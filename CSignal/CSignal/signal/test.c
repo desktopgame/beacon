@@ -1,6 +1,7 @@
 #include "test.h"
 #include "util/list.h"
 #include "util/stack.h"
+#include "ast/ast.h"
 
 void test_stack(void) {
 	stack* st = stack_new();
@@ -29,4 +30,21 @@ void test_list(void) {
 		printf("%d\n", (int)list_at(li, i));
 	}
 	list_delete(li, list_deleter_null);
+}
+
+void test_ast(void) {
+	ast* a = ast_new(ast_add_assign);
+	ast_push(a, ast_new(ast_add));
+	ast_push(a, ast_new(ast_sub));
+	ast_push(a, ast_new(ast_mul));
+	ast_push(a, ast_new(ast_div));
+	ast_push(a, ast_new(ast_mod));
+
+	ast* b = ast_new(ast_bit_and);
+	ast_push(b, ast_new(ast_add));
+	ast_push(b, ast_new(ast_sub));
+	ast_push(a, b);
+
+	ast_print_tree(a);
+	ast_delete(a);
 }

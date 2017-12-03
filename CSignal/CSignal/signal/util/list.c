@@ -47,7 +47,9 @@ list_item list_at(list * self, int index) {
 }
 
 void list_delete(list * self, list_element_deleter deleter) {
-	assert(self != NULL);
+	if (self == NULL) {
+		return;
+	}
 	list* pointee = self;
 	while (1) {
 		list* next = pointee->next;

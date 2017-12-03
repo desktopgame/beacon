@@ -10,4 +10,9 @@ void test_stack(void);
  * リストのテストを実行.
  */
 void test_list(void);
+
+/**
+ * ASTのテストを実行.
+ */
+void test_ast(void);
 #endif // !SIGNAL_TEST_H
