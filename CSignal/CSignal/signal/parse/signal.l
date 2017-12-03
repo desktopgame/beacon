@@ -4,6 +4,7 @@
 #define YY_INPUT(buf, result, max_size) (result = my_yyinput(buf, max_size))
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 #include "signal.tab.h"
 #include "parser.h"
 #include "../ast/ast.h"
@@ -108,6 +109,7 @@ static int my_yyinput(char *buf, int max_size) {
 <INITIAL>","				{ return (COMMA); }
 <INITIAL>":"				{ return (COLON); }
 <INITIAL>"::"				{ return (COLO_COLO); }
+<INITIAL>";"				{ return (SEMI); }
 
 
 <INITIAL>"+"				{ return (ADD); }
@@ -163,5 +165,10 @@ static int my_yyinput(char *buf, int max_size) {
 <INITIAL>[0-9]+\.[0-9]+ {
 	yylval.ast_value = ast_new_double(atof(yytext));
 	return DOUBLE;
+}
+
+<INITIAL>[A-Za-z_][A-Za-z_0-9]* {
+	yylval.string_value = _strdup(yytext);
+	return IDENT;
 }
 %%

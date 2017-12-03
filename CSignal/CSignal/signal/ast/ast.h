@@ -48,6 +48,11 @@ typedef enum ast_tag {
 	//int double
 	ast_int,
 	ast_double,
+
+	ast_identifier,
+	ast_typename,
+
+	ast_variable_decl,
 } ast_tag;
 
 /**
@@ -121,6 +126,20 @@ ast* ast_new_post_inc(ast* a);
  * @return
  */
 ast* ast_new_post_dec(ast* a);
+
+/**
+ * 型名を表す要素を作成します.
+ * @param str
+ * @return
+ */
+ast* ast_new_typename(char* str);
+
+/**
+ * 識別子を表す要素を作成します.
+ * @param str
+ * @return
+ */
+ast* ast_new_identifier(char* str);
 
 /**
  * self に child を子要素として追加します.

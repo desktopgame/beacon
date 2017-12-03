@@ -116,6 +116,7 @@
   <ItemGroup>
     <ClCompile Include="signal\ast\ast.c" />
     <ClCompile Include="signal\ast\ast_new_operator.c" />
+    <ClCompile Include="signal\ast\ast_new_stmt.c" />
     <ClCompile Include="signal\main.c" />
     <ClCompile Include="signal\parse\lex.yy.c" />
     <ClCompile Include="signal\parse\parser.c" />
@@ -130,6 +131,7 @@
   <ItemGroup>
     <ClInclude Include="signal\ast\ast.h" />
     <ClInclude Include="signal\ast\ast_new_operator.h" />
+    <ClInclude Include="signal\ast\ast_new_stmt.h" />
     <ClInclude Include="signal\parse\parser.h" />
     <ClInclude Include="signal\parse\signal.tab.h" />
     <ClInclude Include="signal\parse\yacc_input_type.h" />

@@ -43,40 +43,42 @@
    enum yytokentype {
      INT = 258,
      DOUBLE = 259,
-     DOT = 260,
-     COMMA = 261,
-     COLON = 262,
-     COLO_COLO = 263,
-     ADD = 264,
-     SUB = 265,
-     MUL = 266,
-     DIV = 267,
-     MOD = 268,
-     NOT = 269,
-     ASSIGN = 270,
-     ADD_ASSIGN = 271,
-     SUB_ASSIGN = 272,
-     MUL_ASSIGN = 273,
-     DIV_ASSIGN = 274,
-     MOD_ASSIGN = 275,
-     EQUAL = 276,
-     NOTEQUAL = 277,
-     INC = 278,
-     DEC = 279,
-     GT = 280,
-     GE = 281,
-     LT = 282,
-     LE = 283,
-     BIT_AND = 284,
-     LOGIC_AND = 285,
-     BIT_OR = 286,
-     LOGIC_OR = 287,
-     LCB = 288,
-     RCB = 289,
-     LRB = 290,
-     RRB = 291,
-     LSB = 292,
-     RSB = 293
+     IDENT = 260,
+     DOT = 261,
+     COMMA = 262,
+     COLON = 263,
+     COLO_COLO = 264,
+     ADD = 265,
+     SUB = 266,
+     MUL = 267,
+     DIV = 268,
+     MOD = 269,
+     NOT = 270,
+     ASSIGN = 271,
+     ADD_ASSIGN = 272,
+     SUB_ASSIGN = 273,
+     MUL_ASSIGN = 274,
+     DIV_ASSIGN = 275,
+     MOD_ASSIGN = 276,
+     EQUAL = 277,
+     NOTEQUAL = 278,
+     INC = 279,
+     DEC = 280,
+     GT = 281,
+     GE = 282,
+     LT = 283,
+     LE = 284,
+     BIT_AND = 285,
+     LOGIC_AND = 286,
+     BIT_OR = 287,
+     LOGIC_OR = 288,
+     LCB = 289,
+     RCB = 290,
+     LRB = 291,
+     RRB = 292,
+     LSB = 293,
+     RSB = 294,
+     SEMI = 295
    };
 #endif
 
@@ -87,7 +89,7 @@ typedef union YYSTYPE
 {
 
 /* Line 1676 of yacc.c  */
-#line 8 "C:\\Users\\Koya\\Documents\\GitHub\\CSignal\\CSignal\\CSignal\\signal\\parse\\signal.y"
+#line 9 "C:\\Users\\Koya\\Documents\\GitHub\\CSignal\\CSignal\\CSignal\\signal\\parse\\signal.y"
 
 	char char_value;
 	const char* string_value;
@@ -96,7 +98,7 @@ typedef union YYSTYPE
 
 
 /* Line 1676 of yacc.c  */
-#line 98 "signal.tab.h"
+#line 100 "signal.tab.h"
 } YYSTYPE;
 # define YYSTYPE_IS_TRIVIAL 1
 # define yystype YYSTYPE /* obsolescent; will be withdrawn */

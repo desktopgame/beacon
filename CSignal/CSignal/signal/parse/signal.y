@@ -2,6 +2,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include "../ast/ast_new_operator.h"
+#include "../ast/ast_new_stmt.h"
 #define YYDEBUG 1
 #define YYERROR_VERBOSE 1
 %}
@@ -12,6 +13,7 @@
 }
 %token <ast_value>			INT
 %token <ast_value>			DOUBLE
+%token <string_value>		IDENT
 %token DOT COMMA COLON COLO_COLO
 		ADD SUB MUL DIV MOD NOT
 		ASSIGN ADD_ASSIGN SUB_ASSIGN MUL_ASSIGN DIV_ASSIGN MOD_ASSIGN
@@ -20,16 +22,26 @@
 		GT GE LT LE
 		BIT_AND LOGIC_AND BIT_OR LOGIC_OR
 		LCB RCB LRB RRB LSB RSB
+		SEMI
 %type <ast_value> root top_level expression assign 
 					or and equal compare addsub muldiv 
 					unary prefix postfix primary
+					stmt variable_stmt
 %%
 root
 	: top_level
 	| root top_level
+	| error '\n'
+	{
+		$$ = ast_new_blank();
+	}
 	;
 top_level
 	: expression
+	{
+		ast_compile_entry($1);
+	}
+	| stmt
 	{
 		ast_compile_entry($1);
 	}
@@ -183,4 +195,18 @@ primary
 		$$ = $2;
 	}
 	;
+stmt
+	: expression SEMI
+	{
+		$$ = $1;
+	}
+	| variable_stmt
+	;
+variable_stmt
+	: IDENT IDENT ASSIGN expression SEMI
+	{
+		$$ = ast_new_variable_decl(ast_new_typename($1), ast_new_identifier($2), $4);
+	}
+	;
+
 %%

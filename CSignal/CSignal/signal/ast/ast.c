@@ -62,6 +62,18 @@ ast * ast_new_post_dec(ast * a) {
 	return ret;
 }
 
+ast * ast_new_typename(char * str) {
+	ast* ret = ast_new(ast_typename);
+	ret->u.string_value = str;
+	return ret;
+}
+
+ast * ast_new_identifier(char * str) {
+	ast* ret = ast_new(ast_identifier);
+	ret->u.string_value = str;
+	return ret;
+}
+
 ast * ast_push(ast * self, ast * child) {
 	assert(self != NULL);
 	assert(child != NULL);
@@ -114,6 +126,13 @@ void ast_print(ast* self) {
 		case ast_pre_dec:
 		case ast_post_dec:
 			p("--");
+		case ast_variable_decl: p("variable-decl");
+		case ast_typename:
+			printf("typename(%s)", self->u.string_value);
+			break;
+		case ast_identifier:
+			printf("identifier(%s)", self->u.string_value);
+			break;
 		case ast_int:
 			printf("int(%d)", self->u.int_value);
 			break;
@@ -150,5 +169,12 @@ static void ast_delete_impl(ast* self) {
 		ast_delete_impl(list_at(self->children, i));
 	}
 	list_delete(self->children, list_deleter_null);
+	ast_tag t = self->tag;
+	if (t == ast_typename ||
+		t == ast_identifier) {
+		//printf("free(%s)\n", self->u.string_value);
+		free(self->u.string_value);
+		self->u.string_value = NULL;
+	}
 	free(self);
 }

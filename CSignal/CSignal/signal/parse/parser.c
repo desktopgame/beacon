@@ -58,6 +58,9 @@ parser * parser_parse_from_source(char * source) {
 
 void parser_pop() {
 	parser* p = (parser*)stack_pop(parser_stack);
+	if (p->root) {
+		ast_delete(p->root);
+	}
 	free(p);
 	if (stack_empty(parser_stack)) {
 		stack_delete(parser_stack, stack_deleter_null);

@@ -51,6 +51,9 @@
     <ClCompile Include="signal\ast\ast_new_operator.c">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
+    <ClCompile Include="signal\ast\ast_new_stmt.c">
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="signal\util\cmd.h">
@@ -84,6 +87,9 @@
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
     <ClInclude Include="signal\ast\ast_new_operator.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="signal\ast\ast_new_stmt.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
   </ItemGroup>
