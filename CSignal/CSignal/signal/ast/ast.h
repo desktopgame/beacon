@@ -29,6 +29,22 @@ typedef enum ast_tag {
 	ast_mul_assign,
 	ast_div_assign,
 	ast_mod_assign,
+	//== !=
+	ast_equal,
+	ast_notequal,
+	//> >= < <=
+	ast_gt,
+	ast_ge,
+	ast_lt,
+	ast_le,
+	//! -
+	ast_not,
+	ast_neg,
+	//++ --
+	ast_pre_inc,
+	ast_pre_dec,
+	ast_post_inc,
+	ast_post_dec,
 	//int double
 	ast_int,
 	ast_double,
@@ -77,6 +93,34 @@ ast* ast_new_int(int i);
  * @param d
  */
 ast* ast_new_double(double d);
+
+/**
+ * 前置きインクリメントを表す要素を作成します.
+ * @param a
+ * @return
+ */
+ast* ast_new_pre_inc(ast* a);
+
+/**
+ * 前置きデクリメントを表す要素を作成します.
+ * @param a
+ * @return
+ */
+ast* ast_new_pre_dec(ast* a);
+
+/**
+ * 後置きインクリメントを表す要素を作成します.
+ * @param a
+ * @return
+ */
+ast* ast_new_post_inc(ast* a);
+
+/**
+ * 後置きデクリメントを表す要素を作成します.
+ * @param a
+ * @return
+ */
+ast* ast_new_post_dec(ast* a);
 
 /**
  * self に child を子要素として追加します.

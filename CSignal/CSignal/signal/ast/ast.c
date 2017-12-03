@@ -38,6 +38,30 @@ ast * ast_new_double(double d) {
 	return ret;
 }
 
+ast * ast_new_pre_inc(ast * a) {
+	ast* ret = ast_new(ast_pre_inc);
+	ast_push(ret, a);
+	return ret;
+}
+
+ast * ast_new_pre_dec(ast * a) {
+	ast* ret = ast_new(ast_pre_dec);
+	ast_push(ret, a);
+	return ret;
+}
+
+ast * ast_new_post_inc(ast * a) {
+	ast* ret = ast_new(ast_post_inc);
+	ast_push(ret, a);
+	return ret;
+}
+
+ast * ast_new_post_dec(ast * a) {
+	ast* ret = ast_new(ast_post_dec);
+	ast_push(ret, a);
+	return ret;
+}
+
 ast * ast_push(ast * self, ast * child) {
 	assert(self != NULL);
 	assert(child != NULL);
@@ -60,65 +84,45 @@ void ast_print_tree(ast * self) {
 }
 
 void ast_print(ast* self) {
+#define p(str) printf(str); break
 	switch (self->tag) {
-		case ast_root:
-			printf("root");
-			break;
-		case ast_add:
-			printf("+");
-			break;
-		case ast_sub:
-			printf("-");
-			break;
-		case ast_mul:
-			printf("*");
-			break;
-		case ast_div:
-			printf("/");
-			break;
-		case ast_mod:
-			printf("%");
-			break;
-		case ast_bit_or:
-			printf("|");
-			break;
-		case ast_logic_or:
-			printf("||");
-			break;
-		case ast_bit_and:
-			printf("&");
-			break;
-		case ast_logic_and:
-			printf("&&");
-			break;
-		case ast_assign:
-			printf("=");
-			break;
-		case ast_add_assign:
-			printf("+=");
-			break;
-		case ast_sub_assign:
-			printf("-=");
-			break;
-		case ast_mul_assign:
-			printf("*=");
-			break;
-		case ast_div_assign:
-			printf("/=");
-			break;
-		case ast_mod_assign:
-			printf("%=");
-			break;
+		case ast_root: p("root");
+		case ast_add:  p("+");
+		case ast_sub:  p("-");
+		case ast_mul: p("*");
+		case ast_div: p("/");
+		case ast_mod: p("%");
+		case ast_bit_or: p("|");
+		case ast_logic_or: p("||");
+		case ast_bit_and: p("&");
+		case ast_logic_and: p("&&");
+		case ast_assign: p("=");
+		case ast_add_assign: p("+=");
+		case ast_sub_assign: p("-=");
+		case ast_mul_assign: p("*=");
+		case ast_div_assign: p("/=");
+		case ast_mod_assign: p("%=");
+		case ast_equal: p("==");
+		case ast_notequal: p("!=");
+		case ast_gt: p(">");
+		case ast_ge: p(">=");
+		case ast_lt: p("<");
+		case ast_le: p("<=");
+		case ast_pre_inc:
+		case ast_post_inc:
+			p("++");
+		case ast_pre_dec:
+		case ast_post_dec:
+			p("--");
 		case ast_int:
 			printf("int(%d)", self->u.int_value);
 			break;
 		case ast_double:
 			printf("double(%f)", self->u.double_value);
 			break;
-		default:
-			printf("not implemented");
-			break;
+		default: p("not implemented");
 	}
+#undef p
 }
 
 void ast_delete(ast * self) {
