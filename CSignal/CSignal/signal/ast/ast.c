@@ -1,5 +1,6 @@
 #include "ast.h"
 #include "../util/text.h"
+#include "../parse/parser.h"
 #include <assert.h>
 #include <stdlib.h>
 #include <stdio.h>
@@ -8,11 +9,32 @@ static void ast_print_indent(int depth);
 static void ast_print_tree_impl(ast* self, int depth);
 static void ast_delete_impl(ast* self);
 
+void ast_compile_entry(ast * self) {
+	parser* p = parser_top();
+	ast_push(p->root, self);
+}
+
 ast * ast_new(ast_tag tag) {
 	ast* ret = (ast*)malloc(sizeof(ast));
 	ret->tag = tag;
 	ret->childCount = 0;
 	ret->children = NULL;
+	return ret;
+}
+
+ast * ast_new_blank() {
+	return ast_new(ast_blank);
+}
+
+ast * ast_new_int(int i) {
+	ast* ret = ast_new(ast_int);
+	ret->u.int_value = i;
+	return ret;
+}
+
+ast * ast_new_double(double d) {
+	ast* ret = ast_new(ast_double);
+	ret->u.double_value = d;
 	return ret;
 }
 
@@ -39,6 +61,9 @@ void ast_print_tree(ast * self) {
 
 void ast_print(ast* self) {
 	switch (self->tag) {
+		case ast_root:
+			printf("root");
+			break;
 		case ast_add:
 			printf("+");
 			break;

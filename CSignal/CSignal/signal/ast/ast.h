@@ -9,6 +9,7 @@
  */
 typedef enum ast_tag {
 	ast_root,
+	ast_blank,
 	//+ - * / %
 	ast_add,
 	ast_sub,
@@ -49,10 +50,33 @@ typedef struct ast {
 } ast;
 
 /**
+ * 現在のコンパイラに AST を追加します.
+ * @param self
+ */
+void ast_compile_entry(ast* self);
+
+/**
  * 指定のタグで子要素を持たない AST を作成します.
  * @param tag
  */
 ast* ast_new(ast_tag tag);
+
+/**
+ * 空の要素を作成します.
+ */
+ast* ast_new_blank();
+
+/**
+ * 整数型の値を保存する要素を作成します.
+ * @param i
+ */
+ast* ast_new_int(int i);
+
+/**
+ * 実数型の値を保存する要素を作成します.
+ * @param d
+ */
+ast* ast_new_double(double d);
 
 /**
  * self に child を子要素として追加します.

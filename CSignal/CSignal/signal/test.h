@@ -15,4 +15,9 @@ void test_list(void);
  * ASTのテストを実行.
  */
 void test_ast(void);
+
+/**
+ * ASTのテストを実行.
+ */
+void test_ast2(void);
 #endif // !SIGNAL_TEST_H

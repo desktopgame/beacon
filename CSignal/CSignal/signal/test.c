@@ -1,7 +1,10 @@
 #include "test.h"
 #include "util/list.h"
 #include "util/stack.h"
+#include "util/io.h"
 #include "ast/ast.h"
+#include "parse/parser.h"
+#include <stdio.h>
 
 void test_stack(void) {
 	stack* st = stack_new();
@@ -47,4 +50,12 @@ void test_ast(void) {
 
 	ast_print_tree(a);
 	ast_delete(a);
+}
+
+void test_ast2(void) {
+	char* text = io_read_text("main.signal");
+	parser* p = parser_parse_from_source(text);
+	printf("\n");
+	ast_print_tree(p->root);
+	parser_pop();
 }
