@@ -8,6 +8,7 @@
  * AST(AbstractSourceTree) の種類を表すタグです.
  */
 typedef enum ast_tag {
+	ast_root,
 	//+ - * / %
 	ast_add,
 	ast_sub,
