@@ -48,6 +48,8 @@ typedef enum ast_tag {
 	//int double
 	ast_int,
 	ast_double,
+	ast_char,
+	ast_string,
 
 	ast_identifier,
 	ast_typename,
@@ -86,18 +88,6 @@ ast* ast_new(ast_tag tag);
  * 空の要素を作成します.
  */
 ast* ast_new_blank();
-
-/**
- * 整数型の値を保存する要素を作成します.
- * @param i
- */
-ast* ast_new_int(int i);
-
-/**
- * 実数型の値を保存する要素を作成します.
- * @param d
- */
-ast* ast_new_double(double d);
 
 /**
  * 前置きインクリメントを表す要素を作成します.

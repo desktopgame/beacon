@@ -1,2 +1,4 @@
 (10 + 20 + (5 * 20 + (16 / 4)) >= 20 || 0 < 0)
 TYPENAME VARIABLENAME = 10;
+STRING STR = "aaaa";
+CHAR CH = 'z';

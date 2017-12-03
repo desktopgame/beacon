@@ -26,18 +26,6 @@ ast * ast_new_blank() {
 	return ast_new(ast_blank);
 }
 
-ast * ast_new_int(int i) {
-	ast* ret = ast_new(ast_int);
-	ret->u.int_value = i;
-	return ret;
-}
-
-ast * ast_new_double(double d) {
-	ast* ret = ast_new(ast_double);
-	ret->u.double_value = d;
-	return ret;
-}
-
 ast * ast_new_pre_inc(ast * a) {
 	ast* ret = ast_new(ast_pre_inc);
 	ast_push(ret, a);
@@ -139,6 +127,12 @@ void ast_print(ast* self) {
 		case ast_double:
 			printf("double(%f)", self->u.double_value);
 			break;
+		case ast_char:
+			printf("char(%c)", self->u.char_value);
+			break;
+		case ast_string:
+			printf("string(%s)", self->u.string_value);
+			break;
 		default: p("not implemented");
 	}
 #undef p
@@ -171,8 +165,9 @@ static void ast_delete_impl(ast* self) {
 	list_delete(self->children, list_deleter_null);
 	ast_tag t = self->tag;
 	if (t == ast_typename ||
-		t == ast_identifier) {
-		//printf("free(%s)\n", self->u.string_value);
+		t == ast_identifier ||
+		t == ast_string) {
+		printf("free(%s)\n", self->u.string_value);
 		free(self->u.string_value);
 		self->u.string_value = NULL;
 	}

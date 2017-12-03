@@ -11,6 +11,8 @@
 	const char* string_value;
 	ast* ast_value;
 }
+%token <ast_value>			CHAR_LITERAL
+%token <ast_value>			STRING_LITERAL
 %token <ast_value>			INT
 %token <ast_value>			DOUBLE
 %token <string_value>		IDENT
@@ -22,7 +24,7 @@
 		GT GE LT LE
 		BIT_AND LOGIC_AND BIT_OR LOGIC_OR
 		LCB RCB LRB RRB LSB RSB
-		SEMI
+		SEMI IMPORT
 %type <ast_value> root top_level expression assign 
 					or and equal compare addsub muldiv 
 					unary prefix postfix primary
@@ -190,6 +192,8 @@ postfix
 primary
 	: INT
 	| DOUBLE
+	| CHAR_LITERAL
+	| STRING_LITERAL
 	| LRB expression RRB
 	{
 		$$ = $2;

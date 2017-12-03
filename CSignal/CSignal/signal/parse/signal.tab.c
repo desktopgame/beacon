@@ -106,44 +106,47 @@
    /* Put the tokens into the symbol table, so that GDB and other debuggers
       know about them.  */
    enum yytokentype {
-     INT = 258,
-     DOUBLE = 259,
-     IDENT = 260,
-     DOT = 261,
-     COMMA = 262,
-     COLON = 263,
-     COLO_COLO = 264,
-     ADD = 265,
-     SUB = 266,
-     MUL = 267,
-     DIV = 268,
-     MOD = 269,
-     NOT = 270,
-     ASSIGN = 271,
-     ADD_ASSIGN = 272,
-     SUB_ASSIGN = 273,
-     MUL_ASSIGN = 274,
-     DIV_ASSIGN = 275,
-     MOD_ASSIGN = 276,
-     EQUAL = 277,
-     NOTEQUAL = 278,
-     INC = 279,
-     DEC = 280,
-     GT = 281,
-     GE = 282,
-     LT = 283,
-     LE = 284,
-     BIT_AND = 285,
-     LOGIC_AND = 286,
-     BIT_OR = 287,
-     LOGIC_OR = 288,
-     LCB = 289,
-     RCB = 290,
-     LRB = 291,
-     RRB = 292,
-     LSB = 293,
-     RSB = 294,
-     SEMI = 295
+     CHAR_LITERAL = 258,
+     STRING_LITERAL = 259,
+     INT = 260,
+     DOUBLE = 261,
+     IDENT = 262,
+     DOT = 263,
+     COMMA = 264,
+     COLON = 265,
+     COLO_COLO = 266,
+     ADD = 267,
+     SUB = 268,
+     MUL = 269,
+     DIV = 270,
+     MOD = 271,
+     NOT = 272,
+     ASSIGN = 273,
+     ADD_ASSIGN = 274,
+     SUB_ASSIGN = 275,
+     MUL_ASSIGN = 276,
+     DIV_ASSIGN = 277,
+     MOD_ASSIGN = 278,
+     EQUAL = 279,
+     NOTEQUAL = 280,
+     INC = 281,
+     DEC = 282,
+     GT = 283,
+     GE = 284,
+     LT = 285,
+     LE = 286,
+     BIT_AND = 287,
+     LOGIC_AND = 288,
+     BIT_OR = 289,
+     LOGIC_OR = 290,
+     LCB = 291,
+     RCB = 292,
+     LRB = 293,
+     RRB = 294,
+     LSB = 295,
+     RSB = 296,
+     SEMI = 297,
+     IMPORT = 298
    };
 #endif
 
@@ -163,7 +166,7 @@ typedef union YYSTYPE
 
 
 /* Line 214 of yacc.c  */
-#line 167 "signal.tab.c"
+#line 170 "signal.tab.c"
 } YYSTYPE;
 # define YYSTYPE_IS_TRIVIAL 1
 # define yystype YYSTYPE /* obsolescent; will be withdrawn */
@@ -175,7 +178,7 @@ typedef union YYSTYPE
 
 
 /* Line 264 of yacc.c  */
-#line 179 "signal.tab.c"
+#line 182 "signal.tab.c"
 
 #ifdef short
 # undef short
@@ -388,22 +391,22 @@ union yyalloc
 #endif
 
 /* YYFINAL -- State number of the termination state.  */
-#define YYFINAL  33
+#define YYFINAL  35
 /* YYLAST -- Last index in YYTABLE.  */
-#define YYLAST   87
+#define YYLAST   93
 
 /* YYNTOKENS -- Number of terminals.  */
-#define YYNTOKENS  42
+#define YYNTOKENS  45
 /* YYNNTS -- Number of nonterminals.  */
 #define YYNNTS  17
 /* YYNRULES -- Number of rules.  */
-#define YYNRULES  50
+#define YYNRULES  52
 /* YYNRULES -- Number of states.  */
-#define YYNSTATES  84
+#define YYNSTATES  86
 
 /* YYTRANSLATE(YYLEX) -- Bison symbol number corresponding to YYLEX.  */
 #define YYUNDEFTOK  2
-#define YYMAXUTOK   295
+#define YYMAXUTOK   298
 
 #define YYTRANSLATE(YYX)						\
   ((unsigned int) (YYX) <= YYMAXUTOK ? yytranslate[YYX] : YYUNDEFTOK)
@@ -412,7 +415,7 @@ union yyalloc
 static const yytype_uint8 yytranslate[] =
 {
        0,     2,     2,     2,     2,     2,     2,     2,     2,     2,
-      41,     2,     2,     2,     2,     2,     2,     2,     2,     2,
+      44,     2,     2,     2,     2,     2,     2,     2,     2,     2,
        2,     2,     2,     2,     2,     2,     2,     2,     2,     2,
        2,     2,     2,     2,     2,     2,     2,     2,     2,     2,
        2,     2,     2,     2,     2,     2,     2,     2,     2,     2,
@@ -440,7 +443,7 @@ static const yytype_uint8 yytranslate[] =
        5,     6,     7,     8,     9,    10,    11,    12,    13,    14,
       15,    16,    17,    18,    19,    20,    21,    22,    23,    24,
       25,    26,    27,    28,    29,    30,    31,    32,    33,    34,
-      35,    36,    37,    38,    39,    40
+      35,    36,    37,    38,    39,    40,    41,    42,    43
 };
 
 #if YYDEBUG
@@ -452,40 +455,41 @@ static const yytype_uint8 yyprhs[] =
       23,    27,    31,    35,    39,    43,    45,    49,    53,    55,
       59,    63,    65,    69,    73,    75,    79,    83,    87,    91,
       93,    97,   101,   103,   107,   111,   115,   117,   120,   123,
-     125,   128,   131,   133,   136,   139,   141,   143,   147,   150,
-     152
+     125,   128,   131,   133,   136,   139,   141,   143,   145,   147,
+     151,   154,   156
 };
 
 /* YYRHS -- A `-1'-separated list of the rules' RHS.  */
 static const yytype_int8 yyrhs[] =
 {
-      43,     0,    -1,    44,    -1,    43,    44,    -1,     1,    41,
-      -1,    45,    -1,    57,    -1,    46,    -1,    47,    -1,    47,
-      16,    46,    -1,    47,    17,    46,    -1,    47,    18,    46,
-      -1,    47,    19,    46,    -1,    47,    20,    46,    -1,    47,
-      21,    46,    -1,    48,    -1,    47,    32,    48,    -1,    47,
-      33,    48,    -1,    49,    -1,    48,    30,    49,    -1,    48,
-      31,    49,    -1,    50,    -1,    49,    22,    50,    -1,    49,
-      23,    50,    -1,    51,    -1,    50,    26,    51,    -1,    50,
-      27,    51,    -1,    50,    28,    51,    -1,    50,    29,    51,
-      -1,    52,    -1,    51,    10,    52,    -1,    51,    11,    52,
-      -1,    53,    -1,    52,    12,    53,    -1,    52,    13,    53,
-      -1,    52,    14,    53,    -1,    54,    -1,    15,    53,    -1,
-      11,    53,    -1,    55,    -1,    24,    55,    -1,    25,    55,
-      -1,    56,    -1,    55,    24,    -1,    55,    25,    -1,     3,
-      -1,     4,    -1,    36,    45,    37,    -1,    45,    40,    -1,
-      58,    -1,     5,     5,    16,    45,    40,    -1
+      46,     0,    -1,    47,    -1,    46,    47,    -1,     1,    44,
+      -1,    48,    -1,    60,    -1,    49,    -1,    50,    -1,    50,
+      18,    49,    -1,    50,    19,    49,    -1,    50,    20,    49,
+      -1,    50,    21,    49,    -1,    50,    22,    49,    -1,    50,
+      23,    49,    -1,    51,    -1,    50,    34,    51,    -1,    50,
+      35,    51,    -1,    52,    -1,    51,    32,    52,    -1,    51,
+      33,    52,    -1,    53,    -1,    52,    24,    53,    -1,    52,
+      25,    53,    -1,    54,    -1,    53,    28,    54,    -1,    53,
+      29,    54,    -1,    53,    30,    54,    -1,    53,    31,    54,
+      -1,    55,    -1,    54,    12,    55,    -1,    54,    13,    55,
+      -1,    56,    -1,    55,    14,    56,    -1,    55,    15,    56,
+      -1,    55,    16,    56,    -1,    57,    -1,    17,    56,    -1,
+      13,    56,    -1,    58,    -1,    26,    58,    -1,    27,    58,
+      -1,    59,    -1,    58,    26,    -1,    58,    27,    -1,     5,
+      -1,     6,    -1,     3,    -1,     4,    -1,    38,    48,    39,
+      -1,    48,    42,    -1,    61,    -1,     7,     7,    18,    48,
+      42,    -1
 };
 
 /* YYRLINE[YYN] -- source line where rule number YYN was defined.  */
 static const yytype_uint8 yyrline[] =
 {
-       0,    32,    32,    33,    34,    40,    44,    50,    53,    54,
-      58,    62,    66,    70,    74,    80,    81,    85,    91,    92,
-      96,   102,   103,   107,   113,   114,   118,   122,   126,   132,
-     133,   137,   143,   144,   148,   152,   158,   159,   163,   169,
-     170,   174,   180,   181,   185,   191,   192,   193,   199,   203,
-     206
+       0,    34,    34,    35,    36,    42,    46,    52,    55,    56,
+      60,    64,    68,    72,    76,    82,    83,    87,    93,    94,
+      98,   104,   105,   109,   115,   116,   120,   124,   128,   134,
+     135,   139,   145,   146,   150,   154,   160,   161,   165,   171,
+     172,   176,   182,   183,   187,   193,   194,   195,   196,   197,
+     203,   207,   210
 };
 #endif
 
@@ -494,14 +498,15 @@ static const yytype_uint8 yyrline[] =
    First, the terminals, then, starting at YYNTOKENS, nonterminals.  */
 static const char *const yytname[] =
 {
-  "$end", "error", "$undefined", "INT", "DOUBLE", "IDENT", "DOT", "COMMA",
-  "COLON", "COLO_COLO", "ADD", "SUB", "MUL", "DIV", "MOD", "NOT", "ASSIGN",
-  "ADD_ASSIGN", "SUB_ASSIGN", "MUL_ASSIGN", "DIV_ASSIGN", "MOD_ASSIGN",
-  "EQUAL", "NOTEQUAL", "INC", "DEC", "GT", "GE", "LT", "LE", "BIT_AND",
-  "LOGIC_AND", "BIT_OR", "LOGIC_OR", "LCB", "RCB", "LRB", "RRB", "LSB",
-  "RSB", "SEMI", "'\\n'", "$accept", "root", "top_level", "expression",
-  "assign", "or", "and", "equal", "compare", "addsub", "muldiv", "unary",
-  "prefix", "postfix", "primary", "stmt", "variable_stmt", 0
+  "$end", "error", "$undefined", "CHAR_LITERAL", "STRING_LITERAL", "INT",
+  "DOUBLE", "IDENT", "DOT", "COMMA", "COLON", "COLO_COLO", "ADD", "SUB",
+  "MUL", "DIV", "MOD", "NOT", "ASSIGN", "ADD_ASSIGN", "SUB_ASSIGN",
+  "MUL_ASSIGN", "DIV_ASSIGN", "MOD_ASSIGN", "EQUAL", "NOTEQUAL", "INC",
+  "DEC", "GT", "GE", "LT", "LE", "BIT_AND", "LOGIC_AND", "BIT_OR",
+  "LOGIC_OR", "LCB", "RCB", "LRB", "RRB", "LSB", "RSB", "SEMI", "IMPORT",
+  "'\\n'", "$accept", "root", "top_level", "expression", "assign", "or",
+  "and", "equal", "compare", "addsub", "muldiv", "unary", "prefix",
+  "postfix", "primary", "stmt", "variable_stmt", 0
 };
 #endif
 
@@ -514,19 +519,19 @@ static const yytype_uint16 yytoknum[] =
      265,   266,   267,   268,   269,   270,   271,   272,   273,   274,
      275,   276,   277,   278,   279,   280,   281,   282,   283,   284,
      285,   286,   287,   288,   289,   290,   291,   292,   293,   294,
-     295,    10
+     295,   296,   297,   298,    10
 };
 # endif
 
 /* YYR1[YYN] -- Symbol number of symbol that rule YYN derives.  */
 static const yytype_uint8 yyr1[] =
 {
-       0,    42,    43,    43,    43,    44,    44,    45,    46,    46,
-      46,    46,    46,    46,    46,    47,    47,    47,    48,    48,
-      48,    49,    49,    49,    50,    50,    50,    50,    50,    51,
-      51,    51,    52,    52,    52,    52,    53,    53,    53,    54,
-      54,    54,    55,    55,    55,    56,    56,    56,    57,    57,
-      58
+       0,    45,    46,    46,    46,    47,    47,    48,    49,    49,
+      49,    49,    49,    49,    49,    50,    50,    50,    51,    51,
+      51,    52,    52,    52,    53,    53,    53,    53,    53,    54,
+      54,    54,    55,    55,    55,    55,    56,    56,    56,    57,
+      57,    57,    58,    58,    58,    59,    59,    59,    59,    59,
+      60,    60,    61
 };
 
 /* YYR2[YYN] -- Number of symbols composing right hand side of rule YYN.  */
@@ -536,8 +541,8 @@ static const yytype_uint8 yyr2[] =
        3,     3,     3,     3,     3,     1,     3,     3,     1,     3,
        3,     1,     3,     3,     1,     3,     3,     3,     3,     1,
        3,     3,     1,     3,     3,     3,     1,     2,     2,     1,
-       2,     2,     1,     2,     2,     1,     1,     3,     2,     1,
-       5
+       2,     2,     1,     2,     2,     1,     1,     1,     1,     3,
+       2,     1,     5
 };
 
 /* YYDEFACT[STATE-NAME] -- Default rule to reduce with in state
@@ -545,45 +550,45 @@ static const yytype_uint8 yyr2[] =
    means the default is an error.  */
 static const yytype_uint8 yydefact[] =
 {
-       0,     0,    45,    46,     0,     0,     0,     0,     0,     0,
-       0,     2,     5,     7,     8,    15,    18,    21,    24,    29,
-      32,    36,    39,    42,     6,    49,     4,     0,    38,    37,
-      40,    41,     0,     1,     3,    48,     0,     0,     0,     0,
+       0,     0,    47,    48,    45,    46,     0,     0,     0,     0,
+       0,     0,     0,     2,     5,     7,     8,    15,    18,    21,
+      24,    29,    32,    36,    39,    42,     6,    51,     4,     0,
+      38,    37,    40,    41,     0,     1,     3,    50,     0,     0,
        0,     0,     0,     0,     0,     0,     0,     0,     0,     0,
-       0,     0,     0,     0,     0,     0,     0,    43,    44,     0,
-      47,     9,    10,    11,    12,    13,    14,    16,    17,    19,
-      20,    22,    23,    25,    26,    27,    28,    30,    31,    33,
-      34,    35,     0,    50
+       0,     0,     0,     0,     0,     0,     0,     0,     0,    43,
+      44,     0,    49,     9,    10,    11,    12,    13,    14,    16,
+      17,    19,    20,    22,    23,    25,    26,    27,    28,    30,
+      31,    33,    34,    35,     0,    52
 };
 
 /* YYDEFGOTO[NTERM-NUM].  */
 static const yytype_int8 yydefgoto[] =
 {
-      -1,    10,    11,    12,    13,    14,    15,    16,    17,    18,
-      19,    20,    21,    22,    23,    24,    25
+      -1,    12,    13,    14,    15,    16,    17,    18,    19,    20,
+      21,    22,    23,    24,    25,    26,    27
 };
 
 /* YYPACT[STATE-NUM] -- Index in YYTABLE of the portion describing
    STATE-NUM.  */
-#define YYPACT_NINF -32
+#define YYPACT_NINF -30
 static const yytype_int8 yypact[] =
 {
-       8,   -31,   -32,   -32,    17,    31,    31,     1,     1,    31,
-       3,   -32,   -23,   -32,    41,   -15,    -2,    37,    19,    12,
-     -32,   -32,    16,   -32,   -32,   -32,   -32,    15,   -32,   -32,
-      16,    16,    -1,   -32,   -32,   -32,    31,    31,    31,    31,
-      31,    31,    31,    31,    31,    31,    31,    31,    31,    31,
-      31,    31,    31,    31,    31,    31,    31,   -32,   -32,    31,
-     -32,   -32,   -32,   -32,   -32,   -32,   -32,   -15,   -15,    -2,
-      -2,    37,    37,    19,    19,    19,    19,    12,    12,   -32,
-     -32,   -32,    43,   -32
+      18,   -29,   -30,   -30,   -30,   -30,    27,    54,    54,     8,
+       8,    54,     3,   -30,    -6,   -30,    43,   -28,    23,     9,
+       5,    12,   -30,   -30,     6,   -30,   -30,   -30,   -30,    37,
+     -30,   -30,     6,     6,    31,   -30,   -30,   -30,    54,    54,
+      54,    54,    54,    54,    54,    54,    54,    54,    54,    54,
+      54,    54,    54,    54,    54,    54,    54,    54,    54,   -30,
+     -30,    54,   -30,   -30,   -30,   -30,   -30,   -30,   -30,   -28,
+     -28,    23,    23,     9,     9,     5,     5,     5,     5,    12,
+      12,   -30,   -30,   -30,    51,   -30
 };
 
 /* YYPGOTO[NTERM-NUM].  */
 static const yytype_int8 yypgoto[] =
 {
-     -32,   -32,    28,    -7,    39,   -32,     5,     9,    35,    20,
-      32,    -5,   -32,    79,   -32,   -32,   -32
+     -30,   -30,    64,    -9,    44,   -30,    -2,     7,    20,    22,
+      34,    -7,   -30,    81,   -30,   -30,   -30
 };
 
 /* YYTABLE[YYPACT[STATE-NUM]].  What to do in state STATE-NUM.  If
@@ -593,43 +598,45 @@ static const yytype_int8 yypgoto[] =
 #define YYTABLE_NINF -1
 static const yytype_uint8 yytable[] =
 {
-      28,    29,    32,    33,     2,     3,     2,     3,     4,     1,
-      26,     2,     3,     4,     5,    44,    45,    35,     6,     5,
-      46,    47,    27,     6,    54,    55,    56,     7,     8,    52,
-      53,    59,     7,     8,     2,     3,    60,     9,    34,     9,
-      57,    58,     5,     0,     9,     0,     6,    67,    68,    79,
-      80,    81,    82,    69,    70,     7,     8,    36,    37,    38,
-      39,    40,    41,    48,    49,    50,    51,     9,    73,    74,
-      75,    76,     0,    42,    43,    61,    62,    63,    64,    65,
-      66,    71,    72,    83,    77,    78,    30,    31
+      30,    31,    34,    35,    46,    47,     2,     3,     4,     5,
+       6,     2,     3,     4,     5,    28,     7,    54,    55,     1,
+       8,     2,     3,     4,     5,     6,    56,    57,    58,     9,
+      10,     7,    59,    60,    29,     8,    37,    50,    51,    52,
+      53,    11,    69,    70,     9,    10,    11,    48,    49,    81,
+      82,    83,    84,    71,    72,    61,    11,     2,     3,     4,
+       5,    38,    39,    40,    41,    42,    43,     7,    73,    74,
+      62,     8,    75,    76,    77,    78,    36,    44,    45,     0,
+       9,    10,    63,    64,    65,    66,    67,    68,    79,    80,
+      32,    33,    11,    85
 };
 
 static const yytype_int8 yycheck[] =
 {
-       5,     6,     9,     0,     3,     4,     3,     4,     5,     1,
-      41,     3,     4,     5,    11,    30,    31,    40,    15,    11,
-      22,    23,     5,    15,    12,    13,    14,    24,    25,    10,
-      11,    16,    24,    25,     3,     4,    37,    36,    10,    36,
-      24,    25,    11,    -1,    36,    -1,    15,    42,    43,    54,
-      55,    56,    59,    44,    45,    24,    25,    16,    17,    18,
-      19,    20,    21,    26,    27,    28,    29,    36,    48,    49,
-      50,    51,    -1,    32,    33,    36,    37,    38,    39,    40,
-      41,    46,    47,    40,    52,    53,     7,     8
+       7,     8,    11,     0,    32,    33,     3,     4,     5,     6,
+       7,     3,     4,     5,     6,    44,    13,    12,    13,     1,
+      17,     3,     4,     5,     6,     7,    14,    15,    16,    26,
+      27,    13,    26,    27,     7,    17,    42,    28,    29,    30,
+      31,    38,    44,    45,    26,    27,    38,    24,    25,    56,
+      57,    58,    61,    46,    47,    18,    38,     3,     4,     5,
+       6,    18,    19,    20,    21,    22,    23,    13,    48,    49,
+      39,    17,    50,    51,    52,    53,    12,    34,    35,    -1,
+      26,    27,    38,    39,    40,    41,    42,    43,    54,    55,
+       9,    10,    38,    42
 };
 
 /* YYSTOS[STATE-NUM] -- The (internal number of the) accessing
    symbol of state STATE-NUM.  */
 static const yytype_uint8 yystos[] =
 {
-       0,     1,     3,     4,     5,    11,    15,    24,    25,    36,
-      43,    44,    45,    46,    47,    48,    49,    50,    51,    52,
-      53,    54,    55,    56,    57,    58,    41,     5,    53,    53,
-      55,    55,    45,     0,    44,    40,    16,    17,    18,    19,
-      20,    21,    32,    33,    30,    31,    22,    23,    26,    27,
-      28,    29,    10,    11,    12,    13,    14,    24,    25,    16,
-      37,    46,    46,    46,    46,    46,    46,    48,    48,    49,
-      49,    50,    50,    51,    51,    51,    51,    52,    52,    53,
-      53,    53,    45,    40
+       0,     1,     3,     4,     5,     6,     7,    13,    17,    26,
+      27,    38,    46,    47,    48,    49,    50,    51,    52,    53,
+      54,    55,    56,    57,    58,    59,    60,    61,    44,     7,
+      56,    56,    58,    58,    48,     0,    47,    42,    18,    19,
+      20,    21,    22,    23,    34,    35,    32,    33,    24,    25,
+      28,    29,    30,    31,    12,    13,    14,    15,    16,    26,
+      27,    18,    39,    49,    49,    49,    49,    49,    49,    51,
+      51,    52,    52,    53,    53,    54,    54,    54,    54,    55,
+      55,    56,    56,    56,    48,    42
 };
 
 #define yyerrok		(yyerrstatus = 0)
@@ -1443,7 +1450,7 @@ yyreduce:
         case 4:
 
 /* Line 1455 of yacc.c  */
-#line 35 "C:\\Users\\Koya\\Documents\\GitHub\\CSignal\\CSignal\\CSignal\\signal\\parse\\signal.y"
+#line 37 "C:\\Users\\Koya\\Documents\\GitHub\\CSignal\\CSignal\\CSignal\\signal\\parse\\signal.y"
     {
 		(yyval.ast_value) = ast_new_blank();
 	;}
@@ -1452,7 +1459,7 @@ yyreduce:
   case 5:
 
 /* Line 1455 of yacc.c  */
-#line 41 "C:\\Users\\Koya\\Documents\\GitHub\\CSignal\\CSignal\\CSignal\\signal\\parse\\signal.y"
+#line 43 "C:\\Users\\Koya\\Documents\\GitHub\\CSignal\\CSignal\\CSignal\\signal\\parse\\signal.y"
     {
 		ast_compile_entry((yyvsp[(1) - (1)].ast_value));
 	;}
@@ -1461,7 +1468,7 @@ yyreduce:
   case 6:
 
 /* Line 1455 of yacc.c  */
-#line 45 "C:\\Users\\Koya\\Documents\\GitHub\\CSignal\\CSignal\\CSignal\\signal\\parse\\signal.y"
+#line 47 "C:\\Users\\Koya\\Documents\\GitHub\\CSignal\\CSignal\\CSignal\\signal\\parse\\signal.y"
     {
 		ast_compile_entry((yyvsp[(1) - (1)].ast_value));
 	;}
@@ -1470,7 +1477,7 @@ yyreduce:
   case 9:
 
 /* Line 1455 of yacc.c  */
-#line 55 "C:\\Users\\Koya\\Documents\\GitHub\\CSignal\\CSignal\\CSignal\\signal\\parse\\signal.y"
+#line 57 "C:\\Users\\Koya\\Documents\\GitHub\\CSignal\\CSignal\\CSignal\\signal\\parse\\signal.y"
     {
 		(yyval.ast_value) = ast_new_assign((yyvsp[(1) - (3)].ast_value), (yyvsp[(3) - (3)].ast_value));
 	;}
@@ -1479,7 +1486,7 @@ yyreduce:
   case 10:
 
 /* Line 1455 of yacc.c  */
-#line 59 "C:\\Users\\Koya\\Documents\\GitHub\\CSignal\\CSignal\\CSignal\\signal\\parse\\signal.y"
+#line 61 "C:\\Users\\Koya\\Documents\\GitHub\\CSignal\\CSignal\\CSignal\\signal\\parse\\signal.y"
     {
 		(yyval.ast_value) = ast_new_add_assign((yyvsp[(1) - (3)].ast_value), (yyvsp[(3) - (3)].ast_value));
 	;}
@@ -1488,7 +1495,7 @@ yyreduce:
   case 11:
 
 /* Line 1455 of yacc.c  */
-#line 63 "C:\\Users\\Koya\\Documents\\GitHub\\CSignal\\CSignal\\CSignal\\signal\\parse\\signal.y"
+#line 65 "C:\\Users\\Koya\\Documents\\GitHub\\CSignal\\CSignal\\CSignal\\signal\\parse\\signal.y"
     {
 		(yyval.ast_value) = ast_new_sub_assign((yyvsp[(1) - (3)].ast_value), (yyvsp[(3) - (3)].ast_value));
 	;}
@@ -1497,7 +1504,7 @@ yyreduce:
   case 12:
 
 /* Line 1455 of yacc.c  */
-#line 67 "C:\\Users\\Koya\\Documents\\GitHub\\CSignal\\CSignal\\CSignal\\signal\\parse\\signal.y"
+#line 69 "C:\\Users\\Koya\\Documents\\GitHub\\CSignal\\CSignal\\CSignal\\signal\\parse\\signal.y"
     {
 		(yyval.ast_value) = ast_new_mul_assign((yyvsp[(1) - (3)].ast_value), (yyvsp[(3) - (3)].ast_value));
 	;}
@@ -1506,7 +1513,7 @@ yyreduce:
   case 13:
 
 /* Line 1455 of yacc.c  */
-#line 71 "C:\\Users\\Koya\\Documents\\GitHub\\CSignal\\CSignal\\CSignal\\signal\\parse\\signal.y"
+#line 73 "C:\\Users\\Koya\\Documents\\GitHub\\CSignal\\CSignal\\CSignal\\signal\\parse\\signal.y"
     {
 		(yyval.ast_value) = ast_new_div_assign((yyvsp[(1) - (3)].ast_value), (yyvsp[(3) - (3)].ast_value));
 	;}
@@ -1515,7 +1522,7 @@ yyreduce:
   case 14:
 
 /* Line 1455 of yacc.c  */
-#line 75 "C:\\Users\\Koya\\Documents\\GitHub\\CSignal\\CSignal\\CSignal\\signal\\parse\\signal.y"
+#line 77 "C:\\Users\\Koya\\Documents\\GitHub\\CSignal\\CSignal\\CSignal\\signal\\parse\\signal.y"
     {
 		(yyval.ast_value) = ast_new_mod_assign((yyvsp[(1) - (3)].ast_value), (yyvsp[(3) - (3)].ast_value));
 	;}
@@ -1524,7 +1531,7 @@ yyreduce:
   case 16:
 
 /* Line 1455 of yacc.c  */
-#line 82 "C:\\Users\\Koya\\Documents\\GitHub\\CSignal\\CSignal\\CSignal\\signal\\parse\\signal.y"
+#line 84 "C:\\Users\\Koya\\Documents\\GitHub\\CSignal\\CSignal\\CSignal\\signal\\parse\\signal.y"
     {
 		(yyval.ast_value) = ast_new_bit_or((yyvsp[(1) - (3)].ast_value), (yyvsp[(3) - (3)].ast_value));
 	;}
@@ -1533,7 +1540,7 @@ yyreduce:
   case 17:
 
 /* Line 1455 of yacc.c  */
-#line 86 "C:\\Users\\Koya\\Documents\\GitHub\\CSignal\\CSignal\\CSignal\\signal\\parse\\signal.y"
+#line 88 "C:\\Users\\Koya\\Documents\\GitHub\\CSignal\\CSignal\\CSignal\\signal\\parse\\signal.y"
     {
 		(yyval.ast_value) = ast_new_logic_or((yyvsp[(1) - (3)].ast_value), (yyvsp[(3) - (3)].ast_value));
 	;}
@@ -1542,7 +1549,7 @@ yyreduce:
   case 19:
 
 /* Line 1455 of yacc.c  */
-#line 93 "C:\\Users\\Koya\\Documents\\GitHub\\CSignal\\CSignal\\CSignal\\signal\\parse\\signal.y"
+#line 95 "C:\\Users\\Koya\\Documents\\GitHub\\CSignal\\CSignal\\CSignal\\signal\\parse\\signal.y"
     {
 		(yyval.ast_value) = ast_new_bit_and((yyvsp[(1) - (3)].ast_value), (yyvsp[(3) - (3)].ast_value));
 	;}
@@ -1551,7 +1558,7 @@ yyreduce:
   case 20:
 
 /* Line 1455 of yacc.c  */
-#line 97 "C:\\Users\\Koya\\Documents\\GitHub\\CSignal\\CSignal\\CSignal\\signal\\parse\\signal.y"
+#line 99 "C:\\Users\\Koya\\Documents\\GitHub\\CSignal\\CSignal\\CSignal\\signal\\parse\\signal.y"
     {
 		(yyval.ast_value) = ast_new_logic_and((yyvsp[(1) - (3)].ast_value), (yyvsp[(3) - (3)].ast_value));
 	;}
@@ -1560,7 +1567,7 @@ yyreduce:
   case 22:
 
 /* Line 1455 of yacc.c  */
-#line 104 "C:\\Users\\Koya\\Documents\\GitHub\\CSignal\\CSignal\\CSignal\\signal\\parse\\signal.y"
+#line 106 "C:\\Users\\Koya\\Documents\\GitHub\\CSignal\\CSignal\\CSignal\\signal\\parse\\signal.y"
     {
 		(yyval.ast_value) = ast_new_equal((yyvsp[(1) - (3)].ast_value), (yyvsp[(3) - (3)].ast_value));
 	;}
@@ -1569,7 +1576,7 @@ yyreduce:
   case 23:
 
 /* Line 1455 of yacc.c  */
-#line 108 "C:\\Users\\Koya\\Documents\\GitHub\\CSignal\\CSignal\\CSignal\\signal\\parse\\signal.y"
+#line 110 "C:\\Users\\Koya\\Documents\\GitHub\\CSignal\\CSignal\\CSignal\\signal\\parse\\signal.y"
     {
 		(yyval.ast_value) = ast_new_notequal((yyvsp[(1) - (3)].ast_value), (yyvsp[(3) - (3)].ast_value));
 	;}
@@ -1578,7 +1585,7 @@ yyreduce:
   case 25:
 
 /* Line 1455 of yacc.c  */
-#line 115 "C:\\Users\\Koya\\Documents\\GitHub\\CSignal\\CSignal\\CSignal\\signal\\parse\\signal.y"
+#line 117 "C:\\Users\\Koya\\Documents\\GitHub\\CSignal\\CSignal\\CSignal\\signal\\parse\\signal.y"
     {
 		(yyval.ast_value) = ast_new_gt((yyvsp[(1) - (3)].ast_value), (yyvsp[(3) - (3)].ast_value));
 	;}
@@ -1587,7 +1594,7 @@ yyreduce:
   case 26:
 
 /* Line 1455 of yacc.c  */
-#line 119 "C:\\Users\\Koya\\Documents\\GitHub\\CSignal\\CSignal\\CSignal\\signal\\parse\\signal.y"
+#line 121 "C:\\Users\\Koya\\Documents\\GitHub\\CSignal\\CSignal\\CSignal\\signal\\parse\\signal.y"
     {
 		(yyval.ast_value) = ast_new_ge((yyvsp[(1) - (3)].ast_value), (yyvsp[(3) - (3)].ast_value));
 	;}
@@ -1596,7 +1603,7 @@ yyreduce:
   case 27:
 
 /* Line 1455 of yacc.c  */
-#line 123 "C:\\Users\\Koya\\Documents\\GitHub\\CSignal\\CSignal\\CSignal\\signal\\parse\\signal.y"
+#line 125 "C:\\Users\\Koya\\Documents\\GitHub\\CSignal\\CSignal\\CSignal\\signal\\parse\\signal.y"
     {
 		(yyval.ast_value) = ast_new_lt((yyvsp[(1) - (3)].ast_value), (yyvsp[(3) - (3)].ast_value));
 	;}
@@ -1605,7 +1612,7 @@ yyreduce:
   case 28:
 
 /* Line 1455 of yacc.c  */
-#line 127 "C:\\Users\\Koya\\Documents\\GitHub\\CSignal\\CSignal\\CSignal\\signal\\parse\\signal.y"
+#line 129 "C:\\Users\\Koya\\Documents\\GitHub\\CSignal\\CSignal\\CSignal\\signal\\parse\\signal.y"
     {
 		(yyval.ast_value) = ast_new_le((yyvsp[(1) - (3)].ast_value), (yyvsp[(3) - (3)].ast_value));
 	;}
@@ -1614,7 +1621,7 @@ yyreduce:
   case 30:
 
 /* Line 1455 of yacc.c  */
-#line 134 "C:\\Users\\Koya\\Documents\\GitHub\\CSignal\\CSignal\\CSignal\\signal\\parse\\signal.y"
+#line 136 "C:\\Users\\Koya\\Documents\\GitHub\\CSignal\\CSignal\\CSignal\\signal\\parse\\signal.y"
     {
 		(yyval.ast_value) = ast_new_add((yyvsp[(1) - (3)].ast_value), (yyvsp[(3) - (3)].ast_value));
 	;}
@@ -1623,7 +1630,7 @@ yyreduce:
   case 31:
 
 /* Line 1455 of yacc.c  */
-#line 138 "C:\\Users\\Koya\\Documents\\GitHub\\CSignal\\CSignal\\CSignal\\signal\\parse\\signal.y"
+#line 140 "C:\\Users\\Koya\\Documents\\GitHub\\CSignal\\CSignal\\CSignal\\signal\\parse\\signal.y"
     {
 		(yyval.ast_value) = ast_new_sub((yyvsp[(1) - (3)].ast_value), (yyvsp[(3) - (3)].ast_value));
 	;}
@@ -1632,7 +1639,7 @@ yyreduce:
   case 33:
 
 /* Line 1455 of yacc.c  */
-#line 145 "C:\\Users\\Koya\\Documents\\GitHub\\CSignal\\CSignal\\CSignal\\signal\\parse\\signal.y"
+#line 147 "C:\\Users\\Koya\\Documents\\GitHub\\CSignal\\CSignal\\CSignal\\signal\\parse\\signal.y"
     {
 		(yyval.ast_value) = ast_new_mul((yyvsp[(1) - (3)].ast_value), (yyvsp[(3) - (3)].ast_value));
 	;}
@@ -1641,7 +1648,7 @@ yyreduce:
   case 34:
 
 /* Line 1455 of yacc.c  */
-#line 149 "C:\\Users\\Koya\\Documents\\GitHub\\CSignal\\CSignal\\CSignal\\signal\\parse\\signal.y"
+#line 151 "C:\\Users\\Koya\\Documents\\GitHub\\CSignal\\CSignal\\CSignal\\signal\\parse\\signal.y"
     {
 		(yyval.ast_value) = ast_new_div((yyvsp[(1) - (3)].ast_value), (yyvsp[(3) - (3)].ast_value));
 	;}
@@ -1650,7 +1657,7 @@ yyreduce:
   case 35:
 
 /* Line 1455 of yacc.c  */
-#line 153 "C:\\Users\\Koya\\Documents\\GitHub\\CSignal\\CSignal\\CSignal\\signal\\parse\\signal.y"
+#line 155 "C:\\Users\\Koya\\Documents\\GitHub\\CSignal\\CSignal\\CSignal\\signal\\parse\\signal.y"
     {
 		(yyval.ast_value) = ast_new_mod((yyvsp[(1) - (3)].ast_value), (yyvsp[(3) - (3)].ast_value));
 	;}
@@ -1659,7 +1666,7 @@ yyreduce:
   case 37:
 
 /* Line 1455 of yacc.c  */
-#line 160 "C:\\Users\\Koya\\Documents\\GitHub\\CSignal\\CSignal\\CSignal\\signal\\parse\\signal.y"
+#line 162 "C:\\Users\\Koya\\Documents\\GitHub\\CSignal\\CSignal\\CSignal\\signal\\parse\\signal.y"
     {
 		(yyval.ast_value) = ast_new_not((yyvsp[(2) - (2)].ast_value));
 	;}
@@ -1668,7 +1675,7 @@ yyreduce:
   case 38:
 
 /* Line 1455 of yacc.c  */
-#line 164 "C:\\Users\\Koya\\Documents\\GitHub\\CSignal\\CSignal\\CSignal\\signal\\parse\\signal.y"
+#line 166 "C:\\Users\\Koya\\Documents\\GitHub\\CSignal\\CSignal\\CSignal\\signal\\parse\\signal.y"
     {
 		(yyval.ast_value) = ast_new_neg((yyvsp[(2) - (2)].ast_value));
 	;}
@@ -1677,7 +1684,7 @@ yyreduce:
   case 40:
 
 /* Line 1455 of yacc.c  */
-#line 171 "C:\\Users\\Koya\\Documents\\GitHub\\CSignal\\CSignal\\CSignal\\signal\\parse\\signal.y"
+#line 173 "C:\\Users\\Koya\\Documents\\GitHub\\CSignal\\CSignal\\CSignal\\signal\\parse\\signal.y"
     {
 		(yyval.ast_value) = ast_new_pre_inc((yyvsp[(2) - (2)].ast_value));
 	;}
@@ -1686,7 +1693,7 @@ yyreduce:
   case 41:
 
 /* Line 1455 of yacc.c  */
-#line 175 "C:\\Users\\Koya\\Documents\\GitHub\\CSignal\\CSignal\\CSignal\\signal\\parse\\signal.y"
+#line 177 "C:\\Users\\Koya\\Documents\\GitHub\\CSignal\\CSignal\\CSignal\\signal\\parse\\signal.y"
     {
 		(yyval.ast_value) = ast_new_pre_dec((yyvsp[(2) - (2)].ast_value));
 	;}
@@ -1695,7 +1702,7 @@ yyreduce:
   case 43:
 
 /* Line 1455 of yacc.c  */
-#line 182 "C:\\Users\\Koya\\Documents\\GitHub\\CSignal\\CSignal\\CSignal\\signal\\parse\\signal.y"
+#line 184 "C:\\Users\\Koya\\Documents\\GitHub\\CSignal\\CSignal\\CSignal\\signal\\parse\\signal.y"
     {
 		(yyval.ast_value) = ast_new_post_inc((yyvsp[(1) - (2)].ast_value));
 	;}
@@ -1704,34 +1711,34 @@ yyreduce:
   case 44:
 
 /* Line 1455 of yacc.c  */
-#line 186 "C:\\Users\\Koya\\Documents\\GitHub\\CSignal\\CSignal\\CSignal\\signal\\parse\\signal.y"
+#line 188 "C:\\Users\\Koya\\Documents\\GitHub\\CSignal\\CSignal\\CSignal\\signal\\parse\\signal.y"
     {
 		(yyval.ast_value) = ast_new_post_dec((yyvsp[(1) - (2)].ast_value));
 	;}
     break;
 
-  case 47:
+  case 49:
 
 /* Line 1455 of yacc.c  */
-#line 194 "C:\\Users\\Koya\\Documents\\GitHub\\CSignal\\CSignal\\CSignal\\signal\\parse\\signal.y"
+#line 198 "C:\\Users\\Koya\\Documents\\GitHub\\CSignal\\CSignal\\CSignal\\signal\\parse\\signal.y"
     {
 		(yyval.ast_value) = (yyvsp[(2) - (3)].ast_value);
-	;}
-    break;
-
-  case 48:
-
-/* Line 1455 of yacc.c  */
-#line 200 "C:\\Users\\Koya\\Documents\\GitHub\\CSignal\\CSignal\\CSignal\\signal\\parse\\signal.y"
-    {
-		(yyval.ast_value) = (yyvsp[(1) - (2)].ast_value);
 	;}
     break;
 
   case 50:
 
 /* Line 1455 of yacc.c  */
-#line 207 "C:\\Users\\Koya\\Documents\\GitHub\\CSignal\\CSignal\\CSignal\\signal\\parse\\signal.y"
+#line 204 "C:\\Users\\Koya\\Documents\\GitHub\\CSignal\\CSignal\\CSignal\\signal\\parse\\signal.y"
+    {
+		(yyval.ast_value) = (yyvsp[(1) - (2)].ast_value);
+	;}
+    break;
+
+  case 52:
+
+/* Line 1455 of yacc.c  */
+#line 211 "C:\\Users\\Koya\\Documents\\GitHub\\CSignal\\CSignal\\CSignal\\signal\\parse\\signal.y"
     {
 		(yyval.ast_value) = ast_new_variable_decl(ast_new_typename((yyvsp[(1) - (5)].string_value)), ast_new_identifier((yyvsp[(2) - (5)].string_value)), (yyvsp[(4) - (5)].ast_value));
 	;}
@@ -1740,7 +1747,7 @@ yyreduce:
 
 
 /* Line 1455 of yacc.c  */
-#line 1744 "signal.tab.c"
+#line 1751 "signal.tab.c"
       default: break;
     }
   YY_SYMBOL_PRINT ("-> $$ =", yyr1[yyn], &yyval, &yyloc);
@@ -1952,5 +1959,5 @@ yyreturn:
 
 
 /* Line 1675 of yacc.c  */
-#line 212 "C:\\Users\\Koya\\Documents\\GitHub\\CSignal\\CSignal\\CSignal\\signal\\parse\\signal.y"
+#line 216 "C:\\Users\\Koya\\Documents\\GitHub\\CSignal\\CSignal\\CSignal\\signal\\parse\\signal.y"
 

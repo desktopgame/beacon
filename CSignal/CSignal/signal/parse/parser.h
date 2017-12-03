@@ -5,8 +5,12 @@
 #include "yacc_input_type.h"
 #include <stdbool.h>
 
+/**
+ * Yacc/Bisonの解析結果を保存する構造体です.
+ */
 typedef struct parser {
 	ast* root;
+	char* buffer;
 	yacc_input_type input_type;
 	bool fail;
 } parser;
@@ -21,6 +25,26 @@ parser* parser_push(yacc_input_type input_type);
  * 現在のパーサーを返します.
  */
 parser* parser_top();
+
+/**
+ * バッファーをクリアします.
+ * @param self
+ */
+void parser_clear_buffer(parser* self);
+
+/**
+ * 指定の文字を現在のバッファーへ追加します.
+ * @parma self
+ * @param ch
+ */
+void parser_append_buffer(parser* self, char ch);
+
+/**
+ * バッファーを文字列リテラルをASTへ還元します.
+ * @param self
+ * @return
+ */
+ast* parser_reduce_buffer(parser* self);
 
 /**
 * ファイルを入力として解析を実行します.

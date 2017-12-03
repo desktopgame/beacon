@@ -8,6 +8,7 @@
 #include "signal.tab.h"
 #include "parser.h"
 #include "../ast/ast.h"
+#include "../ast/ast_new_literal.h"
 
 //for C4996
 #ifdef _MSC_VER
@@ -104,6 +105,7 @@ static int my_yyinput(char *buf, int max_size) {
 %option yy_scan_string
 %option yy_scan_buffer
 %option yy_scan_bytes
+%start ML_COMMENT L_COMMENT STRING_LITERAL_STATE
 %%
 <INITIAL>"."				{ return (DOT); }
 <INITIAL>","				{ return (COMMA); }
@@ -152,6 +154,8 @@ static int my_yyinput(char *buf, int max_size) {
 <INITIAL>"["				{ return (LSB); }
 <INITIAL>"]"				{ return (RSB); }
 
+<INITIAL>"import"			{ return (IMPORT); }
+
 <INITIAL>"0" {
 	yylval.ast_value = ast_new_int(0);
 	return INT;
@@ -170,5 +174,58 @@ static int my_yyinput(char *buf, int max_size) {
 <INITIAL>[A-Za-z_][A-Za-z_0-9]* {
 	yylval.string_value = _strdup(yytext);
 	return IDENT;
+}
+
+<INITIAL>\" {
+	parser_clear_buffer(parser_top());
+    BEGIN STRING_LITERAL_STATE;
+}
+<INITIAL>"/*"     BEGIN ML_COMMENT;
+<INITIAL>"//"     BEGIN L_COMMENT;
+<ML_COMMENT>\n     
+<ML_COMMENT>"*/"     {
+    BEGIN INITIAL;
+}
+<ML_COMMENT>.      ;
+<L_COMMENT>\n  {
+	BEGIN INITIAL;
+}
+<L_COMMENT><<EOF>>   {
+	BEGIN INITIAL;
+}
+<L_COMMENT>.   ;
+<INITIAL>\'\\r\' {
+	yylval.ast_value = ast_new_char('\r');
+	return CHAR_LITERAL;
+}
+<INITIAL>\'\\n\' {
+	yylval.ast_value = ast_new_char('\n');
+	return CHAR_LITERAL;
+}
+<INITIAL>\'\\t\' {
+	yylval.ast_value = ast_new_char('\t');
+	return CHAR_LITERAL;
+}
+<INITIAL>\'\\b\' {
+	yylval.ast_value = ast_new_char('\b');
+	return CHAR_LITERAL;
+}
+<INITIAL>\'.\' {
+	yylval.ast_value = ast_new_char(yytext[1]);
+	return CHAR_LITERAL;
+}
+<STRING_LITERAL_STATE>\" {
+	yylval.ast_value = parser_reduce_buffer(parser_top());
+    BEGIN INITIAL;
+	return STRING_LITERAL;
+}
+<STRING_LITERAL_STATE>\\\"	parser_append_buffer(parser_top(), '"');
+<STRING_LITERAL_STATE>\\\'	parser_append_buffer(parser_top(), '\'');
+<STRING_LITERAL_STATE>\\r	parser_append_buffer(parser_top(), '\r');
+<STRING_LITERAL_STATE>\\n	parser_append_buffer(parser_top(), '\n');
+<STRING_LITERAL_STATE>\\t	parser_append_buffer(parser_top(), '\t');
+<STRING_LITERAL_STATE>\\\\	parser_append_buffer(parser_top(), '\\');
+<STRING_LITERAL_STATE>.	{
+	parser_append_buffer(parser_top(), yytext[0]);
 }
 %%
