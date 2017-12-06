@@ -55,6 +55,46 @@ typedef enum ast_tag {
 	ast_typename,
 
 	ast_variable_decl,
+
+	ast_import_decl,
+	ast_import_path,
+
+	ast_class_decl,
+	ast_class_super,
+
+	ast_modifier_public,
+	ast_modifier_private,
+	ast_modifier_protected,
+	ast_modifier_static,
+	ast_modifier_native,
+	ast_modifier_list,
+
+	ast_member_decl,
+	ast_member_decl_list,
+
+	ast_field_decl,
+	ast_field_type_name,
+	ast_field_access_name,
+
+	ast_func_decl,
+	ast_func_name,
+	ast_func_return_name,
+
+	ast_constructor_decl,
+	ast_constructor_chain,
+
+	ast_scope,
+	ast_stmt,
+	ast_stmt_list,
+
+
+	ast_parameter,
+	ast_parameter_type_name,
+	ast_parameter_access_name,
+	ast_parameter_list,
+
+	ast_argument,
+	ast_argument_list,
 } ast_tag;
 
 /**
@@ -83,6 +123,33 @@ void ast_compile_entry(ast* self);
  * @param tag
  */
 ast* ast_new(ast_tag tag);
+
+/**
+ * インポート先のファイルを表す要素を作成します.
+ * @param str
+ * @return
+ */
+ast* ast_new_import_path(ast* str);
+
+/**
+ * インポート宣言を表す要素を作成します.
+ * @param import_path
+ * @return
+ */
+ast* ast_new_import_decl(ast* import_path);
+
+/**
+ * スコープ({ ... }) を表す要素を作成します.
+ * @param stmt_list
+ * @return
+ */
+ast* ast_new_scope(ast* stmt_list);
+
+/**
+ * 空のスコープを表す要素を作成します.
+ * @return
+ */
+ast* ast_new_scope_empty();
 
 /**
  * 空の要素を作成します.

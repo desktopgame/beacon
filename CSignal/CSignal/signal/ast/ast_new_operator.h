@@ -2,6 +2,7 @@
 #ifndef SIGNAL_AST_AST_NEW_OPERATOR_H
 #define SIGNAL_AST_AST_NEW_OPERATOR_H
 #include "ast.h"
+#include "assign_operator_type.h"
 //typedef struct ast { } ast;
 /**
 * 加算を表す要素を作成します.
@@ -42,6 +43,15 @@ ast* ast_new_div(ast* l, ast* r);
 * @return
 */
 ast* ast_new_mod(ast* l, ast* r);
+
+/**
+ * type に応じて適切な代入演算子を作成します.
+ * @param l
+ * @param type
+ * @param r
+ * @return
+ */
+ast* ast_new_generic_assign(ast* l, assign_operator_type type, ast* r);
 
 /**
  * 代入を表す要素を作成します.

@@ -23,6 +23,37 @@ ast * ast_new_mod(ast * l, ast * r) {
 	return ast_new_bop(ast_mod, l, r);
 }
 
+ast * ast_new_generic_assign(ast * l, assign_operator_type type, ast * r) {
+	switch (type) {
+		case assign_otype_def:
+			return ast_new_assign(l, r);
+			break;
+
+		case assign_otype_add:
+			return ast_new_add_assign(l, r);
+			break;
+
+		case assign_otype_sub:
+			return ast_new_sub_assign(l, r);
+			break;
+
+		case assign_otype_mul:
+			return ast_new_mul_assign(l, r);
+			break;
+
+		case assign_otype_div:
+			return ast_new_div_assign(l, r);
+			break;
+
+		case assign_otype_mod:
+			return ast_new_mod_assign(l, r);
+			break;
+		default:
+			break;
+	}
+	return NULL;
+}
+
 ast * ast_new_assign(ast * l, ast * r) {
 	return ast_new_bop(ast_assign, l, r);
 }

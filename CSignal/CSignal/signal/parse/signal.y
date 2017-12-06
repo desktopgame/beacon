@@ -3,6 +3,10 @@
 #include <stdlib.h>
 #include "../ast/ast_new_operator.h"
 #include "../ast/ast_new_stmt.h"
+#include "../ast/ast_new_decl.h"
+#include "../ast/constructor_chain_type.h"
+#include "../ast/assign_operator_type.h"
+#include "../ast/modifier_type.h"
 #define YYDEBUG 1
 #define YYERROR_VERBOSE 1
 %}
@@ -10,12 +14,18 @@
 	char char_value;
 	const char* string_value;
 	ast* ast_value;
+	assign_operator_type assign_otype_value;
+	constructor_chain_type chain_type_value;
+	modifier_type modifier_type_value;
 }
 %token <ast_value>			CHAR_LITERAL
 %token <ast_value>			STRING_LITERAL
 %token <ast_value>			INT
 %token <ast_value>			DOUBLE
 %token <string_value>		IDENT
+%type <assign_otype_value>	assign_type_T
+%type <chain_type_value>	constructor_chain_type_T
+%type <modifier_type_value>	modifier_type_T
 %token DOT COMMA COLON COLO_COLO
 		ADD SUB MUL DIV MOD NOT
 		ASSIGN ADD_ASSIGN SUB_ASSIGN MUL_ASSIGN DIV_ASSIGN MOD_ASSIGN
@@ -25,10 +35,41 @@
 		BIT_AND LOGIC_AND BIT_OR LOGIC_OR
 		LCB RCB LRB RRB LSB RSB
 		SEMI IMPORT
-%type <ast_value> root top_level expression assign 
-					or and equal compare addsub muldiv 
-					unary prefix postfix primary
-					stmt variable_stmt
+		THIS SUPER
+		CLASS PUBLIC PRIVATE PROTECTED STATIC NATIVE NEW
+		DEF ARROW
+%type <ast_value> root 
+					top_level 
+					import 
+					class_decl 
+						modifier_list
+						class_super 
+						member_define_list
+						member_define
+						constructor_define
+						constructor_chain
+						constructor_chain_optional
+						func_define
+						field_define
+						parameter_list
+						argument_list
+					expression 
+						assign 
+						or 
+						and 
+						equal 
+						compare 
+						addsub 
+						muldiv 
+						unary 
+						prefix 
+						postfix 
+						primary
+					stmt_list
+						stmt
+						variable_stmt
+						scope
+						scope_optional
 %%
 root
 	: top_level
@@ -47,35 +88,195 @@ top_level
 	{
 		ast_compile_entry($1);
 	}
+	| import
+	{
+		ast_compile_entry($1);
+	}
+	| class_decl
+	{
+		ast_compile_entry($1);
+	}
+	;
+import
+	: IMPORT STRING_LITERAL
+	{
+		$$ = ast_new_import_decl(ast_new_import_path($2));
+	}
+	;
+class_decl
+	: CLASS IDENT class_super LCB member_define_list RCB
+	{
+		$$ = ast_new_class_decl($2, $3, $5);
+	}
+	;
+class_super
+	: /* empty */
+	{
+		$$ = ast_new_blank();
+	}
+	| COLON IDENT
+	{
+		$$ = ast_new_superclass($2);
+	}
+	;
+member_define_list
+	: /* empty */
+	{
+		$$ = ast_new_blank();
+	}
+	| member_define
+	{
+		$$ = ast_new_member_decl($1);
+	}
+	| member_define_list member_define
+	{
+		$$ = ast_new_member_decl_list($1, $2);
+	}
+	;
+member_define
+	: constructor_define
+	| func_define
+	| field_define
+	;
+constructor_define
+	: modifier_list DEF NEW LRB parameter_list RRB constructor_chain_optional scope_optional
+	{
+		$$ = ast_new_constructor_decl($5, $7, $8);
+	}
+	| DEF NEW LRB RRB constructor_chain_optional scope_optional
+	{
+		$$ = ast_new_constructor_decl(ast_new_blank(), $5, $6);
+	}
+	;
+constructor_chain
+	: COLON constructor_chain_type_T LRB argument_list RRB
+	{
+		$$ = ast_new_constructor_chain($2, $4);
+	}
+	| COLON constructor_chain_type_T LRB RRB
+	{
+		$$ = ast_new_constructor_chain($2, ast_new_blank());
+	}
+	;
+constructor_chain_type_T
+	: SUPER
+	{
+		$$ = chain_type_super;
+	}
+	| THIS
+	{
+		$$ = chain_type_this;
+	}
+	;
+constructor_chain_optional
+	: /* empty */
+	{
+		$$ = ast_new_blank();
+	}
+	| constructor_chain
+	;
+func_define
+	: DEF IDENT LRB parameter_list RRB ARROW IDENT scope_optional
+	{
+		$$ = ast_new_function_decl($2, $4, $8, $7);
+	}
+	| DEF IDENT LRB RRB ARROW IDENT scope_optional
+	{
+		$$ = ast_new_function_decl_empty_params($2, $7, $6);
+	}
+	;
+field_define
+	: IDENT IDENT SEMI
+	{
+		$$ = ast_new_field_decl($1, $2);
+	}
+	;
+modifier_list
+	: modifier_type_T
+	{
+		$$ = ast_new_modifier($1);
+	}
+	| modifier_list modifier_type_T
+	{
+		$$ = ast_new_modifier_list($1, $2);
+	}
+	;
+modifier_type_T
+	: PUBLIC
+	{
+		$$ = modifier_type_public;
+	}
+	| PRIVATE
+	{
+		$$ = modifier_type_private;
+	}
+	| PROTECTED
+	{
+		$$ = modifier_type_protected;
+	}
+	| STATIC
+	{
+		$$ = modifier_type_static;
+	}
+	| NATIVE
+	{
+		$$ = modifier_type_native;
+	}
+	;
+parameter_list
+	: IDENT IDENT
+	{
+		$$ = ast_new_parameter($1, $2);
+	}
+	| IDENT IDENT COMMA parameter_list
+	{
+		$$ = ast_new_parameter_list($1, $2, $4)
+	}
+	;
+argument_list
+	: expression
+	{
+		$$ = ast_new_argument($1);
+	}
+	| expression COMMA argument_list
+	{
+		$$ = ast_new_argument_list($1, $3);
+	}
 	;
 expression
 	: assign
 	;
 assign
 	: or
-	| or ASSIGN assign
+	| or assign_type_T assign
 	{
-		$$ = ast_new_assign($1, $3);
+		$$ = ast_new_generic_assign($1, $2, $3);
 	}
-	| or ADD_ASSIGN assign
+	;
+assign_type_T
+	: ASSIGN
 	{
-		$$ = ast_new_add_assign($1, $3);
+		$$ = assign_otype_def;
 	}
-	| or SUB_ASSIGN assign
+	| ADD_ASSIGN
 	{
-		$$ = ast_new_sub_assign($1, $3);
+		$$ = assign_otype_add;
 	}
-	| or MUL_ASSIGN assign
+	| SUB_ASSIGN
 	{
-		$$ = ast_new_mul_assign($1, $3);
+		$$ = assign_otype_sub;
 	}
-	| or DIV_ASSIGN assign
+	| MUL_ASSIGN
 	{
-		$$ = ast_new_div_assign($1, $3);
+		$$ = assign_otype_mul;
 	}
-	| or MOD_ASSIGN assign
+	| DIV_ASSIGN
 	{
-		$$ = ast_new_mod_assign($1, $3);
+		$$ = assign_otype_div;
+	}
+	| MOD_ASSIGN
+	{
+		$$ = assign_otype_mod;
 	}
 	;
 or
@@ -199,6 +400,16 @@ primary
 		$$ = $2;
 	}
 	;
+stmt_list
+	: stmt
+	{
+		$$ = ast_new_stmt($1);
+	}
+	| stmt_list stmt
+	{
+		$$ = ast_new_stmt_list($1, $2);
+	}
+	;
 stmt
 	: expression SEMI
 	{
@@ -212,5 +423,21 @@ variable_stmt
 		$$ = ast_new_variable_decl(ast_new_typename($1), ast_new_identifier($2), $4);
 	}
 	;
-
+scope
+	: LCB stmt_list RCB
+	{
+		$$ = ast_new_scope($2);
+	}
+	| LCB RCB
+	{
+		$$ = ast_new_scope_empty();
+	}
+	;
+scope_optional
+	: SEMI
+	{
+		$$ = ast_new_blank();
+	}
+	| scope
+	;
 %%

@@ -9,6 +9,7 @@
 #include "parser.h"
 #include "../ast/ast.h"
 #include "../ast/ast_new_literal.h"
+#include "../ast/constructor_chain_type.h"
 
 //for C4996
 #ifdef _MSC_VER
@@ -155,6 +156,19 @@ static int my_yyinput(char *buf, int max_size) {
 <INITIAL>"]"				{ return (RSB); }
 
 <INITIAL>"import"			{ return (IMPORT); }
+
+<INITIAL>"class"			{ return (CLASS); }
+<INITIAL>"this"				{ return (THIS); }
+<INITIAL>"super"			{ return (SUPER); }
+<INITIAL>"new"				{ return (NEW); }
+
+<INITIAL>"public"			{ return (PUBLIC); }
+<INITIAL>"private"			{ return (PRIVATE); }
+<INITIAL>"protected"		{ return (PROTECTED); }
+<INITIAL>"static"			{ return (STATIC); }
+
+<INITIAL>"def"				{ return (DEF); }
+<INITIAL>"->"				{ return (ARROW); }
 
 <INITIAL>"0" {
 	yylval.ast_value = ast_new_int(0);

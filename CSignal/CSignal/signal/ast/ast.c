@@ -8,6 +8,7 @@
 static void ast_print_indent(int depth);
 static void ast_print_tree_impl(ast* self, int depth);
 static void ast_delete_impl(ast* self);
+static bool ast_has_str(ast* self);
 
 void ast_compile_entry(ast * self) {
 	parser* p = parser_top();
@@ -16,10 +17,35 @@ void ast_compile_entry(ast * self) {
 
 ast * ast_new(ast_tag tag) {
 	ast* ret = (ast*)malloc(sizeof(ast));
+	assert(ret != NULL);
 	ret->tag = tag;
 	ret->childCount = 0;
 	ret->children = NULL;
 	return ret;
+}
+
+ast * ast_new_import_path(ast* str) {
+	ast* ret = ast_new(ast_import_path);
+	ret->u.string_value = str->u.string_value;
+	str->u.string_value = NULL;
+	free(str);
+	return ret;
+}
+
+ast * ast_new_import_decl(ast * import_path) {
+	ast* ret = ast_new(ast_import_decl);
+	ast_push(ret, import_path);
+	return ret;
+}
+
+ast * ast_new_scope(ast * stmt_list) {
+	ast* ret = ast_new(ast_scope);
+	ast_push(ret, stmt_list);
+	return ret;
+}
+
+ast * ast_new_scope_empty() {
+	return ast_new_scope(ast_new_blank());
 }
 
 ast * ast_new_blank() {
@@ -133,7 +159,47 @@ void ast_print(ast* self) {
 		case ast_string:
 			printf("string(%s)", self->u.string_value);
 			break;
-		default: p("not implemented");
+		case ast_import_decl: p("import");
+		case ast_import_path:
+			printf("%s", self->u.string_value);
+			break;
+		case ast_class_decl:
+			printf("class(%s)", self->u.string_value);
+			break;
+		case ast_class_super:
+			printf("super_class(%s)", self->u.string_value);
+			break;
+		case ast_member_decl: p("member_decl");
+		case ast_member_decl_list: p("member_decl_list");
+		case ast_field_decl: p("field decl");
+		case ast_field_type_name:
+			printf("type_name(%s)", self->u.string_value);
+			break;
+		case ast_field_access_name:
+			printf("access_name(%s)", self->u.string_value);
+			break;
+		case ast_func_decl: p("func decl");
+		case ast_func_name:
+			printf("func_name(%s)", self->u.string_value);
+			break;
+		case ast_parameter: p("parameter");
+		case ast_parameter_type_name:
+			printf("parameter_type_name(%s)", self->u.string_value);
+			break;
+		case ast_parameter_access_name:
+			printf("parameter_access_name(%s)", self->u.string_value);
+			break;
+		case ast_func_return_name:
+			printf("func_return_name(%s)", self->u.string_value);
+			break;
+		case ast_scope: p("scope");
+		case ast_stmt: p("stmt");
+		case ast_stmt_list: p("stmt list");
+		case ast_blank:
+			printf("blank");
+			break;
+		default: 
+			p("not implemented");
 	}
 #undef p
 }
@@ -164,12 +230,27 @@ static void ast_delete_impl(ast* self) {
 	}
 	list_delete(self->children, list_deleter_null);
 	ast_tag t = self->tag;
-	if (t == ast_typename ||
-		t == ast_identifier ||
-		t == ast_string) {
+	if (ast_has_str(self)) {
 		printf("free(%s)\n", self->u.string_value);
 		free(self->u.string_value);
 		self->u.string_value = NULL;
 	}
 	free(self);
+}
+
+static bool ast_has_str(ast* self) {
+	ast_tag t = self->tag;
+	return
+		t == ast_typename ||
+		t == ast_identifier ||
+		t == ast_string ||
+		t == ast_import_path ||
+		t == ast_field_type_name ||
+		t == ast_field_access_name ||
+		t == ast_func_name ||
+		t == ast_func_return_name ||
+		t == ast_parameter_type_name ||
+		t == ast_parameter_access_name ||
+		t == ast_class_decl ||
+		t == ast_class_super;
 }

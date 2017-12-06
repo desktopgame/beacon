@@ -1,5 +1,8 @@
 //insert by compile.rb
 #include "../ast/ast.h"
+#include "../ast/constructor_chain_type.h"
+#include "../ast/assign_operator_type.h"
+#include "../ast/modifier_type.h"
 
 /* A Bison parser, made by GNU Bison 2.4.1.  */
 
@@ -81,7 +84,18 @@
      LSB = 295,
      RSB = 296,
      SEMI = 297,
-     IMPORT = 298
+     IMPORT = 298,
+     THIS = 299,
+     SUPER = 300,
+     CLASS = 301,
+     PUBLIC = 302,
+     PRIVATE = 303,
+     PROTECTED = 304,
+     STATIC = 305,
+     NATIVE = 306,
+     NEW = 307,
+     DEF = 308,
+     ARROW = 309
    };
 #endif
 
@@ -92,16 +106,19 @@ typedef union YYSTYPE
 {
 
 /* Line 1676 of yacc.c  */
-#line 9 "C:\\Users\\Koya\\Documents\\GitHub\\CSignal\\CSignal\\CSignal\\signal\\parse\\signal.y"
+#line 13 "C:\\Users\\Koya\\Documents\\GitHub\\CSignal\\CSignal\\CSignal\\signal\\parse\\signal.y"
 
 	char char_value;
 	const char* string_value;
 	ast* ast_value;
+	assign_operator_type assign_otype_value;
+	constructor_chain_type chain_type_value;
+	modifier_type modifier_type_value;
 
 
 
 /* Line 1676 of yacc.c  */
-#line 103 "signal.tab.h"
+#line 117 "signal.tab.h"
 } YYSTYPE;
 # define YYSTYPE_IS_TRIVIAL 1
 # define yystype YYSTYPE /* obsolescent; will be withdrawn */

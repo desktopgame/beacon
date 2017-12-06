@@ -1,4 +1,15 @@
-(10 + 20 + (5 * 20 + (16 / 4)) >= 20 || 0 < 0)
-TYPENAME VARIABLENAME = 10;
-STRING STR = "aaaa";
-CHAR CH = 'z';
+import "../lib.h"
+import "../io.h"
+
+class Foo : SuperFoo {
+	int pointX;
+	int pointY;
+
+	def print(String message) -> Void {
+	}
+}
+
+//(10 + 20 + (5 * 20 + (16 / 4)) >= 20 || 0 < 0)
+//TYPENAME VARIABLENAME = 10;
+//STRING STR = "aaaa";
+//CHAR CH = 'z';
