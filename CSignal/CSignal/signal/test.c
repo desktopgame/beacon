@@ -5,6 +5,7 @@
 #include "util/io.h"
 #include "ast/ast.h"
 #include "parse/parser.h"
+#include "env/namespace.h"
 #include <stdio.h>
 
 void test_stack(void) {
@@ -56,7 +57,7 @@ void test_ast(void) {
 void test_ast2(void) {
 	char* text = io_read_text("main.signal");
 	parser* p = parser_parse_from_source(text);
-	printf("\n");
+	system("cls");
 	ast_print_tree(p->root);
 	parser_pop();
 }
@@ -82,4 +83,12 @@ void test_tree_map(void) {
 		printf("%s = %d\n", arr[i], (int)tree_map_get(m, arr[i]));
 	}
 	tree_map_delete(m, tree_map_deleter_null);
+}
+
+void test_namespace(void) {
+	namespace_* signal = namespace_create_at_root("signal");
+	namespace_* lang = namespace_add_namespace(signal, "lang");
+	namespace_* text = namespace_add_namespace(lang, "text");
+	namespace_* io = namespace_add_namespace(lang, "io");
+	namespace_dump();
 }

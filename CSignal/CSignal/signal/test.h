@@ -25,4 +25,9 @@ void test_ast2(void);
  * tree_mapのテストを実行.
  */
 void test_tree_map(void);
+
+/**
+ * 名前空間のテストを実行.
+ */
+void test_namespace(void);
 #endif // !SIGNAL_TEST_H
