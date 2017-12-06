@@ -1,6 +1,7 @@
 #include "test.h"
 #include "util/list.h"
 #include "util/stack.h"
+#include "util/tree_map.h"
 #include "util/io.h"
 #include "ast/ast.h"
 #include "parse/parser.h"
@@ -58,4 +59,27 @@ void test_ast2(void) {
 	printf("\n");
 	ast_print_tree(p->root);
 	parser_pop();
+}
+
+void test_tree_map(void) {
+	tree_map* m = tree_map_new();
+	tree_map_put(m, "KeyA", 10);
+	tree_map_put(m, "KeyB", 5);
+	tree_map_put(m, "KeyC", 2);
+	tree_map_put(m, "KeyXC", 99);
+	tree_map_put(m, "KeyYB", 98);
+	tree_map_put(m, "KeyZA", 97);
+	char* arr[] = {
+		"KeyA",
+		"KeyB",
+		"KeyC",
+		"KeyXC",
+		"KeyYB",
+		"KeyZA",
+	};
+	int arrCount = 6;
+	for (int i = 0; i < arrCount; i++) {
+		printf("%s = %d\n", arr[i], (int)tree_map_get(m, arr[i]));
+	}
+	tree_map_delete(m, tree_map_deleter_null);
 }

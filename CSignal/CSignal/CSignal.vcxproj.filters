@@ -60,6 +60,9 @@
     <ClCompile Include="signal\ast\ast_new_decl.c">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
+    <ClCompile Include="signal\util\tree_map.c">
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="signal\util\cmd.h">
@@ -111,6 +114,9 @@
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
     <ClInclude Include="signal\ast\modifier_type.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="signal\util\tree_map.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
   </ItemGroup>
