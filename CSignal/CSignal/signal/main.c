@@ -15,8 +15,8 @@ int main(int argc, char* argv[]) {
 	//_CrtSetBreakAlloc(103280);
 #endif
 	cmd_dump(argc, argv);
-	test_namespace();
-//	test_ast2();
+//	test_namespace();
+	test_ast2();
 //	test_tree_map();
 //	char* c = io_read_text("main.signal");
 //	printf("%s", c);

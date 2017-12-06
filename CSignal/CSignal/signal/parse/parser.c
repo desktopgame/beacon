@@ -17,6 +17,9 @@ parser * parser_push(yacc_input_type input_type) {
 	p->input_type = input_type;
 	p->root = ast_new(ast_root);
 	p->buffer = NULL;
+	p->errorLineIndex = 0;
+	p->errorColumnIndex = 0;
+	p->source_name = _strdup("unknown-source");
 	p->fail = false;
 	return p;
 }
@@ -58,6 +61,7 @@ parser * parser_parse_from_file(const char * filename) {
 	extern FILE *yyin;
 
 	parser* p = parser_push(yinput_file);
+	parser_swap_source_name(filename);
 	errno_t err = fopen_s(&yyin, filename, "r");
 	if (err != 0) {
 		p->fail = true;
@@ -75,6 +79,7 @@ parser * parser_parse_from_source(char * source) {
 	extern void yy_setstr(char *source);
 	extern void yy_clearstr();
 	extern int yyparse(void);
+	//p->source_name = _strdup("unknown-source");
 	yy_setstr(source);
 	if (yyparse()) {
 		yy_clearstr();
@@ -85,12 +90,19 @@ parser * parser_parse_from_source(char * source) {
 	return p;
 }
 
+void parser_swap_source_name(char * source_name) {
+	parser* p = parser_top();
+	free(p->source_name);
+	p->source_name = _strdup(source_name);
+}
+
 void parser_pop() {
 	parser* p = (parser*)stack_pop(parser_stack);
 	if (p->root) {
 		ast_delete(p->root);
 	}
 	free(p->buffer);
+	free(p->source_name);
 	free(p);
 	if (stack_empty(parser_stack)) {
 		stack_delete(parser_stack, stack_deleter_null);

@@ -10,6 +10,7 @@
 #include "../ast/ast.h"
 #include "../ast/ast_new_literal.h"
 #include "../ast/constructor_chain_type.h"
+#include "../util/text.h"
 
 //for C4996
 #ifdef _MSC_VER
@@ -18,6 +19,9 @@
 #pragma warning(disable:4996)
 #endif
 
+static char* yaccSourceBuffer;
+static int yaccSourceOffset;
+ 
 int yymain(void) {
 	yyparse();
 	return(0);
@@ -28,15 +32,72 @@ int yywrap(void) {
 }
 
 int yyerror(char * err_str) {
-/*
-	fprintf(stderr,err_str);
-	printf("\n");
-	printf("file-name=%s", get_compiler()->file_name);
-	printf(" row=%d", get_compiler()->row);
-	printf(" col=%d", 0);
-	printf("\n");
-*/
-	fprintf(stderr,err_str);
+	system("cls");
+	parser* p = parser_top();
+	p->errorLineIndex = yylloc.last_line;
+	p->errorColumnIndex = yylloc.last_column;
+	//put filename
+	printf("file=%s ", p->source_name);
+	//put line
+	printf("line=%d ", yylloc.last_line);
+	//put column
+	printf("column=%d", yylloc.last_column);
+	text_putline();
+	//put message
+	fprintf (stderr, "%s\n", err_str);
+	if(yaccSourceBuffer == NULL) {
+		return 0;
+	}
+	int len = strlen(yaccSourceBuffer);
+	int line = 1;
+	int startOffset = 0;
+	int endOffset = 0;
+	//find startoffset in error line
+	for(int i=0; i<len; i++) {
+		char ch = yaccSourceBuffer[i];
+		//FIXME:windows only?
+		if(ch == '\n') {
+			line++;
+		}
+		if(line == yylloc.last_line) {
+		startOffset++;
+			break;
+		}
+		startOffset++;
+	}
+	//find endoffset in error line
+	endOffset = startOffset;
+	for(int i=startOffset+1; i<len; i++) {
+		char ch = yaccSourceBuffer[i];
+		//FIXME:windows only?
+		if(ch == '\n') {
+			break;
+		}
+		endOffset++;
+	}
+	//extract error text
+	int errorLen = endOffset - startOffset;
+	char* errorLineText = (char*)malloc(sizeof(char) * errorLen);
+	char* rulerLineText = (char*)malloc(sizeof(char) * errorLen);
+	for(int i=startOffset; i<endOffset; i++) {
+		errorLineText[i-startOffset] = yaccSourceBuffer[i];
+		rulerLineText[i-startOffset] = ' ';
+	}
+	//highlight at cursor
+	if(errorLen > 3) {
+		rulerLineText[errorLen - 1] = '^';
+		rulerLineText[errorLen - 2] = '^';
+		rulerLineText[errorLen - 3] = '^';
+	} else {
+		rulerLineText[errorLen - 1] = '^';
+	}
+	printf(errorLineText);
+	text_putline();
+	printf(rulerLineText);
+	text_putline();
+	free(errorLineText);
+	free(rulerLineText);
+	return 0;
 }
 
 void yyexit() {
@@ -59,9 +120,6 @@ static int file_input(char *buf, int max_size) {
     return len;
 }
 
-static char* yaccSourceBuffer;
-static int yaccSourceOffset;
- 
 void yy_setstr(char* source) {
 	yaccSourceBuffer = source;
 	yaccSourceOffset = 0;
@@ -101,8 +159,30 @@ static int my_yyinput(char *buf, int max_size) {
 	}
 	return result;
 }
-%}
+//error position
+static void update_loc() {
+  static int curr_line = 1;
+  static int curr_col  = 1;
 
+  yylloc.first_line   = curr_line;
+  yylloc.first_column = curr_col;
+
+  {char * s; for(s = yytext; *s != '\0'; s++){
+    if(*s == '\n'){
+      curr_line++;
+      curr_col = 1;
+    }else{
+      curr_col++;
+    }
+  }}
+
+  yylloc.last_line   = curr_line;
+  yylloc.last_column = curr_col-1;
+}
+
+#define YY_USER_ACTION update_loc();
+%}
+%option yylineno
 %option yy_scan_string
 %option yy_scan_buffer
 %option yy_scan_bytes
@@ -157,6 +237,7 @@ static int my_yyinput(char *buf, int max_size) {
 
 <INITIAL>"import"			{ return (IMPORT); }
 
+<INITIAL>"namespace"		{ return (NAMESPACE); }
 <INITIAL>"class"			{ return (CLASS); }
 <INITIAL>"this"				{ return (THIS); }
 <INITIAL>"super"			{ return (SUPER); }
@@ -196,7 +277,9 @@ static int my_yyinput(char *buf, int max_size) {
 }
 <INITIAL>"/*"     BEGIN ML_COMMENT;
 <INITIAL>"//"     BEGIN L_COMMENT;
-<ML_COMMENT>\n     
+<ML_COMMENT>\n     {
+
+}
 <ML_COMMENT>"*/"     {
     BEGIN INITIAL;
 }
