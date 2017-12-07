@@ -26,4 +26,63 @@ ast* ast_new_stmt(ast* stmt);
  * @return
  */
 ast* ast_new_stmt_list(ast* stmt, ast* stmt_list);
+
+/**
+ * ifを表す要素を作成します.
+ * @param cond
+ * @param body
+ * @return
+ */
+ast* ast_new_if(ast* cond, ast* body);
+
+/** 
+ * elseを表す要素を作成します.
+ * @param body
+ * @return
+ */
+ast* ast_new_else(ast* body);
+
+/**
+ * if-elseを表す要素を作成します.
+ * @param cond
+ * @param trueBody
+ * @param falseBody
+ * @return
+ */
+ast* ast_new_if_else(ast* cond, ast* trueBody, ast* falseBody);
+
+/**
+ * if-elif... を表す要素を作成します.
+ * @param cond
+ * @param trueBody
+ * @param elifList
+ * @return
+ */
+ast* ast_new_if_elif_list(ast* cond, ast* trueBody, ast* elifList);
+
+/**
+ * if-elif...-elseを表す要素を作成します.
+ * @param cond
+ * @param trueBody
+ * @param elifList
+ * @param elseBody
+ * @param
+ */
+ast* ast_new_if_elif_list_else(ast* cond, ast* trueBody, ast* elifList, ast* elseBody);
+
+/**
+ * elif...を表す要素を作成します.
+ * @param forward
+ * @param tail
+ * @return
+ */
+ast* ast_new_elif_list(ast* forward, ast* tail);
+
+/**
+ * elifを表す要素を作成します.
+ * @param cond
+ * @param body
+ * @return
+ */
+ast* ast_new_elif(ast* cond, ast* body);
 #endif // !SIGNAL_AST_AST_NEW_STMT_H

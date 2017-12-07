@@ -237,6 +237,10 @@ static void update_loc() {
 
 <INITIAL>"import"			{ return (IMPORT); }
 
+<INITIAL>"if"				{ return (IF); }
+<INITIAL>"elif"				{ return (ELIF); }
+<INITIAL>"else"				{ return (ELSE); }
+
 <INITIAL>"namespace"		{ return (NAMESPACE); }
 <INITIAL>"class"			{ return (CLASS); }
 <INITIAL>"this"				{ return (THIS); }

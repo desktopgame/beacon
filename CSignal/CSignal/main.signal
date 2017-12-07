@@ -1,10 +1,29 @@
 import "../lib.h"
 import "../io.h"
-class Foo : SuperFoo {
-	int pointX;
-	int pointY;
+namespace L {
+	class Foo : SuperFoo {
+		int pointX;
+		int pointY;
+	
+		def print(String message) -> Void {
+			if(10 == 10) {
 
-	def print(String message) -> Void {
+			}
+
+			if(20 == 20) {
+
+			} elif(30 == 30) {
+
+			}
+
+			if(40 == 40) {
+
+			} elif(50 == 50) {
+
+			} else {
+
+			}
+		}
 	}
 }
 

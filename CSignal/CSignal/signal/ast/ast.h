@@ -2,6 +2,7 @@
 #ifndef SIGNAL_AST_AST_H
 #define SIGNAL_AST_AST_H
 #include <stdint.h>
+#include <stdbool.h>
 #include "../util/list.h"
 
 /**
@@ -56,9 +57,15 @@ typedef enum ast_tag {
 
 	ast_variable_decl,
 
+	ast_namespace_decl,
+	ast_namespace_path,
+	ast_namespace_path_list,
+
 	ast_import_decl,
 	ast_import_path,
 
+	ast_class_decl_unit,
+	ast_class_decl_list,
 	ast_class_decl,
 	ast_class_super,
 
@@ -95,6 +102,14 @@ typedef enum ast_tag {
 
 	ast_argument,
 	ast_argument_list,
+	//stmt
+	ast_if,
+	ast_else,
+	ast_if_else,
+	ast_if_elif_list,
+	ast_if_elif_list_else,
+	ast_elif_list,
+	ast_elif,
 } ast_tag;
 
 /**
@@ -123,6 +138,21 @@ void ast_compile_entry(ast* self);
  * @param tag
  */
 ast* ast_new(ast_tag tag);
+
+/**
+ * 名前空間の一節(. ~~~ .)を表す要素を作成します.
+ * @param name
+ * @return
+ */
+ast* ast_new_namespace_path(char* name);
+
+/**
+ * 二つの名前空間を連結します.
+ * @param forward
+ * @param name
+ * @return
+ */
+ast* ast_new_namespace_path_list(ast* forward, char* name);
 
 /**
  * インポート先のファイルを表す要素を作成します.
@@ -229,4 +259,11 @@ void ast_print(ast* self);
  * @param self
  */
 void ast_delete(ast* self);
+
+/**
+ * 指定の要素が空なら true.
+ * @param self
+ * @return
+ */
+bool ast_is_blank(ast* self);
 #endif // !SIGNAL_AST_AST_H

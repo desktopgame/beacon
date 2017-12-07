@@ -18,6 +18,7 @@
 	constructor_chain_type chain_type_value;
 	modifier_type modifier_type_value;
 }
+%locations
 %token <ast_value>			CHAR_LITERAL
 %token <ast_value>			STRING_LITERAL
 %token <ast_value>			INT
@@ -37,9 +38,13 @@
 		SEMI IMPORT
 		THIS SUPER
 		CLASS PUBLIC PRIVATE PROTECTED STATIC NATIVE NEW
-		DEF ARROW
+		DEF ARROW NAMESPACE
+		IF ELIF ELSE
 %type <ast_value> root 
 					top_level 
+					namespace_decl
+					class_decl_list
+					namespace_path
 					import 
 					class_decl 
 						modifier_list
@@ -68,6 +73,9 @@
 					stmt_list
 						stmt
 						variable_stmt
+						if_stmt
+							elif_list
+							elif
 						scope
 						scope_optional
 %%
@@ -92,9 +100,39 @@ top_level
 	{
 		ast_compile_entry($1);
 	}
-	| class_decl
+	| namespace_decl
 	{
 		ast_compile_entry($1);
+	}
+	;
+namespace_decl
+	: NAMESPACE namespace_path LCB class_decl_list RCB
+	{
+		$$ = ast_new_namespace_decl($2, $4);
+	}
+	;
+class_decl_list
+	: /* empty */
+	{
+		$$ = ast_new_blank();
+	}
+	| class_decl
+	{
+		$$ = ast_new_class_decl_unit($1);
+	}
+	| class_decl_list class_decl
+	{
+		$$ = ast_new_class_decl_list($1, $2);
+	}
+	;
+namespace_path
+	: IDENT
+	{
+		$$ = ast_new_namespace_path($1);
+	}
+	| namespace_path DOT IDENT
+	{
+		$$ = ast_new_namespace_path_list($1, $3);
 	}
 	;
 import
@@ -416,11 +454,43 @@ stmt
 		$$ = $1;
 	}
 	| variable_stmt
+	| if_stmt
 	;
 variable_stmt
 	: IDENT IDENT ASSIGN expression SEMI
 	{
 		$$ = ast_new_variable_decl(ast_new_typename($1), ast_new_identifier($2), $4);
+	}
+	;
+if_stmt
+	: IF LRB expression RRB scope
+	{
+		$$ = ast_new_if($3, $5);
+	}
+	| IF LRB expression RRB scope ELSE scope
+	{
+		$$ = ast_new_if_else($3, $5, $7);
+	}
+	| IF LRB expression RRB scope elif_list
+	{
+		$$ = ast_new_if_elif_list($3, $5, $6);
+	}
+	| IF LRB expression RRB scope elif_list ELSE scope
+	{
+		$$ = ast_new_if_elif_list_else($3, $5, $6, $8);
+	}
+	;
+elif_list
+	: elif
+	| elif_list elif
+	{
+		$$ = ast_new_elif_list($1, $2);
+	}
+	;
+elif
+	: ELIF LRB expression RRB scope
+	{
+		$$ = ast_new_elif($3, $5);
 	}
 	;
 scope

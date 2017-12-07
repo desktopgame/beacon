@@ -12,6 +12,10 @@ static bool ast_has_str(ast* self);
 
 void ast_compile_entry(ast * self) {
 	parser* p = parser_top();
+	if (p->fail) {
+		free(self);
+		return;
+	}
 	ast_push(p->root, self);
 }
 
@@ -21,6 +25,19 @@ ast * ast_new(ast_tag tag) {
 	ret->tag = tag;
 	ret->childCount = 0;
 	ret->children = NULL;
+	return ret;
+}
+
+ast * ast_new_namespace_path(char * name) {
+	ast* ret = ast_new(ast_namespace_path);
+	ret->u.string_value = name;
+	return ret;
+}
+
+ast * ast_new_namespace_path_list(ast * forward, char * name) {
+	ast* ret = ast_new(ast_namespace_path_list);
+	ast_push(ret, forward);
+	ast_push(ret, ast_new_namespace_path(name));
 	return ret;
 }
 
@@ -159,6 +176,21 @@ void ast_print(ast* self) {
 		case ast_string:
 			printf("string(%s)", self->u.string_value);
 			break;
+		case ast_namespace_decl:
+			printf("namespace decl");
+			break;
+		case ast_namespace_path:
+			printf("namespace_path(%s)", self->u.string_value);
+			break;
+		case ast_namespace_path_list:
+			printf("namespace_path list");
+			break;
+		case ast_class_decl_unit:
+			printf("class decl_unit");
+			break;
+		case ast_class_decl_list:
+			printf("class decl_list");
+			break;
 		case ast_import_decl: p("import");
 		case ast_import_path:
 			printf("%s", self->u.string_value);
@@ -195,6 +227,12 @@ void ast_print(ast* self) {
 		case ast_scope: p("scope");
 		case ast_stmt: p("stmt");
 		case ast_stmt_list: p("stmt list");
+		case ast_if: p("if");
+		case ast_if_else: p("if else");
+		case ast_if_elif_list: p("if elif_list");
+		case ast_if_elif_list_else: p("if elif_list else");
+		case ast_elif: p("elif");
+		case ast_else: p("else");
 		case ast_blank:
 			printf("blank");
 			break;
@@ -206,6 +244,10 @@ void ast_print(ast* self) {
 
 void ast_delete(ast * self) {
 	ast_delete_impl(self);
+}
+
+bool ast_is_blank(ast * self) {
+	return self == NULL || self->tag == ast_blank;
 }
 
 //private
