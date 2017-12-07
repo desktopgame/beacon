@@ -35,4 +35,6 @@ void test_namespace(void);
  * IOのテストを実行.
  */
 void test_io(void);
+
+void test_io2(void);
 #endif // !SIGNAL_TEST_H

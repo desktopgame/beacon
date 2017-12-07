@@ -4,6 +4,7 @@
 #include <stdlib.h>
 
 void io_new_file(const char * filename) {
+	assert(!io_exists(filename));
 	FILE* fp;
 	errno_t err = fopen_s(&fp, filename, "a");
 	if (err) {
@@ -13,7 +14,17 @@ void io_new_file(const char * filename) {
 	return fp;
 }
 
+bool io_exists(const char * filename) {
+	FILE* fp;
+	errno_t err = fopen_s(&fp, filename, "r");
+	if (!err) {
+		fclose(fp);
+	}
+	return !err;
+}
+
 char * io_read_text(const char * filename) {
+	assert(io_exists(filename));
 	FILE* fp;
 	errno_t err = fopen_s(&fp, filename, "r");
 	if (err) {
@@ -49,4 +60,21 @@ char * io_read_text(const char * filename) {
 	}
 	fclose(fp);
 	return ret;
+}
+
+void io_write_text(const char * filename, const char * text) {
+	assert(io_exists(filename));
+	FILE* fp;
+	errno_t err = fopen_s(&fp, filename, "w");
+	if (err) {
+		//error
+		return;
+	}
+	int len = strlen(text);
+	for (int i = 0; i < len; i++) {
+		char c = text[i];
+		//printf("%c", c);
+		fputc(c, fp);
+	}
+	fclose(fp);
 }

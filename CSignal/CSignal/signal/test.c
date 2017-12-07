@@ -95,3 +95,7 @@ void test_namespace(void) {
 void test_io(void) {
 	io_new_file("io_file.text");
 }
+
+void test_io2(void) {
+	io_write_text("io_file.text", "hello, world!\n c java");
+}
