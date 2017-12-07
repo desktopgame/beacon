@@ -30,4 +30,9 @@ void test_tree_map(void);
  * 名前空間のテストを実行.
  */
 void test_namespace(void);
+
+/**
+ * IOのテストを実行.
+ */
+void test_io(void);
 #endif // !SIGNAL_TEST_H

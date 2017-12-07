@@ -1,15 +1,23 @@
 #include "io.h"
 #include <assert.h>
-#include <stdio.h>
 #include <string.h>
 #include <stdlib.h>
+
+void io_new_file(const char * filename) {
+	FILE* fp;
+	errno_t err = fopen_s(&fp, filename, "a");
+	if (err) {
+		return NULL;
+	}
+	fclose(fp);
+	return fp;
+}
 
 char * io_read_text(const char * filename) {
 	FILE* fp;
 	errno_t err = fopen_s(&fp, filename, "r");
 	if (err) {
 		//error
-		fclose(fp);
 		return NULL;
 	}
 	int buffer_size = 16;

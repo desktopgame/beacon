@@ -57,7 +57,6 @@ void test_ast(void) {
 void test_ast2(void) {
 	char* text = io_read_text("main.signal");
 	parser* p = parser_parse_from_source(text);
-	system("cls");
 	ast_print_tree(p->root);
 	parser_pop();
 }
@@ -91,4 +90,8 @@ void test_namespace(void) {
 	namespace_* text = namespace_add_namespace(lang, "text");
 	namespace_* io = namespace_add_namespace(lang, "io");
 	namespace_dump();
+}
+
+void test_io(void) {
+	io_new_file("io_file.text");
 }

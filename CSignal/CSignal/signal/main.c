@@ -16,7 +16,8 @@ int main(int argc, char* argv[]) {
 #endif
 	cmd_dump(argc, argv);
 //	test_namespace();
-	test_ast2();
+//	test_ast2();
+	test_io();
 //	test_tree_map();
 //	char* c = io_read_text("main.signal");
 //	printf("%s", c);
