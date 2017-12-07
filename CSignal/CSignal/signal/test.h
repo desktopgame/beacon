@@ -37,4 +37,6 @@ void test_namespace(void);
 void test_io(void);
 
 void test_io2(void);
+
+void test_file_path(void);
 #endif // !SIGNAL_TEST_H

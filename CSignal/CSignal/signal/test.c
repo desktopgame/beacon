@@ -3,6 +3,7 @@
 #include "util/stack.h"
 #include "util/tree_map.h"
 #include "util/io.h"
+#include "util/file_path.h"
 #include "ast/ast.h"
 #include "parse/parser.h"
 #include "env/namespace.h"
@@ -98,4 +99,18 @@ void test_io(void) {
 
 void test_io2(void) {
 	io_write_text("io_file.text", "hello, world!\n c java");
+}
+
+void test_file_path(void) {
+	file_path* root = file_path_new("root");
+	file_path* sub = file_path_append(root, "sub");
+	file_path* yy = file_path_append(sub, "yy");
+	file_path_dump(yy, PATH_SEPARATOR_CHAR);
+	file_path_delete(yy);
+	file_path_delete(sub);
+	file_path_delete(root);
+
+	file_path* t = file_path_parse("root_xxxx_yyyy_eeee/sub_subsub_beemy_/yyzzzzzzzzzzzzzzzzz", '/');
+	file_path_dump(t, PATH_SEPARATOR_CHAR);
+	file_path_delete_tree(t);
 }
