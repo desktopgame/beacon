@@ -8,6 +8,37 @@ static ast* ast_new_function_return_name(char* return_type_name);
 static ast* ast_new_parameter_type_name(char* type_name);
 static ast* ast_new_parameter_access_name(char* parameter_name);
 
+ast * ast_new_namespace_decl(ast * namespace_path, ast * body) {
+	ast* ret = ast_new(ast_namespace_decl);
+	ast_push(ret, namespace_path);
+	ast_push(ret, body);
+	return ret;
+}
+
+ast * ast_new_namespace_namespace_decl(ast * namespace_path, ast * body) {
+	return ast_new_namespace_decl(namespace_path, body);
+}
+
+ast * ast_new_namespace_member_decl_list(ast * forward, ast * list) {
+	ast* ret = ast_new(ast_namespace_member_decl_list);
+	ast_push(ret, forward);
+	ast_push(ret, list);
+	return ret;
+}
+
+ast * ast_new_class_decl_unit(ast * class_decl) {
+	ast* ret = ast_new(ast_class_decl_unit);
+	ast_push(ret, class_decl);
+	return ret;
+}
+
+ast * ast_new_class_decl_list(ast * forward, ast * class_decl) {
+	ast* ret = ast_new(ast_class_decl_list);
+	ast_push(ret, forward);
+	ast_push(ret, ast_new_class_decl_unit(class_decl));
+	return ret;
+}
+
 ast * ast_new_class_decl(char * class_name, ast * super_class, ast * member_list) {
 	ast* ret = ast_new(ast_class_decl);
 	ret->u.string_value = class_name;
@@ -109,19 +140,6 @@ ast * ast_new_parameter_list(char * parameter_type_name, char * parameter_access
 	ast* ret = ast_new(ast_parameter_list);
 	ast_push(ret, ast_new_parameter(parameter_type_name, parameter_access_name));
 	ast_push(ret, parameter_list);
-	return ret;
-}
-
-ast * ast_new_argument(ast * factor) {
-	ast* ret = ast_new(ast_argument);
-	ast_push(ret, factor);
-	return ret;
-}
-
-ast * ast_new_argument_list(ast * factor, ast * argument_list) {
-	ast* ret = ast_new(ast_argument_list);
-	ast_push(ret, factor);
-	ast_push(ret, argument_list);
 	return ret;
 }
 

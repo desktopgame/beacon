@@ -68,3 +68,16 @@ ast * ast_new_elif(ast * cond, ast * body) {
 	ast_push(ret, body);
 	return ret;
 }
+
+ast * ast_new_argument(ast * factor) {
+	ast* ret = ast_new(ast_argument);
+	ast_push(ret, factor);
+	return ret;
+}
+
+ast * ast_new_argument_list(ast * factor, ast * argument_list) {
+	ast* ret = ast_new(ast_argument_list);
+	ast_push(ret, factor);
+	ast_push(ret, argument_list);
+	return ret;
+}

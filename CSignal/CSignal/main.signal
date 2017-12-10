@@ -25,6 +25,10 @@ namespace L {
 			}
 		}
 	}
+	namespace M {
+		class Klass {
+		}
+	}
 }
 
 //(10 + 20 + (5 * 20 + (16 / 4)) >= 20 || 0 < 0)

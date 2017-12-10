@@ -58,6 +58,9 @@ typedef enum ast_tag {
 	ast_variable_decl,
 
 	ast_namespace_decl,
+	ast_namespace_body,
+	ast_namespace_member_decl,
+	ast_namespace_member_decl_list,
 	ast_namespace_path,
 	ast_namespace_path_list,
 

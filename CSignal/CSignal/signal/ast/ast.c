@@ -179,6 +179,9 @@ void ast_print(ast* self) {
 		case ast_namespace_decl:
 			printf("namespace decl");
 			break;
+		case ast_namespace_member_decl_list:
+			printf("namepsace member decl");
+			break;
 		case ast_namespace_path:
 			printf("namespace_path(%s)", self->u.string_value);
 			break;

@@ -6,6 +6,45 @@
 #include "modifier_type.h"
 
 /**
+ * 名前空間を表す要素を作成します.
+ * @param namespace_path
+ * @param body
+ * @return
+ */
+ast* ast_new_namespace_decl(ast* namespace_path, ast* body);
+
+/**
+ * 名前空間の内側に定義された名前空間を表す要素を作成します.
+ * @param namespace_path
+ * @param body
+ * @return
+ */
+ast* ast_new_namespace_namespace_decl(ast* namespace_path, ast* body);
+
+/**
+ * 名前空間の内側に含めることが出来る定義の一覧を作成します.
+ * @param forward
+ * @param list
+ * @return
+ */
+ast* ast_new_namespace_member_decl_list(ast* forward, ast* list);
+
+/**
+ * 一つのクラス宣言からなるクラスリストを作成します.
+ * @param class_decl
+ * @return
+ */
+ast* ast_new_class_decl_unit(ast* class_decl);
+
+/**
+ * 二つのクラス宣言を一つのリストにラップする要素を作成します.
+ * @param forward
+ * @param class_decl
+ * @return
+ */
+ast* ast_new_class_decl_list(ast* forward, ast* class_decl);
+
+/**
  * クラス宣言を表す要素を作成します.
  * @param class_name
  * @param super_class
@@ -110,19 +149,4 @@ ast* ast_new_parameter(char* parameter_type_name, char* parameter_access_name);
  * @return
  */
 ast* ast_new_parameter_list(char* parameter_type_name, char* parameter_access_name, ast* parameter_list);
-
-/**
- * 実引数を表す要素を作成します.
- * @param factor
- * @return
- */
-ast* ast_new_argument(ast* factor);
-
-/**
- * 実引数を表す要素を作成します.
- * @param factor
- * @param argument_list
- * @return
- */
-ast* ast_new_argument_list(ast* factor, ast* argument_list);
 #endif // !SIGNAL_AST_AST_NEW_DECL_H

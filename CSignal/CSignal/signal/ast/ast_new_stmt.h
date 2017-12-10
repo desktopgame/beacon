@@ -85,4 +85,19 @@ ast* ast_new_elif_list(ast* forward, ast* tail);
  * @return
  */
 ast* ast_new_elif(ast* cond, ast* body);
+
+/**
+* 実引数を表す要素を作成します.
+* @param factor
+* @return
+*/
+ast* ast_new_argument(ast* factor);
+
+/**
+* 実引数を表す要素を作成します.
+* @param factor
+* @param argument_list
+* @return
+*/
+ast* ast_new_argument_list(ast* factor, ast* argument_list);
 #endif // !SIGNAL_AST_AST_NEW_STMT_H

@@ -43,7 +43,10 @@
 %type <ast_value> root 
 					top_level 
 					namespace_decl
-					class_decl_list
+					namespace_body
+					namespace_member_decl_list
+					namespace_member_decl
+					namespace_member_decl_optional
 					namespace_path
 					import 
 					class_decl 
@@ -106,23 +109,45 @@ top_level
 	}
 	;
 namespace_decl
-	: NAMESPACE namespace_path LCB class_decl_list RCB
+	: NAMESPACE namespace_path namespace_body
 	{
-		$$ = ast_new_namespace_decl($2, $4);
+		$$ = ast_new_namespace_decl($2, $3);
 	}
 	;
-class_decl_list
+namespace_body
+	: LCB namespace_member_decl_optional RCB
+	{
+		$$ = $2
+	}
+	;
+namespace_member_decl
+	: NAMESPACE namespace_path namespace_body
+	{
+		$$ = ast_new_namespace_namespace_decl($2, $3);
+	}
+	| class_decl
+	{
+		$$ = $1;
+	}
+	;
+namespace_member_decl_list
+	: namespace_member_decl
+	{
+		$$ = $1
+	}
+	| namespace_member_decl_list namespace_member_decl
+	{
+		$$ = ast_new_namespace_member_decl_list($1, $2);
+	}
+	;
+namespace_member_decl_optional
 	: /* empty */
 	{
 		$$ = ast_new_blank();
 	}
-	| class_decl
+	| namespace_member_decl_list
 	{
-		$$ = ast_new_class_decl_unit($1);
-	}
-	| class_decl_list class_decl
-	{
-		$$ = ast_new_class_decl_list($1, $2);
+		$$ = $1
 	}
 	;
 namespace_path
