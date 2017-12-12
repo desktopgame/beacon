@@ -279,7 +279,7 @@ static void ast_print_tree_impl(ast* self, int depth) {
 
 static void ast_delete_impl(ast* self) {
 	for (int i = 0; i < self->childCount; i++) {
-		ast_delete_impl(list_at(self->children, i));
+		ast_delete((ast*)list_at(self->children, i));
 	}
 	list_delete(self->children, list_deleter_null);
 	ast_tag t = self->tag;

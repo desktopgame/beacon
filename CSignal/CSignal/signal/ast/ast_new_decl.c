@@ -1,4 +1,5 @@
 #include "ast_new_decl.h"
+#include <stdlib.h>
 
 //proto
 static ast* ast_new_field_type_name(char* type_name);

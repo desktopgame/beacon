@@ -96,7 +96,7 @@ void io_write_text(const char * filename, const char * text) {
 #else
 	FILE* fp = fopen(filename, "w");
 	if (!fp) {
-		return NULL;
+		return;
 	}
 #endif
 	int len = strlen(text);
