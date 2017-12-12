@@ -21,13 +21,17 @@ static char* yaccSourceBuffer;
 static int yaccSourceOffset;
  
 int yymain(void) {
-	yyparse();
+	//yyparse();
 	return(0);
 }
 
+//for clang
+#ifndef SIGNAL_YYWRAP_PART
+#define SIGNAL_YYWRAP_PART
 int yywrap(void) {
 	return 1;
 }
+#endif SIGNAL_YYWRAP_PART
 
 int yyerror(char * err_str) {
 	system("cls");
