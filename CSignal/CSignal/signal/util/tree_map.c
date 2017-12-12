@@ -2,6 +2,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include <stdio.h>
+#include "text.h"
 
 tree_map * tree_map_new() {
 	tree_map* ret = (tree_map*)malloc(sizeof(tree_map));
@@ -25,7 +26,7 @@ void tree_map_put(tree_map* self, tree_key key, tree_item item) {
 	} else if (comp < 0) {
 		if (self->left == NULL) {
 			self->left = tree_map_new();
-			self->left->key = _strdup(key);
+			self->left->key = text_strdup(key);
 		} else {
 			tree_map_put(self->left, key, item);
 			return;
@@ -34,7 +35,7 @@ void tree_map_put(tree_map* self, tree_key key, tree_item item) {
 	} else if (comp > 0) {
 		if (self->right == NULL) {
 			self->right = tree_map_new();
-			self->right->key = _strdup(key);
+			self->right->key = text_strdup(key);
 		} else {
 			tree_map_put(self->right, key, item);
 			return;

@@ -12,7 +12,7 @@ static char* file_path_dump_impl(file_path * self, char separator);
 static void file_path_delete_tree_impl(file_path * self, bool delete_parent);
 
 file_path* file_path_new(const char * name) {
-	return file_path_new_impl(_strdup(name));
+	return file_path_new_impl(text_strdup(name));
 }
 
 file_path * file_path_new_nodup(char * name) {
@@ -45,7 +45,7 @@ file_path * file_path_parse(const char * source, char separator) {
 				packedBuffer[usedBufferSize + 0] = '\0';
 				//バックバッファーを破棄
 				free(buff);
-			} else packedBuffer = _strdup(buff);
+			} else packedBuffer = text_strdup(buff);
 			//一つパスを進める
 			if (root == NULL) {
 				root = file_path_new_nodup(packedBuffer);

@@ -3,6 +3,7 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <string.h>
+#include "../util/text.h"
 #include "../util/stack.h"
 #include "../ast/ast_new_literal.h"
 
@@ -19,7 +20,7 @@ parser * parser_push(yacc_input_type input_type) {
 	p->buffer = NULL;
 	p->errorLineIndex = 0;
 	p->errorColumnIndex = 0;
-	p->source_name = _strdup("unknown-source");
+	p->source_name = text_strdup("unknown-source");
 	p->fail = false;
 	return p;
 }
@@ -80,7 +81,7 @@ parser * parser_parse_from_source(char * source) {
 	extern void yy_clearstr();
 	extern int yyparse(void);
 	//p->source_name = _strdup("unknown-source");
-	yy_setstr(_strdup(source));
+	yy_setstr(text_strdup(source));
 	if (yyparse()) {
 		yy_clearstr();
 		p->fail = true;
@@ -93,7 +94,7 @@ parser * parser_parse_from_source(char * source) {
 void parser_swap_source_name(char * source_name) {
 	parser* p = parser_top();
 	free(p->source_name);
-	p->source_name = _strdup(source_name);
+	p->source_name = text_strdup(source_name);
 }
 
 void parser_pop() {

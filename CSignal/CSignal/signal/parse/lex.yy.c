@@ -1197,7 +1197,7 @@ case 54:
 YY_RULE_SETUP
 #line 271 "C:\\Users\\Koya\\Documents\\GitHub\\CSignal\\CSignal\\CSignal\\signal\\parse\\signal.l"
 {
-	yylval.string_value = _strdup(yytext);
+	yylval.string_value = text_strdup(yytext);
 	return IDENT;
 }
 	YY_BREAK

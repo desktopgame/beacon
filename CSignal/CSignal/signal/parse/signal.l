@@ -269,7 +269,7 @@ static void update_loc() {
 }
 
 <INITIAL>[A-Za-z_][A-Za-z_0-9]* {
-	yylval.string_value = _strdup(yytext);
+	yylval.string_value = text_strdup(yytext);
 	return IDENT;
 }
 
