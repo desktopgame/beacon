@@ -60,7 +60,7 @@ ast * parser_reduce_buffer(parser * self) {
 parser * parser_parse_from_file(const char * filename) {
 	extern int yyparse(void);
 	extern FILE *yyin;
-
+#if defined(_MSC_VER)
 	parser* p = parser_push(yinput_file);
 	parser_swap_source_name(filename);
 	errno_t err = fopen_s(&yyin, filename, "r");
@@ -73,6 +73,20 @@ parser * parser_parse_from_file(const char * filename) {
 		return p;
 	}
 	return p;
+#else
+	parser* p = parser_push(yinput_file);
+	parser_swap_source_name(filename);
+	yyin = fopen(filename, "r");
+	if (!yyin) {
+		p->fail = true;
+		return p;
+	}
+	if (yyparse()) {
+		p->fail = true;
+		return p;
+	}
+	return p;
+#endif
 }
 
 parser * parser_parse_from_source(char * source) {
