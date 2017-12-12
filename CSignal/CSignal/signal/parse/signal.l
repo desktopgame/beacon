@@ -15,8 +15,6 @@
 //for C4996
 #ifdef _MSC_VER
 #pragma warning(disable:4996)
-#elif
-#pragma warning(disable:4996)
 #endif
 
 static char* yaccSourceBuffer;
