@@ -80,7 +80,7 @@ parser * parser_parse_from_source(char * source) {
 	extern void yy_clearstr();
 	extern int yyparse(void);
 	//p->source_name = _strdup("unknown-source");
-	yy_setstr(source);
+	yy_setstr(_strdup(source));
 	if (yyparse()) {
 		yy_clearstr();
 		p->fail = true;

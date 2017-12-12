@@ -50,15 +50,17 @@ void parser_append_buffer(parser* self, char ch);
 ast* parser_reduce_buffer(parser* self);
 
 /**
-* ファイルを入力として解析を実行します.
-* @param filename
-* @return
-*/
+ * ファイルを入力として解析を実行します.
+ * パーサースタックは +1 されます。
+ * @param filename
+ * @return
+ */
 parser* parser_parse_from_file(const char* filename);
 
 /**
  * 文字を入力として解析を実行します.
- * @param source
+ * パーサースタックは +1 されます。
+ * @param source 呼び出し側で開放してください.
  * @return
  */
 parser* parser_parse_from_source(char* source);
@@ -73,6 +75,8 @@ void parser_swap_source_name(char* source_name);
 
 /**
  * 現在のパーサーを削除します.
+ * パーサースタックは -1 されます。
+ * また、このときパーサが持っているASTは開放されます。
  */
 void parser_pop();
 #endif // !SIGNAL_PARSE_PARSER_H

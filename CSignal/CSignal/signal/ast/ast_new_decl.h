@@ -37,14 +37,6 @@ ast* ast_new_namespace_member_decl_list(ast* forward, ast* list);
 ast* ast_new_class_decl_unit(ast* class_decl);
 
 /**
- * 二つのクラス宣言を一つのリストにラップする要素を作成します.
- * @param forward
- * @param class_decl
- * @return
- */
-ast* ast_new_class_decl_list(ast* forward, ast* class_decl);
-
-/**
  * クラス宣言を表す要素を作成します.
  * @param class_name
  * @param super_class

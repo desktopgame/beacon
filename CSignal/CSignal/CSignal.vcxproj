@@ -119,8 +119,11 @@
     <ClCompile Include="signal\ast\ast_new_literal.c" />
     <ClCompile Include="signal\ast\ast_new_operator.c" />
     <ClCompile Include="signal\ast\ast_new_stmt.c" />
+    <ClCompile Include="signal\ast\ast_util.c" />
     <ClCompile Include="signal\env\namespace.c" />
+    <ClCompile Include="signal\env\script_context.c" />
     <ClCompile Include="signal\main.c" />
+    <ClCompile Include="signal\env\class_loader.c" />
     <ClCompile Include="signal\parse\lex.yy.c" />
     <ClCompile Include="signal\parse\parser.c" />
     <ClCompile Include="signal\parse\signal.tab.c" />
@@ -140,11 +143,15 @@
     <ClInclude Include="signal\ast\ast_new_literal.h" />
     <ClInclude Include="signal\ast\ast_new_operator.h" />
     <ClInclude Include="signal\ast\ast_new_stmt.h" />
+    <ClInclude Include="signal\ast\ast_util.h" />
     <ClInclude Include="signal\ast\constructor_chain_type.h" />
     <ClInclude Include="signal\ast\modifier_type.h" />
     <ClInclude Include="signal\env\class.h" />
     <ClInclude Include="signal\env\namespace.h" />
     <ClInclude Include="signal\env\class_type.h" />
+    <ClInclude Include="signal\env\class_loader.h" />
+    <ClInclude Include="signal\env\content_type.h" />
+    <ClInclude Include="signal\env\script_context.h" />
     <ClInclude Include="signal\parse\parser.h" />
     <ClInclude Include="signal\parse\signal.tab.h" />
     <ClInclude Include="signal\parse\yacc_input_type.h" />

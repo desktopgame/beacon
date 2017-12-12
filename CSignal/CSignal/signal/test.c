@@ -7,6 +7,7 @@
 #include "ast/ast.h"
 #include "parse/parser.h"
 #include "env/namespace.h"
+#include "env/class_loader.h"
 #include <stdio.h>
 
 void test_stack(void) {
@@ -113,4 +114,10 @@ void test_file_path(void) {
 	file_path* t = file_path_parse("root_xxxx_yyyy_eeee/sub_subsub_beemy_/yyzzzzzzzzzzzzzzzzz", '/');
 	file_path_dump(t, PATH_SEPARATOR_CHAR);
 	file_path_delete_tree(t);
+}
+
+void test_cll(void) {
+	class_loader* cll = class_loader_new_entry_point("main.signal");
+	class_loader_load(cll);
+	class_loader_delete(cll);
 }

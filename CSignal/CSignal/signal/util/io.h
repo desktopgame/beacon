@@ -21,7 +21,7 @@ bool io_exists(const char* filename);
 /**
  * 指定のファイルを読み込んで返します.
  * @param filename
- * @return
+ * @return 呼び出し側で開放してください.
  */
 char* io_read_text(const char* filename);
 

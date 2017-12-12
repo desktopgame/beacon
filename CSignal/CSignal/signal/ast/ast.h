@@ -68,7 +68,7 @@ typedef enum ast_tag {
 	ast_import_path,
 
 	ast_class_decl_unit,
-	ast_class_decl_list,
+	//ast_class_decl_list,
 	ast_class_decl,
 	ast_class_super,
 
@@ -244,6 +244,20 @@ ast* ast_push(ast* self, ast* child);
  * @param index
  */
 ast* ast_at(ast* self, int index);
+
+/**
+ * 最初の子要素を返します.
+ * @param self
+ * @return
+ */
+ast* ast_first(ast* self);
+
+/**
+ * 二番目の子要素を返します.
+ * @param self
+ * @return
+ */
+ast* ast_second(ast* self);
 
 /**
  * ツリー形式で全てのタグを出力します.

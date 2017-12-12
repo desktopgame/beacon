@@ -1,6 +1,6 @@
 import "../lib.h"
 import "../io.h"
-namespace L {
+namespace L.Goo.Foo {
 	class Foo : SuperFoo {
 		int pointX;
 		int pointY;

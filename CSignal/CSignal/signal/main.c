@@ -3,6 +3,7 @@
 #include <string.h>
 #include "util/cmd.h"
 #include "util/io.h"
+#include "env/script_context.h"
 #include "test.h"
 
 #ifdef _MSC_VER
@@ -14,14 +15,16 @@ int main(int argc, char* argv[]) {
 	_CrtSetDbgFlag(_CRTDBG_ALLOC_MEM_DF | _CRTDBG_LEAK_CHECK_DF);
 	//_CrtSetBreakAlloc(103280);
 #endif
+	script_context_open();
 	cmd_dump(argc, argv);
 //	test_namespace();
-	test_ast2();
+	test_cll();
 //	test_io2();
 //	test_file_path();
 //	test_tree_map();
 //	char* c = io_read_text("main.signal");
 //	printf("%s", c);
 //	free(c);
+	script_context_close();
 	return 0;
 }

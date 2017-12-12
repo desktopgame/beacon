@@ -122,6 +122,14 @@ ast* ast_at(ast * self, int index) {
 	return (ast*)list_at(self->children, index);
 }
 
+ast * ast_first(ast * self) {
+	return ast_at(self, 0);
+}
+
+ast * ast_second(ast * self) {
+	return ast_at(self, 1);
+}
+
 void ast_print_tree(ast * self) {
 	ast_print_tree_impl(self, 0);
 }
@@ -191,9 +199,9 @@ void ast_print(ast* self) {
 		case ast_class_decl_unit:
 			printf("class decl_unit");
 			break;
-		case ast_class_decl_list:
-			printf("class decl_list");
-			break;
+		//case ast_class_decl_list:
+		//	printf("class decl_list");
+		//	break;
 		case ast_import_decl: p("import");
 		case ast_import_path:
 			printf("%s", self->u.string_value);
@@ -290,6 +298,7 @@ static bool ast_has_str(ast* self) {
 		t == ast_identifier ||
 		t == ast_string ||
 		t == ast_import_path ||
+		t == ast_namespace_path ||
 		t == ast_field_type_name ||
 		t == ast_field_access_name ||
 		t == ast_func_name ||

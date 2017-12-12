@@ -32,13 +32,6 @@ ast * ast_new_class_decl_unit(ast * class_decl) {
 	return ret;
 }
 
-ast * ast_new_class_decl_list(ast * forward, ast * class_decl) {
-	ast* ret = ast_new(ast_class_decl_list);
-	ast_push(ret, forward);
-	ast_push(ret, ast_new_class_decl_unit(class_decl));
-	return ret;
-}
-
 ast * ast_new_class_decl(char * class_name, ast * super_class, ast * member_list) {
 	ast* ret = ast_new(ast_class_decl);
 	ret->u.string_value = class_name;
