@@ -126,7 +126,11 @@ void test_file_path(void) {
 }
 
 void test_cll(void) {
+#if defined(_MSC_VER)
 	class_loader* cll = class_loader_new_entry_point("main.signal");
+#else
+	class_loader* cll = class_loader_new_entry_point("../../main.signal");
+#endif
 	class_loader_load(cll);
 	class_loader_delete(cll);
 }
