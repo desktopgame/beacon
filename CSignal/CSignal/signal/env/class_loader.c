@@ -47,6 +47,7 @@ void class_loader_delete(class_loader * self) {
 	}
 	//free(self->source_code);
 	ast_delete(self->source_code);
+	il_top_level_delete(self->il_code);
 	free(self);
 }
 
@@ -54,6 +55,7 @@ void class_loader_delete(class_loader * self) {
 static class_loader* class_loader_new() {
 	class_loader* ret = (class_loader*)malloc(sizeof(class_loader));
 	ret->source_code = NULL;
+	ret->il_code = NULL;
 	ret->parent = NULL;
 	ret->ref_count = 0;
 	ret->type = content_entry_point;
@@ -62,6 +64,7 @@ static class_loader* class_loader_new() {
 }
 
 static void class_loader_load_impl(class_loader* self, ast* source_code) {
+	self->il_code = il_top_level_new();
 	for (int i = 0; i < source_code->childCount; i++) {
 		ast* child = ast_at(self->source_code, i);
 		//import a

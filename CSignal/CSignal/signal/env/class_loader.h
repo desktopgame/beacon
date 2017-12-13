@@ -3,6 +3,7 @@
 #define SIGNAL_PARSER_CLASS_LOADER_H
 #include "../ast/ast.h"
 #include "content_type.h"
+#include "../il/il_top_level.h"
 #include <stdint.h>
 #include <stdbool.h>
 
@@ -11,6 +12,7 @@
  */
 typedef struct class_loader {
 	ast* source_code;
+	il_top_level* il_code;
 	struct class_loader* parent;
 	content_type type;
 	uint32_t ref_count;
