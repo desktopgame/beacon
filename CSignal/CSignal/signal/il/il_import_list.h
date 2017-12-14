@@ -24,6 +24,13 @@ il_import_list* il_import_list_new();
 void il_import_list_push(il_import_list* self, il_import* child);
 
 /**
+ * インポートの一覧をダンプします.
+ * @param depth
+ * @param self
+ */
+void il_import_list_dump(il_import_list* self, int depth);
+
+/**
  * インポートの一覧を解放します.
  * @param self
  */

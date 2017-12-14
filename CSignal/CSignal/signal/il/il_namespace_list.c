@@ -23,6 +23,23 @@ void il_namespace_list_push(il_namespace_list* self, il_namespace* namespacez) {
 	}
 }
 
+void il_namespace_list_dump(il_namespace_list* self, int depth) {
+	text_putindent(depth);
+	printf("namespace-list");
+	text_putline();
+	il_namespace_list* pointee = self;
+	while(1) {
+		if(pointee->namespacez == NULL) {
+			break;
+		}
+		il_namespace_dump(pointee->namespacez, depth + 1);
+		if(pointee->next == NULL) {
+			break;
+		}
+		pointee = pointee->next;
+	}
+}
+
 void il_namespace_list_delete(il_namespace_list* self) {
 	if(self == NULL) {
 		return;

@@ -16,6 +16,13 @@ typedef struct il_import {
 il_import* il_import_new(const char* path);
 
 /**
+ * インポートの詳細を出力します.
+ * @param self
+ * @param depth
+ */
+void il_import_dump(il_import* self, int depth);
+
+/**
  * このインポート宣言と包含された文字列を解放します.
  * @param self
  */

@@ -21,6 +21,21 @@ void il_import_list_push(il_import_list* self, il_import* child) {
 	}
 }
 
+void il_import_list_dump(il_import_list* self, int depth) {
+	text_putindent(depth);
+	printf("import-list");
+	text_putline();
+	il_import_list* pointee = self;
+	while(1) {
+		il_import_dump(pointee->import, depth + 1);
+		if(pointee->next == NULL) {
+			break;
+		}
+		pointee = pointee->next;
+	}
+	text_putline();
+}
+
 void il_import_list_delete(il_import_list* self) {
 	if(self == NULL) {
 		return;

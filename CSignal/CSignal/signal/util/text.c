@@ -10,6 +10,12 @@ void text_putline() {
 #endif // defined(_WIN32)
 }
 
+void text_putindent(int depth) {
+	for(int i=0; i<depth; i++) {
+		printf("    ");
+	}
+}
+
 char * text_strdup(const char * source) {
 #if defined(_MSC_VER)
 	return _strdup(source);

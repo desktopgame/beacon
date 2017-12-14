@@ -21,6 +21,13 @@ il_namespace_list* il_namespace_list_new();
 void il_namespace_list_push(il_namespace_list* self, il_namespace* namespacez);
 
 /**
+ * 名前空間の一覧を出力します.
+ * @param self
+ * @param depth
+ */
+void il_namespace_list_dump(il_namespace_list* self, int depth);
+
+/**
  * 名前空間の一覧を解放します.
  * @param self
  */
