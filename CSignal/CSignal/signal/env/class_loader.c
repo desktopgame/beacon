@@ -3,6 +3,7 @@
 #include <assert.h>
 #include "../util/io.h"
 #include "../parse/parser.h"
+#include "../il/il_class.h"
 
 //proto
 static class_loader* class_loader_new();
@@ -11,8 +12,9 @@ static void class_loader_load_import(class_loader* self, ast* import_decl);
 static void class_loader_load_namespace(class_loader* self, il_namespace_list* parent, ast* namespace_decl);
 static void class_loader_load_namespace_path_recursive(class_loader* self, ast* namespace_path, ast* namespace_body);
 static il_namespace* class_loader_load_ast_to_namespace(ast* a);
-static void class_loader_load_namespace_body(class_loader* self, il_namespace_list* parent, ast* namespace_body);
-static void class_loader_load_class(class_loader* self, ast* class_decl);
+static void class_loader_load_namespace_body(class_loader* self, il_namespace* current, il_namespace_list* parent, ast* namespace_body);
+static void class_loader_load_class(class_loader* self, il_namespace* current, ast* class_decl);
+static void class_loader_load_member(class_loader* self, il_class* current, ast* member);
 
 class_loader * class_loader_new_entry_point(const char * filename) {
 	class_loader* cll = class_loader_new();
@@ -97,7 +99,7 @@ static void class_loader_load_namespace(class_loader* self, il_namespace_list* p
 	il_namespace_list_push(parent, top);
 	class_loader_load_namespace_path_recursive(self, namespace_path, namespace_body);
 	//printf("\n");
-	class_loader_load_namespace_body(self, iln->namespace_list, namespace_body);
+	class_loader_load_namespace_body(self, iln, iln->namespace_list, namespace_body);
 	//printf("\n");
 }
 
@@ -132,7 +134,7 @@ static il_namespace* class_loader_load_ast_to_namespace(ast* a) {
 	}
 }
 
-static void class_loader_load_namespace_body(class_loader* self, il_namespace_list* parent, ast* namespace_body) {
+static void class_loader_load_namespace_body(class_loader* self, il_namespace* current, il_namespace_list* parent, ast* namespace_body) {
 	if (ast_is_blank(namespace_body)) {
 		return;
 	}
@@ -144,15 +146,35 @@ static void class_loader_load_namespace_body(class_loader* self, il_namespace_li
 		//namespace xxx { class yyy { ...
 	} else if (namespace_body->tag == ast_class_decl) {
 		//printf("class decl\n");
+		class_loader_load_class(self, current, namespace_body);
 		//namespace xxx { any yyy { ...
 	} else if (namespace_body->tag == ast_namespace_member_decl_list) {
 		for (int i = 0; i < namespace_body->childCount; i++) {
 			ast* member = ast_at(namespace_body, i);
-			class_loader_load_namespace_body(self, parent, member);
+			class_loader_load_namespace_body(self, current, parent, member);
 		}
 	}
 }
 
-static void class_loader_load_class(class_loader* self, ast* class_decl) {
+static void class_loader_load_class(class_loader* self, il_namespace* current, ast* class_decl) {
+	ast* super_class = ast_first(class_decl);
+	ast* member_list = ast_second(class_decl);
+	il_class* classz = il_class_new(class_decl->u.string_value);
+	//親クラスが宣言されていない
+	if(ast_is_blank(super_class)) {
+		classz->super = NULL;
+	} else {
+		classz->super = il_type_new(super_class->u.string_value);
+	}
+	il_class_list_push(current->class_list, classz);
+}
 
+static void class_loader_load_member(class_loader* self, il_class* current, ast* member) {
+	if(member->tag == ast_member_decl_list) {
+		for(int i=0; i<member->childCount; i++) {
+			class_loader_load_member(self, current, ast_at(member, i));
+		}
+	} else if(member->tag == ast_member_decl) {
+		
+	}
 }

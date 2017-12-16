@@ -1,5 +1,6 @@
 #include "il_namespace.h"
 #include "il_namespace_list.h"
+#include "il_class_list.h"
 #include "../util/text.h"
 #include <stdlib.h>
 
@@ -7,6 +8,7 @@ il_namespace* il_namespace_new(const char* name) {
 	il_namespace* ret = (il_namespace*)malloc(sizeof(il_namespace));
 	ret->name = text_strdup(name);
 	ret->namespace_list = il_namespace_list_new();
+	ret->class_list = il_class_list_new();
 	ret->parent = NULL;
 	return ret;
 }
