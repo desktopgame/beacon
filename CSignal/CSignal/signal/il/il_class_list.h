@@ -1,13 +1,13 @@
 #ifndef SIGNAL_IL_IL_CLASS_LIST_H
 #define SIGNAL_IL_IL_CLASS_LIST_H
 #include "il_class.h"
+#include "../util/list.h"
+
 /**
  * クラスの一覧を表す要素.
  */
-typedef struct il_class_list {
-	il_class* classz;
-	struct il_class_list* next;
-} il_class_list;
+typedef list il_class_list;
+
 /**
  * クラスの一覧を表す要素を作成します.
  * @return
@@ -20,6 +20,13 @@ il_class_list* il_class_list_new();
  * @param classz
  */
 void il_class_list_push(il_class_list* self, il_class* classz);
+
+/**
+ * クラスの一覧を出力します.
+ * @param self
+ * @param depth
+ */
+void il_class_list_dump(il_class_list* self, int depth);
 
 /**
  * クラスの一覧を解放します.

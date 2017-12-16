@@ -28,6 +28,7 @@ void il_namespace_dump(il_namespace* self, int depth) {
 	printf("namespace %s", self->name);
 	text_putline();
 	il_namespace_list_dump(self->namespace_list, depth + 1);
+	il_class_list_dump(self->class_list, depth + 1);
 	text_putline();
 }
 
@@ -37,5 +38,6 @@ void il_namespace_delete(il_namespace* self) {
 	}
 	free(self->name);
 	il_namespace_list_delete(self->namespace_list);
+	il_class_list_delete(self->class_list);
 	free(self);
 }

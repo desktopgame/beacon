@@ -46,6 +46,20 @@ list_item list_at(list * self, int index) {
 	return NULL;
 }
 
+void list_foreach(list * self, list_element_action action) {
+	list* pointee = self;
+	if (pointee->item == NULL) {
+		return;
+	}
+	while (1) {
+		action(pointee->item);
+		if (pointee->next == NULL) {
+			break;
+		}
+		pointee = pointee->next;
+	}
+}
+
 void list_delete(list * self, list_element_deleter deleter) {
 	if (self == NULL) {
 		return;

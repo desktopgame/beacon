@@ -1,14 +1,12 @@
 #ifndef SIGNAL_IL_IL_IMPORT_LIST_H
 #define SIGNAL_IL_IL_IMPORT_LIST_H
 #include "il_import.h"
+#include "../util/list.h"
 
 /**
  * インポートの一覧を表す要素.
  */
-typedef struct il_import_list {
-	il_import* import;
-	struct il_import_list* next;
-} il_import_list;
+typedef list il_import_list;
 
 /**
  * 新しいインポート一覧を作成します.

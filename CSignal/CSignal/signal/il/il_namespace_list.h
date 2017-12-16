@@ -1,13 +1,12 @@
 #ifndef SIGNAL_IL_IL_NAMESPACE_LIST_H
 #define SIGNAL_IL_IL_NAMESPACE_LIST_H
 #include "il_namespace.h"
+#include "../util/list.h"
 /**
  * 名前空間の一覧を表す要素.
  */
-typedef struct il_namespace_list {
-	il_namespace* namespacez;
-	struct il_namespace_list* next;
-} il_namespace_list;
+typedef list il_namespace_list;
+
 /**
  * 名前空間の一覧を表す要素を作成します.
  * @return

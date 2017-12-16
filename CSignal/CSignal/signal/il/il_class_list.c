@@ -1,39 +1,41 @@
 #include "il_class_list.h"
 #include <stdlib.h>
 
+//proto
+static void il_class_list_delete_impl(list_item item);
+
 il_class_list* il_class_list_new() {
-	il_class_list* ret = (il_class_list*)malloc(sizeof(il_class_list));
-	ret->classz = NULL;
-	ret->next = NULL;
-	return ret;
+	return list_new();
 }
 
 void il_class_list_push(il_class_list* self, il_class* classz) {
-	if(self->classz == NULL) {
-		self->classz = classz;
-	} else {
-		if(self->next == NULL) {
-			self->next = il_class_list_new();
-			il_class_list_push(self->next, classz);
-		} else {
-			il_class_list_push(self->next, classz);
+	list_add(self, classz);
+}
+
+void il_class_list_dump(il_class_list * self, int depth) {
+	text_putindent(depth);
+	printf("class-list");
+	text_putline();
+	il_class_list* pointee = self;
+	for (;;) {
+		if (pointee->item == NULL) {
+			break;
 		}
+		il_class* cl = (il_class*)pointee->item;
+		il_class_dump(cl, depth + 1);
+		if (pointee->next == NULL) {
+			break;
+		}
+		pointee = pointee->next;
 	}
 }
 
 void il_class_list_delete(il_class_list* self) {
-	if(self == NULL) {
-		return;
-	}
-	il_class_list* pointee = self;
-	while(1) {
-		il_class_delete(pointee->classz);
-		if(pointee->next == NULL) {
-			free(pointee);
-			break;
-		}
-		il_class_list* temp = pointee;
-		pointee = pointee->next;
-		free(temp);
-	}
+	list_delete(self, il_class_list_delete_impl);
+}
+
+//private
+static void il_class_list_delete_impl(list_item item) {
+	il_class* cl = (il_class*)item;
+	il_class_delete(cl);
 }

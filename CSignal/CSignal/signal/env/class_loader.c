@@ -4,6 +4,8 @@
 #include "../util/io.h"
 #include "../parse/parser.h"
 #include "../il/il_class.h"
+#include "../il/il_field.h"
+#include "../il/il_field_list.h"
 
 //proto
 static class_loader* class_loader_new();
@@ -15,6 +17,9 @@ static il_namespace* class_loader_load_ast_to_namespace(ast* a);
 static void class_loader_load_namespace_body(class_loader* self, il_namespace* current, il_namespace_list* parent, ast* namespace_body);
 static void class_loader_load_class(class_loader* self, il_namespace* current, ast* class_decl);
 static void class_loader_load_member(class_loader* self, il_class* current, ast* member);
+static void class_loader_load_field(class_loader* self, il_class* current, ast* field);
+static void class_loader_load_method(class_loader* self, il_class* current, ast* method);
+static void class_loader_load_constructor(class_loader* self, il_class* current, ast* constructor);
 
 class_loader * class_loader_new_entry_point(const char * filename) {
 	class_loader* cll = class_loader_new();
@@ -166,6 +171,7 @@ static void class_loader_load_class(class_loader* self, il_namespace* current, a
 	} else {
 		classz->super = il_type_new(super_class->u.string_value);
 	}
+	class_loader_load_member(self, classz, member_list);
 	il_class_list_push(current->class_list, classz);
 }
 
@@ -175,6 +181,29 @@ static void class_loader_load_member(class_loader* self, il_class* current, ast*
 			class_loader_load_member(self, current, ast_at(member, i));
 		}
 	} else if(member->tag == ast_member_decl) {
-		
+		ast* child = ast_first(member);
+		if (child->tag == ast_field_decl) {
+			class_loader_load_field(self, current, child);
+		} else if (child->tag == ast_func_decl) {
+			class_loader_load_method(self, current, child);
+		} else if (child->tag == ast_constructor_decl) {
+			class_loader_load_constructor(self, current, child);
+		}
+	} else {
+		int a = 0;
 	}
+}
+
+static void class_loader_load_field(class_loader* self, il_class* current, ast* field) {
+	ast* type_name = ast_first(field);
+	ast* access_name = ast_second(field);
+	il_field* v = il_field_new(access_name->u.string_value);
+	v->type = il_type_new(type_name->u.string_value);
+	il_field_list_push(current->field_list, v);
+}
+
+static void class_loader_load_method(class_loader* self, il_class* current, ast* method) {
+}
+
+static void class_loader_load_constructor(class_loader* self, il_class* current, ast* constructor) {
 }

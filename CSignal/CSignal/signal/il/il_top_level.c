@@ -20,7 +20,7 @@ void il_top_level_delete(il_top_level* self) {
 	if(self == NULL) {
 		return;
 	}
-	il_import_delete(self->import_list);
+	il_import_list_delete(self->import_list);
 	il_namespace_list_delete(self->namespace_list);
 	free(self);
 }

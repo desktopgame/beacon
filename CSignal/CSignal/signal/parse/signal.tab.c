@@ -1834,7 +1834,7 @@ yyreduce:
 /* Line 1455 of yacc.c  */
 #line 195 "C:\\Users\\Koya\\Documents\\GitHub\\CSignal\\CSignal\\CSignal\\signal\\parse\\signal.y"
     {
-		(yyval.ast_value) = ast_new_member_decl_list((yyvsp[(1) - (2)].ast_value), (yyvsp[(2) - (2)].ast_value));
+		(yyval.ast_value) = ast_new_member_decl_list((yyvsp[(1) - (2)].ast_value), ast_new_member_decl((yyvsp[(2) - (2)].ast_value)));
 	;}
     break;
 

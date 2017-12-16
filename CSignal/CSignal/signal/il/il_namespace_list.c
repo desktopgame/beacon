@@ -2,25 +2,15 @@
 #include <stdlib.h>
 #include <assert.h>
 
+//proto
+static void il_namespace_list_delete_impl(list_item item);
+
 il_namespace_list* il_namespace_list_new() {
-	il_namespace_list* ret = (il_namespace_list*)malloc(sizeof(il_namespace_list));
-	ret->namespacez = NULL;
-	ret->next = NULL;
-	return ret;
+	return list_new();
 }
 
 void il_namespace_list_push(il_namespace_list* self, il_namespace* namespacez) {
-	assert(self != NULL);
-	if(self->namespacez == NULL) {
-		self->namespacez = namespacez;
-	} else {
-		if(self->next == NULL) {
-			self->next = il_namespace_list_new();
-			il_namespace_list_push(self->next, namespacez);
-		} else {
-			il_namespace_list_push(self->next, namespacez);
-		}
-	}
+	list_add(self, namespacez);
 }
 
 void il_namespace_list_dump(il_namespace_list* self, int depth) {
@@ -29,10 +19,11 @@ void il_namespace_list_dump(il_namespace_list* self, int depth) {
 	text_putline();
 	il_namespace_list* pointee = self;
 	while(1) {
-		if(pointee->namespacez == NULL) {
+		if(pointee->item == NULL) {
 			break;
 		}
-		il_namespace_dump(pointee->namespacez, depth + 1);
+		il_namespace* nm = (il_namespace*)pointee->item;
+		il_namespace_dump(nm, depth + 1);
 		if(pointee->next == NULL) {
 			break;
 		}
@@ -41,18 +32,11 @@ void il_namespace_list_dump(il_namespace_list* self, int depth) {
 }
 
 void il_namespace_list_delete(il_namespace_list* self) {
-	if(self == NULL) {
-		return;
-	}
-	il_namespace_list* pointee = self;
-	while(1) {
-		il_namespace_delete(pointee->namespacez);
-		if(pointee->next == NULL) {
-			free(pointee);
-			break;
-		}
-		il_namespace_list* temp = pointee;
-		pointee = pointee->next;
-		free(temp);
-	}
+	list_delete(self, il_namespace_list_delete_impl);
+}
+
+//private
+static void il_namespace_list_delete_impl(list_item item) {
+	il_namespace* nm = (il_namespace*)item;
+	il_namespace_delete(nm);
 }

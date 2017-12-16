@@ -22,6 +22,12 @@ typedef struct list {
 typedef void(*list_element_deleter)(list_item item);
 
 /**
+ * リストのアクション関数です.
+ * @param item
+ */
+typedef void(*list_element_action)(list_item item);
+
+/**
  * 新しいリストを作成します.
  * @return
  */
@@ -40,6 +46,13 @@ list_item list_add(list* self, list_item item);
  * @param index
  */
 list_item list_at(list* self, int index);
+
+/**
+ * 全ての要素を訪問します.
+ * @param self
+ * @param action
+ */
+void list_foreach(list* self, list_element_action action);
 
 /**
  * リストとその中身を開放します.

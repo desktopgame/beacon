@@ -1,0 +1,31 @@
+#pragma once
+#ifndef SIGNAL_IL_IL_FIELD_H
+#define SIGNAL_IL_IL_FIELD_H
+#include "il_type.h"
+/**
+ * フィールドを表す要素.
+ */
+typedef struct il_field {
+	il_type* type;
+	char* name;
+} il_field;
+/**
+ * 新しいフィールドを作成します.
+ * @param name
+ * @return
+ */
+il_field* il_field_new(const char* name);
+
+/**
+ * フィールドを出力します.
+ * @param self
+ * @param depth
+ */
+void il_field_dump(il_field* self, int depth);
+
+/**
+ * フィールドを開放します.
+ * @param self
+ */
+void il_field_delete(il_field* self);
+#endif // !SIGNAL_IL_IL_FIELD_H

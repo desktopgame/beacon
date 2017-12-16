@@ -193,7 +193,7 @@ member_define_list
 	}
 	| member_define_list member_define
 	{
-		$$ = ast_new_member_decl_list($1, $2);
+		$$ = ast_new_member_decl_list($1, ast_new_member_decl($2));
 	}
 	;
 member_define
