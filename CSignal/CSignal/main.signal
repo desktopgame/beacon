@@ -5,7 +5,7 @@ namespace L.Goo.Foo {
 		int pointX;
 		int pointY;
 	
-		def print(String message) -> Void {
+		def print(String message, Int d) -> Void {
 			if(10 == 10) {
 
 			}

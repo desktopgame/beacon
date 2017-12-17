@@ -2,6 +2,7 @@
 #define SIGNAL_IL_IL_CLASS_H
 #include "il_type.h"
 struct il_field_list;
+struct il_method_list;
 /**
  * クラスを表す要素.
  */
@@ -9,6 +10,7 @@ typedef struct il_class {
 	char* name;
 	il_type* super;
 	struct il_field_list* field_list;
+	struct il_method_list* method_list;
 } il_class;
 /**
  * クラスを表す要素を作成します.

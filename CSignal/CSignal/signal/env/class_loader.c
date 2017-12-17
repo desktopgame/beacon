@@ -6,6 +6,10 @@
 #include "../il/il_class.h"
 #include "../il/il_field.h"
 #include "../il/il_field_list.h"
+#include "../il/il_method.h"
+#include "../il/il_method_list.h"
+#include "../il/il_stmt_impl.h"
+#include "../il/il_factor_impl.h"
 
 //proto
 static class_loader* class_loader_new();
@@ -19,6 +23,14 @@ static void class_loader_load_class(class_loader* self, il_namespace* current, a
 static void class_loader_load_member(class_loader* self, il_class* current, ast* member);
 static void class_loader_load_field(class_loader* self, il_class* current, ast* field);
 static void class_loader_load_method(class_loader* self, il_class* current, ast* method);
+static void class_loader_load_param(class_loader* self, il_parameter_list* list, ast* source);
+static void class_loader_load_body(class_loader* self, il_stmt_list* list, ast* source);
+static il_stmt_if* class_loader_load_if(class_loader* self, ast* source);
+static il_stmt_if* class_loader_load_if_elif_list(class_loader* self, ast* source);
+static void class_loader_load_elif_list(class_loader* self, il_stmt_elif_list* list, ast* source);
+static il_stmt_if* class_loader_load_if_else(class_loader* self, ast* source);
+static il_stmt_if* class_loader_load_if_elif_list_else(class_loader* self, ast* source);
+static il_factor* class_loader_load_factor(class_loader* self, ast* source);
 static void class_loader_load_constructor(class_loader* self, il_class* current, ast* constructor);
 
 class_loader * class_loader_new_entry_point(const char * filename) {
@@ -189,8 +201,6 @@ static void class_loader_load_member(class_loader* self, il_class* current, ast*
 		} else if (child->tag == ast_constructor_decl) {
 			class_loader_load_constructor(self, current, child);
 		}
-	} else {
-		int a = 0;
 	}
 }
 
@@ -203,6 +213,143 @@ static void class_loader_load_field(class_loader* self, il_class* current, ast* 
 }
 
 static void class_loader_load_method(class_loader* self, il_class* current, ast* method) {
+	ast* func_name = ast_at(method, 0);
+	ast* param_list = ast_at(method, 1);
+	ast* func_body = ast_at(method, 2);
+	ast* ret_name = ast_at(method, 3);
+	il_method* v = il_method_new(func_name->u.string_value);
+	v->return_type = il_type_new(ret_name->u.string_value);
+	class_loader_load_param(self, v->parameter_list, param_list);
+	class_loader_load_body(self, v->statement_list, func_body);
+	il_method_list_push(current->method_list, v);
+}
+
+static void class_loader_load_param(class_loader* self, il_parameter_list* list, ast* source) {
+	if (source->tag == ast_parameter_list) {
+		for (int i = 0; i < source->childCount; i++) {
+			class_loader_load_param(self, list, ast_at(source, i));
+		}
+	} else if (source->tag == ast_parameter) {
+		ast* type_name = ast_first(source);
+		ast* access_name = ast_second(source);
+		il_parameter* p = il_parameter_new(access_name->u.string_value);
+		p->type = il_type_new(type_name->u.string_value);
+		il_parameter_list_push(list, p);
+	}
+}
+
+static void class_loader_load_body(class_loader* self, il_stmt_list* list, ast* source) {
+	if (source->tag == ast_stmt_list || source->tag == ast_scope) {
+		for (int i = 0; i < source->childCount; i++) {
+			class_loader_load_body(self, list, ast_at(source, i));
+		}
+	} else {
+		printf("    ");
+		ast_print(source);
+		printf("\n");
+		switch (source->tag) {
+			case ast_stmt:
+			{
+				class_loader_load_body(self, list, ast_first(source));
+				break;
+			}
+			case ast_if:
+			{
+				il_stmt_if* ilif = class_loader_load_if(self, source);
+				il_stmt_list_push(list, il_wrap_if(ilif));
+				break;
+			}
+			case ast_if_elif_list:
+			{
+				il_stmt* ilif = class_loader_load_if_elif_list(self, source);
+				il_stmt_list_push(list, il_wrap_if(ilif));
+				break;
+			}
+			case ast_if_else:
+			{
+				il_stmt* ilif = class_loader_load_if_else(self, source);
+				il_stmt_list_push(list, il_wrap_if(ilif));
+				break;
+			}
+			case ast_if_elif_list_else:
+			{
+				il_stmt_if* ilif = class_loader_load_if_elif_list_else(self, source);
+				il_stmt_list_push(list, il_wrap_if(ilif));
+				break;
+			}
+			default:
+				break;
+		}
+	}
+}
+
+static il_stmt_if* class_loader_load_if(class_loader* self, ast* source) {
+	assert(source->tag == ast_if);
+	il_stmt_if* ret = il_stmt_if_new();
+	ast* acond = ast_first(source);
+	ast* abody = ast_second(source);
+	il_factor* ilcond = class_loader_load_factor(self, acond);
+	il_stmt_list* ilbody = il_stmt_list_new();
+	class_loader_load_body(self, ilbody, abody);
+	ret->condition = ilcond;
+	ret->body = ilbody;
+	return ret;
+}
+
+static il_stmt_if* class_loader_load_if_elif_list(class_loader* self, ast* source) {
+	ast* aif = ast_first(source);
+	ast* aelif_list = ast_second(source);
+	il_stmt_if* ilif = class_loader_load_if(self, aif);
+	class_loader_load_elif_list(self, ilif->elif_list, aelif_list);
+	//il_stmt_list_push(list, ilif);
+	return ilif;
+}
+
+static il_stmt_if* class_loader_load_if_else(class_loader* self, ast* source) {
+	ast* aif = ast_first(source);
+	ast* aelse = ast_second(source);
+	ast* abody = ast_first(aelse);
+	il_stmt_if* ilif = class_loader_load_if(self, aif);
+	class_loader_load_body(self, ilif->else_body, abody);
+	return ilif;
+}
+
+static il_stmt_if* class_loader_load_if_elif_list_else(class_loader* self, ast* source) {
+	ast* aif_eliflist = ast_first(source);
+	ast* aelse = ast_second(source);
+	il_stmt_if* ilif = class_loader_load_if_elif_list(self, aif_eliflist);
+	class_loader_load_body(self, ilif->else_body, ast_first(aelse));
+	return ilif;
+}
+
+static void class_loader_load_elif_list(class_loader* self, il_stmt_elif_list* list, ast* source) {
+	if (source->tag == ast_elif_list) {
+		for (int i = 0; i < source->childCount; i++) {
+			class_loader_load_elif_list(self, list, ast_at(source, i));
+		}
+	} else if (source->tag == ast_elif) {
+		ast* acond = ast_first(source);
+		ast* abody = ast_second(source);
+		//il_stmt* ilif = il_stmt_if_new();
+		il_stmt_elif* ilelif = il_stmt_elif_new();
+		ilelif->condition = class_loader_load_factor(self, acond);
+		class_loader_load_body(self, ilelif->body, abody);
+		//il_stmt_list_push(list, ilelif);
+		il_stmt_elif_list_push(list, ilelif);
+	}
+}
+
+static il_factor* class_loader_load_factor(class_loader* self, ast* source) {
+	if (source->tag == ast_int) {
+		return il_factor_int_new(source->u.int_value);
+	} else if (source->tag == ast_double) {
+		return il_factor_double_new(source->u.double_value);
+	} else if (source->tag == ast_char) {
+		return il_factor_char_new(source->u.char_value);
+	} else if (source->tag == ast_string) {
+		return il_factor_string_new(source->u.string_value);
+	}
+	return NULL;
 }
 
 static void class_loader_load_constructor(class_loader* self, il_class* current, ast* constructor) {
