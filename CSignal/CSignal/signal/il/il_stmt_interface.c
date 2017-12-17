@@ -12,4 +12,12 @@ void il_stmt_dump(il_stmt * self, int depth) {
 }
 
 void il_stmt_delete(il_stmt * self) {
+	switch (self->type) {
+		case stmt_if:
+			il_stmt_if_delete(self->u.if_);
+			break;
+		default:
+			break;
+	}
+	free(self);
 }

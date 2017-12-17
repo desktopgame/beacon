@@ -289,10 +289,10 @@ static il_stmt_if* class_loader_load_if(class_loader* self, ast* source) {
 	ast* acond = ast_first(source);
 	ast* abody = ast_second(source);
 	il_factor* ilcond = class_loader_load_factor(self, acond);
-	il_stmt_list* ilbody = il_stmt_list_new();
-	class_loader_load_body(self, ilbody, abody);
+	//il_stmt_list* ilbody = il_stmt_list_new();
+	class_loader_load_body(self, ret->body, abody);
 	ret->condition = ilcond;
-	ret->body = ilbody;
+	//ret->body = ilbody;
 	return ret;
 }
 
