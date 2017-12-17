@@ -96,7 +96,7 @@ void sg_log(log_level level, const char* filename, int lineno, const char * sour
 	int res = sprintf_s(buff, LEN, source, ap);
 #else
 	char buff[LEN];
-	sprintf(buff, source, ap);
+	int res = sprintf(buff, source, ap);
 #endif
 	//フォーマット失敗
 	if (res == -1) {
