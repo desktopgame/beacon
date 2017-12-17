@@ -5,6 +5,7 @@
 #include "util/io.h"
 #include "env/script_context.h"
 #include "test.h"
+#include "util/logger.h"
 
 #ifdef _MSC_VER
 #include <crtdbg.h>
@@ -15,6 +16,7 @@ int main(int argc, char* argv[]) {
 	_CrtSetDbgFlag(_CRTDBG_ALLOC_MEM_DF | _CRTDBG_LEAK_CHECK_DF);
 	//_CrtSetBreakAlloc(103280);
 #endif
+	sg_lopen();
 	script_context_open();
 	cmd_dump(argc, argv);
 //	test_namespace();
@@ -26,5 +28,6 @@ int main(int argc, char* argv[]) {
 //	printf("%s", c);
 //	free(c);
 	script_context_close();
+	sg_lclose();
 	return 0;
 }
