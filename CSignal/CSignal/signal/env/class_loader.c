@@ -244,9 +244,9 @@ static void class_loader_load_body(class_loader* self, il_stmt_list* list, ast* 
 			class_loader_load_body(self, list, ast_at(source, i));
 		}
 	} else {
-		printf("    ");
-		ast_print(source);
-		printf("\n");
+		//printf("    ");
+		//ast_print(source);
+		//printf("\n");
 		switch (source->tag) {
 			case ast_stmt:
 			{
@@ -256,25 +256,25 @@ static void class_loader_load_body(class_loader* self, il_stmt_list* list, ast* 
 			case ast_if:
 			{
 				il_stmt_if* ilif = class_loader_load_if(self, source);
-				il_stmt_list_push(list, il_wrap_if(ilif));
+				il_stmt_list_push(list, il_stmt_wrap_if(ilif));
 				break;
 			}
 			case ast_if_elif_list:
 			{
 				il_stmt* ilif = class_loader_load_if_elif_list(self, source);
-				il_stmt_list_push(list, il_wrap_if(ilif));
+				il_stmt_list_push(list, il_stmt_wrap_if(ilif));
 				break;
 			}
 			case ast_if_else:
 			{
 				il_stmt* ilif = class_loader_load_if_else(self, source);
-				il_stmt_list_push(list, il_wrap_if(ilif));
+				il_stmt_list_push(list, il_stmt_wrap_if(ilif));
 				break;
 			}
 			case ast_if_elif_list_else:
 			{
 				il_stmt_if* ilif = class_loader_load_if_elif_list_else(self, source);
-				il_stmt_list_push(list, il_wrap_if(ilif));
+				il_stmt_list_push(list, il_stmt_wrap_if(ilif));
 				break;
 			}
 			default:
@@ -341,13 +341,13 @@ static void class_loader_load_elif_list(class_loader* self, il_stmt_elif_list* l
 
 static il_factor* class_loader_load_factor(class_loader* self, ast* source) {
 	if (source->tag == ast_int) {
-		return il_factor_int_new(source->u.int_value);
+		return il_factor_wrap_int(il_factor_int_new(source->u.int_value));
 	} else if (source->tag == ast_double) {
-		return il_factor_double_new(source->u.double_value);
+		return il_factor_wrap_double(il_factor_double_new(source->u.double_value));
 	} else if (source->tag == ast_char) {
-		return il_factor_char_new(source->u.char_value);
+		return il_factor_wrap_char(il_factor_char_new(source->u.char_value));
 	} else if (source->tag == ast_string) {
-		return il_factor_string_new(source->u.string_value);
+		return il_factor_wrap_string(il_factor_string_new(source->u.string_value));
 	}
 	return NULL;
 }

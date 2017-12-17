@@ -1,6 +1,7 @@
 #pragma once
 #ifndef SIGNAL_IL_IL_FACTOR_CHAR_H
 #define SIGNAL_IL_IL_FACTOR_CHAR_H
+#include "../il_factor_interface.h"
 /**
  * 文字を表す要素.
  */
@@ -9,11 +10,24 @@ typedef struct il_factor_char {
 } il_factor_char;
 
 /**
+ * 文字を表す要素をスーパーセットにラップします.
+ * @param self
+ */
+il_factor* il_factor_wrap_char(il_factor_char* self);
+
+/**
  * 文字を表す要素を作成します.
  * @param c
  * @return
  */
 il_factor_char* il_factor_char_new(char c);
+
+/**
+ * 文字を表す要素を出力します.
+ * @param self
+ * @param depth
+ */
+void il_factor_char_dump(il_factor_char* self, int depth);
 
 /**
  * 文字を表す要素を開放します.

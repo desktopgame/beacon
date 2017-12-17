@@ -6,13 +6,13 @@ namespace L.Goo.Foo {
 		int pointY;
 	
 		def print(String message, Int d) -> Void {
-			if(10 == 10) {
+			if(10) {
 
 			}
 
-			if(20 == 20) {
+			if('a') {
 
-			} elif(30 == 30) {
+			} elif("hello") {
 
 			}
 

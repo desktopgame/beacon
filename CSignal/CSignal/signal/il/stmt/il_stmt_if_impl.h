@@ -41,7 +41,7 @@ typedef struct il_stmt_if {
  * @param self
  * @return
  */
-il_stmt* il_wrap_if(il_stmt_if* self);
+il_stmt* il_stmt_wrap_if(il_stmt_if* self);
 
 /**
  * if を表す要素を作成します.

@@ -8,7 +8,7 @@
 static void il_stmt_elif_list_dump_impl(il_stmt_elif_list* p, int depth);
 static void il_stmt_elif_list_delete_impl(list_item item);
 
-il_stmt * il_wrap_if(il_stmt_if * self) {
+il_stmt * il_stmt_wrap_if(il_stmt_if * self) {
 	il_stmt* ret = (il_stmt*)malloc(sizeof(il_stmt));
 	ret->type = stmt_if;
 	ret->u.if_ = self;
