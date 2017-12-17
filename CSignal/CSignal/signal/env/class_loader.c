@@ -31,6 +31,9 @@ static void class_loader_load_elif_list(class_loader* self, il_stmt_elif_list* l
 static il_stmt_if* class_loader_load_if_else(class_loader* self, ast* source);
 static il_stmt_if* class_loader_load_if_elif_list_else(class_loader* self, ast* source);
 static il_factor* class_loader_load_factor(class_loader* self, ast* source);
+static il_factor_call* class_loader_load_call(class_loader* self, ast* source);
+static il_factor_invoke* class_loader_load_invoke(class_loader* self, ast* source);
+static void class_loader_load_argument_list(class_loader* self, il_argument_list* list, ast* source);
 static void class_loader_load_constructor(class_loader* self, il_class* current, ast* constructor);
 
 class_loader * class_loader_new_entry_point(const char * filename) {
@@ -253,6 +256,15 @@ static void class_loader_load_body(class_loader* self, il_stmt_list* list, ast* 
 				class_loader_load_body(self, list, ast_first(source));
 				break;
 			}
+			case ast_proc:
+			{
+				ast* afact = ast_first(source);
+				il_factor* ilfact = class_loader_load_factor(self, afact);
+				il_stmt_proc* ilproc = il_stmt_proc_new();
+				ilproc->factor = ilfact;
+				il_stmt_list_push(list, il_stmt_wrap_proc(ilproc));
+				break;
+			}
 			case ast_if:
 			{
 				il_stmt_if* ilif = class_loader_load_if(self, source);
@@ -348,8 +360,47 @@ static il_factor* class_loader_load_factor(class_loader* self, ast* source) {
 		return il_factor_wrap_char(il_factor_char_new(source->u.char_value));
 	} else if (source->tag == ast_string) {
 		return il_factor_wrap_string(il_factor_string_new(source->u.string_value));
+	} else if (source->tag == ast_call) {
+		return il_factor_wrap_call(class_loader_load_call(self, source));
+	} else if (source->tag == ast_invoke) {
+		return il_factor_wrap_invoke(class_loader_load_invoke(self, source));
+	} else if (source->tag == ast_variable) {
+		return il_factor_wrap_variable(il_factor_variable_new(source->u.string_value));
 	}
 	return NULL;
+}
+
+static il_factor_call* class_loader_load_call(class_loader* self, ast* source) {
+	assert(source->tag == ast_call);
+	ast* aname = ast_first(source);
+	ast* aargs = ast_second(source);
+	il_factor_call* ilcall = il_factor_call_new(aname->u.string_value);
+	class_loader_load_argument_list(self, ilcall->argument_list, aargs);
+	return ilcall;
+}
+
+static il_factor_invoke* class_loader_load_invoke(class_loader* self, ast* source) {
+	assert(source->tag == ast_invoke);
+	ast* areceiver = ast_at(source, 0);
+	ast* aname = ast_at(source, 1);
+	ast* aargs = ast_at(source, 2);
+	il_factor_invoke* ilinvoke = il_factor_invoke_new(aname->u.string_value);
+	ilinvoke->receiver = class_loader_load_factor(self, areceiver);
+	class_loader_load_argument_list(self, ilinvoke->argument_list, aargs);
+	return ilinvoke;
+}
+
+static void class_loader_load_argument_list(class_loader* self, il_argument_list* list, ast* source) {
+	if (source->tag == ast_argument_list) {
+		for (int i = 0; i < source->childCount; i++) {
+			class_loader_load_argument_list(self, list, ast_at(source, i));
+		}
+	} else if (source->tag == ast_argument) {
+		ast* primary = ast_first(source);
+		il_argument* ilarg = il_argument_list_new();
+		ilarg->factor = class_loader_load_factor(self, primary);
+		il_argument_list_push(list, ilarg);
+	}
 }
 
 static void class_loader_load_constructor(class_loader* self, il_class* current, ast* constructor) {

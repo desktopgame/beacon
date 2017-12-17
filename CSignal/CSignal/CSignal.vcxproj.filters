@@ -126,9 +126,6 @@
     <ClCompile Include="signal\il\il_method_list.c">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
-    <ClCompile Include="signal\il\stmt\il_stmt_expr_impl.c">
-      <Filter>ソース ファイル</Filter>
-    </ClCompile>
     <ClCompile Include="signal\il\il_factor_interface.c">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
@@ -145,6 +142,24 @@
       <Filter>ソース ファイル</Filter>
     </ClCompile>
     <ClCompile Include="signal\il\factor\il_factor_string_impl.c">
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
+    <ClCompile Include="signal\il\il_argument.c">
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
+    <ClCompile Include="signal\il\il_argument_list.c">
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
+    <ClCompile Include="signal\il\factor\il_factor_call_impl.c">
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
+    <ClCompile Include="signal\il\factor\il_factor_invoke_impl.c">
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
+    <ClCompile Include="signal\il\stmt\il_stmt_proc_impl.c">
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
+    <ClCompile Include="signal\il\factor\il_factor_variable_impl.c">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
   </ItemGroup>
@@ -290,9 +305,6 @@
     <ClInclude Include="signal\il\stmt\il_stmt_while_impl.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
-    <ClInclude Include="signal\il\stmt\il_stmt_expr_impl.h">
-      <Filter>ヘッダー ファイル</Filter>
-    </ClInclude>
     <ClInclude Include="signal\il\factor\il_factor_int_impl.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
@@ -303,6 +315,24 @@
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
     <ClInclude Include="signal\il\factor\il_factor_string_impl.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="signal\il\il_argument.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="signal\il\il_argument_list.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="signal\il\factor\il_factor_call_impl.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="signal\il\factor\il_factor_invoke_impl.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="signal\il\stmt\il_stmt_proc_impl.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="signal\il\factor\il_factor_variable_impl.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
   </ItemGroup>

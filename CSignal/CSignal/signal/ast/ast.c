@@ -105,6 +105,37 @@ ast * ast_new_identifier(char * str) {
 	return ret;
 }
 
+ast * ast_new_variable(const char * name) {
+	ast* ret = ast_new(ast_variable);
+	ret->u.string_value = name;
+	return ret;
+}
+
+ast * ast_new_call(const char * name, ast * argument_list) {
+	ast* ret = ast_new(ast_call);
+	ast* aname = ast_new(ast_identifier);
+	aname->u.string_value = name;
+	ast_push(ret, aname);
+	ast_push(ret, argument_list);
+	return ret;
+}
+
+ast * ast_new_invoke(ast * receiver, const char* name, ast * argument_list) {
+	ast* ret = ast_new(ast_invoke);
+	ast* aname = ast_new(ast_identifier);
+	aname->u.string_value = name;
+	ast_push(ret, receiver);
+	ast_push(ret, aname);
+	ast_push(ret, argument_list);
+	return ret;
+}
+
+ast * ast_new_proc(ast * expr) {
+	ast* ret = ast_new(ast_proc);
+	ast_push(ret, expr);
+	return ret;
+}
+
 ast * ast_push(ast * self, ast * child) {
 	assert(self != NULL);
 	assert(child != NULL);
@@ -199,6 +230,14 @@ void ast_print(ast* self) {
 		case ast_class_decl_unit:
 			printf("class decl_unit");
 			break;
+		case ast_variable:
+			printf("variable %s", self->u.string_value);
+			break;
+		case ast_invoke: p("invoke");
+		case ast_call: p("call");
+		case ast_proc: p("process");
+		case ast_argument_list: p("argument-list");
+		case ast_argument: p("argument");
 		//case ast_class_decl_list:
 		//	printf("class decl_list");
 		//	break;
@@ -296,6 +335,7 @@ static bool ast_has_str(ast* self) {
 	return
 		t == ast_typename ||
 		t == ast_identifier ||
+		t == ast_variable ||
 		t == ast_string ||
 		t == ast_import_path ||
 		t == ast_namespace_path ||

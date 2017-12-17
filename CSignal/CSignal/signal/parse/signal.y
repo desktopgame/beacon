@@ -303,7 +303,7 @@ argument_list
 	}
 	| expression COMMA argument_list
 	{
-		$$ = ast_new_argument_list($1, $3);
+		$$ = ast_new_argument_list(ast_new_argument($1), $3);
 	}
 	;
 expression
@@ -444,6 +444,14 @@ prefix
 	;
 postfix
 	: primary
+	| postfix DOT IDENT LRB RRB
+	{
+		$$ = ast_new_invoke($1, $3, ast_new_blank());
+	}
+	| postfix DOT IDENT LRB argument_list RRB
+	{
+		$$ = ast_new_invoke($1, $3, $5);
+	}
 	| postfix INC
 	{
 		$$ = ast_new_post_inc($1);
@@ -458,6 +466,18 @@ primary
 	| DOUBLE
 	| CHAR_LITERAL
 	| STRING_LITERAL
+	| IDENT
+	{
+		$$ = ast_new_variable($1);
+	}
+	| IDENT LRB RRB
+	{
+		$$ = ast_new_call($1, ast_new_blank());
+	}
+	| IDENT LRB argument_list RRB
+	{
+		$$ = ast_new_call($1, $3);
+	}
 	| LRB expression RRB
 	{
 		$$ = $2;
@@ -476,7 +496,7 @@ stmt_list
 stmt
 	: expression SEMI
 	{
-		$$ = $1;
+		$$ = ast_new_proc($1);
 	}
 	| variable_stmt
 	| if_stmt

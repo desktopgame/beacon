@@ -5,13 +5,13 @@
  * 文の種類を表す列挙型.
  */
 typedef enum il_stmt_type {
-	stmt_expr,
+	stmt_proc,
 	stmt_if,
 	stmt_while,
 } il_stmt_type;
 
 //詳細は il_stmt_impl.h を参照してください。
-struct il_stmt_expr;
+struct il_stmt_proc;
 struct il_stmt_if;
 struct il_stmt_while;
 
@@ -21,7 +21,7 @@ struct il_stmt_while;
 typedef struct il_stmt {
 	il_stmt_type type;
 	union {
-		struct il_stmt_expr* expression_;
+		struct il_stmt_proc* proc_;
 		struct il_stmt_if* if_;
 		struct il_stmt_while* while_;
 	} u;

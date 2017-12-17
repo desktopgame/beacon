@@ -6,6 +6,10 @@ namespace L.Goo.Foo {
 		int pointY;
 	
 		def print(String message, Int d) -> Void {
+			main();
+			main(10, 20, "aaa");
+			a.print();
+			a.print(10, 20, "aaa");
 			if(10) {
 
 			}

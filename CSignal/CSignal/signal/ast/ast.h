@@ -52,6 +52,10 @@ typedef enum ast_tag {
 	ast_char,
 	ast_string,
 
+	ast_variable,
+	ast_call,
+	ast_invoke,
+
 	ast_identifier,
 	ast_typename,
 
@@ -95,6 +99,13 @@ typedef enum ast_tag {
 
 	ast_scope,
 	ast_stmt,
+	//
+	//call(); 
+	//a.invoke();
+	//のような、式によってのみ構成される文(ステートメント)
+	//を特別にプロセスと呼称します。
+	//
+	ast_proc,
 	ast_stmt_list,
 
 
@@ -230,6 +241,37 @@ ast* ast_new_typename(char* str);
  * @return
  */
 ast* ast_new_identifier(char* str);
+
+/**
+ * 変数を表す要素を作成します.
+ * @param name
+ * @return
+ */
+ast* ast_new_variable(const char* name);
+
+/**
+ * 関数呼び出しを表す要素を作成します.
+ * @param name
+ * @param argument_list
+ * @return
+ */
+ast* ast_new_call(const char* name, ast* argument_list);
+
+/**
+ * メソッド呼び出しを表す要素を作成します.
+ * @param receiver
+ * @param name
+ * @param argument_list
+ * @return
+ */
+ast* ast_new_invoke(ast* receiver, const char* name, ast* argument_list);
+
+/**
+ * 計算可能な要素だけで構成される文を作成します.
+ * @param expr
+ * @return
+ */
+ast* ast_new_proc(ast* expr);
 
 /**
  * self に child を子要素として追加します.

@@ -23,7 +23,17 @@ void il_factor_dump(il_factor * self, int depth) {
 		case factor_squote:
 			il_factor_string_dump(self->u.string_, depth);
 			break;
+		case factor_call:
+			il_factor_call_dump(self->u.call_, depth);
+			break;
+		case factor_invoke:
+			il_factor_invoke_dump(self->u.invoke_, depth);
+			break;
+		case factor_variable:
+			il_factor_variable_dump(self->u.variable_, depth);
+			break;
 		default:
+			fprintf(stderr, "指定の種類のファクターの出力には未対応です\n");
 			break;
 	}
 }
@@ -45,7 +55,17 @@ void il_factor_delete(il_factor * self) {
 		case factor_squote:
 			il_factor_string_delete(self->u.string_);
 			break;
+		case factor_call:
+			il_factor_call_delete(self->u.call_);
+			break;
+		case factor_invoke:
+			il_factor_invoke_delete(self->u.invoke_);
+			break;
+		case factor_variable:
+			il_factor_variable_delete(self->u.variable_);
+			break;
 		default:
+			fprintf(stderr, "指定の種類のファクターの開放には未対応です\n");
 			break;
 	}
 	free(self);

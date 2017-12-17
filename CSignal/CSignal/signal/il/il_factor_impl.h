@@ -9,4 +9,7 @@
 #include "factor/il_factor_double_impl.h"
 #include "factor/il_factor_char_impl.h"
 #include "factor/il_factor_string_impl.h"
+#include "factor/il_factor_call_impl.h"
+#include "factor/il_factor_invoke_impl.h"
+#include "factor/il_factor_variable_impl.h"
 #endif // !SIGNAL_IL_IL_FACTOR_IMPL_H
