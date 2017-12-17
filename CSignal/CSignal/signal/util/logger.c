@@ -88,21 +88,27 @@ void sg_lclose() {
 //http://www.serendip.ws/archives/4635
 void sg_log(log_level level, const char* filename, int lineno, const char * source, ...) {
 #define LEN 100
-#if defined(_MSC_VER)
 	va_list ap;
 	va_start(ap, source);
+#ifdef _MSC_VER
 	//ソース文字列をフォーマットする
 	char buff[LEN];
 	int res = sprintf_s(buff, LEN, source, ap);
+#else
+	char buff[LEN];
+	sprintf(buff, source, ap);
+#endif
 	//フォーマット失敗
 	if (res == -1) {
 		printf("internal error: %s %d %s", filename, lineno, source);
 		//現在開いているファイルがあるなら書き出す
 		if (logger_fp != NULL) {
+#ifdef DEBUG
 			//rewind(logger_fp);
 			fprintf(logger_fp, "internal error: %s %d %s", filename, lineno, source);
 			fputs("\n", logger_fp);
 			fflush(logger_fp);
+#endif
 		}
 	//フォーマット成功
 	} else {
@@ -114,33 +120,16 @@ void sg_log(log_level level, const char* filename, int lineno, const char * sour
 		//現在開いているファイルがあるなら書き出す
 		if (logger_fp != NULL) {
 			//rewind(logger_fp);
+#ifdef DEBUG
 			sg_fprint_loglevel(logger_fp, level);
 			fprintf(logger_fp, "%s %d ", filename, lineno);
 			fprintf(logger_fp, buff);
 			fputs("\n", logger_fp);
 			fflush(logger_fp);
+#endif
 		}
 	}
 	va_end(ap);
-#else
-	va_list ap;
-	va_start(ap, source);
-	//ソース文字列をフォーマットする
-	char buff[LEN];
-	int res = sprintf_s(buff, LEN, source, ap);
-	//フォーマット失敗
-	if (res == -1) {
-		printf("internal error: %s %d %s", filename, lineno, source);
-		//フォーマット成功
-	} else {
-		sg_pretty_paint_start(level);
-		sg_print_loglevel(level);
-		printf("%s %d ", filename, lineno);
-		printf(buff);
-		sg_pretty_paint_stop();
-	}
-	va_end(ap);
-#endif
 	text_putline();
 #undef LEN
 }
