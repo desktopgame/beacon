@@ -2,9 +2,10 @@
 #ifndef SIGNAL_UTIL_LOGGER_H
 #define SIGNAL_UTIL_LOGGER_H
 #include <stdarg.h>
+#include <stdbool.h>
 
 /**
- * ƒƒO‚ÌƒŒƒxƒ‹‚ğ•\‚·—ñ‹“.
+ * ãƒ­ã‚°ã®ãƒ¬ãƒ™ãƒ«ã‚’è¡¨ã™åˆ—æŒ™.
  */
 typedef enum log_level {
 	log_debug,
@@ -15,17 +16,29 @@ typedef enum log_level {
 } log_level;
 
 /**
- * ƒƒK[‚Ìo—Íæ‚Æ‚È‚éƒtƒ@ƒCƒ‹‚ğƒI[ƒvƒ“‚µ‚Ü‚·.
+ * ãƒ­ã‚¬ãƒ¼ã®å‡ºåŠ›å…ˆã¨ãªã‚‹ãƒ•ã‚¡ã‚¤ãƒ«ã‚’ã‚ªãƒ¼ãƒ—ãƒ³ã—ã¾ã™.
  */
 void sg_lopen();
 
 /**
- * ƒƒK[‚Ìo—Íæ‚Æ‚È‚éƒtƒ@ƒCƒ‹‚ğƒNƒ[ƒY‚µ‚Ü‚·.
+ * ãƒ­ã‚¬ãƒ¼ã®å‡ºåŠ›å…ˆã¨ãªã‚‹ãƒ•ã‚¡ã‚¤ãƒ«ã‚’ã‚¯ãƒ­ãƒ¼ã‚ºã—ã¾ã™.
  */
 void sg_lclose();
 
 /**
- * w’è‚ÌƒtƒH[ƒ}ƒbƒgw’è‚µ‚ÆŒxƒŒƒxƒ‹‚Å•¶š‚ğ•\¦‚µ‚Ü‚·.
+ * ãƒ­ã‚¬ãƒ¼ã®æœ‰åŠ¹/éæœ‰åŠ¹ã‚’è¨­å®šã—ã¾ã™.
+ * @param b æœ‰åŠ¹ãªã‚‰true.
+ */
+void sg_lset_enabled(bool b);
+
+/**
+ * ãƒ­ã‚¬ãƒ¼ã®æœ‰åŠ¹/éæœ‰åŠ¹ã‚’è¿”ã—ã¾ã™.
+ * @return
+ */
+bool sg_lget_enabled();
+
+/**
+ * æŒ‡å®šã®ãƒ•ã‚©ãƒ¼ãƒãƒƒãƒˆæŒ‡å®šã—ã¨è­¦å‘Šãƒ¬ãƒ™ãƒ«ã§æ–‡å­—ã‚’è¡¨ç¤ºã—ã¾ã™.
  * @param level
  * @param filename
  * @param lineno
@@ -34,11 +47,11 @@ void sg_lclose();
  */
 void sg_log(log_level level, const char* filename, int lineno, const char* source, ...);
 
-//ƒ}ƒNƒ–¼‚ª”í‚éê‡‚Í LOG_OVERRIDE ‚ğ’è‹`‚µ‚ÄŠù‘¶‚Ì‚à‚Ì‚ğ–³Œø‚É‚µ‚Ü‚·B
-//(Š„‚Æˆê”Ê“I‚È–¼‘O‚ğg—p‚µ‚Ä‚¢‚é‚Ì‚Å—pˆÓ‚µ‚Ä‚Ü‚·B)
+//ãƒã‚¯ãƒ­åãŒè¢«ã‚‹å ´åˆã¯ LOG_OVERRIDE ã‚’å®šç¾©ã—ã¦æ—¢å­˜ã®ã‚‚ã®ã‚’ç„¡åŠ¹ã«ã—ã¾ã™ã€‚
+//(å‰²ã¨ä¸€èˆ¬çš„ãªåå‰ã‚’ä½¿ç”¨ã—ã¦ã„ã‚‹ã®ã§ç”¨æ„ã—ã¦ã¾ã™ã€‚)
 #if defined(LOG_OVERRIDE)
-#if defined(DEBUG)
-#undef DEBUG
+#if defined(LOG)
+#undef LOG
 #endif
 
 #if defined(INFO)
@@ -58,8 +71,8 @@ void sg_log(log_level level, const char* filename, int lineno, const char* sourc
 #endif
 #endif
 
-//ƒƒOo—Í—pƒ}ƒNƒ‚ğ–³Œø‚É‚·‚é‚É‚Í
-//LOG_DISABLE‚ğ’è‹`‚µ‚Ü‚·B
+//ãƒ­ã‚°å‡ºåŠ›ç”¨ãƒã‚¯ãƒ­ã‚’ç„¡åŠ¹ã«ã™ã‚‹ã«ã¯
+//LOG_DISABLEã‚’å®šç¾©ã—ã¾ã™ã€‚
 #if !defined(LOG_DISABLE)
 #if defined(__FILE__) && defined(__LINE__)
 

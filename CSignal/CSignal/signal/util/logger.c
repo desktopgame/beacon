@@ -1,6 +1,5 @@
 ﻿#include "logger.h"
 #include <stdio.h>
-#include <stdbool.h>
 #include <time.h>
 //#include <conio.h>
 #include "text.h"
@@ -11,6 +10,7 @@
 #endif
 
 //proto
+static void sg_log_impl(log_level level, const char* filename, int lineno, const char * source, ...);
 static char* sg_unique_name();
 static void sg_print_loglevel(log_level level);
 static void sg_fprint_loglevel(FILE* fp, log_level level);
@@ -19,6 +19,7 @@ static void sg_pretty_paint_stop();
 static bool sg_is_error(log_level level);
 
 static FILE* logger_fp = NULL;
+static bool logger_enabled = true;
 
 #if defined(_WIN32)
 static WORD savedInstance;
@@ -53,7 +54,7 @@ void sg_lopen() {
 	char* name = sg_unique_name();
 	if (name == NULL) {
 		logger_fp = NULL;
-		return NULL;
+		return;
 	}
 	if (!io_exists(name)) {
 		io_new_file(name);
@@ -63,17 +64,14 @@ void sg_lopen() {
 	errno_t e = fopen_s(&fp, name, "w");
 	if (e) {
 		free(name);
-		return NULL;
+		return;
 	}
 	free(name);
 	logger_fp = fp;
-	return e;
 #else
-	FILE* fp;
-	fopen(fp, name, "w");
+	FILE* fp = fopen(fp, name, "w");
 	free(name);
 	logger_fp = fp;
-	return fp;
 #endif
 }
 
@@ -85,8 +83,26 @@ void sg_lclose() {
 	}
 }
 
+void sg_lset_enabled(bool b) {
+	logger_enabled = b;
+}
+
+bool sg_lget_enabled() {
+	return logger_enabled;
+}
+
 //http://www.serendip.ws/archives/4635
 void sg_log(log_level level, const char* filename, int lineno, const char * source, ...) {
+	va_list ap;
+	va_start(ap, source);
+	if (logger_enabled) {
+		sg_log_impl(level, filename, lineno, source, ap);
+	}
+	va_end(ap);
+}
+
+//private
+static void sg_log_impl(log_level level, const char* filename, int lineno, const char * source, ...) {
 #define LEN 100
 	va_list ap;
 	va_start(ap, source);
@@ -103,30 +119,30 @@ void sg_log(log_level level, const char* filename, int lineno, const char * sour
 		printf("internal error: %s %d %s", filename, lineno, source);
 		//現在開いているファイルがあるなら書き出す
 		if (logger_fp != NULL) {
-#ifdef DEBUG
 			//rewind(logger_fp);
-			fprintf(logger_fp, "internal error: %s %d %s", filename, lineno, source);
+			fprintf(logger_fp, "internal error: %s %s %d", source, filename, lineno);
 			fputs("\n", logger_fp);
 			fflush(logger_fp);
-#endif
 		}
-	//フォーマット成功
+		//フォーマット成功
 	} else {
 		sg_pretty_paint_start(level);
 		sg_print_loglevel(level);
-		printf("%s %d ", filename, lineno);
 		printf(buff);
+		printf(" [");
+		printf("%s %d", filename, lineno);
+		printf("]");
 		sg_pretty_paint_stop();
 		//現在開いているファイルがあるなら書き出す
 		if (logger_fp != NULL) {
 			//rewind(logger_fp);
-#ifdef DEBUG
 			sg_fprint_loglevel(logger_fp, level);
-			fprintf(logger_fp, "%s %d ", filename, lineno);
 			fprintf(logger_fp, buff);
+			fprintf(logger_fp, " [");
+			fprintf(logger_fp, "%s %d", filename, lineno);
+			fprintf(logger_fp, "]");
 			fputs("\n", logger_fp);
 			fflush(logger_fp);
-#endif
 		}
 	}
 	va_end(ap);
@@ -134,7 +150,6 @@ void sg_log(log_level level, const char* filename, int lineno, const char * sour
 #undef LEN
 }
 
-//private
 static char* sg_unique_name() {
 	//http://www.c-tipsref.com/tips/time/time.html
 #if defined(_MSC_VER)
@@ -235,7 +250,7 @@ static void sg_pretty_paint_start(log_level level) {
 			break;
 		case log_fatal:
 			SetConsoleTextAttribute(h, COL_RED);
-			SetConsoleTextAttribute(h, COMMON_LVB_UNDERSCORE);
+			//SetConsoleTextAttribute(h, COMMON_LVB_UNDERSCORE);
 			break;
 		default:
 			break;
