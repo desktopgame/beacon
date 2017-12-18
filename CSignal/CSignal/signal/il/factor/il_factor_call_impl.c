@@ -5,7 +5,7 @@
 
 il_factor * il_factor_wrap_call(il_factor_call * self) {
 	il_factor* ret = (il_factor*)malloc(sizeof(il_factor));
-	ret->type = factor_call;
+	ret->type = ilfactor_call;
 	ret->u.call_ = self;
 	return ret;
 }

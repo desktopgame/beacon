@@ -1,4 +1,5 @@
 #include "script_context.h"
+#include "../util/logger.h"
 #include <stdlib.h>
 #include <assert.h>
 //proto
@@ -9,6 +10,7 @@ static script_context* gScriptContextCurrent = NULL;
 
 void script_context_open() {
 	script_context_check_init();
+	INFO("script-context open");
 }
 
 script_context* script_context_new() {
@@ -77,6 +79,7 @@ void script_context_close() {
 	}
 	gScriptContext = NULL;
 	gScriptContextCurrent = NULL;
+	INFO("script-context close");
 }
 
 //private

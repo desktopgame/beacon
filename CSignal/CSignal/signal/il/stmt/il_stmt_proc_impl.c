@@ -3,7 +3,7 @@
 
 il_stmt * il_stmt_wrap_proc(il_stmt_proc * self) {
 	il_stmt* ret = (il_stmt*)malloc(sizeof(il_stmt));
-	ret->type = stmt_proc;
+	ret->type = ilstmt_proc;
 	ret->u.proc_ = self;
 	return ret;
 }

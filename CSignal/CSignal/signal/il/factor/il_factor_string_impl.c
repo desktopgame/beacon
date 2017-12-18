@@ -5,7 +5,7 @@
 
 il_factor * il_factor_wrap_string(il_factor_string * self) {
 	il_factor* ret = (il_factor*)malloc(sizeof(il_factor));
-	ret->type = factor_squote;
+	ret->type = ilfactor_squote;
 	ret->u.string_ = self;
 	return ret;
 }

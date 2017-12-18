@@ -5,9 +5,9 @@
  * 文の種類を表す列挙型.
  */
 typedef enum il_stmt_type {
-	stmt_proc,
-	stmt_if,
-	stmt_while,
+	ilstmt_proc,
+	ilstmt_if,
+	ilstmt_while,
 } il_stmt_type;
 
 //詳細は il_stmt_impl.h を参照してください。

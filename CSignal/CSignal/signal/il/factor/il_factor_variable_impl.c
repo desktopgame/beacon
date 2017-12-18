@@ -5,7 +5,7 @@
 
 il_factor * il_factor_wrap_variable(il_factor_variable * self) {
 	il_factor* ret = (il_factor*)malloc(sizeof(il_factor));
-	ret->type = factor_variable;
+	ret->type = ilfactor_variable;
 	ret->u.variable_ = self;
 	return ret;
 }

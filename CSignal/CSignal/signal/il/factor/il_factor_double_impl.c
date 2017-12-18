@@ -5,7 +5,7 @@
 
 il_factor * il_factor_wrap_double(il_factor_double * self) {
 	il_factor* ret = (il_factor*)malloc(sizeof(il_factor));
-	ret->type = factor_double;
+	ret->type = ilfactor_double;
 	ret->u.double_ = self;
 	return ret;
 }

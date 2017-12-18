@@ -5,7 +5,7 @@
 
 il_factor * il_factor_wrap_invoke(il_factor_invoke * self) {
 	il_factor* ret = (il_factor*)malloc(sizeof(il_factor));
-	ret->type = factor_invoke;
+	ret->type = ilfactor_invoke;
 	ret->u.invoke_ = self;
 	return ret;
 }

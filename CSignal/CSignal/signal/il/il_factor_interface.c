@@ -11,25 +11,25 @@ void il_factor_dump(il_factor * self, int depth) {
 		return;
 	}
 	switch (self->type) {
-		case factor_int:
+		case ilfactor_int:
 			il_factor_int_dump(self->u.int_, depth);
 			break;
-		case factor_double:
+		case ilfactor_double:
 			il_factor_double_dump(self->u.double_, depth);
 			break;
-		case factor_cquote:
+		case ilfactor_cquote:
 			il_factor_char_dump(self->u.char_, depth);
 			break;
-		case factor_squote:
+		case ilfactor_squote:
 			il_factor_string_dump(self->u.string_, depth);
 			break;
-		case factor_call:
+		case ilfactor_call:
 			il_factor_call_dump(self->u.call_, depth);
 			break;
-		case factor_invoke:
+		case ilfactor_invoke:
 			il_factor_invoke_dump(self->u.invoke_, depth);
 			break;
-		case factor_variable:
+		case ilfactor_variable:
 			il_factor_variable_dump(self->u.variable_, depth);
 			break;
 		default:
@@ -43,25 +43,25 @@ void il_factor_delete(il_factor * self) {
 		return;
 	}
 	switch (self->type) {
-		case factor_int:
+		case ilfactor_int:
 			il_factor_int_delete(self->u.int_);
 			break;
-		case factor_double:
+		case ilfactor_double:
 			il_factor_double_delete(self->u.double_);
 			break;
-		case factor_cquote:
+		case ilfactor_cquote:
 			il_factor_char_delete(self->u.char_);
 			break;
-		case factor_squote:
+		case ilfactor_squote:
 			il_factor_string_delete(self->u.string_);
 			break;
-		case factor_call:
+		case ilfactor_call:
 			il_factor_call_delete(self->u.call_);
 			break;
-		case factor_invoke:
+		case ilfactor_invoke:
 			il_factor_invoke_delete(self->u.invoke_);
 			break;
-		case factor_variable:
+		case ilfactor_variable:
 			il_factor_variable_delete(self->u.variable_);
 			break;
 		default:

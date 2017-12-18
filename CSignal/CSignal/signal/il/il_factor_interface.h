@@ -5,15 +5,15 @@
  * 計算可能な要素の種類.
  */
 typedef enum il_factor_type {
-	factor_int,
-	factor_double,
-	factor_cquote,
-	factor_squote,
-	factor_unary_op,
-	factor_binary_op,
-	factor_call,
-	factor_invoke,
-	factor_variable,
+	ilfactor_int,
+	ilfactor_double,
+	ilfactor_cquote,
+	ilfactor_squote,
+	ilfactor_unary_op,
+	ilfactor_binary_op,
+	ilfactor_call,
+	ilfactor_invoke,
+	ilfactor_variable,
 } il_factor_type;
 
 //ファクターとして扱える要素自身が内側にファクターを含む(再帰)
