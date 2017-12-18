@@ -11,7 +11,7 @@ void il_stmt_dump(il_stmt * self, int depth) {
 			il_stmt_proc_dump(self->u.proc_, depth);
 			break;
 		default:
-			ERROR("ステートメントをダンプ出来ませんでした。");
+			//ERROR("ステートメントをダンプ出来ませんでした。");
 			break;
 	}
 }
@@ -25,7 +25,7 @@ void il_stmt_delete(il_stmt * self) {
 			il_stmt_proc_delete(self->u.proc_);
 			break;
 		default:
-			ERROR("ステートメントを開放出来ませんでした。");
+			//ERROR("ステートメントを開放出来ませんでした。");
 			break;
 	}
 	free(self);
