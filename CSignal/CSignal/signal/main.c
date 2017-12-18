@@ -18,7 +18,6 @@ int main(int argc, char* argv[]) {
 #endif
 	sg_lopen();
 	script_context_open();
-	DEBUG("signal start");
 	cmd_dump(argc, argv);
 //	test_namespace();
 	test_cll();

@@ -14,7 +14,7 @@ namespace L.Goo.Foo {
 
 			}
 
-			if('a') {
+			if('a' || 10) {
 
 			} elif("hello") {
 

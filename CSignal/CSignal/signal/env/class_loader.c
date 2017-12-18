@@ -31,6 +31,8 @@ static void class_loader_load_elif_list(class_loader* self, il_stmt_elif_list* l
 static il_stmt_if* class_loader_load_if_else(class_loader* self, ast* source);
 static il_stmt_if* class_loader_load_if_elif_list_else(class_loader* self, ast* source);
 static il_factor* class_loader_load_factor(class_loader* self, ast* source);
+static il_factor_unary_op* class_loader_load_unary(class_loader* self, ast* source, ilunary_op_type type);
+static il_factor_binary_op* class_loader_load_binary(class_loader* self, ast* source, ilbinary_op_type type);
 static il_factor_call* class_loader_load_call(class_loader* self, ast* source);
 static il_factor_invoke* class_loader_load_invoke(class_loader* self, ast* source);
 static void class_loader_load_argument_list(class_loader* self, il_argument_list* list, ast* source);
@@ -305,6 +307,9 @@ static il_stmt_if* class_loader_load_if(class_loader* self, ast* source) {
 	class_loader_load_body(self, ret->body, abody);
 	ret->condition = ilcond;
 	//ret->body = ilbody;
+	if (ret->condition == NULL) {
+		int a = 0;
+	}
 	return ret;
 }
 
@@ -366,8 +371,57 @@ static il_factor* class_loader_load_factor(class_loader* self, ast* source) {
 		return il_factor_wrap_invoke(class_loader_load_invoke(self, source));
 	} else if (source->tag == ast_variable) {
 		return il_factor_wrap_variable(il_factor_variable_new(source->u.string_value));
+	//operator(+ - * / %)
+	} else if (source->tag == ast_add) {
+		return il_factor_wrap_binary(class_loader_load_binary(self, source, ilbinary_add));
+	} else if (source->tag == ast_sub) {
+		return il_factor_wrap_binary(class_loader_load_binary(self, source, ilbinary_sub));
+	} else if (source->tag == ast_mul) {
+		return il_factor_wrap_binary(class_loader_load_binary(self, source, ilbinary_mul));
+	} else if (source->tag == ast_div) {
+		return il_factor_wrap_binary(class_loader_load_binary(self, source, ilbinary_div));
+	} else if (source->tag == ast_mod) {
+		return il_factor_wrap_binary(class_loader_load_binary(self, source, ilbinary_mod));
+	//operator(| || & &&)
+	} else if (source->tag == ast_bit_or) {
+		return il_factor_wrap_binary(class_loader_load_binary(self, source, ilbinary_bit_or));
+	} else if (source->tag == ast_logic_or) {
+		return il_factor_wrap_binary(class_loader_load_binary(self, source, ilbinary_logic_or));
+	} else if (source->tag == ast_bit_and) {
+		return il_factor_wrap_binary(class_loader_load_binary(self, source, ilbinary_bit_and));
+	} else if (source->tag == ast_logic_and) {
+		return il_factor_wrap_binary(class_loader_load_binary(self, source, ilbinary_logic_and));
+	//operator(== != > >= < <=)
+	} else if (source->tag == ast_equal) {
+		return il_factor_wrap_binary(class_loader_load_binary(self, source, ilbinary_eq));
+	} else if (source->tag == ast_notequal) {
+		return il_factor_wrap_binary(class_loader_load_binary(self, source, ilbinary_noteq));
+	} else if (source->tag == ast_gt) {
+		return il_factor_wrap_binary(class_loader_load_binary(self, source, ilbinary_gt));
+	} else if (source->tag == ast_ge) {
+		return il_factor_wrap_binary(class_loader_load_binary(self, source, ilbinary_ge));
+	} else if (source->tag == ast_lt) {
+		return il_factor_wrap_binary(class_loader_load_binary(self, source, ilbinary_lt));
+	} else if (source->tag == ast_le) {
+		return il_factor_wrap_binary(class_loader_load_binary(self, source, ilbinary_le));
 	}
 	return NULL;
+}
+
+static il_factor_unary_op* class_loader_load_unary(class_loader* self, ast* source, ilunary_op_type type) {
+	il_factor_unary_op* ret = il_factor_unary_op_new(type);
+	ast* a = ast_first(source);
+	ret->a = class_loader_load_factor(self, a);
+	return ret;
+}
+
+static il_factor_binary_op* class_loader_load_binary(class_loader* self, ast* source, ilbinary_op_type type) {
+	il_factor_binary_op* ret = il_factor_binary_op_new(type);
+	ast* aleft = ast_first(source);
+	ast* aright = ast_second(source);
+	ret->left = class_loader_load_factor(self, aleft);
+	ret->right = class_loader_load_factor(self, aright);
+	return ret;
 }
 
 static il_factor_call* class_loader_load_call(class_loader* self, ast* source) {

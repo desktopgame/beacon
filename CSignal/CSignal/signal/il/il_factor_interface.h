@@ -32,6 +32,8 @@ struct il_factor_string;
 struct il_factor_call;
 struct il_factor_invoke;
 struct il_factor_variable;
+struct il_factor_unary_op;
+struct il_factor_binary_op;
 
 /**
  * 計算可能な要素.
@@ -46,6 +48,8 @@ typedef struct il_factor {
 		struct il_factor_call* call_;
 		struct il_factor_invoke* invoke_;
 		struct il_factor_variable* variable_;
+		struct il_factor_unary_op* unary_;
+		struct il_factor_binary_op* binary_;
 	} u;
 } il_factor;
 

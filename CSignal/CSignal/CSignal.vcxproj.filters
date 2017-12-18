@@ -165,6 +165,12 @@
     <ClCompile Include="signal\util\logger.c">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
+    <ClCompile Include="signal\il\factor\il_factor_unary_op_impl.c">
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
+    <ClCompile Include="signal\il\factor\il_factor_binary_op_impl.c">
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="signal\util\cmd.h">
@@ -339,6 +345,12 @@
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
     <ClInclude Include="signal\util\logger.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="signal\il\factor\il_factor_unary_op_impl.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="signal\il\factor\il_factor_binary_op_impl.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
   </ItemGroup>

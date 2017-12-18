@@ -1,15 +1,10 @@
 #include "il_factor_interface.h"
 #include "il_factor_impl.h"
 #include "../util/text.h"
+#include "../util/logger.h"
 #include <stdio.h>
 
 void il_factor_dump(il_factor * self, int depth) {
-	if (self == NULL) {
-		text_putindent(depth);
-		printf("c-null");
-		text_putline();
-		return;
-	}
 	switch (self->type) {
 		case ilfactor_int:
 			il_factor_int_dump(self->u.int_, depth);
@@ -32,8 +27,14 @@ void il_factor_dump(il_factor * self, int depth) {
 		case ilfactor_variable:
 			il_factor_variable_dump(self->u.variable_, depth);
 			break;
+		case ilfactor_unary_op:
+			il_factor_unary_op_dump(self->u.unary_, depth);
+			break;
+		case ilfactor_binary_op:
+			il_factor_binary_op_dump(self->u.binary_, depth);
+			break;
 		default:
-			fprintf(stderr, "指定の種類のファクターの出力には未対応です\n");
+			ERROR("ファクターをダンプ出来ませんでした");
 			break;
 	}
 }
@@ -64,8 +65,14 @@ void il_factor_delete(il_factor * self) {
 		case ilfactor_variable:
 			il_factor_variable_delete(self->u.variable_);
 			break;
+		case ilfactor_unary_op:
+			il_factor_unary_op_delete(self->u.unary_);
+			break;
+		case ilfactor_binary_op:
+			il_factor_binary_op_delete(self->u.binary_);
+			break;
 		default:
-			fprintf(stderr, "指定の種類のファクターの開放には未対応です\n");
+			ERROR("ファクターを開放出来ませんでした");
 			break;
 	}
 	free(self);
