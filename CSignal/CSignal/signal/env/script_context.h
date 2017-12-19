@@ -1,6 +1,7 @@
 #pragma once
 #ifndef SIGNAL_ENV_SCRIPT_CONTEXT_H
 #define SIGNAL_ENV_SCRIPT_CONTEXT_H
+#include "../util/stack.h"
 /**
  * 唯一のスクリプトコンテキストを表すIDです.
  */
@@ -17,6 +18,7 @@ typedef unsigned long script_cid;
  * 付随するすべては script_context(あるいはそのフィールド)のフィールドとして持たせます。
  */
 typedef struct script_context {
+	stack* parserStack;
 	struct script_context* prev;
 	struct script_context* next;
 } script_context;

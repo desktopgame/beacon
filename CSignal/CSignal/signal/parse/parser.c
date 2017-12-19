@@ -6,15 +6,18 @@
 #include "../util/text.h"
 #include "../util/stack.h"
 #include "../ast/ast_new_literal.h"
+#include "../env/script_context.h"
 
-static stack* parser_stack = NULL;
+
+//static stack* parser_stack = NULL;
 
 parser * parser_push(yacc_input_type input_type) {
-	if (parser_stack == NULL) {
-		parser_stack = stack_new();
+	script_context* ctx = script_context_get_current();
+	if (ctx->parserStack == NULL) {
+		ctx->parserStack = stack_new();
 	}
 	parser* p = (parser*)malloc(sizeof(parser));
-	stack_push(parser_stack, p);
+	stack_push(ctx->parserStack, p);
 	p->input_type = input_type;
 	p->root = ast_new(ast_root);
 	p->buffer = NULL;
@@ -26,10 +29,11 @@ parser * parser_push(yacc_input_type input_type) {
 }
 
 parser * parser_top() {
-	if (parser_stack == NULL) {
+	script_context* ctx = script_context_get_current();
+	if (ctx->parserStack == NULL) {
 		return NULL;
 	}
-	return (parser*)stack_top(parser_stack);
+	return (parser*)stack_top(ctx->parserStack);
 }
 
 void parser_clear_buffer(parser * self) {
@@ -112,15 +116,16 @@ void parser_swap_source_name(char * source_name) {
 }
 
 void parser_pop() {
-	parser* p = (parser*)stack_pop(parser_stack);
+	script_context* ctx = script_context_get_current();
+	parser* p = (parser*)stack_pop(ctx->parserStack);
 	if (p->root) {
 		ast_delete(p->root);
 	}
 	free(p->buffer);
 	free(p->source_name);
 	free(p);
-	if (stack_empty(parser_stack)) {
-		stack_delete(parser_stack, stack_deleter_null);
-		parser_stack = NULL;
+	if (stack_empty(ctx->parserStack)) {
+		stack_delete(ctx->parserStack, stack_deleter_null);
+		ctx->parserStack = NULL;
 	}
 }

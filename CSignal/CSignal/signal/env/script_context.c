@@ -4,6 +4,8 @@
 #include <assert.h>
 //proto
 static script_context* script_context_check_init(void);
+static script_context* script_context_malloc(void);
+static script_context* script_context_free(script_context* self);
 
 static script_context* gScriptContext = NULL;
 static script_context* gScriptContextCurrent = NULL;
@@ -14,9 +16,8 @@ void script_context_open() {
 }
 
 script_context* script_context_new() {
-	script_context* ret = (script_context*)malloc(sizeof(script_context));
+	script_context* ret = script_context_malloc();
 	ret->prev = script_context_back();
-	ret->next = NULL;
 	return ret;
 }
 
@@ -64,7 +65,7 @@ void script_context_delete(script_context * self) {
 			self->next->prev = NULL;
 		}
 	}
-	free(self);
+	script_context_free(self);
 }
 
 void script_context_close() {
@@ -75,7 +76,8 @@ void script_context_close() {
 		}
 		script_context* temp = pointee;
 		pointee = pointee->next;
-		free(temp);
+		script_context_free(temp);
+		//free(temp);
 	}
 	gScriptContext = NULL;
 	gScriptContextCurrent = NULL;
@@ -85,11 +87,20 @@ void script_context_close() {
 //private
 static script_context* script_context_check_init(void) {
 	if (gScriptContext == NULL) {
-		gScriptContext = (script_context*)malloc(sizeof(script_context));
-		gScriptContext->prev = NULL;
-		gScriptContext->next = NULL;
+		gScriptContext = script_context_malloc();
 		gScriptContextCurrent = gScriptContext;
 	}
 	return gScriptContext;
 }
 
+static script_context* script_context_malloc(void) {
+	script_context* ret = (script_context*)malloc(sizeof(script_context));
+	ret->parserStack = NULL;
+	ret->prev = NULL;
+	ret->next = NULL;
+	return ret;
+}
+
+static script_context* script_context_free(script_context* self) {
+	free(self);
+}
