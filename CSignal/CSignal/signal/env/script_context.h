@@ -2,6 +2,7 @@
 #ifndef SIGNAL_ENV_SCRIPT_CONTEXT_H
 #define SIGNAL_ENV_SCRIPT_CONTEXT_H
 #include "../util/stack.h"
+#include "../util/tree_map.h"
 /**
  * 唯一のスクリプトコンテキストを表すIDです.
  */
@@ -19,6 +20,8 @@ typedef unsigned long script_cid;
  */
 typedef struct script_context {
 	stack* parserStack;
+	tree_map* namespaceMap;
+	tree_map* classLoaderMap;
 	struct script_context* prev;
 	struct script_context* next;
 } script_context;

@@ -1,6 +1,10 @@
 #include "class_loader.h"
 #include <stdlib.h>
 #include <assert.h>
+//#include <uni>
+//#include <uni>
+#include "script_context.h"
+#include "../util/text.h"
 #include "../util/io.h"
 #include "../parse/parser.h"
 #include "../il/il_class.h"
@@ -13,6 +17,7 @@
 
 //proto
 static class_loader* class_loader_new();
+
 static void class_loader_ilload_impl(class_loader* self, ast* source_code);
 static void class_loader_ilload_import(class_loader* self, ast* import_decl);
 static void class_loader_ilload_namespace(class_loader* self, il_namespace_list* parent, ast* namespace_decl);
@@ -38,6 +43,8 @@ static il_factor_invoke* class_loader_ilload_invoke(class_loader* self, ast* sou
 static void class_loader_ilload_argument_list(class_loader* self, il_argument_list* list, ast* source);
 static void class_loader_ilload_constructor(class_loader* self, il_class* current, ast* constructor);
 
+static void class_loader_sgload(class_loader* self);
+
 class_loader * class_loader_new_entry_point(const char * filename) {
 	class_loader* cll = class_loader_new();
 	char* text = io_read_text(filename);
@@ -62,6 +69,7 @@ void class_loader_load(class_loader * self) {
 	system("cls");
 	ast_print_tree(self->source_code);
 	class_loader_ilload_impl(self, self->source_code);
+	class_loader_sgload(self);
 }
 
 void class_loader_delete(class_loader * self) {
@@ -88,6 +96,9 @@ static class_loader* class_loader_new() {
 	return ret;
 }
 
+//
+//ilload
+//
 static void class_loader_ilload_impl(class_loader* self, ast* source_code) {
 	self->il_code = il_top_level_new();
 	for (int i = 0; i < source_code->childCount; i++) {
@@ -458,4 +469,58 @@ static void class_loader_ilload_argument_list(class_loader* self, il_argument_li
 }
 
 static void class_loader_ilload_constructor(class_loader* self, il_class* current, ast* constructor) {
+}
+
+//
+//sgload
+//
+static void class_loader_sgload(class_loader* self) {
+	script_context* ctx = script_context_get_current();
+	il_top_level* iltop = self->il_code;
+	il_import_list* ilimports = iltop->import_list;
+	while (ilimports != NULL) {
+		//インポートパスに拡張子を付与
+		il_import* import = (il_import*)ilimports->item;
+		if (import == NULL) {
+			break;
+		}
+		char* withExt = text_concat(import->path, ".signal");
+		char* fullPath = io_absolute_path(withExt);
+		printf("%s\n", fullPath);
+		//そのファイルパスに対応した
+		//クラスローダが既に存在するなら無視
+		class_loader* cll = tree_map_get(ctx->classLoaderMap, fullPath);
+		if (cll != NULL) {
+			cll->ref_count++;
+			continue;
+		//新たに読みこんだなら親に設定
+		} else {
+			cll = class_loader_new();
+			cll->ref_count++;
+			cll->parent = self;
+			cll->type = content_lib;
+			tree_map_put(ctx->classLoaderMap, fullPath, cll);
+		}
+		//パース
+		char* text = io_read_text(fullPath);
+		parser* p = parser_parse_from_source(text);
+		//パースに失敗
+		if (p->fail) {
+			self->fail = true;
+			free(text);
+			parser_pop();
+			return;
+		//成功
+		} else {
+			cll->source_code = p->root;
+			p->root = NULL;
+			free(text);
+			parser_pop();
+		}
+		//ロード
+		class_loader_load(cll);
+		free(withExt);
+		free(fullPath);
+		ilimports = ilimports->next;
+	}
 }

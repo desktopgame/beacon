@@ -3,6 +3,7 @@
 #include <string.h>
 #include "util/cmd.h"
 #include "util/io.h"
+#include "util/text.h"
 #include "env/script_context.h"
 #include "test.h"
 #include "util/logger.h"

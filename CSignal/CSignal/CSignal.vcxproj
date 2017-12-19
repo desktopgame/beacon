@@ -160,10 +160,12 @@
     <ClCompile Include="signal\test.c" />
     <ClCompile Include="signal\util\cmd.c" />
     <ClCompile Include="signal\util\file_path.c" />
+    <ClCompile Include="signal\util\ini.c" />
     <ClCompile Include="signal\util\io.c" />
     <ClCompile Include="signal\util\list.c" />
     <ClCompile Include="signal\util\logger.c" />
     <ClCompile Include="signal\util\stack.c" />
+    <ClCompile Include="signal\util\string_allocator.c" />
     <ClCompile Include="signal\util\text.c" />
     <ClCompile Include="signal\util\tree_map.c" />
   </ItemGroup>
@@ -222,10 +224,12 @@
     <ClInclude Include="signal\test.h" />
     <ClInclude Include="signal\util\cmd.h" />
     <ClInclude Include="signal\util\file_path.h" />
+    <ClInclude Include="signal\util\ini.h" />
     <ClInclude Include="signal\util\io.h" />
     <ClInclude Include="signal\util\list.h" />
     <ClInclude Include="signal\util\logger.h" />
     <ClInclude Include="signal\util\stack.h" />
+    <ClInclude Include="signal\util\string_allocator.h" />
     <ClInclude Include="signal\util\text.h" />
     <ClInclude Include="signal\util\tree_map.h" />
   </ItemGroup>

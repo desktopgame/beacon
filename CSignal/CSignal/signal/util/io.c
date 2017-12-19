@@ -2,6 +2,7 @@
 #include <assert.h>
 #include <string.h>
 #include <stdlib.h>
+#include "text.h"
 
 void io_new_file(const char * filename) {
 	assert(!io_exists(filename));
@@ -106,4 +107,16 @@ void io_write_text(const char * filename, const char * text) {
 		fputc(c, fp);
 	}
 	fclose(fp);
+}
+
+char * io_absolute_path(const char * target) {
+#if defined(_WIN32)
+	char full[_MAX_PATH];
+	if (_fullpath(full, target, _MAX_PATH) != NULL) {
+		return text_strdup(full);
+	}
+	return NULL;
+#else
+	return NULL;
+#endif
 }

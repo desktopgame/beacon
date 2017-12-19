@@ -32,4 +32,12 @@ char* io_read_text(const char* filename);
  * @return
  */
 void io_write_text(const char* filename, const char* text);
+
+/**
+ * 実行時ディレクトリを基準として、
+ * targetに表される位置を絶対パスに変換します.
+ * @param target
+ * @return 呼び出し側で開放してください.
+ */
+char* io_absolute_path(const char* target);
 #endif // !SIGNAL_UTIL_IO_H

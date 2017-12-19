@@ -1,0 +1,6 @@
+namespace java {
+	namespace awt {
+		class Frame {
+		}
+	}
+}

@@ -3,9 +3,10 @@
 #include <stdio.h>
 #include <stdbool.h>
 #include <assert.h>
+#include "script_context.h"
 #include "../util/text.h"
 
-static tree_map* tree_map_root = NULL;
+//static tree_map* tree_map_root = NULL;
 //proto
 static namespace_* namespace_malloc(char* name);
 static void namespace_dump_root(tree_map* root, bool callSelf, int depth);
@@ -14,23 +15,25 @@ static void namespace_put_indent(int depth);
 
 namespace_ * namespace_create_at_root(char * name) {
 	assert(name != NULL);
-	if (tree_map_root == NULL) {
-		tree_map_root = tree_map_new();
+	script_context* ctx = script_context_get_current();
+	if (ctx->namespaceMap == NULL) {
+		ctx->namespaceMap = tree_map_new();
 	}
-	tree_item item = tree_map_get(tree_map_root, name);
+	tree_item item = tree_map_get(ctx->namespaceMap, name);
 	if (item == NULL) {
 		char* dup = name;//_strdup(name);
 		namespace_* newNamespace = namespace_malloc(dup);
-		tree_map_put(tree_map_root, name, newNamespace);
+		tree_map_put(ctx->namespaceMap, name, newNamespace);
 		return newNamespace;
 	} else return (namespace_*)item;
 }
 
 namespace_ * namespace_get_at_root(char * name) {
-	if (tree_map_root == NULL) {
+	script_context* ctx = script_context_get_current();
+	if (ctx->namespaceMap == NULL) {
 		return NULL;
 	}
-	return (namespace_*)tree_map_get(tree_map_root, name);
+	return (namespace_*)tree_map_get(ctx->namespaceMap, name);
 }
 
 namespace_ * namespace_add_namespace(namespace_ * self, char * name) {
@@ -54,11 +57,12 @@ namespace_ * namespace_get_namespace(namespace_ * self, char * name) {
 }
 
 void namespace_dump() {
-	if (tree_map_root == NULL) {
+	script_context* ctx = script_context_get_current();
+	if (ctx->namespaceMap == NULL) {
 		return;
 	}
-	namespace_dump_root(tree_map_root->left, true, 0);
-	namespace_dump_root(tree_map_root->right, true, 0);
+	namespace_dump_root(ctx->namespaceMap->left, true, 0);
+	namespace_dump_root(ctx->namespaceMap->right, true, 0);
 }
 
 //private

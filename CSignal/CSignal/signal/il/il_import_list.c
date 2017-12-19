@@ -19,6 +19,9 @@ void il_import_list_dump(il_import_list* self, int depth) {
 	il_import_list* pointee = self;
 	while(1) {
 		il_import* imp = (il_import*)pointee->item;
+		if (imp == NULL) {
+			break;
+		}
 		il_import_dump(imp, depth + 1);
 		if(pointee->next == NULL) {
 			break;
