@@ -8,6 +8,7 @@
 #include "../util/io.h"
 #include "../parse/parser.h"
 #include "namespace.h"
+#include "class.h"
 #include "../il/il_class.h"
 #include "../il/il_class_list.h"
 #include "../il/il_field.h"
@@ -571,5 +572,6 @@ static void class_loader_sgload_class_list(class_loader* self, il_class_list* il
 }
 
 static void class_loader_sgload_class(class_loader* self, il_class* classz, namespace_* parent) {
-
+	class_* cls = class_new(classz->name, class_type_class);
+	namespace_add_class(parent, cls);
 }

@@ -3,6 +3,7 @@
 #include <stdio.h>
 #include <stdbool.h>
 #include <assert.h>
+#include "class.h"
 #include "script_context.h"
 #include "../util/text.h"
 
@@ -12,6 +13,7 @@ static namespace_* namespace_malloc(char* name);
 static void namespace_dump_root(tree_map* root, bool callSelf, int depth);
 static void namespace_dump_impl(namespace_* root, int depth);
 static void namespace_put_indent(int depth);
+static void namespace_dump_class(tree_map* root, bool isRoot, int depth);
 
 namespace_ * namespace_create_at_root(char * name) {
 	assert(name != NULL);
@@ -50,6 +52,13 @@ namespace_ * namespace_add_namespace(namespace_ * self, char * name) {
 	return child;
 }
 
+class_ * namespace_add_class(namespace_ * self, class_ * classz) {
+	classz->location = self;
+	classz->ref_count++;
+	tree_map_put(self->class_map, classz->name, classz);
+	return classz;
+}
+
 namespace_ * namespace_get_namespace(namespace_ * self, char * name) {
 	assert(self != NULL);
 	assert(name != NULL);
@@ -70,6 +79,7 @@ static namespace_* namespace_malloc(char* name) {
 	namespace_* ret = (namespace_*)malloc(sizeof(namespace_));
 	ret->class_map = NULL;
 	ret->namespace_map = tree_map_new();
+	ret->class_map = tree_map_new();
 	ret->parent = NULL;
 	ret->name = name;//_strdup(name);
 	ret->ref_count = 0;
@@ -95,6 +105,7 @@ static void namespace_dump_impl(namespace_* root, int depth) {
 	namespace_put_indent(depth);
 	printf("%s", root->name);
 	text_putline();
+	namespace_dump_class(root->class_map, true, depth + 1);
 	namespace_dump_root(root->namespace_map, false, depth + 1);
 }
 
@@ -102,4 +113,18 @@ static void namespace_put_indent(int depth) {
 	for (int i = 0; i < depth; i++) {
 		printf("    ");
 	}
+}
+
+static void namespace_dump_class(tree_map* root, bool isRoot, int depth) {
+	if (!isRoot && (root == NULL || root->item == NULL)) {
+		return;
+	}
+	if (!isRoot) {
+
+		namespace_put_indent(depth);
+		printf("%s", ((class_*)root->item)->name);
+		text_putline();
+	}
+	namespace_dump_class(root->left, false, depth);
+	namespace_dump_class(root->right, false, depth);
 }

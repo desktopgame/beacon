@@ -32,6 +32,10 @@ namespace L.Goo.Foo {
 	namespace M {
 		class Klass {
 		}
+		class Lnterface {
+		}
+		class Lnterface2 {
+		}
 	}
 }
 

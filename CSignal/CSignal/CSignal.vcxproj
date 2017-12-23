@@ -120,6 +120,7 @@
     <ClCompile Include="signal\ast\ast_new_operator.c" />
     <ClCompile Include="signal\ast\ast_new_stmt.c" />
     <ClCompile Include="signal\ast\ast_util.c" />
+    <ClCompile Include="signal\env\class.c" />
     <ClCompile Include="signal\env\namespace.c" />
     <ClCompile Include="signal\env\script_context.c" />
     <ClCompile Include="signal\il\factor\il_factor_binary_op_impl.c" />

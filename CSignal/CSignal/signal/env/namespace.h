@@ -3,7 +3,7 @@
 #define SIGNAL_ENV_NAMESPACE_H
 #include "../util/tree_map.h"
 #include <stdint.h>
-
+struct class_;
 /**
  * 名前空間を表す構造体.
  */
@@ -36,6 +36,14 @@ namespace_* namespace_get_at_root(char* name);
  * @return 既に存在するならそれを返します.
  */
 namespace_* namespace_add_namespace(namespace_* self, char* name);
+
+/**
+ * この名前空間にクラスを含めます.
+ * クラスのカウントは +1 されます。
+ * @param self
+ * @param classz
+ */
+struct class_* namespace_add_class(namespace_* self, struct class_* classz);
 
 /**
  * 指定の名前空間から指定の名前の名前空間を検索します.
