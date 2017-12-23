@@ -1,5 +1,6 @@
 #include "text.h"
 #include <stdio.h>
+#include <stdlib.h>
 #include <string.h>
 
 void text_putline() {
@@ -22,4 +23,18 @@ char * text_strdup(const char * source) {
 #else
 	return strdup(source);
 #endif
+}
+
+char * text_concat(const char * a, const char * b) {
+	int alen = strlen(a);
+	int blen = strlen(b);
+	char* block = (char*)malloc((sizeof(char) * (alen + blen)) + 1);
+	for (int i = 0; i < alen; i++) {
+		block[i] = a[i];
+	}
+	for (int i = 0; i < blen; i++) {
+		block[alen + i] = b[i];
+	}
+	block[alen + blen] = '\0';
+	return block;
 }

@@ -133,4 +133,6 @@ void test_cll(void) {
 #endif
 	class_loader_load(cll);
 	class_loader_delete(cll);
+	system("cls");
+	namespace_dump();
 }

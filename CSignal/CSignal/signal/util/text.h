@@ -19,4 +19,12 @@ void text_putindent(int depth);
  * @param source
  */
 char* text_strdup(const char* source);
+
+/**
+ * 二つの文字列を連結して返します.
+ * @param a
+ * @param b
+ * @return 呼び出し側で開放してください.
+ */
+char* text_concat(const char* a, const char* b);
 #endif // !SIGNAL_UTIL_TEXT_H
