@@ -20,6 +20,9 @@ static bool sg_is_error(log_level level);
 
 static FILE* logger_fp = NULL;
 static bool logger_enabled = true;
+static int logger_hour = 0;
+static int logger_min = 0;
+static int logger_sec = 0;
 
 #if defined(_WIN32)
 static WORD savedInstance;
@@ -61,7 +64,7 @@ void sg_lopen() {
 	}
 #if defined(_MSC_VER)
 	FILE* fp;
-	errno_t e = fopen_s(&fp, name, "w");
+	errno_t e = fopen_s(&fp, name, "a");
 	if (e) {
 		free(name);
 		return;
@@ -69,18 +72,23 @@ void sg_lopen() {
 	free(name);
 	logger_fp = fp;
 #else
-	FILE* fp = fopen(fp, name, "w");
+	FILE* fp = fopen(fp, name, "a");
 	free(name);
 	logger_fp = fp;
 #endif
+	fprintf(logger_fp, "%d:%d:%d", logger_hour, logger_min, logger_sec);
+	fputs("\n", logger_fp);
 }
 
 void sg_lclose() {
-	if (logger_fp != NULL) {
-		fflush(logger_fp);
-		fclose(logger_fp);
-		logger_fp = NULL;
+	if (logger_fp == NULL) {
+		return;
 	}
+	fputs("\n", logger_fp);
+
+	fflush(logger_fp);
+	fclose(logger_fp);
+	logger_fp = NULL;
 }
 
 void sg_lset_enabled(bool b) {
@@ -154,9 +162,12 @@ static char* sg_unique_name() {
 	//http://www.c-tipsref.com/tips/time/time.html
 #if defined(_MSC_VER)
 	errno = 0;
+	//現在の時刻を取得
 	time_t timer = time(NULL);
 	struct tm local;
 	errno_t e = localtime_s(&local, &timer);
+	//取得出来なかった場合はNULL
+	//=ログファイルは作成できない
 	if (e) {
 		return NULL;
 	}
@@ -164,17 +175,20 @@ static char* sg_unique_name() {
 	errno_t e2 = sprintf_s(
 		buff, 
 		200, 
-		"log(%d-%d-%d-%d_%d_%d).txt",
+		"log(%d-%d-%d).txt",
 		local.tm_year + 1900,
 		local.tm_mon + 1,
-		local.tm_mday,
-		local.tm_hour,
-		local.tm_min,
-		local.tm_sec
+		local.tm_mday
 	);
 	if (e2) {
 		//return NULL;
 	}
+	//ここでファイル作成時の時間を記録しておく
+	//後で書き込むので
+	logger_hour = local.tm_hour;
+	logger_min = local.tm_min;
+	logger_sec = local.tm_sec;
+
 	char* name = text_strdup(buff);
 	return name;
 #else
