@@ -121,9 +121,10 @@ static void namespace_dump_class(tree_map* root, bool isRoot, int depth) {
 	}
 	if (!isRoot) {
 
-		namespace_put_indent(depth);
-		printf("%s", ((class_*)root->item)->name);
-		text_putline();
+		//namespace_put_indent(depth);
+		class_* e = ((class_*)root->item);
+		class_dump(e, depth);
+		//text_putline();
 	}
 	namespace_dump_class(root->left, false, depth);
 	namespace_dump_class(root->right, false, depth);

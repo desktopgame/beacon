@@ -9,6 +9,12 @@
 #include "../parse/parser.h"
 #include "namespace.h"
 #include "class.h"
+#include "field.h"
+#include "field_list.h"
+#include "method.h"
+#include "method_list.h"
+#include "parameter.h"
+#include "parameter_list.h"
 #include "../il/il_class.h"
 #include "../il/il_class_list.h"
 #include "../il/il_field.h"
@@ -52,6 +58,8 @@ static void class_loader_sgload_namespace_list(class_loader* self, il_namespace_
 static void class_loader_sgload_namespace(class_loader* self, il_namespace* ilnamespace, namespace_* parent);
 static void class_loader_sgload_class_list(class_loader* self, il_class_list* ilclass_list, namespace_* parent);
 static void class_loader_sgload_class(class_loader* self, il_class* classz, namespace_* parent);
+static void class_loader_sgload_fields(class_loader* self, il_class* ilclass, class_* classz);
+static void class_loader_sgload_methods(class_loader* self, il_class* ilclass, class_* classz);
 
 class_loader * class_loader_new_entry_point(const char * filename) {
 	class_loader* cll = class_loader_new();
@@ -573,5 +581,44 @@ static void class_loader_sgload_class_list(class_loader* self, il_class_list* il
 
 static void class_loader_sgload_class(class_loader* self, il_class* classz, namespace_* parent) {
 	class_* cls = class_new(classz->name, class_type_class);
+	class_loader_sgload_fields(self, classz, cls);
+	class_loader_sgload_methods(self, classz, cls);
 	namespace_add_class(parent, cls);
+}
+
+static void class_loader_sgload_fields(class_loader* self, il_class* ilclass, class_* classz) {
+	il_field_list* ilfield_list = ilclass->field_list;
+	while (1) {
+		if (ilfield_list == NULL || ilfield_list->item == NULL) {
+			break;
+		}
+		il_field* ilfield = (il_field*)ilfield_list->item;
+		field* field = field_new(ilfield->name);
+		field_list_push(classz->field_list, field);
+		ilfield_list = ilfield_list->next;
+	}
+}
+
+static void class_loader_sgload_methods(class_loader* self, il_class* ilclass, class_* classz) {
+	il_method_list* ilmethod_list = ilclass->method_list;
+	while (1) {
+		if (ilmethod_list == NULL || ilmethod_list->item == NULL) {
+			break;
+		}
+		il_method* ilmethod = (il_method*)ilmethod_list->item;
+		il_parameter_list* ilparams = ilmethod->parameter_list;
+		method* e = method_new(ilmethod->name);
+		parameter_list* elist = e->parameter_list;
+		while (1) {
+			if (ilparams == NULL || ilparams->item == NULL) {
+				break;
+			}
+			il_parameter* ilp = (il_parameter*)ilparams->item;
+			parameter* param = parameter_new(ilp->name);
+			parameter_list_push(elist, param);
+			ilparams = ilparams->next;
+		}
+		method_list_push(classz->method_list, e);
+		ilmethod_list = ilmethod_list->next;
+	}
 }
