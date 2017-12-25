@@ -32,5 +32,13 @@ typedef enum opcode {
 	op_constd,
 	op_constc,
 	op_consts,
+
+	op_dup,
+	op_pop,
+	op_nop,
+
+	op_goto,
+	op_goto_if_true,
+	op_goto_if_false,
 } opcode;
 #endif // !SIGNAL_VM_OPCODE_H

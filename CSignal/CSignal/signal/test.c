@@ -1,13 +1,16 @@
 #include "test.h"
+#include <stdio.h>
 #include "ast/ast.h"
 #include "env/namespace.h"
 #include "env/class_loader.h"
 #include "parse/parser.h"
 #include "vm/vm.h"
+#include "vm/opcode_buf.h"
 #include "util/list.h"
 #include "util/stack.h"
 #include "util/tree_map.h"
 #include "util/io.h"
+#include "util/string_table.h"
 #include "util/text.h"
 #include "util/file_path.h"
 #include "util/vector.h"
@@ -119,6 +122,7 @@ void test_io2(void) {
 }
 
 void test_file_path(void) {
+	/*
 	file_path* root = file_path_new("root");
 	file_path* sub = file_path_append(root, "sub");
 	file_path* yy = file_path_append(sub, "yy");
@@ -130,6 +134,7 @@ void test_file_path(void) {
 	file_path* t = file_path_parse("root_xxxx_yyyy_eeee/sub_subsub_beemy_/yyzzzzzzzzzzzzzzzzz", '/');
 	file_path_dump(t, PATH_SEPARATOR_CHAR);
 	file_path_delete_tree(t);
+	*/
 }
 
 void test_cll(void) {
@@ -192,21 +197,37 @@ void test_vm(void) {
 	vector_push(vm->constant_pool, 10);
 	vector_push(vm->constant_pool, 5);
 
-	vector* source = vector_new();
+	opcode_buf* buf = opcode_buf_new();
 	//定数プールの 0 番目をプッシュ
-	vector_push(source, op_consti);
-	vector_push(source, 0);
+	opcode_buf_add(buf, op_consti);
+	opcode_buf_add(buf, 0);
 	//定数プールの 1 番目をプッシュ
-	vector_push(source, op_consti);
-	vector_push(source, 1);
+	opcode_buf_add(buf, op_consti);
+	opcode_buf_add(buf, 1);
 	//演算子 + で還元
-	vector_push(source, op_add);
+	opcode_buf_add(buf, op_add);
 	//実行
-	vm_execute(vm, source);
+	vm_execute(vm, buf->source);
 	int res = (int)vector_top(vm->value_stack);
 	printf("res = %d\n", res);
-	vector_delete(source, vector_deleter_null);
+	opcode_buf_delete(buf);
 	vm_delete(vm);
+}
+
+void test_string_table(void) {
+	string_table* st = string_table_new();
+	int a = string_table_index(st, "a");
+	int b = string_table_index(st, "d");
+	int c = string_table_index(st, "y");
+
+	int d = string_table_index(st, "x");
+	int e = string_table_index(st, "t");
+
+	printf("[%d] = %s\n", a, string_table_string(st, a));
+	printf("[%d] = %s\n", b, string_table_string(st, b));
+	printf("[%d] = %s\n", c, string_table_string(st, c));
+	printf("[%d] = %s\n", d, string_table_string(st, d));
+	printf("[%d] = %s\n", e, string_table_string(st, e));
 }
 
 //private

@@ -57,4 +57,6 @@ void test_struct(void);
 void test_vector(void);
 
 void test_vm(void);
+
+void test_string_table(void);
 #endif // !SIGNAL_TEST_H

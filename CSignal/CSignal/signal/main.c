@@ -21,6 +21,7 @@ int main(int argc, char* argv[]) {
 	script_context_open();
 	cmd_dump(argc, argv);
 	test_vm();
+//	test_string_table();
 //	test_namespace();
 //	test_vector();
 //	test_io2();
