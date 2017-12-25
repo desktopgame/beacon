@@ -1,0 +1,36 @@
+#pragma once
+#ifndef SIGNAL_VM_OPCODE_H
+#define SIGNAL_VM_OPCODE_H
+typedef union {
+	int int_;
+	char char_;
+	const char* string_;
+} operand;
+/**
+ * バイトコードの中で、一つの命令を表すのに必要な領域を定義する型です.
+ * 256種類の命令を使用出来ます。
+ */
+typedef unsigned char op_byte;
+
+/**
+ * 命令の一覧です.
+ */
+typedef enum opcode {
+	op_add = 1,
+	op_sub,
+	op_mul,
+	op_div,
+	op_mod,
+
+	op_bit_or,
+	op_logic_or,
+
+	op_bit_and,
+	op_logic_and,
+
+	op_consti,
+	op_constd,
+	op_constc,
+	op_consts,
+} opcode;
+#endif // !SIGNAL_VM_OPCODE_H

@@ -1,6 +1,16 @@
 #pragma once
 #ifndef SIGNAL_TEST_H
 #define SIGNAL_TEST_H
+
+typedef struct OBJ {
+	int index;
+} OBJ;
+
+typedef struct PERSON {
+	char* name;
+	int age;
+} PERSON;
+
 /**
  * スタックのテストを実行.
  */
@@ -41,4 +51,10 @@ void test_io2(void);
 void test_file_path(void);
 
 void test_cll(void);
+
+void test_struct(void);
+
+void test_vector(void);
+
+void test_vm(void);
 #endif // !SIGNAL_TEST_H

@@ -1,14 +1,21 @@
 #include "test.h"
+#include "ast/ast.h"
+#include "env/namespace.h"
+#include "env/class_loader.h"
+#include "parse/parser.h"
+#include "vm/vm.h"
 #include "util/list.h"
 #include "util/stack.h"
 #include "util/tree_map.h"
 #include "util/io.h"
+#include "util/text.h"
 #include "util/file_path.h"
-#include "ast/ast.h"
-#include "parse/parser.h"
-#include "env/namespace.h"
-#include "env/class_loader.h"
+#include "util/vector.h"
 #include <stdio.h>
+#include <stdlib.h>
+
+//proto
+static void person_free(vector_item item);
 
 void test_stack(void) {
 #if defined(_MSC_VER)
@@ -135,4 +142,76 @@ void test_cll(void) {
 	class_loader_delete(cll);
 	system("cls");
 	namespace_dump();
+}
+
+void test_struct(void) {
+	OBJ* o = (OBJ*)malloc(sizeof(OBJ) * 10);
+	for (int i = 0; i < 10; i++) {
+		o[i].index = i;
+	}
+	for (int i = 0; i < 10; i++) {
+		printf("index %d", (o + i)->index);
+	}
+	free(o);
+}
+
+void test_vector(void) {
+	vector* v = vector_new();
+	for (int i = 0; i < 10; i++) {
+		vector_push(v, i);
+	}
+	for (int i = 0; i < v->length; i++) {
+		int e = (int)vector_at(v, i);
+		printf("vector[%d] = %d\n", i, e);
+	}
+	vector_delete(v, vector_deleter_null);
+	printf("\n");
+
+	vector* v2 = vector_new();
+	for (int i = 0; i < 20; i++) {
+		PERSON* p = (PERSON*)malloc(sizeof(PERSON));
+		char buff[100];
+		int x = sprintf_s(buff, 100, "name %d", i);
+		p->name = text_strdup(buff);
+		p->age = (i * 5);
+		vector_push(v2, p);
+//		printf("%p\n", x);
+//		perror("%p");
+	}
+	for (int i = 0; i < v2->length; i++) {
+		vector_item e = vector_at(v2, i);
+		PERSON* p = (PERSON*)e;
+		printf("person[%d] = %s %d\n", i, p->name, p->age);
+	}
+	vector_delete(v2, person_free);
+}
+
+void test_vm(void) {
+	vm* vm = vm_new();
+	//定数プールに登録
+	vector_push(vm->constant_pool, 10);
+	vector_push(vm->constant_pool, 5);
+
+	vector* source = vector_new();
+	//定数プールの 0 番目をプッシュ
+	vector_push(source, op_consti);
+	vector_push(source, 0);
+	//定数プールの 1 番目をプッシュ
+	vector_push(source, op_consti);
+	vector_push(source, 1);
+	//演算子 + で還元
+	vector_push(source, op_add);
+	//実行
+	vm_execute(vm, source);
+	int res = (int)vector_top(vm->value_stack);
+	printf("res = %d\n", res);
+	vector_delete(source, vector_deleter_null);
+	vm_delete(vm);
+}
+
+//private
+static void person_free(vector_item item) {
+	PERSON* p = (PERSON*)item;
+	free(p->name);
+	free(p);
 }

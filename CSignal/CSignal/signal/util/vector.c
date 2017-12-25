@@ -29,12 +29,14 @@ void vector_push(vector * self, vector_item item) {
 vector_item vector_top(vector * self) {
 	assert(self != NULL);
 //	return self->memory[self->length];
-	return *(self->memory + self->length);
+	return *(self->memory + (self->length - 1));
 }
 
 vector_item vector_pop(vector * self) {
 	assert(self != NULL);
-	vector_item ret = self->memory[self->length];
+	vector_item ret = self->memory[self->length - 1];
+	//二重に開放しないように
+	self->memory[self->length - 1] = NULL;
 	self->length--;
 	return ret;
 }
