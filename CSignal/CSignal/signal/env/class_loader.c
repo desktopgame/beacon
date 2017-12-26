@@ -627,8 +627,8 @@ static void class_loader_sgload_methods(class_loader* self, il_class* ilclass, c
 			ilparams = ilparams->next;
 		}
 		opcode_buf* buf = class_loader_sgload_body(self, ilmethod->statement_list);
-		opcode_buf_delete(e->u.script_method->source);
-		e->u.script_method->source = buf;
+		opcode_buf_delete(e->u.script_method->buf);
+		e->u.script_method->buf = buf;
 //		class_loader_sgload_body(self, e->)
 		method_list_push(classz->method_list, e);
 		ilmethod_list = ilmethod_list->next;

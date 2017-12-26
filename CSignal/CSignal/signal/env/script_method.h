@@ -2,6 +2,7 @@
 #ifndef SIGNAL_ENV_SCRIPT_METHOD_H
 #define SIGNAL_ENV_SCRIPT_METHOD_H
 #include "../util/vector.h"
+#include "../vm/opcode_buf.h"
 struct vm;
 struct method;
 
@@ -9,7 +10,8 @@ struct method;
  * スクリプトで実装されたメソッド.
  */
 typedef struct script_method {
-	vector* source;
+//	vector* source;
+	opcode_buf* buf;
 } script_method;
 
 /**
