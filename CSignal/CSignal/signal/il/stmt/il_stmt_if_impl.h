@@ -1,26 +1,22 @@
 #pragma once
 #ifndef SIGNAL_IL_IL_STMT_IF_IMPL_H
 #define SIGNAL_IL_IL_STMT_IF_IMPL_H
-#include "../il_stmt_list.h"
+#include "../../util/vector.h"
 #include "../il_factor_interface.h"
+#include "../il_stmt_interface.h"
 /**
  * elif (...) { ... } を表す要素.
  */
 typedef struct il_stmt_elif {
 	il_factor* condition;
-	il_stmt_list* body;
+	vector* body;
 } il_stmt_elif;
-
-/**
- * elifの一覧を表す要素.
- */
-typedef list il_stmt_elif_list;
 
 /**
  * } else { ... } を表す要素.
  */
 typedef struct il_stmt_else {
-	il_stmt_list* body;
+	vector* body;
 } il_stmt_else;
 
 /**
@@ -31,8 +27,8 @@ typedef struct il_stmt_else {
  */
 typedef struct il_stmt_if {
 	il_factor* condition;
-	il_stmt_list* body;
-	il_stmt_elif_list* elif_list;
+	vector* body;
+	vector* elif_list;
 	il_stmt_else* else_body;
 } il_stmt_if;
 
@@ -59,7 +55,7 @@ il_stmt_elif* il_stmt_elif_new();
  * elif の一覧を表す要素を作成します.
  * @return
  */
-il_stmt_elif_list* il_stmt_elif_list_new();
+vector* il_stmt_elif_list_new();
 
 /**
  * else を表す要素を作成します.
@@ -70,7 +66,7 @@ il_stmt_else* il_stmt_else_new();
 /**
  * elif を一覧に加えます.
  */
-void il_stmt_elif_list_push(il_stmt_elif_list* self, il_stmt_elif* child);
+void il_stmt_elif_list_push(vector* self, il_stmt_elif* child);
 
 /**
  * if とその子要素を出力します.
@@ -102,7 +98,7 @@ void il_stmt_elif_delete(il_stmt_elif* self);
  * elifの一覧 を表す要素を開放します.
  * @param self
  */
-void il_stmt_elif_list_delete(il_stmt_elif_list* self);
+void il_stmt_elif_list_delete(vector* self);
 
 /**
  * else を表す要素を開放します.

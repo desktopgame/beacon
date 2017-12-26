@@ -41,10 +41,10 @@ static void class_loader_ilload_member(class_loader* self, il_class* current, as
 static void class_loader_ilload_field(class_loader* self, il_class* current, ast* field);
 static void class_loader_ilload_method(class_loader* self, il_class* current, ast* method);
 static void class_loader_ilload_param(class_loader* self, vector* list, ast* source);
-static void class_loader_ilload_body(class_loader* self, il_stmt_list* list, ast* source);
+static void class_loader_ilload_body(class_loader* self, vector* list, ast* source);
 static il_stmt_if* class_loader_ilload_if(class_loader* self, ast* source);
 static il_stmt_if* class_loader_ilload_if_elif_list(class_loader* self, ast* source);
-static void class_loader_ilload_elif_list(class_loader* self, il_stmt_elif_list* list, ast* source);
+static void class_loader_ilload_elif_list(class_loader* self, vector* list, ast* source);
 static il_stmt_if* class_loader_ilload_if_else(class_loader* self, ast* source);
 static il_stmt_if* class_loader_ilload_if_elif_list_else(class_loader* self, ast* source);
 static il_factor* class_loader_ilload_factor(class_loader* self, ast* source);
@@ -63,7 +63,7 @@ static void class_loader_sgload_class_list(class_loader* self, il_class_list* il
 static void class_loader_sgload_class(class_loader* self, il_class* classz, namespace_* parent);
 static void class_loader_sgload_fields(class_loader* self, il_class* ilclass, class_* classz);
 static void class_loader_sgload_methods(class_loader* self, il_class* ilclass, class_* classz);
-static opcode_buf* class_loader_sgload_body(class_loader* self, il_stmt_list* stmt_list);
+static opcode_buf* class_loader_sgload_body(class_loader* self, vector* stmt_list);
 
 
 class_loader * class_loader_new_entry_point(const char * filename) {
@@ -275,7 +275,7 @@ static void class_loader_ilload_param(class_loader* self, vector* list, ast* sou
 	}
 }
 
-static void class_loader_ilload_body(class_loader* self, il_stmt_list* list, ast* source) {
+static void class_loader_ilload_body(class_loader* self, vector* list, ast* source) {
 	if (source->tag == ast_stmt_list || source->tag == ast_scope) {
 		for (int i = 0; i < source->childCount; i++) {
 			class_loader_ilload_body(self, list, ast_at(source, i));
@@ -296,31 +296,31 @@ static void class_loader_ilload_body(class_loader* self, il_stmt_list* list, ast
 				il_factor* ilfact = class_loader_ilload_factor(self, afact);
 				il_stmt_proc* ilproc = il_stmt_proc_new();
 				ilproc->factor = ilfact;
-				il_stmt_list_push(list, il_stmt_wrap_proc(ilproc));
+				vector_push(list, il_stmt_wrap_proc(ilproc));
 				break;
 			}
 			case ast_if:
 			{
 				il_stmt_if* ilif = class_loader_ilload_if(self, source);
-				il_stmt_list_push(list, il_stmt_wrap_if(ilif));
+				vector_push(list, il_stmt_wrap_if(ilif));
 				break;
 			}
 			case ast_if_elif_list:
 			{
 				il_stmt* ilif = class_loader_ilload_if_elif_list(self, source);
-				il_stmt_list_push(list, il_stmt_wrap_if(ilif));
+				vector_push(list, il_stmt_wrap_if(ilif));
 				break;
 			}
 			case ast_if_else:
 			{
 				il_stmt* ilif = class_loader_ilload_if_else(self, source);
-				il_stmt_list_push(list, il_stmt_wrap_if(ilif));
+				vector_push(list, il_stmt_wrap_if(ilif));
 				break;
 			}
 			case ast_if_elif_list_else:
 			{
 				il_stmt_if* ilif = class_loader_ilload_if_elif_list_else(self, source);
-				il_stmt_list_push(list, il_stmt_wrap_if(ilif));
+				vector_push(list, il_stmt_wrap_if(ilif));
 				break;
 			}
 			default:
@@ -371,7 +371,7 @@ static il_stmt_if* class_loader_ilload_if_elif_list_else(class_loader* self, ast
 	return ilif;
 }
 
-static void class_loader_ilload_elif_list(class_loader* self, il_stmt_elif_list* list, ast* source) {
+static void class_loader_ilload_elif_list(class_loader* self, vector* list, ast* source) {
 	if (source->tag == ast_elif_list) {
 		for (int i = 0; i < source->childCount; i++) {
 			class_loader_ilload_elif_list(self, list, ast_at(source, i));
@@ -627,16 +627,12 @@ static void class_loader_sgload_methods(class_loader* self, il_class* ilclass, c
 	}
 }
 
-static opcode_buf* class_loader_sgload_body(class_loader* self, il_stmt_list* stmt_list) {
+static opcode_buf* class_loader_sgload_body(class_loader* self, vector* stmt_list) {
 	opcode_buf* ret = opcode_buf_new();
-	il_stmt_list* pointee = stmt_list;
-	while (1) {
-		if (pointee == NULL || pointee->item == NULL) {
-			break;
-		}
-		il_stmt* e = pointee->item;
-		il_stmt_generate(e, ret);
-		pointee = pointee->next;
+	for (int i = 0; i < stmt_list->length; i++) {
+		vector_item e = vector_at(stmt_list, i);
+		il_stmt* s = (il_stmt*)e;
+		il_stmt_generate(s, ret);
 	}
 	return ret;
 }
