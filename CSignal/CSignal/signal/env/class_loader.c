@@ -20,7 +20,6 @@
 #include "../il/il_class_list.h"
 #include "../il/il_field.h"
 #include "../il/il_method.h"
-#include "../il/il_method_list.h"
 #include "../il/il_stmt_impl.h"
 #include "../il/il_factor_impl.h"
 #include "../il/il_parameter.h"
@@ -257,7 +256,7 @@ static void class_loader_ilload_method(class_loader* self, il_class* current, as
 	v->return_type = il_type_new(ret_name->u.string_value);
 	class_loader_ilload_param(self, v->parameter_list, param_list);
 	class_loader_ilload_body(self, v->statement_list, func_body);
-	il_method_list_push(current->method_list, v);
+	vector_push(current->method_list, v);
 }
 
 static void class_loader_ilload_param(class_loader* self, vector* list, ast* source) {
@@ -598,12 +597,10 @@ static void class_loader_sgload_fields(class_loader* self, il_class* ilclass, cl
 }
 
 static void class_loader_sgload_methods(class_loader* self, il_class* ilclass, class_* classz) {
-	il_method_list* ilmethod_list = ilclass->method_list;
-	while (1) {
-		if (ilmethod_list == NULL || ilmethod_list->item == NULL) {
-			break;
-		}
-		il_method* ilmethod = (il_method*)ilmethod_list->item;
+	vector* ilmethod_list = ilclass->method_list;
+	for (int i = 0; i < ilmethod_list->length; i++) {
+		vector_item ep = vector_at(ilmethod_list, i);
+		il_method* ilmethod = (il_method*)ep;
 		vector* ilparams = ilmethod->parameter_list;
 		method* e = method_new(ilmethod->name);
 		vector* parameter_list = e->parameter_list;
@@ -619,7 +616,6 @@ static void class_loader_sgload_methods(class_loader* self, il_class* ilclass, c
 		opcode_buf_delete(e->u.script_method->buf);
 		e->u.script_method->buf = buf;
 		vector_push(classz->method_list, e);
-		ilmethod_list = ilmethod_list->next;
 	}
 }
 

@@ -1,18 +1,19 @@
 #include "il_class.h"
 #include <stdlib.h>
 #include "../util/text.h"
-#include "il_method_list.h"
 #include "il_field.h"
+#include "il_method.h"
 
 //proto
 static void il_class_field_delete(vector_item item);
+static void il_class_method_delete(vector_item item);
 
 il_class* il_class_new(const char* name) {
 	il_class* ret = (il_class*)malloc(sizeof(il_class));
 	ret->name = text_strdup(name);
 	ret->super = NULL;
 	ret->field_list = vector_new();
-	ret->method_list = il_method_list_new();
+	ret->method_list = vector_new();
 	return ret;
 }
 
@@ -25,7 +26,11 @@ void il_class_dump(il_class * self, int depth) {
 		il_field* ilf = (il_field*)e;
 		il_field_dump(ilf, depth + 1);
 	}
-	il_method_list_dump(self->method_list, depth + 1);
+	for (int i = 0; i < self->method_list->length; i++) {
+		vector_item e = vector_at(self->method_list, i);
+		il_method* ilm = (il_method*)e;
+		il_method_dump(ilm, depth + 1);
+	}
 }
 
 void il_class_delete(il_class * self) {
@@ -36,7 +41,7 @@ void il_class_delete(il_class * self) {
 	free(self->name);
 	il_type_delete(self->super);
 	vector_delete(self->field_list, il_class_field_delete);
-	il_method_list_delete(self->method_list);
+	vector_delete(self->method_list, il_class_method_delete);
 	free(self);
 }
 
@@ -44,4 +49,9 @@ void il_class_delete(il_class * self) {
 static void il_class_field_delete(vector_item item) {
 	il_field* e = (il_field*)item;
 	il_field_delete(e);
+}
+
+static void il_class_method_delete(vector_item item) {
+	il_method* e = (il_method*)item;
+	il_method_delete(e);
 }
