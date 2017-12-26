@@ -17,7 +17,6 @@
 #include "method.h"
 #include "parameter.h"
 #include "../il/il_class.h"
-#include "../il/il_class_list.h"
 #include "../il/il_field.h"
 #include "../il/il_method.h"
 #include "../il/il_stmt_impl.h"
@@ -57,7 +56,7 @@ static void class_loader_sgload_impl(class_loader* self);
 static void class_loader_sgload_import(class_loader* self, vector* ilimports);
 static void class_loader_sgload_namespace_list(class_loader* self, il_namespace_list* ilnamespace_list, namespace_* parent);
 static void class_loader_sgload_namespace(class_loader* self, il_namespace* ilnamespace, namespace_* parent);
-static void class_loader_sgload_class_list(class_loader* self, il_class_list* ilclass_list, namespace_* parent);
+static void class_loader_sgload_class_list(class_loader* self, vector* ilclass_list, namespace_* parent);
 static void class_loader_sgload_class(class_loader* self, il_class* classz, namespace_* parent);
 static void class_loader_sgload_fields(class_loader* self, il_class* ilclass, class_* classz);
 static void class_loader_sgload_methods(class_loader* self, il_class* ilclass, class_* classz);
@@ -219,7 +218,7 @@ static void class_loader_ilload_class(class_loader* self, il_namespace* current,
 		classz->super = il_type_new(super_class->u.string_value);
 	}
 	class_loader_ilload_member(self, classz, member_list);
-	il_class_list_push(current->class_list, classz);
+	vector_push(current->class_list, classz);
 }
 
 static void class_loader_ilload_member(class_loader* self, il_class* current, ast* member) {
@@ -568,14 +567,11 @@ static void class_loader_sgload_namespace(class_loader* self, il_namespace* ilna
 	class_loader_sgload_class_list(self, ilnamespace->class_list, current);
 }
 
-static void class_loader_sgload_class_list(class_loader* self, il_class_list* ilclass_list, namespace_* parent) {
-	il_class_list* pointee = ilclass_list;
-	while (1) {
-		if (pointee == NULL || pointee->item == NULL) {
-			break;
-		}
-		class_loader_sgload_class(self, pointee->item, parent);
-		pointee = pointee->next;
+static void class_loader_sgload_class_list(class_loader* self, vector* ilclass_list, namespace_* parent) {
+	for (int i = 0; i < ilclass_list->length; i++) {
+		vector_item e = vector_at(ilclass_list, i);
+		il_class* ilc = (il_class*)e;
+		class_loader_sgload_class(self, ilc, parent);
 	}
 }
 

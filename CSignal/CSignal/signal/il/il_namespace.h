@@ -1,7 +1,7 @@
 #ifndef SIGNAL_IL_IL_NAMESPACE_H
 #define SIGNAL_IL_IL_NAMESPACE_H
+#include "../util/vector.h"
 struct il_namespace_list;
-struct il_class_list;
 
 /**
  * 名前空間の宣言を表す要素.
@@ -10,7 +10,7 @@ typedef struct il_namespace {
 	char* name;
 	struct il_namespace* parent;
 	struct il_namespace_list* namespace_list;
-	struct il_class_list* class_list;
+	vector* class_list;
 } il_namespace;
 
 /**
