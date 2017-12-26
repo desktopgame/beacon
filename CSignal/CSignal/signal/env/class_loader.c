@@ -24,6 +24,7 @@
 #include "../il/il_method_list.h"
 #include "../il/il_stmt_impl.h"
 #include "../il/il_factor_impl.h"
+#include "../il/il_parameter.h"
 
 //proto
 static class_loader* class_loader_new();
@@ -38,7 +39,7 @@ static void class_loader_ilload_class(class_loader* self, il_namespace* current,
 static void class_loader_ilload_member(class_loader* self, il_class* current, ast* member);
 static void class_loader_ilload_field(class_loader* self, il_class* current, ast* field);
 static void class_loader_ilload_method(class_loader* self, il_class* current, ast* method);
-static void class_loader_ilload_param(class_loader* self, il_parameter_list* list, ast* source);
+static void class_loader_ilload_param(class_loader* self, vector* list, ast* source);
 static void class_loader_ilload_body(class_loader* self, il_stmt_list* list, ast* source);
 static il_stmt_if* class_loader_ilload_if(class_loader* self, ast* source);
 static il_stmt_if* class_loader_ilload_if_elif_list(class_loader* self, ast* source);
@@ -259,7 +260,7 @@ static void class_loader_ilload_method(class_loader* self, il_class* current, as
 	il_method_list_push(current->method_list, v);
 }
 
-static void class_loader_ilload_param(class_loader* self, il_parameter_list* list, ast* source) {
+static void class_loader_ilload_param(class_loader* self, vector* list, ast* source) {
 	if (source->tag == ast_parameter_list) {
 		for (int i = 0; i < source->childCount; i++) {
 			class_loader_ilload_param(self, list, ast_at(source, i));
@@ -269,7 +270,7 @@ static void class_loader_ilload_param(class_loader* self, il_parameter_list* lis
 		ast* access_name = ast_second(source);
 		il_parameter* p = il_parameter_new(access_name->u.string_value);
 		p->type = il_type_new(type_name->u.string_value);
-		il_parameter_list_push(list, p);
+		vector_push(list, p);
 	}
 }
 
@@ -610,19 +611,16 @@ static void class_loader_sgload_methods(class_loader* self, il_class* ilclass, c
 			break;
 		}
 		il_method* ilmethod = (il_method*)ilmethod_list->item;
-		il_parameter_list* ilparams = ilmethod->parameter_list;
+		vector* ilparams = ilmethod->parameter_list;
 		method* e = method_new(ilmethod->name);
 		vector* parameter_list = e->parameter_list;
 		e->type = method_type_script;
 		e->u.script_method = script_method_new();
-		while (1) {
-			if (ilparams == NULL || ilparams->item == NULL) {
-				break;
-			}
-			il_parameter* ilp = (il_parameter*)ilparams->item;
+		for (int i = 0; i < ilparams->length; i++) {
+			vector_item e = vector_at(ilparams, i);
+			il_parameter* ilp = (il_parameter*)e;
 			parameter* param = parameter_new(ilp->name);
 			vector_push(parameter_list, param);
-			ilparams = ilparams->next;
 		}
 		opcode_buf* buf = class_loader_sgload_body(self, ilmethod->statement_list);
 		opcode_buf_delete(e->u.script_method->buf);
