@@ -1,14 +1,15 @@
 #pragma once
 #ifndef SIGNAL_IL_IL_FACTOR_CALL_H
 #define SIGNAL_IL_IL_FACTOR_CALL_H
-#include "../il_argument_list.h"
+#include "../../util/vector.h"
+#include "../il_factor_interface.h"
 //struct opcode_buf;
 /**
  * 関数呼び出しを表す要素.
  */
 typedef struct il_factor_call {
 	char* name;
-	il_argument_list* argument_list;
+	vector* argument_list;
 } il_factor_call;
 
 /**
