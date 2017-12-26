@@ -144,6 +144,7 @@ void test_cll(void) {
 	class_loader* cll = class_loader_new_entry_point("../../main.signal");
 #endif
 	class_loader_load(cll);
+	//il_top_level_dump(cll->il_code, 0);
 	class_loader_delete(cll);
 	system("cls");
 	namespace_dump();

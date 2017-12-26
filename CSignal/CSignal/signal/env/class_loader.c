@@ -23,16 +23,17 @@
 #include "../il/il_factor_impl.h"
 #include "../il/il_parameter.h"
 #include "../il/il_import.h"
+#include "../il/il_namespace.h"
 
 //proto
 static class_loader* class_loader_new();
 
 static void class_loader_ilload_impl(class_loader* self, ast* source_code);
 static void class_loader_ilload_import(class_loader* self, ast* import_decl);
-static void class_loader_ilload_namespace(class_loader* self, il_namespace_list* parent, ast* namespace_decl);
+static void class_loader_ilload_namespace(class_loader* self, vector* parent, ast* namespace_decl);
 static void class_loader_ilload_namespace_path_recursive(class_loader* self, ast* namespace_path, ast* namespace_body);
 static il_namespace* class_loader_ilload_ast_to_namespace(ast* a);
-static void class_loader_ilload_namespace_body(class_loader* self, il_namespace* current, il_namespace_list* parent, ast* namespace_body);
+static void class_loader_ilload_namespace_body(class_loader* self, il_namespace* current, vector* parent, ast* namespace_body);
 static void class_loader_ilload_class(class_loader* self, il_namespace* current, ast* class_decl);
 static void class_loader_ilload_member(class_loader* self, il_class* current, ast* member);
 static void class_loader_ilload_field(class_loader* self, il_class* current, ast* field);
@@ -54,7 +55,7 @@ static void class_loader_ilload_constructor(class_loader* self, il_class* curren
 
 static void class_loader_sgload_impl(class_loader* self);
 static void class_loader_sgload_import(class_loader* self, vector* ilimports);
-static void class_loader_sgload_namespace_list(class_loader* self, il_namespace_list* ilnamespace_list, namespace_* parent);
+static void class_loader_sgload_namespace_list(class_loader* self, vector* ilnamespace_list, namespace_* parent);
 static void class_loader_sgload_namespace(class_loader* self, il_namespace* ilnamespace, namespace_* parent);
 static void class_loader_sgload_class_list(class_loader* self, vector* ilclass_list, namespace_* parent);
 static void class_loader_sgload_class(class_loader* self, il_class* classz, namespace_* parent);
@@ -139,7 +140,7 @@ static void class_loader_ilload_import(class_loader* self, ast* import_decl) {
 	printf("import %s\n", path->u.string_value);
 }
 
-static void class_loader_ilload_namespace(class_loader* self, il_namespace_list* parent, ast* namespace_decl) {
+static void class_loader_ilload_namespace(class_loader* self, vector* parent, ast* namespace_decl) {
 	assert(namespace_decl->tag == ast_namespace_decl);
 	//printf("namespace");
 	ast* namespace_path = ast_first(namespace_decl);
@@ -147,7 +148,7 @@ static void class_loader_ilload_namespace(class_loader* self, il_namespace_list*
 	il_namespace* iln = class_loader_ilload_ast_to_namespace(namespace_path);
 	il_namespace* top = il_namespace_root(iln);
 	//printf("%s", top->name);
-	il_namespace_list_push(parent, top);
+	vector_push(parent, top);
 	class_loader_ilload_namespace_path_recursive(self, namespace_path, namespace_body);
 	//printf("\n");
 	class_loader_ilload_namespace_body(self, iln, iln->namespace_list, namespace_body);
@@ -180,12 +181,12 @@ static il_namespace* class_loader_ilload_ast_to_namespace(ast* a) {
 		il_namespace* parent = class_loader_ilload_ast_to_namespace(l);
 		il_namespace* child = class_loader_ilload_ast_to_namespace(r);
 		child->parent = parent;
-		il_namespace_list_push(parent->namespace_list, child);
+		vector_push(parent->namespace_list, child);
 		return child;
 	}
 }
 
-static void class_loader_ilload_namespace_body(class_loader* self, il_namespace* current, il_namespace_list* parent, ast* namespace_body) {
+static void class_loader_ilload_namespace_body(class_loader* self, il_namespace* current, vector* parent, ast* namespace_body) {
 	if (ast_is_blank(namespace_body)) {
 		return;
 	}
@@ -545,14 +546,11 @@ static void class_loader_sgload_import(class_loader* self, vector* ilimports) {
 	}
 }
 
-static void class_loader_sgload_namespace_list(class_loader* self, il_namespace_list* ilnamespace_list, namespace_* parent) {
-	il_namespace_list* pointee = ilnamespace_list;
-	while (1) {
-		if (pointee == NULL || pointee->item == NULL) {
-			break;
-		}
-		class_loader_sgload_namespace(self, pointee->item, parent);
-		pointee = pointee->next;
+static void class_loader_sgload_namespace_list(class_loader* self, vector* ilnamespace_list, namespace_* parent) {
+	for (int i = 0; i < ilnamespace_list->length; i++) {
+		vector_item e = vector_at(ilnamespace_list, i);
+		il_namespace* iln = (il_namespace*)e;
+		class_loader_sgload_namespace(self, iln, parent);
 	}
 }
 

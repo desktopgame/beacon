@@ -1,17 +1,16 @@
 #include "il_namespace.h"
-#include "il_namespace_list.h"
 #include "../util/text.h"
 #include "il_class.h"
 #include <stdlib.h>
 
 //proto
 static void il_namespace_class_delete(vector_item item);
-
+static void il_namespace_namespace_delete(vector_item item);
 
 il_namespace* il_namespace_new(const char* name) {
 	il_namespace* ret = (il_namespace*)malloc(sizeof(il_namespace));
 	ret->name = text_strdup(name);
-	ret->namespace_list = il_namespace_list_new();
+	ret->namespace_list = vector_new();
 	ret->class_list = vector_new();
 	ret->parent = NULL;
 	return ret;
@@ -32,7 +31,14 @@ void il_namespace_dump(il_namespace* self, int depth) {
 	printf("namespace %s", self->name);
 	text_putline();
 
-	il_namespace_list_dump(self->namespace_list, depth + 1);
+	text_putindent(depth);
+	printf("namespace list");
+	text_putline();
+	for (int i = 0; i < self->namespace_list->length; i++) {
+		vector_item e = vector_at(self->namespace_list, i);
+		il_namespace* iln = (il_namespace*)e;
+		il_namespace_dump(iln, depth + 1);
+	}
 
 	text_putindent(depth);
 	printf("class list");
@@ -50,7 +56,7 @@ void il_namespace_delete(il_namespace* self) {
 		return;
 	}
 	free(self->name);
-	il_namespace_list_delete(self->namespace_list);
+	vector_delete(self->namespace_list, il_namespace_namespace_delete);
 	vector_delete(self->class_list, il_namespace_class_delete);
 	free(self);
 }
@@ -59,4 +65,9 @@ void il_namespace_delete(il_namespace* self) {
 static void il_namespace_class_delete(vector_item item) {
 	il_class* e = (il_class*)item;
 	il_class_delete(e);
+}
+
+static void il_namespace_namespace_delete(vector_item item) {
+	il_namespace* e = (il_namespace*)item;
+	il_namespace_delete(e);
 }
