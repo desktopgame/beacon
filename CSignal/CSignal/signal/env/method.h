@@ -3,7 +3,7 @@
 #define SIGNAL_ENV_METHOD_H
 #include "script_method.h"
 #include "native_method.h"
-struct parameter_list;
+#include "../util/vector.h"
 struct class_;
 struct vm;
 
@@ -23,7 +23,7 @@ typedef struct method {
 	method_type type;
 	//struct class_* decleared_type;
 	struct class_* return_type;
-	struct parameter_list* parameter_list;
+	vector* parameter_list;
 	union {
 		script_method* script_method;
 		native_method* native_method;

@@ -16,7 +16,6 @@
 #include "field.h"
 #include "method.h"
 #include "parameter.h"
-#include "parameter_list.h"
 #include "../il/il_class.h"
 #include "../il/il_class_list.h"
 #include "../il/il_field.h"
@@ -612,7 +611,7 @@ static void class_loader_sgload_methods(class_loader* self, il_class* ilclass, c
 		il_method* ilmethod = (il_method*)ilmethod_list->item;
 		il_parameter_list* ilparams = ilmethod->parameter_list;
 		method* e = method_new(ilmethod->name);
-		parameter_list* elist = e->parameter_list;
+		vector* parameter_list = e->parameter_list;
 		e->type = method_type_script;
 		e->u.script_method = script_method_new();
 		while (1) {
@@ -621,7 +620,7 @@ static void class_loader_sgload_methods(class_loader* self, il_class* ilclass, c
 			}
 			il_parameter* ilp = (il_parameter*)ilparams->item;
 			parameter* param = parameter_new(ilp->name);
-			parameter_list_push(elist, param);
+			vector_push(parameter_list, param);
 			ilparams = ilparams->next;
 		}
 		opcode_buf* buf = class_loader_sgload_body(self, ilmethod->statement_list);
