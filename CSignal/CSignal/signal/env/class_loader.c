@@ -53,7 +53,7 @@ static il_factor_unary_op* class_loader_ilload_unary(class_loader* self, ast* so
 static il_factor_binary_op* class_loader_ilload_binary(class_loader* self, ast* source, ilbinary_op_type type);
 static il_factor_call* class_loader_ilload_call(class_loader* self, ast* source);
 static il_factor_invoke* class_loader_ilload_invoke(class_loader* self, ast* source);
-static void class_loader_ilload_argument_list(class_loader* self, vector* list, ast* source);
+static void class_loader_ilload_argument_list(class_loader* self, il_argument_list* list, ast* source);
 static void class_loader_ilload_constructor(class_loader* self, il_class* current, ast* constructor);
 
 static void class_loader_sgload_impl(class_loader* self);
@@ -477,7 +477,7 @@ static il_factor_invoke* class_loader_ilload_invoke(class_loader* self, ast* sou
 	return ilinvoke;
 }
 
-static void class_loader_ilload_argument_list(class_loader* self, vector* list, ast* source) {
+static void class_loader_ilload_argument_list(class_loader* self, il_argument_list* list, ast* source) {
 	if (source->tag == ast_argument_list) {
 		for (int i = 0; i < source->childCount; i++) {
 			class_loader_ilload_argument_list(self, list, ast_at(source, i));
