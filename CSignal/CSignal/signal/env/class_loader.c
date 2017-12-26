@@ -25,6 +25,7 @@
 #include "../il/il_stmt_impl.h"
 #include "../il/il_factor_impl.h"
 #include "../il/il_parameter.h"
+#include "../il/il_import.h"
 
 //proto
 static class_loader* class_loader_new();
@@ -55,7 +56,7 @@ static void class_loader_ilload_argument_list(class_loader* self, vector* list, 
 static void class_loader_ilload_constructor(class_loader* self, il_class* current, ast* constructor);
 
 static void class_loader_sgload_impl(class_loader* self);
-static void class_loader_sgload_import(class_loader* self, il_import_list* ilimports);
+static void class_loader_sgload_import(class_loader* self, vector* ilimports);
 static void class_loader_sgload_namespace_list(class_loader* self, il_namespace_list* ilnamespace_list, namespace_* parent);
 static void class_loader_sgload_namespace(class_loader* self, il_namespace* ilnamespace, namespace_* parent);
 static void class_loader_sgload_class_list(class_loader* self, il_class_list* ilclass_list, namespace_* parent);
@@ -137,7 +138,7 @@ static void class_loader_ilload_impl(class_loader* self, ast* source_code) {
 static void class_loader_ilload_import(class_loader* self, ast* import_decl) {
 	assert(import_decl->tag == ast_import_decl);
 	ast* path = ast_first(import_decl);
-	il_import_list_push(self->il_code->import_list, il_import_new(path->u.string_value));
+	vector_push(self->il_code->import_list, il_import_new(path->u.string_value));
 	printf("import %s\n", path->u.string_value);
 }
 
@@ -502,14 +503,11 @@ static void class_loader_sgload_impl(class_loader* self) {
 	class_loader_sgload_namespace_list(self, self->il_code->namespace_list, NULL);
 }
 
-static void class_loader_sgload_import(class_loader* self, il_import_list* ilimports) {
+static void class_loader_sgload_import(class_loader* self, vector* ilimports) {
 	script_context* ctx = script_context_get_current();
-	while (ilimports != NULL) {
-		//インポートパスに拡張子を付与
-		il_import* import = (il_import*)ilimports->item;
-		if (import == NULL) {
-			break;
-		}
+	for (int i = 0; i < ilimports->length; i++) {
+		vector_item e = vector_at(ilimports, i);
+		il_import* import = (il_import*)e;
 		char* withExt = text_concat(import->path, ".signal");
 		char* fullPath = io_absolute_path(withExt);
 		printf("%s\n", fullPath);
@@ -536,7 +534,7 @@ static void class_loader_sgload_import(class_loader* self, il_import_list* ilimp
 			free(text);
 			parser_pop();
 			return;
-			//成功
+		//成功
 		} else {
 			cll->source_code = p->root;
 			p->root = NULL;
@@ -547,7 +545,6 @@ static void class_loader_sgload_import(class_loader* self, il_import_list* ilimp
 		class_loader_load(cll);
 		free(withExt);
 		free(fullPath);
-		ilimports = ilimports->next;
 	}
 }
 

@@ -1,13 +1,13 @@
 #ifndef SIGNAL_IL_IL_TOP_LEVEL_H
 #define SIGNAL_IL_IL_TOP_LEVEL_H
-#include "il_import_list.h"
+#include "../util/vector.h"
 #include "il_namespace_list.h"
 
 /**
  * 中間言語ILのトップレベル要素です.
  */
 typedef struct il_top_level {
-	il_import_list* import_list;
+	vector* import_list;
 	il_namespace_list* namespace_list;
 } il_top_level;
 /**
