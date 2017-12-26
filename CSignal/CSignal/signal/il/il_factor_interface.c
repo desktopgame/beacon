@@ -2,6 +2,7 @@
 #include "il_factor_impl.h"
 #include "../util/text.h"
 #include "../util/logger.h"
+#include "../vm/opcode_buf.h"
 #include <stdio.h>
 
 void il_factor_dump(il_factor * self, int depth) {
@@ -35,6 +36,41 @@ void il_factor_dump(il_factor * self, int depth) {
 			break;
 		default:
 			ERROR("ファクターをダンプ出来ませんでした");
+			break;
+	}
+}
+
+void il_factor_generate(il_factor * self, opcode_buf * buf) {
+	switch (self->type) {
+		case ilfactor_int:
+			il_factor_int_generate(self->u.int_, buf);
+			break;
+		case ilfactor_double:
+			il_factor_double_generate(self->u.double_, buf);
+			break;
+		case ilfactor_cquote:
+			il_factor_char_generate(self->u.char_, buf);
+			break;
+		case ilfactor_squote:
+			il_factor_string_generate(self->u.string_, buf);
+			break;
+		case ilfactor_call:
+			il_factor_call_generate(self->u.call_, buf);
+			break;
+		case ilfactor_invoke:
+			il_factor_invoke_generate(self->u.int_, buf);
+			break;
+		case ilfactor_variable:
+			il_factor_variable_generate(self->u.variable_, buf);
+			break;
+		case ilfactor_unary_op:
+			il_factor_unary_op_generate(self->u.unary_, buf);
+			break;
+		case ilfactor_binary_op:
+			il_factor_binary_op_generate(self->u.binary_, buf);
+			break;
+		default:
+			ERROR("ファクターを生成出来ませんでした");
 			break;
 	}
 }

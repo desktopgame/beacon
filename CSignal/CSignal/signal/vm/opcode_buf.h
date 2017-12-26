@@ -3,6 +3,7 @@
 #define SIGNAL_VM_OPCODE_BUF_H
 #include "../util/vector.h"
 #include "label.h"
+#include "opcode.h"
 /**
  * オペコードの一覧を表す構造体.
  */
@@ -30,6 +31,13 @@ void opcode_buf_add(opcode_buf* self, vector_item item);
  * @return
  */
 label* opcode_buf_label(opcode_buf * self, int index);
+
+/**
+ * nop を追加してその位置を返します.
+ * @param self
+ * @return
+ */
+int opcode_buf_nop(opcode_buf* self);
 
 /**
  * オペコードの一覧を開放します.

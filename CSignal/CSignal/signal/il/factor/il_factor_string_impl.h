@@ -2,6 +2,7 @@
 #ifndef SIGNAL_IL_IL_FACTOR_STRING_H
 #define SIGNAL_IL_IL_FACTOR_STRING_H
 #include "../il_factor_interface.h"
+//struct opcode_buf;
 /**
  * 文字列を表す要素.
  */
@@ -29,6 +30,13 @@ il_factor_string* il_factor_string_new(const char* name);
  * @param depth
  */
 void il_factor_string_dump(il_factor_string* self, int depth);
+
+/**
+ * 文字列を生成します.
+ * @param self
+ * @param buf
+ */
+void il_factor_string_generate(il_factor_string* self, struct opcode_buf* buf);
 
 /**
  * 文字列を表す要素を開放します.

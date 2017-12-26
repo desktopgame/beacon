@@ -2,36 +2,44 @@
 #ifndef SIGNAL_IL_IL_FACTOR_VARIABLE_H
 #define SIGNAL_IL_IL_FACTOR_VARIABLE_H
 #include "../il_factor_interface.h"
+//struct opcode_buf;
 /**
- * •Ï”‚ğ•\‚·—v‘f.
+ * å¤‰æ•°ã‚’è¡¨ã™è¦ç´ .
  */
 typedef struct il_factor_variable {
 	char* name;
 } il_factor_variable;
 
 /**
- * •Ï”‚ğƒX[ƒp[ƒZƒbƒg‚Éƒ‰ƒbƒv‚µ‚Ü‚·.
+ * å¤‰æ•°ã‚’ã‚¹ãƒ¼ãƒ‘ãƒ¼ã‚»ãƒƒãƒˆã«ãƒ©ãƒƒãƒ—ã—ã¾ã™.
  * @param self
  * @return
  */
 il_factor* il_factor_wrap_variable(il_factor_variable* self);
 
 /**
- * •Ï”‚ğì¬‚µ‚Ü‚·.
+ * å¤‰æ•°ã‚’ä½œæˆã—ã¾ã™.
  * @param name
  * @return
  */
 il_factor_variable* il_factor_variable_new(const char* name);
 
 /**
- * •Ï”‚ğo—Í‚µ‚Ü‚·.
+ * å¤‰æ•°ã‚’å‡ºåŠ›ã—ã¾ã™.
  * @param self
  * @param depth
  */
 void il_factor_variable_dump(il_factor_variable* self, int depth);
 
 /**
- * •Ï”‚ğŠJ•ú‚µ‚Ü‚·.
+ * å¤‰æ•°ã‚’ç”Ÿæˆã—ã¾ã™.
+ * @param self
+ * @param buf
+ */
+void il_factor_variable_generate(il_factor_variable* self, struct opcode_buf* buf);
+
+/**
+ * å¤‰æ•°ã‚’é–‹æ”¾ã—ã¾ã™.
  */
 void il_factor_variable_delete(il_factor_variable* self);
 #endif // !SIGNAL_IL_IL_FACTOR_VARIABLE_H

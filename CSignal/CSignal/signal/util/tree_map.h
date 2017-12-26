@@ -18,6 +18,7 @@ typedef struct tree_map {
 	char* key;
 	tree_item item;
 	//struct tree_map* parent;
+	struct tree_map* parent;
 	struct tree_map* left;
 	struct tree_map* right;
 } tree_map;
@@ -40,7 +41,7 @@ tree_map* tree_map_new();
  * @param key
  * @param item
  */
-void tree_map_put(tree_map* self, tree_key key, tree_item item);
+tree_map* tree_map_put(tree_map* self, tree_key key, tree_item item);
 
 /**
  * 指定のツリーマップで指定のキーに紐づけられた値を返します.
@@ -49,6 +50,14 @@ void tree_map_put(tree_map* self, tree_key key, tree_item item);
  * @return
  */
 tree_item tree_map_get(tree_map* self, tree_key key);
+
+/**
+ * 要素を格納しているセルを返します.
+ * @param self
+ * @param key
+ * @return
+ */
+tree_map* tree_map_cell(tree_map* self, tree_key key);
 
 /**
  * ツリーのキーと引数のキーを比較します.

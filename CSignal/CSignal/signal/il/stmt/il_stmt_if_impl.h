@@ -80,6 +80,13 @@ void il_stmt_elif_list_push(il_stmt_elif_list* self, il_stmt_elif* child);
 void il_stmt_if_dump(il_stmt_if* self, int depth);
 
 /**
+ * if とその子要素を生成します.
+ * @param self
+ * @param buf
+ */
+void il_stmt_if_generate(il_stmt_if* self, struct opcode_buf* buf);
+
+/**
  * if を表す要素を開放します.
  * @param self
  */

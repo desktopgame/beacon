@@ -1,5 +1,6 @@
 #include "opcode_buf.h"
 #include <stdlib.h>
+#include "opcode.h"
 
 //proto
 static opcode_buf_delete_label(vector_item item);
@@ -19,6 +20,12 @@ label * opcode_buf_label(opcode_buf * self, int index) {
 	label* ret = label_new(index);
 	vector_push(self->labels, ret);
 	return ret;
+}
+
+int opcode_buf_nop(opcode_buf * self) {
+	int len = self->source->length;
+	opcode_buf_add(self, op_nop);
+	return len;
 }
 
 void opcode_buf_delete(opcode_buf * self) {

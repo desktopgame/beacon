@@ -2,6 +2,7 @@
 #ifndef SIGNAL_IL_IL_FACTOR_DOUBLE_H
 #define SIGNAL_IL_IL_FACTOR_DOUBLE_H
 #include "../il_factor_interface.h"
+//struct opcode_buf;
 /**
  * 浮動小数リテラルを表す要素.
  */
@@ -29,6 +30,13 @@ il_factor_double* il_factor_double_new(double d);
  * @param depth
  */
 void il_factor_double_dump(il_factor_double* self, int depth);
+
+/**
+ * 浮動小数リテラルを表す要素を生成します.
+ * @param self
+ * @param buf
+ */
+void il_factor_double_generate(il_factor_double* self, struct opcode_buf* buf);
 
 /**
  * 浮動小数リテラルを表す要素を開放します.

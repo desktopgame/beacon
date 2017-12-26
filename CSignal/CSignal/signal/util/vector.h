@@ -56,6 +56,15 @@ vector_item vector_top(vector* self);
 vector_item vector_pop(vector* self);
 
 /**
+ * 指定位置の要素を上書きします.
+ * 長さが足りない場合は 0 で伸ばします。
+ * @param self
+ * @param index
+ * @param item
+ */
+void vector_assign(vector* self, int index, vector_item item);
+
+/**
  * 指定位置の要素を返します.
  * @param self
  * @param index

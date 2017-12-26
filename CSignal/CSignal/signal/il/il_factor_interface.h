@@ -1,6 +1,10 @@
 #pragma once
 #ifndef SIGNAL_IL_IL_FACTOR_INTERFACE_H
 #define SIGNAL_IL_IL_FACTOR_INTERFACE_H
+//#include "../vm/opcode.h"
+//#include "../vm/opcode_buf.h"
+//struct opcode_buf;
+
 /**
  * 計算可能な要素の種類.
  */
@@ -59,6 +63,13 @@ typedef struct il_factor {
  * @param depth
  */
 void il_factor_dump(il_factor* self, int depth);
+
+/**
+ * オペコードを生成します.
+ * @param self
+ * @param buf
+ */
+void il_factor_generate(il_factor* self, struct opcode_buf* buf);
 
 /**
  * 計算可能な要素を開放します.

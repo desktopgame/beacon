@@ -32,10 +32,30 @@ typedef enum opcode {
 	op_constd,
 	op_constc,
 	op_consts,
+	op_method,
 
 	op_dup,
 	op_pop,
 	op_nop,
+
+	op_put_field,
+	op_get_field,
+
+	op_put_static,
+	op_get_static,
+
+	op_store,
+	op_load,
+
+	op_invokevirtual,
+	op_invokestatic,
+	op_invokespecial,
+	op_invokeinterface,
+	op_return,
+
+	op_printi,
+	op_printd,
+	op_prints,
 
 	op_goto,
 	op_goto_if_true,

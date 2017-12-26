@@ -2,6 +2,7 @@
 #ifndef SIGNAL_IL_IL_FACTOR_UNARY_OP_H
 #define SIGNAL_IL_IL_FACTOR_UNARY_OP_H
 #include "../il_factor_interface.h"
+//struct opcode_buf;
 /**
  * 単項演算子の種類を表す列挙型.
  */
@@ -38,6 +39,13 @@ il_factor_unary_op* il_factor_unary_op_new(ilunary_op_type type);
  * @param depth
  */
 void il_factor_unary_op_dump(il_factor_unary_op* self, int depth);
+
+/**
+ * 単項演算子を生成します.
+ * @param self
+ * @param buf
+ */
+void il_factor_unary_op_generate(il_factor_unary_op* self, struct opcode_buf* buf);
 
 /**
  * 単項演算子を開放します.

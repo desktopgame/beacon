@@ -10,10 +10,11 @@ tree_map * tree_map_new() {
 	ret->item = NULL;
 	ret->left = NULL;
 	ret->right = NULL;
+	ret->parent = NULL;
 	return ret;
 }
 
-void tree_map_put(tree_map* self, tree_key key, tree_item item) {
+tree_map* tree_map_put(tree_map* self, tree_key key, tree_item item) {
 	//リテラルによってキーが指定される場合は、
 	//プログラムによって明示的にそれを削除する必要はありませんが、
 	//この関数からは引数のキー文字列が、
@@ -23,43 +24,57 @@ void tree_map_put(tree_map* self, tree_key key, tree_item item) {
 	int comp = tree_map_compare(self, key);
 	if (comp == 0) {
 		self->item = item;
+		return self;
 	} else if (comp < 0) {
 		if (self->left == NULL) {
 			self->left = tree_map_new();
 			self->left->key = text_strdup(key);
+			self->left->parent = self;
 		} else {
-			tree_map_put(self->left, key, item);
-			return;
+			return tree_map_put(self->left, key, item);
 		}
 		self->left->item = item;
+		return self->left;
 	} else if (comp > 0) {
 		if (self->right == NULL) {
 			self->right = tree_map_new();
 			self->right->key = text_strdup(key);
+			self->right->parent = self;
 		} else {
-			tree_map_put(self->right, key, item);
-			return;
+			return tree_map_put(self->right, key, item);
 		}
 		self->right->item = item;
+		return self->right;
 	}
 }
 
 tree_item tree_map_get(tree_map * self, tree_key key) {
+	tree_map* ret = tree_map_cell(self, key);
+	if (ret == NULL) {
+		return NULL;
+	}
+	return ret->item;
+}
+
+tree_map * tree_map_cell(tree_map * self, tree_key key) {
+	if (self == NULL) {
+		return NULL;
+	}
 	int comp = tree_map_compare(self, key);
 	if (comp == 0) {
-		return self->item;
+		return self;
 	} else if (comp < 0) {
 		//指定のキーが存在しない
 		if (self->left == NULL) {
 			return NULL;
 		}
-		return tree_map_get(self->left, key);
+		return tree_map_cell(self->left, key);
 	} else if (comp > 0) {
 		//指定のキーが存在しない
 		if (self->right == NULL) {
 			return NULL;
 		}
-		return tree_map_get(self->right, key);
+		return tree_map_cell(self->right, key);
 	}
 	return NULL;
 }

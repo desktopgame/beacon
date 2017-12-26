@@ -214,6 +214,30 @@ void test_vm(void) {
 	vm_delete(vm);
 }
 
+void test_vm2(void) {
+	vm* vm = vm_new();
+	//定数プールに登録
+	vector_push(vm->constant_pool, "HelloWorld");
+
+
+	opcode_buf* buf = opcode_buf_new();
+	//定数プールの 0 番目をプッシュ
+	opcode_buf_add(buf, op_consts);
+	opcode_buf_add(buf, 0);
+	//スタックのトップを参照一覧 0 番目に格納
+	opcode_buf_add(buf, op_store);
+	opcode_buf_add(buf, 0);
+	//参照一覧の 0 番目をスタックへプッシュ
+	opcode_buf_add(buf, op_load);
+	opcode_buf_add(buf, 0);
+	//スタックのトップを表示
+	opcode_buf_add(buf, op_prints);
+
+	vm_execute(vm, buf->source);
+	opcode_buf_delete(buf);
+	vm_delete(vm);
+}
+
 void test_string_table(void) {
 	string_table* st = string_table_new();
 	int a = string_table_index(st, "a");

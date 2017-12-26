@@ -2,6 +2,7 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include "../../util/text.h"
+#include "../../vm/opcode_buf.h"
 
 il_factor * il_factor_wrap_call(il_factor_call * self) {
 	il_factor* ret = (il_factor*)malloc(sizeof(il_factor));
@@ -22,6 +23,9 @@ void il_factor_call_dump(il_factor_call * self, int depth) {
 	printf("call %s", self->name);
 	text_putline();
 	il_argument_list_dump(self->argument_list, depth + 1);
+}
+
+void il_factor_call_generate(il_factor_call * self, opcode_buf * buf) {
 }
 
 void il_factor_call_delete(il_factor_call * self) {

@@ -41,6 +41,19 @@ vector_item vector_pop(vector * self) {
 	return ret;
 }
 
+void vector_assign(vector * self, int index, vector_item item) {
+	assert(index >= 0);
+	//伸ばす必要がない
+	if (index < self->length) {
+		self->memory[index] = item;
+	} else {
+		while (self->length <= index) {
+			vector_push(self, NULL);
+		}
+		vector_assign(self, index, item);
+	}
+}
+
 vector_item vector_at(vector * self, int index) {
 	assert(index >= 0 && index < self->length);
 	return self->memory[index];

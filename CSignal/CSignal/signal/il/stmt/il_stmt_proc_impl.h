@@ -31,6 +31,13 @@ il_stmt_proc* il_stmt_proc_new();
 void il_stmt_proc_dump(il_stmt_proc* self, int depth);
 
 /**
+ * 式のみで構成される文を生成します.
+ * @param self
+ * @param buf
+ */
+void il_stmt_proc_generate(il_stmt_proc* self, struct opcode_buf* buf);
+
+/**
  * 式のみで構成される文を表す要素を開放します.
  * @param self
  */

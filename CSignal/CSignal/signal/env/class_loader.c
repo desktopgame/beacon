@@ -3,6 +3,10 @@
 #include <assert.h>
 //#include <uni>
 //#include <uni>
+#include "../vm/opcode.h"
+#include "../vm/opcode_buf.h"
+#include "../il/il_argument.h"
+#include "../util/vector.h"
 #include "script_context.h"
 #include "../util/text.h"
 #include "../util/io.h"
@@ -49,7 +53,7 @@ static il_factor_unary_op* class_loader_ilload_unary(class_loader* self, ast* so
 static il_factor_binary_op* class_loader_ilload_binary(class_loader* self, ast* source, ilbinary_op_type type);
 static il_factor_call* class_loader_ilload_call(class_loader* self, ast* source);
 static il_factor_invoke* class_loader_ilload_invoke(class_loader* self, ast* source);
-static void class_loader_ilload_argument_list(class_loader* self, il_argument_list* list, ast* source);
+static void class_loader_ilload_argument_list(class_loader* self, vector* list, ast* source);
 static void class_loader_ilload_constructor(class_loader* self, il_class* current, ast* constructor);
 
 static void class_loader_sgload_impl(class_loader* self);
@@ -60,6 +64,8 @@ static void class_loader_sgload_class_list(class_loader* self, il_class_list* il
 static void class_loader_sgload_class(class_loader* self, il_class* classz, namespace_* parent);
 static void class_loader_sgload_fields(class_loader* self, il_class* ilclass, class_* classz);
 static void class_loader_sgload_methods(class_loader* self, il_class* ilclass, class_* classz);
+static opcode_buf* class_loader_sgload_body(class_loader* self, il_stmt_list* stmt_list);
+
 
 class_loader * class_loader_new_entry_point(const char * filename) {
 	class_loader* cll = class_loader_new();
@@ -471,14 +477,14 @@ static il_factor_invoke* class_loader_ilload_invoke(class_loader* self, ast* sou
 	return ilinvoke;
 }
 
-static void class_loader_ilload_argument_list(class_loader* self, il_argument_list* list, ast* source) {
+static void class_loader_ilload_argument_list(class_loader* self, vector* list, ast* source) {
 	if (source->tag == ast_argument_list) {
 		for (int i = 0; i < source->childCount; i++) {
 			class_loader_ilload_argument_list(self, list, ast_at(source, i));
 		}
 	} else if (source->tag == ast_argument) {
 		ast* primary = ast_first(source);
-		il_argument* ilarg = il_argument_list_new();
+		il_argument* ilarg = il_argument_new();
 		ilarg->factor = class_loader_ilload_factor(self, primary);
 		il_argument_list_push(list, ilarg);
 	}
@@ -609,6 +615,8 @@ static void class_loader_sgload_methods(class_loader* self, il_class* ilclass, c
 		il_parameter_list* ilparams = ilmethod->parameter_list;
 		method* e = method_new(ilmethod->name);
 		parameter_list* elist = e->parameter_list;
+		e->type = method_type_script;
+		e->u.script_method = script_method_new();
 		while (1) {
 			if (ilparams == NULL || ilparams->item == NULL) {
 				break;
@@ -618,7 +626,25 @@ static void class_loader_sgload_methods(class_loader* self, il_class* ilclass, c
 			parameter_list_push(elist, param);
 			ilparams = ilparams->next;
 		}
+		opcode_buf* buf = class_loader_sgload_body(self, ilmethod->statement_list);
+		opcode_buf_delete(e->u.script_method->source);
+		e->u.script_method->source = buf;
+//		class_loader_sgload_body(self, e->)
 		method_list_push(classz->method_list, e);
 		ilmethod_list = ilmethod_list->next;
 	}
+}
+
+static opcode_buf* class_loader_sgload_body(class_loader* self, il_stmt_list* stmt_list) {
+	opcode_buf* ret = opcode_buf_new();
+	il_stmt_list* pointee = stmt_list;
+	while (1) {
+		if (pointee == NULL || pointee->item == NULL) {
+			break;
+		}
+		il_stmt* e = pointee->item;
+		il_stmt_generate(e, ret);
+		pointee = pointee->next;
+	}
+	return ret;
 }

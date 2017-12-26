@@ -35,6 +35,13 @@ typedef struct il_stmt {
 void il_stmt_dump(il_stmt* self, int depth);
 
 /**
+ * 文を生成します.
+ * @param self
+ * @param buf
+ */
+void il_stmt_generate(il_stmt* self, struct opcode_buf* buf);
+
+/**
  * 文を開放します.
  * @param self
  */

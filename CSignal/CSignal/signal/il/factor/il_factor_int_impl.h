@@ -3,6 +3,7 @@
 #define SIGNAL_IL_IL_FACTOR_INT_H
 #include "../il_factor_interface.h"
 #include <stdint.h>
+//struct opcode_buf;
 /**
  * 整数リテラルを表す要素.
  */
@@ -30,6 +31,13 @@ il_factor_int* il_factor_int_new(int32_t i);
  * @param depth
  */
 void il_factor_int_dump(il_factor_int* self, int depth);
+
+/** 
+ * 整数リテラルを生成します.
+ * @param self
+ * @param buf
+ */
+void il_factor_int_generate(il_factor_int* self, struct opcode_buf* buf);
 
 /**
  * 整数リテラルを表す要素を開放します.

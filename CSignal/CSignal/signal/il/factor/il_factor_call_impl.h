@@ -2,8 +2,9 @@
 #ifndef SIGNAL_IL_IL_FACTOR_CALL_H
 #define SIGNAL_IL_IL_FACTOR_CALL_H
 #include "../il_argument_list.h"
+//struct opcode_buf;
 /**
- * ŠÖ”ŒÄ‚Ño‚µ‚ğ•\‚·—v‘f.
+ * é–¢æ•°å‘¼ã³å‡ºã—ã‚’è¡¨ã™è¦ç´ .
  */
 typedef struct il_factor_call {
 	char* name;
@@ -11,28 +12,35 @@ typedef struct il_factor_call {
 } il_factor_call;
 
 /**
- * ŠÖ”ŒÄ‚Ño‚µ‚ğƒX[ƒp[ƒZƒbƒg‚Éƒ‰ƒbƒv‚µ‚Ü‚·.
+ * é–¢æ•°å‘¼ã³å‡ºã—ã‚’ã‚¹ãƒ¼ãƒ‘ãƒ¼ã‚»ãƒƒãƒˆã«ãƒ©ãƒƒãƒ—ã—ã¾ã™.
  * @param self
  * @return
  */
 il_factor* il_factor_wrap_call(il_factor_call* self);
 
 /**
- * ŠÖ”ŒÄ‚Ño‚µ‚ğ•\‚·—v‘f‚ğì¬‚µ‚Ü‚·.
+ * é–¢æ•°å‘¼ã³å‡ºã—ã‚’è¡¨ã™è¦ç´ ã‚’ä½œæˆã—ã¾ã™.
  * @param name
  * @return
  */
 il_factor_call* il_factor_call_new(const char* name);
 
 /**
- * ŠÖ”ŒÄ‚Ño‚µ‚ğo—Í‚µ‚Ü‚·.
+ * é–¢æ•°å‘¼ã³å‡ºã—ã‚’å‡ºåŠ›ã—ã¾ã™.
  * @param self
  * @param depth
  */
 void il_factor_call_dump(il_factor_call* self, int depth);
 
 /**
- * ŠÖ”ŒÄ‚Ño‚µ‚ğŠJ•ú‚µ‚Ü‚·.
+ * é–¢æ•°å‘¼ã³å‡ºã—ã‚’ç”Ÿæˆã—ã¾ã™.
+ * @param self
+ * @param buf
+ */
+void il_factor_call_generate(il_factor_call* self, struct opcode_buf* buf);
+
+/**
+ * é–¢æ•°å‘¼ã³å‡ºã—ã‚’é–‹æ”¾ã—ã¾ã™.
  * @param self
  */
 void il_factor_call_delete(il_factor_call* self);

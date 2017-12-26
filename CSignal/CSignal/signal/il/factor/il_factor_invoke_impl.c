@@ -2,6 +2,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include "../../util/text.h"
+#include "../../vm/opcode_buf.h"
 
 il_factor * il_factor_wrap_invoke(il_factor_invoke * self) {
 	il_factor* ret = (il_factor*)malloc(sizeof(il_factor));
@@ -24,6 +25,9 @@ void il_factor_invoke_dump(il_factor_invoke * self, int depth) {
 	text_putline();
 	il_factor_dump(self->receiver, depth + 1);
 	il_argument_list_dump(self->argument_list, depth + 1);
+}
+
+void il_factor_invoke_generate(il_factor_invoke * self, opcode_buf * buf) {
 }
 
 void il_factor_invoke_delete(il_factor_invoke * self) {

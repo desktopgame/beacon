@@ -11,6 +11,7 @@
 typedef struct vm {
 //	value_stack* value_stack;
 	vector* value_stack;
+	vector* ref_stack;
 	vector* constant_pool;
 //	int poolLength;
 //	constant_pool* pool;

@@ -1,6 +1,7 @@
 #include "il_stmt_interface.h"
 #include "il_stmt_impl.h"
 #include "../util/logger.h"
+#include "../vm/opcode_buf.h"
 
 void il_stmt_dump(il_stmt * self, int depth) {
 	switch (self->type) {
@@ -12,6 +13,21 @@ void il_stmt_dump(il_stmt * self, int depth) {
 			break;
 		default:
 			//ERROR("ステートメントをダンプ出来ませんでした。");
+			break;
+	}
+}
+
+void il_stmt_generate(il_stmt * self, opcode_buf * buf) {
+	switch (self->type) {
+		case ilstmt_if:
+			il_stmt_if_generate(self, buf);
+			//il_stmt_if_delete(self->u.if_);
+			break;
+		case ilstmt_proc:
+			//il_stmt_proc_delete(self->u.proc_);
+			break;
+		default:
+			//ERROR("ステートメントを開放出来ませんでした。");
 			break;
 	}
 }

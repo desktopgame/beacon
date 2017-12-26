@@ -1,6 +1,7 @@
 #include "il_stmt_if_impl.h"
 #include "../il_stmt_list.h"
 #include "../../util/text.h"
+#include "../../vm/opcode_buf.h"
 #include <stdlib.h>
 #include <stdio.h>
 
@@ -58,6 +59,9 @@ void il_stmt_if_dump(il_stmt_if * self, int depth) {
 	text_putline();
 	il_stmt_list_dump(self->else_body->body, depth + 2);
 	text_putline();
+}
+
+void il_stmt_if_generate(il_stmt_if * self, opcode_buf * buf) {
 }
 
 void il_stmt_if_delete(il_stmt_if * self) {

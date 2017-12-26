@@ -2,6 +2,7 @@
 #include <stdlib.h>
 #include<stdio.h>
 #include "../../util/text.h"
+#include "../../vm/opcode_buf.h"
 
 il_factor * il_factor_wrap_string(il_factor_string * self) {
 	il_factor* ret = (il_factor*)malloc(sizeof(il_factor));
@@ -20,6 +21,9 @@ void il_factor_string_dump(il_factor_string * self, int depth) {
 	text_putindent(depth);
 	printf("String %s", self->value);
 	text_putline();
+}
+
+void il_factor_string_generate(il_factor_string * self, opcode_buf * buf) {
 }
 
 void il_factor_string_delete(il_factor_string * self) {
