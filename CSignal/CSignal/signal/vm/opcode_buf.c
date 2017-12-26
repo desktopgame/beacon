@@ -29,6 +29,9 @@ int opcode_buf_nop(opcode_buf * self) {
 }
 
 void opcode_buf_delete(opcode_buf * self) {
+	if (self == NULL) {
+		return;
+	}
 	vector_delete(self->source, vector_deleter_null);
 	vector_delete(self->labels, opcode_buf_delete_label);
 	free(self);
