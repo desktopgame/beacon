@@ -19,7 +19,6 @@
 #include "../il/il_class.h"
 #include "../il/il_class_list.h"
 #include "../il/il_field.h"
-#include "../il/il_field_list.h"
 #include "../il/il_method.h"
 #include "../il/il_method_list.h"
 #include "../il/il_stmt_impl.h"
@@ -246,7 +245,7 @@ static void class_loader_ilload_field(class_loader* self, il_class* current, ast
 	ast* access_name = ast_second(field);
 	il_field* v = il_field_new(access_name->u.string_value);
 	v->type = il_type_new(type_name->u.string_value);
-	il_field_list_push(current->field_list, v);
+	vector_push(current->field_list, v);
 }
 
 static void class_loader_ilload_method(class_loader* self, il_class* current, ast* method) {
@@ -589,15 +588,12 @@ static void class_loader_sgload_class(class_loader* self, il_class* classz, name
 }
 
 static void class_loader_sgload_fields(class_loader* self, il_class* ilclass, class_* classz) {
-	il_field_list* ilfield_list = ilclass->field_list;
-	while (1) {
-		if (ilfield_list == NULL || ilfield_list->item == NULL) {
-			break;
-		}
-		il_field* ilfield = (il_field*)ilfield_list->item;
+	vector* ilfield_list = ilclass->field_list;
+	for (int i = 0; i < ilfield_list->length; i++) {
+		vector_item e = vector_at(ilfield_list, i);
+		il_field* ilfield = (il_field*)e;
 		field* field = field_new(ilfield->name);
 		vector_push(classz->field_list, field);
-		ilfield_list = ilfield_list->next;
 	}
 }
 

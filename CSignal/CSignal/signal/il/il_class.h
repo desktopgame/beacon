@@ -1,7 +1,8 @@
 #ifndef SIGNAL_IL_IL_CLASS_H
 #define SIGNAL_IL_IL_CLASS_H
 #include "il_type.h"
-struct il_field_list;
+#include "../util/vector.h"
+//struct il_field_list;
 struct il_method_list;
 /**
  * クラスを表す要素.
@@ -9,7 +10,7 @@ struct il_method_list;
 typedef struct il_class {
 	char* name;
 	il_type* super;
-	struct il_field_list* field_list;
+	vector* field_list;
 	struct il_method_list* method_list;
 } il_class;
 /**
