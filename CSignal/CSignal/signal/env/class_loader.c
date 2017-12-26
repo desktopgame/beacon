@@ -14,9 +14,7 @@
 #include "namespace.h"
 #include "class.h"
 #include "field.h"
-#include "field_list.h"
 #include "method.h"
-#include "method_list.h"
 #include "parameter.h"
 #include "parameter_list.h"
 #include "../il/il_class.h"
@@ -600,7 +598,7 @@ static void class_loader_sgload_fields(class_loader* self, il_class* ilclass, cl
 		}
 		il_field* ilfield = (il_field*)ilfield_list->item;
 		field* field = field_new(ilfield->name);
-		field_list_push(classz->field_list, field);
+		vector_push(classz->field_list, field);
 		ilfield_list = ilfield_list->next;
 	}
 }
@@ -629,8 +627,7 @@ static void class_loader_sgload_methods(class_loader* self, il_class* ilclass, c
 		opcode_buf* buf = class_loader_sgload_body(self, ilmethod->statement_list);
 		opcode_buf_delete(e->u.script_method->buf);
 		e->u.script_method->buf = buf;
-//		class_loader_sgload_body(self, e->)
-		method_list_push(classz->method_list, e);
+		vector_push(classz->method_list, e);
 		ilmethod_list = ilmethod_list->next;
 	}
 }

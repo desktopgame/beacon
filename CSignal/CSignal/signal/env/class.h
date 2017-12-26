@@ -3,9 +3,10 @@
 #define SIGNAL_ENV_CLASS_H
 #include "namespace.h"
 #include "class_type.h"
+#include "../util/vector.h"
 #include <stdint.h>
-struct field_list;
-struct method_list;
+//struct field_list;
+//struct method_list;
 
 /**
  * クラスを表す構造体です.
@@ -14,8 +15,8 @@ typedef struct class_ {
 	char* name;
 	namespace_* location;
 	struct class_* super_class;
-	struct field_list* field_list;
-	struct method_list* method_list;
+	vector* field_list;
+	vector* method_list;
 	class_type type;
 	uint32_t ref_count;
 } class_;
