@@ -10,6 +10,7 @@
 #include "util/stack.h"
 #include "util/tree_map.h"
 #include "util/io.h"
+#include "util/props.h"
 #include "util/text.h"
 #include "util/file_path.h"
 #include "util/vector.h"
@@ -258,6 +259,21 @@ void test_string_table(void) {
 
 void test_preload(void) {
 	namespace_dump();
+}
+
+void test_props(void) {
+	props* p = props_new();
+	props_puti(p, "int", 100);
+	props_putd(p, "double", 180.0);
+	props_putc(p, "char", 'a');
+	props_puts(p, "string", "aaa");
+	props_puts(p, "string", "aaaxxxx");
+
+	printf("int=%d\n", props_geti(p, "int", 0));
+	printf("double=%f\n", props_getd(p, "double", 0));
+	printf("char=%c\n", props_getc(p, "char", 'd'));
+	printf("string=%s\n", props_gets(p, "string", "ddd"));
+	props_delete(p);
 }
 
 //private
