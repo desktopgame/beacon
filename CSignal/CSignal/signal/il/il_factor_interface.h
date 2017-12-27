@@ -67,9 +67,9 @@ void il_factor_dump(il_factor* self, int depth);
 /**
  * オペコードを生成します.
  * @param self
- * @param buf
+ * @param env
  */
-void il_factor_generate(il_factor* self, struct opcode_buf* buf);
+void il_factor_generate(il_factor* self, struct enviroment* env);
 
 /**
  * 計算可能な要素を開放します.

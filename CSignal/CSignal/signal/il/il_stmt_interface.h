@@ -39,7 +39,7 @@ void il_stmt_dump(il_stmt* self, int depth);
  * @param self
  * @param buf
  */
-void il_stmt_generate(il_stmt* self, struct opcode_buf* buf);
+void il_stmt_generate(il_stmt* self, struct enviroment* env);
 
 /**
  * 文を開放します.

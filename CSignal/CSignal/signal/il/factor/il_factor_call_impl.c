@@ -3,7 +3,7 @@
 #include <stdio.h>
 #include "../il_argument.h"
 #include "../../util/text.h"
-#include "../../vm/opcode_buf.h"
+#include "../../vm/enviroment.h"
 
 //proto
 static void il_factor_call_argument_list_delete(vector_item item);
@@ -33,7 +33,7 @@ void il_factor_call_dump(il_factor_call * self, int depth) {
 	}
 }
 
-void il_factor_call_generate(il_factor_call * self, opcode_buf * buf) {
+void il_factor_call_generate(il_factor_call * self, enviroment* env) {
 }
 
 void il_factor_call_delete(il_factor_call * self) {

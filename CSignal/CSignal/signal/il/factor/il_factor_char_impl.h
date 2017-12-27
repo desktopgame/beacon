@@ -33,9 +33,9 @@ void il_factor_char_dump(il_factor_char* self, int depth);
 /**
  * 文字を生成します.
  * @param self
- * @param buf
+ * @param env
  */
-void il_factor_char_generate(il_factor_char* self, struct opcode_buf* buf);
+void il_factor_char_generate(il_factor_char* self, struct enviroment* env);
 
 /**
  * 文字を表す要素を開放します.

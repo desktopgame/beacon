@@ -78,9 +78,9 @@ void il_stmt_if_dump(il_stmt_if* self, int depth);
 /**
  * if とその子要素を生成します.
  * @param self
- * @param buf
+ * @param env
  */
-void il_stmt_if_generate(il_stmt_if* self, struct opcode_buf* buf);
+void il_stmt_if_generate(il_stmt_if* self, struct enviroment* env);
 
 /**
  * if を表す要素を開放します.

@@ -2,7 +2,7 @@
 #include "il_factor_impl.h"
 #include "../util/text.h"
 #include "../util/logger.h"
-#include "../vm/opcode_buf.h"
+#include "../vm/enviroment.h"
 #include <stdio.h>
 
 void il_factor_dump(il_factor * self, int depth) {
@@ -40,34 +40,34 @@ void il_factor_dump(il_factor * self, int depth) {
 	}
 }
 
-void il_factor_generate(il_factor * self, opcode_buf * buf) {
+void il_factor_generate(il_factor * self, enviroment* env) {
 	switch (self->type) {
 		case ilfactor_int:
-			il_factor_int_generate(self->u.int_, buf);
+			il_factor_int_generate(self->u.int_, env);
 			break;
 		case ilfactor_double:
-			il_factor_double_generate(self->u.double_, buf);
+			il_factor_double_generate(self->u.double_, env);
 			break;
 		case ilfactor_cquote:
-			il_factor_char_generate(self->u.char_, buf);
+			il_factor_char_generate(self->u.char_, env);
 			break;
 		case ilfactor_squote:
-			il_factor_string_generate(self->u.string_, buf);
+			il_factor_string_generate(self->u.string_, env);
 			break;
 		case ilfactor_call:
-			il_factor_call_generate(self->u.call_, buf);
+			il_factor_call_generate(self->u.call_, env);
 			break;
 		case ilfactor_invoke:
-			il_factor_invoke_generate(self->u.int_, buf);
+			il_factor_invoke_generate(self->u.int_, env);
 			break;
 		case ilfactor_variable:
-			il_factor_variable_generate(self->u.variable_, buf);
+			il_factor_variable_generate(self->u.variable_, env);
 			break;
 		case ilfactor_unary_op:
-			il_factor_unary_op_generate(self->u.unary_, buf);
+			il_factor_unary_op_generate(self->u.unary_, env);
 			break;
 		case ilfactor_binary_op:
-			il_factor_binary_op_generate(self->u.binary_, buf);
+			il_factor_binary_op_generate(self->u.binary_, env);
 			break;
 		default:
 			ERROR("ファクターを生成出来ませんでした");

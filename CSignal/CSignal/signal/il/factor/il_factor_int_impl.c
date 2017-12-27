@@ -2,7 +2,7 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include "../../util/text.h"
-#include "../../vm/opcode_buf.h"
+#include "../../vm/enviroment.h"
 
 il_factor * il_factor_wrap_int(il_factor_int * self) {
 	il_factor* ret = (il_factor*)malloc(sizeof(il_factor));
@@ -23,7 +23,7 @@ void il_factor_int_dump(il_factor_int * self, int depth) {
 	text_putline();
 }
 
-void il_factor_int_generate(il_factor_int * self, opcode_buf * buf) {
+void il_factor_int_generate(il_factor_int * self, enviroment* env) {
 }
 
 void il_factor_int_delete(il_factor_int * self) {

@@ -1,5 +1,5 @@
 #include "il_stmt_proc_impl.h"
-#include "../../vm/opcode_buf.h"
+#include "../../vm/enviroment.h"
 #include <stdlib.h>
 
 il_stmt * il_stmt_wrap_proc(il_stmt_proc * self) {
@@ -19,8 +19,8 @@ void il_stmt_proc_dump(il_stmt_proc * self, int depth) {
 	il_factor_dump(self->factor, depth);
 }
 
-void il_stmt_proc_generate(il_stmt_proc * self, opcode_buf * buf) {
-	il_factor_generate(self->factor, buf);
+void il_stmt_proc_generate(il_stmt_proc * self, enviroment * env) {
+	il_factor_generate(self->factor, env);
 }
 
 void il_stmt_proc_delete(il_stmt_proc * self) {

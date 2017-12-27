@@ -34,9 +34,9 @@ void il_factor_variable_dump(il_factor_variable* self, int depth);
 /**
  * 変数を生成します.
  * @param self
- * @param buf
+ * @param env
  */
-void il_factor_variable_generate(il_factor_variable* self, struct opcode_buf* buf);
+void il_factor_variable_generate(il_factor_variable* self, struct enviroment* env);
 
 /**
  * 変数を開放します.

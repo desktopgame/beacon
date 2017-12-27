@@ -36,9 +36,9 @@ void il_factor_call_dump(il_factor_call* self, int depth);
 /**
  * 関数呼び出しを生成します.
  * @param self
- * @param buf
+ * @param env
  */
-void il_factor_call_generate(il_factor_call* self, struct opcode_buf* buf);
+void il_factor_call_generate(il_factor_call* self, struct enviroment* env);
 
 /**
  * 関数呼び出しを開放します.

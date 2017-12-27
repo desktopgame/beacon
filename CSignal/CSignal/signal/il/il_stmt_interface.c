@@ -1,7 +1,7 @@
 #include "il_stmt_interface.h"
 #include "il_stmt_impl.h"
 #include "../util/logger.h"
-#include "../vm/opcode_buf.h"
+#include "../vm/enviroment.h"
 
 void il_stmt_dump(il_stmt * self, int depth) {
 	switch (self->type) {
@@ -17,13 +17,14 @@ void il_stmt_dump(il_stmt * self, int depth) {
 	}
 }
 
-void il_stmt_generate(il_stmt * self, opcode_buf * buf) {
+void il_stmt_generate(il_stmt * self, struct enviroment* env) {
 	switch (self->type) {
 		case ilstmt_if:
-			il_stmt_if_generate(self, buf);
+			il_stmt_if_generate(self, env);
 			//il_stmt_if_delete(self->u.if_);
 			break;
 		case ilstmt_proc:
+			il_stmt_proc_generate(self, env);
 			//il_stmt_proc_delete(self->u.proc_);
 			break;
 		default:

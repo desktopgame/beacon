@@ -2,7 +2,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include "../../util/text.h"
-#include "../../vm/opcode_buf.h"
+#include "../../vm/enviroment.h"
 #include "../il_argument.h"
 
 //proto
@@ -35,7 +35,7 @@ void il_factor_invoke_dump(il_factor_invoke * self, int depth) {
 	}
 }
 
-void il_factor_invoke_generate(il_factor_invoke * self, opcode_buf * buf) {
+void il_factor_invoke_generate(il_factor_invoke * self, enviroment* env) {
 }
 
 void il_factor_invoke_delete(il_factor_invoke * self) {

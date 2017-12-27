@@ -36,9 +36,9 @@ void il_factor_invoke_dump(il_factor_invoke* self, int depth);
 /**
  * メソッド呼び出しを生成します.
  * @param self
- * @param buf
+ * @param env
  */
-void il_factor_invoke_generate(il_factor_invoke* self, struct opcode_buf* buf);
+void il_factor_invoke_generate(il_factor_invoke* self, struct enviroment* env);
 
 /**
  * メソッド呼び出しを開放します.

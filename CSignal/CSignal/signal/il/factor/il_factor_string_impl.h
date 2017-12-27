@@ -34,9 +34,9 @@ void il_factor_string_dump(il_factor_string* self, int depth);
 /**
  * 文字列を生成します.
  * @param self
- * @param buf
+ * @param env
  */
-void il_factor_string_generate(il_factor_string* self, struct opcode_buf* buf);
+void il_factor_string_generate(il_factor_string* self, struct enviroment* env);
 
 /**
  * 文字列を表す要素を開放します.

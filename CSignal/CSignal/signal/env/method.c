@@ -38,6 +38,17 @@ void method_dump(method * self, int depth) {
 	}
 	printf(")");
 	text_putline();
+	if (self->type == method_type_script) {
+		text_putindent(depth);
+
+		opcode_buf* buf = self->u.script_method->buf;
+		for (int i = 0; i < buf->source->length; i++) {
+			text_putindent(depth + 1);
+			i = opcode_print(buf, i);
+			text_putline();
+		}
+		text_putline();
+	}
 }
 
 void method_delete(method * self) {

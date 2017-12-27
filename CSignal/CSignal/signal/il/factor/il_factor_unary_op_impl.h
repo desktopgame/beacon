@@ -43,9 +43,9 @@ void il_factor_unary_op_dump(il_factor_unary_op* self, int depth);
 /**
  * 単項演算子を生成します.
  * @param self
- * @param buf
+ * @param env
  */
-void il_factor_unary_op_generate(il_factor_unary_op* self, struct opcode_buf* buf);
+void il_factor_unary_op_generate(il_factor_unary_op* self, struct enviroment* env);
 
 /**
  * 単項演算子を開放します.

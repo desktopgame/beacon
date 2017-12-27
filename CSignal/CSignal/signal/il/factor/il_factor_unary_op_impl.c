@@ -2,7 +2,7 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include "../../util/text.h"
-#include "../../vm/opcode_buf.h"
+#include "../../vm/enviroment.h"
 
 il_factor * il_factor_wrap_unary(il_factor_unary_op * self) {
 	il_factor* ret = (il_factor*)malloc(sizeof(il_factor));
@@ -34,7 +34,7 @@ void il_factor_unary_op_dump(il_factor_unary_op * self, int depth) {
 	il_factor_dump(self->a, depth + 1);
 }
 
-void il_factor_unary_op_generate(il_factor_unary_op * self, opcode_buf * buf) {
+void il_factor_unary_op_generate(il_factor_unary_op * self, enviroment* env) {
 }
 
 void il_factor_unary_op_delete(il_factor_unary_op * self) {

@@ -35,9 +35,9 @@ void il_factor_int_dump(il_factor_int* self, int depth);
 /** 
  * 整数リテラルを生成します.
  * @param self
- * @param buf
+ * @param env
  */
-void il_factor_int_generate(il_factor_int* self, struct opcode_buf* buf);
+void il_factor_int_generate(il_factor_int* self, struct enviroment* env);
 
 /**
  * 整数リテラルを表す要素を開放します.
