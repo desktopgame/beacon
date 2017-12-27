@@ -61,4 +61,11 @@ typedef enum opcode {
 	op_goto_if_true,
 	op_goto_if_false,
 } opcode;
+
+/**
+ * オペコードを出力します.
+ * @param source
+ * @param index
+ */
+int opcode_print(struct vector* source, int index);
 #endif // !SIGNAL_VM_OPCODE_H

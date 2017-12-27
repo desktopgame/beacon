@@ -194,48 +194,48 @@ void test_vector(void) {
 
 void test_vm(void) {
 	vm* vm = vm_new();
+	enviroment* env = enviroment_new();
 	//定数プールに登録
-	vector_push(vm->constant_pool, 10);
-	vector_push(vm->constant_pool, 5);
+	vector_push(env->constant_pool, 10);
+	vector_push(env->constant_pool, 5);
 
-	opcode_buf* buf = opcode_buf_new();
 	//定数プールの 0 番目をプッシュ
-	opcode_buf_add(buf, op_consti);
-	opcode_buf_add(buf, 0);
+	opcode_buf_add(env->buf, op_consti);
+	opcode_buf_add(env->buf, 0);
 	//定数プールの 1 番目をプッシュ
-	opcode_buf_add(buf, op_consti);
-	opcode_buf_add(buf, 1);
+	opcode_buf_add(env->buf, op_consti);
+	opcode_buf_add(env->buf, 1);
 	//演算子 + で還元
-	opcode_buf_add(buf, op_add);
+	opcode_buf_add(env->buf, op_add);
 	//実行
-	vm_execute(vm, buf->source);
+	vm_execute(vm, env);
 	int res = (int)vector_top(vm->value_stack);
 	printf("res = %d\n", res);
-	opcode_buf_delete(buf);
+	enviroment_delete(env);
 	vm_delete(vm);
 }
 
 void test_vm2(void) {
 	vm* vm = vm_new();
+	enviroment* env = enviroment_new();
 	//定数プールに登録
-	vector_push(vm->constant_pool, "HelloWorld");
+	vector_push(env->constant_pool, "HelloWorld");
 
 
-	opcode_buf* buf = opcode_buf_new();
 	//定数プールの 0 番目をプッシュ
-	opcode_buf_add(buf, op_consts);
-	opcode_buf_add(buf, 0);
+	opcode_buf_add(env->buf, op_consts);
+	opcode_buf_add(env->buf, 0);
 	//スタックのトップを参照一覧 0 番目に格納
-	opcode_buf_add(buf, op_store);
-	opcode_buf_add(buf, 0);
+	opcode_buf_add(env->buf, op_store);
+	opcode_buf_add(env->buf, 0);
 	//参照一覧の 0 番目をスタックへプッシュ
-	opcode_buf_add(buf, op_load);
-	opcode_buf_add(buf, 0);
+	opcode_buf_add(env->buf, op_load);
+	opcode_buf_add(env->buf, 0);
 	//スタックのトップを表示
-	opcode_buf_add(buf, op_prints);
+	opcode_buf_add(env->buf, op_prints);
 
-	vm_execute(vm, buf->source);
-	opcode_buf_delete(buf);
+	vm_execute(vm, env);
+	enviroment_delete(env);
 	vm_delete(vm);
 }
 

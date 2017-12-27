@@ -20,7 +20,8 @@ int main(int argc, char* argv[]) {
 	sg_lopen();
 	script_context_open();
 	cmd_dump(argc, argv);
-	test_cll();
+	test_vm2();
+//	test_cll();
 //	test_vm2();
 //	test_string_table();
 //	test_namespace();

@@ -4,6 +4,7 @@
 #include "opcode.h"
 #include "../util/stack.h"
 #include "../util/vector.h"
+#include "enviroment.h"
 
 /**
  * 実行時の情報を格納する構造体.
@@ -12,7 +13,7 @@ typedef struct vm {
 //	value_stack* value_stack;
 	vector* value_stack;
 	vector* ref_stack;
-	vector* constant_pool;
+//	vector* constant_pool;
 //	int poolLength;
 //	constant_pool* pool;
 //	operand_stack* operand_stack;
@@ -28,9 +29,9 @@ vm* vm_new();
 /**
  * 指定のバイトコードを実行します.
  * @param self
- * @param source
+ * @param env
  */
-void vm_execute(vm* self, vector* source);
+void vm_execute(vm* self, enviroment* env);
 
 /**
  * 仮想マシンを開放します.

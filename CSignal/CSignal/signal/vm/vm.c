@@ -33,7 +33,6 @@ static char* stack_pops(vm* self);
 vm * vm_new() {
 	vm* ret = (vm*)malloc(sizeof(vm));
 	ret->value_stack = vector_new();
-	ret->constant_pool = vector_new();
 	ret->ref_stack = vector_new();
 	//ret->poolLength = 0;
 	//ret->pool = constant_pool_new();
@@ -42,10 +41,10 @@ vm * vm_new() {
 	return ret;
 }
 
-void vm_execute(vm * self, vector* source) {
-	int source_len = source->length;
+void vm_execute(vm* self, enviroment* env) {
+	int source_len = env->buf->source->length;
 	for (int i = 0; i < source_len; i++) {
-		op_byte b = vector_at(source, i);
+		op_byte b = (op_byte)enviroment_source_at(env, i);
 		switch (b) {
 			//eval
 			case op_add:
@@ -75,6 +74,7 @@ void vm_execute(vm * self, vector* source) {
 				int a = SPI(self);
 				int b = SPI(self);
 				vector_push(self->value_stack, (a / b));
+				break;
 			}
 			case op_mod:
 			{
@@ -99,8 +99,8 @@ void vm_execute(vm * self, vector* source) {
 			//push const
 			case op_consti:
 			{
-				int index = vector_at(source, ++i);
-				int cv = (int)vector_at(self->constant_pool, index);
+				int index = (int)enviroment_source_at(env, ++i);
+				int cv = (int)enviroment_constant_at(env, index);
 				vector_push(self->value_stack, cv);
 				INFO("push consti");
 				break;
@@ -117,8 +117,8 @@ void vm_execute(vm * self, vector* source) {
 
 			case op_consts:
 			{
-				int index = vector_at(source, ++i);
-				char* cs = (char*)vector_at(self->constant_pool, index);
+				int index = (int)enviroment_source_at(env, ++i);
+				char* cs = (char*)enviroment_constant_at(env, index);
 				vector_push(self->value_stack, cs);
 				INFO("push consts");
 				break;
@@ -126,7 +126,7 @@ void vm_execute(vm * self, vector* source) {
 			
 			case op_method:
 			{
-				int index = (int)vector_at(source, ++i);
+				int index = (int)enviroment_source_at(env, ++i);
 			}
 				break;
 
@@ -143,13 +143,13 @@ void vm_execute(vm * self, vector* source) {
 			//store,load
 			case op_put_field:
 			{
-				int index = (int)vector_at(source, ++i);
+				int index = (int)enviroment_source_at(env, ++i);
 				break;
 			}
 
 			case op_get_field:
 			{
-				int index = (int)vector_at(source, ++i);
+				int index = (int)enviroment_source_at(env, ++i);
 				break;
 			}
 
@@ -165,7 +165,7 @@ void vm_execute(vm * self, vector* source) {
 
 			case op_store:
 			{
-				int index = (int)vector_at(source, ++i);
+				int index = (int)enviroment_source_at(env, ++i);
 				vector_assign(self->ref_stack, index, vector_pop(self->value_stack));
 				INFO("store");
 				break;
@@ -173,7 +173,7 @@ void vm_execute(vm * self, vector* source) {
 
 			case op_load:
 			{
-				int index = (int)vector_at(source, ++i);
+				int index = (int)enviroment_source_at(env, ++i);
 				vector_item e = vector_at(self->ref_stack, index);
 				vector_push(self->value_stack, e);
 				INFO("load");
@@ -233,7 +233,7 @@ void vm_execute(vm * self, vector* source) {
 			//goto
 			case op_goto:
 			{
-				label* l = (label*)vector_at(source, ++i);
+				label* l = (label*)enviroment_source_at(env, ++i);
 				i = l->cursor;
 				break;
 			}
@@ -241,8 +241,8 @@ void vm_execute(vm * self, vector* source) {
 			case op_goto_if_true:
 			{
 				int v = vector_pop(self->value_stack);
+				label* l = (label*)enviroment_source_at(env, ++i);
 				if (v) {
-					label* l = (label*)vector_at(source, ++i);
 					i = l->cursor;
 				}
 				break;
@@ -251,8 +251,8 @@ void vm_execute(vm * self, vector* source) {
 			case op_goto_if_false:
 			{
 				int v = vector_pop(self->value_stack);
+				label* l = (label*)enviroment_source_at(env, ++i);
 				if (!v) {
-					label* l = (label*)vector_at(source, ++i);
 					i = l->cursor;
 				}
 				break;
@@ -267,7 +267,6 @@ void vm_execute(vm * self, vector* source) {
 void vm_delete(vm * self) {
 	//constant_pool_delete(self->pool);
 	//operand_stack_delete(self->operand_stack);
-	vector_delete(self->constant_pool, vector_deleter_null);
 	vector_delete(self->value_stack, vector_deleter_null);
 	vector_delete(self->ref_stack, vector_deleter_null);
 	free(self);
