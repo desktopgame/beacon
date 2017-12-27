@@ -81,19 +81,10 @@
     <ClCompile Include="signal\il\il_class.c">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
-    <ClCompile Include="signal\il\il_class_list.c">
-      <Filter>ソース ファイル</Filter>
-    </ClCompile>
     <ClCompile Include="signal\il\il_import.c">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
-    <ClCompile Include="signal\il\il_import_list.c">
-      <Filter>ソース ファイル</Filter>
-    </ClCompile>
     <ClCompile Include="signal\il\il_namespace.c">
-      <Filter>ソース ファイル</Filter>
-    </ClCompile>
-    <ClCompile Include="signal\il\il_namespace_list.c">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
     <ClCompile Include="signal\il\il_top_level.c">
@@ -105,25 +96,13 @@
     <ClCompile Include="signal\il\il_field.c">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
-    <ClCompile Include="signal\il\il_field_list.c">
-      <Filter>ソース ファイル</Filter>
-    </ClCompile>
     <ClCompile Include="signal\il\il_parameter.c">
-      <Filter>ソース ファイル</Filter>
-    </ClCompile>
-    <ClCompile Include="signal\il\il_parameter_list.c">
-      <Filter>ソース ファイル</Filter>
-    </ClCompile>
-    <ClCompile Include="signal\il\il_stmt_list.c">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
     <ClCompile Include="signal\il\il_stmt_interface.c">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
     <ClCompile Include="signal\il\il_method.c">
-      <Filter>ソース ファイル</Filter>
-    </ClCompile>
-    <ClCompile Include="signal\il\il_method_list.c">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
     <ClCompile Include="signal\il\il_factor_interface.c">
@@ -145,9 +124,6 @@
       <Filter>ソース ファイル</Filter>
     </ClCompile>
     <ClCompile Include="signal\il\il_argument.c">
-      <Filter>ソース ファイル</Filter>
-    </ClCompile>
-    <ClCompile Include="signal\il\il_argument_list.c">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
     <ClCompile Include="signal\il\factor\il_factor_call_impl.c">
@@ -178,6 +154,42 @@
       <Filter>ソース ファイル</Filter>
     </ClCompile>
     <ClCompile Include="signal\env\class.c">
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
+    <ClCompile Include="signal\vm\vm.c">
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
+    <ClCompile Include="signal\env\field.c">
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
+    <ClCompile Include="signal\env\parameter.c">
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
+    <ClCompile Include="signal\env\method.c">
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
+    <ClCompile Include="signal\util\vector.c">
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
+    <ClCompile Include="signal\util\string_table.c">
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
+    <ClCompile Include="signal\env\script_method.c">
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
+    <ClCompile Include="signal\env\native_method.c">
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
+    <ClCompile Include="signal\vm\label.c">
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
+    <ClCompile Include="signal\vm\opcode_buf.c">
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
+    <ClCompile Include="signal\vm\opcode.c">
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
+    <ClCompile Include="signal\vm\enviroment.c">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
   </ItemGroup>
@@ -263,19 +275,10 @@
     <ClInclude Include="signal\il\il_class.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
-    <ClInclude Include="signal\il\il_class_list.h">
-      <Filter>ヘッダー ファイル</Filter>
-    </ClInclude>
     <ClInclude Include="signal\il\il_import.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
-    <ClInclude Include="signal\il\il_import_list.h">
-      <Filter>ヘッダー ファイル</Filter>
-    </ClInclude>
     <ClInclude Include="signal\il\il_namespace.h">
-      <Filter>ヘッダー ファイル</Filter>
-    </ClInclude>
-    <ClInclude Include="signal\il\il_namespace_list.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
     <ClInclude Include="signal\il\il_top_level.h">
@@ -287,13 +290,7 @@
     <ClInclude Include="signal\il\il_field.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
-    <ClInclude Include="signal\il\il_field_list.h">
-      <Filter>ヘッダー ファイル</Filter>
-    </ClInclude>
     <ClInclude Include="signal\il\il_parameter.h">
-      <Filter>ヘッダー ファイル</Filter>
-    </ClInclude>
-    <ClInclude Include="signal\il\il_parameter_list.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
     <ClInclude Include="signal\il\il_method.h">
@@ -309,12 +306,6 @@
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
     <ClInclude Include="signal\il\il_stmt_interface.h">
-      <Filter>ヘッダー ファイル</Filter>
-    </ClInclude>
-    <ClInclude Include="signal\il\il_stmt_list.h">
-      <Filter>ヘッダー ファイル</Filter>
-    </ClInclude>
-    <ClInclude Include="signal\il\il_method_list.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
     <ClInclude Include="signal\il\stmt\il_stmt_if_impl.h">
@@ -336,9 +327,6 @@
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
     <ClInclude Include="signal\il\il_argument.h">
-      <Filter>ヘッダー ファイル</Filter>
-    </ClInclude>
-    <ClInclude Include="signal\il\il_argument_list.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
     <ClInclude Include="signal\il\factor\il_factor_call_impl.h">
@@ -366,6 +354,48 @@
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
     <ClInclude Include="signal\util\string_allocator.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="signal\env\field.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="signal\vm\opcode.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="signal\vm\vm.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="signal\env\object.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="signal\env\parameter.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="signal\env\method.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="signal\util\vector.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="signal\util\string_table.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="signal\env\script_method.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="signal\env\native_method.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="signal\vm\label.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="signal\vm\opcode_buf.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="signal\vm\enviroment.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="signal\env\class_state.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
   </ItemGroup>
