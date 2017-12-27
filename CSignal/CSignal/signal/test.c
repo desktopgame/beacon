@@ -10,7 +10,6 @@
 #include "util/stack.h"
 #include "util/tree_map.h"
 #include "util/io.h"
-#include "util/string_table.h"
 #include "util/text.h"
 #include "util/file_path.h"
 #include "util/vector.h"
@@ -240,6 +239,7 @@ void test_vm2(void) {
 }
 
 void test_string_table(void) {
+	/*
 	string_table* st = string_table_new();
 	int a = string_table_index(st, "a");
 	int b = string_table_index(st, "d");
@@ -253,6 +253,7 @@ void test_string_table(void) {
 	printf("[%d] = %s\n", c, string_table_string(st, c));
 	printf("[%d] = %s\n", d, string_table_string(st, d));
 	printf("[%d] = %s\n", e, string_table_string(st, e));
+	*/
 }
 
 void test_preload(void) {
