@@ -39,6 +39,14 @@ void il_factor_variable_dump(il_factor_variable* self, int depth);
 void il_factor_variable_generate(il_factor_variable* self, struct enviroment* env);
 
 /**
+ * 変数の型を返します.
+ * @param self
+ * @param env
+ * @return
+ */
+struct class_* il_factor_variable_eval(il_factor_variable* self, struct enviroment* env);
+
+/**
  * 変数を開放します.
  */
 void il_factor_variable_delete(il_factor_variable* self);

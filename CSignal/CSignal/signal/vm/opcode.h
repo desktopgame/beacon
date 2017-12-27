@@ -28,6 +28,16 @@ typedef enum opcode {
 	op_bit_and,
 	op_logic_and,
 
+	op_eq,
+	op_noteq,
+	op_gt,
+	op_ge,
+	op_lt,
+	op_le,
+
+	op_not,
+	op_neg,
+
 	op_consti,
 	op_constd,
 	op_constc,

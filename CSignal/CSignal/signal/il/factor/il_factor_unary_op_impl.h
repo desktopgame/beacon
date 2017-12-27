@@ -48,6 +48,14 @@ void il_factor_unary_op_dump(il_factor_unary_op* self, int depth);
 void il_factor_unary_op_generate(il_factor_unary_op* self, struct enviroment* env);
 
 /**
+ * 単項演算子の結果の型を返します.
+ * @param self
+ * @param env
+ * @return
+ */
+struct class_* il_factor_unary_op_eval(il_factor_unary_op* self, struct enviroment* env);
+
+/**
  * 単項演算子を開放します.
  * @param self
  */

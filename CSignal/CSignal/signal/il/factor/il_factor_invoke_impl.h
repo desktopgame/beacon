@@ -41,6 +41,14 @@ void il_factor_invoke_dump(il_factor_invoke* self, int depth);
 void il_factor_invoke_generate(il_factor_invoke* self, struct enviroment* env);
 
 /**
+ * メソッド呼び出しの戻り値の型を返します.
+ * @param self
+ * @param env
+ * @return
+ */
+struct class_* il_factor_invoke_eval(il_factor_invoke* self, struct enviroment* env);
+
+/**
  * メソッド呼び出しを開放します.
  * @param self
  */

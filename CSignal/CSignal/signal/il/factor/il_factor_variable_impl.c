@@ -26,6 +26,10 @@ void il_factor_variable_dump(il_factor_variable * self, int depth) {
 void il_factor_variable_generate(il_factor_variable * self, enviroment* env) {
 }
 
+class_ * il_factor_variable_eval(il_factor_variable * self, enviroment * env) {
+	return NULL;
+}
+
 void il_factor_variable_delete(il_factor_variable * self) {
 	free(self->name);
 	free(self);

@@ -255,6 +255,10 @@ void test_string_table(void) {
 	printf("[%d] = %s\n", e, string_table_string(st, e));
 }
 
+void test_preload(void) {
+	namespace_dump();
+}
+
 //private
 static void person_free(vector_item item) {
 	PERSON* p = (PERSON*)item;

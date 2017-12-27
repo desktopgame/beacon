@@ -81,6 +81,66 @@ void il_factor_binary_op_dump(il_factor_binary_op * self, int depth) {
 }
 
 void il_factor_binary_op_generate(il_factor_binary_op * self, enviroment* env) {
+	il_factor_generate(self->left, env);
+	il_factor_generate(self->right, env);
+	switch (self->type) {
+		case ilbinary_add:
+			opcode_buf_add(env->buf, op_add);
+			break;
+		case ilbinary_sub:
+			opcode_buf_add(env->buf, op_sub);
+			break;
+		case ilbinary_mul:
+			opcode_buf_add(env->buf, op_mul);
+			break;
+		case ilbinary_div:
+			opcode_buf_add(env->buf, op_div);
+			break;
+		case ilbinary_mod:
+			opcode_buf_add(env->buf, op_mod);
+			break;
+
+
+		case ilbinary_bit_or:
+			opcode_buf_add(env->buf, op_bit_or);
+			break;
+		case ilbinary_logic_or:
+			opcode_buf_add(env->buf, op_logic_or);
+			break;
+
+
+		case ilbinary_bit_and:
+			opcode_buf_add(env->buf, op_bit_and);
+			break;
+		case ilbinary_logic_and:
+			opcode_buf_add(env->buf, op_logic_and);
+			break;
+
+		case ilbinary_eq:
+			opcode_buf_add(env->buf, op_eq);
+			break;
+		case ilbinary_noteq:
+			opcode_buf_add(env->buf, op_noteq);
+			break;
+		case ilbinary_gt:
+			opcode_buf_add(env->buf, op_gt);
+			break;
+		case ilbinary_ge:
+			opcode_buf_add(env->buf, op_ge);
+			break;
+		case ilbinary_lt:
+			opcode_buf_add(env->buf, op_lt);
+			break;
+		case ilbinary_le:
+			opcode_buf_add(env->buf, op_le);
+			break;
+		default:
+			break;
+	}
+}
+
+class_ * il_factor_binary_op_eval(il_factor_binary_op * self, enviroment * env) {
+	return NULL;
 }
 
 void il_factor_binary_op_delete(il_factor_binary_op * self) {

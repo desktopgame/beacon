@@ -39,6 +39,13 @@ void il_factor_double_dump(il_factor_double* self, int depth);
 void il_factor_double_generate(il_factor_double* self, struct enviroment* env);
 
 /**
+ * 浮動小数リテラルを表す要素の型を返します.
+ * @param self
+ * @param env
+ */
+struct class_* il_factor_double_eval(il_factor_double* self, struct enviroment* env);
+
+/**
  * 浮動小数リテラルを表す要素を開放します.
  * @param self
  */

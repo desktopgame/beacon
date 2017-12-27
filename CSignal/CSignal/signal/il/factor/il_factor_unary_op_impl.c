@@ -35,6 +35,21 @@ void il_factor_unary_op_dump(il_factor_unary_op * self, int depth) {
 }
 
 void il_factor_unary_op_generate(il_factor_unary_op * self, enviroment* env) {
+	il_factor_generate(self->a, env);
+	switch (self->type) {
+		case ilunary_not:
+			opcode_buf_add(env->buf, op_not);
+			break;
+		case ilunary_neg:
+			opcode_buf_add(env->buf, op_neg);
+			break;
+		default:
+			break;
+	}
+}
+
+class_ * il_factor_unary_op_eval(il_factor_unary_op * self, enviroment * env) {
+	return NULL;
 }
 
 void il_factor_unary_op_delete(il_factor_unary_op * self) {

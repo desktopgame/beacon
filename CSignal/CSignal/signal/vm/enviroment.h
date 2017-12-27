@@ -3,6 +3,7 @@
 #define SIGNAL_VM_ENVIROMENT_H
 #include "../util/vector.h"
 #include "opcode_buf.h"
+#include "../env/class.h"
 
 /**
  * プログラムの実行環境です.
@@ -13,6 +14,7 @@
 typedef struct enviroment {
 	opcode_buf* buf;
 	vector* constant_pool;
+	class_* class_;
 } enviroment;
 
 /**
@@ -20,6 +22,13 @@ typedef struct enviroment {
  * @return
  */
 enviroment* enviroment_new();
+
+/**
+ * 定数プールに値を追加して、その位置を返します.
+ * @param item
+ * @return
+ */
+int enviroment_add_constant(enviroment* self, vector_item item);
 
 /**
  * 指定位置のオペコード/オペランドを返します.

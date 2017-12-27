@@ -72,6 +72,14 @@ void il_factor_dump(il_factor* self, int depth);
 void il_factor_generate(il_factor* self, struct enviroment* env);
 
 /**
+ * この因子が表す型を返します.
+ * @param self
+ * @param env
+ * @return
+ */
+struct class_* il_factor_eval(il_factor* self, struct enviroment* env);
+
+/**
  * 計算可能な要素を開放します.
  * @param self
  */

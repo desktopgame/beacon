@@ -75,6 +75,43 @@ void il_factor_generate(il_factor * self, enviroment* env) {
 	}
 }
 
+class_ * il_factor_eval(il_factor * self, enviroment * env) {
+	class_* ret = NULL;
+	switch (self->type) {
+		case ilfactor_int:
+			ret = il_factor_int_eval(self->u.int_, env);
+			break;
+		case ilfactor_double:
+			ret = il_factor_double_eval(self->u.double_, env);
+			break;
+		case ilfactor_cquote:
+			ret = il_factor_char_eval(self->u.char_, env);
+			break;
+		case ilfactor_squote:
+			ret = il_factor_string_eval(self->u.string_, env);
+			break;
+		case ilfactor_call:
+			ret = il_factor_call_eval(self->u.call_, env);
+			break;
+		case ilfactor_invoke:
+			ret = il_factor_invoke_eval(self->u.int_, env);
+			break;
+		case ilfactor_variable:
+			ret = il_factor_variable_eval(self->u.variable_, env);
+			break;
+		case ilfactor_unary_op:
+			ret = il_factor_unary_op_eval(self->u.unary_, env);
+			break;
+		case ilfactor_binary_op:
+			ret = il_factor_binary_op_eval(self->u.binary_, env);
+			break;
+		default:
+			ERROR("ファクターの戻り値を評価出来ませんでした");
+			break;
+	}
+	return ret;
+}
+
 void il_factor_delete(il_factor * self) {
 	if (self == NULL) {
 		return;

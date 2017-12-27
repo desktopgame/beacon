@@ -61,4 +61,6 @@ void test_vm(void);
 void test_vm2(void);
 
 void test_string_table(void);
+
+void test_preload(void);
 #endif // !SIGNAL_TEST_H

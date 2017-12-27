@@ -17,6 +17,7 @@ class_ * class_new(const char * name, class_type type) {
 	ret->name = text_strdup(name);
 	ret->type = type;
 	ret->location = NULL;
+	ret->state = class_none;
 	ret->ref_count = 0;
 	ret->super_class = NULL;
 	ret->field_list = vector_new();

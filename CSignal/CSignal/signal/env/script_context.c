@@ -1,9 +1,12 @@
 #include "script_context.h"
 #include "../util/logger.h"
+#include "namespace.h"
+#include "class.h"
 #include <stdlib.h>
 #include <assert.h>
 //proto
 static script_context* script_context_check_init(void);
+static void script_context_launch(script_context* self);
 static script_context* script_context_malloc(void);
 static script_context* script_context_free(script_context* self);
 
@@ -18,6 +21,7 @@ void script_context_open() {
 script_context* script_context_new() {
 	script_context* ret = script_context_malloc();
 	ret->prev = script_context_back();
+	script_context_launch(ret);
 	return ret;
 }
 
@@ -89,8 +93,34 @@ static script_context* script_context_check_init(void) {
 	if (gScriptContext == NULL) {
 		gScriptContext = script_context_malloc();
 		gScriptContextCurrent = gScriptContext;
+		script_context_launch(gScriptContext);
 	}
 	return gScriptContext;
+}
+
+static void script_context_launch(script_context* self) {
+	//一時的に現在のコンテキストを無効にして、
+	//引数のコンテキストを設定する
+	//FIXME:スタック?
+	script_context* selected = script_context_get_current();
+	script_context_set_current(self);
+	//プリロードされるクラスを定義
+	namespace_* signal = namespace_create_at_root("signal");
+	namespace_* lang = namespace_add_namespace(signal, "lang");
+	class_* intClass = class_new("int", class_type_class);
+	class_* doubleClass = class_new("double", class_type_class);
+	class_* charClass = class_new("char", class_type_class);
+	class_* stringClass = class_new("string", class_type_class);
+	intClass->state = class_pending;
+	doubleClass->state = class_pending;
+	charClass->state = class_pending;
+	stringClass->state = class_pending;
+	namespace_add_class(lang, intClass);
+	namespace_add_class(lang, doubleClass);
+	namespace_add_class(lang, charClass);
+	namespace_add_class(lang, stringClass);
+	//退避していたコンテキストを復帰
+	script_context_set_current(selected);
 }
 
 static script_context* script_context_malloc(void) {

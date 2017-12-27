@@ -83,19 +83,30 @@ void vm_execute(vm* self, enviroment* env) {
 				vector_push(self->value_stack, (a % b));
 				break;
 			}
-
 			case op_bit_or:
+			{
 				break;
-
+			}
 			case op_logic_or:
+			{
 				break;
-
+			}
 			case op_bit_and:
+			{
 				break;
-
+			}
 			case op_logic_and:
+			{
 				break;
-
+			}
+			case op_not:
+			{
+				break;
+			}
+			case op_neg:
+			{
+				break;
+			}
 			//push const
 			case op_consti:
 			{

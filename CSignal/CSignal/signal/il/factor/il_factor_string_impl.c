@@ -24,6 +24,13 @@ void il_factor_string_dump(il_factor_string * self, int depth) {
 }
 
 void il_factor_string_generate(il_factor_string * self, enviroment* env) {
+	int index = enviroment_add_constant(env, self->value);
+	opcode_buf_add(env->buf, op_consts);
+	opcode_buf_add(env->buf, index);
+}
+
+class_ * il_factor_string_eval(il_factor_string * self, enviroment * env) {
+	return NULL;
 }
 
 void il_factor_string_delete(il_factor_string * self) {

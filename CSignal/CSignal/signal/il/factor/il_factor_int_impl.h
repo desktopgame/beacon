@@ -40,6 +40,14 @@ void il_factor_int_dump(il_factor_int* self, int depth);
 void il_factor_int_generate(il_factor_int* self, struct enviroment* env);
 
 /**
+ * 整数リテラルを表す要素の型を返します.
+ * @param self
+ * @param env
+ * @return
+ */
+struct class_* il_factor_int_eval(il_factor_int* self, struct enviroment* env);
+
+/**
  * 整数リテラルを表す要素を開放します.
  * @param self
  */

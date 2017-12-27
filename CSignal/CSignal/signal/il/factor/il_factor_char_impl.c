@@ -23,7 +23,14 @@ void il_factor_char_dump(il_factor_char * self, int depth) {
 	text_putline(depth);
 }
 
-void il_factor_char_generate(il_factor_char * self, enviroment * buf) {
+void il_factor_char_generate(il_factor_char * self, enviroment * env) {
+	int index = enviroment_add_constant(env, self->value);
+	opcode_buf_add(env->buf, op_constc);
+	opcode_buf_add(env->buf, index);
+}
+
+class_ * il_factor_char_eval(il_factor_char * self, enviroment * env) {
+	return NULL;
 }
 
 void il_factor_char_delete(il_factor_char * self) {

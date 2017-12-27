@@ -38,6 +38,10 @@ void il_factor_invoke_dump(il_factor_invoke * self, int depth) {
 void il_factor_invoke_generate(il_factor_invoke * self, enviroment* env) {
 }
 
+class_ * il_factor_invoke_eval(il_factor_invoke * self, enviroment * env) {
+	return NULL;
+}
+
 void il_factor_invoke_delete(il_factor_invoke * self) {
 	vector_delete(self->argument_list, il_factor_invoke_argument_delete);
 	free(self->name);

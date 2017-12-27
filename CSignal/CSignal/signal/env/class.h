@@ -3,6 +3,7 @@
 #define SIGNAL_ENV_CLASS_H
 #include "namespace.h"
 #include "class_type.h"
+#include "class_state.h"
 #include "../util/vector.h"
 #include <stdint.h>
 //struct field_list;
@@ -18,6 +19,7 @@ typedef struct class_ {
 	vector* field_list;
 	vector* method_list;
 	class_type type;
+	class_state state;
 	uint32_t ref_count;
 } class_;
 

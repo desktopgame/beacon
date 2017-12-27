@@ -36,6 +36,10 @@ void il_factor_call_dump(il_factor_call * self, int depth) {
 void il_factor_call_generate(il_factor_call * self, enviroment* env) {
 }
 
+class_ * il_factor_call_eval(il_factor_call * self, enviroment * env) {
+	return NULL;
+}
+
 void il_factor_call_delete(il_factor_call * self) {
 	vector_delete(self->argument_list, il_factor_call_argument_list_delete);
 	free(self->name);

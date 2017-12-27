@@ -41,6 +41,14 @@ void il_factor_call_dump(il_factor_call* self, int depth);
 void il_factor_call_generate(il_factor_call* self, struct enviroment* env);
 
 /**
+ * 関数呼び出しの戻り値の型を返します.
+ * @param self
+ * @param env
+ * @return
+ */
+struct class_* il_factor_call_eval(il_factor_call* self, struct enviroment* env);
+
+/**
  * 関数呼び出しを開放します.
  * @param self
  */

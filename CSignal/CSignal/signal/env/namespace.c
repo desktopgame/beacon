@@ -59,10 +59,41 @@ class_ * namespace_add_class(namespace_ * self, class_ * classz) {
 	return classz;
 }
 
-namespace_ * namespace_get_namespace(namespace_ * self, char * name) {
+namespace_ * namespace_get_namespace(namespace_ * self, const char * name) {
 	assert(self != NULL);
 	assert(name != NULL);
 	return (namespace_*)tree_map_get(self->namespace_map, name);
+}
+
+class_ * namespace_get_class(namespace_ * self, const char * name) {
+	assert(self != NULL);
+	assert(name != NULL);
+
+	return (class_*)tree_map_get(self->class_map, name);
+}
+
+namespace_ * namespace_signal() {
+	return namespace_get_at_root("signal");
+}
+
+namespace_ * namespace_lang() {
+	return namespace_get_namespace(namespace_signal(), "lang");
+}
+
+class_ * namespace_int_class() {
+	return namespace_get_class(namespace_lang(), "int");
+}
+
+class_ * namespace_double_class() {
+	return namespace_get_class(namespace_lang(), "double");
+}
+
+class_ * namespace_char_class() {
+	return namespace_get_class(namespace_lang(), "char");
+}
+
+class_ * namespace_string_class() {
+	return namespace_get_class(namespace_lang(), "string");
 }
 
 void namespace_dump() {
