@@ -1,6 +1,5 @@
 #include "opcode.h"
 #include "opcode_buf.h"
-#include "../util/vector.h"
 #include <stdio.h>
 
 int opcode_print(vector* source, int index) {

@@ -162,6 +162,7 @@ void test_struct(void) {
 }
 
 void test_vector(void) {
+#if defined(_MSC_VER)
 	vector* v = vector_new();
 	for (int i = 0; i < 10; i++) {
 		vector_push(v, i);
@@ -190,6 +191,7 @@ void test_vector(void) {
 		printf("person[%d] = %s %d\n", i, p->name, p->age);
 	}
 	vector_delete(v2, person_free);
+#endif
 }
 
 void test_vm(void) {

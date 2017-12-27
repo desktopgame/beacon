@@ -4,6 +4,7 @@
 #include "namespace.h"
 #include "class_type.h"
 #include "class_state.h"
+#include "../vm/enviroment.h"
 #include "../util/vector.h"
 #include <stdint.h>
 #include <stdbool.h>
@@ -87,7 +88,7 @@ vector* class_find_method1(class_* self, const char* name, class_* type1);
  * @return 無ければ空
  *         呼び出し側で開放してください。
  */
-vector* class_find_methodv(class_* self, const char* name, vector* params, struct enviroment* env);
+vector* class_find_methodv(class_* self, const char* name, vector* params, enviroment* env);
 
 /**
  * もっとも一致するメソッドを返します.
@@ -97,7 +98,7 @@ vector* class_find_methodv(class_* self, const char* name, vector* params, struc
  * @param outIndex メソッドへのインデックス
  * @return
  */
-struct method* class_find_methodvf(class_* self, const char* name, vector* params, struct enviroment* env, int* outIndex);
+struct method* class_find_methodvf(class_* self, const char* name, vector* params, enviroment* env, int* outIndex);
 
 /**
  * このクラスの中で有効なメソッドへのインデックスを、

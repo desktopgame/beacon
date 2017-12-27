@@ -1,6 +1,7 @@
 #include "il_stmt_interface.h"
 #include "il_stmt_impl.h"
 #include "../util/logger.h"
+#include "../env/class.h"
 #include "../vm/enviroment.h"
 
 void il_stmt_dump(il_stmt * self, int depth) {

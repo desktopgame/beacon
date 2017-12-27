@@ -3,6 +3,7 @@
 #include <stdio.h>
 #include "../../util/text.h"
 #include "../../vm/enviroment.h"
+#include "../../env/class.h"
 
 il_factor * il_factor_wrap_variable(il_factor_variable * self) {
 	il_factor* ret = (il_factor*)malloc(sizeof(il_factor));

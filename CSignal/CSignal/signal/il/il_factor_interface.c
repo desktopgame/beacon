@@ -3,6 +3,7 @@
 #include "../util/text.h"
 #include "../util/logger.h"
 #include "../vm/enviroment.h"
+#include "../env/class.h"
 #include <stdio.h>
 
 void il_factor_dump(il_factor * self, int depth) {
@@ -35,7 +36,7 @@ void il_factor_dump(il_factor * self, int depth) {
 			il_factor_binary_op_dump(self->u.binary_, depth);
 			break;
 		default:
-			ERROR("ƒtƒ@ƒNƒ^[‚ğƒ_ƒ“ƒvo—ˆ‚Ü‚¹‚ñ‚Å‚µ‚½");
+			ERROR("ï¿½tï¿½@ï¿½Nï¿½^ï¿½[ï¿½ï¿½_ï¿½ï¿½ï¿½vï¿½oï¿½ï¿½ï¿½Ü‚ï¿½ï¿½ï¿½Å‚ï¿½ï¿½ï¿½");
 			break;
 	}
 }
@@ -70,7 +71,7 @@ void il_factor_generate(il_factor * self, enviroment* env) {
 			il_factor_binary_op_generate(self->u.binary_, env);
 			break;
 		default:
-			ERROR("ƒtƒ@ƒNƒ^[‚ğ¶¬o—ˆ‚Ü‚¹‚ñ‚Å‚µ‚½");
+			ERROR("ï¿½tï¿½@ï¿½Nï¿½^ï¿½[ï¿½ğ¶ï¿½ï¿½oï¿½ï¿½ï¿½Ü‚ï¿½ï¿½ï¿½Å‚ï¿½ï¿½ï¿½");
 			break;
 	}
 }
@@ -106,7 +107,7 @@ class_ * il_factor_eval(il_factor * self, enviroment * env) {
 			ret = il_factor_binary_op_eval(self->u.binary_, env);
 			break;
 		default:
-			ERROR("ƒtƒ@ƒNƒ^[‚Ì–ß‚è’l‚ğ•]‰¿o—ˆ‚Ü‚¹‚ñ‚Å‚µ‚½");
+			ERROR("ï¿½tï¿½@ï¿½Nï¿½^ï¿½[ï¿½Ì–ß‚ï¿½lï¿½ï¿½]ï¿½ï¿½ï¿½oï¿½ï¿½ï¿½Ü‚ï¿½ï¿½ï¿½Å‚ï¿½ï¿½ï¿½");
 			break;
 	}
 	return ret;
@@ -145,7 +146,7 @@ void il_factor_delete(il_factor * self) {
 			il_factor_binary_op_delete(self->u.binary_);
 			break;
 		default:
-			ERROR("ƒtƒ@ƒNƒ^[‚ğŠJ•úo—ˆ‚Ü‚¹‚ñ‚Å‚µ‚½");
+			ERROR("ï¿½tï¿½@ï¿½Nï¿½^ï¿½[ï¿½ï¿½Jï¿½ï¿½ï¿½oï¿½ï¿½ï¿½Ü‚ï¿½ï¿½ï¿½Å‚ï¿½ï¿½ï¿½");
 			break;
 	}
 	free(self);

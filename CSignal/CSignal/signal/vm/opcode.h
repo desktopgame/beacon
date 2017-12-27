@@ -1,6 +1,8 @@
 #pragma once
 #ifndef SIGNAL_VM_OPCODE_H
 #define SIGNAL_VM_OPCODE_H
+#include "../util/vector.h"
+
 typedef union {
 	int int_;
 	char char_;
@@ -77,5 +79,5 @@ typedef enum opcode {
  * @param source
  * @param index
  */
-int opcode_print(struct vector* source, int index);
+int opcode_print(vector* source, int index);
 #endif // !SIGNAL_VM_OPCODE_H

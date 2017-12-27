@@ -4,6 +4,7 @@
 #include "../../util/text.h"
 #include "../../vm/enviroment.h"
 #include "../il_argument.h"
+#include "../../env/class.h"
 
 //proto
 static void il_factor_invoke_argument_delete(vector_item item);

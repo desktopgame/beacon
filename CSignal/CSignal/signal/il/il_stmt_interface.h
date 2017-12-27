@@ -1,6 +1,7 @@
 #pragma once
 #ifndef SIGNAL_IL_IL_STMT_INTERFACE_H
 #define SIGNAL_IL_IL_STMT_INTERFACE_H
+#include "../vm/enviroment.h"
 /**
  * 文の種類を表す列挙型.
  */
@@ -39,7 +40,7 @@ void il_stmt_dump(il_stmt* self, int depth);
  * @param self
  * @param buf
  */
-void il_stmt_generate(il_stmt* self, struct enviroment* env);
+void il_stmt_generate(il_stmt* self, enviroment* env);
 
 /**
  * 文を開放します.

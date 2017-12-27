@@ -72,7 +72,7 @@ void sg_lopen() {
 	free(name);
 	logger_fp = fp;
 #else
-	FILE* fp = fopen(fp, name, "a");
+	FILE* fp = fopen(name, "a");
 	free(name);
 	logger_fp = fp;
 #endif

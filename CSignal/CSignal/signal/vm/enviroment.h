@@ -3,8 +3,7 @@
 #define SIGNAL_VM_ENVIROMENT_H
 #include "../util/vector.h"
 #include "opcode_buf.h"
-#include "../env/class.h"
-
+struct class_;
 /**
  * プログラムの実行環境です.
  * スタックや変数は実行時に変化しますが、
@@ -14,7 +13,7 @@
 typedef struct enviroment {
 	opcode_buf* buf;
 	vector* constant_pool;
-	class_* class_;
+	struct class_* class_;
 } enviroment;
 
 /**

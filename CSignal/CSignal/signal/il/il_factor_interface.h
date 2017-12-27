@@ -1,6 +1,7 @@
 #pragma once
 #ifndef SIGNAL_IL_IL_FACTOR_INTERFACE_H
 #define SIGNAL_IL_IL_FACTOR_INTERFACE_H
+#include "../vm/enviroment.h"
 //#include "../vm/opcode.h"
 //#include "../vm/opcode_buf.h"
 //struct opcode_buf;
@@ -69,7 +70,7 @@ void il_factor_dump(il_factor* self, int depth);
  * @param self
  * @param env
  */
-void il_factor_generate(il_factor* self, struct enviroment* env);
+void il_factor_generate(il_factor* self, enviroment* env);
 
 /**
  * この因子が表す型を返します.
@@ -77,7 +78,7 @@ void il_factor_generate(il_factor* self, struct enviroment* env);
  * @param env
  * @return
  */
-struct class_* il_factor_eval(il_factor* self, struct enviroment* env);
+struct class_* il_factor_eval(il_factor* self, enviroment* env);
 
 /**
  * 計算可能な要素を開放します.

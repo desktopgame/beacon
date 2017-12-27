@@ -2,6 +2,7 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include "../../util/text.h"
+#include "../../env/class.h"
 #include "../../vm/enviroment.h"
 
 il_factor * il_factor_wrap_binary(il_factor_binary_op * self) {

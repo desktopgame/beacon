@@ -38,13 +38,13 @@ void class_dump(class_ * self, int depth) {
 	text_putindent(depth);
 	printf("class %s", self->name);
 	text_putline();
-	//ƒtƒB[ƒ‹ƒh‚Ìˆê——‚ğƒ_ƒ“ƒv
+	//ï¿½tï¿½Bï¿½[ï¿½ï¿½ï¿½hï¿½Ìˆê——ï¿½ï¿½_ï¿½ï¿½ï¿½v
 	for (int i = 0; i < self->field_list->length; i++) {
 		vector_item e = vector_at(self->field_list, i);
 		field* f = (field*)e;
 		field_dump(f, depth + 1);
 	}
-	//ƒƒ\ƒbƒh‚Ìˆê——‚ğƒ_ƒ“ƒv
+	//ï¿½ï¿½ï¿½\ï¿½bï¿½hï¿½Ìˆê——ï¿½ï¿½_ï¿½ï¿½ï¿½v
 	for (int i = 0; i < self->method_list->length; i++) {
 		vector_item e = vector_at(self->method_list, i);
 		method* m = (method*)e;
@@ -66,19 +66,19 @@ field * class_find_field(class_* self, const char * name) {
 vector * class_find_method(class_* self, const char * name, int count, ...) {
 	vector* v = vector_new();
 	va_list args;
-	va_start(args, self);
+	va_start(args, count);
 
 	for (int i = 0; i < self->method_list->length; i++) {
 		vector_item e = vector_at(self->method_list, i);
 		method* m = (method*)e;
-		//–¼‘O‚ªˆá‚¤‚Ì‚ÅŸ‚Ö
-		//‚à‚µ‚­‚ÍAˆø”‚Ì”‚ªˆá‚¤‚Ì‚ÅŒŸ¸‚µ‚È‚¢
+		//ï¿½ï¿½ï¿½Oï¿½ï¿½ï¿½á‚¤ï¿½Ì‚Åï¿½ï¿½ï¿½
+		//ï¿½ï¿½ï¿½ï¿½ï¿½ÍAï¿½ï¿½ï¿½ï¿½ï¿½Ìï¿½ï¿½ï¿½ï¿½á‚¤ï¿½Ì‚ÅŒï¿½ï¿½ï¿½ï¿½ï¿½ï¿½È‚ï¿½
 		if (strcmp(m->name, name) || 
 			count != m->parameter_list->length) {
 			continue;
 		}
-		//‰¼ˆø”‚ª 0 ‚È‚Ì‚ÅA
-		//ˆø”‚ÌŒ^‚ğŒŸ¸‚µ‚È‚¢
+		//ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ 0 ï¿½È‚Ì‚ÅA
+		//ï¿½ï¿½ï¿½ï¿½ï¿½ÌŒ^ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½È‚ï¿½
 		if (count == 0) {
 			vector_push(v, m);
 			continue;
@@ -86,12 +86,12 @@ vector * class_find_method(class_* self, const char * name, int count, ...) {
 		bool match = true;
 		va_list buf;
 		va_copy(buf, args);
-		//ƒƒ\ƒbƒh‚Ì‰¼ˆø”Œ^‚ÉÀˆø”‚ÌŒ^‚ğ•ÏŠ·o—ˆ‚é‚È‚ç
+		//ï¿½ï¿½ï¿½\ï¿½bï¿½hï¿½Ì‰ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½^ï¿½Éï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ÌŒ^ï¿½ï¿½ÏŠï¿½ï¿½oï¿½ï¿½ï¿½ï¿½È‚ï¿½
 		for (int j = 0; j < count; j++) {
 			vector_item d = vector_at(m->parameter_list, j);
 			parameter* p = (parameter*)d;
 			class_* cl = va_arg(buf, class_*);
-			//ƒLƒƒƒXƒg•s‰Â”\‚È‚ç
+			//ï¿½Lï¿½ï¿½ï¿½Xï¿½gï¿½sï¿½Â”\ï¿½È‚ï¿½
 			if (!class_castable(cl, p->classz)) {
 				match = false;
 				break;
@@ -119,13 +119,13 @@ vector * class_find_methodv(class_ * self, const char * name, vector * params, e
 	for (int i = 0; i < self->method_list->length; i++) {
 		vector_item e = vector_at(self->method_list, i);
 		method* m = (method*)e;
-		//–¼‘O‚©ˆø”‚Ì”‚ªˆá‚¤
+		//ï¿½ï¿½ï¿½Oï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ìï¿½ï¿½ï¿½ï¿½á‚¤
 		if (strcmp(m->name, name) ||
 			m->parameter_list->length != params->length
 			) {
 			continue;
 		}
-		//0ŒÂ
+		//0ï¿½ï¿½
 		if (params->length == 0) {
 			vector_push(v, m);
 			continue;
@@ -134,7 +134,7 @@ vector * class_find_methodv(class_ * self, const char * name, vector * params, e
 		for (int j = 0; j < params->length; j++) {
 			vector_item d = vector_at(params, j);
 			vector_item d2 = vector_at(m->parameter_list, j);
-			il_argument* p = (parameter*)d;
+			il_argument* p = (il_argument*)d;
 			parameter* p2 = (parameter*)d2;
 			if (!class_castable(il_factor_eval(p->factor, env), p2->classz)) {
 				match = false;
@@ -151,12 +151,12 @@ vector * class_find_methodv(class_ * self, const char * name, vector * params, e
 method * class_find_methodvf(class_ * self, const char * name, vector * params, enviroment * env, int * outIndex) {
 	vector* v = class_find_methodv(self, name, params, env);
 	(*outIndex) = -1;
-	//ˆê‚Â‚à‚È‚©‚Á‚½
-	if (v->length == NULL) {
+	//ï¿½ï¿½Â‚ï¿½È‚ï¿½ï¿½ï¿½ï¿½ï¿½
+	if (v->length == 0) {
 		vector_delete(v, vector_deleter_null);
 		return NULL;
 	}
-	//FIXME:ˆø”‚Ì”‚É‚æ‚Á‚Ä‚ÍŠ®‘S‚Éˆê’v‚µ‚Ä‚¢‚Ä‚à‚±‚ê‚ğ’´‚¦‚é‰Â”\«‚ª‚ ‚é
+	//FIXME:ï¿½ï¿½ï¿½ï¿½ï¿½Ìï¿½ï¿½É‚ï¿½ï¿½ï¿½Ä‚ÍŠï¿½ï¿½Sï¿½Éˆï¿½vï¿½ï¿½ï¿½Ä‚ï¿½ï¿½Ä‚ï¿½ï¿½ï¿½ğ’´‚ï¿½ï¿½ï¿½Â”\ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 	int min = 1024;
 	method* ret = NULL;
 	for (int i = 0; i < v->length; i++) {
@@ -259,8 +259,9 @@ bool class_castable(class_ * self, class_ * other) {
 	if (self == other) {
 		return true;
 	}
-	//self‚ÌeŠK‘w‚Éother‚ªŒ»‚ê‚½‚È‚ç
-	//ƒLƒƒƒXƒg‰Â”\
+	//selfï¿½Ìeï¿½Kï¿½wï¿½ï¿½otherï¿½ï¿½ï¿½ï¿½ï¿½ê‚½ï¿½È‚ï¿½
+	//ï¿½Lï¿½ï¿½ï¿½Xï¿½gï¿½Â”\
+
 	class_* pointee = self;
 	do {
 		if (pointee == other) {

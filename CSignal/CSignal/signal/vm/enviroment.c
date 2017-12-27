@@ -1,4 +1,5 @@
 #include "enviroment.h"
+#include "../env/class.h"
 #include <stdlib.h>
 
 //proto
