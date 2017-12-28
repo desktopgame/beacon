@@ -2,6 +2,7 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <assert.h>
+#include "class.h"
 #include "../util/text.h"
 
 field * field_new(const char * name) {
@@ -14,7 +15,11 @@ field * field_new(const char * name) {
 void field_dump(field * self, int depth) {
 	assert(self != NULL);
 	text_putindent(depth);
-	printf("field %s", self->name);
+	if (self->type == NULL) {
+		printf("field NULL %s", self->name);
+	} else {
+		printf("field %s %s", self->type->name,self->name);
+	}
 	text_putline();
 }
 

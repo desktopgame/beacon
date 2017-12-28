@@ -111,14 +111,17 @@ static void script_context_launch(script_context* self) {
 	class_* doubleClass = class_new("Double", class_type_class);
 	class_* charClass = class_new("Char", class_type_class);
 	class_* stringClass = class_new("String", class_type_class);
+	class_* voidClass = class_new("Void", class_type_class);
 	intClass->state = class_pending;
 	doubleClass->state = class_pending;
 	charClass->state = class_pending;
 	stringClass->state = class_pending;
+	voidClass->state = class_pending;
 	namespace_add_class(lang, intClass);
 	namespace_add_class(lang, doubleClass);
 	namespace_add_class(lang, charClass);
 	namespace_add_class(lang, stringClass);
+	namespace_add_class(lang, voidClass);
 	//退避していたコンテキストを復帰
 	script_context_set_current(selected);
 }

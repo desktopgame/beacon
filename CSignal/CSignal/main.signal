@@ -2,14 +2,14 @@ import "lib"
 //import "../io.h"
 namespace L.Goo.Foo {
 	class Foo : SuperFoo {
-		int pointX;
-		int pointY;
+		Int pointX;
+		Int pointY;
 	
 		def main() -> Void {
 
 		}
 
-		def main(int a, int b, String c) -> Void {
+		def main(Int a, Int b, String c) -> Void {
 			
 		}
 

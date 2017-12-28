@@ -7,6 +7,7 @@
 #define CL_DOUBLE namespace_double_class()
 #define CL_CHAR namespace_char_class()
 #define CL_STRING namespace_string_class()
+#define CL_VOID namespace_void_class()
 
 struct class_;
 /**
@@ -101,6 +102,12 @@ struct class_* namespace_char_class();
  * @return
  */
 struct class_* namespace_string_class();
+
+/**
+ * 現在のスクリプトコンテキストで void クラスを返します.
+ * @return
+ */
+struct class_* namespace_void_class();
 
 /**
  * 全ての名前空間を出力します.

@@ -27,10 +27,11 @@ void import_manager_import(import_manager* self, struct class_loader* target);
 
 /**
  * 指定の名前から型を解決します.
+ * @param self
  * @param name
  * @return 解決出来なかったなら NULL を返します.
  */
-struct class_* import_manager_resolve(const char* name);
+struct class_* import_manager_resolve(import_manager* self, const char* name);
 
 /**
  * インポートマネージャを開放します.

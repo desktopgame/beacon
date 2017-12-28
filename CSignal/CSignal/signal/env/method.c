@@ -2,6 +2,7 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include "../util/text.h"
+#include "class.h"
 #include "parameter.h"
 #include "../vm/vm.h"
 
@@ -31,12 +32,16 @@ void method_dump(method * self, int depth) {
 	for (int i = 0; i < self->parameter_list->length; i++) {
 		vector_item e = vector_at(self->parameter_list, i);
 		parameter* p = (parameter*)e;
-		printf("%s", p->name);
+		printf("%s %s", p->classz->name, p->name);
 		if ((i + 1) < self->parameter_list->length) {
 			printf(" ");
 		}
 	}
-	printf(")");
+	if (self->return_type == NULL) {
+		printf(") -> NULL");
+	} else {
+		printf(") -> %s", self->return_type->name);
+	}
 	text_putline();
 	if (self->type == method_type_script) {
 		opcode_buf* buf = self->u.script_method->env->buf;

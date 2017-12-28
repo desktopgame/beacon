@@ -96,6 +96,10 @@ class_ * namespace_string_class() {
 	return namespace_get_class(namespace_lang(), "String");
 }
 
+class_ * namespace_void_class() {
+	return namespace_get_class(namespace_lang(), "Void");
+}
+
 void namespace_dump() {
 	script_context* ctx = script_context_get_current();
 	if (ctx->namespaceMap == NULL) {

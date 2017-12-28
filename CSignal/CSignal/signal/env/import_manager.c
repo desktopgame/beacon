@@ -15,7 +15,7 @@ void import_manager_import(import_manager * self, class_loader * target) {
 	vector_push(self->class_loader_list, target);
 }
 
-class_ * import_manager_resolve(const char * name) {
+class_ * import_manager_resolve(import_manager* self, const char * name) {
 	//プリミティブ型はどこからでも参照できる
 	if (!strcmp(name, "Int")) {
 		return CL_INT;
@@ -25,6 +25,8 @@ class_ * import_manager_resolve(const char * name) {
 		return CL_CHAR;
 	} else if (!strcmp(name, "String")) {
 		return CL_STRING;
+	} else if (!strcmp(name, "Void")) {
+		return CL_VOID;
 	}
 	return NULL;
 }
