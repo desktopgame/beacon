@@ -81,19 +81,19 @@ namespace_ * namespace_lang() {
 }
 
 class_ * namespace_int_class() {
-	return namespace_get_class(namespace_lang(), "int");
+	return namespace_get_class(namespace_lang(), "Int");
 }
 
 class_ * namespace_double_class() {
-	return namespace_get_class(namespace_lang(), "double");
+	return namespace_get_class(namespace_lang(), "Double");
 }
 
 class_ * namespace_char_class() {
-	return namespace_get_class(namespace_lang(), "char");
+	return namespace_get_class(namespace_lang(), "Char");
 }
 
 class_ * namespace_string_class() {
-	return namespace_get_class(namespace_lang(), "string");
+	return namespace_get_class(namespace_lang(), "String");
 }
 
 void namespace_dump() {

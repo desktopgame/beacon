@@ -112,6 +112,7 @@ static class_loader* class_loader_new() {
 	ret->parent = NULL;
 	ret->ref_count = 0;
 	ret->type = content_entry_point;
+	ret->import_manager = import_manager_new();
 	ret->fail = false;
 	return ret;
 }
@@ -131,7 +132,7 @@ static void class_loader_ilload_impl(class_loader* self, ast* source_code) {
 			class_loader_ilload_namespace(self, self->il_code->namespace_list, child);
 		}
 	}
-	il_top_level_dump(self->il_code, 0);
+	//il_top_level_dump(self->il_code, 0);
 }
 
 static void class_loader_ilload_import(class_loader* self, ast* import_decl) {
@@ -588,6 +589,8 @@ static void class_loader_sgload_fields(class_loader* self, il_class* ilclass, cl
 		vector_item e = vector_at(ilfield_list, i);
 		il_field* ilfield = (il_field*)e;
 		field* field = field_new(ilfield->name);
+		//NOTE:ここではフィールドの型を設定しません
+		//     class_loader_sgload_complete参照
 		vector_push(classz->field_list, field);
 	}
 }
@@ -607,6 +610,8 @@ static void class_loader_sgload_methods(class_loader* self, il_class* ilclass, c
 		method->type = method_type_script;
 		method->u.script_method = script_method_new();
 		//ILパラメータを実行時パラメータへ変換
+		//NOTE:ここでは戻り値の型,引数の型を設定しません
+		//     class_loader_sgload_complete参照
 		for (int i = 0; i < ilparams->length; i++) {
 			vector_item e = vector_at(ilparams, i);
 			il_parameter* ilp = (il_parameter*)e;
@@ -614,6 +619,7 @@ static void class_loader_sgload_methods(class_loader* self, il_class* ilclass, c
 			vector_push(parameter_list, param);
 		}
 		//NOTE:クラスの登録が終わったらオペコードを作成する
+		//     class_loader_sgload_complete参照
 		//enviroment* env = class_loader_sgload_body(self, ilmethod->statement_list);
 		//opcode_buf_delete(e->u.script_method->env);
 		//method->u.script_method->env = NULL;
@@ -633,7 +639,17 @@ static void class_loader_sgload_methods(class_loader* self, il_class* ilclass, c
  * @param classz
  */
 static void class_loader_sgload_complete(class_loader* self, il_class* ilclass, class_* classz) {
+	vector* fields = classz->field_list;
 	vector* methods = classz->method_list;
+	//既に登録されたが、
+	//型が空っぽになっているフィールドの一覧
+	for (int i = 0; i < fields->length; i++) {
+		vector_item e = vector_at(fields, i);
+		field* fi = (field*)e;
+		//FIXME:ILフィールドと実行時フィールドのインデックスが同じなのでとりあえず動く
+		il_field* ilfield = ((il_field*)vector_at(ilclass->field_list, i));
+		fi->type = import_manager_resolve(self->import_manager, ilfield->type->name);
+	}
 	//既に登録されたが、
 	//オペコードが空っぽになっているメソッドの一覧
 	for (int i = 0; i < methods->length; i++) {
@@ -648,6 +664,28 @@ static void class_loader_sgload_complete(class_loader* self, il_class* ilclass, 
 		il_method* ilmethod = (il_method*)vector_at(ilclass->method_list, i);
 		enviroment* env = class_loader_sgload_body(self, ilmethod->statement_list);
 		me->u.script_method->env = env;
+	}
+	//既に登録されたが、
+	//まだ戻り値や引数の型が設定されていないメソッドの一覧
+	for (int i = 0; i < methods->length; i++) {
+		vector_item e = vector_at(methods, i);
+		method* me = (method*)e;
+		//FIXME:ILメソッドと実行時メソッドのインデックスが同じなのでとりあえず動く
+		il_method* ilmethod = ((il_method*)vector_at(ilclass->method_list, i));
+		me->return_type = import_manager_resolve(
+			self->import_manager,
+			ilmethod->return_type->name
+		);
+		for (int j = 0; j < ilmethod->parameter_list->length; j++) {
+			vector_item d = vector_at(ilmethod->parameter_list, j);
+			il_parameter* p = (il_parameter*)d;
+			//FIXME:ILパラメータと実行時パラメータのインデックスが同じなのでとりあえず動く
+			parameter* mep = (parameter*)vector_at(me->parameter_list, j);
+			mep->classz = import_manager_resolve(
+				self->import_manager,
+				p->type->name
+			);
+		}
 	}
 }
 

@@ -3,6 +3,7 @@
 #include <stdio.h>
 #include "../../util/text.h"
 #include "../../vm/enviroment.h"
+#include "../../env/namespace.h"
 #include "../../env/class.h"
 
 il_factor * il_factor_wrap_double(il_factor_double * self) {
@@ -31,7 +32,7 @@ void il_factor_double_generate(il_factor_double * self, enviroment* env) {
 }
 
 class_ * il_factor_double_eval(il_factor_double * self, enviroment * env) {
-	return NULL;
+	return CL_DOUBLE;
 }
 
 void il_factor_double_delete(il_factor_double * self) {

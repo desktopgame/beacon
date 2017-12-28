@@ -3,6 +3,7 @@
 #include <stdio.h>
 #include "../../util/text.h"
 #include "../../vm/enviroment.h"
+#include "../../env/namespace.h"
 #include "../../env/class.h"
 
 il_factor * il_factor_wrap_int(il_factor_int * self) {
@@ -31,7 +32,7 @@ void il_factor_int_generate(il_factor_int * self, enviroment* env) {
 }
 
 class_ * il_factor_int_eval(il_factor_int * self, enviroment * env) {
-	return NULL;
+	return CL_INT;
 }
 
 void il_factor_int_delete(il_factor_int * self) {

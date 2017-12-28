@@ -3,7 +3,7 @@
 #define SIGNAL_IL_IL_ARGUMENT_H
 #include "il_factor_interface.h"
 /**
- * Àˆø”‚ğ•\‚·—v‘f.
+ * å®Ÿå¼•æ•°ã‚’è¡¨ã™è¦ç´ .
  */
 typedef struct il_argument {
 	//char* name;
@@ -11,20 +11,20 @@ typedef struct il_argument {
 } il_argument;
 
 /**
- * Àˆø”‚ğ•\‚·—v‘f‚ğì¬‚µ‚Ü‚·.
+ * å®Ÿå¼•æ•°ã‚’è¡¨ã™è¦ç´ ã‚’ä½œæˆã—ã¾ã™.
  * @return
  */
 il_argument* il_argument_new();
 
 /**
- * Àˆø”‚ğ•\‚·—v‘f‚ğo—Í‚µ‚Ü‚·.
+ * å®Ÿå¼•æ•°ã‚’è¡¨ã™è¦ç´ ã‚’å‡ºåŠ›ã—ã¾ã™.
  * @param self
  * @param depth
  */
 void il_argument_dump(il_argument* self, int depth);
 
 /**
- * Àˆø”‚ğ•\‚·—v‘f‚ğŠJ•ú‚µ‚Ü‚·.
+ * å®Ÿå¼•æ•°ã‚’è¡¨ã™è¦ç´ ã‚’é–‹æ”¾ã—ã¾ã™.
  * @param self
  */
 void il_argument_delete(il_argument* self);

@@ -38,13 +38,13 @@ void class_dump(class_ * self, int depth) {
 	text_putindent(depth);
 	printf("class %s", self->name);
 	text_putline();
-	//�t�B�[���h�̈ꗗ��_���v
+	//フィールドの一覧をダンプ
 	for (int i = 0; i < self->field_list->length; i++) {
 		vector_item e = vector_at(self->field_list, i);
 		field* f = (field*)e;
 		field_dump(f, depth + 1);
 	}
-	//���\�b�h�̈ꗗ��_���v
+	//メソッドの一覧をダンプ
 	for (int i = 0; i < self->method_list->length; i++) {
 		vector_item e = vector_at(self->method_list, i);
 		method* m = (method*)e;
@@ -71,14 +71,13 @@ vector * class_find_method(class_* self, const char * name, int count, ...) {
 	for (int i = 0; i < self->method_list->length; i++) {
 		vector_item e = vector_at(self->method_list, i);
 		method* m = (method*)e;
-		//���O���Ⴄ�̂Ŏ���
-		//�����́A�����̐����Ⴄ�̂Ō������Ȃ�
+		//名前か引数の個数が違うので無視
 		if (strcmp(m->name, name) || 
 			count != m->parameter_list->length) {
 			continue;
 		}
-		//�������� 0 �Ȃ̂ŁA
-		//�����̌^������Ȃ�
+		//引数がひとつもないので、
+		//型のチェックを行わない
 		if (count == 0) {
 			vector_push(v, m);
 			continue;
@@ -86,12 +85,12 @@ vector * class_find_method(class_* self, const char * name, int count, ...) {
 		bool match = true;
 		va_list buf;
 		va_copy(buf, args);
-		//���\�b�h�̉������^�Ɏ������̌^��ϊ��o����Ȃ�
+		//仮引数の型チェック
 		for (int j = 0; j < count; j++) {
 			vector_item d = vector_at(m->parameter_list, j);
 			parameter* p = (parameter*)d;
 			class_* cl = va_arg(buf, class_*);
-			//�L���X�g�s�\�Ȃ�
+			//互換のない型なら次へ
 			if (!class_castable(cl, p->classz)) {
 				match = false;
 				break;
@@ -122,13 +121,14 @@ vector * class_find_methodv(class_ * self, const char * name, vector * args, env
 	for (int i = 0; i < self->method_list->length; i++) {
 		vector_item e = vector_at(self->method_list, i);
 		method* m = (method*)e;
-		//���O�������̐����Ⴄ
+		//名前か引数の個数が違うので無視
 		if (strcmp(m->name, name) ||
 			m->parameter_list->length != args->length
 			) {
 			continue;
 		}
-		//0��
+		//引数がひとつもないので、
+		//型のチェックを行わない
 		if (args->length == 0) {
 			vector_push(v, m);
 			continue;
@@ -154,12 +154,12 @@ vector * class_find_methodv(class_ * self, const char * name, vector * args, env
 method * class_find_methodvf(class_ * self, const char * name, vector * args, enviroment * env, int * outIndex) {
 	vector* v = class_find_methodv(self, name, args, env);
 	(*outIndex) = -1;
-	//���Ȃ�����
+	//メソッドが一つも見つからなかった
 	if (v->length == 0) {
 		vector_delete(v, vector_deleter_null);
 		return NULL;
 	}
-	//FIXME:�����̐��ɂ���Ă͊��S�Ɉ�v���Ă��Ă���𒴂���\��������
+	//見つかった中からもっとも一致するメソッドを選択する
 	int min = 1024;
 	method* ret = NULL;
 	for (int i = 0; i < v->length; i++) {
@@ -262,9 +262,6 @@ bool class_castable(class_ * self, class_ * other) {
 	if (self == other) {
 		return true;
 	}
-	//self�̐e�K�w��other�����ꂽ�Ȃ�
-	//�L���X�g�\
-
 	class_* pointee = self;
 	do {
 		if (pointee == other) {

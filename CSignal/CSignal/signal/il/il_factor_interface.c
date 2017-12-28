@@ -36,7 +36,7 @@ void il_factor_dump(il_factor * self, int depth) {
 			il_factor_binary_op_dump(self->u.binary_, depth);
 			break;
 		default:
-			ERROR("�t�@�N�^�[��_���v�o���܂���ł���");
+			ERROR("ファクターをダンプ出来ませんでした");
 			break;
 	}
 }
@@ -71,7 +71,7 @@ void il_factor_generate(il_factor * self, enviroment* env) {
 			il_factor_binary_op_generate(self->u.binary_, env);
 			break;
 		default:
-			ERROR("�t�@�N�^�[�𐶐��o���܂���ł���");
+			ERROR("ファクターを生成出来ませんでした");
 			break;
 	}
 }
@@ -107,7 +107,7 @@ class_ * il_factor_eval(il_factor * self, enviroment * env) {
 			ret = il_factor_binary_op_eval(self->u.binary_, env);
 			break;
 		default:
-			ERROR("�t�@�N�^�[�̖߂�l��]���o���܂���ł���");
+			ERROR("ファクターの型を取得出来ませんでした");
 			break;
 	}
 	return ret;
@@ -146,7 +146,7 @@ void il_factor_delete(il_factor * self) {
 			il_factor_binary_op_delete(self->u.binary_);
 			break;
 		default:
-			ERROR("�t�@�N�^�[��J���o���܂���ł���");
+			ERROR("ファクターを開放出来ませんでした");
 			break;
 	}
 	free(self);

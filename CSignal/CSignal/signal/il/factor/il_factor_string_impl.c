@@ -31,7 +31,7 @@ void il_factor_string_generate(il_factor_string * self, enviroment* env) {
 }
 
 class_ * il_factor_string_eval(il_factor_string * self, enviroment * env) {
-	return NULL;
+	return CL_STRING;
 }
 
 void il_factor_string_delete(il_factor_string * self) {

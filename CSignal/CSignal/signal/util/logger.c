@@ -270,26 +270,9 @@ static void sg_pretty_paint_start(log_level level) {
 			break;
 	}
 #else
-	switch (level) {
-		case log_debug:
-			printf("\x1b[37m");
-			break;
-		case log_info:
-			printf("\x1b[37m");
-			break;
-		case log_warn:
-			printf("\x1b[33m");
-			break;
-		case log_error:
-			printf("\x1b[31m");
-			break;
-		case log_fatal:
-			printf("\x1b[31m");
-			printf("\x1b[4m");
-			break;
-		default:
-			break;
-	}
+	//
+	//no operation
+	//
 #endif // defined(_WIN32)
 }
 
@@ -299,7 +282,9 @@ static void sg_pretty_paint_stop() {
 	h = GetStdHandle(STD_OUTPUT_HANDLE);
 	SetConsoleTextAttribute(h, savedInstance);
 #else
-	printf("\x1b[0m");
+	//
+	//no operation
+	//
 #endif
 }
 

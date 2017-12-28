@@ -52,13 +52,13 @@ void il_stmt_if_dump(il_stmt_if * self, int depth) {
 	printf("if");
 	text_putline();
 	il_factor_dump(self->condition, depth + 1);
-	//ƒXƒe[ƒgƒƒ“ƒg‚Ìˆê——‚ğƒ_ƒ“ƒv
+	//ã‚¹ãƒ†ãƒ¼ãƒˆãƒ¡ãƒ³ãƒˆã®ä¸€è¦§ã‚’ãƒ€ãƒ³ãƒ—
 	for (int i = 0; i < self->body->length; i++) {
 		vector_item e = vector_at(self->body, i);
 		il_stmt* s = (il_stmt*)e;
 		il_stmt_dump(s, depth + 1);
 	}
-	//ƒGƒ‹ƒXƒCƒt‚Ìˆê——‚ğƒ_ƒ“ƒv
+	//ã‚¨ãƒ«ã‚¹ã‚¤ãƒ•ã®ä¸€è¦§ã‚’ãƒ€ãƒ³ãƒ—
 	for (int i = 0; i < self->elif_list->length; i++) {
 		vector_item e = vector_at(self->elif_list, i);
 		il_stmt_elif* elif = (il_stmt_elif*)e;
@@ -76,7 +76,7 @@ void il_stmt_if_dump(il_stmt_if * self, int depth) {
 	text_putindent(depth + 1);
 	printf("else");
 	text_putline();
-	//ƒXƒe[ƒgƒƒ“ƒg‚Ìˆê——‚ğƒ_ƒ“ƒv
+	//ã‚¹ãƒ†ãƒ¼ãƒˆãƒ¡ãƒ³ãƒˆã®ä¸€è¦§ã‚’ãƒ€ãƒ³ãƒ—
 	for (int i = 0; i < self->else_body->body->length; i++) {
 		vector_item e = vector_at(self->else_body->body, i);
 		il_stmt* s = (il_stmt*)e;
