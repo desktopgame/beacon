@@ -83,22 +83,23 @@ vector* class_find_method1(class_* self, const char* name, class_* type1);
  * こちらでは全ての要素に il_argument* が入っている必要があります。
  * @param self
  * @param name
- * @param params 呼び出し側で開放してください.
+ * @param args 呼び出し側で開放してください.
  * @param env
  * @return 無ければ空
  *         呼び出し側で開放してください。
  */
-vector* class_find_methodv(class_* self, const char* name, vector* params, enviroment* env);
+vector* class_find_methodv(class_* self, const char* name, vector* args, enviroment* env);
 
 /**
  * もっとも一致するメソッドを返します.
  * @param self
  * @param name
  * @param env
+ * @param args
  * @param outIndex メソッドへのインデックス
  * @return
  */
-struct method* class_find_methodvf(class_* self, const char* name, vector* params, enviroment* env, int* outIndex);
+struct method* class_find_methodvf(class_* self, const char* name, vector* args, enviroment* env, int* outIndex);
 
 /**
  * このクラスの中で有効なメソッドへのインデックスを、

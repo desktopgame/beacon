@@ -114,25 +114,25 @@ vector * class_find_method1(class_ * self, const char * name, class_ * type1) {
 	return class_find_method(self, name, 1, type1);
 }
 
-vector * class_find_methodv(class_ * self, const char * name, vector * params, enviroment* env) {
+vector * class_find_methodv(class_ * self, const char * name, vector * args, enviroment* env) {
 	vector* v = vector_new();
 	for (int i = 0; i < self->method_list->length; i++) {
 		vector_item e = vector_at(self->method_list, i);
 		method* m = (method*)e;
 		//���O�������̐����Ⴄ
 		if (strcmp(m->name, name) ||
-			m->parameter_list->length != params->length
+			m->parameter_list->length != args->length
 			) {
 			continue;
 		}
 		//0��
-		if (params->length == 0) {
+		if (args->length == 0) {
 			vector_push(v, m);
 			continue;
 		}
 		bool match = true;
-		for (int j = 0; j < params->length; j++) {
-			vector_item d = vector_at(params, j);
+		for (int j = 0; j < args->length; j++) {
+			vector_item d = vector_at(args, j);
 			vector_item d2 = vector_at(m->parameter_list, j);
 			il_argument* p = (il_argument*)d;
 			parameter* p2 = (parameter*)d2;
@@ -148,8 +148,8 @@ vector * class_find_methodv(class_ * self, const char * name, vector * params, e
 	return v;
 }
 
-method * class_find_methodvf(class_ * self, const char * name, vector * params, enviroment * env, int * outIndex) {
-	vector* v = class_find_methodv(self, name, params, env);
+method * class_find_methodvf(class_ * self, const char * name, vector * args, enviroment * env, int * outIndex) {
+	vector* v = class_find_methodv(self, name, args, env);
 	(*outIndex) = -1;
 	//���Ȃ�����
 	if (v->length == 0) {
@@ -164,7 +164,7 @@ method * class_find_methodvf(class_ * self, const char * name, vector * params, 
 		method* m = (method*)e;
 		int score = 0;
 		for (int j = 0; j < m->parameter_list->length; j++) {
-			vector_item d = vector_at(params, j);
+			vector_item d = vector_at(args, j);
 			vector_item d2 = vector_at(m->parameter_list, j);
 			il_argument* p = (il_argument*)d2;
 			parameter* p2 = (parameter*)d;
