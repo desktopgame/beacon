@@ -4,6 +4,7 @@
 #include "ast.h"
 #include "constructor_chain_type.h"
 #include "modifier_type.h"
+#include "access_level.h"
 
 /**
  * 名前空間を表す要素を作成します.
@@ -53,19 +54,34 @@ ast* ast_new_class_decl(char* class_name, ast* super_class, ast* member_list);
 ast* ast_new_superclass(char* class_name);
 
 /**
+ * "アクセス修飾子とメンバー一覧のセット" のリストを返します.
+ * @param member_tree
+ * @param member_list
+ * @return
+ */
+ast* ast_new_access_member_tree(ast* member_tree, ast* member_list);
+
+/**
+ * アクセス修飾子とメンバーの一覧をセットにして返します.
+ * @param level
+ * @param member_list
+ * @return
+ */
+ast* ast_new_access_member_list(access_level level, ast* member_list);
+
+/**
+ * アクセスレベルを表す要素を作成します.
+ * @param level
+ * @return
+ */
+ast* ast_new_access(access_level level);
+
+/**
  * 修飾子を表す要素を作成します.
  * @param type
  * @return
  */
 ast* ast_new_modifier(modifier_type type);
-
-/**
- * 修飾子を表す要素を作成します.
- * @param modifier_list
- * @parma modifier_type
- * @return
- */
-ast* ast_new_modifier_list(ast* modifier_list, modifier_type type);
 
 /**
  * メンバーを表す要素を作成します.
@@ -76,10 +92,11 @@ ast* ast_new_member_decl(ast* mem);
 
 /**
  * メンバーを表す要素を作成します.
- * @param mem
+ * @param member_list
+ * @param member
  * @param
  */
-ast* ast_new_member_decl_list(ast* mem, ast* member_list);
+ast* ast_new_member_decl_list(ast* member_list, ast* member);
 
 /**
  * フィールド宣言を表す要素を作成します.

@@ -76,12 +76,14 @@ typedef enum ast_tag {
 	ast_class_decl,
 	ast_class_super,
 
-	ast_modifier_public,
-	ast_modifier_private,
-	ast_modifier_protected,
+	ast_access_public,
+	ast_access_private,
+	ast_access_protected,
+	ast_access_member_list,
+	ast_access_member_tree,
+
 	ast_modifier_static,
 	ast_modifier_native,
-	ast_modifier_list,
 
 	ast_member_decl,
 	ast_member_decl_list,
@@ -325,4 +327,18 @@ void ast_delete(ast* self);
  * @return
  */
 bool ast_is_blank(ast* self);
+
+/**
+ * 指定の要素がアクセスレベルなら true.
+ * @param self
+ * @return
+ */
+bool ast_is_access(ast* self);
+
+/**
+ * 指定の要素が修飾子なら true.
+ * @param self
+ * @return
+ */
+bool ast_is_modifier(ast* self);
 #endif // !SIGNAL_AST_AST_H

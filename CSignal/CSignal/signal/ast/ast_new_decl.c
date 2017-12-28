@@ -47,6 +47,33 @@ ast * ast_new_superclass(char * class_name) {
 	return ret;
 }
 
+ast * ast_new_access_member_tree(ast * member_tree, ast * member_list) {
+	ast* ret = ast_new(ast_access_member_tree);
+	ast_push(ret, member_tree);
+	ast_push(ret, member_list);
+	return ret;
+}
+
+ast * ast_new_access_member_list(access_level level, ast * member_list) {
+	ast* ret = ast_new(ast_access_member_list);
+	ast* a = ast_new_access(level);
+	ast_push(ret, a);
+	ast_push(ret, member_list);
+	return ret;
+}
+
+ast * ast_new_access(access_level level) {
+	switch (level) {
+		case access_public:
+			return ast_new(ast_access_public);
+		case access_private:
+			return ast_new(ast_access_private);
+		case access_protected:
+			return ast_new(ast_access_protected);
+	}
+	return NULL;
+}
+
 ast * ast_new_modifier(modifier_type type) {
 	switch (type) {
 //		case modifier_type_public:
@@ -69,23 +96,22 @@ ast * ast_new_modifier(modifier_type type) {
 	return NULL;
 }
 
-ast * ast_new_modifier_list(ast* modifier_list, modifier_type type) {
-	ast* ret = ast_new(ast_modifier_list);
-	ast_push(ret, modifier_list);
-	ast_push(ret, ast_new_modifier(type));
-	return ret;
-}
-
 ast * ast_new_member_decl(ast * mem) {
 	ast* ret = ast_new(ast_member_decl);
 	ast_push(ret, mem);
 	return ret;
 }
 
-ast * ast_new_member_decl_list(ast * mem, ast * member_list) {
+ast * ast_new_member_decl_list(ast* member_list, ast* member) {
+	/*
 	ast* ret = ast_new(ast_member_decl_list);
 	ast_push(ret, mem);
 	ast_push(ret, member_list);
+	return ret;
+	*/
+	ast* ret = ast_new(ast_member_decl_list);
+	ast_push(ret, member_list);
+	ast_push(ret, member);
 	return ret;
 }
 

@@ -54,6 +54,8 @@
 					import 
 					class_decl 
 						class_super 
+						access_member_tree
+						access_member_list
 						member_define_list
 						member_define
 						constructor_define
@@ -169,7 +171,7 @@ import
 	}
 	;
 class_decl
-	: CLASS IDENT class_super LCB member_define_list RCB
+	: CLASS IDENT class_super LCB access_member_list RCB
 	{
 		$$ = ast_new_class_decl($2, $3, $5);
 	}
@@ -182,6 +184,30 @@ class_super
 	| COLON IDENT
 	{
 		$$ = ast_new_superclass($2);
+	}
+	;
+access_member_tree
+	: /* empty */
+	{
+		$$ = ast_new_blank();
+	}
+	| access_member_list
+	{
+		$$ = $1;
+	}
+	| access_member_tree access_member_list
+	{
+		$$ = ast_new_access_member_tree($1, $2);
+	}
+	;
+access_member_list
+	: /* empty */
+	{
+		$$ = ast_new_blank();
+	}
+	| access_level_T COLON member_define_list
+	{
+		$$ = ast_new_access_member_list($1, $3);
 	}
 	;
 member_define_list

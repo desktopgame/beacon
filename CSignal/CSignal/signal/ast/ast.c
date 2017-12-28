@@ -251,6 +251,12 @@ void ast_print(ast* self) {
 		case ast_class_super:
 			printf("super_class(%s)", self->u.string_value);
 			break;
+		case ast_access_member_list: p("access member_list");
+		case ast_access_public: p("public");
+		case ast_access_private: p("private");
+		case ast_access_protected: p("protected");
+		case ast_modifier_static: p("static");
+		case ast_modifier_native: p("native");
 		case ast_member_decl: p("member_decl");
 		case ast_member_decl_list: p("member_decl_list");
 		case ast_field_decl: p("field decl");
@@ -298,6 +304,17 @@ void ast_delete(ast * self) {
 
 bool ast_is_blank(ast * self) {
 	return self == NULL || self->tag == ast_blank;
+}
+
+bool ast_is_access(ast * self) {
+	return self->tag == ast_access_public ||
+		self->tag == ast_access_private ||
+		self->tag == ast_access_protected;
+}
+
+bool ast_is_modifier(ast * self) {
+	return self->tag == ast_modifier_static ||
+		self->tag == ast_modifier_native;
 }
 
 //private

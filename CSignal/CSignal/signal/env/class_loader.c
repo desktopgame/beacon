@@ -36,6 +36,7 @@ static void class_loader_ilload_namespace_path_recursive(class_loader* self, ast
 static il_namespace* class_loader_ilload_ast_to_namespace(ast* a);
 static void class_loader_ilload_namespace_body(class_loader* self, il_namespace* current, vector* parent, ast* namespace_body);
 static void class_loader_ilload_class(class_loader* self, il_namespace* current, ast* class_decl);
+static void class_loader_ilload_member_tree(class_loader* self, il_class* current, ast* tree);
 static void class_loader_ilload_member(class_loader* self, il_class* current, ast* member);
 static void class_loader_ilload_field(class_loader* self, il_class* current, ast* field);
 static void class_loader_ilload_method(class_loader* self, il_class* current, ast* method);
@@ -217,7 +218,7 @@ static void class_loader_ilload_namespace_body(class_loader* self, il_namespace*
 
 static void class_loader_ilload_class(class_loader* self, il_namespace* current, ast* class_decl) {
 	ast* super_class = ast_first(class_decl);
-	ast* member_list = ast_second(class_decl);
+	ast* member_tree = ast_second(class_decl);
 	il_class* classz = il_class_new(class_decl->u.string_value);
 	//親クラスが宣言されていない
 	if(ast_is_blank(super_class)) {
@@ -225,8 +226,26 @@ static void class_loader_ilload_class(class_loader* self, il_namespace* current,
 	} else {
 		classz->super = il_type_new(super_class->u.string_value);
 	}
-	class_loader_ilload_member(self, classz, member_list);
+	//public:
+	//    ....
+	//    ....
+	if (!ast_is_blank(member_tree)) {
+		class_loader_ilload_member_tree(self, classz, member_tree);
+	}
 	vector_push(current->class_list, classz);
+}
+
+static void class_loader_ilload_member_tree(class_loader* self, il_class* current, ast* tree) {
+	if (tree->tag == ast_access_member_tree) {
+		for (int i = 0; i < tree->childCount; i++) {
+			class_loader_ilload_member_tree(self, current, ast_at(tree, i));
+		}
+	} else if (tree->tag == ast_access_member_list) {
+		ast* access = ast_first(tree);
+		ast* member_list = ast_second(tree);
+		class_loader_ilload_member(self, current, member_list);
+
+	}
 }
 
 static void class_loader_ilload_member(class_loader* self, il_class* current, ast* member) {

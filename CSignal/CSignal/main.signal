@@ -2,6 +2,7 @@ import "lib"
 //import "../io.h"
 namespace L.Goo.Foo {
 	class Foo : SuperFoo {
+		public:
 		Int pointX;
 		Int pointY;
 	
