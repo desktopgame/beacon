@@ -21,11 +21,11 @@ void il_stmt_dump(il_stmt * self, int depth) {
 void il_stmt_generate(il_stmt * self, struct enviroment* env) {
 	switch (self->type) {
 		case ilstmt_if:
-			il_stmt_if_generate(self, env);
+			il_stmt_if_generate(self->u.if_, env);
 			//il_stmt_if_delete(self->u.if_);
 			break;
 		case ilstmt_proc:
-			il_stmt_proc_generate(self, env);
+			il_stmt_proc_generate(self->u.proc_, env);
 			//il_stmt_proc_delete(self->u.proc_);
 			break;
 		default:

@@ -2,7 +2,7 @@
 #ifndef SIGNAL_ENV_SCRIPT_METHOD_H
 #define SIGNAL_ENV_SCRIPT_METHOD_H
 #include "../util/vector.h"
-#include "../vm/opcode_buf.h"
+#include "../vm/enviroment.h"
 struct vm;
 struct method;
 
@@ -11,7 +11,7 @@ struct method;
  */
 typedef struct script_method {
 //	vector* source;
-	opcode_buf* buf;
+	enviroment* env;
 } script_method;
 
 /**

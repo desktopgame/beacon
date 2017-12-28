@@ -61,7 +61,7 @@ static void class_loader_sgload_class_list(class_loader* self, vector* ilclass_l
 static void class_loader_sgload_class(class_loader* self, il_class* classz, namespace_* parent);
 static void class_loader_sgload_fields(class_loader* self, il_class* ilclass, class_* classz);
 static void class_loader_sgload_methods(class_loader* self, il_class* ilclass, class_* classz);
-static opcode_buf* class_loader_sgload_body(class_loader* self, vector* stmt_list);
+static enviroment* class_loader_sgload_body(class_loader* self, vector* stmt_list);
 
 
 class_loader * class_loader_new_entry_point(const char * filename) {
@@ -606,15 +606,15 @@ static void class_loader_sgload_methods(class_loader* self, il_class* ilclass, c
 			parameter* param = parameter_new(ilp->name);
 			vector_push(parameter_list, param);
 		}
-		opcode_buf* buf = class_loader_sgload_body(self, ilmethod->statement_list);
-		opcode_buf_delete(e->u.script_method->buf);
-		e->u.script_method->buf = buf;
+		enviroment* env = class_loader_sgload_body(self, ilmethod->statement_list);
+		opcode_buf_delete(e->u.script_method->env);
+		e->u.script_method->env = env;
 		vector_push(classz->method_list, e);
 	}
 }
 
-static opcode_buf* class_loader_sgload_body(class_loader* self, vector* stmt_list) {
-	opcode_buf* ret = opcode_buf_new();
+static enviroment* class_loader_sgload_body(class_loader* self, vector* stmt_list) {
+	enviroment* ret = enviroment_new();
 	for (int i = 0; i < stmt_list->length; i++) {
 		vector_item e = vector_at(stmt_list, i);
 		il_stmt* s = (il_stmt*)e;

@@ -116,6 +116,9 @@ vector * class_find_method1(class_ * self, const char * name, class_ * type1) {
 
 vector * class_find_methodv(class_ * self, const char * name, vector * args, enviroment* env) {
 	vector* v = vector_new();
+	if (self == NULL) {
+		return v;
+	}
 	for (int i = 0; i < self->method_list->length; i++) {
 		vector_item e = vector_at(self->method_list, i);
 		method* m = (method*)e;
