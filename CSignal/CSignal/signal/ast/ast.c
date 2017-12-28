@@ -251,12 +251,14 @@ void ast_print(ast* self) {
 		case ast_class_super:
 			printf("super_class(%s)", self->u.string_value);
 			break;
+		case ast_access_member_tree: p("access member_tree");
 		case ast_access_member_list: p("access member_list");
 		case ast_access_public: p("public");
 		case ast_access_private: p("private");
 		case ast_access_protected: p("protected");
 		case ast_modifier_static: p("static");
 		case ast_modifier_native: p("native");
+		case ast_modifier_static_native: p("static | native");
 		case ast_member_decl: p("member_decl");
 		case ast_member_decl_list: p("member_decl_list");
 		case ast_field_decl: p("field decl");
@@ -314,7 +316,9 @@ bool ast_is_access(ast * self) {
 
 bool ast_is_modifier(ast * self) {
 	return self->tag == ast_modifier_static ||
-		self->tag == ast_modifier_native;
+		self->tag == ast_modifier_native ||
+		self->tag == ast_modifier_none ||
+		self->tag == ast_modifier_static_native;
 }
 
 access_level ast_cast_to_access(ast * self) {
@@ -337,11 +341,18 @@ access_level ast_cast_to_access(ast * self) {
 modifier_type ast_cast_to_modifier(ast * self) {
 	assert(ast_is_modifier(self));
 	switch (self->tag) {
+		case ast_modifier_none:
+			return modifier_none;
+
 		case ast_modifier_static:
 			return modifier_static;
 
 		case ast_modifier_native:
 			return modifier_native;
+
+		case ast_modifier_static_native:
+			return modifier_static | modifier_native;
+
 		default:
 			break;
 	}

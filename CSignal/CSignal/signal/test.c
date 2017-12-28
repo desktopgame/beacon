@@ -145,12 +145,16 @@ void test_cll(void) {
 #endif
 	class_loader_load(cll);
 	//il_top_level_dump(cll->il_code, 0);
+	/*
 	system("cls");
 	//ast_print_tree(cll->source_code);
 	//il_top_level_dump(cll->il_code, 0);
+	//*/
 	class_loader_delete(cll);
+	//*
 	system("cls");
 	namespace_dump();
+	//*/
 }
 
 void test_struct(void) {

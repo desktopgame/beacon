@@ -266,22 +266,26 @@ static void class_loader_ilload_member(class_loader* self, il_class* current, as
 }
 
 static void class_loader_ilload_field(class_loader* self, il_class* current, ast* field, access_level level) {
-	ast* type_name = ast_first(field);
-	ast* access_name = ast_second(field);
+	ast* modifier = ast_first(field);
+	ast* type_name = ast_second(field);
+	ast* access_name = ast_at(field, 2);
 	il_field* v = il_field_new(access_name->u.string_value);
 	v->type = il_type_new(type_name->u.string_value);
 	v->access = level;
+	v->modifier = ast_cast_to_modifier(modifier);
 	vector_push(current->field_list, v);
 }
 
 static void class_loader_ilload_method(class_loader* self, il_class* current, ast* method, access_level level) {
-	ast* func_name = ast_at(method, 0);
-	ast* param_list = ast_at(method, 1);
-	ast* func_body = ast_at(method, 2);
-	ast* ret_name = ast_at(method, 3);
+	ast* modifier = ast_at(method, 0);
+	ast* func_name = ast_at(method, 1);
+	ast* param_list = ast_at(method, 2);
+	ast* func_body = ast_at(method, 3);
+	ast* ret_name = ast_at(method, 4);
 	il_method* v = il_method_new(func_name->u.string_value);
 	v->return_type = il_type_new(ret_name->u.string_value);
 	v->access = level;
+	v->modifier = ast_cast_to_modifier(modifier);
 	class_loader_ilload_param(self, v->parameter_list, param_list);
 	class_loader_ilload_body(self, v->statement_list, func_body);
 	vector_push(current->method_list, v);

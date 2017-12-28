@@ -15,6 +15,8 @@ il_field * il_field_new(const char * name) {
 void il_field_dump(il_field * self, int depth) {
 	text_putindent(depth);
 	access_print(self->access);
+	printf(" ");
+	modifier_print(self->modifier);
 	printf(" field %s %s", self->type->name, self->name);
 	text_putline();
 }

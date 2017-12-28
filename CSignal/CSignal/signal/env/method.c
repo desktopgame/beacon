@@ -30,6 +30,8 @@ void method_execute(method* self, vm * vm) {
 void method_dump(method * self, int depth) {
 	text_putindent(depth);
 	access_print(self->access);
+	printf(" ");
+	modifier_print(self->modifier);
 	printf(" method %s", self->name);
 	printf("(");
 	for (int i = 0; i < self->parameter_list->length; i++) {

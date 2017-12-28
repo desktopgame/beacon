@@ -18,6 +18,8 @@ void field_dump(field * self, int depth) {
 	assert(self != NULL);
 	text_putindent(depth);
 	access_print(self->access);
+	printf(" ");
+	modifier_print(self->modifier);
 	if (self->type == NULL) {
 		printf(" field NULL %s", self->name);
 	} else {

@@ -23,6 +23,8 @@ il_method * il_method_new(const char * name) {
 void il_method_dump(il_method * self, int depth) {
 	text_putindent(depth);
 	access_print(self->access);
+	printf(" ");
+	modifier_print(self->modifier);
 	printf(" method %s -> %s", self->name, self->return_type->name);
 	text_putline();
 	for (int i = 0; i < self->parameter_list->length; i++) {

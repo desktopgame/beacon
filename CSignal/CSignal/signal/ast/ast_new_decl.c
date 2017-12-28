@@ -75,6 +75,9 @@ ast * ast_new_access(access_level level) {
 }
 
 ast * ast_new_modifier(modifier_type type) {
+	if (type == (modifier_static | modifier_native)) {
+		return ast_new(ast_modifier_static_native);
+	}
 	switch (type) {
 //		case modifier_type_public:
 //			return ast_new(ast_modifier_public);
@@ -84,6 +87,8 @@ ast * ast_new_modifier(modifier_type type) {
 
 //		case modifier_type_protected:
 //			return ast_new(ast_modifier_protected);
+		case modifier_none:
+			return ast_new(ast_modifier_none);
 
 		case modifier_static:
 			return ast_new(ast_modifier_static);
@@ -115,15 +120,17 @@ ast * ast_new_member_decl_list(ast* member_list, ast* member) {
 	return ret;
 }
 
-ast * ast_new_field_decl(char * type_name, char * field_name) {
+ast * ast_new_field_decl(modifier_type modifier, char * type_name, char * field_name) {
 	ast* ret = ast_new(ast_field_decl);
+	ast_push(ret, ast_new_modifier(modifier));
 	ast_push(ret, ast_new_field_type_name(type_name));
 	ast_push(ret, ast_new_field_access_name(field_name));
 	return ret;
 }
 
-ast * ast_new_function_decl(char * func_name, ast * parameter_list, ast* body, char * return_type_name) {
+ast * ast_new_function_decl(modifier_type type, char * func_name, ast * parameter_list, ast* body, char * return_type_name) {
 	ast* ret = ast_new(ast_func_decl);
+	ast_push(ret, ast_new_modifier(type));
 	ast_push(ret, ast_new_function_name(func_name));
 	ast_push(ret, parameter_list);
 	ast_push(ret, body);
@@ -131,8 +138,8 @@ ast * ast_new_function_decl(char * func_name, ast * parameter_list, ast* body, c
 	return ret;
 }
 
-ast * ast_new_function_decl_empty_params(char * func_name, ast* body, char * return_type_name) {
-	return ast_new_function_decl(func_name, ast_new_blank(), body, return_type_name);
+ast * ast_new_function_decl_empty_params(modifier_type type, char * func_name, ast* body, char * return_type_name) {
+	return ast_new_function_decl(type, func_name, ast_new_blank(), body, return_type_name);
 }
 
 ast * ast_new_constructor_decl(ast * parameter_list, ast * constructor_chain, ast * body) {

@@ -100,30 +100,33 @@ ast* ast_new_member_decl_list(ast* member_list, ast* member);
 
 /**
  * フィールド宣言を表す要素を作成します.
+ * @param modifier
  * @param type_name
  * @param field_name
  * @return
  */
-ast* ast_new_field_decl(char* type_name, char* field_name);
+ast* ast_new_field_decl(modifier_type modifier, char* type_name, char* field_name);
 
 /**
  * 関数宣言を表す要素を作成します.
+ * @param modifier
  * @param func_name
  * @param parameter_list
  * @param body
  * @param return_type_name
  * @return
  */
-ast* ast_new_function_decl(char* func_name, ast* parameter_list, ast* body, char* return_type_name);
+ast* ast_new_function_decl(modifier_type type, char* func_name, ast* parameter_list, ast* body, char* return_type_name);
 
 /**
  * 関数宣言を表す要素を作成します.
+ * @param modifier
  * @param func_name
  * @param body
  * @param return_type_name
  * @return
  */
-ast* ast_new_function_decl_empty_params(char* func_name, ast* body, char* return_type_name);
+ast* ast_new_function_decl_empty_params(modifier_type type, char* func_name, ast* body, char* return_type_name);
 
 /**
  * コンストラクタ宣言を表す要素を作成します.

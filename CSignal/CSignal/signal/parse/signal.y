@@ -267,23 +267,35 @@ constructor_chain_optional
 	| constructor_chain
 	;
 func_define
-	: DEF IDENT LRB parameter_list RRB ARROW IDENT scope_optional
+	: modifier_type_T DEF IDENT LRB parameter_list RRB ARROW IDENT scope_optional
 	{
-		$$ = ast_new_function_decl($2, $4, $8, $7);
+		$$ = ast_new_function_decl($1, $3, $5, $9, $8);
 	}
-	| DEF IDENT LRB RRB ARROW IDENT scope_optional
+	| modifier_type_T DEF IDENT LRB RRB ARROW IDENT scope_optional
 	{
-		$$ = ast_new_function_decl_empty_params($2, $7, $6);
+		$$ = ast_new_function_decl_empty_params($1, $3, $8, $7);
 	}
 	;
 field_define
-	: IDENT IDENT SEMI
+	: modifier_type_T IDENT IDENT SEMI
 	{
-		$$ = ast_new_field_decl($1, $2);
+		$$ = ast_new_field_decl($1, $2, $3);
 	}
 	;
 modifier_type_T
-	: STATIC
+	: /* empty */
+	{
+		$$ = modifier_none;
+	}
+	| STATIC NATIVE
+	{
+		$$ = modifier_static_native();
+	}
+	| NATIVE STATIC
+	{
+		$$ = modifier_static_native();
+	}
+	| STATIC
 	{
 		$$ = modifier_static;
 	}

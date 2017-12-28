@@ -7,15 +7,15 @@ namespace L.Goo.Foo {
 		Int pointY;
 	
 		private:
-		def main() -> Void {
+		static def main() -> Void {
 
 		}
 
-		def main(Int a, Int b, String c) -> Void {
+		native def main(Int a, Int b, String c) -> Void {
 			
 		}
 
-		def print(String message, Int d) -> Void {
+		static native def print(String message, Int d) -> Void {
 			main();
 			main(10, 20, "aaa");
 			Foo a = Foo.newInstance();

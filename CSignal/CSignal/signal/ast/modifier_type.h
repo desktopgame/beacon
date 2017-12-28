@@ -5,10 +5,20 @@
  * アクセス修飾子を表す列挙型.
  */
 typedef enum modifier_type {
-	modifier_none,
-	modifier_static,
-	modifier_native
+	modifier_none	= (1 << 0),
+	modifier_static	= (1 << 1),
+	modifier_native	= (1 << 2)
 } modifier_type;
+//typedef int modifier_type;
+//const int modifier_none = (1 << 0);
+//const int modifier_static = (1 << 1);
+//const int modifier_native = (1 << 2);
+
+/**
+ * static | native を返します.
+ * @return
+ */
+modifier_type modifier_static_native();
 
 /**
  * 修飾子を出力します.

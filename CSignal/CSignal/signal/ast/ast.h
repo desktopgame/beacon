@@ -84,8 +84,10 @@ typedef enum ast_tag {
 	ast_access_member_list,
 	ast_access_member_tree,
 
+	ast_modifier_none,
 	ast_modifier_static,
 	ast_modifier_native,
+	ast_modifier_static_native,
 
 	ast_member_decl,
 	ast_member_decl_list,
