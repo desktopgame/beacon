@@ -184,12 +184,13 @@ typedef union YYSTYPE
 	ast* ast_value;
 	assign_operator_type assign_otype_value;
 	constructor_chain_type chain_type_value;
+	modifier_type modifier_type_value;
 	access_level access_level_value;
 
 
 
 /* Line 214 of yacc.c  */
-#line 193 "signal.tab.c"
+#line 194 "signal.tab.c"
 } YYSTYPE;
 # define YYSTYPE_IS_TRIVIAL 1
 # define yystype YYSTYPE /* obsolescent; will be withdrawn */
@@ -214,7 +215,7 @@ typedef struct YYLTYPE
 
 
 /* Line 264 of yacc.c  */
-#line 218 "signal.tab.c"
+#line 219 "signal.tab.c"
 
 #ifdef short
 # undef short
@@ -549,17 +550,17 @@ static const yytype_int8 yyrhs[] =
 /* YYRLINE[YYN] -- source line where rule number YYN was defined.  */
 static const yytype_uint16 yyrline[] =
 {
-       0,    86,    86,    87,    88,    94,    98,   102,   106,   112,
-     118,   124,   128,   134,   138,   145,   148,   154,   158,   164,
-     170,   177,   180,   187,   190,   194,   200,   201,   202,   205,
-     209,   215,   219,   225,   229,   236,   239,   242,   246,   252,
-     272,   276,   282,   286,   292,   295,   296,   302,   306,   310,
-     314,   318,   322,   328,   329,   333,   339,   340,   344,   350,
-     351,   355,   361,   362,   366,   370,   374,   380,   381,   385,
-     391,   392,   396,   400,   406,   407,   411,   417,   418,   422,
-     428,   429,   433,   437,   441,   447,   448,   449,   450,   451,
-     455,   459,   463,   469,   473,   479,   483,   484,   487,   493,
-     497,   501,   505,   511,   512,   518,   524,   528,   534,   538
+       0,    88,    88,    89,    90,    96,   100,   104,   108,   114,
+     120,   126,   130,   136,   140,   147,   150,   156,   160,   166,
+     172,   179,   182,   189,   192,   196,   202,   203,   204,   207,
+     211,   217,   221,   227,   231,   238,   241,   244,   248,   254,
+     284,   288,   294,   298,   304,   307,   308,   314,   318,   322,
+     326,   330,   334,   340,   341,   345,   351,   352,   356,   362,
+     363,   367,   373,   374,   378,   382,   386,   392,   393,   397,
+     403,   404,   408,   412,   418,   419,   423,   429,   430,   434,
+     440,   441,   445,   449,   453,   459,   460,   461,   462,   463,
+     467,   471,   475,   481,   485,   491,   495,   496,   499,   505,
+     509,   513,   517,   523,   524,   530,   536,   540,   546,   550
 };
 #endif
 
@@ -1645,7 +1646,7 @@ yyreduce:
         case 4:
 
 /* Line 1455 of yacc.c  */
-#line 89 "C:\\Users\\Koya\\Documents\\GitHub\\CSignal\\CSignal\\CSignal\\signal\\parse\\signal.y"
+#line 91 "C:\\Users\\Koya\\Documents\\GitHub\\CSignal\\CSignal\\CSignal\\signal\\parse\\signal.y"
     {
 		(yyval.ast_value) = ast_new_blank();
 	;}
@@ -1654,7 +1655,7 @@ yyreduce:
   case 5:
 
 /* Line 1455 of yacc.c  */
-#line 95 "C:\\Users\\Koya\\Documents\\GitHub\\CSignal\\CSignal\\CSignal\\signal\\parse\\signal.y"
+#line 97 "C:\\Users\\Koya\\Documents\\GitHub\\CSignal\\CSignal\\CSignal\\signal\\parse\\signal.y"
     {
 		ast_compile_entry((yyvsp[(1) - (1)].ast_value));
 	;}
@@ -1663,7 +1664,7 @@ yyreduce:
   case 6:
 
 /* Line 1455 of yacc.c  */
-#line 99 "C:\\Users\\Koya\\Documents\\GitHub\\CSignal\\CSignal\\CSignal\\signal\\parse\\signal.y"
+#line 101 "C:\\Users\\Koya\\Documents\\GitHub\\CSignal\\CSignal\\CSignal\\signal\\parse\\signal.y"
     {
 		ast_compile_entry((yyvsp[(1) - (1)].ast_value));
 	;}
@@ -1672,7 +1673,7 @@ yyreduce:
   case 7:
 
 /* Line 1455 of yacc.c  */
-#line 103 "C:\\Users\\Koya\\Documents\\GitHub\\CSignal\\CSignal\\CSignal\\signal\\parse\\signal.y"
+#line 105 "C:\\Users\\Koya\\Documents\\GitHub\\CSignal\\CSignal\\CSignal\\signal\\parse\\signal.y"
     {
 		ast_compile_entry((yyvsp[(1) - (1)].ast_value));
 	;}
@@ -1681,7 +1682,7 @@ yyreduce:
   case 8:
 
 /* Line 1455 of yacc.c  */
-#line 107 "C:\\Users\\Koya\\Documents\\GitHub\\CSignal\\CSignal\\CSignal\\signal\\parse\\signal.y"
+#line 109 "C:\\Users\\Koya\\Documents\\GitHub\\CSignal\\CSignal\\CSignal\\signal\\parse\\signal.y"
     {
 		ast_compile_entry((yyvsp[(1) - (1)].ast_value));
 	;}
@@ -1690,7 +1691,7 @@ yyreduce:
   case 9:
 
 /* Line 1455 of yacc.c  */
-#line 113 "C:\\Users\\Koya\\Documents\\GitHub\\CSignal\\CSignal\\CSignal\\signal\\parse\\signal.y"
+#line 115 "C:\\Users\\Koya\\Documents\\GitHub\\CSignal\\CSignal\\CSignal\\signal\\parse\\signal.y"
     {
 		(yyval.ast_value) = ast_new_namespace_decl((yyvsp[(2) - (3)].ast_value), (yyvsp[(3) - (3)].ast_value));
 	;}
@@ -1699,7 +1700,7 @@ yyreduce:
   case 10:
 
 /* Line 1455 of yacc.c  */
-#line 119 "C:\\Users\\Koya\\Documents\\GitHub\\CSignal\\CSignal\\CSignal\\signal\\parse\\signal.y"
+#line 121 "C:\\Users\\Koya\\Documents\\GitHub\\CSignal\\CSignal\\CSignal\\signal\\parse\\signal.y"
     {
 		(yyval.ast_value) = (yyvsp[(2) - (3)].ast_value)
 	;}
@@ -1708,7 +1709,7 @@ yyreduce:
   case 11:
 
 /* Line 1455 of yacc.c  */
-#line 125 "C:\\Users\\Koya\\Documents\\GitHub\\CSignal\\CSignal\\CSignal\\signal\\parse\\signal.y"
+#line 127 "C:\\Users\\Koya\\Documents\\GitHub\\CSignal\\CSignal\\CSignal\\signal\\parse\\signal.y"
     {
 		(yyval.ast_value) = ast_new_namespace_namespace_decl((yyvsp[(2) - (3)].ast_value), (yyvsp[(3) - (3)].ast_value));
 	;}
@@ -1717,7 +1718,7 @@ yyreduce:
   case 12:
 
 /* Line 1455 of yacc.c  */
-#line 129 "C:\\Users\\Koya\\Documents\\GitHub\\CSignal\\CSignal\\CSignal\\signal\\parse\\signal.y"
+#line 131 "C:\\Users\\Koya\\Documents\\GitHub\\CSignal\\CSignal\\CSignal\\signal\\parse\\signal.y"
     {
 		(yyval.ast_value) = (yyvsp[(1) - (1)].ast_value);
 	;}
@@ -1726,7 +1727,7 @@ yyreduce:
   case 13:
 
 /* Line 1455 of yacc.c  */
-#line 135 "C:\\Users\\Koya\\Documents\\GitHub\\CSignal\\CSignal\\CSignal\\signal\\parse\\signal.y"
+#line 137 "C:\\Users\\Koya\\Documents\\GitHub\\CSignal\\CSignal\\CSignal\\signal\\parse\\signal.y"
     {
 		(yyval.ast_value) = (yyvsp[(1) - (1)].ast_value)
 	;}
@@ -1735,7 +1736,7 @@ yyreduce:
   case 14:
 
 /* Line 1455 of yacc.c  */
-#line 139 "C:\\Users\\Koya\\Documents\\GitHub\\CSignal\\CSignal\\CSignal\\signal\\parse\\signal.y"
+#line 141 "C:\\Users\\Koya\\Documents\\GitHub\\CSignal\\CSignal\\CSignal\\signal\\parse\\signal.y"
     {
 		(yyval.ast_value) = ast_new_namespace_member_decl_list((yyvsp[(1) - (2)].ast_value), (yyvsp[(2) - (2)].ast_value));
 	;}
@@ -1744,7 +1745,7 @@ yyreduce:
   case 15:
 
 /* Line 1455 of yacc.c  */
-#line 145 "C:\\Users\\Koya\\Documents\\GitHub\\CSignal\\CSignal\\CSignal\\signal\\parse\\signal.y"
+#line 147 "C:\\Users\\Koya\\Documents\\GitHub\\CSignal\\CSignal\\CSignal\\signal\\parse\\signal.y"
     {
 		(yyval.ast_value) = ast_new_blank();
 	;}
@@ -1753,7 +1754,7 @@ yyreduce:
   case 16:
 
 /* Line 1455 of yacc.c  */
-#line 149 "C:\\Users\\Koya\\Documents\\GitHub\\CSignal\\CSignal\\CSignal\\signal\\parse\\signal.y"
+#line 151 "C:\\Users\\Koya\\Documents\\GitHub\\CSignal\\CSignal\\CSignal\\signal\\parse\\signal.y"
     {
 		(yyval.ast_value) = (yyvsp[(1) - (1)].ast_value)
 	;}
@@ -1762,7 +1763,7 @@ yyreduce:
   case 17:
 
 /* Line 1455 of yacc.c  */
-#line 155 "C:\\Users\\Koya\\Documents\\GitHub\\CSignal\\CSignal\\CSignal\\signal\\parse\\signal.y"
+#line 157 "C:\\Users\\Koya\\Documents\\GitHub\\CSignal\\CSignal\\CSignal\\signal\\parse\\signal.y"
     {
 		(yyval.ast_value) = ast_new_namespace_path((yyvsp[(1) - (1)].string_value));
 	;}
@@ -1771,7 +1772,7 @@ yyreduce:
   case 18:
 
 /* Line 1455 of yacc.c  */
-#line 159 "C:\\Users\\Koya\\Documents\\GitHub\\CSignal\\CSignal\\CSignal\\signal\\parse\\signal.y"
+#line 161 "C:\\Users\\Koya\\Documents\\GitHub\\CSignal\\CSignal\\CSignal\\signal\\parse\\signal.y"
     {
 		(yyval.ast_value) = ast_new_namespace_path_list((yyvsp[(1) - (3)].ast_value), (yyvsp[(3) - (3)].string_value));
 	;}
@@ -1780,7 +1781,7 @@ yyreduce:
   case 19:
 
 /* Line 1455 of yacc.c  */
-#line 165 "C:\\Users\\Koya\\Documents\\GitHub\\CSignal\\CSignal\\CSignal\\signal\\parse\\signal.y"
+#line 167 "C:\\Users\\Koya\\Documents\\GitHub\\CSignal\\CSignal\\CSignal\\signal\\parse\\signal.y"
     {
 		(yyval.ast_value) = ast_new_import_decl(ast_new_import_path((yyvsp[(2) - (2)].ast_value)));
 	;}
@@ -1789,7 +1790,7 @@ yyreduce:
   case 20:
 
 /* Line 1455 of yacc.c  */
-#line 171 "C:\\Users\\Koya\\Documents\\GitHub\\CSignal\\CSignal\\CSignal\\signal\\parse\\signal.y"
+#line 173 "C:\\Users\\Koya\\Documents\\GitHub\\CSignal\\CSignal\\CSignal\\signal\\parse\\signal.y"
     {
 		(yyval.ast_value) = ast_new_class_decl((yyvsp[(2) - (6)].string_value), (yyvsp[(3) - (6)].ast_value), (yyvsp[(5) - (6)].ast_value));
 	;}
@@ -1798,7 +1799,7 @@ yyreduce:
   case 21:
 
 /* Line 1455 of yacc.c  */
-#line 177 "C:\\Users\\Koya\\Documents\\GitHub\\CSignal\\CSignal\\CSignal\\signal\\parse\\signal.y"
+#line 179 "C:\\Users\\Koya\\Documents\\GitHub\\CSignal\\CSignal\\CSignal\\signal\\parse\\signal.y"
     {
 		(yyval.ast_value) = ast_new_blank();
 	;}
@@ -1807,7 +1808,7 @@ yyreduce:
   case 22:
 
 /* Line 1455 of yacc.c  */
-#line 181 "C:\\Users\\Koya\\Documents\\GitHub\\CSignal\\CSignal\\CSignal\\signal\\parse\\signal.y"
+#line 183 "C:\\Users\\Koya\\Documents\\GitHub\\CSignal\\CSignal\\CSignal\\signal\\parse\\signal.y"
     {
 		(yyval.ast_value) = ast_new_superclass((yyvsp[(2) - (2)].string_value));
 	;}
@@ -1816,7 +1817,7 @@ yyreduce:
   case 23:
 
 /* Line 1455 of yacc.c  */
-#line 187 "C:\\Users\\Koya\\Documents\\GitHub\\CSignal\\CSignal\\CSignal\\signal\\parse\\signal.y"
+#line 189 "C:\\Users\\Koya\\Documents\\GitHub\\CSignal\\CSignal\\CSignal\\signal\\parse\\signal.y"
     {
 		(yyval.ast_value) = ast_new_blank();
 	;}
@@ -1825,7 +1826,7 @@ yyreduce:
   case 24:
 
 /* Line 1455 of yacc.c  */
-#line 191 "C:\\Users\\Koya\\Documents\\GitHub\\CSignal\\CSignal\\CSignal\\signal\\parse\\signal.y"
+#line 193 "C:\\Users\\Koya\\Documents\\GitHub\\CSignal\\CSignal\\CSignal\\signal\\parse\\signal.y"
     {
 		(yyval.ast_value) = ast_new_member_decl((yyvsp[(1) - (1)].ast_value));
 	;}
@@ -1834,7 +1835,7 @@ yyreduce:
   case 25:
 
 /* Line 1455 of yacc.c  */
-#line 195 "C:\\Users\\Koya\\Documents\\GitHub\\CSignal\\CSignal\\CSignal\\signal\\parse\\signal.y"
+#line 197 "C:\\Users\\Koya\\Documents\\GitHub\\CSignal\\CSignal\\CSignal\\signal\\parse\\signal.y"
     {
 		(yyval.ast_value) = ast_new_member_decl_list((yyvsp[(1) - (2)].ast_value), ast_new_member_decl((yyvsp[(2) - (2)].ast_value)));
 	;}
@@ -1843,7 +1844,7 @@ yyreduce:
   case 29:
 
 /* Line 1455 of yacc.c  */
-#line 206 "C:\\Users\\Koya\\Documents\\GitHub\\CSignal\\CSignal\\CSignal\\signal\\parse\\signal.y"
+#line 208 "C:\\Users\\Koya\\Documents\\GitHub\\CSignal\\CSignal\\CSignal\\signal\\parse\\signal.y"
     {
 		(yyval.ast_value) = ast_new_constructor_decl((yyvsp[(4) - (7)].ast_value), (yyvsp[(6) - (7)].ast_value), (yyvsp[(7) - (7)].ast_value));
 	;}
@@ -1852,7 +1853,7 @@ yyreduce:
   case 30:
 
 /* Line 1455 of yacc.c  */
-#line 210 "C:\\Users\\Koya\\Documents\\GitHub\\CSignal\\CSignal\\CSignal\\signal\\parse\\signal.y"
+#line 212 "C:\\Users\\Koya\\Documents\\GitHub\\CSignal\\CSignal\\CSignal\\signal\\parse\\signal.y"
     {
 		(yyval.ast_value) = ast_new_constructor_decl(ast_new_blank(), (yyvsp[(5) - (6)].ast_value), (yyvsp[(6) - (6)].ast_value));
 	;}
@@ -1861,7 +1862,7 @@ yyreduce:
   case 31:
 
 /* Line 1455 of yacc.c  */
-#line 216 "C:\\Users\\Koya\\Documents\\GitHub\\CSignal\\CSignal\\CSignal\\signal\\parse\\signal.y"
+#line 218 "C:\\Users\\Koya\\Documents\\GitHub\\CSignal\\CSignal\\CSignal\\signal\\parse\\signal.y"
     {
 		(yyval.ast_value) = ast_new_constructor_chain((yyvsp[(2) - (5)].chain_type_value), (yyvsp[(4) - (5)].ast_value));
 	;}
@@ -1870,7 +1871,7 @@ yyreduce:
   case 32:
 
 /* Line 1455 of yacc.c  */
-#line 220 "C:\\Users\\Koya\\Documents\\GitHub\\CSignal\\CSignal\\CSignal\\signal\\parse\\signal.y"
+#line 222 "C:\\Users\\Koya\\Documents\\GitHub\\CSignal\\CSignal\\CSignal\\signal\\parse\\signal.y"
     {
 		(yyval.ast_value) = ast_new_constructor_chain((yyvsp[(2) - (4)].chain_type_value), ast_new_blank());
 	;}
@@ -1879,7 +1880,7 @@ yyreduce:
   case 33:
 
 /* Line 1455 of yacc.c  */
-#line 226 "C:\\Users\\Koya\\Documents\\GitHub\\CSignal\\CSignal\\CSignal\\signal\\parse\\signal.y"
+#line 228 "C:\\Users\\Koya\\Documents\\GitHub\\CSignal\\CSignal\\CSignal\\signal\\parse\\signal.y"
     {
 		(yyval.chain_type_value) = chain_type_super;
 	;}
@@ -1888,7 +1889,7 @@ yyreduce:
   case 34:
 
 /* Line 1455 of yacc.c  */
-#line 230 "C:\\Users\\Koya\\Documents\\GitHub\\CSignal\\CSignal\\CSignal\\signal\\parse\\signal.y"
+#line 232 "C:\\Users\\Koya\\Documents\\GitHub\\CSignal\\CSignal\\CSignal\\signal\\parse\\signal.y"
     {
 		(yyval.chain_type_value) = chain_type_this;
 	;}
@@ -1897,7 +1898,7 @@ yyreduce:
   case 35:
 
 /* Line 1455 of yacc.c  */
-#line 236 "C:\\Users\\Koya\\Documents\\GitHub\\CSignal\\CSignal\\CSignal\\signal\\parse\\signal.y"
+#line 238 "C:\\Users\\Koya\\Documents\\GitHub\\CSignal\\CSignal\\CSignal\\signal\\parse\\signal.y"
     {
 		(yyval.ast_value) = ast_new_blank();
 	;}
@@ -1906,7 +1907,7 @@ yyreduce:
   case 37:
 
 /* Line 1455 of yacc.c  */
-#line 243 "C:\\Users\\Koya\\Documents\\GitHub\\CSignal\\CSignal\\CSignal\\signal\\parse\\signal.y"
+#line 245 "C:\\Users\\Koya\\Documents\\GitHub\\CSignal\\CSignal\\CSignal\\signal\\parse\\signal.y"
     {
 		(yyval.ast_value) = ast_new_function_decl((yyvsp[(2) - (8)].string_value), (yyvsp[(4) - (8)].ast_value), (yyvsp[(8) - (8)].ast_value), (yyvsp[(7) - (8)].string_value));
 	;}
@@ -1915,7 +1916,7 @@ yyreduce:
   case 38:
 
 /* Line 1455 of yacc.c  */
-#line 247 "C:\\Users\\Koya\\Documents\\GitHub\\CSignal\\CSignal\\CSignal\\signal\\parse\\signal.y"
+#line 249 "C:\\Users\\Koya\\Documents\\GitHub\\CSignal\\CSignal\\CSignal\\signal\\parse\\signal.y"
     {
 		(yyval.ast_value) = ast_new_function_decl_empty_params((yyvsp[(2) - (7)].string_value), (yyvsp[(7) - (7)].ast_value), (yyvsp[(6) - (7)].string_value));
 	;}
@@ -1924,7 +1925,7 @@ yyreduce:
   case 39:
 
 /* Line 1455 of yacc.c  */
-#line 253 "C:\\Users\\Koya\\Documents\\GitHub\\CSignal\\CSignal\\CSignal\\signal\\parse\\signal.y"
+#line 255 "C:\\Users\\Koya\\Documents\\GitHub\\CSignal\\CSignal\\CSignal\\signal\\parse\\signal.y"
     {
 		(yyval.ast_value) = ast_new_field_decl((yyvsp[(1) - (3)].string_value), (yyvsp[(2) - (3)].string_value));
 	;}
@@ -1933,7 +1934,7 @@ yyreduce:
   case 40:
 
 /* Line 1455 of yacc.c  */
-#line 273 "C:\\Users\\Koya\\Documents\\GitHub\\CSignal\\CSignal\\CSignal\\signal\\parse\\signal.y"
+#line 285 "C:\\Users\\Koya\\Documents\\GitHub\\CSignal\\CSignal\\CSignal\\signal\\parse\\signal.y"
     {
 		(yyval.ast_value) = ast_new_parameter((yyvsp[(1) - (2)].string_value), (yyvsp[(2) - (2)].string_value));
 	;}
@@ -1942,7 +1943,7 @@ yyreduce:
   case 41:
 
 /* Line 1455 of yacc.c  */
-#line 277 "C:\\Users\\Koya\\Documents\\GitHub\\CSignal\\CSignal\\CSignal\\signal\\parse\\signal.y"
+#line 289 "C:\\Users\\Koya\\Documents\\GitHub\\CSignal\\CSignal\\CSignal\\signal\\parse\\signal.y"
     {
 		(yyval.ast_value) = ast_new_parameter_list((yyvsp[(1) - (4)].string_value), (yyvsp[(2) - (4)].string_value), (yyvsp[(4) - (4)].ast_value))
 	;}
@@ -1951,7 +1952,7 @@ yyreduce:
   case 42:
 
 /* Line 1455 of yacc.c  */
-#line 283 "C:\\Users\\Koya\\Documents\\GitHub\\CSignal\\CSignal\\CSignal\\signal\\parse\\signal.y"
+#line 295 "C:\\Users\\Koya\\Documents\\GitHub\\CSignal\\CSignal\\CSignal\\signal\\parse\\signal.y"
     {
 		(yyval.ast_value) = ast_new_argument((yyvsp[(1) - (1)].ast_value));
 	;}
@@ -1960,7 +1961,7 @@ yyreduce:
   case 43:
 
 /* Line 1455 of yacc.c  */
-#line 287 "C:\\Users\\Koya\\Documents\\GitHub\\CSignal\\CSignal\\CSignal\\signal\\parse\\signal.y"
+#line 299 "C:\\Users\\Koya\\Documents\\GitHub\\CSignal\\CSignal\\CSignal\\signal\\parse\\signal.y"
     {
 		(yyval.ast_value) = ast_new_argument_list(ast_new_argument((yyvsp[(1) - (3)].ast_value)), (yyvsp[(3) - (3)].ast_value));
 	;}
@@ -1969,7 +1970,7 @@ yyreduce:
   case 46:
 
 /* Line 1455 of yacc.c  */
-#line 297 "C:\\Users\\Koya\\Documents\\GitHub\\CSignal\\CSignal\\CSignal\\signal\\parse\\signal.y"
+#line 309 "C:\\Users\\Koya\\Documents\\GitHub\\CSignal\\CSignal\\CSignal\\signal\\parse\\signal.y"
     {
 		(yyval.ast_value) = ast_new_generic_assign((yyvsp[(1) - (3)].ast_value), (yyvsp[(2) - (3)].assign_otype_value), (yyvsp[(3) - (3)].ast_value));
 	;}
@@ -1978,7 +1979,7 @@ yyreduce:
   case 47:
 
 /* Line 1455 of yacc.c  */
-#line 303 "C:\\Users\\Koya\\Documents\\GitHub\\CSignal\\CSignal\\CSignal\\signal\\parse\\signal.y"
+#line 315 "C:\\Users\\Koya\\Documents\\GitHub\\CSignal\\CSignal\\CSignal\\signal\\parse\\signal.y"
     {
 		(yyval.assign_otype_value) = assign_otype_def;
 	;}
@@ -1987,7 +1988,7 @@ yyreduce:
   case 48:
 
 /* Line 1455 of yacc.c  */
-#line 307 "C:\\Users\\Koya\\Documents\\GitHub\\CSignal\\CSignal\\CSignal\\signal\\parse\\signal.y"
+#line 319 "C:\\Users\\Koya\\Documents\\GitHub\\CSignal\\CSignal\\CSignal\\signal\\parse\\signal.y"
     {
 		(yyval.assign_otype_value) = assign_otype_add;
 	;}
@@ -1996,7 +1997,7 @@ yyreduce:
   case 49:
 
 /* Line 1455 of yacc.c  */
-#line 311 "C:\\Users\\Koya\\Documents\\GitHub\\CSignal\\CSignal\\CSignal\\signal\\parse\\signal.y"
+#line 323 "C:\\Users\\Koya\\Documents\\GitHub\\CSignal\\CSignal\\CSignal\\signal\\parse\\signal.y"
     {
 		(yyval.assign_otype_value) = assign_otype_sub;
 	;}
@@ -2005,7 +2006,7 @@ yyreduce:
   case 50:
 
 /* Line 1455 of yacc.c  */
-#line 315 "C:\\Users\\Koya\\Documents\\GitHub\\CSignal\\CSignal\\CSignal\\signal\\parse\\signal.y"
+#line 327 "C:\\Users\\Koya\\Documents\\GitHub\\CSignal\\CSignal\\CSignal\\signal\\parse\\signal.y"
     {
 		(yyval.assign_otype_value) = assign_otype_mul;
 	;}
@@ -2014,7 +2015,7 @@ yyreduce:
   case 51:
 
 /* Line 1455 of yacc.c  */
-#line 319 "C:\\Users\\Koya\\Documents\\GitHub\\CSignal\\CSignal\\CSignal\\signal\\parse\\signal.y"
+#line 331 "C:\\Users\\Koya\\Documents\\GitHub\\CSignal\\CSignal\\CSignal\\signal\\parse\\signal.y"
     {
 		(yyval.assign_otype_value) = assign_otype_div;
 	;}
@@ -2023,7 +2024,7 @@ yyreduce:
   case 52:
 
 /* Line 1455 of yacc.c  */
-#line 323 "C:\\Users\\Koya\\Documents\\GitHub\\CSignal\\CSignal\\CSignal\\signal\\parse\\signal.y"
+#line 335 "C:\\Users\\Koya\\Documents\\GitHub\\CSignal\\CSignal\\CSignal\\signal\\parse\\signal.y"
     {
 		(yyval.assign_otype_value) = assign_otype_mod;
 	;}
@@ -2032,7 +2033,7 @@ yyreduce:
   case 54:
 
 /* Line 1455 of yacc.c  */
-#line 330 "C:\\Users\\Koya\\Documents\\GitHub\\CSignal\\CSignal\\CSignal\\signal\\parse\\signal.y"
+#line 342 "C:\\Users\\Koya\\Documents\\GitHub\\CSignal\\CSignal\\CSignal\\signal\\parse\\signal.y"
     {
 		(yyval.ast_value) = ast_new_bit_or((yyvsp[(1) - (3)].ast_value), (yyvsp[(3) - (3)].ast_value));
 	;}
@@ -2041,7 +2042,7 @@ yyreduce:
   case 55:
 
 /* Line 1455 of yacc.c  */
-#line 334 "C:\\Users\\Koya\\Documents\\GitHub\\CSignal\\CSignal\\CSignal\\signal\\parse\\signal.y"
+#line 346 "C:\\Users\\Koya\\Documents\\GitHub\\CSignal\\CSignal\\CSignal\\signal\\parse\\signal.y"
     {
 		(yyval.ast_value) = ast_new_logic_or((yyvsp[(1) - (3)].ast_value), (yyvsp[(3) - (3)].ast_value));
 	;}
@@ -2050,7 +2051,7 @@ yyreduce:
   case 57:
 
 /* Line 1455 of yacc.c  */
-#line 341 "C:\\Users\\Koya\\Documents\\GitHub\\CSignal\\CSignal\\CSignal\\signal\\parse\\signal.y"
+#line 353 "C:\\Users\\Koya\\Documents\\GitHub\\CSignal\\CSignal\\CSignal\\signal\\parse\\signal.y"
     {
 		(yyval.ast_value) = ast_new_bit_and((yyvsp[(1) - (3)].ast_value), (yyvsp[(3) - (3)].ast_value));
 	;}
@@ -2059,7 +2060,7 @@ yyreduce:
   case 58:
 
 /* Line 1455 of yacc.c  */
-#line 345 "C:\\Users\\Koya\\Documents\\GitHub\\CSignal\\CSignal\\CSignal\\signal\\parse\\signal.y"
+#line 357 "C:\\Users\\Koya\\Documents\\GitHub\\CSignal\\CSignal\\CSignal\\signal\\parse\\signal.y"
     {
 		(yyval.ast_value) = ast_new_logic_and((yyvsp[(1) - (3)].ast_value), (yyvsp[(3) - (3)].ast_value));
 	;}
@@ -2068,7 +2069,7 @@ yyreduce:
   case 60:
 
 /* Line 1455 of yacc.c  */
-#line 352 "C:\\Users\\Koya\\Documents\\GitHub\\CSignal\\CSignal\\CSignal\\signal\\parse\\signal.y"
+#line 364 "C:\\Users\\Koya\\Documents\\GitHub\\CSignal\\CSignal\\CSignal\\signal\\parse\\signal.y"
     {
 		(yyval.ast_value) = ast_new_equal((yyvsp[(1) - (3)].ast_value), (yyvsp[(3) - (3)].ast_value));
 	;}
@@ -2077,7 +2078,7 @@ yyreduce:
   case 61:
 
 /* Line 1455 of yacc.c  */
-#line 356 "C:\\Users\\Koya\\Documents\\GitHub\\CSignal\\CSignal\\CSignal\\signal\\parse\\signal.y"
+#line 368 "C:\\Users\\Koya\\Documents\\GitHub\\CSignal\\CSignal\\CSignal\\signal\\parse\\signal.y"
     {
 		(yyval.ast_value) = ast_new_notequal((yyvsp[(1) - (3)].ast_value), (yyvsp[(3) - (3)].ast_value));
 	;}
@@ -2086,7 +2087,7 @@ yyreduce:
   case 63:
 
 /* Line 1455 of yacc.c  */
-#line 363 "C:\\Users\\Koya\\Documents\\GitHub\\CSignal\\CSignal\\CSignal\\signal\\parse\\signal.y"
+#line 375 "C:\\Users\\Koya\\Documents\\GitHub\\CSignal\\CSignal\\CSignal\\signal\\parse\\signal.y"
     {
 		(yyval.ast_value) = ast_new_gt((yyvsp[(1) - (3)].ast_value), (yyvsp[(3) - (3)].ast_value));
 	;}
@@ -2095,7 +2096,7 @@ yyreduce:
   case 64:
 
 /* Line 1455 of yacc.c  */
-#line 367 "C:\\Users\\Koya\\Documents\\GitHub\\CSignal\\CSignal\\CSignal\\signal\\parse\\signal.y"
+#line 379 "C:\\Users\\Koya\\Documents\\GitHub\\CSignal\\CSignal\\CSignal\\signal\\parse\\signal.y"
     {
 		(yyval.ast_value) = ast_new_ge((yyvsp[(1) - (3)].ast_value), (yyvsp[(3) - (3)].ast_value));
 	;}
@@ -2104,7 +2105,7 @@ yyreduce:
   case 65:
 
 /* Line 1455 of yacc.c  */
-#line 371 "C:\\Users\\Koya\\Documents\\GitHub\\CSignal\\CSignal\\CSignal\\signal\\parse\\signal.y"
+#line 383 "C:\\Users\\Koya\\Documents\\GitHub\\CSignal\\CSignal\\CSignal\\signal\\parse\\signal.y"
     {
 		(yyval.ast_value) = ast_new_lt((yyvsp[(1) - (3)].ast_value), (yyvsp[(3) - (3)].ast_value));
 	;}
@@ -2113,7 +2114,7 @@ yyreduce:
   case 66:
 
 /* Line 1455 of yacc.c  */
-#line 375 "C:\\Users\\Koya\\Documents\\GitHub\\CSignal\\CSignal\\CSignal\\signal\\parse\\signal.y"
+#line 387 "C:\\Users\\Koya\\Documents\\GitHub\\CSignal\\CSignal\\CSignal\\signal\\parse\\signal.y"
     {
 		(yyval.ast_value) = ast_new_le((yyvsp[(1) - (3)].ast_value), (yyvsp[(3) - (3)].ast_value));
 	;}
@@ -2122,7 +2123,7 @@ yyreduce:
   case 68:
 
 /* Line 1455 of yacc.c  */
-#line 382 "C:\\Users\\Koya\\Documents\\GitHub\\CSignal\\CSignal\\CSignal\\signal\\parse\\signal.y"
+#line 394 "C:\\Users\\Koya\\Documents\\GitHub\\CSignal\\CSignal\\CSignal\\signal\\parse\\signal.y"
     {
 		(yyval.ast_value) = ast_new_add((yyvsp[(1) - (3)].ast_value), (yyvsp[(3) - (3)].ast_value));
 	;}
@@ -2131,7 +2132,7 @@ yyreduce:
   case 69:
 
 /* Line 1455 of yacc.c  */
-#line 386 "C:\\Users\\Koya\\Documents\\GitHub\\CSignal\\CSignal\\CSignal\\signal\\parse\\signal.y"
+#line 398 "C:\\Users\\Koya\\Documents\\GitHub\\CSignal\\CSignal\\CSignal\\signal\\parse\\signal.y"
     {
 		(yyval.ast_value) = ast_new_sub((yyvsp[(1) - (3)].ast_value), (yyvsp[(3) - (3)].ast_value));
 	;}
@@ -2140,7 +2141,7 @@ yyreduce:
   case 71:
 
 /* Line 1455 of yacc.c  */
-#line 393 "C:\\Users\\Koya\\Documents\\GitHub\\CSignal\\CSignal\\CSignal\\signal\\parse\\signal.y"
+#line 405 "C:\\Users\\Koya\\Documents\\GitHub\\CSignal\\CSignal\\CSignal\\signal\\parse\\signal.y"
     {
 		(yyval.ast_value) = ast_new_mul((yyvsp[(1) - (3)].ast_value), (yyvsp[(3) - (3)].ast_value));
 	;}
@@ -2149,7 +2150,7 @@ yyreduce:
   case 72:
 
 /* Line 1455 of yacc.c  */
-#line 397 "C:\\Users\\Koya\\Documents\\GitHub\\CSignal\\CSignal\\CSignal\\signal\\parse\\signal.y"
+#line 409 "C:\\Users\\Koya\\Documents\\GitHub\\CSignal\\CSignal\\CSignal\\signal\\parse\\signal.y"
     {
 		(yyval.ast_value) = ast_new_div((yyvsp[(1) - (3)].ast_value), (yyvsp[(3) - (3)].ast_value));
 	;}
@@ -2158,7 +2159,7 @@ yyreduce:
   case 73:
 
 /* Line 1455 of yacc.c  */
-#line 401 "C:\\Users\\Koya\\Documents\\GitHub\\CSignal\\CSignal\\CSignal\\signal\\parse\\signal.y"
+#line 413 "C:\\Users\\Koya\\Documents\\GitHub\\CSignal\\CSignal\\CSignal\\signal\\parse\\signal.y"
     {
 		(yyval.ast_value) = ast_new_mod((yyvsp[(1) - (3)].ast_value), (yyvsp[(3) - (3)].ast_value));
 	;}
@@ -2167,7 +2168,7 @@ yyreduce:
   case 75:
 
 /* Line 1455 of yacc.c  */
-#line 408 "C:\\Users\\Koya\\Documents\\GitHub\\CSignal\\CSignal\\CSignal\\signal\\parse\\signal.y"
+#line 420 "C:\\Users\\Koya\\Documents\\GitHub\\CSignal\\CSignal\\CSignal\\signal\\parse\\signal.y"
     {
 		(yyval.ast_value) = ast_new_not((yyvsp[(2) - (2)].ast_value));
 	;}
@@ -2176,7 +2177,7 @@ yyreduce:
   case 76:
 
 /* Line 1455 of yacc.c  */
-#line 412 "C:\\Users\\Koya\\Documents\\GitHub\\CSignal\\CSignal\\CSignal\\signal\\parse\\signal.y"
+#line 424 "C:\\Users\\Koya\\Documents\\GitHub\\CSignal\\CSignal\\CSignal\\signal\\parse\\signal.y"
     {
 		(yyval.ast_value) = ast_new_neg((yyvsp[(2) - (2)].ast_value));
 	;}
@@ -2185,7 +2186,7 @@ yyreduce:
   case 78:
 
 /* Line 1455 of yacc.c  */
-#line 419 "C:\\Users\\Koya\\Documents\\GitHub\\CSignal\\CSignal\\CSignal\\signal\\parse\\signal.y"
+#line 431 "C:\\Users\\Koya\\Documents\\GitHub\\CSignal\\CSignal\\CSignal\\signal\\parse\\signal.y"
     {
 		(yyval.ast_value) = ast_new_pre_inc((yyvsp[(2) - (2)].ast_value));
 	;}
@@ -2194,7 +2195,7 @@ yyreduce:
   case 79:
 
 /* Line 1455 of yacc.c  */
-#line 423 "C:\\Users\\Koya\\Documents\\GitHub\\CSignal\\CSignal\\CSignal\\signal\\parse\\signal.y"
+#line 435 "C:\\Users\\Koya\\Documents\\GitHub\\CSignal\\CSignal\\CSignal\\signal\\parse\\signal.y"
     {
 		(yyval.ast_value) = ast_new_pre_dec((yyvsp[(2) - (2)].ast_value));
 	;}
@@ -2203,7 +2204,7 @@ yyreduce:
   case 81:
 
 /* Line 1455 of yacc.c  */
-#line 430 "C:\\Users\\Koya\\Documents\\GitHub\\CSignal\\CSignal\\CSignal\\signal\\parse\\signal.y"
+#line 442 "C:\\Users\\Koya\\Documents\\GitHub\\CSignal\\CSignal\\CSignal\\signal\\parse\\signal.y"
     {
 		(yyval.ast_value) = ast_new_invoke((yyvsp[(1) - (5)].ast_value), (yyvsp[(3) - (5)].string_value), ast_new_blank());
 	;}
@@ -2212,7 +2213,7 @@ yyreduce:
   case 82:
 
 /* Line 1455 of yacc.c  */
-#line 434 "C:\\Users\\Koya\\Documents\\GitHub\\CSignal\\CSignal\\CSignal\\signal\\parse\\signal.y"
+#line 446 "C:\\Users\\Koya\\Documents\\GitHub\\CSignal\\CSignal\\CSignal\\signal\\parse\\signal.y"
     {
 		(yyval.ast_value) = ast_new_invoke((yyvsp[(1) - (6)].ast_value), (yyvsp[(3) - (6)].string_value), (yyvsp[(5) - (6)].ast_value));
 	;}
@@ -2221,7 +2222,7 @@ yyreduce:
   case 83:
 
 /* Line 1455 of yacc.c  */
-#line 438 "C:\\Users\\Koya\\Documents\\GitHub\\CSignal\\CSignal\\CSignal\\signal\\parse\\signal.y"
+#line 450 "C:\\Users\\Koya\\Documents\\GitHub\\CSignal\\CSignal\\CSignal\\signal\\parse\\signal.y"
     {
 		(yyval.ast_value) = ast_new_post_inc((yyvsp[(1) - (2)].ast_value));
 	;}
@@ -2230,7 +2231,7 @@ yyreduce:
   case 84:
 
 /* Line 1455 of yacc.c  */
-#line 442 "C:\\Users\\Koya\\Documents\\GitHub\\CSignal\\CSignal\\CSignal\\signal\\parse\\signal.y"
+#line 454 "C:\\Users\\Koya\\Documents\\GitHub\\CSignal\\CSignal\\CSignal\\signal\\parse\\signal.y"
     {
 		(yyval.ast_value) = ast_new_post_dec((yyvsp[(1) - (2)].ast_value));
 	;}
@@ -2239,7 +2240,7 @@ yyreduce:
   case 89:
 
 /* Line 1455 of yacc.c  */
-#line 452 "C:\\Users\\Koya\\Documents\\GitHub\\CSignal\\CSignal\\CSignal\\signal\\parse\\signal.y"
+#line 464 "C:\\Users\\Koya\\Documents\\GitHub\\CSignal\\CSignal\\CSignal\\signal\\parse\\signal.y"
     {
 		(yyval.ast_value) = ast_new_variable((yyvsp[(1) - (1)].string_value));
 	;}
@@ -2248,7 +2249,7 @@ yyreduce:
   case 90:
 
 /* Line 1455 of yacc.c  */
-#line 456 "C:\\Users\\Koya\\Documents\\GitHub\\CSignal\\CSignal\\CSignal\\signal\\parse\\signal.y"
+#line 468 "C:\\Users\\Koya\\Documents\\GitHub\\CSignal\\CSignal\\CSignal\\signal\\parse\\signal.y"
     {
 		(yyval.ast_value) = ast_new_call((yyvsp[(1) - (3)].string_value), ast_new_blank());
 	;}
@@ -2257,7 +2258,7 @@ yyreduce:
   case 91:
 
 /* Line 1455 of yacc.c  */
-#line 460 "C:\\Users\\Koya\\Documents\\GitHub\\CSignal\\CSignal\\CSignal\\signal\\parse\\signal.y"
+#line 472 "C:\\Users\\Koya\\Documents\\GitHub\\CSignal\\CSignal\\CSignal\\signal\\parse\\signal.y"
     {
 		(yyval.ast_value) = ast_new_call((yyvsp[(1) - (4)].string_value), (yyvsp[(3) - (4)].ast_value));
 	;}
@@ -2266,7 +2267,7 @@ yyreduce:
   case 92:
 
 /* Line 1455 of yacc.c  */
-#line 464 "C:\\Users\\Koya\\Documents\\GitHub\\CSignal\\CSignal\\CSignal\\signal\\parse\\signal.y"
+#line 476 "C:\\Users\\Koya\\Documents\\GitHub\\CSignal\\CSignal\\CSignal\\signal\\parse\\signal.y"
     {
 		(yyval.ast_value) = (yyvsp[(2) - (3)].ast_value);
 	;}
@@ -2275,7 +2276,7 @@ yyreduce:
   case 93:
 
 /* Line 1455 of yacc.c  */
-#line 470 "C:\\Users\\Koya\\Documents\\GitHub\\CSignal\\CSignal\\CSignal\\signal\\parse\\signal.y"
+#line 482 "C:\\Users\\Koya\\Documents\\GitHub\\CSignal\\CSignal\\CSignal\\signal\\parse\\signal.y"
     {
 		(yyval.ast_value) = ast_new_stmt((yyvsp[(1) - (1)].ast_value));
 	;}
@@ -2284,7 +2285,7 @@ yyreduce:
   case 94:
 
 /* Line 1455 of yacc.c  */
-#line 474 "C:\\Users\\Koya\\Documents\\GitHub\\CSignal\\CSignal\\CSignal\\signal\\parse\\signal.y"
+#line 486 "C:\\Users\\Koya\\Documents\\GitHub\\CSignal\\CSignal\\CSignal\\signal\\parse\\signal.y"
     {
 		(yyval.ast_value) = ast_new_stmt_list((yyvsp[(1) - (2)].ast_value), (yyvsp[(2) - (2)].ast_value));
 	;}
@@ -2293,7 +2294,7 @@ yyreduce:
   case 95:
 
 /* Line 1455 of yacc.c  */
-#line 480 "C:\\Users\\Koya\\Documents\\GitHub\\CSignal\\CSignal\\CSignal\\signal\\parse\\signal.y"
+#line 492 "C:\\Users\\Koya\\Documents\\GitHub\\CSignal\\CSignal\\CSignal\\signal\\parse\\signal.y"
     {
 		(yyval.ast_value) = ast_new_proc((yyvsp[(1) - (2)].ast_value));
 	;}
@@ -2302,7 +2303,7 @@ yyreduce:
   case 98:
 
 /* Line 1455 of yacc.c  */
-#line 488 "C:\\Users\\Koya\\Documents\\GitHub\\CSignal\\CSignal\\CSignal\\signal\\parse\\signal.y"
+#line 500 "C:\\Users\\Koya\\Documents\\GitHub\\CSignal\\CSignal\\CSignal\\signal\\parse\\signal.y"
     {
 		(yyval.ast_value) = ast_new_variable_decl(ast_new_typename((yyvsp[(1) - (5)].string_value)), ast_new_identifier((yyvsp[(2) - (5)].string_value)), (yyvsp[(4) - (5)].ast_value));
 	;}
@@ -2311,7 +2312,7 @@ yyreduce:
   case 99:
 
 /* Line 1455 of yacc.c  */
-#line 494 "C:\\Users\\Koya\\Documents\\GitHub\\CSignal\\CSignal\\CSignal\\signal\\parse\\signal.y"
+#line 506 "C:\\Users\\Koya\\Documents\\GitHub\\CSignal\\CSignal\\CSignal\\signal\\parse\\signal.y"
     {
 		(yyval.ast_value) = ast_new_if((yyvsp[(3) - (5)].ast_value), (yyvsp[(5) - (5)].ast_value));
 	;}
@@ -2320,7 +2321,7 @@ yyreduce:
   case 100:
 
 /* Line 1455 of yacc.c  */
-#line 498 "C:\\Users\\Koya\\Documents\\GitHub\\CSignal\\CSignal\\CSignal\\signal\\parse\\signal.y"
+#line 510 "C:\\Users\\Koya\\Documents\\GitHub\\CSignal\\CSignal\\CSignal\\signal\\parse\\signal.y"
     {
 		(yyval.ast_value) = ast_new_if_else((yyvsp[(3) - (7)].ast_value), (yyvsp[(5) - (7)].ast_value), (yyvsp[(7) - (7)].ast_value));
 	;}
@@ -2329,7 +2330,7 @@ yyreduce:
   case 101:
 
 /* Line 1455 of yacc.c  */
-#line 502 "C:\\Users\\Koya\\Documents\\GitHub\\CSignal\\CSignal\\CSignal\\signal\\parse\\signal.y"
+#line 514 "C:\\Users\\Koya\\Documents\\GitHub\\CSignal\\CSignal\\CSignal\\signal\\parse\\signal.y"
     {
 		(yyval.ast_value) = ast_new_if_elif_list((yyvsp[(3) - (6)].ast_value), (yyvsp[(5) - (6)].ast_value), (yyvsp[(6) - (6)].ast_value));
 	;}
@@ -2338,7 +2339,7 @@ yyreduce:
   case 102:
 
 /* Line 1455 of yacc.c  */
-#line 506 "C:\\Users\\Koya\\Documents\\GitHub\\CSignal\\CSignal\\CSignal\\signal\\parse\\signal.y"
+#line 518 "C:\\Users\\Koya\\Documents\\GitHub\\CSignal\\CSignal\\CSignal\\signal\\parse\\signal.y"
     {
 		(yyval.ast_value) = ast_new_if_elif_list_else((yyvsp[(3) - (8)].ast_value), (yyvsp[(5) - (8)].ast_value), (yyvsp[(6) - (8)].ast_value), (yyvsp[(8) - (8)].ast_value));
 	;}
@@ -2347,7 +2348,7 @@ yyreduce:
   case 104:
 
 /* Line 1455 of yacc.c  */
-#line 513 "C:\\Users\\Koya\\Documents\\GitHub\\CSignal\\CSignal\\CSignal\\signal\\parse\\signal.y"
+#line 525 "C:\\Users\\Koya\\Documents\\GitHub\\CSignal\\CSignal\\CSignal\\signal\\parse\\signal.y"
     {
 		(yyval.ast_value) = ast_new_elif_list((yyvsp[(1) - (2)].ast_value), (yyvsp[(2) - (2)].ast_value));
 	;}
@@ -2356,7 +2357,7 @@ yyreduce:
   case 105:
 
 /* Line 1455 of yacc.c  */
-#line 519 "C:\\Users\\Koya\\Documents\\GitHub\\CSignal\\CSignal\\CSignal\\signal\\parse\\signal.y"
+#line 531 "C:\\Users\\Koya\\Documents\\GitHub\\CSignal\\CSignal\\CSignal\\signal\\parse\\signal.y"
     {
 		(yyval.ast_value) = ast_new_elif((yyvsp[(3) - (5)].ast_value), (yyvsp[(5) - (5)].ast_value));
 	;}
@@ -2365,7 +2366,7 @@ yyreduce:
   case 106:
 
 /* Line 1455 of yacc.c  */
-#line 525 "C:\\Users\\Koya\\Documents\\GitHub\\CSignal\\CSignal\\CSignal\\signal\\parse\\signal.y"
+#line 537 "C:\\Users\\Koya\\Documents\\GitHub\\CSignal\\CSignal\\CSignal\\signal\\parse\\signal.y"
     {
 		(yyval.ast_value) = ast_new_scope((yyvsp[(2) - (3)].ast_value));
 	;}
@@ -2374,7 +2375,7 @@ yyreduce:
   case 107:
 
 /* Line 1455 of yacc.c  */
-#line 529 "C:\\Users\\Koya\\Documents\\GitHub\\CSignal\\CSignal\\CSignal\\signal\\parse\\signal.y"
+#line 541 "C:\\Users\\Koya\\Documents\\GitHub\\CSignal\\CSignal\\CSignal\\signal\\parse\\signal.y"
     {
 		(yyval.ast_value) = ast_new_scope_empty();
 	;}
@@ -2383,7 +2384,7 @@ yyreduce:
   case 108:
 
 /* Line 1455 of yacc.c  */
-#line 535 "C:\\Users\\Koya\\Documents\\GitHub\\CSignal\\CSignal\\CSignal\\signal\\parse\\signal.y"
+#line 547 "C:\\Users\\Koya\\Documents\\GitHub\\CSignal\\CSignal\\CSignal\\signal\\parse\\signal.y"
     {
 		(yyval.ast_value) = ast_new_blank();
 	;}
@@ -2392,7 +2393,7 @@ yyreduce:
 
 
 /* Line 1455 of yacc.c  */
-#line 2396 "signal.tab.c"
+#line 2397 "signal.tab.c"
       default: break;
     }
   YY_SYMBOL_PRINT ("-> $$ =", yyr1[yyn], &yyval, &yyloc);
@@ -2611,5 +2612,5 @@ yyreturn:
 
 
 /* Line 1675 of yacc.c  */
-#line 540 "C:\\Users\\Koya\\Documents\\GitHub\\CSignal\\CSignal\\CSignal\\signal\\parse\\signal.y"
+#line 552 "C:\\Users\\Koya\\Documents\\GitHub\\CSignal\\CSignal\\CSignal\\signal\\parse\\signal.y"
 

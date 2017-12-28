@@ -17,6 +17,7 @@
 	ast* ast_value;
 	assign_operator_type assign_otype_value;
 	constructor_chain_type chain_type_value;
+	modifier_type modifier_type_value;
 	access_level access_level_value;
 }
 %locations
@@ -28,6 +29,7 @@
 %type <assign_otype_value>	assign_type_T
 %type <chain_type_value>	constructor_chain_type_T
 %type <access_level_value>	access_level_T
+%type <modifier_type_value> modifier_type_T;
 %token DOT COMMA COLON COLO_COLO
 		ADD SUB MUL DIV MOD NOT
 		ASSIGN ADD_ASSIGN SUB_ASSIGN MUL_ASSIGN DIV_ASSIGN MOD_ASSIGN
@@ -252,6 +254,16 @@ field_define
 	: IDENT IDENT SEMI
 	{
 		$$ = ast_new_field_decl($1, $2);
+	}
+	;
+modifier_type_T
+	: STATIC
+	{
+		$$ = modifier_static;
+	}
+	| NATIVE
+	{
+		$$ = modifier_native;
 	}
 	;
 access_level_T

@@ -49,19 +49,19 @@ ast * ast_new_superclass(char * class_name) {
 
 ast * ast_new_modifier(modifier_type type) {
 	switch (type) {
-		case modifier_type_public:
-			return ast_new(ast_modifier_public);
+//		case modifier_type_public:
+//			return ast_new(ast_modifier_public);
 
-		case modifier_type_private:
-			return ast_new(ast_modifier_private);
+//		case modifier_type_private:
+//			return ast_new(ast_modifier_private);
 
-		case modifier_type_protected:
-			return ast_new(ast_modifier_protected);
+//		case modifier_type_protected:
+//			return ast_new(ast_modifier_protected);
 
-		case modifier_type_static:
+		case modifier_static:
 			return ast_new(ast_modifier_static);
 
-		case modifier_type_native:
+		case modifier_native:
 			return ast_new(ast_modifier_native);
 		default:
 			break;
