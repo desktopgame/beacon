@@ -3,6 +3,7 @@
 #define SIGNAL_IL_IL_FACTOR_INVOKE_H
 #include "../../util/vector.h"
 #include "../il_factor_interface.h"
+struct method;
 /**
  * メソッド呼び出しを表す要素.
  */
@@ -10,6 +11,8 @@ typedef struct il_factor_invoke {
 	char* name;
 	il_factor* receiver;
 	vector* argument_list;
+	struct method* m;
+	int methodIndex;
 } il_factor_invoke;
 
 /**

@@ -5,9 +5,18 @@ namespace L.Goo.Foo {
 		int pointX;
 		int pointY;
 	
+		def main() -> Void {
+
+		}
+
+		def main(int a, int b, String c) -> Void {
+			
+		}
+
 		def print(String message, Int d) -> Void {
 			main();
 			main(10, 20, "aaa");
+			Foo a = Foo.newInstance();
 			a.print();
 			a.print(10, 20, "aaa");
 			if(10) {
