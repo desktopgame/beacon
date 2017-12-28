@@ -4,6 +4,8 @@
 #include "script_method.h"
 #include "native_method.h"
 #include "../util/vector.h"
+#include "../ast/access_level.h"
+#include "../ast/modifier_type.h"
 struct class_;
 struct vm;
 
@@ -24,6 +26,8 @@ typedef struct method {
 	//struct class_* decleared_type;
 	struct class_* return_type;
 	vector* parameter_list;
+	access_level access;
+	modifier_type modifier;
 	union {
 		script_method* script_method;
 		native_method* native_method;

@@ -2,12 +2,16 @@
 #ifndef SIGNAL_IL_IL_FIELD_H
 #define SIGNAL_IL_IL_FIELD_H
 #include "il_type.h"
+#include "../ast/access_level.h"
+#include "../ast/modifier_type.h"
 /**
  * フィールドを表す要素.
  */
 typedef struct il_field {
 	il_type* type;
 	char* name;
+	access_level access;
+	modifier_type modifier;
 } il_field;
 /**
  * 新しいフィールドを作成します.

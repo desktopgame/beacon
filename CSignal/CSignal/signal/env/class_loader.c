@@ -37,9 +37,10 @@ static il_namespace* class_loader_ilload_ast_to_namespace(ast* a);
 static void class_loader_ilload_namespace_body(class_loader* self, il_namespace* current, vector* parent, ast* namespace_body);
 static void class_loader_ilload_class(class_loader* self, il_namespace* current, ast* class_decl);
 static void class_loader_ilload_member_tree(class_loader* self, il_class* current, ast* tree);
-static void class_loader_ilload_member(class_loader* self, il_class* current, ast* member);
-static void class_loader_ilload_field(class_loader* self, il_class* current, ast* field);
-static void class_loader_ilload_method(class_loader* self, il_class* current, ast* method);
+static void class_loader_ilload_member(class_loader* self, il_class* current, ast* member, access_level level);
+static void class_loader_ilload_field(class_loader* self, il_class* current, ast* field, access_level level);
+static void class_loader_ilload_method(class_loader* self, il_class* current, ast* method, access_level level);
+static void class_loader_ilload_constructor(class_loader* self, il_class* current, ast* constructor, access_level level);
 static void class_loader_ilload_param(class_loader* self, vector* list, ast* source);
 static void class_loader_ilload_body(class_loader* self, vector* list, ast* source);
 static il_stmt_if* class_loader_ilload_if(class_loader* self, ast* source);
@@ -53,7 +54,6 @@ static il_factor_binary_op* class_loader_ilload_binary(class_loader* self, ast* 
 static il_factor_call* class_loader_ilload_call(class_loader* self, ast* source);
 static il_factor_invoke* class_loader_ilload_invoke(class_loader* self, ast* source);
 static void class_loader_ilload_argument_list(class_loader* self, vector* list, ast* source);
-static void class_loader_ilload_constructor(class_loader* self, il_class* current, ast* constructor);
 
 static void class_loader_sgload_impl(class_loader* self);
 static void class_loader_sgload_import(class_loader* self, vector* ilimports);
@@ -243,46 +243,51 @@ static void class_loader_ilload_member_tree(class_loader* self, il_class* curren
 	} else if (tree->tag == ast_access_member_list) {
 		ast* access = ast_first(tree);
 		ast* member_list = ast_second(tree);
-		class_loader_ilload_member(self, current, member_list);
-
+		access_level level = ast_cast_to_access(access);
+		class_loader_ilload_member(self, current, member_list, level);
 	}
 }
 
-static void class_loader_ilload_member(class_loader* self, il_class* current, ast* member) {
+static void class_loader_ilload_member(class_loader* self, il_class* current, ast* member, access_level level) {
 	if(member->tag == ast_member_decl_list) {
 		for(int i=0; i<member->childCount; i++) {
-			class_loader_ilload_member(self, current, ast_at(member, i));
+			class_loader_ilload_member(self, current, ast_at(member, i), level);
 		}
 	} else if(member->tag == ast_member_decl) {
 		ast* child = ast_first(member);
 		if (child->tag == ast_field_decl) {
-			class_loader_ilload_field(self, current, child);
+			class_loader_ilload_field(self, current, child, level);
 		} else if (child->tag == ast_func_decl) {
-			class_loader_ilload_method(self, current, child);
+			class_loader_ilload_method(self, current, child, level);
 		} else if (child->tag == ast_constructor_decl) {
-			class_loader_ilload_constructor(self, current, child);
+			class_loader_ilload_constructor(self, current, child, level);
 		}
 	}
 }
 
-static void class_loader_ilload_field(class_loader* self, il_class* current, ast* field) {
+static void class_loader_ilload_field(class_loader* self, il_class* current, ast* field, access_level level) {
 	ast* type_name = ast_first(field);
 	ast* access_name = ast_second(field);
 	il_field* v = il_field_new(access_name->u.string_value);
 	v->type = il_type_new(type_name->u.string_value);
+	v->access = level;
 	vector_push(current->field_list, v);
 }
 
-static void class_loader_ilload_method(class_loader* self, il_class* current, ast* method) {
+static void class_loader_ilload_method(class_loader* self, il_class* current, ast* method, access_level level) {
 	ast* func_name = ast_at(method, 0);
 	ast* param_list = ast_at(method, 1);
 	ast* func_body = ast_at(method, 2);
 	ast* ret_name = ast_at(method, 3);
 	il_method* v = il_method_new(func_name->u.string_value);
 	v->return_type = il_type_new(ret_name->u.string_value);
+	v->access = level;
 	class_loader_ilload_param(self, v->parameter_list, param_list);
 	class_loader_ilload_body(self, v->statement_list, func_body);
 	vector_push(current->method_list, v);
+}
+
+static void class_loader_ilload_constructor(class_loader* self, il_class* current, ast* constructor, access_level level) {
 }
 
 static void class_loader_ilload_param(class_loader* self, vector* list, ast* source) {
@@ -514,9 +519,6 @@ static void class_loader_ilload_argument_list(class_loader* self, vector* list, 
 	}
 }
 
-static void class_loader_ilload_constructor(class_loader* self, il_class* current, ast* constructor) {
-}
-
 //
 //sgload
 //
@@ -627,6 +629,8 @@ static void class_loader_sgload_fields(class_loader* self, il_class* ilclass, cl
 		vector_item e = vector_at(ilfield_list, i);
 		il_field* ilfield = (il_field*)e;
 		field* field = field_new(ilfield->name);
+		field->access = ilfield->access;
+		field->modifier = ilfield->modifier;
 		//NOTE:ここではフィールドの型を設定しません
 		//     class_loader_sgload_complete参照
 		vector_push(classz->field_list, field);
@@ -646,6 +650,8 @@ static void class_loader_sgload_methods(class_loader* self, il_class* ilclass, c
 		method* method = method_new(ilmethod->name);
 		vector* parameter_list = method->parameter_list;
 		method->type = method_type_script;
+		method->access = ilmethod->access;
+		method->modifier = ilmethod->modifier;
 		method->u.script_method = script_method_new();
 		//ILパラメータを実行時パラメータへ変換
 		//NOTE:ここでは戻り値の型,引数の型を設定しません

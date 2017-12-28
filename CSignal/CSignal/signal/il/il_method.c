@@ -14,13 +14,16 @@ il_method * il_method_new(const char * name) {
 	ret->name = text_strdup(name);
 	ret->parameter_list = vector_new();
 	ret->return_type = NULL;
+	ret->access = access_public;
+	ret->modifier = modifier_none;
 	ret->statement_list = vector_new();
 	return ret;
 }
 
 void il_method_dump(il_method * self, int depth) {
 	text_putindent(depth);
-	printf("method %s -> %s", self->name, self->return_type->name);
+	access_print(self->access);
+	printf(" method %s -> %s", self->name, self->return_type->name);
 	text_putline();
 	for (int i = 0; i < self->parameter_list->length; i++) {
 		vector_item e = vector_at(self->parameter_list, i);

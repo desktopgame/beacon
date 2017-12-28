@@ -171,7 +171,7 @@ import
 	}
 	;
 class_decl
-	: CLASS IDENT class_super LCB access_member_list RCB
+	: CLASS IDENT class_super LCB access_member_tree RCB
 	{
 		$$ = ast_new_class_decl($2, $3, $5);
 	}

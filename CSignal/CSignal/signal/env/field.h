@@ -1,6 +1,8 @@
 #pragma once
 #ifndef SIGNAL_ENV_FIELD_H
 #define SIGNAL_ENV_FIELD_H
+#include "../ast/access_level.h"
+#include "../ast/modifier_type.h"
 struct class_;
 /**
  * フィールドを表す構造体.
@@ -8,6 +10,8 @@ struct class_;
 typedef struct field {
 	char* name;
 	struct class_* type;
+	access_level access;
+	modifier_type modifier;
 } field;
 
 /**

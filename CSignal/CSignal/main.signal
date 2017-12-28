@@ -6,6 +6,7 @@ namespace L.Goo.Foo {
 		Int pointX;
 		Int pointY;
 	
+		private:
 		def main() -> Void {
 
 		}

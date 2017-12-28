@@ -3,6 +3,8 @@
 #define SIGNAL_AST_AST_H
 #include <stdint.h>
 #include <stdbool.h>
+#include "access_level.h"
+#include "modifier_type.h"
 #include "../util/list.h"
 
 /**
@@ -341,4 +343,18 @@ bool ast_is_access(ast* self);
  * @return
  */
 bool ast_is_modifier(ast* self);
+
+/**
+ * 指定の要素がアクセスレベルを表す要素なら列挙型に変換します.
+ * @param self
+ * @return
+ */
+access_level ast_cast_to_access(ast* self);
+
+/**
+ * 指定の要素が修飾子を表す要素なら列挙型に変換します.
+ * @param self
+ * @return
+ */
+modifier_type ast_cast_to_modifier(ast* self);
 #endif // !SIGNAL_AST_AST_H

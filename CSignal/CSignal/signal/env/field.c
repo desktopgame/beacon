@@ -9,16 +9,19 @@ field * field_new(const char * name) {
 	field* ret = (field*)malloc(sizeof(field));
 	ret->name = text_strdup(name);
 	ret->type = NULL;
+	ret->access = access_public;
+	ret->modifier = modifier_none;
 	return ret;
 }
 
 void field_dump(field * self, int depth) {
 	assert(self != NULL);
 	text_putindent(depth);
+	access_print(self->access);
 	if (self->type == NULL) {
-		printf("field NULL %s", self->name);
+		printf(" field NULL %s", self->name);
 	} else {
-		printf("field %s %s", self->type->name,self->name);
+		printf(" field %s %s", self->type->name,self->name);
 	}
 	text_putline();
 }

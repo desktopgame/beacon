@@ -317,6 +317,37 @@ bool ast_is_modifier(ast * self) {
 		self->tag == ast_modifier_native;
 }
 
+access_level ast_cast_to_access(ast * self) {
+	assert(ast_is_access(self));
+	switch (self->tag) {
+		case ast_access_public:
+			return access_public;
+
+		case ast_access_private:
+			return access_private;
+
+		case ast_access_protected:
+			return access_protected;
+		default:
+			break;
+	}
+	return access_public;
+}
+
+modifier_type ast_cast_to_modifier(ast * self) {
+	assert(ast_is_modifier(self));
+	switch (self->tag) {
+		case ast_modifier_static:
+			return modifier_static;
+
+		case ast_modifier_native:
+			return modifier_native;
+		default:
+			break;
+	}
+	return modifier_none;
+}
+
 //private
 static void ast_print_indent(int depth) {
 	for (int i = 0; i < depth; i++) {

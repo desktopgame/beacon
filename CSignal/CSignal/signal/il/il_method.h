@@ -3,6 +3,8 @@
 #define SIGNAL_IL_IL_METHOD_H
 #include "il_type.h"
 #include "../util/vector.h"
+#include "../ast/access_level.h"
+#include "../ast/modifier_type.h"
 /**
  * メソッドの定義を表す要素.
  */
@@ -11,6 +13,8 @@ typedef struct il_method {
 	vector* parameter_list;
 	vector* statement_list;
 	il_type* return_type;
+	access_level access;
+	modifier_type modifier;
 } il_method;
 /**
  * メソッドを作成します.

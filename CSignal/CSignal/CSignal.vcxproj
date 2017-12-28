@@ -114,13 +114,17 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="signal\ast\access_level.c" />
     <ClCompile Include="signal\ast\ast.c" />
     <ClCompile Include="signal\ast\ast_new_decl.c" />
     <ClCompile Include="signal\ast\ast_new_literal.c" />
     <ClCompile Include="signal\ast\ast_new_operator.c" />
     <ClCompile Include="signal\ast\ast_new_stmt.c" />
     <ClCompile Include="signal\ast\ast_util.c" />
+    <ClCompile Include="signal\ast\modifier_type.c" />
     <ClCompile Include="signal\env\class.c" />
+    <ClCompile Include="signal\env\import_manager.c" />
+    <ClCompile Include="signal\util\props.c" />
     <ClCompile Include="signal\vm\enviroment.c" />
     <ClCompile Include="signal\env\field.c" />
     <ClCompile Include="signal\env\method.c" />
@@ -159,13 +163,10 @@
     <ClCompile Include="signal\test.c" />
     <ClCompile Include="signal\util\cmd.c" />
     <ClCompile Include="signal\util\file_path.c" />
-    <ClCompile Include="signal\util\ini.c" />
     <ClCompile Include="signal\util\io.c" />
     <ClCompile Include="signal\util\list.c" />
     <ClCompile Include="signal\util\logger.c" />
     <ClCompile Include="signal\util\stack.c" />
-    <ClCompile Include="signal\util\string_allocator.c" />
-    <ClCompile Include="signal\util\string_table.c" />
     <ClCompile Include="signal\util\text.c" />
     <ClCompile Include="signal\util\tree_map.c" />
     <ClCompile Include="signal\util\vector.c" />
@@ -175,6 +176,7 @@
     <ClCompile Include="signal\vm\vm.c" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="signal\ast\access_level.h" />
     <ClInclude Include="signal\ast\assign_operator_type.h" />
     <ClInclude Include="signal\ast\ast.h" />
     <ClInclude Include="signal\ast\ast_new_decl.h" />
@@ -186,6 +188,8 @@
     <ClInclude Include="signal\ast\modifier_type.h" />
     <ClInclude Include="signal\env\class.h" />
     <ClInclude Include="signal\env\class_state.h" />
+    <ClInclude Include="signal\env\import_manager.h" />
+    <ClInclude Include="signal\util\props.h" />
     <ClInclude Include="signal\vm\enviroment.h" />
     <ClInclude Include="signal\env\field.h" />
     <ClInclude Include="signal\env\method.h" />
@@ -229,13 +233,10 @@
     <ClInclude Include="signal\test.h" />
     <ClInclude Include="signal\util\cmd.h" />
     <ClInclude Include="signal\util\file_path.h" />
-    <ClInclude Include="signal\util\ini.h" />
     <ClInclude Include="signal\util\io.h" />
     <ClInclude Include="signal\util\list.h" />
     <ClInclude Include="signal\util\logger.h" />
     <ClInclude Include="signal\util\stack.h" />
-    <ClInclude Include="signal\util\string_allocator.h" />
-    <ClInclude Include="signal\util\string_table.h" />
     <ClInclude Include="signal\util\text.h" />
     <ClInclude Include="signal\util\tree_map.h" />
     <ClInclude Include="signal\util\vector.h" />

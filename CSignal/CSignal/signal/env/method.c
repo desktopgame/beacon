@@ -14,6 +14,8 @@ method * method_new(const char * name) {
 	ret->name = text_strdup(name);
 	ret->parameter_list = vector_new();
 	ret->type = method_type_script;
+	ret->access = access_public;
+	ret->modifier = modifier_none;
 	return ret;
 }
 
@@ -27,7 +29,8 @@ void method_execute(method* self, vm * vm) {
 
 void method_dump(method * self, int depth) {
 	text_putindent(depth);
-	printf("method %s", self->name);
+	access_print(self->access);
+	printf(" method %s", self->name);
 	printf("(");
 	for (int i = 0; i < self->parameter_list->length; i++) {
 		vector_item e = vector_at(self->parameter_list, i);
