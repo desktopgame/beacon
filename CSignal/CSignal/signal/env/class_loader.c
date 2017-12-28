@@ -7,6 +7,7 @@
 #include "../vm/opcode_buf.h"
 #include "../il/il_argument.h"
 #include "../util/vector.h"
+#include "../util/logger.h"
 #include "script_context.h"
 #include "../util/text.h"
 #include "../util/io.h"
@@ -64,6 +65,8 @@ static void class_loader_sgload_methods(class_loader* self, il_class* ilclass, c
 static void class_loader_sgload_complete(class_loader* self, il_class* ilclass, class_* classz);
 static enviroment* class_loader_sgload_body(class_loader* self, vector* stmt_list);
 
+static void class_loader_error(class_loader* self, const char* message);
+static void class_loader_errors(class_loader* self, const char* message, const char* a);
 
 class_loader * class_loader_new_entry_point(const char * filename) {
 	class_loader* cll = class_loader_new();
@@ -71,7 +74,7 @@ class_loader * class_loader_new_entry_point(const char * filename) {
 	parser* p = parser_parse_from_source(text);
 	//解析に失敗した場合
 	if (p->fail) {
-		cll->fail = true;
+		class_loader_errors(cll, "parse failed --- %s", p->source_name);
 		free(text);
 		parser_pop();
 		return cll;
@@ -101,6 +104,7 @@ void class_loader_delete(class_loader * self) {
 	//free(self->source_code);
 	ast_delete(self->source_code);
 	il_top_level_delete(self->il_code);
+	free(self->errorMessage);
 	free(self);
 }
 
@@ -113,7 +117,8 @@ static class_loader* class_loader_new() {
 	ret->ref_count = 0;
 	ret->type = content_entry_point;
 	ret->import_manager = import_manager_new();
-	ret->fail = false;
+	ret->error = false;
+	ret->errorMessage = NULL;
 	return ret;
 }
 
@@ -516,21 +521,35 @@ static void class_loader_sgload_import(class_loader* self, vector* ilimports) {
 		class_loader* cll = tree_map_get(ctx->classLoaderMap, fullPath);
 		if (cll != NULL) {
 			cll->ref_count++;
+			import_manager_import(self->import_manager, cll);
+			//そのローダーが破損しているなら
+			if (cll->error) {
+				class_loader_error(self, cll->errorMessage);
+			}
 			continue;
-			//新たに読みこんだなら親に設定
+		//新たに読みこんだなら親に設定
 		} else {
 			cll = class_loader_new();
 			cll->ref_count++;
 			cll->parent = self;
 			cll->type = content_lib;
+			import_manager_import(self->import_manager, cll);
 			tree_map_put(ctx->classLoaderMap, fullPath, cll);
+		}
+		//そのローダーが破損しているなら
+		if (cll->error) {
+			class_loader_error(self, cll->errorMessage);
+		}
+		//パースをキャンセル
+		if (self->error) {
+			return;
 		}
 		//パース
 		char* text = io_read_text(fullPath);
 		parser* p = parser_parse_from_source(text);
 		//パースに失敗
 		if (p->fail) {
-			self->fail = true;
+			class_loader_errors(cll, "parse failed --- %s", p->source_name);
 			free(text);
 			parser_pop();
 			return;
@@ -697,4 +716,23 @@ static enviroment* class_loader_sgload_body(class_loader* self, vector* stmt_lis
 		il_stmt_generate(s, ret);
 	}
 	return ret;
+}
+
+//utilitiy
+static void class_loader_error(class_loader* self, const char* message) {
+	self->errorMessage = text_strdup(message);
+	self->error = true;
+}
+
+static void class_loader_errors(class_loader* self, const char* message, const char* a) {
+#if defined(_MSC_VER)
+	char buff[100];
+	int res = sprintf_s(buff, 100, message, a);
+	if (res == -1) {
+		class_loader_error(self, text_strdup("internal error: format failed"));
+		ERROR("format error");
+	} else {
+		class_loader_error(self, buff);
+	}
+#endif
 }
