@@ -61,6 +61,7 @@ static void class_loader_sgload_class_list(class_loader* self, vector* ilclass_l
 static void class_loader_sgload_class(class_loader* self, il_class* classz, namespace_* parent);
 static void class_loader_sgload_fields(class_loader* self, il_class* ilclass, class_* classz);
 static void class_loader_sgload_methods(class_loader* self, il_class* ilclass, class_* classz);
+static void class_loader_sgload_complete(class_loader* self, il_class* ilclass, class_* classz);
 static enviroment* class_loader_sgload_body(class_loader* self, vector* stmt_list);
 
 
@@ -578,6 +579,7 @@ static void class_loader_sgload_class(class_loader* self, il_class* classz, name
 	class_loader_sgload_fields(self, classz, cls);
 	class_loader_sgload_methods(self, classz, cls);
 	namespace_add_class(parent, cls);
+	class_loader_sgload_complete(self, classz, cls);
 }
 
 static void class_loader_sgload_fields(class_loader* self, il_class* ilclass, class_* classz) {
@@ -592,24 +594,60 @@ static void class_loader_sgload_fields(class_loader* self, il_class* ilclass, cl
 
 static void class_loader_sgload_methods(class_loader* self, il_class* ilclass, class_* classz) {
 	vector* ilmethod_list = ilclass->method_list;
+	//クラスの中の全てのメソッドに対して
 	for (int i = 0; i < ilmethod_list->length; i++) {
-		vector_item ep = vector_at(ilmethod_list, i);
-		il_method* ilmethod = (il_method*)ep;
+		//メソッド一覧から取り出す
+		vector_item e = vector_at(ilmethod_list, i);
+		il_method* ilmethod = (il_method*)e;
+		//メソッドから仮引数一覧を取りだす
 		vector* ilparams = ilmethod->parameter_list;
-		method* e = method_new(ilmethod->name);
-		vector* parameter_list = e->parameter_list;
-		e->type = method_type_script;
-		e->u.script_method = script_method_new();
+		//実行時のメソッド情報を作成する
+		method* method = method_new(ilmethod->name);
+		vector* parameter_list = method->parameter_list;
+		method->type = method_type_script;
+		method->u.script_method = script_method_new();
+		//ILパラメータを実行時パラメータへ変換
 		for (int i = 0; i < ilparams->length; i++) {
 			vector_item e = vector_at(ilparams, i);
 			il_parameter* ilp = (il_parameter*)e;
 			parameter* param = parameter_new(ilp->name);
 			vector_push(parameter_list, param);
 		}
+		//NOTE:クラスの登録が終わったらオペコードを作成する
+		//enviroment* env = class_loader_sgload_body(self, ilmethod->statement_list);
+		//opcode_buf_delete(e->u.script_method->env);
+		//method->u.script_method->env = NULL;
+		vector_push(classz->method_list, method);
+	}
+}
+
+/**
+ * クラスの登録を行ったあとに呼び出します.
+ * 実際には、便宜上終わっていなければいけないいくつかの登録を終えてから
+ * オペコードの生成を開始します。
+ * 例えば、メソッド呼び出しをオペコードに変換するためには、
+ * 既にメソッドの一覧がクラスに登録されている必要があります。
+ * ここではそれらの作業を実行します。
+ * @param self
+ * @param ilclass
+ * @param classz
+ */
+static void class_loader_sgload_complete(class_loader* self, il_class* ilclass, class_* classz) {
+	vector* methods = classz->method_list;
+	//既に登録されたが、
+	//オペコードが空っぽになっているメソッドの一覧
+	for (int i = 0; i < methods->length; i++) {
+		vector_item e = vector_at(methods, i);
+		method* me = (method*)e;
+		//ネイティブメソッドならオペコードは不要
+		if (me->type == method_type_native) {
+			continue;
+		}
+		//オペコードを作成
+		//FIXME:ILメソッドと実行時メソッドのインデックスが同じなのでとりあえず動く
+		il_method* ilmethod = (il_method*)vector_at(ilclass->method_list, i);
 		enviroment* env = class_loader_sgload_body(self, ilmethod->statement_list);
-		opcode_buf_delete(e->u.script_method->env);
-		e->u.script_method->env = env;
-		vector_push(classz->method_list, e);
+		me->u.script_method->env = env;
 	}
 }
 
