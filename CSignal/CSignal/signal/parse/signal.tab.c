@@ -78,12 +78,13 @@
 #include "../ast/constructor_chain_type.h"
 #include "../ast/assign_operator_type.h"
 #include "../ast/modifier_type.h"
+#include "../ast/access_level.h"
 #define YYDEBUG 1
 #define YYERROR_VERBOSE 1
 
 
 /* Line 189 of yacc.c  */
-#line 87 "signal.tab.c"
+#line 88 "signal.tab.c"
 
 /* Enabling traces.  */
 #ifndef YYDEBUG
@@ -176,19 +177,19 @@ typedef union YYSTYPE
 {
 
 /* Line 214 of yacc.c  */
-#line 13 "C:\\Users\\Koya\\Documents\\GitHub\\CSignal\\CSignal\\CSignal\\signal\\parse\\signal.y"
+#line 14 "C:\\Users\\Koya\\Documents\\GitHub\\CSignal\\CSignal\\CSignal\\signal\\parse\\signal.y"
 
 	char char_value;
 	const char* string_value;
 	ast* ast_value;
 	assign_operator_type assign_otype_value;
 	constructor_chain_type chain_type_value;
-	modifier_type modifier_type_value;
+	access_level access_level_value;
 
 
 
 /* Line 214 of yacc.c  */
-#line 192 "signal.tab.c"
+#line 193 "signal.tab.c"
 } YYSTYPE;
 # define YYSTYPE_IS_TRIVIAL 1
 # define yystype YYSTYPE /* obsolescent; will be withdrawn */
@@ -213,7 +214,7 @@ typedef struct YYLTYPE
 
 
 /* Line 264 of yacc.c  */
-#line 217 "signal.tab.c"
+#line 218 "signal.tab.c"
 
 #ifdef short
 # undef short
@@ -430,16 +431,16 @@ union yyalloc
 /* YYFINAL -- State number of the termination state.  */
 #define YYFINAL  47
 /* YYLAST -- Last index in YYTABLE.  */
-#define YYLAST   256
+#define YYLAST   240
 
 /* YYNTOKENS -- Number of terminals.  */
 #define YYNTOKENS  60
 /* YYNNTS -- Number of nonterminals.  */
-#define YYNNTS  45
+#define YYNNTS  43
 /* YYNRULES -- Number of rules.  */
-#define YYNRULES  116
+#define YYNRULES  109
 /* YYNRULES -- Number of states.  */
-#define YYNSTATES  204
+#define YYNSTATES  193
 
 /* YYTRANSLATE(YYLEX) -- Bison symbol number corresponding to YYLEX.  */
 #define YYUNDEFTOK  2
@@ -493,58 +494,56 @@ static const yytype_uint16 yyprhs[] =
        0,     0,     3,     5,     8,    11,    13,    15,    17,    19,
       23,    27,    31,    33,    35,    38,    39,    41,    43,    47,
       50,    57,    58,    61,    62,    64,    67,    69,    71,    73,
-      82,    89,    95,   100,   102,   104,   105,   107,   116,   124,
-     128,   130,   133,   135,   137,   139,   141,   143,   146,   151,
-     153,   157,   159,   161,   165,   167,   169,   171,   173,   175,
-     177,   179,   183,   187,   189,   193,   197,   199,   203,   207,
-     209,   213,   217,   221,   225,   227,   231,   235,   237,   241,
-     245,   249,   251,   254,   257,   259,   262,   265,   267,   273,
-     280,   283,   286,   288,   290,   292,   294,   296,   300,   305,
-     309,   311,   314,   317,   319,   321,   327,   333,   341,   348,
-     357,   359,   362,   368,   372,   375,   377
+      81,    88,    94,    99,   101,   103,   104,   106,   115,   123,
+     127,   130,   135,   137,   141,   143,   145,   149,   151,   153,
+     155,   157,   159,   161,   163,   167,   171,   173,   177,   181,
+     183,   187,   191,   193,   197,   201,   205,   209,   211,   215,
+     219,   221,   225,   229,   233,   235,   238,   241,   243,   246,
+     249,   251,   257,   264,   267,   270,   272,   274,   276,   278,
+     280,   284,   289,   293,   295,   298,   301,   303,   305,   311,
+     317,   325,   332,   341,   343,   346,   352,   356,   359,   361
 };
 
 /* YYRHS -- A `-1'-separated list of the rules' RHS.  */
 static const yytype_int8 yyrhs[] =
 {
       61,     0,    -1,    62,    -1,    61,    62,    -1,     1,    59,
-      -1,    84,    -1,    98,    -1,    69,    -1,    63,    -1,    55,
+      -1,    82,    -1,    96,    -1,    69,    -1,    63,    -1,    55,
       68,    64,    -1,    36,    67,    37,    -1,    55,    68,    64,
       -1,    70,    -1,    65,    -1,    66,    65,    -1,    -1,    66,
       -1,     7,    -1,    68,     8,     7,    -1,    43,     4,    -1,
       46,     7,    71,    36,    72,    37,    -1,    -1,    10,     7,
       -1,    -1,    73,    -1,    72,    73,    -1,    74,    -1,    78,
-      -1,    79,    -1,    80,    53,    52,    38,    82,    39,    77,
-     104,    -1,    53,    52,    38,    39,    77,   104,    -1,    10,
-      76,    38,    83,    39,    -1,    10,    76,    38,    39,    -1,
-      45,    -1,    44,    -1,    -1,    75,    -1,    53,     7,    38,
-      82,    39,    54,     7,   104,    -1,    53,     7,    38,    39,
-      54,     7,   104,    -1,     7,     7,    42,    -1,    81,    -1,
-      80,    81,    -1,    47,    -1,    48,    -1,    49,    -1,    50,
-      -1,    51,    -1,     7,     7,    -1,     7,     7,     9,    82,
-      -1,    84,    -1,    84,     9,    83,    -1,    85,    -1,    87,
-      -1,    87,    86,    85,    -1,    18,    -1,    19,    -1,    20,
-      -1,    21,    -1,    22,    -1,    23,    -1,    88,    -1,    87,
-      34,    88,    -1,    87,    35,    88,    -1,    89,    -1,    88,
-      32,    89,    -1,    88,    33,    89,    -1,    90,    -1,    89,
-      24,    90,    -1,    89,    25,    90,    -1,    91,    -1,    90,
-      28,    91,    -1,    90,    29,    91,    -1,    90,    30,    91,
-      -1,    90,    31,    91,    -1,    92,    -1,    91,    12,    92,
-      -1,    91,    13,    92,    -1,    93,    -1,    92,    14,    93,
-      -1,    92,    15,    93,    -1,    92,    16,    93,    -1,    94,
-      -1,    17,    93,    -1,    13,    93,    -1,    95,    -1,    26,
-      95,    -1,    27,    95,    -1,    96,    -1,    95,     8,     7,
-      38,    39,    -1,    95,     8,     7,    38,    83,    39,    -1,
-      95,    26,    -1,    95,    27,    -1,     5,    -1,     6,    -1,
-       3,    -1,     4,    -1,     7,    -1,     7,    38,    39,    -1,
-       7,    38,    83,    39,    -1,    38,    84,    39,    -1,    98,
-      -1,    97,    98,    -1,    84,    42,    -1,    99,    -1,   100,
-      -1,     7,     7,    18,    84,    42,    -1,    56,    38,    84,
-      39,   103,    -1,    56,    38,    84,    39,   103,    58,   103,
-      -1,    56,    38,    84,    39,   103,   101,    -1,    56,    38,
-      84,    39,   103,   101,    58,   103,    -1,   102,    -1,   101,
-     102,    -1,    57,    38,    84,    39,   103,    -1,    36,    97,
-      37,    -1,    36,    37,    -1,    42,    -1,   103,    -1
+      -1,    79,    -1,    53,    52,    38,    80,    39,    77,   102,
+      -1,    53,    52,    38,    39,    77,   102,    -1,    10,    76,
+      38,    81,    39,    -1,    10,    76,    38,    39,    -1,    45,
+      -1,    44,    -1,    -1,    75,    -1,    53,     7,    38,    80,
+      39,    54,     7,   102,    -1,    53,     7,    38,    39,    54,
+       7,   102,    -1,     7,     7,    42,    -1,     7,     7,    -1,
+       7,     7,     9,    80,    -1,    82,    -1,    82,     9,    81,
+      -1,    83,    -1,    85,    -1,    85,    84,    83,    -1,    18,
+      -1,    19,    -1,    20,    -1,    21,    -1,    22,    -1,    23,
+      -1,    86,    -1,    85,    34,    86,    -1,    85,    35,    86,
+      -1,    87,    -1,    86,    32,    87,    -1,    86,    33,    87,
+      -1,    88,    -1,    87,    24,    88,    -1,    87,    25,    88,
+      -1,    89,    -1,    88,    28,    89,    -1,    88,    29,    89,
+      -1,    88,    30,    89,    -1,    88,    31,    89,    -1,    90,
+      -1,    89,    12,    90,    -1,    89,    13,    90,    -1,    91,
+      -1,    90,    14,    91,    -1,    90,    15,    91,    -1,    90,
+      16,    91,    -1,    92,    -1,    17,    91,    -1,    13,    91,
+      -1,    93,    -1,    26,    93,    -1,    27,    93,    -1,    94,
+      -1,    93,     8,     7,    38,    39,    -1,    93,     8,     7,
+      38,    81,    39,    -1,    93,    26,    -1,    93,    27,    -1,
+       5,    -1,     6,    -1,     3,    -1,     4,    -1,     7,    -1,
+       7,    38,    39,    -1,     7,    38,    81,    39,    -1,    38,
+      82,    39,    -1,    96,    -1,    95,    96,    -1,    82,    42,
+      -1,    97,    -1,    98,    -1,     7,     7,    18,    82,    42,
+      -1,    56,    38,    82,    39,   101,    -1,    56,    38,    82,
+      39,   101,    58,   101,    -1,    56,    38,    82,    39,   101,
+      99,    -1,    56,    38,    82,    39,   101,    99,    58,   101,
+      -1,   100,    -1,    99,   100,    -1,    57,    38,    82,    39,
+     101,    -1,    36,    95,    37,    -1,    36,    37,    -1,    42,
+      -1,   101,    -1
 };
 
 /* YYRLINE[YYN] -- source line where rule number YYN was defined.  */
@@ -554,14 +553,13 @@ static const yytype_uint16 yyrline[] =
      118,   124,   128,   134,   138,   145,   148,   154,   158,   164,
      170,   177,   180,   187,   190,   194,   200,   201,   202,   205,
      209,   215,   219,   225,   229,   236,   239,   242,   246,   252,
-     258,   262,   268,   272,   276,   280,   284,   290,   294,   300,
-     304,   310,   313,   314,   320,   324,   328,   332,   336,   340,
-     346,   347,   351,   357,   358,   362,   368,   369,   373,   379,
-     380,   384,   388,   392,   398,   399,   403,   409,   410,   414,
-     418,   424,   425,   429,   435,   436,   440,   446,   447,   451,
-     455,   459,   465,   466,   467,   468,   469,   473,   477,   481,
-     487,   491,   497,   501,   502,   505,   511,   515,   519,   523,
-     529,   530,   536,   542,   546,   552,   556
+     272,   276,   282,   286,   292,   295,   296,   302,   306,   310,
+     314,   318,   322,   328,   329,   333,   339,   340,   344,   350,
+     351,   355,   361,   362,   366,   370,   374,   380,   381,   385,
+     391,   392,   396,   400,   406,   407,   411,   417,   418,   422,
+     428,   429,   433,   437,   441,   447,   448,   449,   450,   451,
+     455,   459,   463,   469,   473,   479,   483,   484,   487,   493,
+     497,   501,   505,   511,   512,   518,   524,   528,   534,   538
 };
 #endif
 
@@ -584,10 +582,10 @@ static const char *const yytname[] =
   "class_decl", "class_super", "member_define_list", "member_define",
   "constructor_define", "constructor_chain", "constructor_chain_type_T",
   "constructor_chain_optional", "func_define", "field_define",
-  "modifier_list", "modifier_type_T", "parameter_list", "argument_list",
-  "expression", "assign", "assign_type_T", "or", "and", "equal", "compare",
-  "addsub", "muldiv", "unary", "prefix", "postfix", "primary", "stmt_list",
-  "stmt", "variable_stmt", "if_stmt", "elif_list", "elif", "scope",
+  "parameter_list", "argument_list", "expression", "assign",
+  "assign_type_T", "or", "and", "equal", "compare", "addsub", "muldiv",
+  "unary", "prefix", "postfix", "primary", "stmt_list", "stmt",
+  "variable_stmt", "if_stmt", "elif_list", "elif", "scope",
   "scope_optional", 0
 };
 #endif
@@ -613,14 +611,13 @@ static const yytype_uint8 yyr1[] =
       64,    65,    65,    66,    66,    67,    67,    68,    68,    69,
       70,    71,    71,    72,    72,    72,    73,    73,    73,    74,
       74,    75,    75,    76,    76,    77,    77,    78,    78,    79,
-      80,    80,    81,    81,    81,    81,    81,    82,    82,    83,
-      83,    84,    85,    85,    86,    86,    86,    86,    86,    86,
-      87,    87,    87,    88,    88,    88,    89,    89,    89,    90,
+      80,    80,    81,    81,    82,    83,    83,    84,    84,    84,
+      84,    84,    84,    85,    85,    85,    86,    86,    86,    87,
+      87,    87,    88,    88,    88,    88,    88,    89,    89,    89,
       90,    90,    90,    90,    91,    91,    91,    92,    92,    92,
-      92,    93,    93,    93,    94,    94,    94,    95,    95,    95,
-      95,    95,    96,    96,    96,    96,    96,    96,    96,    96,
-      97,    97,    98,    98,    98,    99,   100,   100,   100,   100,
-     101,   101,   102,   103,   103,   104,   104
+      93,    93,    93,    93,    93,    94,    94,    94,    94,    94,
+      94,    94,    94,    95,    95,    96,    96,    96,    97,    98,
+      98,    98,    98,    99,    99,   100,   101,   101,   102,   102
 };
 
 /* YYR2[YYN] -- Number of symbols composing right hand side of rule YYN.  */
@@ -628,16 +625,15 @@ static const yytype_uint8 yyr2[] =
 {
        0,     2,     1,     2,     2,     1,     1,     1,     1,     3,
        3,     3,     1,     1,     2,     0,     1,     1,     3,     2,
-       6,     0,     2,     0,     1,     2,     1,     1,     1,     8,
+       6,     0,     2,     0,     1,     2,     1,     1,     1,     7,
        6,     5,     4,     1,     1,     0,     1,     8,     7,     3,
-       1,     2,     1,     1,     1,     1,     1,     2,     4,     1,
-       3,     1,     1,     3,     1,     1,     1,     1,     1,     1,
-       1,     3,     3,     1,     3,     3,     1,     3,     3,     1,
-       3,     3,     3,     3,     1,     3,     3,     1,     3,     3,
-       3,     1,     2,     2,     1,     2,     2,     1,     5,     6,
-       2,     2,     1,     1,     1,     1,     1,     3,     4,     3,
-       1,     2,     2,     1,     1,     5,     5,     7,     6,     8,
-       1,     2,     5,     3,     2,     1,     1
+       2,     4,     1,     3,     1,     1,     3,     1,     1,     1,
+       1,     1,     1,     1,     3,     3,     1,     3,     3,     1,
+       3,     3,     1,     3,     3,     3,     3,     1,     3,     3,
+       1,     3,     3,     3,     1,     2,     2,     1,     2,     2,
+       1,     5,     6,     2,     2,     1,     1,     1,     1,     1,
+       3,     4,     3,     1,     2,     2,     1,     1,     5,     5,
+       7,     6,     8,     1,     2,     5,     3,     2,     1,     1
 };
 
 /* YYDEFACT[STATE-NAME] -- Default rule to reduce with in state
@@ -645,75 +641,73 @@ static const yytype_uint8 yyr2[] =
    means the default is an error.  */
 static const yytype_uint8 yydefact[] =
 {
-       0,     0,    94,    95,    92,    93,    96,     0,     0,     0,
+       0,     0,    87,    88,    85,    86,    89,     0,     0,     0,
        0,     0,     0,     0,     0,     0,     2,     8,     7,     5,
-      51,    52,    60,    63,    66,    69,    74,    77,    81,    84,
-      87,     6,   103,   104,     4,     0,     0,    96,    83,    82,
-      85,    86,     0,    19,    17,     0,     0,     1,     3,   102,
-      54,    55,    56,    57,    58,    59,     0,     0,     0,     0,
+      44,    45,    53,    56,    59,    62,    67,    70,    74,    77,
+      80,     6,    96,    97,     4,     0,     0,    89,    76,    75,
+      78,    79,     0,    19,    17,     0,     0,     1,     3,    95,
+      47,    48,    49,    50,    51,    52,     0,     0,     0,     0,
        0,     0,     0,     0,     0,     0,     0,     0,     0,     0,
-       0,     0,     0,    90,    91,     0,    97,     0,    49,    99,
-       0,    15,     9,     0,    61,    62,    53,    64,    65,    67,
-      68,    70,    71,    72,    73,    75,    76,    78,    79,    80,
-       0,     0,    98,     0,    18,     0,     0,    13,    16,     0,
-      12,     0,     0,   105,    50,    21,     0,    14,    10,     0,
-     106,    88,     0,     0,     0,    11,   114,     0,     0,   100,
-       0,     0,   108,   110,    89,    22,    23,   113,   101,     0,
-     107,     0,   111,     0,    42,    43,    44,    45,    46,     0,
-       0,    24,    26,    27,    28,     0,    40,     0,   109,     0,
-       0,     0,    20,    25,     0,    41,     0,    39,     0,     0,
-       0,   112,     0,     0,     0,    35,     0,    47,     0,     0,
-       0,    36,     0,     0,     0,     0,     0,    34,    33,     0,
-     115,   116,    30,    35,    48,    38,     0,     0,     0,    37,
-      32,     0,    29,    31
+       0,     0,     0,    83,    84,     0,    90,     0,    42,    92,
+       0,    15,     9,     0,    54,    55,    46,    57,    58,    60,
+      61,    63,    64,    65,    66,    68,    69,    71,    72,    73,
+       0,     0,    91,     0,    18,     0,     0,    13,    16,     0,
+      12,     0,     0,    98,    43,    21,     0,    14,    10,     0,
+      99,    81,     0,     0,     0,    11,   107,     0,     0,    93,
+       0,     0,   101,   103,    82,    22,    23,   106,    94,     0,
+     100,     0,   104,     0,     0,     0,    24,    26,    27,    28,
+       0,   102,     0,     0,     0,    20,    25,     0,    39,     0,
+       0,   105,     0,     0,     0,    35,     0,    40,     0,     0,
+       0,    36,     0,    35,     0,     0,     0,    34,    33,     0,
+     108,   109,    30,     0,    41,    38,     0,     0,    29,    37,
+      32,     0,    31
 };
 
 /* YYDEFGOTO[NTERM-NUM].  */
 static const yytype_int16 yydefgoto[] =
 {
       -1,    15,    16,    17,    82,   107,   108,   109,    45,    18,
-     110,   124,   150,   151,   152,   181,   189,   182,   153,   154,
-     155,   156,   174,    77,    78,    20,    58,    21,    22,    23,
-      24,    25,    26,    27,    28,    29,    30,   128,    31,    32,
-      33,   132,   133,   191,   192
+     110,   124,   145,   146,   147,   171,   179,   172,   148,   149,
+     164,    77,    78,    20,    58,    21,    22,    23,    24,    25,
+      26,    27,    28,    29,    30,   128,    31,    32,    33,   132,
+     133,   181,   182
 };
 
 /* YYPACT[STATE-NUM] -- Index in YYTABLE of the portion describing
    STATE-NUM.  */
-#define YYPACT_NINF -174
+#define YYPACT_NINF -152
 static const yytype_int16 yypact[] =
 {
-      54,   -35,  -174,  -174,  -174,  -174,    -2,   197,   197,   212,
-     212,   197,    24,    41,    -7,    13,  -174,  -174,  -174,     3,
-    -174,   207,   -24,    49,    48,    77,    38,  -174,  -174,     6,
-    -174,  -174,  -174,  -174,  -174,    45,   140,    32,  -174,  -174,
-       6,     6,    52,  -174,  -174,    14,   197,  -174,  -174,  -174,
-    -174,  -174,  -174,  -174,  -174,  -174,   197,   197,   197,   197,
-     197,   197,   197,   197,   197,   197,   197,   197,   197,   197,
-     197,   197,    89,  -174,  -174,   197,  -174,    72,    78,  -174,
-     109,   -12,  -174,    86,   -24,   -24,  -174,    49,    49,    48,
-      48,    77,    77,    77,    77,    38,    38,  -174,  -174,  -174,
-      82,    94,  -174,   197,  -174,   124,    41,  -174,   -12,   103,
-    -174,   114,   167,  -174,  -174,   142,    14,  -174,  -174,    95,
-      36,  -174,   126,   156,   132,  -174,  -174,     3,   100,  -174,
-     131,   114,    57,  -174,  -174,  -174,   111,  -174,  -174,   197,
-    -174,   114,  -174,   169,  -174,  -174,  -174,  -174,  -174,    -3,
-      35,  -174,  -174,  -174,  -174,   196,  -174,   136,  -174,   135,
-     143,   144,  -174,  -174,   138,  -174,   114,  -174,    -1,   152,
-     154,  -174,   176,   153,   157,   187,   191,   202,   205,   159,
-      79,  -174,     5,   183,   191,     5,   229,  -174,  -174,   199,
-    -174,  -174,  -174,   187,  -174,  -174,     5,   182,     5,  -174,
-    -174,   200,  -174,  -174
+      54,   -52,  -152,  -152,  -152,  -152,    24,   184,   184,    38,
+      38,   184,     8,    20,    34,    13,  -152,  -152,  -152,    32,
+    -152,   205,    51,    63,    65,    78,    33,  -152,  -152,     6,
+    -152,  -152,  -152,  -152,  -152,    59,   137,    41,  -152,  -152,
+       6,     6,    72,  -152,  -152,    27,   184,  -152,  -152,  -152,
+    -152,  -152,  -152,  -152,  -152,  -152,   184,   184,   184,   184,
+     184,   184,   184,   184,   184,   184,   184,   184,   184,   184,
+     184,   184,   109,  -152,  -152,   184,  -152,    81,   116,  -152,
+     111,   -17,  -152,    92,    51,    51,  -152,    63,    63,    65,
+      65,    78,    78,    78,    78,    33,    33,  -152,  -152,  -152,
+     122,   125,  -152,   184,  -152,   127,    20,  -152,   -17,   140,
+    -152,   138,   142,  -152,  -152,   168,    27,  -152,  -152,    95,
+      57,  -152,   154,   172,   158,  -152,  -152,    32,   100,  -152,
+     157,   138,    66,  -152,  -152,  -152,     1,  -152,  -152,   184,
+    -152,   138,  -152,   191,    18,    -1,  -152,  -152,  -152,  -152,
+     160,  -152,   161,   162,   164,  -152,  -152,   138,  -152,    -2,
+      14,  -152,   197,   153,   169,   199,   173,   204,   207,   165,
+      85,  -152,   -14,   199,   208,   -14,   209,  -152,  -152,   182,
+    -152,  -152,  -152,   -14,  -152,  -152,   -14,   179,  -152,  -152,
+    -152,   190,  -152
 };
 
 /* YYPGOTO[NTERM-NUM].  */
 static const yytype_int16 yypgoto[] =
 {
-    -174,  -174,   223,  -174,   137,   146,  -174,  -174,   134,  -174,
-    -174,  -174,  -174,    98,  -174,  -174,  -174,    58,  -174,  -174,
-    -174,    97,  -155,  -102,     0,   198,  -174,  -174,    73,    75,
-      80,   168,    81,    -5,  -174,   145,  -174,  -174,   -84,  -174,
-    -174,  -174,   123,  -104,  -173
+    -152,  -152,   206,  -152,   114,   123,  -152,  -152,   126,  -152,
+    -152,  -152,  -152,    88,  -152,  -152,  -152,    61,  -152,  -152,
+    -151,  -102,     0,   177,  -152,  -152,    79,    93,    96,   107,
+      94,    -5,  -152,   156,  -152,  -152,   -46,  -152,  -152,  -152,
+     104,  -107,   -97
 };
 
 /* YYTABLE[YYPACT[STATE-NUM]].  What to do in state STATE-NUM.  If
@@ -723,62 +717,60 @@ static const yytype_int16 yypgoto[] =
 #define YYTABLE_NINF -1
 static const yytype_uint8 yytable[] =
 {
-      19,   114,    38,    39,   160,    35,   172,   120,    59,    60,
-     122,    42,   195,    47,    72,    19,     2,     3,     4,     5,
-       6,   183,    80,   199,    34,   202,     7,   140,    43,   194,
-       8,    46,    73,    74,   105,   129,    36,   158,   173,     9,
-      10,   119,   143,   106,   138,    49,    83,   190,    44,   161,
-      81,    11,    69,    70,    71,     1,    12,     2,     3,     4,
-       5,     6,   171,    75,    97,    98,    99,     7,    13,    14,
-      36,     8,   162,    61,    62,   101,    63,    64,    65,    66,
-       9,    10,   144,   145,   146,   147,   148,   103,   149,    67,
-      68,    79,    11,   130,   131,   201,   100,    12,     2,     3,
+      19,   114,    38,    39,   120,   162,   143,    34,   143,   166,
+     122,    42,    43,    47,    72,    19,     2,     3,     4,     5,
+       6,   162,   119,   184,   140,   153,     7,    44,   180,   105,
+       8,    35,    73,    74,   151,    80,   155,   163,   106,     9,
+      10,     2,     3,     4,     5,    37,    83,    69,    70,    71,
+     161,    11,   144,   165,   144,     1,    12,     2,     3,     4,
+       5,     6,    36,    81,    97,    98,    99,     7,    13,    14,
+     154,     8,    46,   129,    49,   101,    11,    75,   185,    36,
+       9,    10,   138,    59,    60,   191,   188,    61,    62,   189,
+      67,    68,    11,    63,    64,    65,    66,    12,     2,     3,
        4,     5,     6,     2,     3,     4,     5,     6,     7,    13,
-      14,   102,     8,     7,   130,   141,   104,     8,   143,   127,
-     112,     9,    10,   187,   188,   111,     9,    10,   127,    84,
-      85,   115,   126,    11,    87,    88,   113,   137,    11,   157,
-     118,    89,    90,     2,     3,     4,     5,    37,    95,    96,
-     119,    14,   123,     7,    40,    41,    14,     8,   144,   145,
-     146,   147,   148,   135,   149,   134,     9,    10,   136,   139,
-       2,     3,     4,     5,    37,   166,   159,   167,    11,    76,
-       7,   168,   169,   177,     8,     2,     3,     4,     5,    37,
-     170,   175,   176,     9,    10,     7,   179,   180,   172,     8,
-       2,     3,     4,     5,    37,    11,   121,   178,     9,    10,
-       7,   184,   185,   186,     8,     2,     3,     4,     5,    37,
-      11,   200,   193,     9,    10,    50,    51,    52,    53,    54,
-      55,    91,    92,    93,    94,    11,   196,   197,    48,   203,
-     116,    56,    57,   144,   145,   146,   147,   148,   163,   164,
-      11,   198,   165,   125,   117,   142,    86
+      14,    79,     8,     7,   130,   131,   100,     8,   104,   127,
+     102,     9,    10,   130,   141,   103,     9,    10,   127,   177,
+     178,   111,   126,    11,   115,    84,    85,   137,    11,   150,
+       2,     3,     4,     5,    37,     2,     3,     4,     5,    37,
+       7,    14,    87,    88,     8,     7,    14,    89,    90,     8,
+     112,    95,    96,     9,    10,    40,    41,   113,     9,    10,
+      91,    92,    93,    94,   119,    11,    76,   118,   123,   135,
+      11,   121,     2,     3,     4,     5,    37,     2,     3,     4,
+       5,    37,     7,   134,   136,   139,     8,     7,   152,   157,
+     159,     8,   160,   158,   167,     9,    10,   168,   169,   170,
+       9,    10,   173,   174,   175,   162,   186,    11,   190,   176,
+     187,    48,    11,    50,    51,    52,    53,    54,    55,   192,
+     125,   117,   116,   156,   183,    86,   142,     0,     0,    56,
+      57
 };
 
-static const yytype_uint8 yycheck[] =
+static const yytype_int16 yycheck[] =
 {
-       0,   103,     7,     8,     7,     7,     7,   111,    32,    33,
-     112,    11,   185,     0,     8,    15,     3,     4,     5,     6,
-       7,   176,     8,   196,    59,   198,    13,   131,     4,   184,
-      17,    38,    26,    27,    46,   119,    38,   141,    39,    26,
-      27,    36,     7,    55,   128,    42,    46,    42,     7,    52,
-      36,    38,    14,    15,    16,     1,    43,     3,     4,     5,
-       6,     7,   166,    18,    69,    70,    71,    13,    55,    56,
-      38,    17,    37,    24,    25,    75,    28,    29,    30,    31,
-      26,    27,    47,    48,    49,    50,    51,     9,    53,    12,
-      13,    39,    38,    57,    58,   197,     7,    43,     3,     4,
+       0,   103,     7,     8,   111,     7,     7,    59,     7,   160,
+     112,    11,     4,     0,     8,    15,     3,     4,     5,     6,
+       7,     7,    36,   174,   131,     7,    13,     7,    42,    46,
+      17,     7,    26,    27,   141,     8,    37,    39,    55,    26,
+      27,     3,     4,     5,     6,     7,    46,    14,    15,    16,
+     157,    38,    53,    39,    53,     1,    43,     3,     4,     5,
+       6,     7,    38,    36,    69,    70,    71,    13,    55,    56,
+      52,    17,    38,   119,    42,    75,    38,    18,   175,    38,
+      26,    27,   128,    32,    33,   187,   183,    24,    25,   186,
+      12,    13,    38,    28,    29,    30,    31,    43,     3,     4,
        5,     6,     7,     3,     4,     5,     6,     7,    13,    55,
       56,    39,    17,    13,    57,    58,     7,    17,     7,   119,
-      38,    26,    27,    44,    45,    39,    26,    27,   128,    56,
-      57,     7,    37,    38,    59,    60,    42,    37,    38,   139,
-      37,    61,    62,     3,     4,     5,     6,     7,    67,    68,
-      36,    56,    10,    13,     9,    10,    56,    17,    47,    48,
-      49,    50,    51,     7,    53,    39,    26,    27,    36,    38,
-       3,     4,     5,     6,     7,    39,     7,    42,    38,    39,
-      13,    38,    38,     7,    17,     3,     4,     5,     6,     7,
-      52,    39,    38,    26,    27,    13,    39,    10,     7,    17,
-       3,     4,     5,     6,     7,    38,    39,    54,    26,    27,
-      13,     9,     7,    54,    17,     3,     4,     5,     6,     7,
-      38,    39,    39,    26,    27,    18,    19,    20,    21,    22,
-      23,    63,    64,    65,    66,    38,     7,    38,    15,    39,
-     106,    34,    35,    47,    48,    49,    50,    51,   150,    53,
-      38,   193,   155,   116,   108,   132,    58
+      39,    26,    27,    57,    58,     9,    26,    27,   128,    44,
+      45,    39,    37,    38,     7,    56,    57,    37,    38,   139,
+       3,     4,     5,     6,     7,     3,     4,     5,     6,     7,
+      13,    56,    59,    60,    17,    13,    56,    61,    62,    17,
+      38,    67,    68,    26,    27,     9,    10,    42,    26,    27,
+      63,    64,    65,    66,    36,    38,    39,    37,    10,     7,
+      38,    39,     3,     4,     5,     6,     7,     3,     4,     5,
+       6,     7,    13,    39,    36,    38,    17,    13,     7,    39,
+      38,    17,    38,    42,     7,    26,    27,    54,    39,    10,
+      26,    27,    39,     9,     7,     7,     7,    38,    39,    54,
+      38,    15,    38,    18,    19,    20,    21,    22,    23,    39,
+     116,   108,   106,   145,   173,    58,   132,    -1,    -1,    34,
+      35
 };
 
 /* YYSTOS[STATE-NUM] -- The (internal number of the) accessing
@@ -786,26 +778,25 @@ static const yytype_uint8 yycheck[] =
 static const yytype_uint8 yystos[] =
 {
        0,     1,     3,     4,     5,     6,     7,    13,    17,    26,
-      27,    38,    43,    55,    56,    61,    62,    63,    69,    84,
-      85,    87,    88,    89,    90,    91,    92,    93,    94,    95,
-      96,    98,    99,   100,    59,     7,    38,     7,    93,    93,
-      95,    95,    84,     4,     7,    68,    38,     0,    62,    42,
-      18,    19,    20,    21,    22,    23,    34,    35,    86,    32,
+      27,    38,    43,    55,    56,    61,    62,    63,    69,    82,
+      83,    85,    86,    87,    88,    89,    90,    91,    92,    93,
+      94,    96,    97,    98,    59,     7,    38,     7,    91,    91,
+      93,    93,    82,     4,     7,    68,    38,     0,    62,    42,
+      18,    19,    20,    21,    22,    23,    34,    35,    84,    32,
       33,    24,    25,    28,    29,    30,    31,    12,    13,    14,
-      15,    16,     8,    26,    27,    18,    39,    83,    84,    39,
-       8,    36,    64,    84,    88,    88,    85,    89,    89,    90,
-      90,    91,    91,    91,    91,    92,    92,    93,    93,    93,
-       7,    84,    39,     9,     7,    46,    55,    65,    66,    67,
-      70,    39,    38,    42,    83,     7,    68,    65,    37,    36,
-     103,    39,    83,    10,    71,    64,    37,    84,    97,    98,
-      57,    58,   101,   102,    39,     7,    36,    37,    98,    38,
-     103,    58,   102,     7,    47,    48,    49,    50,    51,    53,
-      72,    73,    74,    78,    79,    80,    81,    84,   103,     7,
-       7,    52,    37,    73,    53,    81,    39,    42,    38,    38,
-      52,   103,     7,    39,    82,    39,    38,     7,    54,    39,
-      10,    75,    77,    82,     9,     7,    54,    44,    45,    76,
-      42,   103,   104,    39,    82,   104,     7,    38,    77,   104,
-      39,    83,   104,    39
+      15,    16,     8,    26,    27,    18,    39,    81,    82,    39,
+       8,    36,    64,    82,    86,    86,    83,    87,    87,    88,
+      88,    89,    89,    89,    89,    90,    90,    91,    91,    91,
+       7,    82,    39,     9,     7,    46,    55,    65,    66,    67,
+      70,    39,    38,    42,    81,     7,    68,    65,    37,    36,
+     101,    39,    81,    10,    71,    64,    37,    82,    95,    96,
+      57,    58,    99,   100,    39,     7,    36,    37,    96,    38,
+     101,    58,   100,     7,    53,    72,    73,    74,    78,    79,
+      82,   101,     7,     7,    52,    37,    73,    39,    42,    38,
+      38,   101,     7,    39,    80,    39,    80,     7,    54,    39,
+      10,    75,    77,    39,     9,     7,    54,    44,    45,    76,
+      42,   101,   102,    77,    80,   102,     7,    38,   102,   102,
+      39,    81,    39
 };
 
 #define yyerrok		(yyerrstatus = 0)
@@ -1854,7 +1845,7 @@ yyreduce:
 /* Line 1455 of yacc.c  */
 #line 206 "C:\\Users\\Koya\\Documents\\GitHub\\CSignal\\CSignal\\CSignal\\signal\\parse\\signal.y"
     {
-		(yyval.ast_value) = ast_new_constructor_decl((yyvsp[(5) - (8)].ast_value), (yyvsp[(7) - (8)].ast_value), (yyvsp[(8) - (8)].ast_value));
+		(yyval.ast_value) = ast_new_constructor_decl((yyvsp[(4) - (7)].ast_value), (yyvsp[(6) - (7)].ast_value), (yyvsp[(7) - (7)].ast_value));
 	;}
     break;
 
@@ -1942,342 +1933,306 @@ yyreduce:
   case 40:
 
 /* Line 1455 of yacc.c  */
-#line 259 "C:\\Users\\Koya\\Documents\\GitHub\\CSignal\\CSignal\\CSignal\\signal\\parse\\signal.y"
+#line 273 "C:\\Users\\Koya\\Documents\\GitHub\\CSignal\\CSignal\\CSignal\\signal\\parse\\signal.y"
     {
-		(yyval.ast_value) = ast_new_modifier((yyvsp[(1) - (1)].modifier_type_value));
+		(yyval.ast_value) = ast_new_parameter((yyvsp[(1) - (2)].string_value), (yyvsp[(2) - (2)].string_value));
 	;}
     break;
 
   case 41:
 
 /* Line 1455 of yacc.c  */
-#line 263 "C:\\Users\\Koya\\Documents\\GitHub\\CSignal\\CSignal\\CSignal\\signal\\parse\\signal.y"
+#line 277 "C:\\Users\\Koya\\Documents\\GitHub\\CSignal\\CSignal\\CSignal\\signal\\parse\\signal.y"
     {
-		(yyval.ast_value) = ast_new_modifier_list((yyvsp[(1) - (2)].ast_value), (yyvsp[(2) - (2)].modifier_type_value));
+		(yyval.ast_value) = ast_new_parameter_list((yyvsp[(1) - (4)].string_value), (yyvsp[(2) - (4)].string_value), (yyvsp[(4) - (4)].ast_value))
 	;}
     break;
 
   case 42:
 
 /* Line 1455 of yacc.c  */
-#line 269 "C:\\Users\\Koya\\Documents\\GitHub\\CSignal\\CSignal\\CSignal\\signal\\parse\\signal.y"
+#line 283 "C:\\Users\\Koya\\Documents\\GitHub\\CSignal\\CSignal\\CSignal\\signal\\parse\\signal.y"
     {
-		(yyval.modifier_type_value) = modifier_type_public;
+		(yyval.ast_value) = ast_new_argument((yyvsp[(1) - (1)].ast_value));
 	;}
     break;
 
   case 43:
 
 /* Line 1455 of yacc.c  */
-#line 273 "C:\\Users\\Koya\\Documents\\GitHub\\CSignal\\CSignal\\CSignal\\signal\\parse\\signal.y"
+#line 287 "C:\\Users\\Koya\\Documents\\GitHub\\CSignal\\CSignal\\CSignal\\signal\\parse\\signal.y"
     {
-		(yyval.modifier_type_value) = modifier_type_private;
-	;}
-    break;
-
-  case 44:
-
-/* Line 1455 of yacc.c  */
-#line 277 "C:\\Users\\Koya\\Documents\\GitHub\\CSignal\\CSignal\\CSignal\\signal\\parse\\signal.y"
-    {
-		(yyval.modifier_type_value) = modifier_type_protected;
-	;}
-    break;
-
-  case 45:
-
-/* Line 1455 of yacc.c  */
-#line 281 "C:\\Users\\Koya\\Documents\\GitHub\\CSignal\\CSignal\\CSignal\\signal\\parse\\signal.y"
-    {
-		(yyval.modifier_type_value) = modifier_type_static;
+		(yyval.ast_value) = ast_new_argument_list(ast_new_argument((yyvsp[(1) - (3)].ast_value)), (yyvsp[(3) - (3)].ast_value));
 	;}
     break;
 
   case 46:
 
 /* Line 1455 of yacc.c  */
-#line 285 "C:\\Users\\Koya\\Documents\\GitHub\\CSignal\\CSignal\\CSignal\\signal\\parse\\signal.y"
+#line 297 "C:\\Users\\Koya\\Documents\\GitHub\\CSignal\\CSignal\\CSignal\\signal\\parse\\signal.y"
     {
-		(yyval.modifier_type_value) = modifier_type_native;
+		(yyval.ast_value) = ast_new_generic_assign((yyvsp[(1) - (3)].ast_value), (yyvsp[(2) - (3)].assign_otype_value), (yyvsp[(3) - (3)].ast_value));
 	;}
     break;
 
   case 47:
 
 /* Line 1455 of yacc.c  */
-#line 291 "C:\\Users\\Koya\\Documents\\GitHub\\CSignal\\CSignal\\CSignal\\signal\\parse\\signal.y"
+#line 303 "C:\\Users\\Koya\\Documents\\GitHub\\CSignal\\CSignal\\CSignal\\signal\\parse\\signal.y"
     {
-		(yyval.ast_value) = ast_new_parameter((yyvsp[(1) - (2)].string_value), (yyvsp[(2) - (2)].string_value));
+		(yyval.assign_otype_value) = assign_otype_def;
 	;}
     break;
 
   case 48:
 
 /* Line 1455 of yacc.c  */
-#line 295 "C:\\Users\\Koya\\Documents\\GitHub\\CSignal\\CSignal\\CSignal\\signal\\parse\\signal.y"
+#line 307 "C:\\Users\\Koya\\Documents\\GitHub\\CSignal\\CSignal\\CSignal\\signal\\parse\\signal.y"
     {
-		(yyval.ast_value) = ast_new_parameter_list((yyvsp[(1) - (4)].string_value), (yyvsp[(2) - (4)].string_value), (yyvsp[(4) - (4)].ast_value))
+		(yyval.assign_otype_value) = assign_otype_add;
 	;}
     break;
 
   case 49:
 
 /* Line 1455 of yacc.c  */
-#line 301 "C:\\Users\\Koya\\Documents\\GitHub\\CSignal\\CSignal\\CSignal\\signal\\parse\\signal.y"
+#line 311 "C:\\Users\\Koya\\Documents\\GitHub\\CSignal\\CSignal\\CSignal\\signal\\parse\\signal.y"
     {
-		(yyval.ast_value) = ast_new_argument((yyvsp[(1) - (1)].ast_value));
+		(yyval.assign_otype_value) = assign_otype_sub;
 	;}
     break;
 
   case 50:
 
 /* Line 1455 of yacc.c  */
-#line 305 "C:\\Users\\Koya\\Documents\\GitHub\\CSignal\\CSignal\\CSignal\\signal\\parse\\signal.y"
+#line 315 "C:\\Users\\Koya\\Documents\\GitHub\\CSignal\\CSignal\\CSignal\\signal\\parse\\signal.y"
     {
-		(yyval.ast_value) = ast_new_argument_list(ast_new_argument((yyvsp[(1) - (3)].ast_value)), (yyvsp[(3) - (3)].ast_value));
+		(yyval.assign_otype_value) = assign_otype_mul;
 	;}
     break;
 
-  case 53:
+  case 51:
 
 /* Line 1455 of yacc.c  */
-#line 315 "C:\\Users\\Koya\\Documents\\GitHub\\CSignal\\CSignal\\CSignal\\signal\\parse\\signal.y"
+#line 319 "C:\\Users\\Koya\\Documents\\GitHub\\CSignal\\CSignal\\CSignal\\signal\\parse\\signal.y"
     {
-		(yyval.ast_value) = ast_new_generic_assign((yyvsp[(1) - (3)].ast_value), (yyvsp[(2) - (3)].assign_otype_value), (yyvsp[(3) - (3)].ast_value));
+		(yyval.assign_otype_value) = assign_otype_div;
+	;}
+    break;
+
+  case 52:
+
+/* Line 1455 of yacc.c  */
+#line 323 "C:\\Users\\Koya\\Documents\\GitHub\\CSignal\\CSignal\\CSignal\\signal\\parse\\signal.y"
+    {
+		(yyval.assign_otype_value) = assign_otype_mod;
 	;}
     break;
 
   case 54:
 
 /* Line 1455 of yacc.c  */
-#line 321 "C:\\Users\\Koya\\Documents\\GitHub\\CSignal\\CSignal\\CSignal\\signal\\parse\\signal.y"
+#line 330 "C:\\Users\\Koya\\Documents\\GitHub\\CSignal\\CSignal\\CSignal\\signal\\parse\\signal.y"
     {
-		(yyval.assign_otype_value) = assign_otype_def;
+		(yyval.ast_value) = ast_new_bit_or((yyvsp[(1) - (3)].ast_value), (yyvsp[(3) - (3)].ast_value));
 	;}
     break;
 
   case 55:
 
 /* Line 1455 of yacc.c  */
-#line 325 "C:\\Users\\Koya\\Documents\\GitHub\\CSignal\\CSignal\\CSignal\\signal\\parse\\signal.y"
+#line 334 "C:\\Users\\Koya\\Documents\\GitHub\\CSignal\\CSignal\\CSignal\\signal\\parse\\signal.y"
     {
-		(yyval.assign_otype_value) = assign_otype_add;
-	;}
-    break;
-
-  case 56:
-
-/* Line 1455 of yacc.c  */
-#line 329 "C:\\Users\\Koya\\Documents\\GitHub\\CSignal\\CSignal\\CSignal\\signal\\parse\\signal.y"
-    {
-		(yyval.assign_otype_value) = assign_otype_sub;
+		(yyval.ast_value) = ast_new_logic_or((yyvsp[(1) - (3)].ast_value), (yyvsp[(3) - (3)].ast_value));
 	;}
     break;
 
   case 57:
 
 /* Line 1455 of yacc.c  */
-#line 333 "C:\\Users\\Koya\\Documents\\GitHub\\CSignal\\CSignal\\CSignal\\signal\\parse\\signal.y"
+#line 341 "C:\\Users\\Koya\\Documents\\GitHub\\CSignal\\CSignal\\CSignal\\signal\\parse\\signal.y"
     {
-		(yyval.assign_otype_value) = assign_otype_mul;
+		(yyval.ast_value) = ast_new_bit_and((yyvsp[(1) - (3)].ast_value), (yyvsp[(3) - (3)].ast_value));
 	;}
     break;
 
   case 58:
 
 /* Line 1455 of yacc.c  */
-#line 337 "C:\\Users\\Koya\\Documents\\GitHub\\CSignal\\CSignal\\CSignal\\signal\\parse\\signal.y"
+#line 345 "C:\\Users\\Koya\\Documents\\GitHub\\CSignal\\CSignal\\CSignal\\signal\\parse\\signal.y"
     {
-		(yyval.assign_otype_value) = assign_otype_div;
+		(yyval.ast_value) = ast_new_logic_and((yyvsp[(1) - (3)].ast_value), (yyvsp[(3) - (3)].ast_value));
 	;}
     break;
 
-  case 59:
+  case 60:
 
 /* Line 1455 of yacc.c  */
-#line 341 "C:\\Users\\Koya\\Documents\\GitHub\\CSignal\\CSignal\\CSignal\\signal\\parse\\signal.y"
+#line 352 "C:\\Users\\Koya\\Documents\\GitHub\\CSignal\\CSignal\\CSignal\\signal\\parse\\signal.y"
     {
-		(yyval.assign_otype_value) = assign_otype_mod;
+		(yyval.ast_value) = ast_new_equal((yyvsp[(1) - (3)].ast_value), (yyvsp[(3) - (3)].ast_value));
 	;}
     break;
 
   case 61:
 
 /* Line 1455 of yacc.c  */
-#line 348 "C:\\Users\\Koya\\Documents\\GitHub\\CSignal\\CSignal\\CSignal\\signal\\parse\\signal.y"
+#line 356 "C:\\Users\\Koya\\Documents\\GitHub\\CSignal\\CSignal\\CSignal\\signal\\parse\\signal.y"
     {
-		(yyval.ast_value) = ast_new_bit_or((yyvsp[(1) - (3)].ast_value), (yyvsp[(3) - (3)].ast_value));
+		(yyval.ast_value) = ast_new_notequal((yyvsp[(1) - (3)].ast_value), (yyvsp[(3) - (3)].ast_value));
 	;}
     break;
 
-  case 62:
+  case 63:
 
 /* Line 1455 of yacc.c  */
-#line 352 "C:\\Users\\Koya\\Documents\\GitHub\\CSignal\\CSignal\\CSignal\\signal\\parse\\signal.y"
+#line 363 "C:\\Users\\Koya\\Documents\\GitHub\\CSignal\\CSignal\\CSignal\\signal\\parse\\signal.y"
     {
-		(yyval.ast_value) = ast_new_logic_or((yyvsp[(1) - (3)].ast_value), (yyvsp[(3) - (3)].ast_value));
+		(yyval.ast_value) = ast_new_gt((yyvsp[(1) - (3)].ast_value), (yyvsp[(3) - (3)].ast_value));
 	;}
     break;
 
   case 64:
 
 /* Line 1455 of yacc.c  */
-#line 359 "C:\\Users\\Koya\\Documents\\GitHub\\CSignal\\CSignal\\CSignal\\signal\\parse\\signal.y"
+#line 367 "C:\\Users\\Koya\\Documents\\GitHub\\CSignal\\CSignal\\CSignal\\signal\\parse\\signal.y"
     {
-		(yyval.ast_value) = ast_new_bit_and((yyvsp[(1) - (3)].ast_value), (yyvsp[(3) - (3)].ast_value));
+		(yyval.ast_value) = ast_new_ge((yyvsp[(1) - (3)].ast_value), (yyvsp[(3) - (3)].ast_value));
 	;}
     break;
 
   case 65:
 
 /* Line 1455 of yacc.c  */
-#line 363 "C:\\Users\\Koya\\Documents\\GitHub\\CSignal\\CSignal\\CSignal\\signal\\parse\\signal.y"
+#line 371 "C:\\Users\\Koya\\Documents\\GitHub\\CSignal\\CSignal\\CSignal\\signal\\parse\\signal.y"
     {
-		(yyval.ast_value) = ast_new_logic_and((yyvsp[(1) - (3)].ast_value), (yyvsp[(3) - (3)].ast_value));
+		(yyval.ast_value) = ast_new_lt((yyvsp[(1) - (3)].ast_value), (yyvsp[(3) - (3)].ast_value));
 	;}
     break;
 
-  case 67:
+  case 66:
 
 /* Line 1455 of yacc.c  */
-#line 370 "C:\\Users\\Koya\\Documents\\GitHub\\CSignal\\CSignal\\CSignal\\signal\\parse\\signal.y"
+#line 375 "C:\\Users\\Koya\\Documents\\GitHub\\CSignal\\CSignal\\CSignal\\signal\\parse\\signal.y"
     {
-		(yyval.ast_value) = ast_new_equal((yyvsp[(1) - (3)].ast_value), (yyvsp[(3) - (3)].ast_value));
+		(yyval.ast_value) = ast_new_le((yyvsp[(1) - (3)].ast_value), (yyvsp[(3) - (3)].ast_value));
 	;}
     break;
 
   case 68:
 
 /* Line 1455 of yacc.c  */
-#line 374 "C:\\Users\\Koya\\Documents\\GitHub\\CSignal\\CSignal\\CSignal\\signal\\parse\\signal.y"
+#line 382 "C:\\Users\\Koya\\Documents\\GitHub\\CSignal\\CSignal\\CSignal\\signal\\parse\\signal.y"
     {
-		(yyval.ast_value) = ast_new_notequal((yyvsp[(1) - (3)].ast_value), (yyvsp[(3) - (3)].ast_value));
+		(yyval.ast_value) = ast_new_add((yyvsp[(1) - (3)].ast_value), (yyvsp[(3) - (3)].ast_value));
 	;}
     break;
 
-  case 70:
+  case 69:
 
 /* Line 1455 of yacc.c  */
-#line 381 "C:\\Users\\Koya\\Documents\\GitHub\\CSignal\\CSignal\\CSignal\\signal\\parse\\signal.y"
+#line 386 "C:\\Users\\Koya\\Documents\\GitHub\\CSignal\\CSignal\\CSignal\\signal\\parse\\signal.y"
     {
-		(yyval.ast_value) = ast_new_gt((yyvsp[(1) - (3)].ast_value), (yyvsp[(3) - (3)].ast_value));
+		(yyval.ast_value) = ast_new_sub((yyvsp[(1) - (3)].ast_value), (yyvsp[(3) - (3)].ast_value));
 	;}
     break;
 
   case 71:
 
 /* Line 1455 of yacc.c  */
-#line 385 "C:\\Users\\Koya\\Documents\\GitHub\\CSignal\\CSignal\\CSignal\\signal\\parse\\signal.y"
+#line 393 "C:\\Users\\Koya\\Documents\\GitHub\\CSignal\\CSignal\\CSignal\\signal\\parse\\signal.y"
     {
-		(yyval.ast_value) = ast_new_ge((yyvsp[(1) - (3)].ast_value), (yyvsp[(3) - (3)].ast_value));
+		(yyval.ast_value) = ast_new_mul((yyvsp[(1) - (3)].ast_value), (yyvsp[(3) - (3)].ast_value));
 	;}
     break;
 
   case 72:
 
 /* Line 1455 of yacc.c  */
-#line 389 "C:\\Users\\Koya\\Documents\\GitHub\\CSignal\\CSignal\\CSignal\\signal\\parse\\signal.y"
+#line 397 "C:\\Users\\Koya\\Documents\\GitHub\\CSignal\\CSignal\\CSignal\\signal\\parse\\signal.y"
     {
-		(yyval.ast_value) = ast_new_lt((yyvsp[(1) - (3)].ast_value), (yyvsp[(3) - (3)].ast_value));
+		(yyval.ast_value) = ast_new_div((yyvsp[(1) - (3)].ast_value), (yyvsp[(3) - (3)].ast_value));
 	;}
     break;
 
   case 73:
 
 /* Line 1455 of yacc.c  */
-#line 393 "C:\\Users\\Koya\\Documents\\GitHub\\CSignal\\CSignal\\CSignal\\signal\\parse\\signal.y"
+#line 401 "C:\\Users\\Koya\\Documents\\GitHub\\CSignal\\CSignal\\CSignal\\signal\\parse\\signal.y"
     {
-		(yyval.ast_value) = ast_new_le((yyvsp[(1) - (3)].ast_value), (yyvsp[(3) - (3)].ast_value));
+		(yyval.ast_value) = ast_new_mod((yyvsp[(1) - (3)].ast_value), (yyvsp[(3) - (3)].ast_value));
 	;}
     break;
 
   case 75:
 
 /* Line 1455 of yacc.c  */
-#line 400 "C:\\Users\\Koya\\Documents\\GitHub\\CSignal\\CSignal\\CSignal\\signal\\parse\\signal.y"
+#line 408 "C:\\Users\\Koya\\Documents\\GitHub\\CSignal\\CSignal\\CSignal\\signal\\parse\\signal.y"
     {
-		(yyval.ast_value) = ast_new_add((yyvsp[(1) - (3)].ast_value), (yyvsp[(3) - (3)].ast_value));
+		(yyval.ast_value) = ast_new_not((yyvsp[(2) - (2)].ast_value));
 	;}
     break;
 
   case 76:
 
 /* Line 1455 of yacc.c  */
-#line 404 "C:\\Users\\Koya\\Documents\\GitHub\\CSignal\\CSignal\\CSignal\\signal\\parse\\signal.y"
+#line 412 "C:\\Users\\Koya\\Documents\\GitHub\\CSignal\\CSignal\\CSignal\\signal\\parse\\signal.y"
     {
-		(yyval.ast_value) = ast_new_sub((yyvsp[(1) - (3)].ast_value), (yyvsp[(3) - (3)].ast_value));
+		(yyval.ast_value) = ast_new_neg((yyvsp[(2) - (2)].ast_value));
 	;}
     break;
 
   case 78:
 
 /* Line 1455 of yacc.c  */
-#line 411 "C:\\Users\\Koya\\Documents\\GitHub\\CSignal\\CSignal\\CSignal\\signal\\parse\\signal.y"
+#line 419 "C:\\Users\\Koya\\Documents\\GitHub\\CSignal\\CSignal\\CSignal\\signal\\parse\\signal.y"
     {
-		(yyval.ast_value) = ast_new_mul((yyvsp[(1) - (3)].ast_value), (yyvsp[(3) - (3)].ast_value));
+		(yyval.ast_value) = ast_new_pre_inc((yyvsp[(2) - (2)].ast_value));
 	;}
     break;
 
   case 79:
 
 /* Line 1455 of yacc.c  */
-#line 415 "C:\\Users\\Koya\\Documents\\GitHub\\CSignal\\CSignal\\CSignal\\signal\\parse\\signal.y"
+#line 423 "C:\\Users\\Koya\\Documents\\GitHub\\CSignal\\CSignal\\CSignal\\signal\\parse\\signal.y"
     {
-		(yyval.ast_value) = ast_new_div((yyvsp[(1) - (3)].ast_value), (yyvsp[(3) - (3)].ast_value));
+		(yyval.ast_value) = ast_new_pre_dec((yyvsp[(2) - (2)].ast_value));
 	;}
     break;
 
-  case 80:
+  case 81:
 
 /* Line 1455 of yacc.c  */
-#line 419 "C:\\Users\\Koya\\Documents\\GitHub\\CSignal\\CSignal\\CSignal\\signal\\parse\\signal.y"
+#line 430 "C:\\Users\\Koya\\Documents\\GitHub\\CSignal\\CSignal\\CSignal\\signal\\parse\\signal.y"
     {
-		(yyval.ast_value) = ast_new_mod((yyvsp[(1) - (3)].ast_value), (yyvsp[(3) - (3)].ast_value));
+		(yyval.ast_value) = ast_new_invoke((yyvsp[(1) - (5)].ast_value), (yyvsp[(3) - (5)].string_value), ast_new_blank());
 	;}
     break;
 
   case 82:
 
 /* Line 1455 of yacc.c  */
-#line 426 "C:\\Users\\Koya\\Documents\\GitHub\\CSignal\\CSignal\\CSignal\\signal\\parse\\signal.y"
+#line 434 "C:\\Users\\Koya\\Documents\\GitHub\\CSignal\\CSignal\\CSignal\\signal\\parse\\signal.y"
     {
-		(yyval.ast_value) = ast_new_not((yyvsp[(2) - (2)].ast_value));
+		(yyval.ast_value) = ast_new_invoke((yyvsp[(1) - (6)].ast_value), (yyvsp[(3) - (6)].string_value), (yyvsp[(5) - (6)].ast_value));
 	;}
     break;
 
   case 83:
 
 /* Line 1455 of yacc.c  */
-#line 430 "C:\\Users\\Koya\\Documents\\GitHub\\CSignal\\CSignal\\CSignal\\signal\\parse\\signal.y"
+#line 438 "C:\\Users\\Koya\\Documents\\GitHub\\CSignal\\CSignal\\CSignal\\signal\\parse\\signal.y"
     {
-		(yyval.ast_value) = ast_new_neg((yyvsp[(2) - (2)].ast_value));
+		(yyval.ast_value) = ast_new_post_inc((yyvsp[(1) - (2)].ast_value));
 	;}
     break;
 
-  case 85:
+  case 84:
 
 /* Line 1455 of yacc.c  */
-#line 437 "C:\\Users\\Koya\\Documents\\GitHub\\CSignal\\CSignal\\CSignal\\signal\\parse\\signal.y"
+#line 442 "C:\\Users\\Koya\\Documents\\GitHub\\CSignal\\CSignal\\CSignal\\signal\\parse\\signal.y"
     {
-		(yyval.ast_value) = ast_new_pre_inc((yyvsp[(2) - (2)].ast_value));
-	;}
-    break;
-
-  case 86:
-
-/* Line 1455 of yacc.c  */
-#line 441 "C:\\Users\\Koya\\Documents\\GitHub\\CSignal\\CSignal\\CSignal\\signal\\parse\\signal.y"
-    {
-		(yyval.ast_value) = ast_new_pre_dec((yyvsp[(2) - (2)].ast_value));
-	;}
-    break;
-
-  case 88:
-
-/* Line 1455 of yacc.c  */
-#line 448 "C:\\Users\\Koya\\Documents\\GitHub\\CSignal\\CSignal\\CSignal\\signal\\parse\\signal.y"
-    {
-		(yyval.ast_value) = ast_new_invoke((yyvsp[(1) - (5)].ast_value), (yyvsp[(3) - (5)].string_value), ast_new_blank());
+		(yyval.ast_value) = ast_new_post_dec((yyvsp[(1) - (2)].ast_value));
 	;}
     break;
 
@@ -2286,7 +2241,7 @@ yyreduce:
 /* Line 1455 of yacc.c  */
 #line 452 "C:\\Users\\Koya\\Documents\\GitHub\\CSignal\\CSignal\\CSignal\\signal\\parse\\signal.y"
     {
-		(yyval.ast_value) = ast_new_invoke((yyvsp[(1) - (6)].ast_value), (yyvsp[(3) - (6)].string_value), (yyvsp[(5) - (6)].ast_value));
+		(yyval.ast_value) = ast_new_variable((yyvsp[(1) - (1)].string_value));
 	;}
     break;
 
@@ -2295,7 +2250,7 @@ yyreduce:
 /* Line 1455 of yacc.c  */
 #line 456 "C:\\Users\\Koya\\Documents\\GitHub\\CSignal\\CSignal\\CSignal\\signal\\parse\\signal.y"
     {
-		(yyval.ast_value) = ast_new_post_inc((yyvsp[(1) - (2)].ast_value));
+		(yyval.ast_value) = ast_new_call((yyvsp[(1) - (3)].string_value), ast_new_blank());
 	;}
     break;
 
@@ -2304,158 +2259,131 @@ yyreduce:
 /* Line 1455 of yacc.c  */
 #line 460 "C:\\Users\\Koya\\Documents\\GitHub\\CSignal\\CSignal\\CSignal\\signal\\parse\\signal.y"
     {
-		(yyval.ast_value) = ast_new_post_dec((yyvsp[(1) - (2)].ast_value));
+		(yyval.ast_value) = ast_new_call((yyvsp[(1) - (4)].string_value), (yyvsp[(3) - (4)].ast_value));
 	;}
     break;
 
-  case 96:
+  case 92:
+
+/* Line 1455 of yacc.c  */
+#line 464 "C:\\Users\\Koya\\Documents\\GitHub\\CSignal\\CSignal\\CSignal\\signal\\parse\\signal.y"
+    {
+		(yyval.ast_value) = (yyvsp[(2) - (3)].ast_value);
+	;}
+    break;
+
+  case 93:
 
 /* Line 1455 of yacc.c  */
 #line 470 "C:\\Users\\Koya\\Documents\\GitHub\\CSignal\\CSignal\\CSignal\\signal\\parse\\signal.y"
     {
-		(yyval.ast_value) = ast_new_variable((yyvsp[(1) - (1)].string_value));
+		(yyval.ast_value) = ast_new_stmt((yyvsp[(1) - (1)].ast_value));
 	;}
     break;
 
-  case 97:
+  case 94:
 
 /* Line 1455 of yacc.c  */
 #line 474 "C:\\Users\\Koya\\Documents\\GitHub\\CSignal\\CSignal\\CSignal\\signal\\parse\\signal.y"
     {
-		(yyval.ast_value) = ast_new_call((yyvsp[(1) - (3)].string_value), ast_new_blank());
+		(yyval.ast_value) = ast_new_stmt_list((yyvsp[(1) - (2)].ast_value), (yyvsp[(2) - (2)].ast_value));
+	;}
+    break;
+
+  case 95:
+
+/* Line 1455 of yacc.c  */
+#line 480 "C:\\Users\\Koya\\Documents\\GitHub\\CSignal\\CSignal\\CSignal\\signal\\parse\\signal.y"
+    {
+		(yyval.ast_value) = ast_new_proc((yyvsp[(1) - (2)].ast_value));
 	;}
     break;
 
   case 98:
 
 /* Line 1455 of yacc.c  */
-#line 478 "C:\\Users\\Koya\\Documents\\GitHub\\CSignal\\CSignal\\CSignal\\signal\\parse\\signal.y"
+#line 488 "C:\\Users\\Koya\\Documents\\GitHub\\CSignal\\CSignal\\CSignal\\signal\\parse\\signal.y"
     {
-		(yyval.ast_value) = ast_new_call((yyvsp[(1) - (4)].string_value), (yyvsp[(3) - (4)].ast_value));
+		(yyval.ast_value) = ast_new_variable_decl(ast_new_typename((yyvsp[(1) - (5)].string_value)), ast_new_identifier((yyvsp[(2) - (5)].string_value)), (yyvsp[(4) - (5)].ast_value));
 	;}
     break;
 
   case 99:
 
 /* Line 1455 of yacc.c  */
-#line 482 "C:\\Users\\Koya\\Documents\\GitHub\\CSignal\\CSignal\\CSignal\\signal\\parse\\signal.y"
+#line 494 "C:\\Users\\Koya\\Documents\\GitHub\\CSignal\\CSignal\\CSignal\\signal\\parse\\signal.y"
     {
-		(yyval.ast_value) = (yyvsp[(2) - (3)].ast_value);
+		(yyval.ast_value) = ast_new_if((yyvsp[(3) - (5)].ast_value), (yyvsp[(5) - (5)].ast_value));
 	;}
     break;
 
   case 100:
 
 /* Line 1455 of yacc.c  */
-#line 488 "C:\\Users\\Koya\\Documents\\GitHub\\CSignal\\CSignal\\CSignal\\signal\\parse\\signal.y"
+#line 498 "C:\\Users\\Koya\\Documents\\GitHub\\CSignal\\CSignal\\CSignal\\signal\\parse\\signal.y"
     {
-		(yyval.ast_value) = ast_new_stmt((yyvsp[(1) - (1)].ast_value));
+		(yyval.ast_value) = ast_new_if_else((yyvsp[(3) - (7)].ast_value), (yyvsp[(5) - (7)].ast_value), (yyvsp[(7) - (7)].ast_value));
 	;}
     break;
 
   case 101:
 
 /* Line 1455 of yacc.c  */
-#line 492 "C:\\Users\\Koya\\Documents\\GitHub\\CSignal\\CSignal\\CSignal\\signal\\parse\\signal.y"
+#line 502 "C:\\Users\\Koya\\Documents\\GitHub\\CSignal\\CSignal\\CSignal\\signal\\parse\\signal.y"
     {
-		(yyval.ast_value) = ast_new_stmt_list((yyvsp[(1) - (2)].ast_value), (yyvsp[(2) - (2)].ast_value));
+		(yyval.ast_value) = ast_new_if_elif_list((yyvsp[(3) - (6)].ast_value), (yyvsp[(5) - (6)].ast_value), (yyvsp[(6) - (6)].ast_value));
 	;}
     break;
 
   case 102:
 
 /* Line 1455 of yacc.c  */
-#line 498 "C:\\Users\\Koya\\Documents\\GitHub\\CSignal\\CSignal\\CSignal\\signal\\parse\\signal.y"
+#line 506 "C:\\Users\\Koya\\Documents\\GitHub\\CSignal\\CSignal\\CSignal\\signal\\parse\\signal.y"
     {
-		(yyval.ast_value) = ast_new_proc((yyvsp[(1) - (2)].ast_value));
+		(yyval.ast_value) = ast_new_if_elif_list_else((yyvsp[(3) - (8)].ast_value), (yyvsp[(5) - (8)].ast_value), (yyvsp[(6) - (8)].ast_value), (yyvsp[(8) - (8)].ast_value));
+	;}
+    break;
+
+  case 104:
+
+/* Line 1455 of yacc.c  */
+#line 513 "C:\\Users\\Koya\\Documents\\GitHub\\CSignal\\CSignal\\CSignal\\signal\\parse\\signal.y"
+    {
+		(yyval.ast_value) = ast_new_elif_list((yyvsp[(1) - (2)].ast_value), (yyvsp[(2) - (2)].ast_value));
 	;}
     break;
 
   case 105:
 
 /* Line 1455 of yacc.c  */
-#line 506 "C:\\Users\\Koya\\Documents\\GitHub\\CSignal\\CSignal\\CSignal\\signal\\parse\\signal.y"
+#line 519 "C:\\Users\\Koya\\Documents\\GitHub\\CSignal\\CSignal\\CSignal\\signal\\parse\\signal.y"
     {
-		(yyval.ast_value) = ast_new_variable_decl(ast_new_typename((yyvsp[(1) - (5)].string_value)), ast_new_identifier((yyvsp[(2) - (5)].string_value)), (yyvsp[(4) - (5)].ast_value));
+		(yyval.ast_value) = ast_new_elif((yyvsp[(3) - (5)].ast_value), (yyvsp[(5) - (5)].ast_value));
 	;}
     break;
 
   case 106:
 
 /* Line 1455 of yacc.c  */
-#line 512 "C:\\Users\\Koya\\Documents\\GitHub\\CSignal\\CSignal\\CSignal\\signal\\parse\\signal.y"
+#line 525 "C:\\Users\\Koya\\Documents\\GitHub\\CSignal\\CSignal\\CSignal\\signal\\parse\\signal.y"
     {
-		(yyval.ast_value) = ast_new_if((yyvsp[(3) - (5)].ast_value), (yyvsp[(5) - (5)].ast_value));
+		(yyval.ast_value) = ast_new_scope((yyvsp[(2) - (3)].ast_value));
 	;}
     break;
 
   case 107:
 
 /* Line 1455 of yacc.c  */
-#line 516 "C:\\Users\\Koya\\Documents\\GitHub\\CSignal\\CSignal\\CSignal\\signal\\parse\\signal.y"
+#line 529 "C:\\Users\\Koya\\Documents\\GitHub\\CSignal\\CSignal\\CSignal\\signal\\parse\\signal.y"
     {
-		(yyval.ast_value) = ast_new_if_else((yyvsp[(3) - (7)].ast_value), (yyvsp[(5) - (7)].ast_value), (yyvsp[(7) - (7)].ast_value));
+		(yyval.ast_value) = ast_new_scope_empty();
 	;}
     break;
 
   case 108:
 
 /* Line 1455 of yacc.c  */
-#line 520 "C:\\Users\\Koya\\Documents\\GitHub\\CSignal\\CSignal\\CSignal\\signal\\parse\\signal.y"
-    {
-		(yyval.ast_value) = ast_new_if_elif_list((yyvsp[(3) - (6)].ast_value), (yyvsp[(5) - (6)].ast_value), (yyvsp[(6) - (6)].ast_value));
-	;}
-    break;
-
-  case 109:
-
-/* Line 1455 of yacc.c  */
-#line 524 "C:\\Users\\Koya\\Documents\\GitHub\\CSignal\\CSignal\\CSignal\\signal\\parse\\signal.y"
-    {
-		(yyval.ast_value) = ast_new_if_elif_list_else((yyvsp[(3) - (8)].ast_value), (yyvsp[(5) - (8)].ast_value), (yyvsp[(6) - (8)].ast_value), (yyvsp[(8) - (8)].ast_value));
-	;}
-    break;
-
-  case 111:
-
-/* Line 1455 of yacc.c  */
-#line 531 "C:\\Users\\Koya\\Documents\\GitHub\\CSignal\\CSignal\\CSignal\\signal\\parse\\signal.y"
-    {
-		(yyval.ast_value) = ast_new_elif_list((yyvsp[(1) - (2)].ast_value), (yyvsp[(2) - (2)].ast_value));
-	;}
-    break;
-
-  case 112:
-
-/* Line 1455 of yacc.c  */
-#line 537 "C:\\Users\\Koya\\Documents\\GitHub\\CSignal\\CSignal\\CSignal\\signal\\parse\\signal.y"
-    {
-		(yyval.ast_value) = ast_new_elif((yyvsp[(3) - (5)].ast_value), (yyvsp[(5) - (5)].ast_value));
-	;}
-    break;
-
-  case 113:
-
-/* Line 1455 of yacc.c  */
-#line 543 "C:\\Users\\Koya\\Documents\\GitHub\\CSignal\\CSignal\\CSignal\\signal\\parse\\signal.y"
-    {
-		(yyval.ast_value) = ast_new_scope((yyvsp[(2) - (3)].ast_value));
-	;}
-    break;
-
-  case 114:
-
-/* Line 1455 of yacc.c  */
-#line 547 "C:\\Users\\Koya\\Documents\\GitHub\\CSignal\\CSignal\\CSignal\\signal\\parse\\signal.y"
-    {
-		(yyval.ast_value) = ast_new_scope_empty();
-	;}
-    break;
-
-  case 115:
-
-/* Line 1455 of yacc.c  */
-#line 553 "C:\\Users\\Koya\\Documents\\GitHub\\CSignal\\CSignal\\CSignal\\signal\\parse\\signal.y"
+#line 535 "C:\\Users\\Koya\\Documents\\GitHub\\CSignal\\CSignal\\CSignal\\signal\\parse\\signal.y"
     {
 		(yyval.ast_value) = ast_new_blank();
 	;}
@@ -2464,7 +2392,7 @@ yyreduce:
 
 
 /* Line 1455 of yacc.c  */
-#line 2468 "signal.tab.c"
+#line 2396 "signal.tab.c"
       default: break;
     }
   YY_SYMBOL_PRINT ("-> $$ =", yyr1[yyn], &yyval, &yyloc);
@@ -2683,5 +2611,5 @@ yyreturn:
 
 
 /* Line 1675 of yacc.c  */
-#line 558 "C:\\Users\\Koya\\Documents\\GitHub\\CSignal\\CSignal\\CSignal\\signal\\parse\\signal.y"
+#line 540 "C:\\Users\\Koya\\Documents\\GitHub\\CSignal\\CSignal\\CSignal\\signal\\parse\\signal.y"
 

@@ -253,6 +253,7 @@ static void update_loc() {
 <INITIAL>"private"			{ return (PRIVATE); }
 <INITIAL>"protected"		{ return (PROTECTED); }
 <INITIAL>"static"			{ return (STATIC); }
+<INITIAL>"native"			{ return (NATIVE); }
 
 <INITIAL>"def"				{ return (DEF); }
 <INITIAL>"->"				{ return (ARROW); }

@@ -3,6 +3,7 @@
 #include "../ast/constructor_chain_type.h"
 #include "../ast/assign_operator_type.h"
 #include "../ast/modifier_type.h"
+#include "../ast/access_level.h"
 
 /* A Bison parser, made by GNU Bison 2.4.1.  */
 
@@ -110,14 +111,14 @@ typedef union YYSTYPE
 {
 
 /* Line 1676 of yacc.c  */
-#line 13 "C:\\Users\\Koya\\Documents\\GitHub\\CSignal\\CSignal\\CSignal\\signal\\parse\\signal.y"
+#line 14 "C:\\Users\\Koya\\Documents\\GitHub\\CSignal\\CSignal\\CSignal\\signal\\parse\\signal.y"
 
 	char char_value;
 	const char* string_value;
 	ast* ast_value;
 	assign_operator_type assign_otype_value;
 	constructor_chain_type chain_type_value;
-	modifier_type modifier_type_value;
+	access_level access_level_value;
 
 
 

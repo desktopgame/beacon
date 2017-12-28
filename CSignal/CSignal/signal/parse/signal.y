@@ -7,6 +7,7 @@
 #include "../ast/constructor_chain_type.h"
 #include "../ast/assign_operator_type.h"
 #include "../ast/modifier_type.h"
+#include "../ast/access_level.h"
 #define YYDEBUG 1
 #define YYERROR_VERBOSE 1
 %}
@@ -16,7 +17,7 @@
 	ast* ast_value;
 	assign_operator_type assign_otype_value;
 	constructor_chain_type chain_type_value;
-	modifier_type modifier_type_value;
+	access_level access_level_value;
 }
 %locations
 %token <ast_value>			CHAR_LITERAL
@@ -26,7 +27,7 @@
 %token <string_value>		IDENT
 %type <assign_otype_value>	assign_type_T
 %type <chain_type_value>	constructor_chain_type_T
-%type <modifier_type_value>	modifier_type_T
+%type <access_level_value>	access_level_T
 %token DOT COMMA COLON COLO_COLO
 		ADD SUB MUL DIV MOD NOT
 		ASSIGN ADD_ASSIGN SUB_ASSIGN MUL_ASSIGN DIV_ASSIGN MOD_ASSIGN
@@ -50,7 +51,6 @@
 					namespace_path
 					import 
 					class_decl 
-						modifier_list
 						class_super 
 						member_define_list
 						member_define
@@ -202,9 +202,9 @@ member_define
 	| field_define
 	;
 constructor_define
-	: modifier_list DEF NEW LRB parameter_list RRB constructor_chain_optional scope_optional
+	: DEF NEW LRB parameter_list RRB constructor_chain_optional scope_optional
 	{
-		$$ = ast_new_constructor_decl($5, $7, $8);
+		$$ = ast_new_constructor_decl($4, $6, $7);
 	}
 	| DEF NEW LRB RRB constructor_chain_optional scope_optional
 	{
@@ -254,36 +254,18 @@ field_define
 		$$ = ast_new_field_decl($1, $2);
 	}
 	;
-modifier_list
-	: modifier_type_T
-	{
-		$$ = ast_new_modifier($1);
-	}
-	| modifier_list modifier_type_T
-	{
-		$$ = ast_new_modifier_list($1, $2);
-	}
-	;
-modifier_type_T
+access_level_T
 	: PUBLIC
 	{
-		$$ = modifier_type_public;
+		$$ = access_public;
 	}
 	| PRIVATE
 	{
-		$$ = modifier_type_private;
+		$$ = access_private;
 	}
 	| PROTECTED
 	{
-		$$ = modifier_type_protected;
-	}
-	| STATIC
-	{
-		$$ = modifier_type_static;
-	}
-	| NATIVE
-	{
-		$$ = modifier_type_native;
+		$$ = access_protected;
 	}
 	;
 parameter_list
