@@ -5,6 +5,14 @@ modifier_type modifier_static_native() {
 	return modifier_static | modifier_native;
 }
 
+bool modifier_is_static(modifier_type type) {
+	return (type & modifier_static);
+}
+
+bool modifier_is_native(modifier_type type) {
+	return (type & modifier_native);
+}
+
 void modifier_print(modifier_type type) {
 	if (type == (modifier_static | modifier_native)) {
 		printf("static native");

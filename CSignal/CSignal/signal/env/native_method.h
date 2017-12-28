@@ -1,14 +1,13 @@
 #pragma once
 #ifndef SIGNAL_ENV_NATIVE_METHOD_H
 #define SIGNAL_ENV_NATIVE_METHOD_H
-struct vm;
-struct method;
+struct native_method_ref;
 
 /**
  * Cで実装されたメソッド.
  */
 typedef struct native_method {
-	void(*impl)(struct method* parent, struct vm* vm);
+	struct native_method_ref* ref;
 } native_method;
 
 /**

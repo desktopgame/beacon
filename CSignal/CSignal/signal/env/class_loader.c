@@ -3,8 +3,10 @@
 #include <assert.h>
 //#include <uni>
 //#include <uni>
+#include "../vm/vm.h"
 #include "../vm/opcode.h"
 #include "../vm/opcode_buf.h"
+#include "../env/native_method_ref.h"
 #include "../il/il_argument.h"
 #include "../util/vector.h"
 #include "../util/logger.h"
@@ -64,6 +66,8 @@ static void class_loader_sgload_class(class_loader* self, il_class* classz, name
 static void class_loader_sgload_fields(class_loader* self, il_class* ilclass, class_* classz);
 static void class_loader_sgload_methods(class_loader* self, il_class* ilclass, class_* classz);
 static void class_loader_sgload_complete(class_loader* self, il_class* ilclass, class_* classz);
+static void class_loader_sgload_attach_native_method(class_loader* self, il_class* ilclass, class_* classz, il_method* ilmethod, method* me);
+static void class_loader_sgload_debug_native_method(method* parent, vm* vm);
 static enviroment* class_loader_sgload_body(class_loader* self, vector* stmt_list);
 
 static void class_loader_error(class_loader* self, const char* message);
@@ -653,7 +657,7 @@ static void class_loader_sgload_methods(class_loader* self, il_class* ilclass, c
 		//実行時のメソッド情報を作成する
 		method* method = method_new(ilmethod->name);
 		vector* parameter_list = method->parameter_list;
-		method->type = method_type_script;
+		method->type = modifier_is_native(ilmethod->modifier) ? method_type_native : method_type_script;
 		method->access = ilmethod->access;
 		method->modifier = ilmethod->modifier;
 		method->u.script_method = script_method_new();
@@ -703,13 +707,14 @@ static void class_loader_sgload_complete(class_loader* self, il_class* ilclass, 
 	for (int i = 0; i < methods->length; i++) {
 		vector_item e = vector_at(methods, i);
 		method* me = (method*)e;
-		//ネイティブメソッドならオペコードは不要
-		if (me->type == method_type_native) {
-			continue;
-		}
 		//オペコードを作成
 		//FIXME:ILメソッドと実行時メソッドのインデックスが同じなのでとりあえず動く
 		il_method* ilmethod = (il_method*)vector_at(ilclass->method_list, i);
+		//ネイティブメソッドならオペコードは不要
+		if (me->type == method_type_native) {
+			class_loader_sgload_attach_native_method(self, ilclass, classz, ilmethod, me);
+			continue;
+		}
 		enviroment* env = class_loader_sgload_body(self, ilmethod->statement_list);
 		me->u.script_method->env = env;
 	}
@@ -735,6 +740,14 @@ static void class_loader_sgload_complete(class_loader* self, il_class* ilclass, 
 			);
 		}
 	}
+}
+
+static void class_loader_sgload_attach_native_method(class_loader* self, il_class* ilclass, class_* classz, il_method* ilmethod, method* me) {
+	me->u.native_method->ref = native_method_ref_new(class_loader_sgload_debug_native_method);
+}
+
+static void class_loader_sgload_debug_native_method(method* parent, vm* vm) {
+
 }
 
 static enviroment* class_loader_sgload_body(class_loader* self, vector* stmt_list) {

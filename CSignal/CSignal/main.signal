@@ -15,7 +15,7 @@ namespace L.Goo.Foo {
 			
 		}
 
-		static native def print(String message, Int d) -> Void {
+		static def print(String message, Int d) -> Void {
 			main();
 			main(10, 20, "aaa");
 			Foo a = Foo.newInstance();
