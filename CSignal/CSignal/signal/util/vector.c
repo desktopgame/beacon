@@ -16,7 +16,7 @@ void vector_push(vector * self, vector_item item) {
 	assert(self != NULL);
 	if (self->length >= self->capacity) {
 		int newCapacitySize = self->capacity + (self->capacity / 2);
-		vector_item* temp = (vector_item*)realloc(self->memory, SLOT_SIZE * newCapacitySize);
+		vector_item* temp = (vector_item*)MEM_REALLOC(self->memory, SLOT_SIZE * newCapacitySize);
 		assert(temp != NULL);
 		self->memory = temp;
 		self->memory[self->length] = item;

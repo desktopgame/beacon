@@ -48,7 +48,7 @@ void parser_append_buffer(parser * self, char ch) {
 		self->buffer[1] = '\0';
 	} else {
 		int len = strlen(self->buffer);
-		char* temp = (char*)realloc(self->buffer, (sizeof(char) * (len + 1)) + 0);
+		char* temp = (char*)MEM_REALLOC(self->buffer, (sizeof(char) * (len + 1)) + 0);
 		assert(temp != NULL);
 		temp[len] = ch;
 		temp[len + 1] = '\0';

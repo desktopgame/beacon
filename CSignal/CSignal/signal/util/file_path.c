@@ -64,7 +64,7 @@ file_path * file_path_parse(const char * source, char separator) {
 			//バッファーが足りなくなったので再確保
 			if (index >= bufferSize) {
 				int newBufferSize = bufferSize + (bufferSize / 2);
-				char* temp = (char*)realloc(buff, sizeof(char) * newBufferSize);
+				char* temp = (char*)MEM_REALLOC(buff, sizeof(char) * newBufferSize);
 				bufferSize = newBufferSize;
 				buff = temp;
 				assert(temp != NULL);
@@ -140,7 +140,7 @@ static char* file_path_dump_impl(file_path * self, char separator) {
 		leftLen = strlen(block);
 	}
 	int len = strlen(self->name);
-	char* temp = (char*)realloc(block, leftLen + len + 2);
+	char* temp = (char*)MEM_REALLOC(block, leftLen + len + 2);
 	for (int i = leftLen; i < leftLen + len; i++) {
 		temp[i] = self->name[i - leftLen];
 	}

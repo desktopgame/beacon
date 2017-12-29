@@ -68,7 +68,7 @@ char * io_read_text(const char * filename) {
 		//予め確保していた領域をはみ出した
 		if (length >= buffer_size) {
 			buffer_size = buffer_size + (buffer_size / 2);
-			char* temp = (char*)realloc(ret, sizeof(char) * buffer_size);
+			char* temp = (char*)MEM_REALLOC(ret, sizeof(char) * buffer_size);
 			//FIXME:再確保失敗時
 			ret = temp;
 		}

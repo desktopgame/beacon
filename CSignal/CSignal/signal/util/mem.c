@@ -15,8 +15,25 @@ void * mem_malloc(size_t size, const char * filename, int lineno) {
 	return ret;
 }
 
+void * mem_realloc(void * block, size_t newSize, const char * filename, int lineno) {
+	void* ret = realloc(block, newSize);
+	if (ret == NULL) {
+		sg_log(log_fatal, filename, lineno, "failed realloc");
+	}
+	//allocCount++;
+	return ret;
+}
+
 void mem_free(void * block, const char * filename, int lineno) {
 	free(block);
+	allocCount--;
+}
+
+void mem_inc() {
+	allocCount++;
+}
+
+void mem_dec() {
 	allocCount--;
 }
 
