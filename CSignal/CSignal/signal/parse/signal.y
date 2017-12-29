@@ -95,11 +95,7 @@ root
 	}
 	;
 top_level
-	: expression
-	{
-		ast_compile_entry($1);
-	}
-	| stmt
+	: stmt_list
 	{
 		ast_compile_entry($1);
 	}

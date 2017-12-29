@@ -140,6 +140,13 @@ static void class_loader_ilload_impl(class_loader* self, ast* source_code) {
 		//namespace Foo { ... }
 		} else if (child->tag == ast_namespace_decl) {
 			class_loader_ilload_namespace(self, self->il_code->namespace_list, child);
+		//print();
+		} else if (child->tag == ast_stmt ||
+				   child->tag == ast_stmt_list) {
+			class_loader_ilload_body(self, self->il_code->statement_list, child);
+		} else {
+			ast_print(child);
+			text_putline();
 		}
 	}
 	//il_top_level_dump(self->il_code, 0);

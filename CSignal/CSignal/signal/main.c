@@ -25,8 +25,8 @@ int main(int argc, char* argv[]) {
 	//オブジェクトにベクターを持たせて、
 	//インデックスがクラスのそれと一致するように
 	//定数プールにdouble型を入れられるように
-	test_vm();
-//	test_cll();
+//	test_vm();
+	test_cll();
 //	test_props();
 //	test_string_table();
 //	test_namespace();

@@ -8,6 +8,7 @@
 typedef struct il_top_level {
 	vector* import_list;
 	vector* namespace_list;
+	vector* statement_list;
 } il_top_level;
 /**
  * トップレベルの要素を作成します.
