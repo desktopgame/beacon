@@ -4,6 +4,7 @@
 #include <assert.h>
 #include "label.h"
 #include "../util/logger.h"
+#include "../util/mem.h"
 //proto
 static int stack_topi(vm* self);
 static double stack_topd(vm* self);
@@ -31,7 +32,7 @@ static char* stack_pops(vm* self);
 
 
 vm * vm_new() {
-	vm* ret = (vm*)malloc(sizeof(vm));
+	vm* ret = (vm*)MEM_MALLOC(sizeof(vm));
 	ret->value_stack = vector_new();
 	ret->ref_stack = vector_new();
 	//ret->poolLength = 0;
@@ -280,7 +281,7 @@ void vm_delete(vm * self) {
 	//operand_stack_delete(self->operand_stack);
 	vector_delete(self->value_stack, vector_deleter_null);
 	vector_delete(self->ref_stack, vector_deleter_null);
-	free(self);
+	MEM_FREE(self);
 }
 
 //private

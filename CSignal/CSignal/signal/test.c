@@ -16,6 +16,7 @@
 #include "util/vector.h"
 #include <stdio.h>
 #include <stdlib.h>
+#include "util/mem.h"
 
 //proto
 static void person_free(vector_item item);
@@ -145,27 +146,28 @@ void test_cll(void) {
 #endif
 	class_loader_load(cll);
 	//il_top_level_dump(cll->il_code, 0);
-	/*
+	//*
 	system("cls");
 	//ast_print_tree(cll->source_code);
 	il_top_level_dump(cll->il_code, 0);
+	opcode_buf_dump(cll->env->buf, 0);
 	//*/
 	class_loader_delete(cll);
-	//*
+	/*
 	system("cls");
 	namespace_dump();
 	//*/
 }
 
 void test_struct(void) {
-	OBJ* o = (OBJ*)malloc(sizeof(OBJ) * 10);
+	OBJ* o = (OBJ*)MEM_MALLOC(sizeof(OBJ) * 10);
 	for (int i = 0; i < 10; i++) {
 		o[i].index = i;
 	}
 	for (int i = 0; i < 10; i++) {
 		printf("index %d", (o + i)->index);
 	}
-	free(o);
+	MEM_FREE(o);
 }
 
 void test_vector(void) {
@@ -183,7 +185,7 @@ void test_vector(void) {
 
 	vector* v2 = vector_new();
 	for (int i = 0; i < 20; i++) {
-		PERSON* p = (PERSON*)malloc(sizeof(PERSON));
+		PERSON* p = (PERSON*)MEM_MALLOC(sizeof(PERSON));
 		char buff[100];
 		int x = sprintf_s(buff, 100, "name %d", i);
 		p->name = text_strdup(buff);
@@ -288,6 +290,6 @@ void test_props(void) {
 //private
 static void person_free(vector_item item) {
 	PERSON* p = (PERSON*)item;
-	free(p->name);
-	free(p);
+	MEM_FREE(p->name);
+	MEM_FREE(p);
 }

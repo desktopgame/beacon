@@ -17,9 +17,11 @@ namespace L.Goo.Foo {
 
 		static def print(String message, Int d) -> Void {
 			main();
+			Console.writeLine("aa");
 			main(10, 20, "aaa");
 			Foo a = Foo.newInstance();
 			a.print();
+			a.print("a");
 			a.print(10, 20, "aaa");
 			if(10) {
 
@@ -49,8 +51,7 @@ namespace L.Goo.Foo {
 		}
 	}
 }
-main();
-main(10, 20, "aaa");
+//Console.writeLine("HelloWorld");
 //(10 + 20 + (5 * 20 + (16 / 4)) >= 20 || 0 < 0)
 //TYPENAME VARIABLENAME = 10;
 //STRING STR = "aaaa";

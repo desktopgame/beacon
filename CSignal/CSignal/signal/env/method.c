@@ -4,13 +4,14 @@
 #include "../util/text.h"
 #include "class.h"
 #include "parameter.h"
+#include "../util/mem.h"
 #include "../vm/vm.h"
 
 //proto
 static void method_parameter_delete(vector_item item);
 
 method * method_new(const char * name) {
-	method* ret = (method*)malloc(sizeof(method));
+	method* ret = (method*)MEM_MALLOC(sizeof(method));
 	ret->name = text_strdup(name);
 	ret->parameter_list = vector_new();
 	ret->type = method_type_script;
@@ -54,14 +55,14 @@ void method_dump(method * self, int depth) {
 }
 
 void method_delete(method * self) {
-	free(self->name);
+	MEM_FREE(self->name);
 	vector_delete(self->parameter_list, method_parameter_delete);
 	if (self->type == method_type_script) {
 		script_method_delete(self->u.script_method);
 	} else if (self->type == method_type_native) {
 		native_method_delete(self->u.native_method);
 	}
-	free(self);
+	MEM_FREE(self);
 }
 
 //private

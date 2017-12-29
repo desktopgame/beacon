@@ -3,6 +3,7 @@
 #include <stdio.h>
 #include "../il_argument.h"
 #include "../../util/text.h"
+#include "../../util/mem.h"
 #include "../../vm/enviroment.h"
 #include "../../env/class.h"
 #include "../../env/method.h"
@@ -12,14 +13,14 @@ static void il_factor_call_argument_list_delete(vector_item item);
 static void il_factor_find_method(il_factor_call* self, enviroment* env);
 
 il_factor * il_factor_wrap_call(il_factor_call * self) {
-	il_factor* ret = (il_factor*)malloc(sizeof(il_factor));
+	il_factor* ret = (il_factor*)MEM_MALLOC(sizeof(il_factor));
 	ret->type = ilfactor_call;
 	ret->u.call_ = self;
 	return ret;
 }
 
 il_factor_call * il_factor_call_new(const char * name) {
-	il_factor_call* ret = (il_factor_call*)malloc(sizeof(il_factor_call));
+	il_factor_call* ret = (il_factor_call*)MEM_MALLOC(sizeof(il_factor_call));
 	ret->name = text_strdup(name);
 	ret->argument_list = vector_new();
 	ret->m = NULL;
@@ -61,8 +62,8 @@ class_ * il_factor_call_eval(il_factor_call * self, enviroment * env) {
 
 void il_factor_call_delete(il_factor_call * self) {
 	vector_delete(self->argument_list, il_factor_call_argument_list_delete);
-	free(self->name);
-	free(self);
+	MEM_FREE(self->name);
+	MEM_FREE(self);
 }
 
 //private

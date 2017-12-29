@@ -5,6 +5,7 @@
 #include <string.h>
 #include "../util/text.h"
 #include "../util/stack.h"
+#include "../util/mem.h"
 #include "../ast/ast_new_literal.h"
 #include "../env/script_context.h"
 
@@ -16,7 +17,7 @@ parser * parser_push(yacc_input_type input_type) {
 	if (ctx->parserStack == NULL) {
 		ctx->parserStack = stack_new();
 	}
-	parser* p = (parser*)malloc(sizeof(parser));
+	parser* p = (parser*)MEM_MALLOC(sizeof(parser));
 	stack_push(ctx->parserStack, p);
 	p->input_type = input_type;
 	p->root = ast_new(ast_root);
@@ -42,7 +43,7 @@ void parser_clear_buffer(parser * self) {
 
 void parser_append_buffer(parser * self, char ch) {
 	if (self->buffer == NULL) {
-		self->buffer = (char*)malloc(sizeof(char) + 1);
+		self->buffer = (char*)MEM_MALLOC(sizeof(char) + 1);
 		self->buffer[0] = ch;
 		self->buffer[1] = '\0';
 	} else {
@@ -111,7 +112,7 @@ parser * parser_parse_from_source(char * source) {
 
 void parser_swap_source_name(char * source_name) {
 	parser* p = parser_top();
-	free(p->source_name);
+	MEM_FREE(p->source_name);
 	p->source_name = text_strdup(source_name);
 }
 
@@ -121,9 +122,9 @@ void parser_pop() {
 	if (p->root) {
 		ast_delete(p->root);
 	}
-	free(p->buffer);
-	free(p->source_name);
-	free(p);
+	MEM_FREE(p->buffer);
+	MEM_FREE(p->source_name);
+	MEM_FREE(p);
 	if (stack_empty(ctx->parserStack)) {
 		stack_delete(ctx->parserStack, stack_deleter_null);
 		ctx->parserStack = NULL;

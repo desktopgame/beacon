@@ -2,11 +2,12 @@
 #include "class_loader.h"
 #include "class.h"
 #include "namespace.h"
+#include "../util/mem.h"
 #include <string.h>
 #include <stdlib.h>
 
 import_manager * import_manager_new() {
-	import_manager* ret = (import_manager*)malloc(sizeof(import_manager));
+	import_manager* ret = (import_manager*)MEM_MALLOC(sizeof(import_manager));
 	ret->class_loader_list = vector_new();
 	return ret;
 }
@@ -33,5 +34,5 @@ class_ * import_manager_resolve(import_manager* self, const char * name) {
 
 void import_manager_delete(import_manager * self) {
 	vector_delete(self->class_loader_list, vector_deleter_null);
-	free(self);
+	MEM_FREE(self);
 }

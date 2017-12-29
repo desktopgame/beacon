@@ -6,20 +6,21 @@
 #include "../il_argument.h"
 #include "../../env/class.h"
 #include "../../env/method.h"
+#include "../../util/mem.h"
 
 //proto
 static void il_factor_invoke_argument_delete(vector_item item);
 static void il_factor_invoke_find(il_factor_invoke* self, enviroment* env);
 
 il_factor * il_factor_wrap_invoke(il_factor_invoke * self) {
-	il_factor* ret = (il_factor*)malloc(sizeof(il_factor));
+	il_factor* ret = (il_factor*)MEM_MALLOC(sizeof(il_factor));
 	ret->type = ilfactor_invoke;
 	ret->u.invoke_ = self;
 	return ret;
 }
 
 il_factor_invoke * il_factor_invoke_new(const char * name) {
-	il_factor_invoke* ret = (il_factor_invoke*)malloc(sizeof(il_factor_invoke));
+	il_factor_invoke* ret = (il_factor_invoke*)MEM_MALLOC(sizeof(il_factor_invoke));
 	ret->name = text_strdup(name);
 	ret->argument_list = vector_new();
 	ret->receiver = NULL;
@@ -63,9 +64,9 @@ class_ * il_factor_invoke_eval(il_factor_invoke * self, enviroment * env) {
 
 void il_factor_invoke_delete(il_factor_invoke * self) {
 	vector_delete(self->argument_list, il_factor_invoke_argument_delete);
-	free(self->name);
+	MEM_FREE(self->name);
 	il_factor_delete(self->receiver);
-	free(self);
+	MEM_FREE(self);
 }
 
 //private

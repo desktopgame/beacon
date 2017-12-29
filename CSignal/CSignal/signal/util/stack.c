@@ -1,9 +1,10 @@
 #include "stack.h"
 #include <assert.h>
 #include <stdlib.h>
+#include "../util/mem.h"
 
 stack * stack_new() {
-	stack* st = (stack*)malloc(sizeof(stack));
+	stack* st = (stack*)MEM_MALLOC(sizeof(stack));
 	st->item = NULL;
 	st->prev = NULL;
 	st->next = NULL;
@@ -48,7 +49,7 @@ stack_item stack_pop(stack * self) {
 			prevElement->next = NULL;
 			self->prev = NULL;
 			stack_item ret = self->item;
-			free(self);
+			MEM_FREE(self);
 			return ret;
 		}
 	} else {
@@ -75,7 +76,7 @@ void stack_delete(stack * self, stack_element_deleter deleter) {
 		if (item) {
 			deleter(item);
 		}
-		free(pointee);
+		MEM_FREE(pointee);
 		pointee = next;
 		if (!next) {
 			break;
@@ -84,7 +85,7 @@ void stack_delete(stack * self, stack_element_deleter deleter) {
 }
 
 void stack_deleter_free(stack_item item) {
-	free(item);
+	MEM_FREE(item);
 }
 
 void stack_deleter_null(stack_item item) {

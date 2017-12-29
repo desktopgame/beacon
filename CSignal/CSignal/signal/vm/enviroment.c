@@ -3,12 +3,13 @@
 #include "../env/object.h"
 #include <stdlib.h>
 #include <assert.h>
+#include "../util/mem.h"
 
 //proto
 static void enviroment_constant_pool_delete(vector_item item);
 
 enviroment * enviroment_new() {
-	enviroment* ret = (enviroment*)malloc(sizeof(enviroment));
+	enviroment* ret = (enviroment*)MEM_MALLOC(sizeof(enviroment));
 	ret->buf = opcode_buf_new();
 	ret->constant_pool = vector_new();
 	ret->class_ = NULL;
@@ -74,7 +75,7 @@ char * enviroment_constant_string_at(enviroment * self, int index) {
 void enviroment_delete(enviroment * self) {
 	opcode_buf_delete(self->buf);
 	vector_delete(self->constant_pool, enviroment_constant_pool_delete);
-	free(self);
+	MEM_FREE(self);
 }
 
 //private

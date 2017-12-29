@@ -4,16 +4,17 @@
 #include "../../util/text.h"
 #include "../../vm/enviroment.h"
 #include "../../env/class.h"
+#include "../../util/mem.h"
 
 il_factor * il_factor_wrap_unary(il_factor_unary_op * self) {
-	il_factor* ret = (il_factor*)malloc(sizeof(il_factor));
+	il_factor* ret = (il_factor*)MEM_MALLOC(sizeof(il_factor));
 	ret->type = ilfactor_unary_op;
 	ret->u.unary_ = self;
 	return ret;
 }
 
 il_factor_unary_op * il_factor_unary_op_new(ilunary_op_type type) {
-	il_factor_unary_op* ret = (il_factor_unary_op*)malloc(sizeof(il_factor_unary_op));
+	il_factor_unary_op* ret = (il_factor_unary_op*)MEM_MALLOC(sizeof(il_factor_unary_op));
 	ret->type = type;
 	ret->a = NULL;
 	return ret;
@@ -55,5 +56,5 @@ class_ * il_factor_unary_op_eval(il_factor_unary_op * self, enviroment * env) {
 
 void il_factor_unary_op_delete(il_factor_unary_op * self) {
 	il_factor_delete(self->a);
-	free(self);
+	MEM_FREE(self);
 }

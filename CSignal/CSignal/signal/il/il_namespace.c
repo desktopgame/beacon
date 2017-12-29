@@ -2,13 +2,14 @@
 #include "../util/text.h"
 #include "il_class.h"
 #include <stdlib.h>
+#include "../util/mem.h"
 
 //proto
 static void il_namespace_class_delete(vector_item item);
 static void il_namespace_namespace_delete(vector_item item);
 
 il_namespace* il_namespace_new(const char* name) {
-	il_namespace* ret = (il_namespace*)malloc(sizeof(il_namespace));
+	il_namespace* ret = (il_namespace*)MEM_MALLOC(sizeof(il_namespace));
 	ret->name = text_strdup(name);
 	ret->namespace_list = vector_new();
 	ret->class_list = vector_new();
@@ -55,10 +56,10 @@ void il_namespace_delete(il_namespace* self) {
 	if(self == NULL) {
 		return;
 	}
-	free(self->name);
+	MEM_FREE(self->name);
 	vector_delete(self->namespace_list, il_namespace_namespace_delete);
 	vector_delete(self->class_list, il_namespace_class_delete);
-	free(self);
+	MEM_FREE(self);
 }
 
 //private

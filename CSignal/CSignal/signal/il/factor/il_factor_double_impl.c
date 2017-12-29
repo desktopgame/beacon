@@ -5,16 +5,17 @@
 #include "../../vm/enviroment.h"
 #include "../../env/namespace.h"
 #include "../../env/class.h"
+#include "../../util/mem.h"
 
 il_factor * il_factor_wrap_double(il_factor_double * self) {
-	il_factor* ret = (il_factor*)malloc(sizeof(il_factor));
+	il_factor* ret = (il_factor*)MEM_MALLOC(sizeof(il_factor));
 	ret->type = ilfactor_double;
 	ret->u.double_ = self;
 	return ret;
 }
 
 il_factor_double * il_factor_double_new(double d) {
-	il_factor_double* ret = (il_factor_double*)malloc(sizeof(il_factor_double));
+	il_factor_double* ret = (il_factor_double*)MEM_MALLOC(sizeof(il_factor_double));
 	ret->value = d;
 	return ret;
 }
@@ -36,5 +37,5 @@ class_ * il_factor_double_eval(il_factor_double * self, enviroment * env) {
 }
 
 void il_factor_double_delete(il_factor_double * self) {
-	free(self);
+	MEM_FREE(self);
 }

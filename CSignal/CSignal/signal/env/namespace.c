@@ -6,6 +6,7 @@
 #include "class.h"
 #include "script_context.h"
 #include "../util/text.h"
+#include "../util/mem.h"
 
 //static tree_map* tree_map_root = NULL;
 //proto
@@ -111,7 +112,7 @@ void namespace_dump() {
 
 //private
 static namespace_* namespace_malloc(char* name) {
-	namespace_* ret = (namespace_*)malloc(sizeof(namespace_));
+	namespace_* ret = (namespace_*)MEM_MALLOC(sizeof(namespace_));
 	ret->class_map = NULL;
 	ret->namespace_map = tree_map_new();
 	ret->class_map = tree_map_new();

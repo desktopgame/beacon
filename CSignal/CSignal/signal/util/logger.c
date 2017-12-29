@@ -4,6 +4,7 @@
 //#include <conio.h>
 #include "text.h"
 #include "io.h"
+#include "mem.h"
 
 #if defined(_WIN32)
 #include <Windows.h>
@@ -66,14 +67,16 @@ void sg_lopen() {
 	FILE* fp;
 	errno_t e = fopen_s(&fp, name, "a");
 	if (e) {
-		free(name);
+		mem_free(name, __FILE__,__LINE__);
+		//MEM_FREE(name);
 		return;
 	}
-	free(name);
+	mem_free(name, __FILE__, __LINE__);
+	//MEM_FREE(name);
 	logger_fp = fp;
 #else
 	FILE* fp = fopen(name, "a");
-	free(name);
+	mem_free(name, __FILE__, __LINE__);
 	logger_fp = fp;
 #endif
 	fprintf(logger_fp, "%d:%d:%d", logger_hour, logger_min, logger_sec);

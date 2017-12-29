@@ -3,10 +3,11 @@
 #include <stdio.h>
 #include <assert.h>
 #include "class.h"
+#include "../util/mem.h"
 #include "../util/text.h"
 
 field * field_new(const char * name) {
-	field* ret = (field*)malloc(sizeof(field));
+	field* ret = (field*)MEM_MALLOC(sizeof(field));
 	ret->name = text_strdup(name);
 	ret->type = NULL;
 	ret->access = access_public;
@@ -32,6 +33,6 @@ void field_delete(field * self) {
 	if (self == NULL) {
 		return;
 	}
-	free(self->name);
-	free(self);
+	MEM_FREE(self->name);
+	MEM_FREE(self);
 }

@@ -1,6 +1,7 @@
 #include "object.h"
 #include "namespace.h"
 #include <stdlib.h>
+#include "../util/mem.h"
 
 //proto
 static object* object_malloc(object_type type);
@@ -38,12 +39,12 @@ object * object_ref_new() {
 }
 
 void object_delete(object * self) {
-	free(self);
+	MEM_FREE(self);
 }
 
 //private
 static object* object_malloc(object_type type) {
-	object* ret = (object*)malloc(sizeof(object));
+	object* ret = (object*)MEM_MALLOC(sizeof(object));
 	ret->classz = NULL;
 	ret->paint = paint_unmarked;
 	ret->type = type;

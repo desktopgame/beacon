@@ -5,16 +5,17 @@
 #include "../../vm/enviroment.h"
 #include "../../env/namespace.h"
 #include "../../env/class.h"
+#include "../../util/mem.h"
 
 il_factor * il_factor_wrap_char(il_factor_char * self) {
-	il_factor* ret = (il_factor*)malloc(sizeof(il_factor));
+	il_factor* ret = (il_factor*)MEM_MALLOC(sizeof(il_factor));
 	ret->type = ilfactor_cquote;
 	ret->u.char_ = self;
 	return ret;
 }
 
 il_factor_char * il_factor_char_new(char c) {
-	il_factor_char* ret = (il_factor_char*)malloc(sizeof(il_factor_char));
+	il_factor_char* ret = (il_factor_char*)MEM_MALLOC(sizeof(il_factor_char));
 	ret->value = c;
 	return ret;
 }
@@ -36,5 +37,5 @@ class_ * il_factor_char_eval(il_factor_char * self, enviroment * env) {
 }
 
 void il_factor_char_delete(il_factor_char * self) {
-	free(self);
+	MEM_FREE(self);
 }

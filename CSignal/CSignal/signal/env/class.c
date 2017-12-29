@@ -6,6 +6,7 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <string.h>
+#include "../util/mem.h"
 #include "../vm/enviroment.h"
 #include "../util/text.h"
 #include "field.h"
@@ -22,7 +23,7 @@ static void class_method_delete(vector_item item);
 
 class_ * class_new(const char * name, class_type type) {
 	assert(name != NULL);
-	class_* ret = (class_*)malloc(sizeof(class_));
+	class_* ret = (class_*)MEM_MALLOC(sizeof(class_));
 	ret->name = text_strdup(name);
 	ret->type = type;
 	ret->location = NULL;
@@ -294,13 +295,13 @@ int class_distance(class_ * self, class_ * other) {
 
 void class_delete(class_ * self) {
 	assert(self->ref_count == 0);
-	free(self->name);
+	MEM_FREE(self->name);
 	if (self->super_class != NULL) {
 		self->super_class->ref_count--;
 	}
 	vector_delete(self->field_list, class_field_delete);
 	vector_delete(self->method_list, class_method_delete);
-	free(self);
+	MEM_FREE(self);
 }
 
 //private

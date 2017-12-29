@@ -2,6 +2,7 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include "../util/text.h"
+#include "../util/mem.h"
 #include "il_stmt_interface.h"
 #include "il_parameter.h"
 
@@ -10,7 +11,7 @@ static void il_method_parameter_delete(vector_item item);
 static void il_method_stmt_delete(vector_item item);
 
 il_method * il_method_new(const char * name) {
-	il_method* ret = (il_method*)malloc(sizeof(il_method));
+	il_method* ret = (il_method*)MEM_MALLOC(sizeof(il_method));
 	ret->name = text_strdup(name);
 	ret->parameter_list = vector_new();
 	ret->return_type = NULL;
@@ -43,11 +44,11 @@ void il_method_delete(il_method * self) {
 	if (self == NULL) {
 		return;
 	}
-	free(self->name);
+	MEM_FREE(self->name);
 	vector_delete(self->parameter_list, il_method_parameter_delete);
 	il_type_delete(self->return_type);
 	vector_delete(self->statement_list, il_method_stmt_delete);
-	free(self);
+	MEM_FREE(self);
 }
 
 //private

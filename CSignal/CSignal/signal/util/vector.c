@@ -1,13 +1,14 @@
 #include "vector.h"
 #include <assert.h>
+#include "mem.h"
 
 #define SLOT_SIZE sizeof(void*)
 
 vector * vector_new() {
-	vector* ret = (vector*)malloc(sizeof(vector));
+	vector* ret = (vector*)MEM_MALLOC(sizeof(vector));
 	ret->length = 0;
 	ret->capacity = 16;
-	ret->memory = (vector_item*)malloc(SLOT_SIZE * 16);
+	ret->memory = (vector_item*)MEM_MALLOC(SLOT_SIZE * 16);
 	return ret;
 }
 
@@ -69,12 +70,12 @@ void vector_delete(vector * self, vector_element_deleter deleter) {
 		self->memory[i] = NULL;
 		deleter(e);
 	}
-	free(self->memory);
-	free(self);
+	MEM_FREE(self->memory);
+	MEM_FREE(self);
 }
 
 void vector_deleter_free(vector_item item) {
-	free(item);
+	MEM_FREE(item);
 }
 
 void vector_deleter_null(vector_item item) {

@@ -4,23 +4,25 @@
 #include <assert.h>
 #include <stdlib.h>
 #include <stdio.h>
+#include "../util/mem.h"
 //proto
 static void ast_print_indent(int depth);
 static void ast_print_tree_impl(ast* self, int depth);
 static void ast_delete_impl(ast* self);
+static void ast_list_deleter(list_item item);
 static bool ast_has_str(ast* self);
 
 void ast_compile_entry(ast * self) {
 	parser* p = parser_top();
 	if (p->fail) {
-		free(self);
+		MEM_FREE(self);
 		return;
 	}
 	ast_push(p->root, self);
 }
 
 ast * ast_new(ast_tag tag) {
-	ast* ret = (ast*)malloc(sizeof(ast));
+	ast* ret = (ast*)MEM_MALLOC(sizeof(ast));
 	assert(ret != NULL);
 	ret->tag = tag;
 	ret->childCount = 0;
@@ -45,7 +47,7 @@ ast * ast_new_import_path(ast* str) {
 	ast* ret = ast_new(ast_import_path);
 	ret->u.string_value = str->u.string_value;
 	str->u.string_value = NULL;
-	free(str);
+	MEM_FREE(str);
 	return ret;
 }
 
@@ -376,17 +378,35 @@ static void ast_print_tree_impl(ast* self, int depth) {
 }
 
 static void ast_delete_impl(ast* self) {
+	//*
 	for (int i = 0; i < self->childCount; i++) {
 		ast_delete((ast*)list_at(self->children, i));
 	}
 	list_delete(self->children, list_deleter_null);
 	ast_tag t = self->tag;
 	if (ast_has_str(self)) {
-		printf("free(%s)\n", self->u.string_value);
-		free(self->u.string_value);
-		self->u.string_value = NULL;
+		//printf("free(%s)\n", self->u.string_value);
+		MEM_FREE(self->u.string_value);
+		//self->u.string_value = NULL;
 	}
-	free(self);
+	MEM_FREE(self);
+	//*/
+	//list_delete(self->children, ast_list_deleter);
+	//free(self);
+}
+
+static void ast_list_deleter(list_item item) {
+	ast* self = (ast*)item;
+	for (int i = 0; i < self->childCount; i++) {
+		ast_delete(ast_at(self, i));
+	}
+	if (ast_has_str(self)) {
+		//IL‘¤‚ÅŠJ•ú‚·‚é‚æ‚¤‚É
+		//printf("free(%s)\n", self->u.string_value);
+		MEM_FREE(self->u.string_value);
+		//self->u.string_value = NULL;
+	}
+	MEM_FREE(self);
 }
 
 static bool ast_has_str(ast* self) {

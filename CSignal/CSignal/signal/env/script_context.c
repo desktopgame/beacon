@@ -5,6 +5,7 @@
 #include "class.h"
 #include <stdlib.h>
 #include <assert.h>
+#include "../util/mem.h"
 //proto
 static script_context* script_context_check_init(void);
 static void script_context_launch(script_context* self);
@@ -128,7 +129,7 @@ static void script_context_launch(script_context* self) {
 }
 
 static script_context* script_context_malloc(void) {
-	script_context* ret = (script_context*)malloc(sizeof(script_context));
+	script_context* ret = (script_context*)MEM_MALLOC(sizeof(script_context));
 	ret->parserStack = NULL;
 	ret->namespaceMap = NULL;
 	ret->classLoaderMap = tree_map_new();
@@ -141,5 +142,5 @@ static script_context* script_context_malloc(void) {
 static script_context* script_context_free(script_context* self) {
 	tree_map_delete(self->classLoaderMap, tree_map_deleter_null);
 	heap_delete(self->heap);
-	free(self);
+	MEM_FREE(self);
 }

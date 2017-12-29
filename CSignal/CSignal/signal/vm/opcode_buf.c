@@ -1,12 +1,13 @@
 #include "opcode_buf.h"
 #include <stdlib.h>
 #include "opcode.h"
+#include "../util/mem.h"
 
 //proto
 static opcode_buf_delete_label(vector_item item);
 
 opcode_buf * opcode_buf_new() {
-	opcode_buf* ret = (opcode_buf*)malloc(sizeof(opcode_buf));
+	opcode_buf* ret = (opcode_buf*)MEM_MALLOC(sizeof(opcode_buf));
 	ret->labels = vector_new();
 	ret->source = vector_new();
 	return ret;
@@ -44,7 +45,7 @@ void opcode_buf_delete(opcode_buf * self) {
 	}
 	vector_delete(self->source, vector_deleter_null);
 	vector_delete(self->labels, opcode_buf_delete_label);
-	free(self);
+	MEM_FREE(self);
 }
 
 

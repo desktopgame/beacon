@@ -5,6 +5,7 @@
 #include <assert.h>
 #include <stdbool.h>
 #include "text.h"
+#include "../util/mem.h"
 
 //proto
 static file_path* file_path_new_impl(char * name);
@@ -23,7 +24,7 @@ file_path * file_path_parse(const char * source, char separator) {
 	int len = strlen(source);
 	int bufferSize = 16;
 	int pointee = 0;
-	char* buff = (char*)malloc(sizeof(char) * bufferSize);
+	char* buff = (char*)MEM_MALLOC(sizeof(char) * bufferSize);
 	buff[bufferSize - 1] = '\0';
 	file_path* root = NULL;
 	for (int i = 0; i < len; i++) {
@@ -38,13 +39,13 @@ file_path * file_path_parse(const char * source, char separator) {
 			char* packedBuffer = NULL;
 			if (usedBufferSize < bufferSize) {
 				//最低限必要な領域をコピー
-				packedBuffer = (char*)malloc((sizeof(char) * usedBufferSize) + 0);
+				packedBuffer = (char*)MEM_MALLOC((sizeof(char) * usedBufferSize) + 0);
 				for (int i = 0; i < usedBufferSize; i++) {
 					packedBuffer[i] = buff[i];
 				}
 				packedBuffer[usedBufferSize + 0] = '\0';
 				//バックバッファーを破棄
-				free(buff);
+				MEM_FREE(buff);
 			} else packedBuffer = text_strdup(buff);
 			//一つパスを進める
 			if (root == NULL) {
@@ -54,7 +55,7 @@ file_path * file_path_parse(const char * source, char separator) {
 			}
 			//バッファーをもとに戻す
 			bufferSize = 16;
-			buff = (char*)malloc(sizeof(char) * bufferSize);
+			buff = (char*)MEM_MALLOC(sizeof(char) * bufferSize);
 			buff[bufferSize - 1] = '\0';
 			pointee = i + 1;
 		//それ以外ならバッファーへ追加
@@ -78,14 +79,14 @@ file_path * file_path_parse(const char * source, char separator) {
 	//ここではそのケースに対応する。
 	if (pointee < len) {
 		int remine = len - pointee;
-		char* tail = (char*)malloc((sizeof(char) * remine) + 1);
+		char* tail = (char*)MEM_MALLOC((sizeof(char) * remine) + 1);
 		for (int i = pointee; i < len; i++) {
 			char ch = source[i];
 			tail[i - pointee] = ch;
 		}
 		tail[remine] = '\0';
 		root = file_path_append_path(root, file_path_new_nodup(tail));
-		free(buff);
+		MEM_FREE(buff);
 	}
 	return root;
 }
@@ -111,7 +112,7 @@ void file_path_dump(file_path * self, char separator) {
 	char* tmp = file_path_to_string(self, separator);
 	printf("%s", tmp);
 	text_putline();
-	free(tmp);
+	MEM_FREE(tmp);
 }
 
 void file_path_delete(file_path * self) {
@@ -124,7 +125,7 @@ void file_path_delete_tree(file_path * self) {
 
 //private
 static file_path* file_path_new_impl(char * name) {
-	file_path* ret = (file_path*)malloc(sizeof(file_path));
+	file_path* ret = (file_path*)MEM_MALLOC(sizeof(file_path));
 	ret->parent = NULL;
 	ret->name = name;
 	ret->ref_count = 0;
@@ -159,7 +160,7 @@ static void file_path_delete_tree_impl(file_path * self, bool delete_parent) {
 		self->parent = NULL;
 	}
 	printf("free %s\n", self->name);
-	free(self->name);
+	MEM_FREE(self->name);
 	self->name = NULL;
-	free(self);
+	MEM_FREE(self);
 }

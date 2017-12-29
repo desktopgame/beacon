@@ -3,6 +3,7 @@
 #include <assert.h>
 //#include <uni>
 //#include <uni>
+#include "../util/mem.h"
 #include "../vm/vm.h"
 #include "../vm/opcode.h"
 #include "../vm/opcode_buf.h"
@@ -80,13 +81,13 @@ class_loader * class_loader_new_entry_point(const char * filename) {
 	//解析に失敗した場合
 	if (p->fail) {
 		class_loader_errors(cll, "parse failed --- %s", p->source_name);
-		free(text);
+		MEM_FREE(text);
 		parser_pop();
 		return cll;
 	}
 	cll->source_code = p->root;
 	p->root = NULL;
-	free(text);
+	MEM_FREE(text);
 	parser_pop();
 	return cll;
 }
@@ -99,6 +100,14 @@ void class_loader_load(class_loader * self) {
 	class_loader_ilload_impl(self, self->source_code);
 	class_loader_sgload_impl(self);
 	self->env = class_loader_sgload_body(self, self->il_code->statement_list);
+	//このクラスローダーがライブラリをロードしているなら
+	//必要最低限の情報を残して後は開放
+	if (self->type == content_lib) {
+		ast_delete(self->source_code);
+		il_top_level_delete(self->il_code);
+		self->source_code = NULL;
+		self->il_code = NULL;
+	}
 }
 
 void class_loader_delete(class_loader * self) {
@@ -109,14 +118,18 @@ void class_loader_delete(class_loader * self) {
 	}
 	//free(self->source_code);
 	ast_delete(self->source_code);
+	self->source_code = NULL;
+
 	il_top_level_delete(self->il_code);
-	free(self->errorMessage);
-	free(self);
+	self->il_code = NULL;
+
+	MEM_FREE(self->errorMessage);
+	MEM_FREE(self);
 }
 
 //private
 static class_loader* class_loader_new() {
-	class_loader* ret = (class_loader*)malloc(sizeof(class_loader));
+	class_loader* ret = (class_loader*)MEM_MALLOC(sizeof(class_loader));
 	ret->source_code = NULL;
 	ret->il_code = NULL;
 	ret->parent = NULL;
@@ -588,20 +601,20 @@ static void class_loader_sgload_import(class_loader* self, vector* ilimports) {
 		//パースに失敗
 		if (p->fail) {
 			class_loader_errors(cll, "parse failed --- %s", p->source_name);
-			free(text);
+			MEM_FREE(text);
 			parser_pop();
 			return;
 		//成功
 		} else {
 			cll->source_code = p->root;
 			p->root = NULL;
-			free(text);
+			MEM_FREE(text);
 			parser_pop();
 		}
 		//ロード
 		class_loader_load(cll);
-		free(withExt);
-		free(fullPath);
+		MEM_FREE(withExt);
+		MEM_FREE(fullPath);
 	}
 }
 

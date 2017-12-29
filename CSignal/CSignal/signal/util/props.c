@@ -1,19 +1,20 @@
 #include "props.h"
 #include <stdlib.h>
 #include "text.h"
+#include "../util/mem.h"
 
 //proto
 static void props_delete_entry(tree_item item);
 static void props_replace(props* self, const char* key);
 
 props_entry * props_entry_new(props_type type) {
-	props_entry* ret = (props_entry*)malloc(sizeof(props_entry));
+	props_entry* ret = (props_entry*)MEM_MALLOC(sizeof(props_entry));
 	ret->type = type;
 	return ret;
 }
 
 props * props_new() {
-	props* ret = (props*)malloc(sizeof(props));
+	props* ret = (props*)MEM_MALLOC(sizeof(props));
 	ret->map = tree_map_new();
 	return ret;
 }
@@ -84,16 +85,16 @@ bool props_contains(props * self, const char * key) {
 
 void props_delete(props * self) {
 	tree_map_delete(self->map, props_delete_entry);
-	free(self);
+	MEM_FREE(self);
 }
 
 //private
 static void props_delete_entry(tree_item item) {
 	props_entry* e = (props_entry*)item;
 	if (e->type == props_string) {
-		free(e->u.string_);
+		MEM_FREE(e->u.string_);
 	}
-	free(e);
+	MEM_FREE(e);
 }
 
 static void props_replace(props* self, const char* key) {
@@ -102,8 +103,8 @@ static void props_replace(props* self, const char* key) {
 		props_entry* p = (props_entry*)e;
 		tree_map_put(self->map, key, 1);
 		if (p->type == props_string) {
-			free(p->u.string_);
+			MEM_FREE(p->u.string_);
 		}
-		free(p);
+		MEM_FREE(p);
 	}
 }

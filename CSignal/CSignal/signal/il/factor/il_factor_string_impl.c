@@ -4,16 +4,17 @@
 #include "../../util/text.h"
 #include "../../vm/enviroment.h"
 #include "../../env/class.h"
+#include "../../util/mem.h"
 
 il_factor * il_factor_wrap_string(il_factor_string * self) {
-	il_factor* ret = (il_factor*)malloc(sizeof(il_factor));
+	il_factor* ret = (il_factor*)MEM_MALLOC(sizeof(il_factor));
 	ret->type = ilfactor_squote;
 	ret->u.string_ = self;
 	return ret;
 }
 
 il_factor_string * il_factor_string_new(const char * name) {
-	il_factor_string* ret = (il_factor_string*)malloc(sizeof(il_factor_string));
+	il_factor_string* ret = (il_factor_string*)MEM_MALLOC(sizeof(il_factor_string));
 	ret->value = text_strdup(name);
 	return ret;
 }
@@ -35,6 +36,6 @@ class_ * il_factor_string_eval(il_factor_string * self, enviroment * env) {
 }
 
 void il_factor_string_delete(il_factor_string * self) {
-	free(self->value);
-	free(self);
+	MEM_FREE(self->value);
+	MEM_FREE(self);
 }

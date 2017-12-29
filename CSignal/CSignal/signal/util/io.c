@@ -3,6 +3,7 @@
 #include <string.h>
 #include <stdlib.h>
 #include "text.h"
+#include "../util/mem.h"
 
 void io_new_file(const char * filename) {
 	assert(!io_exists(filename));
@@ -56,7 +57,7 @@ char * io_read_text(const char * filename) {
 #endif
 	int buffer_size = 16;
 	int length = 0;
-	char* ret = (char*)malloc(sizeof(char) * buffer_size);
+	char* ret = (char*)MEM_MALLOC(sizeof(char) * buffer_size);
 	while (1) {
 		char c = fgetc(fp);
 		if (c == EOF) {
@@ -74,11 +75,11 @@ char * io_read_text(const char * filename) {
 	}
 	//多めに確保しすぎた
 	if (length < buffer_size) {
-		char* copy = (char*)malloc(sizeof(char) * length);
+		char* copy = (char*)MEM_MALLOC(sizeof(char) * length);
 		for (int i = 0; i < length; i++) {
 			copy[i] = ret[i];
 		}
-		free(ret);
+		MEM_FREE(ret);
 		ret = copy;
 	}
 	fclose(fp);

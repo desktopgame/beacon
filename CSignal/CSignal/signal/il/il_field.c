@@ -2,9 +2,10 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include "../util/text.h"
+#include "../util/mem.h"
 
 il_field * il_field_new(const char * name) {
-	il_field* ret = (il_field*)malloc(sizeof(il_field));
+	il_field* ret = (il_field*)MEM_MALLOC(sizeof(il_field));
 	ret->type = NULL;
 	ret->access = access_public;
 	ret->modifier = modifier_none;
@@ -26,6 +27,6 @@ void il_field_delete(il_field * self) {
 		return;
 	}
 	il_type_delete(self->type);
-	free(self->name);
-	free(self);
+	MEM_FREE(self->name);
+	MEM_FREE(self);
 }

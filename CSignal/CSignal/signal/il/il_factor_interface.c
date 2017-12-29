@@ -4,6 +4,7 @@
 #include "../util/logger.h"
 #include "../vm/enviroment.h"
 #include "../env/class.h"
+#include "../util/mem.h"
 #include <stdio.h>
 
 void il_factor_dump(il_factor * self, int depth) {
@@ -149,5 +150,5 @@ void il_factor_delete(il_factor * self) {
 			ERROR("ファクターを開放出来ませんでした");
 			break;
 	}
-	free(self);
+	MEM_FREE(self);
 }

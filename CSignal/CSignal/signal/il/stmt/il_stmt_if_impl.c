@@ -1,5 +1,6 @@
 #include "il_stmt_if_impl.h"
 #include "../../util/text.h"
+#include "../../util/mem.h"
 #include "../../vm/opcode_buf.h"
 #include "../../vm/enviroment.h"
 #include <stdlib.h>
@@ -10,14 +11,14 @@ static void il_stmt_elif_list_delete_impl(vector_item item);
 static void il_stmt_if_delete_stmt(vector_item item);
 
 il_stmt * il_stmt_wrap_if(il_stmt_if * self) {
-	il_stmt* ret = (il_stmt*)malloc(sizeof(il_stmt));
+	il_stmt* ret = (il_stmt*)MEM_MALLOC(sizeof(il_stmt));
 	ret->type = ilstmt_if;
 	ret->u.if_ = self;
 	return ret;
 }
 
 il_stmt_if * il_stmt_if_new() {
-	il_stmt_if* ret = (il_stmt_if*)malloc(sizeof(il_stmt_if));
+	il_stmt_if* ret = (il_stmt_if*)MEM_MALLOC(sizeof(il_stmt_if));
 	ret->condition = NULL;
 	ret->elif_list = vector_new();
 	ret->else_body = il_stmt_else_new();
@@ -26,7 +27,7 @@ il_stmt_if * il_stmt_if_new() {
 }
 
 il_stmt_elif * il_stmt_elif_new() {
-	il_stmt_elif* ret = (il_stmt_elif*)malloc(sizeof(il_stmt_elif));
+	il_stmt_elif* ret = (il_stmt_elif*)MEM_MALLOC(sizeof(il_stmt_elif));
 	ret->condition = NULL;
 	ret->body = vector_new();
 	return ret;
@@ -37,7 +38,7 @@ vector * il_stmt_elif_list_new() {
 }
 
 il_stmt_else * il_stmt_else_new() {
-	il_stmt_else* ret = (il_stmt_else*)malloc(sizeof(il_stmt_else));
+	il_stmt_else* ret = (il_stmt_else*)MEM_MALLOC(sizeof(il_stmt_else));
 	ret->body = vector_new();
 	return ret;
 }
@@ -95,14 +96,14 @@ void il_stmt_if_delete(il_stmt_if * self) {
 	//vector_delete(self->else_body, il_stmt_if_delete_stmt);
 	vector_delete(self->body, il_stmt_if_delete_stmt);
 	il_factor_delete(self->condition);
-	free(self);
+	MEM_FREE(self);
 }
 
 void il_stmt_elif_delete(il_stmt_elif * self) {
 	il_factor_delete(self->condition);
 	vector_delete(self->body, il_stmt_if_delete_stmt);
 	//il_stmt_list_delete(self->body);
-	free(self);
+	MEM_FREE(self);
 }
 
 void il_stmt_elif_list_delete(vector * self) {
@@ -111,7 +112,7 @@ void il_stmt_elif_list_delete(vector * self) {
 
 void il_stmt_else_delete(il_stmt_else * self) {
 	vector_delete(self->body, il_stmt_if_delete_stmt);
-	free(self);
+	MEM_FREE(self);
 }
 
 //private

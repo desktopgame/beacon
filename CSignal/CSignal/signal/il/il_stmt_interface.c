@@ -3,6 +3,7 @@
 #include "../util/logger.h"
 #include "../env/class.h"
 #include "../vm/enviroment.h"
+#include "../util/mem.h"
 
 void il_stmt_dump(il_stmt * self, int depth) {
 	switch (self->type) {
@@ -46,5 +47,5 @@ void il_stmt_delete(il_stmt * self) {
 			//ERROR("ステートメントを開放出来ませんでした。");
 			break;
 	}
-	free(self);
+	MEM_FREE(self);
 }

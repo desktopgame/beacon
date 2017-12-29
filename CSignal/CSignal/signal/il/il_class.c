@@ -3,13 +3,14 @@
 #include "../util/text.h"
 #include "il_field.h"
 #include "il_method.h"
+#include "../util/mem.h"
 
 //proto
 static void il_class_field_delete(vector_item item);
 static void il_class_method_delete(vector_item item);
 
 il_class* il_class_new(const char* name) {
-	il_class* ret = (il_class*)malloc(sizeof(il_class));
+	il_class* ret = (il_class*)MEM_MALLOC(sizeof(il_class));
 	ret->name = text_strdup(name);
 	ret->super = NULL;
 	ret->field_list = vector_new();
@@ -38,11 +39,11 @@ void il_class_delete(il_class * self) {
 		return;
 	}
 	//printf("free class %s\n", self->name);
-	free(self->name);
+	MEM_FREE(self->name);
 	il_type_delete(self->super);
 	vector_delete(self->field_list, il_class_field_delete);
 	vector_delete(self->method_list, il_class_method_delete);
-	free(self);
+	MEM_FREE(self);
 }
 
 //private

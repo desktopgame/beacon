@@ -3,9 +3,10 @@
 #include <string.h>
 #include <stdio.h>
 #include "text.h"
+#include "mem.h"
 
 tree_map * tree_map_new() {
-	tree_map* ret = (tree_map*)malloc(sizeof(tree_map));
+	tree_map* ret = (tree_map*)MEM_MALLOC(sizeof(tree_map));
 	ret->key = "\0";
 	ret->item = NULL;
 	ret->left = NULL;
@@ -96,13 +97,13 @@ void tree_map_delete(tree_map * self, tree_element_deleter deleter) {
 	//printf("delete %s\n", self->key);
 	if (self->item != NULL) {
 		deleter(self->item);
-		free(self->key);
+		MEM_FREE(self->key);
 	}
-	free(self);
+	MEM_FREE(self);
 }
 
 void tree_map_deleter_free(tree_item item) {
-	free(item);
+	MEM_FREE(item);
 }
 
 void tree_map_deleter_null(tree_item item) {

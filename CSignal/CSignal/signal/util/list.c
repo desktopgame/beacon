@@ -1,9 +1,10 @@
 #include "list.h"
 #include <stdlib.h>
 #include <assert.h>
+#include "../util/mem.h"
 
 list * list_new() {
-	list* li = (list*)malloc(sizeof(list));
+	list* li = (list*)MEM_MALLOC(sizeof(list));
 	li->item = NULL;
 	li->prev = NULL;
 	li->next = NULL;
@@ -76,7 +77,7 @@ void list_delete(list * self, list_element_deleter deleter) {
 		if (item) {
 			deleter(item);
 		}
-		free(pointee);
+		MEM_FREE(pointee);
 		pointee = next;
 		if (!next) {
 			break;
@@ -85,7 +86,7 @@ void list_delete(list * self, list_element_deleter deleter) {
 }
 
 void list_deleter_free(list_item item) {
-	free(item);
+	MEM_FREE(item);
 }
 
 void list_deleter_null(list_item item) {
