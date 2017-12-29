@@ -49,13 +49,7 @@ void method_dump(method * self, int depth) {
 	}
 	text_putline();
 	if (self->type == method_type_script) {
-		opcode_buf* buf = self->u.script_method->env->buf;
-		for (int i = 0; i < buf->source->length; i++) {
-			text_putindent(depth + 1);
-			i = opcode_print(buf->source, i);
-			text_putline();
-		}
-		text_putline();
+		opcode_buf_dump(self->u.script_method->env->buf, depth + 1);
 	}
 }
 

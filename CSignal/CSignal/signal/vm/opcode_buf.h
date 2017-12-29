@@ -40,6 +40,13 @@ label* opcode_buf_label(opcode_buf * self, int index);
 int opcode_buf_nop(opcode_buf* self);
 
 /**
+ * オペコードの一覧を出力します.
+ * @param self
+ * @param depth
+ */
+void opcode_buf_dump(opcode_buf* self, int depth);
+
+/**
  * オペコードの一覧を開放します.
  * @param self
  */

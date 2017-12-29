@@ -7,6 +7,7 @@
 #include "../il/il_top_level.h"
 #include <stdint.h>
 #include <stdbool.h>
+struct enviroment;
 
 /**
  * クラスローダーを表す構造体です.
@@ -15,6 +16,7 @@ typedef struct class_loader {
 	ast* source_code;
 	il_top_level* il_code;
 	struct class_loader* parent;
+	struct enviroment* env;
 	import_manager* import_manager;
 	content_type type;
 	uint32_t ref_count;

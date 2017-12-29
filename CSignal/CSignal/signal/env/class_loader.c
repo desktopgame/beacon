@@ -98,6 +98,7 @@ void class_loader_load(class_loader * self) {
 	//ast_print_tree(self->source_code);
 	class_loader_ilload_impl(self, self->source_code);
 	class_loader_sgload_impl(self);
+	self->env = class_loader_sgload_body(self, self->il_code->statement_list);
 }
 
 void class_loader_delete(class_loader * self) {
@@ -122,6 +123,7 @@ static class_loader* class_loader_new() {
 	ret->ref_count = 0;
 	ret->type = content_entry_point;
 	ret->import_manager = import_manager_new();
+	ret->env = NULL;
 	ret->error = false;
 	ret->errorMessage = NULL;
 	return ret;
