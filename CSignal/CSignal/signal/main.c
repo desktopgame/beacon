@@ -21,7 +21,12 @@ int main(int argc, char* argv[]) {
 	script_context_open();
 	cmd_dump(argc, argv);
 //	test_preload();
-	test_cll();
+	//整数リテラルをオブジェクトにラップ
+	//オブジェクトにベクターを持たせて、
+	//インデックスがクラスのそれと一致するように
+	//定数プールにdouble型を入れられるように
+	test_vm2();
+//	test_cll();
 //	test_props();
 //	test_string_table();
 //	test_namespace();

@@ -26,7 +26,7 @@ void il_factor_char_dump(il_factor_char * self, int depth) {
 }
 
 void il_factor_char_generate(il_factor_char * self, enviroment * env) {
-	int index = enviroment_add_constant(env, self->value);
+	int index = enviroment_add_constant_char(env, self->value);
 	opcode_buf_add(env->buf, op_constc);
 	opcode_buf_add(env->buf, index);
 }

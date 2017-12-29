@@ -111,7 +111,7 @@ void vm_execute(vm* self, enviroment* env) {
 			case op_consti:
 			{
 				int index = (int)enviroment_source_at(env, ++i);
-				int cv = (int)enviroment_constant_at(env, index);
+				int cv = enviroment_constant_int_at(env, index);
 				vector_push(self->value_stack, cv);
 				INFO("push consti");
 				break;
@@ -129,7 +129,7 @@ void vm_execute(vm* self, enviroment* env) {
 			case op_consts:
 			{
 				int index = (int)enviroment_source_at(env, ++i);
-				char* cs = (char*)enviroment_constant_at(env, index);
+				char* cs = enviroment_constant_string_at(env, index);
 				vector_push(self->value_stack, cs);
 				INFO("push consts");
 				break;

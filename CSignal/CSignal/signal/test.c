@@ -205,8 +205,8 @@ void test_vm(void) {
 	vm* vm = vm_new();
 	enviroment* env = enviroment_new();
 	//定数プールに登録
-	vector_push(env->constant_pool, 10);
-	vector_push(env->constant_pool, 5);
+	enviroment_add_constant_int(env, 10);
+	enviroment_add_constant_int(env, 5);
 
 	//定数プールの 0 番目をプッシュ
 	opcode_buf_add(env->buf, op_consti);
@@ -228,7 +228,7 @@ void test_vm2(void) {
 	vm* vm = vm_new();
 	enviroment* env = enviroment_new();
 	//定数プールに登録
-	vector_push(env->constant_pool, "HelloWorld");
+	enviroment_add_constant_string(env, "HelloWorld");
 
 
 	//定数プールの 0 番目をプッシュ

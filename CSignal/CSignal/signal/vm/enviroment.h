@@ -3,6 +3,7 @@
 #define SIGNAL_VM_ENVIROMENT_H
 #include "../util/vector.h"
 #include "opcode_buf.h"
+#include "constant_element.h"
 struct class_;
 /**
  * プログラムの実行環境です.
@@ -23,11 +24,32 @@ typedef struct enviroment {
 enviroment* enviroment_new();
 
 /**
- * 定数プールに値を追加して、その位置を返します.
- * @param item
+ * 定数プールに整数を追加して、その位置を返します.
+ * @param i
  * @return
  */
-int enviroment_add_constant(enviroment* self, vector_item item);
+int enviroment_add_constant_int(enviroment* self, int i);
+
+/**
+ * 定数プールに浮動小数を追加して、その位置を返します.
+ * @param d
+ * @return
+ */
+int enviroment_add_constant_double(enviroment* self, double d);
+
+/**
+ * 定数プールに文字を追加して、その位置を返します.
+ * @param c
+ * @return
+ */
+int enviroment_add_constant_char(enviroment* self, char c);
+
+/**
+ * 定数プールに文字列を追加して、その位置を返します.
+ * @param s
+ * @return
+ */
+int enviroment_add_constant_string(enviroment* self, const char* s);
 
 /**
  * 指定位置のオペコード/オペランドを返します.
@@ -43,7 +65,39 @@ vector_item enviroment_source_at(enviroment* self, int index);
  * @param index
  * @return
  */
-vector_item enviroment_constant_at(enviroment* self, int index);
+constant_element* enviroment_constant_at(enviroment* self, int index);
+
+/**
+ * 指定位置の整数型の定数を返します.
+ * @param self
+ * @param index
+ * @return
+ */
+int enviroment_constant_int_at(enviroment* self, int index);
+
+/**
+ * 指定位置の浮動小数型の定数を返します.
+ * @param self
+ * @param index
+ * @return
+ */
+double enviroment_constant_double_at(enviroment* self, int index);
+
+/**
+ * 指定位置の文字型の定数を返します.
+ * @param self
+ * @param index
+ * @return
+ */
+char enviroment_constant_char_at(enviroment* self, int index);
+
+/**
+ * 指定位置の文字列型の定数を返します.
+ * @param self
+ * @param index
+ * @return
+ */
+char* enviroment_constant_string_at(enviroment* self, int index);
 
 /**
  * 環境を開放します.
