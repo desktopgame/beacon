@@ -3,6 +3,8 @@
 #define SIGNAL_ENV_SCRIPT_CONTEXT_H
 #include "../util/stack.h"
 #include "../util/tree_map.h"
+struct heap;
+
 /**
  * 唯一のスクリプトコンテキストを表すIDです.
  */
@@ -22,6 +24,7 @@ typedef struct script_context {
 	stack* parserStack;
 	tree_map* namespaceMap;
 	tree_map* classLoaderMap;
+	struct heap* heap;
 	struct script_context* prev;
 	struct script_context* next;
 } script_context;

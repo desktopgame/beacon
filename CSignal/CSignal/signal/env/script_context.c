@@ -1,5 +1,6 @@
 #include "script_context.h"
 #include "../util/logger.h"
+#include "heap.h"
 #include "namespace.h"
 #include "class.h"
 #include <stdlib.h>
@@ -131,6 +132,7 @@ static script_context* script_context_malloc(void) {
 	ret->parserStack = NULL;
 	ret->namespaceMap = NULL;
 	ret->classLoaderMap = tree_map_new();
+	ret->heap = heap_new();
 	ret->prev = NULL;
 	ret->next = NULL;
 	return ret;
@@ -138,5 +140,6 @@ static script_context* script_context_malloc(void) {
 
 static script_context* script_context_free(script_context* self) {
 	tree_map_delete(self->classLoaderMap, tree_map_deleter_null);
+	heap_delete(self->heap);
 	free(self);
 }

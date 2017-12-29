@@ -1,6 +1,6 @@
 #include "enviroment.h"
 #include "../env/class.h"
-#include "constant_element.h"
+#include "../env/object.h"
 #include <stdlib.h>
 #include <assert.h>
 
@@ -17,25 +17,25 @@ enviroment * enviroment_new() {
 
 int enviroment_add_constant_int(enviroment * self, int i) {
 	int len = self->constant_pool->length;
-	vector_push(self->constant_pool, constant_int_new(i));
+	vector_push(self->constant_pool, object_int_new(i));
 	return len;
 }
 
 int enviroment_add_constant_double(enviroment * self, double d) {
 	int len = self->constant_pool->length;
-	vector_push(self->constant_pool, constant_double_new(d));
+	vector_push(self->constant_pool, object_double_new(d));
 	return len;
 }
 
 int enviroment_add_constant_char(enviroment * self, char c) {
 	int len = self->constant_pool->length;
-	vector_push(self->constant_pool, constant_char_new(c));
+	vector_push(self->constant_pool, object_char_new(c));
 	return len;
 }
 
 int enviroment_add_constant_string(enviroment * self, const char * s) {
 	int len = self->constant_pool->length;
-	vector_push(self->constant_pool, constant_string_new(s));
+	vector_push(self->constant_pool, object_string_new(s));
 	return len;
 }
 
@@ -43,31 +43,31 @@ vector_item enviroment_source_at(enviroment * self, int index) {
 	return vector_at(self->buf->source, index);
 }
 
-constant_element* enviroment_constant_at(enviroment * self, int index) {
-	return (constant_element*)vector_at(self->constant_pool, index);
+object* enviroment_constant_at(enviroment * self, int index) {
+	return (object*)vector_at(self->constant_pool, index);
 }
 
 int enviroment_constant_int_at(enviroment * self, int index) {
-	constant_element* e = enviroment_constant_at(self, index);
-	assert(e->type == constant_int);
+	object* e = enviroment_constant_at(self, index);
+	assert(e->type == object_int);
 	return e->u.int_;
 }
 
 double enviroment_constant_double_at(enviroment * self, int index) {
-	constant_element* e = enviroment_constant_at(self, index);
-	assert(e->type == constant_double);
+	object* e = enviroment_constant_at(self, index);
+	assert(e->type == object_double);
 	return e->u.double_;
 }
 
 char enviroment_constant_char_at(enviroment * self, int index) {
-	constant_element* e = enviroment_constant_at(self, index);
-	assert(e->type == constant_char);
+	object* e = enviroment_constant_at(self, index);
+	assert(e->type == object_char);
 	return e->u.char_;
 }
 
 char * enviroment_constant_string_at(enviroment * self, int index) {
-	constant_element* e = enviroment_constant_at(self, index);
-	assert(e->type == constant_string);
+	object* e = enviroment_constant_at(self, index);
+	assert(e->type == object_string);
 	return e->u.string_;
 }
 
@@ -79,5 +79,5 @@ void enviroment_delete(enviroment * self) {
 
 //private
 static void enviroment_constant_pool_delete(vector_item item) {
-	constant_element_delete((constant_element*)item);
+	object_delete((object*)item);
 }

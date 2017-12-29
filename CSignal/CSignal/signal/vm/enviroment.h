@@ -3,8 +3,8 @@
 #define SIGNAL_VM_ENVIROMENT_H
 #include "../util/vector.h"
 #include "opcode_buf.h"
-#include "constant_element.h"
 struct class_;
+struct object;
 /**
  * プログラムの実行環境です.
  * スタックや変数は実行時に変化しますが、
@@ -65,7 +65,7 @@ vector_item enviroment_source_at(enviroment* self, int index);
  * @param index
  * @return
  */
-constant_element* enviroment_constant_at(enviroment* self, int index);
+struct object* enviroment_constant_at(enviroment* self, int index);
 
 /**
  * 指定位置の整数型の定数を返します.
