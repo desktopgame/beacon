@@ -11,7 +11,7 @@
 #include "factor/il_factor_string_impl.h"
 #include "factor/il_factor_call_impl.h"
 #include "factor/il_factor_invoke_impl.h"
-#include "factor/il_factor_static_invoke_impl.h"
+#include "factor/il_factor_named_invoke_impl.h"
 #include "factor/il_factor_variable_impl.h"
 #include "factor/il_factor_unary_op_impl.h"
 #include "factor/il_factor_binary_op_impl.h"

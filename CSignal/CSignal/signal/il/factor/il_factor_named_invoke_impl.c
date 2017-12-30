@@ -1,21 +1,21 @@
-#include "il_factor_static_invoke_impl.h"
+#include "il_factor_named_invoke_impl.h"
 #include "../il_argument.h"
 #include "../../util/mem.h"
 #include "../../util/text.h"
 #include <assert.h>
 
 //proto
-static void il_factor_static_invoke_delete_argument(vector_item item);
+static void il_factor_named_invoke_delete_argument(vector_item item);
 
-il_factor * il_factor_wrap_static_invoke(il_factor_static_invoke * self) {
+il_factor * il_factor_wrap_named_invoke(il_factor_named_invoke * self) {
 	il_factor* ret = (il_factor*)MEM_MALLOC(sizeof(il_factor));
-	ret->type = ilfactor_static_invoke;
-	ret->u.static_invoke_ = self;
+	ret->type = ilfactor_named_invoke;
+	ret->u.named_invoke_ = self;
 	return ret;
 }
 
-il_factor_static_invoke * il_factor_static_invoke_new(const char* method_name) {
-	il_factor_static_invoke* ret = (il_factor_static_invoke*)MEM_MALLOC(sizeof(il_factor_static_invoke));
+il_factor_named_invoke * il_factor_named_invoke_new(const char* method_name) {
+	il_factor_named_invoke* ret = (il_factor_named_invoke*)MEM_MALLOC(sizeof(il_factor_named_invoke));
 	//ret->class_name = text_strdup(class_name);
 	ret->method_name = text_strdup(method_name);
 	ret->scope_vec = vector_new();
@@ -23,9 +23,9 @@ il_factor_static_invoke * il_factor_static_invoke_new(const char* method_name) {
 	return ret;
 }
 
-void il_factor_static_invoke_dump(il_factor_static_invoke * self, int depth) {
+void il_factor_named_invoke_dump(il_factor_named_invoke * self, int depth) {
 	text_putindent(depth);
-	printf("static invoke %s", self->method_name);
+	printf("named invoke %s", self->method_name);
 	text_putline();
 
 	text_putindent(depth);
@@ -50,26 +50,26 @@ void il_factor_static_invoke_dump(il_factor_static_invoke * self, int depth) {
 	}
 }
 
-void il_factor_static_invoke_generate(il_factor_static_invoke * self, enviroment * env) {
+void il_factor_named_invoke_generate(il_factor_named_invoke * self, enviroment * env) {
 }
 
-class_ * il_factor_static_invoke_eval(il_factor_static_invoke * self, enviroment * env) {
+class_ * il_factor_named_invoke_eval(il_factor_named_invoke * self, enviroment * env) {
 	return NULL;
 }
 
-void il_factor_static_invoke_delete(il_factor_static_invoke * self) {
+void il_factor_named_invoke_delete(il_factor_named_invoke * self) {
 	//MEM_FREE(self->fqcn);
 	assert(self->class_name != NULL);
 	MEM_FREE(self->class_name);
 	MEM_FREE(self->method_name);
 	vector_delete(self->scope_vec, vector_deleter_free);
-	vector_delete(self->argument_list, il_factor_static_invoke_delete_argument);
+	vector_delete(self->argument_list, il_factor_named_invoke_delete_argument);
 	MEM_FREE(self);
 }
 
 
 //private
-static void il_factor_static_invoke_delete_argument(vector_item item) {
+static void il_factor_named_invoke_delete_argument(vector_item item) {
 	il_argument* e = (il_argument*)item;
 	il_argument_delete(e);
 }

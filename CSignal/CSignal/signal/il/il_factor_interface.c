@@ -27,8 +27,8 @@ void il_factor_dump(il_factor * self, int depth) {
 		case ilfactor_invoke:
 			il_factor_invoke_dump(self->u.invoke_, depth);
 			break;
-		case ilfactor_static_invoke:
-			il_factor_static_invoke_dump(self->u.static_invoke_, depth);
+		case ilfactor_named_invoke:
+			il_factor_named_invoke_dump(self->u.named_invoke_, depth);
 			break;
 		case ilfactor_variable:
 			il_factor_variable_dump(self->u.variable_, depth);
@@ -65,8 +65,8 @@ void il_factor_generate(il_factor * self, enviroment* env) {
 		case ilfactor_invoke:
 			il_factor_invoke_generate(self->u.invoke_, env);
 			break;
-		case ilfactor_static_invoke:
-			il_factor_static_invoke_generate(self->u.static_invoke_, env);
+		case ilfactor_named_invoke:
+			il_factor_named_invoke_generate(self->u.named_invoke_, env);
 			break;
 		case ilfactor_variable:
 			il_factor_variable_generate(self->u.variable_, env);
@@ -104,8 +104,8 @@ class_ * il_factor_eval(il_factor * self, enviroment * env) {
 		case ilfactor_invoke:
 			ret = il_factor_invoke_eval(self->u.invoke_, env);
 			break;
-		case ilfactor_static_invoke:
-			ret = il_factor_static_invoke_eval(self->u.static_invoke_, env);
+		case ilfactor_named_invoke:
+			ret = il_factor_named_invoke_eval(self->u.named_invoke_, env);
 			break;
 		case ilfactor_variable:
 			ret = il_factor_variable_eval(self->u.variable_, env);
@@ -146,8 +146,8 @@ void il_factor_delete(il_factor * self) {
 		case ilfactor_invoke:
 			il_factor_invoke_delete(self->u.invoke_);
 			break;
-		case ilfactor_static_invoke:
-			il_factor_static_invoke_delete(self->u.static_invoke_);
+		case ilfactor_named_invoke:
+			il_factor_named_invoke_delete(self->u.named_invoke_);
 			break;
 		case ilfactor_variable:
 			il_factor_variable_delete(self->u.variable_);

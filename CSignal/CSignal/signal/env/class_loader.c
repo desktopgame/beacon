@@ -56,8 +56,8 @@ static il_factor_unary_op* class_loader_ilload_unary(class_loader* self, ast* so
 static il_factor_binary_op* class_loader_ilload_binary(class_loader* self, ast* source, ilbinary_op_type type);
 static il_factor_call* class_loader_ilload_call(class_loader* self, ast* source);
 static il_factor_invoke* class_loader_ilload_invoke(class_loader* self, ast* source);
-static il_factor_static_invoke* class_loader_ilload_static_invoke(class_loader* self, ast* source);
-static void class_loader_ilload_fqcn(ast* fqcn, il_factor_static_invoke* dest);
+static il_factor_named_invoke* class_loader_ilload_named_invoke(class_loader* self, ast* source);
+static void class_loader_ilload_fqcn(ast* fqcn, il_factor_named_invoke* dest);
 static void class_loader_ilload_argument_list(class_loader* self, vector* list, ast* source);
 
 static void class_loader_sgload_impl(class_loader* self);
@@ -463,7 +463,7 @@ static il_factor* class_loader_ilload_factor(class_loader* self, ast* source) {
 	} else if (source->tag == ast_invoke) {
 		return il_factor_wrap_invoke(class_loader_ilload_invoke(self, source));
 	} else if(source->tag == ast_static_invoke) {
-		return il_factor_wrap_static_invoke(class_loader_ilload_static_invoke(self, source));
+		return il_factor_wrap_named_invoke(class_loader_ilload_named_invoke(self, source));
 	} else if (source->tag == ast_variable) {
 		return il_factor_wrap_variable(il_factor_variable_new(source->u.string_value));
 	//operator(+ - * / %)
@@ -539,12 +539,12 @@ static il_factor_invoke* class_loader_ilload_invoke(class_loader* self, ast* sou
 	return ilinvoke;
 }
 
-static il_factor_static_invoke* class_loader_ilload_static_invoke(class_loader* self, ast* source) {
+static il_factor_named_invoke* class_loader_ilload_named_invoke(class_loader* self, ast* source) {
 	assert(source->tag == ast_static_invoke);
 	ast* afqcn = ast_at(source, 0);
 	ast* aname = ast_at(source, 1);
 	ast* aargs = ast_at(source, 2);
-	il_factor_static_invoke* ret = il_factor_static_invoke_new(aname->u.string_value);
+	il_factor_named_invoke* ret = il_factor_named_invoke_new(aname->u.string_value);
 	if (afqcn->tag == ast_fqcn_class_name) {
 		ret->class_name = text_strdup(afqcn->u.string_value);
 	} else  class_loader_ilload_fqcn(afqcn, ret);
@@ -552,7 +552,7 @@ static il_factor_static_invoke* class_loader_ilload_static_invoke(class_loader* 
 	return ret;
 }
 
-static void class_loader_ilload_fqcn(ast* fqcn, il_factor_static_invoke* dest) {
+static void class_loader_ilload_fqcn(ast* fqcn, il_factor_named_invoke* dest) {
 	if (fqcn->tag == ast_fqcn ||
 		fqcn->tag == ast_fqcn_part_list) {
 		if (fqcn->tag == ast_fqcn_part_list &&
