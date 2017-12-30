@@ -545,7 +545,10 @@ static il_factor_static_invoke* class_loader_ilload_static_invoke(class_loader* 
 	ast* aname = ast_at(source, 1);
 	ast* aargs = ast_at(source, 2);
 	il_factor_static_invoke* ret = il_factor_static_invoke_new(aname->u.string_value);
-	class_loader_ilload_fqcn(afqcn, ret);
+	if (afqcn->tag == ast_fqcn_class_name) {
+		ret->class_name = text_strdup(afqcn->u.string_value);
+	} else  class_loader_ilload_fqcn(afqcn, ret);
+	class_loader_ilload_argument_list(self, ret->argument_list, aargs);
 	return ret;
 }
 

@@ -56,11 +56,11 @@ namespace L.Goo.Foo {
 }
 main();
 Console.writeLine("a");
-main(10, 20, "HelloWo");
-Foo a = Foo.newInstance();
-a.print();
-a.print("a");
-a.print(10, 20, "aaa");
+a.main(10, 20, "HelloW");
+//Foo a = Foo.newInstance();
+//a.print();
+//a.print("a");
+//a.print(10, 20, "aaa");
 signal::lang::Console.writeLine("aaa");
 //Console.writeLine("HelloWorld");
 //(10 + 20 + (5 * 20 + (16 / 4)) >= 20 || 0 < 0)

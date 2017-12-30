@@ -2,6 +2,7 @@
 #include "../il_argument.h"
 #include "../../util/mem.h"
 #include "../../util/text.h"
+#include <assert.h>
 
 //proto
 static void il_factor_static_invoke_delete_argument(vector_item item);
@@ -26,6 +27,18 @@ void il_factor_static_invoke_dump(il_factor_static_invoke * self, int depth) {
 	text_putindent(depth);
 	printf("static invoke %s", self->method_name);
 	text_putline();
+	//X::C.call() のような呼び出しなら
+	if (self->scope_vec->length > 0) {
+		text_putindent(depth + 1);
+		printf("scope");
+		text_putline();
+		for (int i = 0; i < self->scope_vec->length; i++) {
+			char* e = (char*)vector_at(self->scope_vec, i);
+			text_putindent(depth + 2);
+			printf("%s", e);
+			text_putline();
+		}
+	}
 	for (int i = 0; i < self->argument_list->length; i++) {
 		vector_item e = vector_at(self->argument_list, i);
 		il_argument* ila = (il_argument*)e;
@@ -42,6 +55,7 @@ class_ * il_factor_static_invoke_eval(il_factor_static_invoke * self, enviroment
 
 void il_factor_static_invoke_delete(il_factor_static_invoke * self) {
 	//MEM_FREE(self->fqcn);
+	assert(self->class_name != NULL);
 	MEM_FREE(self->class_name);
 	MEM_FREE(self->method_name);
 	vector_delete(self->scope_vec, vector_deleter_free);
