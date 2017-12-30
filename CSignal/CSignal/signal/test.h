@@ -11,6 +11,14 @@ typedef struct PERSON {
 	int age;
 } PERSON;
 
+typedef struct HOLDER {
+	union {
+		int i;
+		char c;
+		char* s;
+	} u;
+} HOLDER;
+
 /**
  * スタックのテストを実行.
  */
@@ -65,4 +73,6 @@ void test_string_table(void);
 void test_preload(void);
 
 void test_props(void);
+
+void test_dup(void);
 #endif // !SIGNAL_TEST_H

@@ -81,3 +81,33 @@ ast * ast_new_argument_list(ast * factor, ast * argument_list) {
 	ast_push(ret, argument_list);
 	return ret;
 }
+
+ast * ast_new_fqcn(ast * part_list, char * class_name) {
+	ast* ret = ast_new(ast_fqcn);
+	ast* a = ast_new(ast_fqcn_class_name);
+	a->u.string_value = class_name;
+	ast_push(ret, part_list);
+	ast_push(ret, a);
+	return ret;
+}
+
+ast * ast_new_fqcn_part(char * name) {
+	ast* ret = ast_new(ast_fqcn_class_name);
+	ret->u.string_value = name;
+	return ret;
+}
+
+ast * ast_new_fqcn_part_list(ast * part, ast * part_list) {
+	/*
+	ast* ret = ast_new(ast_fqcn_part_list);
+	ast_push(ret, part);
+	ast_push(ret, part_list);
+	return ret;
+	*/
+	ast* ret = ast_new(ast_fqcn);
+	part->tag = ast_fqcn_class_name;
+	part_list->tag = ast_fqcn_part_list;
+	ast_push(ret, part);
+	ast_push(ret, part_list);
+	return ret;
+}

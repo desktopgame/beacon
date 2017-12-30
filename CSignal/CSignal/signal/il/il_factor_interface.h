@@ -18,6 +18,7 @@ typedef enum il_factor_type {
 	ilfactor_binary_op,
 	ilfactor_call,
 	ilfactor_invoke,
+	ilfactor_static_invoke,
 	ilfactor_variable,
 } il_factor_type;
 
@@ -36,6 +37,7 @@ struct il_factor_char;
 struct il_factor_string;
 struct il_factor_call;
 struct il_factor_invoke;
+struct il_factor_static_invoke;
 struct il_factor_variable;
 struct il_factor_unary_op;
 struct il_factor_binary_op;
@@ -52,6 +54,7 @@ typedef struct il_factor {
 		struct il_factor_string* string_;
 		struct il_factor_call* call_;
 		struct il_factor_invoke* invoke_;
+		struct il_factor_static_invoke* static_invoke_;
 		struct il_factor_variable* variable_;
 		struct il_factor_unary_op* unary_;
 		struct il_factor_binary_op* binary_;

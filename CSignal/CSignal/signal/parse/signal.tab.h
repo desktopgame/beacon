@@ -4,6 +4,7 @@
 #include "../ast/assign_operator_type.h"
 #include "../ast/modifier_type.h"
 #include "../ast/access_level.h"
+#include "../util/mem.h"
 
 /* A Bison parser, made by GNU Bison 2.4.1.  */
 

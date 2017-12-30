@@ -122,6 +122,13 @@ typedef enum ast_tag {
 
 	ast_argument,
 	ast_argument_list,
+
+	ast_fqcn,
+	ast_fqcn_class_name,
+	ast_fqcn_part,
+	ast_fqcn_part_list,
+
+	ast_static_invoke,
 	//stmt
 	ast_if,
 	ast_else,
@@ -271,6 +278,15 @@ ast* ast_new_call(const char* name, ast* argument_list);
  * @return
  */
 ast* ast_new_invoke(ast* receiver, const char* name, ast* argument_list);
+
+/**
+ * 完全修飾名に対するメソッド呼び出しを表す要素を作成します.
+ * @param fqcn
+ * @param name
+ * @param argument_list
+ * @return
+ */
+ast* ast_new_static_invoke(ast* fqcn, const char* name, ast* argument_list);
 
 /**
  * 計算可能な要素だけで構成される文を作成します.

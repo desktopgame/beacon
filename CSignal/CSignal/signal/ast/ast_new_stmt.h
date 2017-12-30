@@ -100,4 +100,27 @@ ast* ast_new_argument(ast* factor);
 * @return
 */
 ast* ast_new_argument_list(ast* factor, ast* argument_list);
+
+/**
+ * 完全クラス名(XX::YY::Foo)を表す要素を作成します.
+ * @param part_list
+ * @param class_name
+ * @return
+ */
+ast* ast_new_fqcn(ast* part_list, char* class_name);
+
+/**
+ * 完全修飾クラス名の 1節 を表す要素を作成します.
+ * @param name
+ * @return
+ */
+ast* ast_new_fqcn_part(char* name);
+
+/**
+ * 完全修飾クラス名の名前空間部分(XX::YY::)の一覧を表す要素を作成します.
+ * @param part
+ * @param part_list
+ * @return
+ */
+ast* ast_new_fqcn_part_list(ast* part, ast* part_list);
 #endif // !SIGNAL_AST_AST_NEW_STMT_H

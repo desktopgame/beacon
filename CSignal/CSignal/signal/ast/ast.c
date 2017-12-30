@@ -132,6 +132,16 @@ ast * ast_new_invoke(ast * receiver, const char* name, ast * argument_list) {
 	return ret;
 }
 
+ast * ast_new_static_invoke(ast * fqcn, const char * name, ast * argument_list) {
+	ast* ret = ast_new(ast_static_invoke);
+	ast* aname = ast_new(ast_identifier);
+	aname->u.string_value = name;
+	ast_push(ret, fqcn);
+	ast_push(ret, aname);
+	ast_push(ret, argument_list);
+	return ret;
+}
+
 ast * ast_new_proc(ast * expr) {
 	ast* ret = ast_new(ast_proc);
 	ast_push(ret, expr);
@@ -235,6 +245,15 @@ void ast_print(ast* self) {
 		case ast_variable:
 			printf("variable %s", self->u.string_value);
 			break;
+		case ast_static_invoke: p("static invoke");
+		case ast_fqcn: p("fqcn");
+		case ast_fqcn_part_list: p("fqcn part-list");
+		case ast_fqcn_part: 
+			printf("fqcn part %s", self->u.string_value);
+			break;
+		case ast_fqcn_class_name: 
+			printf("fqcn class-name %s", self->u.string_value);
+			break;
 		case ast_invoke: p("invoke");
 		case ast_call: p("call");
 		case ast_proc: p("process");
@@ -258,6 +277,7 @@ void ast_print(ast* self) {
 		case ast_access_public: p("public");
 		case ast_access_private: p("private");
 		case ast_access_protected: p("protected");
+		case ast_modifier_none: p("none");
 		case ast_modifier_static: p("static");
 		case ast_modifier_native: p("native");
 		case ast_modifier_static_native: p("static | native");
@@ -274,6 +294,7 @@ void ast_print(ast* self) {
 		case ast_func_name:
 			printf("func_name(%s)", self->u.string_value);
 			break;
+		case ast_parameter_list: p("parameter-list");
 		case ast_parameter: p("parameter");
 		case ast_parameter_type_name:
 			printf("parameter_type_name(%s)", self->u.string_value);
@@ -386,7 +407,10 @@ static void ast_delete_impl(ast* self) {
 	ast_tag t = self->tag;
 	if (ast_has_str(self)) {
 		//printf("free(%s)\n", self->u.string_value);
-		MEM_FREE(self->u.string_value);
+		char* temp = self->u.string_value;
+		self->u.string_value = NULL;
+		printf("_%s\n", temp);
+		MEM_FREE(temp);
 		//self->u.string_value = NULL;
 	}
 	MEM_FREE(self);

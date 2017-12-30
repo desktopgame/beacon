@@ -148,9 +148,9 @@ void test_cll(void) {
 	//il_top_level_dump(cll->il_code, 0);
 	//*
 	system("cls");
-	//ast_print_tree(cll->source_code);
-	il_top_level_dump(cll->il_code, 0);
-	opcode_buf_dump(cll->env->buf, 0);
+	ast_print_tree(cll->source_code);
+	//il_top_level_dump(cll->il_code, 0);
+	//opcode_buf_dump(cll->env->buf, 0);
 	//*/
 	class_loader_delete(cll);
 	/*
@@ -285,6 +285,27 @@ void test_props(void) {
 	printf("char=%c\n", props_getc(p, "char", 'd'));
 	printf("string=%s\n", props_gets(p, "string", "ddd"));
 	props_delete(p);
+}
+
+void test_dup(void) {
+	char* src = "HelloWor";
+	char* a = text_strdup(src);
+	char* b = text_strdup(a);
+	char* c = text_strdup(b);
+	HOLDER* hA = (HOLDER*)malloc(sizeof(HOLDER));
+	HOLDER* hB = (HOLDER*)malloc(sizeof(HOLDER));
+	HOLDER* hC = (HOLDER*)malloc(sizeof(HOLDER));
+	hA->u.s = a;
+	hB->u.s = b;
+	hC->u.s = c;
+	free(hA->u.s);
+	free(hA);
+
+	free(hB->u.s);
+	free(hB);
+
+	free(hC->u.s);
+	free(hC);
 }
 
 //private

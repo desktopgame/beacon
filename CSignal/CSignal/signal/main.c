@@ -12,7 +12,7 @@
 #include <crtdbg.h>
 #endif
 
-int main(int argc, char* argv[]) {
+void _start(int argc, char* argv[]) {
 #ifdef _MSC_VER
 	_CrtSetDbgFlag(_CRTDBG_ALLOC_MEM_DF | _CRTDBG_LEAK_CHECK_DF);
 	//_CrtSetBreakAlloc(103280);
@@ -20,24 +20,22 @@ int main(int argc, char* argv[]) {
 	sg_lopen();
 	script_context_open();
 	cmd_dump(argc, argv);
-//	test_preload();
+}
+
+void _end(int argc, char* argv[]) {
+	script_context_close();
+	sg_lclose();
+}
+
+int main(int argc, char* argv[]) {
+	//test_preload();
 	//整数リテラルをオブジェクトにラップ
 	//オブジェクトにベクターを持たせて、
 	//インデックスがクラスのそれと一致するように
 	//定数プールにdouble型を入れられるように
-//	test_vm();
+	//test_vm();
+	_start(argc, argv);
 	test_cll();
-//	test_props();
-//	test_string_table();
-//	test_namespace();
-//	test_vector();
-//	test_io2();
-//	test_file_path();
-//	test_tree_map();
-//	char* c = io_read_text("main.signal");
-//	printf("%s", c);
-//	free(c);
-	script_context_close();
-	sg_lclose();
+	_end(argc, argv);
 	return 0;
 }

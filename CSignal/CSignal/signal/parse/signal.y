@@ -65,6 +65,7 @@
 						field_define
 						parameter_list
 						argument_list
+						fqcn_part
 					expression 
 						assign 
 						or 
@@ -334,6 +335,16 @@ argument_list
 		$$ = ast_new_argument_list(ast_new_argument($1), $3);
 	}
 	;
+fqcn_part
+	: IDENT
+	{
+		$$ = ast_new_fqcn_part($1);
+	}
+	| IDENT COLO_COLO fqcn_part
+	{
+		$$ = ast_new_fqcn_part_list(ast_new_fqcn_part($1), $3);
+	}
+	;
 expression
 	: assign
 	;
@@ -509,6 +520,14 @@ primary
 	| LRB expression RRB
 	{
 		$$ = $2;
+	}
+	| fqcn_part DOT IDENT LRB RRB
+	{
+		$$ = ast_new_static_invoke($1, $3, ast_new_blank());
+	}
+	| fqcn_part DOT IDENT LRB argument_list RRB
+	{
+		$$ = ast_new_static_invoke($1, $3, $5);
 	}
 	;
 stmt_list

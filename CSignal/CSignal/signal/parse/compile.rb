@@ -19,7 +19,8 @@ begin
 		"../ast/constructor_chain_type.h",
 		"../ast/assign_operator_type.h",
 		"../ast/modifier_type.h",
-		"../ast/access_level.h"
+		"../ast/access_level.h",
+		"../util/mem.h"
 	]
 	prepend = "//insert by compile.rb\n"
 	includeTargets.each do |include|
