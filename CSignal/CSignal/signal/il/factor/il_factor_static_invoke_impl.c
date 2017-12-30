@@ -27,6 +27,10 @@ void il_factor_static_invoke_dump(il_factor_static_invoke * self, int depth) {
 	text_putindent(depth);
 	printf("static invoke %s", self->method_name);
 	text_putline();
+
+	text_putindent(depth);
+	printf("class %s", self->class_name);
+	text_putline();
 	//X::C.call() のような呼び出しなら
 	if (self->scope_vec->length > 0) {
 		text_putindent(depth + 1);
