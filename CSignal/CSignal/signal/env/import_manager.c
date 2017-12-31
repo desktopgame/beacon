@@ -2,6 +2,7 @@
 #include "class_loader.h"
 #include "class.h"
 #include "namespace.h"
+#include "fqcn_cache.h"
 #include "../util/mem.h"
 #include <string.h>
 #include <stdlib.h>
@@ -16,7 +17,8 @@ void import_manager_import(import_manager * self, class_loader * target) {
 	vector_push(self->class_loader_list, target);
 }
 
-class_ * import_manager_resolve(import_manager* self, const char * name) {
+class_ * import_manager_resolve(import_manager* self, namespace_* scope, fqcn_cache* fqcn) {
+	char* name = fqcn->name;
 	//プリミティブ型はどこからでも参照できる
 	if (!strcmp(name, "Int")) {
 		return CL_INT;
@@ -29,7 +31,18 @@ class_ * import_manager_resolve(import_manager* self, const char * name) {
 	} else if (!strcmp(name, "Void")) {
 		return CL_VOID;
 	}
-	return NULL;
+	//FIXME:これだとロードされているだけで、
+	//      実際にはインポートされていなくても参照できる
+	//X::Y形式なら
+	//現在のコンテキストを無視して絶対指定でクラスを参照
+	if (fqcn->scope_vec->length > 0) {
+		namespace_* context = fqcn_scope(fqcn);
+		return namespace_get_class(context, name);
+	//Y形式なら
+	//現在のコンテキストからの相対指定
+	} else {
+		return namespace_get_class(scope, fqcn->name);
+	}
 }
 
 void import_manager_delete(import_manager * self) {

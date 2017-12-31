@@ -2,7 +2,10 @@
 #ifndef SIGNAL_ENV_IMPORT_MANAGER_H
 #define SIGNAL_ENV_IMPORT_MANAGER_H
 #include "../util/vector.h"
+//#include "fqcn_cache.h"
+struct fqcn_cache;
 struct class_;
+struct namespace_;
 struct class_loader;
 
 /**
@@ -28,10 +31,11 @@ void import_manager_import(import_manager* self, struct class_loader* target);
 /**
  * 指定の名前から型を解決します.
  * @param self
- * @param name
+ * @param scope
+ * @param fqcn
  * @return 解決出来なかったなら NULL を返します.
  */
-struct class_* import_manager_resolve(import_manager* self, const char* name);
+struct class_* import_manager_resolve(import_manager* self, struct namespace_* scope, struct fqcn_cache* fqcn);
 
 /**
  * インポートマネージャを開放します.

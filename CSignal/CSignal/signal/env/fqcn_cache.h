@@ -2,7 +2,7 @@
 #ifndef SIGNAL_ENV_FQCN_CACHE_H
 #define SIGNAL_ENV_FQCN_CACHE_H
 #include "../util/vector.h"
-
+struct namespace_;
 /**
  * Full Quality Class Name を表す構造体.
  */
@@ -29,6 +29,14 @@ void fqcn_cache_dump(fqcn_cache* self, int depth);
  * @param self
  */
 void fqcn_cache_print(fqcn_cache* self);
+
+/**
+ * FQCNが示す名前空間を返します.
+ * X::Y ではなく、 Y の場合は NULL を返します。
+ * @param self
+ * @return
+ */
+struct namespace_* fqcn_scope(fqcn_cache* self);
 
 /**
  * FQCNキャッシュを開放します.

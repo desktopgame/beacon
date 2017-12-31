@@ -4,14 +4,14 @@ namespace L.Goo.Foo {
 	class Foo : SuperFoo {
 		public:
 		Int pointX;
-		signal::Int pointY;
+		Int pointY;
 	
 		private:
 		static def main() -> Void {
 
 		}
 
-		native def main(signal::Int a, signal::lang::Int b, String c) -> signal::Void {
+		native def main(Int a, Int b, String c) -> Void {
 			
 		}
 

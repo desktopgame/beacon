@@ -789,6 +789,7 @@ static void class_loader_sgload_methods(class_loader* self, il_class* ilclass, c
  * @param classz
  */
 static void class_loader_sgload_complete(class_loader* self, il_class* ilclass, class_* classz) {
+	namespace_* scope = classz->location;
 	vector* fields = classz->field_list;
 	vector* methods = classz->method_list;
 	//既に登録されたが、
@@ -798,7 +799,7 @@ static void class_loader_sgload_complete(class_loader* self, il_class* ilclass, 
 		field* fi = (field*)e;
 		//FIXME:ILフィールドと実行時フィールドのインデックスが同じなのでとりあえず動く
 		il_field* ilfield = ((il_field*)vector_at(ilclass->field_list, i));
-		fi->type = import_manager_resolve(self->import_manager, ilfield->fqcn->name);
+		fi->type = import_manager_resolve(self->import_manager, scope, ilfield->fqcn);
 	}
 	//既に登録されたが、
 	//オペコードが空っぽになっているメソッドの一覧
@@ -832,7 +833,8 @@ static void class_loader_sgload_complete(class_loader* self, il_class* ilclass, 
 		il_method* ilmethod = ((il_method*)vector_at(ilclass->method_list, i));
 		me->return_type = import_manager_resolve(
 			self->import_manager,
-			ilmethod->return_fqcn->name
+			scope,
+			ilmethod->return_fqcn
 		);
 		for (int j = 0; j < ilmethod->parameter_list->length; j++) {
 			vector_item d = vector_at(ilmethod->parameter_list, j);
@@ -841,7 +843,8 @@ static void class_loader_sgload_complete(class_loader* self, il_class* ilclass, 
 			parameter* mep = (parameter*)vector_at(me->parameter_list, j);
 			mep->classz = import_manager_resolve(
 				self->import_manager,
-				p->fqcn->name
+				scope,
+				p->fqcn
 			);
 		}
 	}
