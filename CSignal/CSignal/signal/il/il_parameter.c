@@ -14,7 +14,7 @@ il_parameter * il_parameter_new(const char * name) {
 
 void il_parameter_dump(il_parameter * self, int depth) {
 	text_putindent(depth);
-	printf("parameter ");
+	printf("parameter %s ", self->name);
 	fqcn_cache_print(self->fqcn);
 	text_putline();
 }

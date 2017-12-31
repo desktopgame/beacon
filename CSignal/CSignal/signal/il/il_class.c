@@ -3,6 +3,7 @@
 #include "../util/text.h"
 #include "il_field.h"
 #include "il_method.h"
+#include "il_constructor.h"
 #include "../util/mem.h"
 
 //proto
@@ -15,6 +16,7 @@ il_class* il_class_new(const char* name) {
 	ret->super = NULL;
 	ret->field_list = vector_new();
 	ret->method_list = vector_new();
+	ret->constructor_list = vector_new();
 	return ret;
 }
 
@@ -31,6 +33,11 @@ void il_class_dump(il_class * self, int depth) {
 		vector_item e = vector_at(self->method_list, i);
 		il_method* ilm = (il_method*)e;
 		il_method_dump(ilm, depth + 1);
+	}
+	for (int i = 0; i < self->constructor_list->length; i++) {
+		vector_item e = vector_at(self->constructor_list, i);
+		il_constructor* ilcons = (il_constructor*)e;
+		il_constructor_dump(ilcons, depth + 1);
 	}
 }
 

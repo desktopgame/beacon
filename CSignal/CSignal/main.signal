@@ -5,6 +5,10 @@ namespace L.Goo.Foo {
 		public:
 		Int pointX;
 		Int pointY;
+
+		def new() { }
+		def new(Int a, Int b) { }
+
 	
 		private:
 		static def main() -> Void {

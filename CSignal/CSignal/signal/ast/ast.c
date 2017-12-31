@@ -275,6 +275,7 @@ void ast_print(ast* self) {
 		case ast_modifier_static: p("static");
 		case ast_modifier_native: p("native");
 		case ast_modifier_static_native: p("static | native");
+		case ast_constructor_decl: p("constructor");
 		case ast_member_decl: p("member_decl");
 		case ast_member_decl_list: p("member_decl_list");
 		case ast_field_decl: p("field decl");

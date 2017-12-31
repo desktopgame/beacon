@@ -10,6 +10,7 @@ typedef struct il_class {
 	il_type* super;
 	vector* field_list;
 	vector* method_list;
+	vector* constructor_list;
 } il_class;
 /**
  * クラスを表す要素を作成します.

@@ -146,6 +146,7 @@ ast * ast_new_function_decl_empty_params(modifier_type type, char * func_name, a
 
 ast * ast_new_constructor_decl(ast * parameter_list, ast * constructor_chain, ast * body) {
 	ast* ret = ast_new(ast_constructor_decl);
+//	ast_push(ret, ast_new_modifier(modifier));
 	ast_push(ret, parameter_list);
 	ast_push(ret, constructor_chain);
 	ast_push(ret, body);

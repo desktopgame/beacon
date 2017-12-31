@@ -21,6 +21,8 @@
 #include "field.h"
 #include "method.h"
 #include "parameter.h"
+#include "../il/il_constructor.h"
+#include "../il/il_constructor_chain.h"
 #include "../il/il_class.h"
 #include "../il/il_field.h"
 #include "../il/il_method.h"
@@ -325,6 +327,20 @@ static void class_loader_ilload_method(class_loader* self, il_class* current, as
 }
 
 static void class_loader_ilload_constructor(class_loader* self, il_class* current, ast* constructor, access_level level) {
+	//ast* amodifier = ast_at(constructor, 0);
+	ast* aparams = ast_at(constructor, 0);
+	ast* achain = ast_at(constructor, 1);
+	ast* abody = ast_at(constructor, 2);
+	il_constructor_chain* ilchain = NULL;
+	if (!ast_is_blank(achain)) {
+
+	}
+	il_constructor* ilcons = il_constructor_new();
+	ilcons->access = level;
+	//ilcons->modifier = ast_cast_to_modifier(amodifier);
+	class_loader_ilload_param(self, ilcons->parameter_list, aparams);
+	class_loader_ilload_body(self, ilcons->statement_list, abody);
+	vector_push(current->constructor_list, ilcons);
 }
 
 static void class_loader_ilload_param(class_loader* self, vector* list, ast* source) {
