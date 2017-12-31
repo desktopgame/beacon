@@ -105,7 +105,7 @@ ast* ast_new_member_decl_list(ast* member_list, ast* member);
  * @param field_name
  * @return
  */
-ast* ast_new_field_decl(modifier_type modifier, char* type_name, char* field_name);
+ast* ast_new_field_decl(modifier_type modifier, ast* type_name, char* field_name);
 
 /**
  * 関数宣言を表す要素を作成します.

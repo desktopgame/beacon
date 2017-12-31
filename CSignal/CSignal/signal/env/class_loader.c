@@ -301,7 +301,8 @@ static void class_loader_ilload_field(class_loader* self, il_class* current, ast
 	ast* type_name = ast_second(field);
 	ast* access_name = ast_at(field, 2);
 	il_field* v = il_field_new(access_name->u.string_value);
-	v->type = il_type_new(type_name->u.string_value);
+	class_loader_ilload_fqcn(ast_first(type_name), v->fqcn);
+	//v->type = il_type_new(type_name->u.string_value);
 	v->access = level;
 	v->modifier = ast_cast_to_modifier(modifier);
 	vector_push(current->field_list, v);
@@ -797,7 +798,7 @@ static void class_loader_sgload_complete(class_loader* self, il_class* ilclass, 
 		field* fi = (field*)e;
 		//FIXME:ILフィールドと実行時フィールドのインデックスが同じなのでとりあえず動く
 		il_field* ilfield = ((il_field*)vector_at(ilclass->field_list, i));
-		fi->type = import_manager_resolve(self->import_manager, ilfield->type->name);
+		fi->type = import_manager_resolve(self->import_manager, ilfield->fqcn->name);
 	}
 	//既に登録されたが、
 	//オペコードが空っぽになっているメソッドの一覧

@@ -6,7 +6,8 @@
 
 il_field * il_field_new(const char * name) {
 	il_field* ret = (il_field*)MEM_MALLOC(sizeof(il_field));
-	ret->type = NULL;
+	//ret->type = NULL;
+	ret->fqcn = fqcn_cache_new();
 	ret->access = access_public;
 	ret->modifier = modifier_none;
 	ret->name = text_strdup(name);
@@ -18,7 +19,7 @@ void il_field_dump(il_field * self, int depth) {
 	access_print(self->access);
 	printf(" ");
 	modifier_print(self->modifier);
-	printf(" field %s %s", self->type->name, self->name);
+	printf(" field %s %s", self->fqcn->name, self->name);
 	text_putline();
 }
 
@@ -26,7 +27,7 @@ void il_field_delete(il_field * self) {
 	if (self == NULL) {
 		return;
 	}
-	il_type_delete(self->type);
+//	il_type_delete(self->type);
 	MEM_FREE(self->name);
 	MEM_FREE(self);
 }

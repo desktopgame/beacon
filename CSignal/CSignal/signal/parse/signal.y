@@ -275,7 +275,7 @@ func_define
 	}
 	;
 field_define
-	: modifier_type_T IDENT IDENT SEMI
+	: modifier_type_T typename_T IDENT SEMI
 	{
 		$$ = ast_new_field_decl($1, $2, $3);
 	}
