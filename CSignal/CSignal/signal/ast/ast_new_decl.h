@@ -147,20 +147,20 @@ ast* ast_new_constructor_chain(constructor_chain_type chain_type, ast* argument_
 
 /**
  * 仮引数を表す要素を作成します.
- * @param parameter_type_name
+ * @param atypename
  * @param parameter_access_name
  * @return
  */
-ast* ast_new_parameter(char* parameter_type_name, char* parameter_access_name);
+ast* ast_new_parameter(ast* atypename, char* parameter_access_name);
 
 /**
  * 仮引数を表す要素を作成します.
- * @param parameter_type_name
+ * @param atypename
  * @param parameter_access_name
  * @param parameter_list
  * @return
  */
-ast* ast_new_parameter_list(char* parameter_type_name, char* parameter_access_name, ast* parameter_list);
+ast* ast_new_parameter_list(ast* atypename, char* parameter_access_name, ast* parameter_list);
 
 /**
  * X::Y::C や C を型名でラップします.

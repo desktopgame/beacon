@@ -60,6 +60,7 @@ static il_factor_call* class_loader_ilload_call(class_loader* self, ast* source)
 static il_factor_invoke* class_loader_ilload_invoke(class_loader* self, ast* source);
 static il_factor_named_invoke* class_loader_ilload_named_invoke(class_loader* self, ast* source);
 static void class_loader_ilload_fqcn(ast* fqcn, fqcn_cache* dest);
+static void class_loader_ilload_fqcn_impl(ast* fqcn, fqcn_cache* dest);
 static void class_loader_ilload_argument_list(class_loader* self, vector* list, ast* source);
 
 static void class_loader_sgload_impl(class_loader* self);
@@ -333,7 +334,8 @@ static void class_loader_ilload_param(class_loader* self, vector* list, ast* sou
 		ast* type_name = ast_first(source);
 		ast* access_name = ast_second(source);
 		il_parameter* p = il_parameter_new(access_name->u.string_value);
-		p->type = il_type_new(type_name->u.string_value);
+		class_loader_ilload_fqcn(ast_first(type_name), p->fqcn);
+		//p->type = il_type_new(type_name->u.string_value);
 		vector_push(list, p);
 	}
 }
@@ -570,6 +572,15 @@ static il_factor_named_invoke* class_loader_ilload_named_invoke(class_loader* se
 }
 
 static void class_loader_ilload_fqcn(ast* fqcn, fqcn_cache* dest) {
+	class_loader_ilload_fqcn_impl(fqcn, dest);
+	//FIXME: Int のような文字パースで失敗してしまうので対策
+	if (dest->name == NULL &&
+		dest->scope_vec->length > 0) {
+		dest->name = (char*)vector_pop(dest->scope_vec);
+	}
+}
+
+static void class_loader_ilload_fqcn_impl(ast* fqcn, fqcn_cache* dest) {
 	if (fqcn->tag == ast_fqcn ||
 		fqcn->tag == ast_fqcn_part_list) {
 		if (fqcn->tag == ast_fqcn_part_list &&
@@ -582,7 +593,7 @@ static void class_loader_ilload_fqcn(ast* fqcn, fqcn_cache* dest) {
 		}
 		for (int i = 0; i < fqcn->childCount; i++) {
 			ast* c = ast_at(fqcn, i);
-			class_loader_ilload_fqcn(c, dest);
+			class_loader_ilload_fqcn_impl(c, dest);
 		}
 	} else {
 		//FIXME:とりあえずここでタグを直してるけどast.cの時点でどうにかするべき
@@ -828,7 +839,7 @@ static void class_loader_sgload_complete(class_loader* self, il_class* ilclass, 
 			parameter* mep = (parameter*)vector_at(me->parameter_list, j);
 			mep->classz = import_manager_resolve(
 				self->import_manager,
-				p->type->name
+				p->fqcn->name
 			);
 		}
 	}

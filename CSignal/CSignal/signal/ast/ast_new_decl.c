@@ -156,16 +156,19 @@ ast * ast_new_constructor_chain(constructor_chain_type chain_type, ast * argumen
 	return ret;
 }
 
-ast * ast_new_parameter(char * parameter_type_name, char * parameter_access_name) {
+ast * ast_new_parameter(ast* atypename, char * parameter_access_name) {
 	ast* ret = ast_new(ast_parameter);
-	ast_push(ret, ast_new_parameter_type_name(parameter_type_name));
+//	ast_push(ret, ast_new_parameter_type_name(parameter_type_name));
+	ast_push(ret, atypename);
 	ast_push(ret, ast_new_parameter_access_name(parameter_access_name));
 	return ret;
 }
 
-ast * ast_new_parameter_list(char * parameter_type_name, char * parameter_access_name, ast * parameter_list) {
+ast * ast_new_parameter_list(ast* atypename, char * parameter_access_name, ast * parameter_list) {
 	ast* ret = ast_new(ast_parameter_list);
-	ast_push(ret, ast_new_parameter(parameter_type_name, parameter_access_name));
+//	ast_push(ret, atypename);
+//	ast_push(ret, ast_new_parameter(parameter_type_name, parameter_access_name));
+	ast_push(ret, ast_new_parameter(atypename, parameter_access_name));
 	ast_push(ret, parameter_list);
 	return ret;
 }

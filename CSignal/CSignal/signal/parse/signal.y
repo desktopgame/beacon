@@ -317,11 +317,11 @@ access_level_T
 	}
 	;
 parameter_list
-	: IDENT IDENT
+	: typename_T IDENT
 	{
 		$$ = ast_new_parameter($1, $2);
 	}
-	| IDENT IDENT COMMA parameter_list
+	| typename_T IDENT COMMA parameter_list
 	{
 		$$ = ast_new_parameter_list($1, $2, $4)
 	}

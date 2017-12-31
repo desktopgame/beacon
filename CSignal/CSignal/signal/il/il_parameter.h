@@ -1,7 +1,8 @@
 #pragma once
 #ifndef SIGNAL_IL_IL_PARAMETER_H
 #define SIGNAL_IL_IL_PARAMETER_H
-#include "il_type.h"
+#include "../env/fqcn_cache.h"
+//#include "il_type.h"
 /**
  * パラメータの種類を表す列挙型.
  */
@@ -15,7 +16,7 @@ typedef enum il_parameter_type {
  */
 typedef struct il_parameter {
 	il_parameter_type param_type;
-	il_type* type;
+	fqcn_cache* fqcn;
 	char* name;
 } il_parameter;
 /**
