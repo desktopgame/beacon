@@ -6,6 +6,7 @@
 il_type* il_type_new(const char* name) {
 	il_type* ret = (il_type*)MEM_MALLOC(sizeof(il_type));
 	ret->name = text_strdup(name);
+	ret->scope_vec = vector_new();
 	return ret;
 }
 

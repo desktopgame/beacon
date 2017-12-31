@@ -8,6 +8,7 @@
  */
 typedef struct il_factor_variable {
 	char* name;
+	int index;
 } il_factor_variable;
 
 /**

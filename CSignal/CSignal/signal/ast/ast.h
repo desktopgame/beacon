@@ -59,9 +59,9 @@ typedef enum ast_tag {
 	ast_invoke,
 
 	ast_identifier,
-	ast_typename,
+	//ast_typename,
 
-	ast_variable_decl,
+	//ast_variable_decl,
 
 	ast_namespace_decl,
 	ast_namespace_body,
@@ -113,7 +113,9 @@ typedef enum ast_tag {
 	//
 	ast_proc,
 	ast_stmt_list,
-
+	
+	ast_typename,
+	ast_stmt_variable_decl,
 
 	ast_parameter,
 	ast_parameter_type_name,
@@ -240,13 +242,6 @@ ast* ast_new_post_inc(ast* a);
  * @return
  */
 ast* ast_new_post_dec(ast* a);
-
-/**
- * 型名を表す要素を作成します.
- * @param str
- * @return
- */
-ast* ast_new_typename(char* str);
 
 /**
  * 識別子を表す要素を作成します.

@@ -5,6 +5,7 @@
 #include "../../util/vector.h"
 #include "../../vm/enviroment.h"
 #include "../il_factor_interface.h"
+#include "../../env/fqcn_cache.h"
 struct method;
 /**
  * 名前付き呼び出しの種類を表します.
@@ -28,8 +29,9 @@ typedef enum il_named_invoke_type {
  */
 typedef struct il_factor_named_invoke {
 	char* method_name;
-	vector* scope_vec;
-	char* class_name;
+	//vector* scope_vec;
+	//char* class_name;
+	fqcn_cache* fqcn;
 	vector* argument_list;
 	il_named_invoke_type type;
 	struct method* m;

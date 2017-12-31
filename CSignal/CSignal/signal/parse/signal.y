@@ -65,6 +65,7 @@
 						field_define
 						parameter_list
 						argument_list
+						typename_T
 						fqcn_part
 					expression 
 						assign 
@@ -80,7 +81,7 @@
 						primary
 					stmt_list
 						stmt
-						variable_stmt
+						variable_decl_stmt
 						if_stmt
 							elif_list
 							elif
@@ -335,6 +336,12 @@ argument_list
 		$$ = ast_new_argument_list(ast_new_argument($1), $3);
 	}
 	;
+typename_T
+	: fqcn_part
+	{
+		$$ = ast_new_typename($1);
+	}
+	;
 fqcn_part
 	: IDENT
 	{
@@ -545,13 +552,13 @@ stmt
 	{
 		$$ = ast_new_proc($1);
 	}
-	| variable_stmt
+	| variable_decl_stmt
 	| if_stmt
 	;
-variable_stmt
-	: IDENT IDENT ASSIGN expression SEMI
+variable_decl_stmt
+	: typename_T IDENT SEMI
 	{
-		$$ = ast_new_variable_decl(ast_new_typename($1), ast_new_identifier($2), $4);
+		$$ = ast_new_variable_decl($1, $2);
 	}
 	;
 if_stmt

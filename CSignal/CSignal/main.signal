@@ -62,6 +62,8 @@ namespace L.Goo.Foo {
 //a.print("a");
 //a.print(10, 20, "aaa");
 //Mod::X.call();
+//Person p = Person.new();
+signal::lang::Console c;
 signal::lang::Console.writeLine("aaa");
 //Console.writeLine("HelloWorld");
 //(10 + 20 + (5 * 20 + (16 / 4)) >= 20 || 0 < 0)

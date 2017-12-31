@@ -3,6 +3,7 @@
 #include <assert.h>
 //#include <uni>
 //#include <uni>
+#include "fqcn_cache.h"
 #include "../util/mem.h"
 #include "../vm/vm.h"
 #include "../vm/opcode.h"
@@ -46,6 +47,7 @@ static void class_loader_ilload_method(class_loader* self, il_class* current, as
 static void class_loader_ilload_constructor(class_loader* self, il_class* current, ast* constructor, access_level level);
 static void class_loader_ilload_param(class_loader* self, vector* list, ast* source);
 static void class_loader_ilload_body(class_loader* self, vector* list, ast* source);
+static il_stmt_variable_decl* class_loader_ilload_variable_decl(class_loader* self, ast* source);
 static il_stmt_if* class_loader_ilload_if(class_loader* self, ast* source);
 static il_stmt_if* class_loader_ilload_if_elif_list(class_loader* self, ast* source);
 static void class_loader_ilload_elif_list(class_loader* self, vector* list, ast* source);
@@ -57,7 +59,7 @@ static il_factor_binary_op* class_loader_ilload_binary(class_loader* self, ast* 
 static il_factor_call* class_loader_ilload_call(class_loader* self, ast* source);
 static il_factor_invoke* class_loader_ilload_invoke(class_loader* self, ast* source);
 static il_factor_named_invoke* class_loader_ilload_named_invoke(class_loader* self, ast* source);
-static void class_loader_ilload_fqcn(ast* fqcn, il_factor_named_invoke* dest);
+static void class_loader_ilload_fqcn(ast* fqcn, fqcn_cache* dest);
 static void class_loader_ilload_argument_list(class_loader* self, vector* list, ast* source);
 
 static void class_loader_sgload_impl(class_loader* self);
@@ -360,6 +362,12 @@ static void class_loader_ilload_body(class_loader* self, vector* list, ast* sour
 				vector_push(list, il_stmt_wrap_proc(ilproc));
 				break;
 			}
+			case ast_stmt_variable_decl:
+			{
+				il_stmt_variable_decl* ilvardecl = class_loader_ilload_variable_decl(self, source);
+				vector_push(list, il_stmt_wrap_variable_decl(ilvardecl));
+				break;
+			}
 			case ast_if:
 			{
 				il_stmt_if* ilif = class_loader_ilload_if(self, source);
@@ -388,6 +396,15 @@ static void class_loader_ilload_body(class_loader* self, vector* list, ast* sour
 				break;
 		}
 	}
+}
+
+static il_stmt_variable_decl* class_loader_ilload_variable_decl(class_loader* self, ast* source) {
+	ast* afqcn = ast_first(source);
+	ast* aname = ast_second(source);
+	il_stmt_variable_decl* ret = il_stmt_variable_decl_new(aname->u.string_value);
+	ret->name = text_strdup(aname->u.string_value);
+	class_loader_ilload_fqcn(ast_first(afqcn), ret->fqcn);
+	return ret;
 }
 
 static il_stmt_if* class_loader_ilload_if(class_loader* self, ast* source) {
@@ -546,13 +563,13 @@ static il_factor_named_invoke* class_loader_ilload_named_invoke(class_loader* se
 	ast* aargs = ast_at(source, 2);
 	il_factor_named_invoke* ret = il_factor_named_invoke_new(aname->u.string_value);
 	if (afqcn->tag == ast_fqcn_class_name) {
-		ret->class_name = text_strdup(afqcn->u.string_value);
-	} else  class_loader_ilload_fqcn(afqcn, ret);
+		ret->fqcn->name = text_strdup(afqcn->u.string_value);
+	} else  class_loader_ilload_fqcn(afqcn, ret->fqcn);
 	class_loader_ilload_argument_list(self, ret->argument_list, aargs);
 	return ret;
 }
 
-static void class_loader_ilload_fqcn(ast* fqcn, il_factor_named_invoke* dest) {
+static void class_loader_ilload_fqcn(ast* fqcn, fqcn_cache* dest) {
 	if (fqcn->tag == ast_fqcn ||
 		fqcn->tag == ast_fqcn_part_list) {
 		if (fqcn->tag == ast_fqcn_part_list &&
@@ -560,7 +577,7 @@ static void class_loader_ilload_fqcn(ast* fqcn, il_factor_named_invoke* dest) {
 			//FIXME:もうちょっと高速に出来る
 			//FIXME:とりあえずここでタグを直してるけどast.cの時点でどうにかするべき
 			fqcn->tag = ast_fqcn_class_name;
-			dest->class_name = text_strdup(fqcn->u.string_value);
+			dest->name = text_strdup(fqcn->u.string_value);
 			return;
 		}
 		for (int i = 0; i < fqcn->childCount; i++) {

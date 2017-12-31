@@ -1,9 +1,11 @@
 #ifndef SIGNAL_IL_IL_TYPE_H
 #define SIGNAL_IL_IL_TYPE_H
+#include "../util/vector.h"
 /**
  * 型を表す要素.
  */
 typedef struct il_type {
+	vector* scope_vec;
 	char* name;
 } il_type;
 

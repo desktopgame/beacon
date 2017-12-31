@@ -170,6 +170,12 @@ ast * ast_new_parameter_list(char * parameter_type_name, char * parameter_access
 	return ret;
 }
 
+ast * ast_new_typename(ast * fqcn) {
+	ast* ret = ast_new(ast_typename);
+	ast_push(ret, fqcn);
+	return ret;
+}
+
 //private
 static ast* ast_new_field_type_name(char* type_name) {
 	ast* ret = ast_new(ast_field_type_name);

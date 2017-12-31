@@ -1,13 +1,5 @@
 #include "ast_new_stmt.h"
 
-ast * ast_new_variable_decl(ast * type_name, ast * identifier, ast * expr) {
-	ast* ret = ast_new(ast_variable_decl);
-	ast_push(ret, type_name);
-	ast_push(ret, identifier);
-	ast_push(ret, expr);
-	return ret;
-}
-
 ast * ast_new_stmt(ast * stmt) {
 	ast* ret = ast_new(ast_stmt);
 	ast_push(ret, stmt);
@@ -109,5 +101,14 @@ ast * ast_new_fqcn_part_list(ast * part, ast * part_list) {
 	part_list->tag = ast_fqcn_part_list;
 	ast_push(ret, part);
 	ast_push(ret, part_list);
+	return ret;
+}
+
+ast * ast_new_variable_decl(ast * type, char * name) {
+	ast* ret = ast_new(ast_stmt_variable_decl);
+	ast* aname = ast_new(ast_identifier);
+	aname->u.string_value = name;
+	ast_push(ret, type);
+	ast_push(ret, aname);
 	return ret;
 }

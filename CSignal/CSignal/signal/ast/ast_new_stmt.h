@@ -4,15 +4,6 @@
 #include "ast.h"
 
 /**
- * 変数宣言を表す要素を作成します.
- * @param typename
- * @param identifier,
- * @param expr
- * @return
- */
-ast* ast_new_variable_decl(ast* type_name, ast* identifier, ast* expr);
-
-/**
  * 実行可能な文を表す要素を作成します.
  * @param stmt
  * @return
@@ -123,4 +114,12 @@ ast* ast_new_fqcn_part(char* name);
  * @return
  */
 ast* ast_new_fqcn_part_list(ast* part, ast* part_list);
+
+/**
+ * X::Y y; を表す要素を作成します.
+ * @param type
+ * @param name
+ * @return
+ */
+ast* ast_new_variable_decl(ast* type, char* name);
 #endif // !SIGNAL_AST_AST_NEW_STMT_H

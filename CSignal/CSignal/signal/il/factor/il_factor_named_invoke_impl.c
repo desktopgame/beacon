@@ -22,7 +22,7 @@ il_factor_named_invoke * il_factor_named_invoke_new(const char* method_name) {
 	il_factor_named_invoke* ret = (il_factor_named_invoke*)MEM_MALLOC(sizeof(il_factor_named_invoke));
 	//ret->class_name = text_strdup(class_name);
 	ret->method_name = text_strdup(method_name);
-	ret->scope_vec = vector_new();
+	ret->fqcn = fqcn_cache_new();
 	ret->argument_list = vector_new();
 	ret->type = ilnamed_invoke_static;
 	return ret;
@@ -33,21 +33,7 @@ void il_factor_named_invoke_dump(il_factor_named_invoke * self, int depth) {
 	printf("named invoke %s", self->method_name);
 	text_putline();
 
-	text_putindent(depth);
-	printf("class %s", self->class_name);
-	text_putline();
-	//X::C.call() のような呼び出しなら
-	if (self->scope_vec->length > 0) {
-		text_putindent(depth + 1);
-		printf("scope");
-		text_putline();
-		for (int i = 0; i < self->scope_vec->length; i++) {
-			char* e = (char*)vector_at(self->scope_vec, i);
-			text_putindent(depth + 2);
-			printf("%s", e);
-			text_putline();
-		}
-	}
+	fqcn_cache_dump(self->fqcn, depth + 1);
 	for (int i = 0; i < self->argument_list->length; i++) {
 		vector_item e = vector_at(self->argument_list, i);
 		il_argument* ila = (il_argument*)e;
@@ -81,10 +67,10 @@ class_ * il_factor_named_invoke_eval(il_factor_named_invoke * self, enviroment *
 
 void il_factor_named_invoke_delete(il_factor_named_invoke * self) {
 	//MEM_FREE(self->fqcn);
-	assert(self->class_name != NULL);
-	MEM_FREE(self->class_name);
+	assert(self->fqcn->name != NULL);
+	MEM_FREE(self->fqcn->name);
 	MEM_FREE(self->method_name);
-	vector_delete(self->scope_vec, vector_deleter_free);
+	vector_delete(self->fqcn->scope_vec, vector_deleter_free);
 	vector_delete(self->argument_list, il_factor_named_invoke_delete_argument);
 	MEM_FREE(self);
 }
@@ -98,17 +84,17 @@ static void il_factor_named_invoke_delete_argument(vector_item item) {
 
 static void il_factor_named_invoke_find(il_factor_named_invoke* self, enviroment* env) {
 	//X::Y.call() のような場合
-	if (self->scope_vec->length > 0) {
+	if (self->fqcn->scope_vec->length > 0) {
 		namespace_* top = NULL;
-		for (int i = 0; i < self->scope_vec->length; i++) {
-			char* e = (char*)vector_at(self->scope_vec, i);
+		for (int i = 0; i < self->fqcn->scope_vec->length; i++) {
+			char* e = (char*)vector_at(self->fqcn->scope_vec, i);
 			if (top == NULL) {
 				top = namespace_get_at_root(e);
 			} else {
 				top = namespace_get_namespace(top, e);
 			}
 		}
-		class_* cls = namespace_get_class(top, self->class_name);
+		class_* cls = namespace_get_class(top, self->fqcn->name);
 		int temp = 0;
 		self->m = class_find_methodvf(cls, self->method_name, self->argument_list, env, &temp);
 		self->methodIndex = temp;
@@ -119,12 +105,12 @@ static void il_factor_named_invoke_find(il_factor_named_invoke* self, enviroment
 	} else {
 		namespace_* top = NULL;
 		//クラスが見つかった
-		class_* cls = namespace_get_class(top, self->class_name);
+		class_* cls = namespace_get_class(top, self->fqcn->name);
 		if (cls != NULL) {
 			self->u.classz = cls;
 			self->type = ilnamed_invoke_static;
 		} else {
-			self->u.factor = il_factor_variable_new(self->class_name);
+			self->u.factor = il_factor_variable_new(self->fqcn->name);
 			self->type = ilnamed_invoke_variable;
 		}
 	}

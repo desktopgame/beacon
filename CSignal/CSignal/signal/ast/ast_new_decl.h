@@ -161,4 +161,11 @@ ast* ast_new_parameter(char* parameter_type_name, char* parameter_access_name);
  * @return
  */
 ast* ast_new_parameter_list(char* parameter_type_name, char* parameter_access_name, ast* parameter_list);
+
+/**
+ * X::Y::C や C を型名でラップします.
+ * @param fqcn
+ * @return
+ */
+ast* ast_new_typename(ast* fqcn);
 #endif // !SIGNAL_AST_AST_NEW_DECL_H
