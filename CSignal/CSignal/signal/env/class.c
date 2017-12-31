@@ -170,14 +170,14 @@ method * class_find_methodvf(class_ * self, const char * name, vector * args, en
 		for (int j = 0; j < m->parameter_list->length; j++) {
 			vector_item d = vector_at(args, j);
 			vector_item d2 = vector_at(m->parameter_list, j);
-			il_argument* p = (il_argument*)d2;
-			parameter* p2 = (parameter*)d;
+			il_argument* p = (il_argument*)d;
+			parameter* p2 = (parameter*)d2;
 			score += class_distance(il_factor_eval(p->factor, env), p2->classz);
-			if (score < min) {
-				min = score;
-				ret = m;
-				(*outIndex) = i;
-			}
+		}
+		if (score < min) {
+			min = score;
+			ret = m;
+			(*outIndex) = i;
 		}
 	}
 	vector_delete(v, vector_deleter_null);

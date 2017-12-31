@@ -686,6 +686,7 @@ static void class_loader_sgload_class_list(class_loader* self, vector* ilclass_l
 
 static void class_loader_sgload_class(class_loader* self, il_class* classz, namespace_* parent) {
 	class_* cls = class_new(classz->name, class_type_class);
+	cls->location = parent;
 	class_loader_sgload_fields(self, classz, cls);
 	class_loader_sgload_methods(self, classz, cls);
 	namespace_add_class(parent, cls);
@@ -776,6 +777,7 @@ static void class_loader_sgload_complete(class_loader* self, il_class* ilclass, 
 			class_loader_sgload_attach_native_method(self, ilclass, classz, ilmethod, me);
 			continue;
 		}
+		//NOTE:ここなら名前空間を設定出来る
 		enviroment* env = class_loader_sgload_body(self, ilmethod->statement_list);
 		me->u.script_method->env = env;
 	}

@@ -5,6 +5,15 @@
 #include "../../util/vector.h"
 #include "../../vm/enviroment.h"
 #include "../il_factor_interface.h"
+struct method;
+/**
+ * 名前付き呼び出しの種類を表します.
+ */
+typedef enum il_named_invoke_type {
+	ilnamed_invoke_variable,
+	ilnamed_invoke_static
+} il_named_invoke_type;
+
 /**
  * 完全に修飾されたメソッド呼び出し.
  * 厳密には、修飾のない規則にもマッチする場合があります。
@@ -22,6 +31,13 @@ typedef struct il_factor_named_invoke {
 	vector* scope_vec;
 	char* class_name;
 	vector* argument_list;
+	il_named_invoke_type type;
+	struct method* m;
+	int methodIndex;
+	union {
+		class_* classz;
+		il_factor* factor;
+	} u;
 } il_factor_named_invoke;
 /**
  * 完全に修飾されたメソッド呼び出しをスーパーセットにラップします.
