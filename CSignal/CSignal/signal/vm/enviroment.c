@@ -12,6 +12,7 @@ enviroment * enviroment_new() {
 	enviroment* ret = (enviroment*)MEM_MALLOC(sizeof(enviroment));
 	ret->buf = opcode_buf_new();
 	ret->constant_pool = vector_new();
+	ret->sym_table = symbol_table_new();
 	ret->class_ = NULL;
 	return ret;
 }
@@ -75,6 +76,7 @@ char * enviroment_constant_string_at(enviroment * self, int index) {
 void enviroment_delete(enviroment * self) {
 	opcode_buf_delete(self->buf);
 	vector_delete(self->constant_pool, enviroment_constant_pool_delete);
+	symbol_table_delete(self->sym_table);
 	MEM_FREE(self);
 }
 

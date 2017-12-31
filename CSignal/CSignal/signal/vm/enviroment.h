@@ -3,6 +3,7 @@
 #define SIGNAL_VM_ENVIROMENT_H
 #include "../util/vector.h"
 #include "opcode_buf.h"
+#include "symbol_table.h"
 struct class_;
 struct object;
 /**
@@ -13,6 +14,7 @@ struct object;
  */
 typedef struct enviroment {
 	opcode_buf* buf;
+	symbol_table* sym_table;
 	vector* constant_pool;
 	struct class_* class_;
 } enviroment;

@@ -71,7 +71,7 @@ static void class_loader_sgload_methods(class_loader* self, il_class* ilclass, c
 static void class_loader_sgload_complete(class_loader* self, il_class* ilclass, class_* classz);
 static void class_loader_sgload_attach_native_method(class_loader* self, il_class* ilclass, class_* classz, il_method* ilmethod, method* me);
 static void class_loader_sgload_debug_native_method(method* parent, vm* vm, enviroment* env);
-static enviroment* class_loader_sgload_body(class_loader* self, vector* stmt_list);
+static void class_loader_sgload_body(class_loader* self, vector* stmt_list, enviroment* dest);
 
 static void class_loader_error(class_loader* self, const char* message);
 static void class_loader_errors(class_loader* self, const char* message, const char* a);
@@ -101,7 +101,7 @@ void class_loader_load(class_loader * self) {
 	//ast_print_tree(self->source_code);
 	class_loader_ilload_impl(self, self->source_code);
 	class_loader_sgload_impl(self);
-	self->env = class_loader_sgload_body(self, self->il_code->statement_list);
+	class_loader_sgload_body(self, self->il_code->statement_list, self->env);
 	//このクラスローダーがライブラリをロードしているなら
 	//必要最低限の情報を残して後は開放
 	if (self->type == content_lib) {
@@ -138,7 +138,7 @@ static class_loader* class_loader_new() {
 	ret->ref_count = 0;
 	ret->type = content_entry_point;
 	ret->import_manager = import_manager_new();
-	ret->env = NULL;
+	ret->env = enviroment_new();
 	ret->error = false;
 	ret->errorMessage = NULL;
 	return ret;
@@ -783,8 +783,14 @@ static void class_loader_sgload_complete(class_loader* self, il_class* ilclass, 
 			class_loader_sgload_attach_native_method(self, ilclass, classz, ilmethod, me);
 			continue;
 		}
-		//NOTE:ここなら名前空間を設定出来る
-		enviroment* env = class_loader_sgload_body(self, ilmethod->statement_list);
+		//まずは実引数の一覧にインデックスを割り振る
+		enviroment* env = enviroment_new();
+		for (int i = 0; i < ilmethod->parameter_list->length; i++) {
+			il_parameter* ilparam = (il_parameter*)vector_at(ilmethod->parameter_list, i);
+			symbol_table_add(env->sym_table, ilparam->name);
+		}
+		//NOTE:ここなら名前空間を設定出来る		
+		class_loader_sgload_body(self, ilmethod->statement_list, env);
 		me->u.script_method->env = env;
 	}
 	//既に登録されたが、
@@ -820,14 +826,14 @@ static void class_loader_sgload_debug_native_method(method* parent, vm* vm, envi
 
 }
 
-static enviroment* class_loader_sgload_body(class_loader* self, vector* stmt_list) {
-	enviroment* ret = enviroment_new();
+static void class_loader_sgload_body(class_loader* self, vector* stmt_list, enviroment* dest) {
+//	enviroment* ret = enviroment_new();
 	for (int i = 0; i < stmt_list->length; i++) {
 		vector_item e = vector_at(stmt_list, i);
 		il_stmt* s = (il_stmt*)e;
-		il_stmt_generate(s, ret);
+		il_stmt_generate(s, dest);
 	}
-	return ret;
+//	return ret;
 }
 
 //utilitiy
