@@ -685,11 +685,16 @@ static void class_loader_sgload_class_list(class_loader* self, vector* ilclass_l
 }
 
 static void class_loader_sgload_class(class_loader* self, il_class* classz, namespace_* parent) {
-	class_* cls = class_new(classz->name, class_type_class);
-	cls->location = parent;
+	//既に登録されていたら二重に登録しないように
+	//例えば、ネイティブメソッドを登録するために一時的にクラスが登録されている場合がある
+	class_* cls = namespace_get_class(parent, classz->name);
+	if (cls == NULL) {
+		cls = class_new(classz->name, class_type_class);
+		cls->location = parent;
+		namespace_add_class(parent, cls);
+	}
 	class_loader_sgload_fields(self, classz, cls);
 	class_loader_sgload_methods(self, classz, cls);
-	namespace_add_class(parent, cls);
 	class_linkall(cls);
 	class_loader_sgload_complete(self, classz, cls);
 }
