@@ -11,7 +11,7 @@ script_method * script_method_new() {
 	return ret;
 }
 
-void script_method_execute(script_method * self, method* parent, vm * vm) {
+void script_method_execute(script_method * self, method* parent, vm * vm, enviroment* env) {
 }
 
 void script_method_delete(script_method * self) {

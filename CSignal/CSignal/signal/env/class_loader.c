@@ -70,7 +70,7 @@ static void class_loader_sgload_fields(class_loader* self, il_class* ilclass, cl
 static void class_loader_sgload_methods(class_loader* self, il_class* ilclass, class_* classz);
 static void class_loader_sgload_complete(class_loader* self, il_class* ilclass, class_* classz);
 static void class_loader_sgload_attach_native_method(class_loader* self, il_class* ilclass, class_* classz, il_method* ilmethod, method* me);
-static void class_loader_sgload_debug_native_method(method* parent, vm* vm);
+static void class_loader_sgload_debug_native_method(method* parent, vm* vm, enviroment* env);
 static enviroment* class_loader_sgload_body(class_loader* self, vector* stmt_list);
 
 static void class_loader_error(class_loader* self, const char* message);
@@ -690,6 +690,7 @@ static void class_loader_sgload_class(class_loader* self, il_class* classz, name
 	class_loader_sgload_fields(self, classz, cls);
 	class_loader_sgload_methods(self, classz, cls);
 	namespace_add_class(parent, cls);
+	class_linkall(cls);
 	class_loader_sgload_complete(self, classz, cls);
 }
 
@@ -809,7 +810,7 @@ static void class_loader_sgload_attach_native_method(class_loader* self, il_clas
 	me->u.native_method->ref = native_method_ref_new(class_loader_sgload_debug_native_method);
 }
 
-static void class_loader_sgload_debug_native_method(method* parent, vm* vm) {
+static void class_loader_sgload_debug_native_method(method* parent, vm* vm, enviroment* env) {
 
 }
 

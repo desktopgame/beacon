@@ -32,6 +32,7 @@ class_ * class_new(const char * name, class_type type) {
 	ret->super_class = NULL;
 	ret->field_list = vector_new();
 	ret->method_list = vector_new();
+	ret->absoluteIndex = -1;
 	return ret;
 }
 
@@ -291,6 +292,17 @@ int class_distance(class_ * self, class_ * other) {
 		}
 	} while (1);
 	return depth;
+}
+
+void class_linkall(class_ * self) {
+	for (int i = 0; i < self->field_list->length; i++) {
+		field* f = (field*)vector_at(self->field_list, i);
+		f->parent = self;
+	}
+	for (int i = 0; i < self->method_list->length; i++) {
+		method* m = (method*)vector_at(self->method_list, i);
+		m->parent = self;
+	}
 }
 
 void class_delete(class_ * self) {

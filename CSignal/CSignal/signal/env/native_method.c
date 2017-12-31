@@ -11,8 +11,8 @@ native_method * native_method_new() {
 	return ret;
 }
 
-void native_method_execute(native_method * self, method * parent, vm * vm) {
-	self->ref->impl(parent, vm);
+void native_method_execute(native_method * self, method * parent, vm * vm, enviroment* env) {
+	self->ref->impl(parent, vm, env);
 }
 
 void native_method_delete(native_method * self) {

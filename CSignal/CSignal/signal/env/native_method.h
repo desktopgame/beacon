@@ -2,6 +2,8 @@
 #ifndef SIGNAL_ENV_NATIVE_METHOD_H
 #define SIGNAL_ENV_NATIVE_METHOD_H
 struct native_method_ref;
+struct enviroment;
+struct method;
 
 /**
  * Cで実装されたメソッド.
@@ -20,8 +22,9 @@ native_method* native_method_new();
  * ネイティブメソッドを実行します.
  * @param self
  * @param vm
+ * @param env
  */
-void native_method_execute(native_method* self, struct method* parent, struct vm* vm);
+void native_method_execute(native_method* self, struct method* parent, struct vm* vm, struct enviroment* env);
 
 /**
  * ネイティブメソッドを開放します.

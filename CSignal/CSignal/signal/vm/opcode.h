@@ -44,6 +44,7 @@ typedef enum opcode {
 	op_constd,
 	op_constc,
 	op_consts,
+	op_static_method,
 	op_method,
 
 	op_dup,

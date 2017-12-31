@@ -24,6 +24,8 @@ typedef struct class_ {
 	class_type type;
 	class_state state;
 	uint32_t ref_count;
+	//名前空間を無視してフラットにアクセスするための添え字
+	int absoluteIndex;
 } class_;
 
 /**
@@ -172,6 +174,12 @@ bool class_castable(class_* self, class_* other);
  *         継承関係が異なるなら -1
  */
 int class_distance(class_* self, class_* other);
+
+/**
+ * 全てのメンバーがこのクラスを参照できるようにします.
+ * @param self
+ */
+void class_linkall(class_* self);
 
 /**
  * このクラスを開放します.

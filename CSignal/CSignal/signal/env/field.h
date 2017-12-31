@@ -9,6 +9,7 @@ struct class_;
  */
 typedef struct field {
 	char* name;
+	struct class_* parent;
 	struct class_* type;
 	access_level access;
 	modifier_type modifier;

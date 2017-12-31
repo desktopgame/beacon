@@ -8,6 +8,7 @@
 #include "../ast/modifier_type.h"
 struct class_;
 struct vm;
+struct enviroment;
 
 /**
  * メソッドの種類を表す列挙.
@@ -24,6 +25,7 @@ typedef struct method {
 	char* name;
 	method_type type;
 	//struct class_* decleared_type;
+	struct class_* parent;
 	struct class_* return_type;
 	vector* parameter_list;
 	access_level access;
@@ -45,8 +47,9 @@ method* method_new(const char* name);
  * メソッドを実行します.
  * @param self
  * @param vm
+ * @param env
  */
-void method_execute(method* self, struct vm* vm);
+void method_execute(method* self, struct vm* vm, struct enviroment* env);
 
 /**
  * メソッドを出力します.

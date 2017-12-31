@@ -3,6 +3,7 @@
 #define SIGNAL_ENV_SCRIPT_CONTEXT_H
 #include "../util/stack.h"
 #include "../util/tree_map.h"
+#include "../util/vector.h"
 struct heap;
 
 /**
@@ -24,6 +25,8 @@ typedef struct script_context {
 	stack* parserStack;
 	tree_map* namespaceMap;
 	tree_map* classLoaderMap;
+	//通し番号でクラスを参照するためのベクター
+	vector* class_vec;
 	struct heap* heap;
 	struct script_context* prev;
 	struct script_context* next;

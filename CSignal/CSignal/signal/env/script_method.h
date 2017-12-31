@@ -5,6 +5,7 @@
 #include "../vm/enviroment.h"
 struct vm;
 struct method;
+struct enviroment;
 
 /**
  * スクリプトで実装されたメソッド.
@@ -24,8 +25,9 @@ script_method* script_method_new();
  * メソッドを実行します.
  * @param self
  * @param vm
+ * @param env
  */
-void script_method_execute(script_method* self, struct method* parent, struct vm* vm);
+void script_method_execute(script_method* self, struct method* parent, struct vm* vm, struct enviroment* env);
 
 /**
  * メソッドを開放します.

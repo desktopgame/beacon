@@ -3,8 +3,12 @@
 #include <stdio.h>
 #include <assert.h>
 #include "label.h"
+#include "../env/class.h"
+#include "../env/method.h"
+#include "../env/script_context.h"
 #include "../util/logger.h"
 #include "../util/mem.h"
+#include "../util/vector.h"
 //proto
 static int stack_topi(vm* self);
 static double stack_topd(vm* self);
@@ -43,6 +47,7 @@ vm * vm_new() {
 }
 
 void vm_execute(vm* self, enviroment* env) {
+	script_context* ctx = script_context_get_current();
 	int source_len = env->buf->source->length;
 	for (int i = 0; i < source_len; i++) {
 		op_byte b = (op_byte)enviroment_source_at(env, i);
@@ -135,12 +140,24 @@ void vm_execute(vm* self, enviroment* env) {
 				INFO("push consts");
 				break;
 			}
-			
+			case op_static_method:
+			{
+				int absClassIndex = (int)enviroment_source_at(env, ++i);
+				int methodIndex = (int)enviroment_source_at(env, ++i);
+				class_* cls = (class_*)vector_at(ctx->class_vec, absClassIndex);
+				method* m = class_method_by_index(cls, methodIndex);
+				//‚¢‚ç‚È‚¢
+				opcode code = (opcode)enviroment_source_at(env, ++i);
+				assert(code == op_invokestatic);
+				method_execute(m, self, env);
+				break;
+			}
 			case op_method:
 			{
 				int index = (int)enviroment_source_at(env, ++i);
-			}
+
 				break;
+			}
 
 			case op_dup:
 				vector_push(self->value_stack, vector_top(self->value_stack));

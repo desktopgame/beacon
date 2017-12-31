@@ -17,14 +17,15 @@ method * method_new(const char * name) {
 	ret->type = method_type_script;
 	ret->access = access_public;
 	ret->modifier = modifier_none;
+	ret->parent = NULL;
 	return ret;
 }
 
-void method_execute(method* self, vm * vm) {
+void method_execute(method* self, vm * vm, enviroment* env) {
 	if (self->type == method_type_script) {
-		script_method_execute(self->u.script_method, self, vm);
+		script_method_execute(self->u.script_method, self, vm, env);
 	} else if (self->type == method_type_native) {
-		native_method_execute(self->u.native_method, self, vm);
+		native_method_execute(self->u.native_method, self, vm, env);
 	}
 }
 

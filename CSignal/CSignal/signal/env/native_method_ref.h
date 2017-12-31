@@ -3,10 +3,11 @@
 #define SIGNAL_ENV_NATIVE_METHOD_REF_H
 #include "method.h"
 #include "../vm/vm.h"
+#include "../vm/enviroment.h"
 /**
  * ネイティブメソッドの実装.
  */
-typedef void(*native_impl)(method* parent, vm* vm);
+typedef void(*native_impl)(method* parent, vm* vm, enviroment* env);
 
 /**
  * ネイティブメソッドを表す関数ポインタをラップする構造体.

@@ -134,6 +134,7 @@ static script_context* script_context_malloc(void) {
 	ret->namespaceMap = NULL;
 	ret->classLoaderMap = tree_map_new();
 	ret->heap = heap_new();
+	ret->class_vec = vector_new();
 	ret->prev = NULL;
 	ret->next = NULL;
 	return ret;

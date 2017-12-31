@@ -67,7 +67,8 @@ void il_factor_named_invoke_generate(il_factor_named_invoke * self, enviroment *
 	//C.call() クラスへの呼び出し
 	} else {
 		il_factor_named_invoke_generate_args(self, env);
-		opcode_buf_add(env->buf, (vector_item)op_method);
+		opcode_buf_add(env->buf, (vector_item)op_static_method);
+		opcode_buf_add(env->buf, self->m->parent->absoluteIndex);
 		opcode_buf_add(env->buf, self->methodIndex);
 		opcode_buf_add(env->buf, op_invokestatic);
 	}

@@ -54,9 +54,12 @@ namespace_ * namespace_add_namespace(namespace_ * self, char * name) {
 }
 
 class_ * namespace_add_class(namespace_ * self, class_ * classz) {
+	script_context* ctx = script_context_get_current();
 	classz->location = self;
 	classz->ref_count++;
 	tree_map_put(self->class_map, classz->name, classz);
+	classz->absoluteIndex = ctx->class_vec->length;
+	vector_push(ctx->class_vec, classz);
 	return classz;
 }
 
