@@ -2,6 +2,7 @@
 #ifndef SIGNAL_IL_IL_METHOD_H
 #define SIGNAL_IL_IL_METHOD_H
 #include "il_type.h"
+#include "../env/fqcn_cache.h"
 #include "../util/vector.h"
 #include "../ast/access_level.h"
 #include "../ast/modifier_type.h"
@@ -12,7 +13,8 @@ typedef struct il_method {
 	char* name;
 	vector* parameter_list;
 	vector* statement_list;
-	il_type* return_type;
+	//il_type* return_type;
+	fqcn_cache* return_fqcn;
 	access_level access;
 	modifier_type modifier;
 } il_method;

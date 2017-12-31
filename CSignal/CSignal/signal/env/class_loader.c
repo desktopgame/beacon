@@ -314,7 +314,8 @@ static void class_loader_ilload_method(class_loader* self, il_class* current, as
 	ast* func_body = ast_at(method, 3);
 	ast* ret_name = ast_at(method, 4);
 	il_method* v = il_method_new(func_name->u.string_value);
-	v->return_type = il_type_new(ret_name->u.string_value);
+	class_loader_ilload_fqcn(ast_first(ret_name), v->return_fqcn);
+//	v->return_type = il_type_new(ret_name->u.string_value);
 	v->access = level;
 	v->modifier = ast_cast_to_modifier(modifier);
 	class_loader_ilload_param(self, v->parameter_list, param_list);
@@ -830,7 +831,7 @@ static void class_loader_sgload_complete(class_loader* self, il_class* ilclass, 
 		il_method* ilmethod = ((il_method*)vector_at(ilclass->method_list, i));
 		me->return_type = import_manager_resolve(
 			self->import_manager,
-			ilmethod->return_type->name
+			ilmethod->return_fqcn->name
 		);
 		for (int j = 0; j < ilmethod->parameter_list->length; j++) {
 			vector_item d = vector_at(ilmethod->parameter_list, j);

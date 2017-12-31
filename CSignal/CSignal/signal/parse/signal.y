@@ -265,11 +265,11 @@ constructor_chain_optional
 	| constructor_chain
 	;
 func_define
-	: modifier_type_T DEF IDENT LRB parameter_list RRB ARROW IDENT scope_optional
+	: modifier_type_T DEF IDENT LRB parameter_list RRB ARROW typename_T scope_optional
 	{
 		$$ = ast_new_function_decl($1, $3, $5, $9, $8);
 	}
-	| modifier_type_T DEF IDENT LRB RRB ARROW IDENT scope_optional
+	| modifier_type_T DEF IDENT LRB RRB ARROW typename_T scope_optional
 	{
 		$$ = ast_new_function_decl_empty_params($1, $3, $8, $7);
 	}

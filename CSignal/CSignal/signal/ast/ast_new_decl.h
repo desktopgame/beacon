@@ -116,7 +116,7 @@ ast* ast_new_field_decl(modifier_type modifier, char* type_name, char* field_nam
  * @param return_type_name
  * @return
  */
-ast* ast_new_function_decl(modifier_type type, char* func_name, ast* parameter_list, ast* body, char* return_type_name);
+ast* ast_new_function_decl(modifier_type type, char* func_name, ast* parameter_list, ast* body, ast* return_type);
 
 /**
  * 関数宣言を表す要素を作成します.
@@ -126,7 +126,7 @@ ast* ast_new_function_decl(modifier_type type, char* func_name, ast* parameter_l
  * @param return_type_name
  * @return
  */
-ast* ast_new_function_decl_empty_params(modifier_type type, char* func_name, ast* body, char* return_type_name);
+ast* ast_new_function_decl_empty_params(modifier_type type, char* func_name, ast* body, ast* return_type);
 
 /**
  * コンストラクタ宣言を表す要素を作成します.

@@ -128,18 +128,19 @@ ast * ast_new_field_decl(modifier_type modifier, char * type_name, char * field_
 	return ret;
 }
 
-ast * ast_new_function_decl(modifier_type type, char * func_name, ast * parameter_list, ast* body, char * return_type_name) {
+ast * ast_new_function_decl(modifier_type type, char * func_name, ast * parameter_list, ast* body, ast* return_type) {
 	ast* ret = ast_new(ast_func_decl);
 	ast_push(ret, ast_new_modifier(type));
 	ast_push(ret, ast_new_function_name(func_name));
 	ast_push(ret, parameter_list);
 	ast_push(ret, body);
-	ast_push(ret, ast_new_function_return_name(return_type_name));
+	ast_push(ret, return_type);
+	//ast_push(ret, ast_new_function_return_name(return_type_name));
 	return ret;
 }
 
-ast * ast_new_function_decl_empty_params(modifier_type type, char * func_name, ast* body, char * return_type_name) {
-	return ast_new_function_decl(type, func_name, ast_new_blank(), body, return_type_name);
+ast * ast_new_function_decl_empty_params(modifier_type type, char * func_name, ast* body, ast* return_type) {
+	return ast_new_function_decl(type, func_name, ast_new_blank(), body, return_type);
 }
 
 ast * ast_new_constructor_decl(ast * parameter_list, ast * constructor_chain, ast * body) {
