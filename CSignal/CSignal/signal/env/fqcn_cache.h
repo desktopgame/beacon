@@ -25,6 +25,12 @@ fqcn_cache* fqcn_cache_new();
 void fqcn_cache_dump(fqcn_cache* self, int depth);
 
 /**
+ * FQCNを切り詰めて改行せずに表示します.
+ * @param self
+ */
+void fqcn_cache_print(fqcn_cache* self);
+
+/**
  * FQCNキャッシュを開放します.
  * @param self
  */

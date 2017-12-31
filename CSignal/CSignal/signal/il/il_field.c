@@ -19,7 +19,9 @@ void il_field_dump(il_field * self, int depth) {
 	access_print(self->access);
 	printf(" ");
 	modifier_print(self->modifier);
-	printf(" field %s %s", self->fqcn->name, self->name);
+	printf(" field ");
+	fqcn_cache_print(self->fqcn);
+	printf(" %s", self->name);
 	text_putline();
 }
 

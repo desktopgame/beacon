@@ -26,7 +26,8 @@ void il_method_dump(il_method * self, int depth) {
 	access_print(self->access);
 	printf(" ");
 	modifier_print(self->modifier);
-	printf(" method %s -> %s", self->name, self->return_fqcn->name);
+	printf(" method %s -> ", self->name);
+	fqcn_cache_print(self->return_fqcn);
 	text_putline();
 	for (int i = 0; i < self->parameter_list->length; i++) {
 		vector_item e = vector_at(self->parameter_list, i);
