@@ -812,7 +812,8 @@ static void class_loader_sgload_complete(class_loader* self, il_class* ilclass, 
 }
 
 static void class_loader_sgload_attach_native_method(class_loader* self, il_class* ilclass, class_* classz, il_method* ilmethod, method* me) {
-	me->u.native_method->ref = native_method_ref_new(class_loader_sgload_debug_native_method);
+//	native_method.h で、実行時にリンクするようにしたので不要
+//	me->u.native_method->ref = native_method_ref_new(class_loader_sgload_debug_native_method);
 }
 
 static void class_loader_sgload_debug_native_method(method* parent, vm* vm, enviroment* env) {

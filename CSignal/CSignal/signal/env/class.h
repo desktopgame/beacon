@@ -4,6 +4,7 @@
 #include "namespace.h"
 #include "class_type.h"
 #include "class_state.h"
+#include "native_method_ref.h"
 #include "../vm/enviroment.h"
 #include "../util/vector.h"
 #include <stdint.h>
@@ -24,6 +25,7 @@ typedef struct class_ {
 	class_type type;
 	class_state state;
 	uint32_t ref_count;
+	tree_map* native_method_ref_map;
 	//名前空間を無視してフラットにアクセスするための添え字
 	int absoluteIndex;
 } class_;
@@ -43,6 +45,14 @@ class_* class_new(const char* name, class_type type);
  * @param depth
  */
 void class_dump(class_* self, int depth);
+
+/**
+ * 指定の名前に対応するネイティブ関数を登録します.s
+ * @param self
+ * @param name
+ * @param impl
+ */
+void class_define_native_method(class_* self, const char* name, native_impl impl);
 
 /**
  * 指定の名前を持つフィールドを返します.

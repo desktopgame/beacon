@@ -409,7 +409,7 @@ static void ast_delete_impl(ast* self) {
 		//printf("free(%s)\n", self->u.string_value);
 		char* temp = self->u.string_value;
 		self->u.string_value = NULL;
-		printf("_%s\n", temp);
+		//printf("_%s\n", temp);
 		MEM_FREE(temp);
 		//self->u.string_value = NULL;
 	}

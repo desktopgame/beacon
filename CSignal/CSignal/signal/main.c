@@ -1,6 +1,7 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <string.h>
+#include "lib/sg_library_interface.h"
 #include "util/cmd.h"
 #include "util/io.h"
 #include "util/text.h"
@@ -20,6 +21,9 @@ void _start(int argc, char* argv[]) {
 	sg_lopen();
 	script_context_open();
 	cmd_dump(argc, argv);
+
+	//ネイティブメソッドの登録
+	sg_console_init();
 }
 
 void _end(int argc, char* argv[]) {

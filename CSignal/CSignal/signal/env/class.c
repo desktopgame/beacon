@@ -32,6 +32,7 @@ class_ * class_new(const char * name, class_type type) {
 	ret->super_class = NULL;
 	ret->field_list = vector_new();
 	ret->method_list = vector_new();
+	ret->native_method_ref_map = tree_map_new();
 	ret->absoluteIndex = -1;
 	return ret;
 }
@@ -52,6 +53,11 @@ void class_dump(class_ * self, int depth) {
 		method* m = (method*)e;
 		method_dump(m, depth + 1);
 	}
+}
+
+void class_define_native_method(class_ * self, const char * name, native_impl impl) {
+	native_method_ref* ref = native_method_ref_new(impl);
+	tree_map_put(self->native_method_ref_map, name, ref);
 }
 
 field * class_find_field(class_* self, const char * name) {
