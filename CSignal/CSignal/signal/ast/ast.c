@@ -203,6 +203,7 @@ void ast_print(ast* self) {
 		case ast_post_dec:
 			p("--");
 		case ast_stmt_variable_decl: p("variable-decl");
+		case ast_stmt_variable_init: p("variable-init");
 		case ast_typename:
 			printf("typename");
 			break;

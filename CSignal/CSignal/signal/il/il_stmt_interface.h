@@ -9,7 +9,8 @@ typedef enum il_stmt_type {
 	ilstmt_proc,
 	ilstmt_if,
 	ilstmt_while,
-	ilstmt_variable_decl
+	ilstmt_variable_decl,
+	ilstmt_variable_init,
 } il_stmt_type;
 
 //詳細は il_stmt_impl.h を参照してください。
@@ -17,6 +18,7 @@ struct il_stmt_proc;
 struct il_stmt_if;
 struct il_stmt_while;
 struct il_stmt_variable_decl;
+struct il_stmt_variable_init;
 
 /**
  * 文を表す要素です.
@@ -28,6 +30,7 @@ typedef struct il_stmt {
 		struct il_stmt_if* if_;
 		struct il_stmt_while* while_;
 		struct il_stmt_variable_decl* variable_decl;
+		struct il_stmt_variable_init* variable_init;
 	} u;
 } il_stmt;
 

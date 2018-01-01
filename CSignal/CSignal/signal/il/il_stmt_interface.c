@@ -16,6 +16,9 @@ void il_stmt_dump(il_stmt * self, int depth) {
 		case ilstmt_variable_decl:
 			il_stmt_variable_decl_dump(self->u.variable_decl, depth);
 			break;
+		case ilstmt_variable_init:
+			il_stmt_variable_init_dump(self->u.variable_init, depth);
+			break;
 		default:
 			//ERROR("ステートメントをダンプ出来ませんでした。");
 			break;
@@ -35,6 +38,9 @@ void il_stmt_generate(il_stmt * self, struct enviroment* env) {
 		case ilstmt_variable_decl:
 			il_stmt_variable_decl_generate(self->u.variable_decl, env);
 			break;
+		case ilstmt_variable_init:
+			il_stmt_variable_decl_generate(self->u.variable_init, env);
+			break;
 		default:
 			//ERROR("ステートメントを開放出来ませんでした。");
 			break;
@@ -51,6 +57,9 @@ void il_stmt_delete(il_stmt * self) {
 			break;
 		case ilstmt_variable_decl:
 			il_stmt_variable_decl_delete(self->u.variable_decl);
+			break;
+		case ilstmt_variable_init:
+			il_stmt_variable_init_delete(self->u.variable_init);
 			break;
 		default:
 			//ERROR("ステートメントを開放出来ませんでした。");

@@ -122,4 +122,13 @@ ast* ast_new_fqcn_part_list(ast* part, ast* part_list);
  * @return
  */
 ast* ast_new_variable_decl(ast* type, char* name);
+
+/**
+ * X::Y y = new X::Y() のような初期化を表す要素を作成します.
+ * @param type
+ * @param name
+ * @param fact
+ * @return
+ */
+ast* ast_new_variable_init(ast* type, char* name, ast* fact);
 #endif // !SIGNAL_AST_AST_NEW_STMT_H

@@ -50,6 +50,7 @@ static void class_loader_ilload_constructor(class_loader* self, il_class* curren
 static void class_loader_ilload_param(class_loader* self, vector* list, ast* source);
 static void class_loader_ilload_body(class_loader* self, vector* list, ast* source);
 static il_stmt_variable_decl* class_loader_ilload_variable_decl(class_loader* self, ast* source);
+static il_stmt_variable_init* class_loader_ilload_variable_init(class_loader* self, ast* source);
 static il_stmt_if* class_loader_ilload_if(class_loader* self, ast* source);
 static il_stmt_if* class_loader_ilload_if_elif_list(class_loader* self, ast* source);
 static void class_loader_ilload_elif_list(class_loader* self, vector* list, ast* source);
@@ -388,6 +389,12 @@ static void class_loader_ilload_body(class_loader* self, vector* list, ast* sour
 				vector_push(list, il_stmt_wrap_variable_decl(ilvardecl));
 				break;
 			}
+			case ast_stmt_variable_init:
+			{
+				il_stmt_variable_init* ilvarinit = class_loader_ilload_variable_init(self, source);
+				vector_push(list, il_stmt_wrap_variable_init(ilvarinit));
+				break;
+			}
 			case ast_if:
 			{
 				il_stmt_if* ilif = class_loader_ilload_if(self, source);
@@ -424,6 +431,16 @@ static il_stmt_variable_decl* class_loader_ilload_variable_decl(class_loader* se
 	il_stmt_variable_decl* ret = il_stmt_variable_decl_new(aname->u.string_value);
 	ret->name = text_strdup(aname->u.string_value);
 	class_loader_ilload_fqcn(ast_first(afqcn), ret->fqcn);
+	return ret;
+}
+
+static il_stmt_variable_init* class_loader_ilload_variable_init(class_loader* self, ast* source) {
+	ast* afqcn = ast_first(source);
+	ast* aident = ast_second(source);
+	ast* afact = ast_at(source, 2);
+	il_stmt_variable_init* ret = il_stmt_variable_init_new(aident->u.string_value);
+	class_loader_ilload_fqcn(ast_first(afqcn), ret->fqcn);
+	ret->fact = class_loader_ilload_factor(self, afact);
 	return ret;
 }
 

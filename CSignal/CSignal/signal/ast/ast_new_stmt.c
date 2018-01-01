@@ -112,3 +112,13 @@ ast * ast_new_variable_decl(ast * type, char * name) {
 	ast_push(ret, aname);
 	return ret;
 }
+
+ast * ast_new_variable_init(ast * type, char * name, ast * fact) {
+	ast* ret = ast_new(ast_stmt_variable_init);
+	ast* aname = ast_new(ast_identifier);
+	aname->u.string_value = name;
+	ast_push(ret, type);
+	ast_push(ret, aname);
+	ast_push(ret, fact);
+	return ret;
+}

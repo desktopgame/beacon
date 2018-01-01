@@ -82,6 +82,7 @@
 					stmt_list
 						stmt
 						variable_decl_stmt
+						variable_init_stmt
 						if_stmt
 							elif_list
 							elif
@@ -553,12 +554,19 @@ stmt
 		$$ = ast_new_proc($1);
 	}
 	| variable_decl_stmt
+	| variable_init_stmt
 	| if_stmt
 	;
 variable_decl_stmt
 	: typename_T IDENT SEMI
 	{
 		$$ = ast_new_variable_decl($1, $2);
+	}
+	;
+variable_init_stmt
+	: typename_T IDENT ASSIGN expression SEMI
+	{
+		$$ = ast_new_variable_init($1, $2, $4);
 	}
 	;
 if_stmt
