@@ -70,7 +70,8 @@ namespace L.Goo.Foo {
 //Mod::X.call();
 //Person p = Person.new();
 signal::lang::Console c;
-Console d = 0;
+Console d = this;
+this.print(10, this);
 signal::lang::Console.writeLine("aaa");
 //Console.writeLine("HelloWorld");
 //(10 + 20 + (5 * 20 + (16 / 4)) >= 20 || 0 < 0)

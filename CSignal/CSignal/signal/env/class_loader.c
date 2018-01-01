@@ -558,6 +558,17 @@ static il_factor* class_loader_ilload_factor(class_loader* self, ast* source) {
 		return il_factor_wrap_binary(class_loader_ilload_binary(self, source, ilbinary_lt));
 	} else if (source->tag == ast_le) {
 		return il_factor_wrap_binary(class_loader_ilload_binary(self, source, ilbinary_le));
+	//this super
+	} else if (source->tag == ast_this) {
+		il_factor* ret = (il_factor*)MEM_MALLOC(sizeof(il_factor));
+		ret->type = ilfactor_this;
+		ret->u.this_ = 0;
+		return ret;
+	} else if (source->tag == ast_super) {
+		il_factor* ret = (il_factor*)MEM_MALLOC(sizeof(il_factor));
+		ret->type = ilfactor_super;
+		ret->u.super_ = 0;
+		return ret;
 	}
 	return NULL;
 }

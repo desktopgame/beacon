@@ -142,6 +142,14 @@ ast * ast_new_proc(ast * expr) {
 	return ret;
 }
 
+ast * ast_new_this() {
+	return ast_new(ast_this);
+}
+
+ast * ast_new_super() {
+	return ast_new(ast_super);
+}
+
 ast * ast_push(ast * self, ast * child) {
 	assert(self != NULL);
 	assert(child != NULL);
@@ -222,6 +230,8 @@ void ast_print(ast* self) {
 		case ast_string:
 			printf("string(%s)", self->u.string_value);
 			break;
+		case ast_this: p("this");
+		case ast_super: p("super");
 		case ast_namespace_decl:
 			printf("namespace decl");
 			break;

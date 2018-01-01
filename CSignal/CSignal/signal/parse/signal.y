@@ -537,6 +537,14 @@ primary
 	{
 		$$ = ast_new_static_invoke($1, $3, $5);
 	}
+	| THIS
+	{
+		$$ = ast_new_this();
+	}
+	| SUPER
+	{
+		$$ = ast_new_super();
+	}
 	;
 stmt_list
 	: stmt

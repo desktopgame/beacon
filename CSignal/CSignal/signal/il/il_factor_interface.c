@@ -39,6 +39,12 @@ void il_factor_dump(il_factor * self, int depth) {
 		case ilfactor_binary_op:
 			il_factor_binary_op_dump(self->u.binary_, depth);
 			break;
+		case ilfactor_this:
+			il_factor_this_dump(self->u.this_, depth);
+			break;
+		case ilfactor_super:
+			il_factor_super_dump(self->u.super_, depth);
+			break;
 		default:
 			ERROR("ファクターをダンプ出来ませんでした");
 			break;
@@ -76,6 +82,12 @@ void il_factor_generate(il_factor * self, enviroment* env) {
 			break;
 		case ilfactor_binary_op:
 			il_factor_binary_op_generate(self->u.binary_, env);
+			break;
+		case ilfactor_this:
+			il_factor_this_generate(self->u.this_, env);
+			break;
+		case ilfactor_super:
+			il_factor_super_generate(self->u.super_, env);
 			break;
 		default:
 			ERROR("ファクターを生成出来ませんでした");
@@ -115,6 +127,12 @@ class_ * il_factor_eval(il_factor * self, enviroment * env) {
 			break;
 		case ilfactor_binary_op:
 			ret = il_factor_binary_op_eval(self->u.binary_, env);
+			break;
+		case ilfactor_this:
+			ret = il_factor_this_eval(self->u.this_, env);
+			break;
+		case ilfactor_super:
+			ret = il_factor_super_eval(self->u.super_, env);
 			break;
 		default:
 			ERROR("ファクターの型を取得出来ませんでした");
@@ -157,6 +175,12 @@ void il_factor_delete(il_factor * self) {
 			break;
 		case ilfactor_binary_op:
 			il_factor_binary_op_delete(self->u.binary_);
+			break;
+		case ilfactor_this:
+			il_factor_this_delete(self->u.this_);
+			break;
+		case ilfactor_super:
+			il_factor_super_delete(self->u.super_);
 			break;
 		default:
 			ERROR("ファクターを開放出来ませんでした");

@@ -59,6 +59,9 @@ typedef enum ast_tag {
 	ast_call,
 	ast_invoke,
 
+	ast_this,
+	ast_super,
+
 	ast_identifier,
 	//ast_typename,
 
@@ -293,6 +296,18 @@ ast* ast_new_static_invoke(ast* fqcn, const char* name, ast* argument_list);
  * @return
  */
 ast* ast_new_proc(ast* expr);
+
+/**
+ * thisを表す因子を作成します.
+ * @return
+ */
+ast* ast_new_this();
+
+/**
+ * superを表す因子を作成します.
+ * @return
+ */
+ast* ast_new_super();
 
 /**
  * self に child を子要素として追加します.
