@@ -17,4 +17,5 @@
 #include "factor/il_factor_binary_op_impl.h"
 #include "factor/il_factor_this_impl.h"
 #include "factor/il_factor_super_impl.h"
+#include "factor/il_factor_new_instance_impl.h"
 #endif // !SIGNAL_IL_IL_FACTOR_IMPL_H

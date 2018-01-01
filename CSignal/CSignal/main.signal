@@ -69,10 +69,11 @@ namespace L.Goo.Foo {
 //a.print(10, 20, "aaa");
 //Mod::X.call();
 //Person p = Person.new();
-signal::lang::Console c;
-Console d = this;
-this.print(10, this);
-signal::lang::Console.writeLine("aaa");
+//signal::lang::Console c;
+//Console d = this;
+//this.print(10, this);
+signal::lang::Console c = new signal::lang::Console(10, this);
+//signal::lang::Console.writeLine("aaa");
 //Console.writeLine("HelloWorld");
 //(10 + 20 + (5 * 20 + (16 / 4)) >= 20 || 0 < 0)
 //TYPENAME VARIABLENAME = 10;

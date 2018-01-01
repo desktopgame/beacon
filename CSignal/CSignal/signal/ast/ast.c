@@ -150,6 +150,13 @@ ast * ast_new_super() {
 	return ast_new(ast_super);
 }
 
+ast * ast_new_new_instance(ast * afqcn, ast * argument_list) {
+	ast* ret = ast_new(ast_new_instance);
+	ast_push(ret, afqcn);
+	ast_push(ret, argument_list);
+	return ret;
+}
+
 ast * ast_push(ast * self, ast * child) {
 	assert(self != NULL);
 	assert(child != NULL);
@@ -264,6 +271,7 @@ void ast_print(ast* self) {
 		case ast_proc: p("process");
 		case ast_argument_list: p("argument-list");
 		case ast_argument: p("argument");
+		case ast_new_instance: p("new-instance");
 		//case ast_class_decl_list:
 		//	printf("class decl_list");
 		//	break;

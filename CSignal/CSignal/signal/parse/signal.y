@@ -545,6 +545,14 @@ primary
 	{
 		$$ = ast_new_super();
 	}
+	| NEW typename_T LRB argument_list RRB
+	{
+		$$ = ast_new_new_instance($2, $4);
+	}
+	| NEW typename_T LRB RRB
+	{
+		$$ = ast_new_new_instance($2, ast_new_blank());
+	}
 	;
 stmt_list
 	: stmt

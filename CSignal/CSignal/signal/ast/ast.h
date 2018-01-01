@@ -61,6 +61,7 @@ typedef enum ast_tag {
 
 	ast_this,
 	ast_super,
+	ast_new_instance,
 
 	ast_identifier,
 	//ast_typename,
@@ -308,6 +309,14 @@ ast* ast_new_this();
  * @return
  */
 ast* ast_new_super();
+
+/**
+ * new X::Y(...) を表す因子を作成します.
+ * @param afqcn
+ * @parma argument_list
+ * @return
+ */
+ast* ast_new_new_instance(ast* afqcn, ast* argument_list);
 
 /**
  * self に child を子要素として追加します.
