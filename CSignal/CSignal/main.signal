@@ -6,7 +6,8 @@ namespace L.Goo.Foo {
 		Int pointX;
 		Int pointY;
 
-		def new() { }
+		def new() : this(10, 20, 30) { }
+		def new(Int a, Int b, Int c) : super(a, b, c) { }
 		def new(Int a, Int b) { }
 
 	

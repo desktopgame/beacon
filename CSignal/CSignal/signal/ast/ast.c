@@ -378,6 +378,18 @@ modifier_type ast_cast_to_modifier(ast * self) {
 	return modifier_none;
 }
 
+constructor_chain_type ast_cast_to_chain_type(ast * self) {
+	switch (self->tag) {
+		case ast_constructor_chain_this:
+			return chain_type_this;
+		case ast_constructor_chain_super:
+			return chain_type_super;
+		default:
+			break;
+	}
+	return chain_type_super;
+}
+
 //private
 static void ast_print_indent(int depth) {
 	for (int i = 0; i < depth; i++) {

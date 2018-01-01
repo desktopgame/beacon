@@ -5,6 +5,7 @@
 #include <stdbool.h>
 #include "access_level.h"
 #include "modifier_type.h"
+#include "constructor_chain_type.h"
 #include "../util/list.h"
 
 /**
@@ -102,6 +103,8 @@ typedef enum ast_tag {
 
 	ast_constructor_decl,
 	ast_constructor_chain,
+	ast_constructor_chain_this,
+	ast_constructor_chain_super,
 
 	ast_scope,
 	ast_stmt,
@@ -371,4 +374,11 @@ access_level ast_cast_to_access(ast* self);
  * @return
  */
 modifier_type ast_cast_to_modifier(ast* self);
+
+/**
+ * 指定の要素が連鎖を表す要素なら列挙型に変換します.
+ * @param self
+ * @return
+ */
+constructor_chain_type ast_cast_to_chain_type(ast* self);
 #endif // !SIGNAL_AST_AST_H

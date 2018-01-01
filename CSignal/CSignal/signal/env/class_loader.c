@@ -334,10 +334,15 @@ static void class_loader_ilload_constructor(class_loader* self, il_class* curren
 	ast* abody = ast_at(constructor, 2);
 	il_constructor_chain* ilchain = NULL;
 	if (!ast_is_blank(achain)) {
-
+		ast* achain_type = ast_first(achain);
+		ast* aargs = ast_second(achain);
+		ilchain = il_constructor_chain_new();
+		ilchain->type = ast_cast_to_chain_type(achain_type);
+		class_loader_ilload_argument_list(self, ilchain->argument_list, aargs);
 	}
 	il_constructor* ilcons = il_constructor_new();
 	ilcons->access = level;
+	ilcons->chain = ilchain;
 	//ilcons->modifier = ast_cast_to_modifier(amodifier);
 	class_loader_ilload_param(self, ilcons->parameter_list, aparams);
 	class_loader_ilload_body(self, ilcons->statement_list, abody);

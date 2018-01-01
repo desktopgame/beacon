@@ -155,6 +155,11 @@ ast * ast_new_constructor_decl(ast * parameter_list, ast * constructor_chain, as
 
 ast * ast_new_constructor_chain(constructor_chain_type chain_type, ast * argument_list) {
 	ast* ret = ast_new(ast_constructor_chain);
+	if (chain_type == chain_type_this) {
+		ast_push(ret, ast_new(ast_constructor_chain_this));
+	} else {
+		ast_push(ret, ast_new(ast_constructor_chain_super));
+	}
 	ast_push(ret, argument_list);
 	return ret;
 }

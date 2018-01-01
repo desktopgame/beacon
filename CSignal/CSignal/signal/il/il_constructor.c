@@ -2,6 +2,7 @@
 #include "../util/mem.h"
 #include "il_parameter.h"
 #include "il_stmt_interface.h"
+#include "il_constructor_chain.h"
 
 il_constructor * il_constructor_new() {
 	il_constructor* ret = (il_constructor*)MEM_MALLOC(sizeof(il_constructor));
@@ -20,6 +21,9 @@ void il_constructor_dump(il_constructor * self, int depth) {
 	printf(" constructor");
 //	fqcn_cache_print(self->return_fqcn);
 	text_putline();
+	if (self->chain != NULL) {
+		il_constructor_chain_dump(self->chain, depth + 1);
+	}
 	for (int i = 0; i < self->parameter_list->length; i++) {
 		vector_item e = vector_at(self->parameter_list, i);
 		il_parameter* p = (il_parameter*)e;
