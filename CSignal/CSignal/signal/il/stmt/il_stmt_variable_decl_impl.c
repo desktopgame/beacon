@@ -1,4 +1,4 @@
-#include "il_stmt_variable_decl.h"
+#include "il_stmt_variable_decl_impl.h"
 #include "../../util/mem.h"
 #include "../../util/text.h"
 #include "../../vm/enviroment.h"
