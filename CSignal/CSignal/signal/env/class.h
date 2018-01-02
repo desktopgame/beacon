@@ -75,23 +75,6 @@ struct field* class_find_field(class_* self, const char* name);
 vector* class_find_method(class_* self, const char* name, int count, ...);
 
 /**
- * 引数が0個のメソッドを検索します.
- * @param self
- * @param name
- * @return
- */
-vector* class_find_method0(class_* self, const char* name);
-
-/**
- * 引数が1個のメソッドを検索します.
- * @param self
- * @param name
- * @param type1
- * @return
- */
-vector* class_find_method1(class_* self, const char* name, class_* type1);
-
-/**
  * vectorで可変長引数を表現する版の実装.
  * こちらでは全ての要素に il_argument* が入っている必要があります。
  * @param self
@@ -101,7 +84,7 @@ vector* class_find_method1(class_* self, const char* name, class_* type1);
  * @return 無ければ空
  *         呼び出し側で開放してください。
  */
-vector* class_find_methodv(class_* self, const char* name, vector* args, enviroment* env);
+vector* class_find_method_args(class_* self, const char* name, vector* args, enviroment* env);
 
 /**
  * もっとも一致するメソッドを返します.
@@ -112,7 +95,7 @@ vector* class_find_methodv(class_* self, const char* name, vector* args, envirom
  * @param outIndex メソッドへのインデックス
  * @return
  */
-struct method* class_find_methodvf(class_* self, const char* name, vector* args, enviroment* env, int* outIndex);
+struct method* class_find_method_args_match(class_* self, const char* name, vector* args, enviroment* env, int* outIndex);
 
 /**
  * このクラスの中で有効なメソッドへのインデックスを、

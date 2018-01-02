@@ -96,7 +96,7 @@ static void il_factor_named_invoke_find(il_factor_named_invoke* self, enviroment
 		}
 		class_* cls = namespace_get_class(top, self->fqcn->name);
 		int temp = 0;
-		self->m = class_find_methodvf(cls, self->method_name, self->argument_list, env, &temp);
+		self->m = class_find_method_args_match(cls, self->method_name, self->argument_list, env, &temp);
 		self->methodIndex = temp;
 		//printf("%s %s", top->name, cls->name);
 		self->u.classz = cls;

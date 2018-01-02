@@ -80,7 +80,7 @@ static void il_factor_invoke_find(il_factor_invoke* self, enviroment* env) {
 		return;
 	}
 	int temp = 0;
-	self->m = class_find_methodvf(
+	self->m = class_find_method_args_match(
 		il_factor_eval(self->receiver, env),
 		self->name,
 		self->argument_list,

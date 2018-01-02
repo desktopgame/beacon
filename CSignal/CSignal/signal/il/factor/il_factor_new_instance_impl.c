@@ -33,6 +33,8 @@ void il_factor_new_instance_dump(il_factor_new_instance * self, int depth) {
 }
 
 void il_factor_new_instance_generate(il_factor_new_instance * self, enviroment * env) {
+	//Œ»Ý‚ÌƒNƒ‰ƒX‚ðŽæ“¾
+	class_* cls = enviroment_class(env, self->fqcn);
 }
 
 class_ * il_factor_new_instance_eval(il_factor_new_instance * self, enviroment * env) {

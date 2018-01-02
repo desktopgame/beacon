@@ -121,15 +121,7 @@ vector * class_find_method(class_* self, const char * name, int count, ...) {
 	return v;
 }
 
-vector * class_find_method0(class_ * self, const char * name) {
-	return class_find_method(self, name, 0);
-}
-
-vector * class_find_method1(class_ * self, const char * name, class_ * type1) {
-	return class_find_method(self, name, 1, type1);
-}
-
-vector * class_find_methodv(class_ * self, const char * name, vector * args, enviroment* env) {
+vector * class_find_method_args(class_ * self, const char * name, vector * args, enviroment* env) {
 	vector* v = vector_new();
 	if (self == NULL) {
 		return v;
@@ -167,8 +159,8 @@ vector * class_find_methodv(class_ * self, const char * name, vector * args, env
 	return v;
 }
 
-method * class_find_methodvf(class_ * self, const char * name, vector * args, enviroment * env, int * outIndex) {
-	vector* v = class_find_methodv(self, name, args, env);
+method * class_find_method_args_match(class_ * self, const char * name, vector * args, enviroment * env, int * outIndex) {
+	vector* v = class_find_method_args(self, name, args, env);
 	(*outIndex) = -1;
 	//メソッドが一つも見つからなかった
 	if (v->length == 0) {
