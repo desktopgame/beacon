@@ -14,6 +14,7 @@ enviroment * enviroment_new() {
 	ret->constant_pool = vector_new();
 	ret->sym_table = symbol_table_new();
 	ret->class_ = NULL;
+	ret->context_cll = NULL;
 	return ret;
 }
 

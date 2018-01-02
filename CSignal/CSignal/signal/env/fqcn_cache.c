@@ -1,6 +1,8 @@
 #include "fqcn_cache.h"
 #include "../util/mem.h"
 #include "namespace.h"
+#include "class.h"
+
 
 fqcn_cache * fqcn_cache_new() {
 	fqcn_cache* ret = (fqcn_cache*)MEM_MALLOC(sizeof(fqcn_cache));
@@ -39,9 +41,9 @@ void fqcn_cache_print(fqcn_cache * self) {
 	}
 }
 
-namespace_ * fqcn_scope(fqcn_cache * self) {
+namespace_ * fqcn_scope(fqcn_cache * self, namespace_* current) {
 	if (self->scope_vec->length == 0) {
-		return NULL;
+		return current;
 	}
 	namespace_* top = NULL;
 	for (int i = 0; i < self->scope_vec->length; i++) {
@@ -53,6 +55,31 @@ namespace_ * fqcn_scope(fqcn_cache * self) {
 		}
 	}
 	return top;
+}
+
+class_ * fqcn_class(fqcn_cache * self, namespace_* current) {
+	//Y形式
+	if (self->scope_vec->length == 0) {
+		char* name = self->name;
+		//プリミティブ型はどこからでも参照できる
+		if (!strcmp(name, "Int")) {
+			return CL_INT;
+		} else if (!strcmp(name, "Double")) {
+			return CL_DOUBLE;
+		} else if (!strcmp(name, "Char")) {
+			return CL_CHAR;
+		} else if (!strcmp(name, "String")) {
+			return CL_STRING;
+		} else if (!strcmp(name, "Void")) {
+			return CL_VOID;
+		}
+		if (current == NULL) { return NULL; }
+		return namespace_get_class(current, self->name);
+	}
+	//X::Yのような形式
+	namespace_* c = fqcn_scope(self, current);
+	if (c == NULL) { return NULL; }
+	return namespace_get_class(c, self->name);
 }
 
 void fqcn_cache_delete(fqcn_cache * self) {

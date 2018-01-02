@@ -22,6 +22,7 @@ typedef struct class_ {
 	struct class_* super_class;
 	vector* field_list;
 	vector* method_list;
+	vector* constructor_list;
 	class_type type;
 	class_state state;
 	uint32_t ref_count;

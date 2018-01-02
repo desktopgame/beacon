@@ -11,6 +11,7 @@
 #include "../util/text.h"
 #include "field.h"
 #include "method.h"
+#include "constructor.h"
 
 //http://jumble-note.blogspot.jp/2012/09/c-vacopy.html
 #ifndef va_copy
@@ -32,6 +33,7 @@ class_ * class_new(const char * name, class_type type) {
 	ret->super_class = NULL;
 	ret->field_list = vector_new();
 	ret->method_list = vector_new();
+	ret->constructor_list = vector_new();
 	ret->native_method_ref_map = tree_map_new();
 	ret->absoluteIndex = -1;
 	return ret;
@@ -52,6 +54,12 @@ void class_dump(class_ * self, int depth) {
 		vector_item e = vector_at(self->method_list, i);
 		method* m = (method*)e;
 		method_dump(m, depth + 1);
+	}
+	//コンストラクタの一覧をダンプ
+	for (int i = 0; i < self->constructor_list->length; i++) {
+		vector_item e = vector_at(self->constructor_list, i);
+		constructor* c = (constructor*)e;
+		constructor_dump(c, depth + 1);
 	}
 }
 

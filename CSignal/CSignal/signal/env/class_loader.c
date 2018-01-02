@@ -21,6 +21,7 @@
 #include "field.h"
 #include "method.h"
 #include "parameter.h"
+#include "constructor.h"
 #include "../il/il_constructor.h"
 #include "../il/il_constructor_chain.h"
 #include "../il/il_class.h"
@@ -76,7 +77,9 @@ static void class_loader_sgload_class_list(class_loader* self, vector* ilclass_l
 static void class_loader_sgload_class(class_loader* self, il_class* classz, namespace_* parent);
 static void class_loader_sgload_fields(class_loader* self, il_class* ilclass, class_* classz);
 static void class_loader_sgload_methods(class_loader* self, il_class* ilclass, class_* classz);
+static void class_loader_sgload_constructors(class_loader* self, il_class* ilclass, class_* classz);
 static void class_loader_sgload_complete(class_loader* self, il_class* ilclass, class_* classz);
+static void class_loader_sgload_params(class_loader* self, namespace_* scope, vector* param_list, method* me);
 static void class_loader_sgload_attach_native_method(class_loader* self, il_class* ilclass, class_* classz, il_method* ilmethod, method* me);
 static void class_loader_sgload_debug_native_method(method* parent, vm* vm, enviroment* env);
 static void class_loader_sgload_body(class_loader* self, vector* stmt_list, enviroment* dest);
@@ -149,6 +152,7 @@ static class_loader* class_loader_new() {
 	ret->env = enviroment_new();
 	ret->error = false;
 	ret->errorMessage = NULL;
+	ret->env->context_cll = ret;
 	return ret;
 }
 
@@ -798,6 +802,7 @@ static void class_loader_sgload_class(class_loader* self, il_class* classz, name
 	}
 	class_loader_sgload_fields(self, classz, cls);
 	class_loader_sgload_methods(self, classz, cls);
+	class_loader_sgload_constructors(self, classz, cls);
 	class_linkall(cls);
 	class_loader_sgload_complete(self, classz, cls);
 }
@@ -850,6 +855,29 @@ static void class_loader_sgload_methods(class_loader* self, il_class* ilclass, c
 	}
 }
 
+static void class_loader_sgload_constructors(class_loader* self, il_class* ilclass, class_* classz) {
+	vector* ilcons_list = ilclass->constructor_list;
+	for (int i = 0; i < ilcons_list->length; i++) {
+		vector_item e = vector_at(ilcons_list, i);
+		il_constructor* ilcons = (il_constructor*)e;
+		//メソッドから仮引数一覧を取りだす
+		vector* ilparams = ilcons->parameter_list;
+		//実行時のメソッド情報を作成する
+		constructor* cons = constructor_new();
+		vector* parameter_list = cons->parameter_list;
+		cons->access = ilcons->access;
+		//NOTE:ここでは戻り値の型,引数の型を設定しません
+		//     class_loader_sgload_complete参照
+		for (int i = 0; i < ilparams->length; i++) {
+			vector_item e = vector_at(ilparams, i);
+			il_parameter* ilp = (il_parameter*)e;
+			parameter* param = parameter_new(ilp->name);
+			vector_push(parameter_list, param);
+		}
+		vector_push(classz->constructor_list, cons);
+	}
+}
+
 /**
  * クラスの登録を行ったあとに呼び出します.
  * 実際には、便宜上終わっていなければいけないいくつかの登録を終えてから
@@ -865,6 +893,7 @@ static void class_loader_sgload_complete(class_loader* self, il_class* ilclass, 
 	namespace_* scope = classz->location;
 	vector* fields = classz->field_list;
 	vector* methods = classz->method_list;
+	vector* constructors = classz->constructor_list;
 	//既に登録されたが、
 	//型が空っぽになっているフィールドの一覧
 	for (int i = 0; i < fields->length; i++) {
@@ -879,16 +908,24 @@ static void class_loader_sgload_complete(class_loader* self, il_class* ilclass, 
 	for (int i = 0; i < methods->length; i++) {
 		vector_item e = vector_at(methods, i);
 		method* me = (method*)e;
-		//オペコードを作成
-		//FIXME:ILメソッドと実行時メソッドのインデックスが同じなのでとりあえず動く
 		il_method* ilmethod = (il_method*)vector_at(ilclass->method_list, i);
+		//戻り値と仮引数に型を設定
+		me->return_type = import_manager_resolve(
+			self->import_manager,
+			scope,
+			ilmethod->return_fqcn
+		);
+		class_loader_sgload_params(self, scope, ilmethod->parameter_list, me->parameter_list);
 		//ネイティブメソッドならオペコードは不要
 		if (me->type == method_type_native) {
 			class_loader_sgload_attach_native_method(self, ilclass, classz, ilmethod, me);
 			continue;
 		}
-		//まずは実引数の一覧にインデックスを割り振る
+		//オペコードを作成
+		//FIXME:ILメソッドと実行時メソッドのインデックスが同じなのでとりあえず動く
+		//まずは仮引数の一覧にインデックスを割り振る
 		enviroment* env = enviroment_new();
+		env->context_cll = self;
 		for (int i = 0; i < ilmethod->parameter_list->length; i++) {
 			il_parameter* ilparam = (il_parameter*)vector_at(ilmethod->parameter_list, i);
 			symbol_table_add(env->sym_table, ilparam->name);
@@ -897,29 +934,42 @@ static void class_loader_sgload_complete(class_loader* self, il_class* ilclass, 
 		class_loader_sgload_body(self, ilmethod->statement_list, env);
 		me->u.script_method->env = env;
 	}
+
 	//既に登録されたが、
-	//まだ戻り値や引数の型が設定されていないメソッドの一覧
-	for (int i = 0; i < methods->length; i++) {
-		vector_item e = vector_at(methods, i);
-		method* me = (method*)e;
-		//FIXME:ILメソッドと実行時メソッドのインデックスが同じなのでとりあえず動く
-		il_method* ilmethod = ((il_method*)vector_at(ilclass->method_list, i));
-		me->return_type = import_manager_resolve(
+	//オペコードが空っぽになっているコンストラクタの一覧
+	for (int i = 0; i < constructors->length; i++) {
+		vector_item e = vector_at(constructors, i);
+		constructor* cons = (constructor*)e;
+		il_constructor* ilcons = (il_constructor*)vector_at(ilclass->constructor_list, i);
+		//仮引数に型を設定する
+		class_loader_sgload_params(self, scope, ilcons->parameter_list, cons->parameter_list);
+		//まずは仮引数の一覧にインデックスを割り振る
+		enviroment* env = enviroment_new();
+		env->context_cll = self;
+		for (int i = 0; i < cons->parameter_list->length; i++) {
+			il_parameter* ilparam = (il_parameter*)vector_at(ilcons->parameter_list, i);
+			symbol_table_add(env->sym_table, ilparam->name);
+		}
+		//NOTE:ここなら名前空間を設定出来る		
+		class_loader_sgload_body(self, ilcons->statement_list, env);
+		cons->env = env;
+	}
+}
+
+static void class_loader_sgload_params(class_loader* self, namespace_* scope, vector* param_list, vector* sg_param_list) {
+//	for (int j = 0; j < ilmethod->parameter_list->length; j++) {
+	for (int j = 0; j < param_list->length; j++) {
+		//vector_item d = vector_at(ilmethod->parameter_list, j);
+		vector_item e = vector_at(param_list, j);
+		il_parameter* ilparam = (il_parameter*)e;
+		//FIXME:ILパラメータと実行時パラメータのインデックスが同じなのでとりあえず動く
+		//parameter* mep = (parameter*)vector_at(me->parameter_list, j);
+		parameter* mep = (parameter*)vector_at(sg_param_list, j);
+		mep->classz = import_manager_resolve(
 			self->import_manager,
 			scope,
-			ilmethod->return_fqcn
+			ilparam->fqcn
 		);
-		for (int j = 0; j < ilmethod->parameter_list->length; j++) {
-			vector_item d = vector_at(ilmethod->parameter_list, j);
-			il_parameter* p = (il_parameter*)d;
-			//FIXME:ILパラメータと実行時パラメータのインデックスが同じなのでとりあえず動く
-			parameter* mep = (parameter*)vector_at(me->parameter_list, j);
-			mep->classz = import_manager_resolve(
-				self->import_manager,
-				scope,
-				p->fqcn
-			);
-		}
 	}
 }
 

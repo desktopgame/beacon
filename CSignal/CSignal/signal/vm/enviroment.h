@@ -6,6 +6,7 @@
 #include "symbol_table.h"
 struct class_;
 struct object;
+struct class_loader;
 /**
  * プログラムの実行環境です.
  * スタックや変数は実行時に変化しますが、
@@ -13,6 +14,7 @@ struct object;
  * 不変なものをここでは enviroment と呼称します。
  */
 typedef struct enviroment {
+	struct class_loader* context_cll;
 	opcode_buf* buf;
 	symbol_table* sym_table;
 	vector* constant_pool;

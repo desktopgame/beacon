@@ -6,7 +6,9 @@ namespace L.Goo.Foo {
 		Int pointX;
 		Int pointY;
 
-		def new() : this(10, 20, 30) { }
+		def new() : this(10, 20, 30) {
+			main();
+		}
 		def new(Int a, Int b, Int c) : super(a, b, c) { }
 		def new(Int a, Int b) { }
 
@@ -21,8 +23,8 @@ namespace L.Goo.Foo {
 		}
 
 		static def print(String message, Int d) -> Void {
-/*
 			main();
+/*
 		//HelloWor
 			Console.writeLine("a");
 			main(10, 20, "HelloWo");
