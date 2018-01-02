@@ -62,7 +62,7 @@ typedef enum ast_tag {
 	ast_this,
 	ast_super,
 	ast_new_instance,
-
+	ast_field_access,
 	ast_identifier,
 	//ast_typename,
 
@@ -309,6 +309,14 @@ ast* ast_new_this();
  * @return
  */
 ast* ast_new_super();
+
+/**
+ * hoge.foo を表す因子を作成します.
+ * @param afact
+ * @param name
+ * @return
+ */
+ast* ast_new_field_access(ast* afact, char* name);
 
 /**
  * new X::Y(...) を表す因子を作成します.

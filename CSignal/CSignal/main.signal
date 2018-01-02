@@ -72,7 +72,8 @@ namespace L.Goo.Foo {
 //signal::lang::Console c;
 //Console d = this;
 //this.print(10, this);
-signal::lang::Console c = new signal::lang::Console(10, this);
+signal::lang::Console c = System.out;
+//signal::lang::Console c = new signal::lang::Console(10, this);
 //signal::lang::Console.writeLine("aaa");
 //Console.writeLine("HelloWorld");
 //(10 + 20 + (5 * 20 + (16 / 4)) >= 20 || 0 < 0)

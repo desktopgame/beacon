@@ -148,8 +148,8 @@ void test_cll(void) {
 	//il_top_level_dump(cll->il_code, 0);
 	//*
 	system("cls");
-	ast_print_tree(cll->source_code);
-	//il_top_level_dump(cll->il_code, 0);
+	//ast_print_tree(cll->source_code);
+	il_top_level_dump(cll->il_code, 0);
 	//opcode_buf_dump(cll->env->buf, 0);
 	//vm* vm = vm_new();
 	//vm_execute(vm, cll->env);

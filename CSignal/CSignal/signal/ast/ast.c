@@ -150,6 +150,15 @@ ast * ast_new_super() {
 	return ast_new(ast_super);
 }
 
+ast * ast_new_field_access(ast * afact, char * name) {
+	ast* ret = ast_new(ast_field_access);
+	ast* aname = ast_new(ast_identifier);
+	aname->u.string_value = name;
+	ast_push(ret, afact);
+	ast_push(ret, aname);
+	return ret;
+}
+
 ast * ast_new_new_instance(ast * afqcn, ast * argument_list) {
 	ast* ret = ast_new(ast_new_instance);
 	ast_push(ret, afqcn);
@@ -295,6 +304,9 @@ void ast_print(ast* self) {
 		case ast_modifier_native: p("native");
 		case ast_modifier_static_native: p("static | native");
 		case ast_constructor_decl: p("constructor");
+		case ast_constructor_chain: p("constructor chain");
+		case ast_constructor_chain_this: p("this");
+		case ast_constructor_chain_super: p("super");
 		case ast_member_decl: p("member_decl");
 		case ast_member_decl_list: p("member_decl_list");
 		case ast_field_decl: p("field decl");
@@ -319,6 +331,7 @@ void ast_print(ast* self) {
 		case ast_func_return_name:
 			printf("func_return_name(%s)", self->u.string_value);
 			break;
+		case ast_field_access: p("field-access");
 		case ast_scope: p("scope");
 		case ast_stmt: p("stmt");
 		case ast_stmt_list: p("stmt list");

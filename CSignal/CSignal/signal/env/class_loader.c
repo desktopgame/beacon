@@ -63,6 +63,7 @@ static il_factor_call* class_loader_ilload_call(class_loader* self, ast* source)
 static il_factor_invoke* class_loader_ilload_invoke(class_loader* self, ast* source);
 static il_factor_named_invoke* class_loader_ilload_named_invoke(class_loader* self, ast* source);
 static il_factor_new_instance* class_loader_ilload_new_instance(class_loader* self, ast* source);
+static il_factor_field_access* class_loader_ilload_field_access(class_loader* self, ast* source);
 static void class_loader_ilload_fqcn(ast* fqcn, fqcn_cache* dest);
 static void class_loader_ilload_fqcn_impl(ast* fqcn, fqcn_cache* dest);
 static void class_loader_ilload_argument_list(class_loader* self, vector* list, ast* source);
@@ -572,6 +573,8 @@ static il_factor* class_loader_ilload_factor(class_loader* self, ast* source) {
 		return ret;
 	} else if (source->tag == ast_new_instance) {
 		return il_factor_wrap_new_instance(class_loader_ilload_new_instance(self, source));
+	} else if (source->tag == ast_field_access) {
+		return il_factor_wrap_field_access(class_loader_ilload_field_access(self, source));
 	}
 	return NULL;
 }
@@ -632,6 +635,14 @@ static il_factor_new_instance* class_loader_ilload_new_instance(class_loader* se
 	il_factor_new_instance* ret = il_factor_new_instance_new();
 	class_loader_ilload_fqcn(ast_first(afqcn), ret->fqcn);
 	class_loader_ilload_argument_list(self, ret->argument_list, aargs);
+	return ret;
+}
+
+static il_factor_field_access* class_loader_ilload_field_access(class_loader* self, ast* source) {
+	ast* afact = ast_first(source);
+	ast* aident = ast_second(source);
+	il_factor_field_access* ret = il_factor_field_access_new(aident->u.string_value);
+	ret->fact = class_loader_ilload_factor(self, afact);
 	return ret;
 }
 

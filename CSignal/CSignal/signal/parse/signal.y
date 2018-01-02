@@ -491,6 +491,10 @@ prefix
 	;
 postfix
 	: primary
+	| postfix DOT IDENT
+	{
+		$$ = ast_new_field_access($1, $3);
+	}
 	| postfix DOT IDENT LRB RRB
 	{
 		$$ = ast_new_invoke($1, $3, ast_new_blank());
@@ -536,6 +540,10 @@ primary
 	| fqcn_part DOT IDENT LRB argument_list RRB
 	{
 		$$ = ast_new_static_invoke($1, $3, $5);
+	}
+	| IDENT DOT IDENT
+	{
+		$$ = ast_new_field_access(ast_new_variable($1), $3);
 	}
 	| THIS
 	{
