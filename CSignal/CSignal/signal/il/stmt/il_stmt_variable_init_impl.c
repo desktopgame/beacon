@@ -1,6 +1,8 @@
 #include "il_stmt_variable_init_impl.h"
 #include "../../util/mem.h"
 #include "../../util/text.h"
+#include "../../vm/symbol_entry.h"
+#include "../../env/namespace.h"
 #include <stdio.h>
 
 il_stmt * il_stmt_wrap_variable_init(il_stmt_variable_init * self) {
@@ -27,6 +29,14 @@ void il_stmt_variable_init_dump(il_stmt_variable_init * self, int depth) {
 }
 
 void il_stmt_variable_init_generate(il_stmt_variable_init * self, enviroment * env) {
+	symbol_entry* e = symbol_table_entry(
+		env->sym_table,
+		fqcn_class(self->fqcn, (namespace_*)vector_top(env->namespace_vec)),
+		self->name
+	);
+	il_factor_generate(self->fact, env);
+	opcode_buf_add(env->buf, op_store);
+	opcode_buf_add(env->buf, e->index);
 }
 
 void il_stmt_variable_init_delete(il_stmt_variable_init * self) {

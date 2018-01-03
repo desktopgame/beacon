@@ -2,6 +2,7 @@
 #include "../../util/mem.h"
 #include "../../util/text.h"
 #include "../../vm/enviroment.h"
+#include "../../env/namespace.h"
 
 il_stmt * il_stmt_wrap_variable_decl(il_stmt_variable_decl * self) {
 	il_stmt* ret = (il_stmt*)MEM_MALLOC(sizeof(il_stmt));
@@ -26,6 +27,11 @@ void il_stmt_variable_decl_dump(il_stmt_variable_decl * self, int depth) {
 }
 
 void il_stmt_variable_decl_generate(il_stmt_variable_decl * self, enviroment * env) {
+	symbol_table_entry(
+		env->sym_table,
+		fqcn_class(self->fqcn, (namespace_*)vector_top(env->namespace_vec)),
+		self->name
+	);
 }
 
 void il_stmt_variable_decl_delete(il_stmt_variable_decl * self) {
