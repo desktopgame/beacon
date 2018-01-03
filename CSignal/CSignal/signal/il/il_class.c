@@ -13,7 +13,7 @@ static void il_class_method_delete(vector_item item);
 il_class* il_class_new(const char* name) {
 	il_class* ret = (il_class*)MEM_MALLOC(sizeof(il_class));
 	ret->name = text_strdup(name);
-	ret->super = NULL;
+	ret->super = fqcn_cache_new();
 	ret->field_list = vector_new();
 	ret->method_list = vector_new();
 	ret->constructor_list = vector_new();
@@ -47,7 +47,7 @@ void il_class_delete(il_class * self) {
 	}
 	//printf("free class %s\n", self->name);
 	MEM_FREE(self->name);
-	il_type_delete(self->super);
+	MEM_FREE(self->super);
 	vector_delete(self->field_list, il_class_field_delete);
 	vector_delete(self->method_list, il_class_method_delete);
 	MEM_FREE(self);

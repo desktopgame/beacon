@@ -48,10 +48,10 @@ ast* ast_new_class_decl(char* class_name, ast* super_class, ast* member_list);
 
 /**
  * スーパークラスを表す要素を作成します.
- * @param class_name
+ * @param fqcn
  * @return
  */
-ast* ast_new_superclass(char* class_name);
+ast* ast_new_superclass(ast* fqcn);
 
 /**
  * "アクセス修飾子とメンバー一覧のセット" のリストを返します.

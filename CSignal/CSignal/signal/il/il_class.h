@@ -2,12 +2,13 @@
 #define SIGNAL_IL_IL_CLASS_H
 #include "il_type.h"
 #include "../util/vector.h"
+#include "../env/fqcn_cache.h"
 /**
  * クラスを表す要素.
  */
 typedef struct il_class {
 	char* name;
-	il_type* super;
+	fqcn_cache* super;
 	vector* field_list;
 	vector* method_list;
 	vector* constructor_list;

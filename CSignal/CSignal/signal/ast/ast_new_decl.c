@@ -41,9 +41,10 @@ ast * ast_new_class_decl(char * class_name, ast * super_class, ast * member_list
 	return ret;
 }
 
-ast * ast_new_superclass(char * class_name) {
+ast * ast_new_superclass(ast* fqcn) {
 	ast* ret = ast_new(ast_class_super);
-	ret->u.string_value = class_name;
+	ast_push(ret, fqcn);
+//	ret->u.string_value = class_name;
 	return ret;
 }
 

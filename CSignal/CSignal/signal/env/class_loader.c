@@ -265,7 +265,8 @@ static void class_loader_ilload_class(class_loader* self, il_namespace* current,
 	if(ast_is_blank(super_class)) {
 		classz->super = NULL;
 	} else {
-		classz->super = il_type_new(super_class->u.string_value);
+		ast* atypename = ast_first(super_class);
+		class_loader_ilload_fqcn(ast_first(atypename), classz->super);
 	}
 	//public:
 	//    ....
@@ -812,6 +813,9 @@ static void class_loader_sgload_class(class_loader* self, il_class* classz, name
 	class_* cls = namespace_get_class(parent, classz->name);
 	if (cls == NULL) {
 		cls = class_new(classz->name, class_type_class);
+		if (classz->super != NULL) {
+			cls->super_class = fqcn_class(classz->super, parent);
+		}
 		cls->location = parent;
 		namespace_add_class(parent, cls);
 	}
@@ -947,7 +951,11 @@ static void class_loader_sgload_complete(class_loader* self, il_class* ilclass, 
 		env->context_cll = self;
 		for (int i = 0; i < ilmethod->parameter_list->length; i++) {
 			il_parameter* ilparam = (il_parameter*)vector_at(ilmethod->parameter_list, i);
-			symbol_table_add(env->sym_table, ilparam->name);
+			symbol_table_entry(
+				env->sym_table,
+				fqcn_class(ilparam->fqcn, scope),
+				ilparam->name
+			);
 		}
 		//NOTE:ここなら名前空間を設定出来る		
 		class_loader_sgload_body(self, ilmethod->statement_list, env, scope);
@@ -969,7 +977,11 @@ static void class_loader_sgload_complete(class_loader* self, il_class* ilclass, 
 		env->context_cll = self;
 		for (int i = 0; i < cons->parameter_list->length; i++) {
 			il_parameter* ilparam = (il_parameter*)vector_at(ilcons->parameter_list, i);
-			symbol_table_add(env->sym_table, ilparam->name);
+			symbol_table_entry(
+				env->sym_table, 
+				fqcn_class(ilparam->fqcn, scope),
+				ilparam->name
+			);
 		}
 		class_loader_sgload_chain(self, ilclass, classz, ilcons, ilcons->chain, env);
 		//NOTE:ここなら名前空間を設定出来る		

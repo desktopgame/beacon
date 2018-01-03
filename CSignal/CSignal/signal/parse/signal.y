@@ -180,7 +180,7 @@ class_super
 	{
 		$$ = ast_new_blank();
 	}
-	| COLON IDENT
+	| COLON typename_T
 	{
 		$$ = ast_new_superclass($2);
 	}

@@ -5,6 +5,7 @@
 #include "../../vm/enviroment.h"
 #include "../../env/class.h"
 #include "../../util/mem.h"
+#include "../../vm/symbol_entry.h"
 
 //proto
 static void il_factor_variable_check(il_factor_variable* self, enviroment* env);
@@ -20,6 +21,7 @@ il_factor_variable * il_factor_variable_new(const char * name) {
 	il_factor_variable* ret = (il_factor_variable*)MEM_MALLOC(sizeof(il_factor_variable));
 	ret->name = text_strdup(name);
 	ret->index = -1;
+	ret->type = NULL;
 	return ret;
 }
 
@@ -35,7 +37,7 @@ void il_factor_variable_generate(il_factor_variable * self, enviroment* env) {
 
 class_ * il_factor_variable_eval(il_factor_variable * self, enviroment * env) {
 	il_factor_variable_check(self, env);
-	return NULL;
+	return self->type;
 }
 
 void il_factor_variable_delete(il_factor_variable * self) {
@@ -48,5 +50,11 @@ static void il_factor_variable_check(il_factor_variable* self, enviroment* env) 
 	if (self->index != -1) {
 		return;
 	}
-	self->index = symbol_table_add(env->sym_table, self->name);
+	symbol_entry* e = symbol_table_entry(
+		env->sym_table, 
+		NULL,
+		self->name
+	);
+	self->type = e->type;
+	self->index = e->index;
 }

@@ -2,13 +2,16 @@
 #ifndef SIGNAL_IL_IL_FACTOR_VARIABLE_H
 #define SIGNAL_IL_IL_FACTOR_VARIABLE_H
 #include "../il_factor_interface.h"
+#include "../../env/fqcn_cache.h"
 //struct opcode_buf;
+struct class_;
 /**
  * 変数を表す要素.
  */
 typedef struct il_factor_variable {
 	char* name;
 	int index;
+	struct class_* type;
 } il_factor_variable;
 
 /**
