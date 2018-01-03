@@ -120,7 +120,7 @@ static namespace_* namespace_malloc(char* name) {
 	ret->namespace_map = tree_map_new();
 	ret->class_map = tree_map_new();
 	ret->parent = NULL;
-	ret->name = name;//_strdup(name);
+	ret->name = text_strdup(name);
 	ret->ref_count = 0;
 	return ret;
 }

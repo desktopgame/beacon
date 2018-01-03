@@ -14,7 +14,7 @@ void il_factor_super_generate(il_factor_super * self, enviroment * env) {
 }
 
 class_ * il_factor_super_eval(il_factor_super * self, enviroment * env) {
-	return NULL;
+	return ((class_*)vector_top(env->class_vec))->super_class;
 }
 
 void il_factor_super_delete(il_factor_super * self) {

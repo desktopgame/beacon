@@ -12,7 +12,8 @@
 #include <stdarg.h>
 //struct field_list;
 //struct method_list;
-
+struct method;
+struct constructor;
 /**
  * クラスを表す構造体です.
  */
@@ -59,9 +60,31 @@ void class_define_native_method(class_* self, const char* name, native_impl impl
  * 指定の名前を持つフィールドを返します.
  * @param self
  * @param name
+ * @param outIndex
  * @return 無ければ NULL
  */
-struct field* class_find_field(class_* self, const char* name);
+struct field* class_find_field(class_* self, const char* name, int* outIndex);
+
+/**
+ * 指定の型で呼び出せるコンストラクタの一覧を返します.
+ * @param self
+ * @param args<il_argument*> 呼び出し側で開放してください.
+ * @param env
+ * @return 無ければ空
+ *         呼び出し側で開放してください。
+ */
+vector* class_find_constructor_args(class_* self, vector* args, enviroment* env);
+
+/**
+ * もっとも一致するコンストラクタを返します.
+ * @param self
+ * @param args<il_argument*> 呼び出し側で開放してください.
+ * @param env
+ * @param outIndex
+ * @return 無ければ空
+ *         呼び出し側で開放してください。
+ */
+struct constructor* class_find_constructor_args_match(class_* self, vector* args, enviroment* env, int* outIndex);
 
 /**
  * 指定の名前/仮引数を持つメソッドの一覧を返します.
@@ -74,12 +97,13 @@ struct field* class_find_field(class_* self, const char* name);
  */
 vector* class_find_method(class_* self, const char* name, int count, ...);
 
+
+
 /**
- * vectorで可変長引数を表現する版の実装.
- * こちらでは全ての要素に il_argument* が入っている必要があります。
+ * 指定の型で呼び出せるメソッドの一覧を返します.
  * @param self
  * @param name
- * @param args 呼び出し側で開放してください.
+ * @param args<il_argument*> 呼び出し側で開放してください.
  * @param env
  * @return 無ければ空
  *         呼び出し側で開放してください。
@@ -91,7 +115,7 @@ vector* class_find_method_args(class_* self, const char* name, vector* args, env
  * @param self
  * @param name
  * @param env
- * @param args
+ * @param args<il_argument*>
  * @param outIndex メソッドへのインデックス
  * @return
  */

@@ -1,7 +1,10 @@
 #include "il_factor_binary_op_impl.h"
 #include <stdlib.h>
 #include <stdio.h>
+#include <assert.h>
 #include "../../util/text.h"
+#include "il_factor_variable_impl.h"
+#include "il_factor_field_access_impl.h"
 #include "../../env/class.h"
 #include "../../vm/enviroment.h"
 #include "../../util/mem.h"
@@ -155,6 +158,26 @@ void il_factor_binary_op_generate(il_factor_binary_op * self, enviroment* env) {
 		case ilbinary_le:
 			opcode_buf_add(env->buf, op_le);
 			break;
+		//フィールドへの代入(put)なら、
+		//フィールドのインデックス
+		//ローカル変数への代入(store)なら、
+		//実引数を0として関数の頭からカウントしたインデックス
+		case ilbinary_assign:
+		{
+			if (self->left->type == ilfactor_field_access) {
+				il_factor_eval(self->left, env);
+				il_factor_field_access* field_access = self->left->u.field_access_;
+				opcode_buf_add(env->buf, op_put_field);
+				opcode_buf_add(env->buf, field_access->fieldIndex);
+			} else {
+				assert(self->left->type == ilfactor_variable);
+				il_factor_variable* v = (il_factor_variable*)self->left;
+				opcode_buf_add(env->buf, op_store);
+				opcode_buf_add(env->buf, v->index);
+			}
+			break;
+		}
+
 		default:
 			break;
 	}

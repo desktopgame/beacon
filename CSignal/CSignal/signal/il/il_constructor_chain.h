@@ -3,12 +3,15 @@
 #define SIGNAL_IL_IL_CONSTRUCTOR_CHAIN_H
 #include "../util/vector.h"
 #include "../ast/constructor_chain_type.h"
+struct constructor;
 /**
  * コンストラクタの連鎖を表す要素.
  */
 typedef struct il_constructor_chain {
 	constructor_chain_type type;
 	vector* argument_list;
+	struct constructor* c;
+	int constructorIndex;
 } il_constructor_chain;
 /**
  * コンストラクタの連鎖を表す要素を作成します.

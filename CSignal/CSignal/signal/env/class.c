@@ -68,15 +68,85 @@ void class_define_native_method(class_ * self, const char * name, native_impl im
 	tree_map_put(self->native_method_ref_map, name, ref);
 }
 
-field * class_find_field(class_* self, const char * name) {
+field * class_find_field(class_* self, const char * name, int* outIndex) {
+	(*outIndex) = -1;
 	for (int i = 0; i < self->field_list->length; i++) {
 		vector_item e = vector_at(self->field_list, i);
 		field* f = (field*)e;
 		if (!strcmp(name, f->name)) {
+			(*outIndex) = i;
 			return f;
 		}
 	}
 	return NULL;
+}
+
+vector * class_find_constructor_args(class_ * self, vector * args, enviroment* env) {
+	vector* v = vector_new();
+	if (self == NULL) {
+		return v;
+	}
+	for (int i = 0; i < self->constructor_list->length; i++) {
+		vector_item e = vector_at(self->constructor_list, i);
+		constructor* c = (constructor*)e;
+		//引数の個数が違うので無視
+		if (c->parameter_list->length != args->length) {
+			continue;
+		}
+		//引数がひとつもないので、
+		//型のチェックを行わない
+		if (args->length == 0) {
+			vector_push(v, c);
+			continue;
+		}
+		bool match = true;
+		for (int j = 0; j < args->length; j++) {
+			vector_item d = vector_at(args, j);
+			vector_item d2 = vector_at(c->parameter_list, j);
+			il_argument* p = (il_argument*)d;
+			parameter* p2 = (parameter*)d2;
+			if (!class_castable(il_factor_eval(p->factor, env), p2->classz)) {
+				match = false;
+				break;
+			}
+		}
+		if (match) {
+			vector_push(v, c);
+		}
+	}
+	return v;
+}
+
+constructor * class_find_constructor_args_match(class_ * self, vector * args, enviroment * env, int* outIndex) {
+	vector* v = class_find_constructor_args(self, args, env);
+	(*outIndex) = -1;
+	//コンストラクタが一つも見つからなかった
+	if (v->length == 0) {
+		vector_delete(v, vector_deleter_null);
+		return NULL;
+	}
+	//見つかった中からもっとも一致するコンストラクタを選択する
+	int min = 1024;
+	constructor* ret = NULL;
+	for (int i = 0; i < v->length; i++) {
+		vector_item e = vector_at(v, i);
+		constructor* c = (constructor*)e;
+		int score = 0;
+		for (int j = 0; j < c->parameter_list->length; j++) {
+			vector_item d = vector_at(args, j);
+			vector_item d2 = vector_at(c->parameter_list, j);
+			il_argument* p = (il_argument*)d;
+			parameter* p2 = (parameter*)d2;
+			score += class_distance(il_factor_eval(p->factor, env), p2->classz);
+		}
+		if (score < min) {
+			min = score;
+			ret = c;
+			(*outIndex) = i;
+		}
+	}
+	vector_delete(v, vector_deleter_null);
+	return ret;
 }
 
 vector * class_find_method(class_* self, const char * name, int count, ...) {

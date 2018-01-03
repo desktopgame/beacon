@@ -1,6 +1,7 @@
 #include "enviroment.h"
 #include "../env/class.h"
 #include "../env/object.h"
+#include "../env/fqcn_cache.h"
 #include <stdlib.h>
 #include <assert.h>
 #include "../util/mem.h"
@@ -13,8 +14,10 @@ enviroment * enviroment_new() {
 	ret->buf = opcode_buf_new();
 	ret->constant_pool = vector_new();
 	ret->sym_table = symbol_table_new();
-	ret->class_ = NULL;
+	//ret->class_ = NULL;
 	ret->context_cll = NULL;
+	ret->namespace_vec = vector_new();
+	ret->class_vec = vector_new();
 	return ret;
 }
 
@@ -72,6 +75,18 @@ char * enviroment_constant_string_at(enviroment * self, int index) {
 	object* e = enviroment_constant_at(self, index);
 	assert(e->type == object_string);
 	return e->u.string_;
+}
+
+class_ * enviroment_class(enviroment * self, fqcn_cache * fqcn) {
+	vector_item e = vector_top(self->namespace_vec);
+	class_* cls = NULL;
+	if (e != NULL) {
+		namespace_* scope = (namespace_*)e;
+		cls = fqcn_class(fqcn, scope);
+	} else {
+		cls = fqcn_class(fqcn, NULL);
+	}
+	return cls;
 }
 
 void enviroment_delete(enviroment * self) {

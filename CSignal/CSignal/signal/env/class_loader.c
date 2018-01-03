@@ -943,6 +943,7 @@ static void class_loader_sgload_complete(class_loader* self, il_class* ilclass, 
 		//FIXME:ILメソッドと実行時メソッドのインデックスが同じなのでとりあえず動く
 		//まずは仮引数の一覧にインデックスを割り振る
 		enviroment* env = enviroment_new();
+		vector_push(env->class_vec, classz);
 		env->context_cll = self;
 		for (int i = 0; i < ilmethod->parameter_list->length; i++) {
 			il_parameter* ilparam = (il_parameter*)vector_at(ilmethod->parameter_list, i);
@@ -951,6 +952,7 @@ static void class_loader_sgload_complete(class_loader* self, il_class* ilclass, 
 		//NOTE:ここなら名前空間を設定出来る		
 		class_loader_sgload_body(self, ilmethod->statement_list, env, scope);
 		me->u.script_method->env = env;
+		vector_pop(env->class_vec);
 	}
 
 	//既に登録されたが、
@@ -963,6 +965,7 @@ static void class_loader_sgload_complete(class_loader* self, il_class* ilclass, 
 		class_loader_sgload_params(self, scope, ilcons->parameter_list, cons->parameter_list);
 		//まずは仮引数の一覧にインデックスを割り振る
 		enviroment* env = enviroment_new();
+		vector_push(env->class_vec, classz);
 		env->context_cll = self;
 		for (int i = 0; i < cons->parameter_list->length; i++) {
 			il_parameter* ilparam = (il_parameter*)vector_at(ilcons->parameter_list, i);
@@ -972,6 +975,7 @@ static void class_loader_sgload_complete(class_loader* self, il_class* ilclass, 
 		//NOTE:ここなら名前空間を設定出来る		
 		class_loader_sgload_body(self, ilcons->statement_list, env, scope);
 		cons->env = env;
+		vector_pop(env->class_vec);
 	}
 }
 
@@ -993,6 +997,11 @@ static void class_loader_sgload_params(class_loader* self, namespace_* scope, ve
 }
 
 static void class_loader_sgload_chain(class_loader* self, il_class* ilclass, class_* classz, il_constructor* ilcons, il_constructor_chain* ilchain, enviroment* env) {
+	//親クラスがないなら作成
+	if (classz->super_class == NULL &&
+		ilcons->chain == NULL) {
+		opcode_buf_add(env->buf, op_new_instance);
+	}
 	if (ilcons->chain == NULL) {
 		return;
 	}

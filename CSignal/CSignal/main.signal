@@ -1,18 +1,38 @@
 import "lib"
 //import "../io.h"
+namespace signal.lang {
+	class Point2D {
+		public:
+		Int x;
+		Int y;
+
+		def new(Int x, Int y) {
+			this.x = x;
+			this.y = y;
+		}
+
+		def new() : this(0, 0) {
+		}
+	}
+
+	class Point3D : Point2D {
+		public:
+		Int z;
+
+		def new(Int x, Int y, Int z) : super(x, y) {
+			this.z = z;
+		}
+
+		def new() : this(0, 0, 0) {
+		}
+	}
+}
 namespace L.Goo.Foo {
 	class Foo : SuperFoo {
 		public:
 		Int pointX;
 		Int pointY;
 
-		def new() : this(10, 20, 30) {
-			main();
-		}
-		def new(Int a, Int b, Int c) : super(a, b, c) { }
-		def new(Int a, Int b) { }
-
-	
 		private:
 		static def main() -> Void {
 

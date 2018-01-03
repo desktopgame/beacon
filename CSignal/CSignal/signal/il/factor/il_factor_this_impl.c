@@ -14,7 +14,7 @@ void il_factor_this_generate(il_factor_this * self, enviroment * env) {
 }
 
 class_ * il_factor_this_eval(il_factor_this * self, enviroment * env) {
-	return NULL;
+	return (class_*)vector_top(env->class_vec);
 }
 
 void il_factor_this_delete(il_factor_this * self) {

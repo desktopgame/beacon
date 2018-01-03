@@ -4,6 +4,7 @@
 #include "../il_factor_interface.h"
 struct enviroment;
 struct class_;
+struct field;
 
 /**
  * フィールドアクセスを表す要素.
@@ -11,6 +12,8 @@ struct class_;
 typedef struct il_factor_field_access {
 	il_factor* fact;
 	char* name;
+	struct field* f;
+	int fieldIndex;
 } il_factor_field_access;
 
 /**

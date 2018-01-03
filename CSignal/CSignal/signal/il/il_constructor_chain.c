@@ -8,6 +8,8 @@ il_constructor_chain * il_constructor_chain_new() {
 	il_constructor_chain* ret = (il_constructor_chain*)MEM_MALLOC(sizeof(il_constructor_chain));
 	ret->type = chain_type_this;
 	ret->argument_list = vector_new();
+	ret->c = NULL;
+	ret->constructorIndex = -1;
 	return ret;
 }
 

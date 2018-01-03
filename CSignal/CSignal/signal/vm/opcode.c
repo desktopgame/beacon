@@ -133,6 +133,23 @@ int opcode_print(vector* source, int index) {
 			break;
 		}
 		//invoke
+		case op_chain_this:
+		{
+			int a = (int)vector_at(source, ++index);
+			printf("chain this(%d)", a);
+			break;
+		}
+		case op_chain_super:
+		{
+			int a = (int)vector_at(source, ++index);
+			printf("chain super(%d)", a);
+			break;
+		}
+		case op_new_instance:
+		{
+			printf("new instance");
+			break;
+		}
 		case op_invokevirtual:
 		{
 			printf("invoke virtual");

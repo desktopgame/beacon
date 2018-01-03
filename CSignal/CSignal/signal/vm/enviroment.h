@@ -7,6 +7,7 @@
 struct class_;
 struct object;
 struct class_loader;
+struct fqcn_cache;
 /**
  * プログラムの実行環境です.
  * スタックや変数は実行時に変化しますが、
@@ -18,7 +19,9 @@ typedef struct enviroment {
 	opcode_buf* buf;
 	symbol_table* sym_table;
 	vector* constant_pool;
-	struct class_* class_;
+	vector* namespace_vec;
+	vector* class_vec;
+//	struct class_* class_;
 } enviroment;
 
 /**
@@ -102,6 +105,14 @@ char enviroment_constant_char_at(enviroment* self, int index);
  * @return
  */
 char* enviroment_constant_string_at(enviroment* self, int index);
+
+/**
+ * 現在のコンテキストでのクラスを返します.
+ * @param self
+ * @param fqcn
+ * @return
+ */
+struct class_* enviroment_class(enviroment* self, struct fqcn_cache* fqcn);
 
 /**
  * 環境を開放します.
