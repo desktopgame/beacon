@@ -1,0 +1,15 @@
+namespace java {
+	namespace awt {
+		class Frame {
+		}
+	}
+}
+
+namespace signal.lang {
+	class Console {
+		public:
+		static native def writeLine(String str) -> Void;
+
+		static native def write(String str) -> Void;
+	}
+}

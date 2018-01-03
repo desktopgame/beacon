@@ -5,6 +5,10 @@
 #include "text.h"
 #include "../util/mem.h"
 
+#if defined(__clang__)
+#include <unistd.h>
+#endif
+
 void io_new_file(const char * filename) {
 	assert(!io_exists(filename));
 #if defined(_MSC_VER)
@@ -118,6 +122,18 @@ char * io_absolute_path(const char * target) {
 	}
 	return NULL;
 #else
-	return NULL;
+	char full[256] = {0};
+	memset(full, '\0', 256);
+	getcwd(full, 256);
+	for(int i=0; i<256; i++) {
+		char c = full[i];
+		if(c == '\0') {
+			full[i] = '/';
+			break;
+		}
+	}
+	char* a = text_concat(full, target);
+	printf("path %s", a);
+	return text_strdup(a);
 #endif
 }

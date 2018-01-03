@@ -1,7 +1,7 @@
 #pragma once
 #ifndef SIGNAL_ENV_MEM_H
 #define SIGNAL_ENV_MEM_H
-
+#include <stdlib.h>
 #define MEM_MALLOC(size) (mem_malloc(size, __FILE__, __LINE__))
 #define MEM_FREE(size) (mem_free(size, __FILE__, __LINE__))
 #define MEM_REALLOC(block, size) (mem_realloc(block, size, __FILE__, __LINE__))

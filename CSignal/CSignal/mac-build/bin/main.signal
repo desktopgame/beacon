@@ -1,0 +1,104 @@
+import "lib"
+//import "../io.h"
+namespace signal.lang {
+	class Point2D {
+		public:
+		Int x;
+		Int y;
+
+		def new(Int x, Int y) {
+			this.x = x;
+			this.y = y;
+		}
+
+		def new() : this(0, 0) {
+		}
+	}
+
+	class Point3D : Point2D {
+		public:
+		Int z;
+
+		def new(Int x, Int y, Int z) : super(x, y) {
+			this.z = z;
+		}
+
+		def new() : this(0, 0, 0) {
+		}
+	}
+}
+namespace L.Goo.Foo {
+	class Foo : SuperFoo {
+		public:
+		Int pointX;
+		Int pointY;
+
+		private:
+		static def main() -> Void {
+
+		}
+
+		native def main(Int a, Int b, String c) -> Void {
+			
+		}
+
+		static def print(String message, Int d) -> Void {
+			main();
+/*
+		//HelloWor
+			Console.writeLine("a");
+			main(10, 20, "HelloWo");
+			Foo a = Foo.newInstance();
+			a.print();
+			a.print("a");
+			a.print(10, 20, "aaa");
+*/
+			if(10) {
+
+			}
+
+			if('a' || 10) {
+
+			} elif("hello") {
+
+			}
+
+			if(40 == 40) {
+
+			} elif(50 == 50) {
+
+			} else {
+
+			}
+		}
+	}
+	namespace M {
+		class Klass {
+		}
+		class Lnterface {
+		}
+		class Lnterface2 {
+		}
+	}
+}
+
+//main();
+//Console.writeLine("a");
+//a.main(10, 20, "HelloW");
+//Foo a = Foo.newInstance();
+//a.print();
+//a.print("a");
+//a.print(10, 20, "aaa");
+//Mod::X.call();
+//Person p = Person.new();
+//signal::lang::Console c;
+//Console d = this;
+//this.print(10, this);
+signal::lang::Console c = System.out;
+//signal::lang::Console c = new signal::lang::Console(10, this);
+//signal::lang::Console.writeLine("aaa");
+//Console.writeLine("HelloWorld");
+//(10 + 20 + (5 * 20 + (16 / 4)) >= 20 || 0 < 0)
+//TYPENAME VARIABLENAME = 10;
+//STRING STR = "aaaa";
+//CHAR CH = 'z';

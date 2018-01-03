@@ -4,7 +4,7 @@
 struct native_method_ref;
 struct enviroment;
 struct method;
-
+struct vm;
 /**
  * Cで実装されたメソッド.
  */
