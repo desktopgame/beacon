@@ -79,10 +79,11 @@ static void class_loader_sgload_fields(class_loader* self, il_class* ilclass, cl
 static void class_loader_sgload_methods(class_loader* self, il_class* ilclass, class_* classz);
 static void class_loader_sgload_constructors(class_loader* self, il_class* ilclass, class_* classz);
 static void class_loader_sgload_complete(class_loader* self, il_class* ilclass, class_* classz);
-static void class_loader_sgload_params(class_loader* self, namespace_* scope, vector* param_list, method* me);
+static void class_loader_sgload_params(class_loader* self, namespace_* scope, vector* param_list, vector* sg_param_liste);
+static void class_loader_sgload_chain(class_loader* self, il_class* ilclass, class_* classz, il_constructor* ilcons, il_constructor_chain* ilchain, enviroment* env);
 static void class_loader_sgload_attach_native_method(class_loader* self, il_class* ilclass, class_* classz, il_method* ilmethod, method* me);
 static void class_loader_sgload_debug_native_method(method* parent, vm* vm, enviroment* env);
-static void class_loader_sgload_body(class_loader* self, vector* stmt_list, enviroment* dest);
+static void class_loader_sgload_body(class_loader* self, vector* stmt_list, enviroment* dest, namespace_* range);
 
 static void class_loader_error(class_loader* self, const char* message);
 static void class_loader_errors(class_loader* self, const char* message, const char* a);
@@ -112,7 +113,7 @@ void class_loader_load(class_loader * self) {
 	//ast_print_tree(self->source_code);
 	class_loader_ilload_impl(self, self->source_code);
 	class_loader_sgload_impl(self);
-	class_loader_sgload_body(self, self->il_code->statement_list, self->env);
+	class_loader_sgload_body(self, self->il_code->statement_list, self->env, NULL);
 	//このクラスローダーがライブラリをロードしているなら
 	//必要最低限の情報を残して後は開放
 	if (self->type == content_lib) {
@@ -391,6 +392,7 @@ static void class_loader_ilload_body(class_loader* self, vector* list, ast* sour
 				il_factor* ilfact = class_loader_ilload_factor(self, afact);
 				il_stmt_proc* ilproc = il_stmt_proc_new();
 				ilproc->factor = ilfact;
+				assert(ilfact != NULL);
 				vector_push(list, il_stmt_wrap_proc(ilproc));
 				break;
 			}
@@ -564,6 +566,19 @@ static il_factor* class_loader_ilload_factor(class_loader* self, ast* source) {
 		return il_factor_wrap_binary(class_loader_ilload_binary(self, source, ilbinary_lt));
 	} else if (source->tag == ast_le) {
 		return il_factor_wrap_binary(class_loader_ilload_binary(self, source, ilbinary_le));
+	//operator(= += -= *= /= %=)
+	} else if (source->tag == ast_assign) {
+		return il_factor_wrap_binary(class_loader_ilload_binary(self, source, ilbinary_assign));
+	} else if (source->tag == ast_add_assign) {
+		return il_factor_wrap_binary(class_loader_ilload_binary(self, source, ilbinary_add_assign));
+	} else if (source->tag == ast_sub_assign) {
+		return il_factor_wrap_binary(class_loader_ilload_binary(self, source, ilbinary_sub_assign));
+	} else if (source->tag == ast_mul_assign) {
+		return il_factor_wrap_binary(class_loader_ilload_binary(self, source, ilbinary_mul_assign));
+	} else if (source->tag == ast_div_assign) {
+		return il_factor_wrap_binary(class_loader_ilload_binary(self, source, ilbinary_div_assign));
+	} else if(source->tag == ast_mod_assign) {
+		return il_factor_wrap_binary(class_loader_ilload_binary(self, source, ilbinary_mod_assign));
 	//this super
 	} else if (source->tag == ast_this) {
 		il_factor* ret = (il_factor*)MEM_MALLOC(sizeof(il_factor));
@@ -815,6 +830,7 @@ static void class_loader_sgload_fields(class_loader* self, il_class* ilclass, cl
 		field* field = field_new(ilfield->name);
 		field->access = ilfield->access;
 		field->modifier = ilfield->modifier;
+		field->parent = classz;
 		//NOTE:ここではフィールドの型を設定しません
 		//     class_loader_sgload_complete参照
 		vector_push(classz->field_list, field);
@@ -837,6 +853,7 @@ static void class_loader_sgload_methods(class_loader* self, il_class* ilclass, c
 		method->access = ilmethod->access;
 		method->modifier = ilmethod->modifier;
 		method->u.script_method = script_method_new();
+		method->parent = classz;
 		//ILパラメータを実行時パラメータへ変換
 		//NOTE:ここでは戻り値の型,引数の型を設定しません
 		//     class_loader_sgload_complete参照
@@ -866,6 +883,7 @@ static void class_loader_sgload_constructors(class_loader* self, il_class* ilcla
 		constructor* cons = constructor_new();
 		vector* parameter_list = cons->parameter_list;
 		cons->access = ilcons->access;
+		cons->parent = classz;
 		//NOTE:ここでは戻り値の型,引数の型を設定しません
 		//     class_loader_sgload_complete参照
 		for (int i = 0; i < ilparams->length; i++) {
@@ -931,7 +949,7 @@ static void class_loader_sgload_complete(class_loader* self, il_class* ilclass, 
 			symbol_table_add(env->sym_table, ilparam->name);
 		}
 		//NOTE:ここなら名前空間を設定出来る		
-		class_loader_sgload_body(self, ilmethod->statement_list, env);
+		class_loader_sgload_body(self, ilmethod->statement_list, env, scope);
 		me->u.script_method->env = env;
 	}
 
@@ -950,8 +968,9 @@ static void class_loader_sgload_complete(class_loader* self, il_class* ilclass, 
 			il_parameter* ilparam = (il_parameter*)vector_at(ilcons->parameter_list, i);
 			symbol_table_add(env->sym_table, ilparam->name);
 		}
+		class_loader_sgload_chain(self, ilclass, classz, ilcons, ilcons->chain, env);
 		//NOTE:ここなら名前空間を設定出来る		
-		class_loader_sgload_body(self, ilcons->statement_list, env);
+		class_loader_sgload_body(self, ilcons->statement_list, env, scope);
 		cons->env = env;
 	}
 }
@@ -973,6 +992,26 @@ static void class_loader_sgload_params(class_loader* self, namespace_* scope, ve
 	}
 }
 
+static void class_loader_sgload_chain(class_loader* self, il_class* ilclass, class_* classz, il_constructor* ilcons, il_constructor_chain* ilchain, enviroment* env) {
+	if (ilcons->chain == NULL) {
+		return;
+	}
+	//連鎖先のコンストラクタを検索する
+	il_constructor_chain* chain = ilcons->chain;
+	constructor* chainTarget = NULL;
+	int temp = 0;
+	if (chain->type == chain_type_this) {
+		chainTarget = class_find_constructor_args_match(classz, chain->argument_list, env, &temp);
+		opcode_buf_add(env->buf, op_chain_this);
+	} else if (chain->type == chain_type_super) {
+		chainTarget = class_find_constructor_args_match(classz->super_class, chain->argument_list, env, &temp);
+		opcode_buf_add(env->buf, op_chain_super);
+	}
+	chain->c = chainTarget;
+	chain->constructorIndex = temp;
+	opcode_buf_add(env->buf, temp);
+}
+
 static void class_loader_sgload_attach_native_method(class_loader* self, il_class* ilclass, class_* classz, il_method* ilmethod, method* me) {
 //	native_method.h で、実行時にリンクするようにしたので不要
 //	me->u.native_method->ref = native_method_ref_new(class_loader_sgload_debug_native_method);
@@ -982,13 +1021,15 @@ static void class_loader_sgload_debug_native_method(method* parent, vm* vm, envi
 
 }
 
-static void class_loader_sgload_body(class_loader* self, vector* stmt_list, enviroment* dest) {
+static void class_loader_sgload_body(class_loader* self, vector* stmt_list, enviroment* dest, namespace_* range) {
 //	enviroment* ret = enviroment_new();
+	vector_push(dest->namespace_vec, range);
 	for (int i = 0; i < stmt_list->length; i++) {
 		vector_item e = vector_at(stmt_list, i);
 		il_stmt* s = (il_stmt*)e;
 		il_stmt_generate(s, dest);
 	}
+	vector_pop(dest->namespace_vec);
 //	return ret;
 }
 

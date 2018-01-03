@@ -4,7 +4,11 @@
 #include "../../vm/enviroment.h"
 #include "../../env/class.h"
 #include "../../util/text.h"
+#include "../../env/constructor.h"
 #include <stdio.h>
+
+//proto
+static void il_factor_new_instance_find(il_factor_new_instance * self, enviroment * env);
 
 il_factor * il_factor_wrap_new_instance(il_factor_new_instance * self) {
 	il_factor* ret = (il_factor*)MEM_MALLOC(sizeof(il_factor));
@@ -17,6 +21,8 @@ il_factor_new_instance * il_factor_new_instance_new() {
 	il_factor_new_instance* ret = (il_factor_new_instance*)MEM_MALLOC(sizeof(il_factor_new_instance));
 	ret->fqcn = fqcn_cache_new();
 	ret->argument_list = vector_new();
+	ret->c = NULL;
+	ret->constructorIndex = -1;
 	return ret;
 }
 
@@ -33,13 +39,21 @@ void il_factor_new_instance_dump(il_factor_new_instance * self, int depth) {
 }
 
 void il_factor_new_instance_generate(il_factor_new_instance * self, enviroment * env) {
-	//Œ»Ý‚ÌƒNƒ‰ƒX‚ðŽæ“¾
-	class_* cls = enviroment_class(env, self->fqcn);
+	il_factor_new_instance_find(self, env);
 }
 
 class_ * il_factor_new_instance_eval(il_factor_new_instance * self, enviroment * env) {
+	il_factor_new_instance_find(self, env);
 	return NULL;
 }
 
 void il_factor_new_instance_delete(il_factor_new_instance * self) {
+}
+
+//private
+static void il_factor_new_instance_find(il_factor_new_instance * self, enviroment * env) {
+	class_* cls = enviroment_class(env, self->fqcn);
+	int temp = 0;
+	self->c = class_find_constructor_args_match(cls, self->argument_list, env, &temp);
+	self->constructorIndex = temp;
 }

@@ -6,12 +6,15 @@
 #include "../il_factor_interface.h"
 struct enviroment;
 struct class_;
+struct constructor;
 /**
  * コンストラクタの呼び出しを表す要素.
  */
 typedef struct il_factor_new_instance {
 	vector* argument_list;
 	fqcn_cache* fqcn;
+	struct constructor* c;
+	int constructorIndex;
 } il_factor_new_instance;
 
 /**

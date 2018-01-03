@@ -74,6 +74,25 @@ void il_factor_binary_op_dump(il_factor_binary_op * self, int depth) {
 		case ilbinary_le:
 			printf("<=");
 			break;
+
+		case ilbinary_assign:
+			printf("=");
+			break;
+		case ilbinary_add_assign:
+			printf("+=");
+			break;
+		case ilbinary_sub_assign:
+			printf("-=");
+			break;
+		case ilbinary_mul_assign:
+			printf("*=");
+			break;
+		case ilbinary_div_assign:
+			printf("/=");
+			break;
+		case ilbinary_mod_assign:
+			printf("%=");
+			break;
 		default:
 			break;
 	}
