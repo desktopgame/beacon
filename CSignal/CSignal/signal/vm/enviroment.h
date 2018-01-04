@@ -80,7 +80,7 @@ struct object* enviroment_constant_at(enviroment* self, int index);
  * @param index
  * @return
  */
-int enviroment_constant_int_at(enviroment* self, int index);
+struct object* enviroment_constant_int_at(enviroment* self, int index);
 
 /**
  * 指定位置の浮動小数型の定数を返します.
@@ -88,7 +88,7 @@ int enviroment_constant_int_at(enviroment* self, int index);
  * @param index
  * @return
  */
-double enviroment_constant_double_at(enviroment* self, int index);
+struct object* enviroment_constant_double_at(enviroment* self, int index);
 
 /**
  * 指定位置の文字型の定数を返します.
@@ -96,7 +96,7 @@ double enviroment_constant_double_at(enviroment* self, int index);
  * @param index
  * @return
  */
-char enviroment_constant_char_at(enviroment* self, int index);
+struct object* enviroment_constant_char_at(enviroment* self, int index);
 
 /**
  * 指定位置の文字列型の定数を返します.
@@ -104,7 +104,7 @@ char enviroment_constant_char_at(enviroment* self, int index);
  * @param index
  * @return
  */
-char* enviroment_constant_string_at(enviroment* self, int index);
+struct object* enviroment_constant_string_at(enviroment* self, int index);
 
 /**
  * 現在のコンテキストでのクラスを返します.

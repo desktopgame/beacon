@@ -6,6 +6,7 @@
 #include "../../util/text.h"
 #include "../../env/constructor.h"
 #include <stdio.h>
+#include <assert.h>
 
 //proto
 static void il_factor_new_instance_find(il_factor_new_instance * self, enviroment * env);
@@ -40,11 +41,20 @@ void il_factor_new_instance_dump(il_factor_new_instance * self, int depth) {
 
 void il_factor_new_instance_generate(il_factor_new_instance * self, enviroment * env) {
 	il_factor_new_instance_find(self, env);
+	//実引数を全てスタックへ
+	for (int i = 0; i < self->argument_list->length; i++) {
+		il_argument* ilarg = (il_argument*)vector_at(self->argument_list, i);
+		il_factor_generate(ilarg->factor, env);
+	}
+	//クラスとコンストラクタのインデックスをプッシュ
+	opcode_buf_add(env->buf, op_new_instance);
+	opcode_buf_add(env->buf, self->c->parent->absoluteIndex);
+	opcode_buf_add(env->buf, self->constructorIndex);
 }
 
 class_ * il_factor_new_instance_eval(il_factor_new_instance * self, enviroment * env) {
 	il_factor_new_instance_find(self, env);
-	return NULL;
+	return self->c->parent;
 }
 
 void il_factor_new_instance_delete(il_factor_new_instance * self) {
@@ -55,5 +65,6 @@ static void il_factor_new_instance_find(il_factor_new_instance * self, enviromen
 	class_* cls = enviroment_class(env, self->fqcn);
 	int temp = 0;
 	self->c = class_find_constructor_args_match(cls, self->argument_list, env, &temp);
+	assert(self->c != NULL);
 	self->constructorIndex = temp;
 }

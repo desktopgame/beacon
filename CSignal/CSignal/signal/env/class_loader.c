@@ -956,6 +956,16 @@ static void class_loader_sgload_complete(class_loader* self, il_class* ilclass, 
 				fqcn_class(ilparam->fqcn, scope),
 				ilparam->name
 			);
+			//実引数を保存
+			//0番目は this のために開けておく
+			opcode_buf_add(env->buf, op_store);
+			opcode_buf_add(env->buf, (i + 1));
+		}
+		//インスタンスメソッドなら
+		//0番目を this で埋める
+		if (!modifier_is_static(me->modifier)) {
+			opcode_buf_add(env->buf, op_store);
+			opcode_buf_add(env->buf, 0);
 		}
 		//NOTE:ここなら名前空間を設定出来る		
 		class_loader_sgload_body(self, ilmethod->statement_list, env, scope);
@@ -982,6 +992,10 @@ static void class_loader_sgload_complete(class_loader* self, il_class* ilclass, 
 				fqcn_class(ilparam->fqcn, scope),
 				ilparam->name
 			);
+			//実引数を保存
+			//0番目は this のために開けておく
+			opcode_buf_add(env->buf, op_store);
+			opcode_buf_add(env->buf, (i + 1));
 		}
 		class_loader_sgload_chain(self, ilclass, classz, ilcons, ilcons->chain, env);
 		//NOTE:ここなら名前空間を設定出来る		
@@ -1012,9 +1026,11 @@ static void class_loader_sgload_chain(class_loader* self, il_class* ilclass, cla
 	//親クラスがないなら作成
 	if (classz->super_class == NULL &&
 		ilcons->chain == NULL) {
-		opcode_buf_add(env->buf, op_new_instance);
+		opcode_buf_add(env->buf, op_new_object);
 	}
 	if (ilcons->chain == NULL) {
+		opcode_buf_add(env->buf, op_alloc_field);
+		opcode_buf_add(env->buf, classz->absoluteIndex);
 		return;
 	}
 	//連鎖先のコンストラクタを検索する

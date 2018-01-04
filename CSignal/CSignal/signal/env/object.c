@@ -35,7 +35,9 @@ object * object_string_new(const char * s) {
 }
 
 object * object_ref_new() {
-	return object_malloc(object_ref);
+	object* ret= object_malloc(object_ref);
+	ret->u.field_vec = vector_new();
+	return ret;
 }
 
 void object_delete(object * self) {

@@ -53,28 +53,28 @@ object* enviroment_constant_at(enviroment * self, int index) {
 	return (object*)vector_at(self->constant_pool, index);
 }
 
-int enviroment_constant_int_at(enviroment * self, int index) {
+object* enviroment_constant_int_at(enviroment * self, int index) {
 	object* e = enviroment_constant_at(self, index);
 	assert(e->type == object_int);
-	return e->u.int_;
+	return e;
 }
 
-double enviroment_constant_double_at(enviroment * self, int index) {
+object* enviroment_constant_double_at(enviroment * self, int index) {
 	object* e = enviroment_constant_at(self, index);
 	assert(e->type == object_double);
-	return e->u.double_;
+	return e;
 }
 
-char enviroment_constant_char_at(enviroment * self, int index) {
+object* enviroment_constant_char_at(enviroment * self, int index) {
 	object* e = enviroment_constant_at(self, index);
 	assert(e->type == object_char);
-	return e->u.char_;
+	return e;
 }
 
-char * enviroment_constant_string_at(enviroment * self, int index) {
+object* enviroment_constant_string_at(enviroment * self, int index) {
 	object* e = enviroment_constant_at(self, index);
 	assert(e->type == object_string);
-	return e->u.string_;
+	return e;
 }
 
 class_ * enviroment_class(enviroment * self, fqcn_cache * fqcn) {

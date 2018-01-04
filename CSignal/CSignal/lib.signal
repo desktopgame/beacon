@@ -10,6 +10,8 @@ namespace signal.lang {
 		public:
 		static native def writeLine(String str) -> Void;
 
+		static native def writeLine(Int i) -> Void;
+
 		static native def write(String str) -> Void;
 	}
 }

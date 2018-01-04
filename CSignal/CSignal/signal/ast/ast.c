@@ -4,6 +4,7 @@
 #include <assert.h>
 #include <stdlib.h>
 #include <stdio.h>
+#include "../env/fqcn_cache.h"
 #include "../util/mem.h"
 //proto
 static void ast_print_indent(int depth);
@@ -157,6 +158,29 @@ ast * ast_new_field_access(ast * afact, char * name) {
 	ast_push(ret, afact);
 	ast_push(ret, aname);
 	return ret;
+}
+
+ast * ast_new_field_access_fqcn(ast * fqcn, char * name) {
+//	assert(fqcn->tag != ast_fqcn_part_list);
+	if (fqcn->tag == ast_fqcn_part ||
+		fqcn->tag == ast_fqcn_class_name) {
+		//この時点では point.a のようなアクセスを
+		//インスタンス point のフィールド a へのアクセスなのか
+		//クラス Point の静的フィールド a へのアクセスなのか判別出来ない
+		//なので、とりあえずフィールドアクセスとして扱う
+		//この判別は il_factor_field_access で行う。
+		ast* ret = ast_new(ast_field_access);
+		ast* avar = ast_new(ast_variable);
+		ast* aname = ast_new(ast_identifier);
+		avar->u.string_value = fqcn->u.string_value;
+		aname->u.string_value = name;
+		ast_push(ret, avar);
+		ast_push(ret, aname);
+		return ret;
+	} else if (fqcn->tag == ast_fqcn_part_list) {
+		//こっちの場合は静的フィールドへのアクセスと断定できる
+	}
+	return NULL;
 }
 
 ast * ast_new_new_instance(ast * afqcn, ast * argument_list) {
@@ -464,7 +488,7 @@ static void ast_list_deleter(list_item item) {
 		ast_delete(ast_at(self, i));
 	}
 	if (ast_has_str(self)) {
-		//IL���ŊJ������悤��
+		//IL側で開放するように
 		//printf("free(%s)\n", self->u.string_value);
 		MEM_FREE(self->u.string_value);
 		//self->u.string_value = NULL;
@@ -487,6 +511,6 @@ static bool ast_has_str(ast* self) {
 		t == ast_func_return_name ||
 		t == ast_parameter_type_name ||
 		t == ast_parameter_access_name ||
-		t == ast_class_decl ||
-		t == ast_class_super;
+		t == ast_class_decl;
+		//t == ast_class_super;
 }

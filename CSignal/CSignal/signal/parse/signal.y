@@ -41,7 +41,7 @@
 		SEMI IMPORT
 		THIS SUPER
 		CLASS PUBLIC PRIVATE PROTECTED STATIC NATIVE NEW
-		DEF ARROW NAMESPACE
+		CTOR DEF ARROW NAMESPACE
 		IF ELIF ELSE
 %type <ast_value> root 
 					top_level 
@@ -229,11 +229,11 @@ member_define
 	| field_define
 	;
 constructor_define
-	: DEF NEW LRB parameter_list RRB constructor_chain_optional scope_optional
+	: CTOR NEW LRB parameter_list RRB constructor_chain_optional scope_optional
 	{
 		$$ = ast_new_constructor_decl($4, $6, $7);
 	}
-	| DEF NEW LRB RRB constructor_chain_optional scope_optional
+	| CTOR NEW LRB RRB constructor_chain_optional scope_optional
 	{
 		$$ = ast_new_constructor_decl(ast_new_blank(), $5, $6);
 	}
@@ -541,9 +541,9 @@ primary
 	{
 		$$ = ast_new_static_invoke($1, $3, $5);
 	}
-	| IDENT DOT IDENT
+	| fqcn_part DOT IDENT
 	{
-		$$ = ast_new_field_access(ast_new_variable($1), $3);
+		$$ = ast_new_field_access_fqcn($1, $3);
 	}
 	| THIS
 	{

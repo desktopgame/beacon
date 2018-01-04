@@ -79,7 +79,13 @@ int opcode_print(vector* source, int index) {
 			printf("push method(%d)", a);
 			break;
 		}
-
+		case op_static_method:
+		{
+			int a = (int)vector_at(source, ++index);
+			int b = (int)vector_at(source, ++index);
+			printf("push static method(%d %d)", a, b);
+			break;
+		}
 		case op_dup:
 		{
 			printf("dup");
@@ -145,9 +151,32 @@ int opcode_print(vector* source, int index) {
 			printf("chain super(%d)", a);
 			break;
 		}
+		case op_new_object:
+		{
+			printf("new object");
+			break;
+		}
+		case op_alloc_field:
+		{
+			int a = (int)vector_at(source, ++index);
+			printf("alloc field(%d)", a);
+			break;
+		}
 		case op_new_instance:
 		{
-			printf("new instance");
+			int a = (int)vector_at(source, ++index);
+			int b = (int)vector_at(source, ++index);
+			printf("new instance(%d %d)", a, b);
+			break;
+		}
+		case op_this:
+		{
+			printf("this");
+			break;
+		}
+		case op_super:
+		{
+			printf("super");
 			break;
 		}
 		case op_invokevirtual:

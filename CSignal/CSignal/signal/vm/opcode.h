@@ -62,7 +62,11 @@ typedef enum opcode {
 
 	op_chain_this,
 	op_chain_super,
+	op_new_object,
+	op_alloc_field,
 	op_new_instance,
+	op_this,
+	op_super,
 	op_invokevirtual,
 	op_invokestatic,
 	op_invokespecial,

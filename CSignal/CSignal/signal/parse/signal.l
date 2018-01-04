@@ -255,6 +255,7 @@ static void update_loc() {
 <INITIAL>"static"			{ return (STATIC); }
 <INITIAL>"native"			{ return (NATIVE); }
 
+<INITIAL>"ctor"				{ return (CTOR); }
 <INITIAL>"def"				{ return (DEF); }
 <INITIAL>"->"				{ return (ARROW); }
 

@@ -103,14 +103,17 @@ static void il_factor_named_invoke_find(il_factor_named_invoke* self, enviroment
 		self->type = ilnamed_invoke_static;
 	//Y.call() の場合
 	} else {
-		namespace_* top = NULL;
+		namespace_* top = (namespace_*)vector_top(env->namespace_vec);
 		//クラスが見つかった
-		class_* cls = namespace_get_class(top, self->fqcn->name);
+		class_* cls = NULL;
+		if (top != NULL) {
+			cls = namespace_get_class(top, self->fqcn->name);
+		}
 		if (cls != NULL) {
 			self->u.classz = cls;
 			self->type = ilnamed_invoke_static;
 		} else {
-			self->u.factor = il_factor_variable_new(self->fqcn->name);
+			self->u.factor = il_factor_wrap_variable(il_factor_variable_new(self->fqcn->name));
 			self->type = ilnamed_invoke_variable;
 		}
 	}

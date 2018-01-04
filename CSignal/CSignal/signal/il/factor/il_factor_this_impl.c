@@ -11,6 +11,7 @@ void il_factor_this_dump(il_factor_this * self, int depth) {
 }
 
 void il_factor_this_generate(il_factor_this * self, enviroment * env) {
+	opcode_buf_add(env->buf, op_this);
 }
 
 class_ * il_factor_this_eval(il_factor_this * self, enviroment * env) {

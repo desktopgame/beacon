@@ -11,6 +11,7 @@ void il_factor_super_dump(il_factor_super * self, int depth) {
 }
 
 void il_factor_super_generate(il_factor_super * self, enviroment * env) {
+	opcode_buf_add(env->buf, op_super);
 }
 
 class_ * il_factor_super_eval(il_factor_super * self, enviroment * env) {

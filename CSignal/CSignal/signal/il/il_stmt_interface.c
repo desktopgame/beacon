@@ -39,7 +39,7 @@ void il_stmt_generate(il_stmt * self, struct enviroment* env) {
 			il_stmt_variable_decl_generate(self->u.variable_decl, env);
 			break;
 		case ilstmt_variable_init:
-			il_stmt_variable_decl_generate(self->u.variable_init, env);
+			il_stmt_variable_init_generate(self->u.variable_init, env);
 			break;
 		default:
 			//ERROR("ステートメントを開放出来ませんでした。");

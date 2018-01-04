@@ -96,12 +96,13 @@
      STATIC = 305,
      NATIVE = 306,
      NEW = 307,
-     DEF = 308,
-     ARROW = 309,
-     NAMESPACE = 310,
-     IF = 311,
-     ELIF = 312,
-     ELSE = 313
+     CTOR = 308,
+     DEF = 309,
+     ARROW = 310,
+     NAMESPACE = 311,
+     IF = 312,
+     ELIF = 313,
+     ELSE = 314
    };
 #endif
 
@@ -125,7 +126,7 @@ typedef union YYSTYPE
 
 
 /* Line 1676 of yacc.c  */
-#line 122 "signal.tab.h"
+#line 123 "signal.tab.h"
 } YYSTYPE;
 # define YYSTYPE_IS_TRIVIAL 1
 # define yystype YYSTYPE /* obsolescent; will be withdrawn */

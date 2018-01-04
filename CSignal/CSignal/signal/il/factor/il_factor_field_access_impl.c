@@ -2,6 +2,7 @@
 #include "../../util/mem.h"
 #include "../../util/text.h"
 #include "../../env/class.h"
+#include "../../env/field.h"
 #include <stdio.h>
 
 
@@ -33,11 +34,14 @@ void il_factor_field_access_dump(il_factor_field_access * self, int depth) {
 
 void il_factor_field_access_generate(il_factor_field_access * self, enviroment * env) {
 	il_factor_field_access_find(self, env);
+	il_factor_generate(self->fact, env);
+	opcode_buf_add(env->buf, op_get_field);
+	opcode_buf_add(env->buf, self->fieldIndex);
 }
 
 class_ * il_factor_field_access_eval(il_factor_field_access * self, enviroment * env) {
 	il_factor_field_access_find(self, env);
-	return NULL;
+	return self->f->type;
 }
 
 void il_factor_field_access_delete(il_factor_field_access * self) {
@@ -47,6 +51,9 @@ void il_factor_field_access_delete(il_factor_field_access * self) {
 static void il_factor_field_access_find(il_factor_field_access * self, enviroment * env) {
 	class_* cls = il_factor_eval(self->fact, env);
 	int temp = 0;
+	//ここでもしfactがvariableなら、
+	//対応するクラス名があるか調べる
+	//あったならfactは開放して、f/fieldIndexも再検索
 	self->f = class_find_field(cls, self->name, &temp);
 	self->fieldIndex = temp;
 //	class_find_fie

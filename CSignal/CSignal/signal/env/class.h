@@ -12,6 +12,7 @@
 #include <stdarg.h>
 //struct field_list;
 //struct method_list;
+struct object;
 struct method;
 struct constructor;
 /**
@@ -40,6 +41,23 @@ typedef struct class_ {
  * @return
  */
 class_* class_new(const char* name, class_type type);
+
+/**
+ * 指定のオブジェクトにこのクラスのフィールドを表す
+ * オブジェクトの一覧を追加します。
+ * この関数は親クラスから順番に呼び出してください。
+ * @param self
+ * @param o
+ */
+void class_alloc_fields(class_* self, struct object* o);
+
+/**
+ * 指定のオブジェクトに追加されたフィールドの一覧を開放します.
+ * このメソッドは子クラスから順番に呼び出してください。
+ * @param self
+ * @param o
+ */
+void class_free_fields(class_* self, struct object* o);
 
 /**
  * クラスを出力します.

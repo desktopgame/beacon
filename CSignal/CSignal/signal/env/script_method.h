@@ -24,10 +24,11 @@ script_method* script_method_new();
 /**
  * メソッドを実行します.
  * @param self
- * @param vm
+ * @param parent
+ * @param vmachine
  * @param env
  */
-void script_method_execute(script_method* self, struct method* parent, struct vm* vm, struct enviroment* env);
+void script_method_execute(script_method* self, struct method* parent, struct vm* vmachine, struct enviroment* env);
 
 /**
  * メソッドを開放します.

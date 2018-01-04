@@ -7,6 +7,7 @@
 #include <stdio.h>
 #include <string.h>
 #include "../util/mem.h"
+#include "object.h"
 #include "../vm/enviroment.h"
 #include "../util/text.h"
 #include "field.h"
@@ -37,6 +38,20 @@ class_ * class_new(const char * name, class_type type) {
 	ret->native_method_ref_map = tree_map_new();
 	ret->absoluteIndex = -1;
 	return ret;
+}
+
+void class_alloc_fields(class_ * self, object * o) {
+	assert(o->type == object_ref);
+	for (int i = 0; i < self->field_list->length; i++) {
+		field* f = (field*)vector_at(self->field_list, i);
+		object* a = object_ref_new();
+		a->classz = f->type;
+		vector_push(o->u.field_vec, a);
+	}
+	o->classz = self;
+}
+
+void class_free_fields(class_ * self, object * o) {
 }
 
 void class_dump(class_ * self, int depth) {

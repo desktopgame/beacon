@@ -9,6 +9,9 @@
 #include "../../vm/enviroment.h"
 #include "../../util/mem.h"
 
+//proto
+static void il_factor_binary_op_generate_impl(il_factor_binary_op * self, enviroment * env, opcode c);
+
 il_factor * il_factor_wrap_binary(il_factor_binary_op * self) {
 	il_factor* ret = (il_factor*)MEM_MALLOC(sizeof(il_factor));
 	ret->type = ilfactor_binary_op;
@@ -105,58 +108,57 @@ void il_factor_binary_op_dump(il_factor_binary_op * self, int depth) {
 }
 
 void il_factor_binary_op_generate(il_factor_binary_op * self, enviroment* env) {
-	il_factor_generate(self->left, env);
-	il_factor_generate(self->right, env);
+	
 	switch (self->type) {
 		case ilbinary_add:
-			opcode_buf_add(env->buf, op_add);
+			il_factor_binary_op_generate_impl(self, env, op_add);
 			break;
 		case ilbinary_sub:
-			opcode_buf_add(env->buf, op_sub);
+			il_factor_binary_op_generate_impl(self, env, op_sub);
 			break;
 		case ilbinary_mul:
-			opcode_buf_add(env->buf, op_mul);
+			il_factor_binary_op_generate_impl(self, env, op_mul);
 			break;
 		case ilbinary_div:
-			opcode_buf_add(env->buf, op_div);
+			il_factor_binary_op_generate_impl(self, env, op_div);
 			break;
 		case ilbinary_mod:
-			opcode_buf_add(env->buf, op_mod);
+			il_factor_binary_op_generate_impl(self, env, op_mod);
 			break;
 
 
 		case ilbinary_bit_or:
-			opcode_buf_add(env->buf, op_bit_or);
+			il_factor_binary_op_generate_impl(self, env, op_bit_or);
 			break;
 		case ilbinary_logic_or:
-			opcode_buf_add(env->buf, op_logic_or);
+			il_factor_binary_op_generate_impl(self, env, op_logic_or);
 			break;
 
 
 		case ilbinary_bit_and:
-			opcode_buf_add(env->buf, op_bit_and);
+			il_factor_binary_op_generate_impl(self, env, op_bit_and);
 			break;
 		case ilbinary_logic_and:
-			opcode_buf_add(env->buf, op_logic_and);
+			il_factor_binary_op_generate_impl(self, env, op_logic_and);
 			break;
 
 		case ilbinary_eq:
-			opcode_buf_add(env->buf, op_eq);
+			il_factor_binary_op_generate_impl(self, env, op_eq);
 			break;
 		case ilbinary_noteq:
-			opcode_buf_add(env->buf, op_noteq);
+			il_factor_binary_op_generate_impl(self, env, op_noteq);
 			break;
 		case ilbinary_gt:
-			opcode_buf_add(env->buf, op_gt);
+			il_factor_binary_op_generate_impl(self, env, op_gt);
 			break;
 		case ilbinary_ge:
-			opcode_buf_add(env->buf, op_ge);
+			il_factor_binary_op_generate_impl(self, env, op_ge);
 			break;
 		case ilbinary_lt:
-			opcode_buf_add(env->buf, op_lt);
+			il_factor_binary_op_generate_impl(self, env, op_lt);
 			break;
 		case ilbinary_le:
-			opcode_buf_add(env->buf, op_le);
+			il_factor_binary_op_generate_impl(self, env, op_le);
 			break;
 		//フィールドへの代入(put)なら、
 		//フィールドのインデックス
@@ -165,11 +167,14 @@ void il_factor_binary_op_generate(il_factor_binary_op * self, enviroment* env) {
 		case ilbinary_assign:
 		{
 			if (self->left->type == ilfactor_field_access) {
-				il_factor_eval(self->left, env);
 				il_factor_field_access* field_access = self->left->u.field_access_;
+				il_factor_eval(self->left, env);
+				il_factor_generate(field_access->fact, env);
+				il_factor_generate(self->right, env);
 				opcode_buf_add(env->buf, op_put_field);
 				opcode_buf_add(env->buf, field_access->fieldIndex);
 			} else {
+				il_factor_generate(self->right, env);
 				assert(self->left->type == ilfactor_variable);
 				il_factor_variable* v = (il_factor_variable*)self->left;
 				opcode_buf_add(env->buf, op_store);
@@ -191,4 +196,11 @@ void il_factor_binary_op_delete(il_factor_binary_op * self) {
 	il_factor_delete(self->left);
 	il_factor_delete(self->right);
 	MEM_FREE(self);
+}
+
+//private
+static void il_factor_binary_op_generate_impl(il_factor_binary_op * self, enviroment * env, opcode c) {
+	il_factor_generate(self->left, env);
+	il_factor_generate(self->right, env);
+	opcode_buf_add(env->buf, (vector_item)c);
 }

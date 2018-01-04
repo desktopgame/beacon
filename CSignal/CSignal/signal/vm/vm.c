@@ -5,6 +5,8 @@
 #include "label.h"
 #include "../env/class.h"
 #include "../env/method.h"
+#include "../env/object.h"
+#include "../env/constructor.h"
 #include "../env/script_context.h"
 #include "../util/logger.h"
 #include "../util/mem.h"
@@ -39,10 +41,15 @@ vm * vm_new() {
 	vm* ret = (vm*)MEM_MALLOC(sizeof(vm));
 	ret->value_stack = vector_new();
 	ret->ref_stack = vector_new();
-	//ret->poolLength = 0;
-	//ret->pool = constant_pool_new();
-	//ret->operand_stack = operand_stack_new();
-	//ret->operand_active = ret->operand_stack;
+	ret->parent = NULL;
+	ret->level = 0;
+	return ret;
+}
+
+vm * vm_sub(vm * parent) {
+	vm* ret = vm_new();
+	ret->parent = parent;
+	ret->level = parent->level + 1;
 	return ret;
 }
 
@@ -117,8 +124,8 @@ void vm_execute(vm* self, enviroment* env) {
 			case op_consti:
 			{
 				int index = (int)enviroment_source_at(env, ++i);
-				int cv = enviroment_constant_int_at(env, index);
-				vector_push(self->value_stack, cv);
+				object* o = (object*)enviroment_constant_int_at(env, index);
+				vector_push(self->value_stack, o);
 				INFO("push consti");
 				break;
 			}
@@ -155,7 +162,12 @@ void vm_execute(vm* self, enviroment* env) {
 			case op_method:
 			{
 				int index = (int)enviroment_source_at(env, ++i);
-
+				opcode code = (opcode)enviroment_source_at(env, ++i);
+				object* o = (object*)vector_pop(self->value_stack);
+				method* m = class_method_by_index(o->classz, index);
+				assert(code == op_invokevirtual ||
+					   code == op_invokespecial);
+				method_execute(m, self, env);
 				break;
 			}
 
@@ -168,17 +180,76 @@ void vm_execute(vm* self, enviroment* env) {
 			case op_nop:
 				/* no operation */
 				break;
-
+			case op_new_object:
+			{
+				//コンストラクタをさかのぼり、
+				//トップレベルまで到達するとこの処理によって生成が行われます。
+				object* o = object_ref_new();
+				vector_push(self->value_stack, o);
+				//これを this とする
+				vector_assign(self->ref_stack, 0, o);
+				break;
+			}
+			case op_alloc_field:
+			{
+				int absClsIndex = (int)enviroment_source_at(env, ++i);
+				class_* cls = (class_*)vector_at(ctx->class_vec, absClsIndex);
+				object* obj = (object*)vector_top(self->value_stack);
+				class_alloc_fields(cls, obj);
+				break;
+			}
+			case op_new_instance:
+			{
+				//生成するクラスとコンストラクタを特定
+				int absClsIndex = (int)enviroment_source_at(env, ++i);
+				int constructorIndex = (int)enviroment_source_at(env, ++i);
+				class_* cls = (class_*)vector_at(ctx->class_vec, absClsIndex);
+				constructor* ctor = (constructor*)vector_at(cls->constructor_list, constructorIndex);
+				//新しいVMでコンストラクタを実行
+				//また、現在のVMから実引数をポップ
+				vm* sub = vm_sub(self);
+				for (int i = 0; i < ctor->parameter_list->length; i++) {
+					vector_item e = vector_pop(self->value_stack);
+					object* o = (object*)e;
+					vector_push(sub->value_stack, e);
+				}
+				opcode_buf_dump(ctor->env->buf, sub->level);
+				vm_execute(sub, ctor->env);
+				//コンストラクタを実行した場合、
+				//objectがスタックのトップに残っているはず
+				vector_item returnV = vector_top(sub->value_stack);
+				object* returnO = (object*)returnV;
+				vector_push(self->value_stack, returnV);
+				break;
+			}
+			case op_this:
+			{
+				vector_push(self->value_stack,vector_at(self->ref_stack,0));
+				break;
+			}
+			case op_super:
+			{
+				vector_push(self->value_stack, vector_at(self->ref_stack, 0));
+				break;
+			}
 			//store,load
 			case op_put_field:
 			{
-				int index = (int)enviroment_source_at(env, ++i);
+				object* assignValue = (object*)vector_pop(self->value_stack);
+				object* assignTarget = (object*)vector_pop(self->value_stack);
+				assert(assignTarget->type == object_ref);
+				int fieldIndex = (int)enviroment_source_at(env, ++i);
+				vector_assign(assignTarget->u.field_vec, fieldIndex, assignValue);
 				break;
 			}
 
 			case op_get_field:
 			{
-				int index = (int)enviroment_source_at(env, ++i);
+				object* sourceObject = (object*)vector_pop(self->value_stack);
+				assert(sourceObject->type == object_ref);
+				int fieldIndex = (int)enviroment_source_at(env, ++i);
+				object* val = (object*)vector_at(sourceObject->u.field_vec, fieldIndex);
+				vector_push(self->value_stack, val);
 				break;
 			}
 
@@ -195,7 +266,9 @@ void vm_execute(vm* self, enviroment* env) {
 			case op_store:
 			{
 				int index = (int)enviroment_source_at(env, ++i);
-				vector_assign(self->ref_stack, index, vector_pop(self->value_stack));
+				vector_item e = vector_pop(self->value_stack);
+				object* o = (object*)e;
+				vector_assign(self->ref_stack, index, e);
 				INFO("store");
 				break;
 			}
@@ -204,6 +277,7 @@ void vm_execute(vm* self, enviroment* env) {
 			{
 				int index = (int)enviroment_source_at(env, ++i);
 				vector_item e = vector_at(self->ref_stack, index);
+				object*  o = (object*)e;
 				vector_push(self->value_stack, e);
 				INFO("load");
 				break;
@@ -296,8 +370,8 @@ void vm_execute(vm* self, enviroment* env) {
 void vm_delete(vm * self) {
 	//constant_pool_delete(self->pool);
 	//operand_stack_delete(self->operand_stack);
-	vector_delete(self->value_stack, vector_deleter_null);
-	vector_delete(self->ref_stack, vector_deleter_null);
+	//vector_delete(self->value_stack, vector_deleter_null);
+	//vector_delete(self->ref_stack, vector_deleter_null);
 	MEM_FREE(self);
 }
 

@@ -10,14 +10,10 @@
  * 実行時の情報を格納する構造体.
  */
 typedef struct vm {
-//	value_stack* value_stack;
 	vector* value_stack;
 	vector* ref_stack;
-//	vector* constant_pool;
-//	int poolLength;
-//	constant_pool* pool;
-//	operand_stack* operand_stack;
-//	operand_stack* operand_active;
+	struct vm* parent;
+	int level;
 } vm;
 
 /**
@@ -25,6 +21,13 @@ typedef struct vm {
  * @return
  */
 vm* vm_new();
+
+/**
+ * 親を指定して仮想マシンを作成します.
+ * @param parent
+ * @return
+ */
+vm* vm_sub(vm* parent);
 
 /**
  * 指定のバイトコードを実行します.

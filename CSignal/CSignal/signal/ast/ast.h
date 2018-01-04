@@ -7,7 +7,6 @@
 #include "modifier_type.h"
 #include "constructor_chain_type.h"
 #include "../util/list.h"
-
 /**
  * AST(AbstractSourceTree) の種類を表すタグです.
  */
@@ -317,6 +316,14 @@ ast* ast_new_super();
  * @return
  */
 ast* ast_new_field_access(ast* afact, char* name);
+
+/**
+ * hoge.foo を表す因子を作成します.
+ * @param fqcn
+ * @param name
+ * @return
+ */
+ast* ast_new_field_access_fqcn(ast* fqcn, char* name);
 
 /**
  * new X::Y(...) を表す因子を作成します.

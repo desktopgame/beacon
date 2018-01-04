@@ -6,12 +6,15 @@ namespace signal.lang {
 		Int x;
 		Int y;
 
-		def new(Int x, Int y) {
+		ctor new(Int x, Int y) {
 			this.x = x;
 			this.y = y;
 		}
 
-		def new() : this(0, 0) {
+		ctor new() : this(0, 0) {
+		}
+
+		def print(Int a) -> Void {
 		}
 	}
 
@@ -19,11 +22,11 @@ namespace signal.lang {
 		public:
 		Int z;
 
-		def new(Int x, Int y, Int z) : super(x, y) {
+		ctor new(Int x, Int y, Int z) : super(x, y) {
 			this.z = z;
 		}
 
-		def new() : this(0, 0, 0) {
+		ctor new() : this(0, 0, 0) {
 		}
 	}
 }
@@ -82,23 +85,8 @@ namespace L.Goo.Foo {
 	}
 }
 
-//main();
-//Console.writeLine("a");
-//a.main(10, 20, "HelloW");
-//Foo a = Foo.newInstance();
-//a.print();
-//a.print("a");
-//a.print(10, 20, "aaa");
-//Mod::X.call();
-//Person p = Person.new();
-//signal::lang::Console c;
-//Console d = this;
-//this.print(10, this);
-signal::lang::Console c = System.out;
-//signal::lang::Console c = new signal::lang::Console(10, this);
-//signal::lang::Console.writeLine("aaa");
-//Console.writeLine("HelloWorld");
-//(10 + 20 + (5 * 20 + (16 / 4)) >= 20 || 0 < 0)
-//TYPENAME VARIABLENAME = 10;
-//STRING STR = "aaaa";
-//CHAR CH = 'z';
+signal::lang::Point2D c = new signal::lang::Point2D(10, 2);
+c.print();
+signal::lang::Console.writeLine(100);
+signal::lang::Console.writeLine(c.x);
+signal::lang::Console.writeLine("PP");
