@@ -37,6 +37,9 @@ void il_factor_variable_generate(il_factor_variable * self, enviroment* env) {
 	opcode_buf_add(env->buf, self->index);
 }
 
+void il_factor_variable_load(il_factor_variable * self, enviroment * env, il_ehandler * eh) {
+}
+
 class_ * il_factor_variable_eval(il_factor_variable * self, enviroment * env) {
 	il_factor_variable_check(self, env);
 	return self->type;

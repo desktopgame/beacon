@@ -61,6 +61,9 @@ void il_factor_named_invoke_generate(il_factor_named_invoke * self, enviroment *
 	}
 }
 
+void il_factor_named_invoke_load(il_factor_named_invoke * self, enviroment * env, il_ehandler * eh) {
+}
+
 class_ * il_factor_named_invoke_eval(il_factor_named_invoke * self, enviroment * env) {
 	il_factor_named_invoke_find(self, env);
 	return self->m->return_type;

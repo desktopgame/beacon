@@ -45,6 +45,14 @@ void il_factor_new_instance_dump(il_factor_new_instance* self, int depth);
 void il_factor_new_instance_generate(il_factor_new_instance* self, struct enviroment* env);
 
 /**
+ * コンストラクタの呼び出しを読み込みます.
+ * @param self
+ * @param env
+ * @param eh
+ */
+void il_factor_new_instance_load(il_factor_new_instance* self, struct enviroment* env, il_ehandler* eh);
+
+/**
  * コンストラクタで生成されるオブジェクトの型を返します.
  * @param self
  * @param env

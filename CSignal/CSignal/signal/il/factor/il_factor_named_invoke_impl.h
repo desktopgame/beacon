@@ -70,6 +70,14 @@ void il_factor_named_invoke_dump(il_factor_named_invoke* self, int depth);
 void il_factor_named_invoke_generate(il_factor_named_invoke* self, enviroment* env);
 
 /**
+ * メソッド呼び出しを読み込みます.
+ * @param self
+ * @param env
+ * @param eh
+ */
+void il_factor_named_invoke_load(il_factor_named_invoke* self, enviroment* env, il_ehandler* eh);
+
+/**
  * メソッド呼び出しの戻り値の型を返します.
  * @param self
  * @param env

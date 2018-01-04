@@ -1,6 +1,7 @@
 #pragma once
 #ifndef SIGNAL_IL_IL_FACTOR_SUPER_H
 #define SIGNAL_IL_IL_FACTOR_SUPER_H
+#include "../il_ehandler.h"
 struct enviroment;
 struct class_;
 
@@ -22,6 +23,14 @@ void il_factor_super_dump(il_factor_super* self, int depth);
  * @param env
  */
 void il_factor_super_generate(il_factor_super* self, struct enviroment* env);
+
+/**
+ * superを表す要素を読み込みます.
+ * @param self
+ * @param env
+ * @param eh
+ */
+void il_factor_super_load(il_factor_super* self, struct enviroment* env, il_ehandler* eh);
 
 /**
  * superで参照されるオブジェクトの型を返します.

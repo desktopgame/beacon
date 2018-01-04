@@ -31,6 +31,9 @@ void il_factor_string_generate(il_factor_string * self, enviroment* env) {
 	opcode_buf_add(env->buf, index);
 }
 
+void il_factor_string_load(il_factor_string * self, enviroment * env, il_ehandler * eh) {
+}
+
 class_ * il_factor_string_eval(il_factor_string * self, enviroment * env) {
 	return CL_STRING;
 }

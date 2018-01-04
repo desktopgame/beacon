@@ -39,6 +39,14 @@ void il_factor_string_dump(il_factor_string* self, int depth);
 void il_factor_string_generate(il_factor_string* self, struct enviroment* env);
 
 /**
+ * 文字列を表す要素を読み込みます.
+ * @param self
+ * @param env
+ * @param eh
+ */
+void il_factor_string_load(il_factor_string* self, struct enviroment* env, il_ehandler* eh);
+
+/**
  * 文字列を表す要素の型を返します.
  * @param self
  * @param env

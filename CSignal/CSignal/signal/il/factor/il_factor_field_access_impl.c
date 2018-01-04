@@ -39,6 +39,9 @@ void il_factor_field_access_generate(il_factor_field_access * self, enviroment *
 	opcode_buf_add(env->buf, self->fieldIndex);
 }
 
+void il_factor_field_access_load(il_factor_field_access * self, enviroment * env, il_ehandler * eh) {
+}
+
 class_ * il_factor_field_access_eval(il_factor_field_access * self, enviroment * env) {
 	il_factor_field_access_find(self, env);
 	return self->f->type;

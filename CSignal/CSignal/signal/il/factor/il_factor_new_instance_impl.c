@@ -52,6 +52,9 @@ void il_factor_new_instance_generate(il_factor_new_instance * self, enviroment *
 	opcode_buf_add(env->buf, self->constructorIndex);
 }
 
+void il_factor_new_instance_load(il_factor_new_instance * self, enviroment * env, il_ehandler * eh) {
+}
+
 class_ * il_factor_new_instance_eval(il_factor_new_instance * self, enviroment * env) {
 	il_factor_new_instance_find(self, env);
 	return self->c->parent;

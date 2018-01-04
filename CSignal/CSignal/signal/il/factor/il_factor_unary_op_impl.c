@@ -50,6 +50,9 @@ void il_factor_unary_op_generate(il_factor_unary_op * self, enviroment* env) {
 	}
 }
 
+void il_factor_unary_op_load(il_factor_unary_op * self, enviroment * env, il_ehandler * eh) {
+}
+
 class_ * il_factor_unary_op_eval(il_factor_unary_op * self, enviroment * env) {
 	return NULL;
 }

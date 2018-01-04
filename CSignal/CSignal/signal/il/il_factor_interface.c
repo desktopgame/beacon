@@ -107,6 +107,56 @@ void il_factor_generate(il_factor * self, enviroment* env) {
 	}
 }
 
+void il_factor_load(il_factor * self, enviroment * env, il_ehandler * eh) {
+	switch (self->type) {
+		case ilfactor_int:
+			il_factor_int_load(self->u.int_, env, eh);
+			break;
+		case ilfactor_double:
+			il_factor_double_load(self->u.double_, env, eh);
+			break;
+		case ilfactor_cquote:
+			il_factor_char_load(self->u.char_, env, eh);
+			break;
+		case ilfactor_squote:
+			il_factor_string_load(self->u.string_, env, eh);
+			break;
+		case ilfactor_call:
+			il_factor_call_load(self->u.call_, env, eh);
+			break;
+		case ilfactor_invoke:
+			il_factor_invoke_load(self->u.invoke_, env, eh);
+			break;
+		case ilfactor_named_invoke:
+			il_factor_named_invoke_load(self->u.named_invoke_, env, eh);
+			break;
+		case ilfactor_variable:
+			il_factor_variable_load(self->u.variable_, env, eh);
+			break;
+		case ilfactor_unary_op:
+			il_factor_unary_op_load(self->u.unary_, env, eh);
+			break;
+		case ilfactor_binary_op:
+			il_factor_binary_op_load(self->u.binary_, env, eh);
+			break;
+		case ilfactor_this:
+			il_factor_this_load(self->u.this_, env, eh);
+			break;
+		case ilfactor_super:
+			il_factor_super_load(self->u.super_, env, eh);
+			break;
+		case ilfactor_new_instance:
+			il_factor_new_instance_load(self->u.new_instance_, env, eh);
+			break;
+		case ilfactor_field_access:
+			il_factor_field_access_load(self->u.field_access_, env, eh);
+			break;
+		default:
+			ERROR("ファクターの型を取得出来ませんでした");
+			break;
+	}
+}
+
 class_ * il_factor_eval(il_factor * self, enviroment * env) {
 	class_* ret = NULL;
 	switch (self->type) {

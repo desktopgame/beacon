@@ -55,6 +55,9 @@ void il_factor_call_generate(il_factor_call * self, enviroment* env) {
 	opcode_buf_add(env->buf, (vector_item)op_invokevirtual);
 }
 
+void il_factor_call_load(il_factor_call * self, enviroment * env, il_ehandler * eh) {
+}
+
 class_ * il_factor_call_eval(il_factor_call * self, enviroment * env) {
 	il_factor_find_method(self, env);
 	return self->m->return_type;

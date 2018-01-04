@@ -2,6 +2,7 @@
 #ifndef SIGNAL_IL_IL_FACTOR_INTERFACE_H
 #define SIGNAL_IL_IL_FACTOR_INTERFACE_H
 #include "../vm/enviroment.h"
+#include "il_ehandler.h"
 //#include "../vm/opcode.h"
 //#include "../vm/opcode_buf.h"
 //struct opcode_buf;
@@ -86,6 +87,14 @@ void il_factor_dump(il_factor* self, int depth);
  * @param env
  */
 void il_factor_generate(il_factor* self, enviroment* env);
+
+/**
+ * 因子を読み込みます.
+ * @param self
+ * @param env
+ * @param eh
+ */
+void il_factor_load(il_factor* self, enviroment* env, il_ehandler* eh);
 
 /**
  * この因子が表す型を返します.

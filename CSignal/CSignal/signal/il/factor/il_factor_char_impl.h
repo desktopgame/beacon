@@ -38,6 +38,14 @@ void il_factor_char_dump(il_factor_char* self, int depth);
 void il_factor_char_generate(il_factor_char* self, struct enviroment* env);
 
 /**
+ * 文字を表す要素を読み込みます.
+ * @param self
+ * @param env
+ * @param eh
+ */
+void il_factor_char_load(il_factor_char* self, struct enviroment* env, il_ehandler* eh);
+
+/**
  * 文字を表す要素の型を返します.
  * @param self
  * @param env

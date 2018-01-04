@@ -45,6 +45,14 @@ void il_factor_field_access_dump(il_factor_field_access* self, int depth);
 void il_factor_field_access_generate(il_factor_field_access* self, struct enviroment* env);
 
 /**
+ * フィールドアクセスを読み込みます.
+ * @param self
+ * @param env
+ * @param eh
+ */
+void il_factor_field_access_load(il_factor_field_access* self, struct enviroment* env, il_ehandler* eh);
+
+/**
  * フィールドアクセスの結果の型を返します.
  * @param self
  * @param env

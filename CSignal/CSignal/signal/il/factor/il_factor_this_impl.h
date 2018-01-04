@@ -1,6 +1,7 @@
 #pragma once
 #ifndef SIGNAL_IL_IL_FACTOR_THIS_H
 #define SIGNAL_IL_IL_FACTOR_THIS_H
+#include "../il_ehandler.h"
 struct enviroment;
 struct class_;
 /**
@@ -21,6 +22,14 @@ void il_factor_this_dump(il_factor_this* self, int depth);
  * @param env
  */
 void il_factor_this_generate(il_factor_this* self, struct enviroment* env);
+
+/**
+ * thisを読み込みます.
+ * @param self
+ * @parma env
+ * @param eh
+ */
+void il_factor_this_load(il_factor_this* self, struct enviroment* env, il_ehandler* eh);
 
 /**
  * thisで参照されるオブジェクトの型を返します.

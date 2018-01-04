@@ -71,6 +71,14 @@ void il_factor_binary_op_dump(il_factor_binary_op* self, int depth);
 void il_factor_binary_op_generate(il_factor_binary_op* self, struct enviroment* env);
 
 /**
+ * 二項演算子を読み込みます.
+ * @param self
+ * @parma env
+ * @param eh
+ */
+void il_factor_binary_op_load(il_factor_binary_op* self, struct enviroment* env, il_ehandler* eh);
+
+/**
  * 二項演算子の結果の型を返します.
  * @param self
  * @param env

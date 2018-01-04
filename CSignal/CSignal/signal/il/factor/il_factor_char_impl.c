@@ -32,6 +32,9 @@ void il_factor_char_generate(il_factor_char * self, enviroment * env) {
 	opcode_buf_add(env->buf, index);
 }
 
+void il_factor_char_load(il_factor_char * self, enviroment * env, il_ehandler * eh) {
+}
+
 class_ * il_factor_char_eval(il_factor_char * self, enviroment * env) {
 	return CL_CHAR;
 }

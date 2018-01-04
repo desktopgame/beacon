@@ -1060,13 +1060,20 @@ static void class_loader_sgload_debug_native_method(method* parent, vm* vm, envi
 
 static void class_loader_sgload_body(class_loader* self, vector* stmt_list, enviroment* dest, namespace_* range) {
 //	enviroment* ret = enviroment_new();
+	il_ehandler* eh = il_ehandler_new();
 	vector_push(dest->namespace_vec, range);
+	for (int i = 0; i < stmt_list->length; i++) {
+		vector_item e = vector_at(stmt_list, i);
+		il_stmt* s = (il_stmt*)e;
+		il_stmt_load(s, dest, eh);
+	}
 	for (int i = 0; i < stmt_list->length; i++) {
 		vector_item e = vector_at(stmt_list, i);
 		il_stmt* s = (il_stmt*)e;
 		il_stmt_generate(s, dest);
 	}
 	vector_pop(dest->namespace_vec);
+	il_ehandler_delete(eh);
 //	return ret;
 }
 
