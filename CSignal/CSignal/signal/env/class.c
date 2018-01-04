@@ -290,6 +290,7 @@ int class_method_index_resolve(class_* self, int index) {
 }
 
 method * class_method_by_index(class_* self, int index) {
+	assert(index >= 0);
 	if (self->super_class == NULL) {
 		vector_item e = vector_at(self->method_list, index);
 		return (method*)e;

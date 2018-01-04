@@ -14,7 +14,10 @@ namespace signal.lang {
 		ctor new() : this(0, 0) {
 		}
 
-		def print(Int a) -> Void {
+		def print(Int a, Int b) -> Void {
+			signal::lang::Console.writeLine("home");
+			Console.writeLine(a);
+			Console.writeLine(b);
 		}
 	}
 
@@ -86,7 +89,7 @@ namespace L.Goo.Foo {
 }
 
 signal::lang::Point2D c = new signal::lang::Point2D(10, 2);
-c.print();
+c.print(2, 5);
 signal::lang::Console.writeLine(100);
 signal::lang::Console.writeLine(c.x);
 signal::lang::Console.writeLine("PP");

@@ -9,6 +9,7 @@
 //proto
 static void il_factor_named_invoke_delete_argument(vector_item item);
 static void il_factor_named_invoke_find(il_factor_named_invoke* self, enviroment* env);
+static void il_factor_named_invoke_generate_IMPL(il_factor_named_invoke* self, enviroment* env, class_* cls);
 static void il_factor_named_invoke_generate_args(il_factor_named_invoke* self, enviroment* env);
 
 il_factor * il_factor_wrap_named_invoke(il_factor_named_invoke * self) {
@@ -45,8 +46,8 @@ void il_factor_named_invoke_generate(il_factor_named_invoke * self, enviroment *
 	il_factor_named_invoke_find(self, env);
 	//c.call() 変数への呼び出し
 	if (self->type == ilnamed_invoke_variable) {
-		il_factor_generate(self->u.factor, env);
 		il_factor_named_invoke_generate_args(self, env);
+		il_factor_generate(self->u.factor, env);
 		opcode_buf_add(env->buf, (vector_item)op_method);
 		opcode_buf_add(env->buf, self->methodIndex);
 		opcode_buf_add(env->buf, op_invokevirtual);
@@ -95,9 +96,7 @@ static void il_factor_named_invoke_find(il_factor_named_invoke* self, enviroment
 			}
 		}
 		class_* cls = namespace_get_class(top, self->fqcn->name);
-		int temp = 0;
-		self->m = class_find_method_args_match(cls, self->method_name, self->argument_list, env, &temp);
-		self->methodIndex = temp;
+		il_factor_named_invoke_generate_IMPL(self, env, cls);
 		//printf("%s %s", top->name, cls->name);
 		self->u.classz = cls;
 		self->type = ilnamed_invoke_static;
@@ -112,11 +111,20 @@ static void il_factor_named_invoke_find(il_factor_named_invoke* self, enviroment
 		if (cls != NULL) {
 			self->u.classz = cls;
 			self->type = ilnamed_invoke_static;
+			il_factor_named_invoke_generate_IMPL(self, env, cls);
 		} else {
 			self->u.factor = il_factor_wrap_variable(il_factor_variable_new(self->fqcn->name));
 			self->type = ilnamed_invoke_variable;
+			cls = (class_*)il_factor_eval(self->u.factor, env);
+			il_factor_named_invoke_generate_IMPL(self, env, cls);
 		}
 	}
+}
+
+static void il_factor_named_invoke_generate_IMPL(il_factor_named_invoke* self, enviroment* env, class_* cls) {
+	int temp = 0;
+	self->m = class_find_method_args_match(cls, self->method_name, self->argument_list, env, &temp);
+	self->methodIndex = temp;
 }
 
 static void il_factor_named_invoke_generate_args(il_factor_named_invoke* self, enviroment* env) {

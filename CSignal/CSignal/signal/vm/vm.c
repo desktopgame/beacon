@@ -163,7 +163,7 @@ void vm_execute(vm* self, enviroment* env) {
 			{
 				int index = (int)enviroment_source_at(env, ++i);
 				opcode code = (opcode)enviroment_source_at(env, ++i);
-				object* o = (object*)vector_pop(self->value_stack);
+				object* o = (object*)vector_top(self->value_stack);
 				method* m = class_method_by_index(o->classz, index);
 				assert(code == op_invokevirtual ||
 					   code == op_invokespecial);

@@ -35,6 +35,7 @@ vector_item vector_top(vector * self) {
 
 vector_item vector_pop(vector * self) {
 	assert(self != NULL);
+	assert(self->length > 0);
 	vector_item ret = self->memory[self->length - 1];
 	//二重に開放しないように
 	self->memory[self->length - 1] = NULL;
