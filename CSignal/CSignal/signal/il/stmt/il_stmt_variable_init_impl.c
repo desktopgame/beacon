@@ -39,6 +39,9 @@ void il_stmt_variable_init_generate(il_stmt_variable_init * self, enviroment * e
 	opcode_buf_add(env->buf, e->index);
 }
 
+void il_stmt_variable_init_load(il_stmt_variable_init * self, enviroment * env, il_ehandler * eh) {
+}
+
 void il_stmt_variable_init_delete(il_stmt_variable_init * self) {
 	MEM_FREE(self->name);
 	MEM_FREE(self);

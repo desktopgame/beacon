@@ -47,6 +47,26 @@ void il_stmt_generate(il_stmt * self, struct enviroment* env) {
 	}
 }
 
+void il_stmt_load(il_stmt * self, enviroment* env, il_ehandler * eh) {
+	switch (self->type) {
+		case ilstmt_if:
+			il_stmt_if_load(self, env, eh);
+			break;
+		case ilstmt_proc:
+			il_stmt_proc_load(self, env, eh);
+			break;
+		case ilstmt_variable_decl:
+			il_stmt_variable_decl_load(self, env, eh);
+			break;
+		case ilstmt_variable_init:
+			il_stmt_variable_init_load(self, env, eh);
+			break;
+		default:
+			//ERROR("ステートメントを開放出来ませんでした。");
+			break;
+	}
+}
+
 void il_stmt_delete(il_stmt * self) {
 	switch (self->type) {
 		case ilstmt_if:

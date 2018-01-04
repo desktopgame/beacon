@@ -38,6 +38,14 @@ void il_stmt_proc_dump(il_stmt_proc* self, int depth);
 void il_stmt_proc_generate(il_stmt_proc* self, struct enviroment* env);
 
 /**
+ * 式のみで構成される文を読み込みます.
+ * @param self
+ * @param env
+ * @param eh
+ */
+void il_stmt_proc_load(il_stmt_proc* self, struct enviroment* env, il_ehandler* eh);
+
+/**
  * 式のみで構成される文を表す要素を開放します.
  * @param self
  */

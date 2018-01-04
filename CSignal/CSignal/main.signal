@@ -89,7 +89,7 @@ namespace L.Goo.Foo {
 }
 
 signal::lang::Point2D c = new signal::lang::Point2D(10, 2);
-c.print(2, 5);
+c.print(200, 5);
 signal::lang::Console.writeLine(100);
 signal::lang::Console.writeLine(c.x);
 signal::lang::Console.writeLine("PP");

@@ -24,6 +24,9 @@ void il_stmt_proc_generate(il_stmt_proc * self, enviroment * env) {
 	il_factor_generate(self->factor, env);
 }
 
+void il_stmt_proc_load(il_stmt_proc * self, struct enviroment* env, il_ehandler * eh) {
+}
+
 void il_stmt_proc_delete(il_stmt_proc * self) {
 	il_factor_delete(self->factor);
 	MEM_FREE(self);

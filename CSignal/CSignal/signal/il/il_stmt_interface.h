@@ -2,6 +2,7 @@
 #ifndef SIGNAL_IL_IL_STMT_INTERFACE_H
 #define SIGNAL_IL_IL_STMT_INTERFACE_H
 #include "../vm/enviroment.h"
+#include "il_ehandler.h"
 /**
  * 文の種類を表す列挙型.
  */
@@ -47,6 +48,14 @@ void il_stmt_dump(il_stmt* self, int depth);
  * @param buf
  */
 void il_stmt_generate(il_stmt* self, enviroment* env);
+
+/**
+ * ステートメントを読み込んでエラーがあれば記録します.
+ * @param self
+ * @param env
+ * @param eh
+ */
+void il_stmt_load(il_stmt* self, enviroment* env, il_ehandler* eh);
 
 /**
  * 文を開放します.

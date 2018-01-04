@@ -34,6 +34,9 @@ void il_stmt_variable_decl_generate(il_stmt_variable_decl * self, enviroment * e
 	);
 }
 
+void il_stmt_variable_decl_load(il_stmt_variable_decl * self, struct enviroment* env, il_ehandler * eh) {
+}
+
 void il_stmt_variable_decl_delete(il_stmt_variable_decl * self) {
 	if (self == NULL) {
 		return;

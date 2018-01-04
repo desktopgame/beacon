@@ -89,6 +89,9 @@ void il_stmt_if_dump(il_stmt_if * self, int depth) {
 void il_stmt_if_generate(il_stmt_if * self, enviroment* env) {
 }
 
+void il_stmt_if_load(il_stmt_if * self, struct enviroment* env, il_ehandler * eh) {
+}
+
 void il_stmt_if_delete(il_stmt_if * self) {
 //	il_stmt_elif_list_delete(self->elif_list);
 	vector_delete(self->elif_list, il_stmt_elif_list_delete_impl);

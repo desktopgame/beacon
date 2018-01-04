@@ -41,6 +41,14 @@ void il_stmt_variable_decl_dump(il_stmt_variable_decl* self, int depth);
 void il_stmt_variable_decl_generate(il_stmt_variable_decl* self, struct enviroment* env);
 
 /**
+ * 型宣言を表す要素を出力します.
+ * @param self
+ * @param env
+ * @param eh
+ */
+void il_stmt_variable_decl_load(il_stmt_variable_decl* self, struct enviroment* env, il_ehandler* eh);
+
+/**
  * 型宣言を表す要素を開放します.
  * @param self
  */
