@@ -5,6 +5,7 @@
 int opcode_print(vector* source, int index) {
 	vector_item e = vector_at(source, index);
 	opcode code = (opcode)e;
+	printf("%d: ", index);
 	switch (code) {
 		//eval
 		case op_add:
@@ -110,8 +111,9 @@ int opcode_print(vector* source, int index) {
 		}
 		case op_get_field:
 		{
-			int a = (int)vector_at(source, ++index);
-			printf("get field(%d)", a);
+			//int a = (int)vector_at(source, ++index);
+			int b = (int)vector_at(source, ++index);
+			printf("get field(%d)", b);
 			break;
 		}
 		case op_put_static:
@@ -142,13 +144,15 @@ int opcode_print(vector* source, int index) {
 		case op_chain_this:
 		{
 			int a = (int)vector_at(source, ++index);
-			printf("chain this(%d)", a);
+			int b = (int)vector_at(source, ++index);
+			printf("chain this(%d %d)", a, b);
 			break;
 		}
 		case op_chain_super:
 		{
 			int a = (int)vector_at(source, ++index);
-			printf("chain super(%d)", a);
+			int b = (int)vector_at(source, ++index);
+			printf("chain super(%d %d)", a, b);
 			break;
 		}
 		case op_new_object:
@@ -218,6 +222,11 @@ int opcode_print(vector* source, int index) {
 		case op_prints:
 		{
 			printf("prints");
+			break;
+		}
+		case op_breakpoint:
+		{
+			printf("breakpoint");
 			break;
 		}
 		//goto

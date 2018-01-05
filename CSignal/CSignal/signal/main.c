@@ -19,6 +19,7 @@ void _start(int argc, char* argv[]) {
 	//_CrtSetBreakAlloc(103280);
 #endif
 	sg_lopen();
+	sg_lset_enabled(false);
 	script_context_open();
 	cmd_dump(argc, argv);
 

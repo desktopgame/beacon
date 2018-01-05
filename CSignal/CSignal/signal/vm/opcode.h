@@ -76,6 +76,7 @@ typedef enum opcode {
 	op_printi,
 	op_printd,
 	op_prints,
+	op_breakpoint,
 
 	op_goto,
 	op_goto_if_true,

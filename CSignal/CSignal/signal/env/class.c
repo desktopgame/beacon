@@ -96,6 +96,18 @@ field * class_find_field(class_* self, const char * name, int* outIndex) {
 	return NULL;
 }
 
+field * class_find_field_tree(class_ * self, const char * name, access_domain domain, int * outIndex) {
+	class_* pointee = self;
+	do {
+		field* f = class_find_field(pointee, name, outIndex);
+		if (f != NULL && domain_accept(domain, f->modifier, f->access)) {
+			return f;
+		}
+		pointee = pointee->super_class;
+	} while (pointee != NULL);
+	return NULL;
+}
+
 vector * class_find_constructor_args(class_ * self, vector * args, enviroment* env) {
 	vector* v = vector_new();
 	if (self == NULL) {

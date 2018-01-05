@@ -18,6 +18,7 @@ enviroment * enviroment_new() {
 	ret->context_cll = NULL;
 	ret->namespace_vec = vector_new();
 	ret->class_vec = vector_new();
+	ret->toplevel = false;
 	return ret;
 }
 

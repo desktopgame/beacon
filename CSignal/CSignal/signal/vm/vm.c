@@ -153,7 +153,7 @@ void vm_execute(vm* self, enviroment* env) {
 				int methodIndex = (int)enviroment_source_at(env, ++i);
 				class_* cls = (class_*)vector_at(ctx->class_vec, absClassIndex);
 				method* m = class_method_by_index(cls, methodIndex);
-				//‚¢‚ç‚È‚¢
+				//ã„ã‚‰ãªã„
 				opcode code = (opcode)enviroment_source_at(env, ++i);
 				assert(code == op_invokestatic);
 				method_execute(m, self, env);
@@ -182,11 +182,11 @@ void vm_execute(vm* self, enviroment* env) {
 				break;
 			case op_new_object:
 			{
-				//ƒRƒ“ƒXƒgƒ‰ƒNƒ^‚ğ‚³‚©‚Ì‚Ú‚èA
-				//ƒgƒbƒvƒŒƒxƒ‹‚Ü‚Å“’B‚·‚é‚Æ‚±‚Ìˆ—‚É‚æ‚Á‚Ä¶¬‚ªs‚í‚ê‚Ü‚·B
+				//ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿ã‚’ã•ã‹ã®ã¼ã‚Šã€
+				//ãƒˆãƒƒãƒ—ãƒ¬ãƒ™ãƒ«ã¾ã§åˆ°é”ã™ã‚‹ã¨ã“ã®å‡¦ç†ã«ã‚ˆã£ã¦ç”ŸæˆãŒè¡Œã‚ã‚Œã¾ã™ã€‚
 				object* o = object_ref_new();
 				vector_push(self->value_stack, o);
-				//‚±‚ê‚ğ this ‚Æ‚·‚é
+				//ã“ã‚Œã‚’ this ã¨ã™ã‚‹
 				vector_assign(self->ref_stack, 0, o);
 				break;
 			}
@@ -200,13 +200,13 @@ void vm_execute(vm* self, enviroment* env) {
 			}
 			case op_new_instance:
 			{
-				//¶¬‚·‚éƒNƒ‰ƒX‚ÆƒRƒ“ƒXƒgƒ‰ƒNƒ^‚ğ“Á’è
+				//ç”Ÿæˆã™ã‚‹ã‚¯ãƒ©ã‚¹ã¨ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿ã‚’ç‰¹å®š
 				int absClsIndex = (int)enviroment_source_at(env, ++i);
 				int constructorIndex = (int)enviroment_source_at(env, ++i);
 				class_* cls = (class_*)vector_at(ctx->class_vec, absClsIndex);
 				constructor* ctor = (constructor*)vector_at(cls->constructor_list, constructorIndex);
-				//V‚µ‚¢VM‚ÅƒRƒ“ƒXƒgƒ‰ƒNƒ^‚ğÀs
-				//‚Ü‚½AŒ»İ‚ÌVM‚©‚çÀˆø”‚ğƒ|ƒbƒv
+				//æ–°ã—ã„VMã§ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿ã‚’å®Ÿè¡Œ
+				//ã¾ãŸã€ç¾åœ¨ã®VMã‹ã‚‰å®Ÿå¼•æ•°ã‚’ãƒãƒƒãƒ—
 				vm* sub = vm_sub(self);
 				for (int i = 0; i < ctor->parameter_list->length; i++) {
 					vector_item e = vector_pop(self->value_stack);
@@ -215,11 +215,37 @@ void vm_execute(vm* self, enviroment* env) {
 				}
 				opcode_buf_dump(ctor->env->buf, sub->level);
 				vm_execute(sub, ctor->env);
-				//ƒRƒ“ƒXƒgƒ‰ƒNƒ^‚ğÀs‚µ‚½ê‡A
-				//object‚ªƒXƒ^ƒbƒN‚Ìƒgƒbƒv‚Éc‚Á‚Ä‚¢‚é‚Í‚¸
+				//ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿ã‚’å®Ÿè¡Œã—ãŸå ´åˆã€
+				//objectãŒã‚¹ã‚¿ãƒƒã‚¯ã®ãƒˆãƒƒãƒ—ã«æ®‹ã£ã¦ã„ã‚‹ã¯ãš
 				vector_item returnV = vector_top(sub->value_stack);
 				object* returnO = (object*)returnV;
 				vector_push(self->value_stack, returnV);
+				break;
+			}
+			case op_chain_this:
+			case op_chain_super:
+			{
+				int absClsIndex = (int)enviroment_source_at(env, ++i);
+				int ctorIndex = (int)enviroment_source_at(env, ++i);
+				class_* cls = (class_*)vector_at(ctx->class_vec, absClsIndex);
+				constructor* ctor = (class_*)vector_at(cls->constructor_list, ctorIndex);
+				//ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿ã‚’å®Ÿè¡Œã™ã‚‹ãŸã‚ã®VMã‚’ä½œæˆ
+				vm* sub = vm_sub(self);
+				//ãƒã‚§ã‚¤ãƒ³ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿ã«æ¸¡ã•ã‚ŒãŸå®Ÿå¼•æ•°ã‚’ãƒ—ãƒƒã‚·ãƒ¥
+				for (int i = 0; i < ctor->parameter_list->length; i++) {
+					object* o = (object*)vector_pop(self->value_stack);
+					vector_push(sub->value_stack, o);
+				}
+				opcode_buf_dump(ctor->env->buf, sub->level);
+				vm_execute(sub, ctor->env);
+				vm_delete(sub);
+				//ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿ã‚’å®Ÿè¡Œã—ãŸå ´åˆã€
+				//objectãŒã‚¹ã‚¿ãƒƒã‚¯ã®ãƒˆãƒƒãƒ—ã«æ®‹ã£ã¦ã„ã‚‹ã¯ãš
+				vector_item returnV = vector_top(sub->value_stack);
+				object* returnO = (object*)returnV;
+				vector_assign(self->ref_stack, 0, returnV);
+				vector_push(self->value_stack, returnV);
+				//class_alloc_fields(cls, returnO);
 				break;
 			}
 			case op_this:
@@ -247,6 +273,7 @@ void vm_execute(vm* self, enviroment* env) {
 			{
 				object* sourceObject = (object*)vector_pop(self->value_stack);
 				assert(sourceObject->type == object_ref);
+				//int absClsIndex = (int)enviroment_source_at(env, ++i);
 				int fieldIndex = (int)enviroment_source_at(env, ++i);
 				object* val = (object*)vector_at(sourceObject->u.field_vec, fieldIndex);
 				vector_push(self->value_stack, val);
@@ -330,6 +357,10 @@ void vm_execute(vm* self, enviroment* env) {
 				char* s = SPS(self);
 				printf("string: %s\n", s);
 				INFO("prints");
+				break;
+			}
+			case op_breakpoint:
+			{
 				break;
 			}
 

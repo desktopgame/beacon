@@ -154,6 +154,7 @@ static class_loader* class_loader_new() {
 	ret->error = false;
 	ret->errorMessage = NULL;
 	ret->env->context_cll = ret;
+	ret->env->toplevel = true;
 	return ret;
 }
 
@@ -1033,20 +1034,30 @@ static void class_loader_sgload_chain(class_loader* self, il_class* ilclass, cla
 		opcode_buf_add(env->buf, classz->absoluteIndex);
 		return;
 	}
-	//連鎖先のコンストラクタを検索する
+	//チェインコンストラクタの実引数をプッシュ
 	il_constructor_chain* chain = ilcons->chain;
+	for (int i = 0; i < chain->argument_list->length; i++) {
+		il_argument* ilarg = (il_argument*)vector_at(chain->argument_list, i);
+		il_factor_generate(ilarg->factor, env);
+	}
+	//連鎖先のコンストラクタを検索する
 	constructor* chainTarget = NULL;
 	int temp = 0;
 	if (chain->type == chain_type_this) {
 		chainTarget = class_find_constructor_args_match(classz, chain->argument_list, env, &temp);
 		opcode_buf_add(env->buf, op_chain_this);
+		opcode_buf_add(env->buf, classz->absoluteIndex);
 	} else if (chain->type == chain_type_super) {
 		chainTarget = class_find_constructor_args_match(classz->super_class, chain->argument_list, env, &temp);
 		opcode_buf_add(env->buf, op_chain_super);
+		opcode_buf_add(env->buf, classz->super_class->absoluteIndex);
 	}
 	chain->c = chainTarget;
 	chain->constructorIndex = temp;
 	opcode_buf_add(env->buf, temp);
+	//親クラスへのチェインなら即座にフィールドを確保
+	opcode_buf_add(env->buf, op_alloc_field);
+	opcode_buf_add(env->buf, classz->absoluteIndex);
 }
 
 static void class_loader_sgload_attach_native_method(class_loader* self, il_class* ilclass, class_* classz, il_method* ilmethod, method* me) {

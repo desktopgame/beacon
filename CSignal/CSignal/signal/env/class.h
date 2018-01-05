@@ -7,6 +7,7 @@
 #include "native_method_ref.h"
 #include "../vm/enviroment.h"
 #include "../util/vector.h"
+#include "access_domain.h"
 #include <stdint.h>
 #include <stdbool.h>
 #include <stdarg.h>
@@ -82,6 +83,17 @@ void class_define_native_method(class_* self, const char* name, native_impl impl
  * @return 無ければ NULL
  */
 struct field* class_find_field(class_* self, const char* name, int* outIndex);
+
+/**
+ * 指定の名前を持つフィールドを返します.
+ * selfの中に見つけられなかった場合には親クラスも検索します。
+ * @param self
+ * @param name
+ * @param domain
+ * @param outIndex
+ * @return
+ */
+struct field* class_find_field_tree(class_* self, const char* name, access_domain domain, int* outIndex);
 
 /**
  * 指定の型で呼び出せるコンストラクタの一覧を返します.

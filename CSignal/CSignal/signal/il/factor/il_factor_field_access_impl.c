@@ -1,6 +1,7 @@
 #include "il_factor_field_access_impl.h"
 #include "../../util/mem.h"
 #include "../../util/text.h"
+#include "../../util/logger.h"
 #include "../../env/class.h"
 #include "../../env/field.h"
 #include <stdio.h>
@@ -54,10 +55,13 @@ void il_factor_field_access_delete(il_factor_field_access * self) {
 static void il_factor_field_access_find(il_factor_field_access * self, enviroment * env) {
 	class_* cls = il_factor_eval(self->fact, env);
 	int temp = 0;
-	//‚±‚±‚Å‚à‚µfact‚ªvariable‚È‚çA
-	//‘Î‰ž‚·‚éƒNƒ‰ƒX–¼‚ª‚ ‚é‚©’²‚×‚é
-	//‚ ‚Á‚½‚È‚çfact‚ÍŠJ•ú‚µ‚ÄAf/fieldIndex‚àÄŒŸõ
-	self->f = class_find_field(cls, self->name, &temp);
-	self->fieldIndex = temp;
+	//TEST(env->toplevel);
+	//ã“ã“ã§ã‚‚ã—factãŒvariableãªã‚‰ã€
+	//å¯¾å¿œã™ã‚‹ã‚¯ãƒ©ã‚¹åãŒã‚ã‚‹ã‹èª¿ã¹ã‚‹
+	//ã‚ã£ãŸãªã‚‰factã¯é–‹æ”¾ã—ã¦ã€f/fieldIndexã‚‚å†æ¤œç´¢
+	self->f = class_find_field_tree(cls, self->name, domain_none, &temp);
+	TEST(self->f == NULL);
+	self->fieldIndex = class_field_index_resolve(self->f->parent, temp);
+	//TEST(env->toplevel);
 //	class_find_fie
 }

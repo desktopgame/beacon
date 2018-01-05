@@ -47,6 +47,12 @@ bool sg_lget_enabled();
  */
 void sg_log(log_level level, const char* filename, int lineno, const char* source, ...);
 
+/**
+ * 指定の条件を満たすならブレークします.
+ * @param cond
+ */
+void sg_test(bool cond);
+
 //マクロ名が被る場合は LOG_OVERRIDE を定義して既存のものを無効にします。
 //(割と一般的な名前を使用しているので用意してます。)
 #if defined(LOG_OVERRIDE)
@@ -70,7 +76,7 @@ void sg_log(log_level level, const char* filename, int lineno, const char* sourc
 #undef FATAL
 #endif
 #endif
-
+#define TEST(cond) sg_test(cond)
 //ログ出力用マクロを無効にするには
 //LOG_DISABLEを定義します。
 #if !defined(LOG_DISABLE)

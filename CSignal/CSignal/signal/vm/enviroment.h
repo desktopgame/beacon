@@ -4,6 +4,7 @@
 #include "../util/vector.h"
 #include "opcode_buf.h"
 #include "symbol_table.h"
+#include <stdbool.h>
 struct class_;
 struct object;
 struct class_loader;
@@ -19,8 +20,11 @@ typedef struct enviroment {
 	opcode_buf* buf;
 	symbol_table* sym_table;
 	vector* constant_pool;
+	//解析中の情報
+	//FIXME:ここに持たせるべきじゃない
 	vector* namespace_vec;
 	vector* class_vec;
+	bool toplevel;
 //	struct class_* class_;
 } enviroment;
 

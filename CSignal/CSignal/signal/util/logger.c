@@ -112,6 +112,12 @@ void sg_log(log_level level, const char* filename, int lineno, const char * sour
 	va_end(ap);
 }
 
+void sg_test(bool cond) {
+	if (cond) {
+		int x = 0;
+	}
+}
+
 //private
 static void sg_log_impl(log_level level, const char* filename, int lineno, const char * source, ...) {
 #define LEN 100
