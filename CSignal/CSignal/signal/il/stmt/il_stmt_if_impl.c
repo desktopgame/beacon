@@ -97,10 +97,10 @@ void il_stmt_if_generate(il_stmt_if * self, enviroment* env) {
 	for (int i = 0; i < self->body->length; i++) {
 		il_stmt* stmt = (il_stmt*)vector_at(self->body, i);
 		il_stmt_generate(stmt, env);
-		//条件が満たされて実行されたら最後までジャンプ
-		opcode_buf_add(env->buf, op_goto);
-		opcode_buf_add(env->buf, tail);
 	}
+	//条件が満たされて実行されたら最後までジャンプ
+	opcode_buf_add(env->buf, op_goto);
+	opcode_buf_add(env->buf, tail);
 	l1->cursor = opcode_buf_nop(env->buf);
 	// elif(...)
 	for (int i = 0; i < self->elif_list->length; i++) {
@@ -113,10 +113,10 @@ void il_stmt_if_generate(il_stmt_if * self, enviroment* env) {
 		for (int j = 0; j < elif->body->length; j++) {
 			il_stmt* stmt = (il_stmt*)vector_at(elif->body, j);
 			il_stmt_generate(stmt, env);
-			//条件が満たされて実行されたら最後までジャンプ
-			opcode_buf_add(env->buf, op_goto);
-			opcode_buf_add(env->buf, tail);
 		}
+		//条件が満たされて実行されたら最後までジャンプ
+		opcode_buf_add(env->buf, op_goto);
+		opcode_buf_add(env->buf, tail);
 		l2->cursor = opcode_buf_nop(env->buf);
 	}
 	// else { ... }
