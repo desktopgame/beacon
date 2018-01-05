@@ -497,7 +497,7 @@ static il_stmt_if* class_loader_ilload_if_elif_list_else(class_loader* self, ast
 	ast* aif_eliflist = ast_first(source);
 	ast* aelse = ast_second(source);
 	il_stmt_if* ilif = class_loader_ilload_if_elif_list(self, aif_eliflist);
-	class_loader_ilload_body(self, ilif->else_body, ast_first(aelse));
+	class_loader_ilload_body(self, ilif->else_body->body, ast_first(aelse));
 	return ilif;
 }
 
@@ -579,8 +579,12 @@ static il_factor* class_loader_ilload_factor(class_loader* self, ast* source) {
 		return il_factor_wrap_binary(class_loader_ilload_binary(self, source, ilbinary_mul_assign));
 	} else if (source->tag == ast_div_assign) {
 		return il_factor_wrap_binary(class_loader_ilload_binary(self, source, ilbinary_div_assign));
-	} else if(source->tag == ast_mod_assign) {
+	} else if (source->tag == ast_mod_assign) {
 		return il_factor_wrap_binary(class_loader_ilload_binary(self, source, ilbinary_mod_assign));
+	} else if (source->tag == ast_not) {
+		return il_factor_wrap_unary(class_loader_ilload_unary(self, source, ilunary_not));
+	} else if(source->tag == ast_neg) {
+		return il_factor_wrap_unary(class_loader_ilload_unary(self, source, ilunary_neg));
 	//this super
 	} else if (source->tag == ast_this) {
 		il_factor* ret = (il_factor*)MEM_MALLOC(sizeof(il_factor));
