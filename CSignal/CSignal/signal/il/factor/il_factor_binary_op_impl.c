@@ -35,6 +35,8 @@ typedef enum bi_operator_t {
 static void il_factor_binary_op_generate_impl(il_factor_binary_op * self, enviroment * env, bi_operator_t c);
 static opcode bi_operator_to_opi(bi_operator_t bi);
 static opcode bi_operator_to_opd(bi_operator_t bi);
+static void assign_generate_start(il_factor_binary_op * self, enviroment* env);
+static void assign_generate_end(il_factor_binary_op * self, enviroment* env);
 
 il_factor * il_factor_wrap_binary(il_factor_binary_op * self) {
 	il_factor* ret = (il_factor*)MEM_MALLOC(sizeof(il_factor));
@@ -198,21 +200,53 @@ void il_factor_binary_op_generate(il_factor_binary_op * self, enviroment* env) {
 				opcode_buf_add(env->buf, op_put_field);
 				opcode_buf_add(env->buf, field_access->fieldIndex);
 			} else {
+				il_factor_eval(self->left, env);
 				il_factor_generate(self->right, env);
 				assert(self->left->type == ilfactor_variable);
-				il_factor_variable* v = (il_factor_variable*)self->left;
+				il_factor_variable* v = self->left->u.variable_;
 				opcode_buf_add(env->buf, op_store);
 				opcode_buf_add(env->buf, v->index);
 			}
 			break;
 		}
 
+		case ilbinary_add_assign:
+			assign_generate_start(self, env);
+			il_factor_binary_op_generate_impl(self, env, bi_add);
+			assign_generate_end(self, env);
+			break;
+
+		case ilbinary_sub_assign:
+			assign_generate_start(self, env);
+			il_factor_binary_op_generate_impl(self, env, bi_sub);
+			assign_generate_end(self, env);
+			break;
+
+		case ilbinary_mul_assign:
+			assign_generate_start(self, env);
+			il_factor_binary_op_generate_impl(self, env, bi_mul);
+			assign_generate_end(self, env);
+			break;
+
+		case ilbinary_div_assign:
+			assign_generate_start(self, env);
+			il_factor_binary_op_generate_impl(self, env, bi_div);
+			assign_generate_end(self, env);
+			break;
+
+		case ilbinary_mod_assign:
+			assign_generate_start(self, env);
+			il_factor_binary_op_generate_impl(self, env, bi_mod);
+			assign_generate_end(self, env);
+			break;
 		default:
 			break;
 	}
 }
 
 void il_factor_binary_op_load(il_factor_binary_op * self, enviroment * env, il_ehandler * eh) {
+	il_factor_load(self->left, env, eh);
+	il_factor_load(self->right, env, eh);
 }
 
 class_ * il_factor_binary_op_eval(il_factor_binary_op * self, enviroment * env) {
@@ -297,4 +331,27 @@ static opcode bi_operator_to_opd(bi_operator_t bi) {
 			break;
 	}
 	//*/
+}
+
+static void assign_generate_start(il_factor_binary_op * self, enviroment* env) {
+	if (self->left->type == ilfactor_field_access) {
+		il_factor_field_access* field_access = self->left->u.field_access_;
+		il_factor_eval(self->left, env);
+		il_factor_generate(field_access->fact, env);
+	}
+}
+
+static void assign_generate_end(il_factor_binary_op * self, enviroment* env) {
+	if (self->left->type == ilfactor_field_access) {
+		il_factor_field_access* field_access = self->left->u.field_access_;
+		opcode_buf_add(env->buf, op_put_field);
+		opcode_buf_add(env->buf, field_access->fieldIndex);
+	} else {
+		il_factor_eval(self->left, env);
+		//il_factor_generate(self->right, env);
+		assert(self->left->type == ilfactor_variable);
+		il_factor_variable* v = self->left->u.variable_;
+		opcode_buf_add(env->buf, op_store);
+		opcode_buf_add(env->buf, v->index);
+	}
 }

@@ -93,6 +93,16 @@ namespace L.Goo.Foo {
 		}
 	}
 }
+Int a = 2;
+signal::lang::Console.writeLine(a);
+
+a += 2;
+signal::lang::Console.writeLine(a);
+
+a = 0;
+signal::lang::Console.writeLine(a);
+
+/*
 signal::lang::Point3D c = new signal::lang::Point3D(1, 2, 3);
 //signal::lang::Console.writeLine(c.x);
 //signal::lang::Console.writeLine(c.y);
@@ -117,6 +127,7 @@ if(a == b) {
 	signal::lang::Console.writeLine("else");
 	signal::lang::Console.writeLine("else");
 }
+*/
 
 //signal::lang::Point2D c = new signal::lang::Point2D(10, 2);
 //c.print(200, 5);

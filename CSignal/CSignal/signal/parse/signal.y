@@ -362,6 +362,10 @@ assign
 	{
 		$$ = ast_new_generic_assign($1, $2, $3);
 	}
+	| IDENT assign_type_T assign
+	{
+		$$ = ast_new_generic_assign(ast_new_variable($1), $2, $3);
+	}
 	;
 assign_type_T
 	: ASSIGN

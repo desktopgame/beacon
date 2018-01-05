@@ -38,6 +38,7 @@ void il_factor_variable_generate(il_factor_variable * self, enviroment* env) {
 }
 
 void il_factor_variable_load(il_factor_variable * self, enviroment * env, il_ehandler * eh) {
+	il_factor_variable_check(self, env);
 }
 
 class_ * il_factor_variable_eval(il_factor_variable * self, enviroment * env) {
