@@ -87,6 +87,49 @@ void il_stmt_if_dump(il_stmt_if * self, int depth) {
 }
 
 void il_stmt_if_generate(il_stmt_if * self, enviroment* env) {
+	//if(...)
+	il_factor_generate(self->condition, env);
+	label* l1 = label_new(0);
+	label* tail = label_new(0);
+	// { ... }
+	opcode_buf_add(env->buf, op_goto_if_false);
+	opcode_buf_add(env->buf, l1);
+	for (int i = 0; i < self->body->length; i++) {
+		il_stmt* stmt = (il_stmt*)vector_at(self->body, i);
+		il_stmt_generate(stmt, env);
+		//条件が満たされて実行されたら最後までジャンプ
+		opcode_buf_add(env->buf, op_goto);
+		opcode_buf_add(env->buf, tail);
+	}
+	l1->cursor = opcode_buf_nop(env->buf);
+	// elif(...)
+	for (int i = 0; i < self->elif_list->length; i++) {
+		il_stmt_elif* elif = (il_stmt_elif*)vector_at(self->elif_list, i);
+		il_factor_generate(elif->condition, env);
+		label* l2 = label_new(0);
+		// { ... }
+		opcode_buf_add(env->buf, op_goto_if_false);
+		opcode_buf_add(env->buf, l2);
+		for (int j = 0; j < elif->body->length; j++) {
+			il_stmt* stmt = (il_stmt*)vector_at(elif->body, j);
+			il_stmt_generate(stmt, env);
+			//条件が満たされて実行されたら最後までジャンプ
+			opcode_buf_add(env->buf, op_goto);
+			opcode_buf_add(env->buf, tail);
+		}
+		l2->cursor = opcode_buf_nop(env->buf);
+	}
+	// else { ... }
+	if (self->else_body == NULL ||
+		self->else_body->body->length == 0) {
+		tail->cursor = opcode_buf_nop(env->buf);
+	} else {
+		tail->cursor = opcode_buf_nop(env->buf);
+		for (int i = 0; i < self->else_body->body->length; i++) {
+			il_stmt* stmt = (il_stmt*)vector_at(self->else_body->body, i);
+			il_stmt_generate(stmt, env);
+		}
+	}
 }
 
 void il_stmt_if_load(il_stmt_if * self, struct enviroment* env, il_ehandler * eh) {

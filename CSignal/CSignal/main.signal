@@ -97,7 +97,16 @@ signal::lang::Point3D c = new signal::lang::Point3D(1, 2, 3);
 //signal::lang::Console.writeLine(c.x);
 //signal::lang::Console.writeLine(c.y);
 //signal::lang::Console.writeLine(c.z);
+Int a = 10;
+Int b = 20;
 c.print(20, 5);
+if(a == b) {
+	signal::lang::Console.writeLine("a == b");
+} elif(a > b) {
+	signal::lang::Console.writeLine("a > b");
+} elif(a < b) {
+	signal::lang::Console.writeLine("a > b");
+}
 
 //signal::lang::Point2D c = new signal::lang::Point2D(10, 2);
 //c.print(200, 5);

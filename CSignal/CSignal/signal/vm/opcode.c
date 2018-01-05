@@ -48,7 +48,21 @@ int opcode_print(vector* source, int index) {
 		case op_logic_and:
 			printf("logic and");
 			break;
-
+		case op_eq:
+			printf("eq");
+			break;
+		case op_gt:
+			printf("gt");
+			break;
+		case op_ge:
+			printf("ge");
+			break;
+		case op_lt:
+			printf("lt");
+			break;
+		case op_le:
+			printf("le");
+			break;
 		//push const
 		case op_consti:
 		{
