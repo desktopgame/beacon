@@ -2,6 +2,7 @@
 #ifndef SIGNAL_ENV_OBJECT_H
 #define SIGNAL_ENV_OBJECT_H
 #include "../util/vector.h"
+#include <stdbool.h>
 
 struct class_;
 /** 
@@ -24,6 +25,7 @@ typedef enum object_type {
 	object_double,
 	object_char,
 	object_string,
+	object_bool,
 	object_ref,
 } object_type;
 
@@ -43,6 +45,7 @@ typedef struct object {
 		double double_;
 		char char_;
 		char* string_;
+		bool bool_;
 		vector* field_vec;
 	} u;
 } object;
@@ -74,6 +77,13 @@ object* object_char_new(char c);
  * @return
  */
 object* object_string_new(const char* s);
+
+/**
+ * 真偽値型のオブジェクトを作成します.
+ * @param b
+ * @return
+ */
+object* object_bool_new(bool b);
 
 /**
  * 参照型のオブジェクトを作成します.

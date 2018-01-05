@@ -16,23 +16,27 @@ static int stack_topi(vm* self);
 static double stack_topd(vm* self);
 static char stack_topc(vm* self);
 static char* stack_tops(vm* self);
+static bool stack_topb(vm* self);
 
 static int stack_popi(vm* self);
 static double stack_popd(vm* self);
 static char stack_popc(vm* self);
 static char* stack_pops(vm* self);
+static bool stack_popb(vm* self);
 
 //Stack Top
 #define STI(a) stack_topi(a)
 #define STD(a) stack_topd(a)
 #define STC(a) stack_topc(a)
 #define STS(a) stack_tops(a)
+#define STB(a) stack_topb(a)
 
 //Stack Pop
-#define SPI(a) stack_popi(a);
-#define SPD(a) stack_popd(a);
-#define SPC(a) stack_popc(a);
-#define SPS(a) stack_pops(a);
+#define SPI(a) stack_popi(a)
+#define SPD(a) stack_popd(a)
+#define SPC(a) stack_popc(a)
+#define SPS(a) stack_pops(a)
+#define SPB(a) stack_popb(a)
 
 //Reference Store
 
@@ -59,67 +63,95 @@ void vm_execute(vm* self, enviroment* env) {
 	for (int i = 0; i < source_len; i++) {
 		op_byte b = (op_byte)enviroment_source_at(env, i);
 		switch (b) {
-			//eval
-			case op_add:
-			{
-				int a = SPI(self);
-				int b = SPI(self);
-				vector_push(self->value_stack, (a + b));
-				INFO("add");
+			//int & int
+			case op_iadd:
+				vector_push(self->value_stack, object_int_new(SPI(self) + SPI(self)));
 				break;
-			}
-			case op_sub:
-			{
-				int a = SPI(self);
-				int b = SPI(self);
-				vector_push(self->value_stack, (a - b));
+			case op_isub:
+				vector_push(self->value_stack, object_int_new(SPI(self) - SPI(self)));
 				break;
-			}
-			case op_mul:
-			{
-				int a = SPI(self);
-				int b = SPI(self);
-				vector_push(self->value_stack, (a * b));
+			case op_imul:
+				vector_push(self->value_stack, object_int_new(SPI(self) * SPI(self)));
 				break;
-			}
-			case op_div:
-			{
-				int a = SPI(self);
-				int b = SPI(self);
-				vector_push(self->value_stack, (a / b));
+			case op_idiv:
+				vector_push(self->value_stack, object_int_new(SPI(self) / SPI(self)));
 				break;
-			}
-			case op_mod:
-			{
-				int a = SPI(self);
-				int b = SPI(self);
-				vector_push(self->value_stack, (a % b));
+			case op_imod:
+				vector_push(self->value_stack, object_int_new(SPI(self) % SPI(self)));
 				break;
-			}
-			case op_bit_or:
-			{
+			case op_ibit_or:
+				vector_push(self->value_stack, object_int_new(SPI(self) | SPI(self)));
 				break;
-			}
-			case op_logic_or:
-			{
+			case op_ilogic_or:
+				vector_push(self->value_stack, object_int_new(SPI(self) || SPI(self)));
 				break;
-			}
-			case op_bit_and:
-			{
+			case op_ibit_and:
+				vector_push(self->value_stack, object_int_new(SPI(self) & SPI(self)));
 				break;
-			}
-			case op_logic_and:
-			{
+			case op_ilogic_and:
+				vector_push(self->value_stack, object_int_new(SPI(self) && SPI(self)));
 				break;
-			}
-			case op_not:
-			{
+			case op_ieq:
+				vector_push(self->value_stack, object_bool_new(SPI(self) == SPI(self)));
 				break;
-			}
-			case op_neg:
-			{
+			case op_inoteq:
+				vector_push(self->value_stack, object_bool_new(SPI(self) != SPI(self)));
 				break;
-			}
+			case op_igt:
+				vector_push(self->value_stack, object_bool_new(SPI(self) > SPI(self)));
+				break;
+			case op_ige:
+				vector_push(self->value_stack, object_bool_new(SPI(self) >= SPI(self)));
+				break;
+			case op_ilt:
+				vector_push(self->value_stack, object_bool_new(SPI(self) < SPI(self)));
+				break;
+			case op_ile:
+				vector_push(self->value_stack, object_bool_new(SPI(self) <= SPI(self)));
+				break;
+				//double & double
+			case op_dadd:
+				vector_push(self->value_stack, object_double_new(SPD(self) + SPD(self)));
+				break;
+			case op_dsub:
+				vector_push(self->value_stack, object_double_new(SPD(self) - SPD(self)));
+				break;
+			case op_dmul:
+				vector_push(self->value_stack, object_double_new(SPD(self) * SPD(self)));
+				break;
+			case op_ddiv:
+				vector_push(self->value_stack, object_double_new(SPD(self) / SPD(self)));
+				break;
+			case op_dmod:
+				vector_push(self->value_stack, object_double_new((double)((int)SPD(self) % (int)SPD(self))));
+				break;
+			case op_deq:
+				vector_push(self->value_stack, object_bool_new(SPD(self) == SPD(self)));
+				break;
+			case op_dnoteq:
+				vector_push(self->value_stack, object_bool_new(SPD(self) != SPD(self)));
+				break;
+			case op_dgt:
+				vector_push(self->value_stack, object_bool_new(SPD(self) > SPD(self)));
+				break;
+			case op_dge:
+				vector_push(self->value_stack, object_bool_new(SPD(self) >= SPD(self)));
+				break;
+			case op_dlt:
+				vector_push(self->value_stack, object_bool_new(SPD(self) < SPD(self)));
+				break;
+			case op_dle:
+				vector_push(self->value_stack, object_bool_new(SPD(self) <= SPD(self)));
+				break;
+			case op_ineg:
+				vector_push(self->value_stack, object_int_new(-SPI(self)));
+				break;
+			case op_dneg:
+				vector_push(self->value_stack, object_double_new(-SPD(self)));
+				break;
+			case op_bnot:
+				vector_push(self->value_stack, object_bool_new(!SPB(self)));
+				break;
 			//push const
 			case op_consti:
 			{
@@ -374,7 +406,7 @@ void vm_execute(vm* self, enviroment* env) {
 
 			case op_goto_if_true:
 			{
-				int v = vector_pop(self->value_stack);
+				bool v = (bool)vector_pop(self->value_stack);
 				label* l = (label*)enviroment_source_at(env, ++i);
 				if (v) {
 					i = l->cursor;
@@ -384,7 +416,7 @@ void vm_execute(vm* self, enviroment* env) {
 
 			case op_goto_if_false:
 			{
-				int v = vector_pop(self->value_stack);
+				bool v = (bool)vector_pop(self->value_stack);
 				label* l = (label*)enviroment_source_at(env, ++i);
 				if (!v) {
 					i = l->cursor;
@@ -408,40 +440,62 @@ void vm_delete(vm * self) {
 
 //private
 static int stack_topi(vm* self) {
-	return (int)vector_top(self->value_stack);
+	object* ret = (object*)vector_top(self->value_stack);
+	assert(ret->type == object_int);
+	return ret->u.int_;
 }
 
 static double stack_topd(vm* self) {
-	double* d = (double*)vector_top(self->value_stack);
-	return (*d);
+	object* ret = (object*)vector_top(self->value_stack);
+	assert(ret->type == object_double);
+	return ret->u.double_;
 }
 
 static char stack_topc(vm* self) {
-	char c = (char)vector_top(self->value_stack);
-	return c;
+	object* ret = (object*)vector_top(self->value_stack);
+	assert(ret->type == object_char);
+	return ret->u.char_;
 }
 
 static char* stack_tops(vm* self) {
-	char* s = (char*)vector_top(self->value_stack);
-	return s;
+	object* ret = (object*)vector_top(self->value_stack);
+	assert(ret->type == object_string);
+	return ret->u.string_;
+}
+
+static bool stack_topb(vm* self) {
+	object* ret = (object*)vector_top(self->value_stack);
+	assert(ret->type == object_bool);
+	return ret->u.bool_;
 }
 
 
 static int stack_popi(vm* self) {
-	return (int)vector_pop(self->value_stack);
+	object* ret = (object*)vector_pop(self->value_stack);
+	assert(ret->type == object_int);
+	return ret->u.int_;
 }
 
 static double stack_popd(vm* self) {
-	double* d = (double*)vector_pop(self->value_stack);
-	return (*d);
+	object* ret = (object*)vector_pop(self->value_stack);
+	assert(ret->type == object_double);
+	return ret->u.double_;
 }
 
 static char stack_popc(vm* self) {
-	char c = (char)vector_pop(self->value_stack);
-	return c;
+	object* ret = (object*)vector_pop(self->value_stack);
+	assert(ret->type == object_char);
+	return ret->u.char_;
 }
 
 static char* stack_pops(vm* self) {
-	char* s = (char*)vector_pop(self->value_stack);
-	return s;
+	object* ret = (object*)vector_pop(self->value_stack);
+	assert(ret->type == object_string);
+	return ret->u.string_;
+}
+
+static bool stack_popb(vm* self) {
+	object* ret = (object*)vector_pop(self->value_stack);
+	assert(ret->type == object_bool);
+	return ret->u.bool_;
 }

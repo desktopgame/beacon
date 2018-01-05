@@ -100,6 +100,10 @@ class_ * namespace_string_class() {
 	return namespace_get_class(namespace_lang(), "String");
 }
 
+class_ * namespace_bool_class() {
+	return namespace_get_class(namespace_lang(), "Bool");
+}
+
 class_ * namespace_void_class() {
 	return namespace_get_class(namespace_lang(), "Void");
 }

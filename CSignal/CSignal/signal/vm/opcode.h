@@ -18,27 +18,60 @@ typedef unsigned char op_byte;
  * 命令の一覧です.
  */
 typedef enum opcode {
-	op_add = 1,
-	op_sub,
-	op_mul,
-	op_div,
-	op_mod,
+	//{{{ binary operator
+		//{{{ int
+		op_iadd = 1,
+		op_isub,
+		op_imul,
+		op_idiv,
+		op_imod,
+		op_ibit_or,
+		op_ilogic_or,
+		op_ibit_and,
+		op_ilogic_and,
+		op_ieq,
+		op_inoteq,
+		op_igt,
+		op_ige,
+		op_ilt,
+		op_ile,
+		//}}}
 
-	op_bit_or,
-	op_logic_or,
+		//{{{ double
+		op_dadd,
+		op_dsub,
+		op_dmul,
+		op_ddiv,
+		op_dmod,
+		/*
+			明示的に int にキャストする必要があります。
+			op_dbit_or,
+			op_dlogic_or,
+			op_dbit_and,
+			op_dlogic_and,
+		*/
+		op_deq,
+		op_dnoteq,
+		op_dgt,
+		op_dge,
+		op_dlt,
+		op_dle,
+		//}}}
+	//}}}
 
-	op_bit_and,
-	op_logic_and,
+	//{{{ unary
+		//{{{ int
+		op_ineg,
+		//}}}
 
-	op_eq,
-	op_noteq,
-	op_gt,
-	op_ge,
-	op_lt,
-	op_le,
+		//{{{ double
+		op_dneg,
+		//}}}
 
-	op_not,
-	op_neg,
+		//{{{ bool
+		op_bnot,
+		//}}}
+	//}}}
 
 	op_consti,
 	op_constd,

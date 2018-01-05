@@ -6,11 +6,35 @@
 #include "il_factor_variable_impl.h"
 #include "il_factor_field_access_impl.h"
 #include "../../env/class.h"
+#include "../../env/namespace.h"
 #include "../../vm/enviroment.h"
 #include "../../util/mem.h"
 
+typedef enum bi_operator_t {
+	bi_add,
+	bi_sub,
+	bi_mul,
+	bi_div,
+	bi_mod,
+
+	bi_bit_or,
+	bi_logic_or,
+
+	bi_bit_and,
+	bi_logic_and,
+
+	bi_eq,
+	bi_noteq,
+	bi_gt,
+	bi_ge,
+	bi_lt,
+	bi_le
+} bi_operator_t;
+
 //proto
-static void il_factor_binary_op_generate_impl(il_factor_binary_op * self, enviroment * env, opcode c);
+static void il_factor_binary_op_generate_impl(il_factor_binary_op * self, enviroment * env, bi_operator_t c);
+static opcode bi_operator_to_opi(bi_operator_t bi);
+static opcode bi_operator_to_opd(bi_operator_t bi);
 
 il_factor * il_factor_wrap_binary(il_factor_binary_op * self) {
 	il_factor* ret = (il_factor*)MEM_MALLOC(sizeof(il_factor));
@@ -111,54 +135,54 @@ void il_factor_binary_op_generate(il_factor_binary_op * self, enviroment* env) {
 	
 	switch (self->type) {
 		case ilbinary_add:
-			il_factor_binary_op_generate_impl(self, env, op_add);
+			il_factor_binary_op_generate_impl(self, env, bi_add);
 			break;
 		case ilbinary_sub:
-			il_factor_binary_op_generate_impl(self, env, op_sub);
+			il_factor_binary_op_generate_impl(self, env, bi_sub);
 			break;
 		case ilbinary_mul:
-			il_factor_binary_op_generate_impl(self, env, op_mul);
+			il_factor_binary_op_generate_impl(self, env, bi_mul);
 			break;
 		case ilbinary_div:
-			il_factor_binary_op_generate_impl(self, env, op_div);
+			il_factor_binary_op_generate_impl(self, env, bi_div);
 			break;
 		case ilbinary_mod:
-			il_factor_binary_op_generate_impl(self, env, op_mod);
+			il_factor_binary_op_generate_impl(self, env, bi_mod);
 			break;
 
 
 		case ilbinary_bit_or:
-			il_factor_binary_op_generate_impl(self, env, op_bit_or);
+			il_factor_binary_op_generate_impl(self, env, bi_bit_or);
 			break;
 		case ilbinary_logic_or:
-			il_factor_binary_op_generate_impl(self, env, op_logic_or);
+			il_factor_binary_op_generate_impl(self, env, bi_logic_or);
 			break;
 
 
 		case ilbinary_bit_and:
-			il_factor_binary_op_generate_impl(self, env, op_bit_and);
+			il_factor_binary_op_generate_impl(self, env, bi_bit_and);
 			break;
 		case ilbinary_logic_and:
-			il_factor_binary_op_generate_impl(self, env, op_logic_and);
+			il_factor_binary_op_generate_impl(self, env, bi_logic_and);
 			break;
 
 		case ilbinary_eq:
-			il_factor_binary_op_generate_impl(self, env, op_eq);
+			il_factor_binary_op_generate_impl(self, env, bi_eq);
 			break;
 		case ilbinary_noteq:
-			il_factor_binary_op_generate_impl(self, env, op_noteq);
+			il_factor_binary_op_generate_impl(self, env, bi_noteq);
 			break;
 		case ilbinary_gt:
-			il_factor_binary_op_generate_impl(self, env, op_gt);
+			il_factor_binary_op_generate_impl(self, env, bi_gt);
 			break;
 		case ilbinary_ge:
-			il_factor_binary_op_generate_impl(self, env, op_ge);
+			il_factor_binary_op_generate_impl(self, env, bi_ge);
 			break;
 		case ilbinary_lt:
-			il_factor_binary_op_generate_impl(self, env, op_lt);
+			il_factor_binary_op_generate_impl(self, env, bi_lt);
 			break;
 		case ilbinary_le:
-			il_factor_binary_op_generate_impl(self, env, op_le);
+			il_factor_binary_op_generate_impl(self, env, bi_le);
 			break;
 		//フィールドへの代入(put)なら、
 		//フィールドのインデックス
@@ -202,8 +226,74 @@ void il_factor_binary_op_delete(il_factor_binary_op * self) {
 }
 
 //private
-static void il_factor_binary_op_generate_impl(il_factor_binary_op * self, enviroment * env, opcode c) {
+static void il_factor_binary_op_generate_impl(il_factor_binary_op * self, enviroment * env, bi_operator_t c) {
 	il_factor_generate(self->left, env);
 	il_factor_generate(self->right, env);
-	opcode_buf_add(env->buf, (vector_item)c);
+	
+	class_* lclass = il_factor_eval(self->left, env);
+	class_* rclass = il_factor_eval(self->right, env);
+	if (lclass == CL_INT &&
+		rclass == CL_INT) {
+		opcode_buf_add(env->buf, (vector_item)bi_operator_to_opi(c));
+	}
+	if (lclass == CL_DOUBLE &&
+		rclass == CL_DOUBLE) {
+		opcode_buf_add(env->buf, (vector_item)bi_operator_to_opd(c));
+	}
+}
+
+static opcode bi_operator_to_opi(bi_operator_t bi) {
+	switch (bi) {
+		case bi_add: return op_iadd;
+		case bi_sub: return op_isub;
+		case bi_mul: return op_imul;
+		case bi_div: return op_idiv;
+		case bi_mod: return op_imod;
+
+		case bi_bit_or: return op_ibit_or;
+		case bi_logic_or: return op_ilogic_or;
+		case bi_bit_and: return op_ibit_and;
+		case bi_logic_and: return op_ilogic_and;
+
+		case bi_eq: return op_ieq;
+		case bi_noteq: return op_inoteq;
+		case bi_gt: return op_igt;
+		case bi_ge: return op_ige;
+		case bi_lt: return op_ilt;
+		case bi_le: return op_ile;
+
+		default:
+			break;
+	}
+}
+
+static opcode bi_operator_to_opd(bi_operator_t bi) {
+	//return op_dbit_and - bi;
+	//*
+	switch (bi) {
+		case bi_add: return op_dadd;
+		case bi_sub: return op_dsub;
+		case bi_mul: return op_dmul;
+		case bi_div: return op_ddiv;
+		case bi_mod: return op_dmod;
+
+		case bi_bit_or:
+		case bi_logic_or:
+		case bi_bit_and:
+		case bi_logic_and:
+			//未対応
+			assert(false);
+			break;
+
+		case bi_eq: return op_deq;
+		case bi_noteq: return op_dnoteq;
+		case bi_gt: return op_dgt;
+		case bi_ge: return op_dge;
+		case bi_lt: return op_dlt;
+		case bi_le: return op_dle;
+
+		default:
+			break;
+	}
+	//*/
 }

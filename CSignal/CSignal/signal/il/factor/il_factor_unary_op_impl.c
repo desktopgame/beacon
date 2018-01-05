@@ -1,10 +1,20 @@
 #include "il_factor_unary_op_impl.h"
 #include <stdlib.h>
 #include <stdio.h>
+#include <assert.h>
 #include "../../util/text.h"
 #include "../../vm/enviroment.h"
 #include "../../env/class.h"
 #include "../../util/mem.h"
+
+typedef enum u_operator_t {
+	u_not,
+	u_neg
+} u_operator_t;
+
+static opcode u_operator_to_opi(u_operator_t c);
+static opcode u_operator_to_opd(u_operator_t c);
+static opcode u_operator_to_opb(u_operator_t c);
 
 il_factor * il_factor_wrap_unary(il_factor_unary_op * self) {
 	il_factor* ret = (il_factor*)MEM_MALLOC(sizeof(il_factor));
@@ -38,15 +48,18 @@ void il_factor_unary_op_dump(il_factor_unary_op * self, int depth) {
 
 void il_factor_unary_op_generate(il_factor_unary_op * self, enviroment* env) {
 	il_factor_generate(self->a, env);
-	switch (self->type) {
-		case ilunary_not:
-			opcode_buf_add(env->buf, op_not);
-			break;
-		case ilunary_neg:
-			opcode_buf_add(env->buf, op_neg);
-			break;
-		default:
-			break;
+	class_* cls = il_factor_eval(self->a, env);
+	if (cls == CL_INT) {
+		assert(self->type == ilunary_neg);
+		opcode_buf_add(env->buf, (vector_item)u_operator_to_opi(u_neg));
+	} else if (cls == CL_DOUBLE) {
+		assert(self->type == ilunary_neg);
+		opcode_buf_add(env->buf, (vector_item)u_operator_to_opd(u_neg));
+	} else if (cls == CL_BOOL) {
+		assert(self->type == ilunary_not);
+		opcode_buf_add(env->buf, (vector_item)u_operator_to_opb(u_not));
+	} else {
+		assert(false);
 	}
 }
 
@@ -60,4 +73,19 @@ class_ * il_factor_unary_op_eval(il_factor_unary_op * self, enviroment * env) {
 void il_factor_unary_op_delete(il_factor_unary_op * self) {
 	il_factor_delete(self->a);
 	MEM_FREE(self);
+}
+
+static opcode u_operator_to_opi(u_operator_t c) {
+	assert(c == u_neg);
+	return op_ineg;
+}
+
+static opcode u_operator_to_opd(u_operator_t c) {
+	assert(c == u_neg);
+	return op_dneg;
+}
+
+static opcode u_operator_to_opb(u_operator_t c) {
+	assert(c == u_not);
+	return op_bnot;
 }

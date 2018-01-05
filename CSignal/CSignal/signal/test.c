@@ -220,7 +220,7 @@ void test_vm(void) {
 	opcode_buf_add(env->buf, op_consti);
 	opcode_buf_add(env->buf, 1);
 	//演算子 + で還元
-	opcode_buf_add(env->buf, op_add);
+	opcode_buf_add(env->buf, op_iadd);
 	//実行
 	vm_execute(vm, env);
 	int res = (int)vector_top(vm->value_stack);

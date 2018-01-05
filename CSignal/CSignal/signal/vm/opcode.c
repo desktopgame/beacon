@@ -7,61 +7,94 @@ int opcode_print(vector* source, int index) {
 	opcode code = (opcode)e;
 	printf("%d: ", index);
 	switch (code) {
-		//eval
-		case op_add:
-		{
-			printf("add");
+		//int & int
+		case op_iadd:
+			printf("iadd");
 			break;
-		}
-		case op_sub:
-		{
-			printf("sub");
+		case op_isub:
+			printf("isub");
 			break;
-		}
-		case op_mul:
-		{
+		case op_imul:
+			printf("imul");
+			break;
+		case op_idiv:
+			printf("idiv");
+			break;
+		case op_imod:
+			printf("imod");
+			break;
+		case op_ibit_or:
+			printf("ibit or");
+			break;
+		case op_ilogic_or:
+			printf("ilogic or");
+			break;
+		case op_ibit_and:
+			printf("ibit and");
+			break;
+		case op_ilogic_and:
+			printf("ilogic and");
+			break;
+		case op_ieq:
+			printf("ieq");
+			break;
+		case op_inoteq:
+			printf("inoteq");
+			break;
+		case op_igt:
+			printf("igt");
+			break;
+		case op_ige:
+			printf("ige");
+			break;
+		case op_ilt:
+			printf("ilt");
+			break;
+		case op_ile:
+			printf("ile");
+			break;
+		//double & double
+		case op_dadd:
+			printf("dadd");
+			break;
+		case op_dsub:
+			printf("dsub");
+			break;
+		case op_dmul:
 			printf("mul");
 			break;
-		}
-		case op_div:
-		{
-			printf("div");
+		case op_ddiv:
+			printf("ddiv");
 			break;
-		}
-		case op_mod:
-		{
-			printf("mod");
+		case op_dmod:
+			printf("dmod");
 			break;
-		}
-		case op_bit_or:
-			printf("bit or");
+		case op_deq:
+			printf("deq");
 			break;
-
-		case op_logic_or:
-			printf("logic or");
+		case op_dnoteq:
+			printf("dnoteq");
 			break;
-
-		case op_bit_and:
-			printf("bit and");
+		case op_dgt:
+			printf("dgt");
 			break;
-
-		case op_logic_and:
-			printf("logic and");
+		case op_dge:
+			printf("dge");
 			break;
-		case op_eq:
-			printf("eq");
+		case op_dlt:
+			printf("dlt");
 			break;
-		case op_gt:
-			printf("gt");
+		case op_dle:
+			printf("dle");
 			break;
-		case op_ge:
-			printf("ge");
+		case op_ineg:
+			printf("ineg");
 			break;
-		case op_lt:
-			printf("lt");
+		case op_dneg:
+			printf("dneg");
 			break;
-		case op_le:
-			printf("le");
+		case op_bnot:
+			printf("bnot");
 			break;
 		//push const
 		case op_consti:
