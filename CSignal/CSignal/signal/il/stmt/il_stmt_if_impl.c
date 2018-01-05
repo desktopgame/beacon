@@ -124,11 +124,11 @@ void il_stmt_if_generate(il_stmt_if * self, enviroment* env) {
 		self->else_body->body->length == 0) {
 		tail->cursor = opcode_buf_nop(env->buf);
 	} else {
-		tail->cursor = opcode_buf_nop(env->buf);
 		for (int i = 0; i < self->else_body->body->length; i++) {
 			il_stmt* stmt = (il_stmt*)vector_at(self->else_body->body, i);
 			il_stmt_generate(stmt, env);
 		}
+		tail->cursor = opcode_buf_nop(env->buf);
 	}
 }
 
