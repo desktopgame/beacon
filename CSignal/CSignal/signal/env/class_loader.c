@@ -1044,11 +1044,11 @@ static void class_loader_sgload_chain(class_loader* self, il_class* ilclass, cla
 	constructor* chainTarget = NULL;
 	int temp = 0;
 	if (chain->type == chain_type_this) {
-		chainTarget = class_find_constructor_args_match(classz, chain->argument_list, env, &temp);
+		chainTarget = class_find_constructor(classz, chain->argument_list, env, &temp);
 		opcode_buf_add(env->buf, op_chain_this);
 		opcode_buf_add(env->buf, classz->absoluteIndex);
 	} else if (chain->type == chain_type_super) {
-		chainTarget = class_find_constructor_args_match(classz->super_class, chain->argument_list, env, &temp);
+		chainTarget = class_find_constructor(classz->super_class, chain->argument_list, env, &temp);
 		opcode_buf_add(env->buf, op_chain_super);
 		opcode_buf_add(env->buf, classz->super_class->absoluteIndex);
 	}

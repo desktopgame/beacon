@@ -3,6 +3,7 @@
 #include "../../env/method.h"
 #include "../../util/mem.h"
 #include "../../util/text.h"
+#include "../../util/logger.h"
 #include "il_factor_variable_impl.h"
 #include <assert.h>
 
@@ -121,13 +122,14 @@ static void il_factor_named_invoke_find(il_factor_named_invoke* self, enviroment
 			cls = (class_*)il_factor_eval(self->u.factor, env);
 			il_factor_named_invoke_generate_IMPL(self, env, cls);
 		}
+		//TEST(env->toplevel);
 	}
 }
 
 static void il_factor_named_invoke_generate_IMPL(il_factor_named_invoke* self, enviroment* env, class_* cls) {
 	int temp = 0;
-	self->m = class_find_method_args_match(cls, self->method_name, self->argument_list, env, &temp);
-	self->methodIndex = temp;
+	self->m = class_find_method(cls, self->method_name, self->argument_list, env, &temp);
+	self->methodIndex = class_method_index_resolve(self->m->parent, temp);
 }
 
 static void il_factor_named_invoke_generate_args(il_factor_named_invoke* self, enviroment* env) {

@@ -67,7 +67,7 @@ void il_factor_new_instance_delete(il_factor_new_instance * self) {
 static void il_factor_new_instance_find(il_factor_new_instance * self, enviroment * env) {
 	class_* cls = enviroment_class(env, self->fqcn);
 	int temp = 0;
-	self->c = class_find_constructor_args_match(cls, self->argument_list, env, &temp);
+	self->c = class_find_constructor(cls, self->argument_list, env, &temp);
 	assert(self->c != NULL);
 	self->constructorIndex = temp;
 }

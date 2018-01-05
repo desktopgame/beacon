@@ -96,16 +96,6 @@ struct field* class_find_field(class_* self, const char* name, int* outIndex);
 struct field* class_find_field_tree(class_* self, const char* name, access_domain domain, int* outIndex);
 
 /**
- * 指定の型で呼び出せるコンストラクタの一覧を返します.
- * @param self
- * @param args<il_argument*> 呼び出し側で開放してください.
- * @param env
- * @return 無ければ空
- *         呼び出し側で開放してください。
- */
-vector* class_find_constructor_args(class_* self, vector* args, enviroment* env);
-
-/**
  * もっとも一致するコンストラクタを返します.
  * @param self
  * @param args<il_argument*> 呼び出し側で開放してください.
@@ -114,31 +104,7 @@ vector* class_find_constructor_args(class_* self, vector* args, enviroment* env)
  * @return 無ければ空
  *         呼び出し側で開放してください。
  */
-struct constructor* class_find_constructor_args_match(class_* self, vector* args, enviroment* env, int* outIndex);
-
-/**
- * 指定の名前/仮引数を持つメソッドの一覧を返します.
- * @param self
- * @param name
- * @param count
- * @param ...
- * @return 無ければ空
- *         呼び出し側で開放してください。
- */
-vector* class_find_method(class_* self, const char* name, int count, ...);
-
-
-
-/**
- * 指定の型で呼び出せるメソッドの一覧を返します.
- * @param self
- * @param name
- * @param args<il_argument*> 呼び出し側で開放してください.
- * @param env
- * @return 無ければ空
- *         呼び出し側で開放してください。
- */
-vector* class_find_method_args(class_* self, const char* name, vector* args, enviroment* env);
+struct constructor* class_find_constructor(class_* self, vector* args, enviroment* env, int* outIndex);
 
 /**
  * もっとも一致するメソッドを返します.
@@ -149,7 +115,7 @@ vector* class_find_method_args(class_* self, const char* name, vector* args, env
  * @param outIndex メソッドへのインデックス
  * @return
  */
-struct method* class_find_method_args_match(class_* self, const char* name, vector* args, enviroment* env, int* outIndex);
+struct method* class_find_method(class_* self, const char* name, vector* args, enviroment* env, int* outIndex);
 
 /**
  * このクラスの中で有効なメソッドへのインデックスを、

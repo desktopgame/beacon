@@ -80,6 +80,6 @@ static void il_factor_find_method(il_factor_call* self, enviroment* env) {
 		return;
 	}
 	int temp = 0;
-	self->m = class_find_method_args_match((class_*)vector_top(env->class_vec), self->name, self->argument_list, env, &temp);
+	self->m = class_find_method((class_*)vector_top(env->class_vec), self->name, self->argument_list, env, &temp);
 	self->methodIndex = temp;
 }

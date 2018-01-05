@@ -31,6 +31,12 @@ namespace signal.lang {
 
 		ctor new() : this(0, 0, 0) {
 		}
+
+		def printXYZ() -> Void {
+			Console.writeLine(this.x);
+			Console.writeLine(this.y);
+			Console.writeLine(this.z);
+		}
 	}
 }
 namespace L.Goo.Foo {
@@ -88,9 +94,10 @@ namespace L.Goo.Foo {
 	}
 }
 signal::lang::Point3D c = new signal::lang::Point3D(1, 2, 3);
-signal::lang::Console.writeLine(c.x);
-signal::lang::Console.writeLine(c.y);
-signal::lang::Console.writeLine(c.z);
+//signal::lang::Console.writeLine(c.x);
+//signal::lang::Console.writeLine(c.y);
+//signal::lang::Console.writeLine(c.z);
+c.printXYZ();
 
 //signal::lang::Point2D c = new signal::lang::Point2D(10, 2);
 //c.print(200, 5);

@@ -22,6 +22,8 @@
 //private
 static void class_field_delete(vector_item item);
 static void class_method_delete(vector_item item);
+static vector * class_find_method_impl(class_ * self, const char * name, vector * args, enviroment* env);
+static vector * class_find_constructor_impl(class_ * self, vector * args, enviroment* env);
 
 class_ * class_new(const char * name, class_type type) {
 	assert(name != NULL);
@@ -108,44 +110,8 @@ field * class_find_field_tree(class_ * self, const char * name, access_domain do
 	return NULL;
 }
 
-vector * class_find_constructor_args(class_ * self, vector * args, enviroment* env) {
-	vector* v = vector_new();
-	if (self == NULL) {
-		return v;
-	}
-	for (int i = 0; i < self->constructor_list->length; i++) {
-		vector_item e = vector_at(self->constructor_list, i);
-		constructor* c = (constructor*)e;
-		//引数の個数が違うので無視
-		if (c->parameter_list->length != args->length) {
-			continue;
-		}
-		//引数がひとつもないので、
-		//型のチェックを行わない
-		if (args->length == 0) {
-			vector_push(v, c);
-			continue;
-		}
-		bool match = true;
-		for (int j = 0; j < args->length; j++) {
-			vector_item d = vector_at(args, j);
-			vector_item d2 = vector_at(c->parameter_list, j);
-			il_argument* p = (il_argument*)d;
-			parameter* p2 = (parameter*)d2;
-			if (!class_castable(il_factor_eval(p->factor, env), p2->classz)) {
-				match = false;
-				break;
-			}
-		}
-		if (match) {
-			vector_push(v, c);
-		}
-	}
-	return v;
-}
-
-constructor * class_find_constructor_args_match(class_ * self, vector * args, enviroment * env, int* outIndex) {
-	vector* v = class_find_constructor_args(self, args, env);
+constructor * class_find_constructor(class_ * self, vector * args, enviroment * env, int* outIndex) {
+	vector* v = class_find_constructor_impl(self, args, env);
 	(*outIndex) = -1;
 	//コンストラクタが一つも見つからなかった
 	if (v->length == 0) {
@@ -176,88 +142,8 @@ constructor * class_find_constructor_args_match(class_ * self, vector * args, en
 	return ret;
 }
 
-vector * class_find_method(class_* self, const char * name, int count, ...) {
-	vector* v = vector_new();
-	va_list args;
-	va_start(args, count);
-
-	for (int i = 0; i < self->method_list->length; i++) {
-		vector_item e = vector_at(self->method_list, i);
-		method* m = (method*)e;
-		//名前か引数の個数が違うので無視
-		if (strcmp(m->name, name) || 
-			count != m->parameter_list->length) {
-			continue;
-		}
-		//引数がひとつもないので、
-		//型のチェックを行わない
-		if (count == 0) {
-			vector_push(v, m);
-			continue;
-		}
-		bool match = true;
-		va_list buf;
-		va_copy(buf, args);
-		//仮引数の型チェック
-		for (int j = 0; j < count; j++) {
-			vector_item d = vector_at(m->parameter_list, j);
-			parameter* p = (parameter*)d;
-			class_* cl = va_arg(buf, class_*);
-			//互換のない型なら次へ
-			if (!class_castable(cl, p->classz)) {
-				match = false;
-				break;
-			}
-		}
-		va_end(buf);
-		if (match) {
-			vector_push(v, m);
-		}
-	}
-	va_end(args);
-	return v;
-}
-
-vector * class_find_method_args(class_ * self, const char * name, vector * args, enviroment* env) {
-	vector* v = vector_new();
-	if (self == NULL) {
-		return v;
-	}
-	for (int i = 0; i < self->method_list->length; i++) {
-		vector_item e = vector_at(self->method_list, i);
-		method* m = (method*)e;
-		//名前か引数の個数が違うので無視
-		if (strcmp(m->name, name) ||
-			m->parameter_list->length != args->length
-			) {
-			continue;
-		}
-		//引数がひとつもないので、
-		//型のチェックを行わない
-		if (args->length == 0) {
-			vector_push(v, m);
-			continue;
-		}
-		bool match = true;
-		for (int j = 0; j < args->length; j++) {
-			vector_item d = vector_at(args, j);
-			vector_item d2 = vector_at(m->parameter_list, j);
-			il_argument* p = (il_argument*)d;
-			parameter* p2 = (parameter*)d2;
-			if (!class_castable(il_factor_eval(p->factor, env), p2->classz)) {
-				match = false;
-				break;
-			}
-		}
-		if (match) {
-			vector_push(v, m);
-		}
-	}
-	return v;
-}
-
-method * class_find_method_args_match(class_ * self, const char * name, vector * args, enviroment * env, int * outIndex) {
-	vector* v = class_find_method_args(self, name, args, env);
+method * class_find_method(class_ * self, const char * name, vector * args, enviroment * env, int * outIndex) {
+	vector* v = class_find_method_impl(self, name, args, env);
 	(*outIndex) = -1;
 	//メソッドが一つも見つからなかった
 	if (v->length == 0) {
@@ -429,4 +315,78 @@ static void class_field_delete(vector_item item) {
 static void class_method_delete(vector_item item) {
 	method* e = (method*)item;
 	method_delete(e);
+}
+
+static vector * class_find_method_impl(class_ * self, const char * name, vector * args, enviroment* env) {
+	vector* v = vector_new();
+	if (self == NULL) {
+		return v;
+	}
+	for (int i = 0; i < self->method_list->length; i++) {
+		vector_item e = vector_at(self->method_list, i);
+		method* m = (method*)e;
+		//名前か引数の個数が違うので無視
+		if (strcmp(m->name, name) ||
+			m->parameter_list->length != args->length
+			) {
+			continue;
+		}
+		//引数がひとつもないので、
+		//型のチェックを行わない
+		if (args->length == 0) {
+			vector_push(v, m);
+			continue;
+		}
+		bool match = true;
+		for (int j = 0; j < args->length; j++) {
+			vector_item d = vector_at(args, j);
+			vector_item d2 = vector_at(m->parameter_list, j);
+			il_argument* p = (il_argument*)d;
+			parameter* p2 = (parameter*)d2;
+			if (!class_castable(il_factor_eval(p->factor, env), p2->classz)) {
+				match = false;
+				break;
+			}
+		}
+		if (match) {
+			vector_push(v, m);
+		}
+	}
+	return v;
+}
+
+static vector * class_find_constructor_impl(class_ * self, vector * args, enviroment* env) {
+	vector* v = vector_new();
+	if (self == NULL) {
+		return v;
+	}
+	for (int i = 0; i < self->constructor_list->length; i++) {
+		vector_item e = vector_at(self->constructor_list, i);
+		constructor* c = (constructor*)e;
+		//引数の個数が違うので無視
+		if (c->parameter_list->length != args->length) {
+			continue;
+		}
+		//引数がひとつもないので、
+		//型のチェックを行わない
+		if (args->length == 0) {
+			vector_push(v, c);
+			continue;
+		}
+		bool match = true;
+		for (int j = 0; j < args->length; j++) {
+			vector_item d = vector_at(args, j);
+			vector_item d2 = vector_at(c->parameter_list, j);
+			il_argument* p = (il_argument*)d;
+			parameter* p2 = (parameter*)d2;
+			if (!class_castable(il_factor_eval(p->factor, env), p2->classz)) {
+				match = false;
+				break;
+			}
+		}
+		if (match) {
+			vector_push(v, c);
+		}
+	}
+	return v;
 }
