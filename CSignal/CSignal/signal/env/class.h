@@ -118,6 +118,19 @@ struct constructor* class_find_constructor(class_* self, vector* args, enviromen
 struct method* class_find_method(class_* self, const char* name, vector* args, enviroment* env, int* outIndex);
 
 /**
+ * もっとも一致するメソッドを返します.
+ * 無かったら親クラスを検索します。
+ * @param self
+ * @param name
+ * @param env
+ * @param args<il_argument*>
+ * @param domain
+ * @param outIndex
+ * @return
+ */
+struct method* class_find_method_tree(class_* self, const char* name, vector* args, access_domain domain, enviroment* env, int* outIndex);
+
+/**
  * このクラスの中で有効なメソッドへのインデックスを、
  * スーパークラスも加味したインデックスへ変換します.
  * @param self

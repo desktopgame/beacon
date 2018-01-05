@@ -174,6 +174,19 @@ method * class_find_method(class_ * self, const char * name, vector * args, envi
 	return ret;
 }
 
+method * class_find_method_tree(class_ * self, const char * name, vector * args, access_domain domain, enviroment * env, int * outIndex) {
+	class_* pointee = self;
+	do {
+		method* m = class_find_method(pointee, name, args, env, outIndex);
+		if (m != NULL &&
+			domain_accept(domain, m->modifier, m->access)) {
+			return m;
+		}
+		pointee = pointee->super_class;
+	} while (pointee != NULL);
+	return NULL;
+}
+
 int class_method_index_resolve(class_* self, int index) {
 	assert(index >= 0);
 	if (self->super_class == NULL) {
