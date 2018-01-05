@@ -227,8 +227,9 @@ void il_factor_binary_op_delete(il_factor_binary_op * self) {
 
 //private
 static void il_factor_binary_op_generate_impl(il_factor_binary_op * self, enviroment * env, bi_operator_t c) {
-	il_factor_generate(self->left, env);
+	//ここで逆にしておく
 	il_factor_generate(self->right, env);
+	il_factor_generate(self->left, env);
 	
 	class_* lclass = il_factor_eval(self->left, env);
 	class_* rclass = il_factor_eval(self->right, env);

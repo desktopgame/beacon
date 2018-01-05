@@ -105,7 +105,7 @@ if(a == b) {
 } elif(a > b) {
 	signal::lang::Console.writeLine("a > b");
 } elif(a < b) {
-	signal::lang::Console.writeLine("a > b");
+	signal::lang::Console.writeLine("a < b");
 }
 
 //signal::lang::Point2D c = new signal::lang::Point2D(10, 2);

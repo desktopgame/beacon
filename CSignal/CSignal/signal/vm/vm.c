@@ -406,7 +406,7 @@ void vm_execute(vm* self, enviroment* env) {
 
 			case op_goto_if_true:
 			{
-				bool v = (bool)vector_pop(self->value_stack);
+				bool v = SPB(self);
 				label* l = (label*)enviroment_source_at(env, ++i);
 				if (v) {
 					i = l->cursor;
@@ -416,7 +416,7 @@ void vm_execute(vm* self, enviroment* env) {
 
 			case op_goto_if_false:
 			{
-				bool v = (bool)vector_pop(self->value_stack);
+				bool v = SPB(self);
 				label* l = (label*)enviroment_source_at(env, ++i);
 				if (!v) {
 					i = l->cursor;
