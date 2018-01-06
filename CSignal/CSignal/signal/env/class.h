@@ -123,32 +123,6 @@ struct constructor* class_find_constructor(class_* self, vector* args, enviromen
 struct method* class_find_method(class_* self, const char* name, vector* args, enviroment* env, int* outIndex);
 
 /**
- * このクラスの中で有効なメソッドへのインデックスを、
- * スーパークラスも加味したインデックスへ変換します.
- * @param self
- * @param index selfのメソッド一覧の中で有効なインデックス
- * @return
- */
-int class_method_index_resolve(class_* self, int index);
-
-/**
- * スーパークラスも加味したメソッドのインデックスから、
- * 適切なクラスのメソッドを返します.
- * @param self
- * @param index
- * @return
- */
-struct method* class_method_by_index(class_* self, int index);
-
-/**
- * このクラスからルートまでを辿って、
- * 全てのメソッドの数を返します.
- * @param self
- * @return
- */
-int class_method_countall(class_* self);
-
-/**
  * このクラスの中で有効なフィールドへのインデックスを
  * スーパークラスも加味したインデックスへ変換します.
  * @param self
