@@ -186,7 +186,7 @@ void vm_execute(vm* self, enviroment* env) {
 				int absClassIndex = (int)enviroment_source_at(env, ++i);
 				int methodIndex = (int)enviroment_source_at(env, ++i);
 				class_* cls = (class_*)vector_at(ctx->class_vec, absClassIndex);
-				method* m = class_method_by_index(cls, methodIndex);
+				method* m = (method*)vector_at(cls->vt->elements, methodIndex);
 				//いらない
 				opcode code = (opcode)enviroment_source_at(env, ++i);
 				assert(code == op_invokestatic);
@@ -198,7 +198,7 @@ void vm_execute(vm* self, enviroment* env) {
 				int index = (int)enviroment_source_at(env, ++i);
 				opcode code = (opcode)enviroment_source_at(env, ++i);
 				object* o = (object*)vector_top(self->value_stack);
-				method* m = class_method_by_index(o->classz, index);
+				method* m = (method*)vector_at(o->vptr->elements, index);
 				assert(code == op_invokevirtual ||
 					   code == op_invokespecial);
 				method_execute(m, self, env);

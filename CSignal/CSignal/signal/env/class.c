@@ -47,6 +47,9 @@ void class_alloc_fields(class_ * self, object * o) {
 	assert(o->type == object_ref);
 	for (int i = 0; i < self->field_list->length; i++) {
 		field* f = (field*)vector_at(self->field_list, i);
+		if (modifier_is_static(f->modifier)) {
+			continue;
+		}
 		object* a = object_ref_new();
 		a->classz = f->type;
 		vector_push(o->u.field_vec, a);
@@ -186,50 +189,6 @@ method * class_find_method(class_ * self, const char * name, vector * args, envi
 	return ret;
 }
 
-int class_method_index_resolve(class_* self, int index) {
-	return index;
-	/*
-	assert(index >= 0);
-	if (self->super_class == NULL) {
-		return index;
-	}
-	class_* pointee = self->super_class;
-	do {
-		index += (pointee->method_list->length);
-		pointee = pointee->super_class;
-	} while (pointee != NULL);
-	return index;
-	*/
-}
-
-method * class_method_by_index(class_* self, int index) {
-	return (method*)vector_at(self->vt->elements, index);
-	/*
-	assert(index >= 0);
-	if (self->super_class == NULL) {
-		vector_item e = vector_at(self->method_list, index);
-		return (method*)e;
-	}
-	class_* pointee = self;
-	do {
-		int length = pointee->method_list->length;
-		int end = class_method_countall(pointee);
-		int start = end - length;
-		int relative = index - start;
-		if (index >= start && index < end) {
-			vector_item e = vector_at(pointee->method_list, relative);
-			return (method*)e;
-		}
-		pointee = pointee->super_class;
-	} while (pointee != NULL);
-	return NULL;
-	*/
-}
-
-int class_method_countall(class_ * self) {
-	return class_method_index_resolve(self, self->method_list->length);
-}
-
 int class_field_index_resolve(class_ * self, int index) {
 	assert(index >= 0);
 	if (self->super_class == NULL) {
@@ -264,7 +223,7 @@ field * class_field_by_index(class_ * self, int index) {
 }
 
 int class_field_countall(class_ * self) {
-	return class_method_index_resolve(self, self->field_list->length);
+	return class_field_index_resolve(self, self->field_list->length);
 }
 
 bool class_castable(class_ * self, class_ * other) {

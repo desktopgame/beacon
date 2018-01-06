@@ -135,7 +135,7 @@ static void il_factor_named_invoke_find(il_factor_named_invoke* self, enviroment
 static void il_factor_named_invoke_generate_IMPL(il_factor_named_invoke* self, enviroment* env, class_* cls) {
 	int temp = 0;
 	self->m = class_find_method(cls, self->method_name, self->argument_list, env, &temp);
-	self->methodIndex = class_method_index_resolve(self->m->parent, temp);
+	self->methodIndex = temp;
 	//temp = 0;
 	//TEST(env->toplevel);
 }

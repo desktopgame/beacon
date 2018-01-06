@@ -22,7 +22,10 @@ namespace signal.lang {
 		def print() -> Void {
 			Console.writeLine("2D");
 		}
-
+		private:
+		def test() -> Void {
+			Console.writeLine("test2D");
+		}
 	}
 
 	class Point3D : Point2D {
@@ -46,6 +49,9 @@ namespace signal.lang {
 			Console.writeLine(this.z);
 		}
 */
+		def test() -> Void {
+			Console.writeLine("test3D");
+		}
 	}
 }
 namespace L.Goo.Foo {
@@ -102,7 +108,7 @@ namespace L.Goo.Foo {
 		}
 	}
 }
-signal::lang::Point2D c = new signal::lang::Point3D(1, 2, 3);
+signal::lang::Point2D c = new signal::lang::Point2D(1, 2);
 c.print();
 /*
 Int a = 2;
