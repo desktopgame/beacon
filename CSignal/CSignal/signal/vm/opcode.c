@@ -232,6 +232,7 @@ int opcode_print(vector* source, int index) {
 		}
 		case op_invokevirtual:
 		{
+			//int a = (int)vector_at(source, ++index);
 			printf("invoke virtual");
 			break;
 		}

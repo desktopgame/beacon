@@ -49,9 +49,15 @@ void il_factor_named_invoke_generate(il_factor_named_invoke * self, enviroment *
 	if (self->type == ilnamed_invoke_variable) {
 		il_factor_named_invoke_generate_args(self, env);
 		il_factor_generate(self->u.factor, env);
+
 		opcode_buf_add(env->buf, (vector_item)op_method);
 		opcode_buf_add(env->buf, self->methodIndex);
-		opcode_buf_add(env->buf, op_invokevirtual);
+		//継承出来ないなら
+		if (self->m->access == access_private) {
+			opcode_buf_add(env->buf, op_invokespecial);
+		} else {
+			opcode_buf_add(env->buf, op_invokevirtual);
+		}
 	//C.call() クラスへの呼び出し
 	} else {
 		il_factor_named_invoke_generate_args(self, env);
@@ -128,8 +134,10 @@ static void il_factor_named_invoke_find(il_factor_named_invoke* self, enviroment
 
 static void il_factor_named_invoke_generate_IMPL(il_factor_named_invoke* self, enviroment* env, class_* cls) {
 	int temp = 0;
-	self->m = class_find_method_tree(cls, self->method_name, self->argument_list, domain_none, env, &temp);
+	self->m = class_find_method(cls, self->method_name, self->argument_list, env, &temp);
 	self->methodIndex = class_method_index_resolve(self->m->parent, temp);
+	//temp = 0;
+	//TEST(env->toplevel);
 }
 
 static void il_factor_named_invoke_generate_args(il_factor_named_invoke* self, enviroment* env) {

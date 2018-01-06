@@ -6,6 +6,7 @@
 #include "../util/vector.h"
 #include "../ast/access_level.h"
 #include "../ast/modifier_type.h"
+#include <stdbool.h>
 struct class_;
 struct vm;
 struct enviroment;
@@ -57,6 +58,16 @@ void method_execute(method* self, struct vm* vm, struct enviroment* env);
  * @param depth
  */
 void method_dump(method* self, int depth);
+
+/**
+ * メソッドa とb が完全に等価である場合に true を返します.
+ * もしくは戻り値がサブクラス型でオーバライドされている場合でも true です。
+ * @see http://www.ne.jp/asahi/hishidama/home/tech/java/covariant.html
+ * @param a
+ * @param b
+ * @return
+ */
+bool method_equal(method* a, method* b);
 
 /**
  * メソッドを開放します.

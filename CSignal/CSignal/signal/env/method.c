@@ -1,6 +1,7 @@
 #include "method.h"
 #include <stdlib.h>
 #include <stdio.h>
+#include <string.h>
 #include "../util/text.h"
 #include "class.h"
 #include "parameter.h"
@@ -53,6 +54,25 @@ void method_dump(method * self, int depth) {
 	if (self->type == method_type_script) {
 		opcode_buf_dump(self->u.script_method->env->buf, depth + 1);
 	}
+}
+
+bool method_equal(method * a, method * b) {
+	if (strcmp(a->name, b->name) ||
+		a->parameter_list->length != b->parameter_list->length) {
+		return false;
+	}
+	for (int i = 0; i < a->parameter_list->length; i++) {
+		class_* ap = ((parameter*)vector_at(a->parameter_list, i))->classz;
+		class_* bp = ((parameter*)vector_at(b->parameter_list, i))->classz;
+		if (ap != bp) { return false; }
+	}
+	class_* ar = a->return_type;
+	class_* br = b->return_type;
+	if (ar == br) {
+		return true;
+	}
+	//‹¤•Ï–ß‚è’l
+	return class_castable(b, a);
 }
 
 void method_delete(method * self) {

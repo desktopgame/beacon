@@ -5,6 +5,7 @@
 #include "class_type.h"
 #include "class_state.h"
 #include "native_method_ref.h"
+#include "vtable.h"
 #include "../vm/enviroment.h"
 #include "../util/vector.h"
 #include "access_domain.h"
@@ -30,6 +31,7 @@ typedef struct class_ {
 	class_state state;
 	uint32_t ref_count;
 	tree_map* native_method_ref_map;
+	vtable* vt;
 	//名前空間を無視してフラットにアクセスするための添え字
 	int absoluteIndex;
 } class_;
@@ -47,6 +49,9 @@ class_* class_new(const char* name, class_type type);
  * 指定のオブジェクトにこのクラスのフィールドを表す
  * オブジェクトの一覧を追加します。
  * この関数は親クラスから順番に呼び出してください。
+ * 以下の副作用をもたらします。
+ * - o->classz は self で上書きされます。
+ * - o->vptr は self->vt で上書きされます。
  * @param self
  * @param o
  */
@@ -116,19 +121,6 @@ struct constructor* class_find_constructor(class_* self, vector* args, enviromen
  * @return
  */
 struct method* class_find_method(class_* self, const char* name, vector* args, enviroment* env, int* outIndex);
-
-/**
- * もっとも一致するメソッドを返します.
- * 無かったら親クラスを検索します。
- * @param self
- * @param name
- * @param env
- * @param args<il_argument*>
- * @param domain
- * @param outIndex
- * @return
- */
-struct method* class_find_method_tree(class_* self, const char* name, vector* args, access_domain domain, enviroment* env, int* outIndex);
 
 /**
  * このクラスの中で有効なメソッドへのインデックスを、
@@ -201,6 +193,14 @@ bool class_castable(class_* self, class_* other);
  *         継承関係が異なるなら -1
  */
 int class_distance(class_* self, class_* other);
+
+/**
+ * このクラスの vtable を、現在のメソッド一覧に基づいて作成します.
+ * このメソッドが呼び出されるまでメンバの vt は NULL です。
+ * また、この関数は全てのメソッドが登録されてから呼び出してさい。
+ * @param self
+ */
+void class_create_vtable(class_* self);
 
 /**
  * 全てのメンバーがこのクラスを参照できるようにします.

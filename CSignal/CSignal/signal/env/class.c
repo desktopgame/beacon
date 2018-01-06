@@ -1,5 +1,6 @@
 #include "class.h"
 #include "../util/text.h"
+#include "../util/logger.h"
 #include "parameter.h"
 #include "../il/il_argument.h"
 #include <assert.h>
@@ -22,7 +23,6 @@
 //private
 static void class_field_delete(vector_item item);
 static void class_method_delete(vector_item item);
-static vector * class_find_method_impl(class_ * self, const char * name, vector * args, enviroment* env);
 static vector * class_find_constructor_impl(class_ * self, vector * args, enviroment* env);
 
 class_ * class_new(const char * name, class_type type) {
@@ -39,6 +39,7 @@ class_ * class_new(const char * name, class_type type) {
 	ret->constructor_list = vector_new();
 	ret->native_method_ref_map = tree_map_new();
 	ret->absoluteIndex = -1;
+	ret->vt = NULL;
 	return ret;
 }
 
@@ -50,7 +51,9 @@ void class_alloc_fields(class_ * self, object * o) {
 		a->classz = f->type;
 		vector_push(o->u.field_vec, a);
 	}
+	class_create_vtable(self->vt);
 	o->classz = self;
+	o->vptr = self->vt;
 }
 
 void class_free_fields(class_ * self, object * o) {
@@ -143,19 +146,28 @@ constructor * class_find_constructor(class_ * self, vector * args, enviroment * 
 }
 
 method * class_find_method(class_ * self, const char * name, vector * args, enviroment * env, int * outIndex) {
-	vector* v = class_find_method_impl(self, name, args, env);
+	//vector* v = class_find_method_impl(self, name, args, env);
 	(*outIndex) = -1;
-	//メソッドが一つも見つからなかった
-	if (v->length == 0) {
-		vector_delete(v, vector_deleter_null);
-		return NULL;
-	}
-	//見つかった中からもっとも一致するメソッドを選択する
-	int min = 1024;
+	class_create_vtable(self);
 	method* ret = NULL;
-	for (int i = 0; i < v->length; i++) {
-		vector_item e = vector_at(v, i);
+	int min = 1024;
+	//	for (int i = 0; i < self->method_list->length; i++) {
+	for (int i = 0; i < self->vt->elements->length; i++) {
+		//vector_item e = vector_at(self->method_list, i);
+		vector_item e = vector_at(self->vt->elements, i);
 		method* m = (method*)e;
+		//名前か引数の個数が違うので無視
+		if (strcmp(m->name, name) ||
+			m->parameter_list->length != args->length
+			) {
+			continue;
+		}
+		//引数がひとつもないので、
+		//型のチェックを行わない
+		if (args->length == 0) {
+			(*outIndex) = i;
+			return m;
+		}
 		int score = 0;
 		for (int j = 0; j < m->parameter_list->length; j++) {
 			vector_item d = vector_at(args, j);
@@ -165,29 +177,18 @@ method * class_find_method(class_ * self, const char * name, vector * args, envi
 			score += class_distance(il_factor_eval(p->factor, env), p2->classz);
 		}
 		if (score < min) {
+			TEST(env->toplevel);
 			min = score;
 			ret = m;
 			(*outIndex) = i;
 		}
 	}
-	vector_delete(v, vector_deleter_null);
 	return ret;
 }
 
-method * class_find_method_tree(class_ * self, const char * name, vector * args, access_domain domain, enviroment * env, int * outIndex) {
-	class_* pointee = self;
-	do {
-		method* m = class_find_method(pointee, name, args, env, outIndex);
-		if (m != NULL &&
-			domain_accept(domain, m->modifier, m->access)) {
-			return m;
-		}
-		pointee = pointee->super_class;
-	} while (pointee != NULL);
-	return NULL;
-}
-
 int class_method_index_resolve(class_* self, int index) {
+	return index;
+	/*
 	assert(index >= 0);
 	if (self->super_class == NULL) {
 		return index;
@@ -198,9 +199,12 @@ int class_method_index_resolve(class_* self, int index) {
 		pointee = pointee->super_class;
 	} while (pointee != NULL);
 	return index;
+	*/
 }
 
 method * class_method_by_index(class_* self, int index) {
+	return (method*)vector_at(self->vt->elements, index);
+	/*
 	assert(index >= 0);
 	if (self->super_class == NULL) {
 		vector_item e = vector_at(self->method_list, index);
@@ -219,6 +223,7 @@ method * class_method_by_index(class_* self, int index) {
 		pointee = pointee->super_class;
 	} while (pointee != NULL);
 	return NULL;
+	*/
 }
 
 int class_method_countall(class_ * self) {
@@ -297,6 +302,30 @@ int class_distance(class_ * self, class_ * other) {
 	return depth;
 }
 
+void class_create_vtable(class_ * self) {
+	assert(self != NULL);
+	//初期化済み
+	if (self->vt != NULL) {
+		return;
+	}
+	self->vt = vtable_new();
+	//トップレベルではメソッドの一覧を配列に入れるだけ
+	if (self->super_class == NULL) {
+		for (int i = 0; i < self->method_list->length; i++) {
+			vector_push(self->vt->elements, vector_at(self->method_list, i));
+		}
+	//あるクラスを継承する場合には、
+	//重複するメソッドを上書きするように
+	} else {
+		class_create_vtable(self->super_class);
+		vtable_copy(self->super_class->vt, self->vt);
+		for (int i = 0; i < self->method_list->length; i++) {
+			method* m = (method*)vector_at(self->method_list, i);
+			vtable_replace(self->vt, m);
+		}
+	}
+}
+
 void class_linkall(class_ * self) {
 	for (int i = 0; i < self->field_list->length; i++) {
 		field* f = (field*)vector_at(self->field_list, i);
@@ -328,44 +357,6 @@ static void class_field_delete(vector_item item) {
 static void class_method_delete(vector_item item) {
 	method* e = (method*)item;
 	method_delete(e);
-}
-
-static vector * class_find_method_impl(class_ * self, const char * name, vector * args, enviroment* env) {
-	vector* v = vector_new();
-	if (self == NULL) {
-		return v;
-	}
-	for (int i = 0; i < self->method_list->length; i++) {
-		vector_item e = vector_at(self->method_list, i);
-		method* m = (method*)e;
-		//名前か引数の個数が違うので無視
-		if (strcmp(m->name, name) ||
-			m->parameter_list->length != args->length
-			) {
-			continue;
-		}
-		//引数がひとつもないので、
-		//型のチェックを行わない
-		if (args->length == 0) {
-			vector_push(v, m);
-			continue;
-		}
-		bool match = true;
-		for (int j = 0; j < args->length; j++) {
-			vector_item d = vector_at(args, j);
-			vector_item d2 = vector_at(m->parameter_list, j);
-			il_argument* p = (il_argument*)d;
-			parameter* p2 = (parameter*)d2;
-			if (!class_castable(il_factor_eval(p->factor, env), p2->classz)) {
-				match = false;
-				break;
-			}
-		}
-		if (match) {
-			vector_push(v, m);
-		}
-	}
-	return v;
 }
 
 static vector * class_find_constructor_impl(class_ * self, vector * args, enviroment* env) {

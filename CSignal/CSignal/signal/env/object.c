@@ -1,6 +1,7 @@
 #include "object.h"
 #include "namespace.h"
 #include <stdlib.h>
+#include "vtable.h"
 #include "../util/mem.h"
 
 //proto
@@ -57,5 +58,6 @@ static object* object_malloc(object_type type) {
 	ret->classz = NULL;
 	ret->paint = paint_unmarked;
 	ret->type = type;
+	ret->vptr = NULL;
 	return ret;
 }

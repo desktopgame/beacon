@@ -5,6 +5,7 @@
 #include <stdbool.h>
 
 struct class_;
+struct vtable;
 /** 
  * オブジェクトの着色状態.
  * インクリメンタルGCのためのフラグです。
@@ -34,10 +35,12 @@ typedef enum object_type {
  * signal で使用される全てのデータはこれ。
  */
 typedef struct object {
-	//宣言時の型, 代入時の型を持つ
-	//代入されるたびに更新される
-	//代入されるとき、インデックスをどうにか変換
 	struct class_* classz;
+	//-初期化時
+	//-宣言時と互換性のある
+	//異なる型が代入されたとき
+	//この vptr を入れ替える
+	struct vtable* vptr;
 	object_paint paint;
 	object_type type;
 	union {

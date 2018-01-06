@@ -1,6 +1,7 @@
 #pragma once
 #ifndef SIGNAL_AST_ACCESS_LEVEL_H
 #define SIGNAL_AST_ACCESS_LEVEL_H
+#include <stdbool.h>
 /**
  * アクセスレベルを定義する列挙型.
  */

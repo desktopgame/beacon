@@ -977,7 +977,6 @@ static void class_loader_sgload_complete(class_loader* self, il_class* ilclass, 
 		me->u.script_method->env = env;
 		vector_pop(env->class_vec);
 	}
-
 	//既に登録されたが、
 	//オペコードが空っぽになっているコンストラクタの一覧
 	for (int i = 0; i < constructors->length; i++) {
@@ -1008,6 +1007,7 @@ static void class_loader_sgload_complete(class_loader* self, il_class* ilclass, 
 		cons->env = env;
 		vector_pop(env->class_vec);
 	}
+	class_create_vtable(classz);
 }
 
 static void class_loader_sgload_params(class_loader* self, namespace_* scope, vector* param_list, vector* sg_param_list) {
