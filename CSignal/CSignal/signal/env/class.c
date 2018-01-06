@@ -294,6 +294,10 @@ void class_linkall(class_ * self) {
 		method* m = (method*)vector_at(self->method_list, i);
 		m->parent = self;
 	}
+	for (int i = 0; i < self->constructor_list->length; i++) {
+		constructor* ctor = (constructor*)vector_at(self->constructor_list, i);
+		ctor->parent = self;
+	}
 }
 
 void class_delete(class_ * self) {
