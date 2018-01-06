@@ -9,4 +9,5 @@
 #include "stmt/il_stmt_while_impl.h"
 #include "stmt/il_stmt_variable_decl_impl.h"
 #include "stmt/il_stmt_variable_init_impl.h"
+#include "stmt/il_stmt_return_impl.h"
 #endif // !SIGNAL_IL_IL_STMT_IMPL_H

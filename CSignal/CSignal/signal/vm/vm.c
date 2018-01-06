@@ -204,6 +204,11 @@ void vm_execute(vm* self, enviroment* env) {
 				method_execute(m, self, env);
 				break;
 			}
+			case op_return:
+			{
+				i = source_len;
+				break;
+			}
 
 			case op_dup:
 				vector_push(self->value_stack, vector_top(self->value_stack));
@@ -363,12 +368,6 @@ void vm_execute(vm* self, enviroment* env) {
 			{
 				break;
 			}
-
-			case op_return:
-			{
-				break;
-			}
-
 			//debug
 			case op_printi:
 			{

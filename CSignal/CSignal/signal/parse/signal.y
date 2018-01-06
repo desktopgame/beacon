@@ -41,7 +41,7 @@
 		SEMI IMPORT
 		THIS SUPER
 		CLASS PUBLIC PRIVATE PROTECTED STATIC NATIVE NEW
-		CTOR DEF ARROW NAMESPACE
+		CTOR DEF ARROW NAMESPACE RETURN
 		IF ELIF ELSE
 %type <ast_value> root 
 					top_level 
@@ -86,6 +86,7 @@
 						if_stmt
 							elif_list
 							elif
+						return_stmt
 						scope
 						scope_optional
 %%
@@ -584,6 +585,7 @@ stmt
 	| variable_decl_stmt
 	| variable_init_stmt
 	| if_stmt
+	| return_stmt
 	;
 variable_decl_stmt
 	: typename_T IDENT SEMI
@@ -626,6 +628,12 @@ elif
 	: ELIF LRB expression RRB scope
 	{
 		$$ = ast_new_elif($3, $5);
+	}
+	;
+return_stmt
+	: RETURN expression SEMI
+	{
+		$$ = ast_new_return($2);
 	}
 	;
 scope

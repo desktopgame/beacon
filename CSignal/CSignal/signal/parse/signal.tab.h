@@ -100,9 +100,10 @@
      DEF = 309,
      ARROW = 310,
      NAMESPACE = 311,
-     IF = 312,
-     ELIF = 313,
-     ELSE = 314
+     RETURN = 312,
+     IF = 313,
+     ELIF = 314,
+     ELSE = 315
    };
 #endif
 
@@ -126,7 +127,7 @@ typedef union YYSTYPE
 
 
 /* Line 1676 of yacc.c  */
-#line 123 "signal.tab.h"
+#line 124 "signal.tab.h"
 } YYSTYPE;
 # define YYSTYPE_IS_TRIVIAL 1
 # define yystype YYSTYPE /* obsolescent; will be withdrawn */

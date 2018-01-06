@@ -22,6 +22,15 @@ namespace signal.lang {
 		def print() -> Void {
 			Console.writeLine("2D");
 		}
+
+		def getX() -> Int {
+			return this.x;
+		}
+
+		def getY() -> Int {
+			return this.y;
+		}
+
 		private:
 		def test() -> Void {
 			Console.writeLine("test2D");
@@ -110,6 +119,11 @@ namespace L.Goo.Foo {
 }
 signal::lang::Point2D c = new signal::lang::Point2D(1, 2);
 c.print();
+
+Int a = c.getX();
+Int b = c.getY();
+signal::lang::Console.writeLine(a);
+signal::lang::Console.writeLine(b);
 /*
 Int a = 2;
 signal::lang::Console.writeLine(a);

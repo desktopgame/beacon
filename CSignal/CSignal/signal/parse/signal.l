@@ -254,6 +254,7 @@ static void update_loc() {
 <INITIAL>"protected"		{ return (PROTECTED); }
 <INITIAL>"static"			{ return (STATIC); }
 <INITIAL>"native"			{ return (NATIVE); }
+<INITIAL>"return"			{ return (RETURN); }
 
 <INITIAL>"ctor"				{ return (CTOR); }
 <INITIAL>"def"				{ return (DEF); }

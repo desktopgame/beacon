@@ -180,7 +180,7 @@ method * class_find_method(class_ * self, const char * name, vector * args, envi
 			score += class_distance(il_factor_eval(p->factor, env), p2->classz);
 		}
 		if (score < min) {
-			TEST(env->toplevel);
+			//TEST(env->toplevel);
 			min = score;
 			ret = m;
 			(*outIndex) = i;

@@ -57,6 +57,7 @@ static il_stmt_if* class_loader_ilload_if_elif_list(class_loader* self, ast* sou
 static void class_loader_ilload_elif_list(class_loader* self, vector* list, ast* source);
 static il_stmt_if* class_loader_ilload_if_else(class_loader* self, ast* source);
 static il_stmt_if* class_loader_ilload_if_elif_list_else(class_loader* self, ast* source);
+static il_stmt_return* class_loader_ilload_return(class_loader* self, ast* source);
 static il_factor* class_loader_ilload_factor(class_loader* self, ast* source);
 static il_factor_unary_op* class_loader_ilload_unary(class_loader* self, ast* source, ilunary_op_type type);
 static il_factor_binary_op* class_loader_ilload_binary(class_loader* self, ast* source, ilbinary_op_type type);
@@ -434,6 +435,12 @@ static void class_loader_ilload_body(class_loader* self, vector* list, ast* sour
 				vector_push(list, il_stmt_wrap_if(ilif));
 				break;
 			}
+			case ast_return:
+			{
+				il_stmt_return* ilret = class_loader_ilload_return(self, source);
+				vector_push(list, il_stmt_wrap_return(ilret));
+				break;
+			}
 			default:
 				break;
 		}
@@ -516,6 +523,15 @@ static void class_loader_ilload_elif_list(class_loader* self, vector* list, ast*
 		//il_stmt_list_push(list, ilelif);
 		il_stmt_elif_list_push(list, ilelif);
 	}
+}
+
+static il_stmt_return* class_loader_ilload_return(class_loader* self, ast* source) {
+	assert(source->tag == ast_return);
+	ast* afact = ast_first(source);
+	il_factor* ilfact = class_loader_ilload_factor(self, afact);
+	il_stmt_return* ret = il_stmt_return_new();
+	ret->fact = ilfact;
+	return ret;
 }
 
 static il_factor* class_loader_ilload_factor(class_loader* self, ast* source) {

@@ -79,6 +79,7 @@ typedef enum opcode {
 	op_consts,
 	op_static_method,
 	op_method,
+	op_return,
 
 	op_dup,
 	op_pop,
@@ -104,7 +105,6 @@ typedef enum opcode {
 	op_invokestatic,
 	op_invokespecial,
 	op_invokeinterface,
-	op_return,
 
 	op_printi,
 	op_printd,

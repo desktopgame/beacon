@@ -57,7 +57,7 @@ typedef enum ast_tag {
 	ast_variable,
 	ast_call,
 	ast_invoke,
-
+	ast_return,
 	ast_this,
 	ast_super,
 	ast_new_instance,

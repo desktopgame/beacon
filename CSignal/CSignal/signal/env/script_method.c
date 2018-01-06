@@ -3,6 +3,7 @@
 #include "../vm/vm.h"
 #include "method.h"
 #include "../util/mem.h"
+#include "namespace.h"
 
 script_method * script_method_new() {
 	script_method* ret = (script_method*)MEM_MALLOC(sizeof(script_method));
@@ -21,6 +22,10 @@ void script_method_execute(script_method * self, method* parent, vm * vmachine, 
 	}
 	opcode_buf_dump(self->env->buf, sub->level);
 	vm_execute(sub, self->env);
+	//戻り値が Void 以外ならスタックトップの値を引き継ぐ
+	if (parent->return_type != CL_VOID) {
+		vector_push(vmachine->value_stack, vector_pop(sub->value_stack));
+	}
 	vm_delete(sub);
 }
 
