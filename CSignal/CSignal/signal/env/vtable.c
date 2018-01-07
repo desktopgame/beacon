@@ -14,7 +14,17 @@ void vtable_copy(vtable * src, vtable * dst) {
 	}
 }
 
+void vtable_add(vtable * self, method * m) {
+	if (modifier_is_static(m->modifier)) {
+		return;
+	}
+	vector_push(self->elements, m);
+}
+
 void vtable_replace(vtable * self, method * m) {
+	if (modifier_is_static(m->modifier)) {
+		return;
+	}
 	for (int i = 0; i < self->elements->length; i++) {
 		method* e = (method*)vector_at(self->elements, i);
 		if (method_equal(m, e)) {

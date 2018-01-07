@@ -66,6 +66,7 @@ static il_factor_invoke* class_loader_ilload_invoke(class_loader* self, ast* sou
 static il_factor_named_invoke* class_loader_ilload_named_invoke(class_loader* self, ast* source);
 static il_factor_new_instance* class_loader_ilload_new_instance(class_loader* self, ast* source);
 static il_factor_field_access* class_loader_ilload_field_access(class_loader* self, ast* source);
+static il_factor_static_field_access* class_loader_ilload_static_field_access(class_loader* self, ast* source);
 static void class_loader_ilload_fqcn(ast* fqcn, fqcn_cache* dest);
 static void class_loader_ilload_fqcn_impl(ast* fqcn, fqcn_cache* dest);
 static void class_loader_ilload_argument_list(class_loader* self, vector* list, ast* source);
@@ -616,6 +617,8 @@ static il_factor* class_loader_ilload_factor(class_loader* self, ast* source) {
 		return il_factor_wrap_new_instance(class_loader_ilload_new_instance(self, source));
 	} else if (source->tag == ast_field_access) {
 		return il_factor_wrap_field_access(class_loader_ilload_field_access(self, source));
+	} else if (source->tag == ast_static_field_access) {
+		return il_factor_wrap_static_field_access(class_loader_ilload_static_field_access(self, source));
 	}
 	return NULL;
 }
@@ -684,6 +687,14 @@ static il_factor_field_access* class_loader_ilload_field_access(class_loader* se
 	ast* aident = ast_second(source);
 	il_factor_field_access* ret = il_factor_field_access_new(aident->u.string_value);
 	ret->fact = class_loader_ilload_factor(self, afact);
+	return ret;
+}
+
+static il_factor_static_field_access* class_loader_ilload_static_field_access(class_loader* self, ast* source) {
+	ast* afqcn = ast_first(source);
+	ast* aident = ast_second(source);
+	il_factor_static_field_access* ret = il_factor_static_field_access_new(aident->u.string_value);
+	class_loader_ilload_fqcn(afqcn, ret->fqcn);
 	return ret;
 }
 
@@ -858,7 +869,8 @@ static void class_loader_sgload_fields(class_loader* self, il_class* ilclass, cl
 		field->parent = classz;
 		//NOTE:ここではフィールドの型を設定しません
 		//     class_loader_sgload_complete参照
-		vector_push(classz->field_list, field);
+		//vector_push(classz->field_list, field);
+		class_add_field(classz, field);
 	}
 }
 
@@ -893,7 +905,8 @@ static void class_loader_sgload_methods(class_loader* self, il_class* ilclass, c
 		//enviroment* env = class_loader_sgload_body(self, ilmethod->statement_list);
 		//opcode_buf_delete(e->u.script_method->env);
 		//method->u.script_method->env = NULL;
-		vector_push(classz->method_list, method);
+		//vector_push(classz->method_list, method);
+		class_add_method(classz, method);
 	}
 }
 
@@ -917,7 +930,8 @@ static void class_loader_sgload_constructors(class_loader* self, il_class* ilcla
 			parameter* param = parameter_new(ilp->name);
 			vector_push(parameter_list, param);
 		}
-		vector_push(classz->constructor_list, cons);
+		//vector_push(classz->constructor_list, cons);
+		class_add_constructor(classz, cons);
 	}
 }
 

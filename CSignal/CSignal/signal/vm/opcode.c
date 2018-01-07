@@ -121,19 +121,6 @@ int opcode_print(vector* source, int index) {
 			printf("push consts(%d)", a);
 			break;
 		}
-		case op_method:
-		{
-			int a = (int)vector_at(source, ++index);
-			printf("push method(%d)", a);
-			break;
-		}
-		case op_static_method:
-		{
-			int a = (int)vector_at(source, ++index);
-			int b = (int)vector_at(source, ++index);
-			printf("push static method(%d %d)", a, b);
-			break;
-		}
 		case op_dup:
 		{
 			printf("dup");
@@ -166,13 +153,15 @@ int opcode_print(vector* source, int index) {
 		case op_put_static:
 		{
 			int a = (int)vector_at(source, ++index);
-			printf("put static(%d)", a);
+			int b = (int)vector_at(source, ++index);
+			printf("put static(%d %d)", a, b);
 			break;
 		}
 		case op_get_static:
 		{
 			int a = (int)vector_at(source, ++index);
-			printf("get static(%d)", a);
+			int b = (int)vector_at(source, ++index);
+			printf("get static(%d %d)", a, b);
 			break;
 		}
 		case op_store:
@@ -232,18 +221,21 @@ int opcode_print(vector* source, int index) {
 		}
 		case op_invokevirtual:
 		{
-			//int a = (int)vector_at(source, ++index);
-			printf("invoke virtual");
+			int a = (int)vector_at(source, ++index);
+			printf("invoke virtual(%d)", a);
 			break;
 		}
 		case op_invokestatic:
 		{
-			printf("invoke static");
+			int a = (int)vector_at(source, ++index);
+			int b = (int)vector_at(source, ++index);
+			printf("invoke static(%d %d)", a, b);
 			break;
 		}
 		case op_invokespecial:
 		{
-			printf("invoke special");
+			int a = (int)vector_at(source, ++index);
+			printf("invoke special(%d)", a);
 			break;
 		}
 		case op_invokeinterface:

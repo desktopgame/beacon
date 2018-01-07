@@ -28,7 +28,17 @@ void vtable_copy(vtable* src, vtable* dst);
 
 /**
  * メソッド一覧に m を追加します.
+ * 重複は検査されません。
+ * 静的メソッドの場合は無視されます。
+ * @param self
+ * @param m
+ */
+void vtable_add(vtable* self, struct method* m);
+
+/**
+ * メソッド一覧に m を追加します.
  * 重複する場合には上書きします。
+ * 静的メソッドの場合は無視されます。
  * @param self
  * @param m
  */

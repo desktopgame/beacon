@@ -49,10 +49,13 @@ void il_factor_call_generate(il_factor_call * self, enviroment* env) {
 	}
 	//呼び出すメソッドの位置をスタックに積む
 	//ここで直接メソッドのポインタを積まないのはあとでシリアライズするときのため。
-	opcode_buf_add(env->buf, (vector_item)op_method);
-	opcode_buf_add(env->buf, (vector_item)self->methodIndex);
-	//FIXME:あとで修飾子に応じて切り替えるように
-	opcode_buf_add(env->buf, (vector_item)op_invokevirtual);
+	if (self->m->access == access_private) {
+		opcode_buf_add(env->buf, (vector_item)op_invokespecial);
+		opcode_buf_add(env->buf, (vector_item)self->methodIndex);
+	} else {
+		opcode_buf_add(env->buf, (vector_item)op_invokevirtual);
+		opcode_buf_add(env->buf, (vector_item)self->methodIndex);
+	}
 }
 
 void il_factor_call_load(il_factor_call * self, enviroment * env, il_ehandler * eh) {

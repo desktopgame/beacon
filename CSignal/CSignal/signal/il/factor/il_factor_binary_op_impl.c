@@ -5,7 +5,9 @@
 #include "../../util/text.h"
 #include "il_factor_variable_impl.h"
 #include "il_factor_field_access_impl.h"
+#include "il_factor_static_field_access_impl.h"
 #include "../../env/class.h"
+#include "../../env/field.h"
 #include "../../env/namespace.h"
 #include "../../vm/enviroment.h"
 #include "../../util/mem.h"
@@ -192,13 +194,26 @@ void il_factor_binary_op_generate(il_factor_binary_op * self, enviroment* env) {
 		//実引数を0として関数の頭からカウントしたインデックス
 		case ilbinary_assign:
 		{
-			if (self->left->type == ilfactor_field_access) {
+			if (self->left->type == ilfactor_static_field_access) {
+				il_factor_static_field_access* sfa = self->left->u.static_field_access;
+				il_factor_eval(self->left, env);
+				il_factor_generate(self->right, env);
+				opcode_buf_add(env->buf, op_put_static);
+				opcode_buf_add(env->buf, sfa->f->parent->absoluteIndex);
+				opcode_buf_add(env->buf, sfa->fieldIndex);
+			} else if (self->left->type == ilfactor_field_access) {
 				il_factor_field_access* field_access = self->left->u.field_access_;
 				il_factor_eval(self->left, env);
 				il_factor_generate(field_access->fact, env);
 				il_factor_generate(self->right, env);
-				opcode_buf_add(env->buf, op_put_field);
-				opcode_buf_add(env->buf, field_access->fieldIndex);
+				if (modifier_is_static(field_access->f->modifier)) {
+					opcode_buf_add(env->buf, op_put_static);
+					opcode_buf_add(env->buf, field_access->f->parent->absoluteIndex);
+					opcode_buf_add(env->buf, field_access->fieldIndex);
+				} else {
+					opcode_buf_add(env->buf, op_put_field);
+					opcode_buf_add(env->buf, field_access->fieldIndex);
+				}
 			} else {
 				il_factor_eval(self->left, env);
 				il_factor_generate(self->right, env);
@@ -342,10 +357,23 @@ static void assign_generate_start(il_factor_binary_op * self, enviroment* env) {
 }
 
 static void assign_generate_end(il_factor_binary_op * self, enviroment* env) {
-	if (self->left->type == ilfactor_field_access) {
+	if (self->left->type == ilfactor_static_field_access) {
+		il_factor_static_field_access* sfa = self->left->u.static_field_access;
+		il_factor_eval(self->left, env);
+		//il_factor_generate(self->right, env);
+		opcode_buf_add(env->buf, op_put_static);
+		opcode_buf_add(env->buf, sfa->f->parent->absoluteIndex);
+		opcode_buf_add(env->buf, sfa->fieldIndex);
+	} else if (self->left->type == ilfactor_field_access) {
 		il_factor_field_access* field_access = self->left->u.field_access_;
-		opcode_buf_add(env->buf, op_put_field);
-		opcode_buf_add(env->buf, field_access->fieldIndex);
+		if (modifier_is_static(field_access->f->modifier)) {
+			opcode_buf_add(env->buf, op_put_static);
+			opcode_buf_add(env->buf, field_access->f->parent->absoluteIndex);
+			opcode_buf_add(env->buf, field_access->fieldIndex);
+		} else {
+			opcode_buf_add(env->buf, op_put_field);
+			opcode_buf_add(env->buf, field_access->fieldIndex);
+		}
 	} else {
 		il_factor_eval(self->left, env);
 		//il_factor_generate(self->right, env);

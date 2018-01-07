@@ -177,8 +177,14 @@ ast * ast_new_field_access_fqcn(ast * fqcn, char * name) {
 		ast_push(ret, avar);
 		ast_push(ret, aname);
 		return ret;
-	} else if (fqcn->tag == ast_fqcn_part_list) {
+	} else if (fqcn->tag == ast_fqcn || fqcn->tag == ast_fqcn_part_list) {
 		//こっちの場合は静的フィールドへのアクセスと断定できる
+		ast* ret = ast_new(ast_static_field_access);
+		ast* aname = ast_new(ast_identifier);
+		aname->u.string_value = name;
+		ast_push(ret, fqcn);
+		ast_push(ret, aname);
+		return ret;
 	}
 	return NULL;
 }
@@ -356,6 +362,7 @@ void ast_print(ast* self) {
 			printf("func_return_name(%s)", self->u.string_value);
 			break;
 		case ast_field_access: p("field-access");
+		case ast_static_field_access: p("static-field-access");
 		case ast_scope: p("scope");
 		case ast_stmt: p("stmt");
 		case ast_stmt_list: p("stmt list");
@@ -365,6 +372,7 @@ void ast_print(ast* self) {
 		case ast_if_elif_list_else: p("if elif_list else");
 		case ast_elif: p("elif");
 		case ast_else: p("else");
+		case ast_return: p("return");
 		case ast_blank:
 			printf("blank");
 			break;

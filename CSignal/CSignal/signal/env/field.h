@@ -4,6 +4,7 @@
 #include "../ast/access_level.h"
 #include "../ast/modifier_type.h"
 struct class_;
+struct object;
 /**
  * フィールドを表す構造体.
  */
@@ -11,6 +12,7 @@ typedef struct field {
 	char* name;
 	struct class_* parent;
 	struct class_* type;
+	struct object* static_value;
 	access_level access;
 	modifier_type modifier;
 } field;

@@ -4,6 +4,7 @@
 #include <assert.h>
 #include "label.h"
 #include "../env/class.h"
+#include "../env/field.h"
 #include "../env/method.h"
 #include "../env/object.h"
 #include "../env/constructor.h"
@@ -181,29 +182,6 @@ void vm_execute(vm* self, enviroment* env) {
 				vector_push(self->value_stack, cs);
 				break;
 			}
-			case op_static_method:
-			{
-				int absClassIndex = (int)enviroment_source_at(env, ++i);
-				int methodIndex = (int)enviroment_source_at(env, ++i);
-				class_* cls = (class_*)vector_at(ctx->class_vec, absClassIndex);
-				method* m = (method*)vector_at(cls->vt->elements, methodIndex);
-				//いらない
-				opcode code = (opcode)enviroment_source_at(env, ++i);
-				assert(code == op_invokestatic);
-				method_execute(m, self, env);
-				break;
-			}
-			case op_method:
-			{
-				int index = (int)enviroment_source_at(env, ++i);
-				opcode code = (opcode)enviroment_source_at(env, ++i);
-				object* o = (object*)vector_top(self->value_stack);
-				method* m = (method*)vector_at(o->vptr->elements, index);
-				assert(code == op_invokevirtual ||
-					   code == op_invokespecial);
-				method_execute(m, self, env);
-				break;
-			}
 			case op_return:
 			{
 				i = source_len;
@@ -321,14 +299,23 @@ void vm_execute(vm* self, enviroment* env) {
 
 			case op_put_static:
 			{
+				int absClsIndex = (int)enviroment_source_at(env, ++i);
+				int fieldIndex = (int)enviroment_source_at(env, ++i);
+				class_* cls = (class_*)vector_at(ctx->class_vec, absClsIndex);
+				field* f = class_get_sfield(cls, fieldIndex);
+				f->static_value = (object*)vector_pop(self->value_stack);
 				break;
 			}
 
 			case op_get_static:
 			{
+				int absClsIndex = (int)enviroment_source_at(env, ++i);
+				int fieldIndex = (int)enviroment_source_at(env, ++i);
+				class_* cls = (class_*)vector_at(ctx->class_vec, absClsIndex);
+				field* f = class_get_sfield(cls, fieldIndex);
+				vector_push(self->value_stack, f->static_value);
 				break;
 			}
-
 			case op_store:
 			{
 				int index = (int)enviroment_source_at(env, ++i);
@@ -338,7 +325,6 @@ void vm_execute(vm* self, enviroment* env) {
 				INFO("store");
 				break;
 			}
-
 			case op_load:
 			{
 				int index = (int)enviroment_source_at(env, ++i);
@@ -349,23 +335,35 @@ void vm_execute(vm* self, enviroment* env) {
 				break;
 			}
 			//invoke
-			case op_invokevirtual:
-			{
-				break;
-			}
-
-			case op_invokestatic:
-			{
-				break;
-			}
-
-			case op_invokespecial:
-			{
-				break;
-			}
-
 			case op_invokeinterface:
 			{
+				break;
+			}
+			case op_invokestatic:
+			{
+				int absClassIndex = (int)enviroment_source_at(env, ++i);
+				int methodIndex = (int)enviroment_source_at(env, ++i);
+				class_* cls = (class_*)vector_at(ctx->class_vec, absClassIndex);
+				//method* m = (method*)vector_at(cls->vt->elements, methodIndex);
+				method* m = class_get_smethod(cls, methodIndex);
+				//いらない
+			//	opcode code = (opcode)enviroment_source_at(env, ++i);
+			//	assert(code == op_invokestatic);
+				method_execute(m, self, env);
+				break;
+				break;
+			}
+			case op_invokevirtual:
+			case op_invokespecial:
+			{
+				int index = (int)enviroment_source_at(env, ++i);
+			//	opcode code = (opcode)enviroment_source_at(env, ++i);
+				object* o = (object*)vector_top(self->value_stack);
+				//method* m = (method*)vector_at(o->vptr->elements, index);
+				method* m = class_get_method(o, index);
+			//	assert(code == op_invokevirtual ||
+			//		   code == op_invokespecial);
+				method_execute(m, self, env);
 				break;
 			}
 			//debug

@@ -5,6 +5,7 @@ namespace signal.lang {
 		public:
 		Int x;
 		Int y;
+		static Int P;
 
 		ctor new(Int x, Int y) {
 			this.x = x;
@@ -50,6 +51,10 @@ namespace signal.lang {
 
 		def print() -> Void {
 			Console.writeLine("3D");
+		}
+
+		def getZ() -> Int {
+			return this.z;
 		}
 /*
 		def printXYZ() -> Void {
@@ -117,13 +122,20 @@ namespace L.Goo.Foo {
 		}
 	}
 }
-signal::lang::Point2D c = new signal::lang::Point2D(1, 2);
+signal::lang::Point2D.P = 0;
+signal::lang::Point3D c = new signal::lang::Point3D(1, 2, 5);
 c.print();
 
 Int a = c.getX();
 Int b = c.getY();
+Int z = c.getZ();
+signal::lang::Console.writeLine(signal::lang::Point2D.P);
 signal::lang::Console.writeLine(a);
 signal::lang::Console.writeLine(b);
+signal::lang::Console.writeLine(z);
+
+signal::lang::Point2D.P = 2;
+signal::lang::Console.writeLine(signal::lang::Point2D.P);
 /*
 Int a = 2;
 signal::lang::Console.writeLine(a);

@@ -15,6 +15,7 @@
 //struct field_list;
 //struct method_list;
 struct object;
+struct field;
 struct method;
 struct constructor;
 /**
@@ -25,12 +26,15 @@ typedef struct class_ {
 	namespace_* location;
 	struct class_* super_class;
 	vector* field_list;
+	vector* sfield_list;
 	vector* method_list;
+	vector* smethod_list;
 	vector* constructor_list;
 	class_type type;
 	class_state state;
 	uint32_t ref_count;
 	tree_map* native_method_ref_map;
+	//vector* static_fieldval_vec;
 	vtable* vt;
 	//名前空間を無視してフラットにアクセスするための添え字
 	int absoluteIndex;
@@ -66,6 +70,27 @@ void class_alloc_fields(class_* self, struct object* o);
 void class_free_fields(class_* self, struct object* o);
 
 /**
+ * このクラスにフィールドを追加します.
+ * @param self
+ * @param f
+ */
+void class_add_field(class_* self, struct field* f);
+
+/**
+ * このクラスにメソッドを追加します.
+ * @param self
+ * @param m
+ */
+void class_add_method(class_* self, struct method* m);
+
+/**
+ * このクラスにコンストラクタを追加します.
+ * @param self
+ * @param c
+ */
+void class_add_constructor(class_* self, struct constructor* c);
+
+/**
  * クラスを出力します.
  * @param self
  * @param depth
@@ -98,7 +123,46 @@ struct field* class_find_field(class_* self, const char* name, int* outIndex);
  * @param outIndex
  * @return
  */
-struct field* class_find_field_tree(class_* self, const char* name, access_domain domain, int* outIndex);
+struct field* class_find_field_tree(class_* self, const char* name, int* outIndex);
+
+/**
+ * 指定の名前を持つ静的フィールドを返します.
+ * @param self
+ * @param name
+ * @param outIndex
+ * @return 無ければ NULL
+ */
+struct field* class_find_sfield(class_* self, const char* name, int* outIndex);
+
+/**
+ * 指定の名前を持つ静的フィールドを返します.
+ * selfの中に見つけられなかった場合には親クラスも検索します。
+ * @param self
+ * @param name
+ * @param outIndex
+ * @return 無ければ NULL
+ */
+struct field* class_find_sfield_tree(class_* self, const char* name, int* outIndex);
+
+/**
+ * 指定位置のフィールドを返します.
+ * このクラスの上や下も含めて検索します。
+ * つまりこの index は self の最上位クラスから self までに現れる全てのフィールドの通し番号です。
+ * @param self
+ * @param index
+ * @return
+ */
+struct field* class_get_field(class_* self, int index);
+
+/**
+ * 指定位置の静的フィールドを返します.
+ * このクラスの上や下も含めて検索します。
+ * つまりこの index は self の最上位クラスから self までに現れる全てのフィールドの通し番号です。
+ * @param self
+ * @param index
+ * @return
+ */
+struct field* class_get_sfield(class_* self, int index);
 
 /**
  * もっとも一致するコンストラクタを返します.
@@ -123,30 +187,35 @@ struct constructor* class_find_constructor(class_* self, vector* args, enviromen
 struct method* class_find_method(class_* self, const char* name, vector* args, enviroment* env, int* outIndex);
 
 /**
- * このクラスの中で有効なフィールドへのインデックスを
- * スーパークラスも加味したインデックスへ変換します.
+ * もっとも一致する静的メソッドを返します.
+ * @param self
+ * @param name
+ * @param env
+ * @param args<il_argument*>
+ * @param outIndex メソッドへのインデックス
+ * @return
+ */
+struct method* class_find_smethod(class_* self, const char* name, vector* args, enviroment* env, int* outIndex);
+
+/**
+ * 指定位置のメソッドを返します.
+ * このクラスの上や下も含めて検索します。
+ * つまりこの index は self の最上位クラスから self までに現れる全てのメソッドの通し番号です。
+ * @param o
+ * @param index
+ * @return
+ */
+struct method* class_get_method(struct object* o, int index);
+
+/**
+ * 指定位置のメソッドを返します.
+ * このクラスの上や下も含めて検索します。
+ * つまりこの index は self の最上位クラスから self までに現れる全てのメソッドの通し番号です。
  * @param self
  * @param index
  * @return
  */
-int class_field_index_resolve(class_* self, int index);
-
-/**
- * スーパークラスも加味したフィールドのインデックスから、
- * 適切なクラスのメソッドを返します.
- * @param self
- * @param index
- * @return
- */
-struct field* class_field_by_index(class_* self, int index);
-
-/**
- * このクラスからルートまでを辿って、
- * 全てのフィールドの数を返します.
- * @param self
- * @return
- */
-int class_field_countall(class_* self);
+struct method* class_get_smethod(class_* self, int index);
 
 /**
  * self を other の型に変換出来るなら true.
@@ -175,6 +244,34 @@ int class_distance(class_* self, class_* other);
  * @param self
  */
 void class_create_vtable(class_* self);
+
+/**
+ * このクラスとその親全てに定義されたフィールドの合計を返します.
+ * @param self
+ * @return
+ */
+int class_count_fieldall(class_* self);
+
+/**
+ * このクラスとその親全てに定義された静的フィールドの合計を返します.
+ * @param self
+ * @return
+ */
+int class_count_sfieldall(class_* self);
+
+/**
+ * このクラスとその親全てに定義されたメソッドの合計を返します.
+ * @param self
+ * @return
+ */
+int class_count_methodall(class_* self);
+
+/**
+ * このクラスとその親全てに定義されたメソッドの合計を返します.
+ * @param self
+ * @return
+ */
+int class_count_smethodall(class_* self);
 
 /**
  * 全てのメンバーがこのクラスを参照できるようにします.

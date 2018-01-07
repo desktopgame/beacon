@@ -13,6 +13,7 @@ field * field_new(const char * name) {
 	ret->access = access_public;
 	ret->modifier = modifier_none;
 	ret->parent = NULL;
+	ret->static_value = NULL;
 	return ret;
 }
 

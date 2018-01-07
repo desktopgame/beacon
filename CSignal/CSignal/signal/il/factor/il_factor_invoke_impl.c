@@ -53,14 +53,13 @@ void il_factor_invoke_generate(il_factor_invoke * self, enviroment* env) {
 		il_argument* ilarg = (il_argument*)e;
 		il_factor_generate(ilarg->factor, env);
 	}
-	opcode_buf_add(env->buf, (vector_item)op_method);
-	opcode_buf_add(env->buf, (vector_item)self->methodIndex);
 	//メソッドのインデックスをプッシュ
 	if (self->m->access == access_private) {
 		opcode_buf_add(env->buf, (vector_item)op_invokespecial);
 	} else {
 		opcode_buf_add(env->buf, (vector_item)op_invokevirtual);
 	}
+	opcode_buf_add(env->buf, (vector_item)self->methodIndex);
 }
 
 void il_factor_invoke_load(il_factor_invoke * self, enviroment * env, il_ehandler * eh) {
