@@ -40,7 +40,7 @@
 		LCB RCB LRB RRB LSB RSB
 		SEMI IMPORT
 		THIS SUPER
-		CLASS PUBLIC PRIVATE PROTECTED STATIC NATIVE NEW
+		INTERFACE CLASS PUBLIC PRIVATE PROTECTED STATIC NATIVE NEW
 		CTOR DEF ARROW NAMESPACE RETURN
 		IF ELIF ELSE
 %type <ast_value> root 
@@ -53,6 +53,7 @@
 					namespace_path
 					import 
 					class_decl 
+					interface_decl
 						class_super 
 						access_member_tree
 						access_member_list
@@ -133,6 +134,10 @@ namespace_member_decl
 	{
 		$$ = $1;
 	}
+	| interface_decl
+	{
+		$$ = $1;
+	}
 	;
 namespace_member_decl_list
 	: namespace_member_decl
@@ -174,6 +179,12 @@ class_decl
 	: CLASS IDENT class_super LCB access_member_tree RCB
 	{
 		$$ = ast_new_class_decl($2, $3, $5);
+	}
+	;
+interface_decl
+	: INTERFACE IDENT LCB access_member_tree RCB
+	{
+		$$ = ast_new_interface_decl($2, $4);
 	}
 	;
 class_super

@@ -9,9 +9,6 @@
 #include "../ast/ast_new_literal.h"
 #include "../env/script_context.h"
 
-
-//static stack* parser_stack = NULL;
-
 parser * parser_push(yacc_input_type input_type) {
 	script_context* ctx = script_context_get_current();
 	if (ctx->parserStack == NULL) {
@@ -23,7 +20,9 @@ parser * parser_push(yacc_input_type input_type) {
 	p->root = ast_new(ast_root);
 	p->buffer = NULL;
 	p->errorLineIndex = 0;
+	p->errorLineText = NULL;
 	p->errorColumnIndex = 0;
+	p->errorMessage = NULL;
 	p->source_name = text_strdup("unknown-source");
 	p->fail = false;
 	return p;
@@ -75,6 +74,7 @@ parser * parser_parse_from_file(const char * filename) {
 	}
 	if (yyparse()) {
 		p->fail = true;
+		parser_print_error(p);
 		return p;
 	}
 	return p;
@@ -88,6 +88,7 @@ parser * parser_parse_from_file(const char * filename) {
 	}
 	if (yyparse()) {
 		p->fail = true;
+		parser_print_error(p);
 		return p;
 	}
 	return p;
@@ -95,18 +96,29 @@ parser * parser_parse_from_file(const char * filename) {
 }
 
 parser * parser_parse_from_source(char * source) {
+	return parser_parse_from_source_swap(source, NULL);
+}
+
+parser * parser_parse_from_source_swap(char * source, char * info) {
 	parser* p = parser_push(yinput_string);
 	extern void yy_setstr(char *source);
 	extern void yy_clearstr();
 	extern int yyparse(void);
+	if (info != NULL) {
+		MEM_FREE(p->source_name);
+		p->source_name = text_strdup(info);
+	}
 	//p->source_name = _strdup("unknown-source");
 	yy_setstr(text_strdup(source));
 	if (yyparse()) {
 		yy_clearstr();
 		p->fail = true;
+		parser_print_error(p);
+		//parser_free_source(p);
 		return p;
 	}
 	yy_clearstr();
+	//parser_free_source(p);
 	return p;
 }
 
@@ -114,6 +126,31 @@ void parser_swap_source_name(char * source_name) {
 	parser* p = parser_top();
 	MEM_FREE(p->source_name);
 	p->source_name = text_strdup(source_name);
+}
+
+void parser_print_error(parser * p) {
+	if (!p->fail) {
+		return;
+	}
+	system("cls");
+	//put filename
+	printf("file=%s ", p->source_name);
+	//put line
+	printf("line=%d ", p->errorLineIndex);
+	//put column
+	printf("column=%d", p->errorColumnIndex);
+	text_putline();
+	//put str
+	printf("%s", p->errorMessage);
+	text_putline();
+	//put line
+	printf("%s", p->errorLineText);
+	text_putline();
+	fflush(stdout);
+	MEM_FREE(p->errorMessage);
+	MEM_FREE(p->errorLineText);
+	p->errorMessage = NULL;
+	p->errorLineText = NULL;
 }
 
 void parser_pop() {

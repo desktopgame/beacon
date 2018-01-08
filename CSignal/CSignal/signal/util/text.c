@@ -5,6 +5,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include "mem.h"
+#include "string_buffer.h"
 
 //proto
 static char* text_strclone(const char* source);
@@ -38,6 +39,15 @@ char * text_strdup(const char * source) {
 	return ret;
 }
 
+errno_t text_strncpy(char * outChar, size_t index, const char * source, size_t dataSize) {
+#if defined(_MSC_VER)
+	return strncpy_s(outChar, index, source, dataSize);
+#else
+	strncpy(outChar, source + index, dataSize);
+#endif
+	return NULL;
+}
+
 char * text_concat(const char * a, const char * b) {
 	int alen = strlen(a);
 	int blen = strlen(b);
@@ -50,6 +60,39 @@ char * text_concat(const char * a, const char * b) {
 	}
 	block[alen + blen] = '\0';
 	return block;
+}
+
+char * text_lineat(const char * src, int lineno) {
+	printf("%s", src);
+	//return NULL;
+	int len = strlen(src);
+	int curLine = 0;
+	string_buffer* buf = string_buffer_new();
+	char* PTR = NULL;
+	for (int i = 0; i < len; i++) {
+		char c = src[i];
+//		strncpy(PTR, src + i, sizeof(char));
+//		text_strncpy(PTR, i, src, sizeof(char));
+//		char c = (*PTR);
+		if (c == '\0') { break; }
+		if (c == '\n') {
+			if (lineno == curLine) {
+				break;
+			}
+			curLine++;
+			//以前のバッファーを破棄
+			//string_buffer_delete(buf);
+			//buf = string_buffer_new();
+		} else {
+			if (lineno == 0 || lineno == curLine) {
+				string_buffer_append(buf, c);
+			}
+		}
+	}
+	string_buffer_shrink(buf);
+	char* ret = buf->text;
+	MEM_FREE(buf);
+	return ret;
 }
 
 char* text_sum(vector * v, char * join) {

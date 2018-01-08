@@ -1,6 +1,7 @@
 #include "string_buffer.h"
 #include "mem.h"
 #include <assert.h>
+#include <stdio.h>
 
 //proto
 static void string_buffer_fill_zero(string_buffer* self, int offs, int len);
@@ -15,6 +16,7 @@ string_buffer * string_buffer_new() {
 }
 
 void string_buffer_append(string_buffer * self, char_t c) {
+	//printf("%c", c);
 	if (self->length >= self->capacity) {
 		int newSize = self->capacity + (self->capacity / 2);
 		char_t* temp = (char*)MEM_REALLOC(self->text, newSize);
@@ -30,6 +32,9 @@ void string_buffer_append(string_buffer * self, char_t c) {
 
 void string_buffer_shrink(string_buffer * self) {
 	if (self->length == self->capacity) {
+		return;
+	}
+	if (self->length == 0) {
 		return;
 	}
 	char_t* temp = (char*)MEM_REALLOC(self->text, self->length);

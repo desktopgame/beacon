@@ -11,7 +11,10 @@
 typedef struct parser {
 	ast* root;
 	char* buffer;
+	//char* source;
 	char* source_name;
+	char* errorLineText;
+	char* errorMessage;
 	int errorLineIndex;
 	int errorColumnIndex;
 	yacc_input_type input_type;
@@ -66,12 +69,26 @@ parser* parser_parse_from_file(const char* filename);
 parser* parser_parse_from_source(char* source);
 
 /**
+ * 情報を入れ替えてからパースします.
+ * @param source
+ * @param info
+ * @return
+ */
+parser* parser_parse_from_source_swap(char* source, char* info);
+
+/**
  * デバッグ情報として使用される入力元の情報を設定します.
  * 以前の情報は開放されます。
  * また、この時渡す引数は呼び出し側で開放してください。
  * @param source_name
  */
 void parser_swap_source_name(char* source_name);
+
+/**
+ * エラー情報を表示します.
+ * @param p
+ */
+void parser_print_error(parser* p);
 
 /**
  * 現在のパーサーを削除します.

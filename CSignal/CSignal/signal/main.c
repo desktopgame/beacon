@@ -7,6 +7,7 @@
 #include "util/text.h"
 #include "env/script_context.h"
 #include "test.h"
+#include "util/string_buffer.h"
 #include "util/logger.h"
 
 #ifdef _MSC_VER

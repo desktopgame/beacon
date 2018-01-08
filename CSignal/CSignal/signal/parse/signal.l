@@ -5,12 +5,14 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <stdbool.h>
 #include "signal.tab.h"
 #include "parser.h"
 #include "../ast/ast.h"
 #include "../ast/ast_new_literal.h"
 #include "../ast/constructor_chain_type.h"
 #include "../util/text.h"
+#include "../util/mem.h"
 
 //for C4996
 #ifdef _MSC_VER
@@ -19,6 +21,10 @@
 
 static char* yaccSourceBuffer;
 static int yaccSourceOffset;
+static char* yaccErrorBuf;
+
+static int curr_line;
+static int curr_col;
  
 int yymain(void) {
 	//yyparse();
@@ -34,72 +40,13 @@ int yywrap(void) {
 #endif SIGNAL_YYWRAP_PART
 
 int yyerror(char * err_str) {
-	system("cls");
 	parser* p = parser_top();
+	p->fail = true;
 	p->errorLineIndex = yylloc.last_line;
 	p->errorColumnIndex = yylloc.last_column;
-	//put filename
-	printf("file=%s ", p->source_name);
-	//put line
-	printf("line=%d ", yylloc.last_line);
-	//put column
-	printf("column=%d", yylloc.last_column);
-	text_putline();
-	//put message
-	fprintf (stderr, "%s\n", err_str);
-	if(yaccSourceBuffer == NULL) {
-		return 0;
-	}
-	int len = strlen(yaccSourceBuffer);
-	int line = 1;
-	int startOffset = 0;
-	int endOffset = 0;
-	//find startoffset in error line
-	for(int i=0; i<len; i++) {
-		char ch = yaccSourceBuffer[i];
-		//FIXME:windows only?
-		if(ch == '\n') {
-			line++;
-		}
-		if(line == yylloc.last_line) {
-		startOffset++;
-			break;
-		}
-		startOffset++;
-	}
-	//find endoffset in error line
-	endOffset = startOffset;
-	for(int i=startOffset+1; i<len; i++) {
-		char ch = yaccSourceBuffer[i];
-		//FIXME:windows only?
-		if(ch == '\n') {
-			break;
-		}
-		endOffset++;
-	}
-	//extract error text
-	int errorLen = endOffset - startOffset;
-	char* errorLineText = (char*)malloc(sizeof(char) * errorLen);
-	char* rulerLineText = (char*)malloc(sizeof(char) * errorLen);
-	for(int i=startOffset; i<endOffset; i++) {
-		errorLineText[i-startOffset] = yaccSourceBuffer[i];
-		rulerLineText[i-startOffset] = ' ';
-	}
-	//highlight at cursor
-	if(errorLen > 3) {
-		rulerLineText[errorLen - 1] = '^';
-		rulerLineText[errorLen - 2] = '^';
-		rulerLineText[errorLen - 3] = '^';
-	} else {
-		rulerLineText[errorLen - 1] = '^';
-	}
-	printf(errorLineText);
-	text_putline();
-	printf(rulerLineText);
-	text_putline();
-	free(errorLineText);
-	free(rulerLineText);
-	return 0;
+	p->errorMessage = text_strdup(err_str);
+	p->errorLineText  = text_lineat(yaccSourceBuffer, yylloc.last_line);
+	return 1;
 }
 
 void yyexit() {
@@ -125,6 +72,9 @@ static int file_input(char *buf, int max_size) {
 void yy_setstr(char* source) {
 	yaccSourceBuffer = source;
 	yaccSourceOffset = 0;
+	yylineno = 0;
+	curr_line = 0;
+	curr_col = 0;
 }
 
 void yy_clearstr() {
@@ -163,9 +113,6 @@ static int my_yyinput(char *buf, int max_size) {
 }
 //error position
 static void update_loc() {
-  static int curr_line = 1;
-  static int curr_col  = 1;
-
   yylloc.first_line   = curr_line;
   yylloc.first_column = curr_col;
 
@@ -182,7 +129,8 @@ static void update_loc() {
   yylloc.last_column = curr_col-1;
 }
 
-#define YY_USER_ACTION update_loc();
+//#define YY_USER_ACTION update_loc();
+#define YY_USER_ACTION yylloc.first_line = yylloc.last_line = yylineno;
 %}
 %option yylineno
 %option yy_scan_string
@@ -245,6 +193,7 @@ static void update_loc() {
 
 <INITIAL>"namespace"		{ return (NAMESPACE); }
 <INITIAL>"class"			{ return (CLASS); }
+<INITIAL>"interface"		{ return (INTERFACE); }
 <INITIAL>"this"				{ return (THIS); }
 <INITIAL>"super"			{ return (SUPER); }
 <INITIAL>"new"				{ return (NEW); }
