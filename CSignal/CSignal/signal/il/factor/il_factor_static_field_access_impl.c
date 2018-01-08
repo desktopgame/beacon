@@ -1,6 +1,7 @@
 #include "il_factor_static_field_access_impl.h"
 #include "../../util/mem.h"
-#include "../../env/class.h"
+#include "../../env/type_interface.h"
+#include "../../env/type_impl.h"
 #include "../../env/field.h"
 #include "../../util/text.h"
 #include <stdio.h>
@@ -26,7 +27,7 @@ il_factor_static_field_access * il_factor_static_field_access_new(const char* na
 
 void il_factor_static_field_access_dump(il_factor_static_field_access * self, int depth) {
 	text_putindent(depth);
-	printf("static field access(%s.%s)", self->f->parent->name, self->f->name);
+	printf("static field access(%s.%s)",type_name(self->f->parent), self->f->name);
 	text_putline();
 }
 
@@ -37,7 +38,7 @@ void il_factor_static_field_access_generate(il_factor_static_field_access * self
 	opcode_buf_add(env->buf, self->fieldIndex);
 }
 
-class_ * il_factor_static_field_access_eval(il_factor_static_field_access * self, enviroment * env) {
+type * il_factor_static_field_access_eval(il_factor_static_field_access * self, enviroment * env) {
 	il_factor_static_field_access_find(self, env);
 	return self->f->type;
 }
@@ -54,7 +55,7 @@ void il_factor_static_field_access_delete(il_factor_static_field_access * self) 
 //private
 static void il_factor_static_field_access_find(il_factor_static_field_access * self, enviroment * env) {
 	int temp = 0;
-	class_* cls = fqcn_class(self->fqcn, (namespace_*)vector_top(env->namespace_vec));
+	type* cls = fqcn_class(self->fqcn, (namespace_*)vector_top(env->namespace_vec));
 	self->f = class_find_sfield_tree(cls, self->name, &temp);
 	self->fieldIndex = temp;
 }

@@ -2,7 +2,9 @@
 #include "../../util/mem.h"
 #include "../../util/text.h"
 #include "../../util/logger.h"
-#include "../../env/class.h"
+#include "../../env/type_interface.h"
+#include "../../env/type_impl.h"
+#include "../../env/namespace.h"
 #include "../../env/field.h"
 #include "il_factor_variable_impl.h"
 #include <stdio.h>
@@ -50,7 +52,7 @@ void il_factor_field_access_generate(il_factor_field_access * self, enviroment *
 void il_factor_field_access_load(il_factor_field_access * self, enviroment * env, il_ehandler * eh) {
 }
 
-class_ * il_factor_field_access_eval(il_factor_field_access * self, enviroment * env) {
+type * il_factor_field_access_eval(il_factor_field_access * self, enviroment * env) {
 	il_factor_field_access_find(self, env);
 	return self->f->type;
 }
@@ -60,7 +62,8 @@ void il_factor_field_access_delete(il_factor_field_access * self) {
 
 //private
 static void il_factor_field_access_find(il_factor_field_access * self, enviroment * env) {
-	class_* cls = il_factor_eval(self->fact, env);
+	/*
+	type* tp = il_factor_eval(self->fact, env);
 	int temp = 0;
 	//TEST(env->toplevel);
 	//ここでもしfactがvariableなら、
@@ -87,10 +90,11 @@ static void il_factor_field_access_find(il_factor_field_access * self, enviromen
 	//variableではない(戻り値や式の結果)
 	//
 	} else {
-		self->f = class_find_field_tree(cls, self->name, &temp);
+		self->f = class_find_field_tree(NULL, self->name, &temp);
 		TEST(self->f == NULL);
 		self->fieldIndex = temp;
 	}
+	*/
 	//TEST(env->toplevel);
 //	class_find_fie
 }

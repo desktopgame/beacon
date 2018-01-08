@@ -3,7 +3,7 @@
 #define SIGNAL_LIB_SG_LIBRARY_IMPL_H
 //ネイティブメソッド自体を実装する .c からインクルード出来ます。
 #include "../env/namespace.h"
-#include "../env/class.h"
+#include "../env/type_interface.h"
 #include "../env/method.h"
 #include "../env/object.h"
 

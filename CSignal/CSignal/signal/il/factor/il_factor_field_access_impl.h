@@ -3,7 +3,7 @@
 #define SIGNAL_IL_IL_FACTOR_FIELD_ACCESS_H
 #include "../il_factor_interface.h"
 struct enviroment;
-struct class_;
+struct type;
 struct field;
 
 /**
@@ -57,7 +57,7 @@ void il_factor_field_access_load(il_factor_field_access* self, struct enviroment
  * @param self
  * @param env
  */
-struct class_* il_factor_field_access_eval(il_factor_field_access* self, struct enviroment* env);
+struct type* il_factor_field_access_eval(il_factor_field_access* self, struct enviroment* env);
 
 /**
  * フィールドアクセスを表す要素を開放します.

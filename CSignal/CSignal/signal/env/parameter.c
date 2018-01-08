@@ -6,7 +6,7 @@
 parameter * parameter_new(const char * name) {
 	parameter* ret = (parameter*)MEM_MALLOC(sizeof(parameter));
 	ret->name = text_strdup(name);
-	ret->classz = NULL;
+	ret->type = NULL;
 	return ret;
 }
 

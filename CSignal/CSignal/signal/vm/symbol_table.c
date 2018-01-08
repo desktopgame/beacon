@@ -1,7 +1,8 @@
 #include "symbol_table.h"
 #include "../util/mem.h"
 #include "symbol_entry.h"
-#include "../env/class.h"
+#include "../env/type_interface.h"
+#include "../env/type_impl.h"
 #include <assert.h>
 
 //proto

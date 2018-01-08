@@ -57,7 +57,7 @@ void il_factor_call_load(il_factor_call* self, struct enviroment* env, il_ehandl
  * @param env
  * @return
  */
-struct class_* il_factor_call_eval(il_factor_call* self, struct enviroment* env);
+struct type* il_factor_call_eval(il_factor_call* self, struct enviroment* env);
 
 /**
  * 関数呼び出しを開放します.

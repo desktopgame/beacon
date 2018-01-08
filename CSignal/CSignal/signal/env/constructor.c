@@ -2,7 +2,8 @@
 #include "../util/mem.h"
 #include "../util/text.h"
 #include "parameter.h"
-#include "class.h"
+#include "../vm/enviroment.h"
+#include "type_interface.h"
 
 constructor * constructor_new() {
 	constructor* ret = (constructor*)MEM_MALLOC(sizeof(constructor));
@@ -21,7 +22,7 @@ void constructor_dump(constructor * self, int depth) {
 	for (int i = 0; i < self->parameter_list->length; i++) {
 		vector_item e = vector_at(self->parameter_list, i);
 		parameter* p = (parameter*)e;
-		printf("%s %s", p->classz->name, p->name);
+		printf("%s %s", type_name(p->type), p->name);
 		if ((i + 1) < self->parameter_list->length) {
 			printf(" ");
 		}

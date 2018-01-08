@@ -1,14 +1,14 @@
 #pragma once
 #ifndef SIGNAL_ENV_CLASS_H
 #define SIGNAL_ENV_CLASS_H
-#include "namespace.h"
-#include "class_type.h"
-#include "class_state.h"
-#include "native_method_ref.h"
-#include "vtable.h"
-#include "../vm/enviroment.h"
-#include "../util/vector.h"
-#include "access_domain.h"
+#include "../namespace.h"
+#include "../class_state.h"
+#include "../native_method_ref.h"
+#include "../vtable.h"
+#include "../type_interface.h"
+#include "../../vm/enviroment.h"
+#include "../../util/vector.h"
+#include "../access_domain.h"
 #include <stdint.h>
 #include <stdbool.h>
 #include <stdarg.h>
@@ -30,7 +30,7 @@ typedef struct class_ {
 	vector* method_list;
 	vector* smethod_list;
 	vector* constructor_list;
-	class_type type;
+	//class_type type;
 	class_state state;
 	uint32_t ref_count;
 	tree_map* native_method_ref_map;
@@ -41,13 +41,19 @@ typedef struct class_ {
 } class_;
 
 /**
+ * クラスをスーパーセットにラップします.
+ * @param self
+ * @return
+ */
+type* type_wrap_class(class_* self);
+
+/**
  * 新しいクラスを作成します.
  * 呼び出し側で対応する名前空間を紐づけてください。
  * @param name これは呼び出し側で開放してください。
- * @param type
  * @return
  */
-class_* class_new(const char* name, class_type type);
+class_* class_new(const char* name);
 
 /**
  * 指定のオブジェクトにこのクラスのフィールドを表す

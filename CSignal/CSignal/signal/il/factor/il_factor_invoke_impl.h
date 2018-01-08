@@ -57,7 +57,7 @@ void il_factor_invoke_load(il_factor_invoke* self, struct enviroment* env, il_eh
  * @param env
  * @return
  */
-struct class_* il_factor_invoke_eval(il_factor_invoke* self, struct enviroment* env);
+struct type* il_factor_invoke_eval(il_factor_invoke* self, struct enviroment* env);
 
 /**
  * メソッド呼び出しを開放します.

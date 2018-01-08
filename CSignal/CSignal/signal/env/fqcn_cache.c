@@ -1,7 +1,7 @@
 #include "fqcn_cache.h"
 #include "../util/mem.h"
 #include "namespace.h"
-#include "class.h"
+#include "type_interface.h"
 
 
 fqcn_cache * fqcn_cache_new() {
@@ -57,7 +57,7 @@ namespace_ * fqcn_scope(fqcn_cache * self, namespace_* current) {
 	return top;
 }
 
-class_ * fqcn_class(fqcn_cache * self, namespace_* current) {
+type * fqcn_class(fqcn_cache * self, namespace_* current) {
 	//Y形式
 	if (self->scope_vec->length == 0) {
 		char* name = self->name;
@@ -74,12 +74,12 @@ class_ * fqcn_class(fqcn_cache * self, namespace_* current) {
 			return CL_VOID;
 		}
 		if (current == NULL) { return NULL; }
-		return namespace_get_class(current, self->name);
+		return namespace_get_type(current, self->name);
 	}
 	//X::Yのような形式
 	namespace_* c = fqcn_scope(self, current);
 	if (c == NULL) { return NULL; }
-	return namespace_get_class(c, self->name);
+	return namespace_get_type(c, self->name);
 }
 
 void fqcn_cache_delete(fqcn_cache * self) {

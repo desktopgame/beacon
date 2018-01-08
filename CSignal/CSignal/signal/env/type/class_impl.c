@@ -1,19 +1,19 @@
-#include "class.h"
-#include "../util/text.h"
-#include "../util/logger.h"
-#include "parameter.h"
-#include "../il/il_argument.h"
+#include "class_impl.h"
+#include "../../util/text.h"
+#include "../../util/logger.h"
+#include "../parameter.h"
+#include "../../il/il_argument.h"
 #include <assert.h>
 #include <stdlib.h>
 #include <stdio.h>
 #include <string.h>
-#include "../util/mem.h"
-#include "object.h"
-#include "../vm/enviroment.h"
-#include "../util/text.h"
-#include "field.h"
-#include "method.h"
-#include "constructor.h"
+#include "../../util/mem.h"
+#include "../object.h"
+#include "../../vm/enviroment.h"
+#include "../../util/text.h"
+#include "../field.h"
+#include "../method.h"
+#include "../constructor.h"
 
 //http://jumble-note.blogspot.jp/2012/09/c-vacopy.html
 #ifndef va_copy
@@ -26,11 +26,17 @@ static void class_field_delete(vector_item item);
 static void class_method_delete(vector_item item);
 static vector * class_find_constructor_impl(class_ * self, vector * args, enviroment* env);
 
-class_ * class_new(const char * name, class_type type) {
+type * type_wrap_class(class_ * self) {
+	type* ret = type_new();
+	ret->tag = type_class;
+	ret->u.class_ = self;
+	return ret;
+}
+
+class_ * class_new(const char * name) {
 	assert(name != NULL);
 	class_* ret = (class_*)MEM_MALLOC(sizeof(class_));
 	ret->name = text_strdup(name);
-	ret->type = type;
 	ret->location = NULL;
 	ret->state = class_none;
 	ret->ref_count = 0;
@@ -207,7 +213,9 @@ constructor * class_find_constructor(class_ * self, vector * args, enviroment * 
 			vector_item d2 = vector_at(c->parameter_list, j);
 			il_argument* p = (il_argument*)d;
 			parameter* p2 = (parameter*)d2;
+			/*
 			score += class_distance(il_factor_eval(p->factor, env), p2->classz);
+			*/
 		}
 		if (score < min) {
 			min = score;
@@ -406,7 +414,9 @@ static method* class_find_method_impl(vector* elements, const char * name, vecto
 			vector_item d2 = vector_at(m->parameter_list, j);
 			il_argument* p = (il_argument*)d;
 			parameter* p2 = (parameter*)d2;
+			/*
 			score += class_distance(il_factor_eval(p->factor, env), p2->classz);
+			*/
 		}
 		if (score < min) {
 			//TEST(env->toplevel);
@@ -452,10 +462,12 @@ static vector * class_find_constructor_impl(class_ * self, vector * args, enviro
 			vector_item d2 = vector_at(c->parameter_list, j);
 			il_argument* p = (il_argument*)d;
 			parameter* p2 = (parameter*)d2;
+			/*
 			if (!class_castable(il_factor_eval(p->factor, env), p2->classz)) {
 				match = false;
 				break;
 			}
+			*/
 		}
 		if (match) {
 			vector_push(v, c);

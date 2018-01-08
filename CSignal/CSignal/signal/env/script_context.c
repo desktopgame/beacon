@@ -2,7 +2,8 @@
 #include "../util/logger.h"
 #include "heap.h"
 #include "namespace.h"
-#include "class.h"
+#include "type_interface.h"
+#include "type/class_impl.h"
 #include <stdlib.h>
 #include <assert.h>
 #include "../util/mem.h"
@@ -109,24 +110,24 @@ static void script_context_launch(script_context* self) {
 	//プリロードされるクラスを定義
 	namespace_* signal = namespace_create_at_root("signal");
 	namespace_* lang = namespace_add_namespace(signal, "lang");
-	class_* intClass = class_new("Int", class_type_class);
-	class_* doubleClass = class_new("Double", class_type_class);
-	class_* charClass = class_new("Char", class_type_class);
-	class_* stringClass = class_new("String", class_type_class);
-	class_* boolClass = class_new("Bool", class_type_class);
-	class_* voidClass = class_new("Void", class_type_class);
+	class_* intClass = class_new("Int");
+	class_* doubleClass = class_new("Double");
+	class_* charClass = class_new("Char");
+	class_* stringClass = class_new("String");
+	class_* boolClass = class_new("Bool");
+	class_* voidClass = class_new("Void");
 	intClass->state = class_pending;
 	doubleClass->state = class_pending;
 	charClass->state = class_pending;
 	stringClass->state = class_pending;
 	boolClass->state = class_pending;
 	voidClass->state = class_pending;
-	namespace_add_class(lang, intClass);
-	namespace_add_class(lang, doubleClass);
-	namespace_add_class(lang, charClass);
-	namespace_add_class(lang, stringClass);
-	namespace_add_class(lang, boolClass);
-	namespace_add_class(lang, voidClass);
+	namespace_add_type(lang, type_wrap_class(intClass));
+	namespace_add_type(lang, type_wrap_class(doubleClass));
+	namespace_add_type(lang, type_wrap_class(charClass));
+	namespace_add_type(lang, type_wrap_class(stringClass));
+	namespace_add_type(lang, type_wrap_class(boolClass));
+	namespace_add_type(lang, type_wrap_class(voidClass));
 	//退避していたコンテキストを復帰
 	script_context_set_current(selected);
 }
@@ -137,7 +138,7 @@ static script_context* script_context_malloc(void) {
 	ret->namespaceMap = NULL;
 	ret->classLoaderMap = tree_map_new();
 	ret->heap = heap_new();
-	ret->class_vec = vector_new();
+	ret->type_vec = vector_new();
 	ret->prev = NULL;
 	ret->next = NULL;
 	return ret;

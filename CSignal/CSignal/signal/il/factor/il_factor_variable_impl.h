@@ -4,14 +4,14 @@
 #include "../il_factor_interface.h"
 #include "../../env/fqcn_cache.h"
 //struct opcode_buf;
-struct class_;
+struct type;
 /**
  * 変数を表す要素.
  */
 typedef struct il_factor_variable {
 	char* name;
 	int index;
-	struct class_* type;
+	struct type* type;
 } il_factor_variable;
 
 /**
@@ -56,7 +56,7 @@ void il_factor_variable_load(il_factor_variable* self, struct enviroment* env, i
  * @param env
  * @return
  */
-struct class_* il_factor_variable_eval(il_factor_variable* self, struct enviroment* env);
+struct type* il_factor_variable_eval(il_factor_variable* self, struct enviroment* env);
 
 /**
  * 変数を開放します.

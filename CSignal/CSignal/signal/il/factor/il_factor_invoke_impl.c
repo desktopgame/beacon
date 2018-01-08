@@ -4,7 +4,7 @@
 #include "../../util/text.h"
 #include "../../vm/enviroment.h"
 #include "../il_argument.h"
-#include "../../env/class.h"
+#include "../../env/type_interface.h"
 #include "../../env/method.h"
 #include "../../util/mem.h"
 
@@ -65,7 +65,7 @@ void il_factor_invoke_generate(il_factor_invoke * self, enviroment* env) {
 void il_factor_invoke_load(il_factor_invoke * self, enviroment * env, il_ehandler * eh) {
 }
 
-class_ * il_factor_invoke_eval(il_factor_invoke * self, enviroment * env) {
+type * il_factor_invoke_eval(il_factor_invoke * self, enviroment * env) {
 	il_factor_invoke_find(self, env);
 	return self->m->return_type;
 }

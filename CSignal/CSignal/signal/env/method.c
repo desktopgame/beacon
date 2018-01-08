@@ -3,7 +3,7 @@
 #include <stdio.h>
 #include <string.h>
 #include "../util/text.h"
-#include "class.h"
+#include "type_interface.h"
 #include "parameter.h"
 #include "../util/mem.h"
 #include "../vm/vm.h"
@@ -40,7 +40,7 @@ void method_dump(method * self, int depth) {
 	for (int i = 0; i < self->parameter_list->length; i++) {
 		vector_item e = vector_at(self->parameter_list, i);
 		parameter* p = (parameter*)e;
-		printf("%s %s", p->classz->name, p->name);
+		printf("%s %s", type_name(p->type), p->name);
 		if ((i + 1) < self->parameter_list->length) {
 			printf(" ");
 		}
@@ -48,7 +48,7 @@ void method_dump(method * self, int depth) {
 	if (self->return_type == NULL) {
 		printf(") -> NULL");
 	} else {
-		printf(") -> %s", self->return_type->name);
+		printf(") -> %s", type_name(self->return_type));
 	}
 	text_putline();
 	if (self->type == method_type_script) {
@@ -62,17 +62,19 @@ bool method_equal(method * a, method * b) {
 		return false;
 	}
 	for (int i = 0; i < a->parameter_list->length; i++) {
-		class_* ap = ((parameter*)vector_at(a->parameter_list, i))->classz;
-		class_* bp = ((parameter*)vector_at(b->parameter_list, i))->classz;
+		type* ap = ((parameter*)vector_at(a->parameter_list, i))->type;
+		type* bp = ((parameter*)vector_at(b->parameter_list, i))->type;
 		if (ap != bp) { return false; }
 	}
-	class_* ar = a->return_type;
-	class_* br = b->return_type;
+	type* ar = a->return_type;
+	type* br = b->return_type;
 	if (ar == br) {
 		return true;
 	}
 	//‹¤•Ï–ß‚è’l
-	return class_castable(b, a);
+	//FIXME:‚ ‚Æ‚Å
+	return false;
+	//return class_castable(b, a);
 }
 
 void method_delete(method * self) {

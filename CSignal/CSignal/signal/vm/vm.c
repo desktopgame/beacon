@@ -3,7 +3,8 @@
 #include <stdio.h>
 #include <assert.h>
 #include "label.h"
-#include "../env/class.h"
+#include "../env/type_interface.h"
+#include "../env/type_impl.h"
 #include "../env/field.h"
 #include "../env/method.h"
 #include "../env/object.h"
@@ -210,7 +211,7 @@ void vm_execute(vm* self, enviroment* env) {
 			case op_alloc_field:
 			{
 				int absClsIndex = (int)enviroment_source_at(env, ++i);
-				class_* cls = (class_*)vector_at(ctx->class_vec, absClsIndex);
+				type* cls = (type*)vector_at(ctx->type_vec, absClsIndex);
 				object* obj = (object*)vector_top(self->value_stack);
 				class_alloc_fields(cls, obj);
 				break;
@@ -220,7 +221,9 @@ void vm_execute(vm* self, enviroment* env) {
 				//生成するクラスとコンストラクタを特定
 				int absClsIndex = (int)enviroment_source_at(env, ++i);
 				int constructorIndex = (int)enviroment_source_at(env, ++i);
-				class_* cls = (class_*)vector_at(ctx->class_vec, absClsIndex);
+				type* tp = (type*)vector_at(ctx->type_vec, absClsIndex);
+				assert(tp->tag == type_class);
+				class_* cls = tp->u.class_;
 				constructor* ctor = (constructor*)vector_at(cls->constructor_list, constructorIndex);
 				//新しいVMでコンストラクタを実行
 				//また、現在のVMから実引数をポップ
@@ -244,8 +247,10 @@ void vm_execute(vm* self, enviroment* env) {
 			{
 				int absClsIndex = (int)enviroment_source_at(env, ++i);
 				int ctorIndex = (int)enviroment_source_at(env, ++i);
-				class_* cls = (class_*)vector_at(ctx->class_vec, absClsIndex);
-				constructor* ctor = (class_*)vector_at(cls->constructor_list, ctorIndex);
+				type* tp = (type*)vector_at(ctx->type_vec, absClsIndex);
+				assert(tp->tag == type_class);
+				class_* cls = tp->u.class_;
+				constructor* ctor = (constructor*)vector_at(cls->constructor_list, ctorIndex);
 				//コンストラクタを実行するためのVMを作成
 				vm* sub = vm_sub(self);
 				//チェインコンストラクタに渡された実引数をプッシュ
@@ -301,7 +306,7 @@ void vm_execute(vm* self, enviroment* env) {
 			{
 				int absClsIndex = (int)enviroment_source_at(env, ++i);
 				int fieldIndex = (int)enviroment_source_at(env, ++i);
-				class_* cls = (class_*)vector_at(ctx->class_vec, absClsIndex);
+				type* cls = (type*)vector_at(ctx->type_vec, absClsIndex);
 				field* f = class_get_sfield(cls, fieldIndex);
 				f->static_value = (object*)vector_pop(self->value_stack);
 				break;
@@ -311,7 +316,7 @@ void vm_execute(vm* self, enviroment* env) {
 			{
 				int absClsIndex = (int)enviroment_source_at(env, ++i);
 				int fieldIndex = (int)enviroment_source_at(env, ++i);
-				class_* cls = (class_*)vector_at(ctx->class_vec, absClsIndex);
+				type* cls = (type*)vector_at(ctx->type_vec, absClsIndex);
 				field* f = class_get_sfield(cls, fieldIndex);
 				vector_push(self->value_stack, f->static_value);
 				break;
@@ -343,7 +348,7 @@ void vm_execute(vm* self, enviroment* env) {
 			{
 				int absClassIndex = (int)enviroment_source_at(env, ++i);
 				int methodIndex = (int)enviroment_source_at(env, ++i);
-				class_* cls = (class_*)vector_at(ctx->class_vec, absClassIndex);
+				type* cls = (type*)vector_at(ctx->type_vec, absClassIndex);
 				//method* m = (method*)vector_at(cls->vt->elements, methodIndex);
 				method* m = class_get_smethod(cls, methodIndex);
 				//いらない

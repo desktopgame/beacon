@@ -1,6 +1,7 @@
 #include "il_factor_named_invoke_impl.h"
 #include "../il_argument.h"
 #include "../../env/method.h"
+#include "../../env/namespace.h"
 #include "../../util/mem.h"
 #include "../../util/text.h"
 #include "../../util/logger.h"
@@ -10,8 +11,8 @@
 //proto
 static void il_factor_named_invoke_delete_argument(vector_item item);
 static void il_factor_named_invoke_find(il_factor_named_invoke* self, enviroment* env);
-static void il_factor_named_invoke_generate_IMPL(il_factor_named_invoke* self, enviroment* env, class_* cls);
-static void il_factor_named_invoke_generate_STATIC_IMPL(il_factor_named_invoke* self, enviroment* env, class_* cls);
+static void il_factor_named_invoke_generate_IMPL(il_factor_named_invoke* self, enviroment* env, type* cls);
+static void il_factor_named_invoke_generate_STATIC_IMPL(il_factor_named_invoke* self, enviroment* env, type* cls);
 static void il_factor_named_invoke_generate_args(il_factor_named_invoke* self, enviroment* env);
 
 il_factor * il_factor_wrap_named_invoke(il_factor_named_invoke * self) {
@@ -69,7 +70,7 @@ void il_factor_named_invoke_generate(il_factor_named_invoke * self, enviroment *
 void il_factor_named_invoke_load(il_factor_named_invoke * self, enviroment * env, il_ehandler * eh) {
 }
 
-class_ * il_factor_named_invoke_eval(il_factor_named_invoke * self, enviroment * env) {
+type * il_factor_named_invoke_eval(il_factor_named_invoke * self, enviroment * env) {
 	il_factor_named_invoke_find(self, env);
 	return self->m->return_type;
 }
@@ -103,34 +104,34 @@ static void il_factor_named_invoke_find(il_factor_named_invoke* self, enviroment
 				top = namespace_get_namespace(top, e);
 			}
 		}
-		class_* cls = namespace_get_class(top, self->fqcn->name);
-		il_factor_named_invoke_generate_STATIC_IMPL(self, env, cls);
+		type* tp = namespace_get_type(top, self->fqcn->name);
+		il_factor_named_invoke_generate_STATIC_IMPL(self, env, tp);
 		//printf("%s %s", top->name, cls->name);
-		self->u.classz = cls;
+		self->u.type = tp;
 		self->type = ilnamed_invoke_static;
 	//Y.call() の場合
 	} else {
 		namespace_* top = (namespace_*)vector_top(env->namespace_vec);
 		//クラスが見つかった
-		class_* cls = NULL;
+		type* tp = NULL;
 		if (top != NULL) {
-			cls = namespace_get_class(top, self->fqcn->name);
+			tp = namespace_get_type(top, self->fqcn->name);
 		}
-		if (cls != NULL) {
-			self->u.classz = cls;
+		if (tp != NULL) {
+			self->u.type = tp;
 			self->type = ilnamed_invoke_static;
-			il_factor_named_invoke_generate_STATIC_IMPL(self, env, cls);
+			il_factor_named_invoke_generate_STATIC_IMPL(self, env, tp);
 		} else {
 			self->u.factor = il_factor_wrap_variable(il_factor_variable_new(self->fqcn->name));
 			self->type = ilnamed_invoke_variable;
-			cls = (class_*)il_factor_eval(self->u.factor, env);
-			il_factor_named_invoke_generate_IMPL(self, env, cls);
+			tp = il_factor_eval(self->u.factor, env);
+			il_factor_named_invoke_generate_IMPL(self, env, tp);
 		}
 		//TEST(env->toplevel);
 	}
 }
 
-static void il_factor_named_invoke_generate_IMPL(il_factor_named_invoke* self, enviroment* env, class_* cls) {
+static void il_factor_named_invoke_generate_IMPL(il_factor_named_invoke* self, enviroment* env, type* cls) {
 	int temp = 0;
 	self->m = class_find_method(cls, self->method_name, self->argument_list, env, &temp);
 	self->methodIndex = temp;
@@ -138,7 +139,7 @@ static void il_factor_named_invoke_generate_IMPL(il_factor_named_invoke* self, e
 	//TEST(env->toplevel);
 }
 
-static void il_factor_named_invoke_generate_STATIC_IMPL(il_factor_named_invoke* self, enviroment* env, class_* cls) {
+static void il_factor_named_invoke_generate_STATIC_IMPL(il_factor_named_invoke* self, enviroment* env, type* cls) {
 	int temp = 0;
 	self->m = class_find_smethod(cls, self->method_name, self->argument_list, env, &temp);
 	self->methodIndex = temp;

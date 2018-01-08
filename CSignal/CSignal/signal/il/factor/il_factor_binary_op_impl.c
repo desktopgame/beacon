@@ -6,7 +6,7 @@
 #include "il_factor_variable_impl.h"
 #include "il_factor_field_access_impl.h"
 #include "il_factor_static_field_access_impl.h"
-#include "../../env/class.h"
+#include "../../env/type_interface.h"
 #include "../../env/field.h"
 #include "../../env/namespace.h"
 #include "../../vm/enviroment.h"
@@ -264,7 +264,7 @@ void il_factor_binary_op_load(il_factor_binary_op * self, enviroment * env, il_e
 	il_factor_load(self->right, env, eh);
 }
 
-class_ * il_factor_binary_op_eval(il_factor_binary_op * self, enviroment * env) {
+type * il_factor_binary_op_eval(il_factor_binary_op * self, enviroment * env) {
 	return NULL;
 }
 
@@ -280,14 +280,14 @@ static void il_factor_binary_op_generate_impl(il_factor_binary_op * self, enviro
 	il_factor_generate(self->right, env);
 	il_factor_generate(self->left, env);
 	
-	class_* lclass = il_factor_eval(self->left, env);
-	class_* rclass = il_factor_eval(self->right, env);
-	if (lclass == CL_INT &&
-		rclass == CL_INT) {
+	type* ltype = il_factor_eval(self->left, env);
+	type* rtype = il_factor_eval(self->right, env);
+	if (ltype == CL_INT &&
+		rtype == CL_INT) {
 		opcode_buf_add(env->buf, (vector_item)bi_operator_to_opi(c));
 	}
-	if (lclass == CL_DOUBLE &&
-		rclass == CL_DOUBLE) {
+	if (ltype == CL_DOUBLE &&
+		rtype == CL_DOUBLE) {
 		opcode_buf_add(env->buf, (vector_item)bi_operator_to_opd(c));
 	}
 }

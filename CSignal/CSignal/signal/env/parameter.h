@@ -1,13 +1,13 @@
 #pragma once
 #ifndef SIGNAL_ENV_PARAMETER_H
 #define SIGNAL_ENV_PARAMETER_H
-struct class_;
+struct type;
 /**
  * メソッドの仮引数を表す構造体です.
  */
 typedef struct parameter {
 	char* name;
-	struct class_* classz;
+	struct type* type;
 } parameter;
 
 /**

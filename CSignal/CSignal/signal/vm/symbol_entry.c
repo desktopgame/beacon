@@ -1,7 +1,7 @@
 #include "symbol_entry.h"
 #include "../util/mem.h"
 #include "../util/text.h"
-#include "../env/class.h"
+#include "../env/type_interface.h"
 symbol_entry * symbol_entry_new(const char * name) {
 	symbol_entry* ret = (symbol_entry*)MEM_MALLOC(sizeof(symbol_entry));
 	ret->index = 0;

@@ -5,7 +5,7 @@
 #include "../../env/fqcn_cache.h"
 #include "../il_factor_interface.h"
 struct enviroment;
-struct class_;
+struct type;
 struct constructor;
 /**
  * コンストラクタの呼び出しを表す要素.
@@ -58,7 +58,7 @@ void il_factor_new_instance_load(il_factor_new_instance* self, struct enviroment
  * @param env
  * @return
  */
-struct class_* il_factor_new_instance_eval(il_factor_new_instance* self, struct enviroment* env);
+struct type* il_factor_new_instance_eval(il_factor_new_instance* self, struct enviroment* env);
 
 /**
  * コンストラクタの呼び出しを表す要素を開放します.

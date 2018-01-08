@@ -61,7 +61,7 @@ void il_factor_unary_op_load(il_factor_unary_op* self, struct enviroment* env, i
  * @param env
  * @return
  */
-struct class_* il_factor_unary_op_eval(il_factor_unary_op* self, struct enviroment* env);
+struct type* il_factor_unary_op_eval(il_factor_unary_op* self, struct enviroment* env);
 
 /**
  * 単項演算子を開放します.

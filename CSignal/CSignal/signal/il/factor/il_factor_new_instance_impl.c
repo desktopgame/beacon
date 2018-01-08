@@ -2,7 +2,7 @@
 #include "../../util/mem.h"
 #include "../il_argument.h"
 #include "../../vm/enviroment.h"
-#include "../../env/class.h"
+#include "../../env/type_interface.h"
 #include "../../util/text.h"
 #include "../../env/constructor.h"
 #include <stdio.h>
@@ -48,14 +48,14 @@ void il_factor_new_instance_generate(il_factor_new_instance * self, enviroment *
 	}
 	//クラスとコンストラクタのインデックスをプッシュ
 	opcode_buf_add(env->buf, op_new_instance);
-	opcode_buf_add(env->buf, self->c->parent->absoluteIndex);
+//	opcode_buf_add(env->buf, self->c->parent->absoluteIndex);
 	opcode_buf_add(env->buf, self->constructorIndex);
 }
 
 void il_factor_new_instance_load(il_factor_new_instance * self, enviroment * env, il_ehandler * eh) {
 }
 
-class_ * il_factor_new_instance_eval(il_factor_new_instance * self, enviroment * env) {
+type * il_factor_new_instance_eval(il_factor_new_instance * self, enviroment * env) {
 	il_factor_new_instance_find(self, env);
 	return self->c->parent;
 }
@@ -65,9 +65,11 @@ void il_factor_new_instance_delete(il_factor_new_instance * self) {
 
 //private
 static void il_factor_new_instance_find(il_factor_new_instance * self, enviroment * env) {
+	/*
 	class_* cls = enviroment_class(env, self->fqcn);
 	int temp = 0;
 	self->c = class_find_constructor(cls, self->argument_list, env, &temp);
 	assert(self->c != NULL);
 	self->constructorIndex = temp;
+	*/
 }

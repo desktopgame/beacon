@@ -5,7 +5,7 @@
 #include "../../util/text.h"
 #include "../../util/mem.h"
 #include "../../vm/enviroment.h"
-#include "../../env/class.h"
+#include "../../env/type_interface.h"
 #include "../../env/method.h"
 
 //proto
@@ -67,7 +67,7 @@ void il_factor_call_generate(il_factor_call * self, enviroment* env) {
 void il_factor_call_load(il_factor_call * self, enviroment * env, il_ehandler * eh) {
 }
 
-class_ * il_factor_call_eval(il_factor_call * self, enviroment * env) {
+type * il_factor_call_eval(il_factor_call * self, enviroment * env) {
 	il_factor_find_method(self, env);
 	return self->m->return_type;
 }
@@ -89,10 +89,10 @@ static void il_factor_find_method(il_factor_call* self, enviroment* env) {
 		return;
 	}
 	int temp = 0;
-	self->m = class_find_method((class_*)vector_top(env->class_vec), self->name, self->argument_list, env, &temp);
+//	self->m = class_find_method((class_*)vector_top(env->class_vec), self->name, self->argument_list, env, &temp);
 	self->methodIndex = temp;
 	if (self->m == NULL) {
-		self->m = class_find_smethod((class_*)vector_top(env->class_vec), self->name, self->argument_list, env, &temp);
+	//	self->m = class_find_smethod((class_*)vector_top(env->class_vec), self->name, self->argument_list, env, &temp);
 		self->methodIndex = temp;
 	}
 }

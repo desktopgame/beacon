@@ -1,8 +1,10 @@
 #include "il_factor_super_impl.h"
 #include <stdio.h>
+#include <assert.h>
 #include "../../vm/enviroment.h"
 #include "../../util/text.h"
-#include "../../env/class.h"
+#include "../../env/type_interface.h"
+#include "../../env/type_impl.h"
 
 void il_factor_super_dump(il_factor_super * self, int depth) {
 	text_putindent(depth);
@@ -17,8 +19,10 @@ void il_factor_super_generate(il_factor_super * self, enviroment * env) {
 void il_factor_super_load(il_factor_super * self, enviroment * env, il_ehandler * eh) {
 }
 
-class_ * il_factor_super_eval(il_factor_super * self, enviroment * env) {
-	return ((class_*)vector_top(env->class_vec))->super_class;
+type * il_factor_super_eval(il_factor_super * self, enviroment * env) {
+	type* t = ((type*)vector_top(env->class_vec));
+	assert(t->tag == type_class);
+	return t->u.class_->super_class;
 }
 
 void il_factor_super_delete(il_factor_super * self) {

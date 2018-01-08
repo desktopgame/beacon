@@ -84,7 +84,7 @@ void il_factor_binary_op_load(il_factor_binary_op* self, struct enviroment* env,
  * @param env
  * @return
  */
-struct class_* il_factor_binary_op_eval(il_factor_binary_op* self, struct enviroment* env);
+struct type* il_factor_binary_op_eval(il_factor_binary_op* self, struct enviroment* env);
 
 /**
  * 二項演算子を開放します.

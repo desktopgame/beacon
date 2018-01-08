@@ -3,7 +3,7 @@
 #include "../util/text.h"
 #include "../util/logger.h"
 #include "../vm/enviroment.h"
-#include "../env/class.h"
+#include "../env/type_interface.h"
 #include "../util/mem.h"
 #include <stdio.h>
 
@@ -166,8 +166,8 @@ void il_factor_load(il_factor * self, enviroment * env, il_ehandler * eh) {
 	}
 }
 
-class_ * il_factor_eval(il_factor * self, enviroment * env) {
-	class_* ret = NULL;
+type * il_factor_eval(il_factor * self, enviroment * env) {
+	type* ret = NULL;
 	switch (self->type) {
 		case ilfactor_int:
 			ret = il_factor_int_eval(self->u.int_, env);

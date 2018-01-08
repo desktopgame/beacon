@@ -3,7 +3,7 @@
 #include <stdio.h>
 #include "../../util/text.h"
 #include "../../vm/enviroment.h"
-#include "../../env/class.h"
+#include "../../env/type_interface.h"
 #include "../../util/mem.h"
 #include "../../vm/symbol_entry.h"
 
@@ -41,7 +41,7 @@ void il_factor_variable_load(il_factor_variable * self, enviroment * env, il_eha
 	il_factor_variable_check(self, env);
 }
 
-class_ * il_factor_variable_eval(il_factor_variable * self, enviroment * env) {
+type * il_factor_variable_eval(il_factor_variable * self, enviroment * env) {
 	il_factor_variable_check(self, env);
 	return self->type;
 }

@@ -3,7 +3,7 @@
 #define SIGNAL_IL_IL_FACTOR_SUPER_H
 #include "../il_ehandler.h"
 struct enviroment;
-struct class_;
+struct type;
 
 /**
  * superを表す要素.
@@ -38,7 +38,7 @@ void il_factor_super_load(il_factor_super* self, struct enviroment* env, il_ehan
  * @param env
  * @return
  */
-struct class_* il_factor_super_eval(il_factor_super* self, struct enviroment* env);
+struct type* il_factor_super_eval(il_factor_super* self, struct enviroment* env);
 
 /**
  * superを表す要素を出力します.

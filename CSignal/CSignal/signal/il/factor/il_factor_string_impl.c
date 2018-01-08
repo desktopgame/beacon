@@ -3,7 +3,8 @@
 #include<stdio.h>
 #include "../../util/text.h"
 #include "../../vm/enviroment.h"
-#include "../../env/class.h"
+#include "../../env/type_interface.h"
+#include "../../env/type_impl.h"
 #include "../../util/mem.h"
 
 il_factor * il_factor_wrap_string(il_factor_string * self) {
@@ -34,7 +35,7 @@ void il_factor_string_generate(il_factor_string * self, enviroment* env) {
 void il_factor_string_load(il_factor_string * self, enviroment * env, il_ehandler * eh) {
 }
 
-class_ * il_factor_string_eval(il_factor_string * self, enviroment * env) {
+type * il_factor_string_eval(il_factor_string * self, enviroment * env) {
 	return CL_STRING;
 }
 

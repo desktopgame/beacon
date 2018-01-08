@@ -51,7 +51,7 @@ void il_factor_double_load(il_factor_double* self, struct enviroment* env, il_eh
  * @param self
  * @param env
  */
-struct class_* il_factor_double_eval(il_factor_double* self, struct enviroment* env);
+struct type* il_factor_double_eval(il_factor_double* self, struct enviroment* env);
 
 /**
  * 浮動小数リテラルを表す要素を開放します.

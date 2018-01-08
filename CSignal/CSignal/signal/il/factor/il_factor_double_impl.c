@@ -4,7 +4,7 @@
 #include "../../util/text.h"
 #include "../../vm/enviroment.h"
 #include "../../env/namespace.h"
-#include "../../env/class.h"
+#include "../../env/type_interface.h"
 #include "../../util/mem.h"
 
 il_factor * il_factor_wrap_double(il_factor_double * self) {
@@ -35,7 +35,7 @@ void il_factor_double_generate(il_factor_double * self, enviroment* env) {
 void il_factor_double_load(il_factor_double * self, enviroment * env, il_ehandler * eh) {
 }
 
-class_ * il_factor_double_eval(il_factor_double * self, enviroment * env) {
+type * il_factor_double_eval(il_factor_double * self, enviroment * env) {
 	return CL_DOUBLE;
 }
 

@@ -4,7 +4,7 @@
 #include "../../util/text.h"
 #include "../../vm/enviroment.h"
 #include "../../env/namespace.h"
-#include "../../env/class.h"
+#include "../../env/type_interface.h"
 #include "../../util/mem.h"
 
 il_factor * il_factor_wrap_char(il_factor_char * self) {
@@ -35,7 +35,7 @@ void il_factor_char_generate(il_factor_char * self, enviroment * env) {
 void il_factor_char_load(il_factor_char * self, enviroment * env, il_ehandler * eh) {
 }
 
-class_ * il_factor_char_eval(il_factor_char * self, enviroment * env) {
+type * il_factor_char_eval(il_factor_char * self, enviroment * env) {
 	return CL_CHAR;
 }
 

@@ -2,7 +2,7 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <assert.h>
-#include "class.h"
+#include "type_interface.h"
 #include "../util/mem.h"
 #include "../util/text.h"
 
@@ -26,7 +26,7 @@ void field_dump(field * self, int depth) {
 	if (self->type == NULL) {
 		printf(" field NULL %s", self->name);
 	} else {
-		printf(" field %s %s", self->type->name,self->name);
+		printf(" field %s %s", type_name(self->type),self->name);
 	}
 	text_putline();
 }

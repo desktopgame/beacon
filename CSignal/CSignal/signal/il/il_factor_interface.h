@@ -105,7 +105,7 @@ void il_factor_load(il_factor* self, enviroment* env, il_ehandler* eh);
  * @param env
  * @return
  */
-struct class_* il_factor_eval(il_factor* self, enviroment* env);
+struct type* il_factor_eval(il_factor* self, enviroment* env);
 
 /**
  * 計算可能な要素を開放します.

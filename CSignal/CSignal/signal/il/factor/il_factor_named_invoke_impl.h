@@ -1,7 +1,7 @@
 #pragma once
 #ifndef SIGNAL_IL_IL_FACTOR_STATIC_INVOKE_H
 #define SIGNAL_IL_IL_FACTOR_STATIC_INVOKE_H
-#include "../../env/class.h"
+#include "../../env/type_interface.h"
 #include "../../util/vector.h"
 #include "../../vm/enviroment.h"
 #include "../il_factor_interface.h"
@@ -37,7 +37,7 @@ typedef struct il_factor_named_invoke {
 	struct method* m;
 	int methodIndex;
 	union {
-		class_* classz;
+		type* type;
 		il_factor* factor;
 	} u;
 } il_factor_named_invoke;
@@ -83,7 +83,7 @@ void il_factor_named_invoke_load(il_factor_named_invoke* self, enviroment* env, 
  * @param env
  * @return
  */
-class_* il_factor_named_invoke_eval(il_factor_named_invoke* self, enviroment* env);
+type* il_factor_named_invoke_eval(il_factor_named_invoke* self, enviroment* env);
 
 /**
  * 完全に修飾されたメソッド呼び出しを開放します.

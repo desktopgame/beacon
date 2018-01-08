@@ -4,7 +4,7 @@
 #include "../util/vector.h"
 //#include "fqcn_cache.h"
 struct fqcn_cache;
-struct class_;
+struct type;
 struct namespace_;
 struct class_loader;
 
@@ -35,7 +35,7 @@ void import_manager_import(import_manager* self, struct class_loader* target);
  * @param fqcn
  * @return 解決出来なかったなら NULL を返します.
  */
-struct class_* import_manager_resolve(import_manager* self, struct namespace_* scope, struct fqcn_cache* fqcn);
+struct type* import_manager_resolve(import_manager* self, struct namespace_* scope, struct fqcn_cache* fqcn);
 
 /**
  * インポートマネージャを開放します.

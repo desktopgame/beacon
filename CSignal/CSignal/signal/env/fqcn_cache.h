@@ -3,7 +3,7 @@
 #define SIGNAL_ENV_FQCN_CACHE_H
 #include "../util/vector.h"
 struct namespace_;
-struct class_;
+struct type;
 //struct enviroment;
 /**
  * Full Quality Class Name を表す構造体.
@@ -48,7 +48,7 @@ struct namespace_* fqcn_scope(fqcn_cache* self, struct namespace_* current);
  * @param current
  * @return
  */
-struct class_* fqcn_class(fqcn_cache* self, struct namespace_* current);
+struct type* fqcn_class(fqcn_cache* self, struct namespace_* current);
 
 /**
  * FQCNキャッシュを開放します.

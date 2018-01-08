@@ -7,7 +7,7 @@
 #include "../ast/access_level.h"
 #include "../ast/modifier_type.h"
 #include <stdbool.h>
-struct class_;
+struct type;
 struct vm;
 struct enviroment;
 
@@ -26,8 +26,8 @@ typedef struct method {
 	char* name;
 	method_type type;
 	//struct class_* decleared_type;
-	struct class_* parent;
-	struct class_* return_type;
+	struct type* parent;
+	struct type* return_type;
 	vector* parameter_list;
 	access_level access;
 	modifier_type modifier;

@@ -1,5 +1,6 @@
 #include "enviroment.h"
-#include "../env/class.h"
+#include "../env/type_interface.h"
+#include "../env/type_impl.h"
 #include "../env/object.h"
 #include "../env/fqcn_cache.h"
 #include <stdlib.h>

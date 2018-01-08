@@ -4,7 +4,7 @@
 #include "../../env/fqcn_cache.h"
 #include "../il_factor_interface.h"
 struct enviroment;
-struct class_;
+struct type;
 struct field;
 /**
  * X::Y.a のようなフィールドアクセスを表す要素.
@@ -50,7 +50,7 @@ void il_factor_static_field_access_generate(il_factor_static_field_access* self,
  * @param env
  * @return
  */
-struct class_* il_factor_static_field_access_eval(il_factor_static_field_access* self, struct enviroment* env);
+struct type* il_factor_static_field_access_eval(il_factor_static_field_access* self, struct enviroment* env);
 
 /**
  * 静的フィールドアクセスを表す要素を読み込みます.

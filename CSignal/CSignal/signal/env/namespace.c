@@ -3,7 +3,7 @@
 #include <stdio.h>
 #include <stdbool.h>
 #include <assert.h>
-#include "class.h"
+#include "type_interface.h"
 #include "script_context.h"
 #include "../util/text.h"
 #include "../util/mem.h"
@@ -53,14 +53,14 @@ namespace_ * namespace_add_namespace(namespace_ * self, char * name) {
 	return child;
 }
 
-class_ * namespace_add_class(namespace_ * self, class_ * classz) {
+struct type* namespace_add_type(namespace_* self, type* type) {
 	script_context* ctx = script_context_get_current();
-	classz->location = self;
-	classz->ref_count++;
-	tree_map_put(self->class_map, classz->name, classz);
-	classz->absoluteIndex = ctx->class_vec->length;
-	vector_push(ctx->class_vec, classz);
-	return classz;
+	type->location = self;
+	//classz->ref_count++;
+	tree_map_put(self->type_map, type_name(type), type);
+	type->absoluteIndex = ctx->type_vec->length;
+	vector_push(ctx->type_vec, type);
+	return type;
 }
 
 namespace_ * namespace_get_namespace(namespace_ * self, const char * name) {
@@ -69,11 +69,11 @@ namespace_ * namespace_get_namespace(namespace_ * self, const char * name) {
 	return (namespace_*)tree_map_get(self->namespace_map, name);
 }
 
-class_ * namespace_get_class(namespace_ * self, const char * name) {
+type * namespace_get_type(namespace_ * self, const char * name) {
 	assert(self != NULL);
 	assert(name != NULL);
 
-	return (class_*)tree_map_get(self->class_map, name);
+	return (type*)tree_map_get(self->type_map, name);
 }
 
 namespace_ * namespace_signal() {
@@ -84,28 +84,28 @@ namespace_ * namespace_lang() {
 	return namespace_get_namespace(namespace_signal(), "lang");
 }
 
-class_ * namespace_int_class() {
-	return namespace_get_class(namespace_lang(), "Int");
+type * namespace_int_class() {
+	return namespace_get_type(namespace_lang(), "Int");
 }
 
-class_ * namespace_double_class() {
-	return namespace_get_class(namespace_lang(), "Double");
+type * namespace_double_class() {
+	return namespace_get_type(namespace_lang(), "Double");
 }
 
-class_ * namespace_char_class() {
-	return namespace_get_class(namespace_lang(), "Char");
+type * namespace_char_class() {
+	return namespace_get_type(namespace_lang(), "Char");
 }
 
-class_ * namespace_string_class() {
-	return namespace_get_class(namespace_lang(), "String");
+type * namespace_string_class() {
+	return namespace_get_type(namespace_lang(), "String");
 }
 
-class_ * namespace_bool_class() {
-	return namespace_get_class(namespace_lang(), "Bool");
+type * namespace_bool_class() {
+	return namespace_get_type(namespace_lang(), "Bool");
 }
 
-class_ * namespace_void_class() {
-	return namespace_get_class(namespace_lang(), "Void");
+type * namespace_void_class() {
+	return namespace_get_type(namespace_lang(), "Void");
 }
 
 void namespace_dump() {
@@ -120,9 +120,9 @@ void namespace_dump() {
 //private
 static namespace_* namespace_malloc(char* name) {
 	namespace_* ret = (namespace_*)MEM_MALLOC(sizeof(namespace_));
-	ret->class_map = NULL;
+	ret->type_map = NULL;
 	ret->namespace_map = tree_map_new();
-	ret->class_map = tree_map_new();
+	ret->type_map = tree_map_new();
 	ret->parent = NULL;
 	ret->name = text_strdup(name);
 	ret->ref_count = 0;
@@ -148,7 +148,7 @@ static void namespace_dump_impl(namespace_* root, int depth) {
 	namespace_put_indent(depth);
 	printf("%s", root->name);
 	text_putline();
-	namespace_dump_class(root->class_map, true, depth + 1);
+	namespace_dump_class(root->type_map, true, depth + 1);
 	namespace_dump_root(root->namespace_map, false, depth + 1);
 }
 
@@ -163,11 +163,8 @@ static void namespace_dump_class(tree_map* root, bool isRoot, int depth) {
 		return;
 	}
 	if (!isRoot) {
-
-		//namespace_put_indent(depth);
-		class_* e = ((class_*)root->item);
-		class_dump(e, depth);
-		//text_putline();
+		type* e = ((type*)root->item);
+		type_dump(e, depth);
 	}
 	namespace_dump_class(root->left, false, depth);
 	namespace_dump_class(root->right, false, depth);

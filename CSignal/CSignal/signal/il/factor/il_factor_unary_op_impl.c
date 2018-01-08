@@ -4,7 +4,8 @@
 #include <assert.h>
 #include "../../util/text.h"
 #include "../../vm/enviroment.h"
-#include "../../env/class.h"
+#include "../../env/namespace.h"
+#include "../../env/type_interface.h"
 #include "../../util/mem.h"
 
 typedef enum u_operator_t {
@@ -48,7 +49,7 @@ void il_factor_unary_op_dump(il_factor_unary_op * self, int depth) {
 
 void il_factor_unary_op_generate(il_factor_unary_op * self, enviroment* env) {
 	il_factor_generate(self->a, env);
-	class_* cls = il_factor_eval(self->a, env);
+	type* cls = il_factor_eval(self->a, env);
 	if (cls == CL_INT) {
 		assert(self->type == ilunary_neg);
 		opcode_buf_add(env->buf, (vector_item)u_operator_to_opi(u_neg));
@@ -66,7 +67,7 @@ void il_factor_unary_op_generate(il_factor_unary_op * self, enviroment* env) {
 void il_factor_unary_op_load(il_factor_unary_op * self, enviroment * env, il_ehandler * eh) {
 }
 
-class_ * il_factor_unary_op_eval(il_factor_unary_op * self, enviroment * env) {
+type * il_factor_unary_op_eval(il_factor_unary_op * self, enviroment * env) {
 	return NULL;
 }
 

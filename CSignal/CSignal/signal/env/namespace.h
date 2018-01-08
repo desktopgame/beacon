@@ -10,7 +10,7 @@
 #define CL_BOOL namespace_bool_class()
 #define CL_VOID namespace_void_class()
 
-struct class_;
+struct type;
 /**
  * 名前空間を表す構造体.
  */
@@ -18,7 +18,7 @@ typedef struct namespace_ {
 	char* name;
 	struct namespace_* parent;
 	tree_map* namespace_map;
-	tree_map* class_map;
+	tree_map* type_map;
 	uint32_t ref_count;
 } namespace_;
 
@@ -48,9 +48,9 @@ namespace_* namespace_add_namespace(namespace_* self, char* name);
  * この名前空間にクラスを含めます.
  * クラスのカウントは +1 されます。
  * @param self
- * @param classz
+ * @param type
  */
-struct class_* namespace_add_class(namespace_* self, struct class_* classz);
+struct type* namespace_add_type(namespace_* self, struct type* type);
 
 /**
  * 指定の名前空間から指定の名前の名前空間を検索します.
@@ -66,7 +66,7 @@ namespace_* namespace_get_namespace(namespace_* self, const char* name);
  * @param name
  * @return 見つからないなら NULL
  */
-struct class_* namespace_get_class(namespace_* self, const char* name);
+struct type* namespace_get_type(namespace_* self, const char* name);
 
 /**
  * signal 名前空間を返します.
@@ -84,37 +84,37 @@ namespace_* namespace_lang();
  * 現在のスクリプトコンテキストで int クラスを返します.
  * @return
  */
-struct class_* namespace_int_class();
+struct type* namespace_int_class();
 
 /**
  * 現在のスクリプトコンテキストで double クラスを返します.
  * @return
  */
-struct class_* namespace_double_class();
+struct type* namespace_double_class();
 
 /**
  * 現在のスクリプトコンテキストで char クラスを返します.
  * @return
  */
-struct class_* namespace_char_class();
+struct type* namespace_char_class();
 
 /**
  * 現在のスクリプトコンテキストで string クラスを返します.
  * @return
  */
-struct class_* namespace_string_class();
+struct type* namespace_string_class();
 
 /**
  * 現在のスクリプトコンテキストで bool クラスを返します.
  * @return
  */
-struct class_* namespace_bool_class();
+struct type* namespace_bool_class();
 
 /**
  * 現在のスクリプトコンテキストで void クラスを返します.
  * @return
  */
-struct class_* namespace_void_class();
+struct type* namespace_void_class();
 
 /**
  * 全ての名前空間を出力します.

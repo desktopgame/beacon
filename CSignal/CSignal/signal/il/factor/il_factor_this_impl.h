@@ -3,7 +3,7 @@
 #define SIGNAL_IL_IL_FACTOR_THIS_H
 #include "../il_ehandler.h"
 struct enviroment;
-struct class_;
+struct type;
 /**
  * thisを表す要素.
  */
@@ -37,7 +37,7 @@ void il_factor_this_load(il_factor_this* self, struct enviroment* env, il_ehandl
  * @param env
  * @return
  */
-struct class_* il_factor_this_eval(il_factor_this* self, struct enviroment* env);
+struct type* il_factor_this_eval(il_factor_this* self, struct enviroment* env);
 
 /**
  * thisを表す要素を開放します.

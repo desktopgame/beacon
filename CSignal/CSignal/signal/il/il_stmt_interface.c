@@ -1,7 +1,7 @@
 #include "il_stmt_interface.h"
 #include "il_stmt_impl.h"
 #include "../util/logger.h"
-#include "../env/class.h"
+#include "../env/type_interface.h"
 #include "../vm/enviroment.h"
 #include "../util/mem.h"
 

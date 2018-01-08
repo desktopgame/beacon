@@ -52,7 +52,7 @@ void il_factor_string_load(il_factor_string* self, struct enviroment* env, il_eh
  * @param env
  * @return
  */
-struct class_* il_factor_string_eval(il_factor_string* self, struct enviroment* env);
+struct type* il_factor_string_eval(il_factor_string* self, struct enviroment* env);
 
 /**
  * 文字列を表す要素を開放します.

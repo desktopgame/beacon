@@ -53,7 +53,7 @@ void il_factor_int_load(il_factor_int* self, struct enviroment* env, il_ehandler
  * @param env
  * @return
  */
-struct class_* il_factor_int_eval(il_factor_int* self, struct enviroment* env);
+struct type* il_factor_int_eval(il_factor_int* self, struct enviroment* env);
 
 /**
  * 整数リテラルを表す要素を開放します.

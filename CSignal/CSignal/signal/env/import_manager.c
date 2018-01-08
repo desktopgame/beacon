@@ -1,6 +1,6 @@
 #include "import_manager.h"
 #include "class_loader.h"
-#include "class.h"
+#include "type_interface.h"
 #include "namespace.h"
 #include "fqcn_cache.h"
 #include "../util/mem.h"
@@ -17,7 +17,7 @@ void import_manager_import(import_manager * self, class_loader * target) {
 	vector_push(self->class_loader_list, target);
 }
 
-class_ * import_manager_resolve(import_manager* self, namespace_* scope, fqcn_cache* fqcn) {
+type * import_manager_resolve(import_manager* self, namespace_* scope, fqcn_cache* fqcn) {
 	return fqcn_class(fqcn, scope);
 }
 

@@ -18,7 +18,7 @@
 #include "../util/io.h"
 #include "../parse/parser.h"
 #include "namespace.h"
-#include "class.h"
+#include "type_impl.h"
 #include "field.h"
 #include "method.h"
 #include "parameter.h"
@@ -877,12 +877,13 @@ static void class_loader_sgload_type_list(class_loader* self, vector* iltype_lis
 }
 
 static void class_loader_sgload_class(class_loader* self, il_type* type, namespace_* parent) {
+	/*
 	//既に登録されていたら二重に登録しないように
 	//例えば、ネイティブメソッドを登録するために一時的にクラスが登録されている場合がある
 	assert(type->tag == iltype_class);
 	class_* cls = namespace_get_class(parent, type->u.class_->name);
 	if (cls == NULL) {
-		cls = class_new(type->u.class_->name, class_type_class);
+		cls = class_new(type->u.class_->name);
 		if (type->u.class_->super != NULL) {
 			cls->super_class = fqcn_class(type->u.class_->super, parent);
 		}
@@ -895,6 +896,7 @@ static void class_loader_sgload_class(class_loader* self, il_type* type, namespa
 	class_loader_sgload_constructors(self, type, cls);
 	class_linkall(cls);
 	class_loader_sgload_complete(self, type, cls);
+	*/
 }
 
 static void class_loader_sgload_fields(class_loader* self, il_type* iltype, class_* classz) {
@@ -1127,13 +1129,13 @@ static void class_loader_sgload_params(class_loader* self, namespace_* scope, ve
 		//FIXME:ILパラメータと実行時パラメータのインデックスが同じなのでとりあえず動く
 		//parameter* mep = (parameter*)vector_at(me->parameter_list, j);
 		parameter* mep = (parameter*)vector_at(sg_param_list, j);
-		class_* c = import_manager_resolve(
+		type* c = import_manager_resolve(
 			self->import_manager,
 			scope,
 			ilparam->fqcn
 			);
 		TEST(c == NULL);
-		mep->classz = c;
+		mep->type = c;
 	}
 }
 
