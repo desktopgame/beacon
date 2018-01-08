@@ -1,17 +1,47 @@
 import "lib"
 //import "../io.h"
 namespace signal.lang {
+/*
+	interface IPoint {
+		public:
+		def getX() -> Int;
+		def getY() -> Int;
+	}
+*/
 	class Point2D {
 		public:
 		Int x;
 		Int y;
+		static Int P;
 
-		def new(Int x, Int y) {
+		ctor new(Int x, Int y) {
 			this.x = x;
 			this.y = y;
 		}
 
-		def new() : this(0, 0) {
+		ctor new() : this(0, 0) {
+		}
+
+		def print(Int a, Int b) -> Void {
+			signal::lang::Console.writeLine("home");
+			Console.writeLine(a);
+			Console.writeLine(b);
+		}
+		def print() -> Void {
+			Console.writeLine("2D");
+		}
+
+		def getX() -> Int {
+			return this.x;
+		}
+
+		def getY() -> Int {
+			return this.y;
+		}
+
+		private:
+		def test() -> Void {
+			Console.writeLine("test2D");
 		}
 	}
 
@@ -19,11 +49,29 @@ namespace signal.lang {
 		public:
 		Int z;
 
-		def new(Int x, Int y, Int z) : super(x, y) {
+		ctor new(Int x, Int y, Int z) : super(x, y) {
 			this.z = z;
 		}
 
-		def new() : this(0, 0, 0) {
+		ctor new() : this(0, 0, 0) {
+		}
+
+		def print() -> Void {
+			Console.writeLine("3D");
+		}
+
+		def getZ() -> Int {
+			return this.z;
+		}
+/*
+		def printXYZ() -> Void {
+			Console.writeLine(this.x);
+			Console.writeLine(this.y);
+			Console.writeLine(this.z);
+		}
+*/
+		def test() -> Void {
+			Console.writeLine("test3D");
 		}
 	}
 }
@@ -34,7 +82,7 @@ namespace L.Goo.Foo {
 		Int pointY;
 
 		private:
-		static def main() -> Void {
+		static def mainx() -> Void {
 
 		}
 
@@ -43,7 +91,7 @@ namespace L.Goo.Foo {
 		}
 
 		static def print(String message, Int d) -> Void {
-			main();
+			mainx();
 /*
 		//HelloWor
 			Console.writeLine("a");
@@ -81,24 +129,61 @@ namespace L.Goo.Foo {
 		}
 	}
 }
+//*
+signal::lang::Point2D.P = 0;
+signal::lang::Point3D c = new signal::lang::Point3D(1, 2, 5);
+c.print();
 
-//main();
-//Console.writeLine("a");
-//a.main(10, 20, "HelloW");
-//Foo a = Foo.newInstance();
-//a.print();
-//a.print("a");
-//a.print(10, 20, "aaa");
-//Mod::X.call();
-//Person p = Person.new();
-//signal::lang::Console c;
-//Console d = this;
-//this.print(10, this);
-signal::lang::Console c = System.out;
-//signal::lang::Console c = new signal::lang::Console(10, this);
-//signal::lang::Console.writeLine("aaa");
-//Console.writeLine("HelloWorld");
-//(10 + 20 + (5 * 20 + (16 / 4)) >= 20 || 0 < 0)
-//TYPENAME VARIABLENAME = 10;
-//STRING STR = "aaaa";
-//CHAR CH = 'z';
+Int a = c.getX();
+Int b = c.getY();
+Int z = c.getZ();
+signal::lang::Console.writeLine(signal::lang::Point2D.P);
+signal::lang::Console.writeLine(a);
+signal::lang::Console.writeLine(b);
+signal::lang::Console.writeLine(z);
+
+signal::lang::Point2D.P = 2;
+signal::lang::Console.writeLine(signal::lang::Point2D.P);
+//*/
+/*
+Int a = 2;
+signal::lang::Console.writeLine(a);
+
+a += 2;
+signal::lang::Console.writeLine(a);
+
+a = 0;
+signal::lang::Console.writeLine(a);
+*/
+/*
+signal::lang::Point3D c = new signal::lang::Point3D(1, 2, 3);
+//signal::lang::Console.writeLine(c.x);
+//signal::lang::Console.writeLine(c.y);
+//signal::lang::Console.writeLine(c.z);
+Int a = 2;
+Int b = 20;
+c.print(20, 5);
+if(a == b) {
+	signal::lang::Console.writeLine("a == b");
+	signal::lang::Console.writeLine("a == b");
+	signal::lang::Console.writeLine("a == b");
+} elif(a > b) {
+	signal::lang::Console.writeLine("a > b");
+	signal::lang::Console.writeLine("a > b");
+	signal::lang::Console.writeLine("a > b");
+} elif(a < 0) {
+	signal::lang::Console.writeLine("a < 0");
+	signal::lang::Console.writeLine("a < 0");
+	signal::lang::Console.writeLine("a < 0");
+} else {
+	signal::lang::Console.writeLine("else");
+	signal::lang::Console.writeLine("else");
+	signal::lang::Console.writeLine("else");
+}
+*/
+
+//signal::lang::Point2D c = new signal::lang::Point2D(10, 2);
+//c.print(200, 5);
+//signal::lang::Console.writeLine(100);
+//signal::lang::Console.writeLine(c.x);
+//signal::lang::Console.writeLine("PP");

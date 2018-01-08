@@ -3,6 +3,7 @@
 #include "../util/text.h"
 #include <stdio.h>
 #include <assert.h>
+#include <stdbool.h>
 
 il_ehandler * il_ehandler_new() {
 	il_ehandler* ret = (il_ehandler*)MEM_MALLOC(sizeof(il_ehandler));

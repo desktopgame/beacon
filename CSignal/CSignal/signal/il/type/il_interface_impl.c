@@ -16,7 +16,7 @@ il_interface * il_interface_new(const char * name) {
 	return ret;
 }
 
-void il_interface_dump(il_interface * self) {
+void il_interface_dump(il_interface * self, int depth) {
 }
 
 void il_interface_delete(il_interface * self) {

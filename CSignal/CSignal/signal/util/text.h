@@ -3,6 +3,12 @@
 #define SIGNAL_UTIL_TEXT_H
 #include "vector.h"
 
+//clangでは errno_t が見つからない
+#if defined(__clang__)
+typedef int SG_errno_t;
+#else
+typedef errno_t SG_errno_t;
+#endif
 /**
  * 改行文字を出力します
  */
@@ -29,7 +35,7 @@ char* text_strdup(const char* source);
  * @param source
  * @param dataSize 一文字のサイズ
  */
-errno_t text_strncpy(char* outChar, size_t index, const char* source, size_t dataSize);
+SG_errno_t text_strncpy(char* outChar, size_t index, const char* source, size_t dataSize);
 
 /**
  * 二つの文字列を連結して返します.

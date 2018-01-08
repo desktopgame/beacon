@@ -39,7 +39,7 @@ char * text_strdup(const char * source) {
 	return ret;
 }
 
-errno_t text_strncpy(char * outChar, size_t index, const char * source, size_t dataSize) {
+SG_errno_t text_strncpy(char * outChar, size_t index, const char * source, size_t dataSize) {
 #if defined(_MSC_VER)
 	return strncpy_s(outChar, index, source, dataSize);
 #else
@@ -80,7 +80,7 @@ char * text_lineat(const char * src, int lineno) {
 				break;
 			}
 			curLine++;
-			//ˆÈ‘O‚Ìƒoƒbƒtƒ@[‚ğ”jŠü
+			//ï¿½È‘Oï¿½Ìƒoï¿½bï¿½tï¿½@ï¿½[ï¿½ï¿½jï¿½ï¿½
 			//string_buffer_delete(buf);
 			//buf = string_buffer_new();
 		} else {
@@ -99,7 +99,7 @@ char* text_sum(vector * v, char * join) {
 	if (v == NULL || v->length == 0) {
 		return NULL;
 	}
-	//FIXME:‚à‚¤‚¿‚å‚Á‚Æ‚‘¬‚Éo—ˆ‚é
+	//FIXME:ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Æï¿½ï¿½ï¿½ï¿½Éoï¿½ï¿½ï¿½ï¿½
 	char* head = text_strdup((char*)vector_at(v, 0));
 	int ptr = strlen(head);
 	for (int i = 1; i < v->length; i++) {

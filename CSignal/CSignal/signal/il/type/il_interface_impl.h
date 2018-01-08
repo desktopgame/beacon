@@ -28,8 +28,9 @@ il_interface* il_interface_new(const char* name);
 /**
  * インターフェースを出力します.
  * @param self
+ * @param depth
  */
-void il_interface_dump(il_interface* self);
+void il_interface_dump(il_interface* self, int depth);
 
 /**
  * インターフェースを開放します.

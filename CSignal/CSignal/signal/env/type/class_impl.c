@@ -59,14 +59,14 @@ void class_alloc_fields(class_ * self, object * o) {
 	for (int i = 0; i < self->field_list->length; i++) {
 		field* f = (field*)vector_at(self->field_list, i);
 		object* a = object_ref_new();
-		a->classz = f->type;
+		a->classz = f->type->u.class_;
 		//静的フィールドは別の場所に確保
 		if (modifier_is_static(f->modifier)) {
 			continue;
 		}
 		vector_push(o->u.field_vec, a);
 	}
-	class_create_vtable(self->vt);
+	class_create_vtable(self);
 	o->classz = self;
 	o->vptr = self->vt;
 }
