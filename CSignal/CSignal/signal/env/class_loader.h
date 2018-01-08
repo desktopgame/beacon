@@ -25,6 +25,12 @@ typedef struct class_loader {
 } class_loader;
 
 /**
+ * クラスローダーを作成します.
+ * @return
+ */
+class_loader* class_loader_new();
+
+/**
  * エントリポイントを示すクラスローダーを作成します.
  * @param filename
  * @return
@@ -43,4 +49,19 @@ void class_loader_load(class_loader* self);
  * @param self
  */
 void class_loader_delete(class_loader* self);
+
+/**
+ * エラーを報告します.
+ * @param self
+ * @param message
+ */
+void class_loader_error(class_loader* self, const char* message);
+
+/**
+ * エラーを報告します.
+ * @param self
+ * @param message
+ * @param a
+ */
+void class_loader_errors(class_loader* self, const char* message, const char* a);
 #endif // !SIGNAL_PARSER_CLASS_LOADER_H
