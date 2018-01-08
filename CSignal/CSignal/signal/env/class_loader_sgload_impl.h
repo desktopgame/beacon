@@ -10,17 +10,101 @@
 #include "type_interface.h"
 #include "type_impl.h"
 
+/**
+ * 全ての中間言語をもっとも抽象的なモデルであるSGへ変換します.
+ * SGは静的に型付けされたクラス階層をそのまま表現します。
+ * @param self
+ */
 void class_loader_sgload_impl(class_loader* self);
+
+/**
+ * インポートの一覧を確認して、読み込むべきファイルがあるなら読み込みます.
+ * @param self
+ * @param ilimports
+ */
 void class_loader_sgload_import(class_loader* self, vector* ilimports);
+
+/**
+ * 名前空間の一覧を読み込みます.
+ * @param self
+ * @param ilnamespace_list
+ * @param parent
+ */
 void class_loader_sgload_namespace_list(class_loader* self, vector* ilnamespace_list, namespace_* parent);
+
+/**
+ * 名前空間と含まれるエントリの一覧を読み込みます.
+ * @param self
+ * @param ilnamespace
+ * @param parent
+ */
 void class_loader_sgload_namespace(class_loader* self, il_namespace* ilnamespace, namespace_* parent);
+
+/**
+ * 型宣言の一覧を読み込みます.
+ * @param self
+ * @param iltype_list
+ * @param parent
+ */
 void class_loader_sgload_type_list(class_loader* self, vector* iltype_list, namespace_* parent);
+
+/**
+ * クラス宣言を読み込んで名前空間に登録します.
+ * @param self
+ * @param iltype
+ * @param parent
+ */
 void class_loader_sgload_class(class_loader* self, il_type* iltype, namespace_* parent);
+
+/**
+ * インスタンス/静的フィールド宣言を読み込んでクラスに追加します.
+ * @param self
+ * @param iltype
+ * @param classz
+ */
 void class_loader_sgload_fields(class_loader* self, il_type* iltype, class_* classz);
+
+/**
+ * フィールド宣言を読み込んでクラスに追加します.
+ * @param self
+ * @param iltype
+ * @param classz
+ * @param ilfields
+ */
 void class_loader_sgload_fields_impl(class_loader* self, il_type* iltype, class_* classz, vector* ilfields);
+
+/**
+ * インスタンス/静的メソッド宣言を読み込んでクラスに追加します.
+ * @param self
+ * @param iltype
+ * @param classz
+ */
 void class_loader_sgload_methods(class_loader* self, il_type* iltype, class_* classz);
+
+
+/**
+ * メソッド宣言を読み込んでクラスに追加します.
+ * @param self
+ * @param iltype
+ * @param classz
+ * @param ilmethods
+ */
 void class_loader_sgload_methods_impl(class_loader* self, il_type* iltype, class_* classz, vector* ilmethods);
+
+/**
+ * コンストラクタ宣言を読み込んでクラスに追加します.
+ * @param self
+ * @param iltype
+ * @param classz
+ */
 void class_loader_sgload_constructors(class_loader* self, il_type* iltype, class_* classz);
+
+/**
+ * クラスとメンバーの一覧が登録されるまで保留されていた作業を実行します.
+ * @param self
+ * @param iltype
+ * @param tp
+ */
 void class_loader_sgload_complete(class_loader* self, il_type* iltype, type* tp);
 void class_loader_sgload_complete_fields(class_loader* self, il_type* iltype, type* tp);
 void class_loader_sgload_complete_fields_impl(class_loader* self, namespace_* scope, vector* ilfields, vector* sgfields);
