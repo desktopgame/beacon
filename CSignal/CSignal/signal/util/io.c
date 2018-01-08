@@ -84,7 +84,10 @@ char * io_read_text(const char * filename) {
 			copy[i] = ret[i];
 		}
 		MEM_FREE(ret);
+		copy[length] = '\0';
 		ret = copy;
+	} else {
+		ret[buffer_size] = '\0';
 	}
 	fclose(fp);
 	return ret;
