@@ -5,6 +5,7 @@
 #include "../../env/field.h"
 #include "../../util/text.h"
 #include <stdio.h>
+#include <assert.h>
 
 //proto
 static void il_factor_static_field_access_find(il_factor_static_field_access * self, enviroment * env);
@@ -55,7 +56,10 @@ void il_factor_static_field_access_delete(il_factor_static_field_access * self) 
 //private
 static void il_factor_static_field_access_find(il_factor_static_field_access * self, enviroment * env) {
 	int temp = 0;
-	type* cls = fqcn_type(self->fqcn, (namespace_*)vector_top(env->namespace_vec));
+	type* cls = fqcn_class(self->fqcn, (namespace_*)vector_top(env->namespace_vec));
+	//フィールドはクラスにしか定義出来ないので、
+	//クラスが見つからなかったらエラー
+	assert(cls != NULL);
 	self->f = class_find_sfield_tree(cls, self->name, &temp);
 	self->fieldIndex = temp;
 }

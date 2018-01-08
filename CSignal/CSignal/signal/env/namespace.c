@@ -4,6 +4,7 @@
 #include <stdbool.h>
 #include <assert.h>
 #include "type_interface.h"
+#include "type_impl.h"
 #include "script_context.h"
 #include "../util/text.h"
 #include "../util/mem.h"
@@ -59,6 +60,9 @@ struct type* namespace_add_type(namespace_* self, type* type) {
 	//classz->ref_count++;
 	tree_map_put(self->type_map, type_name(type), type);
 	type->absoluteIndex = ctx->type_vec->length;
+	if (type->tag == type_class) {
+		type->u.class_->classIndex = type->absoluteIndex;
+	}
 	vector_push(ctx->type_vec, type);
 	return type;
 }
@@ -72,8 +76,20 @@ namespace_ * namespace_get_namespace(namespace_ * self, const char * name) {
 type * namespace_get_type(namespace_ * self, const char * name) {
 	assert(self != NULL);
 	assert(name != NULL);
-
 	return (type*)tree_map_get(self->type_map, name);
+}
+
+class_ * namespace_get_class(namespace_ * self, const char * name) {
+	type* ret = namespace_get_type(self, name);
+	if (ret != NULL && 
+		ret->tag != type_class) {
+		assert(false);
+		return NULL;
+	}
+	if (ret == NULL) {
+		return NULL;
+	}
+	return ret->u.class_;
 }
 
 namespace_ * namespace_signal() {

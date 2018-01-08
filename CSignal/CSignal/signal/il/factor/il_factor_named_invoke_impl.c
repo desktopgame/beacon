@@ -5,14 +5,15 @@
 #include "../../util/mem.h"
 #include "../../util/text.h"
 #include "../../util/logger.h"
+#include "../../env/type_impl.h"
 #include "il_factor_variable_impl.h"
 #include <assert.h>
 
 //proto
 static void il_factor_named_invoke_delete_argument(vector_item item);
 static void il_factor_named_invoke_find(il_factor_named_invoke* self, enviroment* env);
-static void il_factor_named_invoke_generate_IMPL(il_factor_named_invoke* self, enviroment* env, type* cls);
-static void il_factor_named_invoke_generate_STATIC_IMPL(il_factor_named_invoke* self, enviroment* env, type* cls);
+static void il_factor_named_invoke_generate_IMPL(il_factor_named_invoke* self, enviroment* env, type* tp);
+static void il_factor_named_invoke_generate_STATIC_IMPL(il_factor_named_invoke* self, enviroment* env, type* tp);
 static void il_factor_named_invoke_generate_args(il_factor_named_invoke* self, enviroment* env);
 
 il_factor * il_factor_wrap_named_invoke(il_factor_named_invoke * self) {
@@ -131,7 +132,9 @@ static void il_factor_named_invoke_find(il_factor_named_invoke* self, enviroment
 	}
 }
 
-static void il_factor_named_invoke_generate_IMPL(il_factor_named_invoke* self, enviroment* env, type* cls) {
+static void il_factor_named_invoke_generate_IMPL(il_factor_named_invoke* self, enviroment* env, type* tp) {
+	assert(tp->tag == type_class);
+	class_* cls = tp->u.class_;
 	int temp = 0;
 	self->m = class_find_method(cls, self->method_name, self->argument_list, env, &temp);
 	self->methodIndex = temp;
@@ -139,7 +142,9 @@ static void il_factor_named_invoke_generate_IMPL(il_factor_named_invoke* self, e
 	//TEST(env->toplevel);
 }
 
-static void il_factor_named_invoke_generate_STATIC_IMPL(il_factor_named_invoke* self, enviroment* env, type* cls) {
+static void il_factor_named_invoke_generate_STATIC_IMPL(il_factor_named_invoke* self, enviroment* env, type* tp) {
+	assert(tp->tag == type_class);
+	class_* cls = tp->u.class_;
 	int temp = 0;
 	self->m = class_find_smethod(cls, self->method_name, self->argument_list, env, &temp);
 	self->methodIndex = temp;

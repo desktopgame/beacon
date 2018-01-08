@@ -11,6 +11,7 @@
 #define CL_VOID namespace_void_class()
 
 struct type;
+struct class_;
 /**
  * 名前空間を表す構造体.
  */
@@ -61,12 +62,20 @@ struct type* namespace_add_type(namespace_* self, struct type* type);
 namespace_* namespace_get_namespace(namespace_* self, const char* name);
 
 /**
- * 指定の名前空間で指定の名前のクラスを検索します.
+ * 指定の名前空間で指定の名前のタイプを検索します.
  * @param self
  * @param name
  * @return 見つからないなら NULL
  */
 struct type* namespace_get_type(namespace_* self, const char* name);
+
+/**
+ * 指定の名前空間で指定の名前のクラスを検索します.
+ * @param self
+ * @param name
+ * @return 見つからないなら NULL
+ */
+struct class_* namespace_get_class(namespace_* self, const char* name);
 
 /**
  * signal 名前空間を返します.

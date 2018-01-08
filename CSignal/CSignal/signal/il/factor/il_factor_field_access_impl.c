@@ -8,7 +8,7 @@
 #include "../../env/field.h"
 #include "il_factor_variable_impl.h"
 #include <stdio.h>
-
+#include <assert.h>
 
 //proto
 static void il_factor_field_access_find(il_factor_field_access * self, enviroment * env);
@@ -62,7 +62,7 @@ void il_factor_field_access_delete(il_factor_field_access * self) {
 
 //private
 static void il_factor_field_access_find(il_factor_field_access * self, enviroment * env) {
-	/*
+	//*
 	type* tp = il_factor_eval(self->fact, env);
 	int temp = 0;
 	//TEST(env->toplevel);
@@ -90,11 +90,12 @@ static void il_factor_field_access_find(il_factor_field_access * self, enviromen
 	//variableではない(戻り値や式の結果)
 	//
 	} else {
-		self->f = class_find_field_tree(NULL, self->name, &temp);
+		assert(tp->tag == type_class);
+		self->f = class_find_field_tree(tp->u.class_, self->name, &temp);
 		TEST(self->f == NULL);
 		self->fieldIndex = temp;
 	}
-	*/
+	//*/
 	//TEST(env->toplevel);
 //	class_find_fie
 }

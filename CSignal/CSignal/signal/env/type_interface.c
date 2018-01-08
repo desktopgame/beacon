@@ -23,5 +23,26 @@ void type_dump(type * self, int depth) {
 	}
 }
 
+int type_distance(type * a, type * b) {
+	if (a == b) {
+		return 0;
+	}
+	if (a->tag == type_class &&
+		b->tag == type_class) {
+		return class_distance(a->u.class_, b->u.class_);
+	}
+	return -1;
+}
+
+bool type_castable(type * self, type * other) {
+	if (self->tag != other->tag) {
+		return false;
+	}
+	if (self->tag == type_class) {
+		return class_castable(self->u.class_, other->u.class_);
+	}
+	return false;
+}
+
 void type_delete(type * self) {
 }

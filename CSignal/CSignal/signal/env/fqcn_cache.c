@@ -2,6 +2,8 @@
 #include "../util/mem.h"
 #include "namespace.h"
 #include "type_interface.h"
+#include "type_impl.h"
+#include <assert.h>
 
 
 fqcn_cache * fqcn_cache_new() {
@@ -73,13 +75,29 @@ type * fqcn_type(fqcn_cache * self, namespace_* current) {
 		} else if (!strcmp(name, "Void")) {
 			return CL_VOID;
 		}
-		if (current == NULL) { return NULL; }
+		if (current == NULL) { 
+			return NULL; 
+		}
 		return namespace_get_type(current, self->name);
 	}
 	//X::Yのような形式
 	namespace_* c = fqcn_scope(self, current);
-	if (c == NULL) { return NULL; }
+	if (c == NULL) { 
+		return NULL; 
+	}
 	return namespace_get_type(c, self->name);
+}
+
+class_ * fqcn_class(fqcn_cache * self, namespace_ * current) {
+	type* tp = fqcn_type(self, current);
+	if (tp == NULL) {
+		return NULL;
+	}
+	assert(tp->tag == type_class);
+	if (tp->tag != type_class) {
+		return NULL;
+	}
+	return tp->u.class_;
 }
 
 void fqcn_cache_delete(fqcn_cache * self) {

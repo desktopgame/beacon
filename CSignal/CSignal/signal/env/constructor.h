@@ -9,7 +9,7 @@ struct enviroment;
  * コンストラクタを表す構造体.
  */
 typedef struct constructor {
-	struct class_* parent;
+	struct type* parent;
 	struct enviroment* env;
 	vector* parameter_list;
 	access_level access;

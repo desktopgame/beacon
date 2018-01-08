@@ -78,20 +78,20 @@ static void class_loader_sgload_import(class_loader* self, vector* ilimports);
 static void class_loader_sgload_namespace_list(class_loader* self, vector* ilnamespace_list, namespace_* parent);
 static void class_loader_sgload_namespace(class_loader* self, il_namespace* ilnamespace, namespace_* parent);
 static void class_loader_sgload_type_list(class_loader* self, vector* iltype_list, namespace_* parent);
-static void class_loader_sgload_class(class_loader* self, il_type* type, namespace_* parent);
+static void class_loader_sgload_class(class_loader* self, il_type* iltype, namespace_* parent);
 static void class_loader_sgload_fields(class_loader* self, il_type* iltype, class_* classz);
 static void class_loader_sgload_fields_impl(class_loader* self, il_type* iltype, class_* classz, vector* ilfields);
 static void class_loader_sgload_methods(class_loader* self, il_type* iltype, class_* classz);
 static void class_loader_sgload_methods_impl(class_loader* self, il_type* iltype, class_* classz, vector* ilmethods);
 static void class_loader_sgload_constructors(class_loader* self, il_type* iltype, class_* classz);
-static void class_loader_sgload_complete(class_loader* self, il_type* iltype, class_* classz);
-static void class_loader_sgload_complete_fields(class_loader* self, il_type* iltype, class_* classz);
+static void class_loader_sgload_complete(class_loader* self, il_type* iltype, type* tp);
+static void class_loader_sgload_complete_fields(class_loader* self, il_type* iltype, type* tp);
 static void class_loader_sgload_complete_fields_impl(class_loader* self, namespace_* scope, vector* ilfields, vector* sgfields);
-static void class_loader_sgload_complete_methods(class_loader* self, il_type* iltype, class_* classz);
-static void class_loader_sgload_complete_methods_impl(class_loader* self, namespace_* scope, il_type* iltype, class_* classz, vector* ilmethods, vector* sgmethods);
-static void class_loader_sgload_complete_constructors(class_loader* self, il_type* iltype, class_* classz);
+static void class_loader_sgload_complete_methods(class_loader* self, il_type* iltype, type* tp);
+static void class_loader_sgload_complete_methods_impl(class_loader* self, namespace_* scope, il_type* iltype, type* tp, vector* ilmethods, vector* sgmethods);
+static void class_loader_sgload_complete_constructors(class_loader* self, il_type* iltype, type* tp);
 static void class_loader_sgload_params(class_loader* self, namespace_* scope, vector* param_list, vector* sg_param_liste);
-static void class_loader_sgload_chain(class_loader* self, il_type* iltype, class_* classz, il_constructor* ilcons, il_constructor_chain* ilchain, enviroment* env);
+static void class_loader_sgload_chain(class_loader* self, il_type* iltype, type* tp, il_constructor* ilcons, il_constructor_chain* ilchain, enviroment* env);
 static void class_loader_sgload_attach_native_method(class_loader* self, il_type* iltype, class_* classz, il_method* ilmethod, method* me);
 static void class_loader_sgload_debug_native_method(method* parent, vm* vm, enviroment* env);
 static void class_loader_sgload_body(class_loader* self, vector* stmt_list, enviroment* dest, namespace_* range);
@@ -876,27 +876,52 @@ static void class_loader_sgload_type_list(class_loader* self, vector* iltype_lis
 	}
 }
 
-static void class_loader_sgload_class(class_loader* self, il_type* type, namespace_* parent) {
-	/*
+static void class_loader_sgload_class(class_loader* self, il_type* iltype, namespace_* parent) {
+	//*
 	//既に登録されていたら二重に登録しないように
 	//例えば、ネイティブメソッドを登録するために一時的にクラスが登録されている場合がある
-	assert(type->tag == iltype_class);
-	class_* cls = namespace_get_class(parent, type->u.class_->name);
-	if (cls == NULL) {
-		cls = class_new(type->u.class_->name);
-		if (type->u.class_->super != NULL) {
-			cls->super_class = fqcn_class(type->u.class_->super, parent);
+	assert(iltype->tag == iltype_class);
+	type* tp = namespace_get_type(parent, iltype->u.class_->name);
+	class_* cls;
+//	class_* cls = namespace_get_type(parent, iltype->u.class_->name);
+	if (tp == NULL) {
+		cls = class_new(iltype->u.class_->name);
+		if (iltype->u.class_->super != NULL) {
+			cls->super_class = fqcn_class(iltype->u.class_->super, parent);
 		}
 		cls->location = parent;
-		namespace_add_class(parent, cls);
+		tp = type_wrap_class(cls);
+		namespace_add_type(parent, tp);
+	} else {
+		cls = tp->u.class_;
 	}
 	//TEST(!strcmp(type->u.class_->name, "Console"));
-	class_loader_sgload_fields(self, type, cls);
-	class_loader_sgload_methods(self, type, cls);
-	class_loader_sgload_constructors(self, type, cls);
-	class_linkall(cls);
-	class_loader_sgload_complete(self, type, cls);
-	*/
+	class_loader_sgload_fields(self, iltype, cls);
+	class_loader_sgload_methods(self, iltype, cls);
+	class_loader_sgload_constructors(self, iltype, cls);
+//	class_linkall(cls);
+	for (int i = 0; i < cls->field_list->length; i++) {
+		field* e = (field*)vector_at(cls->field_list, i);
+		e->parent = tp;
+	}
+	for (int i = 0; i < cls->sfield_list->length; i++) {
+		field* e = (field*)vector_at(cls->sfield_list, i);
+		e->parent = tp;
+	}
+	for (int i = 0; i < cls->method_list->length; i++) {
+		method* e = (method*)vector_at(cls->method_list, i);
+		e->parent = tp;
+	}
+	for (int i = 0; i < cls->smethod_list->length; i++) {
+		method* e = (method*)vector_at(cls->smethod_list, i);
+		e->parent = tp;
+	}
+	for (int i = 0; i < cls->constructor_list->length; i++) {
+		constructor* e = (constructor*)vector_at(cls->constructor_list, i);
+		e->parent = tp;
+	}
+	class_loader_sgload_complete(self, iltype, tp);
+	///*/
 }
 
 static void class_loader_sgload_fields(class_loader* self, il_type* iltype, class_* classz) {
@@ -999,15 +1024,17 @@ static void class_loader_sgload_constructors(class_loader* self, il_type* iltype
  * @param ilclass
  * @param classz
  */
-static void class_loader_sgload_complete(class_loader* self, il_type* iltype, class_* classz) {
-	class_loader_sgload_complete_fields(self, iltype, classz);
-	class_loader_sgload_complete_methods(self, iltype, classz);
-	class_loader_sgload_complete_constructors(self, iltype, classz);
-	class_create_vtable(classz);
+static void class_loader_sgload_complete(class_loader* self, il_type* iltype, type* tp) {
+	class_loader_sgload_complete_fields(self, iltype, tp);
+	class_loader_sgload_complete_methods(self, iltype, tp);
+	class_loader_sgload_complete_constructors(self, iltype, tp);
+	class_create_vtable(tp->u.class_);
 }
 
-static void class_loader_sgload_complete_fields(class_loader* self, il_type* iltype, class_* classz) {
-	namespace_* scope = classz->location;
+static void class_loader_sgload_complete_fields(class_loader* self, il_type* iltype, type* tp) {
+	namespace_* scope = tp->location;
+	assert(tp->tag == type_class);
+	class_* classz = tp->u.class_;
 	vector* fields = classz->field_list;
 	if (iltype->tag == iltype_interface) {
 		return;
@@ -1027,13 +1054,17 @@ static void class_loader_sgload_complete_fields_impl(class_loader* self, namespa
 	}
 }
 
-static void class_loader_sgload_complete_methods(class_loader* self, il_type* iltype, class_* classz) {
+static void class_loader_sgload_complete_methods(class_loader* self, il_type* iltype, type* tp) {
+	assert(tp->tag == type_class);
+	class_* classz = tp->u.class_;
 	namespace_* scope = classz->location;
-	class_loader_sgload_complete_methods_impl(self, scope, iltype, classz, il_type_method_vec(iltype), classz->method_list);
-	class_loader_sgload_complete_methods_impl(self, scope, iltype, classz, il_type_smethod_vec(iltype), classz->smethod_list);
+	class_loader_sgload_complete_methods_impl(self, scope, iltype, tp, il_type_method_vec(iltype), classz->method_list);
+	class_loader_sgload_complete_methods_impl(self, scope, iltype, tp, il_type_smethod_vec(iltype), classz->smethod_list);
 }
 
-static void class_loader_sgload_complete_methods_impl(class_loader* self, namespace_* scope, il_type* iltype, class_* classz, vector* ilmethods, vector* sgmethods) {
+static void class_loader_sgload_complete_methods_impl(class_loader* self, namespace_* scope, il_type* iltype, type* tp, vector* ilmethods, vector* sgmethods) {
+	assert(tp->tag == type_class);
+	class_* classz = tp->u.class_;
 	for (int i = 0; i < sgmethods->length; i++) {
 		vector_item e = vector_at(sgmethods, i);
 		method* me = (method*)e;
@@ -1055,13 +1086,13 @@ static void class_loader_sgload_complete_methods_impl(class_loader* self, namesp
 		//FIXME:ILメソッドと実行時メソッドのインデックスが同じなのでとりあえず動く
 		//まずは仮引数の一覧にインデックスを割り振る
 		enviroment* env = enviroment_new();
-		vector_push(env->class_vec, classz);
+		vector_push(env->class_vec, tp);
 		env->context_cll = self;
 		for (int i = 0; i < ilmethod->parameter_list->length; i++) {
 			il_parameter* ilparam = (il_parameter*)vector_at(ilmethod->parameter_list, i);
 			symbol_table_entry(
 				env->sym_table,
-				fqcn_class(ilparam->fqcn, scope),
+				fqcn_type(ilparam->fqcn, scope),
 				ilparam->name
 				);
 			//実引数を保存
@@ -1082,7 +1113,9 @@ static void class_loader_sgload_complete_methods_impl(class_loader* self, namesp
 	}
 }
 
-static void class_loader_sgload_complete_constructors(class_loader* self, il_type* iltype, class_* classz) {
+static void class_loader_sgload_complete_constructors(class_loader* self, il_type* iltype, type* tp) {
+	assert(tp->tag == type_class);
+	class_* classz = tp->u.class_;
 	namespace_* scope = classz->location;
 	vector* constructors = classz->constructor_list;
 	if (iltype->tag != iltype_class) {
@@ -1098,13 +1131,13 @@ static void class_loader_sgload_complete_constructors(class_loader* self, il_typ
 		class_loader_sgload_params(self, scope, ilcons->parameter_list, cons->parameter_list);
 		//まずは仮引数の一覧にインデックスを割り振る
 		enviroment* env = enviroment_new();
-		vector_push(env->class_vec, classz);
+		vector_push(env->class_vec, tp);
 		env->context_cll = self;
 		for (int i = 0; i < cons->parameter_list->length; i++) {
 			il_parameter* ilparam = (il_parameter*)vector_at(ilcons->parameter_list, i);
 			symbol_table_entry(
 				env->sym_table,
-				fqcn_class(ilparam->fqcn, scope),
+				fqcn_type(ilparam->fqcn, scope),
 				ilparam->name
 				);
 			//実引数を保存
@@ -1112,7 +1145,7 @@ static void class_loader_sgload_complete_constructors(class_loader* self, il_typ
 			opcode_buf_add(env->buf, op_store);
 			opcode_buf_add(env->buf, (i + 1));
 		}
-		class_loader_sgload_chain(self, iltype, classz, ilcons, ilcons->chain, env);
+		class_loader_sgload_chain(self, iltype, tp, ilcons, ilcons->chain, env);
 		//NOTE:ここなら名前空間を設定出来る		
 		class_loader_sgload_body(self, ilcons->statement_list, env, scope);
 		cons->env = env;
@@ -1139,15 +1172,16 @@ static void class_loader_sgload_params(class_loader* self, namespace_* scope, ve
 	}
 }
 
-static void class_loader_sgload_chain(class_loader* self, il_type* iltype, class_* classz, il_constructor* ilcons, il_constructor_chain* ilchain, enviroment* env) {
+static void class_loader_sgload_chain(class_loader* self, il_type* iltype, type* tp, il_constructor* ilcons, il_constructor_chain* ilchain, enviroment* env) {
 	//親クラスがないなら作成
+	class_* classz = tp->u.class_;
 	if (classz->super_class == NULL &&
 		ilcons->chain == NULL) {
 		opcode_buf_add(env->buf, op_new_object);
 	}
 	if (ilcons->chain == NULL) {
 		opcode_buf_add(env->buf, op_alloc_field);
-		opcode_buf_add(env->buf, classz->absoluteIndex);
+		opcode_buf_add(env->buf, tp->absoluteIndex);
 		return;
 	}
 	//チェインコンストラクタの実引数をプッシュ
@@ -1162,18 +1196,18 @@ static void class_loader_sgload_chain(class_loader* self, il_type* iltype, class
 	if (chain->type == chain_type_this) {
 		chainTarget = class_find_constructor(classz, chain->argument_list, env, &temp);
 		opcode_buf_add(env->buf, op_chain_this);
-		opcode_buf_add(env->buf, classz->absoluteIndex);
+		opcode_buf_add(env->buf, tp->absoluteIndex);
 	} else if (chain->type == chain_type_super) {
 		chainTarget = class_find_constructor(classz->super_class, chain->argument_list, env, &temp);
 		opcode_buf_add(env->buf, op_chain_super);
-		opcode_buf_add(env->buf, classz->super_class->absoluteIndex);
+		opcode_buf_add(env->buf, classz->super_class->classIndex);
 	}
 	chain->c = chainTarget;
 	chain->constructorIndex = temp;
 	opcode_buf_add(env->buf, temp);
 	//親クラスへのチェインなら即座にフィールドを確保
 	opcode_buf_add(env->buf, op_alloc_field);
-	opcode_buf_add(env->buf, classz->absoluteIndex);
+	opcode_buf_add(env->buf, tp->absoluteIndex);
 }
 
 static void class_loader_sgload_attach_native_method(class_loader* self, il_type* ilclass, class_* classz, il_method* ilmethod, method* me) {

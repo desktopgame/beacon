@@ -36,8 +36,7 @@ typedef struct class_ {
 	tree_map* native_method_ref_map;
 	//vector* static_fieldval_vec;
 	vtable* vt;
-	//名前空間を無視してフラットにアクセスするための添え字
-	int absoluteIndex;
+	int classIndex;
 } class_;
 
 /**

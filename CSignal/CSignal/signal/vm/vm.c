@@ -213,7 +213,7 @@ void vm_execute(vm* self, enviroment* env) {
 				int absClsIndex = (int)enviroment_source_at(env, ++i);
 				type* cls = (type*)vector_at(ctx->type_vec, absClsIndex);
 				object* obj = (object*)vector_top(self->value_stack);
-				class_alloc_fields(cls, obj);
+				class_alloc_fields(cls->u.class_, obj);
 				break;
 			}
 			case op_new_instance:
@@ -306,7 +306,8 @@ void vm_execute(vm* self, enviroment* env) {
 			{
 				int absClsIndex = (int)enviroment_source_at(env, ++i);
 				int fieldIndex = (int)enviroment_source_at(env, ++i);
-				type* cls = (type*)vector_at(ctx->type_vec, absClsIndex);
+				type* tp = (type*)vector_at(ctx->type_vec, absClsIndex);
+				class_* cls = tp->u.class_;
 				field* f = class_get_sfield(cls, fieldIndex);
 				f->static_value = (object*)vector_pop(self->value_stack);
 				break;
@@ -317,7 +318,7 @@ void vm_execute(vm* self, enviroment* env) {
 				int absClsIndex = (int)enviroment_source_at(env, ++i);
 				int fieldIndex = (int)enviroment_source_at(env, ++i);
 				type* cls = (type*)vector_at(ctx->type_vec, absClsIndex);
-				field* f = class_get_sfield(cls, fieldIndex);
+				field* f = class_get_sfield(cls->u.class_, fieldIndex);
 				vector_push(self->value_stack, f->static_value);
 				break;
 			}
@@ -350,7 +351,7 @@ void vm_execute(vm* self, enviroment* env) {
 				int methodIndex = (int)enviroment_source_at(env, ++i);
 				type* cls = (type*)vector_at(ctx->type_vec, absClassIndex);
 				//method* m = (method*)vector_at(cls->vt->elements, methodIndex);
-				method* m = class_get_smethod(cls, methodIndex);
+				method* m = class_get_smethod(cls->u.class_, methodIndex);
 				//いらない
 			//	opcode code = (opcode)enviroment_source_at(env, ++i);
 			//	assert(code == op_invokestatic);

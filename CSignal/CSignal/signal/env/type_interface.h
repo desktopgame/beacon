@@ -1,6 +1,7 @@
 #pragma once
 #ifndef SIGNAL_ENV_TYPE_INTERFACE_H
 #define SIGNAL_ENV_TYPE_INTERFACE_H
+#include <stdbool.h>
 /**
  * 型の種類を表すタグ.
  */
@@ -46,6 +47,22 @@ char* type_name(type* self);
  * @param depth
  */
 void type_dump(type* self, int depth);
+
+/**
+ * 型の距離を返します.
+ * @param a
+ * @param b
+ * @return
+ */
+int type_distance(type* a, type* b);
+
+/**
+ * self を other に変換出来るなら true.
+ * @param self
+ * @param other
+ * @return
+ */
+bool type_castable(type* self, type* other);
 
 /**
  * 型を開放します.

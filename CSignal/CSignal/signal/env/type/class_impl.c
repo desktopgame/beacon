@@ -47,7 +47,9 @@ class_ * class_new(const char * name) {
 	ret->smethod_list = vector_new();
 	ret->constructor_list = vector_new();
 	ret->native_method_ref_map = tree_map_new();
-	ret->absoluteIndex = -1;
+	//FIXME:ここで持つ必要はない
+	ret->classIndex = -1;
+	//ret->absoluteIndex = -1;
 	ret->vt = NULL;
 	return ret;
 }
@@ -213,9 +215,9 @@ constructor * class_find_constructor(class_ * self, vector * args, enviroment * 
 			vector_item d2 = vector_at(c->parameter_list, j);
 			il_argument* p = (il_argument*)d;
 			parameter* p2 = (parameter*)d2;
-			/*
-			score += class_distance(il_factor_eval(p->factor, env), p2->classz);
-			*/
+			//*
+			score += type_distance(il_factor_eval(p->factor, env), p2->type);
+			//*/
 		}
 		if (score < min) {
 			min = score;
@@ -414,9 +416,7 @@ static method* class_find_method_impl(vector* elements, const char * name, vecto
 			vector_item d2 = vector_at(m->parameter_list, j);
 			il_argument* p = (il_argument*)d;
 			parameter* p2 = (parameter*)d2;
-			/*
-			score += class_distance(il_factor_eval(p->factor, env), p2->classz);
-			*/
+			score += type_distance(il_factor_eval(p->factor, env), p2->type);
 		}
 		if (score < min) {
 			//TEST(env->toplevel);
@@ -462,12 +462,10 @@ static vector * class_find_constructor_impl(class_ * self, vector * args, enviro
 			vector_item d2 = vector_at(c->parameter_list, j);
 			il_argument* p = (il_argument*)d;
 			parameter* p2 = (parameter*)d2;
-			/*
-			if (!class_castable(il_factor_eval(p->factor, env), p2->classz)) {
+			if (!type_castable(il_factor_eval(p->factor, env), p2->type)) {
 				match = false;
 				break;
 			}
-			*/
 		}
 		if (match) {
 			vector_push(v, c);
