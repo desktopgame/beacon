@@ -1,18 +1,18 @@
 #include "il_namespace.h"
 #include "../util/text.h"
-#include "il_class.h"
 #include <stdlib.h>
 #include "../util/mem.h"
+#include "il_type_interface.h"
 
 //proto
-static void il_namespace_class_delete(vector_item item);
+static void il_namespace_type_delete(vector_item item);
 static void il_namespace_namespace_delete(vector_item item);
 
 il_namespace* il_namespace_new(const char* name) {
 	il_namespace* ret = (il_namespace*)MEM_MALLOC(sizeof(il_namespace));
 	ret->name = text_strdup(name);
 	ret->namespace_list = vector_new();
-	ret->class_list = vector_new();
+	ret->type_list = vector_new();
 	ret->parent = NULL;
 	return ret;
 }
@@ -42,12 +42,12 @@ void il_namespace_dump(il_namespace* self, int depth) {
 	}
 
 	text_putindent(depth);
-	printf("class list");
+	printf("type list");
 	text_putline();
-	for (int i = 0; i < self->class_list->length; i++) {
-		vector_item e = vector_at(self->class_list, i);
-		il_class* ilc = (il_class*)e;
-		il_class_dump(ilc, depth + 1);
+	for (int i = 0; i < self->type_list->length; i++) {
+		vector_item e = vector_at(self->type_list, i);
+		il_type* ilt = (il_type*)e;
+		il_type_dump(ilt, depth + 1);
 	}
 	text_putline();
 }
@@ -58,14 +58,14 @@ void il_namespace_delete(il_namespace* self) {
 	}
 	MEM_FREE(self->name);
 	vector_delete(self->namespace_list, il_namespace_namespace_delete);
-	vector_delete(self->class_list, il_namespace_class_delete);
+	vector_delete(self->type_list, il_namespace_type_delete);
 	MEM_FREE(self);
 }
 
 //private
-static void il_namespace_class_delete(vector_item item) {
-	il_class* e = (il_class*)item;
-	il_class_delete(e);
+static void il_namespace_type_delete(vector_item item) {
+	il_type* e = (il_type*)item;
+	il_type_delete(e);
 }
 
 static void il_namespace_namespace_delete(vector_item item) {

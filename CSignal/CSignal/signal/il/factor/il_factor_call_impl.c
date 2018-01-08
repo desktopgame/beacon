@@ -47,6 +47,12 @@ void il_factor_call_generate(il_factor_call * self, enviroment* env) {
 		il_argument* ilarg = (il_argument*)e;
 		il_factor_generate(ilarg->factor, env);
 	}
+	if (modifier_is_static(self->m->modifier)) {
+		opcode_buf_add(env->buf, (vector_item)op_invokestatic);
+		opcode_buf_add(env->buf, self->m->parent->absoluteIndex);
+		opcode_buf_add(env->buf, (vector_item)self->methodIndex);
+		return;
+	}
 	//呼び出すメソッドの位置をスタックに積む
 	//ここで直接メソッドのポインタを積まないのはあとでシリアライズするときのため。
 	if (self->m->access == access_private) {
@@ -85,4 +91,8 @@ static void il_factor_find_method(il_factor_call* self, enviroment* env) {
 	int temp = 0;
 	self->m = class_find_method((class_*)vector_top(env->class_vec), self->name, self->argument_list, env, &temp);
 	self->methodIndex = temp;
+	if (self->m == NULL) {
+		self->m = class_find_smethod((class_*)vector_top(env->class_vec), self->name, self->argument_list, env, &temp);
+		self->methodIndex = temp;
+	}
 }

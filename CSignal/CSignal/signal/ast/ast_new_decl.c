@@ -41,6 +41,13 @@ ast * ast_new_class_decl(char * class_name, ast * super_class, ast * member_list
 	return ret;
 }
 
+ast * ast_new_interface_decl(char * interface_name, ast * member_list) {
+	ast* ret = ast_new(ast_interface_decl);
+	ret->u.string_value = interface_name;
+	ast_push(ret, member_list);
+	return ret;
+}
+
 ast * ast_new_superclass(ast* fqcn) {
 	ast* ret = ast_new(ast_class_super);
 	ast_push(ret, fqcn);

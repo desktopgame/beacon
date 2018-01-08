@@ -1,7 +1,6 @@
 #pragma once
 #ifndef SIGNAL_IL_IL_METHOD_H
 #define SIGNAL_IL_IL_METHOD_H
-#include "il_type.h"
 #include "../env/fqcn_cache.h"
 #include "../util/vector.h"
 #include "../ast/access_level.h"

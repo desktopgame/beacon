@@ -1,23 +1,50 @@
-#include "il_class.h"
+#include "il_class_impl.h"
 #include <stdlib.h>
-#include "../util/text.h"
-#include "il_field.h"
-#include "il_method.h"
-#include "il_constructor.h"
-#include "../util/mem.h"
+#include "../../util/text.h"
+//#include "../../env/field.h"
+//#include "../../env/method.h"
+#include "../il_field.h"
+#include "../il_method.h"
+#include "../il_constructor.h"
+#include "../../util/mem.h"
 
 //proto
 static void il_class_field_delete(vector_item item);
 static void il_class_method_delete(vector_item item);
+
+il_type * il_type_wrap_class(il_class * self) {
+	il_type* ret = il_type_new();
+	ret->tag = iltype_class;
+	ret->u.class_ = self;
+	return ret;
+}
 
 il_class* il_class_new(const char* name) {
 	il_class* ret = (il_class*)MEM_MALLOC(sizeof(il_class));
 	ret->name = text_strdup(name);
 	ret->super = fqcn_cache_new();
 	ret->field_list = vector_new();
+	ret->sfield_list = vector_new();
 	ret->method_list = vector_new();
+	ret->smethod_list = vector_new();
 	ret->constructor_list = vector_new();
 	return ret;
+}
+
+void il_class_add_field(il_class * self, il_field * f) {
+	if (modifier_is_static(f->modifier)) {
+		vector_push(self->sfield_list, f);
+	} else {
+		vector_push(self->field_list, f);
+	}
+}
+
+void il_class_add_method(il_class * self, il_method * m) {
+	if (modifier_is_static(m->modifier)) {
+		vector_push(self->smethod_list, m);
+	} else {
+		vector_push(self->method_list, m);
+	}
 }
 
 void il_class_dump(il_class * self, int depth) {

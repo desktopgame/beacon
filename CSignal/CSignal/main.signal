@@ -1,6 +1,13 @@
 import "lib"
 //import "../io.h"
 namespace signal.lang {
+/*
+	interface IPoint {
+		public:
+		def getX() -> Int;
+		def getY() -> Int;
+	}
+*/
 	class Point2D {
 		public:
 		Int x;
@@ -75,7 +82,7 @@ namespace L.Goo.Foo {
 		Int pointY;
 
 		private:
-		static def main() -> Void {
+		static def mainx() -> Void {
 
 		}
 
@@ -84,7 +91,7 @@ namespace L.Goo.Foo {
 		}
 
 		static def print(String message, Int d) -> Void {
-			main();
+			mainx();
 /*
 		//HelloWor
 			Console.writeLine("a");
@@ -122,6 +129,7 @@ namespace L.Goo.Foo {
 		}
 	}
 }
+//*
 signal::lang::Point2D.P = 0;
 signal::lang::Point3D c = new signal::lang::Point3D(1, 2, 5);
 c.print();
@@ -136,6 +144,7 @@ signal::lang::Console.writeLine(z);
 
 signal::lang::Point2D.P = 2;
 signal::lang::Console.writeLine(signal::lang::Point2D.P);
+//*/
 /*
 Int a = 2;
 signal::lang::Console.writeLine(a);

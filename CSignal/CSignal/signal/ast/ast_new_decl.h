@@ -47,6 +47,14 @@ ast* ast_new_class_decl_unit(ast* class_decl);
 ast* ast_new_class_decl(char* class_name, ast* super_class, ast* member_list);
 
 /**
+ * インターフェース宣言を表す要素を作成します.
+ * @param interface_name
+ * @param member_list
+ * @return
+ */
+ast* ast_new_interface_decl(char* interface_name, ast* member_list);
+
+/**
  * スーパークラスを表す要素を作成します.
  * @param fqcn
  * @return

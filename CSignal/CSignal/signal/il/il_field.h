@@ -1,7 +1,6 @@
 #pragma once
 #ifndef SIGNAL_IL_IL_FIELD_H
 #define SIGNAL_IL_IL_FIELD_H
-#include "il_type.h"
 #include "../ast/access_level.h"
 #include "../ast/modifier_type.h"
 #include "../env/fqcn_cache.h"

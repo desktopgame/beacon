@@ -1,7 +1,6 @@
 #pragma once
 #ifndef SIGNAL_IL_IL_STMT_VARIABLE_DECL_H
 #define SIGNAL_IL_IL_STMT_VARIABLE_DECL_H
-#include "../il_type.h"
 #include "../il_stmt_interface.h"
 #include "../../env/fqcn_cache.h"
 struct enviroment;

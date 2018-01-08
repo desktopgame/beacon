@@ -321,6 +321,9 @@ void ast_print(ast* self) {
 		case ast_class_decl:
 			printf("class(%s)", self->u.string_value);
 			break;
+		case ast_interface_decl:
+			printf("interface(%s)", self->u.string_value);
+			break;
 		case ast_class_super:
 			printf("super_class(%s)", self->u.string_value);
 			break;
