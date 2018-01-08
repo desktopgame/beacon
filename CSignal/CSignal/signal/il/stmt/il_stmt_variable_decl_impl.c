@@ -29,7 +29,7 @@ void il_stmt_variable_decl_dump(il_stmt_variable_decl * self, int depth) {
 void il_stmt_variable_decl_generate(il_stmt_variable_decl * self, enviroment * env) {
 	symbol_table_entry(
 		env->sym_table,
-		fqcn_class(self->fqcn, (namespace_*)vector_top(env->namespace_vec)),
+		fqcn_type(self->fqcn, (namespace_*)vector_top(env->namespace_vec)),
 		self->name
 	);
 }

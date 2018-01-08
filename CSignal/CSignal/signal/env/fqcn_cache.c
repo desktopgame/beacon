@@ -57,7 +57,7 @@ namespace_ * fqcn_scope(fqcn_cache * self, namespace_* current) {
 	return top;
 }
 
-type * fqcn_class(fqcn_cache * self, namespace_* current) {
+type * fqcn_type(fqcn_cache * self, namespace_* current) {
 	//Y形式
 	if (self->scope_vec->length == 0) {
 		char* name = self->name;

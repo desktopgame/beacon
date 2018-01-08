@@ -31,7 +31,7 @@ void il_stmt_variable_init_dump(il_stmt_variable_init * self, int depth) {
 void il_stmt_variable_init_generate(il_stmt_variable_init * self, enviroment * env) {
 	symbol_entry* e = symbol_table_entry(
 		env->sym_table,
-		fqcn_class(self->fqcn, (namespace_*)vector_top(env->namespace_vec)),
+		fqcn_type(self->fqcn, (namespace_*)vector_top(env->namespace_vec)),
 		self->name
 	);
 	il_factor_generate(self->fact, env);

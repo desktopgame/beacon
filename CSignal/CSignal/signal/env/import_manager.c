@@ -18,7 +18,7 @@ void import_manager_import(import_manager * self, class_loader * target) {
 }
 
 type * import_manager_resolve(import_manager* self, namespace_* scope, fqcn_cache* fqcn) {
-	return fqcn_class(fqcn, scope);
+	return fqcn_type(fqcn, scope);
 }
 
 void import_manager_delete(import_manager * self) {

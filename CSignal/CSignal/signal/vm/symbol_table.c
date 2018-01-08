@@ -15,16 +15,16 @@ symbol_table * symbol_table_new() {
 	return ret;
 }
 
-symbol_entry* symbol_table_entry(symbol_table* self, class_* cls, const char * name) {
+symbol_entry* symbol_table_entry(symbol_table* self, type* tp, const char * name) {
 	tree_item data = tree_map_get(self->map, name);
 	if (data) {
 		return ((symbol_entry*)data);
 	}
-	assert(cls != NULL);
+	assert(tp != NULL);
 	int ret = self->count;
 	symbol_entry* e = symbol_entry_new(name);
 	e->index = self->count;
-	e->type = cls;
+	e->type = tp;
 	tree_map_put(self->map, name, e);
 	self->count++;
 	return e;

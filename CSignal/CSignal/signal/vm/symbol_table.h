@@ -3,7 +3,7 @@
 #define SIGNAL_VM_SYMBOL_TABLE_H
 #include "../util/tree_map.h"
 //#include "../env/class.h"
-struct class_;
+struct type;
 struct symbol_entry;
 /**
  * 変数名とインデックスの変換テーブルです.
@@ -28,7 +28,7 @@ symbol_table* symbol_table_new();
  * @param name
  * @return
  */
-struct symbol_entry* symbol_table_entry(symbol_table* self, struct class_* cls, const char* name);
+struct symbol_entry* symbol_table_entry(symbol_table* self, struct type* tp, const char* name);
 
 /**
  * シンボルテーブルを開放します.

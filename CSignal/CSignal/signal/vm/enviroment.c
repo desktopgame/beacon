@@ -81,14 +81,14 @@ object* enviroment_constant_string_at(enviroment * self, int index) {
 
 class_ * enviroment_class(enviroment * self, fqcn_cache * fqcn) {
 	vector_item e = vector_top(self->namespace_vec);
-	class_* cls = NULL;
+	type* tp = NULL;
 	if (e != NULL) {
 		namespace_* scope = (namespace_*)e;
-		cls = fqcn_class(fqcn, scope);
+		tp = fqcn_type(fqcn, scope);
 	} else {
-		cls = fqcn_class(fqcn, NULL);
+		tp = fqcn_type(fqcn, NULL);
 	}
-	return cls;
+	return NULL;
 }
 
 void enviroment_delete(enviroment * self) {

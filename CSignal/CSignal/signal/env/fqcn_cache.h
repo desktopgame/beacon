@@ -48,7 +48,7 @@ struct namespace_* fqcn_scope(fqcn_cache* self, struct namespace_* current);
  * @param current
  * @return
  */
-struct type* fqcn_class(fqcn_cache* self, struct namespace_* current);
+struct type* fqcn_type(fqcn_cache* self, struct namespace_* current);
 
 /**
  * FQCNキャッシュを開放します.
