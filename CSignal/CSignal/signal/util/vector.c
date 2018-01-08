@@ -62,6 +62,12 @@ vector_item vector_at(vector * self, int index) {
 //	return *(self->memory + index);
 }
 
+void vector_clear(vector * self) {
+	while (self->length > 0) {
+		vector_pop(self);
+	}
+}
+
 void vector_delete(vector * self, vector_element_deleter deleter) {
 	if (self == NULL) {
 		return;

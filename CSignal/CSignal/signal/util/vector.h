@@ -73,6 +73,12 @@ void vector_assign(vector* self, int index, vector_item item);
 vector_item vector_at(vector* self, int index);
 
 /**
+ * 中身を空にします.
+ * @param self
+ */
+void vector_clear(vector* self);
+
+/**
  * ベクターを開放します.
  * @param self
  * @param deleter
