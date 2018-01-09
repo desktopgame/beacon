@@ -12,6 +12,7 @@
 #include "../il/il_stmt_impl.h"
 #include "../util/mem.h"
 #include "../util/text.h"
+#include "../util/logger.h"
 #include <stdio.h>
 #include <assert.h>
 //
@@ -44,7 +45,7 @@ void class_loader_ilload_import(class_loader* self, ast* import_decl) {
 	ast* path = ast_first(import_decl);
 	il_import* ret = il_import_new(path->u.string_value);
 	vector_push(self->il_code->import_list, (vector_item)ret);
-	printf("import %s\n", path->u.string_value);
+	//printf("import %s\n", path->u.string_value);
 }
 
 void class_loader_ilload_namespace(class_loader* self, vector* parent, ast* namespace_decl) {
@@ -79,7 +80,7 @@ il_namespace* class_loader_ilload_ast_to_namespace(ast* a) {
 	       a->tag == ast_namespace_path_list);
 	if(a->tag == ast_namespace_path) {
 		//printf("-  %s", a->u.string_value);
-		text_putline();
+		//text_putline();
 		il_namespace* ret = il_namespace_new(a->u.string_value);
 		return ret;
 	} else if(a->tag == ast_namespace_path_list) {
@@ -91,6 +92,8 @@ il_namespace* class_loader_ilload_ast_to_namespace(ast* a) {
 		vector_push(parent->namespace_list, child);
 		return child;
 	}
+	ERROR("unsupported tag");
+	return NULL;
 }
 
 void class_loader_ilload_namespace_body(class_loader* self, il_namespace* current, vector* parent, ast* namespace_body) {
@@ -116,6 +119,7 @@ void class_loader_ilload_namespace_body(class_loader* self, il_namespace* curren
 }
 
 void class_loader_ilload_class(class_loader* self, il_namespace* current, ast* class_decl) {
+	assert(class_decl->tag == ast_class_decl);
 	ast* super_class = ast_first(class_decl);
 	ast* member_tree = ast_second(class_decl);
 	il_class* classz = il_class_new(class_decl->u.string_value);
@@ -141,11 +145,7 @@ void class_loader_ilload_class(class_loader* self, il_namespace* current, ast* c
 void class_loader_ilload_interface(class_loader* self, il_namespace* current, ast* interface_decl) {
 	ast* member_tree = ast_first(interface_decl);
 	il_interface* inter = il_interface_new(interface_decl->u.string_value);
-	if (!ast_is_blank(member_tree)) {
-	}
 	vector_push(current->type_list, il_type_wrap_interface(inter));
-//	vector_push(current->interface_list, inter);
-//	il_namespace_add_entity(inter);
 }
 
 void class_loader_ilload_member_tree(class_loader* self, il_type* current, ast* tree) {
@@ -294,13 +294,13 @@ void class_loader_ilload_body(class_loader* self, vector* list, ast* source) {
 			}
 			case ast_if_elif_list:
 			{
-				il_stmt* ilif = class_loader_ilload_if_elif_list(self, source);
+				il_stmt_if* ilif = class_loader_ilload_if_elif_list(self, source);
 				vector_push(list, il_stmt_wrap_if(ilif));
 				break;
 			}
 			case ast_if_else:
 			{
-				il_stmt* ilif = class_loader_ilload_if_else(self, source);
+				il_stmt_if* ilif = class_loader_ilload_if_else(self, source);
 				vector_push(list, il_stmt_wrap_if(ilif));
 				break;
 			}
@@ -351,9 +351,6 @@ il_stmt_if* class_loader_ilload_if(class_loader* self, ast* source) {
 	class_loader_ilload_body(self, ret->body, abody);
 	ret->condition = ilcond;
 	//ret->body = ilbody;
-	if (ret->condition == NULL) {
-		int a = 0;
-	}
 	return ret;
 }
 
@@ -371,7 +368,7 @@ il_stmt_if* class_loader_ilload_if_else(class_loader* self, ast* source) {
 	ast* aelse = ast_second(source);
 	ast* abody = ast_first(aelse);
 	il_stmt_if* ilif = class_loader_ilload_if(self, aif);
-	class_loader_ilload_body(self, ilif->else_body, abody);
+	class_loader_ilload_body(self, ilif->else_body->body, abody);
 	return ilif;
 }
 
