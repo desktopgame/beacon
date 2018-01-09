@@ -95,11 +95,11 @@ parser * parser_parse_from_file(const char * filename) {
 #endif
 }
 
-parser * parser_parse_from_source(char * source) {
+parser * parser_parse_from_source(const char * source) {
 	return parser_parse_from_source_swap(source, NULL);
 }
 
-parser * parser_parse_from_source_swap(char * source, char * info) {
+parser * parser_parse_from_source_swap(const char * source, const char * info) {
 	parser* p = parser_push(yinput_string);
 	extern void yy_setstr(char *source);
 	extern void yy_clearstr();

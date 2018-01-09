@@ -66,7 +66,7 @@ parser* parser_parse_from_file(const char* filename);
  * @param source 呼び出し側で開放してください.
  * @return
  */
-parser* parser_parse_from_source(char* source);
+parser* parser_parse_from_source(const char* source);
 
 /**
  * 情報を入れ替えてからパースします.
@@ -74,7 +74,7 @@ parser* parser_parse_from_source(char* source);
  * @param info
  * @return
  */
-parser* parser_parse_from_source_swap(char* source, char* info);
+parser* parser_parse_from_source_swap(const char* source, const char* info);
 
 /**
  * デバッグ情報として使用される入力元の情報を設定します.
