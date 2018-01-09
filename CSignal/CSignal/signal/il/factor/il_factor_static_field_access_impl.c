@@ -34,9 +34,9 @@ void il_factor_static_field_access_dump(il_factor_static_field_access * self, in
 
 void il_factor_static_field_access_generate(il_factor_static_field_access * self, enviroment * env) {
 	il_factor_static_field_access_find(self, env);
-	opcode_buf_add(env->buf, op_get_static);
-	opcode_buf_add(env->buf, self->f->parent->absoluteIndex);
-	opcode_buf_add(env->buf, self->fieldIndex);
+	opcode_buf_add(env->buf, (vector_item)op_get_static);
+	opcode_buf_add(env->buf, (vector_item)self->f->parent->absoluteIndex);
+	opcode_buf_add(env->buf, (vector_item)self->fieldIndex);
 }
 
 type * il_factor_static_field_access_eval(il_factor_static_field_access * self, enviroment * env) {
@@ -56,7 +56,7 @@ void il_factor_static_field_access_delete(il_factor_static_field_access * self) 
 //private
 static void il_factor_static_field_access_find(il_factor_static_field_access * self, enviroment * env) {
 	int temp = 0;
-	type* cls = fqcn_class(self->fqcn, (namespace_*)vector_top(env->namespace_vec));
+	class_* cls = fqcn_class(self->fqcn, (namespace_*)vector_top(env->namespace_vec));
 	//フィールドはクラスにしか定義出来ないので、
 	//クラスが見つからなかったらエラー
 	assert(cls != NULL);
