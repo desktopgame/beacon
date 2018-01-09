@@ -60,44 +60,44 @@ void class_loader_sgload_class(class_loader* self, il_type* iltype, namespace_* 
  * インスタンス/静的フィールド宣言を読み込んでクラスに追加します.
  * @param self
  * @param iltype
- * @param classz
+ * @param tp
  */
-void class_loader_sgload_fields(class_loader* self, il_type* iltype, class_* classz);
+void class_loader_sgload_fields(class_loader* self, il_type* iltype, type* tp);
 
 /**
  * フィールド宣言を読み込んでクラスに追加します.
  * @param self
  * @param iltype
- * @param classz
+ * @param tp
  * @param ilfields
  */
-void class_loader_sgload_fields_impl(class_loader* self, il_type* iltype, class_* classz, vector* ilfields);
+void class_loader_sgload_fields_impl(class_loader* self, il_type* iltype, type* tp, vector* ilfields);
 
 /**
  * インスタンス/静的メソッド宣言を読み込んでクラスに追加します.
  * @param self
  * @param iltype
- * @param classz
+ * @param tp
  */
-void class_loader_sgload_methods(class_loader* self, il_type* iltype, class_* classz);
+void class_loader_sgload_methods(class_loader* self, il_type* iltype, type* tp);
 
 
 /**
  * メソッド宣言を読み込んでクラスに追加します.
  * @param self
  * @param iltype
- * @param classz
+ * @param tp
  * @param ilmethods
  */
-void class_loader_sgload_methods_impl(class_loader* self, il_type* iltype, class_* classz, vector* ilmethods);
+void class_loader_sgload_methods_impl(class_loader* self, il_type* iltype, type* tp, vector* ilmethods);
 
 /**
  * コンストラクタ宣言を読み込んでクラスに追加します.
  * @param self
  * @param iltype
- * @param classz
+ * @param tp
  */
-void class_loader_sgload_constructors(class_loader* self, il_type* iltype, class_* classz);
+void class_loader_sgload_constructors(class_loader* self, il_type* iltype, type* tp);
 
 /**
  * クラスとメンバーの一覧が登録されるまで保留されていた作業を実行します.

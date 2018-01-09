@@ -34,7 +34,7 @@ void class_loader_sgload_import(class_loader* self, vector* ilimports) {
 		il_import* import = (il_import*)e;
 		char* withExt = text_concat(import->path, ".signal");
 		char* fullPath = io_absolute_path(withExt);
-		printf("%s\n", fullPath);
+		//printf("%s\n", fullPath);
 		//そのファイルパスに対応した
 		//クラスローダが既に存在するなら無視
 		class_loader* cll = tree_map_get(ctx->classLoaderMap, fullPath);
@@ -138,65 +138,47 @@ void class_loader_sgload_class(class_loader* self, il_type* iltype, namespace_* 
 		cls = tp->u.class_;
 	}
 	//TEST(!strcmp(type->u.class_->name, "Console"));
-	class_loader_sgload_fields(self, iltype, cls);
-	class_loader_sgload_methods(self, iltype, cls);
-	class_loader_sgload_constructors(self, iltype, cls);
+	class_loader_sgload_fields(self, iltype, tp);
+	class_loader_sgload_methods(self, iltype, tp);
+	class_loader_sgload_constructors(self, iltype, tp);
 //	class_linkall(cls);
-	for (int i = 0; i < cls->field_list->length; i++) {
-		field* e = (field*)vector_at(cls->field_list, i);
-		e->parent = tp;
-	}
-	for (int i = 0; i < cls->sfield_list->length; i++) {
-		field* e = (field*)vector_at(cls->sfield_list, i);
-		e->parent = tp;
-	}
-	for (int i = 0; i < cls->method_list->length; i++) {
-		method* e = (method*)vector_at(cls->method_list, i);
-		e->parent = tp;
-	}
-	for (int i = 0; i < cls->smethod_list->length; i++) {
-		method* e = (method*)vector_at(cls->smethod_list, i);
-		e->parent = tp;
-	}
-	for (int i = 0; i < cls->constructor_list->length; i++) {
-		constructor* e = (constructor*)vector_at(cls->constructor_list, i);
-		e->parent = tp;
-	}
 	class_loader_sgload_complete(self, iltype, tp);
 	///*/
 }
 
-void class_loader_sgload_fields(class_loader* self, il_type* iltype, class_* classz) {
+void class_loader_sgload_fields(class_loader* self, il_type* iltype, type* tp) {
 	assert(iltype->tag == iltype_class);
-	class_loader_sgload_fields_impl(self, iltype, classz, iltype->u.class_->field_list);
-	class_loader_sgload_fields_impl(self, iltype, classz, iltype->u.class_->sfield_list);
+	class_loader_sgload_fields_impl(self, iltype, tp, iltype->u.class_->field_list);
+	class_loader_sgload_fields_impl(self, iltype, tp, iltype->u.class_->sfield_list);
 }
 
-void class_loader_sgload_fields_impl(class_loader* self, il_type* iltype, class_* classz, vector* ilfields) {
+void class_loader_sgload_fields_impl(class_loader* self, il_type* iltype, type* tp, vector* ilfields) {
+	class_* cls = tp->u.class_;
 	for (int i = 0; i < ilfields->length; i++) {
 		vector_item e = vector_at(ilfields, i);
 		il_field* ilfield = (il_field*)e;
 		field* field = field_new(ilfield->name);
 		field->access = ilfield->access;
 		field->modifier = ilfield->modifier;
-		field->parent = classz;
+		field->parent = tp;
 		//NOTE:ここではフィールドの型を設定しません
 		//     class_loader_sgload_complete参照
 		//vector_push(classz->field_list, field);
-		class_add_field(classz, field);
+		class_add_field(cls, field);
 	}
 }
 
-void class_loader_sgload_methods(class_loader* self, il_type* iltype, class_* classz) {
+void class_loader_sgload_methods(class_loader* self, il_type* iltype, type* tp) {
 	assert(iltype->tag == iltype_class);
 	//TEST(!strcmp(iltype->u.class_->name, "Console"));
-	class_loader_sgload_methods_impl(self, iltype, classz, iltype->u.class_->method_list);
-	class_loader_sgload_methods_impl(self, iltype, classz, iltype->u.class_->smethod_list);
+	class_loader_sgload_methods_impl(self, iltype, tp, iltype->u.class_->method_list);
+	class_loader_sgload_methods_impl(self, iltype, tp, iltype->u.class_->smethod_list);
 	//TEST(iltype->u.class_->method_list->length != classz->method_list->length);
 	//TEST(iltype->u.class_->smethod_list->length != classz->smethod_list->length);
 }
 
-void class_loader_sgload_methods_impl(class_loader* self, il_type* iltype, class_* classz, vector* ilmethods) {
+void class_loader_sgload_methods_impl(class_loader* self, il_type* iltype, type* tp, vector* ilmethods) {
+	class_* classz = tp->u.class_;
 	for (int i = 0; i < ilmethods->length; i++) {
 		//メソッド一覧から取り出す
 		vector_item e = vector_at(ilmethods, i);
@@ -210,7 +192,7 @@ void class_loader_sgload_methods_impl(class_loader* self, il_type* iltype, class
 		method->access = ilmethod->access;
 		method->modifier = ilmethod->modifier;
 		method->u.script_method = script_method_new();
-		method->parent = classz;
+		method->parent = tp;
 		//ILパラメータを実行時パラメータへ変換
 		//NOTE:ここでは戻り値の型,引数の型を設定しません
 		//     class_loader_sgload_complete参照
@@ -221,16 +203,12 @@ void class_loader_sgload_methods_impl(class_loader* self, il_type* iltype, class
 			vector_push(parameter_list, param);
 		}
 		//NOTE:クラスの登録が終わったらオペコードを作成する
-		//     class_loader_sgload_complete参照
-		//enviroment* env = class_loader_sgload_body(self, ilmethod->statement_list);
-		//opcode_buf_delete(e->u.script_method->env);
-		//method->u.script_method->env = NULL;
-		//vector_push(classz->method_list, method);
 		class_add_method(classz, method);
 	}
 }
 
-void class_loader_sgload_constructors(class_loader* self, il_type* iltype, class_* classz) {
+void class_loader_sgload_constructors(class_loader* self, il_type* iltype, type* tp) {
+	class_* classz = tp->u.class_;
 	vector* ilcons_list = iltype->u.class_->constructor_list;
 	for (int i = 0; i < ilcons_list->length; i++) {
 		vector_item e = vector_at(ilcons_list, i);
@@ -241,7 +219,7 @@ void class_loader_sgload_constructors(class_loader* self, il_type* iltype, class
 		constructor* cons = constructor_new();
 		vector* parameter_list = cons->parameter_list;
 		cons->access = ilcons->access;
-		cons->parent = classz;
+		cons->parent = tp;
 		//NOTE:ここでは戻り値の型,引数の型を設定しません
 		//     class_loader_sgload_complete参照
 		for (int i = 0; i < ilparams->length; i++) {
@@ -339,14 +317,14 @@ void class_loader_sgload_complete_methods_impl(class_loader* self, namespace_* s
 				);
 			//実引数を保存
 			//0番目は this のために開けておく
-			opcode_buf_add(env->buf, op_store);
-			opcode_buf_add(env->buf, (i + 1));
+			opcode_buf_add(env->buf, (vector_item)op_store);
+			opcode_buf_add(env->buf, (vector_item)(i + 1));
 		}
 		//インスタンスメソッドなら
 		//0番目を this で埋める
 		if (!modifier_is_static(me->modifier)) {
-			opcode_buf_add(env->buf, op_store);
-			opcode_buf_add(env->buf, 0);
+			opcode_buf_add(env->buf, (vector_item)op_store);
+			opcode_buf_add(env->buf, (vector_item)0);
 		}
 		//NOTE:ここなら名前空間を設定出来る		
 		class_loader_sgload_body(self, ilmethod->statement_list, env, scope);
