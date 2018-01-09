@@ -61,7 +61,7 @@ class_loader * class_loader_new_entry_point(const char * filename) {
 	parser* p = parser_parse_from_source_swap(text, filename);
 	//解析に失敗した場合
 	if (p->fail) {
-		class_loader_errors(cll, "parse failed --- %s", p->source_name);
+		class_loader_errorf(cll, "parse failed --- %s", p->source_name);
 		MEM_FREE(text);
 		parser_pop();
 		return cll;
@@ -118,15 +118,19 @@ void class_loader_error(class_loader* self, const char* message) {
 	self->error = true;
 }
 
-void class_loader_errors(class_loader* self, const char* message, const char* a) {
+void class_loader_errorf(class_loader* self, const char* message, ...) {
+	va_list ap;
+	va_start(ap, message);
 #if defined(_MSC_VER)
-	char buff[100];
-	int res = sprintf_s(buff, 100, message, a);
-	if (res == -1) {
-		class_loader_error(self, text_strdup("internal error: format failed"));
-		ERROR("format error");
-	} else {
-		class_loader_error(self, buff);
-	}
+#else
+char buff[100];
+int res = sprintf(buff, message, ap);
+if(res == -1) {
+	//on error
+	printf("internal error: %s %d", __FILE__, __LINE__);
+} else {
+	class_loader_error(self, buff);
+}
 #endif
+	va_end(ap);
 }
