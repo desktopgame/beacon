@@ -6,6 +6,7 @@
 #include "import_manager.h"
 #include "../il/il_top_level.h"
 #include <stdint.h>
+#include <stdarg.h>
 #include <stdbool.h>
 struct enviroment;
 
@@ -58,10 +59,10 @@ void class_loader_delete(class_loader* self);
 void class_loader_error(class_loader* self, const char* message);
 
 /**
- * エラーを報告します.
+ * エラーをフォーマット付きで報告します.
  * @param self
  * @param message
- * @param a
+ * @param ...
  */
-void class_loader_errors(class_loader* self, const char* message, const char* a);
+void class_loader_errorf(class_loader* self, const char* message, ...);
 #endif // !SIGNAL_PARSER_CLASS_LOADER_H
