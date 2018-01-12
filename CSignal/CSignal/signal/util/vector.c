@@ -15,12 +15,8 @@ vector * vector_new() {
 void vector_push(vector * self, vector_item item) {
 	assert(self != NULL);
 	if (self->length >= self->capacity) {
-		int newCapacitySize = self->capacity + (self->capacity / 2);
-		vector_item* temp = (vector_item*)MEM_REALLOC(self->memory, SLOT_SIZE * newCapacitySize);
-		assert(temp != NULL);
-		self->memory = temp;
+		vector_reserve(self);
 		self->memory[self->length] = item;
-		self->capacity = newCapacitySize;
 	} else {
 		self->memory[self->length] = item;
 	}
@@ -41,6 +37,30 @@ vector_item vector_pop(vector * self) {
 	self->memory[self->length - 1] = NULL;
 	self->length--;
 	return ret;
+}
+
+void vector_insert(vector * self, int index, vector_item item) {
+	assert(index >= 0 && index < (self->length + 1));
+	if (self->capacity < (self->length + 1)) {
+		vector_reserve(self);
+	}
+	vector_item t = self->memory[index];
+	for (int i = index; i < self->length; i++) {
+		vector_item b = self->memory[i + 1];
+		self->memory[i + 1] = t;
+		t = b;
+	}
+	self->memory[index] = item;
+	self->length++;
+}
+
+int vector_reserve(vector * self) {
+	int newCapacitySize = self->capacity + (self->capacity / 2);
+	vector_item* temp = (vector_item*)MEM_REALLOC(self->memory, SLOT_SIZE * newCapacitySize);
+	assert(temp != NULL);
+	self->memory = temp;
+	self->capacity = newCapacitySize;
+	return newCapacitySize;
 }
 
 void vector_assign(vector * self, int index, vector_item item) {

@@ -56,6 +56,23 @@ vector_item vector_top(vector* self);
 vector_item vector_pop(vector* self);
 
 /**
+ * 指定位置に値を挿入します.
+ * indexから末尾までの要素を一つ右にシフトします。
+ * 次に index を item で上書きします。
+ * @param self
+ * @param index
+ * @param item
+ */
+void vector_insert(vector* self, int index, vector_item item);
+
+/**
+ * 容量を拡張します.
+ * @param self
+ * @return 新しいキャパシティサイズ
+ */
+int vector_reserve(vector* self);
+
+/**
  * 指定位置の要素を上書きします.
  * 長さが足りない場合は 0 で伸ばします。
  * @param self

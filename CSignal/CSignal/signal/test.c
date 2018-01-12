@@ -206,6 +206,24 @@ void test_vector(void) {
 #endif
 }
 
+void test_vector2(void) {
+	vector* v = vector_new();
+	vector_push(v, 10);
+	vector_push(v, 20);
+	vector_push(v, 30);
+	//出力テスト
+	for (int i = 0; i < v->length; i++) {
+		printf("%d\n", vector_at(v, i));
+	}
+	printf("\n");
+	vector_insert(v, 3, 5);
+	//出力テスト
+	for (int i = 0; i < v->length; i++) {
+		printf("%d\n", vector_at(v, i));
+	}
+	printf("\n");
+}
+
 void test_vm(void) {
 	vm* vm = vm_new();
 	enviroment* env = enviroment_new();

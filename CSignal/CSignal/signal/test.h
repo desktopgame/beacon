@@ -64,6 +64,8 @@ void test_struct(void);
 
 void test_vector(void);
 
+void test_vector2(void);
+
 void test_vm(void);
 
 void test_vm2(void);
