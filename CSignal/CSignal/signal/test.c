@@ -224,6 +224,24 @@ void test_vector2(void) {
 	printf("\n");
 }
 
+void test_vector3(void) {
+	vector* v = vector_new();
+	vector_push(v, 10);
+	vector_push(v, 20);
+	vector_push(v, 30);
+	//出力テスト
+	for (int i = 0; i < v->length; i++) {
+		printf("%d\n", vector_at(v, i));
+	}
+	printf("\n");
+	vector_remove(v, 2);
+	//出力テスト
+	for (int i = 0; i < v->length; i++) {
+		printf("%d\n", vector_at(v, i));
+	}
+	printf("\n");
+}
+
 void test_vm(void) {
 	vm* vm = vm_new();
 	enviroment* env = enviroment_new();

@@ -66,6 +66,13 @@ vector_item vector_pop(vector* self);
 void vector_insert(vector* self, int index, vector_item item);
 
 /**
+ * 指定位置の要素を削除します.
+ * @param self
+ * @param index
+ */
+vector_item vector_remove(vector* self, int index);
+
+/**
  * 容量を拡張します.
  * @param self
  * @return 新しいキャパシティサイズ

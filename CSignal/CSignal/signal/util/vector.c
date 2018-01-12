@@ -54,6 +54,16 @@ void vector_insert(vector * self, int index, vector_item item) {
 	self->length++;
 }
 
+vector_item vector_remove(vector * self, int index) {
+	assert(index >= 0 && index < self->length);
+	vector_item ret = self->memory[index];
+	for (int i = index + 1; i < self->length; i++) {
+		self->memory[i - 1] = self->memory[i];
+	}
+	self->length--;
+	return ret;
+}
+
 int vector_reserve(vector * self) {
 	int newCapacitySize = self->capacity + (self->capacity / 2);
 	vector_item* temp = (vector_item*)MEM_REALLOC(self->memory, SLOT_SIZE * newCapacitySize);
