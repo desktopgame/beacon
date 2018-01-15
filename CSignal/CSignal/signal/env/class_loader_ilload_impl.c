@@ -109,6 +109,9 @@ void class_loader_ilload_namespace_body(class_loader* self, il_namespace* curren
 	} else if (namespace_body->tag == ast_class_decl) {
 		//printf("class decl\n");
 		class_loader_ilload_class(self, current, namespace_body);
+		//namespace xxx { interface yyy { ...
+	} else if(namespace_body->tag == ast_interface_decl) {
+		class_loader_ilload_interface(self, current, namespace_body);
 		//namespace xxx { any yyy { ...
 	} else if (namespace_body->tag == ast_namespace_member_decl_list) {
 		for (int i = 0; i < namespace_body->childCount; i++) {
@@ -145,7 +148,14 @@ void class_loader_ilload_class(class_loader* self, il_namespace* current, ast* c
 void class_loader_ilload_interface(class_loader* self, il_namespace* current, ast* interface_decl) {
 	ast* member_tree = ast_first(interface_decl);
 	il_interface* inter = il_interface_new(interface_decl->u.string_value);
-	vector_push(current->type_list, il_type_wrap_interface(inter));
+	il_type* type = il_type_wrap_interface(inter);
+	//vector_push(current->type_list, type);
+	//public:
+	//    ...
+	if (!ast_is_blank(member_tree)) {
+		class_loader_ilload_member_tree(self, type, member_tree);
+	}
+	vector_push(current->type_list, type);
 }
 
 void class_loader_ilload_member_tree(class_loader* self, il_type* current, ast* tree) {
@@ -188,7 +198,8 @@ void class_loader_ilload_field(class_loader* self, il_type* current, ast* field,
 	//v->type = il_type_new(type_name->u.string_value);
 	v->access = level;
 	v->modifier = ast_cast_to_modifier(modifier);
-	il_class_add_field(current->u.class_, v);
+	il_type_add_field(current, v);
+	//il_class_add_field(current->u.class_, v);
 	//vector_push(current->u.class_->field_list, v);
 }
 
@@ -207,7 +218,8 @@ void class_loader_ilload_method(class_loader* self, il_type* current, ast* metho
 	//TEST((!strcmp(v->name, "main")));
 	class_loader_ilload_param(self, v->parameter_list, param_list);
 	class_loader_ilload_body(self, v->statement_list, func_body);
-	il_class_add_method(current->u.class_, v);
+	il_type_add_method(current, v);
+	//il_class_add_method(current->u.class_, v);
 	//vector_push(il_type_method_vec(current), v);
 }
 

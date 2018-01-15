@@ -22,7 +22,7 @@ void _start(int argc, char* argv[]) {
 	sg_lopen();
 	sg_lset_enabled(false);
 	script_context_open();
-	cmd_dump(argc, argv);
+	//cmd_dump(argc, argv);
 
 	//ネイティブメソッドの登録
 	sg_console_init();
@@ -42,6 +42,7 @@ int main(int argc, char* argv[]) {
 	//test_vm();
 	_start(argc, argv);
 	test_cll();
+//	test_vector3();
 	_end(argc, argv);
 	return 0;
 }

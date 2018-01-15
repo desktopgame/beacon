@@ -1,11 +1,12 @@
 #include "il_interface_impl.h"
 #include "../../util/mem.h"
 #include "../../util/text.h"
+#include "../il_method.h"
 
 il_type * il_type_wrap_interface(il_interface * self) {
 	il_type* ret = il_type_new();
 	ret->tag = iltype_interface;
-	ret->u.interface_ = ret;
+	ret->u.interface_ = self;
 	return ret;
 }
 
@@ -16,7 +17,20 @@ il_interface * il_interface_new(const char * name) {
 	return ret;
 }
 
+void il_interface_add_method(il_interface * self, il_method * method) {
+	vector_push(self->method_list, method);
+}
+
 void il_interface_dump(il_interface * self, int depth) {
+	text_putindent(depth);
+	printf("interface %s", self->name);
+	text_putline();
+
+	for (int i = 0; i < self->method_list->length; i++) {
+		vector_item e = vector_at(self->method_list, i);
+		il_method* ilm = (il_method*)e;
+		il_method_dump(ilm, depth + 1);
+	}
 }
 
 void il_interface_delete(il_interface * self) {

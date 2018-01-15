@@ -1,13 +1,16 @@
 import "lib"
 //import "../io.h"
 namespace signal.lang {
-/*
+
 	interface IPoint {
 		public:
 		def getX() -> Int;
 		def getY() -> Int;
 	}
-*/
+
+	interface ISerializable {
+	}
+
 	class Point2D {
 		public:
 		Int x;

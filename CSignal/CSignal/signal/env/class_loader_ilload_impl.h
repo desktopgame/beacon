@@ -60,6 +60,7 @@ void class_loader_ilload_namespace_body(class_loader* self, il_namespace* curren
  * @param class_decl
  */
 void class_loader_ilload_class(class_loader* self, il_namespace* current, ast* class_decl);
+void class_loader_ilload_interface(class_loader* self, il_namespace* current, ast* interface_decl);
 
 /**
  * メンバーツリーを IL に変換します.

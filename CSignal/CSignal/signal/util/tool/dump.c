@@ -4,7 +4,6 @@
 
 void cmd_tool_dump(dump_option * option) {
 	if (option->filename == NULL) {
-		printf("-fileオプションで対象ファイルを設定してください。");
 		text_putline();
 		return;
 	}

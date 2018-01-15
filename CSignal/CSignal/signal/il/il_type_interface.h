@@ -13,6 +13,9 @@ typedef enum il_type_tag {
 
 struct il_class;
 struct il_interface;
+struct il_field;
+struct il_method;
+struct il_constructor;
 
 /**
  * 名前空間に含めることが出来る型.
@@ -44,6 +47,27 @@ vector* il_type_method_vec(il_type* self);
  * @return
  */
 vector* il_type_smethod_vec(il_type* self);
+
+/**
+ * コンストラクタを追加します.
+ * @param self
+ * @param ctor
+ */
+void il_type_add_constructor(il_type* self, struct il_constructor* ctor);
+
+/**
+ * フィールドを追加します.
+ * @param self
+ * @param field
+ */
+void il_type_add_field(il_type* self, struct il_field* field);
+
+/**
+ * メソッドを追加します.
+ * @param self
+ * @param field
+ */
+void il_type_add_method(il_type* self, struct il_method* method);
 
 /**
  * 型を出力します.

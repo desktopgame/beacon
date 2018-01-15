@@ -3,6 +3,7 @@
 #define SIGNAL_IL_IL_INTERFACE_H
 #include "../../util/vector.h"
 #include "../il_type_interface.h"
+struct il_method;
 /**
  * インターフェースを表す要素.
  */
@@ -24,6 +25,8 @@ il_type* il_type_wrap_interface(il_interface* self);
  * @return
  */
 il_interface* il_interface_new(const char* name);
+
+void il_interface_add_method(il_interface* self, struct il_method* method);
 
 /**
  * インターフェースを出力します.

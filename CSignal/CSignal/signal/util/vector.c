@@ -65,6 +65,7 @@ vector_item vector_remove(vector * self, int index) {
 }
 
 int vector_reserve(vector * self) {
+	assert(self->capacity > 0);
 	int newCapacitySize = self->capacity + (self->capacity / 2);
 	vector_item* temp = (vector_item*)MEM_REALLOC(self->memory, SLOT_SIZE * newCapacitySize);
 	assert(temp != NULL);
