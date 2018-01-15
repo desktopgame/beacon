@@ -22,7 +22,7 @@ il_type * il_type_wrap_class(il_class * self) {
 il_class* il_class_new(const char* name) {
 	il_class* ret = (il_class*)MEM_MALLOC(sizeof(il_class));
 	ret->name = text_strdup(name);
-	ret->super = fqcn_cache_new();
+	ret->extend_list = vector_new();
 	ret->field_list = vector_new();
 	ret->sfield_list = vector_new();
 	ret->method_list = vector_new();
@@ -51,6 +51,11 @@ void il_class_dump(il_class * self, int depth) {
 	text_putindent(depth);
 	printf("class %s", self->name);
 	text_putline();
+	//ここでは親クラスとインターフェースをごちゃまぜで表示
+	for (int i = 0; i < self->extend_list->length; i++) {
+		fqcn_cache* e = (fqcn_cache*)vector_at(self->extend_list, i);
+		fqcn_cache_dump(e, depth + 1);
+	}
 	for (int i = 0; i < self->field_list->length; i++) {
 		vector_item e = vector_at(self->field_list, i);
 		il_field* ilf = (il_field*)e;
@@ -74,7 +79,7 @@ void il_class_delete(il_class * self) {
 	}
 	//printf("free class %s\n", self->name);
 	MEM_FREE(self->name);
-	MEM_FREE(self->super);
+	//MEM_FREE(self->super);
 	vector_delete(self->field_list, il_class_field_delete);
 	vector_delete(self->method_list, il_class_method_delete);
 	MEM_FREE(self);

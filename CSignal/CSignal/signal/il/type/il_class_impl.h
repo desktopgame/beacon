@@ -10,7 +10,9 @@ struct il_method;
  */
 typedef struct il_class {
 	char* name;
-	fqcn_cache* super;
+//	fqcn_cache* super;
+//	vector* implement_list;
+	vector* extend_list;
 	vector* field_list;
 	vector* sfield_list;
 	vector* method_list;

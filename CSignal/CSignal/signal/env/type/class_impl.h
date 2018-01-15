@@ -25,6 +25,7 @@ typedef struct class_ {
 	char* name;
 	namespace_* location;
 	struct class_* super_class;
+	vector* impl_list;
 	vector* field_list;
 	vector* sfield_list;
 	vector* method_list;

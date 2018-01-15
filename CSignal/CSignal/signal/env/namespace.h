@@ -12,6 +12,7 @@
 
 struct type;
 struct class_;
+struct interface_;
 /**
  * 名前空間を表す構造体.
  */
@@ -76,6 +77,14 @@ struct type* namespace_get_type(namespace_* self, const char* name);
  * @return 見つからないなら NULL
  */
 struct class_* namespace_get_class(namespace_* self, const char* name);
+
+/**
+ * 指定の名前空間で指定の名前のインターフェースを検索します.
+ * @param self
+ * @param name
+ * @return 見つからないなら NULL
+ */
+struct interface_* namespace_get_interface(namespace_* self, const char* name);
 
 /**
  * signal 名前空間を返します.

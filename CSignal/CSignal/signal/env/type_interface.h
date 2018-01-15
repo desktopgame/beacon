@@ -14,6 +14,8 @@ typedef enum type_tag {
 struct namespace_;
 struct class_;
 struct interface_;
+struct field;
+struct method;
 
 /**
  * 型を表す構造体.
@@ -40,6 +42,20 @@ type* type_new();
  * @return
  */
 char* type_name(type* self);
+
+/**
+ * この型にフィールドを追加します.
+ * @param self
+ * @param f
+ */
+void type_add_field(type* self, struct field* f);
+
+/**
+ * この型にメソッドを追加します.
+ * @param self
+ * @param m
+ */
+void type_add_method(type* self, struct method* m);
 
 /**
  * この型の名前を出力します.

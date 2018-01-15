@@ -5,6 +5,7 @@
 struct namespace_;
 struct type;
 struct class_;
+struct interface_;
 //struct enviroment;
 /**
  * Full Quality Class Name を表す構造体.
@@ -50,6 +51,15 @@ struct namespace_* fqcn_scope(fqcn_cache* self, struct namespace_* current);
  * @return
  */
 struct type* fqcn_type(fqcn_cache* self, struct namespace_* current);
+
+/**
+ * X::Y の表すタイプを返します.
+ * 絶対参照のときは引数 current は無視されます。
+ * @param self
+ * @param current
+ * @return
+ */
+struct interface_* fqcn_interface(fqcn_cache* self, struct namespace_* current);
 
 /**
  * X::Y の表すタイプを返します.

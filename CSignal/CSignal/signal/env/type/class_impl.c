@@ -14,6 +14,7 @@
 #include "../field.h"
 #include "../method.h"
 #include "../constructor.h"
+#include "../type_impl.h"
 
 //http://jumble-note.blogspot.jp/2012/09/c-vacopy.html
 #ifndef va_copy
@@ -41,6 +42,7 @@ class_ * class_new(const char * name) {
 	ret->state = class_none;
 	ret->ref_count = 0;
 	ret->super_class = NULL;
+	ret->impl_list = vector_new();
 	ret->field_list = vector_new();
 	ret->sfield_list = vector_new();
 	ret->method_list = vector_new();
@@ -98,6 +100,19 @@ void class_dump(class_ * self, int depth) {
 	text_putindent(depth);
 	printf("class %s", self->name);
 	text_putline();
+	//親クラスがあるなら表示
+	if (self->super_class != NULL) {
+		text_putindent(depth + 1);
+		printf("super %s", self->super_class->name);
+		text_putline();
+	}
+	//実装インターフェースがあるなら表示
+	for (int i = 0; i < self->impl_list->length; i++) {
+		interface_* inter = (interface_*)vector_at(self->impl_list, i);
+		text_putindent(depth + 1);
+		printf("impl %s", inter->name);
+		text_putline();
+	}
 	//フィールドの一覧をダンプ
 	for (int i = 0; i < self->field_list->length; i++) {
 		vector_item e = vector_at(self->field_list, i);

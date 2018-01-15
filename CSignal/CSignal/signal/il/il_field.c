@@ -3,6 +3,7 @@
 #include <stdio.h>
 #include "../util/text.h"
 #include "../util/mem.h"
+#include "../env/fqcn_cache.h"
 
 il_field * il_field_new(const char * name) {
 	il_field* ret = (il_field*)MEM_MALLOC(sizeof(il_field));

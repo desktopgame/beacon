@@ -113,7 +113,7 @@ void class_loader_sgload_type_list(class_loader* self, vector* iltype_list, name
 		if (ilt->tag == iltype_class) {
 			class_loader_sgload_class(self, ilt, parent);
 		} else if (ilt->tag == iltype_interface) {
-
+			class_loader_sgload_interface(self, ilt, parent);
 		}
 	}
 }
@@ -128,9 +128,29 @@ void class_loader_sgload_class(class_loader* self, il_type* iltype, namespace_* 
 //	class_* cls = namespace_get_type(parent, iltype->u.class_->name);
 	if (tp == NULL) {
 		cls = class_new(iltype->u.class_->name);
-		if (iltype->u.class_->super != NULL) {
-			cls->super_class = fqcn_class(iltype->u.class_->super, parent);
+		for (int i = 0; i < iltype->u.class_->extend_list->length; i++) {
+			fqcn_cache* e = (fqcn_cache*)vector_at(iltype->u.class_->extend_list, i);
+			//最初の一つはクラスでもインターフェースでもよい
+			if (i == 0) {
+				class_* c = fqcn_class(e, parent);
+				if (c != NULL) {
+					cls->super_class = c;
+				} else {
+					//クラスではなかったのでインターフェースとして扱う
+					interface_* inter = fqcn_interface(e, parent);
+					assert(inter != NULL);
+					vector_push(cls->impl_list, inter);
+				}
+			//二つ目以降はインターフェースのみ
+			} else {
+				interface_* inter = fqcn_interface(e, parent);
+				assert(inter != NULL);
+				vector_push(cls->impl_list, inter);
+			}
 		}
+//		if (iltype->u.class_->super != NULL) {
+//			cls->super_class = fqcn_class(iltype->u.class_->super, parent);
+//		}
 		cls->location = parent;
 		tp = type_wrap_class(cls);
 		namespace_add_type(parent, tp);
@@ -142,8 +162,36 @@ void class_loader_sgload_class(class_loader* self, il_type* iltype, namespace_* 
 	class_loader_sgload_methods(self, iltype, tp);
 	class_loader_sgload_constructors(self, iltype, tp);
 //	class_linkall(cls);
-	class_loader_sgload_complete(self, iltype, tp);
+//	class_loader_sgload_complete(self, iltype, tp);
+
+	class_loader_sgload_complete_fields(self, iltype, tp);
+	class_loader_sgload_complete_methods(self, iltype, tp);
+	class_loader_sgload_complete_constructors(self, iltype, tp);
+	class_create_vtable(tp->u.class_);
 	///*/
+}
+
+void class_loader_sgload_interface(class_loader * self, il_type * iltype, namespace_ * parent) {
+	assert(iltype->tag == iltype_interface);
+	type* tp = namespace_get_type(parent, iltype->u.interface_->name);
+	interface_* inter = NULL;
+	if (tp == NULL) {
+		inter = interface_new(iltype->u.interface_->name);
+		for (int i = 0; i < iltype->u.interface_->extends_list->length; i++) {
+			fqcn_cache* e = (fqcn_cache*)vector_at(iltype->u.interface_->extends_list, i);
+			//インターフェースはインターフェースのみ継承
+			interface_* interI = fqcn_interface(e, parent);
+			assert(interI != NULL);
+			vector_push(inter->impl_list, interI);
+		}
+		inter->location = parent;
+		tp = type_wrap_interface(inter);
+		namespace_add_type(parent, tp);
+	} else {
+		inter = tp->u.interface_;
+	}
+	class_loader_sgload_methods(self, iltype, tp);
+	class_loader_sgload_complete_methods_impl(self, parent, iltype, tp, iltype->u.interface_->method_list, tp->u.interface_->method_list);
 }
 
 void class_loader_sgload_fields(class_loader* self, il_type* iltype, type* tp) {
@@ -153,7 +201,7 @@ void class_loader_sgload_fields(class_loader* self, il_type* iltype, type* tp) {
 }
 
 void class_loader_sgload_fields_impl(class_loader* self, il_type* iltype, type* tp, vector* ilfields) {
-	class_* cls = tp->u.class_;
+	//class_* cls = tp->u.class_;
 	for (int i = 0; i < ilfields->length; i++) {
 		vector_item e = vector_at(ilfields, i);
 		il_field* ilfield = (il_field*)e;
@@ -164,21 +212,27 @@ void class_loader_sgload_fields_impl(class_loader* self, il_type* iltype, type* 
 		//NOTE:ここではフィールドの型を設定しません
 		//     class_loader_sgload_complete参照
 		//vector_push(classz->field_list, field);
-		class_add_field(cls, field);
+		//class_add_field(cls, field);
+		type_add_field(tp, field);
 	}
 }
 
 void class_loader_sgload_methods(class_loader* self, il_type* iltype, type* tp) {
-	assert(iltype->tag == iltype_class);
+	assert(iltype->tag == iltype_class ||
+		   iltype->tag == iltype_interface);
 	//TEST(!strcmp(iltype->u.class_->name, "Console"));
-	class_loader_sgload_methods_impl(self, iltype, tp, iltype->u.class_->method_list);
-	class_loader_sgload_methods_impl(self, iltype, tp, iltype->u.class_->smethod_list);
+	if (iltype->tag == iltype_class) {
+		class_loader_sgload_methods_impl(self, iltype, tp, iltype->u.class_->method_list);
+		class_loader_sgload_methods_impl(self, iltype, tp, iltype->u.class_->smethod_list);
+	} else if (iltype->tag == iltype_interface) {
+		class_loader_sgload_methods_impl(self, iltype, tp, iltype->u.interface_->method_list);
+	}
 	//TEST(iltype->u.class_->method_list->length != classz->method_list->length);
 	//TEST(iltype->u.class_->smethod_list->length != classz->smethod_list->length);
 }
 
 void class_loader_sgload_methods_impl(class_loader* self, il_type* iltype, type* tp, vector* ilmethods) {
-	class_* classz = tp->u.class_;
+	//class_* classz = tp->u.class_;
 	for (int i = 0; i < ilmethods->length; i++) {
 		//メソッド一覧から取り出す
 		vector_item e = vector_at(ilmethods, i);
@@ -193,6 +247,10 @@ void class_loader_sgload_methods_impl(class_loader* self, il_type* iltype, type*
 		method->modifier = ilmethod->modifier;
 		method->u.script_method = script_method_new();
 		method->parent = tp;
+		//インターフェースなら
+		if (tp->tag == type_interface) {
+			method->type = method_type_abstract;
+		}
 		//ILパラメータを実行時パラメータへ変換
 		//NOTE:ここでは戻り値の型,引数の型を設定しません
 		//     class_loader_sgload_complete参照
@@ -203,7 +261,7 @@ void class_loader_sgload_methods_impl(class_loader* self, il_type* iltype, type*
 			vector_push(parameter_list, param);
 		}
 		//NOTE:クラスの登録が終わったらオペコードを作成する
-		class_add_method(classz, method);
+		type_add_method(tp, method);
 	}
 }
 
@@ -231,24 +289,6 @@ void class_loader_sgload_constructors(class_loader* self, il_type* iltype, type*
 		//vector_push(classz->constructor_list, cons);
 		class_add_constructor(classz, cons);
 	}
-}
-
-/**
- * クラスの登録を行ったあとに呼び出します.
- * 実際には、便宜上終わっていなければいけないいくつかの登録を終えてから
- * オペコードの生成を開始します。
- * 例えば、メソッド呼び出しをオペコードに変換するためには、
- * 既にメソッドの一覧がクラスに登録されている必要があります。
- * ここではそれらの作業を実行します。
- * @param self
- * @param ilclass
- * @param classz
- */
-void class_loader_sgload_complete(class_loader* self, il_type* iltype, type* tp) {
-	class_loader_sgload_complete_fields(self, iltype, tp);
-	class_loader_sgload_complete_methods(self, iltype, tp);
-	class_loader_sgload_complete_constructors(self, iltype, tp);
-	class_create_vtable(tp->u.class_);
 }
 
 void class_loader_sgload_complete_fields(class_loader* self, il_type* iltype, type* tp) {
@@ -283,8 +323,8 @@ void class_loader_sgload_complete_methods(class_loader* self, il_type* iltype, t
 }
 
 void class_loader_sgload_complete_methods_impl(class_loader* self, namespace_* scope, il_type* iltype, type* tp, vector* ilmethods, vector* sgmethods) {
-	assert(tp->tag == type_class);
-	class_* classz = tp->u.class_;
+	//assert(tp->tag == type_class);
+	//class_* classz = tp->u.class_;
 	for (int i = 0; i < sgmethods->length; i++) {
 		vector_item e = vector_at(sgmethods, i);
 		method* me = (method*)e;
@@ -298,8 +338,9 @@ void class_loader_sgload_complete_methods_impl(class_loader* self, namespace_* s
 		//TEST(!strcmp(me->name, "main"));
 		class_loader_sgload_params(self, scope, ilmethod->parameter_list, me->parameter_list);
 		//ネイティブメソッドならオペコードは不要
-		if (me->type == method_type_native) {
-			class_loader_sgload_attach_native_method(self, iltype, classz, ilmethod, me);
+		if (me->type == method_type_native ||
+			me->type == method_type_abstract) {
+			//class_loader_sgload_attach_native_method(self, iltype, classz, ilmethod, me);
 			continue;
 		}
 		//オペコードを作成

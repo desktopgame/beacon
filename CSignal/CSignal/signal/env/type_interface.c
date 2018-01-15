@@ -1,6 +1,8 @@
 #include "type_interface.h"
 #include "../util/mem.h"
 #include "type_impl.h"
+#include "field.h"
+#include "method.h"
 #include <assert.h>
 
 type * type_new() {
@@ -12,14 +14,33 @@ type * type_new() {
 }
 
 char * type_name(type * self) {
+	//assert(self->tag == type_class);
+	if (self->tag == type_class) {
+		return self->u.class_->name;
+	} else if (self->tag == type_interface) {
+		return self->u.interface_->name;
+	}
+	return NULL;
+}
+
+void type_add_field(type* self, field * f) {
 	assert(self->tag == type_class);
-	return self->u.class_->name;
+	class_add_field(self->u.class_, f);
+}
+
+void type_add_method(type* self, method * m) {
+	if (self->tag == type_class) {
+		class_add_method(self->u.class_, m);
+	} else if (self->tag == type_interface) {
+		interface_add_method(self->u.interface_, m);
+	}
 }
 
 void type_dump(type * self, int depth) {
-	assert(self->tag == type_class);
 	if (self->tag == type_class) {
 		class_dump(self->u.class_, depth);
+	} else if (self->tag == type_interface) {
+		interface_dump(self->u.interface_, depth);
 	}
 }
 

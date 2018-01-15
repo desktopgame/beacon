@@ -57,6 +57,14 @@ void class_loader_sgload_type_list(class_loader* self, vector* iltype_list, name
 void class_loader_sgload_class(class_loader* self, il_type* iltype, namespace_* parent);
 
 /**
+ * インターフェース宣言を読み込んで名前空間に登録します.
+ * @param self
+ * @param iltype
+ * @param parent
+ */
+void class_loader_sgload_interface(class_loader* self, il_type* iltype, namespace_* parent);
+
+/**
  * インスタンス/静的フィールド宣言を読み込んでクラスに追加します.
  * @param self
  * @param iltype
@@ -99,13 +107,6 @@ void class_loader_sgload_methods_impl(class_loader* self, il_type* iltype, type*
  */
 void class_loader_sgload_constructors(class_loader* self, il_type* iltype, type* tp);
 
-/**
- * クラスとメンバーの一覧が登録されるまで保留されていた作業を実行します.
- * @param self
- * @param iltype
- * @param tp
- */
-void class_loader_sgload_complete(class_loader* self, il_type* iltype, type* tp);
 void class_loader_sgload_complete_fields(class_loader* self, il_type* iltype, type* tp);
 void class_loader_sgload_complete_fields_impl(class_loader* self, namespace_* scope, vector* ilfields, vector* sgfields);
 void class_loader_sgload_complete_methods(class_loader* self, il_type* iltype, type* tp);

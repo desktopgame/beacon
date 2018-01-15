@@ -88,7 +88,21 @@ type * fqcn_type(fqcn_cache * self, namespace_* current) {
 	return namespace_get_type(c, self->name);
 }
 
+interface_ * fqcn_interface(fqcn_cache * self, namespace_ * current) {
+	//FIXME:コピペ(fqcn_class)
+	type* tp = fqcn_type(self, current);
+	if (tp == NULL) {
+		return NULL;
+	}
+	assert(tp->tag == type_interface);
+	if (tp->tag != type_interface) {
+		return NULL;
+	}
+	return tp->u.interface_;
+}
+
 class_ * fqcn_class(fqcn_cache * self, namespace_ * current) {
+	//FIXME:コピペ(fqcn_interface)
 	type* tp = fqcn_type(self, current);
 	if (tp == NULL) {
 		return NULL;

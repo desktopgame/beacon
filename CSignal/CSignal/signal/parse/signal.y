@@ -54,7 +54,6 @@
 					import 
 					class_decl 
 					interface_decl
-						class_super 
 						access_member_tree
 						access_member_list
 						member_define_list
@@ -177,9 +176,13 @@ import
 	}
 	;
 class_decl
-	: CLASS IDENT class_super LCB access_member_tree RCB
+	: CLASS IDENT LCB access_member_tree RCB
 	{
-		$$ = ast_new_class_decl($2, $3, $5);
+		$$ = ast_new_class_decl($2, ast_new_blank(), $4);
+	}
+	| CLASS IDENT COLON typename_list LCB access_member_tree RCB
+	{
+		$$ = ast_new_class_decl($2, $4, $6);
 	}
 	;
 interface_decl
@@ -190,16 +193,6 @@ interface_decl
 	| INTERFACE IDENT COLON typename_list LCB access_member_tree RCB
 	{
 		$$ = ast_new_interface_decl($2, $4, $6);
-	}
-	;
-class_super
-	: /* empty */
-	{
-		$$ = ast_new_blank();
-	}
-	| COLON typename_T
-	{
-		$$ = ast_new_superclass($2);
 	}
 	;
 access_member_tree

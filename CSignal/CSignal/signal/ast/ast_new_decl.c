@@ -33,10 +33,12 @@ ast * ast_new_class_decl_unit(ast * class_decl) {
 	return ret;
 }
 
-ast * ast_new_class_decl(char * class_name, ast * super_class, ast * member_list) {
+ast * ast_new_class_decl(char* class_name, ast* extend_list, ast* member_list) {
 	ast* ret = ast_new(ast_class_decl);
 	ret->u.string_value = class_name;
-	ast_push(ret, super_class);
+//	ast_push(ret, super_class);
+//	ast_push(ret, impl_list);
+	ast_push(ret, extend_list);
 	ast_push(ret, member_list);
 	return ret;
 }

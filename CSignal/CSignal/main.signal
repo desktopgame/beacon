@@ -1,6 +1,20 @@
 import "lib"
 //import "../io.h"
 namespace signal.lang {
+	interface A {
+	}
+	interface X {
+	}
+	interface Y {
+	}
+	interface Z {
+	}
+	class Klass {
+	}
+	interface B {
+	}
+	interface C {
+	}
 
 	interface IPoint {
 		public:
@@ -14,6 +28,9 @@ namespace signal.lang {
 	}
 
 	interface ISerializable : X, Y, Z {
+	}
+
+	class MyClass : Klass, B, C {
 	}
 
 	class Point2D {
@@ -84,7 +101,7 @@ namespace signal.lang {
 	}
 }
 namespace L.Goo.Foo {
-	class Foo : SuperFoo {
+	class Foo {
 		public:
 		Int pointX;
 		Int pointY;

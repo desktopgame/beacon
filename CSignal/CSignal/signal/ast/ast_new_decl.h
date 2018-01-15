@@ -40,11 +40,11 @@ ast* ast_new_class_decl_unit(ast* class_decl);
 /**
  * クラス宣言を表す要素を作成します.
  * @param class_name
- * @param super_class
+ * @param extend_list
  * @param member_list
  * @return
  */
-ast* ast_new_class_decl(char* class_name, ast* super_class, ast* member_list);
+ast* ast_new_class_decl(char* class_name, ast* extend_list, ast* member_list);
 
 /**
  * インターフェース宣言を表す要素を作成します.

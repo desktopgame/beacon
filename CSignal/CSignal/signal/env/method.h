@@ -17,6 +17,7 @@ struct enviroment;
 typedef enum method_type {
 	method_type_script,
 	method_type_native,
+	method_type_abstract,
 } method_type;
 
 /**

@@ -116,21 +116,31 @@ void class_loader_delete(class_loader * self) {
 void class_loader_error(class_loader* self, const char* message) {
 	self->errorMessage = text_strdup(message);
 	self->error = true;
+	printf("%s", message);
+	text_putline();
 }
 
 void class_loader_errorf(class_loader* self, const char* message, ...) {
 	va_list ap;
 	va_start(ap, message);
 #if defined(_MSC_VER)
+	char buff[100];
+	int res = sprintf_s(buff, 100, message, ap);
+	if (res == -1) {
+		//on error
+		printf("internal error: %s %d", __FILE__, __LINE__);
+	} else {
+		class_loader_error(self, buff);
+	}
 #else
-char buff[100];
-int res = sprintf(buff, message, ap);
-if(res == -1) {
-	//on error
-	printf("internal error: %s %d", __FILE__, __LINE__);
-} else {
-	class_loader_error(self, buff);
-}
+	char buff[100];
+	int res = sprintf(buff, message, ap);
+	if(res == -1) {
+		//on error
+		printf("internal error: %s %d", __FILE__, __LINE__);
+	} else {
+		class_loader_error(self, buff);
+	}
 #endif
 	va_end(ap);
 }

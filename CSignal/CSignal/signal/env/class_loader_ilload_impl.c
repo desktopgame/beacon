@@ -123,22 +123,17 @@ void class_loader_ilload_namespace_body(class_loader* self, il_namespace* curren
 
 void class_loader_ilload_class(class_loader* self, il_namespace* current, ast* class_decl) {
 	assert(class_decl->tag == ast_class_decl);
-	ast* super_class = ast_first(class_decl);
-	ast* member_tree = ast_second(class_decl);
+	ast* aextend_list = ast_first(class_decl);
+	ast* amember_tree = ast_second(class_decl);
 	il_class* classz = il_class_new(class_decl->u.string_value);
 	il_type* type = il_type_wrap_class(classz);
-	//親クラスが宣言されていない
-	if(ast_is_blank(super_class)) {
-		classz->super = NULL;
-	} else {
-		ast* atypename = ast_first(super_class);
-		class_loader_ilload_fqcn(ast_first(atypename), classz->super);
-	}
+	//class Foo : X, Y 
+	class_loader_ilload_typename_list(self, classz->extend_list, aextend_list);
 	//public:
 	//    ....
 	//    ....
-	if (!ast_is_blank(member_tree)) {
-		class_loader_ilload_member_tree(self, type, member_tree);
+	if (!ast_is_blank(amember_tree)) {
+		class_loader_ilload_member_tree(self, type, amember_tree);
 	}
 	vector_push(current->type_list, type);
 	//il_namespace_add_entity(current, classz);
