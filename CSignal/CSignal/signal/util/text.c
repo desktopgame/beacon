@@ -18,6 +18,18 @@ void text_putline() {
 #endif // defined(_WIN32)
 }
 
+void test_printfln(const char * message, ...) {
+	va_list ap;
+	va_start(ap, message);
+	printf(message, ap);
+#if defined(_MSC_VER)
+	printf("\n");
+#else
+	printf("\r\n");
+#endif
+	va_end(ap);
+}
+
 void text_putindent(int depth) {
 	for(int i=0; i<depth; i++) {
 		printf("    ");

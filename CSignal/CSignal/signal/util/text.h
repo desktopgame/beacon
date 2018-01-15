@@ -2,6 +2,7 @@
 #ifndef SIGNAL_UTIL_TEXT_H
 #define SIGNAL_UTIL_TEXT_H
 #include "vector.h"
+#include <stdarg.h>
 
 //clangでは errno_t が見つからない
 #if defined(__clang__)
@@ -13,6 +14,12 @@ typedef errno_t SG_errno_t;
  * 改行文字を出力します
  */
 void text_putline(void);
+
+/**
+ * printf へ委譲したあと、
+ * 改行を出力します。
+ */
+void test_printfln(const char* message, ...);
 
 /**
  * 指定の数だけ空白を出力します.
