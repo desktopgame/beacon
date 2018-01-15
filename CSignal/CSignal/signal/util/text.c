@@ -18,7 +18,7 @@ void text_putline() {
 #endif // defined(_WIN32)
 }
 
-void test_printfln(const char * message, ...) {
+void text_printfln(const char * message, ...) {
 	va_list ap;
 	va_start(ap, message);
 	printf(message, ap);

@@ -19,7 +19,7 @@ void text_putline(void);
  * printf へ委譲したあと、
  * 改行を出力します。
  */
-void test_printfln(const char* message, ...);
+void text_printfln(const char* message, ...);
 
 /**
  * 指定の数だけ空白を出力します.
