@@ -13,6 +13,7 @@
 
 //proto
 static void il_factor_new_instance_find(il_factor_new_instance * self, enviroment * env);
+static void il_Factor_new_instace_delete_arg(vector_item item);
 
 il_factor * il_factor_wrap_new_instance(il_factor_new_instance * self) {
 	il_factor* ret = (il_factor*)MEM_MALLOC(sizeof(il_factor));
@@ -56,6 +57,9 @@ void il_factor_new_instance_generate(il_factor_new_instance * self, enviroment *
 }
 
 void il_factor_new_instance_load(il_factor_new_instance * self, enviroment * env, il_ehandler * eh) {
+	fqcn_cache_delete(self->fqcn);
+	vector_delete(self->argument_list, il_Factor_new_instace_delete_arg);
+	MEM_FREE(self);
 }
 
 type * il_factor_new_instance_eval(il_factor_new_instance * self, enviroment * env) {
@@ -76,4 +80,9 @@ static void il_factor_new_instance_find(il_factor_new_instance * self, enviromen
 	assert(self->c != NULL);
 	self->constructorIndex = temp;
 	//*/
+}
+
+static void il_Factor_new_instace_delete_arg(vector_item item) {
+	il_argument* e = (il_argument*)item;
+	il_argument_delete(e);
 }

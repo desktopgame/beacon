@@ -29,6 +29,7 @@ void _start(int argc, char* argv[]) {
 }
 
 void _end(int argc, char* argv[]) {
+	system("cls");
 	script_context_close();
 	sg_lclose();
 }

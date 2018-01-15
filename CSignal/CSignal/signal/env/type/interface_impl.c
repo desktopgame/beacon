@@ -4,6 +4,8 @@
 #include "../../util/text.h"
 #include "../../env/method.h"
 #include <stdio.h>
+//proto
+static void interface_delete_method(vector_item item);
 
 type * type_wrap_interface(interface_ * self) {
 	type* ret = type_new();
@@ -45,6 +47,14 @@ void interface_dump(interface_ * self, int depth) {
 }
 
 void interface_delete(interface_ * self) {
+	vector_delete(self->method_list, interface_delete_method);
+	vector_delete(self->impl_list, vector_deleter_null);
 	MEM_FREE(self->name);
 	MEM_FREE(self);
+}
+
+//private
+static void interface_delete_method(vector_item item) {
+	method* e = (method*)item;
+	method_delete(e);
 }

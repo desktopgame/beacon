@@ -97,7 +97,7 @@ void class_loader_load(class_loader * self) {
 
 void class_loader_delete(class_loader * self) {
 	assert(self != NULL);
-	assert(self->ref_count == 0);
+	//assert(self->ref_count == 0);
 	if (self->parent != NULL) {
 		self->parent->ref_count--;
 	}
@@ -108,6 +108,8 @@ void class_loader_delete(class_loader * self) {
 	il_top_level_delete(self->il_code);
 	self->il_code = NULL;
 
+	import_manager_delete(self->import_manager);
+	enviroment_delete(self->env);
 	MEM_FREE(self->errorMessage);
 	MEM_FREE(self);
 }

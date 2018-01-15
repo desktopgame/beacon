@@ -66,4 +66,10 @@ bool type_castable(type * self, type * other) {
 }
 
 void type_delete(type * self) {
+	if (self->tag == type_class) {
+		class_delete(self->u.class_);
+	} else if (self->tag == type_interface) {
+		interface_delete(self->u.interface_);
+	}
+	MEM_FREE(self);
 }

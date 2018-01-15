@@ -92,6 +92,9 @@ class_ * enviroment_class(enviroment * self, fqcn_cache * fqcn) {
 }
 
 void enviroment_delete(enviroment * self) {
+	vector_delete(self->namespace_vec, vector_deleter_null);
+	vector_delete(self->class_vec, vector_deleter_null);
+	
 	opcode_buf_delete(self->buf);
 	vector_delete(self->constant_pool, enviroment_constant_pool_delete);
 	symbol_table_delete(self->sym_table);

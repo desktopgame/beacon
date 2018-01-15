@@ -49,6 +49,8 @@ void il_factor_static_field_access_load(il_factor_static_field_access * self, en
 }
 
 void il_factor_static_field_access_delete(il_factor_static_field_access * self) {
+	fqcn_cache_delete(self->fqcn);
+	//il_factor_delete(self->f);
 	MEM_FREE(self->name);
 	MEM_FREE(self);
 }

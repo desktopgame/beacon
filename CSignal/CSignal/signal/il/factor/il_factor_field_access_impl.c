@@ -58,6 +58,8 @@ type * il_factor_field_access_eval(il_factor_field_access * self, enviroment * e
 }
 
 void il_factor_field_access_delete(il_factor_field_access * self) {
+	il_factor_delete(self->f);
+	MEM_FREE(self->name);
 }
 
 //private

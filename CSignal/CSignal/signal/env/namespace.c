@@ -16,6 +16,8 @@ static void namespace_dump_root(tree_map* root, bool callSelf, int depth);
 static void namespace_dump_impl(namespace_* root, int depth);
 static void namespace_put_indent(int depth);
 static void namespace_dump_class(tree_map* root, bool isRoot, int depth);
+static void namespace_delete_namespace(vector_item item);
+static namespace_delete_type(vector_item item);
 
 namespace_ * namespace_create_at_root(char * name) {
 	assert(name != NULL);
@@ -148,6 +150,14 @@ void namespace_dump() {
 	namespace_dump_root(ctx->namespaceMap->right, true, 0);
 }
 
+void namespace_delete(namespace_ * self) {
+	text_printfln("delete namespace %s", self->name);
+	tree_map_delete(self->namespace_map, namespace_delete_namespace);
+	tree_map_delete(self->type_map, namespace_delete_type);
+	MEM_FREE(self->name);
+	MEM_FREE(self);
+}
+
 //private
 static namespace_* namespace_malloc(char* name) {
 	namespace_* ret = (namespace_*)MEM_MALLOC(sizeof(namespace_));
@@ -199,4 +209,14 @@ static void namespace_dump_class(tree_map* root, bool isRoot, int depth) {
 	}
 	namespace_dump_class(root->left, false, depth);
 	namespace_dump_class(root->right, false, depth);
+}
+
+static void namespace_delete_namespace(vector_item item) {
+	namespace_* e = (namespace_*)item;
+	namespace_delete(e);
+}
+
+static namespace_delete_type(vector_item item) {
+	type* e = (type*)item;
+	type_delete(e);
 }

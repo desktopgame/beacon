@@ -4,6 +4,7 @@
 #include "namespace.h"
 #include "type_interface.h"
 #include "type/class_impl.h"
+#include "class_loader.h"
 #include <stdlib.h>
 #include <assert.h>
 #include "../util/mem.h"
@@ -12,6 +13,8 @@ static script_context* script_context_check_init(void);
 static void script_context_launch(script_context* self);
 static script_context* script_context_malloc(void);
 static script_context* script_context_free(script_context* self);
+static void script_context_class_loader_delete(vector_item item);
+static void script_context_namespace_delete(vector_item item);
 
 static script_context* gScriptContext = NULL;
 static script_context* gScriptContextCurrent = NULL;
@@ -145,7 +148,19 @@ static script_context* script_context_malloc(void) {
 }
 
 static script_context* script_context_free(script_context* self) {
-	tree_map_delete(self->classLoaderMap, tree_map_deleter_null);
+	vector_delete(self->type_vec, vector_deleter_null);
+	tree_map_delete(self->classLoaderMap, script_context_class_loader_delete);
+	tree_map_delete(self->namespaceMap, script_context_namespace_delete);
 	heap_delete(self->heap);
 	MEM_FREE(self);
+}
+
+static void script_context_class_loader_delete(vector_item item) {
+	class_loader* e = (class_loader*)item;
+	class_loader_delete(e);
+}
+
+static void script_context_namespace_delete(vector_item item) {
+	namespace_* e = (namespace_*)item;
+	namespace_delete(e);
 }

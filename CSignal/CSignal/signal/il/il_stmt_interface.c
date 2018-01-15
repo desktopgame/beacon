@@ -95,6 +95,7 @@ void il_stmt_delete(il_stmt * self) {
 			break;
 		default:
 			//ERROR("ステートメントを開放出来ませんでした。");
+			{ int x = 0; }
 			break;
 	}
 	MEM_FREE(self);

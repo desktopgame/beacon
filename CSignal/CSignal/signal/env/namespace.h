@@ -138,4 +138,10 @@ struct type* namespace_void_class();
  * 全ての名前空間を出力します.
  */
 void namespace_dump();
+
+/**
+ * 名前空間を開放します.
+ * @param self
+ */
+void namespace_delete(namespace_* self);
 #endif // !SIGNAL_ENV_NAMESPACE_H

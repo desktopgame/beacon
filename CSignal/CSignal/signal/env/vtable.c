@@ -36,6 +36,9 @@ void vtable_replace(vtable * self, method * m) {
 }
 
 void vtable_delete(vtable * self) {
+	if (self == NULL) {
+		return;
+	}
 	vector_delete(self->elements, vector_deleter_null);
 	MEM_FREE(self);
 }

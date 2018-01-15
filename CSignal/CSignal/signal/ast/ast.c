@@ -386,6 +386,9 @@ void ast_print(ast* self) {
 }
 
 void ast_delete(ast * self) {
+	if (self == NULL) {
+		return;
+	}
 	ast_delete_impl(self);
 }
 

@@ -79,9 +79,10 @@ type * il_factor_named_invoke_eval(il_factor_named_invoke * self, enviroment * e
 void il_factor_named_invoke_delete(il_factor_named_invoke * self) {
 	//MEM_FREE(self->fqcn);
 	assert(self->fqcn->name != NULL);
-	MEM_FREE(self->fqcn->name);
+	//MEM_FREE(self->fqcn->name);
+	fqcn_cache_delete(self->fqcn);
 	MEM_FREE(self->method_name);
-	vector_delete(self->fqcn->scope_vec, vector_deleter_free);
+	//vector_delete(self->fqcn->scope_vec, vector_deleter_free);
 	vector_delete(self->argument_list, il_factor_named_invoke_delete_argument);
 	MEM_FREE(self);
 }

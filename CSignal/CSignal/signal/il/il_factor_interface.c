@@ -273,6 +273,7 @@ void il_factor_delete(il_factor * self) {
 			break;
 		default:
 			ERROR("ファクターを開放出来ませんでした");
+			{ int x = 0; }
 			break;
 	}
 	MEM_FREE(self);

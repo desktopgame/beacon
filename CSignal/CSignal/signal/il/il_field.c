@@ -31,6 +31,7 @@ void il_field_delete(il_field * self) {
 		return;
 	}
 //	il_type_delete(self->type);
+	fqcn_cache_delete(self->fqcn);
 	MEM_FREE(self->name);
 	MEM_FREE(self);
 }

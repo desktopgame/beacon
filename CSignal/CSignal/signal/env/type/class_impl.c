@@ -25,6 +25,7 @@
 static method* class_find_method_impl(vector* elements, const char * name, vector * args, enviroment * env, int * outIndex);
 static void class_field_delete(vector_item item);
 static void class_method_delete(vector_item item);
+static void class_ctor_delete(vector_item item);
 static vector * class_find_constructor_impl(class_ * self, vector * args, enviroment* env);
 
 type * type_wrap_class(class_ * self) {
@@ -392,13 +393,20 @@ void class_linkall(class_ * self) {
 }
 
 void class_delete(class_ * self) {
-	assert(self->ref_count == 0);
-	MEM_FREE(self->name);
+//	assert(self->ref_count == 0);
+//	MEM_FREE(self->name);
 	if (self->super_class != NULL) {
 		self->super_class->ref_count--;
 	}
+	vector_delete(self->impl_list, vector_deleter_null);
 	vector_delete(self->field_list, class_field_delete);
+	vector_delete(self->sfield_list, class_field_delete);
 	vector_delete(self->method_list, class_method_delete);
+	vector_delete(self->smethod_list, class_method_delete);
+	vector_delete(self->constructor_list, class_ctor_delete);
+	tree_map_delete(self->native_method_ref_map, tree_map_deleter_null);
+	vtable_delete(self->vt);
+	MEM_FREE(self->name);
 	MEM_FREE(self);
 }
 
@@ -451,6 +459,11 @@ static void class_field_delete(vector_item item) {
 static void class_method_delete(vector_item item) {
 	method* e = (method*)item;
 	method_delete(e);
+}
+
+static void class_ctor_delete(vector_item item) {
+	constructor* e = (constructor*)item;
+	constructor_delete(e);
 }
 
 static vector * class_find_constructor_impl(class_ * self, vector * args, enviroment* env) {
