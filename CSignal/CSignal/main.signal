@@ -8,7 +8,12 @@ namespace signal.lang {
 		def getY() -> Int;
 	}
 
-	interface ISerializable {
+	interface ICloneable : A {
+		public:
+		def clone() -> Object;
+	}
+
+	interface ISerializable : X, Y, Z {
 	}
 
 	class Point2D {

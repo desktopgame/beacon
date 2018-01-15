@@ -63,6 +63,14 @@ void class_loader_ilload_class(class_loader* self, il_namespace* current, ast* c
 void class_loader_ilload_interface(class_loader* self, il_namespace* current, ast* interface_decl);
 
 /**
+ * 型名の一覧を dst へ出力します.
+ * @param self
+ * @param dst
+ * @param typename_list
+ */
+void class_loader_ilload_typename_list(class_loader* self, vector* dst, ast* typename_list);
+
+/**
  * メンバーツリーを IL に変換します.
  * メンバーツリーとは、"アクセス修飾子とメンバーリストのペア"のリストです。
  * つまり、C++のメンバー定義を模倣した構文をモデル化します。

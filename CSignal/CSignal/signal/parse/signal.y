@@ -66,6 +66,7 @@
 						field_define
 						parameter_list
 						argument_list
+						typename_list
 						typename_T
 						fqcn_part
 					expression 
@@ -184,7 +185,11 @@ class_decl
 interface_decl
 	: INTERFACE IDENT LCB access_member_tree RCB
 	{
-		$$ = ast_new_interface_decl($2, $4);
+		$$ = ast_new_interface_decl($2, ast_new_blank(), $4);
+	}
+	| INTERFACE IDENT COLON typename_list LCB access_member_tree RCB
+	{
+		$$ = ast_new_interface_decl($2, $4, $6);
 	}
 	;
 class_super
@@ -347,6 +352,16 @@ argument_list
 	| expression COMMA argument_list
 	{
 		$$ = ast_new_argument_list(ast_new_argument($1), $3);
+	}
+	;
+typename_list
+	: typename_T
+	{
+		$$ = $1;
+	}
+	| typename_T COMMA typename_list
+	{
+		$$ = ast_new_typename_list($1, $3);
 	}
 	;
 typename_T

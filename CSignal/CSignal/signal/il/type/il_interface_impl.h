@@ -10,6 +10,7 @@ struct il_method;
 typedef struct il_interface {
 	char* name;
 	vector* method_list;
+	vector* extends_list;
 } il_interface;
 
 /**

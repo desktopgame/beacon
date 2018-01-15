@@ -49,10 +49,11 @@ ast* ast_new_class_decl(char* class_name, ast* super_class, ast* member_list);
 /**
  * インターフェース宣言を表す要素を作成します.
  * @param interface_name
+ * @param super_interface_list
  * @param member_list
  * @return
  */
-ast* ast_new_interface_decl(char* interface_name, ast* member_list);
+ast* ast_new_interface_decl(char* interface_name, ast* super_interface_list, ast* member_list);
 
 /**
  * スーパークラスを表す要素を作成します.
@@ -169,6 +170,15 @@ ast* ast_new_parameter(ast* atypename, char* parameter_access_name);
  * @return
  */
 ast* ast_new_parameter_list(ast* atypename, char* parameter_access_name, ast* parameter_list);
+
+/**
+ * クラスが実装するインターフェイスの一覧として使用される、
+ * 型名の一覧を作成します.
+ * @param atypename
+ * @param typename_list
+ * @return
+ */
+ast* ast_new_typename_list(ast* atypename, ast* typename_list);
 
 /**
  * X::Y::C や C を型名でラップします.

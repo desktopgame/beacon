@@ -15,7 +15,7 @@ fqcn_cache * fqcn_cache_new() {
 
 void fqcn_cache_dump(fqcn_cache * self, int depth) {
 	text_putindent(depth);
-	printf("class %s", self->name);
+	printf("type %s", self->name);
 	text_putline();
 	//X::C.call() のような呼び出しなら
 	if (self->scope_vec->length > 0) {

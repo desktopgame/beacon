@@ -41,9 +41,10 @@ ast * ast_new_class_decl(char * class_name, ast * super_class, ast * member_list
 	return ret;
 }
 
-ast * ast_new_interface_decl(char * interface_name, ast * member_list) {
+ast * ast_new_interface_decl(char * interface_name, ast* super_interface_list, ast * member_list) {
 	ast* ret = ast_new(ast_interface_decl);
 	ret->u.string_value = interface_name;
+	ast_push(ret, super_interface_list);
 	ast_push(ret, member_list);
 	return ret;
 }
@@ -186,6 +187,13 @@ ast * ast_new_parameter_list(ast* atypename, char * parameter_access_name, ast *
 //	ast_push(ret, ast_new_parameter(parameter_type_name, parameter_access_name));
 	ast_push(ret, ast_new_parameter(atypename, parameter_access_name));
 	ast_push(ret, parameter_list);
+	return ret;
+}
+
+ast * ast_new_typename_list(ast * atypename, ast * typename_list) {
+	ast* ret = ast_new(ast_typename_list);
+	ast_push(ret, atypename);
+	ast_push(ret, typename_list);
 	return ret;
 }
 

@@ -146,16 +146,34 @@ void class_loader_ilload_class(class_loader* self, il_namespace* current, ast* c
 }
 
 void class_loader_ilload_interface(class_loader* self, il_namespace* current, ast* interface_decl) {
-	ast* member_tree = ast_first(interface_decl);
+	ast* extends_list = ast_first(interface_decl);
+	ast* member_tree = ast_second(interface_decl);
 	il_interface* inter = il_interface_new(interface_decl->u.string_value);
 	il_type* type = il_type_wrap_interface(inter);
-	//vector_push(current->type_list, type);
+	//interface Foo : XXX, YYY, CCC
+	class_loader_ilload_typename_list(self, inter->extends_list, extends_list);
 	//public:
 	//    ...
 	if (!ast_is_blank(member_tree)) {
 		class_loader_ilload_member_tree(self, type, member_tree);
 	}
 	vector_push(current->type_list, type);
+}
+
+void class_loader_ilload_typename_list(class_loader * self, vector * dst, ast * typename_list) {
+	if (ast_is_blank(typename_list)) {
+		return;
+	}
+	if (typename_list->tag == ast_typename) {
+		fqcn_cache* e = fqcn_cache_new();
+		//[typename [fqcn]]
+		class_loader_ilload_fqcn(ast_first(typename_list), e);
+		vector_push(dst, e);
+	} else if(typename_list->tag == ast_typename_list) {
+		for (int i = 0; i < typename_list->childCount; i++) {
+			class_loader_ilload_typename_list(self, dst, ast_at(typename_list, i));
+		}
+	}
 }
 
 void class_loader_ilload_member_tree(class_loader* self, il_type* current, ast* tree) {

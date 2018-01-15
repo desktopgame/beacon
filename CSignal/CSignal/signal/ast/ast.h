@@ -125,6 +125,7 @@ typedef enum ast_tag {
 	ast_stmt_list,
 	
 	ast_typename,
+	ast_typename_list,
 	ast_stmt_variable_decl,
 	ast_stmt_variable_init,
 
