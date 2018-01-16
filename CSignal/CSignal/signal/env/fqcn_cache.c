@@ -107,7 +107,7 @@ class_ * fqcn_class(fqcn_cache * self, namespace_ * current) {
 	if (tp == NULL) {
 		return NULL;
 	}
-	assert(tp->tag == type_class);
+	//assert(tp->tag == type_class);
 	if (tp->tag != type_class) {
 		return NULL;
 	}

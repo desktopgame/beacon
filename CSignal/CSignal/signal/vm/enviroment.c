@@ -57,25 +57,25 @@ object* enviroment_constant_at(enviroment * self, int index) {
 
 object* enviroment_constant_int_at(enviroment * self, int index) {
 	object* e = enviroment_constant_at(self, index);
-	assert(e->type == object_int);
+	assert(e->tag == object_int);
 	return e;
 }
 
 object* enviroment_constant_double_at(enviroment * self, int index) {
 	object* e = enviroment_constant_at(self, index);
-	assert(e->type == object_double);
+	assert(e->tag == object_double);
 	return e;
 }
 
 object* enviroment_constant_char_at(enviroment * self, int index) {
 	object* e = enviroment_constant_at(self, index);
-	assert(e->type == object_char);
+	assert(e->tag == object_char);
 	return e;
 }
 
 object* enviroment_constant_string_at(enviroment * self, int index) {
 	object* e = enviroment_constant_at(self, index);
-	assert(e->type == object_string);
+	assert(e->tag == object_string);
 	return e;
 }
 

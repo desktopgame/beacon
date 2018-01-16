@@ -18,18 +18,18 @@ void sg_console_init() {
 //private
 static void sg_console_writeLine(method* parent, vm* vm, enviroment* env) {
 	object* o = (object*)vector_pop(vm->value_stack);
-	if (o->type == object_int) {
+	if (o->tag == object_int) {
 		printf("%d\n", o->u.int_);
-	} else if (o->type == object_string) {
+	} else if (o->tag == object_string) {
 		printf("%s\n", o->u.string_);
 	}
 }
 
 static void sg_console_write(method* parent, vm* vm, enviroment* env) {
 	object* o = (object*)vector_pop(vm->value_stack);
-	if (o->type == object_int) {
+	if (o->tag == object_int) {
 		printf("%d", o->u.int_);
-	} else if (o->type == object_string) {
+	} else if (o->tag == object_string) {
 		printf("%s", o->u.string_);
 	}
 }

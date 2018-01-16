@@ -2,6 +2,7 @@
 #ifndef SIGNAL_ENV_TYPE_INTERFACE_H
 #define SIGNAL_ENV_TYPE_INTERFACE_H
 #include <stdbool.h>
+#include "../util/vector.h"
 /**
  * 型の種類を表すタグ.
  */
@@ -16,6 +17,7 @@ struct class_;
 struct interface_;
 struct field;
 struct method;
+struct enviroment;
 
 /**
  * 型を表す構造体.
@@ -56,6 +58,17 @@ void type_add_field(type* self, struct field* f);
  * @param m
  */
 void type_add_method(type* self, struct method* m);
+
+/**
+ * この型からメソッドを検索します.
+ * @param self
+ * @param name
+ * @param args
+ * @param env
+ * @param outIndex
+ * @return
+ */
+struct method* type_find_method(type* self, const char* name, vector* args, struct enviroment* env, int* outIndex);
 
 /**
  * この型の名前を出力します.

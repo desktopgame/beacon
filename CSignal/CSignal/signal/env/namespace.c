@@ -151,7 +151,7 @@ void namespace_dump() {
 }
 
 void namespace_delete(namespace_ * self) {
-	text_printfln("delete namespace %s", self->name);
+//	text_printfln("delete namespace %s", self->name);
 	tree_map_delete(self->namespace_map, namespace_delete_namespace);
 	tree_map_delete(self->type_map, namespace_delete_type);
 	MEM_FREE(self->name);

@@ -15,6 +15,7 @@
 #include "../method.h"
 #include "../constructor.h"
 #include "../type_impl.h"
+#include "meta_impl.h"
 
 //http://jumble-note.blogspot.jp/2012/09/c-vacopy.html
 #ifndef va_copy
@@ -60,7 +61,7 @@ class_ * class_new(const char * name) {
 }
 
 void class_alloc_fields(class_ * self, object * o) {
-	assert(o->type == object_ref);
+	assert(o->tag == object_ref);
 	for (int i = 0; i < self->field_list->length; i++) {
 		field* f = (field*)vector_at(self->field_list, i);
 		object* a = object_ref_new();
@@ -414,43 +415,7 @@ void class_delete(class_ * self) {
 
 //private
 static method* class_find_method_impl(vector* elements, const char * name, vector * args, enviroment * env, int * outIndex) {
-	(*outIndex) = -1;
-	//class_create_vtable(self);
-	method* ret = NULL;
-	int min = 1024;
-	//	for (int i = 0; i < self->method_list->length; i++) {
-	for (int i = 0; i < elements->length; i++) {
-		//vector_item e = vector_at(self->method_list, i);
-		vector_item e = vector_at(elements, i);
-		method* m = (method*)e;
-		//名前か引数の個数が違うので無視
-		if (strcmp(m->name, name) ||
-			m->parameter_list->length != args->length
-			) {
-			continue;
-		}
-		//引数がひとつもないので、
-		//型のチェックを行わない
-		if (args->length == 0) {
-			(*outIndex) = i;
-			return m;
-		}
-		int score = 0;
-		for (int j = 0; j < m->parameter_list->length; j++) {
-			vector_item d = vector_at(args, j);
-			vector_item d2 = vector_at(m->parameter_list, j);
-			il_argument* p = (il_argument*)d;
-			parameter* p2 = (parameter*)d2;
-			score += type_distance(il_factor_eval(p->factor, env), p2->type);
-		}
-		if (score < min) {
-			//TEST(env->toplevel);
-			min = score;
-			ret = m;
-			(*outIndex) = i;
-		}
-	}
-	return ret;
+	return meta_find_method(elements, name, args, env, outIndex);
 }
 
 static void class_field_delete(vector_item item) {

@@ -134,10 +134,11 @@ static void il_factor_named_invoke_find(il_factor_named_invoke* self, enviroment
 }
 
 static void il_factor_named_invoke_generate_IMPL(il_factor_named_invoke* self, enviroment* env, type* tp) {
-	assert(tp->tag == type_class);
-	class_* cls = tp->u.class_;
+	//assert(tp->tag == type_class);
+	//class_* cls = tp->u.class_;
 	int temp = 0;
-	self->m = class_find_method(cls, self->method_name, self->argument_list, env, &temp);
+	self->m = type_find_method(tp, self->method_name, self->argument_list, env, &temp);
+	//self->m = class_find_method(cls, self->method_name, self->argument_list, env, &temp);
 	self->methodIndex = temp;
 	//temp = 0;
 	//TEST(env->toplevel);
