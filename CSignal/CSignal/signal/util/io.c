@@ -4,6 +4,7 @@
 #include <stdlib.h>
 #include "text.h"
 #include "../util/mem.h"
+#include "string_buffer.h"
 
 #if defined(__clang__)
 #include <unistd.h>
@@ -46,6 +47,7 @@ bool io_exists(const char * filename) {
 
 char * io_read_text(const char * filename) {
 	assert(io_exists(filename));
+	string_buffer* buff = string_buffer_new();
 #if defined(_MSC_VER)
 	FILE* fp;
 	errno_t err = fopen_s(&fp, filename, "r");
@@ -59,37 +61,17 @@ char * io_read_text(const char * filename) {
 		return NULL;
 	}
 #endif
-	int buffer_size = 16;
-	int length = 0;
-	char* ret = (char*)MEM_MALLOC(sizeof(char) * buffer_size);
 	while (1) {
 		char c = fgetc(fp);
 		if (c == EOF) {
 			break;
 		}
-		ret[length] = c;
-		length++;
-		//予め確保していた領域をはみ出した
-		if (length >= buffer_size) {
-			buffer_size = buffer_size + (buffer_size / 2);
-			char* temp = (char*)MEM_REALLOC(ret, sizeof(char) * buffer_size);
-			//FIXME:再確保失敗時
-			ret = temp;
-		}
+		string_buffer_append(buff, c);
 	}
-	//多めに確保しすぎた
-	if (length < buffer_size) {
-		char* copy = (char*)MEM_MALLOC(sizeof(char) * length);
-		for (int i = 0; i < length; i++) {
-			copy[i] = ret[i];
-		}
-		MEM_FREE(ret);
-		copy[length] = '\0';
-		ret = copy;
-	} else {
-		ret[buffer_size] = '\0';
-	}
+	string_buffer_shrink(buff);
+	char* ret = buff->text;
 	fclose(fp);
+	MEM_FREE(buff);
 	return ret;
 }
 

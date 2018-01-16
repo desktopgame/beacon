@@ -17,14 +17,15 @@ string_buffer * string_buffer_new() {
 
 void string_buffer_append(string_buffer * self, char_t c) {
 	//printf("%c", c);
+	//printf("[%c]\n", c);
 	if (self->length >= self->capacity) {
 		int newSize = self->capacity + (self->capacity / 2);
 		char_t* temp = (char*)MEM_REALLOC(self->text, newSize);
 		assert(temp != NULL);
 		//新しく確保された部分を 0埋め
-		string_buffer_fill_zero(self, self->length, newSize);
 		self->text = temp;
 		self->capacity = newSize;
+		//string_buffer_fill_zero(self, self->length, newSize);
 	}
 	self->text[self->length] = c;
 	self->length++;
