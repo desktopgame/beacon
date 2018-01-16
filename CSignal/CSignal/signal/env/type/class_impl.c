@@ -32,6 +32,7 @@ type * type_wrap_class(class_ * self) {
 	type* ret = type_new();
 	ret->tag = type_class;
 	ret->u.class_ = self;
+	self->parent = ret;
 	return ret;
 }
 
@@ -39,6 +40,7 @@ class_ * class_new(const char * name) {
 	assert(name != NULL);
 	class_* ret = (class_*)MEM_MALLOC(sizeof(class_));
 	ret->name = text_strdup(name);
+	ret->parent = NULL;
 	ret->location = NULL;
 	ret->state = class_none;
 	ret->ref_count = 0;
@@ -62,7 +64,7 @@ void class_alloc_fields(class_ * self, object * o) {
 	for (int i = 0; i < self->field_list->length; i++) {
 		field* f = (field*)vector_at(self->field_list, i);
 		object* a = object_ref_new();
-		a->classz = f->type->u.class_;
+		a->type = f->type;
 		//静的フィールドは別の場所に確保
 		if (modifier_is_static(f->modifier)) {
 			continue;
@@ -70,7 +72,7 @@ void class_alloc_fields(class_ * self, object * o) {
 		vector_push(o->u.field_vec, a);
 	}
 	class_create_vtable(self);
-	o->classz = self;
+	o->type = self->parent;
 	o->vptr = self->vt;
 }
 

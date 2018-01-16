@@ -4,7 +4,7 @@
 #include "../util/vector.h"
 #include <stdbool.h>
 
-struct class_;
+struct type;
 struct vtable;
 /** 
  * オブジェクトの着色状態.
@@ -21,28 +21,28 @@ typedef enum object_paint {
 /**
  * オブジェクトの種類を表す列挙.
  */
-typedef enum object_type {
+typedef enum object_tag {
 	object_int,
 	object_double,
 	object_char,
 	object_string,
 	object_bool,
 	object_ref,
-} object_type;
+} object_tag;
 
 /**
  * ヒープに関連付けされるオブジェクト.
  * signal で使用される全てのデータはこれ。
  */
 typedef struct object {
-	struct class_* classz;
+	struct type* type;
 	//-初期化時
 	//-宣言時と互換性のある
 	//異なる型が代入されたとき
 	//この vptr を入れ替える
 	struct vtable* vptr;
 	object_paint paint;
-	object_type type;
+	object_tag tag;
 	union {
 		int int_;
 		double double_;

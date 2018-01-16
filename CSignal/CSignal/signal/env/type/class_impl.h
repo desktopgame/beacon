@@ -22,6 +22,7 @@ struct constructor;
  * クラスを表す構造体です.
  */
 typedef struct class_ {
+	type* parent;
 	char* name;
 	namespace_* location;
 	struct class_* super_class;
