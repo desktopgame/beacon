@@ -47,7 +47,9 @@ namespace signal.lang {
 		}
 	}
 }
-
+String s = signal::lang::Console.readLine();
+signal::lang::Console.writeLine(s);
+/*
 signal::lang::ICallable x = new signal::lang::ImplA();
 x.call();
 x.call2();
@@ -59,3 +61,4 @@ x.call2();
 x = new signal::lang::ImplX();
 x.call();
 x.call2();
+*/

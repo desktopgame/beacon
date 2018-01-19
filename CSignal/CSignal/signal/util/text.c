@@ -51,6 +51,22 @@ char * text_strdup(const char * source) {
 	return ret;
 }
 
+char * text_gets() {
+	string_buffer* sb = string_buffer_new();
+	while (true) {
+		char c = getchar();
+		if (c == '\n') {
+			string_buffer_shrink(sb);
+			break;
+		} else {
+			string_buffer_append(sb, c);
+		}
+	}
+	char* ret = sb->text;
+	MEM_FREE(sb);
+	return ret;
+}
+
 SG_errno_t text_strncpy(char * outChar, size_t index, const char * source, size_t dataSize) {
 #if defined(_MSC_VER)
 	return strncpy_s(outChar, index, source, dataSize);

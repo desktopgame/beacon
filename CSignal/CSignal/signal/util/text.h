@@ -35,6 +35,12 @@ void text_putindent(int depth);
 char* text_strdup(const char* source);
 
 /**
+ * 1行読み込んで返します.
+ * @return 呼び出し側で開放してください.
+ */
+char* text_gets();
+
+/**
  * 指定位置の文字を取り出します.
  * コンパイラごとの差分を吸収するために提供されます。
  * @param outChar
