@@ -51,7 +51,7 @@ vtable* vtable_lookup(vtable * self, vtable * castTo) {
 	//	return;
 	//}
 	vtable* newVT = vtable_new();
-	//newVT->parent = self;
+	newVT->parent = self;
 	//self->proxy = newVT;
 	//‰¼‘zŠÖ”‚Ìˆê——
 	for (int i = 0; i < castTo->elements->length; i++) {

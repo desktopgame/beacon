@@ -9,12 +9,9 @@ struct method;
  * 親クラスで現れた時点の添え字をサブクラスの実装で上書きします。
  */
 typedef struct vtable {
-	//struct vtable* parent;
+	//恐らくアップキャストのときに必要
+	struct vtable* parent;
 	vector* elements;
-	//インターフェイス型にキャストされるとき、
-	//proxyを設定する
-//	struct vtable* proxy;
-//	struct vtable* parent;
 } vtable;
 
 /**
