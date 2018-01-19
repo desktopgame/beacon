@@ -4,11 +4,16 @@ namespace signal.lang {
 	interface ICallable {
 		public:
 		def call() -> Void;
+		def call2() -> Void;
 	}
 
 	class ImplA : ICallable {
 		public:
 		ctor new() {
+		}
+
+		def call2() -> Void {
+			Console.writeLine("2AAA");
 		}
 
 		def call() -> Void {
@@ -20,6 +25,10 @@ namespace signal.lang {
 		ctor new() {
 		}
 
+		def call2() -> Void {
+			Console.writeLine("2VBB");
+		}
+
 		def call() -> Void {
 			Console.writeLine("BBB");
 		}
@@ -28,3 +37,8 @@ namespace signal.lang {
 
 signal::lang::ICallable x = new signal::lang::ImplA();
 x.call();
+x.call2();
+
+x = new signal::lang::ImplB();
+x.call();
+x.call2();

@@ -45,6 +45,15 @@ method * type_find_method(type * self, const char * name, vector * args, envirom
 	return NULL;
 }
 
+vtable * type_vtable(type * self) {
+	if (self->tag == type_class) {
+		return self->u.class_->vt;
+	} else if (self->tag == type_interface) {
+		return self->u.interface_->vt;
+	}
+	return NULL;
+}
+
 void type_dump(type * self, int depth) {
 	if (self->tag == type_class) {
 		class_dump(self->u.class_, depth);

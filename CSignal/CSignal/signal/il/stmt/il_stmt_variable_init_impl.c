@@ -3,6 +3,7 @@
 #include "../../util/text.h"
 #include "../../vm/symbol_entry.h"
 #include "../../env/namespace.h"
+#include "../../env/type_interface.h"
 #include <stdio.h>
 
 il_stmt * il_stmt_wrap_variable_init(il_stmt_variable_init * self) {
@@ -35,6 +36,13 @@ void il_stmt_variable_init_generate(il_stmt_variable_init * self, enviroment * e
 		self->name
 	);
 	il_factor_generate(self->fact, env);
+	//éŒ¾Œ^‚Æ‘ã“üŒ^‚ªˆÙ‚È‚éê‡
+	type* a = il_factor_eval(self->fact, env);
+	type* b = fqcn_type(self->fqcn, (namespace_*)vector_top(env->namespace_vec));
+	if (a != b) {
+		opcode_buf_add(env->buf, op_lookup);
+		opcode_buf_add(env->buf, b->absoluteIndex);
+	}
 	opcode_buf_add(env->buf, op_store);
 	opcode_buf_add(env->buf, e->index);
 }

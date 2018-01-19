@@ -2,12 +2,6 @@
 #ifndef SIGNAL_VM_OPCODE_H
 #define SIGNAL_VM_OPCODE_H
 #include "../util/vector.h"
-
-typedef union {
-	int int_;
-	char char_;
-	const char* string_;
-} operand;
 /**
  * バイトコードの中で、一つの命令を表すのに必要な領域を定義する型です.
  * 256種類の命令を使用出来ます。
@@ -89,6 +83,7 @@ typedef enum opcode {
 	op_put_static,
 	op_get_static,
 
+	op_lookup,
 	op_store,
 	op_load,
 

@@ -219,6 +219,12 @@ int opcode_print(vector* source, int index) {
 			printf("super");
 			break;
 		}
+		case op_lookup:
+		{
+			int a = (int)vector_at(source, ++index);
+			printf("lookup %d", a);
+			break;
+		}
 		case op_invokevirtual:
 		{
 			int a = (int)vector_at(source, ++index);
@@ -290,7 +296,7 @@ int opcode_print(vector* source, int index) {
 		}
 		default:
 		{
-			printf("printi");
+			printf("not implemented");
 			break;
 		}
 	}

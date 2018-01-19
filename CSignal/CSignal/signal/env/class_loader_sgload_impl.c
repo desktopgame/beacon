@@ -192,6 +192,7 @@ void class_loader_sgload_interface(class_loader * self, il_type * iltype, namesp
 	}
 	class_loader_sgload_methods(self, iltype, tp);
 	class_loader_sgload_complete_methods_impl(self, parent, iltype, tp, iltype->u.interface_->method_list, tp->u.interface_->method_list);
+	interface_create_vtable(inter);
 }
 
 void class_loader_sgload_fields(class_loader* self, il_type* iltype, type* tp) {

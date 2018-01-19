@@ -15,6 +15,7 @@
 #include "../method.h"
 #include "../constructor.h"
 #include "../type_impl.h"
+#include "../../env/vtable.h"
 #include "meta_impl.h"
 
 //http://jumble-note.blogspot.jp/2012/09/c-vacopy.html
@@ -266,7 +267,8 @@ method * class_find_smethod(class_ * self, const char * name, vector * args, env
 
 method * class_get_method(object * o, int index) {
 	assert(index >= 0);
-	return (method*)vector_at(o->vptr->elements, index);
+	vtable* vx = vtable_delegate(o->vptr);
+	return (method*)vector_at(vx->elements, index);
 }
 
 method * class_get_smethod(class_* self, int index) {

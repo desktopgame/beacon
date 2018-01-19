@@ -18,6 +18,7 @@ struct interface_;
 struct field;
 struct method;
 struct enviroment;
+struct vtable;
 
 /**
  * 型を表す構造体.
@@ -69,6 +70,13 @@ void type_add_method(type* self, struct method* m);
  * @return
  */
 struct method* type_find_method(type* self, const char* name, vector* args, struct enviroment* env, int* outIndex);
+
+/**
+ * 仮想関数の一覧を返します.
+ * @param self
+ * @return
+ */
+struct vtable* type_vtable(type* self);
 
 /**
  * この型の名前を出力します.
