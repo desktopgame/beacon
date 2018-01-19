@@ -206,6 +206,14 @@ il_stmt_return* class_loader_ilload_return(class_loader* self, ast* source);
 il_factor* class_loader_ilload_factor(class_loader* self, ast* source);
 
 /**
+ * キャストを IL に変換します.
+ * @param self
+ * @param source
+ * @return
+ */
+il_factor_cast* class_loader_ilload_cast(class_loader* self, ast* source);
+
+/**
  * 単項演算子を IL に変換します.
  * @param self
  * @param source

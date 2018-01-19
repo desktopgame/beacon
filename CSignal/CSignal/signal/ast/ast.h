@@ -53,7 +53,7 @@ typedef enum ast_tag {
 	ast_double,
 	ast_char,
 	ast_string,
-
+	ast_cast,
 	ast_variable,
 	ast_call,
 	ast_invoke,
@@ -186,6 +186,14 @@ ast* ast_new(ast_tag tag);
  * @return
  */
 ast* ast_new_namespace_path(char* name);
+
+/**
+ * キャストを表す要素を作成します.
+ * @param atypename
+ * @param afact
+ * @return
+ */
+ast* ast_new_cast(ast* atypename, ast* afact);
 
 /**
  * 二つの名前空間を連結します.

@@ -37,6 +37,13 @@ ast * ast_new_namespace_path(char * name) {
 	return ret;
 }
 
+ast * ast_new_cast(ast * atypename, ast * afact) {
+	ast* ret = ast_new(ast_cast);
+	ast_push(ret, atypename);
+	ast_push(ret, afact);
+	return ret;
+}
+
 ast * ast_new_namespace_path_list(ast * forward, char * name) {
 	ast* ret = ast_new(ast_namespace_path_list);
 	ast_push(ret, forward);
@@ -376,6 +383,7 @@ void ast_print(ast* self) {
 		case ast_elif: p("elif");
 		case ast_else: p("else");
 		case ast_return: p("return");
+		case ast_cast: p("cast");
 		case ast_blank:
 			printf("blank");
 			break;

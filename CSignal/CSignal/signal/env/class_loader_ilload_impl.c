@@ -515,8 +515,18 @@ il_factor* class_loader_ilload_factor(class_loader* self, ast* source) {
 		return il_factor_wrap_field_access(class_loader_ilload_field_access(self, source));
 	} else if (source->tag == ast_static_field_access) {
 		return il_factor_wrap_static_field_access(class_loader_ilload_static_field_access(self, source));
+	} else if (source->tag == ast_cast) {
+		return il_factor_wrap_cast(class_loader_ilload_cast(self, source));
 	}
 	return NULL;
+}
+
+il_factor_cast * class_loader_ilload_cast(class_loader * self, ast * source) {
+	ast* atypename = ast_first(source);
+	ast* afact = ast_second(source);
+	il_factor_cast* ret = il_factor_cast_new(class_loader_ilload_factor(self, afact));
+	class_loader_ilload_fqcn(ast_first(atypename), ret->fqcn);
+	return ret;
 }
 
 il_factor_unary_op* class_loader_ilload_unary(class_loader* self, ast* source, ilunary_op_type type) {

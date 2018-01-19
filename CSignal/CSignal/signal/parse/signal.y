@@ -557,6 +557,10 @@ primary
 	{
 		$$ = $2;
 	}
+	| LRB typename_T RRB expression
+	{
+		$$ = ast_new_cast($2, $4);
+	}
 	| fqcn_part DOT IDENT LRB RRB
 	{
 		$$ = ast_new_static_invoke($1, $3, ast_new_blank());

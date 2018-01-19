@@ -41,24 +41,8 @@ namespace signal.lang {
 		def call2() -> Void {
 			Console.writeLine("2XXX");
 		}
-
-		def call() -> Void {
-			Console.writeLine("XXX");
-		}
 	}
 }
-String s = signal::lang::Console.readLine();
-signal::lang::Console.writeLine(s);
-/*
-signal::lang::ICallable x = new signal::lang::ImplA();
-x.call();
-x.call2();
+signal::lang::ImplA x = new signal::lang::ImplA();
+signal::lang::ICallable a = (signal::lang::ICallable)x;
 
-x = new signal::lang::ImplB();
-x.call();
-x.call2();
-
-x = new signal::lang::ImplX();
-x.call();
-x.call2();
-*/

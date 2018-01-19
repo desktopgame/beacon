@@ -54,6 +54,9 @@ void il_factor_dump(il_factor * self, int depth) {
 		case ilfactor_static_field_access:
 			il_factor_static_field_access_dump(self->u.static_field_access, depth);
 			break;
+		case ilfactor_cast:
+			il_factor_cast_dump(self->u.cast_, depth);
+			break;
 		default:
 			ERROR("ファクターをダンプ出来ませんでした");
 			break;
@@ -106,6 +109,9 @@ void il_factor_generate(il_factor * self, enviroment* env) {
 			break;
 		case ilfactor_static_field_access:
 			il_factor_static_field_access_generate(self->u.static_field_access, env);
+			break;
+		case ilfactor_cast:
+			il_factor_cast_generate(self->u.cast_, env);
 			break;
 		default:
 			ERROR("ファクターを生成出来ませんでした");
@@ -160,6 +166,8 @@ void il_factor_load(il_factor * self, enviroment * env, il_ehandler * eh) {
 		case ilfactor_static_field_access:
 			il_factor_static_field_access_load(self->u.static_field_access, env, eh);
 			break;
+		case ilfactor_cast:
+			il_factor_cast_load(self->u.cast_, env, eh);
 		default:
 			ERROR("ファクターの型を取得出来ませんでした");
 			break;
@@ -214,6 +222,8 @@ type * il_factor_eval(il_factor * self, enviroment * env) {
 		case ilfactor_static_field_access:
 			ret = il_factor_static_field_access_eval(self->u.static_field_access, env);
 			break;
+		case ilfactor_cast:
+			il_factor_cast_eval(self->u.cast_, env);
 		default:
 			ERROR("ファクターの型を取得出来ませんでした");
 			break;
@@ -271,6 +281,8 @@ void il_factor_delete(il_factor * self) {
 		case ilfactor_static_field_access:
 			il_factor_static_field_access_delete(self->u.static_field_access);
 			break;
+		case ilfactor_cast:
+			il_factor_cast_delete(self->u.cast_);
 		default:
 			ERROR("ファクターを開放出来ませんでした");
 			{ int x = 0; }
