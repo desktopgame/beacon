@@ -44,7 +44,12 @@ namespace signal.lang {
 	}
 }
 
-
+def test() -> Void {
+	signal::lang::Console.writeLine("Say");
+}
+def test2() -> Void {
+	signal::lang::Console.writeLine("Say");
+}
 
 signal::lang::ImplA x = new signal::lang::ImplA();
 signal::lang::ICallable a = (signal::lang::ICallable)x;

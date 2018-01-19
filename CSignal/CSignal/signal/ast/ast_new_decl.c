@@ -5,7 +5,8 @@
 static ast* ast_new_field_type_name(char* type_name);
 static ast* ast_new_field_access_name(char* field_name);
 static ast* ast_new_function_name(char* func_name);
-static ast* ast_new_function_return_name(char* return_type_name);
+static ast* ast_new_method_name(char* func_name);
+static ast* ast_new_method_return_name(char* return_type_name);
 static ast* ast_new_parameter_type_name(char* type_name);
 static ast* ast_new_parameter_access_name(char* parameter_name);
 
@@ -140,10 +141,25 @@ ast * ast_new_field_decl(modifier_type modifier, ast* type_name, char * field_na
 	return ret;
 }
 
+ast * ast_new_function_decl(char * function_name, ast * parameter_list, ast * body, ast * return_type) {
+	ast* ret = ast_new(ast_function_decl);
+//	ast_push(ret, ast_new_modifier(type));
+	ast_push(ret, ast_new_function_name(function_name));
+	ast_push(ret, parameter_list);
+	ast_push(ret, body);
+	ast_push(ret, return_type);
+	//ast_push(ret, ast_new_function_return_name(return_type_name));
+	return ret;
+}
+
+ast * ast_new_function_decl_empty_params(char * function_name, ast * body, ast * return_type) {
+	return ast_new_function_decl(function_name, ast_new_blank(), body, return_type);
+}
+
 ast * ast_new_method_decl(modifier_type type, char * func_name, ast * parameter_list, ast* body, ast* return_type) {
 	ast* ret = ast_new(ast_method_decl);
 	ast_push(ret, ast_new_modifier(type));
-	ast_push(ret, ast_new_function_name(func_name));
+	ast_push(ret, ast_new_method_name(func_name));
 	ast_push(ret, parameter_list);
 	ast_push(ret, body);
 	ast_push(ret, return_type);
@@ -219,12 +235,18 @@ static ast* ast_new_field_access_name(char* field_name) {
 }
 
 static ast* ast_new_function_name(char* func_name) {
+	ast* ret = ast_new(ast_function_name);
+	ret->u.string_value = func_name;
+	return ret;
+}
+
+static ast* ast_new_method_name(char* func_name) {
 	ast* ret = ast_new(ast_method_name);
 	ret->u.string_value = func_name;
 	return ret;
 }
 
-static ast* ast_new_function_return_name(char* return_type_name) {
+static ast* ast_new_method_return_name(char* return_type_name) {
 	ast* ret = ast_new(ast_method_return_name);
 	ret->u.string_value = return_type_name;
 	return ret;

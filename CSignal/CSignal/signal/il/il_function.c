@@ -34,6 +34,9 @@ void il_function_dump(il_function * self, int depth) {
 		il_stmt* s = (il_stmt*)e;
 		il_stmt_dump(s, depth + 1);
 	}
+	text_putindent(depth);
+	printf("function end");
+	text_putline();
 }
 
 void il_function_delete(il_function * self) {

@@ -118,6 +118,24 @@ ast* ast_new_field_decl(modifier_type modifier, ast* type_name, char* field_name
 
 /**
  * 関数宣言を表す要素を作成します.
+ * @param function_name
+ * @parma parameter_list
+ * @param body
+ * @param return_type
+ */
+ast* ast_new_function_decl(char* function_name, ast* parameter_list, ast* body, ast* return_type);
+
+/**
+ * 引数のない関数宣言を表す要素を作成します.
+ * @param function_name
+ * @param body
+ * @param return_name
+ * @return
+ */
+ast* ast_new_function_decl_empty_params(char* function_name, ast* body, ast* return_type);
+
+/**
+ * メソッド宣言を表す要素を作成します.
  * @param modifier
  * @param func_name
  * @param parameter_list
@@ -128,7 +146,7 @@ ast* ast_new_field_decl(modifier_type modifier, ast* type_name, char* field_name
 ast* ast_new_method_decl(modifier_type type, char* func_name, ast* parameter_list, ast* body, ast* return_type);
 
 /**
- * 関数宣言を表す要素を作成します.
+ * 引数のないメソッド宣言を表す要素を作成します.
  * @param modifier
  * @param func_name
  * @param body

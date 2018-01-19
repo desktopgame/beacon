@@ -61,6 +61,7 @@
 						constructor_define
 						constructor_chain
 						constructor_chain_optional
+						function_define
 						method_define
 						field_define
 						parameter_list
@@ -109,6 +110,10 @@ top_level
 		ast_compile_entry($1);
 	}
 	| namespace_decl
+	{
+		ast_compile_entry($1);
+	}
+	| function_define
 	{
 		ast_compile_entry($1);
 	}
@@ -274,6 +279,16 @@ constructor_chain_optional
 		$$ = ast_new_blank();
 	}
 	| constructor_chain
+	;
+function_define
+	: DEF IDENT LRB parameter_list RRB ARROW typename_T scope_optional
+	{
+		$$ = ast_new_function_decl($2, $4, $8, $7);
+	}
+	| DEF IDENT LRB RRB ARROW typename_T scope_optional
+	{
+		$$ = ast_new_function_decl_empty_params($2, $7, $6);
+	}
 	;
 method_define
 	: modifier_type_T DEF IDENT LRB parameter_list RRB ARROW typename_T scope_optional

@@ -104,6 +104,10 @@ typedef enum ast_tag {
 	ast_field_type_name,
 	ast_field_access_name,
 
+	ast_function_decl,
+	ast_function_name,
+	ast_function_return_name,
+
 	ast_method_decl,
 	ast_method_name,
 	ast_method_return_name,

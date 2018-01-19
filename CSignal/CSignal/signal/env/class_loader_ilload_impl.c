@@ -3,6 +3,7 @@
 #include "../il/il_type_impl.h"
 #include "../il/il_field.h"
 #include "../il/il_import.h"
+#include "../il/il_function.h"
 #include "../il/il_method.h"
 #include "../il/il_constructor.h"
 #include "../il/il_constructor_chain.h"
@@ -33,7 +34,8 @@ void class_loader_ilload_impl(class_loader* self, ast* source_code) {
 				   child->tag == ast_stmt_list) {
 			class_loader_ilload_body(self, self->il_code->statement_list, child);
 		//def f() { ... }
-		} else if(child->tag == ast_method_decl) {
+		} else if(child->tag == ast_function_decl) {
+			class_loader_ilload_function(self, child);
 		} else {
 			ast_print(child);
 			text_putline();
@@ -43,11 +45,16 @@ void class_loader_ilload_impl(class_loader* self, ast* source_code) {
 }
 
 void class_loader_ilload_function(class_loader * self, ast * source) {
-	assert(source->tag == ast_method_decl);
-	ast* func_name = ast_at(source, 1);
-	ast* param_list = ast_at(source, 2);
-	ast* func_body = ast_at(source, 3);
-	ast* ret_name = ast_at(source, 4);
+	assert(source->tag == ast_function_decl);
+	ast* afunc_name = ast_at(source, 0);
+	ast* aparam_list = ast_at(source, 1);
+	ast* afunc_body = ast_at(source, 2);
+	ast* aret_name = ast_at(source, 3);
+	il_function* ilfunc = il_function_new(afunc_name->u.string_value);
+	class_loader_ilload_parameter_list(self, ilfunc->parameter_list, aparam_list);
+	class_loader_ilload_body(self, ilfunc->statement_list, afunc_body);
+	class_loader_ilload_fqcn(ast_first(aret_name), ilfunc->return_fqcn);
+	vector_push(self->il_code->function_list, ilfunc);
 }
 
 void class_loader_ilload_import(class_loader* self, ast* import_decl) {
@@ -239,7 +246,7 @@ void class_loader_ilload_method(class_loader* self, il_type* current, ast* metho
 	v->access = level;
 	v->modifier = ast_cast_to_modifier(modifier);
 	//TEST((!strcmp(v->name, "main")));
-	class_loader_ilload_param(self, v->parameter_list, param_list);
+	class_loader_ilload_parameter_list(self, v->parameter_list, param_list);
 	class_loader_ilload_body(self, v->statement_list, func_body);
 	il_type_add_method(current, v);
 	//il_class_add_method(current->u.class_, v);
@@ -264,15 +271,15 @@ void class_loader_ilload_constructor(class_loader* self, il_type* current, ast* 
 	ilcons->access = level;
 	ilcons->chain = ilchain;
 	//ilcons->modifier = ast_cast_to_modifier(amodifier);
-	class_loader_ilload_param(self, ilcons->parameter_list, aparams);
+	class_loader_ilload_parameter_list(self, ilcons->parameter_list, aparams);
 	class_loader_ilload_body(self, ilcons->statement_list, abody);
 	vector_push(current->u.class_->constructor_list, ilcons);
 }
 
-void class_loader_ilload_param(class_loader* self, vector* list, ast* source) {
+void class_loader_ilload_parameter_list(class_loader* self, vector* list, ast* source) {
 	if (source->tag == ast_parameter_list) {
 		for (int i = 0; i < source->childCount; i++) {
-			class_loader_ilload_param(self, list, ast_at(source, i));
+			class_loader_ilload_parameter_list(self, list, ast_at(source, i));
 		}
 	} else if (source->tag == ast_parameter) {
 		ast* type_name = ast_first(source);

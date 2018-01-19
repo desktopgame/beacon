@@ -130,7 +130,7 @@ void class_loader_ilload_constructor(class_loader* self, il_type* current, ast* 
  * @param list
  * @param source
  */
-void class_loader_ilload_param(class_loader* self, vector* list, ast* source);
+void class_loader_ilload_parameter_list(class_loader* self, vector* list, ast* source);
 
 /**
  * ステートメントの一覧を IL に変換します.
