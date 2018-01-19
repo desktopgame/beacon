@@ -356,9 +356,9 @@ void ast_print(ast* self) {
 		case ast_field_access_name:
 			printf("access_name(%s)", self->u.string_value);
 			break;
-		case ast_func_decl: p("func decl");
-		case ast_func_name:
-			printf("func_name(%s)", self->u.string_value);
+		case ast_method_decl: p("method decl");
+		case ast_method_name:
+			printf("method_name(%s)", self->u.string_value);
 			break;
 		case ast_parameter_list: p("parameter-list");
 		case ast_parameter: p("parameter");
@@ -368,8 +368,8 @@ void ast_print(ast* self) {
 		case ast_parameter_access_name:
 			printf("parameter_access_name(%s)", self->u.string_value);
 			break;
-		case ast_func_return_name:
-			printf("func_return_name(%s)", self->u.string_value);
+		case ast_method_return_name:
+			printf("method_return_name(%s)", self->u.string_value);
 			break;
 		case ast_field_access: p("field-access");
 		case ast_static_field_access: p("static-field-access");
@@ -529,8 +529,8 @@ static bool ast_has_str(ast* self) {
 		t == ast_namespace_path ||
 		t == ast_field_type_name ||
 		t == ast_field_access_name ||
-		t == ast_func_name ||
-		t == ast_func_return_name ||
+		t == ast_method_name ||
+		t == ast_method_return_name ||
 		t == ast_parameter_type_name ||
 		t == ast_parameter_access_name ||
 		t == ast_class_decl;

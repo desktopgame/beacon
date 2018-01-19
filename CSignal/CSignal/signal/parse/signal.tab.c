@@ -606,13 +606,14 @@ static const char *const yytname[] =
   "namespace_path", "import", "class_decl", "interface_decl",
   "access_member_tree", "access_member_list", "member_define_list",
   "member_define", "constructor_define", "constructor_chain",
-  "constructor_chain_type_T", "constructor_chain_optional", "func_define",
-  "field_define", "modifier_type_T", "access_level_T", "parameter_list",
-  "argument_list", "typename_list", "typename_T", "fqcn_part",
-  "expression", "assign", "assign_type_T", "or", "and", "equal", "compare",
-  "addsub", "muldiv", "unary", "prefix", "postfix", "primary", "stmt_list",
-  "stmt", "variable_decl_stmt", "variable_init_stmt", "if_stmt",
-  "elif_list", "elif", "return_stmt", "scope", "scope_optional", 0
+  "constructor_chain_type_T", "constructor_chain_optional",
+  "method_define", "field_define", "modifier_type_T", "access_level_T",
+  "parameter_list", "argument_list", "typename_list", "typename_T",
+  "fqcn_part", "expression", "assign", "assign_type_T", "or", "and",
+  "equal", "compare", "addsub", "muldiv", "unary", "prefix", "postfix",
+  "primary", "stmt_list", "stmt", "variable_decl_stmt",
+  "variable_init_stmt", "if_stmt", "elif_list", "elif", "return_stmt",
+  "scope", "scope_optional", 0
 };
 #endif
 
@@ -2067,7 +2068,7 @@ yyreduce:
 /* Line 1455 of yacc.c  */
 #line 280 "C:\\Users\\Koya\\Documents\\GitHub\\CSignal\\CSignal\\CSignal\\signal\\parse\\signal.y"
     {
-		(yyval.ast_value) = ast_new_function_decl((yyvsp[(1) - (9)].modifier_type_value), (yyvsp[(3) - (9)].string_value), (yyvsp[(5) - (9)].ast_value), (yyvsp[(9) - (9)].ast_value), (yyvsp[(8) - (9)].ast_value));
+		(yyval.ast_value) = ast_new_method_decl((yyvsp[(1) - (9)].modifier_type_value), (yyvsp[(3) - (9)].string_value), (yyvsp[(5) - (9)].ast_value), (yyvsp[(9) - (9)].ast_value), (yyvsp[(8) - (9)].ast_value));
 	;}
     break;
 
@@ -2076,7 +2077,7 @@ yyreduce:
 /* Line 1455 of yacc.c  */
 #line 284 "C:\\Users\\Koya\\Documents\\GitHub\\CSignal\\CSignal\\CSignal\\signal\\parse\\signal.y"
     {
-		(yyval.ast_value) = ast_new_function_decl_empty_params((yyvsp[(1) - (8)].modifier_type_value), (yyvsp[(3) - (8)].string_value), (yyvsp[(8) - (8)].ast_value), (yyvsp[(7) - (8)].ast_value));
+		(yyval.ast_value) = ast_new_method_decl_empty_params((yyvsp[(1) - (8)].modifier_type_value), (yyvsp[(3) - (8)].string_value), (yyvsp[(8) - (8)].ast_value), (yyvsp[(7) - (8)].ast_value));
 	;}
     break;
 
@@ -2776,7 +2777,7 @@ yyreduce:
 
 
 /* Line 1455 of yacc.c  */
-#line 2780 "signal.tab.c"
+#line 2781 "signal.tab.c"
       default: break;
     }
   YY_SYMBOL_PRINT ("-> $$ =", yyr1[yyn], &yyval, &yyloc);

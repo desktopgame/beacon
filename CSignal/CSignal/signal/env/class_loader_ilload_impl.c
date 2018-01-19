@@ -32,12 +32,22 @@ void class_loader_ilload_impl(class_loader* self, ast* source_code) {
 		} else if (child->tag == ast_stmt ||
 				   child->tag == ast_stmt_list) {
 			class_loader_ilload_body(self, self->il_code->statement_list, child);
+		//def f() { ... }
+		} else if(child->tag == ast_method_decl) {
 		} else {
 			ast_print(child);
 			text_putline();
 		}
 	}
 	//il_top_level_dump(self->il_code, 0);
+}
+
+void class_loader_ilload_function(class_loader * self, ast * source) {
+	assert(source->tag == ast_method_decl);
+	ast* func_name = ast_at(source, 1);
+	ast* param_list = ast_at(source, 2);
+	ast* func_body = ast_at(source, 3);
+	ast* ret_name = ast_at(source, 4);
 }
 
 void class_loader_ilload_import(class_loader* self, ast* import_decl) {
@@ -193,7 +203,7 @@ void class_loader_ilload_member(class_loader* self, il_type* current, ast* membe
 		ast* child = ast_first(member);
 		if (child->tag == ast_field_decl) {
 			class_loader_ilload_field(self, current, child, level);
-		} else if (child->tag == ast_func_decl) {
+		} else if (child->tag == ast_method_decl) {
 			class_loader_ilload_method(self, current, child, level);
 		} else if (child->tag == ast_constructor_decl) {
 			class_loader_ilload_constructor(self, current, child, level);

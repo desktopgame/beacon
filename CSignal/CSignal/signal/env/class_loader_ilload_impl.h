@@ -14,6 +14,13 @@
 void class_loader_ilload_impl(class_loader* self, ast* source_code);
 
 /**
+ * トップレベルの関数宣言を IL に変換します.
+ * @param self
+ * @param source
+ */
+void class_loader_ilload_function(class_loader* self, ast* source);
+
+/**
  * インポート宣言を IL に変換します.
  * @param self
  * @param import_decl

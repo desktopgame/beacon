@@ -61,7 +61,7 @@
 						constructor_define
 						constructor_chain
 						constructor_chain_optional
-						func_define
+						method_define
 						field_define
 						parameter_list
 						argument_list
@@ -235,7 +235,7 @@ member_define_list
 	;
 member_define
 	: constructor_define
-	| func_define
+	| method_define
 	| field_define
 	;
 constructor_define
@@ -275,14 +275,14 @@ constructor_chain_optional
 	}
 	| constructor_chain
 	;
-func_define
+method_define
 	: modifier_type_T DEF IDENT LRB parameter_list RRB ARROW typename_T scope_optional
 	{
-		$$ = ast_new_function_decl($1, $3, $5, $9, $8);
+		$$ = ast_new_method_decl($1, $3, $5, $9, $8);
 	}
 	| modifier_type_T DEF IDENT LRB RRB ARROW typename_T scope_optional
 	{
-		$$ = ast_new_function_decl_empty_params($1, $3, $8, $7);
+		$$ = ast_new_method_decl_empty_params($1, $3, $8, $7);
 	}
 	;
 field_define

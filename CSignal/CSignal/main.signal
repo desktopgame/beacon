@@ -43,6 +43,9 @@ namespace signal.lang {
 		}
 	}
 }
+
+
+
 signal::lang::ImplA x = new signal::lang::ImplA();
 signal::lang::ICallable a = (signal::lang::ICallable)x;
 
