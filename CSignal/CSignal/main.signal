@@ -33,6 +33,19 @@ namespace signal.lang {
 			Console.writeLine("BBB");
 		}
 	}
+	class ImplX : ImplA {
+		public:
+		ctor new() : super() {
+		}
+
+		def call2() -> Void {
+			Console.writeLine("2XXX");
+		}
+
+		def call() -> Void {
+			Console.writeLine("XXX");
+		}
+	}
 }
 
 signal::lang::ICallable x = new signal::lang::ImplA();
@@ -40,5 +53,9 @@ x.call();
 x.call2();
 
 x = new signal::lang::ImplB();
+x.call();
+x.call2();
+
+x = new signal::lang::ImplX();
 x.call();
 x.call2();
