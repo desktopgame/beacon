@@ -6,6 +6,7 @@
 vtable * vtable_new() {
 	vtable* ret = (vtable*)MEM_MALLOC(sizeof(vtable));
 	ret->elements = vector_new();
+	ret->parent = NULL;
 	return ret;
 }
 
