@@ -267,7 +267,7 @@ method * class_find_smethod(class_ * self, const char * name, vector * args, env
 
 method * class_get_method(object * o, int index) {
 	assert(index >= 0);
-	vtable* vx = vtable_delegate(o->vptr);
+	vtable* vx = (o->vptr);
 	return (method*)vector_at(vx->elements, index);
 }
 

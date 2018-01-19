@@ -346,7 +346,7 @@ void vm_execute(vm* self, enviroment* env) {
 				int absClsIndex = (int)enviroment_source_at(env, ++i);
 				object* o = (object*)vector_top(self->value_stack);
 				type* tp = (type*)vector_at(ctx->type_vec, absClsIndex);
-				vtable_lookup(o->vptr, type_vtable(tp));
+				o->vptr = vtable_lookup(o->vptr, type_vtable(tp));
 				break;
 			}
 			case op_invokeinterface:

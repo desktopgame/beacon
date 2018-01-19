@@ -13,8 +13,8 @@ typedef struct vtable {
 	vector* elements;
 	//インターフェイス型にキャストされるとき、
 	//proxyを設定する
-	struct vtable* proxy;
-	struct vtable* parent;
+//	struct vtable* proxy;
+//	struct vtable* parent;
 } vtable;
 
 /**
@@ -52,15 +52,9 @@ void vtable_replace(vtable* self, struct method* m);
  * この仮想関数テーブルを指定のインターフェイス型の関数へキャストします.
  * @param self
  * @param castTo
- */
-void vtable_lookup(vtable* self, vtable* castTo);
-
-/** 
- * vtableを現在の型で返します.
- * @param self
  * @return
  */
-vtable* vtable_delegate(vtable* self);
+vtable* vtable_lookup(vtable* self, vtable* castTo);
 
 /**
  * vtableを開放します.

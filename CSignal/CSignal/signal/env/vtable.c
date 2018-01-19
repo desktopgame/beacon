@@ -6,8 +6,6 @@
 vtable * vtable_new() {
 	vtable* ret = (vtable*)MEM_MALLOC(sizeof(vtable));
 	ret->elements = vector_new();
-	ret->proxy = NULL;
-	ret->parent = NULL;
 	return ret;
 }
 
@@ -38,17 +36,23 @@ void vtable_replace(vtable * self, method * m) {
 	vector_push(self->elements, m);
 }
 
-void vtable_lookup(vtable * self, vtable * castTo) {
+vtable* vtable_lookup(vtable * self, vtable * castTo) {
 	if (self == castTo) {
-		return;
+		return self;
 	}
-	if (self->proxy != NULL) {
-		vtable_lookup(self->proxy, castTo);
-		return;
-	}
+	//複製
+	//戻り値がvtable
+	//o->vptrを書き換える
+	//proxy parentは不要
+	//変換を記録して二回目以降はキャッシュを返す
+	//
+	//if (self->proxy != NULL) {
+	//	vtable_lookup(self->proxy, castTo);
+	//	return;
+	//}
 	vtable* newVT = vtable_new();
-	newVT->parent = self;
-	self->proxy = newVT;
+	//newVT->parent = self;
+	//self->proxy = newVT;
 	//仮想関数の一覧
 	for (int i = 0; i < castTo->elements->length; i++) {
 		method* e = (method*)vector_at(castTo->elements, i);
@@ -64,13 +68,7 @@ void vtable_lookup(vtable * self, vtable * castTo) {
 		}
 	}
 	assert((newVT->elements->length == castTo->elements->length));
-}
-
-vtable * vtable_delegate(vtable * self) {
-	if (self->proxy == NULL) {
-		return self;
-	}
-	return vtable_delegate(self->proxy);
+	return newVT;
 }
 
 void vtable_delete(vtable * self) {
