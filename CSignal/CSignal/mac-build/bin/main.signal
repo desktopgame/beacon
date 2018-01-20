@@ -1,189 +1,64 @@
 import "lib"
 //import "../io.h"
 namespace signal.lang {
-/*
-	interface IPoint {
+	interface ICallable {
 		public:
-		def getX() -> Int;
-		def getY() -> Int;
-	}
-*/
-	class Point2D {
-		public:
-		Int x;
-		Int y;
-		static Int P;
-
-		ctor new(Int x, Int y) {
-			this.x = x;
-			this.y = y;
-		}
-
-		ctor new() : this(0, 0) {
-		}
-
-		def print(Int a, Int b) -> Void {
-			signal::lang::Console.writeLine("home");
-			Console.writeLine(a);
-			Console.writeLine(b);
-		}
-		def print() -> Void {
-			Console.writeLine("2D");
-		}
-
-		def getX() -> Int {
-			return this.x;
-		}
-
-		def getY() -> Int {
-			return this.y;
-		}
-
-		private:
-		def test() -> Void {
-			Console.writeLine("test2D");
-		}
+		def call() -> Void;
+		def call2() -> Void;
 	}
 
-	class Point3D : Point2D {
+	class ImplA : ICallable {
 		public:
-		Int z;
-
-		ctor new(Int x, Int y, Int z) : super(x, y) {
-			this.z = z;
+		ctor new() {
 		}
 
-		ctor new() : this(0, 0, 0) {
+		def call2() -> Void {
+			Console.writeLine("2AAA");
 		}
 
-		def print() -> Void {
-			Console.writeLine("3D");
+		def call() -> Void {
+			Console.writeLine("AAA");
+		}
+	}
+	class ImplB : ICallable {
+		public:
+		ctor new() {
 		}
 
-		def getZ() -> Int {
-			return this.z;
+		def call2() -> Void {
+			Console.writeLine("2VBB");
 		}
-/*
-		def printXYZ() -> Void {
-			Console.writeLine(this.x);
-			Console.writeLine(this.y);
-			Console.writeLine(this.z);
+
+		def call() -> Void {
+			Console.writeLine("BBB");
 		}
-*/
-		def test() -> Void {
-			Console.writeLine("test3D");
+	}
+	class ImplX : ImplA {
+		public:
+		ctor new() : super() {
+		}
+
+		def call2() -> Void {
+			Console.writeLine("2XXX");
 		}
 	}
 }
-namespace L.Goo.Foo {
-	class Foo : SuperFoo {
-		public:
-		Int pointX;
-		Int pointY;
 
-		private:
-		static def mainx() -> Void {
-
-		}
-
-		native def main(Int a, Int b, String c) -> Void {
-			
-		}
-
-		static def print(String message, Int d) -> Void {
-			mainx();
-/*
-		//HelloWor
-			Console.writeLine("a");
-			main(10, 20, "HelloWo");
-			Foo a = Foo.newInstance();
-			a.print();
-			a.print("a");
-			a.print(10, 20, "aaa");
-*/
-			if(10) {
-
-			}
-
-			if('a' || 10) {
-
-			} elif("hello") {
-
-			}
-
-			if(40 == 40) {
-
-			} elif(50 == 50) {
-
-			} else {
-
-			}
-		}
-	}
-	namespace M {
-		class Klass {
-		}
-		class Lnterface {
-		}
-		class Lnterface2 {
-		}
-	}
+def test() -> Void {
+	signal::lang::Console.writeLine("Say");
 }
-//*
-signal::lang::Point2D.P = 0;
-signal::lang::Point3D c = new signal::lang::Point3D(1, 2, 5);
-c.print();
-
-Int a = c.getX();
-Int b = c.getY();
-Int z = c.getZ();
-signal::lang::Console.writeLine(signal::lang::Point2D.P);
-signal::lang::Console.writeLine(a);
-signal::lang::Console.writeLine(b);
-signal::lang::Console.writeLine(z);
-
-signal::lang::Point2D.P = 2;
-signal::lang::Console.writeLine(signal::lang::Point2D.P);
-//*/
-/*
-Int a = 2;
-signal::lang::Console.writeLine(a);
-
-a += 2;
-signal::lang::Console.writeLine(a);
-
-a = 0;
-signal::lang::Console.writeLine(a);
-*/
-/*
-signal::lang::Point3D c = new signal::lang::Point3D(1, 2, 3);
-//signal::lang::Console.writeLine(c.x);
-//signal::lang::Console.writeLine(c.y);
-//signal::lang::Console.writeLine(c.z);
-Int a = 2;
-Int b = 20;
-c.print(20, 5);
-if(a == b) {
-	signal::lang::Console.writeLine("a == b");
-	signal::lang::Console.writeLine("a == b");
-	signal::lang::Console.writeLine("a == b");
-} elif(a > b) {
-	signal::lang::Console.writeLine("a > b");
-	signal::lang::Console.writeLine("a > b");
-	signal::lang::Console.writeLine("a > b");
-} elif(a < 0) {
-	signal::lang::Console.writeLine("a < 0");
-	signal::lang::Console.writeLine("a < 0");
-	signal::lang::Console.writeLine("a < 0");
-} else {
-	signal::lang::Console.writeLine("else");
-	signal::lang::Console.writeLine("else");
-	signal::lang::Console.writeLine("else");
+def test2() -> Void {
+	signal::lang::Console.writeLine("Say");
 }
-*/
 
-//signal::lang::Point2D c = new signal::lang::Point2D(10, 2);
-//c.print(200, 5);
-//signal::lang::Console.writeLine(100);
-//signal::lang::Console.writeLine(c.x);
-//signal::lang::Console.writeLine("PP");
+Int i = 0;
+while(i < 10) {
+	signal::lang::Console.writeLine("Say");
+	i = i + 1;
+}
+
+Bool b = true;
+Bool b2 = false;
+signal::lang::ImplA x = new signal::lang::ImplA();
+signal::lang::ICallable a = (signal::lang::ICallable)x;
+

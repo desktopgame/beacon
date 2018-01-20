@@ -71,11 +71,11 @@ bool cmd_nexteqany(cmd_line * self, char * argv[], int params, ...) {
 	char* e = cmd_nexts(self, argv);
 	bool found = false;
 	for (int i = 0; i < params; i++) {
-		if (!strcmp(e, ap)) {
+		if (!strcmp(e, va_arg(ap, char*))) {
 			found = true;
 			break;
 		}
-		ap++;
+//		ap++;
 	}
 	va_end(ap);
 	return found;
@@ -102,7 +102,7 @@ void cmd_signal(int argc, char * argv[]) {
 			cmd_signal_dump(cmdl, argv);
 			break;
 		} else {
-			printf("ƒRƒ}ƒ“ƒh‚ğ‰ğßo—ˆ‚Ü‚¹‚ñB (%s)", action);
+			printf("ï¿½Rï¿½}ï¿½ï¿½ï¿½hï¿½ï¿½ï¿½ßoï¿½ï¿½ï¿½Ü‚ï¿½ï¿½ï¿½B (%s)", action);
 			text_putline();
 			break;
 		}
@@ -143,7 +143,7 @@ static void cmd_signal_signal(cmd_line* self, char* argv) {
 		}
 	}
 	if (filename == NULL) {
-		printf("-fileƒIƒvƒVƒ‡ƒ“‚Å‘ÎÛƒtƒ@ƒCƒ‹‚ğİ’è‚µ‚Ä‚­‚¾‚³‚¢B");
+		printf("-fileï¿½Iï¿½vï¿½Vï¿½ï¿½ï¿½ï¿½ï¿½Å‘ÎÛƒtï¿½@ï¿½Cï¿½ï¿½ï¿½ï¿½İ’è‚µï¿½Ä‚ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½B");
 		text_putline();
 		return;
 	}
@@ -163,7 +163,7 @@ static void cmd_signal_dump(cmd_line* self, char* argv) {
 		//-file
 		if (!strcmp(param, "-file")) {
 			if (self->index >= self->argc) {
-				printf("-file ‚É‚Íƒtƒ@ƒCƒ‹ƒpƒX‚ª•K—v‚Å‚·B");
+				printf("-file ï¿½É‚Íƒtï¿½@ï¿½Cï¿½ï¿½ï¿½pï¿½Xï¿½ï¿½ï¿½Kï¿½vï¿½Å‚ï¿½ï¿½B");
 				text_putline();
 				break;
 			}
