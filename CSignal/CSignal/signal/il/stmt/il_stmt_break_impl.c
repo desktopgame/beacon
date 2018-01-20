@@ -10,6 +10,9 @@ il_stmt * il_stmt_wrap_break() {
 }
 
 void il_stmt_break_generate(void * empty, enviroment * env) {
+	label* lab = (label*)vector_top(env->whileEnd_vec);
+	opcode_buf_add(env->buf, op_goto);
+	opcode_buf_add(env->buf, lab);
 }
 
 void il_stmt_break_load(void * empty, enviroment * env, il_ehandler* eh) {

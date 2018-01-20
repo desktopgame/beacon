@@ -24,7 +24,10 @@ typedef struct enviroment {
 	//FIXME:ここに持たせるべきじゃない
 	vector* namespace_vec;
 	vector* class_vec;
+	vector* whileStart_vec;
+	vector* whileEnd_vec;
 	bool toplevel;
+
 //	struct class_* class_;
 } enviroment;
 

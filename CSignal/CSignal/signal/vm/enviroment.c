@@ -20,6 +20,8 @@ enviroment * enviroment_new() {
 	ret->namespace_vec = vector_new();
 	ret->class_vec = vector_new();
 	ret->toplevel = false;
+	ret->whileStart_vec = vector_new();
+	ret->whileEnd_vec = vector_new();
 	return ret;
 }
 
