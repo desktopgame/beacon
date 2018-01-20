@@ -56,6 +56,7 @@ while(i < 10) {
 	Console.writeLine("Say");
 	i = i + 1;
 }
+i.p();
 
 Bool b = true;
 Bool b2 = false;

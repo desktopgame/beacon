@@ -3,6 +3,7 @@
 #include <stdlib.h>
 #include "vtable.h"
 #include "../util/mem.h"
+#include "type_interface.h"
 
 //proto
 static object* object_malloc(object_tag type);
@@ -14,6 +15,7 @@ object * object_int_new(int i) {
 	object* ret = object_malloc(object_int);
 	ret->u.int_ = i;
 	ret->type = CL_INT;
+	ret->vptr = type_vtable(CL_INT);
 	return ret;
 }
 
@@ -21,6 +23,7 @@ object * object_double_new(double d) {
 	object* ret = object_malloc(object_double);
 	ret->u.double_ = d;
 	ret->type = CL_DOUBLE;
+	ret->vptr = type_vtable(CL_DOUBLE);
 	return ret;
 }
 
@@ -28,6 +31,7 @@ object * object_char_new(char c) {
 	object* ret = object_malloc(object_char);
 	ret->u.char_ = c;
 	ret->type = CL_CHAR;
+	ret->vptr = type_vtable(CL_CHAR);
 	return ret;
 }
 
@@ -35,6 +39,7 @@ object * object_string_new(const char * s) {
 	object* ret = object_malloc(object_string);
 	ret->u.string_ = s;
 	ret->type = CL_STRING;
+	ret->vptr = type_vtable(CL_STRING);
 	return ret;
 }
 
@@ -42,6 +47,7 @@ object * object_bool_new(bool b) {
 	object* ret = object_malloc(object_bool);
 	ret->u.bool_ = b;
 	ret->type = CL_BOOL;
+	ret->vptr = type_vtable(CL_BOOL);
 	return ret;
 }
 
