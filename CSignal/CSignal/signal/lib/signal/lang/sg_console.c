@@ -12,7 +12,7 @@ static void sg_console_read(method* parent, vm* vm, enviroment* env);
 
 void sg_console_init() {
 	namespace_* lang = namespace_lang();
-	class_* cls = class_new("Console");
+	class_* cls = class_new_preload("Console");
 	namespace_add_type(lang, type_wrap_class(cls));
 	class_define_native_method(cls, "writeLine", sg_console_writeLine);
 	class_define_native_method(cls, "write", sg_console_write);

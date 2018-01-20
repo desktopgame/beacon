@@ -113,18 +113,13 @@ static void script_context_launch(script_context* self) {
 	//プリロードされるクラスを定義
 	namespace_* signal = namespace_create_at_root("signal");
 	namespace_* lang = namespace_add_namespace(signal, "lang");
-	class_* intClass = class_new("Int");
-	class_* doubleClass = class_new("Double");
-	class_* charClass = class_new("Char");
-	class_* stringClass = class_new("String");
-	class_* boolClass = class_new("Bool");
-	class_* voidClass = class_new("Void");
-	intClass->state = class_pending;
-	doubleClass->state = class_pending;
-	charClass->state = class_pending;
-	stringClass->state = class_pending;
-	boolClass->state = class_pending;
-	voidClass->state = class_pending;
+	class_* intClass = class_new_preload("Int");
+	class_* doubleClass = class_new_preload("Double");
+	class_* charClass = class_new_preload("Char");
+	class_* stringClass = class_new_preload("String");
+	class_* boolClass = class_new_preload("Bool");
+	class_* voidClass = class_new_preload("Void");
+	//名前空間に追加
 	namespace_add_type(lang, type_wrap_class(intClass));
 	namespace_add_type(lang, type_wrap_class(doubleClass));
 	namespace_add_type(lang, type_wrap_class(charClass));

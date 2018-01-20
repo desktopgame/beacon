@@ -57,6 +57,12 @@ type* type_wrap_class(class_* self);
 class_* class_new(const char* name);
 
 /**
+ * 事前に読みこまれる必要があるクラスを作成します.
+ * @param name
+ */
+class_* class_new_preload(const char* name);
+
+/**
  * 指定のオブジェクトにこのクラスのフィールドを表す
  * オブジェクトの一覧を追加します。
  * この関数は親クラスから順番に呼び出してください。

@@ -61,6 +61,12 @@ class_ * class_new(const char * name) {
 	return ret;
 }
 
+class_ * class_new_preload(const char * name) {
+	class_* cl = class_new(name);
+	cl->state = class_pending;
+	return cl;
+}
+
 void class_alloc_fields(class_ * self, object * o) {
 	assert(o->tag == object_ref);
 	for (int i = 0; i < self->field_list->length; i++) {
