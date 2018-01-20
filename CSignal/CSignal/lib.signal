@@ -6,6 +6,7 @@ namespace java {
 }
 
 namespace signal.lang {
+
 	class Console {
 		public:
 		static native def writeLine(String str) -> Void;
@@ -17,5 +18,11 @@ namespace signal.lang {
 		static native def read() -> Char;
 
 		static native def readLine() -> String;
+	}
+	class Int {
+		public:
+		def p() -> Void {
+			Console.writeLine("Foo!");
+		}
 	}
 }

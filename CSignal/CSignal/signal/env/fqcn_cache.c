@@ -108,7 +108,9 @@ static type * fqcn_type_impl(fqcn_cache * self, namespace_* current) {
 	if (self->scope_vec->length == 0) {
 		char* name = self->name;
 		//プリミティブ型はどこからでも参照できる
-		if (!strcmp(name, "Int")) {
+		if (!strcmp(name, "Object")) {
+			return CL_OBJECT;
+		} else if (!strcmp(name, "Int")) {
 			return CL_INT;
 		} else if (!strcmp(name, "Double")) {
 			return CL_DOUBLE;

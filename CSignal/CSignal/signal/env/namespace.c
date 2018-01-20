@@ -117,6 +117,10 @@ namespace_ * namespace_lang() {
 	return namespace_get_namespace(namespace_signal(), "lang");
 }
 
+type * namespace_object_class() {
+	return namespace_get_type(namespace_lang(), "Object");
+}
+
 type * namespace_int_class() {
 	return namespace_get_type(namespace_lang(), "Int");
 }

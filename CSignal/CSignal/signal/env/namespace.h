@@ -3,6 +3,7 @@
 #define SIGNAL_ENV_NAMESPACE_H
 #include "../util/tree_map.h"
 #include <stdint.h>
+#define CL_OBJECT namespace_object_class()
 #define CL_INT namespace_int_class()
 #define CL_DOUBLE namespace_double_class()
 #define CL_CHAR namespace_char_class()
@@ -97,6 +98,12 @@ namespace_* namespace_signal();
  * @return
  */
 namespace_* namespace_lang();
+
+/**
+ * 現在のスクリプトコンテキストで int クラスを返します.
+ * @return
+ */
+struct type* namespace_object_class();
 
 /**
  * 現在のスクリプトコンテキストで int クラスを返します.
