@@ -119,10 +119,16 @@ static void il_factor_named_invoke_find(il_factor_named_invoke* self, enviroment
 		if (top != NULL) {
 			tp = namespace_get_type(top, self->fqcn->name);
 		}
+		//見つからないので signal::lang を補完
+		if (tp == NULL) {
+			tp = namespace_get_type(namespace_lang(), self->fqcn->name);
+		}
+		//見つかったなら静的呼び出し
 		if (tp != NULL) {
 			self->u.type = tp;
 			self->type = ilnamed_invoke_static;
 			il_factor_named_invoke_generate_STATIC_IMPL(self, env, tp);
+		//変数へのインスタンス呼び出し
 		} else {
 			self->u.factor = il_factor_wrap_variable(il_factor_variable_new(self->fqcn->name));
 			self->type = ilnamed_invoke_variable;

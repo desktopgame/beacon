@@ -5,6 +5,8 @@
 #include "type_impl.h"
 #include <assert.h>
 
+//proto
+static type * fqcn_type_impl(fqcn_cache * self, namespace_* current);
 
 fqcn_cache * fqcn_cache_new() {
 	fqcn_cache* ret = (fqcn_cache*)MEM_MALLOC(sizeof(fqcn_cache));
@@ -59,35 +61,14 @@ namespace_ * fqcn_scope(fqcn_cache * self, namespace_* current) {
 	return top;
 }
 
-type * fqcn_type(fqcn_cache * self, namespace_* current) {
-	//Y形式
-	if (self->scope_vec->length == 0) {
-		char* name = self->name;
-		//プリミティブ型はどこからでも参照できる
-		if (!strcmp(name, "Int")) {
-			return CL_INT;
-		} else if (!strcmp(name, "Double")) {
-			return CL_DOUBLE;
-		} else if (!strcmp(name, "Char")) {
-			return CL_CHAR;
-		} else if (!strcmp(name, "String")) {
-			return CL_STRING;
-		} else if(!strcmp(name, "Bool")) {
-			return CL_BOOL;
-		} else if (!strcmp(name, "Void")) {
-			return CL_VOID;
-		}
-		if (current == NULL) { 
-			return NULL; 
-		}
-		return namespace_get_type(current, self->name);
+type * fqcn_type(fqcn_cache * self, namespace_ * current) {
+	type* ret = fqcn_type_impl(self, current);
+	//Console(X::Yを含まない)のような指定なら
+	//signal::lang空間も探索する
+	if (ret == NULL && self->scope_vec->length == 0) {
+		ret = fqcn_type_impl(self, namespace_lang());
 	}
-	//X::Yのような形式
-	namespace_* c = fqcn_scope(self, current);
-	if (c == NULL) { 
-		return NULL; 
-	}
-	return namespace_get_type(c, self->name);
+	return ret;
 }
 
 interface_ * fqcn_interface(fqcn_cache * self, namespace_ * current) {
@@ -120,4 +101,35 @@ void fqcn_cache_delete(fqcn_cache * self) {
 	vector_delete(self->scope_vec, vector_deleter_free);
 	MEM_FREE(self->name);
 	MEM_FREE(self);
+}
+//private
+static type * fqcn_type_impl(fqcn_cache * self, namespace_* current) {
+	//Y形式
+	if (self->scope_vec->length == 0) {
+		char* name = self->name;
+		//プリミティブ型はどこからでも参照できる
+		if (!strcmp(name, "Int")) {
+			return CL_INT;
+		} else if (!strcmp(name, "Double")) {
+			return CL_DOUBLE;
+		} else if (!strcmp(name, "Char")) {
+			return CL_CHAR;
+		} else if (!strcmp(name, "String")) {
+			return CL_STRING;
+		} else if (!strcmp(name, "Bool")) {
+			return CL_BOOL;
+		} else if (!strcmp(name, "Void")) {
+			return CL_VOID;
+		}
+		if (current == NULL) {
+			return NULL;
+		}
+		return namespace_get_type(current, self->name);
+	}
+	//X::Yのような形式
+	namespace_* c = fqcn_scope(self, current);
+	if (c == NULL) {
+		return NULL;
+	}
+	return namespace_get_type(c, self->name);
 }

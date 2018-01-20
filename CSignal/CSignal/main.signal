@@ -45,15 +45,15 @@ namespace signal.lang {
 }
 
 def test() -> Void {
-	signal::lang::Console.writeLine("Say");
+	Console.writeLine("Say");
 }
 def test2() -> Void {
-	signal::lang::Console.writeLine("Say");
+	Console.writeLine("Say");
 }
 
 Int i = 0;
 while(i < 10) {
-	signal::lang::Console.writeLine("Say");
+	Console.writeLine("Say");
 	i = i + 1;
 }
 
