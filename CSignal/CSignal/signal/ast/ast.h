@@ -119,6 +119,7 @@ typedef enum ast_tag {
 
 	ast_scope,
 	ast_stmt,
+	ast_while,
 	//
 	//call(); 
 	//a.invoke();

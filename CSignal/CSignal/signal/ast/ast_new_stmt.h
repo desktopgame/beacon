@@ -78,6 +78,14 @@ ast* ast_new_elif_list(ast* forward, ast* tail);
 ast* ast_new_elif(ast* cond, ast* body);
 
 /**
+ * whileを表す要素を作成します.
+ * @param cond
+ * @param body
+ * @return
+ */
+ast* ast_new_while(ast* cond, ast* body);
+
+/**
  * 値を返却するステートメントを作成します.
  * @param fact
  * @return

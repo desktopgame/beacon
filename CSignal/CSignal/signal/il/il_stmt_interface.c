@@ -22,6 +22,9 @@ void il_stmt_dump(il_stmt * self, int depth) {
 		case ilstmt_return:
 			il_stmt_return_dump(self->u.return_, depth);
 			break;
+		case ilstmt_while:
+			il_stmt_while_dump(self->u.while_, depth);
+			break;
 		default:
 			//ERROR("ステートメントをダンプ出来ませんでした。");
 			break;
@@ -47,6 +50,9 @@ void il_stmt_generate(il_stmt * self, struct enviroment* env) {
 		case ilstmt_return:
 			il_stmt_return_generate(self->u.return_, env);
 			break;
+		case ilstmt_while:
+			il_stmt_while_generate(self->u.while_, env);
+			break;
 		default:
 			//ERROR("ステートメントを開放出来ませんでした。");
 			break;
@@ -70,6 +76,9 @@ void il_stmt_load(il_stmt * self, enviroment* env, il_ehandler * eh) {
 		case ilstmt_return:
 			il_stmt_return_load(self->u.return_, env, eh);
 			break;
+		case ilstmt_while:
+			//il_stmt_while_delete(self->u.while_);
+			break;
 		default:
 			//ERROR("ステートメントを開放出来ませんでした。");
 			break;
@@ -92,6 +101,9 @@ void il_stmt_delete(il_stmt * self) {
 			break;
 		case ilstmt_return:
 			il_stmt_return_delete(self->u.return_);
+			break;
+		case ilstmt_while:
+			il_stmt_while_delete(self->u.while_);
 			break;
 		default:
 			//ERROR("ステートメントを開放出来ませんでした。");

@@ -42,7 +42,7 @@
 		THIS SUPER
 		INTERFACE CLASS PUBLIC PRIVATE PROTECTED STATIC NATIVE NEW
 		CTOR DEF ARROW NAMESPACE RETURN
-		IF ELIF ELSE
+		IF ELIF ELSE WHILE
 %type <ast_value> root 
 					top_level 
 					namespace_decl
@@ -88,6 +88,7 @@
 						if_stmt
 							elif_list
 							elif
+						while_stmt
 						return_stmt
 						scope
 						scope_optional
@@ -623,6 +624,7 @@ stmt
 	| variable_decl_stmt
 	| variable_init_stmt
 	| if_stmt
+	| while_stmt
 	| return_stmt
 	;
 variable_decl_stmt
@@ -666,6 +668,12 @@ elif
 	: ELIF LRB expression RRB scope
 	{
 		$$ = ast_new_elif($3, $5);
+	}
+	;
+while_stmt
+	: WHILE LRB expression RRB scope_optional
+	{
+		$$ = ast_new_while($3, $5);
 	}
 	;
 return_stmt

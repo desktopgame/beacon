@@ -286,57 +286,58 @@ static void yy_fatal_error YY_PROTO(( yyconst char msg[] ));
 	*yy_cp = '\0'; \
 	yy_c_buf_p = yy_cp;
 
-#define YY_NUM_RULES 80
-#define YY_END_OF_BUFFER 81
-static yyconst short int yy_acclist[216] =
+#define YY_NUM_RULES 81
+#define YY_END_OF_BUFFER 82
+static yyconst short int yy_acclist[223] =
     {   0,
-       81,   80,   11,   80,   59,   80,   10,   80,   26,   80,
-       80,   32,   80,   33,   80,    8,   80,    6,   80,    2,
-       80,    7,   80,    1,   80,    9,   80,   55,   80,   56,
-       80,    3,   80,    5,   80,   24,   80,   12,   80,   22,
-       80,   58,   80,   34,   80,   35,   80,   58,   80,   58,
-       80,   58,   80,   58,   80,   58,   80,   58,   80,   58,
-       80,   58,   80,   58,   80,   30,   80,   28,   80,   31,
-       80,   64,   80,   62,   80,   64,   80,   66,   80,   65,
-       80,   79,   80,   72,   79,   80,   79,   80,   19,   17,
-       27,   15,   20,   13,   21,   14,   54,   60,   61,   16,
+       82,   81,   11,   81,   60,   81,   10,   81,   26,   81,
+       81,   32,   81,   33,   81,    8,   81,    6,   81,    2,
+       81,    7,   81,    1,   81,    9,   81,   56,   81,   57,
+       81,    3,   81,    5,   81,   24,   81,   12,   81,   22,
+       81,   59,   81,   34,   81,   35,   81,   59,   81,   59,
+       81,   59,   81,   59,   81,   59,   81,   59,   81,   59,
+       81,   59,   81,   59,   81,   59,   81,   30,   81,   28,
+       81,   31,   81,   65,   81,   63,   81,   65,   81,   67,
+       81,   66,   81,   80,   81,   73,   80,   81,   80,   81,
+       19,   17,   27,   15,   20,   13,   21,   14,   55,   61,
 
-       56,    4,   25,   18,   23,   58,   58,   58,   58,   58,
-       37,   58,   58,   58,   58,   58,   58,   58,   58,   58,
-       58,   58,   29,   63,   73,   74,   78,   76,   75,   77,
-       71,   57,   58,   58,   53,   58,   58,   58,   58,   58,
-       58,   58,   45,   58,   58,   58,   58,   58,   58,   58,
-       58,   70,   68,   67,   69,   58,   52,   58,   38,   58,
-       39,   58,   58,   58,   58,   58,   58,   58,   58,   58,
-       58,   58,   43,   58,   41,   58,   58,   58,   58,   58,
-       58,   58,   58,   58,   58,   44,   58,   36,   58,   58,
-       58,   50,   58,   58,   58,   46,   58,   51,   58,   49,
+       62,   16,   57,    4,   25,   18,   23,   59,   59,   59,
+       59,   59,   37,   59,   59,   59,   59,   59,   59,   59,
+       59,   59,   59,   59,   59,   29,   64,   74,   75,   79,
+       77,   76,   78,   72,   58,   59,   59,   54,   59,   59,
+       59,   59,   59,   59,   59,   46,   59,   59,   59,   59,
+       59,   59,   59,   59,   59,   71,   69,   68,   70,   59,
+       53,   59,   38,   59,   39,   59,   59,   59,   59,   59,
+       59,   59,   59,   59,   59,   59,   44,   59,   59,   42,
+       59,   59,   59,   59,   59,   59,   59,   59,   59,   59,
+       45,   59,   40,   59,   36,   59,   59,   59,   51,   59,
 
-       58,   58,   58,   47,   58,   58,   58,   58,   58,   42,
-       58,   40,   58,   48,   58
+       59,   59,   47,   59,   52,   59,   50,   59,   59,   59,
+       48,   59,   59,   59,   59,   59,   43,   59,   41,   59,
+       49,   59
     } ;
 
-static yyconst short int yy_accept[173] =
+static yyconst short int yy_accept[178] =
     {   0,
         1,    1,    1,    1,    1,    1,    1,    1,    1,    2,
         3,    5,    7,    9,   11,   12,   14,   16,   18,   20,
        22,   24,   26,   28,   30,   32,   34,   36,   38,   40,
        42,   44,   46,   48,   50,   52,   54,   56,   58,   60,
        62,   64,   66,   68,   70,   72,   74,   76,   78,   80,
-       82,   84,   87,   89,   90,   91,   92,   92,   92,   93,
-       94,   95,   96,   97,   98,   99,  100,  101,  101,  101,
-      102,  103,  104,  105,  106,  107,  108,  109,  110,  111,
-      113,  114,  115,  116,  117,  118,  119,  120,  121,  122,
-      123,  124,  125,  126,  127,  128,  129,  130,  131,  132,
+       82,   84,   86,   89,   91,   92,   93,   94,   94,   94,
+       95,   96,   97,   98,   99,  100,  101,  102,  103,  103,
+      103,  104,  105,  106,  107,  108,  109,  110,  111,  112,
+      113,  115,  116,  117,  118,  119,  120,  121,  122,  123,
+      124,  125,  126,  127,  128,  129,  130,  131,  132,  133,
 
-      132,  132,  132,  132,  133,  134,  135,  137,  138,  139,
-      140,  141,  142,  143,  145,  146,  147,  148,  149,  150,
-      151,  152,  153,  154,  155,  156,  157,  159,  161,  163,
-      164,  165,  166,  167,  168,  169,  170,  171,  172,  173,
-      175,  177,  178,  179,  180,  181,  182,  183,  184,  185,
-      186,  188,  190,  191,  192,  194,  195,  196,  198,  200,
-      202,  203,  204,  206,  207,  208,  209,  210,  212,  214,
-      216,  216
+      134,  135,  135,  135,  135,  135,  136,  137,  138,  140,
+      141,  142,  143,  144,  145,  146,  148,  149,  150,  151,
+      152,  153,  154,  155,  156,  157,  158,  159,  160,  161,
+      163,  165,  167,  168,  169,  170,  171,  172,  173,  174,
+      175,  176,  177,  179,  180,  182,  183,  184,  185,  186,
+      187,  188,  189,  190,  191,  193,  195,  197,  198,  199,
+      201,  202,  203,  205,  207,  209,  210,  211,  213,  214,
+      215,  216,  217,  219,  221,  223,  223
     } ;
 
 static yyconst int yy_ec[256] =
@@ -380,112 +381,116 @@ static yyconst int yy_meta[49] =
         3,    3,    3,    3,    3,    1,    1,    1
     } ;
 
-static yyconst short int yy_base[177] =
+static yyconst short int yy_base[182] =
     {   0,
-        0,    0,   47,   48,  199,  198,   49,   50,  199,  202,
-      177,  202,  176,  190,  170,  202,  202,  173,   44,  202,
-       46,  202,   51,   46,   62,  175,  202,  171,  170,  169,
-        0,  202,  202,   29,  158,  153,   45,   42,   40,  156,
-       42,  153,  202,  138,  202,  202,  202,  169,  202,  202,
-      202,  202,   82,  202,  202,  202,  176,   63,  202,  202,
-      202,  202,  202,  202,  202,  202,  202,   71,   76,   80,
-      202,  202,  202,  202,    0,  155,  143,  148,   61,    0,
-      140,  136,   62,  132,   72,  148,  133,  147,  134,  138,
-      202,  202,  202,  202,  202,  202,  202,  202,  202,  164,
+        0,    0,   47,   48,  203,  202,   49,   50,  203,  206,
+      181,  206,  180,  194,  174,  206,  206,  177,   44,  206,
+       46,  206,   51,   46,   62,  179,  206,  175,  174,  173,
+        0,  206,  206,   29,  162,  157,   45,   42,   40,  160,
+       42,  157,  156,  206,  141,  206,  206,  206,  172,  206,
+      206,  206,  206,   82,  206,  206,  206,  179,   63,  206,
+      206,  206,  206,  206,  206,  206,  206,  206,   71,   76,
+       80,  206,  206,  206,  206,    0,  158,  146,  151,   61,
+        0,  143,  139,   62,  135,   72,  151,  136,  150,  137,
+      141,  140,  206,  206,  206,  206,  206,  206,  206,  206,
 
-      163,  162,  161,   92,  126,  126,    0,  133,  133,  125,
-      131,  130,  126,    0,  115,  116,  122,  113,  113,  123,
-      112,  202,  202,  202,  202,  111,    0,    0,    0,  111,
-      110,  108,  104,  120,  115,  111,  104,  109,  102,    0,
-        0,   99,  108,  100,  107,   95,  106,   94,   84,   91,
-        0,    0,   91,   90,    0,   85,   73,    0,    0,    0,
-       85,   84,    0,   81,   80,   70,   69,    0,    0,    0,
-      202,  124,  127,  130,  133,   53
+      206,  166,  165,  164,  163,   92,  128,  128,    0,  135,
+      135,  127,  133,  132,  128,    0,  117,  118,  124,  115,
+      115,  125,  114,  119,  206,  206,  206,  206,  112,    0,
+        0,    0,  112,  111,  109,  105,  121,  116,  112,  105,
+      110,  103,    0,  111,    0,   99,  108,  100,  107,   95,
+      106,   94,   84,   91,    0,    0,    0,   91,   90,    0,
+       85,   73,    0,    0,    0,   85,   84,    0,   81,   80,
+       70,   69,    0,    0,    0,  206,  124,  127,  130,  133,
+       53
     } ;
 
-static yyconst short int yy_def[177] =
+static yyconst short int yy_def[182] =
     {   0,
-      171,    1,  172,  172,  173,  173,  174,  174,  171,  171,
-      171,  171,  171,  171,  175,  171,  171,  171,  171,  171,
-      171,  171,  171,  171,  171,  171,  171,  171,  171,  171,
-      176,  171,  171,  176,  176,  176,  176,  176,  176,  176,
-      176,  176,  171,  171,  171,  171,  171,  171,  171,  171,
-      171,  171,  171,  171,  171,  171,  171,  171,  171,  171,
-      171,  171,  171,  171,  171,  171,  171,  171,  171,  171,
-      171,  171,  171,  171,  176,  176,  176,  176,  176,  176,
+      176,    1,  177,  177,  178,  178,  179,  179,  176,  176,
+      176,  176,  176,  176,  180,  176,  176,  176,  176,  176,
       176,  176,  176,  176,  176,  176,  176,  176,  176,  176,
-      171,  171,  171,  171,  171,  171,  171,  171,  171,  171,
+      181,  176,  176,  181,  181,  181,  181,  181,  181,  181,
+      181,  181,  181,  176,  176,  176,  176,  176,  176,  176,
+      176,  176,  176,  176,  176,  176,  176,  176,  176,  176,
+      176,  176,  176,  176,  176,  176,  176,  176,  176,  176,
+      176,  176,  176,  176,  176,  181,  181,  181,  181,  181,
+      181,  181,  181,  181,  181,  181,  181,  181,  181,  181,
+      181,  181,  176,  176,  176,  176,  176,  176,  176,  176,
 
-      171,  171,  171,  171,  176,  176,  176,  176,  176,  176,
-      176,  176,  176,  176,  176,  176,  176,  176,  176,  176,
-      176,  171,  171,  171,  171,  176,  176,  176,  176,  176,
-      176,  176,  176,  176,  176,  176,  176,  176,  176,  176,
-      176,  176,  176,  176,  176,  176,  176,  176,  176,  176,
-      176,  176,  176,  176,  176,  176,  176,  176,  176,  176,
-      176,  176,  176,  176,  176,  176,  176,  176,  176,  176,
-        0,  171,  171,  171,  171,  171
+      176,  176,  176,  176,  176,  176,  181,  181,  181,  181,
+      181,  181,  181,  181,  181,  181,  181,  181,  181,  181,
+      181,  181,  181,  181,  176,  176,  176,  176,  181,  181,
+      181,  181,  181,  181,  181,  181,  181,  181,  181,  181,
+      181,  181,  181,  181,  181,  181,  181,  181,  181,  181,
+      181,  181,  181,  181,  181,  181,  181,  181,  181,  181,
+      181,  181,  181,  181,  181,  181,  181,  181,  181,  181,
+      181,  181,  181,  181,  181,    0,  176,  176,  176,  176,
+      176
     } ;
 
-static yyconst short int yy_nxt[251] =
+static yyconst short int yy_nxt[255] =
     {   0,
        10,   10,   11,   12,   13,   14,   15,   16,   17,   18,
        19,   20,   21,   22,   23,   24,   25,   26,   27,   28,
        29,   30,   31,   32,   10,   33,   31,   31,   34,   35,
        36,   31,   31,   37,   31,   31,   38,   31,   39,   40,
-       41,   42,   31,   31,   31,   43,   44,   45,   47,   47,
-       10,   10,   52,   52,   60,   75,   48,   48,   62,   68,
-       65,   69,   69,   76,   61,   66,   63,   64,   83,   99,
-       77,   67,   84,   53,   53,   68,   80,   70,   70,   85,
-       81,   82,   86,   88,   89,   93,  104,  104,   94,   68,
-      100,   69,   69,   68,  108,   70,   70,  112,  170,  101,
+       41,   42,   31,   31,   43,   44,   45,   46,   48,   48,
+       10,   10,   53,   53,   61,   76,   49,   49,   63,   69,
+       66,   70,   70,   77,   62,   67,   64,   65,   84,  101,
+       78,   68,   85,   54,   54,   69,   81,   71,   71,   86,
+       82,   83,   87,   89,   90,   95,  106,  106,   96,   69,
+      102,   70,   70,   69,  110,   71,   71,  114,  175,  103,
 
-      169,  109,  102,  113,  103,  115,   95,  104,  104,  116,
-      168,  167,  166,  165,  164,  163,  162,  161,   96,  160,
-      159,   97,  158,   98,   46,   46,   46,   49,   49,   49,
-       51,   51,   51,   57,  157,   57,  156,  155,  154,  153,
-      152,  151,  150,  149,  148,  147,  146,  145,  144,  143,
-      142,  141,  140,  139,  138,  137,  136,  135,  134,  133,
-      132,  131,  130,  129,  128,  127,  126,  125,  124,  123,
-      122,  121,  120,  119,  118,  117,  114,  111,  110,  107,
-      106,  105,   99,   92,   91,   90,   87,   79,   78,   74,
-       73,   72,   71,   59,   58,   56,   55,   54,  171,   50,
+      174,  111,  104,  115,  105,  117,   97,  106,  106,  118,
+      173,  172,  171,  170,  169,  168,  167,  166,   98,  165,
+      164,   99,  163,  100,   47,   47,   47,   50,   50,   50,
+       52,   52,   52,   58,  162,   58,  161,  160,  159,  158,
+      157,  156,  155,  154,  153,  152,  151,  150,  149,  148,
+      147,  146,  145,  144,  143,  142,  141,  140,  139,  138,
+      137,  136,  135,  134,  133,  132,  131,  130,  129,  128,
+      127,  126,  125,  124,  123,  122,  121,  120,  119,  116,
+      113,  112,  109,  108,  107,  101,   94,   93,   92,   91,
+       88,   80,   79,   75,   74,   73,   72,   60,   59,   57,
 
-       50,    9,  171,  171,  171,  171,  171,  171,  171,  171,
-      171,  171,  171,  171,  171,  171,  171,  171,  171,  171,
-      171,  171,  171,  171,  171,  171,  171,  171,  171,  171,
-      171,  171,  171,  171,  171,  171,  171,  171,  171,  171,
-      171,  171,  171,  171,  171,  171,  171,  171,  171,  171
+       56,   55,  176,   51,   51,    9,  176,  176,  176,  176,
+      176,  176,  176,  176,  176,  176,  176,  176,  176,  176,
+      176,  176,  176,  176,  176,  176,  176,  176,  176,  176,
+      176,  176,  176,  176,  176,  176,  176,  176,  176,  176,
+      176,  176,  176,  176,  176,  176,  176,  176,  176,  176,
+      176,  176,  176,  176
     } ;
 
-static yyconst short int yy_chk[251] =
+static yyconst short int yy_chk[255] =
     {   0,
         1,    1,    1,    1,    1,    1,    1,    1,    1,    1,
         1,    1,    1,    1,    1,    1,    1,    1,    1,    1,
         1,    1,    1,    1,    1,    1,    1,    1,    1,    1,
         1,    1,    1,    1,    1,    1,    1,    1,    1,    1,
         1,    1,    1,    1,    1,    1,    1,    1,    3,    4,
-        7,    8,    7,    8,   19,  176,    3,    4,   21,   24,
-       23,   24,   24,   34,   19,   23,   21,   21,   38,   58,
+        7,    8,    7,    8,   19,  181,    3,    4,   21,   24,
+       23,   24,   24,   34,   19,   23,   21,   21,   38,   59,
        34,   23,   38,    7,    8,   25,   37,   25,   25,   39,
-       37,   37,   39,   41,   41,   53,   68,   68,   53,   69,
-       58,   69,   69,   70,   79,   70,   70,   83,  167,   58,
+       37,   37,   39,   41,   41,   54,   69,   69,   54,   70,
+       59,   70,   70,   71,   80,   71,   71,   84,  172,   59,
 
-      166,   79,   58,   83,   58,   85,   53,  104,  104,   85,
-      165,  164,  162,  161,  157,  156,  154,  153,   53,  150,
-      149,   53,  148,   53,  172,  172,  172,  173,  173,  173,
-      174,  174,  174,  175,  147,  175,  146,  145,  144,  143,
-      142,  139,  138,  137,  136,  135,  134,  133,  132,  131,
-      130,  126,  121,  120,  119,  118,  117,  116,  115,  113,
-      112,  111,  110,  109,  108,  106,  105,  103,  102,  101,
-      100,   90,   89,   88,   87,   86,   84,   82,   81,   78,
-       77,   76,   57,   48,   44,   42,   40,   36,   35,   30,
-       29,   28,   26,   18,   15,   14,   13,   11,    9,    6,
+      171,   80,   59,   84,   59,   86,   54,  106,  106,   86,
+      170,  169,  167,  166,  162,  161,  159,  158,   54,  154,
+      153,   54,  152,   54,  177,  177,  177,  178,  178,  178,
+      179,  179,  179,  180,  151,  180,  150,  149,  148,  147,
+      146,  144,  142,  141,  140,  139,  138,  137,  136,  135,
+      134,  133,  129,  124,  123,  122,  121,  120,  119,  118,
+      117,  115,  114,  113,  112,  111,  110,  108,  107,  105,
+      104,  103,  102,   92,   91,   90,   89,   88,   87,   85,
+       83,   82,   79,   78,   77,   58,   49,   45,   43,   42,
+       40,   36,   35,   30,   29,   28,   26,   18,   15,   14,
 
-        5,  171,  171,  171,  171,  171,  171,  171,  171,  171,
-      171,  171,  171,  171,  171,  171,  171,  171,  171,  171,
-      171,  171,  171,  171,  171,  171,  171,  171,  171,  171,
-      171,  171,  171,  171,  171,  171,  171,  171,  171,  171,
-      171,  171,  171,  171,  171,  171,  171,  171,  171,  171
+       13,   11,    9,    6,    5,  176,  176,  176,  176,  176,
+      176,  176,  176,  176,  176,  176,  176,  176,  176,  176,
+      176,  176,  176,  176,  176,  176,  176,  176,  176,  176,
+      176,  176,  176,  176,  176,  176,  176,  176,  176,  176,
+      176,  176,  176,  176,  176,  176,  176,  176,  176,  176,
+      176,  176,  176,  176
     } ;
 
 static yy_state_type yy_state_buf[YY_BUF_SIZE + 2], *yy_state_ptr;
@@ -641,7 +646,7 @@ static void update_loc() {
 #define L_COMMENT 2
 #define STRING_LITERAL_STATE 3
 
-#line 645 "lex.yy.c"
+#line 650 "lex.yy.c"
 
 /* Macros after this point can all be overridden by user definitions in
  * section 1.
@@ -794,7 +799,7 @@ YY_DECL
 
 #line 140 "C:\\Users\\Koya\\Documents\\GitHub\\CSignal\\CSignal\\CSignal\\signal\\parse\\signal.l"
 
-#line 798 "lex.yy.c"
+#line 803 "lex.yy.c"
 
 	if ( yy_init )
 		{
@@ -842,14 +847,14 @@ yy_match:
 			while ( yy_chk[yy_base[yy_current_state] + yy_c] != yy_current_state )
 				{
 				yy_current_state = (int) yy_def[yy_current_state];
-				if ( yy_current_state >= 172 )
+				if ( yy_current_state >= 177 )
 					yy_c = yy_meta[(unsigned int) yy_c];
 				}
 			yy_current_state = yy_nxt[yy_base[yy_current_state] + (unsigned int) yy_c];
 			*yy_state_ptr++ = yy_current_state;
 			++yy_cp;
 			}
-		while ( yy_base[yy_current_state] != 202 );
+		while ( yy_base[yy_current_state] != 206 );
 
 yy_find_action:
 		yy_current_state = *--yy_state_ptr;
@@ -1083,257 +1088,262 @@ YY_RULE_SETUP
 case 40:
 YY_RULE_SETUP
 #line 194 "C:\\Users\\Koya\\Documents\\GitHub\\CSignal\\CSignal\\CSignal\\signal\\parse\\signal.l"
-{ return (NAMESPACE); }
+{ return (WHILE); }
 	YY_BREAK
 case 41:
 YY_RULE_SETUP
-#line 195 "C:\\Users\\Koya\\Documents\\GitHub\\CSignal\\CSignal\\CSignal\\signal\\parse\\signal.l"
-{ return (CLASS); }
+#line 196 "C:\\Users\\Koya\\Documents\\GitHub\\CSignal\\CSignal\\CSignal\\signal\\parse\\signal.l"
+{ return (NAMESPACE); }
 	YY_BREAK
 case 42:
 YY_RULE_SETUP
-#line 196 "C:\\Users\\Koya\\Documents\\GitHub\\CSignal\\CSignal\\CSignal\\signal\\parse\\signal.l"
-{ return (INTERFACE); }
+#line 197 "C:\\Users\\Koya\\Documents\\GitHub\\CSignal\\CSignal\\CSignal\\signal\\parse\\signal.l"
+{ return (CLASS); }
 	YY_BREAK
 case 43:
 YY_RULE_SETUP
-#line 197 "C:\\Users\\Koya\\Documents\\GitHub\\CSignal\\CSignal\\CSignal\\signal\\parse\\signal.l"
-{ return (THIS); }
+#line 198 "C:\\Users\\Koya\\Documents\\GitHub\\CSignal\\CSignal\\CSignal\\signal\\parse\\signal.l"
+{ return (INTERFACE); }
 	YY_BREAK
 case 44:
 YY_RULE_SETUP
-#line 198 "C:\\Users\\Koya\\Documents\\GitHub\\CSignal\\CSignal\\CSignal\\signal\\parse\\signal.l"
-{ return (SUPER); }
+#line 199 "C:\\Users\\Koya\\Documents\\GitHub\\CSignal\\CSignal\\CSignal\\signal\\parse\\signal.l"
+{ return (THIS); }
 	YY_BREAK
 case 45:
 YY_RULE_SETUP
-#line 199 "C:\\Users\\Koya\\Documents\\GitHub\\CSignal\\CSignal\\CSignal\\signal\\parse\\signal.l"
-{ return (NEW); }
+#line 200 "C:\\Users\\Koya\\Documents\\GitHub\\CSignal\\CSignal\\CSignal\\signal\\parse\\signal.l"
+{ return (SUPER); }
 	YY_BREAK
 case 46:
 YY_RULE_SETUP
 #line 201 "C:\\Users\\Koya\\Documents\\GitHub\\CSignal\\CSignal\\CSignal\\signal\\parse\\signal.l"
-{ return (PUBLIC); }
+{ return (NEW); }
 	YY_BREAK
 case 47:
 YY_RULE_SETUP
-#line 202 "C:\\Users\\Koya\\Documents\\GitHub\\CSignal\\CSignal\\CSignal\\signal\\parse\\signal.l"
-{ return (PRIVATE); }
+#line 203 "C:\\Users\\Koya\\Documents\\GitHub\\CSignal\\CSignal\\CSignal\\signal\\parse\\signal.l"
+{ return (PUBLIC); }
 	YY_BREAK
 case 48:
 YY_RULE_SETUP
-#line 203 "C:\\Users\\Koya\\Documents\\GitHub\\CSignal\\CSignal\\CSignal\\signal\\parse\\signal.l"
-{ return (PROTECTED); }
+#line 204 "C:\\Users\\Koya\\Documents\\GitHub\\CSignal\\CSignal\\CSignal\\signal\\parse\\signal.l"
+{ return (PRIVATE); }
 	YY_BREAK
 case 49:
 YY_RULE_SETUP
-#line 204 "C:\\Users\\Koya\\Documents\\GitHub\\CSignal\\CSignal\\CSignal\\signal\\parse\\signal.l"
-{ return (STATIC); }
+#line 205 "C:\\Users\\Koya\\Documents\\GitHub\\CSignal\\CSignal\\CSignal\\signal\\parse\\signal.l"
+{ return (PROTECTED); }
 	YY_BREAK
 case 50:
 YY_RULE_SETUP
-#line 205 "C:\\Users\\Koya\\Documents\\GitHub\\CSignal\\CSignal\\CSignal\\signal\\parse\\signal.l"
-{ return (NATIVE); }
+#line 206 "C:\\Users\\Koya\\Documents\\GitHub\\CSignal\\CSignal\\CSignal\\signal\\parse\\signal.l"
+{ return (STATIC); }
 	YY_BREAK
 case 51:
 YY_RULE_SETUP
-#line 206 "C:\\Users\\Koya\\Documents\\GitHub\\CSignal\\CSignal\\CSignal\\signal\\parse\\signal.l"
-{ return (RETURN); }
+#line 207 "C:\\Users\\Koya\\Documents\\GitHub\\CSignal\\CSignal\\CSignal\\signal\\parse\\signal.l"
+{ return (NATIVE); }
 	YY_BREAK
 case 52:
 YY_RULE_SETUP
 #line 208 "C:\\Users\\Koya\\Documents\\GitHub\\CSignal\\CSignal\\CSignal\\signal\\parse\\signal.l"
-{ return (CTOR); }
+{ return (RETURN); }
 	YY_BREAK
 case 53:
 YY_RULE_SETUP
-#line 209 "C:\\Users\\Koya\\Documents\\GitHub\\CSignal\\CSignal\\CSignal\\signal\\parse\\signal.l"
-{ return (DEF); }
+#line 210 "C:\\Users\\Koya\\Documents\\GitHub\\CSignal\\CSignal\\CSignal\\signal\\parse\\signal.l"
+{ return (CTOR); }
 	YY_BREAK
 case 54:
 YY_RULE_SETUP
-#line 210 "C:\\Users\\Koya\\Documents\\GitHub\\CSignal\\CSignal\\CSignal\\signal\\parse\\signal.l"
-{ return (ARROW); }
+#line 211 "C:\\Users\\Koya\\Documents\\GitHub\\CSignal\\CSignal\\CSignal\\signal\\parse\\signal.l"
+{ return (DEF); }
 	YY_BREAK
 case 55:
 YY_RULE_SETUP
 #line 212 "C:\\Users\\Koya\\Documents\\GitHub\\CSignal\\CSignal\\CSignal\\signal\\parse\\signal.l"
+{ return (ARROW); }
+	YY_BREAK
+case 56:
+YY_RULE_SETUP
+#line 214 "C:\\Users\\Koya\\Documents\\GitHub\\CSignal\\CSignal\\CSignal\\signal\\parse\\signal.l"
 {
 	yylval.ast_value = ast_new_int(0);
 	return INT;
 }
 	YY_BREAK
-case 56:
+case 57:
 YY_RULE_SETUP
-#line 217 "C:\\Users\\Koya\\Documents\\GitHub\\CSignal\\CSignal\\CSignal\\signal\\parse\\signal.l"
+#line 219 "C:\\Users\\Koya\\Documents\\GitHub\\CSignal\\CSignal\\CSignal\\signal\\parse\\signal.l"
 {
 	yylval.ast_value = ast_new_int(atoi(yytext));
 	return INT;
 }
 	YY_BREAK
-case 57:
+case 58:
 YY_RULE_SETUP
-#line 222 "C:\\Users\\Koya\\Documents\\GitHub\\CSignal\\CSignal\\CSignal\\signal\\parse\\signal.l"
+#line 224 "C:\\Users\\Koya\\Documents\\GitHub\\CSignal\\CSignal\\CSignal\\signal\\parse\\signal.l"
 {
 	yylval.ast_value = ast_new_double(atof(yytext));
 	return DOUBLE;
 }
 	YY_BREAK
-case 58:
+case 59:
 YY_RULE_SETUP
-#line 227 "C:\\Users\\Koya\\Documents\\GitHub\\CSignal\\CSignal\\CSignal\\signal\\parse\\signal.l"
+#line 229 "C:\\Users\\Koya\\Documents\\GitHub\\CSignal\\CSignal\\CSignal\\signal\\parse\\signal.l"
 {
 	yylval.string_value = text_strdup(yytext);
 	return IDENT;
 }
 	YY_BREAK
-case 59:
+case 60:
 YY_RULE_SETUP
-#line 232 "C:\\Users\\Koya\\Documents\\GitHub\\CSignal\\CSignal\\CSignal\\signal\\parse\\signal.l"
+#line 234 "C:\\Users\\Koya\\Documents\\GitHub\\CSignal\\CSignal\\CSignal\\signal\\parse\\signal.l"
 {
 	parser_clear_buffer(parser_top());
     BEGIN STRING_LITERAL_STATE;
 }
 	YY_BREAK
-case 60:
-YY_RULE_SETUP
-#line 236 "C:\\Users\\Koya\\Documents\\GitHub\\CSignal\\CSignal\\CSignal\\signal\\parse\\signal.l"
-BEGIN ML_COMMENT;
-	YY_BREAK
 case 61:
 YY_RULE_SETUP
-#line 237 "C:\\Users\\Koya\\Documents\\GitHub\\CSignal\\CSignal\\CSignal\\signal\\parse\\signal.l"
-BEGIN L_COMMENT;
+#line 238 "C:\\Users\\Koya\\Documents\\GitHub\\CSignal\\CSignal\\CSignal\\signal\\parse\\signal.l"
+BEGIN ML_COMMENT;
 	YY_BREAK
 case 62:
 YY_RULE_SETUP
-#line 238 "C:\\Users\\Koya\\Documents\\GitHub\\CSignal\\CSignal\\CSignal\\signal\\parse\\signal.l"
+#line 239 "C:\\Users\\Koya\\Documents\\GitHub\\CSignal\\CSignal\\CSignal\\signal\\parse\\signal.l"
+BEGIN L_COMMENT;
+	YY_BREAK
+case 63:
+YY_RULE_SETUP
+#line 240 "C:\\Users\\Koya\\Documents\\GitHub\\CSignal\\CSignal\\CSignal\\signal\\parse\\signal.l"
 {
 
 }
 	YY_BREAK
-case 63:
+case 64:
 YY_RULE_SETUP
-#line 241 "C:\\Users\\Koya\\Documents\\GitHub\\CSignal\\CSignal\\CSignal\\signal\\parse\\signal.l"
+#line 243 "C:\\Users\\Koya\\Documents\\GitHub\\CSignal\\CSignal\\CSignal\\signal\\parse\\signal.l"
 {
     BEGIN INITIAL;
 }
 	YY_BREAK
-case 64:
-YY_RULE_SETUP
-#line 244 "C:\\Users\\Koya\\Documents\\GitHub\\CSignal\\CSignal\\CSignal\\signal\\parse\\signal.l"
-;
-	YY_BREAK
 case 65:
 YY_RULE_SETUP
-#line 245 "C:\\Users\\Koya\\Documents\\GitHub\\CSignal\\CSignal\\CSignal\\signal\\parse\\signal.l"
+#line 246 "C:\\Users\\Koya\\Documents\\GitHub\\CSignal\\CSignal\\CSignal\\signal\\parse\\signal.l"
+;
+	YY_BREAK
+case 66:
+YY_RULE_SETUP
+#line 247 "C:\\Users\\Koya\\Documents\\GitHub\\CSignal\\CSignal\\CSignal\\signal\\parse\\signal.l"
 {
 	BEGIN INITIAL;
 }
 	YY_BREAK
 case YY_STATE_EOF(L_COMMENT):
-#line 248 "C:\\Users\\Koya\\Documents\\GitHub\\CSignal\\CSignal\\CSignal\\signal\\parse\\signal.l"
+#line 250 "C:\\Users\\Koya\\Documents\\GitHub\\CSignal\\CSignal\\CSignal\\signal\\parse\\signal.l"
 {
 	BEGIN INITIAL;
 }
 	YY_BREAK
-case 66:
-YY_RULE_SETUP
-#line 251 "C:\\Users\\Koya\\Documents\\GitHub\\CSignal\\CSignal\\CSignal\\signal\\parse\\signal.l"
-;
-	YY_BREAK
 case 67:
 YY_RULE_SETUP
-#line 252 "C:\\Users\\Koya\\Documents\\GitHub\\CSignal\\CSignal\\CSignal\\signal\\parse\\signal.l"
+#line 253 "C:\\Users\\Koya\\Documents\\GitHub\\CSignal\\CSignal\\CSignal\\signal\\parse\\signal.l"
+;
+	YY_BREAK
+case 68:
+YY_RULE_SETUP
+#line 254 "C:\\Users\\Koya\\Documents\\GitHub\\CSignal\\CSignal\\CSignal\\signal\\parse\\signal.l"
 {
 	yylval.ast_value = ast_new_char('\r');
 	return CHAR_LITERAL;
 }
 	YY_BREAK
-case 68:
+case 69:
 YY_RULE_SETUP
-#line 256 "C:\\Users\\Koya\\Documents\\GitHub\\CSignal\\CSignal\\CSignal\\signal\\parse\\signal.l"
+#line 258 "C:\\Users\\Koya\\Documents\\GitHub\\CSignal\\CSignal\\CSignal\\signal\\parse\\signal.l"
 {
 	yylval.ast_value = ast_new_char('\n');
 	return CHAR_LITERAL;
 }
 	YY_BREAK
-case 69:
+case 70:
 YY_RULE_SETUP
-#line 260 "C:\\Users\\Koya\\Documents\\GitHub\\CSignal\\CSignal\\CSignal\\signal\\parse\\signal.l"
+#line 262 "C:\\Users\\Koya\\Documents\\GitHub\\CSignal\\CSignal\\CSignal\\signal\\parse\\signal.l"
 {
 	yylval.ast_value = ast_new_char('\t');
 	return CHAR_LITERAL;
 }
 	YY_BREAK
-case 70:
+case 71:
 YY_RULE_SETUP
-#line 264 "C:\\Users\\Koya\\Documents\\GitHub\\CSignal\\CSignal\\CSignal\\signal\\parse\\signal.l"
+#line 266 "C:\\Users\\Koya\\Documents\\GitHub\\CSignal\\CSignal\\CSignal\\signal\\parse\\signal.l"
 {
 	yylval.ast_value = ast_new_char('\b');
 	return CHAR_LITERAL;
 }
 	YY_BREAK
-case 71:
+case 72:
 YY_RULE_SETUP
-#line 268 "C:\\Users\\Koya\\Documents\\GitHub\\CSignal\\CSignal\\CSignal\\signal\\parse\\signal.l"
+#line 270 "C:\\Users\\Koya\\Documents\\GitHub\\CSignal\\CSignal\\CSignal\\signal\\parse\\signal.l"
 {
 	yylval.ast_value = ast_new_char(yytext[1]);
 	return CHAR_LITERAL;
 }
 	YY_BREAK
-case 72:
+case 73:
 YY_RULE_SETUP
-#line 272 "C:\\Users\\Koya\\Documents\\GitHub\\CSignal\\CSignal\\CSignal\\signal\\parse\\signal.l"
+#line 274 "C:\\Users\\Koya\\Documents\\GitHub\\CSignal\\CSignal\\CSignal\\signal\\parse\\signal.l"
 {
 	yylval.ast_value = parser_reduce_buffer(parser_top());
     BEGIN INITIAL;
 	return STRING_LITERAL;
 }
 	YY_BREAK
-case 73:
-YY_RULE_SETUP
-#line 277 "C:\\Users\\Koya\\Documents\\GitHub\\CSignal\\CSignal\\CSignal\\signal\\parse\\signal.l"
-parser_append_buffer(parser_top(), '"');
-	YY_BREAK
 case 74:
 YY_RULE_SETUP
-#line 278 "C:\\Users\\Koya\\Documents\\GitHub\\CSignal\\CSignal\\CSignal\\signal\\parse\\signal.l"
-parser_append_buffer(parser_top(), '\'');
+#line 279 "C:\\Users\\Koya\\Documents\\GitHub\\CSignal\\CSignal\\CSignal\\signal\\parse\\signal.l"
+parser_append_buffer(parser_top(), '"');
 	YY_BREAK
 case 75:
 YY_RULE_SETUP
-#line 279 "C:\\Users\\Koya\\Documents\\GitHub\\CSignal\\CSignal\\CSignal\\signal\\parse\\signal.l"
-parser_append_buffer(parser_top(), '\r');
+#line 280 "C:\\Users\\Koya\\Documents\\GitHub\\CSignal\\CSignal\\CSignal\\signal\\parse\\signal.l"
+parser_append_buffer(parser_top(), '\'');
 	YY_BREAK
 case 76:
 YY_RULE_SETUP
-#line 280 "C:\\Users\\Koya\\Documents\\GitHub\\CSignal\\CSignal\\CSignal\\signal\\parse\\signal.l"
-parser_append_buffer(parser_top(), '\n');
+#line 281 "C:\\Users\\Koya\\Documents\\GitHub\\CSignal\\CSignal\\CSignal\\signal\\parse\\signal.l"
+parser_append_buffer(parser_top(), '\r');
 	YY_BREAK
 case 77:
 YY_RULE_SETUP
-#line 281 "C:\\Users\\Koya\\Documents\\GitHub\\CSignal\\CSignal\\CSignal\\signal\\parse\\signal.l"
-parser_append_buffer(parser_top(), '\t');
+#line 282 "C:\\Users\\Koya\\Documents\\GitHub\\CSignal\\CSignal\\CSignal\\signal\\parse\\signal.l"
+parser_append_buffer(parser_top(), '\n');
 	YY_BREAK
 case 78:
 YY_RULE_SETUP
-#line 282 "C:\\Users\\Koya\\Documents\\GitHub\\CSignal\\CSignal\\CSignal\\signal\\parse\\signal.l"
-parser_append_buffer(parser_top(), '\\');
+#line 283 "C:\\Users\\Koya\\Documents\\GitHub\\CSignal\\CSignal\\CSignal\\signal\\parse\\signal.l"
+parser_append_buffer(parser_top(), '\t');
 	YY_BREAK
 case 79:
 YY_RULE_SETUP
-#line 283 "C:\\Users\\Koya\\Documents\\GitHub\\CSignal\\CSignal\\CSignal\\signal\\parse\\signal.l"
+#line 284 "C:\\Users\\Koya\\Documents\\GitHub\\CSignal\\CSignal\\CSignal\\signal\\parse\\signal.l"
+parser_append_buffer(parser_top(), '\\');
+	YY_BREAK
+case 80:
+YY_RULE_SETUP
+#line 285 "C:\\Users\\Koya\\Documents\\GitHub\\CSignal\\CSignal\\CSignal\\signal\\parse\\signal.l"
 {
 	parser_append_buffer(parser_top(), yytext[0]);
 }
 	YY_BREAK
-case 80:
+case 81:
 YY_RULE_SETUP
-#line 286 "C:\\Users\\Koya\\Documents\\GitHub\\CSignal\\CSignal\\CSignal\\signal\\parse\\signal.l"
+#line 288 "C:\\Users\\Koya\\Documents\\GitHub\\CSignal\\CSignal\\CSignal\\signal\\parse\\signal.l"
 ECHO;
 	YY_BREAK
-#line 1337 "lex.yy.c"
+#line 1347 "lex.yy.c"
 			case YY_STATE_EOF(INITIAL):
 			case YY_STATE_EOF(ML_COMMENT):
 			case YY_STATE_EOF(STRING_LITERAL_STATE):
@@ -1624,7 +1634,7 @@ static yy_state_type yy_get_previous_state()
 		while ( yy_chk[yy_base[yy_current_state] + yy_c] != yy_current_state )
 			{
 			yy_current_state = (int) yy_def[yy_current_state];
-			if ( yy_current_state >= 172 )
+			if ( yy_current_state >= 177 )
 				yy_c = yy_meta[(unsigned int) yy_c];
 			}
 		yy_current_state = yy_nxt[yy_base[yy_current_state] + (unsigned int) yy_c];
@@ -1654,11 +1664,11 @@ yy_state_type yy_current_state;
 	while ( yy_chk[yy_base[yy_current_state] + yy_c] != yy_current_state )
 		{
 		yy_current_state = (int) yy_def[yy_current_state];
-		if ( yy_current_state >= 172 )
+		if ( yy_current_state >= 177 )
 			yy_c = yy_meta[(unsigned int) yy_c];
 		}
 	yy_current_state = yy_nxt[yy_base[yy_current_state] + (unsigned int) yy_c];
-	yy_is_jam = (yy_current_state == 171);
+	yy_is_jam = (yy_current_state == 176);
 	if ( ! yy_is_jam )
 		*yy_state_ptr++ = yy_current_state;
 
@@ -2219,4 +2229,4 @@ int main()
 	return 0;
 	}
 #endif
-#line 286 "C:\\Users\\Koya\\Documents\\GitHub\\CSignal\\CSignal\\CSignal\\signal\\parse\\signal.l"
+#line 288 "C:\\Users\\Koya\\Documents\\GitHub\\CSignal\\CSignal\\CSignal\\signal\\parse\\signal.l"

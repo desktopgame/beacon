@@ -104,7 +104,8 @@
      RETURN = 313,
      IF = 314,
      ELIF = 315,
-     ELSE = 316
+     ELSE = 316,
+     WHILE = 317
    };
 #endif
 
@@ -128,7 +129,7 @@ typedef union YYSTYPE
 
 
 /* Line 1676 of yacc.c  */
-#line 125 "signal.tab.h"
+#line 126 "signal.tab.h"
 } YYSTYPE;
 # define YYSTYPE_IS_TRIVIAL 1
 # define yystype YYSTYPE /* obsolescent; will be withdrawn */

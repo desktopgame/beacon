@@ -51,6 +51,11 @@ def test2() -> Void {
 	signal::lang::Console.writeLine("Say");
 }
 
+Int i = 0;
+while(i < 10) {
+	signal::lang::Console.writeLine("Say");
+}
+
 signal::lang::ImplA x = new signal::lang::ImplA();
 signal::lang::ICallable a = (signal::lang::ICallable)x;
 

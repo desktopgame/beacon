@@ -197,6 +197,14 @@ il_stmt_if* class_loader_ilload_if_else(class_loader* self, ast* source);
 il_stmt_if* class_loader_ilload_if_elif_list_else(class_loader* self, ast* source);
 
 /**
+ * while ( ... ) { ... } を IL に変換します.
+ * @param self
+ * @param source
+ * @return
+ */
+il_stmt_while* class_loader_ilload_while(class_loader* self, ast* source);
+
+/**
  * return fact; を IL に変換します.
  * @param self
  * @param source

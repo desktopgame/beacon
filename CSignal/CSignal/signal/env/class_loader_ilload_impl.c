@@ -352,6 +352,12 @@ void class_loader_ilload_body(class_loader* self, vector* list, ast* source) {
 				vector_push(list, il_stmt_wrap_if(ilif));
 				break;
 			}
+			case ast_while:
+			{
+				il_stmt_while* ilwh = class_loader_ilload_while(self, source);
+				vector_push(list, il_stmt_wrap_while(ilwh));
+				break;
+			}
 			case ast_return:
 			{
 				il_stmt_return* ilret = class_loader_ilload_return(self, source);
@@ -420,6 +426,15 @@ il_stmt_if* class_loader_ilload_if_elif_list_else(class_loader* self, ast* sourc
 	il_stmt_if* ilif = class_loader_ilload_if_elif_list(self, aif_eliflist);
 	class_loader_ilload_body(self, ilif->else_body->body, ast_first(aelse));
 	return ilif;
+}
+
+il_stmt_while * class_loader_ilload_while(class_loader * self, ast * source) {
+	ast* acond = ast_first(source);
+	ast* abody = ast_second(source);
+	il_stmt_while* ilwhile = il_stmt_while_new();
+	ilwhile->condition = class_loader_ilload_factor(self, acond);
+	class_loader_ilload_body(self, ilwhile->statement_list, abody);
+	return ilwhile;
 }
 
 void class_loader_ilload_elif_list(class_loader* self, vector* list, ast* source) {
