@@ -114,6 +114,7 @@ static void script_context_launch(script_context* self) {
 	//プリロード
 	namespace_* signal = namespace_create_at_root("signal");
 	namespace_* lang = namespace_add_namespace(signal, "lang");
+	sg_object_init();
 	sg_int_init();
 	sg_double_init();
 	sg_char_init();
