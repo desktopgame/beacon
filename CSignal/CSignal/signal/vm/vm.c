@@ -454,61 +454,61 @@ void vm_delete(vm * self) {
 //private
 static int stack_topi(vm* self) {
 	object* ret = (object*)vector_top(self->value_stack);
-	assert(ret->type == object_int);
+	assert(ret->tag == object_int);
 	return ret->u.int_;
 }
 
 static double stack_topd(vm* self) {
 	object* ret = (object*)vector_top(self->value_stack);
-	assert(ret->type == object_double);
+	assert(ret->tag == object_double);
 	return ret->u.double_;
 }
 
 static char stack_topc(vm* self) {
 	object* ret = (object*)vector_top(self->value_stack);
-	assert(ret->type == object_char);
+	assert(ret->tag == object_char);
 	return ret->u.char_;
 }
 
 static char* stack_tops(vm* self) {
 	object* ret = (object*)vector_top(self->value_stack);
-	assert(ret->type == object_string);
+	assert(ret->tag == object_string);
 	return ret->u.string_;
 }
 
 static bool stack_topb(vm* self) {
 	object* ret = (object*)vector_top(self->value_stack);
-	assert(ret->type == object_bool);
+	assert(ret->tag == object_bool);
 	return ret->u.bool_;
 }
 
 
 static int stack_popi(vm* self) {
 	object* ret = (object*)vector_pop(self->value_stack);
-	assert(ret->type == object_int);
+	assert(ret->tag == object_int);
 	return ret->u.int_;
 }
 
 static double stack_popd(vm* self) {
 	object* ret = (object*)vector_pop(self->value_stack);
-	assert(ret->type == object_double);
+	assert(ret->tag == object_double);
 	return ret->u.double_;
 }
 
 static char stack_popc(vm* self) {
 	object* ret = (object*)vector_pop(self->value_stack);
-	assert(ret->type == object_char);
+	assert(ret->tag == object_char);
 	return ret->u.char_;
 }
 
 static char* stack_pops(vm* self) {
 	object* ret = (object*)vector_pop(self->value_stack);
-	assert(ret->type == object_string);
+	assert(ret->tag == object_string);
 	return ret->u.string_;
 }
 
 static bool stack_popb(vm* self) {
 	object* ret = (object*)vector_pop(self->value_stack);
-	assert(ret->type == object_bool);
+	assert(ret->tag == object_bool);
 	return ret->u.bool_;
 }

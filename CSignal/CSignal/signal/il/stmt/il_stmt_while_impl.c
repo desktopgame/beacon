@@ -33,6 +33,22 @@ void il_stmt_while_dump(il_stmt_while * self, int depth) {
 }
 
 void il_stmt_while_generate(il_stmt_while * self, enviroment * env) {
+	int prev = opcode_buf_nop(env->buf);
+	label* prevLab = opcode_buf_label(env->buf, prev);
+	label* nextLab = opcode_buf_label(env->buf, -1);
+
+	il_factor_generate(self->condition, env);
+	opcode_buf_add(env->buf, op_goto_if_false);
+	opcode_buf_add(env->buf, nextLab);
+	for (int i = 0; i < self->statement_list->length; i++) {
+		il_stmt* e = (il_stmt*)vector_at(self->statement_list, i);
+		il_stmt_generate(e, env);
+	}
+	opcode_buf_add(env->buf, op_goto);
+	opcode_buf_add(env->buf, prevLab);
+
+	int next = opcode_buf_nop(env->buf);
+	nextLab->cursor = next;
 }
 
 void il_stmt_while_delete(il_stmt_while * self) {
