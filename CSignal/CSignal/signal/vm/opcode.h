@@ -71,6 +71,8 @@ typedef enum opcode {
 	op_constd,
 	op_constc,
 	op_consts,
+	op_true,
+	op_false,
 	op_return,
 
 	op_dup,

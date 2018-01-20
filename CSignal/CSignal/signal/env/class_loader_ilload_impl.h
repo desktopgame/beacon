@@ -221,6 +221,22 @@ il_stmt_return* class_loader_ilload_return(class_loader* self, ast* source);
 il_factor* class_loader_ilload_factor(class_loader* self, ast* source);
 
 /**
+ * trueを表すILを作成します.
+ * @param self
+ * @param source
+ * @return
+ */
+il_factor_bool* class_loader_ilload_true(class_loader* self, ast* source);
+
+/**
+ * falseを表すILを作成します.
+ * @param self
+ * @param source
+ * @return
+ */
+il_factor_bool* class_loader_ilload_false(class_loader* self, ast* source);
+
+/**
  * キャストを IL に変換します.
  * @param self
  * @param source

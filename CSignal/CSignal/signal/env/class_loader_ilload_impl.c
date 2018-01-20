@@ -549,8 +549,20 @@ il_factor* class_loader_ilload_factor(class_loader* self, ast* source) {
 		return il_factor_wrap_static_field_access(class_loader_ilload_static_field_access(self, source));
 	} else if (source->tag == ast_cast) {
 		return il_factor_wrap_cast(class_loader_ilload_cast(self, source));
+	} else if (source->tag == ast_true) {
+		return il_factor_wrap_bool(class_loader_ilload_true(self, source));
+	} else if (source->tag == ast_false) {
+		return il_factor_wrap_bool(class_loader_ilload_false(self, source));
 	}
 	return NULL;
+}
+
+il_factor_bool * class_loader_ilload_true(class_loader * self, ast * source) {
+	return il_factor_bool_new(true);
+}
+
+il_factor_bool * class_loader_ilload_false(class_loader * self, ast * source) {
+	return il_factor_bool_new(false);
 }
 
 il_factor_cast * class_loader_ilload_cast(class_loader * self, ast * source) {

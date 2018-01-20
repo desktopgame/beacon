@@ -3,6 +3,7 @@
 #define SIGNAL_UTIL_TEXT_H
 #include "vector.h"
 #include <stdarg.h>
+#include <stdbool.h>
 
 //clangでは errno_t が見つからない
 #if defined(__clang__)
@@ -14,6 +15,12 @@ typedef errno_t SG_errno_t;
  * 改行文字を出力します
  */
 void text_putline(void);
+
+/**
+ * 真偽値型の値を出力します.
+ * @param b
+ */
+void text_putb(bool b);
 
 /**
  * printf へ委譲したあと、

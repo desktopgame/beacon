@@ -18,6 +18,10 @@ void text_putline() {
 #endif // defined(_WIN32)
 }
 
+void text_putb(bool b) {
+	printf("%s", (b ? "true" : "false"));
+}
+
 void text_printfln(const char * message, ...) {
 	va_list ap;
 	va_start(ap, message);

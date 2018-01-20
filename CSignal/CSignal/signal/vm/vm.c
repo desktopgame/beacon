@@ -183,6 +183,16 @@ void vm_execute(vm* self, enviroment* env) {
 				vector_push(self->value_stack, cs);
 				break;
 			}
+			case op_true:
+			{
+				vector_push(self->value_stack, object_true());
+				break;
+			}
+			case op_false:
+			{
+				vector_push(self->value_stack, object_false());
+				break;
+			}
 			case op_return:
 			{
 				i = source_len;

@@ -95,6 +95,25 @@ object* object_bool_new(bool b);
 object* object_ref_new();
 
 /**
+ * 真偽値型の値を参照します.
+ * @param b
+ * @return
+ */
+object* object_bool_get(bool b);
+
+/**
+ * trueを参照します.
+ * @return
+ */
+object* object_true();
+
+/**
+ * falseを参照します.
+ * @return
+ */
+object* object_false();
+
+/**
  * オブジェクトとフィールドを開放します.
  * @param self
  */

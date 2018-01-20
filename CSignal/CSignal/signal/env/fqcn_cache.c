@@ -72,6 +72,8 @@ type * fqcn_type(fqcn_cache * self, namespace_* current) {
 			return CL_CHAR;
 		} else if (!strcmp(name, "String")) {
 			return CL_STRING;
+		} else if(!strcmp(name, "Bool")) {
+			return CL_BOOL;
 		} else if (!strcmp(name, "Void")) {
 			return CL_VOID;
 		}

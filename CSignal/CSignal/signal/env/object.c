@@ -6,6 +6,9 @@
 
 //proto
 static object* object_malloc(object_tag type);
+static object* gObjectTrue = NULL;
+static object* gObjectFalse = NULL;
+
 
 object * object_int_new(int i) {
 	object* ret = object_malloc(object_int);
@@ -46,6 +49,26 @@ object * object_ref_new() {
 	object* ret= object_malloc(object_ref);
 	ret->u.field_vec = vector_new();
 	return ret;
+}
+
+object * object_bool_get(bool b) {
+	return (b ? object_true() : object_false());
+}
+
+object * object_true() {
+	if (gObjectTrue == NULL) {
+		gObjectTrue = object_malloc(object_bool);
+		gObjectTrue->u.bool_ = !false;
+	}
+	return gObjectTrue;
+}
+
+object * object_false() {
+	if (gObjectFalse == NULL) {
+		gObjectFalse = object_malloc(object_bool);
+		gObjectFalse->u.bool_ = false;
+	}
+	return gObjectFalse;
 }
 
 void object_delete(object * self) {

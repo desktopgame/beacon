@@ -27,6 +27,7 @@ typedef enum il_factor_type {
 	ilfactor_field_access,
 	ilfactor_static_field_access,
 	ilfactor_cast,
+	ilfactor_bool,
 } il_factor_type;
 
 //ファクターとして扱える要素自身が内側にファクターを含む(再帰)
@@ -54,6 +55,7 @@ struct il_factor_new_instance;
 struct il_factor_field_access;
 struct il_factor_static_field_access;
 struct il_factor_cast;
+struct il_factor_bool;
 
 /**
  * 計算可能な要素.
@@ -77,6 +79,7 @@ typedef struct il_factor {
 		struct il_factor_field_access* field_access_;
 		struct il_factor_static_field_access* static_field_access;
 		struct il_factor_cast* cast_;
+		struct il_factor_bool* bool_;
 	} u;
 } il_factor;
 

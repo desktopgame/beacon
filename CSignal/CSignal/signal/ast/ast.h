@@ -117,6 +117,9 @@ typedef enum ast_tag {
 	ast_constructor_chain_this,
 	ast_constructor_chain_super,
 
+	ast_true,
+	ast_false,
+
 	ast_scope,
 	ast_stmt,
 	ast_while,
@@ -184,6 +187,18 @@ void ast_compile_entry(ast* self);
  * @param tag
  */
 ast* ast_new(ast_tag tag);
+
+/**
+ * trueを表す要素を作成します.
+ * @return
+ */
+ast* ast_new_true();
+
+/**
+ * falseを表す要素を作成します.
+ * @return
+ */
+ast* ast_new_false();
 
 /**
  * 名前空間の一節(. ~~~ .)を表す要素を作成します.

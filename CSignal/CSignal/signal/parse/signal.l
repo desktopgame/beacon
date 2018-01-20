@@ -200,6 +200,9 @@ static void update_loc() {
 <INITIAL>"super"			{ return (SUPER); }
 <INITIAL>"new"				{ return (NEW); }
 
+<INITIAL>"true"			{ return (TRUE); }
+<INITIAL>"false"		{ return (FALSE); }
+
 <INITIAL>"public"			{ return (PUBLIC); }
 <INITIAL>"private"			{ return (PRIVATE); }
 <INITIAL>"protected"		{ return (PROTECTED); }

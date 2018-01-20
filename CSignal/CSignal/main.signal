@@ -57,6 +57,8 @@ while(i < 10) {
 	i = i + 1;
 }
 
+Bool b = true;
+Bool b2 = false;
 signal::lang::ImplA x = new signal::lang::ImplA();
 signal::lang::ICallable a = (signal::lang::ICallable)x;
 

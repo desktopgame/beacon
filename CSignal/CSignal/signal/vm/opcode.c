@@ -121,6 +121,16 @@ int opcode_print(vector* source, int index) {
 			printf("push consts(%d)", a);
 			break;
 		}
+		case op_true:
+		{
+			printf("true");
+			break;
+		}
+		case op_false:
+		{
+			printf("false");
+			break;
+		}
 		case op_dup:
 		{
 			printf("dup");

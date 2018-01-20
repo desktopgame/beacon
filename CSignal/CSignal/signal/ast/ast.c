@@ -31,6 +31,14 @@ ast * ast_new(ast_tag tag) {
 	return ret;
 }
 
+ast * ast_new_true() {
+	return ast_new(ast_true);
+}
+
+ast * ast_new_false() {
+	return ast_new(ast_false);
+}
+
 ast * ast_new_namespace_path(char * name) {
 	ast* ret = ast_new(ast_namespace_path);
 	ret->u.string_value = name;
@@ -387,6 +395,12 @@ void ast_print(ast* self) {
 		case ast_blank:
 			printf("blank");
 			break;
+		case ast_function_decl: p("function decl");
+		case ast_function_name: p("function name");
+		case ast_function_return_name: p("function return name");
+		case ast_while: p("while");
+		case ast_true: p("true");
+		case ast_false: p("false");
 		default: 
 			p("not implemented");
 	}
