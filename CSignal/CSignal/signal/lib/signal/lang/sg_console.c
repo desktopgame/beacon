@@ -1,6 +1,5 @@
 #include "sg_console.h"
 #include "../../sg_library_impl.h"
-#include "../../../env/type/class_impl.h"
 #include "../../../util/text.h"
 #include <stdio.h>
 

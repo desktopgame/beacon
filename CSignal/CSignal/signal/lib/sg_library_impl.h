@@ -6,6 +6,7 @@
 #include "../env/type_interface.h"
 #include "../env/method.h"
 #include "../env/object.h"
+#include "../env/type/class_impl.h"
 
 #include "../vm/vm.h"
 #include "../vm/enviroment.h"

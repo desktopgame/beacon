@@ -8,6 +8,7 @@
 #include <stdlib.h>
 #include <assert.h>
 #include "../util/mem.h"
+#include "../lib/sg_library_interface.h"
 //proto
 static script_context* script_context_check_init(void);
 static void script_context_launch(script_context* self);
@@ -110,22 +111,16 @@ static void script_context_launch(script_context* self) {
 	//FIXME:スタック?
 	script_context* selected = script_context_get_current();
 	script_context_set_current(self);
-	//プリロードされるクラスを定義
+	//プリロード
 	namespace_* signal = namespace_create_at_root("signal");
 	namespace_* lang = namespace_add_namespace(signal, "lang");
-	class_* intClass = class_new_preload("Int");
-	class_* doubleClass = class_new_preload("Double");
-	class_* charClass = class_new_preload("Char");
-	class_* stringClass = class_new_preload("String");
-	class_* boolClass = class_new_preload("Bool");
-	class_* voidClass = class_new_preload("Void");
-	//名前空間に追加
-	namespace_add_type(lang, type_wrap_class(intClass));
-	namespace_add_type(lang, type_wrap_class(doubleClass));
-	namespace_add_type(lang, type_wrap_class(charClass));
-	namespace_add_type(lang, type_wrap_class(stringClass));
-	namespace_add_type(lang, type_wrap_class(boolClass));
-	namespace_add_type(lang, type_wrap_class(voidClass));
+	sg_int_init();
+	sg_double_init();
+	sg_char_init();
+	sg_string_init();
+	sg_bool_init();
+	sg_void_init();
+	sg_console_init();
 	//退避していたコンテキストを復帰
 	script_context_set_current(selected);
 }
