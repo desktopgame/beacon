@@ -107,7 +107,9 @@
      IF = 316,
      ELIF = 317,
      ELSE = 318,
-     WHILE = 319
+     WHILE = 319,
+     BREAK = 320,
+     CONTINUE = 321
    };
 #endif
 
@@ -131,7 +133,7 @@ typedef union YYSTYPE
 
 
 /* Line 1676 of yacc.c  */
-#line 128 "signal.tab.h"
+#line 130 "signal.tab.h"
 } YYSTYPE;
 # define YYSTYPE_IS_TRIVIAL 1
 # define yystype YYSTYPE /* obsolescent; will be withdrawn */

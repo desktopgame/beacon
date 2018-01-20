@@ -192,6 +192,8 @@ static void update_loc() {
 <INITIAL>"else"				{ return (ELSE); }
 
 <INITIAL>"while"			{ return (WHILE); }
+<INITIAL>"break"			{ return (BREAK); }
+<INITIAL>"continue"			{ return (CONTINUE); }
 
 <INITIAL>"namespace"		{ return (NAMESPACE); }
 <INITIAL>"class"			{ return (CLASS); }

@@ -358,6 +358,16 @@ void class_loader_ilload_body(class_loader* self, vector* list, ast* source) {
 				vector_push(list, il_stmt_wrap_while(ilwh));
 				break;
 			}
+			case ast_break:
+			{
+				vector_push(list, il_stmt_wrap_break());
+				break;
+			}
+			case ast_continue:
+			{
+				vector_push(list, il_stmt_wrap_continue());
+				break;
+			}
 			case ast_return:
 			{
 				il_stmt_return* ilret = class_loader_ilload_return(self, source);

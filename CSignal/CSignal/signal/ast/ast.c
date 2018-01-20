@@ -401,6 +401,8 @@ void ast_print(ast* self) {
 		case ast_while: p("while");
 		case ast_true: p("true");
 		case ast_false: p("false");
+		case ast_break: p("break");
+		case ast_continue: p("continue");
 		default: 
 			p("not implemented");
 	}

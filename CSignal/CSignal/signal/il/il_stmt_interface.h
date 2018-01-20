@@ -13,6 +13,8 @@ typedef enum il_stmt_type {
 	ilstmt_variable_decl,
 	ilstmt_variable_init,
 	ilstmt_return,
+	ilstmt_break,
+	ilstmt_continue,
 } il_stmt_type;
 
 //詳細は il_stmt_impl.h を参照してください。

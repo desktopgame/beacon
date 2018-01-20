@@ -41,9 +41,28 @@ namespace signal.lang {
 		def call2() -> Void {
 			Console.writeLine("2XXX");
 		}
+		static def check(Int a) -> Void {
+			if(a == 0) {
+				Console.writeLine("a == 0");
+			} else {
+				Console.writeLine("a != 0");
+			}
+		}
 	}
 }
-
+Int a = 0;
+while(a < 5) {
+	if(a == 3) {
+		break;
+	}
+	if(a == 2) {
+		continue;
+	}
+	a = a + 1;
+}
+//ImplX.check(0);
+//ImplX.check(1);
+/*
 def test() -> Void {
 	Console.writeLine("Say");
 }
@@ -63,3 +82,4 @@ Bool b2 = false;
 signal::lang::ImplA x = new signal::lang::ImplA();
 signal::lang::ICallable a = (signal::lang::ICallable)x;
 
+*/

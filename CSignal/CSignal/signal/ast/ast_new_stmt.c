@@ -68,6 +68,14 @@ ast * ast_new_while(ast * cond, ast * body) {
 	return ret;
 }
 
+ast * ast_new_break() {
+	return ast_new(ast_break);
+}
+
+ast * ast_new_continue() {
+	return ast_new(ast_continue);
+}
+
 ast * ast_new_return(ast * fact) {
 	ast* ret = ast_new(ast_return);
 	ast_push(ret, fact);

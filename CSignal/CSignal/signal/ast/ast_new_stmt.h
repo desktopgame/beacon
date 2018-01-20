@@ -85,6 +85,18 @@ ast* ast_new_elif(ast* cond, ast* body);
  */
 ast* ast_new_while(ast* cond, ast* body);
 
+/** 
+ * ループから抜けるステートメントを作成します.
+ * @return
+ */
+ast* ast_new_break();
+
+/**
+ * 次のループまでスキップするステートメントを作成します.
+ * @return
+ */
+ast* ast_new_continue();
+
 /**
  * 値を返却するステートメントを作成します.
  * @param fact

@@ -42,7 +42,7 @@
 		THIS SUPER TRUE FALSE
 		INTERFACE CLASS PUBLIC PRIVATE PROTECTED STATIC NATIVE NEW
 		CTOR DEF ARROW NAMESPACE RETURN
-		IF ELIF ELSE WHILE
+		IF ELIF ELSE WHILE BREAK CONTINUE
 %type <ast_value> root 
 					top_level 
 					namespace_decl
@@ -89,6 +89,8 @@
 							elif_list
 							elif
 						while_stmt
+						break_stmt
+						continue_stmt
 						return_stmt
 						scope
 						scope_optional
@@ -633,6 +635,8 @@ stmt
 	| variable_init_stmt
 	| if_stmt
 	| while_stmt
+	| break_stmt
+	| continue_stmt
 	| return_stmt
 	;
 variable_decl_stmt
@@ -682,6 +686,18 @@ while_stmt
 	: WHILE LRB expression RRB scope_optional
 	{
 		$$ = ast_new_while($3, $5);
+	}
+	;
+break_stmt
+	: BREAK SEMI
+	{
+		$$ = ast_new_break();
+	}
+	;
+continue_stmt
+	: CONTINUE SEMI
+	{
+		$$ = ast_new_continue();
 	}
 	;
 return_stmt
