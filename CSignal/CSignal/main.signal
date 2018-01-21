@@ -62,6 +62,7 @@ while(i < 10) {
 	}
 }
 Console.writeLine(i.toString());
+Console.writeLine((100 + 10).toString());
 
 /*
 def test() -> Void {
