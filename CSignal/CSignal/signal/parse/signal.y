@@ -30,7 +30,7 @@
 %type <chain_type_value>	constructor_chain_type_T
 %type <access_level_value>	access_level_T
 %type <modifier_type_value> modifier_type_T;
-%token DOT COMMA COLON COLO_COLO
+%token DOT COMMA COMMA_OPT COLON COLO_COLO
 		ADD SUB MUL DIV MOD NOT
 		ASSIGN ADD_ASSIGN SUB_ASSIGN MUL_ASSIGN DIV_ASSIGN MOD_ASSIGN
 		EQUAL NOTEQUAL
@@ -40,7 +40,7 @@
 		LCB RCB LRB RRB LSB RSB
 		SEMI IMPORT
 		THIS SUPER TRUE FALSE
-		INTERFACE CLASS PUBLIC PRIVATE PROTECTED STATIC NATIVE NEW
+		INTERFACE CLASS ENUM PUBLIC PRIVATE PROTECTED STATIC NATIVE NEW
 		CTOR DEF ARROW NAMESPACE RETURN
 		IF ELIF ELSE WHILE BREAK CONTINUE
 %type <ast_value> root 
@@ -53,6 +53,7 @@
 					namespace_path
 					import 
 					class_decl 
+					enum_decl
 					interface_decl
 						access_member_tree
 						access_member_list
@@ -64,6 +65,7 @@
 						function_define
 						method_define
 						field_define
+						ident_list
 						parameter_list
 						argument_list
 						typename_list
@@ -146,6 +148,10 @@ namespace_member_decl
 	{
 		$$ = $1;
 	}
+	| enum_decl
+	{
+		$$ = $1;
+	}
 	;
 namespace_member_decl_list
 	: namespace_member_decl
@@ -191,6 +197,16 @@ class_decl
 	| CLASS IDENT COLON typename_list LCB access_member_tree RCB
 	{
 		$$ = ast_new_class_decl($2, $4, $6);
+	}
+	;
+enum_decl
+	: ENUM IDENT LCB ident_list RCB
+	{
+		$$ = ast_new_enum_decl($2, $4);
+	}
+	| ENUM IDENT LCB ident_list COMMA RCB
+	{
+		$$ = ast_new_enum_decl($2, $4);
 	}
 	;
 interface_decl
@@ -343,6 +359,16 @@ access_level_T
 	| PROTECTED
 	{
 		$$ = access_protected;
+	}
+	;
+ident_list
+	: IDENT
+	{
+		$$ = ast_new_identifier($1);
+	}
+	| IDENT COMMA ident_list
+	{
+		$$ = ast_new_identifier_list($1, $3);
 	}
 	;
 parameter_list

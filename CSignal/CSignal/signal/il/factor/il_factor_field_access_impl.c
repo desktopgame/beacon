@@ -38,12 +38,14 @@ void il_factor_field_access_dump(il_factor_field_access * self, int depth) {
 
 void il_factor_field_access_generate(il_factor_field_access * self, enviroment * env) {
 	il_factor_field_access_find(self, env);
-	il_factor_generate(self->fact, env);
+	
 	if (modifier_is_static(self->f->modifier)) {
 		opcode_buf_add(env->buf, op_get_static);
 		opcode_buf_add(env->buf, self->f->parent->absoluteIndex);
 		opcode_buf_add(env->buf, self->fieldIndex);
 	} else {
+		il_factor_generate(self->fact, env);
+
 		opcode_buf_add(env->buf, op_get_field);
 		opcode_buf_add(env->buf, self->fieldIndex);
 	}
@@ -58,14 +60,13 @@ type * il_factor_field_access_eval(il_factor_field_access * self, enviroment * e
 }
 
 void il_factor_field_access_delete(il_factor_field_access * self) {
-	il_factor_delete(self->f);
+	il_factor_delete(self->fact);
 	MEM_FREE(self->name);
 }
 
 //private
 static void il_factor_field_access_find(il_factor_field_access * self, enviroment * env) {
 	//*
-	type* tp = il_factor_eval(self->fact, env);
 	int temp = 0;
 	//TEST(env->toplevel);
 	//ここでもしfactがvariableなら、
@@ -77,6 +78,9 @@ static void il_factor_field_access_find(il_factor_field_access * self, enviromen
 		class_* cls = NULL;
 		if (top != NULL) {
 			cls = namespace_get_class(top, var->name);
+		}
+		if (cls == NULL) {
+			cls = namespace_get_class(namespace_lang(), var->name);
 		}
 		//クラスが見つかった
 		if (cls != NULL) {
@@ -92,6 +96,7 @@ static void il_factor_field_access_find(il_factor_field_access * self, enviromen
 	//variableではない(戻り値や式の結果)
 	//
 	} else {
+		type* tp = il_factor_eval(self->fact, env);
 		assert(tp->tag == type_class);
 		self->f = class_find_field_tree(tp->u.class_, self->name, &temp);
 		TEST(self->f == NULL);

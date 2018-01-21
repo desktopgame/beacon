@@ -13,6 +13,7 @@ typedef enum il_type_tag {
 
 struct il_class;
 struct il_interface;
+struct il_enum;
 struct il_field;
 struct il_method;
 struct il_constructor;
@@ -25,6 +26,7 @@ typedef struct il_type {
 	union {
 		struct il_class* class_;
 		struct il_interface* interface_;
+		struct il_enum* enum_;
 	} u;
 } il_type;
 

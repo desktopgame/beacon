@@ -1,7 +1,6 @@
 #include "il_type_interface.h"
 #include "../util/mem.h"
-#include "type/il_class_impl.h"
-#include "type/il_interface_impl.h"
+#include "il_type_impl.h"
 #include "il_constructor.h"
 #include "il_field.h"
 #include "il_method.h"
@@ -58,6 +57,8 @@ void il_type_dump(il_type * self, int depth) {
 		il_class_dump(self->u.class_, depth);
 	} else if (self->tag == iltype_interface) {
 		il_interface_dump(self->u.interface_, depth);
+	} else if (self->tag == iltype_enum) {
+		il_enum_dump(self->u.enum_, depth);
 	}
 }
 

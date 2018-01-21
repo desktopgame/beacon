@@ -11,6 +11,7 @@
 #include "../il/il_method.h"
 #include "../il/il_constructor.h"
 #include "../il/il_stmt_interface.h"
+#include "../env/object.h"
 #include "parameter.h"
 #include "field.h"
 #include "method.h"
@@ -114,7 +115,35 @@ void class_loader_sgload_type_list(class_loader* self, vector* iltype_list, name
 			class_loader_sgload_class(self, ilt, parent);
 		} else if (ilt->tag == iltype_interface) {
 			class_loader_sgload_interface(self, ilt, parent);
+		} else if (ilt->tag == iltype_enum) {
+			class_loader_sgload_enum(self, ilt, parent);
 		}
+	}
+}
+
+void class_loader_sgload_enum(class_loader * self, il_type * iltype, namespace_ * parent) {
+	assert(iltype->tag == iltype_enum);
+	il_enum* ilenum = iltype->u.enum_;
+	type* tp = namespace_get_type(parent, iltype->u.enum_->name);
+	class_* cls;
+	if (tp == NULL) {
+		cls = class_new(iltype->u.enum_->name);
+		cls->location = parent;
+		tp = type_wrap_class(cls);
+		namespace_add_type(parent, tp);
+	} else {
+		cls = tp->u.class_;
+	}
+	//全ての列挙子を public static final フィールドとして追加
+	for (int i = 0; i < ilenum->item_vec->length; i++) {
+		char* str = (char*)vector_at(ilenum->item_vec, i);
+		field* f = field_new(str);
+		f->modifier = modifier_static;
+		f->access = access_public;
+		f->static_value = object_int_new(i);
+		f->type = CL_INT;
+		f->parent = tp;
+		class_add_field(cls, f);
 	}
 }
 

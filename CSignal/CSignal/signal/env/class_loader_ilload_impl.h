@@ -68,6 +68,7 @@ void class_loader_ilload_namespace_body(class_loader* self, il_namespace* curren
  */
 void class_loader_ilload_class(class_loader* self, il_namespace* current, ast* class_decl);
 void class_loader_ilload_interface(class_loader* self, il_namespace* current, ast* interface_decl);
+void class_loader_ilload_enum(class_loader* self, il_namespace* current, ast* enum_decl);
 
 /**
  * 型名の一覧を dst へ出力します.
@@ -123,6 +124,14 @@ void class_loader_ilload_method(class_loader* self, il_type* current, ast* metho
  * @param level
  */
 void class_loader_ilload_constructor(class_loader* self, il_type* current, ast* constructor, access_level level);
+
+/**
+ * 識別子を IL に変換します.
+ * @param self
+ * @param list
+ * @param source
+ */
+void class_loader_ilload_identifier_list(class_loader* self, vector* list, ast* source);
 
 /**
  * 仮引数を IL に変換します.

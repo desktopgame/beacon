@@ -127,8 +127,11 @@ void class_loader_ilload_namespace_body(class_loader* self, il_namespace* curren
 		//printf("class decl\n");
 		class_loader_ilload_class(self, current, namespace_body);
 		//namespace xxx { interface yyy { ...
-	} else if(namespace_body->tag == ast_interface_decl) {
+	} else if (namespace_body->tag == ast_interface_decl) {
 		class_loader_ilload_interface(self, current, namespace_body);
+		//namespace xxx { enum yyy { ...
+	} else if(namespace_body->tag == ast_enum_decl) {
+		class_loader_ilload_enum(self, current, namespace_body);
 		//namespace xxx { any yyy { ...
 	} else if (namespace_body->tag == ast_namespace_member_decl_list) {
 		for (int i = 0; i < namespace_body->childCount; i++) {
@@ -170,6 +173,14 @@ void class_loader_ilload_interface(class_loader* self, il_namespace* current, as
 		class_loader_ilload_member_tree(self, type, member_tree);
 	}
 	vector_push(current->type_list, type);
+}
+
+void class_loader_ilload_enum(class_loader * self, il_namespace * current, ast * enum_decl) {
+	assert(enum_decl->tag == ast_enum_decl);
+	ast* aname_list = ast_first(enum_decl);
+	il_enum* ilenum = il_enum_new(enum_decl->u.string_value);
+	class_loader_ilload_identifier_list(self, ilenum->item_vec, aname_list);
+	vector_push(current->type_list, il_type_wrap_enum(ilenum));
 }
 
 void class_loader_ilload_typename_list(class_loader * self, vector * dst, ast * typename_list) {
@@ -274,6 +285,17 @@ void class_loader_ilload_constructor(class_loader* self, il_type* current, ast* 
 	class_loader_ilload_parameter_list(self, ilcons->parameter_list, aparams);
 	class_loader_ilload_body(self, ilcons->statement_list, abody);
 	vector_push(current->u.class_->constructor_list, ilcons);
+}
+
+void class_loader_ilload_identifier_list(class_loader * self, vector * list, ast * source) {
+	if (source->tag == ast_identifier_list) {
+		for (int i = 0; i < source->childCount; i++) {
+			class_loader_ilload_identifier_list(self, list, ast_at(source, i));
+		}
+	} else if(source->tag == ast_identifier) {
+		char* str = source->u.string_value;
+		vector_push(list, str);
+	}
 }
 
 void class_loader_ilload_parameter_list(class_loader* self, vector* list, ast* source) {

@@ -130,9 +130,19 @@ void class_dump(class_ * self, int depth) {
 		field* f = (field*)e;
 		field_dump(f, depth + 1);
 	}
+	for (int i = 0; i < self->sfield_list->length; i++) {
+		vector_item e = vector_at(self->sfield_list, i);
+		field* f = (field*)e;
+		field_dump(f, depth + 1);
+	}
 	//メソッドの一覧をダンプ
 	for (int i = 0; i < self->method_list->length; i++) {
 		vector_item e = vector_at(self->method_list, i);
+		method* m = (method*)e;
+		method_dump(m, depth + 1);
+	}
+	for (int i = 0; i < self->smethod_list->length; i++) {
+		vector_item e = vector_at(self->smethod_list, i);
 		method* m = (method*)e;
 		method_dump(m, depth + 1);
 	}

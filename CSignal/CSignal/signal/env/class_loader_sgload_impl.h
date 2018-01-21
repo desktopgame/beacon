@@ -49,6 +49,14 @@ void class_loader_sgload_namespace(class_loader* self, il_namespace* ilnamespace
 void class_loader_sgload_type_list(class_loader* self, vector* iltype_list, namespace_* parent);
 
 /**
+ * 列挙宣言を読み込んで名前空間に登録します.
+ * @param self
+ * @param iltype
+ * @param parent
+ */
+void class_loader_sgload_enum(class_loader* self, il_type* iltype, namespace_* parent);
+
+/**
  * クラス宣言を読み込んで名前空間に登録します.
  * @param self
  * @param iltype

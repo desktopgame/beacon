@@ -117,6 +117,13 @@ ast * ast_new_identifier(char * str) {
 	return ret;
 }
 
+ast * ast_new_identifier_list(char * str, ast * ident_list) {
+	ast* ret = ast_new(ast_identifier_list);
+	ast_push(ret, ast_new_identifier(str));
+	ast_push(ret, ident_list);
+	return ret;
+}
+
 ast * ast_new_variable(const char * name) {
 	ast* ret = ast_new(ast_variable);
 	ret->u.string_value = name;
@@ -403,6 +410,10 @@ void ast_print(ast* self) {
 		case ast_false: p("false");
 		case ast_break: p("break");
 		case ast_continue: p("continue");
+		case ast_enum_decl:
+			printf("enum(%s)", self->u.string_value);
+			break;
+		case ast_identifier_list: p("ident list");
 		default: 
 			p("not implemented");
 	}

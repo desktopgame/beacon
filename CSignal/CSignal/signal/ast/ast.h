@@ -66,6 +66,7 @@ typedef enum ast_tag {
 	ast_static_field_access,
 
 	ast_identifier,
+	ast_identifier_list,
 	//ast_typename,
 
 	//ast_variable_decl,
@@ -83,6 +84,7 @@ typedef enum ast_tag {
 	ast_class_decl_unit,
 	//ast_class_decl_list,
 	ast_class_decl,
+	ast_enum_decl,
 	ast_interface_decl,
 	ast_class_super,
 
@@ -291,6 +293,14 @@ ast* ast_new_post_dec(ast* a);
  * @return
  */
 ast* ast_new_identifier(char* str);
+
+/**
+ * 識別子のリストを表す要素を作成します.
+ * @param str
+ * @param ident_list
+ * @return
+ */
+ast* ast_new_identifier_list(char* str, ast* ident_list);
 
 /**
  * 変数を表す要素を作成します.
