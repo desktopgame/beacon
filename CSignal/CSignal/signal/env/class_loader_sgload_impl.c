@@ -157,6 +157,13 @@ void class_loader_sgload_class(class_loader* self, il_type* iltype, namespace_* 
 	} else {
 		cls = tp->u.class_;
 	}
+	//デフォルトで親に Object を持つように
+	class_* objClass = CL_OBJECT->u.class_;
+	if (cls != objClass) {
+		if (cls->super_class == NULL) {
+			cls->super_class = objClass;
+		}
+	}
 	//TEST(!strcmp(type->u.class_->name, "Console"));
 	class_loader_sgload_fields(self, iltype, tp);
 	class_loader_sgload_methods(self, iltype, tp);

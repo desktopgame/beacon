@@ -29,5 +29,7 @@ namespace signal.lang {
 		def p() -> Void {
 			Console.writeLine("Foo!");
 		}
+
+		
 	}
 }

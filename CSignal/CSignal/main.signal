@@ -61,6 +61,7 @@ while(i < 10) {
 		break;
 	}
 }
+Console.writeLine(i.toString());
 
 /*
 def test() -> Void {
