@@ -3,6 +3,7 @@
 #include "../../util/text.h"
 #include "../../vm/enviroment.h"
 #include "../../env/type_interface.h"
+#include <assert.h>
 
 void il_factor_this_dump(il_factor_this * self, int depth) {
 	text_putindent(depth);
@@ -18,7 +19,9 @@ void il_factor_this_load(il_factor_this * self, enviroment * env, il_ehandler * 
 }
 
 type * il_factor_this_eval(il_factor_this * self, enviroment * env) {
-	return (type*)vector_top(env->class_vec);
+	assert(env->type_vec->length > 0);
+	type* ret = (type*)vector_top(env->type_vec);
+	return ret;
 }
 
 void il_factor_this_delete(il_factor_this * self) {

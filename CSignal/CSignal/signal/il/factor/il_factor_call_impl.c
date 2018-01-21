@@ -91,7 +91,7 @@ static void il_factor_find_method(il_factor_call* self, enviroment* env) {
 		return;
 	}
 	int temp = 0;
-	type* tp = (type*)vector_top(env->class_vec);
+	type* tp = (type*)vector_top(env->type_vec);
 	class_* cls = tp->u.class_;
 	self->m = class_find_method(cls, self->name, self->argument_list, env, &temp);
 	self->methodIndex = temp;

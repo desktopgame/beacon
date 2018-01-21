@@ -1,12 +1,16 @@
-namespace java {
-	namespace awt {
-		class Frame {
-		}
-	}
-}
-
 namespace signal.lang {
 	class Object {
+		public:
+		ctor new() {
+		}
+
+		public:
+		def toString() -> String {
+			return this.nativeToString();
+		}
+
+		private:
+		native def nativeToString() -> String;
 	}
 	class Console {
 		public:

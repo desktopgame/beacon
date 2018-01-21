@@ -23,7 +23,7 @@ typedef struct enviroment {
 	//解析中の情報
 	//FIXME:ここに持たせるべきじゃない
 	vector* namespace_vec;
-	vector* class_vec;
+	vector* type_vec;
 	vector* whileStart_vec;
 	vector* whileEnd_vec;
 	bool toplevel;

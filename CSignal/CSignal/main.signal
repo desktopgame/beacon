@@ -51,6 +51,8 @@ namespace signal.lang {
 	}
 }
 
+Object o = new Object();
+Console.writeLine(o.toString());
 Int i = 0;
 while(i < 10) {
 	Console.writeLine("Say");

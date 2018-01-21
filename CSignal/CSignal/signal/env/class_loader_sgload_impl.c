@@ -164,10 +164,11 @@ void class_loader_sgload_class(class_loader* self, il_type* iltype, namespace_* 
 //	class_linkall(cls);
 //	class_loader_sgload_complete(self, iltype, tp);
 
+	class_create_vtable(tp->u.class_);
 	class_loader_sgload_complete_fields(self, iltype, tp);
 	class_loader_sgload_complete_methods(self, iltype, tp);
 	class_loader_sgload_complete_constructors(self, iltype, tp);
-	class_create_vtable(tp->u.class_);
+	
 	///*/
 }
 
@@ -348,7 +349,7 @@ void class_loader_sgload_complete_methods_impl(class_loader* self, namespace_* s
 		//FIXME:ILメソッドと実行時メソッドのインデックスが同じなのでとりあえず動く
 		//まずは仮引数の一覧にインデックスを割り振る
 		enviroment* env = enviroment_new();
-		vector_push(env->class_vec, tp);
+		vector_push(env->type_vec, tp);
 		env->context_cll = self;
 		for (int i = 0; i < ilmethod->parameter_list->length; i++) {
 			il_parameter* ilparam = (il_parameter*)vector_at(ilmethod->parameter_list, i);
@@ -371,7 +372,7 @@ void class_loader_sgload_complete_methods_impl(class_loader* self, namespace_* s
 		//NOTE:ここなら名前空間を設定出来る		
 		class_loader_sgload_body(self, ilmethod->statement_list, env, scope);
 		me->u.script_method->env = env;
-		vector_pop(env->class_vec);
+		vector_pop(env->type_vec);
 	}
 }
 
@@ -393,7 +394,7 @@ void class_loader_sgload_complete_constructors(class_loader* self, il_type* ilty
 		class_loader_sgload_params(self, scope, ilcons->parameter_list, cons->parameter_list);
 		//まずは仮引数の一覧にインデックスを割り振る
 		enviroment* env = enviroment_new();
-		vector_push(env->class_vec, tp);
+		vector_push(env->type_vec, tp);
 		env->context_cll = self;
 		for (int i = 0; i < cons->parameter_list->length; i++) {
 			il_parameter* ilparam = (il_parameter*)vector_at(ilcons->parameter_list, i);
@@ -411,7 +412,7 @@ void class_loader_sgload_complete_constructors(class_loader* self, il_type* ilty
 		//NOTE:ここなら名前空間を設定出来る		
 		class_loader_sgload_body(self, ilcons->statement_list, env, scope);
 		cons->env = env;
-		vector_pop(env->class_vec);
+		vector_pop(env->type_vec);
 	}
 }
 

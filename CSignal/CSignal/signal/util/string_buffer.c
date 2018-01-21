@@ -2,6 +2,8 @@
 #include "mem.h"
 #include <assert.h>
 #include <stdio.h>
+#include <assert.h>
+#include <string.h>
 
 //proto
 static void string_buffer_fill_zero(string_buffer* self, int offs, int len);
@@ -29,6 +31,33 @@ void string_buffer_append(string_buffer * self, char_t c) {
 	}
 	self->text[self->length] = c;
 	self->length++;
+}
+
+void string_buffer_appendf(string_buffer * self, const char * message, ...) {
+	va_list ap;
+	va_start(ap, message);
+
+#define BUFF_LEN (256)
+	char block[BUFF_LEN];
+	memset(block, '\0', BUFF_LEN);
+	int res = sprintf_s(block, BUFF_LEN, message, ap);
+	assert(res != -1);
+	int len = strlen(block);
+	for (int i = 0; i < len; i++) {
+		char c = block[i];
+		string_buffer_append(self, c);
+	}
+
+	va_end(ap);
+#undef BUFF_LEN
+}
+
+void string_buffer_appends(string_buffer * self, const char * s) {
+	for (int i = 0; ; i++) {
+		char c = s[i];
+		if (c == '\0') break;
+		string_buffer_append(self, c);
+	}
 }
 
 void string_buffer_shrink(string_buffer * self) {

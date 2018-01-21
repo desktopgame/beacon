@@ -1,6 +1,7 @@
 #pragma once
 #ifndef SIGNAL_UTIL_STRING_BUFFER_H
 #define SIGNAL_UTIL_STRING_BUFFER_H
+#include <stdarg.h>
 
 /**
  * 格納される文字の型.
@@ -29,6 +30,21 @@ string_buffer* string_buffer_new();
  * @param c
  */
 void string_buffer_append(string_buffer* self, char_t c);
+
+/**
+ * フォーマットして追記します.
+ * @param self
+ * @param message
+ * @param ...
+ */
+void string_buffer_appendf(string_buffer* self, const char* message, ...);
+
+/**
+ * 全て追記します.
+ * @param self
+ * @param s
+ */
+void string_buffer_appends(string_buffer* self, const char* s);
 
 /**
  * 将来の拡張のために確保された余分な領域を開放します.

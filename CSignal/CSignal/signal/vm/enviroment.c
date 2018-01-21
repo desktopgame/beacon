@@ -18,7 +18,7 @@ enviroment * enviroment_new() {
 	//ret->class_ = NULL;
 	ret->context_cll = NULL;
 	ret->namespace_vec = vector_new();
-	ret->class_vec = vector_new();
+	ret->type_vec = vector_new();
 	ret->toplevel = false;
 	ret->whileStart_vec = vector_new();
 	ret->whileEnd_vec = vector_new();
@@ -95,7 +95,7 @@ class_ * enviroment_class(enviroment * self, fqcn_cache * fqcn) {
 
 void enviroment_delete(enviroment * self) {
 	vector_delete(self->namespace_vec, vector_deleter_null);
-	vector_delete(self->class_vec, vector_deleter_null);
+	vector_delete(self->type_vec, vector_deleter_null);
 	
 	opcode_buf_delete(self->buf);
 	vector_delete(self->constant_pool, enviroment_constant_pool_delete);

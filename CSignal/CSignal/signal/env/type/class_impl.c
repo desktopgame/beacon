@@ -258,6 +258,7 @@ constructor * class_find_constructor(class_ * self, vector * args, enviroment * 
 method * class_find_method(class_ * self, const char * name, vector * args, enviroment * env, int * outIndex) {
 	(*outIndex) = -1;
 	class_create_vtable(self);
+	assert(self->vt->elements->length > 0);
 	return class_find_method_impl(self->vt->elements, name, args, env, outIndex);
 }
 
@@ -346,6 +347,7 @@ void class_create_vtable(class_ * self) {
 			vtable_replace(self->vt, m);
 		}
 	}
+	//assert(self->vt->elements->length > 0);
 }
 
 int class_count_fieldall(class_ * self) {

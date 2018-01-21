@@ -20,7 +20,7 @@ void il_factor_super_load(il_factor_super * self, enviroment * env, il_ehandler 
 }
 
 type * il_factor_super_eval(il_factor_super * self, enviroment * env) {
-	type* t = ((type*)vector_top(env->class_vec));
+	type* t = ((type*)vector_top(env->type_vec));
 	assert(t->tag == type_class);
 	return t->u.class_->super_class;
 }

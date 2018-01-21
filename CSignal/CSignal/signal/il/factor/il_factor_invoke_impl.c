@@ -7,6 +7,7 @@
 #include "../../env/type_interface.h"
 #include "../../env/method.h"
 #include "../../util/mem.h"
+#include "../../env/type_impl.h"
 
 //proto
 static void il_factor_invoke_argument_delete(vector_item item);
@@ -88,8 +89,9 @@ static void il_factor_invoke_find(il_factor_invoke* self, enviroment* env) {
 		return;
 	}
 	int temp = 0;
+	class_* cl = il_factor_eval(self->receiver, env)->u.class_;
 	self->m = class_find_method(
-		il_factor_eval(self->receiver, env),
+		cl,
 		self->name,
 		self->argument_list,
 		env,
