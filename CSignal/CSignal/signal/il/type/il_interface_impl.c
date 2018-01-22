@@ -26,7 +26,7 @@ void il_interface_dump(il_interface * self, int depth) {
 	text_putindent(depth);
 	printf("interface %s", self->name);
 	text_putline();
-	//Œp³‚·‚éƒCƒ“ƒ^[ƒtƒFƒCƒX‚Ìˆê——‚ğo—Í
+	//ç¶™æ‰¿ã™ã‚‹ã‚¤ãƒ³ã‚¿ãƒ¼ãƒ•ã‚§ã‚¤ã‚¹ã®ä¸€è¦§ã‚’å‡ºåŠ›
 	for (int i = 0; i < self->extends_list->length; i++) {
 		fqcn_cache* e = (fqcn_cache*)vector_at(self->extends_list, i);
 		fqcn_cache_dump(e, depth + 1);

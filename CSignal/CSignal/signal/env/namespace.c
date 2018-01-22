@@ -82,7 +82,7 @@ type * namespace_get_type(namespace_ * self, const char * name) {
 }
 
 class_ * namespace_get_class(namespace_ * self, const char * name) {
-	//FIXME:ƒRƒsƒy(namespace_get_interface)
+	//FIXME:ã‚³ãƒ”ãƒš(namespace_get_interface)
 	type* ret = namespace_get_type(self, name);
 	if (ret != NULL && 
 		ret->tag != type_class) {
@@ -96,7 +96,7 @@ class_ * namespace_get_class(namespace_ * self, const char * name) {
 }
 
 interface_ * namespace_get_interface(namespace_ * self, const char * name) {
-	//FIXME:ƒRƒsƒy(namespace_get_class)
+	//FIXME:ã‚³ãƒ”ãƒš(namespace_get_class)
 	type* ret = namespace_get_type(self, name);
 	if (ret != NULL &&
 		ret->tag != type_interface) {

@@ -52,7 +52,7 @@ void il_class_dump(il_class * self, int depth) {
 	text_putindent(depth);
 	printf("class %s", self->name);
 	text_putline();
-	//ここでは親クラスとインターフェースをごちゃまぜで表示
+	//縺薙％縺ｧ縺ｯ隕ｪ繧ｯ繝ｩ繧ｹ縺ｨ繧､繝ｳ繧ｿ繝ｼ繝輔ぉ繝ｼ繧ｹ繧偵＃縺｡繧�縺ｾ縺懊〒陦ｨ遉ｺ
 	for (int i = 0; i < self->extend_list->length; i++) {
 		fqcn_cache* e = (fqcn_cache*)vector_at(self->extend_list, i);
 		fqcn_cache_dump(e, depth + 1);

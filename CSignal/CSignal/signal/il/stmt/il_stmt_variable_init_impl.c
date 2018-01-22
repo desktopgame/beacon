@@ -36,7 +36,7 @@ void il_stmt_variable_init_generate(il_stmt_variable_init * self, enviroment * e
 		self->name
 	);
 	il_factor_generate(self->fact, env);
-	//éŒ¾Œ^‚Æ‘ã“üŒ^‚ªˆÙ‚È‚éê‡
+	//å®£è¨€åž‹ã¨ä»£å…¥åž‹ãŒç•°ãªã‚‹å ´åˆ
 	type* a = il_factor_eval(self->fact, env);
 	type* b = fqcn_type(self->fqcn, (namespace_*)vector_top(env->namespace_vec));
 	if (a != b) {

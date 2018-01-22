@@ -41,11 +41,11 @@ vtable* vtable_lookup(vtable * self, vtable * castTo) {
 	if (self == castTo) {
 		return self;
 	}
-	//•¡»
-	//–ß‚è’l‚ªvtable
-	//o->vptr‚ğ‘‚«Š·‚¦‚é
-	//proxy parent‚Í•s—v
-	//•ÏŠ·‚ğ‹L˜^‚µ‚Ä“ñ‰ñ–ÚˆÈ~‚ÍƒLƒƒƒbƒVƒ…‚ğ•Ô‚·
+	//è¤‡è£½
+	//æˆ»ã‚Šå€¤ãŒvtable
+	//o->vptrã‚’æ›¸ãæ›ãˆã‚‹
+	//proxy parentã¯ä¸è¦
+	//å¤‰æ›ã‚’è¨˜éŒ²ã—ã¦äºŒå›ç›®ä»¥é™ã¯ã‚­ãƒ£ãƒƒã‚·ãƒ¥ã‚’è¿”ã™
 	//
 	//if (self->proxy != NULL) {
 	//	vtable_lookup(self->proxy, castTo);
@@ -54,13 +54,13 @@ vtable* vtable_lookup(vtable * self, vtable * castTo) {
 	vtable* newVT = vtable_new();
 	newVT->parent = self;
 	//self->proxy = newVT;
-	//‰¼‘zŠÖ”‚Ìˆê——
+	//ä»®æƒ³é–¢æ•°ã®ä¸€è¦§
 	for (int i = 0; i < castTo->elements->length; i++) {
 		method* e = (method*)vector_at(castTo->elements, i);
-		//‹ïÛŠÖ”‚Ìˆê——
+		//å…·è±¡é–¢æ•°ã®ä¸€è¦§
 		for (int j = 0; j < self->elements->length; j++) {
-			//ŒİŠ·«‚ª‚ ‚é‚È‚çA
-			//‹ïÛƒƒ\ƒbƒh‚ğ’Ç‰Á
+			//äº’æ›æ€§ãŒã‚ã‚‹ãªã‚‰ã€
+			//å…·è±¡ãƒ¡ã‚½ãƒƒãƒ‰ã‚’è¿½åŠ 
 			method* li = (method*)vector_at(self->elements, j);
 			if (method_equal(e, li)) {
 				vtable_add(newVT, li);

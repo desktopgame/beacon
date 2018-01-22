@@ -71,8 +71,8 @@ bool method_equal(method * a, method * b) {
 	if (ar == br) {
 		return true;
 	}
-	//‹¤•Ï–ß‚è’l
-	//FIXME:‚ ‚Æ‚Å
+	//å…±å¤‰æˆ»ã‚Šå€¤
+	//FIXME:ã‚ã¨ã§
 	return false;
 	//return class_castable(b, a);
 }

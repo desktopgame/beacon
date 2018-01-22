@@ -20,21 +20,21 @@ void sg_object_init() {
 static void sg_object_nativeToString(method* parent, vm* vm, enviroment* env) {
 	object* self = (object*)vector_top(vm->value_stack);
 	string_buffer* sb = string_buffer_new();
-	//ŽQÆŒ^
+	//å‚ç…§åž‹
 	if (self->tag == object_ref) {
 		char* name = type_name(self->type);
 		string_buffer_append(sb, '[');
 		string_buffer_appends(sb, name);
 		string_buffer_append(sb, ']');
 		string_buffer_shrink(sb);
-	//^‹UŒ^
+	//çœŸå½åž‹
 	} else if (self->tag == object_bool) {
 		if (self == object_true()) {
 			string_buffer_appends(sb, "true");
 		} else if (self == object_false()) {
 			string_buffer_appends(sb, "false");
 		}
-	//®”Œ^
+	//æ•´æ•°åž‹
 	} else if (self->tag == object_int) {
 #define BUFF_LEN 256
 		char buff[256];
