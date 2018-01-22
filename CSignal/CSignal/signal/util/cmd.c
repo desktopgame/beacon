@@ -102,7 +102,7 @@ void cmd_signal(int argc, char * argv[]) {
 			cmd_signal_dump(cmdl, argv);
 			break;
 		} else {
-			printf("�R�}���h���ߏo���܂���B (%s)", action);
+			printf("指定の命令を解釈出来ません(%s)", action);
 			text_putline();
 			break;
 		}
@@ -143,7 +143,7 @@ static void cmd_signal_signal(cmd_line* self, char* argv) {
 		}
 	}
 	if (filename == NULL) {
-		printf("-file�I�v�V�����őΏۃt�@�C����ݒ肵�Ă��������B");
+		printf("-fileオプションでファイルを指定してください。");
 		text_putline();
 		return;
 	}
@@ -163,7 +163,7 @@ static void cmd_signal_dump(cmd_line* self, char* argv) {
 		//-file
 		if (!strcmp(param, "-file")) {
 			if (self->index >= self->argc) {
-				printf("-file �ɂ̓t�@�C���p�X���K�v�ł��B");
+				printf("-fileオプションでファイルを指定してください。");
 				text_putline();
 				break;
 			}

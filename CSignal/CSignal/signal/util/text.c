@@ -103,18 +103,12 @@ char * text_lineat(const char * src, int lineno) {
 	char* PTR = NULL;
 	for (int i = 0; i < len; i++) {
 		char c = src[i];
-//		strncpy(PTR, src + i, sizeof(char));
-//		text_strncpy(PTR, i, src, sizeof(char));
-//		char c = (*PTR);
 		if (c == '\0') { break; }
 		if (c == '\n') {
 			if (lineno == curLine) {
 				break;
 			}
 			curLine++;
-			//�ȑO�̃o�b�t�@�[��j��
-			//string_buffer_delete(buf);
-			//buf = string_buffer_new();
 		} else {
 			if (lineno == 0 || lineno == curLine) {
 				string_buffer_append(buf, c);
@@ -131,7 +125,7 @@ char* text_sum(vector * v, char * join) {
 	if (v == NULL || v->length == 0) {
 		return NULL;
 	}
-	//FIXME:��������ƍ����ɏo����
+	//FIXME:もうちょっと無駄をなくせるはず
 	char* head = text_strdup((char*)vector_at(v, 0));
 	int ptr = strlen(head);
 	for (int i = 1; i < v->length; i++) {
