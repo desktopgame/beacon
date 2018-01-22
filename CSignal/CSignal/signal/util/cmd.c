@@ -143,7 +143,9 @@ static void cmd_signal_signal(cmd_line* self, char* argv) {
 		}
 	}
 	if (filename == NULL) {
-		printf("-fileオプションでファイルを指定してください。");
+		//定数が二行目に続いているとか出たのでとりあえず消す
+		//printf("-fileオプションでファイルを指定してください。");
+		//
 		text_putline();
 		return;
 	}
@@ -163,7 +165,9 @@ static void cmd_signal_dump(cmd_line* self, char* argv) {
 		//-file
 		if (!strcmp(param, "-file")) {
 			if (self->index >= self->argc) {
-				printf("-fileオプションでファイルを指定してください。");
+				//定数が二行目に続いているとか出たのでとりあえず消す
+				//printf("-fileオプションでファイルを指定してください。");
+				//
 				text_putline();
 				break;
 			}
