@@ -16,6 +16,7 @@ begin
 	DQ = "\"";
 	includeTargets = [
 		"../ast/ast.h", 
+		"../ast/ast_new_factor.h", 
 		"../ast/constructor_chain_type.h",
 		"../ast/assign_operator_type.h",
 		"../ast/modifier_type.h",

@@ -1,5 +1,6 @@
 //insert by compile.rb
 #include "../ast/ast.h"
+#include "../ast/ast_new_factor.h"
 #include "../ast/constructor_chain_type.h"
 #include "../ast/assign_operator_type.h"
 #include "../ast/modifier_type.h"
@@ -122,7 +123,7 @@ typedef union YYSTYPE
 {
 
 /* Line 1676 of yacc.c  */
-#line 14 "C:\\Users\\Koya\\Documents\\GitHub\\CSignal\\CSignal\\CSignal\\signal\\parse\\signal.y"
+#line 15 "C:\\Users\\Koya\\Documents\\GitHub\\CSignal\\CSignal\\CSignal\\signal\\parse\\signal.y"
 
 	char char_value;
 	const char* string_value;

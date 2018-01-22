@@ -1,6 +1,7 @@
 %{
 #include <stdio.h>
 #include <stdlib.h>
+#include "../ast/ast_new_factor.h"
 #include "../ast/ast_new_operator.h"
 #include "../ast/ast_new_stmt.h"
 #include "../ast/ast_new_decl.h"
