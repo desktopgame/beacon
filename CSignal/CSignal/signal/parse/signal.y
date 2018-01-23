@@ -39,7 +39,7 @@
 		GT GE LT LE
 		BIT_AND LOGIC_AND BIT_OR LOGIC_OR
 		LCB RCB LRB RRB LSB RSB
-		SEMI IMPORT
+		SEMI IMPORT VAR
 		THIS SUPER TRUE FALSE
 		INTERFACE CLASS ENUM PUBLIC PRIVATE PROTECTED STATIC NATIVE NEW
 		CTOR DEF ARROW NAMESPACE RETURN
@@ -88,6 +88,7 @@
 						stmt
 						variable_decl_stmt
 						variable_init_stmt
+						inferenced_type_init_stmt
 						if_stmt
 							elif_list
 							elif
@@ -660,6 +661,7 @@ stmt
 	}
 	| variable_decl_stmt
 	| variable_init_stmt
+	| inferenced_type_init_stmt
 	| if_stmt
 	| while_stmt
 	| break_stmt
@@ -676,6 +678,12 @@ variable_init_stmt
 	: typename_T IDENT ASSIGN expression SEMI
 	{
 		$$ = ast_new_variable_init($1, $2, $4);
+	}
+	;
+inferenced_type_init_stmt
+	: VAR IDENT ASSIGN expression SEMI
+	{
+		$$ = ast_new_inferenced_type_init($2, $4);
 	}
 	;
 if_stmt

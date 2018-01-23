@@ -143,3 +143,12 @@ ast * ast_new_variable_init(ast * type, char * name, ast * fact) {
 	ast_push(ret, fact);
 	return ret;
 }
+
+ast * ast_new_inferenced_type_init(const char * name, ast * fact) {
+	ast* ret = ast_new(ast_inferenced_type_init);
+	ast* aname = ast_new(ast_identifier);
+	aname->u.string_value = name;
+	ast_push(ret, aname);
+	ast_push(ret, fact);
+	return ret;
+}

@@ -350,6 +350,12 @@ void class_loader_ilload_body(class_loader* self, vector* list, ast* source) {
 				vector_push(list, il_stmt_wrap_variable_init(ilvarinit));
 				break;
 			}
+			case ast_inferenced_type_init:
+			{
+				il_stmt_inferenced_type_init* ilinfer = class_loader_ilload_inferenced_type_init(self, source);
+				vector_push(list, il_stmt_wrap_inferenced_type_init(ilinfer));
+				break;
+			}
 			case ast_if:
 			{
 				il_stmt_if* ilif = class_loader_ilload_if(self, source);
@@ -400,6 +406,14 @@ void class_loader_ilload_body(class_loader* self, vector* list, ast* source) {
 				break;
 		}
 	}
+}
+
+il_stmt_inferenced_type_init * class_loader_ilload_inferenced_type_init(class_loader * self, ast * source) {
+	ast* aname = ast_first(source);
+	ast* afact = ast_second(source);
+	il_stmt_inferenced_type_init* ret = il_stmt_inferenced_type_init_new(aname->u.string_value);
+	ret->fact = class_loader_ilload_factor(self, afact);
+	return ret;
 }
 
 il_stmt_variable_decl* class_loader_ilload_variable_decl(class_loader* self, ast* source) {

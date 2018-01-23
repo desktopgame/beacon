@@ -186,6 +186,7 @@ static void update_loc() {
 <INITIAL>"]"				{ return (RSB); }
 
 <INITIAL>"import"			{ return (IMPORT); }
+<INITIAL>"var"				{ return (VAR); }
 
 <INITIAL>"if"				{ return (IF); }
 <INITIAL>"elif"				{ return (ELIF); }

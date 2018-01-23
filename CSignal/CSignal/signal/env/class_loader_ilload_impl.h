@@ -150,6 +150,14 @@ void class_loader_ilload_parameter_list(class_loader* self, vector* list, ast* s
 void class_loader_ilload_body(class_loader* self, vector* list, ast* source);
 
 /**
+ * var宣言を IL に変換します.
+ * @param self
+ * @param source
+ * @return
+ */
+il_stmt_inferenced_type_init* class_loader_ilload_inferenced_type_init(class_loader* self, ast* source);
+
+/**
  * 変数宣言を IL に変換します.
  * @param self
  * @param source

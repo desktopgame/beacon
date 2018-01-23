@@ -158,4 +158,12 @@ ast* ast_new_variable_decl(ast* type, char* name);
  * @return
  */
 ast* ast_new_variable_init(ast* type, char* name, ast* fact);
+
+/**
+ * var y = new X::Y() のような初期化を表す要素を作成します.
+ * @param name
+ * @param fact
+ * @return
+ */
+ast* ast_new_inferenced_type_init(const char* name, ast* fact);
 #endif // !SIGNAL_AST_AST_NEW_STMT_H

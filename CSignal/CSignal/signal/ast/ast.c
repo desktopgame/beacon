@@ -287,6 +287,7 @@ void ast_print(ast* self) {
 			printf("enum(%s)", self->u.string_value);
 			break;
 		case ast_identifier_list: p("ident list");
+		case ast_inferenced_type_init: p("var init");
 		default: 
 			p("not implemented");
 	}

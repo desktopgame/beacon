@@ -55,6 +55,7 @@ typedef enum ast_tag {
 	ast_string,
 	ast_cast,
 	ast_variable,
+	ast_inferenced_type_init,
 	ast_call,
 	ast_invoke,
 	ast_return,

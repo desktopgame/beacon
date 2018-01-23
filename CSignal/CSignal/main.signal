@@ -54,7 +54,10 @@ namespace signal.lang {
 		}
 	}
 }
-
+Int a = 0;
+var x = 0;
+var y = new Object();
+/*
 Object o = new Object();
 Console.writeLine(o.toString());
 Int i = 0;
@@ -69,7 +72,7 @@ Console.writeLine(i.toString());
 Console.writeLine((100 + 10).toString());
 Console.writeLine(List.A);
 Console.writeLine(List.B);
-
+*/
 /*
 def test() -> Void {
 	Console.writeLine("Say");
