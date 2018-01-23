@@ -189,6 +189,15 @@ struct field* class_get_sfield(class_* self, int index);
 struct constructor* class_find_constructor(class_* self, vector* args, enviroment* env, int* outIndex);
 
 /**
+ * 引数が一つもないコンストラクタを検索して返します.
+ * @param self
+ * @param env
+ * @param outIndex
+ * @return
+ */
+struct constructor* class_find_empty_constructor(class_* self, enviroment* env, int* outIndex);
+
+/**
  * もっとも一致するメソッドを返します.
  * @param self
  * @param name

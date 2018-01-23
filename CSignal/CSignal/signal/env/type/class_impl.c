@@ -265,6 +265,14 @@ constructor * class_find_constructor(class_ * self, vector * args, enviroment * 
 	return ret;
 }
 
+constructor * class_find_empty_constructor(class_ * self, enviroment * env, int * outIndex) {
+	vector* emptyArgs = vector_new();
+	constructor* ret = class_find_constructor(self, emptyArgs, env, outIndex);
+	vector_delete(emptyArgs, vector_deleter_null);
+
+	return ret;
+}
+
 method * class_find_method(class_ * self, const char * name, vector * args, enviroment * env, int * outIndex) {
 	(*outIndex) = -1;
 	class_create_vtable(self);

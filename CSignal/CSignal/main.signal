@@ -13,7 +13,7 @@ namespace signal.lang {
 
 	class ImplA : ICallable {
 		public:
-		ctor new() : super() {
+		ctor new() {
 		}
 
 		def call2() -> Void {

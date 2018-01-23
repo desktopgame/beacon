@@ -476,13 +476,50 @@ void class_loader_sgload_chain(class_loader* self, il_type* iltype, type* tp, il
 	class_* classz = tp->u.class_;
 	if (classz->super_class == NULL &&
 		ilcons->chain == NULL) {
-		opcode_buf_add(env->buf, op_new_object);
-	}
-	if (ilcons->chain == NULL) {
-		opcode_buf_add(env->buf, op_alloc_field);
-		opcode_buf_add(env->buf, tp->absoluteIndex);
+		class_loader_sgload_chain_root(self, iltype, tp, ilcons, ilchain, env);
 		return;
 	}
+	//親クラスがあるのに連鎖がない
+	if (classz->super_class != NULL &&
+		ilcons->chain == NULL) {
+		class_loader_sgload_chain_auto(self, iltype, tp, ilcons, ilchain, env);
+		return;
+	}
+	class_loader_sgload_chain_super(self, iltype, tp, ilcons, ilchain, env);
+}
+
+void class_loader_sgload_chain_root(class_loader * self, il_type * iltype, type * tp, il_constructor * ilcons, il_constructor_chain * ilchain, enviroment * env) {
+	opcode_buf_add(env->buf, op_new_object);
+	opcode_buf_add(env->buf, op_alloc_field);
+	opcode_buf_add(env->buf, tp->absoluteIndex);
+}
+
+void class_loader_sgload_chain_auto(class_loader * self, il_type * iltype, type * tp, il_constructor * ilcons, il_constructor_chain * ilchain, enviroment * env) {
+	class_* classz = tp->u.class_;
+	int emptyTemp = 0;
+	constructor* emptyTarget = class_find_empty_constructor(classz->super_class, env, &emptyTemp);
+	//連鎖を明示的に書いていないのに、
+	//親クラスにも空のコンストラクタが存在しない=エラー
+	//(この場合自動的にチェインコンストラクタを補うことが出来ないため。)
+	assert((emptyTarget != NULL));
+	//空のコンストラクタを見つけることが出来たので、
+	//自動的にそれへ連鎖するチェインをおぎなう
+	il_constructor_chain* ch_empty = il_constructor_chain_new();
+	ch_empty->c = emptyTarget;
+	ch_empty->constructorIndex = emptyTemp;
+	ch_empty->type = ast_constructor_chain_super;
+	ilcons->chain = ch_empty;
+	//親クラスへ連鎖
+	opcode_buf_add(env->buf, op_chain_super);
+	opcode_buf_add(env->buf, classz->super_class->classIndex);
+	opcode_buf_add(env->buf, emptyTemp);
+	//このクラスのフィールドを確保
+	opcode_buf_add(env->buf, op_alloc_field);
+	opcode_buf_add(env->buf, tp->absoluteIndex);
+}
+
+void class_loader_sgload_chain_super(class_loader * self, il_type * iltype, type * tp, il_constructor * ilcons, il_constructor_chain * ilchain, enviroment * env) {
+	class_* classz = tp->u.class_;
 	//チェインコンストラクタの実引数をプッシュ
 	il_constructor_chain* chain = ilcons->chain;
 	for (int i = 0; i < chain->argument_list->length; i++) {
