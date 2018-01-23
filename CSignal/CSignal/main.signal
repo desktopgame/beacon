@@ -13,7 +13,7 @@ namespace signal.lang {
 
 	class ImplA : ICallable {
 		public:
-		ctor new() {
+		ctor new() : super() {
 		}
 
 		def call2() -> Void {
@@ -54,9 +54,11 @@ namespace signal.lang {
 		}
 	}
 }
-Int a = 0;
-var x = 0;
-var y = new Object();
+//Int a = 0;
+//var x = 0;
+//signal::lang::ImplA y =new signal::lang::ImplA();
+var y = new signal::lang::ImplA();
+y.call();
 /*
 Object o = new Object();
 Console.writeLine(o.toString());

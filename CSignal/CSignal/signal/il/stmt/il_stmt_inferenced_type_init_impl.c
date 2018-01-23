@@ -1,6 +1,8 @@
 #include "il_stmt_inferenced_type_init_impl.h"
 #include "../../util/mem.h"
 #include "../../util/text.h"
+#include "../../vm/symbol_entry.h"
+#include "../../env/type_interface.h"
 #include <stdio.h>
 
 il_stmt * il_stmt_wrap_inferenced_type_init(il_stmt_inferenced_type_init * self) {
@@ -25,6 +27,17 @@ void il_stmt_inferenced_type_init_dump(il_stmt_inferenced_type_init * self, int 
 }
 
 void il_stmt_inferenced_type_init_generate(il_stmt_inferenced_type_init * self, enviroment * env) {
+	//右辺の方で宣言する
+	type* tp = il_factor_eval(self->fact, env);
+	symbol_entry* e = symbol_table_entry(
+		env->sym_table,
+		tp,
+//		fqcn_type(self->fqcn, (namespace_*)vector_top(env->namespace_vec)),
+		self->name
+	);
+	il_factor_generate(self->fact, env);
+	opcode_buf_add(env->buf, op_store);
+	opcode_buf_add(env->buf, e->index);
 }
 
 void il_stmt_inferenced_type_init_load(il_stmt_inferenced_type_init * self, enviroment * env, il_ehandler * eh) {
