@@ -97,6 +97,9 @@
 						continue_stmt
 						return_stmt
 						throw_stmt
+						try_stmt
+						catch_stmt_list
+						catch_stmt
 						scope
 						scope_optional
 %%
@@ -669,6 +672,7 @@ stmt
 	| continue_stmt
 	| return_stmt
 	| throw_stmt
+	| try_stmt
 	;
 variable_decl_stmt
 	: typename_T IDENT SEMI
@@ -747,6 +751,28 @@ throw_stmt
 	: THROW expression SEMI
 	{
 		$$ = ast_new_throw($2);
+	}
+	;
+try_stmt
+	: TRY scope catch_stmt_list
+	{
+		$$ = ast_new_try($2, $3);
+	}
+	;
+catch_stmt_list
+	: catch_stmt
+	{
+		$$ = $1;
+	}
+	| catch_stmt_list catch_stmt
+	{
+		$$ = ast_new_catch_list($2, $1);
+	}
+	;
+catch_stmt
+	: CATCH LRB IDENT IDENT RRB scope
+	{
+		$$ = ast_new_catch($3, $4, $6);
 	}
 	;
 scope

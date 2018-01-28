@@ -289,6 +289,9 @@ void ast_print(ast* self) {
 		case ast_identifier_list: p("ident list");
 		case ast_inferenced_type_init: p("var init");
 		case ast_stmt_throw: p("throw");
+		case ast_stmt_try: p("try");
+		case ast_stmt_catch_list: p("catch list");
+		case ast_stmt_catch: p("catch");
 		default: 
 			p("not implemented");
 	}

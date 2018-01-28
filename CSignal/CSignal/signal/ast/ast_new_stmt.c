@@ -89,6 +89,32 @@ ast* ast_new_throw(ast* fact) {
 	return ret;
 }
 
+ast* ast_new_try(ast* abody, ast* acatch_list) {
+	ast* ret = ast_new(ast_stmt_try);
+	ast_push(ret, abody);
+	ast_push(ret, acatch_list);
+	return ret;
+}
+
+ast* ast_new_catch(char* stypename, char* sname, ast* abody) {
+	ast* ret = ast_new(ast_stmt_catch);
+	ast* atypename = ast_new(ast_identifier);
+	ast* aname = ast_new(ast_identifier);
+	atypename->u.string_value = stypename;
+	aname->u.string_value = sname;
+	ast_push(ret, atypename);
+	ast_push(ret, aname);
+	ast_push(ret, abody);
+	return ret;
+}
+
+ast* ast_new_catch_list(ast* acatch, ast* acatch_list) {
+	ast* ret = ast_new(ast_stmt_catch_list);
+	ast_push(ret, acatch);
+	ast_push(ret, acatch_list);
+	return ret;
+}
+
 ast * ast_new_argument(ast * factor) {
 	ast* ret = ast_new(ast_argument);
 	ast_push(ret, factor);

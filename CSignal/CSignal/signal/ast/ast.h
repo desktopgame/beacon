@@ -142,6 +142,9 @@ typedef enum ast_tag {
 	ast_stmt_variable_decl,
 	ast_stmt_variable_init,
 
+	ast_stmt_try,
+	ast_stmt_catch,
+	ast_stmt_catch_list,
 	ast_stmt_throw,
 
 	ast_parameter,

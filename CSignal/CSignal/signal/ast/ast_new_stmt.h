@@ -112,6 +112,30 @@ ast* ast_new_return(ast* fact);
 ast* ast_new_throw(ast* fact);
 
 /**
+ * 例外が発生するかもしれない処理を囲うステートメント.
+ * @param abody
+ * @param acatch_list
+ */
+ast* ast_new_try(ast* abody, ast* acatch_list);
+
+/**
+ * 例外を捕捉するステートメントを作成します.
+ * @param typename
+ * @param name
+ * @param abody
+ * @return
+ */
+ast* ast_new_catch(char* stypename, char* sname, ast* abody);
+
+/**
+ * キャッチ節の一覧を作成します.
+ * @param acatch
+ * @param acatch_list
+ * @return
+ */
+ast* ast_new_catch_list(ast* acatch, ast* acatch_list);
+
+/**
 * 実引数を表す要素を作成します.
 * @param factor
 * @return
