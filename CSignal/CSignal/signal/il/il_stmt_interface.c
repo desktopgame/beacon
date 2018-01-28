@@ -34,6 +34,12 @@ void il_stmt_dump(il_stmt * self, int depth) {
 		case ilstmt_inferenced_type_init:
 			il_stmt_inferenced_type_init_dump(self->u.inferenced_type_init, depth);
 			break;
+		case ilstmt_try:
+			il_stmt_try_dump(self->u.try_, depth);
+			break;
+		case ilstmt_throw:
+			il_stmt_throw_dump(self->u.throw_, depth);
+			break;
 		default:
 			//ERROR("ステートメントをダンプ出来ませんでした。");
 			break;
@@ -71,6 +77,12 @@ void il_stmt_generate(il_stmt * self, struct enviroment* env) {
 		case ilstmt_inferenced_type_init:
 			il_stmt_inferenced_type_init_generate(self->u.inferenced_type_init, env);
 			break;
+		case ilstmt_try:
+			il_stmt_try_generate(self->u.try_, env);
+			break;
+		case ilstmt_throw:
+			il_stmt_throw_generate(self->u.throw_, env);
+			break;
 		default:
 			//ERROR("ステートメントを開放出来ませんでした。");
 			break;
@@ -106,6 +118,12 @@ void il_stmt_load(il_stmt * self, enviroment* env, il_ehandler * eh) {
 		case ilstmt_inferenced_type_init:
 			il_stmt_inferenced_type_init_load(self->u.inferenced_type_init, env, eh);
 			break;
+		case ilstmt_try:
+			il_stmt_try_load(self->u.try_, env, eh);
+			break;
+		case ilstmt_throw:
+			il_stmt_throw_load(self->u.throw_, env, eh);
+			break;
 		default:
 			//ERROR("ステートメントを開放出来ませんでした。");
 			break;
@@ -140,6 +158,12 @@ void il_stmt_delete(il_stmt * self) {
 			break;
 		case ilstmt_inferenced_type_init:
 			il_stmt_inferenced_type_init_delete(self->u.inferenced_type_init);
+			break;
+		case ilstmt_try:
+			il_stmt_try_delete(self->u.try_);
+			break;
+		case ilstmt_throw:
+			il_stmt_throw_delete(self->u.throw_);
 			break;
 		default:
 			//ERROR("ステートメントを開放出来ませんでした。");

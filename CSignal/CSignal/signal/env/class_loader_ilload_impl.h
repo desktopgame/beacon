@@ -230,6 +230,30 @@ il_stmt_while* class_loader_ilload_while(class_loader* self, ast* source);
 il_stmt_return* class_loader_ilload_return(class_loader* self, ast* source);
 
 /**
+ * try { ... } catch (A a) { ... } を IL に変換します.
+ * @param self
+ * @param source
+ * @return
+ */
+il_stmt_try* class_loader_ilload_try(class_loader* self, ast* source);
+
+/**
+ * catch節の一覧を IL に変換して vector へ追加します.
+ * @param self
+ * @param dest
+ * @param source
+ */
+void class_loader_ilload_catch_list(class_loader* self, vector* dest, ast* source);
+
+/**
+ * スローを IL に変換して返します.
+ * @param self
+ * @param source
+ * @return
+ */
+il_stmt_throw* class_loader_ilload_throw(class_loader* self, ast* source);
+
+/**
  * 因子を IL に変換します.
  * @param self
  * @param source

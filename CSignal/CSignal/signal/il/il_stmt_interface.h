@@ -15,7 +15,9 @@ typedef enum il_stmt_type {
 	ilstmt_return,
 	ilstmt_break,
 	ilstmt_continue,
-	ilstmt_inferenced_type_init
+	ilstmt_inferenced_type_init,
+	ilstmt_try,
+	ilstmt_throw,
 } il_stmt_type;
 
 //詳細は il_stmt_impl.h を参照してください。
@@ -26,6 +28,8 @@ struct il_stmt_variable_decl;
 struct il_stmt_variable_init;
 struct il_stmt_return;
 struct il_stmt_inferenced_type_init;
+struct il_stmt_try;
+struct il_stmt_throw;
 
 /**
  * 文を表す要素です.
@@ -40,6 +44,8 @@ typedef struct il_stmt {
 		struct il_stmt_variable_init* variable_init;
 		struct il_stmt_return* return_;
 		struct il_stmt_inferenced_type_init* inferenced_type_init;
+		struct il_stmt_try* try_;
+		struct il_stmt_throw* throw_;
 	} u;
 } il_stmt;
 

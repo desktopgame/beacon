@@ -13,4 +13,6 @@
 #include "stmt/il_stmt_break_impl.h"
 #include "stmt/il_stmt_continue_impl.h"
 #include "stmt/il_stmt_inferenced_type_init_impl.h"
+#include "stmt/il_stmt_try_impl.h"
+#include "stmt/il_stmt_throw_impl.h"
 #endif // !SIGNAL_IL_IL_STMT_IMPL_H

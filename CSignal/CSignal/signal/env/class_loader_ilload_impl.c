@@ -402,6 +402,18 @@ void class_loader_ilload_body(class_loader* self, vector* list, ast* source) {
 				vector_push(list, il_stmt_wrap_return(ilret));
 				break;
 			}
+			case ast_stmt_try:
+			{
+				il_stmt_try* iltry = class_loader_ilload_try(self, source);
+				vector_push(list, il_stmt_wrap_try(iltry));
+				break;
+			}
+			case ast_stmt_throw:
+			{
+				il_stmt_throw* ilthrow = class_loader_ilload_throw(self, source);
+				vector_push(list, il_stmt_wrap_throw(ilthrow));
+				break;
+			}
 			default:
 				break;
 		}
@@ -506,6 +518,38 @@ il_stmt_return* class_loader_ilload_return(class_loader* self, ast* source) {
 	il_factor* ilfact = class_loader_ilload_factor(self, afact);
 	il_stmt_return* ret = il_stmt_return_new();
 	ret->fact = ilfact;
+	return ret;
+}
+
+il_stmt_try* class_loader_ilload_try(class_loader* self, ast* source) {
+	ast* abody = ast_first(source);
+	ast* acatch_list = ast_second(source);
+	il_stmt_try* ret = il_stmt_try_new();
+	class_loader_ilload_body(self, ret->statement_list, abody);
+	class_loader_ilload_catch_list(self, ret->catch_list, acatch_list);
+	return ret;
+}
+
+void class_loader_ilload_catch_list(class_loader* self, vector* dest, ast* source) {
+	if(source->tag == ast_stmt_catch) {
+		ast* atypename = ast_first(source);
+		ast* aname = ast_second(source);
+		ast* abody = ast_at(source, 2);
+		il_stmt_catch* ilcatch = il_stmt_catch_new(aname->u.string_value);
+		class_loader_ilload_fqcn(atypename, ilcatch->fqcn);
+		class_loader_ilload_body(self, ilcatch->statement_list, abody);
+		vector_push(dest, ilcatch);
+
+	} else if(source->tag == ast_stmt_catch_list) {
+		for(int i=0; i<source->childCount; i++) {
+			class_loader_ilload_catch_list(self, dest, ast_at(source, i));
+		}
+	}
+}
+
+il_stmt_throw* class_loader_ilload_throw(class_loader* self, ast* source) {
+	il_stmt_throw* ret = il_stmt_throw_new();
+	ret->fact = class_loader_ilload_factor(self, ast_first(source));
 	return ret;
 }
 

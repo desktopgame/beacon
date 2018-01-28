@@ -62,7 +62,7 @@ y.call();
 try {
 	throw 0;
 } catch(Exception e) {
-
+	e.printStackTrace();
 } catch(AException e2) {
 
 }
