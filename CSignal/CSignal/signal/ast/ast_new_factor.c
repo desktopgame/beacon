@@ -1,5 +1,6 @@
 #include "ast_new_factor.h"
 #include "ast.h"
+#include <stdlib.h>
 
 ast * ast_new_true() {
 	return ast_new(ast_true);

@@ -6,6 +6,10 @@ namespace signal.lang {
 		def call() -> Void;
 		def call2() -> Void;
 	}
+	enum List {
+		A,
+		B
+	}
 
 	class ImplA : ICallable {
 		public:
@@ -41,24 +45,49 @@ namespace signal.lang {
 		def call2() -> Void {
 			Console.writeLine("2XXX");
 		}
+		static def check(Int a) -> Void {
+			if(a == 0) {
+				Console.writeLine("a == 0");
+			} else {
+				Console.writeLine("a != 0");
+			}
+		}
 	}
 }
-
-def test() -> Void {
-	signal::lang::Console.writeLine("Say");
-}
-def test2() -> Void {
-	signal::lang::Console.writeLine("Say");
-}
-
+//Int a = 0;
+//var x = 0;
+//signal::lang::ImplA y =new signal::lang::ImplA();
+var y = new signal::lang::ImplA();
+y.call();
+/*
+Object o = new Object();
+Console.writeLine(o.toString());
 Int i = 0;
 while(i < 10) {
-	signal::lang::Console.writeLine("Say");
+	Console.writeLine("Say");
 	i = i + 1;
+	if(i == 3) {
+		break;
+	}
 }
+Console.writeLine(i.toString());
+Console.writeLine((100 + 10).toString());
+Console.writeLine(List.A);
+Console.writeLine(List.B);
+*/
+/*
+def test() -> Void {
+	Console.writeLine("Say");
+}
+def test2() -> Void {
+	Console.writeLine("Say");
+}
+
+i.p();
 
 Bool b = true;
 Bool b2 = false;
 signal::lang::ImplA x = new signal::lang::ImplA();
 signal::lang::ICallable a = (signal::lang::ICallable)x;
 
+*/
