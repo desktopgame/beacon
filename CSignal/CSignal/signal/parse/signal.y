@@ -43,7 +43,7 @@
 		THIS SUPER TRUE FALSE
 		INTERFACE CLASS ENUM PUBLIC PRIVATE PROTECTED STATIC NATIVE NEW
 		CTOR DEF ARROW NAMESPACE RETURN
-		IF ELIF ELSE WHILE BREAK CONTINUE
+		IF ELIF ELSE WHILE BREAK CONTINUE TRY CATCH THROW
 %type <ast_value> root 
 					top_level 
 					namespace_decl
@@ -96,6 +96,7 @@
 						break_stmt
 						continue_stmt
 						return_stmt
+						throw_stmt
 						scope
 						scope_optional
 %%
@@ -667,6 +668,7 @@ stmt
 	| break_stmt
 	| continue_stmt
 	| return_stmt
+	| throw_stmt
 	;
 variable_decl_stmt
 	: typename_T IDENT SEMI
@@ -739,6 +741,12 @@ return_stmt
 	: RETURN expression SEMI
 	{
 		$$ = ast_new_return($2);
+	}
+	;
+throw_stmt
+	: THROW expression SEMI
+	{
+		$$ = ast_new_throw($2);
 	}
 	;
 scope

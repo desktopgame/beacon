@@ -82,6 +82,13 @@ ast * ast_new_return(ast * fact) {
 	return ret;
 }
 
+
+ast* ast_new_throw(ast* fact) {
+	ast* ret = ast_new(ast_stmt_throw);
+	ast_push(ret, fact);
+	return ret;
+}
+
 ast * ast_new_argument(ast * factor) {
 	ast* ret = ast_new(ast_argument);
 	ast_push(ret, factor);

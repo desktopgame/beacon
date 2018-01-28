@@ -59,6 +59,7 @@ namespace signal.lang {
 //signal::lang::ImplA y =new signal::lang::ImplA();
 var y = new signal::lang::ImplA();
 y.call();
+throw 0;
 /*
 Object o = new Object();
 Console.writeLine(o.toString());

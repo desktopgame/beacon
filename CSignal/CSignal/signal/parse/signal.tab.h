@@ -113,7 +113,10 @@
      ELSE = 321,
      WHILE = 322,
      BREAK = 323,
-     CONTINUE = 324
+     CONTINUE = 324,
+     TRY = 325,
+     CATCH = 326,
+     THROW = 327
    };
 #endif
 /* Tokens.  */
@@ -184,6 +187,9 @@
 #define WHILE 322
 #define BREAK 323
 #define CONTINUE 324
+#define TRY 325
+#define CATCH 326
+#define THROW 327
 
 
 
@@ -201,7 +207,7 @@ typedef union YYSTYPE
 	access_level access_level_value;
 }
 /* Line 1529 of yacc.c.  */
-#line 197 "signal.tab.h"
+#line 203 "signal.tab.h"
 	YYSTYPE;
 # define yystype YYSTYPE /* obsolescent; will be withdrawn */
 # define YYSTYPE_IS_DECLARED 1
