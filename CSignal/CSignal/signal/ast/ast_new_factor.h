@@ -53,10 +53,10 @@ ast* ast_new_post_dec(ast* a);
 
 /**
  * 変数を表す要素を作成します.
- * @param name
+ * @param a
  * @return
  */
-ast* ast_new_variable(const char* name);
+ast* ast_new_variable(ast* a);
 
 /**
  * 関数呼び出しを表す要素を作成します.

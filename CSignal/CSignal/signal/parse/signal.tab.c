@@ -1,24 +1,23 @@
-/* A Bison parser, made by GNU Bison 2.3.  */
+
+/* A Bison parser, made by GNU Bison 2.4.1.  */
 
 /* Skeleton implementation for Bison's Yacc-like parsers in C
-
-   Copyright (C) 1984, 1989, 1990, 2000, 2001, 2002, 2003, 2004, 2005, 2006
+   
+      Copyright (C) 1984, 1989, 1990, 2000, 2001, 2002, 2003, 2004, 2005, 2006
    Free Software Foundation, Inc.
-
-   This program is free software; you can redistribute it and/or modify
+   
+   This program is free software: you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
-   the Free Software Foundation; either version 2, or (at your option)
-   any later version.
-
+   the Free Software Foundation, either version 3 of the License, or
+   (at your option) any later version.
+   
    This program is distributed in the hope that it will be useful,
    but WITHOUT ANY WARRANTY; without even the implied warranty of
    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
    GNU General Public License for more details.
-
+   
    You should have received a copy of the GNU General Public License
-   along with this program; if not, write to the Free Software
-   Foundation, Inc., 51 Franklin Street, Fifth Floor,
-   Boston, MA 02110-1301, USA.  */
+   along with this program.  If not, see <http://www.gnu.org/licenses/>.  */
 
 /* As a special exception, you may create a larger work that contains
    part or all of the Bison parser skeleton and distribute that work
@@ -29,7 +28,7 @@
    special exception, which will cause the skeleton and the resulting
    Bison output files to be licensed under the GNU General Public
    License without this special exception.
-
+   
    This special exception was added by the Free Software Foundation in
    version 2.2 of Bison.  */
 
@@ -47,7 +46,7 @@
 #define YYBISON 1
 
 /* Bison version.  */
-#define YYBISON_VERSION "2.3"
+#define YYBISON_VERSION "2.4.1"
 
 /* Skeleton name.  */
 #define YYSKELETON_NAME "yacc.c"
@@ -55,9 +54,56 @@
 /* Pure parsers.  */
 #define YYPURE 0
 
+/* Push parsers.  */
+#define YYPUSH 0
+
+/* Pull parsers.  */
+#define YYPULL 1
+
 /* Using locations.  */
 #define YYLSP_NEEDED 1
 
+
+
+/* Copy the first part of user declarations.  */
+
+/* Line 189 of yacc.c  */
+#line 1 "C:\\Users\\Koya\\Documents\\GitHub\\CSignal\\CSignal\\CSignal\\signal\\parse\\signal.y"
+
+#include <stdio.h>
+#include <stdlib.h>
+#include "../ast/ast_new_factor.h"
+#include "../ast/ast_new_operator.h"
+#include "../ast/ast_new_stmt.h"
+#include "../ast/ast_new_decl.h"
+#include "../ast/constructor_chain_type.h"
+#include "../ast/assign_operator_type.h"
+#include "../ast/modifier_type.h"
+#include "../ast/access_level.h"
+#define YYDEBUG 1
+#define YYERROR_VERBOSE 1
+
+
+/* Line 189 of yacc.c  */
+#line 89 "signal.tab.c"
+
+/* Enabling traces.  */
+#ifndef YYDEBUG
+# define YYDEBUG 0
+#endif
+
+/* Enabling verbose error messages.  */
+#ifdef YYERROR_VERBOSE
+# undef YYERROR_VERBOSE
+# define YYERROR_VERBOSE 1
+#else
+# define YYERROR_VERBOSE 0
+#endif
+
+/* Enabling the token table.  */
+#ifndef YYTOKEN_TABLE
+# define YYTOKEN_TABLE 0
+#endif
 
 
 /* Tokens.  */
@@ -138,120 +184,16 @@
      THROW = 327
    };
 #endif
-/* Tokens.  */
-#define CHAR_LITERAL 258
-#define STRING_LITERAL 259
-#define INT 260
-#define DOUBLE 261
-#define IDENT 262
-#define DOT 263
-#define COMMA 264
-#define COMMA_OPT 265
-#define COLON 266
-#define COLO_COLO 267
-#define ADD 268
-#define SUB 269
-#define MUL 270
-#define DIV 271
-#define MOD 272
-#define NOT 273
-#define ASSIGN 274
-#define ADD_ASSIGN 275
-#define SUB_ASSIGN 276
-#define MUL_ASSIGN 277
-#define DIV_ASSIGN 278
-#define MOD_ASSIGN 279
-#define EQUAL 280
-#define NOTEQUAL 281
-#define INC 282
-#define DEC 283
-#define GT 284
-#define GE 285
-#define LT 286
-#define LE 287
-#define BIT_AND 288
-#define LOGIC_AND 289
-#define BIT_OR 290
-#define LOGIC_OR 291
-#define LCB 292
-#define RCB 293
-#define LRB 294
-#define RRB 295
-#define LSB 296
-#define RSB 297
-#define SEMI 298
-#define IMPORT 299
-#define VAR 300
-#define THIS 301
-#define SUPER 302
-#define TRUE 303
-#define FALSE 304
-#define INTERFACE 305
-#define CLASS 306
-#define ENUM 307
-#define PUBLIC 308
-#define PRIVATE 309
-#define PROTECTED 310
-#define STATIC 311
-#define NATIVE 312
-#define NEW 313
-#define CTOR 314
-#define DEF 315
-#define ARROW 316
-#define NAMESPACE 317
-#define RETURN 318
-#define IF 319
-#define ELIF 320
-#define ELSE 321
-#define WHILE 322
-#define BREAK 323
-#define CONTINUE 324
-#define TRY 325
-#define CATCH 326
-#define THROW 327
 
 
-
-
-/* Copy the first part of user declarations.  */
-#line 1 "/Users/koya/Desktop/VSCode/CSignal/CSignal/CSignal/CSignal/signal/parse/signal.y"
-
-#include <stdio.h>
-#include <stdlib.h>
-#include "../ast/ast_new_factor.h"
-#include "../ast/ast_new_operator.h"
-#include "../ast/ast_new_stmt.h"
-#include "../ast/ast_new_decl.h"
-#include "../ast/constructor_chain_type.h"
-#include "../ast/assign_operator_type.h"
-#include "../ast/modifier_type.h"
-#include "../ast/access_level.h"
-#define YYDEBUG 1
-#define YYERROR_VERBOSE 1
-
-
-/* Enabling traces.  */
-#ifndef YYDEBUG
-# define YYDEBUG 0
-#endif
-
-/* Enabling verbose error messages.  */
-#ifdef YYERROR_VERBOSE
-# undef YYERROR_VERBOSE
-# define YYERROR_VERBOSE 1
-#else
-# define YYERROR_VERBOSE 0
-#endif
-
-/* Enabling the token table.  */
-#ifndef YYTOKEN_TABLE
-# define YYTOKEN_TABLE 0
-#endif
 
 #if ! defined YYSTYPE && ! defined YYSTYPE_IS_DECLARED
 typedef union YYSTYPE
-#line 15 "/Users/koya/Desktop/VSCode/CSignal/CSignal/CSignal/CSignal/signal/parse/signal.y"
 {
+
+/* Line 214 of yacc.c  */
+#line 15 "C:\\Users\\Koya\\Documents\\GitHub\\CSignal\\CSignal\\CSignal\\signal\\parse\\signal.y"
+
 	char char_value;
 	const char* string_value;
 	ast* ast_value;
@@ -259,13 +201,15 @@ typedef union YYSTYPE
 	constructor_chain_type chain_type_value;
 	modifier_type modifier_type_value;
 	access_level access_level_value;
-}
-/* Line 193 of yacc.c.  */
-#line 265 "signal.tab.c"
-	YYSTYPE;
+
+
+
+/* Line 214 of yacc.c  */
+#line 209 "signal.tab.c"
+} YYSTYPE;
+# define YYSTYPE_IS_TRIVIAL 1
 # define yystype YYSTYPE /* obsolescent; will be withdrawn */
 # define YYSTYPE_IS_DECLARED 1
-# define YYSTYPE_IS_TRIVIAL 1
 #endif
 
 #if ! defined YYLTYPE && ! defined YYLTYPE_IS_DECLARED
@@ -285,8 +229,8 @@ typedef struct YYLTYPE
 /* Copy the second part of user declarations.  */
 
 
-/* Line 216 of yacc.c.  */
-#line 290 "signal.tab.c"
+/* Line 264 of yacc.c  */
+#line 234 "signal.tab.c"
 
 #ifdef short
 # undef short
@@ -336,7 +280,7 @@ typedef short int yytype_int16;
 #define YYSIZE_MAXIMUM ((YYSIZE_T) -1)
 
 #ifndef YY_
-# if defined YYENABLE_NLS && YYENABLE_NLS
+# if YYENABLE_NLS
 #  if ENABLE_NLS
 #   include <libintl.h> /* INFRINGES ON USER NAME SPACE */
 #   define YY_(msgid) dgettext ("bison-runtime", msgid)
@@ -361,14 +305,14 @@ typedef short int yytype_int16;
 #if (defined __STDC__ || defined __C99__FUNC__ \
      || defined __cplusplus || defined _MSC_VER)
 static int
-YYID (int i)
+YYID (int yyi)
 #else
 static int
-YYID (i)
-    int i;
+YYID (yyi)
+    int yyi;
 #endif
 {
-  return i;
+  return yyi;
 }
 #endif
 
@@ -450,9 +394,9 @@ void free (void *); /* INFRINGES ON USER NAME SPACE */
 /* A type that is properly aligned for any stack member.  */
 union yyalloc
 {
-  yytype_int16 yyss;
-  YYSTYPE yyvs;
-    YYLTYPE yyls;
+  yytype_int16 yyss_alloc;
+  YYSTYPE yyvs_alloc;
+  YYLTYPE yyls_alloc;
 };
 
 /* The size of the maximum gap between one aligned stack and the next.  */
@@ -487,12 +431,12 @@ union yyalloc
    elements in the stack, and YYPTR gives the new location of the
    stack.  Advance YYPTR to a properly aligned location for the next
    stack.  */
-# define YYSTACK_RELOCATE(Stack)					\
+# define YYSTACK_RELOCATE(Stack_alloc, Stack)				\
     do									\
       {									\
 	YYSIZE_T yynewbytes;						\
-	YYCOPY (&yyptr->Stack, Stack, yysize);				\
-	Stack = &yyptr->Stack;						\
+	YYCOPY (&yyptr->Stack_alloc, Stack, yysize);			\
+	Stack = &yyptr->Stack_alloc;					\
 	yynewbytes = yystacksize * sizeof (*Stack) + YYSTACK_GAP_MAXIMUM; \
 	yyptr += yynewbytes / sizeof (*yyptr);				\
       }									\
@@ -625,7 +569,7 @@ static const yytype_int16 yyrhs[] =
       -1,   117,     8,     7,    39,    40,    -1,   117,     8,     7,
       39,   102,    40,    -1,   117,    27,    -1,   117,    28,    -1,
        5,    -1,     6,    -1,     3,    -1,     4,    -1,    48,    -1,
-      49,    -1,     7,    -1,     7,    39,    40,    -1,     7,    39,
+      49,    -1,   105,    -1,     7,    39,    40,    -1,     7,    39,
      102,    40,    -1,    39,   106,    40,    -1,    39,   104,    40,
      106,    -1,   105,     8,     7,    39,    40,    -1,   105,     8,
        7,    39,   102,    40,    -1,   105,     8,     7,    -1,    46,
@@ -642,7 +586,7 @@ static const yytype_int16 yyrhs[] =
       39,   106,    40,   136,    -1,    68,    43,    -1,    69,    43,
       -1,    63,   106,    43,    -1,    72,   106,    43,    -1,    70,
      135,   133,    -1,   134,    -1,   133,   134,    -1,    71,    39,
-       7,     7,    40,   135,    -1,    37,   119,    38,    -1,    37,
+     104,     7,    40,   135,    -1,    37,   119,    38,    -1,    37,
       38,    -1,    43,    -1,   135,    -1
 };
 
@@ -768,14 +712,14 @@ static const yytype_uint8 yyr2[] =
    means the default is an error.  */
 static const yytype_uint8 yydefact[] =
 {
-       0,     0,   116,   117,   114,   115,   120,     0,     0,     0,
+       0,     0,   116,   117,   114,   115,    69,     0,     0,     0,
        0,     0,     0,     0,   128,   129,   118,   119,     0,     0,
        0,     0,     0,     0,     0,     0,     0,     0,     0,     2,
-       7,     6,     8,     0,    68,     0,    71,    72,    81,    84,
+       7,     6,     8,     0,   120,     0,    71,    72,    81,    84,
       87,    90,    95,    98,   102,   105,   108,     5,   132,   135,
      136,   137,   138,   139,   140,   141,   142,   143,   144,     4,
-       0,    75,    76,    77,    78,    79,    80,     0,     0,   120,
-       0,   104,   103,   106,   107,     0,     0,    21,     0,    69,
+       0,    75,    76,    77,    78,    79,    80,     0,     0,    69,
+     120,   104,   103,   106,   107,     0,     0,    21,     0,    69,
        0,    68,     0,    19,     0,     0,     0,     0,   156,   157,
        0,     0,     0,     1,     3,     0,     0,   134,     0,     0,
        0,     0,     0,     0,     0,     0,     0,     0,     0,     0,
@@ -819,100 +763,100 @@ static const yytype_int16 yydefgoto[] =
 #define YYPACT_NINF -218
 static const yytype_int16 yypact[] =
 {
-     375,   -31,  -218,  -218,  -218,  -218,   306,   181,   181,   102,
-     102,   628,    46,    67,  -218,  -218,  -218,  -218,    86,    89,
-      91,   628,    14,    44,   101,   110,    97,   628,   305,  -218,
-    -218,  -218,  -218,   116,   172,   140,  -218,   364,    35,    77,
-     222,   118,   122,  -218,  -218,    73,  -218,   516,  -218,  -218,
+     375,   -59,  -218,  -218,  -218,  -218,   242,   181,   181,   102,
+     102,   628,    27,    43,  -218,  -218,  -218,  -218,    46,    91,
+     106,   628,     3,    64,    86,    93,    81,   628,   305,  -218,
+    -218,  -218,  -218,   132,    17,   109,  -218,   294,    35,    58,
+     140,   107,   127,  -218,  -218,    73,  -218,   516,  -218,  -218,
     -218,  -218,  -218,  -218,  -218,  -218,  -218,  -218,  -218,  -218,
-      86,  -218,  -218,  -218,  -218,  -218,  -218,    31,   628,    76,
-     172,  -218,  -218,    73,    73,   160,   164,  -218,   187,   198,
-     175,  -218,   179,  -218,    11,   188,   628,   628,  -218,  -218,
-     422,   166,   197,  -218,  -218,    42,   234,  -218,   181,   181,
+      46,  -218,  -218,  -218,  -218,  -218,  -218,    31,   628,    28,
+     156,  -218,  -218,    73,    73,   117,   160,  -218,   191,   194,
+     175,  -218,   179,  -218,    11,   183,   628,   628,  -218,  -218,
+     422,   166,   206,  -218,  -218,    42,   224,  -218,   181,   181,
      628,   181,   181,   181,   181,   181,   181,   181,   181,   181,
-     181,   181,   181,   181,   235,  -218,  -218,  -218,  -218,  -218,
-     204,   236,  -218,   628,  -218,   628,   115,    15,   242,    74,
-    -218,  -218,   215,   218,  -218,   469,   220,   166,  -218,  -218,
-     628,  -218,   226,    35,    35,  -218,    77,    77,   222,   222,
-     118,   118,   118,   118,   122,   122,  -218,  -218,  -218,   227,
-    -218,   628,  -218,   224,  -218,   231,   211,   233,   273,  -218,
-     274,   275,   276,    91,  -218,    74,   247,  -218,  -218,  -218,
-      97,   -12,  -218,   279,  -218,   245,   229,   563,  -218,  -218,
-    -218,    86,   230,   281,     3,    30,   256,    11,  -218,  -218,
-      81,  -218,  -218,  -218,   287,  -218,  -218,   255,  -218,   258,
-     -12,    86,    86,    86,   117,    86,   117,   289,  -218,   260,
-      97,    92,  -218,   261,  -218,  -218,  -218,   -12,  -218,   263,
-     294,  -218,  -218,  -218,   114,  -218,   293,   269,   121,   307,
-      18,   628,  -218,    97,  -218,    97,  -218,   117,    86,  -218,
-    -218,    57,   117,  -218,   289,   277,  -218,   280,  -218,  -218,
-     139,  -218,   264,   266,   259,    16,  -218,  -218,  -218,  -218,
-       6,   169,  -218,  -218,    97,  -218,  -218,  -218,   285,  -218,
-     324,   327,  -218,  -218,    17,   296,   295,   325,   297,    22,
-    -218,   119,  -218,   -12,   325,   278,   300,  -218,  -218,   302,
-    -218,   -12,    86,   282,   590,  -218,   -12,    86,  -218,   308,
-    -218,   -12,  -218,  -218
+     181,   181,   181,   181,   244,  -218,  -218,  -218,  -218,  -218,
+     215,   258,  -218,   628,  -218,   628,   119,    15,   264,   142,
+    -218,  -218,   232,   233,  -218,   469,   241,   166,  -218,  -218,
+     628,  -218,   246,    35,    35,  -218,    58,    58,   140,   140,
+     107,   107,   107,   107,   127,   127,  -218,  -218,  -218,   247,
+    -218,   628,  -218,   239,  -218,   248,   222,   250,   284,  -218,
+     291,   292,   293,   106,  -218,   142,   263,  -218,  -218,  -218,
+      81,    59,  -218,    46,  -218,   260,   229,   563,  -218,  -218,
+    -218,    46,   245,   295,    77,    82,   283,    11,  -218,  -218,
+      50,  -218,  -218,  -218,   314,  -218,  -218,   282,  -218,   285,
+      59,    46,    46,    46,   121,    46,   121,   317,  -218,   287,
+      81,    96,  -218,   288,  -218,  -218,  -218,    59,  -218,   290,
+     322,  -218,  -218,  -218,   100,  -218,   323,   298,   125,   327,
+      18,   628,  -218,    81,  -218,    81,  -218,   121,    46,  -218,
+    -218,    75,   121,  -218,   317,   299,  -218,   300,  -218,  -218,
+     169,  -218,   281,   286,   289,    16,  -218,  -218,  -218,  -218,
+       6,   187,  -218,  -218,    81,  -218,  -218,  -218,   302,  -218,
+     332,   336,  -218,  -218,    22,   306,   303,   337,   315,    23,
+    -218,   143,  -218,    59,   337,   296,   316,  -218,  -218,   319,
+    -218,    59,    46,   301,   590,  -218,    59,    46,  -218,   320,
+    -218,    59,  -218,  -218
 };
 
 /* YYPGOTO[NTERM-NUM].  */
 static const yytype_int16 yypgoto[] =
 {
-    -218,  -218,   314,  -218,   150,   180,  -218,  -218,   183,  -218,
-    -218,  -218,  -218,  -201,  -217,  -218,    93,  -218,  -218,  -218,
-      63,  -218,  -218,  -218,  -218,  -218,   105,  -202,  -122,  -185,
-     -10,     0,     5,   -56,   323,  -218,    80,    88,    94,   156,
-     107,    -1,  -218,   216,  -218,   271,   -38,  -218,  -218,  -218,
-    -218,  -218,   141,  -218,  -218,  -218,  -218,  -218,  -218,  -218,
-     253,   -24,  -207
+    -218,  -218,   331,  -218,   164,   189,  -218,  -218,   193,  -218,
+    -218,  -218,  -218,  -201,  -217,  -218,   105,  -218,  -218,  -218,
+      89,  -218,  -218,  -218,  -218,  -218,   130,  -202,  -122,  -174,
+     -10,     0,     5,   -56,   334,  -218,    99,   115,   141,   188,
+     149,    -1,  -218,   243,  -218,   297,   -38,  -218,  -218,  -218,
+    -218,  -218,   165,  -218,  -218,  -218,  -218,  -218,  -218,  -218,
+     251,   -24,  -207
 };
 
 /* YYTABLE[YYPACT[STATE-NUM]].  What to do in state STATE-NUM.  If
    positive, shift that token.  If negative, reduce the rule which
    number is the opposite.  If zero, do what YYDEFACT says.
    If YYTABLE_NINF, syntax error.  */
-#define YYTABLE_NINF -70
+#define YYTABLE_NINF -69
 static const yytype_int16 yytable[] =
 {
       34,    75,    91,   226,   165,    35,    71,    72,    80,   117,
-     228,    34,   122,    79,   213,   238,    76,   250,    81,   128,
-     246,   250,    79,   -52,    79,    90,    85,   255,    34,    79,
-     237,   201,    92,    35,     2,     3,     4,     5,     6,   188,
-     214,   215,    59,   250,   145,     7,   260,    34,   129,     8,
-      77,   271,    35,    86,   250,   166,   256,   287,     9,    10,
-     118,   140,   295,   261,   207,   209,   280,   216,   101,   102,
-      11,   119,   262,   263,    78,   264,   -52,    14,    15,    16,
-      17,   114,   288,    87,   -69,   141,   300,   296,    60,    18,
-      34,   132,   133,    79,   305,    35,    82,   117,    83,   310,
-     115,   116,   103,   104,   313,     2,     3,     4,     5,    69,
-     156,   157,   158,   262,   263,    67,   264,   168,     2,     3,
-       4,     5,     6,    95,   170,   171,   172,    81,   162,     7,
-     163,   109,   110,     8,    90,    34,   173,   111,   112,   113,
-      35,    11,     9,    10,    88,   185,   219,   220,    14,    15,
-      16,    17,   249,    89,    11,   164,   200,   219,   243,   253,
-      18,    14,    15,    16,    17,   297,   298,   231,   232,   233,
-     231,   232,   233,    18,   231,   232,   233,   275,   143,   144,
-      96,   210,   309,    97,     2,     3,     4,     5,    69,   146,
-     147,    81,   231,   232,   233,     7,   242,   148,   149,     8,
-     123,   227,   168,   230,   124,   230,   125,   282,     9,    10,
-      60,    81,    81,    81,   126,    81,   154,   155,   127,   258,
-      11,   259,   231,   232,   233,    73,    74,    14,    15,    16,
-      17,   131,     2,     3,     4,     5,     6,   136,   230,    18,
-     139,   142,   159,     7,   160,   161,   257,     8,    81,   169,
-     283,   105,   106,   107,   108,   180,     9,    10,   181,   183,
-     281,   150,   151,   152,   153,   186,   187,   189,    11,   206,
-      81,   190,   191,   192,   168,    14,    15,    16,    17,   168,
-     193,   194,   195,   196,    81,   199,   204,    18,   205,    81,
-     212,   211,   306,   217,   223,   224,   239,   311,   225,   241,
-     247,   245,    81,   248,   251,    93,   252,    81,     2,     3,
-       4,     5,     6,   -69,   -69,   273,   254,   278,    60,     7,
-     274,   276,   277,     8,   284,    61,    62,    63,    64,    65,
-      66,   285,     9,    10,   286,   289,   291,   294,   290,   302,
-     303,   304,    94,   307,    11,    67,   -69,   218,   312,    12,
-      13,    14,    15,    16,    17,   198,   197,   301,   279,   272,
-     100,   135,   244,    18,     0,    19,     0,    20,    21,    22,
-       0,     0,    23,    24,    25,    26,     1,    27,     2,     3,
+     228,    34,   122,    79,    59,   238,    76,   250,    81,   128,
+     246,   250,    79,   -52,   -68,    96,    85,   255,    34,    79,
+      79,    77,    92,    35,     2,     3,     4,     5,     6,   188,
+      60,   237,    86,   250,   145,     7,   260,    34,   129,     8,
+      78,   271,    35,    79,   250,   166,   256,   -68,     9,    10,
+     118,   140,   287,   295,   207,   209,   280,    67,   101,   102,
+      11,   119,   262,   263,   261,   264,   -52,    14,    15,    16,
+      17,   114,   288,   103,   104,   141,   300,   296,   213,    18,
+      34,   132,   133,   215,   305,    35,    90,   117,    82,   310,
+     115,   116,   201,    87,   313,     2,     3,     4,     5,    69,
+     156,   157,   158,    83,   214,   219,   220,   168,    90,   216,
+     109,   110,     2,     3,     4,     5,     6,    81,   162,    88,
+     163,   262,   263,     7,   264,    34,    89,     8,   249,    95,
+      35,    11,   111,   112,   113,   185,     9,    10,    14,    15,
+      16,    17,    97,   231,   232,   233,   200,   123,    11,   164,
+      18,   219,   243,   253,    96,    14,    15,    16,    17,   105,
+     106,   107,   108,   204,   231,   232,   233,    18,   231,   232,
+     233,   210,   309,    81,     2,     3,     4,     5,    69,   297,
+     298,    81,   170,   171,   172,     7,   242,   143,   144,     8,
+     124,   227,   168,   230,   173,   230,    60,   275,     9,    10,
+     125,    81,    81,    81,   126,    81,   146,   147,   127,   258,
+      11,   259,   231,   232,   233,   282,   131,    14,    15,    16,
+      17,   142,     2,     3,     4,     5,     6,   136,   230,    18,
+     231,   232,   233,     7,   148,   149,   257,     8,    81,   139,
+     283,   159,    73,    74,    60,   160,     9,    10,   154,   155,
+     281,    61,    62,    63,    64,    65,    66,   161,    11,   206,
+      81,   169,   180,   181,   168,    14,    15,    16,    17,   168,
+     183,    67,   189,   191,    81,   186,   187,    18,   190,    81,
+     192,   193,   306,   150,   151,   152,   153,   311,   194,   195,
+     196,   199,    81,   205,   212,    93,   211,    81,     2,     3,
        4,     5,     6,    61,    62,    63,    64,    65,    66,     7,
-     184,     0,     0,     8,     0,     0,     0,     0,     0,    98,
-      99,     0,     9,    10,     0,     0,     0,     0,     0,     0,
+     217,   223,   224,     8,   239,   225,   241,   247,   245,    98,
+      99,   248,     9,    10,   251,   252,   254,   273,   276,   285,
+     274,   284,   277,   286,    11,   289,   290,   278,   291,    12,
+      13,    14,    15,    16,    17,   294,   303,   302,   304,    94,
+     312,   218,   307,    18,   198,    19,   197,    20,    21,    22,
+     279,   100,    23,    24,    25,    26,     1,    27,     2,     3,
+       4,     5,     6,   301,   272,     0,   244,   135,   184,     7,
+       0,     0,     0,     8,     0,     0,     0,     0,     0,     0,
+       0,     0,     9,    10,     0,     0,     0,     0,     0,     0,
        0,     0,     0,     0,    11,     0,     0,     0,     0,    12,
       13,    14,    15,    16,    17,     2,     3,     4,     5,     6,
        0,     0,     0,    18,     0,    19,     7,    20,    21,    22,
@@ -946,46 +890,46 @@ static const yytype_int16 yytable[] =
 static const yytype_int16 yycheck[] =
 {
        0,    11,    26,   210,   126,     0,     7,     8,    18,    47,
-     212,    11,    68,     7,    11,   216,    11,   234,    18,     8,
-     227,   238,     7,     7,     7,    37,    21,     9,    28,     7,
-     215,    43,    27,    28,     3,     4,     5,     6,     7,   161,
-      37,    11,    73,   260,   100,    14,   247,    47,    37,    18,
-       4,   252,    47,    39,   271,    40,    38,    40,    27,    28,
-      60,    19,    40,   248,   186,   187,    60,    37,    33,    34,
-      39,    40,    56,    57,     7,    59,    60,    46,    47,    48,
-      49,     8,   284,    39,     8,    43,   293,   289,    12,    58,
-      90,    86,    87,     7,   301,    90,     7,   135,     7,   306,
-      27,    28,    25,    26,   311,     3,     4,     5,     6,     7,
-     111,   112,   113,    56,    57,    39,    59,   127,     3,     4,
-       5,     6,     7,     7,    50,    51,    52,   127,   123,    14,
-     125,    13,    14,    18,    37,   135,    62,    15,    16,    17,
-     135,    39,    27,    28,    43,   140,    65,    66,    46,    47,
-      48,    49,    38,    43,    39,    40,   180,    65,    66,    38,
-      58,    46,    47,    48,    49,    46,    47,    53,    54,    55,
-      53,    54,    55,    58,    53,    54,    55,    38,    98,    99,
-       8,   191,   304,    43,     3,     4,     5,     6,     7,   101,
-     102,   191,    53,    54,    55,    14,   220,   103,   104,    18,
-      40,   211,   212,   213,    40,   215,    19,    38,    27,    28,
-      12,   211,   212,   213,    39,   215,   109,   110,    39,   243,
-      39,   245,    53,    54,    55,     9,    10,    46,    47,    48,
-      49,    43,     3,     4,     5,     6,     7,    71,   248,    58,
-      43,     7,     7,    14,    40,     9,   241,    18,   248,     7,
-     274,    29,    30,    31,    32,    40,    27,    28,    40,    39,
-     270,   105,   106,   107,   108,    39,    39,    43,    39,    40,
-     270,    40,    61,    40,   284,    46,    47,    48,    49,   289,
-       7,     7,     7,     7,   284,    38,     7,    58,    43,   289,
-       9,    61,   302,    37,     7,    40,     7,   307,    40,    39,
-      37,    40,   302,     9,    11,     0,    37,   307,     3,     4,
-       5,     6,     7,     7,     8,    38,     9,    58,    12,    14,
-      40,    57,    56,    18,    39,    19,    20,    21,    22,    23,
-      24,     7,    27,    28,     7,    39,    11,    40,    43,    61,
-      40,    39,    28,    61,    39,    39,    40,   197,    40,    44,
-      45,    46,    47,    48,    49,   175,   173,   294,   265,   254,
-      37,    90,   221,    58,    -1,    60,    -1,    62,    63,    64,
-      -1,    -1,    67,    68,    69,    70,     1,    72,     3,     4,
+     212,    11,    68,     7,    73,   216,    11,   234,    18,     8,
+     227,   238,     7,     7,     7,     8,    21,     9,    28,     7,
+       7,     4,    27,    28,     3,     4,     5,     6,     7,   161,
+      12,   215,    39,   260,   100,    14,   247,    47,    37,    18,
+       7,   252,    47,     7,   271,    40,    38,    40,    27,    28,
+      60,    19,    40,    40,   186,   187,    60,    39,    33,    34,
+      39,    40,    56,    57,   248,    59,    60,    46,    47,    48,
+      49,     8,   284,    25,    26,    43,   293,   289,    11,    58,
+      90,    86,    87,    11,   301,    90,    37,   135,     7,   306,
+      27,    28,    43,    39,   311,     3,     4,     5,     6,     7,
+     111,   112,   113,     7,    37,    65,    66,   127,    37,    37,
+      13,    14,     3,     4,     5,     6,     7,   127,   123,    43,
+     125,    56,    57,    14,    59,   135,    43,    18,    38,     7,
+     135,    39,    15,    16,    17,   140,    27,    28,    46,    47,
+      48,    49,    43,    53,    54,    55,   180,    40,    39,    40,
+      58,    65,    66,    38,     8,    46,    47,    48,    49,    29,
+      30,    31,    32,   183,    53,    54,    55,    58,    53,    54,
+      55,   191,   304,   183,     3,     4,     5,     6,     7,    46,
+      47,   191,    50,    51,    52,    14,   220,    98,    99,    18,
+      40,   211,   212,   213,    62,   215,    12,    38,    27,    28,
+      19,   211,   212,   213,    39,   215,   101,   102,    39,   243,
+      39,   245,    53,    54,    55,    38,    43,    46,    47,    48,
+      49,     7,     3,     4,     5,     6,     7,    71,   248,    58,
+      53,    54,    55,    14,   103,   104,   241,    18,   248,    43,
+     274,     7,     9,    10,    12,    40,    27,    28,   109,   110,
+     270,    19,    20,    21,    22,    23,    24,     9,    39,    40,
+     270,     7,    40,    40,   284,    46,    47,    48,    49,   289,
+      39,    39,    43,    61,   284,    39,    39,    58,    40,   289,
+      40,     7,   302,   105,   106,   107,   108,   307,     7,     7,
+       7,    38,   302,    43,     9,     0,    61,   307,     3,     4,
        5,     6,     7,    19,    20,    21,    22,    23,    24,    14,
-     137,    -1,    -1,    18,    -1,    -1,    -1,    -1,    -1,    35,
-      36,    -1,    27,    28,    -1,    -1,    -1,    -1,    -1,    -1,
+      37,     7,    40,    18,     7,    40,    39,    37,    40,    35,
+      36,     9,    27,    28,    11,    37,     9,    38,    57,     7,
+      40,    39,    56,     7,    39,    39,    43,    58,    11,    44,
+      45,    46,    47,    48,    49,    40,    40,    61,    39,    28,
+      40,   197,    61,    58,   175,    60,   173,    62,    63,    64,
+     265,    37,    67,    68,    69,    70,     1,    72,     3,     4,
+       5,     6,     7,   294,   254,    -1,   221,    90,   137,    14,
+      -1,    -1,    -1,    18,    -1,    -1,    -1,    -1,    -1,    -1,
+      -1,    -1,    27,    28,    -1,    -1,    -1,    -1,    -1,    -1,
       -1,    -1,    -1,    -1,    39,    -1,    -1,    -1,    -1,    44,
       45,    46,    47,    48,    49,     3,     4,     5,     6,     7,
       -1,    -1,    -1,    58,    -1,    60,    14,    62,    63,    64,
@@ -1040,7 +984,7 @@ static const yytype_uint8 yystos[] =
       50,    51,    52,    62,    79,    80,    81,    84,    85,    86,
       40,    40,    38,    39,   134,   106,    39,    39,   102,    43,
       40,    61,    40,     7,     7,     7,     7,    82,    79,    38,
-     135,    43,   135,   136,     7,    43,    40,   102,    40,   102,
+     135,    43,   135,   136,   104,    43,    40,   102,    40,   102,
      104,    61,     9,    11,    37,    11,    37,    37,    78,    65,
       66,   125,   126,     7,    40,    40,   136,   104,   101,   103,
      104,    53,    54,    55,    87,    88,    99,   103,    87,     7,
@@ -1125,7 +1069,7 @@ while (YYID (0))
    we won't break user code: when these are the locations we know.  */
 
 #ifndef YY_LOCATION_PRINT
-# if defined YYLTYPE_IS_TRIVIAL && YYLTYPE_IS_TRIVIAL
+# if YYLTYPE_IS_TRIVIAL
 #  define YY_LOCATION_PRINT(File, Loc)			\
      fprintf (File, "%d.%d-%d.%d",			\
 	      (Loc).first_line, (Loc).first_column,	\
@@ -1241,17 +1185,20 @@ yy_symbol_print (yyoutput, yytype, yyvaluep, yylocationp)
 #if (defined __STDC__ || defined __C99__FUNC__ \
      || defined __cplusplus || defined _MSC_VER)
 static void
-yy_stack_print (yytype_int16 *bottom, yytype_int16 *top)
+yy_stack_print (yytype_int16 *yybottom, yytype_int16 *yytop)
 #else
 static void
-yy_stack_print (bottom, top)
-    yytype_int16 *bottom;
-    yytype_int16 *top;
+yy_stack_print (yybottom, yytop)
+    yytype_int16 *yybottom;
+    yytype_int16 *yytop;
 #endif
 {
   YYFPRINTF (stderr, "Stack now");
-  for (; bottom <= top; ++bottom)
-    YYFPRINTF (stderr, " %d", *bottom);
+  for (; yybottom <= yytop; yybottom++)
+    {
+      int yybot = *yybottom;
+      YYFPRINTF (stderr, " %d", yybot);
+    }
   YYFPRINTF (stderr, "\n");
 }
 
@@ -1286,11 +1233,11 @@ yy_reduce_print (yyvsp, yylsp, yyrule)
   /* The symbols being reduced.  */
   for (yyi = 0; yyi < yynrhs; yyi++)
     {
-      fprintf (stderr, "   $%d = ", yyi + 1);
+      YYFPRINTF (stderr, "   $%d = ", yyi + 1);
       yy_symbol_print (stderr, yyrhs[yyprhs[yyrule] + yyi],
 		       &(yyvsp[(yyi + 1) - (yynrhs)])
 		       , &(yylsp[(yyi + 1) - (yynrhs)])		       );
-      fprintf (stderr, "\n");
+      YYFPRINTF (stderr, "\n");
     }
 }
 
@@ -1572,10 +1519,8 @@ yydestruct (yymsg, yytype, yyvaluep, yylocationp)
 	break;
     }
 }
-
 
 /* Prevent warnings from -Wmissing-prototypes.  */
-
 #ifdef YYPARSE_PARAM
 #if defined __STDC__ || defined __cplusplus
 int yyparse (void *YYPARSE_PARAM);
@@ -1591,23 +1536,23 @@ int yyparse ();
 #endif /* ! YYPARSE_PARAM */
 
 
-
-/* The look-ahead symbol.  */
+/* The lookahead symbol.  */
 int yychar;
 
-/* The semantic value of the look-ahead symbol.  */
+/* The semantic value of the lookahead symbol.  */
 YYSTYPE yylval;
+
+/* Location data for the lookahead symbol.  */
+YYLTYPE yylloc;
 
 /* Number of syntax errors so far.  */
 int yynerrs;
-/* Location data for the look-ahead symbol.  */
-YYLTYPE yylloc;
 
 
 
-/*----------.
-| yyparse.  |
-`----------*/
+/*-------------------------.
+| yyparse or yypush_parse.  |
+`-------------------------*/
 
 #ifdef YYPARSE_PARAM
 #if (defined __STDC__ || defined __C99__FUNC__ \
@@ -1631,14 +1576,49 @@ yyparse ()
 #endif
 #endif
 {
-  
-  int yystate;
+
+
+    int yystate;
+    /* Number of tokens to shift before error messages enabled.  */
+    int yyerrstatus;
+
+    /* The stacks and their tools:
+       `yyss': related to states.
+       `yyvs': related to semantic values.
+       `yyls': related to locations.
+
+       Refer to the stacks thru separate pointers, to allow yyoverflow
+       to reallocate them elsewhere.  */
+
+    /* The state stack.  */
+    yytype_int16 yyssa[YYINITDEPTH];
+    yytype_int16 *yyss;
+    yytype_int16 *yyssp;
+
+    /* The semantic value stack.  */
+    YYSTYPE yyvsa[YYINITDEPTH];
+    YYSTYPE *yyvs;
+    YYSTYPE *yyvsp;
+
+    /* The location stack.  */
+    YYLTYPE yylsa[YYINITDEPTH];
+    YYLTYPE *yyls;
+    YYLTYPE *yylsp;
+
+    /* The locations where the error started and ended.  */
+    YYLTYPE yyerror_range[2];
+
+    YYSIZE_T yystacksize;
+
   int yyn;
   int yyresult;
-  /* Number of tokens to shift before error messages enabled.  */
-  int yyerrstatus;
-  /* Look-ahead token as an internal (translated) token number.  */
-  int yytoken = 0;
+  /* Lookahead token as an internal (translated) token number.  */
+  int yytoken;
+  /* The variables used to return semantic value and location from the
+     action routines.  */
+  YYSTYPE yyval;
+  YYLTYPE yyloc;
+
 #if YYERROR_VERBOSE
   /* Buffer for error messages, and its allocated size.  */
   char yymsgbuf[128];
@@ -1646,63 +1626,37 @@ yyparse ()
   YYSIZE_T yymsg_alloc = sizeof yymsgbuf;
 #endif
 
-  /* Three stacks and their tools:
-     `yyss': related to states,
-     `yyvs': related to semantic values,
-     `yyls': related to locations.
-
-     Refer to the stacks thru separate pointers, to allow yyoverflow
-     to reallocate them elsewhere.  */
-
-  /* The state stack.  */
-  yytype_int16 yyssa[YYINITDEPTH];
-  yytype_int16 *yyss = yyssa;
-  yytype_int16 *yyssp;
-
-  /* The semantic value stack.  */
-  YYSTYPE yyvsa[YYINITDEPTH];
-  YYSTYPE *yyvs = yyvsa;
-  YYSTYPE *yyvsp;
-
-  /* The location stack.  */
-  YYLTYPE yylsa[YYINITDEPTH];
-  YYLTYPE *yyls = yylsa;
-  YYLTYPE *yylsp;
-  /* The locations where the error started and ended.  */
-  YYLTYPE yyerror_range[2];
-
 #define YYPOPSTACK(N)   (yyvsp -= (N), yyssp -= (N), yylsp -= (N))
-
-  YYSIZE_T yystacksize = YYINITDEPTH;
-
-  /* The variables used to return semantic value and location from the
-     action routines.  */
-  YYSTYPE yyval;
-  YYLTYPE yyloc;
 
   /* The number of symbols on the RHS of the reduced rule.
      Keep to zero when no symbol should be popped.  */
   int yylen = 0;
+
+  yytoken = 0;
+  yyss = yyssa;
+  yyvs = yyvsa;
+  yyls = yylsa;
+  yystacksize = YYINITDEPTH;
 
   YYDPRINTF ((stderr, "Starting parse\n"));
 
   yystate = 0;
   yyerrstatus = 0;
   yynerrs = 0;
-  yychar = YYEMPTY;		/* Cause a token to be read.  */
+  yychar = YYEMPTY; /* Cause a token to be read.  */
 
   /* Initialize stack pointers.
      Waste one element of value and location stack
      so that they stay on the same level as the state stack.
      The wasted elements are never initialized.  */
-
   yyssp = yyss;
   yyvsp = yyvs;
   yylsp = yyls;
-#if defined YYLTYPE_IS_TRIVIAL && YYLTYPE_IS_TRIVIAL
+
+#if YYLTYPE_IS_TRIVIAL
   /* Initialize the default location before parsing starts.  */
   yylloc.first_line   = yylloc.last_line   = 1;
-  yylloc.first_column = yylloc.last_column = 0;
+  yylloc.first_column = yylloc.last_column = 1;
 #endif
 
   goto yysetstate;
@@ -1741,6 +1695,7 @@ yyparse ()
 		    &yyvs1, yysize * sizeof (*yyvsp),
 		    &yyls1, yysize * sizeof (*yylsp),
 		    &yystacksize);
+
 	yyls = yyls1;
 	yyss = yyss1;
 	yyvs = yyvs1;
@@ -1762,9 +1717,9 @@ yyparse ()
 	  (union yyalloc *) YYSTACK_ALLOC (YYSTACK_BYTES (yystacksize));
 	if (! yyptr)
 	  goto yyexhaustedlab;
-	YYSTACK_RELOCATE (yyss);
-	YYSTACK_RELOCATE (yyvs);
-	YYSTACK_RELOCATE (yyls);
+	YYSTACK_RELOCATE (yyss_alloc, yyss);
+	YYSTACK_RELOCATE (yyvs_alloc, yyvs);
+	YYSTACK_RELOCATE (yyls_alloc, yyls);
 #  undef YYSTACK_RELOCATE
 	if (yyss1 != yyssa)
 	  YYSTACK_FREE (yyss1);
@@ -1785,6 +1740,9 @@ yyparse ()
 
   YYDPRINTF ((stderr, "Entering state %d\n", yystate));
 
+  if (yystate == YYFINAL)
+    YYACCEPT;
+
   goto yybackup;
 
 /*-----------.
@@ -1793,16 +1751,16 @@ yyparse ()
 yybackup:
 
   /* Do appropriate processing given the current state.  Read a
-     look-ahead token if we need one and don't already have one.  */
+     lookahead token if we need one and don't already have one.  */
 
-  /* First try to decide what to do without reference to look-ahead token.  */
+  /* First try to decide what to do without reference to lookahead token.  */
   yyn = yypact[yystate];
   if (yyn == YYPACT_NINF)
     goto yydefault;
 
-  /* Not known => get a look-ahead token if don't already have one.  */
+  /* Not known => get a lookahead token if don't already have one.  */
 
-  /* YYCHAR is either YYEMPTY or YYEOF or a valid look-ahead symbol.  */
+  /* YYCHAR is either YYEMPTY or YYEOF or a valid lookahead symbol.  */
   if (yychar == YYEMPTY)
     {
       YYDPRINTF ((stderr, "Reading a token: "));
@@ -1834,20 +1792,16 @@ yybackup:
       goto yyreduce;
     }
 
-  if (yyn == YYFINAL)
-    YYACCEPT;
-
   /* Count tokens shifted since error; after three, turn off error
      status.  */
   if (yyerrstatus)
     yyerrstatus--;
 
-  /* Shift the look-ahead token.  */
+  /* Shift the lookahead token.  */
   YY_SYMBOL_PRINT ("Shifting", yytoken, &yylval, &yylloc);
 
-  /* Discard the shifted token unless it is eof.  */
-  if (yychar != YYEOF)
-    yychar = YYEMPTY;
+  /* Discard the shifted token.  */
+  yychar = YYEMPTY;
 
   yystate = yyn;
   *++yyvsp = yylval;
@@ -1888,939 +1842,1206 @@ yyreduce:
   switch (yyn)
     {
         case 4:
-#line 110 "/Users/koya/Desktop/VSCode/CSignal/CSignal/CSignal/CSignal/signal/parse/signal.y"
+
+/* Line 1455 of yacc.c  */
+#line 110 "C:\\Users\\Koya\\Documents\\GitHub\\CSignal\\CSignal\\CSignal\\signal\\parse\\signal.y"
     {
 		(yyval.ast_value) = ast_new_blank();
 	;}
     break;
 
   case 5:
-#line 116 "/Users/koya/Desktop/VSCode/CSignal/CSignal/CSignal/CSignal/signal/parse/signal.y"
+
+/* Line 1455 of yacc.c  */
+#line 116 "C:\\Users\\Koya\\Documents\\GitHub\\CSignal\\CSignal\\CSignal\\signal\\parse\\signal.y"
     {
 		ast_compile_entry((yyvsp[(1) - (1)].ast_value));
 	;}
     break;
 
   case 6:
-#line 120 "/Users/koya/Desktop/VSCode/CSignal/CSignal/CSignal/CSignal/signal/parse/signal.y"
+
+/* Line 1455 of yacc.c  */
+#line 120 "C:\\Users\\Koya\\Documents\\GitHub\\CSignal\\CSignal\\CSignal\\signal\\parse\\signal.y"
     {
 		ast_compile_entry((yyvsp[(1) - (1)].ast_value));
 	;}
     break;
 
   case 7:
-#line 124 "/Users/koya/Desktop/VSCode/CSignal/CSignal/CSignal/CSignal/signal/parse/signal.y"
+
+/* Line 1455 of yacc.c  */
+#line 124 "C:\\Users\\Koya\\Documents\\GitHub\\CSignal\\CSignal\\CSignal\\signal\\parse\\signal.y"
     {
 		ast_compile_entry((yyvsp[(1) - (1)].ast_value));
 	;}
     break;
 
   case 8:
-#line 128 "/Users/koya/Desktop/VSCode/CSignal/CSignal/CSignal/CSignal/signal/parse/signal.y"
+
+/* Line 1455 of yacc.c  */
+#line 128 "C:\\Users\\Koya\\Documents\\GitHub\\CSignal\\CSignal\\CSignal\\signal\\parse\\signal.y"
     {
 		ast_compile_entry((yyvsp[(1) - (1)].ast_value));
 	;}
     break;
 
   case 9:
-#line 134 "/Users/koya/Desktop/VSCode/CSignal/CSignal/CSignal/CSignal/signal/parse/signal.y"
+
+/* Line 1455 of yacc.c  */
+#line 134 "C:\\Users\\Koya\\Documents\\GitHub\\CSignal\\CSignal\\CSignal\\signal\\parse\\signal.y"
     {
 		(yyval.ast_value) = ast_new_namespace_decl((yyvsp[(2) - (3)].ast_value), (yyvsp[(3) - (3)].ast_value));
 	;}
     break;
 
   case 10:
-#line 140 "/Users/koya/Desktop/VSCode/CSignal/CSignal/CSignal/CSignal/signal/parse/signal.y"
+
+/* Line 1455 of yacc.c  */
+#line 140 "C:\\Users\\Koya\\Documents\\GitHub\\CSignal\\CSignal\\CSignal\\signal\\parse\\signal.y"
     {
 		(yyval.ast_value) = (yyvsp[(2) - (3)].ast_value)
 	;}
     break;
 
   case 11:
-#line 146 "/Users/koya/Desktop/VSCode/CSignal/CSignal/CSignal/CSignal/signal/parse/signal.y"
+
+/* Line 1455 of yacc.c  */
+#line 146 "C:\\Users\\Koya\\Documents\\GitHub\\CSignal\\CSignal\\CSignal\\signal\\parse\\signal.y"
     {
 		(yyval.ast_value) = ast_new_namespace_namespace_decl((yyvsp[(2) - (3)].ast_value), (yyvsp[(3) - (3)].ast_value));
 	;}
     break;
 
   case 12:
-#line 150 "/Users/koya/Desktop/VSCode/CSignal/CSignal/CSignal/CSignal/signal/parse/signal.y"
+
+/* Line 1455 of yacc.c  */
+#line 150 "C:\\Users\\Koya\\Documents\\GitHub\\CSignal\\CSignal\\CSignal\\signal\\parse\\signal.y"
     {
 		(yyval.ast_value) = (yyvsp[(1) - (1)].ast_value);
 	;}
     break;
 
   case 13:
-#line 154 "/Users/koya/Desktop/VSCode/CSignal/CSignal/CSignal/CSignal/signal/parse/signal.y"
+
+/* Line 1455 of yacc.c  */
+#line 154 "C:\\Users\\Koya\\Documents\\GitHub\\CSignal\\CSignal\\CSignal\\signal\\parse\\signal.y"
     {
 		(yyval.ast_value) = (yyvsp[(1) - (1)].ast_value);
 	;}
     break;
 
   case 14:
-#line 158 "/Users/koya/Desktop/VSCode/CSignal/CSignal/CSignal/CSignal/signal/parse/signal.y"
+
+/* Line 1455 of yacc.c  */
+#line 158 "C:\\Users\\Koya\\Documents\\GitHub\\CSignal\\CSignal\\CSignal\\signal\\parse\\signal.y"
     {
 		(yyval.ast_value) = (yyvsp[(1) - (1)].ast_value);
 	;}
     break;
 
   case 15:
-#line 164 "/Users/koya/Desktop/VSCode/CSignal/CSignal/CSignal/CSignal/signal/parse/signal.y"
+
+/* Line 1455 of yacc.c  */
+#line 164 "C:\\Users\\Koya\\Documents\\GitHub\\CSignal\\CSignal\\CSignal\\signal\\parse\\signal.y"
     {
 		(yyval.ast_value) = (yyvsp[(1) - (1)].ast_value)
 	;}
     break;
 
   case 16:
-#line 168 "/Users/koya/Desktop/VSCode/CSignal/CSignal/CSignal/CSignal/signal/parse/signal.y"
+
+/* Line 1455 of yacc.c  */
+#line 168 "C:\\Users\\Koya\\Documents\\GitHub\\CSignal\\CSignal\\CSignal\\signal\\parse\\signal.y"
     {
 		(yyval.ast_value) = ast_new_namespace_member_decl_list((yyvsp[(1) - (2)].ast_value), (yyvsp[(2) - (2)].ast_value));
 	;}
     break;
 
   case 17:
-#line 174 "/Users/koya/Desktop/VSCode/CSignal/CSignal/CSignal/CSignal/signal/parse/signal.y"
+
+/* Line 1455 of yacc.c  */
+#line 174 "C:\\Users\\Koya\\Documents\\GitHub\\CSignal\\CSignal\\CSignal\\signal\\parse\\signal.y"
     {
 		(yyval.ast_value) = ast_new_blank();
 	;}
     break;
 
   case 18:
-#line 178 "/Users/koya/Desktop/VSCode/CSignal/CSignal/CSignal/CSignal/signal/parse/signal.y"
+
+/* Line 1455 of yacc.c  */
+#line 178 "C:\\Users\\Koya\\Documents\\GitHub\\CSignal\\CSignal\\CSignal\\signal\\parse\\signal.y"
     {
 		(yyval.ast_value) = (yyvsp[(1) - (1)].ast_value)
 	;}
     break;
 
   case 19:
-#line 184 "/Users/koya/Desktop/VSCode/CSignal/CSignal/CSignal/CSignal/signal/parse/signal.y"
+
+/* Line 1455 of yacc.c  */
+#line 184 "C:\\Users\\Koya\\Documents\\GitHub\\CSignal\\CSignal\\CSignal\\signal\\parse\\signal.y"
     {
 		(yyval.ast_value) = ast_new_namespace_path((yyvsp[(1) - (1)].string_value));
 	;}
     break;
 
   case 20:
-#line 188 "/Users/koya/Desktop/VSCode/CSignal/CSignal/CSignal/CSignal/signal/parse/signal.y"
+
+/* Line 1455 of yacc.c  */
+#line 188 "C:\\Users\\Koya\\Documents\\GitHub\\CSignal\\CSignal\\CSignal\\signal\\parse\\signal.y"
     {
 		(yyval.ast_value) = ast_new_namespace_path_list((yyvsp[(1) - (3)].ast_value), (yyvsp[(3) - (3)].string_value));
 	;}
     break;
 
   case 21:
-#line 194 "/Users/koya/Desktop/VSCode/CSignal/CSignal/CSignal/CSignal/signal/parse/signal.y"
+
+/* Line 1455 of yacc.c  */
+#line 194 "C:\\Users\\Koya\\Documents\\GitHub\\CSignal\\CSignal\\CSignal\\signal\\parse\\signal.y"
     {
 		(yyval.ast_value) = ast_new_import_decl(ast_new_import_path((yyvsp[(2) - (2)].ast_value)));
 	;}
     break;
 
   case 22:
-#line 200 "/Users/koya/Desktop/VSCode/CSignal/CSignal/CSignal/CSignal/signal/parse/signal.y"
+
+/* Line 1455 of yacc.c  */
+#line 200 "C:\\Users\\Koya\\Documents\\GitHub\\CSignal\\CSignal\\CSignal\\signal\\parse\\signal.y"
     {
 		(yyval.ast_value) = ast_new_class_decl((yyvsp[(2) - (5)].string_value), ast_new_blank(), (yyvsp[(4) - (5)].ast_value));
 	;}
     break;
 
   case 23:
-#line 204 "/Users/koya/Desktop/VSCode/CSignal/CSignal/CSignal/CSignal/signal/parse/signal.y"
+
+/* Line 1455 of yacc.c  */
+#line 204 "C:\\Users\\Koya\\Documents\\GitHub\\CSignal\\CSignal\\CSignal\\signal\\parse\\signal.y"
     {
 		(yyval.ast_value) = ast_new_class_decl((yyvsp[(2) - (7)].string_value), (yyvsp[(4) - (7)].ast_value), (yyvsp[(6) - (7)].ast_value));
 	;}
     break;
 
   case 24:
-#line 210 "/Users/koya/Desktop/VSCode/CSignal/CSignal/CSignal/CSignal/signal/parse/signal.y"
+
+/* Line 1455 of yacc.c  */
+#line 210 "C:\\Users\\Koya\\Documents\\GitHub\\CSignal\\CSignal\\CSignal\\signal\\parse\\signal.y"
     {
 		(yyval.ast_value) = ast_new_enum_decl((yyvsp[(2) - (5)].string_value), (yyvsp[(4) - (5)].ast_value));
 	;}
     break;
 
   case 25:
-#line 214 "/Users/koya/Desktop/VSCode/CSignal/CSignal/CSignal/CSignal/signal/parse/signal.y"
+
+/* Line 1455 of yacc.c  */
+#line 214 "C:\\Users\\Koya\\Documents\\GitHub\\CSignal\\CSignal\\CSignal\\signal\\parse\\signal.y"
     {
 		(yyval.ast_value) = ast_new_enum_decl((yyvsp[(2) - (6)].string_value), (yyvsp[(4) - (6)].ast_value));
 	;}
     break;
 
   case 26:
-#line 220 "/Users/koya/Desktop/VSCode/CSignal/CSignal/CSignal/CSignal/signal/parse/signal.y"
+
+/* Line 1455 of yacc.c  */
+#line 220 "C:\\Users\\Koya\\Documents\\GitHub\\CSignal\\CSignal\\CSignal\\signal\\parse\\signal.y"
     {
 		(yyval.ast_value) = ast_new_interface_decl((yyvsp[(2) - (5)].string_value), ast_new_blank(), (yyvsp[(4) - (5)].ast_value));
 	;}
     break;
 
   case 27:
-#line 224 "/Users/koya/Desktop/VSCode/CSignal/CSignal/CSignal/CSignal/signal/parse/signal.y"
+
+/* Line 1455 of yacc.c  */
+#line 224 "C:\\Users\\Koya\\Documents\\GitHub\\CSignal\\CSignal\\CSignal\\signal\\parse\\signal.y"
     {
 		(yyval.ast_value) = ast_new_interface_decl((yyvsp[(2) - (7)].string_value), (yyvsp[(4) - (7)].ast_value), (yyvsp[(6) - (7)].ast_value));
 	;}
     break;
 
   case 28:
-#line 230 "/Users/koya/Desktop/VSCode/CSignal/CSignal/CSignal/CSignal/signal/parse/signal.y"
+
+/* Line 1455 of yacc.c  */
+#line 230 "C:\\Users\\Koya\\Documents\\GitHub\\CSignal\\CSignal\\CSignal\\signal\\parse\\signal.y"
     {
 		(yyval.ast_value) = ast_new_blank();
 	;}
     break;
 
   case 29:
-#line 234 "/Users/koya/Desktop/VSCode/CSignal/CSignal/CSignal/CSignal/signal/parse/signal.y"
+
+/* Line 1455 of yacc.c  */
+#line 234 "C:\\Users\\Koya\\Documents\\GitHub\\CSignal\\CSignal\\CSignal\\signal\\parse\\signal.y"
     {
 		(yyval.ast_value) = (yyvsp[(1) - (1)].ast_value);
 	;}
     break;
 
   case 30:
-#line 238 "/Users/koya/Desktop/VSCode/CSignal/CSignal/CSignal/CSignal/signal/parse/signal.y"
+
+/* Line 1455 of yacc.c  */
+#line 238 "C:\\Users\\Koya\\Documents\\GitHub\\CSignal\\CSignal\\CSignal\\signal\\parse\\signal.y"
     {
 		(yyval.ast_value) = ast_new_access_member_tree((yyvsp[(1) - (2)].ast_value), (yyvsp[(2) - (2)].ast_value));
 	;}
     break;
 
   case 31:
-#line 244 "/Users/koya/Desktop/VSCode/CSignal/CSignal/CSignal/CSignal/signal/parse/signal.y"
+
+/* Line 1455 of yacc.c  */
+#line 244 "C:\\Users\\Koya\\Documents\\GitHub\\CSignal\\CSignal\\CSignal\\signal\\parse\\signal.y"
     {
 		(yyval.ast_value) = ast_new_blank();
 	;}
     break;
 
   case 32:
-#line 248 "/Users/koya/Desktop/VSCode/CSignal/CSignal/CSignal/CSignal/signal/parse/signal.y"
+
+/* Line 1455 of yacc.c  */
+#line 248 "C:\\Users\\Koya\\Documents\\GitHub\\CSignal\\CSignal\\CSignal\\signal\\parse\\signal.y"
     {
 		(yyval.ast_value) = ast_new_access_member_list((yyvsp[(1) - (3)].access_level_value), (yyvsp[(3) - (3)].ast_value));
 	;}
     break;
 
   case 33:
-#line 254 "/Users/koya/Desktop/VSCode/CSignal/CSignal/CSignal/CSignal/signal/parse/signal.y"
+
+/* Line 1455 of yacc.c  */
+#line 254 "C:\\Users\\Koya\\Documents\\GitHub\\CSignal\\CSignal\\CSignal\\signal\\parse\\signal.y"
     {
 		(yyval.ast_value) = ast_new_blank();
 	;}
     break;
 
   case 34:
-#line 258 "/Users/koya/Desktop/VSCode/CSignal/CSignal/CSignal/CSignal/signal/parse/signal.y"
+
+/* Line 1455 of yacc.c  */
+#line 258 "C:\\Users\\Koya\\Documents\\GitHub\\CSignal\\CSignal\\CSignal\\signal\\parse\\signal.y"
     {
 		(yyval.ast_value) = ast_new_member_decl((yyvsp[(1) - (1)].ast_value));
 	;}
     break;
 
   case 35:
-#line 262 "/Users/koya/Desktop/VSCode/CSignal/CSignal/CSignal/CSignal/signal/parse/signal.y"
+
+/* Line 1455 of yacc.c  */
+#line 262 "C:\\Users\\Koya\\Documents\\GitHub\\CSignal\\CSignal\\CSignal\\signal\\parse\\signal.y"
     {
 		(yyval.ast_value) = ast_new_member_decl_list((yyvsp[(1) - (2)].ast_value), ast_new_member_decl((yyvsp[(2) - (2)].ast_value)));
 	;}
     break;
 
   case 39:
-#line 273 "/Users/koya/Desktop/VSCode/CSignal/CSignal/CSignal/CSignal/signal/parse/signal.y"
+
+/* Line 1455 of yacc.c  */
+#line 273 "C:\\Users\\Koya\\Documents\\GitHub\\CSignal\\CSignal\\CSignal\\signal\\parse\\signal.y"
     {
 		(yyval.ast_value) = ast_new_constructor_decl((yyvsp[(4) - (7)].ast_value), (yyvsp[(6) - (7)].ast_value), (yyvsp[(7) - (7)].ast_value));
 	;}
     break;
 
   case 40:
-#line 277 "/Users/koya/Desktop/VSCode/CSignal/CSignal/CSignal/CSignal/signal/parse/signal.y"
+
+/* Line 1455 of yacc.c  */
+#line 277 "C:\\Users\\Koya\\Documents\\GitHub\\CSignal\\CSignal\\CSignal\\signal\\parse\\signal.y"
     {
 		(yyval.ast_value) = ast_new_constructor_decl(ast_new_blank(), (yyvsp[(5) - (6)].ast_value), (yyvsp[(6) - (6)].ast_value));
 	;}
     break;
 
   case 41:
-#line 283 "/Users/koya/Desktop/VSCode/CSignal/CSignal/CSignal/CSignal/signal/parse/signal.y"
+
+/* Line 1455 of yacc.c  */
+#line 283 "C:\\Users\\Koya\\Documents\\GitHub\\CSignal\\CSignal\\CSignal\\signal\\parse\\signal.y"
     {
 		(yyval.ast_value) = ast_new_constructor_chain((yyvsp[(2) - (5)].chain_type_value), (yyvsp[(4) - (5)].ast_value));
 	;}
     break;
 
   case 42:
-#line 287 "/Users/koya/Desktop/VSCode/CSignal/CSignal/CSignal/CSignal/signal/parse/signal.y"
+
+/* Line 1455 of yacc.c  */
+#line 287 "C:\\Users\\Koya\\Documents\\GitHub\\CSignal\\CSignal\\CSignal\\signal\\parse\\signal.y"
     {
 		(yyval.ast_value) = ast_new_constructor_chain((yyvsp[(2) - (4)].chain_type_value), ast_new_blank());
 	;}
     break;
 
   case 43:
-#line 293 "/Users/koya/Desktop/VSCode/CSignal/CSignal/CSignal/CSignal/signal/parse/signal.y"
+
+/* Line 1455 of yacc.c  */
+#line 293 "C:\\Users\\Koya\\Documents\\GitHub\\CSignal\\CSignal\\CSignal\\signal\\parse\\signal.y"
     {
 		(yyval.chain_type_value) = chain_type_super;
 	;}
     break;
 
   case 44:
-#line 297 "/Users/koya/Desktop/VSCode/CSignal/CSignal/CSignal/CSignal/signal/parse/signal.y"
+
+/* Line 1455 of yacc.c  */
+#line 297 "C:\\Users\\Koya\\Documents\\GitHub\\CSignal\\CSignal\\CSignal\\signal\\parse\\signal.y"
     {
 		(yyval.chain_type_value) = chain_type_this;
 	;}
     break;
 
   case 45:
-#line 303 "/Users/koya/Desktop/VSCode/CSignal/CSignal/CSignal/CSignal/signal/parse/signal.y"
+
+/* Line 1455 of yacc.c  */
+#line 303 "C:\\Users\\Koya\\Documents\\GitHub\\CSignal\\CSignal\\CSignal\\signal\\parse\\signal.y"
     {
 		(yyval.ast_value) = ast_new_blank();
 	;}
     break;
 
   case 47:
-#line 310 "/Users/koya/Desktop/VSCode/CSignal/CSignal/CSignal/CSignal/signal/parse/signal.y"
+
+/* Line 1455 of yacc.c  */
+#line 310 "C:\\Users\\Koya\\Documents\\GitHub\\CSignal\\CSignal\\CSignal\\signal\\parse\\signal.y"
     {
 		(yyval.ast_value) = ast_new_function_decl((yyvsp[(2) - (8)].string_value), (yyvsp[(4) - (8)].ast_value), (yyvsp[(8) - (8)].ast_value), (yyvsp[(7) - (8)].ast_value));
 	;}
     break;
 
   case 48:
-#line 314 "/Users/koya/Desktop/VSCode/CSignal/CSignal/CSignal/CSignal/signal/parse/signal.y"
+
+/* Line 1455 of yacc.c  */
+#line 314 "C:\\Users\\Koya\\Documents\\GitHub\\CSignal\\CSignal\\CSignal\\signal\\parse\\signal.y"
     {
 		(yyval.ast_value) = ast_new_function_decl_empty_params((yyvsp[(2) - (7)].string_value), (yyvsp[(7) - (7)].ast_value), (yyvsp[(6) - (7)].ast_value));
 	;}
     break;
 
   case 49:
-#line 320 "/Users/koya/Desktop/VSCode/CSignal/CSignal/CSignal/CSignal/signal/parse/signal.y"
+
+/* Line 1455 of yacc.c  */
+#line 320 "C:\\Users\\Koya\\Documents\\GitHub\\CSignal\\CSignal\\CSignal\\signal\\parse\\signal.y"
     {
 		(yyval.ast_value) = ast_new_method_decl((yyvsp[(1) - (9)].modifier_type_value), (yyvsp[(3) - (9)].string_value), (yyvsp[(5) - (9)].ast_value), (yyvsp[(9) - (9)].ast_value), (yyvsp[(8) - (9)].ast_value));
 	;}
     break;
 
   case 50:
-#line 324 "/Users/koya/Desktop/VSCode/CSignal/CSignal/CSignal/CSignal/signal/parse/signal.y"
+
+/* Line 1455 of yacc.c  */
+#line 324 "C:\\Users\\Koya\\Documents\\GitHub\\CSignal\\CSignal\\CSignal\\signal\\parse\\signal.y"
     {
 		(yyval.ast_value) = ast_new_method_decl_empty_params((yyvsp[(1) - (8)].modifier_type_value), (yyvsp[(3) - (8)].string_value), (yyvsp[(8) - (8)].ast_value), (yyvsp[(7) - (8)].ast_value));
 	;}
     break;
 
   case 51:
-#line 330 "/Users/koya/Desktop/VSCode/CSignal/CSignal/CSignal/CSignal/signal/parse/signal.y"
+
+/* Line 1455 of yacc.c  */
+#line 330 "C:\\Users\\Koya\\Documents\\GitHub\\CSignal\\CSignal\\CSignal\\signal\\parse\\signal.y"
     {
 		(yyval.ast_value) = ast_new_field_decl((yyvsp[(1) - (4)].modifier_type_value), (yyvsp[(2) - (4)].ast_value), (yyvsp[(3) - (4)].string_value));
 	;}
     break;
 
   case 52:
-#line 336 "/Users/koya/Desktop/VSCode/CSignal/CSignal/CSignal/CSignal/signal/parse/signal.y"
+
+/* Line 1455 of yacc.c  */
+#line 336 "C:\\Users\\Koya\\Documents\\GitHub\\CSignal\\CSignal\\CSignal\\signal\\parse\\signal.y"
     {
 		(yyval.modifier_type_value) = modifier_none;
 	;}
     break;
 
   case 53:
-#line 340 "/Users/koya/Desktop/VSCode/CSignal/CSignal/CSignal/CSignal/signal/parse/signal.y"
+
+/* Line 1455 of yacc.c  */
+#line 340 "C:\\Users\\Koya\\Documents\\GitHub\\CSignal\\CSignal\\CSignal\\signal\\parse\\signal.y"
     {
 		(yyval.modifier_type_value) = modifier_static_native();
 	;}
     break;
 
   case 54:
-#line 344 "/Users/koya/Desktop/VSCode/CSignal/CSignal/CSignal/CSignal/signal/parse/signal.y"
+
+/* Line 1455 of yacc.c  */
+#line 344 "C:\\Users\\Koya\\Documents\\GitHub\\CSignal\\CSignal\\CSignal\\signal\\parse\\signal.y"
     {
 		(yyval.modifier_type_value) = modifier_static_native();
 	;}
     break;
 
   case 55:
-#line 348 "/Users/koya/Desktop/VSCode/CSignal/CSignal/CSignal/CSignal/signal/parse/signal.y"
+
+/* Line 1455 of yacc.c  */
+#line 348 "C:\\Users\\Koya\\Documents\\GitHub\\CSignal\\CSignal\\CSignal\\signal\\parse\\signal.y"
     {
 		(yyval.modifier_type_value) = modifier_static;
 	;}
     break;
 
   case 56:
-#line 352 "/Users/koya/Desktop/VSCode/CSignal/CSignal/CSignal/CSignal/signal/parse/signal.y"
+
+/* Line 1455 of yacc.c  */
+#line 352 "C:\\Users\\Koya\\Documents\\GitHub\\CSignal\\CSignal\\CSignal\\signal\\parse\\signal.y"
     {
 		(yyval.modifier_type_value) = modifier_native;
 	;}
     break;
 
   case 57:
-#line 358 "/Users/koya/Desktop/VSCode/CSignal/CSignal/CSignal/CSignal/signal/parse/signal.y"
+
+/* Line 1455 of yacc.c  */
+#line 358 "C:\\Users\\Koya\\Documents\\GitHub\\CSignal\\CSignal\\CSignal\\signal\\parse\\signal.y"
     {
 		(yyval.access_level_value) = access_public;
 	;}
     break;
 
   case 58:
-#line 362 "/Users/koya/Desktop/VSCode/CSignal/CSignal/CSignal/CSignal/signal/parse/signal.y"
+
+/* Line 1455 of yacc.c  */
+#line 362 "C:\\Users\\Koya\\Documents\\GitHub\\CSignal\\CSignal\\CSignal\\signal\\parse\\signal.y"
     {
 		(yyval.access_level_value) = access_private;
 	;}
     break;
 
   case 59:
-#line 366 "/Users/koya/Desktop/VSCode/CSignal/CSignal/CSignal/CSignal/signal/parse/signal.y"
+
+/* Line 1455 of yacc.c  */
+#line 366 "C:\\Users\\Koya\\Documents\\GitHub\\CSignal\\CSignal\\CSignal\\signal\\parse\\signal.y"
     {
 		(yyval.access_level_value) = access_protected;
 	;}
     break;
 
   case 60:
-#line 372 "/Users/koya/Desktop/VSCode/CSignal/CSignal/CSignal/CSignal/signal/parse/signal.y"
+
+/* Line 1455 of yacc.c  */
+#line 372 "C:\\Users\\Koya\\Documents\\GitHub\\CSignal\\CSignal\\CSignal\\signal\\parse\\signal.y"
     {
 		(yyval.ast_value) = ast_new_identifier((yyvsp[(1) - (1)].string_value));
 	;}
     break;
 
   case 61:
-#line 376 "/Users/koya/Desktop/VSCode/CSignal/CSignal/CSignal/CSignal/signal/parse/signal.y"
+
+/* Line 1455 of yacc.c  */
+#line 376 "C:\\Users\\Koya\\Documents\\GitHub\\CSignal\\CSignal\\CSignal\\signal\\parse\\signal.y"
     {
 		(yyval.ast_value) = ast_new_identifier_list((yyvsp[(1) - (3)].string_value), (yyvsp[(3) - (3)].ast_value));
 	;}
     break;
 
   case 62:
-#line 382 "/Users/koya/Desktop/VSCode/CSignal/CSignal/CSignal/CSignal/signal/parse/signal.y"
+
+/* Line 1455 of yacc.c  */
+#line 382 "C:\\Users\\Koya\\Documents\\GitHub\\CSignal\\CSignal\\CSignal\\signal\\parse\\signal.y"
     {
 		(yyval.ast_value) = ast_new_parameter((yyvsp[(1) - (2)].ast_value), (yyvsp[(2) - (2)].string_value));
 	;}
     break;
 
   case 63:
-#line 386 "/Users/koya/Desktop/VSCode/CSignal/CSignal/CSignal/CSignal/signal/parse/signal.y"
+
+/* Line 1455 of yacc.c  */
+#line 386 "C:\\Users\\Koya\\Documents\\GitHub\\CSignal\\CSignal\\CSignal\\signal\\parse\\signal.y"
     {
 		(yyval.ast_value) = ast_new_parameter_list((yyvsp[(1) - (4)].ast_value), (yyvsp[(2) - (4)].string_value), (yyvsp[(4) - (4)].ast_value))
 	;}
     break;
 
   case 64:
-#line 392 "/Users/koya/Desktop/VSCode/CSignal/CSignal/CSignal/CSignal/signal/parse/signal.y"
+
+/* Line 1455 of yacc.c  */
+#line 392 "C:\\Users\\Koya\\Documents\\GitHub\\CSignal\\CSignal\\CSignal\\signal\\parse\\signal.y"
     {
 		(yyval.ast_value) = ast_new_argument((yyvsp[(1) - (1)].ast_value));
 	;}
     break;
 
   case 65:
-#line 396 "/Users/koya/Desktop/VSCode/CSignal/CSignal/CSignal/CSignal/signal/parse/signal.y"
+
+/* Line 1455 of yacc.c  */
+#line 396 "C:\\Users\\Koya\\Documents\\GitHub\\CSignal\\CSignal\\CSignal\\signal\\parse\\signal.y"
     {
 		(yyval.ast_value) = ast_new_argument_list(ast_new_argument((yyvsp[(1) - (3)].ast_value)), (yyvsp[(3) - (3)].ast_value));
 	;}
     break;
 
   case 66:
-#line 402 "/Users/koya/Desktop/VSCode/CSignal/CSignal/CSignal/CSignal/signal/parse/signal.y"
+
+/* Line 1455 of yacc.c  */
+#line 402 "C:\\Users\\Koya\\Documents\\GitHub\\CSignal\\CSignal\\CSignal\\signal\\parse\\signal.y"
     {
 		(yyval.ast_value) = (yyvsp[(1) - (1)].ast_value);
 	;}
     break;
 
   case 67:
-#line 406 "/Users/koya/Desktop/VSCode/CSignal/CSignal/CSignal/CSignal/signal/parse/signal.y"
+
+/* Line 1455 of yacc.c  */
+#line 406 "C:\\Users\\Koya\\Documents\\GitHub\\CSignal\\CSignal\\CSignal\\signal\\parse\\signal.y"
     {
 		(yyval.ast_value) = ast_new_typename_list((yyvsp[(1) - (3)].ast_value), (yyvsp[(3) - (3)].ast_value));
 	;}
     break;
 
   case 68:
-#line 412 "/Users/koya/Desktop/VSCode/CSignal/CSignal/CSignal/CSignal/signal/parse/signal.y"
+
+/* Line 1455 of yacc.c  */
+#line 412 "C:\\Users\\Koya\\Documents\\GitHub\\CSignal\\CSignal\\CSignal\\signal\\parse\\signal.y"
     {
 		(yyval.ast_value) = ast_new_typename((yyvsp[(1) - (1)].ast_value));
 	;}
     break;
 
   case 69:
-#line 418 "/Users/koya/Desktop/VSCode/CSignal/CSignal/CSignal/CSignal/signal/parse/signal.y"
+
+/* Line 1455 of yacc.c  */
+#line 418 "C:\\Users\\Koya\\Documents\\GitHub\\CSignal\\CSignal\\CSignal\\signal\\parse\\signal.y"
     {
 		(yyval.ast_value) = ast_new_fqcn_part((yyvsp[(1) - (1)].string_value));
 	;}
     break;
 
   case 70:
-#line 422 "/Users/koya/Desktop/VSCode/CSignal/CSignal/CSignal/CSignal/signal/parse/signal.y"
+
+/* Line 1455 of yacc.c  */
+#line 422 "C:\\Users\\Koya\\Documents\\GitHub\\CSignal\\CSignal\\CSignal\\signal\\parse\\signal.y"
     {
 		(yyval.ast_value) = ast_new_fqcn_part_list(ast_new_fqcn_part((yyvsp[(1) - (3)].string_value)), (yyvsp[(3) - (3)].ast_value));
 	;}
     break;
 
   case 73:
-#line 432 "/Users/koya/Desktop/VSCode/CSignal/CSignal/CSignal/CSignal/signal/parse/signal.y"
+
+/* Line 1455 of yacc.c  */
+#line 432 "C:\\Users\\Koya\\Documents\\GitHub\\CSignal\\CSignal\\CSignal\\signal\\parse\\signal.y"
     {
 		(yyval.ast_value) = ast_new_generic_assign((yyvsp[(1) - (3)].ast_value), (yyvsp[(2) - (3)].assign_otype_value), (yyvsp[(3) - (3)].ast_value));
 	;}
     break;
 
   case 74:
-#line 436 "/Users/koya/Desktop/VSCode/CSignal/CSignal/CSignal/CSignal/signal/parse/signal.y"
+
+/* Line 1455 of yacc.c  */
+#line 436 "C:\\Users\\Koya\\Documents\\GitHub\\CSignal\\CSignal\\CSignal\\signal\\parse\\signal.y"
     {
 		(yyval.ast_value) = ast_new_generic_assign(ast_new_variable((yyvsp[(1) - (3)].string_value)), (yyvsp[(2) - (3)].assign_otype_value), (yyvsp[(3) - (3)].ast_value));
 	;}
     break;
 
   case 75:
-#line 442 "/Users/koya/Desktop/VSCode/CSignal/CSignal/CSignal/CSignal/signal/parse/signal.y"
+
+/* Line 1455 of yacc.c  */
+#line 442 "C:\\Users\\Koya\\Documents\\GitHub\\CSignal\\CSignal\\CSignal\\signal\\parse\\signal.y"
     {
 		(yyval.assign_otype_value) = assign_otype_def;
 	;}
     break;
 
   case 76:
-#line 446 "/Users/koya/Desktop/VSCode/CSignal/CSignal/CSignal/CSignal/signal/parse/signal.y"
+
+/* Line 1455 of yacc.c  */
+#line 446 "C:\\Users\\Koya\\Documents\\GitHub\\CSignal\\CSignal\\CSignal\\signal\\parse\\signal.y"
     {
 		(yyval.assign_otype_value) = assign_otype_add;
 	;}
     break;
 
   case 77:
-#line 450 "/Users/koya/Desktop/VSCode/CSignal/CSignal/CSignal/CSignal/signal/parse/signal.y"
+
+/* Line 1455 of yacc.c  */
+#line 450 "C:\\Users\\Koya\\Documents\\GitHub\\CSignal\\CSignal\\CSignal\\signal\\parse\\signal.y"
     {
 		(yyval.assign_otype_value) = assign_otype_sub;
 	;}
     break;
 
   case 78:
-#line 454 "/Users/koya/Desktop/VSCode/CSignal/CSignal/CSignal/CSignal/signal/parse/signal.y"
+
+/* Line 1455 of yacc.c  */
+#line 454 "C:\\Users\\Koya\\Documents\\GitHub\\CSignal\\CSignal\\CSignal\\signal\\parse\\signal.y"
     {
 		(yyval.assign_otype_value) = assign_otype_mul;
 	;}
     break;
 
   case 79:
-#line 458 "/Users/koya/Desktop/VSCode/CSignal/CSignal/CSignal/CSignal/signal/parse/signal.y"
+
+/* Line 1455 of yacc.c  */
+#line 458 "C:\\Users\\Koya\\Documents\\GitHub\\CSignal\\CSignal\\CSignal\\signal\\parse\\signal.y"
     {
 		(yyval.assign_otype_value) = assign_otype_div;
 	;}
     break;
 
   case 80:
-#line 462 "/Users/koya/Desktop/VSCode/CSignal/CSignal/CSignal/CSignal/signal/parse/signal.y"
+
+/* Line 1455 of yacc.c  */
+#line 462 "C:\\Users\\Koya\\Documents\\GitHub\\CSignal\\CSignal\\CSignal\\signal\\parse\\signal.y"
     {
 		(yyval.assign_otype_value) = assign_otype_mod;
 	;}
     break;
 
   case 82:
-#line 469 "/Users/koya/Desktop/VSCode/CSignal/CSignal/CSignal/CSignal/signal/parse/signal.y"
+
+/* Line 1455 of yacc.c  */
+#line 469 "C:\\Users\\Koya\\Documents\\GitHub\\CSignal\\CSignal\\CSignal\\signal\\parse\\signal.y"
     {
 		(yyval.ast_value) = ast_new_bit_or((yyvsp[(1) - (3)].ast_value), (yyvsp[(3) - (3)].ast_value));
 	;}
     break;
 
   case 83:
-#line 473 "/Users/koya/Desktop/VSCode/CSignal/CSignal/CSignal/CSignal/signal/parse/signal.y"
+
+/* Line 1455 of yacc.c  */
+#line 473 "C:\\Users\\Koya\\Documents\\GitHub\\CSignal\\CSignal\\CSignal\\signal\\parse\\signal.y"
     {
 		(yyval.ast_value) = ast_new_logic_or((yyvsp[(1) - (3)].ast_value), (yyvsp[(3) - (3)].ast_value));
 	;}
     break;
 
   case 85:
-#line 480 "/Users/koya/Desktop/VSCode/CSignal/CSignal/CSignal/CSignal/signal/parse/signal.y"
+
+/* Line 1455 of yacc.c  */
+#line 480 "C:\\Users\\Koya\\Documents\\GitHub\\CSignal\\CSignal\\CSignal\\signal\\parse\\signal.y"
     {
 		(yyval.ast_value) = ast_new_bit_and((yyvsp[(1) - (3)].ast_value), (yyvsp[(3) - (3)].ast_value));
 	;}
     break;
 
   case 86:
-#line 484 "/Users/koya/Desktop/VSCode/CSignal/CSignal/CSignal/CSignal/signal/parse/signal.y"
+
+/* Line 1455 of yacc.c  */
+#line 484 "C:\\Users\\Koya\\Documents\\GitHub\\CSignal\\CSignal\\CSignal\\signal\\parse\\signal.y"
     {
 		(yyval.ast_value) = ast_new_logic_and((yyvsp[(1) - (3)].ast_value), (yyvsp[(3) - (3)].ast_value));
 	;}
     break;
 
   case 88:
-#line 491 "/Users/koya/Desktop/VSCode/CSignal/CSignal/CSignal/CSignal/signal/parse/signal.y"
+
+/* Line 1455 of yacc.c  */
+#line 491 "C:\\Users\\Koya\\Documents\\GitHub\\CSignal\\CSignal\\CSignal\\signal\\parse\\signal.y"
     {
 		(yyval.ast_value) = ast_new_equal((yyvsp[(1) - (3)].ast_value), (yyvsp[(3) - (3)].ast_value));
 	;}
     break;
 
   case 89:
-#line 495 "/Users/koya/Desktop/VSCode/CSignal/CSignal/CSignal/CSignal/signal/parse/signal.y"
+
+/* Line 1455 of yacc.c  */
+#line 495 "C:\\Users\\Koya\\Documents\\GitHub\\CSignal\\CSignal\\CSignal\\signal\\parse\\signal.y"
     {
 		(yyval.ast_value) = ast_new_notequal((yyvsp[(1) - (3)].ast_value), (yyvsp[(3) - (3)].ast_value));
 	;}
     break;
 
   case 91:
-#line 502 "/Users/koya/Desktop/VSCode/CSignal/CSignal/CSignal/CSignal/signal/parse/signal.y"
+
+/* Line 1455 of yacc.c  */
+#line 502 "C:\\Users\\Koya\\Documents\\GitHub\\CSignal\\CSignal\\CSignal\\signal\\parse\\signal.y"
     {
 		(yyval.ast_value) = ast_new_gt((yyvsp[(1) - (3)].ast_value), (yyvsp[(3) - (3)].ast_value));
 	;}
     break;
 
   case 92:
-#line 506 "/Users/koya/Desktop/VSCode/CSignal/CSignal/CSignal/CSignal/signal/parse/signal.y"
+
+/* Line 1455 of yacc.c  */
+#line 506 "C:\\Users\\Koya\\Documents\\GitHub\\CSignal\\CSignal\\CSignal\\signal\\parse\\signal.y"
     {
 		(yyval.ast_value) = ast_new_ge((yyvsp[(1) - (3)].ast_value), (yyvsp[(3) - (3)].ast_value));
 	;}
     break;
 
   case 93:
-#line 510 "/Users/koya/Desktop/VSCode/CSignal/CSignal/CSignal/CSignal/signal/parse/signal.y"
+
+/* Line 1455 of yacc.c  */
+#line 510 "C:\\Users\\Koya\\Documents\\GitHub\\CSignal\\CSignal\\CSignal\\signal\\parse\\signal.y"
     {
 		(yyval.ast_value) = ast_new_lt((yyvsp[(1) - (3)].ast_value), (yyvsp[(3) - (3)].ast_value));
 	;}
     break;
 
   case 94:
-#line 514 "/Users/koya/Desktop/VSCode/CSignal/CSignal/CSignal/CSignal/signal/parse/signal.y"
+
+/* Line 1455 of yacc.c  */
+#line 514 "C:\\Users\\Koya\\Documents\\GitHub\\CSignal\\CSignal\\CSignal\\signal\\parse\\signal.y"
     {
 		(yyval.ast_value) = ast_new_le((yyvsp[(1) - (3)].ast_value), (yyvsp[(3) - (3)].ast_value));
 	;}
     break;
 
   case 96:
-#line 521 "/Users/koya/Desktop/VSCode/CSignal/CSignal/CSignal/CSignal/signal/parse/signal.y"
+
+/* Line 1455 of yacc.c  */
+#line 521 "C:\\Users\\Koya\\Documents\\GitHub\\CSignal\\CSignal\\CSignal\\signal\\parse\\signal.y"
     {
 		(yyval.ast_value) = ast_new_add((yyvsp[(1) - (3)].ast_value), (yyvsp[(3) - (3)].ast_value));
 	;}
     break;
 
   case 97:
-#line 525 "/Users/koya/Desktop/VSCode/CSignal/CSignal/CSignal/CSignal/signal/parse/signal.y"
+
+/* Line 1455 of yacc.c  */
+#line 525 "C:\\Users\\Koya\\Documents\\GitHub\\CSignal\\CSignal\\CSignal\\signal\\parse\\signal.y"
     {
 		(yyval.ast_value) = ast_new_sub((yyvsp[(1) - (3)].ast_value), (yyvsp[(3) - (3)].ast_value));
 	;}
     break;
 
   case 99:
-#line 532 "/Users/koya/Desktop/VSCode/CSignal/CSignal/CSignal/CSignal/signal/parse/signal.y"
+
+/* Line 1455 of yacc.c  */
+#line 532 "C:\\Users\\Koya\\Documents\\GitHub\\CSignal\\CSignal\\CSignal\\signal\\parse\\signal.y"
     {
 		(yyval.ast_value) = ast_new_mul((yyvsp[(1) - (3)].ast_value), (yyvsp[(3) - (3)].ast_value));
 	;}
     break;
 
   case 100:
-#line 536 "/Users/koya/Desktop/VSCode/CSignal/CSignal/CSignal/CSignal/signal/parse/signal.y"
+
+/* Line 1455 of yacc.c  */
+#line 536 "C:\\Users\\Koya\\Documents\\GitHub\\CSignal\\CSignal\\CSignal\\signal\\parse\\signal.y"
     {
 		(yyval.ast_value) = ast_new_div((yyvsp[(1) - (3)].ast_value), (yyvsp[(3) - (3)].ast_value));
 	;}
     break;
 
   case 101:
-#line 540 "/Users/koya/Desktop/VSCode/CSignal/CSignal/CSignal/CSignal/signal/parse/signal.y"
+
+/* Line 1455 of yacc.c  */
+#line 540 "C:\\Users\\Koya\\Documents\\GitHub\\CSignal\\CSignal\\CSignal\\signal\\parse\\signal.y"
     {
 		(yyval.ast_value) = ast_new_mod((yyvsp[(1) - (3)].ast_value), (yyvsp[(3) - (3)].ast_value));
 	;}
     break;
 
   case 103:
-#line 547 "/Users/koya/Desktop/VSCode/CSignal/CSignal/CSignal/CSignal/signal/parse/signal.y"
+
+/* Line 1455 of yacc.c  */
+#line 547 "C:\\Users\\Koya\\Documents\\GitHub\\CSignal\\CSignal\\CSignal\\signal\\parse\\signal.y"
     {
 		(yyval.ast_value) = ast_new_not((yyvsp[(2) - (2)].ast_value));
 	;}
     break;
 
   case 104:
-#line 551 "/Users/koya/Desktop/VSCode/CSignal/CSignal/CSignal/CSignal/signal/parse/signal.y"
+
+/* Line 1455 of yacc.c  */
+#line 551 "C:\\Users\\Koya\\Documents\\GitHub\\CSignal\\CSignal\\CSignal\\signal\\parse\\signal.y"
     {
 		(yyval.ast_value) = ast_new_neg((yyvsp[(2) - (2)].ast_value));
 	;}
     break;
 
   case 106:
-#line 558 "/Users/koya/Desktop/VSCode/CSignal/CSignal/CSignal/CSignal/signal/parse/signal.y"
+
+/* Line 1455 of yacc.c  */
+#line 558 "C:\\Users\\Koya\\Documents\\GitHub\\CSignal\\CSignal\\CSignal\\signal\\parse\\signal.y"
     {
 		(yyval.ast_value) = ast_new_pre_inc((yyvsp[(2) - (2)].ast_value));
 	;}
     break;
 
   case 107:
-#line 562 "/Users/koya/Desktop/VSCode/CSignal/CSignal/CSignal/CSignal/signal/parse/signal.y"
+
+/* Line 1455 of yacc.c  */
+#line 562 "C:\\Users\\Koya\\Documents\\GitHub\\CSignal\\CSignal\\CSignal\\signal\\parse\\signal.y"
     {
 		(yyval.ast_value) = ast_new_pre_dec((yyvsp[(2) - (2)].ast_value));
 	;}
     break;
 
   case 109:
-#line 569 "/Users/koya/Desktop/VSCode/CSignal/CSignal/CSignal/CSignal/signal/parse/signal.y"
+
+/* Line 1455 of yacc.c  */
+#line 569 "C:\\Users\\Koya\\Documents\\GitHub\\CSignal\\CSignal\\CSignal\\signal\\parse\\signal.y"
     {
 		(yyval.ast_value) = ast_new_field_access((yyvsp[(1) - (3)].ast_value), (yyvsp[(3) - (3)].string_value));
 	;}
     break;
 
   case 110:
-#line 573 "/Users/koya/Desktop/VSCode/CSignal/CSignal/CSignal/CSignal/signal/parse/signal.y"
+
+/* Line 1455 of yacc.c  */
+#line 573 "C:\\Users\\Koya\\Documents\\GitHub\\CSignal\\CSignal\\CSignal\\signal\\parse\\signal.y"
     {
 		(yyval.ast_value) = ast_new_invoke((yyvsp[(1) - (5)].ast_value), (yyvsp[(3) - (5)].string_value), ast_new_blank());
 	;}
     break;
 
   case 111:
-#line 577 "/Users/koya/Desktop/VSCode/CSignal/CSignal/CSignal/CSignal/signal/parse/signal.y"
+
+/* Line 1455 of yacc.c  */
+#line 577 "C:\\Users\\Koya\\Documents\\GitHub\\CSignal\\CSignal\\CSignal\\signal\\parse\\signal.y"
     {
 		(yyval.ast_value) = ast_new_invoke((yyvsp[(1) - (6)].ast_value), (yyvsp[(3) - (6)].string_value), (yyvsp[(5) - (6)].ast_value));
 	;}
     break;
 
   case 112:
-#line 581 "/Users/koya/Desktop/VSCode/CSignal/CSignal/CSignal/CSignal/signal/parse/signal.y"
+
+/* Line 1455 of yacc.c  */
+#line 581 "C:\\Users\\Koya\\Documents\\GitHub\\CSignal\\CSignal\\CSignal\\signal\\parse\\signal.y"
     {
 		(yyval.ast_value) = ast_new_post_inc((yyvsp[(1) - (2)].ast_value));
 	;}
     break;
 
   case 113:
-#line 585 "/Users/koya/Desktop/VSCode/CSignal/CSignal/CSignal/CSignal/signal/parse/signal.y"
+
+/* Line 1455 of yacc.c  */
+#line 585 "C:\\Users\\Koya\\Documents\\GitHub\\CSignal\\CSignal\\CSignal\\signal\\parse\\signal.y"
     {
 		(yyval.ast_value) = ast_new_post_dec((yyvsp[(1) - (2)].ast_value));
 	;}
     break;
 
   case 118:
-#line 595 "/Users/koya/Desktop/VSCode/CSignal/CSignal/CSignal/CSignal/signal/parse/signal.y"
+
+/* Line 1455 of yacc.c  */
+#line 595 "C:\\Users\\Koya\\Documents\\GitHub\\CSignal\\CSignal\\CSignal\\signal\\parse\\signal.y"
     {
 		(yyval.ast_value) = ast_new_true();
 	;}
     break;
 
   case 119:
-#line 599 "/Users/koya/Desktop/VSCode/CSignal/CSignal/CSignal/CSignal/signal/parse/signal.y"
+
+/* Line 1455 of yacc.c  */
+#line 599 "C:\\Users\\Koya\\Documents\\GitHub\\CSignal\\CSignal\\CSignal\\signal\\parse\\signal.y"
     {
 		(yyval.ast_value) = ast_new_false();
 	;}
     break;
 
   case 120:
-#line 603 "/Users/koya/Desktop/VSCode/CSignal/CSignal/CSignal/CSignal/signal/parse/signal.y"
+
+/* Line 1455 of yacc.c  */
+#line 603 "C:\\Users\\Koya\\Documents\\GitHub\\CSignal\\CSignal\\CSignal\\signal\\parse\\signal.y"
     {
-		(yyval.ast_value) = ast_new_variable((yyvsp[(1) - (1)].string_value));
+		(yyval.ast_value) = ast_new_variable((yyvsp[(1) - (1)].ast_value));
 	;}
     break;
 
   case 121:
-#line 607 "/Users/koya/Desktop/VSCode/CSignal/CSignal/CSignal/CSignal/signal/parse/signal.y"
+
+/* Line 1455 of yacc.c  */
+#line 607 "C:\\Users\\Koya\\Documents\\GitHub\\CSignal\\CSignal\\CSignal\\signal\\parse\\signal.y"
     {
 		(yyval.ast_value) = ast_new_call((yyvsp[(1) - (3)].string_value), ast_new_blank());
 	;}
     break;
 
   case 122:
-#line 611 "/Users/koya/Desktop/VSCode/CSignal/CSignal/CSignal/CSignal/signal/parse/signal.y"
+
+/* Line 1455 of yacc.c  */
+#line 611 "C:\\Users\\Koya\\Documents\\GitHub\\CSignal\\CSignal\\CSignal\\signal\\parse\\signal.y"
     {
 		(yyval.ast_value) = ast_new_call((yyvsp[(1) - (4)].string_value), (yyvsp[(3) - (4)].ast_value));
 	;}
     break;
 
   case 123:
-#line 615 "/Users/koya/Desktop/VSCode/CSignal/CSignal/CSignal/CSignal/signal/parse/signal.y"
+
+/* Line 1455 of yacc.c  */
+#line 615 "C:\\Users\\Koya\\Documents\\GitHub\\CSignal\\CSignal\\CSignal\\signal\\parse\\signal.y"
     {
 		(yyval.ast_value) = (yyvsp[(2) - (3)].ast_value);
 	;}
     break;
 
   case 124:
-#line 619 "/Users/koya/Desktop/VSCode/CSignal/CSignal/CSignal/CSignal/signal/parse/signal.y"
+
+/* Line 1455 of yacc.c  */
+#line 619 "C:\\Users\\Koya\\Documents\\GitHub\\CSignal\\CSignal\\CSignal\\signal\\parse\\signal.y"
     {
 		(yyval.ast_value) = ast_new_cast((yyvsp[(2) - (4)].ast_value), (yyvsp[(4) - (4)].ast_value));
 	;}
     break;
 
   case 125:
-#line 623 "/Users/koya/Desktop/VSCode/CSignal/CSignal/CSignal/CSignal/signal/parse/signal.y"
+
+/* Line 1455 of yacc.c  */
+#line 623 "C:\\Users\\Koya\\Documents\\GitHub\\CSignal\\CSignal\\CSignal\\signal\\parse\\signal.y"
     {
 		(yyval.ast_value) = ast_new_static_invoke((yyvsp[(1) - (5)].ast_value), (yyvsp[(3) - (5)].string_value), ast_new_blank());
 	;}
     break;
 
   case 126:
-#line 627 "/Users/koya/Desktop/VSCode/CSignal/CSignal/CSignal/CSignal/signal/parse/signal.y"
+
+/* Line 1455 of yacc.c  */
+#line 627 "C:\\Users\\Koya\\Documents\\GitHub\\CSignal\\CSignal\\CSignal\\signal\\parse\\signal.y"
     {
 		(yyval.ast_value) = ast_new_static_invoke((yyvsp[(1) - (6)].ast_value), (yyvsp[(3) - (6)].string_value), (yyvsp[(5) - (6)].ast_value));
 	;}
     break;
 
   case 127:
-#line 631 "/Users/koya/Desktop/VSCode/CSignal/CSignal/CSignal/CSignal/signal/parse/signal.y"
+
+/* Line 1455 of yacc.c  */
+#line 631 "C:\\Users\\Koya\\Documents\\GitHub\\CSignal\\CSignal\\CSignal\\signal\\parse\\signal.y"
     {
 		(yyval.ast_value) = ast_new_field_access_fqcn((yyvsp[(1) - (3)].ast_value), (yyvsp[(3) - (3)].string_value));
 	;}
     break;
 
   case 128:
-#line 635 "/Users/koya/Desktop/VSCode/CSignal/CSignal/CSignal/CSignal/signal/parse/signal.y"
+
+/* Line 1455 of yacc.c  */
+#line 635 "C:\\Users\\Koya\\Documents\\GitHub\\CSignal\\CSignal\\CSignal\\signal\\parse\\signal.y"
     {
 		(yyval.ast_value) = ast_new_this();
 	;}
     break;
 
   case 129:
-#line 639 "/Users/koya/Desktop/VSCode/CSignal/CSignal/CSignal/CSignal/signal/parse/signal.y"
+
+/* Line 1455 of yacc.c  */
+#line 639 "C:\\Users\\Koya\\Documents\\GitHub\\CSignal\\CSignal\\CSignal\\signal\\parse\\signal.y"
     {
 		(yyval.ast_value) = ast_new_super();
 	;}
     break;
 
   case 130:
-#line 643 "/Users/koya/Desktop/VSCode/CSignal/CSignal/CSignal/CSignal/signal/parse/signal.y"
+
+/* Line 1455 of yacc.c  */
+#line 643 "C:\\Users\\Koya\\Documents\\GitHub\\CSignal\\CSignal\\CSignal\\signal\\parse\\signal.y"
     {
 		(yyval.ast_value) = ast_new_new_instance((yyvsp[(2) - (5)].ast_value), (yyvsp[(4) - (5)].ast_value));
 	;}
     break;
 
   case 131:
-#line 647 "/Users/koya/Desktop/VSCode/CSignal/CSignal/CSignal/CSignal/signal/parse/signal.y"
+
+/* Line 1455 of yacc.c  */
+#line 647 "C:\\Users\\Koya\\Documents\\GitHub\\CSignal\\CSignal\\CSignal\\signal\\parse\\signal.y"
     {
 		(yyval.ast_value) = ast_new_new_instance((yyvsp[(2) - (4)].ast_value), ast_new_blank());
 	;}
     break;
 
   case 132:
-#line 653 "/Users/koya/Desktop/VSCode/CSignal/CSignal/CSignal/CSignal/signal/parse/signal.y"
+
+/* Line 1455 of yacc.c  */
+#line 653 "C:\\Users\\Koya\\Documents\\GitHub\\CSignal\\CSignal\\CSignal\\signal\\parse\\signal.y"
     {
 		(yyval.ast_value) = ast_new_stmt((yyvsp[(1) - (1)].ast_value));
 	;}
     break;
 
   case 133:
-#line 657 "/Users/koya/Desktop/VSCode/CSignal/CSignal/CSignal/CSignal/signal/parse/signal.y"
+
+/* Line 1455 of yacc.c  */
+#line 657 "C:\\Users\\Koya\\Documents\\GitHub\\CSignal\\CSignal\\CSignal\\signal\\parse\\signal.y"
     {
 		(yyval.ast_value) = ast_new_stmt_list((yyvsp[(1) - (2)].ast_value), (yyvsp[(2) - (2)].ast_value));
 	;}
     break;
 
   case 134:
-#line 663 "/Users/koya/Desktop/VSCode/CSignal/CSignal/CSignal/CSignal/signal/parse/signal.y"
+
+/* Line 1455 of yacc.c  */
+#line 663 "C:\\Users\\Koya\\Documents\\GitHub\\CSignal\\CSignal\\CSignal\\signal\\parse\\signal.y"
     {
 		(yyval.ast_value) = ast_new_proc((yyvsp[(1) - (2)].ast_value));
 	;}
     break;
 
   case 145:
-#line 679 "/Users/koya/Desktop/VSCode/CSignal/CSignal/CSignal/CSignal/signal/parse/signal.y"
+
+/* Line 1455 of yacc.c  */
+#line 679 "C:\\Users\\Koya\\Documents\\GitHub\\CSignal\\CSignal\\CSignal\\signal\\parse\\signal.y"
     {
 		(yyval.ast_value) = ast_new_variable_decl((yyvsp[(1) - (3)].ast_value), (yyvsp[(2) - (3)].string_value));
 	;}
     break;
 
   case 146:
-#line 685 "/Users/koya/Desktop/VSCode/CSignal/CSignal/CSignal/CSignal/signal/parse/signal.y"
+
+/* Line 1455 of yacc.c  */
+#line 685 "C:\\Users\\Koya\\Documents\\GitHub\\CSignal\\CSignal\\CSignal\\signal\\parse\\signal.y"
     {
 		(yyval.ast_value) = ast_new_variable_init((yyvsp[(1) - (5)].ast_value), (yyvsp[(2) - (5)].string_value), (yyvsp[(4) - (5)].ast_value));
 	;}
     break;
 
   case 147:
-#line 691 "/Users/koya/Desktop/VSCode/CSignal/CSignal/CSignal/CSignal/signal/parse/signal.y"
+
+/* Line 1455 of yacc.c  */
+#line 691 "C:\\Users\\Koya\\Documents\\GitHub\\CSignal\\CSignal\\CSignal\\signal\\parse\\signal.y"
     {
 		(yyval.ast_value) = ast_new_inferenced_type_init((yyvsp[(2) - (5)].string_value), (yyvsp[(4) - (5)].ast_value));
 	;}
     break;
 
   case 148:
-#line 697 "/Users/koya/Desktop/VSCode/CSignal/CSignal/CSignal/CSignal/signal/parse/signal.y"
+
+/* Line 1455 of yacc.c  */
+#line 697 "C:\\Users\\Koya\\Documents\\GitHub\\CSignal\\CSignal\\CSignal\\signal\\parse\\signal.y"
     {
 		(yyval.ast_value) = ast_new_if((yyvsp[(3) - (5)].ast_value), (yyvsp[(5) - (5)].ast_value));
 	;}
     break;
 
   case 149:
-#line 701 "/Users/koya/Desktop/VSCode/CSignal/CSignal/CSignal/CSignal/signal/parse/signal.y"
+
+/* Line 1455 of yacc.c  */
+#line 701 "C:\\Users\\Koya\\Documents\\GitHub\\CSignal\\CSignal\\CSignal\\signal\\parse\\signal.y"
     {
 		(yyval.ast_value) = ast_new_if_else((yyvsp[(3) - (7)].ast_value), (yyvsp[(5) - (7)].ast_value), (yyvsp[(7) - (7)].ast_value));
 	;}
     break;
 
   case 150:
-#line 705 "/Users/koya/Desktop/VSCode/CSignal/CSignal/CSignal/CSignal/signal/parse/signal.y"
+
+/* Line 1455 of yacc.c  */
+#line 705 "C:\\Users\\Koya\\Documents\\GitHub\\CSignal\\CSignal\\CSignal\\signal\\parse\\signal.y"
     {
 		(yyval.ast_value) = ast_new_if_elif_list((yyvsp[(3) - (6)].ast_value), (yyvsp[(5) - (6)].ast_value), (yyvsp[(6) - (6)].ast_value));
 	;}
     break;
 
   case 151:
-#line 709 "/Users/koya/Desktop/VSCode/CSignal/CSignal/CSignal/CSignal/signal/parse/signal.y"
+
+/* Line 1455 of yacc.c  */
+#line 709 "C:\\Users\\Koya\\Documents\\GitHub\\CSignal\\CSignal\\CSignal\\signal\\parse\\signal.y"
     {
 		(yyval.ast_value) = ast_new_if_elif_list_else((yyvsp[(3) - (8)].ast_value), (yyvsp[(5) - (8)].ast_value), (yyvsp[(6) - (8)].ast_value), (yyvsp[(8) - (8)].ast_value));
 	;}
     break;
 
   case 153:
-#line 716 "/Users/koya/Desktop/VSCode/CSignal/CSignal/CSignal/CSignal/signal/parse/signal.y"
+
+/* Line 1455 of yacc.c  */
+#line 716 "C:\\Users\\Koya\\Documents\\GitHub\\CSignal\\CSignal\\CSignal\\signal\\parse\\signal.y"
     {
 		(yyval.ast_value) = ast_new_elif_list((yyvsp[(1) - (2)].ast_value), (yyvsp[(2) - (2)].ast_value));
 	;}
     break;
 
   case 154:
-#line 722 "/Users/koya/Desktop/VSCode/CSignal/CSignal/CSignal/CSignal/signal/parse/signal.y"
+
+/* Line 1455 of yacc.c  */
+#line 722 "C:\\Users\\Koya\\Documents\\GitHub\\CSignal\\CSignal\\CSignal\\signal\\parse\\signal.y"
     {
 		(yyval.ast_value) = ast_new_elif((yyvsp[(3) - (5)].ast_value), (yyvsp[(5) - (5)].ast_value));
 	;}
     break;
 
   case 155:
-#line 728 "/Users/koya/Desktop/VSCode/CSignal/CSignal/CSignal/CSignal/signal/parse/signal.y"
+
+/* Line 1455 of yacc.c  */
+#line 728 "C:\\Users\\Koya\\Documents\\GitHub\\CSignal\\CSignal\\CSignal\\signal\\parse\\signal.y"
     {
 		(yyval.ast_value) = ast_new_while((yyvsp[(3) - (5)].ast_value), (yyvsp[(5) - (5)].ast_value));
 	;}
     break;
 
   case 156:
-#line 734 "/Users/koya/Desktop/VSCode/CSignal/CSignal/CSignal/CSignal/signal/parse/signal.y"
+
+/* Line 1455 of yacc.c  */
+#line 734 "C:\\Users\\Koya\\Documents\\GitHub\\CSignal\\CSignal\\CSignal\\signal\\parse\\signal.y"
     {
 		(yyval.ast_value) = ast_new_break();
 	;}
     break;
 
   case 157:
-#line 740 "/Users/koya/Desktop/VSCode/CSignal/CSignal/CSignal/CSignal/signal/parse/signal.y"
+
+/* Line 1455 of yacc.c  */
+#line 740 "C:\\Users\\Koya\\Documents\\GitHub\\CSignal\\CSignal\\CSignal\\signal\\parse\\signal.y"
     {
 		(yyval.ast_value) = ast_new_continue();
 	;}
     break;
 
   case 158:
-#line 746 "/Users/koya/Desktop/VSCode/CSignal/CSignal/CSignal/CSignal/signal/parse/signal.y"
+
+/* Line 1455 of yacc.c  */
+#line 746 "C:\\Users\\Koya\\Documents\\GitHub\\CSignal\\CSignal\\CSignal\\signal\\parse\\signal.y"
     {
 		(yyval.ast_value) = ast_new_return((yyvsp[(2) - (3)].ast_value));
 	;}
     break;
 
   case 159:
-#line 752 "/Users/koya/Desktop/VSCode/CSignal/CSignal/CSignal/CSignal/signal/parse/signal.y"
+
+/* Line 1455 of yacc.c  */
+#line 752 "C:\\Users\\Koya\\Documents\\GitHub\\CSignal\\CSignal\\CSignal\\signal\\parse\\signal.y"
     {
 		(yyval.ast_value) = ast_new_throw((yyvsp[(2) - (3)].ast_value));
 	;}
     break;
 
   case 160:
-#line 758 "/Users/koya/Desktop/VSCode/CSignal/CSignal/CSignal/CSignal/signal/parse/signal.y"
+
+/* Line 1455 of yacc.c  */
+#line 758 "C:\\Users\\Koya\\Documents\\GitHub\\CSignal\\CSignal\\CSignal\\signal\\parse\\signal.y"
     {
 		(yyval.ast_value) = ast_new_try((yyvsp[(2) - (3)].ast_value), (yyvsp[(3) - (3)].ast_value));
 	;}
     break;
 
   case 161:
-#line 764 "/Users/koya/Desktop/VSCode/CSignal/CSignal/CSignal/CSignal/signal/parse/signal.y"
+
+/* Line 1455 of yacc.c  */
+#line 764 "C:\\Users\\Koya\\Documents\\GitHub\\CSignal\\CSignal\\CSignal\\signal\\parse\\signal.y"
     {
 		(yyval.ast_value) = (yyvsp[(1) - (1)].ast_value);
 	;}
     break;
 
   case 162:
-#line 768 "/Users/koya/Desktop/VSCode/CSignal/CSignal/CSignal/CSignal/signal/parse/signal.y"
+
+/* Line 1455 of yacc.c  */
+#line 768 "C:\\Users\\Koya\\Documents\\GitHub\\CSignal\\CSignal\\CSignal\\signal\\parse\\signal.y"
     {
 		(yyval.ast_value) = ast_new_catch_list((yyvsp[(2) - (2)].ast_value), (yyvsp[(1) - (2)].ast_value));
 	;}
     break;
 
   case 163:
-#line 774 "/Users/koya/Desktop/VSCode/CSignal/CSignal/CSignal/CSignal/signal/parse/signal.y"
+
+/* Line 1455 of yacc.c  */
+#line 774 "C:\\Users\\Koya\\Documents\\GitHub\\CSignal\\CSignal\\CSignal\\signal\\parse\\signal.y"
     {
-		(yyval.ast_value) = ast_new_catch((yyvsp[(3) - (6)].string_value), (yyvsp[(4) - (6)].string_value), (yyvsp[(6) - (6)].ast_value));
+		(yyval.ast_value) = ast_new_catch((yyvsp[(3) - (6)].ast_value), (yyvsp[(4) - (6)].string_value), (yyvsp[(6) - (6)].ast_value));
 	;}
     break;
 
   case 164:
-#line 780 "/Users/koya/Desktop/VSCode/CSignal/CSignal/CSignal/CSignal/signal/parse/signal.y"
+
+/* Line 1455 of yacc.c  */
+#line 780 "C:\\Users\\Koya\\Documents\\GitHub\\CSignal\\CSignal\\CSignal\\signal\\parse\\signal.y"
     {
 		(yyval.ast_value) = ast_new_scope((yyvsp[(2) - (3)].ast_value));
 	;}
     break;
 
   case 165:
-#line 784 "/Users/koya/Desktop/VSCode/CSignal/CSignal/CSignal/CSignal/signal/parse/signal.y"
+
+/* Line 1455 of yacc.c  */
+#line 784 "C:\\Users\\Koya\\Documents\\GitHub\\CSignal\\CSignal\\CSignal\\signal\\parse\\signal.y"
     {
 		(yyval.ast_value) = ast_new_scope_empty();
 	;}
     break;
 
   case 166:
-#line 790 "/Users/koya/Desktop/VSCode/CSignal/CSignal/CSignal/CSignal/signal/parse/signal.y"
+
+/* Line 1455 of yacc.c  */
+#line 790 "C:\\Users\\Koya\\Documents\\GitHub\\CSignal\\CSignal\\CSignal\\signal\\parse\\signal.y"
     {
 		(yyval.ast_value) = ast_new_blank();
 	;}
     break;
 
 
-/* Line 1267 of yacc.c.  */
-#line 2824 "signal.tab.c"
+
+/* Line 1455 of yacc.c  */
+#line 3045 "signal.tab.c"
       default: break;
     }
   YY_SYMBOL_PRINT ("-> $$ =", yyr1[yyn], &yyval, &yyloc);
@@ -2896,7 +3117,7 @@ yyerrlab:
 
   if (yyerrstatus == 3)
     {
-      /* If just tried and failed to reuse look-ahead token after an
+      /* If just tried and failed to reuse lookahead token after an
 	 error, discard it.  */
 
       if (yychar <= YYEOF)
@@ -2913,7 +3134,7 @@ yyerrlab:
 	}
     }
 
-  /* Else will try to reuse look-ahead token after shifting the error
+  /* Else will try to reuse lookahead token after shifting the error
      token.  */
   goto yyerrlab1;
 
@@ -2971,14 +3192,11 @@ yyerrlab1:
       YY_STACK_PRINT (yyss, yyssp);
     }
 
-  if (yyn == YYFINAL)
-    YYACCEPT;
-
   *++yyvsp = yylval;
 
   yyerror_range[1] = yylloc;
   /* Using YYLLOC is tempting, but would change the location of
-     the look-ahead.  YYLOC is available though.  */
+     the lookahead.  YYLOC is available though.  */
   YYLLOC_DEFAULT (yyloc, (yyerror_range - 1), 2);
   *++yylsp = yyloc;
 
@@ -3003,7 +3221,7 @@ yyabortlab:
   yyresult = 1;
   goto yyreturn;
 
-#ifndef yyoverflow
+#if !defined(yyoverflow) || YYERROR_VERBOSE
 /*-------------------------------------------------.
 | yyexhaustedlab -- memory exhaustion comes here.  |
 `-------------------------------------------------*/
@@ -3014,7 +3232,7 @@ yyexhaustedlab:
 #endif
 
 yyreturn:
-  if (yychar != YYEOF && yychar != YYEMPTY)
+  if (yychar != YYEMPTY)
      yydestruct ("Cleanup: discarding lookahead",
 		 yytoken, &yylval, &yylloc);
   /* Do not reclaim the symbols of the rule which action triggered
@@ -3040,5 +3258,7 @@ yyreturn:
 }
 
 
-#line 795 "/Users/koya/Desktop/VSCode/CSignal/CSignal/CSignal/CSignal/signal/parse/signal.y"
+
+/* Line 1675 of yacc.c  */
+#line 795 "C:\\Users\\Koya\\Documents\\GitHub\\CSignal\\CSignal\\CSignal\\signal\\parse\\signal.y"
 

@@ -599,7 +599,7 @@ primary
 	{
 		$$ = ast_new_false();
 	}
-	| IDENT
+	| fqcn_part
 	{
 		$$ = ast_new_variable($1);
 	}
@@ -770,7 +770,7 @@ catch_stmt_list
 	}
 	;
 catch_stmt
-	: CATCH LRB IDENT IDENT RRB scope
+	: CATCH LRB typename_T IDENT RRB scope
 	{
 		$$ = ast_new_catch($3, $4, $6);
 	}

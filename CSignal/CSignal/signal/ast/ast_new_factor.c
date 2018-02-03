@@ -1,6 +1,7 @@
 #include "ast_new_factor.h"
 #include "ast.h"
 #include <stdlib.h>
+#include <assert.h>
 
 ast * ast_new_true() {
 	return ast_new(ast_true);
@@ -41,9 +42,11 @@ ast * ast_new_post_dec(ast * a) {
 	return ret;
 }
 
-ast * ast_new_variable(const char * name) {
+ast * ast_new_variable(ast* a) {
+	assert(a->tag == ast_fqcn_class_name);
 	ast* ret = ast_new(ast_variable);
-	ret->u.string_value = name;
+	ret->u.string_value = a->u.string_value;
+	ast_push(ret, a);
 	return ret;
 }
 
