@@ -93,6 +93,10 @@ vector_item vector_at(vector * self, int index) {
 //	return *(self->memory + index);
 }
 
+bool vector_empty(vector * self) {
+	return self->length == 0;
+}
+
 void vector_clear(vector * self) {
 	while (self->length > 0) {
 		vector_pop(self);

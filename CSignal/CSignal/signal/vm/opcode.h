@@ -74,6 +74,12 @@ typedef enum opcode {
 	op_true,
 	op_false,
 	op_return,
+	op_try_enter,
+	op_try_exit,
+	op_throw,
+	op_try_clear,
+	op_hexception,
+	op_instanceof,
 
 	op_dup,
 	op_pop,

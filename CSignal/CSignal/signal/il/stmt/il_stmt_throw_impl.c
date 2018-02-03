@@ -26,11 +26,12 @@ void il_stmt_throw_dump(il_stmt_throw* self, int depth) {
 }
 
 void il_stmt_throw_generate(il_stmt_throw* self, enviroment* env) {
-
+	il_factor_generate(self->fact, env);
+	opcode_buf_add(env->buf, op_throw);
 }
 
 void il_stmt_throw_load(il_stmt_throw* self, enviroment* env, il_ehandler* eh) {
-
+	il_factor_load(self->fact, env, eh);
 }
 
 void il_stmt_throw_delete(il_stmt_throw* self) {

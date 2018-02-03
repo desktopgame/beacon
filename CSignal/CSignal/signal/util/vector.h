@@ -2,6 +2,7 @@
 #ifndef SIGNAL_UTIL_VECTOR_H
 #define SIGNAL_UTIL_VECTOR_H
 #include <stdlib.h>
+#include <stdbool.h>
 
 /**
  * ベクターの要素を表す型.
@@ -95,6 +96,13 @@ void vector_assign(vector* self, int index, vector_item item);
  * @return
  */
 vector_item vector_at(vector* self, int index);
+
+/**
+ * 空なら true.
+ * @param self
+ * @return
+ */
+bool vector_empty(vector* self);
 
 /**
  * 中身を空にします.

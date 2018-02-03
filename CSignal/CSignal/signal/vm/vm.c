@@ -3,6 +3,7 @@
 #include <stdio.h>
 #include <assert.h>
 #include "label.h"
+#include "vm_trace.h"
 #include "../env/type_interface.h"
 #include "../env/type_impl.h"
 #include "../env/field.h"
@@ -10,9 +11,11 @@
 #include "../env/object.h"
 #include "../env/constructor.h"
 #include "../env/script_context.h"
+#include "../thread/thread.h"
 #include "../util/logger.h"
 #include "../util/mem.h"
 #include "../util/vector.h"
+#include "../util/text.h"
 //proto
 static int stack_topi(vm* self);
 static double stack_topd(vm* self);
@@ -49,6 +52,8 @@ vm * vm_new() {
 	ret->ref_stack = vector_new();
 	ret->parent = NULL;
 	ret->level = 0;
+	ret->terminate = false;
+	ret->validate = false;
 	return ret;
 }
 
@@ -63,6 +68,14 @@ void vm_execute(vm* self, enviroment* env) {
 	script_context* ctx = script_context_get_current();
 	int source_len = env->buf->source->length;
 	for (int i = 0; i < source_len; i++) {
+		//このVMの子要素で例外がスローされ、
+		//それを子要素自身で処理できなかった場合には、
+		//自分で処理を試みます。
+		if (self->validate) {
+			if (!vm_validate(self, source_len, &i)) {
+				break;
+			}
+		}
 		op_byte b = (op_byte)enviroment_source_at(env, i);
 		switch (b) {
 			//int & int
@@ -198,7 +211,63 @@ void vm_execute(vm* self, enviroment* env) {
 				i = source_len;
 				break;
 			}
-
+			case op_throw:
+			{
+				//例外は呼び出し全てへ伝播
+				object* e = (object*)vector_pop(self->value_stack);
+				vm_throw(self, e);
+				sg_thread* th = sg_thread_current();
+				//空ならプログラムを終了
+				if (stack_empty(th->trace_stack)) {
+					vm_terminate(self);
+				//どこかでキャッチしようとしている
+				} else {
+					vm_validate(self, source_len, &i);
+				}
+				break;
+			}
+			case op_try_enter:
+			{
+				sg_thread* th = sg_thread_current();
+				vm_trace* trace = vm_trace_new(self);
+				trace->pc = i; //goto
+				stack_push(th->trace_stack, trace);
+				//goto
+				i++;
+				//label
+				i++;
+				//これ以降は通常のステートメント...
+				break;
+			}
+			case op_try_exit:
+			{
+				sg_thread* th = sg_thread_current();
+				vm_trace* trace = (vm_trace*)stack_pop(th->trace_stack);
+				vm_trace_delete(trace);
+				break;
+			}
+			case op_try_clear:
+			{
+				sg_thread* th = sg_thread_current();
+				vm_catch(self);
+				vm_trace* trace = (vm_trace*)stack_pop(th->trace_stack);
+				vm_trace_delete(trace);
+				break;
+			}
+			case op_hexception:
+			{
+				vector_push(self->value_stack, self->exception);
+				break;
+			}
+			case op_instanceof:
+			{
+				int absClsIndex = (int)enviroment_source_at(env, ++i);
+				type* tp = (type*)vector_at(ctx->type_vec, absClsIndex);
+				object* v = (object*)vector_pop(self->value_stack);
+				int dist = type_distance(v->type, tp);
+				vector_push(self->value_stack, object_bool_get(dist >= 0));
+				break;
+			}
 			case op_dup:
 				vector_push(self->value_stack, vector_top(self->value_stack));
 				break;
@@ -450,7 +519,58 @@ void vm_execute(vm* self, enviroment* env) {
 			default:
 				break;
 		}
+		//キャッチされなかった例外によって終了する
+		if (self->terminate) {
+			vm_uncaught(self);
+			break; 
+		}
 	}
+}
+
+void vm_throw(vm * self, object * exc) {
+	vm* temp = self;
+	do {
+		temp->exception = exc;
+		temp = temp->parent;
+	} while (temp != NULL);
+}
+
+void vm_catch(vm * self) {
+	if (self == NULL) {
+		return;
+	}
+	vm* temp = self;
+	do {
+		temp->exception = NULL;
+		temp = temp->parent;
+	} while (temp != NULL);
+}
+
+bool vm_validate(vm* self, int source_len, int* pcDest) {
+	sg_thread* th = sg_thread_current();
+	vm_trace* trace = (vm_trace*)stack_top(th->trace_stack);
+	//ここなので catch節 へ向かう
+	if (trace->v == self) {
+		*pcDest = trace->pc;
+		return true;
+	//ここではないので終了
+	} else {
+		self->parent->validate = true;
+		*pcDest = source_len;
+		return false;
+	}
+}
+
+void vm_terminate(vm * self) {
+	vm* temp = self;
+	do {
+		temp->terminate = true;
+		temp = temp->parent;
+	} while (temp != NULL);
+}
+
+void vm_uncaught(vm * self) {
+	text_printfln("terminate... %d", self->level);
 }
 
 void vm_delete(vm * self) {

@@ -96,13 +96,13 @@ ast* ast_new_try(ast* abody, ast* acatch_list) {
 	return ret;
 }
 
-ast* ast_new_catch(char* stypename, char* sname, ast* abody) {
+ast* ast_new_catch(ast* stypename, char* sname, ast* abody) {
 	ast* ret = ast_new(ast_stmt_catch);
-	ast* atypename = ast_new(ast_identifier);
+	//ast* atypename = ast_new(ast_identifier);
 	ast* aname = ast_new(ast_identifier);
-	atypename->u.string_value = stypename;
+	//atypename->u.string_value = stypename;
 	aname->u.string_value = sname;
-	ast_push(ret, atypename);
+	ast_push(ret, stypename);
 	ast_push(ret, aname);
 	ast_push(ret, abody);
 	return ret;

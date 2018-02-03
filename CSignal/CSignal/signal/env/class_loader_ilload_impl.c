@@ -536,7 +536,7 @@ void class_loader_ilload_catch_list(class_loader* self, vector* dest, ast* sourc
 		ast* aname = ast_second(source);
 		ast* abody = ast_at(source, 2);
 		il_stmt_catch* ilcatch = il_stmt_catch_new(aname->u.string_value);
-		class_loader_ilload_fqcn(atypename, ilcatch->fqcn);
+		class_loader_ilload_fqcn(ast_first(atypename), ilcatch->fqcn);
 		class_loader_ilload_body(self, ilcatch->statement_list, abody);
 		vector_push(dest, ilcatch);
 

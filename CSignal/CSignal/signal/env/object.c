@@ -65,6 +65,7 @@ object * object_true() {
 	if (gObjectTrue == NULL) {
 		gObjectTrue = object_malloc(object_bool);
 		gObjectTrue->u.bool_ = !false;
+		gObjectTrue->type = CL_BOOL;
 	}
 	return gObjectTrue;
 }
@@ -73,6 +74,7 @@ object * object_false() {
 	if (gObjectFalse == NULL) {
 		gObjectFalse = object_malloc(object_bool);
 		gObjectFalse->u.bool_ = false;
+		gObjectFalse->type = CL_BOOL;
 	}
 	return gObjectFalse;
 }

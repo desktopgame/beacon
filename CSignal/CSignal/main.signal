@@ -57,16 +57,20 @@ namespace signal.lang {
 //Int a = 0;
 //var x = 0;
 //signal::lang::ImplA y =new signal::lang::ImplA();
-var y = new signal::lang::ImplA();
-y.call();
-signal::lang::Console.writeLine("A");
+//var y = new signal::lang::ImplA();
+//y.call();
+//signal::lang::Console.writeLine("A");
 try {
+	try {
+		throw true;
+	} catch(Bool w) {
+		Console.writeLine("catchI Bool");
+	}
 	throw 0;
 } catch(Int e) {
-//	e.printStackTrace();
-	signal::lang::Console.writeLine(e);
+	Console.writeLine("catch Int");
 } catch(Bool e2) {
-
+	Console.writeLine("catch Bool");
 }
 /*
 Object o = new Object();

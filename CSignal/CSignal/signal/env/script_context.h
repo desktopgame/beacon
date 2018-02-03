@@ -25,6 +25,7 @@ typedef struct script_context {
 	stack* parserStack;
 	tree_map* namespaceMap;
 	tree_map* classLoaderMap;
+	vector* threadVec;
 	//通し番号でクラスを参照するためのベクター
 	vector* type_vec;
 	struct heap* heap;

@@ -9,11 +9,12 @@
 #include <assert.h>
 #include "../util/mem.h"
 #include "../lib/sg_library_interface.h"
+#include "../thread/thread.h"
 //proto
 static script_context* script_context_check_init(void);
 static void script_context_launch(script_context* self);
 static script_context* script_context_malloc(void);
-static script_context* script_context_free(script_context* self);
+static void script_context_free(script_context* self);
 static void script_context_class_loader_delete(vector_item item);
 static void script_context_namespace_delete(vector_item item);
 
@@ -21,6 +22,7 @@ static script_context* gScriptContext = NULL;
 static script_context* gScriptContextCurrent = NULL;
 
 void script_context_open() {
+	sg_thread_launch();
 	script_context_check_init();
 	INFO("script-context open");
 }
@@ -93,6 +95,7 @@ void script_context_close() {
 	gScriptContext = NULL;
 	gScriptContextCurrent = NULL;
 	INFO("script-context close");
+	sg_thread_destroy();
 }
 
 //private
@@ -135,11 +138,14 @@ static script_context* script_context_malloc(void) {
 	ret->type_vec = vector_new();
 	ret->prev = NULL;
 	ret->next = NULL;
+	ret->threadVec = vector_new();
+	vector_push(ret->threadVec, sg_thread_main());
 	return ret;
 }
 
-static script_context* script_context_free(script_context* self) {
+static void script_context_free(script_context* self) {
 	vector_delete(self->type_vec, vector_deleter_null);
+	vector_delete(self->threadVec, vector_deleter_null);
 	tree_map_delete(self->classLoaderMap, script_context_class_loader_delete);
 	tree_map_delete(self->namespaceMap, script_context_namespace_delete);
 	heap_delete(self->heap);

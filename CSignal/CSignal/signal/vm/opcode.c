@@ -264,6 +264,38 @@ int opcode_print(vector* source, int index) {
 			printf("return");
 			break;
 		}
+		case op_throw:
+		{
+			printf("throw");
+			//int a = (int)vector_at(source, ++index);
+			break;
+		}
+		case op_try_enter:
+		{
+			printf("try enter");
+			break;
+		}
+		case op_try_exit:
+		{
+			printf("try exit");
+			break;
+		}
+		case op_try_clear:
+		{
+			printf("try clear");
+			break;
+		}
+		case op_hexception:
+		{
+			printf("hexception");
+			break;
+		}
+		case op_instanceof:
+		{
+			int a = (int)vector_at(source, ++index);
+			printf("instanceof(%d)", a);
+			break;
+		}
 		//debug
 		case op_printi:
 		{

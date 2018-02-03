@@ -125,7 +125,7 @@ ast* ast_new_try(ast* abody, ast* acatch_list);
  * @param abody
  * @return
  */
-ast* ast_new_catch(char* stypename, char* sname, ast* abody);
+ast* ast_new_catch(ast* stypename, char* sname, ast* abody);
 
 /**
  * キャッチ節の一覧を作成します.
