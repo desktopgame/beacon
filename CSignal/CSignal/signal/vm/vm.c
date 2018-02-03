@@ -365,7 +365,7 @@ void vm_execute(vm* self, enviroment* env) {
 			{
 				object* assignValue = (object*)vector_pop(self->value_stack);
 				object* assignTarget = (object*)vector_pop(self->value_stack);
-				assert(assignTarget->type == object_ref);
+				assert(assignTarget->tag == object_ref);
 				int fieldIndex = (int)enviroment_source_at(env, ++i);
 				vector_assign(assignTarget->u.field_vec, fieldIndex, assignValue);
 				break;
@@ -374,7 +374,7 @@ void vm_execute(vm* self, enviroment* env) {
 			case op_get_field:
 			{
 				object* sourceObject = (object*)vector_pop(self->value_stack);
-				assert(sourceObject->type == object_ref);
+				assert(sourceObject->tag == object_ref);
 				//int absClsIndex = (int)enviroment_source_at(env, ++i);
 				int fieldIndex = (int)enviroment_source_at(env, ++i);
 				object* val = (object*)vector_at(sourceObject->u.field_vec, fieldIndex);
