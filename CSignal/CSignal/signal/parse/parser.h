@@ -4,13 +4,14 @@
 #include "../ast/ast.h"
 #include "yacc_input_type.h"
 #include <stdbool.h>
+#include "../util/string_buffer.h"
 
 /**
  * Yacc/Bisonの解析結果を保存する構造体です.
  */
 typedef struct parser {
 	ast* root;
-	char* buffer;
+	string_buffer* sBuffer;
 	//char* source;
 	char* source_name;
 	char* errorLineText;

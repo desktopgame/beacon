@@ -205,7 +205,7 @@ static void update_loc() {
 <INITIAL>"new"				{ return (NEW); }
 
 <INITIAL>"true"			{ return (TRUE); }
-<INITIAL>"true"			{ return (TRUE); }
+<INITIAL>"false"		{ return (FALSE); }
 
 <INITIAL>"try"			{ return (TRY); }
 <INITIAL>"catch"		{ return (CATCH); }

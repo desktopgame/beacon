@@ -18,7 +18,7 @@ parser * parser_push(yacc_input_type input_type) {
 	stack_push(ctx->parserStack, p);
 	p->input_type = input_type;
 	p->root = ast_new(ast_root);
-	p->buffer = NULL;
+	p->sBuffer = NULL;
 	p->errorLineIndex = 0;
 	p->errorLineText = NULL;
 	p->errorColumnIndex = 0;
@@ -37,27 +37,22 @@ parser * parser_top() {
 }
 
 void parser_clear_buffer(parser * self) {
-	self->buffer = NULL;
+	self->sBuffer = NULL;
 }
 
 void parser_append_buffer(parser * self, char ch) {
-	if (self->buffer == NULL) {
-		self->buffer = (char*)MEM_MALLOC(sizeof(char) + 1);
-		self->buffer[0] = ch;
-		self->buffer[1] = '\0';
-	} else {
-		int len = strlen(self->buffer);
-		char* temp = (char*)MEM_REALLOC(self->buffer, (sizeof(char) * (len + 1)) + 0);
-		assert(temp != NULL);
-		temp[len] = ch;
-		temp[len + 1] = '\0';
-		self->buffer = temp;
+	if (self->sBuffer == NULL) {
+		self->sBuffer = string_buffer_new();
 	}
+	string_buffer_append(self->sBuffer, ch);
 }
 
 ast * parser_reduce_buffer(parser * self) {
-	ast* ret = ast_new_string(self->buffer);
-	self->buffer = NULL;
+	string_buffer_shrink(self->sBuffer);
+	ast* ret = ast_new_string(self->sBuffer->text);
+	self->sBuffer->text = NULL;
+	MEM_FREE(self->sBuffer);
+	self->sBuffer = NULL;
 	return ret;
 }
 
@@ -159,7 +154,7 @@ void parser_pop() {
 	if (p->root) {
 		ast_delete(p->root);
 	}
-	MEM_FREE(p->buffer);
+	MEM_FREE(p->sBuffer);
 	MEM_FREE(p->source_name);
 	MEM_FREE(p);
 	if (stack_empty(ctx->parserStack)) {

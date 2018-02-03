@@ -63,10 +63,10 @@ namespace signal.lang {
 try {
 	try {
 		throw true;
-	} catch(Bool w) {
-		Console.writeLine("catchI Bool");
+	} catch(Int w) {
+		Console.writeLine("catchI Boolaaaaaaaaaaa");
 	}
-	throw 0;
+	throw false;
 } catch(Int e) {
 	Console.writeLine("catch Int");
 } catch(Bool e2) {

@@ -265,7 +265,8 @@ void vm_execute(vm* self, enviroment* env) {
 				type* tp = (type*)vector_at(ctx->type_vec, absClsIndex);
 				object* v = (object*)vector_pop(self->value_stack);
 				int dist = type_distance(v->type, tp);
-				vector_push(self->value_stack, object_bool_get(dist >= 0));
+				object* b = object_bool_get(dist >= 0);
+				vector_push(self->value_stack, b);
 				break;
 			}
 			case op_dup:
@@ -510,6 +511,7 @@ void vm_execute(vm* self, enviroment* env) {
 			{
 				bool v = SPB(self);
 				label* l = (label*)enviroment_source_at(env, ++i);
+				int a = l->cursor;
 				if (!v) {
 					i = l->cursor;
 				}

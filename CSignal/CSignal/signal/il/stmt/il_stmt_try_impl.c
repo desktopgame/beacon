@@ -118,6 +118,9 @@ void il_stmt_try_generate(il_stmt_try* self, enviroment* env) {
 	}
 	//try-catch‚ÌÅŒã
 	nextCause->cursor = opcode_buf_nop(env->buf);
+	//‚Ç‚Ìcatch‚É‚àˆø‚Á‚©‚©‚ç‚È‚©‚Á‚½
+	opcode_buf_add(env->buf, op_try_exit);
+	//catch‚ðˆ—‚µ‚½‚ç‚±‚±‚É
 	try_end->cursor = opcode_buf_nop(env->buf);
 }
 
