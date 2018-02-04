@@ -331,7 +331,8 @@ void vm_execute(vm* self, enviroment* env) {
 					object* o = (object*)e;
 					vector_push(sub->value_stack, e);
 				}
-				opcode_buf_dump(ctor->env->buf, sub->level);
+				enviroment_op_dump(ctor->env, sub->level);
+				//opcode_buf_dump(ctor->env->buf, sub->level);
 				vm_execute(sub, ctor->env);
 				//コンストラクタを実行した場合、
 				//objectがスタックのトップに残っているはず
@@ -356,7 +357,8 @@ void vm_execute(vm* self, enviroment* env) {
 					object* o = (object*)vector_pop(self->value_stack);
 					vector_push(sub->value_stack, o);
 				}
-				opcode_buf_dump(ctor->env->buf, sub->level);
+				enviroment_op_dump(ctor->env, sub->level);
+				//opcode_buf_dump(ctor->env->buf, sub->level);
 				vm_execute(sub, ctor->env);
 				vm_delete(sub);
 				//コンストラクタを実行した場合、

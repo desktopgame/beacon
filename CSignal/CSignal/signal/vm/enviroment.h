@@ -20,6 +20,7 @@ typedef struct enviroment {
 	opcode_buf* buf;
 	symbol_table* sym_table;
 	vector* constant_pool;
+	vector* line_rangeVec;
 	//解析中の情報
 	//FIXME:ここに持たせるべきじゃない
 	vector* namespace_vec;
@@ -36,6 +37,21 @@ typedef struct enviroment {
  * @return
  */
 enviroment* enviroment_new();
+
+/**
+ * 指定の行番号を開始します.
+ * @param self
+ * @param lineno
+ */
+void enviroment_add_range(enviroment* self, int lineno);
+
+/**
+ * この enviroment に含まれるオペコードの一覧をダンプします.
+ * opcode_buf_dump との違いは、行番号を出力できる点です。
+ * @param self
+ * @param depth
+ */
+void enviroment_op_dump(enviroment* self, int depth);
 
 /**
  * 定数プールに整数を追加して、その位置を返します.

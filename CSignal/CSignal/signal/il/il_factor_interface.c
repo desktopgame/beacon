@@ -130,6 +130,7 @@ void il_factor_generate(il_factor * self, enviroment* env) {
 			ERROR("ファクターを生成出来ませんでした");
 			break;
 	}
+	enviroment_add_range(env, self->lineno);
 }
 
 void il_factor_load(il_factor * self, enviroment * env, il_ehandler * eh) {

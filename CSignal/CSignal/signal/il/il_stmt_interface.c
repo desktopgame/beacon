@@ -88,6 +88,7 @@ void il_stmt_generate(il_stmt * self, struct enviroment* env) {
 			//ERROR("ステートメントを開放出来ませんでした。");
 			break;
 	}
+	enviroment_add_range(env, self->lineno);
 }
 
 void il_stmt_load(il_stmt * self, enviroment* env, il_ehandler * eh) {

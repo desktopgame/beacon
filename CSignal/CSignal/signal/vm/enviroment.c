@@ -3,8 +3,10 @@
 #include "../env/type_impl.h"
 #include "../env/object.h"
 #include "../env/fqcn_cache.h"
+#include "line_range.h"
 #include <stdlib.h>
 #include <assert.h>
+#include <stdio.h>
 #include "../util/mem.h"
 
 //proto
@@ -19,10 +21,63 @@ enviroment * enviroment_new() {
 	ret->context_cll = NULL;
 	ret->namespace_vec = vector_new();
 	ret->type_vec = vector_new();
+	ret->line_rangeVec = vector_new();
 	ret->toplevel = false;
 	ret->whileStart_vec = vector_new();
 	ret->whileEnd_vec = vector_new();
 	return ret;
+}
+
+void enviroment_add_range(enviroment* self, int lineno) {
+	//‹ó‚È‚Ì‚Å’Ç‰Á
+	if (vector_empty(self->line_rangeVec)) {
+		line_range* lr = line_range_new();
+		lr->start_offset = 0;
+		lr->endOffset = 0;
+		lr->lineno = lineno;
+		vector_push(self->line_rangeVec, lr);
+		return;
+	}
+	//‹ó‚Å‚Í‚È‚¢‚È‚çA
+	//ÅŒã‚É‚Â‚¢‚©‚µ‚½ƒŒƒ“ƒW‚ðL‚Î‚·‚©V‚½‚É’Ç‰Á‚·‚é
+	line_range* lrt = (line_range*)vector_top(self->line_rangeVec);
+	if (lrt->lineno == lineno) {
+		lrt->endOffset = self->buf->source->length;
+	} else {
+		line_range* lr = line_range_new();
+		lr->start_offset = self->buf->source->length;
+		lr->endOffset = self->buf->source->length;
+		lr->lineno = lineno;
+		vector_push(self->line_rangeVec, lr);
+	}
+}
+
+void enviroment_op_dump(enviroment * self, int depth) {
+	opcode_buf* buf = self->buf;
+	line_range* lr = NULL;
+	int lrPos = -1;
+	for (int i = 0; i < buf->source->length; i++) {
+		text_putindent(depth);
+		i = opcode_print(buf->source, i);
+		if (!vector_empty(self->line_rangeVec)) {
+			if (lr == NULL) {
+				lr = vector_at(self->line_rangeVec, 0);
+				lrPos = 0;
+			} else {
+				if (i > lr->endOffset) {
+					lrPos++;
+					if (lrPos < self->line_rangeVec->length) {
+						lr = vector_at(self->line_rangeVec, lrPos);
+					} else lr = NULL;
+				}
+			}
+		}
+		if (lr != NULL) {
+			printf("<%d>", lr->lineno);
+		}
+		text_putline();
+	}
+	text_putline();
 }
 
 int enviroment_add_constant_int(enviroment * self, int i) {
