@@ -28,6 +28,9 @@ ast * ast_new(ast_tag tag) {
 	ret->tag = tag;
 	ret->childCount = 0;
 	ret->children = NULL;
+	//行番号を取得
+	parser* p = parser_top();
+	ret->lineno = p->lineno;
 	return ret;
 }
 
@@ -297,6 +300,7 @@ void ast_print(ast* self) {
 			p("not implemented");
 	}
 #undef p
+	printf("<%d>", self->lineno);
 }
 
 void ast_delete(ast * self) {

@@ -228,6 +228,10 @@ static void update_loc() {
 	return INT;
 }
 
+<INITIAL>"\n" {
+	parser_top()->lineno++;
+}
+
 <INITIAL>[1-9][0-9]* {
 	yylval.ast_value = ast_new_int(atoi(yytext));
 	return INT;
@@ -250,13 +254,14 @@ static void update_loc() {
 <INITIAL>"/*"     BEGIN ML_COMMENT;
 <INITIAL>"//"     BEGIN L_COMMENT;
 <ML_COMMENT>\n     {
-
+	parser_top()->lineno++;
 }
 <ML_COMMENT>"*/"     {
     BEGIN INITIAL;
 }
 <ML_COMMENT>.      ;
 <L_COMMENT>\n  {
+	parser_top()->lineno++;
 	BEGIN INITIAL;
 }
 <L_COMMENT><<EOF>>   {

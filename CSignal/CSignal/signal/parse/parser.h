@@ -3,8 +3,9 @@
 #define SIGNAL_PARSE_PARSER_H
 #include "../ast/ast.h"
 #include "yacc_input_type.h"
-#include <stdbool.h>
 #include "../util/string_buffer.h"
+#include <stdbool.h>
+#include <stdint.h>
 
 /**
  * Yacc/Bisonの解析結果を保存する構造体です.
@@ -20,6 +21,7 @@ typedef struct parser {
 	int errorColumnIndex;
 	yacc_input_type input_type;
 	bool fail;
+	uint32_t lineno;
 } parser;
 
 /**

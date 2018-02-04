@@ -184,6 +184,7 @@ typedef struct ast {
 	} u;
 	ast_tag tag;
 	uint32_t childCount;
+	uint32_t lineno;
 	list* children;
 } ast;
 

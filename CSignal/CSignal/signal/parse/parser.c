@@ -25,6 +25,7 @@ parser * parser_push(yacc_input_type input_type) {
 	p->errorMessage = NULL;
 	p->source_name = text_strdup("unknown-source");
 	p->fail = false;
+	p->lineno = 0;
 	return p;
 }
 
