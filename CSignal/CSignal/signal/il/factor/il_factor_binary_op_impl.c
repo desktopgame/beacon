@@ -37,6 +37,8 @@ typedef enum bi_operator_t {
 static void il_factor_binary_op_generate_impl(il_factor_binary_op * self, enviroment * env, bi_operator_t c);
 static opcode bi_operator_to_opi(bi_operator_t bi);
 static opcode bi_operator_to_opd(bi_operator_t bi);
+static opcode bi_operator_to_opb(bi_operator_t bi);
+static bool ilbi_compare(il_factor_binary_op* self);
 static void assign_dump_operator(il_factor_binary_op* self);
 static void assign_generate_simple(il_factor_binary_op * self, enviroment* env);
 static void assign_generate_start(il_factor_binary_op * self, enviroment* env);
@@ -171,11 +173,21 @@ type * il_factor_binary_op_eval(il_factor_binary_op * self, enviroment * env) {
 	type* rtype = il_factor_eval(self->right, env);
 	if (ltype == CL_INT &&
 		rtype == CL_INT) {
+		if (ilbi_compare(self)) {
+			return CL_BOOL;
+		}
 		return CL_INT;
 	}
 	if (ltype == CL_DOUBLE &&
 		rtype == CL_DOUBLE) {
+		if (ilbi_compare(self)) {
+			return CL_BOOL;
+		}
 		return CL_DOUBLE;
+	}
+	if (ltype == CL_BOOL &&
+		rtype == CL_BOOL) {
+		return CL_BOOL;
 	}
 	return NULL;
 }
@@ -201,6 +213,10 @@ static void il_factor_binary_op_generate_impl(il_factor_binary_op * self, enviro
 	if (ltype == CL_DOUBLE &&
 		rtype == CL_DOUBLE) {
 		opcode_buf_add(env->buf, (vector_item)bi_operator_to_opd(c));
+	}
+	if (ltype == CL_BOOL &&
+		rtype == CL_BOOL) {
+		opcode_buf_add(env->buf, (vector_item)bi_operator_to_opb(c));
 	}
 }
 
@@ -258,6 +274,35 @@ static opcode bi_operator_to_opd(bi_operator_t bi) {
 			break;
 	}
 	//*/
+}
+
+static opcode bi_operator_to_opb(bi_operator_t bi) {
+	switch (bi) {
+		case bi_bit_or: return op_bbit_or;
+		case bi_logic_or: return op_blogic_or;
+		case bi_bit_and: return op_bbit_and;
+		case bi_logic_and: return op_blogic_and;
+
+		default:
+			assert(false);
+			break;
+	}
+}
+
+static bool ilbi_compare(il_factor_binary_op* self) {
+	ilbinary_op_type t = self->type;
+	switch (t) {
+		case ilbinary_eq:
+		case ilbinary_noteq:
+		case ilbinary_gt:
+		case ilbinary_ge:
+		case ilbinary_lt:
+		case ilbinary_le:
+			return true;
+		default:
+			break;
+	}
+	return false;
 }
 
 static void assign_dump_operator(il_factor_binary_op* self) {

@@ -12,60 +12,44 @@ typedef unsigned char op_byte;
  * 命令の一覧です.
  */
 typedef enum opcode {
-	//{{{ binary operator
-		//{{{ int
-		op_iadd = 1,
-		op_isub,
-		op_imul,
-		op_idiv,
-		op_imod,
-		op_ibit_or,
-		op_ilogic_or,
-		op_ibit_and,
-		op_ilogic_and,
-		op_ieq,
-		op_inoteq,
-		op_igt,
-		op_ige,
-		op_ilt,
-		op_ile,
-		//}}}
+	op_iadd = 1,
+	op_isub,
+	op_imul,
+	op_idiv,
+	op_imod,
+	op_ibit_or,
+	op_ilogic_or,
+	op_ibit_and,
+	op_ilogic_and,
+	op_ieq,
+	op_inoteq,
+	op_igt,
+	op_ige,
+	op_ilt,
+	op_ile,
 
-		//{{{ double
-		op_dadd,
-		op_dsub,
-		op_dmul,
-		op_ddiv,
-		op_dmod,
-		/*
-			明示的に int にキャストする必要があります。
-			op_dbit_or,
-			op_dlogic_or,
-			op_dbit_and,
-			op_dlogic_and,
-		*/
-		op_deq,
-		op_dnoteq,
-		op_dgt,
-		op_dge,
-		op_dlt,
-		op_dle,
-		//}}}
-	//}}}
+	op_dadd,
+	op_dsub,
+	op_dmul,
+	op_ddiv,
+	op_dmod,
 
-	//{{{ unary
-		//{{{ int
-		op_ineg,
-		//}}}
+	op_deq,
+	op_dnoteq,
+	op_dgt,
+	op_dge,
+	op_dlt,
+	op_dle,
 
-		//{{{ double
-		op_dneg,
-		//}}}
+	op_ineg,
 
-		//{{{ bool
-		op_bnot,
-		//}}}
-	//}}}
+	op_dneg,
+
+	op_bnot,
+	op_bbit_or,
+	op_blogic_or,
+	op_bbit_and,
+	op_blogic_and,
 
 	op_consti,
 	op_constd,

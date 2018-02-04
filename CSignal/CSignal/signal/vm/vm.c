@@ -167,6 +167,19 @@ void vm_execute(vm* self, enviroment* env) {
 			case op_bnot:
 				vector_push(self->value_stack, object_bool_new(!SPB(self)));
 				break;
+			//TODO:短絡評価していない
+			case op_bbit_or:
+				vector_push(self->value_stack, object_bool_new(SPB(self) | SPB(self)));
+				break;
+			case op_blogic_or:
+				vector_push(self->value_stack, object_bool_new(SPB(self) || SPB(self)));
+				break;
+			case op_bbit_and:
+				vector_push(self->value_stack, object_bool_new(SPB(self) & SPB(self)));
+				break;
+			case op_blogic_and:
+				vector_push(self->value_stack, object_bool_new(SPB(self) && SPB(self)));
+				break;
 			//push const
 			case op_consti:
 			{

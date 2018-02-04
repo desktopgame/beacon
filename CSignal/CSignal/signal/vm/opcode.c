@@ -96,6 +96,18 @@ int opcode_print(vector* source, int index) {
 		case op_bnot:
 			printf("bnot");
 			break;
+		case op_bbit_or:
+			printf("bbit_or");
+			break;
+		case op_blogic_or:
+			printf("blogic_or");
+			break;
+		case op_bbit_and:
+			printf("bbit_and");
+			break;
+		case op_blogic_and:
+			printf("blogic_and");
+			break;
 		//push const
 		case op_consti:
 		{

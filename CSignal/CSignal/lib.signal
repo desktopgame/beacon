@@ -27,6 +27,9 @@ namespace signal.lang {
 		}
 
 		def set(Int index, Object v) -> Void {
+			if(index < 0 || index >= this.length) {
+				throw -1;
+			}
 			this.nativeSet(index, v);
 		}
 
