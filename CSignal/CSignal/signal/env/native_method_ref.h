@@ -4,7 +4,6 @@
 #include "method.h"
 #include "../vm/vm.h"
 #include "../vm/enviroment.h"
-#include <stdint.h>
 /**
  * ネイティブメソッドの実装.
  */
@@ -15,7 +14,6 @@ typedef void(*native_impl)(method* parent, vm* vm, enviroment* env);
  */
 typedef struct native_method_ref {
 	native_impl impl;
-	int32_t ref_count;
 } native_method_ref;
 
 /**
