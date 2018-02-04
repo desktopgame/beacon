@@ -27,13 +27,12 @@ namespace signal.lang {
 		}
 
 		def set(Int index, Object v) -> Void {
-			if(index < 0 || index >= this.length) {
-				throw -1;
-			}
+			this.checkRange(index);
 			this.nativeSet(index, v);
 		}
 
 		def get(Int index) -> Object {
+			this.checkRange(index);
 			return this.nativeGet(index);
 		}
 
@@ -46,6 +45,11 @@ namespace signal.lang {
 		}
 		
 		private:
+		def checkRange(Int index) -> Void {
+			if(index < 0 || index >= this.length) {
+				throw -1;
+			}
+		}
 		native def nativeInit() -> Void;
 		native def nativeSet(Int index, Object v) -> Void;
 		native def nativeGet(Int index) -> Object;

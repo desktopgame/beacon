@@ -17,6 +17,8 @@ parser * parser_push(yacc_input_type input_type) {
 	parser* p = (parser*)MEM_MALLOC(sizeof(parser));
 	stack_push(ctx->parserStack, p);
 	p->input_type = input_type;
+	p->lineno = 0;
+	p->linenoVec = vector_new();
 	p->root = ast_new(ast_root);
 	p->sBuffer = NULL;
 	p->errorLineIndex = 0;
@@ -25,13 +27,15 @@ parser * parser_push(yacc_input_type input_type) {
 	p->errorMessage = NULL;
 	p->source_name = text_strdup("unknown-source");
 	p->fail = false;
-	p->lineno = 0;
 	return p;
 }
 
 parser * parser_top() {
 	script_context* ctx = script_context_get_current();
 	if (ctx->parserStack == NULL) {
+		return NULL;
+	}
+	if (stack_empty(ctx->parserStack)) {
 		return NULL;
 	}
 	return (parser*)stack_top(ctx->parserStack);

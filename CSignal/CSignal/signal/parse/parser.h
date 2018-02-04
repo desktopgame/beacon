@@ -4,6 +4,7 @@
 #include "../ast/ast.h"
 #include "yacc_input_type.h"
 #include "../util/string_buffer.h"
+#include "../util/vector.h"
 #include <stdbool.h>
 #include <stdint.h>
 
@@ -22,6 +23,7 @@ typedef struct parser {
 	yacc_input_type input_type;
 	bool fail;
 	uint32_t lineno;
+	vector* linenoVec;
 } parser;
 
 /**
