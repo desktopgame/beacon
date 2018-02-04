@@ -64,6 +64,13 @@ class_ * class_new(const char * name) {
 class_ * class_new_preload(const char * name) {
 	class_* cl = class_new(name);
 	cl->state = class_pending;
+	if (CL_OBJECT == NULL) {
+		return cl;
+	}
+	class_* objCls = CL_OBJECT->u.class_;
+	if (cl != objCls) {
+		cl->super_class = objCls;
+	}
 	return cl;
 }
 
