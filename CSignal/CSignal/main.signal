@@ -62,8 +62,9 @@ namespace signal.lang {
 //signal::lang::Console.writeLine("A");
 var arr = new Array(4);
 Console.writeLine(arr.length());
-Console.writeLine(null);
-
+arr.set(0, "Foo");
+Console.writeLine(arr.get(0));
+/*
 try {
 	try {
 		throw true;
@@ -76,6 +77,7 @@ try {
 } catch(Bool e2) {
 	Console.writeLine("catch Bool");
 }
+*/
 /*
 Object o = new Object();
 Console.writeLine(o.toString());

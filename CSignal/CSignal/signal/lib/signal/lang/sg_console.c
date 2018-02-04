@@ -26,6 +26,8 @@ static void sg_console_writeLine(method* parent, vm* vm, enviroment* env) {
 		printf("%d\n", o->u.int_);
 	} else if (o->tag == object_string) {
 		printf("%s\n", o->u.string_);
+	} else if (o->tag == object_ref) {
+		printf("%s\n", type_name(o->type));
 	}
 }
 

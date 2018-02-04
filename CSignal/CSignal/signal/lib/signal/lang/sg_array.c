@@ -30,12 +30,23 @@ static void sg_array_nativeInit(method* parent, vm* vm, enviroment* env) {
 	//配列の長さだけ確保
 	int len = lengthObj->u.int_;
 	assert(len >= 0);
+	for (int i = 0; i < len; i++) {
+		vector_push(self->nativeSlotVec, object_get_null());
+	}
 }
 
 static void sg_array_nativeSet(method* parent, vm* vm, enviroment* env) {
-
+	object* self = vector_pop(vm->value_stack);
+	object* val = vector_pop(vm->value_stack);
+	object* idx = vector_pop(vm->value_stack);
+	assert(idx->tag == object_int);
+	vector_assign(self->nativeSlotVec, idx->u.int_, val);
 }
 
 static void sg_array_nativeGet(method* parent, vm* vm, enviroment* env) {
-
+	object* self = vector_pop(vm->value_stack);
+	object* idx = vector_pop(vm->value_stack);
+	assert(idx->tag == object_int);
+	object* ret = vector_at(self->nativeSlotVec, idx->u.int_);
+	vector_push(vm->value_stack, ret);
 }

@@ -46,14 +46,14 @@ void il_factor_invoke_generate(il_factor_invoke * self, enviroment* env) {
 	il_factor_invoke_find(self, env);
 	//NOTE:Hoge.Foo() hoge.Foo() はil_named_invokeに拾われるので、
 	//こちらでは関数の戻り値や式に対する呼び出しだけ考慮する。
-	//このメソッドを呼び出しているオブジェクトをプッシュ
-	il_factor_generate(self->receiver, env);
 	//全ての引数をプッシュ
 	for(int i=0; i<self->argument_list->length; i++) {
 		vector_item e = vector_at(self->argument_list, i);
 		il_argument* ilarg = (il_argument*)e;
 		il_factor_generate(ilarg->factor, env);
 	}
+	//このメソッドを呼び出しているオブジェクトをプッシュ
+	il_factor_generate(self->receiver, env);
 	//メソッドのインデックスをプッシュ
 	if (self->m->access == access_private) {
 		opcode_buf_add(env->buf, (vector_item)op_invokespecial);
