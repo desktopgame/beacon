@@ -68,7 +68,8 @@ int type_distance(type * a, type * b) {
 	}
 	if (a->tag == type_class &&
 		b->tag == type_class) {
-		return class_distance(a->u.class_, b->u.class_);
+		int dist = class_distance(a->u.class_, b->u.class_);
+		return dist;
 	}
 	return -1;
 }

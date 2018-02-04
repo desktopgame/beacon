@@ -25,14 +25,21 @@ method * meta_find_method(vector * method_vec, const char * name, vector * args,
 			return m;
 		}
 		int score = 0;
+		bool illegal = false;
 		for (int j = 0; j < m->parameter_list->length; j++) {
 			vector_item d = vector_at(args, j);
 			vector_item d2 = vector_at(m->parameter_list, j);
 			il_argument* p = (il_argument*)d;
 			parameter* p2 = (parameter*)d2;
-			score += type_distance(il_factor_eval(p->factor, env), p2->type);
+			int dist = type_distance(il_factor_eval(p->factor, env), p2->type);
+			score += dist;
+			//継承関係のないパラメータ
+			if (dist == -1) {
+				illegal = true;
+				break;
+			}
 		}
-		if (score < min) {
+		if (score < min && !illegal) {
 			//TEST(env->toplevel);
 			min = score;
 			ret = m;
