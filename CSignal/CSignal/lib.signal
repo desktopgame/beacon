@@ -27,11 +27,19 @@ namespace signal.lang {
 		}
 
 		def set(Int index, Object v) -> Void {
-			nativeSet(index, v);
+			this.nativeSet(index, v);
 		}
 
 		def get(Int index) -> Object {
-			return nativeGet(index);
+			return this.nativeGet(index);
+		}
+
+		//再帰関数のテスト
+		def test(Int a, Int b) -> Int {
+			if(b <= 0) {
+				return a;
+			}
+			return this.test(a + b, b - 1);
 		}
 		
 		private:
@@ -44,6 +52,8 @@ namespace signal.lang {
 		static native def writeLine(String str) -> Void;
 
 		static native def writeLine(Int i) -> Void;
+
+		static native def writeLine(Object i) -> Void;
 
 		static native def write(String str) -> Void;
 
