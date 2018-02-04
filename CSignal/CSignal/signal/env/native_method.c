@@ -17,6 +17,7 @@ void native_method_execute(native_method * self, method * parent, vm * vm, envir
 	if (self->ref == NULL) {
 		class_* declared = parent->parent->u.class_;
 		self->ref = tree_map_get(declared->native_method_ref_map, parent->name);
+		self->ref->ref_count++;
 	}
 	self->ref->impl(parent, vm, env);
 }
