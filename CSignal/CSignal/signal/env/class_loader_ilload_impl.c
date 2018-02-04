@@ -19,6 +19,11 @@
 //
 //ilload
 //
+
+//proto
+static il_factor* class_loader_ilload_factorImpl(class_loader* self, ast* source);
+static il_stmt* class_loader_ilload_bodyImpl(class_loader* self, ast* source);
+
 void class_loader_ilload_impl(class_loader* self, ast* source_code) {
 	self->il_code = il_top_level_new();
 	for (int i = 0; i < source_code->childCount; i++) {
@@ -319,103 +324,10 @@ void class_loader_ilload_body(class_loader* self, vector* list, ast* source) {
 			class_loader_ilload_body(self, list, ast_at(source, i));
 		}
 	} else {
-		//printf("    ");
-		//ast_print(source);
-		//printf("\n");
-		switch (source->tag) {
-			case ast_stmt:
-			{
-				class_loader_ilload_body(self, list, ast_first(source));
-				break;
-			}
-			case ast_proc:
-			{
-				ast* afact = ast_first(source);
-				il_factor* ilfact = class_loader_ilload_factor(self, afact);
-				il_stmt_proc* ilproc = il_stmt_proc_new();
-				ilproc->factor = ilfact;
-				assert(ilfact != NULL);
-				vector_push(list, il_stmt_wrap_proc(ilproc));
-				break;
-			}
-			case ast_stmt_variable_decl:
-			{
-				il_stmt_variable_decl* ilvardecl = class_loader_ilload_variable_decl(self, source);
-				vector_push(list, il_stmt_wrap_variable_decl(ilvardecl));
-				break;
-			}
-			case ast_stmt_variable_init:
-			{
-				il_stmt_variable_init* ilvarinit = class_loader_ilload_variable_init(self, source);
-				vector_push(list, il_stmt_wrap_variable_init(ilvarinit));
-				break;
-			}
-			case ast_inferenced_type_init:
-			{
-				il_stmt_inferenced_type_init* ilinfer = class_loader_ilload_inferenced_type_init(self, source);
-				vector_push(list, il_stmt_wrap_inferenced_type_init(ilinfer));
-				break;
-			}
-			case ast_if:
-			{
-				il_stmt_if* ilif = class_loader_ilload_if(self, source);
-				vector_push(list, il_stmt_wrap_if(ilif));
-				break;
-			}
-			case ast_if_elif_list:
-			{
-				il_stmt_if* ilif = class_loader_ilload_if_elif_list(self, source);
-				vector_push(list, il_stmt_wrap_if(ilif));
-				break;
-			}
-			case ast_if_else:
-			{
-				il_stmt_if* ilif = class_loader_ilload_if_else(self, source);
-				vector_push(list, il_stmt_wrap_if(ilif));
-				break;
-			}
-			case ast_if_elif_list_else:
-			{
-				il_stmt_if* ilif = class_loader_ilload_if_elif_list_else(self, source);
-				vector_push(list, il_stmt_wrap_if(ilif));
-				break;
-			}
-			case ast_while:
-			{
-				il_stmt_while* ilwh = class_loader_ilload_while(self, source);
-				vector_push(list, il_stmt_wrap_while(ilwh));
-				break;
-			}
-			case ast_break:
-			{
-				vector_push(list, il_stmt_wrap_break());
-				break;
-			}
-			case ast_continue:
-			{
-				vector_push(list, il_stmt_wrap_continue());
-				break;
-			}
-			case ast_return:
-			{
-				il_stmt_return* ilret = class_loader_ilload_return(self, source);
-				vector_push(list, il_stmt_wrap_return(ilret));
-				break;
-			}
-			case ast_stmt_try:
-			{
-				il_stmt_try* iltry = class_loader_ilload_try(self, source);
-				vector_push(list, il_stmt_wrap_try(iltry));
-				break;
-			}
-			case ast_stmt_throw:
-			{
-				il_stmt_throw* ilthrow = class_loader_ilload_throw(self, source);
-				vector_push(list, il_stmt_wrap_throw(ilthrow));
-				break;
-			}
-			default:
-				break;
+		il_stmt* stmt = class_loader_ilload_bodyImpl(self, source);
+		if (stmt != NULL) {
+			stmt->lineno = source->lineno;
+			vector_push(list, stmt);
 		}
 	}
 }
@@ -554,102 +466,9 @@ il_stmt_throw* class_loader_ilload_throw(class_loader* self, ast* source) {
 }
 
 il_factor* class_loader_ilload_factor(class_loader* self, ast* source) {
-	if (source->tag == ast_int) {
-		return il_factor_wrap_int(il_factor_int_new(source->u.int_value));
-	} else if (source->tag == ast_double) {
-		return il_factor_wrap_double(il_factor_double_new(source->u.double_value));
-	} else if (source->tag == ast_char) {
-		return il_factor_wrap_char(il_factor_char_new(source->u.char_value));
-	} else if (source->tag == ast_string) {
-		return il_factor_wrap_string(il_factor_string_new(source->u.string_value));
-	} else if (source->tag == ast_call) {
-		return il_factor_wrap_call(class_loader_ilload_call(self, source));
-	} else if (source->tag == ast_invoke) {
-		return il_factor_wrap_invoke(class_loader_ilload_invoke(self, source));
-	} else if(source->tag == ast_static_invoke) {
-		return il_factor_wrap_named_invoke(class_loader_ilload_named_invoke(self, source));
-	} else if (source->tag == ast_variable) {
-		return il_factor_wrap_variable(il_factor_variable_new(source->u.string_value));
-	//operator(+ - * / %)
-	} else if (source->tag == ast_add) {
-		return il_factor_wrap_binary(class_loader_ilload_binary(self, source, ilbinary_add));
-	} else if (source->tag == ast_sub) {
-		return il_factor_wrap_binary(class_loader_ilload_binary(self, source, ilbinary_sub));
-	} else if (source->tag == ast_mul) {
-		return il_factor_wrap_binary(class_loader_ilload_binary(self, source, ilbinary_mul));
-	} else if (source->tag == ast_div) {
-		return il_factor_wrap_binary(class_loader_ilload_binary(self, source, ilbinary_div));
-	} else if (source->tag == ast_mod) {
-		return il_factor_wrap_binary(class_loader_ilload_binary(self, source, ilbinary_mod));
-	//operator(| || & &&)
-	} else if (source->tag == ast_bit_or) {
-		return il_factor_wrap_binary(class_loader_ilload_binary(self, source, ilbinary_bit_or));
-	} else if (source->tag == ast_logic_or) {
-		return il_factor_wrap_binary(class_loader_ilload_binary(self, source, ilbinary_logic_or));
-	} else if (source->tag == ast_bit_and) {
-		return il_factor_wrap_binary(class_loader_ilload_binary(self, source, ilbinary_bit_and));
-	} else if (source->tag == ast_logic_and) {
-		return il_factor_wrap_binary(class_loader_ilload_binary(self, source, ilbinary_logic_and));
-	//operator(== != > >= < <=)
-	} else if (source->tag == ast_equal) {
-		return il_factor_wrap_binary(class_loader_ilload_binary(self, source, ilbinary_eq));
-	} else if (source->tag == ast_notequal) {
-		return il_factor_wrap_binary(class_loader_ilload_binary(self, source, ilbinary_noteq));
-	} else if (source->tag == ast_gt) {
-		return il_factor_wrap_binary(class_loader_ilload_binary(self, source, ilbinary_gt));
-	} else if (source->tag == ast_ge) {
-		return il_factor_wrap_binary(class_loader_ilload_binary(self, source, ilbinary_ge));
-	} else if (source->tag == ast_lt) {
-		return il_factor_wrap_binary(class_loader_ilload_binary(self, source, ilbinary_lt));
-	} else if (source->tag == ast_le) {
-		return il_factor_wrap_binary(class_loader_ilload_binary(self, source, ilbinary_le));
-	//operator(= += -= *= /= %=)
-	} else if (source->tag == ast_assign) {
-		return il_factor_wrap_binary(class_loader_ilload_binary(self, source, ilbinary_assign));
-	} else if (source->tag == ast_add_assign) {
-		return il_factor_wrap_binary(class_loader_ilload_binary(self, source, ilbinary_add_assign));
-	} else if (source->tag == ast_sub_assign) {
-		return il_factor_wrap_binary(class_loader_ilload_binary(self, source, ilbinary_sub_assign));
-	} else if (source->tag == ast_mul_assign) {
-		return il_factor_wrap_binary(class_loader_ilload_binary(self, source, ilbinary_mul_assign));
-	} else if (source->tag == ast_div_assign) {
-		return il_factor_wrap_binary(class_loader_ilload_binary(self, source, ilbinary_div_assign));
-	} else if (source->tag == ast_mod_assign) {
-		return il_factor_wrap_binary(class_loader_ilload_binary(self, source, ilbinary_mod_assign));
-	} else if (source->tag == ast_not) {
-		return il_factor_wrap_unary(class_loader_ilload_unary(self, source, ilunary_not));
-	} else if(source->tag == ast_neg) {
-		return il_factor_wrap_unary(class_loader_ilload_unary(self, source, ilunary_neg));
-	//this super
-	} else if (source->tag == ast_this) {
-		il_factor* ret = (il_factor*)MEM_MALLOC(sizeof(il_factor));
-		ret->type = ilfactor_this;
-		ret->u.this_ = 0;
-		return ret;
-	} else if (source->tag == ast_super) {
-		il_factor* ret = (il_factor*)MEM_MALLOC(sizeof(il_factor));
-		ret->type = ilfactor_super;
-		ret->u.super_ = 0;
-		return ret;
-	} else if (source->tag == ast_new_instance) {
-		return il_factor_wrap_new_instance(class_loader_ilload_new_instance(self, source));
-	} else if (source->tag == ast_field_access) {
-		return il_factor_wrap_field_access(class_loader_ilload_field_access(self, source));
-	} else if (source->tag == ast_static_field_access) {
-		return il_factor_wrap_static_field_access(class_loader_ilload_static_field_access(self, source));
-	} else if (source->tag == ast_cast) {
-		return il_factor_wrap_cast(class_loader_ilload_cast(self, source));
-	} else if (source->tag == ast_true) {
-		return il_factor_wrap_bool(class_loader_ilload_true(self, source));
-	} else if (source->tag == ast_false) {
-		return il_factor_wrap_bool(class_loader_ilload_false(self, source));
-	} else if (source->tag == ast_null) {
-		il_factor* ret = (il_factor*)MEM_MALLOC(sizeof(il_factor));
-		ret->type = ilfactor_null;
-		ret->u.null_ = NULL;
-		return ret;
-	}
-	return NULL;
+	il_factor* ret = class_loader_ilload_factorImpl(self, source);
+	ret->lineno = source->lineno;
+	return ret;
 }
 
 il_factor_bool * class_loader_ilload_true(class_loader * self, ast * source) {
@@ -786,4 +605,191 @@ void class_loader_ilload_argument_list(class_loader* self, vector* list, ast* so
 		//il_argument_list_push(list, ilarg);
 		vector_push(list, ilarg);
 	}
+}
+
+//private
+static il_factor* class_loader_ilload_factorImpl(class_loader* self, ast* source) {
+	if (source->tag == ast_int) {
+		return il_factor_wrap_int(il_factor_int_new(source->u.int_value));
+	} else if (source->tag == ast_double) {
+		return il_factor_wrap_double(il_factor_double_new(source->u.double_value));
+	} else if (source->tag == ast_char) {
+		return il_factor_wrap_char(il_factor_char_new(source->u.char_value));
+	} else if (source->tag == ast_string) {
+		return il_factor_wrap_string(il_factor_string_new(source->u.string_value));
+	} else if (source->tag == ast_call) {
+		return il_factor_wrap_call(class_loader_ilload_call(self, source));
+	} else if (source->tag == ast_invoke) {
+		return il_factor_wrap_invoke(class_loader_ilload_invoke(self, source));
+	} else if (source->tag == ast_static_invoke) {
+		return il_factor_wrap_named_invoke(class_loader_ilload_named_invoke(self, source));
+	} else if (source->tag == ast_variable) {
+		return il_factor_wrap_variable(il_factor_variable_new(source->u.string_value));
+		//operator(+ - * / %)
+	} else if (source->tag == ast_add) {
+		return il_factor_wrap_binary(class_loader_ilload_binary(self, source, ilbinary_add));
+	} else if (source->tag == ast_sub) {
+		return il_factor_wrap_binary(class_loader_ilload_binary(self, source, ilbinary_sub));
+	} else if (source->tag == ast_mul) {
+		return il_factor_wrap_binary(class_loader_ilload_binary(self, source, ilbinary_mul));
+	} else if (source->tag == ast_div) {
+		return il_factor_wrap_binary(class_loader_ilload_binary(self, source, ilbinary_div));
+	} else if (source->tag == ast_mod) {
+		return il_factor_wrap_binary(class_loader_ilload_binary(self, source, ilbinary_mod));
+		//operator(| || & &&)
+	} else if (source->tag == ast_bit_or) {
+		return il_factor_wrap_binary(class_loader_ilload_binary(self, source, ilbinary_bit_or));
+	} else if (source->tag == ast_logic_or) {
+		return il_factor_wrap_binary(class_loader_ilload_binary(self, source, ilbinary_logic_or));
+	} else if (source->tag == ast_bit_and) {
+		return il_factor_wrap_binary(class_loader_ilload_binary(self, source, ilbinary_bit_and));
+	} else if (source->tag == ast_logic_and) {
+		return il_factor_wrap_binary(class_loader_ilload_binary(self, source, ilbinary_logic_and));
+		//operator(== != > >= < <=)
+	} else if (source->tag == ast_equal) {
+		return il_factor_wrap_binary(class_loader_ilload_binary(self, source, ilbinary_eq));
+	} else if (source->tag == ast_notequal) {
+		return il_factor_wrap_binary(class_loader_ilload_binary(self, source, ilbinary_noteq));
+	} else if (source->tag == ast_gt) {
+		return il_factor_wrap_binary(class_loader_ilload_binary(self, source, ilbinary_gt));
+	} else if (source->tag == ast_ge) {
+		return il_factor_wrap_binary(class_loader_ilload_binary(self, source, ilbinary_ge));
+	} else if (source->tag == ast_lt) {
+		return il_factor_wrap_binary(class_loader_ilload_binary(self, source, ilbinary_lt));
+	} else if (source->tag == ast_le) {
+		return il_factor_wrap_binary(class_loader_ilload_binary(self, source, ilbinary_le));
+		//operator(= += -= *= /= %=)
+	} else if (source->tag == ast_assign) {
+		return il_factor_wrap_binary(class_loader_ilload_binary(self, source, ilbinary_assign));
+	} else if (source->tag == ast_add_assign) {
+		return il_factor_wrap_binary(class_loader_ilload_binary(self, source, ilbinary_add_assign));
+	} else if (source->tag == ast_sub_assign) {
+		return il_factor_wrap_binary(class_loader_ilload_binary(self, source, ilbinary_sub_assign));
+	} else if (source->tag == ast_mul_assign) {
+		return il_factor_wrap_binary(class_loader_ilload_binary(self, source, ilbinary_mul_assign));
+	} else if (source->tag == ast_div_assign) {
+		return il_factor_wrap_binary(class_loader_ilload_binary(self, source, ilbinary_div_assign));
+	} else if (source->tag == ast_mod_assign) {
+		return il_factor_wrap_binary(class_loader_ilload_binary(self, source, ilbinary_mod_assign));
+	} else if (source->tag == ast_not) {
+		return il_factor_wrap_unary(class_loader_ilload_unary(self, source, ilunary_not));
+	} else if (source->tag == ast_neg) {
+		return il_factor_wrap_unary(class_loader_ilload_unary(self, source, ilunary_neg));
+		//this super
+	} else if (source->tag == ast_this) {
+		il_factor* ret = (il_factor*)MEM_MALLOC(sizeof(il_factor));
+		ret->type = ilfactor_this;
+		ret->u.this_ = 0;
+		return ret;
+	} else if (source->tag == ast_super) {
+		il_factor* ret = (il_factor*)MEM_MALLOC(sizeof(il_factor));
+		ret->type = ilfactor_super;
+		ret->u.super_ = 0;
+		return ret;
+	} else if (source->tag == ast_new_instance) {
+		return il_factor_wrap_new_instance(class_loader_ilload_new_instance(self, source));
+	} else if (source->tag == ast_field_access) {
+		return il_factor_wrap_field_access(class_loader_ilload_field_access(self, source));
+	} else if (source->tag == ast_static_field_access) {
+		return il_factor_wrap_static_field_access(class_loader_ilload_static_field_access(self, source));
+	} else if (source->tag == ast_cast) {
+		return il_factor_wrap_cast(class_loader_ilload_cast(self, source));
+	} else if (source->tag == ast_true) {
+		return il_factor_wrap_bool(class_loader_ilload_true(self, source));
+	} else if (source->tag == ast_false) {
+		return il_factor_wrap_bool(class_loader_ilload_false(self, source));
+	} else if (source->tag == ast_null) {
+		il_factor* ret = (il_factor*)MEM_MALLOC(sizeof(il_factor));
+		ret->type = ilfactor_null;
+		ret->u.null_ = NULL;
+		return ret;
+	}
+	return NULL;
+}
+
+static il_stmt* class_loader_ilload_bodyImpl(class_loader* self, ast* source) {
+	//printf("    ");
+	//ast_print(source);
+	//printf("\n");
+	switch (source->tag) {
+		case ast_stmt:
+		{
+			return class_loader_ilload_bodyImpl(self, ast_first(source));
+		}
+		case ast_proc:
+		{
+			ast* afact = ast_first(source);
+			il_factor* ilfact = class_loader_ilload_factor(self, afact);
+			il_stmt_proc* ilproc = il_stmt_proc_new();
+			ilproc->factor = ilfact;
+			assert(ilfact != NULL);
+			return il_stmt_wrap_proc(ilproc);
+		}
+		case ast_stmt_variable_decl:
+		{
+			il_stmt_variable_decl* ilvardecl = class_loader_ilload_variable_decl(self, source);
+			return il_stmt_wrap_variable_decl(ilvardecl);
+		}
+		case ast_stmt_variable_init:
+		{
+			il_stmt_variable_init* ilvarinit = class_loader_ilload_variable_init(self, source);
+			return il_stmt_wrap_variable_init(ilvarinit);
+		}
+		case ast_inferenced_type_init:
+		{
+			il_stmt_inferenced_type_init* ilinfer = class_loader_ilload_inferenced_type_init(self, source);
+			return il_stmt_wrap_inferenced_type_init(ilinfer);
+		}
+		case ast_if:
+		{
+			il_stmt_if* ilif = class_loader_ilload_if(self, source);
+			return il_stmt_wrap_if(ilif);
+		}
+		case ast_if_elif_list:
+		{
+			il_stmt_if* ilif = class_loader_ilload_if_elif_list(self, source);
+			return il_stmt_wrap_if(ilif);
+		}
+		case ast_if_else:
+		{
+			il_stmt_if* ilif = class_loader_ilload_if_else(self, source);
+			return il_stmt_wrap_if(ilif);
+		}
+		case ast_if_elif_list_else:
+		{
+			il_stmt_if* ilif = class_loader_ilload_if_elif_list_else(self, source);
+			return il_stmt_wrap_if(ilif);
+		}
+		case ast_while:
+		{
+			il_stmt_while* ilwh = class_loader_ilload_while(self, source);
+			return il_stmt_wrap_while(ilwh);
+		}
+		case ast_break:
+		{
+			return il_stmt_wrap_break();
+		}
+		case ast_continue:
+		{
+			return il_stmt_wrap_continue();
+		}
+		case ast_return:
+		{
+			il_stmt_return* ilret = class_loader_ilload_return(self, source);
+			return il_stmt_wrap_return(ilret);
+		}
+		case ast_stmt_try:
+		{
+			il_stmt_try* iltry = class_loader_ilload_try(self, source);
+			return il_stmt_wrap_try(iltry);
+		}
+		case ast_stmt_throw:
+		{
+			il_stmt_throw* ilthrow = class_loader_ilload_throw(self, source);
+			return il_stmt_wrap_throw(ilthrow);
+		}
+		default:
+			break;
+	}
+	return NULL;
 }

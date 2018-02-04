@@ -8,6 +8,7 @@
 #include <stdio.h>
 
 void il_factor_dump(il_factor * self, int depth) {
+	printf("<%d> ", self->lineno);
 	switch (self->type) {
 		case ilfactor_int:
 			il_factor_int_dump(self->u.int_, depth);

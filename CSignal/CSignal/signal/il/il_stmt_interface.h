@@ -3,6 +3,7 @@
 #define SIGNAL_IL_IL_STMT_INTERFACE_H
 #include "../vm/enviroment.h"
 #include "il_ehandler.h"
+#include <stdint.h>
 /**
  * 文の種類を表す列挙型.
  */
@@ -36,6 +37,7 @@ struct il_stmt_throw;
  */
 typedef struct il_stmt {
 	il_stmt_type type;
+	uint32_t lineno;
 	union {
 		struct il_stmt_proc* proc_;
 		struct il_stmt_if* if_;

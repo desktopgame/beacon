@@ -3,6 +3,7 @@
 #define SIGNAL_IL_IL_FACTOR_INTERFACE_H
 #include "../vm/enviroment.h"
 #include "il_ehandler.h"
+#include <stdint.h>
 //#include "../vm/opcode.h"
 //#include "../vm/opcode_buf.h"
 //struct opcode_buf;
@@ -64,6 +65,7 @@ struct il_factor_null;
  */
 typedef struct il_factor {
 	il_factor_type type;
+	uint32_t lineno;
 	union {
 		struct il_factor_int* int_;
 		struct il_factor_double* double_;
