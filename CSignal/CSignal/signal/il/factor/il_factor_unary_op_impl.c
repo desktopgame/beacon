@@ -68,6 +68,11 @@ void il_factor_unary_op_load(il_factor_unary_op * self, enviroment * env, il_eha
 }
 
 type * il_factor_unary_op_eval(il_factor_unary_op * self, enviroment * env) {
+	if (self->type == ilunary_neg) {
+		return il_factor_eval(self->a, env);
+	} else if (self->type == ilunary_not) {
+		return CL_BOOL;
+	}
 	return NULL;
 }
 
