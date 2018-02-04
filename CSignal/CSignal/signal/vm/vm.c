@@ -236,7 +236,7 @@ void vm_execute(vm* self, enviroment* env) {
 				vm_throw(self, e);
 				sg_thread* th = sg_thread_current();
 				//空ならプログラムを終了
-				if (stack_empty(th->trace_stack)) {
+				if (vector_empty(th->trace_stack)) {
 					vm_terminate(self);
 				//どこかでキャッチしようとしている
 				} else {
@@ -249,7 +249,7 @@ void vm_execute(vm* self, enviroment* env) {
 				sg_thread* th = sg_thread_current();
 				vm_trace* trace = vm_trace_new(self);
 				trace->pc = i; //goto
-				stack_push(th->trace_stack, trace);
+				vector_push(th->trace_stack, trace);
 				//goto
 				i++;
 				//label
@@ -260,7 +260,7 @@ void vm_execute(vm* self, enviroment* env) {
 			case op_try_exit:
 			{
 				sg_thread* th = sg_thread_current();
-				vm_trace* trace = (vm_trace*)stack_pop(th->trace_stack);
+				vm_trace* trace = (vm_trace*)vector_pop(th->trace_stack);
 				vm_trace_delete(trace);
 				break;
 			}
@@ -268,7 +268,7 @@ void vm_execute(vm* self, enviroment* env) {
 			{
 				sg_thread* th = sg_thread_current();
 				vm_catch(self);
-				vm_trace* trace = (vm_trace*)stack_pop(th->trace_stack);
+				vm_trace* trace = (vm_trace*)vector_pop(th->trace_stack);
 				vm_trace_delete(trace);
 				break;
 			}
@@ -569,13 +569,25 @@ void vm_catch(vm * self) {
 
 bool vm_validate(vm* self, int source_len, int* pcDest) {
 	sg_thread* th = sg_thread_current();
-	vm_trace* trace = (vm_trace*)stack_top(th->trace_stack);
+	vm_trace* trace = (vm_trace*)vector_top(th->trace_stack);
 	//ここなので catch節 へ向かう
 	if (trace->v == self) {
-		*pcDest = trace->pc;
+		//ここでジャンプレベルを確認するのは
+		//例えば
+		// try { throw ... } catch { ... }
+		//と、
+		// try { throwFunc() ... } catch { ... }
+		//では、
+		//プログラムカウンタの位置が異なるためです。
+		//
+		if (trace->jumpLevel > 0) {
+			*pcDest = trace->pc + 1;
+		} else *pcDest = trace->pc;
+		self->validate = false;
 		return true;
 	//ここではないので終了
 	} else {
+		trace->jumpLevel++;
 		self->parent->validate = true;
 		*pcDest = source_len;
 		return false;

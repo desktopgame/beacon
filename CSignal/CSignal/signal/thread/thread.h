@@ -1,7 +1,8 @@
 #pragma once
 #ifndef SIGNAL_THREAD_THREAD_H
 #define SIGNAL_THREAD_THREAD_H
-#include "../util/stack.h"
+//#include "../util/stack.h"
+#include "../util/vector.h"
 
 
 /**
@@ -9,7 +10,7 @@
  * 現在の呼び出し位置を表すトレースのスタックを含みます。
  */
 typedef struct sg_thread {
-	stack* trace_stack;
+	vector* trace_stack;
 } sg_thread;
 
 void sg_thread_launch();

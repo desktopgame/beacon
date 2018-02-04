@@ -13,7 +13,7 @@ void sg_thread_launch() {
 
 sg_thread * sg_thread_new() {
 	sg_thread* ret = (sg_thread*)MEM_MALLOC(sizeof(sg_thread));
-	ret->trace_stack = stack_new();
+	ret->trace_stack = vector_new();
 	return ret;
 }
 
