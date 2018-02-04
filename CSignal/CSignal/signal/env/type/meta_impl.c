@@ -1,6 +1,8 @@
 #include "meta_impl.h"
 #include "../../il/il_argument.h"
 #include "../parameter.h"
+#include "../type_interface.h"
+#include "../namespace.h"
 
 method * meta_find_method(vector * method_vec, const char * name, vector * args, enviroment * env, int * outIndex) {
 	(*outIndex) = -1;
@@ -31,7 +33,13 @@ method * meta_find_method(vector * method_vec, const char * name, vector * args,
 			vector_item d2 = vector_at(m->parameter_list, j);
 			il_argument* p = (il_argument*)d;
 			parameter* p2 = (parameter*)d2;
-			int dist = type_distance(il_factor_eval(p->factor, env), p2->type);
+			//実引数が NULL なら常に許容する
+			int dist = 0;
+			type* argType = il_factor_eval(p->factor, env);
+			type* parType = p2->type;
+			if (argType != CL_NULL) {
+				dist = type_distance(argType, parType);
+			}
 			score += dist;
 			//継承関係のないパラメータ
 			if (dist == -1) {

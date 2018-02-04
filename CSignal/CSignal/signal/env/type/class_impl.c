@@ -246,16 +246,26 @@ constructor * class_find_constructor(class_ * self, vector * args, enviroment * 
 		vector_item e = vector_at(v, i);
 		constructor* c = (constructor*)e;
 		int score = 0;
+		bool illegal = false;
 		for (int j = 0; j < c->parameter_list->length; j++) {
 			vector_item d = vector_at(args, j);
 			vector_item d2 = vector_at(c->parameter_list, j);
 			il_argument* p = (il_argument*)d;
 			parameter* p2 = (parameter*)d2;
-			//*
-			score += type_distance(il_factor_eval(p->factor, env), p2->type);
-			//*/
+			//NULL以外なら型の互換性を調べる
+			int dist = 0;
+			type* argType = il_factor_eval(p->factor, env);
+			type* parType = p2->type;
+			if (argType != CL_NULL) {
+				dist = type_distance(argType, parType);
+			}
+			if (dist == -1) {
+				illegal = true;
+				break;
+			}
+			score += dist;
 		}
-		if (score < min) {
+		if (score < min && !illegal) {
 			min = score;
 			ret = c;
 			(*outIndex) = i;
