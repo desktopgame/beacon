@@ -72,61 +72,6 @@ void class_loader_sgload_class(class_loader* self, il_type* iltype, namespace_* 
  */
 void class_loader_sgload_interface(class_loader* self, il_type* iltype, namespace_* parent);
 
-/**
- * インスタンス/静的フィールド宣言を読み込んでクラスに追加します.
- * @param self
- * @param iltype
- * @param tp
- */
-void class_loader_sgload_fields(class_loader* self, il_type* iltype, type* tp);
-
-/**
- * フィールド宣言を読み込んでクラスに追加します.
- * @param self
- * @param iltype
- * @param tp
- * @param ilfields
- */
-void class_loader_sgload_fields_impl(class_loader* self, il_type* iltype, type* tp, vector* ilfields);
-
-/**
- * インスタンス/静的メソッド宣言を読み込んでクラスに追加します.
- * @param self
- * @param iltype
- * @param tp
- */
-void class_loader_sgload_methods(class_loader* self, il_type* iltype, type* tp);
-
-
-/**
- * メソッド宣言を読み込んでクラスに追加します.
- * @param self
- * @param iltype
- * @param tp
- * @param ilmethods
- */
-void class_loader_sgload_methods_impl(class_loader* self, il_type* iltype, type* tp, vector* ilmethods);
-
-/**
- * コンストラクタ宣言を読み込んでクラスに追加します.
- * @param self
- * @param iltype
- * @param tp
- */
-void class_loader_sgload_constructors(class_loader* self, il_type* iltype, type* tp);
-
-void class_loader_sgload_complete_fields(class_loader* self, il_type* iltype, type* tp);
-void class_loader_sgload_complete_fields_impl(class_loader* self, namespace_* scope, vector* ilfields, vector* sgfields);
-void class_loader_sgload_complete_methods(class_loader* self, il_type* iltype, type* tp);
-void class_loader_sgload_complete_methods_impl(class_loader* self, namespace_* scope, il_type* iltype, type* tp, vector* ilmethods, vector* sgmethods);
-void class_loader_sgload_complete_constructors(class_loader* self, il_type* iltype, type* tp);
-void class_loader_sgload_params(class_loader* self, namespace_* scope, vector* param_list, vector* sg_param_liste);
-
-void class_loader_sgload_chain(class_loader* self, il_type* iltype, type* tp, il_constructor* ilcons, il_constructor_chain* ilchain, enviroment* env);
-void class_loader_sgload_chain_root(class_loader* self, il_type* iltype, type* tp, il_constructor* ilcons, il_constructor_chain* ilchain, enviroment* env);
-void class_loader_sgload_chain_auto(class_loader* self, il_type* iltype, type* tp, il_constructor* ilcons, il_constructor_chain* ilchain, enviroment* env);
-void class_loader_sgload_chain_super(class_loader* self, il_type* iltype, type* tp, il_constructor* ilcons, il_constructor_chain* ilchain, enviroment* env);
-
 void class_loader_sgload_attach_native_method(class_loader* self, il_type* iltype, class_* classz, il_method* ilmethod, method* me);
 void class_loader_sgload_debug_native_method(method* parent, vm* vm, enviroment* env);
 void class_loader_sgload_body(class_loader* self, vector* stmt_list, enviroment* dest, namespace_* range);
