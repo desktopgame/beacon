@@ -78,8 +78,10 @@ void vm_terminate(vm* self);
  * コールスタックの深いところから先に呼び出されます.
  * ここでどの関数呼び出しでエラーが発生したかを出力します。
  * @param self
+ * @param env
+ * @param pc
  */
-void vm_uncaught(vm* self);
+void vm_uncaught(vm* self, enviroment* env, int pc);
 
 /**
  * 仮想マシンを開放します.

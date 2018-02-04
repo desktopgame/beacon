@@ -542,7 +542,7 @@ void vm_execute(vm* self, enviroment* env) {
 		}
 		//キャッチされなかった例外によって終了する
 		if (self->terminate) {
-			vm_uncaught(self);
+			vm_uncaught(self, env, i);
 			break; 
 		}
 	}
@@ -602,7 +602,7 @@ void vm_terminate(vm * self) {
 	} while (temp != NULL);
 }
 
-void vm_uncaught(vm * self) {
+void vm_uncaught(vm * self, enviroment* env, int pc) {
 	text_printfln("terminate... %d", self->level);
 }
 
