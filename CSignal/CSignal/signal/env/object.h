@@ -28,6 +28,7 @@ typedef enum object_tag {
 	object_string,
 	object_bool,
 	object_ref,
+	object_null,
 } object_tag;
 
 /**
@@ -106,13 +107,19 @@ object* object_bool_get(bool b);
  * trueを参照します.
  * @return
  */
-object* object_true();
+object* object_get_true();
 
 /**
  * falseを参照します.
  * @return
  */
-object* object_false();
+object* object_get_false();
+
+/**
+ * nullを参照します.
+ * @return
+ */
+object* object_get_null();
 
 /**
  * オブジェクトとフィールドを開放します.

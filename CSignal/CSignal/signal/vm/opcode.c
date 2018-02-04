@@ -131,6 +131,11 @@ int opcode_print(vector* source, int index) {
 			printf("false");
 			break;
 		}
+		case op_null:
+		{
+			printf("null");
+			break;
+		}
 		case op_dup:
 		{
 			printf("dup");

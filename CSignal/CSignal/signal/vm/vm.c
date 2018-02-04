@@ -198,12 +198,17 @@ void vm_execute(vm* self, enviroment* env) {
 			}
 			case op_true:
 			{
-				vector_push(self->value_stack, object_true());
+				vector_push(self->value_stack, object_get_true());
 				break;
 			}
 			case op_false:
 			{
-				vector_push(self->value_stack, object_false());
+				vector_push(self->value_stack, object_get_false());
+				break;
+			}
+			case op_null:
+			{
+				vector_push(self->value_stack, object_get_null());
 				break;
 			}
 			case op_return:

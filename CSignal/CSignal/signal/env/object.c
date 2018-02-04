@@ -9,6 +9,7 @@
 static object* object_malloc(object_tag type);
 static object* gObjectTrue = NULL;
 static object* gObjectFalse = NULL;
+static object* gObjectNull = NULL;
 
 
 object * object_int_new(int i) {
@@ -58,10 +59,10 @@ object * object_ref_new() {
 }
 
 object * object_bool_get(bool b) {
-	return (b ? object_true() : object_false());
+	return (b ? object_get_true() : object_get_false());
 }
 
-object * object_true() {
+object * object_get_true() {
 	if (gObjectTrue == NULL) {
 		gObjectTrue = object_malloc(object_bool);
 		gObjectTrue->u.bool_ = !false;
@@ -70,13 +71,21 @@ object * object_true() {
 	return gObjectTrue;
 }
 
-object * object_false() {
+object * object_get_false() {
 	if (gObjectFalse == NULL) {
 		gObjectFalse = object_malloc(object_bool);
 		gObjectFalse->u.bool_ = false;
 		gObjectFalse->type = CL_BOOL;
 	}
 	return gObjectFalse;
+}
+
+object * object_get_null() {
+	if (gObjectNull == NULL) {
+		gObjectNull = object_malloc(object_null);
+		gObjectNull->type = CL_NULL;
+	}
+	return gObjectNull;
 }
 
 void object_delete(object * self) {

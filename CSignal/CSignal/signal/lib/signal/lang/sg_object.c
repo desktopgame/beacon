@@ -29,9 +29,9 @@ static void sg_object_nativeToString(method* parent, vm* vm, enviroment* env) {
 		string_buffer_shrink(sb);
 	//真偽型
 	} else if (self->tag == object_bool) {
-		if (self == object_true()) {
+		if (self == object_get_true()) {
 			string_buffer_appends(sb, "true");
-		} else if (self == object_false()) {
+		} else if (self == object_get_false()) {
 			string_buffer_appends(sb, "false");
 		}
 	//整数型
