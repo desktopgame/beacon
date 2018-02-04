@@ -21,6 +21,7 @@ typedef struct class_loader {
 	import_manager* import_manager;
 	content_type type;
 	uint32_t ref_count;
+	char* filename;
 	char* errorMessage;
 	bool error;
 } class_loader;

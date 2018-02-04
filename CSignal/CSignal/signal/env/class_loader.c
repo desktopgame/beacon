@@ -57,6 +57,7 @@ class_loader* class_loader_new() {
 
 class_loader * class_loader_new_entry_point(const char * filename) {
 	class_loader* cll = class_loader_new();
+	cll->filename = text_strdup(filename);
 	char* text = io_read_text(filename);
 	parser* p = parser_parse_from_source_swap(text, filename);
 	//解析に失敗した場合
@@ -110,6 +111,7 @@ void class_loader_delete(class_loader * self) {
 
 	import_manager_delete(self->import_manager);
 	enviroment_delete(self->env);
+	MEM_FREE(self->filename);
 	MEM_FREE(self->errorMessage);
 	MEM_FREE(self);
 }

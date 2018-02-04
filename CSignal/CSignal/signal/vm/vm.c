@@ -4,6 +4,7 @@
 #include <assert.h>
 #include "label.h"
 #include "vm_trace.h"
+#include "../env/class_loader.h"
 #include "../env/type_interface.h"
 #include "../env/type_impl.h"
 #include "../env/field.h"
@@ -16,6 +17,7 @@
 #include "../util/mem.h"
 #include "../util/vector.h"
 #include "../util/text.h"
+#include "line_range.h"
 //proto
 static int stack_topi(vm* self);
 static double stack_topd(vm* self);
@@ -605,7 +607,13 @@ void vm_terminate(vm * self) {
 }
 
 void vm_uncaught(vm * self, enviroment* env, int pc) {
-	text_printfln("terminate... %d", self->level);
+	line_range* lr = line_range_find(env->line_rangeVec, pc);
+	int line = -1;
+	if (lr != NULL) {
+		line = lr->lineno;
+	}
+	printf("file: %s <%d>", env->context_cll->filename, line);
+	printf("\n");
 }
 
 void vm_delete(vm * self) {

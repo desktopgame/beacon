@@ -9,6 +9,16 @@ line_range * line_range_new() {
 	return ret;
 }
 
+line_range * line_range_find(vector * line_rangeVec, int pc) {
+	for (int i = 0; i < line_rangeVec->length; i++) {
+		line_range* lr = (line_range*)vector_at(line_rangeVec, i);
+		if (i >= lr->start_offset && i < lr->endOffset) {
+			return lr;
+		}
+	}
+	return NULL;
+}
+
 void line_range_delete(line_range * self) {
 	MEM_FREE(self);
 }

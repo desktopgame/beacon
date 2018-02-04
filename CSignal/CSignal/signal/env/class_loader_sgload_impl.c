@@ -66,6 +66,7 @@ void class_loader_sgload_import(class_loader* self, vector* ilimports) {
 			return;
 		}
 		//パース
+		cll->filename = text_strdup(fullPath);
 		char* text = io_read_text(fullPath);
 		parser* p = parser_parse_from_source_swap(text, fullPath);
 		//パースに失敗
