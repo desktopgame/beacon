@@ -16,6 +16,12 @@ ast* ast_new_true();
 ast* ast_new_false();
 
 /**
+ * nullを表す要素を作成します.
+ * @return
+ */
+ast* ast_new_null();
+
+/**
  * キャストを表す要素を作成します.
  * @param atypename
  * @param afact

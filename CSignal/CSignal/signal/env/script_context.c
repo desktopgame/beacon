@@ -126,6 +126,7 @@ static void script_context_launch(script_context* self) {
 	sg_void_init();
 	sg_console_init();
 	sg_array_init();
+	sg_null_init();
 	//退避していたコンテキストを復帰
 	script_context_set_current(selected);
 }

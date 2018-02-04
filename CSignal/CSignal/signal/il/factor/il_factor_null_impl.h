@@ -1,0 +1,16 @@
+#pragma once
+#ifndef SIGNAL_IL_IL_FACTOR_NULL_H
+#define SIGNAL_IL_IL_FACTOR_NULL_H
+#include "../il_factor_interface.h"
+
+struct enviroment;
+struct type;
+
+void il_factor_null_dump(void* empty, int depth);
+
+void il_factor_null_generate(void* empty, struct enviroment* env);
+
+void il_factor_null_load(void* empty, struct enviroment* env, il_ehandler* eh);
+
+struct type* il_factor_null_eval(void* empty, struct enviroment* env);
+#endif // !SIGNAL_IL_IL_FACTOR_NULL_H

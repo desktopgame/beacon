@@ -643,6 +643,11 @@ il_factor* class_loader_ilload_factor(class_loader* self, ast* source) {
 		return il_factor_wrap_bool(class_loader_ilload_true(self, source));
 	} else if (source->tag == ast_false) {
 		return il_factor_wrap_bool(class_loader_ilload_false(self, source));
+	} else if (source->tag == ast_null) {
+		il_factor* ret = (il_factor*)MEM_MALLOC(sizeof(il_factor));
+		ret->type = ilfactor_null;
+		ret->u.null_ = NULL;
+		return ret;
 	}
 	return NULL;
 }

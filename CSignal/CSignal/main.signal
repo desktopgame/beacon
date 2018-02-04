@@ -62,6 +62,7 @@ namespace signal.lang {
 //signal::lang::Console.writeLine("A");
 var arr = new Array(4);
 Console.writeLine(arr.length());
+Console.writeLine(null);
 
 try {
 	try {

@@ -11,6 +11,10 @@ ast * ast_new_false() {
 	return ast_new(ast_false);
 }
 
+ast * ast_new_null() {
+	return ast_new(ast_null);
+}
+
 ast * ast_new_cast(ast * atypename, ast * afact) {
 	ast* ret = ast_new(ast_cast);
 	ast_push(ret, atypename);

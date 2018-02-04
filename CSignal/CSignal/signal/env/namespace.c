@@ -145,6 +145,10 @@ type * namespace_void_class() {
 	return namespace_get_type(namespace_lang(), "Void");
 }
 
+type * namespace_null_class() {
+	return namespace_get_type(namespace_lang(), "Null");
+}
+
 void namespace_dump() {
 	script_context* ctx = script_context_get_current();
 	if (ctx->namespaceMap == NULL) {

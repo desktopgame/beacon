@@ -60,6 +60,9 @@ void il_factor_dump(il_factor * self, int depth) {
 		case ilfactor_bool:
 			il_factor_bool_dump(self->u.bool_, depth);
 			break;
+		case ilfactor_null:
+			il_factor_null_dump(NULL, depth);
+			break;
 		default:
 			ERROR("ファクターをダンプ出来ませんでした");
 			break;
@@ -118,6 +121,9 @@ void il_factor_generate(il_factor * self, enviroment* env) {
 			break;
 		case ilfactor_bool:
 			il_factor_bool_generate(self->u.bool_, env);
+			break;
+		case ilfactor_null:
+			il_factor_null_generate(NULL, env);
 			break;
 		default:
 			ERROR("ファクターを生成出来ませんでした");
@@ -178,6 +184,9 @@ void il_factor_load(il_factor * self, enviroment * env, il_ehandler * eh) {
 		case ilfactor_bool:
 			//il_factor_bool_load(self->u.bool_, depth);
 			break;
+		case ilfactor_null:
+			il_factor_null_load(NULL, env, eh);
+			break;
 		default:
 			ERROR("ファクターの型を取得出来ませんでした");
 			break;
@@ -237,6 +246,9 @@ type * il_factor_eval(il_factor * self, enviroment * env) {
 			break;
 		case ilfactor_bool:
 			ret = il_factor_bool_eval(self->u.bool_,env);
+			break;
+		case ilfactor_null:
+			ret = il_factor_null_eval(NULL, env);
 			break;
 		default:
 			ERROR("ファクターの型を取得出来ませんでした");
@@ -300,6 +312,8 @@ void il_factor_delete(il_factor * self) {
 			break;
 		case ilfactor_bool:
 			il_factor_bool_delete(self->u.bool_);
+			break;
+		case ilfactor_null:
 			break;
 		default:
 			ERROR("ファクターを開放出来ませんでした");

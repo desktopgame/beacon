@@ -10,6 +10,7 @@
 #define CL_STRING namespace_string_class()
 #define CL_BOOL namespace_bool_class()
 #define CL_VOID namespace_void_class()
+#define CL_NULL namespace_null_class()
 
 struct type;
 struct class_;
@@ -140,6 +141,12 @@ struct type* namespace_bool_class();
  * @return
  */
 struct type* namespace_void_class();
+
+/**
+ * 現在のスクリプトコンテキストで null クラスを返します.
+ * @return
+ */
+struct type* namespace_null_class();
 
 /**
  * 全ての名前空間を出力します.

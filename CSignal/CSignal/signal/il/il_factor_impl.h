@@ -22,4 +22,5 @@
 #include "factor/il_factor_static_field_access_impl.h"
 #include "factor/il_factor_cast_impl.h"
 #include "factor/il_factor_bool_impl.h"
+#include "factor/il_factor_null_impl.h"
 #endif // !SIGNAL_IL_IL_FACTOR_IMPL_H
