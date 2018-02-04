@@ -60,6 +60,9 @@ namespace signal.lang {
 //var y = new signal::lang::ImplA();
 //y.call();
 //signal::lang::Console.writeLine("A");
+var arr = new Array(4);
+Console.writeLine(arr.length());
+
 try {
 	try {
 		throw true;

@@ -12,6 +12,33 @@ namespace signal.lang {
 		private:
 		native def nativeToString() -> String;
 	}
+	class Array {
+		private:
+		Int length;
+
+		public:
+		ctor new(Int length) {
+			this.length = length;
+			nativeInit();
+		}
+
+		def length() -> Int {
+			return this.length;
+		}
+
+		def set(Int index, Object v) -> Void {
+			nativeSet(index, v);
+		}
+
+		def get(Int index) -> Object {
+			return nativeGet(index);
+		}
+		
+		private:
+		native def nativeInit() -> Void;
+		native def nativeSet(Int index, Object v) -> Void;
+		native def nativeGet(Int index) -> Object;
+	}
 	class Console {
 		public:
 		static native def writeLine(String str) -> Void;

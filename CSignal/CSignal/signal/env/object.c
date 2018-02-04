@@ -90,5 +90,6 @@ static object* object_malloc(object_tag type) {
 	ret->paint = paint_unmarked;
 	ret->tag = type;
 	ret->vptr = NULL;
+	ret->nativeSlotVec = vector_new();
 	return ret;
 }

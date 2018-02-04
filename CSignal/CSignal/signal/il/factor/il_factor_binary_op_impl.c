@@ -355,6 +355,7 @@ static void assign_generate_simple(il_factor_binary_op * self, enviroment* env) 
 		type* lt = il_factor_eval(self->left, env);
 		il_factor_generate(field_access->fact, env);
 		il_factor_generate(self->right, env);
+		assert(field_access->f->type != NULL);
 		//ルックアップ
 		opcode_buf_add(env->buf, op_lookup);
 		opcode_buf_add(env->buf, field_access->f->type->absoluteIndex);

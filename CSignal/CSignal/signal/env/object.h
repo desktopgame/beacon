@@ -43,6 +43,7 @@ typedef struct object {
 	struct vtable* vptr;
 	object_paint paint;
 	object_tag tag;
+	vector* nativeSlotVec;
 	union {
 		int int_;
 		double double_;

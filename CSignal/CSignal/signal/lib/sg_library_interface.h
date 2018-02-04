@@ -10,4 +10,5 @@
 #include "signal/lang/sg_bool.h"
 #include "signal/lang/sg_void.h"
 #include "signal/lang/sg_console.h"
+#include "signal/lang/sg_array.h"
 #endif // !SIGNAL_LIB_SG_LIBRARY_INTERFACE_H
