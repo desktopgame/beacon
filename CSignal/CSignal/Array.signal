@@ -1,3 +1,5 @@
+import "Exception"
+
 namespace signal.lang {
 	class Array {
 		private:
@@ -34,8 +36,8 @@ namespace signal.lang {
 		private:
 		def checkRange(Int index) -> Void {
 			if(index < 0 || index >= this.length) {
-			//	throw new Exception("Out Of Range");
-				throw -1;
+				throw new Exception("Out Of Range");
+			//	throw -1;
 			}
 		}
 		native def nativeInit() -> Void;

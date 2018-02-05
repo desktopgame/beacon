@@ -47,6 +47,7 @@ method * type_find_method(type * self, const char * name, vector * args, envirom
 
 vtable * type_vtable(type * self) {
 	if (self->tag == type_class) {
+		class_create_vtable(self->u.class_);
 		return self->u.class_->vt;
 	} else if (self->tag == type_interface) {
 		return self->u.interface_->vt;

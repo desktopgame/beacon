@@ -2,6 +2,7 @@
 #include "ast.h"
 #include <stdlib.h>
 #include <assert.h>
+#include "../util/text.h"
 
 ast * ast_new_true() {
 	return ast_new(ast_true);
@@ -58,6 +59,13 @@ ast * ast_new_variable(ast* a) {
 	ast* ret = ast_new(ast_variable);
 	ret->u.string_value = a->u.string_value;
 	ast_push(ret, a);
+	return ret;
+}
+
+ast * ast_new_variable_fromstr(char * str) {
+	ast* ret = ast_new(ast_variable);
+	ret->u.string_value = text_strdup(str);
+	//ast_push(ret, a);
 	return ret;
 }
 

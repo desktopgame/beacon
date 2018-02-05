@@ -73,6 +73,13 @@ ast* ast_new_post_dec(ast* a);
 ast* ast_new_variable(ast* a);
 
 /**
+ * 変数を表す要素を作成します.
+ * @param str
+ * @return
+ */
+ast* ast_new_variable_fromstr(char* str);
+
+/**
  * 関数呼び出しを表す要素を作成します.
  * @param name
  * @param argument_list

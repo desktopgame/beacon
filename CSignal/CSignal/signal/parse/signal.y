@@ -434,7 +434,7 @@ assign
 	}
 	| IDENT assign_type_T assign
 	{
-		$$ = ast_new_generic_assign(ast_new_variable($1), $2, $3);
+		$$ = ast_new_generic_assign(ast_new_variable_fromstr($1), $2, $3);
 	}
 	;
 assign_type_T

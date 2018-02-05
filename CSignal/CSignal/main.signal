@@ -60,17 +60,17 @@ namespace signal.lang {
 //var y = new signal::lang::ImplA();
 //y.call();
 //signal::lang::Console.writeLine("A");
-//try {
+try {
 	var arr = new Array(4);
 	Console.writeLine(arr.length());
-	arr.set(0, "Foo");
+	arr.set(-1, "Foo");
 	String s = arr.get(0) as String;
 	Console.writeLine(s);
 	Console.writeLine(arr.get(0));
 	Console.writeLine(arr.test(10, 5));
-//} catch(Int a) {
-//	Console.writeLine("Error!");
-//}
+} catch(Exception e) {
+	Console.writeLine("Error!");
+}
 /*
 try {
 	try {
