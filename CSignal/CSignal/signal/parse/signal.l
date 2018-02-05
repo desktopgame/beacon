@@ -207,6 +207,7 @@ static void update_loc() {
 <INITIAL>"true"			{ return (TRUE); }
 <INITIAL>"false"		{ return (FALSE); }
 <INITIAL>"null"			{ return (NULL_TOK); }
+<INITIAL>"as"			{ return (AS); }
 
 <INITIAL>"try"			{ return (TRY); }
 <INITIAL>"catch"		{ return (CATCH); }

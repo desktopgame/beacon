@@ -355,6 +355,14 @@ il_factor_field_access* class_loader_ilload_field_access(class_loader* self, ast
 il_factor_static_field_access* class_loader_ilload_static_field_access(class_loader* self, ast* source);
 
 /**
+ * asによる型変換を IL に変換します.
+ * @param self
+ * @param source
+ * @return
+ */
+il_factor_as* class_loader_ilload_as(class_loader* self, ast* source);
+
+/**
  * Hoge::Foo::Classのような修飾名を表すASTを解析して
  * 引数destに格納します.
  * @param fqcn

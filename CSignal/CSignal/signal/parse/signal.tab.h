@@ -95,29 +95,30 @@
      TRUE = 303,
      FALSE = 304,
      NULL_TOK = 305,
-     INTERFACE = 306,
-     CLASS = 307,
-     ENUM = 308,
-     PUBLIC = 309,
-     PRIVATE = 310,
-     PROTECTED = 311,
-     STATIC = 312,
-     NATIVE = 313,
-     NEW = 314,
-     CTOR = 315,
-     DEF = 316,
-     ARROW = 317,
-     NAMESPACE = 318,
-     RETURN = 319,
-     IF = 320,
-     ELIF = 321,
-     ELSE = 322,
-     WHILE = 323,
-     BREAK = 324,
-     CONTINUE = 325,
-     TRY = 326,
-     CATCH = 327,
-     THROW = 328
+     AS = 306,
+     INTERFACE = 307,
+     CLASS = 308,
+     ENUM = 309,
+     PUBLIC = 310,
+     PRIVATE = 311,
+     PROTECTED = 312,
+     STATIC = 313,
+     NATIVE = 314,
+     NEW = 315,
+     CTOR = 316,
+     DEF = 317,
+     ARROW = 318,
+     NAMESPACE = 319,
+     RETURN = 320,
+     IF = 321,
+     ELIF = 322,
+     ELSE = 323,
+     WHILE = 324,
+     BREAK = 325,
+     CONTINUE = 326,
+     TRY = 327,
+     CATCH = 328,
+     THROW = 329
    };
 #endif
 
@@ -141,7 +142,7 @@ typedef union YYSTYPE
 
 
 /* Line 1676 of yacc.c  */
-#line 137 "signal.tab.h"
+#line 138 "signal.tab.h"
 } YYSTYPE;
 # define YYSTYPE_IS_TRIVIAL 1
 # define yystype YYSTYPE /* obsolescent; will be withdrawn */

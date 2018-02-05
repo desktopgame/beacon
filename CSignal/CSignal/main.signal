@@ -63,7 +63,8 @@ namespace signal.lang {
 //try {
 	var arr = new Array(4);
 	Console.writeLine(arr.length());
-	arr.set(-1, "Foo");
+	arr.set(0, "Foo");
+	String s = arr.get(0) as String;
 	Console.writeLine(arr.get(0));
 	Console.writeLine(arr.test(10, 5));
 //} catch(Int a) {

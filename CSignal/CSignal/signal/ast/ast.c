@@ -307,6 +307,7 @@ void ast_print(ast* self) {
 		case ast_stmt_catch_list: p("catch list");
 		case ast_stmt_catch: p("catch");
 		case ast_null: p("null");
+		case ast_as: p("as");
 		default: 
 			p("not implemented");
 	}

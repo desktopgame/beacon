@@ -123,6 +123,7 @@ typedef enum ast_tag {
 	ast_true,
 	ast_false,
 	ast_null,
+	ast_as,
 
 	ast_scope,
 	ast_stmt,

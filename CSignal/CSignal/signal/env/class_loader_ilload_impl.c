@@ -562,6 +562,13 @@ il_factor_static_field_access* class_loader_ilload_static_field_access(class_loa
 	return ret;
 }
 
+il_factor_as* class_loader_ilload_as(class_loader* self, ast* source) {
+	il_factor_as* ret = il_factor_as_new();
+	ret->fact = class_loader_ilload_factor(self, ast_first(source));
+	class_loader_ilload_fqcn(ast_first(ast_second(source)), ret->fqcn);
+	return ret;
+}
+
 void class_loader_ilload_fqcn(ast* fqcn, fqcn_cache* dest) {
 	class_loader_ilload_fqcn_impl(fqcn, dest);
 	//FIXME: Int のような文字パースで失敗してしまうので対策
@@ -703,6 +710,8 @@ static il_factor* class_loader_ilload_factorImpl(class_loader* self, ast* source
 		ret->type = ilfactor_null;
 		ret->u.null_ = NULL;
 		return ret;
+	} else if (source->tag == ast_as) {
+		return il_factor_wrap_as(class_loader_ilload_as(self, source));
 	}
 	return NULL;
 }

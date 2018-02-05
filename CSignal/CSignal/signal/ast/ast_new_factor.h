@@ -22,6 +22,14 @@ ast* ast_new_false();
 ast* ast_new_null();
 
 /**
+ * ... as Int を表す要素を作成します.
+ * @param afact
+ * @param atypename
+ * @return
+ */
+ast* ast_new_as(ast* afact, ast* atypename);
+
+/**
  * キャストを表す要素を作成します.
  * @param atypename
  * @param afact
