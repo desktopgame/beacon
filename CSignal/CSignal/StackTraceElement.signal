@@ -1,0 +1,21 @@
+namespace signal.lang {
+	class StackTraceElement {
+		private:
+		String fileName;
+		Int lineIndex;
+
+		public:
+		ctor new(String fileName, Int lineIndex) {
+			this.fileName = fileName;
+			this.lineIndex = lineIndex;
+		}
+
+		def getFileName() -> String {
+			return this.fileName;
+		}
+
+		def getLineIndex() -> Int {
+			return this.lineIndex;
+		}
+	}
+}

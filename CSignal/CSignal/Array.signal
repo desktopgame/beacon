@@ -1,0 +1,45 @@
+namespace signal.lang {
+	class Array {
+		private:
+		Int length;
+
+		public:
+		ctor new(Int length) {
+			this.length = length;
+			nativeInit();
+		}
+
+		def length() -> Int {
+			return this.length;
+		}
+
+		def set(Int index, Object v) -> Void {
+			this.checkRange(index);
+			this.nativeSet(index, v);
+		}
+
+		def get(Int index) -> Object {
+			this.checkRange(index);
+			return this.nativeGet(index);
+		}
+
+		//再帰関数のテスト
+		def test(Int a, Int b) -> Int {
+			if(b <= 0) {
+				return a;
+			}
+			return this.test(a + b, b - 1);
+		}
+		
+		private:
+		def checkRange(Int index) -> Void {
+			if(index < 0 || index >= this.length) {
+			//	throw new Exception("Out Of Range");
+				throw -1;
+			}
+		}
+		native def nativeInit() -> Void;
+		native def nativeSet(Int index, Object v) -> Void;
+		native def nativeGet(Int index) -> Object;
+	}
+}

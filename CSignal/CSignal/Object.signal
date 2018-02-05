@@ -1,0 +1,15 @@
+namespace signal.lang {
+	class Object {
+		public:
+		ctor new() {
+		}
+
+		public:
+		def toString() -> String {
+			return this.nativeToString();
+		}
+
+		private:
+		native def nativeToString() -> String;
+	}
+}

@@ -1,0 +1,10 @@
+import "Console"
+
+namespace signal.lang {
+	class Int {
+		public:
+		def p() -> Void {
+			Console.writeLine("Foo!");
+		}
+	}
+}

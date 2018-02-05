@@ -1,0 +1,16 @@
+namespace signal.lang {
+	class Console {
+		public:
+		static native def writeLine(String str) -> Void;
+
+		static native def writeLine(Int i) -> Void;
+
+		static native def writeLine(Object i) -> Void;
+
+		static native def write(String str) -> Void;
+
+		static native def read() -> Char;
+
+		static native def readLine() -> String;
+	}
+}

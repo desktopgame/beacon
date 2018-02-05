@@ -1,0 +1,28 @@
+namespace signal.lang {
+	class Exception {
+		private:
+		String message;
+		Array stackTrace;
+
+		public:
+		ctor new(String message) {
+			this.message = message;
+			this.nativeInit();
+		}
+
+		ctor new() : this("No Message") {
+		}
+
+		def print() -> Void {
+		//	Int index = 0;
+		//	while(index < this.stackTrace.length()) {
+		//		var st = this.stackTrace.get(index);
+		//		Console.writeLine(st.getFileName());
+		//	//	index = (index + 1);
+		//	}
+		}
+
+		private:
+		native def nativeInit() -> Void;
+	}
+}
