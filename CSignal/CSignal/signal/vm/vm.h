@@ -15,6 +15,8 @@ typedef struct vm {
 	struct vm* parent;
 	struct object* exception;
 	int level;
+	int pc;
+	enviroment* contextRef;
 	bool validate;
 	bool terminate;
 } vm;

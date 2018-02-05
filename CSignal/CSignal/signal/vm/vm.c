@@ -69,6 +69,7 @@ vm * vm_sub(vm * parent) {
 void vm_execute(vm* self, enviroment* env) {
 	script_context* ctx = script_context_get_current();
 	int source_len = env->buf->source->length;
+	self->contextRef = env;
 	for (int i = 0; i < source_len; i++) {
 		//このVMの子要素で例外がスローされ、
 		//それを子要素自身で処理できなかった場合には、
@@ -78,6 +79,7 @@ void vm_execute(vm* self, enviroment* env) {
 				break;
 			}
 		}
+		self->pc = i;
 		op_byte b = (op_byte)enviroment_source_at(env, i);
 		switch (b) {
 			//int & int
