@@ -25,10 +25,11 @@
 
 //private
 static method* class_find_method_impl(vector* elements, const char * name, vector * args, enviroment * env, int * outIndex);
+static constructor* class_find_constructor_impl(vector* v, vector * args, enviroment* env, int * outIndex);
+static constructor* class_find_rconstructor_impl(vector* v,vector * args, int * outIndex);
 static void class_field_delete(vector_item item);
 static void class_method_delete(vector_item item);
 static void class_ctor_delete(vector_item item);
-static vector * class_find_constructor_impl(class_ * self, vector * args, enviroment* env);
 
 type * type_wrap_class(class_ * self) {
 	type* ret = type_new();
@@ -238,48 +239,16 @@ field * class_get_sfield(class_ * self, int index) {
 	return class_get_sfield(self->super_class, index);
 }
 
-constructor * class_find_constructor(class_ * self, vector * args, enviroment * env, int* outIndex) {
-	vector* v = class_find_constructor_impl(self, args, env);
+constructor * class_find_rconstructor(class_ * self, vector * args, int* outIndex) {
+	vector* v = meta_find_rconstructors(self, args);
 	(*outIndex) = -1;
-	//コンストラクタが一つも見つからなかった
-	if (v->length == 0) {
-		vector_delete(v, vector_deleter_null);
-		return NULL;
-	}
-	//見つかった中からもっとも一致するコンストラクタを選択する
-	int min = 1024;
-	constructor* ret = NULL;
-	for (int i = 0; i < v->length; i++) {
-		vector_item e = vector_at(v, i);
-		constructor* c = (constructor*)e;
-		int score = 0;
-		bool illegal = false;
-		for (int j = 0; j < c->parameter_list->length; j++) {
-			vector_item d = vector_at(args, j);
-			vector_item d2 = vector_at(c->parameter_list, j);
-			il_argument* p = (il_argument*)d;
-			parameter* p2 = (parameter*)d2;
-			//NULL以外なら型の互換性を調べる
-			int dist = 0;
-			type* argType = il_factor_eval(p->factor, env);
-			type* parType = p2->type;
-			if (argType != CL_NULL) {
-				dist = type_distance(argType, parType);
-			}
-			if (dist == -1) {
-				illegal = true;
-				break;
-			}
-			score += dist;
-		}
-		if (score < min && !illegal) {
-			min = score;
-			ret = c;
-			(*outIndex) = i;
-		}
-	}
-	vector_delete(v, vector_deleter_null);
-	return ret;
+	return class_find_rconstructor_impl(v, args, outIndex);
+}
+
+constructor * class_find_constructor(class_ * self, vector * args, enviroment * env, int* outIndex) {
+	vector* v = meta_find_constructors(self, args, env);
+	(*outIndex) = -1;
+	return class_find_constructor_impl(v, args, env, outIndex);
 }
 
 constructor * class_find_empty_constructor(class_ * self, enviroment * env, int * outIndex) {
@@ -425,6 +394,34 @@ int class_count_smethodall(class_ * self) {
 	return sum;
 }
 
+object * class_new_rinstance(class_ * self, vm* vmc, int count, ...) {
+	va_list ap;
+	va_start(ap, count);
+	//可変長引数をベクターへ
+	vector* args = vector_new();
+	for (int i = 0; i < count; i++) {
+		object* o = va_arg(ap, object*);
+		vector_push(args, o);
+	}
+	//コンストラクタを検索
+	int temp = 0;
+	constructor* ctor = class_find_rconstructor(self, args, &temp);
+	assert(temp != -1);
+	//コンストラクタを実行
+	vm* sub = vm_sub(vmc);
+	for (int i = 0; i < args->length; i++) {
+		object* o = vector_at(args, i);
+		vector_push(sub->value_stack, o);
+	}
+	vm_execute(sub, ctor->env);
+	object* inst = vector_pop(sub->value_stack);
+	//開放
+	vm_delete(sub);
+	vector_delete(args, vector_deleter_null);
+	va_end(ap);
+	return inst;
+}
+
 void class_linkall(class_ * self) {
 	for (int i = 0; i < self->field_list->length; i++) {
 		field* f = (field*)vector_at(self->field_list, i);
@@ -463,6 +460,90 @@ static method* class_find_method_impl(vector* elements, const char * name, vecto
 	return meta_find_method(elements, name, args, env, outIndex);
 }
 
+static constructor* class_find_constructor_impl(vector* v, vector * args, enviroment* env, int * outIndex) {
+	//コンストラクタが一つも見つからなかった
+	if (v->length == 0) {
+		vector_delete(v, vector_deleter_null);
+		return NULL;
+	}
+	//見つかった中からもっとも一致するコンストラクタを選択する
+	int min = 1024;
+	constructor* ret = NULL;
+	for (int i = 0; i < v->length; i++) {
+		vector_item e = vector_at(v, i);
+		constructor* c = (constructor*)e;
+		int score = 0;
+		bool illegal = false;
+		for (int j = 0; j < c->parameter_list->length; j++) {
+			vector_item d = vector_at(args, j);
+			vector_item d2 = vector_at(c->parameter_list, j);
+			il_argument* p = (il_argument*)d;
+			parameter* p2 = (parameter*)d2;
+			//NULL以外なら型の互換性を調べる
+			int dist = 0;
+			type* argType = il_factor_eval(p->factor, env);
+			type* parType = p2->type;
+			if (argType != CL_NULL) {
+				dist = type_distance(argType, parType);
+			}
+			if (dist == -1) {
+				illegal = true;
+				break;
+			}
+			score += dist;
+		}
+		if (score < min && !illegal) {
+			min = score;
+			ret = c;
+			(*outIndex) = i;
+		}
+	}
+	vector_delete(v, vector_deleter_null);
+	return ret;
+}
+
+static constructor* class_find_rconstructor_impl(vector* v, vector * args, int * outIndex) {
+	//コンストラクタが一つも見つからなかった
+	if (v->length == 0) {
+		vector_delete(v, vector_deleter_null);
+		return NULL;
+	}
+	//見つかった中からもっとも一致するコンストラクタを選択する
+	int min = 1024;
+	constructor* ret = NULL;
+	for (int i = 0; i < v->length; i++) {
+		vector_item e = vector_at(v, i);
+		constructor* c = (constructor*)e;
+		int score = 0;
+		bool illegal = false;
+		for (int j = 0; j < c->parameter_list->length; j++) {
+			vector_item d = vector_at(args, j);
+			vector_item d2 = vector_at(c->parameter_list, j);
+			object* p = (object*)d;
+			parameter* p2 = (parameter*)d2;
+			//NULL以外なら型の互換性を調べる
+			int dist = 0;
+			type* argType = p->type;
+			type* parType = p2->type;
+			if (argType != CL_NULL) {
+				dist = type_distance(argType, parType);
+			}
+			if (dist == -1) {
+				illegal = true;
+				break;
+			}
+			score += dist;
+		}
+		if (score < min && !illegal) {
+			min = score;
+			ret = c;
+			(*outIndex) = i;
+		}
+	}
+	vector_delete(v, vector_deleter_null);
+	return ret;
+}
+
 static void class_field_delete(vector_item item) {
 	field* e = (field*)item;
 	field_delete(e);
@@ -476,40 +557,4 @@ static void class_method_delete(vector_item item) {
 static void class_ctor_delete(vector_item item) {
 	constructor* e = (constructor*)item;
 	constructor_delete(e);
-}
-
-static vector * class_find_constructor_impl(class_ * self, vector * args, enviroment* env) {
-	vector* v = vector_new();
-	if (self == NULL) {
-		return v;
-	}
-	for (int i = 0; i < self->constructor_list->length; i++) {
-		vector_item e = vector_at(self->constructor_list, i);
-		constructor* c = (constructor*)e;
-		//引数の個数が違うので無視
-		if (c->parameter_list->length != args->length) {
-			continue;
-		}
-		//引数がひとつもないので、
-		//型のチェックを行わない
-		if (args->length == 0) {
-			vector_push(v, c);
-			continue;
-		}
-		bool match = true;
-		for (int j = 0; j < args->length; j++) {
-			vector_item d = vector_at(args, j);
-			vector_item d2 = vector_at(c->parameter_list, j);
-			il_argument* p = (il_argument*)d;
-			parameter* p2 = (parameter*)d2;
-			if (!type_castable(il_factor_eval(p->factor, env), p2->type)) {
-				match = false;
-				break;
-			}
-		}
-		if (match) {
-			vector_push(v, c);
-		}
-	}
-	return v;
 }

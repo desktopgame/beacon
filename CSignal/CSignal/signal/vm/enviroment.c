@@ -68,7 +68,7 @@ void enviroment_op_dump(enviroment * self, int depth) {
 					lrPos++;
 					if (lrPos < self->line_rangeVec->length) {
 						lr = vector_at(self->line_rangeVec, lrPos);
-					} else lr = NULL;
+					}
 				}
 			}
 		}

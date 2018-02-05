@@ -5,6 +5,8 @@
 #include "../util/vector.h"
 struct class_;
 struct enviroment;
+struct object;
+struct vm;
 /**
  * コンストラクタを表す構造体.
  */
@@ -27,6 +29,15 @@ constructor* constructor_new();
  * @param depth
  */
 void constructor_dump(constructor* self, int depth);
+
+/**
+ * このコンストラクタを使用してオブジェクトを生成します.
+ * @param self
+ * @param args
+ * @param parent
+ * @return
+ */
+struct object* constructor_new_instance(constructor* self, vector* args, struct vm* parent);
 
 /**
  * コンストラクタを開放します.

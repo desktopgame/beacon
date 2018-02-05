@@ -12,4 +12,5 @@
 #include "signal/lang/sg_console.h"
 #include "signal/lang/sg_array.h"
 #include "signal/lang/sg_null.h"
+#include "signal/lang/sg_exception.h"
 #endif // !SIGNAL_LIB_SG_LIBRARY_INTERFACE_H

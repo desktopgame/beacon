@@ -1,6 +1,7 @@
 #include "sg_array.h"
 #include "../../sg_library_impl.h"
 #include "../../../env/field.h"
+#include "../../../env/constructor.h"
 #include <assert.h>
 
 //proto
@@ -15,6 +16,25 @@ void sg_array_init() {
 	class_define_native_method(arrayClass, "nativeInit", sg_array_nativeInit);
 	class_define_native_method(arrayClass, "nativeSet", sg_array_nativeSet);
 	class_define_native_method(arrayClass, "nativeGet", sg_array_nativeGet);
+}
+
+type * sg_array_class() {
+	namespace_* lang = namespace_lang();
+	return namespace_get_type(lang, "Array");
+}
+
+object * sg_array_new(int length, vm * vmc) {
+	type* arrayType = sg_array_class();
+	object* ret = class_new_rinstance(arrayType, vmc, 1, length);
+	return ret;
+}
+
+void sg_array_set(object * arr, int index, object * o) {
+	vector_assign(arr->nativeSlotVec, index, o);
+}
+
+object * sg_array_get(object * arr, int index) {
+	return (object*)vector_at(arr->nativeSlotVec, index);
 }
 //private
 static void sg_array_nativeInit(method* parent, vm* vm, enviroment* env) {

@@ -1,9 +1,11 @@
 #include "constructor.h"
 #include "../util/mem.h"
 #include "../util/text.h"
-#include "parameter.h"
 #include "../vm/enviroment.h"
+#include "../vm/vm.h"
+#include "parameter.h"
 #include "type_interface.h"
+#include "object.h"
 
 constructor * constructor_new() {
 	constructor* ret = (constructor*)MEM_MALLOC(sizeof(constructor));
@@ -30,6 +32,17 @@ void constructor_dump(constructor * self, int depth) {
 	printf(")");
 	text_putline();
 	opcode_buf_dump(self->env->buf, depth + 1);
+}
+
+object * constructor_new_instance(constructor * self, vector * args, vm * parent) {
+	vm* sub = vm_sub(parent);
+	for (int i = 0; i < args->length; i++) {
+		vector_push(sub->value_stack, vector_at(args, i));
+	}
+	vm_execute(sub, self->env);
+	object* ret = vector_pop(sub->value_stack);
+	vm_delete(sub);
+	return ret;
 }
 
 void constructor_delete(constructor * self) {
