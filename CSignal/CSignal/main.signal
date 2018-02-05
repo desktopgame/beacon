@@ -65,6 +65,7 @@ namespace signal.lang {
 	Console.writeLine(arr.length());
 	arr.set(0, "Foo");
 	String s = arr.get(0) as String;
+	Console.writeLine(s);
 	Console.writeLine(arr.get(0));
 	Console.writeLine(arr.test(10, 5));
 //} catch(Int a) {

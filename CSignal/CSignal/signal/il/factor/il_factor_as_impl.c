@@ -4,6 +4,7 @@
 #include "../../util/text.h"
 #include "../../env/namespace.h"
 #include <stdio.h>
+#include <assert.h>
 
 il_factor * il_factor_wrap_as(il_factor_as * self) {
 	il_factor* ret = (il_factor*)MEM_MALLOC(sizeof(il_factor));
@@ -28,6 +29,16 @@ void il_factor_as_dump(il_factor_as * self, int depth) {
 }
 
 void il_factor_as_generate(il_factor_as * self, enviroment * env) {
+	il_factor_generate(self->fact, env);
+
+	type* from = il_factor_eval(self->fact, env);
+	type* to = fqcn_type(self->fqcn, (namespace_*)vector_top(env->namespace_vec));
+	int dist = type_distance(to, from);
+	assert(dist != -1);
+	if (dist != -1) {
+		opcode_buf_add(env->buf, op_lookup);
+		opcode_buf_add(env->buf, to->absoluteIndex);
+	}
 }
 
 void il_factor_as_load(il_factor_as * self, enviroment * env, il_ehandler * eh) {
