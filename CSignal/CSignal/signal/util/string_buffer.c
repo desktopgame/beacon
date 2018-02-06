@@ -40,11 +40,12 @@ void string_buffer_appendf(string_buffer * self, const char * message, ...) {
 #define BUFF_LEN (256)
 	char block[BUFF_LEN];
 	memset(block, '\0', BUFF_LEN);
-	int res = text_sprintf(block, BUFF_LEN, message, ap);
+	int res = vsprintf_s(block, BUFF_LEN, message, ap);
 	assert(res != -1);
 	int len = strlen(block);
 	for (int i = 0; i < len; i++) {
 		char c = block[i];
+		if (c == '\0') { break; }
 		string_buffer_append(self, c);
 	}
 
