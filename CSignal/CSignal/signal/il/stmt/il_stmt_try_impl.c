@@ -35,7 +35,7 @@ il_stmt_catch* il_stmt_catch_new(const char* name) {
 
 void il_stmt_try_dump(il_stmt_try* self, int depth) {
 	text_putindent(depth);
-	printf("try");
+	text_printf("try");
 	text_putline();
 	for(int i=0; i<self->statement_list->length; i++) {
 		il_stmt* e = (il_stmt*)vector_at(self->statement_list, i);
@@ -49,9 +49,9 @@ void il_stmt_try_dump(il_stmt_try* self, int depth) {
 
 void il_stmt_catch_dump(il_stmt_catch* self, int depth) {
 	text_putindent(depth);
-	printf("catch(");
+	text_printf("catch(");
 	fqcn_cache_print(self->fqcn);
-	printf(" %s)", self->name);
+	text_printf(" %s)", self->name);
 	text_putline();
 	for(int i=0; i<self->statement_list->length; i++) {
 		il_stmt* e = (il_stmt*)vector_at(self->statement_list, i);

@@ -15,13 +15,13 @@ il_constructor_chain * il_constructor_chain_new() {
 
 void il_constructor_chain_dump(il_constructor_chain * self, int depth) {
 	text_putindent(depth);
-	printf("constructor chain");
+	text_printf("constructor chain");
 	text_putline();
 	text_putindent(depth);
 	if (self->type == chain_type_this) {
-		printf("this");
+		text_printf("this");
 	} else if (self->type == chain_type_super) {
-		printf("super");
+		text_printf("super");
 	}
 	text_putline();
 	for (int i = 0; i < self->argument_list->length; i++) {

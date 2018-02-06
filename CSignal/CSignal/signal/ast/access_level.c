@@ -4,15 +4,15 @@
 void access_print(access_level level) {
 	switch (level) {
 		case access_public:
-			printf("public");
+			text_printf("public");
 			break;
 
 		case access_private:
-			printf("private");
+			text_printf("private");
 			break;
 
 		case access_protected:
-			printf("protected");
+			text_printf("protected");
 			break;
 
 		default:

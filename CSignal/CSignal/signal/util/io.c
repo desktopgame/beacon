@@ -93,7 +93,7 @@ void io_write_text(const char * filename, const char * text) {
 	int len = strlen(text);
 	for (int i = 0; i < len; i++) {
 		char c = text[i];
-		//printf("%c", c);
+		//text_printf("%c", c);
 		fputc(c, fp);
 	}
 	fclose(fp);
@@ -118,7 +118,7 @@ char * io_absolute_path(const char * target) {
 		}
 	}
 	char* a = text_concat(full, target);
-	printf("path %s", a);
+	text_printf("path %s", a);
 	return text_strdup(a);
 #endif
 }

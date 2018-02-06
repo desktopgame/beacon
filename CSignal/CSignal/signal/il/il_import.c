@@ -13,7 +13,7 @@ il_import* il_import_new(const char* path) {
 
 void il_import_dump(il_import* self, int depth) {
 	text_putindent(depth);
-	printf("import %s", self->path);
+	text_printf("import %s", self->path);
 	text_putline();
 }
 

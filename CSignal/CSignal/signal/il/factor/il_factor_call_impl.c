@@ -32,7 +32,7 @@ il_factor_call * il_factor_call_new(const char * name) {
 
 void il_factor_call_dump(il_factor_call * self, int depth) {
 	text_putindent(depth);
-	printf("call %s", self->name);
+	text_printf("call %s", self->name);
 	text_putline();
 	for (int i = 0; i < self->argument_list->length; i++) {
 		vector_item e = vector_at(self->argument_list, i);

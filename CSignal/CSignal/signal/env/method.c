@@ -33,22 +33,22 @@ void method_execute(method* self, vm * vm, enviroment* env) {
 void method_dump(method * self, int depth) {
 	text_putindent(depth);
 	access_print(self->access);
-	printf(" ");
+	text_printf(" ");
 	modifier_print(self->modifier);
-	printf(" method %s", self->name);
-	printf("(");
+	text_printf(" method %s", self->name);
+	text_printf("(");
 	for (int i = 0; i < self->parameter_list->length; i++) {
 		vector_item e = vector_at(self->parameter_list, i);
 		parameter* p = (parameter*)e;
-		printf("%s %s", type_name(p->type), p->name);
+		text_printf("%s %s", type_name(p->type), p->name);
 		if ((i + 1) < self->parameter_list->length) {
-			printf(" ");
+			text_printf(" ");
 		}
 	}
 	if (self->return_type == NULL) {
-		printf(") -> NULL");
+		text_printf(") -> NULL");
 	} else {
-		printf(") -> %s", type_name(self->return_type));
+		text_printf(") -> %s", type_name(self->return_type));
 	}
 	text_putline();
 	if (self->type == method_type_script) {

@@ -21,7 +21,7 @@ il_stmt_inferenced_type_init * il_stmt_inferenced_type_init_new(const char * nam
 
 void il_stmt_inferenced_type_init_dump(il_stmt_inferenced_type_init * self, int depth) {
 	text_putindent(depth);
-	printf("var init %s", self->name);
+	text_printf("var init %s", self->name);
 	text_putline();
 	il_factor_dump(self->fact, depth + 1);
 }

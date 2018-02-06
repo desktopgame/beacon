@@ -102,7 +102,7 @@ void cmd_signal(int argc, char * argv[]) {
 			cmd_signal_dump(cmdl, argv);
 			break;
 		} else {
-			printf("指定の命令を解釈出来ません(%s)", action);
+			text_printf("指定の命令を解釈出来ません(%s)", action);
 			text_putline();
 			break;
 		}
@@ -110,11 +110,11 @@ void cmd_signal(int argc, char * argv[]) {
 }
 
 void cmd_dump(int argc, const char* const argv[]) {
-	printf("--- args ---");
+	text_printf("--- args ---");
 	text_putline();
 	for (int i = 0; i < argc; i++) {
 		char* e = argv[i];
-		printf("argv[%d] = %s", i, argv[i]);
+		text_printf("argv[%d] = %s", i, argv[i]);
 		text_putline();
 	}
 	text_putline();
@@ -144,7 +144,7 @@ static void cmd_signal_signal(cmd_line* self, char* argv) {
 	}
 	if (filename == NULL) {
 		//定数が二行目に続いているとか出たのでとりあえず消す
-		//printf("-fileオプションでファイルを指定してください。");
+		//text_printf("-fileオプションでファイルを指定してください。");
 		//
 		text_putline();
 		return;
@@ -166,7 +166,7 @@ static void cmd_signal_dump(cmd_line* self, char* argv) {
 		if (!strcmp(param, "-file")) {
 			if (self->index >= self->argc) {
 				//定数が二行目に続いているとか出たのでとりあえず消す
-				//printf("-fileオプションでファイルを指定してください。");
+				//text_printf("-fileオプションでファイルを指定してください。");
 				//
 				text_putline();
 				break;

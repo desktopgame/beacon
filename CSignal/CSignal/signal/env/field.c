@@ -21,12 +21,12 @@ void field_dump(field * self, int depth) {
 	assert(self != NULL);
 	text_putindent(depth);
 	access_print(self->access);
-	printf(" ");
+	text_printf(" ");
 	modifier_print(self->modifier);
 	if (self->type == NULL) {
-		printf(" field NULL %s", self->name);
+		text_printf(" field NULL %s", self->name);
 	} else {
-		printf(" field %s %s", type_name(self->type),self->name);
+		text_printf(" field %s %s", type_name(self->type),self->name);
 	}
 	text_putline();
 }

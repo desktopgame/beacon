@@ -27,7 +27,7 @@ il_factor_variable * il_factor_variable_new(const char * name) {
 
 void il_factor_variable_dump(il_factor_variable * self, int depth) {
 	text_putindent(depth);
-	printf("variable %s", self->name);
+	text_printf("variable %s", self->name);
 	text_putline();
 }
 

@@ -35,7 +35,7 @@ il_factor_named_invoke * il_factor_named_invoke_new(const char* method_name) {
 
 void il_factor_named_invoke_dump(il_factor_named_invoke * self, int depth) {
 	text_putindent(depth);
-	printf("named invoke %s", self->method_name);
+	text_printf("named invoke %s", self->method_name);
 	text_putline();
 
 	fqcn_cache_dump(self->fqcn, depth + 1);
@@ -108,7 +108,7 @@ static void il_factor_named_invoke_find(il_factor_named_invoke* self, enviroment
 		}
 		type* tp = namespace_get_type(top, self->fqcn->name);
 		il_factor_named_invoke_generate_STATIC_IMPL(self, env, tp);
-		//printf("%s %s", top->name, cls->name);
+		//text_printf("%s %s", top->name, cls->name);
 		self->u.type = tp;
 		self->type = ilnamed_invoke_static;
 	//Y.call() の場合

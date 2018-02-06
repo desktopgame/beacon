@@ -18,8 +18,8 @@ string_buffer * string_buffer_new() {
 }
 
 void string_buffer_append(string_buffer * self, char_t c) {
-	//printf("%c", c);
-	//printf("[%c]\n", c);
+	//text_printf("%c", c);
+	//text_printf("[%c]\n", c);
 	if (self->length >= self->capacity) {
 		int newSize = self->capacity + (self->capacity / 2);
 		char_t* temp = (char*)MEM_REALLOC(self->text, newSize);
@@ -40,11 +40,7 @@ void string_buffer_appendf(string_buffer * self, const char * message, ...) {
 #define BUFF_LEN (256)
 	char block[BUFF_LEN];
 	memset(block, '\0', BUFF_LEN);
-#if defined(_MSC_VER)
-	int res = sprintf_s(block, BUFF_LEN, message, ap);
-#else
-	int res = sprintf(block, message, ap);
-#endif
+	int res = text_sprintf(block, BUFF_LEN, message, ap);
 	assert(res != -1);
 	int len = strlen(block);
 	for (int i = 0; i < len; i++) {

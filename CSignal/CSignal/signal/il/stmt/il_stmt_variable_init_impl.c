@@ -23,7 +23,7 @@ il_stmt_variable_init * il_stmt_variable_init_new(const char * name) {
 
 void il_stmt_variable_init_dump(il_stmt_variable_init * self, int depth) {
 	text_putindent(depth);
-	printf("variable init %s", self->name);
+	text_printf("variable init %s", self->name);
 	text_putline();
 	fqcn_cache_dump(self->fqcn, depth + 1);
 	il_factor_dump(self->fact, depth + 1);

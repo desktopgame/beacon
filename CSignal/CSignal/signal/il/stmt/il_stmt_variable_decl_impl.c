@@ -20,7 +20,7 @@ il_stmt_variable_decl * il_stmt_variable_decl_new(const char * name) {
 
 void il_stmt_variable_decl_dump(il_stmt_variable_decl * self, int depth) {
 	text_putindent(depth);
-	printf("variable decl %s", self->name);
+	text_printf("variable decl %s", self->name);
 	text_putline();
 
 	fqcn_cache_dump(self->fqcn, depth + 1);

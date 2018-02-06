@@ -308,73 +308,73 @@ static bool ilbi_compare(il_factor_binary_op* self) {
 static void assign_dump_operator(il_factor_binary_op* self) {
 	switch (self->type) {
 		case ilbinary_add:
-			printf("+");
+			text_printf("+");
 			break;
 		case ilbinary_sub:
-			printf("-");
+			text_printf("-");
 			break;
 		case ilbinary_mul:
-			printf("*");
+			text_printf("*");
 			break;
 		case ilbinary_div:
-			printf("/");
+			text_printf("/");
 			break;
 		case ilbinary_mod:
-			printf("%");
+			text_printf("%");
 			break;
 
 
 		case ilbinary_bit_or:
-			printf("|");
+			text_printf("|");
 			break;
 		case ilbinary_logic_or:
-			printf("||");
+			text_printf("||");
 			break;
 
 
 		case ilbinary_bit_and:
-			printf("&");
+			text_printf("&");
 			break;
 		case ilbinary_logic_and:
-			printf("&&");
+			text_printf("&&");
 			break;
 
 		case ilbinary_eq:
-			printf("==");
+			text_printf("==");
 			break;
 		case ilbinary_noteq:
-			printf("!=");
+			text_printf("!=");
 			break;
 		case ilbinary_gt:
-			printf(">");
+			text_printf(">");
 			break;
 		case ilbinary_ge:
-			printf(">=");
+			text_printf(">=");
 			break;
 		case ilbinary_lt:
-			printf("<");
+			text_printf("<");
 			break;
 		case ilbinary_le:
-			printf("<=");
+			text_printf("<=");
 			break;
 
 		case ilbinary_assign:
-			printf("=");
+			text_printf("=");
 			break;
 		case ilbinary_add_assign:
-			printf("+=");
+			text_printf("+=");
 			break;
 		case ilbinary_sub_assign:
-			printf("-=");
+			text_printf("-=");
 			break;
 		case ilbinary_mul_assign:
-			printf("*=");
+			text_printf("*=");
 			break;
 		case ilbinary_div_assign:
-			printf("/=");
+			text_printf("/=");
 			break;
 		case ilbinary_mod_assign:
-			printf("%=");
+			text_printf("%=");
 			break;
 		default:
 			break;

@@ -73,7 +73,7 @@ void enviroment_op_dump(enviroment * self, int depth) {
 			}
 		}
 		if (lr != NULL) {
-			printf("<%d>", lr->lineno);
+			text_printf("<%d>", lr->lineno);
 		}
 		text_putline();
 	}

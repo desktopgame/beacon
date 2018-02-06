@@ -46,7 +46,7 @@ void class_loader_sgload_impl(class_loader* self) {
 	class_loader_sgload_namespace_list(self, self->il_code->namespace_list, NULL);
 	class_loader_sgload_link(self);
 	class_* tp = namespace_get_class(namespace_lang(), "Exception");
-	printf("--%s \n", self->filename);
+	text_printf("--%s \n", self->filename);
 	int i = 0;
 }
 
@@ -58,14 +58,14 @@ void class_loader_sgload_import(class_loader* self, vector* ilimports) {
 		il_import* import = (il_import*)e;
 		char* withExt = text_concat(import->path, ".signal");
 		char* fullPath = io_absolute_path(withExt);
-		//printf("%s\n", fullPath);
+		//text_printf("%s\n", fullPath);
 		//そのファイルパスに対応した
 		//クラスローダが既に存在するなら無視
 		class_loader* cll = tree_map_get(ctx->classLoaderMap, fullPath);
 		if (cll != NULL) {
 			cll->ref_count++;
 			import_manager_import(self->import_manager, cll);
-			printf("aimport %s\n", cll->filename);
+			text_printf("aimport %s\n", cll->filename);
 			//そのローダーが破損しているなら
 			if (cll->error) {
 				class_loader_error(self, cll->errorMessage);
@@ -80,7 +80,7 @@ void class_loader_sgload_import(class_loader* self, vector* ilimports) {
 			cll->parent = self;
 			cll->type = content_lib;
 			cll->filename = fullPath;
-			printf("nimport %s\n", cll->filename);
+			text_printf("nimport %s\n", cll->filename);
 			import_manager_import(self->import_manager, cll);
 			tree_map_put(ctx->classLoaderMap, fullPath, cll);
 		}
@@ -126,7 +126,7 @@ void class_loader_sgload_namespace_list(class_loader* self, vector* ilnamespace_
 	if (self->loadDecl || self->loadImpl) { return; }
 	self->loadDecl = true;
 	if (self->error) { return; }
-	printf("decl %s\n", self->filename);
+	text_printf("decl %s\n", self->filename);
 	if (strstr(self->filename, "Exc")) {
 		int i = 0;
 	}
@@ -318,14 +318,14 @@ void class_loader_sgload_body(class_loader* self, vector* stmt_list, enviroment*
 //private
 static void class_loader_sgload_link(class_loader* self) {
 	//class_link_print(self->link);
-	//printf(" :%s ", self->filename)
+	//text_printf(" :%s ", self->filename)
 	/*;
 	if (self->link == classlink_linked) {
-		//printf("linked\n");
+		//text_printf("linked\n");
 		return;
 	}
 	if (self->link == classlink_pending) {
-		//printf("pending\n");
+		//text_printf("pending\n");
 		class_loader_sgload_import(self, self->il_code->import_list);
 		class_loader_sgload_namespace_list(self, self->il_code->namespace_list, NULL);
 		self->link = classlink_resume;
@@ -335,14 +335,14 @@ static void class_loader_sgload_link(class_loader* self) {
 	if (self->loadImpl) { return; }
 	self->loadImpl = true;
 	//resume, unlinked
-	//printf("other\n");
+	//text_printf("other\n");
 	for (int i = 0; i < self->type_cacheVec->length; i++) {
 		type_cache* e = (type_cache*)vector_at(self->type_cacheVec, i);
 		class_loader_sgload_linkImpl(self, e);
 	}
 	vector_clear(self->type_cacheVec);
 	//self->link = classlink_linked;
-	printf("impl %s\n", self->filename);
+	text_printf("impl %s\n", self->filename);
 }
 
 static void class_loader_sgload_linkImpl(class_loader* self, type_cache* e) {

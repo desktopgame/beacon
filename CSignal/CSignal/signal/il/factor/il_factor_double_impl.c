@@ -22,7 +22,7 @@ il_factor_double * il_factor_double_new(double d) {
 
 void il_factor_double_dump(il_factor_double * self, int depth) {
 	text_putindent(depth);
-	printf("Dobule %f", self->value);
+	text_printf("Dobule %f", self->value);
 	text_putline();
 }
 

@@ -6,7 +6,7 @@
 #include "../util/mem.h"
 
 void il_stmt_dump(il_stmt * self, int depth) {
-	printf("<%d> ", self->lineno);
+	text_printf("<%d> ", self->lineno);
 	switch (self->type) {
 		case ilstmt_if:
 			il_stmt_if_dump(self->u.if_, depth);

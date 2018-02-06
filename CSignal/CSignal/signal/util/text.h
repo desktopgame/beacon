@@ -31,7 +31,17 @@ void text_putb(bool b);
 int text_printf(const char* message, ...);
 
 /**
- * printf へ委譲したあと、
+ * sprintfへの委譲です.
+ * @param block
+ * @param blockSize
+ * @param message
+ * @param ...
+ * @return
+ */
+int text_sprintf(char* block, size_t blockSize, char* message, ...);
+
+/**
+ * text_printf へ委譲したあと、
  * 改行を出力します。
  */
 void text_printfln(const char* message, ...);

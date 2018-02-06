@@ -159,7 +159,7 @@ void namespace_dump() {
 }
 
 void namespace_delete(namespace_ * self) {
-//	text_printfln("delete namespace %s", self->name);
+//	text_text_printfln("delete namespace %s", self->name);
 	tree_map_delete(self->namespace_map, namespace_delete_namespace);
 	tree_map_delete(self->type_map, namespace_delete_type);
 	MEM_FREE(self->name);
@@ -195,7 +195,7 @@ static void namespace_dump_root(tree_map* root, bool callSelf, int depth) {
 
 static void namespace_dump_impl(namespace_* root, int depth) {
 	namespace_put_indent(depth);
-	printf("%s", root->name);
+	text_printf("%s", root->name);
 	text_putline();
 	namespace_dump_class(root->type_map, true, depth + 1);
 	namespace_dump_root(root->namespace_map, false, depth + 1);
@@ -203,7 +203,7 @@ static void namespace_dump_impl(namespace_* root, int depth) {
 
 static void namespace_put_indent(int depth) {
 	for (int i = 0; i < depth; i++) {
-		printf("    ");
+		text_printf("    ");
 	}
 }
 

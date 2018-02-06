@@ -31,7 +31,7 @@ il_factor_field_access * il_factor_field_access_new(const char * name) {
 
 void il_factor_field_access_dump(il_factor_field_access * self, int depth) {
 	text_putindent(depth);
-	printf("field access %s", self->name);
+	text_printf("field access %s", self->name);
 	text_putline();
 	il_factor_dump(self->fact, depth + 1);
 }

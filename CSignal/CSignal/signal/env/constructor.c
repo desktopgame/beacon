@@ -19,17 +19,17 @@ constructor * constructor_new() {
 void constructor_dump(constructor * self, int depth) {
 	text_putindent(depth);
 	access_print(self->access);
-	printf(" constructor");
-	printf("(");
+	text_printf(" constructor");
+	text_printf("(");
 	for (int i = 0; i < self->parameter_list->length; i++) {
 		vector_item e = vector_at(self->parameter_list, i);
 		parameter* p = (parameter*)e;
-		printf("%s %s", type_name(p->type), p->name);
+		text_printf("%s %s", type_name(p->type), p->name);
 		if ((i + 1) < self->parameter_list->length) {
-			printf(" ");
+			text_printf(" ");
 		}
 	}
-	printf(")");
+	text_printf(")");
 	text_putline();
 	opcode_buf_dump(self->env->buf, depth + 1);
 }

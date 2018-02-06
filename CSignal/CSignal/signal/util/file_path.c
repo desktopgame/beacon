@@ -69,7 +69,7 @@ file_path * file_path_parse(const char * source, char separator) {
 				buff = temp;
 				assert(temp != NULL);
 			}
-			//printf("push %c\n", ch);
+			//text_printf("push %c\n", ch);
 			buff[index] = ch;
 		}
 	}
@@ -110,7 +110,7 @@ char * file_path_to_string(file_path * self, char separator) {
 
 void file_path_dump(file_path * self, char separator) {
 	char* tmp = file_path_to_string(self, separator);
-	printf("%s", tmp);
+	text_printf("%s", tmp);
 	text_putline();
 	MEM_FREE(tmp);
 }
@@ -159,7 +159,7 @@ static void file_path_delete_tree_impl(file_path * self, bool delete_parent) {
 		}
 		self->parent = NULL;
 	}
-	printf("free %s\n", self->name);
+	text_printf("free %s\n", self->name);
 	MEM_FREE(self->name);
 	self->name = NULL;
 	MEM_FREE(self);

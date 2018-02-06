@@ -16,9 +16,9 @@ il_constructor * il_constructor_new() {
 void il_constructor_dump(il_constructor * self, int depth) {
 	text_putindent(depth);
 	access_print(self->access);
-//	printf(" ");
+//	text_printf(" ");
 //	modifier_print(self->modifier);
-	printf(" constructor");
+	text_printf(" constructor");
 //	fqcn_cache_print(self->return_fqcn);
 	text_putline();
 	if (self->chain != NULL) {

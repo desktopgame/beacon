@@ -35,13 +35,13 @@ method * interface_find_method(interface_ * self, const char * name, vector * ar
 
 void interface_dump(interface_ * self, int depth) {
 	text_putindent(depth);
-	printf("interface %s", self->name);
+	text_printf("interface %s", self->name);
 	text_putline();
 	//継承するインターフェイスの一覧
 	for (int i = 0; i < self->impl_list->length; i++) {
 		interface_* inter = (interface_*)vector_at(self->impl_list, i);
 		text_putindent(depth + 1);
-		printf("extend %s", inter->name);
+		text_printf("extend %s", inter->name);
 		text_putline();
 	}
 	//メソッドの一覧をダンプ

@@ -21,7 +21,7 @@ il_function * il_function_new(const char * name) {
 
 void il_function_dump(il_function * self, int depth) {
 	text_putindent(depth);
-	printf("function %s -> ", self->name);
+	text_printf("function %s -> ", self->name);
 	fqcn_cache_print(self->return_fqcn);
 	text_putline();
 	for (int i = 0; i < self->parameter_list->length; i++) {
@@ -35,7 +35,7 @@ void il_function_dump(il_function * self, int depth) {
 		il_stmt_dump(s, depth + 1);
 	}
 	text_putindent(depth);
-	printf("function end");
+	text_printf("function end");
 	text_putline();
 }
 

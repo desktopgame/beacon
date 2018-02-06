@@ -20,7 +20,7 @@ void il_stmt_break_load(void * empty, enviroment * env, il_ehandler* eh) {
 
 void il_stmt_break_dump(void * empty, int depth) {
 	text_putindent(depth);
-	printf("break");
+	text_printf("break");
 	text_putline();
 }
 

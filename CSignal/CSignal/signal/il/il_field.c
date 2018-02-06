@@ -18,11 +18,11 @@ il_field * il_field_new(const char * name) {
 void il_field_dump(il_field * self, int depth) {
 	text_putindent(depth);
 	access_print(self->access);
-	printf(" ");
+	text_printf(" ");
 	modifier_print(self->modifier);
-	printf(" field ");
+	text_printf(" field ");
 	fqcn_cache_print(self->fqcn);
-	printf(" %s", self->name);
+	text_printf(" %s", self->name);
 	text_putline();
 }
 

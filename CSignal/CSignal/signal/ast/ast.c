@@ -135,7 +135,7 @@ void ast_print_tree(ast * self) {
 }
 
 void ast_print(ast* self) {
-#define p(str) printf(str); break
+#define p(str) text_printf(str); break
 	switch (self->tag) {
 		case ast_root: p("root");
 		case ast_add:  p("+");
@@ -168,51 +168,51 @@ void ast_print(ast* self) {
 		case ast_stmt_variable_decl: p("variable-decl");
 		case ast_stmt_variable_init: p("variable-init");
 		case ast_typename:
-			printf("typename");
+			text_printf("typename");
 			break;
 		case ast_identifier:
-			printf("identifier(%s)", self->u.string_value);
+			text_printf("identifier(%s)", self->u.string_value);
 			break;
 		case ast_int:
-			printf("int(%d)", self->u.int_value);
+			text_printf("int(%d)", self->u.int_value);
 			break;
 		case ast_double:
-			printf("double(%f)", self->u.double_value);
+			text_printf("double(%f)", self->u.double_value);
 			break;
 		case ast_char:
-			printf("char(%c)", self->u.char_value);
+			text_printf("char(%c)", self->u.char_value);
 			break;
 		case ast_string:
-			printf("string(%s)", self->u.string_value);
+			text_printf("string(%s)", self->u.string_value);
 			break;
 		case ast_this: p("this");
 		case ast_super: p("super");
 		case ast_namespace_decl:
-			printf("namespace decl");
+			text_printf("namespace decl");
 			break;
 		case ast_namespace_member_decl_list:
-			printf("namepsace member decl");
+			text_printf("namepsace member decl");
 			break;
 		case ast_namespace_path:
-			printf("namespace_path(%s)", self->u.string_value);
+			text_printf("namespace_path(%s)", self->u.string_value);
 			break;
 		case ast_namespace_path_list:
-			printf("namespace_path list");
+			text_printf("namespace_path list");
 			break;
 		case ast_class_decl_unit:
-			printf("class decl_unit");
+			text_printf("class decl_unit");
 			break;
 		case ast_variable:
-			printf("variable %s", self->u.string_value);
+			text_printf("variable %s", self->u.string_value);
 			break;
 		case ast_static_invoke: p("static invoke");
 		case ast_fqcn: p("fqcn");
 		case ast_fqcn_part_list: p("fqcn part-list");
 		case ast_fqcn_part: 
-			printf("fqcn part %s", self->u.string_value);
+			text_printf("fqcn part %s", self->u.string_value);
 			break;
 		case ast_fqcn_class_name: 
-			printf("fqcn class-name %s", self->u.string_value);
+			text_printf("fqcn class-name %s", self->u.string_value);
 			break;
 		case ast_invoke: p("invoke");
 		case ast_call: p("call");
@@ -221,20 +221,20 @@ void ast_print(ast* self) {
 		case ast_argument: p("argument");
 		case ast_new_instance: p("new-instance");
 		//case ast_class_decl_list:
-		//	printf("class decl_list");
+		//	text_printf("class decl_list");
 		//	break;
 		case ast_import_decl: p("import");
 		case ast_import_path:
-			printf("%s", self->u.string_value);
+			text_printf("%s", self->u.string_value);
 			break;
 		case ast_class_decl:
-			printf("class(%s)", self->u.string_value);
+			text_printf("class(%s)", self->u.string_value);
 			break;
 		case ast_interface_decl:
-			printf("interface(%s)", self->u.string_value);
+			text_printf("interface(%s)", self->u.string_value);
 			break;
 		case ast_class_super:
-			printf("super_class(%s)", self->u.string_value);
+			text_printf("super_class(%s)", self->u.string_value);
 			break;
 		case ast_access_member_tree: p("access member_tree");
 		case ast_access_member_list: p("access member_list");
@@ -253,25 +253,25 @@ void ast_print(ast* self) {
 		case ast_member_decl_list: p("member_decl_list");
 		case ast_field_decl: p("field decl");
 		case ast_field_type_name:
-			printf("type_name(%s)", self->u.string_value);
+			text_printf("type_name(%s)", self->u.string_value);
 			break;
 		case ast_field_access_name:
-			printf("access_name(%s)", self->u.string_value);
+			text_printf("access_name(%s)", self->u.string_value);
 			break;
 		case ast_method_decl: p("method decl");
 		case ast_method_name:
-			printf("method_name(%s)", self->u.string_value);
+			text_printf("method_name(%s)", self->u.string_value);
 			break;
 		case ast_parameter_list: p("parameter-list");
 		case ast_parameter: p("parameter");
 		case ast_parameter_type_name:
-			printf("parameter_type_name(%s)", self->u.string_value);
+			text_printf("parameter_type_name(%s)", self->u.string_value);
 			break;
 		case ast_parameter_access_name:
-			printf("parameter_access_name(%s)", self->u.string_value);
+			text_printf("parameter_access_name(%s)", self->u.string_value);
 			break;
 		case ast_method_return_name:
-			printf("method_return_name(%s)", self->u.string_value);
+			text_printf("method_return_name(%s)", self->u.string_value);
 			break;
 		case ast_field_access: p("field-access");
 		case ast_static_field_access: p("static-field-access");
@@ -287,7 +287,7 @@ void ast_print(ast* self) {
 		case ast_return: p("return");
 		case ast_cast: p("cast");
 		case ast_blank:
-			printf("blank");
+			text_printf("blank");
 			break;
 		case ast_function_decl: p("function decl");
 		case ast_function_name: p("function name");
@@ -298,7 +298,7 @@ void ast_print(ast* self) {
 		case ast_break: p("break");
 		case ast_continue: p("continue");
 		case ast_enum_decl:
-			printf("enum(%s)", self->u.string_value);
+			text_printf("enum(%s)", self->u.string_value);
 			break;
 		case ast_identifier_list: p("ident list");
 		case ast_inferenced_type_init: p("var init");
@@ -312,7 +312,7 @@ void ast_print(ast* self) {
 			p("not implemented");
 	}
 #undef p
-	printf("<%d>", self->lineno);
+	text_printf("<%d>", self->lineno);
 }
 
 void ast_delete(ast * self) {
@@ -392,7 +392,7 @@ constructor_chain_type ast_cast_to_chain_type(ast * self) {
 //private
 static void ast_print_indent(int depth) {
 	for (int i = 0; i < depth; i++) {
-		printf("    ");
+		text_printf("    ");
 	}
 }
 
@@ -413,10 +413,10 @@ static void ast_delete_impl(ast* self) {
 	list_delete(self->children, list_deleter_null);
 	ast_tag t = self->tag;
 	if (ast_has_str(self)) {
-		//printf("free(%s)\n", self->u.string_value);
+		//text_printf("free(%s)\n", self->u.string_value);
 		char* temp = self->u.string_value;
 		//self->u.string_value = NULL;
-		//printf("_%s\n", temp);
+		//text_printf("_%s\n", temp);
 		MEM_FREE(temp);
 		//self->u.string_value = NULL;
 	}
@@ -433,7 +433,7 @@ static void ast_list_deleter(list_item item) {
 	}
 	if (ast_has_str(self)) {
 		//IL側で開放するように
-		//printf("free(%s)\n", self->u.string_value);
+		//text_printf("free(%s)\n", self->u.string_value);
 		MEM_FREE(self->u.string_value);
 		//self->u.string_value = NULL;
 	}

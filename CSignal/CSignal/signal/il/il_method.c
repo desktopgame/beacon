@@ -24,9 +24,9 @@ il_method * il_method_new(const char * name) {
 void il_method_dump(il_method * self, int depth) {
 	text_putindent(depth);
 	access_print(self->access);
-	printf(" ");
+	text_printf(" ");
 	modifier_print(self->modifier);
-	printf(" method %s -> ", self->name);
+	text_printf(" method %s -> ", self->name);
 	fqcn_cache_print(self->return_fqcn);
 	text_putline();
 	for (int i = 0; i < self->parameter_list->length; i++) {

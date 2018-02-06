@@ -23,7 +23,7 @@ il_top_level* il_top_level_new() {
 }
 
 void il_top_level_dump(il_top_level* self, int depth) {
-	printf("top_level");
+	text_printf("top_level");
 	text_putline();
 	for (int i = 0; i < self->import_list->length; i++) {
 		vector_item e = vector_at(self->import_list, i);

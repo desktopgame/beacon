@@ -29,11 +29,11 @@ il_namespace* il_namespace_root(il_namespace* self) {
 
 void il_namespace_dump(il_namespace* self, int depth) {
 	text_putindent(depth);
-	printf("namespace %s", self->name);
+	text_printf("namespace %s", self->name);
 	text_putline();
 
 	text_putindent(depth);
-	printf("namespace list");
+	text_printf("namespace list");
 	text_putline();
 	for (int i = 0; i < self->namespace_list->length; i++) {
 		vector_item e = vector_at(self->namespace_list, i);
@@ -42,7 +42,7 @@ void il_namespace_dump(il_namespace* self, int depth) {
 	}
 
 	text_putindent(depth);
-	printf("type list");
+	text_printf("type list");
 	text_putline();
 	for (int i = 0; i < self->type_list->length; i++) {
 		vector_item e = vector_at(self->type_list, i);

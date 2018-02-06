@@ -24,7 +24,7 @@ void il_interface_add_method(il_interface * self, il_method * method) {
 
 void il_interface_dump(il_interface * self, int depth) {
 	text_putindent(depth);
-	printf("interface %s", self->name);
+	text_printf("interface %s", self->name);
 	text_putline();
 	//継承するインターフェイスの一覧を出力
 	for (int i = 0; i < self->extends_list->length; i++) {

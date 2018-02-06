@@ -17,17 +17,17 @@ fqcn_cache * fqcn_cache_new() {
 
 void fqcn_cache_dump(fqcn_cache * self, int depth) {
 	text_putindent(depth);
-	printf("type %s", self->name);
+	text_printf("type %s", self->name);
 	text_putline();
 	//X::C.call() のような呼び出しなら
 	if (self->scope_vec->length > 0) {
 		text_putindent(depth);
-		printf("scope");
+		text_printf("scope");
 		text_putline();
 		for (int i = 0; i < self->scope_vec->length; i++) {
 			char* e = (char*)vector_at(self->scope_vec, i);
 			text_putindent(depth + 1);
-			printf("%s", e);
+			text_printf("%s", e);
 			text_putline();
 		}
 	}
@@ -35,13 +35,13 @@ void fqcn_cache_dump(fqcn_cache * self, int depth) {
 
 void fqcn_cache_print(fqcn_cache * self) {
 	if (self->scope_vec->length == 0) {
-		printf("%s", self->name);
+		text_printf("%s", self->name);
 	} else {
 		for (int i = 0; i < self->scope_vec->length; i++) {
-			printf("%s", (char*)vector_at(self->scope_vec, i));
-			printf("::");
+			text_printf("%s", (char*)vector_at(self->scope_vec, i));
+			text_printf("::");
 		}
-		printf("%s", self->name);
+		text_printf("%s", self->name);
 	}
 }
 

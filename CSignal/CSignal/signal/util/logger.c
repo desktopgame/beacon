@@ -123,17 +123,12 @@ static void sg_log_impl(log_level level, const char* filename, int lineno, const
 #define LEN 100
 	va_list ap;
 	va_start(ap, source);
-#ifdef _MSC_VER
 	//ソース文字列をフォーマットする
 	char buff[LEN];
-	int res = sprintf_s(buff, LEN, source, ap);
-#else
-	char buff[LEN];
-	int res = sprintf(buff, source, ap);
-#endif
+	int res = text_sprintf(buff, LEN, source, ap);
 	//フォーマット失敗
 	if (res == -1) {
-		printf("internal error: %s %d %s", filename, lineno, source);
+		text_printf("internal error: %s %d %s", filename, lineno, source);
 		//現在開いているファイルがあるなら書き出す
 		if (logger_fp != NULL) {
 			//rewind(logger_fp);
@@ -145,10 +140,10 @@ static void sg_log_impl(log_level level, const char* filename, int lineno, const
 	} else {
 		sg_pretty_paint_start(level);
 		sg_print_loglevel(level);
-		printf(buff);
-		printf(" [");
-		printf("%s %d", filename, lineno);
-		printf("]");
+		text_printf(buff);
+		text_printf(" [");
+		text_printf("%s %d", filename, lineno);
+		text_printf("]");
 		sg_pretty_paint_stop();
 		//現在開いているファイルがあるなら書き出す
 		if (logger_fp != NULL) {
@@ -181,7 +176,7 @@ static char* sg_unique_name() {
 		return NULL;
 	}
 	char buff[200];
-	errno_t e2 = sprintf_s(
+	errno_t e2 = text_sprintf(
 		buff, 
 		200, 
 		"log(%d-%d-%d).txt",
@@ -208,19 +203,19 @@ static char* sg_unique_name() {
 static void sg_print_loglevel(log_level level) {
 	switch (level) {
 		case log_debug:
-			printf("debug: ");
+			text_printf("debug: ");
 			break;
 		case log_info:
-			printf("info: ");
+			text_printf("info: ");
 			break;
 		case log_warn:
-			printf("warn: ");
+			text_printf("warn: ");
 			break;
 		case log_error:
-			printf("error: ");
+			text_printf("error: ");
 			break;
 		case log_fatal:
-			printf("fatal: ");
+			text_printf("fatal: ");
 			break;
 		default:
 			break;

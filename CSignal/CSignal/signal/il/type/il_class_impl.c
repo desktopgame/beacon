@@ -50,7 +50,7 @@ void il_class_add_method(il_class * self, il_method * m) {
 
 void il_class_dump(il_class * self, int depth) {
 	text_putindent(depth);
-	printf("class %s", self->name);
+	text_printf("class %s", self->name);
 	text_putline();
 	//ここでは親クラスとインターフェースをごちゃまぜで表示
 	for (int i = 0; i < self->extend_list->length; i++) {
@@ -78,7 +78,7 @@ void il_class_delete(il_class * self) {
 	if (self == NULL) {
 		return;
 	}
-	//printf("free class %s\n", self->name);
+	//text_printf("free class %s\n", self->name);
 	MEM_FREE(self->name);
 	//MEM_FREE(self->super);
 	vector_delete(self->field_list, il_class_field_delete);

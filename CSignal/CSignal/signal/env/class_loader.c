@@ -125,48 +125,37 @@ void class_loader_delete(class_loader * self) {
 void class_loader_error(class_loader* self, const char* message) {
 	self->errorMessage = text_strdup(message);
 	self->error = true;
-	printf("%s", message);
+	text_printf("%s", message);
 	text_putline();
 }
 
 void class_loader_errorf(class_loader* self, const char* message, ...) {
 	va_list ap;
 	va_start(ap, message);
-#if defined(_MSC_VER)
 	char buff[100];
-	int res = sprintf_s(buff, 100, message, ap);
+	int res = text_sprintf(buff, 100, message, ap);
 	if (res == -1) {
 		//on error
-		printf("internal error: %s %d", __FILE__, __LINE__);
+		text_printf("internal error: %s %d", __FILE__, __LINE__);
 	} else {
 		class_loader_error(self, buff);
 	}
-#else
-	char buff[100];
-	int res = sprintf(buff, message, ap);
-	if(res == -1) {
-		//on error
-		printf("internal error: %s %d", __FILE__, __LINE__);
-	} else {
-		class_loader_error(self, buff);
-	}
-#endif
 	va_end(ap);
 }
 /*
 void class_link_print(class_link link) {
 	switch (link) {
 		case classlink_pending:
-			printf("pending");
+			text_printf("pending");
 			break;
 		case classlink_resume:
-			printf("resume");
+			text_printf("resume");
 			break;
 		case classlink_unlinked:
-			printf("unlinked");
+			text_printf("unlinked");
 			break;
 		case classlink_linked:
-			printf("linked");
+			text_printf("linked");
 			break;
 		default:
 			break;

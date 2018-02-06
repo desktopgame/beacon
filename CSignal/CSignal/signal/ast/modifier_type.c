@@ -15,20 +15,20 @@ bool modifier_is_native(modifier_type type) {
 
 void modifier_print(modifier_type type) {
 	if (type == (modifier_static | modifier_native)) {
-		printf("static native");
+		text_printf("static native");
 		return;
 	}
 	switch (type) {
 		case modifier_none:
-			printf("none");
+			text_printf("none");
 			break;
 
 		case modifier_static:
-			printf("static");
+			text_printf("static");
 			break;
 
 		case modifier_native:
-			printf("native");
+			text_printf("native");
 			break;
 
 		default:

@@ -20,7 +20,7 @@ void il_stmt_continue_load(void * empty, enviroment * env, il_ehandler* eh) {
 
 void il_stmt_continue_dump(void * empty, int depth) {
 	text_putindent(depth);
-	printf("continue");
+	text_printf("continue");
 	text_putline();
 }
 

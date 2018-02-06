@@ -17,7 +17,7 @@ il_argument * il_argument_new() {
 
 void il_argument_dump(il_argument * self, int depth) {
 	text_putindent(depth);
-	printf("argument");
+	text_printf("argument");
 	text_putline();
 	il_factor_dump(self->factor, depth + 1);
 }

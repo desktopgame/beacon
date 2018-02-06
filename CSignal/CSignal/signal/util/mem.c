@@ -40,7 +40,7 @@ void mem_dec() {
 void mem_check() {
 #ifdef DEBUG
 	if (allocCount > 0) {
-		printf("detected of memory leaks: %d", allocCount);
+		text_printf("detected of memory leaks: %d", allocCount);
 	}
 #endif
 }

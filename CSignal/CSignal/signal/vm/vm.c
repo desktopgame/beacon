@@ -489,7 +489,7 @@ void vm_execute(vm* self, enviroment* env) {
 			case op_printi:
 			{
 				int i = SPI(self);
-				printf("int: %d\n", i);
+				text_printf("int: %d\n", i);
 				INFO("printi");
 				break;
 			}
@@ -497,7 +497,7 @@ void vm_execute(vm* self, enviroment* env) {
 			case op_printd:
 			{
 				double d = SPD(self);
-				printf("double: %f\n", d);
+				text_printf("double: %f\n", d);
 				INFO("printd");
 				break;
 			}
@@ -505,7 +505,7 @@ void vm_execute(vm* self, enviroment* env) {
 			case op_prints:
 			{
 				char* s = SPS(self);
-				printf("string: %s\n", s);
+				text_printf("string: %s\n", s);
 				INFO("prints");
 				break;
 			}
@@ -614,8 +614,8 @@ void vm_uncaught(vm * self, enviroment* env, int pc) {
 	if (lr != NULL) {
 		line = lr->lineno;
 	}
-	printf("file: %s <%d>", env->context_cll->filename, line);
-	printf("\n");
+	text_printf("file: %s <%d>", env->context_cll->filename, line);
+	text_printf("\n");
 }
 
 void vm_delete(vm * self) {

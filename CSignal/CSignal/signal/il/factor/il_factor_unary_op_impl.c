@@ -35,10 +35,10 @@ void il_factor_unary_op_dump(il_factor_unary_op * self, int depth) {
 	text_putindent(depth);
 	switch (self->type) {
 		case ilunary_not:
-			printf("!");
+			text_printf("!");
 			break;
 		case ilunary_neg:
-			printf("-");
+			text_printf("-");
 			break;
 		default:
 			break;

@@ -5,202 +5,202 @@
 int opcode_print(vector* source, int index) {
 	vector_item e = vector_at(source, index);
 	opcode code = (opcode)e;
-	printf("%d: ", index);
+	text_printf("%d: ", index);
 	switch (code) {
 		//int & int
 		case op_iadd:
-			printf("iadd");
+			text_printf("iadd");
 			break;
 		case op_isub:
-			printf("isub");
+			text_printf("isub");
 			break;
 		case op_imul:
-			printf("imul");
+			text_printf("imul");
 			break;
 		case op_idiv:
-			printf("idiv");
+			text_printf("idiv");
 			break;
 		case op_imod:
-			printf("imod");
+			text_printf("imod");
 			break;
 		case op_ibit_or:
-			printf("ibit or");
+			text_printf("ibit or");
 			break;
 		case op_ilogic_or:
-			printf("ilogic or");
+			text_printf("ilogic or");
 			break;
 		case op_ibit_and:
-			printf("ibit and");
+			text_printf("ibit and");
 			break;
 		case op_ilogic_and:
-			printf("ilogic and");
+			text_printf("ilogic and");
 			break;
 		case op_ieq:
-			printf("ieq");
+			text_printf("ieq");
 			break;
 		case op_inoteq:
-			printf("inoteq");
+			text_printf("inoteq");
 			break;
 		case op_igt:
-			printf("igt");
+			text_printf("igt");
 			break;
 		case op_ige:
-			printf("ige");
+			text_printf("ige");
 			break;
 		case op_ilt:
-			printf("ilt");
+			text_printf("ilt");
 			break;
 		case op_ile:
-			printf("ile");
+			text_printf("ile");
 			break;
 		//double & double
 		case op_dadd:
-			printf("dadd");
+			text_printf("dadd");
 			break;
 		case op_dsub:
-			printf("dsub");
+			text_printf("dsub");
 			break;
 		case op_dmul:
-			printf("mul");
+			text_printf("mul");
 			break;
 		case op_ddiv:
-			printf("ddiv");
+			text_printf("ddiv");
 			break;
 		case op_dmod:
-			printf("dmod");
+			text_printf("dmod");
 			break;
 		case op_deq:
-			printf("deq");
+			text_printf("deq");
 			break;
 		case op_dnoteq:
-			printf("dnoteq");
+			text_printf("dnoteq");
 			break;
 		case op_dgt:
-			printf("dgt");
+			text_printf("dgt");
 			break;
 		case op_dge:
-			printf("dge");
+			text_printf("dge");
 			break;
 		case op_dlt:
-			printf("dlt");
+			text_printf("dlt");
 			break;
 		case op_dle:
-			printf("dle");
+			text_printf("dle");
 			break;
 		case op_ineg:
-			printf("ineg");
+			text_printf("ineg");
 			break;
 		case op_dneg:
-			printf("dneg");
+			text_printf("dneg");
 			break;
 		case op_bnot:
-			printf("bnot");
+			text_printf("bnot");
 			break;
 		case op_bbit_or:
-			printf("bbit_or");
+			text_printf("bbit_or");
 			break;
 		case op_blogic_or:
-			printf("blogic_or");
+			text_printf("blogic_or");
 			break;
 		case op_bbit_and:
-			printf("bbit_and");
+			text_printf("bbit_and");
 			break;
 		case op_blogic_and:
-			printf("blogic_and");
+			text_printf("blogic_and");
 			break;
 		//push const
 		case op_consti:
 		{
 			int a = vector_at(source, ++index);
-			printf("push consti(%d)", a);
+			text_printf("push consti(%d)", a);
 			break;
 		}
 		case op_constd:
 		{
 			int a = vector_at(source, ++index);
-			printf("push constd(%d)", a);
+			text_printf("push constd(%d)", a);
 			break;
 		}
 		case op_constc:
 		{
 			int a = vector_at(source, ++index);
-			printf("push constc(%d)", a);
+			text_printf("push constc(%d)", a);
 			break;
 		}
 		case op_consts:
 		{
 			int a = vector_at(source, ++index);
-			printf("push consts(%d)", a);
+			text_printf("push consts(%d)", a);
 			break;
 		}
 		case op_true:
 		{
-			printf("true");
+			text_printf("true");
 			break;
 		}
 		case op_false:
 		{
-			printf("false");
+			text_printf("false");
 			break;
 		}
 		case op_null:
 		{
-			printf("null");
+			text_printf("null");
 			break;
 		}
 		case op_dup:
 		{
-			printf("dup");
+			text_printf("dup");
 			break;
 		}
 		case op_pop:
 		{
-			printf("pop");
+			text_printf("pop");
 			break;
 		}
 		case op_nop:
 		{
-			printf("nop");
+			text_printf("nop");
 			break;
 		}
 		//store,load
 		case op_put_field:
 		{
 			int a = (int)vector_at(source, ++index);
-			printf("put field(%d)", a);
+			text_printf("put field(%d)", a);
 			break;
 		}
 		case op_get_field:
 		{
 			//int a = (int)vector_at(source, ++index);
 			int b = (int)vector_at(source, ++index);
-			printf("get field(%d)", b);
+			text_printf("get field(%d)", b);
 			break;
 		}
 		case op_put_static:
 		{
 			int a = (int)vector_at(source, ++index);
 			int b = (int)vector_at(source, ++index);
-			printf("put static(%d %d)", a, b);
+			text_printf("put static(%d %d)", a, b);
 			break;
 		}
 		case op_get_static:
 		{
 			int a = (int)vector_at(source, ++index);
 			int b = (int)vector_at(source, ++index);
-			printf("get static(%d %d)", a, b);
+			text_printf("get static(%d %d)", a, b);
 			break;
 		}
 		case op_store:
 		{
 			int a = (int)vector_at(source, ++index);
-			printf("store %d", a);
+			text_printf("store %d", a);
 			break;
 		}
 		case op_load:
 		{
 			int a = (int)vector_at(source, ++index);
-			printf("load %d", a);
+			text_printf("load %d", a);
 			break;
 		}
 		//invoke
@@ -208,154 +208,154 @@ int opcode_print(vector* source, int index) {
 		{
 			int a = (int)vector_at(source, ++index);
 			int b = (int)vector_at(source, ++index);
-			printf("chain this(%d %d)", a, b);
+			text_printf("chain this(%d %d)", a, b);
 			break;
 		}
 		case op_chain_super:
 		{
 			int a = (int)vector_at(source, ++index);
 			int b = (int)vector_at(source, ++index);
-			printf("chain super(%d %d)", a, b);
+			text_printf("chain super(%d %d)", a, b);
 			break;
 		}
 		case op_new_object:
 		{
-			printf("new object");
+			text_printf("new object");
 			break;
 		}
 		case op_alloc_field:
 		{
 			int a = (int)vector_at(source, ++index);
-			printf("alloc field(%d)", a);
+			text_printf("alloc field(%d)", a);
 			break;
 		}
 		case op_new_instance:
 		{
 			int a = (int)vector_at(source, ++index);
 			int b = (int)vector_at(source, ++index);
-			printf("new instance(%d %d)", a, b);
+			text_printf("new instance(%d %d)", a, b);
 			break;
 		}
 		case op_this:
 		{
-			printf("this");
+			text_printf("this");
 			break;
 		}
 		case op_super:
 		{
-			printf("super");
+			text_printf("super");
 			break;
 		}
 		case op_lookup:
 		{
 			int a = (int)vector_at(source, ++index);
-			printf("lookup %d", a);
+			text_printf("lookup %d", a);
 			break;
 		}
 		case op_invokevirtual:
 		{
 			int a = (int)vector_at(source, ++index);
-			printf("invoke virtual(%d)", a);
+			text_printf("invoke virtual(%d)", a);
 			break;
 		}
 		case op_invokestatic:
 		{
 			int a = (int)vector_at(source, ++index);
 			int b = (int)vector_at(source, ++index);
-			printf("invoke static(%d %d)", a, b);
+			text_printf("invoke static(%d %d)", a, b);
 			break;
 		}
 		case op_invokespecial:
 		{
 			int a = (int)vector_at(source, ++index);
-			printf("invoke special(%d)", a);
+			text_printf("invoke special(%d)", a);
 			break;
 		}
 		case op_invokeinterface:
 		{
-			printf("invoke interface");
+			text_printf("invoke interface");
 			break;
 		}
 		case op_return:
 		{
-			printf("return");
+			text_printf("return");
 			break;
 		}
 		case op_throw:
 		{
-			printf("throw");
+			text_printf("throw");
 			//int a = (int)vector_at(source, ++index);
 			break;
 		}
 		case op_try_enter:
 		{
-			printf("try enter");
+			text_printf("try enter");
 			break;
 		}
 		case op_try_exit:
 		{
-			printf("try exit");
+			text_printf("try exit");
 			break;
 		}
 		case op_try_clear:
 		{
-			printf("try clear");
+			text_printf("try clear");
 			break;
 		}
 		case op_hexception:
 		{
-			printf("hexception");
+			text_printf("hexception");
 			break;
 		}
 		case op_instanceof:
 		{
 			int a = (int)vector_at(source, ++index);
-			printf("instanceof(%d)", a);
+			text_printf("instanceof(%d)", a);
 			break;
 		}
 		//debug
 		case op_printi:
 		{
-			printf("printi");
+			text_printf("printi");
 			break;
 		}
 		case op_printd:
 		{
-			printf("printd");
+			text_printf("printd");
 			break;
 		}
 		case op_prints:
 		{
-			printf("prints");
+			text_printf("prints");
 			break;
 		}
 		case op_breakpoint:
 		{
-			printf("breakpoint");
+			text_printf("breakpoint");
 			break;
 		}
 		//goto
 		case op_goto:
 		{
 			label* l = (label*)vector_at(source, ++index);
-			printf("goto(%d)", l->cursor);
+			text_printf("goto(%d)", l->cursor);
 			break;
 		}
 		case op_goto_if_true:
 		{
 			label* l = (label*)vector_at(source, ++index);
-			printf("goto if true(%d)", l->cursor);
+			text_printf("goto if true(%d)", l->cursor);
 			break;
 		}
 		case op_goto_if_false:
 		{
 			label* l = (label*)vector_at(source, ++index);
-			printf("goto if false(%d)", l->cursor);
+			text_printf("goto if false(%d)", l->cursor);
 			break;
 		}
 		default:
 		{
-			printf("not implemented");
+			text_printf("not implemented");
 			break;
 		}
 	}

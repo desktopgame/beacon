@@ -28,7 +28,7 @@ il_factor_static_field_access * il_factor_static_field_access_new(const char* na
 
 void il_factor_static_field_access_dump(il_factor_static_field_access * self, int depth) {
 	text_putindent(depth);
-	printf("static field access(%s.%s)",type_name(self->f->parent), self->f->name);
+	text_printf("static field access(%s.%s)",type_name(self->f->parent), self->f->name);
 	text_putline();
 }
 

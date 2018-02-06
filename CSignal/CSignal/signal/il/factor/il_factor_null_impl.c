@@ -6,7 +6,7 @@
 
 void il_factor_null_dump(void * empty, int depth) {
 	text_putindent(depth);
-	printf("null");
+	text_printf("null");
 	text_putline();
 }
 

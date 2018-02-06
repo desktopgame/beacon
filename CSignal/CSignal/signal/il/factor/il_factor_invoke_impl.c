@@ -33,7 +33,7 @@ il_factor_invoke * il_factor_invoke_new(const char * name) {
 
 void il_factor_invoke_dump(il_factor_invoke * self, int depth) {
 	text_putindent(depth);
-	printf("invoke %s", self->name);
+	text_printf("invoke %s", self->name);
 	text_putline();
 	il_factor_dump(self->receiver, depth + 1);
 	for (int i = 0; i < self->argument_list->length; i++) {

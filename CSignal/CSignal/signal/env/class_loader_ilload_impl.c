@@ -67,29 +67,29 @@ void class_loader_ilload_import(class_loader* self, ast* import_decl) {
 	ast* path = ast_first(import_decl);
 	il_import* ret = il_import_new(path->u.string_value);
 	vector_push(self->il_code->import_list, (vector_item)ret);
-	//printf("import %s\n", path->u.string_value);
+	//text_printf("import %s\n", path->u.string_value);
 }
 
 void class_loader_ilload_namespace(class_loader* self, vector* parent, ast* namespace_decl) {
 	assert(namespace_decl->tag == ast_namespace_decl);
-	//printf("namespace");
+	//text_printf("namespace");
 	ast* namespace_path = ast_first(namespace_decl);
 	ast* namespace_body = ast_second(namespace_decl);
 	il_namespace* iln = class_loader_ilload_ast_to_namespace(namespace_path);
 	il_namespace* top = il_namespace_root(iln);
-	//printf("%s", top->name);
+	//text_printf("%s", top->name);
 	vector_push(parent, top);
 	class_loader_ilload_namespace_path_recursive(self, namespace_path, namespace_body);
-	//printf("\n");
+	//text_printf("\n");
 	class_loader_ilload_namespace_body(self, iln, iln->namespace_list, namespace_body);
-	//printf("\n");
+	//text_printf("\n");
 }
 
 void class_loader_ilload_namespace_path_recursive(class_loader* self, ast* namespace_path, ast* namespace_body) {
 	assert(namespace_path->tag == ast_namespace_path ||
 		   namespace_path->tag == ast_namespace_path_list);
 	if (namespace_path->tag == ast_namespace_path) {
-	//	printf(" %s", namespace_path->u.string_value);
+	//	text_printf(" %s", namespace_path->u.string_value);
 	} else if (namespace_path->tag == ast_namespace_path_list) {
 		for (int i = 0; i < namespace_path->childCount; i++) {
 			class_loader_ilload_namespace_path_recursive(self, ast_at(namespace_path, i), namespace_body);
@@ -101,7 +101,7 @@ il_namespace* class_loader_ilload_ast_to_namespace(ast* a) {
 	assert(a->tag == ast_namespace_path ||
 	       a->tag == ast_namespace_path_list);
 	if(a->tag == ast_namespace_path) {
-		//printf("-  %s", a->u.string_value);
+		//text_printf("-  %s", a->u.string_value);
 		//text_putline();
 		il_namespace* ret = il_namespace_new(a->u.string_value);
 		return ret;
@@ -129,7 +129,7 @@ void class_loader_ilload_namespace_body(class_loader* self, il_namespace* curren
 		class_loader_ilload_namespace(self, parent, namespace_body);
 		//namespace xxx { class yyy { ...
 	} else if (namespace_body->tag == ast_class_decl) {
-		//printf("class decl\n");
+		//text_printf("class decl\n");
 		class_loader_ilload_class(self, current, namespace_body);
 		//namespace xxx { interface yyy { ...
 	} else if (namespace_body->tag == ast_interface_decl) {
@@ -717,9 +717,9 @@ static il_factor* class_loader_ilload_factorImpl(class_loader* self, ast* source
 }
 
 static il_stmt* class_loader_ilload_bodyImpl(class_loader* self, ast* source) {
-	//printf("    ");
+	//text_printf("    ");
 	//ast_print(source);
-	//printf("\n");
+	//text_printf("\n");
 	switch (source->tag) {
 		case ast_stmt:
 		{

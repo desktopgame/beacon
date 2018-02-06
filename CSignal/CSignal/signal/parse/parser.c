@@ -134,17 +134,17 @@ void parser_print_error(parser * p) {
 	}
 	//system("cls");
 	//put filename
-	printf("file=%s ", p->source_name);
+	text_printf("file=%s ", p->source_name);
 	//put line
-	printf("line=%d ", p->errorLineIndex);
+	text_printf("line=%d ", p->errorLineIndex);
 	//put column
-	printf("column=%d", p->errorColumnIndex);
+	text_printf("column=%d", p->errorColumnIndex);
 	text_putline();
 	//put str
-	printf("%s", p->errorMessage);
+	text_printf("%s", p->errorMessage);
 	text_putline();
 	//put line
-	printf("%s", p->errorLineText);
+	text_printf("%s", p->errorLineText);
 	text_putline();
 	fflush(stdout);
 	MEM_FREE(p->errorMessage);

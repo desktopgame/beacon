@@ -8,7 +8,7 @@
 
 void il_factor_super_dump(il_factor_super * self, int depth) {
 	text_putindent(depth);
-	printf("super");
+	text_printf("super");
 	text_putline();
 }
 

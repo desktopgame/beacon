@@ -25,16 +25,16 @@ void test_stack(void) {
 #if defined(_MSC_VER)
 	stack* st = stack_new();
 	for (int i = 1; i < 4; i++) {
-		printf("%d\n", i * 10);
+		text_printf("%d\n", i * 10);
 		stack_push(st, (stack_item)(i * 10));
 	}
-	printf("pop\n");
+	text_printf("pop\n");
 	while (!stack_empty(st)) {
 		//FIXME:macではここがコンパイル出来ない
-		printf("%d ", stack_empty(st));
+		text_printf("%d ", stack_empty(st));
 		int i = (int)stack_pop(st);
-		printf("%d", i);
-		printf(" %d\n", stack_empty(st));
+		text_printf("%d", i);
+		text_printf(" %d\n", stack_empty(st));
 	}
 	stack_delete(st, stack_deleter_null);
 #endif
@@ -44,13 +44,13 @@ void test_list(void) {
 #if defined(_MSC_VER)
 	list* li = list_new();
 	for (int i = 1; i < 4; i++) {
-		printf("%d\n", i * 10);
+		text_printf("%d\n", i * 10);
 		list_add(li, (stack_item)(i * 10));
 	}
-	printf("at\n");
+	text_printf("at\n");
 	for (int i = 0; i < 3; i++) {
 		//FIXME:macではここがコンパイル出来ない
-		printf("%d\n", (int)list_at(li, i));
+		text_printf("%d\n", (int)list_at(li, i));
 	}
 	list_delete(li, list_deleter_null);
 #endif
@@ -100,7 +100,7 @@ void test_tree_map(void) {
 	int arrCount = 6;
 	for (int i = 0; i < arrCount; i++) {
 		//FIXME:macではここがコンパイル出来ない
-		printf("%s = %d\n", arr[i], (int)tree_map_get(m, arr[i]));
+		text_printf("%s = %d\n", arr[i], (int)tree_map_get(m, arr[i]));
 	}
 	tree_map_delete(m, tree_map_deleter_null);
 #endif
@@ -168,7 +168,7 @@ void test_struct(void) {
 		o[i].index = i;
 	}
 	for (int i = 0; i < 10; i++) {
-		printf("index %d", (o + i)->index);
+		text_printf("index %d", (o + i)->index);
 	}
 	MEM_FREE(o);
 }
@@ -181,26 +181,26 @@ void test_vector(void) {
 	}
 	for (int i = 0; i < v->length; i++) {
 		int e = (int)vector_at(v, i);
-		printf("vector[%d] = %d\n", i, e);
+		text_printf("vector[%d] = %d\n", i, e);
 	}
 	vector_delete(v, vector_deleter_null);
-	printf("\n");
+	text_printf("\n");
 
 	vector* v2 = vector_new();
 	for (int i = 0; i < 20; i++) {
 		PERSON* p = (PERSON*)MEM_MALLOC(sizeof(PERSON));
 		char buff[100];
-		int x = sprintf_s(buff, 100, "name %d", i);
+		int x = text_sprintf(buff, 100, "name %d", i);
 		p->name = text_strdup(buff);
 		p->age = (i * 5);
 		vector_push(v2, p);
-//		printf("%p\n", x);
+//		text_printf("%p\n", x);
 //		perror("%p");
 	}
 	for (int i = 0; i < v2->length; i++) {
 		vector_item e = vector_at(v2, i);
 		PERSON* p = (PERSON*)e;
-		printf("person[%d] = %s %d\n", i, p->name, p->age);
+		text_printf("person[%d] = %s %d\n", i, p->name, p->age);
 	}
 	vector_delete(v2, person_free);
 #endif
@@ -213,15 +213,15 @@ void test_vector2(void) {
 	vector_push(v, 30);
 	//出力テスト
 	for (int i = 0; i < v->length; i++) {
-		printf("%d\n", vector_at(v, i));
+		text_printf("%d\n", vector_at(v, i));
 	}
-	printf("\n");
+	text_printf("\n");
 	vector_insert(v, 3, 5);
 	//出力テスト
 	for (int i = 0; i < v->length; i++) {
-		printf("%d\n", vector_at(v, i));
+		text_printf("%d\n", vector_at(v, i));
 	}
-	printf("\n");
+	text_printf("\n");
 }
 
 void test_vector3(void) {
@@ -231,15 +231,15 @@ void test_vector3(void) {
 	vector_push(v, 30);
 	//出力テスト
 	for (int i = 0; i < v->length; i++) {
-		printf("%d\n", vector_at(v, i));
+		text_printf("%d\n", vector_at(v, i));
 	}
-	printf("\n");
+	text_printf("\n");
 	vector_remove(v, 2);
 	//出力テスト
 	for (int i = 0; i < v->length; i++) {
-		printf("%d\n", vector_at(v, i));
+		text_printf("%d\n", vector_at(v, i));
 	}
-	printf("\n");
+	text_printf("\n");
 }
 
 void test_vector4(void) {
@@ -269,7 +269,7 @@ void test_vm(void) {
 	//実行
 	vm_execute(vm, env);
 	int res = (int)vector_top(vm->value_stack);
-	printf("res = %d\n", res);
+	text_printf("res = %d\n", res);
 	enviroment_delete(env);
 	vm_delete(vm);
 }
@@ -308,11 +308,11 @@ void test_string_table(void) {
 	int d = string_table_index(st, "x");
 	int e = string_table_index(st, "t");
 
-	printf("[%d] = %s\n", a, string_table_string(st, a));
-	printf("[%d] = %s\n", b, string_table_string(st, b));
-	printf("[%d] = %s\n", c, string_table_string(st, c));
-	printf("[%d] = %s\n", d, string_table_string(st, d));
-	printf("[%d] = %s\n", e, string_table_string(st, e));
+	text_printf("[%d] = %s\n", a, string_table_string(st, a));
+	text_printf("[%d] = %s\n", b, string_table_string(st, b));
+	text_printf("[%d] = %s\n", c, string_table_string(st, c));
+	text_printf("[%d] = %s\n", d, string_table_string(st, d));
+	text_printf("[%d] = %s\n", e, string_table_string(st, e));
 	*/
 }
 
@@ -328,10 +328,10 @@ void test_props(void) {
 	props_puts(p, "string", "aaa");
 	props_puts(p, "string", "aaaxxxx");
 
-	printf("int=%d\n", props_geti(p, "int", 0));
-	printf("double=%f\n", props_getd(p, "double", 0));
-	printf("char=%c\n", props_getc(p, "char", 'd'));
-	printf("string=%s\n", props_gets(p, "string", "ddd"));
+	text_printf("int=%d\n", props_geti(p, "int", 0));
+	text_printf("double=%f\n", props_getd(p, "double", 0));
+	text_printf("char=%c\n", props_getc(p, "char", 'd'));
+	text_printf("string=%s\n", props_gets(p, "string", "ddd"));
 	props_delete(p);
 }
 

@@ -22,13 +22,13 @@ il_enum * il_enum_new(const char * name) {
 
 void il_enum_dump(il_enum * self, int depth) {
 	text_putindent(depth);
-	printf("enum %s", self->name);
+	text_printf("enum %s", self->name);
 	text_putline();
 	for (int i = 0; i < self->item_vec->length; i++) {
 		char* str = (char*)vector_at(self->item_vec, i);
 
 		text_putindent(depth + 1);
-		printf("%s", str);
+		text_printf("%s", str);
 		text_putline();
 	}
 }

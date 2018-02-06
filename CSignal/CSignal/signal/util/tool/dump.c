@@ -14,13 +14,13 @@ void cmd_tool_dump(dump_option * option) {
 	}
 	//system("cls");
 	//対象を出力
-	printf("対象: %s", option->filename);
+	text_printf("対象: %s", option->filename);
 	text_putline();
 	//オプションを出力
-	printf("オプション: ");
-	if (option->ast) { printf("ast "); }
-	if (option->il) { printf("il "); }
-	if (option->sg) { printf("sg "); }
+	text_printf("オプション: ");
+	if (option->ast) { text_printf("ast "); }
+	if (option->il) { text_printf("il "); }
+	if (option->sg) { text_printf("sg "); }
 	text_putline();
 	ast_print_tree(p->root);
 	parser_pop();

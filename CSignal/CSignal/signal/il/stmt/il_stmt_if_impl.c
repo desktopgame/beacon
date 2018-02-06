@@ -50,7 +50,7 @@ void il_stmt_elif_list_push(vector * self, il_stmt_elif * child) {
 
 void il_stmt_if_dump(il_stmt_if * self, int depth) {
 	text_putindent(depth);
-	printf("if");
+	text_printf("if");
 	text_putline();
 	il_factor_dump(self->condition, depth + 1);
 	//ステートメントの一覧をダンプ
@@ -64,7 +64,7 @@ void il_stmt_if_dump(il_stmt_if * self, int depth) {
 		vector_item e = vector_at(self->elif_list, i);
 		il_stmt_elif* elif = (il_stmt_elif*)e;
 		text_putindent(depth);
-		printf("elif");
+		text_printf("elif");
 		text_putline();
 		il_factor_dump(elif->condition, depth + 1);
 		for (int i = 0; i < elif->body->length; i++) {
@@ -75,7 +75,7 @@ void il_stmt_if_dump(il_stmt_if * self, int depth) {
 	}
 	
 	text_putindent(depth + 1);
-	printf("else");
+	text_printf("else");
 	text_putline();
 	//ステートメントの一覧をダンプ
 	for (int i = 0; i < self->else_body->body->length; i++) {

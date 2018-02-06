@@ -20,7 +20,7 @@ il_stmt_throw* il_stmt_throw_new() {
 
 void il_stmt_throw_dump(il_stmt_throw* self, int depth) {
 	text_putindent(depth);
-	printf("throw");
+	text_printf("throw");
 	text_putline();
 	il_factor_dump(self->fact, depth + 1);
 }

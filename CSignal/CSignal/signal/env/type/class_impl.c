@@ -117,19 +117,19 @@ void class_add_constructor(class_ * self, constructor * c) {
 
 void class_dump(class_ * self, int depth) {
 	text_putindent(depth);
-	printf("class %s", self->name);
+	text_printf("class %s", self->name);
 	text_putline();
 	//親クラスがあるなら表示
 	if (self->super_class != NULL) {
 		text_putindent(depth + 1);
-		printf("super %s", self->super_class->name);
+		text_printf("super %s", self->super_class->name);
 		text_putline();
 	}
 	//実装インターフェースがあるなら表示
 	for (int i = 0; i < self->impl_list->length; i++) {
 		interface_* inter = (interface_*)vector_at(self->impl_list, i);
 		text_putindent(depth + 1);
-		printf("impl %s", inter->name);
+		text_printf("impl %s", inter->name);
 		text_putline();
 	}
 	//フィールドの一覧をダンプ

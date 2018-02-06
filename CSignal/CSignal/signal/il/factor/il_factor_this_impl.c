@@ -7,7 +7,7 @@
 
 void il_factor_this_dump(il_factor_this * self, int depth) {
 	text_putindent(depth);
-	printf("this");
+	text_printf("this");
 	text_putline();
 }
 

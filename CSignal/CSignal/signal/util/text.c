@@ -12,22 +12,35 @@ static char* text_strclone(const char* source);
 
 void text_putline() {
 #if defined(_WIN32)
-	printf("\n");
+	text_printf("\n");
 #else
-	printf("\n");
+	text_printf("\n");
 #endif // defined(_WIN32)
 }
 
 void text_putb(bool b) {
-	printf("%s", (b ? "true" : "false"));
+	text_printf("%s", (b ? "true" : "false"));
 }
 
 int text_printf(const char * message, ...) {
 	va_list ap;
 	va_start(ap, message);
 
-	printf(message, ap);
+	int res = vprintf(message, ap);
 
+	va_end(ap);
+	return res;
+}
+
+int text_sprintf(char * block, size_t blockSize, char * message, ...) {
+	va_list ap;
+	va_start(ap, message);
+	int res = 0;
+#if defined(_MSC_VER)
+	res = vsprintf_s(block, blockSize, message, ap);
+#else
+	res = vsprintf(block, message, ap);
+#endif
 	va_end(ap);
 	return 0;
 }
@@ -35,18 +48,18 @@ int text_printf(const char * message, ...) {
 void text_printfln(const char * message, ...) {
 	va_list ap;
 	va_start(ap, message);
-	printf(message, ap);
+	text_printf(message, ap);
 #if defined(_MSC_VER)
-	printf("\n");
+	text_printf("\n");
 #else
-	printf("\r\n");
+	text_printf("\r\n");
 #endif
 	va_end(ap);
 }
 
 void text_putindent(int depth) {
 	for(int i=0; i<depth; i++) {
-		printf("    ");
+		text_printf("    ");
 	}
 }
 
@@ -105,7 +118,7 @@ char * text_concat(const char * a, const char * b) {
 }
 
 char * text_lineat(const char * src, int lineno) {
-	printf("%s", src);
+	text_printf("%s", src);
 	//return NULL;
 	int len = strlen(src);
 	int curLine = 0;

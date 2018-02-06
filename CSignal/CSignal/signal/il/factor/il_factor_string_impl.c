@@ -22,7 +22,7 @@ il_factor_string * il_factor_string_new(const char * name) {
 
 void il_factor_string_dump(il_factor_string * self, int depth) {
 	text_putindent(depth);
-	printf("String %s", self->value);
+	text_printf("String %s", self->value);
 	text_putline();
 }
 

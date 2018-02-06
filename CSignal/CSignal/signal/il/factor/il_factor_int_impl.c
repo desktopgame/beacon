@@ -22,7 +22,7 @@ il_factor_int * il_factor_int_new(int32_t i) {
 
 void il_factor_int_dump(il_factor_int * self, int depth) {
 	text_putindent(depth);
-	printf("Int %d", self->value);
+	text_printf("Int %d", self->value);
 	text_putline();
 }
 

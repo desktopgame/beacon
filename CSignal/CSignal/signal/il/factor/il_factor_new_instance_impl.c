@@ -33,7 +33,7 @@ il_factor_new_instance * il_factor_new_instance_new() {
 
 void il_factor_new_instance_dump(il_factor_new_instance * self, int depth) {
 	text_putindent(depth);
-	printf("new instance");
+	text_printf("new instance");
 	text_putline();
 
 	fqcn_cache_dump(self->fqcn, depth + 1);

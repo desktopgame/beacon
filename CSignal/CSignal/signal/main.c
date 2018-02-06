@@ -32,6 +32,12 @@ void _end(int argc, char* argv[]) {
 }
 
 int main(int argc, char* argv[]) {
+	text_printf("aa %s", "vvv");
+
+	char block[100];
+	text_sprintf(block, 100, "Hoge %d", 100);
+	text_printf("\n%s", block);
+
 	//test_preload();
 	//整数リテラルをオブジェクトにラップ
 	//オブジェクトにベクターを持たせて、
