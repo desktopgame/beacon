@@ -49,9 +49,14 @@ class_loader* class_loader_new() {
 	ret->import_manager = import_manager_new();
 	ret->env = enviroment_new();
 	ret->error = false;
+	ret->type_cacheVec = vector_new();
+	ret->level = 0;
 	ret->errorMessage = NULL;
 	ret->env->context_cll = ret;
 	ret->env->toplevel = true;
+	//ret->link = classlink_unlinked;
+	ret->loadDecl = false;
+	ret->loadImpl = false;
 	return ret;
 }
 
@@ -77,7 +82,7 @@ class_loader * class_loader_new_entry_point(const char * filename) {
 void class_loader_load(class_loader * self) {
 	assert(self != NULL);
 	assert(self->source_code != NULL);
-	system("cls");
+	//system("cls");
 	//ast_print_tree(self->source_code);
 	class_loader_ilload_impl(self, self->source_code);
 	if (self->error) { return; }
@@ -148,3 +153,23 @@ void class_loader_errorf(class_loader* self, const char* message, ...) {
 #endif
 	va_end(ap);
 }
+/*
+void class_link_print(class_link link) {
+	switch (link) {
+		case classlink_pending:
+			printf("pending");
+			break;
+		case classlink_resume:
+			printf("resume");
+			break;
+		case classlink_unlinked:
+			printf("unlinked");
+			break;
+		case classlink_linked:
+			printf("linked");
+			break;
+		default:
+			break;
+	}
+}
+*/

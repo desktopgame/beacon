@@ -1,6 +1,7 @@
 #include "il_factor_invoke_impl.h"
 #include <stdio.h>
 #include <stdlib.h>
+#include <assert.h>
 #include "../../util/text.h"
 #include "../../vm/enviroment.h"
 #include "../il_argument.h"
@@ -98,4 +99,5 @@ static void il_factor_invoke_find(il_factor_invoke* self, enviroment* env) {
 		&temp
 	);
 	self->methodIndex = temp;
+	assert(self->m != NULL);
 }

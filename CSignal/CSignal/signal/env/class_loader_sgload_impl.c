@@ -22,14 +22,36 @@
 //
 //sgload
 //
+#include "type_cache.h"
+#include <string.h>
+//proto
+static void class_loader_sgload_link(class_loader* self);
+static void class_loader_sgload_linkImpl(class_loader* self, type_cache* e);
+
 void class_loader_sgload_impl(class_loader* self) {
 	script_context* ctx = script_context_get_current();
 	il_top_level* iltop = self->il_code;
 	class_loader_sgload_import(self, self->il_code->import_list);
+	/*
+	if (self->link == classlink_resume) {
+		class_loader_sgload_link(self);
+	} else if (self->link == classlink_pending) {
+		class_loader_sgload_link(self);
+		self->link = classlink_linked;
+	} else if (self->link == classlink_unlinked) {
+		class_loader_sgload_namespace_list(self, self->il_code->namespace_list, NULL);
+		class_loader_sgload_link(self);
+	}
+	*/
 	class_loader_sgload_namespace_list(self, self->il_code->namespace_list, NULL);
+	class_loader_sgload_link(self);
+	class_* tp = namespace_get_class(namespace_lang(), "Exception");
+	printf("--%s \n", self->filename);
+	int i = 0;
 }
 
 void class_loader_sgload_import(class_loader* self, vector* ilimports) {
+	if (self->loadDecl || self->loadImpl) { return; }
 	script_context* ctx = script_context_get_current();
 	for (int i = 0; i < ilimports->length; i++) {
 		vector_item e = vector_at(ilimports, i);
@@ -43,9 +65,12 @@ void class_loader_sgload_import(class_loader* self, vector* ilimports) {
 		if (cll != NULL) {
 			cll->ref_count++;
 			import_manager_import(self->import_manager, cll);
+			printf("aimport %s\n", cll->filename);
 			//そのローダーが破損しているなら
 			if (cll->error) {
 				class_loader_error(self, cll->errorMessage);
+			} else {
+				class_loader_sgload_link(cll);
 			}
 			continue;
 		//新たに読みこんだなら親に設定
@@ -54,6 +79,8 @@ void class_loader_sgload_import(class_loader* self, vector* ilimports) {
 			cll->ref_count++;
 			cll->parent = self;
 			cll->type = content_lib;
+			cll->filename = fullPath;
+			printf("nimport %s\n", cll->filename);
 			import_manager_import(self->import_manager, cll);
 			tree_map_put(ctx->classLoaderMap, fullPath, cll);
 		}
@@ -66,7 +93,12 @@ void class_loader_sgload_import(class_loader* self, vector* ilimports) {
 			return;
 		}
 		//パース
+		//if (self->link == classlink_unlinked) {
+		//	self->link = classlink_pending;
+		//}
 		cll->filename = text_strdup(fullPath);
+		cll->level = (self->level + 1);
+		//cll->link = classlink_unlinked;
 		char* text = io_read_text(fullPath);
 		parser* p = parser_parse_from_source_swap(text, fullPath);
 		//パースに失敗
@@ -90,7 +122,14 @@ void class_loader_sgload_import(class_loader* self, vector* ilimports) {
 }
 
 void class_loader_sgload_namespace_list(class_loader* self, vector* ilnamespace_list, namespace_* parent) {
+	//self->link = classlink_resume;
+	if (self->loadDecl || self->loadImpl) { return; }
+	self->loadDecl = true;
 	if (self->error) { return; }
+	printf("decl %s\n", self->filename);
+	if (strstr(self->filename, "Exc")) {
+		int i = 0;
+	}
 	for (int i = 0; i < ilnamespace_list->length; i++) {
 		vector_item e = vector_at(ilnamespace_list, i);
 		il_namespace* iln = (il_namespace*)e;
@@ -195,8 +234,21 @@ void class_loader_sgload_class(class_loader* self, il_type* iltype, namespace_* 
 			cls->super_class = objClass;
 		}
 	}
-	class_loader_sgload_members(self, iltype, tp, parent);
-	///*/
+	class_loader_sgload_class_decl(self, iltype, tp, parent);
+	if (self->level == 0) {
+		class_loader_sgload_class_impl(self, iltype, tp, parent);
+	} else {
+		vector_push(self->type_cacheVec, 
+			type_cache_init(
+				type_cache_new(),
+				self,
+				iltype,
+				tp,
+				parent,
+				cachekind_class_method
+			)
+		);
+	}
 }
 
 void class_loader_sgload_interface(class_loader * self, il_type * iltype, namespace_ * parent) {
@@ -218,9 +270,21 @@ void class_loader_sgload_interface(class_loader * self, il_type * iltype, namesp
 	} else {
 		inter = tp->u.interface_;
 	}
-	class_loader_sgload_methods(self, iltype, tp, parent);
-	class_loader_sgload_complete_methods_impl(self, parent, iltype, tp, iltype->u.interface_->method_list, tp->u.interface_->method_list);
-	interface_create_vtable(inter);
+	class_loader_sgload_interface_decl(self, iltype, tp, parent);
+	if (self->level == 0) {
+		class_loader_sgload_interface_impl(self, iltype, tp, parent);
+	} else {
+		vector_push(self->type_cacheVec,
+			type_cache_init(
+				type_cache_new(),
+				self,
+				iltype,
+				tp,
+				parent,
+				cachekind_interface_method
+			)
+		);
+	}
 }
 
 void class_loader_sgload_attach_native_method(class_loader* self, il_type* ilclass, class_* classz, il_method* ilmethod, method* me) {
@@ -249,4 +313,42 @@ void class_loader_sgload_body(class_loader* self, vector* stmt_list, enviroment*
 	vector_pop(dest->namespace_vec);
 	il_ehandler_delete(eh);
 //	return ret;
+}
+
+//private
+static void class_loader_sgload_link(class_loader* self) {
+	//class_link_print(self->link);
+	//printf(" :%s ", self->filename)
+	/*;
+	if (self->link == classlink_linked) {
+		//printf("linked\n");
+		return;
+	}
+	if (self->link == classlink_pending) {
+		//printf("pending\n");
+		class_loader_sgload_import(self, self->il_code->import_list);
+		class_loader_sgload_namespace_list(self, self->il_code->namespace_list, NULL);
+		self->link = classlink_resume;
+		return;
+	}
+	*/
+	if (self->loadImpl) { return; }
+	self->loadImpl = true;
+	//resume, unlinked
+	//printf("other\n");
+	for (int i = 0; i < self->type_cacheVec->length; i++) {
+		type_cache* e = (type_cache*)vector_at(self->type_cacheVec, i);
+		class_loader_sgload_linkImpl(self, e);
+	}
+	vector_clear(self->type_cacheVec);
+	//self->link = classlink_linked;
+	printf("impl %s\n", self->filename);
+}
+
+static void class_loader_sgload_linkImpl(class_loader* self, type_cache* e) {
+	if (e->kind == cachekind_class_method) {
+		class_loader_sgload_class_impl(e->context, e->iltype, e->tp, e->scope);
+	} else if (e->kind == cachekind_interface_method) {
+		class_loader_sgload_interface_impl(e->context, e->iltype, e->tp, e->scope);
+	}
 }

@@ -55,18 +55,30 @@ static void class_loader_sgload_chain_auto(class_loader* self, il_type* iltype, 
 static void class_loader_sgload_chain_super(class_loader* self, il_type* iltype, type* tp, il_constructor* ilcons, il_constructor_chain* ilchain, enviroment* env);
 
 
-void class_loader_sgload_members(class_loader * self, il_type * iltype, type * tp, namespace_ * scope) {
+void class_loader_sgload_class_decl(class_loader * self, il_type * iltype, type * tp, namespace_ * scope) {
 	//TEST(!strcmp(type->u.class_->name, "Console"));
+	assert(tp->u.class_->method_list->length == 0);
+	assert(tp->u.class_->smethod_list->length == 0);
 	class_loader_sgload_fields(self, iltype, tp);
 	class_loader_sgload_methods(self, iltype, tp, scope);
 	class_loader_sgload_constructors(self, iltype, tp, scope);
-	//	class_linkall(cls);
-	//	class_loader_sgload_complete(self, iltype, tp);
+	class_create_vtable(tp->u.class_);	
+}
 
-	class_create_vtable(tp->u.class_);
+void class_loader_sgload_class_impl(class_loader * self, il_type * iltype, type * tp, namespace_ * scope) {
 	class_loader_sgload_complete_fields(self, iltype, tp);
 	class_loader_sgload_complete_methods(self, iltype, tp);
 	class_loader_sgload_complete_constructors(self, iltype, tp);
+}
+
+void class_loader_sgload_interface_decl(class_loader * self, il_type * iltype, type * tp, namespace_ * scope) {
+	assert(tp->u.interface_->method_list->length == 0);
+	class_loader_sgload_methods(self, iltype, tp, scope);
+}
+
+void class_loader_sgload_interface_impl(class_loader * self, il_type * iltype, type * tp, namespace_ * scope) {
+	class_loader_sgload_complete_methods_impl(self, scope, iltype, tp, iltype->u.interface_->method_list, tp->u.interface_->method_list);
+	interface_create_vtable(tp->u.interface_);
 }
 
 void class_loader_sgload_methods(class_loader* self, il_type* iltype, type* tp, namespace_* scope) {

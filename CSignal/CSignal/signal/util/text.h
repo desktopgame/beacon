@@ -23,6 +23,14 @@ void text_putline(void);
 void text_putb(bool b);
 
 /**
+ * printfへの委譲です.
+ * @param message
+ * @param ...
+ * @return
+ */
+int text_printf(const char* message, ...);
+
+/**
  * printf へ委譲したあと、
  * 改行を出力します。
  */

@@ -9,7 +9,15 @@
 #include <stdarg.h>
 #include <stdbool.h>
 struct enviroment;
+/*
+typedef enum class_link {
+	classlink_pending,
+	classlink_resume,
 
+	classlink_unlinked,
+	classlink_linked
+} class_link;
+*/
 /**
  * クラスローダーを表す構造体です.
  */
@@ -21,8 +29,13 @@ typedef struct class_loader {
 	import_manager* import_manager;
 	content_type type;
 	uint32_t ref_count;
+	vector* type_cacheVec;
+	//class_link link;
+	int level;
 	char* filename;
 	char* errorMessage;
+	bool loadDecl;
+	bool loadImpl;
 	bool error;
 } class_loader;
 
@@ -66,4 +79,6 @@ void class_loader_error(class_loader* self, const char* message);
  * @param ...
  */
 void class_loader_errorf(class_loader* self, const char* message, ...);
+
+//void class_link_print(class_link link);
 #endif // !SIGNAL_PARSER_CLASS_LOADER_H

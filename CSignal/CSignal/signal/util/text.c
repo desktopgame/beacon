@@ -22,6 +22,16 @@ void text_putb(bool b) {
 	printf("%s", (b ? "true" : "false"));
 }
 
+int text_printf(const char * message, ...) {
+	va_list ap;
+	va_start(ap, message);
+
+	printf(message, ap);
+
+	va_end(ap);
+	return 0;
+}
+
 void text_printfln(const char * message, ...) {
 	va_list ap;
 	va_start(ap, message);

@@ -11,8 +11,11 @@
 #include "type_interface.h"
 #include "type_impl.h"
 
-void class_loader_sgload_members(class_loader* self, il_type* iltype, type* tp, namespace_* scope);
+void class_loader_sgload_class_decl(class_loader* self, il_type* iltype, type* tp, namespace_* scope);
+void class_loader_sgload_class_impl(class_loader* self, il_type* iltype, type* tp, namespace_* scope);
 
+void class_loader_sgload_interface_decl(class_loader* self, il_type* iltype, type* tp, namespace_* scope);
+void class_loader_sgload_interface_impl(class_loader* self, il_type* iltype, type* tp, namespace_* scope);
 
 /**
  * インスタンス/静的メソッド宣言を読み込んでクラスに追加します.

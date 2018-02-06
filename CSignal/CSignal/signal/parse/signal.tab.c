@@ -80,8 +80,8 @@
 #include "../ast/assign_operator_type.h"
 #include "../ast/modifier_type.h"
 #include "../ast/access_level.h"
-#define YYDEBUG 1
-#define YYERROR_VERBOSE 1
+//#define YYDEBUG 1
+//#define YYERROR_VERBOSE 1
 
 
 /* Line 189 of yacc.c  */

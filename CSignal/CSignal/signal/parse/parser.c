@@ -132,7 +132,7 @@ void parser_print_error(parser * p) {
 	if (!p->fail) {
 		return;
 	}
-	system("cls");
+	//system("cls");
 	//put filename
 	printf("file=%s ", p->source_name);
 	//put line

@@ -147,13 +147,13 @@ void test_cll(void) {
 	class_loader_load(cll);
 	//il_top_level_dump(cll->il_code, 0);
 	//*
-	system("cls");
+	//system("cls");
 	//ast_print_tree(cll->source_code);
-	il_top_level_dump(cll->il_code, 0);
-	enviroment_op_dump(cll->env, 0);
-	vm* vm = vm_new();
-	vm_execute(vm, cll->env);
-	vm_delete(vm);
+	//il_top_level_dump(cll->il_code, 0);
+	//enviroment_op_dump(cll->env, 0);
+	//vm* vm = vm_new();
+	//vm_execute(vm, cll->env);
+	//vm_delete(vm);
 	//*/
 	class_loader_delete(cll);
 	/*

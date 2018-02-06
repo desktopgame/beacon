@@ -12,7 +12,7 @@ void cmd_tool_dump(dump_option * option) {
 	if (p->fail) {
 		return;
 	}
-	system("cls");
+	//system("cls");
 	//対象を出力
 	printf("対象: %s", option->filename);
 	text_putline();
