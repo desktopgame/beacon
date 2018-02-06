@@ -44,11 +44,14 @@ void text_putb(bool b) {
 int text_printf(const char * message, ...) {
 	va_list ap;
 	va_start(ap, message);
+	int res = text_vprintf(message, ap);
+	va_end(ap);
+	return res;
+}
 
+int text_vprintf(const char * message, va_list ap) {
 	text_printfdbg(message, ap);
 	int res = vprintf(message, ap);
-
-	va_end(ap);
 	return res;
 }
 

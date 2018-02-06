@@ -50,6 +50,14 @@ void text_putb(bool b);
 int text_printf(const char* message, ...);
 
 /**
+ * printfへの委譲です.
+ * @param message
+ * @param ap
+ * @return
+ */
+int text_vprintf(const char* message, va_list ap);
+
+/**
  * sprintfへの委譲です.
  * @param block
  * @param blockSize
