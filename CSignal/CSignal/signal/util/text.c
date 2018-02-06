@@ -55,14 +55,19 @@ int text_printf(const char * message, ...) {
 int text_sprintf(char * block, size_t blockSize, char * message, ...) {
 	va_list ap;
 	va_start(ap, message);
+	int res = text_vsprintf(block, blockSize, message, ap);
+	va_end(ap);
+	return 0;
+}
+
+int text_vsprintf(char * block, size_t blockSize, char * message, va_list ap) {
 	int res = 0;
 #if defined(_MSC_VER)
 	res = vsprintf_s(block, blockSize, message, ap);
 #else
 	res = vsprintf(block, message, ap);
 #endif
-	va_end(ap);
-	return 0;
+	return res;
 }
 
 void text_printfln(const char * message, ...) {

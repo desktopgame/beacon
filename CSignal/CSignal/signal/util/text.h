@@ -58,6 +58,15 @@ int text_printf(const char* message, ...);
  * @return
  */
 int text_sprintf(char* block, size_t blockSize, char* message, ...);
+/**
+ * sprintfへの委譲です.
+ * @param block
+ * @param blockSize
+ * @param message
+ * @param ...
+ * @return
+ */
+int text_vsprintf(char* block, size_t blockSize, char* message, va_list ap);
 
 /**
  * text_printf へ委譲したあと、
