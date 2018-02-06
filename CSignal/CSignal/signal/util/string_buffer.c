@@ -37,6 +37,11 @@ void string_buffer_appendf(string_buffer * self, const char * message, ...) {
 	va_list ap;
 	va_start(ap, message);
 
+	string_buffer_vappendf(self, message, ap);
+	va_end(ap);
+}
+
+void string_buffer_vappendf(string_buffer * self, const char * message, va_list ap) {
 #define BUFF_LEN (256)
 	char block[BUFF_LEN];
 	memset(block, '\0', BUFF_LEN);
@@ -49,7 +54,6 @@ void string_buffer_appendf(string_buffer * self, const char * message, ...) {
 		string_buffer_append(self, c);
 	}
 
-	va_end(ap);
 #undef BUFF_LEN
 }
 

@@ -40,6 +40,14 @@ void string_buffer_append(string_buffer* self, char_t c);
 void string_buffer_appendf(string_buffer* self, const char* message, ...);
 
 /**
+ * フォーマットして追記します.
+ * @param self
+ * @param message
+ * @param ap
+ */
+void string_buffer_vappendf(string_buffer* self, const char* message, va_list ap);
+
+/**
  * 全て追記します.
  * @param self
  * @param s
