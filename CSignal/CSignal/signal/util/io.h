@@ -19,6 +19,13 @@ void io_new_file(const char* filename);
 bool io_exists(const char* filename);
 
 /**
+ * 指定のファイルを削除します.
+ * @param filename
+ * @return
+ */
+bool io_delete(const char* filename);
+
+/**
  * 指定のファイルを読み込んで返します.
  * @param filename
  * @return 呼び出し側で開放してください.

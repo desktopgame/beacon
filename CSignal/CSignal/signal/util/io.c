@@ -45,6 +45,10 @@ bool io_exists(const char * filename) {
 #endif
 }
 
+bool io_delete(const char * filename) {
+	return remove(filename);
+}
+
 char * io_read_text(const char * filename) {
 	assert(io_exists(filename));
 	string_buffer* buff = string_buffer_new();
