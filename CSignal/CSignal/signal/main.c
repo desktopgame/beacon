@@ -18,6 +18,7 @@ void _start(int argc, char* argv[]) {
 	_CrtSetDbgFlag(_CRTDBG_ALLOC_MEM_DF | _CRTDBG_LEAK_CHECK_DF);
 	//_CrtSetBreakAlloc(103280);
 #endif
+	text_set_trace(true);
 	sg_lopen();
 	sg_lset_enabled(false);
 	script_context_open();
@@ -29,15 +30,10 @@ void _end(int argc, char* argv[]) {
 	//system("cls");
 	script_context_close();
 	sg_lclose();
+	text_flush_trace();
 }
 
 int main(int argc, char* argv[]) {
-	text_printf("aa %s", "vvv");
-
-	char block[100];
-	text_sprintf(block, 100, "Hoge %d", 100);
-	text_printf("\n%s", block);
-
 	//test_preload();
 	//整数リテラルをオブジェクトにラップ
 	//オブジェクトにベクターを持たせて、

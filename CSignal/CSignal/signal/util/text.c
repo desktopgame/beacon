@@ -6,9 +6,28 @@
 #include <string.h>
 #include "mem.h"
 #include "string_buffer.h"
+#include "io.h"
 
 //proto
 static char* text_strclone(const char* source);
+static void text_printfdbg(const char* message, va_list ap);
+static FILE* text_fp = NULL;
+static bool text_trace = false;
+
+void text_set_trace(bool b) {
+	text_trace = b;
+}
+
+bool text_is_trace() {
+	return text_trace;
+}
+
+void text_flush_trace() {
+	if (!text_trace || text_fp == NULL) {
+		return;
+	}
+	fclose(text_fp);
+}
 
 void text_putline() {
 #if defined(_WIN32)
@@ -26,6 +45,7 @@ int text_printf(const char * message, ...) {
 	va_list ap;
 	va_start(ap, message);
 
+	text_printfdbg(message, ap);
 	int res = vprintf(message, ap);
 
 	va_end(ap);
@@ -175,4 +195,31 @@ static char* text_strclone(const char* source) {
 	}
 	block[len] = '\0';
 	return block;
+}
+
+static void text_printfdbg(const char* message, va_list ap) {
+	if (!text_trace) {
+		return;
+	}
+
+#if defined(DEBUG)
+	if (text_fp == NULL) {
+		if (io_exists("printf.text")) {
+			io_delete("printf.text");
+		}
+#if defined(_MSC_VER)
+		errno_t e = fopen_s(&text_fp, "printf.text", "w");
+		assert(!e);
+#else
+		text_fp = fopen("printf.text", "w");
+		assert(text_fp != NULL);
+#endif
+	}
+	
+	char block[256];
+	int res = vsprintf_s(block, 256, message, ap);
+	assert(res != -1);
+	fprintf(text_fp, "%s", block);
+	fflush(text_fp);
+#endif
 }
