@@ -26,6 +26,7 @@ type * sg_array_class() {
 object * sg_array_new(int length, vm * vmc) {
 	type* arrayType = sg_array_class();
 	object* ret = class_new_rinstance(arrayType->u.class_, vmc, 1, object_int_new(length));
+//	class_
 	return ret;
 }
 

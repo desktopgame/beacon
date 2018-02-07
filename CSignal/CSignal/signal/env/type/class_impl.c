@@ -409,7 +409,7 @@ object * class_new_rinstance(class_ * self, vm* vmc, int count, ...) {
 	assert(temp != -1);
 	//コンストラクタを実行
 	vm* sub = vm_sub(vmc);
-	for (int i = 0; i < args->length; i++) {
+	for (int i = args->length-1; i>=0; i--) {
 		object* o = vector_at(args, i);
 		vector_push(sub->value_stack, o);
 	}

@@ -70,6 +70,7 @@ try {
 	Console.writeLine(arr.test(10, 5));
 } catch(Exception e) {
 	Console.writeLine("Error!");
+	e.print();
 }
 /*
 try {
