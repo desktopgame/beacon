@@ -30,6 +30,8 @@ static void sg_console_writeLine(method* parent, vm* vm, enviroment* env) {
 		text_printf("%s\n", type_name(o->type));
 	} else if (o->tag == object_char) {
 		text_printf("%c\n", o->u.char_);
+	} else if (o->tag == object_bool) {
+		text_printf("%s\n", o->u.bool_ ? "true" : "false");
 	}
 }
 
@@ -43,6 +45,8 @@ static void sg_console_write(method* parent, vm* vm, enviroment* env) {
 		text_printf("%s", type_name(o->type));
 	} else if (o->tag == object_char) {
 		text_printf("%c", o->u.char_);
+	} else if (o->tag == object_bool) {
+		text_printf("%s", o->u.bool_ ? "true" : "false");
 	}
 }
 

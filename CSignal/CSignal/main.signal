@@ -1,6 +1,6 @@
 import "lib"
 
-var ch = 'A';
+var ch = false;
 Console.write("[");
 Console.write(ch);
 Console.write("]");
