@@ -26,6 +26,7 @@
 #include <string.h>
 #include "import_info.h"
 //proto
+static void class_loader_sgload_namespace_tree(class_loader* self);
 static void class_loader_sgload_importImpl(class_loader* self, vector* ilimports, int i);
 static void class_loader_sgload_importImplAlready(class_loader* self, class_loader* cll);
 static class_loader* class_loader_sgload_importImplNew(class_loader* self, char* fullPath);
@@ -39,8 +40,7 @@ void class_loader_sgload_impl(class_loader* self) {
 	script_context* ctx = script_context_get_current();
 	il_top_level* iltop = self->il_code;
 	class_loader_sgload_import(self, self->il_code->import_list);
-	class_loader_sgload_namespace_list(self, self->il_code->namespace_list, NULL);
-	self->loadedNamespace = true;
+	class_loader_sgload_namespace_tree(self);
 
 	class_loader_sgload_excecClassDecl(self);
 	class_loader_sgload_excecInterfaceDecl(self);
@@ -267,6 +267,11 @@ void class_loader_sgload_body(class_loader* self, vector* stmt_list, enviroment*
 }
 
 //private
+static void class_loader_sgload_namespace_tree(class_loader* self) {
+	class_loader_sgload_namespace_list(self, self->il_code->namespace_list, NULL);
+	self->loadedNamespace = true;
+}
+
 static void class_loader_sgload_importImpl(class_loader* self, vector* ilimports, int i) {
 	if (i >= ilimports->length ||
 	    import_manager_loaded(self->import_manager, i)) {
@@ -410,8 +415,7 @@ static void class_loader_sgload_yield(class_loader* parent, class_loader* target
 
 	}
 	class_loader_sgload_import(target, target->il_code->import_list);
-	class_loader_sgload_namespace_list(target, target->il_code->namespace_list, NULL);
-	target->loadedNamespace = true;
+	class_loader_sgload_namespace_tree(target);
 
 	class_loader_sgload_excecClassDecl(target);
 	class_loader_sgload_excecInterfaceDecl(target);
