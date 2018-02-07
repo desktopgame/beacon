@@ -28,6 +28,8 @@ static void sg_console_writeLine(method* parent, vm* vm, enviroment* env) {
 		text_printf("%s\n", o->u.string_);
 	} else if (o->tag == object_ref) {
 		text_printf("%s\n", type_name(o->type));
+	} else if (o->tag == object_char) {
+		text_printf("%c\n", o->u.char_);
 	}
 }
 
@@ -37,6 +39,10 @@ static void sg_console_write(method* parent, vm* vm, enviroment* env) {
 		text_printf("%d", o->u.int_);
 	} else if (o->tag == object_string) {
 		text_printf("%s", o->u.string_);
+	} else if (o->tag == object_ref) {
+		text_printf("%s", type_name(o->type));
+	} else if (o->tag == object_char) {
+		text_printf("%c", o->u.char_);
 	}
 }
 
