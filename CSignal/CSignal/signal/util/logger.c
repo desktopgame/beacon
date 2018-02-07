@@ -11,7 +11,7 @@
 #endif
 
 //proto
-static void sg_log_impl(log_level level, const char* filename, int lineno, const char * source, ...);
+static void sg_log_impl(log_level level, const char* filename, int lineno, const char * source, va_list ap);
 static char* sg_unique_name();
 static void sg_print_loglevel(log_level level);
 static void sg_fprint_loglevel(FILE* fp, log_level level);
@@ -119,13 +119,13 @@ void sg_test(bool cond) {
 }
 
 //private
-static void sg_log_impl(log_level level, const char* filename, int lineno, const char * source, ...) {
+static void sg_log_impl(log_level level, const char* filename, int lineno, const char * source, va_list ap) {
 #define LEN 100
-	va_list ap;
-	va_start(ap, source);
+//	va_list ap;
+//	va_start(ap, source);
 	//ソース文字列をフォーマットする
 	char buff[LEN];
-	int res = text_sprintf(buff, LEN, source, ap);
+	int res = text_vsprintf(buff, LEN, source, ap);
 	//フォーマット失敗
 	if (res == -1) {
 		text_printf("internal error: %s %d %s", filename, lineno, source);
@@ -157,7 +157,7 @@ static void sg_log_impl(log_level level, const char* filename, int lineno, const
 			fflush(logger_fp);
 		}
 	}
-	va_end(ap);
+//	va_end(ap);
 	text_putline();
 #undef LEN
 }
