@@ -1,0 +1,4 @@
+namespace signal.lang {
+	class Null {
+	}
+}
