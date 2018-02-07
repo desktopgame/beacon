@@ -7,12 +7,13 @@ struct fqcn_cache;
 struct type;
 struct namespace_;
 struct class_loader;
+struct import_info;
 
 /**
  * あるファイルが参照しているファイルの一覧を管理します.
  */
 typedef struct import_manager {
-	vector* class_loader_list;
+	vector* infoVec;
 } import_manager;
 
 /**
@@ -25,8 +26,17 @@ import_manager* import_manager_new();
  * 指定のクラスローダをインポートの一覧に含めます.
  * @param self
  * @param target
+ * @return
  */
-void import_manager_import(import_manager* self, struct class_loader* target);
+struct import_info* import_manager_import(import_manager* self, struct class_loader* target);
+
+/**
+ * 既に読み込まれたなら true.
+ * @param self
+ * @param index
+ * @return
+ */
+bool import_manager_loaded(import_manager* self, int index);
 
 /**
  * 指定の名前から型を解決します.

@@ -105,6 +105,22 @@ vector_item vector_at(vector* self, int index);
 bool vector_empty(vector* self);
 
 /**
+ * 先頭から検索して一致するものがあるなら添え字を返します.
+ * @param self
+ * @param item
+ * @return 見つからなければ -1
+ */
+int vector_find(vector* self, vector_item item);
+
+/** 
+ * 先頭から検索して一致するものがあるなら true を返します.
+ * @param self
+ * @param item
+ * @return 見つからなければ false
+ */
+bool vector_contains(vector* self, vector_item item);
+
+/**
  * 中身を空にします.
  * @param self
  */

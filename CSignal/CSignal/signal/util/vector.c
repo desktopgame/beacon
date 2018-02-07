@@ -97,6 +97,22 @@ bool vector_empty(vector * self) {
 	return self->length == 0;
 }
 
+int vector_find(vector * self, vector_item item) {
+	int pos = -1;
+	for (int i = 0; i < self->length; i++) {
+		vector_item e = vector_at(self, i);
+		if (e == item) {
+			pos = i;
+			break;
+		}
+	}
+	return pos;
+}
+
+bool vector_contains(vector * self, vector_item item) {
+	return vector_find(self, item);
+}
+
 void vector_clear(vector * self) {
 	while (self->length > 0) {
 		vector_pop(self);

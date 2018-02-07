@@ -24,18 +24,19 @@ typedef enum class_link {
 typedef struct class_loader {
 	ast* source_code;
 	il_top_level* il_code;
-	struct class_loader* parent;
+	//struct class_loader* parent;
 	struct enviroment* env;
 	import_manager* import_manager;
 	content_type type;
 	uint32_t ref_count;
 	vector* type_cacheVec;
+	vector* parentVec;
 	//class_link link;
 	int level;
+	bool loadedNamespace;
+	bool linkedAllImports;
 	char* filename;
 	char* errorMessage;
-	bool loadDecl;
-	bool loadImpl;
 	bool error;
 } class_loader;
 

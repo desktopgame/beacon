@@ -12,6 +12,7 @@
 #include "../il/il_constructor.h"
 #include "../il/il_stmt_interface.h"
 #include "../env/object.h"
+#include "../util/logger.h"
 #include "parameter.h"
 #include "field.h"
 #include "method.h"
@@ -56,13 +57,14 @@ static void class_loader_sgload_chain_super(class_loader* self, il_type* iltype,
 
 
 void class_loader_sgload_class_decl(class_loader * self, il_type * iltype, type * tp, namespace_ * scope) {
-	//TEST(!strcmp(type->u.class_->name, "Console"));
+	//TEST(!strcmp(tp->u.class_->name, "Array"));
 	assert(tp->u.class_->method_list->length == 0);
 	assert(tp->u.class_->smethod_list->length == 0);
 	class_loader_sgload_fields(self, iltype, tp);
 	class_loader_sgload_methods(self, iltype, tp, scope);
 	class_loader_sgload_constructors(self, iltype, tp, scope);
 	class_create_vtable(tp->u.class_);	
+	int s = tp->u.class_->method_list->length;
 }
 
 void class_loader_sgload_class_impl(class_loader * self, il_type * iltype, type * tp, namespace_ * scope) {
@@ -111,6 +113,11 @@ void class_loader_sgload_methods_impl(class_loader* self, il_type* iltype, type*
 		method->modifier = ilmethod->modifier;
 		method->u.script_method = script_method_new();
 		method->parent = tp;
+		method->return_type = import_manager_resolve(
+			self->import_manager,
+			scope,
+			ilmethod->return_fqcn
+		);
 		//インターフェースなら
 		if (tp->tag == type_interface) {
 			method->type = method_type_abstract;
@@ -146,12 +153,6 @@ void class_loader_sgload_complete_methods_impl(class_loader* self, namespace_* s
 		vector_item e = vector_at(sgmethods, i);
 		method* me = (method*)e;
 		il_method* ilmethod = (il_method*)vector_at(ilmethods, i);
-		//戻り値と仮引数に型を設定
-		me->return_type = import_manager_resolve(
-			self->import_manager,
-			scope,
-			ilmethod->return_fqcn
-			);
 		//TEST(!strcmp(me->name, "main"));
 		//class_loader_sgload_params(self, scope, ilmethod->parameter_list, me->parameter_list);
 		//ネイティブメソッドならオペコードは不要

@@ -8,6 +8,7 @@ type_cache * type_cache_new() {
 	ret->iltype = NULL;
 	ret->tp = NULL;
 	ret->scope = NULL;
+	ret->consume = false;
 	return ret;
 }
 

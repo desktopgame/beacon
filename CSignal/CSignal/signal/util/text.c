@@ -76,7 +76,7 @@ int text_vsprintf(char * block, size_t blockSize, char * message, va_list ap) {
 void text_printfln(const char * message, ...) {
 	va_list ap;
 	va_start(ap, message);
-	text_printf(message, ap);
+	text_vprintf(message, ap);
 #if defined(_MSC_VER)
 	text_printf("\n");
 #else

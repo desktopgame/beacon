@@ -6,6 +6,7 @@
 #include "../env/type_interface.h"
 #include "../util/mem.h"
 #include <stdio.h>
+#include <assert.h>
 
 void il_factor_dump(il_factor * self, int depth) {
 	text_printf("<%d> ", self->lineno);
@@ -268,6 +269,7 @@ type * il_factor_eval(il_factor * self, enviroment * env) {
 			ERROR("ファクターの型を取得出来ませんでした");
 			break;
 	}
+	assert(ret != NULL);
 	return ret;
 }
 

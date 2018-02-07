@@ -1,5 +1,6 @@
 import "Array"
 import "Console"
+import "StackTraceElement"
 
 namespace signal.lang {
 	class Exception {
@@ -19,7 +20,7 @@ namespace signal.lang {
 		def print() -> Void {
 			Int index = 0;
 			while(index < this.stackTrace.length()) {
-				var st = this.stackTrace.get(index);
+				var st = this.stackTrace.get(index) as StackTraceElement;
 				Console.writeLine(st.getFileName());
 				index = (index + 1);
 			}

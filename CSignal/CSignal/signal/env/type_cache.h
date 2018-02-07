@@ -10,8 +10,11 @@
  * 何を読み込むためのキャッシュかを表す列挙型.
  */
 typedef enum cache_kind {
-	cachekind_class_method,
-	cachekind_interface_method,
+	cachekind_class_decl,
+	cachekind_class_impl,
+
+	cachekind_interface_decl,
+	cachekind_interface_impl,
 } cache_kind;
 
 /**
@@ -31,6 +34,7 @@ typedef struct type_cache {
 	type* tp;
 	namespace_* scope;
 	cache_kind kind;
+	bool consume;
 } type_cache;
 
 type_cache* type_cache_new();

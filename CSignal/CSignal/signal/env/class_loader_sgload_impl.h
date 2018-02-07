@@ -17,6 +17,8 @@
  */
 void class_loader_sgload_impl(class_loader* self);
 
+void class_loader_sgload_link(class_loader* self);
+
 /**
  * インポートの一覧を確認して、読み込むべきファイルがあるなら読み込みます.
  * @param self

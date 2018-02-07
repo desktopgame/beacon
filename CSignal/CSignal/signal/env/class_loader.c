@@ -37,13 +37,16 @@
 
 #include "class_loader_ilload_impl.h"
 #include "class_loader_sgload_impl.h"
+#include "import_info.h"
 
+//proto
+static void class_loader_link(class_loader* self);
 
 class_loader* class_loader_new() {
 	class_loader* ret = (class_loader*)MEM_MALLOC(sizeof(class_loader));
 	ret->source_code = NULL;
 	ret->il_code = NULL;
-	ret->parent = NULL;
+	ret->parentVec = vector_new();
 	ret->ref_count = 0;
 	ret->type = content_entry_point;
 	ret->import_manager = import_manager_new();
@@ -51,12 +54,12 @@ class_loader* class_loader_new() {
 	ret->error = false;
 	ret->type_cacheVec = vector_new();
 	ret->level = 0;
+	ret->loadedNamespace = false;
+	ret->linkedAllImports = false;
 	ret->errorMessage = NULL;
 	ret->env->context_cll = ret;
 	ret->env->toplevel = true;
 	//ret->link = classlink_unlinked;
-	ret->loadDecl = false;
-	ret->loadImpl = false;
 	return ret;
 }
 
@@ -90,22 +93,24 @@ void class_loader_load(class_loader * self) {
 	class_loader_sgload_impl(self);
 	if (self->error) { return; }
 
+	class_loader_link(self);
 	class_loader_sgload_body(self, self->il_code->statement_list, self->env, NULL);
 	//このクラスローダーがライブラリをロードしているなら
 	//必要最低限の情報を残して後は開放
 	if (self->type == content_lib) {
-		ast_delete(self->source_code);
-		il_top_level_delete(self->il_code);
-		self->source_code = NULL;
-		self->il_code = NULL;
+	//	ast_delete(self->source_code);
+	//	il_top_level_delete(self->il_code);
+	//	self->source_code = NULL;
+	//	self->il_code = NULL;
 	}
 }
 
 void class_loader_delete(class_loader * self) {
 	assert(self != NULL);
 	//assert(self->ref_count == 0);
-	if (self->parent != NULL) {
-		self->parent->ref_count--;
+	for (int i = 0; i < self->parentVec->length; i++) {
+		class_loader* e = (class_loader*)vector_at(self->parentVec, i);
+		e->ref_count--;
 	}
 	//free(self->source_code);
 	ast_delete(self->source_code);
@@ -142,23 +147,18 @@ void class_loader_errorf(class_loader* self, const char* message, ...) {
 	}
 	va_end(ap);
 }
-/*
-void class_link_print(class_link link) {
-	switch (link) {
-		case classlink_pending:
-			text_printf("pending");
-			break;
-		case classlink_resume:
-			text_printf("resume");
-			break;
-		case classlink_unlinked:
-			text_printf("unlinked");
-			break;
-		case classlink_linked:
-			text_printf("linked");
-			break;
-		default:
-			break;
+
+//private
+static void class_loader_link(class_loader* self) {
+	if (self->linkedAllImports) {
+		return;
 	}
+	self->linkedAllImports = true;
+	import_manager* importMgr = self->import_manager;
+	for (int i = 0; i < importMgr->infoVec->length; i++) {
+		import_info* info = (import_info*)vector_at(importMgr->infoVec, i);
+		class_loader_link(info->context);
+	}
+
+	class_loader_sgload_link(self);
 }
-*/
