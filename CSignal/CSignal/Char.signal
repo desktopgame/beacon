@@ -1,4 +1,11 @@
 namespace signal.lang {
 	class Char {
+		public:
+		ctor new(Char ch) {
+			this.nativeInit(ch);
+		}
+
+		private:
+		native def nativeInit(Char ch) -> Void;
 	}
 }
