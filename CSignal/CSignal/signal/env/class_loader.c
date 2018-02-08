@@ -59,7 +59,6 @@ class_loader* class_loader_new() {
 	ret->errorMessage = NULL;
 	ret->env->context_cll = ret;
 	ret->env->toplevel = true;
-	ret->a = 0;
 	//ret->link = classlink_unlinked;
 	return ret;
 }

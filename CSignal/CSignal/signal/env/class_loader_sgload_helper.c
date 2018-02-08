@@ -66,8 +66,6 @@ void class_loader_sgload_class_decl(class_loader * self, il_type * iltype, type 
 	class_loader_sgload_methods(self, iltype, tp, scope);
 	class_loader_sgload_constructors(self, iltype, tp, scope);
 	class_create_vtable(tp->u.class_);	
-	int s = tp->u.class_->method_list->length;
-	self->a++;
 }
 
 void class_loader_sgload_class_impl(class_loader * self, il_type * iltype, type * tp, namespace_ * scope) {

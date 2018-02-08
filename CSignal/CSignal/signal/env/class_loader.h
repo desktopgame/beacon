@@ -9,15 +9,7 @@
 #include <stdarg.h>
 #include <stdbool.h>
 struct enviroment;
-/*
-typedef enum class_link {
-	classlink_pending,
-	classlink_resume,
 
-	classlink_unlinked,
-	classlink_linked
-} class_link;
-*/
 /**
  * クラスローダーを表す構造体です.
  */
@@ -31,10 +23,6 @@ typedef struct class_loader {
 	uint32_t ref_count;
 	vector* type_cacheVec;
 	struct class_loader* parent;
-	int a;
-	//int xxx;
-	//vector* parentVec;
-	//class_link link;
 	int level;
 	bool loadedNamespace;
 	bool linkedAllImports;
