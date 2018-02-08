@@ -24,6 +24,8 @@ static void sg_console_writeLine(method* parent, vm* vm, enviroment* env) {
 	object* o = (object*)vector_pop(vm->value_stack);
 	if (o->tag == object_int) {
 		text_printf("%d\n", o->u.int_);
+	} else if(o->tag == object_double) {
+		text_printf("%f\n", o->u.double_);
 	} else if (o->tag == object_string) {
 		text_printf("%s\n", o->u.string_);
 	} else if (o->tag == object_ref) {
@@ -39,6 +41,8 @@ static void sg_console_write(method* parent, vm* vm, enviroment* env) {
 	object* o = (object*)vector_pop(vm->value_stack);
 	if (o->tag == object_int) {
 		text_printf("%d", o->u.int_);
+	}  else if (o->tag == object_double) {
+		text_printf("%f", o->u.double_);
 	} else if (o->tag == object_string) {
 		text_printf("%s", o->u.string_);
 	} else if (o->tag == object_ref) {
