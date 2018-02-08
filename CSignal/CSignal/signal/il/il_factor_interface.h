@@ -31,6 +31,8 @@ typedef enum il_factor_type {
 	ilfactor_bool,
 	ilfactor_null,
 	ilfactor_as,
+	ilfactor_inc,
+	ilfactor_dec
 } il_factor_type;
 
 //ファクターとして扱える要素自身が内側にファクターを含む(再帰)
@@ -61,6 +63,8 @@ struct il_factor_cast;
 struct il_factor_bool;
 struct il_factor_null;
 struct il_factor_as;
+struct il_factor_inc;
+struct il_factor_dec;
 
 /**
  * 計算可能な要素.
@@ -88,6 +92,8 @@ typedef struct il_factor {
 		struct il_factor_bool* bool_;
 		struct il_factor_null* null_;
 		struct il_factor_as* as_;
+		struct il_factor_inc* inc_;
+		struct il_factor_dec* dec_;
 	} u;
 } il_factor;
 

@@ -4,13 +4,13 @@ var arr = new Array(5);
 var i = 0;
 while(i < arr.length()) {
 	arr.set(i, i * 10);
-	i = (i + 1);
+	i++;
 }
 //オリジナルを出力
 i = 0;
 while(i < arr.length()) {
 	Console.writeLine(arr.get(i));
-	i = (i + 1);
+	i++;
 }
 
 Console.writeLine("---");
@@ -20,5 +20,5 @@ Array.copy(arr, 0, sub, 0, 5);
 i = 0;
 while(i < sub.length()) {
 	Console.writeLine(arr.get(i));
-	i = (i + 1);
+	i++;
 }

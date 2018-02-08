@@ -68,6 +68,12 @@ void il_factor_dump(il_factor * self, int depth) {
 		case ilfactor_as:
 			il_factor_as_dump(self->u.as_, depth);
 			break;
+		case ilfactor_inc:
+			il_factor_inc_dump(self->u.inc_, depth);
+			break;
+		case ilfactor_dec:
+			il_factor_dec_dump(self->u.dec_, depth);
+			break;
 		default:
 			ERROR("ファクターをダンプ出来ませんでした");
 			break;
@@ -132,6 +138,12 @@ void il_factor_generate(il_factor * self, enviroment* env) {
 			break;
 		case ilfactor_as:
 			il_factor_as_generate(self->u.as_, env);
+			break;
+		case ilfactor_inc:
+			il_factor_inc_generate(self->u.inc_, env);
+			break;
+		case ilfactor_dec:
+			il_factor_dec_generate(self->u.dec_, env);
 			break;
 		default:
 			ERROR("ファクターを生成出来ませんでした");
@@ -199,6 +211,12 @@ void il_factor_load(il_factor * self, enviroment * env, il_ehandler * eh) {
 		case ilfactor_as:
 			il_factor_as_load(self->u.as_, env, eh);
 			break;
+		case ilfactor_inc:
+			il_factor_inc_load(self->u.inc_, env, eh);
+			break;
+		case ilfactor_dec:
+			il_factor_dec_load(self->u.dec_, env, eh);
+			break;
 		default:
 			ERROR("ファクターの型を取得出来ませんでした");
 			break;
@@ -264,6 +282,12 @@ type * il_factor_eval(il_factor * self, enviroment * env) {
 			break;
 		case ilfactor_as:
 			ret = il_factor_as_eval(self->u.as_, env);
+			break;
+		case ilfactor_inc:
+			ret = il_factor_inc_eval(self->u.inc_, env);
+			break;
+		case ilfactor_dec:
+			ret = il_factor_dec_eval(self->u.dec_, env);
 			break;
 		default:
 			ERROR("ファクターの型を取得出来ませんでした");
@@ -333,6 +357,12 @@ void il_factor_delete(il_factor * self) {
 			break;
 		case ilfactor_as:
 			il_factor_as_delete(self->u.as_);
+			break;
+		case ilfactor_inc:
+			il_factor_inc_delete(self->u.inc_);
+			break;
+		case ilfactor_dec:
+			il_factor_dec_delete(self->u.dec_);
 			break;
 		default:
 			ERROR("ファクターを開放出来ませんでした");

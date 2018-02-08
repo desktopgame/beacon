@@ -363,6 +363,21 @@ il_factor_static_field_access* class_loader_ilload_static_field_access(class_loa
 il_factor_as* class_loader_ilload_as(class_loader* self, ast* source);
 
 /**
+ * インクリメントを表す要素を作成します.
+ * @param self
+ * @param source
+ * @return
+ */
+il_factor_inc* class_loader_ilload_inc(class_loader* self, ast* source);
+/**
+ * デクリメントを表す要素を作成します.
+ * @param self
+ * @param source
+ * @return
+ */
+il_factor_dec* class_loader_ilload_dec(class_loader* self, ast* source);
+
+/**
  * Hoge::Foo::Classのような修飾名を表すASTを解析して
  * 引数destに格納します.
  * @param fqcn

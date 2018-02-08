@@ -569,6 +569,28 @@ il_factor_as* class_loader_ilload_as(class_loader* self, ast* source) {
 	return ret;
 }
 
+il_factor_inc * class_loader_ilload_inc(class_loader * self, ast * source) {
+	assert(source->tag == ast_pre_inc ||
+		   source->tag == ast_post_inc);
+	fix_type type = (source->tag == ast_pre_inc) ? fixtype_pre : fixtype_post;
+	il_factor_inc* ret = il_factor_inc_new(type);
+	ast* afact = ast_first(source);
+	ret->fact = class_loader_ilload_factor(self, afact);
+	ret->type = type;
+	return ret;
+}
+
+il_factor_dec * class_loader_ilload_dec(class_loader * self, ast * source) {
+	assert(source->tag == ast_pre_dec ||
+		   source->tag == ast_post_dec);
+	fix_type type = (source->tag == ast_pre_dec) ? fixtype_pre : fixtype_post;
+	il_factor_dec* ret = il_factor_dec_new(type);
+	ast* afact = ast_first(source);
+	ret->fact = class_loader_ilload_factor(self, afact);
+	ret->type = type;
+	return ret;
+}
+
 void class_loader_ilload_fqcn(ast* fqcn, fqcn_cache* dest) {
 	class_loader_ilload_fqcn_impl(fqcn, dest);
 	//FIXME: Int のような文字パースで失敗してしまうので対策
@@ -712,6 +734,12 @@ static il_factor* class_loader_ilload_factorImpl(class_loader* self, ast* source
 		return ret;
 	} else if (source->tag == ast_as) {
 		return il_factor_wrap_as(class_loader_ilload_as(self, source));
+	} else if (source->tag == ast_pre_inc ||
+			   source->tag == ast_post_inc) {
+		return il_factor_wrap_inc(class_loader_ilload_inc(self, source));
+	} else if (source->tag == ast_pre_dec ||
+			   source->tag == ast_post_dec) {
+		return il_factor_wrap_dec(class_loader_ilload_dec(self, source));
 	}
 	return NULL;
 }
