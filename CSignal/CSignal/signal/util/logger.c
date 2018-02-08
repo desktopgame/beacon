@@ -112,6 +112,52 @@ void sg_log(log_level level, const char* filename, int lineno, const char * sour
 	va_end(ap);
 }
 
+//FIXME:コピペ
+void sg_debug(const char * filename, int lineno, const char * source, ...) {
+	va_list ap;
+	va_start(ap, source);
+	if (logger_enabled) {
+		sg_log_impl(log_debug, filename, lineno, source, ap);
+	}
+	va_end(ap);
+}
+
+void sg_info(const char * filename, int lineno, const char * source, ...) {
+	va_list ap;
+	va_start(ap, source);
+	if (logger_enabled) {
+		sg_log_impl(log_info, filename, lineno, source, ap);
+	}
+	va_end(ap);
+}
+
+void sg_warn(const char * filename, int lineno, const char * source, ...) {
+	va_list ap;
+	va_start(ap, source);
+	if (logger_enabled) {
+		sg_log_impl(log_warn, filename, lineno, source, ap);
+	}
+	va_end(ap);
+}
+
+void sg_error(const char * filename, int lineno, const char * source, ...) {
+	va_list ap;
+	va_start(ap, source);
+	if (logger_enabled) {
+		sg_log_impl(log_error, filename, lineno, source, ap);
+	}
+	va_end(ap);
+}
+
+void sg_fatal(const char * filename, int lineno, const char * source, ...) {
+	va_list ap;
+	va_start(ap, source);
+	if (logger_enabled) {
+		sg_log_impl(log_fatal, filename, lineno, source, ap);
+	}
+	va_end(ap);
+}
+
 void sg_test(bool cond) {
 	if (cond) {
 		int x = 0;
@@ -120,7 +166,7 @@ void sg_test(bool cond) {
 
 //private
 static void sg_log_impl(log_level level, const char* filename, int lineno, const char * source, va_list ap) {
-#define LEN 100
+#define LEN 256
 //	va_list ap;
 //	va_start(ap, source);
 	//ソース文字列をフォーマットする

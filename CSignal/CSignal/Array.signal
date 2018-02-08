@@ -1,6 +1,10 @@
 import "Exception"
 
 namespace signal.lang {
+	/**
+	 * 配列を表現するクラスです.
+	 * 要素は signal::lang::Object で扱われます。
+	 */
 	class Array {
 		private:
 		Int length;
@@ -25,7 +29,7 @@ namespace signal.lang {
 			return this.nativeGet(index);
 		}
 
-		//�ċA�֐��̃e�X�g
+		//再帰関数のテスト
 		def test(Int a, Int b) -> Int {
 			if(b <= 0) {
 				return a;

@@ -57,7 +57,9 @@ static void class_loader_sgload_chain_super(class_loader* self, il_type* iltype,
 
 
 void class_loader_sgload_class_decl(class_loader * self, il_type * iltype, type * tp, namespace_ * scope) {
-	//TEST(!strcmp(tp->u.class_->name, "Array"));
+	//TEST((!strcmp(tp->u.class_->name, "Array") && self->a == 0));
+	//printf("aaa");
+	//TEST((!strcmp(tp->u.class_->name, "Array") && self->a == 1));
 	assert(tp->u.class_->method_list->length == 0);
 	assert(tp->u.class_->smethod_list->length == 0);
 	class_loader_sgload_fields(self, iltype, tp);
@@ -65,6 +67,7 @@ void class_loader_sgload_class_decl(class_loader * self, il_type * iltype, type 
 	class_loader_sgload_constructors(self, iltype, tp, scope);
 	class_create_vtable(tp->u.class_);	
 	int s = tp->u.class_->method_list->length;
+	self->a++;
 }
 
 void class_loader_sgload_class_impl(class_loader * self, il_type * iltype, type * tp, namespace_ * scope) {

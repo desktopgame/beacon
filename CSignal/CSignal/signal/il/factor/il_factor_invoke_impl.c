@@ -8,6 +8,7 @@
 #include "../../env/type_interface.h"
 #include "../../env/method.h"
 #include "../../util/mem.h"
+#include "../../util/logger.h"
 #include "../../env/type_impl.h"
 
 //proto
@@ -91,6 +92,8 @@ static void il_factor_invoke_find(il_factor_invoke* self, enviroment* env) {
 	}
 	int temp = 0;
 	class_* cl = il_factor_eval(self->receiver, env)->u.class_;
+	class_* intcls = CL_INT->u.class_;
+	//TEST((cl == intcls && !strcmp(self->name, "nativeInit")));
 	self->m = class_find_method(
 		cl,
 		self->name,

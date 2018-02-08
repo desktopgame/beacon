@@ -11,6 +11,8 @@ namespace signal.lang {
 
 		static native def write(Int i) -> Void;
 
+		static native def write(Object i) -> Void;
+
 		static native def read() -> Char;
 
 		static native def readLine() -> String;

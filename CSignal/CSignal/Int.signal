@@ -1,10 +1,13 @@
-import "Console"
+//import "Console"
 
 namespace signal.lang {
 	class Int {
 		public:
-		def p() -> Void {
-			Console.writeLine("Foo!");
+		ctor new(Int i) {
+			this.nativeInit(i);
 		}
+
+		private:
+		native def nativeInit(Int i) -> Void;
 	}
 }

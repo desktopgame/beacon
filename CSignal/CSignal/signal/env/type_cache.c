@@ -1,6 +1,7 @@
 #include "type_cache.h"
 #include "../util/mem.h"
 #include "class_loader_sgload_impl.h"
+#include "class_loader.h"
 
 type_cache * type_cache_new() {
 	type_cache* ret = (type_cache*)MEM_MALLOC(sizeof(type_cache));

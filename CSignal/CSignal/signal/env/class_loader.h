@@ -30,7 +30,10 @@ typedef struct class_loader {
 	content_type type;
 	uint32_t ref_count;
 	vector* type_cacheVec;
-	vector* parentVec;
+	struct class_loader* parent;
+	int a;
+	//int xxx;
+	//vector* parentVec;
 	//class_link link;
 	int level;
 	bool loadedNamespace;
@@ -61,6 +64,20 @@ class_loader* class_loader_new_entry_point(const char* filename);
 void class_loader_load(class_loader* self);
 
 /**
+ * self を 親として fullPath のファイルを読み込みます.
+ * @param self
+ * @parma fullPath
+ */
+void class_loader_sub(class_loader* self, char* fullPath);
+
+/**
+ * 実行時ディレクトリからの相対パスでファイルを読み込みます.
+ * @param self
+ * @param rpath
+ */
+void class_loader_rsub(class_loader* self, char* relativePath);
+
+/**
  * このクラスローダーを開放します.
  * @param self
  */
@@ -80,6 +97,12 @@ void class_loader_error(class_loader* self, const char* message);
  * @param ...
  */
 void class_loader_errorf(class_loader* self, const char* message, ...);
+
+/**
+ * ブートストラップクラスローダーを返します.
+ * @return
+ */
+class_loader* class_loader_bootstrap();
 
 //void class_link_print(class_link link);
 #endif // !SIGNAL_PARSER_CLASS_LOADER_H

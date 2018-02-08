@@ -330,6 +330,7 @@ int class_distance(class_ * self, class_ * other) {
 }
 
 void class_create_vtable(class_ * self) {
+	//TEST(!strcmp(self->name, "Int"));
 	assert(self != NULL);
 	//初期化済み
 	if (self->vt != NULL) {

@@ -46,7 +46,7 @@ class_loader* class_loader_new() {
 	class_loader* ret = (class_loader*)MEM_MALLOC(sizeof(class_loader));
 	ret->source_code = NULL;
 	ret->il_code = NULL;
-	ret->parentVec = vector_new();
+	ret->parent = NULL;
 	ret->ref_count = 0;
 	ret->type = content_entry_point;
 	ret->import_manager = import_manager_new();
@@ -59,6 +59,7 @@ class_loader* class_loader_new() {
 	ret->errorMessage = NULL;
 	ret->env->context_cll = ret;
 	ret->env->toplevel = true;
+	ret->a = 0;
 	//ret->link = classlink_unlinked;
 	return ret;
 }
@@ -95,6 +96,7 @@ void class_loader_load(class_loader * self) {
 
 	class_loader_link(self);
 	class_loader_sgload_body(self, self->il_code->statement_list, self->env, NULL);
+	sg_log(log_info, __FILE__, __LINE__, "loaded file %s", self->filename);
 	//このクラスローダーがライブラリをロードしているなら
 	//必要最低限の情報を残して後は開放
 	if (self->type == content_lib) {
@@ -105,12 +107,21 @@ void class_loader_load(class_loader * self) {
 	}
 }
 
+void class_loader_sub(class_loader * self, char * fullPath) {
+	class_loader_sgload_sub(self, fullPath);
+}
+
+void class_loader_rsub(class_loader * self, char * relativePath) {
+	char* a = io_absolute_path(relativePath);
+	class_loader_sub(self, a);
+	MEM_FREE(a);
+}
+
 void class_loader_delete(class_loader * self) {
 	assert(self != NULL);
 	//assert(self->ref_count == 0);
-	for (int i = 0; i < self->parentVec->length; i++) {
-		class_loader* e = (class_loader*)vector_at(self->parentVec, i);
-		e->ref_count--;
+	if (self->parent != NULL) {
+		self->parent->ref_count--;
 	}
 	//free(self->source_code);
 	ast_delete(self->source_code);

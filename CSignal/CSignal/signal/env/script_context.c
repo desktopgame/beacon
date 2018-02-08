@@ -128,6 +128,22 @@ static void script_context_launch(script_context* self) {
 	sg_void_init();
 	sg_console_init();
 	sg_null_init();
+	//ブートストラップクラスローダー
+	self->bootstrap_class_loader = class_loader_new();
+	class_loader_rsub(self->bootstrap_class_loader, "Object.signal");
+
+	class_loader_rsub(self->bootstrap_class_loader, "Int.signal");
+	class_loader_rsub(self->bootstrap_class_loader, "Double.signal");
+	class_loader_rsub(self->bootstrap_class_loader, "Char.signal");
+	class_loader_rsub(self->bootstrap_class_loader, "Bool.signal");
+	class_loader_rsub(self->bootstrap_class_loader, "Null.signal");
+	class_loader_rsub(self->bootstrap_class_loader, "Void.signal");
+
+	class_loader_rsub(self->bootstrap_class_loader, "Array.signal");
+	class_loader_rsub(self->bootstrap_class_loader, "String.signal");
+	class_loader_rsub(self->bootstrap_class_loader, "Console.signal");
+	class_loader_rsub(self->bootstrap_class_loader, "Exception.signal");
+	class_loader_rsub(self->bootstrap_class_loader, "StackTraceElement.signal");
 	//退避していたコンテキストを復帰
 	script_context_set_current(selected);
 }
@@ -142,6 +158,7 @@ static script_context* script_context_malloc(void) {
 	ret->prev = NULL;
 	ret->next = NULL;
 	ret->threadVec = vector_new();
+	ret->bootstrap_class_loader = NULL;
 	vector_push(ret->threadVec, sg_thread_main());
 	return ret;
 }

@@ -47,6 +47,12 @@ bool sg_lget_enabled();
  */
 void sg_log(log_level level, const char* filename, int lineno, const char* source, ...);
 
+void sg_debug(const char* filename, int lineno, const char* source, ...);
+void sg_info(const char* filename, int lineno, const char* source, ...);
+void sg_warn(const char* filename, int lineno, const char* source, ...);
+void sg_error(const char* filename, int lineno, const char* source, ...);
+void sg_fatal(const char* filename, int lineno, const char* source, ...);
+
 /**
  * 指定の条件を満たすならブレークします.
  * @param cond

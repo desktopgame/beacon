@@ -4,7 +4,8 @@
 #include "../il/il_type_interface.h"
 #include "type_interface.h"
 #include "namespace.h"
-#include "class_loader.h"
+struct class_loader;
+//#include "class_loader.h"
 
 /**
  * 何を読み込むためのキャッシュかを表す列挙型.
@@ -29,7 +30,7 @@ typedef enum cache_kind {
  * つまり宣言ロード時に予約された実装の読み込みが必要な情報を表すキャッシュです。
  */
 typedef struct type_cache {
-	class_loader* context;
+	struct class_loader* context;
 	il_type* iltype;
 	type* tp;
 	namespace_* scope;
@@ -41,7 +42,7 @@ type_cache* type_cache_new();
 
 type_cache * type_cache_init(
 	type_cache* self,
-	class_loader* context,
+	struct class_loader* context,
 	il_type* iltype,
 	type* tp,
 	namespace_* scope,

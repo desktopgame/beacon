@@ -20,6 +20,13 @@ void class_loader_sgload_impl(class_loader* self);
 void class_loader_sgload_link(class_loader* self);
 
 /**
+ * selfを親として fullPath のファイルを読み込みます.
+ * @param self
+ * @param fullPath
+ */
+void class_loader_sgload_sub(class_loader* self, char* fullPath);
+
+/**
  * インポートの一覧を確認して、読み込むべきファイルがあるなら読み込みます.
  * @param self
  * @param ilimports

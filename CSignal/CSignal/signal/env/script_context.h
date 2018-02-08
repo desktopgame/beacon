@@ -5,6 +5,7 @@
 #include "../util/tree_map.h"
 #include "../util/vector.h"
 struct heap;
+struct class_loader;
 
 /**
  * 唯一のスクリプトコンテキストを表すIDです.
@@ -26,6 +27,7 @@ typedef struct script_context {
 	tree_map* namespaceMap;
 	tree_map* classLoaderMap;
 	vector* threadVec;
+	struct class_loader* bootstrap_class_loader;
 	//通し番号でクラスを参照するためのベクター
 	vector* type_vec;
 	struct heap* heap;

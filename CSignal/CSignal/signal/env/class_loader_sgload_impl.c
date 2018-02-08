@@ -25,6 +25,7 @@
 #include "type_cache.h"
 #include <string.h>
 #include "import_info.h"
+#include "../util/logger.h"
 //proto
 static void class_loader_sgload_namespace_tree(class_loader* self);
 static void class_loader_sgload_importImpl(class_loader* self, vector* ilimports, int i);
@@ -45,19 +46,68 @@ void class_loader_sgload_impl(class_loader* self) {
 	class_loader_sgload_excecClassDecl(self);
 	class_loader_sgload_excecInterfaceDecl(self);
 
-	class_loader_sgload_excecClassImpl(self);
-	class_loader_sgload_excecInterfaceImpl(self);
+//	class_loader_sgload_excecClassImpl(self);
+//	class_loader_sgload_excecInterfaceImpl(self);
 }
 
 void class_loader_sgload_link(class_loader * self) {
+	sg_info(__FILE__, __LINE__, "link %s",self->filename);
+
 	class_loader_sgload_import(self, self->il_code->import_list);
-	class_loader_sgload_namespace_list(self, self->il_code->namespace_list, NULL);
+	class_loader_sgload_namespace_tree(self);
 
 	class_loader_sgload_excecClassDecl(self);
 	class_loader_sgload_excecInterfaceDecl(self);
 
 	class_loader_sgload_excecClassImpl(self);
 	class_loader_sgload_excecInterfaceImpl(self);
+}
+
+void class_loader_sgload_sub(class_loader * self, char * fullPath) {
+	script_context* ctx = script_context_get_current();
+	//text_printf("%s\n", fullPath);
+	//そのファイルパスに対応した
+	//クラスローダが既に存在するなら無視
+	class_loader* cll = tree_map_get(ctx->classLoaderMap, fullPath);
+	if (cll != NULL) {
+		class_loader_sgload_importImplAlready(self, cll);
+		return;
+		//新たに読みこんだなら親に設定
+	} else {
+		sg_info(__FILE__, __LINE__, "import new %s", fullPath);
+		cll = class_loader_sgload_importImplNew(self, fullPath);
+	}
+	//そのローダーが破損しているなら
+	if (cll->error) {
+		class_loader_error(self, cll->errorMessage);
+	}
+	//パースをキャンセル
+	if (self->error) {
+		return;
+	}
+	cll->filename = text_strdup(fullPath);
+	cll->level = (self->level + 1);
+	//cll->link = classlink_unlinked;
+	char* text = io_read_text(fullPath);
+	parser* p = parser_parse_from_source_swap(text, fullPath);
+	assert(p->root != NULL);
+	//パースに失敗
+	if (p->fail) {
+		//class_loader_errors(cll, "parse failed --- %s", p->source_name);
+		MEM_FREE(text);
+		parser_pop();
+		return;
+		//成功
+	} else {
+		cll->source_code = p->root;
+		p->root = NULL;
+		MEM_FREE(text);
+		parser_pop();
+	}
+	//ロード
+	class_loader_load(cll);
+	assert(cll->source_code != NULL);
+	assert(cll->il_code != NULL);
 }
 
 void class_loader_sgload_import(class_loader* self, vector* ilimports) {
@@ -68,7 +118,7 @@ void class_loader_sgload_import(class_loader* self, vector* ilimports) {
 
 void class_loader_sgload_namespace_list(class_loader* self, vector* ilnamespace_list, namespace_* parent) {
 	//self->link = classlink_resume;
-	if (self->error || self->loadedNamespace) { return; }
+	if (self->error) { return; }
 	for (int i = 0; i < ilnamespace_list->length; i++) {
 		vector_item e = vector_at(ilnamespace_list, i);
 		il_namespace* iln = (il_namespace*)e;
@@ -114,6 +164,7 @@ void class_loader_sgload_enum(class_loader * self, il_type * iltype, namespace_ 
 	} else {
 		cls = tp->u.class_;
 	}
+	sg_info(__FILE__, __LINE__, "register enum %s", cls->name);
 	//全ての列挙子を public static final フィールドとして追加
 	for (int i = 0; i < ilenum->item_vec->length; i++) {
 		char* str = (char*)vector_at(ilenum->item_vec, i);
@@ -173,6 +224,7 @@ void class_loader_sgload_class(class_loader* self, il_type* iltype, namespace_* 
 			cls->super_class = objClass;
 		}
 	}
+	sg_info(__FILE__, __LINE__, "register class %s", cls->name);
 	//text_printfln("(( %s ))", type_name(tp));
 	//宣言のロードを予約
 	type_cache* tc = type_cache_init(
@@ -216,6 +268,7 @@ void class_loader_sgload_interface(class_loader * self, il_type * iltype, namesp
 	} else {
 		inter = tp->u.interface_;
 	}
+	sg_info(log_info, __FILE__, __LINE__, "register interface %s", inter->name);
 	//宣言のロードを予約
 	type_cache* tc = type_cache_init(
 		type_cache_new(),
@@ -268,6 +321,9 @@ void class_loader_sgload_body(class_loader* self, vector* stmt_list, enviroment*
 
 //private
 static void class_loader_sgload_namespace_tree(class_loader* self) {
+	if (self->loadedNamespace) {
+		return;
+	}
 	class_loader_sgload_namespace_list(self, self->il_code->namespace_list, NULL);
 	self->loadedNamespace = true;
 }
@@ -277,53 +333,11 @@ static void class_loader_sgload_importImpl(class_loader* self, vector* ilimports
 	    import_manager_loaded(self->import_manager, i)) {
 		return;
 	}
-	script_context* ctx = script_context_get_current();
 	vector_item e = vector_at(ilimports, i);
 	il_import* import = (il_import*)e;
 	char* withExt = text_concat(import->path, ".signal");
 	char* fullPath = io_absolute_path(withExt);
-	//text_printf("%s\n", fullPath);
-	//そのファイルパスに対応した
-	//クラスローダが既に存在するなら無視
-	class_loader* cll = tree_map_get(ctx->classLoaderMap, fullPath);
-	if (cll != NULL) {
-		class_loader_sgload_importImplAlready(self, cll);
-		return;
-		//新たに読みこんだなら親に設定
-	} else {
-		cll = class_loader_sgload_importImplNew(self, fullPath);
-	}
-	//そのローダーが破損しているなら
-	if (cll->error) {
-		class_loader_error(self, cll->errorMessage);
-	}
-	//パースをキャンセル
-	if (self->error) {
-		return;
-	}
-	cll->filename = text_strdup(fullPath);
-	cll->level = (self->level + 1);
-	//cll->link = classlink_unlinked;
-	char* text = io_read_text(fullPath);
-	parser* p = parser_parse_from_source_swap(text, fullPath);
-	assert(p->root != NULL);
-	//パースに失敗
-	if (p->fail) {
-		//class_loader_errors(cll, "parse failed --- %s", p->source_name);
-		MEM_FREE(text);
-		parser_pop();
-		return;
-		//成功
-	} else {
-		cll->source_code = p->root;
-		p->root = NULL;
-		MEM_FREE(text);
-		parser_pop();
-	}
-	//ロード
-	class_loader_load(cll);
-	assert(cll->source_code != NULL);
-	assert(cll->il_code != NULL);
+	class_loader_sgload_sub(self, fullPath);
 	MEM_FREE(withExt);
 	MEM_FREE(fullPath);
 }
@@ -341,10 +355,6 @@ static void class_loader_sgload_importImplAlready(class_loader* self, class_load
 		class_loader_error(self, cll->errorMessage);
 		return;
 	}
-	//自分をインクルードしている一覧に
-	//含まれているなら=相互インクルードの場合
-	if (vector_contains(self->parentVec, cll)) {
-	}
 	class_loader_sgload_yield(self, cll);
 }
 
@@ -354,15 +364,18 @@ static class_loader* class_loader_sgload_importImplNew(class_loader* self, char*
 	cll->ref_count++;
 	cll->type = content_lib;
 	cll->filename = fullPath;
-	vector_push(cll->parentVec, self);
+	cll->parent = self;
 	//text_printf("nimport %s\n", cll->filename);
-	import_manager_import(self->import_manager, cll);
+	import_info* info = import_manager_import(self->import_manager, cll);
+	info->consume = true;
+	sg_info(__FILE__, __LINE__, "import put %s", fullPath);
 	tree_map_put(ctx->classLoaderMap, fullPath, cll);
 	return cll;
 }
 
 //FIXME:コピペ
 static void class_loader_sgload_excecClassDecl(class_loader* self) {
+	sg_info(__FILE__, __LINE__, "loaded class decl %s", self->filename);
 	//text_printfln("CLASS_DECL %s ==", self->filename);
 	for (int i = 0; i < self->type_cacheVec->length; i++) {
 		type_cache* e = (type_cache*)vector_at(self->type_cacheVec, i);
@@ -375,6 +388,7 @@ static void class_loader_sgload_excecClassDecl(class_loader* self) {
 }
 
 static void class_loader_sgload_excecClassImpl(class_loader* self) {
+	sg_info(__FILE__, __LINE__, "loaded class impl %s", self->filename);
 	//text_printfln("CLASS_IMPL %s ==", self->filename);
 	for (int i = 0; i < self->type_cacheVec->length; i++) {
 		type_cache* e = (type_cache*)vector_at(self->type_cacheVec, i);
@@ -387,6 +401,7 @@ static void class_loader_sgload_excecClassImpl(class_loader* self) {
 }
 
 static void class_loader_sgload_excecInterfaceDecl(class_loader* self) {
+	sg_info(__FILE__, __LINE__, "loaded interface decl %s", self->filename);
 	//text_printfln("INTERFACE_DECL %s ==", self->filename);
 	for (int i = 0; i < self->type_cacheVec->length; i++) {
 		type_cache* e = (type_cache*)vector_at(self->type_cacheVec, i);
@@ -399,6 +414,7 @@ static void class_loader_sgload_excecInterfaceDecl(class_loader* self) {
 }
 
 static void class_loader_sgload_excecInterfaceImpl(class_loader* self) {
+	sg_info(__FILE__, __LINE__, "loaded interface impl %s", self->filename);
 	//text_printfln("INTERFACE_IMPL %s ==", self->filename);
 	for (int i = 0; i < self->type_cacheVec->length; i++) {
 		type_cache* e = (type_cache*)vector_at(self->type_cacheVec, i);
