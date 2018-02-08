@@ -1,4 +1,11 @@
 namespace signal.lang {
 	class Double {
+		public:
+		ctor new(Double d) {
+			this.nativeInit(d);
+		}
+
+		private:
+		native def nativeInit(Double d) -> Void;
 	}
 }
