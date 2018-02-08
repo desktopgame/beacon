@@ -2,12 +2,14 @@
 #include "../../sg_library_impl.h"
 #include "../../../env/field.h"
 #include "../../../env/constructor.h"
+#include "../../../env/exception.h"
 #include <assert.h>
 
 //proto
 static void sg_array_nativeInit(method* parent, vm* vm, enviroment* env);
 static void sg_array_nativeSet(method* parent, vm* vm, enviroment* env);
 static void sg_array_nativeGet(method* parent, vm* vm, enviroment* env);
+static void sg_array_nativeCopy(method* parent, vm* vm, enviroment* env);
 
 void sg_array_init() {
 	namespace_* lang = namespace_lang();
@@ -16,6 +18,7 @@ void sg_array_init() {
 	class_define_native_method(arrayClass, "nativeInit", sg_array_nativeInit);
 	class_define_native_method(arrayClass, "nativeSet", sg_array_nativeSet);
 	class_define_native_method(arrayClass, "nativeGet", sg_array_nativeGet);
+	class_define_native_method(arrayClass, "nativeCopy", sg_array_nativeCopy);
 }
 
 type * sg_array_class() {
@@ -70,4 +73,34 @@ static void sg_array_nativeGet(method* parent, vm* vm, enviroment* env) {
 	assert(idx->tag == object_int);
 	object* ret = vector_at(self->nativeSlotVec, idx->u.int_);
 	vector_push(vm->value_stack, ret);
+}
+
+static void sg_array_nativeCopy(method* parent, vm* vm, enviroment* env) {
+	object* length = vector_pop(vm->value_stack);
+	object* dstOffset = vector_pop(vm->value_stack);
+	object* dst = vector_pop(vm->value_stack);
+	object* srcOffset = vector_pop(vm->value_stack);
+	object* src = vector_pop(vm->value_stack);
+	int srcLen = src->nativeSlotVec->length;
+	int dstLen = dst->nativeSlotVec->length;
+	int cpyLen = length->u.int_;
+	//添え字がマイナス
+	if (srcOffset->u.int_ < 0 ||
+		dstOffset->u.int_ < 0) {
+		vm_native_throw(vm, exception_new_simplef(vm, "index must be positive: %d - %d", srcOffset->u.int_, dstOffset->u.int_));
+		return;
+	}
+	//添え字がはみ出している
+	if ((srcOffset->u.int_ + cpyLen) > srcLen ||
+		(dstOffset->u.int_ + cpyLen) > dstLen) {
+		vm_native_throw(vm, exception_new_simplef(vm, "index must be less than size of array: %d - %d", srcOffset->u.int_, dstOffset->u.int_));
+		return;
+	}
+	for (int i = srcOffset->u.int_;
+			 i < (srcOffset->u.int_ + length->u.int_);
+			 i++) {
+		int a = (i - srcOffset->u.int_) + dstOffset->u.int_;
+		vector_item e = vector_at(src->nativeSlotVec, i);
+		vector_assign(dst->nativeSlotVec, a, e);
+	}
 }

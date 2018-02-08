@@ -56,6 +56,7 @@ vm * vm_new() {
 	ret->level = 0;
 	ret->terminate = false;
 	ret->validate = false;
+	ret->nativeThrowPos = -1;
 	return ret;
 }
 
@@ -546,11 +547,32 @@ void vm_execute(vm* self, enviroment* env) {
 			default:
 				break;
 		}
+		//ネイティブメソッドからスローされた例外を検出
+		if (self->nativeThrowPos != -1) {
+			i = self->nativeThrowPos;
+			self->nativeThrowPos = -1;
+		}
 		//キャッチされなかった例外によって終了する
 		if (self->terminate) {
 			vm_uncaught(self, env, i);
 			break; 
 		}
+	}
+}
+
+void vm_native_throw(vm * self, object * exc) {
+	self->exception = exc;
+
+	vm_throw(self, exc);
+	sg_thread* th = sg_thread_current();
+	//空ならプログラムを終了
+	if (vector_empty(th->trace_stack)) {
+		vm_terminate(self);
+	//どこかでキャッチしようとしている
+	} else {
+		int temp = 0;
+		vm_validate(self, self->contextRef->buf->source->length, &temp);
+		self->nativeThrowPos = temp;
 	}
 }
 
