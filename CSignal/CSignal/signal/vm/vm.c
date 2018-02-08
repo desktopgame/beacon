@@ -445,6 +445,44 @@ void vm_execute(vm* self, enviroment* env) {
 				INFO("load");
 				break;
 			}
+			case op_inc:
+			{
+				object* o = vector_top(self->value_stack);
+				object_inc(o);
+				break;
+			}
+			case op_dec:
+			{
+				object* o = vector_top(self->value_stack);
+				object_dec(o);
+				break;
+			}
+			case op_copy:
+			{
+				object* o = vector_top(self->value_stack);
+				vector_push(self->value_stack, object_copy(o));
+				break;
+			}
+			case op_swap:
+			{
+				/*  
+				末尾の二つを入れ替える命令です。
+				この命令は次のように実行されます。
+				:
+				    |A|B|C|D|
+				:
+				    first = D
+				    second = C
+				    |A|B|
+				:
+				    |A|B|D|C|
+				*/
+				object* first = vector_pop(self->value_stack);
+				object* second = vector_pop(self->value_stack);
+				vector_push(self->value_stack, first);
+				vector_push(self->value_stack, second);
+				break;
+			}
 			//invoke
 			case op_lookup:
 			{

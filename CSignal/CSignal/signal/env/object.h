@@ -122,6 +122,28 @@ object* object_get_false();
 object* object_get_null();
 
 /**
+ * このオブジェクトが数値型なら、
+ * 内部の数値を +1 します.
+ * @param self
+ */
+void object_inc(object* self);
+
+/**
+ * このオブジェクトが数値型なら、
+ * 内部の数値を -1 します.
+ * @param self
+ */
+void object_dec(object* self);
+
+/**
+ * このオブジェクトを複製します.
+ * int/doubleでのみ使用可能です。
+ * @param self
+ * @return
+ */
+object* object_copy(object* self);
+
+/**
  * オブジェクトとフィールドを開放します.
  * @param self
  */

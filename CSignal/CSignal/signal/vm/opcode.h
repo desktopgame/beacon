@@ -79,6 +79,10 @@ typedef enum opcode {
 	op_lookup,
 	op_store,
 	op_load,
+	op_inc,
+	op_dec,
+	op_copy,
+	op_swap,
 
 	op_chain_this,
 	op_chain_super,

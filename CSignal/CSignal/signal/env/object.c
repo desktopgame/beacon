@@ -4,6 +4,7 @@
 #include "vtable.h"
 #include "../util/mem.h"
 #include "type_interface.h"
+#include <assert.h>
 
 //proto
 static object* object_malloc(object_tag type);
@@ -86,6 +87,32 @@ object * object_get_null() {
 		gObjectNull->type = CL_NULL;
 	}
 	return gObjectNull;
+}
+
+void object_inc(object * self) {
+	if (self->tag == object_int) {
+		self->u.int_++;
+	} else if (self->tag == object_double) {
+		self->u.double_++;
+	} else assert(false);
+}
+
+void object_dec(object * self) {
+	if (self->tag == object_int) {
+		self->u.int_--;
+	} else if (self->tag == object_double) {
+		self->u.double_--;
+	} else  assert(false);
+}
+
+object* object_copy(object * self) {
+	object* ret = NULL;
+	if (self->tag == object_int) {
+		ret = object_int_new(self->u.int_);
+	} else if (self->tag == object_double) {
+		ret = object_int_new(self->u.double_);
+	} else assert(false);
+	return ret;
 }
 
 void object_delete(object * self) {

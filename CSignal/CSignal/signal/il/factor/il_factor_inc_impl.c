@@ -25,7 +25,23 @@ void il_factor_inc_dump(il_factor_inc * self, int depth) {
 }
 
 void il_factor_inc_generate(il_factor_inc * self, enviroment * env) {
-	il_factor_generate(self->fact, env);
+	if (self->type == fixtype_pre) {
+		il_factor_generate(self->fact, env);
+		opcode_buf_add(env->buf, op_inc);
+
+	} else if (self->type == fixtype_post) {
+		//FIXME:コピペ
+		//
+		il_factor_generate(self->fact, env);
+		//複製
+		opcode_buf_add(env->buf, op_copy);
+		//オリジナルをインクリメント
+		opcode_buf_add(env->buf, op_swap);
+		opcode_buf_add(env->buf, op_inc);
+		//が、返すのはとりあえず複製
+		//ここでオリジナルがスタックから消える
+		opcode_buf_add(env->buf, op_pop);
+	}
 }
 
 void il_factor_inc_load(il_factor_inc * self, enviroment * env, il_ehandler * eh) {

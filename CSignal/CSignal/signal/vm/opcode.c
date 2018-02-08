@@ -203,6 +203,26 @@ int opcode_print(vector* source, int index) {
 			text_printf("load %d", a);
 			break;
 		}
+		case op_inc:
+		{
+			text_printf("inc");
+			break;
+		}
+		case op_dec:
+		{
+			text_printf("inc");
+			break;
+		}
+		case op_copy:
+		{
+			text_printf("copy");
+			break;
+		}
+		case op_swap:
+		{
+			text_printf("swap");
+			break;
+		}
 		//invoke
 		case op_chain_this:
 		{
