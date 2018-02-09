@@ -17,15 +17,7 @@ namespace signal.lang {
 		}
 
 		def substr(Int offs, Int len) -> String {
-			var range = new Array(len);
-			var ptr = offs;
-
-			while(ptr < offs + len) {
-				var a = ptr-offs;
-				range.set(a, this.charArray.get(ptr) as Char);
-				ptr++;
-			}
-			return new String(range);
+			return new String(this.charArray.sub(offs, len));
 		}
 		private:
 		native def nativeInit() -> Void;

@@ -25,6 +25,18 @@ namespace signal.lang {
 			this.nativeSet(index, v);
 		}
 
+		def sub(Int offs, Int len) -> Array {
+			var range = new Array(len);
+			var ptr = offs;
+
+			while(ptr < offs + len) {
+				var a = ptr-offs;
+				range.set(a, this.get(ptr));
+				ptr++;
+			}
+			return range;
+		}
+
 		def get(Int index) -> Object {
 			this.checkRange(index);
 			return this.nativeGet(index);
