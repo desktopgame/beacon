@@ -1,4 +1,33 @@
+import "Array"
+
 namespace signal.lang {
 	class String {
+		private:
+		Array charArray;
+
+		public:
+		ctor new(Array source) {
+			this.charArray = new Array(source.length());
+			Array.copy(source, 0, this.charArray, 0, source.length());
+			this.nativeInit();
+		}
+
+		def charAt(Int index) -> Char {
+			return this.charArray.get(index) as Char;
+		}
+
+		def substr(Int offs, Int len) -> String {
+			var range = new Array(len);
+			var ptr = offs;
+
+			while(ptr < offs + len) {
+				var a = ptr-offs;
+				range.set(a, this.charArray.get(ptr) as Char);
+				ptr++;
+			}
+			return new String(range);
+		}
+		private:
+		native def nativeInit() -> Void;
 	}
 }

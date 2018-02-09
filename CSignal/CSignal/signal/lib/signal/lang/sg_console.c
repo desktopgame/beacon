@@ -1,6 +1,7 @@
 #include "sg_console.h"
 #include "../../sg_library_impl.h"
 #include "../../../util/text.h"
+#include "sg_string.h"
 #include <stdio.h>
 
 //proto
@@ -27,7 +28,7 @@ static void sg_console_writeLine(method* parent, vm* vm, enviroment* env) {
 	} else if(o->tag == object_double) {
 		text_printf("%f\n", o->u.double_);
 	} else if (o->tag == object_string) {
-		text_printf("%s\n", o->u.string_);
+		text_printf("%s\n", sg_string_raw(o)->text);
 	} else if (o->tag == object_ref) {
 		text_printf("%s\n", type_name(o->type));
 	} else if (o->tag == object_char) {
@@ -44,7 +45,7 @@ static void sg_console_write(method* parent, vm* vm, enviroment* env) {
 	}  else if (o->tag == object_double) {
 		text_printf("%f", o->u.double_);
 	} else if (o->tag == object_string) {
-		text_printf("%s", o->u.string_);
+		text_printf("%s", sg_string_raw(o)->text);
 	} else if (o->tag == object_ref) {
 		text_printf("%s", type_name(o->type));
 	} else if (o->tag == object_char) {

@@ -3,6 +3,7 @@
 #include "../../util/text.h"
 #include "../../vm/symbol_entry.h"
 #include "../../env/type_interface.h"
+#include "../../env/namespace.h"
 #include <stdio.h>
 
 il_stmt * il_stmt_wrap_inferenced_type_init(il_stmt_inferenced_type_init * self) {
@@ -36,6 +37,15 @@ void il_stmt_inferenced_type_init_generate(il_stmt_inferenced_type_init * self, 
 		self->name
 	);
 	il_factor_generate(self->fact, env);
+	if (tp == CL_INT ||
+		tp == CL_DOUBLE ||
+		tp == CL_BOOL ||
+		tp == CL_CHAR) {
+		//複製を代入する
+		opcode_buf_add(env->buf, op_copy);
+		opcode_buf_add(env->buf, op_swap);
+		opcode_buf_add(env->buf, op_pop);
+	}
 	opcode_buf_add(env->buf, op_store);
 	opcode_buf_add(env->buf, e->index);
 }

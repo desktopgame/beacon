@@ -15,8 +15,10 @@
 #include "../thread/thread.h"
 #include "../util/logger.h"
 #include "../util/mem.h"
+#include "../util/string_buffer.h"
 #include "../util/vector.h"
 #include "../util/text.h"
+#include "../lib/signal/lang/sg_string.h"
 #include "line_range.h"
 //proto
 static int stack_topi(vm* self);
@@ -399,7 +401,7 @@ void vm_execute(vm* self, enviroment* env) {
 			case op_get_field:
 			{
 				object* sourceObject = (object*)vector_pop(self->value_stack);
-				assert(sourceObject->tag == object_ref);
+				//assert(sourceObject->tag == object_ref);
 				//int absClsIndex = (int)enviroment_source_at(env, ++i);
 				int fieldIndex = (int)enviroment_source_at(env, ++i);
 				object* val = (object*)vector_at(sourceObject->u.field_vec, fieldIndex);
@@ -490,7 +492,19 @@ void vm_execute(vm* self, enviroment* env) {
 				object* o = (object*)vector_top(self->value_stack);
 				assert(o->type != CL_NULL);
 				type* tp = (type*)vector_at(ctx->type_vec, absClsIndex);
-				o->vptr = vtable_lookup(o->vptr, type_vtable(tp));
+				if (tp == CL_INT ||
+					tp == CL_DOUBLE ||
+					tp == CL_CHAR) {
+					vector_push(
+						self->value_stack, 
+						object_scopy(
+							vector_pop(self->value_stack)
+						)
+					);
+				} else if(tp == CL_BOOL) {
+				} else {
+					o->vptr = vtable_lookup(o->vptr, type_vtable(tp));
+				}
 				break;
 			}
 			case op_invokeinterface:
@@ -708,7 +722,7 @@ static char stack_topc(vm* self) {
 static char* stack_tops(vm* self) {
 	object* ret = (object*)vector_top(self->value_stack);
 	assert(ret->tag == object_string);
-	return ret->u.string_;
+	return sg_string_raw(ret)->text;
 }
 
 static bool stack_topb(vm* self) {
@@ -739,7 +753,7 @@ static char stack_popc(vm* self) {
 static char* stack_pops(vm* self) {
 	object* ret = (object*)vector_pop(self->value_stack);
 	assert(ret->tag == object_string);
-	return ret->u.string_;
+	return sg_string_raw(ret)->text;
 }
 
 static bool stack_popb(vm* self) {

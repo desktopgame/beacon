@@ -49,7 +49,7 @@ typedef struct object {
 		int int_;
 		double double_;
 		char char_;
-		char* string_;
+//		char* string_;
 		bool bool_;
 		vector* field_vec;
 	} u;
@@ -137,11 +137,18 @@ void object_dec(object* self);
 
 /**
  * このオブジェクトを複製します.
- * int/doubleでのみ使用可能です。
+ * int/double/char/boolでのみ使用可能です。
  * @param self
  * @return
  */
 object* object_copy(object* self);
+/**
+ * このオブジェクトを複製します.
+ * int/double/char/boolでのみ使用可能です。
+ * @param self
+ * @return
+ */
+object* object_scopy(object* self);
 
 /**
  * オブジェクトとフィールドを開放します.

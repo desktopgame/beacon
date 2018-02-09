@@ -1,24 +1,7 @@
 import "lib"
-//データを作成
-var arr = new Array(5);
-var i = 0;
-while(i < arr.length()) {
-	arr.set(i, i * 10);
-	i++;
-}
-//オリジナルを出力
-i = 0;
-while(i < arr.length()) {
-	Console.writeLine(arr.get(i));
-	i++;
-}
 
-Console.writeLine("---");
-var sub = new Array(5);
-Array.copy(arr, 0, sub, 0, 5);
-//コピーを出力
-i = 0;
-while(i < sub.length()) {
-	Console.writeLine(arr.get(i));
-	i++;
-}
+var str = "HelloWorld";
+Console.writeLine(str);
+
+var sub = str.substr(0, 4);
+Console.writeLine(sub);

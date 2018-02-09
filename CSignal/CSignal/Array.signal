@@ -1,4 +1,5 @@
 import "Exception"
+import "String"
 
 namespace signal.lang {
 	/**
@@ -43,7 +44,7 @@ namespace signal.lang {
 		
 		private:
 		def checkRange(Int index) -> Void {
-			if(index < 0 || index >= this.length) {
+			if(index < 0 || index >= this.length()) {
 				throw new Exception("Out Of Range");
 			//	throw -1;
 			}

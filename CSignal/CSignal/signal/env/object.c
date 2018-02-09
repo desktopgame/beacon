@@ -1,10 +1,13 @@
 #include "object.h"
 #include "namespace.h"
+#include "../util/string_buffer.h"
 #include <stdlib.h>
 #include "vtable.h"
 #include "../util/mem.h"
 #include "type_interface.h"
 #include <assert.h>
+#include "type_impl.h"
+#include "../lib/signal/lang/sg_array.h"
 
 //proto
 static object* object_malloc(object_tag type);
@@ -39,9 +42,37 @@ object * object_char_new(char c) {
 
 object * object_string_new(const char * s) {
 	object* ret = object_malloc(object_string);
-	ret->u.string_ = s;
+	//ret->u.string_ = s;
+	ret->u.field_vec = vector_new();
 	ret->type = CL_STRING;
 	ret->vptr = type_vtable(CL_STRING);
+
+	//配列を生成
+	object* arr = object_ref_new();
+	type* arrType = sg_array_class();
+	type* strType = namespace_get_type(namespace_lang(), "String");
+	arr->type = arrType;
+	arr->vptr = type_vtable(arrType);
+	//ボックス化
+	char* itr = s;
+	string_buffer* sb = string_buffer_new();
+	while ((*itr) != '\0') {
+		char e = (*itr);
+		vector_push(arr->nativeSlotVec, object_char_new(e));
+		itr++;
+		string_buffer_append(sb, e);
+	}
+	string_buffer_shrink(sb);
+	//String#charArrayを埋める
+	int temp = 0;
+	class_find_field(strType->u.class_, "charArray", &temp);
+	vector_assign(ret->u.field_vec, temp, arr);
+	//Array#lengthを埋める
+	temp = 0;
+	class_find_field(arrType->u.class_, "length", &temp);
+	vector_assign(arr->u.field_vec, temp, object_int_new(sb->length));
+	//C形式の文字列でも保存
+	vector_assign(ret->nativeSlotVec, 0, sb);
 	return ret;
 }
 
@@ -110,9 +141,18 @@ object* object_copy(object * self) {
 	if (self->tag == object_int) {
 		ret = object_int_new(self->u.int_);
 	} else if (self->tag == object_double) {
-		ret = object_int_new(self->u.double_);
-	} else assert(false);
+		ret = object_double_new(self->u.double_);
+	} else if (self->tag == object_char) {
+		ret = object_char_new(self->u.char_);
+	} else {
+		ret = self;
+	}
 	return ret;
+}
+
+object * object_scopy(object * self) {
+	assert(self->tag != object_ref);
+	return object_copy(self);
 }
 
 void object_delete(object * self) {

@@ -3,6 +3,7 @@
 #include "../../../env/field.h"
 #include "../../../env/constructor.h"
 #include "../../../env/exception.h"
+#include "../../../util/text.h"
 #include <assert.h>
 
 //proto
@@ -72,6 +73,7 @@ static void sg_array_nativeGet(method* parent, vm* vm, enviroment* env) {
 	object* idx = vector_pop(vm->value_stack);
 	assert(idx->tag == object_int);
 	object* ret = vector_at(self->nativeSlotVec, idx->u.int_);
+	//text_printfln("array get %d", idx->u.int_);
 	vector_push(vm->value_stack, ret);
 }
 
