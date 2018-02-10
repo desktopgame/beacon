@@ -5,3 +5,5 @@ Console.writeLine(str);
 
 var sub = str.substr(0, 4);
 Console.writeLine(sub);
+
+Console.writeLine(sub.charAt(0));

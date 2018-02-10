@@ -16,6 +16,7 @@
 #include "../constructor.h"
 #include "../type_impl.h"
 #include "../../env/vtable.h"
+#include "../../util/logger.h"
 #include "meta_impl.h"
 
 //http://jumble-note.blogspot.jp/2012/09/c-vacopy.html
@@ -441,6 +442,7 @@ void class_linkall(class_ * self) {
 void class_delete(class_ * self) {
 //	assert(self->ref_count == 0);
 //	MEM_FREE(self->name);
+	sg_info(__FILE__, __LINE__, "deleted class %s", self->name);
 	if (self->super_class != NULL) {
 		self->super_class->ref_count--;
 	}

@@ -21,7 +21,7 @@ void script_method_execute(script_method * self, method* parent, vm * vmachine, 
 	for (int i = 0; i < parent->parameter_list->length; i++) {
 		vector_push(sub->value_stack, object_copy(vector_pop(vmachine->value_stack)));
 	}
-	enviroment_op_dump(self->env, sub->level);
+//	enviroment_op_dump(self->env, sub->level);
 	//opcode_buf_dump(self->env->buf, sub->level);
 	vm_execute(sub, self->env);
 	//戻り値が Void 以外ならスタックトップの値を引き継ぐ

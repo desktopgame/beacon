@@ -7,6 +7,9 @@
 #include "type_interface.h"
 #include "object.h"
 
+//proto
+static void constructor_parameter_delete(vector_item item);
+
 constructor * constructor_new() {
 	constructor* ret = (constructor*)MEM_MALLOC(sizeof(constructor));
 	ret->parent = NULL;
@@ -46,4 +49,13 @@ object * constructor_new_instance(constructor * self, vector * args, vm * parent
 }
 
 void constructor_delete(constructor * self) {
+	enviroment_delete(self->env);
+	vector_delete(self->parameter_list, constructor_parameter_delete);
+	MEM_FREE(self);
+}
+
+//private
+static void constructor_parameter_delete(vector_item item) {
+	parameter* e = (parameter*)item;
+	parameter_delete(e);
 }

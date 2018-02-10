@@ -78,6 +78,9 @@ type * il_factor_named_invoke_eval(il_factor_named_invoke * self, enviroment * e
 
 void il_factor_named_invoke_delete(il_factor_named_invoke * self) {
 	//MEM_FREE(self->fqcn);
+	if (self->type == ilnamed_invoke_variable) {
+		il_factor_delete(self->u.factor);
+	}
 	assert(self->fqcn->name != NULL);
 	//MEM_FREE(self->fqcn->name);
 	fqcn_cache_delete(self->fqcn);

@@ -367,10 +367,10 @@ void vm_execute(vm* self, enviroment* env) {
 		//		enviroment_op_dump(ctor->env, sub->level);
 				//opcode_buf_dump(ctor->env->buf, sub->level);
 				vm_execute(sub, ctor->env);
-				vm_delete(sub);
 				//コンストラクタを実行した場合、
 				//objectがスタックのトップに残っているはず
 				vector_item returnV = vector_top(sub->value_stack);
+				vm_delete(sub);
 				object* returnO = (object*)returnV;
 				vector_assign(self->ref_stack, 0, returnV);
 				vector_push(self->value_stack, returnV);
@@ -693,10 +693,12 @@ void vm_uncaught(vm * self, enviroment* env, int pc) {
 }
 
 void vm_delete(vm * self) {
+	vector_clear(self->value_stack);
+	vector_clear(self->ref_stack);
 	//constant_pool_delete(self->pool);
 	//operand_stack_delete(self->operand_stack);
-	//vector_delete(self->value_stack, vector_deleter_null);
-	//vector_delete(self->ref_stack, vector_deleter_null);
+	vector_delete(self->value_stack, vector_deleter_null);
+	vector_delete(self->ref_stack, vector_deleter_null);
 	MEM_FREE(self);
 }
 

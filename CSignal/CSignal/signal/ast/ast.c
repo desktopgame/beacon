@@ -451,10 +451,13 @@ static bool ast_has_str(ast* self) {
 		t == ast_namespace_path ||
 		t == ast_field_type_name ||
 		t == ast_field_access_name ||
+		t == ast_function_name ||
 		t == ast_method_name ||
 		t == ast_method_return_name ||
 		t == ast_parameter_type_name ||
 		t == ast_parameter_access_name ||
-		t == ast_class_decl;
+		t == ast_class_decl ||
+		t == ast_interface_decl ||
+		t == ast_enum_decl ;
 		//t == ast_class_super;
 }
