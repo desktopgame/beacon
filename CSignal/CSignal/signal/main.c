@@ -20,7 +20,7 @@ void _start(int argc, char* argv[]) {
 #endif
 	text_set_trace(true);
 	sg_lopen();
-	sg_lset_enabled(false);
+	sg_lset_enabled(true);
 	script_context_open();
 	//cmd_dump(argc, argv);
 

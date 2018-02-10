@@ -68,6 +68,11 @@ static void gc_mark(heap* self) {
 	vm* top = sg_thread_get_vm_ref(th);
 	assert(top != NULL);
 	vm_markall(top);
+
+	//true/false/null‚Íí‚Éƒ}[ƒN
+	object_get_true()->paint = paint_marked;
+	object_get_false()->paint = paint_marked;
+	object_get_null()->paint = paint_marked;
 }
 
 static void gc_sweep(heap* self) {

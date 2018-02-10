@@ -88,13 +88,6 @@ object* object_char_new(char c);
 object* object_string_new(const char* s);
 
 /**
- * 真偽値型のオブジェクトを作成します.
- * @param b
- * @return
- */
-object* object_bool_new(bool b);
-
-/**
  * 参照型のオブジェクトを作成します.
  * @return
  */

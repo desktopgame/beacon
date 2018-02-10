@@ -121,22 +121,22 @@ void vm_execute(vm* self, enviroment* env) {
 				vector_push(self->value_stack, object_int_new(SPI(self) && SPI(self)));
 				break;
 			case op_ieq:
-				vector_push(self->value_stack, object_bool_new(SPI(self) == SPI(self)));
+				vector_push(self->value_stack, object_bool_get(SPI(self) == SPI(self)));
 				break;
 			case op_inoteq:
-				vector_push(self->value_stack, object_bool_new(SPI(self) != SPI(self)));
+				vector_push(self->value_stack, object_bool_get(SPI(self) != SPI(self)));
 				break;
 			case op_igt:
-				vector_push(self->value_stack, object_bool_new(SPI(self) > SPI(self)));
+				vector_push(self->value_stack, object_bool_get(SPI(self) > SPI(self)));
 				break;
 			case op_ige:
-				vector_push(self->value_stack, object_bool_new(SPI(self) >= SPI(self)));
+				vector_push(self->value_stack, object_bool_get(SPI(self) >= SPI(self)));
 				break;
 			case op_ilt:
-				vector_push(self->value_stack, object_bool_new(SPI(self) < SPI(self)));
+				vector_push(self->value_stack, object_bool_get(SPI(self) < SPI(self)));
 				break;
 			case op_ile:
-				vector_push(self->value_stack, object_bool_new(SPI(self) <= SPI(self)));
+				vector_push(self->value_stack, object_bool_get(SPI(self) <= SPI(self)));
 				break;
 				//double & double
 			case op_dadd:
@@ -155,22 +155,22 @@ void vm_execute(vm* self, enviroment* env) {
 				vector_push(self->value_stack, object_double_new((double)((int)SPD(self) % (int)SPD(self))));
 				break;
 			case op_deq:
-				vector_push(self->value_stack, object_bool_new(SPD(self) == SPD(self)));
+				vector_push(self->value_stack, object_bool_get(SPD(self) == SPD(self)));
 				break;
 			case op_dnoteq:
-				vector_push(self->value_stack, object_bool_new(SPD(self) != SPD(self)));
+				vector_push(self->value_stack, object_bool_get(SPD(self) != SPD(self)));
 				break;
 			case op_dgt:
-				vector_push(self->value_stack, object_bool_new(SPD(self) > SPD(self)));
+				vector_push(self->value_stack, object_bool_get(SPD(self) > SPD(self)));
 				break;
 			case op_dge:
-				vector_push(self->value_stack, object_bool_new(SPD(self) >= SPD(self)));
+				vector_push(self->value_stack, object_bool_get(SPD(self) >= SPD(self)));
 				break;
 			case op_dlt:
-				vector_push(self->value_stack, object_bool_new(SPD(self) < SPD(self)));
+				vector_push(self->value_stack, object_bool_get(SPD(self) < SPD(self)));
 				break;
 			case op_dle:
-				vector_push(self->value_stack, object_bool_new(SPD(self) <= SPD(self)));
+				vector_push(self->value_stack, object_bool_get(SPD(self) <= SPD(self)));
 				break;
 			case op_ineg:
 				vector_push(self->value_stack, object_int_new(-SPI(self)));
@@ -179,20 +179,20 @@ void vm_execute(vm* self, enviroment* env) {
 				vector_push(self->value_stack, object_double_new(-SPD(self)));
 				break;
 			case op_bnot:
-				vector_push(self->value_stack, object_bool_new(!SPB(self)));
+				vector_push(self->value_stack, object_bool_get(!SPB(self)));
 				break;
 			//TODO:短絡評価していない
 			case op_bbit_or:
-				vector_push(self->value_stack, object_bool_new(SPB(self) | SPB(self)));
+				vector_push(self->value_stack, object_bool_get(SPB(self) | SPB(self)));
 				break;
 			case op_blogic_or:
-				vector_push(self->value_stack, object_bool_new(SPB(self) || SPB(self)));
+				vector_push(self->value_stack, object_bool_get(SPB(self) || SPB(self)));
 				break;
 			case op_bbit_and:
-				vector_push(self->value_stack, object_bool_new(SPB(self) & SPB(self)));
+				vector_push(self->value_stack, object_bool_get(SPB(self) & SPB(self)));
 				break;
 			case op_blogic_and:
-				vector_push(self->value_stack, object_bool_new(SPB(self) && SPB(self)));
+				vector_push(self->value_stack, object_bool_get(SPB(self) && SPB(self)));
 				break;
 			//push const
 			case op_consti:
@@ -715,10 +715,6 @@ void vm_markall(vm * self) {
 			object_markall(f->static_value);
 		}
 	}
-	//true/false/nullは常にマーク
-	object_get_true()->paint = paint_marked;
-	object_get_false()->paint = paint_marked;
-	object_get_null()->paint = paint_marked;
 	//全ての子要素を巡回してマーキング
 	vm_markallImpl(self);
 }

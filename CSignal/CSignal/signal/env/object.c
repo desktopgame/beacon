@@ -79,14 +79,6 @@ object * object_string_new(const char * s) {
 	return ret;
 }
 
-object * object_bool_new(bool b) {
-	object* ret = object_malloc(object_bool);
-	ret->u.bool_ = b;
-	ret->type = CL_BOOL;
-	ret->vptr = type_vtable(CL_BOOL);
-	return ret;
-}
-
 object * object_ref_new() {
 	object* ret= object_malloc(object_ref);
 	ret->u.field_vec = vector_new();
