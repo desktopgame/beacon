@@ -32,5 +32,6 @@ void il_stmt_return_load(il_stmt_return * self, enviroment * env, il_ehandler * 
 }
 
 void il_stmt_return_delete(il_stmt_return * self) {
+	il_factor_delete(self->fact);
 	MEM_FREE(self);
 }

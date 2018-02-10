@@ -38,9 +38,11 @@
 #include "class_loader_ilload_impl.h"
 #include "class_loader_sgload_impl.h"
 #include "import_info.h"
+#include "type_cache.h"
 
 //proto
 static void class_loader_link(class_loader* self);
+static void class_loader_cache_delete(vector_item item);
 
 class_loader* class_loader_new() {
 	class_loader* ret = (class_loader*)MEM_MALLOC(sizeof(class_loader));
@@ -130,6 +132,7 @@ void class_loader_delete(class_loader * self) {
 	il_top_level_delete(self->il_code);
 	self->il_code = NULL;
 
+	vector_delete(self->type_cacheVec, class_loader_cache_delete);
 	import_manager_delete(self->import_manager);
 	enviroment_delete(self->env);
 	if (self->parent != NULL &&
@@ -177,4 +180,9 @@ static void class_loader_link(class_loader* self) {
 	}
 
 	class_loader_sgload_link(self);
+}
+
+static void class_loader_cache_delete(vector_item item) {
+	type_cache* e = (type_cache*)item;
+	type_cache_delete(e);
 }

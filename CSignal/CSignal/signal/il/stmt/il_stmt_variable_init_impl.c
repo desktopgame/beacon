@@ -51,6 +51,8 @@ void il_stmt_variable_init_load(il_stmt_variable_init * self, enviroment * env, 
 }
 
 void il_stmt_variable_init_delete(il_stmt_variable_init * self) {
+	il_factor_delete(self->fact);
+	fqcn_cache_delete(self->fqcn);
 	MEM_FREE(self->name);
 	MEM_FREE(self);
 }
