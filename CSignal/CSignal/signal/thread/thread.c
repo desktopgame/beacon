@@ -5,6 +5,9 @@
 #include "../vm/vm.h"
 #include <assert.h>
 
+//proto
+static void sg_thread_trace_delete(vector_item item);
+
 static volatile sg_thread* g_sg_main_thread = NULL;
 
 void sg_thread_launch() {
@@ -34,6 +37,8 @@ void sg_thread_clear(sg_thread* self) {
 }
 
 void sg_thread_delete(sg_thread * self) {
+	vector_delete(self->trace_stack, sg_thread_trace_delete);
+	MEM_FREE(self);
 }
 
 void sg_thread_set_vm_ref(sg_thread * self, vm * vmRef) {
@@ -58,4 +63,9 @@ sg_thread * sg_thread_main() {
 void sg_thread_destroy() {
 	sg_thread_delete(g_sg_main_thread);
 	g_sg_main_thread = NULL;
+}
+//private
+static void sg_thread_trace_delete(vector_item item) {
+	vm_trace* e = (vm_trace*)item;
+	vm_trace_delete(e);
 }

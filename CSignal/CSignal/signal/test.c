@@ -155,8 +155,8 @@ void test_cll(void) {
 	vm* vm = vm_new();
 	sg_thread_set_vm_ref(sg_thread_current(), vm);
 	vm_execute(vm, cll->env);
-	//vm_delete(vm);
-	//sg_thread_release_vm_ref(sg_thread_current());
+	vm_delete(vm);
+	sg_thread_release_vm_ref(sg_thread_current());
 	//*/
 	class_loader_delete(cll);
 	/*

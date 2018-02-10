@@ -729,6 +729,7 @@ void vm_delete(vm * self) {
 	//operand_stack_delete(self->operand_stack);
 	vector_delete(self->value_stack, vector_deleter_null);
 	vector_delete(self->ref_stack, vector_deleter_null);
+	vector_delete(self->childrenVec, vector_deleter_null);
 	MEM_FREE(self);
 }
 

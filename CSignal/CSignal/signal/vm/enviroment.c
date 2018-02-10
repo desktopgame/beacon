@@ -11,6 +11,7 @@
 
 //proto
 static void enviroment_constant_pool_delete(vector_item item);
+static void enviroment_line_range_delete(vector_item item);
 static void enviroment_add_constant(enviroment* self, object* o);
 
 enviroment * enviroment_new() {
@@ -152,6 +153,7 @@ class_ * enviroment_class(enviroment * self, fqcn_cache * fqcn) {
 void enviroment_delete(enviroment * self) {
 	vector_delete(self->namespace_vec, vector_deleter_null);
 	vector_delete(self->type_vec, vector_deleter_null);
+	vector_delete(self->line_rangeVec, enviroment_line_range_delete);
 	
 	opcode_buf_delete(self->buf);
 	vector_delete(self->constant_pool, enviroment_constant_pool_delete);
@@ -161,8 +163,13 @@ void enviroment_delete(enviroment * self) {
 
 //private
 static void enviroment_constant_pool_delete(vector_item item) {
-	//開放はヒープ
-	//object_delete((object*)item);
+	//StringやArrayはここで中身を削除する必要がある
+	object_delete((object*)item);
+}
+
+static void enviroment_line_range_delete(vector_item item) {
+	line_range* e = (line_range*)item;
+	line_range_delete(e);
 }
 
 static void enviroment_add_constant(enviroment* self, object* o) {

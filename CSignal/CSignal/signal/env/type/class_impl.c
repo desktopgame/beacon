@@ -455,13 +455,13 @@ void class_delete(class_ * self) {
 	if (self->super_class != NULL) {
 		self->super_class->ref_count--;
 	}
+	tree_map_delete(self->native_method_ref_map, tree_map_deleter_null);
 	vector_delete(self->impl_list, vector_deleter_null);
 	vector_delete(self->field_list, class_field_delete);
 	vector_delete(self->sfield_list, class_field_delete);
 	vector_delete(self->method_list, class_method_delete);
 	vector_delete(self->smethod_list, class_method_delete);
 	vector_delete(self->constructor_list, class_ctor_delete);
-	tree_map_delete(self->native_method_ref_map, tree_map_deleter_null);
 	vtable_delete(self->vt);
 	MEM_FREE(self->name);
 	MEM_FREE(self);

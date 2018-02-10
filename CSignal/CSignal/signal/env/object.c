@@ -184,10 +184,15 @@ void object_markall(object * self) {
 void object_delete(object * self) {
 	sg_info(__FILE__, __LINE__, "deleted object %s", type_name(self->type));
 	if (self->tag == object_string) {
-		vector_delete(self->nativeSlotVec, vector_deleter_free);
-	} else {
-		vector_delete(self->nativeSlotVec, vector_deleter_null);
+		string_buffer* sb = vector_at(self->nativeSlotVec, 0);
+		vector_remove(self->nativeSlotVec, 0);
+		string_buffer_delete(sb);
 	}
+	if (self->tag == object_string ||
+		self->tag == object_ref) {
+		vector_delete(self->u.field_vec, vector_deleter_null);
+	}
+	vector_delete(self->nativeSlotVec, vector_deleter_null);
 	MEM_FREE(self);
 }
 
