@@ -20,6 +20,7 @@
 #include "../util/text.h"
 #include "../lib/signal/lang/sg_string.h"
 #include "line_range.h"
+#include "../env/heap.h"
 //proto
 static int stack_topi(vm* self);
 static double stack_topd(vm* self);
@@ -32,6 +33,8 @@ static double stack_popd(vm* self);
 static char stack_popc(vm* self);
 static char* stack_pops(vm* self);
 static bool stack_popb(vm* self);
+static void remove_from_parent(vm* self);
+static void vm_markallImpl(vm* self);
 
 //Stack Top
 #define STI(a) stack_topi(a)
@@ -59,6 +62,8 @@ vm * vm_new() {
 	ret->terminate = false;
 	ret->validate = false;
 	ret->nativeThrowPos = -1;
+	ret->exception = NULL;
+	ret->childrenVec = vector_new();
 	return ret;
 }
 
@@ -66,6 +71,8 @@ vm * vm_sub(vm * parent) {
 	vm* ret = vm_new();
 	ret->parent = parent;
 	ret->level = parent->level + 1;
+
+	vector_push(parent->childrenVec, ret);
 	return ret;
 }
 
@@ -346,6 +353,7 @@ void vm_execute(vm* self, enviroment* env) {
 				vector_item returnV = vector_top(sub->value_stack);
 				object* returnO = (object*)returnV;
 				vector_push(self->value_stack, returnV);
+				vm_delete(sub);
 				break;
 			}
 			case op_chain_this:
@@ -370,10 +378,11 @@ void vm_execute(vm* self, enviroment* env) {
 				//コンストラクタを実行した場合、
 				//objectがスタックのトップに残っているはず
 				vector_item returnV = vector_top(sub->value_stack);
-				vm_delete(sub);
 				object* returnO = (object*)returnV;
 				vector_assign(self->ref_stack, 0, returnV);
 				vector_push(self->value_stack, returnV);
+
+				vm_delete(sub);
 				//class_alloc_fields(cls, returnO);
 				break;
 			}
@@ -435,7 +444,7 @@ void vm_execute(vm* self, enviroment* env) {
 				vector_item e = vector_pop(self->value_stack);
 				object* o = (object*)e;
 				vector_assign(self->ref_stack, index, e);
-				INFO("store");
+				//INFO("store");
 				break;
 			}
 			case op_load:
@@ -444,7 +453,7 @@ void vm_execute(vm* self, enviroment* env) {
 				vector_item e = vector_at(self->ref_stack, index);
 				object*  o = (object*)e;
 				vector_push(self->value_stack, e);
-				INFO("load");
+				//INFO("load");
 				break;
 			}
 			case op_inc:
@@ -523,7 +532,7 @@ void vm_execute(vm* self, enviroment* env) {
 			//	assert(code == op_invokestatic);
 				method_execute(m, self, env);
 				break;
-				break;
+				//break;
 			}
 			case op_invokevirtual:
 			case op_invokespecial:
@@ -640,11 +649,11 @@ void vm_catch(vm * self) {
 	if (self == NULL) {
 		return;
 	}
-	vm* temp = self;
-	do {
-		temp->exception = NULL;
-		temp = temp->parent;
-	} while (temp != NULL);
+	for (int i = 0; i < self->childrenVec->length; i++) {
+		vm* e = (vm*)vector_at(self->childrenVec, i);
+		vm_catch(e);
+	}
+	self->exception = NULL;
 }
 
 bool vm_validate(vm* self, int source_len, int* pcDest) {
@@ -692,7 +701,32 @@ void vm_uncaught(vm * self, enviroment* env, int pc) {
 	text_printf("\n");
 }
 
+void vm_markall(vm * self) {
+	//全ての静的フィールドをマークする
+	script_context* ctx = script_context_get_current();
+	for (int i = 0; i < ctx->type_vec->length; i++) {
+		type* e = (type*)vector_at(ctx->type_vec, i);
+		if (e->tag != type_class) {
+			continue;
+		}
+		class_* cls = e->u.class_;
+		for (int j = 0; j < cls->sfield_list->length; j++) {
+			field* f = (field*)vector_at(cls->sfield_list, j);
+			object_markall(f->static_value);
+		}
+	}
+	//true/false/nullは常にマーク
+	object_get_true()->paint = paint_marked;
+	object_get_false()->paint = paint_marked;
+	object_get_null()->paint = paint_marked;
+	//全ての子要素を巡回してマーキング
+	vm_markallImpl(self);
+}
+
 void vm_delete(vm * self) {
+	heap_gc(heap_get());
+
+	remove_from_parent(self);
 	vector_clear(self->value_stack);
 	vector_clear(self->ref_stack);
 	//constant_pool_delete(self->pool);
@@ -762,4 +796,28 @@ static bool stack_popb(vm* self) {
 	object* ret = (object*)vector_pop(self->value_stack);
 	assert(ret->tag == object_bool);
 	return ret->u.bool_;
+}
+
+static void remove_from_parent(vm* self) {
+	if (self->parent != NULL) {
+		int idx = vector_find(self->parent->childrenVec, self);
+		vector_remove(self->parent->childrenVec, idx);
+	}
+}
+
+static void vm_markallImpl(vm* self) {
+	for (int i = 0; i < self->childrenVec->length; i++) {
+		vm* e = (vm*)vector_at(self->childrenVec, i);
+		vm_markallImpl(e);
+	}
+	for (int i = 0; i < self->value_stack->length; i++) {
+		object* e = (object*)vector_at(self->value_stack, i);
+		object_markall(e);
+	}
+	for (int i = 0; i < self->ref_stack->length; i++) {
+		object* e = (object*)vector_at(self->ref_stack, i);
+		object_markall(e);
+	}
+	//例外をマークする
+	object_markall(self->exception);
 }

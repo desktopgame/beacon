@@ -17,6 +17,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include "util/mem.h"
+#include "thread/thread.h"
 
 //proto
 static void person_free(vector_item item);
@@ -152,8 +153,10 @@ void test_cll(void) {
 	//il_top_level_dump(cll->il_code, 0);
 	enviroment_op_dump(cll->env, 0);
 	vm* vm = vm_new();
+	sg_thread_set_vm_ref(sg_thread_current(), vm);
 	vm_execute(vm, cll->env);
-	vm_delete(vm);
+	//vm_delete(vm);
+	//sg_thread_release_vm_ref(sg_thread_current());
 	//*/
 	class_loader_delete(cll);
 	/*

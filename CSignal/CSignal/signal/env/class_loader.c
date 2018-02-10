@@ -39,6 +39,7 @@
 #include "class_loader_sgload_impl.h"
 #include "import_info.h"
 #include "type_cache.h"
+#include "heap.h"
 
 //proto
 static void class_loader_link(class_loader* self);
@@ -87,24 +88,25 @@ class_loader * class_loader_new_entry_point(const char * filename) {
 void class_loader_load(class_loader * self) {
 	assert(self != NULL);
 	assert(self->source_code != NULL);
-	//system("cls");
-	//ast_print_tree(self->source_code);
+	//オブジェクトをヒープへ追加しないように
+	//定数プール上のオブジェクトが
+	//ガベージコレクションの対象にならないためにロックします。
+	script_context* ctx = script_context_get_current();
+	ctx->heap->blocking = true;
+	//AST -> IL へ
 	class_loader_ilload_impl(self, self->source_code);
 	if (self->error) { return; }
-
+	//IL -> SG へ
 	class_loader_sgload_impl(self);
 	if (self->error) { return; }
-
+	//他のクラスローダーとリンク
 	class_loader_link(self);
+	//トップレベルのステートメントを読み込む
 	class_loader_sgload_body(self, self->il_code->statement_list, self->env, NULL);
 	sg_log(log_info, __FILE__, __LINE__, "loaded file %s", self->filename);
-	//このクラスローダーがライブラリをロードしているなら
-	//必要最低限の情報を残して後は開放
-	if (self->type == content_lib) {
-	//	ast_delete(self->source_code);
-	//	il_top_level_delete(self->il_code);
-	//	self->source_code = NULL;
-	//	self->il_code = NULL;
+	//フラグを戻す
+	if (self->parent == NULL) {
+		ctx->heap->blocking = false;
 	}
 }
 

@@ -2,6 +2,7 @@
 #include "../util/mem.h"
 #include "../env/script_context.h"
 #include "../vm/vm_trace.h"
+#include "../vm/vm.h"
 #include <assert.h>
 
 static volatile sg_thread* g_sg_main_thread = NULL;
@@ -14,6 +15,7 @@ void sg_thread_launch() {
 sg_thread * sg_thread_new() {
 	sg_thread* ret = (sg_thread*)MEM_MALLOC(sizeof(sg_thread));
 	ret->trace_stack = vector_new();
+	ret->vmRef = NULL;
 	return ret;
 }
 
@@ -32,6 +34,21 @@ void sg_thread_clear(sg_thread* self) {
 }
 
 void sg_thread_delete(sg_thread * self) {
+}
+
+void sg_thread_set_vm_ref(sg_thread * self, vm * vmRef) {
+	//TODO:ここで同期をとる
+	assert(vmRef != NULL);
+	self->vmRef = vmRef;
+}
+
+vm * sg_thread_get_vm_ref(sg_thread * self) {
+	//TODO:ここで同期をとる
+	return self->vmRef;
+}
+
+void sg_thread_release_vm_ref(sg_thread * self) {
+	self->vmRef = NULL;
 }
 
 sg_thread * sg_thread_main() {

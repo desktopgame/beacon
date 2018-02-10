@@ -8,6 +8,9 @@
 #include <assert.h>
 #include "type_impl.h"
 #include "../lib/signal/lang/sg_array.h"
+#include "heap.h"
+#include "../lib/signal/lang/sg_array.h"
+#include "../util/logger.h"
 
 //proto
 static object* object_malloc(object_tag type);
@@ -155,7 +158,44 @@ object * object_scopy(object * self) {
 	return object_copy(self);
 }
 
+void object_markall(object * self) {
+	//field#static_valueは
+	//実際に修飾子が static でないときは NULL
+	if (self == NULL) {
+		return;
+	}
+	if (self->paint == paint_marked) {
+		return;
+	}
+	if (self->paint != paint_onexit) {
+		self->paint = paint_marked;
+	}
+	//フィールドを全てマーク
+	if (self->tag == object_string ||
+		self->tag == object_ref) {
+		for (int i = 0; i < self->u.field_vec->length; i++) {
+			object* e = (object*)vector_at(self->u.field_vec, i);
+			object_markall(e);
+		}
+	}
+	//配列型ならスロットも全てマーク
+	type* arrayType = sg_array_class();
+	if (self->tag == object_ref &&
+		self->type == arrayType) {
+		for (int i = 0; i < self->nativeSlotVec->length; i++) {
+			object* e = (object*)vector_at(self->nativeSlotVec, i);
+			object_markall(e);
+		}
+	}
+}
+
 void object_delete(object * self) {
+	sg_info(__FILE__, __LINE__, "deleted object %s", type_name(self->type));
+	if (self->tag == object_string) {
+		vector_delete(self->nativeSlotVec, vector_deleter_free);
+	} else {
+		vector_delete(self->nativeSlotVec, vector_deleter_null);
+	}
 	MEM_FREE(self);
 }
 
@@ -167,5 +207,6 @@ static object* object_malloc(object_tag type) {
 	ret->tag = type;
 	ret->vptr = NULL;
 	ret->nativeSlotVec = vector_new();
+	heap_add(heap_get(), ret);
 	return ret;
 }

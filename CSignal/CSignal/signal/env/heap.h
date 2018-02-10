@@ -3,6 +3,7 @@
 #define SIGNAL_ENV_HEAP_H
 #include "../util/vector.h"
 #include "object.h"
+#include <stdbool.h>
 
 /**
  * オブジェクトの一覧を格納します.
@@ -10,6 +11,7 @@
 typedef struct heap {
 	int threshold;
 	vector* object_vec;
+	bool blocking;
 } heap;
 
 /**
@@ -26,6 +28,8 @@ heap* heap_get();
 
 /**
  * ヒープにオブジェクトを追加します.
+ * obj#blockingがtrueなら、
+ * 追加せずに obj#paint を paint_onexit へ変更します。
  * @param self
  * @param obj
  */

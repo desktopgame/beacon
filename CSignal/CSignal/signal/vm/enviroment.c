@@ -11,6 +11,7 @@
 
 //proto
 static void enviroment_constant_pool_delete(vector_item item);
+static void enviroment_add_constant(enviroment* self, object* o);
 
 enviroment * enviroment_new() {
 	enviroment* ret = (enviroment*)MEM_MALLOC(sizeof(enviroment));
@@ -82,25 +83,25 @@ void enviroment_op_dump(enviroment * self, int depth) {
 
 int enviroment_add_constant_int(enviroment * self, int i) {
 	int len = self->constant_pool->length;
-	vector_push(self->constant_pool, object_int_new(i));
+	enviroment_add_constant(self, object_int_new(i));
 	return len;
 }
 
 int enviroment_add_constant_double(enviroment * self, double d) {
 	int len = self->constant_pool->length;
-	vector_push(self->constant_pool, object_double_new(d));
+	enviroment_add_constant(self, object_double_new(d));
 	return len;
 }
 
 int enviroment_add_constant_char(enviroment * self, char c) {
 	int len = self->constant_pool->length;
-	vector_push(self->constant_pool, object_char_new(c));
+	enviroment_add_constant(self, object_char_new(c));
 	return len;
 }
 
 int enviroment_add_constant_string(enviroment * self, const char * s) {
 	int len = self->constant_pool->length;
-	vector_push(self->constant_pool, object_string_new(s));
+	enviroment_add_constant(self, object_string_new(s));
 	return len;
 }
 
@@ -160,5 +161,10 @@ void enviroment_delete(enviroment * self) {
 
 //private
 static void enviroment_constant_pool_delete(vector_item item) {
-	object_delete((object*)item);
+	//ŠJ•ú‚Íƒq[ƒv
+	//object_delete((object*)item);
+}
+
+static void enviroment_add_constant(enviroment* self, object* o) {
+	vector_push(self->constant_pool, o);
 }

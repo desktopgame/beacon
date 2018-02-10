@@ -80,8 +80,17 @@ void class_alloc_fields(class_ * self, object * o) {
 	assert(o->tag == object_ref);
 	for (int i = 0; i < self->field_list->length; i++) {
 		field* f = (field*)vector_at(self->field_list, i);
-		object* a = object_ref_new();
-		a->type = f->type;
+		object* a = object_get_null();
+		//プリミティブ型のときはデフォルト値を入れておく
+		if (f->type == CL_INT) {
+			a = object_int_new(0);
+		} else if (f->type == CL_DOUBLE) {
+			a = object_double_new(0.0);
+		} else if (f->type == CL_BOOL) {
+			a = object_bool_get(false);
+		} else if (f->type == CL_CHAR) {
+			a = object_char_new('\0');
+		}
 		//静的フィールドは別の場所に確保
 		if (modifier_is_static(f->modifier)) {
 			continue;

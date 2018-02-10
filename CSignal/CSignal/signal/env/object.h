@@ -12,7 +12,11 @@ struct vtable;
  */
 typedef enum object_paint {
 	paint_unmarked,
-	paint_marked
+	paint_marked,
+	//コンテキストが終了するまで
+	//GCの対象にならない
+	//ソースコード中に直接記述されたリテラルのためのフラグ。
+	paint_onexit,
 //	paint_white,
 //	paint_black,
 //	paint_gray
@@ -151,7 +155,14 @@ object* object_copy(object* self);
 object* object_scopy(object* self);
 
 /**
- * オブジェクトとフィールドを開放します.
+ * このオブジェクトと
+ * このオブジェクトから参照可能なオブジェクトを全てマークします.
+ * @param self
+ */
+void object_markall(object* self);
+
+/**
+ * オブジェクトを開放します.
  * @param self
  */
 void object_delete(object* self);
