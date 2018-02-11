@@ -109,28 +109,28 @@ int opcode_print(vector* source, int index) {
 			text_printf("blogic_and");
 			break;
 		//push const
-		case op_consti:
+		case op_iconst:
 		{
 			int a = vector_at(source, ++index);
-			text_printf("push consti(%d)", a);
+			text_printf("push iconst(%d)", a);
 			break;
 		}
-		case op_constd:
+		case op_dconst:
 		{
 			int a = vector_at(source, ++index);
-			text_printf("push constd(%d)", a);
+			text_printf("push dconst(%d)", a);
 			break;
 		}
-		case op_constc:
+		case op_cconst:
 		{
 			int a = vector_at(source, ++index);
-			text_printf("push constc(%d)", a);
+			text_printf("push cconst(%d)", a);
 			break;
 		}
-		case op_consts:
+		case op_sconst:
 		{
 			int a = vector_at(source, ++index);
-			text_printf("push consts(%d)", a);
+			text_printf("push sconst(%d)", a);
 			break;
 		}
 		case op_true:

@@ -28,7 +28,7 @@ void il_factor_double_dump(il_factor_double * self, int depth) {
 
 void il_factor_double_generate(il_factor_double * self, enviroment* env) {
 	int index = enviroment_add_constant_double(env, self->value);
-	opcode_buf_add(env->buf, op_constd);
+	opcode_buf_add(env->buf, op_dconst);
 	opcode_buf_add(env->buf, index);
 }
 

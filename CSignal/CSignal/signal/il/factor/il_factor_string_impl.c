@@ -28,7 +28,7 @@ void il_factor_string_dump(il_factor_string * self, int depth) {
 
 void il_factor_string_generate(il_factor_string * self, enviroment* env) {
 	int index = enviroment_add_constant_string(env, self->value);
-	opcode_buf_add(env->buf, (vector_item)op_consts);
+	opcode_buf_add(env->buf, (vector_item)op_sconst);
 	opcode_buf_add(env->buf, (vector_item)index);
 }
 

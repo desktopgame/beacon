@@ -195,28 +195,28 @@ void vm_execute(vm* self, enviroment* env) {
 				vector_push(self->value_stack, object_bool_get(SPB(self) && SPB(self)));
 				break;
 			//push const
-			case op_consti:
+			case op_iconst:
 			{
 				int index = (int)enviroment_source_at(env, ++i);
 				object* o = (object*)enviroment_constant_int_at(env, index);
 				vector_push(self->value_stack, o);
 				break;
 			}
-			case op_constd:
+			case op_dconst:
 			{
 				int index = (int)enviroment_source_at(env, ++i);
 				object* d = enviroment_constant_double_at(env, index);
 				vector_push(self->value_stack, d);
 				break;
 			}
-			case op_constc:
+			case op_cconst:
 			{
 				int index = (int)enviroment_source_at(env, ++i);
 				object* c = enviroment_constant_char_at(env, index);
 				vector_push(self->value_stack, c);
 				break;
 			}
-			case op_consts:
+			case op_sconst:
 			{
 				int index = (int)enviroment_source_at(env, ++i);
 				object* cs = enviroment_constant_string_at(env, index);
