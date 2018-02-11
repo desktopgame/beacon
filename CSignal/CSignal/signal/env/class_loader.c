@@ -50,7 +50,6 @@ class_loader* class_loader_new() {
 	ret->source_code = NULL;
 	ret->il_code = NULL;
 	ret->parent = NULL;
-	ret->ref_count = 0;
 	ret->type = content_entry_point;
 	ret->import_manager = import_manager_new();
 	ret->env = enviroment_new();
@@ -123,10 +122,6 @@ void class_loader_rsub(class_loader * self, char * relativePath) {
 void class_loader_delete(class_loader * self) {
 	assert(self != NULL);
 	sg_info(__FILE__, __LINE__, "deleted loader %s", self->filename);
-	//assert(self->ref_count == 0);
-	if (self->parent != NULL) {
-		self->parent->ref_count--;
-	}
 	//free(self->source_code);
 	ast_delete(self->source_code);
 	self->source_code = NULL;
@@ -137,11 +132,7 @@ void class_loader_delete(class_loader * self) {
 	vector_delete(self->type_cacheVec, class_loader_cache_delete);
 	import_manager_delete(self->import_manager);
 	enviroment_delete(self->env);
-	if (self->parent != NULL &&
-		self->parent->ref_count == 0) {
-		class_loader_delete(self->parent);
-		self->parent = NULL;
-	}
+	
 	MEM_FREE(self->filename);
 	MEM_FREE(self->errorMessage);
 	MEM_FREE(self);

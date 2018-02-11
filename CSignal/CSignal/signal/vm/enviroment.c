@@ -3,16 +3,19 @@
 #include "../env/type_impl.h"
 #include "../env/object.h"
 #include "../env/fqcn_cache.h"
+#include "../lib/signal/lang/sg_array.h"
 #include "line_range.h"
 #include <stdlib.h>
 #include <assert.h>
 #include <stdio.h>
 #include "../util/mem.h"
+#include "../util/string_buffer.h"
 
 //proto
 static void enviroment_constant_pool_delete(vector_item item);
 static void enviroment_line_range_delete(vector_item item);
 static void enviroment_add_constant(enviroment* self, object* o);
+static void enviroment_object_delete(object* obj);
 
 enviroment * enviroment_new() {
 	enviroment* ret = (enviroment*)MEM_MALLOC(sizeof(enviroment));
@@ -155,6 +158,9 @@ void enviroment_delete(enviroment * self) {
 	vector_delete(self->type_vec, vector_deleter_null);
 	vector_delete(self->line_rangeVec, enviroment_line_range_delete);
 	
+	vector_delete(self->whileStart_vec, vector_deleter_null);
+	vector_delete(self->whileEnd_vec, vector_deleter_null);
+
 	opcode_buf_delete(self->buf);
 	vector_delete(self->constant_pool, enviroment_constant_pool_delete);
 	symbol_table_delete(self->sym_table);
@@ -164,7 +170,7 @@ void enviroment_delete(enviroment * self) {
 //private
 static void enviroment_constant_pool_delete(vector_item item) {
 	//StringやArrayはここで中身を削除する必要がある
-	object_delete((object*)item);
+	enviroment_object_delete((object*)item);
 }
 
 static void enviroment_line_range_delete(vector_item item) {
@@ -174,4 +180,29 @@ static void enviroment_line_range_delete(vector_item item) {
 
 static void enviroment_add_constant(enviroment* self, object* o) {
 	vector_push(self->constant_pool, o);
+}
+
+static void enviroment_object_delete(object* obj) {
+	if (obj == NULL) {
+		return;
+	}
+	//enviromentが削除される時点では、
+	//すでにスレッドとVMの関連付けが解除されていて、
+	//GCを実行することができないので自分で開放する。
+	//FIXME:この方法だと、
+	//定数がフィールドに定数を含む場合に二重開放される
+	if (obj->tag == object_ref ||
+		obj->tag == object_string) {
+		for (int i = 0; i < obj->u.field_vec->length; i++) {
+			object* e = (object*)(obj->u.field_vec, i);
+			enviroment_object_delete(e);
+		}
+	}
+	if (obj->type == sg_array_class()) {
+		for (int i = 0; i < obj->nativeSlotVec->length; i++) {
+			object* e = (object*)vector_at(obj->nativeSlotVec, i);
+			enviroment_object_delete(e);
+		}
+	}
+	object_delete(obj);
 }

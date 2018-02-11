@@ -145,7 +145,7 @@ object* object_copy(object * self) {
 	return ret;
 }
 
-object * object_scopy(object * self) {
+object * object_copy_s(object * self) {
 	assert(self->tag != object_ref);
 	return object_copy(self);
 }

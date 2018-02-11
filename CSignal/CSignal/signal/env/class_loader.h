@@ -20,7 +20,6 @@ typedef struct class_loader {
 	struct enviroment* env;
 	import_manager* import_manager;
 	content_type type;
-	uint32_t ref_count;
 	vector* type_cacheVec;
 	struct class_loader* parent;
 	int level;

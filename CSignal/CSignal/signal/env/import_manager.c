@@ -8,6 +8,9 @@
 #include <string.h>
 #include <stdlib.h>
 
+//proto
+static void import_manager_delete_import_info(vector_item item);
+
 import_manager * import_manager_new() {
 	import_manager* ret = (import_manager*)MEM_MALLOC(sizeof(import_manager));
 	ret->infoVec = vector_new();
@@ -35,6 +38,11 @@ type * import_manager_resolve(import_manager* self, namespace_* scope, fqcn_cach
 }
 
 void import_manager_delete(import_manager * self) {
-	vector_delete(self->infoVec, vector_deleter_null);
+	vector_delete(self->infoVec, import_manager_delete_import_info);
 	MEM_FREE(self);
+}
+//private
+static void import_manager_delete_import_info(vector_item item) {
+	import_info* e = (import_info*)item;
+	import_info_delete(e);
 }

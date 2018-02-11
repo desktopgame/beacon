@@ -145,6 +145,7 @@ void test_cll(void) {
 #else
 	class_loader* cll = class_loader_new_entry_point("main.signal");
 #endif
+	enviroment* env = cll;
 	class_loader_load(cll);
 	//il_top_level_dump(cll->il_code, 0);
 	//*
@@ -159,6 +160,7 @@ void test_cll(void) {
 	sg_thread_release_vm_ref(sg_thread_current());
 	//*/
 	class_loader_delete(cll);
+	int i = 0;
 	/*
 	system("cls");
 	namespace_dump();

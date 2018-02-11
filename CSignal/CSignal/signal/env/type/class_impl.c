@@ -31,6 +31,7 @@ static constructor* class_find_rconstructor_impl(vector* v,vector * args, int * 
 static void class_field_delete(vector_item item);
 static void class_method_delete(vector_item item);
 static void class_ctor_delete(vector_item item);
+static void class_native_method_ref_delete(vector_item item);
 
 type * type_wrap_class(class_ * self) {
 	type* ret = type_new();
@@ -455,7 +456,7 @@ void class_delete(class_ * self) {
 	if (self->super_class != NULL) {
 		self->super_class->ref_count--;
 	}
-	tree_map_delete(self->native_method_ref_map, tree_map_deleter_null);
+	tree_map_delete(self->native_method_ref_map, class_native_method_ref_delete);
 	vector_delete(self->impl_list, vector_deleter_null);
 	vector_delete(self->field_list, class_field_delete);
 	vector_delete(self->sfield_list, class_field_delete);
@@ -569,4 +570,9 @@ static void class_method_delete(vector_item item) {
 static void class_ctor_delete(vector_item item) {
 	constructor* e = (constructor*)item;
 	constructor_delete(e);
+}
+
+static void class_native_method_ref_delete(vector_item item) {
+	native_method_ref* e = (native_method_ref*)item;
+	native_method_ref_delete(e);
 }

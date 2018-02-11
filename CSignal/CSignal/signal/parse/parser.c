@@ -159,6 +159,7 @@ void parser_pop() {
 	if (p->root) {
 		ast_delete(p->root);
 	}
+	vector_delete(p->linenoVec, vector_deleter_null);
 	MEM_FREE(p->sBuffer);
 	MEM_FREE(p->source_name);
 	MEM_FREE(p);

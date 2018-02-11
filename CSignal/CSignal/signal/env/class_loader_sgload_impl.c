@@ -344,7 +344,6 @@ static void class_loader_sgload_importImpl(class_loader* self, vector* ilimports
 
 static void class_loader_sgload_importImplAlready(class_loader* self, class_loader* cll) {
 	//self -> cll への参照を与える
-	cll->ref_count++;
 	import_info* info = import_manager_import(self->import_manager, cll);
 	info->consume = true;
 	assert(cll->source_code != NULL);
@@ -361,7 +360,6 @@ static void class_loader_sgload_importImplAlready(class_loader* self, class_load
 static class_loader* class_loader_sgload_importImplNew(class_loader* self, char* fullPath) {
 	script_context* ctx = script_context_get_current();
 	class_loader* cll = class_loader_new();
-	cll->ref_count++;
 	cll->type = content_lib;
 	cll->filename = fullPath;
 	cll->parent = self;

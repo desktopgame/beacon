@@ -145,7 +145,7 @@ object* object_copy(object* self);
  * @param self
  * @return
  */
-object* object_scopy(object* self);
+object* object_copy_s(object* self);
 
 /**
  * このオブジェクトと

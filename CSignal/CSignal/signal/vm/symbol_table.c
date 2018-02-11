@@ -32,6 +32,7 @@ symbol_entry* symbol_table_entry(symbol_table* self, type* tp, const char * name
 
 void symbol_table_delete(symbol_table * self) {
 	tree_map_delete(self->map, symbol_table_delete_entry);
+	MEM_FREE(self);
 }
 
 //private

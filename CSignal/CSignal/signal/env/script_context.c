@@ -164,6 +164,7 @@ static script_context* script_context_malloc(void) {
 }
 
 static void script_context_free(script_context* self) {
+	class_loader_delete(self->bootstrap_class_loader);
 	heap_delete(self->heap);
 	vector_delete(self->type_vec, vector_deleter_null);
 	vector_delete(self->threadVec, vector_deleter_null);

@@ -503,14 +503,14 @@ void vm_execute(vm* self, enviroment* env) {
 				type* tp = (type*)vector_at(ctx->type_vec, absClsIndex);
 				if (tp == CL_INT ||
 					tp == CL_DOUBLE ||
-					tp == CL_CHAR) {
+					tp == CL_CHAR ||
+					tp == CL_BOOL) {
 					vector_push(
-						self->value_stack, 
-						object_scopy(
+						self->value_stack,
+						object_copy_s(
 							vector_pop(self->value_stack)
 						)
 					);
-				} else if(tp == CL_BOOL) {
 				} else {
 					o->vptr = vtable_lookup(o->vptr, type_vtable(tp));
 				}
@@ -720,11 +720,13 @@ void vm_markall(vm * self) {
 }
 
 void vm_delete(vm * self) {
-	heap_gc(heap_get());
 
 	remove_from_parent(self);
 	vector_clear(self->value_stack);
 	vector_clear(self->ref_stack);
+
+	heap_gc(heap_get());
+
 	//constant_pool_delete(self->pool);
 	//operand_stack_delete(self->operand_stack);
 	vector_delete(self->value_stack, vector_deleter_null);

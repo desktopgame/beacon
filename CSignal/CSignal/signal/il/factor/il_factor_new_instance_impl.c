@@ -68,6 +68,9 @@ type * il_factor_new_instance_eval(il_factor_new_instance * self, enviroment * e
 }
 
 void il_factor_new_instance_delete(il_factor_new_instance * self) {
+	vector_delete(self->argument_list, il_Factor_new_instace_delete_arg);
+	fqcn_cache_delete(self->fqcn);
+	MEM_FREE(self);
 }
 
 //private
