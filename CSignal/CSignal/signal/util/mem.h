@@ -2,9 +2,8 @@
 #ifndef SIGNAL_ENV_MEM_H
 #define SIGNAL_ENV_MEM_H
 #include <stdlib.h>
-#define MEM_MALLOC(size) (mem_malloc(size, __FILE__, __LINE__))
-#define MEM_FREE(size) (mem_free(size, __FILE__, __LINE__))
-#define MEM_REALLOC(block, size) (mem_realloc(block, size, __FILE__, __LINE__))
+#include <stdbool.h>
+
 /**
  * malloc のラッパーです.
  * 通常はこちらではなくマクロ版を使用します。
@@ -36,18 +35,33 @@ void* mem_realloc(void* block, size_t newSize, const char* filename, int lineno)
 void mem_free(void* block, const char* filename, int lineno);
 
 /**
- * 割りあてカウントを +1 します.
- * strdup のようなメソッドを使用した後に呼び出します。
+ * 現在確保中のすべてのメモリーをダンプします.
  */
-void mem_inc();
+void mem_dump();
 
 /**
- * 割り当てカウントを -1 します.
+ * メモリリーク検出のためのトレースを実行するなら true.
+ * @param trace
  */
-void mem_dec();
+void mem_set_trace(bool trace);
 
 /**
- * プログラムの最後で呼び出します.
+ * @return
  */
-void mem_check();
+bool mem_get_trace();
+
+/**
+ * 指定の位置で確保されたメモリを監視します.
+ * @param count
+ */
+void mem_break(int count);
+
+/**
+ * メモリ情報をトレースするためのキャッシュを開放します.
+ */
+void mem_destroy();
+
+#define MEM_MALLOC(size) (mem_malloc(size, __FILE__, __LINE__))
+#define MEM_FREE(size) (mem_free(size, __FILE__, __LINE__))
+#define MEM_REALLOC(block, size) (mem_realloc(block, size, __FILE__, __LINE__))
 #endif // !SIGNAL_ENV_MEM_H

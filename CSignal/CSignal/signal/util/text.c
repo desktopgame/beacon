@@ -101,7 +101,6 @@ char * text_strdup(const char * source) {
 #else
 	ret = strdup(source);
 #endif
-	mem_inc();
 	assert(ret != NULL) ;
 	return ret;
 }
