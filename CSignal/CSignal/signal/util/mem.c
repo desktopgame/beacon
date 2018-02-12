@@ -73,6 +73,10 @@ void mem_free(void * block, const char * filename, int lineno) {
 }
 
 void mem_dump() {
+#if defined(DEBUG)
+	if (!gMemTrace) {
+		return;
+	}
 	text_printfln(" - memory leaks(%d) -", gMemCounter);
 	text_printfln("    used memory(%d)", gMemUsedMemory);
 	text_printfln("    not found realloc(%d)", gMemNotFoundRealloc);
@@ -85,6 +89,7 @@ void mem_dump() {
 		text_printf("\n");
 		ptr = ptr->next;
 	}
+#endif
 }
 
 void mem_set_trace(bool trace) {
@@ -100,8 +105,13 @@ void mem_break(int count) {
 }
 
 void mem_destroy() {
+#if defined(DEBUG)
+	if (!gMemTrace) {
+		return;
+	}
 	slot_destroy(gSlotHead->next);
 	gSlotHead = NULL;
+#endif
 }
 
 //private
