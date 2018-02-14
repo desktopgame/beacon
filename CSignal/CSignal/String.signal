@@ -19,6 +19,10 @@ namespace signal.lang {
 		def substr(Int offs, Int len) -> String {
 			return new String(this.charArray.sub(offs, len));
 		}
+
+		def length() -> Int {
+			return this.charArray.length()
+		}
 		private:
 		native def nativeInit() -> Void;
 	}

@@ -738,25 +738,25 @@ while_stmt
 	}
 	;
 break_stmt
-	: BREAK SEMI
+	: BREAK stmt_term
 	{
 		$$ = ast_new_break();
 	}
 	;
 continue_stmt
-	: CONTINUE SEMI
+	: CONTINUE stmt_term
 	{
 		$$ = ast_new_continue();
 	}
 	;
 return_stmt
-	: RETURN expression SEMI
+	: RETURN expression stmt_term
 	{
 		$$ = ast_new_return($2);
 	}
 	;
 throw_stmt
-	: THROW expression SEMI
+	: THROW expression stmt_term
 	{
 		$$ = ast_new_throw($2);
 	}

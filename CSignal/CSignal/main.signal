@@ -7,3 +7,10 @@ var sub = str.substr(0, 4)
 Console.writeLine(sub)
 
 Console.writeLine(sub.charAt(0))
+
+Int offs = 0
+while(offs < sub.length()) {
+	var ch = sub.charAt(offs)
+	offs++
+	Console.writeLine(ch)
+}
