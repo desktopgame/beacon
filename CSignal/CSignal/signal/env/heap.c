@@ -18,7 +18,7 @@ heap * heap_new() {
 	heap* ret = (heap*)MEM_MALLOC(sizeof(heap));
 	ret->threshold = 16;
 	ret->object_vec = vector_new();
-	ret->blocking = false;
+	ret->blocking = 0;
 	return ret;
 }
 
@@ -28,7 +28,7 @@ heap * heap_get() {
 }
 
 void heap_add(heap * self, object * obj) {
-	if (self->blocking) {
+	if (self->blocking > 0) {
 		obj->paint = paint_onexit;
 		return;
 	}

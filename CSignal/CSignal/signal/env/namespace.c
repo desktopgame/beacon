@@ -16,8 +16,12 @@ static void namespace_dump_root(tree_map* root, bool callSelf, int depth);
 static void namespace_dump_impl(namespace_* root, int depth);
 static void namespace_put_indent(int depth);
 static void namespace_dump_class(tree_map* root, bool isRoot, int depth);
-static void namespace_delete_namespace(vector_item item);
-static namespace_delete_type(vector_item item);
+
+static void namespace_unlink_namespace(char* name, tree_item item);
+static void namespace_delete_namespace(tree_item item);
+
+static namespace_unlink_type(char* name, tree_item item);
+static namespace_delete_type(tree_item item);
 
 namespace_ * namespace_create_at_root(char * name) {
 	assert(name != NULL);
@@ -158,6 +162,11 @@ void namespace_dump() {
 	namespace_dump_root(ctx->namespaceMap->right, true, 0);
 }
 
+void namespace_unlink(namespace_ * self) {
+	tree_map_each(self->namespace_map, namespace_unlink_namespace);
+	tree_map_each(self->type_map, namespace_unlink_type);
+}
+
 void namespace_delete(namespace_ * self) {
 //	text_text_printfln("delete namespace %s", self->name);
 	tree_map_delete(self->namespace_map, namespace_delete_namespace);
@@ -219,12 +228,26 @@ static void namespace_dump_class(tree_map* root, bool isRoot, int depth) {
 	namespace_dump_class(root->right, false, depth);
 }
 
-static void namespace_delete_namespace(vector_item item) {
+static void namespace_unlink_namespace(char* name, tree_item item) {
 	namespace_* e = (namespace_*)item;
+	text_printfln("unlink namespace %s", e->name);
+	namespace_unlink(e);
+}
+
+static void namespace_delete_namespace(tree_item item) {
+	namespace_* e = (namespace_*)item;
+	text_printfln("delete namespace %s", e->name);
 	namespace_delete(e);
 }
 
-static namespace_delete_type(vector_item item) {
+static namespace_unlink_type(char* name, tree_item item) {
 	type* e = (type*)item;
+	text_printfln("unlink type %s", type_name(e));
+	type_unlink(e);
+}
+
+static namespace_delete_type(tree_item item) {
+	type* e = (type*)item;
+	text_printfln("delete type %s", type_name(e));
 	type_delete(e);
 }

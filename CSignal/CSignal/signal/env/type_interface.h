@@ -102,6 +102,12 @@ int type_distance(type* a, type* b);
 bool type_castable(type* self, type* other);
 
 /**
+ * 型情報を残してメソッドやフィールドなどのみを開放します.
+ * @param self
+ */
+void type_unlink(type* self);
+
+/**
  * 型を開放します.
  * @param self
  */

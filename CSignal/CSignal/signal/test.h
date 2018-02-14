@@ -70,6 +70,8 @@ void test_vector3(void);
 
 void test_vector4(void);
 
+void test_map(void);
+
 void test_vm(void);
 
 void test_vm2(void);

@@ -30,6 +30,7 @@ il_factor_named_invoke * il_factor_named_invoke_new(const char* method_name) {
 	ret->fqcn = fqcn_cache_new();
 	ret->argument_list = vector_new();
 	ret->type = ilnamed_invoke_static;
+	ret->find = false;
 	return ret;
 }
 
@@ -98,6 +99,10 @@ static void il_factor_named_invoke_delete_argument(vector_item item) {
 }
 
 static void il_factor_named_invoke_find(il_factor_named_invoke* self, enviroment* env) {
+	if (self->find) {
+		return;
+	}
+	self->find = true;
 	//X::Y.call() のような場合
 	if (self->fqcn->scope_vec->length > 0) {
 		namespace_* top = NULL;

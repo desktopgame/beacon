@@ -319,6 +319,12 @@ struct object* class_new_rinstance(class_* self, vm* vmc, int count, ...);
 void class_linkall(class_* self);
 
 /**
+ * 型情報を残してメソッドやフィールドなどのみを開放します.
+ * @param self
+ */
+void class_unlink(class_* self);
+
+/**
  * このクラスを開放します.
  * ただし先にこのクラスを参照するサブクラスを開放する必要があります。
  * @param self

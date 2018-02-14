@@ -23,6 +23,13 @@ typedef struct tree_map {
 	struct tree_map* right;
 } tree_map;
 
+
+/**
+ * ツリーのアクション関数です.
+ * @param item
+ */
+typedef void(*tree_action)(char* name, tree_item item);
+
 /**
  * ツリーのデリータ関数です.
  * @param item
@@ -66,6 +73,13 @@ tree_map* tree_map_cell(tree_map* self, tree_key key);
  * @return
  */
 int tree_map_compare(tree_map* self, tree_key key);
+
+/**
+ * ツリー内のすべての要素を訪問します.
+ * @param self
+ * @param act
+ */
+void tree_map_each(tree_map* self, tree_action act);
 
 /**
  * ツリーと全ての要素を削除します.

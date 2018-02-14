@@ -155,6 +155,12 @@ object* object_copy_s(object* self);
 void object_markall(object* self);
 
 /**
+ * まだ開放されていないオブジェクトの数を返します.
+ * @return
+ */
+int object_count();
+
+/**
  * オブジェクトを開放します.
  * @param self
  */

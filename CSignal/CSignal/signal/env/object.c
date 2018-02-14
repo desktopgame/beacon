@@ -4,6 +4,7 @@
 #include <stdlib.h>
 #include "vtable.h"
 #include "../util/mem.h"
+#include "../util/text.h"
 #include "type_interface.h"
 #include <assert.h>
 #include "type_impl.h"
@@ -17,6 +18,7 @@ static object* object_malloc(object_tag type);
 static object* gObjectTrue = NULL;
 static object* gObjectFalse = NULL;
 static object* gObjectNull = NULL;
+static int gObjectCount = 0;
 
 
 object * object_int_new(int i) {
@@ -70,6 +72,8 @@ object * object_string_new(const char * s) {
 	int temp = 0;
 	class_find_field(strType->u.class_, "charArray", &temp);
 	vector_assign(ret->u.field_vec, temp, arr);
+	vector_item* test = vector_at(ret->u.field_vec, temp);
+	assert(test != NULL);
 	//Array#length‚ð–„‚ß‚é
 	temp = 0;
 	class_find_field(arrType->u.class_, "length", &temp);
@@ -181,8 +185,13 @@ void object_markall(object * self) {
 	}
 }
 
+int object_count() {
+	return gObjectCount;
+}
+
 void object_delete(object * self) {
-	sg_info(__FILE__, __LINE__, "deleted object %s", type_name(self->type));
+	gObjectCount--;
+	//sg_info(__FILE__, __LINE__, "deleted object %s", type_name(self->type));
 	if (self->tag == object_string) {
 		string_buffer* sb = vector_at(self->nativeSlotVec, 0);
 		vector_remove(self->nativeSlotVec, 0);
@@ -205,5 +214,6 @@ static object* object_malloc(object_tag type) {
 	ret->vptr = NULL;
 	ret->nativeSlotVec = vector_new();
 	heap_add(heap_get(), ret);
+	gObjectCount++;
 	return ret;
 }

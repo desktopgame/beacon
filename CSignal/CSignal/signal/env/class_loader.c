@@ -61,6 +61,7 @@ class_loader* class_loader_new() {
 	ret->errorMessage = NULL;
 	ret->env->context_cll = ret;
 	ret->env->toplevel = true;
+	text_printfln("new classloader");
 	//ret->link = classlink_unlinked;
 	return ret;
 }
@@ -87,11 +88,6 @@ class_loader * class_loader_new_entry_point(const char * filename) {
 void class_loader_load(class_loader * self) {
 	assert(self != NULL);
 	assert(self->source_code != NULL);
-	//オブジェクトをヒープへ追加しないように
-	//定数プール上のオブジェクトが
-	//ガベージコレクションの対象にならないためにロックします。
-	script_context* ctx = script_context_get_current();
-	ctx->heap->blocking = true;
 	//AST -> IL へ
 	class_loader_ilload_impl(self, self->source_code);
 	if (self->error) { return; }
@@ -103,10 +99,6 @@ void class_loader_load(class_loader * self) {
 	//トップレベルのステートメントを読み込む
 	class_loader_sgload_body(self, self->il_code->statement_list, self->env, NULL);
 	sg_log(log_info, __FILE__, __LINE__, "loaded file %s", self->filename);
-	//フラグを戻す
-	if (self->parent == NULL) {
-		ctx->heap->blocking = false;
-	}
 }
 
 void class_loader_sub(class_loader * self, char * fullPath) {
@@ -124,15 +116,10 @@ void class_loader_delete(class_loader * self) {
 	sg_info(__FILE__, __LINE__, "deleted loader %s", self->filename);
 	//free(self->source_code);
 	ast_delete(self->source_code);
-	self->source_code = NULL;
-
 	il_top_level_delete(self->il_code);
-	self->il_code = NULL;
-
 	vector_delete(self->type_cacheVec, class_loader_cache_delete);
 	import_manager_delete(self->import_manager);
 	enviroment_delete(self->env);
-	
 	MEM_FREE(self->filename);
 	MEM_FREE(self->errorMessage);
 	MEM_FREE(self);
@@ -169,6 +156,10 @@ static void class_loader_link(class_loader* self) {
 	import_manager* importMgr = self->import_manager;
 	for (int i = 0; i < importMgr->infoVec->length; i++) {
 		import_info* info = (import_info*)vector_at(importMgr->infoVec, i);
+		if (info->consume) {
+			continue;
+		}
+		info->consume = true;
 		class_loader_link(info->context);
 	}
 

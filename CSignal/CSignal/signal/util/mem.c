@@ -24,7 +24,7 @@ static slot* slot_new();
 static void slot_init(const char* filename, int lineno, void* arena, size_t size);
 static void slot_add(slot* head, slot* a);
 static void* slot_realloc(slot* head, void* arena, size_t newSize);
-static void slot_remove(slot* head, void* arena);
+static int slot_remove(slot* head, void* arena);
 static void slot_dump(slot* self);
 static void slot_destroy(slot* self);
 static void mem_input();
@@ -64,9 +64,10 @@ void * mem_realloc(void * block, size_t newSize, const char * filename, int line
 }
 
 void mem_free(void * block, const char * filename, int lineno) {
+	int index = -1;
 #if defined(DEBUG)
 	if (gMemTrace) {
-		slot_remove(gSlotHead, block);
+		index = slot_remove(gSlotHead, block);
 	}
 #endif
 	free(block);
@@ -142,7 +143,7 @@ static void slot_init(const char* filename, int lineno, void* arena, size_t size
 	if (gSlotHead == NULL) {
 		gSlotHead = slot_new();
 		ptr = gSlotHead;
-		gMemCounter = 0;
+		gMemCounter = 1;
 		gMemNotFoundRealloc = 0;
 		gMemNotFoundFree = 0;
 		gMemUsedMemory = size;
@@ -199,7 +200,7 @@ static void* slot_realloc(slot* head, void* arena, size_t newSize) {
 	return temp;
 }
 
-static void slot_remove(slot* head, void* arena) {
+static int slot_remove(slot* head, void* arena) {
 	if (head == NULL) {
 		return;
 	}
@@ -209,7 +210,7 @@ static void slot_remove(slot* head, void* arena) {
 		//mem_mallocˆÈŠO‚ÅŠm•Û‚³‚ê‚½ƒƒ‚ƒŠ
 		if (ptr == NULL) {
 			gMemNotFoundFree++;
-			return;
+			return -1;
 		}
 	}
 	if (ptr->prev != NULL) {
@@ -218,10 +219,12 @@ static void slot_remove(slot* head, void* arena) {
 	if (ptr->next != NULL) {
 		ptr->next->prev = ptr->prev;
 	}
+	int ret = ptr->index;
 	gMemCounter--;
 	gMemUsedMemory -= ptr->size;
 	free(ptr);
 	assert(gMemCounter >= 0);
+	return ret;
 }
 
 static void slot_dump(slot* self) {

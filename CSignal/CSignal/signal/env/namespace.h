@@ -154,6 +154,12 @@ struct type* namespace_null_class();
 void namespace_dump();
 
 /**
+ * 指定の名前空間のすべての型で unlink を呼び出します.
+ * @param self
+ */
+void namespace_unlink(namespace_* self);
+
+/**
  * 名前空間を開放します.
  * @param self
  */

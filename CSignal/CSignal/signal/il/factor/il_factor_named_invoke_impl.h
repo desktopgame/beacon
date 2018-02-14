@@ -36,6 +36,7 @@ typedef struct il_factor_named_invoke {
 	il_named_invoke_type type;
 	struct method* m;
 	int methodIndex;
+	bool find;
 	union {
 		type* type;
 		il_factor* factor;

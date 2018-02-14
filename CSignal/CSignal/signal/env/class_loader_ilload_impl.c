@@ -25,6 +25,7 @@ static il_factor* class_loader_ilload_factorImpl(class_loader* self, ast* source
 static il_stmt* class_loader_ilload_bodyImpl(class_loader* self, ast* source);
 
 void class_loader_ilload_impl(class_loader* self, ast* source_code) {
+	assert(self->il_code == NULL);
 	self->il_code = il_top_level_new();
 	for (int i = 0; i < source_code->childCount; i++) {
 		ast* child = ast_at(self->source_code, i);

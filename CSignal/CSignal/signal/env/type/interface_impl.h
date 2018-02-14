@@ -65,6 +65,12 @@ void interface_dump(interface_* self, int depth);
 void interface_create_vtable(interface_* self);
 
 /**
+ * 型情報を残してメソッドやフィールドなどのみを開放します.
+ * @param self
+ */
+void interface_unlink(interface_* self);
+
+/**
  * インターフェイスを開放します.
  * @param self
  */

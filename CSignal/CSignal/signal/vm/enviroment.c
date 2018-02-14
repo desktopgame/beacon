@@ -1,4 +1,5 @@
 #include "enviroment.h"
+#include "../env/class_loader.h"
 #include "../env/type_interface.h"
 #include "../env/type_impl.h"
 #include "../env/object.h"
@@ -10,6 +11,7 @@
 #include <stdio.h>
 #include "../util/mem.h"
 #include "../util/string_buffer.h"
+#include "../util/text.h"
 
 //proto
 static void enviroment_constant_pool_delete(vector_item item);
@@ -154,6 +156,10 @@ class_ * enviroment_class(enviroment * self, fqcn_cache * fqcn) {
 }
 
 void enviroment_delete(enviroment * self) {
+	//text_printfln("deleted env %s", self->context_cll->filename);
+	text_printfln("delete pool---");
+	vector_delete(self->constant_pool, enviroment_constant_pool_delete);
+
 	vector_delete(self->namespace_vec, vector_deleter_null);
 	vector_delete(self->type_vec, vector_deleter_null);
 	vector_delete(self->line_rangeVec, enviroment_line_range_delete);
@@ -162,15 +168,16 @@ void enviroment_delete(enviroment * self) {
 	vector_delete(self->whileEnd_vec, vector_deleter_null);
 
 	opcode_buf_delete(self->buf);
-	vector_delete(self->constant_pool, enviroment_constant_pool_delete);
 	symbol_table_delete(self->sym_table);
 	MEM_FREE(self);
+	text_printfln("---delete pool");
 }
 
 //private
 static void enviroment_constant_pool_delete(vector_item item) {
 	//StringやArrayはここで中身を削除する必要がある
 	enviroment_object_delete((object*)item);
+	//object_delete((object*)item);
 }
 
 static void enviroment_line_range_delete(vector_item item) {
@@ -180,21 +187,31 @@ static void enviroment_line_range_delete(vector_item item) {
 
 static void enviroment_add_constant(enviroment* self, object* o) {
 	vector_push(self->constant_pool, o);
+	assert(o->paint == paint_onexit);
 }
 
 static void enviroment_object_delete(object* obj) {
 	if (obj == NULL) {
 		return;
 	}
+	type* tp = obj->type;
+	char* name = type_name(tp);
+	assert(obj->paint == paint_onexit);
+	//*
 	//enviromentが削除される時点では、
 	//すでにスレッドとVMの関連付けが解除されていて、
 	//GCを実行することができないので自分で開放する。
 	//FIXME:この方法だと、
 	//定数がフィールドに定数を含む場合に二重開放される
-	if (obj->tag == object_ref ||
-		obj->tag == object_string) {
+	if (obj->tag == object_ref) {
 		for (int i = 0; i < obj->u.field_vec->length; i++) {
-			object* e = (object*)(obj->u.field_vec, i);
+			object* e = (object*)vector_at(obj->u.field_vec, i);
+			enviroment_object_delete(e);
+		}
+	}
+	if (obj->tag == object_string) {
+		for (int i = 0; i < obj->u.field_vec->length; i++) {
+			object* e = (object*)vector_at(obj->u.field_vec, i);
 			enviroment_object_delete(e);
 		}
 	}
@@ -204,5 +221,6 @@ static void enviroment_object_delete(object* obj) {
 			enviroment_object_delete(e);
 		}
 	}
+	text_printfln("delete object %s", type_name(obj->type));
 	object_delete(obj);
 }

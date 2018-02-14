@@ -26,7 +26,9 @@
 #include <string.h>
 #include "import_info.h"
 #include "../util/logger.h"
+#include "../env/heap.h"
 //proto
+static void class_loader_sgload_subImpl(class_loader * self, char * fullPath);
 static void class_loader_sgload_namespace_tree(class_loader* self);
 static void class_loader_sgload_importImpl(class_loader* self, vector* ilimports, int i);
 static void class_loader_sgload_importImplAlready(class_loader* self, class_loader* cll);
@@ -45,9 +47,6 @@ void class_loader_sgload_impl(class_loader* self) {
 
 	class_loader_sgload_excecClassDecl(self);
 	class_loader_sgload_excecInterfaceDecl(self);
-
-//	class_loader_sgload_excecClassImpl(self);
-//	class_loader_sgload_excecInterfaceImpl(self);
 }
 
 void class_loader_sgload_link(class_loader * self) {
@@ -65,53 +64,14 @@ void class_loader_sgload_link(class_loader * self) {
 
 void class_loader_sgload_sub(class_loader * self, char * fullPath) {
 	script_context* ctx = script_context_get_current();
-	//text_printf("%s\n", fullPath);
-	//そのファイルパスに対応した
-	//クラスローダが既に存在するなら無視
-	class_loader* cll = tree_map_get(ctx->classLoaderMap, fullPath);
-	if (cll != NULL) {
-		class_loader_sgload_importImplAlready(self, cll);
-		return;
-		//新たに読みこんだなら親に設定
-	} else {
-		sg_info(__FILE__, __LINE__, "import new %s", fullPath);
-		cll = class_loader_sgload_importImplNew(self, fullPath);
-	}
-	//そのローダーが破損しているなら
-	if (cll->error) {
-		class_loader_error(self, cll->errorMessage);
-	}
-	//パースをキャンセル
-	if (self->error) {
-		return;
-	}
-	cll->filename = text_strdup(fullPath);
-	cll->level = (self->level + 1);
-	//cll->link = classlink_unlinked;
-	char* text = io_read_text(fullPath);
-	parser* p = parser_parse_from_source_swap(text, fullPath);
-	assert(p->root != NULL);
-	//パースに失敗
-	if (p->fail) {
-		//class_loader_errors(cll, "parse failed --- %s", p->source_name);
-		MEM_FREE(text);
-		parser_pop();
-		return;
-		//成功
-	} else {
-		cll->source_code = p->root;
-		p->root = NULL;
-		MEM_FREE(text);
-		parser_pop();
-	}
-	//ロード
-	class_loader_load(cll);
-	assert(cll->source_code != NULL);
-	assert(cll->il_code != NULL);
+	ctx->heap->blocking++;
+	class_loader_sgload_subImpl(self, fullPath);
+	ctx->heap->blocking--;
 }
 
 void class_loader_sgload_import(class_loader* self, vector* ilimports) {
-	for (int i = 0; i < ilimports->length; i++) {
+//	TEST(self->import_manager->infoVec->length > 0);
+	for (int i = self->import_manager->infoVec->length; i < ilimports->length; i++) {
 		class_loader_sgload_importImpl(self, ilimports, i);
 	}
 }
@@ -320,6 +280,53 @@ void class_loader_sgload_body(class_loader* self, vector* stmt_list, enviroment*
 }
 
 //private
+static void class_loader_sgload_subImpl(class_loader * self, char * fullPath) {
+	script_context* ctx = script_context_get_current();
+	//text_printf("%s\n", fullPath);
+	//そのファイルパスに対応した
+	//クラスローダが既に存在するなら無視
+	class_loader* cll = tree_map_get(ctx->classLoaderMap, fullPath);
+	if (cll != NULL) {
+		class_loader_sgload_importImplAlready(self, cll);
+		return;
+		//新たに読みこんだなら親に設定
+	} else {
+		sg_info(__FILE__, __LINE__, "import new %s", fullPath);
+		cll = class_loader_sgload_importImplNew(self, fullPath);
+	}
+	//そのローダーが破損しているなら
+	if (cll->error) {
+		class_loader_error(self, cll->errorMessage);
+	}
+	//パースをキャンセル
+	if (self->error) {
+		return;
+	}
+	cll->filename = text_strdup(fullPath);
+	cll->level = (self->level + 1);
+	//cll->link = classlink_unlinked;
+	char* text = io_read_text(fullPath);
+	parser* p = parser_parse_from_source_swap(text, fullPath);
+	assert(p->root != NULL);
+	//パースに失敗
+	if (p->fail) {
+		//class_loader_errors(cll, "parse failed --- %s", p->source_name);
+		MEM_FREE(text);
+		parser_pop();
+		return;
+		//成功
+	} else {
+		cll->source_code = p->root;
+		p->root = NULL;
+		MEM_FREE(text);
+		parser_pop();
+	}
+	//ロード
+	class_loader_load(cll);
+	assert(cll->source_code != NULL);
+	assert(cll->il_code != NULL);
+}
+
 static void class_loader_sgload_namespace_tree(class_loader* self) {
 	if (self->loadedNamespace) {
 		return;
@@ -365,7 +372,7 @@ static class_loader* class_loader_sgload_importImplNew(class_loader* self, char*
 	cll->parent = self;
 	//text_printf("nimport %s\n", cll->filename);
 	import_info* info = import_manager_import(self->import_manager, cll);
-	info->consume = true;
+	info->consume = false;
 	sg_info(__FILE__, __LINE__, "import put %s", fullPath);
 	tree_map_put(ctx->classLoaderMap, fullPath, cll);
 	return cll;
@@ -373,61 +380,75 @@ static class_loader* class_loader_sgload_importImplNew(class_loader* self, char*
 
 //FIXME:コピペ
 static void class_loader_sgload_excecClassDecl(class_loader* self) {
-	sg_info(__FILE__, __LINE__, "loaded class decl %s", self->filename);
+	int count = 0;
 	//text_printfln("CLASS_DECL %s ==", self->filename);
 	for (int i = 0; i < self->type_cacheVec->length; i++) {
 		type_cache* e = (type_cache*)vector_at(self->type_cacheVec, i);
 		if (e->kind != cachekind_class_decl || e->consume) {
 			continue;
 		}
+		count++;
 		e->consume = true;
 		class_loader_sgload_class_decl(e->context, e->iltype, e->tp, e->scope);
+	}
+	if (count > 0) {
+		sg_info(__FILE__, __LINE__, "loaded class decl %s", self->filename);
 	}
 }
 
 static void class_loader_sgload_excecClassImpl(class_loader* self) {
-	sg_info(__FILE__, __LINE__, "loaded class impl %s", self->filename);
+	int count = 0;
 	//text_printfln("CLASS_IMPL %s ==", self->filename);
 	for (int i = 0; i < self->type_cacheVec->length; i++) {
 		type_cache* e = (type_cache*)vector_at(self->type_cacheVec, i);
 		if (e->kind != cachekind_class_impl || e->consume) {
 			continue;
 		}
+		count++;
 		e->consume = true;
 		class_loader_sgload_class_impl(e->context, e->iltype, e->tp, e->scope);
+	}
+	if (count > 0) {
+		sg_info(__FILE__, __LINE__, "loaded class impl %s", self->filename);
 	}
 }
 
 static void class_loader_sgload_excecInterfaceDecl(class_loader* self) {
-	sg_info(__FILE__, __LINE__, "loaded interface decl %s", self->filename);
+	int count = 0;
 	//text_printfln("INTERFACE_DECL %s ==", self->filename);
 	for (int i = 0; i < self->type_cacheVec->length; i++) {
 		type_cache* e = (type_cache*)vector_at(self->type_cacheVec, i);
 		if (e->kind != cachekind_interface_decl || e->consume) {
 			continue;
 		}
+		count++;
 		e->consume = true;
 		class_loader_sgload_interface_decl(e->context, e->iltype, e->tp, e->scope);
+	}
+	if(count > 0) {
+		sg_info(__FILE__, __LINE__, "loaded interface decl %s", self->filename);
 	}
 }
 
 static void class_loader_sgload_excecInterfaceImpl(class_loader* self) {
-	sg_info(__FILE__, __LINE__, "loaded interface impl %s", self->filename);
+	int count = 0;
 	//text_printfln("INTERFACE_IMPL %s ==", self->filename);
 	for (int i = 0; i < self->type_cacheVec->length; i++) {
 		type_cache* e = (type_cache*)vector_at(self->type_cacheVec, i);
 		if (e->kind != cachekind_interface_impl || e->consume) {
 			continue;
 		}
+		count++;
 		e->consume = true;
 		class_loader_sgload_interface_impl(e->context, e->iltype, e->tp, e->scope);
+	}
+	if(count > 0) {
+		sg_info(__FILE__, __LINE__, "loaded interface impl %s", self->filename);
 	}
 }
 
 static void class_loader_sgload_yield(class_loader* parent, class_loader* target) {
-	if (target->source_code == NULL) {
-
-	}
+	assert(target->source_code != NULL);
 	class_loader_sgload_import(target, target->il_code->import_list);
 	class_loader_sgload_namespace_tree(target);
 

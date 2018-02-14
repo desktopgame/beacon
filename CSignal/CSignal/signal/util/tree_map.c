@@ -4,6 +4,10 @@
 #include <stdio.h>
 #include "text.h"
 #include "mem.h"
+#include <assert.h>
+
+//proto
+static void tree_map_eachImpl(tree_map* self, tree_action act);
 
 tree_map * tree_map_new() {
 	tree_map* ret = (tree_map*)MEM_MALLOC(sizeof(tree_map));
@@ -16,6 +20,7 @@ tree_map * tree_map_new() {
 }
 
 tree_map* tree_map_put(tree_map* self, tree_key key, tree_item item) {
+	assert(strcmp(key, "\0"));
 	//リテラルによってキーが指定される場合は、
 	//プログラムによって明示的にそれを削除する必要はありませんが、
 	//この関数からは引数のキー文字列が、
@@ -84,6 +89,10 @@ int tree_map_compare(tree_map * self, tree_key key) {
 	return strcmp(self->key, key);
 }
 
+void tree_map_each(tree_map * self, tree_action act) {
+	tree_map_eachImpl(self, act);
+}
+
 void tree_map_delete(tree_map * self, tree_element_deleter deleter) {
 	//先に子要素を開放する
 	if (self->left != NULL) {
@@ -107,4 +116,19 @@ void tree_map_deleter_free(tree_item item) {
 }
 
 void tree_map_deleter_null(tree_item item) {
+}
+
+//private
+static void tree_map_eachImpl(tree_map* self, tree_action act) {
+	if (self->left != NULL) {
+		tree_map_eachImpl(self->left, act);
+	}
+	//同じならそれはルート要素
+	if (strcmp(self->key, "\0")) {
+		act(self->key, self->item);
+	}
+
+	if (self->right != NULL) {
+		tree_map_eachImpl(self->right, act);
+	}
 }

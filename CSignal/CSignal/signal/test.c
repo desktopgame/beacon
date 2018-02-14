@@ -18,9 +18,12 @@
 #include <stdlib.h>
 #include "util/mem.h"
 #include "thread/thread.h"
+#include "env/script_context.h"
+#include "env/heap.h"
 
 //proto
 static void person_free(vector_item item);
+static void tree_map_test(char* name, tree_item item);
 
 void test_stack(void) {
 #if defined(_MSC_VER)
@@ -140,13 +143,16 @@ void test_file_path(void) {
 }
 
 void test_cll(void) {
+	script_context* ctx = script_context_get_current();
+	ctx->heap->blocking++;
 #if defined(_MSC_VER)
 	class_loader* cll = class_loader_new_entry_point("main.signal");
 #else
 	class_loader* cll = class_loader_new_entry_point("main.signal");
 #endif
-	enviroment* env = cll;
+	enviroment* env = cll->env;
 	class_loader_load(cll);
+	ctx->heap->blocking--;
 	//il_top_level_dump(cll->il_code, 0);
 	//*
 	system("cls");
@@ -160,6 +166,10 @@ void test_cll(void) {
 	sg_thread_release_vm_ref(sg_thread_current());
 	//*/
 	class_loader_delete(cll);
+	for (int j = 0; j < 5; j++) {
+		printf("a");
+	}
+	printf("\n");
 	int i = 0;
 	/*
 	system("cls");
@@ -256,6 +266,15 @@ void test_vector4(void) {
 //	}
 }
 
+void test_map(void) {
+	tree_map* map = tree_map_new();
+	tree_map_put(map, "AAA", 10);
+	tree_map_put(map, "ABB", 20);
+	tree_map_put(map, "ACD", 30);
+	tree_map_put(map, "FAE", 40);
+	tree_map_each(map, tree_map_test);
+}
+
 void test_vm(void) {
 	vm* vm = vm_new();
 	enviroment* env = enviroment_new();
@@ -264,10 +283,10 @@ void test_vm(void) {
 	enviroment_add_constant_int(env, 5);
 
 	//定数プールの 0 番目をプッシュ
-	opcode_buf_add(env->buf, op_consti);
+	opcode_buf_add(env->buf, op_iconst);
 	opcode_buf_add(env->buf, 0);
 	//定数プールの 1 番目をプッシュ
-	opcode_buf_add(env->buf, op_consti);
+	opcode_buf_add(env->buf, op_iconst);
 	opcode_buf_add(env->buf, 1);
 	//演算子 + で還元
 	opcode_buf_add(env->buf, op_iadd);
@@ -287,7 +306,7 @@ void test_vm2(void) {
 
 
 	//定数プールの 0 番目をプッシュ
-	opcode_buf_add(env->buf, op_consts);
+	opcode_buf_add(env->buf, op_sconst);
 	opcode_buf_add(env->buf, 0);
 	//スタックのトップを参照一覧 0 番目に格納
 	opcode_buf_add(env->buf, op_store);
@@ -366,4 +385,8 @@ static void person_free(vector_item item) {
 	PERSON* p = (PERSON*)item;
 	MEM_FREE(p->name);
 	MEM_FREE(p);
+}
+
+static void tree_map_test(char* name, tree_item item) {
+	text_printf("name %s\n", name);
 }

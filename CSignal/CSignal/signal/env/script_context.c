@@ -10,13 +10,16 @@
 #include "../util/mem.h"
 #include "../lib/sg_library_interface.h"
 #include "../thread/thread.h"
+#include "../util/text.h"
 //proto
 static script_context* script_context_check_init(void);
 static void script_context_launch(script_context* self);
 static script_context* script_context_malloc(void);
 static void script_context_free(script_context* self);
 static void script_context_class_loader_delete(vector_item item);
-static void script_context_namespace_delete(vector_item item);
+
+static void script_context_namespace_unlink(char* name, tree_item item);
+static void script_context_namespace_delete(tree_item item);
 
 static script_context* gScriptContext = NULL;
 static script_context* gScriptContextCurrent = NULL;
@@ -114,6 +117,7 @@ static void script_context_launch(script_context* self) {
 	//FIXME:スタック?
 	script_context* selected = script_context_get_current();
 	script_context_set_current(self);
+	self->heap->blocking++;
 	//プリロード
 	namespace_* signal = namespace_create_at_root("signal");
 	namespace_* lang = namespace_add_namespace(signal, "lang");
@@ -145,6 +149,7 @@ static void script_context_launch(script_context* self) {
 	class_loader_rsub(self->bootstrap_class_loader, "Exception.signal");
 	class_loader_rsub(self->bootstrap_class_loader, "StackTraceElement.signal");
 	//退避していたコンテキストを復帰
+	self->heap->blocking--;
 	script_context_set_current(selected);
 }
 
@@ -164,11 +169,21 @@ static script_context* script_context_malloc(void) {
 }
 
 static void script_context_free(script_context* self) {
+	int aa = object_count();
+
 	class_loader_delete(self->bootstrap_class_loader);
 	heap_delete(self->heap);
+	int x = object_count();
+
 	vector_delete(self->type_vec, vector_deleter_null);
 	vector_delete(self->threadVec, vector_deleter_null);
 	tree_map_delete(self->classLoaderMap, script_context_class_loader_delete);
+	tree_map_each(self->namespaceMap, script_context_namespace_unlink);
+
+	int a = object_count();
+//	text_printfln("---");
+//	mem_dump();
+//	text_printfln("---");
 	tree_map_delete(self->namespaceMap, script_context_namespace_delete);
 	MEM_FREE(self);
 }
@@ -178,7 +193,13 @@ static void script_context_class_loader_delete(vector_item item) {
 	class_loader_delete(e);
 }
 
-static void script_context_namespace_delete(vector_item item) {
+static void script_context_namespace_unlink(char* name, tree_item item) {
+	namespace_* e = (namespace_*)item;
+	namespace_unlink(e);
+}
+
+static void script_context_namespace_delete(tree_item item) {
 	namespace_* e = (namespace_*)item;
 	namespace_delete(e);
 }
+

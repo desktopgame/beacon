@@ -85,6 +85,14 @@ bool type_castable(type * self, type * other) {
 	return false;
 }
 
+void type_unlink(type * self) {
+	if (self->tag == type_class) {
+		class_unlink(self->u.class_);
+	} else if (self->tag == type_interface) {
+		interface_unlink(self->u.interface_);
+	}
+}
+
 void type_delete(type * self) {
 	if (self->tag == type_class) {
 		class_delete(self->u.class_);

@@ -11,7 +11,7 @@
 typedef struct heap {
 	int threshold;
 	vector* object_vec;
-	bool blocking;
+	int blocking;
 } heap;
 
 /**

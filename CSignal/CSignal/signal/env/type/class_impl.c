@@ -449,10 +449,7 @@ void class_linkall(class_ * self) {
 	}
 }
 
-void class_delete(class_ * self) {
-//	assert(self->ref_count == 0);
-//	MEM_FREE(self->name);
-	sg_info(__FILE__, __LINE__, "deleted class %s", self->name);
+void class_unlink(class_ * self) {
 	if (self->super_class != NULL) {
 		self->super_class->ref_count--;
 	}
@@ -464,6 +461,13 @@ void class_delete(class_ * self) {
 	vector_delete(self->smethod_list, class_method_delete);
 	vector_delete(self->constructor_list, class_ctor_delete);
 	vtable_delete(self->vt);
+}
+
+void class_delete(class_ * self) {
+//	assert(self->ref_count == 0);
+//	MEM_FREE(self->name);
+	sg_info(__FILE__, __LINE__, "deleted class %s", self->name);
+	
 	MEM_FREE(self->name);
 	MEM_FREE(self);
 }
