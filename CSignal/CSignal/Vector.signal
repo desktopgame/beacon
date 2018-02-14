@@ -1,0 +1,52 @@
+import "Array"
+import "Exception"
+
+namespace signal.lang {
+	class Vector {
+		private:
+		Array proxy;
+		Int length;
+		Int capacity;
+	
+		public:
+		ctor new() {
+			this.length = 0
+			this.capacity = 2
+			this.proxy = new Array(this.capacity)
+		}
+	
+		def push(Object o) -> Void {
+			if(this.length < this.capacity) {
+				this.proxy.set(this.length, o)
+			} elif (this.length >= this.capacity) {
+				var newLen = this.length + (this.length / 2)
+				var newArr = new Array(newLen)
+				Array.copy(this.proxy, 0, newArr, 0, this.length)
+				this.proxy = newArr
+				this.proxy.set(this.length, o)
+			}
+			this.length++
+		}
+	
+		def pop() -> Object {
+			if(this.length == 0) {
+				throw new Exception("not added any objects")
+			}
+			var ret = this.proxy.get(this.length - 1)
+			this.length--
+			return ret
+		}
+
+		def set(Int index, Object a) -> Void {
+			this.proxy.set(index, a);
+		}
+
+		def get(Int index) -> Object {
+			return this.proxy.get(index);
+		}
+
+		def length() -> Int {
+			return this.length
+		}
+	}
+}

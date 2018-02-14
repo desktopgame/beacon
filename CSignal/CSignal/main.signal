@@ -1,5 +1,7 @@
 import "lib"
+import "Vector"
 
+/*
 var str = "HelloWorld"
 Console.writeLine(str)
 
@@ -14,3 +16,38 @@ while(offs < sub.length()) {
 	offs++
 	Console.writeLine(ch)
 }
+*/
+
+var vec = new Vector();
+vec.push("Hello");
+vec.push("World");
+vec.push("!!");
+vec.push("!!");
+vec.push("!!");
+//全部表示
+Int i = 0;
+while(i < vec.length()) {
+	Console.writeLine(vec.get(i))
+	i++
+}
+
+Console.writeLine(" ")
+Console.writeLine(" ")
+Console.writeLine(" ")
+
+vec.pop();
+vec.push("FF")
+//全部表示
+i = 0;
+while(i < vec.length()) {
+	Console.writeLine(vec.get(i))
+	i++
+}
+vec.set(0, "HHHH")
+//全部表示
+i = 0;
+while(i < vec.length()) {
+	Console.writeLine(vec.get(i))
+	i++
+}
+
