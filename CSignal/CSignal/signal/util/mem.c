@@ -97,6 +97,17 @@ void mem_set_trace(bool trace) {
 	gMemTrace = trace;
 }
 
+void mem_mark(void* p, size_t size, const char* filename, int lineno) {
+	if (p == NULL) {
+		return;
+	}
+#if defined(DEBUG)
+	if (gMemTrace) {
+		slot_init(filename, lineno, p, size);
+	}
+#endif
+}
+
 bool mem_get_trace() {
 	return gMemTrace;
 }

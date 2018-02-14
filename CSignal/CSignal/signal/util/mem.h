@@ -46,6 +46,17 @@ void mem_dump();
 void mem_set_trace(bool trace);
 
 /**
+ * mem_malloc以外の方法で確保されたメモリを
+ * このモジュールが管理するメモリの一覧に加えます.
+ * ここで追加されたメモリは mem_free で開放してください。
+ * @param p
+ * @param size
+ * @param filename
+ * @param lineno
+ */
+void mem_mark(void* p, size_t size, const char* filename, int lineno);
+
+/**
  * @return
  */
 bool mem_get_trace();
@@ -64,4 +75,5 @@ void mem_destroy();
 #define MEM_MALLOC(size) (mem_malloc(size, __FILE__, __LINE__))
 #define MEM_FREE(size) (mem_free(size, __FILE__, __LINE__))
 #define MEM_REALLOC(block, size) (mem_realloc(block, size, __FILE__, __LINE__))
+#define MEM_MARK(block, size) (mem_mark(block, size, __FILE__, __LINE__))
 #endif // !SIGNAL_ENV_MEM_H
