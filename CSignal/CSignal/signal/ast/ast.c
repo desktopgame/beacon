@@ -458,6 +458,8 @@ static bool ast_has_str(ast* self) {
 		t == ast_parameter_access_name ||
 		t == ast_class_decl ||
 		t == ast_interface_decl ||
-		t == ast_enum_decl ;
+		t == ast_enum_decl ||
+		t == ast_fqcn_part ||
+		t == ast_fqcn_class_name;
 		//t == ast_class_super;
 }

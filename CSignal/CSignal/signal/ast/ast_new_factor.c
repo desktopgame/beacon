@@ -57,14 +57,14 @@ ast * ast_new_post_dec(ast * a) {
 ast * ast_new_variable(ast* a) {
 	assert(a->tag == ast_fqcn_class_name);
 	ast* ret = ast_new(ast_variable);
-	ret->u.string_value = a->u.string_value;
+	ret->u.string_value = text_strdup(a->u.string_value);
 	ast_push(ret, a);
 	return ret;
 }
 
 ast * ast_new_variable_fromstr(char * str) {
 	ast* ret = ast_new(ast_variable);
-	ret->u.string_value = text_strdup(str);
+	ret->u.string_value = (str);
 	//ast_push(ret, a);
 	return ret;
 }
@@ -127,7 +127,7 @@ ast * ast_new_field_access_fqcn(ast * fqcn, char * name) {
 		ast* ret = ast_new(ast_field_access);
 		ast* avar = ast_new(ast_variable);
 		ast* aname = ast_new(ast_identifier);
-		avar->u.string_value = fqcn->u.string_value;
+		avar->u.string_value = text_strdup(fqcn->u.string_value);
 		aname->u.string_value = name;
 		ast_push(ret, avar);
 		ast_push(ret, aname);
