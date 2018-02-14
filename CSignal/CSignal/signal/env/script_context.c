@@ -12,6 +12,7 @@
 #include "../thread/thread.h"
 #include "../util/text.h"
 //proto
+static script_context* script_context_new();
 static script_context* script_context_check_init(void);
 static void script_context_launch(script_context* self);
 static script_context* script_context_malloc(void);
@@ -30,11 +31,29 @@ void script_context_open() {
 	INFO("script-context open");
 }
 
-script_context* script_context_new() {
-	script_context* ret = script_context_malloc();
-	ret->prev = script_context_back();
-	script_context_launch(ret);
+script_context * script_context_add() {
+	script_context* ret = script_context_new();
+	script_context* ptr = gScriptContext;
+	while (ptr->next != NULL) {
+		ptr = ptr->next;
+	}
+	ptr->next = ret;
+	ret->prev = ptr;
 	return ret;
+}
+
+script_context * script_context_remove(script_context * self) {
+	script_context* next = NULL;
+	if (self->prev != NULL) {
+		next = self->prev;
+	} else if (self->next != NULL) {
+		next = self->next;
+	}
+	if (self->prev != NULL) self->prev->next = self->next;
+	if (self->next != NULL)  self->next->prev = self->prev;
+	script_context_free(self);
+	script_context_set_current(next);
+	return next;
 }
 
 script_context * script_context_back() {
@@ -102,6 +121,12 @@ void script_context_close() {
 }
 
 //private
+static script_context* script_context_new() {
+	script_context* ret = script_context_malloc();
+	script_context_launch(ret);
+	return ret;
+}
+
 static script_context* script_context_check_init(void) {
 	if (gScriptContext == NULL) {
 		gScriptContext = script_context_malloc();
@@ -134,6 +159,7 @@ static void script_context_launch(script_context* self) {
 	sg_null_init();
 	//ブートストラップクラスローダー
 	self->bootstrap_class_loader = class_loader_new();
+	self->bootstrap_class_loader->filename = text_strdup("bootstrap");
 	class_loader_rsub(self->bootstrap_class_loader, "Object.signal");
 
 	class_loader_rsub(self->bootstrap_class_loader, "Int.signal");

@@ -25,11 +25,13 @@ void sg_array_init() {
 }
 
 type * sg_array_class() {
-	if (gSgArrayType == NULL) {
-		namespace_* lang = namespace_lang();
-		gSgArrayType = namespace_get_type(lang, "Array");
-	}
-	return gSgArrayType;
+	namespace_* lang = namespace_lang();
+	return namespace_get_type(lang, "Array");
+	//if (gSgArrayType == NULL) {
+	//	namespace_* lang = namespace_lang();
+	//	gSgArrayType = namespace_get_type(lang, "Array");
+	//}
+	//return gSgArrayType;
 }
 
 object * sg_array_new(int length, vm * vmc) {

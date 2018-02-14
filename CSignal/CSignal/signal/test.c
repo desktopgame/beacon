@@ -20,6 +20,7 @@
 #include "thread/thread.h"
 #include "env/script_context.h"
 #include "env/heap.h"
+#include "vm/eval.h"
 
 //proto
 static void person_free(vector_item item);
@@ -143,33 +144,8 @@ void test_file_path(void) {
 }
 
 void test_cll(void) {
-	script_context* ctx = script_context_get_current();
-	ctx->heap->blocking++;
-#if defined(_MSC_VER)
-	class_loader* cll = class_loader_new_entry_point_from_file("main.signal");
-#else
-	class_loader* cll = class_loader_new_entry_point("main.signal");
-#endif
-	enviroment* env = cll->env;
-	class_loader_load(cll);
-	ctx->heap->blocking--;
-	//il_top_level_dump(cll->il_code, 0);
-	//*
-	system("cls");
-	//ast_print_tree(cll->source_code);
-	//il_top_level_dump(cll->il_code, 0);
-	enviroment_op_dump(cll->env, 0);
-	vm* vm = vm_new();
-	sg_thread_set_vm_ref(sg_thread_current(), vm);
-	vm_execute(vm, cll->env);
-	vm_delete(vm);
-	sg_thread_release_vm_ref(sg_thread_current());
-	//*/
-	class_loader_delete(cll);
-	/*
-	system("cls");
-	namespace_dump();
-	//*/
+//	eval_top_from_file("main.signal");
+	eval_top_from_source("import \"lib\"\nConsole.writeLine(\"Hello\")");
 }
 
 void test_struct(void) {

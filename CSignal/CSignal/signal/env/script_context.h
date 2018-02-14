@@ -43,10 +43,17 @@ typedef struct script_context {
 void script_context_open();
 
 /**
- * 新しいスクリプトコンテキストを作成して返します.
+ * 新しいコンテキストを作成して返します.
  * @return
  */
-script_context* script_context_new();
+script_context* script_context_add();
+
+/**
+ * 指定の要素を連結リストから外して開放します.
+ * @param self
+ * @return
+ */
+script_context* script_context_remove(script_context* self);
 
 /**
  * 末尾のコンテキストを返します.

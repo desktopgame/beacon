@@ -69,7 +69,7 @@ class_loader* class_loader_new() {
 class_loader * class_loader_new_entry_point_from_file(const char * filename) {
 	char* text = io_read_text(filename);
 	class_loader* ret = class_loader_new_entry_point_from_source(text, filename);
-	ret->filename = text_strdup(filename);
+	//ret->filename = text_strdup(filename);
 	MEM_FREE(text);
 	return ret;
 }

@@ -64,6 +64,9 @@ void * mem_realloc(void * block, size_t newSize, const char * filename, int line
 }
 
 void mem_free(void * block, const char * filename, int lineno) {
+	if (block == NULL) {
+		return;
+	}
 	int index = -1;
 #if defined(DEBUG)
 	if (gMemTrace) {
