@@ -9,6 +9,7 @@
 #include <stdarg.h>
 #include <stdbool.h>
 struct enviroment;
+struct parser;
 
 /**
  * クラスローダーを表す構造体です.
@@ -41,7 +42,22 @@ class_loader* class_loader_new();
  * @param filename
  * @return
  */
-class_loader* class_loader_new_entry_point(const char* filename);
+class_loader* class_loader_new_entry_point_from_file(const char* filename);
+
+/**
+ * エントリポイントを示すクラスローダーを作成します.
+ * @param source
+ * @param contextDescription
+ * @return
+ */
+class_loader* class_loader_new_entry_point_from_source(const char* source, const char* contextDescription);
+
+/**
+ * エントリポイントを示すクラスローダーを作成します.
+ * @param p 呼び出し側で pop() してください
+ * @return
+ */
+class_loader* class_loader_new_entry_point_from_parser(struct parser* p);
 
 /**
  * ファイルの内容を解析して必要に応じてインポート先のファイルの読み込み、

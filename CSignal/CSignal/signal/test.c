@@ -146,7 +146,7 @@ void test_cll(void) {
 	script_context* ctx = script_context_get_current();
 	ctx->heap->blocking++;
 #if defined(_MSC_VER)
-	class_loader* cll = class_loader_new_entry_point("main.signal");
+	class_loader* cll = class_loader_new_entry_point_from_file("main.signal");
 #else
 	class_loader* cll = class_loader_new_entry_point("main.signal");
 #endif

@@ -66,23 +66,35 @@ class_loader* class_loader_new() {
 	return ret;
 }
 
-class_loader * class_loader_new_entry_point(const char * filename) {
-	class_loader* cll = class_loader_new();
-	cll->filename = text_strdup(filename);
+class_loader * class_loader_new_entry_point_from_file(const char * filename) {
 	char* text = io_read_text(filename);
-	parser* p = parser_parse_from_source_swap(text, filename);
+	class_loader* ret = class_loader_new_entry_point_from_source(text, filename);
+	ret->filename = text_strdup(filename);
+	MEM_FREE(text);
+	return ret;
+}
+
+class_loader * class_loader_new_entry_point_from_source(const char * source, const char* contextDescription) {
+	parser* p = parser_parse_from_source_swap(source, contextDescription);
+	class_loader* ret = class_loader_new_entry_point_from_parser(p);
+	parser_pop();
+	ret->filename = text_strdup(contextDescription);
+	return ret;
+}
+
+class_loader * class_loader_new_entry_point_from_parser(parser * p) {
+	class_loader* ret = class_loader_new();
 	//解析に失敗した場合
 	if (p->fail) {
-		class_loader_errorf(cll, "parse failed --- %s", p->source_name);
-		MEM_FREE(text);
-		parser_pop();
-		return cll;
+		class_loader_errorf(ret, "parse failed --- %s", p->source_name);
+		//MEM_FREE(text);
+		//parser_pop();
+		return ret;
 	}
-	cll->source_code = p->root;
+	ret->source_code = p->root;
 	p->root = NULL;
-	MEM_FREE(text);
-	parser_pop();
-	return cll;
+	//MEM_FREE(text);
+	return ret;
 }
 
 void class_loader_load(class_loader * self) {
