@@ -39,7 +39,7 @@ int main(int argc, char* argv[]) {
 	//定数プールにdouble型を入れられるように
 	//test_vm();
 	_start(argc, argv);
-	//test_cll();
+	test_cll();
 //	test_vector3();
 	_end(argc, argv);
 	return 0;

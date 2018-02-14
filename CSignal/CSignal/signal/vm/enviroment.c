@@ -157,7 +157,7 @@ class_ * enviroment_class(enviroment * self, fqcn_cache * fqcn) {
 
 void enviroment_delete(enviroment * self) {
 	//text_printfln("deleted env %s", self->context_cll->filename);
-	text_printfln("delete pool---");
+	//text_printfln("delete pool---");
 	vector_delete(self->constant_pool, enviroment_constant_pool_delete);
 
 	vector_delete(self->namespace_vec, vector_deleter_null);
@@ -170,7 +170,7 @@ void enviroment_delete(enviroment * self) {
 	opcode_buf_delete(self->buf);
 	symbol_table_delete(self->sym_table);
 	MEM_FREE(self);
-	text_printfln("---delete pool");
+	//text_printfln("---delete pool");
 }
 
 //private
@@ -221,6 +221,6 @@ static void enviroment_object_delete(object* obj) {
 			enviroment_object_delete(e);
 		}
 	}
-	text_printfln("delete object %s", type_name(obj->type));
+	//text_printfln("delete object %s", type_name(obj->type));
 	object_delete(obj);
 }

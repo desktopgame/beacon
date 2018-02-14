@@ -40,6 +40,9 @@ int yywrap(void) {
 #endif SIGNAL_YYWRAP_PART
 
 int yyerror(char * err_str) {
+	printf("%s", err_str);
+	printf("\n");
+
 	parser* p = parser_top();
 	p->fail = true;
 	p->errorLineIndex = yylloc.last_line;

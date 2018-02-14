@@ -1,9 +1,9 @@
 import "lib"
 
-var str = "HelloWorld";
-Console.writeLine(str);
+var str = "HelloWorld"
+Console.writeLine(str)
 
-var sub = str.substr(0, 4);
-Console.writeLine(sub);
+var sub = str.substr(0, 4)
+Console.writeLine(sub)
 
-Console.writeLine(sub.charAt(0));
+Console.writeLine(sub.charAt(0))

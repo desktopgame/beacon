@@ -230,24 +230,24 @@ static void namespace_dump_class(tree_map* root, bool isRoot, int depth) {
 
 static void namespace_unlink_namespace(char* name, tree_item item) {
 	namespace_* e = (namespace_*)item;
-	text_printfln("unlink namespace %s", e->name);
+	//text_printfln("unlink namespace %s", e->name);
 	namespace_unlink(e);
 }
 
 static void namespace_delete_namespace(tree_item item) {
 	namespace_* e = (namespace_*)item;
-	text_printfln("delete namespace %s", e->name);
+	//text_printfln("delete namespace %s", e->name);
 	namespace_delete(e);
 }
 
 static namespace_unlink_type(char* name, tree_item item) {
 	type* e = (type*)item;
-	text_printfln("unlink type %s", type_name(e));
+	//text_printfln("unlink type %s", type_name(e));
 	type_unlink(e);
 }
 
 static namespace_delete_type(tree_item item) {
 	type* e = (type*)item;
-	text_printfln("delete type %s", type_name(e));
+	//text_printfln("delete type %s", type_name(e));
 	type_delete(e);
 }

@@ -581,6 +581,9 @@ int yywrap(void) {
 #endif SIGNAL_YYWRAP_PART
 
 int yyerror(char * err_str) {
+	printf("%s", err_str);
+	printf("\n");
+
 	parser* p = parser_top();
 	p->fail = true;
 	p->errorLineIndex = yylloc.last_line;
@@ -676,7 +679,7 @@ static void update_loc() {
 #define L_COMMENT 2
 #define STRING_LITERAL_STATE 3
 
-#line 680 "lex.yy.c"
+#line 683 "lex.yy.c"
 
 /* Macros after this point can all be overridden by user definitions in
  * section 1.
@@ -827,9 +830,9 @@ YY_DECL
 	register char *yy_cp, *yy_bp;
 	register int yy_act;
 
-#line 140 "C:\\Users\\Koya\\Documents\\GitHub\\CSignal\\CSignal\\CSignal\\signal\\parse\\signal.l"
+#line 143 "C:\\Users\\Koya\\Documents\\GitHub\\CSignal\\CSignal\\CSignal\\signal\\parse\\signal.l"
 
-#line 833 "lex.yy.c"
+#line 836 "lex.yy.c"
 
 	if ( yy_init )
 		{
@@ -922,337 +925,337 @@ do_action:	/* This label is used only to access EOF actions. */
 	{ /* beginning of action switch */
 case 1:
 YY_RULE_SETUP
-#line 141 "C:\\Users\\Koya\\Documents\\GitHub\\CSignal\\CSignal\\CSignal\\signal\\parse\\signal.l"
+#line 144 "C:\\Users\\Koya\\Documents\\GitHub\\CSignal\\CSignal\\CSignal\\signal\\parse\\signal.l"
 { return (DOT); }
 	YY_BREAK
 case 2:
 YY_RULE_SETUP
-#line 142 "C:\\Users\\Koya\\Documents\\GitHub\\CSignal\\CSignal\\CSignal\\signal\\parse\\signal.l"
+#line 145 "C:\\Users\\Koya\\Documents\\GitHub\\CSignal\\CSignal\\CSignal\\signal\\parse\\signal.l"
 { return (COMMA); }
 	YY_BREAK
 case 3:
 YY_RULE_SETUP
-#line 143 "C:\\Users\\Koya\\Documents\\GitHub\\CSignal\\CSignal\\CSignal\\signal\\parse\\signal.l"
+#line 146 "C:\\Users\\Koya\\Documents\\GitHub\\CSignal\\CSignal\\CSignal\\signal\\parse\\signal.l"
 { return (COLON); }
 	YY_BREAK
 case 4:
 YY_RULE_SETUP
-#line 144 "C:\\Users\\Koya\\Documents\\GitHub\\CSignal\\CSignal\\CSignal\\signal\\parse\\signal.l"
+#line 147 "C:\\Users\\Koya\\Documents\\GitHub\\CSignal\\CSignal\\CSignal\\signal\\parse\\signal.l"
 { return (COLO_COLO); }
 	YY_BREAK
 case 5:
 YY_RULE_SETUP
-#line 145 "C:\\Users\\Koya\\Documents\\GitHub\\CSignal\\CSignal\\CSignal\\signal\\parse\\signal.l"
+#line 148 "C:\\Users\\Koya\\Documents\\GitHub\\CSignal\\CSignal\\CSignal\\signal\\parse\\signal.l"
 { return (SEMI); }
 	YY_BREAK
 case 6:
 YY_RULE_SETUP
-#line 148 "C:\\Users\\Koya\\Documents\\GitHub\\CSignal\\CSignal\\CSignal\\signal\\parse\\signal.l"
+#line 151 "C:\\Users\\Koya\\Documents\\GitHub\\CSignal\\CSignal\\CSignal\\signal\\parse\\signal.l"
 { return (ADD); }
 	YY_BREAK
 case 7:
 YY_RULE_SETUP
-#line 149 "C:\\Users\\Koya\\Documents\\GitHub\\CSignal\\CSignal\\CSignal\\signal\\parse\\signal.l"
+#line 152 "C:\\Users\\Koya\\Documents\\GitHub\\CSignal\\CSignal\\CSignal\\signal\\parse\\signal.l"
 { return (SUB); }
 	YY_BREAK
 case 8:
 YY_RULE_SETUP
-#line 150 "C:\\Users\\Koya\\Documents\\GitHub\\CSignal\\CSignal\\CSignal\\signal\\parse\\signal.l"
+#line 153 "C:\\Users\\Koya\\Documents\\GitHub\\CSignal\\CSignal\\CSignal\\signal\\parse\\signal.l"
 { return (MUL); }
 	YY_BREAK
 case 9:
 YY_RULE_SETUP
-#line 151 "C:\\Users\\Koya\\Documents\\GitHub\\CSignal\\CSignal\\CSignal\\signal\\parse\\signal.l"
+#line 154 "C:\\Users\\Koya\\Documents\\GitHub\\CSignal\\CSignal\\CSignal\\signal\\parse\\signal.l"
 { return (DIV); }
 	YY_BREAK
 case 10:
 YY_RULE_SETUP
-#line 152 "C:\\Users\\Koya\\Documents\\GitHub\\CSignal\\CSignal\\CSignal\\signal\\parse\\signal.l"
+#line 155 "C:\\Users\\Koya\\Documents\\GitHub\\CSignal\\CSignal\\CSignal\\signal\\parse\\signal.l"
 { return (MOD); }
 	YY_BREAK
 case 11:
 YY_RULE_SETUP
-#line 153 "C:\\Users\\Koya\\Documents\\GitHub\\CSignal\\CSignal\\CSignal\\signal\\parse\\signal.l"
+#line 156 "C:\\Users\\Koya\\Documents\\GitHub\\CSignal\\CSignal\\CSignal\\signal\\parse\\signal.l"
 { return (NOT); }
 	YY_BREAK
 case 12:
 YY_RULE_SETUP
-#line 156 "C:\\Users\\Koya\\Documents\\GitHub\\CSignal\\CSignal\\CSignal\\signal\\parse\\signal.l"
+#line 159 "C:\\Users\\Koya\\Documents\\GitHub\\CSignal\\CSignal\\CSignal\\signal\\parse\\signal.l"
 { return (ASSIGN); }
 	YY_BREAK
 case 13:
 YY_RULE_SETUP
-#line 157 "C:\\Users\\Koya\\Documents\\GitHub\\CSignal\\CSignal\\CSignal\\signal\\parse\\signal.l"
+#line 160 "C:\\Users\\Koya\\Documents\\GitHub\\CSignal\\CSignal\\CSignal\\signal\\parse\\signal.l"
 { return (ADD_ASSIGN); }
 	YY_BREAK
 case 14:
 YY_RULE_SETUP
-#line 158 "C:\\Users\\Koya\\Documents\\GitHub\\CSignal\\CSignal\\CSignal\\signal\\parse\\signal.l"
+#line 161 "C:\\Users\\Koya\\Documents\\GitHub\\CSignal\\CSignal\\CSignal\\signal\\parse\\signal.l"
 { return (SUB_ASSIGN); }
 	YY_BREAK
 case 15:
 YY_RULE_SETUP
-#line 159 "C:\\Users\\Koya\\Documents\\GitHub\\CSignal\\CSignal\\CSignal\\signal\\parse\\signal.l"
+#line 162 "C:\\Users\\Koya\\Documents\\GitHub\\CSignal\\CSignal\\CSignal\\signal\\parse\\signal.l"
 { return (MUL_ASSIGN); }
 	YY_BREAK
 case 16:
 YY_RULE_SETUP
-#line 160 "C:\\Users\\Koya\\Documents\\GitHub\\CSignal\\CSignal\\CSignal\\signal\\parse\\signal.l"
+#line 163 "C:\\Users\\Koya\\Documents\\GitHub\\CSignal\\CSignal\\CSignal\\signal\\parse\\signal.l"
 { return (DIV_ASSIGN); }
 	YY_BREAK
 case 17:
 YY_RULE_SETUP
-#line 161 "C:\\Users\\Koya\\Documents\\GitHub\\CSignal\\CSignal\\CSignal\\signal\\parse\\signal.l"
+#line 164 "C:\\Users\\Koya\\Documents\\GitHub\\CSignal\\CSignal\\CSignal\\signal\\parse\\signal.l"
 { return (MOD_ASSIGN); }
 	YY_BREAK
 case 18:
 YY_RULE_SETUP
-#line 163 "C:\\Users\\Koya\\Documents\\GitHub\\CSignal\\CSignal\\CSignal\\signal\\parse\\signal.l"
+#line 166 "C:\\Users\\Koya\\Documents\\GitHub\\CSignal\\CSignal\\CSignal\\signal\\parse\\signal.l"
 { return (EQUAL); }
 	YY_BREAK
 case 19:
 YY_RULE_SETUP
-#line 164 "C:\\Users\\Koya\\Documents\\GitHub\\CSignal\\CSignal\\CSignal\\signal\\parse\\signal.l"
+#line 167 "C:\\Users\\Koya\\Documents\\GitHub\\CSignal\\CSignal\\CSignal\\signal\\parse\\signal.l"
 { return (NOTEQUAL); }
 	YY_BREAK
 case 20:
 YY_RULE_SETUP
-#line 167 "C:\\Users\\Koya\\Documents\\GitHub\\CSignal\\CSignal\\CSignal\\signal\\parse\\signal.l"
+#line 170 "C:\\Users\\Koya\\Documents\\GitHub\\CSignal\\CSignal\\CSignal\\signal\\parse\\signal.l"
 { return (INC); }
 	YY_BREAK
 case 21:
 YY_RULE_SETUP
-#line 168 "C:\\Users\\Koya\\Documents\\GitHub\\CSignal\\CSignal\\CSignal\\signal\\parse\\signal.l"
+#line 171 "C:\\Users\\Koya\\Documents\\GitHub\\CSignal\\CSignal\\CSignal\\signal\\parse\\signal.l"
 { return (DEC); }
 	YY_BREAK
 case 22:
 YY_RULE_SETUP
-#line 170 "C:\\Users\\Koya\\Documents\\GitHub\\CSignal\\CSignal\\CSignal\\signal\\parse\\signal.l"
+#line 173 "C:\\Users\\Koya\\Documents\\GitHub\\CSignal\\CSignal\\CSignal\\signal\\parse\\signal.l"
 { return (GT); }
 	YY_BREAK
 case 23:
 YY_RULE_SETUP
-#line 171 "C:\\Users\\Koya\\Documents\\GitHub\\CSignal\\CSignal\\CSignal\\signal\\parse\\signal.l"
+#line 174 "C:\\Users\\Koya\\Documents\\GitHub\\CSignal\\CSignal\\CSignal\\signal\\parse\\signal.l"
 { return (GE); }
 	YY_BREAK
 case 24:
 YY_RULE_SETUP
-#line 172 "C:\\Users\\Koya\\Documents\\GitHub\\CSignal\\CSignal\\CSignal\\signal\\parse\\signal.l"
+#line 175 "C:\\Users\\Koya\\Documents\\GitHub\\CSignal\\CSignal\\CSignal\\signal\\parse\\signal.l"
 { return (LT); }
 	YY_BREAK
 case 25:
 YY_RULE_SETUP
-#line 173 "C:\\Users\\Koya\\Documents\\GitHub\\CSignal\\CSignal\\CSignal\\signal\\parse\\signal.l"
+#line 176 "C:\\Users\\Koya\\Documents\\GitHub\\CSignal\\CSignal\\CSignal\\signal\\parse\\signal.l"
 { return (LE); }
 	YY_BREAK
 case 26:
 YY_RULE_SETUP
-#line 175 "C:\\Users\\Koya\\Documents\\GitHub\\CSignal\\CSignal\\CSignal\\signal\\parse\\signal.l"
+#line 178 "C:\\Users\\Koya\\Documents\\GitHub\\CSignal\\CSignal\\CSignal\\signal\\parse\\signal.l"
 { return (BIT_AND); }
 	YY_BREAK
 case 27:
 YY_RULE_SETUP
-#line 176 "C:\\Users\\Koya\\Documents\\GitHub\\CSignal\\CSignal\\CSignal\\signal\\parse\\signal.l"
+#line 179 "C:\\Users\\Koya\\Documents\\GitHub\\CSignal\\CSignal\\CSignal\\signal\\parse\\signal.l"
 { return (LOGIC_AND); }
 	YY_BREAK
 case 28:
 YY_RULE_SETUP
-#line 177 "C:\\Users\\Koya\\Documents\\GitHub\\CSignal\\CSignal\\CSignal\\signal\\parse\\signal.l"
+#line 180 "C:\\Users\\Koya\\Documents\\GitHub\\CSignal\\CSignal\\CSignal\\signal\\parse\\signal.l"
 { return (BIT_OR); }
 	YY_BREAK
 case 29:
 YY_RULE_SETUP
-#line 178 "C:\\Users\\Koya\\Documents\\GitHub\\CSignal\\CSignal\\CSignal\\signal\\parse\\signal.l"
+#line 181 "C:\\Users\\Koya\\Documents\\GitHub\\CSignal\\CSignal\\CSignal\\signal\\parse\\signal.l"
 { return (LOGIC_OR); }
 	YY_BREAK
 case 30:
 YY_RULE_SETUP
-#line 181 "C:\\Users\\Koya\\Documents\\GitHub\\CSignal\\CSignal\\CSignal\\signal\\parse\\signal.l"
+#line 184 "C:\\Users\\Koya\\Documents\\GitHub\\CSignal\\CSignal\\CSignal\\signal\\parse\\signal.l"
 { return (LCB); }
 	YY_BREAK
 case 31:
 YY_RULE_SETUP
-#line 182 "C:\\Users\\Koya\\Documents\\GitHub\\CSignal\\CSignal\\CSignal\\signal\\parse\\signal.l"
+#line 185 "C:\\Users\\Koya\\Documents\\GitHub\\CSignal\\CSignal\\CSignal\\signal\\parse\\signal.l"
 { return (RCB); }
 	YY_BREAK
 case 32:
 YY_RULE_SETUP
-#line 183 "C:\\Users\\Koya\\Documents\\GitHub\\CSignal\\CSignal\\CSignal\\signal\\parse\\signal.l"
+#line 186 "C:\\Users\\Koya\\Documents\\GitHub\\CSignal\\CSignal\\CSignal\\signal\\parse\\signal.l"
 { return (LRB); }
 	YY_BREAK
 case 33:
 YY_RULE_SETUP
-#line 184 "C:\\Users\\Koya\\Documents\\GitHub\\CSignal\\CSignal\\CSignal\\signal\\parse\\signal.l"
+#line 187 "C:\\Users\\Koya\\Documents\\GitHub\\CSignal\\CSignal\\CSignal\\signal\\parse\\signal.l"
 { return (RRB); }
 	YY_BREAK
 case 34:
 YY_RULE_SETUP
-#line 185 "C:\\Users\\Koya\\Documents\\GitHub\\CSignal\\CSignal\\CSignal\\signal\\parse\\signal.l"
+#line 188 "C:\\Users\\Koya\\Documents\\GitHub\\CSignal\\CSignal\\CSignal\\signal\\parse\\signal.l"
 { return (LSB); }
 	YY_BREAK
 case 35:
 YY_RULE_SETUP
-#line 186 "C:\\Users\\Koya\\Documents\\GitHub\\CSignal\\CSignal\\CSignal\\signal\\parse\\signal.l"
+#line 189 "C:\\Users\\Koya\\Documents\\GitHub\\CSignal\\CSignal\\CSignal\\signal\\parse\\signal.l"
 { return (RSB); }
 	YY_BREAK
 case 36:
 YY_RULE_SETUP
-#line 188 "C:\\Users\\Koya\\Documents\\GitHub\\CSignal\\CSignal\\CSignal\\signal\\parse\\signal.l"
+#line 191 "C:\\Users\\Koya\\Documents\\GitHub\\CSignal\\CSignal\\CSignal\\signal\\parse\\signal.l"
 { return (IMPORT); }
 	YY_BREAK
 case 37:
 YY_RULE_SETUP
-#line 189 "C:\\Users\\Koya\\Documents\\GitHub\\CSignal\\CSignal\\CSignal\\signal\\parse\\signal.l"
+#line 192 "C:\\Users\\Koya\\Documents\\GitHub\\CSignal\\CSignal\\CSignal\\signal\\parse\\signal.l"
 { return (VAR); }
 	YY_BREAK
 case 38:
 YY_RULE_SETUP
-#line 191 "C:\\Users\\Koya\\Documents\\GitHub\\CSignal\\CSignal\\CSignal\\signal\\parse\\signal.l"
+#line 194 "C:\\Users\\Koya\\Documents\\GitHub\\CSignal\\CSignal\\CSignal\\signal\\parse\\signal.l"
 { return (IF); }
 	YY_BREAK
 case 39:
 YY_RULE_SETUP
-#line 192 "C:\\Users\\Koya\\Documents\\GitHub\\CSignal\\CSignal\\CSignal\\signal\\parse\\signal.l"
+#line 195 "C:\\Users\\Koya\\Documents\\GitHub\\CSignal\\CSignal\\CSignal\\signal\\parse\\signal.l"
 { return (ELIF); }
 	YY_BREAK
 case 40:
 YY_RULE_SETUP
-#line 193 "C:\\Users\\Koya\\Documents\\GitHub\\CSignal\\CSignal\\CSignal\\signal\\parse\\signal.l"
+#line 196 "C:\\Users\\Koya\\Documents\\GitHub\\CSignal\\CSignal\\CSignal\\signal\\parse\\signal.l"
 { return (ELSE); }
 	YY_BREAK
 case 41:
 YY_RULE_SETUP
-#line 195 "C:\\Users\\Koya\\Documents\\GitHub\\CSignal\\CSignal\\CSignal\\signal\\parse\\signal.l"
+#line 198 "C:\\Users\\Koya\\Documents\\GitHub\\CSignal\\CSignal\\CSignal\\signal\\parse\\signal.l"
 { return (WHILE); }
 	YY_BREAK
 case 42:
 YY_RULE_SETUP
-#line 196 "C:\\Users\\Koya\\Documents\\GitHub\\CSignal\\CSignal\\CSignal\\signal\\parse\\signal.l"
+#line 199 "C:\\Users\\Koya\\Documents\\GitHub\\CSignal\\CSignal\\CSignal\\signal\\parse\\signal.l"
 { return (BREAK); }
 	YY_BREAK
 case 43:
 YY_RULE_SETUP
-#line 197 "C:\\Users\\Koya\\Documents\\GitHub\\CSignal\\CSignal\\CSignal\\signal\\parse\\signal.l"
+#line 200 "C:\\Users\\Koya\\Documents\\GitHub\\CSignal\\CSignal\\CSignal\\signal\\parse\\signal.l"
 { return (CONTINUE); }
 	YY_BREAK
 case 44:
 YY_RULE_SETUP
-#line 199 "C:\\Users\\Koya\\Documents\\GitHub\\CSignal\\CSignal\\CSignal\\signal\\parse\\signal.l"
+#line 202 "C:\\Users\\Koya\\Documents\\GitHub\\CSignal\\CSignal\\CSignal\\signal\\parse\\signal.l"
 { return (NAMESPACE); }
 	YY_BREAK
 case 45:
 YY_RULE_SETUP
-#line 200 "C:\\Users\\Koya\\Documents\\GitHub\\CSignal\\CSignal\\CSignal\\signal\\parse\\signal.l"
+#line 203 "C:\\Users\\Koya\\Documents\\GitHub\\CSignal\\CSignal\\CSignal\\signal\\parse\\signal.l"
 { return (CLASS); }
 	YY_BREAK
 case 46:
 YY_RULE_SETUP
-#line 201 "C:\\Users\\Koya\\Documents\\GitHub\\CSignal\\CSignal\\CSignal\\signal\\parse\\signal.l"
+#line 204 "C:\\Users\\Koya\\Documents\\GitHub\\CSignal\\CSignal\\CSignal\\signal\\parse\\signal.l"
 { return (ENUM); }
 	YY_BREAK
 case 47:
 YY_RULE_SETUP
-#line 202 "C:\\Users\\Koya\\Documents\\GitHub\\CSignal\\CSignal\\CSignal\\signal\\parse\\signal.l"
+#line 205 "C:\\Users\\Koya\\Documents\\GitHub\\CSignal\\CSignal\\CSignal\\signal\\parse\\signal.l"
 { return (INTERFACE); }
 	YY_BREAK
 case 48:
 YY_RULE_SETUP
-#line 203 "C:\\Users\\Koya\\Documents\\GitHub\\CSignal\\CSignal\\CSignal\\signal\\parse\\signal.l"
+#line 206 "C:\\Users\\Koya\\Documents\\GitHub\\CSignal\\CSignal\\CSignal\\signal\\parse\\signal.l"
 { return (THIS); }
 	YY_BREAK
 case 49:
 YY_RULE_SETUP
-#line 204 "C:\\Users\\Koya\\Documents\\GitHub\\CSignal\\CSignal\\CSignal\\signal\\parse\\signal.l"
+#line 207 "C:\\Users\\Koya\\Documents\\GitHub\\CSignal\\CSignal\\CSignal\\signal\\parse\\signal.l"
 { return (SUPER); }
 	YY_BREAK
 case 50:
 YY_RULE_SETUP
-#line 205 "C:\\Users\\Koya\\Documents\\GitHub\\CSignal\\CSignal\\CSignal\\signal\\parse\\signal.l"
+#line 208 "C:\\Users\\Koya\\Documents\\GitHub\\CSignal\\CSignal\\CSignal\\signal\\parse\\signal.l"
 { return (NEW); }
 	YY_BREAK
 case 51:
 YY_RULE_SETUP
-#line 207 "C:\\Users\\Koya\\Documents\\GitHub\\CSignal\\CSignal\\CSignal\\signal\\parse\\signal.l"
+#line 210 "C:\\Users\\Koya\\Documents\\GitHub\\CSignal\\CSignal\\CSignal\\signal\\parse\\signal.l"
 { return (TRUE); }
 	YY_BREAK
 case 52:
 YY_RULE_SETUP
-#line 208 "C:\\Users\\Koya\\Documents\\GitHub\\CSignal\\CSignal\\CSignal\\signal\\parse\\signal.l"
+#line 211 "C:\\Users\\Koya\\Documents\\GitHub\\CSignal\\CSignal\\CSignal\\signal\\parse\\signal.l"
 { return (FALSE); }
 	YY_BREAK
 case 53:
 YY_RULE_SETUP
-#line 209 "C:\\Users\\Koya\\Documents\\GitHub\\CSignal\\CSignal\\CSignal\\signal\\parse\\signal.l"
+#line 212 "C:\\Users\\Koya\\Documents\\GitHub\\CSignal\\CSignal\\CSignal\\signal\\parse\\signal.l"
 { return (NULL_TOK); }
 	YY_BREAK
 case 54:
 YY_RULE_SETUP
-#line 210 "C:\\Users\\Koya\\Documents\\GitHub\\CSignal\\CSignal\\CSignal\\signal\\parse\\signal.l"
+#line 213 "C:\\Users\\Koya\\Documents\\GitHub\\CSignal\\CSignal\\CSignal\\signal\\parse\\signal.l"
 { return (AS); }
 	YY_BREAK
 case 55:
 YY_RULE_SETUP
-#line 212 "C:\\Users\\Koya\\Documents\\GitHub\\CSignal\\CSignal\\CSignal\\signal\\parse\\signal.l"
+#line 215 "C:\\Users\\Koya\\Documents\\GitHub\\CSignal\\CSignal\\CSignal\\signal\\parse\\signal.l"
 { return (TRY); }
 	YY_BREAK
 case 56:
 YY_RULE_SETUP
-#line 213 "C:\\Users\\Koya\\Documents\\GitHub\\CSignal\\CSignal\\CSignal\\signal\\parse\\signal.l"
+#line 216 "C:\\Users\\Koya\\Documents\\GitHub\\CSignal\\CSignal\\CSignal\\signal\\parse\\signal.l"
 { return (CATCH); }
 	YY_BREAK
 case 57:
 YY_RULE_SETUP
-#line 214 "C:\\Users\\Koya\\Documents\\GitHub\\CSignal\\CSignal\\CSignal\\signal\\parse\\signal.l"
+#line 217 "C:\\Users\\Koya\\Documents\\GitHub\\CSignal\\CSignal\\CSignal\\signal\\parse\\signal.l"
 { return (THROW); }
 	YY_BREAK
 case 58:
 YY_RULE_SETUP
-#line 216 "C:\\Users\\Koya\\Documents\\GitHub\\CSignal\\CSignal\\CSignal\\signal\\parse\\signal.l"
+#line 219 "C:\\Users\\Koya\\Documents\\GitHub\\CSignal\\CSignal\\CSignal\\signal\\parse\\signal.l"
 { return (PUBLIC); }
 	YY_BREAK
 case 59:
 YY_RULE_SETUP
-#line 217 "C:\\Users\\Koya\\Documents\\GitHub\\CSignal\\CSignal\\CSignal\\signal\\parse\\signal.l"
+#line 220 "C:\\Users\\Koya\\Documents\\GitHub\\CSignal\\CSignal\\CSignal\\signal\\parse\\signal.l"
 { return (PRIVATE); }
 	YY_BREAK
 case 60:
 YY_RULE_SETUP
-#line 218 "C:\\Users\\Koya\\Documents\\GitHub\\CSignal\\CSignal\\CSignal\\signal\\parse\\signal.l"
+#line 221 "C:\\Users\\Koya\\Documents\\GitHub\\CSignal\\CSignal\\CSignal\\signal\\parse\\signal.l"
 { return (PROTECTED); }
 	YY_BREAK
 case 61:
 YY_RULE_SETUP
-#line 219 "C:\\Users\\Koya\\Documents\\GitHub\\CSignal\\CSignal\\CSignal\\signal\\parse\\signal.l"
+#line 222 "C:\\Users\\Koya\\Documents\\GitHub\\CSignal\\CSignal\\CSignal\\signal\\parse\\signal.l"
 { return (STATIC); }
 	YY_BREAK
 case 62:
 YY_RULE_SETUP
-#line 220 "C:\\Users\\Koya\\Documents\\GitHub\\CSignal\\CSignal\\CSignal\\signal\\parse\\signal.l"
+#line 223 "C:\\Users\\Koya\\Documents\\GitHub\\CSignal\\CSignal\\CSignal\\signal\\parse\\signal.l"
 { return (NATIVE); }
 	YY_BREAK
 case 63:
 YY_RULE_SETUP
-#line 221 "C:\\Users\\Koya\\Documents\\GitHub\\CSignal\\CSignal\\CSignal\\signal\\parse\\signal.l"
+#line 224 "C:\\Users\\Koya\\Documents\\GitHub\\CSignal\\CSignal\\CSignal\\signal\\parse\\signal.l"
 { return (RETURN); }
 	YY_BREAK
 case 64:
 YY_RULE_SETUP
-#line 223 "C:\\Users\\Koya\\Documents\\GitHub\\CSignal\\CSignal\\CSignal\\signal\\parse\\signal.l"
+#line 226 "C:\\Users\\Koya\\Documents\\GitHub\\CSignal\\CSignal\\CSignal\\signal\\parse\\signal.l"
 { return (CTOR); }
 	YY_BREAK
 case 65:
 YY_RULE_SETUP
-#line 224 "C:\\Users\\Koya\\Documents\\GitHub\\CSignal\\CSignal\\CSignal\\signal\\parse\\signal.l"
+#line 227 "C:\\Users\\Koya\\Documents\\GitHub\\CSignal\\CSignal\\CSignal\\signal\\parse\\signal.l"
 { return (DEF); }
 	YY_BREAK
 case 66:
 YY_RULE_SETUP
-#line 225 "C:\\Users\\Koya\\Documents\\GitHub\\CSignal\\CSignal\\CSignal\\signal\\parse\\signal.l"
+#line 228 "C:\\Users\\Koya\\Documents\\GitHub\\CSignal\\CSignal\\CSignal\\signal\\parse\\signal.l"
 { return (ARROW); }
 	YY_BREAK
 case 67:
 YY_RULE_SETUP
-#line 227 "C:\\Users\\Koya\\Documents\\GitHub\\CSignal\\CSignal\\CSignal\\signal\\parse\\signal.l"
+#line 230 "C:\\Users\\Koya\\Documents\\GitHub\\CSignal\\CSignal\\CSignal\\signal\\parse\\signal.l"
 {
 	yylval.ast_value = ast_new_int(0);
 	return INT;
@@ -1260,14 +1263,14 @@ YY_RULE_SETUP
 	YY_BREAK
 case 68:
 YY_RULE_SETUP
-#line 232 "C:\\Users\\Koya\\Documents\\GitHub\\CSignal\\CSignal\\CSignal\\signal\\parse\\signal.l"
+#line 235 "C:\\Users\\Koya\\Documents\\GitHub\\CSignal\\CSignal\\CSignal\\signal\\parse\\signal.l"
 {
 	parser_top()->lineno++;
 }
 	YY_BREAK
 case 69:
 YY_RULE_SETUP
-#line 236 "C:\\Users\\Koya\\Documents\\GitHub\\CSignal\\CSignal\\CSignal\\signal\\parse\\signal.l"
+#line 239 "C:\\Users\\Koya\\Documents\\GitHub\\CSignal\\CSignal\\CSignal\\signal\\parse\\signal.l"
 {
 	yylval.ast_value = ast_new_int(atoi(yytext));
 	return INT;
@@ -1275,7 +1278,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 70:
 YY_RULE_SETUP
-#line 241 "C:\\Users\\Koya\\Documents\\GitHub\\CSignal\\CSignal\\CSignal\\signal\\parse\\signal.l"
+#line 244 "C:\\Users\\Koya\\Documents\\GitHub\\CSignal\\CSignal\\CSignal\\signal\\parse\\signal.l"
 {
 	yylval.ast_value = ast_new_double(atof(yytext));
 	return DOUBLE;
@@ -1283,7 +1286,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 71:
 YY_RULE_SETUP
-#line 246 "C:\\Users\\Koya\\Documents\\GitHub\\CSignal\\CSignal\\CSignal\\signal\\parse\\signal.l"
+#line 249 "C:\\Users\\Koya\\Documents\\GitHub\\CSignal\\CSignal\\CSignal\\signal\\parse\\signal.l"
 {
 	yylval.string_value = text_strdup(yytext);
 	return IDENT;
@@ -1291,7 +1294,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 72:
 YY_RULE_SETUP
-#line 251 "C:\\Users\\Koya\\Documents\\GitHub\\CSignal\\CSignal\\CSignal\\signal\\parse\\signal.l"
+#line 254 "C:\\Users\\Koya\\Documents\\GitHub\\CSignal\\CSignal\\CSignal\\signal\\parse\\signal.l"
 {
 	parser_clear_buffer(parser_top());
     BEGIN STRING_LITERAL_STATE;
@@ -1299,55 +1302,55 @@ YY_RULE_SETUP
 	YY_BREAK
 case 73:
 YY_RULE_SETUP
-#line 255 "C:\\Users\\Koya\\Documents\\GitHub\\CSignal\\CSignal\\CSignal\\signal\\parse\\signal.l"
+#line 258 "C:\\Users\\Koya\\Documents\\GitHub\\CSignal\\CSignal\\CSignal\\signal\\parse\\signal.l"
 BEGIN ML_COMMENT;
 	YY_BREAK
 case 74:
 YY_RULE_SETUP
-#line 256 "C:\\Users\\Koya\\Documents\\GitHub\\CSignal\\CSignal\\CSignal\\signal\\parse\\signal.l"
+#line 259 "C:\\Users\\Koya\\Documents\\GitHub\\CSignal\\CSignal\\CSignal\\signal\\parse\\signal.l"
 BEGIN L_COMMENT;
 	YY_BREAK
 case 75:
 YY_RULE_SETUP
-#line 257 "C:\\Users\\Koya\\Documents\\GitHub\\CSignal\\CSignal\\CSignal\\signal\\parse\\signal.l"
+#line 260 "C:\\Users\\Koya\\Documents\\GitHub\\CSignal\\CSignal\\CSignal\\signal\\parse\\signal.l"
 {
 	parser_top()->lineno++;
 }
 	YY_BREAK
 case 76:
 YY_RULE_SETUP
-#line 260 "C:\\Users\\Koya\\Documents\\GitHub\\CSignal\\CSignal\\CSignal\\signal\\parse\\signal.l"
+#line 263 "C:\\Users\\Koya\\Documents\\GitHub\\CSignal\\CSignal\\CSignal\\signal\\parse\\signal.l"
 {
     BEGIN INITIAL;
 }
 	YY_BREAK
 case 77:
 YY_RULE_SETUP
-#line 263 "C:\\Users\\Koya\\Documents\\GitHub\\CSignal\\CSignal\\CSignal\\signal\\parse\\signal.l"
+#line 266 "C:\\Users\\Koya\\Documents\\GitHub\\CSignal\\CSignal\\CSignal\\signal\\parse\\signal.l"
 ;
 	YY_BREAK
 case 78:
 YY_RULE_SETUP
-#line 264 "C:\\Users\\Koya\\Documents\\GitHub\\CSignal\\CSignal\\CSignal\\signal\\parse\\signal.l"
+#line 267 "C:\\Users\\Koya\\Documents\\GitHub\\CSignal\\CSignal\\CSignal\\signal\\parse\\signal.l"
 {
 	parser_top()->lineno++;
 	BEGIN INITIAL;
 }
 	YY_BREAK
 case YY_STATE_EOF(L_COMMENT):
-#line 268 "C:\\Users\\Koya\\Documents\\GitHub\\CSignal\\CSignal\\CSignal\\signal\\parse\\signal.l"
+#line 271 "C:\\Users\\Koya\\Documents\\GitHub\\CSignal\\CSignal\\CSignal\\signal\\parse\\signal.l"
 {
 	BEGIN INITIAL;
 }
 	YY_BREAK
 case 79:
 YY_RULE_SETUP
-#line 271 "C:\\Users\\Koya\\Documents\\GitHub\\CSignal\\CSignal\\CSignal\\signal\\parse\\signal.l"
+#line 274 "C:\\Users\\Koya\\Documents\\GitHub\\CSignal\\CSignal\\CSignal\\signal\\parse\\signal.l"
 ;
 	YY_BREAK
 case 80:
 YY_RULE_SETUP
-#line 272 "C:\\Users\\Koya\\Documents\\GitHub\\CSignal\\CSignal\\CSignal\\signal\\parse\\signal.l"
+#line 275 "C:\\Users\\Koya\\Documents\\GitHub\\CSignal\\CSignal\\CSignal\\signal\\parse\\signal.l"
 {
 	yylval.ast_value = ast_new_char('\r');
 	return CHAR_LITERAL;
@@ -1355,7 +1358,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 81:
 YY_RULE_SETUP
-#line 276 "C:\\Users\\Koya\\Documents\\GitHub\\CSignal\\CSignal\\CSignal\\signal\\parse\\signal.l"
+#line 279 "C:\\Users\\Koya\\Documents\\GitHub\\CSignal\\CSignal\\CSignal\\signal\\parse\\signal.l"
 {
 	yylval.ast_value = ast_new_char('\n');
 	return CHAR_LITERAL;
@@ -1363,7 +1366,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 82:
 YY_RULE_SETUP
-#line 280 "C:\\Users\\Koya\\Documents\\GitHub\\CSignal\\CSignal\\CSignal\\signal\\parse\\signal.l"
+#line 283 "C:\\Users\\Koya\\Documents\\GitHub\\CSignal\\CSignal\\CSignal\\signal\\parse\\signal.l"
 {
 	yylval.ast_value = ast_new_char('\t');
 	return CHAR_LITERAL;
@@ -1371,7 +1374,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 83:
 YY_RULE_SETUP
-#line 284 "C:\\Users\\Koya\\Documents\\GitHub\\CSignal\\CSignal\\CSignal\\signal\\parse\\signal.l"
+#line 287 "C:\\Users\\Koya\\Documents\\GitHub\\CSignal\\CSignal\\CSignal\\signal\\parse\\signal.l"
 {
 	yylval.ast_value = ast_new_char('\b');
 	return CHAR_LITERAL;
@@ -1379,7 +1382,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 84:
 YY_RULE_SETUP
-#line 288 "C:\\Users\\Koya\\Documents\\GitHub\\CSignal\\CSignal\\CSignal\\signal\\parse\\signal.l"
+#line 291 "C:\\Users\\Koya\\Documents\\GitHub\\CSignal\\CSignal\\CSignal\\signal\\parse\\signal.l"
 {
 	yylval.ast_value = ast_new_char(yytext[1]);
 	return CHAR_LITERAL;
@@ -1387,7 +1390,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 85:
 YY_RULE_SETUP
-#line 292 "C:\\Users\\Koya\\Documents\\GitHub\\CSignal\\CSignal\\CSignal\\signal\\parse\\signal.l"
+#line 295 "C:\\Users\\Koya\\Documents\\GitHub\\CSignal\\CSignal\\CSignal\\signal\\parse\\signal.l"
 {
 	yylval.ast_value = parser_reduce_buffer(parser_top());
     BEGIN INITIAL;
@@ -1396,47 +1399,47 @@ YY_RULE_SETUP
 	YY_BREAK
 case 86:
 YY_RULE_SETUP
-#line 297 "C:\\Users\\Koya\\Documents\\GitHub\\CSignal\\CSignal\\CSignal\\signal\\parse\\signal.l"
+#line 300 "C:\\Users\\Koya\\Documents\\GitHub\\CSignal\\CSignal\\CSignal\\signal\\parse\\signal.l"
 parser_append_buffer(parser_top(), '"');
 	YY_BREAK
 case 87:
 YY_RULE_SETUP
-#line 298 "C:\\Users\\Koya\\Documents\\GitHub\\CSignal\\CSignal\\CSignal\\signal\\parse\\signal.l"
+#line 301 "C:\\Users\\Koya\\Documents\\GitHub\\CSignal\\CSignal\\CSignal\\signal\\parse\\signal.l"
 parser_append_buffer(parser_top(), '\'');
 	YY_BREAK
 case 88:
 YY_RULE_SETUP
-#line 299 "C:\\Users\\Koya\\Documents\\GitHub\\CSignal\\CSignal\\CSignal\\signal\\parse\\signal.l"
+#line 302 "C:\\Users\\Koya\\Documents\\GitHub\\CSignal\\CSignal\\CSignal\\signal\\parse\\signal.l"
 parser_append_buffer(parser_top(), '\r');
 	YY_BREAK
 case 89:
 YY_RULE_SETUP
-#line 300 "C:\\Users\\Koya\\Documents\\GitHub\\CSignal\\CSignal\\CSignal\\signal\\parse\\signal.l"
+#line 303 "C:\\Users\\Koya\\Documents\\GitHub\\CSignal\\CSignal\\CSignal\\signal\\parse\\signal.l"
 parser_append_buffer(parser_top(), '\n');
 	YY_BREAK
 case 90:
 YY_RULE_SETUP
-#line 301 "C:\\Users\\Koya\\Documents\\GitHub\\CSignal\\CSignal\\CSignal\\signal\\parse\\signal.l"
+#line 304 "C:\\Users\\Koya\\Documents\\GitHub\\CSignal\\CSignal\\CSignal\\signal\\parse\\signal.l"
 parser_append_buffer(parser_top(), '\t');
 	YY_BREAK
 case 91:
 YY_RULE_SETUP
-#line 302 "C:\\Users\\Koya\\Documents\\GitHub\\CSignal\\CSignal\\CSignal\\signal\\parse\\signal.l"
+#line 305 "C:\\Users\\Koya\\Documents\\GitHub\\CSignal\\CSignal\\CSignal\\signal\\parse\\signal.l"
 parser_append_buffer(parser_top(), '\\');
 	YY_BREAK
 case 92:
 YY_RULE_SETUP
-#line 303 "C:\\Users\\Koya\\Documents\\GitHub\\CSignal\\CSignal\\CSignal\\signal\\parse\\signal.l"
+#line 306 "C:\\Users\\Koya\\Documents\\GitHub\\CSignal\\CSignal\\CSignal\\signal\\parse\\signal.l"
 {
 	parser_append_buffer(parser_top(), yytext[0]);
 }
 	YY_BREAK
 case 93:
 YY_RULE_SETUP
-#line 306 "C:\\Users\\Koya\\Documents\\GitHub\\CSignal\\CSignal\\CSignal\\signal\\parse\\signal.l"
+#line 309 "C:\\Users\\Koya\\Documents\\GitHub\\CSignal\\CSignal\\CSignal\\signal\\parse\\signal.l"
 ECHO;
 	YY_BREAK
-#line 1440 "lex.yy.c"
+#line 1443 "lex.yy.c"
 			case YY_STATE_EOF(INITIAL):
 			case YY_STATE_EOF(ML_COMMENT):
 			case YY_STATE_EOF(STRING_LITERAL_STATE):
@@ -2322,4 +2325,4 @@ int main()
 	return 0;
 	}
 #endif
-#line 306 "C:\\Users\\Koya\\Documents\\GitHub\\CSignal\\CSignal\\CSignal\\signal\\parse\\signal.l"
+#line 309 "C:\\Users\\Koya\\Documents\\GitHub\\CSignal\\CSignal\\CSignal\\signal\\parse\\signal.l"

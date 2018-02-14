@@ -166,11 +166,6 @@ void test_cll(void) {
 	sg_thread_release_vm_ref(sg_thread_current());
 	//*/
 	class_loader_delete(cll);
-	for (int j = 0; j < 5; j++) {
-		printf("a");
-	}
-	printf("\n");
-	int i = 0;
 	/*
 	system("cls");
 	namespace_dump();

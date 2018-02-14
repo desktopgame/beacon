@@ -667,7 +667,7 @@ stmt_list
 	}
 	;
 stmt
-	: expression SEMI
+	: expression stmt_term
 	{
 		$$ = ast_new_proc($1);
 	}
@@ -689,13 +689,13 @@ variable_decl_stmt
 	}
 	;
 variable_init_stmt
-	: typename_T IDENT ASSIGN expression SEMI
+	: typename_T IDENT ASSIGN expression stmt_term
 	{
 		$$ = ast_new_variable_init($1, $2, $4);
 	}
 	;
 inferenced_type_init_stmt
-	: VAR IDENT ASSIGN expression SEMI
+	: VAR IDENT ASSIGN expression stmt_term
 	{
 		$$ = ast_new_inferenced_type_init($2, $4);
 	}
@@ -799,5 +799,9 @@ scope_optional
 		$$ = ast_new_blank();
 	}
 	| scope
+	;
+stmt_term
+	: SEMI
+	| /* empty */
 	;
 %%
