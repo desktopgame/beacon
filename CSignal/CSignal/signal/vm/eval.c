@@ -10,23 +10,29 @@
 #include <assert.h>
 
 //proto
-static script_context* eval_swap_ctx();
 static void eval_top_from_cll(class_loader* cll);
 
-void eval_top_from_file(const char * filename) {
-	script_context* ctx = eval_swap_ctx();
+script_context * eval_push() {
+	script_context* cur = script_context_get_current();
+	assert(cur != NULL);
+	//現在のコンテキストを入れ替える
+	script_context* ctx = script_context_add();
+	script_context_set_current(ctx);
+	return ctx;
+}
 
-	class_loader* cll = class_loader_new_entry_point_from_file(filename);
-	eval_top_from_cll(cll);
+void eval_pop(script_context * ctx) {
 	script_context_remove(ctx);
 }
 
-void eval_top_from_source(const char * source) {
-	script_context* ctx = eval_swap_ctx();
+void eval_top_from_file(const char * filename) {
+	class_loader* cll = class_loader_new_entry_point_from_file(filename);
+	eval_top_from_cll(cll);
+}
 
+void eval_top_from_source(const char * source) {
 	class_loader* cll = class_loader_new_entry_point_from_source(source, "eval-top");
 	eval_top_from_cll(cll);
-	script_context_remove(ctx);
 }
 
 void eval_top_from_lines(const char ** lines, int lineCount) {
@@ -42,25 +48,9 @@ void eval_top_from_lines(const char ** lines, int lineCount) {
 }
 
 void eval_interactive() {
-	script_context* ctx = eval_swap_ctx();
-
-	while (true) {
-		char* line = text_gets();
-
-		MEM_FREE(line);
-	}
 }
 
 //private
-static script_context* eval_swap_ctx() {
-	script_context* cur = script_context_get_current();
-	assert(cur != NULL);
-	//現在のコンテキストを入れ替える
-	script_context* ctx = script_context_add();
-	script_context_set_current(ctx);
-	return ctx;
-}
-
 static void eval_top_from_cll(class_loader* cll) {
 	script_context* ctx = script_context_get_current();
 
