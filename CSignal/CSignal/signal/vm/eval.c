@@ -4,6 +4,9 @@
 #include "../env/heap.h"
 #include "../thread/thread.h"
 #include "../vm/vm.h"
+#include "../util/string_buffer.h"
+#include "../util/text.h"
+#include "../util/mem.h"
 #include <assert.h>
 
 //proto
@@ -24,6 +27,28 @@ void eval_top_from_source(const char * source) {
 	class_loader* cll = class_loader_new_entry_point_from_source(source, "eval-top");
 	eval_top_from_cll(cll);
 	script_context_remove(ctx);
+}
+
+void eval_top_from_lines(const char ** lines, int lineCount) {
+	string_buffer* sb = string_buffer_new();
+	for (int i = 0; i < lineCount; i++) {
+		char* line = lines[i];
+		string_buffer_appends(sb, line);
+		string_buffer_append(sb, '\n');
+	}
+	string_buffer_shrink(sb);
+	eval_top_from_source(sb->text);
+	string_buffer_delete(sb);
+}
+
+void eval_interactive() {
+	script_context* ctx = eval_swap_ctx();
+
+	while (true) {
+		char* line = text_gets();
+
+		MEM_FREE(line);
+	}
 }
 
 //private
