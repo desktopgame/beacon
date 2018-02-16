@@ -77,10 +77,14 @@ vm * vm_sub(vm * parent) {
 }
 
 void vm_execute(vm* self, enviroment* env) {
+	vm_resume(self, env, 0);
+}
+
+void vm_resume(vm * self, enviroment * env, int pos) {
 	script_context* ctx = script_context_get_current();
 	int source_len = env->buf->source->length;
 	self->contextRef = env;
-	for (int i = 0; i < source_len; i++) {
+	for (int i = pos; i < source_len; i++) {
 		//このVMの子要素で例外がスローされ、
 		//それを子要素自身で処理できなかった場合には、
 		//自分で処理を試みます。
@@ -181,7 +185,7 @@ void vm_execute(vm* self, enviroment* env) {
 			case op_bnot:
 				vector_push(self->value_stack, object_bool_get(!SPB(self)));
 				break;
-			//TODO:短絡評価していない
+				//TODO:短絡評価していない
 			case op_bbit_or:
 				vector_push(self->value_stack, object_bool_get(SPB(self) | SPB(self)));
 				break;
@@ -194,7 +198,7 @@ void vm_execute(vm* self, enviroment* env) {
 			case op_blogic_and:
 				vector_push(self->value_stack, object_bool_get(SPB(self) && SPB(self)));
 				break;
-			//push const
+				//push const
 			case op_iconst:
 			{
 				int index = (int)enviroment_source_at(env, ++i);
@@ -252,7 +256,7 @@ void vm_execute(vm* self, enviroment* env) {
 				//空ならプログラムを終了
 				if (vector_empty(th->trace_stack)) {
 					vm_terminate(self);
-				//どこかでキャッチしようとしている
+					//どこかでキャッチしようとしている
 				} else {
 					vm_validate(self, source_len, &i);
 				}
@@ -372,7 +376,7 @@ void vm_execute(vm* self, enviroment* env) {
 					object* o = (object*)vector_pop(self->value_stack);
 					vector_push(sub->value_stack, o);
 				}
-		//		enviroment_op_dump(ctor->env, sub->level);
+				//		enviroment_op_dump(ctor->env, sub->level);
 				//opcode_buf_dump(ctor->env->buf, sub->level);
 				vm_execute(sub, ctor->env);
 				//コンストラクタを実行した場合、
@@ -388,7 +392,7 @@ void vm_execute(vm* self, enviroment* env) {
 			}
 			case op_this:
 			{
-				vector_push(self->value_stack,vector_at(self->ref_stack,0));
+				vector_push(self->value_stack, vector_at(self->ref_stack, 0));
 				break;
 			}
 			case op_super:
@@ -476,17 +480,17 @@ void vm_execute(vm* self, enviroment* env) {
 			}
 			case op_swap:
 			{
-				/*  
+				/*
 				末尾の二つを入れ替える命令です。
 				この命令は次のように実行されます。
 				:
-				    |A|B|C|D|
+				|A|B|C|D|
 				:
-				    first = D
-				    second = C
-				    |A|B|
+				first = D
+				second = C
+				|A|B|
 				:
-				    |A|B|D|C|
+				|A|B|D|C|
 				*/
 				object* first = vector_pop(self->value_stack);
 				object* second = vector_pop(self->value_stack);
@@ -509,8 +513,8 @@ void vm_execute(vm* self, enviroment* env) {
 						self->value_stack,
 						object_copy_s(
 							vector_pop(self->value_stack)
-						)
-					);
+							)
+						);
 				} else {
 					o->vptr = vtable_lookup(o->vptr, type_vtable(tp));
 				}
@@ -528,8 +532,8 @@ void vm_execute(vm* self, enviroment* env) {
 				//method* m = (method*)vector_at(cls->vt->elements, methodIndex);
 				method* m = class_get_smethod(cls->u.class_, methodIndex);
 				//いらない
-			//	opcode code = (opcode)enviroment_source_at(env, ++i);
-			//	assert(code == op_invokestatic);
+				//	opcode code = (opcode)enviroment_source_at(env, ++i);
+				//	assert(code == op_invokestatic);
 				method_execute(m, self, env);
 				break;
 				//break;
@@ -538,12 +542,12 @@ void vm_execute(vm* self, enviroment* env) {
 			case op_invokespecial:
 			{
 				int index = (int)enviroment_source_at(env, ++i);
-			//	opcode code = (opcode)enviroment_source_at(env, ++i);
+				//	opcode code = (opcode)enviroment_source_at(env, ++i);
 				object* o = (object*)vector_top(self->value_stack);
 				//method* m = (method*)vector_at(o->vptr->elements, index);
 				method* m = class_get_method(o, index);
-			//	assert(code == op_invokevirtual ||
-			//		   code == op_invokespecial);
+				//	assert(code == op_invokevirtual ||
+				//		   code == op_invokespecial);
 				method_execute(m, self, env);
 				break;
 			}
@@ -616,7 +620,7 @@ void vm_execute(vm* self, enviroment* env) {
 		//キャッチされなかった例外によって終了する
 		if (self->terminate) {
 			vm_uncaught(self, env, i);
-			break; 
+			break;
 		}
 	}
 }

@@ -108,6 +108,14 @@ vm* vm_sub(vm* parent);
 void vm_execute(vm* self, enviroment* env);
 
 /**
+ * 開始位置を指定して指定のバイトコードを実行します.
+ * @param self
+ * @param env
+ * @param pos
+ */
+void vm_resume(vm* self, enviroment* env, int pos);
+
+/**
  * ネイティブメソッドから例外をスローする場合にはこちらを使用します.
  * @param self
  * @param exc
