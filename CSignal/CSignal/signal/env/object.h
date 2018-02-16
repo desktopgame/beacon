@@ -161,6 +161,12 @@ void object_markall(object* self);
 int object_count();
 
 /**
+ * オブジェクトの詳細を出力します.
+ * @param self
+ */
+void object_print(object* self);
+
+/**
  * オブジェクトを開放します.
  * @param self
  */

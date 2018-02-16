@@ -144,15 +144,16 @@ void test_file_path(void) {
 }
 
 void test_cll(void) {
-	script_context* temp = eval_push();
+//	script_context* temp = eval_push();
 	char* lines[2] = {
 		{ " import \"lib\" " },
 		{ " Console.writeLine(\"Hello\") " }
 	};
-		eval_top_from_file("main.signal");
+		eval_interactive();
+	//	eval_top_from_file("main.signal");
 	//	eval_top_from_source("import \"lib\"\nConsole.writeLine(\"Hello\")");
 	//	eval_top_from_lines(lines, 2);
-	eval_pop(temp);
+//	eval_pop(temp);
 }
 
 void test_struct(void) {

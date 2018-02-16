@@ -189,6 +189,23 @@ int object_count() {
 	return gObjectCount;
 }
 
+void object_print(object * self) {
+	if (self->tag == object_int) {
+		text_printf("Int: %d", self->u.int_);
+	} else if (self->tag == object_double) {
+		text_printf("Double: %d", self->u.double_);
+	} else if (self->tag == object_string) {
+		string_buffer* sb = (string_buffer*)vector_at(self->nativeSlotVec, 0);
+		text_printf("String: %s", sb->text);
+	} else if (self->tag == object_bool) {
+		text_printf("Bool: %s", (self == object_get_true() ? "true" : "false"));
+	} else if (self->tag == object_null) {
+		text_printf("Ref: Null");
+	} else if (self->tag == object_ref) {
+		text_printf("Ref: %s", type_name(self->type));
+	}
+}
+
 void object_delete(object * self) {
 	gObjectCount--;
 	//sg_info(__FILE__, __LINE__, "deleted object %s", type_name(self->type));
