@@ -47,6 +47,14 @@ int opcode_buf_nop(opcode_buf* self);
 void opcode_buf_dump(opcode_buf* self, int depth);
 
 /**
+ * a の 末尾に b を統合した新しい opcode_buf を作成します.
+ * @param a
+ * @param b
+ * @return
+ */
+opcode_buf* opcode_buf_merge(opcode_buf* a, opcode_buf* b);
+
+/**
  * オペコードの一覧を開放します.
  * @param self
  */

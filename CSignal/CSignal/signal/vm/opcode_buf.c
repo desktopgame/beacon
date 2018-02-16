@@ -5,6 +5,7 @@
 
 //proto
 static opcode_buf_delete_label(vector_item item);
+static void opcode_buf_copy(opcode_buf* src, opcode_buf* dst);
 
 opcode_buf * opcode_buf_new() {
 	opcode_buf* ret = (opcode_buf*)MEM_MALLOC(sizeof(opcode_buf));
@@ -39,6 +40,13 @@ void opcode_buf_dump(opcode_buf * self, int depth) {
 	text_putline();
 }
 
+opcode_buf * opcode_buf_merge(opcode_buf * a, opcode_buf * b) {
+	opcode_buf* ret = opcode_buf_new();
+	opcode_buf_copy(a, ret);
+	opcode_buf_copy(b, ret);
+	return ret;
+}
+
 void opcode_buf_delete(opcode_buf * self) {
 	if (self == NULL) {
 		return;
@@ -53,4 +61,21 @@ void opcode_buf_delete(opcode_buf * self) {
 static opcode_buf_delete_label(vector_item item) {
 	label* l = (label*)item;
 	label_delete(l);
+}
+
+static void opcode_buf_copy(opcode_buf* src, opcode_buf* dst) {
+	for (int i = 0; i < src->source->length; i++) {
+		vector_item e = vector_at(src->source, i);
+		if (e == op_goto ||
+			e == op_goto_if_false ||
+			e == op_goto_if_true) {
+
+			opcode_buf_add(dst, e);
+			label* lb = (label*)vector_at(src->source, ++i);
+			opcode_buf_add(dst, e);
+			vector_push(dst->labels, lb);
+		} else {
+			opcode_buf_add(dst, e);
+		}
+	}
 }
