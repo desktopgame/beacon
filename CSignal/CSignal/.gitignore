@@ -1,2 +1,6 @@
 #でかいファイルは無視
 x64/
+*.txt
+*.txt~
+*.gitignore~
+*.signal~
