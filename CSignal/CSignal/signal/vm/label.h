@@ -18,6 +18,13 @@ typedef struct label {
 label* label_new(int cursor);
 
 /**
+ * ラベルを複製します.
+ * @param src
+ * @return
+ */
+label* label_clone(label* src);
+
+/**
  * ラベルを開放します.
  * @param self
  */

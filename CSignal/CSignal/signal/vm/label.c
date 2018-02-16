@@ -8,6 +8,11 @@ label * label_new(int cursor) {
 	return ret;
 }
 
+label * label_clone(label * src) {
+	label* ret = label_new(src->cursor);
+	return ret;
+}
+
 void label_delete(label * self) {
 	MEM_FREE(self);
 }
