@@ -40,7 +40,7 @@ void bench_simple(const char * name, time_ref * befor, time_ref * after) {
 	int diff = (int)(1000.0 * (end.time - start.time)
 				 + (end.millitm - start.millitm));
 
-	text_printf("%s: %u ミリ秒", name, diff);
+	text_printf("%s: %ums", name, diff);
 	text_putline();
 #else
 	double diff = difftime(after->time, befor->time);
