@@ -149,8 +149,8 @@ void test_cll(void) {
 		{ " import \"lib\" " },
 		{ " Console.writeLine(\"Hello\") " }
 	};
-		eval_interactive();
-	//	eval_top_from_file("main.signal");
+	//	eval_interactive();
+		eval_top_from_file("main.signal");
 	//	eval_top_from_source("import \"lib\"\nConsole.writeLine(\"Hello\")");
 	//	eval_top_from_lines(lines, 2);
 //	eval_pop(temp);
@@ -336,6 +336,23 @@ void test_props(void) {
 	text_printf("char=%c\n", props_getc(p, "char", 'd'));
 	text_printf("string=%s\n", props_gets(p, "string", "ddd"));
 	props_delete(p);
+}
+
+void test_malloc(void) {
+	int size = 16;
+	void* block = malloc(size);
+	while (true) {
+		//最後に確保したブロックを開放
+		free(block);
+		block = NULL;
+		//二倍の領域を確保
+		size = size + 1;
+		void* tmp = malloc(size);
+		if (tmp == NULL) {
+			break;
+		}
+	}
+	text_printfln("malloc limit: %d", size);
 }
 
 void test_dup(void) {
