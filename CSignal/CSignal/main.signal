@@ -1,53 +1,15 @@
 import "lib"
 import "Vector"
 
-/*
-var str = "HelloWorld"
-Console.writeLine(str)
-
-var sub = str.substr(0, 4)
-Console.writeLine(sub)
-
-Console.writeLine(sub.charAt(0))
-
-Int offs = 0
-while(offs < sub.length()) {
-	var ch = sub.charAt(offs)
+var arr = new Array(5);
+var offs = 0
+while(offs < arr.length()) {
+	arr.set(offs, offs * 10)
 	offs++
-	Console.writeLine(ch)
-}
-*/
-
-var vec = new Vector();
-vec.push("Hello");
-vec.push("World");
-vec.push("!!");
-vec.push("!!");
-vec.push("!!");
-//全部表示
-Int i = 0;
-while(i < vec.length()) {
-	Console.writeLine(vec.get(i))
-	i++
 }
 
-Console.writeLine(" ")
-Console.writeLine(" ")
-Console.writeLine(" ")
-
-vec.pop();
-vec.push("FF")
-//全部表示
-i = 0;
-while(i < vec.length()) {
-	Console.writeLine(vec.get(i))
-	i++
+var itr = arr.iterate()
+while(itr.hasNext()) {
+	var e = itr.next()
+	Console.writeLine(e)
 }
-vec.set(0, "HHHH")
-//全部表示
-i = 0;
-while(i < vec.length()) {
-	Console.writeLine(vec.get(i))
-	i++
-}
-

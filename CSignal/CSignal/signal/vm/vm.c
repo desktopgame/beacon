@@ -522,6 +522,12 @@ void vm_resume(vm * self, enviroment * env, int pos) {
 			}
 			case op_invokeinterface:
 			{
+				int absClassIndex = (int)enviroment_source_at(env, ++i);
+				int methodIndex = (int)enviroment_source_at(env, ++i);
+				type* tp = vector_at(ctx->type_vec, absClassIndex);
+				object* o = (object*)vector_top(self->value_stack);
+				method* m = class_get_impl_method(o->type->u.class_, tp, methodIndex);
+				method_execute(m, self, env);
 				break;
 			}
 			case op_invokestatic:

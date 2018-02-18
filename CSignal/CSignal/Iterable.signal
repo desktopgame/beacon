@@ -1,0 +1,8 @@
+import "Iterator"
+
+namespace signal.lang {
+	interface Iterable {
+		public:
+		def iterate() -> Iterator;
+	}
+}

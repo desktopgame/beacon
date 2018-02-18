@@ -293,7 +293,9 @@ int opcode_print(vector* source, int index) {
 		}
 		case op_invokeinterface:
 		{
-			text_printf("invoke interface");
+			int a = (int)vector_at(source, ++index);
+			int b = (int)vector_at(source, ++index);
+			text_printf("invoke interface(%d %d)", a, b);
 			break;
 		}
 		case op_return:

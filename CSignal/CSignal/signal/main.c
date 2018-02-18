@@ -9,19 +9,22 @@
 #include "util/string_buffer.h"
 #include "util/logger.h"
 #include "util/mem.h"
+#include "util/bench_mark.h"
 
 void _start(int argc, char* argv[]) {
 	text_set_trace(true);
 	mem_set_trace(true);
-	//mem_break(4791);
+	//mem_break(4061);
 	sg_lopen();
-	sg_lset_enabled(true);
+	sg_lset_enabled(false);
 	script_context_open();
 	//cmd_dump(argc, argv);
 
+	bench_start();
 }
 
 void _end(int argc, char* argv[]) {
+	bench_end("main", bench_simple);
 	//system("cls");
 	script_context_close();
 	sg_lclose();

@@ -1,0 +1,9 @@
+import "Bool"
+
+namespace signal.lang {
+	interface Iterator {
+		public:
+		def hasNext() -> Bool;
+		def next() -> Object;
+	}
+}

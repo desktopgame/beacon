@@ -82,5 +82,7 @@ void test_preload(void);
 
 void test_props(void);
 
+void test_malloc(void);
+
 void test_dup(void);
 #endif // !SIGNAL_TEST_H

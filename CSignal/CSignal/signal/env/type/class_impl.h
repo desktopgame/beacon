@@ -36,6 +36,10 @@ typedef struct class_ {
 	class_state state;
 	uint32_t ref_count;
 	tree_map* native_method_ref_map;
+	//インターフェースに対応した
+	//実装メソッドのテーブルのベクター
+	//http://d.hatena.ne.jp/tetz42/20120205/1328449750
+	vector* vtVec;
 	//vector* static_fieldval_vec;
 	vtable* vt;
 	int classIndex;
@@ -246,6 +250,16 @@ struct method* class_get_method(struct object* o, int index);
  * @return
  */
 struct method* class_get_smethod(class_* self, int index);
+
+/**
+ * selfから、 interTypeの仮想関数テーブルの interIndex番目に属するメソッド
+ * を実装するために定義されたメソッドを検索して返します。
+ * @param self
+ * @param interType
+ * @param interIndex
+ * @return
+ */
+struct method* class_get_impl_method(class_* self, type* interType, int interMIndex);
 
 /**
  * self を other の型に変換出来るなら true.

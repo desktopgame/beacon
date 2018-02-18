@@ -57,9 +57,16 @@ void il_factor_named_invoke_generate(il_factor_named_invoke * self, enviroment *
 		if (self->m->access == access_private) {
 			opcode_buf_add(env->buf, op_invokespecial);
 		} else {
-			opcode_buf_add(env->buf, op_invokevirtual);
+			//invokeinterface
+			if (self->m->parent->tag == type_interface) {
+				opcode_buf_add(env->buf, op_invokeinterface);
+				opcode_buf_add(env->buf, self->m->parent->absoluteIndex);
+				opcode_buf_add(env->buf, self->methodIndex);
+			} else {
+				opcode_buf_add(env->buf, op_invokevirtual);
+				opcode_buf_add(env->buf, self->methodIndex);
+			}
 		}
-		opcode_buf_add(env->buf, self->methodIndex);
 	//C.call() クラスへの呼び出し
 	} else {
 		il_factor_named_invoke_generate_args(self, env);

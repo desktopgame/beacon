@@ -32,6 +32,8 @@ static void class_field_delete(vector_item item);
 static void class_method_delete(vector_item item);
 static void class_ctor_delete(vector_item item);
 static void class_native_method_ref_delete(vector_item item);
+static method* class_find_impl_method(class_* self, method* virtualMethod);
+static void class_vtable_vec_delete(vector_item item);
 
 type * type_wrap_class(class_ * self) {
 	type* ret = type_new();
@@ -57,6 +59,7 @@ class_ * class_new(const char * name) {
 	ret->smethod_list = vector_new();
 	ret->constructor_list = vector_new();
 	ret->native_method_ref_map = tree_map_new();
+	ret->vtVec = vector_new();
 	//FIXME:ここで持つ必要はない
 	ret->classIndex = -1;
 	//ret->absoluteIndex = -1;
@@ -305,6 +308,24 @@ method * class_get_smethod(class_* self, int index) {
 	return class_get_smethod(self->super_class, index);
 }
 
+method * class_get_impl_method(class_ * self, type * interType, int interMIndex) {
+	assert(self->vtVec->length > 0);
+	//指定のインターフェイスが
+	//このクラスにおいて何番目かを調べる
+	int declIndex = -1;
+	for (int i = 0; i < self->impl_list->length; i++) {
+		interface_* inter = (interface_*)vector_at(self->impl_list, i);
+		if (inter == interType->u.interface_) {
+			declIndex = i;
+			break;
+		}
+	}
+	//仮想関数テーブルの一覧から引く
+	assert(declIndex != -1);
+	vtable* vtAt = vector_at(self->vtVec, declIndex);
+	return vector_at(vtAt->elements, interMIndex);
+}
+
 bool class_castable(class_ * self, class_ * other) {
 	assert(self != NULL && other != NULL);
 	if (self == other) {
@@ -362,6 +383,24 @@ void class_create_vtable(class_ * self) {
 			method* m = (method*)vector_at(self->method_list, i);
 			vtable_replace(self->vt, m);
 		}
+	}
+	//もしインターフェースを実装しているなら、
+	//インターフェースに対応する同じ並びのメソッドテーブルも作る
+	for (int i = 0; i < self->impl_list->length; i++) {
+		interface_* inter = (interface_*)vector_at(self->impl_list, i);
+		vtable* interVT = inter->vt;
+		vtable* newVT = vtable_new();
+		//そのインターフェースに定義されたテーブルの一覧
+		//これはスーパーインターフェースも含む。
+		for (int j = 0; j < interVT->elements->length; j++) {
+			//実装クラスの中の、
+			//シグネチャが同じメソッドをテーブルへ。
+			method* interVTM = vector_at(interVT->elements, j);
+			method* classVTM = class_find_impl_method(self, interVTM);
+			assert(classVTM != NULL);
+			vtable_add(newVT, classVTM);
+		}
+		vector_push(self->vtVec, newVT);
 	}
 	//assert(self->vt->elements->length > 0);
 }
@@ -461,6 +500,7 @@ void class_unlink(class_ * self) {
 	vector_delete(self->smethod_list, class_method_delete);
 	vector_delete(self->constructor_list, class_ctor_delete);
 	vtable_delete(self->vt);
+	vector_delete(self->vtVec, class_vtable_vec_delete);
 }
 
 void class_delete(class_ * self) {
@@ -579,4 +619,22 @@ static void class_ctor_delete(vector_item item) {
 static void class_native_method_ref_delete(vector_item item) {
 	native_method_ref* e = (native_method_ref*)item;
 	native_method_ref_delete(e);
+}
+
+static method* class_find_impl_method(class_* self, method* virtualMethod) {
+	method* ret = NULL;
+	vtable* clVT = self->vt;
+	for (int i = 0; i < clVT->elements->length; i++) {
+		method* clM = vector_at(clVT->elements, i);
+		if (method_equal(virtualMethod, clM)) {
+			ret = clM;
+			break;
+		}
+	}
+	return ret;
+}
+
+static void class_vtable_vec_delete(vector_item item) {
+	vtable* e = (vtable*)item;
+	vtable_delete(e);
 }

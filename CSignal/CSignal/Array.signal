@@ -1,12 +1,14 @@
 import "Exception"
 import "String"
+import "Iterable"
+import "ArrayIterator"
 
 namespace signal.lang {
 	/**
-	 * é…åˆ—ã‚’è¡¨ç¾ã™ã‚‹ã‚¯ãƒ©ã‚¹ã§ã™.
-	 * è¦ç´ ã¯ signal::lang::Object ã§æ‰±ã‚ã‚Œã¾ã™ã€‚
+	 * ”z—ñ‚ð•\Œ»‚·‚éƒNƒ‰ƒX‚Å‚·.
+	 * —v‘f‚Í signal::lang::Object ‚Åˆµ‚í‚ê‚Ü‚·B
 	 */
-	class Array {
+	class Array : Iterable {
 		private:
 		Int length;
 
@@ -46,12 +48,16 @@ namespace signal.lang {
 			Array.nativeCopy(src, srcOffset, dst, dstOffset, length);
 		}
 
-		//å†å¸°é–¢æ•°ã®ãƒ†ã‚¹ãƒˆ
+		//Ä‹AŠÖ”‚ÌƒeƒXƒg
 		def test(Int a, Int b) -> Int {
 			if(b <= 0) {
 				return a;
 			}
 			return this.test(a + b, b - 1);
+		}
+
+		def iterate() -> Iterator {
+			return new ArrayIterator(this)
 		}
 		
 		private:

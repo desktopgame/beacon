@@ -1,0 +1,26 @@
+import "Iterator"
+import "Array"
+
+namespace signal.lang {
+	class ArrayIterator : Iterator {
+		private:
+		Array source;
+		Int offset;
+
+		public:
+		ctor new(Array source) {
+			this.source = source
+			this.offset = 0
+		}
+
+		def hasNext() -> Bool {
+			return this.offset < this.source.length()
+		}
+
+		def next() -> Object {
+			var ret = this.source.get(this.offset)
+			this.offset++
+			return ret
+		}
+	}
+}
