@@ -68,6 +68,17 @@ bool mem_get_trace();
 void mem_break(int count);
 
 /**
+ * 使用中のメモリ領域を返します.
+ * @return 対応していない場合は -1 を返します.
+ */
+unsigned mem_get_usage_mb();
+
+/** 
+ * 使用中のメモリ領域を出力します.
+ */
+void mem_dump_usage_mb();
+
+/**
  * メモリ情報をトレースするためのキャッシュを開放します.
  */
 void mem_destroy();

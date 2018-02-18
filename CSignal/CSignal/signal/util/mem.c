@@ -8,6 +8,10 @@
 #include <assert.h>
 #include <string.h>
 
+#if defined(_WIN32)
+#include <Windows.h>
+#endif
+
 //private struct
 typedef struct slot {
 	char* filename;
@@ -117,6 +121,21 @@ bool mem_get_trace() {
 
 void mem_break(int count) {
 	gMemBreak = count;
+}
+
+unsigned mem_get_usage_mb() {
+#if defined(_WIN32)
+	//https://detail.chiebukuro.yahoo.co.jp/qa/question_detail/q11145533671
+	MEMORYSTATUSEX m = { sizeof m };
+	GlobalMemoryStatusEx(&m);
+	return (unsigned)(((512 * 1024) + (m.ullTotalVirtual - m.ullAvailVirtual)) / (1024 * 1024));
+#else
+	return -1;
+#endif
+}
+
+void mem_dump_usage_mb() {
+	text_printfln("usage: %umb", mem_get_usage_mb());
 }
 
 void mem_destroy() {
