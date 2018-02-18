@@ -72,7 +72,7 @@ void string_buffer_shrink(string_buffer * self) {
 	if (self->length == 0) {
 		return;
 	}
-	char_t* temp = (char*)MEM_REALLOC(self->text, self->length);
+	char_t* temp = (char*)MEM_REALLOC(self->text, self->length + 1);
 	assert(temp != NULL);
 	temp[self->length] = '\0';
 	self->text = temp;
