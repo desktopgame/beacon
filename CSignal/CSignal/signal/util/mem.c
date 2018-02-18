@@ -216,7 +216,7 @@ static void* slot_realloc(slot* head, void* arena, size_t newSize) {
 
 static int slot_remove(slot* head, void* arena) {
 	if (head == NULL) {
-		return;
+		return -1;
 	}
 	slot* ptr = head;
 	while (ptr->arena != arena) {
