@@ -78,6 +78,7 @@ void interface_create_vtable(interface_ * self) {
 void interface_unlink(interface_ * self) {
 	vector_delete(self->method_list, interface_delete_method);
 	vector_delete(self->impl_list, vector_deleter_null);
+	vtable_delete(self->vt);
 }
 
 void interface_delete(interface_ * self) {

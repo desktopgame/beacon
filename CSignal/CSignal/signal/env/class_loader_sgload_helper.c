@@ -112,17 +112,19 @@ void class_loader_sgload_methods_impl(class_loader* self, il_type* iltype, type*
 		method->type = modifier_is_native(ilmethod->modifier) ? method_type_native : method_type_script;
 		method->access = ilmethod->access;
 		method->modifier = ilmethod->modifier;
-		method->u.script_method = script_method_new();
+		//インターフェースなら空
+		if (tp->tag == type_interface) {
+			method->type = method_type_abstract;
+			method->u.script_method = NULL;
+		} else {
+			method->u.script_method = script_method_new();
+		}
 		method->parent = tp;
 		method->return_type = import_manager_resolve(
 			self->import_manager,
 			scope,
 			ilmethod->return_fqcn
 		);
-		//インターフェースなら
-		if (tp->tag == type_interface) {
-			method->type = method_type_abstract;
-		}
 		//ILパラメータを実行時パラメータへ変換
 		//NOTE:ここでは戻り値の型,引数の型を設定しません
 		//     class_loader_sgload_complete参照
