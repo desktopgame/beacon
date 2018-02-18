@@ -13,6 +13,7 @@ static char* text_strclone(const char* source);
 static void text_printfdbg(const char* message, va_list ap);
 static FILE* text_fp = NULL;
 static bool text_trace = false;
+static bool gTraceClosed = false;
 
 void text_set_trace(bool b) {
 	text_trace = b;
@@ -27,6 +28,8 @@ void text_flush_trace() {
 		return;
 	}
 	fclose(text_fp);
+	text_fp = NULL;
+	gTraceClosed = true;
 }
 
 void text_putline() {
@@ -205,7 +208,7 @@ static char* text_strclone(const char* source) {
 }
 
 static void text_printfdbg(const char* message, va_list ap) {
-	if (!text_trace) {
+	if (!text_trace || gTraceClosed) {
 		return;
 	}
 
