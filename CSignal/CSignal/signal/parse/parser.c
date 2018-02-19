@@ -53,6 +53,10 @@ void parser_append_buffer(parser * self, char ch) {
 }
 
 ast * parser_reduce_buffer(parser * self) {
+	//""‚Ì‚æ‚¤‚È‹ó•¶Žš‚Ìê‡
+	if (self->sBuffer == NULL) {
+		return ast_new_string(text_strdup(""));
+	}
 	string_buffer_shrink(self->sBuffer);
 	ast* ret = ast_new_string(self->sBuffer->text);
 	self->sBuffer->text = NULL;
