@@ -15,11 +15,11 @@ il_factor_dec* il_factor_dec_new(fix_type type);
 
 void il_factor_dec_dump(il_factor_dec* self, int depth);
 
-void il_factor_dec_generate(il_factor_dec* self, struct enviroment* env);
+void il_factor_dec_generate(il_factor_dec* self, struct enviroment* env, il_load_cache* cache);
 
-void il_factor_dec_load(il_factor_dec* self, struct enviroment* env, il_ehandler* eh);
+void il_factor_dec_load(il_factor_dec* self, struct enviroment* env, il_load_cache* cache, il_ehandler* eh);
 
-struct type* il_factor_dec_eval(il_factor_dec* self, struct enviroment* env);
+struct type* il_factor_dec_eval(il_factor_dec* self, struct enviroment* env, il_load_cache* cache);
 
 void il_factor_dec_delete(il_factor_dec* self);
 #endif // !SIGNAL_IL_IL_FACTOR_DEC_H

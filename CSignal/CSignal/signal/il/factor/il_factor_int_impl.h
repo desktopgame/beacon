@@ -36,24 +36,27 @@ void il_factor_int_dump(il_factor_int* self, int depth);
  * 整数リテラルを生成します.
  * @param self
  * @param env
+ * @param cache
  */
-void il_factor_int_generate(il_factor_int* self, struct enviroment* env);
+void il_factor_int_generate(il_factor_int* self, struct enviroment* env, il_load_cache* cache);
 
 /**
  * 整数リテラルを読み込みます.
  * @param self
  * @param env
+ * @param cache
  * @param eh
  */
-void il_factor_int_load(il_factor_int* self, struct enviroment* env, il_ehandler* eh);
+void il_factor_int_load(il_factor_int* self, struct enviroment* env, il_load_cache* cache, il_ehandler* eh);
 
 /**
  * 整数リテラルを表す要素の型を返します.
  * @param self
  * @param env
+ * @param cache
  * @return
  */
-struct type* il_factor_int_eval(il_factor_int* self, struct enviroment* env);
+struct type* il_factor_int_eval(il_factor_int* self, struct enviroment* env, il_load_cache* cache);
 
 /**
  * 整数リテラルを表す要素を開放します.

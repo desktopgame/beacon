@@ -21,15 +21,6 @@ typedef struct enviroment {
 	symbol_table* sym_table;
 	vector* constant_pool;
 	vector* line_rangeVec;
-	//解析中の情報
-	//FIXME:ここに持たせるべきじゃない
-	vector* namespace_vec;
-	vector* type_vec;
-	vector* whileStart_vec;
-	vector* whileEnd_vec;
-	bool toplevel;
-
-//	struct class_* class_;
 } enviroment;
 
 /**
@@ -128,14 +119,6 @@ struct object* enviroment_constant_char_at(enviroment* self, int index);
  * @return
  */
 struct object* enviroment_constant_string_at(enviroment* self, int index);
-
-/**
- * 現在のコンテキストでのクラスを返します.
- * @param self
- * @param fqcn
- * @return
- */
-struct class_* enviroment_class(enviroment* self, struct fqcn_cache* fqcn);
 
 /**
  * 環境を開放します.

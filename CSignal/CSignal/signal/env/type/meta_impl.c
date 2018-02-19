@@ -7,7 +7,7 @@
 #include "../constructor.h"
 #include "../object.h"
 
-method * meta_find_method(vector * method_vec, const char * name, vector * args, enviroment * env, int * outIndex) {
+method * meta_find_method(vector * method_vec, const char * name, vector * args, enviroment * env, il_load_cache* cache, int * outIndex) {
 	(*outIndex) = -1;
 	//class_create_vtable(self);
 	method* ret = NULL;
@@ -38,7 +38,7 @@ method * meta_find_method(vector * method_vec, const char * name, vector * args,
 			parameter* p2 = (parameter*)d2;
 			//実引数が NULL なら常に許容する
 			int dist = 0;
-			type* argType = il_factor_eval(p->factor, env);
+			type* argType = il_factor_eval(p->factor, env, cache);
 			type* parType = p2->type;
 			if (argType != CL_NULL) {
 				dist = type_distance(argType, parType);
@@ -60,7 +60,7 @@ method * meta_find_method(vector * method_vec, const char * name, vector * args,
 	return ret;
 }
 
-vector * meta_find_constructors(class_ * self, vector * args, enviroment * env) {
+vector * meta_find_constructors(class_ * self, vector * args, enviroment * env, il_load_cache* cache) {
 	vector* v = vector_new();
 	if (self == NULL) {
 		return v;
@@ -84,7 +84,7 @@ vector * meta_find_constructors(class_ * self, vector * args, enviroment * env) 
 			vector_item d2 = vector_at(c->parameter_list, j);
 			il_argument* p = (il_argument*)d;
 			parameter* p2 = (parameter*)d2;
-			if (!type_castable(il_factor_eval(p->factor, env), p2->type)) {
+			if (!type_castable(il_factor_eval(p->factor, env, cache), p2->type)) {
 				match = false;
 				break;
 			}

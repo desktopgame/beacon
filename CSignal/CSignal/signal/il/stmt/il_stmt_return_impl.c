@@ -23,12 +23,12 @@ void il_stmt_return_dump(il_stmt_return * self, int depth) {
 	il_factor_dump(self->fact, depth + 1);
 }
 
-void il_stmt_return_generate(il_stmt_return * self, enviroment * env) {
-	il_factor_generate(self->fact, env);
+void il_stmt_return_generate(il_stmt_return * self, enviroment * env, il_load_cache* cache) {
+	il_factor_generate(self->fact, env, cache);
 	opcode_buf_add(env->buf, op_return);
 }
 
-void il_stmt_return_load(il_stmt_return * self, enviroment * env, il_ehandler * eh) {
+void il_stmt_return_load(il_stmt_return * self, enviroment * env, il_load_cache* cache, il_ehandler * eh) {
 }
 
 void il_stmt_return_delete(il_stmt_return * self) {

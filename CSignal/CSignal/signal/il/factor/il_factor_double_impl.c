@@ -26,16 +26,16 @@ void il_factor_double_dump(il_factor_double * self, int depth) {
 	text_putline();
 }
 
-void il_factor_double_generate(il_factor_double * self, enviroment* env) {
+void il_factor_double_generate(il_factor_double * self, enviroment* env, il_load_cache* cache) {
 	int index = enviroment_add_constant_double(env, self->value);
 	opcode_buf_add(env->buf, op_dconst);
 	opcode_buf_add(env->buf, index);
 }
 
-void il_factor_double_load(il_factor_double * self, enviroment * env, il_ehandler * eh) {
+void il_factor_double_load(il_factor_double * self, enviroment * env, il_load_cache* cache, il_ehandler * eh) {
 }
 
-type * il_factor_double_eval(il_factor_double * self, enviroment * env) {
+type * il_factor_double_eval(il_factor_double * self, enviroment * env, il_load_cache* cache) {
 	return CL_DOUBLE;
 }
 

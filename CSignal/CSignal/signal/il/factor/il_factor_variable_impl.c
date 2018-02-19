@@ -8,7 +8,7 @@
 #include "../../vm/symbol_entry.h"
 
 //proto
-static void il_factor_variable_check(il_factor_variable* self, enviroment* env);
+static void il_factor_variable_check(il_factor_variable* self, enviroment* env, il_load_cache* cache);
 
 il_factor * il_factor_wrap_variable(il_factor_variable * self) {
 	il_factor* ret = (il_factor*)MEM_MALLOC(sizeof(il_factor));
@@ -31,18 +31,18 @@ void il_factor_variable_dump(il_factor_variable * self, int depth) {
 	text_putline();
 }
 
-void il_factor_variable_generate(il_factor_variable * self, enviroment* env) {
-	il_factor_variable_check(self, env);
+void il_factor_variable_generate(il_factor_variable * self, enviroment* env, il_load_cache* cache) {
+	il_factor_variable_check(self, env, cache);
 	opcode_buf_add(env->buf, op_load);
 	opcode_buf_add(env->buf, self->index);
 }
 
-void il_factor_variable_load(il_factor_variable * self, enviroment * env, il_ehandler * eh) {
-	il_factor_variable_check(self, env);
+void il_factor_variable_load(il_factor_variable * self, enviroment * env, il_load_cache* cache, il_ehandler * eh) {
+	il_factor_variable_check(self, env, cache);
 }
 
-type * il_factor_variable_eval(il_factor_variable * self, enviroment * env) {
-	il_factor_variable_check(self, env);
+type * il_factor_variable_eval(il_factor_variable * self, enviroment * env, il_load_cache* cache) {
+	il_factor_variable_check(self, env, cache);
 	return self->type;
 }
 
@@ -52,7 +52,7 @@ void il_factor_variable_delete(il_factor_variable * self) {
 }
 
 //private
-static void il_factor_variable_check(il_factor_variable* self, enviroment* env) {
+static void il_factor_variable_check(il_factor_variable* self, enviroment* env, il_load_cache* cache) {
 	if (self->index != -1) {
 		return;
 	}
@@ -61,6 +61,10 @@ static void il_factor_variable_check(il_factor_variable* self, enviroment* env) 
 		NULL,
 		self->name
 	);
-	self->type = e->type;
-	self->index = e->index;
+	if (e != NULL) {
+		self->type = e->type;
+		self->index = e->index;
+	} else {
+		//フィールドアクセス
+	}
 }

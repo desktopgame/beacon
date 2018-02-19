@@ -39,24 +39,27 @@ void il_factor_variable_dump(il_factor_variable* self, int depth);
  * 変数を生成します.
  * @param self
  * @param env
+ * @param cache
  */
-void il_factor_variable_generate(il_factor_variable* self, struct enviroment* env);
+void il_factor_variable_generate(il_factor_variable* self, struct enviroment* env, il_load_cache* cache);
 
 /**
  * 変数を読み込みます.
  * @param self
  * @param env
+ * @param cache
  * @param eh
  */
-void il_factor_variable_load(il_factor_variable* self, struct enviroment* env, il_ehandler* eh);
+void il_factor_variable_load(il_factor_variable* self, struct enviroment* env, il_load_cache* cache, il_ehandler* eh);
 
 /**
  * 変数の型を返します.
  * @param self
  * @param env
+ * @param cache
  * @return
  */
-struct type* il_factor_variable_eval(il_factor_variable* self, struct enviroment* env);
+struct type* il_factor_variable_eval(il_factor_variable* self, struct enviroment* env, il_load_cache* cache);
 
 /**
  * 変数を開放します.

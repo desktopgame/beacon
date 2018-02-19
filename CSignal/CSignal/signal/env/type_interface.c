@@ -36,11 +36,11 @@ void type_add_method(type* self, method * m) {
 	}
 }
 
-method * type_find_method(type * self, const char * name, vector * args, enviroment * env, int * outIndex) {
+method * type_find_method(type * self, const char * name, vector * args, enviroment * env, il_load_cache* cache, int * outIndex) {
 	if (self->tag == type_class) {
-		return class_find_method(self->u.class_, name, args, env, outIndex);
+		return class_find_method(self->u.class_, name, args, env, cache, outIndex);
 	} else if (self->tag == type_interface) {
-		return interface_find_method(self->u.interface_, name, args, env, outIndex);
+		return interface_find_method(self->u.interface_, name, args, env, cache, outIndex);
 	}
 	return NULL;
 }

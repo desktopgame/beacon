@@ -60,7 +60,6 @@ class_loader* class_loader_new() {
 	ret->linkedAllImports = false;
 	ret->errorMessage = NULL;
 	ret->env->context_cll = ret;
-	ret->env->toplevel = true;
 	text_printfln("new classloader");
 	//ret->link = classlink_unlinked;
 	return ret;
@@ -109,7 +108,10 @@ void class_loader_load(class_loader * self) {
 	//他のクラスローダーとリンク
 	class_loader_link(self);
 	//トップレベルのステートメントを読み込む
-	class_loader_sgload_body(self, self->il_code->statement_list, self->env, NULL);
+	il_load_cache* cache = il_load_cache_new();
+	cache->toplevel = true;
+	class_loader_sgload_body(self, self->il_code->statement_list, self->env, NULL, cache);
+	il_load_cache_delete(cache);
 	sg_log(log_info, __FILE__, __LINE__, "loaded file %s", self->filename);
 }
 

@@ -13,7 +13,7 @@
 
 //proto
 static void il_factor_invoke_argument_delete(vector_item item);
-static void il_factor_invoke_find(il_factor_invoke* self, enviroment* env);
+static void il_factor_invoke_find(il_factor_invoke* self, enviroment* env, il_load_cache* cache);
 
 il_factor * il_factor_wrap_invoke(il_factor_invoke * self) {
 	il_factor* ret = (il_factor*)MEM_MALLOC(sizeof(il_factor));
@@ -44,18 +44,18 @@ void il_factor_invoke_dump(il_factor_invoke * self, int depth) {
 	}
 }
 
-void il_factor_invoke_generate(il_factor_invoke * self, enviroment* env) {
-	il_factor_invoke_find(self, env);
+void il_factor_invoke_generate(il_factor_invoke * self, enviroment* env, il_load_cache* cache) {
+	il_factor_invoke_find(self, env, cache);
 	//NOTE:Hoge.Foo() hoge.Foo() はil_named_invokeに拾われるので、
 	//こちらでは関数の戻り値や式に対する呼び出しだけ考慮する。
 	//全ての引数をプッシュ
 	for(int i=0; i<self->argument_list->length; i++) {
 		vector_item e = vector_at(self->argument_list, i);
 		il_argument* ilarg = (il_argument*)e;
-		il_factor_generate(ilarg->factor, env);
+		il_factor_generate(ilarg->factor, env, cache);
 	}
 	//このメソッドを呼び出しているオブジェクトをプッシュ
-	il_factor_generate(self->receiver, env);
+	il_factor_generate(self->receiver, env, cache);
 	//メソッドのインデックスをプッシュ
 	if (self->m->access == access_private) {
 		opcode_buf_add(env->buf, (vector_item)op_invokespecial);
@@ -65,11 +65,11 @@ void il_factor_invoke_generate(il_factor_invoke * self, enviroment* env) {
 	opcode_buf_add(env->buf, (vector_item)self->methodIndex);
 }
 
-void il_factor_invoke_load(il_factor_invoke * self, enviroment * env, il_ehandler * eh) {
+void il_factor_invoke_load(il_factor_invoke * self, enviroment * env, il_load_cache* cache, il_ehandler * eh) {
 }
 
-type * il_factor_invoke_eval(il_factor_invoke * self, enviroment * env) {
-	il_factor_invoke_find(self, env);
+type * il_factor_invoke_eval(il_factor_invoke * self, enviroment * env, il_load_cache* cache) {
+	il_factor_invoke_find(self, env, cache);
 	return self->m->return_type;
 }
 
@@ -86,12 +86,12 @@ static void il_factor_invoke_argument_delete(vector_item item) {
 	il_argument_delete(e);
 }
 
-static void il_factor_invoke_find(il_factor_invoke* self, enviroment* env) {
+static void il_factor_invoke_find(il_factor_invoke* self, enviroment* env, il_load_cache* cache) {
 	if(self->m != NULL) {
 		return;
 	}
 	int temp = 0;
-	class_* cl = il_factor_eval(self->receiver, env)->u.class_;
+	class_* cl = il_factor_eval(self->receiver, env, cache)->u.class_;
 	class_* intcls = CL_INT->u.class_;
 	//TEST((cl == intcls && !strcmp(self->name, "nativeInit")));
 	self->m = class_find_method(
@@ -99,6 +99,7 @@ static void il_factor_invoke_find(il_factor_invoke* self, enviroment* env) {
 		self->name,
 		self->argument_list,
 		env,
+		cache,
 		&temp
 	);
 	self->methodIndex = temp;

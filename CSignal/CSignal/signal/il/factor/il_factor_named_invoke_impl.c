@@ -11,10 +11,10 @@
 
 //proto
 static void il_factor_named_invoke_delete_argument(vector_item item);
-static void il_factor_named_invoke_find(il_factor_named_invoke* self, enviroment* env);
-static void il_factor_named_invoke_generate_IMPL(il_factor_named_invoke* self, enviroment* env, type* tp);
-static void il_factor_named_invoke_generate_STATIC_IMPL(il_factor_named_invoke* self, enviroment* env, type* tp);
-static void il_factor_named_invoke_generate_args(il_factor_named_invoke* self, enviroment* env);
+static void il_factor_named_invoke_find(il_factor_named_invoke* self, enviroment* env, il_load_cache* cache);
+static void il_factor_named_invoke_generate_IMPL(il_factor_named_invoke* self, enviroment* env, il_load_cache* cache, type* tp);
+static void il_factor_named_invoke_generate_STATIC_IMPL(il_factor_named_invoke* self, enviroment* env, il_load_cache* cache, type* tp);
+static void il_factor_named_invoke_generate_args(il_factor_named_invoke* self, enviroment* env, il_load_cache* cache);
 
 il_factor * il_factor_wrap_named_invoke(il_factor_named_invoke * self) {
 	il_factor* ret = (il_factor*)MEM_MALLOC(sizeof(il_factor));
@@ -47,12 +47,12 @@ void il_factor_named_invoke_dump(il_factor_named_invoke * self, int depth) {
 	}
 }
 
-void il_factor_named_invoke_generate(il_factor_named_invoke * self, enviroment * env) {
-	il_factor_named_invoke_find(self, env);
+void il_factor_named_invoke_generate(il_factor_named_invoke * self, enviroment * env, il_load_cache* cache) {
+	il_factor_named_invoke_find(self, env, cache);
 	//c.call() 変数への呼び出し
 	if (self->type == ilnamed_invoke_variable) {
-		il_factor_named_invoke_generate_args(self, env);
-		il_factor_generate(self->u.factor, env);
+		il_factor_named_invoke_generate_args(self, env, cache);
+		il_factor_generate(self->u.factor, env, cache);
 		//継承出来ないなら
 		if (self->m->access == access_private) {
 			opcode_buf_add(env->buf, op_invokespecial);
@@ -69,18 +69,18 @@ void il_factor_named_invoke_generate(il_factor_named_invoke * self, enviroment *
 		}
 	//C.call() クラスへの呼び出し
 	} else {
-		il_factor_named_invoke_generate_args(self, env);
+		il_factor_named_invoke_generate_args(self, env, cache);
 		opcode_buf_add(env->buf, op_invokestatic);
 		opcode_buf_add(env->buf, self->m->parent->absoluteIndex);
 		opcode_buf_add(env->buf, self->methodIndex);
 	}
 }
 
-void il_factor_named_invoke_load(il_factor_named_invoke * self, enviroment * env, il_ehandler * eh) {
+void il_factor_named_invoke_load(il_factor_named_invoke * self, enviroment * env, il_load_cache* cache, il_ehandler * eh) {
 }
 
-type * il_factor_named_invoke_eval(il_factor_named_invoke * self, enviroment * env) {
-	il_factor_named_invoke_find(self, env);
+type * il_factor_named_invoke_eval(il_factor_named_invoke * self, enviroment * env, il_load_cache* cache) {
+	il_factor_named_invoke_find(self, env, cache);
 	return self->m->return_type;
 }
 
@@ -105,7 +105,7 @@ static void il_factor_named_invoke_delete_argument(vector_item item) {
 	il_argument_delete(e);
 }
 
-static void il_factor_named_invoke_find(il_factor_named_invoke* self, enviroment* env) {
+static void il_factor_named_invoke_find(il_factor_named_invoke* self, enviroment* env, il_load_cache* cache) {
 	if (self->find) {
 		return;
 	}
@@ -122,13 +122,13 @@ static void il_factor_named_invoke_find(il_factor_named_invoke* self, enviroment
 			}
 		}
 		type* tp = namespace_get_type(top, self->fqcn->name);
-		il_factor_named_invoke_generate_STATIC_IMPL(self, env, tp);
+		il_factor_named_invoke_generate_STATIC_IMPL(self, env, cache, tp);
 		//text_printf("%s %s", top->name, cls->name);
 		self->u.type = tp;
 		self->type = ilnamed_invoke_static;
 	//Y.call() の場合
 	} else {
-		namespace_* top = (namespace_*)vector_top(env->namespace_vec);
+		namespace_* top = (namespace_*)vector_top(cache->namespace_vec);
 		//クラスが見つかった
 		type* tp = NULL;
 		if (top != NULL) {
@@ -142,23 +142,23 @@ static void il_factor_named_invoke_find(il_factor_named_invoke* self, enviroment
 		if (tp != NULL) {
 			self->u.type = tp;
 			self->type = ilnamed_invoke_static;
-			il_factor_named_invoke_generate_STATIC_IMPL(self, env, tp);
+			il_factor_named_invoke_generate_STATIC_IMPL(self, env, cache, tp);
 		//変数へのインスタンス呼び出し
 		} else {
 			self->u.factor = il_factor_wrap_variable(il_factor_variable_new(self->fqcn->name));
 			self->type = ilnamed_invoke_variable;
-			tp = il_factor_eval(self->u.factor, env);
-			il_factor_named_invoke_generate_IMPL(self, env, tp);
+			tp = il_factor_eval(self->u.factor, env, cache);
+			il_factor_named_invoke_generate_IMPL(self, env, cache, tp);
 		}
 		//TEST(env->toplevel);
 	}
 }
 
-static void il_factor_named_invoke_generate_IMPL(il_factor_named_invoke* self, enviroment* env, type* tp) {
+static void il_factor_named_invoke_generate_IMPL(il_factor_named_invoke* self, enviroment* env, il_load_cache* cache, type* tp) {
 	//assert(tp->tag == type_class);
 	//class_* cls = tp->u.class_;
 	int temp = 0;
-	self->m = type_find_method(tp, self->method_name, self->argument_list, env, &temp);
+	self->m = type_find_method(tp, self->method_name, self->argument_list, env, cache, &temp);
 	//self->m = class_find_method(cls, self->method_name, self->argument_list, env, &temp);
 	assert(self->m != NULL);
 	self->methodIndex = temp;
@@ -166,22 +166,22 @@ static void il_factor_named_invoke_generate_IMPL(il_factor_named_invoke* self, e
 	//TEST(env->toplevel);
 }
 
-static void il_factor_named_invoke_generate_STATIC_IMPL(il_factor_named_invoke* self, enviroment* env, type* tp) {
+static void il_factor_named_invoke_generate_STATIC_IMPL(il_factor_named_invoke* self, enviroment* env, il_load_cache* cache, type* tp) {
 	assert(tp->tag == type_class);
 	class_* cls = tp->u.class_;
 	int temp = 0;
-	self->m = class_find_smethod(cls, self->method_name, self->argument_list, env, &temp);
+	self->m = class_find_smethod(cls, self->method_name, self->argument_list, env, cache, &temp);
 	self->methodIndex = temp;
 	TEST(self->m == NULL);
 	//temp = 0;
 	//TEST(env->toplevel);
 }
 
-static void il_factor_named_invoke_generate_args(il_factor_named_invoke* self, enviroment* env) {
+static void il_factor_named_invoke_generate_args(il_factor_named_invoke* self, enviroment* env, il_load_cache* cache) {
 	//全ての引数をプッシュ
 	for (int i = 0; i<self->argument_list->length; i++) {
 		vector_item e = vector_at(self->argument_list, i);
 		il_argument* ilarg = (il_argument*)e;
-		il_factor_generate(ilarg->factor, env);
+		il_factor_generate(ilarg->factor, env, cache);
 	}
 }

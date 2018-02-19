@@ -34,24 +34,27 @@ void il_factor_char_dump(il_factor_char* self, int depth);
  * 文字を生成します.
  * @param self
  * @param env
+ * @param cache
  */
-void il_factor_char_generate(il_factor_char* self, struct enviroment* env);
+void il_factor_char_generate(il_factor_char* self, struct enviroment* env, il_load_cache* cache);
 
 /**
  * 文字を表す要素を読み込みます.
  * @param self
  * @param env
+ * @param cache
  * @param eh
  */
-void il_factor_char_load(il_factor_char* self, struct enviroment* env, il_ehandler* eh);
+void il_factor_char_load(il_factor_char* self, struct enviroment* env, il_load_cache* cache, il_ehandler* eh);
 
 /**
  * 文字を表す要素の型を返します.
  * @param self
  * @param env
+ * @param cache
  * @return
  */
-struct type* il_factor_char_eval(il_factor_char* self, struct enviroment* env);
+struct type* il_factor_char_eval(il_factor_char* self, struct enviroment* env, il_load_cache* cache);
 
 /**
  * 文字を表す要素を開放します.

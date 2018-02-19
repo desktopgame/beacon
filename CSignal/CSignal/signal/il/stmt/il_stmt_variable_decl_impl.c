@@ -26,15 +26,15 @@ void il_stmt_variable_decl_dump(il_stmt_variable_decl * self, int depth) {
 	fqcn_cache_dump(self->fqcn, depth + 1);
 }
 
-void il_stmt_variable_decl_generate(il_stmt_variable_decl * self, enviroment * env) {
+void il_stmt_variable_decl_generate(il_stmt_variable_decl * self, enviroment * env, il_load_cache* cache) {
 	symbol_table_entry(
 		env->sym_table,
-		fqcn_type(self->fqcn, (namespace_*)vector_top(env->namespace_vec)),
+		fqcn_type(self->fqcn, (namespace_*)vector_top(cache->namespace_vec)),
 		self->name
 	);
 }
 
-void il_stmt_variable_decl_load(il_stmt_variable_decl * self, struct enviroment* env, il_ehandler * eh) {
+void il_stmt_variable_decl_load(il_stmt_variable_decl * self, struct enviroment* env, il_load_cache* cache, il_ehandler * eh) {
 }
 
 void il_stmt_variable_decl_delete(il_stmt_variable_decl * self) {

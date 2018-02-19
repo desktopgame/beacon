@@ -15,11 +15,21 @@ typedef struct il_load_cache {
 	bool toplevel;
 } il_load_cache;
 
+struct class_;
+struct fqcn_cache;
+
 /**
  * ILキャッシュを作成します.
  * @return
  */
 il_load_cache* il_load_cache_new();
+
+/**
+ * 現在解析中のクラスを返します.
+ * @param self
+ * @return
+ */
+struct class_* il_load_cache_class(il_load_cache* self, struct fqcn_cache* fqcn);
 
 /**
  * ILキャッシュを開放します

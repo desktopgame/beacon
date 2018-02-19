@@ -29,18 +29,18 @@ void il_factor_cast_dump(il_factor_cast * self, int depth) {
 	il_factor_dump(self->fact, depth + 1);
 }
 
-void il_factor_cast_generate(il_factor_cast * self, enviroment * env) {
-	il_factor_generate(self->fact, env);
-	type* t = fqcn_type(self->fqcn, (namespace_*)vector_top(env->namespace_vec));
+void il_factor_cast_generate(il_factor_cast * self, enviroment * env, il_load_cache* cache) {
+	il_factor_generate(self->fact, env, cache);
+	type* t = fqcn_type(self->fqcn, (namespace_*)vector_top(cache->namespace_vec));
 	opcode_buf_add(env->buf, op_lookup);
 	opcode_buf_add(env->buf, t->absoluteIndex);
 }
 
-void il_factor_cast_load(il_factor_cast * self, enviroment * env, il_ehandler * eh) {
+void il_factor_cast_load(il_factor_cast * self, enviroment * env, il_load_cache* cache, il_ehandler * eh) {
 }
 
-type * il_factor_cast_eval(il_factor_cast * self, enviroment * env) {
-	return fqcn_type(self->fqcn, (namespace_*)vector_top(env->namespace_vec));
+type * il_factor_cast_eval(il_factor_cast * self, enviroment * env, il_load_cache* cache) {
+	return fqcn_type(self->fqcn, (namespace_*)vector_top(cache->namespace_vec));
 }
 
 void il_factor_cast_delete(il_factor_cast * self) {

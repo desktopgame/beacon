@@ -35,23 +35,26 @@ void il_factor_double_dump(il_factor_double* self, int depth);
  * 浮動小数リテラルを表す要素を生成します.
  * @param self
  * @param env
+ * @param cache
  */
-void il_factor_double_generate(il_factor_double* self, struct enviroment* env);
+void il_factor_double_generate(il_factor_double* self, struct enviroment* env, il_load_cache* cache);
 
 /**
  * 浮動小数リテラルを表す要素を作成します.
  * @param self
  * @param env
+ * @param cache
  * @param eh
  */
-void il_factor_double_load(il_factor_double* self, struct enviroment* env, il_ehandler* eh);
+void il_factor_double_load(il_factor_double* self, struct enviroment* env, il_load_cache* cache, il_ehandler* eh);
 
 /**
  * 浮動小数リテラルを表す要素の型を返します.
  * @param self
  * @param env
+ * @param cache
  */
-struct type* il_factor_double_eval(il_factor_double* self, struct enviroment* env);
+struct type* il_factor_double_eval(il_factor_double* self, struct enviroment* env, il_load_cache* cache);
 
 /**
  * 浮動小数リテラルを表す要素を開放します.

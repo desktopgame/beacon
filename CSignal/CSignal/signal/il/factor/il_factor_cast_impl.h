@@ -17,11 +17,11 @@ il_factor_cast* il_factor_cast_new(il_factor* fact);
 
 void il_factor_cast_dump(il_factor_cast* self, int depth);
 
-void il_factor_cast_generate(il_factor_cast* self, struct enviroment* env);
+void il_factor_cast_generate(il_factor_cast* self, struct enviroment* env, il_load_cache* cache);
 
-void il_factor_cast_load(il_factor_cast* self, struct enviroment* env, il_ehandler* eh);
+void il_factor_cast_load(il_factor_cast* self, struct enviroment* env, il_load_cache* cache, il_ehandler* eh);
 
-struct type* il_factor_cast_eval(il_factor_cast* self, struct enviroment* env);
+struct type* il_factor_cast_eval(il_factor_cast* self, struct enviroment* env, il_load_cache* cache);
 
 void il_factor_cast_delete(il_factor_cast* self);
 #endif // !SIGNAL_IL_IL_FACTOR_CAST_H

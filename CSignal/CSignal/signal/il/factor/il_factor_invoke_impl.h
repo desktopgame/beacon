@@ -40,24 +40,27 @@ void il_factor_invoke_dump(il_factor_invoke* self, int depth);
  * メソッド呼び出しを生成します.
  * @param self
  * @param env
+ * @param cache
  */
-void il_factor_invoke_generate(il_factor_invoke* self, struct enviroment* env);
+void il_factor_invoke_generate(il_factor_invoke* self, struct enviroment* env, il_load_cache* cache);
 
 /**
  * メソッド呼び出しを読み込みます.
  * @param self
  * @param env
+ * @param cache
  * @param eh
  */
-void il_factor_invoke_load(il_factor_invoke* self, struct enviroment* env, il_ehandler* eh);
+void il_factor_invoke_load(il_factor_invoke* self, struct enviroment* env, il_load_cache* cache, il_ehandler* eh);
 
 /**
  * メソッド呼び出しの戻り値の型を返します.
  * @param self
  * @param env
+ * @param cache
  * @return
  */
-struct type* il_factor_invoke_eval(il_factor_invoke* self, struct enviroment* env);
+struct type* il_factor_invoke_eval(il_factor_invoke* self, struct enviroment* env, il_load_cache* cache);
 
 /**
  * メソッド呼び出しを開放します.

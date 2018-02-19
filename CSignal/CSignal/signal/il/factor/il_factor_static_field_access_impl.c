@@ -4,11 +4,12 @@
 #include "../../env/type_impl.h"
 #include "../../env/field.h"
 #include "../../util/text.h"
+#include "./../il_load_cache.h"
 #include <stdio.h>
 #include <assert.h>
 
 //proto
-static void il_factor_static_field_access_find(il_factor_static_field_access * self, enviroment * env);
+static void il_factor_static_field_access_find(il_factor_static_field_access * self, enviroment * env, il_load_cache* cache);
 
 il_factor * il_factor_wrap_static_field_access(il_factor_static_field_access * self) {
 	il_factor* ret = (il_factor*)MEM_MALLOC(sizeof(il_factor));
@@ -32,20 +33,20 @@ void il_factor_static_field_access_dump(il_factor_static_field_access * self, in
 	text_putline();
 }
 
-void il_factor_static_field_access_generate(il_factor_static_field_access * self, enviroment * env) {
-	il_factor_static_field_access_find(self, env);
+void il_factor_static_field_access_generate(il_factor_static_field_access * self, enviroment * env, il_load_cache* cache) {
+	il_factor_static_field_access_find(self, env, cache);
 	opcode_buf_add(env->buf, (vector_item)op_get_static);
 	opcode_buf_add(env->buf, (vector_item)self->f->parent->absoluteIndex);
 	opcode_buf_add(env->buf, (vector_item)self->fieldIndex);
 }
 
-type * il_factor_static_field_access_eval(il_factor_static_field_access * self, enviroment * env) {
-	il_factor_static_field_access_find(self, env);
+type * il_factor_static_field_access_eval(il_factor_static_field_access * self, enviroment * env, il_load_cache* cache) {
+	il_factor_static_field_access_find(self, env, cache);
 	return self->f->type;
 }
 
-void il_factor_static_field_access_load(il_factor_static_field_access * self, enviroment * env, il_ehandler * eh) {
-	il_factor_static_field_access_find(self, env);
+void il_factor_static_field_access_load(il_factor_static_field_access * self, enviroment * env, il_load_cache* cache, il_ehandler * eh) {
+	il_factor_static_field_access_find(self, env, cache);
 }
 
 void il_factor_static_field_access_delete(il_factor_static_field_access * self) {
@@ -56,9 +57,9 @@ void il_factor_static_field_access_delete(il_factor_static_field_access * self) 
 }
 
 //private
-static void il_factor_static_field_access_find(il_factor_static_field_access * self, enviroment * env) {
+static void il_factor_static_field_access_find(il_factor_static_field_access * self, enviroment * env, il_load_cache* cache) {
 	int temp = 0;
-	class_* cls = fqcn_class(self->fqcn, (namespace_*)vector_top(env->namespace_vec));
+	class_* cls = fqcn_class(self->fqcn, (namespace_*)vector_top(cache->namespace_vec));
 	//フィールドはクラスにしか定義出来ないので、
 	//クラスが見つからなかったらエラー
 	assert(cls != NULL);

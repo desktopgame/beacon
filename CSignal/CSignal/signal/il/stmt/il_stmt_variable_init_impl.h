@@ -40,16 +40,18 @@ void il_stmt_variable_init_dump(il_stmt_variable_init* self, int depth);
  * 変数の初期化を表す要素を出力します.
  * @param depth
  * @param env
+ * @param cache
  */
-void il_stmt_variable_init_generate(il_stmt_variable_init* self, struct enviroment* env);
+void il_stmt_variable_init_generate(il_stmt_variable_init* self, struct enviroment* env, il_load_cache* cache);
 
 /**
  * 変数の初期化を表す要素を読み込みます.
  * @param self
  * @param env
+ * @param cache
  * @param eh
  */
-void il_stmt_variable_init_load(il_stmt_variable_init* self, struct enviroment* env, il_ehandler* eh);
+void il_stmt_variable_init_load(il_stmt_variable_init* self, struct enviroment* env, il_load_cache* cache, il_ehandler* eh);
 
 /**
  * 変数の初期化を表す要素を開放します.

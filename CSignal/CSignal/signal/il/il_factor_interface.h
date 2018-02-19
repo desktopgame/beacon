@@ -3,6 +3,7 @@
 #define SIGNAL_IL_IL_FACTOR_INTERFACE_H
 #include "../vm/enviroment.h"
 #include "il_ehandler.h"
+#include "il_load_cache.h"
 #include <stdint.h>
 //#include "../vm/opcode.h"
 //#include "../vm/opcode_buf.h"
@@ -108,24 +109,27 @@ void il_factor_dump(il_factor* self, int depth);
  * オペコードを生成します.
  * @param self
  * @param env
+ * @param cache
  */
-void il_factor_generate(il_factor* self, enviroment* env);
+void il_factor_generate(il_factor* self, enviroment* env, il_load_cache* cache);
 
 /**
  * 因子を読み込みます.
  * @param self
  * @param env
+ * @param cache
  * @param eh
  */
-void il_factor_load(il_factor* self, enviroment* env, il_ehandler* eh);
+void il_factor_load(il_factor* self, enviroment* env, il_load_cache* cache, il_ehandler* eh);
 
 /**
  * この因子が表す型を返します.
  * @param self
  * @param env
+ * @param cache
  * @return
  */
-struct type* il_factor_eval(il_factor* self, enviroment* env);
+struct type* il_factor_eval(il_factor* self, enviroment* env, il_load_cache* cache);
 
 /**
  * 計算可能な要素を開放します.

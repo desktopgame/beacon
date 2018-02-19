@@ -26,12 +26,7 @@ enviroment * enviroment_new() {
 	ret->sym_table = symbol_table_new();
 	//ret->class_ = NULL;
 	ret->context_cll = NULL;
-	ret->namespace_vec = vector_new();
-	ret->type_vec = vector_new();
 	ret->line_rangeVec = vector_new();
-	ret->toplevel = false;
-	ret->whileStart_vec = vector_new();
-	ret->whileEnd_vec = vector_new();
 	return ret;
 }
 
@@ -143,30 +138,13 @@ object* enviroment_constant_string_at(enviroment * self, int index) {
 	return e;
 }
 
-class_ * enviroment_class(enviroment * self, fqcn_cache * fqcn) {
-	vector_item e = vector_top(self->namespace_vec);
-	class_* tp = NULL;
-	if (e != NULL) {
-		namespace_* scope = (namespace_*)e;
-		tp = fqcn_class(fqcn, scope);
-	} else {
-		tp = fqcn_class(fqcn, NULL);
-	}
-	return tp;
-}
-
 void enviroment_delete(enviroment * self) {
 	//text_printfln("deleted env %s", self->context_cll->filename);
 	//text_printfln("delete pool---");
 	vector_delete(self->constant_pool, enviroment_constant_pool_delete);
 
-	vector_delete(self->namespace_vec, vector_deleter_null);
-	vector_delete(self->type_vec, vector_deleter_null);
 	vector_delete(self->line_rangeVec, enviroment_line_range_delete);
 	
-	vector_delete(self->whileStart_vec, vector_deleter_null);
-	vector_delete(self->whileEnd_vec, vector_deleter_null);
-
 	opcode_buf_delete(self->buf);
 	symbol_table_delete(self->sym_table);
 	MEM_FREE(self);

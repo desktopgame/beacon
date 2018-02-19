@@ -41,23 +41,26 @@ void il_factor_field_access_dump(il_factor_field_access* self, int depth);
  * フィールドアクセスを表す要素を出力します.
  * @param self
  * @param env
+ * @param cache
  */
-void il_factor_field_access_generate(il_factor_field_access* self, struct enviroment* env);
+void il_factor_field_access_generate(il_factor_field_access* self, struct enviroment* env, il_load_cache* cache);
 
 /**
  * フィールドアクセスを読み込みます.
  * @param self
  * @param env
+ * @param cache
  * @param eh
  */
-void il_factor_field_access_load(il_factor_field_access* self, struct enviroment* env, il_ehandler* eh);
+void il_factor_field_access_load(il_factor_field_access* self, struct enviroment* env, il_load_cache* cache, il_ehandler* eh);
 
 /**
  * フィールドアクセスの結果の型を返します.
  * @param self
  * @param env
+ * @param cache
  */
-struct type* il_factor_field_access_eval(il_factor_field_access* self, struct enviroment* env);
+struct type* il_factor_field_access_eval(il_factor_field_access* self, struct enviroment* env, il_load_cache* cache);
 
 /**
  * フィールドアクセスを表す要素を開放します.

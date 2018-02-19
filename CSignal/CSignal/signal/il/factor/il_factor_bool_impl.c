@@ -23,7 +23,7 @@ void il_factor_bool_dump(il_factor_bool * self, int depth) {
 	text_putline();
 }
 
-void il_factor_bool_generate(il_factor_bool * self, enviroment * env) {
+void il_factor_bool_generate(il_factor_bool * self, enviroment * env, il_load_cache* cache) {
 	if (self->a) {
 		opcode_buf_add(env->buf, op_true);
 	} else {
@@ -31,7 +31,7 @@ void il_factor_bool_generate(il_factor_bool * self, enviroment * env) {
 	}
 }
 
-type * il_factor_bool_eval(il_factor_bool * self, enviroment * env) {
+type * il_factor_bool_eval(il_factor_bool * self, enviroment * env, il_load_cache* cache) {
 	return CL_BOOL;
 }
 

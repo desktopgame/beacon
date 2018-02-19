@@ -41,24 +41,27 @@ void il_factor_new_instance_dump(il_factor_new_instance* self, int depth);
  * コンストラクタの呼び出しを表す要素を出力します.
  * @param self
  * @param env
+ * @param cache
  */
-void il_factor_new_instance_generate(il_factor_new_instance* self, struct enviroment* env);
+void il_factor_new_instance_generate(il_factor_new_instance* self, struct enviroment* env, il_load_cache* cache);
 
 /**
  * コンストラクタの呼び出しを読み込みます.
  * @param self
  * @param env
+ * @param cache
  * @param eh
  */
-void il_factor_new_instance_load(il_factor_new_instance* self, struct enviroment* env, il_ehandler* eh);
+void il_factor_new_instance_load(il_factor_new_instance* self, struct enviroment* env, il_load_cache* cache, il_ehandler* eh);
 
 /**
  * コンストラクタで生成されるオブジェクトの型を返します.
  * @param self
  * @param env
+ * @param cache
  * @return
  */
-struct type* il_factor_new_instance_eval(il_factor_new_instance* self, struct enviroment* env);
+struct type* il_factor_new_instance_eval(il_factor_new_instance* self, struct enviroment* env, il_load_cache* cache);
 
 /**
  * コンストラクタの呼び出しを表す要素を開放します.

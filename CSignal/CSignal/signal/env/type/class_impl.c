@@ -25,8 +25,8 @@
 #endif
 
 //private
-static method* class_find_method_impl(vector* elements, const char * name, vector * args, enviroment * env, int * outIndex);
-static constructor* class_find_constructor_impl(vector* v, vector * args, enviroment* env, int * outIndex);
+static method* class_find_method_impl(vector* elements, const char * name, vector * args, enviroment * env, il_load_cache* cache, int * outIndex);
+static constructor* class_find_constructor_impl(vector* v, vector * args, enviroment* env, il_load_cache* cache, int * outIndex);
 static constructor* class_find_rconstructor_impl(vector* v,vector * args, int * outIndex);
 static void class_field_delete(vector_item item);
 static void class_method_delete(vector_item item);
@@ -259,32 +259,32 @@ constructor * class_find_rconstructor(class_ * self, vector * args, int* outInde
 	return class_find_rconstructor_impl(v, args, outIndex);
 }
 
-constructor * class_find_constructor(class_ * self, vector * args, enviroment * env, int* outIndex) {
-	vector* v = meta_find_constructors(self, args, env);
+constructor * class_find_constructor(class_ * self, vector * args, enviroment * env, il_load_cache* cache, int* outIndex) {
+	vector* v = meta_find_constructors(self, args, env, cache);
 	(*outIndex) = -1;
-	return class_find_constructor_impl(v, args, env, outIndex);
+	return class_find_constructor_impl(v, args, env, cache, outIndex);
 }
 
-constructor * class_find_empty_constructor(class_ * self, enviroment * env, int * outIndex) {
+constructor * class_find_empty_constructor(class_ * self, enviroment * env, il_load_cache* cache, int * outIndex) {
 	vector* emptyArgs = vector_new();
-	constructor* ret = class_find_constructor(self, emptyArgs, env, outIndex);
+	constructor* ret = class_find_constructor(self, emptyArgs, env, cache, outIndex);
 	vector_delete(emptyArgs, vector_deleter_null);
 
 	return ret;
 }
 
-method * class_find_method(class_ * self, const char * name, vector * args, enviroment * env, int * outIndex) {
+method * class_find_method(class_ * self, const char * name, vector * args, enviroment * env, il_load_cache* cache, int * outIndex) {
 	(*outIndex) = -1;
 	class_create_vtable(self);
 	assert(self->vt->elements->length > 0);
-	return class_find_method_impl(self->vt->elements, name, args, env, outIndex);
+	return class_find_method_impl(self->vt->elements, name, args, env, cache, outIndex);
 }
 
-method * class_find_smethod(class_ * self, const char * name, vector * args, enviroment * env, int * outIndex) {
+method * class_find_smethod(class_ * self, const char * name, vector * args, enviroment * env, il_load_cache* cache, int * outIndex) {
 	(*outIndex) = -1;
 	class_create_vtable(self);
 	int temp = 0;
-	method* ret = class_find_method_impl(self->smethod_list, name, args, env, &temp);
+	method* ret = class_find_method_impl(self->smethod_list, name, args, env, cache, &temp);
 	temp += (class_count_smethodall(self) - self->smethod_list->length);
 	(*outIndex) = temp;
 	return ret;
@@ -513,11 +513,11 @@ void class_delete(class_ * self) {
 }
 
 //private
-static method* class_find_method_impl(vector* elements, const char * name, vector * args, enviroment * env, int * outIndex) {
-	return meta_find_method(elements, name, args, env, outIndex);
+static method* class_find_method_impl(vector* elements, const char * name, vector * args, enviroment * env, il_load_cache* cache, int * outIndex) {
+	return meta_find_method(elements, name, args, env, cache, outIndex);
 }
 
-static constructor* class_find_constructor_impl(vector* v, vector * args, enviroment* env, int * outIndex) {
+static constructor* class_find_constructor_impl(vector* v, vector * args, enviroment* env, il_load_cache* cache, int * outIndex) {
 	//コンストラクタが一つも見つからなかった
 	if (v->length == 0) {
 		vector_delete(v, vector_deleter_null);
@@ -538,7 +538,7 @@ static constructor* class_find_constructor_impl(vector* v, vector * args, enviro
 			parameter* p2 = (parameter*)d2;
 			//NULL以外なら型の互換性を調べる
 			int dist = 0;
-			type* argType = il_factor_eval(p->factor, env);
+			type* argType = il_factor_eval(p->factor, env, cache);
 			type* parType = p2->type;
 			if (argType != CL_NULL) {
 				dist = type_distance(argType, parType);

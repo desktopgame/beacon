@@ -67,24 +67,27 @@ void il_factor_named_invoke_dump(il_factor_named_invoke* self, int depth);
  * 完全に修飾されたメソッド呼び出しを開放します.
  * @param self
  * @param env
+ * @param cache
  */
-void il_factor_named_invoke_generate(il_factor_named_invoke* self, enviroment* env);
+void il_factor_named_invoke_generate(il_factor_named_invoke* self, enviroment* env, il_load_cache* cache);
 
 /**
  * メソッド呼び出しを読み込みます.
  * @param self
  * @param env
+ * @param cache
  * @param eh
  */
-void il_factor_named_invoke_load(il_factor_named_invoke* self, enviroment* env, il_ehandler* eh);
+void il_factor_named_invoke_load(il_factor_named_invoke* self, enviroment* env, il_load_cache* cache, il_ehandler* eh);
 
 /**
  * メソッド呼び出しの戻り値の型を返します.
  * @param self
  * @param env
+ * @param cache
  * @return
  */
-type* il_factor_named_invoke_eval(il_factor_named_invoke* self, enviroment* env);
+type* il_factor_named_invoke_eval(il_factor_named_invoke* self, enviroment* env, il_load_cache* cache);
 
 /**
  * 完全に修飾されたメソッド呼び出しを開放します.

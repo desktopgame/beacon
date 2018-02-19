@@ -34,15 +34,15 @@ typedef enum bi_operator_t {
 } bi_operator_t;
 
 //proto
-static void il_factor_binary_op_generate_impl(il_factor_binary_op * self, enviroment * env, bi_operator_t c);
+static void il_factor_binary_op_generate_impl(il_factor_binary_op * self, enviroment * env, il_load_cache* cache, bi_operator_t c);
 static opcode bi_operator_to_opi(bi_operator_t bi);
 static opcode bi_operator_to_opd(bi_operator_t bi);
 static opcode bi_operator_to_opb(bi_operator_t bi);
 static bool ilbi_compare(il_factor_binary_op* self);
 static void assign_dump_operator(il_factor_binary_op* self);
-static void assign_generate_simple(il_factor_binary_op * self, enviroment* env);
-static void assign_generate_start(il_factor_binary_op * self, enviroment* env);
-static void assign_generate_end(il_factor_binary_op * self, enviroment* env);
+static void assign_generate_simple(il_factor_binary_op * self, enviroment* env, il_load_cache* cache);
+static void assign_generate_start(il_factor_binary_op * self, enviroment* env, il_load_cache* cache);
+static void assign_generate_end(il_factor_binary_op * self, enviroment* env, il_load_cache* cache);
 
 il_factor * il_factor_wrap_binary(il_factor_binary_op * self) {
 	il_factor* ret = (il_factor*)MEM_MALLOC(sizeof(il_factor));
@@ -67,57 +67,57 @@ void il_factor_binary_op_dump(il_factor_binary_op * self, int depth) {
 	il_factor_dump(self->right, depth + 1);
 }
 
-void il_factor_binary_op_generate(il_factor_binary_op * self, enviroment* env) {
+void il_factor_binary_op_generate(il_factor_binary_op * self, enviroment* env, il_load_cache* cache) {
 	switch (self->type) {
 		case ilbinary_add:
-			il_factor_binary_op_generate_impl(self, env, bi_add);
+			il_factor_binary_op_generate_impl(self, env, cache, bi_add);
 			break;
 		case ilbinary_sub:
-			il_factor_binary_op_generate_impl(self, env, bi_sub);
+			il_factor_binary_op_generate_impl(self, env, cache, bi_sub);
 			break;
 		case ilbinary_mul:
-			il_factor_binary_op_generate_impl(self, env, bi_mul);
+			il_factor_binary_op_generate_impl(self, env, cache, bi_mul);
 			break;
 		case ilbinary_div:
-			il_factor_binary_op_generate_impl(self, env, bi_div);
+			il_factor_binary_op_generate_impl(self, env, cache, bi_div);
 			break;
 		case ilbinary_mod:
-			il_factor_binary_op_generate_impl(self, env, bi_mod);
+			il_factor_binary_op_generate_impl(self, env, cache, bi_mod);
 			break;
 
 
 		case ilbinary_bit_or:
-			il_factor_binary_op_generate_impl(self, env, bi_bit_or);
+			il_factor_binary_op_generate_impl(self, env, cache, bi_bit_or);
 			break;
 		case ilbinary_logic_or:
-			il_factor_binary_op_generate_impl(self, env, bi_logic_or);
+			il_factor_binary_op_generate_impl(self, env, cache, bi_logic_or);
 			break;
 
 
 		case ilbinary_bit_and:
-			il_factor_binary_op_generate_impl(self, env, bi_bit_and);
+			il_factor_binary_op_generate_impl(self, env, cache, bi_bit_and);
 			break;
 		case ilbinary_logic_and:
-			il_factor_binary_op_generate_impl(self, env, bi_logic_and);
+			il_factor_binary_op_generate_impl(self, env, cache, bi_logic_and);
 			break;
 
 		case ilbinary_eq:
-			il_factor_binary_op_generate_impl(self, env, bi_eq);
+			il_factor_binary_op_generate_impl(self, env, cache, bi_eq);
 			break;
 		case ilbinary_noteq:
-			il_factor_binary_op_generate_impl(self, env, bi_noteq);
+			il_factor_binary_op_generate_impl(self, env, cache, bi_noteq);
 			break;
 		case ilbinary_gt:
-			il_factor_binary_op_generate_impl(self, env, bi_gt);
+			il_factor_binary_op_generate_impl(self, env, cache, bi_gt);
 			break;
 		case ilbinary_ge:
-			il_factor_binary_op_generate_impl(self, env, bi_ge);
+			il_factor_binary_op_generate_impl(self, env, cache, bi_ge);
 			break;
 		case ilbinary_lt:
-			il_factor_binary_op_generate_impl(self, env, bi_lt);
+			il_factor_binary_op_generate_impl(self, env, cache, bi_lt);
 			break;
 		case ilbinary_le:
-			il_factor_binary_op_generate_impl(self, env, bi_le);
+			il_factor_binary_op_generate_impl(self, env, cache, bi_le);
 			break;
 		//フィールドへの代入(put)なら、
 		//フィールドのインデックス
@@ -125,52 +125,52 @@ void il_factor_binary_op_generate(il_factor_binary_op * self, enviroment* env) {
 		//実引数を0として関数の頭からカウントしたインデックス
 		case ilbinary_assign:
 		{
-			assign_generate_simple(self, env);
+			assign_generate_simple(self, env, cache);
 			break;
 		}
 
 		case ilbinary_add_assign:
-			assign_generate_start(self, env);
-			il_factor_binary_op_generate_impl(self, env, bi_add);
-			assign_generate_end(self, env);
+			assign_generate_start(self, env, cache);
+			il_factor_binary_op_generate_impl(self, env, cache, bi_add);
+			assign_generate_end(self, env, cache);
 			break;
 
 		case ilbinary_sub_assign:
-			assign_generate_start(self, env);
-			il_factor_binary_op_generate_impl(self, env, bi_sub);
-			assign_generate_end(self, env);
+			assign_generate_start(self, env, cache);
+			il_factor_binary_op_generate_impl(self, env, cache, bi_sub);
+			assign_generate_end(self, env, cache);
 			break;
 
 		case ilbinary_mul_assign:
-			assign_generate_start(self, env);
-			il_factor_binary_op_generate_impl(self, env, bi_mul);
-			assign_generate_end(self, env);
+			assign_generate_start(self, env, cache);
+			il_factor_binary_op_generate_impl(self, env, cache, bi_mul);
+			assign_generate_end(self, env, cache);
 			break;
 
 		case ilbinary_div_assign:
-			assign_generate_start(self, env);
-			il_factor_binary_op_generate_impl(self, env, bi_div);
-			assign_generate_end(self, env);
+			assign_generate_start(self, env, cache);
+			il_factor_binary_op_generate_impl(self, env, cache, bi_div);
+			assign_generate_end(self, env, cache);
 			break;
 
 		case ilbinary_mod_assign:
-			assign_generate_start(self, env);
-			il_factor_binary_op_generate_impl(self, env, bi_mod);
-			assign_generate_end(self, env);
+			assign_generate_start(self, env, cache);
+			il_factor_binary_op_generate_impl(self, env, cache, bi_mod);
+			assign_generate_end(self, env, cache);
 			break;
 		default:
 			break;
 	}
 }
 
-void il_factor_binary_op_load(il_factor_binary_op * self, enviroment * env, il_ehandler * eh) {
-	il_factor_load(self->left, env, eh);
-	il_factor_load(self->right, env, eh);
+void il_factor_binary_op_load(il_factor_binary_op * self, enviroment * env, il_load_cache* cache, il_ehandler * eh) {
+	il_factor_load(self->left, env, cache, eh);
+	il_factor_load(self->right, env, cache, eh);
 }
 
-type * il_factor_binary_op_eval(il_factor_binary_op * self, enviroment * env) {
-	type* ltype = il_factor_eval(self->left, env);
-	type* rtype = il_factor_eval(self->right, env);
+type * il_factor_binary_op_eval(il_factor_binary_op * self, enviroment * env, il_load_cache* cache) {
+	type* ltype = il_factor_eval(self->left, env, cache);
+	type* rtype = il_factor_eval(self->right, env, cache);
 	if (ltype == CL_INT &&
 		rtype == CL_INT) {
 		if (ilbi_compare(self)) {
@@ -199,13 +199,13 @@ void il_factor_binary_op_delete(il_factor_binary_op * self) {
 }
 
 //private
-static void il_factor_binary_op_generate_impl(il_factor_binary_op * self, enviroment * env, bi_operator_t c) {
+static void il_factor_binary_op_generate_impl(il_factor_binary_op * self, enviroment * env, il_load_cache* cache, bi_operator_t c) {
 	//ここで逆にしておく
-	il_factor_generate(self->right, env);
-	il_factor_generate(self->left, env);
+	il_factor_generate(self->right, env, cache);
+	il_factor_generate(self->left, env, cache);
 	
-	type* ltype = il_factor_eval(self->left, env);
-	type* rtype = il_factor_eval(self->right, env);
+	type* ltype = il_factor_eval(self->left, env, cache);
+	type* rtype = il_factor_eval(self->right, env, cache);
 	if (ltype == CL_INT &&
 		rtype == CL_INT) {
 		opcode_buf_add(env->buf, (vector_item)bi_operator_to_opi(c));
@@ -381,12 +381,12 @@ static void assign_dump_operator(il_factor_binary_op* self) {
 	}
 }
 
-static void assign_generate_simple(il_factor_binary_op * self, enviroment* env) {
+static void assign_generate_simple(il_factor_binary_op * self, enviroment* env, il_load_cache* cache) {
 	if (self->left->type == ilfactor_static_field_access) {
 		//右辺をプッシュ
 		il_factor_static_field_access* sfa = self->left->u.static_field_access;
-		type* lt = il_factor_eval(self->left, env);
-		il_factor_generate(self->right, env);
+		type* lt = il_factor_eval(self->left, env, cache);
+		il_factor_generate(self->right, env, cache);
 		//フィールド型にルックアップ
 		opcode_buf_add(env->buf, op_lookup);
 		opcode_buf_add(env->buf, sfa->f->type->absoluteIndex);
@@ -397,9 +397,9 @@ static void assign_generate_simple(il_factor_binary_op * self, enviroment* env) 
 	} else if (self->left->type == ilfactor_field_access) {
 		//右辺をプッシュ
 		il_factor_field_access* field_access = self->left->u.field_access_;
-		type* lt = il_factor_eval(self->left, env);
-		il_factor_generate(field_access->fact, env);
-		il_factor_generate(self->right, env);
+		type* lt = il_factor_eval(self->left, env, cache);
+		il_factor_generate(field_access->fact, env, cache);
+		il_factor_generate(self->right, env, cache);
 		assert(field_access->f->type != NULL);
 		//ルックアップ
 		opcode_buf_add(env->buf, op_lookup);
@@ -414,9 +414,9 @@ static void assign_generate_simple(il_factor_binary_op * self, enviroment* env) 
 			opcode_buf_add(env->buf, field_access->fieldIndex);
 		}
 	} else {
-		type* lt = il_factor_eval(self->left, env);
+		type* lt = il_factor_eval(self->left, env, cache);
 		//右辺をプッシュ
-		il_factor_generate(self->right, env);
+		il_factor_generate(self->right, env, cache);
 		opcode_buf_add(env->buf, op_lookup);
 		//左辺型にルックアップ
 		opcode_buf_add(env->buf, lt->absoluteIndex);
@@ -428,22 +428,22 @@ static void assign_generate_simple(il_factor_binary_op * self, enviroment* env) 
 	}
 }
 
-static void assign_generate_start(il_factor_binary_op * self, enviroment* env) {
+static void assign_generate_start(il_factor_binary_op * self, enviroment* env, il_load_cache* cache) {
 	if (self->left->type == ilfactor_field_access) {
 		il_factor_field_access* field_access = self->left->u.field_access_;
-		il_factor_eval(self->left, env);
-		il_factor_generate(field_access->fact, env);
+		il_factor_eval(self->left, env, cache);
+		il_factor_generate(field_access->fact, env, cache);
 	}
 }
 
-static void assign_generate_end(il_factor_binary_op * self, enviroment* env) {
+static void assign_generate_end(il_factor_binary_op * self, enviroment* env, il_load_cache* cache) {
 	if (self->left->type == ilfactor_static_field_access) {
 		il_factor_static_field_access* sfa = self->left->u.static_field_access;
 		//代入先の静的フィールドの型でルックアップ
 		opcode_buf_add(env->buf, op_lookup);
 		opcode_buf_add(env->buf, sfa->f->type->absoluteIndex);
 		//プット
-		il_factor_eval(self->left, env);
+		il_factor_eval(self->left, env, cache);
 		//il_factor_generate(self->right, env);
 		opcode_buf_add(env->buf, op_put_static);
 		opcode_buf_add(env->buf, sfa->f->parent->absoluteIndex);
@@ -467,13 +467,13 @@ static void assign_generate_end(il_factor_binary_op * self, enviroment* env) {
 			opcode_buf_add(env->buf, field_access->fieldIndex);
 		}
 	} else {
-		il_factor_eval(self->left, env);
+		il_factor_eval(self->left, env, cache);
 		//il_factor_generate(self->right, env);
 		assert(self->left->type == ilfactor_variable);
 		il_factor_variable* v = self->left->u.variable_;
 		//代入先の変数の型でルックアップ
 		opcode_buf_add(env->buf, op_lookup);
-		opcode_buf_add(env->buf, il_factor_variable_eval(v, env)->absoluteIndex);
+		opcode_buf_add(env->buf, il_factor_variable_eval(v, env, cache)->absoluteIndex);
 		//ストア
 		opcode_buf_add(env->buf, op_store);
 		opcode_buf_add(env->buf, v->index);

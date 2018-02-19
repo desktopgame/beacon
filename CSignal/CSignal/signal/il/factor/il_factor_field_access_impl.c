@@ -11,7 +11,7 @@
 #include <assert.h>
 
 //proto
-static void il_factor_field_access_find(il_factor_field_access * self, enviroment * env);
+static void il_factor_field_access_find(il_factor_field_access * self, enviroment * env, il_load_cache* cache);
 
 il_factor * il_factor_wrap_field_access(il_factor_field_access * self) {
 	il_factor* ret = (il_factor*)MEM_MALLOC(sizeof(il_factor));
@@ -36,26 +36,26 @@ void il_factor_field_access_dump(il_factor_field_access * self, int depth) {
 	il_factor_dump(self->fact, depth + 1);
 }
 
-void il_factor_field_access_generate(il_factor_field_access * self, enviroment * env) {
-	il_factor_field_access_find(self, env);
+void il_factor_field_access_generate(il_factor_field_access * self, enviroment * env, il_load_cache* cache) {
+	il_factor_field_access_find(self, env, cache);
 	
 	if (modifier_is_static(self->f->modifier)) {
 		opcode_buf_add(env->buf, op_get_static);
 		opcode_buf_add(env->buf, self->f->parent->absoluteIndex);
 		opcode_buf_add(env->buf, self->fieldIndex);
 	} else {
-		il_factor_generate(self->fact, env);
+		il_factor_generate(self->fact, env, cache);
 
 		opcode_buf_add(env->buf, op_get_field);
 		opcode_buf_add(env->buf, self->fieldIndex);
 	}
 }
 
-void il_factor_field_access_load(il_factor_field_access * self, enviroment * env, il_ehandler * eh) {
+void il_factor_field_access_load(il_factor_field_access * self, enviroment * env, il_load_cache* cache, il_ehandler * eh) {
 }
 
-type * il_factor_field_access_eval(il_factor_field_access * self, enviroment * env) {
-	il_factor_field_access_find(self, env);
+type * il_factor_field_access_eval(il_factor_field_access * self, enviroment * env, il_load_cache* cache) {
+	il_factor_field_access_find(self, env, cache);
 	return self->f->type;
 }
 
@@ -66,7 +66,7 @@ void il_factor_field_access_delete(il_factor_field_access * self) {
 }
 
 //private
-static void il_factor_field_access_find(il_factor_field_access * self, enviroment * env) {
+static void il_factor_field_access_find(il_factor_field_access * self, enviroment * env, il_load_cache* cache) {
 	//*
 	int temp = 0;
 	//TEST(env->toplevel);
@@ -75,7 +75,7 @@ static void il_factor_field_access_find(il_factor_field_access * self, enviromen
 	//あったならfactは開放して、f/fieldIndexも再検索
 	if (self->fact->type == ilfactor_variable) {
 		il_factor_variable* var = self->fact->u.variable_;
-		namespace_* top = (namespace_*)vector_top(env->namespace_vec);
+		namespace_* top = (namespace_*)vector_top(cache->namespace_vec);
 		class_* cls = NULL;
 		if (top != NULL) {
 			cls = namespace_get_class(top, var->name);
@@ -97,7 +97,7 @@ static void il_factor_field_access_find(il_factor_field_access * self, enviromen
 	//variableではない(戻り値や式の結果)
 	//
 	} else {
-		type* tp = il_factor_eval(self->fact, env);
+		type* tp = il_factor_eval(self->fact, env, cache);
 		assert(tp->tag == type_class);
 		self->f = class_find_field_tree(tp->u.class_, self->name, &temp);
 		TEST(self->f == NULL);

@@ -41,24 +41,27 @@ void il_factor_static_field_access_dump(il_factor_static_field_access* self, int
  * 静的フィールドアクセスを表す要素を生成します.
  * @param self
  * @param env
+ * @param cache
  */
-void il_factor_static_field_access_generate(il_factor_static_field_access* self, struct enviroment* env);
+void il_factor_static_field_access_generate(il_factor_static_field_access* self, struct enviroment* env, il_load_cache* cache);
 
 /**
  * 静的フィールドアクセスを表す要素の結果の型を返します.
  * @param self
  * @param env
+ * @param cache
  * @return
  */
-struct type* il_factor_static_field_access_eval(il_factor_static_field_access* self, struct enviroment* env);
+struct type* il_factor_static_field_access_eval(il_factor_static_field_access* self, struct enviroment* env, il_load_cache* cache);
 
 /**
  * 静的フィールドアクセスを表す要素を読み込みます.
  * @param self
  * @param env
+ * @param cache
  * @param eh
  */
-void il_factor_static_field_access_load(il_factor_static_field_access* self, struct enviroment* env, il_ehandler* eh);
+void il_factor_static_field_access_load(il_factor_static_field_access* self, struct enviroment* env, il_load_cache* cache, il_ehandler* eh);
 
 /**
  * 静的フィールドを表す要素を削除します.

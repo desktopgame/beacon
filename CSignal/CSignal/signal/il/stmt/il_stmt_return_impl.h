@@ -35,16 +35,18 @@ void il_stmt_return_dump(il_stmt_return* self, int depth);
  * 式を返却する文を生成します.
  * @param self
  * @param env
+ * @param cache
  */
-void il_stmt_return_generate(il_stmt_return* self, struct enviroment* env);
+void il_stmt_return_generate(il_stmt_return* self, struct enviroment* env, il_load_cache* cache);
 
 /**
  * 式を返却する文を読み込みます.
  * @param self
  * @param env
+ * @param cache
  * @param eh
  */
-void il_stmt_return_load(il_stmt_return* self, struct enviroment* env, il_ehandler* eh);
+void il_stmt_return_load(il_stmt_return* self, struct enviroment* env, il_load_cache* cache, il_ehandler* eh);
 
 /**
  * 式を返却する文を開放します.

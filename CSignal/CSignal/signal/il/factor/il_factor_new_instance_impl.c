@@ -12,7 +12,7 @@
 #include "../../util/logger.h"
 
 //proto
-static void il_factor_new_instance_find(il_factor_new_instance * self, enviroment * env);
+static void il_factor_new_instance_find(il_factor_new_instance * self, enviroment * env, il_load_cache* cache);
 static void il_Factor_new_instace_delete_arg(vector_item item);
 
 il_factor * il_factor_wrap_new_instance(il_factor_new_instance * self) {
@@ -43,12 +43,12 @@ void il_factor_new_instance_dump(il_factor_new_instance * self, int depth) {
 	}
 }
 
-void il_factor_new_instance_generate(il_factor_new_instance * self, enviroment * env) {
-	il_factor_new_instance_find(self, env);
+void il_factor_new_instance_generate(il_factor_new_instance * self, enviroment * env, il_load_cache* cache) {
+	il_factor_new_instance_find(self, env, cache);
 	//実引数を全てスタックへ
 	for (int i = 0; i < self->argument_list->length; i++) {
 		il_argument* ilarg = (il_argument*)vector_at(self->argument_list, i);
-		il_factor_generate(ilarg->factor, env);
+		il_factor_generate(ilarg->factor, env, cache);
 	}
 	//クラスとコンストラクタのインデックスをプッシュ
 	opcode_buf_add(env->buf, op_new_instance);
@@ -56,14 +56,14 @@ void il_factor_new_instance_generate(il_factor_new_instance * self, enviroment *
 	opcode_buf_add(env->buf, self->constructorIndex);
 }
 
-void il_factor_new_instance_load(il_factor_new_instance * self, enviroment * env, il_ehandler * eh) {
-	fqcn_cache_delete(self->fqcn);
-	vector_delete(self->argument_list, il_Factor_new_instace_delete_arg);
-	MEM_FREE(self);
+void il_factor_new_instance_load(il_factor_new_instance * self, enviroment * env, il_load_cache* cache, il_ehandler * eh) {
+//	fqcn_cache_delete(self->fqcn);
+//	vector_delete(self->argument_list, il_Factor_new_instace_delete_arg);
+//	MEM_FREE(self);
 }
 
-type * il_factor_new_instance_eval(il_factor_new_instance * self, enviroment * env) {
-	il_factor_new_instance_find(self, env);
+type * il_factor_new_instance_eval(il_factor_new_instance * self, enviroment * env, il_load_cache* cache) {
+	il_factor_new_instance_find(self, env, cache);
 	return self->c->parent;
 }
 
@@ -74,12 +74,12 @@ void il_factor_new_instance_delete(il_factor_new_instance * self) {
 }
 
 //private
-static void il_factor_new_instance_find(il_factor_new_instance * self, enviroment * env) {
+static void il_factor_new_instance_find(il_factor_new_instance * self, enviroment * env, il_load_cache* cache) {
 	//*
-	class_* cls = enviroment_class(env, self->fqcn);
+	class_* cls = il_load_cache_class(cache, self->fqcn);
 	int temp = 0;
 	//TEST(!strcmp(cls->name, "Point3D"));
-	self->c = class_find_constructor(cls, self->argument_list, env, &temp);
+	self->c = class_find_constructor(cls, self->argument_list, env, cache, &temp);
 	assert(self->c != NULL);
 	self->constructorIndex = temp;
 	//*/

@@ -38,16 +38,18 @@ void il_stmt_inferenced_type_init_dump(il_stmt_inferenced_type_init* self, int d
  * 推論された型の初期化を表す要素を生成します.
  * @param self
  * @param env
+ * @param cache
  */
-void il_stmt_inferenced_type_init_generate(il_stmt_inferenced_type_init* self, struct enviroment* env);
+void il_stmt_inferenced_type_init_generate(il_stmt_inferenced_type_init* self, struct enviroment* env, il_load_cache* cache);
 
 /**
  * 推論された型の初期化を表す要素を読み込みます.
  * @param self
  * @param env
+ * @param cache
  * @param eh
  */
-void il_stmt_inferenced_type_init_load(il_stmt_inferenced_type_init* self, struct enviroment* env, il_ehandler* eh);
+void il_stmt_inferenced_type_init_load(il_stmt_inferenced_type_init* self, struct enviroment* env, il_load_cache* cache, il_ehandler* eh);
 
 /**
  * 推論された型の初期化を表す要素を開放します.

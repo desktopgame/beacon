@@ -3,6 +3,7 @@
 #define SIGNAL_ENV_TYPE_INTERFACE_H
 #include <stdbool.h>
 #include "../util/vector.h"
+#include "../il/il_load_cache.h"
 /**
  * 型の種類を表すタグ.
  */
@@ -69,7 +70,7 @@ void type_add_method(type* self, struct method* m);
  * @param outIndex
  * @return
  */
-struct method* type_find_method(type* self, const char* name, vector* args, struct enviroment* env, int* outIndex);
+struct method* type_find_method(type* self, const char* name, vector* args, struct enviroment* env, il_load_cache* cache, int* outIndex);
 
 /**
  * 仮想関数の一覧を返します.

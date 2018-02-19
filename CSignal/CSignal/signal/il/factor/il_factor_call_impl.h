@@ -40,24 +40,27 @@ void il_factor_call_dump(il_factor_call* self, int depth);
  * 関数呼び出しを生成します.
  * @param self
  * @param env
+ * @param cache
  */
-void il_factor_call_generate(il_factor_call* self, struct enviroment* env);
+void il_factor_call_generate(il_factor_call* self, struct enviroment* env, il_load_cache* cache);
 
 /**
  * 関数呼び出しを読み込みます.
  * @param self
  * @param env
+ * @param cache
  * @param eh
  */
-void il_factor_call_load(il_factor_call* self, struct enviroment* env, il_ehandler* eh);
+void il_factor_call_load(il_factor_call* self, struct enviroment* env, il_load_cache* cache, il_ehandler* eh);
 
 /**
  * 関数呼び出しの戻り値の型を返します.
  * @param self
  * @param env
+ * @param cache
  * @return
  */
-struct type* il_factor_call_eval(il_factor_call* self, struct enviroment* env);
+struct type* il_factor_call_eval(il_factor_call* self, struct enviroment* env, il_load_cache* cache);
 
 /**
  * 関数呼び出しを開放します.

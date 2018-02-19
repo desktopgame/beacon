@@ -28,11 +28,11 @@ void il_factor_as_dump(il_factor_as * self, int depth) {
 	il_factor_dump(self->fact, depth + 1);
 }
 
-void il_factor_as_generate(il_factor_as * self, enviroment * env) {
-	il_factor_generate(self->fact, env);
+void il_factor_as_generate(il_factor_as * self, enviroment * env, il_load_cache* cache) {
+	il_factor_generate(self->fact, env, cache);
 
-	type* from = il_factor_eval(self->fact, env);
-	type* to = fqcn_type(self->fqcn, (namespace_*)vector_top(env->namespace_vec));
+	type* from = il_factor_eval(self->fact, env, cache);
+	type* to = fqcn_type(self->fqcn, (namespace_*)vector_top(cache->namespace_vec));
 	int dist = type_distance(to, from);
 	assert(dist != -1);
 	if (dist != -1) {
@@ -41,11 +41,11 @@ void il_factor_as_generate(il_factor_as * self, enviroment * env) {
 	}
 }
 
-void il_factor_as_load(il_factor_as * self, enviroment * env, il_ehandler * eh) {
+void il_factor_as_load(il_factor_as * self, enviroment * env, il_load_cache* cache, il_ehandler * eh) {
 }
 
-type * il_factor_as_eval(il_factor_as * self, enviroment * env) {
-	namespace_* n = (namespace_*)vector_top(env->namespace_vec);
+type * il_factor_as_eval(il_factor_as * self, enviroment * env, il_load_cache* cache) {
+	namespace_* n = (namespace_*)vector_top(cache->namespace_vec);
 	return fqcn_type(self->fqcn, n);
 }
 
