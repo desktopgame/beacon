@@ -60,7 +60,13 @@ void il_factor_invoke_generate(il_factor_invoke * self, enviroment* env, il_load
 	if (self->m->access == access_private) {
 		opcode_buf_add(env->buf, (vector_item)op_invokespecial);
 	} else {
-		opcode_buf_add(env->buf, (vector_item)op_invokevirtual);
+		type* receiverType = il_factor_eval(self->receiver, env, cache);
+		if (receiverType->tag == type_class) {
+			opcode_buf_add(env->buf, (vector_item)op_invokevirtual);
+		} else {
+			opcode_buf_add(env->buf, (vector_item)op_invokeinterface);
+			opcode_buf_add(env->buf, receiverType->absoluteIndex);
+		}
 	}
 	opcode_buf_add(env->buf, (vector_item)self->methodIndex);
 }
@@ -91,11 +97,8 @@ static void il_factor_invoke_find(il_factor_invoke* self, enviroment* env, il_lo
 		return;
 	}
 	int temp = 0;
-	class_* cl = il_factor_eval(self->receiver, env, cache)->u.class_;
-	class_* intcls = CL_INT->u.class_;
-	//TEST((cl == intcls && !strcmp(self->name, "nativeInit")));
-	self->m = class_find_method(
-		cl,
+	self->m = type_find_method(
+		il_factor_eval(self->receiver, env, cache),
 		self->name,
 		self->argument_list,
 		env,

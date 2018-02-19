@@ -13,3 +13,6 @@ while(itr.hasNext()) {
 	var e = itr.next()
 	Console.writeLine(e)
 }
+
+Console.writeLine("")
+Console.writeLine(arr.iterate().next())
