@@ -19,7 +19,7 @@ namespace signal.lang {
 		}
 
 		def length() -> Int {
-			return this.length;
+			return length;
 		}
 
 		def set(Int index, Object v) -> Void {
@@ -62,9 +62,8 @@ namespace signal.lang {
 		
 		private:
 		def checkRange(Int index) -> Void {
-			if(index < 0 || index >= this.length()) {
+			if(index < 0 || index >= length) {
 				throw new Exception("Out Of Range");
-			//	throw -1;
 			}
 		}
 		native def nativeInit() -> Void;

@@ -3,15 +3,21 @@
 #define SIGNAL_IL_IL_FACTOR_VARIABLE_H
 #include "../il_factor_interface.h"
 #include "../../env/fqcn_cache.h"
+#include <stdbool.h>
 //struct opcode_buf;
 struct type;
+struct field;
 /**
  * 変数を表す要素.
  */
 typedef struct il_factor_variable {
 	char* name;
 	int index;
-	struct type* type;
+	union {
+		struct type* type;
+		struct field* f;
+	} u;
+	bool fieldAccess;
 } il_factor_variable;
 
 /**
