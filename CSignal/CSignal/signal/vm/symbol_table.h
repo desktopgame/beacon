@@ -26,7 +26,7 @@ symbol_table* symbol_table_new();
  * @param self
  * @param cls
  * @param name
- * @return
+ * @return nameに対応するエントリが存在せず、clsがNULLならNULL
  */
 struct symbol_entry* symbol_table_entry(symbol_table* self, struct type* tp, const char* name);
 

@@ -20,7 +20,10 @@ symbol_entry* symbol_table_entry(symbol_table* self, type* tp, const char * name
 	if (data) {
 		return ((symbol_entry*)data);
 	}
-	assert(tp != NULL);
+	//フィールドアクセスのために追加
+	if (tp == NULL) {
+		return NULL;
+	}
 	int ret = self->count;
 	symbol_entry* e = symbol_entry_new(name);
 	e->index = self->count;
