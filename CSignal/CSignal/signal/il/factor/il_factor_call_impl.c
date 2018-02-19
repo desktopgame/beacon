@@ -58,9 +58,11 @@ void il_factor_call_generate(il_factor_call * self, enviroment* env, il_load_cac
 	//呼び出すメソッドの位置をスタックに積む
 	//ここで直接メソッドのポインタを積まないのはあとでシリアライズするときのため。
 	if (self->m->access == access_private) {
+		opcode_buf_add(env->buf, op_this);
 		opcode_buf_add(env->buf, (vector_item)op_invokespecial);
 		opcode_buf_add(env->buf, (vector_item)self->methodIndex);
 	} else {
+		opcode_buf_add(env->buf, op_this);
 		opcode_buf_add(env->buf, (vector_item)op_invokevirtual);
 		opcode_buf_add(env->buf, (vector_item)self->methodIndex);
 	}
