@@ -61,10 +61,10 @@ void il_factor_named_invoke_generate(il_factor_named_invoke * self, enviroment *
 			if (self->m->parent->tag == type_interface) {
 				opcode_buf_add(env->buf, op_invokeinterface);
 				opcode_buf_add(env->buf, self->m->parent->absolute_index);
-				opcode_buf_add(env->buf, self->methodIndex);
+				opcode_buf_add(env->buf, self->method_index);
 			} else {
 				opcode_buf_add(env->buf, op_invokevirtual);
-				opcode_buf_add(env->buf, self->methodIndex);
+				opcode_buf_add(env->buf, self->method_index);
 			}
 		}
 	//C.call() クラスへの呼び出し
@@ -72,7 +72,7 @@ void il_factor_named_invoke_generate(il_factor_named_invoke * self, enviroment *
 		il_factor_named_invoke_generate_args(self, env, cache);
 		opcode_buf_add(env->buf, op_invokestatic);
 		opcode_buf_add(env->buf, self->m->parent->absolute_index);
-		opcode_buf_add(env->buf, self->methodIndex);
+		opcode_buf_add(env->buf, self->method_index);
 	}
 }
 
@@ -161,7 +161,7 @@ static void il_factor_named_invoke_generate_IMPL(il_factor_named_invoke* self, e
 	self->m = type_find_method(tp, self->method_name, self->argument_list, env, cache, &temp);
 	//self->m = class_find_method(cls, self->method_name, self->argument_list, env, &temp);
 	assert(self->m != NULL);
-	self->methodIndex = temp;
+	self->method_index = temp;
 	//temp = 0;
 	//TEST(env->toplevel);
 }
@@ -171,7 +171,7 @@ static void il_factor_named_invoke_generate_STATIC_IMPL(il_factor_named_invoke* 
 	class_* cls = tp->u.class_;
 	int temp = 0;
 	self->m = class_find_smethod(cls, self->method_name, self->argument_list, env, cache, &temp);
-	self->methodIndex = temp;
+	self->method_index = temp;
 	TEST(self->m == NULL);
 	//temp = 0;
 	//TEST(env->toplevel);
