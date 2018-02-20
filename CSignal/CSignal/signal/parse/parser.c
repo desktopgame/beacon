@@ -20,7 +20,7 @@ parser * parser_push(yacc_input_type input_type) {
 	p->lineno = 0;
 	p->linenoVec = vector_new();
 	p->root = ast_new(ast_root);
-	p->sBuffer = NULL;
+	p->literal_buffer = NULL;
 	p->error_line_index = 0;
 	p->error_line_text = NULL;
 	p->error_column_index = 0;
@@ -42,26 +42,26 @@ parser * parser_top() {
 }
 
 void parser_clear_buffer(parser * self) {
-	self->sBuffer = NULL;
+	self->literal_buffer = NULL;
 }
 
 void parser_append_buffer(parser * self, char ch) {
-	if (self->sBuffer == NULL) {
-		self->sBuffer = string_buffer_new();
+	if (self->literal_buffer == NULL) {
+		self->literal_buffer = string_buffer_new();
 	}
-	string_buffer_append(self->sBuffer, ch);
+	string_buffer_append(self->literal_buffer, ch);
 }
 
 ast * parser_reduce_buffer(parser * self) {
 	//""‚Ì‚æ‚¤‚È‹ó•¶š‚Ìê‡
-	if (self->sBuffer == NULL) {
+	if (self->literal_buffer == NULL) {
 		return ast_new_string(text_strdup(""));
 	}
-	string_buffer_shrink(self->sBuffer);
-	ast* ret = ast_new_string(self->sBuffer->text);
-	self->sBuffer->text = NULL;
-	MEM_FREE(self->sBuffer);
-	self->sBuffer = NULL;
+	string_buffer_shrink(self->literal_buffer);
+	ast* ret = ast_new_string(self->literal_buffer->text);
+	self->literal_buffer->text = NULL;
+	MEM_FREE(self->literal_buffer);
+	self->literal_buffer = NULL;
 	return ret;
 }
 
@@ -164,7 +164,7 @@ void parser_pop() {
 		ast_delete(p->root);
 	}
 	vector_delete(p->linenoVec, vector_deleter_null);
-	MEM_FREE(p->sBuffer);
+	MEM_FREE(p->literal_buffer);
 	MEM_FREE(p->source_name);
 	MEM_FREE(p);
 	if (stack_empty(ctx->parser_stack)) {

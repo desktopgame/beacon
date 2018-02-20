@@ -13,7 +13,7 @@
  */
 typedef struct parser {
 	ast* root;
-	string_buffer* sBuffer;
+	string_buffer* literal_buffer;
 	//char* source;
 	char* source_name;
 	char* error_line_text;
