@@ -83,7 +83,7 @@ void vm_execute(vm* self, enviroment* env) {
 void vm_resume(vm * self, enviroment * env, int pos) {
 	script_context* ctx = script_context_get_current();
 	int source_len = env->buf->source->length;
-	self->contextRef = env;
+	self->context_ref = env;
 	for (int i = pos; i < source_len; i++) {
 		//このVMの子要素で例外がスローされ、
 		//それを子要素自身で処理できなかった場合には、
@@ -642,7 +642,7 @@ void vm_native_throw(vm * self, object * exc) {
 	//どこかでキャッチしようとしている
 	} else {
 		int temp = 0;
-		vm_validate(self, self->contextRef->buf->source->length, &temp);
+		vm_validate(self, self->context_ref->buf->source->length, &temp);
 		self->native_throw_pos = temp;
 	}
 }

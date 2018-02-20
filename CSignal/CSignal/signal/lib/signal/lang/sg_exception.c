@@ -25,13 +25,13 @@ static void sg_exception_nativeInit(method* parent, vm* vmc, enviroment* env) {
 	vector* stackTraceElementVec = vector_new();
 	do {
 		//実行中のインストラクションの行番号を取得
-		line_range* lr = line_range_find(temp->contextRef->line_rangeVec, temp->pc);
+		line_range* lr = line_range_find(temp->context_ref->line_rangeVec, temp->pc);
 		//スタックトレースを作成
 		object* trace = class_new_rinstance(
 			stackTraceElementClass,
 			vmc,
 			2,
-			object_string_new(temp->contextRef->context_ref->filename),
+			object_string_new(temp->context_ref->context_ref->filename),
 			object_int_new(lr->lineno)
 		);
 		vector_push(stackTraceElementVec, trace);
