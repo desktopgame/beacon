@@ -56,7 +56,7 @@ class_loader* class_loader_new() {
 	ret->error = false;
 	ret->type_cacheVec = vector_new();
 	ret->level = 0;
-	ret->loadedNamespace = false;
+	ret->loaded_namespace = false;
 	ret->linkedAllImports = false;
 	ret->errorMessage = NULL;
 	ret->env->context_ref = ret;

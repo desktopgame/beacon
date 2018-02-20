@@ -328,11 +328,11 @@ static void class_loader_sgload_subImpl(class_loader * self, char * fullPath) {
 }
 
 static void class_loader_sgload_namespace_tree(class_loader* self) {
-	if (self->loadedNamespace) {
+	if (self->loaded_namespace) {
 		return;
 	}
 	class_loader_sgload_namespace_list(self, self->il_code->namespace_list, NULL);
-	self->loadedNamespace = true;
+	self->loaded_namespace = true;
 }
 
 static void class_loader_sgload_importImpl(class_loader* self, vector* ilimports, int i) {

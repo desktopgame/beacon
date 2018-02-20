@@ -24,7 +24,7 @@ typedef struct class_loader {
 	vector* type_cacheVec;
 	struct class_loader* parent;
 	int level;
-	bool loadedNamespace;
+	bool loaded_namespace;
 	bool linkedAllImports;
 	char* filename;
 	char* errorMessage;
