@@ -170,7 +170,7 @@ void class_loader_sgload_complete_methods_impl(class_loader* self, namespace_* s
 		//まずは仮引数の一覧にインデックスを割り振る
 		enviroment* env = enviroment_new();
 		vector_push(cache->type_vec, tp);
-		env->context_cll = self;
+		env->context_ref = self;
 		for (int i = 0; i < ilmethod->parameter_list->length; i++) {
 			il_parameter* ilparam = (il_parameter*)vector_at(ilmethod->parameter_list, i);
 			symbol_table_entry(
@@ -292,7 +292,7 @@ static void class_loader_sgload_complete_constructors(class_loader* self, il_typ
 		//まずは仮引数の一覧にインデックスを割り振る
 		enviroment* env = enviroment_new();
 		vector_push(cache->type_vec, tp);
-		env->context_cll = self;
+		env->context_ref = self;
 		for (int i = 0; i < cons->parameter_list->length; i++) {
 			il_parameter* ilparam = (il_parameter*)vector_at(ilcons->parameter_list, i);
 			symbol_table_entry(

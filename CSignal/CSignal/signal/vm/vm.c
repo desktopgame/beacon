@@ -707,7 +707,7 @@ void vm_uncaught(vm * self, enviroment* env, int pc) {
 	if (lr != NULL) {
 		line = lr->lineno;
 	}
-	text_printf("file: %s <%d>", env->context_cll->filename, line);
+	text_printf("file: %s <%d>", env->context_ref->filename, line);
 	text_printf("\n");
 }
 

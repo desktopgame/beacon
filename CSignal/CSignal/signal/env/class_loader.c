@@ -59,7 +59,7 @@ class_loader* class_loader_new() {
 	ret->loadedNamespace = false;
 	ret->linkedAllImports = false;
 	ret->errorMessage = NULL;
-	ret->env->context_cll = ret;
+	ret->env->context_ref = ret;
 	text_printfln("new classloader");
 	//ret->link = classlink_unlinked;
 	return ret;

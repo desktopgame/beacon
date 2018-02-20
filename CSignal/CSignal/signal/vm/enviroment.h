@@ -16,7 +16,7 @@ struct fqcn_cache;
  * 不変なものをここでは enviroment と呼称します。
  */
 typedef struct enviroment {
-	struct class_loader* context_cll;
+	struct class_loader* context_ref;
 	opcode_buf* buf;
 	symbol_table* sym_table;
 	vector* constant_pool;
