@@ -285,7 +285,7 @@ static void class_loader_sgload_subImpl(class_loader * self, char * fullPath) {
 	//text_printf("%s\n", fullPath);
 	//そのファイルパスに対応した
 	//クラスローダが既に存在するなら無視
-	class_loader* cll = tree_map_get(ctx->classLoaderMap, fullPath);
+	class_loader* cll = tree_map_get(ctx->class_loader_map, fullPath);
 	if (cll != NULL) {
 		class_loader_sgload_importImplAlready(self, cll);
 		return;
@@ -374,7 +374,7 @@ static class_loader* class_loader_sgload_importImplNew(class_loader* self, char*
 	import_info* info = import_manager_import(self->import_manager, cll);
 	info->consume = false;
 	sg_info(__FILE__, __LINE__, "import put %s", fullPath);
-	tree_map_put(ctx->classLoaderMap, fullPath, cll);
+	tree_map_put(ctx->class_loader_map, fullPath, cll);
 	return cll;
 }
 

@@ -25,7 +25,7 @@ typedef unsigned long script_cid;
 typedef struct script_context {
 	stack* parser_stack;
 	tree_map* namespace_map;
-	tree_map* classLoaderMap;
+	tree_map* class_loader_map;
 	vector* threadVec;
 	struct class_loader* bootstrap_class_loader;
 	//通し番号でクラスを参照するためのベクター

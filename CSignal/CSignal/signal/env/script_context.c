@@ -183,7 +183,7 @@ static script_context* script_context_malloc(void) {
 	script_context* ret = (script_context*)MEM_MALLOC(sizeof(script_context));
 	ret->parser_stack = NULL;
 	ret->namespace_map = NULL;
-	ret->classLoaderMap = tree_map_new();
+	ret->class_loader_map = tree_map_new();
 	ret->heap = heap_new();
 	ret->type_vec = vector_new();
 	ret->prev = NULL;
@@ -203,7 +203,7 @@ static void script_context_free(script_context* self) {
 
 	vector_delete(self->type_vec, vector_deleter_null);
 	vector_delete(self->threadVec, vector_deleter_null);
-	tree_map_delete(self->classLoaderMap, script_context_class_loader_delete);
+	tree_map_delete(self->class_loader_map, script_context_class_loader_delete);
 	tree_map_each(self->namespace_map, script_context_namespace_unlink);
 
 	int a = object_count();
