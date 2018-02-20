@@ -354,7 +354,7 @@ static void class_loader_sgload_chain(class_loader* self, il_type* iltype, type*
 static void class_loader_sgload_chain_root(class_loader * self, il_type * iltype, type * tp, il_constructor * ilcons, il_constructor_chain * ilchain, enviroment * env) {
 	opcode_buf_add(env->buf, op_new_object);
 	opcode_buf_add(env->buf, op_alloc_field);
-	opcode_buf_add(env->buf, tp->absoluteIndex);
+	opcode_buf_add(env->buf, tp->absolute_index);
 }
 
 static void class_loader_sgload_chain_auto(class_loader * self, il_type * iltype, type * tp, il_constructor * ilcons, il_constructor_chain * ilchain, enviroment * env) {
@@ -378,7 +378,7 @@ static void class_loader_sgload_chain_auto(class_loader * self, il_type * iltype
 	opcode_buf_add(env->buf, emptyTemp);
 	//このクラスのフィールドを確保
 	opcode_buf_add(env->buf, op_alloc_field);
-	opcode_buf_add(env->buf, tp->absoluteIndex);
+	opcode_buf_add(env->buf, tp->absolute_index);
 }
 
 static void class_loader_sgload_chain_super(class_loader * self, il_type * iltype, type * tp, il_constructor * ilcons, il_constructor_chain * ilchain, enviroment * env) {
@@ -396,7 +396,7 @@ static void class_loader_sgload_chain_super(class_loader * self, il_type * iltyp
 	if (chain->type == chain_type_this) {
 		chainTarget = class_find_constructor(classz, chain->argument_list, env, cache, &temp);
 		opcode_buf_add(env->buf, op_chain_this);
-		opcode_buf_add(env->buf, tp->absoluteIndex);
+		opcode_buf_add(env->buf, tp->absolute_index);
 	} else if (chain->type == chain_type_super) {
 		chainTarget = class_find_constructor(classz->super_class, chain->argument_list, env, cache, &temp);
 		opcode_buf_add(env->buf, op_chain_super);
@@ -407,6 +407,6 @@ static void class_loader_sgload_chain_super(class_loader * self, il_type * iltyp
 	opcode_buf_add(env->buf, temp);
 	//親クラスへのチェインなら即座にフィールドを確保
 	opcode_buf_add(env->buf, op_alloc_field);
-	opcode_buf_add(env->buf, tp->absoluteIndex);
+	opcode_buf_add(env->buf, tp->absolute_index);
 	il_load_cache_delete(cache);
 }

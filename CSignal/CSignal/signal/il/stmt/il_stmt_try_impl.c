@@ -95,7 +95,7 @@ void il_stmt_try_generate(il_stmt_try* self, enviroment* env, il_load_cache* cac
 		//現在の例外と catch節 の型に互換性があるなら続行
 		opcode_buf_add(env->buf, op_hexception);
 		opcode_buf_add(env->buf, op_instanceof);
-		opcode_buf_add(env->buf, exType->absoluteIndex);
+		opcode_buf_add(env->buf, exType->absolute_index);
 		//互換性がないので次のケースへ
 		opcode_buf_add(env->buf, op_goto_if_false);
 		opcode_buf_add(env->buf, nextCause);

@@ -389,10 +389,10 @@ static void assign_generate_simple(il_factor_binary_op * self, enviroment* env, 
 		il_factor_generate(self->right, env, cache);
 		//フィールド型にルックアップ
 		opcode_buf_add(env->buf, op_lookup);
-		opcode_buf_add(env->buf, sfa->f->type->absoluteIndex);
+		opcode_buf_add(env->buf, sfa->f->type->absolute_index);
 		//プット
 		opcode_buf_add(env->buf, op_put_static);
-		opcode_buf_add(env->buf, sfa->f->parent->absoluteIndex);
+		opcode_buf_add(env->buf, sfa->f->parent->absolute_index);
 		opcode_buf_add(env->buf, sfa->fieldIndex);
 	} else if (self->left->type == ilfactor_field_access) {
 		//右辺をプッシュ
@@ -403,11 +403,11 @@ static void assign_generate_simple(il_factor_binary_op * self, enviroment* env, 
 		assert(field_access->f->type != NULL);
 		//ルックアップ
 		opcode_buf_add(env->buf, op_lookup);
-		opcode_buf_add(env->buf, field_access->f->type->absoluteIndex);
+		opcode_buf_add(env->buf, field_access->f->type->absolute_index);
 		//プット
 		if (modifier_is_static(field_access->f->modifier)) {
 			opcode_buf_add(env->buf, op_put_static);
-			opcode_buf_add(env->buf, field_access->f->parent->absoluteIndex);
+			opcode_buf_add(env->buf, field_access->f->parent->absolute_index);
 			opcode_buf_add(env->buf, field_access->fieldIndex);
 		} else {
 			opcode_buf_add(env->buf, op_put_field);
@@ -419,7 +419,7 @@ static void assign_generate_simple(il_factor_binary_op * self, enviroment* env, 
 		il_factor_generate(self->right, env, cache);
 		opcode_buf_add(env->buf, op_lookup);
 		//左辺型にルックアップ
-		opcode_buf_add(env->buf, lt->absoluteIndex);
+		opcode_buf_add(env->buf, lt->absolute_index);
 		//ストア
 		assert(self->left->type == ilfactor_variable);
 		il_factor_variable* v = self->left->u.variable_;
@@ -441,27 +441,27 @@ static void assign_generate_end(il_factor_binary_op * self, enviroment* env, il_
 		il_factor_static_field_access* sfa = self->left->u.static_field_access;
 		//代入先の静的フィールドの型でルックアップ
 		opcode_buf_add(env->buf, op_lookup);
-		opcode_buf_add(env->buf, sfa->f->type->absoluteIndex);
+		opcode_buf_add(env->buf, sfa->f->type->absolute_index);
 		//プット
 		il_factor_eval(self->left, env, cache);
 		//il_factor_generate(self->right, env);
 		opcode_buf_add(env->buf, op_put_static);
-		opcode_buf_add(env->buf, sfa->f->parent->absoluteIndex);
+		opcode_buf_add(env->buf, sfa->f->parent->absolute_index);
 		opcode_buf_add(env->buf, sfa->fieldIndex);
 	} else if (self->left->type == ilfactor_field_access) {
 		il_factor_field_access* field_access = self->left->u.field_access_;
 		if (modifier_is_static(field_access->f->modifier)) {
 			//代入先の静的フィールドの型でルックアップ
 			opcode_buf_add(env->buf, op_lookup);
-			opcode_buf_add(env->buf, field_access->f->type->absoluteIndex);
+			opcode_buf_add(env->buf, field_access->f->type->absolute_index);
 			//プット
 			opcode_buf_add(env->buf, op_put_static);
-			opcode_buf_add(env->buf, field_access->f->parent->absoluteIndex);
+			opcode_buf_add(env->buf, field_access->f->parent->absolute_index);
 			opcode_buf_add(env->buf, field_access->fieldIndex);
 		} else {
 			//代入先のフィールドの型でルックアップ
 			opcode_buf_add(env->buf, op_lookup);
-			opcode_buf_add(env->buf, field_access->f->type->absoluteIndex);
+			opcode_buf_add(env->buf, field_access->f->type->absolute_index);
 			//プット
 			opcode_buf_add(env->buf, op_put_field);
 			opcode_buf_add(env->buf, field_access->fieldIndex);
@@ -473,7 +473,7 @@ static void assign_generate_end(il_factor_binary_op * self, enviroment* env, il_
 		il_factor_variable* v = self->left->u.variable_;
 		//代入先の変数の型でルックアップ
 		opcode_buf_add(env->buf, op_lookup);
-		opcode_buf_add(env->buf, il_factor_variable_eval(v, env, cache)->absoluteIndex);
+		opcode_buf_add(env->buf, il_factor_variable_eval(v, env, cache)->absolute_index);
 		//ストア
 		opcode_buf_add(env->buf, op_store);
 		opcode_buf_add(env->buf, v->index);

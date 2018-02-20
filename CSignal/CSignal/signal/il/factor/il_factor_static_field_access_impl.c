@@ -36,7 +36,7 @@ void il_factor_static_field_access_dump(il_factor_static_field_access * self, in
 void il_factor_static_field_access_generate(il_factor_static_field_access * self, enviroment * env, il_load_cache* cache) {
 	il_factor_static_field_access_find(self, env, cache);
 	opcode_buf_add(env->buf, (vector_item)op_get_static);
-	opcode_buf_add(env->buf, (vector_item)self->f->parent->absoluteIndex);
+	opcode_buf_add(env->buf, (vector_item)self->f->parent->absolute_index);
 	opcode_buf_add(env->buf, (vector_item)self->fieldIndex);
 }
 

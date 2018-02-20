@@ -52,7 +52,7 @@ void il_factor_new_instance_generate(il_factor_new_instance * self, enviroment *
 	}
 	//クラスとコンストラクタのインデックスをプッシュ
 	opcode_buf_add(env->buf, op_new_instance);
-	opcode_buf_add(env->buf, self->c->parent->absoluteIndex);
+	opcode_buf_add(env->buf, self->c->parent->absolute_index);
 	opcode_buf_add(env->buf, self->constructorIndex);
 }
 

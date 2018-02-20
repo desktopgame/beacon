@@ -27,7 +27,7 @@ struct vtable;
 typedef struct type {
 	type_tag tag;
 	struct namespace_* location;
-	int absoluteIndex;
+	int absolute_index;
 	union {
 		struct class_* class_;
 		struct interface_* interface_;

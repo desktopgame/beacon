@@ -37,7 +37,7 @@ void il_factor_as_generate(il_factor_as * self, enviroment * env, il_load_cache*
 	assert(dist != -1);
 	if (dist != -1) {
 		opcode_buf_add(env->buf, op_lookup);
-		opcode_buf_add(env->buf, to->absoluteIndex);
+		opcode_buf_add(env->buf, to->absolute_index);
 	}
 }
 

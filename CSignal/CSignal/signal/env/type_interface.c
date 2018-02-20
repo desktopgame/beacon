@@ -9,7 +9,7 @@ type * type_new() {
 	type* ret = (type*)MEM_MALLOC(sizeof(type));
 	ret->tag = type_class;
 	ret->location = NULL;
-	ret->absoluteIndex = -1;
+	ret->absolute_index = -1;
 	return ret;
 }
 

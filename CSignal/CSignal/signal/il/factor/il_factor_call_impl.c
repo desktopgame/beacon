@@ -51,7 +51,7 @@ void il_factor_call_generate(il_factor_call * self, enviroment* env, il_load_cac
 	}
 	if (modifier_is_static(self->m->modifier)) {
 		opcode_buf_add(env->buf, (vector_item)op_invokestatic);
-		opcode_buf_add(env->buf, self->m->parent->absoluteIndex);
+		opcode_buf_add(env->buf, self->m->parent->absolute_index);
 		opcode_buf_add(env->buf, (vector_item)self->methodIndex);
 		return;
 	}

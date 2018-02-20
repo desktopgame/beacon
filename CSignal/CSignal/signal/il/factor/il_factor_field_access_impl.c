@@ -41,7 +41,7 @@ void il_factor_field_access_generate(il_factor_field_access * self, enviroment *
 	
 	if (modifier_is_static(self->f->modifier)) {
 		opcode_buf_add(env->buf, op_get_static);
-		opcode_buf_add(env->buf, self->f->parent->absoluteIndex);
+		opcode_buf_add(env->buf, self->f->parent->absolute_index);
 		opcode_buf_add(env->buf, self->fieldIndex);
 	} else {
 		il_factor_generate(self->fact, env, cache);

@@ -46,7 +46,7 @@ void il_factor_variable_generate(il_factor_variable * self, enviroment* env, il_
 			opcode_buf_add(env->buf, self->index);
 		} else {
 			opcode_buf_add(env->buf, op_get_static);
-			opcode_buf_add(env->buf, self->u.f->parent->absoluteIndex);
+			opcode_buf_add(env->buf, self->u.f->parent->absolute_index);
 			opcode_buf_add(env->buf, self->index);
 		}
 	}

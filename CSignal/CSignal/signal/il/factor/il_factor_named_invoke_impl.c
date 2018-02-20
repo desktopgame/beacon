@@ -60,7 +60,7 @@ void il_factor_named_invoke_generate(il_factor_named_invoke * self, enviroment *
 			//invokeinterface
 			if (self->m->parent->tag == type_interface) {
 				opcode_buf_add(env->buf, op_invokeinterface);
-				opcode_buf_add(env->buf, self->m->parent->absoluteIndex);
+				opcode_buf_add(env->buf, self->m->parent->absolute_index);
 				opcode_buf_add(env->buf, self->methodIndex);
 			} else {
 				opcode_buf_add(env->buf, op_invokevirtual);
@@ -71,7 +71,7 @@ void il_factor_named_invoke_generate(il_factor_named_invoke * self, enviroment *
 	} else {
 		il_factor_named_invoke_generate_args(self, env, cache);
 		opcode_buf_add(env->buf, op_invokestatic);
-		opcode_buf_add(env->buf, self->m->parent->absoluteIndex);
+		opcode_buf_add(env->buf, self->m->parent->absolute_index);
 		opcode_buf_add(env->buf, self->methodIndex);
 	}
 }

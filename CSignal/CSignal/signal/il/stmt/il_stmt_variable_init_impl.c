@@ -41,7 +41,7 @@ void il_stmt_variable_init_generate(il_stmt_variable_init * self, enviroment * e
 	type* b = fqcn_type(self->fqcn, (namespace_*)vector_top(cache->namespace_vec));
 	if (a != b) {
 		opcode_buf_add(env->buf, op_lookup);
-		opcode_buf_add(env->buf, b->absoluteIndex);
+		opcode_buf_add(env->buf, b->absolute_index);
 	}
 	opcode_buf_add(env->buf, op_store);
 	opcode_buf_add(env->buf, e->index);

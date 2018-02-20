@@ -65,7 +65,7 @@ void il_factor_invoke_generate(il_factor_invoke * self, enviroment* env, il_load
 			opcode_buf_add(env->buf, (vector_item)op_invokevirtual);
 		} else {
 			opcode_buf_add(env->buf, (vector_item)op_invokeinterface);
-			opcode_buf_add(env->buf, receiverType->absoluteIndex);
+			opcode_buf_add(env->buf, receiverType->absolute_index);
 		}
 	}
 	opcode_buf_add(env->buf, (vector_item)self->methodIndex);
