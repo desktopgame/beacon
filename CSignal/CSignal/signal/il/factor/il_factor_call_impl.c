@@ -26,7 +26,7 @@ il_factor_call * il_factor_call_new(const char * name) {
 	ret->name = text_strdup(name);
 	ret->argument_list = vector_new();
 	ret->m = NULL;
-	ret->methodIndex = -1;
+	ret->method_index = -1;
 	return ret;
 }
 
@@ -52,7 +52,7 @@ void il_factor_call_generate(il_factor_call * self, enviroment* env, il_load_cac
 	if (modifier_is_static(self->m->modifier)) {
 		opcode_buf_add(env->buf, (vector_item)op_invokestatic);
 		opcode_buf_add(env->buf, self->m->parent->absolute_index);
-		opcode_buf_add(env->buf, (vector_item)self->methodIndex);
+		opcode_buf_add(env->buf, (vector_item)self->method_index);
 		return;
 	}
 	//呼び出すメソッドの位置をスタックに積む
@@ -60,11 +60,11 @@ void il_factor_call_generate(il_factor_call * self, enviroment* env, il_load_cac
 	if (self->m->access == access_private) {
 		opcode_buf_add(env->buf, op_this);
 		opcode_buf_add(env->buf, (vector_item)op_invokespecial);
-		opcode_buf_add(env->buf, (vector_item)self->methodIndex);
+		opcode_buf_add(env->buf, (vector_item)self->method_index);
 	} else {
 		opcode_buf_add(env->buf, op_this);
 		opcode_buf_add(env->buf, (vector_item)op_invokevirtual);
-		opcode_buf_add(env->buf, (vector_item)self->methodIndex);
+		opcode_buf_add(env->buf, (vector_item)self->method_index);
 	}
 }
 
@@ -96,9 +96,9 @@ static void il_factor_find_method(il_factor_call* self, enviroment* env, il_load
 	type* tp = (type*)vector_top(cache->type_vec);
 	class_* cls = tp->u.class_;
 	self->m = class_find_method(cls, self->name, self->argument_list, env, cache, &temp);
-	self->methodIndex = temp;
+	self->method_index = temp;
 	if (self->m == NULL) {
 		self->m = class_find_smethod(cls, self->name, self->argument_list, env, cache, &temp);
-		self->methodIndex = temp;
+		self->method_index = temp;
 	}
 }
