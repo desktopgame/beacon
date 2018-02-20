@@ -27,7 +27,7 @@ il_factor_new_instance * il_factor_new_instance_new() {
 	ret->fqcn = fqcn_cache_new();
 	ret->argument_list = vector_new();
 	ret->c = NULL;
-	ret->constructorIndex = -1;
+	ret->constructor_index = -1;
 	return ret;
 }
 
@@ -53,7 +53,7 @@ void il_factor_new_instance_generate(il_factor_new_instance * self, enviroment *
 	//クラスとコンストラクタのインデックスをプッシュ
 	opcode_buf_add(env->buf, op_new_instance);
 	opcode_buf_add(env->buf, self->c->parent->absolute_index);
-	opcode_buf_add(env->buf, self->constructorIndex);
+	opcode_buf_add(env->buf, self->constructor_index);
 }
 
 void il_factor_new_instance_load(il_factor_new_instance * self, enviroment * env, il_load_cache* cache, il_ehandler * eh) {
@@ -81,7 +81,7 @@ static void il_factor_new_instance_find(il_factor_new_instance * self, enviromen
 	//TEST(!strcmp(cls->name, "Point3D"));
 	self->c = class_find_constructor(cls, self->argument_list, env, cache, &temp);
 	assert(self->c != NULL);
-	self->constructorIndex = temp;
+	self->constructor_index = temp;
 	//*/
 }
 
