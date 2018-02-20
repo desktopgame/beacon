@@ -181,7 +181,7 @@ static void script_context_launch(script_context* self) {
 
 static script_context* script_context_malloc(void) {
 	script_context* ret = (script_context*)MEM_MALLOC(sizeof(script_context));
-	ret->parserStack = NULL;
+	ret->parser_stack = NULL;
 	ret->namespaceMap = NULL;
 	ret->classLoaderMap = tree_map_new();
 	ret->heap = heap_new();

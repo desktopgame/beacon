@@ -11,11 +11,11 @@
 
 parser * parser_push(yacc_input_type input_type) {
 	script_context* ctx = script_context_get_current();
-	if (ctx->parserStack == NULL) {
-		ctx->parserStack = stack_new();
+	if (ctx->parser_stack == NULL) {
+		ctx->parser_stack = stack_new();
 	}
 	parser* p = (parser*)MEM_MALLOC(sizeof(parser));
-	stack_push(ctx->parserStack, p);
+	stack_push(ctx->parser_stack, p);
 	p->input_type = input_type;
 	p->lineno = 0;
 	p->linenoVec = vector_new();
@@ -32,13 +32,13 @@ parser * parser_push(yacc_input_type input_type) {
 
 parser * parser_top() {
 	script_context* ctx = script_context_get_current();
-	if (ctx->parserStack == NULL) {
+	if (ctx->parser_stack == NULL) {
 		return NULL;
 	}
-	if (stack_empty(ctx->parserStack)) {
+	if (stack_empty(ctx->parser_stack)) {
 		return NULL;
 	}
-	return (parser*)stack_top(ctx->parserStack);
+	return (parser*)stack_top(ctx->parser_stack);
 }
 
 void parser_clear_buffer(parser * self) {
@@ -159,7 +159,7 @@ void parser_print_error(parser * p) {
 
 void parser_pop() {
 	script_context* ctx = script_context_get_current();
-	parser* p = (parser*)stack_pop(ctx->parserStack);
+	parser* p = (parser*)stack_pop(ctx->parser_stack);
 	if (p->root) {
 		ast_delete(p->root);
 	}
@@ -167,8 +167,8 @@ void parser_pop() {
 	MEM_FREE(p->sBuffer);
 	MEM_FREE(p->source_name);
 	MEM_FREE(p);
-	if (stack_empty(ctx->parserStack)) {
-		stack_delete(ctx->parserStack, stack_deleter_null);
-		ctx->parserStack = NULL;
+	if (stack_empty(ctx->parser_stack)) {
+		stack_delete(ctx->parser_stack, stack_deleter_null);
+		ctx->parser_stack = NULL;
 	}
 }
