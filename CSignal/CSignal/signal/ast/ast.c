@@ -32,7 +32,7 @@ ast * ast_new(ast_tag tag) {
 	parser* p = parser_top();
 	if (p != NULL) {
 		ret->lineno = p->lineno;
-		vector_push(p->linenoVec, p->lineno);
+		vector_push(p->lineno_vec, p->lineno);
 	} else ret->lineno = -1;
 	return ret;
 }
@@ -108,8 +108,8 @@ ast * ast_push(ast * self, ast * child) {
 	//行番号を補正
 	parser* p = parser_top();
 	if (p != NULL) {
-		if (!vector_empty(p->linenoVec)) {
-			int lineno = (int)vector_pop(p->linenoVec);
+		if (!vector_empty(p->lineno_vec)) {
+			int lineno = (int)vector_pop(p->lineno_vec);
 			self->lineno = lineno;
 		}
 	}

@@ -18,7 +18,7 @@ parser * parser_push(yacc_input_type input_type) {
 	stack_push(ctx->parser_stack, p);
 	p->input_type = input_type;
 	p->lineno = 0;
-	p->linenoVec = vector_new();
+	p->lineno_vec = vector_new();
 	p->root = ast_new(ast_root);
 	p->literal_buffer = NULL;
 	p->error_line_index = 0;
@@ -163,7 +163,7 @@ void parser_pop() {
 	if (p->root) {
 		ast_delete(p->root);
 	}
-	vector_delete(p->linenoVec, vector_deleter_null);
+	vector_delete(p->lineno_vec, vector_deleter_null);
 	MEM_FREE(p->literal_buffer);
 	MEM_FREE(p->source_name);
 	MEM_FREE(p);

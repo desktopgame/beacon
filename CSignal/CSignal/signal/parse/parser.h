@@ -23,7 +23,7 @@ typedef struct parser {
 	yacc_input_type input_type;
 	bool fail;
 	uint32_t lineno;
-	vector* linenoVec;
+	vector* lineno_vec;
 } parser;
 
 /**
