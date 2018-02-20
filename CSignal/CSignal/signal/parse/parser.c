@@ -24,7 +24,7 @@ parser * parser_push(yacc_input_type input_type) {
 	p->errorLineIndex = 0;
 	p->error_line_text = NULL;
 	p->errorColumnIndex = 0;
-	p->errorMessage = NULL;
+	p->error_message = NULL;
 	p->source_name = text_strdup("unknown-source");
 	p->fail = false;
 	return p;
@@ -145,15 +145,15 @@ void parser_print_error(parser * p) {
 	text_printf("column=%d", p->errorColumnIndex);
 	text_putline();
 	//put str
-	text_printf("%s", p->errorMessage);
+	text_printf("%s", p->error_message);
 	text_putline();
 	//put line
 	text_printf("%s", p->error_line_text);
 	text_putline();
 	fflush(stdout);
-	MEM_FREE(p->errorMessage);
+	MEM_FREE(p->error_message);
 	MEM_FREE(p->error_line_text);
-	p->errorMessage = NULL;
+	p->error_message = NULL;
 	p->error_line_text = NULL;
 }
 

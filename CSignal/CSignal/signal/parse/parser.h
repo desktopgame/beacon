@@ -17,7 +17,7 @@ typedef struct parser {
 	//char* source;
 	char* source_name;
 	char* error_line_text;
-	char* errorMessage;
+	char* error_message;
 	int errorLineIndex;
 	int errorColumnIndex;
 	yacc_input_type input_type;
