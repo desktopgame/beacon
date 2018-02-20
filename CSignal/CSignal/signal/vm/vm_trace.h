@@ -7,7 +7,7 @@ struct vm;
 typedef struct vm_trace {
 	struct vm* v;
 	int32_t pc;
-	int32_t jumpLevel;
+	int32_t jump_level;
 } vm_trace;
 
 vm_trace* vm_trace_new(struct vm* v);

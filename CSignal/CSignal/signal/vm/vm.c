@@ -679,14 +679,14 @@ bool vm_validate(vm* self, int source_len, int* pcDest) {
 		//では、
 		//プログラムカウンタの位置が異なるためです。
 		//
-		if (trace->jumpLevel > 0) {
+		if (trace->jump_level > 0) {
 			*pcDest = trace->pc + 1;
 		} else *pcDest = trace->pc;
 		self->validate = false;
 		return true;
 	//ここではないので終了
 	} else {
-		trace->jumpLevel++;
+		trace->jump_level++;
 		self->parent->validate = true;
 		*pcDest = source_len;
 		return false;
