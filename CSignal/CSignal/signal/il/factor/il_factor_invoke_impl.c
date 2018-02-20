@@ -28,7 +28,7 @@ il_factor_invoke * il_factor_invoke_new(const char * name) {
 	ret->argument_list = vector_new();
 	ret->receiver = NULL;
 	ret->m = NULL;
-	ret->methodIndex = -1;
+	ret->method_index = -1;
 	return ret;
 }
 
@@ -68,7 +68,7 @@ void il_factor_invoke_generate(il_factor_invoke * self, enviroment* env, il_load
 			opcode_buf_add(env->buf, receiverType->absolute_index);
 		}
 	}
-	opcode_buf_add(env->buf, (vector_item)self->methodIndex);
+	opcode_buf_add(env->buf, (vector_item)self->method_index);
 }
 
 void il_factor_invoke_load(il_factor_invoke * self, enviroment * env, il_load_cache* cache, il_ehandler * eh) {
@@ -105,6 +105,6 @@ static void il_factor_invoke_find(il_factor_invoke* self, enviroment* env, il_lo
 		cache,
 		&temp
 	);
-	self->methodIndex = temp;
+	self->method_index = temp;
 	assert(self->m != NULL);
 }

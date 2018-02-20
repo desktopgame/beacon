@@ -12,7 +12,7 @@ typedef struct il_factor_invoke {
 	il_factor* receiver;
 	vector* argument_list;
 	struct method* m;
-	int methodIndex;
+	int method_index;
 } il_factor_invoke;
 
 /**
