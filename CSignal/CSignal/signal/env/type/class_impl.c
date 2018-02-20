@@ -59,7 +59,7 @@ class_ * class_new(const char * name) {
 	ret->smethod_list = vector_new();
 	ret->constructor_list = vector_new();
 	ret->native_method_ref_map = tree_map_new();
-	ret->vtVec = vector_new();
+	ret->vt_vec = vector_new();
 	//FIXME:ここで持つ必要はない
 	ret->classIndex = -1;
 	//ret->absoluteIndex = -1;
@@ -309,7 +309,7 @@ method * class_get_smethod(class_* self, int index) {
 }
 
 method * class_get_impl_method(class_ * self, type * interType, int interMIndex) {
-	assert(self->vtVec->length > 0);
+	assert(self->vt_vec->length > 0);
 	//指定のインターフェイスが
 	//このクラスにおいて何番目かを調べる
 	int declIndex = -1;
@@ -322,7 +322,7 @@ method * class_get_impl_method(class_ * self, type * interType, int interMIndex)
 	}
 	//仮想関数テーブルの一覧から引く
 	assert(declIndex != -1);
-	vtable* vtAt = vector_at(self->vtVec, declIndex);
+	vtable* vtAt = vector_at(self->vt_vec, declIndex);
 	return vector_at(vtAt->elements, interMIndex);
 }
 
@@ -400,7 +400,7 @@ void class_create_vtable(class_ * self) {
 			assert(classVTM != NULL);
 			vtable_add(newVT, classVTM);
 		}
-		vector_push(self->vtVec, newVT);
+		vector_push(self->vt_vec, newVT);
 	}
 	//assert(self->vt->elements->length > 0);
 }
@@ -500,7 +500,7 @@ void class_unlink(class_ * self) {
 	vector_delete(self->smethod_list, class_method_delete);
 	vector_delete(self->constructor_list, class_ctor_delete);
 	vtable_delete(self->vt);
-	vector_delete(self->vtVec, class_vtable_vec_delete);
+	vector_delete(self->vt_vec, class_vtable_vec_delete);
 }
 
 void class_delete(class_ * self) {

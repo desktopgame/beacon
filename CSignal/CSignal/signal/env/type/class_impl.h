@@ -40,7 +40,7 @@ typedef struct class_ {
 	//インターフェースに対応した
 	//実装メソッドのテーブルのベクター
 	//http://d.hatena.ne.jp/tetz42/20120205/1328449750
-	vector* vtVec;
+	vector* vt_vec;
 	//vector* static_fieldval_vec;
 	vtable* vt;
 	int classIndex;
