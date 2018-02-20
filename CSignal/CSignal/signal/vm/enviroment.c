@@ -194,8 +194,8 @@ static void enviroment_object_delete(object* obj) {
 		}
 	}
 	if (obj->type == sg_array_class()) {
-		for (int i = 0; i < obj->nativeSlotVec->length; i++) {
-			object* e = (object*)vector_at(obj->nativeSlotVec, i);
+		for (int i = 0; i < obj->native_slot_vec->length; i++) {
+			object* e = (object*)vector_at(obj->native_slot_vec, i);
 			enviroment_object_delete(e);
 		}
 	}

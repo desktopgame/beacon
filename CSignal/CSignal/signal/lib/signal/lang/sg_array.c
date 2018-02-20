@@ -42,11 +42,11 @@ object * sg_array_new(int length, vm * vmc) {
 }
 
 void sg_array_set(object * arr, int index, object * o) {
-	vector_assign(arr->nativeSlotVec, index, o);
+	vector_assign(arr->native_slot_vec, index, o);
 }
 
 object * sg_array_get(object * arr, int index) {
-	return (object*)vector_at(arr->nativeSlotVec, index);
+	return (object*)vector_at(arr->native_slot_vec, index);
 }
 //private
 static void sg_array_nativeInit(method* parent, vm* vm, enviroment* env) {
@@ -63,7 +63,7 @@ static void sg_array_nativeInit(method* parent, vm* vm, enviroment* env) {
 	int len = lengthObj->u.int_;
 	assert(len >= 0);
 	for (int i = 0; i < len; i++) {
-		vector_push(self->nativeSlotVec, object_get_null());
+		vector_push(self->native_slot_vec, object_get_null());
 	}
 }
 
@@ -72,14 +72,14 @@ static void sg_array_nativeSet(method* parent, vm* vm, enviroment* env) {
 	object* val = vector_pop(vm->value_stack);
 	object* idx = vector_pop(vm->value_stack);
 	assert(idx->tag == object_int);
-	vector_assign(self->nativeSlotVec, idx->u.int_, val);
+	vector_assign(self->native_slot_vec, idx->u.int_, val);
 }
 
 static void sg_array_nativeGet(method* parent, vm* vm, enviroment* env) {
 	object* self = vector_pop(vm->value_stack);
 	object* idx = vector_pop(vm->value_stack);
 	assert(idx->tag == object_int);
-	object* ret = vector_at(self->nativeSlotVec, idx->u.int_);
+	object* ret = vector_at(self->native_slot_vec, idx->u.int_);
 	//text_printfln("array get %d", idx->u.int_);
 	vector_push(vm->value_stack, ret);
 }
@@ -90,8 +90,8 @@ static void sg_array_nativeCopy(method* parent, vm* vm, enviroment* env) {
 	object* dst = vector_pop(vm->value_stack);
 	object* srcOffset = vector_pop(vm->value_stack);
 	object* src = vector_pop(vm->value_stack);
-	int srcLen = src->nativeSlotVec->length;
-	int dstLen = dst->nativeSlotVec->length;
+	int srcLen = src->native_slot_vec->length;
+	int dstLen = dst->native_slot_vec->length;
 	int cpyLen = length->u.int_;
 	//添え字がマイナス
 	if (srcOffset->u.int_ < 0 ||
@@ -109,7 +109,7 @@ static void sg_array_nativeCopy(method* parent, vm* vm, enviroment* env) {
 			 i < (srcOffset->u.int_ + length->u.int_);
 			 i++) {
 		int a = (i - srcOffset->u.int_) + dstOffset->u.int_;
-		vector_item e = vector_at(src->nativeSlotVec, i);
-		vector_assign(dst->nativeSlotVec, a, e);
+		vector_item e = vector_at(src->native_slot_vec, i);
+		vector_assign(dst->native_slot_vec, a, e);
 	}
 }

@@ -63,7 +63,7 @@ object * object_string_new(const char * s) {
 	string_buffer* sb = string_buffer_new();
 	while ((*itr) != '\0') {
 		char e = (*itr);
-		vector_push(arr->nativeSlotVec, object_char_new(e));
+		vector_push(arr->native_slot_vec, object_char_new(e));
 		itr++;
 		string_buffer_append(sb, e);
 	}
@@ -79,7 +79,7 @@ object * object_string_new(const char * s) {
 	class_find_field(arrType->u.class_, "length", &temp);
 	vector_assign(arr->u.field_vec, temp, object_int_new(sb->length));
 	//CŒ`Ž®‚Ì•¶Žš—ñ‚Å‚à•Û‘¶
-	vector_assign(ret->nativeSlotVec, 0, sb);
+	vector_assign(ret->native_slot_vec, 0, sb);
 	return ret;
 }
 
@@ -178,8 +178,8 @@ void object_markall(object * self) {
 	type* arrayType = sg_array_class();
 	if (self->tag == object_ref &&
 		self->type == arrayType) {
-		for (int i = 0; i < self->nativeSlotVec->length; i++) {
-			object* e = (object*)vector_at(self->nativeSlotVec, i);
+		for (int i = 0; i < self->native_slot_vec->length; i++) {
+			object* e = (object*)vector_at(self->native_slot_vec, i);
 			object_markall(e);
 		}
 	}
@@ -195,7 +195,7 @@ void object_print(object * self) {
 	} else if (self->tag == object_double) {
 		text_printf("Double: %d", self->u.double_);
 	} else if (self->tag == object_string) {
-		string_buffer* sb = (string_buffer*)vector_at(self->nativeSlotVec, 0);
+		string_buffer* sb = (string_buffer*)vector_at(self->native_slot_vec, 0);
 		text_printf("String: %s", sb->text);
 	} else if (self->tag == object_bool) {
 		text_printf("Bool: %s", (self == object_get_true() ? "true" : "false"));
@@ -210,15 +210,15 @@ void object_delete(object * self) {
 	gObjectCount--;
 	//sg_info(__FILE__, __LINE__, "deleted object %s", type_name(self->type));
 	if (self->tag == object_string) {
-		string_buffer* sb = vector_at(self->nativeSlotVec, 0);
-		vector_remove(self->nativeSlotVec, 0);
+		string_buffer* sb = vector_at(self->native_slot_vec, 0);
+		vector_remove(self->native_slot_vec, 0);
 		string_buffer_delete(sb);
 	}
 	if (self->tag == object_string ||
 		self->tag == object_ref) {
 		vector_delete(self->u.field_vec, vector_deleter_null);
 	}
-	vector_delete(self->nativeSlotVec, vector_deleter_null);
+	vector_delete(self->native_slot_vec, vector_deleter_null);
 	MEM_FREE(self);
 }
 
@@ -229,7 +229,7 @@ static object* object_malloc(object_tag type) {
 	ret->paint = paint_unmarked;
 	ret->tag = type;
 	ret->vptr = NULL;
-	ret->nativeSlotVec = vector_new();
+	ret->native_slot_vec = vector_new();
 	heap_add(heap_get(), ret);
 	gObjectCount++;
 	return ret;

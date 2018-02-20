@@ -48,7 +48,7 @@ typedef struct object {
 	struct vtable* vptr;
 	object_paint paint;
 	object_tag tag;
-	vector* nativeSlotVec;
+	vector* native_slot_vec;
 	union {
 		int int_;
 		double double_;

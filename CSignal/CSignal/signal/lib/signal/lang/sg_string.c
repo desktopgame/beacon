@@ -13,7 +13,7 @@ void sg_string_init() {
 }
 
 string_buffer * sg_string_raw(object* self) {
-	vector_item e = vector_at(self->nativeSlotVec, 0);
+	vector_item e = vector_at(self->native_slot_vec, 0);
 	assert(self->tag == object_string);
 	return (string_buffer*)e;
 }
@@ -34,11 +34,11 @@ static void sg_string_nativeInit(method* parent, vm* vm, enviroment* env) {
 	object* charArr = vector_at(self->u.field_vec, temp);
 	//‚±‚ê‚ð char* ‚Ö•ÏŠ·
 	string_buffer* sb = string_buffer_new();
-	for (int i = 0; i < charArr->nativeSlotVec->length; i++) {
-		object* e = (object*)vector_at(charArr->nativeSlotVec, i);
+	for (int i = 0; i < charArr->native_slot_vec->length; i++) {
+		object* e = (object*)vector_at(charArr->native_slot_vec, i);
 		assert(e->tag == object_char);
 		string_buffer_append(sb, e->u.char_);
 	}
-	vector_assign(self->nativeSlotVec, 0, sb);
+	vector_assign(self->native_slot_vec, 0, sb);
 	self->tag = object_string;
 }
