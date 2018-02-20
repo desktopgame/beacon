@@ -35,7 +35,7 @@ void enviroment_add_range(enviroment* self, int lineno) {
 	if (vector_empty(self->line_rangeVec)) {
 		line_range* lr = line_range_new();
 		lr->start_offset = 0;
-		lr->endOffset = 0;
+		lr->end_offset = 0;
 		lr->lineno = lineno;
 		vector_push(self->line_rangeVec, lr);
 		return;
@@ -44,11 +44,11 @@ void enviroment_add_range(enviroment* self, int lineno) {
 	//ÅŒã‚É‚Â‚¢‚©‚µ‚½ƒŒƒ“ƒW‚ðL‚Î‚·‚©V‚½‚É’Ç‰Á‚·‚é
 	line_range* lrt = (line_range*)vector_top(self->line_rangeVec);
 	if (lrt->lineno == lineno) {
-		lrt->endOffset = self->buf->source->length;
+		lrt->end_offset = self->buf->source->length;
 	} else {
 		line_range* lr = line_range_new();
 		lr->start_offset = self->buf->source->length;
-		lr->endOffset = self->buf->source->length;
+		lr->end_offset = self->buf->source->length;
 		lr->lineno = lineno;
 		vector_push(self->line_rangeVec, lr);
 	}
@@ -66,7 +66,7 @@ void enviroment_op_dump(enviroment * self, int depth) {
 				lr = vector_at(self->line_rangeVec, 0);
 				lrPos = 0;
 			} else {
-				if (i > lr->endOffset) {
+				if (i > lr->end_offset) {
 					lrPos++;
 					if (lrPos < self->line_rangeVec->length) {
 						lr = vector_at(self->line_rangeVec, lrPos);

@@ -9,7 +9,7 @@
  */
 typedef struct line_range {
 	uint32_t start_offset;
-	uint32_t endOffset;
+	uint32_t end_offset;
 	uint32_t lineno;
 } line_range;
 
