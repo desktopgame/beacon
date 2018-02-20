@@ -27,7 +27,7 @@ static il_stmt* class_loader_ilload_bodyImpl(class_loader* self, ast* source);
 void class_loader_ilload_impl(class_loader* self, ast* source_code) {
 	assert(self->il_code == NULL);
 	self->il_code = il_top_level_new();
-	for (int i = 0; i < source_code->childCount; i++) {
+	for (int i = 0; i < source_code->child_count; i++) {
 		ast* child = ast_at(self->source_code, i);
 		//import a
 		if (child->tag == ast_import_decl) {
@@ -92,7 +92,7 @@ void class_loader_ilload_namespace_path_recursive(class_loader* self, ast* names
 	if (namespace_path->tag == ast_namespace_path) {
 	//	text_printf(" %s", namespace_path->u.string_value);
 	} else if (namespace_path->tag == ast_namespace_path_list) {
-		for (int i = 0; i < namespace_path->childCount; i++) {
+		for (int i = 0; i < namespace_path->child_count; i++) {
 			class_loader_ilload_namespace_path_recursive(self, ast_at(namespace_path, i), namespace_body);
 		}
 	}
@@ -140,7 +140,7 @@ void class_loader_ilload_namespace_body(class_loader* self, il_namespace* curren
 		class_loader_ilload_enum(self, current, namespace_body);
 		//namespace xxx { any yyy { ...
 	} else if (namespace_body->tag == ast_namespace_member_decl_list) {
-		for (int i = 0; i < namespace_body->childCount; i++) {
+		for (int i = 0; i < namespace_body->child_count; i++) {
 			ast* member = ast_at(namespace_body, i);
 			class_loader_ilload_namespace_body(self, current, parent, member);
 		}
@@ -199,7 +199,7 @@ void class_loader_ilload_typename_list(class_loader * self, vector * dst, ast * 
 		class_loader_ilload_fqcn(ast_first(typename_list), e);
 		vector_push(dst, e);
 	} else if(typename_list->tag == ast_typename_list) {
-		for (int i = 0; i < typename_list->childCount; i++) {
+		for (int i = 0; i < typename_list->child_count; i++) {
 			class_loader_ilload_typename_list(self, dst, ast_at(typename_list, i));
 		}
 	}
@@ -207,7 +207,7 @@ void class_loader_ilload_typename_list(class_loader * self, vector * dst, ast * 
 
 void class_loader_ilload_member_tree(class_loader* self, il_type* current, ast* tree) {
 	if (tree->tag == ast_access_member_tree) {
-		for (int i = 0; i < tree->childCount; i++) {
+		for (int i = 0; i < tree->child_count; i++) {
 			class_loader_ilload_member_tree(self, current, ast_at(tree, i));
 		}
 	} else if (tree->tag == ast_access_member_list) {
@@ -220,7 +220,7 @@ void class_loader_ilload_member_tree(class_loader* self, il_type* current, ast* 
 
 void class_loader_ilload_member(class_loader* self, il_type* current, ast* member, access_level level) {
 	if(member->tag == ast_member_decl_list) {
-		for(int i=0; i<member->childCount; i++) {
+		for(int i=0; i<member->child_count; i++) {
 			class_loader_ilload_member(self, current, ast_at(member, i), level);
 		}
 	} else if(member->tag == ast_member_decl) {
@@ -295,7 +295,7 @@ void class_loader_ilload_constructor(class_loader* self, il_type* current, ast* 
 
 void class_loader_ilload_identifier_list(class_loader * self, vector * list, ast * source) {
 	if (source->tag == ast_identifier_list) {
-		for (int i = 0; i < source->childCount; i++) {
+		for (int i = 0; i < source->child_count; i++) {
 			class_loader_ilload_identifier_list(self, list, ast_at(source, i));
 		}
 	} else if(source->tag == ast_identifier) {
@@ -306,7 +306,7 @@ void class_loader_ilload_identifier_list(class_loader * self, vector * list, ast
 
 void class_loader_ilload_parameter_list(class_loader* self, vector* list, ast* source) {
 	if (source->tag == ast_parameter_list) {
-		for (int i = 0; i < source->childCount; i++) {
+		for (int i = 0; i < source->child_count; i++) {
 			class_loader_ilload_parameter_list(self, list, ast_at(source, i));
 		}
 	} else if (source->tag == ast_parameter) {
@@ -321,7 +321,7 @@ void class_loader_ilload_parameter_list(class_loader* self, vector* list, ast* s
 
 void class_loader_ilload_body(class_loader* self, vector* list, ast* source) {
 	if (source->tag == ast_stmt_list || source->tag == ast_scope) {
-		for (int i = 0; i < source->childCount; i++) {
+		for (int i = 0; i < source->child_count; i++) {
 			class_loader_ilload_body(self, list, ast_at(source, i));
 		}
 	} else {
@@ -410,7 +410,7 @@ il_stmt_while * class_loader_ilload_while(class_loader * self, ast * source) {
 
 void class_loader_ilload_elif_list(class_loader* self, vector* list, ast* source) {
 	if (source->tag == ast_elif_list) {
-		for (int i = 0; i < source->childCount; i++) {
+		for (int i = 0; i < source->child_count; i++) {
 			class_loader_ilload_elif_list(self, list, ast_at(source, i));
 		}
 	} else if (source->tag == ast_elif) {
@@ -454,7 +454,7 @@ void class_loader_ilload_catch_list(class_loader* self, vector* dest, ast* sourc
 		vector_push(dest, ilcatch);
 
 	} else if(source->tag == ast_stmt_catch_list) {
-		for(int i=0; i<source->childCount; i++) {
+		for(int i=0; i<source->child_count; i++) {
 			class_loader_ilload_catch_list(self, dest, ast_at(source, i));
 		}
 	}
@@ -605,14 +605,14 @@ void class_loader_ilload_fqcn_impl(ast* fqcn, fqcn_cache* dest) {
 	if (fqcn->tag == ast_fqcn ||
 		fqcn->tag == ast_fqcn_part_list) {
 		if (fqcn->tag == ast_fqcn_part_list &&
-			fqcn->childCount == 0) {
+			fqcn->child_count == 0) {
 			//FIXME:もうちょっと高速に出来る
 			//FIXME:とりあえずここでタグを直してるけどast.cの時点でどうにかするべき
 			fqcn->tag = ast_fqcn_class_name;
 			dest->name = text_strdup(fqcn->u.string_value);
 			return;
 		}
-		for (int i = 0; i < fqcn->childCount; i++) {
+		for (int i = 0; i < fqcn->child_count; i++) {
 			ast* c = ast_at(fqcn, i);
 			class_loader_ilload_fqcn_impl(c, dest);
 		}
@@ -625,7 +625,7 @@ void class_loader_ilload_fqcn_impl(ast* fqcn, fqcn_cache* dest) {
 
 void class_loader_ilload_argument_list(class_loader* self, vector* list, ast* source) {
 	if (source->tag == ast_argument_list) {
-		for (int i = 0; i < source->childCount; i++) {
+		for (int i = 0; i < source->child_count; i++) {
 			class_loader_ilload_argument_list(self, list, ast_at(source, i));
 		}
 	} else if (source->tag == ast_argument) {

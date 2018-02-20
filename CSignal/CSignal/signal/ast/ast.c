@@ -26,7 +26,7 @@ ast * ast_new(ast_tag tag) {
 	ast* ret = (ast*)MEM_MALLOC(sizeof(ast));
 	assert(ret != NULL);
 	ret->tag = tag;
-	ret->childCount = 0;
+	ret->child_count = 0;
 	ret->children = NULL;
 	//行番号を取得
 	parser* p = parser_top();
@@ -104,7 +104,7 @@ ast * ast_push(ast * self, ast * child) {
 		self->children = list_new();
 	}
 	list_add(self->children, child);
-	self->childCount++;
+	self->child_count++;
 	//行番号を補正
 	parser* p = parser_top();
 	if (p != NULL) {
@@ -118,7 +118,7 @@ ast * ast_push(ast * self, ast * child) {
 
 ast* ast_at(ast * self, int index) {
 	assert(self != NULL);
-	assert(index >= 0 && index < self->childCount);
+	assert(index >= 0 && index < self->child_count);
 	return (ast*)list_at(self->children, index);
 }
 
@@ -400,14 +400,14 @@ static void ast_print_tree_impl(ast* self, int depth) {
 	ast_print_indent(depth);
 	ast_print(self);
 	text_putline();
-	for (int i = 0; i < self->childCount; i++) {
+	for (int i = 0; i < self->child_count; i++) {
 		ast_print_tree_impl(ast_at(self, i), depth + 1);
 	}
 }
 
 static void ast_delete_impl(ast* self) {
 	//*
-	for (int i = 0; i < self->childCount; i++) {
+	for (int i = 0; i < self->child_count; i++) {
 		ast_delete((ast*)list_at(self->children, i));
 	}
 	list_delete(self->children, list_deleter_null);
@@ -428,7 +428,7 @@ static void ast_delete_impl(ast* self) {
 
 static void ast_list_deleter(list_item item) {
 	ast* self = (ast*)item;
-	for (int i = 0; i < self->childCount; i++) {
+	for (int i = 0; i < self->child_count; i++) {
 		ast_delete(ast_at(self, i));
 	}
 	if (ast_has_str(self)) {
