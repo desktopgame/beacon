@@ -61,7 +61,7 @@ vm * vm_new() {
 	ret->level = 0;
 	ret->terminate = false;
 	ret->validate = false;
-	ret->nativeThrowPos = -1;
+	ret->native_throw_pos = -1;
 	ret->exception = NULL;
 	ret->children_vec = vector_new();
 	return ret;
@@ -619,9 +619,9 @@ void vm_resume(vm * self, enviroment * env, int pos) {
 				break;
 		}
 		//ネイティブメソッドからスローされた例外を検出
-		if (self->nativeThrowPos != -1) {
-			i = self->nativeThrowPos;
-			self->nativeThrowPos = -1;
+		if (self->native_throw_pos != -1) {
+			i = self->native_throw_pos;
+			self->native_throw_pos = -1;
 		}
 		//キャッチされなかった例外によって終了する
 		if (self->terminate) {
@@ -643,7 +643,7 @@ void vm_native_throw(vm * self, object * exc) {
 	} else {
 		int temp = 0;
 		vm_validate(self, self->contextRef->buf->source->length, &temp);
-		self->nativeThrowPos = temp;
+		self->native_throw_pos = temp;
 	}
 }
 
