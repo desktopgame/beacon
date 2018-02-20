@@ -23,7 +23,7 @@ parser * parser_push(yacc_input_type input_type) {
 	p->sBuffer = NULL;
 	p->error_line_index = 0;
 	p->error_line_text = NULL;
-	p->errorColumnIndex = 0;
+	p->error_column_index = 0;
 	p->error_message = NULL;
 	p->source_name = text_strdup("unknown-source");
 	p->fail = false;
@@ -142,7 +142,7 @@ void parser_print_error(parser * p) {
 	//put line
 	text_printf("line=%d ", p->error_line_index);
 	//put column
-	text_printf("column=%d", p->errorColumnIndex);
+	text_printf("column=%d", p->error_column_index);
 	text_putline();
 	//put str
 	text_printf("%s", p->error_message);

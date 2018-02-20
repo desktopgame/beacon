@@ -46,7 +46,7 @@ int yyerror(char * err_str) {
 	parser* p = parser_top();
 	p->fail = true;
 	p->error_line_index = yylloc.last_line;
-	p->errorColumnIndex = yylloc.last_column;
+	p->error_column_index = yylloc.last_column;
 	p->error_message = text_strdup(err_str);
 	p->error_line_text  = text_lineat(yaccSourceBuffer, yylloc.last_line);
 	return 1;

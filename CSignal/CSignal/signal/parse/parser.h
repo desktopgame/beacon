@@ -19,7 +19,7 @@ typedef struct parser {
 	char* error_line_text;
 	char* error_message;
 	int error_line_index;
-	int errorColumnIndex;
+	int error_column_index;
 	yacc_input_type input_type;
 	bool fail;
 	uint32_t lineno;
