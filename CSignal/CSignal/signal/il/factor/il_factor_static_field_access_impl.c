@@ -23,7 +23,7 @@ il_factor_static_field_access * il_factor_static_field_access_new(const char* na
 	ret->fqcn = fqcn_cache_new();
 	ret->name = text_strdup(name);
 	ret->f = NULL;
-	ret->fieldIndex = -1;
+	ret->field_index = -1;
 	return ret;
 }
 
@@ -37,7 +37,7 @@ void il_factor_static_field_access_generate(il_factor_static_field_access * self
 	il_factor_static_field_access_find(self, env, cache);
 	opcode_buf_add(env->buf, (vector_item)op_get_static);
 	opcode_buf_add(env->buf, (vector_item)self->f->parent->absolute_index);
-	opcode_buf_add(env->buf, (vector_item)self->fieldIndex);
+	opcode_buf_add(env->buf, (vector_item)self->field_index);
 }
 
 type * il_factor_static_field_access_eval(il_factor_static_field_access * self, enviroment * env, il_load_cache* cache) {
@@ -64,5 +64,5 @@ static void il_factor_static_field_access_find(il_factor_static_field_access * s
 	//クラスが見つからなかったらエラー
 	assert(cls != NULL);
 	self->f = class_find_sfield_tree(cls, self->name, &temp);
-	self->fieldIndex = temp;
+	self->field_index = temp;
 }

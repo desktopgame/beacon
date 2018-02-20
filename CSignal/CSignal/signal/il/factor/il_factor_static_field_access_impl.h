@@ -13,7 +13,7 @@ typedef struct il_factor_static_field_access {
 	fqcn_cache* fqcn;
 	char* name;
 	struct field* f;
-	int fieldIndex;
+	int field_index;
 } il_factor_static_field_access;
 
 /**

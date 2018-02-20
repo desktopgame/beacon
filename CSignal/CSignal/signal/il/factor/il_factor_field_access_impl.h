@@ -13,7 +13,7 @@ typedef struct il_factor_field_access {
 	il_factor* fact;
 	char* name;
 	struct field* f;
-	int fieldIndex;
+	int field_index;
 } il_factor_field_access;
 
 /**

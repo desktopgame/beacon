@@ -393,7 +393,7 @@ static void assign_generate_simple(il_factor_binary_op * self, enviroment* env, 
 		//プット
 		opcode_buf_add(env->buf, op_put_static);
 		opcode_buf_add(env->buf, sfa->f->parent->absolute_index);
-		opcode_buf_add(env->buf, sfa->fieldIndex);
+		opcode_buf_add(env->buf, sfa->field_index);
 	} else if (self->left->type == ilfactor_field_access) {
 		//右辺をプッシュ
 		il_factor_field_access* field_access = self->left->u.field_access_;
@@ -408,10 +408,10 @@ static void assign_generate_simple(il_factor_binary_op * self, enviroment* env, 
 		if (modifier_is_static(field_access->f->modifier)) {
 			opcode_buf_add(env->buf, op_put_static);
 			opcode_buf_add(env->buf, field_access->f->parent->absolute_index);
-			opcode_buf_add(env->buf, field_access->fieldIndex);
+			opcode_buf_add(env->buf, field_access->field_index);
 		} else {
 			opcode_buf_add(env->buf, op_put_field);
-			opcode_buf_add(env->buf, field_access->fieldIndex);
+			opcode_buf_add(env->buf, field_access->field_index);
 		}
 	} else {
 		type* lt = il_factor_eval(self->left, env, cache);
@@ -447,7 +447,7 @@ static void assign_generate_end(il_factor_binary_op * self, enviroment* env, il_
 		//il_factor_generate(self->right, env);
 		opcode_buf_add(env->buf, op_put_static);
 		opcode_buf_add(env->buf, sfa->f->parent->absolute_index);
-		opcode_buf_add(env->buf, sfa->fieldIndex);
+		opcode_buf_add(env->buf, sfa->field_index);
 	} else if (self->left->type == ilfactor_field_access) {
 		il_factor_field_access* field_access = self->left->u.field_access_;
 		if (modifier_is_static(field_access->f->modifier)) {
@@ -457,14 +457,14 @@ static void assign_generate_end(il_factor_binary_op * self, enviroment* env, il_
 			//プット
 			opcode_buf_add(env->buf, op_put_static);
 			opcode_buf_add(env->buf, field_access->f->parent->absolute_index);
-			opcode_buf_add(env->buf, field_access->fieldIndex);
+			opcode_buf_add(env->buf, field_access->field_index);
 		} else {
 			//代入先のフィールドの型でルックアップ
 			opcode_buf_add(env->buf, op_lookup);
 			opcode_buf_add(env->buf, field_access->f->type->absolute_index);
 			//プット
 			opcode_buf_add(env->buf, op_put_field);
-			opcode_buf_add(env->buf, field_access->fieldIndex);
+			opcode_buf_add(env->buf, field_access->field_index);
 		}
 	} else {
 		il_factor_eval(self->left, env, cache);

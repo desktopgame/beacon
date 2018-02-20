@@ -25,7 +25,7 @@ il_factor_field_access * il_factor_field_access_new(const char * name) {
 	ret->name = text_strdup(name);
 	ret->fact = NULL;
 	ret->f = NULL;
-	ret->fieldIndex = -1;
+	ret->field_index = -1;
 	return ret;
 }
 
@@ -42,12 +42,12 @@ void il_factor_field_access_generate(il_factor_field_access * self, enviroment *
 	if (modifier_is_static(self->f->modifier)) {
 		opcode_buf_add(env->buf, op_get_static);
 		opcode_buf_add(env->buf, self->f->parent->absolute_index);
-		opcode_buf_add(env->buf, self->fieldIndex);
+		opcode_buf_add(env->buf, self->field_index);
 	} else {
 		il_factor_generate(self->fact, env, cache);
 
 		opcode_buf_add(env->buf, op_get_field);
-		opcode_buf_add(env->buf, self->fieldIndex);
+		opcode_buf_add(env->buf, self->field_index);
 	}
 }
 
@@ -72,7 +72,7 @@ static void il_factor_field_access_find(il_factor_field_access * self, enviromen
 	//TEST(env->toplevel);
 	//ここでもしfactがvariableなら、
 	//対応するクラス名があるか調べる
-	//あったならfactは開放して、f/fieldIndexも再検索
+	//あったならfactは開放して、f/field_indexも再検索
 	if (self->fact->type == ilfactor_variable) {
 		il_factor_variable* var = self->fact->u.variable_;
 		namespace_* top = (namespace_*)vector_top(cache->namespace_vec);
@@ -87,12 +87,12 @@ static void il_factor_field_access_find(il_factor_field_access * self, enviromen
 		if (cls != NULL) {
 			//静的フィールド
 			self->f = class_find_sfield_tree(cls, self->name, &temp);
-			self->fieldIndex = temp;
+			self->field_index = temp;
 		} else {
 			//クラスではなかったので変数として扱う
 			self->f = class_find_field_tree(cls, self->name, &temp);
 			TEST(self->f == NULL);
-			self->fieldIndex = temp;
+			self->field_index = temp;
 		}
 	//variableではない(戻り値や式の結果)
 	//
@@ -101,7 +101,7 @@ static void il_factor_field_access_find(il_factor_field_access * self, enviromen
 		assert(tp->tag == type_class);
 		self->f = class_find_field_tree(tp->u.class_, self->name, &temp);
 		TEST(self->f == NULL);
-		self->fieldIndex = temp;
+		self->field_index = temp;
 	}
 	//*/
 	//TEST(env->toplevel);
