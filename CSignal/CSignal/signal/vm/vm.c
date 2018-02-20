@@ -63,7 +63,7 @@ vm * vm_new() {
 	ret->validate = false;
 	ret->nativeThrowPos = -1;
 	ret->exception = NULL;
-	ret->childrenVec = vector_new();
+	ret->children_vec = vector_new();
 	return ret;
 }
 
@@ -72,7 +72,7 @@ vm * vm_sub(vm * parent) {
 	ret->parent = parent;
 	ret->level = parent->level + 1;
 
-	vector_push(parent->childrenVec, ret);
+	vector_push(parent->children_vec, ret);
 	return ret;
 }
 
@@ -659,8 +659,8 @@ void vm_catch(vm * self) {
 	if (self == NULL) {
 		return;
 	}
-	for (int i = 0; i < self->childrenVec->length; i++) {
-		vm* e = (vm*)vector_at(self->childrenVec, i);
+	for (int i = 0; i < self->children_vec->length; i++) {
+		vm* e = (vm*)vector_at(self->children_vec, i);
 		vm_catch(e);
 	}
 	self->exception = NULL;
@@ -741,7 +741,7 @@ void vm_delete(vm * self) {
 	//operand_stack_delete(self->operand_stack);
 	vector_delete(self->value_stack, vector_deleter_null);
 	vector_delete(self->ref_stack, vector_deleter_null);
-	vector_delete(self->childrenVec, vector_deleter_null);
+	vector_delete(self->children_vec, vector_deleter_null);
 	MEM_FREE(self);
 }
 
@@ -809,14 +809,14 @@ static bool stack_popb(vm* self) {
 
 static void remove_from_parent(vm* self) {
 	if (self->parent != NULL) {
-		int idx = vector_find(self->parent->childrenVec, self);
-		vector_remove(self->parent->childrenVec, idx);
+		int idx = vector_find(self->parent->children_vec, self);
+		vector_remove(self->parent->children_vec, idx);
 	}
 }
 
 static void vm_markallImpl(vm* self) {
-	for (int i = 0; i < self->childrenVec->length; i++) {
-		vm* e = (vm*)vector_at(self->childrenVec, i);
+	for (int i = 0; i < self->children_vec->length; i++) {
+		vm* e = (vm*)vector_at(self->children_vec, i);
 		vm_markallImpl(e);
 	}
 	for (int i = 0; i < self->value_stack->length; i++) {

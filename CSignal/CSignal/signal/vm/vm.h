@@ -26,7 +26,7 @@ typedef struct vm {
 	//つまりメインファイルとなります。
 	//子要素を記憶しておく必要があるのは、
 	//ガベージコレクションのためです。
-	vector* childrenVec;
+	vector* children_vec;
 
 	//親VMです.
 	//コンストラクタ/メソッドが終了した場合、
