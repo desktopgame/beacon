@@ -21,7 +21,7 @@ parser * parser_push(yacc_input_type input_type) {
 	p->linenoVec = vector_new();
 	p->root = ast_new(ast_root);
 	p->sBuffer = NULL;
-	p->errorLineIndex = 0;
+	p->error_line_index = 0;
 	p->error_line_text = NULL;
 	p->errorColumnIndex = 0;
 	p->error_message = NULL;
@@ -140,7 +140,7 @@ void parser_print_error(parser * p) {
 	//put filename
 	text_printf("file=%s ", p->source_name);
 	//put line
-	text_printf("line=%d ", p->errorLineIndex);
+	text_printf("line=%d ", p->error_line_index);
 	//put column
 	text_printf("column=%d", p->errorColumnIndex);
 	text_putline();
