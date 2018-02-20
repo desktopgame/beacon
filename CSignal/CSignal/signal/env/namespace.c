@@ -26,24 +26,24 @@ static namespace_delete_type(tree_item item);
 namespace_ * namespace_create_at_root(char * name) {
 	assert(name != NULL);
 	script_context* ctx = script_context_get_current();
-	if (ctx->namespaceMap == NULL) {
-		ctx->namespaceMap = tree_map_new();
+	if (ctx->namespace_map == NULL) {
+		ctx->namespace_map = tree_map_new();
 	}
-	tree_item item = tree_map_get(ctx->namespaceMap, name);
+	tree_item item = tree_map_get(ctx->namespace_map, name);
 	if (item == NULL) {
 		char* dup = name;//_strdup(name);
 		namespace_* newNamespace = namespace_malloc(dup);
-		tree_map_put(ctx->namespaceMap, name, newNamespace);
+		tree_map_put(ctx->namespace_map, name, newNamespace);
 		return newNamespace;
 	} else return (namespace_*)item;
 }
 
 namespace_ * namespace_get_at_root(char * name) {
 	script_context* ctx = script_context_get_current();
-	if (ctx->namespaceMap == NULL) {
+	if (ctx->namespace_map == NULL) {
 		return NULL;
 	}
-	return (namespace_*)tree_map_get(ctx->namespaceMap, name);
+	return (namespace_*)tree_map_get(ctx->namespace_map, name);
 }
 
 namespace_ * namespace_add_namespace(namespace_ * self, char * name) {
@@ -155,11 +155,11 @@ type * namespace_null_class() {
 
 void namespace_dump() {
 	script_context* ctx = script_context_get_current();
-	if (ctx->namespaceMap == NULL) {
+	if (ctx->namespace_map == NULL) {
 		return;
 	}
-	namespace_dump_root(ctx->namespaceMap->left, true, 0);
-	namespace_dump_root(ctx->namespaceMap->right, true, 0);
+	namespace_dump_root(ctx->namespace_map->left, true, 0);
+	namespace_dump_root(ctx->namespace_map->right, true, 0);
 }
 
 void namespace_unlink(namespace_ * self) {
