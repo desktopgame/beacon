@@ -54,7 +54,7 @@ class_loader* class_loader_new() {
 	ret->import_manager = import_manager_new();
 	ret->env = enviroment_new();
 	ret->error = false;
-	ret->type_cacheVec = vector_new();
+	ret->type_cache_vec = vector_new();
 	ret->level = 0;
 	ret->loaded_namespace = false;
 	ret->linked_allimports = false;
@@ -131,7 +131,7 @@ void class_loader_delete(class_loader * self) {
 	//free(self->source_code);
 	ast_delete(self->source_code);
 	il_top_level_delete(self->il_code);
-	vector_delete(self->type_cacheVec, class_loader_cache_delete);
+	vector_delete(self->type_cache_vec, class_loader_cache_delete);
 	import_manager_delete(self->import_manager);
 	enviroment_delete(self->env);
 	MEM_FREE(self->filename);

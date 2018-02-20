@@ -21,7 +21,7 @@ typedef struct class_loader {
 	struct enviroment* env;
 	import_manager* import_manager;
 	content_type type;
-	vector* type_cacheVec;
+	vector* type_cache_vec;
 	struct class_loader* parent;
 	int level;
 	bool loaded_namespace;

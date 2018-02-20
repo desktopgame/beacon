@@ -195,7 +195,7 @@ void class_loader_sgload_class(class_loader* self, il_type* iltype, namespace_* 
 		parent,
 		cachekind_class_decl
 	);
-	vector_push(self->type_cacheVec, tc);
+	vector_push(self->type_cache_vec, tc);
 //	class_loader_sgload_class_decl(self, iltype, tp, parent);
 	//実装のロードを予約
 	type_cache* mtc = type_cache_init(
@@ -206,7 +206,7 @@ void class_loader_sgload_class(class_loader* self, il_type* iltype, namespace_* 
 		parent,
 		cachekind_class_impl
 	);
-	vector_push(self->type_cacheVec, mtc);
+	vector_push(self->type_cache_vec, mtc);
 }
 
 void class_loader_sgload_interface(class_loader * self, il_type * iltype, namespace_ * parent) {
@@ -238,7 +238,7 @@ void class_loader_sgload_interface(class_loader * self, il_type * iltype, namesp
 		parent,
 		cachekind_interface_decl
 	);
-	vector_push(self->type_cacheVec, tc);
+	vector_push(self->type_cache_vec, tc);
 	//実装のロードを予約
 	type_cache* mtc = type_cache_init(
 		type_cache_new(),
@@ -248,7 +248,7 @@ void class_loader_sgload_interface(class_loader * self, il_type * iltype, namesp
 		parent,
 		cachekind_interface_impl
 	);
-	vector_push(self->type_cacheVec, mtc);
+	vector_push(self->type_cache_vec, mtc);
 }
 
 void class_loader_sgload_attach_native_method(class_loader* self, il_type* ilclass, class_* classz, il_method* ilmethod, method* me) {
@@ -382,8 +382,8 @@ static class_loader* class_loader_sgload_importImplNew(class_loader* self, char*
 static void class_loader_sgload_excecClassDecl(class_loader* self) {
 	int count = 0;
 	//text_printfln("CLASS_DECL %s ==", self->filename);
-	for (int i = 0; i < self->type_cacheVec->length; i++) {
-		type_cache* e = (type_cache*)vector_at(self->type_cacheVec, i);
+	for (int i = 0; i < self->type_cache_vec->length; i++) {
+		type_cache* e = (type_cache*)vector_at(self->type_cache_vec, i);
 		if (e->kind != cachekind_class_decl || e->consume) {
 			continue;
 		}
@@ -399,8 +399,8 @@ static void class_loader_sgload_excecClassDecl(class_loader* self) {
 static void class_loader_sgload_excecClassImpl(class_loader* self) {
 	int count = 0;
 	//text_printfln("CLASS_IMPL %s ==", self->filename);
-	for (int i = 0; i < self->type_cacheVec->length; i++) {
-		type_cache* e = (type_cache*)vector_at(self->type_cacheVec, i);
+	for (int i = 0; i < self->type_cache_vec->length; i++) {
+		type_cache* e = (type_cache*)vector_at(self->type_cache_vec, i);
 		if (e->kind != cachekind_class_impl || e->consume) {
 			continue;
 		}
@@ -416,8 +416,8 @@ static void class_loader_sgload_excecClassImpl(class_loader* self) {
 static void class_loader_sgload_excecInterfaceDecl(class_loader* self) {
 	int count = 0;
 	//text_printfln("INTERFACE_DECL %s ==", self->filename);
-	for (int i = 0; i < self->type_cacheVec->length; i++) {
-		type_cache* e = (type_cache*)vector_at(self->type_cacheVec, i);
+	for (int i = 0; i < self->type_cache_vec->length; i++) {
+		type_cache* e = (type_cache*)vector_at(self->type_cache_vec, i);
 		if (e->kind != cachekind_interface_decl || e->consume) {
 			continue;
 		}
@@ -433,8 +433,8 @@ static void class_loader_sgload_excecInterfaceDecl(class_loader* self) {
 static void class_loader_sgload_excecInterfaceImpl(class_loader* self) {
 	int count = 0;
 	//text_printfln("INTERFACE_IMPL %s ==", self->filename);
-	for (int i = 0; i < self->type_cacheVec->length; i++) {
-		type_cache* e = (type_cache*)vector_at(self->type_cacheVec, i);
+	for (int i = 0; i < self->type_cache_vec->length; i++) {
+		type_cache* e = (type_cache*)vector_at(self->type_cache_vec, i);
 		if (e->kind != cachekind_interface_impl || e->consume) {
 			continue;
 		}
