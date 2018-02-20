@@ -11,7 +11,7 @@ typedef struct il_constructor_chain {
 	constructor_chain_type type;
 	vector* argument_list;
 	struct constructor* c;
-	int constructorIndex;
+	int constructor_index;
 } il_constructor_chain;
 /**
  * コンストラクタの連鎖を表す要素を作成します.

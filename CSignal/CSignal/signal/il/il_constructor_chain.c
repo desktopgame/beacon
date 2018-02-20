@@ -12,7 +12,7 @@ il_constructor_chain * il_constructor_chain_new() {
 	ret->type = chain_type_this;
 	ret->argument_list = vector_new();
 	ret->c = NULL;
-	ret->constructorIndex = -1;
+	ret->constructor_index = -1;
 	return ret;
 }
 

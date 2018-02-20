@@ -369,7 +369,7 @@ static void class_loader_sgload_chain_auto(class_loader * self, il_type * iltype
 	//自動的にそれへ連鎖するチェインをおぎなう
 	il_constructor_chain* ch_empty = il_constructor_chain_new();
 	ch_empty->c = emptyTarget;
-	ch_empty->constructorIndex = emptyTemp;
+	ch_empty->constructor_index = emptyTemp;
 	ch_empty->type = ast_constructor_chain_super;
 	ilcons->chain = ch_empty;
 	//親クラスへ連鎖
@@ -403,7 +403,7 @@ static void class_loader_sgload_chain_super(class_loader * self, il_type * iltyp
 		opcode_buf_add(env->buf, classz->super_class->classIndex);
 	}
 	chain->c = chainTarget;
-	chain->constructorIndex = temp;
+	chain->constructor_index = temp;
 	opcode_buf_add(env->buf, temp);
 	//親クラスへのチェインなら即座にフィールドを確保
 	opcode_buf_add(env->buf, op_alloc_field);
