@@ -296,7 +296,7 @@ static void class_loader_sgload_subImpl(class_loader * self, char * fullPath) {
 	}
 	//そのローダーが破損しているなら
 	if (cll->error) {
-		class_loader_error(self, cll->errorMessage);
+		class_loader_error(self, cll->error_message);
 	}
 	//パースをキャンセル
 	if (self->error) {
@@ -358,7 +358,7 @@ static void class_loader_sgload_importImplAlready(class_loader* self, class_load
 	//text_printf("aimport %s\n", cll->filename);
 	//そのローダーが破損しているなら
 	if (cll->error) {
-		class_loader_error(self, cll->errorMessage);
+		class_loader_error(self, cll->error_message);
 		return;
 	}
 	class_loader_sgload_yield(self, cll);

@@ -27,7 +27,7 @@ typedef struct class_loader {
 	bool loaded_namespace;
 	bool linked_allimports;
 	char* filename;
-	char* errorMessage;
+	char* error_message;
 	bool error;
 } class_loader;
 

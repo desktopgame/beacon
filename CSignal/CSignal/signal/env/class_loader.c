@@ -58,7 +58,7 @@ class_loader* class_loader_new() {
 	ret->level = 0;
 	ret->loaded_namespace = false;
 	ret->linked_allimports = false;
-	ret->errorMessage = NULL;
+	ret->error_message = NULL;
 	ret->env->context_ref = ret;
 	text_printfln("new classloader");
 	//ret->link = classlink_unlinked;
@@ -135,13 +135,13 @@ void class_loader_delete(class_loader * self) {
 	import_manager_delete(self->import_manager);
 	enviroment_delete(self->env);
 	MEM_FREE(self->filename);
-	MEM_FREE(self->errorMessage);
+	MEM_FREE(self->error_message);
 	MEM_FREE(self);
 }
 
 //utilitiy
 void class_loader_error(class_loader* self, const char* message) {
-	self->errorMessage = text_strdup(message);
+	self->error_message = text_strdup(message);
 	self->error = true;
 	text_printf("%s", message);
 	text_putline();
