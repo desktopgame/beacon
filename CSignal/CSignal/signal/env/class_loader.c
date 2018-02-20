@@ -57,7 +57,7 @@ class_loader* class_loader_new() {
 	ret->type_cacheVec = vector_new();
 	ret->level = 0;
 	ret->loaded_namespace = false;
-	ret->linkedAllImports = false;
+	ret->linked_allimports = false;
 	ret->errorMessage = NULL;
 	ret->env->context_ref = ret;
 	text_printfln("new classloader");
@@ -163,10 +163,10 @@ void class_loader_errorf(class_loader* self, const char* message, ...) {
 
 //private
 static void class_loader_link(class_loader* self) {
-	if (self->linkedAllImports) {
+	if (self->linked_allimports) {
 		return;
 	}
-	self->linkedAllImports = true;
+	self->linked_allimports = true;
 	import_manager* importMgr = self->import_manager;
 	for (int i = 0; i < importMgr->infoVec->length; i++) {
 		import_info* info = (import_info*)vector_at(importMgr->infoVec, i);

@@ -25,7 +25,7 @@ typedef struct class_loader {
 	struct class_loader* parent;
 	int level;
 	bool loaded_namespace;
-	bool linkedAllImports;
+	bool linked_allimports;
 	char* filename;
 	char* errorMessage;
 	bool error;
