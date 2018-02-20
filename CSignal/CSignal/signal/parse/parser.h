@@ -16,7 +16,7 @@ typedef struct parser {
 	string_buffer* sBuffer;
 	//char* source;
 	char* source_name;
-	char* errorLineText;
+	char* error_line_text;
 	char* errorMessage;
 	int errorLineIndex;
 	int errorColumnIndex;
