@@ -13,23 +13,23 @@ static void import_manager_delete_import_info(vector_item item);
 
 import_manager * import_manager_new() {
 	import_manager* ret = (import_manager*)MEM_MALLOC(sizeof(import_manager));
-	ret->infoVec = vector_new();
+	ret->info_vec = vector_new();
 	return ret;
 }
 
 import_info* import_manager_import(import_manager * self, class_loader * target) {
 	import_info* info = import_info_new();
 	info->context = target;
-	vector_push(self->infoVec, info);
+	vector_push(self->info_vec, info);
 //	vector_push(self->class_loader_list, target);
 	return info;
 }
 
 bool import_manager_loaded(import_manager * self, int index) {
-	if (index >= self->infoVec->length) {
+	if (index >= self->info_vec->length) {
 		return false;
 	}
-	import_info* info = (import_info*)vector_at(self->infoVec, index);
+	import_info* info = (import_info*)vector_at(self->info_vec, index);
 	return info->consume;
 }
 
@@ -38,7 +38,7 @@ type * import_manager_resolve(import_manager* self, namespace_* scope, fqcn_cach
 }
 
 void import_manager_delete(import_manager * self) {
-	vector_delete(self->infoVec, import_manager_delete_import_info);
+	vector_delete(self->info_vec, import_manager_delete_import_info);
 	MEM_FREE(self);
 }
 //private

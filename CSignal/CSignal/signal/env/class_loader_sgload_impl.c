@@ -71,7 +71,7 @@ void class_loader_sgload_sub(class_loader * self, char * fullPath) {
 
 void class_loader_sgload_import(class_loader* self, vector* ilimports) {
 //	TEST(self->import_manager->infoVec->length > 0);
-	for (int i = self->import_manager->infoVec->length; i < ilimports->length; i++) {
+	for (int i = self->import_manager->info_vec->length; i < ilimports->length; i++) {
 		class_loader_sgload_importImpl(self, ilimports, i);
 	}
 }

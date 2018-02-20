@@ -13,7 +13,7 @@ struct import_info;
  * あるファイルが参照しているファイルの一覧を管理します.
  */
 typedef struct import_manager {
-	vector* infoVec;
+	vector* info_vec;
 } import_manager;
 
 /**

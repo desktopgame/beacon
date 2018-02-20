@@ -168,8 +168,8 @@ static void class_loader_link(class_loader* self) {
 	}
 	self->linked_allimports = true;
 	import_manager* importMgr = self->import_manager;
-	for (int i = 0; i < importMgr->infoVec->length; i++) {
-		import_info* info = (import_info*)vector_at(importMgr->infoVec, i);
+	for (int i = 0; i < importMgr->info_vec->length; i++) {
+		import_info* info = (import_info*)vector_at(importMgr->info_vec, i);
 		if (info->consume) {
 			continue;
 		}
