@@ -18,8 +18,9 @@ class Make
 		file = File.open(line, "r")
 		file.each do |line|
 			#整形していろいろやる
-			styledText = line.chomp
-			if(styledText.start_with?(";")) then
+			styledText = line.strip
+			if(styledText.start_with?(";;")) then
+				p "find  " + line
 				next
 			end
 			#lineのほうを追記
