@@ -1,3 +1,4 @@
+# coding: utf-8
 require 'open3'
 
 #o, e, s = Open3.capture3("/Users/koya/Desktop/VSCode/CSignal/CSignal/CSignal/CSignal/signal/parse/flex_compile.sh")

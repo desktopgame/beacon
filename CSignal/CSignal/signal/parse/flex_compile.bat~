@@ -1,7 +1,0 @@
-cd C:\FlexYACC\bin
-bison -d C:\Users\Koya\Documents\GitHub\CSignal\CSignal\CSignal\signal\parse\signal.y
-flex C:\Users\Koya\Documents\GitHub\CSignal\CSignal\CSignal\signal\parse\signal.l
-move /Y C:\FlexYACC\bin\signal.tab.h C:\Users\Koya\Documents\GitHub\CSignal\CSignal\CSignal\signal\parse\signal.tab.h
-move /Y C:\FlexYACC\bin\signal.tab.c C:\Users\Koya\Documents\GitHub\CSignal\CSignal\CSignal\signal\parse\signal.tab.c
-move /Y C:\FlexYACC\bin\lex.yy.c C:\Users\Koya\Documents\GitHub\CSignal\CSignal\CSignal\signal\parse\lex.yy.c
-set /P USR_INPUT_STR = "キーを押して終了"
