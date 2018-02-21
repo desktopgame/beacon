@@ -15,17 +15,19 @@ class Make
 	#
 	def self.__readstr__(line)
 		buffer = ""
-		file = File.open(line, "r")
+		file = File.open(line.strip, "r")
 		file.each do |line|
 			#整形していろいろやる
 			styledText = line.strip
 			if(styledText.start_with?(";;")) then
-				p "find  " + line
+				printf "comment: " + styledText
+				printf "\n"
 				next
 			end
 			#lineのほうを追記
 			buffer += line
 		end
+		buffer += "\n"
 		file.close()
 		return buffer
 	end
@@ -57,5 +59,4 @@ class Make
 	def self.yy()
 		__config_out__("yy.makeconfig", "signal.y")
 	end
-
 end

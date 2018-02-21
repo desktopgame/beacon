@@ -1,0 +1,83 @@
+
+%locations
+%token <ast_value>			CHAR_LITERAL
+%token <ast_value>			STRING_LITERAL
+%token <ast_value>			INT
+%token <ast_value>			DOUBLE
+%token <string_value>		IDENT
+%type <assign_otype_value>	assign_type_T
+%type <chain_type_value>	constructor_chain_type_T
+%type <access_level_value>	access_level_T
+%type <modifier_type_value> modifier_type_T;
+%token DOT COMMA COMMA_OPT COLON COLO_COLO
+		ADD SUB MUL DIV MOD NOT
+		ASSIGN ADD_ASSIGN SUB_ASSIGN MUL_ASSIGN DIV_ASSIGN MOD_ASSIGN
+		EQUAL NOTEQUAL
+		INC DEC
+		GT GE LT LE
+		BIT_AND LOGIC_AND BIT_OR LOGIC_OR
+		LCB RCB LRB RRB LSB RSB
+		SEMI IMPORT VAR
+		THIS SUPER TRUE FALSE NULL_TOK AS
+		INTERFACE CLASS ENUM PUBLIC PRIVATE PROTECTED STATIC NATIVE NEW
+		CTOR DEF ARROW NAMESPACE RETURN
+		IF ELIF ELSE WHILE BREAK CONTINUE TRY CATCH THROW
+%type <ast_value> root 
+					top_level 
+					namespace_decl
+					namespace_body
+					namespace_member_decl_list
+					namespace_member_decl
+					namespace_member_decl_optional
+					namespace_path
+					import 
+					class_decl 
+					enum_decl
+					interface_decl
+						access_member_tree
+						access_member_list
+						member_define_list
+						member_define
+						constructor_define
+						constructor_chain
+						constructor_chain_optional
+						function_define
+						method_define
+						field_define
+						ident_list
+						parameter_list
+						argument_list
+						typename_list
+						typename_T
+						fqcn_part
+					expression 
+						assign 
+						or 
+						and 
+						equal 
+						compare 
+						addsub 
+						muldiv 
+						unary 
+						prefix 
+						postfix 
+						primary
+					stmt_list
+						stmt
+						variable_decl_stmt
+						variable_init_stmt
+						inferenced_type_init_stmt
+						if_stmt
+							elif_list
+							elif
+						while_stmt
+						break_stmt
+						continue_stmt
+						return_stmt
+						throw_stmt
+						try_stmt
+						catch_stmt_list
+						catch_stmt
+						scope
+						scope_optional
+%%

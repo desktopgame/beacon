@@ -141,6 +141,7 @@ static void update_loc() {
 %option yy_scan_bytes
 %start ML_COMMENT L_COMMENT STRING_LITERAL_STATE
 %%
+
 <INITIAL>"."				{ return (DOT); }
 <INITIAL>","				{ return (COMMA); }
 <INITIAL>":"				{ return (COLON); }

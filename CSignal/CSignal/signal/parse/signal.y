@@ -21,6 +21,8 @@
 	modifier_type modifier_type_value;
 	access_level access_level_value;
 }
+
+
 %locations
 %token <ast_value>			CHAR_LITERAL
 %token <ast_value>			STRING_LITERAL
@@ -103,6 +105,8 @@
 						scope
 						scope_optional
 %%
+
+
 root
 	: top_level
 	| root top_level
