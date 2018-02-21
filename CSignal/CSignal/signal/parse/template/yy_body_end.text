@@ -1,0 +1,26 @@
+
+
+scope
+	: LCB stmt_list RCB
+	{
+		$$ = ast_new_scope($2);
+	}
+	| LCB RCB
+	{
+		$$ = ast_new_scope_empty();
+	}
+	;
+scope_optional
+	: SEMI
+	{
+		$$ = ast_new_blank();
+	}
+	| scope
+	;
+stmt_term
+	: SEMI
+	| /* empty */
+	;
+%%
+
+

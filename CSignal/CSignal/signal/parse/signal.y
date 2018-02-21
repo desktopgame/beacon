@@ -107,6 +107,8 @@
 %%
 
 
+
+
 root
 	: top_level
 	| root top_level
@@ -427,6 +429,11 @@ fqcn_part
 		$$ = ast_new_fqcn_part_list(ast_new_fqcn_part($1), $3);
 	}
 	;
+
+
+
+
+
 expression
 	: assign
 	;
@@ -660,6 +667,11 @@ primary
 		$$ = ast_new_new_instance($2, ast_new_blank());
 	}
 	;
+
+
+
+
+
 stmt_list
 	: stmt
 	{
@@ -787,6 +799,11 @@ catch_stmt
 		$$ = ast_new_catch($3, $4, $6);
 	}
 	;
+
+
+
+
+
 scope
 	: LCB stmt_list RCB
 	{
@@ -809,3 +826,6 @@ stmt_term
 	| /* empty */
 	;
 %%
+
+
+
