@@ -6,6 +6,18 @@
 #これの後にさらに yacc/bison 自体のビルドを行う。
 #
 class Make
+	def self.__parsecode__(code)
+		ret = eval(code)
+		if(ret.nil?() || ret.empty?()) then
+			return ""
+		end
+		if(ret.instance_of?(String)) then
+			return ret
+		else
+			return ret.to_s
+		end
+	end
+
 	#
 	#定義ファイルを読み込む関数
 	#.l や .y にはコメントを埋められないので、
@@ -16,16 +28,41 @@ class Make
 	def self.__readstr__(line)
 		buffer = ""
 		file = File.open(line.strip, "r")
+
+		inCode = false
+		buffCode = ""
+		lineno = 0
 		file.each do |line|
+			lineno += 1
 			#整形していろいろやる
+			#;;から始まる行は無視
 			styledText = line.strip
 			if(styledText.start_with?(";;")) then
 				printf "comment: " + styledText
 				printf "\n"
 				next
 			end
-			#lineのほうを追記
-			buffer += line
+			#既にコードの中なら終了を検出する
+			if(inCode) then
+				if(styledText == "$$}") then
+					inCode = false
+					buffer += __parsecode__(buffCode)
+				else
+					buffCode += line
+				end
+			#コードの外なら開始を検出する
+			else
+				#コードを開始
+				if(styledText == "$${") then
+					inCode = true
+					buffCode = ""
+				else
+					buffer += line
+				end
+			end
+		end
+		if(inCode) then
+			raise "コードブロック $${ ... $$} が終了していません。[" + (line.strip + ":" + lineno.to_s) + "]"
 		end
 		buffer += "\n"
 		file.close()
