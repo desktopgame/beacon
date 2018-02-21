@@ -51,7 +51,7 @@ static WORD savedInstance;
 #define COL_BLUE_MASK 0x01	//  青色ビット
 #endif
 
-void sg_lopen() {
+void logger_open() {
 	if (logger_fp != NULL) {
 		return;
 	}
@@ -83,7 +83,7 @@ void sg_lopen() {
 	fputs("\n", logger_fp);
 }
 
-void sg_lclose() {
+void logger_close() {
 	if (logger_fp == NULL) {
 		return;
 	}
@@ -94,16 +94,16 @@ void sg_lclose() {
 	logger_fp = NULL;
 }
 
-void sg_lset_enabled(bool b) {
+void logger_set_enabled(bool b) {
 	logger_enabled = b;
 }
 
-bool sg_lget_enabled() {
+bool logger_is_enabled() {
 	return logger_enabled;
 }
 
 //http://www.serendip.ws/archives/4635
-void sg_log(log_level level, const char* filename, int lineno, const char * source, ...) {
+void logger_log(log_level level, const char* filename, int lineno, const char * source, ...) {
 	va_list ap;
 	va_start(ap, source);
 	if (logger_enabled) {
@@ -113,7 +113,7 @@ void sg_log(log_level level, const char* filename, int lineno, const char * sour
 }
 
 //FIXME:コピペ
-void sg_debug(const char * filename, int lineno, const char * source, ...) {
+void logger_debug(const char * filename, int lineno, const char * source, ...) {
 	va_list ap;
 	va_start(ap, source);
 	if (logger_enabled) {
@@ -122,7 +122,7 @@ void sg_debug(const char * filename, int lineno, const char * source, ...) {
 	va_end(ap);
 }
 
-void sg_info(const char * filename, int lineno, const char * source, ...) {
+void logger_info(const char * filename, int lineno, const char * source, ...) {
 	va_list ap;
 	va_start(ap, source);
 	if (logger_enabled) {
@@ -131,7 +131,7 @@ void sg_info(const char * filename, int lineno, const char * source, ...) {
 	va_end(ap);
 }
 
-void sg_warn(const char * filename, int lineno, const char * source, ...) {
+void logger_warn(const char * filename, int lineno, const char * source, ...) {
 	va_list ap;
 	va_start(ap, source);
 	if (logger_enabled) {
@@ -140,7 +140,7 @@ void sg_warn(const char * filename, int lineno, const char * source, ...) {
 	va_end(ap);
 }
 
-void sg_error(const char * filename, int lineno, const char * source, ...) {
+void logger_error(const char * filename, int lineno, const char * source, ...) {
 	va_list ap;
 	va_start(ap, source);
 	if (logger_enabled) {
@@ -149,7 +149,7 @@ void sg_error(const char * filename, int lineno, const char * source, ...) {
 	va_end(ap);
 }
 
-void sg_fatal(const char * filename, int lineno, const char * source, ...) {
+void logger_fatal(const char * filename, int lineno, const char * source, ...) {
 	va_list ap;
 	va_start(ap, source);
 	if (logger_enabled) {
@@ -158,7 +158,7 @@ void sg_fatal(const char * filename, int lineno, const char * source, ...) {
 	va_end(ap);
 }
 
-void sg_test(bool cond) {
+void logger_test(bool cond) {
 	if (cond) {
 		int x = 0;
 	}

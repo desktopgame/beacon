@@ -15,8 +15,8 @@ void _start(int argc, char* argv[]) {
 	text_set_trace(true);
 	mem_set_trace(true);
 	//mem_break(4061);
-	sg_lopen();
-	sg_lset_enabled(false);
+	logger_open();
+	logger_set_enabled(false);
 	script_context_open();
 	//cmd_dump(argc, argv);
 
@@ -27,7 +27,7 @@ void _end(int argc, char* argv[]) {
 	bench_end("main", bench_simple);
 	//system("cls");
 	script_context_close();
-	sg_lclose();
+	logger_close();
 
 	mem_dump();
 	mem_destroy();

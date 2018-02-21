@@ -50,7 +50,7 @@ void class_loader_sgload_impl(class_loader* self) {
 }
 
 void class_loader_sgload_link(class_loader * self) {
-	sg_info(__FILE__, __LINE__, "link %s",self->filename);
+	logger_info(__FILE__, __LINE__, "link %s",self->filename);
 
 	class_loader_sgload_import(self, self->il_code->import_list);
 	class_loader_sgload_namespace_tree(self);
@@ -124,7 +124,7 @@ void class_loader_sgload_enum(class_loader * self, il_type * iltype, namespace_ 
 	} else {
 		cls = tp->u.class_;
 	}
-	sg_info(__FILE__, __LINE__, "register enum %s", cls->name);
+	logger_info(__FILE__, __LINE__, "register enum %s", cls->name);
 	//全ての列挙子を public static final フィールドとして追加
 	for (int i = 0; i < ilenum->item_vec->length; i++) {
 		char* str = (char*)vector_at(ilenum->item_vec, i);
@@ -184,7 +184,7 @@ void class_loader_sgload_class(class_loader* self, il_type* iltype, namespace_* 
 			cls->super_class = objClass;
 		}
 	}
-	sg_info(__FILE__, __LINE__, "register class %s", cls->name);
+	logger_info(__FILE__, __LINE__, "register class %s", cls->name);
 	//text_printfln("(( %s ))", type_name(tp));
 	//宣言のロードを予約
 	type_cache* tc = type_cache_init(
@@ -228,7 +228,7 @@ void class_loader_sgload_interface(class_loader * self, il_type * iltype, namesp
 	} else {
 		inter = tp->u.interface_;
 	}
-	sg_info(log_info, __FILE__, __LINE__, "register interface %s", inter->name);
+	logger_info(log_info, __FILE__, __LINE__, "register interface %s", inter->name);
 	//宣言のロードを予約
 	type_cache* tc = type_cache_init(
 		type_cache_new(),
@@ -291,7 +291,7 @@ static void class_loader_sgload_subImpl(class_loader * self, char * fullPath) {
 		return;
 		//新たに読みこんだなら親に設定
 	} else {
-		sg_info(__FILE__, __LINE__, "import new %s", fullPath);
+		logger_info(__FILE__, __LINE__, "import new %s", fullPath);
 		cll = class_loader_sgload_importImplNew(self, fullPath);
 	}
 	//そのローダーが破損しているなら
@@ -373,7 +373,7 @@ static class_loader* class_loader_sgload_importImplNew(class_loader* self, char*
 	//text_printf("nimport %s\n", cll->filename);
 	import_info* info = import_manager_import(self->import_manager, cll);
 	info->consume = false;
-	sg_info(__FILE__, __LINE__, "import put %s", fullPath);
+	logger_info(__FILE__, __LINE__, "import put %s", fullPath);
 	tree_map_put(ctx->class_loader_map, fullPath, cll);
 	return cll;
 }
@@ -392,7 +392,7 @@ static void class_loader_sgload_excecClassDecl(class_loader* self) {
 		class_loader_sgload_class_decl(e->context, e->iltype, e->tp, e->scope);
 	}
 	if (count > 0) {
-		sg_info(__FILE__, __LINE__, "loaded class decl %s", self->filename);
+		logger_info(__FILE__, __LINE__, "loaded class decl %s", self->filename);
 	}
 }
 
@@ -409,7 +409,7 @@ static void class_loader_sgload_excecClassImpl(class_loader* self) {
 		class_loader_sgload_class_impl(e->context, e->iltype, e->tp, e->scope);
 	}
 	if (count > 0) {
-		sg_info(__FILE__, __LINE__, "loaded class impl %s", self->filename);
+		logger_info(__FILE__, __LINE__, "loaded class impl %s", self->filename);
 	}
 }
 
@@ -426,7 +426,7 @@ static void class_loader_sgload_excecInterfaceDecl(class_loader* self) {
 		class_loader_sgload_interface_decl(e->context, e->iltype, e->tp, e->scope);
 	}
 	if(count > 0) {
-		sg_info(__FILE__, __LINE__, "loaded interface decl %s", self->filename);
+		logger_info(__FILE__, __LINE__, "loaded interface decl %s", self->filename);
 	}
 }
 
@@ -443,7 +443,7 @@ static void class_loader_sgload_excecInterfaceImpl(class_loader* self) {
 		class_loader_sgload_interface_impl(e->context, e->iltype, e->tp, e->scope);
 	}
 	if(count > 0) {
-		sg_info(__FILE__, __LINE__, "loaded interface impl %s", self->filename);
+		logger_info(__FILE__, __LINE__, "loaded interface impl %s", self->filename);
 	}
 }
 

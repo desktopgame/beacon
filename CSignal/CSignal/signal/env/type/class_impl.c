@@ -506,7 +506,7 @@ void class_unlink(class_ * self) {
 void class_delete(class_ * self) {
 //	assert(self->ref_count == 0);
 //	MEM_FREE(self->name);
-	sg_info(__FILE__, __LINE__, "deleted class %s", self->name);
+	logger_info(__FILE__, __LINE__, "deleted class %s", self->name);
 	
 	MEM_FREE(self->name);
 	MEM_FREE(self);

@@ -18,24 +18,24 @@ typedef enum log_level {
 /**
  * ロガーの出力先となるファイルをオープンします.
  */
-void sg_lopen();
+void logger_open();
 
 /**
  * ロガーの出力先となるファイルをクローズします.
  */
-void sg_lclose();
+void logger_close();
 
 /**
  * ロガーの有効/非有効を設定します.
  * @param b 有効ならtrue.
  */
-void sg_lset_enabled(bool b);
+void logger_set_enabled(bool b);
 
 /**
  * ロガーの有効/非有効を返します.
  * @return
  */
-bool sg_lget_enabled();
+bool logger_is_enabled();
 
 /**
  * 指定のフォーマット指定しと警告レベルで文字を表示します.
@@ -45,19 +45,19 @@ bool sg_lget_enabled();
  * @param source
  * @param ...
  */
-void sg_log(log_level level, const char* filename, int lineno, const char* source, ...);
+void logger_log(log_level level, const char* filename, int lineno, const char* source, ...);
 
-void sg_debug(const char* filename, int lineno, const char* source, ...);
-void sg_info(const char* filename, int lineno, const char* source, ...);
-void sg_warn(const char* filename, int lineno, const char* source, ...);
-void sg_error(const char* filename, int lineno, const char* source, ...);
-void sg_fatal(const char* filename, int lineno, const char* source, ...);
+void logger_debug(const char* filename, int lineno, const char* source, ...);
+void logger_info(const char* filename, int lineno, const char* source, ...);
+void logger_warn(const char* filename, int lineno, const char* source, ...);
+void logger_error(const char* filename, int lineno, const char* source, ...);
+void logger_fatal(const char* filename, int lineno, const char* source, ...);
 
 /**
  * 指定の条件を満たすならブレークします.
  * @param cond
  */
-void sg_test(bool cond);
+void logger_test(bool cond);
 
 //マクロ名が被る場合は LOG_OVERRIDE を定義して既存のものを無効にします。
 //(割と一般的な名前を使用しているので用意してます。)
@@ -82,17 +82,17 @@ void sg_test(bool cond);
 #undef FATAL
 #endif
 #endif
-#define TEST(cond) sg_test(cond)
+#define TEST(cond) logger_test(cond)
 //ログ出力用マクロを無効にするには
 //LOG_DISABLEを定義します。
 #if !defined(LOG_DISABLE)
 #if defined(__FILE__) && defined(__LINE__)
 
-#define DEBUG(source) sg_log(log_debug, __FILE__, __LINE__, source)
-#define INFO(source) sg_log(log_info, __FILE__, __LINE__, source)
-#define WARN(source) sg_log(log_warn, __FILE__, __LINE__, source)
-#define ERROR(source) sg_log(log_error, __FILE__, __LINE__, source)
-#define FATAL(source) sg_log(log_fatal, __FILE__, __LINE__, source)
+#define DEBUG(source) logger_log(log_debug, __FILE__, __LINE__, source)
+#define INFO(source) logger_log(log_info, __FILE__, __LINE__, source)
+#define WARN(source) logger_log(log_warn, __FILE__, __LINE__, source)
+#define ERROR(source) logger_log(log_error, __FILE__, __LINE__, source)
+#define FATAL(source) logger_log(log_fatal, __FILE__, __LINE__, source)
 
 #else
 #define DEBUG(source) sg_log(log_debug, "invalid", -1, source)

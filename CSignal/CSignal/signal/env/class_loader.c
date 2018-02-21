@@ -112,7 +112,7 @@ void class_loader_load(class_loader * self) {
 	cache->toplevel = true;
 	class_loader_sgload_body(self, self->il_code->statement_list, self->env, NULL, cache);
 	il_load_cache_delete(cache);
-	sg_log(log_info, __FILE__, __LINE__, "loaded file %s", self->filename);
+	logger_log(log_info, __FILE__, __LINE__, "loaded file %s", self->filename);
 }
 
 void class_loader_sub(class_loader * self, char * fullPath) {
