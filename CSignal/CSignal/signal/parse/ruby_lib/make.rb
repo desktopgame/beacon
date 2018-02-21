@@ -6,6 +6,68 @@
 #これの後にさらに yacc/bison 自体のビルドを行う。
 #
 class Make
+	def self.__conv__(src, dict) 
+		buff = src
+		dict.each do |key, val|
+			buff.gsub!(key, val)
+		end
+		return buff
+	end
+
+	def self.__eval__(env, source) 
+		buffer = ""
+		map = { }
+		#マージ
+		env.each do |key, val|
+			map.store(key, val)
+		end
+		#展開回数
+		exp = 0
+		source.lines do |line|
+			styledText = line.strip
+			#$$SET FROM TO
+			#でマクロの定義
+			if(styledText.start_with?("$$SET")) then
+				words = styledText.split(" ")
+				#キーの次の文字をすべて連結(元に戻す)
+				map.store(words[1], words.slice(2...words.length()).join(" "))
+				next
+			end
+			#$$REM A B C
+			#でマクロの無効化
+			if(styledText.start_with?("$$REM")) then
+				arr = styledText.split(" ")
+				words = arr.slice(1...arr.length())
+				words.each do |e|
+					map.delete(e)
+				end
+				next
+			end
+			#$$ENV
+			#右側のリストを展開する
+			if(styledText.start_with?("$$ENV")) then
+				range = styledText.split(" ")
+				buffer += range.slice(1...range.length()).join(" ")
+				buffer += "\n"
+				exp += 1
+				next
+			end
+			buffer += __conv__(line, map)
+		end
+		if(exp > 0) then
+			buffer = __eval__(map, buffer)
+		end
+		return buffer
+	end
+
+	def self.__preprocess__(fileName)
+		iFile = File.open(fileName,"r")
+		source = iFile.read()
+		iFile.close
+		env = { }
+		return __eval__(env, source)
+	end
+
 	def self.__parsecode__(code)
 		ret = eval(code)
 		if(ret.nil?() || ret.empty?()) then
@@ -26,13 +88,16 @@ class Make
 	#あとファイルを分割したいので、一行区切りでファイル名を記述させる。
 	#
 	def self.__readstr__(line)
+		#吐き出されるソースコード
 		buffer = ""
-		file = File.open(line.strip, "r")
-
+		fileName = line.strip
+		#マクロを先に展開
+		source = __preprocess__(fileName)
+		#rubyコードの中を実行しているかのフラグ
 		inCode = false
 		buffCode = ""
 		lineno = 0
-		file.each do |line|
+		source.lines do |line|
 			lineno += 1
 			#整形していろいろやる
 			#;;から始まる行は無視
@@ -65,7 +130,6 @@ class Make
 			raise "コードブロック $${ ... $$} が終了していません。[" + (line.strip + ":" + lineno.to_s) + "]"
 		end
 		buffer += "\n"
-		file.close()
 		return buffer
 	end
 
