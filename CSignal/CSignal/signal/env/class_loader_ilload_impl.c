@@ -19,10 +19,12 @@
 //
 //ilload
 //
+#include"../il/il_type_parameter.h"
 
 //proto
 static il_factor* class_loader_ilload_factorImpl(class_loader* self, ast* source);
 static il_stmt* class_loader_ilload_bodyImpl(class_loader* self, ast* source);
+static void class_loader_ilload_type_parameter(class_loader* self, ast* source, vector* dest);
 
 void class_loader_ilload_impl(class_loader* self, ast* source_code) {
 	assert(self->il_code == NULL);
@@ -152,17 +154,19 @@ void class_loader_ilload_class(class_loader* self, il_namespace* current, ast* c
 	ast* atypename = ast_first(class_decl);
 	ast* aextend_list = ast_second(class_decl);
 	ast* amember_tree = ast_at(class_decl, 2);
-	il_class* classz = il_class_new(atypename->u.string_value);
-	il_type* type = il_type_wrap_class(classz);
+	il_class* ilclassz = il_class_new(atypename->u.string_value);
+	il_type* iltype = il_type_wrap_class(ilclassz);
+	//class Foo<A, B>
+	class_loader_ilload_type_parameter(self, ast_first(atypename), ilclassz->type_parameter_list);
 	//class Foo : X, Y 
-	class_loader_ilload_typename_list(self, classz->extend_list, aextend_list);
+	class_loader_ilload_typename_list(self, ilclassz->extend_list, aextend_list);
 	//public:
 	//    ....
 	//    ....
 	if (!ast_is_blank(amember_tree)) {
-		class_loader_ilload_member_tree(self, type, amember_tree);
+		class_loader_ilload_member_tree(self, iltype, amember_tree);
 	}
-	vector_push(current->type_list, type);
+	vector_push(current->type_list, iltype);
 	//il_namespace_add_entity(current, classz);
 	//vector_push(current->class_list, classz);
 }
@@ -171,16 +175,18 @@ void class_loader_ilload_interface(class_loader* self, il_namespace* current, as
 	ast* atypename = ast_first(interface_decl);
 	ast* aextends_list = ast_second(interface_decl);
 	ast* amember_tree = ast_at(interface_decl, 2);
-	il_interface* inter = il_interface_new(atypename->u.string_value);
-	il_type* type = il_type_wrap_interface(inter);
+	il_interface* ilinter = il_interface_new(atypename->u.string_value);
+	il_type* iltype = il_type_wrap_interface(ilinter);
+	//interface Foo<A, B>
+	class_loader_ilload_type_parameter(self, ast_first(atypename), ilinter->type_parameter_list);
 	//interface Foo : XXX, YYY, CCC
-	class_loader_ilload_typename_list(self, inter->extends_list, aextends_list);
+	class_loader_ilload_typename_list(self, ilinter->extends_list, aextends_list);
 	//public:
 	//    ...
 	if (!ast_is_blank(amember_tree)) {
-		class_loader_ilload_member_tree(self, type, amember_tree);
+		class_loader_ilload_member_tree(self, iltype, amember_tree);
 	}
-	vector_push(current->type_list, type);
+	vector_push(current->type_list, iltype);
 }
 
 void class_loader_ilload_enum(class_loader * self, il_namespace * current, ast * enum_decl) {
@@ -832,4 +838,23 @@ static il_stmt* class_loader_ilload_bodyImpl(class_loader* self, ast* source) {
 			break;
 	}
 	return NULL;
+}
+
+static void class_loader_ilload_type_parameter(class_loader* self, ast* source, vector* dest) {
+	if (ast_is_blank(source)) {
+		return;
+	}
+	if (source->tag == ast_type_parameter_list) {
+		for (int i = 0; i < source->child_count; i++) {
+			class_loader_ilload_type_parameter(self, ast_at(source, i), dest);
+		}
+		return;
+	}
+	assert(source->tag == ast_type_parameter ||
+		   source->tag == ast_type_in_parameter ||
+		   source->tag == ast_type_out_parameter);
+	il_type_parameter* iltypeparam = il_type_parameter_new(source->u.string_value);
+	if (source->tag == ast_type_in_parameter) iltypeparam->kind = il_type_parameter_kind_in;
+	if (source->tag == ast_type_out_parameter) iltypeparam->kind = il_type_parameter_kind_out;
+	vector_push(dest, iltypeparam);
 }

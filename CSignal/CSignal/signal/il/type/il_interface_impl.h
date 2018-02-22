@@ -11,6 +11,7 @@ typedef struct il_interface {
 	char* name;
 	vector* method_list;
 	vector* extends_list;
+	vector* type_parameter_list;
 } il_interface;
 
 /**

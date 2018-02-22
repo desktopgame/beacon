@@ -18,6 +18,7 @@ typedef struct il_class {
 	vector* method_list;
 	vector* smethod_list;
 	vector* constructor_list;
+	vector* type_parameter_list;
 } il_class;
 
 /**

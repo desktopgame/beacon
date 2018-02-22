@@ -6,6 +6,7 @@
 #include "../il_field.h"
 #include "../il_method.h"
 #include "../il_constructor.h"
+#include "../il_type_parameter.h"
 #include "../../util/mem.h"
 
 //proto
@@ -30,6 +31,7 @@ il_class* il_class_new(const char* name) {
 	ret->method_list = vector_new();
 	ret->smethod_list = vector_new();
 	ret->constructor_list = vector_new();
+	ret->type_parameter_list = vector_new();
 	return ret;
 }
 
@@ -52,6 +54,7 @@ void il_class_add_method(il_class * self, il_method * m) {
 void il_class_dump(il_class * self, int depth) {
 	text_putindent(depth);
 	text_printf("class %s", self->name);
+	il_type_parameter_list_print(self->type_parameter_list);
 	text_putline();
 	//ここでは親クラスとインターフェースをごちゃまぜで表示
 	for (int i = 0; i < self->extend_list->length; i++) {

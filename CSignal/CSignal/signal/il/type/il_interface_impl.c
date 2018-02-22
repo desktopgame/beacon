@@ -2,6 +2,7 @@
 #include "../../util/mem.h"
 #include "../../util/text.h"
 #include "../il_method.h"
+#include "../il_type_parameter.h"
 
 //proto
 static void il_interface_fqcn_delete(vector_item item);
@@ -19,6 +20,7 @@ il_interface * il_interface_new(const char * name) {
 	ret->extends_list = vector_new();
 	ret->method_list = vector_new();
 	ret->name = text_strdup(name);
+	ret->type_parameter_list = vector_new();
 	return ret;
 }
 
@@ -29,6 +31,7 @@ void il_interface_add_method(il_interface * self, il_method * method) {
 void il_interface_dump(il_interface * self, int depth) {
 	text_putindent(depth);
 	text_printf("interface %s", self->name);
+	il_type_parameter_list_print(self->type_parameter_list);
 	text_putline();
 	//継承するインターフェイスの一覧を出力
 	for (int i = 0; i < self->extends_list->length; i++) {
