@@ -146,22 +146,24 @@ ast* ast_new_function_decl_empty_params(char* function_name, ast* body, ast* ret
  * メソッド宣言を表す要素を作成します.
  * @param modifier
  * @param func_name
+ * @param atype_parameter
  * @param parameter_list
  * @param body
  * @param return_type_name
  * @return
  */
-ast* ast_new_method_decl(modifier_type type, char* func_name, ast* parameter_list, ast* body, ast* return_type);
+ast* ast_new_method_decl(modifier_type type, char* func_name, ast* atype_parameter, ast* parameter_list, ast* body, ast* return_type);
 
 /**
  * 引数のないメソッド宣言を表す要素を作成します.
  * @param modifier
  * @param func_name
+ * @param atype_parameter
  * @param body
  * @param return_type_name
  * @return
  */
-ast* ast_new_method_decl_empty_params(modifier_type type, char* func_name, ast* body, ast* return_type);
+ast* ast_new_method_decl_empty_params(modifier_type type, char* func_name, ast* atype_parameter, ast* body, ast* return_type);
 
 /**
  * コンストラクタ宣言を表す要素を作成します.

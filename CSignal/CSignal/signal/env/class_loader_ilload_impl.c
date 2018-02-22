@@ -262,9 +262,10 @@ void class_loader_ilload_method(class_loader* self, il_type* current, ast* metho
 	assert(current->tag == iltype_class || current->tag == iltype_interface);
 	ast* modifier = ast_at(method, 0);
 	ast* func_name = ast_at(method, 1);
-	ast* param_list = ast_at(method, 2);
-	ast* func_body = ast_at(method, 3);
-	ast* ret_name = ast_at(method, 4);
+	ast* ageneric = ast_at(method, 2);
+	ast* param_list = ast_at(method, 3);
+	ast* func_body = ast_at(method, 4);
+	ast* ret_name = ast_at(method, 5);
 	il_method* v = il_method_new(func_name->u.string_value);
 	class_loader_ilload_fqcn(ast_first(ret_name), v->return_fqcn);
 //	v->return_type = il_type_new(ret_name->u.string_value);

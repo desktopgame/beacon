@@ -1,5 +1,11 @@
 namespace signal.lang {
 	class Vector<T> {
+		public:
+		def push<A, B, C>(T item) -> Void {
+		}
+
+		def pop<E>() -> T {
+		}
 	}
 
 	class Dict<K, V> {

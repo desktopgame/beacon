@@ -165,10 +165,11 @@ ast * ast_new_function_decl_empty_params(char * function_name, ast * body, ast *
 	return ast_new_function_decl(function_name, ast_new_blank(), body, return_type);
 }
 
-ast * ast_new_method_decl(modifier_type type, char * func_name, ast * parameter_list, ast* body, ast* return_type) {
+ast * ast_new_method_decl(modifier_type type, char * func_name, ast* atype_parameter, ast * parameter_list, ast* body, ast* return_type) {
 	ast* ret = ast_new(ast_method_decl);
 	ast_push(ret, ast_new_modifier(type));
 	ast_push(ret, ast_new_method_name(func_name));
+	ast_push(ret, atype_parameter);
 	ast_push(ret, parameter_list);
 	ast_push(ret, body);
 	ast_push(ret, return_type);
@@ -176,8 +177,8 @@ ast * ast_new_method_decl(modifier_type type, char * func_name, ast * parameter_
 	return ret;
 }
 
-ast * ast_new_method_decl_empty_params(modifier_type type, char * func_name, ast* body, ast* return_type) {
-	return ast_new_method_decl(type, func_name, ast_new_blank(), body, return_type);
+ast * ast_new_method_decl_empty_params(modifier_type type, char * func_name, ast* atype_parameter, ast* body, ast* return_type) {
+	return ast_new_method_decl(type, func_name, atype_parameter, ast_new_blank(), body, return_type);
 }
 
 ast * ast_new_constructor_decl(ast * parameter_list, ast * constructor_chain, ast * body) {
