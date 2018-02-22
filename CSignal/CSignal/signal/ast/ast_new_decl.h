@@ -39,12 +39,12 @@ ast* ast_new_class_decl_unit(ast* class_decl);
 
 /**
  * クラス宣言を表す要素を作成します.
- * @param class_name
+ * @param aclass_name
  * @param extend_list
  * @param member_list
  * @return
  */
-ast* ast_new_class_decl(char* class_name, ast* extend_list, ast* member_list);
+ast* ast_new_class_decl(ast* aclass_name, ast* extend_list, ast* member_list);
 
 /**
  * インターフェース宣言を表す要素を作成します.
@@ -212,4 +212,29 @@ ast* ast_new_typename_list(ast* atypename, ast* typename_list);
  * @return
  */
 ast* ast_new_typename(ast* fqcn);
+
+/**
+ * T や K V などの要素を作成します.
+ * @param name
+ * @return
+ */
+ast* ast_new_type_parameter(char* name);
+ast* ast_new_type_in_parameter(char* name);
+ast* ast_new_type_out_parameter(char* name);
+
+/** 
+ * T や K V の要素のリストを作成します.
+ * @param aparam
+ * @param alist
+ * @return
+ */
+ast* ast_new_type_parameter_list(ast* aparam, ast* alist);
+
+/**
+ * Name<T> や Name<K, V> のような要素を作成します.
+ * @param name
+ * @param aparams
+ * @return
+ */
+ast * ast_new_parameterized_typename(char* name, ast* aparams);
 #endif // !SIGNAL_AST_AST_NEW_DECL_H

@@ -2,9 +2,13 @@
 require_relative 'ruby_lib/make'
 require_relative 'ruby_lib/build'
 
-Make.lex()
-Make.yy()
-Build.compile()
+begin
+	Make.lex()
+	Make.yy()
+	Build.compile()
+rescue e
+	p e
+end
 
 #0.9秒後にクローズ
 times = 0.0

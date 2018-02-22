@@ -149,9 +149,10 @@ void class_loader_ilload_namespace_body(class_loader* self, il_namespace* curren
 
 void class_loader_ilload_class(class_loader* self, il_namespace* current, ast* class_decl) {
 	assert(class_decl->tag == ast_class_decl);
-	ast* aextend_list = ast_first(class_decl);
-	ast* amember_tree = ast_second(class_decl);
-	il_class* classz = il_class_new(class_decl->u.string_value);
+	ast* atypename = ast_first(class_decl);
+	ast* aextend_list = ast_second(class_decl);
+	ast* amember_tree = ast_at(class_decl, 2);
+	il_class* classz = il_class_new(atypename->u.string_value);
 	il_type* type = il_type_wrap_class(classz);
 	//class Foo : X, Y 
 	class_loader_ilload_typename_list(self, classz->extend_list, aextend_list);

@@ -34,11 +34,12 @@ ast * ast_new_class_decl_unit(ast * class_decl) {
 	return ret;
 }
 
-ast * ast_new_class_decl(char* class_name, ast* extend_list, ast* member_list) {
+ast * ast_new_class_decl(ast* aclass_name, ast* extend_list, ast* member_list) {
 	ast* ret = ast_new(ast_class_decl);
-	ret->u.string_value = class_name;
+//	ret->u.string_value = class_name;
 //	ast_push(ret, super_class);
 //	ast_push(ret, impl_list);
+	ast_push(ret, aclass_name);
 	ast_push(ret, extend_list);
 	ast_push(ret, member_list);
 	return ret;
@@ -225,6 +226,38 @@ ast * ast_new_typename_list(ast * atypename, ast * typename_list) {
 ast * ast_new_typename(ast * fqcn) {
 	ast* ret = ast_new(ast_typename);
 	ast_push(ret, fqcn);
+	return ret;
+}
+
+ast * ast_new_type_parameter(char * name) {
+	ast* ret = ast_new(ast_type_parameter);
+	ret->u.string_value = name;
+	return ret;
+}
+
+ast * ast_new_type_in_parameter(char * name) {
+	ast* ret = ast_new(ast_type_in_parameter);
+	ret->u.string_value = name;
+	return ret;
+}
+
+ast * ast_new_type_out_parameter(char * name) {
+	ast* ret = ast_new(ast_type_out_parameter);
+	ret->u.string_value = name;
+	return ret;
+}
+
+ast * ast_new_type_parameter_list(ast* aparam, ast * alist) {
+	ast* ret = ast_new(ast_type_parameter_list);
+	ast_push(ret, aparam);
+	ast_push(ret, alist);
+	return ret;
+}
+
+ast * ast_new_parameterized_typename(char * name, ast * aparams) {
+	ast* ret = ast_new(ast_parameterized_typename);
+	ret->u.string_value = name;
+	ast_push(ret, aparams);
 	return ret;
 }
 

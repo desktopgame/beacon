@@ -147,6 +147,8 @@ static void update_loc() {
 <INITIAL>":"				{ return (COLON); }
 <INITIAL>"::"				{ return (COLO_COLO); }
 <INITIAL>";"				{ return (SEMI); }
+<INITIAL>"in"				{ return (IN); }
+<INITIAL>"out"				{ return (OUT); }
 
 
 <INITIAL>"+"				{ return (ADD); }

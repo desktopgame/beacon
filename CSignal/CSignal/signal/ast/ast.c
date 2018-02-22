@@ -228,7 +228,7 @@ void ast_print(ast* self) {
 			text_printf("%s", self->u.string_value);
 			break;
 		case ast_class_decl:
-			text_printf("class(%s)", self->u.string_value);
+			text_printf("class");
 			break;
 		case ast_interface_decl:
 			text_printf("interface(%s)", self->u.string_value);
@@ -308,6 +308,18 @@ void ast_print(ast* self) {
 		case ast_stmt_catch: p("catch");
 		case ast_null: p("null");
 		case ast_as: p("as");
+		case ast_type_parameter: 
+			text_printf("type parameter(%s)", self->u.string_value);
+			break;
+		case ast_type_in_parameter:
+			text_printf("type in parameter(%s)", self->u.string_value);
+			break;
+		case ast_type_out_parameter:
+			text_printf("type out parameter(%s)", self->u.string_value);
+			break;
+		case ast_parameterized_typename:
+			text_printf("typename(%s)", self->u.string_value);
+			break;
 		default: 
 			p("not implemented");
 	}
@@ -456,10 +468,14 @@ static bool ast_has_str(ast* self) {
 		t == ast_method_return_name ||
 		t == ast_parameter_type_name ||
 		t == ast_parameter_access_name ||
-		t == ast_class_decl ||
+	//	t == ast_class_decl ||
 		t == ast_interface_decl ||
 		t == ast_enum_decl ||
 		t == ast_fqcn_part ||
-		t == ast_fqcn_class_name;
+		t == ast_fqcn_class_name ||
+		t == ast_type_parameter ||
+		t == ast_type_in_parameter ||
+		t == ast_type_out_parameter ||
+		t == ast_parameterized_typename;
 		//t == ast_class_super;
 }

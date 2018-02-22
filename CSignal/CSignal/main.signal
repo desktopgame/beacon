@@ -1,18 +1,4 @@
-import "lib"
-import "Vector"
-
-var arr = new Array(5);
-var offs = 0
-while(offs < arr.length()) {
-	arr.set(offs, offs * 10)
-	offs++
+namespace signal.lang {
+	class Vector<T> {
+	}
 }
-
-var itr = arr.iterate()
-while(itr.hasNext()) {
-	var e = itr.next()
-	Console.writeLine(e)
-}
-
-Console.writeLine("")
-Console.writeLine(arr.iterate().next())

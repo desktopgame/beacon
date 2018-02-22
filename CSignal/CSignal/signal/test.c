@@ -144,13 +144,15 @@ void test_file_path(void) {
 }
 
 void test_cll(void) {
+	class_loader* cll = class_loader_new_entry_point_from_file("main.signal");
+	ast_print_tree(cll->source_code);
 //	script_context* temp = eval_push();
-	char* lines[2] = {
-		{ " import \"lib\" " },
-		{ " Console.writeLine(\"Hello\") " }
-	};
+//	char* lines[2] = {
+//		{ " import \"lib\" " },
+//		{ " Console.writeLine(\"Hello\") " }
+//	};
 	//	eval_interactive();
-		eval_top_from_file("main.signal");
+//		eval_top_from_file("main.signal");
 	//	eval_top_from_source("import \"lib\"\nConsole.writeLine(\"Hello\")");
 	//	eval_top_from_lines(lines, 2);
 //	eval_pop(temp);

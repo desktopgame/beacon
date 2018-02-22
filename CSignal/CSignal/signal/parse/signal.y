@@ -44,6 +44,7 @@
 		SEMI IMPORT VAR
 		THIS SUPER TRUE FALSE NULL_TOK AS
 		INTERFACE CLASS ENUM PUBLIC PRIVATE PROTECTED STATIC NATIVE NEW
+		IN OUT
 		CTOR DEF ARROW NAMESPACE RETURN
 		IF ELIF ELSE WHILE BREAK CONTINUE TRY CATCH THROW
 %type <ast_value> root 
@@ -55,6 +56,10 @@
 					namespace_member_decl_optional
 					namespace_path
 					import 
+					parameterized_typename
+					type_parameter_group
+					type_parameter_list
+					type_parameter
 					class_decl 
 					enum_decl
 					interface_decl
@@ -108,7 +113,6 @@
 
 
 
-
 root
 	: top_level
 	| root top_level
@@ -117,6 +121,7 @@ root
 		$$ = ast_new_blank();
 	}
 	;
+
 top_level
 	: stmt_list
 	{
@@ -135,18 +140,21 @@ top_level
 		ast_compile_entry($1);
 	}
 	;
+
 namespace_decl
 	: NAMESPACE namespace_path namespace_body
 	{
 		$$ = ast_new_namespace_decl($2, $3);
 	}
 	;
+
 namespace_body
 	: LCB namespace_member_decl_optional RCB
 	{
 		$$ = $2
 	}
 	;
+
 namespace_member_decl
 	: NAMESPACE namespace_path namespace_body
 	{
@@ -165,6 +173,7 @@ namespace_member_decl
 		$$ = $1;
 	}
 	;
+
 namespace_member_decl_list
 	: namespace_member_decl
 	{
@@ -175,6 +184,7 @@ namespace_member_decl_list
 		$$ = ast_new_namespace_member_decl_list($1, $2);
 	}
 	;
+
 namespace_member_decl_optional
 	: /* empty */
 	{
@@ -185,6 +195,7 @@ namespace_member_decl_optional
 		$$ = $1
 	}
 	;
+
 namespace_path
 	: IDENT
 	{
@@ -195,22 +206,69 @@ namespace_path
 		$$ = ast_new_namespace_path_list($1, $3);
 	}
 	;
+
 import
 	: IMPORT STRING_LITERAL
 	{
 		$$ = ast_new_import_decl(ast_new_import_path($2));
 	}
 	;
+
+parameterized_typename
+	: IDENT type_parameter_group
+	{
+		$$ = ast_new_parameterized_typename($1, $2);
+	}
+	;
+
+type_parameter_group
+	: /* empty */
+	{
+		$$ = ast_new_blank();
+	}
+	| LT type_parameter_list GT
+	{
+		$$ = $2;
+	}
+	;
+
+type_parameter_list
+	: type_parameter
+	{
+		$$ = $1;
+	}
+	| type_parameter COMMA type_parameter_list
+	{
+		$$ = ast_new_type_parameter_list($1, $3);
+	}
+	;
+
+type_parameter
+	: IDENT
+	{
+		$$ = ast_new_type_parameter($1);
+	}
+	| IN IDENT
+	{
+		$$ = ast_new_type_in_parameter($2);
+	}
+	| OUT IDENT
+	{
+		$$ = ast_new_type_out_parameter($2);
+	}
+	;
+
 class_decl
-	: CLASS IDENT LCB access_member_tree RCB
+	: CLASS parameterized_typename LCB access_member_tree RCB
 	{
 		$$ = ast_new_class_decl($2, ast_new_blank(), $4);
 	}
-	| CLASS IDENT COLON typename_list LCB access_member_tree RCB
+	| CLASS parameterized_typename COLON typename_list LCB access_member_tree RCB
 	{
 		$$ = ast_new_class_decl($2, $4, $6);
 	}
 	;
+
 enum_decl
 	: ENUM IDENT LCB ident_list RCB
 	{
@@ -221,6 +279,7 @@ enum_decl
 		$$ = ast_new_enum_decl($2, $4);
 	}
 	;
+
 interface_decl
 	: INTERFACE IDENT LCB access_member_tree RCB
 	{
@@ -231,6 +290,7 @@ interface_decl
 		$$ = ast_new_interface_decl($2, $4, $6);
 	}
 	;
+
 access_member_tree
 	: /* empty */
 	{
@@ -245,6 +305,7 @@ access_member_tree
 		$$ = ast_new_access_member_tree($1, $2);
 	}
 	;
+
 access_member_list
 	: /* empty */
 	{
@@ -255,6 +316,7 @@ access_member_list
 		$$ = ast_new_access_member_list($1, $3);
 	}
 	;
+
 member_define_list
 	: /* empty */
 	{
@@ -269,11 +331,13 @@ member_define_list
 		$$ = ast_new_member_decl_list($1, ast_new_member_decl($2));
 	}
 	;
+
 member_define
 	: constructor_define
 	| method_define
 	| field_define
 	;
+
 constructor_define
 	: CTOR NEW LRB parameter_list RRB constructor_chain_optional scope_optional
 	{
@@ -284,6 +348,7 @@ constructor_define
 		$$ = ast_new_constructor_decl(ast_new_blank(), $5, $6);
 	}
 	;
+
 constructor_chain
 	: COLON constructor_chain_type_T LRB argument_list RRB
 	{
@@ -294,6 +359,7 @@ constructor_chain
 		$$ = ast_new_constructor_chain($2, ast_new_blank());
 	}
 	;
+
 constructor_chain_type_T
 	: SUPER
 	{
@@ -304,6 +370,7 @@ constructor_chain_type_T
 		$$ = chain_type_this;
 	}
 	;
+
 constructor_chain_optional
 	: /* empty */
 	{
@@ -311,6 +378,7 @@ constructor_chain_optional
 	}
 	| constructor_chain
 	;
+
 function_define
 	: DEF IDENT LRB parameter_list RRB ARROW typename_T scope_optional
 	{
@@ -321,6 +389,7 @@ function_define
 		$$ = ast_new_function_decl_empty_params($2, $7, $6);
 	}
 	;
+
 method_define
 	: modifier_type_T DEF IDENT LRB parameter_list RRB ARROW typename_T scope_optional
 	{
@@ -331,12 +400,14 @@ method_define
 		$$ = ast_new_method_decl_empty_params($1, $3, $8, $7);
 	}
 	;
+
 field_define
 	: modifier_type_T typename_T IDENT SEMI
 	{
 		$$ = ast_new_field_decl($1, $2, $3);
 	}
 	;
+
 modifier_type_T
 	: /* empty */
 	{
@@ -359,6 +430,7 @@ modifier_type_T
 		$$ = modifier_native;
 	}
 	;
+
 access_level_T
 	: PUBLIC
 	{
@@ -373,6 +445,7 @@ access_level_T
 		$$ = access_protected;
 	}
 	;
+
 ident_list
 	: IDENT
 	{
@@ -383,6 +456,7 @@ ident_list
 		$$ = ast_new_identifier_list($1, $3);
 	}
 	;
+
 parameter_list
 	: typename_T IDENT
 	{
@@ -393,6 +467,7 @@ parameter_list
 		$$ = ast_new_parameter_list($1, $2, $4)
 	}
 	;
+
 argument_list
 	: expression
 	{
@@ -403,6 +478,7 @@ argument_list
 		$$ = ast_new_argument_list(ast_new_argument($1), $3);
 	}
 	;
+
 typename_list
 	: typename_T
 	{
@@ -413,12 +489,14 @@ typename_list
 		$$ = ast_new_typename_list($1, $3);
 	}
 	;
+
 typename_T
 	: fqcn_part
 	{
 		$$ = ast_new_typename($1);
 	}
 	;
+
 fqcn_part
 	: IDENT
 	{
@@ -429,6 +507,7 @@ fqcn_part
 		$$ = ast_new_fqcn_part_list(ast_new_fqcn_part($1), $3);
 	}
 	;
+
 
 
 

@@ -162,6 +162,12 @@ typedef enum ast_tag {
 	ast_fqcn_part,
 	ast_fqcn_part_list,
 
+	ast_parameterized_typename,
+	ast_type_parameter,
+	ast_type_in_parameter,
+	ast_type_out_parameter,
+	ast_type_parameter_list,
+
 	ast_static_invoke,
 	//stmt
 	ast_if,

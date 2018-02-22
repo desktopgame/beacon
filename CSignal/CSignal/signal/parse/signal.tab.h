@@ -105,20 +105,22 @@
      STATIC = 313,
      NATIVE = 314,
      NEW = 315,
-     CTOR = 316,
-     DEF = 317,
-     ARROW = 318,
-     NAMESPACE = 319,
-     RETURN = 320,
-     IF = 321,
-     ELIF = 322,
-     ELSE = 323,
-     WHILE = 324,
-     BREAK = 325,
-     CONTINUE = 326,
-     TRY = 327,
-     CATCH = 328,
-     THROW = 329
+     IN = 316,
+     OUT = 317,
+     CTOR = 318,
+     DEF = 319,
+     ARROW = 320,
+     NAMESPACE = 321,
+     RETURN = 322,
+     IF = 323,
+     ELIF = 324,
+     ELSE = 325,
+     WHILE = 326,
+     BREAK = 327,
+     CONTINUE = 328,
+     TRY = 329,
+     CATCH = 330,
+     THROW = 331
    };
 #endif
 
@@ -142,7 +144,7 @@ typedef union YYSTYPE
 
 
 /* Line 1676 of yacc.c  */
-#line 138 "signal.tab.h"
+#line 140 "signal.tab.h"
 } YYSTYPE;
 # define YYSTYPE_IS_TRIVIAL 1
 # define yystype YYSTYPE /* obsolescent; will be withdrawn */

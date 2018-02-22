@@ -20,6 +20,7 @@
 		SEMI IMPORT VAR
 		THIS SUPER TRUE FALSE NULL_TOK AS
 		INTERFACE CLASS ENUM PUBLIC PRIVATE PROTECTED STATIC NATIVE NEW
+		IN OUT
 		CTOR DEF ARROW NAMESPACE RETURN
 		IF ELIF ELSE WHILE BREAK CONTINUE TRY CATCH THROW
 %type <ast_value> root 
@@ -31,6 +32,10 @@
 					namespace_member_decl_optional
 					namespace_path
 					import 
+					parameterized_typename
+					type_parameter_group
+					type_parameter_list
+					type_parameter
 					class_decl 
 					enum_decl
 					interface_decl
