@@ -16,6 +16,7 @@ typedef struct il_method {
 	fqcn_cache* return_fqcn;
 	access_level access;
 	modifier_type modifier;
+	vector* type_parameter_list;
 } il_method;
 /**
  * メソッドを作成します.

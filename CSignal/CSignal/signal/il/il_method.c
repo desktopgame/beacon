@@ -5,6 +5,7 @@
 #include "../util/mem.h"
 #include "il_stmt_interface.h"
 #include "il_parameter.h"
+#include "il_type_parameter.h"
 
 //proto
 static void il_method_parameter_delete(vector_item item);
@@ -18,6 +19,7 @@ il_method * il_method_new(const char * name) {
 	ret->access = access_public;
 	ret->modifier = modifier_none;
 	ret->statement_list = vector_new();
+	ret->type_parameter_list = vector_new();
 	return ret;
 }
 
@@ -26,7 +28,9 @@ void il_method_dump(il_method * self, int depth) {
 	access_print(self->access);
 	text_printf(" ");
 	modifier_print(self->modifier);
-	text_printf(" method %s -> ", self->name);
+	text_printf(" method %s", self->name);
+	il_type_parameter_list_print(self->type_parameter_list);
+	text_printf(" -> ");
 	fqcn_cache_print(self->return_fqcn);
 	text_putline();
 	for (int i = 0; i < self->parameter_list->length; i++) {

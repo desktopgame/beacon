@@ -1,10 +1,13 @@
 namespace signal.lang {
 	class Vector<T> {
 		public:
-		def push<A, B, C>(T item) -> Void {
+		def push<A, B, C>(Object item) -> Void {
 		}
 
 		def pop<E>() -> T {
+		}
+
+		def top() -> Void {
 		}
 	}
 

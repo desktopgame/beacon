@@ -267,6 +267,7 @@ void class_loader_ilload_method(class_loader* self, il_type* current, ast* metho
 	ast* func_body = ast_at(method, 4);
 	ast* ret_name = ast_at(method, 5);
 	il_method* v = il_method_new(func_name->u.string_value);
+	class_loader_ilload_type_parameter(self, ageneric, v->type_parameter_list);
 	class_loader_ilload_fqcn(ast_first(ret_name), v->return_fqcn);
 //	v->return_type = il_type_new(ret_name->u.string_value);
 	v->access = level;
