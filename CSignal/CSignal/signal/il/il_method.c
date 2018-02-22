@@ -10,6 +10,7 @@
 //proto
 static void il_method_parameter_delete(vector_item item);
 static void il_method_stmt_delete(vector_item item);
+static void il_method_type_parameter_delete(vector_item item);
 
 il_method * il_method_new(const char * name) {
 	il_method* ret = (il_method*)MEM_MALLOC(sizeof(il_method));
@@ -54,6 +55,7 @@ void il_method_delete(il_method * self) {
 	vector_delete(self->parameter_list, il_method_parameter_delete);
 	//il_type_delete(self->return_type);
 	vector_delete(self->statement_list, il_method_stmt_delete);
+	vector_delete(self->type_parameter_list, il_method_type_parameter_delete);
 	MEM_FREE(self);
 }
 
@@ -66,4 +68,9 @@ static void il_method_parameter_delete(vector_item item) {
 static void il_method_stmt_delete(vector_item item) {
 	il_stmt* e = (il_stmt*)item;
 	il_stmt_delete(e);
+}
+
+static void il_method_type_parameter_delete(vector_item item) {
+	il_type_parameter* e = (il_type_parameter*)item;
+	il_type_parameter_delete(e);
 }

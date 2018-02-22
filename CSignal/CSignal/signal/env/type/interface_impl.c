@@ -8,6 +8,8 @@
 #include <stdio.h>
 //proto
 static void interface_delete_method(vector_item item);
+static void interface_type_parameter_delete(vector_item item);
+
 
 type * type_wrap_interface(interface_ * self) {
 	type* ret = type_new();
@@ -85,6 +87,7 @@ void interface_unlink(interface_ * self) {
 }
 
 void interface_delete(interface_ * self) {
+	vector_delete(self->type_parameter_list, interface_type_parameter_delete);
 	MEM_FREE(self->name);
 	MEM_FREE(self);
 }
@@ -93,4 +96,9 @@ void interface_delete(interface_ * self) {
 static void interface_delete_method(vector_item item) {
 	method* e = (method*)item;
 	method_delete(e);
+}
+
+static void interface_type_parameter_delete(vector_item item) {
+	type_parameter* e = (type_parameter*)item;
+	type_parameter_delete(e);
 }

@@ -11,6 +11,7 @@
 
 //proto
 static void method_parameter_delete(vector_item item);
+static void method_type_parameter_delete(vector_item item);
 
 method * method_new(const char * name) {
 	method* ret = (method*)MEM_MALLOC(sizeof(method));
@@ -82,6 +83,7 @@ bool method_equal(method * a, method * b) {
 
 void method_delete(method * self) {
 	MEM_FREE(self->name);
+	vector_delete(self->type_parameter_list, method_parameter_delete);
 	vector_delete(self->parameter_list, method_parameter_delete);
 	if (self->type == method_type_script) {
 		script_method_delete(self->u.script_method);
@@ -95,4 +97,9 @@ void method_delete(method * self) {
 static void method_parameter_delete(vector_item item) {
 	parameter* e = (parameter*)item;
 	parameter_delete(e);
+}
+
+static void method_type_parameter_delete(vector_item item) {
+	type_parameter* e = (type_parameter*)item;
+	type_parameter_delete(e);
 }

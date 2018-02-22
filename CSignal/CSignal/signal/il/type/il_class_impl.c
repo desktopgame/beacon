@@ -14,6 +14,7 @@ static void il_class_field_delete(vector_item item);
 static void il_class_method_delete(vector_item item);
 static void il_class_ctor_delete(vector_item item);
 static void il_class_extend_delete(vector_item item);
+static void il_class_type_parameter_delete(vector_item item);
 
 il_type * il_type_wrap_class(il_class * self) {
 	il_type* ret = il_type_new();
@@ -91,6 +92,7 @@ void il_class_delete(il_class * self) {
 	vector_delete(self->smethod_list, il_class_method_delete);
 	vector_delete(self->constructor_list, il_class_ctor_delete);
 	vector_delete(self->extend_list, il_class_extend_delete);
+	vector_delete(self->type_parameter_list, il_class_type_parameter_delete);
 	MEM_FREE(self);
 }
 
@@ -113,4 +115,9 @@ static void il_class_ctor_delete(vector_item item) {
 static void il_class_extend_delete(vector_item item) {
 	fqcn_cache* e = (fqcn_cache*)item;
 	fqcn_cache_delete(e);
+}
+
+static void il_class_type_parameter_delete(vector_item item) {
+	il_type_parameter* e = (il_type_parameter*)item;
+	il_type_parameter_delete(e);
 }

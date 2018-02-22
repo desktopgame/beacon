@@ -150,6 +150,7 @@ void test_cll(void) {
 //	il_top_level_dump(cll->il_code, 0);
 	system("cls");
 	namespace_dump();
+	class_loader_delete(cll);
 //	script_context* temp = eval_push();
 //	char* lines[2] = {
 //		{ " import \"lib\" " },

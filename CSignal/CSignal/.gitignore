@@ -2,5 +2,7 @@
 x64/
 *.txt
 *.txt~
+*.text~
+*.rb~
 *.gitignore~
 *.signal~

@@ -7,6 +7,7 @@
 //proto
 static void il_interface_fqcn_delete(vector_item item);
 static void il_interface_method_delete(vector_item item);
+static void il_interface_type_parameter_delete(vector_item item);
 
 il_type * il_type_wrap_interface(il_interface * self) {
 	il_type* ret = il_type_new();
@@ -49,6 +50,7 @@ void il_interface_dump(il_interface * self, int depth) {
 void il_interface_delete(il_interface * self) {
 	vector_delete(self->extends_list, il_interface_fqcn_delete);
 	vector_delete(self->method_list, il_interface_method_delete);
+	vector_delete(self->type_parameter_list, il_interface_type_parameter_delete);
 	MEM_FREE(self->name);
 	MEM_FREE(self);
 }
@@ -61,4 +63,9 @@ static void il_interface_fqcn_delete(vector_item item) {
 static void il_interface_method_delete(vector_item item) {
 	il_method* e = (il_method*)item;
 	il_method_delete(e);
+}
+
+static void il_interface_type_parameter_delete(vector_item item) {
+	il_type_parameter* e = (il_type_parameter*)item;
+	il_type_parameter_delete(e);
 }

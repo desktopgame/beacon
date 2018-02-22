@@ -35,6 +35,7 @@ static void class_ctor_delete(vector_item item);
 static void class_native_method_ref_delete(vector_item item);
 static method* class_find_impl_method(class_* self, method* virtualMethod);
 static void class_vtable_vec_delete(vector_item item);
+static void class_type_parameter_delete(vector_item item);
 
 type * type_wrap_class(class_ * self) {
 	type* ret = type_new();
@@ -510,7 +511,7 @@ void class_delete(class_ * self) {
 //	assert(self->ref_count == 0);
 //	MEM_FREE(self->name);
 	logger_info(__FILE__, __LINE__, "deleted class %s", self->name);
-	
+	vector_delete(self->type_parameter_list, class_type_parameter_delete);
 	MEM_FREE(self->name);
 	MEM_FREE(self);
 }
@@ -640,4 +641,9 @@ static method* class_find_impl_method(class_* self, method* virtualMethod) {
 static void class_vtable_vec_delete(vector_item item) {
 	vtable* e = (vtable*)item;
 	vtable_delete(e);
+}
+
+static void class_type_parameter_delete(vector_item item) {
+	type_parameter* e = (type_parameter*)item;
+	type_parameter_delete(e);
 }
