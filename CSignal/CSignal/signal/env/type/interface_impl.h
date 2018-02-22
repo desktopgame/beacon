@@ -18,6 +18,7 @@ typedef struct interface_ {
 	vector* method_list;
 	namespace_* location;
 	vtable* vt;
+	vector* type_parameter_list;
 } interface_;
 
 /**

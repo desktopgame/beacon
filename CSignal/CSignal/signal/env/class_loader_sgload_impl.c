@@ -11,7 +11,9 @@
 #include "../il/il_method.h"
 #include "../il/il_constructor.h"
 #include "../il/il_stmt_interface.h"
+#include "../il/il_type_parameter.h"
 #include "../env/object.h"
+#include "type_parameter.h"
 #include "parameter.h"
 #include "field.h"
 #include "method.h"
@@ -145,7 +147,6 @@ void class_loader_sgload_class(class_loader* self, il_type* iltype, namespace_* 
 	assert(iltype->tag == iltype_class);
 	type* tp = namespace_get_type(parent, iltype->u.class_->name);
 	class_* cls;
-//	class_* cls = namespace_get_type(parent, iltype->u.class_->name);
 	if (tp == NULL) {
 		cls = class_new(iltype->u.class_->name);
 		for (int i = 0; i < iltype->u.class_->extend_list->length; i++) {
@@ -168,12 +169,12 @@ void class_loader_sgload_class(class_loader* self, il_type* iltype, namespace_* 
 				vector_push(cls->impl_list, inter);
 			}
 		}
-//		if (iltype->u.class_->super != NULL) {
-//			cls->super_class = fqcn_class(iltype->u.class_->super, parent);
-//		}
+		//場所を設定
 		cls->location = parent;
 		tp = type_wrap_class(cls);
 		namespace_add_type(parent, tp);
+		//仮型引数を与える
+		type_parameter_list_dup(iltype->u.class_->type_parameter_list, cls->type_parameter_list);
 	} else {
 		cls = tp->u.class_;
 	}
@@ -222,9 +223,12 @@ void class_loader_sgload_interface(class_loader * self, il_type * iltype, namesp
 			assert(interI != NULL);
 			vector_push(inter->impl_list, interI);
 		}
+		//場所を設定
 		inter->location = parent;
 		tp = type_wrap_interface(inter);
 		namespace_add_type(parent, tp);
+		//仮型引数を与える
+		type_parameter_list_dup(iltype->u.interface_->type_parameter_list, inter->type_parameter_list);
 	} else {
 		inter = tp->u.interface_;
 	}

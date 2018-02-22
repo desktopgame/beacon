@@ -4,6 +4,7 @@
 #include "../../util/text.h"
 #include "../../env/method.h"
 #include "meta_impl.h"
+#include "../type_parameter.h"
 #include <stdio.h>
 //proto
 static void interface_delete_method(vector_item item);
@@ -22,6 +23,7 @@ interface_ * interface_new(const char * name) {
 	ret->location = NULL;
 	ret->method_list = vector_new();
 	ret->vt = NULL;
+	ret->type_parameter_list = vector_new();
 	return ret;
 }
 
@@ -36,6 +38,7 @@ method * interface_find_method(interface_ * self, const char * name, vector * ar
 void interface_dump(interface_ * self, int depth) {
 	text_putindent(depth);
 	text_printf("interface %s", self->name);
+	type_parameter_print(self->type_parameter_list);
 	text_putline();
 	//継承するインターフェイスの一覧
 	for (int i = 0; i < self->impl_list->length; i++) {

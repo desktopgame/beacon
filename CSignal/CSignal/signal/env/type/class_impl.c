@@ -18,6 +18,7 @@
 #include "../../env/vtable.h"
 #include "../../util/logger.h"
 #include "meta_impl.h"
+#include "../type_parameter.h"
 
 //http://jumble-note.blogspot.jp/2012/09/c-vacopy.html
 #ifndef va_copy
@@ -60,6 +61,7 @@ class_ * class_new(const char * name) {
 	ret->constructor_list = vector_new();
 	ret->native_method_ref_map = tree_map_new();
 	ret->vt_vec = vector_new();
+	ret->type_parameter_list = vector_new();
 	//FIXME:ここで持つ必要はない
 	ret->classIndex = -1;
 	//ret->absoluteIndex = -1;
@@ -132,6 +134,7 @@ void class_add_constructor(class_ * self, constructor * c) {
 void class_dump(class_ * self, int depth) {
 	text_putindent(depth);
 	text_printf("class %s", self->name);
+	type_parameter_print(self->type_parameter_list);
 	text_putline();
 	//親クラスがあるなら表示
 	if (self->super_class != NULL) {
