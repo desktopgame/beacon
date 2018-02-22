@@ -1,4 +1,10 @@
 namespace signal.lang {
 	class Vector<T> {
 	}
+
+	class Dict<K, V> {
+	}
+
+	interface Enumerable<in T, out R> {
+	}
 }

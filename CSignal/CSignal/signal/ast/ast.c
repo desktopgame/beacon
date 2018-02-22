@@ -320,6 +320,7 @@ void ast_print(ast* self) {
 		case ast_parameterized_typename:
 			text_printf("typename(%s)", self->u.string_value);
 			break;
+		case ast_type_parameter_list: p("type parameter list");
 		default: 
 			p("not implemented");
 	}
@@ -469,7 +470,7 @@ static bool ast_has_str(ast* self) {
 		t == ast_parameter_type_name ||
 		t == ast_parameter_access_name ||
 	//	t == ast_class_decl ||
-		t == ast_interface_decl ||
+	//	t == ast_interface_decl ||
 		t == ast_enum_decl ||
 		t == ast_fqcn_part ||
 		t == ast_fqcn_class_name ||

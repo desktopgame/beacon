@@ -168,16 +168,17 @@ void class_loader_ilload_class(class_loader* self, il_namespace* current, ast* c
 }
 
 void class_loader_ilload_interface(class_loader* self, il_namespace* current, ast* interface_decl) {
-	ast* extends_list = ast_first(interface_decl);
-	ast* member_tree = ast_second(interface_decl);
-	il_interface* inter = il_interface_new(interface_decl->u.string_value);
+	ast* atypename = ast_first(interface_decl);
+	ast* aextends_list = ast_second(interface_decl);
+	ast* amember_tree = ast_at(interface_decl, 2);
+	il_interface* inter = il_interface_new(atypename->u.string_value);
 	il_type* type = il_type_wrap_interface(inter);
 	//interface Foo : XXX, YYY, CCC
-	class_loader_ilload_typename_list(self, inter->extends_list, extends_list);
+	class_loader_ilload_typename_list(self, inter->extends_list, aextends_list);
 	//public:
 	//    ...
-	if (!ast_is_blank(member_tree)) {
-		class_loader_ilload_member_tree(self, type, member_tree);
+	if (!ast_is_blank(amember_tree)) {
+		class_loader_ilload_member_tree(self, type, amember_tree);
 	}
 	vector_push(current->type_list, type);
 }

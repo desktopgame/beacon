@@ -48,12 +48,12 @@ ast* ast_new_class_decl(ast* aclass_name, ast* extend_list, ast* member_list);
 
 /**
  * インターフェース宣言を表す要素を作成します.
- * @param interface_name
+ * @param ainterface_name
  * @param super_interface_list
  * @param member_list
  * @return
  */
-ast* ast_new_interface_decl(char* interface_name, ast* super_interface_list, ast* member_list);
+ast* ast_new_interface_decl(ast* ainterface_name, ast* super_interface_list, ast* member_list);
 
 /**
  * 列挙宣言を表す要素を作成します.

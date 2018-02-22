@@ -281,11 +281,11 @@ enum_decl
 	;
 
 interface_decl
-	: INTERFACE IDENT LCB access_member_tree RCB
+	: INTERFACE parameterized_typename LCB access_member_tree RCB
 	{
 		$$ = ast_new_interface_decl($2, ast_new_blank(), $4);
 	}
-	| INTERFACE IDENT COLON typename_list LCB access_member_tree RCB
+	| INTERFACE parameterized_typename COLON typename_list LCB access_member_tree RCB
 	{
 		$$ = ast_new_interface_decl($2, $4, $6);
 	}
