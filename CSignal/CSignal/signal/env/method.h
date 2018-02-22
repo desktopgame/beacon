@@ -30,6 +30,7 @@ typedef struct method {
 	struct type* parent;
 	struct type* return_type;
 	vector* parameter_list;
+	vector* type_parameter_list;
 	access_level access;
 	modifier_type modifier;
 	union {

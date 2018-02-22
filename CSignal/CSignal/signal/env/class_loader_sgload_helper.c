@@ -18,6 +18,7 @@
 #include "method.h"
 #include "constructor.h"
 #include <assert.h>
+#include "type_parameter.h"
 
 /**
  * インスタンス/静的フィールド宣言を読み込んでクラスに追加します.
@@ -112,6 +113,7 @@ void class_loader_sgload_methods_impl(class_loader* self, il_type* iltype, type*
 		method->type = modifier_is_native(ilmethod->modifier) ? method_type_native : method_type_script;
 		method->access = ilmethod->access;
 		method->modifier = ilmethod->modifier;
+		type_parameter_list_dup(ilmethod->type_parameter_list, method->type_parameter_list);
 		//インターフェースなら空
 		if (tp->tag == type_interface) {
 			method->type = method_type_abstract;

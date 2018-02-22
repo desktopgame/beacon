@@ -7,6 +7,7 @@
 #include "parameter.h"
 #include "../util/mem.h"
 #include "../vm/vm.h"
+#include "type_parameter.h"
 
 //proto
 static void method_parameter_delete(vector_item item);
@@ -19,6 +20,7 @@ method * method_new(const char * name) {
 	ret->access = access_public;
 	ret->modifier = modifier_none;
 	ret->parent = NULL;
+	ret->type_parameter_list = vector_new();
 	return ret;
 }
 
@@ -36,6 +38,7 @@ void method_dump(method * self, int depth) {
 	text_printf(" ");
 	modifier_print(self->modifier);
 	text_printf(" method %s", self->name);
+	type_parameter_print(self->type_parameter_list);
 	text_printf("(");
 	for (int i = 0; i < self->parameter_list->length; i++) {
 		vector_item e = vector_at(self->parameter_list, i);
