@@ -147,6 +147,9 @@ void class_loader_sgload_class(class_loader* self, il_type* iltype, namespace_* 
 	assert(iltype->tag == iltype_class);
 	type* tp = namespace_get_type(parent, iltype->u.class_->name);
 	class_* cls;
+	//FIXME:あとで親関数から渡すようにする
+	il_load_cache* cache = il_load_cache_new();
+	vector_push(cache->namespace_vec, parent);
 	if (tp == NULL) {
 		cls = class_new(iltype->u.class_->name);
 		for (int i = 0; i < iltype->u.class_->extend_list->length; i++) {
@@ -174,7 +177,7 @@ void class_loader_sgload_class(class_loader* self, il_type* iltype, namespace_* 
 		tp = type_wrap_class(cls);
 		namespace_add_type(parent, tp);
 		//仮型引数を与える
-		type_parameter_list_dup(iltype->u.class_->type_parameter_list, cls->type_parameter_list);
+		type_parameter_list_dup(iltype->u.class_->type_parameter_list, cls->type_parameter_list, cache);
 	} else {
 		cls = tp->u.class_;
 	}
@@ -208,12 +211,17 @@ void class_loader_sgload_class(class_loader* self, il_type* iltype, namespace_* 
 		cachekind_class_impl
 	);
 	vector_push(self->type_cache_vec, mtc);
+	vector_pop(cache->namespace_vec);
+	il_load_cache_delete(cache);
 }
 
 void class_loader_sgload_interface(class_loader * self, il_type * iltype, namespace_ * parent) {
 	assert(iltype->tag == iltype_interface);
 	type* tp = namespace_get_type(parent, iltype->u.interface_->name);
 	interface_* inter = NULL;
+	//NOTE:後で親関数から渡すようにする
+	il_load_cache* cache = il_load_cache_new();
+	vector_push(cache->namespace_vec, parent);
 	if (tp == NULL) {
 		inter = interface_new(iltype->u.interface_->name);
 		for (int i = 0; i < iltype->u.interface_->extends_list->length; i++) {
@@ -228,7 +236,7 @@ void class_loader_sgload_interface(class_loader * self, il_type * iltype, namesp
 		tp = type_wrap_interface(inter);
 		namespace_add_type(parent, tp);
 		//仮型引数を与える
-		type_parameter_list_dup(iltype->u.interface_->type_parameter_list, inter->type_parameter_list);
+		type_parameter_list_dup(iltype->u.interface_->type_parameter_list, inter->type_parameter_list, cache);
 	} else {
 		inter = tp->u.interface_;
 	}
@@ -253,6 +261,8 @@ void class_loader_sgload_interface(class_loader * self, il_type * iltype, namesp
 		cachekind_interface_impl
 	);
 	vector_push(self->type_cache_vec, mtc);
+	vector_pop(cache->namespace_vec);
+	il_load_cache_delete(cache);
 }
 
 void class_loader_sgload_attach_native_method(class_loader* self, il_type* ilclass, class_* classz, il_method* ilmethod, method* me) {

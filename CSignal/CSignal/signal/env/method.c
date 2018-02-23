@@ -83,7 +83,7 @@ bool method_equal(method * a, method * b) {
 
 void method_delete(method * self) {
 	MEM_FREE(self->name);
-	vector_delete(self->type_parameter_list, method_parameter_delete);
+	vector_delete(self->type_parameter_list, method_type_parameter_delete);
 	vector_delete(self->parameter_list, method_parameter_delete);
 	if (self->type == method_type_script) {
 		script_method_delete(self->u.script_method);

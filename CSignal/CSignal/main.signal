@@ -18,5 +18,8 @@ namespace signal.lang {
 	}
 
 	class TreeMap<T(IComparable)> {
+		public:
+		def put<Func(IFunc)>() -> Void {
+		}
 	}
 }

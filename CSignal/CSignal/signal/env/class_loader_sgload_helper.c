@@ -100,6 +100,8 @@ void class_loader_sgload_methods(class_loader* self, il_type* iltype, type* tp, 
 }
 
 void class_loader_sgload_methods_impl(class_loader* self, il_type* iltype, type* tp, vector* ilmethods, namespace_* scope) {
+	il_load_cache* cache = il_load_cache_new();
+	vector_push(cache->namespace_vec, scope);
 	//class_* classz = tp->u.class_;
 	for (int i = 0; i < ilmethods->length; i++) {
 		//メソッド一覧から取り出す
@@ -113,7 +115,7 @@ void class_loader_sgload_methods_impl(class_loader* self, il_type* iltype, type*
 		method->type = modifier_is_native(ilmethod->modifier) ? method_type_native : method_type_script;
 		method->access = ilmethod->access;
 		method->modifier = ilmethod->modifier;
-		type_parameter_list_dup(ilmethod->type_parameter_list, method->type_parameter_list);
+		type_parameter_list_dup(ilmethod->type_parameter_list, method->type_parameter_list, cache);
 		//インターフェースなら空
 		if (tp->tag == type_interface) {
 			method->type = method_type_abstract;
@@ -140,6 +142,8 @@ void class_loader_sgload_methods_impl(class_loader* self, il_type* iltype, type*
 		//NOTE:クラスの登録が終わったらオペコードを作成する
 		type_add_method(tp, method);
 	}
+	vector_pop(cache->namespace_vec);
+	il_load_cache_delete(cache);
 }
 
 
