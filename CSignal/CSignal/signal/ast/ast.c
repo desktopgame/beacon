@@ -321,6 +321,7 @@ void ast_print(ast* self) {
 			text_printf("typename(%s)", self->u.string_value);
 			break;
 		case ast_type_parameter_list: p("type parameter list");
+		case ast_type_parameter_rule_list: p("type parameter rule list");
 		default: 
 			p("not implemented");
 	}

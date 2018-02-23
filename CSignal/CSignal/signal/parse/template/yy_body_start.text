@@ -213,17 +213,34 @@ $$REM __LIST __ENTRY
 ;;T in T out R ‚È‚Ç{{{
 ;;
 type_parameter
-	: IDENT
+	: IDENT type_parameter_rule_list
 	{
-		$$ = ast_new_type_parameter($1);
+		$$ = ast_new_type_parameter($1, $2);
 	}
-	| IN IDENT
+	| IN IDENT type_parameter_rule_list
 	{
-		$$ = ast_new_type_in_parameter($2);
+		$$ = ast_new_type_in_parameter($2, $3);
 	}
-	| OUT IDENT
+	| OUT IDENT type_parameter_rule_list
 	{
-		$$ = ast_new_type_out_parameter($2);
+		$$ = ast_new_type_out_parameter($2, $3);
+	}
+	;
+;;
+;;}}}
+;;
+
+;;
+;;Œ^éŒ¾‚É‘Î‚·‚é§–ñ{{{
+;;
+type_parameter_rule_list
+	: /* empty */
+	{
+		$$ = ast_new_blank();
+	}
+	| LRB typename_list RRB
+	{
+		$$ = ast_new_type_parameter_rule_list($2);
 	}
 	;
 ;;

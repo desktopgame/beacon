@@ -36,6 +36,7 @@
 					type_parameter_group
 					type_parameter_list
 					type_parameter
+					type_parameter_rule_list
 					class_decl 
 					enum_decl
 					interface_decl

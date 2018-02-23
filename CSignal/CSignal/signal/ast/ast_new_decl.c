@@ -231,21 +231,24 @@ ast * ast_new_typename(ast * fqcn) {
 	return ret;
 }
 
-ast * ast_new_type_parameter(char * name) {
+ast * ast_new_type_parameter(char * name, ast* arule_list) {
 	ast* ret = ast_new(ast_type_parameter);
 	ret->u.string_value = name;
+	ast_push(ret, arule_list);
 	return ret;
 }
 
-ast * ast_new_type_in_parameter(char * name) {
+ast * ast_new_type_in_parameter(char * name, ast* arule_list) {
 	ast* ret = ast_new(ast_type_in_parameter);
 	ret->u.string_value = name;
+	ast_push(ret, arule_list);
 	return ret;
 }
 
-ast * ast_new_type_out_parameter(char * name) {
+ast * ast_new_type_out_parameter(char * name, ast* arule_list) {
 	ast* ret = ast_new(ast_type_out_parameter);
 	ret->u.string_value = name;
+	ast_push(ret, arule_list);
 	return ret;
 }
 
@@ -260,6 +263,12 @@ ast * ast_new_parameterized_typename(char * name, ast * aparams) {
 	ast* ret = ast_new(ast_parameterized_typename);
 	ret->u.string_value = name;
 	ast_push(ret, aparams);
+	return ret;
+}
+
+ast * ast_new_type_parameter_rule_list(ast * arule_list) {
+	ast* ret = ast_new(ast_type_parameter_rule_list);
+	ast_push(ret, arule_list);
 	return ret;
 }
 

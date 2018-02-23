@@ -168,6 +168,8 @@ typedef enum ast_tag {
 	ast_type_out_parameter,
 	ast_type_parameter_list,
 
+	ast_type_parameter_rule_list,
+
 	ast_static_invoke,
 	//stmt
 	ast_if,

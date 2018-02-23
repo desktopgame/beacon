@@ -16,4 +16,7 @@ namespace signal.lang {
 
 	interface Enumerable<in T, out R> {
 	}
+
+	class TreeMap<T(IComparable)> {
+	}
 }

@@ -60,6 +60,7 @@
 					type_parameter_group
 					type_parameter_list
 					type_parameter
+					type_parameter_rule_list
 					class_decl 
 					enum_decl
 					interface_decl
@@ -244,17 +245,28 @@ type_parameter_list
 	;
 
 type_parameter
-	: IDENT
+	: IDENT type_parameter_rule_list
 	{
-		$$ = ast_new_type_parameter($1);
+		$$ = ast_new_type_parameter($1, $2);
 	}
-	| IN IDENT
+	| IN IDENT type_parameter_rule_list
 	{
-		$$ = ast_new_type_in_parameter($2);
+		$$ = ast_new_type_in_parameter($2, $3);
 	}
-	| OUT IDENT
+	| OUT IDENT type_parameter_rule_list
 	{
-		$$ = ast_new_type_out_parameter($2);
+		$$ = ast_new_type_out_parameter($2, $3);
+	}
+	;
+
+type_parameter_rule_list
+	: /* empty */
+	{
+		$$ = ast_new_blank();
+	}
+	| LRB typename_list RRB
+	{
+		$$ = ast_new_type_parameter_rule_list($2);
 	}
 	;
 

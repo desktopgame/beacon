@@ -145,11 +145,11 @@ void test_file_path(void) {
 
 void test_cll(void) {
 	class_loader* cll = class_loader_new_entry_point_from_file("main.signal");
-//	ast_print_tree(cll->source_code);
-	class_loader_load(cll);
+	ast_print_tree(cll->source_code);
+//	class_loader_load(cll);
 //	il_top_level_dump(cll->il_code, 0);
-	system("cls");
-	namespace_dump();
+//	system("cls");
+//	namespace_dump();
 	class_loader_delete(cll);
 //	script_context* temp = eval_push();
 //	char* lines[2] = {

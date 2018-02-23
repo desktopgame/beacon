@@ -218,11 +218,12 @@ ast* ast_new_typename(ast* fqcn);
 /**
  * T や K V などの要素を作成します.
  * @param name
+ * @param arule_list
  * @return
  */
-ast* ast_new_type_parameter(char* name);
-ast* ast_new_type_in_parameter(char* name);
-ast* ast_new_type_out_parameter(char* name);
+ast* ast_new_type_parameter(char* name, ast* arule_list);
+ast* ast_new_type_in_parameter(char* name, ast* arule_list);
+ast* ast_new_type_out_parameter(char* name, ast* arule_list);
 
 /** 
  * T や K V の要素のリストを作成します.
@@ -239,4 +240,11 @@ ast* ast_new_type_parameter_list(ast* aparam, ast* alist);
  * @return
  */
 ast * ast_new_parameterized_typename(char* name, ast* aparams);
+
+/**
+ * 型制約の一覧を表す要素を作成します.
+ * @param arule_list
+ * @return
+ */
+ast* ast_new_type_parameter_rule_list(ast* arule_list);
 #endif // !SIGNAL_AST_AST_NEW_DECL_H
