@@ -53,6 +53,7 @@
 						ident_list
 						parameter_list
 						argument_list
+						typename_group
 						typename_list
 						typename_T
 						fqcn_part

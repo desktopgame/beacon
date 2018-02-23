@@ -585,6 +585,23 @@ argument_list
 ;;
 
 ;;
+;;Œ^–¼‚ÌƒOƒ‹[ƒv{{{
+;;
+typename_group
+	: /* empty */
+	{
+		$$ = ast_new_blank();
+	}
+	| LT typename_list GT
+	{
+		$$ = $2;
+	}
+	;
+;;
+;;}}}
+;;
+
+;;
 ;;Œ^–¼‚ÌƒŠƒXƒg{{{
 ;;
 typename_list
@@ -605,9 +622,9 @@ typename_list
 ;;Œ^–¼{{{
 ;;
 typename_T
-	: fqcn_part
+	: fqcn_part typename_group
 	{
-		$$ = ast_new_typename($1);
+		$$ = ast_new_typename($1, $2);
 	}
 	;
 ;;

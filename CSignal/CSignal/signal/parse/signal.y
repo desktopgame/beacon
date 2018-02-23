@@ -77,6 +77,7 @@
 						ident_list
 						parameter_list
 						argument_list
+						typename_group
 						typename_list
 						typename_T
 						fqcn_part
@@ -491,6 +492,17 @@ argument_list
 	}
 	;
 
+typename_group
+	: /* empty */
+	{
+		$$ = ast_new_blank();
+	}
+	| LT typename_list GT
+	{
+		$$ = $2;
+	}
+	;
+
 typename_list
 	: typename_T
 	{
@@ -503,9 +515,9 @@ typename_list
 	;
 
 typename_T
-	: fqcn_part
+	: fqcn_part typename_group
 	{
-		$$ = ast_new_typename($1);
+		$$ = ast_new_typename($1, $2);
 	}
 	;
 

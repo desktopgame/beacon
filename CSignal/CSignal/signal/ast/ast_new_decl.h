@@ -211,9 +211,10 @@ ast* ast_new_typename_list(ast* atypename, ast* typename_list);
 /**
  * X::Y::C や C を型名でラップします.
  * @param fqcn
+ * @param atype_args
  * @return
  */
-ast* ast_new_typename(ast* fqcn);
+ast* ast_new_typename(ast* fqcn, ast* atype_args);
 
 /**
  * T や K V などの要素を作成します.

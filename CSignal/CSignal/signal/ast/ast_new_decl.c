@@ -225,9 +225,10 @@ ast * ast_new_typename_list(ast * atypename, ast * typename_list) {
 	return ret;
 }
 
-ast * ast_new_typename(ast * fqcn) {
+ast * ast_new_typename(ast * fqcn, ast* atype_args) {
 	ast* ret = ast_new(ast_typename);
 	ast_push(ret, fqcn);
+	ast_push(ret, atype_args);
 	return ret;
 }
 
