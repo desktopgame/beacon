@@ -1,5 +1,6 @@
 #include "generic_type.h"
 #include "type_interface.h"
+#include "../util/mem.h"
 
 //proto
 static void generic_type_tree_delete(vector_item item);
