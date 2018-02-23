@@ -20,11 +20,13 @@
 //ilload
 //
 #include"../il/il_type_parameter.h"
+#include "../il/il_type_parameter_rule.h"
 
 //proto
 static il_factor* class_loader_ilload_factorImpl(class_loader* self, ast* source);
 static il_stmt* class_loader_ilload_bodyImpl(class_loader* self, ast* source);
 static void class_loader_ilload_type_parameter(class_loader* self, ast* source, vector* dest);
+static void class_loader_ilload_type_parameter_rule(class_loader* self, ast* source, vector* dest);
 
 void class_loader_ilload_impl(class_loader* self, ast* source_code) {
 	assert(self->il_code == NULL);
@@ -855,8 +857,30 @@ static void class_loader_ilload_type_parameter(class_loader* self, ast* source, 
 	assert(source->tag == ast_type_parameter ||
 		   source->tag == ast_type_in_parameter ||
 		   source->tag == ast_type_out_parameter);
+	ast* arule_list = ast_first(source);
 	il_type_parameter* iltypeparam = il_type_parameter_new(source->u.string_value);
 	if (source->tag == ast_type_in_parameter) iltypeparam->kind = il_type_parameter_kind_in;
 	if (source->tag == ast_type_out_parameter) iltypeparam->kind = il_type_parameter_kind_out;
 	vector_push(dest, iltypeparam);
+	//制約があるならそれも設定
+	if (!ast_is_blank(arule_list) &&
+		arule_list->tag == ast_type_parameter_rule_list) {
+		class_loader_ilload_type_parameter_rule(self, ast_first(arule_list), iltypeparam->rule_vec);
+	}
+}
+
+static void class_loader_ilload_type_parameter_rule(class_loader* self, ast* source, vector* dest) {
+	if (source->tag == ast_type_parameter_list) {
+		for (int i = 0; i < source->child_count; i++) {
+			class_loader_ilload_type_parameter_rule(self, ast_at(source, i), dest);
+		}
+	} else {
+		if (source->tag == ast_typename) {
+			il_type_parameter_rule* rule = il_type_parameter_rule_new();
+			rule->tag = il_type_parameter_rule_polymorphic;
+			rule->u.fqcn_ = fqcn_cache_new();
+			class_loader_ilload_fqcn(ast_first(source), rule->u.fqcn_);
+			vector_push(dest, rule);
+		}
+	}
 }

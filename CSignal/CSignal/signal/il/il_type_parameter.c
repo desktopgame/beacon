@@ -1,11 +1,16 @@
 #include "il_type_parameter.h"
 #include "../util/mem.h"
 #include "../util/text.h"
+#include "il_type_parameter_rule.h"
+
+//proto
+static void il_type_parameter_rule_list_delete(vector_item item);
 
 il_type_parameter * il_type_parameter_new(char* name) {
 	il_type_parameter* ret = (il_type_parameter*)MEM_MALLOC(sizeof(il_type_parameter));
 	ret->kind = il_type_parameter_kind_default;
 	ret->name = text_strdup(name);
+	ret->rule_vec = vector_new();
 	return ret;
 }
 
@@ -22,6 +27,7 @@ void il_type_parameter_list_print(vector * v) {
 			text_printf("out ");
 		}
 		text_printf("%s", e->name);
+		il_type_parameter_rule_list_print(e->rule_vec);
 		if (i != v->length - 1) {
 			text_printf(", ");
 		}
@@ -30,6 +36,12 @@ void il_type_parameter_list_print(vector * v) {
 }
 
 void il_type_parameter_delete(il_type_parameter * self) {
+	vector_delete(self->rule_vec, il_type_parameter_rule_list_delete);
 	MEM_FREE(self->name);
 	MEM_FREE(self);
+}
+//private
+static void il_type_parameter_rule_list_delete(vector_item item) {
+	il_type_parameter_rule* e = (il_type_parameter_rule*)item;
+	il_type_parameter_rule_delete(e);
 }
