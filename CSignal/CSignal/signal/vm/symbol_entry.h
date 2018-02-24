@@ -2,13 +2,13 @@
 #ifndef SIGNAL_VM_SYMBOL_ENTRY_H
 #define SIGNAL_VM_SYMBOL_ENTRY_H
 //#include "../env/class.h"
-//struct type;
+struct type;
 /**
  * シンボルを表す構造体.
  */
 typedef struct symbol_entry {
 	int index;
-	struct generic_type* gtype;
+	struct type* type;
 } symbol_entry;
 
 /**

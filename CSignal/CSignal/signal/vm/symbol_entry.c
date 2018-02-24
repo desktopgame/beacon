@@ -5,7 +5,7 @@
 symbol_entry * symbol_entry_new(const char * name) {
 	symbol_entry* ret = (symbol_entry*)MEM_MALLOC(sizeof(symbol_entry));
 	ret->index = 0;
-	ret->gtype = NULL;
+	ret->type = NULL;
 	return ret;
 }
 

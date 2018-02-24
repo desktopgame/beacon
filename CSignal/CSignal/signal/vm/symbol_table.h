@@ -3,7 +3,7 @@
 #define SIGNAL_VM_SYMBOL_TABLE_H
 #include "../util/tree_map.h"
 //#include "../env/class.h"
-struct generic_type;
+struct type;
 struct symbol_entry;
 /**
  * 変数名とインデックスの変換テーブルです.
@@ -24,11 +24,11 @@ symbol_table* symbol_table_new();
  * 指定の名前に対応するインデックスを返します.
  * もしくは、既に登録されているならそれを返します。
  * @param self
- * @param gtp
+ * @param tp
  * @param name
  * @return nameに対応するエントリが存在せず、clsがNULLならNULL
  */
-struct symbol_entry* symbol_table_entry(symbol_table* self, struct generic_type* gtp, const char* name);
+struct symbol_entry* symbol_table_entry(symbol_table* self, struct type* tp, const char* name);
 
 /**
  * シンボルテーブルを開放します.
