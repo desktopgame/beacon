@@ -102,6 +102,7 @@ void class_loader_sgload_methods(class_loader* self, il_type* iltype, type* tp, 
 void class_loader_sgload_methods_impl(class_loader* self, il_type* iltype, type* tp, vector* ilmethods, namespace_* scope) {
 	il_load_cache* cache = il_load_cache_new();
 	vector_push(cache->namespace_vec, scope);
+	vector_push(cache->type_vec, tp);
 	//class_* classz = tp->u.class_;
 	for (int i = 0; i < ilmethods->length; i++) {
 		//メソッド一覧から取り出す
@@ -142,6 +143,7 @@ void class_loader_sgload_methods_impl(class_loader* self, il_type* iltype, type*
 		//NOTE:クラスの登録が終わったらオペコードを作成する
 		type_add_method(tp, method);
 	}
+	vector_pop(cache->type_vec);
 	vector_pop(cache->namespace_vec);
 	il_load_cache_delete(cache);
 }

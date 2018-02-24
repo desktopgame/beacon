@@ -109,6 +109,14 @@ bool type_castable(type* self, type* other);
 void type_unlink(type* self);
 
 /**
+ * 指定の名前の型変数が何番目に表れるかを返します.
+ * @param self
+ * @param name
+ * @return
+ */
+int type_for_generic_index(type* self, char* name);
+
+/**
  * 型を開放します.
  * @param self
  */

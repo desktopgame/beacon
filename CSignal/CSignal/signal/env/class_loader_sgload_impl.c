@@ -153,21 +153,21 @@ void class_loader_sgload_class(class_loader* self, il_type* iltype, namespace_* 
 	if (tp == NULL) {
 		cls = class_new(iltype->u.class_->name);
 		for (int i = 0; i < iltype->u.class_->extend_list->length; i++) {
-			fqcn_cache* e = (fqcn_cache*)vector_at(iltype->u.class_->extend_list, i);
+			generic_cache* e = (generic_cache*)vector_at(iltype->u.class_->extend_list, i);
 			//最初の一つはクラスでもインターフェースでもよい
 			if (i == 0) {
-				class_* c = fqcn_class(e, parent);
+				class_* c = generic_cache_class(e, parent);
 				if (c != NULL) {
 					cls->super_class = c;
 				} else {
 					//クラスではなかったのでインターフェースとして扱う
-					interface_* inter = fqcn_interface(e, parent);
+					interface_* inter = generic_cache_interface(e, parent);
 					assert(inter != NULL);
 					vector_push(cls->impl_list, inter);
 				}
 			//二つ目以降はインターフェースのみ
 			} else {
-				interface_* inter = fqcn_interface(e, parent);
+				interface_* inter = generic_cache_interface(e, parent);
 				assert(inter != NULL);
 				vector_push(cls->impl_list, inter);
 			}
@@ -177,8 +177,10 @@ void class_loader_sgload_class(class_loader* self, il_type* iltype, namespace_* 
 		tp = type_wrap_class(cls);
 		namespace_add_type(parent, tp);
 		//仮型引数を与える
+		vector_push(cache->type_vec, tp);
 		type_parameter_list_dup(iltype->u.class_->type_parameter_list, cls->type_parameter_list, cache);
 	} else {
+		vector_push(cache->type_vec, tp);
 		cls = tp->u.class_;
 	}
 	//デフォルトで親に Object を持つように
@@ -211,6 +213,7 @@ void class_loader_sgload_class(class_loader* self, il_type* iltype, namespace_* 
 		cachekind_class_impl
 	);
 	vector_push(self->type_cache_vec, mtc);
+	vector_pop(cache->type_vec);
 	vector_pop(cache->namespace_vec);
 	il_load_cache_delete(cache);
 }
@@ -225,9 +228,9 @@ void class_loader_sgload_interface(class_loader * self, il_type * iltype, namesp
 	if (tp == NULL) {
 		inter = interface_new(iltype->u.interface_->name);
 		for (int i = 0; i < iltype->u.interface_->extends_list->length; i++) {
-			fqcn_cache* e = (fqcn_cache*)vector_at(iltype->u.interface_->extends_list, i);
+			generic_cache* e = (generic_cache*)vector_at(iltype->u.interface_->extends_list, i);
 			//インターフェースはインターフェースのみ継承
-			interface_* interI = fqcn_interface(e, parent);
+			interface_* interI = generic_cache_interface(e, parent);
 			assert(interI != NULL);
 			vector_push(inter->impl_list, interI);
 		}
@@ -236,8 +239,10 @@ void class_loader_sgload_interface(class_loader * self, il_type * iltype, namesp
 		tp = type_wrap_interface(inter);
 		namespace_add_type(parent, tp);
 		//仮型引数を与える
+		vector_push(cache->type_vec, tp);
 		type_parameter_list_dup(iltype->u.interface_->type_parameter_list, inter->type_parameter_list, cache);
 	} else {
+		vector_push(cache->type_vec, tp);
 		inter = tp->u.interface_;
 	}
 	logger_info(log_info, __FILE__, __LINE__, "register interface %s", inter->name);
@@ -261,6 +266,7 @@ void class_loader_sgload_interface(class_loader * self, il_type * iltype, namesp
 		cachekind_interface_impl
 	);
 	vector_push(self->type_cache_vec, mtc);
+	vector_pop(cache->type_vec);
 	vector_pop(cache->namespace_vec);
 	il_load_cache_delete(cache);
 }

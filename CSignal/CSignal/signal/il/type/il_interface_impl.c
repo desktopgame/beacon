@@ -36,8 +36,8 @@ void il_interface_dump(il_interface * self, int depth) {
 	text_putline();
 	//継承するインターフェイスの一覧を出力
 	for (int i = 0; i < self->extends_list->length; i++) {
-		fqcn_cache* e = (fqcn_cache*)vector_at(self->extends_list, i);
-		fqcn_cache_dump(e, depth + 1);
+		generic_cache* e = (generic_cache*)vector_at(self->extends_list, i);
+		generic_cache_dump(e, depth + 1);
 	}
 
 	for (int i = 0; i < self->method_list->length; i++) {
@@ -56,8 +56,8 @@ void il_interface_delete(il_interface * self) {
 }
 //private 
 static void il_interface_fqcn_delete(vector_item item) {
-	fqcn_cache* e = (fqcn_cache*)item;
-	fqcn_cache_delete(e);
+	generic_cache* e = (generic_cache*)item;
+	generic_cache_delete(e);
 }
 
 static void il_interface_method_delete(vector_item item) {

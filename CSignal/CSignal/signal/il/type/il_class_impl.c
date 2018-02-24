@@ -59,8 +59,8 @@ void il_class_dump(il_class * self, int depth) {
 	text_putline();
 	//ここでは親クラスとインターフェースをごちゃまぜで表示
 	for (int i = 0; i < self->extend_list->length; i++) {
-		fqcn_cache* e = (fqcn_cache*)vector_at(self->extend_list, i);
-		fqcn_cache_dump(e, depth + 1);
+		generic_cache* e = (generic_cache*)vector_at(self->extend_list, i);
+		generic_cache_dump(e, depth + 1);
 	}
 	for (int i = 0; i < self->field_list->length; i++) {
 		vector_item e = vector_at(self->field_list, i);
@@ -113,8 +113,10 @@ static void il_class_ctor_delete(vector_item item) {
 }
 
 static void il_class_extend_delete(vector_item item) {
-	fqcn_cache* e = (fqcn_cache*)item;
-	fqcn_cache_delete(e);
+	//fqcn_cache* e = (fqcn_cache*)item;
+	//fqcn_cache_delete(e);
+	generic_cache* e = (generic_cache*)item;
+	generic_cache_delete(e);
 }
 
 static void il_class_type_parameter_delete(vector_item item) {

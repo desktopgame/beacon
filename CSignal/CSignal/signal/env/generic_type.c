@@ -1,6 +1,7 @@
 #include "generic_type.h"
 #include "type_interface.h"
 #include "../util/mem.h"
+#include "../util/text.h"
 
 //proto
 static void generic_type_tree_delete(vector_item item);
@@ -9,6 +10,7 @@ generic_type * generic_type_new(type * core_type) {
 	generic_type* ret = (generic_type*)MEM_MALLOC(sizeof(generic_type));
 	ret->core_type = core_type;
 	ret->type_args_list = vector_new();
+	ret->virtual_type_index = -1;
 	return ret;
 }
 
@@ -39,6 +41,26 @@ bool generic_type_assignable(generic_type * left, generic_type * right) {
 		}
 	}
 	return ret;
+}
+
+void generic_type_print(generic_type * self) {
+	if (self->virtual_type_index != -1) {
+		text_printf("[%d]", self->virtual_type_index);
+	} else {
+		text_printf("%s", type_name(self->core_type));
+	}
+	if (self->type_args_list->length == 0) {
+		return;
+	}
+	text_printf("<");
+	for (int i = 0; i < self->type_args_list->length; i++) {
+		generic_type* e = (generic_type*)vector_at(self->type_args_list, i);
+		generic_type_print(e);
+		if (i != self->type_args_list->length - 1) {
+			text_printf(",");
+		}
+	}
+	text_printf(">");
 }
 
 void generic_type_delete(generic_type * self) {

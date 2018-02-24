@@ -15,13 +15,25 @@ generic_cache * generic_cache_new() {
 	return ret;
 }
 
-generic_type * generic_cache_gtype(generic_cache * self, namespace_ * scope) {
+generic_type * generic_cache_gtype(generic_cache * self, namespace_ * scope, il_load_cache* cache) {
 	type* core_type = generic_cache_type(self, scope);
 	generic_type* ret = generic_type_new(core_type);
+	//もし名前空間でラッピングされていなくて、
+	//なおかつ型が見つからないなら、
+	//仮想型(List<T>のT)として扱う。
+	if (self->fqcn->scope_vec->length == 0 &&
+		core_type == NULL) {
+		//読み込み中の型
+		type* container = (type*)vector_top(cache->type_vec);
+		ret->virtual_type_index = type_for_generic_index(container, self->fqcn->name);
+		//しかし、Tに対して追加の型変数を与えることはできません。
+		assert(self->type_args->length == 0 && ret->virtual_type_index != -1);
+		return ret;
+	}
 	assert(core_type->tag != type_enum);
 	for (int i = 0; i < self->type_args->length; i++) {
 		generic_cache* e = (generic_cache*)vector_at(self->type_args, i);
-		generic_type* child = generic_cache_gtype(e, scope);
+		generic_type* child = generic_cache_gtype(e, scope, cache);
 		vector_push(ret->type_args_list, child);
 	}
 	if (core_type->tag == type_class) {
@@ -38,11 +50,19 @@ type * generic_cache_type(generic_cache * self, namespace_ * scope) {
 }
 
 class_ * generic_cache_class(generic_cache * self, namespace_ * scope) {
-	return generic_cache_type(self, scope)->u.class_;
+	type* tp = generic_cache_type(self, scope);
+	if (tp == NULL || tp->tag == type_interface) {
+		return NULL;
+	}
+	return tp->u.class_;
 }
 
 interface_ * generic_cache_interface(generic_cache * self, namespace_ * scope) {
-	return generic_cache_type(self, scope)->u.interface_;
+	type* tp = generic_cache_type(self, scope);
+	if (tp == NULL || tp->tag == type_class) {
+		return NULL;
+	}
+	return tp->u.interface_;
 }
 
 void generic_cache_print(generic_cache * self) {
@@ -60,6 +80,12 @@ void generic_cache_print(generic_cache * self) {
 		}
 	}
 	text_printf(">");
+}
+
+void generic_cache_dump(generic_cache * self, int depth) {
+	text_putindent(depth);
+	generic_cache_print(self);
+	text_putline();
 }
 
 void generic_cache_delete(generic_cache * self) {

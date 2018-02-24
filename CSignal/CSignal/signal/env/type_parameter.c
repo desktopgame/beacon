@@ -32,14 +32,29 @@ type_parameter * type_parameter_dup(il_type_parameter * src, il_load_cache* cach
 		default:
 			break;
 	}
-	type_parameter_rule_list_dup(src->rule_vec, ret->rule_vec, cache);
+//	type_parameter_rule_list_dup(src->rule_vec, ret->rule_vec, cache);
 	return ret;
 }
 
 void type_parameter_list_dup(vector* ilSource, vector* sgDest, il_load_cache* cache) {
+	//これはILレベルの<K, V>の並びを
+	//SGレベルの<K, V> へ変換します。
+	//<K(IComparable<K>), V>のような宣言をするとき、
+	//Kは仮想型としてIComparableで正しく認識されます。
+	//そのためには、type_parameterをとりえず登録しておいて、
+	//あとからルール一覧を対応づける必要があります。
+	//type_parameter_dupからルールの複製を削除したのもそのためです。
 	for (int i = 0; i < ilSource->length; i++) {
 		il_type_parameter* e = (il_type_parameter*)vector_at(ilSource, i);
-		vector_push(sgDest, type_parameter_dup(e, cache));
+		type_parameter* newTP = type_parameter_dup(e, cache);
+		vector_push(sgDest, newTP);
+		//type_parameter_rule_list_dup(e->rule_vec, newTP->rule_vec, cache);
+	}
+	//ここでルールを当てはめる
+	for (int i = 0; i < ilSource->length; i++) {
+		il_type_parameter* e = (il_type_parameter*)vector_at(ilSource, i);
+		type_parameter* v = vector_at(sgDest, i);
+		type_parameter_rule_list_dup(e->rule_vec, v->rule_vec, cache);
 	}
 }
 
@@ -57,6 +72,7 @@ void type_parameter_print(vector* v) {
 			text_printf("out ");
 		}
 		text_printf("%s", e->name);
+		type_parameter_rule_list_print(e->rule_vec);
 		if (i != v->length - 1) {
 			text_printf(", ");
 		}

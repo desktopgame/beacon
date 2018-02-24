@@ -215,7 +215,7 @@ void class_loader_ilload_typename_list(class_loader * self, vector * dst, ast * 
 		//fqcn_cache* e = fqcn_cache_new();
 		generic_cache* e = generic_cache_new();
 		//[typename [fqcn]]
-		class_loader_ilload_generic(ast_first(typename_list), e);
+		class_loader_ilload_generic(typename_list, e);
 		vector_push(dst, e);
 	} else if(typename_list->tag == ast_typename_list) {
 		for (int i = 0; i < typename_list->child_count; i++) {
@@ -260,7 +260,7 @@ void class_loader_ilload_field(class_loader* self, il_type* current, ast* field,
 	ast* type_name = ast_second(field);
 	ast* access_name = ast_at(field, 2);
 	il_field* v = il_field_new(access_name->u.string_value);
-	class_loader_ilload_generic(ast_first(type_name), v->fqcn);
+	class_loader_ilload_generic(type_name, v->fqcn);
 	//v->type = il_type_new(type_name->u.string_value);
 	v->access = level;
 	v->modifier = ast_cast_to_modifier(modifier);
@@ -279,7 +279,7 @@ void class_loader_ilload_method(class_loader* self, il_type* current, ast* metho
 	ast* ret_name = ast_at(method, 5);
 	il_method* v = il_method_new(func_name->u.string_value);
 	class_loader_ilload_type_parameter(self, ageneric, v->type_parameter_list);
-	class_loader_ilload_generic(ast_first(ret_name), v->return_fqcn);
+	class_loader_ilload_generic(ret_name, v->return_fqcn);
 //	v->return_type = il_type_new(ret_name->u.string_value);
 	v->access = level;
 	v->modifier = ast_cast_to_modifier(modifier);
@@ -334,7 +334,7 @@ void class_loader_ilload_parameter_list(class_loader* self, vector* list, ast* s
 		ast* type_name = ast_first(source);
 		ast* access_name = ast_second(source);
 		il_parameter* p = il_parameter_new(access_name->u.string_value);
-		class_loader_ilload_generic(ast_first(type_name), p->fqcn);
+		class_loader_ilload_generic(type_name, p->fqcn);
 		//p->type = il_type_new(type_name->u.string_value);
 		vector_push(list, p);
 	}
@@ -376,7 +376,7 @@ il_stmt_variable_init* class_loader_ilload_variable_init(class_loader* self, ast
 	ast* aident = ast_second(source);
 	ast* afact = ast_at(source, 2);
 	il_stmt_variable_init* ret = il_stmt_variable_init_new(aident->u.string_value);
-	class_loader_ilload_generic(ast_first(afqcn), ret->fqcn);
+	class_loader_ilload_generic(afqcn, ret->fqcn);
 	ret->fact = class_loader_ilload_factor(self, afact);
 	return ret;
 }
@@ -563,7 +563,7 @@ il_factor_new_instance* class_loader_ilload_new_instance(class_loader* self, ast
 	ast* afqcn = ast_first(source);
 	ast* aargs = ast_second(source);
 	il_factor_new_instance* ret = il_factor_new_instance_new();
-	class_loader_ilload_generic(ast_first(afqcn), ret->fqcn);
+	class_loader_ilload_generic(afqcn, ret->fqcn);
 	class_loader_ilload_argument_list(self, ret->argument_list, aargs);
 	return ret;
 }
@@ -587,7 +587,7 @@ il_factor_static_field_access* class_loader_ilload_static_field_access(class_loa
 il_factor_as* class_loader_ilload_as(class_loader* self, ast* source) {
 	il_factor_as* ret = il_factor_as_new();
 	ret->fact = class_loader_ilload_factor(self, ast_first(source));
-	class_loader_ilload_generic(ast_first(ast_second(source)), ret->fqcn);
+	class_loader_ilload_generic(ast_second(source), ret->fqcn);
 	return ret;
 }
 
@@ -614,6 +614,7 @@ il_factor_dec * class_loader_ilload_dec(class_loader * self, ast * source) {
 }
 
 void class_loader_ilload_generic(ast* fqcn, generic_cache* dest) {
+	assert(fqcn->tag == ast_typename);
 	class_loader_ilload_generic_impl(fqcn, dest);
 	fqcn_cache* body = dest->fqcn;
 	//FIXME: Int のような文字パースで失敗してしまうので対策
@@ -640,9 +641,16 @@ void class_loader_ilload_argument_list(class_loader* self, vector* list, ast* so
 //private
 static void class_loader_ilload_generic_impl(ast* fqcn, generic_cache* dest) {
 	fqcn_cache* body = dest->fqcn;
-	ast* atype_args = ast_first(fqcn);
-	if (!ast_is_blank(atype_args)) {
-		class_loader_ilload_generic_inner(atype_args, dest);
+	//型引数を解析する
+	if (fqcn->tag == ast_typename) {
+		ast* atype_args = ast_second(fqcn);
+		if (!ast_is_blank(atype_args)) {
+			class_loader_ilload_generic_inner(atype_args, dest);
+		}
+	}
+	if (fqcn->tag == ast_typename) {
+		class_loader_ilload_generic_impl(ast_first(fqcn), dest);
+		return;
 	}
 	if (fqcn->tag == ast_fqcn ||
 		fqcn->tag == ast_fqcn_part_list) {
@@ -907,7 +915,7 @@ static void class_loader_ilload_type_parameter_rule(class_loader* self, ast* sou
 			il_type_parameter_rule* rule = il_type_parameter_rule_new();
 			rule->tag = il_type_parameter_rule_polymorphic;
 			rule->u.fqcn_ = generic_cache_new();
-			class_loader_ilload_generic(ast_first(source), rule->u.fqcn_);
+			class_loader_ilload_generic(source, rule->u.fqcn_);
 			vector_push(dest, rule);
 		}
 	}

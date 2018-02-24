@@ -8,6 +8,8 @@
 #include "../../env/field.h"
 #include "../../util/mem.h"
 #include "../../vm/symbol_entry.h"
+#include <assert.h>
+#include <string.h>
 
 //proto
 static void il_factor_variable_check(il_factor_variable* self, enviroment* env, il_load_cache* cache);
@@ -20,6 +22,7 @@ il_factor * il_factor_wrap_variable(il_factor_variable * self) {
 }
 
 il_factor_variable * il_factor_variable_new(const char * name) {
+	assert(strlen(name) > 0);
 	il_factor_variable* ret = (il_factor_variable*)MEM_MALLOC(sizeof(il_factor_variable));
 	ret->name = text_strdup(name);
 	ret->index = -1;

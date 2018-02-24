@@ -111,7 +111,7 @@ static void il_factor_named_invoke_find(il_factor_named_invoke* self, enviroment
 	}
 	self->find = true;
 	//X::Y.call() のような場合
-	fqcn_cache* body = self->fqcn;
+	fqcn_cache* body = self->fqcn->fqcn;
 	if (body->scope_vec->length > 0) {
 		namespace_* top = NULL;
 		for (int i = 0; i < body->scope_vec->length; i++) {

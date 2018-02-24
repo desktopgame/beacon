@@ -76,7 +76,7 @@ void il_factor_new_instance_delete(il_factor_new_instance * self) {
 //private
 static void il_factor_new_instance_find(il_factor_new_instance * self, enviroment * env, il_load_cache* cache) {
 	//*
-	class_* cls = il_load_cache_class(cache, self->fqcn);
+	class_* cls = il_load_cache_class(cache, self->fqcn->fqcn);
 	int temp = 0;
 	//TEST(!strcmp(cls->name, "Point3D"));
 	self->c = class_find_constructor(cls, self->argument_list, env, cache, &temp);

@@ -24,5 +24,7 @@ type_parameter_rule* type_parameter_rule_dup(struct il_type_parameter_rule* src,
 
 void type_parameter_rule_list_dup(vector* ilSource, vector* sgDest, struct il_load_cache* cache);
 
+void type_parameter_rule_list_print(vector* v);
+
 void type_parameter_rule_delete(type_parameter_rule* self);
 #endif // !SIGNAL_ENV_TYPE_PARAMETER_RULE_H

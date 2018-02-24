@@ -3,7 +3,9 @@
 #include "type_impl.h"
 #include "field.h"
 #include "method.h"
+#include "type_parameter.h"
 #include <assert.h>
+#include <string.h>
 
 type * type_new() {
 	type* ret = (type*)MEM_MALLOC(sizeof(type));
@@ -91,6 +93,23 @@ void type_unlink(type * self) {
 	} else if (self->tag == type_interface) {
 		interface_unlink(self->u.interface_);
 	}
+}
+
+int type_for_generic_index(type * self, char * name) {
+	assert(self->tag != type_enum);
+	vector* v = NULL;
+	if (self->tag == type_class) v = self->u.class_->type_parameter_list;
+	if (self->tag == type_interface) v = self->u.interface_->type_parameter_list;
+	//‘S‚Ä‚ÌŒ^•Ï”‚Æ”ä‚×‚é
+	int ret = -1;
+	for (int i = 0; i < v->length; i++) {
+		type_parameter* e = (type_parameter*)vector_at(v, i);
+		if (!strcmp(e->name, name)) {
+			ret = i;
+			break;
+		}
+	}
+	return ret;
 }
 
 void type_delete(type * self) {

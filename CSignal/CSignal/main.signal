@@ -17,7 +17,16 @@ namespace signal.lang {
 	interface Enumerable<in T, out R> {
 	}
 
-	class TreeMap<T(IComparable<T>)> {
+	interface IList<T> : Iterator {
+	}
+
+	interface IComparable<T> {
+	}
+
+	interface IFunc {
+	}
+
+	class TreeMap<K(IComparable<K, V>), V> {
 		public:
 		def put<Func(IFunc)>() -> Void {
 		}
