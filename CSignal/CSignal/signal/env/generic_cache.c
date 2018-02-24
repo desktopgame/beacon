@@ -18,15 +18,15 @@ generic_cache * generic_cache_new() {
 generic_type * generic_cache_gtype(generic_cache * self, namespace_ * scope, il_load_cache* cache) {
 	type* core_type = generic_cache_type(self, scope);
 	generic_type* ret = generic_type_new(core_type);
-	//‚à‚µ–¼‘O‹óŠÔ‚Åƒ‰ƒbƒsƒ“ƒO‚³‚ê‚Ä‚¢‚È‚­‚ÄA
-	//‚È‚¨‚©‚ÂŒ^‚ªŒ©‚Â‚©‚ç‚È‚¢‚È‚çA
-	//‰¼‘zŒ^(List<T>‚ÌT)‚Æ‚µ‚Äˆµ‚¤B
+	//ã‚‚ã—åå‰ç©ºé–“ã§ãƒ©ãƒƒãƒ”ãƒ³ã‚°ã•ã‚Œã¦ã„ãªãã¦ã€
+	//ãªãŠã‹ã¤å‹ãŒè¦‹ã¤ã‹ã‚‰ãªã„ãªã‚‰ã€
+	//ä»®æƒ³å‹(List<T>ã®T)ã¨ã—ã¦æ‰±ã†ã€‚
 	if (self->fqcn->scope_vec->length == 0 &&
 		core_type == NULL) {
-		//“Ç‚İ‚İ’†‚ÌŒ^
+		//èª­ã¿è¾¼ã¿ä¸­ã®å‹
 		type* container = (type*)vector_top(cache->type_vec);
 		ret->virtual_type_index = type_for_generic_index(container, self->fqcn->name);
-		//‚µ‚©‚µAT‚É‘Î‚µ‚Ä’Ç‰Á‚ÌŒ^•Ï”‚ğ—^‚¦‚é‚±‚Æ‚Í‚Å‚«‚Ü‚¹‚ñB
+		//ã—ã‹ã—ã€Tã«å¯¾ã—ã¦è¿½åŠ ã®å‹å¤‰æ•°ã‚’ä¸ãˆã‚‹ã“ã¨ã¯ã§ãã¾ã›ã‚“ã€‚
 		assert(self->type_args->length == 0 && ret->virtual_type_index != -1);
 		return ret;
 	}

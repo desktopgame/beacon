@@ -31,7 +31,7 @@ enviroment * enviroment_new() {
 }
 
 void enviroment_add_range(enviroment* self, int lineno) {
-	//‹ó‚È‚Ì‚Å’Ç‰Á
+	//ç©ºãªã®ã§è¿½åŠ 
 	if (vector_empty(self->line_rangeVec)) {
 		line_range* lr = line_range_new();
 		lr->start_offset = 0;
@@ -40,8 +40,8 @@ void enviroment_add_range(enviroment* self, int lineno) {
 		vector_push(self->line_rangeVec, lr);
 		return;
 	}
-	//‹ó‚Å‚Í‚È‚¢‚È‚çA
-	//ÅŒã‚É‚Â‚¢‚©‚µ‚½ƒŒƒ“ƒW‚ðL‚Î‚·‚©V‚½‚É’Ç‰Á‚·‚é
+	//ç©ºã§ã¯ãªã„ãªã‚‰ã€
+	//æœ€å¾Œã«ã¤ã„ã‹ã—ãŸãƒ¬ãƒ³ã‚¸ã‚’ä¼¸ã°ã™ã‹æ–°ãŸã«è¿½åŠ ã™ã‚‹
 	line_range* lrt = (line_range*)vector_top(self->line_rangeVec);
 	if (lrt->lineno == lineno) {
 		lrt->end_offset = self->buf->source->length;
@@ -153,7 +153,7 @@ void enviroment_delete(enviroment * self) {
 
 //private
 static void enviroment_constant_pool_delete(vector_item item) {
-	//String‚âArray‚Í‚±‚±‚Å’†g‚ðíœ‚·‚é•K—v‚ª‚ ‚é
+	//Stringã‚„Arrayã¯ã“ã“ã§ä¸­èº«ã‚’å‰Šé™¤ã™ã‚‹å¿…è¦ãŒã‚ã‚‹
 	enviroment_object_delete((object*)item);
 	//object_delete((object*)item);
 }
@@ -176,11 +176,11 @@ static void enviroment_object_delete(object* obj) {
 	char* name = type_name(tp);
 	assert(obj->paint == paint_onexit);
 	//*
-	//enviroment‚ªíœ‚³‚ê‚éŽž“_‚Å‚ÍA
-	//‚·‚Å‚ÉƒXƒŒƒbƒh‚ÆVM‚ÌŠÖ˜A•t‚¯‚ª‰ðœ‚³‚ê‚Ä‚¢‚ÄA
-	//GC‚ðŽÀs‚·‚é‚±‚Æ‚ª‚Å‚«‚È‚¢‚Ì‚ÅŽ©•ª‚ÅŠJ•ú‚·‚éB
-	//FIXME:‚±‚Ì•û–@‚¾‚ÆA
-	//’è”‚ªƒtƒB[ƒ‹ƒh‚É’è”‚ðŠÜ‚Þê‡‚É“ñdŠJ•ú‚³‚ê‚é
+	//enviromentãŒå‰Šé™¤ã•ã‚Œã‚‹æ™‚ç‚¹ã§ã¯ã€
+	//ã™ã§ã«ã‚¹ãƒ¬ãƒƒãƒ‰ã¨VMã®é–¢é€£ä»˜ã‘ãŒè§£é™¤ã•ã‚Œã¦ã„ã¦ã€
+	//GCã‚’å®Ÿè¡Œã™ã‚‹ã“ã¨ãŒã§ããªã„ã®ã§è‡ªåˆ†ã§é–‹æ”¾ã™ã‚‹ã€‚
+	//FIXME:ã“ã®æ–¹æ³•ã ã¨ã€
+	//å®šæ•°ãŒãƒ•ã‚£ãƒ¼ãƒ«ãƒ‰ã«å®šæ•°ã‚’å«ã‚€å ´åˆã«äºŒé‡é–‹æ”¾ã•ã‚Œã‚‹
 	if (obj->tag == object_ref) {
 		for (int i = 0; i < obj->u.field_vec->length; i++) {
 			object* e = (object*)vector_at(obj->u.field_vec, i);

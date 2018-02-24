@@ -63,64 +63,64 @@ void il_stmt_try_generate(il_stmt_try* self, enviroment* env, il_load_cache* cac
 	label* try_end = opcode_buf_label(env->buf, -1);
 	label* catch_start = opcode_buf_label(env->buf, -1);
 	opcode_buf_add(env->buf, op_try_enter);
-	//������catch�̊J�n�ɔ�΂��܂����A
-	//op_try_enter����͂��̕����̓X�L�b�v����܂��B
+	//ここでcatchの開始に飛ばしますが、
+	//op_try_enterからはこの部分はスキップされます。
 	opcode_buf_add(env->buf, op_goto);
 	opcode_buf_add(env->buf, catch_start);
-	//��O���������邩������Ȃ�
-	//�X�e�[�g�����g�̈ꗗ
+	//例外が発生するかもしれない
+	//ステートメントの一覧
 	for (int i = 0; i < self->statement_list->length; i++) {
 		il_stmt* e = (il_stmt*)vector_at(self->statement_list, i);
 		il_stmt_generate(e, env, cache);
 	}
 	opcode_buf_add(env->buf, op_try_exit);
-	//��O���������Ȃ������Ȃ�catch���X�L�b�v
+	//例外が発生しなかったならcatchをスキップ
 	opcode_buf_add(env->buf, op_goto);
 	opcode_buf_add(env->buf, try_end);
-	//��O��ߑ������炱���ɔ�Ԃ悤��
+	//例外を捕捉したらここに飛ぶように
 	catch_start->cursor = opcode_buf_nop(env->buf);
-	//�S�Ă�catch�߂ɑ΂���
+	//全てのcatch節に対して
 	label* nextCause = NULL;
 	for (int i = 0; i < self->catch_list->length; i++) {
-		//��O���w��̖��O�ŃA�N�Z�X�o����悤��
+		//例外を指定の名前でアクセス出来るように
 		il_stmt_catch* ilcatch = (il_stmt_catch*)vector_at(self->catch_list, i);
 		type* exType = generic_cache_type(ilcatch->fqcn, (namespace_*)vector_top(cache->namespace_vec));
 		int exIndex = symbol_table_entry(env->sym_table, exType, ilcatch->name)->index;
-		//���O�̃P�[�X�̃W�����v���������
+		//直前のケースのジャンプ先をここに
 		if (nextCause != NULL) {
 			int head = opcode_buf_nop(env->buf);
 			nextCause->cursor = head;
 		}
 		nextCause = opcode_buf_label(env->buf, -1);
-		//���݂̗�O�� catch�� �̌^�Ɍ݊���������Ȃ瑱�s
+		//現在の例外と catch節 の型に互換性があるなら続行
 		opcode_buf_add(env->buf, op_hexception);
 		opcode_buf_add(env->buf, op_instanceof);
 		opcode_buf_add(env->buf, exType->absolute_index);
-		//�݊������Ȃ��̂Ŏ��̃P�[�X��
+		//互換性がないので次のケースへ
 		opcode_buf_add(env->buf, op_goto_if_false);
 		opcode_buf_add(env->buf, nextCause);
-		//�w��̖��O�ŗ�O��錾
+		//指定の名前で例外を宣言
 		opcode_buf_add(env->buf, op_hexception);
 		opcode_buf_add(env->buf, op_store);
 		opcode_buf_add(env->buf, exIndex);
-		//catch�̓����̃X�e�[�g�����g�𐶐�
+		//catchの内側のステートメントを生成
 		for (int j = 0; j < ilcatch->statement_list->length; j++) {
 			il_stmt* e = (il_stmt*)vector_at(ilcatch->statement_list, j);
 			il_stmt_generate(e, env, cache);
 		}
-		//catch���ꂽ�̂ŁA
-		//��O�t���O���N���A����
+		//catchされたので、
+		//例外フラグをクリアする
 		opcode_buf_add(env->buf, op_try_clear);
-		//�Ō��catch�̌���
+		//最後のcatchの後ろへ
 		opcode_buf_add(env->buf, op_goto);
 		opcode_buf_add(env->buf, try_end);
 		//nextCause = opcode_buf_label(env->buf, -1);
 	}
-	//try-catch�̍Ō�
+	//try-catchの最後
 	nextCause->cursor = opcode_buf_nop(env->buf);
-	//�ǂ�catch�ɂ�����������Ȃ�����
+	//どのcatchにも引っかからなかった
 	opcode_buf_add(env->buf, op_try_exit);
-	//catch�����������炱����
+	//catchを処理したらここに
 	try_end->cursor = opcode_buf_nop(env->buf);
 }
 

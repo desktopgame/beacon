@@ -100,7 +100,7 @@ int type_for_generic_index(type * self, char * name) {
 	vector* v = NULL;
 	if (self->tag == type_class) v = self->u.class_->type_parameter_list;
 	if (self->tag == type_interface) v = self->u.interface_->type_parameter_list;
-	//�S�Ă̌^�ϐ��Ɣ�ׂ�
+	//全ての型変数と比べる
 	int ret = -1;
 	for (int i = 0; i < v->length; i++) {
 		type_parameter* e = (type_parameter*)vector_at(v, i);

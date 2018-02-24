@@ -37,20 +37,20 @@ type_parameter * type_parameter_dup(il_type_parameter * src, il_load_cache* cach
 }
 
 void type_parameter_list_dup(vector* ilSource, vector* sgDest, il_load_cache* cache) {
-	//�����IL���x����<K, V>�̕��т�
-	//SG���x����<K, V> �֕ϊ����܂��B
-	//<K(IComparable<K>), V>�̂悤�Ȑ錾������Ƃ��A
-	//K�͉��z�^�Ƃ���IComparable�Ő������F������܂��B
-	//���̂��߂ɂ́Atype_parameter���Ƃ肦���o�^���Ă����āA
-	//���Ƃ��烋�[���ꗗ��Ή��Â���K�v������܂��B
-	//type_parameter_dup���烋�[���̕������폜�����̂����̂��߂ł��B
+	//これはILレベルの<K, V>の並びを
+	//SGレベルの<K, V> へ変換します。
+	//<K(IComparable<K>), V>のような宣言をするとき、
+	//Kは仮想型としてIComparableで正しく認識されます。
+	//そのためには、type_parameterをとりえず登録しておいて、
+	//あとからルール一覧を対応づける必要があります。
+	//type_parameter_dupからルールの複製を削除したのもそのためです。
 	for (int i = 0; i < ilSource->length; i++) {
 		il_type_parameter* e = (il_type_parameter*)vector_at(ilSource, i);
 		type_parameter* newTP = type_parameter_dup(e, cache);
 		vector_push(sgDest, newTP);
 		//type_parameter_rule_list_dup(e->rule_vec, newTP->rule_vec, cache);
 	}
-	//�����Ń��[���𓖂Ă͂߂�
+	//ここでルールを当てはめる
 	for (int i = 0; i < ilSource->length; i++) {
 		il_type_parameter* e = (il_type_parameter*)vector_at(ilSource, i);
 		type_parameter* v = vector_at(sgDest, i);
@@ -59,7 +59,7 @@ void type_parameter_list_dup(vector* ilSource, vector* sgDest, il_load_cache* ca
 }
 
 void type_parameter_print(vector* v) {
-	//FIXME:il_type_parameter����̃R�s�y
+	//FIXME:il_type_parameterからのコピペ
 	if (v->length <= 0) {
 		return;
 	}

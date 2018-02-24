@@ -88,7 +88,7 @@ static void il_factor_variable_check(il_factor_variable* self, enviroment* env, 
 		self->index = e->index;
 		self->fieldAccess = false;
 	} else {
-		//フィールドアクセス
+		//繝輔ぅ繝ｼ繝ｫ繝峨い繧ｯ繧ｻ繧ｹ
 		class_* cls = ((type*)vector_top(cache->type_vec))->u.class_;
 		int temp = 0;
 		field* f = class_find_field(cls, self->name, &temp);

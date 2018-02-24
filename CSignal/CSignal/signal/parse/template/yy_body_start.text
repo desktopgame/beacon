@@ -1,7 +1,7 @@
 
 
 ;;
-;;top_level‚ÌƒŠƒXƒg{{{
+;;top_levelã®ãƒªã‚¹ãƒˆ{{{
 ;;
 root
 	: top_level
@@ -16,7 +16,7 @@ root
 ;;
 
 ;;
-;;ƒgƒbƒvƒŒƒxƒ‹‚É’è‹`‚Å‚«‚é—v‘f{{{
+;;ãƒˆãƒƒãƒ—ãƒ¬ãƒ™ãƒ«ã«å®šç¾©ã§ãã‚‹è¦ç´ {{{
 ;;
 top_level
 	: stmt_list
@@ -41,7 +41,7 @@ top_level
 ;;
 
 ;;
-;;–¼‘O‹óŠÔ‚Ì’è‹`{{{
+;;åå‰ç©ºé–“ã®å®šç¾©{{{
 ;;
 namespace_decl
 	: NAMESPACE namespace_path namespace_body
@@ -54,7 +54,7 @@ namespace_decl
 ;;
 
 ;;
-;;–¼‘O‹óŠÔ‚Ì“à‘¤‚É’è‹`‚Å‚«‚é—v‘f{{{
+;;åå‰ç©ºé–“ã®å†…å´ã«å®šç¾©ã§ãã‚‹è¦ç´ {{{
 ;;
 namespace_body
 	: LCB namespace_member_decl_optional RCB
@@ -67,7 +67,7 @@ namespace_body
 ;;
 
 ;;
-;;Œ^éŒ¾{{{
+;;å‹å®£è¨€{{{
 ;;
 namespace_member_decl
 	: NAMESPACE namespace_path namespace_body
@@ -92,7 +92,7 @@ namespace_member_decl
 ;;
 
 ;;
-;;Œ^éŒ¾‚ÌƒŠƒXƒg{{{
+;;å‹å®£è¨€ã®ãƒªã‚¹ãƒˆ{{{
 ;;
 namespace_member_decl_list
 	: namespace_member_decl
@@ -109,7 +109,7 @@ namespace_member_decl_list
 ;;
 
 ;;
-;;–¼‘O‹óŠÔ‚ÌéŒ¾(‹ó){{{
+;;åå‰ç©ºé–“ã®å®£è¨€(ç©º){{{
 ;;
 namespace_member_decl_optional
 	: /* empty */
@@ -126,7 +126,7 @@ namespace_member_decl_optional
 ;;
 
 ;;
-;;–¼‘O‹óŠÔ‚Éw’è‚Å‚«‚é . ‹æØ‚è‚ÌƒpƒX{{{
+;;åå‰ç©ºé–“ã«æŒ‡å®šã§ãã‚‹ . åŒºåˆ‡ã‚Šã®ãƒ‘ã‚¹{{{
 ;;
 namespace_path
 	: IDENT
@@ -143,7 +143,7 @@ namespace_path
 ;;
 
 ;;
-;;import signal.lang ‚Ì‚æ‚¤‚ÈƒCƒ“ƒ|[ƒg‚ÌéŒ¾{{{
+;;import signal.lang ã®ã‚ˆã†ãªã‚¤ãƒ³ãƒãƒ¼ãƒˆã®å®£è¨€{{{
 ;;
 import
 	: IMPORT STRING_LITERAL
@@ -156,7 +156,7 @@ import
 ;;
 
 ;;
-;;Name<T> ‚â Name<in T, out R>‚È‚Ç{{{
+;;Name<T> ã‚„ Name<in T, out R>ãªã©{{{
 ;;
 $$SET __BODY type_parameter_group
 parameterized_typename
@@ -171,7 +171,7 @@ $$REM __BODY
 ;;
 
 ;;
-;;<T> ‚â <in T, out R> ‚È‚Ç{{{
+;;<T> ã‚„ <in T, out R> ãªã©{{{
 ;;
 $$SET __LIST type_parameter_list
 type_parameter_group
@@ -190,7 +190,7 @@ $$REM __LIST
 ;;
 
 ;;
-;;T ‚â K, V‚È‚Ç{{{
+;;T ã‚„ K, Vãªã©{{{
 ;;
 $$SET __LIST type_parameter_list
 $$SET __ENTRY type_parameter
@@ -210,7 +210,7 @@ $$REM __LIST __ENTRY
 ;;
 
 ;;
-;;T in T out R ‚È‚Ç{{{
+;;T in T out R ãªã©{{{
 ;;
 type_parameter
 	: IDENT type_parameter_rule_list
@@ -231,7 +231,7 @@ type_parameter
 ;;
 
 ;;
-;;Œ^éŒ¾‚É‘Î‚·‚é§–ñ{{{
+;;å‹å®£è¨€ã«å¯¾ã™ã‚‹åˆ¶ç´„{{{
 ;;
 type_parameter_rule_list
 	: /* empty */
@@ -248,7 +248,7 @@ type_parameter_rule_list
 ;;
 
 ;;
-;;ƒNƒ‰ƒXéŒ¾{{{
+;;ã‚¯ãƒ©ã‚¹å®£è¨€{{{
 ;;
 class_decl
 	: CLASS parameterized_typename LCB access_member_tree RCB
@@ -265,7 +265,7 @@ class_decl
 ;;
 
 ;;
-;;—ñ‹“éŒ¾{{{
+;;åˆ—æŒ™å®£è¨€{{{
 ;;
 enum_decl
 	: ENUM IDENT LCB ident_list RCB
@@ -282,7 +282,7 @@ enum_decl
 ;;
 
 ;;
-;;ƒCƒ“ƒ^[ƒtƒFƒCƒXéŒ¾{{{
+;;ã‚¤ãƒ³ã‚¿ãƒ¼ãƒ•ã‚§ã‚¤ã‚¹å®£è¨€{{{
 ;;
 interface_decl
 	: INTERFACE parameterized_typename LCB access_member_tree RCB
@@ -299,7 +299,7 @@ interface_decl
 ;;
 
 ;;
-;;"ƒAƒNƒZƒXCüq‚Æ'ƒƒ“ƒo[éŒ¾‚ÌƒŠƒXƒg'‚ÌƒyƒA‚ÌƒŠƒXƒg"‚ÌƒŠƒXƒg{{{
+;;"ã‚¢ã‚¯ã‚»ã‚¹ä¿®é£¾å­ã¨'ãƒ¡ãƒ³ãƒãƒ¼å®£è¨€ã®ãƒªã‚¹ãƒˆ'ã®ãƒšã‚¢ã®ãƒªã‚¹ãƒˆ"ã®ãƒªã‚¹ãƒˆ{{{
 ;;
 access_member_tree
 	: /* empty */
@@ -320,7 +320,7 @@ access_member_tree
 ;;
 
 ;;
-;;ƒAƒNƒZƒXCüq‚Æ"ƒƒ“ƒo[éŒ¾‚ÌƒŠƒXƒg"‚ÌƒyƒA‚ÌƒŠƒXƒg{{{
+;;ã‚¢ã‚¯ã‚»ã‚¹ä¿®é£¾å­ã¨"ãƒ¡ãƒ³ãƒãƒ¼å®£è¨€ã®ãƒªã‚¹ãƒˆ"ã®ãƒšã‚¢ã®ãƒªã‚¹ãƒˆ{{{
 ;;
 access_member_list
 	: /* empty */
@@ -337,7 +337,7 @@ access_member_list
 ;;
 
 ;;
-;;ƒƒ“ƒo[éŒ¾‚ÌƒŠƒXƒg{{{
+;;ãƒ¡ãƒ³ãƒãƒ¼å®£è¨€ã®ãƒªã‚¹ãƒˆ{{{
 ;;
 member_define_list
 	: /* empty */
@@ -358,7 +358,7 @@ member_define_list
 ;;
 
 ;;
-;;ƒƒ“ƒo[éŒ¾{{{
+;;ãƒ¡ãƒ³ãƒãƒ¼å®£è¨€{{{
 ;;
 member_define
 	: constructor_define
@@ -370,7 +370,7 @@ member_define
 ;;
 
 ;;
-;;ƒRƒ“ƒXƒgƒ‰ƒNƒ^éŒ¾{{{
+;;ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿å®£è¨€{{{
 ;;
 constructor_define
 	: CTOR NEW LRB parameter_list RRB constructor_chain_optional scope_optional
@@ -387,7 +387,7 @@ constructor_define
 ;;
 
 ;;
-;;ƒRƒ“ƒXƒgƒ‰ƒNƒ^‚Ì˜A½{{{
+;;ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿ã®é€£é–{{{
 ;;
 constructor_chain
 	: COLON constructor_chain_type_T LRB argument_list RRB
@@ -404,7 +404,7 @@ constructor_chain
 ;;
 
 ;;
-;;ƒRƒ“ƒXƒgƒ‰ƒNƒ^‚Ì˜A½‚Ìí—Ş{{{
+;;ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿ã®é€£é–ã®ç¨®é¡{{{
 ;;
 constructor_chain_type_T
 	: SUPER
@@ -421,7 +421,7 @@ constructor_chain_type_T
 ;;
 
 ;;
-;;ƒRƒ“ƒXƒgƒ‰ƒNƒ^‚Ì˜A½(‹ó){{{
+;;ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿ã®é€£é–(ç©º){{{
 ;;
 constructor_chain_optional
 	: /* empty */
@@ -435,7 +435,7 @@ constructor_chain_optional
 ;;
 
 ;;
-;;ŠÖ”éŒ¾{{{
+;;é–¢æ•°å®£è¨€{{{
 ;;
 function_define
 	: DEF IDENT LRB parameter_list RRB ARROW typename_T scope_optional
@@ -452,7 +452,7 @@ function_define
 ;;
 
 ;;
-;;ƒƒ\ƒbƒhéŒ¾{{{
+;;ãƒ¡ã‚½ãƒƒãƒ‰å®£è¨€{{{
 ;;
 $$SET __GENERIC type_parameter_group
 method_define
@@ -471,7 +471,7 @@ $$REM __GENERIC
 ;;
 
 ;;
-;;ƒtƒB[ƒ‹ƒhéŒ¾{{{
+;;ãƒ•ã‚£ãƒ¼ãƒ«ãƒ‰å®£è¨€{{{
 ;;
 field_define
 	: modifier_type_T typename_T IDENT SEMI
@@ -484,7 +484,7 @@ field_define
 ;;
 
 ;;
-;;Cüq{{{
+;;ä¿®é£¾å­{{{
 ;;
 modifier_type_T
 	: /* empty */
@@ -513,7 +513,7 @@ modifier_type_T
 ;;
 
 ;;
-;;ƒAƒNƒZƒXƒŒƒxƒ‹{{{
+;;ã‚¢ã‚¯ã‚»ã‚¹ãƒ¬ãƒ™ãƒ«{{{
 ;;
 access_level_T
 	: PUBLIC
@@ -534,7 +534,7 @@ access_level_T
 ;;
 
 ;;
-;;¯•Êq‚ÌƒŠƒXƒg{{{
+;;è­˜åˆ¥å­ã®ãƒªã‚¹ãƒˆ{{{
 ;;
 ident_list
 	: IDENT
@@ -551,7 +551,7 @@ ident_list
 ;;
 
 ;;
-;;‰¼ˆø”‚ÌƒŠƒXƒg{{{
+;;ä»®å¼•æ•°ã®ãƒªã‚¹ãƒˆ{{{
 ;;
 parameter_list
 	: typename_T IDENT
@@ -568,7 +568,7 @@ parameter_list
 ;;
 
 ;;
-;;Àˆø”‚ÌƒŠƒXƒg{{{
+;;å®Ÿå¼•æ•°ã®ãƒªã‚¹ãƒˆ{{{
 ;;
 argument_list
 	: expression
@@ -585,7 +585,7 @@ argument_list
 ;;
 
 ;;
-;;Œ^–¼‚ÌƒOƒ‹[ƒv{{{
+;;å‹åã®ã‚°ãƒ«ãƒ¼ãƒ—{{{
 ;;
 typename_group
 	: /* empty */
@@ -602,7 +602,7 @@ typename_group
 ;;
 
 ;;
-;;Œ^–¼‚ÌƒŠƒXƒg{{{
+;;å‹åã®ãƒªã‚¹ãƒˆ{{{
 ;;
 typename_list
 	: typename_T
@@ -619,7 +619,7 @@ typename_list
 ;;
 
 ;;
-;;Œ^–¼{{{
+;;å‹å{{{
 ;;
 typename_T
 	: fqcn_part typename_group
@@ -628,7 +628,7 @@ typename_T
 	}
 	;
 ;;
-;;Œ^–¼}}}
+;;å‹å}}}
 ;;
 
 ;;
@@ -648,6 +648,6 @@ fqcn_part
 ;;}}}
 ;;
 
-;;‚±‚±‚Éfactor
-;;‚±‚±‚Éstmt
+;;ã“ã“ã«factor
+;;ã“ã“ã«stmt
 

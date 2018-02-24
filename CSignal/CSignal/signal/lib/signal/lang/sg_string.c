@@ -21,18 +21,18 @@ string_buffer * sg_string_raw(object* self) {
 //private
 static void sg_string_nativeInit(method* parent, vm* vm, enviroment* env) {
 	object* self = vector_at(vm->ref_stack, 0);
-	//ƒvƒƒOƒ‰ƒ€‚Ì’†‚Å ƒ_ƒuƒ‹ƒNƒH[ƒg("HelloWorld") ‚É‚æ‚Á‚Ä
-	//•¶š—ñ‚ªì¬‚³‚ê‚½ê‡‚É‚Í object_string_new() 
-	//‚É‚æ‚Á‚Ä¶¬‚³‚ê‚Ü‚·B
-	//‚±‚¿‚ç‚Ìê‡‚Å‚Í object#nativeSlotVec ‚É CŒ`®‚Ì•¶š—ñ‚ğŠi”[‚µ‚Ü‚·B
-	//‚±‚ê‚ÍƒRƒ“ƒXƒgƒ‰ƒNƒ^‚É‚æ‚Á‚Ä String ‚ªì¬‚³‚ê‚½ê‡‚É‚Í
-	//ŒÄ‚Ño‚³‚ê‚È‚¢‚Ì‚ÅA‚»‚Ì•”•ª‚Ìˆ—‚ğ‚±‚±‚Ås‚¢‚Ü‚·B
+	//ãƒ—ãƒ­ã‚°ãƒ©ãƒ ã®ä¸­ã§ ãƒ€ãƒ–ãƒ«ã‚¯ã‚©ãƒ¼ãƒˆ("HelloWorld") ã«ã‚ˆã£ã¦
+	//æ–‡å­—åˆ—ãŒä½œæˆã•ã‚ŒãŸå ´åˆã«ã¯ object_string_new() 
+	//ã«ã‚ˆã£ã¦ç”Ÿæˆã•ã‚Œã¾ã™ã€‚
+	//ã“ã¡ã‚‰ã®å ´åˆã§ã¯ object#nativeSlotVec ã« Cå½¢å¼ã®æ–‡å­—åˆ—ã‚’æ ¼ç´ã—ã¾ã™ã€‚
+	//ã“ã‚Œã¯ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿ã«ã‚ˆã£ã¦ String ãŒä½œæˆã•ã‚ŒãŸå ´åˆã«ã¯
+	//å‘¼ã³å‡ºã•ã‚Œãªã„ã®ã§ã€ãã®éƒ¨åˆ†ã®å‡¦ç†ã‚’ã“ã“ã§è¡Œã„ã¾ã™ã€‚
 
-	//String#charArray‚ğæ“¾
+	//String#charArrayã‚’å–å¾—
 	int temp = 0;
 	class_find_field(CL_STRING->u.class_, "charArray", &temp);
 	object* charArr = vector_at(self->u.field_vec, temp);
-	//‚±‚ê‚ğ char* ‚Ö•ÏŠ·
+	//ã“ã‚Œã‚’ char* ã¸å¤‰æ›
 	string_buffer* sb = string_buffer_new();
 	for (int i = 0; i < charArr->native_slot_vec->length; i++) {
 		object* e = (object*)vector_at(charArr->native_slot_vec, i);

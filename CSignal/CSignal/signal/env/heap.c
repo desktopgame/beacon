@@ -62,14 +62,14 @@ static void gc_clear(heap* self) {
 }
 
 static void gc_mark(heap* self) {
-	//¡‚Í‚Ü‚¾ƒ}ƒ‹ƒ`ƒXƒŒƒbƒh‚É‘Î‰‚µ‚Ä‚¢‚È‚¢‚Ì‚ÅA
-	//‚Æ‚è‚ ‚¦‚¸Às’†‚ÌƒXƒŒƒbƒh‚Ì‚İ‚ğ‘ÎÛ‚Æ‚·‚é
+	//ä»Šã¯ã¾ã ãƒãƒ«ãƒã‚¹ãƒ¬ãƒƒãƒ‰ã«å¯¾å¿œã—ã¦ã„ãªã„ã®ã§ã€
+	//ã¨ã‚Šã‚ãˆãšå®Ÿè¡Œä¸­ã®ã‚¹ãƒ¬ãƒƒãƒ‰ã®ã¿ã‚’å¯¾è±¡ã¨ã™ã‚‹
 	sg_thread* th = sg_thread_current();
 	vm* top = sg_thread_get_vm_ref(th);
 	assert(top != NULL);
 	vm_markall(top);
 
-	//true/false/null‚Íí‚Éƒ}[ƒN
+	//true/false/nullã¯å¸¸ã«ãƒãƒ¼ã‚¯
 	object_get_true()->paint = paint_marked;
 	object_get_false()->paint = paint_marked;
 	object_get_null()->paint = paint_marked;

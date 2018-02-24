@@ -8,8 +8,8 @@ struct type;
 typedef struct generic_type {
 	struct type* core_type;
 	vector* type_args_list;
-	//�������̌^�� List<T> �� T��\���Ȃ�A
-	//�O���̃N���X�̉��Ԗڂ̌^�ϐ������i�[����B
+	//もしこの型が List<T> の Tを表すなら、
+	//外側のクラスの何番目の型変数かを格納する。
 	int virtual_type_index;
 } generic_type;
 

@@ -32,7 +32,7 @@ void type_parameter_rule_list_dup(vector * ilSource, vector * sgDest, il_load_ca
 }
 
 void type_parameter_rule_list_print(vector * v) {
-	//FIXME:il_type_parameter_rule‚ÌƒRƒsƒy
+	//FIXME:il_type_parameter_ruleã®ã‚³ãƒ”ãƒš
 	if (v->length == 0) {
 		return;
 	}

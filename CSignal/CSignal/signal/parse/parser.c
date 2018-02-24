@@ -53,7 +53,7 @@ void parser_append_buffer(parser * self, char ch) {
 }
 
 ast * parser_reduce_buffer(parser * self) {
-	//""�̂悤�ȋ󕶎��̏ꍇ
+	//""のような空文字の場合
 	if (self->literal_buffer == NULL) {
 		return ast_new_string(text_strdup(""));
 	}

@@ -170,7 +170,7 @@ static slot* slot_new() {
 }
 
 static void slot_init(const char* filename, int lineno, void* arena, size_t size) {
-	//ƒXƒƒbƒg‚Ìì¬
+	//ã‚¹ãƒ­ãƒƒãƒˆã®ä½œæˆ
 	assert(arena != NULL);
 	slot* ptr = NULL;
 	if (gSlotHead == NULL) {
@@ -211,7 +211,7 @@ static void* slot_realloc(slot* head, void* arena, size_t newSize) {
 	slot* ptr = head;
 	while (ptr->arena != arena) {
 		ptr = ptr->next;
-		//mem_mallocˆÈŠO‚ÅŠm•Û‚³‚ê‚½ƒƒ‚ƒŠ
+		//mem_mallocä»¥å¤–ã§ç¢ºä¿ã•ã‚ŒãŸãƒ¡ãƒ¢ãƒª
 		if (ptr == NULL) {
 			void* ret = realloc(arena, newSize);
 			assert(ret != NULL);
@@ -221,10 +221,10 @@ static void* slot_realloc(slot* head, void* arena, size_t newSize) {
 	}
 	void* temp = realloc(arena, newSize);
 	assert(temp != NULL);
-	//k‚ñ‚¾
+	//ç¸®ã‚“ã 
 	if (ptr->size > newSize) {
 		gMemUsedMemory -= (ptr->size - newSize);
-	//Šg‘å‚µ‚½
+	//æ‹¡å¤§ã—ãŸ
 	} else if (ptr->size < newSize) {
 		gMemUsedMemory += (newSize - ptr->size);
 	}
@@ -240,7 +240,7 @@ static int slot_remove(slot* head, void* arena) {
 	slot* ptr = head;
 	while (ptr->arena != arena) {
 		ptr = ptr->next;
-		//mem_mallocˆÈŠO‚ÅŠm•Û‚³‚ê‚½ƒƒ‚ƒŠ
+		//mem_mallocä»¥å¤–ã§ç¢ºä¿ã•ã‚ŒãŸãƒ¡ãƒ¢ãƒª
 		if (ptr == NULL) {
 			gMemNotFoundFree++;
 			return -1;
@@ -297,7 +297,7 @@ static void mem_input() {
 	while (breakNow != 0) {
 		char* line = mem_readline();
 		bool breakLoop = false;
-		//ƒRƒ}ƒ“ƒh‚ğ‰ğß
+		//ã‚³ãƒãƒ³ãƒ‰ã‚’è§£é‡ˆ
 		if (!strcmp(line, "stop")) {
 			breakLoop = true;
 		} else if(!strcmp(line, "ignore")) {
@@ -318,15 +318,15 @@ static char* mem_readline() {
 	int len = 16;
 	while (true) {
 		char c = getc(stdin);
-		//‰üs•¶š‚È‚çI—¹
+		//æ”¹è¡Œæ–‡å­—ãªã‚‰çµ‚äº†
 		if (c == '\n') {
 			break;
 		}
-		//‚Ü‚¾ƒoƒbƒtƒ@‚É—]‚è‚ª‚ ‚ ‚é
+		//ã¾ã ãƒãƒƒãƒ•ã‚¡ã«ä½™ã‚ŠãŒã‚ã‚ã‚‹
 		if (offs < len) {
 			line[offs] = c;
 			offs++;
-		//‚à‚¤‚È‚¢‚Ì‚ÅŠg’£
+		//ã‚‚ã†ãªã„ã®ã§æ‹¡å¼µ
 		} else if (offs >= len) {
 			int newLen = len + (len / 2);
 			void* temp = realloc(line, sizeof(char) * newLen);

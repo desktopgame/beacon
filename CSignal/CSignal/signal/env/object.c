@@ -52,13 +52,13 @@ object * object_string_new(const char * s) {
 	ret->type = CL_STRING;
 	ret->vptr = type_vtable(CL_STRING);
 
-	//”z—ñ‚ð¶¬
+	//é…åˆ—ã‚’ç”Ÿæˆ
 	object* arr = object_ref_new();
 	type* arrType = sg_array_class();
 	type* strType = namespace_get_type(namespace_lang(), "String");
 	arr->type = arrType;
 	arr->vptr = type_vtable(arrType);
-	//ƒ{ƒbƒNƒX‰»
+	//ãƒœãƒƒã‚¯ã‚¹åŒ–
 	char* itr = s;
 	string_buffer* sb = string_buffer_new();
 	while ((*itr) != '\0') {
@@ -68,17 +68,17 @@ object * object_string_new(const char * s) {
 		string_buffer_append(sb, e);
 	}
 	string_buffer_shrink(sb);
-	//String#charArray‚ð–„‚ß‚é
+	//String#charArrayã‚’åŸ‹ã‚ã‚‹
 	int temp = 0;
 	class_find_field(strType->u.class_, "charArray", &temp);
 	vector_assign(ret->u.field_vec, temp, arr);
 	vector_item* test = vector_at(ret->u.field_vec, temp);
 	assert(test != NULL);
-	//Array#length‚ð–„‚ß‚é
+	//Array#lengthã‚’åŸ‹ã‚ã‚‹
 	temp = 0;
 	class_find_field(arrType->u.class_, "length", &temp);
 	vector_assign(arr->u.field_vec, temp, object_int_new(sb->length));
-	//CŒ`Ž®‚Ì•¶Žš—ñ‚Å‚à•Û‘¶
+	//Cå½¢å¼ã®æ–‡å­—åˆ—ã§ã‚‚ä¿å­˜
 	vector_assign(ret->native_slot_vec, 0, sb);
 	return ret;
 }
@@ -155,8 +155,8 @@ object * object_copy_s(object * self) {
 }
 
 void object_markall(object * self) {
-	//field#static_value‚Í
-	//ŽÀÛ‚ÉCüŽq‚ª static ‚Å‚È‚¢‚Æ‚«‚Í NULL
+	//field#static_valueã¯
+	//å®Ÿéš›ã«ä¿®é£¾å­ãŒ static ã§ãªã„ã¨ãã¯ NULL
 	if (self == NULL) {
 		return;
 	}
@@ -166,7 +166,7 @@ void object_markall(object * self) {
 	if (self->paint != paint_onexit) {
 		self->paint = paint_marked;
 	}
-	//ƒtƒB[ƒ‹ƒh‚ð‘S‚Äƒ}[ƒN
+	//ãƒ•ã‚£ãƒ¼ãƒ«ãƒ‰ã‚’å…¨ã¦ãƒžãƒ¼ã‚¯
 	if (self->tag == object_string ||
 		self->tag == object_ref) {
 		for (int i = 0; i < self->u.field_vec->length; i++) {
@@ -174,7 +174,7 @@ void object_markall(object * self) {
 			object_markall(e);
 		}
 	}
-	//”z—ñŒ^‚È‚çƒXƒƒbƒg‚à‘S‚Äƒ}[ƒN
+	//é…åˆ—åž‹ãªã‚‰ã‚¹ãƒ­ãƒƒãƒˆã‚‚å…¨ã¦ãƒžãƒ¼ã‚¯
 	type* arrayType = sg_array_class();
 	if (self->tag == object_ref &&
 		self->type == arrayType) {

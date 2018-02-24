@@ -21,7 +21,7 @@ symbol_entry* symbol_table_entry(symbol_table* self, type* tp, const char * name
 	if (data) {
 		return ((symbol_entry*)data);
 	}
-	//フィールドアクセスのために追加
+	//繝輔ぅ繝ｼ繝ｫ繝峨い繧ｯ繧ｻ繧ｹ縺ｮ縺溘ａ縺ｫ霑ｽ蜉
 	if (tp == NULL) {
 		return NULL;
 	}

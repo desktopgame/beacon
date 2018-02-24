@@ -15,22 +15,22 @@ generic_type * generic_type_new(type * core_type) {
 }
 
 bool generic_type_assignable(generic_type * left, generic_type * right) {
-	//Š®‘S‚É“¯‚¶ƒ|ƒCƒ“ƒ^‚È‚ç”äŠr‚Í•s—v
+	//å®Œå…¨ã«åŒã˜ãƒã‚¤ãƒ³ã‚¿ãªã‚‰æ¯”è¼ƒã¯ä¸è¦
 	if (left == right) {
 		return true;
 	}
-	//Šî–{Œ^‚©Œ^ˆø”‚Ì”‚ªˆá‚¤‚È‚ç false
+	//åŸºæœ¬å‹ã‹å‹å¼•æ•°ã®æ•°ãŒé•ã†ãªã‚‰ false
 	if (left->core_type != right->core_type ||
 		left->type_args_list->length != right->type_args_list) {
 		return false;
 	}
-	//Œ^ˆø”‚ª 0 ŒÂ‚È‚ç”äŠr•s—v
+	//å‹å¼•æ•°ãŒ 0 å€‹ãªã‚‰æ¯”è¼ƒä¸è¦
 	if (left->type_args_list->length == 0 &&
 		right->type_args_list->length == 0) {
 		return true;
 	}
-	//TODO: in/out ‚Ìl—¶
-	//Šî–{Œ^‚ÆŒ^ˆø”‚ª0ŒÂˆÈã‚Åˆê’v‚·‚é‚È‚ç‚»‚ê‚ç‚ğ”äŠr
+	//TODO: in/out ã®è€ƒæ…®
+	//åŸºæœ¬å‹ã¨å‹å¼•æ•°ãŒ0å€‹ä»¥ä¸Šã§ä¸€è‡´ã™ã‚‹ãªã‚‰ãã‚Œã‚‰ã‚’æ¯”è¼ƒ
 	bool ret = true;
 	for (int i = 0; i < left->type_args_list->length; i++) {
 		generic_type* le = (generic_type*)vector_at(left->type_args_list, i);
