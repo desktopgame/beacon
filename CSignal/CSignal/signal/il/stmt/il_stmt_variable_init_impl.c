@@ -32,13 +32,13 @@ void il_stmt_variable_init_dump(il_stmt_variable_init * self, int depth) {
 void il_stmt_variable_init_generate(il_stmt_variable_init * self, enviroment * env, il_load_cache* cache) {
 	symbol_entry* e = symbol_table_entry(
 		env->sym_table,
-		fqcn_type(self->fqcn, (namespace_*)vector_top(cache->namespace_vec)),
+		generic_cache_type(self->fqcn, (namespace_*)vector_top(cache->namespace_vec)),
 		self->name
 	);
 	il_factor_generate(self->fact, env, cache);
 	//宣言型と代入型が異なる場合
 	type* a = il_factor_eval(self->fact, env, cache);
-	type* b = fqcn_type(self->fqcn, (namespace_*)vector_top(cache->namespace_vec));
+	type* b = generic_cache_type(self->fqcn, (namespace_*)vector_top(cache->namespace_vec));
 	if (a != b) {
 		opcode_buf_add(env->buf, op_lookup);
 		opcode_buf_add(env->buf, b->absolute_index);

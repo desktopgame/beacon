@@ -84,7 +84,7 @@ void il_stmt_try_generate(il_stmt_try* self, enviroment* env, il_load_cache* cac
 	for (int i = 0; i < self->catch_list->length; i++) {
 		//例外を指定の名前でアクセス出来るように
 		il_stmt_catch* ilcatch = (il_stmt_catch*)vector_at(self->catch_list, i);
-		type* exType = fqcn_type(ilcatch->fqcn, (namespace_*)vector_top(cache->namespace_vec));
+		type* exType = generic_cache_type(ilcatch->fqcn, (namespace_*)vector_top(cache->namespace_vec));
 		int exIndex = symbol_table_entry(env->sym_table, exType, ilcatch->name)->index;
 		//直前のケースのジャンプ先をここに
 		if (nextCause != NULL) {

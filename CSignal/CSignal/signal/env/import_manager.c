@@ -7,6 +7,8 @@
 #include "../util/mem.h"
 #include <string.h>
 #include <stdlib.h>
+#include"generic_cache.h"
+#include "generic_type.h"
 
 //proto
 static void import_manager_delete_import_info(vector_item item);
@@ -33,8 +35,8 @@ bool import_manager_loaded(import_manager * self, int index) {
 	return info->consume;
 }
 
-type * import_manager_resolve(import_manager* self, namespace_* scope, fqcn_cache* fqcn) {
-	return fqcn_type(fqcn, scope);
+generic_type * import_manager_resolve(import_manager* self, namespace_* scope, generic_cache* fqcn) {
+	return generic_cache_type(fqcn, scope);
 }
 
 void import_manager_delete(import_manager * self) {

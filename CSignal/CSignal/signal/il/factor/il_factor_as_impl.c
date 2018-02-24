@@ -32,7 +32,7 @@ void il_factor_as_generate(il_factor_as * self, enviroment * env, il_load_cache*
 	il_factor_generate(self->fact, env, cache);
 
 	type* from = il_factor_eval(self->fact, env, cache);
-	type* to = fqcn_type(self->fqcn, (namespace_*)vector_top(cache->namespace_vec));
+	type* to = generic_cache_type(self->fqcn, (namespace_*)vector_top(cache->namespace_vec));
 	int dist = type_distance(to, from);
 	assert(dist != -1);
 	if (dist != -1) {
@@ -46,7 +46,7 @@ void il_factor_as_load(il_factor_as * self, enviroment * env, il_load_cache* cac
 
 type * il_factor_as_eval(il_factor_as * self, enviroment * env, il_load_cache* cache) {
 	namespace_* n = (namespace_*)vector_top(cache->namespace_vec);
-	return fqcn_type(self->fqcn, n);
+	return generic_cache_type(self->fqcn, n);
 }
 
 void il_factor_as_delete(il_factor_as * self) {

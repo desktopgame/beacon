@@ -2,7 +2,7 @@
 #ifndef SIGNAL_ENV_TYPE_PARAMETER_RULE_H
 #define SIGNAL_ENV_TYPE_PARAMETER_RULE_H
 #include "../util/vector.h"
-struct type;
+struct generic_type;
 struct il_type_parameter_rule;
 struct il_load_cache;
 
@@ -14,7 +14,7 @@ typedef enum type_parameter_rule_tag {
 typedef struct type_parameter_rule {
 	type_parameter_rule_tag tag;
 	union {
-		struct type* type_;
+		struct generic_type* gtype_;
 	} u;
 } type_parameter_rule;
 

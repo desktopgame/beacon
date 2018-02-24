@@ -16,7 +16,7 @@ type_parameter_rule * type_parameter_rule_dup(il_type_parameter_rule * src, il_l
 	type_parameter_rule* ret = type_parameter_rule_new();
 	if (src->tag == il_type_parameter_rule_polymorphic) {
 		ret->tag = il_type_parameter_rule_polymorphic;
-		ret->u.type_ = fqcn_type(src->u.fqcn_, (namespace_*)vector_top(cache->namespace_vec));
+		ret->u.gtype_ = generic_cache_type(src->u.fqcn_, (namespace_*)vector_top(cache->namespace_vec));
 	}
 	return ret;
 }

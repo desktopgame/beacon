@@ -181,9 +181,9 @@ void class_loader_sgload_complete_methods_impl(class_loader* self, namespace_* s
 			il_parameter* ilparam = (il_parameter*)vector_at(ilmethod->parameter_list, i);
 			symbol_table_entry(
 				env->sym_table,
-				fqcn_type(ilparam->fqcn, scope),
+				generic_cache_type(ilparam->fqcn, scope),
 				ilparam->name
-				);
+			);
 			//実引数を保存
 			//0番目は this のために開けておく
 			opcode_buf_add(env->buf, (vector_item)op_store);
@@ -303,9 +303,9 @@ static void class_loader_sgload_complete_constructors(class_loader* self, il_typ
 			il_parameter* ilparam = (il_parameter*)vector_at(ilcons->parameter_list, i);
 			symbol_table_entry(
 				env->sym_table,
-				fqcn_type(ilparam->fqcn, scope),
+				generic_cache_type(ilparam->fqcn, scope),
 				ilparam->name
-				);
+			);
 			//実引数を保存
 			//0番目は this のために開けておく
 			opcode_buf_add(env->buf, op_store);
