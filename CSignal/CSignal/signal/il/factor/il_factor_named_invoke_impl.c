@@ -27,7 +27,7 @@ il_factor_named_invoke * il_factor_named_invoke_new(const char* method_name) {
 	il_factor_named_invoke* ret = (il_factor_named_invoke*)MEM_MALLOC(sizeof(il_factor_named_invoke));
 	//ret->class_name = text_strdup(class_name);
 	ret->method_name = text_strdup(method_name);
-	ret->fqcn = fqcn_cache_new();
+	ret->fqcn = generic_cache_new();
 	ret->argument_list = vector_new();
 	ret->type = ilnamed_invoke_static;
 	ret->find = false;
@@ -89,9 +89,9 @@ void il_factor_named_invoke_delete(il_factor_named_invoke * self) {
 	if (self->type == ilnamed_invoke_variable) {
 		il_factor_delete(self->u.factor);
 	}
-	assert(self->fqcn->name != NULL);
+	//assert(self->fqcn->name != NULL);
 	//MEM_FREE(self->fqcn->name);
-	fqcn_cache_delete(self->fqcn);
+	generic_cache_delete(self->fqcn);
 	MEM_FREE(self->method_name);
 	//vector_delete(self->fqcn->scope_vec, vector_deleter_free);
 	vector_delete(self->argument_list, il_factor_named_invoke_delete_argument);
@@ -111,17 +111,18 @@ static void il_factor_named_invoke_find(il_factor_named_invoke* self, enviroment
 	}
 	self->find = true;
 	//X::Y.call() のような場合
-	if (self->fqcn->scope_vec->length > 0) {
+	fqcn_cache* body = self->fqcn;
+	if (body->scope_vec->length > 0) {
 		namespace_* top = NULL;
-		for (int i = 0; i < self->fqcn->scope_vec->length; i++) {
-			char* e = (char*)vector_at(self->fqcn->scope_vec, i);
+		for (int i = 0; i < body->scope_vec->length; i++) {
+			char* e = (char*)vector_at(body->scope_vec, i);
 			if (top == NULL) {
 				top = namespace_get_at_root(e);
 			} else {
 				top = namespace_get_namespace(top, e);
 			}
 		}
-		type* tp = namespace_get_type(top, self->fqcn->name);
+		type* tp = namespace_get_type(top, body->name);
 		il_factor_named_invoke_generate_STATIC_IMPL(self, env, cache, tp);
 		//text_printf("%s %s", top->name, cls->name);
 		self->u.type = tp;
@@ -132,11 +133,11 @@ static void il_factor_named_invoke_find(il_factor_named_invoke* self, enviroment
 		//クラスが見つかった
 		type* tp = NULL;
 		if (top != NULL) {
-			tp = namespace_get_type(top, self->fqcn->name);
+			tp = namespace_get_type(top, body->name);
 		}
 		//見つからないので signal::lang を補完
 		if (tp == NULL) {
-			tp = namespace_get_type(namespace_lang(), self->fqcn->name);
+			tp = namespace_get_type(namespace_lang(), body->name);
 		}
 		//見つかったなら静的呼び出し
 		if (tp != NULL) {
@@ -145,7 +146,7 @@ static void il_factor_named_invoke_find(il_factor_named_invoke* self, enviroment
 			il_factor_named_invoke_generate_STATIC_IMPL(self, env, cache, tp);
 		//変数へのインスタンス呼び出し
 		} else {
-			self->u.factor = il_factor_wrap_variable(il_factor_variable_new(self->fqcn->name));
+			self->u.factor = il_factor_wrap_variable(il_factor_variable_new(body->name));
 			self->type = ilnamed_invoke_variable;
 			tp = il_factor_eval(self->u.factor, env, cache);
 			il_factor_named_invoke_generate_IMPL(self, env, cache, tp);

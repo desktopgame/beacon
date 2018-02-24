@@ -2,7 +2,7 @@
 #ifndef SIGNAL_IL_IL_FACTOR_NEW_INSTANCE_H
 #define SIGNAL_IL_IL_FACTOR_NEW_INSTANCE_H
 #include "../../util/vector.h"
-#include "../../env/fqcn_cache.h"
+#include "../../env/generic_cache.h"
 #include "../il_factor_interface.h"
 struct enviroment;
 struct type;
@@ -12,7 +12,7 @@ struct constructor;
  */
 typedef struct il_factor_new_instance {
 	vector* argument_list;
-	fqcn_cache* fqcn;
+	generic_cache* fqcn;
 	struct constructor* c;
 	int constructor_index;
 } il_factor_new_instance;

@@ -1,7 +1,7 @@
 #pragma once
 #ifndef SIGNAL_IL_IL_STMT_VARIABLE_INIT_H
 #define SIGNAL_IL_IL_STMT_VARIABLE_INIT_H
-#include "../../env/fqcn_cache.h"
+#include "../../env/generic_cache.h"
 #include "../il_stmt_interface.h"
 #include "../il_factor_interface.h"
 struct enviroment;
@@ -9,7 +9,7 @@ struct enviroment;
  * 変数の初期化を表す要素.
  */
 typedef struct il_stmt_variable_init {
-	fqcn_cache* fqcn;
+	generic_cache* fqcn;
 	char* name;
 	il_factor* fact;
 } il_stmt_variable_init;

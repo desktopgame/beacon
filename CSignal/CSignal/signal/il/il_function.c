@@ -1,5 +1,5 @@
 #include "il_function.h"
-#include "../env/fqcn_cache.h"
+#include "../env/generic_cache.h"
 #include "../util/mem.h"
 #include "../util/text.h"
 #include "il_parameter.h"
@@ -15,14 +15,14 @@ il_function * il_function_new(const char * name) {
 	ret->name = text_strdup(name);
 	ret->parameter_list = vector_new();
 	ret->statement_list = vector_new();
-	ret->return_fqcn = fqcn_cache_new();
+	ret->return_fqcn = generic_cache_new();
 	return ret;
 }
 
 void il_function_dump(il_function * self, int depth) {
 	text_putindent(depth);
 	text_printf("function %s -> ", self->name);
-	fqcn_cache_print(self->return_fqcn);
+	generic_cache_print(self->return_fqcn);
 	text_putline();
 	for (int i = 0; i < self->parameter_list->length; i++) {
 		vector_item e = vector_at(self->parameter_list, i);
@@ -42,7 +42,7 @@ void il_function_dump(il_function * self, int depth) {
 void il_function_delete(il_function * self) {
 	vector_delete(self->parameter_list, il_function_parameter_delete);
 	vector_delete(self->statement_list, il_function_stmt_delete);
-	fqcn_cache_delete(self->return_fqcn);
+	generic_cache_delete(self->return_fqcn);
 	MEM_FREE(self->name);
 	MEM_FREE(self);
 }

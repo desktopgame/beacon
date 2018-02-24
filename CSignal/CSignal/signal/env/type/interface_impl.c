@@ -4,12 +4,13 @@
 #include "../../util/text.h"
 #include "../../env/method.h"
 #include "meta_impl.h"
+#include "../generic_type.h"
 #include "../type_parameter.h"
 #include <stdio.h>
 //proto
 static void interface_delete_method(vector_item item);
 static void interface_type_parameter_delete(vector_item item);
-
+static void interface_generic_type_list_delete(vector_item item);
 
 type * type_wrap_interface(interface_ * self) {
 	type* ret = type_new();
@@ -26,6 +27,7 @@ interface_ * interface_new(const char * name) {
 	ret->method_list = vector_new();
 	ret->vt = NULL;
 	ret->type_parameter_list = vector_new();
+	ret->generic_instance_list = vector_new();
 	return ret;
 }
 
@@ -88,6 +90,7 @@ void interface_unlink(interface_ * self) {
 
 void interface_delete(interface_ * self) {
 	vector_delete(self->type_parameter_list, interface_type_parameter_delete);
+	vector_delete(self->generic_instance_list, interface_generic_type_list_delete);
 	MEM_FREE(self->name);
 	MEM_FREE(self);
 }
@@ -101,4 +104,9 @@ static void interface_delete_method(vector_item item) {
 static void interface_type_parameter_delete(vector_item item) {
 	type_parameter* e = (type_parameter*)item;
 	type_parameter_delete(e);
+}
+
+static void interface_generic_type_list_delete(vector_item item) {
+	generic_type* e = (generic_type*)item;
+	generic_type_delete(e);
 }

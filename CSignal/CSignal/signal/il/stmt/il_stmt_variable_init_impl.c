@@ -17,7 +17,7 @@ il_stmt_variable_init * il_stmt_variable_init_new(const char * name) {
 	il_stmt_variable_init* ret = (il_stmt_variable_init*)MEM_MALLOC(sizeof(il_stmt_variable_init));
 	ret->name = text_strdup(name);
 	ret->fact = NULL;
-	ret->fqcn = fqcn_cache_new();
+	ret->fqcn = generic_cache_new();
 	return ret;
 }
 
@@ -52,7 +52,7 @@ void il_stmt_variable_init_load(il_stmt_variable_init * self, enviroment * env, 
 
 void il_stmt_variable_init_delete(il_stmt_variable_init * self) {
 	il_factor_delete(self->fact);
-	fqcn_cache_delete(self->fqcn);
+	generic_cache_delete(self->fqcn);
 	MEM_FREE(self->name);
 	MEM_FREE(self);
 }

@@ -24,7 +24,7 @@ il_factor * il_factor_wrap_new_instance(il_factor_new_instance * self) {
 
 il_factor_new_instance * il_factor_new_instance_new() {
 	il_factor_new_instance* ret = (il_factor_new_instance*)MEM_MALLOC(sizeof(il_factor_new_instance));
-	ret->fqcn = fqcn_cache_new();
+	ret->fqcn = generic_cache_new();
 	ret->argument_list = vector_new();
 	ret->c = NULL;
 	ret->constructor_index = -1;
@@ -69,7 +69,7 @@ type * il_factor_new_instance_eval(il_factor_new_instance * self, enviroment * e
 
 void il_factor_new_instance_delete(il_factor_new_instance * self) {
 	vector_delete(self->argument_list, il_Factor_new_instace_delete_arg);
-	fqcn_cache_delete(self->fqcn);
+	generic_cache_delete(self->fqcn);
 	MEM_FREE(self);
 }
 

@@ -4,13 +4,13 @@
 #include "../ast/access_level.h"
 #include "../ast/modifier_type.h"
 //#include "../env/fqcn_cache.h"
-struct fqcn_cache;
+struct generic_cache;
 /**
  * フィールドを表す要素.
  */
 typedef struct il_field {
 	//il_type* type;
-	struct fqcn_cache* fqcn;
+	struct generic_cache* fqcn;
 	char* name;
 	access_level access;
 	modifier_type modifier;

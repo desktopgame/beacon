@@ -3,12 +3,12 @@
 #include <stdio.h>
 #include "../util/text.h"
 #include "../util/mem.h"
-#include "../env/fqcn_cache.h"
+#include "../env/generic_cache.h"
 
 il_field * il_field_new(const char * name) {
 	il_field* ret = (il_field*)MEM_MALLOC(sizeof(il_field));
 	//ret->type = NULL;
-	ret->fqcn = fqcn_cache_new();
+	ret->fqcn = generic_cache_new();
 	ret->access = access_public;
 	ret->modifier = modifier_none;
 	ret->name = text_strdup(name);
@@ -21,7 +21,7 @@ void il_field_dump(il_field * self, int depth) {
 	text_printf(" ");
 	modifier_print(self->modifier);
 	text_printf(" field ");
-	fqcn_cache_print(self->fqcn);
+	generic_cache_print(self->fqcn);
 	text_printf(" %s", self->name);
 	text_putline();
 }
@@ -31,7 +31,7 @@ void il_field_delete(il_field * self) {
 		return;
 	}
 //	il_type_delete(self->type);
-	fqcn_cache_delete(self->fqcn);
+	generic_cache_delete(self->fqcn);
 	MEM_FREE(self->name);
 	MEM_FREE(self);
 }

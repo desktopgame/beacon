@@ -16,7 +16,7 @@ il_method * il_method_new(const char * name) {
 	il_method* ret = (il_method*)MEM_MALLOC(sizeof(il_method));
 	ret->name = text_strdup(name);
 	ret->parameter_list = vector_new();
-	ret->return_fqcn = fqcn_cache_new();
+	ret->return_fqcn = generic_cache_new();
 	ret->access = access_public;
 	ret->modifier = modifier_none;
 	ret->statement_list = vector_new();
@@ -32,7 +32,7 @@ void il_method_dump(il_method * self, int depth) {
 	text_printf(" method %s", self->name);
 	il_type_parameter_list_print(self->type_parameter_list);
 	text_printf(" -> ");
-	fqcn_cache_print(self->return_fqcn);
+	generic_cache_print(self->return_fqcn);
 	text_putline();
 	for (int i = 0; i < self->parameter_list->length; i++) {
 		vector_item e = vector_at(self->parameter_list, i);
@@ -51,7 +51,7 @@ void il_method_delete(il_method * self) {
 		return;
 	}
 	MEM_FREE(self->name);
-	fqcn_cache_delete(self->return_fqcn);
+	generic_cache_delete(self->return_fqcn);
 	vector_delete(self->parameter_list, il_method_parameter_delete);
 	//il_type_delete(self->return_type);
 	vector_delete(self->statement_list, il_method_stmt_delete);

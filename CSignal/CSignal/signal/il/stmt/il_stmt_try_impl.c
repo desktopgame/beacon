@@ -28,7 +28,7 @@ il_stmt_try* il_stmt_try_new() {
 il_stmt_catch* il_stmt_catch_new(const char* name) {
 	il_stmt_catch* ret = (il_stmt_catch*)MEM_MALLOC(sizeof(il_stmt_catch));
 	ret->name = text_strdup(name);
-	ret->fqcn = fqcn_cache_new();
+	ret->fqcn = generic_cache_new();
 	ret->statement_list = vector_new();
 	return ret;
 }
@@ -50,7 +50,7 @@ void il_stmt_try_dump(il_stmt_try* self, int depth) {
 void il_stmt_catch_dump(il_stmt_catch* self, int depth) {
 	text_putindent(depth);
 	text_printf("catch(");
-	fqcn_cache_print(self->fqcn);
+	generic_cache_print(self->fqcn);
 	text_printf(" %s)", self->name);
 	text_putline();
 	for(int i=0; i<self->statement_list->length; i++) {
@@ -137,7 +137,7 @@ void il_stmt_catch_load(il_stmt_catch* self, enviroment* env, il_load_cache* cac
 }
 
 void il_stmt_catch_delete(il_stmt_catch* self) {
-	fqcn_cache_delete(self->fqcn);
+	generic_cache_delete(self->fqcn);
 	vector_delete(self->statement_list, il_stmt_catch_stmt_delete);
 	MEM_FREE(self->name);
 	MEM_FREE(self);

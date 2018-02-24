@@ -20,7 +20,7 @@ il_factor * il_factor_wrap_static_field_access(il_factor_static_field_access * s
 
 il_factor_static_field_access * il_factor_static_field_access_new(const char* name) {
 	il_factor_static_field_access* ret = (il_factor_static_field_access*)MEM_MALLOC(sizeof(il_factor_static_field_access));
-	ret->fqcn = fqcn_cache_new();
+	ret->fqcn = generic_cache_new();
 	ret->name = text_strdup(name);
 	ret->f = NULL;
 	ret->field_index = -1;
@@ -50,7 +50,7 @@ void il_factor_static_field_access_load(il_factor_static_field_access * self, en
 }
 
 void il_factor_static_field_access_delete(il_factor_static_field_access * self) {
-	fqcn_cache_delete(self->fqcn);
+	generic_cache_delete(self->fqcn);
 	//il_factor_delete(self->f);
 	MEM_FREE(self->name);
 	MEM_FREE(self);

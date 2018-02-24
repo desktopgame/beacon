@@ -14,7 +14,7 @@ il_stmt * il_stmt_wrap_variable_decl(il_stmt_variable_decl * self) {
 il_stmt_variable_decl * il_stmt_variable_decl_new(const char * name) {
 	il_stmt_variable_decl* ret = (il_stmt_variable_decl*)MEM_MALLOC(sizeof(il_stmt_variable_decl));
 	ret->name = text_strdup(name);
-	ret->fqcn = fqcn_cache_new();
+	ret->fqcn = generic_cache_new();
 	return ret;
 }
 

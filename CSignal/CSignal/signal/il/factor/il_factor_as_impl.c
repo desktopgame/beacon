@@ -16,14 +16,14 @@ il_factor * il_factor_wrap_as(il_factor_as * self) {
 il_factor_as * il_factor_as_new() {
 	il_factor_as* ret = (il_factor_as*)MEM_MALLOC(sizeof(il_factor_as));
 	ret->fact = NULL;
-	ret->fqcn = fqcn_cache_new();
+	ret->fqcn = generic_cache_new();
 	return ret;
 }
 
 void il_factor_as_dump(il_factor_as * self, int depth) {
 	text_putindent(depth);
 	text_printf("as ");
-	fqcn_cache_print(self->fqcn);
+	generic_cache_print(self->fqcn);
 	text_putline();
 	il_factor_dump(self->fact, depth + 1);
 }
@@ -50,7 +50,7 @@ type * il_factor_as_eval(il_factor_as * self, enviroment * env, il_load_cache* c
 }
 
 void il_factor_as_delete(il_factor_as * self) {
-	fqcn_cache_delete(self->fqcn);
+	generic_cache_delete(self->fqcn);
 	il_factor_delete(self->fact);
 	MEM_FREE(self);
 }

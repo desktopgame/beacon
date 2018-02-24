@@ -2,13 +2,13 @@
 #ifndef SIGNAL_IL_IL_STMT_VARIABLE_DECL_H
 #define SIGNAL_IL_IL_STMT_VARIABLE_DECL_H
 #include "../il_stmt_interface.h"
-#include "../../env/fqcn_cache.h"
+#include "../../env/generic_cache.h"
 struct enviroment;
 /**
  * 型宣言を表す要素.
  */
 typedef struct il_stmt_variable_decl {
-	fqcn_cache* fqcn;
+	generic_cache* fqcn;
 	char* name;
 } il_stmt_variable_decl;
 /**

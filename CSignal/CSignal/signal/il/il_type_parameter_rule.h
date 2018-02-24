@@ -1,7 +1,7 @@
 #pragma once
 #ifndef SIGNAL_IL_IL_TYPE_PARAMETER_RULE_H
 #define SIGNAL_IL_IL_TYPE_PARAMETER_RULE_H
-#include "../env/fqcn_cache.h"
+#include "../env/generic_cache.h"
 struct vector;
 
 typedef enum il_type_parameter_rule_tag {
@@ -12,7 +12,7 @@ typedef enum il_type_parameter_rule_tag {
 typedef struct il_type_parameter_rule {
 	il_type_parameter_rule_tag tag;
 	union {
-		fqcn_cache* fqcn_;
+		generic_cache* fqcn_;
 	} u;
 } il_type_parameter_rule;
 

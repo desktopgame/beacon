@@ -5,6 +5,7 @@
 #include "../il/il_namespace.h"
 #include "../il/il_factor_impl.h"
 #include "../il/il_stmt_impl.h"
+#include "generic_cache.h"
 
 /**
  * ASTの全てのエントリを IL に変換します.
@@ -383,14 +384,7 @@ il_factor_dec* class_loader_ilload_dec(class_loader* self, ast* source);
  * @param fqcn
  * @param dest
  */
-void class_loader_ilload_fqcn(ast* fqcn, fqcn_cache* dest);
-
-/**
- * class_loader_ilload_fqcnの再帰開始用関数.
- * @param fqcn
- * @param dest
- */
-void class_loader_ilload_fqcn_impl(ast* fqcn, fqcn_cache* dest);
+void class_loader_ilload_generic(ast* fqcn, generic_cache* dest);
 
 /**
  * 実引数の一覧を IL に変換して list へ格納します.

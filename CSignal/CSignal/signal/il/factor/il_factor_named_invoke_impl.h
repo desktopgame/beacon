@@ -5,7 +5,7 @@
 #include "../../util/vector.h"
 #include "../../vm/enviroment.h"
 #include "../il_factor_interface.h"
-#include "../../env/fqcn_cache.h"
+#include "../../env/generic_cache.h"
 struct method;
 /**
  * 名前付き呼び出しの種類を表します.
@@ -31,7 +31,7 @@ typedef struct il_factor_named_invoke {
 	char* method_name;
 	//vector* scope_vec;
 	//char* class_name;
-	fqcn_cache* fqcn;
+	generic_cache* fqcn;
 	vector* argument_list;
 	il_named_invoke_type type;
 	struct method* m;

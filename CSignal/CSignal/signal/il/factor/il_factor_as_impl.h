@@ -2,11 +2,11 @@
 #ifndef SIGNAL_IL_IL_FACTOR_AS_H
 #define SIGNAL_IL_IL_FACTOR_AS_H
 #include "../il_factor_interface.h"
-#include "../../env/fqcn_cache.h"
+#include "../../env/generic_cache.h"
 
 typedef struct il_factor_as {
 	il_factor* fact;
-	fqcn_cache* fqcn;
+	generic_cache* fqcn;
 } il_factor_as;
 
 struct enviroment;

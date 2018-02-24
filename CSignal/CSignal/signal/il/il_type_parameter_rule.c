@@ -17,7 +17,7 @@ void il_type_parameter_rule_list_print(vector * v) {
 	for (int i = 0; i < v->length; i++) {
 		il_type_parameter_rule* e = (il_type_parameter_rule*)vector_at(v, i);
 		if (e->tag == il_type_parameter_rule_polymorphic) {
-			fqcn_cache_print(e->u.fqcn_);
+			generic_cache_print(e->u.fqcn_);
 		}
 		if (i != v->length - 1) {
 			text_printf(", ");
@@ -28,7 +28,7 @@ void il_type_parameter_rule_list_print(vector * v) {
 
 void il_type_parameter_rule_delete(il_type_parameter_rule * self) {
 	if (self->tag == il_type_parameter_rule_polymorphic) {
-		fqcn_cache_delete(self->u.fqcn_);
+		generic_cache_delete(self->u.fqcn_);
 	}
 	MEM_FREE(self);
 }

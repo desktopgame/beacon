@@ -16,7 +16,7 @@ il_factor * il_factor_wrap_cast(il_factor_cast * self) {
 
 il_factor_cast * il_factor_cast_new(il_factor * fact) {
 	il_factor_cast* ret = (il_factor_cast*)MEM_MALLOC(sizeof(il_factor_cast));
-	ret->fqcn = fqcn_cache_new();
+	ret->fqcn = generic_cache_new();
 	ret->fact = fact;
 	return ret;
 }
@@ -44,7 +44,7 @@ type * il_factor_cast_eval(il_factor_cast * self, enviroment * env, il_load_cach
 }
 
 void il_factor_cast_delete(il_factor_cast * self) {
-	fqcn_cache_delete(self->fqcn);
+	generic_cache_delete(self->fqcn);
 	il_factor_delete(self->fact);
 	MEM_FREE(self);
 }

@@ -38,6 +38,7 @@ typedef struct class_ {
 	uint32_t ref_count;
 	tree_map* native_method_ref_map;
 	vector* type_parameter_list;
+	vector* generic_instance_list;
 	//インターフェースに対応した
 	//実装メソッドのテーブルのベクター
 	//http://d.hatena.ne.jp/tetz42/20120205/1328449750

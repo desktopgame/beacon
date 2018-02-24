@@ -1,7 +1,7 @@
 #ifndef SIGNAL_IL_IL_STMT_TRY_H
 #define SIGNAL_IL_IL_STMT_TRY_H
 #include "../../util/vector.h"
-#include "../../env/fqcn_cache.h"
+#include "../../env/generic_cache.h"
 #include "../il_stmt_interface.h"
 
 struct enviroment;
@@ -12,7 +12,7 @@ typedef struct il_stmt_try {
 } il_stmt_try;
 
 typedef struct il_stmt_catch {
-	fqcn_cache* fqcn;
+	generic_cache* fqcn;
 	char* name;
 	vector* statement_list;
 } il_stmt_catch;

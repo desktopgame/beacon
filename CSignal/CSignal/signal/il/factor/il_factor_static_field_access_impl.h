@@ -1,16 +1,18 @@
 #pragma once
 #ifndef SIGNAL_IL_IL_FACTOR_STATIC_FIELD_ACCESS_H
 #define SIGNAL_IL_IL_FACTOR_STATIC_FIELD_ACCESS_H
-#include "../../env/fqcn_cache.h"
+#include "../../env/generic_cache.h"
 #include "../il_factor_interface.h"
 struct enviroment;
 struct type;
 struct field;
+//NOTE:これについては型変数は不要
+//でもほとんどのインターフェイスがジェネリックで受け取るのでラップしておく
 /**
  * X::Y.a のようなフィールドアクセスを表す要素.
  */
 typedef struct il_factor_static_field_access {
-	fqcn_cache* fqcn;
+	generic_cache* fqcn;
 	char* name;
 	struct field* f;
 	int field_index;

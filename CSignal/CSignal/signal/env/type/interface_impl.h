@@ -19,6 +19,7 @@ typedef struct interface_ {
 	namespace_* location;
 	vtable* vt;
 	vector* type_parameter_list;
+	vector* generic_instance_list;
 } interface_;
 
 /**
