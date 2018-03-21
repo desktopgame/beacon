@@ -4,7 +4,7 @@
 #include "../util/vector.h"
 #include <stdbool.h>
 
-struct type;
+struct generic_type;
 struct vtable;
 /** 
  * オブジェクトの着色状態.
@@ -40,7 +40,7 @@ typedef enum object_tag {
  * signal で使用される全てのデータはこれ。
  */
 typedef struct object {
-	struct type* type;
+	struct generic_type* gtype;
 	//-初期化時
 	//-宣言時と互換性のある
 	//異なる型が代入されたとき

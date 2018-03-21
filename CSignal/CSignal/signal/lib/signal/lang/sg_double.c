@@ -16,5 +16,5 @@ static void sg_double_nativeInit(method* parent, vm* vmc, enviroment* env) {
 	object* self = vector_at(vmc->ref_stack, 0);
 
 	self->u.double_ = d->u.double_;
-	self->type = object_double;
+	self->tag = object_double;
 }

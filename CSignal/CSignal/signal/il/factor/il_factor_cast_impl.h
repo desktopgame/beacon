@@ -21,7 +21,7 @@ void il_factor_cast_generate(il_factor_cast* self, struct enviroment* env, il_lo
 
 void il_factor_cast_load(il_factor_cast* self, struct enviroment* env, il_load_cache* cache, il_ehandler* eh);
 
-struct type* il_factor_cast_eval(il_factor_cast* self, struct enviroment* env, il_load_cache* cache);
+generic_type* il_factor_cast_eval(il_factor_cast* self, struct enviroment* env, il_load_cache* cache);
 
 void il_factor_cast_delete(il_factor_cast* self);
 #endif // !SIGNAL_IL_IL_FACTOR_CAST_H

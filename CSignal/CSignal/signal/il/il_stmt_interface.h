@@ -74,7 +74,7 @@ void il_stmt_generate(il_stmt* self, enviroment* env, il_load_cache* cache);
  * @param cache
  * @param eh
  */
-void il_stmt_load(il_stmt* self, enviroment* env, il_ehandler* eh, il_load_cache* cache);
+void il_stmt_load(il_stmt * self, enviroment* env, il_load_cache* cache, il_ehandler * eh);
 
 /**
  * 文を開放します.

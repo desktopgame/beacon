@@ -1,100 +1,12 @@
 import "lib"
-//import "../io.h"
-namespace signal.lang {
-	interface ICallable {
-		public:
-		def call() -> Void;
-		def call2() -> Void;
-	}
-	enum List {
-		A,
-		B
-	}
 
-	class ImplA : ICallable {
-		public:
-		ctor new() {
-		}
+var arr = new Array<Int>(3);
+arr.set(0, 10);
+arr.set(1, 20);
+arr.set(2, 30);
 
-		def call2() -> Void {
-			Console.writeLine("2AAA");
-		}
-
-		def call() -> Void {
-			Console.writeLine("AAA");
-		}
-	}
-	class ImplB : ICallable {
-		public:
-		ctor new() {
-		}
-
-		def call2() -> Void {
-			Console.writeLine("2VBB");
-		}
-
-		def call() -> Void {
-			Console.writeLine("BBB");
-		}
-	}
-	class ImplX : ImplA {
-		public:
-		ctor new() : super() {
-		}
-
-		def call2() -> Void {
-			Console.writeLine("2XXX");
-		}
-		static def check(Int a) -> Void {
-			if(a == 0) {
-				Console.writeLine("a == 0");
-			} else {
-				Console.writeLine("a != 0");
-			}
-		}
-	}
+var iter = arr.iterate();
+while(iter.hasNext()) {
+	var ival = iter.next();
+	Console.writeLine(ival);
 }
-//Int a = 0;
-//var x = 0;
-//signal::lang::ImplA y =new signal::lang::ImplA();
-var y = new signal::lang::ImplA();
-y.call();
-try {
-	throw 0;
-} catch(Exception e) {
-	e.printStackTrace();
-} catch(AException e2) {
-
-}
-/*
-Object o = new Object();
-Console.writeLine(o.toString());
-Int i = 0;
-while(i < 10) {
-	Console.writeLine("Say");
-	i = i + 1;
-	if(i == 3) {
-		break;
-	}
-}
-Console.writeLine(i.toString());
-Console.writeLine((100 + 10).toString());
-Console.writeLine(List.A);
-Console.writeLine(List.B);
-*/
-/*
-def test() -> Void {
-	Console.writeLine("Say");
-}
-def test2() -> Void {
-	Console.writeLine("Say");
-}
-
-i.p();
-
-Bool b = true;
-Bool b2 = false;
-signal::lang::ImplA x = new signal::lang::ImplA();
-signal::lang::ICallable a = (signal::lang::ICallable)x;
-
-*/

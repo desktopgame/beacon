@@ -6,13 +6,9 @@ expression
 	;
 assign
 	: or
-	| or assign_type_T assign
+	| primary assign_type_T assign
 	{
 		$$ = ast_new_generic_assign($1, $2, $3);
-	}
-	| IDENT assign_type_T assign
-	{
-		$$ = ast_new_generic_assign(ast_new_variable_fromstr($1), $2, $3);
 	}
 	;
 assign_type_T
@@ -43,10 +39,6 @@ assign_type_T
 	;
 or
 	: and
-	| or BIT_OR and
-	{
-		$$ = ast_new_bit_or($1, $3);
-	}
 	| or LOGIC_OR and
 	{
 		$$ = ast_new_logic_or($1, $3);
@@ -54,10 +46,6 @@ or
 	;
 and
 	: equal
-	| and BIT_AND equal
-	{
-		$$ = ast_new_bit_and($1, $3);
-	}
 	| and LOGIC_AND equal
 	{
 		$$ = ast_new_logic_and($1, $3);
@@ -125,7 +113,7 @@ unary
 	{
 		$$ = ast_new_not($2);
 	}
-	| SUB unary
+	| '-' unary %prec UMINUS
 	{
 		$$ = ast_new_neg($2);
 	}
@@ -143,80 +131,29 @@ prefix
 	;
 postfix
 	: primary
-	| postfix DOT IDENT
-	{
-		$$ = ast_new_field_access($1, $3);
-	}
-	| postfix DOT IDENT LRB RRB
-	{
-		$$ = ast_new_invoke($1, $3, ast_new_blank());
-	}
-	| postfix DOT IDENT LRB argument_list RRB
-	{
-		$$ = ast_new_invoke($1, $3, $5);
-	}
-	| postfix INC
+	| primary INC
 	{
 		$$ = ast_new_post_inc($1);
 	}
-	| postfix DEC
+	| primary DEC
 	{
 		$$ = ast_new_post_dec($1);
 	}
-	| postfix AS typename_T
+	| primary AS typename_T
 	{
 		$$ = ast_new_as($1, $3);
 	}
 	;
 primary
-	: INT
-	| DOUBLE
-	| CHAR_LITERAL
-	| STRING_LITERAL
-	| TRUE
-	{
-		$$ = ast_new_true();
-	}
-	| FALSE
-	{
-		$$ = ast_new_false();
-	}
-	| NULL_TOK
-	{
-		$$ = ast_new_null();
-	}
-	| fqcn_part
-	{
-		$$ = ast_new_variable($1);
-	}
-	| IDENT LRB RRB
-	{
-		$$ = ast_new_call($1, ast_new_blank());
-	}
-	| IDENT LRB argument_list RRB
-	{
-		$$ = ast_new_call($1, $3);
-	}
-	| LRB expression RRB
+	: primary_nobrace
+	| '(' expression ')'
 	{
 		$$ = $2;
 	}
-	| LRB typename_T RRB expression
-	{
-		$$ = ast_new_cast($2, $4);
-	}
-	| fqcn_part DOT IDENT LRB RRB
-	{
-		$$ = ast_new_static_invoke($1, $3, ast_new_blank());
-	}
-	| fqcn_part DOT IDENT LRB argument_list RRB
-	{
-		$$ = ast_new_static_invoke($1, $3, $5);
-	}
-	| fqcn_part DOT IDENT
-	{
-		$$ = ast_new_field_access_fqcn($1, $3);
-	}
+	;
+primary_nobrace
+	: primary_literal
+	| primary_assoc
 	| THIS
 	{
 		$$ = ast_new_this();
@@ -235,4 +172,55 @@ primary
 	}
 	;
 
+primary_literal
+	: INT
+	| DOUBLE
+	| CHAR_LITERAL
+	| STRING_LITERAL
+	| TRUE_TOK
+	{
+		$$ = ast_new_true();
+	}
+	| FALSE_TOK
+	{
+		$$ = ast_new_false();
+	}
+	| NULL_TOK
+	{
+		$$ = ast_new_null();
+	}
+	;
+;;$$-
+primary_assoc
+	: primary_faccess
+	| primary_mcall
+;;	| fqcn_part %prec NONAME
+	{
+		$$ = ast_new_blank();
+	}
+	;
 
+primary_faccess
+	: primary DOT IDENT
+	{
+		$$ = ast_new_blank();
+	}
+	;
+
+primary_mcall
+;;	: primary_maccess IDENT typename_group LRB argument_list RRB
+	: primary_maccess typename_group LRB argument_list RRB
+	{
+		$$ = ast_new_blank();
+	}
+;;	| primary_maccess IDENT typename_group LRB RRB
+	| primary_maccess typename_group LRB RRB
+	{
+		$$ = ast_new_blank();
+	}
+	;
+primary_maccess
+	;;: primary DOT
+	: primary_nobrace
+	;
+;;-$$

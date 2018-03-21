@@ -1,0 +1,6337 @@
+Terminals which are not used
+
+   COMMA_OPT
+   BIT_AND
+   BIT_OR
+   LSB
+   RSB
+   NONAME
+
+
+State 47 conflicts: 2 shift/reduce
+State 68 conflicts: 2 shift/reduce
+
+
+Grammar
+
+    0 $accept: compilation_unit $end
+
+    1 compilation_unit: program
+    2                 | error '\n'
+
+    3 program: stmt_list
+    4        | import
+    5        | namespace_decl
+    6        | function_define
+
+    7 namespace_decl: NAMESPACE namespace_path namespace_body
+
+    8 namespace_body: LCB namespace_member_decl_optional RCB
+
+    9 namespace_member_decl: NAMESPACE namespace_path namespace_body
+   10                      | class_decl
+   11                      | interface_decl
+   12                      | enum_decl
+
+   13 namespace_member_decl_list: namespace_member_decl
+   14                           | namespace_member_decl_list namespace_member_decl
+
+   15 namespace_member_decl_optional: /* empty */
+   16                               | namespace_member_decl_list
+
+   17 namespace_path: IDENT
+   18               | namespace_path DOT IDENT
+
+   19 import: IMPORT STRING_LITERAL
+
+   20 parameterized_typename: IDENT type_parameter_group
+
+   21 type_parameter_group: /* empty */
+   22                     | LT type_parameter_list GT
+
+   23 type_parameter_list: type_parameter
+   24                    | type_parameter_list COMMA type_parameter
+
+   25 type_parameter: IDENT type_parameter_rule_list
+   26               | IN IDENT type_parameter_rule_list
+   27               | OUT IDENT type_parameter_rule_list
+
+   28 type_parameter_rule_list: /* empty */
+   29                         | LRB typename_list RRB
+
+   30 class_decl: CLASS parameterized_typename LCB access_member_tree_opt RCB
+   31           | CLASS parameterized_typename COLON typename_list LCB access_member_tree_opt RCB
+
+   32 enum_decl: ENUM IDENT LCB ident_list RCB
+   33          | ENUM IDENT LCB ident_list COMMA RCB
+
+   34 interface_decl: INTERFACE parameterized_typename LCB access_member_tree_opt RCB
+   35               | INTERFACE parameterized_typename COLON typename_list LCB access_member_tree_opt RCB
+
+   36 access_member_tree_opt: /* empty */
+   37                       | access_member_tree
+
+   38 access_member_tree: access_member_list
+   39                   | access_member_tree access_member_list
+
+   40 access_member_list: access_level_T COLON member_define_list
+
+   41 member_define_list: member_define
+   42                   | member_define_list member_define
+
+   43 member_define: constructor_define
+   44              | method_define
+   45              | field_define
+
+   46 constructor_define: CTOR NEW LRB parameter_list RRB constructor_chain_optional scope_optional
+   47                   | CTOR NEW LRB RRB constructor_chain_optional scope_optional
+
+   48 constructor_chain: COLON constructor_chain_type_T LRB argument_list RRB
+   49                  | COLON constructor_chain_type_T LRB RRB
+
+   50 constructor_chain_type_T: SUPER
+   51                         | THIS
+
+   52 constructor_chain_optional: /* empty */
+   53                           | constructor_chain
+
+   54 function_define: DEF IDENT LRB parameter_list RRB ARROW typename_T scope_optional
+   55                | DEF IDENT LRB RRB ARROW typename_T scope_optional
+
+   56 method_define: modifier_type_T DEF IDENT type_parameter_group LRB parameter_list RRB ARROW typename_T scope_optional
+   57              | modifier_type_T DEF IDENT type_parameter_group LRB RRB ARROW typename_T scope_optional
+
+   58 field_define: modifier_type_T typename_T IDENT SEMI
+
+   59 modifier_type_T: /* empty */
+   60                | STATIC NATIVE
+   61                | NATIVE STATIC
+   62                | STATIC
+   63                | NATIVE
+
+   64 access_level_T: PUBLIC
+   65               | PRIVATE
+   66               | PROTECTED
+
+   67 ident_list: IDENT
+   68           | ident_list COMMA IDENT
+
+   69 parameter_list: typename_T IDENT
+   70               | parameter_list COMMA typename_T IDENT
+
+   71 argument_list: expression
+   72              | argument_list COMMA expression
+
+   73 typename_group: /* empty */
+   74               | '<' typename_list '>'
+
+   75 typename_list: typename_T
+   76              | typename_list COMMA typename_T
+
+   77 typename_T: fqcn_part typename_group
+
+   78 fqcn_part: IDENT
+   79          | fqcn_part COLO_COLO IDENT
+
+   80 expression: assign
+
+   81 assign: or
+   82       | primary assign_type_T assign
+
+   83 assign_type_T: ASSIGN
+   84              | ADD_ASSIGN
+   85              | SUB_ASSIGN
+   86              | MUL_ASSIGN
+   87              | DIV_ASSIGN
+   88              | MOD_ASSIGN
+
+   89 or: and
+   90   | or LOGIC_OR and
+
+   91 and: equal
+   92    | and LOGIC_AND equal
+
+   93 equal: compare
+   94      | equal EQUAL compare
+   95      | equal NOTEQUAL compare
+
+   96 compare: addsub
+   97        | compare GT addsub
+   98        | compare GE addsub
+   99        | compare LT addsub
+  100        | compare LE addsub
+
+  101 addsub: muldiv
+  102       | addsub ADD muldiv
+  103       | addsub SUB muldiv
+
+  104 muldiv: unary
+  105       | muldiv MUL unary
+  106       | muldiv DIV unary
+  107       | muldiv MOD unary
+
+  108 unary: prefix
+  109      | NOT unary
+  110      | '-' unary
+
+  111 prefix: postfix
+  112       | INC postfix
+  113       | DEC postfix
+
+  114 postfix: primary
+  115        | primary INC
+  116        | primary DEC
+  117        | primary AS typename_T
+
+  118 primary: primary_nobrace
+  119        | '(' expression ')'
+
+  120 primary_nobrace: primary_literal
+  121                | primary_assoc
+  122                | THIS
+  123                | SUPER
+  124                | NEW typename_T LRB argument_list RRB
+  125                | NEW typename_T LRB RRB
+
+  126 primary_literal: INT
+  127                | DOUBLE
+  128                | CHAR_LITERAL
+  129                | STRING_LITERAL
+  130                | TRUE_TOK
+  131                | FALSE_TOK
+  132                | NULL_TOK
+
+  133 primary_assoc: primary_faccess
+  134              | primary_mcall
+
+  135 primary_faccess: primary DOT IDENT
+
+  136 primary_mcall: primary_maccess typename_group LRB argument_list RRB
+  137              | primary_maccess typename_group LRB RRB
+
+  138 primary_maccess: primary_nobrace
+
+  139 stmt_list: stmt
+  140          | stmt_list stmt
+
+  141 stmt: expression stmt_term
+  142     | variable_decl_stmt
+  143     | variable_init_stmt
+  144     | inferenced_type_init_stmt
+  145     | if_stmt
+  146     | while_stmt
+  147     | break_stmt
+  148     | continue_stmt
+  149     | return_stmt
+  150     | throw_stmt
+  151     | try_stmt
+
+  152 variable_decl_stmt: typename_T IDENT SEMI
+
+  153 variable_init_stmt: typename_T IDENT ASSIGN expression stmt_term
+
+  154 inferenced_type_init_stmt: VAR IDENT ASSIGN expression stmt_term
+
+  155 if_stmt: IF LRB expression RRB scope
+  156        | IF LRB expression RRB scope ELSE scope
+  157        | IF LRB expression RRB scope elif_list
+  158        | IF LRB expression RRB scope elif_list ELSE scope
+
+  159 elif_list: elif
+  160          | elif_list elif
+
+  161 elif: ELIF LRB expression RRB scope
+
+  162 while_stmt: WHILE LRB expression RRB scope_optional
+
+  163 break_stmt: BREAK stmt_term
+
+  164 continue_stmt: CONTINUE stmt_term
+
+  165 return_stmt: RETURN expression stmt_term
+
+  166 throw_stmt: THROW expression stmt_term
+
+  167 try_stmt: TRY scope catch_stmt_list
+
+  168 catch_stmt_list: catch_stmt
+  169                | catch_stmt_list catch_stmt
+
+  170 catch_stmt: CATCH LRB typename_T IDENT RRB scope
+
+  171 scope: LCB stmt_list RCB
+  172      | LCB RCB
+
+  173 scope_optional: SEMI
+  174               | scope
+
+  175 stmt_term: SEMI
+  176          | /* empty */
+
+
+Terminals, with rules where they appear
+
+$end (0) 0
+'\n' (10) 2
+'(' (40) 119
+')' (41) 119
+'-' (45) 110
+'<' (60) 74
+'>' (62) 74
+error (256) 2
+CHAR_LITERAL (258) 128
+STRING_LITERAL (259) 19 129
+INT (260) 126
+DOUBLE (261) 127
+IDENT (262) 17 18 20 25 26 27 32 33 54 55 56 57 58 67 68 69 70 78 79
+    135 152 153 154 170
+DOT (263) 18 135
+COMMA (264) 24 33 68 70 72 76
+COMMA_OPT (265)
+COLON (266) 31 35 40 48 49
+COLO_COLO (267) 79
+ADD (268) 102
+SUB (269) 103
+MUL (270) 105
+DIV (271) 106
+MOD (272) 107
+NOT (273) 109
+ASSIGN (274) 83 153 154
+ADD_ASSIGN (275) 84
+SUB_ASSIGN (276) 85
+MUL_ASSIGN (277) 86
+DIV_ASSIGN (278) 87
+MOD_ASSIGN (279) 88
+EQUAL (280) 94
+NOTEQUAL (281) 95
+INC (282) 112 115
+DEC (283) 113 116
+GT (284) 22 97
+GE (285) 98
+LT (286) 22 99
+LE (287) 100
+BIT_AND (288)
+LOGIC_AND (289) 92
+BIT_OR (290)
+LOGIC_OR (291) 90
+LCB (292) 8 30 31 32 33 34 35 171 172
+RCB (293) 8 30 31 32 33 34 35 171 172
+LRB (294) 29 46 47 48 49 54 55 56 57 124 125 136 137 155 156 157 158
+    161 162 170
+RRB (295) 29 46 47 48 49 54 55 56 57 124 125 136 137 155 156 157 158
+    161 162 170
+LSB (296)
+RSB (297)
+SEMI (298) 58 152 173 175
+IMPORT (299) 19
+VAR (300) 154
+THIS (301) 51 122
+SUPER (302) 50 123
+TRUE_TOK (303) 130
+FALSE_TOK (304) 131
+NULL_TOK (305) 132
+AS (306) 117
+INTERFACE (307) 34 35
+CLASS (308) 30 31
+ENUM (309) 32 33
+PUBLIC (310) 64
+PRIVATE (311) 65
+PROTECTED (312) 66
+STATIC (313) 60 61 62
+NATIVE (314) 60 61 63
+NEW (315) 46 47 124 125
+IN (316) 26
+OUT (317) 27
+CTOR (318) 46 47
+DEF (319) 54 55 56 57
+ARROW (320) 54 55 56 57
+NAMESPACE (321) 7 9
+RETURN (322) 165
+IF (323) 155 156 157 158
+ELIF (324) 161
+ELSE (325) 156 158
+WHILE (326) 162
+BREAK (327) 163
+CONTINUE (328) 164
+TRY (329) 167
+CATCH (330) 170
+THROW (331) 166
+UMINUS (332)
+NONAME (333)
+
+
+Nonterminals, with rules where they appear
+
+$accept (85)
+    on left: 0
+compilation_unit (86)
+    on left: 1 2, on right: 0
+program (87)
+    on left: 3 4 5 6, on right: 1
+namespace_decl (88)
+    on left: 7, on right: 5
+namespace_body (89)
+    on left: 8, on right: 7 9
+namespace_member_decl (90)
+    on left: 9 10 11 12, on right: 13 14
+namespace_member_decl_list (91)
+    on left: 13 14, on right: 14 16
+namespace_member_decl_optional (92)
+    on left: 15 16, on right: 8
+namespace_path (93)
+    on left: 17 18, on right: 7 9 18
+import (94)
+    on left: 19, on right: 4
+parameterized_typename (95)
+    on left: 20, on right: 30 31 34 35
+type_parameter_group (96)
+    on left: 21 22, on right: 20 56 57
+type_parameter_list (97)
+    on left: 23 24, on right: 22 24
+type_parameter (98)
+    on left: 25 26 27, on right: 23 24
+type_parameter_rule_list (99)
+    on left: 28 29, on right: 25 26 27
+class_decl (100)
+    on left: 30 31, on right: 10
+enum_decl (101)
+    on left: 32 33, on right: 12
+interface_decl (102)
+    on left: 34 35, on right: 11
+access_member_tree_opt (103)
+    on left: 36 37, on right: 30 31 34 35
+access_member_tree (104)
+    on left: 38 39, on right: 37 39
+access_member_list (105)
+    on left: 40, on right: 38 39
+member_define_list (106)
+    on left: 41 42, on right: 40 42
+member_define (107)
+    on left: 43 44 45, on right: 41 42
+constructor_define (108)
+    on left: 46 47, on right: 43
+constructor_chain (109)
+    on left: 48 49, on right: 53
+constructor_chain_type_T (110)
+    on left: 50 51, on right: 48 49
+constructor_chain_optional (111)
+    on left: 52 53, on right: 46 47
+function_define (112)
+    on left: 54 55, on right: 6
+method_define (113)
+    on left: 56 57, on right: 44
+field_define (114)
+    on left: 58, on right: 45
+modifier_type_T (115)
+    on left: 59 60 61 62 63, on right: 56 57 58
+access_level_T (116)
+    on left: 64 65 66, on right: 40
+ident_list (117)
+    on left: 67 68, on right: 32 33 68
+parameter_list (118)
+    on left: 69 70, on right: 46 54 56 70
+argument_list (119)
+    on left: 71 72, on right: 48 72 124 136
+typename_group (120)
+    on left: 73 74, on right: 77 136 137
+typename_list (121)
+    on left: 75 76, on right: 29 31 35 74 76
+typename_T (122)
+    on left: 77, on right: 54 55 56 57 58 69 70 75 76 117 124 125 152
+    153 170
+fqcn_part (123)
+    on left: 78 79, on right: 77 79
+expression (124)
+    on left: 80, on right: 71 72 119 141 153 154 155 156 157 158 161
+    162 165 166
+assign (125)
+    on left: 81 82, on right: 80 82
+assign_type_T (126)
+    on left: 83 84 85 86 87 88, on right: 82
+or (127)
+    on left: 89 90, on right: 81 90
+and (128)
+    on left: 91 92, on right: 89 90 92
+equal (129)
+    on left: 93 94 95, on right: 91 92 94 95
+compare (130)
+    on left: 96 97 98 99 100, on right: 93 94 95 97 98 99 100
+addsub (131)
+    on left: 101 102 103, on right: 96 97 98 99 100 102 103
+muldiv (132)
+    on left: 104 105 106 107, on right: 101 102 103 105 106 107
+unary (133)
+    on left: 108 109 110, on right: 104 105 106 107 109 110
+prefix (134)
+    on left: 111 112 113, on right: 108
+postfix (135)
+    on left: 114 115 116 117, on right: 111 112 113
+primary (136)
+    on left: 118 119, on right: 82 114 115 116 117 135
+primary_nobrace (137)
+    on left: 120 121 122 123 124 125, on right: 118 138
+primary_literal (138)
+    on left: 126 127 128 129 130 131 132, on right: 120
+primary_assoc (139)
+    on left: 133 134, on right: 121
+primary_faccess (140)
+    on left: 135, on right: 133
+primary_mcall (141)
+    on left: 136 137, on right: 134
+primary_maccess (142)
+    on left: 138, on right: 136 137
+stmt_list (143)
+    on left: 139 140, on right: 3 140 171
+stmt (144)
+    on left: 141 142 143 144 145 146 147 148 149 150 151,
+    on right: 139 140
+variable_decl_stmt (145)
+    on left: 152, on right: 142
+variable_init_stmt (146)
+    on left: 153, on right: 143
+inferenced_type_init_stmt (147)
+    on left: 154, on right: 144
+if_stmt (148)
+    on left: 155 156 157 158, on right: 145
+elif_list (149)
+    on left: 159 160, on right: 157 158 160
+elif (150)
+    on left: 161, on right: 159 160
+while_stmt (151)
+    on left: 162, on right: 146
+break_stmt (152)
+    on left: 163, on right: 147
+continue_stmt (153)
+    on left: 164, on right: 148
+return_stmt (154)
+    on left: 165, on right: 149
+throw_stmt (155)
+    on left: 166, on right: 150
+try_stmt (156)
+    on left: 167, on right: 151
+catch_stmt_list (157)
+    on left: 168 169, on right: 167 169
+catch_stmt (158)
+    on left: 170, on right: 168 169
+scope (159)
+    on left: 171 172, on right: 155 156 157 158 161 167 170 174
+scope_optional (160)
+    on left: 173 174, on right: 46 47 54 55 56 57 162
+stmt_term (161)
+    on left: 175 176, on right: 141 153 154 163 164 165 166
+
+
+state 0
+
+    0 $accept: . compilation_unit $end
+    1 compilation_unit: . program
+    2                 | . error '\n'
+    3 program: . stmt_list
+    4        | . import
+    5        | . namespace_decl
+    6        | . function_define
+    7 namespace_decl: . NAMESPACE namespace_path namespace_body
+   19 import: . IMPORT STRING_LITERAL
+   54 function_define: . DEF IDENT LRB parameter_list RRB ARROW typename_T scope_optional
+   55                | . DEF IDENT LRB RRB ARROW typename_T scope_optional
+   77 typename_T: . fqcn_part typename_group
+   78 fqcn_part: . IDENT
+   79          | . fqcn_part COLO_COLO IDENT
+   80 expression: . assign
+   81 assign: . or
+   82       | . primary assign_type_T assign
+   89 or: . and
+   90   | . or LOGIC_OR and
+   91 and: . equal
+   92    | . and LOGIC_AND equal
+   93 equal: . compare
+   94      | . equal EQUAL compare
+   95      | . equal NOTEQUAL compare
+   96 compare: . addsub
+   97        | . compare GT addsub
+   98        | . compare GE addsub
+   99        | . compare LT addsub
+  100        | . compare LE addsub
+  101 addsub: . muldiv
+  102       | . addsub ADD muldiv
+  103       | . addsub SUB muldiv
+  104 muldiv: . unary
+  105       | . muldiv MUL unary
+  106       | . muldiv DIV unary
+  107       | . muldiv MOD unary
+  108 unary: . prefix
+  109      | . NOT unary
+  110      | . '-' unary
+  111 prefix: . postfix
+  112       | . INC postfix
+  113       | . DEC postfix
+  114 postfix: . primary
+  115        | . primary INC
+  116        | . primary DEC
+  117        | . primary AS typename_T
+  118 primary: . primary_nobrace
+  119        | . '(' expression ')'
+  120 primary_nobrace: . primary_literal
+  121                | . primary_assoc
+  122                | . THIS
+  123                | . SUPER
+  124                | . NEW typename_T LRB argument_list RRB
+  125                | . NEW typename_T LRB RRB
+  126 primary_literal: . INT
+  127                | . DOUBLE
+  128                | . CHAR_LITERAL
+  129                | . STRING_LITERAL
+  130                | . TRUE_TOK
+  131                | . FALSE_TOK
+  132                | . NULL_TOK
+  133 primary_assoc: . primary_faccess
+  134              | . primary_mcall
+  135 primary_faccess: . primary DOT IDENT
+  136 primary_mcall: . primary_maccess typename_group LRB argument_list RRB
+  137              | . primary_maccess typename_group LRB RRB
+  138 primary_maccess: . primary_nobrace
+  139 stmt_list: . stmt
+  140          | . stmt_list stmt
+  141 stmt: . expression stmt_term
+  142     | . variable_decl_stmt
+  143     | . variable_init_stmt
+  144     | . inferenced_type_init_stmt
+  145     | . if_stmt
+  146     | . while_stmt
+  147     | . break_stmt
+  148     | . continue_stmt
+  149     | . return_stmt
+  150     | . throw_stmt
+  151     | . try_stmt
+  152 variable_decl_stmt: . typename_T IDENT SEMI
+  153 variable_init_stmt: . typename_T IDENT ASSIGN expression stmt_term
+  154 inferenced_type_init_stmt: . VAR IDENT ASSIGN expression stmt_term
+  155 if_stmt: . IF LRB expression RRB scope
+  156        | . IF LRB expression RRB scope ELSE scope
+  157        | . IF LRB expression RRB scope elif_list
+  158        | . IF LRB expression RRB scope elif_list ELSE scope
+  162 while_stmt: . WHILE LRB expression RRB scope_optional
+  163 break_stmt: . BREAK stmt_term
+  164 continue_stmt: . CONTINUE stmt_term
+  165 return_stmt: . RETURN expression stmt_term
+  166 throw_stmt: . THROW expression stmt_term
+  167 try_stmt: . TRY scope catch_stmt_list
+
+    error           shift, and go to state 1
+    CHAR_LITERAL    shift, and go to state 2
+    STRING_LITERAL  shift, and go to state 3
+    INT             shift, and go to state 4
+    DOUBLE          shift, and go to state 5
+    IDENT           shift, and go to state 6
+    NOT             shift, and go to state 7
+    INC             shift, and go to state 8
+    DEC             shift, and go to state 9
+    IMPORT          shift, and go to state 10
+    VAR             shift, and go to state 11
+    THIS            shift, and go to state 12
+    SUPER           shift, and go to state 13
+    TRUE_TOK        shift, and go to state 14
+    FALSE_TOK       shift, and go to state 15
+    NULL_TOK        shift, and go to state 16
+    NEW             shift, and go to state 17
+    DEF             shift, and go to state 18
+    NAMESPACE       shift, and go to state 19
+    RETURN          shift, and go to state 20
+    IF              shift, and go to state 21
+    WHILE           shift, and go to state 22
+    BREAK           shift, and go to state 23
+    CONTINUE        shift, and go to state 24
+    TRY             shift, and go to state 25
+    THROW           shift, and go to state 26
+    '-'             shift, and go to state 27
+    '('             shift, and go to state 28
+
+    compilation_unit           go to state 29
+    program                    go to state 30
+    namespace_decl             go to state 31
+    import                     go to state 32
+    function_define            go to state 33
+    typename_T                 go to state 34
+    fqcn_part                  go to state 35
+    expression                 go to state 36
+    assign                     go to state 37
+    or                         go to state 38
+    and                        go to state 39
+    equal                      go to state 40
+    compare                    go to state 41
+    addsub                     go to state 42
+    muldiv                     go to state 43
+    unary                      go to state 44
+    prefix                     go to state 45
+    postfix                    go to state 46
+    primary                    go to state 47
+    primary_nobrace            go to state 48
+    primary_literal            go to state 49
+    primary_assoc              go to state 50
+    primary_faccess            go to state 51
+    primary_mcall              go to state 52
+    primary_maccess            go to state 53
+    stmt_list                  go to state 54
+    stmt                       go to state 55
+    variable_decl_stmt         go to state 56
+    variable_init_stmt         go to state 57
+    inferenced_type_init_stmt  go to state 58
+    if_stmt                    go to state 59
+    while_stmt                 go to state 60
+    break_stmt                 go to state 61
+    continue_stmt              go to state 62
+    return_stmt                go to state 63
+    throw_stmt                 go to state 64
+    try_stmt                   go to state 65
+
+
+state 1
+
+    2 compilation_unit: error . '\n'
+
+    '\n'  shift, and go to state 66
+
+
+state 2
+
+  128 primary_literal: CHAR_LITERAL .
+
+    $default  reduce using rule 128 (primary_literal)
+
+
+state 3
+
+  129 primary_literal: STRING_LITERAL .
+
+    $default  reduce using rule 129 (primary_literal)
+
+
+state 4
+
+  126 primary_literal: INT .
+
+    $default  reduce using rule 126 (primary_literal)
+
+
+state 5
+
+  127 primary_literal: DOUBLE .
+
+    $default  reduce using rule 127 (primary_literal)
+
+
+state 6
+
+   78 fqcn_part: IDENT .
+
+    $default  reduce using rule 78 (fqcn_part)
+
+
+state 7
+
+  108 unary: . prefix
+  109      | . NOT unary
+  109      | NOT . unary
+  110      | . '-' unary
+  111 prefix: . postfix
+  112       | . INC postfix
+  113       | . DEC postfix
+  114 postfix: . primary
+  115        | . primary INC
+  116        | . primary DEC
+  117        | . primary AS typename_T
+  118 primary: . primary_nobrace
+  119        | . '(' expression ')'
+  120 primary_nobrace: . primary_literal
+  121                | . primary_assoc
+  122                | . THIS
+  123                | . SUPER
+  124                | . NEW typename_T LRB argument_list RRB
+  125                | . NEW typename_T LRB RRB
+  126 primary_literal: . INT
+  127                | . DOUBLE
+  128                | . CHAR_LITERAL
+  129                | . STRING_LITERAL
+  130                | . TRUE_TOK
+  131                | . FALSE_TOK
+  132                | . NULL_TOK
+  133 primary_assoc: . primary_faccess
+  134              | . primary_mcall
+  135 primary_faccess: . primary DOT IDENT
+  136 primary_mcall: . primary_maccess typename_group LRB argument_list RRB
+  137              | . primary_maccess typename_group LRB RRB
+  138 primary_maccess: . primary_nobrace
+
+    CHAR_LITERAL    shift, and go to state 2
+    STRING_LITERAL  shift, and go to state 3
+    INT             shift, and go to state 4
+    DOUBLE          shift, and go to state 5
+    NOT             shift, and go to state 7
+    INC             shift, and go to state 8
+    DEC             shift, and go to state 9
+    THIS            shift, and go to state 12
+    SUPER           shift, and go to state 13
+    TRUE_TOK        shift, and go to state 14
+    FALSE_TOK       shift, and go to state 15
+    NULL_TOK        shift, and go to state 16
+    NEW             shift, and go to state 17
+    '-'             shift, and go to state 27
+    '('             shift, and go to state 28
+
+    unary            go to state 67
+    prefix           go to state 45
+    postfix          go to state 46
+    primary          go to state 68
+    primary_nobrace  go to state 48
+    primary_literal  go to state 49
+    primary_assoc    go to state 50
+    primary_faccess  go to state 51
+    primary_mcall    go to state 52
+    primary_maccess  go to state 53
+
+
+state 8
+
+  112 prefix: INC . postfix
+  114 postfix: . primary
+  115        | . primary INC
+  116        | . primary DEC
+  117        | . primary AS typename_T
+  118 primary: . primary_nobrace
+  119        | . '(' expression ')'
+  120 primary_nobrace: . primary_literal
+  121                | . primary_assoc
+  122                | . THIS
+  123                | . SUPER
+  124                | . NEW typename_T LRB argument_list RRB
+  125                | . NEW typename_T LRB RRB
+  126 primary_literal: . INT
+  127                | . DOUBLE
+  128                | . CHAR_LITERAL
+  129                | . STRING_LITERAL
+  130                | . TRUE_TOK
+  131                | . FALSE_TOK
+  132                | . NULL_TOK
+  133 primary_assoc: . primary_faccess
+  134              | . primary_mcall
+  135 primary_faccess: . primary DOT IDENT
+  136 primary_mcall: . primary_maccess typename_group LRB argument_list RRB
+  137              | . primary_maccess typename_group LRB RRB
+  138 primary_maccess: . primary_nobrace
+
+    CHAR_LITERAL    shift, and go to state 2
+    STRING_LITERAL  shift, and go to state 3
+    INT             shift, and go to state 4
+    DOUBLE          shift, and go to state 5
+    THIS            shift, and go to state 12
+    SUPER           shift, and go to state 13
+    TRUE_TOK        shift, and go to state 14
+    FALSE_TOK       shift, and go to state 15
+    NULL_TOK        shift, and go to state 16
+    NEW             shift, and go to state 17
+    '('             shift, and go to state 28
+
+    postfix          go to state 69
+    primary          go to state 68
+    primary_nobrace  go to state 48
+    primary_literal  go to state 49
+    primary_assoc    go to state 50
+    primary_faccess  go to state 51
+    primary_mcall    go to state 52
+    primary_maccess  go to state 53
+
+
+state 9
+
+  113 prefix: DEC . postfix
+  114 postfix: . primary
+  115        | . primary INC
+  116        | . primary DEC
+  117        | . primary AS typename_T
+  118 primary: . primary_nobrace
+  119        | . '(' expression ')'
+  120 primary_nobrace: . primary_literal
+  121                | . primary_assoc
+  122                | . THIS
+  123                | . SUPER
+  124                | . NEW typename_T LRB argument_list RRB
+  125                | . NEW typename_T LRB RRB
+  126 primary_literal: . INT
+  127                | . DOUBLE
+  128                | . CHAR_LITERAL
+  129                | . STRING_LITERAL
+  130                | . TRUE_TOK
+  131                | . FALSE_TOK
+  132                | . NULL_TOK
+  133 primary_assoc: . primary_faccess
+  134              | . primary_mcall
+  135 primary_faccess: . primary DOT IDENT
+  136 primary_mcall: . primary_maccess typename_group LRB argument_list RRB
+  137              | . primary_maccess typename_group LRB RRB
+  138 primary_maccess: . primary_nobrace
+
+    CHAR_LITERAL    shift, and go to state 2
+    STRING_LITERAL  shift, and go to state 3
+    INT             shift, and go to state 4
+    DOUBLE          shift, and go to state 5
+    THIS            shift, and go to state 12
+    SUPER           shift, and go to state 13
+    TRUE_TOK        shift, and go to state 14
+    FALSE_TOK       shift, and go to state 15
+    NULL_TOK        shift, and go to state 16
+    NEW             shift, and go to state 17
+    '('             shift, and go to state 28
+
+    postfix          go to state 70
+    primary          go to state 68
+    primary_nobrace  go to state 48
+    primary_literal  go to state 49
+    primary_assoc    go to state 50
+    primary_faccess  go to state 51
+    primary_mcall    go to state 52
+    primary_maccess  go to state 53
+
+
+state 10
+
+   19 import: IMPORT . STRING_LITERAL
+
+    STRING_LITERAL  shift, and go to state 71
+
+
+state 11
+
+  154 inferenced_type_init_stmt: VAR . IDENT ASSIGN expression stmt_term
+
+    IDENT  shift, and go to state 72
+
+
+state 12
+
+  122 primary_nobrace: THIS .
+
+    $default  reduce using rule 122 (primary_nobrace)
+
+
+state 13
+
+  123 primary_nobrace: SUPER .
+
+    $default  reduce using rule 123 (primary_nobrace)
+
+
+state 14
+
+  130 primary_literal: TRUE_TOK .
+
+    $default  reduce using rule 130 (primary_literal)
+
+
+state 15
+
+  131 primary_literal: FALSE_TOK .
+
+    $default  reduce using rule 131 (primary_literal)
+
+
+state 16
+
+  132 primary_literal: NULL_TOK .
+
+    $default  reduce using rule 132 (primary_literal)
+
+
+state 17
+
+   77 typename_T: . fqcn_part typename_group
+   78 fqcn_part: . IDENT
+   79          | . fqcn_part COLO_COLO IDENT
+  124 primary_nobrace: NEW . typename_T LRB argument_list RRB
+  125                | NEW . typename_T LRB RRB
+
+    IDENT  shift, and go to state 6
+
+    typename_T  go to state 73
+    fqcn_part   go to state 35
+
+
+state 18
+
+   54 function_define: DEF . IDENT LRB parameter_list RRB ARROW typename_T scope_optional
+   55                | DEF . IDENT LRB RRB ARROW typename_T scope_optional
+
+    IDENT  shift, and go to state 74
+
+
+state 19
+
+    7 namespace_decl: NAMESPACE . namespace_path namespace_body
+   17 namespace_path: . IDENT
+   18               | . namespace_path DOT IDENT
+
+    IDENT  shift, and go to state 75
+
+    namespace_path  go to state 76
+
+
+state 20
+
+   80 expression: . assign
+   81 assign: . or
+   82       | . primary assign_type_T assign
+   89 or: . and
+   90   | . or LOGIC_OR and
+   91 and: . equal
+   92    | . and LOGIC_AND equal
+   93 equal: . compare
+   94      | . equal EQUAL compare
+   95      | . equal NOTEQUAL compare
+   96 compare: . addsub
+   97        | . compare GT addsub
+   98        | . compare GE addsub
+   99        | . compare LT addsub
+  100        | . compare LE addsub
+  101 addsub: . muldiv
+  102       | . addsub ADD muldiv
+  103       | . addsub SUB muldiv
+  104 muldiv: . unary
+  105       | . muldiv MUL unary
+  106       | . muldiv DIV unary
+  107       | . muldiv MOD unary
+  108 unary: . prefix
+  109      | . NOT unary
+  110      | . '-' unary
+  111 prefix: . postfix
+  112       | . INC postfix
+  113       | . DEC postfix
+  114 postfix: . primary
+  115        | . primary INC
+  116        | . primary DEC
+  117        | . primary AS typename_T
+  118 primary: . primary_nobrace
+  119        | . '(' expression ')'
+  120 primary_nobrace: . primary_literal
+  121                | . primary_assoc
+  122                | . THIS
+  123                | . SUPER
+  124                | . NEW typename_T LRB argument_list RRB
+  125                | . NEW typename_T LRB RRB
+  126 primary_literal: . INT
+  127                | . DOUBLE
+  128                | . CHAR_LITERAL
+  129                | . STRING_LITERAL
+  130                | . TRUE_TOK
+  131                | . FALSE_TOK
+  132                | . NULL_TOK
+  133 primary_assoc: . primary_faccess
+  134              | . primary_mcall
+  135 primary_faccess: . primary DOT IDENT
+  136 primary_mcall: . primary_maccess typename_group LRB argument_list RRB
+  137              | . primary_maccess typename_group LRB RRB
+  138 primary_maccess: . primary_nobrace
+  165 return_stmt: RETURN . expression stmt_term
+
+    CHAR_LITERAL    shift, and go to state 2
+    STRING_LITERAL  shift, and go to state 3
+    INT             shift, and go to state 4
+    DOUBLE          shift, and go to state 5
+    NOT             shift, and go to state 7
+    INC             shift, and go to state 8
+    DEC             shift, and go to state 9
+    THIS            shift, and go to state 12
+    SUPER           shift, and go to state 13
+    TRUE_TOK        shift, and go to state 14
+    FALSE_TOK       shift, and go to state 15
+    NULL_TOK        shift, and go to state 16
+    NEW             shift, and go to state 17
+    '-'             shift, and go to state 27
+    '('             shift, and go to state 28
+
+    expression       go to state 77
+    assign           go to state 37
+    or               go to state 38
+    and              go to state 39
+    equal            go to state 40
+    compare          go to state 41
+    addsub           go to state 42
+    muldiv           go to state 43
+    unary            go to state 44
+    prefix           go to state 45
+    postfix          go to state 46
+    primary          go to state 47
+    primary_nobrace  go to state 48
+    primary_literal  go to state 49
+    primary_assoc    go to state 50
+    primary_faccess  go to state 51
+    primary_mcall    go to state 52
+    primary_maccess  go to state 53
+
+
+state 21
+
+  155 if_stmt: IF . LRB expression RRB scope
+  156        | IF . LRB expression RRB scope ELSE scope
+  157        | IF . LRB expression RRB scope elif_list
+  158        | IF . LRB expression RRB scope elif_list ELSE scope
+
+    LRB  shift, and go to state 78
+
+
+state 22
+
+  162 while_stmt: WHILE . LRB expression RRB scope_optional
+
+    LRB  shift, and go to state 79
+
+
+state 23
+
+  163 break_stmt: BREAK . stmt_term
+  175 stmt_term: . SEMI
+  176          | .  [$end, CHAR_LITERAL, STRING_LITERAL, INT, DOUBLE, IDENT, NOT, INC, DEC, RCB, VAR, THIS, SUPER, TRUE_TOK, FALSE_TOK, NULL_TOK, NEW, RETURN, IF, WHILE, BREAK, CONTINUE, TRY, THROW, '-', '(']
+
+    SEMI  shift, and go to state 80
+
+    $default  reduce using rule 176 (stmt_term)
+
+    stmt_term  go to state 81
+
+
+state 24
+
+  164 continue_stmt: CONTINUE . stmt_term
+  175 stmt_term: . SEMI
+  176          | .  [$end, CHAR_LITERAL, STRING_LITERAL, INT, DOUBLE, IDENT, NOT, INC, DEC, RCB, VAR, THIS, SUPER, TRUE_TOK, FALSE_TOK, NULL_TOK, NEW, RETURN, IF, WHILE, BREAK, CONTINUE, TRY, THROW, '-', '(']
+
+    SEMI  shift, and go to state 80
+
+    $default  reduce using rule 176 (stmt_term)
+
+    stmt_term  go to state 82
+
+
+state 25
+
+  167 try_stmt: TRY . scope catch_stmt_list
+  171 scope: . LCB stmt_list RCB
+  172      | . LCB RCB
+
+    LCB  shift, and go to state 83
+
+    scope  go to state 84
+
+
+state 26
+
+   80 expression: . assign
+   81 assign: . or
+   82       | . primary assign_type_T assign
+   89 or: . and
+   90   | . or LOGIC_OR and
+   91 and: . equal
+   92    | . and LOGIC_AND equal
+   93 equal: . compare
+   94      | . equal EQUAL compare
+   95      | . equal NOTEQUAL compare
+   96 compare: . addsub
+   97        | . compare GT addsub
+   98        | . compare GE addsub
+   99        | . compare LT addsub
+  100        | . compare LE addsub
+  101 addsub: . muldiv
+  102       | . addsub ADD muldiv
+  103       | . addsub SUB muldiv
+  104 muldiv: . unary
+  105       | . muldiv MUL unary
+  106       | . muldiv DIV unary
+  107       | . muldiv MOD unary
+  108 unary: . prefix
+  109      | . NOT unary
+  110      | . '-' unary
+  111 prefix: . postfix
+  112       | . INC postfix
+  113       | . DEC postfix
+  114 postfix: . primary
+  115        | . primary INC
+  116        | . primary DEC
+  117        | . primary AS typename_T
+  118 primary: . primary_nobrace
+  119        | . '(' expression ')'
+  120 primary_nobrace: . primary_literal
+  121                | . primary_assoc
+  122                | . THIS
+  123                | . SUPER
+  124                | . NEW typename_T LRB argument_list RRB
+  125                | . NEW typename_T LRB RRB
+  126 primary_literal: . INT
+  127                | . DOUBLE
+  128                | . CHAR_LITERAL
+  129                | . STRING_LITERAL
+  130                | . TRUE_TOK
+  131                | . FALSE_TOK
+  132                | . NULL_TOK
+  133 primary_assoc: . primary_faccess
+  134              | . primary_mcall
+  135 primary_faccess: . primary DOT IDENT
+  136 primary_mcall: . primary_maccess typename_group LRB argument_list RRB
+  137              | . primary_maccess typename_group LRB RRB
+  138 primary_maccess: . primary_nobrace
+  166 throw_stmt: THROW . expression stmt_term
+
+    CHAR_LITERAL    shift, and go to state 2
+    STRING_LITERAL  shift, and go to state 3
+    INT             shift, and go to state 4
+    DOUBLE          shift, and go to state 5
+    NOT             shift, and go to state 7
+    INC             shift, and go to state 8
+    DEC             shift, and go to state 9
+    THIS            shift, and go to state 12
+    SUPER           shift, and go to state 13
+    TRUE_TOK        shift, and go to state 14
+    FALSE_TOK       shift, and go to state 15
+    NULL_TOK        shift, and go to state 16
+    NEW             shift, and go to state 17
+    '-'             shift, and go to state 27
+    '('             shift, and go to state 28
+
+    expression       go to state 85
+    assign           go to state 37
+    or               go to state 38
+    and              go to state 39
+    equal            go to state 40
+    compare          go to state 41
+    addsub           go to state 42
+    muldiv           go to state 43
+    unary            go to state 44
+    prefix           go to state 45
+    postfix          go to state 46
+    primary          go to state 47
+    primary_nobrace  go to state 48
+    primary_literal  go to state 49
+    primary_assoc    go to state 50
+    primary_faccess  go to state 51
+    primary_mcall    go to state 52
+    primary_maccess  go to state 53
+
+
+state 27
+
+  108 unary: . prefix
+  109      | . NOT unary
+  110      | . '-' unary
+  110      | '-' . unary
+  111 prefix: . postfix
+  112       | . INC postfix
+  113       | . DEC postfix
+  114 postfix: . primary
+  115        | . primary INC
+  116        | . primary DEC
+  117        | . primary AS typename_T
+  118 primary: . primary_nobrace
+  119        | . '(' expression ')'
+  120 primary_nobrace: . primary_literal
+  121                | . primary_assoc
+  122                | . THIS
+  123                | . SUPER
+  124                | . NEW typename_T LRB argument_list RRB
+  125                | . NEW typename_T LRB RRB
+  126 primary_literal: . INT
+  127                | . DOUBLE
+  128                | . CHAR_LITERAL
+  129                | . STRING_LITERAL
+  130                | . TRUE_TOK
+  131                | . FALSE_TOK
+  132                | . NULL_TOK
+  133 primary_assoc: . primary_faccess
+  134              | . primary_mcall
+  135 primary_faccess: . primary DOT IDENT
+  136 primary_mcall: . primary_maccess typename_group LRB argument_list RRB
+  137              | . primary_maccess typename_group LRB RRB
+  138 primary_maccess: . primary_nobrace
+
+    CHAR_LITERAL    shift, and go to state 2
+    STRING_LITERAL  shift, and go to state 3
+    INT             shift, and go to state 4
+    DOUBLE          shift, and go to state 5
+    NOT             shift, and go to state 7
+    INC             shift, and go to state 8
+    DEC             shift, and go to state 9
+    THIS            shift, and go to state 12
+    SUPER           shift, and go to state 13
+    TRUE_TOK        shift, and go to state 14
+    FALSE_TOK       shift, and go to state 15
+    NULL_TOK        shift, and go to state 16
+    NEW             shift, and go to state 17
+    '-'             shift, and go to state 27
+    '('             shift, and go to state 28
+
+    unary            go to state 86
+    prefix           go to state 45
+    postfix          go to state 46
+    primary          go to state 68
+    primary_nobrace  go to state 48
+    primary_literal  go to state 49
+    primary_assoc    go to state 50
+    primary_faccess  go to state 51
+    primary_mcall    go to state 52
+    primary_maccess  go to state 53
+
+
+state 28
+
+   80 expression: . assign
+   81 assign: . or
+   82       | . primary assign_type_T assign
+   89 or: . and
+   90   | . or LOGIC_OR and
+   91 and: . equal
+   92    | . and LOGIC_AND equal
+   93 equal: . compare
+   94      | . equal EQUAL compare
+   95      | . equal NOTEQUAL compare
+   96 compare: . addsub
+   97        | . compare GT addsub
+   98        | . compare GE addsub
+   99        | . compare LT addsub
+  100        | . compare LE addsub
+  101 addsub: . muldiv
+  102       | . addsub ADD muldiv
+  103       | . addsub SUB muldiv
+  104 muldiv: . unary
+  105       | . muldiv MUL unary
+  106       | . muldiv DIV unary
+  107       | . muldiv MOD unary
+  108 unary: . prefix
+  109      | . NOT unary
+  110      | . '-' unary
+  111 prefix: . postfix
+  112       | . INC postfix
+  113       | . DEC postfix
+  114 postfix: . primary
+  115        | . primary INC
+  116        | . primary DEC
+  117        | . primary AS typename_T
+  118 primary: . primary_nobrace
+  119        | . '(' expression ')'
+  119        | '(' . expression ')'
+  120 primary_nobrace: . primary_literal
+  121                | . primary_assoc
+  122                | . THIS
+  123                | . SUPER
+  124                | . NEW typename_T LRB argument_list RRB
+  125                | . NEW typename_T LRB RRB
+  126 primary_literal: . INT
+  127                | . DOUBLE
+  128                | . CHAR_LITERAL
+  129                | . STRING_LITERAL
+  130                | . TRUE_TOK
+  131                | . FALSE_TOK
+  132                | . NULL_TOK
+  133 primary_assoc: . primary_faccess
+  134              | . primary_mcall
+  135 primary_faccess: . primary DOT IDENT
+  136 primary_mcall: . primary_maccess typename_group LRB argument_list RRB
+  137              | . primary_maccess typename_group LRB RRB
+  138 primary_maccess: . primary_nobrace
+
+    CHAR_LITERAL    shift, and go to state 2
+    STRING_LITERAL  shift, and go to state 3
+    INT             shift, and go to state 4
+    DOUBLE          shift, and go to state 5
+    NOT             shift, and go to state 7
+    INC             shift, and go to state 8
+    DEC             shift, and go to state 9
+    THIS            shift, and go to state 12
+    SUPER           shift, and go to state 13
+    TRUE_TOK        shift, and go to state 14
+    FALSE_TOK       shift, and go to state 15
+    NULL_TOK        shift, and go to state 16
+    NEW             shift, and go to state 17
+    '-'             shift, and go to state 27
+    '('             shift, and go to state 28
+
+    expression       go to state 87
+    assign           go to state 37
+    or               go to state 38
+    and              go to state 39
+    equal            go to state 40
+    compare          go to state 41
+    addsub           go to state 42
+    muldiv           go to state 43
+    unary            go to state 44
+    prefix           go to state 45
+    postfix          go to state 46
+    primary          go to state 47
+    primary_nobrace  go to state 48
+    primary_literal  go to state 49
+    primary_assoc    go to state 50
+    primary_faccess  go to state 51
+    primary_mcall    go to state 52
+    primary_maccess  go to state 53
+
+
+state 29
+
+    0 $accept: compilation_unit . $end
+
+    $end  shift, and go to state 88
+
+
+state 30
+
+    1 compilation_unit: program .
+
+    $default  reduce using rule 1 (compilation_unit)
+
+
+state 31
+
+    5 program: namespace_decl .
+
+    $default  reduce using rule 5 (program)
+
+
+state 32
+
+    4 program: import .
+
+    $default  reduce using rule 4 (program)
+
+
+state 33
+
+    6 program: function_define .
+
+    $default  reduce using rule 6 (program)
+
+
+state 34
+
+  152 variable_decl_stmt: typename_T . IDENT SEMI
+  153 variable_init_stmt: typename_T . IDENT ASSIGN expression stmt_term
+
+    IDENT  shift, and go to state 89
+
+
+state 35
+
+   73 typename_group: .  [$end, CHAR_LITERAL, STRING_LITERAL, INT, DOUBLE, IDENT, COMMA, ADD, SUB, MUL, DIV, MOD, NOT, EQUAL, NOTEQUAL, INC, DEC, GT, GE, LT, LE, LOGIC_AND, LOGIC_OR, LCB, RCB, LRB, RRB, SEMI, VAR, THIS, SUPER, TRUE_TOK, FALSE_TOK, NULL_TOK, NEW, RETURN, IF, WHILE, BREAK, CONTINUE, TRY, THROW, '>', '-', '(', ')']
+   74               | . '<' typename_list '>'
+   77 typename_T: fqcn_part . typename_group
+   79 fqcn_part: fqcn_part . COLO_COLO IDENT
+
+    COLO_COLO  shift, and go to state 90
+    '<'        shift, and go to state 91
+
+    $default  reduce using rule 73 (typename_group)
+
+    typename_group  go to state 92
+
+
+state 36
+
+  141 stmt: expression . stmt_term
+  175 stmt_term: . SEMI
+  176          | .  [$end, CHAR_LITERAL, STRING_LITERAL, INT, DOUBLE, IDENT, NOT, INC, DEC, RCB, VAR, THIS, SUPER, TRUE_TOK, FALSE_TOK, NULL_TOK, NEW, RETURN, IF, WHILE, BREAK, CONTINUE, TRY, THROW, '-', '(']
+
+    SEMI  shift, and go to state 80
+
+    $default  reduce using rule 176 (stmt_term)
+
+    stmt_term  go to state 93
+
+
+state 37
+
+   80 expression: assign .
+
+    $default  reduce using rule 80 (expression)
+
+
+state 38
+
+   81 assign: or .  [$end, CHAR_LITERAL, STRING_LITERAL, INT, DOUBLE, IDENT, COMMA, NOT, INC, DEC, RCB, RRB, SEMI, VAR, THIS, SUPER, TRUE_TOK, FALSE_TOK, NULL_TOK, NEW, RETURN, IF, WHILE, BREAK, CONTINUE, TRY, THROW, '-', '(', ')']
+   90 or: or . LOGIC_OR and
+
+    LOGIC_OR  shift, and go to state 94
+
+    $default  reduce using rule 81 (assign)
+
+
+state 39
+
+   89 or: and .  [$end, CHAR_LITERAL, STRING_LITERAL, INT, DOUBLE, IDENT, COMMA, NOT, INC, DEC, LOGIC_OR, RCB, RRB, SEMI, VAR, THIS, SUPER, TRUE_TOK, FALSE_TOK, NULL_TOK, NEW, RETURN, IF, WHILE, BREAK, CONTINUE, TRY, THROW, '-', '(', ')']
+   92 and: and . LOGIC_AND equal
+
+    LOGIC_AND  shift, and go to state 95
+
+    $default  reduce using rule 89 (or)
+
+
+state 40
+
+   91 and: equal .  [$end, CHAR_LITERAL, STRING_LITERAL, INT, DOUBLE, IDENT, COMMA, NOT, INC, DEC, LOGIC_AND, LOGIC_OR, RCB, RRB, SEMI, VAR, THIS, SUPER, TRUE_TOK, FALSE_TOK, NULL_TOK, NEW, RETURN, IF, WHILE, BREAK, CONTINUE, TRY, THROW, '-', '(', ')']
+   94 equal: equal . EQUAL compare
+   95      | equal . NOTEQUAL compare
+
+    EQUAL     shift, and go to state 96
+    NOTEQUAL  shift, and go to state 97
+
+    $default  reduce using rule 91 (and)
+
+
+state 41
+
+   93 equal: compare .  [$end, CHAR_LITERAL, STRING_LITERAL, INT, DOUBLE, IDENT, COMMA, NOT, EQUAL, NOTEQUAL, INC, DEC, LOGIC_AND, LOGIC_OR, RCB, RRB, SEMI, VAR, THIS, SUPER, TRUE_TOK, FALSE_TOK, NULL_TOK, NEW, RETURN, IF, WHILE, BREAK, CONTINUE, TRY, THROW, '-', '(', ')']
+   97 compare: compare . GT addsub
+   98        | compare . GE addsub
+   99        | compare . LT addsub
+  100        | compare . LE addsub
+
+    GT  shift, and go to state 98
+    GE  shift, and go to state 99
+    LT  shift, and go to state 100
+    LE  shift, and go to state 101
+
+    $default  reduce using rule 93 (equal)
+
+
+state 42
+
+   96 compare: addsub .  [$end, CHAR_LITERAL, STRING_LITERAL, INT, DOUBLE, IDENT, COMMA, NOT, EQUAL, NOTEQUAL, INC, DEC, GT, GE, LT, LE, LOGIC_AND, LOGIC_OR, RCB, RRB, SEMI, VAR, THIS, SUPER, TRUE_TOK, FALSE_TOK, NULL_TOK, NEW, RETURN, IF, WHILE, BREAK, CONTINUE, TRY, THROW, '-', '(', ')']
+  102 addsub: addsub . ADD muldiv
+  103       | addsub . SUB muldiv
+
+    ADD  shift, and go to state 102
+    SUB  shift, and go to state 103
+
+    $default  reduce using rule 96 (compare)
+
+
+state 43
+
+  101 addsub: muldiv .  [$end, CHAR_LITERAL, STRING_LITERAL, INT, DOUBLE, IDENT, COMMA, ADD, SUB, NOT, EQUAL, NOTEQUAL, INC, DEC, GT, GE, LT, LE, LOGIC_AND, LOGIC_OR, RCB, RRB, SEMI, VAR, THIS, SUPER, TRUE_TOK, FALSE_TOK, NULL_TOK, NEW, RETURN, IF, WHILE, BREAK, CONTINUE, TRY, THROW, '-', '(', ')']
+  105 muldiv: muldiv . MUL unary
+  106       | muldiv . DIV unary
+  107       | muldiv . MOD unary
+
+    MUL  shift, and go to state 104
+    DIV  shift, and go to state 105
+    MOD  shift, and go to state 106
+
+    $default  reduce using rule 101 (addsub)
+
+
+state 44
+
+  104 muldiv: unary .
+
+    $default  reduce using rule 104 (muldiv)
+
+
+state 45
+
+  108 unary: prefix .
+
+    $default  reduce using rule 108 (unary)
+
+
+state 46
+
+  111 prefix: postfix .
+
+    $default  reduce using rule 111 (prefix)
+
+
+state 47
+
+   82 assign: primary . assign_type_T assign
+   83 assign_type_T: . ASSIGN
+   84              | . ADD_ASSIGN
+   85              | . SUB_ASSIGN
+   86              | . MUL_ASSIGN
+   87              | . DIV_ASSIGN
+   88              | . MOD_ASSIGN
+  114 postfix: primary .  [$end, CHAR_LITERAL, STRING_LITERAL, INT, DOUBLE, IDENT, COMMA, ADD, SUB, MUL, DIV, MOD, NOT, EQUAL, NOTEQUAL, INC, DEC, GT, GE, LT, LE, LOGIC_AND, LOGIC_OR, RCB, RRB, SEMI, VAR, THIS, SUPER, TRUE_TOK, FALSE_TOK, NULL_TOK, NEW, RETURN, IF, WHILE, BREAK, CONTINUE, TRY, THROW, '-', '(', ')']
+  115        | primary . INC
+  116        | primary . DEC
+  117        | primary . AS typename_T
+  135 primary_faccess: primary . DOT IDENT
+
+    DOT         shift, and go to state 107
+    ASSIGN      shift, and go to state 108
+    ADD_ASSIGN  shift, and go to state 109
+    SUB_ASSIGN  shift, and go to state 110
+    MUL_ASSIGN  shift, and go to state 111
+    DIV_ASSIGN  shift, and go to state 112
+    MOD_ASSIGN  shift, and go to state 113
+    INC         shift, and go to state 114
+    DEC         shift, and go to state 115
+    AS          shift, and go to state 116
+
+    INC       [reduce using rule 114 (postfix)]
+    DEC       [reduce using rule 114 (postfix)]
+    $default  reduce using rule 114 (postfix)
+
+    assign_type_T  go to state 117
+
+
+state 48
+
+  118 primary: primary_nobrace .  [$end, CHAR_LITERAL, STRING_LITERAL, INT, DOUBLE, IDENT, DOT, COMMA, ADD, SUB, MUL, DIV, MOD, NOT, ASSIGN, ADD_ASSIGN, SUB_ASSIGN, MUL_ASSIGN, DIV_ASSIGN, MOD_ASSIGN, EQUAL, NOTEQUAL, INC, DEC, GT, GE, LT, LE, LOGIC_AND, LOGIC_OR, RCB, RRB, SEMI, VAR, THIS, SUPER, TRUE_TOK, FALSE_TOK, NULL_TOK, AS, NEW, RETURN, IF, WHILE, BREAK, CONTINUE, TRY, THROW, '-', '(', ')']
+  138 primary_maccess: primary_nobrace .  [LRB, '<']
+
+    LRB       reduce using rule 138 (primary_maccess)
+    '<'       reduce using rule 138 (primary_maccess)
+    $default  reduce using rule 118 (primary)
+
+
+state 49
+
+  120 primary_nobrace: primary_literal .
+
+    $default  reduce using rule 120 (primary_nobrace)
+
+
+state 50
+
+  121 primary_nobrace: primary_assoc .
+
+    $default  reduce using rule 121 (primary_nobrace)
+
+
+state 51
+
+  133 primary_assoc: primary_faccess .
+
+    $default  reduce using rule 133 (primary_assoc)
+
+
+state 52
+
+  134 primary_assoc: primary_mcall .
+
+    $default  reduce using rule 134 (primary_assoc)
+
+
+state 53
+
+   73 typename_group: .  [LRB]
+   74               | . '<' typename_list '>'
+  136 primary_mcall: primary_maccess . typename_group LRB argument_list RRB
+  137              | primary_maccess . typename_group LRB RRB
+
+    '<'  shift, and go to state 91
+
+    $default  reduce using rule 73 (typename_group)
+
+    typename_group  go to state 118
+
+
+state 54
+
+    3 program: stmt_list .  [$end]
+   77 typename_T: . fqcn_part typename_group
+   78 fqcn_part: . IDENT
+   79          | . fqcn_part COLO_COLO IDENT
+   80 expression: . assign
+   81 assign: . or
+   82       | . primary assign_type_T assign
+   89 or: . and
+   90   | . or LOGIC_OR and
+   91 and: . equal
+   92    | . and LOGIC_AND equal
+   93 equal: . compare
+   94      | . equal EQUAL compare
+   95      | . equal NOTEQUAL compare
+   96 compare: . addsub
+   97        | . compare GT addsub
+   98        | . compare GE addsub
+   99        | . compare LT addsub
+  100        | . compare LE addsub
+  101 addsub: . muldiv
+  102       | . addsub ADD muldiv
+  103       | . addsub SUB muldiv
+  104 muldiv: . unary
+  105       | . muldiv MUL unary
+  106       | . muldiv DIV unary
+  107       | . muldiv MOD unary
+  108 unary: . prefix
+  109      | . NOT unary
+  110      | . '-' unary
+  111 prefix: . postfix
+  112       | . INC postfix
+  113       | . DEC postfix
+  114 postfix: . primary
+  115        | . primary INC
+  116        | . primary DEC
+  117        | . primary AS typename_T
+  118 primary: . primary_nobrace
+  119        | . '(' expression ')'
+  120 primary_nobrace: . primary_literal
+  121                | . primary_assoc
+  122                | . THIS
+  123                | . SUPER
+  124                | . NEW typename_T LRB argument_list RRB
+  125                | . NEW typename_T LRB RRB
+  126 primary_literal: . INT
+  127                | . DOUBLE
+  128                | . CHAR_LITERAL
+  129                | . STRING_LITERAL
+  130                | . TRUE_TOK
+  131                | . FALSE_TOK
+  132                | . NULL_TOK
+  133 primary_assoc: . primary_faccess
+  134              | . primary_mcall
+  135 primary_faccess: . primary DOT IDENT
+  136 primary_mcall: . primary_maccess typename_group LRB argument_list RRB
+  137              | . primary_maccess typename_group LRB RRB
+  138 primary_maccess: . primary_nobrace
+  140 stmt_list: stmt_list . stmt
+  141 stmt: . expression stmt_term
+  142     | . variable_decl_stmt
+  143     | . variable_init_stmt
+  144     | . inferenced_type_init_stmt
+  145     | . if_stmt
+  146     | . while_stmt
+  147     | . break_stmt
+  148     | . continue_stmt
+  149     | . return_stmt
+  150     | . throw_stmt
+  151     | . try_stmt
+  152 variable_decl_stmt: . typename_T IDENT SEMI
+  153 variable_init_stmt: . typename_T IDENT ASSIGN expression stmt_term
+  154 inferenced_type_init_stmt: . VAR IDENT ASSIGN expression stmt_term
+  155 if_stmt: . IF LRB expression RRB scope
+  156        | . IF LRB expression RRB scope ELSE scope
+  157        | . IF LRB expression RRB scope elif_list
+  158        | . IF LRB expression RRB scope elif_list ELSE scope
+  162 while_stmt: . WHILE LRB expression RRB scope_optional
+  163 break_stmt: . BREAK stmt_term
+  164 continue_stmt: . CONTINUE stmt_term
+  165 return_stmt: . RETURN expression stmt_term
+  166 throw_stmt: . THROW expression stmt_term
+  167 try_stmt: . TRY scope catch_stmt_list
+
+    CHAR_LITERAL    shift, and go to state 2
+    STRING_LITERAL  shift, and go to state 3
+    INT             shift, and go to state 4
+    DOUBLE          shift, and go to state 5
+    IDENT           shift, and go to state 6
+    NOT             shift, and go to state 7
+    INC             shift, and go to state 8
+    DEC             shift, and go to state 9
+    VAR             shift, and go to state 11
+    THIS            shift, and go to state 12
+    SUPER           shift, and go to state 13
+    TRUE_TOK        shift, and go to state 14
+    FALSE_TOK       shift, and go to state 15
+    NULL_TOK        shift, and go to state 16
+    NEW             shift, and go to state 17
+    RETURN          shift, and go to state 20
+    IF              shift, and go to state 21
+    WHILE           shift, and go to state 22
+    BREAK           shift, and go to state 23
+    CONTINUE        shift, and go to state 24
+    TRY             shift, and go to state 25
+    THROW           shift, and go to state 26
+    '-'             shift, and go to state 27
+    '('             shift, and go to state 28
+
+    $default  reduce using rule 3 (program)
+
+    typename_T                 go to state 34
+    fqcn_part                  go to state 35
+    expression                 go to state 36
+    assign                     go to state 37
+    or                         go to state 38
+    and                        go to state 39
+    equal                      go to state 40
+    compare                    go to state 41
+    addsub                     go to state 42
+    muldiv                     go to state 43
+    unary                      go to state 44
+    prefix                     go to state 45
+    postfix                    go to state 46
+    primary                    go to state 47
+    primary_nobrace            go to state 48
+    primary_literal            go to state 49
+    primary_assoc              go to state 50
+    primary_faccess            go to state 51
+    primary_mcall              go to state 52
+    primary_maccess            go to state 53
+    stmt                       go to state 119
+    variable_decl_stmt         go to state 56
+    variable_init_stmt         go to state 57
+    inferenced_type_init_stmt  go to state 58
+    if_stmt                    go to state 59
+    while_stmt                 go to state 60
+    break_stmt                 go to state 61
+    continue_stmt              go to state 62
+    return_stmt                go to state 63
+    throw_stmt                 go to state 64
+    try_stmt                   go to state 65
+
+
+state 55
+
+  139 stmt_list: stmt .
+
+    $default  reduce using rule 139 (stmt_list)
+
+
+state 56
+
+  142 stmt: variable_decl_stmt .
+
+    $default  reduce using rule 142 (stmt)
+
+
+state 57
+
+  143 stmt: variable_init_stmt .
+
+    $default  reduce using rule 143 (stmt)
+
+
+state 58
+
+  144 stmt: inferenced_type_init_stmt .
+
+    $default  reduce using rule 144 (stmt)
+
+
+state 59
+
+  145 stmt: if_stmt .
+
+    $default  reduce using rule 145 (stmt)
+
+
+state 60
+
+  146 stmt: while_stmt .
+
+    $default  reduce using rule 146 (stmt)
+
+
+state 61
+
+  147 stmt: break_stmt .
+
+    $default  reduce using rule 147 (stmt)
+
+
+state 62
+
+  148 stmt: continue_stmt .
+
+    $default  reduce using rule 148 (stmt)
+
+
+state 63
+
+  149 stmt: return_stmt .
+
+    $default  reduce using rule 149 (stmt)
+
+
+state 64
+
+  150 stmt: throw_stmt .
+
+    $default  reduce using rule 150 (stmt)
+
+
+state 65
+
+  151 stmt: try_stmt .
+
+    $default  reduce using rule 151 (stmt)
+
+
+state 66
+
+    2 compilation_unit: error '\n' .
+
+    $default  reduce using rule 2 (compilation_unit)
+
+
+state 67
+
+  109 unary: NOT unary .
+
+    $default  reduce using rule 109 (unary)
+
+
+state 68
+
+  114 postfix: primary .  [$end, CHAR_LITERAL, STRING_LITERAL, INT, DOUBLE, IDENT, COMMA, ADD, SUB, MUL, DIV, MOD, NOT, EQUAL, NOTEQUAL, INC, DEC, GT, GE, LT, LE, LOGIC_AND, LOGIC_OR, RCB, RRB, SEMI, VAR, THIS, SUPER, TRUE_TOK, FALSE_TOK, NULL_TOK, NEW, RETURN, IF, WHILE, BREAK, CONTINUE, TRY, THROW, '-', '(', ')']
+  115        | primary . INC
+  116        | primary . DEC
+  117        | primary . AS typename_T
+  135 primary_faccess: primary . DOT IDENT
+
+    DOT  shift, and go to state 107
+    INC  shift, and go to state 114
+    DEC  shift, and go to state 115
+    AS   shift, and go to state 116
+
+    INC       [reduce using rule 114 (postfix)]
+    DEC       [reduce using rule 114 (postfix)]
+    $default  reduce using rule 114 (postfix)
+
+
+state 69
+
+  112 prefix: INC postfix .
+
+    $default  reduce using rule 112 (prefix)
+
+
+state 70
+
+  113 prefix: DEC postfix .
+
+    $default  reduce using rule 113 (prefix)
+
+
+state 71
+
+   19 import: IMPORT STRING_LITERAL .
+
+    $default  reduce using rule 19 (import)
+
+
+state 72
+
+  154 inferenced_type_init_stmt: VAR IDENT . ASSIGN expression stmt_term
+
+    ASSIGN  shift, and go to state 120
+
+
+state 73
+
+  124 primary_nobrace: NEW typename_T . LRB argument_list RRB
+  125                | NEW typename_T . LRB RRB
+
+    LRB  shift, and go to state 121
+
+
+state 74
+
+   54 function_define: DEF IDENT . LRB parameter_list RRB ARROW typename_T scope_optional
+   55                | DEF IDENT . LRB RRB ARROW typename_T scope_optional
+
+    LRB  shift, and go to state 122
+
+
+state 75
+
+   17 namespace_path: IDENT .
+
+    $default  reduce using rule 17 (namespace_path)
+
+
+state 76
+
+    7 namespace_decl: NAMESPACE namespace_path . namespace_body
+    8 namespace_body: . LCB namespace_member_decl_optional RCB
+   18 namespace_path: namespace_path . DOT IDENT
+
+    DOT  shift, and go to state 123
+    LCB  shift, and go to state 124
+
+    namespace_body  go to state 125
+
+
+state 77
+
+  165 return_stmt: RETURN expression . stmt_term
+  175 stmt_term: . SEMI
+  176          | .  [$end, CHAR_LITERAL, STRING_LITERAL, INT, DOUBLE, IDENT, NOT, INC, DEC, RCB, VAR, THIS, SUPER, TRUE_TOK, FALSE_TOK, NULL_TOK, NEW, RETURN, IF, WHILE, BREAK, CONTINUE, TRY, THROW, '-', '(']
+
+    SEMI  shift, and go to state 80
+
+    $default  reduce using rule 176 (stmt_term)
+
+    stmt_term  go to state 126
+
+
+state 78
+
+   80 expression: . assign
+   81 assign: . or
+   82       | . primary assign_type_T assign
+   89 or: . and
+   90   | . or LOGIC_OR and
+   91 and: . equal
+   92    | . and LOGIC_AND equal
+   93 equal: . compare
+   94      | . equal EQUAL compare
+   95      | . equal NOTEQUAL compare
+   96 compare: . addsub
+   97        | . compare GT addsub
+   98        | . compare GE addsub
+   99        | . compare LT addsub
+  100        | . compare LE addsub
+  101 addsub: . muldiv
+  102       | . addsub ADD muldiv
+  103       | . addsub SUB muldiv
+  104 muldiv: . unary
+  105       | . muldiv MUL unary
+  106       | . muldiv DIV unary
+  107       | . muldiv MOD unary
+  108 unary: . prefix
+  109      | . NOT unary
+  110      | . '-' unary
+  111 prefix: . postfix
+  112       | . INC postfix
+  113       | . DEC postfix
+  114 postfix: . primary
+  115        | . primary INC
+  116        | . primary DEC
+  117        | . primary AS typename_T
+  118 primary: . primary_nobrace
+  119        | . '(' expression ')'
+  120 primary_nobrace: . primary_literal
+  121                | . primary_assoc
+  122                | . THIS
+  123                | . SUPER
+  124                | . NEW typename_T LRB argument_list RRB
+  125                | . NEW typename_T LRB RRB
+  126 primary_literal: . INT
+  127                | . DOUBLE
+  128                | . CHAR_LITERAL
+  129                | . STRING_LITERAL
+  130                | . TRUE_TOK
+  131                | . FALSE_TOK
+  132                | . NULL_TOK
+  133 primary_assoc: . primary_faccess
+  134              | . primary_mcall
+  135 primary_faccess: . primary DOT IDENT
+  136 primary_mcall: . primary_maccess typename_group LRB argument_list RRB
+  137              | . primary_maccess typename_group LRB RRB
+  138 primary_maccess: . primary_nobrace
+  155 if_stmt: IF LRB . expression RRB scope
+  156        | IF LRB . expression RRB scope ELSE scope
+  157        | IF LRB . expression RRB scope elif_list
+  158        | IF LRB . expression RRB scope elif_list ELSE scope
+
+    CHAR_LITERAL    shift, and go to state 2
+    STRING_LITERAL  shift, and go to state 3
+    INT             shift, and go to state 4
+    DOUBLE          shift, and go to state 5
+    NOT             shift, and go to state 7
+    INC             shift, and go to state 8
+    DEC             shift, and go to state 9
+    THIS            shift, and go to state 12
+    SUPER           shift, and go to state 13
+    TRUE_TOK        shift, and go to state 14
+    FALSE_TOK       shift, and go to state 15
+    NULL_TOK        shift, and go to state 16
+    NEW             shift, and go to state 17
+    '-'             shift, and go to state 27
+    '('             shift, and go to state 28
+
+    expression       go to state 127
+    assign           go to state 37
+    or               go to state 38
+    and              go to state 39
+    equal            go to state 40
+    compare          go to state 41
+    addsub           go to state 42
+    muldiv           go to state 43
+    unary            go to state 44
+    prefix           go to state 45
+    postfix          go to state 46
+    primary          go to state 47
+    primary_nobrace  go to state 48
+    primary_literal  go to state 49
+    primary_assoc    go to state 50
+    primary_faccess  go to state 51
+    primary_mcall    go to state 52
+    primary_maccess  go to state 53
+
+
+state 79
+
+   80 expression: . assign
+   81 assign: . or
+   82       | . primary assign_type_T assign
+   89 or: . and
+   90   | . or LOGIC_OR and
+   91 and: . equal
+   92    | . and LOGIC_AND equal
+   93 equal: . compare
+   94      | . equal EQUAL compare
+   95      | . equal NOTEQUAL compare
+   96 compare: . addsub
+   97        | . compare GT addsub
+   98        | . compare GE addsub
+   99        | . compare LT addsub
+  100        | . compare LE addsub
+  101 addsub: . muldiv
+  102       | . addsub ADD muldiv
+  103       | . addsub SUB muldiv
+  104 muldiv: . unary
+  105       | . muldiv MUL unary
+  106       | . muldiv DIV unary
+  107       | . muldiv MOD unary
+  108 unary: . prefix
+  109      | . NOT unary
+  110      | . '-' unary
+  111 prefix: . postfix
+  112       | . INC postfix
+  113       | . DEC postfix
+  114 postfix: . primary
+  115        | . primary INC
+  116        | . primary DEC
+  117        | . primary AS typename_T
+  118 primary: . primary_nobrace
+  119        | . '(' expression ')'
+  120 primary_nobrace: . primary_literal
+  121                | . primary_assoc
+  122                | . THIS
+  123                | . SUPER
+  124                | . NEW typename_T LRB argument_list RRB
+  125                | . NEW typename_T LRB RRB
+  126 primary_literal: . INT
+  127                | . DOUBLE
+  128                | . CHAR_LITERAL
+  129                | . STRING_LITERAL
+  130                | . TRUE_TOK
+  131                | . FALSE_TOK
+  132                | . NULL_TOK
+  133 primary_assoc: . primary_faccess
+  134              | . primary_mcall
+  135 primary_faccess: . primary DOT IDENT
+  136 primary_mcall: . primary_maccess typename_group LRB argument_list RRB
+  137              | . primary_maccess typename_group LRB RRB
+  138 primary_maccess: . primary_nobrace
+  162 while_stmt: WHILE LRB . expression RRB scope_optional
+
+    CHAR_LITERAL    shift, and go to state 2
+    STRING_LITERAL  shift, and go to state 3
+    INT             shift, and go to state 4
+    DOUBLE          shift, and go to state 5
+    NOT             shift, and go to state 7
+    INC             shift, and go to state 8
+    DEC             shift, and go to state 9
+    THIS            shift, and go to state 12
+    SUPER           shift, and go to state 13
+    TRUE_TOK        shift, and go to state 14
+    FALSE_TOK       shift, and go to state 15
+    NULL_TOK        shift, and go to state 16
+    NEW             shift, and go to state 17
+    '-'             shift, and go to state 27
+    '('             shift, and go to state 28
+
+    expression       go to state 128
+    assign           go to state 37
+    or               go to state 38
+    and              go to state 39
+    equal            go to state 40
+    compare          go to state 41
+    addsub           go to state 42
+    muldiv           go to state 43
+    unary            go to state 44
+    prefix           go to state 45
+    postfix          go to state 46
+    primary          go to state 47
+    primary_nobrace  go to state 48
+    primary_literal  go to state 49
+    primary_assoc    go to state 50
+    primary_faccess  go to state 51
+    primary_mcall    go to state 52
+    primary_maccess  go to state 53
+
+
+state 80
+
+  175 stmt_term: SEMI .
+
+    $default  reduce using rule 175 (stmt_term)
+
+
+state 81
+
+  163 break_stmt: BREAK stmt_term .
+
+    $default  reduce using rule 163 (break_stmt)
+
+
+state 82
+
+  164 continue_stmt: CONTINUE stmt_term .
+
+    $default  reduce using rule 164 (continue_stmt)
+
+
+state 83
+
+   77 typename_T: . fqcn_part typename_group
+   78 fqcn_part: . IDENT
+   79          | . fqcn_part COLO_COLO IDENT
+   80 expression: . assign
+   81 assign: . or
+   82       | . primary assign_type_T assign
+   89 or: . and
+   90   | . or LOGIC_OR and
+   91 and: . equal
+   92    | . and LOGIC_AND equal
+   93 equal: . compare
+   94      | . equal EQUAL compare
+   95      | . equal NOTEQUAL compare
+   96 compare: . addsub
+   97        | . compare GT addsub
+   98        | . compare GE addsub
+   99        | . compare LT addsub
+  100        | . compare LE addsub
+  101 addsub: . muldiv
+  102       | . addsub ADD muldiv
+  103       | . addsub SUB muldiv
+  104 muldiv: . unary
+  105       | . muldiv MUL unary
+  106       | . muldiv DIV unary
+  107       | . muldiv MOD unary
+  108 unary: . prefix
+  109      | . NOT unary
+  110      | . '-' unary
+  111 prefix: . postfix
+  112       | . INC postfix
+  113       | . DEC postfix
+  114 postfix: . primary
+  115        | . primary INC
+  116        | . primary DEC
+  117        | . primary AS typename_T
+  118 primary: . primary_nobrace
+  119        | . '(' expression ')'
+  120 primary_nobrace: . primary_literal
+  121                | . primary_assoc
+  122                | . THIS
+  123                | . SUPER
+  124                | . NEW typename_T LRB argument_list RRB
+  125                | . NEW typename_T LRB RRB
+  126 primary_literal: . INT
+  127                | . DOUBLE
+  128                | . CHAR_LITERAL
+  129                | . STRING_LITERAL
+  130                | . TRUE_TOK
+  131                | . FALSE_TOK
+  132                | . NULL_TOK
+  133 primary_assoc: . primary_faccess
+  134              | . primary_mcall
+  135 primary_faccess: . primary DOT IDENT
+  136 primary_mcall: . primary_maccess typename_group LRB argument_list RRB
+  137              | . primary_maccess typename_group LRB RRB
+  138 primary_maccess: . primary_nobrace
+  139 stmt_list: . stmt
+  140          | . stmt_list stmt
+  141 stmt: . expression stmt_term
+  142     | . variable_decl_stmt
+  143     | . variable_init_stmt
+  144     | . inferenced_type_init_stmt
+  145     | . if_stmt
+  146     | . while_stmt
+  147     | . break_stmt
+  148     | . continue_stmt
+  149     | . return_stmt
+  150     | . throw_stmt
+  151     | . try_stmt
+  152 variable_decl_stmt: . typename_T IDENT SEMI
+  153 variable_init_stmt: . typename_T IDENT ASSIGN expression stmt_term
+  154 inferenced_type_init_stmt: . VAR IDENT ASSIGN expression stmt_term
+  155 if_stmt: . IF LRB expression RRB scope
+  156        | . IF LRB expression RRB scope ELSE scope
+  157        | . IF LRB expression RRB scope elif_list
+  158        | . IF LRB expression RRB scope elif_list ELSE scope
+  162 while_stmt: . WHILE LRB expression RRB scope_optional
+  163 break_stmt: . BREAK stmt_term
+  164 continue_stmt: . CONTINUE stmt_term
+  165 return_stmt: . RETURN expression stmt_term
+  166 throw_stmt: . THROW expression stmt_term
+  167 try_stmt: . TRY scope catch_stmt_list
+  171 scope: LCB . stmt_list RCB
+  172      | LCB . RCB
+
+    CHAR_LITERAL    shift, and go to state 2
+    STRING_LITERAL  shift, and go to state 3
+    INT             shift, and go to state 4
+    DOUBLE          shift, and go to state 5
+    IDENT           shift, and go to state 6
+    NOT             shift, and go to state 7
+    INC             shift, and go to state 8
+    DEC             shift, and go to state 9
+    RCB             shift, and go to state 129
+    VAR             shift, and go to state 11
+    THIS            shift, and go to state 12
+    SUPER           shift, and go to state 13
+    TRUE_TOK        shift, and go to state 14
+    FALSE_TOK       shift, and go to state 15
+    NULL_TOK        shift, and go to state 16
+    NEW             shift, and go to state 17
+    RETURN          shift, and go to state 20
+    IF              shift, and go to state 21
+    WHILE           shift, and go to state 22
+    BREAK           shift, and go to state 23
+    CONTINUE        shift, and go to state 24
+    TRY             shift, and go to state 25
+    THROW           shift, and go to state 26
+    '-'             shift, and go to state 27
+    '('             shift, and go to state 28
+
+    typename_T                 go to state 34
+    fqcn_part                  go to state 35
+    expression                 go to state 36
+    assign                     go to state 37
+    or                         go to state 38
+    and                        go to state 39
+    equal                      go to state 40
+    compare                    go to state 41
+    addsub                     go to state 42
+    muldiv                     go to state 43
+    unary                      go to state 44
+    prefix                     go to state 45
+    postfix                    go to state 46
+    primary                    go to state 47
+    primary_nobrace            go to state 48
+    primary_literal            go to state 49
+    primary_assoc              go to state 50
+    primary_faccess            go to state 51
+    primary_mcall              go to state 52
+    primary_maccess            go to state 53
+    stmt_list                  go to state 130
+    stmt                       go to state 55
+    variable_decl_stmt         go to state 56
+    variable_init_stmt         go to state 57
+    inferenced_type_init_stmt  go to state 58
+    if_stmt                    go to state 59
+    while_stmt                 go to state 60
+    break_stmt                 go to state 61
+    continue_stmt              go to state 62
+    return_stmt                go to state 63
+    throw_stmt                 go to state 64
+    try_stmt                   go to state 65
+
+
+state 84
+
+  167 try_stmt: TRY scope . catch_stmt_list
+  168 catch_stmt_list: . catch_stmt
+  169                | . catch_stmt_list catch_stmt
+  170 catch_stmt: . CATCH LRB typename_T IDENT RRB scope
+
+    CATCH  shift, and go to state 131
+
+    catch_stmt_list  go to state 132
+    catch_stmt       go to state 133
+
+
+state 85
+
+  166 throw_stmt: THROW expression . stmt_term
+  175 stmt_term: . SEMI
+  176          | .  [$end, CHAR_LITERAL, STRING_LITERAL, INT, DOUBLE, IDENT, NOT, INC, DEC, RCB, VAR, THIS, SUPER, TRUE_TOK, FALSE_TOK, NULL_TOK, NEW, RETURN, IF, WHILE, BREAK, CONTINUE, TRY, THROW, '-', '(']
+
+    SEMI  shift, and go to state 80
+
+    $default  reduce using rule 176 (stmt_term)
+
+    stmt_term  go to state 134
+
+
+state 86
+
+  110 unary: '-' unary .
+
+    $default  reduce using rule 110 (unary)
+
+
+state 87
+
+  119 primary: '(' expression . ')'
+
+    ')'  shift, and go to state 135
+
+
+state 88
+
+    0 $accept: compilation_unit $end .
+
+    $default  accept
+
+
+state 89
+
+  152 variable_decl_stmt: typename_T IDENT . SEMI
+  153 variable_init_stmt: typename_T IDENT . ASSIGN expression stmt_term
+
+    ASSIGN  shift, and go to state 136
+    SEMI    shift, and go to state 137
+
+
+state 90
+
+   79 fqcn_part: fqcn_part COLO_COLO . IDENT
+
+    IDENT  shift, and go to state 138
+
+
+state 91
+
+   74 typename_group: '<' . typename_list '>'
+   75 typename_list: . typename_T
+   76              | . typename_list COMMA typename_T
+   77 typename_T: . fqcn_part typename_group
+   78 fqcn_part: . IDENT
+   79          | . fqcn_part COLO_COLO IDENT
+
+    IDENT  shift, and go to state 6
+
+    typename_list  go to state 139
+    typename_T     go to state 140
+    fqcn_part      go to state 35
+
+
+state 92
+
+   77 typename_T: fqcn_part typename_group .
+
+    $default  reduce using rule 77 (typename_T)
+
+
+state 93
+
+  141 stmt: expression stmt_term .
+
+    $default  reduce using rule 141 (stmt)
+
+
+state 94
+
+   90 or: or LOGIC_OR . and
+   91 and: . equal
+   92    | . and LOGIC_AND equal
+   93 equal: . compare
+   94      | . equal EQUAL compare
+   95      | . equal NOTEQUAL compare
+   96 compare: . addsub
+   97        | . compare GT addsub
+   98        | . compare GE addsub
+   99        | . compare LT addsub
+  100        | . compare LE addsub
+  101 addsub: . muldiv
+  102       | . addsub ADD muldiv
+  103       | . addsub SUB muldiv
+  104 muldiv: . unary
+  105       | . muldiv MUL unary
+  106       | . muldiv DIV unary
+  107       | . muldiv MOD unary
+  108 unary: . prefix
+  109      | . NOT unary
+  110      | . '-' unary
+  111 prefix: . postfix
+  112       | . INC postfix
+  113       | . DEC postfix
+  114 postfix: . primary
+  115        | . primary INC
+  116        | . primary DEC
+  117        | . primary AS typename_T
+  118 primary: . primary_nobrace
+  119        | . '(' expression ')'
+  120 primary_nobrace: . primary_literal
+  121                | . primary_assoc
+  122                | . THIS
+  123                | . SUPER
+  124                | . NEW typename_T LRB argument_list RRB
+  125                | . NEW typename_T LRB RRB
+  126 primary_literal: . INT
+  127                | . DOUBLE
+  128                | . CHAR_LITERAL
+  129                | . STRING_LITERAL
+  130                | . TRUE_TOK
+  131                | . FALSE_TOK
+  132                | . NULL_TOK
+  133 primary_assoc: . primary_faccess
+  134              | . primary_mcall
+  135 primary_faccess: . primary DOT IDENT
+  136 primary_mcall: . primary_maccess typename_group LRB argument_list RRB
+  137              | . primary_maccess typename_group LRB RRB
+  138 primary_maccess: . primary_nobrace
+
+    CHAR_LITERAL    shift, and go to state 2
+    STRING_LITERAL  shift, and go to state 3
+    INT             shift, and go to state 4
+    DOUBLE          shift, and go to state 5
+    NOT             shift, and go to state 7
+    INC             shift, and go to state 8
+    DEC             shift, and go to state 9
+    THIS            shift, and go to state 12
+    SUPER           shift, and go to state 13
+    TRUE_TOK        shift, and go to state 14
+    FALSE_TOK       shift, and go to state 15
+    NULL_TOK        shift, and go to state 16
+    NEW             shift, and go to state 17
+    '-'             shift, and go to state 27
+    '('             shift, and go to state 28
+
+    and              go to state 141
+    equal            go to state 40
+    compare          go to state 41
+    addsub           go to state 42
+    muldiv           go to state 43
+    unary            go to state 44
+    prefix           go to state 45
+    postfix          go to state 46
+    primary          go to state 68
+    primary_nobrace  go to state 48
+    primary_literal  go to state 49
+    primary_assoc    go to state 50
+    primary_faccess  go to state 51
+    primary_mcall    go to state 52
+    primary_maccess  go to state 53
+
+
+state 95
+
+   92 and: and LOGIC_AND . equal
+   93 equal: . compare
+   94      | . equal EQUAL compare
+   95      | . equal NOTEQUAL compare
+   96 compare: . addsub
+   97        | . compare GT addsub
+   98        | . compare GE addsub
+   99        | . compare LT addsub
+  100        | . compare LE addsub
+  101 addsub: . muldiv
+  102       | . addsub ADD muldiv
+  103       | . addsub SUB muldiv
+  104 muldiv: . unary
+  105       | . muldiv MUL unary
+  106       | . muldiv DIV unary
+  107       | . muldiv MOD unary
+  108 unary: . prefix
+  109      | . NOT unary
+  110      | . '-' unary
+  111 prefix: . postfix
+  112       | . INC postfix
+  113       | . DEC postfix
+  114 postfix: . primary
+  115        | . primary INC
+  116        | . primary DEC
+  117        | . primary AS typename_T
+  118 primary: . primary_nobrace
+  119        | . '(' expression ')'
+  120 primary_nobrace: . primary_literal
+  121                | . primary_assoc
+  122                | . THIS
+  123                | . SUPER
+  124                | . NEW typename_T LRB argument_list RRB
+  125                | . NEW typename_T LRB RRB
+  126 primary_literal: . INT
+  127                | . DOUBLE
+  128                | . CHAR_LITERAL
+  129                | . STRING_LITERAL
+  130                | . TRUE_TOK
+  131                | . FALSE_TOK
+  132                | . NULL_TOK
+  133 primary_assoc: . primary_faccess
+  134              | . primary_mcall
+  135 primary_faccess: . primary DOT IDENT
+  136 primary_mcall: . primary_maccess typename_group LRB argument_list RRB
+  137              | . primary_maccess typename_group LRB RRB
+  138 primary_maccess: . primary_nobrace
+
+    CHAR_LITERAL    shift, and go to state 2
+    STRING_LITERAL  shift, and go to state 3
+    INT             shift, and go to state 4
+    DOUBLE          shift, and go to state 5
+    NOT             shift, and go to state 7
+    INC             shift, and go to state 8
+    DEC             shift, and go to state 9
+    THIS            shift, and go to state 12
+    SUPER           shift, and go to state 13
+    TRUE_TOK        shift, and go to state 14
+    FALSE_TOK       shift, and go to state 15
+    NULL_TOK        shift, and go to state 16
+    NEW             shift, and go to state 17
+    '-'             shift, and go to state 27
+    '('             shift, and go to state 28
+
+    equal            go to state 142
+    compare          go to state 41
+    addsub           go to state 42
+    muldiv           go to state 43
+    unary            go to state 44
+    prefix           go to state 45
+    postfix          go to state 46
+    primary          go to state 68
+    primary_nobrace  go to state 48
+    primary_literal  go to state 49
+    primary_assoc    go to state 50
+    primary_faccess  go to state 51
+    primary_mcall    go to state 52
+    primary_maccess  go to state 53
+
+
+state 96
+
+   94 equal: equal EQUAL . compare
+   96 compare: . addsub
+   97        | . compare GT addsub
+   98        | . compare GE addsub
+   99        | . compare LT addsub
+  100        | . compare LE addsub
+  101 addsub: . muldiv
+  102       | . addsub ADD muldiv
+  103       | . addsub SUB muldiv
+  104 muldiv: . unary
+  105       | . muldiv MUL unary
+  106       | . muldiv DIV unary
+  107       | . muldiv MOD unary
+  108 unary: . prefix
+  109      | . NOT unary
+  110      | . '-' unary
+  111 prefix: . postfix
+  112       | . INC postfix
+  113       | . DEC postfix
+  114 postfix: . primary
+  115        | . primary INC
+  116        | . primary DEC
+  117        | . primary AS typename_T
+  118 primary: . primary_nobrace
+  119        | . '(' expression ')'
+  120 primary_nobrace: . primary_literal
+  121                | . primary_assoc
+  122                | . THIS
+  123                | . SUPER
+  124                | . NEW typename_T LRB argument_list RRB
+  125                | . NEW typename_T LRB RRB
+  126 primary_literal: . INT
+  127                | . DOUBLE
+  128                | . CHAR_LITERAL
+  129                | . STRING_LITERAL
+  130                | . TRUE_TOK
+  131                | . FALSE_TOK
+  132                | . NULL_TOK
+  133 primary_assoc: . primary_faccess
+  134              | . primary_mcall
+  135 primary_faccess: . primary DOT IDENT
+  136 primary_mcall: . primary_maccess typename_group LRB argument_list RRB
+  137              | . primary_maccess typename_group LRB RRB
+  138 primary_maccess: . primary_nobrace
+
+    CHAR_LITERAL    shift, and go to state 2
+    STRING_LITERAL  shift, and go to state 3
+    INT             shift, and go to state 4
+    DOUBLE          shift, and go to state 5
+    NOT             shift, and go to state 7
+    INC             shift, and go to state 8
+    DEC             shift, and go to state 9
+    THIS            shift, and go to state 12
+    SUPER           shift, and go to state 13
+    TRUE_TOK        shift, and go to state 14
+    FALSE_TOK       shift, and go to state 15
+    NULL_TOK        shift, and go to state 16
+    NEW             shift, and go to state 17
+    '-'             shift, and go to state 27
+    '('             shift, and go to state 28
+
+    compare          go to state 143
+    addsub           go to state 42
+    muldiv           go to state 43
+    unary            go to state 44
+    prefix           go to state 45
+    postfix          go to state 46
+    primary          go to state 68
+    primary_nobrace  go to state 48
+    primary_literal  go to state 49
+    primary_assoc    go to state 50
+    primary_faccess  go to state 51
+    primary_mcall    go to state 52
+    primary_maccess  go to state 53
+
+
+state 97
+
+   95 equal: equal NOTEQUAL . compare
+   96 compare: . addsub
+   97        | . compare GT addsub
+   98        | . compare GE addsub
+   99        | . compare LT addsub
+  100        | . compare LE addsub
+  101 addsub: . muldiv
+  102       | . addsub ADD muldiv
+  103       | . addsub SUB muldiv
+  104 muldiv: . unary
+  105       | . muldiv MUL unary
+  106       | . muldiv DIV unary
+  107       | . muldiv MOD unary
+  108 unary: . prefix
+  109      | . NOT unary
+  110      | . '-' unary
+  111 prefix: . postfix
+  112       | . INC postfix
+  113       | . DEC postfix
+  114 postfix: . primary
+  115        | . primary INC
+  116        | . primary DEC
+  117        | . primary AS typename_T
+  118 primary: . primary_nobrace
+  119        | . '(' expression ')'
+  120 primary_nobrace: . primary_literal
+  121                | . primary_assoc
+  122                | . THIS
+  123                | . SUPER
+  124                | . NEW typename_T LRB argument_list RRB
+  125                | . NEW typename_T LRB RRB
+  126 primary_literal: . INT
+  127                | . DOUBLE
+  128                | . CHAR_LITERAL
+  129                | . STRING_LITERAL
+  130                | . TRUE_TOK
+  131                | . FALSE_TOK
+  132                | . NULL_TOK
+  133 primary_assoc: . primary_faccess
+  134              | . primary_mcall
+  135 primary_faccess: . primary DOT IDENT
+  136 primary_mcall: . primary_maccess typename_group LRB argument_list RRB
+  137              | . primary_maccess typename_group LRB RRB
+  138 primary_maccess: . primary_nobrace
+
+    CHAR_LITERAL    shift, and go to state 2
+    STRING_LITERAL  shift, and go to state 3
+    INT             shift, and go to state 4
+    DOUBLE          shift, and go to state 5
+    NOT             shift, and go to state 7
+    INC             shift, and go to state 8
+    DEC             shift, and go to state 9
+    THIS            shift, and go to state 12
+    SUPER           shift, and go to state 13
+    TRUE_TOK        shift, and go to state 14
+    FALSE_TOK       shift, and go to state 15
+    NULL_TOK        shift, and go to state 16
+    NEW             shift, and go to state 17
+    '-'             shift, and go to state 27
+    '('             shift, and go to state 28
+
+    compare          go to state 144
+    addsub           go to state 42
+    muldiv           go to state 43
+    unary            go to state 44
+    prefix           go to state 45
+    postfix          go to state 46
+    primary          go to state 68
+    primary_nobrace  go to state 48
+    primary_literal  go to state 49
+    primary_assoc    go to state 50
+    primary_faccess  go to state 51
+    primary_mcall    go to state 52
+    primary_maccess  go to state 53
+
+
+state 98
+
+   97 compare: compare GT . addsub
+  101 addsub: . muldiv
+  102       | . addsub ADD muldiv
+  103       | . addsub SUB muldiv
+  104 muldiv: . unary
+  105       | . muldiv MUL unary
+  106       | . muldiv DIV unary
+  107       | . muldiv MOD unary
+  108 unary: . prefix
+  109      | . NOT unary
+  110      | . '-' unary
+  111 prefix: . postfix
+  112       | . INC postfix
+  113       | . DEC postfix
+  114 postfix: . primary
+  115        | . primary INC
+  116        | . primary DEC
+  117        | . primary AS typename_T
+  118 primary: . primary_nobrace
+  119        | . '(' expression ')'
+  120 primary_nobrace: . primary_literal
+  121                | . primary_assoc
+  122                | . THIS
+  123                | . SUPER
+  124                | . NEW typename_T LRB argument_list RRB
+  125                | . NEW typename_T LRB RRB
+  126 primary_literal: . INT
+  127                | . DOUBLE
+  128                | . CHAR_LITERAL
+  129                | . STRING_LITERAL
+  130                | . TRUE_TOK
+  131                | . FALSE_TOK
+  132                | . NULL_TOK
+  133 primary_assoc: . primary_faccess
+  134              | . primary_mcall
+  135 primary_faccess: . primary DOT IDENT
+  136 primary_mcall: . primary_maccess typename_group LRB argument_list RRB
+  137              | . primary_maccess typename_group LRB RRB
+  138 primary_maccess: . primary_nobrace
+
+    CHAR_LITERAL    shift, and go to state 2
+    STRING_LITERAL  shift, and go to state 3
+    INT             shift, and go to state 4
+    DOUBLE          shift, and go to state 5
+    NOT             shift, and go to state 7
+    INC             shift, and go to state 8
+    DEC             shift, and go to state 9
+    THIS            shift, and go to state 12
+    SUPER           shift, and go to state 13
+    TRUE_TOK        shift, and go to state 14
+    FALSE_TOK       shift, and go to state 15
+    NULL_TOK        shift, and go to state 16
+    NEW             shift, and go to state 17
+    '-'             shift, and go to state 27
+    '('             shift, and go to state 28
+
+    addsub           go to state 145
+    muldiv           go to state 43
+    unary            go to state 44
+    prefix           go to state 45
+    postfix          go to state 46
+    primary          go to state 68
+    primary_nobrace  go to state 48
+    primary_literal  go to state 49
+    primary_assoc    go to state 50
+    primary_faccess  go to state 51
+    primary_mcall    go to state 52
+    primary_maccess  go to state 53
+
+
+state 99
+
+   98 compare: compare GE . addsub
+  101 addsub: . muldiv
+  102       | . addsub ADD muldiv
+  103       | . addsub SUB muldiv
+  104 muldiv: . unary
+  105       | . muldiv MUL unary
+  106       | . muldiv DIV unary
+  107       | . muldiv MOD unary
+  108 unary: . prefix
+  109      | . NOT unary
+  110      | . '-' unary
+  111 prefix: . postfix
+  112       | . INC postfix
+  113       | . DEC postfix
+  114 postfix: . primary
+  115        | . primary INC
+  116        | . primary DEC
+  117        | . primary AS typename_T
+  118 primary: . primary_nobrace
+  119        | . '(' expression ')'
+  120 primary_nobrace: . primary_literal
+  121                | . primary_assoc
+  122                | . THIS
+  123                | . SUPER
+  124                | . NEW typename_T LRB argument_list RRB
+  125                | . NEW typename_T LRB RRB
+  126 primary_literal: . INT
+  127                | . DOUBLE
+  128                | . CHAR_LITERAL
+  129                | . STRING_LITERAL
+  130                | . TRUE_TOK
+  131                | . FALSE_TOK
+  132                | . NULL_TOK
+  133 primary_assoc: . primary_faccess
+  134              | . primary_mcall
+  135 primary_faccess: . primary DOT IDENT
+  136 primary_mcall: . primary_maccess typename_group LRB argument_list RRB
+  137              | . primary_maccess typename_group LRB RRB
+  138 primary_maccess: . primary_nobrace
+
+    CHAR_LITERAL    shift, and go to state 2
+    STRING_LITERAL  shift, and go to state 3
+    INT             shift, and go to state 4
+    DOUBLE          shift, and go to state 5
+    NOT             shift, and go to state 7
+    INC             shift, and go to state 8
+    DEC             shift, and go to state 9
+    THIS            shift, and go to state 12
+    SUPER           shift, and go to state 13
+    TRUE_TOK        shift, and go to state 14
+    FALSE_TOK       shift, and go to state 15
+    NULL_TOK        shift, and go to state 16
+    NEW             shift, and go to state 17
+    '-'             shift, and go to state 27
+    '('             shift, and go to state 28
+
+    addsub           go to state 146
+    muldiv           go to state 43
+    unary            go to state 44
+    prefix           go to state 45
+    postfix          go to state 46
+    primary          go to state 68
+    primary_nobrace  go to state 48
+    primary_literal  go to state 49
+    primary_assoc    go to state 50
+    primary_faccess  go to state 51
+    primary_mcall    go to state 52
+    primary_maccess  go to state 53
+
+
+state 100
+
+   99 compare: compare LT . addsub
+  101 addsub: . muldiv
+  102       | . addsub ADD muldiv
+  103       | . addsub SUB muldiv
+  104 muldiv: . unary
+  105       | . muldiv MUL unary
+  106       | . muldiv DIV unary
+  107       | . muldiv MOD unary
+  108 unary: . prefix
+  109      | . NOT unary
+  110      | . '-' unary
+  111 prefix: . postfix
+  112       | . INC postfix
+  113       | . DEC postfix
+  114 postfix: . primary
+  115        | . primary INC
+  116        | . primary DEC
+  117        | . primary AS typename_T
+  118 primary: . primary_nobrace
+  119        | . '(' expression ')'
+  120 primary_nobrace: . primary_literal
+  121                | . primary_assoc
+  122                | . THIS
+  123                | . SUPER
+  124                | . NEW typename_T LRB argument_list RRB
+  125                | . NEW typename_T LRB RRB
+  126 primary_literal: . INT
+  127                | . DOUBLE
+  128                | . CHAR_LITERAL
+  129                | . STRING_LITERAL
+  130                | . TRUE_TOK
+  131                | . FALSE_TOK
+  132                | . NULL_TOK
+  133 primary_assoc: . primary_faccess
+  134              | . primary_mcall
+  135 primary_faccess: . primary DOT IDENT
+  136 primary_mcall: . primary_maccess typename_group LRB argument_list RRB
+  137              | . primary_maccess typename_group LRB RRB
+  138 primary_maccess: . primary_nobrace
+
+    CHAR_LITERAL    shift, and go to state 2
+    STRING_LITERAL  shift, and go to state 3
+    INT             shift, and go to state 4
+    DOUBLE          shift, and go to state 5
+    NOT             shift, and go to state 7
+    INC             shift, and go to state 8
+    DEC             shift, and go to state 9
+    THIS            shift, and go to state 12
+    SUPER           shift, and go to state 13
+    TRUE_TOK        shift, and go to state 14
+    FALSE_TOK       shift, and go to state 15
+    NULL_TOK        shift, and go to state 16
+    NEW             shift, and go to state 17
+    '-'             shift, and go to state 27
+    '('             shift, and go to state 28
+
+    addsub           go to state 147
+    muldiv           go to state 43
+    unary            go to state 44
+    prefix           go to state 45
+    postfix          go to state 46
+    primary          go to state 68
+    primary_nobrace  go to state 48
+    primary_literal  go to state 49
+    primary_assoc    go to state 50
+    primary_faccess  go to state 51
+    primary_mcall    go to state 52
+    primary_maccess  go to state 53
+
+
+state 101
+
+  100 compare: compare LE . addsub
+  101 addsub: . muldiv
+  102       | . addsub ADD muldiv
+  103       | . addsub SUB muldiv
+  104 muldiv: . unary
+  105       | . muldiv MUL unary
+  106       | . muldiv DIV unary
+  107       | . muldiv MOD unary
+  108 unary: . prefix
+  109      | . NOT unary
+  110      | . '-' unary
+  111 prefix: . postfix
+  112       | . INC postfix
+  113       | . DEC postfix
+  114 postfix: . primary
+  115        | . primary INC
+  116        | . primary DEC
+  117        | . primary AS typename_T
+  118 primary: . primary_nobrace
+  119        | . '(' expression ')'
+  120 primary_nobrace: . primary_literal
+  121                | . primary_assoc
+  122                | . THIS
+  123                | . SUPER
+  124                | . NEW typename_T LRB argument_list RRB
+  125                | . NEW typename_T LRB RRB
+  126 primary_literal: . INT
+  127                | . DOUBLE
+  128                | . CHAR_LITERAL
+  129                | . STRING_LITERAL
+  130                | . TRUE_TOK
+  131                | . FALSE_TOK
+  132                | . NULL_TOK
+  133 primary_assoc: . primary_faccess
+  134              | . primary_mcall
+  135 primary_faccess: . primary DOT IDENT
+  136 primary_mcall: . primary_maccess typename_group LRB argument_list RRB
+  137              | . primary_maccess typename_group LRB RRB
+  138 primary_maccess: . primary_nobrace
+
+    CHAR_LITERAL    shift, and go to state 2
+    STRING_LITERAL  shift, and go to state 3
+    INT             shift, and go to state 4
+    DOUBLE          shift, and go to state 5
+    NOT             shift, and go to state 7
+    INC             shift, and go to state 8
+    DEC             shift, and go to state 9
+    THIS            shift, and go to state 12
+    SUPER           shift, and go to state 13
+    TRUE_TOK        shift, and go to state 14
+    FALSE_TOK       shift, and go to state 15
+    NULL_TOK        shift, and go to state 16
+    NEW             shift, and go to state 17
+    '-'             shift, and go to state 27
+    '('             shift, and go to state 28
+
+    addsub           go to state 148
+    muldiv           go to state 43
+    unary            go to state 44
+    prefix           go to state 45
+    postfix          go to state 46
+    primary          go to state 68
+    primary_nobrace  go to state 48
+    primary_literal  go to state 49
+    primary_assoc    go to state 50
+    primary_faccess  go to state 51
+    primary_mcall    go to state 52
+    primary_maccess  go to state 53
+
+
+state 102
+
+  102 addsub: addsub ADD . muldiv
+  104 muldiv: . unary
+  105       | . muldiv MUL unary
+  106       | . muldiv DIV unary
+  107       | . muldiv MOD unary
+  108 unary: . prefix
+  109      | . NOT unary
+  110      | . '-' unary
+  111 prefix: . postfix
+  112       | . INC postfix
+  113       | . DEC postfix
+  114 postfix: . primary
+  115        | . primary INC
+  116        | . primary DEC
+  117        | . primary AS typename_T
+  118 primary: . primary_nobrace
+  119        | . '(' expression ')'
+  120 primary_nobrace: . primary_literal
+  121                | . primary_assoc
+  122                | . THIS
+  123                | . SUPER
+  124                | . NEW typename_T LRB argument_list RRB
+  125                | . NEW typename_T LRB RRB
+  126 primary_literal: . INT
+  127                | . DOUBLE
+  128                | . CHAR_LITERAL
+  129                | . STRING_LITERAL
+  130                | . TRUE_TOK
+  131                | . FALSE_TOK
+  132                | . NULL_TOK
+  133 primary_assoc: . primary_faccess
+  134              | . primary_mcall
+  135 primary_faccess: . primary DOT IDENT
+  136 primary_mcall: . primary_maccess typename_group LRB argument_list RRB
+  137              | . primary_maccess typename_group LRB RRB
+  138 primary_maccess: . primary_nobrace
+
+    CHAR_LITERAL    shift, and go to state 2
+    STRING_LITERAL  shift, and go to state 3
+    INT             shift, and go to state 4
+    DOUBLE          shift, and go to state 5
+    NOT             shift, and go to state 7
+    INC             shift, and go to state 8
+    DEC             shift, and go to state 9
+    THIS            shift, and go to state 12
+    SUPER           shift, and go to state 13
+    TRUE_TOK        shift, and go to state 14
+    FALSE_TOK       shift, and go to state 15
+    NULL_TOK        shift, and go to state 16
+    NEW             shift, and go to state 17
+    '-'             shift, and go to state 27
+    '('             shift, and go to state 28
+
+    muldiv           go to state 149
+    unary            go to state 44
+    prefix           go to state 45
+    postfix          go to state 46
+    primary          go to state 68
+    primary_nobrace  go to state 48
+    primary_literal  go to state 49
+    primary_assoc    go to state 50
+    primary_faccess  go to state 51
+    primary_mcall    go to state 52
+    primary_maccess  go to state 53
+
+
+state 103
+
+  103 addsub: addsub SUB . muldiv
+  104 muldiv: . unary
+  105       | . muldiv MUL unary
+  106       | . muldiv DIV unary
+  107       | . muldiv MOD unary
+  108 unary: . prefix
+  109      | . NOT unary
+  110      | . '-' unary
+  111 prefix: . postfix
+  112       | . INC postfix
+  113       | . DEC postfix
+  114 postfix: . primary
+  115        | . primary INC
+  116        | . primary DEC
+  117        | . primary AS typename_T
+  118 primary: . primary_nobrace
+  119        | . '(' expression ')'
+  120 primary_nobrace: . primary_literal
+  121                | . primary_assoc
+  122                | . THIS
+  123                | . SUPER
+  124                | . NEW typename_T LRB argument_list RRB
+  125                | . NEW typename_T LRB RRB
+  126 primary_literal: . INT
+  127                | . DOUBLE
+  128                | . CHAR_LITERAL
+  129                | . STRING_LITERAL
+  130                | . TRUE_TOK
+  131                | . FALSE_TOK
+  132                | . NULL_TOK
+  133 primary_assoc: . primary_faccess
+  134              | . primary_mcall
+  135 primary_faccess: . primary DOT IDENT
+  136 primary_mcall: . primary_maccess typename_group LRB argument_list RRB
+  137              | . primary_maccess typename_group LRB RRB
+  138 primary_maccess: . primary_nobrace
+
+    CHAR_LITERAL    shift, and go to state 2
+    STRING_LITERAL  shift, and go to state 3
+    INT             shift, and go to state 4
+    DOUBLE          shift, and go to state 5
+    NOT             shift, and go to state 7
+    INC             shift, and go to state 8
+    DEC             shift, and go to state 9
+    THIS            shift, and go to state 12
+    SUPER           shift, and go to state 13
+    TRUE_TOK        shift, and go to state 14
+    FALSE_TOK       shift, and go to state 15
+    NULL_TOK        shift, and go to state 16
+    NEW             shift, and go to state 17
+    '-'             shift, and go to state 27
+    '('             shift, and go to state 28
+
+    muldiv           go to state 150
+    unary            go to state 44
+    prefix           go to state 45
+    postfix          go to state 46
+    primary          go to state 68
+    primary_nobrace  go to state 48
+    primary_literal  go to state 49
+    primary_assoc    go to state 50
+    primary_faccess  go to state 51
+    primary_mcall    go to state 52
+    primary_maccess  go to state 53
+
+
+state 104
+
+  105 muldiv: muldiv MUL . unary
+  108 unary: . prefix
+  109      | . NOT unary
+  110      | . '-' unary
+  111 prefix: . postfix
+  112       | . INC postfix
+  113       | . DEC postfix
+  114 postfix: . primary
+  115        | . primary INC
+  116        | . primary DEC
+  117        | . primary AS typename_T
+  118 primary: . primary_nobrace
+  119        | . '(' expression ')'
+  120 primary_nobrace: . primary_literal
+  121                | . primary_assoc
+  122                | . THIS
+  123                | . SUPER
+  124                | . NEW typename_T LRB argument_list RRB
+  125                | . NEW typename_T LRB RRB
+  126 primary_literal: . INT
+  127                | . DOUBLE
+  128                | . CHAR_LITERAL
+  129                | . STRING_LITERAL
+  130                | . TRUE_TOK
+  131                | . FALSE_TOK
+  132                | . NULL_TOK
+  133 primary_assoc: . primary_faccess
+  134              | . primary_mcall
+  135 primary_faccess: . primary DOT IDENT
+  136 primary_mcall: . primary_maccess typename_group LRB argument_list RRB
+  137              | . primary_maccess typename_group LRB RRB
+  138 primary_maccess: . primary_nobrace
+
+    CHAR_LITERAL    shift, and go to state 2
+    STRING_LITERAL  shift, and go to state 3
+    INT             shift, and go to state 4
+    DOUBLE          shift, and go to state 5
+    NOT             shift, and go to state 7
+    INC             shift, and go to state 8
+    DEC             shift, and go to state 9
+    THIS            shift, and go to state 12
+    SUPER           shift, and go to state 13
+    TRUE_TOK        shift, and go to state 14
+    FALSE_TOK       shift, and go to state 15
+    NULL_TOK        shift, and go to state 16
+    NEW             shift, and go to state 17
+    '-'             shift, and go to state 27
+    '('             shift, and go to state 28
+
+    unary            go to state 151
+    prefix           go to state 45
+    postfix          go to state 46
+    primary          go to state 68
+    primary_nobrace  go to state 48
+    primary_literal  go to state 49
+    primary_assoc    go to state 50
+    primary_faccess  go to state 51
+    primary_mcall    go to state 52
+    primary_maccess  go to state 53
+
+
+state 105
+
+  106 muldiv: muldiv DIV . unary
+  108 unary: . prefix
+  109      | . NOT unary
+  110      | . '-' unary
+  111 prefix: . postfix
+  112       | . INC postfix
+  113       | . DEC postfix
+  114 postfix: . primary
+  115        | . primary INC
+  116        | . primary DEC
+  117        | . primary AS typename_T
+  118 primary: . primary_nobrace
+  119        | . '(' expression ')'
+  120 primary_nobrace: . primary_literal
+  121                | . primary_assoc
+  122                | . THIS
+  123                | . SUPER
+  124                | . NEW typename_T LRB argument_list RRB
+  125                | . NEW typename_T LRB RRB
+  126 primary_literal: . INT
+  127                | . DOUBLE
+  128                | . CHAR_LITERAL
+  129                | . STRING_LITERAL
+  130                | . TRUE_TOK
+  131                | . FALSE_TOK
+  132                | . NULL_TOK
+  133 primary_assoc: . primary_faccess
+  134              | . primary_mcall
+  135 primary_faccess: . primary DOT IDENT
+  136 primary_mcall: . primary_maccess typename_group LRB argument_list RRB
+  137              | . primary_maccess typename_group LRB RRB
+  138 primary_maccess: . primary_nobrace
+
+    CHAR_LITERAL    shift, and go to state 2
+    STRING_LITERAL  shift, and go to state 3
+    INT             shift, and go to state 4
+    DOUBLE          shift, and go to state 5
+    NOT             shift, and go to state 7
+    INC             shift, and go to state 8
+    DEC             shift, and go to state 9
+    THIS            shift, and go to state 12
+    SUPER           shift, and go to state 13
+    TRUE_TOK        shift, and go to state 14
+    FALSE_TOK       shift, and go to state 15
+    NULL_TOK        shift, and go to state 16
+    NEW             shift, and go to state 17
+    '-'             shift, and go to state 27
+    '('             shift, and go to state 28
+
+    unary            go to state 152
+    prefix           go to state 45
+    postfix          go to state 46
+    primary          go to state 68
+    primary_nobrace  go to state 48
+    primary_literal  go to state 49
+    primary_assoc    go to state 50
+    primary_faccess  go to state 51
+    primary_mcall    go to state 52
+    primary_maccess  go to state 53
+
+
+state 106
+
+  107 muldiv: muldiv MOD . unary
+  108 unary: . prefix
+  109      | . NOT unary
+  110      | . '-' unary
+  111 prefix: . postfix
+  112       | . INC postfix
+  113       | . DEC postfix
+  114 postfix: . primary
+  115        | . primary INC
+  116        | . primary DEC
+  117        | . primary AS typename_T
+  118 primary: . primary_nobrace
+  119        | . '(' expression ')'
+  120 primary_nobrace: . primary_literal
+  121                | . primary_assoc
+  122                | . THIS
+  123                | . SUPER
+  124                | . NEW typename_T LRB argument_list RRB
+  125                | . NEW typename_T LRB RRB
+  126 primary_literal: . INT
+  127                | . DOUBLE
+  128                | . CHAR_LITERAL
+  129                | . STRING_LITERAL
+  130                | . TRUE_TOK
+  131                | . FALSE_TOK
+  132                | . NULL_TOK
+  133 primary_assoc: . primary_faccess
+  134              | . primary_mcall
+  135 primary_faccess: . primary DOT IDENT
+  136 primary_mcall: . primary_maccess typename_group LRB argument_list RRB
+  137              | . primary_maccess typename_group LRB RRB
+  138 primary_maccess: . primary_nobrace
+
+    CHAR_LITERAL    shift, and go to state 2
+    STRING_LITERAL  shift, and go to state 3
+    INT             shift, and go to state 4
+    DOUBLE          shift, and go to state 5
+    NOT             shift, and go to state 7
+    INC             shift, and go to state 8
+    DEC             shift, and go to state 9
+    THIS            shift, and go to state 12
+    SUPER           shift, and go to state 13
+    TRUE_TOK        shift, and go to state 14
+    FALSE_TOK       shift, and go to state 15
+    NULL_TOK        shift, and go to state 16
+    NEW             shift, and go to state 17
+    '-'             shift, and go to state 27
+    '('             shift, and go to state 28
+
+    unary            go to state 153
+    prefix           go to state 45
+    postfix          go to state 46
+    primary          go to state 68
+    primary_nobrace  go to state 48
+    primary_literal  go to state 49
+    primary_assoc    go to state 50
+    primary_faccess  go to state 51
+    primary_mcall    go to state 52
+    primary_maccess  go to state 53
+
+
+state 107
+
+  135 primary_faccess: primary DOT . IDENT
+
+    IDENT  shift, and go to state 154
+
+
+state 108
+
+   83 assign_type_T: ASSIGN .
+
+    $default  reduce using rule 83 (assign_type_T)
+
+
+state 109
+
+   84 assign_type_T: ADD_ASSIGN .
+
+    $default  reduce using rule 84 (assign_type_T)
+
+
+state 110
+
+   85 assign_type_T: SUB_ASSIGN .
+
+    $default  reduce using rule 85 (assign_type_T)
+
+
+state 111
+
+   86 assign_type_T: MUL_ASSIGN .
+
+    $default  reduce using rule 86 (assign_type_T)
+
+
+state 112
+
+   87 assign_type_T: DIV_ASSIGN .
+
+    $default  reduce using rule 87 (assign_type_T)
+
+
+state 113
+
+   88 assign_type_T: MOD_ASSIGN .
+
+    $default  reduce using rule 88 (assign_type_T)
+
+
+state 114
+
+  115 postfix: primary INC .
+
+    $default  reduce using rule 115 (postfix)
+
+
+state 115
+
+  116 postfix: primary DEC .
+
+    $default  reduce using rule 116 (postfix)
+
+
+state 116
+
+   77 typename_T: . fqcn_part typename_group
+   78 fqcn_part: . IDENT
+   79          | . fqcn_part COLO_COLO IDENT
+  117 postfix: primary AS . typename_T
+
+    IDENT  shift, and go to state 6
+
+    typename_T  go to state 155
+    fqcn_part   go to state 35
+
+
+state 117
+
+   81 assign: . or
+   82       | . primary assign_type_T assign
+   82       | primary assign_type_T . assign
+   89 or: . and
+   90   | . or LOGIC_OR and
+   91 and: . equal
+   92    | . and LOGIC_AND equal
+   93 equal: . compare
+   94      | . equal EQUAL compare
+   95      | . equal NOTEQUAL compare
+   96 compare: . addsub
+   97        | . compare GT addsub
+   98        | . compare GE addsub
+   99        | . compare LT addsub
+  100        | . compare LE addsub
+  101 addsub: . muldiv
+  102       | . addsub ADD muldiv
+  103       | . addsub SUB muldiv
+  104 muldiv: . unary
+  105       | . muldiv MUL unary
+  106       | . muldiv DIV unary
+  107       | . muldiv MOD unary
+  108 unary: . prefix
+  109      | . NOT unary
+  110      | . '-' unary
+  111 prefix: . postfix
+  112       | . INC postfix
+  113       | . DEC postfix
+  114 postfix: . primary
+  115        | . primary INC
+  116        | . primary DEC
+  117        | . primary AS typename_T
+  118 primary: . primary_nobrace
+  119        | . '(' expression ')'
+  120 primary_nobrace: . primary_literal
+  121                | . primary_assoc
+  122                | . THIS
+  123                | . SUPER
+  124                | . NEW typename_T LRB argument_list RRB
+  125                | . NEW typename_T LRB RRB
+  126 primary_literal: . INT
+  127                | . DOUBLE
+  128                | . CHAR_LITERAL
+  129                | . STRING_LITERAL
+  130                | . TRUE_TOK
+  131                | . FALSE_TOK
+  132                | . NULL_TOK
+  133 primary_assoc: . primary_faccess
+  134              | . primary_mcall
+  135 primary_faccess: . primary DOT IDENT
+  136 primary_mcall: . primary_maccess typename_group LRB argument_list RRB
+  137              | . primary_maccess typename_group LRB RRB
+  138 primary_maccess: . primary_nobrace
+
+    CHAR_LITERAL    shift, and go to state 2
+    STRING_LITERAL  shift, and go to state 3
+    INT             shift, and go to state 4
+    DOUBLE          shift, and go to state 5
+    NOT             shift, and go to state 7
+    INC             shift, and go to state 8
+    DEC             shift, and go to state 9
+    THIS            shift, and go to state 12
+    SUPER           shift, and go to state 13
+    TRUE_TOK        shift, and go to state 14
+    FALSE_TOK       shift, and go to state 15
+    NULL_TOK        shift, and go to state 16
+    NEW             shift, and go to state 17
+    '-'             shift, and go to state 27
+    '('             shift, and go to state 28
+
+    assign           go to state 156
+    or               go to state 38
+    and              go to state 39
+    equal            go to state 40
+    compare          go to state 41
+    addsub           go to state 42
+    muldiv           go to state 43
+    unary            go to state 44
+    prefix           go to state 45
+    postfix          go to state 46
+    primary          go to state 47
+    primary_nobrace  go to state 48
+    primary_literal  go to state 49
+    primary_assoc    go to state 50
+    primary_faccess  go to state 51
+    primary_mcall    go to state 52
+    primary_maccess  go to state 53
+
+
+state 118
+
+  136 primary_mcall: primary_maccess typename_group . LRB argument_list RRB
+  137              | primary_maccess typename_group . LRB RRB
+
+    LRB  shift, and go to state 157
+
+
+state 119
+
+  140 stmt_list: stmt_list stmt .
+
+    $default  reduce using rule 140 (stmt_list)
+
+
+state 120
+
+   80 expression: . assign
+   81 assign: . or
+   82       | . primary assign_type_T assign
+   89 or: . and
+   90   | . or LOGIC_OR and
+   91 and: . equal
+   92    | . and LOGIC_AND equal
+   93 equal: . compare
+   94      | . equal EQUAL compare
+   95      | . equal NOTEQUAL compare
+   96 compare: . addsub
+   97        | . compare GT addsub
+   98        | . compare GE addsub
+   99        | . compare LT addsub
+  100        | . compare LE addsub
+  101 addsub: . muldiv
+  102       | . addsub ADD muldiv
+  103       | . addsub SUB muldiv
+  104 muldiv: . unary
+  105       | . muldiv MUL unary
+  106       | . muldiv DIV unary
+  107       | . muldiv MOD unary
+  108 unary: . prefix
+  109      | . NOT unary
+  110      | . '-' unary
+  111 prefix: . postfix
+  112       | . INC postfix
+  113       | . DEC postfix
+  114 postfix: . primary
+  115        | . primary INC
+  116        | . primary DEC
+  117        | . primary AS typename_T
+  118 primary: . primary_nobrace
+  119        | . '(' expression ')'
+  120 primary_nobrace: . primary_literal
+  121                | . primary_assoc
+  122                | . THIS
+  123                | . SUPER
+  124                | . NEW typename_T LRB argument_list RRB
+  125                | . NEW typename_T LRB RRB
+  126 primary_literal: . INT
+  127                | . DOUBLE
+  128                | . CHAR_LITERAL
+  129                | . STRING_LITERAL
+  130                | . TRUE_TOK
+  131                | . FALSE_TOK
+  132                | . NULL_TOK
+  133 primary_assoc: . primary_faccess
+  134              | . primary_mcall
+  135 primary_faccess: . primary DOT IDENT
+  136 primary_mcall: . primary_maccess typename_group LRB argument_list RRB
+  137              | . primary_maccess typename_group LRB RRB
+  138 primary_maccess: . primary_nobrace
+  154 inferenced_type_init_stmt: VAR IDENT ASSIGN . expression stmt_term
+
+    CHAR_LITERAL    shift, and go to state 2
+    STRING_LITERAL  shift, and go to state 3
+    INT             shift, and go to state 4
+    DOUBLE          shift, and go to state 5
+    NOT             shift, and go to state 7
+    INC             shift, and go to state 8
+    DEC             shift, and go to state 9
+    THIS            shift, and go to state 12
+    SUPER           shift, and go to state 13
+    TRUE_TOK        shift, and go to state 14
+    FALSE_TOK       shift, and go to state 15
+    NULL_TOK        shift, and go to state 16
+    NEW             shift, and go to state 17
+    '-'             shift, and go to state 27
+    '('             shift, and go to state 28
+
+    expression       go to state 158
+    assign           go to state 37
+    or               go to state 38
+    and              go to state 39
+    equal            go to state 40
+    compare          go to state 41
+    addsub           go to state 42
+    muldiv           go to state 43
+    unary            go to state 44
+    prefix           go to state 45
+    postfix          go to state 46
+    primary          go to state 47
+    primary_nobrace  go to state 48
+    primary_literal  go to state 49
+    primary_assoc    go to state 50
+    primary_faccess  go to state 51
+    primary_mcall    go to state 52
+    primary_maccess  go to state 53
+
+
+state 121
+
+   71 argument_list: . expression
+   72              | . argument_list COMMA expression
+   80 expression: . assign
+   81 assign: . or
+   82       | . primary assign_type_T assign
+   89 or: . and
+   90   | . or LOGIC_OR and
+   91 and: . equal
+   92    | . and LOGIC_AND equal
+   93 equal: . compare
+   94      | . equal EQUAL compare
+   95      | . equal NOTEQUAL compare
+   96 compare: . addsub
+   97        | . compare GT addsub
+   98        | . compare GE addsub
+   99        | . compare LT addsub
+  100        | . compare LE addsub
+  101 addsub: . muldiv
+  102       | . addsub ADD muldiv
+  103       | . addsub SUB muldiv
+  104 muldiv: . unary
+  105       | . muldiv MUL unary
+  106       | . muldiv DIV unary
+  107       | . muldiv MOD unary
+  108 unary: . prefix
+  109      | . NOT unary
+  110      | . '-' unary
+  111 prefix: . postfix
+  112       | . INC postfix
+  113       | . DEC postfix
+  114 postfix: . primary
+  115        | . primary INC
+  116        | . primary DEC
+  117        | . primary AS typename_T
+  118 primary: . primary_nobrace
+  119        | . '(' expression ')'
+  120 primary_nobrace: . primary_literal
+  121                | . primary_assoc
+  122                | . THIS
+  123                | . SUPER
+  124                | . NEW typename_T LRB argument_list RRB
+  124                | NEW typename_T LRB . argument_list RRB
+  125                | . NEW typename_T LRB RRB
+  125                | NEW typename_T LRB . RRB
+  126 primary_literal: . INT
+  127                | . DOUBLE
+  128                | . CHAR_LITERAL
+  129                | . STRING_LITERAL
+  130                | . TRUE_TOK
+  131                | . FALSE_TOK
+  132                | . NULL_TOK
+  133 primary_assoc: . primary_faccess
+  134              | . primary_mcall
+  135 primary_faccess: . primary DOT IDENT
+  136 primary_mcall: . primary_maccess typename_group LRB argument_list RRB
+  137              | . primary_maccess typename_group LRB RRB
+  138 primary_maccess: . primary_nobrace
+
+    CHAR_LITERAL    shift, and go to state 2
+    STRING_LITERAL  shift, and go to state 3
+    INT             shift, and go to state 4
+    DOUBLE          shift, and go to state 5
+    NOT             shift, and go to state 7
+    INC             shift, and go to state 8
+    DEC             shift, and go to state 9
+    RRB             shift, and go to state 159
+    THIS            shift, and go to state 12
+    SUPER           shift, and go to state 13
+    TRUE_TOK        shift, and go to state 14
+    FALSE_TOK       shift, and go to state 15
+    NULL_TOK        shift, and go to state 16
+    NEW             shift, and go to state 17
+    '-'             shift, and go to state 27
+    '('             shift, and go to state 28
+
+    argument_list    go to state 160
+    expression       go to state 161
+    assign           go to state 37
+    or               go to state 38
+    and              go to state 39
+    equal            go to state 40
+    compare          go to state 41
+    addsub           go to state 42
+    muldiv           go to state 43
+    unary            go to state 44
+    prefix           go to state 45
+    postfix          go to state 46
+    primary          go to state 47
+    primary_nobrace  go to state 48
+    primary_literal  go to state 49
+    primary_assoc    go to state 50
+    primary_faccess  go to state 51
+    primary_mcall    go to state 52
+    primary_maccess  go to state 53
+
+
+state 122
+
+   54 function_define: DEF IDENT LRB . parameter_list RRB ARROW typename_T scope_optional
+   55                | DEF IDENT LRB . RRB ARROW typename_T scope_optional
+   69 parameter_list: . typename_T IDENT
+   70               | . parameter_list COMMA typename_T IDENT
+   77 typename_T: . fqcn_part typename_group
+   78 fqcn_part: . IDENT
+   79          | . fqcn_part COLO_COLO IDENT
+
+    IDENT  shift, and go to state 6
+    RRB    shift, and go to state 162
+
+    parameter_list  go to state 163
+    typename_T      go to state 164
+    fqcn_part       go to state 35
+
+
+state 123
+
+   18 namespace_path: namespace_path DOT . IDENT
+
+    IDENT  shift, and go to state 165
+
+
+state 124
+
+    8 namespace_body: LCB . namespace_member_decl_optional RCB
+    9 namespace_member_decl: . NAMESPACE namespace_path namespace_body
+   10                      | . class_decl
+   11                      | . interface_decl
+   12                      | . enum_decl
+   13 namespace_member_decl_list: . namespace_member_decl
+   14                           | . namespace_member_decl_list namespace_member_decl
+   15 namespace_member_decl_optional: .  [RCB]
+   16                               | . namespace_member_decl_list
+   30 class_decl: . CLASS parameterized_typename LCB access_member_tree_opt RCB
+   31           | . CLASS parameterized_typename COLON typename_list LCB access_member_tree_opt RCB
+   32 enum_decl: . ENUM IDENT LCB ident_list RCB
+   33          | . ENUM IDENT LCB ident_list COMMA RCB
+   34 interface_decl: . INTERFACE parameterized_typename LCB access_member_tree_opt RCB
+   35               | . INTERFACE parameterized_typename COLON typename_list LCB access_member_tree_opt RCB
+
+    INTERFACE  shift, and go to state 166
+    CLASS      shift, and go to state 167
+    ENUM       shift, and go to state 168
+    NAMESPACE  shift, and go to state 169
+
+    $default  reduce using rule 15 (namespace_member_decl_optional)
+
+    namespace_member_decl           go to state 170
+    namespace_member_decl_list      go to state 171
+    namespace_member_decl_optional  go to state 172
+    class_decl                      go to state 173
+    enum_decl                       go to state 174
+    interface_decl                  go to state 175
+
+
+state 125
+
+    7 namespace_decl: NAMESPACE namespace_path namespace_body .
+
+    $default  reduce using rule 7 (namespace_decl)
+
+
+state 126
+
+  165 return_stmt: RETURN expression stmt_term .
+
+    $default  reduce using rule 165 (return_stmt)
+
+
+state 127
+
+  155 if_stmt: IF LRB expression . RRB scope
+  156        | IF LRB expression . RRB scope ELSE scope
+  157        | IF LRB expression . RRB scope elif_list
+  158        | IF LRB expression . RRB scope elif_list ELSE scope
+
+    RRB  shift, and go to state 176
+
+
+state 128
+
+  162 while_stmt: WHILE LRB expression . RRB scope_optional
+
+    RRB  shift, and go to state 177
+
+
+state 129
+
+  172 scope: LCB RCB .
+
+    $default  reduce using rule 172 (scope)
+
+
+state 130
+
+   77 typename_T: . fqcn_part typename_group
+   78 fqcn_part: . IDENT
+   79          | . fqcn_part COLO_COLO IDENT
+   80 expression: . assign
+   81 assign: . or
+   82       | . primary assign_type_T assign
+   89 or: . and
+   90   | . or LOGIC_OR and
+   91 and: . equal
+   92    | . and LOGIC_AND equal
+   93 equal: . compare
+   94      | . equal EQUAL compare
+   95      | . equal NOTEQUAL compare
+   96 compare: . addsub
+   97        | . compare GT addsub
+   98        | . compare GE addsub
+   99        | . compare LT addsub
+  100        | . compare LE addsub
+  101 addsub: . muldiv
+  102       | . addsub ADD muldiv
+  103       | . addsub SUB muldiv
+  104 muldiv: . unary
+  105       | . muldiv MUL unary
+  106       | . muldiv DIV unary
+  107       | . muldiv MOD unary
+  108 unary: . prefix
+  109      | . NOT unary
+  110      | . '-' unary
+  111 prefix: . postfix
+  112       | . INC postfix
+  113       | . DEC postfix
+  114 postfix: . primary
+  115        | . primary INC
+  116        | . primary DEC
+  117        | . primary AS typename_T
+  118 primary: . primary_nobrace
+  119        | . '(' expression ')'
+  120 primary_nobrace: . primary_literal
+  121                | . primary_assoc
+  122                | . THIS
+  123                | . SUPER
+  124                | . NEW typename_T LRB argument_list RRB
+  125                | . NEW typename_T LRB RRB
+  126 primary_literal: . INT
+  127                | . DOUBLE
+  128                | . CHAR_LITERAL
+  129                | . STRING_LITERAL
+  130                | . TRUE_TOK
+  131                | . FALSE_TOK
+  132                | . NULL_TOK
+  133 primary_assoc: . primary_faccess
+  134              | . primary_mcall
+  135 primary_faccess: . primary DOT IDENT
+  136 primary_mcall: . primary_maccess typename_group LRB argument_list RRB
+  137              | . primary_maccess typename_group LRB RRB
+  138 primary_maccess: . primary_nobrace
+  140 stmt_list: stmt_list . stmt
+  141 stmt: . expression stmt_term
+  142     | . variable_decl_stmt
+  143     | . variable_init_stmt
+  144     | . inferenced_type_init_stmt
+  145     | . if_stmt
+  146     | . while_stmt
+  147     | . break_stmt
+  148     | . continue_stmt
+  149     | . return_stmt
+  150     | . throw_stmt
+  151     | . try_stmt
+  152 variable_decl_stmt: . typename_T IDENT SEMI
+  153 variable_init_stmt: . typename_T IDENT ASSIGN expression stmt_term
+  154 inferenced_type_init_stmt: . VAR IDENT ASSIGN expression stmt_term
+  155 if_stmt: . IF LRB expression RRB scope
+  156        | . IF LRB expression RRB scope ELSE scope
+  157        | . IF LRB expression RRB scope elif_list
+  158        | . IF LRB expression RRB scope elif_list ELSE scope
+  162 while_stmt: . WHILE LRB expression RRB scope_optional
+  163 break_stmt: . BREAK stmt_term
+  164 continue_stmt: . CONTINUE stmt_term
+  165 return_stmt: . RETURN expression stmt_term
+  166 throw_stmt: . THROW expression stmt_term
+  167 try_stmt: . TRY scope catch_stmt_list
+  171 scope: LCB stmt_list . RCB
+
+    CHAR_LITERAL    shift, and go to state 2
+    STRING_LITERAL  shift, and go to state 3
+    INT             shift, and go to state 4
+    DOUBLE          shift, and go to state 5
+    IDENT           shift, and go to state 6
+    NOT             shift, and go to state 7
+    INC             shift, and go to state 8
+    DEC             shift, and go to state 9
+    RCB             shift, and go to state 178
+    VAR             shift, and go to state 11
+    THIS            shift, and go to state 12
+    SUPER           shift, and go to state 13
+    TRUE_TOK        shift, and go to state 14
+    FALSE_TOK       shift, and go to state 15
+    NULL_TOK        shift, and go to state 16
+    NEW             shift, and go to state 17
+    RETURN          shift, and go to state 20
+    IF              shift, and go to state 21
+    WHILE           shift, and go to state 22
+    BREAK           shift, and go to state 23
+    CONTINUE        shift, and go to state 24
+    TRY             shift, and go to state 25
+    THROW           shift, and go to state 26
+    '-'             shift, and go to state 27
+    '('             shift, and go to state 28
+
+    typename_T                 go to state 34
+    fqcn_part                  go to state 35
+    expression                 go to state 36
+    assign                     go to state 37
+    or                         go to state 38
+    and                        go to state 39
+    equal                      go to state 40
+    compare                    go to state 41
+    addsub                     go to state 42
+    muldiv                     go to state 43
+    unary                      go to state 44
+    prefix                     go to state 45
+    postfix                    go to state 46
+    primary                    go to state 47
+    primary_nobrace            go to state 48
+    primary_literal            go to state 49
+    primary_assoc              go to state 50
+    primary_faccess            go to state 51
+    primary_mcall              go to state 52
+    primary_maccess            go to state 53
+    stmt                       go to state 119
+    variable_decl_stmt         go to state 56
+    variable_init_stmt         go to state 57
+    inferenced_type_init_stmt  go to state 58
+    if_stmt                    go to state 59
+    while_stmt                 go to state 60
+    break_stmt                 go to state 61
+    continue_stmt              go to state 62
+    return_stmt                go to state 63
+    throw_stmt                 go to state 64
+    try_stmt                   go to state 65
+
+
+state 131
+
+  170 catch_stmt: CATCH . LRB typename_T IDENT RRB scope
+
+    LRB  shift, and go to state 179
+
+
+state 132
+
+  167 try_stmt: TRY scope catch_stmt_list .  [$end, CHAR_LITERAL, STRING_LITERAL, INT, DOUBLE, IDENT, NOT, INC, DEC, RCB, VAR, THIS, SUPER, TRUE_TOK, FALSE_TOK, NULL_TOK, NEW, RETURN, IF, WHILE, BREAK, CONTINUE, TRY, THROW, '-', '(']
+  169 catch_stmt_list: catch_stmt_list . catch_stmt
+  170 catch_stmt: . CATCH LRB typename_T IDENT RRB scope
+
+    CATCH  shift, and go to state 131
+
+    $default  reduce using rule 167 (try_stmt)
+
+    catch_stmt  go to state 180
+
+
+state 133
+
+  168 catch_stmt_list: catch_stmt .
+
+    $default  reduce using rule 168 (catch_stmt_list)
+
+
+state 134
+
+  166 throw_stmt: THROW expression stmt_term .
+
+    $default  reduce using rule 166 (throw_stmt)
+
+
+state 135
+
+  119 primary: '(' expression ')' .
+
+    $default  reduce using rule 119 (primary)
+
+
+state 136
+
+   80 expression: . assign
+   81 assign: . or
+   82       | . primary assign_type_T assign
+   89 or: . and
+   90   | . or LOGIC_OR and
+   91 and: . equal
+   92    | . and LOGIC_AND equal
+   93 equal: . compare
+   94      | . equal EQUAL compare
+   95      | . equal NOTEQUAL compare
+   96 compare: . addsub
+   97        | . compare GT addsub
+   98        | . compare GE addsub
+   99        | . compare LT addsub
+  100        | . compare LE addsub
+  101 addsub: . muldiv
+  102       | . addsub ADD muldiv
+  103       | . addsub SUB muldiv
+  104 muldiv: . unary
+  105       | . muldiv MUL unary
+  106       | . muldiv DIV unary
+  107       | . muldiv MOD unary
+  108 unary: . prefix
+  109      | . NOT unary
+  110      | . '-' unary
+  111 prefix: . postfix
+  112       | . INC postfix
+  113       | . DEC postfix
+  114 postfix: . primary
+  115        | . primary INC
+  116        | . primary DEC
+  117        | . primary AS typename_T
+  118 primary: . primary_nobrace
+  119        | . '(' expression ')'
+  120 primary_nobrace: . primary_literal
+  121                | . primary_assoc
+  122                | . THIS
+  123                | . SUPER
+  124                | . NEW typename_T LRB argument_list RRB
+  125                | . NEW typename_T LRB RRB
+  126 primary_literal: . INT
+  127                | . DOUBLE
+  128                | . CHAR_LITERAL
+  129                | . STRING_LITERAL
+  130                | . TRUE_TOK
+  131                | . FALSE_TOK
+  132                | . NULL_TOK
+  133 primary_assoc: . primary_faccess
+  134              | . primary_mcall
+  135 primary_faccess: . primary DOT IDENT
+  136 primary_mcall: . primary_maccess typename_group LRB argument_list RRB
+  137              | . primary_maccess typename_group LRB RRB
+  138 primary_maccess: . primary_nobrace
+  153 variable_init_stmt: typename_T IDENT ASSIGN . expression stmt_term
+
+    CHAR_LITERAL    shift, and go to state 2
+    STRING_LITERAL  shift, and go to state 3
+    INT             shift, and go to state 4
+    DOUBLE          shift, and go to state 5
+    NOT             shift, and go to state 7
+    INC             shift, and go to state 8
+    DEC             shift, and go to state 9
+    THIS            shift, and go to state 12
+    SUPER           shift, and go to state 13
+    TRUE_TOK        shift, and go to state 14
+    FALSE_TOK       shift, and go to state 15
+    NULL_TOK        shift, and go to state 16
+    NEW             shift, and go to state 17
+    '-'             shift, and go to state 27
+    '('             shift, and go to state 28
+
+    expression       go to state 181
+    assign           go to state 37
+    or               go to state 38
+    and              go to state 39
+    equal            go to state 40
+    compare          go to state 41
+    addsub           go to state 42
+    muldiv           go to state 43
+    unary            go to state 44
+    prefix           go to state 45
+    postfix          go to state 46
+    primary          go to state 47
+    primary_nobrace  go to state 48
+    primary_literal  go to state 49
+    primary_assoc    go to state 50
+    primary_faccess  go to state 51
+    primary_mcall    go to state 52
+    primary_maccess  go to state 53
+
+
+state 137
+
+  152 variable_decl_stmt: typename_T IDENT SEMI .
+
+    $default  reduce using rule 152 (variable_decl_stmt)
+
+
+state 138
+
+   79 fqcn_part: fqcn_part COLO_COLO IDENT .
+
+    $default  reduce using rule 79 (fqcn_part)
+
+
+state 139
+
+   74 typename_group: '<' typename_list . '>'
+   76 typename_list: typename_list . COMMA typename_T
+
+    COMMA  shift, and go to state 182
+    '>'    shift, and go to state 183
+
+
+state 140
+
+   75 typename_list: typename_T .
+
+    $default  reduce using rule 75 (typename_list)
+
+
+state 141
+
+   90 or: or LOGIC_OR and .  [$end, CHAR_LITERAL, STRING_LITERAL, INT, DOUBLE, IDENT, COMMA, NOT, INC, DEC, LOGIC_OR, RCB, RRB, SEMI, VAR, THIS, SUPER, TRUE_TOK, FALSE_TOK, NULL_TOK, NEW, RETURN, IF, WHILE, BREAK, CONTINUE, TRY, THROW, '-', '(', ')']
+   92 and: and . LOGIC_AND equal
+
+    LOGIC_AND  shift, and go to state 95
+
+    $default  reduce using rule 90 (or)
+
+
+state 142
+
+   92 and: and LOGIC_AND equal .  [$end, CHAR_LITERAL, STRING_LITERAL, INT, DOUBLE, IDENT, COMMA, NOT, INC, DEC, LOGIC_AND, LOGIC_OR, RCB, RRB, SEMI, VAR, THIS, SUPER, TRUE_TOK, FALSE_TOK, NULL_TOK, NEW, RETURN, IF, WHILE, BREAK, CONTINUE, TRY, THROW, '-', '(', ')']
+   94 equal: equal . EQUAL compare
+   95      | equal . NOTEQUAL compare
+
+    EQUAL     shift, and go to state 96
+    NOTEQUAL  shift, and go to state 97
+
+    $default  reduce using rule 92 (and)
+
+
+state 143
+
+   94 equal: equal EQUAL compare .  [$end, CHAR_LITERAL, STRING_LITERAL, INT, DOUBLE, IDENT, COMMA, NOT, EQUAL, NOTEQUAL, INC, DEC, LOGIC_AND, LOGIC_OR, RCB, RRB, SEMI, VAR, THIS, SUPER, TRUE_TOK, FALSE_TOK, NULL_TOK, NEW, RETURN, IF, WHILE, BREAK, CONTINUE, TRY, THROW, '-', '(', ')']
+   97 compare: compare . GT addsub
+   98        | compare . GE addsub
+   99        | compare . LT addsub
+  100        | compare . LE addsub
+
+    GT  shift, and go to state 98
+    GE  shift, and go to state 99
+    LT  shift, and go to state 100
+    LE  shift, and go to state 101
+
+    $default  reduce using rule 94 (equal)
+
+
+state 144
+
+   95 equal: equal NOTEQUAL compare .  [$end, CHAR_LITERAL, STRING_LITERAL, INT, DOUBLE, IDENT, COMMA, NOT, EQUAL, NOTEQUAL, INC, DEC, LOGIC_AND, LOGIC_OR, RCB, RRB, SEMI, VAR, THIS, SUPER, TRUE_TOK, FALSE_TOK, NULL_TOK, NEW, RETURN, IF, WHILE, BREAK, CONTINUE, TRY, THROW, '-', '(', ')']
+   97 compare: compare . GT addsub
+   98        | compare . GE addsub
+   99        | compare . LT addsub
+  100        | compare . LE addsub
+
+    GT  shift, and go to state 98
+    GE  shift, and go to state 99
+    LT  shift, and go to state 100
+    LE  shift, and go to state 101
+
+    $default  reduce using rule 95 (equal)
+
+
+state 145
+
+   97 compare: compare GT addsub .  [$end, CHAR_LITERAL, STRING_LITERAL, INT, DOUBLE, IDENT, COMMA, NOT, EQUAL, NOTEQUAL, INC, DEC, GT, GE, LT, LE, LOGIC_AND, LOGIC_OR, RCB, RRB, SEMI, VAR, THIS, SUPER, TRUE_TOK, FALSE_TOK, NULL_TOK, NEW, RETURN, IF, WHILE, BREAK, CONTINUE, TRY, THROW, '-', '(', ')']
+  102 addsub: addsub . ADD muldiv
+  103       | addsub . SUB muldiv
+
+    ADD  shift, and go to state 102
+    SUB  shift, and go to state 103
+
+    $default  reduce using rule 97 (compare)
+
+
+state 146
+
+   98 compare: compare GE addsub .  [$end, CHAR_LITERAL, STRING_LITERAL, INT, DOUBLE, IDENT, COMMA, NOT, EQUAL, NOTEQUAL, INC, DEC, GT, GE, LT, LE, LOGIC_AND, LOGIC_OR, RCB, RRB, SEMI, VAR, THIS, SUPER, TRUE_TOK, FALSE_TOK, NULL_TOK, NEW, RETURN, IF, WHILE, BREAK, CONTINUE, TRY, THROW, '-', '(', ')']
+  102 addsub: addsub . ADD muldiv
+  103       | addsub . SUB muldiv
+
+    ADD  shift, and go to state 102
+    SUB  shift, and go to state 103
+
+    $default  reduce using rule 98 (compare)
+
+
+state 147
+
+   99 compare: compare LT addsub .  [$end, CHAR_LITERAL, STRING_LITERAL, INT, DOUBLE, IDENT, COMMA, NOT, EQUAL, NOTEQUAL, INC, DEC, GT, GE, LT, LE, LOGIC_AND, LOGIC_OR, RCB, RRB, SEMI, VAR, THIS, SUPER, TRUE_TOK, FALSE_TOK, NULL_TOK, NEW, RETURN, IF, WHILE, BREAK, CONTINUE, TRY, THROW, '-', '(', ')']
+  102 addsub: addsub . ADD muldiv
+  103       | addsub . SUB muldiv
+
+    ADD  shift, and go to state 102
+    SUB  shift, and go to state 103
+
+    $default  reduce using rule 99 (compare)
+
+
+state 148
+
+  100 compare: compare LE addsub .  [$end, CHAR_LITERAL, STRING_LITERAL, INT, DOUBLE, IDENT, COMMA, NOT, EQUAL, NOTEQUAL, INC, DEC, GT, GE, LT, LE, LOGIC_AND, LOGIC_OR, RCB, RRB, SEMI, VAR, THIS, SUPER, TRUE_TOK, FALSE_TOK, NULL_TOK, NEW, RETURN, IF, WHILE, BREAK, CONTINUE, TRY, THROW, '-', '(', ')']
+  102 addsub: addsub . ADD muldiv
+  103       | addsub . SUB muldiv
+
+    ADD  shift, and go to state 102
+    SUB  shift, and go to state 103
+
+    $default  reduce using rule 100 (compare)
+
+
+state 149
+
+  102 addsub: addsub ADD muldiv .  [$end, CHAR_LITERAL, STRING_LITERAL, INT, DOUBLE, IDENT, COMMA, ADD, SUB, NOT, EQUAL, NOTEQUAL, INC, DEC, GT, GE, LT, LE, LOGIC_AND, LOGIC_OR, RCB, RRB, SEMI, VAR, THIS, SUPER, TRUE_TOK, FALSE_TOK, NULL_TOK, NEW, RETURN, IF, WHILE, BREAK, CONTINUE, TRY, THROW, '-', '(', ')']
+  105 muldiv: muldiv . MUL unary
+  106       | muldiv . DIV unary
+  107       | muldiv . MOD unary
+
+    MUL  shift, and go to state 104
+    DIV  shift, and go to state 105
+    MOD  shift, and go to state 106
+
+    $default  reduce using rule 102 (addsub)
+
+
+state 150
+
+  103 addsub: addsub SUB muldiv .  [$end, CHAR_LITERAL, STRING_LITERAL, INT, DOUBLE, IDENT, COMMA, ADD, SUB, NOT, EQUAL, NOTEQUAL, INC, DEC, GT, GE, LT, LE, LOGIC_AND, LOGIC_OR, RCB, RRB, SEMI, VAR, THIS, SUPER, TRUE_TOK, FALSE_TOK, NULL_TOK, NEW, RETURN, IF, WHILE, BREAK, CONTINUE, TRY, THROW, '-', '(', ')']
+  105 muldiv: muldiv . MUL unary
+  106       | muldiv . DIV unary
+  107       | muldiv . MOD unary
+
+    MUL  shift, and go to state 104
+    DIV  shift, and go to state 105
+    MOD  shift, and go to state 106
+
+    $default  reduce using rule 103 (addsub)
+
+
+state 151
+
+  105 muldiv: muldiv MUL unary .
+
+    $default  reduce using rule 105 (muldiv)
+
+
+state 152
+
+  106 muldiv: muldiv DIV unary .
+
+    $default  reduce using rule 106 (muldiv)
+
+
+state 153
+
+  107 muldiv: muldiv MOD unary .
+
+    $default  reduce using rule 107 (muldiv)
+
+
+state 154
+
+  135 primary_faccess: primary DOT IDENT .
+
+    $default  reduce using rule 135 (primary_faccess)
+
+
+state 155
+
+  117 postfix: primary AS typename_T .
+
+    $default  reduce using rule 117 (postfix)
+
+
+state 156
+
+   82 assign: primary assign_type_T assign .
+
+    $default  reduce using rule 82 (assign)
+
+
+state 157
+
+   71 argument_list: . expression
+   72              | . argument_list COMMA expression
+   80 expression: . assign
+   81 assign: . or
+   82       | . primary assign_type_T assign
+   89 or: . and
+   90   | . or LOGIC_OR and
+   91 and: . equal
+   92    | . and LOGIC_AND equal
+   93 equal: . compare
+   94      | . equal EQUAL compare
+   95      | . equal NOTEQUAL compare
+   96 compare: . addsub
+   97        | . compare GT addsub
+   98        | . compare GE addsub
+   99        | . compare LT addsub
+  100        | . compare LE addsub
+  101 addsub: . muldiv
+  102       | . addsub ADD muldiv
+  103       | . addsub SUB muldiv
+  104 muldiv: . unary
+  105       | . muldiv MUL unary
+  106       | . muldiv DIV unary
+  107       | . muldiv MOD unary
+  108 unary: . prefix
+  109      | . NOT unary
+  110      | . '-' unary
+  111 prefix: . postfix
+  112       | . INC postfix
+  113       | . DEC postfix
+  114 postfix: . primary
+  115        | . primary INC
+  116        | . primary DEC
+  117        | . primary AS typename_T
+  118 primary: . primary_nobrace
+  119        | . '(' expression ')'
+  120 primary_nobrace: . primary_literal
+  121                | . primary_assoc
+  122                | . THIS
+  123                | . SUPER
+  124                | . NEW typename_T LRB argument_list RRB
+  125                | . NEW typename_T LRB RRB
+  126 primary_literal: . INT
+  127                | . DOUBLE
+  128                | . CHAR_LITERAL
+  129                | . STRING_LITERAL
+  130                | . TRUE_TOK
+  131                | . FALSE_TOK
+  132                | . NULL_TOK
+  133 primary_assoc: . primary_faccess
+  134              | . primary_mcall
+  135 primary_faccess: . primary DOT IDENT
+  136 primary_mcall: . primary_maccess typename_group LRB argument_list RRB
+  136              | primary_maccess typename_group LRB . argument_list RRB
+  137              | . primary_maccess typename_group LRB RRB
+  137              | primary_maccess typename_group LRB . RRB
+  138 primary_maccess: . primary_nobrace
+
+    CHAR_LITERAL    shift, and go to state 2
+    STRING_LITERAL  shift, and go to state 3
+    INT             shift, and go to state 4
+    DOUBLE          shift, and go to state 5
+    NOT             shift, and go to state 7
+    INC             shift, and go to state 8
+    DEC             shift, and go to state 9
+    RRB             shift, and go to state 184
+    THIS            shift, and go to state 12
+    SUPER           shift, and go to state 13
+    TRUE_TOK        shift, and go to state 14
+    FALSE_TOK       shift, and go to state 15
+    NULL_TOK        shift, and go to state 16
+    NEW             shift, and go to state 17
+    '-'             shift, and go to state 27
+    '('             shift, and go to state 28
+
+    argument_list    go to state 185
+    expression       go to state 161
+    assign           go to state 37
+    or               go to state 38
+    and              go to state 39
+    equal            go to state 40
+    compare          go to state 41
+    addsub           go to state 42
+    muldiv           go to state 43
+    unary            go to state 44
+    prefix           go to state 45
+    postfix          go to state 46
+    primary          go to state 47
+    primary_nobrace  go to state 48
+    primary_literal  go to state 49
+    primary_assoc    go to state 50
+    primary_faccess  go to state 51
+    primary_mcall    go to state 52
+    primary_maccess  go to state 53
+
+
+state 158
+
+  154 inferenced_type_init_stmt: VAR IDENT ASSIGN expression . stmt_term
+  175 stmt_term: . SEMI
+  176          | .  [$end, CHAR_LITERAL, STRING_LITERAL, INT, DOUBLE, IDENT, NOT, INC, DEC, RCB, VAR, THIS, SUPER, TRUE_TOK, FALSE_TOK, NULL_TOK, NEW, RETURN, IF, WHILE, BREAK, CONTINUE, TRY, THROW, '-', '(']
+
+    SEMI  shift, and go to state 80
+
+    $default  reduce using rule 176 (stmt_term)
+
+    stmt_term  go to state 186
+
+
+state 159
+
+  125 primary_nobrace: NEW typename_T LRB RRB .
+
+    $default  reduce using rule 125 (primary_nobrace)
+
+
+state 160
+
+   72 argument_list: argument_list . COMMA expression
+  124 primary_nobrace: NEW typename_T LRB argument_list . RRB
+
+    COMMA  shift, and go to state 187
+    RRB    shift, and go to state 188
+
+
+state 161
+
+   71 argument_list: expression .
+
+    $default  reduce using rule 71 (argument_list)
+
+
+state 162
+
+   55 function_define: DEF IDENT LRB RRB . ARROW typename_T scope_optional
+
+    ARROW  shift, and go to state 189
+
+
+state 163
+
+   54 function_define: DEF IDENT LRB parameter_list . RRB ARROW typename_T scope_optional
+   70 parameter_list: parameter_list . COMMA typename_T IDENT
+
+    COMMA  shift, and go to state 190
+    RRB    shift, and go to state 191
+
+
+state 164
+
+   69 parameter_list: typename_T . IDENT
+
+    IDENT  shift, and go to state 192
+
+
+state 165
+
+   18 namespace_path: namespace_path DOT IDENT .
+
+    $default  reduce using rule 18 (namespace_path)
+
+
+state 166
+
+   20 parameterized_typename: . IDENT type_parameter_group
+   34 interface_decl: INTERFACE . parameterized_typename LCB access_member_tree_opt RCB
+   35               | INTERFACE . parameterized_typename COLON typename_list LCB access_member_tree_opt RCB
+
+    IDENT  shift, and go to state 193
+
+    parameterized_typename  go to state 194
+
+
+state 167
+
+   20 parameterized_typename: . IDENT type_parameter_group
+   30 class_decl: CLASS . parameterized_typename LCB access_member_tree_opt RCB
+   31           | CLASS . parameterized_typename COLON typename_list LCB access_member_tree_opt RCB
+
+    IDENT  shift, and go to state 193
+
+    parameterized_typename  go to state 195
+
+
+state 168
+
+   32 enum_decl: ENUM . IDENT LCB ident_list RCB
+   33          | ENUM . IDENT LCB ident_list COMMA RCB
+
+    IDENT  shift, and go to state 196
+
+
+state 169
+
+    9 namespace_member_decl: NAMESPACE . namespace_path namespace_body
+   17 namespace_path: . IDENT
+   18               | . namespace_path DOT IDENT
+
+    IDENT  shift, and go to state 75
+
+    namespace_path  go to state 197
+
+
+state 170
+
+   13 namespace_member_decl_list: namespace_member_decl .
+
+    $default  reduce using rule 13 (namespace_member_decl_list)
+
+
+state 171
+
+    9 namespace_member_decl: . NAMESPACE namespace_path namespace_body
+   10                      | . class_decl
+   11                      | . interface_decl
+   12                      | . enum_decl
+   14 namespace_member_decl_list: namespace_member_decl_list . namespace_member_decl
+   16 namespace_member_decl_optional: namespace_member_decl_list .  [RCB]
+   30 class_decl: . CLASS parameterized_typename LCB access_member_tree_opt RCB
+   31           | . CLASS parameterized_typename COLON typename_list LCB access_member_tree_opt RCB
+   32 enum_decl: . ENUM IDENT LCB ident_list RCB
+   33          | . ENUM IDENT LCB ident_list COMMA RCB
+   34 interface_decl: . INTERFACE parameterized_typename LCB access_member_tree_opt RCB
+   35               | . INTERFACE parameterized_typename COLON typename_list LCB access_member_tree_opt RCB
+
+    INTERFACE  shift, and go to state 166
+    CLASS      shift, and go to state 167
+    ENUM       shift, and go to state 168
+    NAMESPACE  shift, and go to state 169
+
+    $default  reduce using rule 16 (namespace_member_decl_optional)
+
+    namespace_member_decl  go to state 198
+    class_decl             go to state 173
+    enum_decl              go to state 174
+    interface_decl         go to state 175
+
+
+state 172
+
+    8 namespace_body: LCB namespace_member_decl_optional . RCB
+
+    RCB  shift, and go to state 199
+
+
+state 173
+
+   10 namespace_member_decl: class_decl .
+
+    $default  reduce using rule 10 (namespace_member_decl)
+
+
+state 174
+
+   12 namespace_member_decl: enum_decl .
+
+    $default  reduce using rule 12 (namespace_member_decl)
+
+
+state 175
+
+   11 namespace_member_decl: interface_decl .
+
+    $default  reduce using rule 11 (namespace_member_decl)
+
+
+state 176
+
+  155 if_stmt: IF LRB expression RRB . scope
+  156        | IF LRB expression RRB . scope ELSE scope
+  157        | IF LRB expression RRB . scope elif_list
+  158        | IF LRB expression RRB . scope elif_list ELSE scope
+  171 scope: . LCB stmt_list RCB
+  172      | . LCB RCB
+
+    LCB  shift, and go to state 83
+
+    scope  go to state 200
+
+
+state 177
+
+  162 while_stmt: WHILE LRB expression RRB . scope_optional
+  171 scope: . LCB stmt_list RCB
+  172      | . LCB RCB
+  173 scope_optional: . SEMI
+  174               | . scope
+
+    LCB   shift, and go to state 83
+    SEMI  shift, and go to state 201
+
+    scope           go to state 202
+    scope_optional  go to state 203
+
+
+state 178
+
+  171 scope: LCB stmt_list RCB .
+
+    $default  reduce using rule 171 (scope)
+
+
+state 179
+
+   77 typename_T: . fqcn_part typename_group
+   78 fqcn_part: . IDENT
+   79          | . fqcn_part COLO_COLO IDENT
+  170 catch_stmt: CATCH LRB . typename_T IDENT RRB scope
+
+    IDENT  shift, and go to state 6
+
+    typename_T  go to state 204
+    fqcn_part   go to state 35
+
+
+state 180
+
+  169 catch_stmt_list: catch_stmt_list catch_stmt .
+
+    $default  reduce using rule 169 (catch_stmt_list)
+
+
+state 181
+
+  153 variable_init_stmt: typename_T IDENT ASSIGN expression . stmt_term
+  175 stmt_term: . SEMI
+  176          | .  [$end, CHAR_LITERAL, STRING_LITERAL, INT, DOUBLE, IDENT, NOT, INC, DEC, RCB, VAR, THIS, SUPER, TRUE_TOK, FALSE_TOK, NULL_TOK, NEW, RETURN, IF, WHILE, BREAK, CONTINUE, TRY, THROW, '-', '(']
+
+    SEMI  shift, and go to state 80
+
+    $default  reduce using rule 176 (stmt_term)
+
+    stmt_term  go to state 205
+
+
+state 182
+
+   76 typename_list: typename_list COMMA . typename_T
+   77 typename_T: . fqcn_part typename_group
+   78 fqcn_part: . IDENT
+   79          | . fqcn_part COLO_COLO IDENT
+
+    IDENT  shift, and go to state 6
+
+    typename_T  go to state 206
+    fqcn_part   go to state 35
+
+
+state 183
+
+   74 typename_group: '<' typename_list '>' .
+
+    $default  reduce using rule 74 (typename_group)
+
+
+state 184
+
+  137 primary_mcall: primary_maccess typename_group LRB RRB .
+
+    $default  reduce using rule 137 (primary_mcall)
+
+
+state 185
+
+   72 argument_list: argument_list . COMMA expression
+  136 primary_mcall: primary_maccess typename_group LRB argument_list . RRB
+
+    COMMA  shift, and go to state 187
+    RRB    shift, and go to state 207
+
+
+state 186
+
+  154 inferenced_type_init_stmt: VAR IDENT ASSIGN expression stmt_term .
+
+    $default  reduce using rule 154 (inferenced_type_init_stmt)
+
+
+state 187
+
+   72 argument_list: argument_list COMMA . expression
+   80 expression: . assign
+   81 assign: . or
+   82       | . primary assign_type_T assign
+   89 or: . and
+   90   | . or LOGIC_OR and
+   91 and: . equal
+   92    | . and LOGIC_AND equal
+   93 equal: . compare
+   94      | . equal EQUAL compare
+   95      | . equal NOTEQUAL compare
+   96 compare: . addsub
+   97        | . compare GT addsub
+   98        | . compare GE addsub
+   99        | . compare LT addsub
+  100        | . compare LE addsub
+  101 addsub: . muldiv
+  102       | . addsub ADD muldiv
+  103       | . addsub SUB muldiv
+  104 muldiv: . unary
+  105       | . muldiv MUL unary
+  106       | . muldiv DIV unary
+  107       | . muldiv MOD unary
+  108 unary: . prefix
+  109      | . NOT unary
+  110      | . '-' unary
+  111 prefix: . postfix
+  112       | . INC postfix
+  113       | . DEC postfix
+  114 postfix: . primary
+  115        | . primary INC
+  116        | . primary DEC
+  117        | . primary AS typename_T
+  118 primary: . primary_nobrace
+  119        | . '(' expression ')'
+  120 primary_nobrace: . primary_literal
+  121                | . primary_assoc
+  122                | . THIS
+  123                | . SUPER
+  124                | . NEW typename_T LRB argument_list RRB
+  125                | . NEW typename_T LRB RRB
+  126 primary_literal: . INT
+  127                | . DOUBLE
+  128                | . CHAR_LITERAL
+  129                | . STRING_LITERAL
+  130                | . TRUE_TOK
+  131                | . FALSE_TOK
+  132                | . NULL_TOK
+  133 primary_assoc: . primary_faccess
+  134              | . primary_mcall
+  135 primary_faccess: . primary DOT IDENT
+  136 primary_mcall: . primary_maccess typename_group LRB argument_list RRB
+  137              | . primary_maccess typename_group LRB RRB
+  138 primary_maccess: . primary_nobrace
+
+    CHAR_LITERAL    shift, and go to state 2
+    STRING_LITERAL  shift, and go to state 3
+    INT             shift, and go to state 4
+    DOUBLE          shift, and go to state 5
+    NOT             shift, and go to state 7
+    INC             shift, and go to state 8
+    DEC             shift, and go to state 9
+    THIS            shift, and go to state 12
+    SUPER           shift, and go to state 13
+    TRUE_TOK        shift, and go to state 14
+    FALSE_TOK       shift, and go to state 15
+    NULL_TOK        shift, and go to state 16
+    NEW             shift, and go to state 17
+    '-'             shift, and go to state 27
+    '('             shift, and go to state 28
+
+    expression       go to state 208
+    assign           go to state 37
+    or               go to state 38
+    and              go to state 39
+    equal            go to state 40
+    compare          go to state 41
+    addsub           go to state 42
+    muldiv           go to state 43
+    unary            go to state 44
+    prefix           go to state 45
+    postfix          go to state 46
+    primary          go to state 47
+    primary_nobrace  go to state 48
+    primary_literal  go to state 49
+    primary_assoc    go to state 50
+    primary_faccess  go to state 51
+    primary_mcall    go to state 52
+    primary_maccess  go to state 53
+
+
+state 188
+
+  124 primary_nobrace: NEW typename_T LRB argument_list RRB .
+
+    $default  reduce using rule 124 (primary_nobrace)
+
+
+state 189
+
+   55 function_define: DEF IDENT LRB RRB ARROW . typename_T scope_optional
+   77 typename_T: . fqcn_part typename_group
+   78 fqcn_part: . IDENT
+   79          | . fqcn_part COLO_COLO IDENT
+
+    IDENT  shift, and go to state 6
+
+    typename_T  go to state 209
+    fqcn_part   go to state 35
+
+
+state 190
+
+   70 parameter_list: parameter_list COMMA . typename_T IDENT
+   77 typename_T: . fqcn_part typename_group
+   78 fqcn_part: . IDENT
+   79          | . fqcn_part COLO_COLO IDENT
+
+    IDENT  shift, and go to state 6
+
+    typename_T  go to state 210
+    fqcn_part   go to state 35
+
+
+state 191
+
+   54 function_define: DEF IDENT LRB parameter_list RRB . ARROW typename_T scope_optional
+
+    ARROW  shift, and go to state 211
+
+
+state 192
+
+   69 parameter_list: typename_T IDENT .
+
+    $default  reduce using rule 69 (parameter_list)
+
+
+state 193
+
+   20 parameterized_typename: IDENT . type_parameter_group
+   21 type_parameter_group: .  [COLON, LCB]
+   22                     | . LT type_parameter_list GT
+
+    LT  shift, and go to state 212
+
+    $default  reduce using rule 21 (type_parameter_group)
+
+    type_parameter_group  go to state 213
+
+
+state 194
+
+   34 interface_decl: INTERFACE parameterized_typename . LCB access_member_tree_opt RCB
+   35               | INTERFACE parameterized_typename . COLON typename_list LCB access_member_tree_opt RCB
+
+    COLON  shift, and go to state 214
+    LCB    shift, and go to state 215
+
+
+state 195
+
+   30 class_decl: CLASS parameterized_typename . LCB access_member_tree_opt RCB
+   31           | CLASS parameterized_typename . COLON typename_list LCB access_member_tree_opt RCB
+
+    COLON  shift, and go to state 216
+    LCB    shift, and go to state 217
+
+
+state 196
+
+   32 enum_decl: ENUM IDENT . LCB ident_list RCB
+   33          | ENUM IDENT . LCB ident_list COMMA RCB
+
+    LCB  shift, and go to state 218
+
+
+state 197
+
+    8 namespace_body: . LCB namespace_member_decl_optional RCB
+    9 namespace_member_decl: NAMESPACE namespace_path . namespace_body
+   18 namespace_path: namespace_path . DOT IDENT
+
+    DOT  shift, and go to state 123
+    LCB  shift, and go to state 124
+
+    namespace_body  go to state 219
+
+
+state 198
+
+   14 namespace_member_decl_list: namespace_member_decl_list namespace_member_decl .
+
+    $default  reduce using rule 14 (namespace_member_decl_list)
+
+
+state 199
+
+    8 namespace_body: LCB namespace_member_decl_optional RCB .
+
+    $default  reduce using rule 8 (namespace_body)
+
+
+state 200
+
+  155 if_stmt: IF LRB expression RRB scope .  [$end, CHAR_LITERAL, STRING_LITERAL, INT, DOUBLE, IDENT, NOT, INC, DEC, RCB, VAR, THIS, SUPER, TRUE_TOK, FALSE_TOK, NULL_TOK, NEW, RETURN, IF, WHILE, BREAK, CONTINUE, TRY, THROW, '-', '(']
+  156        | IF LRB expression RRB scope . ELSE scope
+  157        | IF LRB expression RRB scope . elif_list
+  158        | IF LRB expression RRB scope . elif_list ELSE scope
+  159 elif_list: . elif
+  160          | . elif_list elif
+  161 elif: . ELIF LRB expression RRB scope
+
+    ELIF  shift, and go to state 220
+    ELSE  shift, and go to state 221
+
+    $default  reduce using rule 155 (if_stmt)
+
+    elif_list  go to state 222
+    elif       go to state 223
+
+
+state 201
+
+  173 scope_optional: SEMI .
+
+    $default  reduce using rule 173 (scope_optional)
+
+
+state 202
+
+  174 scope_optional: scope .
+
+    $default  reduce using rule 174 (scope_optional)
+
+
+state 203
+
+  162 while_stmt: WHILE LRB expression RRB scope_optional .
+
+    $default  reduce using rule 162 (while_stmt)
+
+
+state 204
+
+  170 catch_stmt: CATCH LRB typename_T . IDENT RRB scope
+
+    IDENT  shift, and go to state 224
+
+
+state 205
+
+  153 variable_init_stmt: typename_T IDENT ASSIGN expression stmt_term .
+
+    $default  reduce using rule 153 (variable_init_stmt)
+
+
+state 206
+
+   76 typename_list: typename_list COMMA typename_T .
+
+    $default  reduce using rule 76 (typename_list)
+
+
+state 207
+
+  136 primary_mcall: primary_maccess typename_group LRB argument_list RRB .
+
+    $default  reduce using rule 136 (primary_mcall)
+
+
+state 208
+
+   72 argument_list: argument_list COMMA expression .
+
+    $default  reduce using rule 72 (argument_list)
+
+
+state 209
+
+   55 function_define: DEF IDENT LRB RRB ARROW typename_T . scope_optional
+  171 scope: . LCB stmt_list RCB
+  172      | . LCB RCB
+  173 scope_optional: . SEMI
+  174               | . scope
+
+    LCB   shift, and go to state 83
+    SEMI  shift, and go to state 201
+
+    scope           go to state 202
+    scope_optional  go to state 225
+
+
+state 210
+
+   70 parameter_list: parameter_list COMMA typename_T . IDENT
+
+    IDENT  shift, and go to state 226
+
+
+state 211
+
+   54 function_define: DEF IDENT LRB parameter_list RRB ARROW . typename_T scope_optional
+   77 typename_T: . fqcn_part typename_group
+   78 fqcn_part: . IDENT
+   79          | . fqcn_part COLO_COLO IDENT
+
+    IDENT  shift, and go to state 6
+
+    typename_T  go to state 227
+    fqcn_part   go to state 35
+
+
+state 212
+
+   22 type_parameter_group: LT . type_parameter_list GT
+   23 type_parameter_list: . type_parameter
+   24                    | . type_parameter_list COMMA type_parameter
+   25 type_parameter: . IDENT type_parameter_rule_list
+   26               | . IN IDENT type_parameter_rule_list
+   27               | . OUT IDENT type_parameter_rule_list
+
+    IDENT  shift, and go to state 228
+    IN     shift, and go to state 229
+    OUT    shift, and go to state 230
+
+    type_parameter_list  go to state 231
+    type_parameter       go to state 232
+
+
+state 213
+
+   20 parameterized_typename: IDENT type_parameter_group .
+
+    $default  reduce using rule 20 (parameterized_typename)
+
+
+state 214
+
+   35 interface_decl: INTERFACE parameterized_typename COLON . typename_list LCB access_member_tree_opt RCB
+   75 typename_list: . typename_T
+   76              | . typename_list COMMA typename_T
+   77 typename_T: . fqcn_part typename_group
+   78 fqcn_part: . IDENT
+   79          | . fqcn_part COLO_COLO IDENT
+
+    IDENT  shift, and go to state 6
+
+    typename_list  go to state 233
+    typename_T     go to state 140
+    fqcn_part      go to state 35
+
+
+state 215
+
+   34 interface_decl: INTERFACE parameterized_typename LCB . access_member_tree_opt RCB
+   36 access_member_tree_opt: .  [RCB]
+   37                       | . access_member_tree
+   38 access_member_tree: . access_member_list
+   39                   | . access_member_tree access_member_list
+   40 access_member_list: . access_level_T COLON member_define_list
+   64 access_level_T: . PUBLIC
+   65               | . PRIVATE
+   66               | . PROTECTED
+
+    PUBLIC     shift, and go to state 234
+    PRIVATE    shift, and go to state 235
+    PROTECTED  shift, and go to state 236
+
+    $default  reduce using rule 36 (access_member_tree_opt)
+
+    access_member_tree_opt  go to state 237
+    access_member_tree      go to state 238
+    access_member_list      go to state 239
+    access_level_T          go to state 240
+
+
+state 216
+
+   31 class_decl: CLASS parameterized_typename COLON . typename_list LCB access_member_tree_opt RCB
+   75 typename_list: . typename_T
+   76              | . typename_list COMMA typename_T
+   77 typename_T: . fqcn_part typename_group
+   78 fqcn_part: . IDENT
+   79          | . fqcn_part COLO_COLO IDENT
+
+    IDENT  shift, and go to state 6
+
+    typename_list  go to state 241
+    typename_T     go to state 140
+    fqcn_part      go to state 35
+
+
+state 217
+
+   30 class_decl: CLASS parameterized_typename LCB . access_member_tree_opt RCB
+   36 access_member_tree_opt: .  [RCB]
+   37                       | . access_member_tree
+   38 access_member_tree: . access_member_list
+   39                   | . access_member_tree access_member_list
+   40 access_member_list: . access_level_T COLON member_define_list
+   64 access_level_T: . PUBLIC
+   65               | . PRIVATE
+   66               | . PROTECTED
+
+    PUBLIC     shift, and go to state 234
+    PRIVATE    shift, and go to state 235
+    PROTECTED  shift, and go to state 236
+
+    $default  reduce using rule 36 (access_member_tree_opt)
+
+    access_member_tree_opt  go to state 242
+    access_member_tree      go to state 238
+    access_member_list      go to state 239
+    access_level_T          go to state 240
+
+
+state 218
+
+   32 enum_decl: ENUM IDENT LCB . ident_list RCB
+   33          | ENUM IDENT LCB . ident_list COMMA RCB
+   67 ident_list: . IDENT
+   68           | . ident_list COMMA IDENT
+
+    IDENT  shift, and go to state 243
+
+    ident_list  go to state 244
+
+
+state 219
+
+    9 namespace_member_decl: NAMESPACE namespace_path namespace_body .
+
+    $default  reduce using rule 9 (namespace_member_decl)
+
+
+state 220
+
+  161 elif: ELIF . LRB expression RRB scope
+
+    LRB  shift, and go to state 245
+
+
+state 221
+
+  156 if_stmt: IF LRB expression RRB scope ELSE . scope
+  171 scope: . LCB stmt_list RCB
+  172      | . LCB RCB
+
+    LCB  shift, and go to state 83
+
+    scope  go to state 246
+
+
+state 222
+
+  157 if_stmt: IF LRB expression RRB scope elif_list .  [$end, CHAR_LITERAL, STRING_LITERAL, INT, DOUBLE, IDENT, NOT, INC, DEC, RCB, VAR, THIS, SUPER, TRUE_TOK, FALSE_TOK, NULL_TOK, NEW, RETURN, IF, WHILE, BREAK, CONTINUE, TRY, THROW, '-', '(']
+  158        | IF LRB expression RRB scope elif_list . ELSE scope
+  160 elif_list: elif_list . elif
+  161 elif: . ELIF LRB expression RRB scope
+
+    ELIF  shift, and go to state 220
+    ELSE  shift, and go to state 247
+
+    $default  reduce using rule 157 (if_stmt)
+
+    elif  go to state 248
+
+
+state 223
+
+  159 elif_list: elif .
+
+    $default  reduce using rule 159 (elif_list)
+
+
+state 224
+
+  170 catch_stmt: CATCH LRB typename_T IDENT . RRB scope
+
+    RRB  shift, and go to state 249
+
+
+state 225
+
+   55 function_define: DEF IDENT LRB RRB ARROW typename_T scope_optional .
+
+    $default  reduce using rule 55 (function_define)
+
+
+state 226
+
+   70 parameter_list: parameter_list COMMA typename_T IDENT .
+
+    $default  reduce using rule 70 (parameter_list)
+
+
+state 227
+
+   54 function_define: DEF IDENT LRB parameter_list RRB ARROW typename_T . scope_optional
+  171 scope: . LCB stmt_list RCB
+  172      | . LCB RCB
+  173 scope_optional: . SEMI
+  174               | . scope
+
+    LCB   shift, and go to state 83
+    SEMI  shift, and go to state 201
+
+    scope           go to state 202
+    scope_optional  go to state 250
+
+
+state 228
+
+   25 type_parameter: IDENT . type_parameter_rule_list
+   28 type_parameter_rule_list: .  [COMMA, GT]
+   29                         | . LRB typename_list RRB
+
+    LRB  shift, and go to state 251
+
+    $default  reduce using rule 28 (type_parameter_rule_list)
+
+    type_parameter_rule_list  go to state 252
+
+
+state 229
+
+   26 type_parameter: IN . IDENT type_parameter_rule_list
+
+    IDENT  shift, and go to state 253
+
+
+state 230
+
+   27 type_parameter: OUT . IDENT type_parameter_rule_list
+
+    IDENT  shift, and go to state 254
+
+
+state 231
+
+   22 type_parameter_group: LT type_parameter_list . GT
+   24 type_parameter_list: type_parameter_list . COMMA type_parameter
+
+    COMMA  shift, and go to state 255
+    GT     shift, and go to state 256
+
+
+state 232
+
+   23 type_parameter_list: type_parameter .
+
+    $default  reduce using rule 23 (type_parameter_list)
+
+
+state 233
+
+   35 interface_decl: INTERFACE parameterized_typename COLON typename_list . LCB access_member_tree_opt RCB
+   76 typename_list: typename_list . COMMA typename_T
+
+    COMMA  shift, and go to state 182
+    LCB    shift, and go to state 257
+
+
+state 234
+
+   64 access_level_T: PUBLIC .
+
+    $default  reduce using rule 64 (access_level_T)
+
+
+state 235
+
+   65 access_level_T: PRIVATE .
+
+    $default  reduce using rule 65 (access_level_T)
+
+
+state 236
+
+   66 access_level_T: PROTECTED .
+
+    $default  reduce using rule 66 (access_level_T)
+
+
+state 237
+
+   34 interface_decl: INTERFACE parameterized_typename LCB access_member_tree_opt . RCB
+
+    RCB  shift, and go to state 258
+
+
+state 238
+
+   37 access_member_tree_opt: access_member_tree .  [RCB]
+   39 access_member_tree: access_member_tree . access_member_list
+   40 access_member_list: . access_level_T COLON member_define_list
+   64 access_level_T: . PUBLIC
+   65               | . PRIVATE
+   66               | . PROTECTED
+
+    PUBLIC     shift, and go to state 234
+    PRIVATE    shift, and go to state 235
+    PROTECTED  shift, and go to state 236
+
+    $default  reduce using rule 37 (access_member_tree_opt)
+
+    access_member_list  go to state 259
+    access_level_T      go to state 240
+
+
+state 239
+
+   38 access_member_tree: access_member_list .
+
+    $default  reduce using rule 38 (access_member_tree)
+
+
+state 240
+
+   40 access_member_list: access_level_T . COLON member_define_list
+
+    COLON  shift, and go to state 260
+
+
+state 241
+
+   31 class_decl: CLASS parameterized_typename COLON typename_list . LCB access_member_tree_opt RCB
+   76 typename_list: typename_list . COMMA typename_T
+
+    COMMA  shift, and go to state 182
+    LCB    shift, and go to state 261
+
+
+state 242
+
+   30 class_decl: CLASS parameterized_typename LCB access_member_tree_opt . RCB
+
+    RCB  shift, and go to state 262
+
+
+state 243
+
+   67 ident_list: IDENT .
+
+    $default  reduce using rule 67 (ident_list)
+
+
+state 244
+
+   32 enum_decl: ENUM IDENT LCB ident_list . RCB
+   33          | ENUM IDENT LCB ident_list . COMMA RCB
+   68 ident_list: ident_list . COMMA IDENT
+
+    COMMA  shift, and go to state 263
+    RCB    shift, and go to state 264
+
+
+state 245
+
+   80 expression: . assign
+   81 assign: . or
+   82       | . primary assign_type_T assign
+   89 or: . and
+   90   | . or LOGIC_OR and
+   91 and: . equal
+   92    | . and LOGIC_AND equal
+   93 equal: . compare
+   94      | . equal EQUAL compare
+   95      | . equal NOTEQUAL compare
+   96 compare: . addsub
+   97        | . compare GT addsub
+   98        | . compare GE addsub
+   99        | . compare LT addsub
+  100        | . compare LE addsub
+  101 addsub: . muldiv
+  102       | . addsub ADD muldiv
+  103       | . addsub SUB muldiv
+  104 muldiv: . unary
+  105       | . muldiv MUL unary
+  106       | . muldiv DIV unary
+  107       | . muldiv MOD unary
+  108 unary: . prefix
+  109      | . NOT unary
+  110      | . '-' unary
+  111 prefix: . postfix
+  112       | . INC postfix
+  113       | . DEC postfix
+  114 postfix: . primary
+  115        | . primary INC
+  116        | . primary DEC
+  117        | . primary AS typename_T
+  118 primary: . primary_nobrace
+  119        | . '(' expression ')'
+  120 primary_nobrace: . primary_literal
+  121                | . primary_assoc
+  122                | . THIS
+  123                | . SUPER
+  124                | . NEW typename_T LRB argument_list RRB
+  125                | . NEW typename_T LRB RRB
+  126 primary_literal: . INT
+  127                | . DOUBLE
+  128                | . CHAR_LITERAL
+  129                | . STRING_LITERAL
+  130                | . TRUE_TOK
+  131                | . FALSE_TOK
+  132                | . NULL_TOK
+  133 primary_assoc: . primary_faccess
+  134              | . primary_mcall
+  135 primary_faccess: . primary DOT IDENT
+  136 primary_mcall: . primary_maccess typename_group LRB argument_list RRB
+  137              | . primary_maccess typename_group LRB RRB
+  138 primary_maccess: . primary_nobrace
+  161 elif: ELIF LRB . expression RRB scope
+
+    CHAR_LITERAL    shift, and go to state 2
+    STRING_LITERAL  shift, and go to state 3
+    INT             shift, and go to state 4
+    DOUBLE          shift, and go to state 5
+    NOT             shift, and go to state 7
+    INC             shift, and go to state 8
+    DEC             shift, and go to state 9
+    THIS            shift, and go to state 12
+    SUPER           shift, and go to state 13
+    TRUE_TOK        shift, and go to state 14
+    FALSE_TOK       shift, and go to state 15
+    NULL_TOK        shift, and go to state 16
+    NEW             shift, and go to state 17
+    '-'             shift, and go to state 27
+    '('             shift, and go to state 28
+
+    expression       go to state 265
+    assign           go to state 37
+    or               go to state 38
+    and              go to state 39
+    equal            go to state 40
+    compare          go to state 41
+    addsub           go to state 42
+    muldiv           go to state 43
+    unary            go to state 44
+    prefix           go to state 45
+    postfix          go to state 46
+    primary          go to state 47
+    primary_nobrace  go to state 48
+    primary_literal  go to state 49
+    primary_assoc    go to state 50
+    primary_faccess  go to state 51
+    primary_mcall    go to state 52
+    primary_maccess  go to state 53
+
+
+state 246
+
+  156 if_stmt: IF LRB expression RRB scope ELSE scope .
+
+    $default  reduce using rule 156 (if_stmt)
+
+
+state 247
+
+  158 if_stmt: IF LRB expression RRB scope elif_list ELSE . scope
+  171 scope: . LCB stmt_list RCB
+  172      | . LCB RCB
+
+    LCB  shift, and go to state 83
+
+    scope  go to state 266
+
+
+state 248
+
+  160 elif_list: elif_list elif .
+
+    $default  reduce using rule 160 (elif_list)
+
+
+state 249
+
+  170 catch_stmt: CATCH LRB typename_T IDENT RRB . scope
+  171 scope: . LCB stmt_list RCB
+  172      | . LCB RCB
+
+    LCB  shift, and go to state 83
+
+    scope  go to state 267
+
+
+state 250
+
+   54 function_define: DEF IDENT LRB parameter_list RRB ARROW typename_T scope_optional .
+
+    $default  reduce using rule 54 (function_define)
+
+
+state 251
+
+   29 type_parameter_rule_list: LRB . typename_list RRB
+   75 typename_list: . typename_T
+   76              | . typename_list COMMA typename_T
+   77 typename_T: . fqcn_part typename_group
+   78 fqcn_part: . IDENT
+   79          | . fqcn_part COLO_COLO IDENT
+
+    IDENT  shift, and go to state 6
+
+    typename_list  go to state 268
+    typename_T     go to state 140
+    fqcn_part      go to state 35
+
+
+state 252
+
+   25 type_parameter: IDENT type_parameter_rule_list .
+
+    $default  reduce using rule 25 (type_parameter)
+
+
+state 253
+
+   26 type_parameter: IN IDENT . type_parameter_rule_list
+   28 type_parameter_rule_list: .  [COMMA, GT]
+   29                         | . LRB typename_list RRB
+
+    LRB  shift, and go to state 251
+
+    $default  reduce using rule 28 (type_parameter_rule_list)
+
+    type_parameter_rule_list  go to state 269
+
+
+state 254
+
+   27 type_parameter: OUT IDENT . type_parameter_rule_list
+   28 type_parameter_rule_list: .  [COMMA, GT]
+   29                         | . LRB typename_list RRB
+
+    LRB  shift, and go to state 251
+
+    $default  reduce using rule 28 (type_parameter_rule_list)
+
+    type_parameter_rule_list  go to state 270
+
+
+state 255
+
+   24 type_parameter_list: type_parameter_list COMMA . type_parameter
+   25 type_parameter: . IDENT type_parameter_rule_list
+   26               | . IN IDENT type_parameter_rule_list
+   27               | . OUT IDENT type_parameter_rule_list
+
+    IDENT  shift, and go to state 228
+    IN     shift, and go to state 229
+    OUT    shift, and go to state 230
+
+    type_parameter  go to state 271
+
+
+state 256
+
+   22 type_parameter_group: LT type_parameter_list GT .
+
+    $default  reduce using rule 22 (type_parameter_group)
+
+
+state 257
+
+   35 interface_decl: INTERFACE parameterized_typename COLON typename_list LCB . access_member_tree_opt RCB
+   36 access_member_tree_opt: .  [RCB]
+   37                       | . access_member_tree
+   38 access_member_tree: . access_member_list
+   39                   | . access_member_tree access_member_list
+   40 access_member_list: . access_level_T COLON member_define_list
+   64 access_level_T: . PUBLIC
+   65               | . PRIVATE
+   66               | . PROTECTED
+
+    PUBLIC     shift, and go to state 234
+    PRIVATE    shift, and go to state 235
+    PROTECTED  shift, and go to state 236
+
+    $default  reduce using rule 36 (access_member_tree_opt)
+
+    access_member_tree_opt  go to state 272
+    access_member_tree      go to state 238
+    access_member_list      go to state 239
+    access_level_T          go to state 240
+
+
+state 258
+
+   34 interface_decl: INTERFACE parameterized_typename LCB access_member_tree_opt RCB .
+
+    $default  reduce using rule 34 (interface_decl)
+
+
+state 259
+
+   39 access_member_tree: access_member_tree access_member_list .
+
+    $default  reduce using rule 39 (access_member_tree)
+
+
+state 260
+
+   40 access_member_list: access_level_T COLON . member_define_list
+   41 member_define_list: . member_define
+   42                   | . member_define_list member_define
+   43 member_define: . constructor_define
+   44              | . method_define
+   45              | . field_define
+   46 constructor_define: . CTOR NEW LRB parameter_list RRB constructor_chain_optional scope_optional
+   47                   | . CTOR NEW LRB RRB constructor_chain_optional scope_optional
+   56 method_define: . modifier_type_T DEF IDENT type_parameter_group LRB parameter_list RRB ARROW typename_T scope_optional
+   57              | . modifier_type_T DEF IDENT type_parameter_group LRB RRB ARROW typename_T scope_optional
+   58 field_define: . modifier_type_T typename_T IDENT SEMI
+   59 modifier_type_T: .  [IDENT, DEF]
+   60                | . STATIC NATIVE
+   61                | . NATIVE STATIC
+   62                | . STATIC
+   63                | . NATIVE
+
+    STATIC  shift, and go to state 273
+    NATIVE  shift, and go to state 274
+    CTOR    shift, and go to state 275
+
+    $default  reduce using rule 59 (modifier_type_T)
+
+    member_define_list  go to state 276
+    member_define       go to state 277
+    constructor_define  go to state 278
+    method_define       go to state 279
+    field_define        go to state 280
+    modifier_type_T     go to state 281
+
+
+state 261
+
+   31 class_decl: CLASS parameterized_typename COLON typename_list LCB . access_member_tree_opt RCB
+   36 access_member_tree_opt: .  [RCB]
+   37                       | . access_member_tree
+   38 access_member_tree: . access_member_list
+   39                   | . access_member_tree access_member_list
+   40 access_member_list: . access_level_T COLON member_define_list
+   64 access_level_T: . PUBLIC
+   65               | . PRIVATE
+   66               | . PROTECTED
+
+    PUBLIC     shift, and go to state 234
+    PRIVATE    shift, and go to state 235
+    PROTECTED  shift, and go to state 236
+
+    $default  reduce using rule 36 (access_member_tree_opt)
+
+    access_member_tree_opt  go to state 282
+    access_member_tree      go to state 238
+    access_member_list      go to state 239
+    access_level_T          go to state 240
+
+
+state 262
+
+   30 class_decl: CLASS parameterized_typename LCB access_member_tree_opt RCB .
+
+    $default  reduce using rule 30 (class_decl)
+
+
+state 263
+
+   33 enum_decl: ENUM IDENT LCB ident_list COMMA . RCB
+   68 ident_list: ident_list COMMA . IDENT
+
+    IDENT  shift, and go to state 283
+    RCB    shift, and go to state 284
+
+
+state 264
+
+   32 enum_decl: ENUM IDENT LCB ident_list RCB .
+
+    $default  reduce using rule 32 (enum_decl)
+
+
+state 265
+
+  161 elif: ELIF LRB expression . RRB scope
+
+    RRB  shift, and go to state 285
+
+
+state 266
+
+  158 if_stmt: IF LRB expression RRB scope elif_list ELSE scope .
+
+    $default  reduce using rule 158 (if_stmt)
+
+
+state 267
+
+  170 catch_stmt: CATCH LRB typename_T IDENT RRB scope .
+
+    $default  reduce using rule 170 (catch_stmt)
+
+
+state 268
+
+   29 type_parameter_rule_list: LRB typename_list . RRB
+   76 typename_list: typename_list . COMMA typename_T
+
+    COMMA  shift, and go to state 182
+    RRB    shift, and go to state 286
+
+
+state 269
+
+   26 type_parameter: IN IDENT type_parameter_rule_list .
+
+    $default  reduce using rule 26 (type_parameter)
+
+
+state 270
+
+   27 type_parameter: OUT IDENT type_parameter_rule_list .
+
+    $default  reduce using rule 27 (type_parameter)
+
+
+state 271
+
+   24 type_parameter_list: type_parameter_list COMMA type_parameter .
+
+    $default  reduce using rule 24 (type_parameter_list)
+
+
+state 272
+
+   35 interface_decl: INTERFACE parameterized_typename COLON typename_list LCB access_member_tree_opt . RCB
+
+    RCB  shift, and go to state 287
+
+
+state 273
+
+   60 modifier_type_T: STATIC . NATIVE
+   62                | STATIC .  [IDENT, DEF]
+
+    NATIVE  shift, and go to state 288
+
+    $default  reduce using rule 62 (modifier_type_T)
+
+
+state 274
+
+   61 modifier_type_T: NATIVE . STATIC
+   63                | NATIVE .  [IDENT, DEF]
+
+    STATIC  shift, and go to state 289
+
+    $default  reduce using rule 63 (modifier_type_T)
+
+
+state 275
+
+   46 constructor_define: CTOR . NEW LRB parameter_list RRB constructor_chain_optional scope_optional
+   47                   | CTOR . NEW LRB RRB constructor_chain_optional scope_optional
+
+    NEW  shift, and go to state 290
+
+
+state 276
+
+   40 access_member_list: access_level_T COLON member_define_list .  [RCB, PUBLIC, PRIVATE, PROTECTED]
+   42 member_define_list: member_define_list . member_define
+   43 member_define: . constructor_define
+   44              | . method_define
+   45              | . field_define
+   46 constructor_define: . CTOR NEW LRB parameter_list RRB constructor_chain_optional scope_optional
+   47                   | . CTOR NEW LRB RRB constructor_chain_optional scope_optional
+   56 method_define: . modifier_type_T DEF IDENT type_parameter_group LRB parameter_list RRB ARROW typename_T scope_optional
+   57              | . modifier_type_T DEF IDENT type_parameter_group LRB RRB ARROW typename_T scope_optional
+   58 field_define: . modifier_type_T typename_T IDENT SEMI
+   59 modifier_type_T: .  [IDENT, DEF]
+   60                | . STATIC NATIVE
+   61                | . NATIVE STATIC
+   62                | . STATIC
+   63                | . NATIVE
+
+    STATIC  shift, and go to state 273
+    NATIVE  shift, and go to state 274
+    CTOR    shift, and go to state 275
+
+    IDENT     reduce using rule 59 (modifier_type_T)
+    DEF       reduce using rule 59 (modifier_type_T)
+    $default  reduce using rule 40 (access_member_list)
+
+    member_define       go to state 291
+    constructor_define  go to state 278
+    method_define       go to state 279
+    field_define        go to state 280
+    modifier_type_T     go to state 281
+
+
+state 277
+
+   41 member_define_list: member_define .
+
+    $default  reduce using rule 41 (member_define_list)
+
+
+state 278
+
+   43 member_define: constructor_define .
+
+    $default  reduce using rule 43 (member_define)
+
+
+state 279
+
+   44 member_define: method_define .
+
+    $default  reduce using rule 44 (member_define)
+
+
+state 280
+
+   45 member_define: field_define .
+
+    $default  reduce using rule 45 (member_define)
+
+
+state 281
+
+   56 method_define: modifier_type_T . DEF IDENT type_parameter_group LRB parameter_list RRB ARROW typename_T scope_optional
+   57              | modifier_type_T . DEF IDENT type_parameter_group LRB RRB ARROW typename_T scope_optional
+   58 field_define: modifier_type_T . typename_T IDENT SEMI
+   77 typename_T: . fqcn_part typename_group
+   78 fqcn_part: . IDENT
+   79          | . fqcn_part COLO_COLO IDENT
+
+    IDENT  shift, and go to state 6
+    DEF    shift, and go to state 292
+
+    typename_T  go to state 293
+    fqcn_part   go to state 35
+
+
+state 282
+
+   31 class_decl: CLASS parameterized_typename COLON typename_list LCB access_member_tree_opt . RCB
+
+    RCB  shift, and go to state 294
+
+
+state 283
+
+   68 ident_list: ident_list COMMA IDENT .
+
+    $default  reduce using rule 68 (ident_list)
+
+
+state 284
+
+   33 enum_decl: ENUM IDENT LCB ident_list COMMA RCB .
+
+    $default  reduce using rule 33 (enum_decl)
+
+
+state 285
+
+  161 elif: ELIF LRB expression RRB . scope
+  171 scope: . LCB stmt_list RCB
+  172      | . LCB RCB
+
+    LCB  shift, and go to state 83
+
+    scope  go to state 295
+
+
+state 286
+
+   29 type_parameter_rule_list: LRB typename_list RRB .
+
+    $default  reduce using rule 29 (type_parameter_rule_list)
+
+
+state 287
+
+   35 interface_decl: INTERFACE parameterized_typename COLON typename_list LCB access_member_tree_opt RCB .
+
+    $default  reduce using rule 35 (interface_decl)
+
+
+state 288
+
+   60 modifier_type_T: STATIC NATIVE .
+
+    $default  reduce using rule 60 (modifier_type_T)
+
+
+state 289
+
+   61 modifier_type_T: NATIVE STATIC .
+
+    $default  reduce using rule 61 (modifier_type_T)
+
+
+state 290
+
+   46 constructor_define: CTOR NEW . LRB parameter_list RRB constructor_chain_optional scope_optional
+   47                   | CTOR NEW . LRB RRB constructor_chain_optional scope_optional
+
+    LRB  shift, and go to state 296
+
+
+state 291
+
+   42 member_define_list: member_define_list member_define .
+
+    $default  reduce using rule 42 (member_define_list)
+
+
+state 292
+
+   56 method_define: modifier_type_T DEF . IDENT type_parameter_group LRB parameter_list RRB ARROW typename_T scope_optional
+   57              | modifier_type_T DEF . IDENT type_parameter_group LRB RRB ARROW typename_T scope_optional
+
+    IDENT  shift, and go to state 297
+
+
+state 293
+
+   58 field_define: modifier_type_T typename_T . IDENT SEMI
+
+    IDENT  shift, and go to state 298
+
+
+state 294
+
+   31 class_decl: CLASS parameterized_typename COLON typename_list LCB access_member_tree_opt RCB .
+
+    $default  reduce using rule 31 (class_decl)
+
+
+state 295
+
+  161 elif: ELIF LRB expression RRB scope .
+
+    $default  reduce using rule 161 (elif)
+
+
+state 296
+
+   46 constructor_define: CTOR NEW LRB . parameter_list RRB constructor_chain_optional scope_optional
+   47                   | CTOR NEW LRB . RRB constructor_chain_optional scope_optional
+   69 parameter_list: . typename_T IDENT
+   70               | . parameter_list COMMA typename_T IDENT
+   77 typename_T: . fqcn_part typename_group
+   78 fqcn_part: . IDENT
+   79          | . fqcn_part COLO_COLO IDENT
+
+    IDENT  shift, and go to state 6
+    RRB    shift, and go to state 299
+
+    parameter_list  go to state 300
+    typename_T      go to state 164
+    fqcn_part       go to state 35
+
+
+state 297
+
+   21 type_parameter_group: .  [LRB]
+   22                     | . LT type_parameter_list GT
+   56 method_define: modifier_type_T DEF IDENT . type_parameter_group LRB parameter_list RRB ARROW typename_T scope_optional
+   57              | modifier_type_T DEF IDENT . type_parameter_group LRB RRB ARROW typename_T scope_optional
+
+    LT  shift, and go to state 212
+
+    $default  reduce using rule 21 (type_parameter_group)
+
+    type_parameter_group  go to state 301
+
+
+state 298
+
+   58 field_define: modifier_type_T typename_T IDENT . SEMI
+
+    SEMI  shift, and go to state 302
+
+
+state 299
+
+   47 constructor_define: CTOR NEW LRB RRB . constructor_chain_optional scope_optional
+   48 constructor_chain: . COLON constructor_chain_type_T LRB argument_list RRB
+   49                  | . COLON constructor_chain_type_T LRB RRB
+   52 constructor_chain_optional: .  [LCB, SEMI]
+   53                           | . constructor_chain
+
+    COLON  shift, and go to state 303
+
+    $default  reduce using rule 52 (constructor_chain_optional)
+
+    constructor_chain           go to state 304
+    constructor_chain_optional  go to state 305
+
+
+state 300
+
+   46 constructor_define: CTOR NEW LRB parameter_list . RRB constructor_chain_optional scope_optional
+   70 parameter_list: parameter_list . COMMA typename_T IDENT
+
+    COMMA  shift, and go to state 190
+    RRB    shift, and go to state 306
+
+
+state 301
+
+   56 method_define: modifier_type_T DEF IDENT type_parameter_group . LRB parameter_list RRB ARROW typename_T scope_optional
+   57              | modifier_type_T DEF IDENT type_parameter_group . LRB RRB ARROW typename_T scope_optional
+
+    LRB  shift, and go to state 307
+
+
+state 302
+
+   58 field_define: modifier_type_T typename_T IDENT SEMI .
+
+    $default  reduce using rule 58 (field_define)
+
+
+state 303
+
+   48 constructor_chain: COLON . constructor_chain_type_T LRB argument_list RRB
+   49                  | COLON . constructor_chain_type_T LRB RRB
+   50 constructor_chain_type_T: . SUPER
+   51                         | . THIS
+
+    THIS   shift, and go to state 308
+    SUPER  shift, and go to state 309
+
+    constructor_chain_type_T  go to state 310
+
+
+state 304
+
+   53 constructor_chain_optional: constructor_chain .
+
+    $default  reduce using rule 53 (constructor_chain_optional)
+
+
+state 305
+
+   47 constructor_define: CTOR NEW LRB RRB constructor_chain_optional . scope_optional
+  171 scope: . LCB stmt_list RCB
+  172      | . LCB RCB
+  173 scope_optional: . SEMI
+  174               | . scope
+
+    LCB   shift, and go to state 83
+    SEMI  shift, and go to state 201
+
+    scope           go to state 202
+    scope_optional  go to state 311
+
+
+state 306
+
+   46 constructor_define: CTOR NEW LRB parameter_list RRB . constructor_chain_optional scope_optional
+   48 constructor_chain: . COLON constructor_chain_type_T LRB argument_list RRB
+   49                  | . COLON constructor_chain_type_T LRB RRB
+   52 constructor_chain_optional: .  [LCB, SEMI]
+   53                           | . constructor_chain
+
+    COLON  shift, and go to state 303
+
+    $default  reduce using rule 52 (constructor_chain_optional)
+
+    constructor_chain           go to state 304
+    constructor_chain_optional  go to state 312
+
+
+state 307
+
+   56 method_define: modifier_type_T DEF IDENT type_parameter_group LRB . parameter_list RRB ARROW typename_T scope_optional
+   57              | modifier_type_T DEF IDENT type_parameter_group LRB . RRB ARROW typename_T scope_optional
+   69 parameter_list: . typename_T IDENT
+   70               | . parameter_list COMMA typename_T IDENT
+   77 typename_T: . fqcn_part typename_group
+   78 fqcn_part: . IDENT
+   79          | . fqcn_part COLO_COLO IDENT
+
+    IDENT  shift, and go to state 6
+    RRB    shift, and go to state 313
+
+    parameter_list  go to state 314
+    typename_T      go to state 164
+    fqcn_part       go to state 35
+
+
+state 308
+
+   51 constructor_chain_type_T: THIS .
+
+    $default  reduce using rule 51 (constructor_chain_type_T)
+
+
+state 309
+
+   50 constructor_chain_type_T: SUPER .
+
+    $default  reduce using rule 50 (constructor_chain_type_T)
+
+
+state 310
+
+   48 constructor_chain: COLON constructor_chain_type_T . LRB argument_list RRB
+   49                  | COLON constructor_chain_type_T . LRB RRB
+
+    LRB  shift, and go to state 315
+
+
+state 311
+
+   47 constructor_define: CTOR NEW LRB RRB constructor_chain_optional scope_optional .
+
+    $default  reduce using rule 47 (constructor_define)
+
+
+state 312
+
+   46 constructor_define: CTOR NEW LRB parameter_list RRB constructor_chain_optional . scope_optional
+  171 scope: . LCB stmt_list RCB
+  172      | . LCB RCB
+  173 scope_optional: . SEMI
+  174               | . scope
+
+    LCB   shift, and go to state 83
+    SEMI  shift, and go to state 201
+
+    scope           go to state 202
+    scope_optional  go to state 316
+
+
+state 313
+
+   57 method_define: modifier_type_T DEF IDENT type_parameter_group LRB RRB . ARROW typename_T scope_optional
+
+    ARROW  shift, and go to state 317
+
+
+state 314
+
+   56 method_define: modifier_type_T DEF IDENT type_parameter_group LRB parameter_list . RRB ARROW typename_T scope_optional
+   70 parameter_list: parameter_list . COMMA typename_T IDENT
+
+    COMMA  shift, and go to state 190
+    RRB    shift, and go to state 318
+
+
+state 315
+
+   48 constructor_chain: COLON constructor_chain_type_T LRB . argument_list RRB
+   49                  | COLON constructor_chain_type_T LRB . RRB
+   71 argument_list: . expression
+   72              | . argument_list COMMA expression
+   80 expression: . assign
+   81 assign: . or
+   82       | . primary assign_type_T assign
+   89 or: . and
+   90   | . or LOGIC_OR and
+   91 and: . equal
+   92    | . and LOGIC_AND equal
+   93 equal: . compare
+   94      | . equal EQUAL compare
+   95      | . equal NOTEQUAL compare
+   96 compare: . addsub
+   97        | . compare GT addsub
+   98        | . compare GE addsub
+   99        | . compare LT addsub
+  100        | . compare LE addsub
+  101 addsub: . muldiv
+  102       | . addsub ADD muldiv
+  103       | . addsub SUB muldiv
+  104 muldiv: . unary
+  105       | . muldiv MUL unary
+  106       | . muldiv DIV unary
+  107       | . muldiv MOD unary
+  108 unary: . prefix
+  109      | . NOT unary
+  110      | . '-' unary
+  111 prefix: . postfix
+  112       | . INC postfix
+  113       | . DEC postfix
+  114 postfix: . primary
+  115        | . primary INC
+  116        | . primary DEC
+  117        | . primary AS typename_T
+  118 primary: . primary_nobrace
+  119        | . '(' expression ')'
+  120 primary_nobrace: . primary_literal
+  121                | . primary_assoc
+  122                | . THIS
+  123                | . SUPER
+  124                | . NEW typename_T LRB argument_list RRB
+  125                | . NEW typename_T LRB RRB
+  126 primary_literal: . INT
+  127                | . DOUBLE
+  128                | . CHAR_LITERAL
+  129                | . STRING_LITERAL
+  130                | . TRUE_TOK
+  131                | . FALSE_TOK
+  132                | . NULL_TOK
+  133 primary_assoc: . primary_faccess
+  134              | . primary_mcall
+  135 primary_faccess: . primary DOT IDENT
+  136 primary_mcall: . primary_maccess typename_group LRB argument_list RRB
+  137              | . primary_maccess typename_group LRB RRB
+  138 primary_maccess: . primary_nobrace
+
+    CHAR_LITERAL    shift, and go to state 2
+    STRING_LITERAL  shift, and go to state 3
+    INT             shift, and go to state 4
+    DOUBLE          shift, and go to state 5
+    NOT             shift, and go to state 7
+    INC             shift, and go to state 8
+    DEC             shift, and go to state 9
+    RRB             shift, and go to state 319
+    THIS            shift, and go to state 12
+    SUPER           shift, and go to state 13
+    TRUE_TOK        shift, and go to state 14
+    FALSE_TOK       shift, and go to state 15
+    NULL_TOK        shift, and go to state 16
+    NEW             shift, and go to state 17
+    '-'             shift, and go to state 27
+    '('             shift, and go to state 28
+
+    argument_list    go to state 320
+    expression       go to state 161
+    assign           go to state 37
+    or               go to state 38
+    and              go to state 39
+    equal            go to state 40
+    compare          go to state 41
+    addsub           go to state 42
+    muldiv           go to state 43
+    unary            go to state 44
+    prefix           go to state 45
+    postfix          go to state 46
+    primary          go to state 47
+    primary_nobrace  go to state 48
+    primary_literal  go to state 49
+    primary_assoc    go to state 50
+    primary_faccess  go to state 51
+    primary_mcall    go to state 52
+    primary_maccess  go to state 53
+
+
+state 316
+
+   46 constructor_define: CTOR NEW LRB parameter_list RRB constructor_chain_optional scope_optional .
+
+    $default  reduce using rule 46 (constructor_define)
+
+
+state 317
+
+   57 method_define: modifier_type_T DEF IDENT type_parameter_group LRB RRB ARROW . typename_T scope_optional
+   77 typename_T: . fqcn_part typename_group
+   78 fqcn_part: . IDENT
+   79          | . fqcn_part COLO_COLO IDENT
+
+    IDENT  shift, and go to state 6
+
+    typename_T  go to state 321
+    fqcn_part   go to state 35
+
+
+state 318
+
+   56 method_define: modifier_type_T DEF IDENT type_parameter_group LRB parameter_list RRB . ARROW typename_T scope_optional
+
+    ARROW  shift, and go to state 322
+
+
+state 319
+
+   49 constructor_chain: COLON constructor_chain_type_T LRB RRB .
+
+    $default  reduce using rule 49 (constructor_chain)
+
+
+state 320
+
+   48 constructor_chain: COLON constructor_chain_type_T LRB argument_list . RRB
+   72 argument_list: argument_list . COMMA expression
+
+    COMMA  shift, and go to state 187
+    RRB    shift, and go to state 323
+
+
+state 321
+
+   57 method_define: modifier_type_T DEF IDENT type_parameter_group LRB RRB ARROW typename_T . scope_optional
+  171 scope: . LCB stmt_list RCB
+  172      | . LCB RCB
+  173 scope_optional: . SEMI
+  174               | . scope
+
+    LCB   shift, and go to state 83
+    SEMI  shift, and go to state 201
+
+    scope           go to state 202
+    scope_optional  go to state 324
+
+
+state 322
+
+   56 method_define: modifier_type_T DEF IDENT type_parameter_group LRB parameter_list RRB ARROW . typename_T scope_optional
+   77 typename_T: . fqcn_part typename_group
+   78 fqcn_part: . IDENT
+   79          | . fqcn_part COLO_COLO IDENT
+
+    IDENT  shift, and go to state 6
+
+    typename_T  go to state 325
+    fqcn_part   go to state 35
+
+
+state 323
+
+   48 constructor_chain: COLON constructor_chain_type_T LRB argument_list RRB .
+
+    $default  reduce using rule 48 (constructor_chain)
+
+
+state 324
+
+   57 method_define: modifier_type_T DEF IDENT type_parameter_group LRB RRB ARROW typename_T scope_optional .
+
+    $default  reduce using rule 57 (method_define)
+
+
+state 325
+
+   56 method_define: modifier_type_T DEF IDENT type_parameter_group LRB parameter_list RRB ARROW typename_T . scope_optional
+  171 scope: . LCB stmt_list RCB
+  172      | . LCB RCB
+  173 scope_optional: . SEMI
+  174               | . scope
+
+    LCB   shift, and go to state 83
+    SEMI  shift, and go to state 201
+
+    scope           go to state 202
+    scope_optional  go to state 326
+
+
+state 326
+
+   56 method_define: modifier_type_T DEF IDENT type_parameter_group LRB parameter_list RRB ARROW typename_T scope_optional .
+
+    $default  reduce using rule 56 (method_define)

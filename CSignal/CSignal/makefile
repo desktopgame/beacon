@@ -5,7 +5,7 @@
 # コンパイラ 僕はOSXでC++なのでclang++
 COMPILER  = clang
 # お好きなフラグを
-CXXFLAGS    = -g -O0 -MMD -Wall -Wextra -Winit-self
+CXXFLAGS    = -g -O0 -MMD -Wall -Wextra -Winit-self -Wunused-parameter
 # ライブラリ関係の指定
 # ifeq "$(shell getconf LONG_BIT)" "64"
 #	LDFLAGS = -L/usr/local/lib -L/opt/local/lib -std=c++11 -stdlib=libc++ -lstdc++ -v

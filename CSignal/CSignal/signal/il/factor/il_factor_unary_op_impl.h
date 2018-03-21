@@ -2,6 +2,7 @@
 #ifndef SIGNAL_IL_IL_FACTOR_UNARY_OP_H
 #define SIGNAL_IL_IL_FACTOR_UNARY_OP_H
 #include "../il_factor_interface.h"
+#include "../../env/generic_type.h"
 //struct opcode_buf;
 /**
  * 単項演算子の種類を表す列挙型.
@@ -61,7 +62,7 @@ void il_factor_unary_op_load(il_factor_unary_op* self, struct enviroment* env, i
  * @param env
  * @return
  */
-struct type* il_factor_unary_op_eval(il_factor_unary_op* self, struct enviroment* env, il_load_cache* cache);
+generic_type* il_factor_unary_op_eval(il_factor_unary_op* self, struct enviroment* env, il_load_cache* cache);
 
 /**
  * 単項演算子を開放します.

@@ -4,9 +4,10 @@
 #include "../env/type_interface.h"
 #include "../vm/enviroment.h"
 #include "../util/mem.h"
+#include "il_print_layout.h"
 
 void il_stmt_dump(il_stmt * self, int depth) {
-	text_printf("<%d> ", self->lineno);
+	il_print_layout_form(self->lineno);
 	switch (self->type) {
 		case ilstmt_if:
 			il_stmt_if_dump(self->u.if_, depth);
@@ -109,7 +110,7 @@ void il_stmt_load(il_stmt * self, enviroment* env, il_load_cache* cache, il_ehan
 			il_stmt_return_load(self->u.return_, env, cache, eh);
 			break;
 		case ilstmt_while:
-			//il_stmt_while_delete(self->u.while_);
+			il_stmt_while_load(self->u.while_, env, cache, eh);
 			break;
 		case ilstmt_break:
 			il_stmt_break_load(NULL, env, cache, eh);

@@ -3,9 +3,18 @@
 #include "mem.h"
 
 #define SLOT_SIZE sizeof(void*)
-
+/*
 vector * vector_new() {
 	vector* ret = (vector*)MEM_MALLOC(sizeof(vector));
+	ret->length = 0;
+	ret->capacity = 16;
+	ret->memory = (vector_item*)MEM_MALLOC(SLOT_SIZE * 16);
+	return ret;
+}
+*/
+
+vector* vector_malloc(const char* filename, int lineno) {
+	vector* ret = (vector*)mem_malloc(sizeof(vector), filename, lineno);
 	ret->length = 0;
 	ret->capacity = 16;
 	ret->memory = (vector_item*)MEM_MALLOC(SLOT_SIZE * 16);

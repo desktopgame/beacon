@@ -21,21 +21,13 @@
 #include "type_parameter.h"
 
 /**
- * インスタンス/静的フィールド宣言を読み込んでクラスに追加します.
- * @param self
- * @param iltype
- * @param tp
- */
-static void class_loader_sgload_fields(class_loader* self, il_type* iltype, type* tp);
-
-/**
  * フィールド宣言を読み込んでクラスに追加します.
  * @param self
  * @param iltype
  * @param tp
  * @param ilfields
  */
-static void class_loader_sgload_fields_impl(class_loader* self, il_type* iltype, type* tp, vector* ilfields);
+static void class_loader_sgload_fields_impl(class_loader* self, il_type* iltype, type* tp, vector* ilfields, namespace_* scope);
 
 /**
  * コンストラクタ宣言を読み込んでクラスに追加します.
@@ -49,7 +41,7 @@ static void class_loader_sgload_constructors(class_loader* self, il_type* iltype
 static void class_loader_sgload_complete_fields(class_loader* self, il_type* iltype, type* tp);
 static void class_loader_sgload_complete_fields_impl(class_loader* self, namespace_* scope, vector* ilfields, vector* sgfields);
 static void class_loader_sgload_complete_constructors(class_loader* self, il_type* iltype, type* tp);
-static void class_loader_sgload_params(class_loader* self, namespace_* scope, vector* param_list, vector* sg_param_liste);
+static void class_loader_sgload_params(class_loader* self, namespace_* scope, vector* param_list, vector* sg_param_liste, il_load_cache* cache);
 
 static void class_loader_sgload_chain(class_loader* self, il_type* iltype, type* tp, il_constructor* ilcons, il_constructor_chain* ilchain, enviroment* env);
 static void class_loader_sgload_chain_root(class_loader* self, il_type* iltype, type* tp, il_constructor* ilcons, il_constructor_chain* ilchain, enviroment* env);
@@ -63,8 +55,15 @@ void class_loader_sgload_class_decl(class_loader * self, il_type * iltype, type 
 	//TEST((!strcmp(tp->u.class_->name, "Array") && self->a == 1));
 	assert(tp->u.class_->method_list->length == 0);
 	assert(tp->u.class_->smethod_list->length == 0);
-	class_loader_sgload_fields(self, iltype, tp);
-	class_loader_sgload_methods(self, iltype, tp, scope);
+	type_init_generic(tp, tp->u.class_->type_parameter_list->length);
+	class_loader_sgload_fields_impl(self, iltype, tp, iltype->u.class_->field_list, scope);
+	class_loader_sgload_fields_impl(self, iltype, tp, iltype->u.class_->sfield_list, scope);
+
+	class_loader_sgload_methods_impl(self, iltype, tp, iltype->u.class_->method_list, scope);
+	class_loader_sgload_methods_impl(self, iltype, tp, iltype->u.class_->smethod_list, scope);
+
+	//class_loader_sgload_fields(self, iltype, tp);
+	//class_loader_sgload_methods(self, iltype, tp, scope);
 	class_loader_sgload_constructors(self, iltype, tp, scope);
 	class_create_vtable(tp->u.class_);	
 }
@@ -77,26 +76,14 @@ void class_loader_sgload_class_impl(class_loader * self, il_type * iltype, type 
 
 void class_loader_sgload_interface_decl(class_loader * self, il_type * iltype, type * tp, namespace_ * scope) {
 	assert(tp->u.interface_->method_list->length == 0);
-	class_loader_sgload_methods(self, iltype, tp, scope);
+//	class_loader_sgload_methods(self, iltype, tp, scope);
+	type_init_generic(tp, tp->u.interface_->type_parameter_list->length);
+	class_loader_sgload_methods_impl(self, iltype, tp, iltype->u.interface_->method_list, scope);
 }
 
 void class_loader_sgload_interface_impl(class_loader * self, il_type * iltype, type * tp, namespace_ * scope) {
 	class_loader_sgload_complete_methods_impl(self, scope, iltype, tp, iltype->u.interface_->method_list, tp->u.interface_->method_list);
 	interface_create_vtable(tp->u.interface_);
-}
-
-void class_loader_sgload_methods(class_loader* self, il_type* iltype, type* tp, namespace_* scope) {
-	assert(iltype->tag == iltype_class ||
-		   iltype->tag == iltype_interface);
-	//TEST(!strcmp(iltype->u.class_->name, "Console"));
-	if (iltype->tag == iltype_class) {
-		class_loader_sgload_methods_impl(self, iltype, tp, iltype->u.class_->method_list, scope);
-		class_loader_sgload_methods_impl(self, iltype, tp, iltype->u.class_->smethod_list, scope);
-	} else if (iltype->tag == iltype_interface) {
-		class_loader_sgload_methods_impl(self, iltype, tp, iltype->u.interface_->method_list, scope);
-	}
-	//TEST(iltype->u.class_->method_list->length != classz->method_list->length);
-	//TEST(iltype->u.class_->smethod_list->length != classz->smethod_list->length);
 }
 
 void class_loader_sgload_methods_impl(class_loader* self, il_type* iltype, type* tp, vector* ilmethods, namespace_* scope) {
@@ -112,6 +99,7 @@ void class_loader_sgload_methods_impl(class_loader* self, il_type* iltype, type*
 		vector* ilparams = ilmethod->parameter_list;
 		//実行時のメソッド情報を作成する
 		method* method = method_new(ilmethod->name);
+		vector_push(cache->method_vec, method);
 		vector* parameter_list = method->parameter_list;
 		method->type = modifier_is_native(ilmethod->modifier) ? method_type_native : method_type_script;
 		method->access = ilmethod->access;
@@ -124,11 +112,12 @@ void class_loader_sgload_methods_impl(class_loader* self, il_type* iltype, type*
 		} else {
 			method->u.script_method = script_method_new();
 		}
-		method->parent = tp;
-		method->return_type = import_manager_resolve(
+		method->gparent = tp->generic_self;
+		method->return_gtype = import_manager_resolve(
 			self->import_manager,
 			scope,
-			ilmethod->return_fqcn
+			ilmethod->return_fqcn,
+			cache
 		);
 		//ILパラメータを実行時パラメータへ変換
 		//NOTE:ここでは戻り値の型,引数の型を設定しません
@@ -139,9 +128,10 @@ void class_loader_sgload_methods_impl(class_loader* self, il_type* iltype, type*
 			parameter* param = parameter_new(ilp->name);
 			vector_push(parameter_list, param);
 		}
-		class_loader_sgload_params(self, scope, ilmethod->parameter_list, method->parameter_list);
+		class_loader_sgload_params(self, scope, ilmethod->parameter_list, method->parameter_list, cache);
 		//NOTE:クラスの登録が終わったらオペコードを作成する
 		type_add_method(tp, method);
+		vector_pop(cache->method_vec);
 	}
 	vector_pop(cache->type_vec);
 	vector_pop(cache->namespace_vec);
@@ -183,7 +173,7 @@ void class_loader_sgload_complete_methods_impl(class_loader* self, namespace_* s
 			il_parameter* ilparam = (il_parameter*)vector_at(ilmethod->parameter_list, i);
 			symbol_table_entry(
 				env->sym_table,
-				generic_cache_type(ilparam->fqcn, scope),
+				generic_cache_gtype(ilparam->fqcn, scope, cache),
 				ilparam->name
 			);
 			//実引数を保存
@@ -206,32 +196,35 @@ void class_loader_sgload_complete_methods_impl(class_loader* self, namespace_* s
 }
 
 //private
-static void class_loader_sgload_fields(class_loader* self, il_type* iltype, type* tp) {
-	assert(iltype->tag == iltype_class);
-	class_loader_sgload_fields_impl(self, iltype, tp, iltype->u.class_->field_list);
-	class_loader_sgload_fields_impl(self, iltype, tp, iltype->u.class_->sfield_list);
-}
-
-static void class_loader_sgload_fields_impl(class_loader* self, il_type* iltype, type* tp, vector* ilfields) {
+static void class_loader_sgload_fields_impl(class_loader* self, il_type* iltype, type* tp, vector* ilfields, namespace_* scope) {
 	//class_* cls = tp->u.class_;
+	il_load_cache* cache = il_load_cache_new();
+	vector_push(cache->namespace_vec, scope);
+	vector_push(cache->type_vec, tp);
 	for (int i = 0; i < ilfields->length; i++) {
 		vector_item e = vector_at(ilfields, i);
 		il_field* ilfield = (il_field*)e;
 		field* field = field_new(ilfield->name);
 		field->access = ilfield->access;
 		field->modifier = ilfield->modifier;
-		field->parent = tp;
+		field->gparent = tp->generic_self;
+		field->gtype = generic_cache_gtype(ilfield->fqcn, scope, cache);
 		//NOTE:ここではフィールドの型を設定しません
 		//     class_loader_sgload_complete参照
 		//vector_push(classz->field_list, field);
 		//class_add_field(cls, field);
 		type_add_field(tp, field);
 	}
+	vector_pop(cache->namespace_vec);
+	vector_pop(cache->type_vec);
+	il_load_cache_delete(cache);
 }
 
 static void class_loader_sgload_constructors(class_loader* self, il_type* iltype, type* tp, namespace_* scope) {
 	class_* classz = tp->u.class_;
 	vector* ilcons_list = iltype->u.class_->constructor_list;
+	il_load_cache* cache = il_load_cache_new();
+	vector_push(cache->type_vec, tp);
 	for (int i = 0; i < ilcons_list->length; i++) {
 		vector_item e = vector_at(ilcons_list, i);
 		il_constructor* ilcons = (il_constructor*)e;
@@ -241,7 +234,7 @@ static void class_loader_sgload_constructors(class_loader* self, il_type* iltype
 		constructor* cons = constructor_new();
 		vector* parameter_list = cons->parameter_list;
 		cons->access = ilcons->access;
-		cons->parent = tp;
+		cons->gparent = tp->generic_self;
 		//NOTE:ここでは戻り値の型,引数の型を設定しません
 		//     class_loader_sgload_complete参照
 		for (int i = 0; i < ilparams->length; i++) {
@@ -250,10 +243,12 @@ static void class_loader_sgload_constructors(class_loader* self, il_type* iltype
 			parameter* param = parameter_new(ilp->name);
 			vector_push(parameter_list, param);
 		}
-		class_loader_sgload_params(self, scope, ilcons->parameter_list, cons->parameter_list);
+		class_loader_sgload_params(self, scope, ilcons->parameter_list, cons->parameter_list, cache);
 		//vector_push(classz->constructor_list, cons);
 		class_add_constructor(classz, cons);
 	}
+	vector_pop(cache->type_vec);
+	il_load_cache_delete(cache);
 }
 
 static void class_loader_sgload_complete_fields(class_loader* self, il_type* iltype, type* tp) {
@@ -270,13 +265,18 @@ static void class_loader_sgload_complete_fields(class_loader* self, il_type* ilt
 
 static void class_loader_sgload_complete_fields_impl(class_loader* self, namespace_* scope, vector* ilfields, vector* sgfields) {
 	//	namespace_* scope = classz->location;
+	il_load_cache* cache = il_load_cache_new();
 	for (int i = 0; i < sgfields->length; i++) {
 		vector_item e = vector_at(sgfields, i);
 		field* fi = (field*)e;
+
+		vector_push(cache->type_vec, fi->gparent->core_type);
 		//FIXME:ILフィールドと実行時フィールドのインデックスが同じなのでとりあえず動く
 		il_field* ilfield = ((il_field*)vector_at(ilfields, i));
-		fi->type = import_manager_resolve(self->import_manager, scope, ilfield->fqcn);
+		fi->gtype = import_manager_resolve(self->import_manager, scope, ilfield->fqcn, cache);
+		vector_pop(cache->type_vec);
 	}
+	il_load_cache_delete(cache);
 }
 
 static void class_loader_sgload_complete_constructors(class_loader* self, il_type* iltype, type* tp) {
@@ -305,7 +305,7 @@ static void class_loader_sgload_complete_constructors(class_loader* self, il_typ
 			il_parameter* ilparam = (il_parameter*)vector_at(ilcons->parameter_list, i);
 			symbol_table_entry(
 				env->sym_table,
-				generic_cache_type(ilparam->fqcn, scope),
+				generic_cache_gtype(ilparam->fqcn, scope, cache),
 				ilparam->name
 			);
 			//実引数を保存
@@ -322,7 +322,7 @@ static void class_loader_sgload_complete_constructors(class_loader* self, il_typ
 	il_load_cache_delete(cache);
 }
 
-static void class_loader_sgload_params(class_loader* self, namespace_* scope, vector* param_list, vector* sg_param_list) {
+static void class_loader_sgload_params(class_loader* self, namespace_* scope, vector* param_list, vector* sg_param_list, il_load_cache* cache) {
 	//	for (int j = 0; j < ilmethod->parameter_list->length; j++) {
 	for (int j = 0; j < param_list->length; j++) {
 		//vector_item d = vector_at(ilmethod->parameter_list, j);
@@ -331,14 +331,15 @@ static void class_loader_sgload_params(class_loader* self, namespace_* scope, ve
 		//FIXME:ILパラメータと実行時パラメータのインデックスが同じなのでとりあえず動く
 		//parameter* mep = (parameter*)vector_at(me->parameter_list, j);
 		parameter* mep = (parameter*)vector_at(sg_param_list, j);
-		type* c = import_manager_resolve(
+		generic_type* gtp = import_manager_resolve(
 			self->import_manager,
 			scope,
-			ilparam->fqcn
+			ilparam->fqcn,
+			cache
 			);
-		assert(c != NULL);
+		assert(gtp != NULL);
 		//TEST(c == NULL);
-		mep->type = c;
+		mep->gtype = gtp;
 	}
 }
 
@@ -368,7 +369,7 @@ static void class_loader_sgload_chain_root(class_loader * self, il_type * iltype
 static void class_loader_sgload_chain_auto(class_loader * self, il_type * iltype, type * tp, il_constructor * ilcons, il_constructor_chain * ilchain, enviroment * env) {
 	class_* classz = tp->u.class_;
 	int emptyTemp = 0;
-	constructor* emptyTarget = class_find_empty_constructor(classz->super_class, env, NULL, &emptyTemp);
+	constructor* emptyTarget = class_find_empty_constructor(classz->super_class->core_type->u.class_, env, NULL, &emptyTemp);
 	//連鎖を明示的に書いていないのに、
 	//親クラスにも空のコンストラクタが存在しない=エラー
 	//(この場合自動的にチェインコンストラクタを補うことが出来ないため。)
@@ -382,7 +383,7 @@ static void class_loader_sgload_chain_auto(class_loader * self, il_type * iltype
 	ilcons->chain = ch_empty;
 	//親クラスへ連鎖
 	opcode_buf_add(env->buf, op_chain_super);
-	opcode_buf_add(env->buf, classz->super_class->classIndex);
+	opcode_buf_add(env->buf, classz->super_class->core_type->u.class_->classIndex);
 	opcode_buf_add(env->buf, emptyTemp);
 	//このクラスのフィールドを確保
 	opcode_buf_add(env->buf, op_alloc_field);
@@ -408,7 +409,7 @@ static void class_loader_sgload_chain_super(class_loader * self, il_type * iltyp
 	} else if (chain->type == chain_type_super) {
 		chainTarget = class_find_constructor(classz->super_class, chain->argument_list, env, cache, &temp);
 		opcode_buf_add(env->buf, op_chain_super);
-		opcode_buf_add(env->buf, classz->super_class->classIndex);
+		opcode_buf_add(env->buf, classz->super_class->core_type->u.class_->classIndex);
 	}
 	chain->c = chainTarget;
 	chain->constructor_index = temp;

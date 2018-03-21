@@ -18,10 +18,10 @@ void il_factor_this_generate(il_factor_this * self, enviroment * env, il_load_ca
 void il_factor_this_load(il_factor_this * self, enviroment * env, il_load_cache* cache, il_ehandler * eh) {
 }
 
-type * il_factor_this_eval(il_factor_this * self, enviroment * env, il_load_cache* cache) {
+generic_type* il_factor_this_eval(il_factor_this * self, enviroment * env, il_load_cache* cache) {
 	assert(cache->type_vec->length > 0);
 	type* ret = (type*)vector_top(cache->type_vec);
-	return ret;
+	return ret->generic_self;
 }
 
 void il_factor_this_delete(il_factor_this * self) {

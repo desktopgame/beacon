@@ -29,7 +29,7 @@ void vtable_replace(vtable * self, method * m) {
 	}
 	for (int i = 0; i < self->elements->length; i++) {
 		method* e = (method*)vector_at(self->elements, i);
-		if (method_equal(m, e)) {
+		if (method_override(m, e)) {
 			vector_assign(self->elements, i, m);
 			return;
 		}
@@ -38,6 +38,8 @@ void vtable_replace(vtable * self, method * m) {
 }
 
 vtable* vtable_lookup(vtable * self, vtable * castTo) {
+	assert(self != NULL);
+	assert(castTo != NULL);
 	if (self == castTo) {
 		return self;
 	}
@@ -62,7 +64,7 @@ vtable* vtable_lookup(vtable * self, vtable * castTo) {
 			//互換性があるなら、
 			//具象メソッドを追加
 			method* li = (method*)vector_at(self->elements, j);
-			if (method_equal(e, li)) {
+			if (method_override(e, li)) {
 				vtable_add(newVT, li);
 				break;
 			}

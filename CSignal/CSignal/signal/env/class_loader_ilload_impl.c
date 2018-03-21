@@ -11,6 +11,7 @@
 #include "../il/il_argument.h"
 #include "../il/il_stmt_interface.h"
 #include "../il/il_stmt_impl.h"
+#include "../il/il_type_argument.h"
 #include "../util/mem.h"
 #include "../util/text.h"
 #include "../util/logger.h"
@@ -28,6 +29,7 @@ static il_stmt* class_loader_ilload_bodyImpl(class_loader* self, ast* source);
 static void class_loader_ilload_type_parameter(class_loader* self, ast* source, vector* dest);
 static void class_loader_ilload_type_parameter_rule(class_loader* self, ast* source, vector* dest);
 static void class_loader_ilload_generic_inner(ast* atype_args, generic_cache* dest);
+static void class_loader_ilload_type_argument(class_loader* self, ast* atype_args, vector* dest);
 
 /**
  * class_loader_ilload_genericの再帰開始用関数.
@@ -528,8 +530,10 @@ il_factor_binary_op* class_loader_ilload_binary(class_loader* self, ast* source,
 il_factor_call* class_loader_ilload_call(class_loader* self, ast* source) {
 	assert(source->tag == ast_call);
 	ast* aname = ast_first(source);
-	ast* aargs = ast_second(source);
+	ast* atype_args = ast_second(source);
+	ast* aargs = ast_at(source, 2);
 	il_factor_call* ilcall = il_factor_call_new(aname->u.string_value);
+	class_loader_ilload_type_argument(self, atype_args, ilcall->type_argument_list);
 	class_loader_ilload_argument_list(self, ilcall->argument_list, aargs);
 	return ilcall;
 }
@@ -538,10 +542,13 @@ il_factor_invoke* class_loader_ilload_invoke(class_loader* self, ast* source) {
 	assert(source->tag == ast_invoke);
 	ast* areceiver = ast_at(source, 0);
 	ast* aname = ast_at(source, 1);
-	ast* aargs = ast_at(source, 2);
+	ast* atype_args = ast_at(source, 2);
+	ast* aargs = ast_at(source, 3);
 	il_factor_invoke* ilinvoke = il_factor_invoke_new(aname->u.string_value);
 	ilinvoke->receiver = class_loader_ilload_factor(self, areceiver);
+	class_loader_ilload_type_argument(self, atype_args, ilinvoke->type_argument_list);
 	class_loader_ilload_argument_list(self, ilinvoke->argument_list, aargs);
+	class_loader_ilload_type_argument(self, atype_args, ilinvoke->type_argument_list);
 	return ilinvoke;
 }
 
@@ -549,7 +556,8 @@ il_factor_named_invoke* class_loader_ilload_named_invoke(class_loader* self, ast
 	assert(source->tag == ast_static_invoke);
 	ast* afqcn = ast_at(source, 0);
 	ast* aname = ast_at(source, 1);
-	ast* aargs = ast_at(source, 2);
+	ast* atype_args = ast_at(source, 2);
+	ast* aargs = ast_at(source, 3);
 	il_factor_named_invoke* ret = il_factor_named_invoke_new(aname->u.string_value);
 	if (afqcn->tag == ast_fqcn_class_name) {
 		ret->fqcn->fqcn->name = text_strdup(afqcn->u.string_value);
@@ -571,16 +579,20 @@ il_factor_new_instance* class_loader_ilload_new_instance(class_loader* self, ast
 il_factor_field_access* class_loader_ilload_field_access(class_loader* self, ast* source) {
 	ast* afact = ast_first(source);
 	ast* aident = ast_second(source);
+	ast* atype_args = ast_at(source, 2);
 	il_factor_field_access* ret = il_factor_field_access_new(aident->u.string_value);
 	ret->fact = class_loader_ilload_factor(self, afact);
+	class_loader_ilload_type_argument(self, atype_args, ret->type_argument_list);
 	return ret;
 }
 
 il_factor_static_field_access* class_loader_ilload_static_field_access(class_loader* self, ast* source) {
 	ast* afqcn = ast_first(source);
 	ast* aident = ast_second(source);
+	ast* atype_args = ast_at(source, 2);
 	il_factor_static_field_access* ret = il_factor_static_field_access_new(aident->u.string_value);
 	class_loader_ilload_generic(afqcn, ret->fqcn);
+	class_loader_ilload_type_argument(self, atype_args, ret->type_argument_list);
 	return ret;
 }
 
@@ -613,8 +625,35 @@ il_factor_dec * class_loader_ilload_dec(class_loader * self, ast * source) {
 	return ret;
 }
 
+il_factor_op_call* class_loader_ilload_op_call(class_loader* self, ast* source) {
+	assert(source->tag == ast_op_call);
+	il_factor_op_call* ret = il_factor_op_call_new();
+	ast* afact = ast_first(source);
+	ast* aargs = ast_second(source);
+	//ast* aargs = ast_at(source, 2);
+	ret->receiver = class_loader_ilload_factorImpl(self, afact);
+	//class_loader_ilload_type_argument(self, atype_args, ret->type_argument_list);
+	class_loader_ilload_argument_list(self, ret->argument_list, aargs);
+	il_factor_dump(ret->receiver, 0);
+	return ret;
+}
+
+il_factor_name_reference* class_loader_ilload_name_reference(class_loader* self, ast* source) {
+	ast* atypename = ast_first(source);
+	ast* afqcn = ast_first(atypename);
+	ast* atype_args = ast_second(atypename);
+	il_factor_name_reference* ilnameref = il_factor_name_reference_new();
+	class_loader_ilload_generic(afqcn, ilnameref->fqcn);
+	class_loader_ilload_type_argument(self, atype_args, ilnameref->type_argument_list);
+	return ilnameref;
+}
+
 void class_loader_ilload_generic(ast* fqcn, generic_cache* dest) {
-	assert(fqcn->tag == ast_typename);
+	//assert(fqcn->tag == ast_typename);
+	if(fqcn->tag == ast_fqcn_class_name) {
+		dest->fqcn->name = text_strdup(fqcn->u.string_value);
+		return;
+	}
 	class_loader_ilload_generic_impl(fqcn, dest);
 	fqcn_cache* body = dest->fqcn;
 	//FIXME: Int のような文字パースで失敗してしまうので対策
@@ -702,7 +741,12 @@ static il_factor* class_loader_ilload_factorImpl(class_loader* self, ast* source
 	} else if (source->tag == ast_static_invoke) {
 		return il_factor_wrap_named_invoke(class_loader_ilload_named_invoke(self, source));
 	} else if (source->tag == ast_variable) {
-		return il_factor_wrap_variable(il_factor_variable_new(source->u.string_value));
+		il_factor_variable* ilvar = il_factor_variable_new(source->u.string_value);
+		if(source->child_count > 0) {
+			ast* atype_args = ast_first(source);
+			class_loader_ilload_type_argument(self, atype_args, ilvar->type_argument_list);
+		}
+		return il_factor_wrap_variable(ilvar);
 		//operator(+ - * / %)
 	} else if (source->tag == ast_add) {
 		return il_factor_wrap_binary(class_loader_ilload_binary(self, source, ilbinary_add));
@@ -789,6 +833,10 @@ static il_factor* class_loader_ilload_factorImpl(class_loader* self, ast* source
 	} else if (source->tag == ast_pre_dec ||
 			   source->tag == ast_post_dec) {
 		return il_factor_wrap_dec(class_loader_ilload_dec(self, source));
+	} else if(source->tag == ast_op_call) {
+		return il_factor_wrap_op_call(class_loader_ilload_op_call(self, source));
+	} else if(source->tag == ast_name_reference) {
+		return il_factor_wrap_name_reference(class_loader_ilload_name_reference(self, source));
 	}
 	return NULL;
 }
@@ -919,4 +967,21 @@ static void class_loader_ilload_type_parameter_rule(class_loader* self, ast* sou
 			vector_push(dest, rule);
 		}
 	}
+}
+
+static void class_loader_ilload_type_argument(class_loader* self, ast* atype_args, vector* dest) {
+	if(ast_is_blank(atype_args)) {
+		return;
+	}
+	if(atype_args->tag == ast_typename_list) {
+		for(int i=0; i<atype_args->child_count; i++) {
+			ast* e = ast_at(atype_args, i);
+			class_loader_ilload_type_argument(self, e, dest);
+		}
+	} else if(atype_args->tag == ast_typename) {
+		il_type_argument* iltype_arg = il_type_argument_new();
+		vector_push(dest, iltype_arg);
+		class_loader_ilload_generic(atype_args, iltype_arg->gcache);
+//		class_loader_ilload_generic(atype_args)
+	} else assert(false);
 }

@@ -16,5 +16,5 @@ static void sg_int_nativeInit(method* parent, vm* vmc, enviroment* env) {
 	object* self = vector_at(vmc->ref_stack, 0);
 
 	self->u.int_ = i->u.int_;
-	self->type = object_int;
+	self->tag = object_int;
 }

@@ -134,8 +134,8 @@ void class_loader_sgload_enum(class_loader * self, il_type * iltype, namespace_ 
 		f->modifier = modifier_static;
 		f->access = access_public;
 		f->static_value = object_int_new(i);
-		f->type = CL_INT;
-		f->parent = tp;
+		f->gtype = CL_INT->generic_self;
+		f->gparent = tp->generic_self;
 		class_add_field(cls, f);
 	}
 }
@@ -150,44 +150,52 @@ void class_loader_sgload_class(class_loader* self, il_type* iltype, namespace_* 
 	//FIXME:あとで親関数から渡すようにする
 	il_load_cache* cache = il_load_cache_new();
 	vector_push(cache->namespace_vec, parent);
+	type_init_generic(tp, iltype->u.class_->type_parameter_list->length);
 	if (tp == NULL) {
 		cls = class_new(iltype->u.class_->name);
+		tp = type_wrap_class(cls);
+		vector_push(cache->type_vec, tp);
+		type_init_generic(tp, iltype->u.class_->type_parameter_list->length);
+		type_parameter_list_dup(iltype->u.class_->type_parameter_list, cls->type_parameter_list, cache);
 		for (int i = 0; i < iltype->u.class_->extend_list->length; i++) {
 			generic_cache* e = (generic_cache*)vector_at(iltype->u.class_->extend_list, i);
 			//最初の一つはクラスでもインターフェースでもよい
 			if (i == 0) {
-				class_* c = generic_cache_class(e, parent);
-				if (c != NULL) {
-					cls->super_class = c;
-				} else {
-					//クラスではなかったのでインターフェースとして扱う
-					interface_* inter = generic_cache_interface(e, parent);
-					assert(inter != NULL);
-					vector_push(cls->impl_list, inter);
+				generic_type* gtp = generic_cache_gtype(e, parent, cache);
+				assert(gtp != NULL);
+				if (gtp->core_type->tag == type_class) {
+					cls->super_class = gtp;
+				} else if (gtp->core_type->tag == type_interface) {
+					vector_push(cls->impl_list, gtp);
 				}
 			//二つ目以降はインターフェースのみ
 			} else {
-				interface_* inter = generic_cache_interface(e, parent);
-				assert(inter != NULL);
-				vector_push(cls->impl_list, inter);
+				generic_type* gtp = generic_cache_gtype(e, parent, cache);
+				vector_push(cls->impl_list, gtp);
+				assert(gtp->core_type->tag == type_interface);
 			}
 		}
 		//場所を設定
+		if (!strcmp(cls->name, "ArrayIterator")) {
+			int a = 0;
+		}
 		cls->location = parent;
-		tp = type_wrap_class(cls);
 		namespace_add_type(parent, tp);
-		//仮型引数を与える
-		vector_push(cache->type_vec, tp);
-		type_parameter_list_dup(iltype->u.class_->type_parameter_list, cls->type_parameter_list, cache);
 	} else {
+		if (!strcmp(tp->u.class_->name, "ArrayIterator")) {
+			int a = 0;
+		}
 		vector_push(cache->type_vec, tp);
 		cls = tp->u.class_;
+		//もしネイティブメソッドのために
+		//既に登録されていたならここが型変数がNULLになってしまう
+		type_parameter_list_dup(iltype->u.class_->type_parameter_list, cls->type_parameter_list, cache);
 	}
 	//デフォルトで親に Object を持つように
 	class_* objClass = CL_OBJECT->u.class_;
 	if (cls != objClass) {
 		if (cls->super_class == NULL) {
-			cls->super_class = objClass;
+			cls->super_class = CL_OBJECT->generic_self;
 		}
 	}
 	logger_info(__FILE__, __LINE__, "register class %s", cls->name);
@@ -225,27 +233,31 @@ void class_loader_sgload_interface(class_loader * self, il_type * iltype, namesp
 	//NOTE:後で親関数から渡すようにする
 	il_load_cache* cache = il_load_cache_new();
 	vector_push(cache->namespace_vec, parent);
+	type_init_generic(tp, iltype->u.interface_->type_parameter_list->length);
 	if (tp == NULL) {
 		inter = interface_new(iltype->u.interface_->name);
+		tp = type_wrap_interface(inter);
+		vector_push(cache->type_vec, tp);
+		type_init_generic(tp, iltype->u.interface_->type_parameter_list->length);
+		type_parameter_list_dup(iltype->u.interface_->type_parameter_list, inter->type_parameter_list, cache);
 		for (int i = 0; i < iltype->u.interface_->extends_list->length; i++) {
 			generic_cache* e = (generic_cache*)vector_at(iltype->u.interface_->extends_list, i);
 			//インターフェースはインターフェースのみ継承
-			interface_* interI = generic_cache_interface(e, parent);
-			assert(interI != NULL);
-			vector_push(inter->impl_list, interI);
+			generic_type* gtp = generic_cache_gtype(e, parent, cache);
+			assert(gtp->core_type->tag == type_interface);
+			vector_push(inter->impl_list, gtp);
 		}
 		//場所を設定
 		inter->location = parent;
-		tp = type_wrap_interface(inter);
 		namespace_add_type(parent, tp);
-		//仮型引数を与える
-		vector_push(cache->type_vec, tp);
-		type_parameter_list_dup(iltype->u.interface_->type_parameter_list, inter->type_parameter_list, cache);
 	} else {
 		vector_push(cache->type_vec, tp);
 		inter = tp->u.interface_;
+		//もしネイティブメソッドのために
+		//既に登録されていたならここが型変数がNULLになってしまう
+		type_parameter_list_dup(iltype->u.class_->type_parameter_list, inter->type_parameter_list, cache);
 	}
-	logger_info(log_info, __FILE__, __LINE__, "register interface %s", inter->name);
+	logger_info(__FILE__, __LINE__, "register interface %s", inter->name);
 	//宣言のロードを予約
 	type_cache* tc = type_cache_init(
 		type_cache_new(),

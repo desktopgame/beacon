@@ -10,6 +10,7 @@
 #include "../env/field.h"
 #include "../env/method.h"
 #include "../env/object.h"
+#include "../env/type_impl.h"
 #include "../env/constructor.h"
 #include "../env/script_context.h"
 #include "../thread/thread.h"
@@ -21,6 +22,7 @@
 #include "../lib/signal/lang/sg_string.h"
 #include "line_range.h"
 #include "../env/heap.h"
+#include "../env/generic_type.h"
 //proto
 static int stack_topi(vm* self);
 static double stack_topd(vm* self);
@@ -300,7 +302,7 @@ void vm_resume(vm * self, enviroment * env, int pos) {
 				int absClsIndex = (int)enviroment_source_at(env, ++i);
 				type* tp = (type*)vector_at(ctx->type_vec, absClsIndex);
 				object* v = (object*)vector_pop(self->value_stack);
-				int dist = type_distance(v->type, tp);
+				int dist = type_distance(v->gtype->core_type, tp);
 				object* b = object_bool_get(dist >= 0);
 				vector_push(self->value_stack, b);
 				break;
@@ -349,6 +351,8 @@ void vm_resume(vm * self, enviroment * env, int pos) {
 					object* o = (object*)e;
 					vector_push(sub->value_stack, e);
 				}
+				text_putindent(self->level);
+				text_printfln("[ %s#new ]", type_name(ctor->gparent->core_type));
 				enviroment_op_dump(ctor->env, sub->level);
 				//opcode_buf_dump(ctor->env->buf, sub->level);
 				vm_execute(sub, ctor->env);
@@ -499,34 +503,13 @@ void vm_resume(vm * self, enviroment * env, int pos) {
 				break;
 			}
 			//invoke
-			case op_lookup:
-			{
-				int absClsIndex = (int)enviroment_source_at(env, ++i);
-				object* o = (object*)vector_top(self->value_stack);
-				assert(o->type != CL_NULL);
-				type* tp = (type*)vector_at(ctx->type_vec, absClsIndex);
-				if (tp == CL_INT ||
-					tp == CL_DOUBLE ||
-					tp == CL_CHAR ||
-					tp == CL_BOOL) {
-					vector_push(
-						self->value_stack,
-						object_copy_s(
-							vector_pop(self->value_stack)
-							)
-						);
-				} else {
-					o->vptr = vtable_lookup(o->vptr, type_vtable(tp));
-				}
-				break;
-			}
 			case op_invokeinterface:
 			{
 				int absClassIndex = (int)enviroment_source_at(env, ++i);
 				int methodIndex = (int)enviroment_source_at(env, ++i);
 				type* tp = vector_at(ctx->type_vec, absClassIndex);
 				object* o = (object*)vector_top(self->value_stack);
-				method* m = class_get_impl_method(o->type->u.class_, tp, methodIndex);
+				method* m = class_get_impl_method(o->gtype->core_type->u.class_, tp, methodIndex);
 				method_execute(m, self, env);
 				break;
 			}

@@ -11,7 +11,7 @@ struct vm;
  * コンストラクタを表す構造体.
  */
 typedef struct constructor {
-	struct type* parent;
+	struct generic_type* gparent;
 	struct enviroment* env;
 	vector* parameter_list;
 	access_level access;

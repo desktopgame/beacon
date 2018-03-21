@@ -6,7 +6,7 @@ namespace signal.lang {
 	class Exception {
 		private:
 		String message;
-		Array stackTrace;
+		Array<StackTraceElement> stackTrace;
 
 		public:
 		ctor new(String message) {
@@ -21,7 +21,7 @@ namespace signal.lang {
 			Console.writeLine(this.message);
 			Int index = 0;
 			while(index < this.stackTrace.length()) {
-				var st = this.stackTrace.get(index) as StackTraceElement;
+				var st = this.stackTrace.get(index);
 				Console.write("    ");
 				Console.write(st.getLineIndex());
 				Console.write(": ");

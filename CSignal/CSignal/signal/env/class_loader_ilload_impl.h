@@ -379,6 +379,22 @@ il_factor_inc* class_loader_ilload_inc(class_loader* self, ast* source);
 il_factor_dec* class_loader_ilload_dec(class_loader* self, ast* source);
 
 /**
+ * 関数呼び出し演算子を表す要素を作成します.
+ * @param self
+ * @param source
+ * @return
+ */
+il_factor_op_call* class_loader_ilload_op_call(class_loader* self, ast* source);
+
+/**
+ * 名前参照を表す要素を作成します.
+ * @param self
+ * @param source
+ * @return
+ */
+il_factor_name_reference* class_loader_ilload_name_reference(class_loader* self, ast* source);
+
+/**
  * Hoge::Foo::Classのような修飾名を表すASTを解析して
  * 引数destに格納します.
  * @param fqcn

@@ -11,7 +11,7 @@ namespace signal.lang {
 		public:
 		ctor new() {
 			this.length = 0
-			this.capacity = 2
+			this.capacity = 16
 			this.proxy = new Array(this.capacity)
 		}
 	
@@ -38,15 +38,24 @@ namespace signal.lang {
 		}
 
 		def set(Int index, Object a) -> Void {
+			this.checkRange(index);
 			this.proxy.set(index, a);
 		}
 
 		def get(Int index) -> Object {
+			this.checkRange(index);
 			return this.proxy.get(index);
 		}
 
 		def length() -> Int {
 			return this.length
+		}
+
+		private:
+		def checkRange(Int index) -> Void {
+			if(index < 0 || index >= this.length) {
+				throw new Exception("Out Of Range")
+			}
 		}
 	}
 }

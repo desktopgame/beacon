@@ -1,35 +1,13 @@
-namespace signal.lang {
-	class Object {
-		public:
-		ctor new() {
-		}
+import "Object"
+import "Array"
+import "Int"
+import "Double"
+import "Char"
+import "String"
+import "Bool"
+import "Null"
+import "Void"
+import "Console"
 
-		public:
-		def toString() -> String {
-			return this.nativeToString();
-		}
-
-		private:
-		native def nativeToString() -> String;
-	}
-	class Console {
-		public:
-		static native def writeLine(String str) -> Void;
-
-		static native def writeLine(Int i) -> Void;
-
-		static native def write(String str) -> Void;
-
-		static native def read() -> Char;
-
-		static native def readLine() -> String;
-	}
-	class Int {
-		public:
-		def p() -> Void {
-			Console.writeLine("Foo!");
-		}
-
-		
-	}
-}
+import "Exception"
+import "StackTraceElement"

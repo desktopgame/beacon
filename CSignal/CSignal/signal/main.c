@@ -1,6 +1,7 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <string.h>
+#include "il/il_print_layout.h"
 #include "util/cmd.h"
 #include "util/io.h"
 #include "util/text.h"
@@ -9,14 +10,17 @@
 #include "util/string_buffer.h"
 #include "util/logger.h"
 #include "util/mem.h"
+#include "util/hash_table.h"
 #include "util/bench_mark.h"
 
 void _start(int argc, char* argv[]) {
+	il_print_layout_hide(true);
+
 	text_set_trace(true);
 	mem_set_trace(true);
-	//mem_break(4061);
+	//mem_break(311);
 	logger_open();
-	logger_set_enabled(false);
+	logger_set_enabled(!true);
 	script_context_open();
 	//cmd_dump(argc, argv);
 

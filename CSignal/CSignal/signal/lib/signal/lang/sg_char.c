@@ -17,5 +17,5 @@ static void sg_char_nativeInit(method* parent, vm* vmc, enviroment* env) {
 	object* self = vector_at(vmc->ref_stack, 0);
 
 	self->u.char_ = ch->u.char_;
-	self->type = object_char;
+	self->tag = object_char;
 }

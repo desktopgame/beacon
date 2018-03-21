@@ -29,6 +29,7 @@ void il_stmt_return_generate(il_stmt_return * self, enviroment * env, il_load_ca
 }
 
 void il_stmt_return_load(il_stmt_return * self, enviroment * env, il_load_cache* cache, il_ehandler * eh) {
+	il_factor_load(self->fact, env, cache, eh);
 }
 
 void il_stmt_return_delete(il_stmt_return * self) {

@@ -1,0 +1,23 @@
+import "Iterator"
+
+namespace signal.lang {
+	class ObjectIterator : Iterator {
+		private:
+		Object source;
+
+		public:
+		ctor new(Object source) {
+			this.source = source
+		}
+
+		def hasNext() -> Bool {
+			return source != null
+		}
+
+		def next() -> Void {
+			var ret = source
+			this.source = null
+			return ret
+		}
+	}
+}

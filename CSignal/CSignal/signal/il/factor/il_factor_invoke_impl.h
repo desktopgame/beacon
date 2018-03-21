@@ -4,6 +4,8 @@
 #include "../../util/vector.h"
 #include "../il_factor_interface.h"
 struct method;
+struct type;
+struct generic_type;
 /**
  * メソッド呼び出しを表す要素.
  */
@@ -11,7 +13,10 @@ typedef struct il_factor_invoke {
 	char* name;
 	il_factor* receiver;
 	vector* argument_list;
+	vector* type_argument_list;
 	struct method* m;
+	struct type* static_receiver;
+	struct generic_type* return_type;
 	int method_index;
 } il_factor_invoke;
 
@@ -60,7 +65,7 @@ void il_factor_invoke_load(il_factor_invoke* self, struct enviroment* env, il_lo
  * @param cache
  * @return
  */
-struct type* il_factor_invoke_eval(il_factor_invoke* self, struct enviroment* env, il_load_cache* cache);
+generic_type* il_factor_invoke_eval(il_factor_invoke* self, struct enviroment* env, il_load_cache* cache);
 
 /**
  * メソッド呼び出しを開放します.

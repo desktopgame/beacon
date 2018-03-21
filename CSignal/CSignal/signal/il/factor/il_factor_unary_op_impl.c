@@ -67,11 +67,11 @@ void il_factor_unary_op_generate(il_factor_unary_op * self, enviroment* env, il_
 void il_factor_unary_op_load(il_factor_unary_op * self, enviroment * env, il_load_cache* cache, il_ehandler * eh) {
 }
 
-type * il_factor_unary_op_eval(il_factor_unary_op * self, enviroment * env, il_load_cache* cache) {
+generic_type* il_factor_unary_op_eval(il_factor_unary_op * self, enviroment * env, il_load_cache* cache) {
 	if (self->type == ilunary_neg) {
 		return il_factor_eval(self->a, env, cache);
 	} else if (self->type == ilunary_not) {
-		return CL_BOOL;
+		return CL_BOOL->generic_self;
 	}
 	return NULL;
 }

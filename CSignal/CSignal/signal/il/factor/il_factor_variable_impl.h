@@ -3,9 +3,11 @@
 #define SIGNAL_IL_IL_FACTOR_VARIABLE_H
 #include "../il_factor_interface.h"
 #include "../../env/fqcn_cache.h"
+#include "../../env/generic_type.h"
+#include "../../util/vector.h"
 #include <stdbool.h>
 //struct opcode_buf;
-struct type;
+struct generic_type;
 struct field;
 /**
  * 変数を表す要素.
@@ -14,9 +16,13 @@ typedef struct il_factor_variable {
 	char* name;
 	int index;
 	union {
-		struct type* type;
+		struct generic_type* gtype;
 		struct field* f;
 	} u;
+	//構文規則のために、フィールドアクセスが
+	//実型引数をもつ。
+	//foo<Int>()
+	vector* type_argument_list;
 	bool fieldAccess;
 } il_factor_variable;
 
@@ -65,7 +71,7 @@ void il_factor_variable_load(il_factor_variable* self, struct enviroment* env, i
  * @param cache
  * @return
  */
-struct type* il_factor_variable_eval(il_factor_variable* self, struct enviroment* env, il_load_cache* cache);
+generic_type* il_factor_variable_eval(il_factor_variable* self, struct enviroment* env, il_load_cache* cache);
 
 /**
  * 変数を開放します.

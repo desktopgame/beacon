@@ -23,13 +23,13 @@ void il_stmt_variable_decl_dump(il_stmt_variable_decl * self, int depth) {
 	text_printf("variable decl %s", self->name);
 	text_putline();
 
-	fqcn_cache_dump(self->fqcn, depth + 1);
+	generic_cache_dump(self->fqcn, depth + 1);
 }
 
 void il_stmt_variable_decl_generate(il_stmt_variable_decl * self, enviroment * env, il_load_cache* cache) {
 	symbol_table_entry(
 		env->sym_table,
-		generic_cache_type(self->fqcn, (namespace_*)vector_top(cache->namespace_vec)),
+		generic_cache_gtype(self->fqcn, (namespace_*)vector_top(cache->namespace_vec), cache),
 		self->name
 	);
 }

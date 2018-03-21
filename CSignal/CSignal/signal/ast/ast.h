@@ -48,6 +48,8 @@ typedef enum ast_tag {
 	ast_pre_dec,
 	ast_post_inc,
 	ast_post_dec,
+	//() (...)
+	ast_op_call,
 	//int double
 	ast_int,
 	ast_double,
@@ -138,7 +140,7 @@ typedef enum ast_tag {
 	//
 	ast_proc,
 	ast_stmt_list,
-	
+	ast_name_reference,
 	ast_typename,
 	ast_typename_list,
 	ast_stmt_variable_decl,
@@ -205,9 +207,16 @@ void ast_compile_entry(ast* self);
 
 /**
  * 指定のタグで子要素を持たない AST を作成します.
- * @param tag
  */
-ast* ast_new(ast_tag tag);
+#define ast_new(tag) (ast_malloc(tag, __FILE__, __LINE__))
+
+/**
+ * 指定のタグで子要素を持たない AST を作成します.
+ * @param tag
+ * @param filename
+ * @param lineno
+ */
+ast* ast_malloc(ast_tag tag, const char* filename, int lineno);
 
 /**
  * 名前空間の一節(. ~~~ .)を表す要素を作成します.

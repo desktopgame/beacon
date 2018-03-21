@@ -24,6 +24,29 @@ typedef struct vector {
 } vector;
 
 /**
+ * vecの中の全ての要素を type へキャストして、 item へ代入しながら { ... } の内側を実行します.
+ * type型で、itemを事前に宣言している必要があります。
+ * <code>
+ *	vector* v = vector_new();
+ *	vector_push(v, 10);
+ *	vector_push(v, 20);
+ *	vector_push(v, 30);
+ *	int item = 0;
+ *	VFOREACH(index, int, item, v) {
+ *		printf("hello %d %d ¥n", index, item);
+ *	}
+ * </code>
+ * @param type
+ * @param item
+ * @param vec
+ */
+#define VFOREACH(vindex, type, item, vvec) \
+	for(int vindex=0, item=(type)vector_at(vvec, vindex); \
+		vindex<(vvec->length); \
+		item=(type)vector_at(vvec, ++vindex) \
+	) \
+
+/**
  * ベクターのデリータ関数です.
  * @param item
  */
@@ -31,9 +54,15 @@ typedef void(*vector_element_deleter)(vector_item item);
 
 /**
  * ベクターを作成します.
- * @return
  */
-vector* vector_new();
+#define vector_new() (vector_malloc(__FILE__, __LINE__))
+
+/**
+ * ベクターを作成します.
+ * @param filename
+ * @param lineno
+ */
+vector* vector_malloc(const char* filename, int lineno);
 
 /**
  * 末尾に要素を追加します.

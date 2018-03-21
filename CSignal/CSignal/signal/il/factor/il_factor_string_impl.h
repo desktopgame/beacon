@@ -55,7 +55,7 @@ void il_factor_string_load(il_factor_string* self, struct enviroment* env, il_lo
  * @param cache
  * @return
  */
-struct type* il_factor_string_eval(il_factor_string* self, struct enviroment* env, il_load_cache* cache);
+generic_type* il_factor_string_eval(il_factor_string* self, struct enviroment* env, il_load_cache* cache);
 
 /**
  * 文字列を表す要素を開放します.

@@ -4,6 +4,7 @@
 #include "../../../env/constructor.h"
 #include "../../../env/exception.h"
 #include "../../../util/text.h"
+#include "../../../env/generic_type.h"
 #include <assert.h>
 
 //proto
@@ -50,7 +51,7 @@ object * sg_array_get(object * arr, int index) {
 }
 //private
 static void sg_array_nativeInit(method* parent, vm* vm, enviroment* env) {
-	type* tp = parent->parent;
+	type* tp = parent->gparent->core_type;
 	//Array#lengthを取り出す
 	int temp = 0;
 	field* lengthField = class_find_field(tp->u.class_, "length", &temp);
@@ -69,8 +70,8 @@ static void sg_array_nativeInit(method* parent, vm* vm, enviroment* env) {
 
 static void sg_array_nativeSet(method* parent, vm* vm, enviroment* env) {
 	object* self = vector_pop(vm->value_stack);
-	object* val = vector_pop(vm->value_stack);
 	object* idx = vector_pop(vm->value_stack);
+	object* val = vector_pop(vm->value_stack);
 	assert(idx->tag == object_int);
 	vector_assign(self->native_slot_vec, idx->u.int_, val);
 }
@@ -79,7 +80,7 @@ static void sg_array_nativeGet(method* parent, vm* vm, enviroment* env) {
 	object* self = vector_pop(vm->value_stack);
 	object* idx = vector_pop(vm->value_stack);
 	assert(idx->tag == object_int);
-	object* ret = vector_at(self->native_slot_vec, idx->u.int_);
+	object* ret = (object*)vector_at(self->native_slot_vec, idx->u.int_);
 	//text_printfln("array get %d", idx->u.int_);
 	vector_push(vm->value_stack, ret);
 }

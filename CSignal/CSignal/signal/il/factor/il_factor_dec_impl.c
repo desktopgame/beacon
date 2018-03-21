@@ -47,7 +47,7 @@ void il_factor_dec_load(il_factor_dec * self, enviroment * env, il_load_cache* c
 	il_factor_load(self->fact, env, cache, eh);
 }
 
-type * il_factor_dec_eval(il_factor_dec * self, enviroment * env, il_load_cache* cache) {
+generic_type* il_factor_dec_eval(il_factor_dec * self, enviroment * env, il_load_cache* cache) {
 	return il_factor_eval(self->fact, env, cache);
 }
 

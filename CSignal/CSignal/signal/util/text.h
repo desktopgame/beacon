@@ -102,6 +102,13 @@ char* text_strdup(const char* source);
 char* text_gets();
 
 /**
+ * strが空白文字だけで構成されるなら true.
+ * @param str
+ * @return
+ */
+bool text_white(const char* str);
+
+/**
  * 指定位置の文字を取り出します.
  * コンパイラごとの差分を吸収するために提供されます。
  * @param outChar
@@ -133,4 +140,10 @@ char* text_lineat(const char* src, int lineno);
  * @return 呼び出し側で開放してください.
  */
 char* text_sum(vector* v, char* join);
+
+/**
+ * stdoutの有効/無効を設定します.
+ * @param enabled
+ */
+void text_stdout_enabled(bool enabled);
 #endif // !SIGNAL_UTIL_TEXT_H

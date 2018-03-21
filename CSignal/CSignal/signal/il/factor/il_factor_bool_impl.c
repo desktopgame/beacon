@@ -31,8 +31,8 @@ void il_factor_bool_generate(il_factor_bool * self, enviroment * env, il_load_ca
 	}
 }
 
-type * il_factor_bool_eval(il_factor_bool * self, enviroment * env, il_load_cache* cache) {
-	return CL_BOOL;
+generic_type* il_factor_bool_eval(il_factor_bool * self, enviroment * env, il_load_cache* cache) {
+	return CL_BOOL->generic_self;
 }
 
 void il_factor_bool_delete(il_factor_bool * self) {

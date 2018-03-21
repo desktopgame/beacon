@@ -12,6 +12,7 @@
 #include "../util/mem.h"
 #include "../util/string_buffer.h"
 #include "../util/text.h"
+#include "../env/generic_type.h"
 
 //proto
 static void enviroment_constant_pool_delete(vector_item item);
@@ -172,7 +173,7 @@ static void enviroment_object_delete(object* obj) {
 	if (obj == NULL) {
 		return;
 	}
-	type* tp = obj->type;
+	type* tp = obj->gtype->core_type;
 	char* name = type_name(tp);
 	assert(obj->paint == paint_onexit);
 	//*
@@ -193,7 +194,7 @@ static void enviroment_object_delete(object* obj) {
 			enviroment_object_delete(e);
 		}
 	}
-	if (obj->type == sg_array_class()) {
+	if (obj->gtype == sg_array_class()->generic_self) {
 		for (int i = 0; i < obj->native_slot_vec->length; i++) {
 			object* e = (object*)vector_at(obj->native_slot_vec, i);
 			enviroment_object_delete(e);

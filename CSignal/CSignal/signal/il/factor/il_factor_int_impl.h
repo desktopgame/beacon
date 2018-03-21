@@ -56,7 +56,7 @@ void il_factor_int_load(il_factor_int* self, struct enviroment* env, il_load_cac
  * @param cache
  * @return
  */
-struct type* il_factor_int_eval(il_factor_int* self, struct enviroment* env, il_load_cache* cache);
+generic_type* il_factor_int_eval(il_factor_int* self, struct enviroment* env, il_load_cache* cache);
 
 /**
  * 整数リテラルを表す要素を開放します.

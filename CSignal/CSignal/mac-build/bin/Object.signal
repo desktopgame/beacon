@@ -1,3 +1,4 @@
+
 namespace signal.lang {
 	class Object {
 		public:

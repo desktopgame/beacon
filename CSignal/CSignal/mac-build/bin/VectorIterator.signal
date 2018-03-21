@@ -1,0 +1,20 @@
+import "Iterator"
+
+class VectorIterator : Iterator {
+	private:
+	Vector source;
+	Int offset;
+
+	public:
+	ctor new(Vector source) {
+		this.source = source;
+	}
+
+	def hasNext() -> Bool {
+		return this.offs < source.length()
+	}
+
+	def next() -> Object {
+		
+	}
+}

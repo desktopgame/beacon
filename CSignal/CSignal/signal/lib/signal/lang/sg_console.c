@@ -3,6 +3,7 @@
 #include "../../../util/text.h"
 #include "sg_string.h"
 #include <stdio.h>
+#include "../../../env/generic_type.h"
 
 //proto
 static void sg_console_writeLine(method* parent, vm* vm, enviroment* env);
@@ -30,7 +31,8 @@ static void sg_console_writeLine(method* parent, vm* vm, enviroment* env) {
 	} else if (o->tag == object_string) {
 		text_printf("%s\n", sg_string_raw(o)->text);
 	} else if (o->tag == object_ref) {
-		text_printf("%s\n", type_name(o->type));
+		generic_type_print(o->gtype);
+		text_printf("\n");
 	} else if (o->tag == object_char) {
 		text_printf("%c\n", o->u.char_);
 	} else if (o->tag == object_bool) {
@@ -47,7 +49,8 @@ static void sg_console_write(method* parent, vm* vm, enviroment* env) {
 	} else if (o->tag == object_string) {
 		text_printf("%s", sg_string_raw(o)->text);
 	} else if (o->tag == object_ref) {
-		text_printf("%s", type_name(o->type));
+		generic_type_print(o->gtype);
+		//text_printf("\n");
 	} else if (o->tag == object_char) {
 		text_printf("%c", o->u.char_);
 	} else if (o->tag == object_bool) {

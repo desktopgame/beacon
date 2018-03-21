@@ -22,8 +22,8 @@ void ast_compile_entry(ast * self) {
 	ast_push(p->root, self);
 }
 
-ast * ast_new(ast_tag tag) {
-	ast* ret = (ast*)MEM_MALLOC(sizeof(ast));
+ast * ast_malloc(ast_tag tag, const char* filename, int lineno) {
+	ast* ret = (ast*)mem_malloc(sizeof(ast), filename, lineno);
 	assert(ret != NULL);
 	ret->tag = tag;
 	ret->child_count = 0;

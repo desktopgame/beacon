@@ -3,15 +3,15 @@
 #define SIGNAL_ENV_FIELD_H
 #include "../ast/access_level.h"
 #include "../ast/modifier_type.h"
-struct type;
+struct generic_type;
 struct object;
 /**
  * フィールドを表す構造体.
  */
 typedef struct field {
 	char* name;
-	struct type* parent;
-	struct type* type;
+	struct generic_type* gparent;
+	struct generic_type* gtype;
 	struct object* static_value;
 	access_level access;
 	modifier_type modifier;

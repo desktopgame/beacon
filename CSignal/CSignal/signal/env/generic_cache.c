@@ -17,31 +17,51 @@ generic_cache * generic_cache_new() {
 
 generic_type * generic_cache_gtype(generic_cache * self, namespace_ * scope, il_load_cache* cache) {
 	type* core_type = generic_cache_type(self, scope);
-	generic_type* ret = generic_type_new(core_type);
 	//もし名前空間でラッピングされていなくて、
 	//なおかつ型が見つからないなら、
 	//仮想型(List<T>のT)として扱う。
 	if (self->fqcn->scope_vec->length == 0 &&
 		core_type == NULL) {
 		//読み込み中の型
+		generic_type* ret = generic_type_new(core_type);
 		type* container = (type*)vector_top(cache->type_vec);
+		ret->u.type_ = container;
 		ret->virtual_type_index = type_for_generic_index(container, self->fqcn->name);
+		//見つからなかったのでメソッドから調べる
+		if (ret->virtual_type_index == -1) {
+			method* m = (method*)vector_top(cache->method_vec);
+			ret->u.type_ = m;
+			ret->virtual_type_index = method_for_generic_index(m, self->fqcn->name);
+		}
 		//しかし、Tに対して追加の型変数を与えることはできません。
-		assert(self->type_args->length == 0 && ret->virtual_type_index != -1);
+		assert(self->type_args->length == 0);
+		assert(ret != NULL);
 		return ret;
 	}
+	//型変数がない
+	if (self->type_args->length == 0) {
+		if(core_type->tag == type_class) {
+			type_init_generic(core_type, core_type->u.class_->type_parameter_list->length);
+		} else if(core_type->tag == type_interface) {
+			type_init_generic(core_type, core_type->u.interface_->type_parameter_list->length);
+		}
+		assert(core_type->generic_self != NULL);
+		return core_type->generic_self;
+	}
+	generic_type* ret2 = generic_type_new(core_type);
 	assert(core_type->tag != type_enum);
 	for (int i = 0; i < self->type_args->length; i++) {
 		generic_cache* e = (generic_cache*)vector_at(self->type_args, i);
 		generic_type* child = generic_cache_gtype(e, scope, cache);
-		vector_push(ret->type_args_list, child);
+		generic_type_addargs(ret2, child);
 	}
 	if (core_type->tag == type_class) {
-		vector_push(core_type->u.class_->generic_instance_list, ret);
+		vector_push(core_type->u.class_->generic_instance_list, ret2);
 	} else if (core_type->tag == type_interface) {
-		vector_push(core_type->u.interface_->generic_instance_list, ret);
+		vector_push(core_type->u.interface_->generic_instance_list, ret2);
 	}
-	return ret;
+	assert(ret2 != NULL);
+	return ret2;
 }
 
 type * generic_cache_type(generic_cache * self, namespace_ * scope) {

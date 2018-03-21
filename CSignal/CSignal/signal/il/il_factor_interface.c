@@ -9,7 +9,7 @@
 #include <assert.h>
 
 void il_factor_dump(il_factor * self, int depth) {
-	text_printf("<%d> ", self->lineno);
+	il_print_layout_form(self->lineno);
 	switch (self->type) {
 		case ilfactor_int:
 			il_factor_int_dump(self->u.int_, depth);
@@ -145,6 +145,12 @@ void il_factor_generate(il_factor * self, enviroment* env, il_load_cache* cache)
 		case ilfactor_dec:
 			il_factor_dec_generate(self->u.dec_, env, cache);
 			break;
+		case ilfactor_op_call:
+			il_factor_op_call_generate(self->u.op_call_, env, cache);
+			break;
+		case ilfactor_name_reference:
+			il_factor_name_reference_generate(self->u.name_reference_, env, cache);
+			break;
 		default:
 			ERROR("ファクターを生成出来ませんでした");
 			break;
@@ -217,14 +223,17 @@ void il_factor_load(il_factor * self, enviroment * env, il_load_cache* cache, il
 		case ilfactor_dec:
 			il_factor_dec_load(self->u.dec_, env, cache, eh);
 			break;
+		case ilfactor_name_reference:
+			il_factor_name_reference_load(self->u.name_reference_, env, cache, eh);
+			break;
 		default:
 			ERROR("ファクターの型を取得出来ませんでした");
 			break;
 	}
 }
 
-type * il_factor_eval(il_factor * self, enviroment * env, il_load_cache* cache) {
-	type* ret = NULL;
+generic_type* il_factor_eval(il_factor * self, enviroment * env, il_load_cache* cache) {
+	generic_type* ret = NULL;
 	switch (self->type) {
 		case ilfactor_int:
 			ret = il_factor_int_eval(self->u.int_, env, cache);
@@ -288,6 +297,12 @@ type * il_factor_eval(il_factor * self, enviroment * env, il_load_cache* cache) 
 			break;
 		case ilfactor_dec:
 			ret = il_factor_dec_eval(self->u.dec_, env, cache);
+			break;
+		case ilfactor_op_call:
+			ret = il_factor_op_call_eval(self->u.op_call_, env, cache);
+			break;
+		case ilfactor_name_reference:
+			ret = il_factor_name_reference_eval(self->u.name_reference_, env, cache);
 			break;
 		default:
 			ERROR("ファクターの型を取得出来ませんでした");
@@ -363,6 +378,9 @@ void il_factor_delete(il_factor * self) {
 			break;
 		case ilfactor_dec:
 			il_factor_dec_delete(self->u.dec_);
+			break;
+		case ilfactor_name_reference:
+			il_factor_name_reference_delete(self->u.name_reference_);
 			break;
 		default:
 			ERROR("ファクターを開放出来ませんでした");

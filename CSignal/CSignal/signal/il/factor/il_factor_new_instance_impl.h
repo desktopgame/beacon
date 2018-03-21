@@ -13,6 +13,7 @@ struct constructor;
 typedef struct il_factor_new_instance {
 	vector* argument_list;
 	generic_cache* fqcn;
+	generic_type* instance_type;
 	struct constructor* c;
 	int constructor_index;
 } il_factor_new_instance;
@@ -61,7 +62,7 @@ void il_factor_new_instance_load(il_factor_new_instance* self, struct enviroment
  * @param cache
  * @return
  */
-struct type* il_factor_new_instance_eval(il_factor_new_instance* self, struct enviroment* env, il_load_cache* cache);
+generic_type* il_factor_new_instance_eval(il_factor_new_instance* self, struct enviroment* env, il_load_cache* cache);
 
 /**
  * コンストラクタの呼び出しを表す要素を開放します.

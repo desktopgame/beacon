@@ -35,8 +35,8 @@ void il_factor_double_generate(il_factor_double * self, enviroment* env, il_load
 void il_factor_double_load(il_factor_double * self, enviroment * env, il_load_cache* cache, il_ehandler * eh) {
 }
 
-type * il_factor_double_eval(il_factor_double * self, enviroment * env, il_load_cache* cache) {
-	return CL_DOUBLE;
+generic_type* il_factor_double_eval(il_factor_double * self, enviroment * env, il_load_cache* cache) {
+	return CL_DOUBLE->generic_self;
 }
 
 void il_factor_double_delete(il_factor_double * self) {

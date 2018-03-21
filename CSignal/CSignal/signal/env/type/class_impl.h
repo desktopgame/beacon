@@ -19,6 +19,7 @@ struct object;
 struct field;
 struct method;
 struct constructor;
+struct generic_type;
 /**
  * クラスを表す構造体です.
  */
@@ -26,7 +27,7 @@ typedef struct class_ {
 	type* parent;
 	char* name;
 	namespace_* location;
-	struct class_* super_class;
+	struct generic_type* super_class;
 	vector* impl_list;
 	vector* field_list;
 	vector* sfield_list;

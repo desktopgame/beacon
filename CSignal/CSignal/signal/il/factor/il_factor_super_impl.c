@@ -19,10 +19,10 @@ void il_factor_super_generate(il_factor_super * self, enviroment * env, il_load_
 void il_factor_super_load(il_factor_super * self, enviroment * env, il_load_cache* cache, il_ehandler * eh) {
 }
 
-type * il_factor_super_eval(il_factor_super * self, enviroment * env, il_load_cache* cache) {
+generic_type* il_factor_super_eval(il_factor_super * self, enviroment * env, il_load_cache* cache) {
 	type* t = ((type*)vector_top(cache->type_vec));
 	assert(t->tag == type_class);
-	return t->u.class_->super_class;
+	return t->u.class_->super_class->core_type->u.class_->parent->generic_self;
 }
 
 void il_factor_super_delete(il_factor_super * self) {

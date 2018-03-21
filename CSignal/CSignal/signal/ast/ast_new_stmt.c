@@ -1,7 +1,7 @@
 #include "ast_new_stmt.h"
 
-ast * ast_new_stmt(ast * stmt) {
-	ast* ret = ast_new(ast_stmt);
+ast * ast_malloc_stmt(ast * stmt, const char* filename, int lineno) {
+	ast* ret = ast_malloc(ast_stmt, filename, lineno);
 	ast_push(ret, stmt);
 	return ret;
 }
@@ -137,8 +137,8 @@ ast * ast_new_fqcn(ast * part_list, char * class_name) {
 	return ret;
 }
 
-ast * ast_new_fqcn_part(char * name) {
-	ast* ret = ast_new(ast_fqcn_class_name);
+ast* ast_malloc_fqcn_part(char* name, const char* filename, int lineno) {
+	ast* ret = ast_malloc(ast_fqcn_class_name, filename, lineno);
 	ret->u.string_value = name;
 	return ret;
 }

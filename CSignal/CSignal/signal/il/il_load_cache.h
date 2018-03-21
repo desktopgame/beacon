@@ -10,11 +10,15 @@
 typedef struct il_load_cache {
 	vector* namespace_vec;
 	vector* type_vec;
+	vector* method_vec;
+	vector* receiver_vec;
+	vector* type_args_vec;
 	vector* while_start_vec;
 	vector* while_end_vec;
 	bool toplevel;
 } il_load_cache;
 
+struct namespace_;
 struct class_;
 struct fqcn_cache;
 
@@ -23,6 +27,13 @@ struct fqcn_cache;
  * @return
  */
 il_load_cache* il_load_cache_new();
+
+/**
+ * 現在のスコープの名前空間を返します.
+ * @param self
+ * @return
+ */
+struct namespace_* il_load_cache_namespace(il_load_cache* self);
 
 /**
  * 現在解析中のクラスを返します.

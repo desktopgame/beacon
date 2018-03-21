@@ -8,8 +8,14 @@
 //proto
 static void string_buffer_fill_zero(string_buffer* self, int offs, int len);
 
+/*
 string_buffer * string_buffer_new() {
-	string_buffer* ret = (string_buffer*)MEM_MALLOC(sizeof(string_buffer));
+	
+}
+*/
+
+string_buffer* string_buffer_malloc(const char* filename, int lineno) {
+	string_buffer* ret = (string_buffer*)mem_malloc(sizeof(string_buffer), filename, lineno);
 	ret->length = 0;
 	ret->capacity = 16;
 	ret->text = (char*)MEM_MALLOC(sizeof(char) * 16);
@@ -45,7 +51,11 @@ void string_buffer_vappendf(string_buffer * self, const char * message, va_list 
 #define BUFF_LEN (256)
 	char block[BUFF_LEN];
 	memset(block, '\0', BUFF_LEN);
+	#if defined(_MSC_VER)
 	int res = vsprintf_s(block, BUFF_LEN, message, ap);
+	#else
+	int res = vsprintf(block, message, ap);
+	#endif
 	assert(res != -1);
 	int len = strlen(block);
 	for (int i = 0; i < len; i++) {
@@ -67,7 +77,7 @@ void string_buffer_appends(string_buffer * self, const char * s) {
 
 void string_buffer_shrink(string_buffer * self) {
 	if (self->length == self->capacity) {
-		return;
+		//return;
 	}
 	if (self->length == 0) {
 		return;

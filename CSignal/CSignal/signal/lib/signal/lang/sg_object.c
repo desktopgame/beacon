@@ -22,9 +22,9 @@ static void sg_object_nativeToString(method* parent, vm* vm, enviroment* env) {
 	string_buffer* sb = string_buffer_new();
 	//参照型
 	if (self->tag == object_ref) {
-		char* name = type_name(self->type);
+		//char* name = type_name(self->type);
 		string_buffer_append(sb, '[');
-		string_buffer_appends(sb, name);
+		string_buffer_appends(sb, "Ref");
 		string_buffer_append(sb, ']');
 		string_buffer_shrink(sb);
 	//真偽型

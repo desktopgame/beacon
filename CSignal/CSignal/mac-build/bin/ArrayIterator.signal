@@ -2,23 +2,23 @@ import "Iterator"
 import "Array"
 
 namespace signal.lang {
-	class ArrayIterator : Iterator {
+	class ArrayIterator<T> : Iterator<T> {
 		private:
-		Array source;
+		Array<T> source;
 		Int offset;
 
 		public:
-		ctor new(Array source) {
+		ctor new(Array<T> source) {
 			this.source = source
 			this.offset = 0
 		}
 
 		def hasNext() -> Bool {
-			return this.offset < this.source.length()
+			return offset < source.length()
 		}
 
-		def next() -> Object {
-			var ret = this.source.get(this.offset)
+		def next() -> T {
+			var ret = source.get(offset)
 			this.offset++
 			return ret
 		}

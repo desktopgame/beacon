@@ -5,6 +5,7 @@
 #include "../env/type_impl.h"
 //#include "../env/generic_type.h"
 #include <assert.h>
+#include "../env/generic_type.h"
 
 //proto
 static void symbol_table_delete_entry(tree_item item);
@@ -16,19 +17,19 @@ symbol_table * symbol_table_new() {
 	return ret;
 }
 
-symbol_entry* symbol_table_entry(symbol_table* self, type* tp, const char * name) {
+symbol_entry* symbol_table_entry(symbol_table* self, generic_type* gtp, const char * name) {
 	tree_item data = tree_map_get(self->map, name);
 	if (data) {
 		return ((symbol_entry*)data);
 	}
 	//フィールドアクセスのために追加
-	if (tp == NULL) {
+	if (gtp == NULL) {
 		return NULL;
 	}
 	int ret = self->count;
 	symbol_entry* e = symbol_entry_new(name);
 	e->index = self->count;
-	e->type = tp;
+	e->gtype = gtp;
 	tree_map_put(self->map, name, e);
 	self->count++;
 	return e;

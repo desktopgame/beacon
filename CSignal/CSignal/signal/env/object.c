@@ -12,6 +12,7 @@
 #include "heap.h"
 #include "../lib/signal/lang/sg_array.h"
 #include "../util/logger.h"
+#include "generic_type.h"
 
 //proto
 static object* object_malloc(object_tag type);
@@ -24,7 +25,7 @@ static int gObjectCount = 0;
 object * object_int_new(int i) {
 	object* ret = object_malloc(object_int);
 	ret->u.int_ = i;
-	ret->type = CL_INT;
+	ret->gtype = CL_INT->generic_self;
 	ret->vptr = type_vtable(CL_INT);
 	return ret;
 }
@@ -32,7 +33,7 @@ object * object_int_new(int i) {
 object * object_double_new(double d) {
 	object* ret = object_malloc(object_double);
 	ret->u.double_ = d;
-	ret->type = CL_DOUBLE;
+	ret->gtype = CL_DOUBLE->generic_self;
 	ret->vptr = type_vtable(CL_DOUBLE);
 	return ret;
 }
@@ -40,7 +41,7 @@ object * object_double_new(double d) {
 object * object_char_new(char c) {
 	object* ret = object_malloc(object_char);
 	ret->u.char_ = c;
-	ret->type = CL_CHAR;
+	ret->gtype = CL_CHAR->generic_self;
 	ret->vptr = type_vtable(CL_CHAR);
 	return ret;
 }
@@ -49,14 +50,14 @@ object * object_string_new(const char * s) {
 	object* ret = object_malloc(object_string);
 	//ret->u.string_ = s;
 	ret->u.field_vec = vector_new();
-	ret->type = CL_STRING;
+	ret->gtype = CL_STRING->generic_self;
 	ret->vptr = type_vtable(CL_STRING);
 
 	//配列を生成
 	object* arr = object_ref_new();
 	type* arrType = sg_array_class();
 	type* strType = namespace_get_type(namespace_lang(), "String");
-	arr->type = arrType;
+	arr->gtype = arrType->generic_self;
 	arr->vptr = type_vtable(arrType);
 	//ボックス化
 	char* itr = s;
@@ -97,7 +98,7 @@ object * object_get_true() {
 	if (gObjectTrue == NULL) {
 		gObjectTrue = object_malloc(object_bool);
 		gObjectTrue->u.bool_ = !false;
-		gObjectTrue->type = CL_BOOL;
+		gObjectTrue->gtype = CL_BOOL->generic_self;
 	}
 	return gObjectTrue;
 }
@@ -106,7 +107,7 @@ object * object_get_false() {
 	if (gObjectFalse == NULL) {
 		gObjectFalse = object_malloc(object_bool);
 		gObjectFalse->u.bool_ = false;
-		gObjectFalse->type = CL_BOOL;
+		gObjectFalse->gtype = CL_BOOL->generic_self;
 	}
 	return gObjectFalse;
 }
@@ -114,7 +115,7 @@ object * object_get_false() {
 object * object_get_null() {
 	if (gObjectNull == NULL) {
 		gObjectNull = object_malloc(object_null);
-		gObjectNull->type = CL_NULL;
+		gObjectNull->gtype = CL_NULL->generic_self;
 	}
 	return gObjectNull;
 }
@@ -177,7 +178,7 @@ void object_markall(object * self) {
 	//配列型ならスロットも全てマーク
 	type* arrayType = sg_array_class();
 	if (self->tag == object_ref &&
-		self->type == arrayType) {
+		self->gtype == arrayType->generic_self) {
 		for (int i = 0; i < self->native_slot_vec->length; i++) {
 			object* e = (object*)vector_at(self->native_slot_vec, i);
 			object_markall(e);
@@ -202,7 +203,8 @@ void object_print(object * self) {
 	} else if (self->tag == object_null) {
 		text_printf("Ref: Null");
 	} else if (self->tag == object_ref) {
-		text_printf("Ref: %s", type_name(self->type));
+		text_printf("Ref: ");
+		generic_type_print(self->gtype);
 	}
 }
 
@@ -225,7 +227,7 @@ void object_delete(object * self) {
 //private
 static object* object_malloc(object_tag type) {
 	object* ret = (object*)MEM_MALLOC(sizeof(object));
-	ret->type = NULL;
+	ret->gtype = NULL;
 	ret->paint = paint_unmarked;
 	ret->tag = type;
 	ret->vptr = NULL;

@@ -7,7 +7,7 @@
 #include "../ast/access_level.h"
 #include "../ast/modifier_type.h"
 #include <stdbool.h>
-struct type;
+struct generic_type;
 struct vm;
 struct enviroment;
 
@@ -27,8 +27,8 @@ typedef struct method {
 	char* name;
 	method_type type;
 	//struct class_* decleared_type;
-	struct type* parent;
-	struct type* return_type;
+	struct generic_type* gparent;
+	struct generic_type* return_gtype;
 	vector* parameter_list;
 	vector* type_parameter_list;
 	access_level access;
@@ -65,11 +65,18 @@ void method_dump(method* self, int depth);
  * メソッドa とb が完全に等価である場合に true を返します.
  * もしくは戻り値がサブクラス型でオーバライドされている場合でも true です。
  * @see http://www.ne.jp/asahi/hishidama/home/tech/java/covariant.html
- * @param a
- * @param b
+ * @param superM
+ * @param subM
  * @return
  */
-bool method_equal(method* a, method* b);
+bool method_override(method* superM, method* subM);
+
+/**
+ * @param self
+ * @param name
+ * @return
+ */
+int method_for_generic_index(method* self, const char* name);
 
 /**
  * メソッドを開放します.

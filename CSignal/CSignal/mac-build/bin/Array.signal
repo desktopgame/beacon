@@ -5,59 +5,51 @@ import "ArrayIterator"
 
 namespace signal.lang {
 	/**
-	 * ”z—ñ‚ğ•\Œ»‚·‚éƒNƒ‰ƒX‚Å‚·.
-	 * —v‘f‚Í signal::lang::Object ‚Åˆµ‚í‚ê‚Ü‚·B
+	 * ï¿½zï¿½ï¿½ï¿½\ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Nï¿½ï¿½ï¿½Xï¿½Å‚ï¿½.
+	 * ï¿½vï¿½fï¿½ï¿½ signal::lang::Object ï¿½Åˆï¿½ï¿½ï¿½ï¿½Ü‚ï¿½ï¿½B
 	 */
-	class Array : Iterable {
+	class Array<T> : Iterable<T> {
 		private:
 		Int length;
 
 		public:
 		ctor new(Int length) {
 			this.length = length;
-			this.nativeInit();
+			nativeInit();
 		}
 
 		def length() -> Int {
 			return length;
 		}
 
-		def set(Int index, Object v) -> Void {
-			this.checkRange(index);
-			this.nativeSet(index, v);
+		def set(Int index, T v) -> Void {
+			checkRange(index);
+			nativeSet(index, v);
 		}
 
-		def sub(Int offs, Int len) -> Array {
-			var range = new Array(len);
+		def sub(Int offs, Int len) -> Array<T> {
+			var range = new Array<T>(len);
 			var ptr = offs;
 
 			while(ptr < offs + len) {
 				var a = ptr-offs;
-				range.set(a, this.get(ptr));
+				range.set(a, get(ptr));
 				ptr++;
 			}
 			return range;
 		}
 
-		def get(Int index) -> Object {
-			this.checkRange(index);
-			return this.nativeGet(index);
+		def get(Int index) -> T {
+			checkRange(index);
+			return nativeGet(index) as T;
 		}
 
-		static def copy(Array src, Int srcOffset, Array dst, Int dstOffset, Int length) -> Void {
+		static def copy<T>(Array<T> src, Int srcOffset, Array<T> dst, Int dstOffset, Int length) -> Void {
 			Array.nativeCopy(src, srcOffset, dst, dstOffset, length);
 		}
 
-		//Ä‹AŠÖ”‚ÌƒeƒXƒg
-		def test(Int a, Int b) -> Int {
-			if(b <= 0) {
-				return a;
-			}
-			return this.test(a + b, b - 1);
-		}
-
-		def iterate() -> Iterator {
-			return new ArrayIterator(this)
+		def iterate() -> Iterator<T> {
+			return new ArrayIterator<T>(this)
 		}
 		
 		private:

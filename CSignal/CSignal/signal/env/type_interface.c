@@ -4,6 +4,8 @@
 #include "field.h"
 #include "method.h"
 #include "type_parameter.h"
+#include "generic_type.h"
+#include "../util/text.h"
 #include <assert.h>
 #include <string.h>
 
@@ -12,7 +14,24 @@ type * type_new() {
 	ret->tag = type_class;
 	ret->location = NULL;
 	ret->absolute_index = -1;
+	ret->generic_self = NULL;
 	return ret;
+}
+
+generic_type* type_init_generic(type* self, int counts) {
+	if (self == NULL) {
+		return NULL;
+	}
+	if (self->generic_self == NULL) {
+		self->generic_self = generic_type_new(self);
+		for (int i = 0; i < counts; i++) {
+			generic_type* arg = generic_type_new(NULL);
+			arg->virtual_type_index = i;
+			generic_type_addargs(self->generic_self, arg);
+		}
+		self->generic_self->ref_count = 1;
+	}
+	return self->generic_self;
 }
 
 char * type_name(type * self) {
@@ -39,12 +58,18 @@ void type_add_method(type* self, method * m) {
 }
 
 method * type_find_method(type * self, const char * name, vector * args, enviroment * env, il_load_cache* cache, int * outIndex) {
+	assert(self != NULL);
 	if (self->tag == type_class) {
 		return class_find_method(self->u.class_, name, args, env, cache, outIndex);
 	} else if (self->tag == type_interface) {
 		return interface_find_method(self->u.interface_, name, args, env, cache, outIndex);
 	}
 	return NULL;
+}
+
+method* type_find_smethod(type* self, const char* name, vector* args, struct enviroment* env, il_load_cache* cache, int* outIndex) {
+	assert(self->tag == type_class);
+	return class_find_smethod(self->u.class_, name, args, env, cache, outIndex);
 }
 
 vtable * type_vtable(type * self) {
@@ -78,6 +103,8 @@ int type_distance(type * a, type * b) {
 }
 
 bool type_castable(type * self, type * other) {
+	assert(self != NULL);
+	assert(other != NULL);
 	if (self->tag != other->tag) {
 		return false;
 	}
@@ -109,7 +136,52 @@ int type_for_generic_index(type * self, char * name) {
 			break;
 		}
 	}
+	if (ret == -1) {
+		int a = 0;
+	}
 	return ret;
+}
+
+generic_type * type_find_impl(type * self, type * a) {
+	//selfがクラスなら
+	if (self->tag == type_class) {
+
+		class_* ptr = self->u.class_;
+		while (ptr != NULL) {
+			if (a->tag == type_class &&
+				ptr == a->u.class_) {
+				return ptr->parent->generic_self;
+			}
+			if (a->tag == type_interface) {
+				for (int i = 0; i < ptr->impl_list->length; i++) {
+					generic_type* inter = (generic_type*)vector_at(ptr->impl_list, i);
+					if (inter->core_type == a) {
+						return inter;
+					}
+				}
+			}
+			ptr = ptr->super_class->core_type->u.class_;
+		}
+	} else if (self->tag == type_interface) {
+		interface_* inter = self->u.interface_;
+		for (int i = 0; i < inter->impl_list->length; i++) {
+			generic_type* e = (generic_type*)vector_at(inter->impl_list, i);
+			if (e->core_type == a) {
+				return e;
+			}
+		}
+	}
+	return NULL;
+}
+
+generic_type * type_type_parameter_at(type * self, int index) {
+	assert(self->tag != type_enum);
+	if (self->tag == type_class) {
+		return (generic_type*)vector_at(self->u.class_, index);
+	} else if (self->tag == type_interface) {
+		return (generic_type*)vector_at(self->u.interface_, index);
+	}
+	return NULL;
 }
 
 void type_delete(type * self) {

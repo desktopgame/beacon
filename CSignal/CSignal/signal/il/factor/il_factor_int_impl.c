@@ -35,8 +35,8 @@ void il_factor_int_generate(il_factor_int * self, enviroment* env, il_load_cache
 void il_factor_int_load(il_factor_int * self, enviroment * env, il_load_cache* cache, il_ehandler * eh) {
 }
 
-type * il_factor_int_eval(il_factor_int * self, enviroment * env, il_load_cache* cache) {
-	return CL_INT;
+generic_type* il_factor_int_eval(il_factor_int * self, enviroment * env, il_load_cache* cache) {
+	return CL_INT->generic_self;
 }
 
 void il_factor_int_delete(il_factor_int * self) {

@@ -1,8 +1,8 @@
 import "Iterator"
 
 namespace signal.lang {
-	interface Iterable {
+	interface Iterable<T> {
 		public:
-		def iterate() -> Iterator;
+		def iterate() -> Iterator<T>;
 	}
 }

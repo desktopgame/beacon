@@ -210,8 +210,8 @@ static void update_loc() {
 <INITIAL>"super"			{ return (SUPER); }
 <INITIAL>"new"				{ return (NEW); }
 
-<INITIAL>"true"			{ return (TRUE); }
-<INITIAL>"false"		{ return (FALSE); }
+<INITIAL>"true"			{ return (TRUE_TOK); }
+<INITIAL>"false"		{ return (FALSE_TOK); }
 <INITIAL>"null"			{ return (NULL_TOK); }
 <INITIAL>"as"			{ return (AS); }
 

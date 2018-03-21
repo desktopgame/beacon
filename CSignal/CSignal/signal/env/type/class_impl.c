@@ -20,6 +20,7 @@
 #include "meta_impl.h"
 #include "../type_parameter.h"
 #include "../generic_type.h"
+#include "../generic_type.h"
 
 //http://jumble-note.blogspot.jp/2012/09/c-vacopy.html
 #ifndef va_copy
@@ -92,13 +93,13 @@ void class_alloc_fields(class_ * self, object * o) {
 		field* f = (field*)vector_at(self->field_list, i);
 		object* a = object_get_null();
 		//プリミティブ型のときはデフォルト値を入れておく
-		if (f->type == CL_INT) {
+		if (f->gtype == CL_INT->generic_self) {
 			a = object_int_new(0);
-		} else if (f->type == CL_DOUBLE) {
+		} else if (f->gtype == CL_DOUBLE->generic_self) {
 			a = object_double_new(0.0);
-		} else if (f->type == CL_BOOL) {
+		} else if (f->gtype == CL_BOOL->generic_self) {
 			a = object_bool_get(false);
-		} else if (f->type == CL_CHAR) {
+		} else if (f->gtype == CL_CHAR->generic_self) {
 			a = object_char_new('\0');
 		}
 		//静的フィールドは別の場所に確保
@@ -108,7 +109,7 @@ void class_alloc_fields(class_ * self, object * o) {
 		vector_push(o->u.field_vec, a);
 	}
 	class_create_vtable(self);
-	o->type = self->parent;
+	o->gtype = self->parent->generic_self;
 	o->vptr = self->vt;
 }
 
@@ -143,12 +144,15 @@ void class_dump(class_ * self, int depth) {
 	//親クラスがあるなら表示
 	if (self->super_class != NULL) {
 		text_putindent(depth + 1);
-		text_printf("super %s", self->super_class->name);
+		text_printf("super ");
+		text_printf("%s", type_name(self->super_class->core_type));
+//		generic_type_print(self->super_class->);
 		text_putline();
 	}
 	//実装インターフェースがあるなら表示
 	for (int i = 0; i < self->impl_list->length; i++) {
-		interface_* inter = (interface_*)vector_at(self->impl_list, i);
+		generic_type* e = (generic_type*)vector_at(self->impl_list, i);
+		interface_* inter = e->core_type->u.interface_;
 		text_putindent(depth + 1);
 		text_printf("impl %s", inter->name);
 		text_putline();
@@ -208,7 +212,7 @@ field * class_find_field_tree(class_ * self, const char * name, int * outIndex) 
 		if (f != NULL) {
 			return f;
 		}
-		pointee = pointee->super_class;
+		pointee = pointee->super_class->core_type->u.class_;
 	} while (pointee != NULL);
 	return NULL;
 }
@@ -321,7 +325,8 @@ method * class_get_impl_method(class_ * self, type * interType, int interMIndex)
 	//このクラスにおいて何番目かを調べる
 	int declIndex = -1;
 	for (int i = 0; i < self->impl_list->length; i++) {
-		interface_* inter = (interface_*)vector_at(self->impl_list, i);
+		generic_type* e = vector_at(self->impl_list, i);
+		interface_* inter = e->core_type->u.interface_;
 		if (inter == interType->u.interface_) {
 			declIndex = i;
 			break;
@@ -384,8 +389,8 @@ void class_create_vtable(class_ * self) {
 	//あるクラスを継承する場合には、
 	//重複するメソッドを上書きするように
 	} else {
-		class_create_vtable(self->super_class);
-		vtable_copy(self->super_class->vt, self->vt);
+		class_create_vtable(self->super_class->core_type->u.class_);
+		vtable_copy(self->super_class->core_type->u.class_->vt, self->vt);
 		for (int i = 0; i < self->method_list->length; i++) {
 			method* m = (method*)vector_at(self->method_list, i);
 			vtable_replace(self->vt, m);
@@ -394,7 +399,8 @@ void class_create_vtable(class_ * self) {
 	//もしインターフェースを実装しているなら、
 	//インターフェースに対応する同じ並びのメソッドテーブルも作る
 	for (int i = 0; i < self->impl_list->length; i++) {
-		interface_* inter = (interface_*)vector_at(self->impl_list, i);
+		generic_type* gtp = (generic_type*)vector_at(self->impl_list, i);
+		interface_* inter = (interface_*)gtp->core_type->u.interface_;
 		vtable* interVT = inter->vt;
 		vtable* newVT = vtable_new();
 		//そのインターフェースに定義されたテーブルの一覧
@@ -417,7 +423,10 @@ int class_count_fieldall(class_ * self) {
 	int sum = 0;
 	do {
 		sum += (pt->field_list->length);
-		pt = pt->super_class;
+		if(pt->super_class == NULL) {
+			break;
+		}
+		pt = pt->super_class->core_type->u.class_;
 	} while (pt != NULL);
 	return sum;
 }
@@ -483,21 +492,21 @@ object * class_new_rinstance(class_ * self, vm* vmc, int count, ...) {
 void class_linkall(class_ * self) {
 	for (int i = 0; i < self->field_list->length; i++) {
 		field* f = (field*)vector_at(self->field_list, i);
-		f->parent = self;
+		f->gparent = self->parent->generic_self;
 	}
 	for (int i = 0; i < self->method_list->length; i++) {
 		method* m = (method*)vector_at(self->method_list, i);
-		m->parent = self;
+		m->gparent = self->parent->generic_self;
 	}
 	for (int i = 0; i < self->constructor_list->length; i++) {
 		constructor* ctor = (constructor*)vector_at(self->constructor_list, i);
-		ctor->parent = self;
+		ctor->gparent = self->parent->generic_self;
 	}
 }
 
 void class_unlink(class_ * self) {
 	if (self->super_class != NULL) {
-		self->super_class->ref_count--;
+		self->super_class->core_type->u.class_->ref_count--;
 	}
 	tree_map_delete(self->native_method_ref_map, class_native_method_ref_delete);
 	vector_delete(self->impl_list, vector_deleter_null);
@@ -546,10 +555,10 @@ static constructor* class_find_constructor_impl(vector* v, vector * args, enviro
 			parameter* p2 = (parameter*)d2;
 			//NULL以外なら型の互換性を調べる
 			int dist = 0;
-			type* argType = il_factor_eval(p->factor, env, cache);
-			type* parType = p2->type;
+			generic_type* argType = il_factor_eval(p->factor, env, cache);
+			generic_type* parType = p2->gtype;
 			if (argType != CL_NULL) {
-				dist = type_distance(argType, parType);
+				dist = generic_type_distance(argType, parType);
 			}
 			if (dist == -1) {
 				illegal = true;
@@ -588,8 +597,8 @@ static constructor* class_find_rconstructor_impl(vector* v, vector * args, int *
 			parameter* p2 = (parameter*)d2;
 			//NULL以外なら型の互換性を調べる
 			int dist = 0;
-			type* argType = p->type;
-			type* parType = p2->type;
+			generic_type* argType = p->gtype;
+			generic_type* parType = p2->gtype;
 			if (argType != CL_NULL) {
 				dist = type_distance(argType, parType);
 			}
@@ -634,7 +643,7 @@ static method* class_find_impl_method(class_* self, method* virtualMethod) {
 	vtable* clVT = self->vt;
 	for (int i = 0; i < clVT->elements->length; i++) {
 		method* clM = vector_at(clVT->elements, i);
-		if (method_equal(virtualMethod, clM)) {
+		if (method_override(virtualMethod, clM)) {
 			ret = clM;
 			break;
 		}

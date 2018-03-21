@@ -6,7 +6,7 @@
 #include "../../env/type_impl.h"
 #include "../../env/namespace.h"
 #include "../../env/field.h"
-#include "il_factor_variable_impl.h"
+#include "../il_factor_impl.h"
 #include <stdio.h>
 #include <assert.h>
 
@@ -26,6 +26,8 @@ il_factor_field_access * il_factor_field_access_new(const char * name) {
 	ret->fact = NULL;
 	ret->f = NULL;
 	ret->field_index = -1;
+	ret->type_argument_list = vector_new();
+	ret->parent = NULL;
 	return ret;
 }
 
@@ -41,7 +43,7 @@ void il_factor_field_access_generate(il_factor_field_access * self, enviroment *
 	
 	if (modifier_is_static(self->f->modifier)) {
 		opcode_buf_add(env->buf, op_get_static);
-		opcode_buf_add(env->buf, self->f->parent->absolute_index);
+		opcode_buf_add(env->buf, self->f->gparent->core_type->absolute_index);
 		opcode_buf_add(env->buf, self->field_index);
 	} else {
 		il_factor_generate(self->fact, env, cache);
@@ -52,11 +54,25 @@ void il_factor_field_access_generate(il_factor_field_access * self, enviroment *
 }
 
 void il_factor_field_access_load(il_factor_field_access * self, enviroment * env, il_load_cache* cache, il_ehandler * eh) {
+	if(self->fact->type == ilfactor_name_reference) {
+		il_factor_name_reference* ilnameref = self->fact->u.name_reference_;
+		il_factor_static_field_access* ilstatic = il_factor_static_field_access_new(self->name);
+
+		generic_cache_delete(ilstatic->fqcn);
+		vector_delete(ilstatic->type_argument_list, vector_deleter_null);
+		ilstatic->fqcn = ilnameref->fqcn;
+		ilstatic->type_argument_list = ilnameref->type_argument_list;
+		ilnameref->fqcn = NULL;
+		ilnameref->type_argument_list = NULL;
+		il_factor_field_access_delete(self);
+		self->parent->type = ilfactor_static_field_access;
+		self->parent->u.static_field_access = ilstatic;
+	}
 }
 
-type * il_factor_field_access_eval(il_factor_field_access * self, enviroment * env, il_load_cache* cache) {
+generic_type* il_factor_field_access_eval(il_factor_field_access * self, enviroment * env, il_load_cache* cache) {
 	il_factor_field_access_find(self, env, cache);
-	return self->f->type;
+	return self->f->gtype;
 }
 
 void il_factor_field_access_delete(il_factor_field_access * self) {
@@ -97,7 +113,7 @@ static void il_factor_field_access_find(il_factor_field_access * self, enviromen
 	//variableではない(戻り値や式の結果)
 	//
 	} else {
-		type* tp = il_factor_eval(self->fact, env, cache);
+		type* tp = il_factor_eval(self->fact, env, cache)->core_type;
 		assert(tp->tag == type_class);
 		self->f = class_find_field_tree(tp->u.class_, self->name, &temp);
 		TEST(self->f == NULL);

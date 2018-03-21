@@ -76,7 +76,8 @@ typedef enum opcode {
 	op_put_static,
 	op_get_static,
 
-	op_lookup,
+	//op_lookup,
+	//op_glookup,
 	op_store,
 	op_load,
 	op_inc,

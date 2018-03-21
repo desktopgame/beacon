@@ -3,6 +3,7 @@
 #define SIGNAL_IL_IL_FACTOR_THIS_H
 #include "../il_ehandler.h"
 #include "../il_load_cache.h"
+#include "../../env/generic_type.h"
 struct enviroment;
 struct type;
 /**
@@ -41,7 +42,7 @@ void il_factor_this_load(il_factor_this* self, struct enviroment* env, il_load_c
  * @param cache
  * @return
  */
-struct type* il_factor_this_eval(il_factor_this* self, struct enviroment* env, il_load_cache* cache);
+generic_type* il_factor_this_eval(il_factor_this* self, struct enviroment* env, il_load_cache* cache);
 
 /**
  * thisを表す要素を開放します.

@@ -1,9 +1,9 @@
 import "Bool"
 
 namespace signal.lang {
-	interface Iterator {
+	interface Iterator<T> {
 		public:
 		def hasNext() -> Bool;
-		def next() -> Object;
+		def next() -> T;
 	}
 }

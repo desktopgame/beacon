@@ -9,8 +9,8 @@
 #include "../ast/assign_operator_type.h"
 #include "../ast/modifier_type.h"
 #include "../ast/access_level.h"
-//#define YYDEBUG 1
-//#define YYERROR_VERBOSE 1
+#define YYDEBUG 1
+#define YYERROR_VERBOSE 1
 %}
 %union {
 	char char_value;
@@ -42,13 +42,13 @@
 		BIT_AND LOGIC_AND BIT_OR LOGIC_OR
 		LCB RCB LRB RRB LSB RSB
 		SEMI IMPORT VAR
-		THIS SUPER TRUE FALSE NULL_TOK AS
+		THIS SUPER TRUE_TOK FALSE_TOK NULL_TOK AS
 		INTERFACE CLASS ENUM PUBLIC PRIVATE PROTECTED STATIC NATIVE NEW
 		IN OUT
 		CTOR DEF ARROW NAMESPACE RETURN
 		IF ELIF ELSE WHILE BREAK CONTINUE TRY CATCH THROW
-%type <ast_value> root 
-					top_level 
+%type <ast_value> compilation_unit 
+					program 
 					namespace_decl
 					namespace_body
 					namespace_member_decl_list
@@ -64,6 +64,7 @@
 					class_decl 
 					enum_decl
 					interface_decl
+						access_member_tree_opt
 						access_member_tree
 						access_member_list
 						member_define_list
@@ -93,6 +94,12 @@
 						prefix 
 						postfix 
 						primary
+						primary_nobrace
+						primary_literal
+						primary_assoc
+						primary_faccess
+						primary_mcall
+						primary_maccess
 					stmt_list
 						stmt
 						variable_decl_stmt
@@ -111,20 +118,20 @@
 						catch_stmt
 						scope
 						scope_optional
+%left UMINUS
+%left NONAME
 %%
 
 
-
-root
-	: top_level
-	| root top_level
+compilation_unit
+	: program
 	| error '\n'
 	{
 		$$ = ast_new_blank();
 	}
 	;
 
-top_level
+program
 	: stmt_list
 	{
 		ast_compile_entry($1);
@@ -163,17 +170,8 @@ namespace_member_decl
 		$$ = ast_new_namespace_namespace_decl($2, $3);
 	}
 	| class_decl
-	{
-		$$ = $1;
-	}
 	| interface_decl
-	{
-		$$ = $1;
-	}
 	| enum_decl
-	{
-		$$ = $1;
-	}
 	;
 
 namespace_member_decl_list
@@ -193,9 +191,6 @@ namespace_member_decl_optional
 		$$ = ast_new_blank();
 	}
 	| namespace_member_decl_list
-	{
-		$$ = $1
-	}
 	;
 
 namespace_path
@@ -239,9 +234,9 @@ type_parameter_list
 	{
 		$$ = $1;
 	}
-	| type_parameter COMMA type_parameter_list
+	| type_parameter_list COMMA type_parameter
 	{
-		$$ = ast_new_type_parameter_list($1, $3);
+		$$ = ast_new_type_parameter_list($3, $1);
 	}
 	;
 
@@ -272,11 +267,11 @@ type_parameter_rule_list
 	;
 
 class_decl
-	: CLASS parameterized_typename LCB access_member_tree RCB
+	: CLASS parameterized_typename LCB access_member_tree_opt RCB
 	{
 		$$ = ast_new_class_decl($2, ast_new_blank(), $4);
 	}
-	| CLASS parameterized_typename COLON typename_list LCB access_member_tree RCB
+	| CLASS parameterized_typename COLON typename_list LCB access_member_tree_opt RCB
 	{
 		$$ = ast_new_class_decl($2, $4, $6);
 	}
@@ -294,25 +289,26 @@ enum_decl
 	;
 
 interface_decl
-	: INTERFACE parameterized_typename LCB access_member_tree RCB
+	: INTERFACE parameterized_typename LCB access_member_tree_opt RCB
 	{
 		$$ = ast_new_interface_decl($2, ast_new_blank(), $4);
 	}
-	| INTERFACE parameterized_typename COLON typename_list LCB access_member_tree RCB
+	| INTERFACE parameterized_typename COLON typename_list LCB access_member_tree_opt RCB
 	{
 		$$ = ast_new_interface_decl($2, $4, $6);
 	}
 	;
 
-access_member_tree
+access_member_tree_opt
 	: /* empty */
 	{
 		$$ = ast_new_blank();
 	}
-	| access_member_list
-	{
-		$$ = $1;
-	}
+	| access_member_tree
+	;
+
+access_member_tree
+	: access_member_list
 	| access_member_tree access_member_list
 	{
 		$$ = ast_new_access_member_tree($1, $2);
@@ -320,22 +316,14 @@ access_member_tree
 	;
 
 access_member_list
-	: /* empty */
-	{
-		$$ = ast_new_blank();
-	}
-	| access_level_T COLON member_define_list
+	: access_level_T COLON member_define_list
 	{
 		$$ = ast_new_access_member_list($1, $3);
 	}
 	;
 
 member_define_list
-	: /* empty */
-	{
-		$$ = ast_new_blank();
-	}
-	| member_define
+	: member_define
 	{
 		$$ = ast_new_member_decl($1);
 	}
@@ -464,9 +452,9 @@ ident_list
 	{
 		$$ = ast_new_identifier($1);
 	}
-	| IDENT COMMA ident_list
+	| ident_list COMMA IDENT
 	{
-		$$ = ast_new_identifier_list($1, $3);
+		$$ = ast_new_identifier_list($3, $1);
 	}
 	;
 
@@ -475,9 +463,9 @@ parameter_list
 	{
 		$$ = ast_new_parameter($1, $2);
 	}
-	| typename_T IDENT COMMA parameter_list
+	| parameter_list COMMA typename_T IDENT
 	{
-		$$ = ast_new_parameter_list($1, $2, $4)
+		$$ = ast_new_parameter_list($3, $4, $1)
 	}
 	;
 
@@ -486,9 +474,9 @@ argument_list
 	{
 		$$ = ast_new_argument($1);
 	}
-	| expression COMMA argument_list
+	| argument_list COMMA expression
 	{
-		$$ = ast_new_argument_list(ast_new_argument($1), $3);
+		$$ = ast_new_argument_list(ast_new_argument($3), $1);
 	}
 	;
 
@@ -497,7 +485,7 @@ typename_group
 	{
 		$$ = ast_new_blank();
 	}
-	| LT typename_list GT
+	| '<' typename_list '>'
 	{
 		$$ = $2;
 	}
@@ -508,9 +496,9 @@ typename_list
 	{
 		$$ = $1;
 	}
-	| typename_T COMMA typename_list
+	| typename_list COMMA typename_T
 	{
-		$$ = ast_new_typename_list($1, $3);
+		$$ = ast_new_typename_list($3, $1);
 	}
 	;
 
@@ -526,9 +514,9 @@ fqcn_part
 	{
 		$$ = ast_new_fqcn_part($1);
 	}
-	| IDENT COLO_COLO fqcn_part
+	| fqcn_part COLO_COLO IDENT
 	{
-		$$ = ast_new_fqcn_part_list(ast_new_fqcn_part($1), $3);
+		$$ = ast_new_fqcn_part_list(ast_new_fqcn_part($3), $1);
 	}
 	;
 
@@ -542,13 +530,9 @@ expression
 	;
 assign
 	: or
-	| or assign_type_T assign
+	| primary assign_type_T assign
 	{
 		$$ = ast_new_generic_assign($1, $2, $3);
-	}
-	| IDENT assign_type_T assign
-	{
-		$$ = ast_new_generic_assign(ast_new_variable_fromstr($1), $2, $3);
 	}
 	;
 assign_type_T
@@ -579,10 +563,6 @@ assign_type_T
 	;
 or
 	: and
-	| or BIT_OR and
-	{
-		$$ = ast_new_bit_or($1, $3);
-	}
 	| or LOGIC_OR and
 	{
 		$$ = ast_new_logic_or($1, $3);
@@ -590,10 +570,6 @@ or
 	;
 and
 	: equal
-	| and BIT_AND equal
-	{
-		$$ = ast_new_bit_and($1, $3);
-	}
 	| and LOGIC_AND equal
 	{
 		$$ = ast_new_logic_and($1, $3);
@@ -661,7 +637,7 @@ unary
 	{
 		$$ = ast_new_not($2);
 	}
-	| SUB unary
+	| '-' unary %prec UMINUS
 	{
 		$$ = ast_new_neg($2);
 	}
@@ -679,80 +655,29 @@ prefix
 	;
 postfix
 	: primary
-	| postfix DOT IDENT
-	{
-		$$ = ast_new_field_access($1, $3);
-	}
-	| postfix DOT IDENT LRB RRB
-	{
-		$$ = ast_new_invoke($1, $3, ast_new_blank());
-	}
-	| postfix DOT IDENT LRB argument_list RRB
-	{
-		$$ = ast_new_invoke($1, $3, $5);
-	}
-	| postfix INC
+	| primary INC
 	{
 		$$ = ast_new_post_inc($1);
 	}
-	| postfix DEC
+	| primary DEC
 	{
 		$$ = ast_new_post_dec($1);
 	}
-	| postfix AS typename_T
+	| primary AS typename_T
 	{
 		$$ = ast_new_as($1, $3);
 	}
 	;
 primary
-	: INT
-	| DOUBLE
-	| CHAR_LITERAL
-	| STRING_LITERAL
-	| TRUE
-	{
-		$$ = ast_new_true();
-	}
-	| FALSE
-	{
-		$$ = ast_new_false();
-	}
-	| NULL_TOK
-	{
-		$$ = ast_new_null();
-	}
-	| fqcn_part
-	{
-		$$ = ast_new_variable($1);
-	}
-	| IDENT LRB RRB
-	{
-		$$ = ast_new_call($1, ast_new_blank());
-	}
-	| IDENT LRB argument_list RRB
-	{
-		$$ = ast_new_call($1, $3);
-	}
-	| LRB expression RRB
+	: primary_nobrace
+	| '(' expression ')'
 	{
 		$$ = $2;
 	}
-	| LRB typename_T RRB expression
-	{
-		$$ = ast_new_cast($2, $4);
-	}
-	| fqcn_part DOT IDENT LRB RRB
-	{
-		$$ = ast_new_static_invoke($1, $3, ast_new_blank());
-	}
-	| fqcn_part DOT IDENT LRB argument_list RRB
-	{
-		$$ = ast_new_static_invoke($1, $3, $5);
-	}
-	| fqcn_part DOT IDENT
-	{
-		$$ = ast_new_field_access_fqcn($1, $3);
-	}
+	;
+primary_nobrace
+	: primary_literal
+	| primary_assoc
 	| THIS
 	{
 		$$ = ast_new_this();
@@ -771,8 +696,52 @@ primary
 	}
 	;
 
+primary_literal
+	: INT
+	| DOUBLE
+	| CHAR_LITERAL
+	| STRING_LITERAL
+	| TRUE_TOK
+	{
+		$$ = ast_new_true();
+	}
+	| FALSE_TOK
+	{
+		$$ = ast_new_false();
+	}
+	| NULL_TOK
+	{
+		$$ = ast_new_null();
+	}
+	;
+primary_assoc
+	: primary_faccess
+	| primary_mcall
+	{
+		$$ = ast_new_blank();
+	}
+	;
 
+primary_faccess
+	: primary DOT IDENT
+	{
+		$$ = ast_new_blank();
+	}
+	;
 
+primary_mcall
+	: primary_maccess typename_group LRB argument_list RRB
+	{
+		$$ = ast_new_blank();
+	}
+	| primary_maccess typename_group LRB RRB
+	{
+		$$ = ast_new_blank();
+	}
+	;
+primary_maccess
+	: primary_nobrace
+	;
 
 
 stmt_list

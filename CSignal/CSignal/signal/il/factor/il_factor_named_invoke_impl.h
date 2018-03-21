@@ -7,6 +7,7 @@
 #include "../il_factor_interface.h"
 #include "../../env/generic_cache.h"
 struct method;
+struct generic_type;
 /**
  * 名前付き呼び出しの種類を表します.
  */
@@ -32,13 +33,15 @@ typedef struct il_factor_named_invoke {
 	//vector* scope_vec;
 	//char* class_name;
 	generic_cache* fqcn;
+	struct generic_type* return_type;
 	vector* argument_list;
+	vector* type_argument_list;
 	il_named_invoke_type type;
 	struct method* m;
 	int method_index;
 	bool find;
 	union {
-		type* type;
+		struct type* type;
 		il_factor* factor;
 	} u;
 } il_factor_named_invoke;
@@ -87,7 +90,7 @@ void il_factor_named_invoke_load(il_factor_named_invoke* self, enviroment* env, 
  * @param cache
  * @return
  */
-type* il_factor_named_invoke_eval(il_factor_named_invoke* self, enviroment* env, il_load_cache* cache);
+generic_type* il_factor_named_invoke_eval(il_factor_named_invoke* self, enviroment* env, il_load_cache* cache);
 
 /**
  * 完全に修飾されたメソッド呼び出しを開放します.

@@ -1,11 +1,11 @@
-
+$$SET root compilation_unit
+$$SET top_level program
 
 ;;
 ;;top_levelのリスト{{{
 ;;
 root
 	: top_level
-	| root top_level
 	| error '\n'
 	{
 		$$ = ast_new_blank();
@@ -75,17 +75,8 @@ namespace_member_decl
 		$$ = ast_new_namespace_namespace_decl($2, $3);
 	}
 	| class_decl
-	{
-		$$ = $1;
-	}
 	| interface_decl
-	{
-		$$ = $1;
-	}
 	| enum_decl
-	{
-		$$ = $1;
-	}
 	;
 ;;
 ;;}}}
@@ -117,9 +108,6 @@ namespace_member_decl_optional
 		$$ = ast_new_blank();
 	}
 	| namespace_member_decl_list
-	{
-		$$ = $1
-	}
 	;
 ;;
 ;;}}}
@@ -199,9 +187,9 @@ __LIST
 	{
 		$$ = $1;
 	}
-	| __ENTRY COMMA __LIST
+	| __LIST COMMA __ENTRY
 	{
-		$$ = ast_new_type_parameter_list($1, $3);
+		$$ = ast_new_type_parameter_list($3, $1);
 	}
 	;
 $$REM __LIST __ENTRY
@@ -251,11 +239,11 @@ type_parameter_rule_list
 ;;クラス宣言{{{
 ;;
 class_decl
-	: CLASS parameterized_typename LCB access_member_tree RCB
+	: CLASS parameterized_typename LCB access_member_tree_opt RCB
 	{
 		$$ = ast_new_class_decl($2, ast_new_blank(), $4);
 	}
-	| CLASS parameterized_typename COLON typename_list LCB access_member_tree RCB
+	| CLASS parameterized_typename COLON typename_list LCB access_member_tree_opt RCB
 	{
 		$$ = ast_new_class_decl($2, $4, $6);
 	}
@@ -285,11 +273,11 @@ enum_decl
 ;;インターフェイス宣言{{{
 ;;
 interface_decl
-	: INTERFACE parameterized_typename LCB access_member_tree RCB
+	: INTERFACE parameterized_typename LCB access_member_tree_opt RCB
 	{
 		$$ = ast_new_interface_decl($2, ast_new_blank(), $4);
 	}
-	| INTERFACE parameterized_typename COLON typename_list LCB access_member_tree RCB
+	| INTERFACE parameterized_typename COLON typename_list LCB access_member_tree_opt RCB
 	{
 		$$ = ast_new_interface_decl($2, $4, $6);
 	}
@@ -298,18 +286,19 @@ interface_decl
 ;;}}}
 ;;
 
-;;
-;;"アクセス修飾子と'メンバー宣言のリスト'のペアのリスト"のリスト{{{
-;;
-access_member_tree
+access_member_tree_opt
 	: /* empty */
 	{
 		$$ = ast_new_blank();
 	}
-	| access_member_list
-	{
-		$$ = $1;
-	}
+	| access_member_tree
+	;
+
+;;
+;;"アクセス修飾子と'メンバー宣言のリスト'のペアのリスト"のリスト{{{
+;;
+access_member_tree
+	: access_member_list
 	| access_member_tree access_member_list
 	{
 		$$ = ast_new_access_member_tree($1, $2);
@@ -323,11 +312,7 @@ access_member_tree
 ;;アクセス修飾子と"メンバー宣言のリスト"のペアのリスト{{{
 ;;
 access_member_list
-	: /* empty */
-	{
-		$$ = ast_new_blank();
-	}
-	| access_level_T COLON member_define_list
+	: access_level_T COLON member_define_list
 	{
 		$$ = ast_new_access_member_list($1, $3);
 	}
@@ -340,11 +325,7 @@ access_member_list
 ;;メンバー宣言のリスト{{{
 ;;
 member_define_list
-	: /* empty */
-	{
-		$$ = ast_new_blank();
-	}
-	| member_define
+	: member_define
 	{
 		$$ = ast_new_member_decl($1);
 	}
@@ -541,9 +522,9 @@ ident_list
 	{
 		$$ = ast_new_identifier($1);
 	}
-	| IDENT COMMA ident_list
+	| ident_list COMMA IDENT
 	{
-		$$ = ast_new_identifier_list($1, $3);
+		$$ = ast_new_identifier_list($3, $1);
 	}
 	;
 ;;
@@ -558,9 +539,9 @@ parameter_list
 	{
 		$$ = ast_new_parameter($1, $2);
 	}
-	| typename_T IDENT COMMA parameter_list
+	| parameter_list COMMA typename_T IDENT
 	{
-		$$ = ast_new_parameter_list($1, $2, $4)
+		$$ = ast_new_parameter_list($3, $4, $1)
 	}
 	;
 ;;
@@ -575,9 +556,9 @@ argument_list
 	{
 		$$ = ast_new_argument($1);
 	}
-	| expression COMMA argument_list
+	| argument_list COMMA expression
 	{
-		$$ = ast_new_argument_list(ast_new_argument($1), $3);
+		$$ = ast_new_argument_list(ast_new_argument($3), $1);
 	}
 	;
 ;;
@@ -592,7 +573,7 @@ typename_group
 	{
 		$$ = ast_new_blank();
 	}
-	| LT typename_list GT
+	| '<' typename_list '>'
 	{
 		$$ = $2;
 	}
@@ -609,9 +590,9 @@ typename_list
 	{
 		$$ = $1;
 	}
-	| typename_T COMMA typename_list
+	| typename_list COMMA typename_T
 	{
-		$$ = ast_new_typename_list($1, $3);
+		$$ = ast_new_typename_list($3, $1);
 	}
 	;
 ;;
@@ -639,9 +620,9 @@ fqcn_part
 	{
 		$$ = ast_new_fqcn_part($1);
 	}
-	| IDENT COLO_COLO fqcn_part
+	| fqcn_part COLO_COLO IDENT
 	{
-		$$ = ast_new_fqcn_part_list(ast_new_fqcn_part($1), $3);
+		$$ = ast_new_fqcn_part_list(ast_new_fqcn_part($3), $1);
 	}
 	;
 ;;

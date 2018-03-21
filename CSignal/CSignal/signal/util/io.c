@@ -2,6 +2,7 @@
 #include <assert.h>
 #include <string.h>
 #include <stdlib.h>
+#include <errno.h>
 #include "text.h"
 #include "../util/mem.h"
 #include "string_buffer.h"
@@ -45,12 +46,23 @@ bool io_exists(const char * filename) {
 #endif
 }
 
+bool io_exists_s(const char* filename) {
+	errno = 0;
+	bool ret = io_exists(filename);
+	int tmp = errno;
+	if(!ret) {
+		perror("fopen error  ");
+		text_printf("path: %s", filename);
+	}
+	return ret;
+}
+
 bool io_delete(const char * filename) {
 	return remove(filename);
 }
 
 char * io_read_text(const char * filename) {
-	assert(io_exists(filename));
+	assert(io_exists_s(filename));
 	string_buffer* buff = string_buffer_new();
 #if defined(_MSC_VER)
 	FILE* fp;
@@ -122,7 +134,8 @@ char * io_absolute_path(const char * target) {
 		}
 	}
 	char* a = text_concat(full, target);
-	text_printf("path %s", a);
-	return text_strdup(a);
+	//text_printf("path %s", a);
+	//return text_strdup(a);
+	return a;
 #endif
 }

@@ -266,12 +266,6 @@ int opcode_print(vector* source, int index) {
 			text_printf("super");
 			break;
 		}
-		case op_lookup:
-		{
-			int a = (int)vector_at(source, ++index);
-			text_printf("lookup %d", a);
-			break;
-		}
 		case op_invokevirtual:
 		{
 			int a = (int)vector_at(source, ++index);

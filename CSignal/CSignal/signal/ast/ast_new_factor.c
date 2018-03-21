@@ -54,46 +54,64 @@ ast * ast_new_post_dec(ast * a) {
 	return ret;
 }
 
-ast * ast_new_variable(ast* a) {
+ast* ast_new_name_reference(ast* atypename) {
+	ast* ret = ast_new(ast_name_reference);
+	ast_push(ret, atypename);
+	return ret;
+}
+
+ast * ast_new_variable(ast* a, ast* atype_args) {
 	assert(a->tag == ast_fqcn_class_name);
 	ast* ret = ast_new(ast_variable);
 	ret->u.string_value = text_strdup(a->u.string_value);
 	ast_push(ret, a);
+	ast_push(ret, atype_args);
 	return ret;
 }
 
-ast * ast_new_variable_fromstr(char * str) {
+ast * ast_new_variable_fromstr(char * str, ast* atype_args) {
 	ast* ret = ast_new(ast_variable);
 	ret->u.string_value = (str);
+	ast_push(ret, atype_args);
 	//ast_push(ret, a);
 	return ret;
 }
 
-ast * ast_new_call(const char * name, ast * argument_list) {
+ast* ast_new_op_call(ast* areceiver, ast* aargs) {
+	ast* ret = ast_new(ast_op_call);
+	ast_push(ret, areceiver);
+	ast_push(ret, aargs);
+	return ret;
+}
+
+ast * ast_new_call(const char * name, ast* atype_args, ast * argument_list) {
 	ast* ret = ast_new(ast_call);
 	ast* aname = ast_new(ast_identifier);
 	aname->u.string_value = name;
 	ast_push(ret, aname);
+	ast_push(ret, atype_args);
 	ast_push(ret, argument_list);
 	return ret;
 }
 
-ast * ast_new_invoke(ast * receiver, const char* name, ast * argument_list) {
+ast * ast_new_invoke(ast * receiver, const char* name, ast* atype_args, ast * argument_list) {
 	ast* ret = ast_new(ast_invoke);
 	ast* aname = ast_new(ast_identifier);
 	aname->u.string_value = name;
 	ast_push(ret, receiver);
 	ast_push(ret, aname);
+	ast_push(ret, atype_args);
 	ast_push(ret, argument_list);
 	return ret;
 }
 
-ast * ast_new_static_invoke(ast * fqcn, const char * name, ast * argument_list) {
+ast * ast_new_static_invoke(ast * fqcn, const char * name, ast* atype_args, ast * argument_list) {
 	ast* ret = ast_new(ast_static_invoke);
 	ast* aname = ast_new(ast_identifier);
 	aname->u.string_value = name;
 	ast_push(ret, fqcn);
 	ast_push(ret, aname);
+	ast_push(ret, atype_args);
 	ast_push(ret, argument_list);
 	return ret;
 }
@@ -106,16 +124,17 @@ ast * ast_new_super() {
 	return ast_new(ast_super);
 }
 
-ast * ast_new_field_access(ast * afact, char * name) {
+ast * ast_new_field_access(ast * afact, char * name, ast* atype_args) {
 	ast* ret = ast_new(ast_field_access);
 	ast* aname = ast_new(ast_identifier);
 	aname->u.string_value = name;
 	ast_push(ret, afact);
 	ast_push(ret, aname);
+	ast_push(ret, atype_args);
 	return ret;
 }
 
-ast * ast_new_field_access_fqcn(ast * fqcn, char * name) {
+ast * ast_new_field_access_fqcn(ast * fqcn, char * name, ast* atype_args) {
 	//	assert(fqcn->tag != ast_fqcn_part_list);
 	if (fqcn->tag == ast_fqcn_part ||
 		fqcn->tag == ast_fqcn_class_name) {
@@ -131,6 +150,8 @@ ast * ast_new_field_access_fqcn(ast * fqcn, char * name) {
 		aname->u.string_value = name;
 		ast_push(ret, avar);
 		ast_push(ret, aname);
+		ast_push(ret, atype_args);
+		ast_push(ret, fqcn);
 		return ret;
 	} else if (fqcn->tag == ast_fqcn || fqcn->tag == ast_fqcn_part_list) {
 		//こっちの場合は静的フィールドへのアクセスと断定できる
@@ -139,6 +160,7 @@ ast * ast_new_field_access_fqcn(ast * fqcn, char * name) {
 		aname->u.string_value = name;
 		ast_push(ret, fqcn);
 		ast_push(ret, aname);
+		ast_push(ret, atype_args);
 		return ret;
 	}
 	return NULL;

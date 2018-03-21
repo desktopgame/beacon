@@ -26,4 +26,6 @@
 #include "factor/il_factor_as_impl.h"
 #include "factor/il_factor_inc_impl.h"
 #include "factor/il_factor_dec_impl.h"
+#include "factor/il_factor_op_call_impl.h"
+#include "factor/il_factor_name_reference_impl.h"
 #endif // !SIGNAL_IL_IL_FACTOR_IMPL_H

@@ -18,11 +18,13 @@
 		BIT_AND LOGIC_AND BIT_OR LOGIC_OR
 		LCB RCB LRB RRB LSB RSB
 		SEMI IMPORT VAR
-		THIS SUPER TRUE FALSE NULL_TOK AS
+		THIS SUPER TRUE_TOK FALSE_TOK NULL_TOK AS
 		INTERFACE CLASS ENUM PUBLIC PRIVATE PROTECTED STATIC NATIVE NEW
 		IN OUT
 		CTOR DEF ARROW NAMESPACE RETURN
 		IF ELIF ELSE WHILE BREAK CONTINUE TRY CATCH THROW
+$$SET root compilation_unit
+$$SET top_level program
 %type <ast_value> root 
 					top_level 
 					namespace_decl
@@ -40,6 +42,7 @@
 					class_decl 
 					enum_decl
 					interface_decl
+						access_member_tree_opt
 						access_member_tree
 						access_member_list
 						member_define_list
@@ -69,6 +72,12 @@
 						prefix 
 						postfix 
 						primary
+						primary_nobrace
+						primary_literal
+						primary_assoc
+						primary_faccess
+						primary_mcall
+						primary_maccess
 					stmt_list
 						stmt
 						variable_decl_stmt
@@ -87,4 +96,6 @@
 						catch_stmt
 						scope
 						scope_optional
+%left UMINUS
+%left NONAME
 %%

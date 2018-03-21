@@ -5,6 +5,7 @@
 #include "../../vm/symbol_entry.h"
 #include "../../env/namespace.h"
 #include "../../env/type_interface.h"
+#include "../../env/generic_type.h"
 #include <stdio.h>
 
 //proto
@@ -84,8 +85,8 @@ void il_stmt_try_generate(il_stmt_try* self, enviroment* env, il_load_cache* cac
 	for (int i = 0; i < self->catch_list->length; i++) {
 		//例外を指定の名前でアクセス出来るように
 		il_stmt_catch* ilcatch = (il_stmt_catch*)vector_at(self->catch_list, i);
-		type* exType = generic_cache_type(ilcatch->fqcn, (namespace_*)vector_top(cache->namespace_vec));
-		int exIndex = symbol_table_entry(env->sym_table, exType, ilcatch->name)->index;
+		generic_type* exgType = generic_cache_gtype(ilcatch->fqcn, (namespace_*)vector_top(cache->namespace_vec), cache);
+		int exIndex = symbol_table_entry(env->sym_table, exgType, ilcatch->name)->index;
 		//直前のケースのジャンプ先をここに
 		if (nextCause != NULL) {
 			int head = opcode_buf_nop(env->buf);
@@ -95,7 +96,7 @@ void il_stmt_try_generate(il_stmt_try* self, enviroment* env, il_load_cache* cac
 		//現在の例外と catch節 の型に互換性があるなら続行
 		opcode_buf_add(env->buf, op_hexception);
 		opcode_buf_add(env->buf, op_instanceof);
-		opcode_buf_add(env->buf, exType->absolute_index);
+		opcode_buf_add(env->buf, exgType->core_type->absolute_index);
 		//互換性がないので次のケースへ
 		opcode_buf_add(env->buf, op_goto_if_false);
 		opcode_buf_add(env->buf, nextCause);
@@ -129,11 +130,21 @@ void il_stmt_catch_generate(il_stmt_catch* self, enviroment* env, il_load_cache*
 }
 
 void il_stmt_try_load(il_stmt_try* self, enviroment* env, il_load_cache* cache, il_ehandler* eh) {
-
+	for(int i=0; i<self->statement_list->length; i++) {
+		il_stmt* e = (il_stmt*)vector_at(self->statement_list, i);
+		il_stmt_load(e, env, cache, eh);
+	}
+	for(int i=0; i<self->catch_list->length; i++) {
+		il_stmt_catch* e = (il_stmt_catch*)vector_at(self->catch_list, i);
+		il_stmt_catch_load(e, env, cache, eh);
+	}
 }
 
 void il_stmt_catch_load(il_stmt_catch* self, enviroment* env, il_load_cache* cache, il_ehandler* eh) {
-
+	for(int i=0; i<self->statement_list->length; i++) {
+		il_stmt* e = (il_stmt*)vector_at(self->statement_list, i);
+		il_stmt_load(e, env, cache, eh);
+	}
 }
 
 void il_stmt_catch_delete(il_stmt_catch* self) {

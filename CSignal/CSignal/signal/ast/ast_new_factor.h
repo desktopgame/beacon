@@ -66,44 +66,66 @@ ast* ast_new_post_inc(ast* a);
 ast* ast_new_post_dec(ast* a);
 
 /**
- * 変数を表す要素を作成します.
- * @param a
+ * 名前参照を表す要素を作成します.
+ * 名前参照には identifier だけで構成される変数参照と、
+ * 名前空間とクラス名を連結した 静的フィールド参照が存在します。
+ * @param atypename
  * @return
  */
-ast* ast_new_variable(ast* a);
+ast* ast_new_name_reference(ast* atypename);
+
+/**
+ * 変数を表す要素を作成します.
+ * @param a
+ * @param atype_args
+ * @return
+ */
+ast* ast_new_variable(ast* a, ast* atype_args);
 
 /**
  * 変数を表す要素を作成します.
  * @param str
+ * @param atype_args
  * @return
  */
-ast* ast_new_variable_fromstr(char* str);
+ast* ast_new_variable_fromstr(char* str, ast* atype_args);
+
+/**
+ * 関数呼び出し演算子を表す要素を作成します.
+ * @param areceiver
+ * @param aargs
+ * @return
+ */
+ast* ast_new_op_call(ast* areceiver, ast* aargs);
 
 /**
  * 関数呼び出しを表す要素を作成します.
  * @param name
+ * @param atype_args
  * @param argument_list
  * @return
  */
-ast* ast_new_call(const char* name, ast* argument_list);
+ast* ast_new_call(const char* name, ast* atype_args, ast* argument_list);
 
 /**
  * メソッド呼び出しを表す要素を作成します.
  * @param receiver
  * @param name
+ * @param atype_args
  * @param argument_list
  * @return
  */
-ast* ast_new_invoke(ast* receiver, const char* name, ast* argument_list);
+ast* ast_new_invoke(ast* receiver, const char* name, ast* atype_args, ast* argument_list);
 
 /**
  * 完全修飾名に対するメソッド呼び出しを表す要素を作成します.
  * @param fqcn
  * @param name
+ * @param atype_args
  * @param argument_list
  * @return
  */
-ast* ast_new_static_invoke(ast* fqcn, const char* name, ast* argument_list);
+ast* ast_new_static_invoke(ast* fqcn, const char* name, ast* atype_args, ast* argument_list);
 
 /**
  * thisを表す因子を作成します.
@@ -121,17 +143,19 @@ ast* ast_new_super();
  * hoge.foo を表す因子を作成します.
  * @param afact
  * @param name
+ * @param atype_args
  * @return
  */
-ast* ast_new_field_access(ast* afact, char* name);
+ast* ast_new_field_access(ast* afact, char* name, ast* atype_args);
 
 /**
  * hoge.foo を表す因子を作成します.
  * @param fqcn
  * @param name
+ * @param atype_args
  * @return
  */
-ast* ast_new_field_access_fqcn(ast* fqcn, char* name);
+ast* ast_new_field_access_fqcn(ast* fqcn, char* name, ast* atype_args);
 
 /**
  * new X::Y(...) を表す因子を作成します.

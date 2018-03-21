@@ -4,7 +4,10 @@
 #include "logger.h"
 #include "text.h"
 
+#if defined(_MSC_VER)
 #include <crtdbg.h>
+#endif
+
 #include <assert.h>
 #include <string.h>
 
@@ -90,7 +93,7 @@ void mem_dump() {
 	text_printfln("    not found realloc(%d)", gMemNotFoundRealloc);
 	text_printfln("    not found free(%d)", gMemNotFoundFree);
 
-	slot* ptr = gSlotHead;
+	slot* ptr = gSlotHead->next;
 	while (ptr != NULL) {
 		text_printf("    ");
 		slot_dump(ptr);

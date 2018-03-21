@@ -90,11 +90,14 @@ parser * parser_parse_from_file(const char * filename) {
 		p->fail = true;
 		return p;
 	}
+	text_stdout_enabled(false);
 	if (yyparse()) {
 		p->fail = true;
+		text_stdout_enabled(true);
 		parser_print_error(p);
 		return p;
 	}
+	text_stdout_enabled(true);
 	return p;
 #endif
 }
@@ -112,16 +115,23 @@ parser * parser_parse_from_source_swap(const char * source, const char * info) {
 		MEM_FREE(p->source_name);
 		p->source_name = text_strdup(info);
 	}
+	if (text_white(source)) {
+		p->root = ast_new_blank();
+		return p;
+	}
+	text_stdout_enabled(false);
 	//p->source_name = _strdup("unknown-source");
 	yy_setstr(text_strdup(source));
 	if (yyparse()) {
 		yy_clearstr();
 		p->fail = true;
+		text_stdout_enabled(true);
 		parser_print_error(p);
 		//parser_free_source(p);
 		return p;
 	}
 	yy_clearstr();
+	text_stdout_enabled(true);
 	//parser_free_source(p);
 	return p;
 }

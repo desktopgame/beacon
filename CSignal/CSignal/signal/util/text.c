@@ -4,6 +4,8 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <ctype.h>
+#include <errno.h>
 #include "mem.h"
 #include "string_buffer.h"
 #include "io.h"
@@ -12,6 +14,8 @@
 static char* text_strclone(const char* source);
 static void text_printfdbg(const char* message, va_list ap);
 static FILE* text_fp = NULL;
+static FILE* fake_stdout = NULL;
+static FILE* real_stdout = NULL;
 static bool text_trace = false;
 static bool gTraceClosed = false;
 
@@ -46,6 +50,11 @@ void text_putb(bool b) {
 
 int text_printf(const char * message, ...) {
 	va_list ap;
+
+	va_start(ap, message);
+	text_printfdbg(message, ap);
+	va_end(ap);
+
 	va_start(ap, message);
 	int res = text_vprintf(message, ap);
 	va_end(ap);
@@ -53,7 +62,7 @@ int text_printf(const char * message, ...) {
 }
 
 int text_vprintf(const char * message, va_list ap) {
-	text_printfdbg(message, ap);
+	//text_printfdbg(message, ap);
 	int res = vprintf(message, ap);
 	return res;
 }
@@ -124,6 +133,20 @@ char * text_gets() {
 	return ret;
 }
 
+bool text_white(const char * str) {
+	assert(str != NULL);
+	int len = strlen(str);
+	for (int i = 0; i < len; i++) {
+		char e = str[i];
+		if (e != ' ' &&
+			e != '\n' && 
+			!isspace(e)) {
+			return false;
+		}
+	}
+	return true;
+}
+
 SG_errno_t text_strncpy(char * outChar, size_t index, const char * source, size_t dataSize) {
 #if defined(_MSC_VER)
 	return strncpy_s(outChar, index, source, dataSize);
@@ -134,6 +157,7 @@ SG_errno_t text_strncpy(char * outChar, size_t index, const char * source, size_
 }
 
 char * text_concat(const char * a, const char * b) {
+	#if defined(_MSC_VER)
 	int alen = strlen(a);
 	int blen = strlen(b);
 	char* block = (char*)MEM_MALLOC((sizeof(char) * (alen + blen)) + 1);
@@ -145,10 +169,19 @@ char * text_concat(const char * a, const char * b) {
 	}
 	block[alen + blen] = '\0';
 	return block;
+	#else
+	string_buffer* buff = string_buffer_new();
+	string_buffer_appends(buff, a);
+	string_buffer_appends(buff, b);
+	string_buffer_shrink(buff);
+	char* ret = buff->text;
+	MEM_FREE(buff);
+	return ret;
+	#endif
 }
 
 char * text_lineat(const char * src, int lineno) {
-	text_printf("%s", src);
+	//text_printf("%s", src);
 	//return NULL;
 	int len = strlen(src);
 	int curLine = 0;
@@ -196,6 +229,44 @@ char* text_sum(vector * v, char * join) {
 	return head;
 }
 
+void text_stdout_enabled(bool enabled) {
+	if(enabled) {
+		//一度無効にされているなら、
+		//前回のファイルポインタを閉じる
+		if(fake_stdout != NULL) {
+			fflush(fake_stdout);
+			fclose(fake_stdout);
+			fake_stdout = NULL;
+		}
+		//本物のstdoutが保存されているならそれに戻す
+		if(real_stdout != NULL) {
+			stdout = real_stdout;
+			real_stdout = NULL;
+		}
+	} else {
+		assert(fake_stdout == NULL);
+		assert(real_stdout == NULL);
+		errno = 0;
+		//https://stackoverflow.com/questions/2262484/calling-fdopen-bad-file-descriptor
+		//int fd = mkstemp("fake_stdout");
+		//FILE* fp = fdopen(fd, "w");
+		const char* fname = "tmp";
+		//すでに存在するなら削除
+		if(io_exists(fname)) {
+			io_delete(fname);
+		}
+		//stdoutを入れ替えれる
+		FILE* fp = fopen(fname, "w");
+		if(fp == NULL) {
+			perror("fopen  ");
+		}
+		assert(fp != NULL);
+		fake_stdout = fp;
+		real_stdout = stdout;
+		stdout = fp;
+	}
+}
+
 //private
 static char* text_strclone(const char* source) {
 	int len = strlen(source);
@@ -208,6 +279,9 @@ static char* text_strclone(const char* source) {
 }
 
 static void text_printfdbg(const char* message, va_list ap) {
+#if defined(__clang__)
+	return;
+#endif
 	if (!text_trace || gTraceClosed) {
 		return;
 	}
@@ -226,8 +300,12 @@ static void text_printfdbg(const char* message, va_list ap) {
 #endif
 	}
 	
-	char block[256];
+	char block[512];
+	#if defined(_MSC_VER)
 	int res = vsprintf_s(block, 256, message, ap);
+	#else
+	int res = vsprintf(block, message, ap);
+	#endif
 	assert(res != -1);
 	fprintf(text_fp, "%s", block);
 	fflush(text_fp);

@@ -5,10 +5,17 @@
 
 /**
  * 実行可能な文を表す要素を作成します.
+ */
+#define ast_new_stmt(stmt) (ast_malloc_stmt(stmt, __FILE__, __LINE__))
+
+/**
+ * 実行可能な文を表す要素を作成します.
  * @param stmt
+ * @param filename
+ * @param lineno
  * @return
  */
-ast* ast_new_stmt(ast* stmt);
+ast* ast_malloc_stmt(ast* stmt, const char* filename, int lineno);
 
 /**
  * 実行可能な文を表す要素を作成します. 
@@ -160,10 +167,17 @@ ast* ast_new_fqcn(ast* part_list, char* class_name);
 
 /**
  * 完全修飾クラス名の 1節 を表す要素を作成します.
+ */
+#define ast_new_fqcn_part(name) (ast_malloc_fqcn_part(name, __FILE__, __LINE__))
+
+/**
+ * 完全修飾クラス名の 1節 を表す要素を作成します.
  * @param name
+ * @param filename
+ * @param lineno
  * @return
  */
-ast* ast_new_fqcn_part(char* name);
+ast* ast_malloc_fqcn_part(char* name, const char* filename, int lineno);
 
 /**
  * 完全修飾クラス名の名前空間部分(XX::YY::)の一覧を表す要素を作成します.

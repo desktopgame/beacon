@@ -42,6 +42,7 @@
 #include "heap.h"
 
 //proto
+static void class_loader_load_impl(class_loader* self);
 static void class_loader_link(class_loader* self);
 static void class_loader_cache_delete(vector_item item);
 
@@ -60,7 +61,7 @@ class_loader* class_loader_new() {
 	ret->linked_allimports = false;
 	ret->error_message = NULL;
 	ret->env->context_ref = ret;
-	text_printfln("new classloader");
+	//text_printfln("new classloader");
 	//ret->link = classlink_unlinked;
 	return ret;
 }
@@ -97,22 +98,10 @@ class_loader * class_loader_new_entry_point_from_parser(parser * p) {
 }
 
 void class_loader_load(class_loader * self) {
-	assert(self != NULL);
-	assert(self->source_code != NULL);
-	//AST -> IL へ
-	class_loader_ilload_impl(self, self->source_code);
-	if (self->error) { return; }
-	//IL -> SG へ
-	class_loader_sgload_impl(self);
-	if (self->error) { return; }
-	//他のクラスローダーとリンク
-	class_loader_link(self);
-	//トップレベルのステートメントを読み込む
-	il_load_cache* cache = il_load_cache_new();
-	cache->toplevel = true;
-	class_loader_sgload_body(self, self->il_code->statement_list, self->env, NULL, cache);
-	il_load_cache_delete(cache);
-	logger_log(log_info, __FILE__, __LINE__, "loaded file %s", self->filename);
+	heap* hee = heap_get();
+	hee->blocking++;
+	class_loader_load_impl(self);
+	hee->blocking--;
 }
 
 void class_loader_sub(class_loader * self, char * fullPath) {
@@ -162,6 +151,25 @@ void class_loader_errorf(class_loader* self, const char* message, ...) {
 }
 
 //private
+static void class_loader_load_impl(class_loader* self) {
+	assert(self != NULL);
+	assert(self->source_code != NULL);
+	//AST -> IL へ
+	class_loader_ilload_impl(self, self->source_code);
+	if (self->error) { return; }
+	//IL -> SG へ
+	class_loader_sgload_impl(self);
+	if (self->error) { return; }
+	//他のクラスローダーとリンク
+	class_loader_link(self);
+	//トップレベルのステートメントを読み込む
+	il_load_cache* cache = il_load_cache_new();
+	cache->toplevel = true;
+	class_loader_sgload_body(self, self->il_code->statement_list, self->env, NULL, cache);
+	il_load_cache_delete(cache);
+	logger_log(log_info, __FILE__, __LINE__, "loaded file %s", self->filename);
+}
+
 static void class_loader_link(class_loader* self) {
 	if (self->linked_allimports) {
 		return;

@@ -6,13 +6,14 @@
 #include "parameter.h"
 #include "type_interface.h"
 #include "object.h"
+#include "generic_type.h"
 
 //proto
 static void constructor_parameter_delete(vector_item item);
 
 constructor * constructor_new() {
 	constructor* ret = (constructor*)MEM_MALLOC(sizeof(constructor));
-	ret->parent = NULL;
+	ret->gparent = NULL;
 	ret->env = NULL;
 	ret->parameter_list = vector_new();
 	ret->access = access_public;
@@ -27,7 +28,8 @@ void constructor_dump(constructor * self, int depth) {
 	for (int i = 0; i < self->parameter_list->length; i++) {
 		vector_item e = vector_at(self->parameter_list, i);
 		parameter* p = (parameter*)e;
-		text_printf("%s %s", type_name(p->type), p->name);
+		generic_type_print(p->gtype);
+		text_printf(" %s", p->name);
 		if ((i + 1) < self->parameter_list->length) {
 			text_printf(" ");
 		}

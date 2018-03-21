@@ -22,7 +22,15 @@ typedef struct string_buffer {
  * 文字列バッファーを作成します.
  * @return
  */
-string_buffer* string_buffer_new();
+#define string_buffer_new() (string_buffer_malloc(__FILE__, __LINE__))
+
+/**
+ * 文字列バッファーを作成します.
+ * @param filename
+ * @param lineno
+ * @return
+ */
+string_buffer* string_buffer_malloc(const char* filename, int lineno);
 
 /**
  * バッファーの最後に追記します.

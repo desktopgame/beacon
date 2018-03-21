@@ -35,8 +35,8 @@ void il_factor_string_generate(il_factor_string * self, enviroment* env, il_load
 void il_factor_string_load(il_factor_string * self, enviroment * env, il_load_cache* cache, il_ehandler * eh) {
 }
 
-type * il_factor_string_eval(il_factor_string * self, enviroment * env, il_load_cache* cache) {
-	return CL_STRING;
+generic_type* il_factor_string_eval(il_factor_string * self, enviroment * env, il_load_cache* cache) {
+	return CL_STRING->generic_self;
 }
 
 void il_factor_string_delete(il_factor_string * self) {

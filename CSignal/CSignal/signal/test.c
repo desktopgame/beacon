@@ -20,6 +20,7 @@
 #include "thread/thread.h"
 #include "env/script_context.h"
 #include "env/heap.h"
+#include "vm/enviroment.h"
 #include "vm/eval.h"
 
 //proto
@@ -145,11 +146,17 @@ void test_file_path(void) {
 
 void test_cll(void) {
 	class_loader* cll = class_loader_new_entry_point_from_file("main.signal");
-//	system("cls");
+	system("clear");
 //	ast_print_tree(cll->source_code);
 	class_loader_load(cll);
 //	il_top_level_dump(cll->il_code, 0);
-	namespace_dump();
+//	namespace_dump();
+	enviroment_op_dump(cll->env, 0);
+	vm* v = vm_new();
+	sg_thread_set_vm_ref(sg_thread_current(), v);
+	vm_execute(v, cll->env);
+	vm_delete(v);
+	sg_thread_release_vm_ref(sg_thread_current());
 	class_loader_delete(cll);
 //	script_context* temp = eval_push();
 //	char* lines[2] = {

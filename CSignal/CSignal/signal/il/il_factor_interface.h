@@ -5,6 +5,7 @@
 #include "il_ehandler.h"
 #include "il_load_cache.h"
 #include <stdint.h>
+#include "../env/generic_type.h"
 //#include "../vm/opcode.h"
 //#include "../vm/opcode_buf.h"
 //struct opcode_buf;
@@ -33,7 +34,9 @@ typedef enum il_factor_type {
 	ilfactor_null,
 	ilfactor_as,
 	ilfactor_inc,
-	ilfactor_dec
+	ilfactor_dec,
+	ilfactor_op_call,
+	ilfactor_name_reference,
 } il_factor_type;
 
 //ファクターとして扱える要素自身が内側にファクターを含む(再帰)
@@ -66,6 +69,8 @@ struct il_factor_null;
 struct il_factor_as;
 struct il_factor_inc;
 struct il_factor_dec;
+struct il_factor_op_call;
+struct il_factor_name_reference;
 
 /**
  * 計算可能な要素.
@@ -95,6 +100,8 @@ typedef struct il_factor {
 		struct il_factor_as* as_;
 		struct il_factor_inc* inc_;
 		struct il_factor_dec* dec_;
+		struct il_factor_op_call* op_call_;
+		struct il_factor_name_reference* name_reference_;
 	} u;
 } il_factor;
 
@@ -129,7 +136,7 @@ void il_factor_load(il_factor* self, enviroment* env, il_load_cache* cache, il_e
  * @param cache
  * @return
  */
-struct type* il_factor_eval(il_factor* self, enviroment* env, il_load_cache* cache);
+generic_type* il_factor_eval(il_factor* self, enviroment* env, il_load_cache* cache);
 
 /**
  * 計算可能な要素を開放します.

@@ -2,6 +2,7 @@
 #ifndef SIGNAL_IL_IL_FACTOR_STATIC_FIELD_ACCESS_H
 #define SIGNAL_IL_IL_FACTOR_STATIC_FIELD_ACCESS_H
 #include "../../env/generic_cache.h"
+#include "../../util/vector.h"
 #include "../il_factor_interface.h"
 struct enviroment;
 struct type;
@@ -16,6 +17,10 @@ typedef struct il_factor_static_field_access {
 	char* name;
 	struct field* f;
 	int field_index;
+	//構文規則のために、フィールドアクセスが
+	//実型引数をもつ。
+	//namespace::foo<Int>
+	vector* type_argument_list;
 } il_factor_static_field_access;
 
 /**
@@ -54,7 +59,7 @@ void il_factor_static_field_access_generate(il_factor_static_field_access* self,
  * @param cache
  * @return
  */
-struct type* il_factor_static_field_access_eval(il_factor_static_field_access* self, struct enviroment* env, il_load_cache* cache);
+generic_type* il_factor_static_field_access_eval(il_factor_static_field_access* self, struct enviroment* env, il_load_cache* cache);
 
 /**
  * 静的フィールドアクセスを表す要素を読み込みます.

@@ -54,7 +54,7 @@ void il_factor_double_load(il_factor_double* self, struct enviroment* env, il_lo
  * @param env
  * @param cache
  */
-struct type* il_factor_double_eval(il_factor_double* self, struct enviroment* env, il_load_cache* cache);
+generic_type* il_factor_double_eval(il_factor_double* self, struct enviroment* env, il_load_cache* cache);
 
 /**
  * 浮動小数リテラルを表す要素を開放します.

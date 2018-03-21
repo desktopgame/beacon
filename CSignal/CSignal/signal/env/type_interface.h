@@ -20,6 +20,7 @@ struct field;
 struct method;
 struct enviroment;
 struct vtable;
+struct generic_type;
 
 /**
  * 型を表す構造体.
@@ -27,6 +28,7 @@ struct vtable;
 typedef struct type {
 	type_tag tag;
 	struct namespace_* location;
+	struct generic_type* generic_self;
 	int absolute_index;
 	union {
 		struct class_* class_;
@@ -39,6 +41,13 @@ typedef struct type {
  * @return
  */
 type* type_new();
+
+/**
+ * この型を表す generic_type を作成します.
+ * @param self
+ * @return
+ */
+struct generic_type* type_init_generic(type* self, int counts);
 
 /**
  * この型の名前を返します.
@@ -71,6 +80,17 @@ void type_add_method(type* self, struct method* m);
  * @return
  */
 struct method* type_find_method(type* self, const char* name, vector* args, struct enviroment* env, il_load_cache* cache, int* outIndex);
+
+/**
+ * この型から静的メソッドを検索します.
+ * @param self
+ * @param name
+ * @param args
+ * @param env
+ * @param outIndex
+ * @return
+ */
+struct method* type_find_smethod(type* self, const char* name, vector* args, struct enviroment* env, il_load_cache* cache, int* outIndex);
 
 /**
  * 仮想関数の一覧を返します.
@@ -115,6 +135,27 @@ void type_unlink(type* self);
  * @return
  */
 int type_for_generic_index(type* self, char* name);
+
+/**
+ * selfの継承クラスや実装インターフェイスに a が現れるなら型変数付きで返します.
+ * 例えば
+ *
+ * class IntList : List<Int>
+ * を表すクラスに List<T> を渡すと List<Int> が返ります。
+ * @param self
+ * @param a
+ * @return
+ */
+struct generic_type* type_find_impl(type* self, type* a);
+
+/**
+ * この型がクラス/インターフェイスを表すとき、
+ * 指定位置の型変数を返します.
+ * @param self
+ * @param index
+ * @return
+ */
+struct generic_type* type_type_parameter_at(type* self, int index);
 
 /**
  * 型を開放します.
