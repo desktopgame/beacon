@@ -11,12 +11,12 @@ func runCmd(workdir string, name string, args ...string) {
 	cmd.Dir = workdir
 	out, err := cmd.Output()
 	if err != nil {
-		fmt.Println("flex/bison:    fail")
+		fmt.Println("    fail")
 	}
 	fmt.Println(string(out))
 }
 
 func main() {
-	runCmd("../src/signal/parse", "go", "run", "script/gen.go")
+	runCmd("../src/beacon/parse", "go", "run", "script/gen.go")
 	runCmd("../src", "make")
 }
