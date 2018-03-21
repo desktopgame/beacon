@@ -149,12 +149,8 @@ func execp(name string, args ...string) {
 	out, err := exec.Command(name, args...).Output()
 	if err != nil {
 		fmt.Println("    error")
-	} else {
-		for _, line := range regexp.MustCompile("\r\n|\n\r|\n|\r").Split(string(out), -1) {
-			fmt.Printf("    %s", line)
-			fmt.Println()
-		}
 	}
+	fmt.Println(string(out))
 	fmt.Println()
 }
 

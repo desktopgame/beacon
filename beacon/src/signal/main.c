@@ -10,7 +10,6 @@
 #include "util/string_buffer.h"
 #include "util/logger.h"
 #include "util/mem.h"
-#include "util/hash_table.h"
 #include "util/bench_mark.h"
 
 void _start(int argc, char* argv[]) {

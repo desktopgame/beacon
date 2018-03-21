@@ -1,6 +1,0 @@
-#でかいファイルは無視
-*.sdf
-.vs/
-.log
-.tlog
-Debug/

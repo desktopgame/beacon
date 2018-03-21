@@ -21,19 +21,20 @@ INCLUDE   = -I/usr/include -I/opt/local/include
 # 生成される実行ファイル
 TARGETS   = a.out
 # 生成されるバイナリファイルの出力ディレクトリ
-TARGETDIR = mac-build/bin
+TARGETDIR = ../bin
 # ソースコードの位置
 SRCROOT   = .
 # 中間バイナリファイルの出力ディレクトリ
-OBJROOT   = mac-build/obj
+OBJROOT   = ../obj
 # ソースディレクトリの中を(shellの)findコマンドで走破してサブディレクトリまでリスト化する
 SRCDIRS  := $(shell find $(SRCROOT) -type d)
 # ソースディレクトリを元にforeach命令で全cppファイルをリスト化する
+#SOURCES   = $(foreach dir, $(SRCDIRS), $(wildcard $(dir)/*.c))
 SOURCES   = $(foreach dir, $(SRCDIRS), $(wildcard $(dir)/*.c))
 # 上記のcppファイルのリストを元にオブジェクトファイル名を決定
-OBJECTS   = $(addprefix $(OBJROOT)/, $(SOURCES:.c=.o)) 
+OBJECTS   = $(addprefix $(OBJROOT)/, $(SOURCES:.c=.o))
 # ソースディレクトリと同じ構造で中間バイナリファイルの出力ディレクトリをリスト化
-OBJDIRS   = $(addprefix $(OBJROOT)/, $(SRCDIRS)) 
+OBJDIRS   = $(addprefix $(OBJROOT)/, $(SRCDIRS))
 # 依存ファイル.dを.oファイルから作る
 DEPENDS   = $(OBJECTS:.o=.d)
 
