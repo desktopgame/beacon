@@ -17,6 +17,6 @@ func runCmd(workdir string, name string, args ...string) {
 }
 
 func main() {
-	runCmd("../src/beacon/parse", "go", "run", "script/gen.go")
-	runCmd("../src", "make")
+	runCmd("src/beacon/parse", "go", "run", "script/gen.go")
+	runCmd("src", "make")
 }
