@@ -50,9 +50,9 @@ func replace(source string, m map[string]string) string {
 	return ret
 }
 
-func addReplace(line string, buff *bytes.Buffer, m map[string]string) {
-	words := strings.Split(line, " ")
-	fixedLine := strings.Join(words[1:len(words)], " ")
+func addReplace(prefix string, line string, buff *bytes.Buffer, m map[string]string) {
+	//words := strings.Split(line, " ")
+	fixedLine := strings.TrimLeft(line[strings.Index(line, prefix)+len(prefix):len(line)], " \t")
 	buff.WriteString(replace(fixedLine, m))
 	buff.WriteByte('\n')
 }
@@ -103,14 +103,14 @@ func preprocess(source string, m map[string]string, isTest bool) string {
 			if isTest {
 				buff.WriteString("//Test Only")
 				buff.WriteByte('\n')
-				addReplace(line, &buff, m)
+				addReplace("$$TOK", line, &buff, m)
 			}
 			//テスト時のみ無効になるコードは $$TOK で開始する
 		} else if strings.HasPrefix(styledLine, "$$TNO") {
 			if !isTest {
 				buff.WriteString("//Release Only")
 				buff.WriteByte('\n')
-				addReplace(line, &buff, m)
+				addReplace("$$TNO", line, &buff, m)
 			}
 		} else {
 			buff.WriteString(replace(line, m))
