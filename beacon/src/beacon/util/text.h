@@ -46,7 +46,7 @@ void text_putb(bool b);
  * @param ch
  * @param count
  */
-void test_printr(char ch, int count);
+void text_printr(char ch, int count);
 
 /**
  * printfへの委譲です.

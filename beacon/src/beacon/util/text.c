@@ -48,7 +48,7 @@ void text_putb(bool b) {
 	text_printf("%s", (b ? "true" : "false"));
 }
 
-void test_printr(char ch, int count) {
+void text_printr(char ch, int count) {
 	for(int i=0; i<count; i++) {
 		text_printf("%c", ch);
 	}
