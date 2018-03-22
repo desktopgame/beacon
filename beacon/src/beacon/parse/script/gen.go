@@ -101,15 +101,15 @@ func preprocess(source string, m map[string]string, isTest bool) string {
 			//テスト時のみ有効になるコードは $$TOK で開始する
 		} else if strings.HasPrefix(styledLine, "$$TOK") {
 			if isTest {
-				buff.WriteString("//Test Only")
-				buff.WriteByte('\n')
+				//buff.WriteString("//Test Only")
+				//buff.WriteByte('\n')
 				addReplace("$$TOK", line, &buff, m)
 			}
 			//テスト時のみ無効になるコードは $$TOK で開始する
 		} else if strings.HasPrefix(styledLine, "$$TNO") {
 			if !isTest {
-				buff.WriteString("//Release Only")
-				buff.WriteByte('\n')
+				//buff.WriteString("//Release Only")
+				//buff.WriteByte('\n')
 				addReplace("$$TNO", line, &buff, m)
 			}
 		} else {
