@@ -38,6 +38,11 @@ void _end(int argc, char* argv[]) {
 }
 
 int main(int argc, char* argv[]) {
+#if defined(DEBUG)
+	if(!test_run()) {
+		return 0;
+	}
+#endif
 	//test_preload();
 	//整数リテラルをオブジェクトにラップ
 	//オブジェクトにベクターを持たせて、
@@ -45,7 +50,6 @@ int main(int argc, char* argv[]) {
 	//定数プールにdouble型を入れられるように
 	//test_vm();
 	_start(argc, argv);
-	test_cll();
 //	test_vector3();
 	_end(argc, argv);
 	return 0;

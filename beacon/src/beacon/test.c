@@ -14,6 +14,8 @@
 #include "util/text.h"
 #include "util/file_path.h"
 #include "util/vector.h"
+#include "util/test/xtest.h"
+#include "util/test/xtest_group.h"
 #include <stdio.h>
 #include <stdlib.h>
 #include "util/mem.h"
@@ -24,10 +26,59 @@
 #include "vm/eval.h"
 
 //proto
+static void test_stack(void);
+static void test_list(void);
+static void test_ast(void);
+static void test_ast2(void);
+static void test_tree_map(void);
+static void test_namespace(void);
+static void test_io(void);
+static void test_io2(void);
+static void test_file_path(void);
+static void test_cll(void);
+static void test_struct(void);
+static void test_vector(void);
+static void test_vector2(void);
+static void test_vector3(void);
+static void test_vector4(void);
+static void test_map(void);
+static void test_vm(void);
+static void test_vm2(void);
+static void test_string_table(void);
+static void test_preload(void);
+static void test_props(void);
+static void test_malloc(void);
+static void test_dup(void);
+
 static void person_free(vector_item item);
 static void tree_map_test(char* name, tree_item item);
 
-void test_stack(void) {
+void test_suc() {
+	REQ_EQ(0, 0);
+	REQ_EQ(1, 1);
+	REQ_EQ(3, 3);
+	const char* bbb = "bbb";
+	REQ_STREQ("aaa", "aaa");
+	MUST_STREQ("bbb", bbb);
+}
+
+void test_fail() {
+	REQ_EQ(0, 1);
+	REQ_EQ(0, 0);
+	MUST_EQ(1, 2);
+	text_printf("test_fail done!");
+}
+
+bool test_run() {
+	xtest_group* gr = xtest_group_new("basic");
+	xtest_group_add(gr, "suc test", test_suc);
+	xtest_group_add(gr, "fail test", test_fail);
+	bool ret = xtest_group_run(gr);
+	xtest_group_delete(gr);
+	return ret;
+}
+
+static void test_stack(void) {
 #if defined(_MSC_VER)
 	stack* st = stack_new();
 	for (int i = 1; i < 4; i++) {
@@ -46,7 +97,7 @@ void test_stack(void) {
 #endif
 }
 
-void test_list(void) {
+static void test_list(void) {
 #if defined(_MSC_VER)
 	list* li = list_new();
 	for (int i = 1; i < 4; i++) {
@@ -62,7 +113,7 @@ void test_list(void) {
 #endif
 }
 
-void test_ast(void) {
+static void test_ast(void) {
 	ast* a = ast_new(ast_add_assign);
 	ast_push(a, ast_new(ast_add));
 	ast_push(a, ast_new(ast_sub));
@@ -79,14 +130,14 @@ void test_ast(void) {
 	ast_delete(a);
 }
 
-void test_ast2(void) {
+static void test_ast2(void) {
 	char* text = io_read_text("main.signal");
 	parser* p = parser_parse_from_source(text);
 	ast_print_tree(p->root);
 	parser_pop();
 }
 
-void test_tree_map(void) {
+static void test_tree_map(void) {
 #if defined(_MSC_VER)
 	tree_map* m = tree_map_new();
 	tree_map_put(m, "KeyA", 10);
@@ -112,7 +163,7 @@ void test_tree_map(void) {
 #endif
 }
 
-void test_namespace(void) {
+static void test_namespace(void) {
 	namespace_* signal = namespace_create_at_root("signal");
 	namespace_* lang = namespace_add_namespace(signal, "lang");
 	namespace_* text = namespace_add_namespace(lang, "text");
@@ -120,15 +171,15 @@ void test_namespace(void) {
 	namespace_dump();
 }
 
-void test_io(void) {
+static void test_io(void) {
 	io_new_file("io_file.text");
 }
 
-void test_io2(void) {
+static void test_io2(void) {
 	io_write_text("io_file.text", "hello, world!\n c java");
 }
 
-void test_file_path(void) {
+static void test_file_path(void) {
 	/*
 	file_path* root = file_path_new("root");
 	file_path* sub = file_path_append(root, "sub");
@@ -144,7 +195,7 @@ void test_file_path(void) {
 	*/
 }
 
-void test_cll(void) {
+static void test_cll(void) {
 	class_loader* cll = class_loader_new_entry_point_from_file("main.signal");
 	system("clear");
 //	ast_print_tree(cll->source_code);
@@ -170,18 +221,7 @@ void test_cll(void) {
 //	eval_pop(temp);
 }
 
-void test_struct(void) {
-	OBJ* o = (OBJ*)MEM_MALLOC(sizeof(OBJ) * 10);
-	for (int i = 0; i < 10; i++) {
-		o[i].index = i;
-	}
-	for (int i = 0; i < 10; i++) {
-		text_printf("index %d", (o + i)->index);
-	}
-	MEM_FREE(o);
-}
-
-void test_vector(void) {
+static void test_vector(void) {
 #if defined(_MSC_VER)
 	vector* v = vector_new();
 	for (int i = 0; i < 10; i++) {
@@ -214,7 +254,7 @@ void test_vector(void) {
 #endif
 }
 
-void test_vector2(void) {
+static void test_vector2(void) {
 	vector* v = vector_new();
 	vector_push(v, 10);
 	vector_push(v, 20);
@@ -232,7 +272,7 @@ void test_vector2(void) {
 	text_printf("\n");
 }
 
-void test_vector3(void) {
+static void test_vector3(void) {
 	vector* v = vector_new();
 	vector_push(v, 10);
 	vector_push(v, 20);
@@ -250,7 +290,7 @@ void test_vector3(void) {
 	text_printf("\n");
 }
 
-void test_vector4(void) {
+static void test_vector4(void) {
 	vector* v = vector_new();
 	vector_push(v, 10);
 	vector_push(v, 20);
@@ -259,7 +299,7 @@ void test_vector4(void) {
 //	}
 }
 
-void test_map(void) {
+static void test_map(void) {
 	tree_map* map = tree_map_new();
 	tree_map_put(map, "AAA", 10);
 	tree_map_put(map, "ABB", 20);
@@ -268,7 +308,7 @@ void test_map(void) {
 	tree_map_each(map, tree_map_test);
 }
 
-void test_vm(void) {
+static void test_vm(void) {
 	vm* vm = vm_new();
 	enviroment* env = enviroment_new();
 	//定数プールに登録
@@ -291,7 +331,7 @@ void test_vm(void) {
 	vm_delete(vm);
 }
 
-void test_vm2(void) {
+static void test_vm2(void) {
 	vm* vm = vm_new();
 	enviroment* env = enviroment_new();
 	//定数プールに登録
@@ -315,7 +355,7 @@ void test_vm2(void) {
 	vm_delete(vm);
 }
 
-void test_string_table(void) {
+static void test_string_table(void) {
 	/*
 	string_table* st = string_table_new();
 	int a = string_table_index(st, "a");
@@ -333,11 +373,11 @@ void test_string_table(void) {
 	*/
 }
 
-void test_preload(void) {
+static void test_preload(void) {
 	namespace_dump();
 }
 
-void test_props(void) {
+static void test_props(void) {
 	props* p = props_new();
 	props_puti(p, "int", 100);
 	props_putd(p, "double", 180.0);
@@ -352,7 +392,7 @@ void test_props(void) {
 	props_delete(p);
 }
 
-void test_malloc(void) {
+static void test_malloc(void) {
 	int size = 16;
 	void* block = malloc(size);
 	while (true) {
@@ -369,34 +409,7 @@ void test_malloc(void) {
 	text_printfln("malloc limit: %d", size);
 }
 
-void test_dup(void) {
-	char* src = "HelloWor";
-	char* a = text_strdup(src);
-	char* b = text_strdup(a);
-	char* c = text_strdup(b);
-	HOLDER* hA = (HOLDER*)malloc(sizeof(HOLDER));
-	HOLDER* hB = (HOLDER*)malloc(sizeof(HOLDER));
-	HOLDER* hC = (HOLDER*)malloc(sizeof(HOLDER));
-	hA->u.s = a;
-	hB->u.s = b;
-	hC->u.s = c;
-	free(hA->u.s);
-	free(hA);
-
-	free(hB->u.s);
-	free(hB);
-
-	free(hC->u.s);
-	free(hC);
-}
-
 //private
-static void person_free(vector_item item) {
-	PERSON* p = (PERSON*)item;
-	MEM_FREE(p->name);
-	MEM_FREE(p);
-}
-
 static void tree_map_test(char* name, tree_item item) {
 	text_printf("name %s\n", name);
 }
