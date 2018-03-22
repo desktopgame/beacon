@@ -43,12 +43,12 @@ int yyerror(char * err_str) {
 	printf("%s", err_str);
 	printf("\n");
 
-	parser* p = parser_top();
-	p->fail = true;
-	p->error_line_index = yylloc.last_line;
-	p->error_column_index = yylloc.last_column;
-	p->error_message = text_strdup(err_str);
-	p->error_line_text  = text_lineat(yaccSourceBuffer, yylloc.last_line);
+$$TNO	parser* p = parser_top();
+$$TNO	p->fail = true;
+$$TNO	p->error_line_index = yylloc.last_line;
+$$TNO	p->error_column_index = yylloc.last_column;
+$$TNO	p->error_message = text_strdup(err_str);
+$$TNO	p->error_line_text  = text_lineat(yaccSourceBuffer, yylloc.last_line);
 	return 1;
 }
 
@@ -103,19 +103,21 @@ static int string_input(char *buf, int max_size) {
 }
 
 static int my_yyinput(char *buf, int max_size) {
-	int result;
-	parser* p = parser_top();
-	switch (p->input_type) {
-		case yinput_file:
-			result = file_input(buf, max_size);
-			break;
-		case yinput_string:
-			result = string_input(buf, max_size);
-			break;
-		default:
-			return 0;
-	}
-	return result;
+$$TOK	return string_input(buf, max_size);
+
+$$TNO	int result;
+$$TNO	parser* p = parser_top();
+$$TNO	switch (p->input_type) {
+$$TNO		case yinput_file:
+$$TNO			result = file_input(buf, max_size);
+$$TNO			break;
+$$TNO		case yinput_string:
+$$TNO			result = string_input(buf, max_size);
+$$TNO			break;
+$$TNO		default:
+$$TNO			return 0;
+$$TNO	}
+$$TNO	return result;
 }
 //error position
 static void update_loc() {
