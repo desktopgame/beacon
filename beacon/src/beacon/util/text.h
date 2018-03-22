@@ -42,6 +42,13 @@ void text_putline(void);
 void text_putb(bool b);
 
 /**
+ * ch を count 回出力します.s
+ * @param ch
+ * @param count
+ */
+void test_printr(char ch, int count);
+
+/**
  * printfへの委譲です.
  * @param message
  * @param ...
