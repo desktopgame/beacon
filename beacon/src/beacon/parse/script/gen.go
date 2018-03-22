@@ -2,6 +2,7 @@ package main
 
 import (
 	"bytes"
+	"flag"
 	"fmt"
 	"io/ioutil"
 	"os/exec"
@@ -49,7 +50,14 @@ func replace(source string, m map[string]string) string {
 	return ret
 }
 
-func preprocess(source string, m map[string]string) string {
+func addReplace(line string, buff *bytes.Buffer, m map[string]string) {
+	words := strings.Split(line, " ")
+	fixedLine := strings.Join(words[1:len(words)], " ")
+	buff.WriteString(replace(fixedLine, m))
+	buff.WriteByte('\n')
+}
+
+func preprocess(source string, m map[string]string, isTest bool) string {
 	var buff bytes.Buffer
 	inMultiLineComment := false
 	exp := 0
@@ -90,19 +98,32 @@ func preprocess(source string, m map[string]string) string {
 			buff.WriteString(strings.Join(words[1:len(words)-1], " "))
 			buff.WriteByte('\n')
 			exp++
-
+			//テスト時のみ有効になるコードは $$TOK で開始する
+		} else if strings.HasPrefix(styledLine, "$$TOK") {
+			if isTest {
+				buff.WriteString("//Test Only")
+				buff.WriteByte('\n')
+				addReplace(line, &buff, m)
+			}
+			//テスト時のみ無効になるコードは $$TOK で開始する
+		} else if strings.HasPrefix(styledLine, "$$TNO") {
+			if !isTest {
+				buff.WriteString("//Release Only")
+				buff.WriteByte('\n')
+				addReplace(line, &buff, m)
+			}
 		} else {
 			buff.WriteString(replace(line, m))
 			buff.WriteByte('\n')
 		}
 	}
 	if exp > 0 {
-		return preprocess(buff.String(), m)
+		return preprocess(buff.String(), m, isTest)
 	}
 	return buff.String()
 }
 
-func make(config string, targetFile string) error {
+func make(config string, targetFile string, isTest bool) error {
 	//ディレクトリをひらけなかった場合
 	content, err := ioutil.ReadFile(config)
 	if err != nil {
@@ -127,7 +148,7 @@ func make(config string, targetFile string) error {
 		fmt.Println()
 		//プリプロセッサで加工
 		text := string(content)
-		buff.WriteString(preprocess(text, map[string]string{}))
+		buff.WriteString(preprocess(text, map[string]string{}, isTest))
 	}
 	ioutil.WriteFile(targetFile, buff.Bytes(), 0600)
 	fmt.Println("make : complete")
@@ -154,9 +175,19 @@ func execp(name string, args ...string) {
 	fmt.Println()
 }
 
+//global
+var (
+	isTest = flag.Bool("test", false, "test flag")
+)
+
 func main() {
-	make("lex.makeconfig", "signal.l")
-	make("yy.makeconfig", "signal.y")
+	//実行時引数を解析する
+	flag.Parse()
+	//args := flag.Args()
+	//fmt.Println(args)
+
+	make("lex.makeconfig", "signal.l", *isTest)
+	make("yy.makeconfig", "signal.y", *isTest)
 	execp("flex", "signal.l")
 	execp("bison", "-d", "signal.y")
 	insert("signal.tab.h",
