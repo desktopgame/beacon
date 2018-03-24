@@ -98,6 +98,7 @@ bool xtest_expect_vtrue(xtest* self, bool condition, bool isRecord, bool isThrow
 	if(isRecord) {
 		xlog* xl = xlog_new(filename, lineno);
 		vector_push(self->log_vec, xl);
+		self->error = true;
 	}
 	if(fmt != NULL) {
 		xtest_vprintf(fmt, ap);
