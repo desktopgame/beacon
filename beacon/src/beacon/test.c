@@ -28,12 +28,14 @@
 
 //proto
 static void test_cll(void);
+static void test_parse_err_hdr(parser* p);
 
 static void test_bison_grammer() {
 	const char* topdir = "grammer_test";
 	const char* rundir = "./grammer_test/run";
 	const char* errdir = "./grammer_test/err";
-	xtest_printf("-%s-\n", rundir);
+	parser_set_err_hdr(test_parse_err_hdr);
+	//xtest_printf("-%s-\n", rundir);
 	//成功するはず
 	vector* files = io_list_files(rundir);
 	for(int i=0; i<files->length; i++) {
@@ -41,9 +43,11 @@ static void test_bison_grammer() {
 		if(!io_extension(e->filename, "cn")) {
 			continue;
 		}
-		parser* p = parser_parse_from_file(e->filename);
-		MUST_TRUE(!p->fail);
+		char* input = io_read_text(e->filename);
+		parser* p = parser_parse_from_source(input);
+		xtest_must_true(!p->fail, "%s", e->filename);
 		parser_pop();
+		MEM_FREE(input);
 	}
 	io_list_files_delete(files);
 	//失敗するはず
@@ -53,11 +57,14 @@ static void test_bison_grammer() {
 		if(!io_extension(e->filename, "cn")) {
 			continue;
 		}
-		parser* p = parser_parse_from_file(e->filename);
-		MUST_TRUE(p->fail);
+		char* input = io_read_text(e->filename);
+		parser* p = parser_parse_from_source(input);
+		xtest_must_true(p->fail, "%s", e->filename);
 		parser_pop();
+		MEM_FREE(input);
 	}
 	io_list_files_delete(files);
+	parser_set_err_hdr(parser_default_err_hdr);
 }
 
 bool test_run() {
@@ -92,4 +99,32 @@ static void test_cll(void) {
 	//	eval_top_from_source("import \"lib\"\nConsole.writeLine(\"Hello\")");
 	//	eval_top_from_lines(lines, 2);
 //	eval_pop(temp);
+}
+
+//FIXME:parser.cからのコピペ
+static void test_parse_err_hdr(parser* p) {
+	//system("cls");
+	//put filename
+	for(int i=0; i<4; i++) {
+		xtest_printf(" ");
+	}
+	xtest_printf("file=%s ", p->source_name);
+	//put line
+	xtest_printf("line=%d ", p->error_line_index);
+	//put column
+	xtest_printf("column=%d", p->error_column_index);
+	xtest_printf("\n");
+	//put str
+	for(int i=0; i<4; i++) {
+		xtest_printf(" ");
+	}
+	xtest_printf("%s", p->error_message);
+	xtest_printf("\n");
+	//put line
+	for(int i=0; i<4; i++) {
+		xtest_printf(" ");
+	}
+	xtest_printf("%s", p->error_line_text);
+	xtest_printf("\n");
+	fflush(stdout);
 }

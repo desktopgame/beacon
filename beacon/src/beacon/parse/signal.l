@@ -40,9 +40,12 @@ int yywrap(void) {
 #endif SIGNAL_YYWRAP_PART
 
 int yyerror(char * err_str) {
-	printf("%s", err_str);
-	printf("\n");
-
+parser* p = parser_top();
+p->fail = true;
+p->error_line_index = yylloc.last_line;
+p->error_column_index = yylloc.last_column;
+p->error_message = text_strdup(err_str);
+p->error_line_text  = text_lineat(yaccSourceBuffer, yylloc.last_line);
 	return 1;
 }
 
@@ -94,8 +97,20 @@ static int string_input(char *buf, int max_size) {
 }
 
 static int my_yyinput(char *buf, int max_size) {
-return string_input(buf, max_size);
 
+int result;
+parser* p = parser_top();
+switch (p->input_type) {
+case yinput_file:
+result = file_input(buf, max_size);
+break;
+case yinput_string:
+result = string_input(buf, max_size);
+break;
+default:
+return 0;
+}
+return result;
 }
 //error position
 static void update_loc() {
@@ -214,36 +229,44 @@ static void update_loc() {
 <INITIAL>"->"				{ return (ARROW); }
 
 <INITIAL>"0" {
+yylval.ast_value = ast_new_int(0);
 	return INT;
 }
 
 <INITIAL>"\n" {
+parser_top()->lineno++;
 }
 
 <INITIAL>[1-9][0-9]* {
+yylval.ast_value = ast_new_int(atoi(yytext));
 	return INT;
 }
 
 <INITIAL>[0-9]+\.[0-9]+ {
+yylval.ast_value = ast_new_double(atof(yytext));
 	return DOUBLE;
 }
 
 <INITIAL>[A-Za-z_][A-Za-z_0-9]* {
+yylval.string_value = text_strdup(yytext);
 	return IDENT;
 }
 
 <INITIAL>\" {
+parser_clear_buffer(parser_top());
     BEGIN STRING_LITERAL_STATE;
 }
 <INITIAL>"/*"     BEGIN ML_COMMENT;
 <INITIAL>"//"     BEGIN L_COMMENT;
 <ML_COMMENT>\n     {
+parser_top()->lineno++;
 }
 <ML_COMMENT>"*/"     {
     BEGIN INITIAL;
 }
 <ML_COMMENT>.      ;
 <L_COMMENT>\n  {
+parser_top()->lineno++;
 	BEGIN INITIAL;
 }
 <L_COMMENT><<EOF>>   {
@@ -251,36 +274,49 @@ static void update_loc() {
 }
 <L_COMMENT>.   ;
 <INITIAL>\'\\r\' {
+yylval.ast_value = ast_new_char('\r');
 	return CHAR_LITERAL;
 }
 <INITIAL>\'\\n\' {
+yylval.ast_value = ast_new_char('\n');
 	return CHAR_LITERAL;
 }
 <INITIAL>\'\\t\' {
+yylval.ast_value = ast_new_char('\t');
 	return CHAR_LITERAL;
 }
 <INITIAL>\'\\b\' {
+yylval.ast_value = ast_new_char('\b');
 	return CHAR_LITERAL;
 }
 <INITIAL>\'.\' {
+yylval.ast_value = ast_new_char(yytext[1]);
 	return CHAR_LITERAL;
 }
 <STRING_LITERAL_STATE>\" {
+yylval.ast_value = parser_reduce_buffer(parser_top());
     BEGIN INITIAL;
 	return STRING_LITERAL;
 }
 <STRING_LITERAL_STATE>\\\"	{
+parser_append_buffer(parser_top(), '"');
 }
 <STRING_LITERAL_STATE>\\\'	{
+parser_append_buffer(parser_top(), '\'');
 }
 <STRING_LITERAL_STATE>\\r	{
+parser_append_buffer(parser_top(), '\r');
 }
 <STRING_LITERAL_STATE>\\n	{
+parser_append_buffer(parser_top(), '\n');
 }
 <STRING_LITERAL_STATE>\\t	{
+parser_append_buffer(parser_top(), '\t');
 }
 <STRING_LITERAL_STATE>\\\\	{
+parser_append_buffer(parser_top(), '\\');
 }
 <STRING_LITERAL_STATE>.	{
+parser_append_buffer(parser_top(), yytext[0]);
 }
 %%
