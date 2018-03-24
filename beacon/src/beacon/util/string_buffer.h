@@ -63,6 +63,13 @@ void string_buffer_vappendf(string_buffer* self, const char* message, va_list ap
 void string_buffer_appends(string_buffer* self, const char* s);
 
 /**
+ * shrink,freeを実行して文字列だけを返します.
+ * @param self
+ * @return
+ */
+char* string_buffer_release(string_buffer* self);
+
+/**
  * 将来の拡張のために確保された余分な領域を開放します.
  * また、末尾をゼロ文字にします。
  * @param self

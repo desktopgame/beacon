@@ -75,6 +75,13 @@ void string_buffer_appends(string_buffer * self, const char * s) {
 	}
 }
 
+char* string_buffer_release(string_buffer* self) {
+	string_buffer_shrink(self);
+	char* ret = self->text;
+	MEM_FREE(self);
+	return ret;
+}
+
 void string_buffer_shrink(string_buffer * self) {
 	if (self->length == self->capacity) {
 		//return;
