@@ -3,13 +3,19 @@
 #include <string.h>
 #include <stdlib.h>
 #include <errno.h>
+#include <dirent.h>
+#include <sys/stat.h>
 #include "text.h"
+#include "file_entry.h"
 #include "../util/mem.h"
 #include "string_buffer.h"
 
 #if defined(__clang__)
 #include <unistd.h>
 #endif
+
+//proto
+static void io_file_entry_delete(vector_item item);
 
 void io_new_file(const char * filename) {
 	assert(!io_exists(filename));
@@ -138,4 +144,42 @@ char * io_absolute_path(const char * target) {
 	//return text_strdup(a);
 	return a;
 #endif
+}
+
+vector* io_list_files(const char* dirname) {
+	vector* ret = vector_new();
+	DIR *dir = opendir(dirname);
+	struct dirent *dp;
+	struct stat fi;
+
+	for (dp = readdir(dir); dp != NULL; dp = readdir(dir)) {
+		if (dp->d_name[0] != '.') {
+			char* fullp = io_join_path(dirname, dp->d_name);
+			file_entry* ent = file_entry_ref(fullp);
+			//joinpath(path2, dirname, dp->d_name);
+			stat(fullp, &fi);
+			ent->is_file = !S_ISDIR(fi.st_mode);
+			vector_push(ret, ent);
+		}
+	}
+	closedir(dir);
+	return ret;
+}
+
+void io_list_files_delete(vector* files) {
+	vector_delete(files, io_file_entry_delete);
+}
+
+char* io_join_path(const char* a, const char* b) {
+	string_buffer* buf = string_buffer_new();
+	string_buffer_appends(buf, a);
+	string_buffer_append(buf, '/');
+	string_buffer_appends(buf, b);
+	return string_buffer_release(buf);
+}
+
+//private
+static void io_file_entry_delete(vector_item item) {
+	file_entry* e = (file_entry*)item;
+	file_entry_delete(e);
 }

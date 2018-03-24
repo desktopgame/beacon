@@ -3,6 +3,7 @@
 #define SIGNAL_UTIL_IO_H
 #include <stdio.h>
 #include <stdbool.h>
+#include "vector.h"
 
 /**
  * 新しいファイルを作成します.
@@ -55,4 +56,25 @@ void io_write_text(const char* filename, const char* text);
  * @return 呼び出し側で開放してください.
  */
 char* io_absolute_path(const char* target);
+
+/**
+ * dirnameの直下のファイル名一覧を返します.
+ * @param dirname
+ * @return
+ */
+vector* io_list_files(const char* dirname);
+
+/**
+ * io_list_files によって確保された vector を解放します.s
+ * @param files
+ */
+void io_list_files_delete(vector* files);
+
+/**
+ * a と b をパス区切り文字で連結して返します.
+ * @param a
+ * @param b
+ * @return
+ */
+char* io_join_path(const char* a, const char* b);
 #endif // !SIGNAL_UTIL_IO_H
