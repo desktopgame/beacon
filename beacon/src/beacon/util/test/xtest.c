@@ -85,6 +85,7 @@ bool xtest_expect_true(xtest* self, bool condition, bool isThrow, const char* fi
 	va_start(ap, fmt);
 	bool ret = xtest_expect_vtrue(self, condition, isThrow, filename, lineno, fmt, ap);
 	va_end(ap);
+	return ret;
 }
 
 bool xtest_expect_vtrue(xtest* self, bool condition, bool isThrow, const char* filename, int lineno, const char* fmt, va_list ap) {
