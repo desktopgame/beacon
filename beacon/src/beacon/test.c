@@ -33,13 +33,31 @@ static void test_bison_grammer() {
 	const char* topdir = "grammer_test";
 	const char* rundir = "./grammer_test/run";
 	const char* errdir = "./grammer_test/err";
-	vector* files = io_list_files(rundir);
 	xtest_printf("-%s-\n", rundir);
+	//成功するはず
+	vector* files = io_list_files(rundir);
 	for(int i=0; i<files->length; i++) {
 		file_entry* e = (file_entry*)vector_at(files, i);
-		const char* str = io_extension(e->filename, "md") ? "true" : "false";
-		xtest_printf("    %s[is md?: %s]\n", e->filename, str);
+		if(!io_extension(e->filename, "cn")) {
+			continue;
+		}
+		parser* p = parser_parse_from_file(e->filename);
+		MUST_TRUE(!p->fail);
+		parser_pop();
 	}
+	io_list_files_delete(files);
+	//失敗するはず
+	files = io_list_files(errdir);
+	for(int i=0; i<files->length; i++) {
+		file_entry* e = (file_entry*)vector_at(files, i);
+		if(!io_extension(e->filename, "cn")) {
+			continue;
+		}
+		parser* p = parser_parse_from_file(e->filename);
+		MUST_TRUE(p->fail);
+		parser_pop();
+	}
+	io_list_files_delete(files);
 }
 
 bool test_run() {

@@ -20,7 +20,6 @@ void _start(int argc, char* argv[]) {
 	//mem_break(311);
 	logger_open();
 	logger_set_enabled(!true);
-	script_context_open();
 	//cmd_dump(argc, argv);
 
 	bench_start();
@@ -29,7 +28,6 @@ void _start(int argc, char* argv[]) {
 void _end(int argc, char* argv[]) {
 	bench_end("main", bench_simple);
 	//system("cls");
-	script_context_close();
 	logger_close();
 
 	mem_dump();
@@ -37,20 +35,29 @@ void _end(int argc, char* argv[]) {
 	text_flush_trace();
 }
 
-int main(int argc, char* argv[]) {
+int run_script(int argc, char* argv[]) {
 #if defined(DEBUG)
 	if(!test_run()) {
 		return 0;
 	}
 #endif
-	//test_preload();
-	//整数リテラルをオブジェクトにラップ
-	//オブジェクトにベクターを持たせて、
-	//インデックスがクラスのそれと一致するように
-	//定数プールにdouble型を入れられるように
-	//test_vm();
-	_start(argc, argv);
-//	test_vector3();
-	_end(argc, argv);
+	//script_context_bootstrap(script_context_get_current());
+	//_start(argc, argv);
+	//TODO:ここにbeacon起動コード
+	//_end(argc, argv);
 	return 0;
+}
+
+int main(int argc, char* argv[]) {
+	mem_set_trace(true);
+
+	script_context_set_bootstrap(false);
+	script_context_open();
+	script_context_set_bootstrap(true);
+
+	int ret = run_script(argc, argv);
+	script_context_close();
+	mem_dump();
+	mem_destroy();
+	return ret;
 }
