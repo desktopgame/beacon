@@ -1,0 +1,11 @@
+namespace beacon {
+	class Test {
+		public:
+		def invokeTest() -> Void {
+			aa.invoke();
+			aa.invokeArgs("aaa", 100, 120);
+			call();
+			callArgs("aaa");
+		}
+	}
+}
