@@ -27,6 +27,11 @@ typedef struct parser {
 } parser;
 
 /**
+ * 構文解析器で生じたエラーをハンドルする関数.s
+ */
+typedef void(*parse_err_haner)(parser* p);
+
+/**
  * 新しいパーサーをプッシュします.
  * @param input_type
  */
@@ -101,4 +106,16 @@ void parser_print_error(parser* p);
  * また、このときパーサが持っているASTは開放されます。
  */
 void parser_pop();
+
+/**
+ * エラーハンドラを設定します.
+ * @param hdr
+ */
+void parser_set_err_hdr(parse_err_haner hdr);
+
+/**
+ * デフォルトのエラーハンドラです.
+ * @param p
+ */
+void parser_default_err_hdr(parser* p);
 #endif // !SIGNAL_PARSE_PARSER_H

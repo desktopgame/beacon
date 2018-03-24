@@ -9,6 +9,9 @@
 #include "../ast/ast_new_literal.h"
 #include "../env/script_context.h"
 
+//proto
+static parse_err_haner gErrHdr = parser_default_err_hdr;
+
 parser * parser_push(yacc_input_type input_type) {
 	script_context* ctx = script_context_get_current();
 	if (ctx->parser_stack == NULL) {
@@ -146,21 +149,7 @@ void parser_print_error(parser * p) {
 	if (!p->fail) {
 		return;
 	}
-	//system("cls");
-	//put filename
-	text_printf("file=%s ", p->source_name);
-	//put line
-	text_printf("line=%d ", p->error_line_index);
-	//put column
-	text_printf("column=%d", p->error_column_index);
-	text_putline();
-	//put str
-	text_printf("%s", p->error_message);
-	text_putline();
-	//put line
-	text_printf("%s", p->error_line_text);
-	text_putline();
-	fflush(stdout);
+	gErrHdr(p);
 	MEM_FREE(p->error_message);
 	MEM_FREE(p->error_line_text);
 	p->error_message = NULL;
@@ -181,4 +170,26 @@ void parser_pop() {
 		stack_delete(ctx->parser_stack, stack_deleter_null);
 		ctx->parser_stack = NULL;
 	}
+}
+
+void parser_set_err_hdr(parse_err_haner hdr) {
+	gErrHdr = hdr;
+}
+
+void parser_default_err_hdr(parser* p) {
+	//system("cls");
+	//put filename
+	text_printf("file=%s ", p->source_name);
+	//put line
+	text_printf("line=%d ", p->error_line_index);
+	//put column
+	text_printf("column=%d", p->error_column_index);
+	text_putline();
+	//put str
+	text_printf("%s", p->error_message);
+	text_putline();
+	//put line
+	text_printf("%s", p->error_line_text);
+	text_putline();
+	fflush(stdout);
 }
