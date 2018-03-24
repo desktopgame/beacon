@@ -115,7 +115,9 @@ void class_loader_rsub(class_loader * self, char * relativePath) {
 }
 
 void class_loader_delete(class_loader * self) {
-	assert(self != NULL);
+	if(self == NULL) {
+		return;
+	}
 	//sg_info(__FILE__, __LINE__, "deleted loader %s", self->filename);
 	//free(self->source_code);
 	ast_delete(self->source_code);
