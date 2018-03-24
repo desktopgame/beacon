@@ -6,15 +6,15 @@
 #include <string.h>
 #include <stdarg.h>
 
-#define REQ_TRUE(condition) xtest_expect_true(xtest_get(), condition, false, __FILE__, __LINE__, NULL)
-#define REQ_FALSE(condition) xtest_expect_true(xtest_get(), !(condition), false, __FILE__, __LINE__, NULL)
-#define REQ_EQ(a, b) xtest_expect_true(xtest_get(), ((a) == (b)), false, __FILE__, __LINE__, NULL)
-#define REQ_STREQ(a, b) xtest_expect_true(xtest_get(), !strcmp((a), (b)), false, __FILE__, __LINE__, NULL)
+#define REQ_TRUE(condition) xtest_expect_true(xtest_get(), condition, true, false, __FILE__, __LINE__, NULL)
+#define REQ_FALSE(condition) xtest_expect_true(xtest_get(), !(condition), true, false, __FILE__, __LINE__, NULL)
+#define REQ_EQ(a, b) xtest_expect_true(xtest_get(), ((a) == (b)), true, false, __FILE__, __LINE__, NULL)
+#define REQ_STREQ(a, b) xtest_expect_true(xtest_get(), !strcmp((a), (b)), true, false, __FILE__, __LINE__, NULL)
 
-#define MUST_TRUE(condition) xtest_expect_true(xtest_get(), condition, true, __FILE__, __LINE__, NULL)
-#define MUST_FALSE(condition) xtest_expect_true(xtest_get(), !(condition), true, __FILE__, __LINE__, NULL)
-#define MUST_EQ(a, b) xtest_expect_true(xtest_get(), ((a) == (b)), true, __FILE__, __LINE__, NULL)
-#define MUST_STREQ(a, b) xtest_expect_true(xtest_get(), !strcmp((a), (b)), true, __FILE__, __LINE__, NULL)
+#define MUST_TRUE(condition) xtest_expect_true(xtest_get(), condition, true, true, __FILE__, __LINE__, NULL)
+#define MUST_FALSE(condition) xtest_expect_true(xtest_get(), !(condition), true, true, __FILE__, __LINE__, NULL)
+#define MUST_EQ(a, b) xtest_expect_true(xtest_get(), ((a) == (b)), true, true, __FILE__, __LINE__, NULL)
+#define MUST_STREQ(a, b) xtest_expect_true(xtest_get(), !strcmp((a), (b)), true, true, __FILE__, __LINE__, NULL)
 
 /**
  * 実行されるテストの形式を表すポインタ.
@@ -29,6 +29,7 @@ typedef struct xtest {
 	xtest_runner runner;
 	vector* log_vec;
 	string_buffer* out;
+	bool error;
 } xtest;
 
 /**
@@ -87,18 +88,20 @@ xtest* xtest_get();
  * condition が true でないなら記録します.
  * @param self
  * @param condition
+ * @param isRecord
  * @param isThrow
  * @param filename
  * @param lineno
  * @param fmt
  * @return
  */
-bool xtest_expect_true(xtest* self, bool condition, bool isThrow, const char* filename, int lineno, const char* fmt, ...);
+bool xtest_expect_true(xtest* self, bool condition, bool isRecord, bool isThrow, const char* filename, int lineno, const char* fmt, ...);
 
 /**
  * condition が true でないなら記録します.
  * @param self
  * @param condition
+ * @param isRecord
  * @param isThrow
  * @param filename
  * @param lineno
@@ -106,7 +109,25 @@ bool xtest_expect_true(xtest* self, bool condition, bool isThrow, const char* fi
  * @param ap
  * @return
  */
-bool xtest_expect_vtrue(xtest* self, bool condition, bool isThrow, const char* filename, int lineno, const char* fmt, va_list ap);
+bool xtest_expect_vtrue(xtest* self, bool condition, bool isRecord, bool isThrow, const char* filename, int lineno, const char* fmt, va_list ap);
+
+/**
+ * ファイル位置を記録しない代わりに、フォーマットを出力します.
+ * @param condition
+ * @param fmt
+ * @param ...
+ */
+void xtest_request_true(bool condition, const char* fmt, ...);
+void xtest_request_vtrue(bool condition, const char* fmt, va_list ap);
+
+/**
+ * ファイル位置を記録しない代わりに、フォーマットを出力します.
+ * @param condition
+ * @param fmt
+ * @param ...
+ */
+void xtest_must_true(bool condition, const char* fmt, ...);
+void xtest_must_vtrue(bool condition, const char* fmt, va_list ap);
 
 /**
  * ログを解放します.

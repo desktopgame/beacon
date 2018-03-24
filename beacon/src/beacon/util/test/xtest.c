@@ -3,6 +3,7 @@
 #include "../text.h"
 #include <setjmp.h>
 #include <assert.h>
+#include <stdio.h>
 
 static xtest* gXTest = NULL;
 static jmp_buf gXBuf;
@@ -16,6 +17,7 @@ xtest* xtest_new(const char* name, xtest_runner runner) {
 	ret->runner = runner;
 	ret->log_vec = vector_new();
 	ret->out = string_buffer_new();
+	ret->error = false;
 	return ret;
 }
 
@@ -35,7 +37,7 @@ bool xtest_run(xtest* self) {
 		thrown = true;
 	}
 	//ログを出力
-	bool ret = self->log_vec->length == 0;
+	bool ret = !self->error;
 	const char* mark = ret ? "::" : "!!";
 	text_printr(' ', 4);
 	text_printf(mark);
@@ -60,6 +62,7 @@ bool xtest_run(xtest* self) {
 			withIndent = true;
 		}
 	}
+	fflush(stdout);
 	return ret;
 }
 
@@ -80,27 +83,52 @@ xtest* xtest_get() {
 	return gXTest;
 }
 
-bool xtest_expect_true(xtest* self, bool condition, bool isThrow, const char* filename, int lineno, const char* fmt, ...) {
+bool xtest_expect_true(xtest* self, bool condition, bool isRecord, bool isThrow, const char* filename, int lineno, const char* fmt, ...) {
 	va_list ap;
 	va_start(ap, fmt);
-	bool ret = xtest_expect_vtrue(self, condition, isThrow, filename, lineno, fmt, ap);
+	bool ret = xtest_expect_vtrue(self, condition, isRecord, isThrow, filename, lineno, fmt, ap);
 	va_end(ap);
 	return ret;
 }
 
-bool xtest_expect_vtrue(xtest* self, bool condition, bool isThrow, const char* filename, int lineno, const char* fmt, va_list ap) {
+bool xtest_expect_vtrue(xtest* self, bool condition, bool isRecord, bool isThrow, const char* filename, int lineno, const char* fmt, va_list ap) {
 	if(condition) {
 		return condition;
 	}
-	xlog* xl = xlog_new(filename, lineno);
-	vector_push(self->log_vec, xl);
+	if(isRecord) {
+		xlog* xl = xlog_new(filename, lineno);
+		vector_push(self->log_vec, xl);
+	}
+	if(fmt != NULL) {
+		xtest_vprintf(fmt, ap);
+	}
 	if(isThrow) {
-		if(fmt != NULL) {
-			xtest_vprintf(fmt, ap);
-		}
+		self->error = true;
 		longjmp(gXBuf, 1);
 	}
 	return condition;
+}
+
+void xtest_request_true(bool condition, const char* fmt, ...) {
+	va_list ap;
+	va_start(ap, fmt);
+	xtest_request_vtrue(condition, fmt, ap);
+	va_end(ap);
+}
+
+void xtest_request_vtrue(bool condition, const char* fmt, va_list ap) {
+	xtest_expect_vtrue(xtest_get(), condition, false, false, "", -1, fmt, ap);
+}
+
+void xtest_must_true(bool condition, const char* fmt, ...) {
+	va_list ap;
+	va_start(ap, fmt);
+	xtest_must_vtrue(condition, fmt, ap);
+	va_end(ap);
+}
+
+void xtest_must_vtrue(bool condition, const char* fmt, va_list ap) {
+	xtest_expect_vtrue(xtest_get(), condition, false, true, "", -1, fmt, ap);
 }
 
 void xlog_delete(xlog* self) {
