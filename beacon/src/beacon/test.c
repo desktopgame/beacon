@@ -37,7 +37,8 @@ static void test_bison_grammer() {
 	xtest_printf("-%s-\n", rundir);
 	for(int i=0; i<files->length; i++) {
 		file_entry* e = (file_entry*)vector_at(files, i);
-		xtest_printf("    %s\n", e->filename);
+		const char* str = io_extension(e->filename, "md") ? "true" : "false";
+		xtest_printf("    %s[is md?: %s]\n", e->filename, str);
 	}
 }
 

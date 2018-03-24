@@ -71,6 +71,14 @@ vector* io_list_files(const char* dirname);
 void io_list_files_delete(vector* files);
 
 /**
+ * filename の拡張子が ext なら true.
+ * @param filename
+ * @param ext ドットを含まない
+ * @return
+ */
+bool io_extension(const char* filename, const char* ext);
+
+/**
  * a と b をパス区切り文字で連結して返します.
  * @param a
  * @param b
