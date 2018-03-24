@@ -90,10 +90,14 @@ int tree_map_compare(tree_map * self, tree_key key) {
 }
 
 void tree_map_each(tree_map * self, tree_action act) {
+	assert(self != NULL);
 	tree_map_eachImpl(self, act);
 }
 
 void tree_map_delete(tree_map * self, tree_element_deleter deleter) {
+	if(self == NULL) {
+		return;
+	}
 	//先に子要素を開放する
 	if (self->left != NULL) {
 		tree_map_delete(self->left, deleter);
