@@ -7,6 +7,9 @@
 static xtest* gXTest = NULL;
 static jmp_buf gXBuf;
 
+//proto
+static void xtest_xlog_delete(vector_item item);
+
 xtest* xtest_new(const char* name, xtest_runner runner) {
 	xtest* ret = (xtest*)MEM_MALLOC(sizeof(xtest));
 	ret->name = text_strdup(name);
@@ -95,6 +98,12 @@ void xlog_delete(xlog* self) {
 
 void xtest_delete(xtest* self) {
 	string_buffer_delete(self->out);
+	vector_delete(self->log_vec, xtest_xlog_delete);
 	MEM_FREE(self->name);
 	MEM_FREE(self);
+}
+//private
+static void xtest_xlog_delete(vector_item item) {
+	xlog* e = (xlog*)item;
+	xlog_delete(e);
 }
