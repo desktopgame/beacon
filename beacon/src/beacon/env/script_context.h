@@ -1,6 +1,7 @@
 #pragma once
 #ifndef SIGNAL_ENV_SCRIPT_CONTEXT_H
 #define SIGNAL_ENV_SCRIPT_CONTEXT_H
+#include <stdbool.h>
 #include "../util/stack.h"
 #include "../util/tree_map.h"
 #include "../util/vector.h"
@@ -86,4 +87,23 @@ void script_context_delete(script_context* self);
  * そこから参照可能な全てのスクリプトコンテキストを開放します.
  */
 void script_context_close();
+
+/**
+ * まだブートストラップクラスローダが起動していないなら起動します.
+ * @param self
+ */
+void script_context_bootstrap(script_context* self);
+
+/**
+ * 新しいスクリプトコンテキストを開始したとき、
+ * ブートストラップクラスローダを起動するなら true.
+ * デフォルトで true です。
+ * @param b
+ */
+void script_context_set_bootstrap(bool b);
+
+/**
+ * @return
+ */
+bool script_context_get_bootstrap();
 #endif // !SIGNAL_ENV_SCRIPT_CONTEXT_H

@@ -24,6 +24,7 @@ static void script_context_namespace_delete(tree_item item);
 
 static script_context* gScriptContext = NULL;
 static script_context* gScriptContextCurrent = NULL;
+static bool gScriptBootstrap = true;
 
 void script_context_open() {
 	sg_thread_launch();
@@ -120,23 +121,7 @@ void script_context_close() {
 	sg_thread_destroy();
 }
 
-//private
-static script_context* script_context_new() {
-	script_context* ret = script_context_malloc();
-	script_context_launch(ret);
-	return ret;
-}
-
-static script_context* script_context_check_init(void) {
-	if (gScriptContext == NULL) {
-		gScriptContext = script_context_malloc();
-		gScriptContextCurrent = gScriptContext;
-		script_context_launch(gScriptContext);
-	}
-	return gScriptContext;
-}
-
-static void script_context_launch(script_context* self) {
+void script_context_bootstrap(script_context* self) {
 	//一時的に現在のコンテキストを無効にして、
 	//引数のコンテキストを設定する
 	//FIXME:スタック?
@@ -179,6 +164,37 @@ static void script_context_launch(script_context* self) {
 	script_context_set_current(selected);
 }
 
+void script_context_set_bootstrap(bool b) {
+	gScriptBootstrap = b;
+}
+
+bool script_context_get_bootstrap() {
+	return gScriptBootstrap;
+}
+
+//private
+static script_context* script_context_new() {
+	script_context* ret = script_context_malloc();
+	script_context_launch(ret);
+	return ret;
+}
+
+static script_context* script_context_check_init(void) {
+	if (gScriptContext == NULL) {
+		gScriptContext = script_context_malloc();
+		gScriptContextCurrent = gScriptContext;
+		script_context_launch(gScriptContext);
+	}
+	return gScriptContext;
+}
+
+static void script_context_launch(script_context* self) {
+	if(!gScriptBootstrap) {
+		return;
+	}
+	script_context_bootstrap(self);
+}
+
 static script_context* script_context_malloc(void) {
 	script_context* ret = (script_context*)MEM_MALLOC(sizeof(script_context));
 	ret->parser_stack = NULL;
@@ -204,7 +220,11 @@ static void script_context_free(script_context* self) {
 	vector_delete(self->type_vec, vector_deleter_null);
 	vector_delete(self->thread_vec, vector_deleter_null);
 	tree_map_delete(self->class_loader_map, script_context_class_loader_delete);
-	tree_map_each(self->namespace_map, script_context_namespace_unlink);
+	//ブートストラップクラスローダを意図的に起動していないなら、
+	//ここはまだNULL
+	if(self->namespace_map != NULL) {
+		tree_map_each(self->namespace_map, script_context_namespace_unlink);
+	}
 
 	int a = object_count();
 //	text_printfln("---");
