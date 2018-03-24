@@ -12,6 +12,7 @@ xtest* xtest_new(const char* name, xtest_runner runner) {
 	ret->name = text_strdup(name);
 	ret->runner = runner;
 	ret->log_vec = vector_new();
+	ret->out = string_buffer_new();
 	return ret;
 }
 
@@ -43,7 +44,33 @@ bool xtest_run(xtest* self) {
 		text_printr(' ', 8);
 		text_printf("%s<%d>\n", e->filename, e->lineno);
 	}
+	//事前に出力されたバッファを表示
+	bool withIndent = true;
+	for(int i=0; i<self->out->length; i++) {
+		char ch = self->out->text[i];
+		if(withIndent) {
+			text_printr(' ', 8);
+			withIndent = false;
+		}
+		text_printf("%c", ch);
+		if(ch == '\n') {
+			withIndent = true;
+		}
+	}
 	return ret;
+}
+
+void xtest_printf(const char* fmt, ...) {
+	va_list ap;
+	va_start(ap, fmt);
+	xtest_vprintf(fmt, ap);
+	va_end(ap);
+}
+
+void xtest_vprintf(const char* fmt, va_list ap) {
+	xtest* cur = xtest_get();
+	assert(cur != NULL);
+	string_buffer_vappendf(cur->out, fmt, ap);
 }
 
 xtest* xtest_get() {
@@ -67,6 +94,7 @@ void xlog_delete(xlog* self) {
 }
 
 void xtest_delete(xtest* self) {
+	string_buffer_delete(self->out);
 	MEM_FREE(self->name);
 	MEM_FREE(self);
 }

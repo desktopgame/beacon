@@ -1,8 +1,10 @@
 #ifndef BEACON_UTIL_TEST_XTEST_H
 #define BEACON_UTIL_TEST_XTEST_H
 #include "../vector.h"
+#include "../string_buffer.h"
 #include <stdbool.h>
 #include <string.h>
+#include <stdarg.h>
 
 #define REQ_TRUE(condition) xtest_expect_true(xtest_get(), condition, false, __FILE__, __LINE__)
 #define REQ_FALSE(condition) xtest_expect_true(xtest_get(), !(condition), false, __FILE__, __LINE__)
@@ -26,6 +28,7 @@ typedef struct xtest {
 	char* name;
 	xtest_runner runner;
 	vector* log_vec;
+	string_buffer* out;
 } xtest;
 
 /**
@@ -58,6 +61,21 @@ xlog* xlog_new(const char* filename, int lineno);
  * @return このテストをパスしたなら true.
  */
 bool xtest_run(xtest* self);
+
+/**
+ * 現在のテスト構造体#out に フォーマットした文字列をバッファします.
+ * ここでバッファされた文字列はテスト終了後にインデントと共に出力されます。
+ * @param fmt
+ * @param ...
+ */
+void xtest_printf(const char* fmt, ...);
+
+/**
+ * @see xtest_printf
+ * @param fmt
+ * @param ap
+ */
+void xtest_vprintf(const char* fmt, va_list ap);
 
 /**
  * 現在テストを実行しているオブジェクトを返します.
