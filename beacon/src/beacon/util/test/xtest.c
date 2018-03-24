@@ -80,13 +80,23 @@ xtest* xtest_get() {
 	return gXTest;
 }
 
-bool xtest_expect_true(xtest* self, bool condition, bool isThrow, const char* filename, int lineno) {
+bool xtest_expect_true(xtest* self, bool condition, bool isThrow, const char* filename, int lineno, const char* fmt, ...) {
+	va_list ap;
+	va_start(ap, fmt);
+	bool ret = xtest_expect_vtrue(self, condition, isThrow, filename, lineno, fmt, ap);
+	va_end(ap);
+}
+
+bool xtest_expect_vtrue(xtest* self, bool condition, bool isThrow, const char* filename, int lineno, const char* fmt, va_list ap) {
 	if(condition) {
 		return condition;
 	}
 	xlog* xl = xlog_new(filename, lineno);
 	vector_push(self->log_vec, xl);
 	if(isThrow) {
+		if(fmt != NULL) {
+			xtest_vprintf(fmt, ap);
+		}
 		longjmp(gXBuf, 1);
 	}
 	return condition;
