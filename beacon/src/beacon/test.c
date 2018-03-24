@@ -53,7 +53,7 @@ static void test_bison_grammer() {
 	//xtest_printf("-%s-\n", rundir);
 	//成功するはず
 	test_bison_grammerImpl(rundir, false);
-	test_bison_grammerImpl(rundir, true);
+	test_bison_grammerImpl(errdir, true);
 	parser_set_err_hdr(parser_default_err_hdr);
 }
 
