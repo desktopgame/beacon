@@ -30,40 +30,30 @@
 static void test_cll(void);
 static void test_parse_err_hdr(parser* p);
 
+static void test_bison_grammerImpl(const char* dirname, bool require) {
+	vector* files = io_list_files(dirname);
+	for(int i=0; i<files->length; i++) {
+		file_entry* e = (file_entry*)vector_at(files, i);
+		if(!io_extension(e->filename, "cn")) {
+			continue;
+		}
+		char* input = io_read_text(e->filename);
+		parser* p = parser_parse_from_source(input);
+		xtest_must_true(p->fail == require, "%s", e->filename);
+		parser_pop();
+		MEM_FREE(input);
+	}
+	io_list_files_delete(files);
+}
+
 static void test_bison_grammer() {
-	const char* topdir = "grammer_test";
 	const char* rundir = "./grammer_test/run";
 	const char* errdir = "./grammer_test/err";
 	parser_set_err_hdr(test_parse_err_hdr);
 	//xtest_printf("-%s-\n", rundir);
 	//成功するはず
-	vector* files = io_list_files(rundir);
-	for(int i=0; i<files->length; i++) {
-		file_entry* e = (file_entry*)vector_at(files, i);
-		if(!io_extension(e->filename, "cn")) {
-			continue;
-		}
-		char* input = io_read_text(e->filename);
-		parser* p = parser_parse_from_source(input);
-		xtest_must_true(!p->fail, "%s", e->filename);
-		parser_pop();
-		MEM_FREE(input);
-	}
-	io_list_files_delete(files);
-	//失敗するはず
-	files = io_list_files(errdir);
-	for(int i=0; i<files->length; i++) {
-		file_entry* e = (file_entry*)vector_at(files, i);
-		if(!io_extension(e->filename, "cn")) {
-			continue;
-		}
-		char* input = io_read_text(e->filename);
-		parser* p = parser_parse_from_source(input);
-		xtest_must_true(p->fail, "%s", e->filename);
-		parser_pop();
-		MEM_FREE(input);
-	}
-	io_list_files_delete(files);
+	test_bison_grammerImpl(rundir, false);
+	test_bison_grammerImpl(rundir, true);
 	parser_set_err_hdr(parser_default_err_hdr);
 }
 
