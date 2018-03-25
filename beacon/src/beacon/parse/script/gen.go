@@ -189,7 +189,7 @@ func main() {
 	make("lex.makeconfig", "signal.l", *isTest)
 	make("yy.makeconfig", "signal.y", *isTest)
 	execp("flex", "signal.l")
-	execp("bison", "-d", "signal.y")
+	execp("bison", "-d", "signal.y", "-r", "all")
 	insert("signal.tab.h",
 		"#include \"../ast/ast.h\"",
 		"#include \"../ast/ast_new_factor.h\"",
