@@ -62,66 +62,75 @@
      DIV = 271,
      MOD = 272,
      NOT = 273,
-     ASSIGN = 274,
-     ADD_ASSIGN = 275,
-     SUB_ASSIGN = 276,
-     MUL_ASSIGN = 277,
-     DIV_ASSIGN = 278,
-     MOD_ASSIGN = 279,
-     EQUAL = 280,
-     NOTEQUAL = 281,
-     INC = 282,
-     DEC = 283,
-     GT = 284,
-     GE = 285,
-     LT = 286,
-     LE = 287,
-     BIT_AND = 288,
-     LOGIC_AND = 289,
-     BIT_OR = 290,
-     LOGIC_OR = 291,
-     LCB = 292,
-     RCB = 293,
-     LRB = 294,
-     RRB = 295,
-     LSB = 296,
-     RSB = 297,
-     SEMI = 298,
-     IMPORT = 299,
-     VAR = 300,
-     THIS = 301,
-     SUPER = 302,
-     TRUE_TOK = 303,
-     FALSE_TOK = 304,
-     NULL_TOK = 305,
-     AS = 306,
-     INTERFACE = 307,
-     CLASS = 308,
-     ENUM = 309,
-     PUBLIC = 310,
-     PRIVATE = 311,
-     PROTECTED = 312,
-     STATIC = 313,
-     NATIVE = 314,
-     NEW = 315,
-     IN = 316,
-     OUT = 317,
-     CTOR = 318,
-     DEF = 319,
-     ARROW = 320,
-     NAMESPACE = 321,
-     RETURN = 322,
-     IF = 323,
-     ELIF = 324,
-     ELSE = 325,
-     WHILE = 326,
-     BREAK = 327,
-     CONTINUE = 328,
-     TRY = 329,
-     CATCH = 330,
-     THROW = 331,
-     UMINUS = 332,
-     NONAME = 333
+     LSHIFT = 274,
+     RSHIFT = 275,
+     CHILDA = 276,
+     EQUAL = 277,
+     NOTEQUAL = 278,
+     GT = 279,
+     GE = 280,
+     LT = 281,
+     LE = 282,
+     BIT_AND = 283,
+     LOGIC_AND = 284,
+     BIT_OR = 285,
+     LOGIC_OR = 286,
+     ASSIGN = 287,
+     ADD_ASSIGN = 288,
+     SUB_ASSIGN = 289,
+     MUL_ASSIGN = 290,
+     DIV_ASSIGN = 291,
+     MOD_ASSIGN = 292,
+     AND_ASSIGN = 293,
+     OR_ASSIGN = 294,
+     LSHIFT_ASSIGN = 295,
+     RSHIFT_ASSIGN = 296,
+     EXC_OR_ASSIGN = 297,
+     INC = 298,
+     DEC = 299,
+     EXC_OR = 300,
+     LCB = 301,
+     RCB = 302,
+     LRB = 303,
+     RRB = 304,
+     LSB = 305,
+     RSB = 306,
+     SEMI = 307,
+     IMPORT = 308,
+     VAR = 309,
+     THIS = 310,
+     SUPER = 311,
+     TRUE_TOK = 312,
+     FALSE_TOK = 313,
+     NULL_TOK = 314,
+     AS = 315,
+     INTERFACE = 316,
+     CLASS = 317,
+     ENUM = 318,
+     PUBLIC = 319,
+     PRIVATE = 320,
+     PROTECTED = 321,
+     STATIC = 322,
+     NATIVE = 323,
+     NEW = 324,
+     IN = 325,
+     OUT = 326,
+     CTOR = 327,
+     DEF = 328,
+     ARROW = 329,
+     NAMESPACE = 330,
+     RETURN = 331,
+     IF = 332,
+     ELIF = 333,
+     ELSE = 334,
+     WHILE = 335,
+     BREAK = 336,
+     CONTINUE = 337,
+     TRY = 338,
+     CATCH = 339,
+     THROW = 340,
+     POSITIVE = 341,
+     NEGATIVE = 342
    };
 #endif
 /* Tokens.  */
@@ -141,66 +150,75 @@
 #define DIV 271
 #define MOD 272
 #define NOT 273
-#define ASSIGN 274
-#define ADD_ASSIGN 275
-#define SUB_ASSIGN 276
-#define MUL_ASSIGN 277
-#define DIV_ASSIGN 278
-#define MOD_ASSIGN 279
-#define EQUAL 280
-#define NOTEQUAL 281
-#define INC 282
-#define DEC 283
-#define GT 284
-#define GE 285
-#define LT 286
-#define LE 287
-#define BIT_AND 288
-#define LOGIC_AND 289
-#define BIT_OR 290
-#define LOGIC_OR 291
-#define LCB 292
-#define RCB 293
-#define LRB 294
-#define RRB 295
-#define LSB 296
-#define RSB 297
-#define SEMI 298
-#define IMPORT 299
-#define VAR 300
-#define THIS 301
-#define SUPER 302
-#define TRUE_TOK 303
-#define FALSE_TOK 304
-#define NULL_TOK 305
-#define AS 306
-#define INTERFACE 307
-#define CLASS 308
-#define ENUM 309
-#define PUBLIC 310
-#define PRIVATE 311
-#define PROTECTED 312
-#define STATIC 313
-#define NATIVE 314
-#define NEW 315
-#define IN 316
-#define OUT 317
-#define CTOR 318
-#define DEF 319
-#define ARROW 320
-#define NAMESPACE 321
-#define RETURN 322
-#define IF 323
-#define ELIF 324
-#define ELSE 325
-#define WHILE 326
-#define BREAK 327
-#define CONTINUE 328
-#define TRY 329
-#define CATCH 330
-#define THROW 331
-#define UMINUS 332
-#define NONAME 333
+#define LSHIFT 274
+#define RSHIFT 275
+#define CHILDA 276
+#define EQUAL 277
+#define NOTEQUAL 278
+#define GT 279
+#define GE 280
+#define LT 281
+#define LE 282
+#define BIT_AND 283
+#define LOGIC_AND 284
+#define BIT_OR 285
+#define LOGIC_OR 286
+#define ASSIGN 287
+#define ADD_ASSIGN 288
+#define SUB_ASSIGN 289
+#define MUL_ASSIGN 290
+#define DIV_ASSIGN 291
+#define MOD_ASSIGN 292
+#define AND_ASSIGN 293
+#define OR_ASSIGN 294
+#define LSHIFT_ASSIGN 295
+#define RSHIFT_ASSIGN 296
+#define EXC_OR_ASSIGN 297
+#define INC 298
+#define DEC 299
+#define EXC_OR 300
+#define LCB 301
+#define RCB 302
+#define LRB 303
+#define RRB 304
+#define LSB 305
+#define RSB 306
+#define SEMI 307
+#define IMPORT 308
+#define VAR 309
+#define THIS 310
+#define SUPER 311
+#define TRUE_TOK 312
+#define FALSE_TOK 313
+#define NULL_TOK 314
+#define AS 315
+#define INTERFACE 316
+#define CLASS 317
+#define ENUM 318
+#define PUBLIC 319
+#define PRIVATE 320
+#define PROTECTED 321
+#define STATIC 322
+#define NATIVE 323
+#define NEW 324
+#define IN 325
+#define OUT 326
+#define CTOR 327
+#define DEF 328
+#define ARROW 329
+#define NAMESPACE 330
+#define RETURN 331
+#define IF 332
+#define ELIF 333
+#define ELSE 334
+#define WHILE 335
+#define BREAK 336
+#define CONTINUE 337
+#define TRY 338
+#define CATCH 339
+#define THROW 340
+#define POSITIVE 341
+#define NEGATIVE 342
 
 
 
@@ -218,7 +236,7 @@ typedef union YYSTYPE
 	access_level access_level_value;
 }
 /* Line 1529 of yacc.c.  */
-#line 215 "signal.tab.h"
+#line 233 "signal.tab.h"
 	YYSTYPE;
 # define yystype YYSTYPE /* obsolescent; will be withdrawn */
 # define YYSTYPE_IS_DECLARED 1

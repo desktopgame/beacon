@@ -4,6 +4,11 @@
 #include "ast.h"
 #include "assign_operator_type.h"
 //typedef struct ast { } ast;
+
+ast* ast_new_unary(ast_tag tag, ast* a);
+
+ast* ast_new_binary(ast_tag tag, ast* left, ast* right);
+
 /**
 * 加算を表す要素を作成します.
 * @param l

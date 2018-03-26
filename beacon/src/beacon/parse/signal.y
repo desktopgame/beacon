@@ -29,20 +29,25 @@
 %token <ast_value>			INT
 %token <ast_value>			DOUBLE
 %token <string_value>		IDENT
-%type <assign_otype_value>	assign_type_T
 %type <chain_type_value>	constructor_chain_type_T
 %type <access_level_value>	access_level_T
 %type <modifier_type_value> modifier_type_T;
 %token DOT COMMA COMMA_OPT COLON COLO_COLO
-		ADD SUB MUL DIV MOD NOT
-		ASSIGN ADD_ASSIGN SUB_ASSIGN MUL_ASSIGN DIV_ASSIGN MOD_ASSIGN
+		ADD SUB MUL DIV MOD NOT LSHIFT RSHIFT CHILDA
 		EQUAL NOTEQUAL
-		INC DEC
 		GT GE LT LE
 		BIT_AND LOGIC_AND BIT_OR LOGIC_OR
+
+		ASSIGN ADD_ASSIGN SUB_ASSIGN MUL_ASSIGN DIV_ASSIGN MOD_ASSIGN
+		AND_ASSIGN OR_ASSIGN LSHIFT_ASSIGN RSHIFT_ASSIGN EXC_OR_ASSIGN
+
+		INC DEC EXC_OR
+
 		LCB RCB LRB RRB LSB RSB
 		SEMI IMPORT VAR
+
 		THIS SUPER TRUE_TOK FALSE_TOK NULL_TOK AS
+
 		INTERFACE CLASS ENUM PUBLIC PRIVATE PROTECTED STATIC NATIVE NEW
 		IN OUT
 		CTOR DEF ARROW NAMESPACE RETURN
@@ -81,25 +86,8 @@
 						typename_group
 						typename_list
 						typename_T
-						fqcn_part
-					expression 
-						assign 
-						or 
-						and 
-						equal 
-						compare 
-						addsub 
-						muldiv 
-						unary 
-						prefix 
-						postfix 
+					expression
 						primary
-						primary_nobrace
-						primary_literal
-						primary_assoc
-						primary_faccess
-						primary_mcall
-						primary_maccess
 					stmt_list
 						stmt
 						variable_decl_stmt
@@ -118,8 +106,19 @@
 						catch_stmt
 						scope
 						scope_optional
-%left UMINUS
-%left NONAME
+%left EQUAL NOTEQUAL
+%left GT GE LT LE
+%left LOGIC_AND
+%left LOGIC_OR
+%left BIT_AND
+%left BIT_OR
+%left EXC_OR
+%left LSHIFT RSHIFT
+%left ADD SUB
+%left MUL DIV MOD
+%left NEGATIVE POSITIVE
+%right ASSIGN ADD_ASSIGN SUB_ASSIGN MUL_ASSIGN DIV_ASSIGN MOD_ASSIGN AND_ASSIGN OR_ASSIGN LSHIFT_ASSIGN RSHIFT_ASSIGN EXC_OR_ASSIGN
+%right CHILDA NOT
 %%
 
 
@@ -503,245 +502,171 @@ $$ = ast_new_typename_list($3, $1);
 	;
 
 typename_T
-	: fqcn_part typename_group
+	: IDENT typename_group
 	{
-$$ = ast_new_typename($1, $2);
+$$ = ast_new_blank();
 	}
 	;
-
-fqcn_part
-	: IDENT
-	{
-$$ = ast_new_fqcn_part($1);
-	}
-	| fqcn_part COLO_COLO IDENT
-	{
-$$ = ast_new_fqcn_part_list(ast_new_fqcn_part($3), $1);
-	}
-	;
-
-
 
 
 
 
 expression
-	: assign
-	;
-assign
-	: or
-	| primary assign_type_T assign
-	{
-$$ = ast_new_generic_assign($1, $2, $3);
-	}
-	;
-assign_type_T
-	: ASSIGN
-	{
-$$ = assign_otype_def;
-	}
-	| ADD_ASSIGN
-	{
-$$ = assign_otype_add;
-	}
-	| SUB_ASSIGN
-	{
-$$ = assign_otype_sub;
-	}
-	| MUL_ASSIGN
-	{
-$$ = assign_otype_mul;
-	}
-	| DIV_ASSIGN
-	{
-$$ = assign_otype_div;
-	}
-	| MOD_ASSIGN
-	{
-$$ = assign_otype_mod;
-	}
-	;
-or
-	: and
-	| or LOGIC_OR and
-	{
-$$ = ast_new_logic_or($1, $3);
-	}
-	;
-and
-	: equal
-	| and LOGIC_AND equal
-	{
-$$ = ast_new_logic_and($1, $3);
-	}
-	;
-equal
-	: compare
-	| equal EQUAL compare
-	{
-$$ = ast_new_equal($1, $3);
-	}
-	| equal NOTEQUAL compare
-	{
-$$ = ast_new_notequal($1, $3);
-	}
-	;
-compare
-	: addsub
-	| compare GT addsub
-	{
-$$ = ast_new_gt($1, $3);
-	}
-	| compare GE addsub
-	{
-$$ = ast_new_ge($1, $3);
-	}
-	| compare LT addsub
-	{
-$$ = ast_new_lt($1, $3);
-	}
-	| compare LE addsub
-	{
-$$ = ast_new_le($1, $3);
-	}
-	;
-addsub
-	: muldiv
-	| addsub ADD muldiv
-	{
-$$ = ast_new_add($1, $3);
-	}
-	| addsub SUB muldiv
-	{
-$$ = ast_new_sub($1, $3);
-	}
-	;
-muldiv
-	: unary
-	| muldiv MUL unary
-	{
-$$ = ast_new_mul($1, $3);
-	}
-	| muldiv DIV unary
-	{
-$$ = ast_new_div($1, $3);
-	}
-	| muldiv MOD unary
-	{
-$$ = ast_new_mod($1, $3);
-	}
-	;
-unary
-	: prefix
-	| NOT unary
-	{
-$$ = ast_new_not($2);
-	}
-	| '-' unary %prec UMINUS
-	{
-$$ = ast_new_neg($2);
-	}
-	;
-prefix
-	: postfix
-	| INC postfix
-	{
-$$ = ast_new_pre_inc($2);
-	}
-	| DEC postfix
-	{
-$$ = ast_new_pre_dec($2);
-	}
-	;
-postfix
 	: primary
-	| primary INC
+	| ADD expression %prec POSITIVE
 	{
-$$ = ast_new_post_inc($1);
+		$$ = ast_new_unary(ast_pos, $2);
 	}
-	| primary DEC
+	| SUB expression %prec NEGATIVE
 	{
-$$ = ast_new_post_dec($1);
+		$$ = ast_new_unary(ast_neg, $2);
 	}
-	| primary AS typename_T
+	| expression ADD expression
 	{
-$$ = ast_new_as($1, $3);
+		$$ = ast_new_binary(ast_add, $1, $3);
+	}
+	| expression SUB expression
+	{
+		$$ = ast_new_binary(ast_sub, $1, $3);
+	}
+	| expression MUL expression
+	{
+		$$ = ast_new_binary(ast_mul, $1, $3);
+	}
+	| expression DIV expression
+	{
+		$$ = ast_new_binary(ast_div, $1, $3);
+	}
+	| expression MOD expression
+	{
+		$$ = ast_new_binary(ast_mod, $1, $3);
+	}
+	| expression BIT_OR expression
+	{
+		$$ = ast_new_binary(ast_bit_or, $1, $3);
+	}
+	| expression EQUAL expression
+	{
+		$$ = ast_new_binary(ast_equal, $1, $3);
+	}
+	| expression NOTEQUAL expression
+	{
+		$$ = ast_new_binary(ast_notequal, $1, $3);
+	}
+	| expression BIT_AND expression
+	{
+		$$ = ast_new_binary(ast_bit_and, $1, $3);
+	}
+	| expression EXC_OR expression
+	{
+		$$ = ast_new_binary(ast_exc_or, $1, $3);
+	}
+	| expression LOGIC_OR expression
+	{
+		$$ = ast_new_binary(ast_logic_or, $1, $3);
+	}
+	| expression LOGIC_AND expression
+	{
+		$$ = ast_new_binary(ast_logic_and, $1, $3);
+	}
+	| expression ASSIGN expression
+	{
+		$$ = ast_new_binary(ast_assign, $1, $3);
+	}
+	| expression ADD_ASSIGN expression
+	{
+		$$ = ast_new_binary(ast_add_assign, $1, $3);
+	}
+	| expression SUB_ASSIGN expression
+	{
+		$$ = ast_new_binary(ast_sub_assign, $1, $3);
+	}
+	| expression MUL_ASSIGN expression
+	{
+		$$ = ast_new_binary(ast_mul_assign, $1, $3);
+	}
+	| expression DIV_ASSIGN expression
+	{
+		$$ = ast_new_binary(ast_div_assign, $1, $3);
+	}
+	| expression MOD_ASSIGN expression
+	{
+		$$ = ast_new_binary(ast_mod_assign, $1, $3);
+	}
+	| expression AND_ASSIGN expression
+	{
+		$$ = ast_new_binary(ast_and_assign, $1, $3);
+	}
+	| expression OR_ASSIGN expression
+	{
+		$$ = ast_new_binary(ast_or_assign, $1, $3);
+	}
+	| expression EXC_OR_ASSIGN expression
+	{
+		$$ = ast_new_binary(ast_exc_or_assign, $1, $3);
+	}
+	| expression LSHIFT_ASSIGN expression
+	{
+		$$ = ast_new_binary(ast_lshift_assign, $1, $3);
+	}
+	| expression RSHIFT_ASSIGN expression
+	{
+		$$ = ast_new_binary(ast_rshift_assign, $1, $3);
+	}
+	| expression GT expression
+	{
+		$$ = ast_new_binary(ast_gt, $1, $3);
+	}
+	| expression GE expression
+	{
+		$$ = ast_new_binary(ast_ge, $1, $3);
+	}
+	| expression LT expression
+	{
+		$$ = ast_new_binary(ast_lt, $1, $3);
+	}
+	| expression LE expression
+	{
+		$$ = ast_new_binary(ast_le, $1, $3);
+	}
+	| expression LSHIFT expression {
+		$$ = ast_new_binary(ast_lshift, $1, $3);
+	}
+	| expression RSHIFT expression {
+		$$ = ast_new_binary(ast_rshift, $1, $3);
+	}
+	| CHILDA expression
+	{
+		$$ = ast_new_unary(ast_childa, $2);
+	}
+	| NOT expression
+	{
+		$$ = ast_new_unary(ast_not, $2);
+	}
+	| LRB expression RRB
+	{
+		$$ = $2;
 	}
 	;
 primary
-	: primary_nobrace
-	| '(' expression ')'
-	{
-$$ = $2;
-	}
-	;
-primary_nobrace
-	: primary_literal
-	| primary_assoc
-	| THIS
-	{
-$$ = ast_new_this();
-	}
-	| SUPER
-	{
-$$ = ast_new_super();
-	}
-	| NEW typename_T LRB argument_list RRB
-	{
-$$ = ast_new_new_instance($2, $4);
-	}
-	| NEW typename_T LRB RRB
-	{
-$$ = ast_new_new_instance($2, ast_new_blank());
-	}
-	;
-
-primary_literal
 	: INT
 	| DOUBLE
 	| CHAR_LITERAL
 	| STRING_LITERAL
 	| TRUE_TOK
 	{
-$$ = ast_new_true();
+		$$ = ast_new_true();
 	}
 	| FALSE_TOK
 	{
-$$ = ast_new_false();
+		$$ = ast_new_false();
 	}
 	| NULL_TOK
 	{
-$$ = ast_new_null();
-	}
-	;
-primary_assoc
-	: primary_faccess
-	| primary_mcall
-	{
-$$ = ast_new_blank();
+		$$ = ast_new_null();
 	}
 	;
 
-primary_faccess
-	: primary DOT IDENT
-	{
-$$ = ast_new_blank();
-	}
-	;
-
-primary_mcall
-	: primary_maccess typename_group LRB argument_list RRB
-	{
-$$ = ast_new_blank();
-	}
-	| primary_maccess typename_group LRB RRB
-	{
-$$ = ast_new_blank();
-	}
-	;
-primary_maccess
-	: primary_nobrace
-	;
 
 
 stmt_list

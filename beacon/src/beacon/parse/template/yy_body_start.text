@@ -603,31 +603,15 @@ $$TNO		$$ = ast_new_typename_list($3, $1);
 ;;型名{{{
 ;;
 typename_T
-	: fqcn_part typename_group
+	: IDENT typename_group
 	{
-$$TNO		$$ = ast_new_typename($1, $2);
+$$TNO		$$ = ast_new_blank();
 	}
 	;
 ;;
 ;;型名}}}
 ;;
 
-;;
-;;FullQualityClassName{{{
-;;
-fqcn_part
-	: IDENT
-	{
-$$TNO		$$ = ast_new_fqcn_part($1);
-	}
-	| fqcn_part COLO_COLO IDENT
-	{
-$$TNO		$$ = ast_new_fqcn_part_list(ast_new_fqcn_part($3), $1);
-	}
-	;
-;;
-;;}}}
-;;
 
 ;;ここにfactor
 ;;ここにstmt

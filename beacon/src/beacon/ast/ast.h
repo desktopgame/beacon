@@ -19,12 +19,16 @@ typedef enum ast_tag {
 	ast_mul,
 	ast_div,
 	ast_mod,
+	ast_lshift,
+	ast_rshift,
 	//| ||
 	ast_bit_or,
 	ast_logic_or,
 	//& &&
 	ast_bit_and,
 	ast_logic_and,
+	ast_exc_or,
+	ast_childa,
 	//= += -= *= /= %=
 	ast_assign,
 	ast_add_assign,
@@ -32,6 +36,11 @@ typedef enum ast_tag {
 	ast_mul_assign,
 	ast_div_assign,
 	ast_mod_assign,
+	ast_or_assign,
+	ast_and_assign,
+	ast_exc_or_assign,
+	ast_lshift_assign,
+	ast_rshift_assign,
 	//== !=
 	ast_equal,
 	ast_notequal,
@@ -42,6 +51,7 @@ typedef enum ast_tag {
 	ast_le,
 	//! -
 	ast_not,
+	ast_pos,
 	ast_neg,
 	//++ --
 	ast_pre_inc,

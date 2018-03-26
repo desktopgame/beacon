@@ -155,7 +155,11 @@ static void update_loc() {
 <INITIAL>"/"				{ return (DIV); }
 <INITIAL>"%"				{ return (MOD); }
 <INITIAL>"!"				{ return (NOT); }
+<INITIAL>"^"				{ return (EXC_OR); }
+<INITIAL>"~"				{ return (CHILDA); }
 
+<INITIAL>"<<"				{ return (LSHIFT); }
+<INITIAL>">>"				{ return (RSHIFT); }
 
 <INITIAL>"="				{ return (ASSIGN); }
 <INITIAL>"+="				{ return (ADD_ASSIGN); }
@@ -163,6 +167,13 @@ static void update_loc() {
 <INITIAL>"*="				{ return (MUL_ASSIGN); }
 <INITIAL>"/="				{ return (DIV_ASSIGN); }
 <INITIAL>"%="				{ return (MOD_ASSIGN); }
+
+<INITIAL>"|="				{ return (OR_ASSIGN); }
+<INITIAL>"&="				{ return (AND_ASSIGN); }
+<INITIAL>"^="				{ return (EXC_OR_ASSIGN); }
+<INITIAL>"&="				{ return (AND_ASSIGN); }
+<INITIAL>"<<="				{ return (LSHIFT_ASSIGN); }
+<INITIAL>">>="				{ return (RSHIFT_ASSIGN); }
 
 <INITIAL>"=="				{ return (EQUAL); }
 <INITIAL>"!="				{ return (NOTEQUAL); }

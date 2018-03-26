@@ -5,20 +5,25 @@
 %token <ast_value>			INT
 %token <ast_value>			DOUBLE
 %token <string_value>		IDENT
-%type <assign_otype_value>	assign_type_T
 %type <chain_type_value>	constructor_chain_type_T
 %type <access_level_value>	access_level_T
 %type <modifier_type_value> modifier_type_T;
 %token DOT COMMA COMMA_OPT COLON COLO_COLO
-		ADD SUB MUL DIV MOD NOT
-		ASSIGN ADD_ASSIGN SUB_ASSIGN MUL_ASSIGN DIV_ASSIGN MOD_ASSIGN
+		ADD SUB MUL DIV MOD NOT LSHIFT RSHIFT CHILDA
 		EQUAL NOTEQUAL
-		INC DEC
 		GT GE LT LE
 		BIT_AND LOGIC_AND BIT_OR LOGIC_OR
+
+		ASSIGN ADD_ASSIGN SUB_ASSIGN MUL_ASSIGN DIV_ASSIGN MOD_ASSIGN
+		AND_ASSIGN OR_ASSIGN LSHIFT_ASSIGN RSHIFT_ASSIGN EXC_OR_ASSIGN
+
+		INC DEC EXC_OR
+
 		LCB RCB LRB RRB LSB RSB
 		SEMI IMPORT VAR
+
 		THIS SUPER TRUE_TOK FALSE_TOK NULL_TOK AS
+
 		INTERFACE CLASS ENUM PUBLIC PRIVATE PROTECTED STATIC NATIVE NEW
 		IN OUT
 		CTOR DEF ARROW NAMESPACE RETURN
@@ -59,25 +64,8 @@ $$SET top_level program
 						typename_group
 						typename_list
 						typename_T
-						fqcn_part
-					expression 
-						assign 
-						or 
-						and 
-						equal 
-						compare 
-						addsub 
-						muldiv 
-						unary 
-						prefix 
-						postfix 
+					expression
 						primary
-						primary_nobrace
-						primary_literal
-						primary_assoc
-						primary_faccess
-						primary_mcall
-						primary_maccess
 					stmt_list
 						stmt
 						variable_decl_stmt
@@ -96,6 +84,17 @@ $$SET top_level program
 						catch_stmt
 						scope
 						scope_optional
-%left UMINUS
-%left NONAME
+%left EQUAL NOTEQUAL
+%left GT GE LT LE
+%left LOGIC_AND
+%left LOGIC_OR
+%left BIT_AND
+%left BIT_OR
+%left EXC_OR
+%left LSHIFT RSHIFT
+%left ADD SUB
+%left MUL DIV MOD
+%left NEGATIVE POSITIVE
+%right ASSIGN ADD_ASSIGN SUB_ASSIGN MUL_ASSIGN DIV_ASSIGN MOD_ASSIGN AND_ASSIGN OR_ASSIGN LSHIFT_ASSIGN RSHIFT_ASSIGN EXC_OR_ASSIGN
+%right CHILDA NOT
 %%
