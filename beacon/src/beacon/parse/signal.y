@@ -87,6 +87,7 @@
 						typename_list
 						typename_T
 					expression
+						expression_brace
 						primary
 					stmt_list
 						stmt
@@ -116,9 +117,8 @@
 %left LSHIFT RSHIFT
 %left ADD SUB
 %left MUL DIV MOD
-%left NEGATIVE POSITIVE
+%right CHILDA NOT NEGATIVE POSITIVE
 %right ASSIGN ADD_ASSIGN SUB_ASSIGN MUL_ASSIGN DIV_ASSIGN MOD_ASSIGN AND_ASSIGN OR_ASSIGN LSHIFT_ASSIGN RSHIFT_ASSIGN EXC_OR_ASSIGN
-%right CHILDA NOT
 %%
 
 
@@ -643,11 +643,13 @@ expression
 	{
 		$$ = ast_new_unary(ast_not, $2);
 	}
-	| LRB expression RRB
+	| expression_brace
+	;
+expression_brace
+	: LRB expression RRB
 	{
 		$$ = $2;
 	}
-	;
 primary
 	: INT
 	| DOUBLE
@@ -820,7 +822,7 @@ $$ = ast_new_blank();
 	;
 stmt_term
 	: SEMI
-	| /* empty */
+	| '\n'
 	;
 %%
 

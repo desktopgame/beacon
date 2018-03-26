@@ -65,6 +65,7 @@ $$SET top_level program
 						typename_list
 						typename_T
 					expression
+						expression_brace
 						primary
 					stmt_list
 						stmt
@@ -94,7 +95,6 @@ $$SET top_level program
 %left LSHIFT RSHIFT
 %left ADD SUB
 %left MUL DIV MOD
-%left NEGATIVE POSITIVE
+%right CHILDA NOT NEGATIVE POSITIVE
 %right ASSIGN ADD_ASSIGN SUB_ASSIGN MUL_ASSIGN DIV_ASSIGN MOD_ASSIGN AND_ASSIGN OR_ASSIGN LSHIFT_ASSIGN RSHIFT_ASSIGN EXC_OR_ASSIGN
-%right CHILDA NOT
 %%

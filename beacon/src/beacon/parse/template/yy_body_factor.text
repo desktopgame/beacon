@@ -130,11 +130,13 @@ expression
 	{
 		$$ = ast_new_unary(ast_not, $2);
 	}
-	| LRB expression RRB
+	| expression_brace
+	;
+expression_brace
+	: LRB expression RRB
 	{
 		$$ = $2;
 	}
-	;
 primary
 	: INT
 	| DOUBLE

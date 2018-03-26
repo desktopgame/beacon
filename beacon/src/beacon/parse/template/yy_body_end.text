@@ -19,7 +19,7 @@ $$TNO		$$ = ast_new_blank();
 	;
 stmt_term
 	: SEMI
-	| /* empty */
+	| '\n'
 	;
 %%
 
