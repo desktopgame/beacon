@@ -120,6 +120,7 @@
 %left MUL DIV MOD
 %left DOT FUNCCALL POST_INC POST_DEC
 %right CHILDA NOT NEGATIVE POSITIVE
+%right AS
 %right ASSIGN ADD_ASSIGN SUB_ASSIGN MUL_ASSIGN DIV_ASSIGN MOD_ASSIGN AND_ASSIGN OR_ASSIGN LSHIFT_ASSIGN RSHIFT_ASSIGN EXC_OR_ASSIGN PRE_INC PRE_DEC
 %token FORM_TYPE
 %%
@@ -658,6 +659,10 @@ expression_nobrace
 		$$ = ast_new_binary(ast_rshift, $1, $3);
 	}
 	| expression DOT IDENT
+	{
+		$$ = ast_new_blank();
+	}
+	| expression AS typename_T
 	{
 		$$ = ast_new_blank();
 	}

@@ -136,6 +136,10 @@ expression_nobrace
 	{
 		$$ = ast_new_blank();
 	}
+	| __SELF AS typename_T
+	{
+		$$ = ast_new_blank();
+	}
 	| CHILDA __SELF
 	{
 		$$ = ast_new_unary(ast_childa, $2);
