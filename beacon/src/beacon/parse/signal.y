@@ -86,6 +86,7 @@
 						typename_group
 						typename_list
 						typename_T
+						fqcn_part
 					expression
 						expression_nobrace
 						primary
@@ -120,6 +121,7 @@
 %left DOT FUNCCALL
 %right CHILDA NOT NEGATIVE POSITIVE
 %right ASSIGN ADD_ASSIGN SUB_ASSIGN MUL_ASSIGN DIV_ASSIGN MOD_ASSIGN AND_ASSIGN OR_ASSIGN LSHIFT_ASSIGN RSHIFT_ASSIGN EXC_OR_ASSIGN
+%token FORM_TYPE
 %%
 
 
@@ -503,12 +505,22 @@ typename_list
 	;
 
 typename_T
-	: IDENT typename_group
+	: fqcn_part typename_group
 	{
 		$$ = ast_new_blank();
 	}
 	;
 
+fqcn_part
+	: IDENT
+	{
+		$$ = ast_new_fqcn_part($1);
+	}
+	| fqcn_part COLO_COLO IDENT
+	{
+		$$ = ast_new_fqcn_part_list(ast_new_fqcn_part($3), $1);
+	}
+	;
 
 
 
@@ -665,6 +677,7 @@ expression_nobrace
 	{
 		$$ = ast_new_blank();
 	}
+	| fqcn_part
 	;
 primary
 	: INT

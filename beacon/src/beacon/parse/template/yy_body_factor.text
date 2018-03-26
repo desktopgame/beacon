@@ -152,6 +152,7 @@ expression_nobrace
 	{
 		$$ = ast_new_blank();
 	}
+	| fqcn_part
 	;
 $$REM __SELF
 primary

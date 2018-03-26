@@ -603,7 +603,7 @@ typename_list
 ;;型名{{{
 ;;
 typename_T
-	: IDENT typename_group
+	: fqcn_part typename_group
 	{
 		$$ = ast_new_blank();
 	}
@@ -612,6 +612,22 @@ typename_T
 ;;型名}}}
 ;;
 
+;;
+;;FullQualityClassName{{{
+;;
+fqcn_part
+	: IDENT
+	{
+		$$ = ast_new_fqcn_part($1);
+	}
+	| fqcn_part COLO_COLO IDENT
+	{
+		$$ = ast_new_fqcn_part_list(ast_new_fqcn_part($3), $1);
+	}
+	;
+;;
+;;}}}
+;;
 
 ;;ここにfactor
 ;;ここにstmt

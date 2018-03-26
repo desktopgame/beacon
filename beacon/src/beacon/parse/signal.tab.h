@@ -131,7 +131,8 @@
      THROW = 340,
      FUNCCALL = 341,
      POSITIVE = 342,
-     NEGATIVE = 343
+     NEGATIVE = 343,
+     FORM_TYPE = 344
    };
 #endif
 /* Tokens.  */
@@ -221,6 +222,7 @@
 #define FUNCCALL 341
 #define POSITIVE 342
 #define NEGATIVE 343
+#define FORM_TYPE 344
 
 
 
@@ -238,7 +240,7 @@ typedef union YYSTYPE
 	access_level access_level_value;
 }
 /* Line 1529 of yacc.c.  */
-#line 235 "signal.tab.h"
+#line 237 "signal.tab.h"
 	YYSTYPE;
 # define yystype YYSTYPE /* obsolescent; will be withdrawn */
 # define YYSTYPE_IS_DECLARED 1
