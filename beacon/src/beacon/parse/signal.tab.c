@@ -698,8 +698,8 @@ static const yytype_uint16 yyrline[] =
      672,   673,   674,   678,   682,   691,   695,   701,   705,   706,
      707,   708,   709,   710,   711,   712,   713,   714,   717,   723,
      729,   735,   739,   743,   747,   753,   754,   760,   766,   772,
-     778,   784,   790,   796,   802,   806,   812,   823,   827,   833,
-     837,   840,   841
+     778,   784,   790,   796,   802,   806,   812,   821,   825,   831,
+     835,   838,   839
 };
 #endif
 
@@ -1990,462 +1990,462 @@ yyreduce:
         case 3:
 #line 129 "signal.y"
     {
-(yyval.ast_value) = ast_new_blank();
+		(yyval.ast_value) = ast_new_blank();
 	;}
     break;
 
   case 4:
 #line 136 "signal.y"
     {
-ast_compile_entry((yyvsp[(1) - (1)].ast_value));
+		ast_compile_entry((yyvsp[(1) - (1)].ast_value));
 	;}
     break;
 
   case 5:
 #line 140 "signal.y"
     {
-ast_compile_entry((yyvsp[(1) - (1)].ast_value));
+		ast_compile_entry((yyvsp[(1) - (1)].ast_value));
 	;}
     break;
 
   case 6:
 #line 144 "signal.y"
     {
-ast_compile_entry((yyvsp[(1) - (1)].ast_value));
+		ast_compile_entry((yyvsp[(1) - (1)].ast_value));
 	;}
     break;
 
   case 7:
 #line 148 "signal.y"
     {
-ast_compile_entry((yyvsp[(1) - (1)].ast_value));
+		ast_compile_entry((yyvsp[(1) - (1)].ast_value));
 	;}
     break;
 
   case 8:
 #line 155 "signal.y"
     {
-(yyval.ast_value) = ast_new_namespace_decl((yyvsp[(2) - (3)].ast_value), (yyvsp[(3) - (3)].ast_value));
+		(yyval.ast_value) = ast_new_namespace_decl((yyvsp[(2) - (3)].ast_value), (yyvsp[(3) - (3)].ast_value));
 	;}
     break;
 
   case 9:
 #line 162 "signal.y"
     {
-(yyval.ast_value) = (yyvsp[(2) - (3)].ast_value)
+		(yyval.ast_value) = (yyvsp[(2) - (3)].ast_value)
 	;}
     break;
 
   case 10:
 #line 169 "signal.y"
     {
-(yyval.ast_value) = ast_new_namespace_namespace_decl((yyvsp[(2) - (3)].ast_value), (yyvsp[(3) - (3)].ast_value));
+		(yyval.ast_value) = ast_new_namespace_namespace_decl((yyvsp[(2) - (3)].ast_value), (yyvsp[(3) - (3)].ast_value));
 	;}
     break;
 
   case 14:
 #line 179 "signal.y"
     {
-(yyval.ast_value) = (yyvsp[(1) - (1)].ast_value)
+		(yyval.ast_value) = (yyvsp[(1) - (1)].ast_value)
 	;}
     break;
 
   case 15:
 #line 183 "signal.y"
     {
-(yyval.ast_value) = ast_new_namespace_member_decl_list((yyvsp[(1) - (2)].ast_value), (yyvsp[(2) - (2)].ast_value));
+		(yyval.ast_value) = ast_new_namespace_member_decl_list((yyvsp[(1) - (2)].ast_value), (yyvsp[(2) - (2)].ast_value));
 	;}
     break;
 
   case 16:
 #line 190 "signal.y"
     {
-(yyval.ast_value) = ast_new_blank();
+		(yyval.ast_value) = ast_new_blank();
 	;}
     break;
 
   case 18:
 #line 198 "signal.y"
     {
-(yyval.ast_value) = ast_new_namespace_path((yyvsp[(1) - (1)].string_value));
+		(yyval.ast_value) = ast_new_namespace_path((yyvsp[(1) - (1)].string_value));
 	;}
     break;
 
   case 19:
 #line 202 "signal.y"
     {
-(yyval.ast_value) = ast_new_namespace_path_list((yyvsp[(1) - (3)].ast_value), (yyvsp[(3) - (3)].string_value));
+		(yyval.ast_value) = ast_new_namespace_path_list((yyvsp[(1) - (3)].ast_value), (yyvsp[(3) - (3)].string_value));
 	;}
     break;
 
   case 20:
 #line 209 "signal.y"
     {
-(yyval.ast_value) = ast_new_import_decl(ast_new_import_path((yyvsp[(2) - (2)].ast_value)));
+		(yyval.ast_value) = ast_new_import_decl(ast_new_import_path((yyvsp[(2) - (2)].ast_value)));
 	;}
     break;
 
   case 21:
 #line 216 "signal.y"
     {
-(yyval.ast_value) = ast_new_parameterized_typename((yyvsp[(1) - (2)].string_value), (yyvsp[(2) - (2)].ast_value));
+		(yyval.ast_value) = ast_new_parameterized_typename((yyvsp[(1) - (2)].string_value), (yyvsp[(2) - (2)].ast_value));
 	;}
     break;
 
   case 22:
 #line 223 "signal.y"
     {
-(yyval.ast_value) = ast_new_blank();
+		(yyval.ast_value) = ast_new_blank();
 	;}
     break;
 
   case 23:
 #line 227 "signal.y"
     {
-(yyval.ast_value) = (yyvsp[(2) - (3)].ast_value);
+		(yyval.ast_value) = (yyvsp[(2) - (3)].ast_value);
 	;}
     break;
 
   case 24:
 #line 234 "signal.y"
     {
-(yyval.ast_value) = (yyvsp[(1) - (1)].ast_value);
+		(yyval.ast_value) = (yyvsp[(1) - (1)].ast_value);
 	;}
     break;
 
   case 25:
 #line 238 "signal.y"
     {
-(yyval.ast_value) = ast_new_type_parameter_list((yyvsp[(3) - (3)].ast_value), (yyvsp[(1) - (3)].ast_value));
+		(yyval.ast_value) = ast_new_type_parameter_list((yyvsp[(3) - (3)].ast_value), (yyvsp[(1) - (3)].ast_value));
 	;}
     break;
 
   case 26:
 #line 245 "signal.y"
     {
-(yyval.ast_value) = ast_new_type_parameter((yyvsp[(1) - (2)].string_value), (yyvsp[(2) - (2)].ast_value));
+		(yyval.ast_value) = ast_new_type_parameter((yyvsp[(1) - (2)].string_value), (yyvsp[(2) - (2)].ast_value));
 	;}
     break;
 
   case 27:
 #line 249 "signal.y"
     {
-(yyval.ast_value) = ast_new_type_in_parameter((yyvsp[(2) - (3)].string_value), (yyvsp[(3) - (3)].ast_value));
+		(yyval.ast_value) = ast_new_type_in_parameter((yyvsp[(2) - (3)].string_value), (yyvsp[(3) - (3)].ast_value));
 	;}
     break;
 
   case 28:
 #line 253 "signal.y"
     {
-(yyval.ast_value) = ast_new_type_out_parameter((yyvsp[(2) - (3)].string_value), (yyvsp[(3) - (3)].ast_value));
+		(yyval.ast_value) = ast_new_type_out_parameter((yyvsp[(2) - (3)].string_value), (yyvsp[(3) - (3)].ast_value));
 	;}
     break;
 
   case 29:
 #line 260 "signal.y"
     {
-(yyval.ast_value) = ast_new_blank();
+		(yyval.ast_value) = ast_new_blank();
 	;}
     break;
 
   case 30:
 #line 264 "signal.y"
     {
-(yyval.ast_value) = ast_new_type_parameter_rule_list((yyvsp[(2) - (3)].ast_value));
+		(yyval.ast_value) = ast_new_type_parameter_rule_list((yyvsp[(2) - (3)].ast_value));
 	;}
     break;
 
   case 31:
 #line 271 "signal.y"
     {
-(yyval.ast_value) = ast_new_class_decl((yyvsp[(2) - (5)].ast_value), ast_new_blank(), (yyvsp[(4) - (5)].ast_value));
+		(yyval.ast_value) = ast_new_class_decl((yyvsp[(2) - (5)].ast_value), ast_new_blank(), (yyvsp[(4) - (5)].ast_value));
 	;}
     break;
 
   case 32:
 #line 275 "signal.y"
     {
-(yyval.ast_value) = ast_new_class_decl((yyvsp[(2) - (7)].ast_value), (yyvsp[(4) - (7)].ast_value), (yyvsp[(6) - (7)].ast_value));
+		(yyval.ast_value) = ast_new_class_decl((yyvsp[(2) - (7)].ast_value), (yyvsp[(4) - (7)].ast_value), (yyvsp[(6) - (7)].ast_value));
 	;}
     break;
 
   case 33:
 #line 282 "signal.y"
     {
-(yyval.ast_value) = ast_new_enum_decl((yyvsp[(2) - (5)].string_value), (yyvsp[(4) - (5)].ast_value));
+		(yyval.ast_value) = ast_new_enum_decl((yyvsp[(2) - (5)].string_value), (yyvsp[(4) - (5)].ast_value));
 	;}
     break;
 
   case 34:
 #line 286 "signal.y"
     {
-(yyval.ast_value) = ast_new_enum_decl((yyvsp[(2) - (6)].string_value), (yyvsp[(4) - (6)].ast_value));
+		(yyval.ast_value) = ast_new_enum_decl((yyvsp[(2) - (6)].string_value), (yyvsp[(4) - (6)].ast_value));
 	;}
     break;
 
   case 35:
 #line 293 "signal.y"
     {
-(yyval.ast_value) = ast_new_interface_decl((yyvsp[(2) - (5)].ast_value), ast_new_blank(), (yyvsp[(4) - (5)].ast_value));
+		(yyval.ast_value) = ast_new_interface_decl((yyvsp[(2) - (5)].ast_value), ast_new_blank(), (yyvsp[(4) - (5)].ast_value));
 	;}
     break;
 
   case 36:
 #line 297 "signal.y"
     {
-(yyval.ast_value) = ast_new_interface_decl((yyvsp[(2) - (7)].ast_value), (yyvsp[(4) - (7)].ast_value), (yyvsp[(6) - (7)].ast_value));
+		(yyval.ast_value) = ast_new_interface_decl((yyvsp[(2) - (7)].ast_value), (yyvsp[(4) - (7)].ast_value), (yyvsp[(6) - (7)].ast_value));
 	;}
     break;
 
   case 37:
 #line 304 "signal.y"
     {
-(yyval.ast_value) = ast_new_blank();
+		(yyval.ast_value) = ast_new_blank();
 	;}
     break;
 
   case 40:
 #line 313 "signal.y"
     {
-(yyval.ast_value) = ast_new_access_member_tree((yyvsp[(1) - (2)].ast_value), (yyvsp[(2) - (2)].ast_value));
+		(yyval.ast_value) = ast_new_access_member_tree((yyvsp[(1) - (2)].ast_value), (yyvsp[(2) - (2)].ast_value));
 	;}
     break;
 
   case 41:
 #line 320 "signal.y"
     {
-(yyval.ast_value) = ast_new_access_member_list((yyvsp[(1) - (3)].access_level_value), (yyvsp[(3) - (3)].ast_value));
+		(yyval.ast_value) = ast_new_access_member_list((yyvsp[(1) - (3)].access_level_value), (yyvsp[(3) - (3)].ast_value));
 	;}
     break;
 
   case 42:
 #line 327 "signal.y"
     {
-(yyval.ast_value) = ast_new_member_decl((yyvsp[(1) - (1)].ast_value));
+		(yyval.ast_value) = ast_new_member_decl((yyvsp[(1) - (1)].ast_value));
 	;}
     break;
 
   case 43:
 #line 331 "signal.y"
     {
-(yyval.ast_value) = ast_new_member_decl_list((yyvsp[(1) - (2)].ast_value), ast_new_member_decl((yyvsp[(2) - (2)].ast_value)));
+		(yyval.ast_value) = ast_new_member_decl_list((yyvsp[(1) - (2)].ast_value), ast_new_member_decl((yyvsp[(2) - (2)].ast_value)));
 	;}
     break;
 
   case 47:
 #line 344 "signal.y"
     {
-(yyval.ast_value) = ast_new_constructor_decl((yyvsp[(4) - (7)].ast_value), (yyvsp[(6) - (7)].ast_value), (yyvsp[(7) - (7)].ast_value));
+		(yyval.ast_value) = ast_new_constructor_decl((yyvsp[(4) - (7)].ast_value), (yyvsp[(6) - (7)].ast_value), (yyvsp[(7) - (7)].ast_value));
 	;}
     break;
 
   case 48:
 #line 348 "signal.y"
     {
-(yyval.ast_value) = ast_new_constructor_decl(ast_new_blank(), (yyvsp[(5) - (6)].ast_value), (yyvsp[(6) - (6)].ast_value));
+		(yyval.ast_value) = ast_new_constructor_decl(ast_new_blank(), (yyvsp[(5) - (6)].ast_value), (yyvsp[(6) - (6)].ast_value));
 	;}
     break;
 
   case 49:
 #line 355 "signal.y"
     {
-(yyval.ast_value) = ast_new_constructor_chain((yyvsp[(2) - (5)].chain_type_value), (yyvsp[(4) - (5)].ast_value));
+		(yyval.ast_value) = ast_new_constructor_chain((yyvsp[(2) - (5)].chain_type_value), (yyvsp[(4) - (5)].ast_value));
 	;}
     break;
 
   case 50:
 #line 359 "signal.y"
     {
-(yyval.ast_value) = ast_new_constructor_chain((yyvsp[(2) - (4)].chain_type_value), ast_new_blank());
+		(yyval.ast_value) = ast_new_constructor_chain((yyvsp[(2) - (4)].chain_type_value), ast_new_blank());
 	;}
     break;
 
   case 51:
 #line 366 "signal.y"
     {
-(yyval.chain_type_value) = chain_type_super;
+		(yyval.chain_type_value) = chain_type_super;
 	;}
     break;
 
   case 52:
 #line 370 "signal.y"
     {
-(yyval.chain_type_value) = chain_type_this;
+		(yyval.chain_type_value) = chain_type_this;
 	;}
     break;
 
   case 53:
 #line 377 "signal.y"
     {
-(yyval.ast_value) = ast_new_blank();
+		(yyval.ast_value) = ast_new_blank();
 	;}
     break;
 
   case 55:
 #line 385 "signal.y"
     {
-(yyval.ast_value) = ast_new_function_decl((yyvsp[(2) - (8)].string_value), (yyvsp[(4) - (8)].ast_value), (yyvsp[(8) - (8)].ast_value), (yyvsp[(7) - (8)].ast_value));
+		(yyval.ast_value) = ast_new_function_decl((yyvsp[(2) - (8)].string_value), (yyvsp[(4) - (8)].ast_value), (yyvsp[(8) - (8)].ast_value), (yyvsp[(7) - (8)].ast_value));
 	;}
     break;
 
   case 56:
 #line 389 "signal.y"
     {
-(yyval.ast_value) = ast_new_function_decl_empty_params((yyvsp[(2) - (7)].string_value), (yyvsp[(7) - (7)].ast_value), (yyvsp[(6) - (7)].ast_value));
+		(yyval.ast_value) = ast_new_function_decl_empty_params((yyvsp[(2) - (7)].string_value), (yyvsp[(7) - (7)].ast_value), (yyvsp[(6) - (7)].ast_value));
 	;}
     break;
 
   case 57:
 #line 396 "signal.y"
     {
-(yyval.ast_value) = ast_new_method_decl((yyvsp[(1) - (10)].modifier_type_value), (yyvsp[(3) - (10)].string_value), (yyvsp[(4) - (10)].ast_value), (yyvsp[(6) - (10)].ast_value), (yyvsp[(10) - (10)].ast_value), (yyvsp[(9) - (10)].ast_value));
+		(yyval.ast_value) = ast_new_method_decl((yyvsp[(1) - (10)].modifier_type_value), (yyvsp[(3) - (10)].string_value), (yyvsp[(4) - (10)].ast_value), (yyvsp[(6) - (10)].ast_value), (yyvsp[(10) - (10)].ast_value), (yyvsp[(9) - (10)].ast_value));
 	;}
     break;
 
   case 58:
 #line 400 "signal.y"
     {
-(yyval.ast_value) = ast_new_method_decl_empty_params((yyvsp[(1) - (9)].modifier_type_value), (yyvsp[(3) - (9)].string_value), (yyvsp[(4) - (9)].ast_value), (yyvsp[(9) - (9)].ast_value), (yyvsp[(8) - (9)].ast_value));
+		(yyval.ast_value) = ast_new_method_decl_empty_params((yyvsp[(1) - (9)].modifier_type_value), (yyvsp[(3) - (9)].string_value), (yyvsp[(4) - (9)].ast_value), (yyvsp[(9) - (9)].ast_value), (yyvsp[(8) - (9)].ast_value));
 	;}
     break;
 
   case 59:
 #line 407 "signal.y"
     {
-(yyval.ast_value) = ast_new_field_decl((yyvsp[(1) - (4)].modifier_type_value), (yyvsp[(2) - (4)].ast_value), (yyvsp[(3) - (4)].string_value));
+		(yyval.ast_value) = ast_new_field_decl((yyvsp[(1) - (4)].modifier_type_value), (yyvsp[(2) - (4)].ast_value), (yyvsp[(3) - (4)].string_value));
 	;}
     break;
 
   case 60:
 #line 414 "signal.y"
     {
-(yyval.modifier_type_value) = modifier_none;
+		(yyval.modifier_type_value) = modifier_none;
 	;}
     break;
 
   case 61:
 #line 418 "signal.y"
     {
-(yyval.modifier_type_value) = modifier_static_native();
+		(yyval.modifier_type_value) = modifier_static_native();
 	;}
     break;
 
   case 62:
 #line 422 "signal.y"
     {
-(yyval.modifier_type_value) = modifier_static_native();
+		(yyval.modifier_type_value) = modifier_static_native();
 	;}
     break;
 
   case 63:
 #line 426 "signal.y"
     {
-(yyval.modifier_type_value) = modifier_static;
+		(yyval.modifier_type_value) = modifier_static;
 	;}
     break;
 
   case 64:
 #line 430 "signal.y"
     {
-(yyval.modifier_type_value) = modifier_native;
+		(yyval.modifier_type_value) = modifier_native;
 	;}
     break;
 
   case 65:
 #line 437 "signal.y"
     {
-(yyval.access_level_value) = access_public;
+		(yyval.access_level_value) = access_public;
 	;}
     break;
 
   case 66:
 #line 441 "signal.y"
     {
-(yyval.access_level_value) = access_private;
+		(yyval.access_level_value) = access_private;
 	;}
     break;
 
   case 67:
 #line 445 "signal.y"
     {
-(yyval.access_level_value) = access_protected;
+		(yyval.access_level_value) = access_protected;
 	;}
     break;
 
   case 68:
 #line 452 "signal.y"
     {
-(yyval.ast_value) = ast_new_identifier((yyvsp[(1) - (1)].string_value));
+		(yyval.ast_value) = ast_new_identifier((yyvsp[(1) - (1)].string_value));
 	;}
     break;
 
   case 69:
 #line 456 "signal.y"
     {
-(yyval.ast_value) = ast_new_identifier_list((yyvsp[(3) - (3)].string_value), (yyvsp[(1) - (3)].ast_value));
+		(yyval.ast_value) = ast_new_identifier_list((yyvsp[(3) - (3)].string_value), (yyvsp[(1) - (3)].ast_value));
 	;}
     break;
 
   case 70:
 #line 463 "signal.y"
     {
-(yyval.ast_value) = ast_new_parameter((yyvsp[(1) - (2)].ast_value), (yyvsp[(2) - (2)].string_value));
+		(yyval.ast_value) = ast_new_parameter((yyvsp[(1) - (2)].ast_value), (yyvsp[(2) - (2)].string_value));
 	;}
     break;
 
   case 71:
 #line 467 "signal.y"
     {
-(yyval.ast_value) = ast_new_parameter_list((yyvsp[(3) - (4)].ast_value), (yyvsp[(4) - (4)].string_value), (yyvsp[(1) - (4)].ast_value))
+		(yyval.ast_value) = ast_new_parameter_list((yyvsp[(3) - (4)].ast_value), (yyvsp[(4) - (4)].string_value), (yyvsp[(1) - (4)].ast_value))
 	;}
     break;
 
   case 72:
 #line 474 "signal.y"
     {
-(yyval.ast_value) = ast_new_argument((yyvsp[(1) - (1)].ast_value));
+		(yyval.ast_value) = ast_new_argument((yyvsp[(1) - (1)].ast_value));
 	;}
     break;
 
   case 73:
 #line 478 "signal.y"
     {
-(yyval.ast_value) = ast_new_argument_list(ast_new_argument((yyvsp[(3) - (3)].ast_value)), (yyvsp[(1) - (3)].ast_value));
+		(yyval.ast_value) = ast_new_argument_list(ast_new_argument((yyvsp[(3) - (3)].ast_value)), (yyvsp[(1) - (3)].ast_value));
 	;}
     break;
 
   case 74:
 #line 485 "signal.y"
     {
-(yyval.ast_value) = ast_new_blank();
+		(yyval.ast_value) = ast_new_blank();
 	;}
     break;
 
   case 75:
 #line 489 "signal.y"
     {
-(yyval.ast_value) = (yyvsp[(2) - (3)].ast_value);
+		(yyval.ast_value) = (yyvsp[(2) - (3)].ast_value);
 	;}
     break;
 
   case 76:
 #line 496 "signal.y"
     {
-(yyval.ast_value) = (yyvsp[(1) - (1)].ast_value);
+		(yyval.ast_value) = (yyvsp[(1) - (1)].ast_value);
 	;}
     break;
 
   case 77:
 #line 500 "signal.y"
     {
-(yyval.ast_value) = ast_new_typename_list((yyvsp[(3) - (3)].ast_value), (yyvsp[(1) - (3)].ast_value));
+		(yyval.ast_value) = ast_new_typename_list((yyvsp[(3) - (3)].ast_value), (yyvsp[(1) - (3)].ast_value));
 	;}
     break;
 
   case 78:
 #line 507 "signal.y"
     {
-(yyval.ast_value) = ast_new_blank();
+		(yyval.ast_value) = ast_new_blank();
 	;}
     break;
 
@@ -2732,168 +2732,168 @@ ast_compile_entry((yyvsp[(1) - (1)].ast_value));
   case 125:
 #line 692 "signal.y"
     {
-(yyval.ast_value) = ast_new_stmt((yyvsp[(1) - (1)].ast_value));
+		(yyval.ast_value) = ast_new_stmt((yyvsp[(1) - (1)].ast_value));
 	;}
     break;
 
   case 126:
 #line 696 "signal.y"
     {
-(yyval.ast_value) = ast_new_stmt_list((yyvsp[(1) - (2)].ast_value), (yyvsp[(2) - (2)].ast_value));
+		(yyval.ast_value) = ast_new_stmt_list((yyvsp[(1) - (2)].ast_value), (yyvsp[(2) - (2)].ast_value));
 	;}
     break;
 
   case 127:
 #line 702 "signal.y"
     {
-(yyval.ast_value) = ast_new_proc((yyvsp[(1) - (2)].ast_value));
+		(yyval.ast_value) = ast_new_proc((yyvsp[(1) - (2)].ast_value));
 	;}
     break;
 
   case 138:
 #line 718 "signal.y"
     {
-(yyval.ast_value) = ast_new_variable_decl((yyvsp[(1) - (3)].ast_value), (yyvsp[(2) - (3)].string_value));
+		(yyval.ast_value) = ast_new_variable_decl((yyvsp[(1) - (3)].ast_value), (yyvsp[(2) - (3)].string_value));
 	;}
     break;
 
   case 139:
 #line 724 "signal.y"
     {
-(yyval.ast_value) = ast_new_variable_init((yyvsp[(1) - (5)].ast_value), (yyvsp[(2) - (5)].string_value), (yyvsp[(4) - (5)].ast_value));
+		(yyval.ast_value) = ast_new_variable_init((yyvsp[(1) - (5)].ast_value), (yyvsp[(2) - (5)].string_value), (yyvsp[(4) - (5)].ast_value));
 	;}
     break;
 
   case 140:
 #line 730 "signal.y"
     {
-(yyval.ast_value) = ast_new_inferenced_type_init((yyvsp[(2) - (5)].string_value), (yyvsp[(4) - (5)].ast_value));
+		(yyval.ast_value) = ast_new_inferenced_type_init((yyvsp[(2) - (5)].string_value), (yyvsp[(4) - (5)].ast_value));
 	;}
     break;
 
   case 141:
 #line 736 "signal.y"
     {
-(yyval.ast_value) = ast_new_if((yyvsp[(3) - (5)].ast_value), (yyvsp[(5) - (5)].ast_value));
+		(yyval.ast_value) = ast_new_if((yyvsp[(3) - (5)].ast_value), (yyvsp[(5) - (5)].ast_value));
 	;}
     break;
 
   case 142:
 #line 740 "signal.y"
     {
-(yyval.ast_value) = ast_new_if_else((yyvsp[(3) - (7)].ast_value), (yyvsp[(5) - (7)].ast_value), (yyvsp[(7) - (7)].ast_value));
+		(yyval.ast_value) = ast_new_if_else((yyvsp[(3) - (7)].ast_value), (yyvsp[(5) - (7)].ast_value), (yyvsp[(7) - (7)].ast_value));
 	;}
     break;
 
   case 143:
 #line 744 "signal.y"
     {
-(yyval.ast_value) = ast_new_if_elif_list((yyvsp[(3) - (6)].ast_value), (yyvsp[(5) - (6)].ast_value), (yyvsp[(6) - (6)].ast_value));
+		(yyval.ast_value) = ast_new_if_elif_list((yyvsp[(3) - (6)].ast_value), (yyvsp[(5) - (6)].ast_value), (yyvsp[(6) - (6)].ast_value));
 	;}
     break;
 
   case 144:
 #line 748 "signal.y"
     {
-(yyval.ast_value) = ast_new_if_elif_list_else((yyvsp[(3) - (8)].ast_value), (yyvsp[(5) - (8)].ast_value), (yyvsp[(6) - (8)].ast_value), (yyvsp[(8) - (8)].ast_value));
+		(yyval.ast_value) = ast_new_if_elif_list_else((yyvsp[(3) - (8)].ast_value), (yyvsp[(5) - (8)].ast_value), (yyvsp[(6) - (8)].ast_value), (yyvsp[(8) - (8)].ast_value));
 	;}
     break;
 
   case 146:
 #line 755 "signal.y"
     {
-(yyval.ast_value) = ast_new_elif_list((yyvsp[(1) - (2)].ast_value), (yyvsp[(2) - (2)].ast_value));
+		(yyval.ast_value) = ast_new_elif_list((yyvsp[(1) - (2)].ast_value), (yyvsp[(2) - (2)].ast_value));
 	;}
     break;
 
   case 147:
 #line 761 "signal.y"
     {
-(yyval.ast_value) = ast_new_elif((yyvsp[(3) - (5)].ast_value), (yyvsp[(5) - (5)].ast_value));
+		(yyval.ast_value) = ast_new_elif((yyvsp[(3) - (5)].ast_value), (yyvsp[(5) - (5)].ast_value));
 	;}
     break;
 
   case 148:
 #line 767 "signal.y"
     {
-(yyval.ast_value) = ast_new_while((yyvsp[(3) - (5)].ast_value), (yyvsp[(5) - (5)].ast_value));
+		(yyval.ast_value) = ast_new_while((yyvsp[(3) - (5)].ast_value), (yyvsp[(5) - (5)].ast_value));
 	;}
     break;
 
   case 149:
 #line 773 "signal.y"
     {
-(yyval.ast_value) = ast_new_break();
+		(yyval.ast_value) = ast_new_break();
 	;}
     break;
 
   case 150:
 #line 779 "signal.y"
     {
-(yyval.ast_value) = ast_new_continue();
+		(yyval.ast_value) = ast_new_continue();
 	;}
     break;
 
   case 151:
 #line 785 "signal.y"
     {
-(yyval.ast_value) = ast_new_return((yyvsp[(2) - (3)].ast_value));
+		(yyval.ast_value) = ast_new_return((yyvsp[(2) - (3)].ast_value));
 	;}
     break;
 
   case 152:
 #line 791 "signal.y"
     {
-(yyval.ast_value) = ast_new_throw((yyvsp[(2) - (3)].ast_value));
+		(yyval.ast_value) = ast_new_throw((yyvsp[(2) - (3)].ast_value));
 	;}
     break;
 
   case 153:
 #line 797 "signal.y"
     {
-(yyval.ast_value) = ast_new_try((yyvsp[(2) - (3)].ast_value), (yyvsp[(3) - (3)].ast_value));
+		(yyval.ast_value) = ast_new_try((yyvsp[(2) - (3)].ast_value), (yyvsp[(3) - (3)].ast_value));
 	;}
     break;
 
   case 154:
 #line 803 "signal.y"
     {
-(yyval.ast_value) = (yyvsp[(1) - (1)].ast_value);
+		(yyval.ast_value) = (yyvsp[(1) - (1)].ast_value);
 	;}
     break;
 
   case 155:
 #line 807 "signal.y"
     {
-(yyval.ast_value) = ast_new_catch_list((yyvsp[(2) - (2)].ast_value), (yyvsp[(1) - (2)].ast_value));
+		(yyval.ast_value) = ast_new_catch_list((yyvsp[(2) - (2)].ast_value), (yyvsp[(1) - (2)].ast_value));
 	;}
     break;
 
   case 156:
 #line 813 "signal.y"
     {
-(yyval.ast_value) = ast_new_catch((yyvsp[(3) - (6)].ast_value), (yyvsp[(4) - (6)].string_value), (yyvsp[(6) - (6)].ast_value));
+		(yyval.ast_value) = ast_new_catch((yyvsp[(3) - (6)].ast_value), (yyvsp[(4) - (6)].string_value), (yyvsp[(6) - (6)].ast_value));
 	;}
     break;
 
   case 157:
-#line 824 "signal.y"
+#line 822 "signal.y"
     {
-(yyval.ast_value) = ast_new_scope((yyvsp[(2) - (3)].ast_value));
+		(yyval.ast_value) = ast_new_scope((yyvsp[(2) - (3)].ast_value));
 	;}
     break;
 
   case 158:
-#line 828 "signal.y"
+#line 826 "signal.y"
     {
-(yyval.ast_value) = ast_new_scope_empty();
+		(yyval.ast_value) = ast_new_scope_empty();
 	;}
     break;
 
   case 159:
-#line 834 "signal.y"
+#line 832 "signal.y"
     {
-(yyval.ast_value) = ast_new_blank();
+		(yyval.ast_value) = ast_new_blank();
 	;}
     break;
 
@@ -3119,7 +3119,7 @@ yyreturn:
 }
 
 
-#line 843 "signal.y"
+#line 841 "signal.y"
 
 
 

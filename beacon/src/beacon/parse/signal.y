@@ -127,47 +127,47 @@ compilation_unit
 	: program
 	| error '\n'
 	{
-$$ = ast_new_blank();
+		$$ = ast_new_blank();
 	}
 	;
 
 program
 	: stmt_list
 	{
-ast_compile_entry($1);
+		ast_compile_entry($1);
 	}
 	| import
 	{
-ast_compile_entry($1);
+		ast_compile_entry($1);
 	}
 	| namespace_decl
 	{
-ast_compile_entry($1);
+		ast_compile_entry($1);
 	}
 	| function_define
 	{
-ast_compile_entry($1);
+		ast_compile_entry($1);
 	}
 	;
 
 namespace_decl
 	: NAMESPACE namespace_path namespace_body
 	{
-$$ = ast_new_namespace_decl($2, $3);
+		$$ = ast_new_namespace_decl($2, $3);
 	}
 	;
 
 namespace_body
 	: LCB namespace_member_decl_optional RCB
 	{
-$$ = $2
+		$$ = $2
 	}
 	;
 
 namespace_member_decl
 	: NAMESPACE namespace_path namespace_body
 	{
-$$ = ast_new_namespace_namespace_decl($2, $3);
+		$$ = ast_new_namespace_namespace_decl($2, $3);
 	}
 	| class_decl
 	| interface_decl
@@ -177,18 +177,18 @@ $$ = ast_new_namespace_namespace_decl($2, $3);
 namespace_member_decl_list
 	: namespace_member_decl
 	{
-$$ = $1
+		$$ = $1
 	}
 	| namespace_member_decl_list namespace_member_decl
 	{
-$$ = ast_new_namespace_member_decl_list($1, $2);
+		$$ = ast_new_namespace_member_decl_list($1, $2);
 	}
 	;
 
 namespace_member_decl_optional
 	: /* empty */
 	{
-$$ = ast_new_blank();
+		$$ = ast_new_blank();
 	}
 	| namespace_member_decl_list
 	;
@@ -196,113 +196,113 @@ $$ = ast_new_blank();
 namespace_path
 	: IDENT
 	{
-$$ = ast_new_namespace_path($1);
+		$$ = ast_new_namespace_path($1);
 	}
 	| namespace_path DOT IDENT
 	{
-$$ = ast_new_namespace_path_list($1, $3);
+		$$ = ast_new_namespace_path_list($1, $3);
 	}
 	;
 
 import
 	: IMPORT STRING_LITERAL
 	{
-$$ = ast_new_import_decl(ast_new_import_path($2));
+		$$ = ast_new_import_decl(ast_new_import_path($2));
 	}
 	;
 
 parameterized_typename
 	: IDENT type_parameter_group
 	{
-$$ = ast_new_parameterized_typename($1, $2);
+		$$ = ast_new_parameterized_typename($1, $2);
 	}
 	;
 
 type_parameter_group
 	: /* empty */
 	{
-$$ = ast_new_blank();
+		$$ = ast_new_blank();
 	}
 	| LT type_parameter_list GT
 	{
-$$ = $2;
+		$$ = $2;
 	}
 	;
 
 type_parameter_list
 	: type_parameter
 	{
-$$ = $1;
+		$$ = $1;
 	}
 	| type_parameter_list COMMA type_parameter
 	{
-$$ = ast_new_type_parameter_list($3, $1);
+		$$ = ast_new_type_parameter_list($3, $1);
 	}
 	;
 
 type_parameter
 	: IDENT type_parameter_rule_list
 	{
-$$ = ast_new_type_parameter($1, $2);
+		$$ = ast_new_type_parameter($1, $2);
 	}
 	| IN IDENT type_parameter_rule_list
 	{
-$$ = ast_new_type_in_parameter($2, $3);
+		$$ = ast_new_type_in_parameter($2, $3);
 	}
 	| OUT IDENT type_parameter_rule_list
 	{
-$$ = ast_new_type_out_parameter($2, $3);
+		$$ = ast_new_type_out_parameter($2, $3);
 	}
 	;
 
 type_parameter_rule_list
 	: /* empty */
 	{
-$$ = ast_new_blank();
+		$$ = ast_new_blank();
 	}
 	| LRB typename_list RRB
 	{
-$$ = ast_new_type_parameter_rule_list($2);
+		$$ = ast_new_type_parameter_rule_list($2);
 	}
 	;
 
 class_decl
 	: CLASS parameterized_typename LCB access_member_tree_opt RCB
 	{
-$$ = ast_new_class_decl($2, ast_new_blank(), $4);
+		$$ = ast_new_class_decl($2, ast_new_blank(), $4);
 	}
 	| CLASS parameterized_typename COLON typename_list LCB access_member_tree_opt RCB
 	{
-$$ = ast_new_class_decl($2, $4, $6);
+		$$ = ast_new_class_decl($2, $4, $6);
 	}
 	;
 
 enum_decl
 	: ENUM IDENT LCB ident_list RCB
 	{
-$$ = ast_new_enum_decl($2, $4);
+		$$ = ast_new_enum_decl($2, $4);
 	}
 	| ENUM IDENT LCB ident_list COMMA RCB
 	{
-$$ = ast_new_enum_decl($2, $4);
+		$$ = ast_new_enum_decl($2, $4);
 	}
 	;
 
 interface_decl
 	: INTERFACE parameterized_typename LCB access_member_tree_opt RCB
 	{
-$$ = ast_new_interface_decl($2, ast_new_blank(), $4);
+		$$ = ast_new_interface_decl($2, ast_new_blank(), $4);
 	}
 	| INTERFACE parameterized_typename COLON typename_list LCB access_member_tree_opt RCB
 	{
-$$ = ast_new_interface_decl($2, $4, $6);
+		$$ = ast_new_interface_decl($2, $4, $6);
 	}
 	;
 
 access_member_tree_opt
 	: /* empty */
 	{
-$$ = ast_new_blank();
+		$$ = ast_new_blank();
 	}
 	| access_member_tree
 	;
@@ -311,25 +311,25 @@ access_member_tree
 	: access_member_list
 	| access_member_tree access_member_list
 	{
-$$ = ast_new_access_member_tree($1, $2);
+		$$ = ast_new_access_member_tree($1, $2);
 	}
 	;
 
 access_member_list
 	: access_level_T COLON member_define_list
 	{
-$$ = ast_new_access_member_list($1, $3);
+		$$ = ast_new_access_member_list($1, $3);
 	}
 	;
 
 member_define_list
 	: member_define
 	{
-$$ = ast_new_member_decl($1);
+		$$ = ast_new_member_decl($1);
 	}
 	| member_define_list member_define
 	{
-$$ = ast_new_member_decl_list($1, ast_new_member_decl($2));
+		$$ = ast_new_member_decl_list($1, ast_new_member_decl($2));
 	}
 	;
 
@@ -342,40 +342,40 @@ member_define
 constructor_define
 	: CTOR NEW LRB parameter_list RRB constructor_chain_optional scope_optional
 	{
-$$ = ast_new_constructor_decl($4, $6, $7);
+		$$ = ast_new_constructor_decl($4, $6, $7);
 	}
 	| CTOR NEW LRB RRB constructor_chain_optional scope_optional
 	{
-$$ = ast_new_constructor_decl(ast_new_blank(), $5, $6);
+		$$ = ast_new_constructor_decl(ast_new_blank(), $5, $6);
 	}
 	;
 
 constructor_chain
 	: COLON constructor_chain_type_T LRB argument_list RRB
 	{
-$$ = ast_new_constructor_chain($2, $4);
+		$$ = ast_new_constructor_chain($2, $4);
 	}
 	| COLON constructor_chain_type_T LRB RRB
 	{
-$$ = ast_new_constructor_chain($2, ast_new_blank());
+		$$ = ast_new_constructor_chain($2, ast_new_blank());
 	}
 	;
 
 constructor_chain_type_T
 	: SUPER
 	{
-$$ = chain_type_super;
+		$$ = chain_type_super;
 	}
 	| THIS
 	{
-$$ = chain_type_this;
+		$$ = chain_type_this;
 	}
 	;
 
 constructor_chain_optional
 	: /* empty */
 	{
-$$ = ast_new_blank();
+		$$ = ast_new_blank();
 	}
 	| constructor_chain
 	;
@@ -383,129 +383,129 @@ $$ = ast_new_blank();
 function_define
 	: DEF IDENT LRB parameter_list RRB ARROW typename_T scope_optional
 	{
-$$ = ast_new_function_decl($2, $4, $8, $7);
+		$$ = ast_new_function_decl($2, $4, $8, $7);
 	}
 	| DEF IDENT LRB RRB ARROW typename_T scope_optional
 	{
-$$ = ast_new_function_decl_empty_params($2, $7, $6);
+		$$ = ast_new_function_decl_empty_params($2, $7, $6);
 	}
 	;
 
 method_define
 	: modifier_type_T DEF IDENT type_parameter_group LRB parameter_list RRB ARROW typename_T scope_optional
 	{
-$$ = ast_new_method_decl($1, $3, $4, $6, $10, $9);
+		$$ = ast_new_method_decl($1, $3, $4, $6, $10, $9);
 	}
 	| modifier_type_T DEF IDENT type_parameter_group LRB RRB ARROW typename_T scope_optional
 	{
-$$ = ast_new_method_decl_empty_params($1, $3, $4, $9, $8);
+		$$ = ast_new_method_decl_empty_params($1, $3, $4, $9, $8);
 	}
 	;
 
 field_define
 	: modifier_type_T typename_T IDENT SEMI
 	{
-$$ = ast_new_field_decl($1, $2, $3);
+		$$ = ast_new_field_decl($1, $2, $3);
 	}
 	;
 
 modifier_type_T
 	: /* empty */
 	{
-$$ = modifier_none;
+		$$ = modifier_none;
 	}
 	| STATIC NATIVE
 	{
-$$ = modifier_static_native();
+		$$ = modifier_static_native();
 	}
 	| NATIVE STATIC
 	{
-$$ = modifier_static_native();
+		$$ = modifier_static_native();
 	}
 	| STATIC
 	{
-$$ = modifier_static;
+		$$ = modifier_static;
 	}
 	| NATIVE
 	{
-$$ = modifier_native;
+		$$ = modifier_native;
 	}
 	;
 
 access_level_T
 	: PUBLIC
 	{
-$$ = access_public;
+		$$ = access_public;
 	}
 	| PRIVATE
 	{
-$$ = access_private;
+		$$ = access_private;
 	}
 	| PROTECTED
 	{
-$$ = access_protected;
+		$$ = access_protected;
 	}
 	;
 
 ident_list
 	: IDENT
 	{
-$$ = ast_new_identifier($1);
+		$$ = ast_new_identifier($1);
 	}
 	| ident_list COMMA IDENT
 	{
-$$ = ast_new_identifier_list($3, $1);
+		$$ = ast_new_identifier_list($3, $1);
 	}
 	;
 
 parameter_list
 	: typename_T IDENT
 	{
-$$ = ast_new_parameter($1, $2);
+		$$ = ast_new_parameter($1, $2);
 	}
 	| parameter_list COMMA typename_T IDENT
 	{
-$$ = ast_new_parameter_list($3, $4, $1)
+		$$ = ast_new_parameter_list($3, $4, $1)
 	}
 	;
 
 argument_list
 	: expression
 	{
-$$ = ast_new_argument($1);
+		$$ = ast_new_argument($1);
 	}
 	| argument_list COMMA expression
 	{
-$$ = ast_new_argument_list(ast_new_argument($3), $1);
+		$$ = ast_new_argument_list(ast_new_argument($3), $1);
 	}
 	;
 
 typename_group
 	: /* empty */
 	{
-$$ = ast_new_blank();
+		$$ = ast_new_blank();
 	}
 	| '<' typename_list '>'
 	{
-$$ = $2;
+		$$ = $2;
 	}
 	;
 
 typename_list
 	: typename_T
 	{
-$$ = $1;
+		$$ = $1;
 	}
 	| typename_list COMMA typename_T
 	{
-$$ = ast_new_typename_list($3, $1);
+		$$ = ast_new_typename_list($3, $1);
 	}
 	;
 
 typename_T
 	: IDENT typename_group
 	{
-$$ = ast_new_blank();
+		$$ = ast_new_blank();
 	}
 	;
 
@@ -690,17 +690,17 @@ primary
 stmt_list
 	: stmt
 	{
-$$ = ast_new_stmt($1);
+		$$ = ast_new_stmt($1);
 	}
 	| stmt_list stmt
 	{
-$$ = ast_new_stmt_list($1, $2);
+		$$ = ast_new_stmt_list($1, $2);
 	}
 	;
 stmt
 	: expression stmt_term
 	{
-$$ = ast_new_proc($1);
+		$$ = ast_new_proc($1);
 	}
 	| variable_decl_stmt
 	| variable_init_stmt
@@ -716,123 +716,121 @@ $$ = ast_new_proc($1);
 variable_decl_stmt
 	: typename_T IDENT SEMI
 	{
-$$ = ast_new_variable_decl($1, $2);
+		$$ = ast_new_variable_decl($1, $2);
 	}
 	;
 variable_init_stmt
 	: typename_T IDENT ASSIGN expression stmt_term
 	{
-$$ = ast_new_variable_init($1, $2, $4);
+		$$ = ast_new_variable_init($1, $2, $4);
 	}
 	;
 inferenced_type_init_stmt
 	: VAR IDENT ASSIGN expression stmt_term
 	{
-$$ = ast_new_inferenced_type_init($2, $4);
+		$$ = ast_new_inferenced_type_init($2, $4);
 	}
 	;
 if_stmt
 	: IF LRB expression RRB scope
 	{
-$$ = ast_new_if($3, $5);
+		$$ = ast_new_if($3, $5);
 	}
 	| IF LRB expression RRB scope ELSE scope
 	{
-$$ = ast_new_if_else($3, $5, $7);
+		$$ = ast_new_if_else($3, $5, $7);
 	}
 	| IF LRB expression RRB scope elif_list
 	{
-$$ = ast_new_if_elif_list($3, $5, $6);
+		$$ = ast_new_if_elif_list($3, $5, $6);
 	}
 	| IF LRB expression RRB scope elif_list ELSE scope
 	{
-$$ = ast_new_if_elif_list_else($3, $5, $6, $8);
+		$$ = ast_new_if_elif_list_else($3, $5, $6, $8);
 	}
 	;
 elif_list
 	: elif
 	| elif_list elif
 	{
-$$ = ast_new_elif_list($1, $2);
+		$$ = ast_new_elif_list($1, $2);
 	}
 	;
 elif
 	: ELIF LRB expression RRB scope
 	{
-$$ = ast_new_elif($3, $5);
+		$$ = ast_new_elif($3, $5);
 	}
 	;
 while_stmt
 	: WHILE LRB expression RRB scope_optional
 	{
-$$ = ast_new_while($3, $5);
+		$$ = ast_new_while($3, $5);
 	}
 	;
 break_stmt
 	: BREAK stmt_term
 	{
-$$ = ast_new_break();
+		$$ = ast_new_break();
 	}
 	;
 continue_stmt
 	: CONTINUE stmt_term
 	{
-$$ = ast_new_continue();
+		$$ = ast_new_continue();
 	}
 	;
 return_stmt
 	: RETURN expression stmt_term
 	{
-$$ = ast_new_return($2);
+		$$ = ast_new_return($2);
 	}
 	;
 throw_stmt
 	: THROW expression stmt_term
 	{
-$$ = ast_new_throw($2);
+		$$ = ast_new_throw($2);
 	}
 	;
 try_stmt
 	: TRY scope catch_stmt_list
 	{
-$$ = ast_new_try($2, $3);
+		$$ = ast_new_try($2, $3);
 	}
 	;
 catch_stmt_list
 	: catch_stmt
 	{
-$$ = $1;
+		$$ = $1;
 	}
 	| catch_stmt_list catch_stmt
 	{
-$$ = ast_new_catch_list($2, $1);
+		$$ = ast_new_catch_list($2, $1);
 	}
 	;
 catch_stmt
 	: CATCH LRB typename_T IDENT RRB scope
 	{
-$$ = ast_new_catch($3, $4, $6);
+		$$ = ast_new_catch($3, $4, $6);
 	}
 	;
-
-
 
 
 
 scope
 	: LCB stmt_list RCB
 	{
-$$ = ast_new_scope($2);
+		$$ = ast_new_scope($2);
 	}
 	| LCB RCB
 	{
-$$ = ast_new_scope_empty();
+		$$ = ast_new_scope_empty();
 	}
 	;
 scope_optional
 	: SEMI
 	{
-$$ = ast_new_blank();
+		$$ = ast_new_blank();
 	}
 	| scope
 	;
