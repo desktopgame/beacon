@@ -129,8 +129,9 @@
      TRY = 338,
      CATCH = 339,
      THROW = 340,
-     POSITIVE = 341,
-     NEGATIVE = 342
+     FUNCCALL = 341,
+     POSITIVE = 342,
+     NEGATIVE = 343
    };
 #endif
 /* Tokens.  */
@@ -217,8 +218,9 @@
 #define TRY 338
 #define CATCH 339
 #define THROW 340
-#define POSITIVE 341
-#define NEGATIVE 342
+#define FUNCCALL 341
+#define POSITIVE 342
+#define NEGATIVE 343
 
 
 
@@ -236,7 +238,7 @@ typedef union YYSTYPE
 	access_level access_level_value;
 }
 /* Line 1529 of yacc.c.  */
-#line 233 "signal.tab.h"
+#line 235 "signal.tab.h"
 	YYSTYPE;
 # define yystype YYSTYPE /* obsolescent; will be withdrawn */
 # define YYSTYPE_IS_DECLARED 1

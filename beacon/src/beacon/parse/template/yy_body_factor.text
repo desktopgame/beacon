@@ -1,143 +1,159 @@
 expression
-	: primary
-	| ADD expression %prec POSITIVE
-	{
-		$$ = ast_new_unary(ast_pos, $2);
-	}
-	| SUB expression %prec NEGATIVE
-	{
-		$$ = ast_new_unary(ast_neg, $2);
-	}
-	| expression ADD expression
-	{
-		$$ = ast_new_binary(ast_add, $1, $3);
-	}
-	| expression SUB expression
-	{
-		$$ = ast_new_binary(ast_sub, $1, $3);
-	}
-	| expression MUL expression
-	{
-		$$ = ast_new_binary(ast_mul, $1, $3);
-	}
-	| expression DIV expression
-	{
-		$$ = ast_new_binary(ast_div, $1, $3);
-	}
-	| expression MOD expression
-	{
-		$$ = ast_new_binary(ast_mod, $1, $3);
-	}
-	| expression BIT_OR expression
-	{
-		$$ = ast_new_binary(ast_bit_or, $1, $3);
-	}
-	| expression EQUAL expression
-	{
-		$$ = ast_new_binary(ast_equal, $1, $3);
-	}
-	| expression NOTEQUAL expression
-	{
-		$$ = ast_new_binary(ast_notequal, $1, $3);
-	}
-	| expression BIT_AND expression
-	{
-		$$ = ast_new_binary(ast_bit_and, $1, $3);
-	}
-	| expression EXC_OR expression
-	{
-		$$ = ast_new_binary(ast_exc_or, $1, $3);
-	}
-	| expression LOGIC_OR expression
-	{
-		$$ = ast_new_binary(ast_logic_or, $1, $3);
-	}
-	| expression LOGIC_AND expression
-	{
-		$$ = ast_new_binary(ast_logic_and, $1, $3);
-	}
-	| expression ASSIGN expression
-	{
-		$$ = ast_new_binary(ast_assign, $1, $3);
-	}
-	| expression ADD_ASSIGN expression
-	{
-		$$ = ast_new_binary(ast_add_assign, $1, $3);
-	}
-	| expression SUB_ASSIGN expression
-	{
-		$$ = ast_new_binary(ast_sub_assign, $1, $3);
-	}
-	| expression MUL_ASSIGN expression
-	{
-		$$ = ast_new_binary(ast_mul_assign, $1, $3);
-	}
-	| expression DIV_ASSIGN expression
-	{
-		$$ = ast_new_binary(ast_div_assign, $1, $3);
-	}
-	| expression MOD_ASSIGN expression
-	{
-		$$ = ast_new_binary(ast_mod_assign, $1, $3);
-	}
-	| expression AND_ASSIGN expression
-	{
-		$$ = ast_new_binary(ast_and_assign, $1, $3);
-	}
-	| expression OR_ASSIGN expression
-	{
-		$$ = ast_new_binary(ast_or_assign, $1, $3);
-	}
-	| expression EXC_OR_ASSIGN expression
-	{
-		$$ = ast_new_binary(ast_exc_or_assign, $1, $3);
-	}
-	| expression LSHIFT_ASSIGN expression
-	{
-		$$ = ast_new_binary(ast_lshift_assign, $1, $3);
-	}
-	| expression RSHIFT_ASSIGN expression
-	{
-		$$ = ast_new_binary(ast_rshift_assign, $1, $3);
-	}
-	| expression GT expression
-	{
-		$$ = ast_new_binary(ast_gt, $1, $3);
-	}
-	| expression GE expression
-	{
-		$$ = ast_new_binary(ast_ge, $1, $3);
-	}
-	| expression LT expression
-	{
-		$$ = ast_new_binary(ast_lt, $1, $3);
-	}
-	| expression LE expression
-	{
-		$$ = ast_new_binary(ast_le, $1, $3);
-	}
-	| expression LSHIFT expression {
-		$$ = ast_new_binary(ast_lshift, $1, $3);
-	}
-	| expression RSHIFT expression {
-		$$ = ast_new_binary(ast_rshift, $1, $3);
-	}
-	| CHILDA expression
-	{
-		$$ = ast_new_unary(ast_childa, $2);
-	}
-	| NOT expression
-	{
-		$$ = ast_new_unary(ast_not, $2);
-	}
-	| expression_brace
-	;
-expression_brace
 	: LRB expression RRB
 	{
 		$$ = $2;
 	}
+	| expression_nobrace
 	;
+$$SET __SELF expression
+expression_nobrace
+	: primary
+	| ADD __SELF %prec POSITIVE
+	{
+		$$ = ast_new_unary(ast_pos, $2);
+	}
+	| SUB __SELF %prec NEGATIVE
+	{
+		$$ = ast_new_unary(ast_neg, $2);
+	}
+	| __SELF ADD __SELF
+	{
+		$$ = ast_new_binary(ast_add, $1, $3);
+	}
+	| __SELF SUB __SELF
+	{
+		$$ = ast_new_binary(ast_sub, $1, $3);
+	}
+	| __SELF MUL __SELF
+	{
+		$$ = ast_new_binary(ast_mul, $1, $3);
+	}
+	| __SELF DIV __SELF
+	{
+		$$ = ast_new_binary(ast_div, $1, $3);
+	}
+	| __SELF MOD __SELF
+	{
+		$$ = ast_new_binary(ast_mod, $1, $3);
+	}
+	| __SELF BIT_OR __SELF
+	{
+		$$ = ast_new_binary(ast_bit_or, $1, $3);
+	}
+	| __SELF EQUAL __SELF
+	{
+		$$ = ast_new_binary(ast_equal, $1, $3);
+	}
+	| __SELF NOTEQUAL __SELF
+	{
+		$$ = ast_new_binary(ast_notequal, $1, $3);
+	}
+	| __SELF BIT_AND __SELF
+	{
+		$$ = ast_new_binary(ast_bit_and, $1, $3);
+	}
+	| __SELF EXC_OR __SELF
+	{
+		$$ = ast_new_binary(ast_exc_or, $1, $3);
+	}
+	| __SELF LOGIC_OR __SELF
+	{
+		$$ = ast_new_binary(ast_logic_or, $1, $3);
+	}
+	| __SELF LOGIC_AND __SELF
+	{
+		$$ = ast_new_binary(ast_logic_and, $1, $3);
+	}
+	| __SELF ASSIGN __SELF
+	{
+		$$ = ast_new_binary(ast_assign, $1, $3);
+	}
+	| __SELF ADD_ASSIGN __SELF
+	{
+		$$ = ast_new_binary(ast_add_assign, $1, $3);
+	}
+	| __SELF SUB_ASSIGN __SELF
+	{
+		$$ = ast_new_binary(ast_sub_assign, $1, $3);
+	}
+	| __SELF MUL_ASSIGN __SELF
+	{
+		$$ = ast_new_binary(ast_mul_assign, $1, $3);
+	}
+	| __SELF DIV_ASSIGN __SELF
+	{
+		$$ = ast_new_binary(ast_div_assign, $1, $3);
+	}
+	| __SELF MOD_ASSIGN __SELF
+	{
+		$$ = ast_new_binary(ast_mod_assign, $1, $3);
+	}
+	| __SELF AND_ASSIGN __SELF
+	{
+		$$ = ast_new_binary(ast_and_assign, $1, $3);
+	}
+	| __SELF OR_ASSIGN __SELF
+	{
+		$$ = ast_new_binary(ast_or_assign, $1, $3);
+	}
+	| __SELF EXC_OR_ASSIGN __SELF
+	{
+		$$ = ast_new_binary(ast_exc_or_assign, $1, $3);
+	}
+	| __SELF LSHIFT_ASSIGN __SELF
+	{
+		$$ = ast_new_binary(ast_lshift_assign, $1, $3);
+	}
+	| __SELF RSHIFT_ASSIGN __SELF
+	{
+		$$ = ast_new_binary(ast_rshift_assign, $1, $3);
+	}
+	| __SELF GT __SELF
+	{
+		$$ = ast_new_binary(ast_gt, $1, $3);
+	}
+	| __SELF GE __SELF
+	{
+		$$ = ast_new_binary(ast_ge, $1, $3);
+	}
+	| __SELF LT __SELF
+	{
+		$$ = ast_new_binary(ast_lt, $1, $3);
+	}
+	| __SELF LE __SELF
+	{
+		$$ = ast_new_binary(ast_le, $1, $3);
+	}
+	| __SELF LSHIFT __SELF
+	{
+		$$ = ast_new_binary(ast_lshift, $1, $3);
+	}
+	| __SELF RSHIFT __SELF
+	{
+		$$ = ast_new_binary(ast_rshift, $1, $3);
+	}
+	| __SELF DOT IDENT
+	{
+		$$ = ast_new_blank();
+	}
+	| CHILDA __SELF
+	{
+		$$ = ast_new_unary(ast_childa, $2);
+	}
+	| NOT __SELF
+	{
+		$$ = ast_new_unary(ast_not, $2);
+	}
+	| expression_nobrace LRB RRB %prec FUNCCALL
+	{
+		$$ = ast_new_blank();
+	}
+	| expression_nobrace LRB argument_list RRB %prec FUNCCALL
+	{
+		$$ = ast_new_blank();
+	}
+	;
+$$REM __SELF
 primary
 	: INT
 	| DOUBLE

@@ -87,7 +87,7 @@
 						typename_list
 						typename_T
 					expression
-						expression_brace
+						expression_nobrace
 						primary
 					stmt_list
 						stmt
@@ -117,6 +117,7 @@
 %left LSHIFT RSHIFT
 %left ADD SUB
 %left MUL DIV MOD
+%left DOT FUNCCALL
 %right CHILDA NOT NEGATIVE POSITIVE
 %right ASSIGN ADD_ASSIGN SUB_ASSIGN MUL_ASSIGN DIV_ASSIGN MOD_ASSIGN AND_ASSIGN OR_ASSIGN LSHIFT_ASSIGN RSHIFT_ASSIGN EXC_OR_ASSIGN
 %%
@@ -512,6 +513,13 @@ $$ = ast_new_blank();
 
 
 expression
+	: LRB expression RRB
+	{
+		$$ = $2;
+	}
+	| expression_nobrace
+	;
+expression_nobrace
 	: primary
 	| ADD expression %prec POSITIVE
 	{
@@ -629,11 +637,17 @@ expression
 	{
 		$$ = ast_new_binary(ast_le, $1, $3);
 	}
-	| expression LSHIFT expression {
+	| expression LSHIFT expression
+	{
 		$$ = ast_new_binary(ast_lshift, $1, $3);
 	}
-	| expression RSHIFT expression {
+	| expression RSHIFT expression
+	{
 		$$ = ast_new_binary(ast_rshift, $1, $3);
+	}
+	| expression DOT IDENT
+	{
+		$$ = ast_new_blank();
 	}
 	| CHILDA expression
 	{
@@ -643,13 +657,15 @@ expression
 	{
 		$$ = ast_new_unary(ast_not, $2);
 	}
-	| expression_brace
-	;
-expression_brace
-	: LRB expression RRB
+	| expression_nobrace LRB RRB %prec FUNCCALL
 	{
-		$$ = $2;
+		$$ = ast_new_blank();
 	}
+	| expression_nobrace LRB argument_list RRB %prec FUNCCALL
+	{
+		$$ = ast_new_blank();
+	}
+	;
 primary
 	: INT
 	| DOUBLE
