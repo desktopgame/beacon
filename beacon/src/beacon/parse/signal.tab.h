@@ -129,10 +129,14 @@
      TRY = 338,
      CATCH = 339,
      THROW = 340,
-     FUNCCALL = 341,
-     POSITIVE = 342,
-     NEGATIVE = 343,
-     FORM_TYPE = 344
+     POST_DEC = 341,
+     POST_INC = 342,
+     FUNCCALL = 343,
+     POSITIVE = 344,
+     NEGATIVE = 345,
+     PRE_DEC = 346,
+     PRE_INC = 347,
+     FORM_TYPE = 348
    };
 #endif
 /* Tokens.  */
@@ -219,10 +223,14 @@
 #define TRY 338
 #define CATCH 339
 #define THROW 340
-#define FUNCCALL 341
-#define POSITIVE 342
-#define NEGATIVE 343
-#define FORM_TYPE 344
+#define POST_DEC 341
+#define POST_INC 342
+#define FUNCCALL 343
+#define POSITIVE 344
+#define NEGATIVE 345
+#define PRE_DEC 346
+#define PRE_INC 347
+#define FORM_TYPE 348
 
 
 
@@ -240,7 +248,7 @@ typedef union YYSTYPE
 	access_level access_level_value;
 }
 /* Line 1529 of yacc.c.  */
-#line 237 "signal.tab.h"
+#line 245 "signal.tab.h"
 	YYSTYPE;
 # define yystype YYSTYPE /* obsolescent; will be withdrawn */
 # define YYSTYPE_IS_DECLARED 1

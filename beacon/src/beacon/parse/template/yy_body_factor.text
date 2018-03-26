@@ -144,6 +144,24 @@ expression_nobrace
 	{
 		$$ = ast_new_unary(ast_not, $2);
 	}
+$$-
+	| INC expression_nobrace %prec PRE_INC
+	{
+		$$ = ast_new_blank();
+	}
+	| DEC expression_nobrace %prec PRE_DEC
+	{
+		$$ = ast_new_blank();
+	}
+	| expression_nobrace INC %prec POST_INC
+	{
+		$$ = ast_new_blank();
+	}
+	| expression_nobrace DEC %prec POST_DEC
+	{
+		$$ = ast_new_blank();
+	}
+-$$
 	| expression_nobrace LRB RRB %prec FUNCCALL
 	{
 		$$ = ast_new_blank();

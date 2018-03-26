@@ -6,6 +6,10 @@ Terminals which are not used
    LSB
    RSB
    AS
+   POST_DEC
+   POST_INC
+   PRE_DEC
+   PRE_INC
    FORM_TYPE
 
 
@@ -334,141 +338,145 @@ CONTINUE (337) 152
 TRY (338) 155
 CATCH (339) 158
 THROW (340) 154
-FUNCCALL (341)
-POSITIVE (342)
-NEGATIVE (343)
-FORM_TYPE (344)
+POST_DEC (341)
+POST_INC (342)
+FUNCCALL (343)
+POSITIVE (344)
+NEGATIVE (345)
+PRE_DEC (346)
+PRE_INC (347)
+FORM_TYPE (348)
 
 
 Nonterminals, with rules where they appear
 
-$accept (93)
+$accept (97)
     on left: 0
-compilation_unit (94)
+compilation_unit (98)
     on left: 1 2, on right: 0
-program (95)
+program (99)
     on left: 3 4 5 6, on right: 1
-namespace_decl (96)
+namespace_decl (100)
     on left: 7, on right: 5
-namespace_body (97)
+namespace_body (101)
     on left: 8, on right: 7 9
-namespace_member_decl (98)
+namespace_member_decl (102)
     on left: 9 10 11 12, on right: 13 14
-namespace_member_decl_list (99)
+namespace_member_decl_list (103)
     on left: 13 14, on right: 14 16
-namespace_member_decl_optional (100)
+namespace_member_decl_optional (104)
     on left: 15 16, on right: 8
-namespace_path (101)
+namespace_path (105)
     on left: 17 18, on right: 7 9 18
-import (102)
+import (106)
     on left: 19, on right: 4
-parameterized_typename (103)
+parameterized_typename (107)
     on left: 20, on right: 30 31 34 35
-type_parameter_group (104)
+type_parameter_group (108)
     on left: 21 22, on right: 20 56 57
-type_parameter_list (105)
+type_parameter_list (109)
     on left: 23 24, on right: 22 24
-type_parameter (106)
+type_parameter (110)
     on left: 25 26 27, on right: 23 24
-type_parameter_rule_list (107)
+type_parameter_rule_list (111)
     on left: 28 29, on right: 25 26 27
-class_decl (108)
+class_decl (112)
     on left: 30 31, on right: 10
-enum_decl (109)
+enum_decl (113)
     on left: 32 33, on right: 12
-interface_decl (110)
+interface_decl (114)
     on left: 34 35, on right: 11
-access_member_tree_opt (111)
+access_member_tree_opt (115)
     on left: 36 37, on right: 30 31 34 35
-access_member_tree (112)
+access_member_tree (116)
     on left: 38 39, on right: 37 39
-access_member_list (113)
+access_member_list (117)
     on left: 40, on right: 38 39
-member_define_list (114)
+member_define_list (118)
     on left: 41 42, on right: 40 42
-member_define (115)
+member_define (119)
     on left: 43 44 45, on right: 41 42
-constructor_define (116)
+constructor_define (120)
     on left: 46 47, on right: 43
-constructor_chain (117)
+constructor_chain (121)
     on left: 48 49, on right: 53
-constructor_chain_type_T (118)
+constructor_chain_type_T (122)
     on left: 50 51, on right: 48 49
-constructor_chain_optional (119)
+constructor_chain_optional (123)
     on left: 52 53, on right: 46 47
-function_define (120)
+function_define (124)
     on left: 54 55, on right: 6
-method_define (121)
+method_define (125)
     on left: 56 57, on right: 44
-field_define (122)
+field_define (126)
     on left: 58, on right: 45
-modifier_type_T (123)
+modifier_type_T (127)
     on left: 59 60 61 62 63, on right: 56 57 58
-access_level_T (124)
+access_level_T (128)
     on left: 64 65 66, on right: 40
-ident_list (125)
+ident_list (129)
     on left: 67 68, on right: 32 33 68
-parameter_list (126)
+parameter_list (130)
     on left: 69 70, on right: 46 54 56 70
-argument_list (127)
+argument_list (131)
     on left: 71 72, on right: 48 72 118
-typename_group (128)
+typename_group (132)
     on left: 73 74, on right: 77
-typename_list (129)
+typename_list (133)
     on left: 75 76, on right: 29 31 35 74 76
-typename_T (130)
+typename_T (134)
     on left: 77, on right: 54 55 56 57 58 69 70 75 76 140 141 158
-fqcn_part (131)
+fqcn_part (135)
     on left: 78 79, on right: 77 79 119
-expression (132)
+expression (136)
     on left: 80 81, on right: 71 72 80 83 84 85 86 87 88 89 90 91 92
     93 94 95 96 97 98 99 100 101 102 103 104 105 106 107 108 109 110
     111 112 113 114 115 116 129 141 142 143 144 145 146 149 150 153
     154
-expression_nobrace (133)
+expression_nobrace (137)
     on left: 82 83 84 85 86 87 88 89 90 91 92 93 94 95 96 97 98 99
     100 101 102 103 104 105 106 107 108 109 110 111 112 113 114 115
     116 117 118 119, on right: 81 117 118
-primary (134)
+primary (138)
     on left: 120 121 122 123 124 125 126, on right: 82
-stmt_list (135)
+stmt_list (139)
     on left: 127 128, on right: 3 128 159
-stmt (136)
+stmt (140)
     on left: 129 130 131 132 133 134 135 136 137 138 139,
     on right: 127 128
-variable_decl_stmt (137)
+variable_decl_stmt (141)
     on left: 140, on right: 130
-variable_init_stmt (138)
+variable_init_stmt (142)
     on left: 141, on right: 131
-inferenced_type_init_stmt (139)
+inferenced_type_init_stmt (143)
     on left: 142, on right: 132
-if_stmt (140)
+if_stmt (144)
     on left: 143 144 145 146, on right: 133
-elif_list (141)
+elif_list (145)
     on left: 147 148, on right: 145 146 148
-elif (142)
+elif (146)
     on left: 149, on right: 147 148
-while_stmt (143)
+while_stmt (147)
     on left: 150, on right: 134
-break_stmt (144)
+break_stmt (148)
     on left: 151, on right: 135
-continue_stmt (145)
+continue_stmt (149)
     on left: 152, on right: 136
-return_stmt (146)
+return_stmt (150)
     on left: 153, on right: 137
-throw_stmt (147)
+throw_stmt (151)
     on left: 154, on right: 138
-try_stmt (148)
+try_stmt (152)
     on left: 155, on right: 139
-catch_stmt_list (149)
+catch_stmt_list (153)
     on left: 156 157, on right: 155 157
-catch_stmt (150)
+catch_stmt (154)
     on left: 158, on right: 156 157
-scope (151)
+scope (155)
     on left: 159 160, on right: 143 144 145 146 149 155 158 162
-scope_optional (152)
+scope_optional (156)
     on left: 161 162, on right: 46 47 54 55 56 57 150
-stmt_term (153)
+stmt_term (157)
     on left: 163 164, on right: 129 141 142 151 152 153 154
 
 
