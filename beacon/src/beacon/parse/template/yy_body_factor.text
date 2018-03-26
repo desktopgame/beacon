@@ -137,6 +137,7 @@ expression_brace
 	{
 		$$ = $2;
 	}
+	;
 primary
 	: INT
 	| DOUBLE
