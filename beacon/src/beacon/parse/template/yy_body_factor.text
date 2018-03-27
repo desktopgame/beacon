@@ -175,6 +175,8 @@ $$-
 		$$ = ast_new_blank();
 	}
 	| fqcn_part
+	| NEW typename_T LRB RRB
+	| NEW typename_T LRB argument_list RRB
 	;
 $$REM __SELF
 primary

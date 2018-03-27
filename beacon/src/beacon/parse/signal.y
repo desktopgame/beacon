@@ -119,7 +119,7 @@
 %left ADD SUB
 %left MUL DIV MOD
 %left DOT FUNCCALL POST_INC POST_DEC
-%right CHILDA NOT NEGATIVE POSITIVE
+%right CHILDA NOT NEGATIVE POSITIVE NEW
 %right AS
 %right ASSIGN ADD_ASSIGN SUB_ASSIGN MUL_ASSIGN DIV_ASSIGN MOD_ASSIGN AND_ASSIGN OR_ASSIGN LSHIFT_ASSIGN RSHIFT_ASSIGN EXC_OR_ASSIGN PRE_INC PRE_DEC
 %token FORM_TYPE
@@ -664,7 +664,7 @@ expression_nobrace
 	}
 	| expression AS typename_T
 	{
-		$$ = ast_new_blank();
+		$$ = ast_new_as($1, $3);
 	}
 	| CHILDA expression
 	{
@@ -683,6 +683,8 @@ expression_nobrace
 		$$ = ast_new_blank();
 	}
 	| fqcn_part
+	| NEW typename_T LRB RRB
+	| NEW typename_T LRB argument_list RRB
 	;
 primary
 	: INT
