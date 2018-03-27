@@ -171,7 +171,7 @@ Grammar
   111                   | expression LE expression
   112                   | expression LSHIFT expression
   113                   | expression RSHIFT expression
-  114                   | expression DOT IDENT
+  114                   | expression DOT IDENT typename_group
   115                   | expression AS typename_T
   116                   | CHILDA expression
   117                   | NOT expression
@@ -423,7 +423,7 @@ parameter_list (130)
 argument_list (131)
     on left: 71 72, on right: 48 72 119 122
 typename_group (132)
-    on left: 73 74, on right: 77
+    on left: 73 74, on right: 77 114
 typename_list (133)
     on left: 75 76, on right: 29 31 35 74 76
 typename_T (134)
@@ -533,7 +533,7 @@ state 0
   111                   | . expression LE expression
   112                   | . expression LSHIFT expression
   113                   | . expression RSHIFT expression
-  114                   | . expression DOT IDENT
+  114                   | . expression DOT IDENT typename_group
   115                   | . expression AS typename_T
   116                   | . CHILDA expression
   117                   | . NOT expression
@@ -708,7 +708,7 @@ state 7
   111                   | . expression LE expression
   112                   | . expression LSHIFT expression
   113                   | . expression RSHIFT expression
-  114                   | . expression DOT IDENT
+  114                   | . expression DOT IDENT typename_group
   115                   | . expression AS typename_T
   116                   | . CHILDA expression
   117                   | . NOT expression
@@ -785,7 +785,7 @@ state 8
   111                   | . expression LE expression
   112                   | . expression LSHIFT expression
   113                   | . expression RSHIFT expression
-  114                   | . expression DOT IDENT
+  114                   | . expression DOT IDENT typename_group
   115                   | . expression AS typename_T
   116                   | . CHILDA expression
   117                   | . NOT expression
@@ -861,7 +861,7 @@ state 9
   111                   | . expression LE expression
   112                   | . expression LSHIFT expression
   113                   | . expression RSHIFT expression
-  114                   | . expression DOT IDENT
+  114                   | . expression DOT IDENT typename_group
   115                   | . expression AS typename_T
   116                   | . CHILDA expression
   117                   | . NOT expression
@@ -938,7 +938,7 @@ state 10
   111                   | . expression LE expression
   112                   | . expression LSHIFT expression
   113                   | . expression RSHIFT expression
-  114                   | . expression DOT IDENT
+  114                   | . expression DOT IDENT typename_group
   115                   | . expression AS typename_T
   116                   | . CHILDA expression
   116                   | CHILDA . expression
@@ -1016,7 +1016,7 @@ state 11
   111                   | . expression LE expression
   112                   | . expression LSHIFT expression
   113                   | . expression RSHIFT expression
-  114                   | . expression DOT IDENT
+  114                   | . expression DOT IDENT typename_group
   115                   | . expression AS typename_T
   116                   | . CHILDA expression
   117                   | . NOT expression
@@ -1160,7 +1160,7 @@ state 20
   111                   | . expression LE expression
   112                   | . expression LSHIFT expression
   113                   | . expression RSHIFT expression
-  114                   | . expression DOT IDENT
+  114                   | . expression DOT IDENT typename_group
   115                   | . expression AS typename_T
   116                   | . CHILDA expression
   117                   | . NOT expression
@@ -1289,7 +1289,7 @@ state 26
   111                   | . expression LE expression
   112                   | . expression LSHIFT expression
   113                   | . expression RSHIFT expression
-  114                   | . expression DOT IDENT
+  114                   | . expression DOT IDENT typename_group
   115                   | . expression AS typename_T
   116                   | . CHILDA expression
   117                   | . NOT expression
@@ -1419,7 +1419,7 @@ state 34
   111                   | expression . LE expression
   112                   | expression . LSHIFT expression
   113                   | expression . RSHIFT expression
-  114                   | expression . DOT IDENT
+  114                   | expression . DOT IDENT typename_group
   115                   | expression . AS typename_T
   132 stmt: expression . stmt_term
   166 stmt_term: . SEMI
@@ -1521,7 +1521,7 @@ state 37
   111                   | . expression LE expression
   112                   | . expression LSHIFT expression
   113                   | . expression RSHIFT expression
-  114                   | . expression DOT IDENT
+  114                   | . expression DOT IDENT typename_group
   115                   | . expression AS typename_T
   116                   | . CHILDA expression
   117                   | . NOT expression
@@ -1732,7 +1732,7 @@ state 51
   111                   | expression . LE expression
   112                   | expression . LSHIFT expression
   113                   | expression . RSHIFT expression
-  114                   | expression . DOT IDENT
+  114                   | expression . DOT IDENT typename_group
   115                   | expression . AS typename_T
 
     ASSIGN         shift, and go to state 96
@@ -1815,7 +1815,7 @@ state 52
   111                   | expression . LE expression
   112                   | expression . LSHIFT expression
   113                   | expression . RSHIFT expression
-  114                   | expression . DOT IDENT
+  114                   | expression . DOT IDENT typename_group
   115                   | expression . AS typename_T
 
     ASSIGN         shift, and go to state 96
@@ -1897,7 +1897,7 @@ state 53
   111                   | expression . LE expression
   112                   | expression . LSHIFT expression
   113                   | expression . RSHIFT expression
-  114                   | expression . DOT IDENT
+  114                   | expression . DOT IDENT typename_group
   115                   | expression . AS typename_T
   117                   | NOT expression .  [DOT, COMMA, ADD, SUB, MUL, DIV, MOD, LSHIFT, RSHIFT, EQUAL, NOTEQUAL, GT, GE, LT, LE, BIT_AND, LOGIC_AND, BIT_OR, LOGIC_OR, EXC_OR, LRB, RRB, SEMI, '\n']
 
@@ -1980,7 +1980,7 @@ state 54
   111                   | expression . LE expression
   112                   | expression . LSHIFT expression
   113                   | expression . RSHIFT expression
-  114                   | expression . DOT IDENT
+  114                   | expression . DOT IDENT typename_group
   115                   | expression . AS typename_T
   116                   | CHILDA expression .  [DOT, COMMA, ADD, SUB, MUL, DIV, MOD, LSHIFT, RSHIFT, EQUAL, NOTEQUAL, GT, GE, LT, LE, BIT_AND, LOGIC_AND, BIT_OR, LOGIC_OR, EXC_OR, LRB, RRB, SEMI, '\n']
 
@@ -2064,7 +2064,7 @@ state 55
   111                   | expression . LE expression
   112                   | expression . LSHIFT expression
   113                   | expression . RSHIFT expression
-  114                   | expression . DOT IDENT
+  114                   | expression . DOT IDENT typename_group
   115                   | expression . AS typename_T
 
     DOT            shift, and go to state 78
@@ -2196,7 +2196,7 @@ state 63
   111                   | expression . LE expression
   112                   | expression . LSHIFT expression
   113                   | expression . RSHIFT expression
-  114                   | expression . DOT IDENT
+  114                   | expression . DOT IDENT typename_group
   115                   | expression . AS typename_T
   156 return_stmt: RETURN expression . stmt_term
   166 stmt_term: . SEMI
@@ -2277,7 +2277,7 @@ state 64
   111                   | . expression LE expression
   112                   | . expression LSHIFT expression
   113                   | . expression RSHIFT expression
-  114                   | . expression DOT IDENT
+  114                   | . expression DOT IDENT typename_group
   115                   | . expression AS typename_T
   116                   | . CHILDA expression
   117                   | . NOT expression
@@ -2357,7 +2357,7 @@ state 65
   111                   | . expression LE expression
   112                   | . expression LSHIFT expression
   113                   | . expression RSHIFT expression
-  114                   | . expression DOT IDENT
+  114                   | . expression DOT IDENT typename_group
   115                   | . expression AS typename_T
   116                   | . CHILDA expression
   117                   | . NOT expression
@@ -2463,7 +2463,7 @@ state 70
   111                   | . expression LE expression
   112                   | . expression LSHIFT expression
   113                   | . expression RSHIFT expression
-  114                   | . expression DOT IDENT
+  114                   | . expression DOT IDENT typename_group
   115                   | . expression AS typename_T
   116                   | . CHILDA expression
   117                   | . NOT expression
@@ -2595,7 +2595,7 @@ state 72
   111                   | expression . LE expression
   112                   | expression . LSHIFT expression
   113                   | expression . RSHIFT expression
-  114                   | expression . DOT IDENT
+  114                   | expression . DOT IDENT typename_group
   115                   | expression . AS typename_T
   157 throw_stmt: THROW expression . stmt_term
   166 stmt_term: . SEMI
@@ -2686,7 +2686,7 @@ state 77
 
 state 78
 
-  114 expression_nobrace: expression DOT . IDENT
+  114 expression_nobrace: expression DOT . IDENT typename_group
 
     IDENT  shift, and go to state 133
 
@@ -2730,7 +2730,7 @@ state 79
   111                   | . expression LE expression
   112                   | . expression LSHIFT expression
   113                   | . expression RSHIFT expression
-  114                   | . expression DOT IDENT
+  114                   | . expression DOT IDENT typename_group
   115                   | . expression AS typename_T
   116                   | . CHILDA expression
   117                   | . NOT expression
@@ -2807,7 +2807,7 @@ state 80
   111                   | . expression LE expression
   112                   | . expression LSHIFT expression
   113                   | . expression RSHIFT expression
-  114                   | . expression DOT IDENT
+  114                   | . expression DOT IDENT typename_group
   115                   | . expression AS typename_T
   116                   | . CHILDA expression
   117                   | . NOT expression
@@ -2884,7 +2884,7 @@ state 81
   111                   | . expression LE expression
   112                   | . expression LSHIFT expression
   113                   | . expression RSHIFT expression
-  114                   | . expression DOT IDENT
+  114                   | . expression DOT IDENT typename_group
   115                   | . expression AS typename_T
   116                   | . CHILDA expression
   117                   | . NOT expression
@@ -2961,7 +2961,7 @@ state 82
   111                   | . expression LE expression
   112                   | . expression LSHIFT expression
   113                   | . expression RSHIFT expression
-  114                   | . expression DOT IDENT
+  114                   | . expression DOT IDENT typename_group
   115                   | . expression AS typename_T
   116                   | . CHILDA expression
   117                   | . NOT expression
@@ -3038,7 +3038,7 @@ state 83
   111                   | . expression LE expression
   112                   | . expression LSHIFT expression
   113                   | . expression RSHIFT expression
-  114                   | . expression DOT IDENT
+  114                   | . expression DOT IDENT typename_group
   115                   | . expression AS typename_T
   116                   | . CHILDA expression
   117                   | . NOT expression
@@ -3115,7 +3115,7 @@ state 84
   112                   | . expression LSHIFT expression
   112                   | expression LSHIFT . expression
   113                   | . expression RSHIFT expression
-  114                   | . expression DOT IDENT
+  114                   | . expression DOT IDENT typename_group
   115                   | . expression AS typename_T
   116                   | . CHILDA expression
   117                   | . NOT expression
@@ -3192,7 +3192,7 @@ state 85
   112                   | . expression LSHIFT expression
   113                   | . expression RSHIFT expression
   113                   | expression RSHIFT . expression
-  114                   | . expression DOT IDENT
+  114                   | . expression DOT IDENT typename_group
   115                   | . expression AS typename_T
   116                   | . CHILDA expression
   117                   | . NOT expression
@@ -3269,7 +3269,7 @@ state 86
   111                   | . expression LE expression
   112                   | . expression LSHIFT expression
   113                   | . expression RSHIFT expression
-  114                   | . expression DOT IDENT
+  114                   | . expression DOT IDENT typename_group
   115                   | . expression AS typename_T
   116                   | . CHILDA expression
   117                   | . NOT expression
@@ -3346,7 +3346,7 @@ state 87
   111                   | . expression LE expression
   112                   | . expression LSHIFT expression
   113                   | . expression RSHIFT expression
-  114                   | . expression DOT IDENT
+  114                   | . expression DOT IDENT typename_group
   115                   | . expression AS typename_T
   116                   | . CHILDA expression
   117                   | . NOT expression
@@ -3423,7 +3423,7 @@ state 88
   111                   | . expression LE expression
   112                   | . expression LSHIFT expression
   113                   | . expression RSHIFT expression
-  114                   | . expression DOT IDENT
+  114                   | . expression DOT IDENT typename_group
   115                   | . expression AS typename_T
   116                   | . CHILDA expression
   117                   | . NOT expression
@@ -3500,7 +3500,7 @@ state 89
   111                   | . expression LE expression
   112                   | . expression LSHIFT expression
   113                   | . expression RSHIFT expression
-  114                   | . expression DOT IDENT
+  114                   | . expression DOT IDENT typename_group
   115                   | . expression AS typename_T
   116                   | . CHILDA expression
   117                   | . NOT expression
@@ -3577,7 +3577,7 @@ state 90
   111                   | . expression LE expression
   112                   | . expression LSHIFT expression
   113                   | . expression RSHIFT expression
-  114                   | . expression DOT IDENT
+  114                   | . expression DOT IDENT typename_group
   115                   | . expression AS typename_T
   116                   | . CHILDA expression
   117                   | . NOT expression
@@ -3654,7 +3654,7 @@ state 91
   111                   | expression LE . expression
   112                   | . expression LSHIFT expression
   113                   | . expression RSHIFT expression
-  114                   | . expression DOT IDENT
+  114                   | . expression DOT IDENT typename_group
   115                   | . expression AS typename_T
   116                   | . CHILDA expression
   117                   | . NOT expression
@@ -3731,7 +3731,7 @@ state 92
   111                   | . expression LE expression
   112                   | . expression LSHIFT expression
   113                   | . expression RSHIFT expression
-  114                   | . expression DOT IDENT
+  114                   | . expression DOT IDENT typename_group
   115                   | . expression AS typename_T
   116                   | . CHILDA expression
   117                   | . NOT expression
@@ -3808,7 +3808,7 @@ state 93
   111                   | . expression LE expression
   112                   | . expression LSHIFT expression
   113                   | . expression RSHIFT expression
-  114                   | . expression DOT IDENT
+  114                   | . expression DOT IDENT typename_group
   115                   | . expression AS typename_T
   116                   | . CHILDA expression
   117                   | . NOT expression
@@ -3885,7 +3885,7 @@ state 94
   111                   | . expression LE expression
   112                   | . expression LSHIFT expression
   113                   | . expression RSHIFT expression
-  114                   | . expression DOT IDENT
+  114                   | . expression DOT IDENT typename_group
   115                   | . expression AS typename_T
   116                   | . CHILDA expression
   117                   | . NOT expression
@@ -3962,7 +3962,7 @@ state 95
   111                   | . expression LE expression
   112                   | . expression LSHIFT expression
   113                   | . expression RSHIFT expression
-  114                   | . expression DOT IDENT
+  114                   | . expression DOT IDENT typename_group
   115                   | . expression AS typename_T
   116                   | . CHILDA expression
   117                   | . NOT expression
@@ -4039,7 +4039,7 @@ state 96
   111                   | . expression LE expression
   112                   | . expression LSHIFT expression
   113                   | . expression RSHIFT expression
-  114                   | . expression DOT IDENT
+  114                   | . expression DOT IDENT typename_group
   115                   | . expression AS typename_T
   116                   | . CHILDA expression
   117                   | . NOT expression
@@ -4116,7 +4116,7 @@ state 97
   111                   | . expression LE expression
   112                   | . expression LSHIFT expression
   113                   | . expression RSHIFT expression
-  114                   | . expression DOT IDENT
+  114                   | . expression DOT IDENT typename_group
   115                   | . expression AS typename_T
   116                   | . CHILDA expression
   117                   | . NOT expression
@@ -4193,7 +4193,7 @@ state 98
   111                   | . expression LE expression
   112                   | . expression LSHIFT expression
   113                   | . expression RSHIFT expression
-  114                   | . expression DOT IDENT
+  114                   | . expression DOT IDENT typename_group
   115                   | . expression AS typename_T
   116                   | . CHILDA expression
   117                   | . NOT expression
@@ -4270,7 +4270,7 @@ state 99
   111                   | . expression LE expression
   112                   | . expression LSHIFT expression
   113                   | . expression RSHIFT expression
-  114                   | . expression DOT IDENT
+  114                   | . expression DOT IDENT typename_group
   115                   | . expression AS typename_T
   116                   | . CHILDA expression
   117                   | . NOT expression
@@ -4347,7 +4347,7 @@ state 100
   111                   | . expression LE expression
   112                   | . expression LSHIFT expression
   113                   | . expression RSHIFT expression
-  114                   | . expression DOT IDENT
+  114                   | . expression DOT IDENT typename_group
   115                   | . expression AS typename_T
   116                   | . CHILDA expression
   117                   | . NOT expression
@@ -4424,7 +4424,7 @@ state 101
   111                   | . expression LE expression
   112                   | . expression LSHIFT expression
   113                   | . expression RSHIFT expression
-  114                   | . expression DOT IDENT
+  114                   | . expression DOT IDENT typename_group
   115                   | . expression AS typename_T
   116                   | . CHILDA expression
   117                   | . NOT expression
@@ -4501,7 +4501,7 @@ state 102
   111                   | . expression LE expression
   112                   | . expression LSHIFT expression
   113                   | . expression RSHIFT expression
-  114                   | . expression DOT IDENT
+  114                   | . expression DOT IDENT typename_group
   115                   | . expression AS typename_T
   116                   | . CHILDA expression
   117                   | . NOT expression
@@ -4578,7 +4578,7 @@ state 103
   111                   | . expression LE expression
   112                   | . expression LSHIFT expression
   113                   | . expression RSHIFT expression
-  114                   | . expression DOT IDENT
+  114                   | . expression DOT IDENT typename_group
   115                   | . expression AS typename_T
   116                   | . CHILDA expression
   117                   | . NOT expression
@@ -4655,7 +4655,7 @@ state 104
   111                   | . expression LE expression
   112                   | . expression LSHIFT expression
   113                   | . expression RSHIFT expression
-  114                   | . expression DOT IDENT
+  114                   | . expression DOT IDENT typename_group
   115                   | . expression AS typename_T
   116                   | . CHILDA expression
   117                   | . NOT expression
@@ -4732,7 +4732,7 @@ state 105
   111                   | . expression LE expression
   112                   | . expression LSHIFT expression
   113                   | . expression RSHIFT expression
-  114                   | . expression DOT IDENT
+  114                   | . expression DOT IDENT typename_group
   115                   | . expression AS typename_T
   116                   | . CHILDA expression
   117                   | . NOT expression
@@ -4809,7 +4809,7 @@ state 106
   111                   | . expression LE expression
   112                   | . expression LSHIFT expression
   113                   | . expression RSHIFT expression
-  114                   | . expression DOT IDENT
+  114                   | . expression DOT IDENT typename_group
   115                   | . expression AS typename_T
   116                   | . CHILDA expression
   117                   | . NOT expression
@@ -4886,7 +4886,7 @@ state 107
   111                   | . expression LE expression
   112                   | . expression LSHIFT expression
   113                   | . expression RSHIFT expression
-  114                   | . expression DOT IDENT
+  114                   | . expression DOT IDENT typename_group
   115                   | . expression AS typename_T
   116                   | . CHILDA expression
   117                   | . NOT expression
@@ -4984,7 +4984,7 @@ state 110
   111                   | . expression LE expression
   112                   | . expression LSHIFT expression
   113                   | . expression RSHIFT expression
-  114                   | . expression DOT IDENT
+  114                   | . expression DOT IDENT typename_group
   115                   | . expression AS typename_T
   116                   | . CHILDA expression
   117                   | . NOT expression
@@ -5078,7 +5078,7 @@ state 113
   111                   | . expression LE expression
   112                   | . expression LSHIFT expression
   113                   | . expression RSHIFT expression
-  114                   | . expression DOT IDENT
+  114                   | . expression DOT IDENT typename_group
   115                   | . expression AS typename_T
   116                   | . CHILDA expression
   117                   | . NOT expression
@@ -5157,7 +5157,7 @@ state 114
   111                   | . expression LE expression
   112                   | . expression LSHIFT expression
   113                   | . expression RSHIFT expression
-  114                   | . expression DOT IDENT
+  114                   | . expression DOT IDENT typename_group
   115                   | . expression AS typename_T
   116                   | . CHILDA expression
   117                   | . NOT expression
@@ -5302,7 +5302,7 @@ state 120
   111                   | expression . LE expression
   112                   | expression . LSHIFT expression
   113                   | expression . RSHIFT expression
-  114                   | expression . DOT IDENT
+  114                   | expression . DOT IDENT typename_group
   115                   | expression . AS typename_T
   146 if_stmt: IF LRB expression . RRB scope
   147        | IF LRB expression . RRB scope ELSE scope
@@ -5374,7 +5374,7 @@ state 121
   111                   | expression . LE expression
   112                   | expression . LSHIFT expression
   113                   | expression . RSHIFT expression
-  114                   | expression . DOT IDENT
+  114                   | expression . DOT IDENT typename_group
   115                   | expression . AS typename_T
   153 while_stmt: WHILE LRB expression . RRB scope_optional
 
@@ -5458,7 +5458,7 @@ state 123
   111                   | . expression LE expression
   112                   | . expression LSHIFT expression
   113                   | . expression RSHIFT expression
-  114                   | . expression DOT IDENT
+  114                   | . expression DOT IDENT typename_group
   115                   | . expression AS typename_T
   116                   | . CHILDA expression
   117                   | . NOT expression
@@ -5615,7 +5615,7 @@ state 128
   111                   | . expression LE expression
   112                   | . expression LSHIFT expression
   113                   | . expression RSHIFT expression
-  114                   | . expression DOT IDENT
+  114                   | . expression DOT IDENT typename_group
   115                   | . expression AS typename_T
   116                   | . CHILDA expression
   117                   | . NOT expression
@@ -5686,9 +5686,15 @@ state 132
 
 state 133
 
-  114 expression_nobrace: expression DOT IDENT .
+   73 typename_group: .  [DOT, COMMA, ADD, SUB, MUL, DIV, MOD, LSHIFT, RSHIFT, EQUAL, NOTEQUAL, GT, GE, LT, LE, BIT_AND, LOGIC_AND, BIT_OR, LOGIC_OR, ASSIGN, ADD_ASSIGN, SUB_ASSIGN, MUL_ASSIGN, DIV_ASSIGN, MOD_ASSIGN, AND_ASSIGN, OR_ASSIGN, LSHIFT_ASSIGN, RSHIFT_ASSIGN, EXC_OR_ASSIGN, EXC_OR, LRB, RRB, SEMI, AS, '\n']
+   74               | . '<' typename_list '>'
+  114 expression_nobrace: expression DOT IDENT . typename_group
 
-    $default  reduce using rule 114 (expression_nobrace)
+    '<'  shift, and go to state 76
+
+    $default  reduce using rule 73 (typename_group)
+
+    typename_group  go to state 192
 
 
 state 134
@@ -5723,7 +5729,7 @@ state 134
   111                   | expression . LE expression
   112                   | expression . LSHIFT expression
   113                   | expression . RSHIFT expression
-  114                   | expression . DOT IDENT
+  114                   | expression . DOT IDENT typename_group
   115                   | expression . AS typename_T
 
     DOT            shift, and go to state 78
@@ -5810,7 +5816,7 @@ state 135
   111                   | expression . LE expression
   112                   | expression . LSHIFT expression
   113                   | expression . RSHIFT expression
-  114                   | expression . DOT IDENT
+  114                   | expression . DOT IDENT typename_group
   115                   | expression . AS typename_T
 
     DOT            shift, and go to state 78
@@ -5897,7 +5903,7 @@ state 136
   111                   | expression . LE expression
   112                   | expression . LSHIFT expression
   113                   | expression . RSHIFT expression
-  114                   | expression . DOT IDENT
+  114                   | expression . DOT IDENT typename_group
   115                   | expression . AS typename_T
 
     DOT            shift, and go to state 78
@@ -5981,7 +5987,7 @@ state 137
   111                   | expression . LE expression
   112                   | expression . LSHIFT expression
   113                   | expression . RSHIFT expression
-  114                   | expression . DOT IDENT
+  114                   | expression . DOT IDENT typename_group
   115                   | expression . AS typename_T
 
     DOT            shift, and go to state 78
@@ -6065,7 +6071,7 @@ state 138
   111                   | expression . LE expression
   112                   | expression . LSHIFT expression
   113                   | expression . RSHIFT expression
-  114                   | expression . DOT IDENT
+  114                   | expression . DOT IDENT typename_group
   115                   | expression . AS typename_T
 
     DOT            shift, and go to state 78
@@ -6149,7 +6155,7 @@ state 139
   112                   | expression . LSHIFT expression  [COMMA, LSHIFT, RSHIFT, EQUAL, NOTEQUAL, GT, GE, LT, LE, BIT_AND, LOGIC_AND, BIT_OR, LOGIC_OR, EXC_OR, LRB, RRB, SEMI, '\n']
   112                   | expression LSHIFT expression .  [COMMA, LSHIFT, RSHIFT, EQUAL, NOTEQUAL, GT, GE, LT, LE, BIT_AND, LOGIC_AND, BIT_OR, LOGIC_OR, EXC_OR, LRB, RRB, SEMI, '\n']
   113                   | expression . RSHIFT expression
-  114                   | expression . DOT IDENT
+  114                   | expression . DOT IDENT typename_group
   115                   | expression . AS typename_T
 
     DOT            shift, and go to state 78
@@ -6238,7 +6244,7 @@ state 140
   112                   | expression . LSHIFT expression
   113                   | expression . RSHIFT expression  [COMMA, LSHIFT, RSHIFT, EQUAL, NOTEQUAL, GT, GE, LT, LE, BIT_AND, LOGIC_AND, BIT_OR, LOGIC_OR, EXC_OR, LRB, RRB, SEMI, '\n']
   113                   | expression RSHIFT expression .  [COMMA, LSHIFT, RSHIFT, EQUAL, NOTEQUAL, GT, GE, LT, LE, BIT_AND, LOGIC_AND, BIT_OR, LOGIC_OR, EXC_OR, LRB, RRB, SEMI, '\n']
-  114                   | expression . DOT IDENT
+  114                   | expression . DOT IDENT typename_group
   115                   | expression . AS typename_T
 
     DOT            shift, and go to state 78
@@ -6327,7 +6333,7 @@ state 141
   111                   | expression . LE expression
   112                   | expression . LSHIFT expression
   113                   | expression . RSHIFT expression
-  114                   | expression . DOT IDENT
+  114                   | expression . DOT IDENT typename_group
   115                   | expression . AS typename_T
 
     DOT            shift, and go to state 78
@@ -6427,7 +6433,7 @@ state 142
   111                   | expression . LE expression
   112                   | expression . LSHIFT expression
   113                   | expression . RSHIFT expression
-  114                   | expression . DOT IDENT
+  114                   | expression . DOT IDENT typename_group
   115                   | expression . AS typename_T
 
     DOT            shift, and go to state 78
@@ -6527,7 +6533,7 @@ state 143
   111                   | expression . LE expression
   112                   | expression . LSHIFT expression
   113                   | expression . RSHIFT expression
-  114                   | expression . DOT IDENT
+  114                   | expression . DOT IDENT typename_group
   115                   | expression . AS typename_T
 
     DOT            shift, and go to state 78
@@ -6623,7 +6629,7 @@ state 144
   111                   | expression . LE expression
   112                   | expression . LSHIFT expression
   113                   | expression . RSHIFT expression
-  114                   | expression . DOT IDENT
+  114                   | expression . DOT IDENT typename_group
   115                   | expression . AS typename_T
 
     DOT            shift, and go to state 78
@@ -6719,7 +6725,7 @@ state 145
   111                   | expression . LE expression
   112                   | expression . LSHIFT expression
   113                   | expression . RSHIFT expression
-  114                   | expression . DOT IDENT
+  114                   | expression . DOT IDENT typename_group
   115                   | expression . AS typename_T
 
     DOT            shift, and go to state 78
@@ -6815,7 +6821,7 @@ state 146
   111                   | expression LE expression .  [COMMA, EQUAL, NOTEQUAL, GT, GE, LT, LE, LRB, RRB, SEMI, '\n']
   112                   | expression . LSHIFT expression
   113                   | expression . RSHIFT expression
-  114                   | expression . DOT IDENT
+  114                   | expression . DOT IDENT typename_group
   115                   | expression . AS typename_T
 
     DOT            shift, and go to state 78
@@ -6911,7 +6917,7 @@ state 147
   111                   | expression . LE expression
   112                   | expression . LSHIFT expression
   113                   | expression . RSHIFT expression
-  114                   | expression . DOT IDENT
+  114                   | expression . DOT IDENT typename_group
   115                   | expression . AS typename_T
 
     DOT            shift, and go to state 78
@@ -7004,7 +7010,7 @@ state 148
   111                   | expression . LE expression
   112                   | expression . LSHIFT expression
   113                   | expression . RSHIFT expression
-  114                   | expression . DOT IDENT
+  114                   | expression . DOT IDENT typename_group
   115                   | expression . AS typename_T
 
     DOT            shift, and go to state 78
@@ -7099,7 +7105,7 @@ state 149
   111                   | expression . LE expression
   112                   | expression . LSHIFT expression
   113                   | expression . RSHIFT expression
-  114                   | expression . DOT IDENT
+  114                   | expression . DOT IDENT typename_group
   115                   | expression . AS typename_T
 
     DOT            shift, and go to state 78
@@ -7191,7 +7197,7 @@ state 150
   111                   | expression . LE expression
   112                   | expression . LSHIFT expression
   113                   | expression . RSHIFT expression
-  114                   | expression . DOT IDENT
+  114                   | expression . DOT IDENT typename_group
   115                   | expression . AS typename_T
 
     DOT            shift, and go to state 78
@@ -7285,7 +7291,7 @@ state 151
   111                   | expression . LE expression
   112                   | expression . LSHIFT expression
   113                   | expression . RSHIFT expression
-  114                   | expression . DOT IDENT
+  114                   | expression . DOT IDENT typename_group
   115                   | expression . AS typename_T
 
     ASSIGN         shift, and go to state 96
@@ -7367,7 +7373,7 @@ state 152
   111                   | expression . LE expression
   112                   | expression . LSHIFT expression
   113                   | expression . RSHIFT expression
-  114                   | expression . DOT IDENT
+  114                   | expression . DOT IDENT typename_group
   115                   | expression . AS typename_T
 
     ASSIGN         shift, and go to state 96
@@ -7449,7 +7455,7 @@ state 153
   111                   | expression . LE expression
   112                   | expression . LSHIFT expression
   113                   | expression . RSHIFT expression
-  114                   | expression . DOT IDENT
+  114                   | expression . DOT IDENT typename_group
   115                   | expression . AS typename_T
 
     ASSIGN         shift, and go to state 96
@@ -7531,7 +7537,7 @@ state 154
   111                   | expression . LE expression
   112                   | expression . LSHIFT expression
   113                   | expression . RSHIFT expression
-  114                   | expression . DOT IDENT
+  114                   | expression . DOT IDENT typename_group
   115                   | expression . AS typename_T
 
     ASSIGN         shift, and go to state 96
@@ -7613,7 +7619,7 @@ state 155
   111                   | expression . LE expression
   112                   | expression . LSHIFT expression
   113                   | expression . RSHIFT expression
-  114                   | expression . DOT IDENT
+  114                   | expression . DOT IDENT typename_group
   115                   | expression . AS typename_T
 
     ASSIGN         shift, and go to state 96
@@ -7695,7 +7701,7 @@ state 156
   111                   | expression . LE expression
   112                   | expression . LSHIFT expression
   113                   | expression . RSHIFT expression
-  114                   | expression . DOT IDENT
+  114                   | expression . DOT IDENT typename_group
   115                   | expression . AS typename_T
 
     ASSIGN         shift, and go to state 96
@@ -7777,7 +7783,7 @@ state 157
   111                   | expression . LE expression
   112                   | expression . LSHIFT expression
   113                   | expression . RSHIFT expression
-  114                   | expression . DOT IDENT
+  114                   | expression . DOT IDENT typename_group
   115                   | expression . AS typename_T
 
     ASSIGN         shift, and go to state 96
@@ -7859,7 +7865,7 @@ state 158
   111                   | expression . LE expression
   112                   | expression . LSHIFT expression
   113                   | expression . RSHIFT expression
-  114                   | expression . DOT IDENT
+  114                   | expression . DOT IDENT typename_group
   115                   | expression . AS typename_T
 
     ASSIGN         shift, and go to state 96
@@ -7941,7 +7947,7 @@ state 159
   111                   | expression . LE expression
   112                   | expression . LSHIFT expression
   113                   | expression . RSHIFT expression
-  114                   | expression . DOT IDENT
+  114                   | expression . DOT IDENT typename_group
   115                   | expression . AS typename_T
 
     ASSIGN         shift, and go to state 96
@@ -8023,7 +8029,7 @@ state 160
   111                   | expression . LE expression
   112                   | expression . LSHIFT expression
   113                   | expression . RSHIFT expression
-  114                   | expression . DOT IDENT
+  114                   | expression . DOT IDENT typename_group
   115                   | expression . AS typename_T
 
     ASSIGN         shift, and go to state 96
@@ -8105,7 +8111,7 @@ state 161
   111                   | expression . LE expression
   112                   | expression . LSHIFT expression
   113                   | expression . RSHIFT expression
-  114                   | expression . DOT IDENT
+  114                   | expression . DOT IDENT typename_group
   115                   | expression . AS typename_T
 
     ASSIGN         shift, and go to state 96
@@ -8187,7 +8193,7 @@ state 162
   111                   | expression . LE expression
   112                   | expression . LSHIFT expression
   113                   | expression . RSHIFT expression
-  114                   | expression . DOT IDENT
+  114                   | expression . DOT IDENT typename_group
   115                   | expression . AS typename_T
 
     DOT            shift, and go to state 78
@@ -8265,8 +8271,8 @@ state 165
    72 argument_list: argument_list . COMMA expression
   119 expression_nobrace: expression_nobrace LRB argument_list . RRB
 
-    COMMA  shift, and go to state 192
-    RRB    shift, and go to state 193
+    COMMA  shift, and go to state 193
+    RRB    shift, and go to state 194
 
 
 state 166
@@ -8301,7 +8307,7 @@ state 166
   111                   | expression . LE expression
   112                   | expression . LSHIFT expression
   113                   | expression . RSHIFT expression
-  114                   | expression . DOT IDENT
+  114                   | expression . DOT IDENT typename_group
   115                   | expression . AS typename_T
 
     DOT            shift, and go to state 78
@@ -8370,7 +8376,7 @@ state 167
   111                   | expression . LE expression
   112                   | expression . LSHIFT expression
   113                   | expression . RSHIFT expression
-  114                   | expression . DOT IDENT
+  114                   | expression . DOT IDENT typename_group
   115                   | expression . AS typename_T
   145 inferenced_type_init_stmt: VAR IDENT ASSIGN expression . stmt_term
   166 stmt_term: . SEMI
@@ -8410,7 +8416,7 @@ state 167
     AS             shift, and go to state 108
     '\n'           shift, and go to state 67
 
-    stmt_term  go to state 194
+    stmt_term  go to state 195
 
 
 state 168
@@ -8425,15 +8431,15 @@ state 169
    72 argument_list: argument_list . COMMA expression
   122 expression_nobrace: NEW typename_T LRB argument_list . RRB
 
-    COMMA  shift, and go to state 192
-    RRB    shift, and go to state 195
+    COMMA  shift, and go to state 193
+    RRB    shift, and go to state 196
 
 
 state 170
 
    55 function_define: DEF IDENT LRB RRB . ARROW typename_T scope_optional
 
-    ARROW  shift, and go to state 196
+    ARROW  shift, and go to state 197
 
 
 state 171
@@ -8441,15 +8447,15 @@ state 171
    54 function_define: DEF IDENT LRB parameter_list . RRB ARROW typename_T scope_optional
    70 parameter_list: parameter_list . COMMA typename_T IDENT
 
-    COMMA  shift, and go to state 197
-    RRB    shift, and go to state 198
+    COMMA  shift, and go to state 198
+    RRB    shift, and go to state 199
 
 
 state 172
 
    69 parameter_list: typename_T . IDENT
 
-    IDENT  shift, and go to state 199
+    IDENT  shift, and go to state 200
 
 
 state 173
@@ -8465,9 +8471,9 @@ state 174
    34 interface_decl: INTERFACE . parameterized_typename LCB access_member_tree_opt RCB
    35               | INTERFACE . parameterized_typename COLON typename_list LCB access_member_tree_opt RCB
 
-    IDENT  shift, and go to state 200
+    IDENT  shift, and go to state 201
 
-    parameterized_typename  go to state 201
+    parameterized_typename  go to state 202
 
 
 state 175
@@ -8476,9 +8482,9 @@ state 175
    30 class_decl: CLASS . parameterized_typename LCB access_member_tree_opt RCB
    31           | CLASS . parameterized_typename COLON typename_list LCB access_member_tree_opt RCB
 
-    IDENT  shift, and go to state 200
+    IDENT  shift, and go to state 201
 
-    parameterized_typename  go to state 202
+    parameterized_typename  go to state 203
 
 
 state 176
@@ -8486,7 +8492,7 @@ state 176
    32 enum_decl: ENUM . IDENT LCB ident_list RCB
    33          | ENUM . IDENT LCB ident_list COMMA RCB
 
-    IDENT  shift, and go to state 203
+    IDENT  shift, and go to state 204
 
 
 state 177
@@ -8497,7 +8503,7 @@ state 177
 
     IDENT  shift, and go to state 61
 
-    namespace_path  go to state 204
+    namespace_path  go to state 205
 
 
 state 178
@@ -8529,7 +8535,7 @@ state 179
 
     $default  reduce using rule 16 (namespace_member_decl_optional)
 
-    namespace_member_decl  go to state 205
+    namespace_member_decl  go to state 206
     class_decl             go to state 181
     enum_decl              go to state 182
     interface_decl         go to state 183
@@ -8539,7 +8545,7 @@ state 180
 
     8 namespace_body: LCB namespace_member_decl_optional . RCB
 
-    RCB  shift, and go to state 206
+    RCB  shift, and go to state 207
 
 
 state 181
@@ -8574,7 +8580,7 @@ state 184
 
     LCB  shift, and go to state 70
 
-    scope  go to state 207
+    scope  go to state 208
 
 
 state 185
@@ -8586,10 +8592,10 @@ state 185
   165               | . scope
 
     LCB   shift, and go to state 70
-    SEMI  shift, and go to state 208
+    SEMI  shift, and go to state 209
 
-    scope           go to state 209
-    scope_optional  go to state 210
+    scope           go to state 210
+    scope_optional  go to state 211
 
 
 state 186
@@ -8608,7 +8614,7 @@ state 187
 
     IDENT  shift, and go to state 6
 
-    typename_T  go to state 211
+    typename_T  go to state 212
     fqcn_part   go to state 59
 
 
@@ -8650,7 +8656,7 @@ state 189
   111                   | expression . LE expression
   112                   | expression . LSHIFT expression
   113                   | expression . RSHIFT expression
-  114                   | expression . DOT IDENT
+  114                   | expression . DOT IDENT typename_group
   115                   | expression . AS typename_T
   144 variable_init_stmt: typename_T IDENT ASSIGN expression . stmt_term
   166 stmt_term: . SEMI
@@ -8690,7 +8696,7 @@ state 189
     AS             shift, and go to state 108
     '\n'           shift, and go to state 67
 
-    stmt_term  go to state 212
+    stmt_term  go to state 213
 
 
 state 190
@@ -8702,7 +8708,7 @@ state 190
 
     IDENT  shift, and go to state 6
 
-    typename_T  go to state 213
+    typename_T  go to state 214
     fqcn_part   go to state 59
 
 
@@ -8714,6 +8720,13 @@ state 191
 
 
 state 192
+
+  114 expression_nobrace: expression DOT IDENT typename_group .
+
+    $default  reduce using rule 114 (expression_nobrace)
+
+
+state 193
 
    72 argument_list: argument_list COMMA . expression
    78 fqcn_part: . IDENT
@@ -8752,7 +8765,7 @@ state 192
   111                   | . expression LE expression
   112                   | . expression LSHIFT expression
   113                   | . expression RSHIFT expression
-  114                   | . expression DOT IDENT
+  114                   | . expression DOT IDENT typename_group
   115                   | . expression AS typename_T
   116                   | . CHILDA expression
   117                   | . NOT expression
@@ -8785,48 +8798,35 @@ state 192
     NEW             shift, and go to state 17
 
     fqcn_part           go to state 50
-    expression          go to state 214
+    expression          go to state 215
     expression_nobrace  go to state 35
     primary             go to state 36
 
 
-state 193
+state 194
 
   119 expression_nobrace: expression_nobrace LRB argument_list RRB .
 
     $default  reduce using rule 119 (expression_nobrace)
 
 
-state 194
+state 195
 
   145 inferenced_type_init_stmt: VAR IDENT ASSIGN expression stmt_term .
 
     $default  reduce using rule 145 (inferenced_type_init_stmt)
 
 
-state 195
+state 196
 
   122 expression_nobrace: NEW typename_T LRB argument_list RRB .
 
     $default  reduce using rule 122 (expression_nobrace)
 
 
-state 196
-
-   55 function_define: DEF IDENT LRB RRB ARROW . typename_T scope_optional
-   77 typename_T: . fqcn_part typename_group
-   78 fqcn_part: . IDENT
-   79          | . fqcn_part COLO_COLO IDENT
-
-    IDENT  shift, and go to state 6
-
-    typename_T  go to state 215
-    fqcn_part   go to state 59
-
-
 state 197
 
-   70 parameter_list: parameter_list COMMA . typename_T IDENT
+   55 function_define: DEF IDENT LRB RRB ARROW . typename_T scope_optional
    77 typename_T: . fqcn_part typename_group
    78 fqcn_part: . IDENT
    79          | . fqcn_part COLO_COLO IDENT
@@ -8839,58 +8839,71 @@ state 197
 
 state 198
 
-   54 function_define: DEF IDENT LRB parameter_list RRB . ARROW typename_T scope_optional
+   70 parameter_list: parameter_list COMMA . typename_T IDENT
+   77 typename_T: . fqcn_part typename_group
+   78 fqcn_part: . IDENT
+   79          | . fqcn_part COLO_COLO IDENT
 
-    ARROW  shift, and go to state 217
+    IDENT  shift, and go to state 6
+
+    typename_T  go to state 217
+    fqcn_part   go to state 59
 
 
 state 199
+
+   54 function_define: DEF IDENT LRB parameter_list RRB . ARROW typename_T scope_optional
+
+    ARROW  shift, and go to state 218
+
+
+state 200
 
    69 parameter_list: typename_T IDENT .
 
     $default  reduce using rule 69 (parameter_list)
 
 
-state 200
+state 201
 
    20 parameterized_typename: IDENT . type_parameter_group
    21 type_parameter_group: .  [COLON, LCB]
    22                     | . LT type_parameter_list GT
 
-    LT  shift, and go to state 218
+    LT  shift, and go to state 219
 
     $default  reduce using rule 21 (type_parameter_group)
 
-    type_parameter_group  go to state 219
-
-
-state 201
-
-   34 interface_decl: INTERFACE parameterized_typename . LCB access_member_tree_opt RCB
-   35               | INTERFACE parameterized_typename . COLON typename_list LCB access_member_tree_opt RCB
-
-    COLON  shift, and go to state 220
-    LCB    shift, and go to state 221
+    type_parameter_group  go to state 220
 
 
 state 202
 
-   30 class_decl: CLASS parameterized_typename . LCB access_member_tree_opt RCB
-   31           | CLASS parameterized_typename . COLON typename_list LCB access_member_tree_opt RCB
+   34 interface_decl: INTERFACE parameterized_typename . LCB access_member_tree_opt RCB
+   35               | INTERFACE parameterized_typename . COLON typename_list LCB access_member_tree_opt RCB
 
-    COLON  shift, and go to state 222
-    LCB    shift, and go to state 223
+    COLON  shift, and go to state 221
+    LCB    shift, and go to state 222
 
 
 state 203
 
-   32 enum_decl: ENUM IDENT . LCB ident_list RCB
-   33          | ENUM IDENT . LCB ident_list COMMA RCB
+   30 class_decl: CLASS parameterized_typename . LCB access_member_tree_opt RCB
+   31           | CLASS parameterized_typename . COLON typename_list LCB access_member_tree_opt RCB
 
-    LCB  shift, and go to state 224
+    COLON  shift, and go to state 223
+    LCB    shift, and go to state 224
 
 
 state 204
+
+   32 enum_decl: ENUM IDENT . LCB ident_list RCB
+   33          | ENUM IDENT . LCB ident_list COMMA RCB
+
+    LCB  shift, and go to state 225
+
+
+state 205
 
     8 namespace_body: . LCB namespace_member_decl_optional RCB
     9 namespace_member_decl: NAMESPACE namespace_path . namespace_body
@@ -8899,24 +8912,24 @@ state 204
     DOT  shift, and go to state 116
     LCB  shift, and go to state 117
 
-    namespace_body  go to state 225
+    namespace_body  go to state 226
 
 
-state 205
+state 206
 
    14 namespace_member_decl_list: namespace_member_decl_list namespace_member_decl .
 
     $default  reduce using rule 14 (namespace_member_decl_list)
 
 
-state 206
+state 207
 
     8 namespace_body: LCB namespace_member_decl_optional RCB .
 
     $default  reduce using rule 8 (namespace_body)
 
 
-state 207
+state 208
 
   146 if_stmt: IF LRB expression RRB scope .  [$end, CHAR_LITERAL, STRING_LITERAL, INT, DOUBLE, IDENT, ADD, SUB, NOT, CHILDA, RCB, LRB, VAR, TRUE_TOK, FALSE_TOK, NULL_TOK, NEW, RETURN, IF, WHILE, BREAK, CONTINUE, TRY, THROW]
   147        | IF LRB expression RRB scope . ELSE scope
@@ -8926,58 +8939,58 @@ state 207
   151          | . elif_list elif
   152 elif: . ELIF LRB expression RRB scope
 
-    ELIF  shift, and go to state 226
-    ELSE  shift, and go to state 227
+    ELIF  shift, and go to state 227
+    ELSE  shift, and go to state 228
 
     $default  reduce using rule 146 (if_stmt)
 
-    elif_list  go to state 228
-    elif       go to state 229
+    elif_list  go to state 229
+    elif       go to state 230
 
 
-state 208
+state 209
 
   164 scope_optional: SEMI .
 
     $default  reduce using rule 164 (scope_optional)
 
 
-state 209
+state 210
 
   165 scope_optional: scope .
 
     $default  reduce using rule 165 (scope_optional)
 
 
-state 210
+state 211
 
   153 while_stmt: WHILE LRB expression RRB scope_optional .
 
     $default  reduce using rule 153 (while_stmt)
 
 
-state 211
+state 212
 
   161 catch_stmt: CATCH LRB typename_T . IDENT RRB scope
 
-    IDENT  shift, and go to state 230
+    IDENT  shift, and go to state 231
 
 
-state 212
+state 213
 
   144 variable_init_stmt: typename_T IDENT ASSIGN expression stmt_term .
 
     $default  reduce using rule 144 (variable_init_stmt)
 
 
-state 213
+state 214
 
    76 typename_list: typename_list COMMA typename_T .
 
     $default  reduce using rule 76 (typename_list)
 
 
-state 214
+state 215
 
    72 argument_list: argument_list COMMA expression .  [COMMA, RRB]
    85 expression_nobrace: expression . ADD expression
@@ -9009,7 +9022,7 @@ state 214
   111                   | expression . LE expression
   112                   | expression . LSHIFT expression
   113                   | expression . RSHIFT expression
-  114                   | expression . DOT IDENT
+  114                   | expression . DOT IDENT typename_group
   115                   | expression . AS typename_T
 
     DOT            shift, and go to state 78
@@ -9047,7 +9060,7 @@ state 214
     $default  reduce using rule 72 (argument_list)
 
 
-state 215
+state 216
 
    55 function_define: DEF IDENT LRB RRB ARROW typename_T . scope_optional
   162 scope: . LCB stmt_list RCB
@@ -9056,20 +9069,20 @@ state 215
   165               | . scope
 
     LCB   shift, and go to state 70
-    SEMI  shift, and go to state 208
+    SEMI  shift, and go to state 209
 
-    scope           go to state 209
-    scope_optional  go to state 231
-
-
-state 216
-
-   70 parameter_list: parameter_list COMMA typename_T . IDENT
-
-    IDENT  shift, and go to state 232
+    scope           go to state 210
+    scope_optional  go to state 232
 
 
 state 217
+
+   70 parameter_list: parameter_list COMMA typename_T . IDENT
+
+    IDENT  shift, and go to state 233
+
+
+state 218
 
    54 function_define: DEF IDENT LRB parameter_list RRB ARROW . typename_T scope_optional
    77 typename_T: . fqcn_part typename_group
@@ -9078,11 +9091,11 @@ state 217
 
     IDENT  shift, and go to state 6
 
-    typename_T  go to state 233
+    typename_T  go to state 234
     fqcn_part   go to state 59
 
 
-state 218
+state 219
 
    22 type_parameter_group: LT . type_parameter_list GT
    23 type_parameter_list: . type_parameter
@@ -9091,22 +9104,22 @@ state 218
    26               | . IN IDENT type_parameter_rule_list
    27               | . OUT IDENT type_parameter_rule_list
 
-    IDENT  shift, and go to state 234
-    IN     shift, and go to state 235
-    OUT    shift, and go to state 236
+    IDENT  shift, and go to state 235
+    IN     shift, and go to state 236
+    OUT    shift, and go to state 237
 
-    type_parameter_list  go to state 237
-    type_parameter       go to state 238
+    type_parameter_list  go to state 238
+    type_parameter       go to state 239
 
 
-state 219
+state 220
 
    20 parameterized_typename: IDENT type_parameter_group .
 
     $default  reduce using rule 20 (parameterized_typename)
 
 
-state 220
+state 221
 
    35 interface_decl: INTERFACE parameterized_typename COLON . typename_list LCB access_member_tree_opt RCB
    75 typename_list: . typename_T
@@ -9117,12 +9130,12 @@ state 220
 
     IDENT  shift, and go to state 6
 
-    typename_list  go to state 239
+    typename_list  go to state 240
     typename_T     go to state 132
     fqcn_part      go to state 59
 
 
-state 221
+state 222
 
    34 interface_decl: INTERFACE parameterized_typename LCB . access_member_tree_opt RCB
    36 access_member_tree_opt: .  [RCB]
@@ -9134,19 +9147,19 @@ state 221
    65               | . PRIVATE
    66               | . PROTECTED
 
-    PUBLIC     shift, and go to state 240
-    PRIVATE    shift, and go to state 241
-    PROTECTED  shift, and go to state 242
+    PUBLIC     shift, and go to state 241
+    PRIVATE    shift, and go to state 242
+    PROTECTED  shift, and go to state 243
 
     $default  reduce using rule 36 (access_member_tree_opt)
 
-    access_member_tree_opt  go to state 243
-    access_member_tree      go to state 244
-    access_member_list      go to state 245
-    access_level_T          go to state 246
+    access_member_tree_opt  go to state 244
+    access_member_tree      go to state 245
+    access_member_list      go to state 246
+    access_level_T          go to state 247
 
 
-state 222
+state 223
 
    31 class_decl: CLASS parameterized_typename COLON . typename_list LCB access_member_tree_opt RCB
    75 typename_list: . typename_T
@@ -9157,12 +9170,12 @@ state 222
 
     IDENT  shift, and go to state 6
 
-    typename_list  go to state 247
+    typename_list  go to state 248
     typename_T     go to state 132
     fqcn_part      go to state 59
 
 
-state 223
+state 224
 
    30 class_decl: CLASS parameterized_typename LCB . access_member_tree_opt RCB
    36 access_member_tree_opt: .  [RCB]
@@ -9174,45 +9187,45 @@ state 223
    65               | . PRIVATE
    66               | . PROTECTED
 
-    PUBLIC     shift, and go to state 240
-    PRIVATE    shift, and go to state 241
-    PROTECTED  shift, and go to state 242
+    PUBLIC     shift, and go to state 241
+    PRIVATE    shift, and go to state 242
+    PROTECTED  shift, and go to state 243
 
     $default  reduce using rule 36 (access_member_tree_opt)
 
-    access_member_tree_opt  go to state 248
-    access_member_tree      go to state 244
-    access_member_list      go to state 245
-    access_level_T          go to state 246
+    access_member_tree_opt  go to state 249
+    access_member_tree      go to state 245
+    access_member_list      go to state 246
+    access_level_T          go to state 247
 
 
-state 224
+state 225
 
    32 enum_decl: ENUM IDENT LCB . ident_list RCB
    33          | ENUM IDENT LCB . ident_list COMMA RCB
    67 ident_list: . IDENT
    68           | . ident_list COMMA IDENT
 
-    IDENT  shift, and go to state 249
+    IDENT  shift, and go to state 250
 
-    ident_list  go to state 250
+    ident_list  go to state 251
 
 
-state 225
+state 226
 
     9 namespace_member_decl: NAMESPACE namespace_path namespace_body .
 
     $default  reduce using rule 9 (namespace_member_decl)
 
 
-state 226
+state 227
 
   152 elif: ELIF . LRB expression RRB scope
 
-    LRB  shift, and go to state 251
+    LRB  shift, and go to state 252
 
 
-state 227
+state 228
 
   147 if_stmt: IF LRB expression RRB scope ELSE . scope
   162 scope: . LCB stmt_list RCB
@@ -9220,53 +9233,53 @@ state 227
 
     LCB  shift, and go to state 70
 
-    scope  go to state 252
+    scope  go to state 253
 
 
-state 228
+state 229
 
   148 if_stmt: IF LRB expression RRB scope elif_list .  [$end, CHAR_LITERAL, STRING_LITERAL, INT, DOUBLE, IDENT, ADD, SUB, NOT, CHILDA, RCB, LRB, VAR, TRUE_TOK, FALSE_TOK, NULL_TOK, NEW, RETURN, IF, WHILE, BREAK, CONTINUE, TRY, THROW]
   149        | IF LRB expression RRB scope elif_list . ELSE scope
   151 elif_list: elif_list . elif
   152 elif: . ELIF LRB expression RRB scope
 
-    ELIF  shift, and go to state 226
-    ELSE  shift, and go to state 253
+    ELIF  shift, and go to state 227
+    ELSE  shift, and go to state 254
 
     $default  reduce using rule 148 (if_stmt)
 
-    elif  go to state 254
+    elif  go to state 255
 
 
-state 229
+state 230
 
   150 elif_list: elif .
 
     $default  reduce using rule 150 (elif_list)
 
 
-state 230
+state 231
 
   161 catch_stmt: CATCH LRB typename_T IDENT . RRB scope
 
-    RRB  shift, and go to state 255
+    RRB  shift, and go to state 256
 
 
-state 231
+state 232
 
    55 function_define: DEF IDENT LRB RRB ARROW typename_T scope_optional .
 
     $default  reduce using rule 55 (function_define)
 
 
-state 232
+state 233
 
    70 parameter_list: parameter_list COMMA typename_T IDENT .
 
     $default  reduce using rule 70 (parameter_list)
 
 
-state 233
+state 234
 
    54 function_define: DEF IDENT LRB parameter_list RRB ARROW typename_T . scope_optional
   162 scope: . LCB stmt_list RCB
@@ -9275,93 +9288,93 @@ state 233
   165               | . scope
 
     LCB   shift, and go to state 70
-    SEMI  shift, and go to state 208
+    SEMI  shift, and go to state 209
 
-    scope           go to state 209
-    scope_optional  go to state 256
+    scope           go to state 210
+    scope_optional  go to state 257
 
 
-state 234
+state 235
 
    25 type_parameter: IDENT . type_parameter_rule_list
    28 type_parameter_rule_list: .  [COMMA, GT]
    29                         | . LRB typename_list RRB
 
-    LRB  shift, and go to state 257
+    LRB  shift, and go to state 258
 
     $default  reduce using rule 28 (type_parameter_rule_list)
 
-    type_parameter_rule_list  go to state 258
-
-
-state 235
-
-   26 type_parameter: IN . IDENT type_parameter_rule_list
-
-    IDENT  shift, and go to state 259
+    type_parameter_rule_list  go to state 259
 
 
 state 236
 
-   27 type_parameter: OUT . IDENT type_parameter_rule_list
+   26 type_parameter: IN . IDENT type_parameter_rule_list
 
     IDENT  shift, and go to state 260
 
 
 state 237
 
-   22 type_parameter_group: LT type_parameter_list . GT
-   24 type_parameter_list: type_parameter_list . COMMA type_parameter
+   27 type_parameter: OUT . IDENT type_parameter_rule_list
 
-    COMMA  shift, and go to state 261
-    GT     shift, and go to state 262
+    IDENT  shift, and go to state 261
 
 
 state 238
+
+   22 type_parameter_group: LT type_parameter_list . GT
+   24 type_parameter_list: type_parameter_list . COMMA type_parameter
+
+    COMMA  shift, and go to state 262
+    GT     shift, and go to state 263
+
+
+state 239
 
    23 type_parameter_list: type_parameter .
 
     $default  reduce using rule 23 (type_parameter_list)
 
 
-state 239
+state 240
 
    35 interface_decl: INTERFACE parameterized_typename COLON typename_list . LCB access_member_tree_opt RCB
    76 typename_list: typename_list . COMMA typename_T
 
     COMMA  shift, and go to state 190
-    LCB    shift, and go to state 263
+    LCB    shift, and go to state 264
 
 
-state 240
+state 241
 
    64 access_level_T: PUBLIC .
 
     $default  reduce using rule 64 (access_level_T)
 
 
-state 241
+state 242
 
    65 access_level_T: PRIVATE .
 
     $default  reduce using rule 65 (access_level_T)
 
 
-state 242
+state 243
 
    66 access_level_T: PROTECTED .
 
     $default  reduce using rule 66 (access_level_T)
 
 
-state 243
+state 244
 
    34 interface_decl: INTERFACE parameterized_typename LCB access_member_tree_opt . RCB
 
-    RCB  shift, and go to state 264
+    RCB  shift, and go to state 265
 
 
-state 244
+state 245
 
    37 access_member_tree_opt: access_member_tree .  [RCB]
    39 access_member_tree: access_member_tree . access_member_list
@@ -9370,64 +9383,64 @@ state 244
    65               | . PRIVATE
    66               | . PROTECTED
 
-    PUBLIC     shift, and go to state 240
-    PRIVATE    shift, and go to state 241
-    PROTECTED  shift, and go to state 242
+    PUBLIC     shift, and go to state 241
+    PRIVATE    shift, and go to state 242
+    PROTECTED  shift, and go to state 243
 
     $default  reduce using rule 37 (access_member_tree_opt)
 
-    access_member_list  go to state 265
-    access_level_T      go to state 246
+    access_member_list  go to state 266
+    access_level_T      go to state 247
 
 
-state 245
+state 246
 
    38 access_member_tree: access_member_list .
 
     $default  reduce using rule 38 (access_member_tree)
 
 
-state 246
+state 247
 
    40 access_member_list: access_level_T . COLON member_define_list
 
-    COLON  shift, and go to state 266
+    COLON  shift, and go to state 267
 
 
-state 247
+state 248
 
    31 class_decl: CLASS parameterized_typename COLON typename_list . LCB access_member_tree_opt RCB
    76 typename_list: typename_list . COMMA typename_T
 
     COMMA  shift, and go to state 190
-    LCB    shift, and go to state 267
-
-
-state 248
-
-   30 class_decl: CLASS parameterized_typename LCB access_member_tree_opt . RCB
-
-    RCB  shift, and go to state 268
+    LCB    shift, and go to state 268
 
 
 state 249
+
+   30 class_decl: CLASS parameterized_typename LCB access_member_tree_opt . RCB
+
+    RCB  shift, and go to state 269
+
+
+state 250
 
    67 ident_list: IDENT .
 
     $default  reduce using rule 67 (ident_list)
 
 
-state 250
+state 251
 
    32 enum_decl: ENUM IDENT LCB ident_list . RCB
    33          | ENUM IDENT LCB ident_list . COMMA RCB
    68 ident_list: ident_list . COMMA IDENT
 
-    COMMA  shift, and go to state 269
-    RCB    shift, and go to state 270
+    COMMA  shift, and go to state 270
+    RCB    shift, and go to state 271
 
 
-state 251
+state 252
 
    78 fqcn_part: . IDENT
    79          | . fqcn_part COLO_COLO IDENT
@@ -9465,7 +9478,7 @@ state 251
   111                   | . expression LE expression
   112                   | . expression LSHIFT expression
   113                   | . expression RSHIFT expression
-  114                   | . expression DOT IDENT
+  114                   | . expression DOT IDENT typename_group
   115                   | . expression AS typename_T
   116                   | . CHILDA expression
   117                   | . NOT expression
@@ -9499,39 +9512,21 @@ state 251
     NEW             shift, and go to state 17
 
     fqcn_part           go to state 50
-    expression          go to state 271
+    expression          go to state 272
     expression_nobrace  go to state 35
     primary             go to state 36
 
 
-state 252
+state 253
 
   147 if_stmt: IF LRB expression RRB scope ELSE scope .
 
     $default  reduce using rule 147 (if_stmt)
 
 
-state 253
-
-  149 if_stmt: IF LRB expression RRB scope elif_list ELSE . scope
-  162 scope: . LCB stmt_list RCB
-  163      | . LCB RCB
-
-    LCB  shift, and go to state 70
-
-    scope  go to state 272
-
-
 state 254
 
-  151 elif_list: elif_list elif .
-
-    $default  reduce using rule 151 (elif_list)
-
-
-state 255
-
-  161 catch_stmt: CATCH LRB typename_T IDENT RRB . scope
+  149 if_stmt: IF LRB expression RRB scope elif_list ELSE . scope
   162 scope: . LCB stmt_list RCB
   163      | . LCB RCB
 
@@ -9540,14 +9535,32 @@ state 255
     scope  go to state 273
 
 
+state 255
+
+  151 elif_list: elif_list elif .
+
+    $default  reduce using rule 151 (elif_list)
+
+
 state 256
+
+  161 catch_stmt: CATCH LRB typename_T IDENT RRB . scope
+  162 scope: . LCB stmt_list RCB
+  163      | . LCB RCB
+
+    LCB  shift, and go to state 70
+
+    scope  go to state 274
+
+
+state 257
 
    54 function_define: DEF IDENT LRB parameter_list RRB ARROW typename_T scope_optional .
 
     $default  reduce using rule 54 (function_define)
 
 
-state 257
+state 258
 
    29 type_parameter_rule_list: LRB . typename_list RRB
    75 typename_list: . typename_T
@@ -9558,38 +9571,25 @@ state 257
 
     IDENT  shift, and go to state 6
 
-    typename_list  go to state 274
+    typename_list  go to state 275
     typename_T     go to state 132
     fqcn_part      go to state 59
 
 
-state 258
+state 259
 
    25 type_parameter: IDENT type_parameter_rule_list .
 
     $default  reduce using rule 25 (type_parameter)
 
 
-state 259
+state 260
 
    26 type_parameter: IN IDENT . type_parameter_rule_list
    28 type_parameter_rule_list: .  [COMMA, GT]
    29                         | . LRB typename_list RRB
 
-    LRB  shift, and go to state 257
-
-    $default  reduce using rule 28 (type_parameter_rule_list)
-
-    type_parameter_rule_list  go to state 275
-
-
-state 260
-
-   27 type_parameter: OUT IDENT . type_parameter_rule_list
-   28 type_parameter_rule_list: .  [COMMA, GT]
-   29                         | . LRB typename_list RRB
-
-    LRB  shift, and go to state 257
+    LRB  shift, and go to state 258
 
     $default  reduce using rule 28 (type_parameter_rule_list)
 
@@ -9598,26 +9598,39 @@ state 260
 
 state 261
 
+   27 type_parameter: OUT IDENT . type_parameter_rule_list
+   28 type_parameter_rule_list: .  [COMMA, GT]
+   29                         | . LRB typename_list RRB
+
+    LRB  shift, and go to state 258
+
+    $default  reduce using rule 28 (type_parameter_rule_list)
+
+    type_parameter_rule_list  go to state 277
+
+
+state 262
+
    24 type_parameter_list: type_parameter_list COMMA . type_parameter
    25 type_parameter: . IDENT type_parameter_rule_list
    26               | . IN IDENT type_parameter_rule_list
    27               | . OUT IDENT type_parameter_rule_list
 
-    IDENT  shift, and go to state 234
-    IN     shift, and go to state 235
-    OUT    shift, and go to state 236
+    IDENT  shift, and go to state 235
+    IN     shift, and go to state 236
+    OUT    shift, and go to state 237
 
-    type_parameter  go to state 277
+    type_parameter  go to state 278
 
 
-state 262
+state 263
 
    22 type_parameter_group: LT type_parameter_list GT .
 
     $default  reduce using rule 22 (type_parameter_group)
 
 
-state 263
+state 264
 
    35 interface_decl: INTERFACE parameterized_typename COLON typename_list LCB . access_member_tree_opt RCB
    36 access_member_tree_opt: .  [RCB]
@@ -9629,33 +9642,33 @@ state 263
    65               | . PRIVATE
    66               | . PROTECTED
 
-    PUBLIC     shift, and go to state 240
-    PRIVATE    shift, and go to state 241
-    PROTECTED  shift, and go to state 242
+    PUBLIC     shift, and go to state 241
+    PRIVATE    shift, and go to state 242
+    PROTECTED  shift, and go to state 243
 
     $default  reduce using rule 36 (access_member_tree_opt)
 
-    access_member_tree_opt  go to state 278
-    access_member_tree      go to state 244
-    access_member_list      go to state 245
-    access_level_T          go to state 246
+    access_member_tree_opt  go to state 279
+    access_member_tree      go to state 245
+    access_member_list      go to state 246
+    access_level_T          go to state 247
 
 
-state 264
+state 265
 
    34 interface_decl: INTERFACE parameterized_typename LCB access_member_tree_opt RCB .
 
     $default  reduce using rule 34 (interface_decl)
 
 
-state 265
+state 266
 
    39 access_member_tree: access_member_tree access_member_list .
 
     $default  reduce using rule 39 (access_member_tree)
 
 
-state 266
+state 267
 
    40 access_member_list: access_level_T COLON . member_define_list
    41 member_define_list: . member_define
@@ -9674,21 +9687,21 @@ state 266
    62                | . STATIC
    63                | . NATIVE
 
-    STATIC  shift, and go to state 279
-    NATIVE  shift, and go to state 280
-    CTOR    shift, and go to state 281
+    STATIC  shift, and go to state 280
+    NATIVE  shift, and go to state 281
+    CTOR    shift, and go to state 282
 
     $default  reduce using rule 59 (modifier_type_T)
 
-    member_define_list  go to state 282
-    member_define       go to state 283
-    constructor_define  go to state 284
-    method_define       go to state 285
-    field_define        go to state 286
-    modifier_type_T     go to state 287
+    member_define_list  go to state 283
+    member_define       go to state 284
+    constructor_define  go to state 285
+    method_define       go to state 286
+    field_define        go to state 287
+    modifier_type_T     go to state 288
 
 
-state 267
+state 268
 
    31 class_decl: CLASS parameterized_typename COLON typename_list LCB . access_member_tree_opt RCB
    36 access_member_tree_opt: .  [RCB]
@@ -9700,42 +9713,42 @@ state 267
    65               | . PRIVATE
    66               | . PROTECTED
 
-    PUBLIC     shift, and go to state 240
-    PRIVATE    shift, and go to state 241
-    PROTECTED  shift, and go to state 242
+    PUBLIC     shift, and go to state 241
+    PRIVATE    shift, and go to state 242
+    PROTECTED  shift, and go to state 243
 
     $default  reduce using rule 36 (access_member_tree_opt)
 
-    access_member_tree_opt  go to state 288
-    access_member_tree      go to state 244
-    access_member_list      go to state 245
-    access_level_T          go to state 246
+    access_member_tree_opt  go to state 289
+    access_member_tree      go to state 245
+    access_member_list      go to state 246
+    access_level_T          go to state 247
 
 
-state 268
+state 269
 
    30 class_decl: CLASS parameterized_typename LCB access_member_tree_opt RCB .
 
     $default  reduce using rule 30 (class_decl)
 
 
-state 269
+state 270
 
    33 enum_decl: ENUM IDENT LCB ident_list COMMA . RCB
    68 ident_list: ident_list COMMA . IDENT
 
-    IDENT  shift, and go to state 289
-    RCB    shift, and go to state 290
+    IDENT  shift, and go to state 290
+    RCB    shift, and go to state 291
 
 
-state 270
+state 271
 
    32 enum_decl: ENUM IDENT LCB ident_list RCB .
 
     $default  reduce using rule 32 (enum_decl)
 
 
-state 271
+state 272
 
    85 expression_nobrace: expression . ADD expression
    86                   | expression . SUB expression
@@ -9766,7 +9779,7 @@ state 271
   111                   | expression . LE expression
   112                   | expression . LSHIFT expression
   113                   | expression . RSHIFT expression
-  114                   | expression . DOT IDENT
+  114                   | expression . DOT IDENT typename_group
   115                   | expression . AS typename_T
   152 elif: ELIF LRB expression . RRB scope
 
@@ -9800,90 +9813,90 @@ state 271
     RSHIFT_ASSIGN  shift, and go to state 105
     EXC_OR_ASSIGN  shift, and go to state 106
     EXC_OR         shift, and go to state 107
-    RRB            shift, and go to state 291
+    RRB            shift, and go to state 292
     AS             shift, and go to state 108
 
 
-state 272
+state 273
 
   149 if_stmt: IF LRB expression RRB scope elif_list ELSE scope .
 
     $default  reduce using rule 149 (if_stmt)
 
 
-state 273
+state 274
 
   161 catch_stmt: CATCH LRB typename_T IDENT RRB scope .
 
     $default  reduce using rule 161 (catch_stmt)
 
 
-state 274
+state 275
 
    29 type_parameter_rule_list: LRB typename_list . RRB
    76 typename_list: typename_list . COMMA typename_T
 
     COMMA  shift, and go to state 190
-    RRB    shift, and go to state 292
+    RRB    shift, and go to state 293
 
 
-state 275
+state 276
 
    26 type_parameter: IN IDENT type_parameter_rule_list .
 
     $default  reduce using rule 26 (type_parameter)
 
 
-state 276
+state 277
 
    27 type_parameter: OUT IDENT type_parameter_rule_list .
 
     $default  reduce using rule 27 (type_parameter)
 
 
-state 277
+state 278
 
    24 type_parameter_list: type_parameter_list COMMA type_parameter .
 
     $default  reduce using rule 24 (type_parameter_list)
 
 
-state 278
+state 279
 
    35 interface_decl: INTERFACE parameterized_typename COLON typename_list LCB access_member_tree_opt . RCB
 
-    RCB  shift, and go to state 293
-
-
-state 279
-
-   60 modifier_type_T: STATIC . NATIVE
-   62                | STATIC .  [IDENT, DEF]
-
-    NATIVE  shift, and go to state 294
-
-    $default  reduce using rule 62 (modifier_type_T)
+    RCB  shift, and go to state 294
 
 
 state 280
 
-   61 modifier_type_T: NATIVE . STATIC
-   63                | NATIVE .  [IDENT, DEF]
+   60 modifier_type_T: STATIC . NATIVE
+   62                | STATIC .  [IDENT, DEF]
 
-    STATIC  shift, and go to state 295
+    NATIVE  shift, and go to state 295
 
-    $default  reduce using rule 63 (modifier_type_T)
+    $default  reduce using rule 62 (modifier_type_T)
 
 
 state 281
 
-   46 constructor_define: CTOR . NEW LRB parameter_list RRB constructor_chain_optional scope_optional
-   47                   | CTOR . NEW LRB RRB constructor_chain_optional scope_optional
+   61 modifier_type_T: NATIVE . STATIC
+   63                | NATIVE .  [IDENT, DEF]
 
-    NEW  shift, and go to state 296
+    STATIC  shift, and go to state 296
+
+    $default  reduce using rule 63 (modifier_type_T)
 
 
 state 282
+
+   46 constructor_define: CTOR . NEW LRB parameter_list RRB constructor_chain_optional scope_optional
+   47                   | CTOR . NEW LRB RRB constructor_chain_optional scope_optional
+
+    NEW  shift, and go to state 297
+
+
+state 283
 
    40 access_member_list: access_level_T COLON member_define_list .  [RCB, PUBLIC, PRIVATE, PROTECTED]
    42 member_define_list: member_define_list . member_define
@@ -9901,50 +9914,50 @@ state 282
    62                | . STATIC
    63                | . NATIVE
 
-    STATIC  shift, and go to state 279
-    NATIVE  shift, and go to state 280
-    CTOR    shift, and go to state 281
+    STATIC  shift, and go to state 280
+    NATIVE  shift, and go to state 281
+    CTOR    shift, and go to state 282
 
     IDENT     reduce using rule 59 (modifier_type_T)
     DEF       reduce using rule 59 (modifier_type_T)
     $default  reduce using rule 40 (access_member_list)
 
-    member_define       go to state 297
-    constructor_define  go to state 284
-    method_define       go to state 285
-    field_define        go to state 286
-    modifier_type_T     go to state 287
+    member_define       go to state 298
+    constructor_define  go to state 285
+    method_define       go to state 286
+    field_define        go to state 287
+    modifier_type_T     go to state 288
 
 
-state 283
+state 284
 
    41 member_define_list: member_define .
 
     $default  reduce using rule 41 (member_define_list)
 
 
-state 284
+state 285
 
    43 member_define: constructor_define .
 
     $default  reduce using rule 43 (member_define)
 
 
-state 285
+state 286
 
    44 member_define: method_define .
 
     $default  reduce using rule 44 (member_define)
 
 
-state 286
+state 287
 
    45 member_define: field_define .
 
     $default  reduce using rule 45 (member_define)
 
 
-state 287
+state 288
 
    56 method_define: modifier_type_T . DEF IDENT type_parameter_group LRB parameter_list RRB ARROW typename_T scope_optional
    57              | modifier_type_T . DEF IDENT type_parameter_group LRB RRB ARROW typename_T scope_optional
@@ -9954,34 +9967,34 @@ state 287
    79          | . fqcn_part COLO_COLO IDENT
 
     IDENT  shift, and go to state 6
-    DEF    shift, and go to state 298
+    DEF    shift, and go to state 299
 
-    typename_T  go to state 299
+    typename_T  go to state 300
     fqcn_part   go to state 59
 
 
-state 288
+state 289
 
    31 class_decl: CLASS parameterized_typename COLON typename_list LCB access_member_tree_opt . RCB
 
-    RCB  shift, and go to state 300
+    RCB  shift, and go to state 301
 
 
-state 289
+state 290
 
    68 ident_list: ident_list COMMA IDENT .
 
     $default  reduce using rule 68 (ident_list)
 
 
-state 290
+state 291
 
    33 enum_decl: ENUM IDENT LCB ident_list COMMA RCB .
 
     $default  reduce using rule 33 (enum_decl)
 
 
-state 291
+state 292
 
   152 elif: ELIF LRB expression RRB . scope
   162 scope: . LCB stmt_list RCB
@@ -9989,82 +10002,82 @@ state 291
 
     LCB  shift, and go to state 70
 
-    scope  go to state 301
+    scope  go to state 302
 
 
-state 292
+state 293
 
    29 type_parameter_rule_list: LRB typename_list RRB .
 
     $default  reduce using rule 29 (type_parameter_rule_list)
 
 
-state 293
+state 294
 
    35 interface_decl: INTERFACE parameterized_typename COLON typename_list LCB access_member_tree_opt RCB .
 
     $default  reduce using rule 35 (interface_decl)
 
 
-state 294
+state 295
 
    60 modifier_type_T: STATIC NATIVE .
 
     $default  reduce using rule 60 (modifier_type_T)
 
 
-state 295
+state 296
 
    61 modifier_type_T: NATIVE STATIC .
 
     $default  reduce using rule 61 (modifier_type_T)
 
 
-state 296
+state 297
 
    46 constructor_define: CTOR NEW . LRB parameter_list RRB constructor_chain_optional scope_optional
    47                   | CTOR NEW . LRB RRB constructor_chain_optional scope_optional
 
-    LRB  shift, and go to state 302
+    LRB  shift, and go to state 303
 
 
-state 297
+state 298
 
    42 member_define_list: member_define_list member_define .
 
     $default  reduce using rule 42 (member_define_list)
 
 
-state 298
+state 299
 
    56 method_define: modifier_type_T DEF . IDENT type_parameter_group LRB parameter_list RRB ARROW typename_T scope_optional
    57              | modifier_type_T DEF . IDENT type_parameter_group LRB RRB ARROW typename_T scope_optional
-
-    IDENT  shift, and go to state 303
-
-
-state 299
-
-   58 field_define: modifier_type_T typename_T . IDENT SEMI
 
     IDENT  shift, and go to state 304
 
 
 state 300
 
+   58 field_define: modifier_type_T typename_T . IDENT SEMI
+
+    IDENT  shift, and go to state 305
+
+
+state 301
+
    31 class_decl: CLASS parameterized_typename COLON typename_list LCB access_member_tree_opt RCB .
 
     $default  reduce using rule 31 (class_decl)
 
 
-state 301
+state 302
 
   152 elif: ELIF LRB expression RRB scope .
 
     $default  reduce using rule 152 (elif)
 
 
-state 302
+state 303
 
    46 constructor_define: CTOR NEW LRB . parameter_list RRB constructor_chain_optional scope_optional
    47                   | CTOR NEW LRB . RRB constructor_chain_optional scope_optional
@@ -10075,35 +10088,35 @@ state 302
    79          | . fqcn_part COLO_COLO IDENT
 
     IDENT  shift, and go to state 6
-    RRB    shift, and go to state 305
+    RRB    shift, and go to state 306
 
-    parameter_list  go to state 306
+    parameter_list  go to state 307
     typename_T      go to state 172
     fqcn_part       go to state 59
 
 
-state 303
+state 304
 
    21 type_parameter_group: .  [LRB]
    22                     | . LT type_parameter_list GT
    56 method_define: modifier_type_T DEF IDENT . type_parameter_group LRB parameter_list RRB ARROW typename_T scope_optional
    57              | modifier_type_T DEF IDENT . type_parameter_group LRB RRB ARROW typename_T scope_optional
 
-    LT  shift, and go to state 218
+    LT  shift, and go to state 219
 
     $default  reduce using rule 21 (type_parameter_group)
 
-    type_parameter_group  go to state 307
-
-
-state 304
-
-   58 field_define: modifier_type_T typename_T IDENT . SEMI
-
-    SEMI  shift, and go to state 308
+    type_parameter_group  go to state 308
 
 
 state 305
+
+   58 field_define: modifier_type_T typename_T IDENT . SEMI
+
+    SEMI  shift, and go to state 309
+
+
+state 306
 
    47 constructor_define: CTOR NEW LRB RRB . constructor_chain_optional scope_optional
    48 constructor_chain: . COLON constructor_chain_type_T LRB argument_list RRB
@@ -10111,59 +10124,59 @@ state 305
    52 constructor_chain_optional: .  [LCB, SEMI]
    53                           | . constructor_chain
 
-    COLON  shift, and go to state 309
+    COLON  shift, and go to state 310
 
     $default  reduce using rule 52 (constructor_chain_optional)
 
-    constructor_chain           go to state 310
-    constructor_chain_optional  go to state 311
-
-
-state 306
-
-   46 constructor_define: CTOR NEW LRB parameter_list . RRB constructor_chain_optional scope_optional
-   70 parameter_list: parameter_list . COMMA typename_T IDENT
-
-    COMMA  shift, and go to state 197
-    RRB    shift, and go to state 312
+    constructor_chain           go to state 311
+    constructor_chain_optional  go to state 312
 
 
 state 307
 
-   56 method_define: modifier_type_T DEF IDENT type_parameter_group . LRB parameter_list RRB ARROW typename_T scope_optional
-   57              | modifier_type_T DEF IDENT type_parameter_group . LRB RRB ARROW typename_T scope_optional
+   46 constructor_define: CTOR NEW LRB parameter_list . RRB constructor_chain_optional scope_optional
+   70 parameter_list: parameter_list . COMMA typename_T IDENT
 
-    LRB  shift, and go to state 313
+    COMMA  shift, and go to state 198
+    RRB    shift, and go to state 313
 
 
 state 308
+
+   56 method_define: modifier_type_T DEF IDENT type_parameter_group . LRB parameter_list RRB ARROW typename_T scope_optional
+   57              | modifier_type_T DEF IDENT type_parameter_group . LRB RRB ARROW typename_T scope_optional
+
+    LRB  shift, and go to state 314
+
+
+state 309
 
    58 field_define: modifier_type_T typename_T IDENT SEMI .
 
     $default  reduce using rule 58 (field_define)
 
 
-state 309
+state 310
 
    48 constructor_chain: COLON . constructor_chain_type_T LRB argument_list RRB
    49                  | COLON . constructor_chain_type_T LRB RRB
    50 constructor_chain_type_T: . SUPER
    51                         | . THIS
 
-    THIS   shift, and go to state 314
-    SUPER  shift, and go to state 315
+    THIS   shift, and go to state 315
+    SUPER  shift, and go to state 316
 
-    constructor_chain_type_T  go to state 316
+    constructor_chain_type_T  go to state 317
 
 
-state 310
+state 311
 
    53 constructor_chain_optional: constructor_chain .
 
     $default  reduce using rule 53 (constructor_chain_optional)
 
 
-state 311
+state 312
 
    47 constructor_define: CTOR NEW LRB RRB constructor_chain_optional . scope_optional
   162 scope: . LCB stmt_list RCB
@@ -10172,13 +10185,13 @@ state 311
   165               | . scope
 
     LCB   shift, and go to state 70
-    SEMI  shift, and go to state 208
+    SEMI  shift, and go to state 209
 
-    scope           go to state 209
-    scope_optional  go to state 317
+    scope           go to state 210
+    scope_optional  go to state 318
 
 
-state 312
+state 313
 
    46 constructor_define: CTOR NEW LRB parameter_list RRB . constructor_chain_optional scope_optional
    48 constructor_chain: . COLON constructor_chain_type_T LRB argument_list RRB
@@ -10186,15 +10199,15 @@ state 312
    52 constructor_chain_optional: .  [LCB, SEMI]
    53                           | . constructor_chain
 
-    COLON  shift, and go to state 309
+    COLON  shift, and go to state 310
 
     $default  reduce using rule 52 (constructor_chain_optional)
 
-    constructor_chain           go to state 310
-    constructor_chain_optional  go to state 318
+    constructor_chain           go to state 311
+    constructor_chain_optional  go to state 319
 
 
-state 313
+state 314
 
    56 method_define: modifier_type_T DEF IDENT type_parameter_group LRB . parameter_list RRB ARROW typename_T scope_optional
    57              | modifier_type_T DEF IDENT type_parameter_group LRB . RRB ARROW typename_T scope_optional
@@ -10205,43 +10218,43 @@ state 313
    79          | . fqcn_part COLO_COLO IDENT
 
     IDENT  shift, and go to state 6
-    RRB    shift, and go to state 319
+    RRB    shift, and go to state 320
 
-    parameter_list  go to state 320
+    parameter_list  go to state 321
     typename_T      go to state 172
     fqcn_part       go to state 59
 
 
-state 314
+state 315
 
    51 constructor_chain_type_T: THIS .
 
     $default  reduce using rule 51 (constructor_chain_type_T)
 
 
-state 315
+state 316
 
    50 constructor_chain_type_T: SUPER .
 
     $default  reduce using rule 50 (constructor_chain_type_T)
 
 
-state 316
+state 317
 
    48 constructor_chain: COLON constructor_chain_type_T . LRB argument_list RRB
    49                  | COLON constructor_chain_type_T . LRB RRB
 
-    LRB  shift, and go to state 321
+    LRB  shift, and go to state 322
 
 
-state 317
+state 318
 
    47 constructor_define: CTOR NEW LRB RRB constructor_chain_optional scope_optional .
 
     $default  reduce using rule 47 (constructor_define)
 
 
-state 318
+state 319
 
    46 constructor_define: CTOR NEW LRB parameter_list RRB constructor_chain_optional . scope_optional
   162 scope: . LCB stmt_list RCB
@@ -10250,29 +10263,29 @@ state 318
   165               | . scope
 
     LCB   shift, and go to state 70
-    SEMI  shift, and go to state 208
+    SEMI  shift, and go to state 209
 
-    scope           go to state 209
-    scope_optional  go to state 322
-
-
-state 319
-
-   57 method_define: modifier_type_T DEF IDENT type_parameter_group LRB RRB . ARROW typename_T scope_optional
-
-    ARROW  shift, and go to state 323
+    scope           go to state 210
+    scope_optional  go to state 323
 
 
 state 320
 
-   56 method_define: modifier_type_T DEF IDENT type_parameter_group LRB parameter_list . RRB ARROW typename_T scope_optional
-   70 parameter_list: parameter_list . COMMA typename_T IDENT
+   57 method_define: modifier_type_T DEF IDENT type_parameter_group LRB RRB . ARROW typename_T scope_optional
 
-    COMMA  shift, and go to state 197
-    RRB    shift, and go to state 324
+    ARROW  shift, and go to state 324
 
 
 state 321
+
+   56 method_define: modifier_type_T DEF IDENT type_parameter_group LRB parameter_list . RRB ARROW typename_T scope_optional
+   70 parameter_list: parameter_list . COMMA typename_T IDENT
+
+    COMMA  shift, and go to state 198
+    RRB    shift, and go to state 325
+
+
+state 322
 
    48 constructor_chain: COLON constructor_chain_type_T LRB . argument_list RRB
    49                  | COLON constructor_chain_type_T LRB . RRB
@@ -10314,7 +10327,7 @@ state 321
   111                   | . expression LE expression
   112                   | . expression LSHIFT expression
   113                   | . expression RSHIFT expression
-  114                   | . expression DOT IDENT
+  114                   | . expression DOT IDENT typename_group
   115                   | . expression AS typename_T
   116                   | . CHILDA expression
   117                   | . NOT expression
@@ -10341,27 +10354,27 @@ state 321
     NOT             shift, and go to state 9
     CHILDA          shift, and go to state 10
     LRB             shift, and go to state 11
-    RRB             shift, and go to state 325
+    RRB             shift, and go to state 326
     TRUE_TOK        shift, and go to state 14
     FALSE_TOK       shift, and go to state 15
     NULL_TOK        shift, and go to state 16
     NEW             shift, and go to state 17
 
-    argument_list       go to state 326
+    argument_list       go to state 327
     fqcn_part           go to state 50
     expression          go to state 166
     expression_nobrace  go to state 35
     primary             go to state 36
 
 
-state 322
+state 323
 
    46 constructor_define: CTOR NEW LRB parameter_list RRB constructor_chain_optional scope_optional .
 
     $default  reduce using rule 46 (constructor_define)
 
 
-state 323
+state 324
 
    57 method_define: modifier_type_T DEF IDENT type_parameter_group LRB RRB ARROW . typename_T scope_optional
    77 typename_T: . fqcn_part typename_group
@@ -10370,34 +10383,34 @@ state 323
 
     IDENT  shift, and go to state 6
 
-    typename_T  go to state 327
+    typename_T  go to state 328
     fqcn_part   go to state 59
 
 
-state 324
+state 325
 
    56 method_define: modifier_type_T DEF IDENT type_parameter_group LRB parameter_list RRB . ARROW typename_T scope_optional
 
-    ARROW  shift, and go to state 328
+    ARROW  shift, and go to state 329
 
 
-state 325
+state 326
 
    49 constructor_chain: COLON constructor_chain_type_T LRB RRB .
 
     $default  reduce using rule 49 (constructor_chain)
 
 
-state 326
+state 327
 
    48 constructor_chain: COLON constructor_chain_type_T LRB argument_list . RRB
    72 argument_list: argument_list . COMMA expression
 
-    COMMA  shift, and go to state 192
-    RRB    shift, and go to state 329
+    COMMA  shift, and go to state 193
+    RRB    shift, and go to state 330
 
 
-state 327
+state 328
 
    57 method_define: modifier_type_T DEF IDENT type_parameter_group LRB RRB ARROW typename_T . scope_optional
   162 scope: . LCB stmt_list RCB
@@ -10406,13 +10419,13 @@ state 327
   165               | . scope
 
     LCB   shift, and go to state 70
-    SEMI  shift, and go to state 208
+    SEMI  shift, and go to state 209
 
-    scope           go to state 209
-    scope_optional  go to state 330
+    scope           go to state 210
+    scope_optional  go to state 331
 
 
-state 328
+state 329
 
    56 method_define: modifier_type_T DEF IDENT type_parameter_group LRB parameter_list RRB ARROW . typename_T scope_optional
    77 typename_T: . fqcn_part typename_group
@@ -10421,25 +10434,25 @@ state 328
 
     IDENT  shift, and go to state 6
 
-    typename_T  go to state 331
+    typename_T  go to state 332
     fqcn_part   go to state 59
 
 
-state 329
+state 330
 
    48 constructor_chain: COLON constructor_chain_type_T LRB argument_list RRB .
 
     $default  reduce using rule 48 (constructor_chain)
 
 
-state 330
+state 331
 
    57 method_define: modifier_type_T DEF IDENT type_parameter_group LRB RRB ARROW typename_T scope_optional .
 
     $default  reduce using rule 57 (method_define)
 
 
-state 331
+state 332
 
    56 method_define: modifier_type_T DEF IDENT type_parameter_group LRB parameter_list RRB ARROW typename_T . scope_optional
   162 scope: . LCB stmt_list RCB
@@ -10448,13 +10461,13 @@ state 331
   165               | . scope
 
     LCB   shift, and go to state 70
-    SEMI  shift, and go to state 208
+    SEMI  shift, and go to state 209
 
-    scope           go to state 209
-    scope_optional  go to state 332
+    scope           go to state 210
+    scope_optional  go to state 333
 
 
-state 332
+state 333
 
    56 method_define: modifier_type_T DEF IDENT type_parameter_group LRB parameter_list RRB ARROW typename_T scope_optional .
 

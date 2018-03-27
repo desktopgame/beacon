@@ -658,7 +658,7 @@ expression_nobrace
 	{
 		$$ = ast_new_binary(ast_rshift, $1, $3);
 	}
-	| expression DOT IDENT
+	| expression DOT IDENT typename_group
 	{
 		$$ = ast_new_blank();
 	}
