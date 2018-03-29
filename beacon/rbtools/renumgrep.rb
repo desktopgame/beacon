@@ -1,24 +1,7 @@
 #srcの中の全ての列挙宣言を取り出して、
 #使用箇所を renumgrep_used.text
 #未使用の列挙を renumgrep_unused.text へ出力するプログラム
-def location(content, offs)
-	row = 0
-	col = 0
-	ptr = 0
-	content.chars do |x|
-		ptr = ptr + 1
-		if x.match(/\n/)
-			row = row + 1
-			col = 0
-			next
-		end
-		if ptr >= offs then
-			break
-		end
-		col = col + 1
-	end
-	return [row, col]
-end
+require './rgrep'
 p "target: " + File.expand_path('./../src')
 enum_list = []
 Dir.glob(File.expand_path('./../src/**/*')) do | filename |
@@ -88,7 +71,7 @@ Dir.glob(File.expand_path('./../src/**/*')) do | filename |
 					break
 				end
 				#fixme: 場合によってはエラー
-				loc = location(content, pos)
+				loc = RGrep::location(content, pos)
 				lastname = filename.slice(filename.length() - 20, 20)
 				info_list << [lastname, item, loc[0], loc[1]]
 				pos = (ret + item.length)
