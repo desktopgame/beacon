@@ -37,6 +37,7 @@ static void test_bison_grammerImpl(const char* dirname, bool require) {
 		if(!io_extension(e->filename, "cn")) {
 			continue;
 		}
+		xtest_printf("%s\n", e->filename);
 		char* input = io_read_text(e->filename);
 		parser* p = parser_parse_from_source(input);
 		xtest_must_true(p->fail == require, "%s", e->filename);
