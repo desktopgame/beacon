@@ -208,13 +208,6 @@ ast_new_post_inc
 ast_new_post_dec
 ast_new_name_reference
 ast_new_variable_fromstr
-ast_new_op_call
-ast_new_call
-ast_new_invoke
-ast_new_static_invoke
-ast_new_field_access_fqcn
-ast_new_new_instance
-ast_new_class_decl_unit
 ast_new_superclass
 ast_new_modifier
 ast_malloc

@@ -99,35 +99,6 @@ ast* ast_new_variable_fromstr(char* str, ast* atype_args);
 ast* ast_new_op_call(ast* areceiver, ast* aargs);
 
 /**
- * 関数呼び出しを表す要素を作成します.
- * @param name
- * @param atype_args
- * @param argument_list
- * @return
- */
-ast* ast_new_call(const char* name, ast* atype_args, ast* argument_list);
-
-/**
- * メソッド呼び出しを表す要素を作成します.
- * @param receiver
- * @param name
- * @param atype_args
- * @param argument_list
- * @return
- */
-ast* ast_new_invoke(ast* receiver, const char* name, ast* atype_args, ast* argument_list);
-
-/**
- * 完全修飾名に対するメソッド呼び出しを表す要素を作成します.
- * @param fqcn
- * @param name
- * @param atype_args
- * @param argument_list
- * @return
- */
-ast* ast_new_static_invoke(ast* fqcn, const char* name, ast* atype_args, ast* argument_list);
-
-/**
  * thisを表す因子を作成します.
  * @return
  */
@@ -147,15 +118,6 @@ ast* ast_new_super();
  * @return
  */
 ast* ast_new_field_access(ast* afact, char* name, ast* atype_args);
-
-/**
- * hoge.foo を表す因子を作成します.
- * @param fqcn
- * @param name
- * @param atype_args
- * @return
- */
-ast* ast_new_field_access_fqcn(ast* fqcn, char* name, ast* atype_args);
 
 /**
  * new X::Y(...) を表す因子を作成します.

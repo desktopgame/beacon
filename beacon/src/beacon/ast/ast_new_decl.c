@@ -28,12 +28,6 @@ ast * ast_new_namespace_member_decl_list(ast * forward, ast * list) {
 	return ret;
 }
 
-ast * ast_new_class_decl_unit(ast * class_decl) {
-	ast* ret = ast_new(ast_class_decl_unit);
-	ast_push(ret, class_decl);
-	return ret;
-}
-
 ast * ast_new_class_decl(ast* aclass_name, ast* extend_list, ast* member_list) {
 	ast* ret = ast_new(ast_class_decl);
 //	ret->u.string_value = class_name;

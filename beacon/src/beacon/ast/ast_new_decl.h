@@ -31,13 +31,6 @@ ast* ast_new_namespace_namespace_decl(ast* namespace_path, ast* body);
 ast* ast_new_namespace_member_decl_list(ast* forward, ast* list);
 
 /**
- * 一つのクラス宣言からなるクラスリストを作成します.
- * @param class_decl
- * @return
- */
-ast* ast_new_class_decl_unit(ast* class_decl);
-
-/**
  * クラス宣言を表す要素を作成します.
  * @param aclass_name
  * @param extend_list

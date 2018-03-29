@@ -665,7 +665,7 @@ expression_nobrace
 	}
 	| expression DOT IDENT typename_group
 	{
-		$$ = ast_new_blank();
+		$$ = ast_new_field_access($1, $3, $4);
 	}
 	| expression AS typename_T
 	{
@@ -681,15 +681,19 @@ expression_nobrace
 	}
 	| expression_nobrace LRB argument_list RRB
 	{
-		$$ = ast_new_blank();
+		$$ = ast_new_op_call($1, $3);
 	}
 	| expression_nobrace LRB RRB
 	{
-		$$ = ast_new_blank();
+		$$ = ast_new_op_call($1, ast_new_blank());
 	}
 	| NEW typename_T LRB argument_list RRB
 	{
-		$$ = ast_new_blank();
+		$$ = ast_new_new_instance($2, $4);
+	}
+	| NEW typename_T LRB RRB
+	{
+		$$ = ast_new_new_instance($2, ast_new_blank());
 	}
 	;
 primary
@@ -710,6 +714,9 @@ primary
 		$$ = ast_new_null();
 	}
 	| fqcn_part typename_group
+	{
+		$$ = ast_new_variable($1, $2);
+	}
 	;
 
 

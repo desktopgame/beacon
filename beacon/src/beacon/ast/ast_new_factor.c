@@ -84,38 +84,6 @@ ast* ast_new_op_call(ast* areceiver, ast* aargs) {
 	return ret;
 }
 
-ast * ast_new_call(const char * name, ast* atype_args, ast * argument_list) {
-	ast* ret = ast_new(ast_call);
-	ast* aname = ast_new(ast_identifier);
-	aname->u.string_value = name;
-	ast_push(ret, aname);
-	ast_push(ret, atype_args);
-	ast_push(ret, argument_list);
-	return ret;
-}
-
-ast * ast_new_invoke(ast * receiver, const char* name, ast* atype_args, ast * argument_list) {
-	ast* ret = ast_new(ast_invoke);
-	ast* aname = ast_new(ast_identifier);
-	aname->u.string_value = name;
-	ast_push(ret, receiver);
-	ast_push(ret, aname);
-	ast_push(ret, atype_args);
-	ast_push(ret, argument_list);
-	return ret;
-}
-
-ast * ast_new_static_invoke(ast * fqcn, const char * name, ast* atype_args, ast * argument_list) {
-	ast* ret = ast_new(ast_static_invoke);
-	ast* aname = ast_new(ast_identifier);
-	aname->u.string_value = name;
-	ast_push(ret, fqcn);
-	ast_push(ret, aname);
-	ast_push(ret, atype_args);
-	ast_push(ret, argument_list);
-	return ret;
-}
-
 ast * ast_new_this() {
 	return ast_new(ast_this);
 }
@@ -132,38 +100,6 @@ ast * ast_new_field_access(ast * afact, char * name, ast* atype_args) {
 	ast_push(ret, aname);
 	ast_push(ret, atype_args);
 	return ret;
-}
-
-ast * ast_new_field_access_fqcn(ast * fqcn, char * name, ast* atype_args) {
-	//	assert(fqcn->tag != ast_fqcn_part_list);
-	if (fqcn->tag == ast_fqcn_part ||
-		fqcn->tag == ast_fqcn_class_name) {
-		//この時点では point.a のようなアクセスを
-		//インスタンス point のフィールド a へのアクセスなのか
-		//クラス Point の静的フィールド a へのアクセスなのか判別出来ない
-		//なので、とりあえずフィールドアクセスとして扱う
-		//この判別は il_factor_field_access で行う。
-		ast* ret = ast_new(ast_field_access);
-		ast* avar = ast_new(ast_variable);
-		ast* aname = ast_new(ast_identifier);
-		avar->u.string_value = text_strdup(fqcn->u.string_value);
-		aname->u.string_value = name;
-		ast_push(ret, avar);
-		ast_push(ret, aname);
-		ast_push(ret, atype_args);
-		ast_push(ret, fqcn);
-		return ret;
-	} else if (fqcn->tag == ast_fqcn || fqcn->tag == ast_fqcn_part_list) {
-		//こっちの場合は静的フィールドへのアクセスと断定できる
-		ast* ret = ast_new(ast_static_field_access);
-		ast* aname = ast_new(ast_identifier);
-		aname->u.string_value = name;
-		ast_push(ret, fqcn);
-		ast_push(ret, aname);
-		ast_push(ret, atype_args);
-		return ret;
-	}
-	return NULL;
 }
 
 ast * ast_new_new_instance(ast * afqcn, ast * argument_list) {
