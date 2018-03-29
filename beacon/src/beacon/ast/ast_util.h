@@ -1,6 +1,6 @@
 #pragma once
-#ifndef SIGNAL_AST_AST_UTIL_H
-#define SIGNAL_AST_AST_UTIL_H
+#ifndef BEACON_AST_AST_UTIL_H
+#define BEACON_AST_AST_UTIL_H
 #include "ast.h"
 
 

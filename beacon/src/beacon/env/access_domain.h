@@ -1,6 +1,6 @@
 #pragma once
-#ifndef SIGNAL_ENV_ACCESS_DOMAIN_H
-#define SIGNAL_ENV_ACCESS_DOMAIN_H
+#ifndef BEACON_ENV_ACCESS_DOMAIN_H
+#define BEACON_ENV_ACCESS_DOMAIN_H
 #include <stdbool.h>
 #include "../ast/access_level.h"
 #include "../ast/modifier_type.h"

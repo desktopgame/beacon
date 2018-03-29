@@ -1,6 +1,6 @@
 #pragma once
-#ifndef SIGNAL_IL_IL_FACTOR_BOOL_H
-#define SIGNAL_IL_IL_FACTOR_BOOL_H
+#ifndef BEACON_IL_IL_FACTOR_BOOL_H
+#define BEACON_IL_IL_FACTOR_BOOL_H
 #include <stdbool.h>
 #include "../il_factor_interface.h"
 

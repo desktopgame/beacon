@@ -1,6 +1,6 @@
 #pragma once
-#ifndef SIGNAL_AST_AST_NEW_DECL_H
-#define SIGNAL_AST_AST_NEW_DECL_H
+#ifndef BEACON_AST_AST_NEW_DECL_H
+#define BEACON_AST_AST_NEW_DECL_H
 #include "ast.h"
 #include "constructor_chain_type.h"
 #include "modifier_type.h"

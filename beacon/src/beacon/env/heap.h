@@ -1,6 +1,6 @@
 #pragma once
-#ifndef SIGNAL_ENV_HEAP_H
-#define SIGNAL_ENV_HEAP_H
+#ifndef BEACON_ENV_HEAP_H
+#define BEACON_ENV_HEAP_H
 #include "../util/vector.h"
 #include "object.h"
 #include <stdbool.h>

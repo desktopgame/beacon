@@ -1,6 +1,6 @@
 #pragma once
-#ifndef SIGNAL_ENV_NATIVE_METHOD_REF_H
-#define SIGNAL_ENV_NATIVE_METHOD_REF_H
+#ifndef BEACON_ENV_NATIVE_METHOD_REF_H
+#define BEACON_ENV_NATIVE_METHOD_REF_H
 #include "method.h"
 #include "../vm/vm.h"
 #include "../vm/enviroment.h"

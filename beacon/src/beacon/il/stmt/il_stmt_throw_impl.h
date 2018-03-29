@@ -1,5 +1,5 @@
-#ifndef SIGNAL_IL_IL_STMT_THROW_H
-#define SIGNAL_IL_IL_STMT_THROW_H
+#ifndef BEACON_IL_IL_STMT_THROW_H
+#define BEACON_IL_IL_STMT_THROW_H
 #include "../il_factor_interface.h"
 #include "../il_stmt_interface.h"
 

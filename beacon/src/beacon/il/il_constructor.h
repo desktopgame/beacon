@@ -1,6 +1,6 @@
 #pragma once
-#ifndef SIGNAL_IL_IL_CONSTRUCTOR_H
-#define SIGNAL_IL_IL_CONSTRUCTOR_H
+#ifndef BEACON_IL_IL_CONSTRUCTOR_H
+#define BEACON_IL_IL_CONSTRUCTOR_H
 #include "../env/fqcn_cache.h"
 #include "../util/vector.h"
 #include "../ast/access_level.h"

@@ -1,6 +1,6 @@
 #pragma once
-#ifndef SIGNAL_IL_IL_LOAD_CACHE_H
-#define SIGNAL_IL_IL_LOAD_CACHE_H
+#ifndef BEACON_IL_IL_LOAD_CACHE_H
+#define BEACON_IL_IL_LOAD_CACHE_H
 #include "../util/vector.h"
 #include <stdbool.h>
 

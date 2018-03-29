@@ -1,6 +1,6 @@
 #pragma once
-#ifndef SIGNAL_IL_IL_FACTOR_INT_H
-#define SIGNAL_IL_IL_FACTOR_INT_H
+#ifndef BEACON_IL_IL_FACTOR_INT_H
+#define BEACON_IL_IL_FACTOR_INT_H
 #include "../il_factor_interface.h"
 #include <stdint.h>
 //struct opcode_buf;

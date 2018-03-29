@@ -1,6 +1,6 @@
 #pragma once
-#ifndef SIGNAL_IL_IL_FACTOR_VARIABLE_H
-#define SIGNAL_IL_IL_FACTOR_VARIABLE_H
+#ifndef BEACON_IL_IL_FACTOR_VARIABLE_H
+#define BEACON_IL_IL_FACTOR_VARIABLE_H
 #include "../il_factor_interface.h"
 #include "../../env/fqcn_cache.h"
 #include "../../env/generic_type.h"

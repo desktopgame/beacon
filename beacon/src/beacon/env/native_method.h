@@ -1,6 +1,6 @@
 #pragma once
-#ifndef SIGNAL_ENV_NATIVE_METHOD_H
-#define SIGNAL_ENV_NATIVE_METHOD_H
+#ifndef BEACON_ENV_NATIVE_METHOD_H
+#define BEACON_ENV_NATIVE_METHOD_H
 struct native_method_ref;
 struct enviroment;
 struct method;

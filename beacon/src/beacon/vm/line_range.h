@@ -1,6 +1,6 @@
 #pragma once
-#ifndef SIGNAL_VM_LINE_RANGE_H
-#define SIGNAL_VM_LINE_RANGE_H
+#ifndef BEACON_VM_LINE_RANGE_H
+#define BEACON_VM_LINE_RANGE_H
 #include <stdint.h>
 #include "../util/vector.h"
 

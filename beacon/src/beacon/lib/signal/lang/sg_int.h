@@ -1,6 +1,6 @@
 #pragma once
-#ifndef SIGNAL_LIB_SIGNAL_LANG_INT_H
-#define SIGNAL_LIB_SIGNAL_LANG_INT_H
+#ifndef BEACON_LIB_SIGNAL_LANG_INT_H
+#define BEACON_LIB_SIGNAL_LANG_INT_H
 /**
  * signal::lang::Intクラスを初期化します.
  */

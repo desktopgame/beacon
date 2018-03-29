@@ -1,6 +1,6 @@
 #pragma once
-#ifndef SIGNAL_IL_IL_TYPE_PARAMETER_RULE_H
-#define SIGNAL_IL_IL_TYPE_PARAMETER_RULE_H
+#ifndef BEACON_IL_IL_TYPE_PARAMETER_RULE_H
+#define BEACON_IL_IL_TYPE_PARAMETER_RULE_H
 #include "../env/generic_cache.h"
 struct vector;
 

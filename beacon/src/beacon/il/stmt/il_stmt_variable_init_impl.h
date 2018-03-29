@@ -1,6 +1,6 @@
 #pragma once
-#ifndef SIGNAL_IL_IL_STMT_VARIABLE_INIT_H
-#define SIGNAL_IL_IL_STMT_VARIABLE_INIT_H
+#ifndef BEACON_IL_IL_STMT_VARIABLE_INIT_H
+#define BEACON_IL_IL_STMT_VARIABLE_INIT_H
 #include "../../env/generic_cache.h"
 #include "../il_stmt_interface.h"
 #include "../il_factor_interface.h"

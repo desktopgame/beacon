@@ -1,6 +1,6 @@
 #pragma once
-#ifndef SIGNAL_IL_IL_STMT_CONTINUE_H
-#define SIGNAL_IL_IL_STMT_CONTINUE_H
+#ifndef BEACON_IL_IL_STMT_CONTINUE_H
+#define BEACON_IL_IL_STMT_CONTINUE_H
 #include "../il_stmt_interface.h"
 
 il_stmt* il_stmt_wrap_continue();

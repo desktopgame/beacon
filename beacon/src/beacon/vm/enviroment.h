@@ -1,6 +1,6 @@
 #pragma once
-#ifndef SIGNAL_VM_ENVIROMENT_H
-#define SIGNAL_VM_ENVIROMENT_H
+#ifndef BEACON_VM_ENVIROMENT_H
+#define BEACON_VM_ENVIROMENT_H
 #include "../util/vector.h"
 #include "opcode_buf.h"
 #include "symbol_table.h"

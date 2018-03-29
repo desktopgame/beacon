@@ -1,6 +1,6 @@
 #pragma once
-#ifndef SIGNAL_LIB_SIGNAL_LANG_SG_ARRAY_H
-#define SIGNAL_LIB_SIGNAL_LANG_SG_ARRAY_H
+#ifndef BEACON_LIB_SIGNAL_LANG_SG_ARRAY_H
+#define BEACON_LIB_SIGNAL_LANG_SG_ARRAY_H
 struct vm;
 struct type;
 struct object;

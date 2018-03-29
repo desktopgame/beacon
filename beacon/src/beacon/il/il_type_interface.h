@@ -1,6 +1,6 @@
 #pragma once
-#ifndef SIGNAL_IL_IL_TYPE_INTERFACE_H
-#define SIGNAL_IL_IL_TYPE_INTERFACE_H
+#ifndef BEACON_IL_IL_TYPE_INTERFACE_H
+#define BEACON_IL_IL_TYPE_INTERFACE_H
 #include "../util/vector.h"
 /**
  * 型の種類を判別する列挙.

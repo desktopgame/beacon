@@ -1,5 +1,5 @@
-#ifndef SIGNAL_IL_IL_TOP_LEVEL_H
-#define SIGNAL_IL_IL_TOP_LEVEL_H
+#ifndef BEACON_IL_IL_TOP_LEVEL_H
+#define BEACON_IL_IL_TOP_LEVEL_H
 #include "../util/vector.h"
 
 /**

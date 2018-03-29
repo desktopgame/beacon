@@ -1,6 +1,6 @@
 #pragma once
-#ifndef SIGNAL_VM_TRACE_H
-#define SIGNAL_VM_TRACE_H
+#ifndef BEACON_VM_TRACE_H
+#define BEACON_VM_TRACE_H
 #include <stdint.h>
 struct vm;
 

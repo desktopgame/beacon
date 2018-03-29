@@ -1,6 +1,6 @@
 #pragma once
-#ifndef SIGNAL_UTIL_VECTOR_H
-#define SIGNAL_UTIL_VECTOR_H
+#ifndef BEACON_UTIL_VECTOR_H
+#define BEACON_UTIL_VECTOR_H
 #include <stdlib.h>
 #include <stdbool.h>
 

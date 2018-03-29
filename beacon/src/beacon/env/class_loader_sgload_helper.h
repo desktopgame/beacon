@@ -1,6 +1,6 @@
 #pragma once
-#ifndef SIGNAL_ENV_CLASS_LOADER_SGLOAD_HELPER_H
-#define SIGNAL_ENV_CLASS_LOADER_SGLOAD_HELPER_H
+#ifndef BEACON_ENV_CLASS_LOADER_SGLOAD_HELPER_H
+#define BEACON_ENV_CLASS_LOADER_SGLOAD_HELPER_H
 //このヘッダーは class_loader_sgload_impl.h 以外からはインクルードしないでください。
 #include "class_loader.h"
 #include "../il/il_namespace.h"

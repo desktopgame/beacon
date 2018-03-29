@@ -1,6 +1,6 @@
 #pragma once
-#ifndef SIGNAL_PARSE_PARSER_H
-#define SIGNAL_PARSE_PARSER_H
+#ifndef BEACON_PARSE_PARSER_H
+#define BEACON_PARSE_PARSER_H
 #include "../ast/ast.h"
 #include "yacc_input_type.h"
 #include "../util/string_buffer.h"

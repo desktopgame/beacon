@@ -1,6 +1,6 @@
 #pragma once
-#ifndef SIGNAL_IL_IL_ARGUMENT_H
-#define SIGNAL_IL_IL_ARGUMENT_H
+#ifndef BEACON_IL_IL_ARGUMENT_H
+#define BEACON_IL_IL_ARGUMENT_H
 #include "il_factor_interface.h"
 /**
  * 実引数を表す要素.

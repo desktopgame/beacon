@@ -1,6 +1,6 @@
 #pragma once
-#ifndef SIGNAL_ENV_IMPORT_MANAGER_H
-#define SIGNAL_ENV_IMPORT_MANAGER_H
+#ifndef BEACON_ENV_IMPORT_MANAGER_H
+#define BEACON_ENV_IMPORT_MANAGER_H
 #include "../util/vector.h"
 //#include "fqcn_cache.h"
 struct generic_cache;

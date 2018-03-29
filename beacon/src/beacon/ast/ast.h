@@ -1,6 +1,6 @@
 #pragma once
-#ifndef SIGNAL_AST_AST_H
-#define SIGNAL_AST_AST_H
+#ifndef BEACON_AST_AST_H
+#define BEACON_AST_AST_H
 #include <stdint.h>
 #include <stdbool.h>
 #include "access_level.h"

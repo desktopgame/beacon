@@ -1,6 +1,6 @@
 #pragma once
-#ifndef SIGNAL_LIB_SIGNAL_LANG_STRING_H
-#define SIGNAL_LIB_SIGNAL_LANG_STRING_H
+#ifndef BEACON_LIB_SIGNAL_LANG_STRING_H
+#define BEACON_LIB_SIGNAL_LANG_STRING_H
 #include "../../../util/string_buffer.h"
 struct object;
 

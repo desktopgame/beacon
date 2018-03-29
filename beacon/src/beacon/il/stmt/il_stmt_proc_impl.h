@@ -1,6 +1,6 @@
 #pragma once
-#ifndef SIGNAL_IL_IL_STMT_EXPR_H
-#define SIGNAL_IL_IL_STMT_EXPR_H
+#ifndef BEACON_IL_IL_STMT_EXPR_H
+#define BEACON_IL_IL_STMT_EXPR_H
 #include "../il_stmt_interface.h"
 #include "../il_factor_interface.h"
 /**

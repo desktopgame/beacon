@@ -1,6 +1,6 @@
 #pragma once
-#ifndef SIGNAL_ENV_CLASS_STATE_H
-#define SIGNAL_ENV_CLASS_STATE_H
+#ifndef BEACON_ENV_CLASS_STATE_H
+#define BEACON_ENV_CLASS_STATE_H
 /**
  * クラスの読み込み状態.
  */

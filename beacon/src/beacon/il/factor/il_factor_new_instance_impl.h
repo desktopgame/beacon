@@ -1,6 +1,6 @@
 #pragma once
-#ifndef SIGNAL_IL_IL_FACTOR_NEW_INSTANCE_H
-#define SIGNAL_IL_IL_FACTOR_NEW_INSTANCE_H
+#ifndef BEACON_IL_IL_FACTOR_NEW_INSTANCE_H
+#define BEACON_IL_IL_FACTOR_NEW_INSTANCE_H
 #include "../../util/vector.h"
 #include "../../env/generic_cache.h"
 #include "../il_factor_interface.h"

@@ -1,6 +1,6 @@
 #pragma once
-#ifndef SIGNAL_IL_IL_FACTOR_DEC_H
-#define SIGNAL_IL_IL_FACTOR_DEC_H
+#ifndef BEACON_IL_IL_FACTOR_DEC_H
+#define BEACON_IL_IL_FACTOR_DEC_H
 #include "../il_operator_fixtype.h"
 #include "../il_factor_interface.h"
 

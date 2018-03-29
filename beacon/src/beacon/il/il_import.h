@@ -1,5 +1,5 @@
-#ifndef SIGNAL_IL_IL_IMPORT_H
-#define SIGNAL_IL_IL_IMPORT_H
+#ifndef BEACON_IL_IL_IMPORT_H
+#define BEACON_IL_IL_IMPORT_H
 /**
  * インポート宣言を表す要素.
  */

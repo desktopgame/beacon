@@ -1,6 +1,6 @@
 #pragma once
-#ifndef SIGNAL_IL_IL_ENUM_H
-#define SIGNAL_IL_IL_ENUM_H
+#ifndef BEACON_IL_IL_ENUM_H
+#define BEACON_IL_IL_ENUM_H
 #include "../../util/vector.h"
 #include "../il_type_interface.h"
 

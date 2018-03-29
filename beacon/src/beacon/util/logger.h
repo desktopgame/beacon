@@ -1,6 +1,6 @@
 #pragma once
-#ifndef SIGNAL_UTIL_LOGGER_H
-#define SIGNAL_UTIL_LOGGER_H
+#ifndef BEACON_UTIL_LOGGER_H
+#define BEACON_UTIL_LOGGER_H
 #include <stdarg.h>
 #include <stdbool.h>
 

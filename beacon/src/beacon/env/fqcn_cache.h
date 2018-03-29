@@ -1,6 +1,6 @@
 #pragma once
-#ifndef SIGNAL_ENV_FQCN_CACHE_H
-#define SIGNAL_ENV_FQCN_CACHE_H
+#ifndef BEACON_ENV_FQCN_CACHE_H
+#define BEACON_ENV_FQCN_CACHE_H
 #include "../util/vector.h"
 struct namespace_;
 struct type;

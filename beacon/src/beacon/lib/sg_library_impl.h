@@ -1,6 +1,6 @@
 #pragma once
-#ifndef SIGNAL_LIB_SG_LIBRARY_IMPL_H
-#define SIGNAL_LIB_SG_LIBRARY_IMPL_H
+#ifndef BEACON_LIB_SG_LIBRARY_IMPL_H
+#define BEACON_LIB_SG_LIBRARY_IMPL_H
 //ネイティブメソッド自体を実装する .c からインクルード出来ます。
 #include "../env/namespace.h"
 #include "../env/type_interface.h"

@@ -1,6 +1,6 @@
 #pragma once
-#ifndef SIGNAL_VM_OPCODE_BUF_H
-#define SIGNAL_VM_OPCODE_BUF_H
+#ifndef BEACON_VM_OPCODE_BUF_H
+#define BEACON_VM_OPCODE_BUF_H
 #include "../util/vector.h"
 #include "label.h"
 #include "opcode.h"

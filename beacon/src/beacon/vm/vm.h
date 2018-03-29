@@ -1,6 +1,6 @@
 #pragma once
-#ifndef SIGNAL_VM_VM_H
-#define SIGNAL_VM_VM_H
+#ifndef BEACON_VM_VM_H
+#define BEACON_VM_VM_H
 #include "opcode.h"
 #include "../util/stack.h"
 #include "../util/vector.h"

@@ -1,6 +1,6 @@
 #pragma once
-#ifndef SIGNAL_VM_EVAL_H
-#define SIGNAL_VM_EVAL_H
+#ifndef BEACON_VM_EVAL_H
+#define BEACON_VM_EVAL_H
 struct script_context;
 
 /**

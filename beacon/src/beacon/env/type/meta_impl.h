@@ -1,6 +1,6 @@
 #pragma once
-#ifndef SIGNAL_ENV_META_H
-#define SIGNAL_ENV_META_H
+#ifndef BEACON_ENV_META_H
+#define BEACON_ENV_META_H
 //クラス自体の実装に関わるメタ関数
 #include "../method.h"
 #include "../../util/vector.h"

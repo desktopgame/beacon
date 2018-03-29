@@ -1,5 +1,5 @@
-#ifndef SIGNAL_IL_IL_TYPE_ARGUMENT_H
-#define SIGNAL_IL_IL_TYPE_ARGUMENT_H
+#ifndef BEACON_IL_IL_TYPE_ARGUMENT_H
+#define BEACON_IL_IL_TYPE_ARGUMENT_H
 #include "../env/generic_cache.h"
 #include "../util/vector.h"
 

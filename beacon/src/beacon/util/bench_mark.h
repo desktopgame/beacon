@@ -1,6 +1,6 @@
 #pragma once
-#ifndef SIGNAL_UTIL_BENCH_MARK_H
-#define SIGNAL_UTIL_BENCH_MARK_H
+#ifndef BEACON_UTIL_BENCH_MARK_H
+#define BEACON_UTIL_BENCH_MARK_H
 #include <stdbool.h>
 #include <time.h>
 

@@ -1,6 +1,6 @@
 #pragma once
-#ifndef SIGNAL_IL_IL_STMT_BREAK_H
-#define SIGNAL_IL_IL_STMT_BREAK_H
+#ifndef BEACON_IL_IL_STMT_BREAK_H
+#define BEACON_IL_IL_STMT_BREAK_H
 #include "../il_stmt_interface.h"
 
 struct enviroment;

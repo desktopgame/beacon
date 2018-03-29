@@ -1,6 +1,6 @@
 #pragma once
-#ifndef SIGNAL_UTIL_ALIAS_H
-#define SIGNAL_UTIL_ALIAS_H
+#ifndef BEACON_UTIL_ALIAS_H
+#define BEACON_UTIL_ALIAS_H
 #include <stdint.h>
 
 typedef char SG_char;

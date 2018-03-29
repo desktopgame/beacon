@@ -1,6 +1,6 @@
 #pragma once
-#ifndef SIGNAL_IL_IL_FACTOR_FIELD_ACCESS_H
-#define SIGNAL_IL_IL_FACTOR_FIELD_ACCESS_H
+#ifndef BEACON_IL_IL_FACTOR_FIELD_ACCESS_H
+#define BEACON_IL_IL_FACTOR_FIELD_ACCESS_H
 #include "../il_factor_interface.h"
 #include "../../util/vector.h"
 struct enviroment;

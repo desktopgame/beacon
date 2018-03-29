@@ -1,6 +1,6 @@
 #pragma once
-#ifndef SIGNAL_VM_LABEL_H
-#define SIGNAL_VM_LABEL_H
+#ifndef BEACON_VM_LABEL_H
+#define BEACON_VM_LABEL_H
 
 /**
  * goto の引数として使用します。

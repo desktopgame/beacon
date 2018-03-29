@@ -1,6 +1,6 @@
 #pragma once
-#ifndef SIGNAL_ENV_TYPE_PARAMETER_H
-#define SIGNAL_ENV_TYPE_PARAMETER_H
+#ifndef BEACON_ENV_TYPE_PARAMETER_H
+#define BEACON_ENV_TYPE_PARAMETER_H
 struct vector;
 struct il_type_parameter;
 struct il_load_cache;

@@ -4,13 +4,13 @@ Dir.glob(File.expand_path('./../src/**/*')) do | filename |
 	if(!filename.end_with?(".h")) then
 		next
 	end
-	File.open(filename) do | file |
+	lines = []
+	File.open(filename, "r") do | file |
 		content = file.read()
 		lineno = 0
 		includeLineno = -1
 		#全ての行を lines へ格納しつつ
 		#ifndefを見つけたら保存
-		lines = []
 		content.lines do |line|
 			lines << line
 			if includeLineno == -1 && line.start_with?("#ifndef") then
@@ -32,6 +32,9 @@ Dir.glob(File.expand_path('./../src/**/*')) do | filename |
 		words[1] = ("BEACON_" + words[1])
 		fixedInclude = (words[0] + " " + words[1])
 		lines[includeLineno] = fixedInclude
+		lines[includeLineno + 1] = "#define " + words[1]
+	end
+	File.open(filename, "w") do | file |
 		lines.each do |eline|
 			file.puts(eline)
 		end

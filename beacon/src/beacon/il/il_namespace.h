@@ -1,5 +1,5 @@
-#ifndef SIGNAL_IL_IL_NAMESPACE_H
-#define SIGNAL_IL_IL_NAMESPACE_H
+#ifndef BEACON_IL_IL_NAMESPACE_H
+#define BEACON_IL_IL_NAMESPACE_H
 #include "../util/vector.h"
 #include "il_type_interface.h"
 

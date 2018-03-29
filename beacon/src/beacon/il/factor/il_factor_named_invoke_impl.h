@@ -1,6 +1,6 @@
 #pragma once
-#ifndef SIGNAL_IL_IL_FACTOR_STATIC_INVOKE_H
-#define SIGNAL_IL_IL_FACTOR_STATIC_INVOKE_H
+#ifndef BEACON_IL_IL_FACTOR_STATIC_INVOKE_H
+#define BEACON_IL_IL_FACTOR_STATIC_INVOKE_H
 #include "../../env/type_interface.h"
 #include "../../util/vector.h"
 #include "../../vm/enviroment.h"

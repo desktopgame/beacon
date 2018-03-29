@@ -1,6 +1,6 @@
 #pragma once
-#ifndef SIGNAL_UTIL_DUMP_H
-#define SIGNAL_UTIL_DUMP_H
+#ifndef BEACON_UTIL_DUMP_H
+#define BEACON_UTIL_DUMP_H
 #include <stdbool.h>
 
 typedef struct dump_option {

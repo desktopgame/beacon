@@ -1,6 +1,6 @@
 #pragma once
-#ifndef SIGNAL_ENV_TYPE_PARAMETER_RULE_H
-#define SIGNAL_ENV_TYPE_PARAMETER_RULE_H
+#ifndef BEACON_ENV_TYPE_PARAMETER_RULE_H
+#define BEACON_ENV_TYPE_PARAMETER_RULE_H
 #include "../util/vector.h"
 struct generic_type;
 struct il_type_parameter_rule;

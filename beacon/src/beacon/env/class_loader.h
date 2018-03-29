@@ -1,6 +1,6 @@
 #pragma once
-#ifndef SIGNAL_PARSER_CLASS_LOADER_H
-#define SIGNAL_PARSER_CLASS_LOADER_H
+#ifndef BEACON_PARSER_CLASS_LOADER_H
+#define BEACON_PARSER_CLASS_LOADER_H
 #include "../ast/ast.h"
 #include "content_type.h"
 #include "import_manager.h"

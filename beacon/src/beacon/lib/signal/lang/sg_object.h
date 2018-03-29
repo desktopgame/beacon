@@ -1,6 +1,6 @@
 #pragma once
-#ifndef SIGNAL_LIB_SIGNAL_LANG_H
-#define SIGNAL_LIB_SIGNAL_LANG_H
+#ifndef BEACON_LIB_SIGNAL_LANG_H
+#define BEACON_LIB_SIGNAL_LANG_H
 
 /**
  * signal::lang::Objectクラスを初期化します.

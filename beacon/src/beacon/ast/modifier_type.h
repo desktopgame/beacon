@@ -1,6 +1,6 @@
 #pragma once
-#ifndef SIGNAL_AST_MODIFIER_TYPE_H
-#define SIGNAL_AST_MODIFIER_TYPE_H
+#ifndef BEACON_AST_MODIFIER_TYPE_H
+#define BEACON_AST_MODIFIER_TYPE_H
 #include <stdbool.h>
 /**
  * アクセス修飾子を表す列挙型.

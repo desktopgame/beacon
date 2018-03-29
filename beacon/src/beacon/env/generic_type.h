@@ -1,6 +1,6 @@
 #pragma once
-#ifndef SIGNAL_ENV_GENERIC_TYPE_H
-#define SIGNAL_ENV_GENERIC_TYPE_H
+#ifndef BEACON_ENV_GENERIC_TYPE_H
+#define BEACON_ENV_GENERIC_TYPE_H
 #include "../util/vector.h"
 #include <stdbool.h>
 struct type;

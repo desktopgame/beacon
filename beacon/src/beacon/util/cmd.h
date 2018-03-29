@@ -1,6 +1,6 @@
 #pragma once
-#ifndef SIGNAL_UTIL_CMD_H
-#define SIGNAL_UTIL_CMD_H
+#ifndef BEACON_UTIL_CMD_H
+#define BEACON_UTIL_CMD_H
 #include <stdbool.h>
 #include <stdarg.h>
 /**

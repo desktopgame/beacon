@@ -1,6 +1,6 @@
 #pragma once
-#ifndef SIGNAL_IL_IL_STMT_INTERFACE_H
-#define SIGNAL_IL_IL_STMT_INTERFACE_H
+#ifndef BEACON_IL_IL_STMT_INTERFACE_H
+#define BEACON_IL_IL_STMT_INTERFACE_H
 #include "../vm/enviroment.h"
 #include "il_ehandler.h"
 #include "il_load_cache.h"

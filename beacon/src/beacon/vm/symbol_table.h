@@ -1,6 +1,6 @@
 #pragma once
-#ifndef SIGNAL_VM_SYMBOL_TABLE_H
-#define SIGNAL_VM_SYMBOL_TABLE_H
+#ifndef BEACON_VM_SYMBOL_TABLE_H
+#define BEACON_VM_SYMBOL_TABLE_H
 #include "../util/tree_map.h"
 //#include "../env/class.h"
 struct generic_type;

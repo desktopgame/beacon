@@ -1,5 +1,5 @@
-#ifndef SIGNAL_UTIL_XASSERT_H
-#define SIGNAL_UTIL_XASSERT_H
+#ifndef BEACON_UTIL_XASSERT_H
+#define BEACON_UTIL_XASSERT_H
 #include <assert.h>
 #include <stdbool.h>
 

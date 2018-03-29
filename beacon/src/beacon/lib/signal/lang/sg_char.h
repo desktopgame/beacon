@@ -1,6 +1,6 @@
 #pragma once
-#ifndef SIGNAL_LIB_SIGNAL_LANG_CHAR_H
-#define SIGNAL_LIB_SIGNAL_LANG_CHAR_H
+#ifndef BEACON_LIB_SIGNAL_LANG_CHAR_H
+#define BEACON_LIB_SIGNAL_LANG_CHAR_H
 
 /**
  * signal::lang::Charクラスを初期化します.

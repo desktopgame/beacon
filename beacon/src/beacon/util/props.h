@@ -1,6 +1,6 @@
 #pragma once
-#ifndef SIGNAL_UTIL_PROPS_H
-#define SIGNAL_UTIL_PROPS_H
+#ifndef BEACON_UTIL_PROPS_H
+#define BEACON_UTIL_PROPS_H
 #include <stdbool.h>
 #include "tree_map.h"
 /**

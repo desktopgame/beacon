@@ -1,6 +1,6 @@
 #pragma once
-#ifndef SIGNAL_UTIL_TREE_MAP_H
-#define SIGNAL_UTIL_TREE_MAP_H
+#ifndef BEACON_UTIL_TREE_MAP_H
+#define BEACON_UTIL_TREE_MAP_H
 /**
  * ツリーマップに格納可能なキーの型.
  */

@@ -1,6 +1,6 @@
 #pragma once
-#ifndef SIGNAL_ENV_EXCEPTION_H
-#define SIGNAL_ENV_EXCEPTION_H
+#ifndef BEACON_ENV_EXCEPTION_H
+#define BEACON_ENV_EXCEPTION_H
 #include <stdarg.h>
 
 struct object;

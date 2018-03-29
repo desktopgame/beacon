@@ -1,6 +1,6 @@
 #pragma once
-#ifndef SIGNAL_IL_IL_FACTOR_CALL_H
-#define SIGNAL_IL_IL_FACTOR_CALL_H
+#ifndef BEACON_IL_IL_FACTOR_CALL_H
+#define BEACON_IL_IL_FACTOR_CALL_H
 #include "../../util/vector.h"
 #include "../il_factor_interface.h"
 struct method;

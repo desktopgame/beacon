@@ -1,6 +1,6 @@
 #pragma once
-#ifndef SIGNAL_ENV_METHOD_H
-#define SIGNAL_ENV_METHOD_H
+#ifndef BEACON_ENV_METHOD_H
+#define BEACON_ENV_METHOD_H
 #include "script_method.h"
 #include "native_method.h"
 #include "../util/vector.h"

@@ -1,6 +1,6 @@
 #pragma once
-#ifndef SIGNAL_UTIL_FILE_PATH_H
-#define SIGNAL_UTIL_FILE_PATH_H
+#ifndef BEACON_UTIL_FILE_PATH_H
+#define BEACON_UTIL_FILE_PATH_H
 #include <stdint.h>
 //define path separator char
 #if defined(_WIN32)

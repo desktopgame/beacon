@@ -1,6 +1,6 @@
 #pragma once
-#ifndef SIGNAL_ENV_CLASS_H
-#define SIGNAL_ENV_CLASS_H
+#ifndef BEACON_ENV_CLASS_H
+#define BEACON_ENV_CLASS_H
 #include "../namespace.h"
 #include "../class_state.h"
 #include "../native_method_ref.h"

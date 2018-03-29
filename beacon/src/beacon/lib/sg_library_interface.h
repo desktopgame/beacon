@@ -1,6 +1,6 @@
 #pragma once
-#ifndef SIGNAL_LIB_SG_LIBRARY_INTERFACE_H
-#define SIGNAL_LIB_SG_LIBRARY_INTERFACE_H
+#ifndef BEACON_LIB_SG_LIBRARY_INTERFACE_H
+#define BEACON_LIB_SG_LIBRARY_INTERFACE_H
 //ネイティブメソッドの初期化を行う実装でインクルード出来ます。
 #include "signal/lang/sg_object.h"
 #include "signal/lang/sg_int.h"

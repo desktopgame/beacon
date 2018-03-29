@@ -1,5 +1,5 @@
-#ifndef SIGNAL_ENV_CLASS_LOADER_ILLOAD_IMPL_H
-#define SIGNAL_ENV_CLASS_LOADER_ILLOAD_IMPL_H
+#ifndef BEACON_ENV_CLASS_LOADER_ILLOAD_IMPL_H
+#define BEACON_ENV_CLASS_LOADER_ILLOAD_IMPL_H
 //このヘッダーは class_loader.h 以外からはインクルードしないでください。
 #include "class_loader.h"
 #include "../il/il_namespace.h"

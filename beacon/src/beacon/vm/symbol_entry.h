@@ -1,6 +1,6 @@
 #pragma once
-#ifndef SIGNAL_VM_SYMBOL_ENTRY_H
-#define SIGNAL_VM_SYMBOL_ENTRY_H
+#ifndef BEACON_VM_SYMBOL_ENTRY_H
+#define BEACON_VM_SYMBOL_ENTRY_H
 //#include "../env/class.h"
 struct generic_type;
 /**

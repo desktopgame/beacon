@@ -1,6 +1,6 @@
 #pragma once
-#ifndef SIGNAL_ENV_FIELD_H
-#define SIGNAL_ENV_FIELD_H
+#ifndef BEACON_ENV_FIELD_H
+#define BEACON_ENV_FIELD_H
 #include "../ast/access_level.h"
 #include "../ast/modifier_type.h"
 struct generic_type;

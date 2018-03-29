@@ -1,6 +1,6 @@
 #pragma once
-#ifndef SIGNAL_ENV_IMPORT_INFO_H
-#define SIGNAL_ENV_IMPORT_INFO_H
+#ifndef BEACON_ENV_IMPORT_INFO_H
+#define BEACON_ENV_IMPORT_INFO_H
 #include <stdbool.h>
 struct class_loader;
 

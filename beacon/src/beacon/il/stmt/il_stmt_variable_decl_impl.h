@@ -1,6 +1,6 @@
 #pragma once
-#ifndef SIGNAL_IL_IL_STMT_VARIABLE_DECL_H
-#define SIGNAL_IL_IL_STMT_VARIABLE_DECL_H
+#ifndef BEACON_IL_IL_STMT_VARIABLE_DECL_H
+#define BEACON_IL_IL_STMT_VARIABLE_DECL_H
 #include "../il_stmt_interface.h"
 #include "../../env/generic_cache.h"
 struct enviroment;

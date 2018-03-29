@@ -1,6 +1,6 @@
 #pragma once
-#ifndef SIGNAL_ENV_CONTENT_TYPE_H
-#define SIGNAL_ENV_CONTENT_TYPE_H
+#ifndef BEACON_ENV_CONTENT_TYPE_H
+#define BEACON_ENV_CONTENT_TYPE_H
 /**
  * クラスローダーによって読み込まれるコンテンツの種類を表す列挙型.
  */

@@ -1,6 +1,6 @@
 #pragma once
-#ifndef SIGNAL_ENV_SCRIPT_CONTEXT_H
-#define SIGNAL_ENV_SCRIPT_CONTEXT_H
+#ifndef BEACON_ENV_SCRIPT_CONTEXT_H
+#define BEACON_ENV_SCRIPT_CONTEXT_H
 #include <stdbool.h>
 #include "../util/stack.h"
 #include "../util/tree_map.h"

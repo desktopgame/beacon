@@ -1,6 +1,6 @@
 #pragma once
-#ifndef SIGNAL_ENV_VTABLE_H
-#define SIGNAL_ENV_VTABLE_H
+#ifndef BEACON_ENV_VTABLE_H
+#define BEACON_ENV_VTABLE_H
 #include "../util/vector.h"
 struct method;
 /**

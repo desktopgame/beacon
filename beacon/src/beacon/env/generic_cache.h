@@ -1,6 +1,6 @@
 #pragma once
-#ifndef SIGNAL_ENV_GENERIC_CACHE_H
-#define SIGNAL_ENV_GENERIC_CACHE_H
+#ifndef BEACON_ENV_GENERIC_CACHE_H
+#define BEACON_ENV_GENERIC_CACHE_H
 #include "fqcn_cache.h"
 #include "../il/il_load_cache.h"
 #include "../util/vector.h"

@@ -1,6 +1,6 @@
 #pragma once
-#ifndef SIGNAL_IL_IL_FACTOR_THIS_H
-#define SIGNAL_IL_IL_FACTOR_THIS_H
+#ifndef BEACON_IL_IL_FACTOR_THIS_H
+#define BEACON_IL_IL_FACTOR_THIS_H
 #include "../il_ehandler.h"
 #include "../il_load_cache.h"
 #include "../../env/generic_type.h"

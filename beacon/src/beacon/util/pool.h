@@ -1,6 +1,6 @@
 #pragma once
-#ifndef SIGNAL_UTIL_POOL_H
-#define SIGNAL_UTIL_POOL_H
+#ifndef BEACON_UTIL_POOL_H
+#define BEACON_UTIL_POOL_H
 #include <stdlib.h>
 
 typedef struct pool {

@@ -1,6 +1,6 @@
 #pragma once
-#ifndef SIGNAL_IL_IL_STMT_WHILE_H
-#define SIGNAL_IL_IL_STMT_WHILE_H
+#ifndef BEACON_IL_IL_STMT_WHILE_H
+#define BEACON_IL_IL_STMT_WHILE_H
 #include "../il_factor_interface.h"
 #include "../il_stmt_interface.h"
 #include "../../util/vector.h"

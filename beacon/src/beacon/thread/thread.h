@@ -1,6 +1,6 @@
 #pragma once
-#ifndef SIGNAL_THREAD_THREAD_H
-#define SIGNAL_THREAD_THREAD_H
+#ifndef BEACON_THREAD_THREAD_H
+#define BEACON_THREAD_THREAD_H
 //#include "../util/stack.h"
 #include "../util/vector.h"
 

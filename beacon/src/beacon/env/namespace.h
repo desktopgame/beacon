@@ -1,6 +1,6 @@
 #pragma once
-#ifndef SIGNAL_ENV_NAMESPACE_H
-#define SIGNAL_ENV_NAMESPACE_H
+#ifndef BEACON_ENV_NAMESPACE_H
+#define BEACON_ENV_NAMESPACE_H
 #include "../util/tree_map.h"
 #include <stdint.h>
 #define CL_OBJECT namespace_object_class()

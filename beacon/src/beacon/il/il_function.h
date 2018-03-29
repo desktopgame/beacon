@@ -1,6 +1,6 @@
 #pragma once
-#ifndef SIGNAL_IL_IL_FUNCTION_H
-#define SIGNAL_IL_IL_FUNCTION_H
+#ifndef BEACON_IL_IL_FUNCTION_H
+#define BEACON_IL_IL_FUNCTION_H
 #include "../util/vector.h"
 
 struct generic_cache;

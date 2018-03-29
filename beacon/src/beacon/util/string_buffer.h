@@ -1,6 +1,6 @@
 #pragma once
-#ifndef SIGNAL_UTIL_STRING_BUFFER_H
-#define SIGNAL_UTIL_STRING_BUFFER_H
+#ifndef BEACON_UTIL_STRING_BUFFER_H
+#define BEACON_UTIL_STRING_BUFFER_H
 #include <stdarg.h>
 
 /**

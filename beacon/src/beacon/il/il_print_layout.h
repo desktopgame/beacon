@@ -1,6 +1,6 @@
 #pragma once
-#ifndef SIGNAL_IL_PRINT_LAYOUT_H
-#define SIGNAL_IL_PRINT_LAYOUT_H
+#ifndef BEACON_IL_PRINT_LAYOUT_H
+#define BEACON_IL_PRINT_LAYOUT_H
 #include <stdbool.h>
 
 /**

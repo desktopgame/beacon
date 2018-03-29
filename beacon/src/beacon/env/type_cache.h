@@ -1,6 +1,6 @@
 #pragma once
-#ifndef SIGNAL_ENV_TYPE_CACHE_H
-#define SIGNAL_ENV_TYPE_CACHE_H
+#ifndef BEACON_ENV_TYPE_CACHE_H
+#define BEACON_ENV_TYPE_CACHE_H
 #include "../il/il_type_interface.h"
 #include "type_interface.h"
 #include "namespace.h"

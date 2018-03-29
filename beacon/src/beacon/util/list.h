@@ -1,6 +1,6 @@
 #pragma once
-#ifndef SIGNAL_UTIL_LIST_H
-#define SIGNAL_UTIL_LIST_H
+#ifndef BEACON_UTIL_LIST_H
+#define BEACON_UTIL_LIST_H
 /**
  * リストに格納するデータ型.
  */

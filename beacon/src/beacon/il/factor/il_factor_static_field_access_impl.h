@@ -1,6 +1,6 @@
 #pragma once
-#ifndef SIGNAL_IL_IL_FACTOR_STATIC_FIELD_ACCESS_H
-#define SIGNAL_IL_IL_FACTOR_STATIC_FIELD_ACCESS_H
+#ifndef BEACON_IL_IL_FACTOR_STATIC_FIELD_ACCESS_H
+#define BEACON_IL_IL_FACTOR_STATIC_FIELD_ACCESS_H
 #include "../../env/generic_cache.h"
 #include "../../util/vector.h"
 #include "../il_factor_interface.h"

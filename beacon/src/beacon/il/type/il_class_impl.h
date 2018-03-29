@@ -1,5 +1,5 @@
-#ifndef SIGNAL_IL_IL_CLASS_H
-#define SIGNAL_IL_IL_CLASS_H
+#ifndef BEACON_IL_IL_CLASS_H
+#define BEACON_IL_IL_CLASS_H
 #include "../../util/vector.h"
 #include "../../env/fqcn_cache.h"
 #include "../il_type_interface.h"

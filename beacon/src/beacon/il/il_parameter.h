@@ -1,6 +1,6 @@
 #pragma once
-#ifndef SIGNAL_IL_IL_PARAMETER_H
-#define SIGNAL_IL_IL_PARAMETER_H
+#ifndef BEACON_IL_IL_PARAMETER_H
+#define BEACON_IL_IL_PARAMETER_H
 #include "../env/generic_cache.h"
 //#include "il_type.h"
 /**

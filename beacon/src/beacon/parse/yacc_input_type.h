@@ -1,6 +1,6 @@
 #pragma once
-#ifndef SIGNAL_PARSE_YACC_INPUT_TYPE_H
-#define SIGNAL_PARSE_YACC_INPUT_TYPE_H
+#ifndef BEACON_PARSE_YACC_INPUT_TYPE_H
+#define BEACON_PARSE_YACC_INPUT_TYPE_H
 /**
  * Yacc/Bisonの入力タイプを表す列挙型.
  */

@@ -1,6 +1,6 @@
 #pragma once
-#ifndef SIGNAL_UTIL_STACK_H
-#define SIGNAL_UTIL_STACK_H
+#ifndef BEACON_UTIL_STACK_H
+#define BEACON_UTIL_STACK_H
 #include <stdbool.h>
 
 #ifdef __cplusplus

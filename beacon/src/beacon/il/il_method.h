@@ -1,6 +1,6 @@
 #pragma once
-#ifndef SIGNAL_IL_IL_METHOD_H
-#define SIGNAL_IL_IL_METHOD_H
+#ifndef BEACON_IL_IL_METHOD_H
+#define BEACON_IL_IL_METHOD_H
 #include "../env/generic_cache.h"
 #include "../util/vector.h"
 #include "../ast/access_level.h"

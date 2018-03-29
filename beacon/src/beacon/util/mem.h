@@ -1,6 +1,6 @@
 #pragma once
-#ifndef SIGNAL_ENV_MEM_H
-#define SIGNAL_ENV_MEM_H
+#ifndef BEACON_ENV_MEM_H
+#define BEACON_ENV_MEM_H
 #include <stdlib.h>
 #include <stdbool.h>
 

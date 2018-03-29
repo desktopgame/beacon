@@ -1,6 +1,6 @@
 #pragma once
-#ifndef SIGNAL_ENV_CONSTRUCTOR_H
-#define SIGNAL_ENV_CONSTRUCTOR_H
+#ifndef BEACON_ENV_CONSTRUCTOR_H
+#define BEACON_ENV_CONSTRUCTOR_H
 #include "../ast/access_level.h"
 #include "../util/vector.h"
 struct class_;

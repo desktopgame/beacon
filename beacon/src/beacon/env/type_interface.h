@@ -1,6 +1,6 @@
 #pragma once
-#ifndef SIGNAL_ENV_TYPE_INTERFACE_H
-#define SIGNAL_ENV_TYPE_INTERFACE_H
+#ifndef BEACON_ENV_TYPE_INTERFACE_H
+#define BEACON_ENV_TYPE_INTERFACE_H
 #include <stdbool.h>
 #include "../util/vector.h"
 #include "../il/il_load_cache.h"
