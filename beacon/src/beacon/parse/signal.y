@@ -661,7 +661,6 @@ expression_nobrace
 	}
 	| expression DOT IDENT typename_group
 	{
-		fprintf(stderr, $3);
 		$$ = ast_new_blank();
 	}
 	| expression AS typename_T
@@ -676,15 +675,15 @@ expression_nobrace
 	{
 		$$ = ast_new_unary(ast_not, $2);
 	}
-	| expression_nobrace LSB argument_list RSB
+	| expression_nobrace LRB argument_list RRB
 	{
 		$$ = ast_new_blank();
 	}
-	| expression_nobrace LSB RSB
+	| expression_nobrace LRB RRB
 	{
 		$$ = ast_new_blank();
 	}
-	| NEW typename_T '(' argument_list RRB
+	| NEW typename_T LRB argument_list RRB
 	{
 		$$ = ast_new_blank();
 	}

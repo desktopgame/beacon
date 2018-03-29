@@ -3,6 +3,8 @@ Terminals which are not used
    LINE
    INC
    DEC
+   LSB
+   RSB
    QUOTE
    POST_DEC
    POST_INC
@@ -179,9 +181,9 @@ Grammar
   114                   | expression AS typename_T
   115                   | CHILDA expression
   116                   | NOT expression
-  117                   | expression_nobrace LSB argument_list RSB
-  118                   | expression_nobrace LSB RSB
-  119                   | NEW typename_T '(' argument_list RRB
+  117                   | expression_nobrace LRB argument_list RRB
+  118                   | expression_nobrace LRB RRB
+  119                   | NEW typename_T LRB argument_list RRB
 
   120 primary: INT
   121        | DOUBLE
@@ -254,7 +256,6 @@ Terminals, with rules where they appear
 
 $end (0) 0
 '\n' (10) 2 165
-'(' (40) 119
 '<' (60)
 error (256) 2
 CHAR_LITERAL (258) 122
@@ -303,10 +304,12 @@ DEC (299)
 EXC_OR (300) 93
 LCB (301) 8 30 31 32 33 34 35 160 161
 RCB (302) 8 30 31 32 33 34 35 160 161
-LRB (303) 29 46 47 48 49 54 55 56 57 144 145 146 147 150 151 159
-RRB (304) 29 46 47 48 49 54 55 56 57 119 144 145 146 147 150 151 159
-LSB (305) 117 118
-RSB (306) 117 118
+LRB (303) 29 46 47 48 49 54 55 56 57 117 118 119 144 145 146 147 150
+    151 159
+RRB (304) 29 46 47 48 49 54 55 56 57 117 118 119 144 145 146 147 150
+    151 159
+LSB (305)
+RSB (306)
 SEMI (307) 58 141 162 164
 IMPORT (308) 19
 VAR (309) 143
@@ -354,133 +357,133 @@ FORM_TYPE (349)
 
 Nonterminals, with rules where they appear
 
-$accept (98)
+$accept (97)
     on left: 0
-compilation_unit (99)
+compilation_unit (98)
     on left: 1 2, on right: 0
-program (100)
+program (99)
     on left: 3 4 5 6, on right: 1
-namespace_decl (101)
+namespace_decl (100)
     on left: 7, on right: 5
-namespace_body (102)
+namespace_body (101)
     on left: 8, on right: 7 9
-namespace_member_decl (103)
+namespace_member_decl (102)
     on left: 9 10 11 12, on right: 13 14
-namespace_member_decl_list (104)
+namespace_member_decl_list (103)
     on left: 13 14, on right: 14 16
-namespace_member_decl_optional (105)
+namespace_member_decl_optional (104)
     on left: 15 16, on right: 8
-namespace_path (106)
+namespace_path (105)
     on left: 17 18, on right: 7 9 18
-import (107)
+import (106)
     on left: 19, on right: 4
-parameterized_typename (108)
+parameterized_typename (107)
     on left: 20, on right: 30 31 34 35
-type_parameter_group (109)
+type_parameter_group (108)
     on left: 21 22, on right: 20 56 57
-type_parameter_list (110)
+type_parameter_list (109)
     on left: 23 24, on right: 22 24
-type_parameter (111)
+type_parameter (110)
     on left: 25 26 27, on right: 23 24
-type_parameter_rule_list (112)
+type_parameter_rule_list (111)
     on left: 28 29, on right: 25 26 27
-class_decl (113)
+class_decl (112)
     on left: 30 31, on right: 10
-enum_decl (114)
+enum_decl (113)
     on left: 32 33, on right: 12
-interface_decl (115)
+interface_decl (114)
     on left: 34 35, on right: 11
-access_member_tree_opt (116)
+access_member_tree_opt (115)
     on left: 36 37, on right: 30 31 34 35
-access_member_tree (117)
+access_member_tree (116)
     on left: 38 39, on right: 37 39
-access_member_list (118)
+access_member_list (117)
     on left: 40, on right: 38 39
-member_define_list (119)
+member_define_list (118)
     on left: 41 42, on right: 40 42
-member_define (120)
+member_define (119)
     on left: 43 44 45, on right: 41 42
-constructor_define (121)
+constructor_define (120)
     on left: 46 47, on right: 43
-constructor_chain (122)
+constructor_chain (121)
     on left: 48 49, on right: 53
-constructor_chain_type_T (123)
+constructor_chain_type_T (122)
     on left: 50 51, on right: 48 49
-constructor_chain_optional (124)
+constructor_chain_optional (123)
     on left: 52 53, on right: 46 47
-function_define (125)
+function_define (124)
     on left: 54 55, on right: 6
-method_define (126)
+method_define (125)
     on left: 56 57, on right: 44
-field_define (127)
+field_define (126)
     on left: 58, on right: 45
-modifier_type_T (128)
+modifier_type_T (127)
     on left: 59 60 61 62 63, on right: 56 57 58
-access_level_T (129)
+access_level_T (128)
     on left: 64 65 66, on right: 40
-ident_list (130)
+ident_list (129)
     on left: 67 68, on right: 32 33 68
-parameter_list (131)
+parameter_list (130)
     on left: 69 70, on right: 46 54 56 70
-argument_list (132)
+argument_list (131)
     on left: 71 72, on right: 48 72 117 119
-typename_group (133)
+typename_group (132)
     on left: 73 74, on right: 77 113 127
-typename_list (134)
+typename_list (133)
     on left: 75 76, on right: 29 31 35 74 76
-typename_T (135)
+typename_T (134)
     on left: 77, on right: 54 55 56 57 58 69 70 75 76 114 119 141 142
     159
-fqcn_part (136)
+fqcn_part (135)
     on left: 78 79, on right: 77 79 127
-expression (137)
+expression (136)
     on left: 80, on right: 71 72 82 83 84 85 86 87 88 89 90 91 92 93
     94 95 96 97 98 99 100 101 102 103 104 105 106 107 108 109 110 111
     112 113 114 115 116 130 142 143 144 145 146 147 150 151 154 155
-expression_nobrace (138)
+expression_nobrace (137)
     on left: 81 82 83 84 85 86 87 88 89 90 91 92 93 94 95 96 97 98
     99 100 101 102 103 104 105 106 107 108 109 110 111 112 113 114
     115 116 117 118 119, on right: 80 117 118
-primary (139)
+primary (138)
     on left: 120 121 122 123 124 125 126 127, on right: 81
-stmt_list (140)
+stmt_list (139)
     on left: 128 129, on right: 3 129 160
-stmt (141)
+stmt (140)
     on left: 130 131 132 133 134 135 136 137 138 139 140,
     on right: 128 129
-variable_decl_stmt (142)
+variable_decl_stmt (141)
     on left: 141, on right: 131
-variable_init_stmt (143)
+variable_init_stmt (142)
     on left: 142, on right: 132
-inferenced_type_init_stmt (144)
+inferenced_type_init_stmt (143)
     on left: 143, on right: 133
-if_stmt (145)
+if_stmt (144)
     on left: 144 145 146 147, on right: 134
-elif_list (146)
+elif_list (145)
     on left: 148 149, on right: 146 147 149
-elif (147)
+elif (146)
     on left: 150, on right: 148 149
-while_stmt (148)
+while_stmt (147)
     on left: 151, on right: 135
-break_stmt (149)
+break_stmt (148)
     on left: 152, on right: 136
-continue_stmt (150)
+continue_stmt (149)
     on left: 153, on right: 137
-return_stmt (151)
+return_stmt (150)
     on left: 154, on right: 138
-throw_stmt (152)
+throw_stmt (151)
     on left: 155, on right: 139
-try_stmt (153)
+try_stmt (152)
     on left: 156, on right: 140
-catch_stmt_list (154)
+catch_stmt_list (153)
     on left: 157 158, on right: 156 158
-catch_stmt (155)
+catch_stmt (154)
     on left: 159, on right: 157 158
-scope (156)
+scope (155)
     on left: 160 161, on right: 144 145 146 147 150 156 159 163
-scope_optional (157)
+scope_optional (156)
     on left: 162 163, on right: 46 47 54 55 56 57 151
-stmt_term (158)
+stmt_term (157)
     on left: 164 165, on right: 130 142 143 152 153 154 155
 
 
@@ -537,9 +540,9 @@ state 0
   114                   | . expression AS typename_T
   115                   | . CHILDA expression
   116                   | . NOT expression
-  117                   | . expression_nobrace LSB argument_list RSB
-  118                   | . expression_nobrace LSB RSB
-  119                   | . NEW typename_T '(' argument_list RRB
+  117                   | . expression_nobrace LRB argument_list RRB
+  118                   | . expression_nobrace LRB RRB
+  119                   | . NEW typename_T LRB argument_list RRB
   120 primary: . INT
   121        | . DOUBLE
   122        | . CHAR_LITERAL
@@ -709,9 +712,9 @@ state 7
   114                   | . expression AS typename_T
   115                   | . CHILDA expression
   116                   | . NOT expression
-  117                   | . expression_nobrace LSB argument_list RSB
-  118                   | . expression_nobrace LSB RSB
-  119                   | . NEW typename_T '(' argument_list RRB
+  117                   | . expression_nobrace LRB argument_list RRB
+  118                   | . expression_nobrace LRB RRB
+  119                   | . NEW typename_T LRB argument_list RRB
   120 primary: . INT
   121        | . DOUBLE
   122        | . CHAR_LITERAL
@@ -783,9 +786,9 @@ state 8
   114                   | . expression AS typename_T
   115                   | . CHILDA expression
   116                   | . NOT expression
-  117                   | . expression_nobrace LSB argument_list RSB
-  118                   | . expression_nobrace LSB RSB
-  119                   | . NEW typename_T '(' argument_list RRB
+  117                   | . expression_nobrace LRB argument_list RRB
+  118                   | . expression_nobrace LRB RRB
+  119                   | . NEW typename_T LRB argument_list RRB
   120 primary: . INT
   121        | . DOUBLE
   122        | . CHAR_LITERAL
@@ -857,9 +860,9 @@ state 9
   115                   | . CHILDA expression
   116                   | . NOT expression
   116                   | NOT . expression
-  117                   | . expression_nobrace LSB argument_list RSB
-  118                   | . expression_nobrace LSB RSB
-  119                   | . NEW typename_T '(' argument_list RRB
+  117                   | . expression_nobrace LRB argument_list RRB
+  118                   | . expression_nobrace LRB RRB
+  119                   | . NEW typename_T LRB argument_list RRB
   120 primary: . INT
   121        | . DOUBLE
   122        | . CHAR_LITERAL
@@ -931,9 +934,9 @@ state 10
   115                   | . CHILDA expression
   115                   | CHILDA . expression
   116                   | . NOT expression
-  117                   | . expression_nobrace LSB argument_list RSB
-  118                   | . expression_nobrace LSB RSB
-  119                   | . NEW typename_T '(' argument_list RRB
+  117                   | . expression_nobrace LRB argument_list RRB
+  118                   | . expression_nobrace LRB RRB
+  119                   | . NEW typename_T LRB argument_list RRB
   120 primary: . INT
   121        | . DOUBLE
   122        | . CHAR_LITERAL
@@ -1003,7 +1006,7 @@ state 16
    77 typename_T: . fqcn_part typename_group
    78 fqcn_part: . IDENT
    79          | . fqcn_part COLO_COLO IDENT
-  119 expression_nobrace: NEW . typename_T '(' argument_list RRB
+  119 expression_nobrace: NEW . typename_T LRB argument_list RRB
 
     IDENT  shift, and go to state 6
 
@@ -1071,9 +1074,9 @@ state 19
   114                   | . expression AS typename_T
   115                   | . CHILDA expression
   116                   | . NOT expression
-  117                   | . expression_nobrace LSB argument_list RSB
-  118                   | . expression_nobrace LSB RSB
-  119                   | . NEW typename_T '(' argument_list RRB
+  117                   | . expression_nobrace LRB argument_list RRB
+  118                   | . expression_nobrace LRB RRB
+  119                   | . NEW typename_T LRB argument_list RRB
   120 primary: . INT
   121        | . DOUBLE
   122        | . CHAR_LITERAL
@@ -1197,9 +1200,9 @@ state 25
   114                   | . expression AS typename_T
   115                   | . CHILDA expression
   116                   | . NOT expression
-  117                   | . expression_nobrace LSB argument_list RSB
-  118                   | . expression_nobrace LSB RSB
-  119                   | . NEW typename_T '(' argument_list RRB
+  117                   | . expression_nobrace LRB argument_list RRB
+  118                   | . expression_nobrace LRB RRB
+  119                   | . NEW typename_T LRB argument_list RRB
   120 primary: . INT
   121        | . DOUBLE
   122        | . CHAR_LITERAL
@@ -1275,7 +1278,7 @@ state 31
 
 state 32
 
-   73 typename_group: .  [IDENT, DOT, ADD, SUB, MUL, DIV, MOD, LSHIFT, RSHIFT, EQUAL, NOTEQUAL, GT, GE, LT, LE, BIT_AND, LOGIC_AND, BIT_OR, LOGIC_OR, ASSIGN, ADD_ASSIGN, SUB_ASSIGN, MUL_ASSIGN, DIV_ASSIGN, MOD_ASSIGN, AND_ASSIGN, OR_ASSIGN, LSHIFT_ASSIGN, RSHIFT_ASSIGN, EXC_OR_ASSIGN, EXC_OR, LSB, SEMI, AS, '\n']
+   73 typename_group: .  [IDENT, DOT, ADD, SUB, MUL, DIV, MOD, LSHIFT, RSHIFT, EQUAL, NOTEQUAL, GT, GE, LT, LE, BIT_AND, LOGIC_AND, BIT_OR, LOGIC_OR, ASSIGN, ADD_ASSIGN, SUB_ASSIGN, MUL_ASSIGN, DIV_ASSIGN, MOD_ASSIGN, AND_ASSIGN, OR_ASSIGN, LSHIFT_ASSIGN, RSHIFT_ASSIGN, EXC_OR_ASSIGN, EXC_OR, LRB, SEMI, AS, '\n']
    74               | . LT typename_list GT
    77 typename_T: fqcn_part . typename_group
    79 fqcn_part: fqcn_part . COLO_COLO IDENT
@@ -1366,13 +1369,13 @@ state 33
 
 state 34
 
-   80 expression: expression_nobrace .  [DOT, COMMA, ADD, SUB, MUL, DIV, MOD, LSHIFT, RSHIFT, EQUAL, NOTEQUAL, GT, GE, LT, LE, BIT_AND, LOGIC_AND, BIT_OR, LOGIC_OR, ASSIGN, ADD_ASSIGN, SUB_ASSIGN, MUL_ASSIGN, DIV_ASSIGN, MOD_ASSIGN, AND_ASSIGN, OR_ASSIGN, LSHIFT_ASSIGN, RSHIFT_ASSIGN, EXC_OR_ASSIGN, EXC_OR, RRB, LSB, RSB, SEMI, AS, '\n']
-  117 expression_nobrace: expression_nobrace . LSB argument_list RSB
-  118                   | expression_nobrace . LSB RSB
+   80 expression: expression_nobrace .  [DOT, COMMA, ADD, SUB, MUL, DIV, MOD, LSHIFT, RSHIFT, EQUAL, NOTEQUAL, GT, GE, LT, LE, BIT_AND, LOGIC_AND, BIT_OR, LOGIC_OR, ASSIGN, ADD_ASSIGN, SUB_ASSIGN, MUL_ASSIGN, DIV_ASSIGN, MOD_ASSIGN, AND_ASSIGN, OR_ASSIGN, LSHIFT_ASSIGN, RSHIFT_ASSIGN, EXC_OR_ASSIGN, EXC_OR, LRB, RRB, SEMI, AS, '\n']
+  117 expression_nobrace: expression_nobrace . LRB argument_list RRB
+  118                   | expression_nobrace . LRB RRB
 
-    LSB  shift, and go to state 108
+    LRB  shift, and go to state 108
 
-    LSB       [reduce using rule 80 (expression)]
+    LRB       [reduce using rule 80 (expression)]
     $default  reduce using rule 80 (expression)
 
 
@@ -1426,9 +1429,9 @@ state 36
   114                   | . expression AS typename_T
   115                   | . CHILDA expression
   116                   | . NOT expression
-  117                   | . expression_nobrace LSB argument_list RSB
-  118                   | . expression_nobrace LSB RSB
-  119                   | . NEW typename_T '(' argument_list RRB
+  117                   | . expression_nobrace LRB argument_list RRB
+  118                   | . expression_nobrace LRB RRB
+  119                   | . NEW typename_T LRB argument_list RRB
   120 primary: . INT
   121        | . DOUBLE
   122        | . CHAR_LITERAL
@@ -1591,7 +1594,7 @@ state 48
 
 state 49
 
-   73 typename_group: .  [DOT, COMMA, ADD, SUB, MUL, DIV, MOD, LSHIFT, RSHIFT, EQUAL, NOTEQUAL, GT, GE, LT, LE, BIT_AND, LOGIC_AND, BIT_OR, LOGIC_OR, ASSIGN, ADD_ASSIGN, SUB_ASSIGN, MUL_ASSIGN, DIV_ASSIGN, MOD_ASSIGN, AND_ASSIGN, OR_ASSIGN, LSHIFT_ASSIGN, RSHIFT_ASSIGN, EXC_OR_ASSIGN, EXC_OR, RRB, LSB, RSB, SEMI, AS, '\n']
+   73 typename_group: .  [DOT, COMMA, ADD, SUB, MUL, DIV, MOD, LSHIFT, RSHIFT, EQUAL, NOTEQUAL, GT, GE, LT, LE, BIT_AND, LOGIC_AND, BIT_OR, LOGIC_OR, ASSIGN, ADD_ASSIGN, SUB_ASSIGN, MUL_ASSIGN, DIV_ASSIGN, MOD_ASSIGN, AND_ASSIGN, OR_ASSIGN, LSHIFT_ASSIGN, RSHIFT_ASSIGN, EXC_OR_ASSIGN, EXC_OR, LRB, RRB, SEMI, AS, '\n']
    74               | . LT typename_list GT
    79 fqcn_part: fqcn_part . COLO_COLO IDENT
   127 primary: fqcn_part . typename_group
@@ -1607,7 +1610,7 @@ state 49
 
 state 50
 
-   82 expression_nobrace: ADD expression .  [DOT, COMMA, ADD, SUB, MUL, DIV, MOD, LSHIFT, RSHIFT, EQUAL, NOTEQUAL, GT, GE, LT, LE, BIT_AND, LOGIC_AND, BIT_OR, LOGIC_OR, EXC_OR, RRB, LSB, RSB, SEMI, '\n']
+   82 expression_nobrace: ADD expression .  [DOT, COMMA, ADD, SUB, MUL, DIV, MOD, LSHIFT, RSHIFT, EQUAL, NOTEQUAL, GT, GE, LT, LE, BIT_AND, LOGIC_AND, BIT_OR, LOGIC_OR, EXC_OR, LRB, RRB, SEMI, '\n']
    84                   | expression . ADD expression
    85                   | expression . SUB expression
    86                   | expression . MUL expression
@@ -1690,7 +1693,7 @@ state 50
 
 state 51
 
-   83 expression_nobrace: SUB expression .  [DOT, COMMA, ADD, SUB, MUL, DIV, MOD, LSHIFT, RSHIFT, EQUAL, NOTEQUAL, GT, GE, LT, LE, BIT_AND, LOGIC_AND, BIT_OR, LOGIC_OR, EXC_OR, RRB, LSB, RSB, SEMI, '\n']
+   83 expression_nobrace: SUB expression .  [DOT, COMMA, ADD, SUB, MUL, DIV, MOD, LSHIFT, RSHIFT, EQUAL, NOTEQUAL, GT, GE, LT, LE, BIT_AND, LOGIC_AND, BIT_OR, LOGIC_OR, EXC_OR, LRB, RRB, SEMI, '\n']
    84                   | expression . ADD expression
    85                   | expression . SUB expression
    86                   | expression . MUL expression
@@ -1804,7 +1807,7 @@ state 52
   112                   | expression . RSHIFT expression
   113                   | expression . DOT IDENT typename_group
   114                   | expression . AS typename_T
-  116                   | NOT expression .  [DOT, COMMA, ADD, SUB, MUL, DIV, MOD, LSHIFT, RSHIFT, EQUAL, NOTEQUAL, GT, GE, LT, LE, BIT_AND, LOGIC_AND, BIT_OR, LOGIC_OR, EXC_OR, RRB, LSB, RSB, SEMI, '\n']
+  116                   | NOT expression .  [DOT, COMMA, ADD, SUB, MUL, DIV, MOD, LSHIFT, RSHIFT, EQUAL, NOTEQUAL, GT, GE, LT, LE, BIT_AND, LOGIC_AND, BIT_OR, LOGIC_OR, EXC_OR, LRB, RRB, SEMI, '\n']
 
     ASSIGN         shift, and go to state 94
     ADD_ASSIGN     shift, and go to state 95
@@ -1887,7 +1890,7 @@ state 53
   112                   | expression . RSHIFT expression
   113                   | expression . DOT IDENT typename_group
   114                   | expression . AS typename_T
-  115                   | CHILDA expression .  [DOT, COMMA, ADD, SUB, MUL, DIV, MOD, LSHIFT, RSHIFT, EQUAL, NOTEQUAL, GT, GE, LT, LE, BIT_AND, LOGIC_AND, BIT_OR, LOGIC_OR, EXC_OR, RRB, LSB, RSB, SEMI, '\n']
+  115                   | CHILDA expression .  [DOT, COMMA, ADD, SUB, MUL, DIV, MOD, LSHIFT, RSHIFT, EQUAL, NOTEQUAL, GT, GE, LT, LE, BIT_AND, LOGIC_AND, BIT_OR, LOGIC_OR, EXC_OR, LRB, RRB, SEMI, '\n']
 
     ASSIGN         shift, and go to state 94
     ADD_ASSIGN     shift, and go to state 95
@@ -1953,14 +1956,14 @@ state 55
 
 state 56
 
-  119 expression_nobrace: NEW typename_T . '(' argument_list RRB
+  119 expression_nobrace: NEW typename_T . LRB argument_list RRB
 
-    '('  shift, and go to state 112
+    LRB  shift, and go to state 112
 
 
 state 57
 
-   73 typename_group: .  [IDENT, DOT, COMMA, ADD, SUB, MUL, DIV, MOD, LSHIFT, RSHIFT, EQUAL, NOTEQUAL, GT, GE, LT, LE, BIT_AND, LOGIC_AND, BIT_OR, LOGIC_OR, ASSIGN, ADD_ASSIGN, SUB_ASSIGN, MUL_ASSIGN, DIV_ASSIGN, MOD_ASSIGN, AND_ASSIGN, OR_ASSIGN, LSHIFT_ASSIGN, RSHIFT_ASSIGN, EXC_OR_ASSIGN, EXC_OR, LCB, RRB, LSB, RSB, SEMI, AS, '\n', '(']
+   73 typename_group: .  [IDENT, DOT, COMMA, ADD, SUB, MUL, DIV, MOD, LSHIFT, RSHIFT, EQUAL, NOTEQUAL, GT, GE, LT, LE, BIT_AND, LOGIC_AND, BIT_OR, LOGIC_OR, ASSIGN, ADD_ASSIGN, SUB_ASSIGN, MUL_ASSIGN, DIV_ASSIGN, MOD_ASSIGN, AND_ASSIGN, OR_ASSIGN, LSHIFT_ASSIGN, RSHIFT_ASSIGN, EXC_OR_ASSIGN, EXC_OR, LCB, LRB, RRB, SEMI, AS, '\n']
    74               | . LT typename_list GT
    77 typename_T: fqcn_part . typename_group
    79 fqcn_part: fqcn_part . COLO_COLO IDENT
@@ -2116,9 +2119,9 @@ state 62
   114                   | . expression AS typename_T
   115                   | . CHILDA expression
   116                   | . NOT expression
-  117                   | . expression_nobrace LSB argument_list RSB
-  118                   | . expression_nobrace LSB RSB
-  119                   | . NEW typename_T '(' argument_list RRB
+  117                   | . expression_nobrace LRB argument_list RRB
+  118                   | . expression_nobrace LRB RRB
+  119                   | . NEW typename_T LRB argument_list RRB
   120 primary: . INT
   121        | . DOUBLE
   122        | . CHAR_LITERAL
@@ -2193,9 +2196,9 @@ state 63
   114                   | . expression AS typename_T
   115                   | . CHILDA expression
   116                   | . NOT expression
-  117                   | . expression_nobrace LSB argument_list RSB
-  118                   | . expression_nobrace LSB RSB
-  119                   | . NEW typename_T '(' argument_list RRB
+  117                   | . expression_nobrace LRB argument_list RRB
+  118                   | . expression_nobrace LRB RRB
+  119                   | . NEW typename_T LRB argument_list RRB
   120 primary: . INT
   121        | . DOUBLE
   122        | . CHAR_LITERAL
@@ -2296,9 +2299,9 @@ state 68
   114                   | . expression AS typename_T
   115                   | . CHILDA expression
   116                   | . NOT expression
-  117                   | . expression_nobrace LSB argument_list RSB
-  118                   | . expression_nobrace LSB RSB
-  119                   | . NEW typename_T '(' argument_list RRB
+  117                   | . expression_nobrace LRB argument_list RRB
+  118                   | . expression_nobrace LRB RRB
+  119                   | . NEW typename_T LRB argument_list RRB
   120 primary: . INT
   121        | . DOUBLE
   122        | . CHAR_LITERAL
@@ -2507,7 +2510,7 @@ state 74
 state 75
 
    77 typename_T: fqcn_part typename_group .  [IDENT]
-  127 primary: fqcn_part typename_group .  [DOT, ADD, SUB, MUL, DIV, MOD, LSHIFT, RSHIFT, EQUAL, NOTEQUAL, GT, GE, LT, LE, BIT_AND, LOGIC_AND, BIT_OR, LOGIC_OR, ASSIGN, ADD_ASSIGN, SUB_ASSIGN, MUL_ASSIGN, DIV_ASSIGN, MOD_ASSIGN, AND_ASSIGN, OR_ASSIGN, LSHIFT_ASSIGN, RSHIFT_ASSIGN, EXC_OR_ASSIGN, EXC_OR, LSB, SEMI, AS, '\n']
+  127 primary: fqcn_part typename_group .  [DOT, ADD, SUB, MUL, DIV, MOD, LSHIFT, RSHIFT, EQUAL, NOTEQUAL, GT, GE, LT, LE, BIT_AND, LOGIC_AND, BIT_OR, LOGIC_OR, ASSIGN, ADD_ASSIGN, SUB_ASSIGN, MUL_ASSIGN, DIV_ASSIGN, MOD_ASSIGN, AND_ASSIGN, OR_ASSIGN, LSHIFT_ASSIGN, RSHIFT_ASSIGN, EXC_OR_ASSIGN, EXC_OR, LRB, SEMI, AS, '\n']
 
     IDENT     reduce using rule 77 (typename_T)
     $default  reduce using rule 127 (primary)
@@ -2562,9 +2565,9 @@ state 77
   114                   | . expression AS typename_T
   115                   | . CHILDA expression
   116                   | . NOT expression
-  117                   | . expression_nobrace LSB argument_list RSB
-  118                   | . expression_nobrace LSB RSB
-  119                   | . NEW typename_T '(' argument_list RRB
+  117                   | . expression_nobrace LRB argument_list RRB
+  118                   | . expression_nobrace LRB RRB
+  119                   | . NEW typename_T LRB argument_list RRB
   120 primary: . INT
   121        | . DOUBLE
   122        | . CHAR_LITERAL
@@ -2636,9 +2639,9 @@ state 78
   114                   | . expression AS typename_T
   115                   | . CHILDA expression
   116                   | . NOT expression
-  117                   | . expression_nobrace LSB argument_list RSB
-  118                   | . expression_nobrace LSB RSB
-  119                   | . NEW typename_T '(' argument_list RRB
+  117                   | . expression_nobrace LRB argument_list RRB
+  118                   | . expression_nobrace LRB RRB
+  119                   | . NEW typename_T LRB argument_list RRB
   120 primary: . INT
   121        | . DOUBLE
   122        | . CHAR_LITERAL
@@ -2710,9 +2713,9 @@ state 79
   114                   | . expression AS typename_T
   115                   | . CHILDA expression
   116                   | . NOT expression
-  117                   | . expression_nobrace LSB argument_list RSB
-  118                   | . expression_nobrace LSB RSB
-  119                   | . NEW typename_T '(' argument_list RRB
+  117                   | . expression_nobrace LRB argument_list RRB
+  118                   | . expression_nobrace LRB RRB
+  119                   | . NEW typename_T LRB argument_list RRB
   120 primary: . INT
   121        | . DOUBLE
   122        | . CHAR_LITERAL
@@ -2784,9 +2787,9 @@ state 80
   114                   | . expression AS typename_T
   115                   | . CHILDA expression
   116                   | . NOT expression
-  117                   | . expression_nobrace LSB argument_list RSB
-  118                   | . expression_nobrace LSB RSB
-  119                   | . NEW typename_T '(' argument_list RRB
+  117                   | . expression_nobrace LRB argument_list RRB
+  118                   | . expression_nobrace LRB RRB
+  119                   | . NEW typename_T LRB argument_list RRB
   120 primary: . INT
   121        | . DOUBLE
   122        | . CHAR_LITERAL
@@ -2858,9 +2861,9 @@ state 81
   114                   | . expression AS typename_T
   115                   | . CHILDA expression
   116                   | . NOT expression
-  117                   | . expression_nobrace LSB argument_list RSB
-  118                   | . expression_nobrace LSB RSB
-  119                   | . NEW typename_T '(' argument_list RRB
+  117                   | . expression_nobrace LRB argument_list RRB
+  118                   | . expression_nobrace LRB RRB
+  119                   | . NEW typename_T LRB argument_list RRB
   120 primary: . INT
   121        | . DOUBLE
   122        | . CHAR_LITERAL
@@ -2932,9 +2935,9 @@ state 82
   114                   | . expression AS typename_T
   115                   | . CHILDA expression
   116                   | . NOT expression
-  117                   | . expression_nobrace LSB argument_list RSB
-  118                   | . expression_nobrace LSB RSB
-  119                   | . NEW typename_T '(' argument_list RRB
+  117                   | . expression_nobrace LRB argument_list RRB
+  118                   | . expression_nobrace LRB RRB
+  119                   | . NEW typename_T LRB argument_list RRB
   120 primary: . INT
   121        | . DOUBLE
   122        | . CHAR_LITERAL
@@ -3006,9 +3009,9 @@ state 83
   114                   | . expression AS typename_T
   115                   | . CHILDA expression
   116                   | . NOT expression
-  117                   | . expression_nobrace LSB argument_list RSB
-  118                   | . expression_nobrace LSB RSB
-  119                   | . NEW typename_T '(' argument_list RRB
+  117                   | . expression_nobrace LRB argument_list RRB
+  118                   | . expression_nobrace LRB RRB
+  119                   | . NEW typename_T LRB argument_list RRB
   120 primary: . INT
   121        | . DOUBLE
   122        | . CHAR_LITERAL
@@ -3080,9 +3083,9 @@ state 84
   114                   | . expression AS typename_T
   115                   | . CHILDA expression
   116                   | . NOT expression
-  117                   | . expression_nobrace LSB argument_list RSB
-  118                   | . expression_nobrace LSB RSB
-  119                   | . NEW typename_T '(' argument_list RRB
+  117                   | . expression_nobrace LRB argument_list RRB
+  118                   | . expression_nobrace LRB RRB
+  119                   | . NEW typename_T LRB argument_list RRB
   120 primary: . INT
   121        | . DOUBLE
   122        | . CHAR_LITERAL
@@ -3154,9 +3157,9 @@ state 85
   114                   | . expression AS typename_T
   115                   | . CHILDA expression
   116                   | . NOT expression
-  117                   | . expression_nobrace LSB argument_list RSB
-  118                   | . expression_nobrace LSB RSB
-  119                   | . NEW typename_T '(' argument_list RRB
+  117                   | . expression_nobrace LRB argument_list RRB
+  118                   | . expression_nobrace LRB RRB
+  119                   | . NEW typename_T LRB argument_list RRB
   120 primary: . INT
   121        | . DOUBLE
   122        | . CHAR_LITERAL
@@ -3228,9 +3231,9 @@ state 86
   114                   | . expression AS typename_T
   115                   | . CHILDA expression
   116                   | . NOT expression
-  117                   | . expression_nobrace LSB argument_list RSB
-  118                   | . expression_nobrace LSB RSB
-  119                   | . NEW typename_T '(' argument_list RRB
+  117                   | . expression_nobrace LRB argument_list RRB
+  118                   | . expression_nobrace LRB RRB
+  119                   | . NEW typename_T LRB argument_list RRB
   120 primary: . INT
   121        | . DOUBLE
   122        | . CHAR_LITERAL
@@ -3302,9 +3305,9 @@ state 87
   114                   | . expression AS typename_T
   115                   | . CHILDA expression
   116                   | . NOT expression
-  117                   | . expression_nobrace LSB argument_list RSB
-  118                   | . expression_nobrace LSB RSB
-  119                   | . NEW typename_T '(' argument_list RRB
+  117                   | . expression_nobrace LRB argument_list RRB
+  118                   | . expression_nobrace LRB RRB
+  119                   | . NEW typename_T LRB argument_list RRB
   120 primary: . INT
   121        | . DOUBLE
   122        | . CHAR_LITERAL
@@ -3376,9 +3379,9 @@ state 88
   114                   | . expression AS typename_T
   115                   | . CHILDA expression
   116                   | . NOT expression
-  117                   | . expression_nobrace LSB argument_list RSB
-  118                   | . expression_nobrace LSB RSB
-  119                   | . NEW typename_T '(' argument_list RRB
+  117                   | . expression_nobrace LRB argument_list RRB
+  118                   | . expression_nobrace LRB RRB
+  119                   | . NEW typename_T LRB argument_list RRB
   120 primary: . INT
   121        | . DOUBLE
   122        | . CHAR_LITERAL
@@ -3450,9 +3453,9 @@ state 89
   114                   | . expression AS typename_T
   115                   | . CHILDA expression
   116                   | . NOT expression
-  117                   | . expression_nobrace LSB argument_list RSB
-  118                   | . expression_nobrace LSB RSB
-  119                   | . NEW typename_T '(' argument_list RRB
+  117                   | . expression_nobrace LRB argument_list RRB
+  118                   | . expression_nobrace LRB RRB
+  119                   | . NEW typename_T LRB argument_list RRB
   120 primary: . INT
   121        | . DOUBLE
   122        | . CHAR_LITERAL
@@ -3524,9 +3527,9 @@ state 90
   114                   | . expression AS typename_T
   115                   | . CHILDA expression
   116                   | . NOT expression
-  117                   | . expression_nobrace LSB argument_list RSB
-  118                   | . expression_nobrace LSB RSB
-  119                   | . NEW typename_T '(' argument_list RRB
+  117                   | . expression_nobrace LRB argument_list RRB
+  118                   | . expression_nobrace LRB RRB
+  119                   | . NEW typename_T LRB argument_list RRB
   120 primary: . INT
   121        | . DOUBLE
   122        | . CHAR_LITERAL
@@ -3598,9 +3601,9 @@ state 91
   114                   | . expression AS typename_T
   115                   | . CHILDA expression
   116                   | . NOT expression
-  117                   | . expression_nobrace LSB argument_list RSB
-  118                   | . expression_nobrace LSB RSB
-  119                   | . NEW typename_T '(' argument_list RRB
+  117                   | . expression_nobrace LRB argument_list RRB
+  118                   | . expression_nobrace LRB RRB
+  119                   | . NEW typename_T LRB argument_list RRB
   120 primary: . INT
   121        | . DOUBLE
   122        | . CHAR_LITERAL
@@ -3672,9 +3675,9 @@ state 92
   114                   | . expression AS typename_T
   115                   | . CHILDA expression
   116                   | . NOT expression
-  117                   | . expression_nobrace LSB argument_list RSB
-  118                   | . expression_nobrace LSB RSB
-  119                   | . NEW typename_T '(' argument_list RRB
+  117                   | . expression_nobrace LRB argument_list RRB
+  118                   | . expression_nobrace LRB RRB
+  119                   | . NEW typename_T LRB argument_list RRB
   120 primary: . INT
   121        | . DOUBLE
   122        | . CHAR_LITERAL
@@ -3746,9 +3749,9 @@ state 93
   114                   | . expression AS typename_T
   115                   | . CHILDA expression
   116                   | . NOT expression
-  117                   | . expression_nobrace LSB argument_list RSB
-  118                   | . expression_nobrace LSB RSB
-  119                   | . NEW typename_T '(' argument_list RRB
+  117                   | . expression_nobrace LRB argument_list RRB
+  118                   | . expression_nobrace LRB RRB
+  119                   | . NEW typename_T LRB argument_list RRB
   120 primary: . INT
   121        | . DOUBLE
   122        | . CHAR_LITERAL
@@ -3820,9 +3823,9 @@ state 94
   114                   | . expression AS typename_T
   115                   | . CHILDA expression
   116                   | . NOT expression
-  117                   | . expression_nobrace LSB argument_list RSB
-  118                   | . expression_nobrace LSB RSB
-  119                   | . NEW typename_T '(' argument_list RRB
+  117                   | . expression_nobrace LRB argument_list RRB
+  118                   | . expression_nobrace LRB RRB
+  119                   | . NEW typename_T LRB argument_list RRB
   120 primary: . INT
   121        | . DOUBLE
   122        | . CHAR_LITERAL
@@ -3894,9 +3897,9 @@ state 95
   114                   | . expression AS typename_T
   115                   | . CHILDA expression
   116                   | . NOT expression
-  117                   | . expression_nobrace LSB argument_list RSB
-  118                   | . expression_nobrace LSB RSB
-  119                   | . NEW typename_T '(' argument_list RRB
+  117                   | . expression_nobrace LRB argument_list RRB
+  118                   | . expression_nobrace LRB RRB
+  119                   | . NEW typename_T LRB argument_list RRB
   120 primary: . INT
   121        | . DOUBLE
   122        | . CHAR_LITERAL
@@ -3968,9 +3971,9 @@ state 96
   114                   | . expression AS typename_T
   115                   | . CHILDA expression
   116                   | . NOT expression
-  117                   | . expression_nobrace LSB argument_list RSB
-  118                   | . expression_nobrace LSB RSB
-  119                   | . NEW typename_T '(' argument_list RRB
+  117                   | . expression_nobrace LRB argument_list RRB
+  118                   | . expression_nobrace LRB RRB
+  119                   | . NEW typename_T LRB argument_list RRB
   120 primary: . INT
   121        | . DOUBLE
   122        | . CHAR_LITERAL
@@ -4042,9 +4045,9 @@ state 97
   114                   | . expression AS typename_T
   115                   | . CHILDA expression
   116                   | . NOT expression
-  117                   | . expression_nobrace LSB argument_list RSB
-  118                   | . expression_nobrace LSB RSB
-  119                   | . NEW typename_T '(' argument_list RRB
+  117                   | . expression_nobrace LRB argument_list RRB
+  118                   | . expression_nobrace LRB RRB
+  119                   | . NEW typename_T LRB argument_list RRB
   120 primary: . INT
   121        | . DOUBLE
   122        | . CHAR_LITERAL
@@ -4116,9 +4119,9 @@ state 98
   114                   | . expression AS typename_T
   115                   | . CHILDA expression
   116                   | . NOT expression
-  117                   | . expression_nobrace LSB argument_list RSB
-  118                   | . expression_nobrace LSB RSB
-  119                   | . NEW typename_T '(' argument_list RRB
+  117                   | . expression_nobrace LRB argument_list RRB
+  118                   | . expression_nobrace LRB RRB
+  119                   | . NEW typename_T LRB argument_list RRB
   120 primary: . INT
   121        | . DOUBLE
   122        | . CHAR_LITERAL
@@ -4190,9 +4193,9 @@ state 99
   114                   | . expression AS typename_T
   115                   | . CHILDA expression
   116                   | . NOT expression
-  117                   | . expression_nobrace LSB argument_list RSB
-  118                   | . expression_nobrace LSB RSB
-  119                   | . NEW typename_T '(' argument_list RRB
+  117                   | . expression_nobrace LRB argument_list RRB
+  118                   | . expression_nobrace LRB RRB
+  119                   | . NEW typename_T LRB argument_list RRB
   120 primary: . INT
   121        | . DOUBLE
   122        | . CHAR_LITERAL
@@ -4264,9 +4267,9 @@ state 100
   114                   | . expression AS typename_T
   115                   | . CHILDA expression
   116                   | . NOT expression
-  117                   | . expression_nobrace LSB argument_list RSB
-  118                   | . expression_nobrace LSB RSB
-  119                   | . NEW typename_T '(' argument_list RRB
+  117                   | . expression_nobrace LRB argument_list RRB
+  118                   | . expression_nobrace LRB RRB
+  119                   | . NEW typename_T LRB argument_list RRB
   120 primary: . INT
   121        | . DOUBLE
   122        | . CHAR_LITERAL
@@ -4338,9 +4341,9 @@ state 101
   114                   | . expression AS typename_T
   115                   | . CHILDA expression
   116                   | . NOT expression
-  117                   | . expression_nobrace LSB argument_list RSB
-  118                   | . expression_nobrace LSB RSB
-  119                   | . NEW typename_T '(' argument_list RRB
+  117                   | . expression_nobrace LRB argument_list RRB
+  118                   | . expression_nobrace LRB RRB
+  119                   | . NEW typename_T LRB argument_list RRB
   120 primary: . INT
   121        | . DOUBLE
   122        | . CHAR_LITERAL
@@ -4412,9 +4415,9 @@ state 102
   114                   | . expression AS typename_T
   115                   | . CHILDA expression
   116                   | . NOT expression
-  117                   | . expression_nobrace LSB argument_list RSB
-  118                   | . expression_nobrace LSB RSB
-  119                   | . NEW typename_T '(' argument_list RRB
+  117                   | . expression_nobrace LRB argument_list RRB
+  118                   | . expression_nobrace LRB RRB
+  119                   | . NEW typename_T LRB argument_list RRB
   120 primary: . INT
   121        | . DOUBLE
   122        | . CHAR_LITERAL
@@ -4486,9 +4489,9 @@ state 103
   114                   | . expression AS typename_T
   115                   | . CHILDA expression
   116                   | . NOT expression
-  117                   | . expression_nobrace LSB argument_list RSB
-  118                   | . expression_nobrace LSB RSB
-  119                   | . NEW typename_T '(' argument_list RRB
+  117                   | . expression_nobrace LRB argument_list RRB
+  118                   | . expression_nobrace LRB RRB
+  119                   | . NEW typename_T LRB argument_list RRB
   120 primary: . INT
   121        | . DOUBLE
   122        | . CHAR_LITERAL
@@ -4560,9 +4563,9 @@ state 104
   114                   | . expression AS typename_T
   115                   | . CHILDA expression
   116                   | . NOT expression
-  117                   | . expression_nobrace LSB argument_list RSB
-  118                   | . expression_nobrace LSB RSB
-  119                   | . NEW typename_T '(' argument_list RRB
+  117                   | . expression_nobrace LRB argument_list RRB
+  118                   | . expression_nobrace LRB RRB
+  119                   | . NEW typename_T LRB argument_list RRB
   120 primary: . INT
   121        | . DOUBLE
   122        | . CHAR_LITERAL
@@ -4634,9 +4637,9 @@ state 105
   114                   | . expression AS typename_T
   115                   | . CHILDA expression
   116                   | . NOT expression
-  117                   | . expression_nobrace LSB argument_list RSB
-  118                   | . expression_nobrace LSB RSB
-  119                   | . NEW typename_T '(' argument_list RRB
+  117                   | . expression_nobrace LRB argument_list RRB
+  118                   | . expression_nobrace LRB RRB
+  119                   | . NEW typename_T LRB argument_list RRB
   120 primary: . INT
   121        | . DOUBLE
   122        | . CHAR_LITERAL
@@ -4729,11 +4732,11 @@ state 108
   114                   | . expression AS typename_T
   115                   | . CHILDA expression
   116                   | . NOT expression
-  117                   | . expression_nobrace LSB argument_list RSB
-  117                   | expression_nobrace LSB . argument_list RSB
-  118                   | . expression_nobrace LSB RSB
-  118                   | expression_nobrace LSB . RSB
-  119                   | . NEW typename_T '(' argument_list RRB
+  117                   | . expression_nobrace LRB argument_list RRB
+  117                   | expression_nobrace LRB . argument_list RRB
+  118                   | . expression_nobrace LRB RRB
+  118                   | expression_nobrace LRB . RRB
+  119                   | . NEW typename_T LRB argument_list RRB
   120 primary: . INT
   121        | . DOUBLE
   122        | . CHAR_LITERAL
@@ -4752,7 +4755,7 @@ state 108
     SUB             shift, and go to state 8
     NOT             shift, and go to state 9
     CHILDA          shift, and go to state 10
-    RSB             shift, and go to state 163
+    RRB             shift, and go to state 163
     TRUE_TOK        shift, and go to state 13
     FALSE_TOK       shift, and go to state 14
     NULL_TOK        shift, and go to state 15
@@ -4820,9 +4823,9 @@ state 111
   114                   | . expression AS typename_T
   115                   | . CHILDA expression
   116                   | . NOT expression
-  117                   | . expression_nobrace LSB argument_list RSB
-  118                   | . expression_nobrace LSB RSB
-  119                   | . NEW typename_T '(' argument_list RRB
+  117                   | . expression_nobrace LRB argument_list RRB
+  118                   | . expression_nobrace LRB RRB
+  119                   | . NEW typename_T LRB argument_list RRB
   120 primary: . INT
   121        | . DOUBLE
   122        | . CHAR_LITERAL
@@ -4896,10 +4899,10 @@ state 112
   114                   | . expression AS typename_T
   115                   | . CHILDA expression
   116                   | . NOT expression
-  117                   | . expression_nobrace LSB argument_list RSB
-  118                   | . expression_nobrace LSB RSB
-  119                   | . NEW typename_T '(' argument_list RRB
-  119                   | NEW typename_T '(' . argument_list RRB
+  117                   | . expression_nobrace LRB argument_list RRB
+  118                   | . expression_nobrace LRB RRB
+  119                   | . NEW typename_T LRB argument_list RRB
+  119                   | NEW typename_T LRB . argument_list RRB
   120 primary: . INT
   121        | . DOUBLE
   122        | . CHAR_LITERAL
@@ -5199,9 +5202,9 @@ state 122
   114                   | . expression AS typename_T
   115                   | . CHILDA expression
   116                   | . NOT expression
-  117                   | . expression_nobrace LSB argument_list RSB
-  118                   | . expression_nobrace LSB RSB
-  119                   | . NEW typename_T '(' argument_list RRB
+  117                   | . expression_nobrace LRB argument_list RRB
+  118                   | . expression_nobrace LRB RRB
+  119                   | . NEW typename_T LRB argument_list RRB
   120 primary: . INT
   121        | . DOUBLE
   122        | . CHAR_LITERAL
@@ -5353,9 +5356,9 @@ state 127
   114                   | . expression AS typename_T
   115                   | . CHILDA expression
   116                   | . NOT expression
-  117                   | . expression_nobrace LSB argument_list RSB
-  118                   | . expression_nobrace LSB RSB
-  119                   | . NEW typename_T '(' argument_list RRB
+  117                   | . expression_nobrace LRB argument_list RRB
+  118                   | . expression_nobrace LRB RRB
+  119                   | . NEW typename_T LRB argument_list RRB
   120 primary: . INT
   121        | . DOUBLE
   122        | . CHAR_LITERAL
@@ -5418,7 +5421,7 @@ state 131
 
 state 132
 
-   73 typename_group: .  [DOT, COMMA, ADD, SUB, MUL, DIV, MOD, LSHIFT, RSHIFT, EQUAL, NOTEQUAL, GT, GE, LT, LE, BIT_AND, LOGIC_AND, BIT_OR, LOGIC_OR, ASSIGN, ADD_ASSIGN, SUB_ASSIGN, MUL_ASSIGN, DIV_ASSIGN, MOD_ASSIGN, AND_ASSIGN, OR_ASSIGN, LSHIFT_ASSIGN, RSHIFT_ASSIGN, EXC_OR_ASSIGN, EXC_OR, RRB, LSB, RSB, SEMI, AS, '\n']
+   73 typename_group: .  [DOT, COMMA, ADD, SUB, MUL, DIV, MOD, LSHIFT, RSHIFT, EQUAL, NOTEQUAL, GT, GE, LT, LE, BIT_AND, LOGIC_AND, BIT_OR, LOGIC_OR, ASSIGN, ADD_ASSIGN, SUB_ASSIGN, MUL_ASSIGN, DIV_ASSIGN, MOD_ASSIGN, AND_ASSIGN, OR_ASSIGN, LSHIFT_ASSIGN, RSHIFT_ASSIGN, EXC_OR_ASSIGN, EXC_OR, LRB, RRB, SEMI, AS, '\n']
    74               | . LT typename_list GT
   113 expression_nobrace: expression DOT IDENT . typename_group
 
@@ -5432,8 +5435,8 @@ state 132
 
 state 133
 
-   84 expression_nobrace: expression . ADD expression  [COMMA, ADD, SUB, LSHIFT, RSHIFT, EQUAL, NOTEQUAL, GT, GE, LT, LE, BIT_AND, LOGIC_AND, BIT_OR, LOGIC_OR, EXC_OR, RRB, LSB, RSB, SEMI, '\n']
-   84                   | expression ADD expression .  [COMMA, ADD, SUB, LSHIFT, RSHIFT, EQUAL, NOTEQUAL, GT, GE, LT, LE, BIT_AND, LOGIC_AND, BIT_OR, LOGIC_OR, EXC_OR, RRB, LSB, RSB, SEMI, '\n']
+   84 expression_nobrace: expression . ADD expression  [COMMA, ADD, SUB, LSHIFT, RSHIFT, EQUAL, NOTEQUAL, GT, GE, LT, LE, BIT_AND, LOGIC_AND, BIT_OR, LOGIC_OR, EXC_OR, LRB, RRB, SEMI, '\n']
+   84                   | expression ADD expression .  [COMMA, ADD, SUB, LSHIFT, RSHIFT, EQUAL, NOTEQUAL, GT, GE, LT, LE, BIT_AND, LOGIC_AND, BIT_OR, LOGIC_OR, EXC_OR, LRB, RRB, SEMI, '\n']
    85                   | expression . SUB expression
    86                   | expression . MUL expression
    87                   | expression . DIV expression
@@ -5520,8 +5523,8 @@ state 133
 state 134
 
    84 expression_nobrace: expression . ADD expression
-   85                   | expression . SUB expression  [COMMA, ADD, SUB, LSHIFT, RSHIFT, EQUAL, NOTEQUAL, GT, GE, LT, LE, BIT_AND, LOGIC_AND, BIT_OR, LOGIC_OR, EXC_OR, RRB, LSB, RSB, SEMI, '\n']
-   85                   | expression SUB expression .  [COMMA, ADD, SUB, LSHIFT, RSHIFT, EQUAL, NOTEQUAL, GT, GE, LT, LE, BIT_AND, LOGIC_AND, BIT_OR, LOGIC_OR, EXC_OR, RRB, LSB, RSB, SEMI, '\n']
+   85                   | expression . SUB expression  [COMMA, ADD, SUB, LSHIFT, RSHIFT, EQUAL, NOTEQUAL, GT, GE, LT, LE, BIT_AND, LOGIC_AND, BIT_OR, LOGIC_OR, EXC_OR, LRB, RRB, SEMI, '\n']
+   85                   | expression SUB expression .  [COMMA, ADD, SUB, LSHIFT, RSHIFT, EQUAL, NOTEQUAL, GT, GE, LT, LE, BIT_AND, LOGIC_AND, BIT_OR, LOGIC_OR, EXC_OR, LRB, RRB, SEMI, '\n']
    86                   | expression . MUL expression
    87                   | expression . DIV expression
    88                   | expression . MOD expression
@@ -5608,8 +5611,8 @@ state 135
 
    84 expression_nobrace: expression . ADD expression
    85                   | expression . SUB expression
-   86                   | expression . MUL expression  [COMMA, ADD, SUB, MUL, DIV, MOD, LSHIFT, RSHIFT, EQUAL, NOTEQUAL, GT, GE, LT, LE, BIT_AND, LOGIC_AND, BIT_OR, LOGIC_OR, EXC_OR, RRB, LSB, RSB, SEMI, '\n']
-   86                   | expression MUL expression .  [COMMA, ADD, SUB, MUL, DIV, MOD, LSHIFT, RSHIFT, EQUAL, NOTEQUAL, GT, GE, LT, LE, BIT_AND, LOGIC_AND, BIT_OR, LOGIC_OR, EXC_OR, RRB, LSB, RSB, SEMI, '\n']
+   86                   | expression . MUL expression  [COMMA, ADD, SUB, MUL, DIV, MOD, LSHIFT, RSHIFT, EQUAL, NOTEQUAL, GT, GE, LT, LE, BIT_AND, LOGIC_AND, BIT_OR, LOGIC_OR, EXC_OR, LRB, RRB, SEMI, '\n']
+   86                   | expression MUL expression .  [COMMA, ADD, SUB, MUL, DIV, MOD, LSHIFT, RSHIFT, EQUAL, NOTEQUAL, GT, GE, LT, LE, BIT_AND, LOGIC_AND, BIT_OR, LOGIC_OR, EXC_OR, LRB, RRB, SEMI, '\n']
    87                   | expression . DIV expression
    88                   | expression . MOD expression
    89                   | expression . BIT_OR expression
@@ -5693,8 +5696,8 @@ state 136
    84 expression_nobrace: expression . ADD expression
    85                   | expression . SUB expression
    86                   | expression . MUL expression
-   87                   | expression . DIV expression  [COMMA, ADD, SUB, MUL, DIV, MOD, LSHIFT, RSHIFT, EQUAL, NOTEQUAL, GT, GE, LT, LE, BIT_AND, LOGIC_AND, BIT_OR, LOGIC_OR, EXC_OR, RRB, LSB, RSB, SEMI, '\n']
-   87                   | expression DIV expression .  [COMMA, ADD, SUB, MUL, DIV, MOD, LSHIFT, RSHIFT, EQUAL, NOTEQUAL, GT, GE, LT, LE, BIT_AND, LOGIC_AND, BIT_OR, LOGIC_OR, EXC_OR, RRB, LSB, RSB, SEMI, '\n']
+   87                   | expression . DIV expression  [COMMA, ADD, SUB, MUL, DIV, MOD, LSHIFT, RSHIFT, EQUAL, NOTEQUAL, GT, GE, LT, LE, BIT_AND, LOGIC_AND, BIT_OR, LOGIC_OR, EXC_OR, LRB, RRB, SEMI, '\n']
+   87                   | expression DIV expression .  [COMMA, ADD, SUB, MUL, DIV, MOD, LSHIFT, RSHIFT, EQUAL, NOTEQUAL, GT, GE, LT, LE, BIT_AND, LOGIC_AND, BIT_OR, LOGIC_OR, EXC_OR, LRB, RRB, SEMI, '\n']
    88                   | expression . MOD expression
    89                   | expression . BIT_OR expression
    90                   | expression . EQUAL expression
@@ -5778,8 +5781,8 @@ state 137
    85                   | expression . SUB expression
    86                   | expression . MUL expression
    87                   | expression . DIV expression
-   88                   | expression . MOD expression  [COMMA, ADD, SUB, MUL, DIV, MOD, LSHIFT, RSHIFT, EQUAL, NOTEQUAL, GT, GE, LT, LE, BIT_AND, LOGIC_AND, BIT_OR, LOGIC_OR, EXC_OR, RRB, LSB, RSB, SEMI, '\n']
-   88                   | expression MOD expression .  [COMMA, ADD, SUB, MUL, DIV, MOD, LSHIFT, RSHIFT, EQUAL, NOTEQUAL, GT, GE, LT, LE, BIT_AND, LOGIC_AND, BIT_OR, LOGIC_OR, EXC_OR, RRB, LSB, RSB, SEMI, '\n']
+   88                   | expression . MOD expression  [COMMA, ADD, SUB, MUL, DIV, MOD, LSHIFT, RSHIFT, EQUAL, NOTEQUAL, GT, GE, LT, LE, BIT_AND, LOGIC_AND, BIT_OR, LOGIC_OR, EXC_OR, LRB, RRB, SEMI, '\n']
+   88                   | expression MOD expression .  [COMMA, ADD, SUB, MUL, DIV, MOD, LSHIFT, RSHIFT, EQUAL, NOTEQUAL, GT, GE, LT, LE, BIT_AND, LOGIC_AND, BIT_OR, LOGIC_OR, EXC_OR, LRB, RRB, SEMI, '\n']
    89                   | expression . BIT_OR expression
    90                   | expression . EQUAL expression
    91                   | expression . NOTEQUAL expression
@@ -5885,8 +5888,8 @@ state 138
   108                   | expression . GE expression
   109                   | expression . LT expression
   110                   | expression . LE expression
-  111                   | expression . LSHIFT expression  [COMMA, LSHIFT, RSHIFT, EQUAL, NOTEQUAL, GT, GE, LT, LE, BIT_AND, LOGIC_AND, BIT_OR, LOGIC_OR, EXC_OR, RRB, LSB, RSB, SEMI, '\n']
-  111                   | expression LSHIFT expression .  [COMMA, LSHIFT, RSHIFT, EQUAL, NOTEQUAL, GT, GE, LT, LE, BIT_AND, LOGIC_AND, BIT_OR, LOGIC_OR, EXC_OR, RRB, LSB, RSB, SEMI, '\n']
+  111                   | expression . LSHIFT expression  [COMMA, LSHIFT, RSHIFT, EQUAL, NOTEQUAL, GT, GE, LT, LE, BIT_AND, LOGIC_AND, BIT_OR, LOGIC_OR, EXC_OR, LRB, RRB, SEMI, '\n']
+  111                   | expression LSHIFT expression .  [COMMA, LSHIFT, RSHIFT, EQUAL, NOTEQUAL, GT, GE, LT, LE, BIT_AND, LOGIC_AND, BIT_OR, LOGIC_OR, EXC_OR, LRB, RRB, SEMI, '\n']
   112                   | expression . RSHIFT expression
   113                   | expression . DOT IDENT typename_group
   114                   | expression . AS typename_T
@@ -5975,8 +5978,8 @@ state 139
   109                   | expression . LT expression
   110                   | expression . LE expression
   111                   | expression . LSHIFT expression
-  112                   | expression . RSHIFT expression  [COMMA, LSHIFT, RSHIFT, EQUAL, NOTEQUAL, GT, GE, LT, LE, BIT_AND, LOGIC_AND, BIT_OR, LOGIC_OR, EXC_OR, RRB, LSB, RSB, SEMI, '\n']
-  112                   | expression RSHIFT expression .  [COMMA, LSHIFT, RSHIFT, EQUAL, NOTEQUAL, GT, GE, LT, LE, BIT_AND, LOGIC_AND, BIT_OR, LOGIC_OR, EXC_OR, RRB, LSB, RSB, SEMI, '\n']
+  112                   | expression . RSHIFT expression  [COMMA, LSHIFT, RSHIFT, EQUAL, NOTEQUAL, GT, GE, LT, LE, BIT_AND, LOGIC_AND, BIT_OR, LOGIC_OR, EXC_OR, LRB, RRB, SEMI, '\n']
+  112                   | expression RSHIFT expression .  [COMMA, LSHIFT, RSHIFT, EQUAL, NOTEQUAL, GT, GE, LT, LE, BIT_AND, LOGIC_AND, BIT_OR, LOGIC_OR, EXC_OR, LRB, RRB, SEMI, '\n']
   113                   | expression . DOT IDENT typename_group
   114                   | expression . AS typename_T
 
@@ -6042,8 +6045,8 @@ state 140
    87                   | expression . DIV expression
    88                   | expression . MOD expression
    89                   | expression . BIT_OR expression
-   90                   | expression . EQUAL expression  [COMMA, EQUAL, NOTEQUAL, RRB, LSB, RSB, SEMI, '\n']
-   90                   | expression EQUAL expression .  [COMMA, EQUAL, NOTEQUAL, RRB, LSB, RSB, SEMI, '\n']
+   90                   | expression . EQUAL expression  [COMMA, EQUAL, NOTEQUAL, LRB, RRB, SEMI, '\n']
+   90                   | expression EQUAL expression .  [COMMA, EQUAL, NOTEQUAL, LRB, RRB, SEMI, '\n']
    91                   | expression . NOTEQUAL expression
    92                   | expression . BIT_AND expression
    93                   | expression . EXC_OR expression
@@ -6143,8 +6146,8 @@ state 141
    88                   | expression . MOD expression
    89                   | expression . BIT_OR expression
    90                   | expression . EQUAL expression
-   91                   | expression . NOTEQUAL expression  [COMMA, EQUAL, NOTEQUAL, RRB, LSB, RSB, SEMI, '\n']
-   91                   | expression NOTEQUAL expression .  [COMMA, EQUAL, NOTEQUAL, RRB, LSB, RSB, SEMI, '\n']
+   91                   | expression . NOTEQUAL expression  [COMMA, EQUAL, NOTEQUAL, LRB, RRB, SEMI, '\n']
+   91                   | expression NOTEQUAL expression .  [COMMA, EQUAL, NOTEQUAL, LRB, RRB, SEMI, '\n']
    92                   | expression . BIT_AND expression
    93                   | expression . EXC_OR expression
    94                   | expression . LOGIC_OR expression
@@ -6259,8 +6262,8 @@ state 142
   104                   | expression . EXC_OR_ASSIGN expression
   105                   | expression . LSHIFT_ASSIGN expression
   106                   | expression . RSHIFT_ASSIGN expression
-  107                   | expression . GT expression  [COMMA, EQUAL, NOTEQUAL, GT, GE, LT, LE, RRB, LSB, RSB, SEMI, '\n']
-  107                   | expression GT expression .  [COMMA, EQUAL, NOTEQUAL, GT, GE, LT, LE, RRB, LSB, RSB, SEMI, '\n']
+  107                   | expression . GT expression  [COMMA, EQUAL, NOTEQUAL, GT, GE, LT, LE, LRB, RRB, SEMI, '\n']
+  107                   | expression GT expression .  [COMMA, EQUAL, NOTEQUAL, GT, GE, LT, LE, LRB, RRB, SEMI, '\n']
   108                   | expression . GE expression
   109                   | expression . LT expression
   110                   | expression . LE expression
@@ -6356,8 +6359,8 @@ state 143
   105                   | expression . LSHIFT_ASSIGN expression
   106                   | expression . RSHIFT_ASSIGN expression
   107                   | expression . GT expression
-  108                   | expression . GE expression  [COMMA, EQUAL, NOTEQUAL, GT, GE, LT, LE, RRB, LSB, RSB, SEMI, '\n']
-  108                   | expression GE expression .  [COMMA, EQUAL, NOTEQUAL, GT, GE, LT, LE, RRB, LSB, RSB, SEMI, '\n']
+  108                   | expression . GE expression  [COMMA, EQUAL, NOTEQUAL, GT, GE, LT, LE, LRB, RRB, SEMI, '\n']
+  108                   | expression GE expression .  [COMMA, EQUAL, NOTEQUAL, GT, GE, LT, LE, LRB, RRB, SEMI, '\n']
   109                   | expression . LT expression
   110                   | expression . LE expression
   111                   | expression . LSHIFT expression
@@ -6453,8 +6456,8 @@ state 144
   106                   | expression . RSHIFT_ASSIGN expression
   107                   | expression . GT expression
   108                   | expression . GE expression
-  109                   | expression . LT expression  [COMMA, EQUAL, NOTEQUAL, GT, GE, LT, LE, RRB, LSB, RSB, SEMI, '\n']
-  109                   | expression LT expression .  [COMMA, EQUAL, NOTEQUAL, GT, GE, LT, LE, RRB, LSB, RSB, SEMI, '\n']
+  109                   | expression . LT expression  [COMMA, EQUAL, NOTEQUAL, GT, GE, LT, LE, LRB, RRB, SEMI, '\n']
+  109                   | expression LT expression .  [COMMA, EQUAL, NOTEQUAL, GT, GE, LT, LE, LRB, RRB, SEMI, '\n']
   110                   | expression . LE expression
   111                   | expression . LSHIFT expression
   112                   | expression . RSHIFT expression
@@ -6550,8 +6553,8 @@ state 145
   107                   | expression . GT expression
   108                   | expression . GE expression
   109                   | expression . LT expression
-  110                   | expression . LE expression  [COMMA, EQUAL, NOTEQUAL, GT, GE, LT, LE, RRB, LSB, RSB, SEMI, '\n']
-  110                   | expression LE expression .  [COMMA, EQUAL, NOTEQUAL, GT, GE, LT, LE, RRB, LSB, RSB, SEMI, '\n']
+  110                   | expression . LE expression  [COMMA, EQUAL, NOTEQUAL, GT, GE, LT, LE, LRB, RRB, SEMI, '\n']
+  110                   | expression LE expression .  [COMMA, EQUAL, NOTEQUAL, GT, GE, LT, LE, LRB, RRB, SEMI, '\n']
   111                   | expression . LSHIFT expression
   112                   | expression . RSHIFT expression
   113                   | expression . DOT IDENT typename_group
@@ -6628,8 +6631,8 @@ state 146
    89                   | expression . BIT_OR expression
    90                   | expression . EQUAL expression
    91                   | expression . NOTEQUAL expression
-   92                   | expression . BIT_AND expression  [COMMA, EQUAL, NOTEQUAL, GT, GE, LT, LE, BIT_AND, LOGIC_AND, LOGIC_OR, RRB, LSB, RSB, SEMI, '\n']
-   92                   | expression BIT_AND expression .  [COMMA, EQUAL, NOTEQUAL, GT, GE, LT, LE, BIT_AND, LOGIC_AND, LOGIC_OR, RRB, LSB, RSB, SEMI, '\n']
+   92                   | expression . BIT_AND expression  [COMMA, EQUAL, NOTEQUAL, GT, GE, LT, LE, BIT_AND, LOGIC_AND, LOGIC_OR, LRB, RRB, SEMI, '\n']
+   92                   | expression BIT_AND expression .  [COMMA, EQUAL, NOTEQUAL, GT, GE, LT, LE, BIT_AND, LOGIC_AND, LOGIC_OR, LRB, RRB, SEMI, '\n']
    93                   | expression . EXC_OR expression
    94                   | expression . LOGIC_OR expression
    95                   | expression . LOGIC_AND expression
@@ -6724,8 +6727,8 @@ state 147
    92                   | expression . BIT_AND expression
    93                   | expression . EXC_OR expression
    94                   | expression . LOGIC_OR expression
-   95                   | expression . LOGIC_AND expression  [COMMA, EQUAL, NOTEQUAL, GT, GE, LT, LE, LOGIC_AND, RRB, LSB, RSB, SEMI, '\n']
-   95                   | expression LOGIC_AND expression .  [COMMA, EQUAL, NOTEQUAL, GT, GE, LT, LE, LOGIC_AND, RRB, LSB, RSB, SEMI, '\n']
+   95                   | expression . LOGIC_AND expression  [COMMA, EQUAL, NOTEQUAL, GT, GE, LT, LE, LOGIC_AND, LRB, RRB, SEMI, '\n']
+   95                   | expression LOGIC_AND expression .  [COMMA, EQUAL, NOTEQUAL, GT, GE, LT, LE, LOGIC_AND, LRB, RRB, SEMI, '\n']
    96                   | expression . ASSIGN expression
    97                   | expression . ADD_ASSIGN expression
    98                   | expression . SUB_ASSIGN expression
@@ -6813,8 +6816,8 @@ state 148
    86                   | expression . MUL expression
    87                   | expression . DIV expression
    88                   | expression . MOD expression
-   89                   | expression . BIT_OR expression  [COMMA, EQUAL, NOTEQUAL, GT, GE, LT, LE, BIT_AND, LOGIC_AND, BIT_OR, LOGIC_OR, RRB, LSB, RSB, SEMI, '\n']
-   89                   | expression BIT_OR expression .  [COMMA, EQUAL, NOTEQUAL, GT, GE, LT, LE, BIT_AND, LOGIC_AND, BIT_OR, LOGIC_OR, RRB, LSB, RSB, SEMI, '\n']
+   89                   | expression . BIT_OR expression  [COMMA, EQUAL, NOTEQUAL, GT, GE, LT, LE, BIT_AND, LOGIC_AND, BIT_OR, LOGIC_OR, LRB, RRB, SEMI, '\n']
+   89                   | expression BIT_OR expression .  [COMMA, EQUAL, NOTEQUAL, GT, GE, LT, LE, BIT_AND, LOGIC_AND, BIT_OR, LOGIC_OR, LRB, RRB, SEMI, '\n']
    90                   | expression . EQUAL expression
    91                   | expression . NOTEQUAL expression
    92                   | expression . BIT_AND expression
@@ -6910,8 +6913,8 @@ state 149
    91                   | expression . NOTEQUAL expression
    92                   | expression . BIT_AND expression
    93                   | expression . EXC_OR expression
-   94                   | expression . LOGIC_OR expression  [COMMA, EQUAL, NOTEQUAL, GT, GE, LT, LE, LOGIC_AND, LOGIC_OR, RRB, LSB, RSB, SEMI, '\n']
-   94                   | expression LOGIC_OR expression .  [COMMA, EQUAL, NOTEQUAL, GT, GE, LT, LE, LOGIC_AND, LOGIC_OR, RRB, LSB, RSB, SEMI, '\n']
+   94                   | expression . LOGIC_OR expression  [COMMA, EQUAL, NOTEQUAL, GT, GE, LT, LE, LOGIC_AND, LOGIC_OR, LRB, RRB, SEMI, '\n']
+   94                   | expression LOGIC_OR expression .  [COMMA, EQUAL, NOTEQUAL, GT, GE, LT, LE, LOGIC_AND, LOGIC_OR, LRB, RRB, SEMI, '\n']
    95                   | expression . LOGIC_AND expression
    96                   | expression . ASSIGN expression
    97                   | expression . ADD_ASSIGN expression
@@ -7006,8 +7009,8 @@ state 150
    93                   | expression . EXC_OR expression
    94                   | expression . LOGIC_OR expression
    95                   | expression . LOGIC_AND expression
-   96                   | expression . ASSIGN expression  [DOT, COMMA, ADD, SUB, MUL, DIV, MOD, LSHIFT, RSHIFT, EQUAL, NOTEQUAL, GT, GE, LT, LE, BIT_AND, LOGIC_AND, BIT_OR, LOGIC_OR, EXC_OR, RRB, LSB, RSB, SEMI, AS, '\n']
-   96                   | expression ASSIGN expression .  [DOT, COMMA, ADD, SUB, MUL, DIV, MOD, LSHIFT, RSHIFT, EQUAL, NOTEQUAL, GT, GE, LT, LE, BIT_AND, LOGIC_AND, BIT_OR, LOGIC_OR, EXC_OR, RRB, LSB, RSB, SEMI, AS, '\n']
+   96                   | expression . ASSIGN expression  [DOT, COMMA, ADD, SUB, MUL, DIV, MOD, LSHIFT, RSHIFT, EQUAL, NOTEQUAL, GT, GE, LT, LE, BIT_AND, LOGIC_AND, BIT_OR, LOGIC_OR, EXC_OR, LRB, RRB, SEMI, AS, '\n']
+   96                   | expression ASSIGN expression .  [DOT, COMMA, ADD, SUB, MUL, DIV, MOD, LSHIFT, RSHIFT, EQUAL, NOTEQUAL, GT, GE, LT, LE, BIT_AND, LOGIC_AND, BIT_OR, LOGIC_OR, EXC_OR, LRB, RRB, SEMI, AS, '\n']
    97                   | expression . ADD_ASSIGN expression
    98                   | expression . SUB_ASSIGN expression
    99                   | expression . MUL_ASSIGN expression
@@ -7089,8 +7092,8 @@ state 151
    94                   | expression . LOGIC_OR expression
    95                   | expression . LOGIC_AND expression
    96                   | expression . ASSIGN expression
-   97                   | expression . ADD_ASSIGN expression  [DOT, COMMA, ADD, SUB, MUL, DIV, MOD, LSHIFT, RSHIFT, EQUAL, NOTEQUAL, GT, GE, LT, LE, BIT_AND, LOGIC_AND, BIT_OR, LOGIC_OR, EXC_OR, RRB, LSB, RSB, SEMI, AS, '\n']
-   97                   | expression ADD_ASSIGN expression .  [DOT, COMMA, ADD, SUB, MUL, DIV, MOD, LSHIFT, RSHIFT, EQUAL, NOTEQUAL, GT, GE, LT, LE, BIT_AND, LOGIC_AND, BIT_OR, LOGIC_OR, EXC_OR, RRB, LSB, RSB, SEMI, AS, '\n']
+   97                   | expression . ADD_ASSIGN expression  [DOT, COMMA, ADD, SUB, MUL, DIV, MOD, LSHIFT, RSHIFT, EQUAL, NOTEQUAL, GT, GE, LT, LE, BIT_AND, LOGIC_AND, BIT_OR, LOGIC_OR, EXC_OR, LRB, RRB, SEMI, AS, '\n']
+   97                   | expression ADD_ASSIGN expression .  [DOT, COMMA, ADD, SUB, MUL, DIV, MOD, LSHIFT, RSHIFT, EQUAL, NOTEQUAL, GT, GE, LT, LE, BIT_AND, LOGIC_AND, BIT_OR, LOGIC_OR, EXC_OR, LRB, RRB, SEMI, AS, '\n']
    98                   | expression . SUB_ASSIGN expression
    99                   | expression . MUL_ASSIGN expression
   100                   | expression . DIV_ASSIGN expression
@@ -7172,8 +7175,8 @@ state 152
    95                   | expression . LOGIC_AND expression
    96                   | expression . ASSIGN expression
    97                   | expression . ADD_ASSIGN expression
-   98                   | expression . SUB_ASSIGN expression  [DOT, COMMA, ADD, SUB, MUL, DIV, MOD, LSHIFT, RSHIFT, EQUAL, NOTEQUAL, GT, GE, LT, LE, BIT_AND, LOGIC_AND, BIT_OR, LOGIC_OR, EXC_OR, RRB, LSB, RSB, SEMI, AS, '\n']
-   98                   | expression SUB_ASSIGN expression .  [DOT, COMMA, ADD, SUB, MUL, DIV, MOD, LSHIFT, RSHIFT, EQUAL, NOTEQUAL, GT, GE, LT, LE, BIT_AND, LOGIC_AND, BIT_OR, LOGIC_OR, EXC_OR, RRB, LSB, RSB, SEMI, AS, '\n']
+   98                   | expression . SUB_ASSIGN expression  [DOT, COMMA, ADD, SUB, MUL, DIV, MOD, LSHIFT, RSHIFT, EQUAL, NOTEQUAL, GT, GE, LT, LE, BIT_AND, LOGIC_AND, BIT_OR, LOGIC_OR, EXC_OR, LRB, RRB, SEMI, AS, '\n']
+   98                   | expression SUB_ASSIGN expression .  [DOT, COMMA, ADD, SUB, MUL, DIV, MOD, LSHIFT, RSHIFT, EQUAL, NOTEQUAL, GT, GE, LT, LE, BIT_AND, LOGIC_AND, BIT_OR, LOGIC_OR, EXC_OR, LRB, RRB, SEMI, AS, '\n']
    99                   | expression . MUL_ASSIGN expression
   100                   | expression . DIV_ASSIGN expression
   101                   | expression . MOD_ASSIGN expression
@@ -7255,8 +7258,8 @@ state 153
    96                   | expression . ASSIGN expression
    97                   | expression . ADD_ASSIGN expression
    98                   | expression . SUB_ASSIGN expression
-   99                   | expression . MUL_ASSIGN expression  [DOT, COMMA, ADD, SUB, MUL, DIV, MOD, LSHIFT, RSHIFT, EQUAL, NOTEQUAL, GT, GE, LT, LE, BIT_AND, LOGIC_AND, BIT_OR, LOGIC_OR, EXC_OR, RRB, LSB, RSB, SEMI, AS, '\n']
-   99                   | expression MUL_ASSIGN expression .  [DOT, COMMA, ADD, SUB, MUL, DIV, MOD, LSHIFT, RSHIFT, EQUAL, NOTEQUAL, GT, GE, LT, LE, BIT_AND, LOGIC_AND, BIT_OR, LOGIC_OR, EXC_OR, RRB, LSB, RSB, SEMI, AS, '\n']
+   99                   | expression . MUL_ASSIGN expression  [DOT, COMMA, ADD, SUB, MUL, DIV, MOD, LSHIFT, RSHIFT, EQUAL, NOTEQUAL, GT, GE, LT, LE, BIT_AND, LOGIC_AND, BIT_OR, LOGIC_OR, EXC_OR, LRB, RRB, SEMI, AS, '\n']
+   99                   | expression MUL_ASSIGN expression .  [DOT, COMMA, ADD, SUB, MUL, DIV, MOD, LSHIFT, RSHIFT, EQUAL, NOTEQUAL, GT, GE, LT, LE, BIT_AND, LOGIC_AND, BIT_OR, LOGIC_OR, EXC_OR, LRB, RRB, SEMI, AS, '\n']
   100                   | expression . DIV_ASSIGN expression
   101                   | expression . MOD_ASSIGN expression
   102                   | expression . AND_ASSIGN expression
@@ -7338,8 +7341,8 @@ state 154
    97                   | expression . ADD_ASSIGN expression
    98                   | expression . SUB_ASSIGN expression
    99                   | expression . MUL_ASSIGN expression
-  100                   | expression . DIV_ASSIGN expression  [DOT, COMMA, ADD, SUB, MUL, DIV, MOD, LSHIFT, RSHIFT, EQUAL, NOTEQUAL, GT, GE, LT, LE, BIT_AND, LOGIC_AND, BIT_OR, LOGIC_OR, EXC_OR, RRB, LSB, RSB, SEMI, AS, '\n']
-  100                   | expression DIV_ASSIGN expression .  [DOT, COMMA, ADD, SUB, MUL, DIV, MOD, LSHIFT, RSHIFT, EQUAL, NOTEQUAL, GT, GE, LT, LE, BIT_AND, LOGIC_AND, BIT_OR, LOGIC_OR, EXC_OR, RRB, LSB, RSB, SEMI, AS, '\n']
+  100                   | expression . DIV_ASSIGN expression  [DOT, COMMA, ADD, SUB, MUL, DIV, MOD, LSHIFT, RSHIFT, EQUAL, NOTEQUAL, GT, GE, LT, LE, BIT_AND, LOGIC_AND, BIT_OR, LOGIC_OR, EXC_OR, LRB, RRB, SEMI, AS, '\n']
+  100                   | expression DIV_ASSIGN expression .  [DOT, COMMA, ADD, SUB, MUL, DIV, MOD, LSHIFT, RSHIFT, EQUAL, NOTEQUAL, GT, GE, LT, LE, BIT_AND, LOGIC_AND, BIT_OR, LOGIC_OR, EXC_OR, LRB, RRB, SEMI, AS, '\n']
   101                   | expression . MOD_ASSIGN expression
   102                   | expression . AND_ASSIGN expression
   103                   | expression . OR_ASSIGN expression
@@ -7421,8 +7424,8 @@ state 155
    98                   | expression . SUB_ASSIGN expression
    99                   | expression . MUL_ASSIGN expression
   100                   | expression . DIV_ASSIGN expression
-  101                   | expression . MOD_ASSIGN expression  [DOT, COMMA, ADD, SUB, MUL, DIV, MOD, LSHIFT, RSHIFT, EQUAL, NOTEQUAL, GT, GE, LT, LE, BIT_AND, LOGIC_AND, BIT_OR, LOGIC_OR, EXC_OR, RRB, LSB, RSB, SEMI, AS, '\n']
-  101                   | expression MOD_ASSIGN expression .  [DOT, COMMA, ADD, SUB, MUL, DIV, MOD, LSHIFT, RSHIFT, EQUAL, NOTEQUAL, GT, GE, LT, LE, BIT_AND, LOGIC_AND, BIT_OR, LOGIC_OR, EXC_OR, RRB, LSB, RSB, SEMI, AS, '\n']
+  101                   | expression . MOD_ASSIGN expression  [DOT, COMMA, ADD, SUB, MUL, DIV, MOD, LSHIFT, RSHIFT, EQUAL, NOTEQUAL, GT, GE, LT, LE, BIT_AND, LOGIC_AND, BIT_OR, LOGIC_OR, EXC_OR, LRB, RRB, SEMI, AS, '\n']
+  101                   | expression MOD_ASSIGN expression .  [DOT, COMMA, ADD, SUB, MUL, DIV, MOD, LSHIFT, RSHIFT, EQUAL, NOTEQUAL, GT, GE, LT, LE, BIT_AND, LOGIC_AND, BIT_OR, LOGIC_OR, EXC_OR, LRB, RRB, SEMI, AS, '\n']
   102                   | expression . AND_ASSIGN expression
   103                   | expression . OR_ASSIGN expression
   104                   | expression . EXC_OR_ASSIGN expression
@@ -7504,8 +7507,8 @@ state 156
    99                   | expression . MUL_ASSIGN expression
   100                   | expression . DIV_ASSIGN expression
   101                   | expression . MOD_ASSIGN expression
-  102                   | expression . AND_ASSIGN expression  [DOT, COMMA, ADD, SUB, MUL, DIV, MOD, LSHIFT, RSHIFT, EQUAL, NOTEQUAL, GT, GE, LT, LE, BIT_AND, LOGIC_AND, BIT_OR, LOGIC_OR, EXC_OR, RRB, LSB, RSB, SEMI, AS, '\n']
-  102                   | expression AND_ASSIGN expression .  [DOT, COMMA, ADD, SUB, MUL, DIV, MOD, LSHIFT, RSHIFT, EQUAL, NOTEQUAL, GT, GE, LT, LE, BIT_AND, LOGIC_AND, BIT_OR, LOGIC_OR, EXC_OR, RRB, LSB, RSB, SEMI, AS, '\n']
+  102                   | expression . AND_ASSIGN expression  [DOT, COMMA, ADD, SUB, MUL, DIV, MOD, LSHIFT, RSHIFT, EQUAL, NOTEQUAL, GT, GE, LT, LE, BIT_AND, LOGIC_AND, BIT_OR, LOGIC_OR, EXC_OR, LRB, RRB, SEMI, AS, '\n']
+  102                   | expression AND_ASSIGN expression .  [DOT, COMMA, ADD, SUB, MUL, DIV, MOD, LSHIFT, RSHIFT, EQUAL, NOTEQUAL, GT, GE, LT, LE, BIT_AND, LOGIC_AND, BIT_OR, LOGIC_OR, EXC_OR, LRB, RRB, SEMI, AS, '\n']
   103                   | expression . OR_ASSIGN expression
   104                   | expression . EXC_OR_ASSIGN expression
   105                   | expression . LSHIFT_ASSIGN expression
@@ -7587,8 +7590,8 @@ state 157
   100                   | expression . DIV_ASSIGN expression
   101                   | expression . MOD_ASSIGN expression
   102                   | expression . AND_ASSIGN expression
-  103                   | expression . OR_ASSIGN expression  [DOT, COMMA, ADD, SUB, MUL, DIV, MOD, LSHIFT, RSHIFT, EQUAL, NOTEQUAL, GT, GE, LT, LE, BIT_AND, LOGIC_AND, BIT_OR, LOGIC_OR, EXC_OR, RRB, LSB, RSB, SEMI, AS, '\n']
-  103                   | expression OR_ASSIGN expression .  [DOT, COMMA, ADD, SUB, MUL, DIV, MOD, LSHIFT, RSHIFT, EQUAL, NOTEQUAL, GT, GE, LT, LE, BIT_AND, LOGIC_AND, BIT_OR, LOGIC_OR, EXC_OR, RRB, LSB, RSB, SEMI, AS, '\n']
+  103                   | expression . OR_ASSIGN expression  [DOT, COMMA, ADD, SUB, MUL, DIV, MOD, LSHIFT, RSHIFT, EQUAL, NOTEQUAL, GT, GE, LT, LE, BIT_AND, LOGIC_AND, BIT_OR, LOGIC_OR, EXC_OR, LRB, RRB, SEMI, AS, '\n']
+  103                   | expression OR_ASSIGN expression .  [DOT, COMMA, ADD, SUB, MUL, DIV, MOD, LSHIFT, RSHIFT, EQUAL, NOTEQUAL, GT, GE, LT, LE, BIT_AND, LOGIC_AND, BIT_OR, LOGIC_OR, EXC_OR, LRB, RRB, SEMI, AS, '\n']
   104                   | expression . EXC_OR_ASSIGN expression
   105                   | expression . LSHIFT_ASSIGN expression
   106                   | expression . RSHIFT_ASSIGN expression
@@ -7671,8 +7674,8 @@ state 158
   102                   | expression . AND_ASSIGN expression
   103                   | expression . OR_ASSIGN expression
   104                   | expression . EXC_OR_ASSIGN expression
-  105                   | expression . LSHIFT_ASSIGN expression  [DOT, COMMA, ADD, SUB, MUL, DIV, MOD, LSHIFT, RSHIFT, EQUAL, NOTEQUAL, GT, GE, LT, LE, BIT_AND, LOGIC_AND, BIT_OR, LOGIC_OR, EXC_OR, RRB, LSB, RSB, SEMI, AS, '\n']
-  105                   | expression LSHIFT_ASSIGN expression .  [DOT, COMMA, ADD, SUB, MUL, DIV, MOD, LSHIFT, RSHIFT, EQUAL, NOTEQUAL, GT, GE, LT, LE, BIT_AND, LOGIC_AND, BIT_OR, LOGIC_OR, EXC_OR, RRB, LSB, RSB, SEMI, AS, '\n']
+  105                   | expression . LSHIFT_ASSIGN expression  [DOT, COMMA, ADD, SUB, MUL, DIV, MOD, LSHIFT, RSHIFT, EQUAL, NOTEQUAL, GT, GE, LT, LE, BIT_AND, LOGIC_AND, BIT_OR, LOGIC_OR, EXC_OR, LRB, RRB, SEMI, AS, '\n']
+  105                   | expression LSHIFT_ASSIGN expression .  [DOT, COMMA, ADD, SUB, MUL, DIV, MOD, LSHIFT, RSHIFT, EQUAL, NOTEQUAL, GT, GE, LT, LE, BIT_AND, LOGIC_AND, BIT_OR, LOGIC_OR, EXC_OR, LRB, RRB, SEMI, AS, '\n']
   106                   | expression . RSHIFT_ASSIGN expression
   107                   | expression . GT expression
   108                   | expression . GE expression
@@ -7754,8 +7757,8 @@ state 159
   103                   | expression . OR_ASSIGN expression
   104                   | expression . EXC_OR_ASSIGN expression
   105                   | expression . LSHIFT_ASSIGN expression
-  106                   | expression . RSHIFT_ASSIGN expression  [DOT, COMMA, ADD, SUB, MUL, DIV, MOD, LSHIFT, RSHIFT, EQUAL, NOTEQUAL, GT, GE, LT, LE, BIT_AND, LOGIC_AND, BIT_OR, LOGIC_OR, EXC_OR, RRB, LSB, RSB, SEMI, AS, '\n']
-  106                   | expression RSHIFT_ASSIGN expression .  [DOT, COMMA, ADD, SUB, MUL, DIV, MOD, LSHIFT, RSHIFT, EQUAL, NOTEQUAL, GT, GE, LT, LE, BIT_AND, LOGIC_AND, BIT_OR, LOGIC_OR, EXC_OR, RRB, LSB, RSB, SEMI, AS, '\n']
+  106                   | expression . RSHIFT_ASSIGN expression  [DOT, COMMA, ADD, SUB, MUL, DIV, MOD, LSHIFT, RSHIFT, EQUAL, NOTEQUAL, GT, GE, LT, LE, BIT_AND, LOGIC_AND, BIT_OR, LOGIC_OR, EXC_OR, LRB, RRB, SEMI, AS, '\n']
+  106                   | expression RSHIFT_ASSIGN expression .  [DOT, COMMA, ADD, SUB, MUL, DIV, MOD, LSHIFT, RSHIFT, EQUAL, NOTEQUAL, GT, GE, LT, LE, BIT_AND, LOGIC_AND, BIT_OR, LOGIC_OR, EXC_OR, LRB, RRB, SEMI, AS, '\n']
   107                   | expression . GT expression
   108                   | expression . GE expression
   109                   | expression . LT expression
@@ -7834,8 +7837,8 @@ state 160
   101                   | expression . MOD_ASSIGN expression
   102                   | expression . AND_ASSIGN expression
   103                   | expression . OR_ASSIGN expression
-  104                   | expression . EXC_OR_ASSIGN expression  [DOT, COMMA, ADD, SUB, MUL, DIV, MOD, LSHIFT, RSHIFT, EQUAL, NOTEQUAL, GT, GE, LT, LE, BIT_AND, LOGIC_AND, BIT_OR, LOGIC_OR, EXC_OR, RRB, LSB, RSB, SEMI, AS, '\n']
-  104                   | expression EXC_OR_ASSIGN expression .  [DOT, COMMA, ADD, SUB, MUL, DIV, MOD, LSHIFT, RSHIFT, EQUAL, NOTEQUAL, GT, GE, LT, LE, BIT_AND, LOGIC_AND, BIT_OR, LOGIC_OR, EXC_OR, RRB, LSB, RSB, SEMI, AS, '\n']
+  104                   | expression . EXC_OR_ASSIGN expression  [DOT, COMMA, ADD, SUB, MUL, DIV, MOD, LSHIFT, RSHIFT, EQUAL, NOTEQUAL, GT, GE, LT, LE, BIT_AND, LOGIC_AND, BIT_OR, LOGIC_OR, EXC_OR, LRB, RRB, SEMI, AS, '\n']
+  104                   | expression EXC_OR_ASSIGN expression .  [DOT, COMMA, ADD, SUB, MUL, DIV, MOD, LSHIFT, RSHIFT, EQUAL, NOTEQUAL, GT, GE, LT, LE, BIT_AND, LOGIC_AND, BIT_OR, LOGIC_OR, EXC_OR, LRB, RRB, SEMI, AS, '\n']
   105                   | expression . LSHIFT_ASSIGN expression
   106                   | expression . RSHIFT_ASSIGN expression
   107                   | expression . GT expression
@@ -7905,8 +7908,8 @@ state 161
    90                   | expression . EQUAL expression
    91                   | expression . NOTEQUAL expression
    92                   | expression . BIT_AND expression
-   93                   | expression . EXC_OR expression  [COMMA, EQUAL, NOTEQUAL, GT, GE, LT, LE, BIT_AND, LOGIC_AND, BIT_OR, LOGIC_OR, EXC_OR, RRB, LSB, RSB, SEMI, '\n']
-   93                   | expression EXC_OR expression .  [COMMA, EQUAL, NOTEQUAL, GT, GE, LT, LE, BIT_AND, LOGIC_AND, BIT_OR, LOGIC_OR, EXC_OR, RRB, LSB, RSB, SEMI, '\n']
+   93                   | expression . EXC_OR expression  [COMMA, EQUAL, NOTEQUAL, GT, GE, LT, LE, BIT_AND, LOGIC_AND, BIT_OR, LOGIC_OR, EXC_OR, LRB, RRB, SEMI, '\n']
+   93                   | expression EXC_OR expression .  [COMMA, EQUAL, NOTEQUAL, GT, GE, LT, LE, BIT_AND, LOGIC_AND, BIT_OR, LOGIC_OR, EXC_OR, LRB, RRB, SEMI, '\n']
    94                   | expression . LOGIC_OR expression
    95                   | expression . LOGIC_AND expression
    96                   | expression . ASSIGN expression
@@ -7994,7 +7997,7 @@ state 162
 
 state 163
 
-  118 expression_nobrace: expression_nobrace LSB RSB .
+  118 expression_nobrace: expression_nobrace LRB RRB .
 
     $default  reduce using rule 118 (expression_nobrace)
 
@@ -8002,15 +8005,15 @@ state 163
 state 164
 
    72 argument_list: argument_list . COMMA expression
-  117 expression_nobrace: expression_nobrace LSB argument_list . RSB
+  117 expression_nobrace: expression_nobrace LRB argument_list . RRB
 
     COMMA  shift, and go to state 191
-    RSB    shift, and go to state 192
+    RRB    shift, and go to state 192
 
 
 state 165
 
-   71 argument_list: expression .  [COMMA, RRB, RSB]
+   71 argument_list: expression .  [COMMA, RRB]
    84 expression_nobrace: expression . ADD expression
    85                   | expression . SUB expression
    86                   | expression . MUL expression
@@ -8155,7 +8158,7 @@ state 166
 state 167
 
    72 argument_list: argument_list . COMMA expression
-  119 expression_nobrace: NEW typename_T '(' argument_list . RRB
+  119 expression_nobrace: NEW typename_T LRB argument_list . RRB
 
     COMMA  shift, and go to state 191
     RRB    shift, and go to state 194
@@ -8494,9 +8497,9 @@ state 191
   114                   | . expression AS typename_T
   115                   | . CHILDA expression
   116                   | . NOT expression
-  117                   | . expression_nobrace LSB argument_list RSB
-  118                   | . expression_nobrace LSB RSB
-  119                   | . NEW typename_T '(' argument_list RRB
+  117                   | . expression_nobrace LRB argument_list RRB
+  118                   | . expression_nobrace LRB RRB
+  119                   | . NEW typename_T LRB argument_list RRB
   120 primary: . INT
   121        | . DOUBLE
   122        | . CHAR_LITERAL
@@ -8528,7 +8531,7 @@ state 191
 
 state 192
 
-  117 expression_nobrace: expression_nobrace LSB argument_list RSB .
+  117 expression_nobrace: expression_nobrace LRB argument_list RRB .
 
     $default  reduce using rule 117 (expression_nobrace)
 
@@ -8542,7 +8545,7 @@ state 193
 
 state 194
 
-  119 expression_nobrace: NEW typename_T '(' argument_list RRB .
+  119 expression_nobrace: NEW typename_T LRB argument_list RRB .
 
     $default  reduce using rule 119 (expression_nobrace)
 
@@ -8715,7 +8718,7 @@ state 212
 
 state 213
 
-   72 argument_list: argument_list COMMA expression .  [COMMA, RRB, RSB]
+   72 argument_list: argument_list COMMA expression .  [COMMA, RRB]
    84 expression_nobrace: expression . ADD expression
    85                   | expression . SUB expression
    86                   | expression . MUL expression
@@ -9204,9 +9207,9 @@ state 250
   114                   | . expression AS typename_T
   115                   | . CHILDA expression
   116                   | . NOT expression
-  117                   | . expression_nobrace LSB argument_list RSB
-  118                   | . expression_nobrace LSB RSB
-  119                   | . NEW typename_T '(' argument_list RRB
+  117                   | . expression_nobrace LRB argument_list RRB
+  118                   | . expression_nobrace LRB RRB
+  119                   | . NEW typename_T LRB argument_list RRB
   120 primary: . INT
   121        | . DOUBLE
   122        | . CHAR_LITERAL
@@ -10050,9 +10053,9 @@ state 320
   114                   | . expression AS typename_T
   115                   | . CHILDA expression
   116                   | . NOT expression
-  117                   | . expression_nobrace LSB argument_list RSB
-  118                   | . expression_nobrace LSB RSB
-  119                   | . NEW typename_T '(' argument_list RRB
+  117                   | . expression_nobrace LRB argument_list RRB
+  118                   | . expression_nobrace LRB RRB
+  119                   | . NEW typename_T LRB argument_list RRB
   120 primary: . INT
   121        | . DOUBLE
   122        | . CHAR_LITERAL
