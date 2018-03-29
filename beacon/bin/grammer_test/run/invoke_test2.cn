@@ -1,0 +1,11 @@
+namespace beacon {
+	class Test {
+		public:
+		def invokeTest() -> Void {
+			aa.invokeA<Int>[0];
+			aa.invokeArgsB<Int>[1, 100, 120];
+			callC<Int>[];
+			callArgsD<Int>["aaa"];
+		}
+	}
+}

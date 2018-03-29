@@ -1,0 +1,7 @@
+namespace beacon {
+	namespace lang {
+		class Foo<T, T2> {
+
+		}
+	}
+}

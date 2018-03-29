@@ -1,9 +1,9 @@
 expression
-	: LRB expression RRB
-	{
-		$$ = $2;
-	}
-	| expression_nobrace
+;;	: LRB expression RRB
+;;	{
+;;		$$ = $2;
+;;	}
+	:  expression_nobrace
 	;
 $$SET __SELF expression
 expression_nobrace
@@ -134,6 +134,7 @@ expression_nobrace
 	}
 	| __SELF DOT IDENT typename_group
 	{
+		fprintf(stderr, $3);
 		$$ = ast_new_blank();
 	}
 	| __SELF AS typename_T
@@ -148,35 +149,18 @@ expression_nobrace
 	{
 		$$ = ast_new_unary(ast_not, $2);
 	}
-$$-
-	| INC expression_nobrace %prec PRE_INC
+	| expression_nobrace LSB argument_list RSB
 	{
 		$$ = ast_new_blank();
 	}
-	| DEC expression_nobrace %prec PRE_DEC
+	| expression_nobrace LSB RSB
 	{
 		$$ = ast_new_blank();
 	}
-	| expression_nobrace INC %prec POST_INC
+	| NEW typename_T '(' argument_list RRB
 	{
 		$$ = ast_new_blank();
 	}
-	| expression_nobrace DEC %prec POST_DEC
-	{
-		$$ = ast_new_blank();
-	}
--$$
-	| expression_nobrace LRB RRB %prec FUNCCALL
-	{
-		$$ = ast_new_blank();
-	}
-	| expression_nobrace LRB argument_list RRB %prec FUNCCALL
-	{
-		$$ = ast_new_blank();
-	}
-	| fqcn_part
-	| NEW typename_T LRB RRB
-	| NEW typename_T LRB argument_list RRB
 	;
 $$REM __SELF
 primary
@@ -196,4 +180,5 @@ primary
 	{
 		$$ = ast_new_null();
 	}
+	| fqcn_part typename_group
 	;

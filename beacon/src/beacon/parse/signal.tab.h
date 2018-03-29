@@ -53,9 +53,9 @@
      IDENT = 262,
      DOT = 263,
      COMMA = 264,
-     COMMA_OPT = 265,
-     COLON = 266,
-     COLO_COLO = 267,
+     COLON = 265,
+     COLO_COLO = 266,
+     LINE = 267,
      ADD = 268,
      SUB = 269,
      MUL = 270,
@@ -129,14 +129,15 @@
      TRY = 338,
      CATCH = 339,
      THROW = 340,
-     POST_DEC = 341,
-     POST_INC = 342,
-     FUNCCALL = 343,
-     POSITIVE = 344,
-     NEGATIVE = 345,
-     PRE_DEC = 346,
-     PRE_INC = 347,
-     FORM_TYPE = 348
+     QUOTE = 341,
+     POST_DEC = 342,
+     POST_INC = 343,
+     FUNCCALL = 344,
+     POSITIVE = 345,
+     NEGATIVE = 346,
+     PRE_DEC = 347,
+     PRE_INC = 348,
+     FORM_TYPE = 349
    };
 #endif
 /* Tokens.  */
@@ -147,9 +148,9 @@
 #define IDENT 262
 #define DOT 263
 #define COMMA 264
-#define COMMA_OPT 265
-#define COLON 266
-#define COLO_COLO 267
+#define COLON 265
+#define COLO_COLO 266
+#define LINE 267
 #define ADD 268
 #define SUB 269
 #define MUL 270
@@ -223,14 +224,15 @@
 #define TRY 338
 #define CATCH 339
 #define THROW 340
-#define POST_DEC 341
-#define POST_INC 342
-#define FUNCCALL 343
-#define POSITIVE 344
-#define NEGATIVE 345
-#define PRE_DEC 346
-#define PRE_INC 347
-#define FORM_TYPE 348
+#define QUOTE 341
+#define POST_DEC 342
+#define POST_INC 343
+#define FUNCCALL 344
+#define POSITIVE 345
+#define NEGATIVE 346
+#define PRE_DEC 347
+#define PRE_INC 348
+#define FORM_TYPE 349
 
 
 
@@ -248,7 +250,7 @@ typedef union YYSTYPE
 	access_level access_level_value;
 }
 /* Line 1529 of yacc.c.  */
-#line 245 "signal.tab.h"
+#line 247 "signal.tab.h"
 	YYSTYPE;
 # define yystype YYSTYPE /* obsolescent; will be withdrawn */
 # define YYSTYPE_IS_DECLARED 1

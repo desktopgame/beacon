@@ -32,7 +32,7 @@
 %type <chain_type_value>	constructor_chain_type_T
 %type <access_level_value>	access_level_T
 %type <modifier_type_value> modifier_type_T;
-%token DOT COMMA COMMA_OPT COLON COLO_COLO
+%token DOT COMMA COLON COLO_COLO LINE
 		ADD SUB MUL DIV MOD NOT LSHIFT RSHIFT CHILDA
 		EQUAL NOTEQUAL
 		GT GE LT LE
@@ -108,9 +108,11 @@
 						catch_stmt
 						scope
 						scope_optional
+%left QUOTE
 %left EQUAL NOTEQUAL
 %left GT GE LT LE
 %left LOGIC_AND
+%left COMMA
 %left LOGIC_OR
 %left BIT_AND
 %left BIT_OR
@@ -119,10 +121,13 @@
 %left ADD SUB
 %left MUL DIV MOD
 %left DOT FUNCCALL POST_INC POST_DEC
+%nonassoc LSB
+%nonassoc '<'
 %right CHILDA NOT NEGATIVE POSITIVE NEW
 %right AS
 %right ASSIGN ADD_ASSIGN SUB_ASSIGN MUL_ASSIGN DIV_ASSIGN MOD_ASSIGN AND_ASSIGN OR_ASSIGN LSHIFT_ASSIGN RSHIFT_ASSIGN EXC_OR_ASSIGN PRE_INC PRE_DEC
 %token FORM_TYPE
+%start compilation_unit
 %%
 
 
@@ -488,7 +493,7 @@ typename_group
 	{
 		$$ = ast_new_blank();
 	}
-	| '<' typename_list '>'
+	| LT typename_list GT
 	{
 		$$ = $2;
 	}
@@ -526,11 +531,7 @@ fqcn_part
 
 
 expression
-	: LRB expression RRB
-	{
-		$$ = $2;
-	}
-	| expression_nobrace
+	:  expression_nobrace
 	;
 expression_nobrace
 	: primary
@@ -660,6 +661,7 @@ expression_nobrace
 	}
 	| expression DOT IDENT typename_group
 	{
+		fprintf(stderr, $3);
 		$$ = ast_new_blank();
 	}
 	| expression AS typename_T
@@ -674,17 +676,18 @@ expression_nobrace
 	{
 		$$ = ast_new_unary(ast_not, $2);
 	}
-	| expression_nobrace LRB RRB %prec FUNCCALL
+	| expression_nobrace LSB argument_list RSB
 	{
 		$$ = ast_new_blank();
 	}
-	| expression_nobrace LRB argument_list RRB %prec FUNCCALL
+	| expression_nobrace LSB RSB
 	{
 		$$ = ast_new_blank();
 	}
-	| fqcn_part
-	| NEW typename_T LRB RRB
-	| NEW typename_T LRB argument_list RRB
+	| NEW typename_T '(' argument_list RRB
+	{
+		$$ = ast_new_blank();
+	}
 	;
 primary
 	: INT
@@ -703,6 +706,7 @@ primary
 	{
 		$$ = ast_new_null();
 	}
+	| fqcn_part typename_group
 	;
 
 

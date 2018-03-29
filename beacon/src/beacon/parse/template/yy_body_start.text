@@ -573,7 +573,7 @@ typename_group
 	{
 		$$ = ast_new_blank();
 	}
-	| '<' typename_list '>'
+	| LT typename_list GT
 	{
 		$$ = $2;
 	}
