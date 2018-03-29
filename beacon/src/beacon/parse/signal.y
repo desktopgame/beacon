@@ -531,7 +531,11 @@ fqcn_part
 
 
 expression
-	:  expression_nobrace
+	: LRB expression RRB
+	{
+		$$ = $2;
+	}
+	|  expression_nobrace
 	;
 expression_nobrace
 	: primary

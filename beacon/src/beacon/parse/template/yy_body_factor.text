@@ -1,9 +1,9 @@
 expression
-;;	: LRB expression RRB
-;;	{
-;;		$$ = $2;
-;;	}
-	:  expression_nobrace
+	: LRB expression RRB
+	{
+		$$ = $2;
+	}
+	|  expression_nobrace
 	;
 $$SET __SELF expression
 expression_nobrace
