@@ -589,6 +589,17 @@ il_factor_call_op* class_loader_ilload_call_op(class_loader* self, ast* source) 
 	return ret;
 }
 
+il_factor_member_op* class_loader_ilload_member_op(class_loader* self, ast* source) {
+	assert(source->tag == ast_field_access);
+	ast* afact = ast_first(source);
+	ast* aname = ast_second(source);
+	ast* atype_args = ast_at(source, 2);
+	il_factor_member_op* ret = il_factor_member_op_new(aname->u.string_value);
+	ret->fact = class_loader_ilload_factor(self, afact);
+	class_loader_ilload_type_argument(self, atype_args, ret->type_args);
+	return ret;
+}
+
 void class_loader_ilload_generic(ast* fqcn, generic_cache* dest) {
 	//assert(fqcn->tag == ast_typename);
 	if(fqcn->tag == ast_fqcn_class_name) {
@@ -782,6 +793,8 @@ static il_factor* class_loader_ilload_factorImpl(class_loader* self, ast* source
 		return il_factor_wrap_dec(class_loader_ilload_dec(self, source));
 	} else if(source->tag == ast_op_call) {
 		return il_factor_wrap_call_op(class_loader_ilload_call_op(self, source));
+	} else if(source->tag == ast_field_access) {
+		return il_factor_wrap_member_op(class_loader_ilload_member_op(self, source));
 	}
 	return NULL;
 }

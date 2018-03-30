@@ -10,13 +10,14 @@
 struct enviroment;
 
 typedef struct il_factor_member_op {
-	fqcn_cache* fqcn;
+	il_factor* fact;
+	char* name;
 	vector* type_args;
 } il_factor_member_op;
 
 il_factor* il_factor_wrap_member_op(il_factor_member_op* self);
 
-il_factor_member_op* il_factor_member_op_new();
+il_factor_member_op* il_factor_member_op_new(const char* name);
 
 void il_factor_member_op_dump(il_factor_member_op* self, int depth);
 

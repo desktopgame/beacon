@@ -1,5 +1,6 @@
 #include "il_factor_member_op_impl.h"
 #include "../../util/mem.h"
+#include "../../util/text.h"
 #include "../../env/generic_cache.h"
 
 //proto
@@ -12,10 +13,11 @@ il_factor* il_factor_wrap_member_op(il_factor_member_op* self) {
 	return ret;
 }
 
-il_factor_member_op* il_factor_member_op_new() {
+il_factor_member_op* il_factor_member_op_new(const char* name) {
 	il_factor_member_op* ret = (il_factor_member_op*)MEM_MALLOC(sizeof(il_factor_member_op));
-	ret->fqcn = fqcn_cache_new();
+	ret->fact = NULL;
 	ret->type_args = vector_new();
+	ret->name = text_strdup(name);
 	return ret;
 }
 
@@ -36,8 +38,9 @@ generic_type* il_factor_member_op_eval(il_factor_member_op* self, struct envirom
 }
 
 void il_factor_member_op_delete(il_factor_member_op* self) {
-	fqcn_cache_delete(self->fqcn);
+	il_factor_delete(self->fact);
 	vector_delete(self->type_args, il_factor_member_op_typearg_delete);
+	MEM_FREE(self->name);
 	MEM_FREE(self);
 }
 

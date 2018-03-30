@@ -346,6 +346,14 @@ il_factor_dec* class_loader_ilload_dec(class_loader* self, ast* source);
 il_factor_call_op* class_loader_ilload_call_op(class_loader* self, ast* source);
 
 /**
+ * メンバアクセスを表す要素を作成します.
+ * @param self
+ * @param source
+ * @return
+ */
+il_factor_member_op* class_loader_ilload_member_op(class_loader* self, ast* source);
+
+/**
  * Hoge::Foo::Classのような修飾名を表すASTを解析して
  * 引数destに格納します.
  * @param fqcn
