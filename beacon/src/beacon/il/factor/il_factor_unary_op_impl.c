@@ -81,6 +81,11 @@ void il_factor_unary_op_delete(il_factor_unary_op * self) {
 	MEM_FREE(self);
 }
 
+il_factor_unary_op* il_factor_cast_unary_op(il_factor* fact) {
+	assert(fact->type == ilfactor_unary_op);
+	return fact->u.unary_;
+}
+
 static opcode u_operator_to_opi(u_operator_t c) {
 	assert(c == u_neg);
 	return op_ineg;

@@ -55,3 +55,8 @@ void il_factor_dec_delete(il_factor_dec * self) {
 	il_factor_delete(self->fact);
 	MEM_FREE(self);
 }
+
+il_factor_dec* il_factor_cast_dec(il_factor* fact) {
+	assert(fact->type == ilfactor_cast);
+	return fact->u.dec_;
+}

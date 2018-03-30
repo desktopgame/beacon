@@ -487,3 +487,8 @@ static void assign_generate_end(il_factor_binary_op * self, enviroment* env, il_
 	}
 	*/
 }
+
+il_factor_binary_op* il_factor_cast_binary_op(il_factor* fact) {
+	assert(fact->type == ilfactor_binary_op);
+	return fact->u.binary_;
+}

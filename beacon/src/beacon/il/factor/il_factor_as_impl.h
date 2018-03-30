@@ -4,6 +4,8 @@
 #include "../il_factor_interface.h"
 #include "../../env/generic_cache.h"
 
+#define IL_FACT2AS(factor) (il_factor_cast_as(factor))
+
 typedef struct il_factor_as {
 	il_factor* fact;
 	generic_cache* fqcn;
@@ -26,4 +28,6 @@ void il_factor_as_load(il_factor_as* self, struct enviroment* env, il_load_cache
 generic_type* il_factor_as_eval(il_factor_as* self, struct enviroment* env, il_load_cache* cache);
 
 void il_factor_as_delete(il_factor_as* self);
+
+il_factor_as* il_factor_cast_as(il_factor* fact);
 #endif // !SIGNAL_IL_IL_FACTOR_AS_H

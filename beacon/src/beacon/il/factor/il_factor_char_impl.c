@@ -42,3 +42,8 @@ generic_type* il_factor_char_eval(il_factor_char * self, enviroment * env, il_lo
 void il_factor_char_delete(il_factor_char * self) {
 	MEM_FREE(self);
 }
+
+il_factor_char* il_factor_cast_char(il_factor* fact) {
+	assert(fact->type == ilfactor_cquote);
+	return fact->u.char_;
+}

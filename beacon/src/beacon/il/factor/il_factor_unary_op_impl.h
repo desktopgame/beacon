@@ -3,6 +3,7 @@
 #define BEACON_IL_IL_FACTOR_UNARY_OP_H
 #include "../il_factor_interface.h"
 #include "../../env/generic_type.h"
+#define IL_FACT2U(fact) (il_factor_cast_unary_op(fact))
 //struct opcode_buf;
 /**
  * 単項演算子の種類を表す列挙型.
@@ -69,4 +70,6 @@ generic_type* il_factor_unary_op_eval(il_factor_unary_op* self, struct enviromen
  * @param self
  */
 void il_factor_unary_op_delete(il_factor_unary_op* self);
+
+il_factor_unary_op* il_factor_cast_unary_op(il_factor* fact);
 #endif // !SIGNAL_IL_IL_FACTOR_UNARY_OP_H

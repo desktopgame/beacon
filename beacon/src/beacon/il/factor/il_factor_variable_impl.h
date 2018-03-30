@@ -6,6 +6,7 @@
 #include "../../env/generic_type.h"
 #include "../../util/vector.h"
 #include <stdbool.h>
+#define IL_FACT2VAR(fact) (il_factor_cast_variable(fact))
 //struct opcode_buf;
 struct generic_type;
 struct field;
@@ -69,4 +70,6 @@ generic_type* il_factor_variable_eval(il_factor_variable* self, struct enviromen
  * 変数を開放します.
  */
 void il_factor_variable_delete(il_factor_variable* self);
+
+il_factor_variable* il_factor_cast_variable(il_factor* fact);
 #endif // !SIGNAL_IL_IL_FACTOR_VARIABLE_H

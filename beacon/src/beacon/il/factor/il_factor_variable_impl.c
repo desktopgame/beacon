@@ -107,3 +107,8 @@ static void il_factor_variable_check(il_factor_variable* self, enviroment* env, 
 	}
 	*/
 }
+
+il_factor_variable* il_factor_cast_variable(il_factor* fact) {
+	assert(fact->type == ilfactor_variable);
+	return fact->u.variable_;
+}

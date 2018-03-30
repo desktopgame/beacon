@@ -4,6 +4,8 @@
 #include <stdbool.h>
 #include "../il_factor_interface.h"
 
+#define IL_FACT2BOOL(fact) (il_factor_cast_bool(fact))
+
 struct enviroment;
 struct type;
 
@@ -22,4 +24,6 @@ void il_factor_bool_generate(il_factor_bool* self, struct enviroment* env, il_lo
 generic_type* il_factor_bool_eval(il_factor_bool* self, struct enviroment* env, il_load_cache* cache);
 
 void il_factor_bool_delete(il_factor_bool* self);
+
+il_factor_bool* il_factor_cast_bool(il_factor* fact);
 #endif // !SIGNAL_IL_IL_FACTOR_BOOL_H

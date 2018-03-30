@@ -42,3 +42,8 @@ generic_type* il_factor_double_eval(il_factor_double * self, enviroment * env, i
 void il_factor_double_delete(il_factor_double * self) {
 	MEM_FREE(self);
 }
+
+il_factor_double* il_factor_cast_double(il_factor* fact) {
+	assert(fact->type == ilfactor_double);
+	return fact->u.double_;
+}

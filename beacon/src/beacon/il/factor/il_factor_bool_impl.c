@@ -38,3 +38,8 @@ generic_type* il_factor_bool_eval(il_factor_bool * self, enviroment * env, il_lo
 void il_factor_bool_delete(il_factor_bool * self) {
 	MEM_FREE(self);
 }
+
+il_factor_bool* il_factor_cast_bool(il_factor* fact) {
+	assert(fact->type == ilfactor_bool);
+	return fact->u.bool_;
+}

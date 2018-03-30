@@ -5,6 +5,7 @@
 #include "il_ehandler.h"
 #include "il_load_cache.h"
 #include <stdint.h>
+#include <assert.h>
 #include "../env/generic_type.h"
 //#include "../vm/opcode.h"
 //#include "../vm/opcode_buf.h"
@@ -83,7 +84,7 @@ typedef struct il_factor {
 		struct il_factor_as* as_;
 		struct il_factor_inc* inc_;
 		struct il_factor_dec* dec_;
-		struct il_factor_call_op* op_call_;
+		struct il_factor_call_op* call_;
 	} u;
 } il_factor;
 

@@ -4,6 +4,7 @@
 #include "../../util/vector.h"
 #include "../../env/generic_cache.h"
 #include "../il_factor_interface.h"
+#define IL_FACT2NEW(fact) (il_factor_cast_new_instance(fact))
 struct enviroment;
 struct type;
 struct constructor;
@@ -69,4 +70,6 @@ generic_type* il_factor_new_instance_eval(il_factor_new_instance* self, struct e
  * @param self
  */
 void il_factor_new_instance_delete(il_factor_new_instance* self);
+
+il_factor_new_instance* il_factor_cast_new_instance(il_factor* fact);
 #endif // !SIGNAL_IL_IL_FACTOR_NEW_INSTANCE_H

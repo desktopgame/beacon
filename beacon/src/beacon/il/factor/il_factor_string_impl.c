@@ -43,3 +43,8 @@ void il_factor_string_delete(il_factor_string * self) {
 	MEM_FREE(self->value);
 	MEM_FREE(self);
 }
+
+il_factor_string* il_factor_cast_string(il_factor* fact) {
+	assert(fact->type == ilfactor_squote);
+	return fact->u.string_;
+}

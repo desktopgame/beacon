@@ -3,6 +3,8 @@
 #include "../../util/vector.h"
 #include "../il_factor_interface.h"
 
+#define IL_FACT2CALL(fact) (il_factor_cast_call_op(fact))
+
 struct enviroment;
 struct generic_type;
 
@@ -24,4 +26,6 @@ struct generic_type* il_factor_call_op_eval(il_factor_call_op* self, struct envi
 void il_factor_call_op_generate(il_factor_call_op* self, struct enviroment* env, il_load_cache* cache);
 
 void il_factor_call_op_delete(il_factor_call_op* self);
+
+il_factor_call_op* il_factor_cast_call_op(il_factor* fact);
 #endif

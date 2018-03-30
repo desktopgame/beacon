@@ -61,3 +61,8 @@ void il_factor_as_delete(il_factor_as * self) {
 	il_factor_delete(self->fact);
 	MEM_FREE(self);
 }
+
+il_factor_as* il_factor_cast_as(il_factor* fact) {
+	assert(fact->type == ilfactor_as);
+	return fact->u.as_;
+}

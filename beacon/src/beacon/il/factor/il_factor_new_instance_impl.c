@@ -89,6 +89,11 @@ void il_factor_new_instance_delete(il_factor_new_instance * self) {
 	MEM_FREE(self);
 }
 
+il_factor_new_instance* il_factor_cast_new_instance(il_factor* fact) {
+	assert(fact->type == ilfactor_new_instance);
+	return fact->u.new_instance_;
+}
+
 //private
 static void il_factor_new_instance_find(il_factor_new_instance * self, enviroment * env, il_load_cache* cache) {
 	//*

@@ -140,6 +140,12 @@ void il_factor_call_op_delete(il_factor_call_op* self) {
 	il_factor_delete(self->receiver);
 	MEM_FREE(self);
 }
+
+il_factor_call_op* il_factor_cast_call_op(il_factor* fact) {
+	assert(fact->type == ilfactor_call_op);
+	return fact->u.call_;
+}
+
 //private
 static void il_factor_call_op_argument_delete(vector_item item) {
 	il_argument* e = (il_argument*)item;

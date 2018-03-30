@@ -2,6 +2,8 @@
 #ifndef BEACON_IL_IL_FACTOR_BINARY_OP_H
 #define BEACON_IL_IL_FACTOR_BINARY_OP_H
 #include "../il_factor_interface.h"
+
+#define IL_FACT2BIN(fact) (il_factor_cast_binary_op(fact))
 /**
  * 二項演算子の種類を表す列挙型.
  */
@@ -91,4 +93,6 @@ generic_type* il_factor_binary_op_eval(il_factor_binary_op* self, struct envirom
  * @param self
  */
 void il_factor_binary_op_delete(il_factor_binary_op* self);
+
+il_factor_binary_op* il_factor_cast_binary_op(il_factor* fact);
 #endif // !SIGNAL_IL_IL_FACTOR_BINARY_OP_H
