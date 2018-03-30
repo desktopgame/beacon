@@ -20,15 +20,10 @@ typedef enum il_factor_type {
 	ilfactor_squote,
 	ilfactor_unary_op,
 	ilfactor_binary_op,
-	ilfactor_call,
-	ilfactor_invoke,
-	ilfactor_named_invoke,
 	ilfactor_variable,
 	ilfactor_this,
 	ilfactor_super,
 	ilfactor_new_instance,
-	ilfactor_field_access,
-	ilfactor_static_field_access,
 	ilfactor_cast,
 	ilfactor_bool,
 	ilfactor_null,
@@ -36,7 +31,6 @@ typedef enum il_factor_type {
 	ilfactor_inc,
 	ilfactor_dec,
 	ilfactor_op_call,
-	ilfactor_name_reference,
 } il_factor_type;
 
 //ファクターとして扱える要素自身が内側にファクターを含む(再帰)
@@ -52,17 +46,12 @@ struct il_factor_int;
 struct il_factor_double;
 struct il_factor_char;
 struct il_factor_string;
-struct il_factor_call;
-struct il_factor_invoke;
-struct il_factor_named_invoke;
 struct il_factor_variable;
 struct il_factor_unary_op;
 struct il_factor_binary_op;
 struct il_factor_this;
 struct il_factor_super;
 struct il_factor_new_instance;
-struct il_factor_field_access;
-struct il_factor_static_field_access;
 struct il_factor_cast;
 struct il_factor_bool;
 struct il_factor_null;
@@ -70,7 +59,6 @@ struct il_factor_as;
 struct il_factor_inc;
 struct il_factor_dec;
 struct il_factor_op_call;
-struct il_factor_name_reference;
 
 /**
  * 計算可能な要素.
@@ -83,17 +71,12 @@ typedef struct il_factor {
 		struct il_factor_double* double_;
 		struct il_factor_char* char_;
 		struct il_factor_string* string_;
-		struct il_factor_call* call_;
-		struct il_factor_invoke* invoke_;
-		struct il_factor_named_invoke* named_invoke_;
 		struct il_factor_variable* variable_;
 		struct il_factor_unary_op* unary_;
 		struct il_factor_binary_op* binary_;
 		struct il_factor_this* this_;
 		struct il_factor_super* super_;
 		struct il_factor_new_instance* new_instance_;
-		struct il_factor_field_access* field_access_;
-		struct il_factor_static_field_access* static_field_access;
 		struct il_factor_cast* cast_;
 		struct il_factor_bool* bool_;
 		struct il_factor_null* null_;
@@ -101,7 +84,6 @@ typedef struct il_factor {
 		struct il_factor_inc* inc_;
 		struct il_factor_dec* dec_;
 		struct il_factor_op_call* op_call_;
-		struct il_factor_name_reference* name_reference_;
 	} u;
 } il_factor;
 

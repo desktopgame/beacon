@@ -13,17 +13,9 @@ struct field;
  * 変数を表す要素.
  */
 typedef struct il_factor_variable {
-	char* name;
+	fqcn_cache* fqcn;
+	vector* type_args;
 	int index;
-	union {
-		struct generic_type* gtype;
-		struct field* f;
-	} u;
-	//構文規則のために、フィールドアクセスが
-	//実型引数をもつ。
-	//foo<Int>()
-	vector* type_argument_list;
-	bool fieldAccess;
 } il_factor_variable;
 
 /**

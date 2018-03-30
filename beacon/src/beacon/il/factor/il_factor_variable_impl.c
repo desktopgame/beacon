@@ -24,22 +24,21 @@ il_factor * il_factor_wrap_variable(il_factor_variable * self) {
 il_factor_variable * il_factor_variable_new(const char * name) {
 	assert(strlen(name) > 0);
 	il_factor_variable* ret = (il_factor_variable*)MEM_MALLOC(sizeof(il_factor_variable));
-	ret->name = text_strdup(name);
-	ret->index = -1;
-	ret->type_argument_list = vector_new();
-	//ret->type = NULL;
-	ret->fieldAccess = false;
+	ret->fqcn = fqcn_cache_new();
+	ret->type_args = vector_new();
 	return ret;
 }
 
 void il_factor_variable_dump(il_factor_variable * self, int depth) {
 	text_putindent(depth);
-	text_printf("variable %s", self->name);
+	text_printf("variable ");
+	fqcn_cache_print(self->fqcn);
 	text_putline();
 }
 
 void il_factor_variable_generate(il_factor_variable * self, enviroment* env, il_load_cache* cache) {
 	il_factor_variable_check(self, env, cache);
+	/*
 	if (!self->fieldAccess) {
 		opcode_buf_add(env->buf, op_load);
 		opcode_buf_add(env->buf, self->index);
@@ -54,6 +53,7 @@ void il_factor_variable_generate(il_factor_variable * self, enviroment* env, il_
 			opcode_buf_add(env->buf, self->index);
 		}
 	}
+	*/
 }
 
 void il_factor_variable_load(il_factor_variable * self, enviroment * env, il_load_cache* cache, il_ehandler * eh) {
@@ -62,6 +62,7 @@ void il_factor_variable_load(il_factor_variable * self, enviroment * env, il_loa
 
 generic_type* il_factor_variable_eval(il_factor_variable * self, enviroment * env, il_load_cache* cache) {
 	il_factor_variable_check(self, env, cache);
+	/*
 	if (!self->fieldAccess) {
 		if (!strcmp(self->name, "st") &&
 			self->u.gtype->tag != generic_type_tag_class &&
@@ -72,15 +73,17 @@ generic_type* il_factor_variable_eval(il_factor_variable * self, enviroment * en
 	} else {
 		return self->u.f->gtype;
 	}
+	*/
 }
 
 void il_factor_variable_delete(il_factor_variable * self) {
-	MEM_FREE(self->name);
+	//MEM_FREE(self->name);
 	MEM_FREE(self);
 }
 
 //private
 static void il_factor_variable_check(il_factor_variable* self, enviroment* env, il_load_cache* cache) {
+	/*
 	if (self->index != -1) {
 		return;
 	}
@@ -102,4 +105,5 @@ static void il_factor_variable_check(il_factor_variable* self, enviroment* env, 
 		self->fieldAccess = true;
 		self->index = temp;
 	}
+	*/
 }

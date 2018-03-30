@@ -28,6 +28,7 @@ il_factor_op_call* il_factor_op_call_new() {
 }
 
 void il_factor_op_call_load(il_factor_op_call* self, struct enviroment* env, il_load_cache* cache, il_ehandler* eh) {
+	/*
 	assert(self->receiver != NULL);
 	//もし receiver が il_factor_name_reference
 	//なら、ここでより具体的な型に決定する
@@ -122,6 +123,7 @@ void il_factor_op_call_load(il_factor_op_call* self, struct enviroment* env, il_
 		il_factor_op_call_delete(self);
 	//C#のデリゲート呼び出しは今の所実装する予定なし。
 	} else assert(false);
+	*/
 }
 
 generic_type* il_factor_op_call_eval(il_factor_op_call* self, struct enviroment* env, il_load_cache* cache) {

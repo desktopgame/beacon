@@ -4,8 +4,6 @@
 #include <assert.h>
 #include "../../util/text.h"
 #include "il_factor_variable_impl.h"
-#include "il_factor_field_access_impl.h"
-#include "il_factor_static_field_access_impl.h"
 #include "../../env/type_interface.h"
 #include "../../env/field.h"
 #include "../../env/namespace.h"
@@ -382,6 +380,7 @@ static void assign_dump_operator(il_factor_binary_op* self) {
 }
 
 static void assign_generate_simple(il_factor_binary_op * self, enviroment* env, il_load_cache* cache) {
+	/*
 	if (self->left->type == ilfactor_static_field_access) {
 		//NOTE:List<T>が定義されるとき、
 		//static T foo;
@@ -430,17 +429,21 @@ static void assign_generate_simple(il_factor_binary_op * self, enviroment* env, 
 		opcode_buf_add(env->buf, op_store);
 		opcode_buf_add(env->buf, v->index);
 	}
+	*/
 }
 
 static void assign_generate_start(il_factor_binary_op * self, enviroment* env, il_load_cache* cache) {
+	/*
 	if (self->left->type == ilfactor_field_access) {
 		il_factor_field_access* field_access = self->left->u.field_access_;
 		il_factor_eval(self->left, env, cache);
 		il_factor_generate(field_access->fact, env, cache);
 	}
+	*/
 }
 
 static void assign_generate_end(il_factor_binary_op * self, enviroment* env, il_load_cache* cache) {
+	/*
 	if (self->left->type == ilfactor_static_field_access) {
 		il_factor_static_field_access* sfa = self->left->u.static_field_access;
 		//代入先の静的フィールドの型でルックアップ
@@ -482,4 +485,5 @@ static void assign_generate_end(il_factor_binary_op * self, enviroment* env, il_
 		opcode_buf_add(env->buf, op_store);
 		opcode_buf_add(env->buf, v->index);
 	}
+	*/
 }

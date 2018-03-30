@@ -717,6 +717,14 @@ primary
 	{
 		$$ = ast_new_variable($1, $2);
 	}
+	| THIS
+	{
+		$$ = ast_new_this();
+	}
+	| SUPER
+	{
+		$$ = ast_new_super();
+	}
 	;
 
 

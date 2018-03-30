@@ -61,9 +61,9 @@ ast* ast_new_name_reference(ast* atypename) {
 }
 
 ast * ast_new_variable(ast* a, ast* atype_args) {
-	assert(a->tag == ast_fqcn_class_name);
+	//assert(a->tag == ast_fqcn_class_name);
 	ast* ret = ast_new(ast_variable);
-	ret->u.string_value = text_strdup(a->u.string_value);
+	//ret->u.string_value = text_strdup(a->u.string_value);
 	ast_push(ret, a);
 	ast_push(ret, atype_args);
 	return ret;

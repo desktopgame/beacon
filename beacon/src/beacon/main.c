@@ -50,13 +50,21 @@ int run_script(int argc, char* argv[]) {
 
 int main(int argc, char* argv[]) {
 	mem_set_trace(true);
+	bool test = false;
+	int ret = 1;
 
-	script_context_set_bootstrap(false);
-	script_context_open();
-	script_context_set_bootstrap(true);
+	if(test) {
+		script_context_set_bootstrap(false);
+		script_context_open();
+		script_context_set_bootstrap(true);
 
-	int ret = run_script(argc, argv);
-	script_context_close();
+		ret = run_script(argc, argv);
+		script_context_close();
+	} else {
+		script_context_open();
+		script_context_close();
+		ret = 0;
+	}
 	mem_dump();
 	mem_destroy();
 	return ret;
