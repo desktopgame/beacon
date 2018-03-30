@@ -343,7 +343,7 @@ il_factor_dec* class_loader_ilload_dec(class_loader* self, ast* source);
  * @param source
  * @return
  */
-il_factor_op_call* class_loader_ilload_op_call(class_loader* self, ast* source);
+il_factor_call_op* class_loader_ilload_call_op(class_loader* self, ast* source);
 
 /**
  * Hoge::Foo::Classのような修飾名を表すASTを解析して

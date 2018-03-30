@@ -115,8 +115,8 @@ void il_factor_generate(il_factor * self, enviroment* env, il_load_cache* cache)
 		case ilfactor_dec:
 			il_factor_dec_generate(self->u.dec_, env, cache);
 			break;
-		case ilfactor_op_call:
-			il_factor_op_call_generate(self->u.op_call_, env, cache);
+		case ilfactor_call_op:
+			il_factor_call_op_generate(self->u.op_call_, env, cache);
 			break;
 		default:
 			ERROR("ファクターを生成出来ませんでした");
@@ -232,8 +232,8 @@ generic_type* il_factor_eval(il_factor * self, enviroment * env, il_load_cache* 
 		case ilfactor_dec:
 			ret = il_factor_dec_eval(self->u.dec_, env, cache);
 			break;
-		case ilfactor_op_call:
-			ret = il_factor_op_call_eval(self->u.op_call_, env, cache);
+		case ilfactor_call_op:
+			ret = il_factor_call_op_eval(self->u.op_call_, env, cache);
 		default:
 			ERROR("ファクターの型を取得出来ませんでした");
 			break;

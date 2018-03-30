@@ -576,9 +576,9 @@ il_factor_dec * class_loader_ilload_dec(class_loader * self, ast * source) {
 	return ret;
 }
 
-il_factor_op_call* class_loader_ilload_op_call(class_loader* self, ast* source) {
+il_factor_call_op* class_loader_ilload_call_op(class_loader* self, ast* source) {
 	assert(source->tag == ast_op_call);
-	il_factor_op_call* ret = il_factor_op_call_new();
+	il_factor_call_op* ret = il_factor_call_op_new();
 	ast* afact = ast_first(source);
 	ast* aargs = ast_second(source);
 	//ast* aargs = ast_at(source, 2);
@@ -781,7 +781,7 @@ static il_factor* class_loader_ilload_factorImpl(class_loader* self, ast* source
 			   source->tag == ast_post_dec) {
 		return il_factor_wrap_dec(class_loader_ilload_dec(self, source));
 	} else if(source->tag == ast_op_call) {
-		return il_factor_wrap_op_call(class_loader_ilload_op_call(self, source));
+		return il_factor_wrap_call_op(class_loader_ilload_call_op(self, source));
 	}
 	return NULL;
 }
