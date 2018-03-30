@@ -59,6 +59,9 @@ void il_factor_dump(il_factor * self, int depth) {
 		case ilfactor_dec:
 			il_factor_dec_dump(self->u.dec_, depth);
 			break;
+		case ilfactor_member_op:
+			il_factor_member_op_dump(self->u.member_, depth);
+			break;
 		default:
 			ERROR("ファクターをダンプ出来ませんでした");
 			break;
@@ -116,7 +119,10 @@ void il_factor_generate(il_factor * self, enviroment* env, il_load_cache* cache)
 			il_factor_dec_generate(self->u.dec_, env, cache);
 			break;
 		case ilfactor_call_op:
-			il_factor_call_op_generate(self->u.op_call_, env, cache);
+			il_factor_call_op_generate(self->u.call_, env, cache);
+			break;
+		case ilfactor_member_op:
+			il_factor_member_op_generate(self->u.member_, env, cache);
 			break;
 		default:
 			ERROR("ファクターを生成出来ませんでした");
@@ -174,6 +180,9 @@ void il_factor_load(il_factor * self, enviroment * env, il_load_cache* cache, il
 			break;
 		case ilfactor_dec:
 			il_factor_dec_load(self->u.dec_, env, cache, eh);
+			break;
+		case ilfactor_member_op:
+			il_factor_member_op_load(self->u.member_, env, cache, eh);
 			break;
 		default:
 			ERROR("ファクターの型を取得出来ませんでした");
@@ -233,7 +242,11 @@ generic_type* il_factor_eval(il_factor * self, enviroment * env, il_load_cache* 
 			ret = il_factor_dec_eval(self->u.dec_, env, cache);
 			break;
 		case ilfactor_call_op:
-			ret = il_factor_call_op_eval(self->u.op_call_, env, cache);
+			ret = il_factor_call_op_eval(self->u.call_, env, cache);
+			break;
+		case ilfactor_member_op:
+			ret = il_factor_member_op_eval(self->u.call_, env, cache);
+			break;
 		default:
 			ERROR("ファクターの型を取得出来ませんでした");
 			break;
@@ -293,6 +306,9 @@ void il_factor_delete(il_factor * self) {
 			break;
 		case ilfactor_dec:
 			il_factor_dec_delete(self->u.dec_);
+			break;
+		case ilfactor_member_op:
+			il_factor_member_op_delete(self->u.member_);
 			break;
 		default:
 			ERROR("ファクターを開放出来ませんでした");

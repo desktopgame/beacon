@@ -15,7 +15,7 @@ static void il_factor_call_op_type_argument_delete(vector_item item);
 il_factor* il_factor_wrap_call_op(il_factor_call_op* self) {
 	il_factor* ret = (il_factor*)MEM_MALLOC(sizeof(il_factor));
 	ret->type = ilfactor_call_op;
-	ret->u.op_call_ = self;
+	ret->u.call_ = self;
 	self->parent = ret;
 	return ret;
 }
