@@ -5,6 +5,7 @@
 #include "../il_type_argument.h"
 #include "../il_factor_impl.h"
 #include "../../env/namespace.h"
+#include "../../vm/enviroment.h"
 #include <string.h>
 #include <assert.h>
 
@@ -27,7 +28,17 @@ il_factor_call_op* il_factor_call_op_new() {
 	return ret;
 }
 
-void il_factor_call_op_load(il_factor_call_op* self, struct enviroment* env, il_load_cache* cache, il_ehandler* eh) {
+void il_factor_call_op_dump(il_factor_call_op* self, int depth) {
+	text_putindent(depth);
+	text_printf("call");
+	il_factor_dump(self->receiver, depth + 1);
+	for(int i=0; i<self->argument_list->length; i++) {
+		il_argument* e = (il_argument*)vector_at(self->argument_list, i);
+		il_argument_dump(e, depth + 1);
+	}
+}
+
+void il_factor_call_op_load(il_factor_call_op* self, enviroment* env, il_load_cache* cache, il_ehandler* eh) {
 	/*
 	assert(self->receiver != NULL);
 	//もし receiver が il_factor_name_reference
@@ -126,14 +137,16 @@ void il_factor_call_op_load(il_factor_call_op* self, struct enviroment* env, il_
 	*/
 }
 
-generic_type* il_factor_call_op_eval(il_factor_call_op* self, struct enviroment* env, il_load_cache* cache) {
+generic_type* il_factor_call_op_eval(il_factor_call_op* self, enviroment* env, il_load_cache* cache) {
 	il_factor_call_op_load(self, env, cache, NULL);
-	return il_factor_eval(self->parent, env, cache);
+	//return il_factor_eval(self->parent, env, cache);
+	return NULL;
 }
 
-void il_factor_call_op_generate(il_factor_call_op* self, struct enviroment* env, il_load_cache* cache) {
+void il_factor_call_op_generate(il_factor_call_op* self, enviroment* env, il_load_cache* cache) {
 	il_factor_call_op_load(self, env, cache, NULL);
-	il_factor_generate(self->parent, env, cache);
+	//後で書き直す
+	//il_factor_generate(self->parent, env, cache);
 }
 
 void il_factor_call_op_delete(il_factor_call_op* self) {

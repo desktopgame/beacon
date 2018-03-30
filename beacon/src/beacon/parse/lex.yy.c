@@ -1328,12 +1328,12 @@ YY_RULE_SETUP
 case 60:
 YY_RULE_SETUP
 #line 218 "signal.l"
-{ return (THIS); }
+{ return (THIS_TOK); }
 	YY_BREAK
 case 61:
 YY_RULE_SETUP
 #line 219 "signal.l"
-{ return (SUPER); }
+{ return (SUPER_TOK); }
 	YY_BREAK
 case 62:
 YY_RULE_SETUP

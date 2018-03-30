@@ -98,8 +98,8 @@
      SEMI = 307,
      IMPORT = 308,
      VAR = 309,
-     THIS = 310,
-     SUPER = 311,
+     THIS_TOK = 310,
+     SUPER_TOK = 311,
      TRUE_TOK = 312,
      FALSE_TOK = 313,
      NULL_TOK = 314,
@@ -193,8 +193,8 @@
 #define SEMI 307
 #define IMPORT 308
 #define VAR 309
-#define THIS 310
-#define SUPER 311
+#define THIS_TOK 310
+#define SUPER_TOK 311
 #define TRUE_TOK 312
 #define FALSE_TOK 313
 #define NULL_TOK 314

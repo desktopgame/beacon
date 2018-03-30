@@ -21,8 +21,7 @@ il_factor * il_factor_wrap_variable(il_factor_variable * self) {
 	return ret;
 }
 
-il_factor_variable * il_factor_variable_new(const char * name) {
-	assert(strlen(name) > 0);
+il_factor_variable * il_factor_variable_new() {
 	il_factor_variable* ret = (il_factor_variable*)MEM_MALLOC(sizeof(il_factor_variable));
 	ret->fqcn = fqcn_cache_new();
 	ret->type_args = vector_new();

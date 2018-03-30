@@ -340,6 +340,7 @@ static void class_loader_sgload_subImpl(class_loader * self, char * fullPath) {
 	char* text = io_read_text(fullPath);
 	parser* p = parser_parse_from_source_swap(text, fullPath);
 	assert(p->root != NULL);
+	assert(!p->fail);
 	//パースに失敗
 	if (p->fail) {
 		//class_loader_errors(cll, "parse failed --- %s", p->source_name);

@@ -46,20 +46,22 @@
 		LCB RCB LRB RRB LSB RSB
 		SEMI IMPORT VAR
 
-		THIS SUPER TRUE_TOK FALSE_TOK NULL_TOK AS
+		THIS_TOK SUPER_TOK TRUE_TOK FALSE_TOK NULL_TOK AS
 
 		INTERFACE CLASS ENUM PUBLIC PRIVATE PROTECTED STATIC NATIVE NEW
 		IN OUT
 		CTOR DEF ARROW NAMESPACE RETURN
 		IF ELIF ELSE WHILE BREAK CONTINUE TRY CATCH THROW
 %type <ast_value> compilation_unit 
-					program 
+					init_decl
+					body_decl
 					namespace_decl
 					namespace_body
 					namespace_member_decl_list
 					namespace_member_decl
 					namespace_member_decl_optional
 					namespace_path
+					import_list
 					import 
 					parameterized_typename
 					type_parameter_group
@@ -109,6 +111,7 @@
 						scope
 						scope_optional
 %left QUOTE
+%left DOT FUNCCALL POST_INC POST_DEC
 %left EQUAL NOTEQUAL
 %left GT GE LT LE
 %left LOGIC_AND
@@ -120,7 +123,6 @@
 %left LSHIFT RSHIFT
 %left ADD SUB
 %left MUL DIV MOD
-%left DOT FUNCCALL POST_INC POST_DEC
 %nonassoc LSB
 %nonassoc '<'
 %right CHILDA NOT NEGATIVE POSITIVE NEW
@@ -132,19 +134,23 @@
 
 
 compilation_unit
-	: program
+	: init_decl body_decl
+	| compilation_unit body_decl
 	| error '\n'
 	{
-		$$ = ast_new_blank();
+		yyclearin;
 	}
 	;
 
-program
-	: stmt_list
+init_decl
+	: /* empty */
+	| import_list
 	{
 		ast_compile_entry($1);
 	}
-	| import
+	;
+body_decl
+	: stmt
 	{
 		ast_compile_entry($1);
 	}
@@ -157,7 +163,6 @@ program
 		ast_compile_entry($1);
 	}
 	;
-
 namespace_decl
 	: NAMESPACE namespace_path namespace_body
 	{
@@ -209,6 +214,14 @@ namespace_path
 	| namespace_path DOT IDENT
 	{
 		$$ = ast_new_namespace_path_list($1, $3);
+	}
+	;
+
+import_list
+	: import
+	| import_list import
+	{
+		$$ = ast_new_import_decl_list($2, $1);
 	}
 	;
 
@@ -370,11 +383,11 @@ constructor_chain
 	;
 
 constructor_chain_type_T
-	: SUPER
+	: SUPER_TOK
 	{
 		$$ = chain_type_super;
 	}
-	| THIS
+	| THIS_TOK
 	{
 		$$ = chain_type_this;
 	}
@@ -513,7 +526,7 @@ typename_list
 typename_T
 	: fqcn_part typename_group
 	{
-		$$ = ast_new_blank();
+		$$ = ast_new_typename($1, $2);
 	}
 	;
 
@@ -535,11 +548,11 @@ expression
 	{
 		$$ = $2;
 	}
+	| primary
 	|  expression_nobrace
 	;
 expression_nobrace
-	: primary
-	| ADD expression %prec POSITIVE
+	: ADD expression %prec POSITIVE
 	{
 		$$ = ast_new_unary(ast_pos, $2);
 	}
@@ -679,11 +692,11 @@ expression_nobrace
 	{
 		$$ = ast_new_unary(ast_not, $2);
 	}
-	| expression_nobrace LRB argument_list RRB
+	| expression_nobrace LRB argument_list RRB %prec FUNCCALL
 	{
 		$$ = ast_new_op_call($1, $3);
 	}
-	| expression_nobrace LRB RRB
+	| expression_nobrace LRB RRB %prec FUNCCALL
 	{
 		$$ = ast_new_op_call($1, ast_new_blank());
 	}
@@ -694,6 +707,10 @@ expression_nobrace
 	| NEW typename_T LRB RRB
 	{
 		$$ = ast_new_new_instance($2, ast_new_blank());
+	}
+	| fqcn_part
+	{
+		$$ = ast_new_variable($1, ast_new_blank());
 	}
 	;
 primary
@@ -713,15 +730,11 @@ primary
 	{
 		$$ = ast_new_null();
 	}
-	| fqcn_part typename_group
-	{
-		$$ = ast_new_variable($1, $2);
-	}
-	| THIS
+	| THIS_TOK
 	{
 		$$ = ast_new_this();
 	}
-	| SUPER
+	| SUPER_TOK
 	{
 		$$ = ast_new_super();
 	}
@@ -805,9 +818,9 @@ elif
 	}
 	;
 while_stmt
-	: WHILE LRB expression RRB scope_optional
+	: WHILE expression scope_optional
 	{
-		$$ = ast_new_while($3, $5);
+		$$ = ast_new_while($2, $3);
 	}
 	;
 break_stmt
@@ -878,7 +891,6 @@ scope_optional
 	;
 stmt_term
 	: SEMI
-	| '\n'
 	;
 %%
 

@@ -7,17 +7,17 @@ namespace signal.lang {
 
 		public:
 		ctor new(Object source) {
-			this.source = source
+			this.source = source;
 		}
 
 		def hasNext() -> Bool {
-			return source != null
+			return source != null;
 		}
 
 		def next() -> Void {
-			var ret = source
-			this.source = null
-			return ret
+			var ret = source;
+			this.source = null;
+			return ret;
 		}
 	}
 }

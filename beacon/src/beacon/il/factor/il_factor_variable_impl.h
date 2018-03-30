@@ -28,10 +28,9 @@ il_factor* il_factor_wrap_variable(il_factor_variable* self);
 
 /**
  * 変数を作成します.
- * @param name
  * @return
  */
-il_factor_variable* il_factor_variable_new(const char* name);
+il_factor_variable* il_factor_variable_new();
 
 /**
  * 変数を出力します.

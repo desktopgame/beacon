@@ -2,6 +2,7 @@
 #include "../../util/mem.h"
 #include "../../util/text.h"
 #include "../../env/generic_cache.h"
+#include "../../vm/enviroment.h"
 
 //proto
 static void il_factor_member_op_typearg_delete(vector_item item);
@@ -22,18 +23,24 @@ il_factor_member_op* il_factor_member_op_new(const char* name) {
 }
 
 void il_factor_member_op_dump(il_factor_member_op* self, int depth) {
+	text_putindent(depth);
+	text_printf("member %s", self->name);
+	il_factor_dump(self->fact, depth + 1);
+	for(int i=0; i<self->type_args->length; i++) {
+		generic_cache* e = (generic_cache*)vector_at(self->type_args, i);
+		generic_cache_dump(e, depth + 1);
+	}
+}
+
+void il_factor_member_op_load(il_factor_member_op* self, enviroment* env, il_load_cache* cache, il_ehandler* eh) {
 
 }
 
-void il_factor_member_op_load(il_factor_member_op* self, struct enviroment* env, il_load_cache* cache, il_ehandler* eh) {
+void il_factor_member_op_generate(il_factor_member_op* self, enviroment* env, il_load_cache* cache) {
 
 }
 
-void il_factor_member_op_generate(il_factor_member_op* self, struct enviroment* env, il_load_cache* cache) {
-
-}
-
-generic_type* il_factor_member_op_eval(il_factor_member_op* self, struct enviroment* env, il_load_cache* cache) {
+generic_type* il_factor_member_op_eval(il_factor_member_op* self, enviroment* env, il_load_cache* cache) {
 	return NULL;
 }
 

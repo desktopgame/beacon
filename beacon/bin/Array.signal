@@ -34,7 +34,7 @@ namespace signal.lang {
 			while(ptr < offs + len) {
 				var a = ptr-offs;
 				range.set(a, get(ptr));
-				ptr++;
+				ptr = ptr + 1;
 			}
 			return range;
 		}
@@ -49,9 +49,9 @@ namespace signal.lang {
 		}
 
 		def iterate() -> Iterator<T> {
-			return new ArrayIterator<T>(this)
+			return new ArrayIterator<T>(this);
 		}
-		
+
 		private:
 		def checkRange(Int index) -> Void {
 			if(index < 0 || index >= length) {

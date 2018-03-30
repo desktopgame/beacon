@@ -9,18 +9,18 @@ namespace signal.lang {
 
 		public:
 		ctor new(Array<T> source) {
-			this.source = source
-			this.offset = 0
+			this.source = source;
+			this.offset = 0;
 		}
 
 		def hasNext() -> Bool {
-			return offset < source.length()
+			return offset < source.length();
 		}
 
 		def next() -> T {
-			var ret = source.get(offset)
-			this.offset++
-			return ret
+			var ret = source.get(offset);
+			this.offset = this.offset + 1;
+			return ret;
 		}
 	}
 }

@@ -59,6 +59,9 @@ void il_factor_dump(il_factor * self, int depth) {
 		case ilfactor_dec:
 			il_factor_dec_dump(self->u.dec_, depth);
 			break;
+		case ilfactor_call_op:
+			il_factor_call_op_dump(self->u.call_, depth);
+			break;
 		case ilfactor_member_op:
 			il_factor_member_op_dump(self->u.member_, depth);
 			break;
@@ -180,6 +183,9 @@ void il_factor_load(il_factor * self, enviroment * env, il_load_cache* cache, il
 			break;
 		case ilfactor_dec:
 			il_factor_dec_load(self->u.dec_, env, cache, eh);
+			break;
+		case ilfactor_call_op:
+			il_factor_call_op_load(self->u.call_, env, cache, eh);
 			break;
 		case ilfactor_member_op:
 			il_factor_member_op_load(self->u.member_, env, cache, eh);
@@ -306,6 +312,9 @@ void il_factor_delete(il_factor * self) {
 			break;
 		case ilfactor_dec:
 			il_factor_dec_delete(self->u.dec_);
+			break;
+		case ilfactor_call_op:
+			il_factor_call_op_delete(self->u.call_);
 			break;
 		case ilfactor_member_op:
 			il_factor_member_op_delete(self->u.member_);

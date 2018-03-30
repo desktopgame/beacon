@@ -5,25 +5,26 @@ $$SET top_level program
 ;;top_levelのリスト{{{
 ;;
 root
-	: top_level
+	: init_decl body_decl
+	| root body_decl
 	| error '\n'
 	{
-		$$ = ast_new_blank();
+		yyclearin;
 	}
 	;
 ;;
 ;;}}}
 ;;
 
-;;
-;;トップレベルに定義できる要素{{{
-;;
-top_level
-	: stmt_list
+init_decl
+	: /* empty */
+	| import_list
 	{
 		ast_compile_entry($1);
 	}
-	| import
+	;
+body_decl
+	: stmt
 	{
 		ast_compile_entry($1);
 	}
@@ -36,10 +37,6 @@ top_level
 		ast_compile_entry($1);
 	}
 	;
-;;
-;;}}}
-;;
-
 ;;
 ;;名前空間の定義{{{
 ;;
@@ -129,6 +126,14 @@ namespace_path
 ;;
 ;;}}}
 ;;
+
+import_list
+	: import
+	| import_list import
+	{
+		$$ = ast_new_import_decl_list($2, $1);
+	}
+	;
 
 ;;
 ;;import signal.lang のようなインポートの宣言{{{
@@ -388,11 +393,11 @@ constructor_chain
 ;;コンストラクタの連鎖の種類{{{
 ;;
 constructor_chain_type_T
-	: SUPER
+	: SUPER_TOK
 	{
 		$$ = chain_type_super;
 	}
-	| THIS
+	| THIS_TOK
 	{
 		$$ = chain_type_this;
 	}
@@ -605,7 +610,7 @@ typename_list
 typename_T
 	: fqcn_part typename_group
 	{
-		$$ = ast_new_blank();
+		$$ = ast_new_typename($1, $2);
 	}
 	;
 ;;

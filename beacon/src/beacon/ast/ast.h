@@ -92,6 +92,7 @@ typedef enum ast_tag {
 	ast_namespace_path_list,
 
 	ast_import_decl,
+	ast_import_decl_list,
 	ast_import_path,
 
 	ast_class_decl_unit,
@@ -256,6 +257,14 @@ ast* ast_new_import_path(ast* str);
  * @return
  */
 ast* ast_new_import_decl(ast* import_path);
+
+/**
+ * インポートの一覧を表す要素を作成します.
+ * @param aimport
+ * @param aimport_list
+ * @return
+ */
+ast* ast_new_import_decl_list(ast* aimport, ast* aimport_list);
 
 /**
  * スコープ({ ... }) を表す要素を作成します.

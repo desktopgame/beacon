@@ -44,8 +44,8 @@ void class_loader_ilload_impl(class_loader* self, ast* source_code) {
 	for (int i = 0; i < source_code->child_count; i++) {
 		ast* child = ast_at(self->source_code, i);
 		//import a
-		if (child->tag == ast_import_decl) {
-			class_loader_ilload_import(self, child);
+		if (child->tag == ast_import_decl || child->tag == ast_import_decl_list) {
+			class_loader_ilload_import_list(self, child);
 		//namespace Foo { ... }
 		} else if (child->tag == ast_namespace_decl) {
 			class_loader_ilload_namespace(self, self->il_code->namespace_list, child);
@@ -75,6 +75,17 @@ void class_loader_ilload_function(class_loader * self, ast * source) {
 	class_loader_ilload_body(self, ilfunc->statement_list, afunc_body);
 	class_loader_ilload_generic(ast_first(aret_name), ilfunc->return_fqcn);
 	vector_push(self->il_code->function_list, ilfunc);
+}
+
+void class_loader_ilload_import_list(class_loader* self, ast* source) {
+	if(source->tag == ast_import_decl_list) {
+		for(int i=0; i<source->child_count; i++) {
+			class_loader_ilload_import_list(self, ast_at(source, i));
+		}
+	} else {
+		assert(source->tag == ast_import_decl);
+		class_loader_ilload_import(self, source);
+	}
 }
 
 void class_loader_ilload_import(class_loader* self, ast* import_decl) {
@@ -531,7 +542,7 @@ il_factor_variable* class_loader_ilload_variable(class_loader* self, ast* source
 	ast* afqcn = ast_first(source);
 	ast* atype_args = ast_second(source);
 
-	il_factor_variable* ilvar = il_factor_variable_new(source->u.string_value);
+	il_factor_variable* ilvar = il_factor_variable_new();
 	class_loader_ilload_fqcn(afqcn, ilvar->fqcn);
 	class_loader_ilload_type_argument(self, atype_args, ilvar->type_args);
 	return ilvar;

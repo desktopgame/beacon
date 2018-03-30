@@ -76,9 +76,9 @@ elif
 	}
 	;
 while_stmt
-	: WHILE LRB expression RRB scope_optional
+	: WHILE expression scope_optional
 	{
-		$$ = ast_new_while($3, $5);
+		$$ = ast_new_while($2, $3);
 	}
 	;
 break_stmt

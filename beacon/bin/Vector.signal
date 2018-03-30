@@ -7,34 +7,34 @@ namespace signal.lang {
 		Array proxy;
 		Int length;
 		Int capacity;
-	
+
 		public:
 		ctor new() {
-			this.length = 0
-			this.capacity = 16
-			this.proxy = new Array(this.capacity)
+			this.length = 0;
+			this.capacity = 16;
+			this.proxy = new Array(this.capacity);
 		}
-	
+
 		def push(Object o) -> Void {
 			if(this.length < this.capacity) {
-				this.proxy.set(this.length, o)
+				this.proxy.set(this.length, o);
 			} elif (this.length >= this.capacity) {
-				var newLen = this.length + (this.length / 2)
-				var newArr = new Array(newLen)
-				Array.copy(this.proxy, 0, newArr, 0, this.length)
-				this.proxy = newArr
-				this.proxy.set(this.length, o)
+				var newLen = this.length + (this.length / 2);
+				var newArr = new Array(newLen);
+				Array.copy(this.proxy, 0, newArr, 0, this.length);
+				this.proxy = newArr;
+				this.proxy.set(this.length, o);
 			}
-			this.length++
+			this.length = this.length + 1;
 		}
-	
+
 		def pop() -> Object {
 			if(this.length == 0) {
-				throw new Exception("not added any objects")
+				throw new Exception("not added any objects");
 			}
-			var ret = this.proxy.get(this.length - 1)
-			this.length--
-			return ret
+			var ret = this.proxy.get(this.length - 1);
+			this.length = this.length - 1;
+			return ret;
 		}
 
 		def set(Int index, Object a) -> Void {
@@ -48,13 +48,13 @@ namespace signal.lang {
 		}
 
 		def length() -> Int {
-			return this.length
+			return this.length;
 		}
 
 		private:
 		def checkRange(Int index) -> Void {
 			if(index < 0 || index >= this.length) {
-				throw new Exception("Out Of Range")
+				throw new Exception("Out Of Range");
 			}
 		}
 	}

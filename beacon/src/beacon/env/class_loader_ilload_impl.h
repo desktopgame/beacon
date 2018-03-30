@@ -22,6 +22,13 @@ void class_loader_ilload_impl(class_loader* self, ast* source_code);
 void class_loader_ilload_function(class_loader* self, ast* source);
 
 /**
+ * インポートの一覧を IL に変換します.
+ * @param self
+ * @param source
+ */
+void class_loader_ilload_import_list(class_loader* self, ast* source);
+
+/**
  * インポート宣言を IL に変換します.
  * @param self
  * @param import_decl

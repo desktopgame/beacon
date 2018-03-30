@@ -17,7 +17,6 @@ scope_optional
 	;
 stmt_term
 	: SEMI
-	| '\n'
 	;
 %%
 

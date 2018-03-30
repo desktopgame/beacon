@@ -21,7 +21,7 @@ namespace signal.lang {
 		}
 
 		def length() -> Int {
-			return this.charArray.length()
+			return this.charArray.length();
 		}
 		private:
 		native def nativeInit() -> Void;

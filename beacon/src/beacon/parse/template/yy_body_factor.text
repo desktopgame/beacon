@@ -3,12 +3,12 @@ expression
 	{
 		$$ = $2;
 	}
+	| primary
 	|  expression_nobrace
 	;
 $$SET __SELF expression
 expression_nobrace
-	: primary
-	| ADD __SELF %prec POSITIVE
+	: ADD __SELF %prec POSITIVE
 	{
 		$$ = ast_new_unary(ast_pos, $2);
 	}
@@ -148,11 +148,11 @@ expression_nobrace
 	{
 		$$ = ast_new_unary(ast_not, $2);
 	}
-	| expression_nobrace LRB argument_list RRB
+	| expression_nobrace LRB argument_list RRB %prec FUNCCALL
 	{
 		$$ = ast_new_op_call($1, $3);
 	}
-	| expression_nobrace LRB RRB
+	| expression_nobrace LRB RRB %prec FUNCCALL
 	{
 		$$ = ast_new_op_call($1, ast_new_blank());
 	}
@@ -163,6 +163,10 @@ expression_nobrace
 	| NEW typename_T LRB RRB
 	{
 		$$ = ast_new_new_instance($2, ast_new_blank());
+	}
+	| fqcn_part
+	{
+		$$ = ast_new_variable($1, ast_new_blank());
 	}
 	;
 $$REM __SELF
@@ -183,15 +187,11 @@ primary
 	{
 		$$ = ast_new_null();
 	}
-	| fqcn_part typename_group
-	{
-		$$ = ast_new_variable($1, $2);
-	}
-	| THIS
+	| THIS_TOK
 	{
 		$$ = ast_new_this();
 	}
-	| SUPER
+	| SUPER_TOK
 	{
 		$$ = ast_new_super();
 	}

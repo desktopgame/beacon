@@ -215,8 +215,8 @@ static void update_loc() {
 <INITIAL>"class"			{ return (CLASS); }
 <INITIAL>"enum"				{ return (ENUM); }
 <INITIAL>"interface"		{ return (INTERFACE); }
-<INITIAL>"this"				{ return (THIS); }
-<INITIAL>"super"			{ return (SUPER); }
+<INITIAL>"this"				{ return (THIS_TOK); }
+<INITIAL>"super"			{ return (SUPER_TOK); }
 <INITIAL>"new"				{ return (NEW); }
 
 <INITIAL>"true"			{ return (TRUE_TOK); }

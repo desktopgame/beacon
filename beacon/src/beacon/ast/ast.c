@@ -64,6 +64,13 @@ ast * ast_new_import_decl(ast * import_path) {
 	return ret;
 }
 
+ast* ast_new_import_decl_list(ast* aimport, ast* aimport_list) {
+	ast* ret = ast_new(ast_import_decl_list);
+	ast_push(ret, aimport);
+	ast_push(ret, aimport_list);
+	return ret;
+}
+
 ast * ast_new_scope(ast * stmt_list) {
 	ast* ret = ast_new(ast_scope);
 	ast_push(ret, stmt_list);
