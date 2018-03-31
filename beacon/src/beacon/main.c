@@ -51,7 +51,7 @@ int run_script(int argc, char* argv[]) {
 int main(int argc, char* argv[]) {
 	mem_set_trace(true);
 	logger_set_enabled(false);
-	bool test = false;
+	bool test = true;
 	int ret = 1;
 
 	if(test) {

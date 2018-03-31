@@ -6,7 +6,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include <stdbool.h>
-#include "signal.tab.h"
+#include "beacon.tab.h"
 #include "parser.h"
 #include "../ast/ast.h"
 #include "../ast/ast_new_literal.h"

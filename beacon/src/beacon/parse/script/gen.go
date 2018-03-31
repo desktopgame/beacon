@@ -186,11 +186,11 @@ func main() {
 	//args := flag.Args()
 	//fmt.Println(args)
 
-	make("lex.makeconfig", "signal.l", *isTest)
-	make("yy.makeconfig", "signal.y", *isTest)
-	execp("flex", "signal.l")
-	execp("bison", "-d", "signal.y", "-r", "all")
-	insert("signal.tab.h",
+	make("lex.makeconfig", "beacon.l", *isTest)
+	make("yy.makeconfig", "beacon.y", *isTest)
+	execp("flex", "beacon.l")
+	execp("bison", "-d", "beacon.y", "-r", "all")
+	insert("beacon.tab.h",
 		"#include \"../ast/ast.h\"",
 		"#include \"../ast/ast_new_factor.h\"",
 		"#include \"../ast/constructor_chain_type.h\"",

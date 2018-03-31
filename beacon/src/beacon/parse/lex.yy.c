@@ -613,8 +613,8 @@ int yy_flex_debug = 0;
 #define YY_MORE_ADJ 0
 #define YY_RESTORE_YY_MORE_OFFSET
 char *yytext;
-#line 1 "signal.l"
-#line 2 "signal.l"
+#line 1 "beacon.l"
+#line 2 "beacon.l"
 //http://kmaebashi.com/programmer/devlang/diksam.html
 #undef YY_INPUT
 #define YY_INPUT(buf, result, max_size) (result = my_yyinput(buf, max_size))
@@ -622,7 +622,7 @@ char *yytext;
 #include <stdlib.h>
 #include <string.h>
 #include <stdbool.h>
-#include "signal.tab.h"
+#include "beacon.tab.h"
 #include "parser.h"
 #include "../ast/ast.h"
 #include "../ast/ast_new_literal.h"
@@ -934,7 +934,7 @@ YY_DECL
 	register char *yy_cp, *yy_bp;
 	register int yy_act;
     
-#line 141 "signal.l"
+#line 141 "beacon.l"
 
 
 #line 941 "lex.yy.c"
@@ -1032,407 +1032,407 @@ do_action:	/* This label is used only to access EOF actions. */
 
 case 1:
 YY_RULE_SETUP
-#line 143 "signal.l"
+#line 143 "beacon.l"
 { return (DOT); }
 	YY_BREAK
 case 2:
 YY_RULE_SETUP
-#line 144 "signal.l"
+#line 144 "beacon.l"
 { return (COMMA); }
 	YY_BREAK
 case 3:
 YY_RULE_SETUP
-#line 145 "signal.l"
+#line 145 "beacon.l"
 { return (COLON); }
 	YY_BREAK
 case 4:
 YY_RULE_SETUP
-#line 146 "signal.l"
+#line 146 "beacon.l"
 { return (COLO_COLO); }
 	YY_BREAK
 case 5:
 YY_RULE_SETUP
-#line 147 "signal.l"
+#line 147 "beacon.l"
 { return (SEMI); }
 	YY_BREAK
 case 6:
 YY_RULE_SETUP
-#line 148 "signal.l"
+#line 148 "beacon.l"
 { return (IN); }
 	YY_BREAK
 case 7:
 YY_RULE_SETUP
-#line 149 "signal.l"
+#line 149 "beacon.l"
 { return (OUT); }
 	YY_BREAK
 case 8:
 YY_RULE_SETUP
-#line 152 "signal.l"
+#line 152 "beacon.l"
 { return (ADD); }
 	YY_BREAK
 case 9:
 YY_RULE_SETUP
-#line 153 "signal.l"
+#line 153 "beacon.l"
 { return (SUB); }
 	YY_BREAK
 case 10:
 YY_RULE_SETUP
-#line 154 "signal.l"
+#line 154 "beacon.l"
 { return (MUL); }
 	YY_BREAK
 case 11:
 YY_RULE_SETUP
-#line 155 "signal.l"
+#line 155 "beacon.l"
 { return (DIV); }
 	YY_BREAK
 case 12:
 YY_RULE_SETUP
-#line 156 "signal.l"
+#line 156 "beacon.l"
 { return (MOD); }
 	YY_BREAK
 case 13:
 YY_RULE_SETUP
-#line 157 "signal.l"
+#line 157 "beacon.l"
 { return (NOT); }
 	YY_BREAK
 case 14:
 YY_RULE_SETUP
-#line 158 "signal.l"
+#line 158 "beacon.l"
 { return (EXC_OR); }
 	YY_BREAK
 case 15:
 YY_RULE_SETUP
-#line 159 "signal.l"
+#line 159 "beacon.l"
 { return (CHILDA); }
 	YY_BREAK
 case 16:
 YY_RULE_SETUP
-#line 161 "signal.l"
+#line 161 "beacon.l"
 { return (LSHIFT); }
 	YY_BREAK
 case 17:
 YY_RULE_SETUP
-#line 162 "signal.l"
+#line 162 "beacon.l"
 { return (RSHIFT); }
 	YY_BREAK
 case 18:
 YY_RULE_SETUP
-#line 164 "signal.l"
+#line 164 "beacon.l"
 { return (ASSIGN); }
 	YY_BREAK
 case 19:
 YY_RULE_SETUP
-#line 165 "signal.l"
+#line 165 "beacon.l"
 { return (ADD_ASSIGN); }
 	YY_BREAK
 case 20:
 YY_RULE_SETUP
-#line 166 "signal.l"
+#line 166 "beacon.l"
 { return (SUB_ASSIGN); }
 	YY_BREAK
 case 21:
 YY_RULE_SETUP
-#line 167 "signal.l"
+#line 167 "beacon.l"
 { return (MUL_ASSIGN); }
 	YY_BREAK
 case 22:
 YY_RULE_SETUP
-#line 168 "signal.l"
+#line 168 "beacon.l"
 { return (DIV_ASSIGN); }
 	YY_BREAK
 case 23:
 YY_RULE_SETUP
-#line 169 "signal.l"
+#line 169 "beacon.l"
 { return (MOD_ASSIGN); }
 	YY_BREAK
 case 24:
 YY_RULE_SETUP
-#line 171 "signal.l"
+#line 171 "beacon.l"
 { return (OR_ASSIGN); }
 	YY_BREAK
 case 25:
 YY_RULE_SETUP
-#line 172 "signal.l"
+#line 172 "beacon.l"
 { return (AND_ASSIGN); }
 	YY_BREAK
 case 26:
 YY_RULE_SETUP
-#line 173 "signal.l"
+#line 173 "beacon.l"
 { return (EXC_OR_ASSIGN); }
 	YY_BREAK
 case 27:
 YY_RULE_SETUP
-#line 174 "signal.l"
+#line 174 "beacon.l"
 { return (AND_ASSIGN); }
 	YY_BREAK
 case 28:
 YY_RULE_SETUP
-#line 175 "signal.l"
+#line 175 "beacon.l"
 { return (LSHIFT_ASSIGN); }
 	YY_BREAK
 case 29:
 YY_RULE_SETUP
-#line 176 "signal.l"
+#line 176 "beacon.l"
 { return (RSHIFT_ASSIGN); }
 	YY_BREAK
 case 30:
 YY_RULE_SETUP
-#line 178 "signal.l"
+#line 178 "beacon.l"
 { return (EQUAL); }
 	YY_BREAK
 case 31:
 YY_RULE_SETUP
-#line 179 "signal.l"
+#line 179 "beacon.l"
 { return (NOTEQUAL); }
 	YY_BREAK
 case 32:
 YY_RULE_SETUP
-#line 182 "signal.l"
+#line 182 "beacon.l"
 { return (INC); }
 	YY_BREAK
 case 33:
 YY_RULE_SETUP
-#line 183 "signal.l"
+#line 183 "beacon.l"
 { return (DEC); }
 	YY_BREAK
 case 34:
 YY_RULE_SETUP
-#line 185 "signal.l"
+#line 185 "beacon.l"
 { return (LGEN); }
 	YY_BREAK
 case 35:
 YY_RULE_SETUP
-#line 186 "signal.l"
+#line 186 "beacon.l"
 { return (RGEN); }
 	YY_BREAK
 case 36:
 YY_RULE_SETUP
-#line 188 "signal.l"
+#line 188 "beacon.l"
 { return (GT); }
 	YY_BREAK
 case 37:
 YY_RULE_SETUP
-#line 189 "signal.l"
+#line 189 "beacon.l"
 { return (GE); }
 	YY_BREAK
 case 38:
 YY_RULE_SETUP
-#line 190 "signal.l"
+#line 190 "beacon.l"
 { return (LT); }
 	YY_BREAK
 case 39:
 YY_RULE_SETUP
-#line 191 "signal.l"
+#line 191 "beacon.l"
 { return (LE); }
 	YY_BREAK
 case 40:
 YY_RULE_SETUP
-#line 193 "signal.l"
+#line 193 "beacon.l"
 { return (BIT_AND); }
 	YY_BREAK
 case 41:
 YY_RULE_SETUP
-#line 194 "signal.l"
+#line 194 "beacon.l"
 { return (LOGIC_AND); }
 	YY_BREAK
 case 42:
 YY_RULE_SETUP
-#line 195 "signal.l"
+#line 195 "beacon.l"
 { return (BIT_OR); }
 	YY_BREAK
 case 43:
 YY_RULE_SETUP
-#line 196 "signal.l"
+#line 196 "beacon.l"
 { return (LOGIC_OR); }
 	YY_BREAK
 case 44:
 YY_RULE_SETUP
-#line 199 "signal.l"
+#line 199 "beacon.l"
 { return (LCB); }
 	YY_BREAK
 case 45:
 YY_RULE_SETUP
-#line 200 "signal.l"
+#line 200 "beacon.l"
 { return (RCB); }
 	YY_BREAK
 case 46:
 YY_RULE_SETUP
-#line 201 "signal.l"
+#line 201 "beacon.l"
 { return (LRB); }
 	YY_BREAK
 case 47:
 YY_RULE_SETUP
-#line 202 "signal.l"
+#line 202 "beacon.l"
 { return (RRB); }
 	YY_BREAK
 case 48:
 YY_RULE_SETUP
-#line 203 "signal.l"
+#line 203 "beacon.l"
 { return (LSB); }
 	YY_BREAK
 case 49:
 YY_RULE_SETUP
-#line 204 "signal.l"
+#line 204 "beacon.l"
 { return (RSB); }
 	YY_BREAK
 case 50:
 YY_RULE_SETUP
-#line 206 "signal.l"
+#line 206 "beacon.l"
 { return (IMPORT); }
 	YY_BREAK
 case 51:
 YY_RULE_SETUP
-#line 207 "signal.l"
+#line 207 "beacon.l"
 { return (VAR); }
 	YY_BREAK
 case 52:
 YY_RULE_SETUP
-#line 209 "signal.l"
+#line 209 "beacon.l"
 { return (IF); }
 	YY_BREAK
 case 53:
 YY_RULE_SETUP
-#line 210 "signal.l"
+#line 210 "beacon.l"
 { return (ELIF); }
 	YY_BREAK
 case 54:
 YY_RULE_SETUP
-#line 211 "signal.l"
+#line 211 "beacon.l"
 { return (ELSE); }
 	YY_BREAK
 case 55:
 YY_RULE_SETUP
-#line 213 "signal.l"
+#line 213 "beacon.l"
 { return (WHILE); }
 	YY_BREAK
 case 56:
 YY_RULE_SETUP
-#line 214 "signal.l"
+#line 214 "beacon.l"
 { return (BREAK); }
 	YY_BREAK
 case 57:
 YY_RULE_SETUP
-#line 215 "signal.l"
+#line 215 "beacon.l"
 { return (CONTINUE); }
 	YY_BREAK
 case 58:
 YY_RULE_SETUP
-#line 217 "signal.l"
+#line 217 "beacon.l"
 { return (NAMESPACE); }
 	YY_BREAK
 case 59:
 YY_RULE_SETUP
-#line 218 "signal.l"
+#line 218 "beacon.l"
 { return (CLASS); }
 	YY_BREAK
 case 60:
 YY_RULE_SETUP
-#line 219 "signal.l"
+#line 219 "beacon.l"
 { return (ENUM); }
 	YY_BREAK
 case 61:
 YY_RULE_SETUP
-#line 220 "signal.l"
+#line 220 "beacon.l"
 { return (INTERFACE); }
 	YY_BREAK
 case 62:
 YY_RULE_SETUP
-#line 221 "signal.l"
+#line 221 "beacon.l"
 { return (THIS_TOK); }
 	YY_BREAK
 case 63:
 YY_RULE_SETUP
-#line 222 "signal.l"
+#line 222 "beacon.l"
 { return (SUPER_TOK); }
 	YY_BREAK
 case 64:
 YY_RULE_SETUP
-#line 223 "signal.l"
+#line 223 "beacon.l"
 { return (NEW); }
 	YY_BREAK
 case 65:
 YY_RULE_SETUP
-#line 225 "signal.l"
+#line 225 "beacon.l"
 { return (TRUE_TOK); }
 	YY_BREAK
 case 66:
 YY_RULE_SETUP
-#line 226 "signal.l"
+#line 226 "beacon.l"
 { return (FALSE_TOK); }
 	YY_BREAK
 case 67:
 YY_RULE_SETUP
-#line 227 "signal.l"
+#line 227 "beacon.l"
 { return (NULL_TOK); }
 	YY_BREAK
 case 68:
 YY_RULE_SETUP
-#line 228 "signal.l"
+#line 228 "beacon.l"
 { return (AS); }
 	YY_BREAK
 case 69:
 YY_RULE_SETUP
-#line 230 "signal.l"
+#line 230 "beacon.l"
 { return (TRY); }
 	YY_BREAK
 case 70:
 YY_RULE_SETUP
-#line 231 "signal.l"
+#line 231 "beacon.l"
 { return (CATCH); }
 	YY_BREAK
 case 71:
 YY_RULE_SETUP
-#line 232 "signal.l"
+#line 232 "beacon.l"
 { return (THROW); }
 	YY_BREAK
 case 72:
 YY_RULE_SETUP
-#line 234 "signal.l"
+#line 234 "beacon.l"
 { return (PUBLIC); }
 	YY_BREAK
 case 73:
 YY_RULE_SETUP
-#line 235 "signal.l"
+#line 235 "beacon.l"
 { return (PRIVATE); }
 	YY_BREAK
 case 74:
 YY_RULE_SETUP
-#line 236 "signal.l"
+#line 236 "beacon.l"
 { return (PROTECTED); }
 	YY_BREAK
 case 75:
 YY_RULE_SETUP
-#line 237 "signal.l"
+#line 237 "beacon.l"
 { return (STATIC); }
 	YY_BREAK
 case 76:
 YY_RULE_SETUP
-#line 238 "signal.l"
+#line 238 "beacon.l"
 { return (NATIVE); }
 	YY_BREAK
 case 77:
 YY_RULE_SETUP
-#line 239 "signal.l"
+#line 239 "beacon.l"
 { return (RETURN); }
 	YY_BREAK
 case 78:
 YY_RULE_SETUP
-#line 241 "signal.l"
+#line 241 "beacon.l"
 { return (CTOR); }
 	YY_BREAK
 case 79:
 YY_RULE_SETUP
-#line 242 "signal.l"
+#line 242 "beacon.l"
 { return (DEF); }
 	YY_BREAK
 case 80:
 YY_RULE_SETUP
-#line 243 "signal.l"
+#line 243 "beacon.l"
 { return (ARROW); }
 	YY_BREAK
 case 81:
 YY_RULE_SETUP
-#line 245 "signal.l"
+#line 245 "beacon.l"
 {
 yylval.ast_value = ast_new_int(0);
 	return INT;
@@ -1441,14 +1441,14 @@ yylval.ast_value = ast_new_int(0);
 case 82:
 /* rule 82 can match eol */
 YY_RULE_SETUP
-#line 250 "signal.l"
+#line 250 "beacon.l"
 {
 parser_top()->lineno++;
 }
 	YY_BREAK
 case 83:
 YY_RULE_SETUP
-#line 254 "signal.l"
+#line 254 "beacon.l"
 {
 yylval.ast_value = ast_new_int(atoi(yytext));
 	return INT;
@@ -1456,7 +1456,7 @@ yylval.ast_value = ast_new_int(atoi(yytext));
 	YY_BREAK
 case 84:
 YY_RULE_SETUP
-#line 259 "signal.l"
+#line 259 "beacon.l"
 {
 yylval.ast_value = ast_new_double(atof(yytext));
 	return DOUBLE;
@@ -1464,7 +1464,7 @@ yylval.ast_value = ast_new_double(atof(yytext));
 	YY_BREAK
 case 85:
 YY_RULE_SETUP
-#line 264 "signal.l"
+#line 264 "beacon.l"
 {
 yylval.string_value = text_strdup(yytext);
 	return IDENT;
@@ -1472,7 +1472,7 @@ yylval.string_value = text_strdup(yytext);
 	YY_BREAK
 case 86:
 YY_RULE_SETUP
-#line 269 "signal.l"
+#line 269 "beacon.l"
 {
 parser_clear_buffer(parser_top());
     BEGIN STRING_LITERAL_STATE;
@@ -1480,57 +1480,57 @@ parser_clear_buffer(parser_top());
 	YY_BREAK
 case 87:
 YY_RULE_SETUP
-#line 273 "signal.l"
+#line 273 "beacon.l"
 BEGIN ML_COMMENT;
 	YY_BREAK
 case 88:
 YY_RULE_SETUP
-#line 274 "signal.l"
+#line 274 "beacon.l"
 BEGIN L_COMMENT;
 	YY_BREAK
 case 89:
 /* rule 89 can match eol */
 YY_RULE_SETUP
-#line 275 "signal.l"
+#line 275 "beacon.l"
 {
 parser_top()->lineno++;
 }
 	YY_BREAK
 case 90:
 YY_RULE_SETUP
-#line 278 "signal.l"
+#line 278 "beacon.l"
 {
     BEGIN INITIAL;
 }
 	YY_BREAK
 case 91:
 YY_RULE_SETUP
-#line 281 "signal.l"
+#line 281 "beacon.l"
 ;
 	YY_BREAK
 case 92:
 /* rule 92 can match eol */
 YY_RULE_SETUP
-#line 282 "signal.l"
+#line 282 "beacon.l"
 {
 parser_top()->lineno++;
 	BEGIN INITIAL;
 }
 	YY_BREAK
 case YY_STATE_EOF(L_COMMENT):
-#line 286 "signal.l"
+#line 286 "beacon.l"
 {
 	BEGIN INITIAL;
 }
 	YY_BREAK
 case 93:
 YY_RULE_SETUP
-#line 289 "signal.l"
+#line 289 "beacon.l"
 ;
 	YY_BREAK
 case 94:
 YY_RULE_SETUP
-#line 290 "signal.l"
+#line 290 "beacon.l"
 {
 yylval.ast_value = ast_new_char('\r');
 	return CHAR_LITERAL;
@@ -1538,7 +1538,7 @@ yylval.ast_value = ast_new_char('\r');
 	YY_BREAK
 case 95:
 YY_RULE_SETUP
-#line 294 "signal.l"
+#line 294 "beacon.l"
 {
 yylval.ast_value = ast_new_char('\n');
 	return CHAR_LITERAL;
@@ -1546,7 +1546,7 @@ yylval.ast_value = ast_new_char('\n');
 	YY_BREAK
 case 96:
 YY_RULE_SETUP
-#line 298 "signal.l"
+#line 298 "beacon.l"
 {
 yylval.ast_value = ast_new_char('\t');
 	return CHAR_LITERAL;
@@ -1554,7 +1554,7 @@ yylval.ast_value = ast_new_char('\t');
 	YY_BREAK
 case 97:
 YY_RULE_SETUP
-#line 302 "signal.l"
+#line 302 "beacon.l"
 {
 yylval.ast_value = ast_new_char('\b');
 	return CHAR_LITERAL;
@@ -1562,7 +1562,7 @@ yylval.ast_value = ast_new_char('\b');
 	YY_BREAK
 case 98:
 YY_RULE_SETUP
-#line 306 "signal.l"
+#line 306 "beacon.l"
 {
 yylval.ast_value = ast_new_char(yytext[1]);
 	return CHAR_LITERAL;
@@ -1570,7 +1570,7 @@ yylval.ast_value = ast_new_char(yytext[1]);
 	YY_BREAK
 case 99:
 YY_RULE_SETUP
-#line 310 "signal.l"
+#line 310 "beacon.l"
 {
 yylval.ast_value = parser_reduce_buffer(parser_top());
     BEGIN INITIAL;
@@ -1579,56 +1579,56 @@ yylval.ast_value = parser_reduce_buffer(parser_top());
 	YY_BREAK
 case 100:
 YY_RULE_SETUP
-#line 315 "signal.l"
+#line 315 "beacon.l"
 {
 parser_append_buffer(parser_top(), '"');
 }
 	YY_BREAK
 case 101:
 YY_RULE_SETUP
-#line 318 "signal.l"
+#line 318 "beacon.l"
 {
 parser_append_buffer(parser_top(), '\'');
 }
 	YY_BREAK
 case 102:
 YY_RULE_SETUP
-#line 321 "signal.l"
+#line 321 "beacon.l"
 {
 parser_append_buffer(parser_top(), '\r');
 }
 	YY_BREAK
 case 103:
 YY_RULE_SETUP
-#line 324 "signal.l"
+#line 324 "beacon.l"
 {
 parser_append_buffer(parser_top(), '\n');
 }
 	YY_BREAK
 case 104:
 YY_RULE_SETUP
-#line 327 "signal.l"
+#line 327 "beacon.l"
 {
 parser_append_buffer(parser_top(), '\t');
 }
 	YY_BREAK
 case 105:
 YY_RULE_SETUP
-#line 330 "signal.l"
+#line 330 "beacon.l"
 {
 parser_append_buffer(parser_top(), '\\');
 }
 	YY_BREAK
 case 106:
 YY_RULE_SETUP
-#line 333 "signal.l"
+#line 333 "beacon.l"
 {
 parser_append_buffer(parser_top(), yytext[0]);
 }
 	YY_BREAK
 case 107:
 YY_RULE_SETUP
-#line 336 "signal.l"
+#line 336 "beacon.l"
 ECHO;
 	YY_BREAK
 #line 1635 "lex.yy.c"
@@ -2642,7 +2642,7 @@ void yyfree (void * ptr )
 
 #define YYTABLES_NAME "yytables"
 
-#line 336 "signal.l"
+#line 336 "beacon.l"
 
 
 
