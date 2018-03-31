@@ -35,7 +35,7 @@
 %token DOT COMMA COLON COLO_COLO LINE
 		ADD SUB MUL DIV MOD NOT LSHIFT RSHIFT CHILDA
 		EQUAL NOTEQUAL
-		GT GE LT LE
+		GT GE LT LE LGEN RGEN
 		BIT_AND LOGIC_AND BIT_OR LOGIC_OR
 
 		ASSIGN ADD_ASSIGN SUB_ASSIGN MUL_ASSIGN DIV_ASSIGN MOD_ASSIGN
@@ -125,7 +125,7 @@
 %left MUL DIV MOD
 %nonassoc LSB
 %nonassoc '<'
-%right CHILDA NOT NEGATIVE POSITIVE NEW
+%right CHILDA NOT NEGATIVE POSITIVE NEW REF
 %right AS
 %right ASSIGN ADD_ASSIGN SUB_ASSIGN MUL_ASSIGN DIV_ASSIGN MOD_ASSIGN AND_ASSIGN OR_ASSIGN LSHIFT_ASSIGN RSHIFT_ASSIGN EXC_OR_ASSIGN PRE_INC PRE_DEC
 %token FORM_TYPE
@@ -244,7 +244,7 @@ type_parameter_group
 	{
 		$$ = ast_new_blank();
 	}
-	| LT type_parameter_list GT
+	| LGEN type_parameter_list RGEN
 	{
 		$$ = $2;
 	}
@@ -506,7 +506,7 @@ typename_group
 	{
 		$$ = ast_new_blank();
 	}
-	| LT typename_list GT
+	| LGEN typename_list RGEN
 	{
 		$$ = $2;
 	}
@@ -708,9 +708,9 @@ expression_nobrace
 	{
 		$$ = ast_new_new_instance($2, ast_new_blank());
 	}
-	| fqcn_part
+	| fqcn_part typename_group
 	{
-		$$ = ast_new_variable($1, ast_new_blank());
+		$$ = ast_new_variable($1, $2);
 	}
 	;
 primary

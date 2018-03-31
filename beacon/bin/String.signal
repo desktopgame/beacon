@@ -3,11 +3,11 @@ import "Array"
 namespace signal.lang {
 	class String {
 		private:
-		Array<Char> charArray;
+		Array<|Char|> charArray;
 
 		public:
-		ctor new(Array<Char> source) {
-			this.charArray = new Array<Char>(source.length());
+		ctor new(Array<|Char|> source) {
+			this.charArray = new Array<|Char|>(source.length());
 			Array.copy(source, 0, this.charArray, 0, source.length());
 			this.nativeInit();
 		}

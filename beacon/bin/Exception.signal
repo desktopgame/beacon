@@ -6,7 +6,7 @@ namespace signal.lang {
 	class Exception {
 		private:
 		String message;
-		Array<StackTraceElement> stackTrace;
+		Array<|StackTraceElement|> stackTrace;
 
 		public:
 		ctor new(String message) {

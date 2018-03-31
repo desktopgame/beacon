@@ -8,7 +8,7 @@ namespace signal.lang {
 	 * �z���\������N���X�ł�.
 	 * �v�f�� signal::lang::Object �ň����܂��B
 	 */
-	class Array<T> : Iterable<T> {
+	class Array<|T|> : Iterable<|T|> {
 		private:
 		Int length;
 
@@ -27,8 +27,8 @@ namespace signal.lang {
 			nativeSet(index, v);
 		}
 
-		def sub(Int offs, Int len) -> Array<T> {
-			var range = new Array<T>(len);
+		def sub(Int offs, Int len) -> Array<|T|> {
+			var range = new Array<|T|>(len);
 			var ptr = offs;
 
 			while(ptr < offs + len) {
@@ -44,12 +44,12 @@ namespace signal.lang {
 			return nativeGet(index) as T;
 		}
 
-		static def copy<T>(Array<T> src, Int srcOffset, Array<T> dst, Int dstOffset, Int length) -> Void {
+		static def copy<|T|>(Array<|T|> src, Int srcOffset, Array<|T|> dst, Int dstOffset, Int length) -> Void {
 			Array.nativeCopy(src, srcOffset, dst, dstOffset, length);
 		}
 
-		def iterate() -> Iterator<T> {
-			return new ArrayIterator<T>(this);
+		def iterate() -> Iterator<|T|> {
+			return new ArrayIterator<|T|>(this);
 		}
 
 		private:

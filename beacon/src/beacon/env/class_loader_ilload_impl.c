@@ -807,7 +807,8 @@ static il_factor* class_loader_ilload_factorImpl(class_loader* self, ast* source
 	} else if(source->tag == ast_field_access) {
 		return il_factor_wrap_member_op(class_loader_ilload_member_op(self, source));
 	}
-	return NULL;
+	il_factor* fact = (il_factor*)MEM_MALLOC(sizeof(il_factor));
+	return fact;
 }
 
 static il_stmt* class_loader_ilload_bodyImpl(class_loader* self, ast* source) {

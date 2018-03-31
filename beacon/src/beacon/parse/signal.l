@@ -182,6 +182,9 @@ static void update_loc() {
 <INITIAL>"++"				{ return (INC); }
 <INITIAL>"--"				{ return (DEC); }
 
+<INITIAL>"<|"				{ return (LGEN); }
+<INITIAL>"|>"				{ return (RGEN); }
+
 <INITIAL>">"				{ return (GT); }
 <INITIAL>">="				{ return (GE); }
 <INITIAL>"<"				{ return (LT); }

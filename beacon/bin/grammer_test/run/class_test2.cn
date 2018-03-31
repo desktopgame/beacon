@@ -1,6 +1,6 @@
 namespace beacon {
 	namespace lang {
-		class Foo<T, T2> {
+		class Foo<|T, T2|> {
 
 		}
 	}

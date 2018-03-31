@@ -172,7 +172,7 @@ type_parameter_group
 	{
 		$$ = ast_new_blank();
 	}
-	| LT __LIST GT
+	| LGEN __LIST RGEN
 	{
 		$$ = $2;
 	}
@@ -578,7 +578,7 @@ typename_group
 	{
 		$$ = ast_new_blank();
 	}
-	| LT typename_list GT
+	| LGEN typename_list RGEN
 	{
 		$$ = $2;
 	}

@@ -1,7 +1,7 @@
 namespace beacon {
 	class Test {
 		public:
-		Generic<Int> a;
-		Generic<Int, Int> b;
+		Generic<|Int|> a;
+		Generic<|Int, Int|> b;
 	}
 }

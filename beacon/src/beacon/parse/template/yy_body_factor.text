@@ -164,9 +164,9 @@ expression_nobrace
 	{
 		$$ = ast_new_new_instance($2, ast_new_blank());
 	}
-	| fqcn_part
+	| fqcn_part typename_group
 	{
-		$$ = ast_new_variable($1, ast_new_blank());
+		$$ = ast_new_variable($1, $2);
 	}
 	;
 $$REM __SELF
