@@ -5,7 +5,7 @@
 #include "../../env/generic_cache.h"
 #include "../il_factor_interface.h"
 
-#define IL_FACT2MEM(fact) (il_factor_member_op_delete(fact))
+#define IL_FACT2MEM(fact) (il_factor_cast_member_op(fact))
 
 struct enviroment;
 

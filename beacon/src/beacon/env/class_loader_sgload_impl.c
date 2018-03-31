@@ -294,7 +294,6 @@ void class_loader_sgload_debug_native_method(method* parent, vm* vm, enviroment*
 
 void class_loader_sgload_body(class_loader* self, vector* stmt_list, enviroment* dest, namespace_* range, il_load_cache* cache) {
 //	enviroment* ret = enviroment_new();
-/*
 	il_ehandler* eh = il_ehandler_new();
 	vector_push(cache->namespace_vec, range);
 	for (int i = 0; i < stmt_list->length; i++) {
@@ -309,7 +308,6 @@ void class_loader_sgload_body(class_loader* self, vector* stmt_list, enviroment*
 	}
 	vector_pop(cache->namespace_vec);
 	il_ehandler_delete(eh);
-	*/
 //	return ret;
 }
 

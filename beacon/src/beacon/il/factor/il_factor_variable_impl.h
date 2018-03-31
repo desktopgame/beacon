@@ -5,11 +5,27 @@
 #include "../../env/fqcn_cache.h"
 #include "../../env/generic_type.h"
 #include "../../util/vector.h"
+#include "variable/il_factor_variable_local_impl.h"
+#include "variable/il_factor_variable_static_impl.h"
 #include <stdbool.h>
 #define IL_FACT2VAR(fact) (il_factor_cast_variable(fact))
 //struct opcode_buf;
 struct generic_type;
 struct field;
+
+/**
+ * 変数の種類を判別する列挙.
+ * beaconの構文定義では、次のものは全て一度 il_Variable として変換されます。
+ * <code>
+ * variable Namespace::Class variable<|T|> Namespace::Class<|T|>
+ * </code>
+ */
+typedef enum il_variable_type {
+	ilvariable_type_local,
+	ilvariable_type_static,
+	ilvariable_type_undefined
+} il_variable_type;
+
 /**
  * 変数を表す要素.
  */
@@ -17,6 +33,11 @@ typedef struct il_factor_variable {
 	fqcn_cache* fqcn;
 	vector* type_args;
 	int index;
+	il_variable_type type;
+	union {
+		il_factor_variable_local* local_;
+		il_factor_variable_static* static_;
+	} u;
 } il_factor_variable;
 
 /**
