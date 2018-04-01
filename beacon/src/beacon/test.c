@@ -8,6 +8,7 @@
 #include "vm/opcode_buf.h"
 #include "util/list.h"
 #include "util/stack.h"
+#include "util/string_buffer.h"
 #include "util/tree_map.h"
 #include "util/io.h"
 #include "util/file_entry.h"
@@ -39,7 +40,28 @@ static void test_bison_grammerImpl(const char* dirname, bool require) {
 		}
 		xtest_printf("%s\n", e->filename);
 		char* input = io_read_text(e->filename);
-		parser* p = parser_parse_from_source(input);
+		char* iter = input;
+		//最初の行を取り出す
+		string_buffer* sb = string_buffer_new();
+		while(1) {
+			char ch = (*iter);
+			if(ch == -1 || ch == '\n') {
+				break;
+			}
+			string_buffer_append(sb, ch);
+			iter++;
+		}
+		//最初の行に --dump が含まれるならASTをダンプ
+		char* firstline = string_buffer_release(sb);
+		bool isDump = false;
+		if(text_contains(firstline, "--dump")) {
+			isDump = true;
+		} else iter = input;
+		parser* p = parser_parse_from_source(iter);
+		if(isDump) {
+			ast_print_tree(p->root);
+		}
+		MEM_FREE(firstline);
 		xtest_must_true(p->fail == require, "%s", e->filename);
 		parser_pop();
 		MEM_FREE(input);
