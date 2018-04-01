@@ -157,6 +157,12 @@ char* text_sum(vector* v, char* join);
 bool text_contains(const char* source, const char* text);
 
 /**
+ * 標準入力から一行読み込んで返します.
+ * @return
+ */
+char* text_readline();
+
+/**
  * stdoutの有効/無効を設定します.
  * @param enabled
  */

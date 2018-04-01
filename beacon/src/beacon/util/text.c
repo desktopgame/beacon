@@ -257,6 +257,18 @@ bool text_contains(const char* source, const char* text) {
 	return false;
 }
 
+char* text_readline() {
+	string_buffer* sb = string_buffer_new();
+	while(1) {
+		char ch = getc(stdin);
+		if(ch == '\0') {
+			break;
+		}
+		string_buffer_append(sb, ch);
+	}
+	return string_buffer_release(sb);
+}
+
 void text_stdout_enabled(bool enabled) {
 	if(enabled) {
 		//一度無効にされているなら、
