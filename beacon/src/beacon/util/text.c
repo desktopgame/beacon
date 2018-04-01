@@ -235,6 +235,28 @@ char* text_sum(vector * v, char * join) {
 	return head;
 }
 
+bool text_contains(const char* source, const char* text) {
+	int pos = 0;
+	int slen = strlen(source);
+	int tlen = strlen(text);
+	for(int i=0; i<slen; i++) {
+		char ch = source[i];
+		int diff = tlen - pos;
+		if(i + diff > slen) {
+			break;
+		}
+		if(ch == text[pos]) {
+			pos++;
+			if(pos == tlen) {
+				return true;
+			}
+		} else {
+			pos = 0;
+		}
+	}
+	return false;
+}
+
 void text_stdout_enabled(bool enabled) {
 	if(enabled) {
 		//一度無効にされているなら、

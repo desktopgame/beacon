@@ -149,6 +149,14 @@ char* text_lineat(const char* src, int lineno);
 char* text_sum(vector* v, char* join);
 
 /**
+ * ソースにテキストが含まれるなら true.
+ * @param source
+ * @param text
+ * @return
+ */
+bool text_contains(const char* source, const char* text);
+
+/**
  * stdoutの有効/無効を設定します.
  * @param enabled
  */
