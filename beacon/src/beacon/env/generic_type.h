@@ -42,7 +42,5 @@ void generic_type_delete(generic_type* self);
 
 generic_type* generic_type_apply(generic_type* self, struct il_load_cache* cache);
 
-struct type* generic_type_eval(generic_type* self, struct il_load_cache* cache);
-
 struct method* generic_type_find_method(generic_type* self, const char* name, vector* args, struct enviroment* env, struct il_load_cache* cache, int* outIndex);
 #endif // !SIGNAL_ENV_GENERIC_TYPE_H

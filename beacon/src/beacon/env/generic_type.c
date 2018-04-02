@@ -95,9 +95,10 @@ void generic_type_delete(generic_type * self) {
 generic_type* generic_type_apply(generic_type* self, il_load_cache* cache) {
 	generic_type* copy = generic_type_new(self->core_type);
 	generic_type* e = NULL;
-
+	//全ての実型引数
 	for(int i=0; i<self->type_args_list->length; i++) {
 		generic_type* e = vector_at(self->type_args_list, i);
+		//この型がクラスやメソッドに定義された仮装型なら
 		if(e->virtual_type_index != -1) {
 			if(e->tag == generic_type_tag_class) {
 				generic_type* tp = vector_top(cache->receiver_vec);
@@ -110,37 +111,12 @@ generic_type* generic_type_apply(generic_type* self, il_load_cache* cache) {
 				//メソッド呼び出しが必要！！
 				//メソッドは仮想型しかもってない！！！
 			} else XALWAYS();
+		//
 		} else {
 			generic_type_addargs(copy, generic_type_apply(e, cache));
 		}
 	}
 	return copy;
-}
-
-type * generic_type_eval(generic_type * self, il_load_cache * cache) {
-	if (self->core_type == NULL) {
-		int index = self->virtual_type_index;
-		generic_type* inner = NULL;
-		if (self->tag == generic_type_tag_class) {
-			type* tp = (type*)vector_top(cache->type_vec);
-			inner = type_type_parameter_at(tp, index);
-			if (inner->core_type == NULL) {
-				return generic_type_eval(inner, cache);
-			}
-			return inner->core_type;
-		} else if (self->tag == generic_type_tag_method) {
-			method* m = (method*)vector_top(cache->method_vec);
-			inner = type_type_parameter_at(m->type_parameter_list, index);
-			if (inner->core_type == NULL) {
-				return generic_type_eval(inner, cache);
-			}
-			return inner->core_type;
-		} else assert(false);
-	}
-	if (self->type_args_list->length == 0) {
-		return self->core_type;
-	}
-	return self->core_type;
 }
 
 method * generic_type_find_method(generic_type* self, const char * name, vector * args, enviroment * env, il_load_cache * cache, int * outIndex) {	
