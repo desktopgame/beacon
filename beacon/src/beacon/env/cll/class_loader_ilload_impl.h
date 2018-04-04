@@ -141,12 +141,4 @@ void class_loader_ilload_constructor(class_loader* self, il_type* current, ast* 
  */
 void class_loader_ilload_identifier_list(class_loader* self, vector* list, ast* source);
 
-/**
- * 仮引数を IL に変換します.
- * @param self
- * @param list
- * @param source
- */
-void class_loader_ilload_parameter_list(class_loader* self, vector* list, ast* source);
-
 #endif

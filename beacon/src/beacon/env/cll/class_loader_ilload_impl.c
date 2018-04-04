@@ -64,7 +64,7 @@ void class_loader_ilload_function(class_loader * self, ast * source) {
 	ast* afunc_body = ast_at(source, 2);
 	ast* aret_name = ast_at(source, 3);
 	il_function* ilfunc = il_function_new(afunc_name->u.string_value);
-	class_loader_ilload_parameter_list(self, ilfunc->parameter_list, aparam_list);
+	CLIL_parameter_list(self, ilfunc->parameter_list, aparam_list);
 	CLIL_body(self, ilfunc->statement_list, afunc_body);
 	CLIL_generic_cache(ast_first(aret_name), ilfunc->return_fqcn);
 	vector_push(self->il_code->function_list, ilfunc);
@@ -290,7 +290,7 @@ void class_loader_ilload_method(class_loader* self, il_type* current, ast* metho
 	v->access = level;
 	v->modifier = ast_cast_to_modifier(modifier);
 	//TEST((!strcmp(v->name, "main")));
-	class_loader_ilload_parameter_list(self, v->parameter_list, param_list);
+	CLIL_parameter_list(self, v->parameter_list, param_list);
 	CLIL_body(self, v->statement_list, func_body);
 	il_type_add_method(current, v);
 	//il_class_add_method(current->u.class_, v);
@@ -315,7 +315,7 @@ void class_loader_ilload_constructor(class_loader* self, il_type* current, ast* 
 	ilcons->access = level;
 	ilcons->chain = ilchain;
 	//ilcons->modifier = ast_cast_to_modifier(amodifier);
-	class_loader_ilload_parameter_list(self, ilcons->parameter_list, aparams);
+	CLIL_parameter_list(self, ilcons->parameter_list, aparams);
 	CLIL_body(self, ilcons->statement_list, abody);
 	vector_push(current->u.class_->constructor_list, ilcons);
 }
@@ -330,20 +330,3 @@ void class_loader_ilload_identifier_list(class_loader * self, vector * list, ast
 		vector_push(list, str);
 	}
 }
-
-void class_loader_ilload_parameter_list(class_loader* self, vector* list, ast* source) {
-	if (source->tag == ast_parameter_list) {
-		for (int i = 0; i < source->child_count; i++) {
-			class_loader_ilload_parameter_list(self, list, ast_at(source, i));
-		}
-	} else if (source->tag == ast_parameter) {
-		ast* type_name = ast_first(source);
-		ast* access_name = ast_second(source);
-		il_parameter* p = il_parameter_new(access_name->u.string_value);
-		CLIL_generic_cache(type_name, p->fqcn);
-		//p->type = il_type_new(type_name->u.string_value);
-		vector_push(list, p);
-	}
-}
-
-//private

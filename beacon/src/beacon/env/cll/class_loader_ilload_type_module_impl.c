@@ -9,6 +9,7 @@
 #include "../../il/il_type_parameter_rule.h"
 #include "../../il/il_type_parameter.h"
 #include "../../il/il_type_argument.h"
+#include "../../il/il_parameter.h"
 #include "../../il/il_argument.h"
 #include "class_loader_ilload_impl.h"
 #include <assert.h>
@@ -99,6 +100,20 @@ void CLIL_type_argument(class_loader* self, ast* atype_args, vector* dest) {
 	} else assert(false);
 }
 
+void CLIL_parameter_list(class_loader* self, vector* list, ast* source) {
+	if (source->tag == ast_parameter_list) {
+		for (int i = 0; i < source->child_count; i++) {
+			CLIL_parameter_list(self, list, ast_at(source, i));
+		}
+	} else if (source->tag == ast_parameter) {
+		ast* type_name = ast_first(source);
+		ast* access_name = ast_second(source);
+		il_parameter* p = il_parameter_new(access_name->u.string_value);
+		CLIL_generic_cache(type_name, p->fqcn);
+		//p->type = il_type_new(type_name->u.string_value);
+		vector_push(list, p);
+	}
+}
 
 void CLIL_argument_list(class_loader* self, vector* list, ast* source) {
 	if (source->tag == ast_argument_list) {
@@ -113,8 +128,7 @@ void CLIL_argument_list(class_loader* self, vector* list, ast* source) {
 		vector_push(list, ilarg);
 	}
 }
-
-
+//private
 static void CLIL_generic_cache_impl(ast* fqcn, generic_cache* dest) {
 	fqcn_cache* body = dest->fqcn;
 	//型引数を解析する
