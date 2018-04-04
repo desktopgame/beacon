@@ -3,12 +3,16 @@
 #include "../../il_factor_interface.h"
 struct enviroment;
 struct generic_type;
+struct method;
 //binded? bound?
 
 typedef struct il_factor_invoke_bound {
 	char* name;
 	vector* type_args;
 	vector* args;
+	struct method* m;
+	int index;
+	struct generic_type* resolved;
 } il_factor_invoke_bound;
 
 il_factor_invoke_bound* il_factor_invoke_bound_new(const char* name);

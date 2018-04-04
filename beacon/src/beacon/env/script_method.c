@@ -5,6 +5,7 @@
 #include "../util/mem.h"
 #include "../util/text.h"
 #include "type_interface.h"
+#include "virtual_type.h"
 #include "namespace.h"
 #include "object.h"
 #include "generic_type.h"
@@ -25,12 +26,12 @@ void script_method_execute(script_method * self, method* parent, vm * vmachine, 
 		vector_push(sub->value_stack, object_copy(vector_pop(vmachine->value_stack)));
 	}
 	text_putindent(sub->level);
-	text_printfln("[ %s#%s ]", type_name(parent->gparent->core_type), parent->name);
+	text_printfln("[ %s#%s ]", type_name(parent->parent), parent->name);
 	enviroment_op_dump(self->env, sub->level);
 	//opcode_buf_dump(self->env->buf, sub->level);
 	vm_execute(sub, self->env);
 	//戻り値が Void 以外ならスタックトップの値を引き継ぐ
-	if (parent->return_gtype->core_type != CL_VOID) {
+	if (!virtual_type_void(&parent->return_vtype)) {
 		vector_push(vmachine->value_stack, vector_pop(sub->value_stack));
 	}
 	vm_delete(sub);

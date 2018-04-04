@@ -3,14 +3,19 @@
 #include "../../il_factor_interface.h"
 struct enviroment;
 struct generic_type;
+struct method;
 
 typedef struct il_factor_invoke {
 	il_factor* receiver;
 	vector* args;
 	vector* type_args;
+	char* name;
+	int index;
+	struct method* m;
+	struct generic_type* resolved;
 } il_factor_invoke;
 
-il_factor_invoke* il_factor_invoke_new();
+il_factor_invoke* il_factor_invoke_new(const char* name);
 
 void il_factor_invoke_generate(il_factor_invoke* self, struct enviroment* env, il_load_cache* cache);
 

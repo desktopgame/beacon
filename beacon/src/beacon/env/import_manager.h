@@ -2,6 +2,7 @@
 #ifndef BEACON_ENV_IMPORT_MANAGER_H
 #define BEACON_ENV_IMPORT_MANAGER_H
 #include "../util/vector.h"
+#include "virtual_type.h"
 //#include "fqcn_cache.h"
 struct generic_cache;
 struct generic_type;
@@ -46,7 +47,7 @@ bool import_manager_loaded(import_manager* self, int index);
  * @param fqcn
  * @return 解決出来なかったなら NULL を返します.
  */
-struct generic_type* import_manager_resolve(import_manager* self, struct namespace_* scope, struct generic_cache* fqcn, struct il_load_cache* ilcache);
+void import_manager_resolve(import_manager* self, struct namespace_* scope, struct generic_cache* fqcn, struct il_load_cache* ilcache, virtual_type* dest);
 
 /**
  * インポートマネージャを開放します.

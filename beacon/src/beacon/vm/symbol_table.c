@@ -1,10 +1,12 @@
 #include "symbol_table.h"
 #include "../util/mem.h"
+#include "../util/xassert.h"
 #include "symbol_entry.h"
 #include "../env/type_interface.h"
 #include "../env/type_impl.h"
 //#include "../env/generic_type.h"
 #include <assert.h>
+#include <string.h>
 #include "../env/generic_type.h"
 
 //proto
@@ -18,6 +20,7 @@ symbol_table * symbol_table_new() {
 }
 
 symbol_entry* symbol_table_entry(symbol_table* self, generic_type* gtp, const char * name) {
+	//XBREAK(!strcmp(name, "st"));
 	tree_item data = tree_map_get(self->map, name);
 	if (data) {
 		return ((symbol_entry*)data);

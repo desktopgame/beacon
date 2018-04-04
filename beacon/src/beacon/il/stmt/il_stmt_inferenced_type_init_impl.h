@@ -4,6 +4,7 @@
 #include "../il_factor_interface.h"
 #include "../il_stmt_interface.h"
 struct enviroment;
+struct symbol_entry;
 /**
  * 推論された型の初期化を表す要素.
  * var y = new X::Y();
@@ -11,6 +12,7 @@ struct enviroment;
 typedef struct il_stmt_inferenced_type_init {
 	char* name;
 	il_factor* fact;
+	struct symbol_entry* sym;
 } il_stmt_inferenced_type_init;
 
 /**

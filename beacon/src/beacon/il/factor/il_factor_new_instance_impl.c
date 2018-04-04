@@ -26,7 +26,8 @@ il_factor * il_factor_wrap_new_instance(il_factor_new_instance * self) {
 
 il_factor_new_instance * il_factor_new_instance_new() {
 	il_factor_new_instance* ret = (il_factor_new_instance*)MEM_MALLOC(sizeof(il_factor_new_instance));
-	ret->fqcn = generic_cache_new();
+	ret->fqcnc = fqcn_cache_new();
+	ret->type_args = vector_new();
 	ret->argument_list = vector_new();
 	ret->c = NULL;
 	ret->constructor_index = -1;
@@ -38,7 +39,7 @@ void il_factor_new_instance_dump(il_factor_new_instance * self, int depth) {
 	text_putindent(depth);
 	text_printf("new instance");
 	text_putline();
-	generic_cache_dump(self->fqcn, depth + 1);
+	fqcn_cache_dump(self->fqcnc, depth + 1);
 	for (int i = 0; i < self->argument_list->length; i++) {
 		il_argument* ilarg = (il_argument*)vector_at(self->argument_list, i);
 		il_argument_dump(ilarg, depth + 1);
@@ -67,14 +68,14 @@ void il_factor_new_instance_load(il_factor_new_instance * self, enviroment * env
 generic_type* il_factor_new_instance_eval(il_factor_new_instance * self, enviroment * env, il_load_cache* cache) {
 	il_factor_new_instance_find(self, env, cache);
 	//型引数がないのでそのまま
-	if (self->fqcn->type_args->length == 0) {
+	if (self->type_args->length == 0) {
 		return self->c->gparent;
 	}
 	if (self->instance_type == NULL) {
 		namespace_* scope = (namespace_*)vector_top(cache->namespace_vec);
 		generic_type* a = generic_type_new(self->c->gparent->core_type);
-		for (int i = 0; i < self->fqcn->type_args->length; i++) {
-			generic_cache* e = vector_at(self->fqcn->type_args, i);
+		for (int i = 0; i < self->type_args->length; i++) {
+			generic_cache* e = vector_at(self->type_args, i);
 			generic_type* arg = generic_cache_gtype(e, scope, cache);
 			generic_type_addargs(a, arg);
 		}
@@ -85,7 +86,7 @@ generic_type* il_factor_new_instance_eval(il_factor_new_instance * self, envirom
 
 void il_factor_new_instance_delete(il_factor_new_instance * self) {
 	vector_delete(self->argument_list, il_Factor_new_instace_delete_arg);
-	generic_cache_delete(self->fqcn);
+	fqcn_cache_delete(self->fqcnc);
 	MEM_FREE(self);
 }
 
@@ -97,7 +98,7 @@ il_factor_new_instance* il_factor_cast_new_instance(il_factor* fact) {
 //private
 static void il_factor_new_instance_find(il_factor_new_instance * self, enviroment * env, il_load_cache* cache) {
 	//*
-	class_* cls = il_load_cache_class(cache, self->fqcn->fqcn);
+	class_* cls = il_load_cache_class(cache, self->fqcnc);
 	int temp = 0;
 	//TEST(!strcmp(cls->name, "Point3D"));
 	self->c = class_find_constructor(cls, self->argument_list, env, cache, &temp);

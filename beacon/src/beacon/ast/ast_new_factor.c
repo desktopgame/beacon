@@ -102,9 +102,10 @@ ast * ast_new_field_access(ast * afact, char * name, ast* atype_args) {
 	return ret;
 }
 
-ast * ast_new_new_instance(ast * afqcn, ast * argument_list) {
+ast * ast_new_new_instance(ast * afqcn, ast* atype_args, ast * argument_list) {
 	ast* ret = ast_new(ast_new_instance);
 	ast_push(ret, afqcn);
+	ast_push(ret, atype_args);
 	ast_push(ret, argument_list);
 	return ret;
 }

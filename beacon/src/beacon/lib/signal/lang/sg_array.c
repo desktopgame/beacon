@@ -51,7 +51,7 @@ object * sg_array_get(object * arr, int index) {
 }
 //private
 static void sg_array_nativeInit(method* parent, vm* vm, enviroment* env) {
-	type* tp = parent->gparent->core_type;
+	type* tp = parent->parent;
 	//Array#lengthを取り出す
 	int temp = 0;
 	field* lengthField = class_find_field(tp->u.class_, "length", &temp);

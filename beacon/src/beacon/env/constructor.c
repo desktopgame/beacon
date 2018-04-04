@@ -28,7 +28,7 @@ void constructor_dump(constructor * self, int depth) {
 	for (int i = 0; i < self->parameter_list->length; i++) {
 		vector_item e = vector_at(self->parameter_list, i);
 		parameter* p = (parameter*)e;
-		generic_type_print(p->gtype);
+		virtual_type_print(&p->vtype);
 		text_printf(" %s", p->name);
 		if ((i + 1) < self->parameter_list->length) {
 			text_printf(" ");

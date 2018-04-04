@@ -111,7 +111,6 @@
 						scope
 						scope_optional
 %left QUOTE
-%left DOT FUNCCALL POST_INC POST_DEC
 %left EQUAL NOTEQUAL
 %left GT GE LT LE
 %left LOGIC_AND
@@ -123,6 +122,7 @@
 %left LSHIFT RSHIFT
 %left ADD SUB
 %left MUL DIV MOD
+%left DOT FUNCCALL POST_INC POST_DEC
 %nonassoc LSB
 %nonassoc '<'
 %right CHILDA NOT NEGATIVE POSITIVE NEW REF
@@ -700,17 +700,25 @@ expression_nobrace
 	{
 		$$ = ast_new_op_call($1, ast_new_blank());
 	}
-	| NEW typename_T LRB argument_list RRB
+	| NEW fqcn_part typename_group LRB argument_list RRB
 	{
-		$$ = ast_new_new_instance($2, $4);
+		$$ = ast_new_new_instance($2, $3, $5);
 	}
-	| NEW typename_T LRB RRB
+	| NEW fqcn_part typename_group LRB RRB
 	{
-		$$ = ast_new_new_instance($2, ast_new_blank());
+		$$ = ast_new_new_instance($2, $3, ast_new_blank());
 	}
 	| fqcn_part typename_group
 	{
 		$$ = ast_new_variable($1, $2);
+	}
+	| THIS_TOK
+	{
+		$$ = ast_new_this();
+	}
+	| SUPER_TOK
+	{
+		$$ = ast_new_super();
 	}
 	;
 primary
@@ -729,14 +737,6 @@ primary
 	| NULL_TOK
 	{
 		$$ = ast_new_null();
-	}
-	| THIS_TOK
-	{
-		$$ = ast_new_this();
-	}
-	| SUPER_TOK
-	{
-		$$ = ast_new_super();
 	}
 	;
 

@@ -36,8 +36,8 @@ bool import_manager_loaded(import_manager * self, int index) {
 	return info->consume;
 }
 
-generic_type * import_manager_resolve(import_manager* self, namespace_* scope, generic_cache* fqcn, il_load_cache* ilcache) {
-	return generic_cache_gtype(fqcn, scope, ilcache);
+void import_manager_resolve(import_manager* self, namespace_* scope, generic_cache* fqcn, il_load_cache* ilcache, virtual_type* dest) {
+//	return generic_cache_gtype(fqcn, scope, ilcache);
 }
 
 void import_manager_delete(import_manager * self) {

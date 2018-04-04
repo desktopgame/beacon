@@ -5,6 +5,11 @@
 
 bool xassert_break(bool condition) {
 	if(condition) {
+		//visual studio code
+		//	-c_cpp_properties.json
+		#if defined(VSCDEBUG)
+			assert(false);
+		#endif
 		return true;
 	}
 	return false;

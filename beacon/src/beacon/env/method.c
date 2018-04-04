@@ -22,7 +22,7 @@ method * method_new(const char * name) {
 	ret->type = method_type_script;
 	ret->access = access_public;
 	ret->modifier = modifier_none;
-	ret->gparent = NULL;
+	ret->parent = NULL;
 	ret->type_parameter_list = vector_new();
 	return ret;
 }
@@ -46,18 +46,14 @@ void method_dump(method * self, int depth) {
 	for (int i = 0; i < self->parameter_list->length; i++) {
 		vector_item e = vector_at(self->parameter_list, i);
 		parameter* p = (parameter*)e;
-		generic_type_print(p->gtype);
+		virtual_type_print(&p->vtype);
 		text_printf(" %s", p->name);
 		if ((i + 1) < self->parameter_list->length) {
 			text_printf(" ");
 		}
 	}
-	if (self->return_gtype == NULL) {
-		text_printf(") -> NULL");
-	} else {
-		text_printf(") -> ");
-		generic_type_print(self->return_gtype);
-	}
+	text_printf(") -> ");
+	virtual_type_print(&self->return_vtype);
 	text_putline();
 	if (self->type == method_type_script) {
 		opcode_buf_dump(self->u.script_method->env->buf, depth + 1);
@@ -70,31 +66,14 @@ bool method_override(method* superM, method* subM) {
 		return false;
 	}
 	for (int i = 0; i < superM->parameter_list->length; i++) {
-		generic_type* ap = ((parameter*)vector_at(superM->parameter_list, i))->gtype;
-		generic_type* bp = ((parameter*)vector_at(subM->parameter_list, i))->gtype;
-		if (ap != bp) { return false; }
+		virtual_type ap = ((parameter*)vector_at(superM->parameter_list, i))->vtype;
+		virtual_type bp = ((parameter*)vector_at(subM->parameter_list, i))->vtype;
+		if (!virtual_type_eq(&ap, &bp)) { return false; }
 	}
-	generic_type* ar = superM->return_gtype;
-	generic_type* br = subM->return_gtype;
-	if (ar == br) {
+	virtual_type ar = superM->return_vtype;
+	virtual_type br = subM->return_vtype;
+	if (virtual_type_eq(&ar, &br)) {
 		return true;
-	}
-	//仮想型の場合
-	if (ar->virtual_type_index != -1) {
-		//戻り値がクラスに宣言された型変数であるとき
-		if (ar->tag == generic_type_tag_class) {
-			//これでサブクラスによって List<T> の
-			//Tに何が当てはめられたかを参照する def
-			generic_type* impl = type_find_impl(subM->gparent->core_type, superM->gparent->core_type);
-			generic_type* def = vector_at(impl->type_args_list, ar->virtual_type_index);
-			assert(def->virtual_type_index != -1);
-			if (generic_type_castable(ar, def)) {
-				return true;
-			}
-		//戻り値がメソッドに宣言された型変数であるとき
-		} else if (ar->tag == generic_type_tag_method) {
-
-		}
 	}
 	//共変戻り値
 	//FIXME:あとで

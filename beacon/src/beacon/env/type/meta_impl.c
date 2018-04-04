@@ -39,9 +39,9 @@ method * meta_find_method(vector * method_vec, const char * name, vector * args,
 			//実引数が NULL なら常に許容する
 			int dist = 0;
 			generic_type* argType = il_factor_eval(p->factor, env, cache);
-			generic_type* parType = p2->gtype;
-			if (argType != CL_NULL) {
-				dist = generic_type_distance(argType, parType);
+			virtual_type parvType = p2->vtype;
+			if (argType != CL_NULL->generic_self) {
+				dist = virtual_type_distance(&parvType, argType);
 			}
 			score += dist;
 			//継承関係のないパラメータ
@@ -84,7 +84,7 @@ vector * meta_find_constructors(class_ * self, vector * args, enviroment * env, 
 			vector_item d2 = vector_at(c->parameter_list, j);
 			il_argument* p = (il_argument*)d;
 			parameter* p2 = (parameter*)d2;
-			if (!generic_type_castable(il_factor_eval(p->factor, env, cache), p2->gtype)) {
+			if (!virtual_type_castable(&p2->vtype, il_factor_eval(p->factor, env, cache))) {
 				match = false;
 				break;
 			}
@@ -120,7 +120,7 @@ vector * meta_find_rconstructors(class_ * self, vector * args) {
 			vector_item d2 = vector_at(c->parameter_list, j);
 			object* p = (object*)d;
 			parameter* p2 = (parameter*)d2;
-			if (!generic_type_castable(p->gtype, p2->gtype)) {
+			if (!virtual_type_castable(&p2->vtype, p->gtype)) {
 				match = false;
 				break;
 			}

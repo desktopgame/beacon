@@ -7,6 +7,7 @@
 #include "../../env/type_impl.h"
 #include "../../env/field.h"
 #include "../../util/mem.h"
+#include "../../util/xassert.h"
 #include "../../vm/symbol_entry.h"
 #include <assert.h>
 #include <string.h>
@@ -79,16 +80,38 @@ static void il_factor_variable_check(il_factor_variable* self, enviroment* env, 
 	if(self->type != ilvariable_type_undefined) {
 		return;
 	}
+	assert(self->fqcn != NULL);
 	//hoge, foo のような文字列の場合
 	if(self->fqcn->scope_vec->length == 0) {
-		il_factor_variable_local* lc = il_factor_variable_local_new(self->fqcn->name);
-		self->type = ilvariable_type_local;
-		//値を入れ替え
-		lc->entry = symbol_table_entry(env->sym_table, NULL, lc->name);
-		lc->type_args = self->type_args;
-		self->type_args = NULL;
+		namespace_* cur = il_load_cache_namespace(cache);
+		class_* ctype = namespace_get_class(cur, self->fqcn->name);
+		if(ctype == NULL) {
+			ctype = namespace_get_class(namespace_lang(), self->fqcn->name);
+		}
+		//現在の名前空間から参照できるクラスがある場合
+		if(ctype != NULL) {
+			//FIXME:すぐ下のところからコピペ
+			il_factor_variable_static* st = il_factor_variable_static_new();
+			self->type = ilvariable_type_static;
+			//値を入れ替え
+			st->fqcn = self->fqcn;
+			st->type_args = self->type_args;
+			self->fqcn = NULL;
+			self->type_args = NULL;
+			self->u.static_ = st;
+		//ただのローカル変数の場合
+		} else {
+			il_factor_variable_local* lc = il_factor_variable_local_new(self->fqcn->name);
+			self->type = ilvariable_type_local;
+			//値を入れ替え
+			lc->entry = symbol_table_entry(env->sym_table, NULL, lc->name);
+			lc->type_args = self->type_args;
+			self->type_args = NULL;
+			self->u.local_ = lc;
+		}
 	//Namespace::Hoge Namespace::Foo のような文字列の場合.
 	} else if(self->fqcn->scope_vec->length > 0) {
+		class_* cls = TYPE2CLASS((type*)vector_top(cache->type_vec));
 		il_factor_variable_static* st = il_factor_variable_static_new();
 		self->type = ilvariable_type_static;
 		//値を入れ替え
@@ -96,6 +119,7 @@ static void il_factor_variable_check(il_factor_variable* self, enviroment* env, 
 		st->type_args = self->type_args;
 		self->fqcn = NULL;
 		self->type_args = NULL;
+		self->u.static_ = st;
 	}
 }
 

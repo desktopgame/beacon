@@ -6,6 +6,9 @@
 #include "util/io.h"
 #include "util/text.h"
 #include "env/script_context.h"
+#include "env/namespace.h"
+#include "env/fqcn_cache.h"
+#include "env/generic_cache.h"
 #include "test.h"
 #include "util/string_buffer.h"
 #include "util/logger.h"
@@ -48,7 +51,7 @@ int run_script(int argc, char* argv[]) {
 	return 0;
 }
 
-int main(int argc, char* argv[]) {
+int _main(int argc, char* argv[]) {
 	mem_set_trace(true);
 	logger_set_enabled(false);
 	bool test = false;
@@ -63,10 +66,16 @@ int main(int argc, char* argv[]) {
 		script_context_close();
 	} else {
 		script_context_open();
+		namespace_dump();
 		script_context_close();
 		ret = 0;
 	}
 	mem_dump();
 	mem_destroy();
 	return ret;
+}
+
+int main(int argc, char* argv[]) {
+	generic_cache* cc = generic_cache_new();
+	return _main(argc, argv);
 }

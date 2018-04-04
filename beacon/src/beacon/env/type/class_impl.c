@@ -93,13 +93,13 @@ void class_alloc_fields(class_ * self, object * o) {
 		field* f = (field*)vector_at(self->field_list, i);
 		object* a = object_get_null();
 		//プリミティブ型のときはデフォルト値を入れておく
-		if (f->gtype == CL_INT->generic_self) {
+		if (virtual_type_int(&f->vtype)) {
 			a = object_int_new(0);
-		} else if (f->gtype == CL_DOUBLE->generic_self) {
+		} else if (virtual_type_double(&f->vtype)) {
 			a = object_double_new(0.0);
-		} else if (f->gtype == CL_BOOL->generic_self) {
+		} else if (virtual_type_bool(&f->vtype)) {
 			a = object_bool_get(false);
-		} else if (f->gtype == CL_CHAR->generic_self) {
+		} else if (virtual_type_char(&f->vtype)) {
 			a = object_char_new('\0');
 		}
 		//静的フィールドは別の場所に確保
@@ -492,11 +492,11 @@ object * class_new_rinstance(class_ * self, vm* vmc, int count, ...) {
 void class_linkall(class_ * self) {
 	for (int i = 0; i < self->field_list->length; i++) {
 		field* f = (field*)vector_at(self->field_list, i);
-		f->gparent = self->parent->generic_self;
+		f->parent = self->parent;
 	}
 	for (int i = 0; i < self->method_list->length; i++) {
 		method* m = (method*)vector_at(self->method_list, i);
-		m->gparent = self->parent->generic_self;
+		m->parent = self->parent;
 	}
 	for (int i = 0; i < self->constructor_list->length; i++) {
 		constructor* ctor = (constructor*)vector_at(self->constructor_list, i);
@@ -556,9 +556,9 @@ static constructor* class_find_constructor_impl(vector* v, vector * args, enviro
 			//NULL以外なら型の互換性を調べる
 			int dist = 0;
 			generic_type* argType = il_factor_eval(p->factor, env, cache);
-			generic_type* parType = p2->gtype;
-			if (argType != CL_NULL) {
-				dist = generic_type_distance(argType, parType);
+			virtual_type parvType = p2->vtype;
+			if (argType != CL_NULL->generic_self) {
+				dist = virtual_type_distance(&parvType, argType);
 			}
 			if (dist == -1) {
 				illegal = true;
@@ -598,9 +598,9 @@ static constructor* class_find_rconstructor_impl(vector* v, vector * args, int *
 			//NULL以外なら型の互換性を調べる
 			int dist = 0;
 			generic_type* argType = p->gtype;
-			generic_type* parType = p2->gtype;
-			if (argType != CL_NULL) {
-				dist = type_distance(argType, parType);
+			virtual_type parvType = p2->vtype;
+			if (argType != CL_NULL->generic_self) {
+				dist = virtual_type_distance(&parvType, argType);
 			}
 			if (dist == -1) {
 				illegal = true;

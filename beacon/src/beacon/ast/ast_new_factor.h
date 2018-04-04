@@ -122,9 +122,10 @@ ast* ast_new_field_access(ast* afact, char* name, ast* atype_args);
 /**
  * new X::Y(...) を表す因子を作成します.
  * @param afqcn
+ * @param atype_args
  * @parma argument_list
  * @return
  */
-ast* ast_new_new_instance(ast* afqcn, ast* argument_list);
+ast* ast_new_new_instance(ast* afqcn, ast* atype_args, ast* argument_list);
 
 #endif // !SIGNAL_AST_AST_NEW_FACTOR_H

@@ -112,13 +112,8 @@ void class_loader_sgload_methods_impl(class_loader* self, il_type* iltype, type*
 		} else {
 			method->u.script_method = script_method_new();
 		}
-		method->gparent = tp->generic_self;
-		method->return_gtype = import_manager_resolve(
-			self->import_manager,
-			scope,
-			ilmethod->return_fqcn,
-			cache
-		);
+		method->parent = tp;
+		import_manager_resolve(self->import_manager, scope, ilmethod->return_fqcn, cache, &method->return_vtype);
 		//ILパラメータを実行時パラメータへ変換
 		//NOTE:ここでは戻り値の型,引数の型を設定しません
 		//     class_loader_sgload_complete参照
@@ -176,11 +171,13 @@ void class_loader_sgload_complete_methods_impl(class_loader* self, namespace_* s
 				generic_cache_gtype(ilparam->fqcn, scope, cache),
 				ilparam->name
 			);
+			text_printf("%s ", ilparam->name);
 			//実引数を保存
 			//0番目は this のために開けておく
 			opcode_buf_add(env->buf, (vector_item)op_store);
 			opcode_buf_add(env->buf, (vector_item)(i + 1));
 		}
+		text_printf("\n");
 		//インスタンスメソッドなら
 		//0番目を this で埋める
 		if (!modifier_is_static(me->modifier)) {
@@ -207,8 +204,8 @@ static void class_loader_sgload_fields_impl(class_loader* self, il_type* iltype,
 		field* field = field_new(ilfield->name);
 		field->access = ilfield->access;
 		field->modifier = ilfield->modifier;
-		field->gparent = tp->generic_self;
-		field->gtype = generic_cache_gtype(ilfield->fqcn, scope, cache);
+		field->parent = tp;
+		import_manager_resolve(self->import_manager, scope, ilfield->fqcn, cache, &field->vtype);
 		//NOTE:ここではフィールドの型を設定しません
 		//     class_loader_sgload_complete参照
 		//vector_push(classz->field_list, field);
@@ -270,10 +267,10 @@ static void class_loader_sgload_complete_fields_impl(class_loader* self, namespa
 		vector_item e = vector_at(sgfields, i);
 		field* fi = (field*)e;
 
-		vector_push(cache->type_vec, fi->gparent->core_type);
+		vector_push(cache->type_vec, fi->parent);
 		//FIXME:ILフィールドと実行時フィールドのインデックスが同じなのでとりあえず動く
 		il_field* ilfield = ((il_field*)vector_at(ilfields, i));
-		fi->gtype = import_manager_resolve(self->import_manager, scope, ilfield->fqcn, cache);
+		import_manager_resolve(self->import_manager, scope, ilfield->fqcn, cache, &fi->vtype);
 		vector_pop(cache->type_vec);
 	}
 	il_load_cache_delete(cache);
@@ -331,15 +328,13 @@ static void class_loader_sgload_params(class_loader* self, namespace_* scope, ve
 		//FIXME:ILパラメータと実行時パラメータのインデックスが同じなのでとりあえず動く
 		//parameter* mep = (parameter*)vector_at(me->parameter_list, j);
 		parameter* mep = (parameter*)vector_at(sg_param_list, j);
-		generic_type* gtp = import_manager_resolve(
+		import_manager_resolve(
 			self->import_manager,
 			scope,
 			ilparam->fqcn,
-			cache
-			);
-		assert(gtp != NULL);
-		//TEST(c == NULL);
-		mep->gtype = gtp;
+			cache,
+			&mep->vtype
+		);
 	}
 }
 

@@ -1,0 +1,8 @@
+namespace beacon {
+	class Test {
+		public:
+		def invokeTest() -> Void {
+			this.hoge.foo();
+		}
+	}
+}

@@ -4,14 +4,19 @@
 #include "../../../env/fqcn_cache.h"
 struct enviroment;
 struct generic_type;
+struct method;
 
 typedef struct il_factor_invoke_static {
+	char* name;
 	fqcn_cache* fqcn;
 	vector* args;
 	vector* type_args;
+	struct method* m;
+	int index;
+	struct generic_type* resolved;
 } il_factor_invoke_static;
 
-il_factor_invoke_static* il_factor_invoke_static_new();
+il_factor_invoke_static* il_factor_invoke_static_new(const char* name);
 
 void il_factor_invoke_static_generate(il_factor_invoke_static* self, struct enviroment* env, il_load_cache* cache);
 

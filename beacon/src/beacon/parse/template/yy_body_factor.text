@@ -156,17 +156,25 @@ expression_nobrace
 	{
 		$$ = ast_new_op_call($1, ast_new_blank());
 	}
-	| NEW typename_T LRB argument_list RRB
+	| NEW fqcn_part typename_group LRB argument_list RRB
 	{
-		$$ = ast_new_new_instance($2, $4);
+		$$ = ast_new_new_instance($2, $3, $5);
 	}
-	| NEW typename_T LRB RRB
+	| NEW fqcn_part typename_group LRB RRB
 	{
-		$$ = ast_new_new_instance($2, ast_new_blank());
+		$$ = ast_new_new_instance($2, $3, ast_new_blank());
 	}
 	| fqcn_part typename_group
 	{
 		$$ = ast_new_variable($1, $2);
+	}
+	| THIS_TOK
+	{
+		$$ = ast_new_this();
+	}
+	| SUPER_TOK
+	{
+		$$ = ast_new_super();
 	}
 	;
 $$REM __SELF
@@ -186,13 +194,5 @@ primary
 	| NULL_TOK
 	{
 		$$ = ast_new_null();
-	}
-	| THIS_TOK
-	{
-		$$ = ast_new_this();
-	}
-	| SUPER_TOK
-	{
-		$$ = ast_new_super();
 	}
 	;

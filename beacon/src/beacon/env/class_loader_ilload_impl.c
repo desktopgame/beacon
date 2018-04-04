@@ -14,8 +14,10 @@
 #include "../il/il_type_argument.h"
 #include "../util/mem.h"
 #include "../util/text.h"
+#include "../util/xassert.h"
 #include "../util/logger.h"
 #include <stdio.h>
+#include <string.h>
 #include <assert.h>
 //
 //ilload
@@ -551,9 +553,12 @@ il_factor_variable* class_loader_ilload_variable(class_loader* self, ast* source
 il_factor_new_instance* class_loader_ilload_new_instance(class_loader* self, ast* source) {
 	assert(source->tag == ast_new_instance);
 	ast* afqcn = ast_first(source);
-	ast* aargs = ast_second(source);
+	ast* atype_args = ast_second(source);
+	ast* aargs = ast_at(source, 2);
 	il_factor_new_instance* ret = il_factor_new_instance_new();
-	class_loader_ilload_generic(afqcn, ret->fqcn);
+	class_loader_ilload_fqcn(afqcn, ret->fqcnc);
+	class_loader_ilload_type_argument(self, atype_args, ret->type_args);
+//	class_loader_ilload_generic(afqcn, ret->fqcn);
 	class_loader_ilload_argument_list(self, ret->argument_list, aargs);
 	return ret;
 }
@@ -593,7 +598,7 @@ il_factor_call_op* class_loader_ilload_call_op(class_loader* self, ast* source) 
 	ast* afact = ast_first(source);
 	ast* aargs = ast_second(source);
 	//ast* aargs = ast_at(source, 2);
-	ret->receiver = class_loader_ilload_factorImpl(self, afact);
+	ret->receiver = class_loader_ilload_factor(self, afact);
 	//class_loader_ilload_type_argument(self, atype_args, ret->type_argument_list);
 	class_loader_ilload_argument_list(self, ret->argument_list, aargs);
 	//il_factor_dump(ret->receiver, 0);
@@ -642,6 +647,10 @@ void class_loader_ilload_argument_list(class_loader* self, vector* list, ast* so
 
 //private
 static void class_loader_ilload_fqcn(ast* afqcn, fqcn_cache* fqcn) {
+	if(afqcn->tag == ast_fqcn_class_name) {
+		fqcn->name = text_strdup(afqcn->u.string_value);
+		return;
+	}
 	if(afqcn->tag == ast_fqcn ||
 	   afqcn->tag == ast_fqcn_part_list) {
 		if (afqcn->tag == ast_fqcn_part_list &&

@@ -4,6 +4,9 @@
 #include <stdbool.h>
 #include "../util/vector.h"
 #include "../il/il_load_cache.h"
+
+#define TYPE2CLASS(type) (type_cast_class(type))
+#define TYPE2INTERFACE(type) (type_cast_interface(type))
 /**
  * 型の種類を表すタグ.
  */
@@ -162,4 +165,7 @@ struct generic_type* type_type_parameter_at(type* self, int index);
  * @param self
  */
 void type_delete(type* self);
+
+struct class_* type_cast_class(type* self);
+struct interface_* type_cast_interface(type* self);
 #endif // !SIGNAL_ENV_TYPE_INTERFACE_H

@@ -92,6 +92,7 @@ void generic_type_delete(generic_type * self) {
 	MEM_FREE(self);
 }
 
+//Hash<String,List<Int>>
 generic_type* generic_type_apply(generic_type* self, il_load_cache* cache) {
 	generic_type* copy = generic_type_new(self->core_type);
 	generic_type* e = NULL;

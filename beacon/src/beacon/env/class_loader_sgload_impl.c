@@ -134,8 +134,8 @@ void class_loader_sgload_enum(class_loader * self, il_type * iltype, namespace_ 
 		f->modifier = modifier_static;
 		f->access = access_public;
 		f->static_value = object_int_new(i);
-		f->gtype = CL_INT->generic_self;
-		f->gparent = tp->generic_self;
+		virtual_type_nongeneric_init(&f->vtype, CL_INT->generic_self);
+		f->parent = tp;
 		class_add_field(cls, f);
 	}
 }

@@ -31,11 +31,6 @@ void il_stmt_variable_init_dump(il_stmt_variable_init * self, int depth) {
 }
 
 void il_stmt_variable_init_generate(il_stmt_variable_init * self, enviroment * env, il_load_cache* cache) {
-	symbol_entry* e = symbol_table_entry(
-		env->sym_table,
-		generic_cache_gtype(self->fqcn, (namespace_*)vector_top(cache->namespace_vec), cache),
-		self->name
-	);
 	il_factor_generate(self->fact, env, cache);
 	//宣言型と代入型が異なる場合
 	generic_type* ga = il_factor_eval(self->fact, env, cache);
@@ -46,11 +41,17 @@ void il_stmt_variable_init_generate(il_stmt_variable_init * self, enviroment * e
 	}
 	assert(generic_type_castable(ga, gb));
 	opcode_buf_add(env->buf, op_store);
-	opcode_buf_add(env->buf, e->index);
+	opcode_buf_add(env->buf, self->sym->index);
 }
 
 void il_stmt_variable_init_load(il_stmt_variable_init * self, enviroment * env, il_load_cache* cache, il_ehandler * eh) {
 	il_factor_load(self->fact, env, cache, eh);
+	symbol_entry* e = symbol_table_entry(
+		env->sym_table,
+		generic_cache_gtype(self->fqcn, (namespace_*)vector_top(cache->namespace_vec), cache),
+		self->name
+	);
+	self->sym = e;
 }
 
 void il_stmt_variable_init_delete(il_stmt_variable_init * self) {

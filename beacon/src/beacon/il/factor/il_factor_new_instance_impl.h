@@ -2,6 +2,7 @@
 #ifndef BEACON_IL_IL_FACTOR_NEW_INSTANCE_H
 #define BEACON_IL_IL_FACTOR_NEW_INSTANCE_H
 #include "../../util/vector.h"
+#include "../../env/fqcn_cache.h"
 #include "../../env/generic_cache.h"
 #include "../il_factor_interface.h"
 #define IL_FACT2NEW(fact) (il_factor_cast_new_instance(fact))
@@ -13,7 +14,9 @@ struct constructor;
  */
 typedef struct il_factor_new_instance {
 	vector* argument_list;
-	generic_cache* fqcn;
+	fqcn_cache* fqcnc;
+	vector* type_args;
+//	generic_cache* fqcn;
 	generic_type* instance_type;
 	struct constructor* c;
 	int constructor_index;

@@ -8,11 +8,14 @@
 #define IL_FACT2MEM(fact) (il_factor_cast_member_op(fact))
 
 struct enviroment;
+struct field;
 
 typedef struct il_factor_member_op {
 	il_factor* fact;
 	char* name;
 	vector* type_args;
+	int index;
+	struct field* f;
 } il_factor_member_op;
 
 il_factor* il_factor_wrap_member_op(il_factor_member_op* self);

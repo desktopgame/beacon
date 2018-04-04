@@ -25,5 +25,7 @@ generic_type* il_factor_variable_static_eval(il_factor_variable_static * self, e
 }
 
 void il_factor_variable_static_delete(il_factor_variable_static* self) {
+	fqcn_cache_delete(self->fqcn);
+	vector_delete(self->type_args, vector_deleter_null);
 	MEM_FREE(self);
 }
