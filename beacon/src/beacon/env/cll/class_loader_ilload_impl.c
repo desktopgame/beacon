@@ -26,6 +26,7 @@
 #include "../../il/il_type_parameter_rule.h"
 #include "class_loader_ilload_type_module_impl.h"
 #include "class_loader_ilload_factor_module_impl.h"
+#include "class_loader_ilload_stmt_module_impl.h"
 
 //proto
 static il_factor* CLIL_factorImpl(class_loader* self, ast* source);
@@ -44,7 +45,7 @@ void class_loader_ilload_impl(class_loader* self, ast* source_code) {
 			class_loader_ilload_namespace(self, self->il_code->namespace_list, child);
 		//print();
 		} else if (ast_is_stmt(child)) {
-			class_loader_ilload_body(self, self->il_code->statement_list, child);
+			CLIL_body(self, self->il_code->statement_list, child);
 		//def f() { ... }
 		} else if(child->tag == ast_function_decl) {
 			class_loader_ilload_function(self, child);
@@ -64,7 +65,7 @@ void class_loader_ilload_function(class_loader * self, ast * source) {
 	ast* aret_name = ast_at(source, 3);
 	il_function* ilfunc = il_function_new(afunc_name->u.string_value);
 	class_loader_ilload_parameter_list(self, ilfunc->parameter_list, aparam_list);
-	class_loader_ilload_body(self, ilfunc->statement_list, afunc_body);
+	CLIL_body(self, ilfunc->statement_list, afunc_body);
 	CLIL_generic_cache(ast_first(aret_name), ilfunc->return_fqcn);
 	vector_push(self->il_code->function_list, ilfunc);
 }
@@ -290,7 +291,7 @@ void class_loader_ilload_method(class_loader* self, il_type* current, ast* metho
 	v->modifier = ast_cast_to_modifier(modifier);
 	//TEST((!strcmp(v->name, "main")));
 	class_loader_ilload_parameter_list(self, v->parameter_list, param_list);
-	class_loader_ilload_body(self, v->statement_list, func_body);
+	CLIL_body(self, v->statement_list, func_body);
 	il_type_add_method(current, v);
 	//il_class_add_method(current->u.class_, v);
 	//vector_push(il_type_method_vec(current), v);
@@ -315,7 +316,7 @@ void class_loader_ilload_constructor(class_loader* self, il_type* current, ast* 
 	ilcons->chain = ilchain;
 	//ilcons->modifier = ast_cast_to_modifier(amodifier);
 	class_loader_ilload_parameter_list(self, ilcons->parameter_list, aparams);
-	class_loader_ilload_body(self, ilcons->statement_list, abody);
+	CLIL_body(self, ilcons->statement_list, abody);
 	vector_push(current->u.class_->constructor_list, ilcons);
 }
 
@@ -345,238 +346,4 @@ void class_loader_ilload_parameter_list(class_loader* self, vector* list, ast* s
 	}
 }
 
-void class_loader_ilload_body(class_loader* self, vector* list, ast* source) {
-	if (source->tag == ast_stmt_list || source->tag == ast_scope) {
-		for (int i = 0; i < source->child_count; i++) {
-			class_loader_ilload_body(self, list, ast_at(source, i));
-		}
-	} else {
-		il_stmt* stmt = class_loader_ilload_bodyImpl(self, source);
-		if (stmt != NULL) {
-			stmt->lineno = source->lineno;
-			vector_push(list, stmt);
-		}
-	}
-}
-
-il_stmt_inferenced_type_init * class_loader_ilload_inferenced_type_init(class_loader * self, ast * source) {
-	ast* aname = ast_first(source);
-	ast* afact = ast_second(source);
-	il_stmt_inferenced_type_init* ret = il_stmt_inferenced_type_init_new(aname->u.string_value);
-	ret->fact = CLIL_factor(self, afact);
-	return ret;
-}
-
-il_stmt_variable_decl* class_loader_ilload_variable_decl(class_loader* self, ast* source) {
-	ast* afqcn = ast_first(source);
-	ast* aname = ast_second(source);
-	il_stmt_variable_decl* ret = il_stmt_variable_decl_new(aname->u.string_value);
-	ret->name = text_strdup(aname->u.string_value);
-	CLIL_generic_cache(ast_first(afqcn), ret->fqcn);
-	return ret;
-}
-
-il_stmt_variable_init* class_loader_ilload_variable_init(class_loader* self, ast* source) {
-	ast* afqcn = ast_first(source);
-	ast* aident = ast_second(source);
-	ast* afact = ast_at(source, 2);
-	il_stmt_variable_init* ret = il_stmt_variable_init_new(aident->u.string_value);
-	CLIL_generic_cache(afqcn, ret->fqcn);
-	ret->fact = CLIL_factor(self, afact);
-	return ret;
-}
-
-il_stmt_if* class_loader_ilload_if(class_loader* self, ast* source) {
-	assert(source->tag == ast_if);
-	il_stmt_if* ret = il_stmt_if_new();
-	ast* acond = ast_first(source);
-	ast* abody = ast_second(source);
-	il_factor* ilcond = CLIL_factor(self, acond);
-	//il_stmt_list* ilbody = il_stmt_list_new();
-	class_loader_ilload_body(self, ret->body, abody);
-	ret->condition = ilcond;
-	//ret->body = ilbody;
-	return ret;
-}
-
-il_stmt_if* class_loader_ilload_if_elif_list(class_loader* self, ast* source) {
-	ast* aif = ast_first(source);
-	ast* aelif_list = ast_second(source);
-	il_stmt_if* ilif = class_loader_ilload_if(self, aif);
-	class_loader_ilload_elif_list(self, ilif->elif_list, aelif_list);
-	//il_stmt_list_push(list, ilif);
-	return ilif;
-}
-
-il_stmt_if* class_loader_ilload_if_else(class_loader* self, ast* source) {
-	ast* aif = ast_first(source);
-	ast* aelse = ast_second(source);
-	ast* abody = ast_first(aelse);
-	il_stmt_if* ilif = class_loader_ilload_if(self, aif);
-	class_loader_ilload_body(self, ilif->else_body->body, abody);
-	return ilif;
-}
-
-il_stmt_if* class_loader_ilload_if_elif_list_else(class_loader* self, ast* source) {
-	ast* aif_eliflist = ast_first(source);
-	ast* aelse = ast_second(source);
-	il_stmt_if* ilif = class_loader_ilload_if_elif_list(self, aif_eliflist);
-	class_loader_ilload_body(self, ilif->else_body->body, ast_first(aelse));
-	return ilif;
-}
-
-il_stmt_while * class_loader_ilload_while(class_loader * self, ast * source) {
-	ast* acond = ast_first(source);
-	ast* abody = ast_second(source);
-	il_stmt_while* ilwhile = il_stmt_while_new();
-	ilwhile->condition = CLIL_factor(self, acond);
-	class_loader_ilload_body(self, ilwhile->statement_list, abody);
-	return ilwhile;
-}
-
-void class_loader_ilload_elif_list(class_loader* self, vector* list, ast* source) {
-	if (source->tag == ast_elif_list) {
-		for (int i = 0; i < source->child_count; i++) {
-			class_loader_ilload_elif_list(self, list, ast_at(source, i));
-		}
-	} else if (source->tag == ast_elif) {
-		ast* acond = ast_first(source);
-		ast* abody = ast_second(source);
-		//il_stmt* ilif = il_stmt_if_new();
-		il_stmt_elif* ilelif = il_stmt_elif_new();
-		ilelif->condition = CLIL_factor(self, acond);
-		class_loader_ilload_body(self, ilelif->body, abody);
-		//il_stmt_list_push(list, ilelif);
-		il_stmt_elif_list_push(list, ilelif);
-	}
-}
-
-il_stmt_return* class_loader_ilload_return(class_loader* self, ast* source) {
-	assert(source->tag == ast_return);
-	ast* afact = ast_first(source);
-	il_factor* ilfact = CLIL_factor(self, afact);
-	il_stmt_return* ret = il_stmt_return_new();
-	ret->fact = ilfact;
-	return ret;
-}
-
-il_stmt_try* class_loader_ilload_try(class_loader* self, ast* source) {
-	ast* abody = ast_first(source);
-	ast* acatch_list = ast_second(source);
-	il_stmt_try* ret = il_stmt_try_new();
-	class_loader_ilload_body(self, ret->statement_list, abody);
-	class_loader_ilload_catch_list(self, ret->catch_list, acatch_list);
-	return ret;
-}
-
-void class_loader_ilload_catch_list(class_loader* self, vector* dest, ast* source) {
-	if(source->tag == ast_stmt_catch) {
-		ast* atypename = ast_first(source);
-		ast* aname = ast_second(source);
-		ast* abody = ast_at(source, 2);
-		il_stmt_catch* ilcatch = il_stmt_catch_new(aname->u.string_value);
-		CLIL_generic_cache(ast_first(atypename), ilcatch->fqcn);
-		class_loader_ilload_body(self, ilcatch->statement_list, abody);
-		vector_push(dest, ilcatch);
-
-	} else if(source->tag == ast_stmt_catch_list) {
-		for(int i=0; i<source->child_count; i++) {
-			class_loader_ilload_catch_list(self, dest, ast_at(source, i));
-		}
-	}
-}
-
-il_stmt_throw* class_loader_ilload_throw(class_loader* self, ast* source) {
-	il_stmt_throw* ret = il_stmt_throw_new();
-	ret->fact = CLIL_factor(self, ast_first(source));
-	return ret;
-}
-
-
 //private
-static il_stmt* class_loader_ilload_bodyImpl(class_loader* self, ast* source) {
-	//text_printf("    ");
-	//ast_print(source);
-	//text_printf("\n");
-	switch (source->tag) {
-		case ast_stmt:
-		{
-			return class_loader_ilload_bodyImpl(self, ast_first(source));
-		}
-		case ast_proc:
-		{
-			ast* afact = ast_first(source);
-			il_factor* ilfact = CLIL_factor(self, afact);
-			il_stmt_proc* ilproc = il_stmt_proc_new();
-			ilproc->factor = ilfact;
-			assert(ilfact != NULL);
-			return il_stmt_wrap_proc(ilproc);
-		}
-		case ast_stmt_variable_decl:
-		{
-			il_stmt_variable_decl* ilvardecl = class_loader_ilload_variable_decl(self, source);
-			return il_stmt_wrap_variable_decl(ilvardecl);
-		}
-		case ast_stmt_variable_init:
-		{
-			il_stmt_variable_init* ilvarinit = class_loader_ilload_variable_init(self, source);
-			return il_stmt_wrap_variable_init(ilvarinit);
-		}
-		case ast_inferenced_type_init:
-		{
-			il_stmt_inferenced_type_init* ilinfer = class_loader_ilload_inferenced_type_init(self, source);
-			return il_stmt_wrap_inferenced_type_init(ilinfer);
-		}
-		case ast_if:
-		{
-			il_stmt_if* ilif = class_loader_ilload_if(self, source);
-			return il_stmt_wrap_if(ilif);
-		}
-		case ast_if_elif_list:
-		{
-			il_stmt_if* ilif = class_loader_ilload_if_elif_list(self, source);
-			return il_stmt_wrap_if(ilif);
-		}
-		case ast_if_else:
-		{
-			il_stmt_if* ilif = class_loader_ilload_if_else(self, source);
-			return il_stmt_wrap_if(ilif);
-		}
-		case ast_if_elif_list_else:
-		{
-			il_stmt_if* ilif = class_loader_ilload_if_elif_list_else(self, source);
-			return il_stmt_wrap_if(ilif);
-		}
-		case ast_while:
-		{
-			il_stmt_while* ilwh = class_loader_ilload_while(self, source);
-			return il_stmt_wrap_while(ilwh);
-		}
-		case ast_break:
-		{
-			return il_stmt_wrap_break();
-		}
-		case ast_continue:
-		{
-			return il_stmt_wrap_continue();
-		}
-		case ast_return:
-		{
-			il_stmt_return* ilret = class_loader_ilload_return(self, source);
-			return il_stmt_wrap_return(ilret);
-		}
-		case ast_stmt_try:
-		{
-			il_stmt_try* iltry = class_loader_ilload_try(self, source);
-			return il_stmt_wrap_try(iltry);
-		}
-		case ast_stmt_throw:
-		{
-			il_stmt_throw* ilthrow = class_loader_ilload_throw(self, source);
-			return il_stmt_wrap_throw(ilthrow);
-		}
-		default:
-			break;
-	}
-	return NULL;
-}
