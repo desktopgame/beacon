@@ -361,14 +361,6 @@ il_factor_call_op* class_loader_ilload_call_op(class_loader* self, ast* source);
 il_factor_member_op* class_loader_ilload_member_op(class_loader* self, ast* source);
 
 /**
- * Hoge::Foo::Classのような修飾名を表すASTを解析して
- * 引数destに格納します.
- * @param fqcn
- * @param dest
- */
-void class_loader_ilload_generic(ast* fqcn, generic_cache* dest);
-
-/**
  * 実引数の一覧を IL に変換して list へ格納します.
  * @param self
  * @param list
