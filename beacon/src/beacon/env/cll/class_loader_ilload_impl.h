@@ -359,12 +359,4 @@ il_factor_call_op* class_loader_ilload_call_op(class_loader* self, ast* source);
  * @return
  */
 il_factor_member_op* class_loader_ilload_member_op(class_loader* self, ast* source);
-
-/**
- * 実引数の一覧を IL に変換して list へ格納します.
- * @param self
- * @param list
- * @param source
- */
-
 #endif
