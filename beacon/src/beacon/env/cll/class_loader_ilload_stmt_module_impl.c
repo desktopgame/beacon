@@ -21,6 +21,9 @@ static il_stmt_try* CLIL_try(class_loader* self, ast* source);
 static void CLIL_catch_list(class_loader* self, vector* dest, ast* source);
 static il_stmt_throw* CLIL_throw(class_loader* self, ast* source);
 
+il_stmt* CLIL_stmt(class_loader* self, ast* source) {
+	return CLIL_bodyImpl(self, source);
+}
 
 void CLIL_body(class_loader* self, vector* list, ast* source) {
 	if (source->tag == ast_stmt_list || source->tag == ast_scope) {
