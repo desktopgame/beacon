@@ -1,6 +1,7 @@
 #include "il_factor_variable_local_impl.h"
 #include "../../../util/mem.h"
 #include "../../../util/text.h"
+#include "../../../util/xassert.h"
 #include "../../../env/generic_type.h"
 #include "../../../env/type_impl.h"
 #include "../../../env/field.h"
@@ -29,6 +30,7 @@ void il_factor_variable_local_generate(il_factor_variable_local* self, enviromen
 
 void il_factor_variable_local_load(il_factor_variable_local * self, enviroment * env, il_load_cache* cache, il_ehandler* eh) {
 	if(self->type == variable_local_undefined) {
+		//XSTREQ(self->name, "iter");
 		//NOTE:変数宣言の後にその変数を使用する場合、
 		//factorはload時点でシンボルエントリーを取得しようとするが、
 		//stmtはgenerate時点でシンボルテーブルへ書き込むので、
@@ -59,6 +61,10 @@ void il_factor_variable_local_load(il_factor_variable_local * self, enviroment *
 		} else {
 			self->u.entry_ = ent;
 			self->gt = ent->gtype;
+			if(ent->gtype->type_args_list->length > 0) {
+				generic_type* a = (generic_type*)vector_at(ent->gtype->type_args_list, 0);
+				int x = 0;
+			}
 		}
 	}
 }

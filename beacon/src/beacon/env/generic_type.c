@@ -58,6 +58,7 @@ bool generic_type_castable(generic_type* a, generic_type* b) {
 int generic_type_distance(generic_type * a, generic_type * b) {
 	if (a->virtual_type_index == -1 &&
 		b->virtual_type_index == -1) {
+		assert(a->core_type != NULL && b->core_type != NULL);
 		return type_distance(a->core_type, b->core_type);
 	}
 	return 0;

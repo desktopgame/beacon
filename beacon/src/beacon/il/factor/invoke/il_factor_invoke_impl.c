@@ -31,8 +31,14 @@ void il_factor_invoke_generate(il_factor_invoke* self, enviroment* env, il_load_
 		il_argument* e = (il_argument*)vector_at(self->args, i);
 		il_factor_generate(e->factor, env, cache);
 	}
-	opcode_buf_add(env->buf, (vector_item)op_invokevirtual);
-	opcode_buf_add(env->buf, (vector_item)self->index);
+	if(self->m->parent->tag == type_interface) {
+		opcode_buf_add(env->buf, (vector_item)op_invokeinterface);
+		opcode_buf_add(env->buf, (vector_item)self->m->parent->absolute_index);
+		opcode_buf_add(env->buf, (vector_item)self->index);
+	} else {
+		opcode_buf_add(env->buf, (vector_item)op_invokevirtual);
+		opcode_buf_add(env->buf, (vector_item)self->index);
+	}
 }
 
 void il_factor_invoke_load(il_factor_invoke * self, enviroment * env, il_load_cache* cache, il_ehandler* eh) {
@@ -48,6 +54,8 @@ void il_factor_invoke_load(il_factor_invoke * self, enviroment * env, il_load_ca
 
 generic_type* il_factor_invoke_eval(il_factor_invoke * self, enviroment * env, il_load_cache* cache) {
 	il_factor_invoke_check(self, env, cache);
+	XSTREQ(self->name, "iterate");
+	//T自体ではなく、返すかたにTが含まれる場合
 	virtual_type returnvType = self->m->return_vtype;
 	if(self->receiver->type == ilfactor_member_op) {
 		il_factor_member_op* ilmem = IL_FACT2MEM(self->receiver);
@@ -87,7 +95,8 @@ static void il_factor_invoke_check(il_factor_invoke * self, enviroment * env, il
 	generic_type* gtype = il_factor_eval(self->receiver, env, cache);
 	type* ctype = gtype->core_type;
 	int temp = -1;
-	self->m = class_find_method(TYPE2CLASS(ctype), self->name, self->args, env, cache, &temp);
+	self->m = type_find_method(ctype, self->name, self->args, env, cache, &temp);
+	//self->m = class_find_method(TYPE2CLASS(ctype), self->name, self->args, env, cache, &temp);
 	self->index = temp;
 	assert(temp != -1);
 }

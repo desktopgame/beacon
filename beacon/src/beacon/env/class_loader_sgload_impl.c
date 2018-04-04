@@ -2,6 +2,7 @@
 #include "script_context.h"
 #include "../util/text.h"
 #include "../util/io.h"
+#include "../util/xassert.h"
 #include "../parse/parser.h"
 #include "../il/il_type_impl.h"
 #include "../il/il_import.h"

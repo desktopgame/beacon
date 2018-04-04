@@ -51,6 +51,7 @@ void il_factor_member_op_generate(il_factor_member_op* self, enviroment* env, il
 
 generic_type* il_factor_member_op_eval(il_factor_member_op* self, enviroment* env, il_load_cache* cache) {
 	il_factor_member_op_check(self, env, cache);
+	assert(self->fact != NULL);
 	if(self->f->vtype.tag == virtualtype_default) {
 		return self->f->vtype.u.gtype;
 	}
