@@ -24,7 +24,7 @@
 //
 #include "../../il/il_type_parameter.h"
 #include "../../il/il_type_parameter_rule.h"
-#include "class_loader_ilload_module_impl.h"
+#include "class_loader_ilload_type_module_impl.h"
 
 //proto
 static il_factor* class_loader_ilload_factorImpl(class_loader* self, ast* source);
@@ -307,7 +307,7 @@ void class_loader_ilload_constructor(class_loader* self, il_type* current, ast* 
 		ast* aargs = ast_second(achain);
 		ilchain = il_constructor_chain_new();
 		ilchain->type = ast_cast_to_chain_type(achain_type);
-		class_loader_ilload_argument_list(self, ilchain->argument_list, aargs);
+		CLIL_argument_list(self, ilchain->argument_list, aargs);
 	}
 	il_constructor* ilcons = il_constructor_new();
 	ilcons->access = level;
@@ -547,7 +547,7 @@ il_factor_new_instance* class_loader_ilload_new_instance(class_loader* self, ast
 	il_factor_new_instance* ret = il_factor_new_instance_new();
 	CLIL_fqcn_cache(afqcn, ret->fqcnc);
 	CLIL_type_argument(self, atype_args, ret->type_args);
-	class_loader_ilload_argument_list(self, ret->argument_list, aargs);
+	CLIL_argument_list(self, ret->argument_list, aargs);
 	return ret;
 }
 
@@ -587,7 +587,7 @@ il_factor_call_op* class_loader_ilload_call_op(class_loader* self, ast* source) 
 	ast* aargs = ast_second(source);
 	//ast* aargs = ast_at(source, 2);
 	ret->receiver = class_loader_ilload_factor(self, afact);
-	class_loader_ilload_argument_list(self, ret->argument_list, aargs);
+	CLIL_argument_list(self, ret->argument_list, aargs);
 	//il_factor_dump(ret->receiver, 0);
 	return ret;
 }
@@ -601,20 +601,6 @@ il_factor_member_op* class_loader_ilload_member_op(class_loader* self, ast* sour
 	ret->fact = class_loader_ilload_factor(self, afact);
 	CLIL_type_argument(self, atype_args, ret->type_args);
 	return ret;
-}
-
-void class_loader_ilload_argument_list(class_loader* self, vector* list, ast* source) {
-	if (source->tag == ast_argument_list) {
-		for (int i = 0; i < source->child_count; i++) {
-			class_loader_ilload_argument_list(self, list, ast_at(source, i));
-		}
-	} else if (source->tag == ast_argument) {
-		ast* primary = ast_first(source);
-		il_argument* ilarg = il_argument_new();
-		ilarg->factor = class_loader_ilload_factor(self, primary);
-		//il_argument_list_push(list, ilarg);
-		vector_push(list, ilarg);
-	}
 }
 
 //private

@@ -366,5 +366,5 @@ il_factor_member_op* class_loader_ilload_member_op(class_loader* self, ast* sour
  * @param list
  * @param source
  */
-void class_loader_ilload_argument_list(class_loader* self, vector* list, ast* source);
+
 #endif

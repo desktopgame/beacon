@@ -1,4 +1,4 @@
-#include "class_loader_ilload_module_impl.h"
+#include "class_loader_ilload_type_module_impl.h"
 #include "../../ast/ast.h"
 #include "../../env/fqcn_cache.h"
 #include "../../env/generic_cache.h"
@@ -8,6 +8,8 @@
 #include "../../il/il_type_parameter_rule.h"
 #include "../../il/il_type_parameter.h"
 #include "../../il/il_type_argument.h"
+#include "../../il/il_argument.h"
+#include "class_loader_ilload_impl.h"
 #include <assert.h>
 
 //proto
@@ -95,6 +97,22 @@ void CLIL_type_argument(class_loader* self, ast* atype_args, vector* dest) {
 		CLIL_generic_cache(atype_args, iltype_arg->gcache);
 	} else assert(false);
 }
+
+
+void CLIL_argument_list(class_loader* self, vector* list, ast* source) {
+	if (source->tag == ast_argument_list) {
+		for (int i = 0; i < source->child_count; i++) {
+			CLIL_argument_list(self, list, ast_at(source, i));
+		}
+	} else if (source->tag == ast_argument) {
+		ast* primary = ast_first(source);
+		il_argument* ilarg = il_argument_new();
+		ilarg->factor = class_loader_ilload_factor(self, primary);
+		//il_argument_list_push(list, ilarg);
+		vector_push(list, ilarg);
+	}
+}
+
 
 static void CLIL_generic_cache_impl(ast* fqcn, generic_cache* dest) {
 	fqcn_cache* body = dest->fqcn;
