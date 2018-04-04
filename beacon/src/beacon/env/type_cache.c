@@ -1,6 +1,6 @@
 #include "type_cache.h"
 #include "../util/mem.h"
-#include "class_loader_sgload_impl.h"
+#include "cll/class_loader_sgload_impl.h"
 #include "class_loader.h"
 
 type_cache * type_cache_new() {

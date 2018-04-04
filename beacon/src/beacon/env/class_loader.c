@@ -35,8 +35,8 @@
 #include "../il/il_namespace.h"
 #include <string.h>
 
-#include "class_loader_ilload_impl.h"
-#include "class_loader_sgload_impl.h"
+#include "cll/class_loader_ilload_impl.h"
+#include "cll/class_loader_sgload_impl.h"
 #include "import_info.h"
 #include "type_cache.h"
 #include "heap.h"
