@@ -15,5 +15,5 @@ void CLIL_type_parameter(struct class_loader* self, struct ast* source, vector* 
 
 void CLIL_type_argument(struct class_loader* self, struct ast* atype_args, vector* dest);
 
-void CLIL_argument_list(class_loader* self, vector* list, ast* source);
+void CLIL_argument_list(struct class_loader* self, vector* list, struct ast* source);
 #endif

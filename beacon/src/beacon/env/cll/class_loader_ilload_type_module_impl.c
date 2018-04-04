@@ -1,4 +1,5 @@
 #include "class_loader_ilload_type_module_impl.h"
+#include "class_loader_ilload_factor_module_impl.h"
 #include "../../ast/ast.h"
 #include "../../env/fqcn_cache.h"
 #include "../../env/generic_cache.h"
@@ -107,7 +108,7 @@ void CLIL_argument_list(class_loader* self, vector* list, ast* source) {
 	} else if (source->tag == ast_argument) {
 		ast* primary = ast_first(source);
 		il_argument* ilarg = il_argument_new();
-		ilarg->factor = class_loader_ilload_factor(self, primary);
+		ilarg->factor = CLIL_factor(self, primary);
 		//il_argument_list_push(list, ilarg);
 		vector_push(list, ilarg);
 	}

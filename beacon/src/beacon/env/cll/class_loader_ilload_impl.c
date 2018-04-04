@@ -25,9 +25,10 @@
 #include "../../il/il_type_parameter.h"
 #include "../../il/il_type_parameter_rule.h"
 #include "class_loader_ilload_type_module_impl.h"
+#include "class_loader_ilload_factor_module_impl.h"
 
 //proto
-static il_factor* class_loader_ilload_factorImpl(class_loader* self, ast* source);
+static il_factor* CLIL_factorImpl(class_loader* self, ast* source);
 static il_stmt* class_loader_ilload_bodyImpl(class_loader* self, ast* source);
 
 void class_loader_ilload_impl(class_loader* self, ast* source_code) {
@@ -362,7 +363,7 @@ il_stmt_inferenced_type_init * class_loader_ilload_inferenced_type_init(class_lo
 	ast* aname = ast_first(source);
 	ast* afact = ast_second(source);
 	il_stmt_inferenced_type_init* ret = il_stmt_inferenced_type_init_new(aname->u.string_value);
-	ret->fact = class_loader_ilload_factor(self, afact);
+	ret->fact = CLIL_factor(self, afact);
 	return ret;
 }
 
@@ -381,7 +382,7 @@ il_stmt_variable_init* class_loader_ilload_variable_init(class_loader* self, ast
 	ast* afact = ast_at(source, 2);
 	il_stmt_variable_init* ret = il_stmt_variable_init_new(aident->u.string_value);
 	CLIL_generic_cache(afqcn, ret->fqcn);
-	ret->fact = class_loader_ilload_factor(self, afact);
+	ret->fact = CLIL_factor(self, afact);
 	return ret;
 }
 
@@ -390,7 +391,7 @@ il_stmt_if* class_loader_ilload_if(class_loader* self, ast* source) {
 	il_stmt_if* ret = il_stmt_if_new();
 	ast* acond = ast_first(source);
 	ast* abody = ast_second(source);
-	il_factor* ilcond = class_loader_ilload_factor(self, acond);
+	il_factor* ilcond = CLIL_factor(self, acond);
 	//il_stmt_list* ilbody = il_stmt_list_new();
 	class_loader_ilload_body(self, ret->body, abody);
 	ret->condition = ilcond;
@@ -428,7 +429,7 @@ il_stmt_while * class_loader_ilload_while(class_loader * self, ast * source) {
 	ast* acond = ast_first(source);
 	ast* abody = ast_second(source);
 	il_stmt_while* ilwhile = il_stmt_while_new();
-	ilwhile->condition = class_loader_ilload_factor(self, acond);
+	ilwhile->condition = CLIL_factor(self, acond);
 	class_loader_ilload_body(self, ilwhile->statement_list, abody);
 	return ilwhile;
 }
@@ -443,7 +444,7 @@ void class_loader_ilload_elif_list(class_loader* self, vector* list, ast* source
 		ast* abody = ast_second(source);
 		//il_stmt* ilif = il_stmt_if_new();
 		il_stmt_elif* ilelif = il_stmt_elif_new();
-		ilelif->condition = class_loader_ilload_factor(self, acond);
+		ilelif->condition = CLIL_factor(self, acond);
 		class_loader_ilload_body(self, ilelif->body, abody);
 		//il_stmt_list_push(list, ilelif);
 		il_stmt_elif_list_push(list, ilelif);
@@ -453,7 +454,7 @@ void class_loader_ilload_elif_list(class_loader* self, vector* list, ast* source
 il_stmt_return* class_loader_ilload_return(class_loader* self, ast* source) {
 	assert(source->tag == ast_return);
 	ast* afact = ast_first(source);
-	il_factor* ilfact = class_loader_ilload_factor(self, afact);
+	il_factor* ilfact = CLIL_factor(self, afact);
 	il_stmt_return* ret = il_stmt_return_new();
 	ret->fact = ilfact;
 	return ret;
@@ -487,225 +488,12 @@ void class_loader_ilload_catch_list(class_loader* self, vector* dest, ast* sourc
 
 il_stmt_throw* class_loader_ilload_throw(class_loader* self, ast* source) {
 	il_stmt_throw* ret = il_stmt_throw_new();
-	ret->fact = class_loader_ilload_factor(self, ast_first(source));
+	ret->fact = CLIL_factor(self, ast_first(source));
 	return ret;
 }
 
-il_factor* class_loader_ilload_factor(class_loader* self, ast* source) {
-	il_factor* ret = class_loader_ilload_factorImpl(self, source);
-	ret->lineno = source->lineno;
-	return ret;
-}
-
-il_factor_bool * class_loader_ilload_true(class_loader * self, ast * source) {
-	return il_factor_bool_new(true);
-}
-
-il_factor_bool * class_loader_ilload_false(class_loader * self, ast * source) {
-	return il_factor_bool_new(false);
-}
-
-il_factor_cast * class_loader_ilload_cast(class_loader * self, ast * source) {
-	ast* atypename = ast_first(source);
-	ast* afact = ast_second(source);
-	il_factor_cast* ret = il_factor_cast_new(class_loader_ilload_factor(self, afact));
-	CLIL_generic_cache(ast_first(atypename), ret->fqcn);
-	return ret;
-}
-
-il_factor_unary_op* class_loader_ilload_unary(class_loader* self, ast* source, ilunary_op_type type) {
-	il_factor_unary_op* ret = il_factor_unary_op_new(type);
-	ast* a = ast_first(source);
-	ret->a = class_loader_ilload_factor(self, a);
-	return ret;
-}
-
-il_factor_binary_op* class_loader_ilload_binary(class_loader* self, ast* source, ilbinary_op_type type) {
-	il_factor_binary_op* ret = il_factor_binary_op_new(type);
-	ast* aleft = ast_first(source);
-	ast* aright = ast_second(source);
-	ret->left = class_loader_ilload_factor(self, aleft);
-	ret->right = class_loader_ilload_factor(self, aright);
-	return ret;
-}
-
-il_factor_variable* class_loader_ilload_variable(class_loader* self, ast* source) {
-	ast* afqcn = ast_first(source);
-	ast* atype_args = ast_second(source);
-
-	il_factor_variable* ilvar = il_factor_variable_new();
-	CLIL_fqcn_cache(afqcn, ilvar->fqcn);
-	CLIL_type_argument(self, atype_args, ilvar->type_args);
-	return ilvar;
-}
-
-il_factor_new_instance* class_loader_ilload_new_instance(class_loader* self, ast* source) {
-	assert(source->tag == ast_new_instance);
-	ast* afqcn = ast_first(source);
-	ast* atype_args = ast_second(source);
-	ast* aargs = ast_at(source, 2);
-	il_factor_new_instance* ret = il_factor_new_instance_new();
-	CLIL_fqcn_cache(afqcn, ret->fqcnc);
-	CLIL_type_argument(self, atype_args, ret->type_args);
-	CLIL_argument_list(self, ret->argument_list, aargs);
-	return ret;
-}
-
-il_factor_as* class_loader_ilload_as(class_loader* self, ast* source) {
-	il_factor_as* ret = il_factor_as_new();
-	ret->fact = class_loader_ilload_factor(self, ast_first(source));
-	CLIL_generic_cache(ast_second(source), ret->fqcn);
-	return ret;
-}
-
-il_factor_inc * class_loader_ilload_inc(class_loader * self, ast * source) {
-	assert(source->tag == ast_pre_inc ||
-		   source->tag == ast_post_inc);
-	fix_type type = (source->tag == ast_pre_inc) ? fixtype_pre : fixtype_post;
-	il_factor_inc* ret = il_factor_inc_new(type);
-	ast* afact = ast_first(source);
-	ret->fact = class_loader_ilload_factor(self, afact);
-	ret->type = type;
-	return ret;
-}
-
-il_factor_dec * class_loader_ilload_dec(class_loader * self, ast * source) {
-	assert(source->tag == ast_pre_dec ||
-		   source->tag == ast_post_dec);
-	fix_type type = (source->tag == ast_pre_dec) ? fixtype_pre : fixtype_post;
-	il_factor_dec* ret = il_factor_dec_new(type);
-	ast* afact = ast_first(source);
-	ret->fact = class_loader_ilload_factor(self, afact);
-	ret->type = type;
-	return ret;
-}
-
-il_factor_call_op* class_loader_ilload_call_op(class_loader* self, ast* source) {
-	assert(source->tag == ast_op_call);
-	il_factor_call_op* ret = il_factor_call_op_new();
-	ast* afact = ast_first(source);
-	ast* aargs = ast_second(source);
-	//ast* aargs = ast_at(source, 2);
-	ret->receiver = class_loader_ilload_factor(self, afact);
-	CLIL_argument_list(self, ret->argument_list, aargs);
-	//il_factor_dump(ret->receiver, 0);
-	return ret;
-}
-
-il_factor_member_op* class_loader_ilload_member_op(class_loader* self, ast* source) {
-	assert(source->tag == ast_field_access);
-	ast* afact = ast_first(source);
-	ast* aname = ast_second(source);
-	ast* atype_args = ast_at(source, 2);
-	il_factor_member_op* ret = il_factor_member_op_new(aname->u.string_value);
-	ret->fact = class_loader_ilload_factor(self, afact);
-	CLIL_type_argument(self, atype_args, ret->type_args);
-	return ret;
-}
 
 //private
-static il_factor* class_loader_ilload_factorImpl(class_loader* self, ast* source) {
-	if (source->tag == ast_int) {
-		return il_factor_wrap_int(il_factor_int_new(source->u.int_value));
-	} else if (source->tag == ast_double) {
-		return il_factor_wrap_double(il_factor_double_new(source->u.double_value));
-	} else if (source->tag == ast_char) {
-		return il_factor_wrap_char(il_factor_char_new(source->u.char_value));
-	} else if (source->tag == ast_string) {
-		return il_factor_wrap_string(il_factor_string_new(source->u.string_value));
-	} else if (source->tag == ast_variable) {
-		return il_factor_wrap_variable(class_loader_ilload_variable(self, source));
-		//operator(+ - * / %)
-	} else if (source->tag == ast_add) {
-		return il_factor_wrap_binary(class_loader_ilload_binary(self, source, ilbinary_add));
-	} else if (source->tag == ast_sub) {
-		return il_factor_wrap_binary(class_loader_ilload_binary(self, source, ilbinary_sub));
-	} else if (source->tag == ast_mul) {
-		return il_factor_wrap_binary(class_loader_ilload_binary(self, source, ilbinary_mul));
-	} else if (source->tag == ast_div) {
-		return il_factor_wrap_binary(class_loader_ilload_binary(self, source, ilbinary_div));
-	} else if (source->tag == ast_mod) {
-		return il_factor_wrap_binary(class_loader_ilload_binary(self, source, ilbinary_mod));
-		//operator(| || & &&)
-	} else if (source->tag == ast_bit_or) {
-		return il_factor_wrap_binary(class_loader_ilload_binary(self, source, ilbinary_bit_or));
-	} else if (source->tag == ast_logic_or) {
-		return il_factor_wrap_binary(class_loader_ilload_binary(self, source, ilbinary_logic_or));
-	} else if (source->tag == ast_bit_and) {
-		return il_factor_wrap_binary(class_loader_ilload_binary(self, source, ilbinary_bit_and));
-	} else if (source->tag == ast_logic_and) {
-		return il_factor_wrap_binary(class_loader_ilload_binary(self, source, ilbinary_logic_and));
-		//operator(== != > >= < <=)
-	} else if (source->tag == ast_equal) {
-		return il_factor_wrap_binary(class_loader_ilload_binary(self, source, ilbinary_eq));
-	} else if (source->tag == ast_notequal) {
-		return il_factor_wrap_binary(class_loader_ilload_binary(self, source, ilbinary_noteq));
-	} else if (source->tag == ast_gt) {
-		return il_factor_wrap_binary(class_loader_ilload_binary(self, source, ilbinary_gt));
-	} else if (source->tag == ast_ge) {
-		return il_factor_wrap_binary(class_loader_ilload_binary(self, source, ilbinary_ge));
-	} else if (source->tag == ast_lt) {
-		return il_factor_wrap_binary(class_loader_ilload_binary(self, source, ilbinary_lt));
-	} else if (source->tag == ast_le) {
-		return il_factor_wrap_binary(class_loader_ilload_binary(self, source, ilbinary_le));
-		//operator(= += -= *= /= %=)
-	} else if (source->tag == ast_assign) {
-		return il_factor_wrap_binary(class_loader_ilload_binary(self, source, ilbinary_assign));
-	} else if (source->tag == ast_add_assign) {
-		return il_factor_wrap_binary(class_loader_ilload_binary(self, source, ilbinary_add_assign));
-	} else if (source->tag == ast_sub_assign) {
-		return il_factor_wrap_binary(class_loader_ilload_binary(self, source, ilbinary_sub_assign));
-	} else if (source->tag == ast_mul_assign) {
-		return il_factor_wrap_binary(class_loader_ilload_binary(self, source, ilbinary_mul_assign));
-	} else if (source->tag == ast_div_assign) {
-		return il_factor_wrap_binary(class_loader_ilload_binary(self, source, ilbinary_div_assign));
-	} else if (source->tag == ast_mod_assign) {
-		return il_factor_wrap_binary(class_loader_ilload_binary(self, source, ilbinary_mod_assign));
-	} else if (source->tag == ast_not) {
-		return il_factor_wrap_unary(class_loader_ilload_unary(self, source, ilunary_not));
-	} else if (source->tag == ast_neg) {
-		return il_factor_wrap_unary(class_loader_ilload_unary(self, source, ilunary_neg));
-		//this super
-	} else if (source->tag == ast_this) {
-		il_factor* ret = (il_factor*)MEM_MALLOC(sizeof(il_factor));
-		ret->type = ilfactor_this;
-		ret->u.this_ = 0;
-		return ret;
-	} else if (source->tag == ast_super) {
-		il_factor* ret = (il_factor*)MEM_MALLOC(sizeof(il_factor));
-		ret->type = ilfactor_super;
-		ret->u.super_ = 0;
-		return ret;
-	} else if (source->tag == ast_new_instance) {
-		return il_factor_wrap_new_instance(class_loader_ilload_new_instance(self, source));
-	} else if (source->tag == ast_cast) {
-		return il_factor_wrap_cast(class_loader_ilload_cast(self, source));
-	} else if (source->tag == ast_true) {
-		return il_factor_wrap_bool(class_loader_ilload_true(self, source));
-	} else if (source->tag == ast_false) {
-		return il_factor_wrap_bool(class_loader_ilload_false(self, source));
-	} else if (source->tag == ast_null) {
-		il_factor* ret = (il_factor*)MEM_MALLOC(sizeof(il_factor));
-		ret->type = ilfactor_null;
-		ret->u.null_ = NULL;
-		return ret;
-	} else if (source->tag == ast_as) {
-		return il_factor_wrap_as(class_loader_ilload_as(self, source));
-	} else if (source->tag == ast_pre_inc ||
-			   source->tag == ast_post_inc) {
-		return il_factor_wrap_inc(class_loader_ilload_inc(self, source));
-	} else if (source->tag == ast_pre_dec ||
-			   source->tag == ast_post_dec) {
-		return il_factor_wrap_dec(class_loader_ilload_dec(self, source));
-	} else if(source->tag == ast_op_call) {
-		return il_factor_wrap_call_op(class_loader_ilload_call_op(self, source));
-	} else if(source->tag == ast_field_access) {
-		return il_factor_wrap_member_op(class_loader_ilload_member_op(self, source));
-	}
-	il_factor* fact = (il_factor*)MEM_MALLOC(sizeof(il_factor));
-	return fact;
-}
-
 static il_stmt* class_loader_ilload_bodyImpl(class_loader* self, ast* source) {
 	//text_printf("    ");
 	//ast_print(source);
@@ -718,7 +506,7 @@ static il_stmt* class_loader_ilload_bodyImpl(class_loader* self, ast* source) {
 		case ast_proc:
 		{
 			ast* afact = ast_first(source);
-			il_factor* ilfact = class_loader_ilload_factor(self, afact);
+			il_factor* ilfact = CLIL_factor(self, afact);
 			il_stmt_proc* ilproc = il_stmt_proc_new();
 			ilproc->factor = ilfact;
 			assert(ilfact != NULL);
