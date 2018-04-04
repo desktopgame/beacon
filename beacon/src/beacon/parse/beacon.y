@@ -92,6 +92,7 @@
 					expression
 						expression_nobrace
 						primary
+						lhs
 					stmt_list
 						stmt
 						variable_decl_stmt
@@ -608,47 +609,47 @@ expression_nobrace
 	{
 		$$ = ast_new_binary(ast_logic_and, $1, $3);
 	}
-	| expression ASSIGN expression
+	| lhs ASSIGN expression
 	{
 		$$ = ast_new_binary(ast_assign, $1, $3);
 	}
-	| expression ADD_ASSIGN expression
+	| lhs ADD_ASSIGN expression
 	{
 		$$ = ast_new_binary(ast_add_assign, $1, $3);
 	}
-	| expression SUB_ASSIGN expression
+	| lhs SUB_ASSIGN expression
 	{
 		$$ = ast_new_binary(ast_sub_assign, $1, $3);
 	}
-	| expression MUL_ASSIGN expression
+	| lhs MUL_ASSIGN expression
 	{
 		$$ = ast_new_binary(ast_mul_assign, $1, $3);
 	}
-	| expression DIV_ASSIGN expression
+	| lhs DIV_ASSIGN expression
 	{
 		$$ = ast_new_binary(ast_div_assign, $1, $3);
 	}
-	| expression MOD_ASSIGN expression
+	| lhs MOD_ASSIGN expression
 	{
 		$$ = ast_new_binary(ast_mod_assign, $1, $3);
 	}
-	| expression AND_ASSIGN expression
+	| lhs AND_ASSIGN expression
 	{
 		$$ = ast_new_binary(ast_and_assign, $1, $3);
 	}
-	| expression OR_ASSIGN expression
+	| lhs OR_ASSIGN expression
 	{
 		$$ = ast_new_binary(ast_or_assign, $1, $3);
 	}
-	| expression EXC_OR_ASSIGN expression
+	| lhs EXC_OR_ASSIGN expression
 	{
 		$$ = ast_new_binary(ast_exc_or_assign, $1, $3);
 	}
-	| expression LSHIFT_ASSIGN expression
+	| lhs LSHIFT_ASSIGN expression
 	{
 		$$ = ast_new_binary(ast_lshift_assign, $1, $3);
 	}
-	| expression RSHIFT_ASSIGN expression
+	| lhs RSHIFT_ASSIGN expression
 	{
 		$$ = ast_new_binary(ast_rshift_assign, $1, $3);
 	}
@@ -675,10 +676,6 @@ expression_nobrace
 	| expression RSHIFT expression
 	{
 		$$ = ast_new_binary(ast_rshift, $1, $3);
-	}
-	| expression DOT IDENT typename_group
-	{
-		$$ = ast_new_field_access($1, $3, $4);
 	}
 	| expression AS typename_T
 	{
@@ -708,10 +705,6 @@ expression_nobrace
 	{
 		$$ = ast_new_new_instance($2, $3, ast_new_blank());
 	}
-	| fqcn_part typename_group
-	{
-		$$ = ast_new_variable($1, $2);
-	}
 	| THIS_TOK
 	{
 		$$ = ast_new_this();
@@ -719,6 +712,17 @@ expression_nobrace
 	| SUPER_TOK
 	{
 		$$ = ast_new_super();
+	}
+	| lhs
+	;
+lhs
+	: fqcn_part typename_group
+	{
+		$$ = ast_new_variable($1, $2);
+	}
+	| expression DOT IDENT typename_group
+	{
+		$$ = ast_new_field_access($1, $3, $4);
 	}
 	;
 primary

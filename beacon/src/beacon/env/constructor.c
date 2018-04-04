@@ -13,7 +13,7 @@ static void constructor_parameter_delete(vector_item item);
 
 constructor * constructor_new() {
 	constructor* ret = (constructor*)MEM_MALLOC(sizeof(constructor));
-	ret->gparent = NULL;
+	ret->parent = NULL;
 	ret->env = NULL;
 	ret->parameter_list = vector_new();
 	ret->access = access_public;

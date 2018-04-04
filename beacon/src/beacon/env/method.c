@@ -61,10 +61,14 @@ void method_dump(method * self, int depth) {
 }
 
 bool method_override(method* superM, method* subM) {
+	//名前が違うか引数の数が違う
 	if (strcmp(superM->name, subM->name) ||
 		superM->parameter_list->length != subM->parameter_list->length) {
 		return false;
 	}
+	return true;
+	/*
+	//全ての引数を比較
 	for (int i = 0; i < superM->parameter_list->length; i++) {
 		virtual_type ap = ((parameter*)vector_at(superM->parameter_list, i))->vtype;
 		virtual_type bp = ((parameter*)vector_at(subM->parameter_list, i))->vtype;
@@ -79,6 +83,7 @@ bool method_override(method* superM, method* subM) {
 	//FIXME:あとで
 	return false;
 	//return class_castable(b, a);
+	//*/
 }
 
 int method_for_generic_index(method * self, const char * name) {

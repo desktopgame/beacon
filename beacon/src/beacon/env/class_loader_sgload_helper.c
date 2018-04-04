@@ -231,7 +231,7 @@ static void class_loader_sgload_constructors(class_loader* self, il_type* iltype
 		constructor* cons = constructor_new();
 		vector* parameter_list = cons->parameter_list;
 		cons->access = ilcons->access;
-		cons->gparent = tp->generic_self;
+		cons->parent = tp;
 		//NOTE:ここでは戻り値の型,引数の型を設定しません
 		//     class_loader_sgload_complete参照
 		for (int i = 0; i < ilparams->length; i++) {

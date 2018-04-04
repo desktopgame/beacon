@@ -19,7 +19,7 @@ namespace signal.lang {
 
 		def next() -> T {
 			var ret = source.get(offset);
-			this.offset = this.offset + 1;
+			this.offset = offset + 1;
 			return ret;
 		}
 	}

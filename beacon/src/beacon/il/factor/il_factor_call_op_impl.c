@@ -46,10 +46,7 @@ void il_factor_call_op_dump(il_factor_call_op* self, int depth) {
 }
 
 void il_factor_call_op_load(il_factor_call_op* self, enviroment* env, il_load_cache* cache, il_ehandler* eh) {
-	for(int i=0; i<self->argument_list->length; i++) {
-		il_argument* e = (il_argument*)vector_at(self->argument_list, i);
-		il_factor_load(e->factor, env, cache, eh);
-	}
+	//argumentlistはサブクラスに渡しちゃってる
 	//il_factor_load(self->receiver, env, cache, eh);
 	il_factor_call_op_check(self, env, cache);
 	if(self->type == ilcall_type_invoke) {
@@ -128,6 +125,7 @@ static void il_factor_invoke_bound_check(il_factor_call_op* self, enviroment* en
 	self->argument_list = NULL;
 	ilvar->type_args = NULL;
 	self->u.invoke_bound_ = bnd;
+	self->type = ilcall_type_invoke_bound;
 }
 
 static void il_factor_member_op_check(il_factor_call_op* self, enviroment* env, il_load_cache* cache) {

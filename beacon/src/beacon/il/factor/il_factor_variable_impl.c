@@ -104,7 +104,7 @@ static void il_factor_variable_check(il_factor_variable* self, enviroment* env, 
 			il_factor_variable_local* lc = il_factor_variable_local_new(self->fqcn->name);
 			self->type = ilvariable_type_local;
 			//値を入れ替え
-			lc->entry = symbol_table_entry(env->sym_table, NULL, lc->name);
+			//lc->entry = symbol_table_entry(env->sym_table, NULL, lc->name);
 			lc->type_args = self->type_args;
 			self->type_args = NULL;
 			self->u.local_ = lc;

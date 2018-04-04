@@ -500,7 +500,7 @@ void class_linkall(class_ * self) {
 	}
 	for (int i = 0; i < self->constructor_list->length; i++) {
 		constructor* ctor = (constructor*)vector_at(self->constructor_list, i);
-		ctor->gparent = self->parent->generic_self;
+		ctor->parent = self->parent;
 	}
 }
 

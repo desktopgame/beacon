@@ -24,5 +24,5 @@ bool xassert_breakptreq(const void* a, const void* b) {
 }
 
 bool xassert_streq(const char* a, const char* b) {
-	return !strcmp(a, b);
+	return xassert_break(!strcmp(a, b));
 }

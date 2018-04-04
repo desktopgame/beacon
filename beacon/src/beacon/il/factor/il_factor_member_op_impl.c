@@ -1,6 +1,7 @@
 #include "il_factor_member_op_impl.h"
 #include "../../util/mem.h"
 #include "../../util/text.h"
+#include "../../util/xassert.h"
 #include "../../env/generic_cache.h"
 #include "../../env/type_interface.h"
 #include "../../env/type/class_impl.h"

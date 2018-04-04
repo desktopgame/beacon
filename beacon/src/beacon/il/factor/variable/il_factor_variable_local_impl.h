@@ -5,13 +5,25 @@
 struct symbol_entry;
 struct enviroment;
 struct generic_type;
+struct field;
+
+typedef enum variable_local_type {
+	variable_local_scope,
+	variable_local_field,
+	variable_local_undefined,
+} variable_local_type;
 
 /**
  * ローカル変数を表す構造体.
  */
 typedef struct il_factor_variable_local {
 	char* name;
-	struct symbol_entry* entry;
+	variable_local_type type;
+	struct generic_type* gt;
+	union {
+		struct symbol_entry* entry_;
+		int field_index;
+	} u;
 	vector* type_args;
 } il_factor_variable_local;
 

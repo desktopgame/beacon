@@ -70,6 +70,7 @@ $$SET top_level program
 					expression
 						expression_nobrace
 						primary
+						lhs
 					stmt_list
 						stmt
 						variable_decl_stmt

@@ -2,6 +2,7 @@
 #include "../../util/mem.h"
 #include "../../util/xassert.h"
 #include "../il_argument.h"
+#include "../il_type_argument.h"
 #include "../../vm/enviroment.h"
 #include "../../env/type_interface.h"
 #include "../../util/text.h"
@@ -55,7 +56,7 @@ void il_factor_new_instance_generate(il_factor_new_instance * self, enviroment *
 	}
 	//クラスとコンストラクタのインデックスをプッシュ
 	opcode_buf_add(env->buf, op_new_instance);
-	opcode_buf_add(env->buf, self->c->gparent->core_type->absolute_index);
+	opcode_buf_add(env->buf, self->c->parent->absolute_index);
 	opcode_buf_add(env->buf, self->constructor_index);
 }
 
@@ -69,14 +70,15 @@ generic_type* il_factor_new_instance_eval(il_factor_new_instance * self, envirom
 	il_factor_new_instance_find(self, env, cache);
 	//型引数がないのでそのまま
 	if (self->type_args->length == 0) {
-		return self->c->gparent;
+		return self->c->parent->generic_self;
 	}
+	//fqcn_cache typename_group
 	if (self->instance_type == NULL) {
 		namespace_* scope = (namespace_*)vector_top(cache->namespace_vec);
-		generic_type* a = generic_type_new(self->c->gparent->core_type);
+		generic_type* a = generic_type_new(self->c->parent);
 		for (int i = 0; i < self->type_args->length; i++) {
-			generic_cache* e = vector_at(self->type_args, i);
-			generic_type* arg = generic_cache_gtype(e, scope, cache);
+			il_type_argument* e = (il_type_argument*)vector_at(self->type_args, i);
+			generic_type* arg = generic_cache_gtype(e->gcache, scope, cache);
 			generic_type_addargs(a, arg);
 		}
 		self->instance_type = a;

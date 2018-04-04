@@ -29,6 +29,7 @@ void il_factor_invoke_static_generate(il_factor_invoke_static* self, enviroment*
 	}
 	opcode_buf_add(env->buf, (vector_item)op_invokestatic);
 	opcode_buf_add(env->buf, (vector_item)self->m->parent->absolute_index);
+	opcode_buf_add(env->buf, (vector_item)self->index);
 }
 
 void il_factor_invoke_static_load(il_factor_invoke_static * self, enviroment * env, il_load_cache* cache, il_ehandler* eh) {

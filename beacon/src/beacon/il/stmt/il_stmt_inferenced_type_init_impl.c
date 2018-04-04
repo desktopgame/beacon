@@ -57,7 +57,7 @@ void il_stmt_inferenced_type_init_load(il_stmt_inferenced_type_init * self, envi
 		self->name
 	);
 	self->sym = e;
-	assert(!strcmp(self->name, "st"));
+//	XSTREQ(self->name, "st");
 }
 
 void il_stmt_inferenced_type_init_delete(il_stmt_inferenced_type_init * self) {
