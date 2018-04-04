@@ -29,9 +29,6 @@
 //proto
 static il_factor* class_loader_ilload_factorImpl(class_loader* self, ast* source);
 static il_stmt* class_loader_ilload_bodyImpl(class_loader* self, ast* source);
-static void class_loader_ilload_type_parameter(class_loader* self, ast* source, vector* dest);
-static void class_loader_ilload_type_parameter_rule(class_loader* self, ast* source, vector* dest);
-static void class_loader_ilload_type_argument(class_loader* self, ast* atype_args, vector* dest);
 
 void class_loader_ilload_impl(class_loader* self, ast* source_code) {
 	assert(self->il_code == NULL);
@@ -174,7 +171,7 @@ void class_loader_ilload_class(class_loader* self, il_namespace* current, ast* c
 	il_class* ilclassz = il_class_new(atypename->u.string_value);
 	il_type* iltype = il_type_wrap_class(ilclassz);
 	//class Foo<A, B>
-	class_loader_ilload_type_parameter(self, ast_first(atypename), ilclassz->type_parameter_list);
+	CLIL_type_parameter(self, ast_first(atypename), ilclassz->type_parameter_list);
 	//class Foo : X, Y 
 	class_loader_ilload_typename_list(self, ilclassz->extend_list, aextend_list);
 	//public:
@@ -195,7 +192,7 @@ void class_loader_ilload_interface(class_loader* self, il_namespace* current, as
 	il_interface* ilinter = il_interface_new(atypename->u.string_value);
 	il_type* iltype = il_type_wrap_interface(ilinter);
 	//interface Foo<A, B>
-	class_loader_ilload_type_parameter(self, ast_first(atypename), ilinter->type_parameter_list);
+	CLIL_type_parameter(self, ast_first(atypename), ilinter->type_parameter_list);
 	//interface Foo : XXX, YYY, CCC
 	class_loader_ilload_typename_list(self, ilinter->extends_list, aextends_list);
 	//public:
@@ -285,7 +282,7 @@ void class_loader_ilload_method(class_loader* self, il_type* current, ast* metho
 	ast* func_body = ast_at(method, 4);
 	ast* ret_name = ast_at(method, 5);
 	il_method* v = il_method_new(func_name->u.string_value);
-	class_loader_ilload_type_parameter(self, ageneric, v->type_parameter_list);
+	CLIL_type_parameter(self, ageneric, v->type_parameter_list);
 	CLIL_generic_cache(ret_name, v->return_fqcn);
 //	v->return_type = il_type_new(ret_name->u.string_value);
 	v->access = level;
@@ -538,7 +535,7 @@ il_factor_variable* class_loader_ilload_variable(class_loader* self, ast* source
 
 	il_factor_variable* ilvar = il_factor_variable_new();
 	CLIL_fqcn_cache(afqcn, ilvar->fqcn);
-	class_loader_ilload_type_argument(self, atype_args, ilvar->type_args);
+	CLIL_type_argument(self, atype_args, ilvar->type_args);
 	return ilvar;
 }
 
@@ -549,7 +546,7 @@ il_factor_new_instance* class_loader_ilload_new_instance(class_loader* self, ast
 	ast* aargs = ast_at(source, 2);
 	il_factor_new_instance* ret = il_factor_new_instance_new();
 	CLIL_fqcn_cache(afqcn, ret->fqcnc);
-	class_loader_ilload_type_argument(self, atype_args, ret->type_args);
+	CLIL_type_argument(self, atype_args, ret->type_args);
 	class_loader_ilload_argument_list(self, ret->argument_list, aargs);
 	return ret;
 }
@@ -590,7 +587,6 @@ il_factor_call_op* class_loader_ilload_call_op(class_loader* self, ast* source) 
 	ast* aargs = ast_second(source);
 	//ast* aargs = ast_at(source, 2);
 	ret->receiver = class_loader_ilload_factor(self, afact);
-	//class_loader_ilload_type_argument(self, atype_args, ret->type_argument_list);
 	class_loader_ilload_argument_list(self, ret->argument_list, aargs);
 	//il_factor_dump(ret->receiver, 0);
 	return ret;
@@ -603,7 +599,7 @@ il_factor_member_op* class_loader_ilload_member_op(class_loader* self, ast* sour
 	ast* atype_args = ast_at(source, 2);
 	il_factor_member_op* ret = il_factor_member_op_new(aname->u.string_value);
 	ret->fact = class_loader_ilload_factor(self, afact);
-	class_loader_ilload_type_argument(self, atype_args, ret->type_args);
+	CLIL_type_argument(self, atype_args, ret->type_args);
 	return ret;
 }
 
@@ -809,61 +805,4 @@ static il_stmt* class_loader_ilload_bodyImpl(class_loader* self, ast* source) {
 			break;
 	}
 	return NULL;
-}
-
-static void class_loader_ilload_type_parameter(class_loader* self, ast* source, vector* dest) {
-	if (ast_is_blank(source)) {
-		return;
-	}
-	if (source->tag == ast_type_parameter_list) {
-		for (int i = 0; i < source->child_count; i++) {
-			class_loader_ilload_type_parameter(self, ast_at(source, i), dest);
-		}
-		return;
-	}
-	assert(source->tag == ast_type_parameter ||
-		   source->tag == ast_type_in_parameter ||
-		   source->tag == ast_type_out_parameter);
-	ast* arule_list = ast_first(source);
-	il_type_parameter* iltypeparam = il_type_parameter_new(source->u.string_value);
-	if (source->tag == ast_type_in_parameter) iltypeparam->kind = il_type_parameter_kind_in;
-	if (source->tag == ast_type_out_parameter) iltypeparam->kind = il_type_parameter_kind_out;
-	vector_push(dest, iltypeparam);
-	//制約があるならそれも設定
-	if (!ast_is_blank(arule_list) &&
-		arule_list->tag == ast_type_parameter_rule_list) {
-		class_loader_ilload_type_parameter_rule(self, ast_first(arule_list), iltypeparam->rule_vec);
-	}
-}
-
-static void class_loader_ilload_type_parameter_rule(class_loader* self, ast* source, vector* dest) {
-	if (source->tag == ast_type_parameter_list) {
-		for (int i = 0; i < source->child_count; i++) {
-			class_loader_ilload_type_parameter_rule(self, ast_at(source, i), dest);
-		}
-	} else {
-		if (source->tag == ast_typename) {
-			il_type_parameter_rule* rule = il_type_parameter_rule_new();
-			rule->tag = il_type_parameter_rule_polymorphic;
-			rule->u.fqcn_ = generic_cache_new();
-			CLIL_generic_cache(source, rule->u.fqcn_);
-			vector_push(dest, rule);
-		}
-	}
-}
-
-static void class_loader_ilload_type_argument(class_loader* self, ast* atype_args, vector* dest) {
-	if(ast_is_blank(atype_args)) {
-		return;
-	}
-	if(atype_args->tag == ast_typename_list) {
-		for(int i=0; i<atype_args->child_count; i++) {
-			ast* e = ast_at(atype_args, i);
-			class_loader_ilload_type_argument(self, e, dest);
-		}
-	} else if(atype_args->tag == ast_typename) {
-		il_type_argument* iltype_arg = il_type_argument_new();
-		vector_push(dest, iltype_arg);
-		CLIL_generic_cache(atype_args, iltype_arg->gcache);
-	} else assert(false);
 }

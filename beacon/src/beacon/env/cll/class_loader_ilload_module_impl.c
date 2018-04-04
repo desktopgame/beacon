@@ -4,9 +4,16 @@
 #include "../../env/generic_cache.h"
 #include "../../util/text.h"
 
+#include "../class_loader.h"
+#include "../../il/il_type_parameter_rule.h"
+#include "../../il/il_type_parameter.h"
+#include "../../il/il_type_argument.h"
+#include <assert.h>
+
 //proto
 static void CLIL_generic_cache_impl(ast* fqcn, generic_cache* dest);
 static void CLIL_generic_cache_inner(ast* atype_args, generic_cache* dest);
+static void CLIL_type_parameter_rule(struct class_loader* self, struct ast* source, vector* dest);
 
 void CLIL_fqcn_cache(ast* afqcn, fqcn_cache* fqcn) {
 if(afqcn->tag == ast_fqcn_class_name) {
@@ -46,6 +53,47 @@ void CLIL_generic_cache(ast* fqcn, generic_cache* dest) {
 		body->scope_vec->length > 0) {
 		body->name = (char*)vector_pop(body->scope_vec);
 	}
+}
+
+void CLIL_type_parameter(class_loader* self, ast* source, vector* dest) {
+	if (ast_is_blank(source)) {
+		return;
+	}
+	if (source->tag == ast_type_parameter_list) {
+		for (int i = 0; i < source->child_count; i++) {
+			CLIL_type_parameter(self, ast_at(source, i), dest);
+		}
+		return;
+	}
+	assert(source->tag == ast_type_parameter ||
+		   source->tag == ast_type_in_parameter ||
+		   source->tag == ast_type_out_parameter);
+	ast* arule_list = ast_first(source);
+	il_type_parameter* iltypeparam = il_type_parameter_new(source->u.string_value);
+	if (source->tag == ast_type_in_parameter) iltypeparam->kind = il_type_parameter_kind_in;
+	if (source->tag == ast_type_out_parameter) iltypeparam->kind = il_type_parameter_kind_out;
+	vector_push(dest, iltypeparam);
+	//制約があるならそれも設定
+	if (!ast_is_blank(arule_list) &&
+		arule_list->tag == ast_type_parameter_rule_list) {
+		CLIL_type_parameter_rule(self, ast_first(arule_list), iltypeparam->rule_vec);
+	}
+}
+
+void CLIL_type_argument(class_loader* self, ast* atype_args, vector* dest) {
+	if(ast_is_blank(atype_args)) {
+		return;
+	}
+	if(atype_args->tag == ast_typename_list) {
+		for(int i=0; i<atype_args->child_count; i++) {
+			ast* e = ast_at(atype_args, i);
+			CLIL_type_argument(self, e, dest);
+		}
+	} else if(atype_args->tag == ast_typename) {
+		il_type_argument* iltype_arg = il_type_argument_new();
+		vector_push(dest, iltype_arg);
+		CLIL_generic_cache(atype_args, iltype_arg->gcache);
+	} else assert(false);
 }
 
 static void CLIL_generic_cache_impl(ast* fqcn, generic_cache* dest) {
@@ -92,5 +140,21 @@ static void CLIL_generic_cache_inner(ast* atype_args, generic_cache* dest) {
 		generic_cache* newCache = generic_cache_new();
 		CLIL_generic_cache(atype_args, newCache);
 		vector_push(dest->type_args, newCache);
+	}
+}
+
+static void CLIL_type_parameter_rule(class_loader* self, ast* source, vector* dest) {
+	if (source->tag == ast_type_parameter_list) {
+		for (int i = 0; i < source->child_count; i++) {
+			CLIL_type_parameter_rule(self, ast_at(source, i), dest);
+		}
+	} else {
+		if (source->tag == ast_typename) {
+			il_type_parameter_rule* rule = il_type_parameter_rule_new();
+			rule->tag = il_type_parameter_rule_polymorphic;
+			rule->u.fqcn_ = generic_cache_new();
+			CLIL_generic_cache(source, rule->u.fqcn_);
+			vector_push(dest, rule);
+		}
 	}
 }
