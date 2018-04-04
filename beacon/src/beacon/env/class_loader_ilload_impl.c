@@ -52,8 +52,7 @@ void class_loader_ilload_impl(class_loader* self, ast* source_code) {
 		} else if (child->tag == ast_namespace_decl) {
 			class_loader_ilload_namespace(self, self->il_code->namespace_list, child);
 		//print();
-		} else if (child->tag == ast_stmt ||
-				   child->tag == ast_stmt_list) {
+		} else if (ast_is_stmt(child)) {
 			class_loader_ilload_body(self, self->il_code->statement_list, child);
 		//def f() { ... }
 		} else if(child->tag == ast_function_decl) {

@@ -361,6 +361,25 @@ bool ast_is_modifier(ast * self) {
 		self->tag == ast_modifier_static_native;
 }
 
+bool ast_is_stmt(ast* self) {
+	switch(self->tag) {
+		case ast_stmt:
+		case ast_stmt_list:
+		case ast_stmt_variable_decl:
+		case ast_stmt_variable_init:
+		case ast_inferenced_type_init:
+		case ast_if:
+		case ast_elif:
+		case ast_else:
+		case ast_while:
+		case ast_continue:
+		case ast_break:
+		case ast_proc:
+			return true;
+	}
+	return false;
+}
+
 access_level ast_cast_to_access(ast * self) {
 	assert(ast_is_access(self));
 	switch (self->tag) {

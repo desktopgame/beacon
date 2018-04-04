@@ -374,6 +374,13 @@ bool ast_is_access(ast* self);
 bool ast_is_modifier(ast* self);
 
 /**
+ * 指定の要素がステートメントなら true.
+ * @param self
+ * @return
+ */
+bool ast_is_stmt(ast* self);
+
+/**
  * 指定の要素がアクセスレベルを表す要素なら列挙型に変換します.
  * @param self
  * @return

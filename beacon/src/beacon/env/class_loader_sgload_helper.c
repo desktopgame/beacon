@@ -171,13 +171,13 @@ void class_loader_sgload_complete_methods_impl(class_loader* self, namespace_* s
 				generic_cache_gtype(ilparam->fqcn, scope, cache),
 				ilparam->name
 			);
-			text_printf("%s ", ilparam->name);
+			//text_printf("%s ", ilparam->name);
 			//実引数を保存
 			//0番目は this のために開けておく
 			opcode_buf_add(env->buf, (vector_item)op_store);
 			opcode_buf_add(env->buf, (vector_item)(i + 1));
 		}
-		text_printf("\n");
+		//text_printf("\n");
 		//インスタンスメソッドなら
 		//0番目を this で埋める
 		if (!modifier_is_static(me->modifier)) {

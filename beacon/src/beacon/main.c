@@ -10,6 +10,7 @@
 #include "env/fqcn_cache.h"
 #include "env/generic_cache.h"
 #include "test.h"
+#include "vm/eval.h"
 #include "util/string_buffer.h"
 #include "util/logger.h"
 #include "util/mem.h"
@@ -66,7 +67,9 @@ int _main(int argc, char* argv[]) {
 		script_context_close();
 	} else {
 		script_context_open();
-		namespace_dump();
+		script_context* ctx = eval_push();
+		eval_top_from_file("main.signal");
+		eval_pop(ctx);
 		script_context_close();
 		ret = 0;
 	}
