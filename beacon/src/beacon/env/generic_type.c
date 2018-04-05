@@ -94,7 +94,7 @@ void generic_type_delete(generic_type * self) {
 }
 
 //Hash<String,List<Int>>
-generic_type* generic_type_apply(generic_type* self, il_load_cache* cache) {
+generic_type* generic_type_apply(generic_type* self, il_context* cache) {
 	generic_type* copy = generic_type_new(self->core_type);
 	generic_type* e = NULL;
 	//全ての実型引数
@@ -121,7 +121,7 @@ generic_type* generic_type_apply(generic_type* self, il_load_cache* cache) {
 	return copy;
 }
 
-method * generic_type_find_method(generic_type* self, const char * name, vector * args, enviroment * env, il_load_cache * cache, int * outIndex) {	
+method * generic_type_find_method(generic_type* self, const char * name, vector * args, enviroment * env, il_context * cache, int * outIndex) {	
 	return type_find_method(self->core_type, name, args, env, cache, outIndex);
 }
 

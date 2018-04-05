@@ -57,7 +57,7 @@ void type_add_method(type* self, method * m) {
 	}
 }
 
-method * type_find_method(type * self, const char * name, vector * args, enviroment * env, il_load_cache* cache, int * outIndex) {
+method * type_find_method(type * self, const char * name, vector * args, enviroment * env, il_context* cache, int * outIndex) {
 	assert(self != NULL);
 	if (self->tag == type_class) {
 		return class_find_method(self->u.class_, name, args, env, cache, outIndex);
@@ -67,7 +67,7 @@ method * type_find_method(type * self, const char * name, vector * args, envirom
 	return NULL;
 }
 
-method* type_find_smethod(type* self, const char* name, vector* args, struct enviroment* env, il_load_cache* cache, int* outIndex) {
+method* type_find_smethod(type* self, const char* name, vector* args, struct enviroment* env, il_context* cache, int* outIndex) {
 	assert(self->tag == type_class);
 	return class_find_smethod(self->u.class_, name, args, env, cache, outIndex);
 }

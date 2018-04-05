@@ -15,7 +15,7 @@ generic_cache * generic_cache_new() {
 	return ret;
 }
 
-generic_type * generic_cache_gtype(generic_cache * self, namespace_ * scope, il_load_cache* cache) {
+generic_type * generic_cache_gtype(generic_cache * self, namespace_ * scope, il_context* cache) {
 	type* core_type = generic_cache_type(self, scope);
 	//もし名前空間でラッピングされていなくて、
 	//なおかつ型が見つからないなら、

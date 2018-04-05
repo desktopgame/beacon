@@ -27,16 +27,16 @@ void il_factor_string_dump(il_factor_string * self, int depth) {
 	text_putline();
 }
 
-void il_factor_string_generate(il_factor_string * self, enviroment* env, il_load_cache* cache) {
+void il_factor_string_generate(il_factor_string * self, enviroment* env, il_context* cache) {
 	int index = enviroment_add_constant_string(env, self->value);
 	opcode_buf_add(env->buf, (vector_item)op_sconst);
 	opcode_buf_add(env->buf, (vector_item)index);
 }
 
-void il_factor_string_load(il_factor_string * self, enviroment * env, il_load_cache* cache, il_ehandler * eh) {
+void il_factor_string_load(il_factor_string * self, enviroment * env, il_context* cache, il_ehandler * eh) {
 }
 
-generic_type* il_factor_string_eval(il_factor_string * self, enviroment * env, il_load_cache* cache) {
+generic_type* il_factor_string_eval(il_factor_string * self, enviroment * env, il_context* cache) {
 	assert(CL_STRING->generic_self->core_type != NULL);
 	return CL_STRING->generic_self;
 }

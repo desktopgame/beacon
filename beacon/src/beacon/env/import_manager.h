@@ -9,7 +9,7 @@ struct generic_type;
 struct namespace_;
 struct class_loader;
 struct import_info;
-struct il_load_cache;
+struct il_context;
 
 /**
  * あるファイルが参照しているファイルの一覧を管理します.
@@ -47,7 +47,7 @@ bool import_manager_loaded(import_manager* self, int index);
  * @param fqcn
  * @return 解決出来なかったなら NULL を返します.
  */
-void import_manager_resolve(import_manager* self, struct namespace_* scope, struct generic_cache* fqcn, struct il_load_cache* ilcache, virtual_type* dest);
+void import_manager_resolve(import_manager* self, struct namespace_* scope, struct generic_cache* fqcn, struct il_context* ilcache, virtual_type* dest);
 
 /**
  * インポートマネージャを開放します.

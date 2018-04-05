@@ -17,11 +17,11 @@ il_factor_inc* il_factor_inc_new(fix_type type);
 
 void il_factor_inc_dump(il_factor_inc* self, int depth);
 
-void il_factor_inc_generate(il_factor_inc* self, struct enviroment* env, il_load_cache* cache);
+void il_factor_inc_generate(il_factor_inc* self, struct enviroment* env, il_context* cache);
 
-void il_factor_inc_load(il_factor_inc* self, struct enviroment* env, il_load_cache* cache, il_ehandler* eh);
+void il_factor_inc_load(il_factor_inc* self, struct enviroment* env, il_context* cache, il_ehandler* eh);
 
-generic_type* il_factor_inc_eval(il_factor_inc* self, struct enviroment* env, il_load_cache* cache);
+generic_type* il_factor_inc_eval(il_factor_inc* self, struct enviroment* env, il_context* cache);
 
 void il_factor_inc_delete(il_factor_inc* self);
 

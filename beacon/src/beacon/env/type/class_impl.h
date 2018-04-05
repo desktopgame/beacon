@@ -9,7 +9,7 @@
 #include "../../vm/enviroment.h"
 #include "../../util/vector.h"
 #include "../access_domain.h"
-#include "../../il/il_load_cache.h"
+#include "../../il/il_context.h"
 #include <stdint.h>
 #include <stdbool.h>
 #include <stdarg.h>
@@ -203,7 +203,7 @@ struct constructor* class_find_rconstructor(class_* self, vector* args, int* out
  * @param outIndex
  * @return 無ければ空
  */
-struct constructor* class_find_constructor(class_* self, vector* args, enviroment* env, il_load_cache* cache, int* outIndex);
+struct constructor* class_find_constructor(class_* self, vector* args, enviroment* env, il_context* cache, int* outIndex);
 
 /**
  * 引数が一つもないコンストラクタを検索して返します.
@@ -213,7 +213,7 @@ struct constructor* class_find_constructor(class_* self, vector* args, enviromen
  * @param outIndex
  * @return
  */
-struct constructor* class_find_empty_constructor(class_* self, enviroment* env, il_load_cache* cache, int* outIndex);
+struct constructor* class_find_empty_constructor(class_* self, enviroment* env, il_context* cache, int* outIndex);
 
 /**
  * もっとも一致するメソッドを返します.
@@ -225,7 +225,7 @@ struct constructor* class_find_empty_constructor(class_* self, enviroment* env, 
  * @param outIndex メソッドへのインデックス
  * @return
  */
-struct method* class_find_method(class_* self, const char* name, vector* args, enviroment* env, il_load_cache* cache, int* outIndex);
+struct method* class_find_method(class_* self, const char* name, vector* args, enviroment* env, il_context* cache, int* outIndex);
 
 /**
  * もっとも一致する静的メソッドを返します.
@@ -237,7 +237,7 @@ struct method* class_find_method(class_* self, const char* name, vector* args, e
  * @param outIndex メソッドへのインデックス
  * @return
  */
-struct method* class_find_smethod(class_* self, const char* name, vector* args, enviroment* env, il_load_cache* cache, int* outIndex);
+struct method* class_find_smethod(class_* self, const char* name, vector* args, enviroment* env, il_context* cache, int* outIndex);
 
 /**
  * 指定位置のメソッドを返します.

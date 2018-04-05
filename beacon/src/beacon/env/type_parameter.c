@@ -3,7 +3,7 @@
 #include "../util/text.h"
 #include "../util/vector.h"
 #include "../il/il_type_parameter.h"
-#include "../il/il_load_cache.h"
+#include "../il/il_context.h"
 #include "type_parameter_rule.h"
 
 //proto
@@ -17,7 +17,7 @@ type_parameter * type_parameter_new(char * name) {
 	return ret;
 }
 
-type_parameter * type_parameter_dup(il_type_parameter * src, il_load_cache* cache) {
+type_parameter * type_parameter_dup(il_type_parameter * src, il_context* cache) {
 	type_parameter* ret = type_parameter_new(src->name);
 	switch (src->kind) {
 		case il_type_parameter_kind_default:
@@ -36,7 +36,7 @@ type_parameter * type_parameter_dup(il_type_parameter * src, il_load_cache* cach
 	return ret;
 }
 
-void type_parameter_list_dup(vector* ilSource, vector* sgDest, il_load_cache* cache) {
+void type_parameter_list_dup(vector* ilSource, vector* sgDest, il_context* cache) {
 	//これはILレベルの<K, V>の並びを
 	//SGレベルの<K, V> へ変換します。
 	//<K(IComparable<K>), V>のような宣言をするとき、

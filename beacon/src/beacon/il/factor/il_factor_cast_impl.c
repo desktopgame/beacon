@@ -30,17 +30,17 @@ void il_factor_cast_dump(il_factor_cast * self, int depth) {
 	il_factor_dump(self->fact, depth + 1);
 }
 
-void il_factor_cast_generate(il_factor_cast * self, enviroment * env, il_load_cache* cache) {
+void il_factor_cast_generate(il_factor_cast * self, enviroment * env, il_context* cache) {
 	il_factor_generate(self->fact, env, cache);
 	type* t = generic_cache_type(self->fqcn, (namespace_*)vector_top(cache->namespace_vec));
 //	opcode_buf_add(env->buf, op_lookup);
 //	opcode_buf_add(env->buf, t->absolute_index);
 }
 
-void il_factor_cast_load(il_factor_cast * self, enviroment * env, il_load_cache* cache, il_ehandler * eh) {
+void il_factor_cast_load(il_factor_cast * self, enviroment * env, il_context* cache, il_ehandler * eh) {
 }
 
-generic_type* il_factor_cast_eval(il_factor_cast * self, enviroment * env, il_load_cache* cache) {
+generic_type* il_factor_cast_eval(il_factor_cast * self, enviroment * env, il_context* cache) {
 	return generic_cache_gtype(self->fqcn, (namespace_*)vector_top(cache->namespace_vec), cache);
 }
 

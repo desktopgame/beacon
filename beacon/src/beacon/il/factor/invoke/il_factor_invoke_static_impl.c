@@ -8,7 +8,7 @@
 #include "../../../util/xassert.h"
 
 //proto
-static void il_factor_invoke_static_check(il_factor_invoke_static * self, enviroment * env, il_load_cache* cache);
+static void il_factor_invoke_static_check(il_factor_invoke_static * self, enviroment * env, il_context* cache);
 static void il_factor_invoke_static_args_delete(vector_item item);
 
 il_factor_invoke_static* il_factor_invoke_static_new(const char* name) {
@@ -23,7 +23,7 @@ il_factor_invoke_static* il_factor_invoke_static_new(const char* name) {
 	return ret;
 }
 
-void il_factor_invoke_static_generate(il_factor_invoke_static* self, enviroment* env, il_load_cache* cache) {
+void il_factor_invoke_static_generate(il_factor_invoke_static* self, enviroment* env, il_context* cache) {
 	for(int i=0; i<self->args->length; i++) {
 		il_argument* e = (il_argument*)vector_at(self->args, i);
 		il_factor_generate(e->factor, env, cache);
@@ -33,13 +33,13 @@ void il_factor_invoke_static_generate(il_factor_invoke_static* self, enviroment*
 	opcode_buf_add(env->buf, (vector_item)self->index);
 }
 
-void il_factor_invoke_static_load(il_factor_invoke_static * self, enviroment * env, il_load_cache* cache, il_ehandler* eh) {
+void il_factor_invoke_static_load(il_factor_invoke_static * self, enviroment * env, il_context* cache, il_ehandler* eh) {
 	vector_push(cache->type_args_vec, self->type_args);
 	il_factor_invoke_static_check(self, env, cache);
 	vector_pop(cache->type_args_vec);
 }
 
-generic_type* il_factor_invoke_static_eval(il_factor_invoke_static * self, enviroment * env, il_load_cache* cache) {
+generic_type* il_factor_invoke_static_eval(il_factor_invoke_static * self, enviroment * env, il_context* cache) {
 	il_factor_invoke_static_check(self, env, cache);
 	virtual_type returnvType = self->m->return_vtype;
 	if(returnvType.tag != virtualtype_default) {
@@ -62,8 +62,8 @@ void il_factor_invoke_static_delete(il_factor_invoke_static* self) {
 	MEM_FREE(self);
 }
 //private
-static void il_factor_invoke_static_check(il_factor_invoke_static * self, enviroment * env, il_load_cache* cache) {
-	class_* cls = il_load_cache_class(cache, self->fqcn);
+static void il_factor_invoke_static_check(il_factor_invoke_static * self, enviroment * env, il_context* cache) {
+	class_* cls = il_context_class(cache, self->fqcn);
 	int temp = -1;
 	for(int i=0; i<self->args->length; i++) {
 		il_argument* e = (il_argument*)vector_at(self->args, i);

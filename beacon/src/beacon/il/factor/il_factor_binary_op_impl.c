@@ -32,15 +32,15 @@ typedef enum bi_operator_t {
 } bi_operator_t;
 
 //proto
-static void il_factor_binary_op_generate_impl(il_factor_binary_op * self, enviroment * env, il_load_cache* cache, bi_operator_t c);
+static void il_factor_binary_op_generate_impl(il_factor_binary_op * self, enviroment * env, il_context* cache, bi_operator_t c);
 static opcode bi_operator_to_opi(bi_operator_t bi);
 static opcode bi_operator_to_opd(bi_operator_t bi);
 static opcode bi_operator_to_opb(bi_operator_t bi);
 static bool ilbi_compare(il_factor_binary_op* self);
 static void assign_dump_operator(il_factor_binary_op* self);
-static void assign_generate_simple(il_factor_binary_op * self, enviroment* env, il_load_cache* cache);
-static void assign_generate_start(il_factor_binary_op * self, enviroment* env, il_load_cache* cache);
-static void assign_generate_end(il_factor_binary_op * self, enviroment* env, il_load_cache* cache);
+static void assign_generate_simple(il_factor_binary_op * self, enviroment* env, il_context* cache);
+static void assign_generate_start(il_factor_binary_op * self, enviroment* env, il_context* cache);
+static void assign_generate_end(il_factor_binary_op * self, enviroment* env, il_context* cache);
 
 il_factor * il_factor_wrap_binary(il_factor_binary_op * self) {
 	il_factor* ret = (il_factor*)MEM_MALLOC(sizeof(il_factor));
@@ -65,7 +65,7 @@ void il_factor_binary_op_dump(il_factor_binary_op * self, int depth) {
 	il_factor_dump(self->right, depth + 1);
 }
 
-void il_factor_binary_op_generate(il_factor_binary_op * self, enviroment* env, il_load_cache* cache) {
+void il_factor_binary_op_generate(il_factor_binary_op * self, enviroment* env, il_context* cache) {
 	switch (self->type) {
 		case ilbinary_add:
 			il_factor_binary_op_generate_impl(self, env, cache, bi_add);
@@ -161,12 +161,12 @@ void il_factor_binary_op_generate(il_factor_binary_op * self, enviroment* env, i
 	}
 }
 
-void il_factor_binary_op_load(il_factor_binary_op * self, enviroment * env, il_load_cache* cache, il_ehandler * eh) {
+void il_factor_binary_op_load(il_factor_binary_op * self, enviroment * env, il_context* cache, il_ehandler * eh) {
 	il_factor_load(self->left, env, cache, eh);
 	il_factor_load(self->right, env, cache, eh);
 }
 
-generic_type* il_factor_binary_op_eval(il_factor_binary_op * self, enviroment * env, il_load_cache* cache) {
+generic_type* il_factor_binary_op_eval(il_factor_binary_op * self, enviroment * env, il_context* cache) {
 	generic_type* ltype = il_factor_eval(self->left, env, cache);
 	generic_type* rtype = il_factor_eval(self->right, env, cache);
 	if (ltype == CL_INT->generic_self &&
@@ -197,7 +197,7 @@ void il_factor_binary_op_delete(il_factor_binary_op * self) {
 }
 
 //private
-static void il_factor_binary_op_generate_impl(il_factor_binary_op * self, enviroment * env, il_load_cache* cache, bi_operator_t c) {
+static void il_factor_binary_op_generate_impl(il_factor_binary_op * self, enviroment * env, il_context* cache, bi_operator_t c) {
 	//ここで逆にしておく
 	il_factor_generate(self->right, env, cache);
 	il_factor_generate(self->left, env, cache);
@@ -379,7 +379,7 @@ static void assign_dump_operator(il_factor_binary_op* self) {
 	}
 }
 
-static void assign_generate_simple(il_factor_binary_op * self, enviroment* env, il_load_cache* cache) {
+static void assign_generate_simple(il_factor_binary_op * self, enviroment* env, il_context* cache) {
 	/*
 	if (self->left->type == ilfactor_static_field_access) {
 		//NOTE:List<T>が定義されるとき、
@@ -432,7 +432,7 @@ static void assign_generate_simple(il_factor_binary_op * self, enviroment* env, 
 	*/
 }
 
-static void assign_generate_start(il_factor_binary_op * self, enviroment* env, il_load_cache* cache) {
+static void assign_generate_start(il_factor_binary_op * self, enviroment* env, il_context* cache) {
 	/*
 	if (self->left->type == ilfactor_field_access) {
 		il_factor_field_access* field_access = self->left->u.field_access_;
@@ -442,7 +442,7 @@ static void assign_generate_start(il_factor_binary_op * self, enviroment* env, i
 	*/
 }
 
-static void assign_generate_end(il_factor_binary_op * self, enviroment* env, il_load_cache* cache) {
+static void assign_generate_end(il_factor_binary_op * self, enviroment* env, il_context* cache) {
 	/*
 	if (self->left->type == ilfactor_static_field_access) {
 		il_factor_static_field_access* sfa = self->left->u.static_field_access;

@@ -47,7 +47,7 @@ void il_factor_unary_op_dump(il_factor_unary_op * self, int depth) {
 	il_factor_dump(self->a, depth + 1);
 }
 
-void il_factor_unary_op_generate(il_factor_unary_op * self, enviroment* env, il_load_cache* cache) {
+void il_factor_unary_op_generate(il_factor_unary_op * self, enviroment* env, il_context* cache) {
 	il_factor_generate(self->a, env, cache);
 	type* cls = il_factor_eval(self->a, env, cache);
 	if (cls == CL_INT) {
@@ -64,10 +64,10 @@ void il_factor_unary_op_generate(il_factor_unary_op * self, enviroment* env, il_
 	}
 }
 
-void il_factor_unary_op_load(il_factor_unary_op * self, enviroment * env, il_load_cache* cache, il_ehandler * eh) {
+void il_factor_unary_op_load(il_factor_unary_op * self, enviroment * env, il_context* cache, il_ehandler * eh) {
 }
 
-generic_type* il_factor_unary_op_eval(il_factor_unary_op * self, enviroment * env, il_load_cache* cache) {
+generic_type* il_factor_unary_op_eval(il_factor_unary_op * self, enviroment * env, il_context* cache) {
 	if (self->type == ilunary_neg) {
 		return il_factor_eval(self->a, env, cache);
 	} else if (self->type == ilunary_not) {

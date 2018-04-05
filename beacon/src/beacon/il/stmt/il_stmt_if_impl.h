@@ -81,7 +81,7 @@ void il_stmt_if_dump(il_stmt_if* self, int depth);
  * @param env
  * @param cache
  */
-void il_stmt_if_generate(il_stmt_if* self, struct enviroment* env, il_load_cache* cache);
+void il_stmt_if_generate(il_stmt_if* self, struct enviroment* env, il_context* cache);
 
 /**
  * if とその子要素を読み込みます.
@@ -90,7 +90,7 @@ void il_stmt_if_generate(il_stmt_if* self, struct enviroment* env, il_load_cache
  * @param cache
  * @param eh
  */
-void il_stmt_if_load(il_stmt_if* self, struct enviroment* env, il_load_cache* cache, il_ehandler* eh);
+void il_stmt_if_load(il_stmt_if* self, struct enviroment* env, il_context* cache, il_ehandler* eh);
 
 /**
  * if を表す要素を開放します.

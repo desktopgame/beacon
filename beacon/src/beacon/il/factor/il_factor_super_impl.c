@@ -12,14 +12,14 @@ void il_factor_super_dump(il_factor_super * self, int depth) {
 	text_putline();
 }
 
-void il_factor_super_generate(il_factor_super * self, enviroment * env, il_load_cache* cache) {
+void il_factor_super_generate(il_factor_super * self, enviroment * env, il_context* cache) {
 	opcode_buf_add(env->buf, op_super);
 }
 
-void il_factor_super_load(il_factor_super * self, enviroment * env, il_load_cache* cache, il_ehandler * eh) {
+void il_factor_super_load(il_factor_super * self, enviroment * env, il_context* cache, il_ehandler * eh) {
 }
 
-generic_type* il_factor_super_eval(il_factor_super * self, enviroment * env, il_load_cache* cache) {
+generic_type* il_factor_super_eval(il_factor_super * self, enviroment * env, il_context* cache) {
 	type* t = ((type*)vector_top(cache->type_vec));
 	assert(t->tag == type_class);
 	return t->u.class_->super_class->core_type->u.class_->parent->generic_self;

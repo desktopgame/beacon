@@ -3,7 +3,7 @@
 #define BEACON_IL_IL_FACTOR_INTERFACE_H
 #include "../vm/enviroment.h"
 #include "il_ehandler.h"
-#include "il_load_cache.h"
+#include "il_context.h"
 #include <stdint.h>
 #include <assert.h>
 #include "../env/generic_type.h"
@@ -104,7 +104,7 @@ void il_factor_dump(il_factor* self, int depth);
  * @param env
  * @param cache
  */
-void il_factor_generate(il_factor* self, enviroment* env, il_load_cache* cache);
+void il_factor_generate(il_factor* self, enviroment* env, il_context* cache);
 
 /**
  * 因子を読み込みます.
@@ -113,7 +113,7 @@ void il_factor_generate(il_factor* self, enviroment* env, il_load_cache* cache);
  * @param cache
  * @param eh
  */
-void il_factor_load(il_factor* self, enviroment* env, il_load_cache* cache, il_ehandler* eh);
+void il_factor_load(il_factor* self, enviroment* env, il_context* cache, il_ehandler* eh);
 
 /**
  * この因子が表す型を返します.
@@ -122,7 +122,7 @@ void il_factor_load(il_factor* self, enviroment* env, il_load_cache* cache, il_e
  * @param cache
  * @return
  */
-generic_type* il_factor_eval(il_factor* self, enviroment* env, il_load_cache* cache);
+generic_type* il_factor_eval(il_factor* self, enviroment* env, il_context* cache);
 
 /**
  * 計算可能な要素を開放します.

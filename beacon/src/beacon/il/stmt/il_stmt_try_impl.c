@@ -60,7 +60,7 @@ void il_stmt_catch_dump(il_stmt_catch* self, int depth) {
 	}
 }
 
-void il_stmt_try_generate(il_stmt_try* self, enviroment* env, il_load_cache* cache) {
+void il_stmt_try_generate(il_stmt_try* self, enviroment* env, il_context* cache) {
 	label* try_end = opcode_buf_label(env->buf, -1);
 	label* catch_start = opcode_buf_label(env->buf, -1);
 	opcode_buf_add(env->buf, op_try_enter);
@@ -125,11 +125,11 @@ void il_stmt_try_generate(il_stmt_try* self, enviroment* env, il_load_cache* cac
 	try_end->cursor = opcode_buf_nop(env->buf);
 }
 
-void il_stmt_catch_generate(il_stmt_catch* self, enviroment* env, il_load_cache* cache) {
+void il_stmt_catch_generate(il_stmt_catch* self, enviroment* env, il_context* cache) {
 
 }
 
-void il_stmt_try_load(il_stmt_try* self, enviroment* env, il_load_cache* cache, il_ehandler* eh) {
+void il_stmt_try_load(il_stmt_try* self, enviroment* env, il_context* cache, il_ehandler* eh) {
 	for(int i=0; i<self->statement_list->length; i++) {
 		il_stmt* e = (il_stmt*)vector_at(self->statement_list, i);
 		il_stmt_load(e, env, cache, eh);
@@ -140,7 +140,7 @@ void il_stmt_try_load(il_stmt_try* self, enviroment* env, il_load_cache* cache, 
 	}
 }
 
-void il_stmt_catch_load(il_stmt_catch* self, enviroment* env, il_load_cache* cache, il_ehandler* eh) {
+void il_stmt_catch_load(il_stmt_catch* self, enviroment* env, il_context* cache, il_ehandler* eh) {
 	for(int i=0; i<self->statement_list->length; i++) {
 		il_stmt* e = (il_stmt*)vector_at(self->statement_list, i);
 		il_stmt_load(e, env, cache, eh);

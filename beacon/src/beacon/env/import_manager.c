@@ -12,7 +12,7 @@
 #include"generic_cache.h"
 #include "generic_type.h"
 #include "type_impl.h"
-#include "../il/il_load_cache.h"
+#include "../il/il_context.h"
 
 //proto
 static void import_manager_delete_import_info(vector_item item);
@@ -39,7 +39,7 @@ bool import_manager_loaded(import_manager * self, int index) {
 	return info->consume;
 }
 
-void import_manager_resolve(import_manager* self, namespace_* scope, generic_cache* fqcn, il_load_cache* ilcache, virtual_type* dest) {
+void import_manager_resolve(import_manager* self, namespace_* scope, generic_cache* fqcn, il_context* ilcache, virtual_type* dest) {
 	type* core_type = fqcn_type(fqcn->fqcn, scope);
 	//名前空間でラッピングされていなくて、
 	//型が見つからない

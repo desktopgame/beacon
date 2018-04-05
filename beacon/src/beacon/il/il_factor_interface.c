@@ -71,7 +71,7 @@ void il_factor_dump(il_factor * self, int depth) {
 	}
 }
 
-void il_factor_generate(il_factor * self, enviroment* env, il_load_cache* cache) {
+void il_factor_generate(il_factor * self, enviroment* env, il_context* cache) {
 	switch (self->type) {
 		case ilfactor_int:
 			il_factor_int_generate(self->u.int_, env, cache);
@@ -134,7 +134,7 @@ void il_factor_generate(il_factor * self, enviroment* env, il_load_cache* cache)
 	enviroment_add_range(env, self->lineno);
 }
 
-void il_factor_load(il_factor * self, enviroment * env, il_load_cache* cache, il_ehandler * eh) {
+void il_factor_load(il_factor * self, enviroment * env, il_context* cache, il_ehandler * eh) {
 	switch (self->type) {
 		case ilfactor_int:
 			il_factor_int_load(self->u.int_, env, cache, eh);
@@ -196,7 +196,7 @@ void il_factor_load(il_factor * self, enviroment * env, il_load_cache* cache, il
 	}
 }
 
-generic_type* il_factor_eval(il_factor * self, enviroment * env, il_load_cache* cache) {
+generic_type* il_factor_eval(il_factor * self, enviroment * env, il_context* cache) {
 	generic_type* ret = NULL;
 	switch (self->type) {
 		case ilfactor_int:

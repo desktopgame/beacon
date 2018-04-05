@@ -7,7 +7,7 @@
 #include "../constructor.h"
 #include "../object.h"
 
-method * meta_find_method(vector * method_vec, const char * name, vector * args, enviroment * env, il_load_cache* cache, int * outIndex) {
+method * meta_find_method(vector * method_vec, const char * name, vector * args, enviroment * env, il_context* cache, int * outIndex) {
 	(*outIndex) = -1;
 	//class_create_vtable(self);
 	method* ret = NULL;
@@ -60,7 +60,7 @@ method * meta_find_method(vector * method_vec, const char * name, vector * args,
 	return ret;
 }
 
-vector * meta_find_constructors(class_ * self, vector * args, enviroment * env, il_load_cache* cache) {
+vector * meta_find_constructors(class_ * self, vector * args, enviroment * env, il_context* cache) {
 	vector* v = vector_new();
 	if (self == NULL) {
 		return v;

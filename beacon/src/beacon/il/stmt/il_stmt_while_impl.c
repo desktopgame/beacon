@@ -32,7 +32,7 @@ void il_stmt_while_dump(il_stmt_while * self, int depth) {
 	}
 }
 
-void il_stmt_while_generate(il_stmt_while * self, enviroment * env, il_load_cache* cache) {
+void il_stmt_while_generate(il_stmt_while * self, enviroment * env, il_context* cache) {
 	int prev = opcode_buf_nop(env->buf);
 	label* prevLab = opcode_buf_label(env->buf, prev);
 	label* nextLab = opcode_buf_label(env->buf, -1);
@@ -63,7 +63,7 @@ void il_stmt_while_delete(il_stmt_while * self) {
 	MEM_FREE(self);
 }
 
-void il_stmt_while_load(il_stmt_while* self, struct enviroment* env, il_load_cache* cache, il_ehandler* eh) {
+void il_stmt_while_load(il_stmt_while* self, struct enviroment* env, il_context* cache, il_ehandler* eh) {
 	il_factor_load(self->condition, env, cache, eh);
 	for(int i=0; i<self->statement_list->length; i++) {
 		il_stmt* e = (il_stmt*)vector_at(self->statement_list, i);

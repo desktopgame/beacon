@@ -12,7 +12,7 @@
 
 //proto
 static void il_factor_invoke_args_delete(vector_item item);
-static void il_factor_invoke_check(il_factor_invoke * self, enviroment * env, il_load_cache* cache);
+static void il_factor_invoke_check(il_factor_invoke * self, enviroment * env, il_context* cache);
 
 il_factor_invoke* il_factor_invoke_new(const char* name) {
 	il_factor_invoke* ret = (il_factor_invoke*)MEM_MALLOC(sizeof(il_factor_invoke));
@@ -26,7 +26,7 @@ il_factor_invoke* il_factor_invoke_new(const char* name) {
 	return ret;
 }
 
-void il_factor_invoke_generate(il_factor_invoke* self, enviroment* env, il_load_cache* cache) {
+void il_factor_invoke_generate(il_factor_invoke* self, enviroment* env, il_context* cache) {
 	for(int i=0; i<self->args->length; i++) {
 		il_argument* e = (il_argument*)vector_at(self->args, i);
 		il_factor_generate(e->factor, env, cache);
@@ -41,7 +41,7 @@ void il_factor_invoke_generate(il_factor_invoke* self, enviroment* env, il_load_
 	}
 }
 
-void il_factor_invoke_load(il_factor_invoke * self, enviroment * env, il_load_cache* cache, il_ehandler* eh) {
+void il_factor_invoke_load(il_factor_invoke * self, enviroment * env, il_context* cache, il_ehandler* eh) {
 	vector_push(cache->type_args_vec, self->type_args);
 	vector_push(cache->receiver_vec, il_factor_eval(self->receiver, env, cache));
 
@@ -52,7 +52,7 @@ void il_factor_invoke_load(il_factor_invoke * self, enviroment * env, il_load_ca
 	vector_pop(cache->type_args_vec);
 }
 
-generic_type* il_factor_invoke_eval(il_factor_invoke * self, enviroment * env, il_load_cache* cache) {
+generic_type* il_factor_invoke_eval(il_factor_invoke * self, enviroment * env, il_context* cache) {
 	il_factor_invoke_check(self, env, cache);
 	generic_type* receivergType = il_factor_eval(self->receiver, env, cache);
 	//T自体ではなく、返すかたにTが含まれる場合
@@ -90,7 +90,7 @@ void il_factor_invoke_delete(il_factor_invoke* self) {
 	MEM_FREE(self);
 }
 //private
-static void il_factor_invoke_check(il_factor_invoke * self, enviroment * env, il_load_cache* cache) {
+static void il_factor_invoke_check(il_factor_invoke * self, enviroment * env, il_context* cache) {
 	il_factor_load(self->receiver, env, cache, NULL);
 	if(self->receiver->type == ilfactor_variable) {
 		il_factor_variable* ilvar = IL_FACT2VAR(self->receiver);

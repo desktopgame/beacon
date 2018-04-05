@@ -9,7 +9,7 @@
 #include "../../vm/enviroment.h"
 
 //proto
-static void il_factor_member_op_check(il_factor_member_op* self, enviroment* env, il_load_cache* cache);
+static void il_factor_member_op_check(il_factor_member_op* self, enviroment* env, il_context* cache);
 static void il_factor_member_op_typearg_delete(vector_item item);
 
 il_factor* il_factor_wrap_member_op(il_factor_member_op* self) {
@@ -38,18 +38,18 @@ void il_factor_member_op_dump(il_factor_member_op* self, int depth) {
 	}
 }
 
-void il_factor_member_op_load(il_factor_member_op* self, enviroment* env, il_load_cache* cache, il_ehandler* eh) {
+void il_factor_member_op_load(il_factor_member_op* self, enviroment* env, il_context* cache, il_ehandler* eh) {
 	il_factor_load(self->fact, env, cache, eh);
 	il_factor_member_op_check(self, env, cache);
 }
 
-void il_factor_member_op_generate(il_factor_member_op* self, enviroment* env, il_load_cache* cache) {
+void il_factor_member_op_generate(il_factor_member_op* self, enviroment* env, il_context* cache) {
 	il_factor_generate(self->fact, env, cache);
 	opcode_buf_add(env->buf, op_get_field);
 	opcode_buf_add(env->buf, self->index);
 }
 
-generic_type* il_factor_member_op_eval(il_factor_member_op* self, enviroment* env, il_load_cache* cache) {
+generic_type* il_factor_member_op_eval(il_factor_member_op* self, enviroment* env, il_context* cache) {
 	il_factor_member_op_check(self, env, cache);
 	assert(self->fact != NULL);
 	if(self->f->vtype.tag == virtualtype_default) {
@@ -71,7 +71,7 @@ il_factor_member_op* il_factor_cast_member_op(il_factor* fact) {
 	return fact->u.member_;
 }
 //private
-static void il_factor_member_op_check(il_factor_member_op* self, enviroment* env, il_load_cache* cache) {
+static void il_factor_member_op_check(il_factor_member_op* self, enviroment* env, il_context* cache) {
 	if(self->index != -1) {
 		return;
 	}

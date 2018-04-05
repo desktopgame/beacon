@@ -3,7 +3,7 @@
 #define BEACON_IL_IL_STMT_INTERFACE_H
 #include "../vm/enviroment.h"
 #include "il_ehandler.h"
-#include "il_load_cache.h"
+#include "il_context.h"
 #include <stdint.h>
 /**
  * 文の種類を表す列挙型.
@@ -65,7 +65,7 @@ void il_stmt_dump(il_stmt* self, int depth);
  * @param env
  * @param cache
  */
-void il_stmt_generate(il_stmt* self, enviroment* env, il_load_cache* cache);
+void il_stmt_generate(il_stmt* self, enviroment* env, il_context* cache);
 
 /**
  * ステートメントを読み込んでエラーがあれば記録します.
@@ -74,7 +74,7 @@ void il_stmt_generate(il_stmt* self, enviroment* env, il_load_cache* cache);
  * @param cache
  * @param eh
  */
-void il_stmt_load(il_stmt * self, enviroment* env, il_load_cache* cache, il_ehandler * eh);
+void il_stmt_load(il_stmt * self, enviroment* env, il_context* cache, il_ehandler * eh);
 
 /**
  * 文を開放します.

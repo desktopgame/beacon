@@ -12,11 +12,11 @@ typedef struct il_factor_variable_static {
 
 il_factor_variable_static* il_factor_variable_static_new();
 
-void il_factor_variable_static_generate(il_factor_variable_static* self, struct enviroment* env, il_load_cache* cache);
+void il_factor_variable_static_generate(il_factor_variable_static* self, struct enviroment* env, il_context* cache);
 
-void il_factor_variable_static_load(il_factor_variable_static * self, struct enviroment * env, il_load_cache* cache, il_ehandler* eh);
+void il_factor_variable_static_load(il_factor_variable_static * self, struct enviroment * env, il_context* cache, il_ehandler* eh);
 
-struct generic_type* il_factor_variable_static_eval(il_factor_variable_static * self, struct enviroment * env, il_load_cache* cache);
+struct generic_type* il_factor_variable_static_eval(il_factor_variable_static * self, struct enviroment * env, il_context* cache);
 
 void il_factor_variable_static_delete(il_factor_variable_static* self);
 #endif

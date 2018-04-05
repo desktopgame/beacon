@@ -15,7 +15,7 @@
 #include "../../util/logger.h"
 
 //proto
-static void il_factor_new_instance_find(il_factor_new_instance * self, enviroment * env, il_load_cache* cache);
+static void il_factor_new_instance_find(il_factor_new_instance * self, enviroment * env, il_context* cache);
 static void il_Factor_new_instace_delete_arg(vector_item item);
 
 il_factor * il_factor_wrap_new_instance(il_factor_new_instance * self) {
@@ -47,7 +47,7 @@ void il_factor_new_instance_dump(il_factor_new_instance * self, int depth) {
 	}
 }
 
-void il_factor_new_instance_generate(il_factor_new_instance * self, enviroment * env, il_load_cache* cache) {
+void il_factor_new_instance_generate(il_factor_new_instance * self, enviroment * env, il_context* cache) {
 	il_factor_new_instance_find(self, env, cache);
 	//実引数を全てスタックへ
 	for (int i = 0; i < self->argument_list->length; i++) {
@@ -60,13 +60,13 @@ void il_factor_new_instance_generate(il_factor_new_instance * self, enviroment *
 	opcode_buf_add(env->buf, self->constructor_index);
 }
 
-void il_factor_new_instance_load(il_factor_new_instance * self, enviroment * env, il_load_cache* cache, il_ehandler * eh) {
+void il_factor_new_instance_load(il_factor_new_instance * self, enviroment * env, il_context* cache, il_ehandler * eh) {
 //	fqcn_cache_delete(self->fqcn);
 //	vector_delete(self->argument_list, il_Factor_new_instace_delete_arg);
 //	MEM_FREE(self);
 }
 
-generic_type* il_factor_new_instance_eval(il_factor_new_instance * self, enviroment * env, il_load_cache* cache) {
+generic_type* il_factor_new_instance_eval(il_factor_new_instance * self, enviroment * env, il_context* cache) {
 	il_factor_new_instance_find(self, env, cache);
 	//型引数がないのでそのまま
 	if (self->type_args->length == 0) {
@@ -98,9 +98,9 @@ il_factor_new_instance* il_factor_cast_new_instance(il_factor* fact) {
 }
 
 //private
-static void il_factor_new_instance_find(il_factor_new_instance * self, enviroment * env, il_load_cache* cache) {
+static void il_factor_new_instance_find(il_factor_new_instance * self, enviroment * env, il_context* cache) {
 	//*
-	class_* cls = il_load_cache_class(cache, self->fqcnc);
+	class_* cls = il_context_class(cache, self->fqcnc);
 	int temp = 0;
 	//TEST(!strcmp(cls->name, "Point3D"));
 	self->c = class_find_constructor(cls, self->argument_list, env, cache, &temp);

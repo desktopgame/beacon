@@ -149,7 +149,7 @@ void class_loader_sgload_class(class_loader* self, il_type* iltype, namespace_* 
 	type* tp = namespace_get_type(parent, iltype->u.class_->name);
 	class_* cls;
 	//FIXME:あとで親関数から渡すようにする
-	il_load_cache* cache = il_load_cache_new();
+	il_context* cache = il_context_new();
 	vector_push(cache->namespace_vec, parent);
 	type_init_generic(tp, iltype->u.class_->type_parameter_list->length);
 	if (tp == NULL) {
@@ -224,7 +224,7 @@ void class_loader_sgload_class(class_loader* self, il_type* iltype, namespace_* 
 	vector_push(self->type_cache_vec, mtc);
 	vector_pop(cache->type_vec);
 	vector_pop(cache->namespace_vec);
-	il_load_cache_delete(cache);
+	il_context_delete(cache);
 }
 
 void class_loader_sgload_interface(class_loader * self, il_type * iltype, namespace_ * parent) {
@@ -232,7 +232,7 @@ void class_loader_sgload_interface(class_loader * self, il_type * iltype, namesp
 	type* tp = namespace_get_type(parent, iltype->u.interface_->name);
 	interface_* inter = NULL;
 	//NOTE:後で親関数から渡すようにする
-	il_load_cache* cache = il_load_cache_new();
+	il_context* cache = il_context_new();
 	vector_push(cache->namespace_vec, parent);
 	type_init_generic(tp, iltype->u.interface_->type_parameter_list->length);
 	if (tp == NULL) {
@@ -281,7 +281,7 @@ void class_loader_sgload_interface(class_loader * self, il_type * iltype, namesp
 	vector_push(self->type_cache_vec, mtc);
 	vector_pop(cache->type_vec);
 	vector_pop(cache->namespace_vec);
-	il_load_cache_delete(cache);
+	il_context_delete(cache);
 }
 
 void class_loader_sgload_attach_native_method(class_loader* self, il_type* ilclass, class_* classz, il_method* ilmethod, method* me) {
@@ -293,7 +293,7 @@ void class_loader_sgload_debug_native_method(method* parent, vm* vm, enviroment*
 
 }
 
-void class_loader_sgload_body(class_loader* self, vector* stmt_list, enviroment* dest, namespace_* range, il_load_cache* cache) {
+void class_loader_sgload_body(class_loader* self, vector* stmt_list, enviroment* dest, namespace_* range, il_context* cache) {
 //	enviroment* ret = enviroment_new();
 	il_ehandler* eh = il_ehandler_new();
 	vector_push(cache->namespace_vec, range);

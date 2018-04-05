@@ -6,7 +6,7 @@
 struct type;
 struct method;
 struct enviroment;
-struct il_load_cache;
+struct il_context;
 
 typedef enum generic_type_tag {
 	generic_type_tag_class,
@@ -40,7 +40,7 @@ void generic_type_print(generic_type* self);
 
 void generic_type_delete(generic_type* self);
 
-generic_type* generic_type_apply(generic_type* self, struct il_load_cache* cache);
+generic_type* generic_type_apply(generic_type* self, struct il_context* cache);
 
-struct method* generic_type_find_method(generic_type* self, const char* name, vector* args, struct enviroment* env, struct il_load_cache* cache, int* outIndex);
+struct method* generic_type_find_method(generic_type* self, const char* name, vector* args, struct enviroment* env, struct il_context* cache, int* outIndex);
 #endif // !SIGNAL_ENV_GENERIC_TYPE_H

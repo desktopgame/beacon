@@ -70,7 +70,7 @@ void il_factor_binary_op_dump(il_factor_binary_op* self, int depth);
  * @param self
  * @param env
  */
-void il_factor_binary_op_generate(il_factor_binary_op* self, struct enviroment* env, il_load_cache* cache);
+void il_factor_binary_op_generate(il_factor_binary_op* self, struct enviroment* env, il_context* cache);
 
 /**
  * 二項演算子を読み込みます.
@@ -78,7 +78,7 @@ void il_factor_binary_op_generate(il_factor_binary_op* self, struct enviroment* 
  * @parma env
  * @param eh
  */
-void il_factor_binary_op_load(il_factor_binary_op* self, struct enviroment* env, il_load_cache* cache, il_ehandler* eh);
+void il_factor_binary_op_load(il_factor_binary_op* self, struct enviroment* env, il_context* cache, il_ehandler* eh);
 
 /**
  * 二項演算子の結果の型を返します.
@@ -86,7 +86,7 @@ void il_factor_binary_op_load(il_factor_binary_op* self, struct enviroment* env,
  * @param env
  * @return
  */
-generic_type* il_factor_binary_op_eval(il_factor_binary_op* self, struct enviroment* env, il_load_cache* cache);
+generic_type* il_factor_binary_op_eval(il_factor_binary_op* self, struct enviroment* env, il_context* cache);
 
 /**
  * 二項演算子を開放します.

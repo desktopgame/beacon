@@ -2,7 +2,7 @@
 #ifndef BEACON_ENV_GENERIC_CACHE_H
 #define BEACON_ENV_GENERIC_CACHE_H
 #include "fqcn_cache.h"
-#include "../il/il_load_cache.h"
+#include "../il/il_context.h"
 #include "../util/vector.h"
 
 struct generic_type;
@@ -18,7 +18,7 @@ typedef struct generic_cache {
 
 generic_cache* generic_cache_new();
 
-struct generic_type* generic_cache_gtype(generic_cache* self, struct namespace_* scope, il_load_cache* cache);
+struct generic_type* generic_cache_gtype(generic_cache* self, struct namespace_* scope, il_context* cache);
 
 struct type* generic_cache_type(generic_cache* self, struct namespace_* scope);
 

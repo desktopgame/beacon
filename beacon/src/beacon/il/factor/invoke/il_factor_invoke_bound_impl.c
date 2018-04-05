@@ -8,7 +8,7 @@
 #include "../../il_argument.h"
 
 //proto
-static void il_factor_invoke_bound_check(il_factor_invoke_bound * self, enviroment * env, il_load_cache* cache);
+static void il_factor_invoke_bound_check(il_factor_invoke_bound * self, enviroment * env, il_context* cache);
 static void il_factor_invoke_bound_args_delete(vector_item item);
 
 il_factor_invoke_bound* il_factor_invoke_bound_new(const char* name) {
@@ -22,7 +22,7 @@ il_factor_invoke_bound* il_factor_invoke_bound_new(const char* name) {
 	return ret;
 }
 
-void il_factor_invoke_bound_generate(il_factor_invoke_bound* self, enviroment* env, il_load_cache* cache) {
+void il_factor_invoke_bound_generate(il_factor_invoke_bound* self, enviroment* env, il_context* cache) {
 	for(int i=0; i<self->args->length; i++) {
 		il_argument* e = (il_argument*)vector_at(self->args, i);
 		il_factor_generate(e->factor, env, cache);
@@ -42,13 +42,13 @@ void il_factor_invoke_bound_generate(il_factor_invoke_bound* self, enviroment* e
 	}
 }
 
-void il_factor_invoke_bound_load(il_factor_invoke_bound * self, enviroment * env, il_load_cache* cache, il_ehandler* eh) {
+void il_factor_invoke_bound_load(il_factor_invoke_bound * self, enviroment * env, il_context* cache, il_ehandler* eh) {
 	vector_push(cache->type_args_vec, self->type_args);
 	il_factor_invoke_bound_check(self, env, cache);
 	vector_pop(cache->type_args_vec);
 }
 
-generic_type* il_factor_invoke_bound_eval(il_factor_invoke_bound * self, enviroment * env, il_load_cache* cache) {
+generic_type* il_factor_invoke_bound_eval(il_factor_invoke_bound * self, enviroment * env, il_context* cache) {
 	type* tp = (type*)vector_top(cache->type_vec);
 	il_factor_invoke_bound_check(self, env, cache);
 	if(self->m->return_vtype.tag == virtualtype_default) {
@@ -78,7 +78,7 @@ void il_factor_invoke_bound_delete(il_factor_invoke_bound* self) {
 	MEM_FREE(self);
 }
 //private
-static void il_factor_invoke_bound_check(il_factor_invoke_bound * self, enviroment * env, il_load_cache* cache) {
+static void il_factor_invoke_bound_check(il_factor_invoke_bound * self, enviroment * env, il_context* cache) {
 	type* ctype = (type*)vector_top(cache->type_vec);
 	int temp = -1;
 	self->m = class_find_method(TYPE2CLASS(ctype), self->name, self->args, env, cache, &temp);

@@ -4,7 +4,7 @@
 #include "../util/vector.h"
 struct generic_type;
 struct il_type_parameter_rule;
-struct il_load_cache;
+struct il_context;
 
 typedef enum type_parameter_rule_tag {
 	type_parameter_rule_tag_polymorphic,
@@ -20,9 +20,9 @@ typedef struct type_parameter_rule {
 
 type_parameter_rule* type_parameter_rule_new();
 
-type_parameter_rule* type_parameter_rule_dup(struct il_type_parameter_rule* src, struct il_load_cache* cache);
+type_parameter_rule* type_parameter_rule_dup(struct il_type_parameter_rule* src, struct il_context* cache);
 
-void type_parameter_rule_list_dup(vector* ilSource, vector* sgDest, struct il_load_cache* cache);
+void type_parameter_rule_list_dup(vector* ilSource, vector* sgDest, struct il_context* cache);
 
 void type_parameter_rule_list_print(vector* v);
 

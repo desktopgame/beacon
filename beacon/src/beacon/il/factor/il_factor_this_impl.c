@@ -11,14 +11,14 @@ void il_factor_this_dump(il_factor_this * self, int depth) {
 	text_putline();
 }
 
-void il_factor_this_generate(il_factor_this * self, enviroment * env, il_load_cache* cache) {
+void il_factor_this_generate(il_factor_this * self, enviroment * env, il_context* cache) {
 	opcode_buf_add(env->buf, op_this);
 }
 
-void il_factor_this_load(il_factor_this * self, enviroment * env, il_load_cache* cache, il_ehandler * eh) {
+void il_factor_this_load(il_factor_this * self, enviroment * env, il_context* cache, il_ehandler * eh) {
 }
 
-generic_type* il_factor_this_eval(il_factor_this * self, enviroment * env, il_load_cache* cache) {
+generic_type* il_factor_this_eval(il_factor_this * self, enviroment * env, il_context* cache) {
 	assert(cache->type_vec->length > 0);
 	type* ret = (type*)vector_top(cache->type_vec);
 	return ret->generic_self;

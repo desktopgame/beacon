@@ -25,12 +25,12 @@ void il_stmt_throw_dump(il_stmt_throw* self, int depth) {
 	il_factor_dump(self->fact, depth + 1);
 }
 
-void il_stmt_throw_generate(il_stmt_throw* self, enviroment* env, il_load_cache* cache) {
+void il_stmt_throw_generate(il_stmt_throw* self, enviroment* env, il_context* cache) {
 	il_factor_generate(self->fact, env, cache);
 	opcode_buf_add(env->buf, op_throw);
 }
 
-void il_stmt_throw_load(il_stmt_throw* self, enviroment* env, il_load_cache* cache, il_ehandler* eh) {
+void il_stmt_throw_load(il_stmt_throw* self, enviroment* env, il_context* cache, il_ehandler* eh) {
 	il_factor_load(self->fact, env, cache, eh);
 }
 

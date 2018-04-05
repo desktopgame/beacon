@@ -13,7 +13,7 @@
 #include <string.h>
 
 //proto
-static void il_factor_variable_check(il_factor_variable* self, enviroment* env, il_load_cache* cache);
+static void il_factor_variable_check(il_factor_variable* self, enviroment* env, il_context* cache);
 
 il_factor * il_factor_wrap_variable(il_factor_variable * self) {
 	il_factor* ret = (il_factor*)MEM_MALLOC(sizeof(il_factor));
@@ -37,7 +37,7 @@ void il_factor_variable_dump(il_factor_variable * self, int depth) {
 	text_putline();
 }
 
-void il_factor_variable_generate(il_factor_variable * self, enviroment* env, il_load_cache* cache) {
+void il_factor_variable_generate(il_factor_variable * self, enviroment* env, il_context* cache) {
 	il_factor_variable_check(self, env, cache);
 	if(self->type == ilvariable_type_local) {
 		il_factor_variable_local_generate(self->u.local_, env, cache);
@@ -46,7 +46,7 @@ void il_factor_variable_generate(il_factor_variable * self, enviroment* env, il_
 	}
 }
 
-void il_factor_variable_load(il_factor_variable * self, enviroment * env, il_load_cache* cache, il_ehandler * eh) {
+void il_factor_variable_load(il_factor_variable * self, enviroment * env, il_context* cache, il_ehandler * eh) {
 	il_factor_variable_check(self, env, cache);
 	if(self->type == ilvariable_type_local) {
 		il_factor_variable_local_load(self->u.local_, env, cache, eh);
@@ -55,7 +55,7 @@ void il_factor_variable_load(il_factor_variable * self, enviroment * env, il_loa
 	}
 }
 
-generic_type* il_factor_variable_eval(il_factor_variable * self, enviroment * env, il_load_cache* cache) {
+generic_type* il_factor_variable_eval(il_factor_variable * self, enviroment * env, il_context* cache) {
 	il_factor_variable_check(self, env, cache);
 	if(self->type == ilvariable_type_local) {
 		return il_factor_variable_local_eval(self->u.local_, env, cache);
@@ -76,14 +76,14 @@ void il_factor_variable_delete(il_factor_variable * self) {
 }
 
 //private
-static void il_factor_variable_check(il_factor_variable* self, enviroment* env, il_load_cache* cache) {
+static void il_factor_variable_check(il_factor_variable* self, enviroment* env, il_context* cache) {
 	if(self->type != ilvariable_type_undefined) {
 		return;
 	}
 	assert(self->fqcn != NULL);
 	//hoge, foo のような文字列の場合
 	if(self->fqcn->scope_vec->length == 0) {
-		namespace_* cur = il_load_cache_namespace(cache);
+		namespace_* cur = il_context_namespace(cache);
 		class_* ctype = namespace_get_class(cur, self->fqcn->name);
 		if(ctype == NULL) {
 			ctype = namespace_get_class(namespace_lang(), self->fqcn->name);

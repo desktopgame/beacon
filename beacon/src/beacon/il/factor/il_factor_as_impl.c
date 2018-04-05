@@ -28,7 +28,7 @@ void il_factor_as_dump(il_factor_as * self, int depth) {
 	il_factor_dump(self->fact, depth + 1);
 }
 
-void il_factor_as_generate(il_factor_as * self, enviroment * env, il_load_cache* cache) {
+void il_factor_as_generate(il_factor_as * self, enviroment * env, il_context* cache) {
 	il_factor_generate(self->fact, env, cache);
 
 	generic_type* from = il_factor_eval(self->fact, env, cache);
@@ -48,10 +48,10 @@ void il_factor_as_generate(il_factor_as * self, enviroment * env, il_load_cache*
 	}
 }
 
-void il_factor_as_load(il_factor_as * self, enviroment * env, il_load_cache* cache, il_ehandler * eh) {
+void il_factor_as_load(il_factor_as * self, enviroment * env, il_context* cache, il_ehandler * eh) {
 }
 
-generic_type* il_factor_as_eval(il_factor_as * self, enviroment * env, il_load_cache* cache) {
+generic_type* il_factor_as_eval(il_factor_as * self, enviroment * env, il_context* cache) {
 	namespace_* n = (namespace_*)vector_top(cache->namespace_vec);
 	return generic_cache_gtype(self->fqcn, n, cache);
 }

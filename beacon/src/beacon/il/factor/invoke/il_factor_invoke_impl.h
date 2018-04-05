@@ -17,11 +17,11 @@ typedef struct il_factor_invoke {
 
 il_factor_invoke* il_factor_invoke_new(const char* name);
 
-void il_factor_invoke_generate(il_factor_invoke* self, struct enviroment* env, il_load_cache* cache);
+void il_factor_invoke_generate(il_factor_invoke* self, struct enviroment* env, il_context* cache);
 
-void il_factor_invoke_load(il_factor_invoke * self, struct enviroment * env, il_load_cache* cache, il_ehandler* eh);
+void il_factor_invoke_load(il_factor_invoke * self, struct enviroment * env, il_context* cache, il_ehandler* eh);
 
-struct generic_type* il_factor_invoke_eval(il_factor_invoke * self, struct enviroment * env, il_load_cache* cache);
+struct generic_type* il_factor_invoke_eval(il_factor_invoke * self, struct enviroment * env, il_context* cache);
 
 void il_factor_invoke_delete(il_factor_invoke* self);
 #endif

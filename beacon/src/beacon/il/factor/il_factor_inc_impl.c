@@ -24,7 +24,7 @@ void il_factor_inc_dump(il_factor_inc * self, int depth) {
 	il_factor_dump(self->fact, depth + 1);
 }
 
-void il_factor_inc_generate(il_factor_inc * self, enviroment * env, il_load_cache* cache) {
+void il_factor_inc_generate(il_factor_inc * self, enviroment * env, il_context* cache) {
 	if (self->type == fixtype_pre) {
 		il_factor_generate(self->fact, env, cache);
 		opcode_buf_add(env->buf, op_inc);
@@ -44,11 +44,11 @@ void il_factor_inc_generate(il_factor_inc * self, enviroment * env, il_load_cach
 	}
 }
 
-void il_factor_inc_load(il_factor_inc * self, enviroment * env, il_load_cache* cache, il_ehandler * eh) {
+void il_factor_inc_load(il_factor_inc * self, enviroment * env, il_context* cache, il_ehandler * eh) {
 	il_factor_load(self->fact, env, cache, eh);
 }
 
-generic_type* il_factor_inc_eval(il_factor_inc * self, enviroment * env, il_load_cache* cache) {
+generic_type* il_factor_inc_eval(il_factor_inc * self, enviroment * env, il_context* cache) {
 	return il_factor_eval(self->fact, env, cache);
 }
 

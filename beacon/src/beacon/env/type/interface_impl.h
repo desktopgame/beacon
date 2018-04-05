@@ -5,7 +5,7 @@
 #include "../namespace.h"
 #include "../vtable.h"
 #include "../../util/vector.h"
-#include "../../il/il_load_cache.h"
+#include "../../il/il_context.h"
 struct method;
 struct enviroment;
 //struct type;
@@ -53,7 +53,7 @@ void interface_add_method(interface_* self, struct method* m);
  * @param outIndex
  * @return
  */
-struct method* interface_find_method(interface_* self, const char * name, vector * args, struct enviroment * env, il_load_cache* cache, int * outIndex);
+struct method* interface_find_method(interface_* self, const char * name, vector * args, struct enviroment * env, il_context* cache, int * outIndex);
 
 /**
  * インターフェイスをダンプします.
