@@ -8,6 +8,8 @@
 #include "../../../util/xassert.h"
 
 //proto
+static void resolve_non_default(il_factor_invoke_static * self, enviroment * env, il_context* ilctx);
+static void resolve_default(il_factor_invoke_static * self, enviroment * env, il_context* ilctx);
 static void il_factor_invoke_static_check(il_factor_invoke_static * self, enviroment * env, il_context* ilctx);
 static void il_factor_invoke_static_args_delete(vector_item item);
 
@@ -43,14 +45,11 @@ generic_type* il_factor_invoke_static_eval(il_factor_invoke_static * self, envir
 	il_factor_invoke_static_check(self, env, ilctx);
 	virtual_type returnvType = self->m->return_vtype;
 	if(returnvType.tag != virtualtype_default) {
-		if(self->resolved == NULL) {
-			self->resolved = generic_type_new(NULL);
-			self->resolved->tag = generic_type_tag_method;
-			self->resolved->virtual_type_index = returnvType.u.index;
-		}
+		resolve_non_default(self, env, ilctx);
 		return self->resolved;
 	} else {
-		return returnvType.u.gtype;
+		resolve_default(self, env, ilctx);
+		return self->resolved;
 	}
 }
 
@@ -62,6 +61,28 @@ void il_factor_invoke_static_delete(il_factor_invoke_static* self) {
 	MEM_FREE(self);
 }
 //private
+//FIXME:il_factor_invokeからのコピペ
+static void resolve_non_default(il_factor_invoke_static * self, enviroment * env, il_context* ilctx) {
+	if(self->resolved != NULL) {
+		return;
+	}
+	virtual_type returnvType = self->m->return_vtype;
+	generic_type* instanced_type = (generic_type*)vector_at(self->type_args, returnvType.u.index);
+	self->resolved = generic_type_new(instanced_type->core_type);
+	self->resolved->tag = generic_type_tag_method;
+	self->resolved->virtual_type_index = returnvType.u.index;
+}
+
+static void resolve_default(il_factor_invoke_static * self, enviroment * env, il_context* ilctx) {
+	if(self->resolved != NULL) {
+		return;
+	}
+	virtual_type returnvType = self->m->return_vtype;
+	vector_push(ilctx->type_args_vec, self->type_args);
+	self->resolved = generic_type_apply(returnvType.u.gtype, ilctx);
+	vector_pop(ilctx->type_args_vec);
+}
+
 static void il_factor_invoke_static_check(il_factor_invoke_static * self, enviroment * env, il_context* ilctx) {
 	class_* cls = il_context_class(ilctx, self->fqcn);
 	int temp = -1;

@@ -9,6 +9,7 @@ struct enviroment;
 struct il_context;
 
 typedef enum generic_type_tag {
+	generic_type_tag_none,
 	generic_type_tag_class,
 	generic_type_tag_method,
 } generic_type_tag;

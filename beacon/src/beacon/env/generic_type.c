@@ -20,6 +20,9 @@ generic_type * generic_type_new(type * core_type) {
 
 void generic_type_addargs(generic_type* self, generic_type* a) {
 	assert(a != NULL);
+	assert(a->tag == generic_type_tag_class || 
+	       a->tag == generic_type_tag_method ||
+		   a->tag == generic_type_tag_none);
 	a->ref_count++;
 	vector_push(self->type_args_list, a);
 }
@@ -98,11 +101,13 @@ void generic_type_delete(generic_type * self) {
 generic_type* generic_type_apply(generic_type* self, il_context* ilctx) {
 	generic_type* copy = generic_type_new(self->core_type);
 	generic_type* e = NULL;
+	int count = 0;
 	//全ての実型引数
 	for(int i=0; i<self->type_args_list->length; i++) {
-		e = vector_at(self->type_args_list, i);
+		e = (generic_type*)vector_at(self->type_args_list, i);
 		//この型がクラスやメソッドに定義された仮装型なら
 		if(e->virtual_type_index != -1) {
+			count++;
 			if(e->tag == generic_type_tag_class) {
 				generic_type* tp = vector_top(ilctx->receiver_vec);
 				generic_type* instanced = vector_at(tp->type_args_list, e->virtual_type_index);
@@ -119,6 +124,8 @@ generic_type* generic_type_apply(generic_type* self, il_context* ilctx) {
 			generic_type_addargs(copy, generic_type_apply(e, ilctx));
 		}
 	}
+	assert(copy->core_type != NULL || count == 0);
+	copy->tag = generic_type_tag_none;
 	return copy;
 }
 

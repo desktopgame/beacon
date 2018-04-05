@@ -8,6 +8,8 @@
 #include "../../il_argument.h"
 
 //proto
+static void resolve_non_default(il_factor_invoke_bound * self, enviroment * env, il_context* ilctx);
+static void resolve_default(il_factor_invoke_bound * self, enviroment * env, il_context* ilctx);
 static void il_factor_invoke_bound_check(il_factor_invoke_bound * self, enviroment * env, il_context* ilctx);
 static void il_factor_invoke_bound_args_delete(vector_item item);
 
@@ -51,22 +53,12 @@ void il_factor_invoke_bound_load(il_factor_invoke_bound * self, enviroment * env
 generic_type* il_factor_invoke_bound_eval(il_factor_invoke_bound * self, enviroment * env, il_context* ilctx) {
 	type* tp = (type*)vector_top(ilctx->type_vec);
 	il_factor_invoke_bound_check(self, env, ilctx);
-	if(self->m->return_vtype.tag == virtualtype_default) {
-		return self->m->return_vtype.u.gtype;
-	} else if(self->m->return_vtype.tag == virtualtype_class_tv) {
-		//ここで新しいジェネリックタイプを作る
-		if(self->resolved == NULL) {
-			self->resolved = generic_type_new(NULL);
-			self->resolved->virtual_type_index = self->m->return_vtype.u.index;
-			self->resolved->tag = generic_type_tag_class;
-		}
-	} else if(self->m->return_vtype.tag == virtualtype_method_tv) {
-		//ここで新しいジェネリックタイプを作る
-		if(self->resolved == NULL) {
-			self->resolved = generic_type_new(NULL);
-			self->resolved->virtual_type_index = self->m->return_vtype.u.index;
-			self->resolved->tag = generic_type_tag_method;
-		}
+	if(self->m->return_vtype.tag != virtualtype_default) {
+		resolve_non_default(self, env, ilctx);
+		return self->resolved;
+	} else {
+		resolve_default(self, env, ilctx);
+		return self->resolved;
 	}
 	return self->resolved;
 }
@@ -78,6 +70,36 @@ void il_factor_invoke_bound_delete(il_factor_invoke_bound* self) {
 	MEM_FREE(self);
 }
 //private
+//FIXME:il_factor_invokeからのコピペ
+static void resolve_non_default(il_factor_invoke_bound * self, enviroment * env, il_context* ilctx) {
+	if(self->resolved != NULL) {
+		return;
+	}
+	type* tp = (type*)vector_top(ilctx->type_vec);
+	generic_type* receivergType = tp->generic_self;
+	virtual_type returnvType = self->m->return_vtype;
+	if(returnvType.tag == virtualtype_class_tv) {
+		self->resolved = generic_type_new(NULL);
+		self->resolved->tag = generic_type_tag_class;
+		self->resolved->virtual_type_index = returnvType.u.index;
+	} else if(returnvType.tag == virtualtype_method_tv) {
+		//メソッドに渡された型引数を参照する
+		generic_type* instanced_type = (generic_type*)vector_at(self->type_args, returnvType.u.index);
+		self->resolved = generic_type_new(instanced_type->core_type);
+		self->resolved->tag = generic_type_tag_class;
+	}
+}
+
+static void resolve_default(il_factor_invoke_bound * self, enviroment * env, il_context* ilctx) {
+	if(self->resolved != NULL) {
+		return;
+	}
+	virtual_type returnvType = self->m->return_vtype;
+	vector_push(ilctx->type_args_vec, self->type_args);
+	self->resolved = generic_type_apply(returnvType.u.gtype, ilctx);
+	vector_pop(ilctx->type_args_vec);
+}
+
 static void il_factor_invoke_bound_check(il_factor_invoke_bound * self, enviroment * env, il_context* ilctx) {
 	type* ctype = (type*)vector_top(ilctx->type_vec);
 	int temp = -1;

@@ -26,11 +26,13 @@ generic_type * generic_cache_gtype(generic_cache * self, namespace_ * scope, il_
 		generic_type* ret = generic_type_new(core_type);
 		type* container = (type*)vector_top(ilctx->type_vec);
 		ret->u.type_ = container;
+		ret->tag = generic_type_tag_class;
 		ret->virtual_type_index = type_for_generic_index(container, self->fqcn->name);
 		//見つからなかったのでメソッドから調べる
 		if (ret->virtual_type_index == -1) {
 			method* m = (method*)vector_top(ilctx->method_vec);
-			ret->u.type_ = m;
+			ret->u.type_ = m->parent;
+			ret->tag = generic_type_tag_method;
 			ret->virtual_type_index = method_for_generic_index(m, self->fqcn->name);
 		}
 		//しかし、Tに対して追加の型変数を与えることはできません。
