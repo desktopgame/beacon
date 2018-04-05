@@ -113,7 +113,6 @@
 						scope_optional
 %left QUOTE
 %left EQUAL NOTEQUAL
-%left GT GE LT LE
 %left LOGIC_AND
 %left COMMA
 %left LOGIC_OR
@@ -123,6 +122,7 @@
 %left LSHIFT RSHIFT
 %left ADD SUB
 %left MUL DIV MOD
+%left GT GE LT LE
 %left DOT FUNCCALL POST_INC POST_DEC
 %nonassoc LSB
 %nonassoc '<'

@@ -24,8 +24,9 @@ void il_factor_variable_local_generate(il_factor_variable_local* self, enviromen
 		opcode_buf_add(env->buf, (vector_item)op_load);
 		opcode_buf_add(env->buf, (vector_item)self->u.entry_->index);
 	} else if(self->type == variable_local_field) {
+		opcode_buf_add(env->buf, (vector_item)op_this);
 		opcode_buf_add(env->buf, (vector_item)op_get_field);
-		opcode_buf_add(env->buf, self->u.field_index);
+		opcode_buf_add(env->buf, (vector_item)self->u.field_index);
 	}
 }
 

@@ -73,6 +73,7 @@ void import_manager_resolve(import_manager* self, namespace_* scope, generic_cac
 	for (int i = 0; i < fqcn->type_args->length; i++) {
 		generic_cache* e = (generic_cache*)vector_at(fqcn->type_args, i);
 		generic_type* child = generic_cache_gtype(e, scope, ilcache);
+		generic_type_fixtype(child);
 		generic_type_addargs(ret2, child);
 	}
 	if (core_type->tag == type_class) {

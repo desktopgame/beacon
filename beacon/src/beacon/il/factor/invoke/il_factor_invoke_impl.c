@@ -33,13 +33,19 @@ void il_factor_invoke_generate(il_factor_invoke* self, enviroment* env, il_conte
 		il_argument* e = (il_argument*)vector_at(self->args, i);
 		il_factor_generate(e->factor, env, ilctx);
 	}
+	il_factor_generate(self->receiver, env, ilctx);
 	if(self->m->parent->tag == type_interface) {
 		opcode_buf_add(env->buf, (vector_item)op_invokeinterface);
 		opcode_buf_add(env->buf, (vector_item)self->m->parent->absolute_index);
 		opcode_buf_add(env->buf, (vector_item)self->index);
 	} else {
-		opcode_buf_add(env->buf, (vector_item)op_invokevirtual);
-		opcode_buf_add(env->buf, (vector_item)self->index);
+		if(self->m->access == access_private) {
+			opcode_buf_add(env->buf, (vector_item)op_invokespecial);
+			opcode_buf_add(env->buf, (vector_item)self->index);
+		} else {
+			opcode_buf_add(env->buf, (vector_item)op_invokevirtual);
+			opcode_buf_add(env->buf, (vector_item)self->index);
+		}
 	}
 }
 

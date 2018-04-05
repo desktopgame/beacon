@@ -18,6 +18,13 @@ generic_type * generic_type_new(type * core_type) {
 	return ret;
 }
 
+void generic_type_fixtype(generic_type* self) {
+	if(self->tag != generic_type_tag_class &&
+	   self->tag != generic_type_tag_method) {
+		   self->tag =generic_type_tag_none;
+	   }
+}
+
 void generic_type_addargs(generic_type* self, generic_type* a) {
 	assert(a != NULL);
 	assert(a->tag == generic_type_tag_class || 
@@ -118,7 +125,7 @@ generic_type* generic_type_apply(generic_type* self, il_context* ilctx) {
 				generic_type_addargs(copy, generic_type_apply(a, ilctx));
 				//メソッド呼び出しが必要！！
 				//メソッドは仮想型しかもってない！！！
-			} else XALWAYS();
+			} else XBREAK(e->tag != generic_type_tag_none);
 		//
 		} else {
 			generic_type_addargs(copy, generic_type_apply(e, ilctx));

@@ -51,8 +51,14 @@ void il_factor_member_op_generate(il_factor_member_op* self, enviroment* env, il
 
 generic_type* il_factor_member_op_eval(il_factor_member_op* self, enviroment* env, il_context* ilctx) {
 	il_factor_member_op_check(self, env, ilctx);
+//	XSTREQ(self->name, "charArray");
 	assert(self->fact != NULL);
 	if(self->f->vtype.tag == virtualtype_default) {
+		generic_type* a = self->f->vtype.u.gtype;
+		if(a->type_args_list->length > 0) {
+			generic_type* cc = (generic_type*)vector_at(a->type_args_list, 0);
+			int xx = 0;
+		}
 		return self->f->vtype.u.gtype;
 	}
 	generic_type* a = il_factor_eval(self->fact, env, ilctx);
@@ -75,6 +81,7 @@ static void il_factor_member_op_check(il_factor_member_op* self, enviroment* env
 	if(self->index != -1) {
 		return;
 	}
+	//XSTREQ(self->name, "charArray");
 	il_factor* fact = self->fact;
 	generic_type* gtype = il_factor_eval(fact, env, ilctx);
 	type* ctype = gtype->core_type;
@@ -82,6 +89,10 @@ static void il_factor_member_op_check(il_factor_member_op* self, enviroment* env
 	int temp = -1;
 	self->f = class_find_field_tree(TYPE2CLASS(ctype), self->name, &temp);
 	self->index = temp;
+	if(self->f->vtype.tag == virtualtype_default) {
+		generic_type* a = self->f->vtype.u.gtype;
+		int aa = 0;
+	}
 	assert(temp != -1);
 }
 

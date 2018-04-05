@@ -16,6 +16,7 @@
 #include "../thread/thread.h"
 #include "../util/logger.h"
 #include "../util/mem.h"
+#include "../util/xassert.h"
 #include "../util/string_buffer.h"
 #include "../util/vector.h"
 #include "../util/text.h"
@@ -457,6 +458,7 @@ void vm_resume(vm * self, enviroment * env, int pos) {
 			}
 			case op_load:
 			{
+				XBREAK(i == 7);
 				int index = (int)enviroment_source_at(env, ++i);
 				vector_item e = vector_at(self->ref_stack, index);
 				object*  o = (object*)e;
@@ -528,15 +530,19 @@ void vm_resume(vm * self, enviroment * env, int pos) {
 				//break;
 			}
 			case op_invokevirtual:
+			{
+				int index = (int)enviroment_source_at(env, ++i);
+				object* o = (object*)vector_top(self->value_stack);
+				method* m = class_get_method(o, index);
+				method_execute(m, self, env);
+				break;
+			}
 			case op_invokespecial:
 			{
 				int index = (int)enviroment_source_at(env, ++i);
-				//	opcode code = (opcode)enviroment_source_at(env, ++i);
 				object* o = (object*)vector_top(self->value_stack);
-				//method* m = (method*)vector_at(o->vptr->elements, index);
-				method* m = class_get_method(o, index);
-				//	assert(code == op_invokevirtual ||
-				//		   code == op_invokespecial);
+				class_* cl = TYPE2CLASS(o->gtype->core_type);
+				method* m = (method*)vector_at(cl->method_list, index);
 				method_execute(m, self, env);
 				break;
 			}

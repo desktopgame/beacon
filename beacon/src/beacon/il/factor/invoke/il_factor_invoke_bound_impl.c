@@ -1,6 +1,7 @@
 #include "il_factor_invoke_bound_impl.h"
 #include "../../../util/mem.h"
 #include "../../../util/text.h"
+#include "../../../util/xassert.h"
 #include "../../../env/generic_type.h"
 #include "../../../env/type_interface.h"
 #include "../../../env/type/class_impl.h"
@@ -101,10 +102,14 @@ static void resolve_default(il_factor_invoke_bound * self, enviroment * env, il_
 }
 
 static void il_factor_invoke_bound_check(il_factor_invoke_bound * self, enviroment * env, il_context* ilctx) {
+	if(self->index != -1) {
+		return;
+	}
 	type* ctype = (type*)vector_top(ilctx->type_vec);
 	int temp = -1;
 	self->m = class_find_method(TYPE2CLASS(ctype), self->name, self->args, env, ilctx, &temp);
 	self->index = temp;
+	//XSTREQ(self->name, "nativeInit");
 	assert(temp != -1);
 }
 static void il_factor_invoke_bound_args_delete(vector_item item) {

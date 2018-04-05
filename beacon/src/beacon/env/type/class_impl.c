@@ -1,6 +1,7 @@
 #include "class_impl.h"
 #include "../../util/text.h"
 #include "../../util/logger.h"
+#include "../../util/xassert.h"
 #include "../parameter.h"
 #include "../../il/il_argument.h"
 #include <assert.h>
@@ -291,7 +292,20 @@ method * class_find_method(class_ * self, const char * name, vector * args, envi
 	(*outIndex) = -1;
 	class_create_vtable(self);
 	assert(self->vt->elements->length > 0);
-	return class_find_method_impl(self->vt->elements, name, args, env, ilctx, outIndex);
+	method* ret = NULL;
+	if((ret = class_find_method_impl(self->vt->elements, name, args, env, ilctx, outIndex))
+	   != NULL) {
+		   return ret;
+	}
+	if((ret = class_find_method_impl(self->method_list, name, args, env, ilctx, outIndex))
+	   != NULL) {
+		   return ret;
+	}
+	if((ret = class_find_method_impl(self->smethod_list, name, args, env, ilctx, outIndex))
+	   != NULL) {
+		   return ret;
+	}
+	return NULL;
 }
 
 method * class_find_smethod(class_ * self, const char * name, vector * args, enviroment * env, il_context* ilctx, int * outIndex) {
@@ -383,6 +397,7 @@ void class_create_vtable(class_ * self) {
 	if (self->vt != NULL) {
 		return;
 	}
+	//XSTREQ(self->name, "Int");
 	self->vt = vtable_new();
 	//トップレベルではメソッドの一覧を配列に入れるだけ
 	if (self->super_class == NULL) {
@@ -511,7 +526,7 @@ static void class_create_vtable_top(class_* self) {
 	for (int i = 0; i < self->method_list->length; i++) {
 		method* m = (method*)vector_at(self->method_list, i);
 		if(m->access != access_private &&
-		   modifier_is_static(m->modifier)) {
+		   !modifier_is_static(m->modifier)) {
 			vtable_add(self->vt, m);
 		}
 	}
@@ -523,7 +538,7 @@ static void class_create_vtable_ov(class_* self) {
 	for (int i = 0; i < self->method_list->length; i++) {
 		method* m = (method*)vector_at(self->method_list, i);
 		if(m->access != access_private &&
-		   modifier_is_static(m->modifier)) {
+		   !modifier_is_static(m->modifier)) {
 			vtable_replace(self->vt, m);
 		}
 	}

@@ -31,6 +31,8 @@ typedef struct generic_type {
 
 generic_type* generic_type_new(struct type* core_type);
 
+void generic_type_fixtype(generic_type* self);
+
 void generic_type_addargs(generic_type* self, generic_type* a);
 
 bool generic_type_castable(generic_type* a, generic_type* b);

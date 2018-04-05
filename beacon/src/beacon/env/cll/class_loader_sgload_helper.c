@@ -102,6 +102,7 @@ void class_loader_sgload_methods_impl(class_loader* self, il_type* iltype, type*
 		vector* ilparams = ilmethod->parameter_list;
 		//実行時のメソッド情報を作成する
 		method* method = method_new(ilmethod->name);
+		//XSTREQ(ilmethod->name, "sub");
 		vector_push(ilctx->method_vec, method);
 		vector* parameter_list = method->parameter_list;
 		method->type = modifier_is_native(ilmethod->modifier) ? method_type_native : method_type_script;
@@ -205,6 +206,7 @@ static void class_loader_sgload_fields_impl(class_loader* self, il_type* iltype,
 		vector_item e = vector_at(ilfields, i);
 		il_field* ilfield = (il_field*)e;
 		field* field = field_new(ilfield->name);
+		//XSTREQ(ilfield->name, "charArray");
 		field->access = ilfield->access;
 		field->modifier = ilfield->modifier;
 		field->parent = tp;
