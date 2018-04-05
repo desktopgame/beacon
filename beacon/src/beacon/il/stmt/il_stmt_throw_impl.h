@@ -15,9 +15,9 @@ il_stmt_throw* il_stmt_throw_new();
 
 void il_stmt_throw_dump(il_stmt_throw* self, int depth);
 
-void il_stmt_throw_generate(il_stmt_throw* self, struct enviroment* env, il_context* cache);
+void il_stmt_throw_generate(il_stmt_throw* self, struct enviroment* env, il_context* ilctx);
 
-void il_stmt_throw_load(il_stmt_throw* self, struct enviroment* env, il_context* cache, il_ehandler* eh);
+void il_stmt_throw_load(il_stmt_throw* self, struct enviroment* env, il_context* ilctx, il_ehandler* eh);
 
 void il_stmt_throw_delete(il_stmt_throw* self);
 #endif

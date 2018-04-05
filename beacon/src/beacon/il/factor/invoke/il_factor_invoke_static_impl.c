@@ -8,7 +8,7 @@
 #include "../../../util/xassert.h"
 
 //proto
-static void il_factor_invoke_static_check(il_factor_invoke_static * self, enviroment * env, il_context* cache);
+static void il_factor_invoke_static_check(il_factor_invoke_static * self, enviroment * env, il_context* ilctx);
 static void il_factor_invoke_static_args_delete(vector_item item);
 
 il_factor_invoke_static* il_factor_invoke_static_new(const char* name) {
@@ -23,24 +23,24 @@ il_factor_invoke_static* il_factor_invoke_static_new(const char* name) {
 	return ret;
 }
 
-void il_factor_invoke_static_generate(il_factor_invoke_static* self, enviroment* env, il_context* cache) {
+void il_factor_invoke_static_generate(il_factor_invoke_static* self, enviroment* env, il_context* ilctx) {
 	for(int i=0; i<self->args->length; i++) {
 		il_argument* e = (il_argument*)vector_at(self->args, i);
-		il_factor_generate(e->factor, env, cache);
+		il_factor_generate(e->factor, env, ilctx);
 	}
 	opcode_buf_add(env->buf, (vector_item)op_invokestatic);
 	opcode_buf_add(env->buf, (vector_item)self->m->parent->absolute_index);
 	opcode_buf_add(env->buf, (vector_item)self->index);
 }
 
-void il_factor_invoke_static_load(il_factor_invoke_static * self, enviroment * env, il_context* cache, il_ehandler* eh) {
-	vector_push(cache->type_args_vec, self->type_args);
-	il_factor_invoke_static_check(self, env, cache);
-	vector_pop(cache->type_args_vec);
+void il_factor_invoke_static_load(il_factor_invoke_static * self, enviroment * env, il_context* ilctx, il_ehandler* eh) {
+	vector_push(ilctx->type_args_vec, self->type_args);
+	il_factor_invoke_static_check(self, env, ilctx);
+	vector_pop(ilctx->type_args_vec);
 }
 
-generic_type* il_factor_invoke_static_eval(il_factor_invoke_static * self, enviroment * env, il_context* cache) {
-	il_factor_invoke_static_check(self, env, cache);
+generic_type* il_factor_invoke_static_eval(il_factor_invoke_static * self, enviroment * env, il_context* ilctx) {
+	il_factor_invoke_static_check(self, env, ilctx);
 	virtual_type returnvType = self->m->return_vtype;
 	if(returnvType.tag != virtualtype_default) {
 		if(self->resolved == NULL) {
@@ -62,8 +62,8 @@ void il_factor_invoke_static_delete(il_factor_invoke_static* self) {
 	MEM_FREE(self);
 }
 //private
-static void il_factor_invoke_static_check(il_factor_invoke_static * self, enviroment * env, il_context* cache) {
-	class_* cls = il_context_class(cache, self->fqcn);
+static void il_factor_invoke_static_check(il_factor_invoke_static * self, enviroment * env, il_context* ilctx) {
+	class_* cls = il_context_class(ilctx, self->fqcn);
 	int temp = -1;
 	for(int i=0; i<self->args->length; i++) {
 		il_argument* e = (il_argument*)vector_at(self->args, i);
@@ -71,7 +71,7 @@ static void il_factor_invoke_static_check(il_factor_invoke_static * self, enviro
 		//XSTREQ(self->name, "writeLine");
 		//int a = 0;
 	}
-	self->m = class_find_smethod(cls, self->name, self->args, env, cache, &temp);
+	self->m = class_find_smethod(cls, self->name, self->args, env, ilctx, &temp);
 	self->index = temp;
 	assert(temp != -1);
 }

@@ -24,7 +24,7 @@ void il_factor_this_dump(il_factor_this* self, int depth);
  * @param env
  * @param cache
  */
-void il_factor_this_generate(il_factor_this* self, struct enviroment* env, il_context* cache);
+void il_factor_this_generate(il_factor_this* self, struct enviroment* env, il_context* ilctx);
 
 /**
  * thisを読み込みます.
@@ -33,7 +33,7 @@ void il_factor_this_generate(il_factor_this* self, struct enviroment* env, il_co
  * @param cache
  * @param eh
  */
-void il_factor_this_load(il_factor_this* self, struct enviroment* env, il_context* cache, il_ehandler* eh);
+void il_factor_this_load(il_factor_this* self, struct enviroment* env, il_context* ilctx, il_ehandler* eh);
 
 /**
  * thisで参照されるオブジェクトの型を返します.
@@ -42,7 +42,7 @@ void il_factor_this_load(il_factor_this* self, struct enviroment* env, il_contex
  * @param cache
  * @return
  */
-generic_type* il_factor_this_eval(il_factor_this* self, struct enviroment* env, il_context* cache);
+generic_type* il_factor_this_eval(il_factor_this* self, struct enviroment* env, il_context* ilctx);
 
 /**
  * thisを表す要素を開放します.

@@ -39,7 +39,7 @@ void il_factor_int_dump(il_factor_int* self, int depth);
  * @param env
  * @param cache
  */
-void il_factor_int_generate(il_factor_int* self, struct enviroment* env, il_context* cache);
+void il_factor_int_generate(il_factor_int* self, struct enviroment* env, il_context* ilctx);
 
 /**
  * 整数リテラルを読み込みます.
@@ -48,7 +48,7 @@ void il_factor_int_generate(il_factor_int* self, struct enviroment* env, il_cont
  * @param cache
  * @param eh
  */
-void il_factor_int_load(il_factor_int* self, struct enviroment* env, il_context* cache, il_ehandler* eh);
+void il_factor_int_load(il_factor_int* self, struct enviroment* env, il_context* ilctx, il_ehandler* eh);
 
 /**
  * 整数リテラルを表す要素の型を返します.
@@ -57,7 +57,7 @@ void il_factor_int_load(il_factor_int* self, struct enviroment* env, il_context*
  * @param cache
  * @return
  */
-generic_type* il_factor_int_eval(il_factor_int* self, struct enviroment* env, il_context* cache);
+generic_type* il_factor_int_eval(il_factor_int* self, struct enviroment* env, il_context* ilctx);
 
 /**
  * 整数リテラルを表す要素を開放します.

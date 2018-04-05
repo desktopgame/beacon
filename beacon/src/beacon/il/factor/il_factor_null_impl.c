@@ -10,13 +10,13 @@ void il_factor_null_dump(void * empty, int depth) {
 	text_putline();
 }
 
-void il_factor_null_generate(void * empty, enviroment * env, il_context* cache) {
+void il_factor_null_generate(void * empty, enviroment * env, il_context* ilctx) {
 	opcode_buf_add(env->buf, op_null);
 }
 
-void il_factor_null_load(void * empty, enviroment * env, il_context* cache, il_ehandler * eh) {
+void il_factor_null_load(void * empty, enviroment * env, il_context* ilctx, il_ehandler * eh) {
 }
 
-generic_type* il_factor_null_eval(void * empty, enviroment * env, il_context* cache) {
+generic_type* il_factor_null_eval(void * empty, enviroment * env, il_context* ilctx) {
 	return CL_NULL->generic_self;
 }

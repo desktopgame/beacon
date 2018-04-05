@@ -18,7 +18,7 @@ struct class_;
  * @param outIndex
  * @return
  */
-method* meta_find_method(vector* method_vec, const char * name, vector * args, enviroment * env, il_context* cache, int * outIndex);
+method* meta_find_method(vector* method_vec, const char * name, vector * args, enviroment * env, il_context* ilctx, int * outIndex);
 
 /**
  * @param self
@@ -27,7 +27,7 @@ method* meta_find_method(vector* method_vec, const char * name, vector * args, e
  * @param cache
  * @return
  */
-vector* meta_find_constructors(struct class_* self, vector* args, enviroment* env, il_context* cache);
+vector* meta_find_constructors(struct class_* self, vector* args, enviroment* env, il_context* ilctx);
 
 /**
  * @param self

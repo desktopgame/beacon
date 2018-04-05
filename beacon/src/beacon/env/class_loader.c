@@ -165,10 +165,10 @@ static void class_loader_load_impl(class_loader* self) {
 	//他のクラスローダーとリンク
 	class_loader_link(self);
 	//トップレベルのステートメントを読み込む
-	il_context* cache = il_context_new();
-	cache->toplevel = true;
-	class_loader_sgload_body(self, self->il_code->statement_list, self->env, NULL, cache);
-	il_context_delete(cache);
+	il_context* ilctx = il_context_new();
+	ilctx->toplevel = true;
+	class_loader_sgload_body(self, self->il_code->statement_list, self->env, NULL, ilctx);
+	il_context_delete(ilctx);
 	logger_log(log_info, __FILE__, __LINE__, "loaded file %s", self->filename);
 }
 

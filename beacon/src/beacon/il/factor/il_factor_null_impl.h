@@ -8,10 +8,10 @@ struct type;
 
 void il_factor_null_dump(void* empty, int depth);
 
-void il_factor_null_generate(void* empty, struct enviroment* env, il_context* cache);
+void il_factor_null_generate(void* empty, struct enviroment* env, il_context* ilctx);
 
-void il_factor_null_load(void* empty, struct enviroment* env, il_context* cache, il_ehandler* eh);
+void il_factor_null_load(void* empty, struct enviroment* env, il_context* ilctx, il_ehandler* eh);
 
-generic_type* il_factor_null_eval(void* empty, struct enviroment* env, il_context* cache);
+generic_type* il_factor_null_eval(void* empty, struct enviroment* env, il_context* ilctx);
 
 #endif // !SIGNAL_IL_IL_FACTOR_NULL_H

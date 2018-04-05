@@ -11,16 +11,16 @@ void il_factor_this_dump(il_factor_this * self, int depth) {
 	text_putline();
 }
 
-void il_factor_this_generate(il_factor_this * self, enviroment * env, il_context* cache) {
+void il_factor_this_generate(il_factor_this * self, enviroment * env, il_context* ilctx) {
 	opcode_buf_add(env->buf, op_this);
 }
 
-void il_factor_this_load(il_factor_this * self, enviroment * env, il_context* cache, il_ehandler * eh) {
+void il_factor_this_load(il_factor_this * self, enviroment * env, il_context* ilctx, il_ehandler * eh) {
 }
 
-generic_type* il_factor_this_eval(il_factor_this * self, enviroment * env, il_context* cache) {
-	assert(cache->type_vec->length > 0);
-	type* ret = (type*)vector_top(cache->type_vec);
+generic_type* il_factor_this_eval(il_factor_this * self, enviroment * env, il_context* ilctx) {
+	assert(ilctx->type_vec->length > 0);
+	type* ret = (type*)vector_top(ilctx->type_vec);
 	return ret->generic_self;
 }
 

@@ -104,7 +104,7 @@ void il_factor_dump(il_factor* self, int depth);
  * @param env
  * @param cache
  */
-void il_factor_generate(il_factor* self, enviroment* env, il_context* cache);
+void il_factor_generate(il_factor* self, enviroment* env, il_context* ilctx);
 
 /**
  * 因子を読み込みます.
@@ -113,7 +113,7 @@ void il_factor_generate(il_factor* self, enviroment* env, il_context* cache);
  * @param cache
  * @param eh
  */
-void il_factor_load(il_factor* self, enviroment* env, il_context* cache, il_ehandler* eh);
+void il_factor_load(il_factor* self, enviroment* env, il_context* ilctx, il_ehandler* eh);
 
 /**
  * この因子が表す型を返します.
@@ -122,7 +122,7 @@ void il_factor_load(il_factor* self, enviroment* env, il_context* cache, il_ehan
  * @param cache
  * @return
  */
-generic_type* il_factor_eval(il_factor* self, enviroment* env, il_context* cache);
+generic_type* il_factor_eval(il_factor* self, enviroment* env, il_context* ilctx);
 
 /**
  * 計算可能な要素を開放します.

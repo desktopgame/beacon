@@ -19,9 +19,9 @@ typedef struct type_parameter {
 
 type_parameter* type_parameter_new(char* name);
 
-type_parameter* type_parameter_dup(struct il_type_parameter* src, struct il_context* cache);
+type_parameter* type_parameter_dup(struct il_type_parameter* src, struct il_context* ilctx);
 
-void type_parameter_list_dup(struct vector* ilSource, struct vector* sgDest, struct il_context* cache);
+void type_parameter_list_dup(struct vector* ilSource, struct vector* sgDest, struct il_context* ilctx);
 
 void type_parameter_print(struct vector* v);
 

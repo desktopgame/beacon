@@ -26,14 +26,14 @@ void il_stmt_variable_decl_dump(il_stmt_variable_decl * self, int depth) {
 	generic_cache_dump(self->fqcn, depth + 1);
 }
 
-void il_stmt_variable_decl_generate(il_stmt_variable_decl * self, enviroment * env, il_context* cache) {
+void il_stmt_variable_decl_generate(il_stmt_variable_decl * self, enviroment * env, il_context* ilctx) {
 
 }
 
-void il_stmt_variable_decl_load(il_stmt_variable_decl * self, struct enviroment* env, il_context* cache, il_ehandler * eh) {
+void il_stmt_variable_decl_load(il_stmt_variable_decl * self, struct enviroment* env, il_context* ilctx, il_ehandler * eh) {
 	symbol_table_entry(
 		env->sym_table,
-		generic_cache_gtype(self->fqcn, (namespace_*)vector_top(cache->namespace_vec), cache),
+		generic_cache_gtype(self->fqcn, (namespace_*)vector_top(ilctx->namespace_vec), ilctx),
 		self->name
 	);
 }

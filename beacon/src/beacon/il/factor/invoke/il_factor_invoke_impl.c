@@ -12,7 +12,7 @@
 
 //proto
 static void il_factor_invoke_args_delete(vector_item item);
-static void il_factor_invoke_check(il_factor_invoke * self, enviroment * env, il_context* cache);
+static void il_factor_invoke_check(il_factor_invoke * self, enviroment * env, il_context* ilctx);
 
 il_factor_invoke* il_factor_invoke_new(const char* name) {
 	il_factor_invoke* ret = (il_factor_invoke*)MEM_MALLOC(sizeof(il_factor_invoke));
@@ -26,10 +26,10 @@ il_factor_invoke* il_factor_invoke_new(const char* name) {
 	return ret;
 }
 
-void il_factor_invoke_generate(il_factor_invoke* self, enviroment* env, il_context* cache) {
+void il_factor_invoke_generate(il_factor_invoke* self, enviroment* env, il_context* ilctx) {
 	for(int i=0; i<self->args->length; i++) {
 		il_argument* e = (il_argument*)vector_at(self->args, i);
-		il_factor_generate(e->factor, env, cache);
+		il_factor_generate(e->factor, env, ilctx);
 	}
 	if(self->m->parent->tag == type_interface) {
 		opcode_buf_add(env->buf, (vector_item)op_invokeinterface);
@@ -41,20 +41,20 @@ void il_factor_invoke_generate(il_factor_invoke* self, enviroment* env, il_conte
 	}
 }
 
-void il_factor_invoke_load(il_factor_invoke * self, enviroment * env, il_context* cache, il_ehandler* eh) {
-	vector_push(cache->type_args_vec, self->type_args);
-	vector_push(cache->receiver_vec, il_factor_eval(self->receiver, env, cache));
+void il_factor_invoke_load(il_factor_invoke * self, enviroment * env, il_context* ilctx, il_ehandler* eh) {
+	vector_push(ilctx->type_args_vec, self->type_args);
+	vector_push(ilctx->receiver_vec, il_factor_eval(self->receiver, env, ilctx));
 
-	il_factor_load(self->receiver, env, cache, eh);
-	il_factor_invoke_check(self, env, cache);
+	il_factor_load(self->receiver, env, ilctx, eh);
+	il_factor_invoke_check(self, env, ilctx);
 
-	vector_pop(cache->receiver_vec);
-	vector_pop(cache->type_args_vec);
+	vector_pop(ilctx->receiver_vec);
+	vector_pop(ilctx->type_args_vec);
 }
 
-generic_type* il_factor_invoke_eval(il_factor_invoke * self, enviroment * env, il_context* cache) {
-	il_factor_invoke_check(self, env, cache);
-	generic_type* receivergType = il_factor_eval(self->receiver, env, cache);
+generic_type* il_factor_invoke_eval(il_factor_invoke * self, enviroment * env, il_context* ilctx) {
+	il_factor_invoke_check(self, env, ilctx);
+	generic_type* receivergType = il_factor_eval(self->receiver, env, ilctx);
 	//T自体ではなく、返すかたにTが含まれる場合
 	virtual_type returnvType = self->m->return_vtype;
 	if(self->receiver->type == ilfactor_member_op) {
@@ -75,9 +75,9 @@ generic_type* il_factor_invoke_eval(il_factor_invoke * self, enviroment * env, i
 	} else {
 		generic_type* gt = returnvType.u.gtype;
 		if(self->resolved == NULL) {
-			vector_push(cache->receiver_vec, receivergType);
-			self->resolved = generic_type_apply(gt, cache);
-			vector_pop(cache->receiver_vec);
+			vector_push(ilctx->receiver_vec, receivergType);
+			self->resolved = generic_type_apply(gt, ilctx);
+			vector_pop(ilctx->receiver_vec);
 		}
 		return self->resolved;
 	}
@@ -90,17 +90,17 @@ void il_factor_invoke_delete(il_factor_invoke* self) {
 	MEM_FREE(self);
 }
 //private
-static void il_factor_invoke_check(il_factor_invoke * self, enviroment * env, il_context* cache) {
-	il_factor_load(self->receiver, env, cache, NULL);
+static void il_factor_invoke_check(il_factor_invoke * self, enviroment * env, il_context* ilctx) {
+	il_factor_load(self->receiver, env, ilctx, NULL);
 	if(self->receiver->type == ilfactor_variable) {
 		il_factor_variable* ilvar = IL_FACT2VAR(self->receiver);
 		assert(ilvar->type != ilvariable_type_static);
 	}
 	//classではなく generic_type にメソッドを検索する関数
-	generic_type* gtype = il_factor_eval(self->receiver, env, cache);
+	generic_type* gtype = il_factor_eval(self->receiver, env, ilctx);
 	type* ctype = gtype->core_type;
 	int temp = -1;
-	self->m = type_find_method(ctype, self->name, self->args, env, cache, &temp);
+	self->m = type_find_method(ctype, self->name, self->args, env, ilctx, &temp);
 	//self->m = class_find_method(TYPE2CLASS(ctype), self->name, self->args, env, cache, &temp);
 	self->index = temp;
 	assert(temp != -1);

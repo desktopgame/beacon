@@ -15,7 +15,7 @@ generic_cache * generic_cache_new() {
 	return ret;
 }
 
-generic_type * generic_cache_gtype(generic_cache * self, namespace_ * scope, il_context* cache) {
+generic_type * generic_cache_gtype(generic_cache * self, namespace_ * scope, il_context* ilctx) {
 	type* core_type = generic_cache_type(self, scope);
 	//もし名前空間でラッピングされていなくて、
 	//なおかつ型が見つからないなら、
@@ -24,12 +24,12 @@ generic_type * generic_cache_gtype(generic_cache * self, namespace_ * scope, il_
 		core_type == NULL) {
 		//読み込み中の型
 		generic_type* ret = generic_type_new(core_type);
-		type* container = (type*)vector_top(cache->type_vec);
+		type* container = (type*)vector_top(ilctx->type_vec);
 		ret->u.type_ = container;
 		ret->virtual_type_index = type_for_generic_index(container, self->fqcn->name);
 		//見つからなかったのでメソッドから調べる
 		if (ret->virtual_type_index == -1) {
-			method* m = (method*)vector_top(cache->method_vec);
+			method* m = (method*)vector_top(ilctx->method_vec);
 			ret->u.type_ = m;
 			ret->virtual_type_index = method_for_generic_index(m, self->fqcn->name);
 		}
@@ -52,7 +52,7 @@ generic_type * generic_cache_gtype(generic_cache * self, namespace_ * scope, il_
 	assert(core_type->tag != type_enum);
 	for (int i = 0; i < self->type_args->length; i++) {
 		generic_cache* e = (generic_cache*)vector_at(self->type_args, i);
-		generic_type* child = generic_cache_gtype(e, scope, cache);
+		generic_type* child = generic_cache_gtype(e, scope, ilctx);
 		generic_type_addargs(ret2, child);
 	}
 	if (core_type->tag == type_class) {

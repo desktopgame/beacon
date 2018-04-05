@@ -47,7 +47,7 @@ bool import_manager_loaded(import_manager* self, int index);
  * @param fqcn
  * @return 解決出来なかったなら NULL を返します.
  */
-void import_manager_resolve(import_manager* self, struct namespace_* scope, struct generic_cache* fqcn, struct il_context* ilcache, virtual_type* dest);
+void import_manager_resolve(import_manager* self, struct namespace_* scope, struct generic_cache* fqcn, struct il_context* ilctx, virtual_type* dest);
 
 /**
  * インポートマネージャを開放します.

@@ -15,7 +15,7 @@
 #include "../../util/logger.h"
 
 //proto
-static void il_factor_new_instance_find(il_factor_new_instance * self, enviroment * env, il_context* cache);
+static void il_factor_new_instance_find(il_factor_new_instance * self, enviroment * env, il_context* ilctx);
 static void il_Factor_new_instace_delete_arg(vector_item item);
 
 il_factor * il_factor_wrap_new_instance(il_factor_new_instance * self) {
@@ -47,12 +47,12 @@ void il_factor_new_instance_dump(il_factor_new_instance * self, int depth) {
 	}
 }
 
-void il_factor_new_instance_generate(il_factor_new_instance * self, enviroment * env, il_context* cache) {
-	il_factor_new_instance_find(self, env, cache);
+void il_factor_new_instance_generate(il_factor_new_instance * self, enviroment * env, il_context* ilctx) {
+	il_factor_new_instance_find(self, env, ilctx);
 	//実引数を全てスタックへ
 	for (int i = 0; i < self->argument_list->length; i++) {
 		il_argument* ilarg = (il_argument*)vector_at(self->argument_list, i);
-		il_factor_generate(ilarg->factor, env, cache);
+		il_factor_generate(ilarg->factor, env, ilctx);
 	}
 	//クラスとコンストラクタのインデックスをプッシュ
 	opcode_buf_add(env->buf, op_new_instance);
@@ -60,25 +60,25 @@ void il_factor_new_instance_generate(il_factor_new_instance * self, enviroment *
 	opcode_buf_add(env->buf, self->constructor_index);
 }
 
-void il_factor_new_instance_load(il_factor_new_instance * self, enviroment * env, il_context* cache, il_ehandler * eh) {
+void il_factor_new_instance_load(il_factor_new_instance * self, enviroment * env, il_context* ilctx, il_ehandler * eh) {
 //	fqcn_cache_delete(self->fqcn);
 //	vector_delete(self->argument_list, il_Factor_new_instace_delete_arg);
 //	MEM_FREE(self);
 }
 
-generic_type* il_factor_new_instance_eval(il_factor_new_instance * self, enviroment * env, il_context* cache) {
-	il_factor_new_instance_find(self, env, cache);
+generic_type* il_factor_new_instance_eval(il_factor_new_instance * self, enviroment * env, il_context* ilctx) {
+	il_factor_new_instance_find(self, env, ilctx);
 	//型引数がないのでそのまま
 	if (self->type_args->length == 0) {
 		return self->c->parent->generic_self;
 	}
 	//fqcn_cache typename_group
 	if (self->instance_type == NULL) {
-		namespace_* scope = (namespace_*)vector_top(cache->namespace_vec);
+		namespace_* scope = (namespace_*)vector_top(ilctx->namespace_vec);
 		generic_type* a = generic_type_new(self->c->parent);
 		for (int i = 0; i < self->type_args->length; i++) {
 			il_type_argument* e = (il_type_argument*)vector_at(self->type_args, i);
-			generic_type* arg = generic_cache_gtype(e->gcache, scope, cache);
+			generic_type* arg = generic_cache_gtype(e->gcache, scope, ilctx);
 			generic_type_addargs(a, arg);
 		}
 		self->instance_type = a;
@@ -98,12 +98,12 @@ il_factor_new_instance* il_factor_cast_new_instance(il_factor* fact) {
 }
 
 //private
-static void il_factor_new_instance_find(il_factor_new_instance * self, enviroment * env, il_context* cache) {
+static void il_factor_new_instance_find(il_factor_new_instance * self, enviroment * env, il_context* ilctx) {
 	//*
-	class_* cls = il_context_class(cache, self->fqcnc);
+	class_* cls = il_context_class(ilctx, self->fqcnc);
 	int temp = 0;
 	//TEST(!strcmp(cls->name, "Point3D"));
-	self->c = class_find_constructor(cls, self->argument_list, env, cache, &temp);
+	self->c = class_find_constructor(cls, self->argument_list, env, ilctx, &temp);
 	assert(self->c != NULL);
 	self->constructor_index = temp;
 	//*/

@@ -14,20 +14,20 @@ type_parameter_rule * type_parameter_rule_new() {
 	return ret;
 }
 
-type_parameter_rule * type_parameter_rule_dup(il_type_parameter_rule * src, il_context* cache) {
+type_parameter_rule * type_parameter_rule_dup(il_type_parameter_rule * src, il_context* ilctx) {
 	type_parameter_rule* ret = type_parameter_rule_new();
 	if (src->tag == il_type_parameter_rule_polymorphic) {
 		ret->tag = type_parameter_rule_tag_polymorphic;
-		ret->u.gtype_ = generic_cache_gtype(src->u.fqcn_, (namespace_*)vector_top(cache->namespace_vec), cache);
+		ret->u.gtype_ = generic_cache_gtype(src->u.fqcn_, (namespace_*)vector_top(ilctx->namespace_vec), ilctx);
 		assert(ret->u.gtype_ != NULL);
 	}
 	return ret;
 }
 
-void type_parameter_rule_list_dup(vector * ilSource, vector * sgDest, il_context* cache) {
+void type_parameter_rule_list_dup(vector * ilSource, vector * sgDest, il_context* ilctx) {
 	for (int i = 0; i < ilSource->length; i++) {
 		il_type_parameter_rule* e = (il_type_parameter_rule*)vector_at(ilSource, i);
-		vector_push(sgDest, type_parameter_rule_dup(e, cache));
+		vector_push(sgDest, type_parameter_rule_dup(e, ilctx));
 	}
 }
 

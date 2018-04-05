@@ -9,13 +9,13 @@ il_stmt * il_stmt_wrap_break() {
 	return ret;
 }
 
-void il_stmt_break_generate(void * empty, enviroment * env, il_context* cache) {
-	label* lab = (label*)vector_top(cache->while_end_vec);
+void il_stmt_break_generate(void * empty, enviroment * env, il_context* ilctx) {
+	label* lab = (label*)vector_top(ilctx->while_end_vec);
 	opcode_buf_add(env->buf, op_goto);
 	opcode_buf_add(env->buf, lab);
 }
 
-void il_stmt_break_load(void * empty, enviroment * env, il_context* cache, il_ehandler* eh) {
+void il_stmt_break_load(void * empty, enviroment * env, il_context* ilctx, il_ehandler* eh) {
 }
 
 void il_stmt_break_dump(void * empty, int depth) {

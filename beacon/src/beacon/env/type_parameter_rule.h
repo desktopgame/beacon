@@ -20,9 +20,9 @@ typedef struct type_parameter_rule {
 
 type_parameter_rule* type_parameter_rule_new();
 
-type_parameter_rule* type_parameter_rule_dup(struct il_type_parameter_rule* src, struct il_context* cache);
+type_parameter_rule* type_parameter_rule_dup(struct il_type_parameter_rule* src, struct il_context* ilctx);
 
-void type_parameter_rule_list_dup(vector* ilSource, vector* sgDest, struct il_context* cache);
+void type_parameter_rule_list_dup(vector* ilSource, vector* sgDest, struct il_context* ilctx);
 
 void type_parameter_rule_list_print(vector* v);
 

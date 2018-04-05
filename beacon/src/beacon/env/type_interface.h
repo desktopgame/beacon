@@ -82,7 +82,7 @@ void type_add_method(type* self, struct method* m);
  * @param outIndex
  * @return
  */
-struct method* type_find_method(type* self, const char* name, vector* args, struct enviroment* env, il_context* cache, int* outIndex);
+struct method* type_find_method(type* self, const char* name, vector* args, struct enviroment* env, il_context* ilctx, int* outIndex);
 
 /**
  * この型から静的メソッドを検索します.
@@ -93,7 +93,7 @@ struct method* type_find_method(type* self, const char* name, vector* args, stru
  * @param outIndex
  * @return
  */
-struct method* type_find_smethod(type* self, const char* name, vector* args, struct enviroment* env, il_context* cache, int* outIndex);
+struct method* type_find_smethod(type* self, const char* name, vector* args, struct enviroment* env, il_context* ilctx, int* outIndex);
 
 /**
  * 仮想関数の一覧を返します.

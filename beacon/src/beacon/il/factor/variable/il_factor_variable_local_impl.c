@@ -18,7 +18,7 @@ il_factor_variable_local* il_factor_variable_local_new(const char* name) {
 	return ret;
 }
 
-void il_factor_variable_local_generate(il_factor_variable_local* self, enviroment* env, il_context* cache) {
+void il_factor_variable_local_generate(il_factor_variable_local* self, enviroment* env, il_context* ilctx) {
 	assert(self->type != variable_local_undefined);
 	if(self->type == variable_local_scope) {
 		opcode_buf_add(env->buf, (vector_item)op_load);
@@ -29,7 +29,7 @@ void il_factor_variable_local_generate(il_factor_variable_local* self, enviromen
 	}
 }
 
-void il_factor_variable_local_load(il_factor_variable_local * self, enviroment * env, il_context* cache, il_ehandler* eh) {
+void il_factor_variable_local_load(il_factor_variable_local * self, enviroment * env, il_context* ilctx, il_ehandler* eh) {
 	if(self->type == variable_local_undefined) {
 		//XSTREQ(self->name, "iter");
 		//NOTE:変数宣言の後にその変数を使用する場合、
@@ -40,7 +40,7 @@ void il_factor_variable_local_load(il_factor_variable_local * self, enviroment *
 		symbol_entry* ent = symbol_table_entry(env->sym_table, NULL, self->name);
 		if(ent == NULL) {
 			self->type = variable_local_field;
-			type* tp = (type*)vector_top(cache->type_vec);
+			type* tp = (type*)vector_top(ilctx->type_vec);
 			int temp = -1;
 			field* f = class_find_field(TYPE2CLASS(tp), self->name, &temp);
 			self->u.field_index = temp;
@@ -70,8 +70,8 @@ void il_factor_variable_local_load(il_factor_variable_local * self, enviroment *
 	}
 }
 
-generic_type* il_factor_variable_local_eval(il_factor_variable_local * self, enviroment * env, il_context* cache) {
-	il_factor_variable_local_load(self, env, cache, NULL);
+generic_type* il_factor_variable_local_eval(il_factor_variable_local * self, enviroment * env, il_context* ilctx) {
+	il_factor_variable_local_load(self, env, ilctx, NULL);
 	assert(self->type != variable_local_undefined);
 	for(int i=0; i<self->gt->type_args_list->length; i++) {
 		generic_type* e = (generic_type*)vector_at(self->gt->type_args_list, i);

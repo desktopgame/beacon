@@ -18,7 +18,7 @@ typedef struct generic_cache {
 
 generic_cache* generic_cache_new();
 
-struct generic_type* generic_cache_gtype(generic_cache* self, struct namespace_* scope, il_context* cache);
+struct generic_type* generic_cache_gtype(generic_cache* self, struct namespace_* scope, il_context* ilctx);
 
 struct type* generic_cache_type(generic_cache* self, struct namespace_* scope);
 

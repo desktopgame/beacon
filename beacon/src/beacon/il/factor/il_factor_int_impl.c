@@ -26,16 +26,16 @@ void il_factor_int_dump(il_factor_int * self, int depth) {
 	text_putline();
 }
 
-void il_factor_int_generate(il_factor_int * self, enviroment* env, il_context* cache) {
+void il_factor_int_generate(il_factor_int * self, enviroment* env, il_context* ilctx) {
 	int index = enviroment_add_constant_int(env, self->value);
 	opcode_buf_add(env->buf, op_iconst);
 	opcode_buf_add(env->buf, index);
 }
 
-void il_factor_int_load(il_factor_int * self, enviroment * env, il_context* cache, il_ehandler * eh) {
+void il_factor_int_load(il_factor_int * self, enviroment * env, il_context* ilctx, il_ehandler * eh) {
 }
 
-generic_type* il_factor_int_eval(il_factor_int * self, enviroment * env, il_context* cache) {
+generic_type* il_factor_int_eval(il_factor_int * self, enviroment * env, il_context* ilctx) {
 	return CL_INT->generic_self;
 }
 

@@ -32,20 +32,20 @@ void il_stmt_while_dump(il_stmt_while * self, int depth) {
 	}
 }
 
-void il_stmt_while_generate(il_stmt_while * self, enviroment * env, il_context* cache) {
+void il_stmt_while_generate(il_stmt_while * self, enviroment * env, il_context* ilctx) {
 	int prev = opcode_buf_nop(env->buf);
 	label* prevLab = opcode_buf_label(env->buf, prev);
 	label* nextLab = opcode_buf_label(env->buf, -1);
-	vector_push(cache->while_start_vec, prevLab);
-	vector_push(cache->while_end_vec, nextLab);
+	vector_push(ilctx->while_start_vec, prevLab);
+	vector_push(ilctx->while_end_vec, nextLab);
 	//条件を満たさないなら nextLab へ
-	il_factor_generate(self->condition, env, cache);
+	il_factor_generate(self->condition, env, ilctx);
 	opcode_buf_add(env->buf, op_goto_if_false);
 	opcode_buf_add(env->buf, nextLab);
 	//全てのステートメントを実行
 	for (int i = 0; i < self->statement_list->length; i++) {
 		il_stmt* e = (il_stmt*)vector_at(self->statement_list, i);
-		il_stmt_generate(e, env, cache);
+		il_stmt_generate(e, env, ilctx);
 	}
 	//prevLab へ行って再判定
 	opcode_buf_add(env->buf, op_goto);
@@ -53,8 +53,8 @@ void il_stmt_while_generate(il_stmt_while * self, enviroment * env, il_context* 
 
 	int next = opcode_buf_nop(env->buf);
 	nextLab->cursor = next;
-	vector_pop(cache->while_start_vec);
-	vector_pop(cache->while_end_vec);
+	vector_pop(ilctx->while_start_vec);
+	vector_pop(ilctx->while_end_vec);
 }
 
 void il_stmt_while_delete(il_stmt_while * self) {
@@ -63,11 +63,11 @@ void il_stmt_while_delete(il_stmt_while * self) {
 	MEM_FREE(self);
 }
 
-void il_stmt_while_load(il_stmt_while* self, struct enviroment* env, il_context* cache, il_ehandler* eh) {
-	il_factor_load(self->condition, env, cache, eh);
+void il_stmt_while_load(il_stmt_while* self, struct enviroment* env, il_context* ilctx, il_ehandler* eh) {
+	il_factor_load(self->condition, env, ilctx, eh);
 	for(int i=0; i<self->statement_list->length; i++) {
 		il_stmt* e = (il_stmt*)vector_at(self->statement_list, i);
-		il_stmt_load(e, env, cache, eh);
+		il_stmt_load(e, env, ilctx, eh);
 	}
 }
 

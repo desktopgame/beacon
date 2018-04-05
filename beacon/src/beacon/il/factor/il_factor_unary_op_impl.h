@@ -47,7 +47,7 @@ void il_factor_unary_op_dump(il_factor_unary_op* self, int depth);
  * @param self
  * @param env
  */
-void il_factor_unary_op_generate(il_factor_unary_op* self, struct enviroment* env, il_context* cache);
+void il_factor_unary_op_generate(il_factor_unary_op* self, struct enviroment* env, il_context* ilctx);
 
 /**
  * 単項演算子を読み込みます.
@@ -55,7 +55,7 @@ void il_factor_unary_op_generate(il_factor_unary_op* self, struct enviroment* en
  * @param env
  * @param eh
  */
-void il_factor_unary_op_load(il_factor_unary_op* self, struct enviroment* env, il_context* cache, il_ehandler* eh);
+void il_factor_unary_op_load(il_factor_unary_op* self, struct enviroment* env, il_context* ilctx, il_ehandler* eh);
 
 /**
  * 単項演算子の結果の型を返します.
@@ -63,7 +63,7 @@ void il_factor_unary_op_load(il_factor_unary_op* self, struct enviroment* env, i
  * @param env
  * @return
  */
-generic_type* il_factor_unary_op_eval(il_factor_unary_op* self, struct enviroment* env, il_context* cache);
+generic_type* il_factor_unary_op_eval(il_factor_unary_op* self, struct enviroment* env, il_context* ilctx);
 
 /**
  * 単項演算子を開放します.

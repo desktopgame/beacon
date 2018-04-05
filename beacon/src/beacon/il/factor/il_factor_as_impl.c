@@ -28,11 +28,11 @@ void il_factor_as_dump(il_factor_as * self, int depth) {
 	il_factor_dump(self->fact, depth + 1);
 }
 
-void il_factor_as_generate(il_factor_as * self, enviroment * env, il_context* cache) {
-	il_factor_generate(self->fact, env, cache);
+void il_factor_as_generate(il_factor_as * self, enviroment * env, il_context* ilctx) {
+	il_factor_generate(self->fact, env, ilctx);
 
-	generic_type* from = il_factor_eval(self->fact, env, cache);
-	generic_type* to = generic_cache_gtype(self->fqcn, (namespace_*)vector_top(cache->namespace_vec), cache);
+	generic_type* from = il_factor_eval(self->fact, env, ilctx);
+	generic_type* to = generic_cache_gtype(self->fqcn, (namespace_*)vector_top(ilctx->namespace_vec), ilctx);
 //	int dist = type_distance(to, from);
 //	assert(dist != -1);
 	if (to->virtual_type_index != -1) {
@@ -48,12 +48,12 @@ void il_factor_as_generate(il_factor_as * self, enviroment * env, il_context* ca
 	}
 }
 
-void il_factor_as_load(il_factor_as * self, enviroment * env, il_context* cache, il_ehandler * eh) {
+void il_factor_as_load(il_factor_as * self, enviroment * env, il_context* ilctx, il_ehandler * eh) {
 }
 
-generic_type* il_factor_as_eval(il_factor_as * self, enviroment * env, il_context* cache) {
-	namespace_* n = (namespace_*)vector_top(cache->namespace_vec);
-	return generic_cache_gtype(self->fqcn, n, cache);
+generic_type* il_factor_as_eval(il_factor_as * self, enviroment * env, il_context* ilctx) {
+	namespace_* n = (namespace_*)vector_top(ilctx->namespace_vec);
+	return generic_cache_gtype(self->fqcn, n, ilctx);
 }
 
 void il_factor_as_delete(il_factor_as * self) {

@@ -24,11 +24,11 @@ il_factor_member_op* il_factor_member_op_new(const char* name);
 
 void il_factor_member_op_dump(il_factor_member_op* self, int depth);
 
-void il_factor_member_op_load(il_factor_member_op* self, struct enviroment* env, il_context* cache, il_ehandler* eh);
+void il_factor_member_op_load(il_factor_member_op* self, struct enviroment* env, il_context* ilctx, il_ehandler* eh);
 
-void il_factor_member_op_generate(il_factor_member_op* self, struct enviroment* env, il_context* cache);
+void il_factor_member_op_generate(il_factor_member_op* self, struct enviroment* env, il_context* ilctx);
 
-generic_type* il_factor_member_op_eval(il_factor_member_op* self, struct enviroment* env, il_context* cache);
+generic_type* il_factor_member_op_eval(il_factor_member_op* self, struct enviroment* env, il_context* ilctx);
 
 void il_factor_member_op_delete(il_factor_member_op* self);
 

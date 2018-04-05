@@ -71,61 +71,61 @@ void il_factor_dump(il_factor * self, int depth) {
 	}
 }
 
-void il_factor_generate(il_factor * self, enviroment* env, il_context* cache) {
+void il_factor_generate(il_factor * self, enviroment* env, il_context* ilctx) {
 	switch (self->type) {
 		case ilfactor_int:
-			il_factor_int_generate(self->u.int_, env, cache);
+			il_factor_int_generate(self->u.int_, env, ilctx);
 			break;
 		case ilfactor_double:
-			il_factor_double_generate(self->u.double_, env, cache);
+			il_factor_double_generate(self->u.double_, env, ilctx);
 			break;
 		case ilfactor_cquote:
-			il_factor_char_generate(self->u.char_, env, cache);
+			il_factor_char_generate(self->u.char_, env, ilctx);
 			break;
 		case ilfactor_squote:
-			il_factor_string_generate(self->u.string_, env, cache);
+			il_factor_string_generate(self->u.string_, env, ilctx);
 			break;
 		case ilfactor_variable:
-			il_factor_variable_generate(self->u.variable_, env, cache);
+			il_factor_variable_generate(self->u.variable_, env, ilctx);
 			break;
 		case ilfactor_unary_op:
-			il_factor_unary_op_generate(self->u.unary_, env, cache);
+			il_factor_unary_op_generate(self->u.unary_, env, ilctx);
 			break;
 		case ilfactor_binary_op:
-			il_factor_binary_op_generate(self->u.binary_, env, cache);
+			il_factor_binary_op_generate(self->u.binary_, env, ilctx);
 			break;
 		case ilfactor_this:
-			il_factor_this_generate(self->u.this_, env, cache);
+			il_factor_this_generate(self->u.this_, env, ilctx);
 			break;
 		case ilfactor_super:
-			il_factor_super_generate(self->u.super_, env, cache);
+			il_factor_super_generate(self->u.super_, env, ilctx);
 			break;
 		case ilfactor_new_instance:
-			il_factor_new_instance_generate(self->u.new_instance_, env, cache);
+			il_factor_new_instance_generate(self->u.new_instance_, env, ilctx);
 			break;
 		case ilfactor_cast:
-			il_factor_cast_generate(self->u.cast_, env, cache);
+			il_factor_cast_generate(self->u.cast_, env, ilctx);
 			break;
 		case ilfactor_bool:
-			il_factor_bool_generate(self->u.bool_, env, cache);
+			il_factor_bool_generate(self->u.bool_, env, ilctx);
 			break;
 		case ilfactor_null:
-			il_factor_null_generate(NULL, env, cache);
+			il_factor_null_generate(NULL, env, ilctx);
 			break;
 		case ilfactor_as:
-			il_factor_as_generate(self->u.as_, env, cache);
+			il_factor_as_generate(self->u.as_, env, ilctx);
 			break;
 		case ilfactor_inc:
-			il_factor_inc_generate(self->u.inc_, env, cache);
+			il_factor_inc_generate(self->u.inc_, env, ilctx);
 			break;
 		case ilfactor_dec:
-			il_factor_dec_generate(self->u.dec_, env, cache);
+			il_factor_dec_generate(self->u.dec_, env, ilctx);
 			break;
 		case ilfactor_call_op:
-			il_factor_call_op_generate(self->u.call_, env, cache);
+			il_factor_call_op_generate(self->u.call_, env, ilctx);
 			break;
 		case ilfactor_member_op:
-			il_factor_member_op_generate(self->u.member_, env, cache);
+			il_factor_member_op_generate(self->u.member_, env, ilctx);
 			break;
 		default:
 			ERROR("ファクターを生成出来ませんでした");
@@ -134,61 +134,61 @@ void il_factor_generate(il_factor * self, enviroment* env, il_context* cache) {
 	enviroment_add_range(env, self->lineno);
 }
 
-void il_factor_load(il_factor * self, enviroment * env, il_context* cache, il_ehandler * eh) {
+void il_factor_load(il_factor * self, enviroment * env, il_context* ilctx, il_ehandler * eh) {
 	switch (self->type) {
 		case ilfactor_int:
-			il_factor_int_load(self->u.int_, env, cache, eh);
+			il_factor_int_load(self->u.int_, env, ilctx, eh);
 			break;
 		case ilfactor_double:
-			il_factor_double_load(self->u.double_, env, cache, eh);
+			il_factor_double_load(self->u.double_, env, ilctx, eh);
 			break;
 		case ilfactor_cquote:
-			il_factor_char_load(self->u.char_, env, cache, eh);
+			il_factor_char_load(self->u.char_, env, ilctx, eh);
 			break;
 		case ilfactor_squote:
-			il_factor_string_load(self->u.string_, env, cache, eh);
+			il_factor_string_load(self->u.string_, env, ilctx, eh);
 			break;
 		case ilfactor_variable:
-			il_factor_variable_load(self->u.variable_, env, cache, eh);
+			il_factor_variable_load(self->u.variable_, env, ilctx, eh);
 			break;
 		case ilfactor_unary_op:
-			il_factor_unary_op_load(self->u.unary_, env, cache, eh);
+			il_factor_unary_op_load(self->u.unary_, env, ilctx, eh);
 			break;
 		case ilfactor_binary_op:
-			il_factor_binary_op_load(self->u.binary_, env, cache, eh);
+			il_factor_binary_op_load(self->u.binary_, env, ilctx, eh);
 			break;
 		case ilfactor_this:
-			il_factor_this_load(self->u.this_, env, cache, eh);
+			il_factor_this_load(self->u.this_, env, ilctx, eh);
 			break;
 		case ilfactor_super:
-			il_factor_super_load(self->u.super_, env, cache, eh);
+			il_factor_super_load(self->u.super_, env, ilctx, eh);
 			break;
 		case ilfactor_new_instance:
-			il_factor_new_instance_load(self->u.new_instance_, env, cache, eh);
+			il_factor_new_instance_load(self->u.new_instance_, env, ilctx, eh);
 			break;
 		case ilfactor_cast:
-			il_factor_cast_load(self->u.cast_, env, cache, eh);
+			il_factor_cast_load(self->u.cast_, env, ilctx, eh);
 			break;
 		case ilfactor_bool:
 			//il_factor_bool_load(self->u.bool_, depth);
 			break;
 		case ilfactor_null:
-			il_factor_null_load(NULL, env, cache, eh);
+			il_factor_null_load(NULL, env, ilctx, eh);
 			break;
 		case ilfactor_as:
-			il_factor_as_load(self->u.as_, env, cache, eh);
+			il_factor_as_load(self->u.as_, env, ilctx, eh);
 			break;
 		case ilfactor_inc:
-			il_factor_inc_load(self->u.inc_, env, cache, eh);
+			il_factor_inc_load(self->u.inc_, env, ilctx, eh);
 			break;
 		case ilfactor_dec:
-			il_factor_dec_load(self->u.dec_, env, cache, eh);
+			il_factor_dec_load(self->u.dec_, env, ilctx, eh);
 			break;
 		case ilfactor_call_op:
-			il_factor_call_op_load(self->u.call_, env, cache, eh);
+			il_factor_call_op_load(self->u.call_, env, ilctx, eh);
 			break;
 		case ilfactor_member_op:
-			il_factor_member_op_load(self->u.member_, env, cache, eh);
+			il_factor_member_op_load(self->u.member_, env, ilctx, eh);
 			break;
 		default:
 			ERROR("ファクターの型を取得出来ませんでした");
@@ -196,62 +196,62 @@ void il_factor_load(il_factor * self, enviroment * env, il_context* cache, il_eh
 	}
 }
 
-generic_type* il_factor_eval(il_factor * self, enviroment * env, il_context* cache) {
+generic_type* il_factor_eval(il_factor * self, enviroment * env, il_context* ilctx) {
 	generic_type* ret = NULL;
 	switch (self->type) {
 		case ilfactor_int:
-			ret = il_factor_int_eval(self->u.int_, env, cache);
+			ret = il_factor_int_eval(self->u.int_, env, ilctx);
 			break;
 		case ilfactor_double:
-			ret = il_factor_double_eval(self->u.double_, env, cache);
+			ret = il_factor_double_eval(self->u.double_, env, ilctx);
 			break;
 		case ilfactor_cquote:
-			ret = il_factor_char_eval(self->u.char_, env, cache);
+			ret = il_factor_char_eval(self->u.char_, env, ilctx);
 			break;
 		case ilfactor_squote:
-			ret = il_factor_string_eval(self->u.string_, env, cache);
+			ret = il_factor_string_eval(self->u.string_, env, ilctx);
 			break;
 		case ilfactor_variable:
-			ret = il_factor_variable_eval(self->u.variable_, env, cache);
+			ret = il_factor_variable_eval(self->u.variable_, env, ilctx);
 			break;
 		case ilfactor_unary_op:
-			ret = il_factor_unary_op_eval(self->u.unary_, env, cache);
+			ret = il_factor_unary_op_eval(self->u.unary_, env, ilctx);
 			break;
 		case ilfactor_binary_op:
-			ret = il_factor_binary_op_eval(self->u.binary_, env, cache);
+			ret = il_factor_binary_op_eval(self->u.binary_, env, ilctx);
 			break;
 		case ilfactor_this:
-			ret = il_factor_this_eval(self->u.this_, env, cache);
+			ret = il_factor_this_eval(self->u.this_, env, ilctx);
 			break;
 		case ilfactor_super:
-			ret = il_factor_super_eval(self->u.super_, env, cache);
+			ret = il_factor_super_eval(self->u.super_, env, ilctx);
 			break;
 		case ilfactor_new_instance:
-			ret = il_factor_new_instance_eval(self->u.new_instance_, env, cache);
+			ret = il_factor_new_instance_eval(self->u.new_instance_, env, ilctx);
 			break;
 		case ilfactor_cast:
-			ret = il_factor_cast_eval(self->u.cast_, env, cache);
+			ret = il_factor_cast_eval(self->u.cast_, env, ilctx);
 			break;
 		case ilfactor_bool:
-			ret = il_factor_bool_eval(self->u.bool_,env, cache);
+			ret = il_factor_bool_eval(self->u.bool_,env, ilctx);
 			break;
 		case ilfactor_null:
-			ret = il_factor_null_eval(NULL, env, cache);
+			ret = il_factor_null_eval(NULL, env, ilctx);
 			break;
 		case ilfactor_as:
-			ret = il_factor_as_eval(self->u.as_, env, cache);
+			ret = il_factor_as_eval(self->u.as_, env, ilctx);
 			break;
 		case ilfactor_inc:
-			ret = il_factor_inc_eval(self->u.inc_, env, cache);
+			ret = il_factor_inc_eval(self->u.inc_, env, ilctx);
 			break;
 		case ilfactor_dec:
-			ret = il_factor_dec_eval(self->u.dec_, env, cache);
+			ret = il_factor_dec_eval(self->u.dec_, env, ilctx);
 			break;
 		case ilfactor_call_op:
-			ret = il_factor_call_op_eval(self->u.call_, env, cache);
+			ret = il_factor_call_op_eval(self->u.call_, env, ilctx);
 			break;
 		case ilfactor_member_op:
-			ret = il_factor_member_op_eval(self->u.call_, env, cache);
+			ret = il_factor_member_op_eval(self->u.call_, env, ilctx);
 			break;
 		default:
 			ERROR("ファクターの型を取得出来ませんでした");

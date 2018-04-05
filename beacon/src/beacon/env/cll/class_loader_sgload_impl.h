@@ -84,5 +84,5 @@ void class_loader_sgload_interface(class_loader* self, il_type* iltype, namespac
 
 void class_loader_sgload_attach_native_method(class_loader* self, il_type* iltype, class_* classz, il_method* ilmethod, method* me);
 void class_loader_sgload_debug_native_method(method* parent, vm* vm, enviroment* env);
-void class_loader_sgload_body(class_loader* self, vector* stmt_list, enviroment* dest, namespace_* range, il_context* cache);
+void class_loader_sgload_body(class_loader* self, vector* stmt_list, enviroment* dest, namespace_* range, il_context* ilctx);
 #endif

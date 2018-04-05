@@ -37,7 +37,7 @@ void il_factor_char_dump(il_factor_char* self, int depth);
  * @param env
  * @param cache
  */
-void il_factor_char_generate(il_factor_char* self, struct enviroment* env, il_context* cache);
+void il_factor_char_generate(il_factor_char* self, struct enviroment* env, il_context* ilctx);
 
 /**
  * 文字を表す要素を読み込みます.
@@ -46,7 +46,7 @@ void il_factor_char_generate(il_factor_char* self, struct enviroment* env, il_co
  * @param cache
  * @param eh
  */
-void il_factor_char_load(il_factor_char* self, struct enviroment* env, il_context* cache, il_ehandler* eh);
+void il_factor_char_load(il_factor_char* self, struct enviroment* env, il_context* ilctx, il_ehandler* eh);
 
 /**
  * 文字を表す要素の型を返します.
@@ -55,7 +55,7 @@ void il_factor_char_load(il_factor_char* self, struct enviroment* env, il_contex
  * @param cache
  * @return
  */
-generic_type* il_factor_char_eval(il_factor_char* self, struct enviroment* env, il_context* cache);
+generic_type* il_factor_char_eval(il_factor_char* self, struct enviroment* env, il_context* ilctx);
 
 /**
  * 文字を表す要素を開放します.

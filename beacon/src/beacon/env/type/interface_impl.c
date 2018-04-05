@@ -35,8 +35,8 @@ void interface_add_method(interface_ * self, method * m) {
 	vector_push(self->method_list, m);
 }
 
-method * interface_find_method(interface_ * self, const char * name, vector * args, enviroment * env, il_context* cache, int * outIndex) {
-	return meta_find_method(self->method_list, name, args, env, cache, outIndex);
+method * interface_find_method(interface_ * self, const char * name, vector * args, enviroment * env, il_context* ilctx, int * outIndex) {
+	return meta_find_method(self->method_list, name, args, env, ilctx, outIndex);
 }
 
 void interface_dump(interface_ * self, int depth) {

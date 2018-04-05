@@ -65,7 +65,7 @@ void il_stmt_dump(il_stmt* self, int depth);
  * @param env
  * @param cache
  */
-void il_stmt_generate(il_stmt* self, enviroment* env, il_context* cache);
+void il_stmt_generate(il_stmt* self, enviroment* env, il_context* ilctx);
 
 /**
  * ステートメントを読み込んでエラーがあれば記録します.
@@ -74,7 +74,7 @@ void il_stmt_generate(il_stmt* self, enviroment* env, il_context* cache);
  * @param cache
  * @param eh
  */
-void il_stmt_load(il_stmt * self, enviroment* env, il_context* cache, il_ehandler * eh);
+void il_stmt_load(il_stmt * self, enviroment* env, il_context* ilctx, il_ehandler * eh);
 
 /**
  * 文を開放します.

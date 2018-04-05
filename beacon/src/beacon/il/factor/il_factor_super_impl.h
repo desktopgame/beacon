@@ -25,7 +25,7 @@ void il_factor_super_dump(il_factor_super* self, int depth);
  * @param env
  * @param cache
  */
-void il_factor_super_generate(il_factor_super* self, struct enviroment* env, il_context* cache);
+void il_factor_super_generate(il_factor_super* self, struct enviroment* env, il_context* ilctx);
 
 /**
  * superを表す要素を読み込みます.
@@ -34,7 +34,7 @@ void il_factor_super_generate(il_factor_super* self, struct enviroment* env, il_
  * @param cache
  * @param eh
  */
-void il_factor_super_load(il_factor_super* self, struct enviroment* env, il_context* cache, il_ehandler* eh);
+void il_factor_super_load(il_factor_super* self, struct enviroment* env, il_context* ilctx, il_ehandler* eh);
 
 /**
  * superで参照されるオブジェクトの型を返します.
@@ -43,7 +43,7 @@ void il_factor_super_load(il_factor_super* self, struct enviroment* env, il_cont
  * @param cache
  * @return
  */
-generic_type* il_factor_super_eval(il_factor_super* self, struct enviroment* env, il_context* cache);
+generic_type* il_factor_super_eval(il_factor_super* self, struct enviroment* env, il_context* ilctx);
 
 /**
  * superを表す要素を出力します.

@@ -48,42 +48,42 @@ void il_stmt_dump(il_stmt * self, int depth) {
 	}
 }
 
-void il_stmt_generate(il_stmt * self, struct enviroment* env, il_context* cache) {
+void il_stmt_generate(il_stmt * self, struct enviroment* env, il_context* ilctx) {
 	switch (self->type) {
 		case ilstmt_if:
-			il_stmt_if_generate(self->u.if_, env, cache);
+			il_stmt_if_generate(self->u.if_, env, ilctx);
 			//il_stmt_if_delete(self->u.if_);
 			break;
 		case ilstmt_proc:
-			il_stmt_proc_generate(self->u.proc_, env, cache);
+			il_stmt_proc_generate(self->u.proc_, env, ilctx);
 			//il_stmt_proc_delete(self->u.proc_);
 			break;
 		case ilstmt_variable_decl:
-			il_stmt_variable_decl_generate(self->u.variable_decl, env, cache);
+			il_stmt_variable_decl_generate(self->u.variable_decl, env, ilctx);
 			break;
 		case ilstmt_variable_init:
-			il_stmt_variable_init_generate(self->u.variable_init, env, cache);
+			il_stmt_variable_init_generate(self->u.variable_init, env, ilctx);
 			break;
 		case ilstmt_return:
-			il_stmt_return_generate(self->u.return_, env, cache);
+			il_stmt_return_generate(self->u.return_, env, ilctx);
 			break;
 		case ilstmt_while:
-			il_stmt_while_generate(self->u.while_, env, cache);
+			il_stmt_while_generate(self->u.while_, env, ilctx);
 			break;
 		case ilstmt_break:
-			il_stmt_break_generate(NULL, env, cache);
+			il_stmt_break_generate(NULL, env, ilctx);
 			break;
 		case ilstmt_continue:
-			il_stmt_continue_generate(NULL, env, cache);
+			il_stmt_continue_generate(NULL, env, ilctx);
 			break;
 		case ilstmt_inferenced_type_init:
-			il_stmt_inferenced_type_init_generate(self->u.inferenced_type_init, env, cache);
+			il_stmt_inferenced_type_init_generate(self->u.inferenced_type_init, env, ilctx);
 			break;
 		case ilstmt_try:
-			il_stmt_try_generate(self->u.try_, env, cache);
+			il_stmt_try_generate(self->u.try_, env, ilctx);
 			break;
 		case ilstmt_throw:
-			il_stmt_throw_generate(self->u.throw_, env, cache);
+			il_stmt_throw_generate(self->u.throw_, env, ilctx);
 			break;
 		default:
 			//ERROR("ステートメントを開放出来ませんでした。");
@@ -92,40 +92,40 @@ void il_stmt_generate(il_stmt * self, struct enviroment* env, il_context* cache)
 	enviroment_add_range(env, self->lineno);
 }
 
-void il_stmt_load(il_stmt * self, enviroment* env, il_context* cache, il_ehandler * eh) {
+void il_stmt_load(il_stmt * self, enviroment* env, il_context* ilctx, il_ehandler * eh) {
 	switch (self->type) {
 		case ilstmt_if:
-			il_stmt_if_load(self->u.if_, env, cache, eh);
+			il_stmt_if_load(self->u.if_, env, ilctx, eh);
 			break;
 		case ilstmt_proc:
-			il_stmt_proc_load(self->u.proc_, env, cache, eh);
+			il_stmt_proc_load(self->u.proc_, env, ilctx, eh);
 			break;
 		case ilstmt_variable_decl:
-			il_stmt_variable_decl_load(self->u.variable_decl, env, cache, eh);
+			il_stmt_variable_decl_load(self->u.variable_decl, env, ilctx, eh);
 			break;
 		case ilstmt_variable_init:
-			il_stmt_variable_init_load(self->u.variable_init, env, cache, eh);
+			il_stmt_variable_init_load(self->u.variable_init, env, ilctx, eh);
 			break;
 		case ilstmt_return:
-			il_stmt_return_load(self->u.return_, env, cache, eh);
+			il_stmt_return_load(self->u.return_, env, ilctx, eh);
 			break;
 		case ilstmt_while:
-			il_stmt_while_load(self->u.while_, env, cache, eh);
+			il_stmt_while_load(self->u.while_, env, ilctx, eh);
 			break;
 		case ilstmt_break:
-			il_stmt_break_load(NULL, env, cache, eh);
+			il_stmt_break_load(NULL, env, ilctx, eh);
 			break;
 		case ilstmt_continue:
-			il_stmt_continue_load(NULL, env, cache, eh);
+			il_stmt_continue_load(NULL, env, ilctx, eh);
 			break;
 		case ilstmt_inferenced_type_init:
-			il_stmt_inferenced_type_init_load(self->u.inferenced_type_init, env, cache, eh);
+			il_stmt_inferenced_type_init_load(self->u.inferenced_type_init, env, ilctx, eh);
 			break;
 		case ilstmt_try:
-			il_stmt_try_load(self->u.try_, env, cache, eh);
+			il_stmt_try_load(self->u.try_, env, ilctx, eh);
 			break;
 		case ilstmt_throw:
-			il_stmt_throw_load(self->u.throw_, env, cache, eh);
+			il_stmt_throw_load(self->u.throw_, env, ilctx, eh);
 			break;
 		default:
 			//ERROR("ステートメントを開放出来ませんでした。");

@@ -149,20 +149,20 @@ void class_loader_sgload_class(class_loader* self, il_type* iltype, namespace_* 
 	type* tp = namespace_get_type(parent, iltype->u.class_->name);
 	class_* cls;
 	//FIXME:あとで親関数から渡すようにする
-	il_context* cache = il_context_new();
-	vector_push(cache->namespace_vec, parent);
+	il_context* ilctx = il_context_new();
+	vector_push(ilctx->namespace_vec, parent);
 	type_init_generic(tp, iltype->u.class_->type_parameter_list->length);
 	if (tp == NULL) {
 		cls = class_new(iltype->u.class_->name);
 		tp = type_wrap_class(cls);
-		vector_push(cache->type_vec, tp);
+		vector_push(ilctx->type_vec, tp);
 		type_init_generic(tp, iltype->u.class_->type_parameter_list->length);
-		type_parameter_list_dup(iltype->u.class_->type_parameter_list, cls->type_parameter_list, cache);
+		type_parameter_list_dup(iltype->u.class_->type_parameter_list, cls->type_parameter_list, ilctx);
 		for (int i = 0; i < iltype->u.class_->extend_list->length; i++) {
 			generic_cache* e = (generic_cache*)vector_at(iltype->u.class_->extend_list, i);
 			//最初の一つはクラスでもインターフェースでもよい
 			if (i == 0) {
-				generic_type* gtp = generic_cache_gtype(e, parent, cache);
+				generic_type* gtp = generic_cache_gtype(e, parent, ilctx);
 				assert(gtp != NULL);
 				if (gtp->core_type->tag == type_class) {
 					cls->super_class = gtp;
@@ -171,7 +171,7 @@ void class_loader_sgload_class(class_loader* self, il_type* iltype, namespace_* 
 				}
 			//二つ目以降はインターフェースのみ
 			} else {
-				generic_type* gtp = generic_cache_gtype(e, parent, cache);
+				generic_type* gtp = generic_cache_gtype(e, parent, ilctx);
 				vector_push(cls->impl_list, gtp);
 				assert(gtp->core_type->tag == type_interface);
 			}
@@ -186,11 +186,11 @@ void class_loader_sgload_class(class_loader* self, il_type* iltype, namespace_* 
 		if (!strcmp(tp->u.class_->name, "ArrayIterator")) {
 			int a = 0;
 		}
-		vector_push(cache->type_vec, tp);
+		vector_push(ilctx->type_vec, tp);
 		cls = tp->u.class_;
 		//もしネイティブメソッドのために
 		//既に登録されていたならここが型変数がNULLになってしまう
-		type_parameter_list_dup(iltype->u.class_->type_parameter_list, cls->type_parameter_list, cache);
+		type_parameter_list_dup(iltype->u.class_->type_parameter_list, cls->type_parameter_list, ilctx);
 	}
 	//デフォルトで親に Object を持つように
 	class_* objClass = CL_OBJECT->u.class_;
@@ -222,9 +222,9 @@ void class_loader_sgload_class(class_loader* self, il_type* iltype, namespace_* 
 		cachekind_class_impl
 	);
 	vector_push(self->type_cache_vec, mtc);
-	vector_pop(cache->type_vec);
-	vector_pop(cache->namespace_vec);
-	il_context_delete(cache);
+	vector_pop(ilctx->type_vec);
+	vector_pop(ilctx->namespace_vec);
+	il_context_delete(ilctx);
 }
 
 void class_loader_sgload_interface(class_loader * self, il_type * iltype, namespace_ * parent) {
@@ -232,19 +232,19 @@ void class_loader_sgload_interface(class_loader * self, il_type * iltype, namesp
 	type* tp = namespace_get_type(parent, iltype->u.interface_->name);
 	interface_* inter = NULL;
 	//NOTE:後で親関数から渡すようにする
-	il_context* cache = il_context_new();
-	vector_push(cache->namespace_vec, parent);
+	il_context* ilctx = il_context_new();
+	vector_push(ilctx->namespace_vec, parent);
 	type_init_generic(tp, iltype->u.interface_->type_parameter_list->length);
 	if (tp == NULL) {
 		inter = interface_new(iltype->u.interface_->name);
 		tp = type_wrap_interface(inter);
-		vector_push(cache->type_vec, tp);
+		vector_push(ilctx->type_vec, tp);
 		type_init_generic(tp, iltype->u.interface_->type_parameter_list->length);
-		type_parameter_list_dup(iltype->u.interface_->type_parameter_list, inter->type_parameter_list, cache);
+		type_parameter_list_dup(iltype->u.interface_->type_parameter_list, inter->type_parameter_list, ilctx);
 		for (int i = 0; i < iltype->u.interface_->extends_list->length; i++) {
 			generic_cache* e = (generic_cache*)vector_at(iltype->u.interface_->extends_list, i);
 			//インターフェースはインターフェースのみ継承
-			generic_type* gtp = generic_cache_gtype(e, parent, cache);
+			generic_type* gtp = generic_cache_gtype(e, parent, ilctx);
 			assert(gtp->core_type->tag == type_interface);
 			vector_push(inter->impl_list, gtp);
 		}
@@ -252,11 +252,11 @@ void class_loader_sgload_interface(class_loader * self, il_type * iltype, namesp
 		inter->location = parent;
 		namespace_add_type(parent, tp);
 	} else {
-		vector_push(cache->type_vec, tp);
+		vector_push(ilctx->type_vec, tp);
 		inter = tp->u.interface_;
 		//もしネイティブメソッドのために
 		//既に登録されていたならここが型変数がNULLになってしまう
-		type_parameter_list_dup(iltype->u.class_->type_parameter_list, inter->type_parameter_list, cache);
+		type_parameter_list_dup(iltype->u.class_->type_parameter_list, inter->type_parameter_list, ilctx);
 	}
 	logger_info(__FILE__, __LINE__, "register interface %s", inter->name);
 	//宣言のロードを予約
@@ -279,9 +279,9 @@ void class_loader_sgload_interface(class_loader * self, il_type * iltype, namesp
 		cachekind_interface_impl
 	);
 	vector_push(self->type_cache_vec, mtc);
-	vector_pop(cache->type_vec);
-	vector_pop(cache->namespace_vec);
-	il_context_delete(cache);
+	vector_pop(ilctx->type_vec);
+	vector_pop(ilctx->namespace_vec);
+	il_context_delete(ilctx);
 }
 
 void class_loader_sgload_attach_native_method(class_loader* self, il_type* ilclass, class_* classz, il_method* ilmethod, method* me) {
@@ -293,21 +293,21 @@ void class_loader_sgload_debug_native_method(method* parent, vm* vm, enviroment*
 
 }
 
-void class_loader_sgload_body(class_loader* self, vector* stmt_list, enviroment* dest, namespace_* range, il_context* cache) {
+void class_loader_sgload_body(class_loader* self, vector* stmt_list, enviroment* dest, namespace_* range, il_context* ilctx) {
 //	enviroment* ret = enviroment_new();
 	il_ehandler* eh = il_ehandler_new();
-	vector_push(cache->namespace_vec, range);
+	vector_push(ilctx->namespace_vec, range);
 	for (int i = 0; i < stmt_list->length; i++) {
 		vector_item e = vector_at(stmt_list, i);
 		il_stmt* s = (il_stmt*)e;
-		il_stmt_load(s, dest, cache, eh);
+		il_stmt_load(s, dest, ilctx, eh);
 	}
 	for (int i = 0; i < stmt_list->length; i++) {
 		vector_item e = vector_at(stmt_list, i);
 		il_stmt* s = (il_stmt*)e;
-		il_stmt_generate(s, dest, cache);
+		il_stmt_generate(s, dest, ilctx);
 	}
-	vector_pop(cache->namespace_vec);
+	vector_pop(ilctx->namespace_vec);
 	il_ehandler_delete(eh);
 //	return ret;
 }

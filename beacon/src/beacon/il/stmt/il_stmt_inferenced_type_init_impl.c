@@ -29,9 +29,9 @@ void il_stmt_inferenced_type_init_dump(il_stmt_inferenced_type_init * self, int 
 	il_factor_dump(self->fact, depth + 1);
 }
 
-void il_stmt_inferenced_type_init_generate(il_stmt_inferenced_type_init * self, enviroment * env, il_context* cache) {
+void il_stmt_inferenced_type_init_generate(il_stmt_inferenced_type_init * self, enviroment * env, il_context* ilctx) {
 	//右辺の方で宣言する
-	il_factor_generate(self->fact, env, cache);
+	il_factor_generate(self->fact, env, ilctx);
 	/*
 	if (gtp == CL_INT->generic_self ||
 		gtp == CL_DOUBLE->generic_self ||
@@ -47,10 +47,10 @@ void il_stmt_inferenced_type_init_generate(il_stmt_inferenced_type_init * self, 
 	opcode_buf_add(env->buf, self->sym->index);
 }
 
-void il_stmt_inferenced_type_init_load(il_stmt_inferenced_type_init * self, enviroment * env, il_context* cache, il_ehandler * eh) {
-	il_factor_load(self->fact, env, cache, eh);
+void il_stmt_inferenced_type_init_load(il_stmt_inferenced_type_init * self, enviroment * env, il_context* ilctx, il_ehandler * eh) {
+	il_factor_load(self->fact, env, ilctx, eh);
 	XSTREQ(self->name, "ival");
-	generic_type* gtp = il_factor_eval(self->fact, env, cache);
+	generic_type* gtp = il_factor_eval(self->fact, env, ilctx);
 	if(gtp->type_args_list->length > 0) {
 		generic_type* a = (generic_type*)vector_at(gtp->type_args_list, 0);
 		int x = 0;

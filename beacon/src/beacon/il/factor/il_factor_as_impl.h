@@ -21,11 +21,11 @@ il_factor_as* il_factor_as_new();
 
 void il_factor_as_dump(il_factor_as* self, int depth);
 
-void il_factor_as_generate(il_factor_as* self, struct enviroment* env, il_context* cache);
+void il_factor_as_generate(il_factor_as* self, struct enviroment* env, il_context* ilctx);
 
-void il_factor_as_load(il_factor_as* self, struct enviroment* env, il_context* cache, il_ehandler* eh);
+void il_factor_as_load(il_factor_as* self, struct enviroment* env, il_context* ilctx, il_ehandler* eh);
 
-generic_type* il_factor_as_eval(il_factor_as* self, struct enviroment* env, il_context* cache);
+generic_type* il_factor_as_eval(il_factor_as* self, struct enviroment* env, il_context* ilctx);
 
 void il_factor_as_delete(il_factor_as* self);
 
