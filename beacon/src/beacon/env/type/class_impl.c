@@ -28,6 +28,9 @@
 #endif
 
 //private
+static void class_create_vtable_top(class_* self);
+static void class_create_vtable_ov(class_* self);
+static void class_create_vtable_interface(class_* self);
 static method* class_find_method_impl(vector* elements, const char * name, vector * args, enviroment * env, il_context* ilctx, int * outIndex);
 static constructor* class_find_constructor_impl(vector* v, vector * args, enviroment* env, il_context* ilctx, int * outIndex);
 static constructor* class_find_rconstructor_impl(vector* v,vector * args, int * outIndex);
@@ -316,7 +319,7 @@ method * class_get_smethod(class_* self, int index) {
 //		return vector_at(self->smethod_list, all - index);
 		return vector_at(self->smethod_list, self->smethod_list->length - (all - index));
 	}
-	return class_get_smethod(self->super_class, index);
+	return class_get_smethod(self->super_class->core_type->u.class_, index);
 }
 
 method * class_get_impl_method(class_ * self, type * interType, int interMIndex) {
@@ -383,39 +386,13 @@ void class_create_vtable(class_ * self) {
 	self->vt = vtable_new();
 	//トップレベルではメソッドの一覧を配列に入れるだけ
 	if (self->super_class == NULL) {
-		for (int i = 0; i < self->method_list->length; i++) {
-			vtable_add(self->vt, vector_at(self->method_list, i));
-		}
+		class_create_vtable_top(self);
 	//あるクラスを継承する場合には、
 	//重複するメソッドを上書きするように
 	} else {
-		class_create_vtable(self->super_class->core_type->u.class_);
-		vtable_copy(self->super_class->core_type->u.class_->vt, self->vt);
-		for (int i = 0; i < self->method_list->length; i++) {
-			method* m = (method*)vector_at(self->method_list, i);
-			vtable_replace(self->vt, m);
-		}
+		class_create_vtable_ov(self);
 	}
-	//もしインターフェースを実装しているなら、
-	//インターフェースに対応する同じ並びのメソッドテーブルも作る
-	for (int i = 0; i < self->impl_list->length; i++) {
-		generic_type* gtp = (generic_type*)vector_at(self->impl_list, i);
-		interface_* inter = (interface_*)gtp->core_type->u.interface_;
-		vtable* interVT = inter->vt;
-		vtable* newVT = vtable_new();
-		//そのインターフェースに定義されたテーブルの一覧
-		//これはスーパーインターフェースも含む。
-		for (int j = 0; j < interVT->elements->length; j++) {
-			//実装クラスの中の、
-			//シグネチャが同じメソッドをテーブルへ。
-			method* interVTM = vector_at(interVT->elements, j);
-			method* classVTM = class_find_impl_method(self, interVTM);
-			assert(classVTM != NULL);
-			vtable_add(newVT, classVTM);
-		}
-		vector_push(self->vt_vec, newVT);
-	}
-	//assert(self->vt->elements->length > 0);
+	class_create_vtable_interface(self);
 }
 
 int class_count_fieldall(class_ * self) {
@@ -530,6 +507,50 @@ void class_delete(class_ * self) {
 }
 
 //private
+static void class_create_vtable_top(class_* self) {
+	for (int i = 0; i < self->method_list->length; i++) {
+		method* m = (method*)vector_at(self->method_list, i);
+		if(m->access != access_private &&
+		   modifier_is_static(m->modifier)) {
+			vtable_add(self->vt, m);
+		}
+	}
+}
+
+static void class_create_vtable_ov(class_* self) {
+	class_create_vtable(self->super_class->core_type->u.class_);
+	vtable_copy(self->super_class->core_type->u.class_->vt, self->vt);
+	for (int i = 0; i < self->method_list->length; i++) {
+		method* m = (method*)vector_at(self->method_list, i);
+		if(m->access != access_private &&
+		   modifier_is_static(m->modifier)) {
+			vtable_replace(self->vt, m);
+		}
+	}
+}
+
+static void class_create_vtable_interface(class_* self) {
+	//もしインターフェースを実装しているなら、
+	//インターフェースに対応する同じ並びのメソッドテーブルも作る
+	for (int i = 0; i < self->impl_list->length; i++) {
+		generic_type* gtp = (generic_type*)vector_at(self->impl_list, i);
+		interface_* inter = (interface_*)gtp->core_type->u.interface_;
+		vtable* interVT = inter->vt;
+		vtable* newVT = vtable_new();
+		//そのインターフェースに定義されたテーブルの一覧
+		//これはスーパーインターフェースも含む。
+		for (int j = 0; j < interVT->elements->length; j++) {
+			//実装クラスの中の、
+			//シグネチャが同じメソッドをテーブルへ。
+			method* interVTM = vector_at(interVT->elements, j);
+			method* classVTM = class_find_impl_method(self, interVTM);
+			assert(classVTM != NULL);
+			vtable_add(newVT, classVTM);
+		}
+		vector_push(self->vt_vec, newVT);
+	}
+}
+
 static method* class_find_method_impl(vector* elements, const char * name, vector * args, enviroment * env, il_context* ilctx, int * outIndex) {
 	return meta_find_method(elements, name, args, env, ilctx, outIndex);
 }
