@@ -7,6 +7,7 @@
 #include "../../../env/field.h"
 #include "../../../vm/enviroment.h"
 #include "../../../vm/symbol_entry.h"
+#include "../../il_argument.h"
 
 il_factor_variable_local* il_factor_variable_local_new(const char* name) {
 	il_factor_variable_local* ret = (il_factor_variable_local*)MEM_MALLOC(sizeof(il_factor_variable_local));
@@ -72,6 +73,10 @@ void il_factor_variable_local_load(il_factor_variable_local * self, enviroment *
 generic_type* il_factor_variable_local_eval(il_factor_variable_local * self, enviroment * env, il_load_cache* cache) {
 	il_factor_variable_local_load(self, env, cache, NULL);
 	assert(self->type != variable_local_undefined);
+	for(int i=0; i<self->gt->type_args_list->length; i++) {
+		generic_type* e = (generic_type*)vector_at(self->gt->type_args_list, i);
+		XSTREQ(self->name, "iter");
+	}
 	return self->gt;
 }
 

@@ -5,6 +5,7 @@
 #include "../../../env/type/class_impl.h"
 #include "../../../vm/enviroment.h"
 #include "../../il_argument.h"
+#include "../../../util/xassert.h"
 
 //proto
 static void il_factor_invoke_static_check(il_factor_invoke_static * self, enviroment * env, il_load_cache* cache);
@@ -64,6 +65,12 @@ void il_factor_invoke_static_delete(il_factor_invoke_static* self) {
 static void il_factor_invoke_static_check(il_factor_invoke_static * self, enviroment * env, il_load_cache* cache) {
 	class_* cls = il_load_cache_class(cache, self->fqcn);
 	int temp = -1;
+	for(int i=0; i<self->args->length; i++) {
+		il_argument* e = (il_argument*)vector_at(self->args, i);
+		il_factor* f = e->factor;
+		//XSTREQ(self->name, "writeLine");
+		//int a = 0;
+	}
 	self->m = class_find_smethod(cls, self->name, self->args, env, cache, &temp);
 	self->index = temp;
 	assert(temp != -1);

@@ -78,7 +78,8 @@ void class_loader_sgload_class_impl(class_loader * self, il_type * iltype, type 
 void class_loader_sgload_interface_decl(class_loader * self, il_type * iltype, type * tp, namespace_ * scope) {
 	assert(tp->u.interface_->method_list->length == 0);
 //	class_loader_sgload_methods(self, iltype, tp, scope);
-	XSTREQ(iltype->u.interface_->name, "Iterator");
+//ArrayIterator<T>の時、中のTが考慮されていない
+	//XSTREQ(iltype->u.interface_->name, "Iterator");
 	type_init_generic(tp, tp->u.interface_->type_parameter_list->length);
 	class_loader_sgload_methods_impl(self, iltype, tp, iltype->u.interface_->method_list, scope);
 }

@@ -54,7 +54,7 @@ void il_factor_invoke_load(il_factor_invoke * self, enviroment * env, il_load_ca
 
 generic_type* il_factor_invoke_eval(il_factor_invoke * self, enviroment * env, il_load_cache* cache) {
 	il_factor_invoke_check(self, env, cache);
-	XSTREQ(self->name, "iterate");
+	generic_type* receivergType = il_factor_eval(self->receiver, env, cache);
 	//T自体ではなく、返すかたにTが含まれる場合
 	virtual_type returnvType = self->m->return_vtype;
 	if(self->receiver->type == ilfactor_member_op) {
@@ -63,10 +63,9 @@ generic_type* il_factor_invoke_eval(il_factor_invoke * self, enviroment * env, i
 	}
 	if(returnvType.tag != virtualtype_default) {
 		if(self->resolved == NULL) {
-			generic_type* gt = il_factor_eval(self->receiver, env, cache);
 			self->resolved = generic_type_new(NULL);
 			self->resolved->tag = generic_type_tag_class;
-			generic_type* a = (generic_type*)vector_at(gt->type_args_list, returnvType.u.index);
+			generic_type* a = (generic_type*)vector_at(receivergType->type_args_list, returnvType.u.index);
 			self->resolved->core_type = a->core_type;
 		}
 		return self->resolved;
@@ -74,7 +73,13 @@ generic_type* il_factor_invoke_eval(il_factor_invoke * self, enviroment * env, i
 		//virtual_type_indexを当てはめる。
 		//new_instanceはevalでコンストラクタで与えられた実型引数を詰める。
 	} else {
-		return returnvType.u.gtype;
+		generic_type* gt = returnvType.u.gtype;
+		if(self->resolved == NULL) {
+			vector_push(cache->receiver_vec, receivergType);
+			self->resolved = generic_type_apply(gt, cache);
+			vector_pop(cache->receiver_vec);
+		}
+		return self->resolved;
 	}
 }
 

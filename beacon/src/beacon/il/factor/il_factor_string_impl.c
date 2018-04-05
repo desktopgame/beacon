@@ -1,6 +1,7 @@
 #include "il_factor_string_impl.h"
 #include <stdlib.h>
-#include<stdio.h>
+#include <stdio.h>
+#include <assert.h>
 #include "../../util/text.h"
 #include "../../vm/enviroment.h"
 #include "../../env/type_interface.h"
@@ -36,6 +37,7 @@ void il_factor_string_load(il_factor_string * self, enviroment * env, il_load_ca
 }
 
 generic_type* il_factor_string_eval(il_factor_string * self, enviroment * env, il_load_cache* cache) {
+	assert(CL_STRING->generic_self->core_type != NULL);
 	return CL_STRING->generic_self;
 }
 
