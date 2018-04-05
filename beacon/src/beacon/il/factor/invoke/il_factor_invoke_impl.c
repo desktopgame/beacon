@@ -55,29 +55,28 @@ void il_factor_invoke_load(il_factor_invoke * self, enviroment * env, il_context
 generic_type* il_factor_invoke_eval(il_factor_invoke * self, enviroment * env, il_context* ilctx) {
 	il_factor_invoke_check(self, env, ilctx);
 	generic_type* receivergType = il_factor_eval(self->receiver, env, ilctx);
-	//T自体ではなく、返すかたにTが含まれる場合
 	virtual_type returnvType = self->m->return_vtype;
-	if(self->receiver->type == ilfactor_member_op) {
-		il_factor_member_op* ilmem = IL_FACT2MEM(self->receiver);
-		//XSTREQ(ilmem->name, "stackTrace");
-	}
+	//型変数をそのまま返す場合
 	if(returnvType.tag != virtualtype_default) {
 		if(self->resolved == NULL) {
-			self->resolved = generic_type_new(NULL);
+			//レシーバの実体化された型の中で、
+			//メソッドの戻り値 'T' が表す位置に対応する実際の型を取り出す。
+			generic_type* instanced_type = (generic_type*)vector_at(receivergType->type_args_list, returnvType.u.index);
+			self->resolved = generic_type_new(instanced_type->core_type);
 			self->resolved->tag = generic_type_tag_class;
-			generic_type* a = (generic_type*)vector_at(receivergType->type_args_list, returnvType.u.index);
-			self->resolved->core_type = a->core_type;
 		}
 		return self->resolved;
-		//receiverをeval
-		//virtual_type_indexを当てはめる。
-		//new_instanceはevalでコンストラクタで与えられた実型引数を詰める。
+	//型変数ではない型を返す
 	} else {
 		generic_type* gt = returnvType.u.gtype;
 		if(self->resolved == NULL) {
+			//内側に型変数が含まれているかもしれないので、
+			//それをここで展開する。
+			vector_push(ilctx->type_args_vec, self->type_args);
 			vector_push(ilctx->receiver_vec, receivergType);
 			self->resolved = generic_type_apply(gt, ilctx);
 			vector_pop(ilctx->receiver_vec);
+			vector_pop(ilctx->type_args_vec);
 		}
 		return self->resolved;
 	}

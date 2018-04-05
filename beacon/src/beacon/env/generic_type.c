@@ -19,6 +19,7 @@ generic_type * generic_type_new(type * core_type) {
 }
 
 void generic_type_addargs(generic_type* self, generic_type* a) {
+	assert(a != NULL);
 	a->ref_count++;
 	vector_push(self->type_args_list, a);
 }
@@ -99,7 +100,7 @@ generic_type* generic_type_apply(generic_type* self, il_context* ilctx) {
 	generic_type* e = NULL;
 	//全ての実型引数
 	for(int i=0; i<self->type_args_list->length; i++) {
-		generic_type* e = vector_at(self->type_args_list, i);
+		e = vector_at(self->type_args_list, i);
 		//この型がクラスやメソッドに定義された仮装型なら
 		if(e->virtual_type_index != -1) {
 			if(e->tag == generic_type_tag_class) {

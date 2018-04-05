@@ -75,7 +75,7 @@ generic_type* il_factor_variable_local_eval(il_factor_variable_local * self, env
 	assert(self->type != variable_local_undefined);
 	for(int i=0; i<self->gt->type_args_list->length; i++) {
 		generic_type* e = (generic_type*)vector_at(self->gt->type_args_list, i);
-		XSTREQ(self->name, "iter");
+		//XSTREQ(self->name, "iter");
 	}
 	return self->gt;
 }
