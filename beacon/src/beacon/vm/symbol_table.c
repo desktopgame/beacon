@@ -31,6 +31,7 @@ symbol_entry* symbol_table_entry(symbol_table* self, generic_type* gtp, const ch
 	}
 	int ret = self->count;
 	symbol_entry* e = symbol_entry_new(name);
+	gtp->ref_count++;
 	e->index = self->count;
 	e->gtype = gtp;
 	tree_map_put(self->map, name, e);

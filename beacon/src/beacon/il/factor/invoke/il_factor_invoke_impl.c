@@ -77,6 +77,8 @@ generic_type* il_factor_invoke_eval(il_factor_invoke * self, enviroment * env, i
 void il_factor_invoke_delete(il_factor_invoke* self) {
 	vector_delete(self->args, il_factor_invoke_args_delete);
 	vector_delete(self->type_args, vector_deleter_null);
+	il_factor_delete(self->receiver);
+	generic_type_delete(self->resolved);
 	MEM_FREE(self->name);
 	MEM_FREE(self);
 }
@@ -99,6 +101,7 @@ static void resolve_non_default(il_factor_invoke * self, enviroment * env, il_co
 		self->resolved = generic_type_new(instanced_type->core_type);
 		self->resolved->tag = generic_type_tag_class;
 	}
+	self->resolved->ref_count++;
 }
 
 static void resolve_default(il_factor_invoke * self, enviroment * env, il_context* ilctx) {
@@ -114,6 +117,7 @@ static void resolve_default(il_factor_invoke * self, enviroment * env, il_contex
 	self->resolved = generic_type_apply(returnvType.u.gtype, ilctx);
 	vector_pop(ilctx->receiver_vec);
 	vector_pop(ilctx->type_args_vec);
+	self->resolved->ref_count++;
 }
 
 static void il_factor_invoke_check(il_factor_invoke * self, enviroment * env, il_context* ilctx) {

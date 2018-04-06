@@ -70,7 +70,6 @@ class_ * class_new(const char * name) {
 	ret->native_method_ref_map = tree_map_new();
 	ret->vt_vec = vector_new();
 	ret->type_parameter_list = vector_new();
-	ret->generic_instance_list = vector_new();
 	//FIXME:ここで持つ必要はない
 	ret->classIndex = -1;
 	//ret->absoluteIndex = -1;
@@ -517,7 +516,6 @@ void class_delete(class_ * self) {
 //	MEM_FREE(self->name);
 	logger_info(__FILE__, __LINE__, "deleted class %s", self->name);
 	vector_delete(self->type_parameter_list, class_type_parameter_delete);
-	vector_delete(self->generic_instance_list, class_generic_type_list_delete);
 	MEM_FREE(self->name);
 	MEM_FREE(self);
 }

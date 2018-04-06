@@ -191,6 +191,7 @@ void type_delete(type * self) {
 	} else if (self->tag == type_interface) {
 		interface_delete(self->u.interface_);
 	}
+	generic_type_delete(self->generic_self);
 	MEM_FREE(self);
 }
 

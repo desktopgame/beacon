@@ -96,12 +96,17 @@ void generic_type_print(generic_type * self) {
 	text_printf(">");
 }
 
-void generic_type_delete(generic_type * self) {
-	if((--self->ref_count) > 0) {
-		return;
+bool generic_type_delete(generic_type * self) {
+	if(self == NULL) {
+		return true;
+	}
+	self->ref_count--;
+	if(self->ref_count > 0) {
+		return false;
 	}
 	vector_delete(self->type_args_list, generic_type_tree_delete);
 	MEM_FREE(self);
+	return true;
 }
 
 bool generic_type_int(generic_type* self) {

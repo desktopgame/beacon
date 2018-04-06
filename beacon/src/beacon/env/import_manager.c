@@ -76,11 +76,6 @@ void import_manager_resolve(import_manager* self, namespace_* scope, generic_cac
 		generic_type_fixtype(child);
 		generic_type_addargs(ret2, child);
 	}
-	if (core_type->tag == type_class) {
-		vector_push(core_type->u.class_->generic_instance_list, ret2);
-	} else if (core_type->tag == type_interface) {
-		vector_push(core_type->u.interface_->generic_instance_list, ret2);
-	}
 	assert(ret2 != NULL);
 	dest->tag = virtualtype_default;
 	dest->u.gtype = ret2;

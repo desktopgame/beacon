@@ -7,6 +7,7 @@
 #include "class_loader.h"
 #include <stdlib.h>
 #include <assert.h>
+#include "generic_type.h"
 #include "../util/mem.h"
 #include "../lib/sg_library_interface.h"
 #include "../thread/thread.h"

@@ -57,11 +57,6 @@ generic_type * generic_cache_gtype(generic_cache * self, namespace_ * scope, il_
 		generic_type* child = generic_cache_gtype(e, scope, ilctx);
 		generic_type_addargs(ret2, child);
 	}
-	if (core_type->tag == type_class) {
-		vector_push(core_type->u.class_->generic_instance_list, ret2);
-	} else if (core_type->tag == type_interface) {
-		vector_push(core_type->u.interface_->generic_instance_list, ret2);
-	}
 	assert(ret2 != NULL);
 	return ret2;
 }

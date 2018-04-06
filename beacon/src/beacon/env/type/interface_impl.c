@@ -27,7 +27,6 @@ interface_ * interface_new(const char * name) {
 	ret->method_list = vector_new();
 	ret->vt = NULL;
 	ret->type_parameter_list = vector_new();
-	ret->generic_instance_list = vector_new();
 	return ret;
 }
 
@@ -90,7 +89,6 @@ void interface_unlink(interface_ * self) {
 
 void interface_delete(interface_ * self) {
 	vector_delete(self->type_parameter_list, interface_type_parameter_delete);
-	vector_delete(self->generic_instance_list, interface_generic_type_list_delete);
 	MEM_FREE(self->name);
 	MEM_FREE(self);
 }

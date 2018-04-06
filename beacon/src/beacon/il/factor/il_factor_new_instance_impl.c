@@ -15,6 +15,7 @@
 #include "../../util/logger.h"
 
 //proto
+static void il_factor_new_instance_delete_typearg(vector_item item);
 static void il_factor_new_instance_find(il_factor_new_instance * self, enviroment * env, il_context* ilctx);
 static void il_Factor_new_instace_delete_arg(vector_item item);
 
@@ -89,6 +90,7 @@ generic_type* il_factor_new_instance_eval(il_factor_new_instance * self, envirom
 
 void il_factor_new_instance_delete(il_factor_new_instance * self) {
 	vector_delete(self->argument_list, il_Factor_new_instace_delete_arg);
+	vector_delete(self->type_args, il_factor_new_instance_delete_typearg);
 	fqcn_cache_delete(self->fqcnc);
 	MEM_FREE(self);
 }
@@ -99,6 +101,11 @@ il_factor_new_instance* il_factor_cast_new_instance(il_factor* fact) {
 }
 
 //private
+static void il_factor_new_instance_delete_typearg(vector_item item) {
+	il_type_argument* e = (il_type_argument*)item;
+	il_type_argument_delete(e);
+}
+
 static void il_factor_new_instance_find(il_factor_new_instance * self, enviroment * env, il_context* ilctx) {
 	//*
 	class_* cls = il_context_class(ilctx, self->fqcnc);

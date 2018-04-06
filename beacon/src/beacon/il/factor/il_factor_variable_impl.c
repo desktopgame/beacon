@@ -72,6 +72,7 @@ void il_factor_variable_delete(il_factor_variable * self) {
 	} else if(self->type == ilvariable_type_static) {
 		il_factor_variable_static_delete(self->u.static_);
 	}
+	fqcn_cache_delete(self->fqcn);
 	MEM_FREE(self);
 }
 

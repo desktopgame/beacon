@@ -41,7 +41,7 @@ int generic_type_distance(generic_type* a, generic_type* b);
 
 void generic_type_print(generic_type* self);
 
-void generic_type_delete(generic_type* self);
+bool generic_type_delete(generic_type* self);
 
 bool generic_type_int(generic_type* self);
 

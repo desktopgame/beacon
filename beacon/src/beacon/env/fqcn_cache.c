@@ -103,6 +103,9 @@ class_ * fqcn_class(fqcn_cache * self, namespace_ * current) {
 }
 
 void fqcn_cache_delete(fqcn_cache * self) {
+	if(self == NULL) {
+		return;
+	}
 	vector_delete(self->scope_vec, vector_deleter_free);
 	MEM_FREE(self->name);
 	MEM_FREE(self);
