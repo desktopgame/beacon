@@ -8,8 +8,13 @@
 //proto
 static type * fqcn_type_impl(fqcn_cache * self, namespace_* current);
 
+/*
 fqcn_cache * fqcn_cache_new() {
-	fqcn_cache* ret = (fqcn_cache*)MEM_MALLOC(sizeof(fqcn_cache));
+}
+*/
+
+fqcn_cache* fqcn_cache_malloc(const char* filename, int lineno) {
+	fqcn_cache* ret = (fqcn_cache*)mem_malloc(sizeof(fqcn_cache), filename, lineno);
 	ret->scope_vec = vector_new();
 	ret->name = NULL;
 	return ret;

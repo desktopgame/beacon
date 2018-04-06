@@ -19,7 +19,13 @@ typedef struct fqcn_cache {
  * FQCNキャッシュを作成します.
  * @return
  */
-fqcn_cache* fqcn_cache_new();
+#define fqcn_cache_new() (fqcn_cache_malloc(__FILE__, __LINE__))
+
+/**
+ * FQCNキャッシュを作成します.
+ * @return
+ */
+fqcn_cache* fqcn_cache_malloc(const char* filename, int lineno);
 
 /**
  * FQCNキャッシュを出力します.
