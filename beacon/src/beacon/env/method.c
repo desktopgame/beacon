@@ -107,6 +107,10 @@ void method_delete(method * self) {
 	} else if (self->type == method_type_native) {
 		native_method_delete(self->u.native_method);
 	}
+
+	if(self->return_vtype.tag == virtualtype_default) {
+		generic_type_delete(self->return_vtype.u.gtype);
+	}
 	MEM_FREE(self);
 }
 

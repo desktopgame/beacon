@@ -65,6 +65,7 @@ void import_manager_resolve(import_manager* self, namespace_* scope, generic_cac
 		assert(core_type->generic_self != NULL);
 		dest->tag = virtualtype_default;
 		dest->u.gtype = core_type->generic_self;
+		dest->u.gtype->ref_count++;
 		return;
 	}
 
@@ -77,6 +78,7 @@ void import_manager_resolve(import_manager* self, namespace_* scope, generic_cac
 		generic_type_addargs(ret2, child);
 	}
 	assert(ret2 != NULL);
+	ret2->ref_count = 1;
 	dest->tag = virtualtype_default;
 	dest->u.gtype = ret2;
 //	return generic_cache_gtype(fqcn, scope, ilcache);

@@ -33,6 +33,9 @@ void field_delete(field * self) {
 	if (self == NULL) {
 		return;
 	}
+	if(self->vtype.tag == virtualtype_default) {
+		generic_type_delete(self->vtype.u.gtype);
+	}
 	MEM_FREE(self->name);
 	MEM_FREE(self);
 }

@@ -275,7 +275,7 @@ static void class_loader_sgload_complete_fields_impl(class_loader* self, namespa
 		vector_push(ilctx->type_vec, fi->parent);
 		//FIXME:ILフィールドと実行時フィールドのインデックスが同じなのでとりあえず動く
 		il_field* ilfield = ((il_field*)vector_at(ilfields, i));
-		import_manager_resolve(self->import_manager, scope, ilfield->fqcn, ilctx, &fi->vtype);
+	//	import_manager_resolve(self->import_manager, scope, ilfield->fqcn, ilctx, &fi->vtype);
 		vector_pop(ilctx->type_vec);
 	}
 	il_context_delete(ilctx);
