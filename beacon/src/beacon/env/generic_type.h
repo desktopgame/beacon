@@ -43,6 +43,12 @@ void generic_type_print(generic_type* self);
 
 void generic_type_delete(generic_type* self);
 
+bool generic_type_int(generic_type* self);
+
+bool generic_type_double(generic_type* self);
+
+bool generic_type_bool(generic_type* self);
+
 generic_type* generic_type_apply(generic_type* self, struct il_context* ilctx);
 
 struct method* generic_type_find_method(generic_type* self, const char* name, vector* args, struct enviroment* env, struct il_context* ilctx, int* outIndex);

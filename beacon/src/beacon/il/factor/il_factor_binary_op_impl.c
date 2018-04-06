@@ -4,10 +4,12 @@
 #include <assert.h>
 #include "../../util/text.h"
 #include "il_factor_variable_impl.h"
-#include "../../env/type_interface.h"
+#include "../il_factor_impl.h"
+#include "../../env/type_impl.h"
 #include "../../env/field.h"
 #include "../../env/namespace.h"
 #include "../../vm/enviroment.h"
+#include "../../vm/symbol_entry.h"
 #include "../../util/mem.h"
 
 typedef enum bi_operator_t {
@@ -39,6 +41,8 @@ static opcode bi_operator_to_opb(bi_operator_t bi);
 static bool ilbi_compare(il_factor_binary_op* self);
 static void assign_dump_operator(il_factor_binary_op* self);
 static void assign_generate_simple(il_factor_binary_op * self, enviroment* env, il_context* ilctx);
+static void assign_generate_putfield(il_factor_binary_op * self, enviroment* env, il_context* ilctx);
+static void assign_generate_store(il_factor_binary_op * self, enviroment* env, il_context* ilctx);
 static void assign_generate_start(il_factor_binary_op * self, enviroment* env, il_context* ilctx);
 static void assign_generate_end(il_factor_binary_op * self, enviroment* env, il_context* ilctx);
 
@@ -201,21 +205,25 @@ static void il_factor_binary_op_generate_impl(il_factor_binary_op * self, enviro
 	//ここで逆にしておく
 	il_factor_generate(self->right, env, ilctx);
 	il_factor_generate(self->left, env, ilctx);
-	
+	int counts = 0;
 	generic_type* ltype = (generic_type*)il_factor_eval(self->left, env, ilctx);
 	generic_type* rtype = (generic_type*)il_factor_eval(self->right, env, ilctx);
-	if (ltype == CL_INT->generic_self &&
-		rtype == CL_INT->generic_self) {
+	if (generic_type_int(ltype) &&
+		generic_type_int(rtype)) {
 		opcode_buf_add(env->buf, (vector_item)bi_operator_to_opi(c));
+		counts++;
 	}
-	if (ltype == CL_DOUBLE->generic_self &&
-		rtype == CL_DOUBLE->generic_self) {
+	if (generic_type_double(ltype) &&
+		generic_type_double(rtype)) {
 		opcode_buf_add(env->buf, (vector_item)bi_operator_to_opd(c));
+		counts++;
 	}
-	if (ltype == CL_BOOL->generic_self &&
-		rtype == CL_BOOL->generic_self) {
+	if (generic_type_bool(ltype) &&
+		generic_type_bool(rtype)) {
 		opcode_buf_add(env->buf, (vector_item)bi_operator_to_opb(c));
+		counts++;
 	}
+	assert(counts > 0);
 }
 
 static opcode bi_operator_to_opi(bi_operator_t bi) {
@@ -380,56 +388,58 @@ static void assign_dump_operator(il_factor_binary_op* self) {
 }
 
 static void assign_generate_simple(il_factor_binary_op * self, enviroment* env, il_context* ilctx) {
-	/*
-	if (self->left->type == ilfactor_static_field_access) {
-		//NOTE:List<T>が定義されるとき、
-		//static T foo;
-		//のように型変数を静的領域に宣言することはできません。
-		//右辺をプッシュ
-		il_factor_static_field_access* sfa = self->left->u.static_field_access;
-		type* lt = il_factor_eval(self->left, env, cache);
-		il_factor_generate(self->right, env, cache);
-		//フィールド型にルックアップ
-		//opcode_buf_add(env->buf, op_lookup);
-		//opcode_buf_add(env->buf, sfa->f->gtype->core_type->absolute_index);
-		//プット
-		opcode_buf_add(env->buf, op_put_static);
-		opcode_buf_add(env->buf, sfa->f->gparent->core_type->absolute_index);
-		opcode_buf_add(env->buf, sfa->field_index);
-	} else if (self->left->type == ilfactor_field_access) {
-		//右辺をプッシュ
-		il_factor_field_access* field_access = self->left->u.field_access_;
-		type* lt = il_factor_eval(self->left, env, cache);
-		il_factor_generate(field_access->fact, env, cache);
-		il_factor_generate(self->right, env, cache);
-		assert(field_access->f->gtype != NULL &&
-			   field_access->f->gtype->virtual_type_index == -1);
-		//ルックアップ
-		//opcode_buf_add(env->buf, op_lookup);
-		//opcode_buf_add(env->buf, field_access->f->gtype->core_type->absolute_index);
-		//プット
-		if (modifier_is_static(field_access->f->modifier)) {
-			opcode_buf_add(env->buf, op_put_static);
-			opcode_buf_add(env->buf, field_access->f->gparent->core_type->absolute_index);
-			opcode_buf_add(env->buf, field_access->field_index);
-		} else {
-			opcode_buf_add(env->buf, op_put_field);
-			opcode_buf_add(env->buf, field_access->field_index);
-		}
-	} else {
-		type* lt = il_factor_eval(self->left, env, cache);
-		//右辺をプッシュ
-		il_factor_generate(self->right, env, cache);
-		//opcode_buf_add(env->buf, op_lookup);
-		//左辺型にルックアップ
-		//opcode_buf_add(env->buf, lt->absolute_index);
-		//ストア
-		assert(self->left->type == ilfactor_variable);
-		il_factor_variable* v = self->left->u.variable_;
-		opcode_buf_add(env->buf, op_store);
-		opcode_buf_add(env->buf, v->index);
+	assign_generate_putfield(self, env, ilctx);
+	assign_generate_store(self, env, ilctx);
+}
+
+static void assign_generate_putfield(il_factor_binary_op * self, enviroment* env, il_context* ilctx) {
+	//左辺がメンバアクセスでない
+	if (self->left->type != ilfactor_member_op) {
+		return;
 	}
-	*/
+	il_factor_member_op* ilmem = IL_FACT2MEM(self->left);
+	il_factor_member_op_load(ilmem, env, ilctx, NULL);
+	il_factor* ilsrc = ilmem->fact;
+	if(ilsrc->type == ilfactor_variable) {
+		il_factor_variable* ilvar = IL_FACT2VAR(ilsrc);
+		//staticなフィールドへの代入
+		if(ilvar->type == ilvariable_type_static) {
+			class_* cls = il_context_class(ilctx, ilvar->fqcn);
+			int temp = -1;
+			class_find_sfield(cls, ilmem->name, &temp);
+			assert(temp != -1);
+			il_factor_generate(self->right, env, ilctx);
+			opcode_buf_add(env->buf, (vector_item)op_put_static);
+			opcode_buf_add(env->buf, (vector_item)cls->parent->absolute_index);
+			opcode_buf_add(env->buf, (vector_item)temp);
+		} else goto inst;
+	//インスタンスフィールドへの代入
+	} else {
+		inst:
+		{
+			generic_type* gt = il_factor_eval(ilmem->fact, env, ilctx);
+			class_* cls = TYPE2CLASS(gt->core_type);
+			int temp = -1;
+			class_find_field(cls, ilmem->name, &temp);
+			assert(temp != -1);
+			il_factor_generate(ilmem->fact, env, ilctx);
+			il_factor_generate(self->right, env, ilctx);
+			opcode_buf_add(env->buf, (vector_item)op_put_field);
+			opcode_buf_add(env->buf, (vector_item)temp);
+		}
+	}
+}
+
+static void assign_generate_store(il_factor_binary_op * self, enviroment* env, il_context* ilctx) {
+	//左辺が変数でない
+	if (self->left->type != ilfactor_variable) {
+		return;
+	}
+	il_factor_variable* ilvar = IL_FACT2VAR(self->left);
+	symbol_entry* ent = symbol_table_entry(env->sym_table, NULL, ilvar->fqcn->name);
+	il_factor_generate(self->right, env, ilctx);
+	opcode_buf_add(env->buf, (vector_item)op_store);
+	opcode_buf_add(env->buf, (vector_item)ent->index);
 }
 
 static void assign_generate_start(il_factor_binary_op * self, enviroment* env, il_context* ilctx) {

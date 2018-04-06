@@ -111,24 +111,24 @@
 						catch_stmt
 						scope
 						scope_optional
+%right ASSIGN ADD_ASSIGN SUB_ASSIGN MUL_ASSIGN DIV_ASSIGN MOD_ASSIGN AND_ASSIGN OR_ASSIGN LSHIFT_ASSIGN RSHIFT_ASSIGN EXC_OR_ASSIGN PRE_INC PRE_DEC
 %left QUOTE
 %left EQUAL NOTEQUAL
-%left LOGIC_AND
 %left COMMA
 %left LOGIC_OR
+%left LOGIC_AND
 %left BIT_AND
 %left BIT_OR
 %left EXC_OR
 %left LSHIFT RSHIFT
+%left GT GE LT LE
 %left ADD SUB
 %left MUL DIV MOD
-%left GT GE LT LE
 %left DOT FUNCCALL POST_INC POST_DEC
 %nonassoc LSB
 %nonassoc '<'
 %right CHILDA NOT NEGATIVE POSITIVE NEW REF
 %right AS
-%right ASSIGN ADD_ASSIGN SUB_ASSIGN MUL_ASSIGN DIV_ASSIGN MOD_ASSIGN AND_ASSIGN OR_ASSIGN LSHIFT_ASSIGN RSHIFT_ASSIGN EXC_OR_ASSIGN PRE_INC PRE_DEC
 %token FORM_TYPE
 %start compilation_unit
 %%
@@ -791,21 +791,21 @@ inferenced_type_init_stmt
 	}
 	;
 if_stmt
-	: IF LRB expression RRB scope
+	: IF expression scope
 	{
-		$$ = ast_new_if($3, $5);
+		$$ = ast_new_if($2, $3);
 	}
-	| IF LRB expression RRB scope ELSE scope
+	| IF expression scope ELSE scope
 	{
-		$$ = ast_new_if_else($3, $5, $7);
+		$$ = ast_new_if_else($2, $3, $5);
 	}
-	| IF LRB expression RRB scope elif_list
+	| IF expression scope elif_list
 	{
-		$$ = ast_new_if_elif_list($3, $5, $6);
+		$$ = ast_new_if_elif_list($2, $3, $4);
 	}
-	| IF LRB expression RRB scope elif_list ELSE scope
+	| IF expression scope elif_list ELSE scope
 	{
-		$$ = ast_new_if_elif_list_else($3, $5, $6, $8);
+		$$ = ast_new_if_elif_list_else($2, $3, $4, $6);
 	}
 	;
 elif_list
@@ -816,9 +816,9 @@ elif_list
 	}
 	;
 elif
-	: ELIF LRB expression RRB scope
+	: ELIF expression scope
 	{
-		$$ = ast_new_elif($3, $5);
+		$$ = ast_new_elif($2, $3);
 	}
 	;
 while_stmt

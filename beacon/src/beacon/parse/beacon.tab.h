@@ -131,15 +131,15 @@
      TRY = 340,
      CATCH = 341,
      THROW = 342,
-     QUOTE = 343,
-     POST_DEC = 344,
-     POST_INC = 345,
-     FUNCCALL = 346,
-     REF = 347,
-     POSITIVE = 348,
-     NEGATIVE = 349,
-     PRE_DEC = 350,
-     PRE_INC = 351,
+     PRE_DEC = 343,
+     PRE_INC = 344,
+     QUOTE = 345,
+     POST_DEC = 346,
+     POST_INC = 347,
+     FUNCCALL = 348,
+     REF = 349,
+     POSITIVE = 350,
+     NEGATIVE = 351,
      FORM_TYPE = 352
    };
 #endif
@@ -229,15 +229,15 @@
 #define TRY 340
 #define CATCH 341
 #define THROW 342
-#define QUOTE 343
-#define POST_DEC 344
-#define POST_INC 345
-#define FUNCCALL 346
-#define REF 347
-#define POSITIVE 348
-#define NEGATIVE 349
-#define PRE_DEC 350
-#define PRE_INC 351
+#define PRE_DEC 343
+#define PRE_INC 344
+#define QUOTE 345
+#define POST_DEC 346
+#define POST_INC 347
+#define FUNCCALL 348
+#define REF 349
+#define POSITIVE 350
+#define NEGATIVE 351
 #define FORM_TYPE 352
 
 

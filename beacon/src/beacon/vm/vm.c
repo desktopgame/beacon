@@ -458,7 +458,7 @@ void vm_resume(vm * self, enviroment * env, int pos) {
 			}
 			case op_load:
 			{
-				XBREAK(i == 7);
+				//XBREAK(i == 7);
 				int index = (int)enviroment_source_at(env, ++i);
 				vector_item e = vector_at(self->ref_stack, index);
 				object*  o = (object*)e;

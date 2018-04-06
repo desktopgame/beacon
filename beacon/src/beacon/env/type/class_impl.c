@@ -464,6 +464,7 @@ object * class_new_rinstance(class_ * self, vm* vmc, int count, ...) {
 	}
 	//コンストラクタを検索
 	int temp = 0;
+	
 	constructor* ctor = class_find_rconstructor(self, args, &temp);
 	assert(temp != -1);
 	//コンストラクタを実行

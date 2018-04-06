@@ -104,6 +104,18 @@ void generic_type_delete(generic_type * self) {
 	MEM_FREE(self);
 }
 
+bool generic_type_int(generic_type* self) {
+	return self->core_type == CL_INT;
+}
+
+bool generic_type_double(generic_type* self) {
+	return self->core_type == CL_DOUBLE;
+}
+
+bool generic_type_bool(generic_type* self) {
+	return self->core_type == CL_BOOL;
+}
+
 //Hash<String,List<Int>>
 generic_type* generic_type_apply(generic_type* self, il_context* ilctx) {
 	generic_type* copy = generic_type_new(self->core_type);
