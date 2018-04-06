@@ -9,8 +9,14 @@
 //proto
 static void generic_type_tree_delete(vector_item item);
 
+/*
 generic_type * generic_type_new(type * core_type) {
-	generic_type* ret = (generic_type*)MEM_MALLOC(sizeof(generic_type));
+	
+}
+*/
+
+generic_type* generic_type_malloc(struct type* core_type, const char* filename, int lineno) {
+generic_type* ret = (generic_type*)mem_malloc(sizeof(generic_type), filename, lineno);
 	ret->core_type = core_type;
 	ret->type_args_list = vector_new();
 	ret->virtual_type_index = -1;

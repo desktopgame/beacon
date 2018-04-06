@@ -29,7 +29,9 @@ typedef struct generic_type {
 	generic_type_tag tag;
 } generic_type;
 
-generic_type* generic_type_new(struct type* core_type);
+#define generic_type_new(ctype) (generic_type_malloc(ctype, __FILE__, __LINE__))
+
+generic_type* generic_type_malloc(struct type* core_type, const char* filename, int lineno);
 
 void generic_type_fixtype(generic_type* self);
 
