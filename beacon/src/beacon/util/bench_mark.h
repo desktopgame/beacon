@@ -7,7 +7,9 @@
 #if defined(_MSC_VER)
 #include <sys/timeb.h>
 #endif
-
+/**
+ * 時刻を表す構造体.
+ */
 typedef struct time_ref {
 #if defined(_MSC_VER)
 	struct timeb time;

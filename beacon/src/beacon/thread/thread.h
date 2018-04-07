@@ -14,14 +14,33 @@ typedef struct sg_thread {
 	struct vm* vmRef;
 } sg_thread;
 
+/**
+ * メインスレッドを作成します.
+ */
 void sg_thread_launch();
 
+/**
+ * 新しいスレッドを作成します.
+ * @return
+ */
 sg_thread* sg_thread_new();
 
+/**
+ * 現在のスレッドを返します.
+ * @return
+ */
 sg_thread* sg_thread_current();
 
+/**
+ * スレッドに記録された全てのトレースを解放します.
+ * @param self
+ */
 void sg_thread_clear(sg_thread* self);
 
+/**
+ * スレッドを解放します.
+ * @param self
+ */
 void sg_thread_delete(sg_thread* self);
 
 /**
@@ -48,7 +67,14 @@ struct vm* sg_thread_get_vm_ref(sg_thread* self);
  */
 void sg_thread_release_vm_ref(sg_thread* self);
 
+/**
+ * メインスレッドを返します.
+ * @return
+ */
 sg_thread* sg_thread_main();
 
+/**
+ * メインスレッドを終了します.
+ */
 void sg_thread_destroy();
 #endif // SIGNAL_THREAD_THREAD_H

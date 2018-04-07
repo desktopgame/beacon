@@ -12,8 +12,12 @@ typedef struct line_range {
 	uint32_t end_offset;
 	uint32_t lineno;
 } line_range;
-
+/**
+ * 新しい範囲を作成します.
+ * @return
+ */
 line_range* line_range_new();
+
 /**
  * line_rangeの一覧から、指定の pc を含むレンジを返します.
  * @param line_rangeVec
