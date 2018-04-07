@@ -21,7 +21,7 @@ void il_factor_this_load(il_factor_this * self, enviroment * env, il_context* il
 generic_type* il_factor_this_eval(il_factor_this * self, enviroment * env, il_context* ilctx) {
 	assert(ilctx->type_vec->length > 0);
 	type* ret = (type*)vector_top(ilctx->type_vec);
-	return ret->generic_self;
+	return generic_type_make(ret);
 }
 
 void il_factor_this_delete(il_factor_this * self) {

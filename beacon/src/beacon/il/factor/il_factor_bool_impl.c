@@ -32,7 +32,7 @@ void il_factor_bool_generate(il_factor_bool * self, enviroment * env, il_context
 }
 
 generic_type* il_factor_bool_eval(il_factor_bool * self, enviroment * env, il_context* ilctx) {
-	return CL_BOOL->generic_self;
+	return GEN_BOOL;
 }
 
 void il_factor_bool_delete(il_factor_bool * self) {

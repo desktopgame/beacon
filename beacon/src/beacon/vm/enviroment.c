@@ -194,7 +194,7 @@ static void enviroment_object_delete(object* obj) {
 			enviroment_object_delete(e);
 		}
 	}
-	if (obj->gtype == sg_array_class()->generic_self) {
+	if (obj->gtype->core_type == sg_array_class()) {
 		for (int i = 0; i < obj->native_slot_vec->length; i++) {
 			object* e = (object*)vector_at(obj->native_slot_vec, i);
 			enviroment_object_delete(e);

@@ -71,7 +71,7 @@ generic_type* il_factor_new_instance_eval(il_factor_new_instance * self, envirom
 	il_factor_new_instance_find(self, env, ilctx);
 	//型引数がないのでそのまま
 	if (self->type_args->length == 0) {
-		return self->c->parent->generic_self;
+		return generic_type_make(self->c->parent);
 	}
 	//fqcn_cache typename_group
 	if (self->instance_type == NULL) {
@@ -111,7 +111,7 @@ static void il_factor_new_instance_find(il_factor_new_instance * self, enviromen
 	class_* cls = il_context_class(ilctx, self->fqcnc);
 	int temp = 0;
 	//TEST(!strcmp(cls->name, "Point3D"));
-	//XSTREQ(cls->name, "String");
+	XSTREQ(cls->name, "ArrayIterator");
 	self->c = class_find_constructor(cls, self->argument_list, env, ilctx, &temp);
 	assert(self->c != NULL);
 	self->constructor_index = temp;

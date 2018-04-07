@@ -30,7 +30,7 @@ void il_factor_as_dump(il_factor_as * self, int depth) {
 
 void il_factor_as_generate(il_factor_as * self, enviroment * env, il_context* ilctx) {
 	il_factor_generate(self->fact, env, ilctx);
-
+/*
 	generic_type* from = il_factor_eval(self->fact, env, ilctx);
 	generic_type* to = generic_cache_gtype(self->fqcn, (namespace_*)vector_top(ilctx->namespace_vec), ilctx);
 //	int dist = type_distance(to, from);
@@ -46,6 +46,7 @@ void il_factor_as_generate(il_factor_as * self, enviroment * env, il_context* il
 //		opcode_buf_add(env->buf, op_lookup);
 //		opcode_buf_add(env->buf, to->core_type->absolute_index);
 	}
+	*/
 }
 
 void il_factor_as_load(il_factor_as * self, enviroment * env, il_context* ilctx, il_ehandler * eh) {

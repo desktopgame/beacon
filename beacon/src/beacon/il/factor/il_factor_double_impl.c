@@ -36,7 +36,7 @@ void il_factor_double_load(il_factor_double * self, enviroment * env, il_context
 }
 
 generic_type* il_factor_double_eval(il_factor_double * self, enviroment * env, il_context* ilctx) {
-	return CL_DOUBLE->generic_self;
+	return GEN_DOUBLE;
 }
 
 void il_factor_double_delete(il_factor_double * self) {

@@ -173,23 +173,23 @@ void il_factor_binary_op_load(il_factor_binary_op * self, enviroment * env, il_c
 generic_type* il_factor_binary_op_eval(il_factor_binary_op * self, enviroment * env, il_context* ilctx) {
 	generic_type* ltype = il_factor_eval(self->left, env, ilctx);
 	generic_type* rtype = il_factor_eval(self->right, env, ilctx);
-	if (ltype == CL_INT->generic_self &&
-		rtype == CL_INT->generic_self) {
+	if (ltype->core_type == CL_INT &&
+		rtype->core_type == CL_INT) {
 		if (ilbi_compare(self)) {
-			return CL_BOOL->generic_self;
+			return GEN_BOOL;
 		}
-		return CL_INT->generic_self;
+		return GEN_INT;
 	}
-	if (ltype == CL_DOUBLE->generic_self &&
-		rtype == CL_DOUBLE->generic_self) {
+	if (ltype->core_type == CL_DOUBLE &&
+		rtype->core_type == CL_DOUBLE) {
 		if (ilbi_compare(self)) {
-			return CL_BOOL->generic_self;
+			return GEN_BOOL;
 		}
-		return CL_DOUBLE->generic_self;
+		return GEN_DOUBLE;
 	}
-	if (ltype == CL_BOOL->generic_self &&
-		rtype == CL_BOOL->generic_self) {
-		return CL_BOOL->generic_self;
+	if (ltype->core_type == CL_BOOL &&
+		rtype->core_type == CL_BOOL) {
+		return GEN_BOOL;
 	}
 	return NULL;
 }

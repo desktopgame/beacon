@@ -57,14 +57,10 @@ void import_manager_resolve(import_manager* self, namespace_* scope, generic_cac
 	}
 	//型引数がない
 	if(fqcn->type_args->length == 0) {
-		if(core_type->tag == type_class) {
-			type_init_generic(core_type, core_type->u.class_->type_parameter_list->length);
-		} else if(core_type->tag == type_interface) {
-			type_init_generic(core_type, core_type->u.interface_->type_parameter_list->length);
-		}
-		assert(core_type->generic_self != NULL);
+		//assert(core_type->generic_self != NULL);
 		dest->tag = virtualtype_default;
-		dest->u.gtype = core_type->generic_self;
+		//dest->u.gtype = core_type->generic_self;
+		dest->u.gtype = generic_type_make(core_type);
 		dest->u.gtype->ref_count++;
 		return;
 	}

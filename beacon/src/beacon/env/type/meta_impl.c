@@ -40,7 +40,7 @@ method * meta_find_method(vector * method_vec, const char * name, vector * args,
 			int dist = 0;
 			generic_type* argType = il_factor_eval(p->factor, env, ilctx);
 			virtual_type parvType = p2->vtype;
-			if (argType != CL_NULL->generic_self) {
+			if (argType->core_type != CL_NULL) {
 				dist = virtual_type_distance(&parvType, argType);
 			}
 			score += dist;

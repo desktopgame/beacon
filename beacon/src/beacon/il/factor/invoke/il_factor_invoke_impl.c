@@ -63,6 +63,7 @@ void il_factor_invoke_load(il_factor_invoke * self, enviroment * env, il_context
 generic_type* il_factor_invoke_eval(il_factor_invoke * self, enviroment * env, il_context* ilctx) {
 	il_factor_invoke_check(self, env, ilctx);
 	virtual_type returnvType = self->m->return_vtype;
+	XSTREQ(self->name, "get");
 	//型変数をそのまま返す場合
 	if(returnvType.tag != virtualtype_default) {
 		resolve_non_default(self, env, ilctx);
@@ -93,12 +94,12 @@ static void resolve_non_default(il_factor_invoke * self, enviroment * env, il_co
 		//レシーバの実体化された型の中で、
 		//メソッドの戻り値 'T' が表す位置に対応する実際の型を取り出す。
 		generic_type* instanced_type = (generic_type*)vector_at(receivergType->type_args_list, returnvType.u.index);
-		self->resolved = generic_type_new(instanced_type->core_type);
+		self->resolved = generic_type_make(instanced_type->core_type);
 		self->resolved->tag = generic_type_tag_class;
 	} else if(returnvType.tag == virtualtype_method_tv) {
 		//メソッドに渡された型引数を参照する
 		generic_type* instanced_type = (generic_type*)vector_at(self->type_args, returnvType.u.index);
-		self->resolved = generic_type_new(instanced_type->core_type);
+		self->resolved = generic_type_make(instanced_type->core_type);
 		self->resolved->tag = generic_type_tag_class;
 	}
 	self->resolved->ref_count++;

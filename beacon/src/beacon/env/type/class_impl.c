@@ -35,6 +35,7 @@ static void class_create_vtable_interface(class_* self);
 static method* class_find_method_impl(vector* elements, const char * name, vector * args, enviroment * env, il_context* ilctx, int * outIndex);
 static constructor* class_find_constructor_impl(vector* v, vector * args, enviroment* env, il_context* ilctx, int * outIndex);
 static constructor* class_find_rconstructor_impl(vector* v,vector * args, int * outIndex);
+static void class_impl_delete(vector_item item);
 static void class_field_delete(vector_item item);
 static void class_method_delete(vector_item item);
 static void class_ctor_delete(vector_item item);
@@ -112,7 +113,7 @@ void class_alloc_fields(class_ * self, object * o) {
 		vector_push(o->u.field_vec, a);
 	}
 	class_create_vtable(self);
-	o->gtype = self->parent->generic_self;
+	o->gtype = generic_type_make(self->parent);
 	o->vptr = self->vt;
 }
 
@@ -500,8 +501,10 @@ void class_unlink(class_ * self) {
 	if (self->super_class != NULL) {
 		self->super_class->core_type->u.class_->ref_count--;
 	}
+	//XSTREQ(self->name, "Void");
+	//generic_type_delete(self->super_class);
 	tree_map_delete(self->native_method_ref_map, class_native_method_ref_delete);
-	vector_delete(self->impl_list, vector_deleter_null);
+	vector_delete(self->impl_list, class_impl_delete);
 	vector_delete(self->field_list, class_field_delete);
 	vector_delete(self->sfield_list, class_field_delete);
 	vector_delete(self->method_list, class_method_delete);
@@ -592,7 +595,7 @@ static constructor* class_find_constructor_impl(vector* v, vector * args, enviro
 			int dist = 0;
 			generic_type* argType = il_factor_eval(p->factor, env, ilctx);
 			virtual_type parvType = p2->vtype;
-			if (argType != CL_NULL->generic_self) {
+			if (argType->core_type != CL_NULL) {
 				dist = virtual_type_distance(&parvType, argType);
 			}
 			if (dist == -1) {
@@ -634,7 +637,7 @@ static constructor* class_find_rconstructor_impl(vector* v, vector * args, int *
 			int dist = 0;
 			generic_type* argType = p->gtype;
 			virtual_type parvType = p2->vtype;
-			if (argType != CL_NULL->generic_self) {
+			if (argType->core_type != CL_NULL) {
 				dist = virtual_type_distance(&parvType, argType);
 			}
 			if (dist == -1) {
@@ -651,6 +654,11 @@ static constructor* class_find_rconstructor_impl(vector* v, vector * args, int *
 	}
 	vector_delete(v, vector_deleter_null);
 	return ret;
+}
+
+static void class_impl_delete(vector_item item) {
+	generic_type* e = (generic_type*)item;
+	generic_type_delete(e);
 }
 
 static void class_field_delete(vector_item item) {

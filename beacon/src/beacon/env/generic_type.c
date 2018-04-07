@@ -1,10 +1,12 @@
 #include "generic_type.h"
+#include "type_interface.h"
 #include "type_impl.h"
 #include "../util/mem.h"
 #include "../util/text.h"
 #include "../util/xassert.h"
 #include "fqcn_cache.h"
 #include <assert.h>
+#include <string.h>
 
 //proto
 static void generic_type_tree_delete(vector_item item);
@@ -14,6 +16,26 @@ generic_type * generic_type_new(type * core_type) {
 	
 }
 */
+
+generic_type* generic_type_make(type* core_type) {
+	if(core_type == NULL) {
+		return generic_type_new(core_type);
+	}
+	generic_type* ret = generic_type_new(core_type);
+	int len = type_type_parameter_len(core_type);
+	for(int i=0; i<len; i++) {
+		generic_type* a = generic_type_new(NULL);
+		a->tag = generic_type_tag_class;
+		a->virtual_type_index = i;
+		a->u.type_ = core_type;
+		generic_type_addargs(ret, a);
+	}
+	if(core_type->tag == type_class &&
+	   !strcmp(core_type->u.class_->name, "Array")) {
+		assert((len == 1));
+	}
+	return ret;
+}
 
 generic_type* generic_type_malloc(struct type* core_type, const char* filename, int lineno) {
 generic_type* ret = (generic_type*)mem_malloc(sizeof(generic_type), filename, lineno);
@@ -38,6 +60,7 @@ void generic_type_addargs(generic_type* self, generic_type* a) {
 		   a->tag == generic_type_tag_none);
 	a->ref_count++;
 	vector_push(self->type_args_list, a);
+	assert(self->type_args_list->length < 2);
 }
 
 bool generic_type_castable(generic_type* a, generic_type* b) {
@@ -111,6 +134,8 @@ bool generic_type_delete(generic_type * self) {
 		return false;
 	}
 	vector_delete(self->type_args_list, generic_type_tree_delete);
+	self->core_type = NULL;
+	self->type_args_list = NULL;
 	MEM_FREE(self);
 	return true;
 }

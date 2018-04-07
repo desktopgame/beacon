@@ -14,25 +14,7 @@ type * type_new() {
 	ret->tag = type_class;
 	ret->location = NULL;
 	ret->absolute_index = -1;
-	ret->generic_self = NULL;
 	return ret;
-}
-
-generic_type* type_init_generic(type* self, int counts) {
-	if (self == NULL) {
-		return NULL;
-	}
-	if (self->generic_self == NULL) {
-		self->generic_self = generic_type_new(self);
-		for (int i = 0; i < counts; i++) {
-			generic_type* arg = generic_type_new(NULL);
-			arg->tag = generic_type_tag_none;
-			arg->virtual_type_index = i;
-			generic_type_addargs(self->generic_self, arg);
-		}
-		self->generic_self->ref_count = 1;
-	}
-	return self->generic_self;
 }
 
 char * type_name(type * self) {
@@ -151,7 +133,7 @@ generic_type * type_find_impl(type * self, type * a) {
 		while (ptr != NULL) {
 			if (a->tag == type_class &&
 				ptr == a->u.class_) {
-				return ptr->parent->generic_self;
+				return generic_type_make(ptr->parent);
 			}
 			if (a->tag == type_interface) {
 				for (int i = 0; i < ptr->impl_list->length; i++) {
@@ -185,13 +167,24 @@ generic_type * type_type_parameter_at(type * self, int index) {
 	return NULL;
 }
 
+int type_type_parameter_len(type* self) {
+	int res = -1;
+	if(self->tag == type_class) {
+		res = self->u.class_->type_parameter_list->length;
+	} else if(self->tag == type_interface) {
+		res = self->u.interface_->type_parameter_list->length;
+	}
+	assert(res < 2);
+	return res;
+}
+
 void type_delete(type * self) {
 	if (self->tag == type_class) {
 		class_delete(self->u.class_);
 	} else if (self->tag == type_interface) {
 		interface_delete(self->u.interface_);
 	}
-	generic_type_delete(self->generic_self);
+//	generic_type_delete(self->generic_self);
 	MEM_FREE(self);
 }
 

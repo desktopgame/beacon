@@ -22,7 +22,7 @@ void il_factor_super_load(il_factor_super * self, enviroment * env, il_context* 
 generic_type* il_factor_super_eval(il_factor_super * self, enviroment * env, il_context* ilctx) {
 	type* t = ((type*)vector_top(ilctx->type_vec));
 	assert(t->tag == type_class);
-	return t->u.class_->super_class->core_type->u.class_->parent->generic_self;
+	return generic_type_new(t->u.class_->super_class->core_type->u.class_->parent);
 }
 
 void il_factor_super_delete(il_factor_super * self) {

@@ -31,7 +31,7 @@ struct generic_type;
 typedef struct type {
 	type_tag tag;
 	struct namespace_* location;
-	struct generic_type* generic_self;
+//	struct generic_type* generic_self;
 	int absolute_index;
 	union {
 		struct class_* class_;
@@ -44,13 +44,6 @@ typedef struct type {
  * @return
  */
 type* type_new();
-
-/**
- * この型を表す generic_type を作成します.
- * @param self
- * @return
- */
-struct generic_type* type_init_generic(type* self, int counts);
 
 /**
  * この型の名前を返します.
@@ -159,6 +152,8 @@ struct generic_type* type_find_impl(type* self, type* a);
  * @return
  */
 struct generic_type* type_type_parameter_at(type* self, int index);
+
+int type_type_parameter_len(type* self);
 
 /**
  * 型を開放します.

@@ -25,7 +25,7 @@ static int gObjectCount = 0;
 object * object_int_new(int i) {
 	object* ret = object_malloc(object_int);
 	ret->u.int_ = i;
-	ret->gtype = CL_INT->generic_self;
+	ret->gtype = GEN_INT;
 	ret->vptr = type_vtable(CL_INT);
 	return ret;
 }
@@ -33,7 +33,7 @@ object * object_int_new(int i) {
 object * object_double_new(double d) {
 	object* ret = object_malloc(object_double);
 	ret->u.double_ = d;
-	ret->gtype = CL_DOUBLE->generic_self;
+	ret->gtype = GEN_DOUBLE;
 	ret->vptr = type_vtable(CL_DOUBLE);
 	return ret;
 }
@@ -41,7 +41,7 @@ object * object_double_new(double d) {
 object * object_char_new(char c) {
 	object* ret = object_malloc(object_char);
 	ret->u.char_ = c;
-	ret->gtype = CL_CHAR->generic_self;
+	ret->gtype = GEN_CHAR;
 	ret->vptr = type_vtable(CL_CHAR);
 	return ret;
 }
@@ -50,14 +50,14 @@ object * object_string_new(const char * s) {
 	object* ret = object_malloc(object_string);
 	//ret->u.string_ = s;
 	ret->u.field_vec = vector_new();
-	ret->gtype = CL_STRING->generic_self;
+	ret->gtype = GEN_STRING;
 	ret->vptr = type_vtable(CL_STRING);
 
 	//配列を生成
 	object* arr = object_ref_new();
 	type* arrType = sg_array_class();
 	type* strType = namespace_get_type(namespace_lang(), "String");
-	arr->gtype = arrType->generic_self;
+	arr->gtype = generic_type_make(arrType);
 	arr->vptr = type_vtable(arrType);
 	//ボックス化
 	char* itr = s;
@@ -98,7 +98,7 @@ object * object_get_true() {
 	if (gObjectTrue == NULL) {
 		gObjectTrue = object_malloc(object_bool);
 		gObjectTrue->u.bool_ = !false;
-		gObjectTrue->gtype = CL_BOOL->generic_self;
+		gObjectTrue->gtype = GEN_BOOL;
 	}
 	return gObjectTrue;
 }
@@ -107,7 +107,7 @@ object * object_get_false() {
 	if (gObjectFalse == NULL) {
 		gObjectFalse = object_malloc(object_bool);
 		gObjectFalse->u.bool_ = false;
-		gObjectFalse->gtype = CL_BOOL->generic_self;
+		gObjectFalse->gtype = GEN_BOOL;
 	}
 	return gObjectFalse;
 }
@@ -115,7 +115,7 @@ object * object_get_false() {
 object * object_get_null() {
 	if (gObjectNull == NULL) {
 		gObjectNull = object_malloc(object_null);
-		gObjectNull->gtype = CL_NULL->generic_self;
+		gObjectNull->gtype = generic_type_new(CL_NULL);
 	}
 	return gObjectNull;
 }
@@ -178,7 +178,7 @@ void object_markall(object * self) {
 	//配列型ならスロットも全てマーク
 	type* arrayType = sg_array_class();
 	if (self->tag == object_ref &&
-		self->gtype == arrayType->generic_self) {
+		self->gtype->core_type == arrayType) {
 		for (int i = 0; i < self->native_slot_vec->length; i++) {
 			object* e = (object*)vector_at(self->native_slot_vec, i);
 			object_markall(e);

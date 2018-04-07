@@ -56,7 +56,7 @@ void class_loader_sgload_class_decl(class_loader * self, il_type * iltype, type 
 	//TEST((!strcmp(tp->u.class_->name, "Array") && self->a == 1));
 	assert(tp->u.class_->method_list->length == 0);
 	assert(tp->u.class_->smethod_list->length == 0);
-	type_init_generic(tp, tp->u.class_->type_parameter_list->length);
+	//type_init_generic(tp, tp->u.class_->type_parameter_list->length);
 	class_loader_sgload_fields_impl(self, iltype, tp, iltype->u.class_->field_list, scope);
 	class_loader_sgload_fields_impl(self, iltype, tp, iltype->u.class_->sfield_list, scope);
 
@@ -80,7 +80,7 @@ void class_loader_sgload_interface_decl(class_loader * self, il_type * iltype, t
 //	class_loader_sgload_methods(self, iltype, tp, scope);
 //ArrayIterator<T>の時、中のTが考慮されていない
 	//XSTREQ(iltype->u.interface_->name, "Iterator");
-	type_init_generic(tp, tp->u.interface_->type_parameter_list->length);
+//	type_init_generic(tp, tp->u.interface_->type_parameter_list->length);
 	class_loader_sgload_methods_impl(self, iltype, tp, iltype->u.interface_->method_list, scope);
 }
 

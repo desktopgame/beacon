@@ -78,16 +78,16 @@ static void resolve_non_default(il_factor_invoke_bound * self, enviroment * env,
 		return;
 	}
 	type* tp = (type*)vector_top(ilctx->type_vec);
-	generic_type* receivergType = tp->generic_self;
+//	generic_type* receivergType = tp->generic_self;
 	virtual_type returnvType = self->m->return_vtype;
 	if(returnvType.tag == virtualtype_class_tv) {
-		self->resolved = generic_type_new(NULL);
+		self->resolved = generic_type_make(NULL);
 		self->resolved->tag = generic_type_tag_class;
 		self->resolved->virtual_type_index = returnvType.u.index;
 	} else if(returnvType.tag == virtualtype_method_tv) {
 		//メソッドに渡された型引数を参照する
 		generic_type* instanced_type = (generic_type*)vector_at(self->type_args, returnvType.u.index);
-		self->resolved = generic_type_new(instanced_type->core_type);
+		self->resolved = generic_type_make(instanced_type->core_type);
 		self->resolved->tag = generic_type_tag_class;
 	}
 	self->resolved->ref_count++;
