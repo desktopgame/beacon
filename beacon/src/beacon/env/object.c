@@ -55,6 +55,7 @@ object * object_string_new(const char * s) {
 
 	//配列を生成
 	object* arr = object_ref_new();
+	arr->tag = object_array;
 	type* arrType = sg_array_class();
 	type* strType = namespace_get_type(namespace_lang(), "String");
 	arr->gtype = generic_type_make(arrType);

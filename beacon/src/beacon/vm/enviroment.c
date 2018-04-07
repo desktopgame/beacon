@@ -18,6 +18,7 @@
 static void enviroment_constant_pool_delete(vector_item item);
 static void enviroment_line_range_delete(vector_item item);
 static void enviroment_add_constant(enviroment* self, object* o);
+static void enviroment_object_delete_self(vector_item item);
 static void enviroment_object_delete(object* obj);
 
 enviroment * enviroment_new() {
@@ -169,6 +170,11 @@ static void enviroment_add_constant(enviroment* self, object* o) {
 	assert(o->paint == paint_onexit);
 }
 
+static void enviroment_object_delete_self(vector_item item) {
+	object* e = (object*)item;
+	enviroment_object_delete(e);
+}
+
 static void enviroment_object_delete(object* obj) {
 	if (obj == NULL) {
 		return;
@@ -183,22 +189,19 @@ static void enviroment_object_delete(object* obj) {
 	//FIXME:この方法だと、
 	//定数がフィールドに定数を含む場合に二重開放される
 	if (obj->tag == object_ref) {
-		for (int i = 0; i < obj->u.field_vec->length; i++) {
-			object* e = (object*)vector_at(obj->u.field_vec, i);
-			enviroment_object_delete(e);
-		}
+		vector_delete(obj->u.field_vec, enviroment_object_delete_self);
+		obj->u.field_vec = NULL;
 	}
 	if (obj->tag == object_string) {
-		for (int i = 0; i < obj->u.field_vec->length; i++) {
-			object* e = (object*)vector_at(obj->u.field_vec, i);
-			enviroment_object_delete(e);
-		}
+		vector_delete(obj->u.field_vec, enviroment_object_delete_self);
+		obj->u.field_vec = NULL;
 	}
-	if (obj->gtype->core_type == sg_array_class()) {
-		for (int i = 0; i < obj->native_slot_vec->length; i++) {
-			object* e = (object*)vector_at(obj->native_slot_vec, i);
-			enviroment_object_delete(e);
-		}
+	//String#charArray
+	if (obj->tag == object_array) {
+		vector_delete(obj->u.field_vec, enviroment_object_delete_self);
+		vector_delete(obj->native_slot_vec, enviroment_object_delete_self);
+		obj->native_slot_vec = NULL;
+		obj->u.field_vec = NULL;
 	}
 	//text_printfln("delete object %s", type_name(obj->type));
 	object_delete(obj);

@@ -32,6 +32,7 @@ typedef enum object_tag {
 	object_string,
 	object_bool,
 	object_ref,
+	object_array,
 	object_null,
 } object_tag;
 
