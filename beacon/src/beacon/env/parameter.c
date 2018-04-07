@@ -11,9 +11,6 @@ parameter * parameter_new(const char * name) {
 }
 
 void parameter_delete(parameter * self) {
-	if(self->vtype.tag == virtualtype_default) {
-		generic_type_delete(self->vtype.u.gtype);
-	}
 	MEM_FREE(self->name);
 	MEM_FREE(self);
 }

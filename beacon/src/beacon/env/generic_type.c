@@ -11,9 +11,8 @@
 
 //proto
 static void generic_type_delete_self(vector_item item);
+static void generic_type_deletercr_self(vector_item item);
 static void generic_type_recursive_mark(generic_type* a);
-static void generic_type_tree_delete(vector_item item);
-static vector* gAllGenericTypeVec = NULL;
 
 /*
 generic_type * generic_type_new(type * core_type) {
@@ -47,18 +46,17 @@ generic_type* generic_type_malloc(struct type* core_type, const char* filename, 
 	ret->type_args_list = vector_new();
 	ret->virtual_type_index = -1;
 	ret->ref_count = 0;
-	if(gAllGenericTypeVec == NULL) {
-		gAllGenericTypeVec = vector_new();
-	}
-	vector_push(gAllGenericTypeVec, ret);
+	//現在のスクリプトコンテキストに登録
+	script_context* ctx = script_context_get_current();
+	vector_push(ctx->all_generic_vec, ret);
 	return ret;
 }
 
 void generic_type_collect() {
 	script_context* ctx = script_context_get_current();
 	//マークを外す
-	for(int i=0; i<gAllGenericTypeVec->length; i++) {
-		generic_type* e= (generic_type*)vector_at(gAllGenericTypeVec, i);
+	for(int i=0; i<ctx->all_generic_vec->length; i++) {
+		generic_type* e= (generic_type*)vector_at(ctx->all_generic_vec, i);
 		e->mark = false;
 	}
 	//全ての型に定義された自身を参照するための generic をマーク
@@ -68,13 +66,19 @@ void generic_type_collect() {
 	}
 	vector* alive = vector_new();
 	vector* dead = vector_new();
-	for(int i=0; i<gAllGenericTypeVec->length; i++) {
-		generic_type* e= (generic_type*)vector_at(gAllGenericTypeVec, i);
+	for(int i=0; i<ctx->all_generic_vec->length; i++) {
+		generic_type* e= (generic_type*)vector_at(ctx->all_generic_vec, i);
 		vector_push((!e->mark ? dead : alive), e);
 	}
-	vector_delete(gAllGenericTypeVec, vector_deleter_null);
+	vector_delete(ctx->all_generic_vec, vector_deleter_null);
 	vector_delete(dead, generic_type_delete_self);
-	gAllGenericTypeVec = alive;
+	ctx->all_generic_vec = alive;
+}
+
+void generic_type_lostownership(generic_type* a) {
+	assert(a->core_type != NULL);
+	assert(a->core_type->generic_self == a);
+	generic_type_deletercr_self(a);
 }
 
 void generic_type_fixtype(generic_type* self) {
@@ -156,21 +160,6 @@ void generic_type_print(generic_type * self) {
 	text_printf(">");
 }
 
-bool generic_type_delete(generic_type * self) {
-	if(self == NULL) {
-		return true;
-	}
-	self->ref_count--;
-	if(self->ref_count > 0) {
-		return false;
-	}
-	vector_delete(self->type_args_list, generic_type_tree_delete);
-	self->core_type = NULL;
-	self->type_args_list = NULL;
-	MEM_FREE(self);
-	return true;
-}
-
 bool generic_type_int(generic_type* self) {
 	return self->core_type == CL_INT;
 }
@@ -226,17 +215,18 @@ static void generic_type_delete_self(vector_item item) {
 	MEM_FREE(e);
 }
 
+static void generic_type_deletercr_self(vector_item item) {
+	generic_type* e = (generic_type*)item;
+	vector_delete(e->type_args_list, generic_type_deletercr_self);
+	MEM_FREE(e);
+}
+
 static void generic_type_recursive_mark(generic_type* a) {
-	if(a->mark) {
+	if(a == NULL || a->mark) {
 		return;
 	}
 	a->mark = true;
 	for(int i=0; i<a->type_args_list->length; i++) {
 		generic_type_recursive_mark((generic_type*)vector_at(a->type_args_list, i));
 	}
-}
-
-static void generic_type_tree_delete(vector_item item) {
-	generic_type* e = (generic_type*)item;
-	generic_type_delete(e);
 }

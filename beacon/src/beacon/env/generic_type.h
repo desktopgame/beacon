@@ -39,6 +39,8 @@ generic_type* generic_type_malloc(struct type* core_type, const char* filename, 
 //memory management
 void generic_type_collect();
 
+void generic_type_lostownership(generic_type* a);
+
 void generic_type_fixtype(generic_type* self);
 
 void generic_type_addargs(generic_type* self, generic_type* a);
@@ -48,8 +50,6 @@ bool generic_type_castable(generic_type* a, generic_type* b);
 int generic_type_distance(generic_type* a, generic_type* b);
 
 void generic_type_print(generic_type* self);
-
-bool generic_type_delete(generic_type* self);
 
 bool generic_type_int(generic_type* self);
 

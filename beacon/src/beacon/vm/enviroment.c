@@ -174,7 +174,7 @@ static void enviroment_object_delete(object* obj) {
 		return;
 	}
 	type* tp = obj->gtype->core_type;
-	char* name = type_name(tp);
+	//char* name = type_name(tp);
 	assert(obj->paint == paint_onexit);
 	//*
 	//enviromentが削除される時点では、

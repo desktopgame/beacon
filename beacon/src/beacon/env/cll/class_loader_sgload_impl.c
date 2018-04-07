@@ -151,11 +151,13 @@ void class_loader_sgload_class(class_loader* self, il_type* iltype, namespace_* 
 	//FIXME:あとで親関数から渡すようにする
 	il_context* ilctx = il_context_new();
 	vector_push(ilctx->namespace_vec, parent);
+	type_init_generic(tp, iltype->u.class_->type_parameter_list->length);
 	//type_init_generic(tp, iltype->u.class_->type_parameter_list->length);
 	if (tp == NULL) {
 		cls = class_new(iltype->u.class_->name);
 		tp = type_wrap_class(cls);
 		vector_push(ilctx->type_vec, tp);
+		type_init_generic(tp, iltype->u.class_->type_parameter_list->length);
 		//type_init_generic(tp, iltype->u.class_->type_parameter_list->length);
 		type_parameter_list_dup(iltype->u.class_->type_parameter_list, cls->type_parameter_list, ilctx);
 		for (int i = 0; i < iltype->u.class_->extend_list->length; i++) {
@@ -234,11 +236,13 @@ void class_loader_sgload_interface(class_loader * self, il_type * iltype, namesp
 	//NOTE:後で親関数から渡すようにする
 	il_context* ilctx = il_context_new();
 	vector_push(ilctx->namespace_vec, parent);
+	type_init_generic(tp, iltype->u.interface_->type_parameter_list->length);
 	//type_init_generic(tp, iltype->u.interface_->type_parameter_list->length);
 	if (tp == NULL) {
 		inter = interface_new(iltype->u.interface_->name);
 		tp = type_wrap_interface(inter);
 		vector_push(ilctx->type_vec, tp);
+		type_init_generic(tp, iltype->u.interface_->type_parameter_list->length);
 		//type_init_generic(tp, iltype->u.interface_->type_parameter_list->length);
 		type_parameter_list_dup(iltype->u.interface_->type_parameter_list, inter->type_parameter_list, ilctx);
 		for (int i = 0; i < iltype->u.interface_->extends_list->length; i++) {

@@ -203,6 +203,7 @@ void type_delete(type * self) {
 		interface_delete(self->u.interface_);
 	}
 //	generic_type_delete(self->generic_self);
+	generic_type_lostownership(self->generic_self);
 	MEM_FREE(self);
 }
 

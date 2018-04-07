@@ -658,7 +658,7 @@ static constructor* class_find_rconstructor_impl(vector* v, vector * args, int *
 
 static void class_impl_delete(vector_item item) {
 	generic_type* e = (generic_type*)item;
-	generic_type_delete(e);
+	//generic_type_delete(e);
 }
 
 static void class_field_delete(vector_item item) {
@@ -706,5 +706,5 @@ static void class_type_parameter_delete(vector_item item) {
 
 static void class_generic_type_list_delete(vector_item item) {
 	generic_type* e = (generic_type*)item;
-	generic_type_delete(e);
+//	generic_type_delete(e);
 }

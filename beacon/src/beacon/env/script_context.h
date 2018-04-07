@@ -31,6 +31,7 @@ typedef struct script_context {
 	struct class_loader* bootstrap_class_loader;
 	//通し番号でクラスを参照するためのベクター
 	vector* type_vec;
+	vector* all_generic_vec;
 	struct heap* heap;
 	struct script_context* prev;
 	struct script_context* next;

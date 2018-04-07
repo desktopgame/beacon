@@ -27,15 +27,11 @@ void il_factor_super_load(il_factor_super * self, enviroment * env, il_context* 
 }
 
 generic_type* il_factor_super_eval(il_factor_super * self, enviroment * env, il_context* ilctx) {
-	if(self->resolved == NULL) {
-		type* t = ((type*)vector_top(ilctx->type_vec));
-		assert(t->tag == type_class);
-		self->resolved = generic_type_new(t->u.class_->super_class->core_type->u.class_->parent);
-	}
-	return self->resolved;
+	type* t = ((type*)vector_top(ilctx->type_vec));
+	return t->u.class_->super_class;
 }
 
 void il_factor_super_delete(il_factor_super * self) {
-	generic_type_delete(self->resolved);
+	//generic_type_delete(self->resolved);
 	MEM_FREE(self);
 }

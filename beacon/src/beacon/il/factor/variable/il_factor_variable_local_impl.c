@@ -84,7 +84,7 @@ generic_type* il_factor_variable_local_eval(il_factor_variable_local * self, env
 
 void il_factor_variable_local_delete(il_factor_variable_local* self) {
 	vector_delete(self->type_args, vector_deleter_null);
-	generic_type_delete(self->gt);
+//	generic_type_delete(self->gt);
 	MEM_FREE(self->name);
 	MEM_FREE(self);
 }

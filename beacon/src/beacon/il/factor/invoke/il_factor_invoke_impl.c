@@ -79,7 +79,7 @@ void il_factor_invoke_delete(il_factor_invoke* self) {
 	vector_delete(self->args, il_factor_invoke_args_delete);
 	vector_delete(self->type_args, vector_deleter_null);
 	il_factor_delete(self->receiver);
-	generic_type_delete(self->resolved);
+	//generic_type_delete(self->resolved);
 	MEM_FREE(self->name);
 	MEM_FREE(self);
 }

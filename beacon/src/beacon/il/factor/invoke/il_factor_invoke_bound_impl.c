@@ -67,7 +67,7 @@ generic_type* il_factor_invoke_bound_eval(il_factor_invoke_bound * self, envirom
 void il_factor_invoke_bound_delete(il_factor_invoke_bound* self) {
 	vector_delete(self->args, il_factor_invoke_bound_args_delete);
 	vector_delete(self->type_args, vector_deleter_null);
-	generic_type_delete(self->resolved);
+	//generic_type_delete(self->resolved);
 	MEM_FREE(self->name);
 	MEM_FREE(self);
 }

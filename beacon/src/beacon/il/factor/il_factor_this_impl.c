@@ -26,15 +26,10 @@ void il_factor_this_load(il_factor_this * self, enviroment * env, il_context* il
 }
 
 generic_type* il_factor_this_eval(il_factor_this * self, enviroment * env, il_context* ilctx) {
-	if(self->resolved == NULL) {
-		assert(ilctx->type_vec->length > 0);
-		type* ret = (type*)vector_top(ilctx->type_vec);
-		self->resolved = generic_type_make(ret);
-	}
-	return self->resolved;
+	return ((type*)vector_top(ilctx->type_vec))->generic_self;
 }
 
 void il_factor_this_delete(il_factor_this * self) {
-	generic_type_delete(self->resolved);
+	//generic_type_delete(self->resolved);
 	MEM_FREE(self);
 }
