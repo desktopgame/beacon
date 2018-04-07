@@ -63,7 +63,7 @@ void il_factor_invoke_load(il_factor_invoke * self, enviroment * env, il_context
 generic_type* il_factor_invoke_eval(il_factor_invoke * self, enviroment * env, il_context* ilctx) {
 	il_factor_invoke_check(self, env, ilctx);
 	virtual_type returnvType = self->m->return_vtype;
-	XSTREQ(self->name, "get");
+	//XSTREQ(self->name, "get");
 	//型変数をそのまま返す場合
 	if(returnvType.tag != virtualtype_default) {
 		resolve_non_default(self, env, ilctx);

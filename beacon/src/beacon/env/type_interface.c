@@ -14,7 +14,25 @@ type * type_new() {
 	ret->tag = type_class;
 	ret->location = NULL;
 	ret->absolute_index = -1;
+	ret->generic_self = NULL;
 	return ret;
+}
+
+generic_type* type_init_generic(type* self, int counts) {
+	if (self == NULL) {
+		return NULL;
+	}
+	if (self->generic_self == NULL) {
+		self->generic_self = generic_type_new(self);
+		for (int i = 0; i < counts; i++) {
+			generic_type* arg = generic_type_new(NULL);
+			arg->tag = generic_type_tag_none;
+			arg->virtual_type_index = i;
+			generic_type_addargs(self->generic_self, arg);
+		}
+		self->generic_self->ref_count = 1;
+	}
+	return self->generic_self;
 }
 
 char * type_name(type * self) {

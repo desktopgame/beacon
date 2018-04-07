@@ -31,7 +31,7 @@ struct generic_type;
 typedef struct type {
 	type_tag tag;
 	struct namespace_* location;
-//	struct generic_type* generic_self;
+	struct generic_type* generic_self;
 	int absolute_index;
 	union {
 		struct class_* class_;
@@ -44,6 +44,8 @@ typedef struct type {
  * @return
  */
 type* type_new();
+
+struct generic_type* type_init_generic(type* self, int counts);
 
 /**
  * この型の名前を返します.

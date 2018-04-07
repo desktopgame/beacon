@@ -4,6 +4,8 @@
 #include "../../env/namespace.h"
 #include <stdio.h>
 
+static generic_type* gSelf = NULL;
+
 void il_factor_null_dump(void * empty, int depth) {
 	text_putindent(depth);
 	text_printf("null");
@@ -18,5 +20,8 @@ void il_factor_null_load(void * empty, enviroment * env, il_context* ilctx, il_e
 }
 
 generic_type* il_factor_null_eval(void * empty, enviroment * env, il_context* ilctx) {
-	return generic_type_new(CL_NULL);
+	if(gSelf == NULL) {
+		gSelf =  generic_type_new(CL_NULL);
+	}
+	return gSelf;
 }

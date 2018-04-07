@@ -90,13 +90,15 @@ static il_factor* CLIL_factorImpl(class_loader* self, ast* source) {
 		//this super
 	} else if (source->tag == ast_this) {
 		il_factor* ret = (il_factor*)MEM_MALLOC(sizeof(il_factor));
+		il_factor_this* th = il_factor_this_new();
 		ret->type = ilfactor_this;
-		ret->u.this_ = 0;
+		ret->u.this_ = th;
 		return ret;
 	} else if (source->tag == ast_super) {
 		il_factor* ret = (il_factor*)MEM_MALLOC(sizeof(il_factor));
+		il_factor_super* sp = il_factor_super_new();
 		ret->type = ilfactor_super;
-		ret->u.super_ = 0;
+		ret->u.super_ = sp;
 		return ret;
 	} else if (source->tag == ast_new_instance) {
 		return il_factor_wrap_new_instance(CLIL_new_instance(self, source));

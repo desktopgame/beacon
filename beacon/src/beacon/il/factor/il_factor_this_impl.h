@@ -9,7 +9,11 @@ struct type;
 /**
  * thisを表す要素.
  */
-typedef int il_factor_this;
+typedef struct il_factor_this {
+	generic_type* resolved;
+} il_factor_this;
+
+il_factor_this* il_factor_this_new();
 
 /**
  * thisを表す要素を出力します.

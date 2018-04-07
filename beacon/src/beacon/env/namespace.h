@@ -13,14 +13,14 @@
 #define CL_NULL (namespace_null_class())
 
 
-#define GEN_OBJECT (generic_type_new(namespace_object_class()))
-#define GEN_INT (generic_type_new(namespace_int_class()))
-#define GEN_DOUBLE (generic_type_new(namespace_double_class()))
-#define GEN_CHAR (generic_type_new(namespace_char_class()))
-#define GEN_STRING (generic_type_new(namespace_string_class()))
-#define GEN_BOOL (generic_type_new(namespace_bool_class()))
-#define GEN_VOID (generic_type_new(namespace_void_class()))
-#define GEN_NULL (generic_type_new(namespace_null_class()))
+#define GEN_OBJECT ((namespace_object_class()->generic_self))
+#define GEN_INT ((namespace_int_class()->generic_self))
+#define GEN_DOUBLE ((namespace_double_class()->generic_self))
+#define GEN_CHAR ((namespace_char_class()->generic_self))
+#define GEN_STRING ((namespace_string_class()->generic_self))
+#define GEN_BOOL ((namespace_bool_class()->generic_self))
+#define GEN_VOID ((namespace_void_class()->generic_self))
+#define GEN_NULL ((namespace_null_class()->generic_self))
 
 struct type;
 struct class_;

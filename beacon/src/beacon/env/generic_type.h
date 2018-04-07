@@ -27,6 +27,7 @@ typedef struct generic_type {
 	int virtual_type_index;
 	int ref_count;
 	generic_type_tag tag;
+	bool mark;
 } generic_type;
 
 #define generic_type_new(ctype) (generic_type_malloc(ctype, __FILE__, __LINE__))
@@ -34,6 +35,9 @@ typedef struct generic_type {
 generic_type* generic_type_make(struct type* core_type);
 
 generic_type* generic_type_malloc(struct type* core_type, const char* filename, int lineno);
+
+//memory management
+void generic_type_collect();
 
 void generic_type_fixtype(generic_type* self);
 

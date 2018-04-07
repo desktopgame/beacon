@@ -54,7 +54,7 @@ int run_script(int argc, char* argv[]) {
 
 int _main(int argc, char* argv[]) {
 	mem_set_trace(true);
-	//mem_break(513);
+	//mem_break(544);
 	logger_set_enabled(false);
 	bool test = false;
 	int ret = 1;

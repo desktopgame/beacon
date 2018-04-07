@@ -10,7 +10,12 @@ struct type;
 /**
  * superを表す要素.
  */
-typedef int il_factor_super;
+
+typedef struct il_factor_super {
+	generic_type* resolved;
+} il_factor_super;
+
+il_factor_super* il_factor_super_new();
 
 /**
  * superを表す要素を出力します.

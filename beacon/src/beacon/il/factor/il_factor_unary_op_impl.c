@@ -5,7 +5,7 @@
 #include "../../util/text.h"
 #include "../../vm/enviroment.h"
 #include "../../env/namespace.h"
-#include "../../env/type_interface.h"
+#include "../../env/type_impl.h"
 #include "../../util/mem.h"
 
 typedef enum u_operator_t {

@@ -92,9 +92,10 @@ static void il_factor_invoke_static_check(il_factor_invoke_static * self, enviro
 	for(int i=0; i<self->args->length; i++) {
 		il_argument* e = (il_argument*)vector_at(self->args, i);
 		il_factor* f = e->factor;
-		//XSTREQ(self->name, "writeLine");
+		
 		//int a = 0;
 	}
+//	XSTREQ(self->name, "write");
 	self->m = class_find_smethod(cls, self->name, self->args, env, ilctx, &temp);
 	self->index = temp;
 	assert(temp != -1);
