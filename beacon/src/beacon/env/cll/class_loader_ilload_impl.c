@@ -176,7 +176,7 @@ void class_loader_ilload_class(class_loader* self, il_namespace* current, ast* c
 	//class Foo<A, B>
 	CLIL_type_parameter(self, ast_first(atypename), ilclassz->type_parameter_list);
 	//class Foo : X, Y 
-	class_loader_ilload_typename_list(self, ilclassz->extend_list, aextend_list);
+	CLIL_typename_list(self, ilclassz->extend_list, aextend_list);
 	//public:
 	//    ....
 	//    ....
@@ -197,7 +197,7 @@ void class_loader_ilload_interface(class_loader* self, il_namespace* current, as
 	//interface Foo<A, B>
 	CLIL_type_parameter(self, ast_first(atypename), ilinter->type_parameter_list);
 	//interface Foo : XXX, YYY, CCC
-	class_loader_ilload_typename_list(self, ilinter->extends_list, aextends_list);
+	CLIL_typename_list(self, ilinter->extends_list, aextends_list);
 	//public:
 	//    ...
 	if (!ast_is_blank(amember_tree)) {
@@ -212,23 +212,6 @@ void class_loader_ilload_enum(class_loader * self, il_namespace * current, ast *
 	il_enum* ilenum = il_enum_new(enum_decl->u.string_value);
 	class_loader_ilload_identifier_list(self, ilenum->item_vec, aname_list);
 	vector_push(current->type_list, il_type_wrap_enum(ilenum));
-}
-
-void class_loader_ilload_typename_list(class_loader * self, vector * dst, ast * typename_list) {
-	if (ast_is_blank(typename_list)) {
-		return;
-	}
-	if (typename_list->tag == ast_typename) {
-		//fqcn_cache* e = fqcn_cache_new();
-		generic_cache* e = generic_cache_new();
-		//[typename [fqcn]]
-		CLIL_generic_cache(typename_list, e);
-		vector_push(dst, e);
-	} else if(typename_list->tag == ast_typename_list) {
-		for (int i = 0; i < typename_list->child_count; i++) {
-			class_loader_ilload_typename_list(self, dst, ast_at(typename_list, i));
-		}
-	}
 }
 
 void class_loader_ilload_identifier_list(class_loader * self, vector * list, ast * source) {

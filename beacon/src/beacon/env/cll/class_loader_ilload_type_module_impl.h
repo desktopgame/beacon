@@ -11,6 +11,15 @@ void CLIL_fqcn_cache(struct ast* afqcn, struct fqcn_cache* fqcn);
 
 void CLIL_generic_cache(struct ast* fqcn, struct generic_cache* dest);
 
+/**
+ * 型名の一覧を dst へ出力します.
+ * @param self
+ * @param dst
+ * @param typename_list
+ */
+void CLIL_typename_list(struct class_loader* self, vector* dst, struct ast* typename_list);
+
+
 void CLIL_type_parameter(struct class_loader* self, struct ast* source, vector* dest);
 
 void CLIL_type_argument(struct class_loader* self, struct ast* atype_args, vector* dest);

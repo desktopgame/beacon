@@ -79,14 +79,6 @@ void class_loader_ilload_interface(class_loader* self, il_namespace* current, as
 void class_loader_ilload_enum(class_loader* self, il_namespace* current, ast* enum_decl);
 
 /**
- * 型名の一覧を dst へ出力します.
- * @param self
- * @param dst
- * @param typename_list
- */
-void class_loader_ilload_typename_list(class_loader* self, vector* dst, ast* typename_list);
-
-/**
  * 識別子を IL に変換します.
  * @param self
  * @param list

@@ -59,6 +59,24 @@ void CLIL_generic_cache(ast* fqcn, generic_cache* dest) {
 	}
 }
 
+void CLIL_typename_list(class_loader * self, vector * dst, ast * typename_list) {
+	if (ast_is_blank(typename_list)) {
+		return;
+	}
+	if (typename_list->tag == ast_typename) {
+		//fqcn_cache* e = fqcn_cache_new();
+		generic_cache* e = generic_cache_new();
+		//[typename [fqcn]]
+		CLIL_generic_cache(typename_list, e);
+		vector_push(dst, e);
+	} else if(typename_list->tag == ast_typename_list) {
+		for (int i = 0; i < typename_list->child_count; i++) {
+			CLIL_typename_list(self, dst, ast_at(typename_list, i));
+		}
+	}
+}
+
+
 void CLIL_type_parameter(class_loader* self, ast* source, vector* dest) {
 	if (ast_is_blank(source)) {
 		return;
