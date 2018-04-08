@@ -280,10 +280,10 @@ bool class_castable(class_* self, class_* other);
 
 /**
  * self と other の距離を返します.
- * どれだけ近しい継承関係かを測れます。
  * @param self
  * @param other
- * @return 同じクラスなら 0 
+ * @return 同じクラスなら 0
+ *         otherがselfのサブクラスなら正の数(階層の深さ)
  *         継承関係が異なるなら -1
  */
 int class_distance(class_* self, class_* other);

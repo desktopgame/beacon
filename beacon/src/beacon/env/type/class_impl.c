@@ -32,9 +32,6 @@
 static void class_create_vtable_top(class_* self);
 static void class_create_vtable_ov(class_* self);
 static void class_create_vtable_interface(class_* self);
-static method* class_find_method_impl(vector* elements, const char * name, vector * args, enviroment * env, il_context* ilctx, int * outIndex);
-static constructor* class_find_constructor_impl(vector* v, vector * args, enviroment* env, il_context* ilctx, int * outIndex);
-static constructor* class_find_rconstructor_impl(vector* v,vector * args, int * outIndex);
 static void class_impl_delete(vector_item item);
 static void class_field_delete(vector_item item);
 static void class_method_delete(vector_item item);
@@ -251,10 +248,9 @@ field * class_get_field(class_ * self, int index) {
 	int all = class_count_fieldall(self);
 	if (index >= (all - self->field_list->length) &&
 		index < all) {
-//		return vector_at(self->field_list, all - index);
 		return vector_at(self->field_list, self->field_list->length - (all - index));
 	}
-	return class_get_field(self->super_class, index);
+	return class_get_field(self->super_class->core_type->u.class_, index);
 }
 
 field * class_get_sfield(class_ * self, int index) {
@@ -269,22 +265,23 @@ field * class_get_sfield(class_ * self, int index) {
 }
 
 constructor * class_find_rconstructor(class_ * self, vector * args, int* outIndex) {
-	vector* v = meta_find_rconstructors(self, args);
-	(*outIndex) = -1;
-	return class_find_rconstructor_impl(v, args, outIndex);
+//	vector* v = meta_find_rconstructors(self, args);
+//	(*outIndex) = -1;
+//	return class_find_rconstructor_impl(v, args, outIndex);
+	return meta_find_rctor(self->constructor_list, args, outIndex);
 }
 
 constructor * class_find_constructor(class_ * self, vector * args, enviroment * env, il_context* ilctx, int* outIndex) {
-	vector* v = meta_find_constructors(self, args, env, ilctx);
-	(*outIndex) = -1;
-	return class_find_constructor_impl(v, args, env, ilctx, outIndex);
+	//	vector* v = meta_find_constructors(self, args, env, ilctx);
+	//	(*outIndex) = -1;
+	//	return class_find_constructor_impl(v, args, env, ilctx, outIndex);
+	return meta_find_ctor(self->constructor_list, args, env, ilctx, outIndex);
 }
 
 constructor * class_find_empty_constructor(class_ * self, enviroment * env, il_context* ilctx, int * outIndex) {
 	vector* emptyArgs = vector_new();
 	constructor* ret = class_find_constructor(self, emptyArgs, env, ilctx, outIndex);
 	vector_delete(emptyArgs, vector_deleter_null);
-
 	return ret;
 }
 
@@ -293,15 +290,15 @@ method * class_find_method(class_ * self, const char * name, vector * args, envi
 	class_create_vtable(self);
 	assert(self->vt->elements->length > 0);
 	method* ret = NULL;
-	if((ret = class_find_method_impl(self->vt->elements, name, args, env, ilctx, outIndex))
+	if((ret = meta_find_method(self->vt->elements, name, args, env, ilctx, outIndex))
 	   != NULL) {
 		   return ret;
 	}
-	if((ret = class_find_method_impl(self->method_list, name, args, env, ilctx, outIndex))
+	if((ret = meta_find_method(self->method_list, name, args, env, ilctx, outIndex))
 	   != NULL) {
 		   return ret;
 	}
-	if((ret = class_find_method_impl(self->smethod_list, name, args, env, ilctx, outIndex))
+	if((ret = meta_find_method(self->smethod_list, name, args, env, ilctx, outIndex))
 	   != NULL) {
 		   return ret;
 	}
@@ -312,7 +309,7 @@ method * class_find_smethod(class_ * self, const char * name, vector * args, env
 	(*outIndex) = -1;
 	class_create_vtable(self);
 	int temp = 0;
-	method* ret = class_find_method_impl(self->smethod_list, name, args, env, ilctx, &temp);
+	method* ret = meta_find_method(self->smethod_list, name, args, env, ilctx, &temp);
 	temp += (class_count_smethodall(self) - self->smethod_list->length);
 	(*outIndex) = temp;
 	return ret;
@@ -375,12 +372,17 @@ int class_distance(class_ * self, class_ * other) {
 		return 0;
 	}
 	int depth = 0;
-	class_* pointee = self;
+	class_* pointee = other;
 	do {
-		if (pointee == other) {
+		if (pointee == self) {
 			return depth;
 		}
-		pointee = pointee->super_class;
+		generic_type* super_gtype = pointee->super_class;
+		if(super_gtype == NULL) {
+			depth = -1;
+			break;
+		}
+		pointee = super_gtype->core_type->u.class_;
 		depth++;
 		if (pointee == NULL) {
 			depth = -1;
@@ -566,94 +568,6 @@ static void class_create_vtable_interface(class_* self) {
 		}
 		vector_push(self->vt_vec, newVT);
 	}
-}
-
-static method* class_find_method_impl(vector* elements, const char * name, vector * args, enviroment * env, il_context* ilctx, int * outIndex) {
-	return meta_find_method(elements, name, args, env, ilctx, outIndex);
-}
-
-static constructor* class_find_constructor_impl(vector* v, vector * args, enviroment* env, il_context* ilctx, int * outIndex) {
-	//コンストラクタが一つも見つからなかった
-	if (v->length == 0) {
-		vector_delete(v, vector_deleter_null);
-		return NULL;
-	}
-	//見つかった中からもっとも一致するコンストラクタを選択する
-	int min = 1024;
-	constructor* ret = NULL;
-	for (int i = 0; i < v->length; i++) {
-		vector_item e = vector_at(v, i);
-		constructor* c = (constructor*)e;
-		int score = 0;
-		bool illegal = false;
-		for (int j = 0; j < c->parameter_list->length; j++) {
-			vector_item d = vector_at(args, j);
-			vector_item d2 = vector_at(c->parameter_list, j);
-			il_argument* p = (il_argument*)d;
-			parameter* p2 = (parameter*)d2;
-			//NULL以外なら型の互換性を調べる
-			int dist = 0;
-			generic_type* argType = il_factor_eval(p->factor, env, ilctx);
-			virtual_type parvType = p2->vtype;
-			if (argType->core_type != CL_NULL) {
-				dist = virtual_type_distance(&parvType, argType);
-			}
-			if (dist == -1) {
-				illegal = true;
-				break;
-			}
-			score += dist;
-		}
-		if (score < min && !illegal) {
-			min = score;
-			ret = c;
-			(*outIndex) = i;
-		}
-	}
-	vector_delete(v, vector_deleter_null);
-	return ret;
-}
-
-static constructor* class_find_rconstructor_impl(vector* v, vector * args, int * outIndex) {
-	//コンストラクタが一つも見つからなかった
-	if (v->length == 0) {
-		vector_delete(v, vector_deleter_null);
-		return NULL;
-	}
-	//見つかった中からもっとも一致するコンストラクタを選択する
-	int min = 1024;
-	constructor* ret = NULL;
-	for (int i = 0; i < v->length; i++) {
-		vector_item e = vector_at(v, i);
-		constructor* c = (constructor*)e;
-		int score = 0;
-		bool illegal = false;
-		for (int j = 0; j < c->parameter_list->length; j++) {
-			vector_item d = vector_at(args, j);
-			vector_item d2 = vector_at(c->parameter_list, j);
-			object* p = (object*)d;
-			parameter* p2 = (parameter*)d2;
-			//NULL以外なら型の互換性を調べる
-			int dist = 0;
-			generic_type* argType = p->gtype;
-			virtual_type parvType = p2->vtype;
-			if (argType->core_type != CL_NULL) {
-				dist = virtual_type_distance(&parvType, argType);
-			}
-			if (dist == -1) {
-				illegal = true;
-				break;
-			}
-			score += dist;
-		}
-		if (score < min && !illegal) {
-			min = score;
-			ret = c;
-			(*outIndex) = i;
-		}
-	}
-	vector_delete(v, vector_deleter_null);
-	return ret;
 }
 
 static void class_impl_delete(vector_item item) {
