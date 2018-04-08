@@ -178,16 +178,9 @@ void class_loader_sgload_class(class_loader* self, il_type* iltype, namespace_* 
 				assert(gtp->core_type->tag == type_interface);
 			}
 		}
-		//場所を設定
-		if (!strcmp(cls->name, "ArrayIterator")) {
-			int a = 0;
-		}
 		cls->location = parent;
 		namespace_add_type(parent, tp);
 	} else {
-		if (!strcmp(tp->u.class_->name, "ArrayIterator")) {
-			int a = 0;
-		}
 		vector_push(ilctx->type_vec, tp);
 		cls = tp->u.class_;
 		//もしネイティブメソッドのために
