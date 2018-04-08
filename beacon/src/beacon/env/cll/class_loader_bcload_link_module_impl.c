@@ -10,11 +10,11 @@
 
 //proto
 
-static void class_loader_sgload_class_decl(class_loader* self, il_type* iltype, type* tp, namespace_* scope);
-static void class_loader_sgload_class_impl(class_loader* self, il_type* iltype, type* tp, namespace_* scope);
+static void CLBC_class_decl(class_loader* self, il_type* iltype, type* tp, namespace_* scope);
+static void CLBC_class_impl(class_loader* self, il_type* iltype, type* tp, namespace_* scope);
 
-static void class_loader_sgload_interface_decl(class_loader* self, il_type* iltype, type* tp, namespace_* scope);
-static void class_loader_sgload_interface_impl(class_loader* self, il_type* iltype, type* tp, namespace_* scope);
+static void CLBC_interface_decl(class_loader* self, il_type* iltype, type* tp, namespace_* scope);
+static void CLBC_interface_impl(class_loader* self, il_type* iltype, type* tp, namespace_* scope);
 
 void CLBC_excec_class_decl(class_loader* self) {
 	int count = 0;
@@ -26,7 +26,7 @@ void CLBC_excec_class_decl(class_loader* self) {
 		}
 		count++;
 		e->consume = true;
-		class_loader_sgload_class_decl(e->context, e->iltype, e->tp, e->scope);
+		CLBC_class_decl(e->context, e->iltype, e->tp, e->scope);
 	}
 	if (count > 0) {
 		logger_info(__FILE__, __LINE__, "loaded class decl %s", self->filename);
@@ -43,7 +43,7 @@ void CLBC_excec_class_impl(class_loader* self) {
 		}
 		count++;
 		e->consume = true;
-		class_loader_sgload_class_impl(e->context, e->iltype, e->tp, e->scope);
+		CLBC_class_impl(e->context, e->iltype, e->tp, e->scope);
 	}
 	if (count > 0) {
 		logger_info(__FILE__, __LINE__, "loaded class impl %s", self->filename);
@@ -60,7 +60,7 @@ void CLBC_excec_interface_decl(class_loader* self) {
 		}
 		count++;
 		e->consume = true;
-		class_loader_sgload_interface_decl(e->context, e->iltype, e->tp, e->scope);
+		CLBC_interface_decl(e->context, e->iltype, e->tp, e->scope);
 	}
 	if(count > 0) {
 		logger_info(__FILE__, __LINE__, "loaded interface decl %s", self->filename);
@@ -77,7 +77,7 @@ void CLBC_excec_interface_impl(class_loader* self) {
 		}
 		count++;
 		e->consume = true;
-		class_loader_sgload_interface_impl(e->context, e->iltype, e->tp, e->scope);
+		CLBC_interface_impl(e->context, e->iltype, e->tp, e->scope);
 	}
 	if(count > 0) {
 		logger_info(__FILE__, __LINE__, "loaded interface impl %s", self->filename);
@@ -93,7 +93,7 @@ void CLBC_yield(class_loader* parent, class_loader* target) {
 	CLBC_excec_interface_decl(target);
 }
 //private
-static void class_loader_sgload_class_decl(class_loader * self, il_type * iltype, type * tp, namespace_ * scope) {
+static void CLBC_class_decl(class_loader * self, il_type * iltype, type * tp, namespace_ * scope) {
 	//TEST((!strcmp(tp->u.class_->name, "Array") && self->a == 0));
 	//printf("aaa");
 	//TEST((!strcmp(tp->u.class_->name, "Array") && self->a == 1));
@@ -112,7 +112,7 @@ static void class_loader_sgload_class_decl(class_loader * self, il_type * iltype
 	class_create_vtable(tp->u.class_);	
 }
 
-static void class_loader_sgload_class_impl(class_loader * self, il_type * iltype, type * tp, namespace_ * scope) {
+static void CLBC_class_impl(class_loader * self, il_type * iltype, type * tp, namespace_ * scope) {
 	CLBC_fields_impl(self, scope, iltype->u.class_->field_list, (TYPE2CLASS(tp))->field_list);
 	CLBC_fields_impl(self, scope, iltype->u.class_->sfield_list, (TYPE2CLASS(tp))->sfield_list);
 	CLBC_methods_impl(self, scope, iltype, tp, iltype->u.class_->method_list, ((TYPE2CLASS(tp))->method_list));
@@ -120,7 +120,7 @@ static void class_loader_sgload_class_impl(class_loader * self, il_type * iltype
 	CLBC_ctor_impl(self, iltype, tp);
 }
 
-static void class_loader_sgload_interface_decl(class_loader * self, il_type * iltype, type * tp, namespace_ * scope) {
+static void CLBC_interface_decl(class_loader * self, il_type * iltype, type * tp, namespace_ * scope) {
 	assert(tp->u.interface_->method_list->length == 0);
 //	class_loader_sgload_methods(self, iltype, tp, scope);
 //ArrayIterator<T>の時、中のTが考慮されていない
@@ -129,7 +129,7 @@ static void class_loader_sgload_interface_decl(class_loader * self, il_type * il
 	CLBC_methods_decl(self, iltype, tp, iltype->u.interface_->method_list, scope);
 }
 
-static void class_loader_sgload_interface_impl(class_loader * self, il_type * iltype, type * tp, namespace_ * scope) {
+static void CLBC_interface_impl(class_loader * self, il_type * iltype, type * tp, namespace_ * scope) {
 	CLBC_methods_impl(self, scope, iltype, tp, iltype->u.interface_->method_list, tp->u.interface_->method_list);
 	interface_create_vtable(tp->u.interface_);
 }
