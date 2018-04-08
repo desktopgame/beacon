@@ -27,7 +27,7 @@ void script_method_execute(script_method * self, method* parent, vm * vmachine, 
 	}
 	text_putindent(sub->level);
 	text_printfln("[ %s#%s ]", type_name(parent->parent), parent->name);
-	enviroment_op_dump(self->env, sub->level);
+	//enviroment_op_dump(self->env, sub->level);
 	//opcode_buf_dump(self->env->buf, sub->level);
 	vm_execute(sub, self->env);
 	//戻り値が Void 以外ならスタックトップの値を引き継ぐ

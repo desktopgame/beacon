@@ -354,7 +354,7 @@ void vm_resume(vm * self, enviroment * env, int pos) {
 				}
 				text_putindent(self->level);
 				text_printfln("[ %s#new ]", type_name(ctor->parent));
-				enviroment_op_dump(ctor->env, sub->level);
+				//enviroment_op_dump(ctor->env, sub->level);
 				//opcode_buf_dump(ctor->env->buf, sub->level);
 				vm_execute(sub, ctor->env);
 				//コンストラクタを実行した場合、
