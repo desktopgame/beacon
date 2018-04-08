@@ -1,4 +1,4 @@
-#include "class_loader_sgload_helper.h"
+#include "class_loader_bcload_helper.h"
 #include "../script_context.h"
 #include "../../util/text.h"
 #include "../../util/io.h"

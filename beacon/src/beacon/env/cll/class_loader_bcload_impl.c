@@ -1,4 +1,4 @@
-#include "class_loader_sgload_impl.h"
+#include "class_loader_bcload_impl.h"
 #include "../script_context.h"
 #include "../../util/text.h"
 #include "../../util/io.h"
@@ -19,7 +19,7 @@
 #include "../field.h"
 #include "../method.h"
 #include "../constructor.h"
-#include "class_loader_sgload_helper.h"
+#include "class_loader_bcload_helper.h"
 #include "../../util/mem.h"
 #include <assert.h>
 //
