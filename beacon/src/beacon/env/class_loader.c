@@ -161,7 +161,7 @@ static void class_loader_load_impl(class_loader* self) {
 	class_loader_ilload_impl(self, self->source_code);
 	if (self->error) { return; }
 	//IL -> SG へ
-	class_loader_sgload_impl(self);
+	class_loader_bcload_impl(self);
 	if (self->error) { return; }
 	//他のクラスローダーとリンク
 	class_loader_link(self);
@@ -188,7 +188,7 @@ static void class_loader_link(class_loader* self) {
 		class_loader_link(info->context);
 	}
 
-	class_loader_sgload_link(self);
+	class_loader_bcload_link(self);
 }
 
 static void class_loader_cache_delete(vector_item item) {

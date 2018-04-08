@@ -93,7 +93,7 @@ static void CLBC_debug_native_method(method* parent, vm* vm, enviroment* env);
 
 
 
-void class_loader_sgload_impl(class_loader* self) {
+void class_loader_bcload_impl(class_loader* self) {
 	script_context* ctx = script_context_get_current();
 	il_top_level* iltop = self->il_code;
 	CLBC_import(self, self->il_code->import_list);
@@ -103,7 +103,7 @@ void class_loader_sgload_impl(class_loader* self) {
 	CLBC_excec_interface_decl(self);
 }
 
-void class_loader_sgload_link(class_loader * self) {
+void class_loader_bcload_link(class_loader * self) {
 	logger_info(__FILE__, __LINE__, "link %s",self->filename);
 
 	CLBC_import(self, self->il_code->import_list);
