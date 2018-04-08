@@ -37,6 +37,7 @@
 
 #include "cll/class_loader_ilload_impl.h"
 #include "cll/class_loader_bcload_impl.h"
+#include "cll/class_loader_bcload_member_module_impl.h"
 #include "import_info.h"
 #include "type_cache.h"
 #include "heap.h"
@@ -105,7 +106,7 @@ void class_loader_load(class_loader * self) {
 }
 
 void class_loader_sub(class_loader * self, char * fullPath) {
-	class_loader_sgload_sub(self, fullPath);
+	CLBC_new_load(self, fullPath);
 }
 
 void class_loader_rsub(class_loader * self, char * relativePath) {
@@ -167,7 +168,7 @@ static void class_loader_load_impl(class_loader* self) {
 	//トップレベルのステートメントを読み込む
 	il_context* ilctx = il_context_new();
 	ilctx->toplevel = true;
-	class_loader_sgload_body(self, self->il_code->statement_list, self->env, NULL, ilctx);
+	CLBC_body(self, self->il_code->statement_list, self->env, NULL, ilctx);
 	il_context_delete(ilctx);
 	logger_log(log_info, __FILE__, __LINE__, "loaded file %s", self->filename);
 }

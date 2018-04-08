@@ -30,8 +30,81 @@
 #include "class_loader_ilload_member_module_impl.h"
 
 //proto
-static il_factor* CLIL_factorImpl(class_loader* self, ast* source);
-static il_stmt* class_loader_ilload_bodyImpl(class_loader* self, ast* source);
+
+/**
+ * トップレベルの関数宣言を IL に変換します.
+ * @param self
+ * @param source
+ */
+static void class_loader_ilload_function(class_loader* self, ast* source);
+
+/**
+ * インポートの一覧を IL に変換します.
+ * @param self
+ * @param source
+ */
+static void class_loader_ilload_import_list(class_loader* self, ast* source);
+
+/**
+ * インポート宣言を IL に変換します.
+ * @param self
+ * @param import_decl
+ */
+static void class_loader_ilload_import(class_loader* self, ast* import_decl);
+
+/**
+ * 名前空間とその内側のエントリ全てを IL に変換します.
+ * @param self
+ * @param parent
+ * @param namespace_decl
+ */
+static void class_loader_ilload_namespace(class_loader* self, vector* parent, ast* namespace_decl);
+
+/**
+ * 名前空間のパス(A.B.C)を解析します.
+ * デバッグ用の関数で、今は特に何も行いません。
+ * @param self
+ * @param namespace_path
+ * @param namespace_body
+ */
+static void class_loader_ilload_namespace_path_recursive(class_loader* self, ast* namespace_path, ast* namespace_body);
+
+/**
+ * 名前空間(またはそのリスト)を IL に変換します.
+ * @param a
+ * @return
+ */
+static il_namespace* class_loader_ilload_ast_to_namespace(ast* a);
+
+/**
+ * 名前空間の内側に定義される要素を IL に変換します.
+ * @param self
+ * @param current
+ * @param parent
+ * @param namespace_body
+ */
+static void class_loader_ilload_namespace_body(class_loader* self, il_namespace* current, vector* parent, ast* namespace_body);
+
+/**
+ * クラス宣言を IL に変換します.
+ * @param self
+ * @param current
+ * @param class_decl
+ */
+static void class_loader_ilload_class(class_loader* self, il_namespace* current, ast* class_decl);
+static void class_loader_ilload_interface(class_loader* self, il_namespace* current, ast* interface_decl);
+static void class_loader_ilload_enum(class_loader* self, il_namespace* current, ast* enum_decl);
+
+/**
+ * 識別子を IL に変換します.
+ * @param self
+ * @param list
+ * @param source
+ */
+static void class_loader_ilload_identifier_list(class_loader* self, vector* list, ast* source);
+
+//static il_factor* CLIL_factorImpl(class_loader* self, ast* source);
+//static il_stmt* class_loader_ilload_bodyImpl(class_loader* self, ast* source);
 
 void class_loader_ilload_impl(class_loader* self, ast* source_code) {
 	assert(self->il_code == NULL);
@@ -58,7 +131,8 @@ void class_loader_ilload_impl(class_loader* self, ast* source_code) {
 	//il_top_level_dump(self->il_code, 0);
 }
 
-void class_loader_ilload_function(class_loader * self, ast * source) {
+//private
+static void class_loader_ilload_function(class_loader * self, ast * source) {
 	assert(source->tag == ast_function_decl);
 	ast* afunc_name = ast_at(source, 0);
 	ast* aparam_list = ast_at(source, 1);
@@ -71,7 +145,7 @@ void class_loader_ilload_function(class_loader * self, ast * source) {
 	vector_push(self->il_code->function_list, ilfunc);
 }
 
-void class_loader_ilload_import_list(class_loader* self, ast* source) {
+static void class_loader_ilload_import_list(class_loader* self, ast* source) {
 	if(source->tag == ast_import_decl_list) {
 		for(int i=0; i<source->child_count; i++) {
 			class_loader_ilload_import_list(self, ast_at(source, i));
@@ -82,7 +156,7 @@ void class_loader_ilload_import_list(class_loader* self, ast* source) {
 	}
 }
 
-void class_loader_ilload_import(class_loader* self, ast* import_decl) {
+static void class_loader_ilload_import(class_loader* self, ast* import_decl) {
 	assert(import_decl->tag == ast_import_decl);
 	ast* path = ast_first(import_decl);
 	il_import* ret = il_import_new(path->u.string_value);
@@ -90,7 +164,7 @@ void class_loader_ilload_import(class_loader* self, ast* import_decl) {
 	//text_printf("import %s\n", path->u.string_value);
 }
 
-void class_loader_ilload_namespace(class_loader* self, vector* parent, ast* namespace_decl) {
+static void class_loader_ilload_namespace(class_loader* self, vector* parent, ast* namespace_decl) {
 	assert(namespace_decl->tag == ast_namespace_decl);
 	//text_printf("namespace");
 	ast* namespace_path = ast_first(namespace_decl);
@@ -105,7 +179,7 @@ void class_loader_ilload_namespace(class_loader* self, vector* parent, ast* name
 	//text_printf("\n");
 }
 
-void class_loader_ilload_namespace_path_recursive(class_loader* self, ast* namespace_path, ast* namespace_body) {
+static void class_loader_ilload_namespace_path_recursive(class_loader* self, ast* namespace_path, ast* namespace_body) {
 	assert(namespace_path->tag == ast_namespace_path ||
 		   namespace_path->tag == ast_namespace_path_list);
 	if (namespace_path->tag == ast_namespace_path) {
@@ -117,7 +191,7 @@ void class_loader_ilload_namespace_path_recursive(class_loader* self, ast* names
 	}
 }
 
-il_namespace* class_loader_ilload_ast_to_namespace(ast* a) {
+static il_namespace* class_loader_ilload_ast_to_namespace(ast* a) {
 	assert(a->tag == ast_namespace_path ||
 	       a->tag == ast_namespace_path_list);
 	if(a->tag == ast_namespace_path) {
@@ -138,7 +212,7 @@ il_namespace* class_loader_ilload_ast_to_namespace(ast* a) {
 	return NULL;
 }
 
-void class_loader_ilload_namespace_body(class_loader* self, il_namespace* current, vector* parent, ast* namespace_body) {
+static void class_loader_ilload_namespace_body(class_loader* self, il_namespace* current, vector* parent, ast* namespace_body) {
 	if (ast_is_blank(namespace_body)) {
 		return;
 	}
@@ -166,7 +240,7 @@ void class_loader_ilload_namespace_body(class_loader* self, il_namespace* curren
 	}
 }
 
-void class_loader_ilload_class(class_loader* self, il_namespace* current, ast* class_decl) {
+static void class_loader_ilload_class(class_loader* self, il_namespace* current, ast* class_decl) {
 	assert(class_decl->tag == ast_class_decl);
 	ast* atypename = ast_first(class_decl);
 	ast* aextend_list = ast_second(class_decl);
@@ -188,7 +262,7 @@ void class_loader_ilload_class(class_loader* self, il_namespace* current, ast* c
 	//vector_push(current->class_list, classz);
 }
 
-void class_loader_ilload_interface(class_loader* self, il_namespace* current, ast* interface_decl) {
+static void class_loader_ilload_interface(class_loader* self, il_namespace* current, ast* interface_decl) {
 	ast* atypename = ast_first(interface_decl);
 	ast* aextends_list = ast_second(interface_decl);
 	ast* amember_tree = ast_at(interface_decl, 2);
@@ -206,7 +280,7 @@ void class_loader_ilload_interface(class_loader* self, il_namespace* current, as
 	vector_push(current->type_list, iltype);
 }
 
-void class_loader_ilload_enum(class_loader * self, il_namespace * current, ast * enum_decl) {
+static void class_loader_ilload_enum(class_loader * self, il_namespace * current, ast * enum_decl) {
 	assert(enum_decl->tag == ast_enum_decl);
 	ast* aname_list = ast_first(enum_decl);
 	il_enum* ilenum = il_enum_new(enum_decl->u.string_value);
@@ -214,7 +288,7 @@ void class_loader_ilload_enum(class_loader * self, il_namespace * current, ast *
 	vector_push(current->type_list, il_type_wrap_enum(ilenum));
 }
 
-void class_loader_ilload_identifier_list(class_loader * self, vector * list, ast * source) {
+static void class_loader_ilload_identifier_list(class_loader * self, vector * list, ast * source) {
 	if (source->tag == ast_identifier_list) {
 		for (int i = 0; i < source->child_count; i++) {
 			class_loader_ilload_identifier_list(self, list, ast_at(source, i));
