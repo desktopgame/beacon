@@ -81,13 +81,6 @@ void generic_type_lostownership(generic_type* a) {
 	generic_type_deletercr_self(a);
 }
 
-void generic_type_fixtype(generic_type* self) {
-	if(self->tag != generic_type_tag_class &&
-	   self->tag != generic_type_tag_method) {
-		   self->tag =generic_type_tag_none;
-	   }
-}
-
 void generic_type_addargs(generic_type* self, generic_type* a) {
 	assert(a != NULL);
 //	assert(a->tag == generic_type_tag_class || 
@@ -203,11 +196,6 @@ generic_type* generic_type_apply(generic_type* self, il_context* ilctx) {
 	copy->tag = generic_type_tag_none;
 	return copy;
 }
-
-method * generic_type_find_method(generic_type* self, const char * name, vector * args, enviroment * env, il_context * ilctx, int * outIndex) {	
-	return type_find_method(self->core_type, name, args, env, ilctx, outIndex);
-}
-
 //private
 static void generic_type_delete_self(vector_item item) {
 	generic_type* e = (generic_type*)item;

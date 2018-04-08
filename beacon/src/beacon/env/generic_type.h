@@ -7,13 +7,19 @@ struct type;
 struct method;
 struct enviroment;
 struct il_context;
-
+/**
+ * 型変数つきの型宣言の型引数では generic_type 自身が使われますが、
+ * それ自体が型変数の場合、何の型変数を指しているかを示す列挙型です.
+ */
 typedef enum generic_type_tag {
 	generic_type_tag_none,
 	generic_type_tag_class,
 	generic_type_tag_method,
 } generic_type_tag;
 
+/**
+ * 型変数つきの型宣言.
+ */
 typedef struct generic_type {
 	struct type* core_type;
 	vector* type_args_list;
@@ -30,34 +36,99 @@ typedef struct generic_type {
 	bool mark;
 } generic_type;
 
+/**
+ * 新しい型変数つきの型宣言を作成します.
+ * @param ctype
+ * @return
+ */
 #define generic_type_new(ctype) (generic_type_malloc(ctype, __FILE__, __LINE__))
 
+/**
+ * 型変数つきの型宣言を作成し、
+ * また type の持つクラス型変数を追加します。
+ * @param core_type
+ * @return
+ */
 generic_type* generic_type_make(struct type* core_type);
 
+/**
+ * 新しい型変数つきの型宣言を作成します.
+ * 通常はマクロ版の generic_type_new を使用します。
+ * @param ctype
+ * @return
+ */
 generic_type* generic_type_malloc(struct type* core_type, const char* filename, int lineno);
 
-//memory management
+/**
+ * 現在のスクリプトコンテキストでどこからも参照されていない
+ * generic_type の一覧を解放します。
+ */
 void generic_type_collect();
 
+/**
+ * type#generic_self を解放する時に使います.
+ * generic_type_collect より後に呼び出してください。
+ * @param a
+ */
 void generic_type_lostownership(generic_type* a);
 
-void generic_type_fixtype(generic_type* self);
-
+/**
+ * self の子要素として a を追加します.
+ * @param self
+ * @param a
+ */
 void generic_type_addargs(generic_type* self, generic_type* a);
 
+/**
+ * a を b へキャスト可能なら true.
+ * @param a
+ * @param b
+ * @return
+ */
 bool generic_type_castable(generic_type* a, generic_type* b);
 
+/**
+ * a と b の距離を返します.
+ * メソッドを解決する時、もっともマッチするオーバーロードを見つけるために使用されます。
+ * @param a
+ * @param b
+ * @return
+ */
 int generic_type_distance(generic_type* a, generic_type* b);
 
+/**
+ * 型変数と型を出力します.
+ * @param self
+ */
 void generic_type_print(generic_type* self);
 
+/**
+ * self が int 型なら true.
+ * @param self
+ * @return
+ */
 bool generic_type_int(generic_type* self);
 
+/**
+ * self が double 型なら true.
+ * @param self
+ * @return
+ */
 bool generic_type_double(generic_type* self);
 
+/**
+ * self が bool 型なら true.
+ * @param self
+ * @return
+ */
 bool generic_type_bool(generic_type* self);
 
+/**
+ * 現在のコンテキストで self の型変数を解決します.
+ * T ではなく T を内包する型(List<T>) などが戻り値になる時に使用されます。
+ * @param self
+ * @param ilctx
+ * @return
+ */
 generic_type* generic_type_apply(generic_type* self, struct il_context* ilctx);
-
-struct method* generic_type_find_method(generic_type* self, const char* name, vector* args, struct enviroment* env, struct il_context* ilctx, int* outIndex);
 #endif // !SIGNAL_ENV_GENERIC_TYPE_H
