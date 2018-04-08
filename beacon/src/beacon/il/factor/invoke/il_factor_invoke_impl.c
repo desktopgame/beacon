@@ -6,9 +6,11 @@
 #include "../../../env/type_interface.h"
 #include "../../../env/type/class_impl.h"
 #include "../../../env/method.h"
+#include "../../../env/class_loader.h"
 #include "../../../vm/enviroment.h"
 #include "../../il_argument.h"
 #include "../../il_factor_impl.h"
+#include <string.h>
 
 //proto
 static void resolve_non_default(il_factor_invoke * self, enviroment * env, il_context* ilctx);
@@ -128,12 +130,16 @@ static void il_factor_invoke_check(il_factor_invoke * self, enviroment * env, il
 		assert(ilvar->type != ilvariable_type_static);
 	}
 	//classではなく generic_type にメソッドを検索する関数
+//	XBREAK((!strcmp(self->name, "set") && env->context_ref->type == content_entry_point));
+//	XSTREQ(self->name, "set")
 	generic_type* gtype = il_factor_eval(self->receiver, env, ilctx);
+	vector_push(ilctx->receiver_vec, gtype);
 	type* ctype = gtype->core_type;
 	int temp = -1;
 	self->m = type_find_method(ctype, self->name, self->args, env, ilctx, &temp);
 	//self->m = class_find_method(TYPE2CLASS(ctype), self->name, self->args, env, cache, &temp);
 	self->index = temp;
+	vector_pop(ilctx->receiver_vec);
 	assert(temp != -1);
 }
 

@@ -24,7 +24,7 @@ int meta_calc_score(vector* params, vector* ilargs, enviroment* env, il_context*
 		generic_type* argType = il_factor_eval(arg->factor, env, ilctx);
 		virtual_type parvType = param->vtype;
 		if (argType->core_type != CL_NULL) {
-			dist = virtual_type_distance(&parvType, argType);
+			dist = virtual_type_distance(&parvType, argType, ilctx);
 		}
 		score += dist;
 		//継承関係のないパラメータ
@@ -38,6 +38,7 @@ int meta_calc_score(vector* params, vector* ilargs, enviroment* env, il_context*
 
 int meta_rcalc_score(vector* params, vector* args) {
 	assert(params->length == args->length);
+	il_context* ilctx = il_context_new();
 	int score = 0;
 	bool illegal = false;
 	for (int i = 0; i < params->length; i++) {
@@ -51,15 +52,16 @@ int meta_rcalc_score(vector* params, vector* args) {
 		generic_type* argType = arg->gtype;
 		virtual_type parvType = param->vtype;
 		if (argType->core_type != CL_NULL) {
-			dist = virtual_type_distance(&parvType, argType);
+			dist = virtual_type_distance(&parvType, argType, ilctx);
 		}
 		score += dist;
 		//継承関係のないパラメータ
 		if (dist == -1) {
 			illegal = true;
-			return -1;
+			break;
 		}
 	}
+	il_context_delete(ilctx);
 	return score;
 }
 

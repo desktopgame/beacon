@@ -110,9 +110,10 @@ static void il_factor_invoke_bound_check(il_factor_invoke_bound * self, envirome
 	}
 	type* ctype = (type*)vector_top(ilctx->type_vec);
 	int temp = -1;
+	vector_push(ilctx->receiver_vec, ctype->generic_self);
 	self->m = class_find_method(TYPE2CLASS(ctype), self->name, self->args, env, ilctx, &temp);
 	self->index = temp;
-	//XSTREQ(self->name, "nativeInit");
+	vector_pop(ilctx->receiver_vec);
 	assert(temp != -1);
 }
 static void il_factor_invoke_bound_args_delete(vector_item item) {
