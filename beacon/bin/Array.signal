@@ -4,10 +4,6 @@ import "Iterable"
 import "ArrayIterator"
 
 namespace signal.lang {
-	/**
-	 * �z���\������N���X�ł�.
-	 * �v�f�� signal::lang::Object �ň����܂��B
-	 */
 	class Array<|T|> : Iterable<|T|> {
 		private:
 		Int length;
