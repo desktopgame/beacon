@@ -3,6 +3,7 @@
 #include "../type_impl.h"
 #include "../../il/il_type_impl.h"
 #include "../../util/logger.h"
+#include "../../util/text.h"
 #include "class_loader_bcload_member_module_impl.h"
 #include "class_loader_bcload_import_module_impl.h"
 #include "class_loader_bcload_impl.h"
@@ -17,6 +18,7 @@ static void CLBC_interface_decl(class_loader* self, il_type* iltype, type* tp, n
 static void CLBC_interface_impl(class_loader* self, il_type* iltype, type* tp, namespace_* scope);
 
 void CLBC_excec_class_decl(class_loader* self) {
+	//*
 	int count = 0;
 	//text_printfln("CLASS_DECL %s ==", self->filename);
 	for (int i = 0; i < self->type_cache_vec->length; i++) {
@@ -31,9 +33,11 @@ void CLBC_excec_class_decl(class_loader* self) {
 	if (count > 0) {
 		logger_info(__FILE__, __LINE__, "loaded class decl %s", self->filename);
 	}
+	//*/
 }
 
 void CLBC_excec_class_impl(class_loader* self) {
+	//*
 	int count = 0;
 	//text_printfln("CLASS_IMPL %s ==", self->filename);
 	for (int i = 0; i < self->type_cache_vec->length; i++) {
@@ -48,9 +52,11 @@ void CLBC_excec_class_impl(class_loader* self) {
 	if (count > 0) {
 		logger_info(__FILE__, __LINE__, "loaded class impl %s", self->filename);
 	}
+	//*/
 }
 
 void CLBC_excec_interface_decl(class_loader* self) {
+	//*
 	int count = 0;
 	//text_printfln("INTERFACE_DECL %s ==", self->filename);
 	for (int i = 0; i < self->type_cache_vec->length; i++) {
@@ -65,10 +71,12 @@ void CLBC_excec_interface_decl(class_loader* self) {
 	if(count > 0) {
 		logger_info(__FILE__, __LINE__, "loaded interface decl %s", self->filename);
 	}
+	//*/
 }
 
 void CLBC_excec_interface_impl(class_loader* self) {
 	int count = 0;
+	//*
 	//text_printfln("INTERFACE_IMPL %s ==", self->filename);
 	for (int i = 0; i < self->type_cache_vec->length; i++) {
 		type_cache* e = (type_cache*)vector_at(self->type_cache_vec, i);
@@ -82,6 +90,7 @@ void CLBC_excec_interface_impl(class_loader* self) {
 	if(count > 0) {
 		logger_info(__FILE__, __LINE__, "loaded interface impl %s", self->filename);
 	}
+	//*/
 }
 
 void CLBC_yield(class_loader* parent, class_loader* target) {
@@ -89,8 +98,8 @@ void CLBC_yield(class_loader* parent, class_loader* target) {
 	CLBC_import(target, target->il_code->import_list);
 	CLBC_namespace_tree(target);
 
-	CLBC_excec_class_decl(target);
-	CLBC_excec_interface_decl(target);
+//	CLBC_excec_class_decl(target);
+//	CLBC_excec_interface_decl(target);
 }
 //private
 static void CLBC_class_decl(class_loader * self, il_type * iltype, type * tp, namespace_ * scope) {
@@ -109,7 +118,8 @@ static void CLBC_class_decl(class_loader * self, il_type * iltype, type * tp, na
 	//class_loader_sgload_fields(self, iltype, tp);
 	//class_loader_sgload_methods(self, iltype, tp, scope);
 	CLBC_ctor_decl(self, iltype, tp, scope);
-	class_create_vtable(tp->u.class_);	
+	class_create_vtable(tp->u.class_);
+	text_printf("decl class %s\n", type_name(tp));
 }
 
 static void CLBC_class_impl(class_loader * self, il_type * iltype, type * tp, namespace_ * scope) {
@@ -118,6 +128,7 @@ static void CLBC_class_impl(class_loader * self, il_type * iltype, type * tp, na
 	CLBC_methods_impl(self, scope, iltype, tp, iltype->u.class_->method_list, ((TYPE2CLASS(tp))->method_list));
 	CLBC_methods_impl(self, scope, iltype, tp, iltype->u.class_->smethod_list, ((TYPE2CLASS(tp))->smethod_list));
 	CLBC_ctor_impl(self, iltype, tp);
+	text_printf("impl class %s\n", type_name(tp));
 }
 
 static void CLBC_interface_decl(class_loader * self, il_type * iltype, type * tp, namespace_ * scope) {
@@ -127,9 +138,11 @@ static void CLBC_interface_decl(class_loader * self, il_type * iltype, type * tp
 	//XSTREQ(iltype->u.interface_->name, "Iterator");
 //	type_init_generic(tp, tp->u.interface_->type_parameter_list->length);
 	CLBC_methods_decl(self, iltype, tp, iltype->u.interface_->method_list, scope);
+	interface_create_vtable(tp->u.interface_);
+	text_printf("decl interface %s\n", type_name(tp));
 }
 
 static void CLBC_interface_impl(class_loader * self, il_type * iltype, type * tp, namespace_ * scope) {
 	CLBC_methods_impl(self, scope, iltype, tp, iltype->u.interface_->method_list, tp->u.interface_->method_list);
-	interface_create_vtable(tp->u.interface_);
+	text_printf("impl interface %s\n", type_name(tp));
 }

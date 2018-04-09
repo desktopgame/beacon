@@ -112,6 +112,7 @@ static void il_factor_new_instance_find(il_factor_new_instance * self, enviromen
 	int temp = 0;
 	//TEST(!strcmp(cls->name, "Point3D"));
 	//XSTREQ(cls->name, "ArrayIterator");
+	assert(cls != NULL);
 	self->c = class_find_constructor(cls, self->argument_list, env, ilctx, &temp);
 	assert(self->c != NULL);
 	self->constructor_index = temp;

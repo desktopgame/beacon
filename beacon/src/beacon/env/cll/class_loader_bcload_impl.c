@@ -30,6 +30,7 @@
 #include "class_loader_bcload_link_module_impl.h"
 #include "class_loader_bcload_import_module_impl.h"
 #include "../../util/mem.h"
+#include "../../util/xassert.h"
 #include <assert.h>
 //
 //sgload
@@ -97,31 +98,30 @@ void class_loader_bcload_impl(class_loader* self) {
 	script_context* ctx = script_context_get_current();
 	il_top_level* iltop = self->il_code;
 	CLBC_import(self, self->il_code->import_list);
+//	class_loader_link(self);
 	CLBC_namespace_tree(self);
 
-	CLBC_excec_class_decl(self);
-	CLBC_excec_interface_decl(self);
+//	CLBC_excec_class_decl(self);
+//	CLBC_excec_interface_decl(self);
 }
 
-void class_loader_bcload_link(class_loader * self) {
+void class_loader_bcload_link(class_loader * self, link_type type) {
 	logger_info(__FILE__, __LINE__, "link %s",self->filename);
-
-	CLBC_import(self, self->il_code->import_list);
-	CLBC_namespace_tree(self);
-
-	CLBC_excec_class_decl(self);
-	CLBC_excec_interface_decl(self);
-
-	CLBC_excec_class_impl(self);
-	CLBC_excec_interface_impl(self);
+	if(type == link_decl) {
+		CLBC_excec_class_decl(self);
+		CLBC_excec_interface_decl(self);
+	} else if(type == link_impl) {
+		CLBC_excec_class_impl(self);
+		CLBC_excec_interface_impl(self);
+	} else assert(false);
 }
 
 void CLBC_namespace_tree(class_loader* self) {
-	if (self->loaded_namespace) {
-		return;
-	}
+//	if (self->loaded_namespace) {
+//		return;
+//	}
 	CLBC_namespace_list(self, self->il_code->namespace_list, NULL);
-	self->loaded_namespace = true;
+//	self->loaded_namespace = true;
 }
 
 //private
@@ -266,6 +266,7 @@ static void CLBC_class(class_loader* self, il_type* iltype, namespace_* parent) 
 	vector_pop(ilctx->type_vec);
 	vector_pop(ilctx->namespace_vec);
 	il_context_delete(ilctx);
+	text_printf("loaded %s\n", type_name(tp));
 }
 
 static void CLBC_interface(class_loader * self, il_type * iltype, namespace_ * parent) {
@@ -325,6 +326,7 @@ static void CLBC_interface(class_loader * self, il_type * iltype, namespace_ * p
 	vector_pop(ilctx->type_vec);
 	vector_pop(ilctx->namespace_vec);
 	il_context_delete(ilctx);
+	text_printf("loaded %s\n", type_name(tp));
 }
 
 static void CLBC_attach_native_method(class_loader* self, il_type* ilclass, class_* classz, il_method* ilmethod, method* me) {

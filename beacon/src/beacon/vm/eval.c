@@ -55,7 +55,7 @@ void eval_top_from_lines(const char ** lines, int lineCount) {
 void eval_interactive() {
 	//入力を実行するためのクラスローダー
 	script_context* ctx = script_context_get_current();
-	class_loader* cll = class_loader_new();
+	class_loader* cll = class_loader_new(content_entry_point);
 	cll->filename = text_strdup("interactive");
 	//行ごとに実行するためのVM
 	//最後の実行位置を記憶する

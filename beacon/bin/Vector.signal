@@ -1,10 +1,11 @@
 import "Array"
 import "Exception"
+import "VectorIterator"
 
 namespace signal.lang {
-	class Vector {
+	class Vector<|T|> : Iterable<|T|> {
 		private:
-		Array proxy;
+		Array<|T|> proxy;
 		Int length;
 		Int capacity;
 
@@ -12,10 +13,10 @@ namespace signal.lang {
 		ctor new() {
 			this.length = 0;
 			this.capacity = 16;
-			this.proxy = new Array(this.capacity);
+			this.proxy = new Array<|T|>(this.capacity);
 		}
 
-		def push(Object o) -> Void {
+		def push(T o) -> Void {
 			if(this.length < this.capacity) {
 				this.proxy.set(this.length, o);
 			} elif (this.length >= this.capacity) {
@@ -28,7 +29,7 @@ namespace signal.lang {
 			this.length = this.length + 1;
 		}
 
-		def pop() -> Object {
+		def pop() -> T {
 			if(this.length == 0) {
 				throw new Exception("not added any objects");
 			}
@@ -37,18 +38,22 @@ namespace signal.lang {
 			return ret;
 		}
 
-		def set(Int index, Object a) -> Void {
+		def set(Int index, T a) -> Void {
 			this.checkRange(index);
 			this.proxy.set(index, a);
 		}
 
-		def get(Int index) -> Object {
+		def get(Int index) -> T {
 			this.checkRange(index);
 			return this.proxy.get(index);
 		}
 
 		def length() -> Int {
 			return this.length;
+		}
+
+		def iterate() -> Iterator<|T|> {
+			return new VectorIterator<|T|>(this);
 		}
 
 		private:

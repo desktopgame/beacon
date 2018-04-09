@@ -144,7 +144,7 @@ void script_context_bootstrap(script_context* self) {
 	sg_console_init();
 	sg_null_init();
 	//ブートストラップクラスローダー
-	self->bootstrap_class_loader = class_loader_new();
+	self->bootstrap_class_loader = class_loader_new(content_lib);
 	self->bootstrap_class_loader->filename = text_strdup("bootstrap");
 	class_loader_rsub(self->bootstrap_class_loader, "Object.signal");
 

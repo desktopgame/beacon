@@ -1,20 +1,26 @@
 import "Iterator"
+import "Vector"
 
-class VectorIterator : Iterator {
-	private:
-	Vector source;
-	Int offset;
+namespace signal.lang {
+	class VectorIterator<|T|> : Iterator<|T|> {
+		private:
+		Vector<|T|> source;
+		Int offs;
 
-	public:
-	ctor new(Vector source) {
-		this.source = source;
-	}
+		public:
+		ctor new(Vector<|T|> source) {
+			this.source = source;
+			this.offs = 0;
+		}
 
-	def hasNext() -> Bool {
-		return this.offs < source.length()
-	}
+		def hasNext() -> Bool {
+			return this.offs < source.length();
+		}
 
-	def next() -> Object {
-		
+		def next() -> T {
+			T ret = source.get(offs);
+			this.offs = offs + 1;
+			return ret;
+		}
 	}
 }

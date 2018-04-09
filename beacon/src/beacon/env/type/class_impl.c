@@ -213,7 +213,11 @@ field * class_find_field_tree(class_ * self, const char * name, int * outIndex) 
 		if (f != NULL) {
 			return f;
 		}
-		pointee = pointee->super_class->core_type->u.class_;
+		generic_type* supergtype = pointee->super_class;
+		if(supergtype == NULL) {
+			break;
+		}
+		pointee = supergtype->core_type->u.class_;
 	} while (pointee != NULL);
 	return NULL;
 }
@@ -288,7 +292,7 @@ constructor * class_find_empty_constructor(class_ * self, enviroment * env, il_c
 method * class_find_method(class_ * self, const char * name, vector * args, enviroment * env, il_context* ilctx, int * outIndex) {
 	(*outIndex) = -1;
 	class_create_vtable(self);
-	assert(self->vt->elements->length > 0);
+	//assert(self->vt->elements->length > 0);
 	method* ret = NULL;
 	if((ret = meta_find_method(self->vt->elements, name, args, env, ilctx, outIndex))
 	   != NULL) {
@@ -503,8 +507,9 @@ void class_unlink(class_ * self) {
 	if (self->super_class != NULL) {
 		self->super_class->core_type->u.class_->ref_count--;
 	}
-	//XSTREQ(self->name, "Void");
+	//XSTREQ(self->name, "Object");
 	//generic_type_delete(self->super_class);
+	text_printf("unlink %s\n", self->name);
 	tree_map_delete(self->native_method_ref_map, class_native_method_ref_delete);
 	vector_delete(self->impl_list, class_impl_delete);
 	vector_delete(self->field_list, class_field_delete);
@@ -519,6 +524,7 @@ void class_unlink(class_ * self) {
 void class_delete(class_ * self) {
 //	assert(self->ref_count == 0);
 //	MEM_FREE(self->name);
+	text_printf("delete %s\n", self->name);
 	logger_info(__FILE__, __LINE__, "deleted class %s", self->name);
 	vector_delete(self->type_parameter_list, class_type_parameter_delete);
 	MEM_FREE(self->name);
@@ -556,6 +562,7 @@ static void class_create_vtable_interface(class_* self) {
 		interface_* inter = (interface_*)gtp->core_type->u.interface_;
 		vtable* interVT = inter->vt;
 		vtable* newVT = vtable_new();
+		assert(interVT != NULL);
 		//そのインターフェースに定義されたテーブルの一覧
 		//これはスーパーインターフェースも含む。
 		for (int j = 0; j < interVT->elements->length; j++) {

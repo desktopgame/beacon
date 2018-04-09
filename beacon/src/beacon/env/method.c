@@ -99,6 +99,7 @@ int method_for_generic_index(method * self, const char * name) {
 }
 
 void method_delete(method * self) {
+	text_printf("%s#%s\n", type_name(self->parent), self->name);
 	MEM_FREE(self->name);
 	vector_delete(self->type_parameter_list, method_type_parameter_delete);
 	vector_delete(self->parameter_list, method_parameter_delete);

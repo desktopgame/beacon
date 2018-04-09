@@ -89,11 +89,12 @@ static void il_factor_member_op_check(il_factor_member_op* self, enviroment* env
 	int temp = -1;
 	self->f = class_find_field_tree(TYPE2CLASS(ctype), self->name, &temp);
 	self->index = temp;
+	assert(self->f != NULL);
+	assert(temp != -1);
 	if(self->f->vtype.tag == virtualtype_default) {
 		generic_type* a = self->f->vtype.u.gtype;
 		int aa = 0;
 	}
-	assert(temp != -1);
 }
 
 static void il_factor_member_op_typearg_delete(vector_item item) {

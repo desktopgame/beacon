@@ -2,6 +2,7 @@
 #define BEACON_ENV_CLASS_LOADER_SGLOAD_IMPL_H
 //このヘッダーは class_loader.h 以外からはインクルードしないでください。
 #include "../class_loader.h"
+#include "../link_type.h"
 
 
 /**
@@ -11,7 +12,7 @@
  */
 void class_loader_bcload_impl(class_loader* self);
 
-void class_loader_bcload_link(class_loader* self);
+void class_loader_bcload_link(class_loader* self, link_type type);
 
 void CLBC_namespace_tree(class_loader* self);
 #endif

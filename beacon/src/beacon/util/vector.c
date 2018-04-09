@@ -34,6 +34,7 @@ void vector_push(vector * self, vector_item item) {
 
 vector_item vector_top(vector * self) {
 	assert(self != NULL);
+	assert(self->length > 0);
 //	return self->memory[self->length];
 	return *(self->memory + (self->length - 1));
 }

@@ -35,6 +35,9 @@ class_ * il_context_class(il_context * self, fqcn_cache* fqcn) {
 	} else {
 		tp = fqcn_class(fqcn, NULL);
 	}
+	if(tp == NULL) {
+		tp = fqcn_class(fqcn, namespace_lang());
+	}
 	return tp;
 }
 

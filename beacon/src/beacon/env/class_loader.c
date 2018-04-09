@@ -16,6 +16,7 @@
 #include "script_context.h"
 #include "../util/text.h"
 #include "../util/io.h"
+#include "../util/xassert.h"
 #include "../parse/parser.h"
 #include "namespace.h"
 #include "type_impl.h"
@@ -37,6 +38,7 @@
 
 #include "cll/class_loader_ilload_impl.h"
 #include "cll/class_loader_bcload_impl.h"
+#include "cll/class_loader_bcload_import_module_impl.h"
 #include "cll/class_loader_bcload_member_module_impl.h"
 #include "import_info.h"
 #include "type_cache.h"
@@ -44,22 +46,22 @@
 
 //proto
 static void class_loader_load_impl(class_loader* self);
-static void class_loader_link(class_loader* self);
+static void class_loader_link(class_loader* self, link_type type);
 static void class_loader_cache_delete(vector_item item);
 
-class_loader* class_loader_new() {
+class_loader* class_loader_new(content_type type) {
 	class_loader* ret = (class_loader*)MEM_MALLOC(sizeof(class_loader));
 	ret->source_code = NULL;
 	ret->il_code = NULL;
 	ret->parent = NULL;
-	ret->type = content_entry_point;
+	ret->type = type;
+	ret->link = link_none;
 	ret->import_manager = import_manager_new();
 	ret->env = enviroment_new();
 	ret->error = false;
-	ret->type_cache_vec = vector_new();
 	ret->level = 0;
-	ret->loaded_namespace = false;
-	ret->linked_allimports = false;
+	ret->type_cache_vec = vector_new();
+	//ret->linked_allimports = false;
 	ret->error_message = NULL;
 	ret->env->context_ref = ret;
 	//text_printfln("new classloader");
@@ -84,7 +86,7 @@ class_loader * class_loader_new_entry_point_from_source(const char * source, con
 }
 
 class_loader * class_loader_new_entry_point_from_parser(parser * p) {
-	class_loader* ret = class_loader_new();
+	class_loader* ret = class_loader_new(content_entry_point);
 	//解析に失敗した場合
 	if (p->fail) {
 		class_loader_errorf(ret, "parse failed --- %s", p->source_name);
@@ -119,7 +121,7 @@ void class_loader_delete(class_loader * self) {
 	if(self == NULL) {
 		return;
 	}
-	//sg_info(__FILE__, __LINE__, "deleted loader %s", self->filename);
+	text_printf("deleted loader %s\n", self->filename);
 	//free(self->source_code);
 	ast_delete(self->source_code);
 	il_top_level_delete(self->il_code);
@@ -164,7 +166,10 @@ static void class_loader_load_impl(class_loader* self) {
 	class_loader_bcload_impl(self);
 	if (self->error) { return; }
 	//他のクラスローダーとリンク
-	class_loader_link(self);
+	if(self->type == content_entry_point) {
+		class_loader_link(self, link_decl);
+		class_loader_link(self, link_impl);
+	}
 	//トップレベルのステートメントを読み込む
 	il_context* ilctx = il_context_new();
 	ilctx->toplevel = true;
@@ -173,22 +178,25 @@ static void class_loader_load_impl(class_loader* self) {
 	logger_log(log_info, __FILE__, __LINE__, "loaded file %s", self->filename);
 }
 
-static void class_loader_link(class_loader* self) {
-	if (self->linked_allimports) {
+static void class_loader_link(class_loader* self, link_type type) {
+	if (self->link == type) {
 		return;
 	}
-	self->linked_allimports = true;
+	self->link = type;
 	import_manager* importMgr = self->import_manager;
 	for (int i = 0; i < importMgr->info_vec->length; i++) {
 		import_info* info = (import_info*)vector_at(importMgr->info_vec, i);
 		if (info->consume) {
 			continue;
 		}
-		info->consume = true;
-		class_loader_link(info->context);
+		//info->consume = true;
+		class_loader_link(info->context, type);
 	}
-
-	class_loader_bcload_link(self);
+//	XBREAK((
+//		!text_contains(self->filename, "Array") &&
+//		text_contains(self->filename, "Iterator"))
+//	);
+	class_loader_bcload_link(self, type);
 }
 
 static void class_loader_cache_delete(vector_item item) {

@@ -8,10 +8,22 @@ import "Bool"
 import "Null"
 import "Void"
 import "Console"
+import "Vector"
+import "VectorIterator"
 
 import "Exception"
 import "StackTraceElement"
+var vec = new Vector<|Int|>();
+vec.push(10);
+vec.push(20);
+vec.push(30);
 
+var iter = vec.iterate();
+while(iter.hasNext()) {
+	var ival = iter.next();
+	Console.writeLine(ival);
+}
+/*
 var arr = new Array<|Int|>(3);
 arr.set(0, "aaa");
 arr.set(1, 20);
@@ -22,3 +34,4 @@ while(iter.hasNext()) {
 	var ival = iter.next();
 	Console.writeLine(ival);
 }
+*/

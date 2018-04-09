@@ -5,6 +5,7 @@
 #include "content_type.h"
 #include "import_manager.h"
 #include "../il/il_top_level.h"
+#include "link_type.h"
 #include <stdint.h>
 #include <stdarg.h>
 #include <stdbool.h>
@@ -17,15 +18,15 @@ struct parser;
 typedef struct class_loader {
 	ast* source_code;
 	il_top_level* il_code;
-	//struct class_loader* parent;
+
 	struct enviroment* env;
 	import_manager* import_manager;
 	content_type type;
+	link_type link;
 	vector* type_cache_vec;
+
 	struct class_loader* parent;
 	int level;
-	bool loaded_namespace;
-	bool linked_allimports;
 	char* filename;
 	char* error_message;
 	bool error;
@@ -33,9 +34,10 @@ typedef struct class_loader {
 
 /**
  * クラスローダーを作成します.
+ * @param type
  * @return
  */
-class_loader* class_loader_new();
+class_loader* class_loader_new(content_type type);
 
 /**
  * エントリポイントを示すクラスローダーを作成します.

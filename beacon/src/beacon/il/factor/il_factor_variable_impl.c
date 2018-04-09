@@ -1,6 +1,7 @@
 #include "il_factor_variable_impl.h"
 #include <stdlib.h>
 #include <stdio.h>
+#include "../il_type_argument.h"
 #include "../../util/text.h"
 #include "../../vm/enviroment.h"
 #include "../../env/type_interface.h"
@@ -14,6 +15,7 @@
 
 //proto
 static void il_factor_variable_check(il_factor_variable* self, enviroment* env, il_context* ilctx);
+static void il_factor_delete_typeargs(vector_item item);
 
 il_factor * il_factor_wrap_variable(il_factor_variable * self) {
 	il_factor* ret = (il_factor*)MEM_MALLOC(sizeof(il_factor));
@@ -71,6 +73,8 @@ void il_factor_variable_delete(il_factor_variable * self) {
 		il_factor_variable_local_delete(self->u.local_);
 	} else if(self->type == ilvariable_type_static) {
 		il_factor_variable_static_delete(self->u.static_);
+	} else if(self->type == ilvariable_type_undefined) {
+		vector_delete(self->type_args, il_factor_delete_typeargs);
 	}
 	fqcn_cache_delete(self->fqcn);
 	MEM_FREE(self);
@@ -122,6 +126,11 @@ static void il_factor_variable_check(il_factor_variable* self, enviroment* env, 
 		self->type_args = NULL;
 		self->u.static_ = st;
 	}
+}
+
+static void il_factor_delete_typeargs(vector_item item) {
+	il_type_argument* e = (il_type_argument*)item;
+	il_type_argument_delete(e);
 }
 
 il_factor_variable* il_factor_cast_variable(il_factor* fact) {

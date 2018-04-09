@@ -9,6 +9,7 @@
 #include "../../util/mem.h"
 #include "../../util/logger.h"
 #include "class_loader_bcload_link_module_impl.h"
+#include "class_loader_ilload_impl.h"
 #include <assert.h>
 
 //proto
@@ -100,7 +101,7 @@ static void CLBC_new_load_internal(class_loader * self, char * fullPath) {
 static void CLBC_import_already(class_loader* self, class_loader* cll) {
 	//self -> cll への参照を与える
 	import_info* info = import_manager_import(self->import_manager, cll);
-	info->consume = true;
+	info->consume = false;
 	assert(cll->source_code != NULL);
 	assert(cll->il_code != NULL);
 	//text_printf("aimport %s\n", cll->filename);
@@ -109,12 +110,12 @@ static void CLBC_import_already(class_loader* self, class_loader* cll) {
 		class_loader_error(self, cll->error_message);
 		return;
 	}
-	CLBC_yield(self, cll);
+	//CLBC_import(cll, cll->il_code->import_list);
 }
 
 static class_loader* CLBC_import_new(class_loader* self, char* fullPath) {
 	script_context* ctx = script_context_get_current();
-	class_loader* cll = class_loader_new();
+	class_loader* cll = class_loader_new(content_lib);
 	cll->type = content_lib;
 	cll->filename = fullPath;
 	cll->parent = self;
