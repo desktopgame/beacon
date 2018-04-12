@@ -12,7 +12,7 @@
 #include <string.h>
 
 //proto
-static void eval_top_from_cll(class_loader* cll);
+static bool eval_top_from_cll(class_loader* cll);
 static void eval_clear_ast(class_loader* cll);
 static void eval_clear_il(class_loader* cll);
 static void eval_clear_env(class_loader* cll);
@@ -30,17 +30,17 @@ void eval_pop(script_context * ctx) {
 	script_context_remove(ctx);
 }
 
-void eval_top_from_file(const char * filename) {
+bool eval_top_from_file(const char * filename) {
 	class_loader* cll = class_loader_new_entry_point_from_file(filename);
-	eval_top_from_cll(cll);
+	return eval_top_from_cll(cll);
 }
 
-void eval_top_from_source(const char * source) {
+bool eval_top_from_source(const char * source) {
 	class_loader* cll = class_loader_new_entry_point_from_source(source, "eval-top");
-	eval_top_from_cll(cll);
+	return eval_top_from_cll(cll);
 }
 
-void eval_top_from_lines(const char ** lines, int lineCount) {
+bool eval_top_from_lines(const char ** lines, int lineCount) {
 	string_buffer* sb = string_buffer_new();
 	for (int i = 0; i < lineCount; i++) {
 		char* line = lines[i];
@@ -48,8 +48,9 @@ void eval_top_from_lines(const char ** lines, int lineCount) {
 		string_buffer_append(sb, '\n');
 	}
 	string_buffer_shrink(sb);
-	eval_top_from_source(sb->text);
+	bool ret = eval_top_from_source(sb->text);
 	string_buffer_delete(sb);
+	return ret;
 }
 
 void eval_interactive() {
@@ -124,7 +125,7 @@ void eval_interactive() {
 }
 
 //private
-static void eval_top_from_cll(class_loader* cll) {
+static bool eval_top_from_cll(class_loader* cll) {
 	script_context* ctx = script_context_get_current();
 
 	//ソースコードを読み込む
@@ -139,7 +140,9 @@ static void eval_top_from_cll(class_loader* cll) {
 	vm_delete(vm);
 	sg_thread_release_vm_ref(sg_thread_current());
 
+	bool ret = cll->error;
 	class_loader_delete(cll);
+	return ret;
 }
 
 static void eval_clear_ast(class_loader* cll) {
