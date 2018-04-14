@@ -1,9 +1,16 @@
 #include "il_error.h"
 #include <stdio.h>
+#include <assert.h>
+#include "../util/vector.h"
+#include "../util/mem.h"
 
 //proto
 static void il_error_print(FILE* fp, il_error_id error_id, va_list ap);
-static bool gPanic = false;
+static vector* gPanicStateVec = NULL;
+
+typedef struct panic_state {
+	bool panic;
+} panic_state;
 
 
 void il_error_report(il_error_id error_id, ...) {
@@ -15,15 +22,41 @@ void il_error_report(il_error_id error_id, ...) {
 
 void il_error_vreport(il_error_id error_id, va_list ap) {
 	il_error_print(stdout, error_id, ap);
-	gPanic = true;
+	assert(gPanicStateVec != NULL);
+	assert(gPanicStateVec->length > 0);
+	panic_state* ps = (panic_state*)vector_top(gPanicStateVec);
+	ps->panic = true;
+}
+
+void il_error_enter() {
+	if(gPanicStateVec == NULL) {
+		gPanicStateVec = vector_new();
+	}
+	panic_state* ps = (panic_state*)MEM_MALLOC(sizeof(panic_state));
+	ps->panic = false;
+	vector_push(gPanicStateVec, ps);
+}
+
+void il_error_exit() {
+	assert(gPanicStateVec != NULL);
+	assert(gPanicStateVec->length > 0);
+	panic_state* ps = (panic_state*)vector_pop(gPanicStateVec);
+	MEM_FREE(ps);
+	if(gPanicStateVec->length == 0) {
+		vector_delete(gPanicStateVec, vector_deleter_null);
+	}
 }
 
 void il_error_clear() {
-	gPanic = false;
+	assert(gPanicStateVec->length > 0);
+	panic_state* ps = (panic_state*)vector_top(gPanicStateVec);
+	ps->panic = false;
 }
 
 bool il_error_panic() {
-	return gPanic;
+	assert(gPanicStateVec->length > 0);
+	panic_state* ps = (panic_state*)vector_top(gPanicStateVec);
+	return ps->panic;
 }
 //private
 static void il_error_print(FILE* fp, il_error_id error_id, va_list ap) {

@@ -29,12 +29,22 @@ void il_error_report(il_error_id error_id, ...);
 void il_error_vreport(il_error_id error_id, va_list ap);
 
 /**
- * パニックフラグをクリアします.
+ * 新しいスコープを開始します.
+ */
+void il_error_enter();
+
+/**
+ * スコープを閉じます.
+ */
+void il_error_exit();
+
+/**
+ * 現在のスコープでパニックフラグをクリアします.
  */
 void il_error_clear();
 
 /**
- * 現在のパニックフラグを返します.
+ * 現在のスコープで現在のパニックフラグを返します.
  */
 bool il_error_panic();
 #endif
