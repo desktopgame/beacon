@@ -54,6 +54,9 @@ void il_factor_new_instance_generate(il_factor_new_instance * self, enviroment *
 	for (int i = 0; i < self->argument_list->length; i++) {
 		il_argument* ilarg = (il_argument*)vector_at(self->argument_list, i);
 		il_factor_generate(ilarg->factor, env, ilctx);
+		if(il_error_panic()) {
+			return;
+		}
 	}
 	//クラスとコンストラクタのインデックスをプッシュ
 	opcode_buf_add(env->buf, op_new_instance);
@@ -69,6 +72,9 @@ void il_factor_new_instance_load(il_factor_new_instance * self, enviroment * env
 
 generic_type* il_factor_new_instance_eval(il_factor_new_instance * self, enviroment * env, il_context* ilctx) {
 	il_factor_new_instance_find(self, env, ilctx);
+	if(il_error_panic()) {
+		return NULL;
+	}
 	//型引数がないのでそのまま
 	if (self->type_args->length == 0) {
 		return generic_type_make(self->c->parent);
@@ -109,13 +115,18 @@ static void il_factor_new_instance_delete_typearg(vector_item item) {
 static void il_factor_new_instance_find(il_factor_new_instance * self, enviroment * env, il_context* ilctx) {
 	//*
 	class_* cls = il_context_class(ilctx, self->fqcnc);
-	int temp = 0;
+	int temp = -1;
 	//TEST(!strcmp(cls->name, "Point3D"));
 	//XSTREQ(cls->name, "ArrayIterator");
-	assert(cls != NULL);
+	if(cls == NULL) {
+		il_error_report(ilerror_undefined_class, self->fqcnc->name);
+		return;
+	}
 	self->c = class_find_constructor(cls, self->argument_list, env, ilctx, &temp);
-	assert(self->c != NULL);
 	self->constructor_index = temp;
+	if(temp == -1) {
+		il_error_report(ilerror_undefined_ctor, cls->name);
+	}
 	//*/
 }
 

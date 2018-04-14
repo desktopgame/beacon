@@ -51,6 +51,9 @@ void il_stmt_inferenced_type_init_load(il_stmt_inferenced_type_init * self, envi
 	il_factor_load(self->fact, env, ilctx, eh);
 	//XSTREQ(self->name, "st");
 	generic_type* gtp = il_factor_eval(self->fact, env, ilctx);
+	if(il_error_panic()) {
+		return;
+	}
 	if(gtp->type_args_list->length > 0) {
 		generic_type* a = (generic_type*)vector_at(gtp->type_args_list, 0);
 		int x = 0;

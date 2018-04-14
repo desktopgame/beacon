@@ -76,6 +76,9 @@ static void il_error_print(FILE* fp, il_error_id error_id, va_list ap) {
 		case ilerror_undefined_field:
 			fmt = "undefined field: %s";
 			break;
+		case ilerror_undefined_ctor:
+			fmt = "undefined ctor: %s";
+			break;
 		default:
 			fmt = "if shown this message, it compiler bug";
 			break;
