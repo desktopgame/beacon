@@ -353,7 +353,7 @@ void vm_resume(vm * self, enviroment * env, int pos) {
 					vector_push(sub->value_stack, e);
 				}
 				text_putindent(self->level);
-				text_printfln("[ %s#new ]", type_name(ctor->parent));
+				//text_printfln("[ %s#new ]", type_name(ctor->parent));
 				//enviroment_op_dump(ctor->env, sub->level);
 				//opcode_buf_dump(ctor->env->buf, sub->level);
 				vm_execute(sub, ctor->env);

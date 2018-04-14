@@ -509,7 +509,7 @@ void class_unlink(class_ * self) {
 	}
 	//XSTREQ(self->name, "Object");
 	//generic_type_delete(self->super_class);
-	text_printf("unlink %s\n", self->name);
+	//text_printf("unlink %s\n", self->name);
 	tree_map_delete(self->native_method_ref_map, class_native_method_ref_delete);
 	vector_delete(self->impl_list, class_impl_delete);
 	vector_delete(self->field_list, class_field_delete);
@@ -524,7 +524,7 @@ void class_unlink(class_ * self) {
 void class_delete(class_ * self) {
 //	assert(self->ref_count == 0);
 //	MEM_FREE(self->name);
-	text_printf("delete %s\n", self->name);
+	//text_printf("delete %s\n", self->name);
 	logger_info(__FILE__, __LINE__, "deleted class %s", self->name);
 	vector_delete(self->type_parameter_list, class_type_parameter_delete);
 	MEM_FREE(self->name);

@@ -266,7 +266,7 @@ static void CLBC_class(class_loader* self, il_type* iltype, namespace_* parent) 
 	vector_pop(ilctx->type_vec);
 	vector_pop(ilctx->namespace_vec);
 	il_context_delete(ilctx);
-	text_printf("loaded %s\n", type_name(tp));
+	//text_printf("loaded %s\n", type_name(tp));
 }
 
 static void CLBC_interface(class_loader * self, il_type * iltype, namespace_ * parent) {
@@ -326,7 +326,7 @@ static void CLBC_interface(class_loader * self, il_type * iltype, namespace_ * p
 	vector_pop(ilctx->type_vec);
 	vector_pop(ilctx->namespace_vec);
 	il_context_delete(ilctx);
-	text_printf("loaded %s\n", type_name(tp));
+	//text_printf("loaded %s\n", type_name(tp));
 }
 
 static void CLBC_attach_native_method(class_loader* self, il_type* ilclass, class_* classz, il_method* ilmethod, method* me) {

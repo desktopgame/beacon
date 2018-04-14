@@ -26,7 +26,7 @@ void script_method_execute(script_method * self, method* parent, vm * vmachine, 
 		vector_push(sub->value_stack, object_copy(vector_pop(vmachine->value_stack)));
 	}
 	text_putindent(sub->level);
-	text_printfln("[ %s#%s ]", type_name(parent->parent), parent->name);
+	//text_printfln("[ %s#%s ]", type_name(parent->parent), parent->name);
 	//enviroment_op_dump(self->env, sub->level);
 	//opcode_buf_dump(self->env->buf, sub->level);
 	vm_execute(sub, self->env);

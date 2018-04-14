@@ -119,7 +119,7 @@ static void CLBC_class_decl(class_loader * self, il_type * iltype, type * tp, na
 	//class_loader_sgload_methods(self, iltype, tp, scope);
 	CLBC_ctor_decl(self, iltype, tp, scope);
 	class_create_vtable(tp->u.class_);
-	text_printf("decl class %s\n", type_name(tp));
+	//text_printf("decl class %s\n", type_name(tp));
 }
 
 static void CLBC_class_impl(class_loader * self, il_type * iltype, type * tp, namespace_ * scope) {
@@ -128,7 +128,7 @@ static void CLBC_class_impl(class_loader * self, il_type * iltype, type * tp, na
 	CLBC_methods_impl(self, scope, iltype, tp, iltype->u.class_->method_list, ((TYPE2CLASS(tp))->method_list));
 	CLBC_methods_impl(self, scope, iltype, tp, iltype->u.class_->smethod_list, ((TYPE2CLASS(tp))->smethod_list));
 	CLBC_ctor_impl(self, iltype, tp);
-	text_printf("impl class %s\n", type_name(tp));
+	//text_printf("impl class %s\n", type_name(tp));
 }
 
 static void CLBC_interface_decl(class_loader * self, il_type * iltype, type * tp, namespace_ * scope) {
@@ -139,10 +139,10 @@ static void CLBC_interface_decl(class_loader * self, il_type * iltype, type * tp
 //	type_init_generic(tp, tp->u.interface_->type_parameter_list->length);
 	CLBC_methods_decl(self, iltype, tp, iltype->u.interface_->method_list, scope);
 	interface_create_vtable(tp->u.interface_);
-	text_printf("decl interface %s\n", type_name(tp));
+	//text_printf("decl interface %s\n", type_name(tp));
 }
 
 static void CLBC_interface_impl(class_loader * self, il_type * iltype, type * tp, namespace_ * scope) {
 	CLBC_methods_impl(self, scope, iltype, tp, iltype->u.interface_->method_list, tp->u.interface_->method_list);
-	text_printf("impl interface %s\n", type_name(tp));
+	//text_printf("impl interface %s\n", type_name(tp));
 }
