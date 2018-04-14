@@ -64,6 +64,9 @@ void il_factor_invoke_load(il_factor_invoke * self, enviroment * env, il_context
 
 generic_type* il_factor_invoke_eval(il_factor_invoke * self, enviroment * env, il_context* ilctx) {
 	il_factor_invoke_check(self, env, ilctx);
+	if(il_error_panic()) {
+		return NULL;
+	}
 	virtual_type returnvType = self->m->return_vtype;
 	//XSTREQ(self->name, "get");
 	//型変数をそのまま返す場合
@@ -124,15 +127,21 @@ static void resolve_default(il_factor_invoke * self, enviroment * env, il_contex
 }
 
 static void il_factor_invoke_check(il_factor_invoke * self, enviroment * env, il_context* ilctx) {
+	//レシーバの読み込み
 	il_factor_load(self->receiver, env, ilctx, NULL);
+	if(il_error_panic()) {
+		return;
+	}
 	if(self->receiver->type == ilfactor_variable) {
 		il_factor_variable* ilvar = IL_FACT2VAR(self->receiver);
 		assert(ilvar->type != ilvariable_type_static);
 	}
-	//classではなく generic_type にメソッドを検索する関数
-//	XBREAK((!strcmp(self->name, "set") && env->context_ref->type == content_entry_point));
-//	XSTREQ(self->name, "set")
+	//レシーバの型を評価
 	generic_type* gtype = il_factor_eval(self->receiver, env, ilctx);
+	if(il_error_panic()) {
+		return;
+	}
+	//対応するメソッドを検索
 	vector_push(ilctx->receiver_vec, gtype);
 	type* ctype = gtype->core_type;
 	int temp = -1;
@@ -140,7 +149,10 @@ static void il_factor_invoke_check(il_factor_invoke * self, enviroment * env, il
 	//self->m = class_find_method(TYPE2CLASS(ctype), self->name, self->args, env, cache, &temp);
 	self->index = temp;
 	vector_pop(ilctx->receiver_vec);
-	assert(temp != -1);
+	if(temp == -1) {
+		il_error_report(ilerror_undefined_method, self->name);
+		return;
+	}
 }
 
 static void il_factor_invoke_args_delete(vector_item item) {

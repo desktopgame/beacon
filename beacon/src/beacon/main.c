@@ -53,10 +53,10 @@ int run_script(int argc, char* argv[]) {
 }
 
 int _main(int argc, char* argv[]) {
-	mem_set_trace(true);
-//	mem_break(466);
+	mem_set_trace(false);
+	//mem_break(41);
 	logger_set_enabled(false);
-	bool test = false;
+	bool test = true;
 	int ret = 1;
 
 	if(test) {

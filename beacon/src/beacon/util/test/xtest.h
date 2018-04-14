@@ -85,6 +85,12 @@ void xtest_vprintf(const char* fmt, va_list ap);
 xtest* xtest_get();
 
 /**
+ * テスト中なら true.
+ * @return
+ */
+bool xtest_now();
+
+/**
  * condition が true でないなら記録します.
  * @param self
  * @param condition

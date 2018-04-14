@@ -4,6 +4,7 @@
 #include "../vm/enviroment.h"
 #include "il_ehandler.h"
 #include "il_context.h"
+#include "il_error.h"
 #include <stdint.h>
 /**
  * 文の種類を表す列挙型.

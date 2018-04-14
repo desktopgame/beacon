@@ -39,14 +39,20 @@ void il_factor_variable_local_load(il_factor_variable_local * self, enviroment *
 		//NULLになることがある。
 		self->type = variable_local_scope;
 		symbol_entry* ent = symbol_table_entry(env->sym_table, NULL, self->name);
+		//ローカル変数として解決出来なかったので、
+		//フィールドとして解決する
 		if(ent == NULL) {
+			//対応するフィールドを検索
 			self->type = variable_local_field;
 			type* tp = (type*)vector_top(ilctx->type_vec);
 			int temp = -1;
 			field* f = class_find_field(TYPE2CLASS(tp), self->name, &temp);
 			self->u.field_index = temp;
 			self->type = variable_local_field;
-			assert(temp != -1);
+			if(temp == -1) {
+				il_error_report(ilerror_undefined_field, self->name);
+				return;
+			}
 			//フィールドの型を調べる
 			virtual_type vt = f->vtype;
 			if(vt.tag == virtualtype_default) {
@@ -63,10 +69,6 @@ void il_factor_variable_local_load(il_factor_variable_local * self, enviroment *
 		} else {
 			self->u.entry_ = ent;
 			self->gt = ent->gtype;
-			if(ent->gtype->type_args_list->length > 0) {
-				generic_type* a = (generic_type*)vector_at(ent->gtype->type_args_list, 0);
-				int x = 0;
-			}
 		}
 		self->gt->ref_count++;
 	}
@@ -75,10 +77,6 @@ void il_factor_variable_local_load(il_factor_variable_local * self, enviroment *
 generic_type* il_factor_variable_local_eval(il_factor_variable_local * self, enviroment * env, il_context* ilctx) {
 	il_factor_variable_local_load(self, env, ilctx, NULL);
 	assert(self->type != variable_local_undefined);
-	for(int i=0; i<self->gt->type_args_list->length; i++) {
-		generic_type* e = (generic_type*)vector_at(self->gt->type_args_list, i);
-		//XSTREQ(self->name, "iter");
-	}
 	return self->gt;
 }
 

@@ -8,6 +8,7 @@
 typedef enum il_error_id {
 	ilerror_undefined_class,
 	ilerror_undefined_variable,
+	ilerror_undefined_field,
 	ilerror_undefined_method,
 	ilerror_end,
 } il_error_id;

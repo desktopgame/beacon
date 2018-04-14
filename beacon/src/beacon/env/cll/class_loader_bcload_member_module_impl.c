@@ -26,6 +26,7 @@ static void CLBC_chain_super(class_loader* self, il_type* iltype, type* tp, il_c
 
 void CLBC_fields_decl(class_loader* self, il_type* iltype, type* tp, vector* ilfields, namespace_* scope) {
 	//class_* cls = tp->u.class_;
+	CL_ERROR(self);
 	il_context* ilctx = il_context_new();
 	vector_push(ilctx->namespace_vec, scope);
 	vector_push(ilctx->type_vec, tp);
@@ -50,6 +51,7 @@ void CLBC_fields_decl(class_loader* self, il_type* iltype, type* tp, vector* ilf
 }
 
 void CLBC_fields_impl(class_loader* self, namespace_* scope, vector* ilfields, vector* sgfields) {
+	CL_ERROR(self);
 	//	namespace_* scope = classz->location;
 	il_context* ilctx = il_context_new();
 	for (int i = 0; i < sgfields->length; i++) {
@@ -66,6 +68,7 @@ void CLBC_fields_impl(class_loader* self, namespace_* scope, vector* ilfields, v
 }
 
 void CLBC_methods_decl(class_loader* self, il_type* iltype, type* tp, vector* ilmethods, namespace_* scope) {
+	CL_ERROR(self);
 	il_context* ilctx = il_context_new();
 	vector_push(ilctx->namespace_vec, scope);
 	vector_push(ilctx->type_vec, tp);
@@ -116,6 +119,7 @@ void CLBC_methods_decl(class_loader* self, il_type* iltype, type* tp, vector* il
 void CLBC_methods_impl(class_loader* self, namespace_* scope, il_type* iltype, type* tp, vector* ilmethods, vector* sgmethods) {
 	//assert(tp->tag == type_class);
 	//class_* classz = tp->u.class_;
+	CL_ERROR(self);
 	il_context* ilctx = il_context_new();
 	for (int i = 0; i < sgmethods->length; i++) {
 		vector_item e = vector_at(sgmethods, i);
@@ -165,6 +169,7 @@ void CLBC_methods_impl(class_loader* self, namespace_* scope, il_type* iltype, t
 
 
 void CLBC_ctor_decl(class_loader* self, il_type* iltype, type* tp, namespace_* scope) {
+	CL_ERROR(self);
 	class_* classz = tp->u.class_;
 	vector* ilcons_list = iltype->u.class_->constructor_list;
 	il_context* ilctx = il_context_new();
@@ -196,6 +201,7 @@ void CLBC_ctor_decl(class_loader* self, il_type* iltype, type* tp, namespace_* s
 }
 
 void CLBC_ctor_impl(class_loader* self, il_type* iltype, type* tp) {
+	CL_ERROR(self);
 	assert(tp->tag == type_class);
 	class_* classz = tp->u.class_;
 	namespace_* scope = classz->location;
@@ -240,18 +246,31 @@ void CLBC_ctor_impl(class_loader* self, il_type* iltype, type* tp) {
 
 void CLBC_body(class_loader* self, vector* stmt_list, enviroment* dest, namespace_* range, il_context* ilctx) {
 	//	enviroment* ret = enviroment_new();
+	CL_ERROR(self);
 	il_ehandler* eh = il_ehandler_new();
 	vector_push(ilctx->namespace_vec, range);
+	il_error_enter();
+	//まずは全てのステートメントを読み込む
 	for (int i = 0; i < stmt_list->length; i++) {
+		if(il_error_panic()) {
+			self->error = true;
+			break;
+		}
 		vector_item e = vector_at(stmt_list, i);
 		il_stmt* s = (il_stmt*)e;
 		il_stmt_load(s, dest, ilctx, eh);
 	}
+	//オペコードを生成
 	for (int i = 0; i < stmt_list->length; i++) {
+		if(il_error_panic()) {
+			self->error = true;
+			break;
+		}
 		vector_item e = vector_at(stmt_list, i);
 		il_stmt* s = (il_stmt*)e;
 		il_stmt_generate(s, dest, ilctx);
 	}
+	il_error_exit();
 	vector_pop(ilctx->namespace_vec);
 	il_ehandler_delete(eh);
 //	return ret;

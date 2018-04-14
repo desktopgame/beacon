@@ -1,4 +1,3 @@
---dump
 import "Iterator"
 import "Array"
 

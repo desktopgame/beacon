@@ -22,13 +22,15 @@ static void CLBC_import_already(class_loader* self, class_loader* cll);
 static class_loader* CLBC_import_new(class_loader* self, char* fullPath);
 
 void CLBC_import(class_loader* self, vector* ilimports) {
-//	TEST(self->import_manager->infoVec->length > 0);
+	CL_ERROR(self);
 	for (int i = self->import_manager->info_vec->length; i < ilimports->length; i++) {
 		CLBC_import_internal(self, ilimports, i);
+		CL_ERROR(self);
 	}
 }
 
 void CLBC_new_load(class_loader * self, char * fullPath) {
+	CL_ERROR(self);
 	script_context* ctx = script_context_get_current();
 	ctx->heap->blocking++;
 	CLBC_new_load_internal(self, fullPath);
@@ -37,6 +39,7 @@ void CLBC_new_load(class_loader * self, char * fullPath) {
 
 //private
 static void CLBC_import_internal(class_loader* self, vector* ilimports, int i) {
+	CL_ERROR(self);
 	if (i >= ilimports->length ||
 	    import_manager_loaded(self->import_manager, i)) {
 		return;
@@ -51,6 +54,7 @@ static void CLBC_import_internal(class_loader* self, vector* ilimports, int i) {
 }
 
 static void CLBC_new_load_internal(class_loader * self, char * fullPath) {
+	CL_ERROR(self);
 	script_context* ctx = script_context_get_current();
 	//text_printf("%s\n", fullPath);
 	//そのファイルパスに対応した
@@ -70,6 +74,7 @@ static void CLBC_new_load_internal(class_loader * self, char * fullPath) {
 	}
 	//パースをキャンセル
 	if (self->error) {
+		cll->error = true;
 		return;
 	}
 	cll->filename = text_strdup(fullPath);
@@ -99,6 +104,7 @@ static void CLBC_new_load_internal(class_loader * self, char * fullPath) {
 }
 
 static void CLBC_import_already(class_loader* self, class_loader* cll) {
+	CL_ERROR(self);
 	//self -> cll への参照を与える
 	import_info* info = import_manager_import(self->import_manager, cll);
 	info->consume = false;
@@ -114,6 +120,7 @@ static void CLBC_import_already(class_loader* self, class_loader* cll) {
 }
 
 static class_loader* CLBC_import_new(class_loader* self, char* fullPath) {
+	CL_ERROR_RET(self, self);
 	script_context* ctx = script_context_get_current();
 	class_loader* cll = class_loader_new(content_lib);
 	cll->type = content_lib;

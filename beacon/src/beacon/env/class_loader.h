@@ -33,6 +33,20 @@ typedef struct class_loader {
 } class_loader;
 
 /**
+ * 引数のクラスローダの error が true なら return します.
+ * @param self
+ */
+#define CL_ERROR(self) if((self)->error) return
+
+/**
+ * 引数のクラスローダの error が true なら a を return します.
+ * @param self
+ * @param a
+ * @return
+ */
+#define CL_ERROR_RET(self, a) if((self)->error) return (a)
+
+/**
  * クラスローダーを作成します.
  * @param type
  * @return

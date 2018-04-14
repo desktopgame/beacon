@@ -4,6 +4,7 @@
 #include "../vm/enviroment.h"
 #include "il_ehandler.h"
 #include "il_context.h"
+#include "il_error.h"
 #include <stdint.h>
 #include <assert.h>
 #include "../env/generic_type.h"
@@ -100,6 +101,7 @@ void il_factor_dump(il_factor* self, int depth);
 
 /**
  * オペコードを生成します.
+ * この関数は ILパニック を発生させることがあります。
  * @param self
  * @param env
  * @param cache
@@ -108,6 +110,7 @@ void il_factor_generate(il_factor* self, enviroment* env, il_context* ilctx);
 
 /**
  * 因子を読み込みます.
+ * この関数は ILパニック を発生させることがあります。
  * @param self
  * @param env
  * @param cache
@@ -117,6 +120,7 @@ void il_factor_load(il_factor* self, enviroment* env, il_context* ilctx, il_ehan
 
 /**
  * この因子が表す型を返します.
+ * この関数は ILパニック を発生させることがあります。
  * @param self
  * @param env
  * @param cache

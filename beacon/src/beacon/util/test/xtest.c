@@ -83,6 +83,10 @@ xtest* xtest_get() {
 	return gXTest;
 }
 
+bool xtest_now() {
+	return gXTest != NULL;
+}
+
 bool xtest_expect_true(xtest* self, bool condition, bool isRecord, bool isThrow, const char* filename, int lineno, const char* fmt, ...) {
 	va_list ap;
 	va_start(ap, fmt);

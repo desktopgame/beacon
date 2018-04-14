@@ -95,17 +95,15 @@ static void CLBC_debug_native_method(method* parent, vm* vm, enviroment* env);
 
 
 void class_loader_bcload_impl(class_loader* self) {
+	CL_ERROR(self);
 	script_context* ctx = script_context_get_current();
 	il_top_level* iltop = self->il_code;
 	CLBC_import(self, self->il_code->import_list);
-//	class_loader_link(self);
 	CLBC_namespace_tree(self);
-
-//	CLBC_excec_class_decl(self);
-//	CLBC_excec_interface_decl(self);
 }
 
 void class_loader_bcload_link(class_loader * self, link_type type) {
+	CL_ERROR(self);
 	logger_info(__FILE__, __LINE__, "link %s",self->filename);
 	if(type == link_decl) {
 		CLBC_excec_class_decl(self);
@@ -117,17 +115,14 @@ void class_loader_bcload_link(class_loader * self, link_type type) {
 }
 
 void CLBC_namespace_tree(class_loader* self) {
-//	if (self->loaded_namespace) {
-//		return;
-//	}
+	CL_ERROR(self);
 	CLBC_namespace_list(self, self->il_code->namespace_list, NULL);
-//	self->loaded_namespace = true;
 }
 
 //private
 static void CLBC_namespace_list(class_loader* self, vector* ilnamespace_list, namespace_* parent) {
 	//self->link = classlink_resume;
-	if (self->error) { return; }
+	CL_ERROR(self);
 	for (int i = 0; i < ilnamespace_list->length; i++) {
 		vector_item e = vector_at(ilnamespace_list, i);
 		il_namespace* iln = (il_namespace*)e;
@@ -136,6 +131,7 @@ static void CLBC_namespace_list(class_loader* self, vector* ilnamespace_list, na
 }
 
 static void CLBC_namespace(class_loader* self, il_namespace* ilnamespace, namespace_* parent) {
+	CL_ERROR(self);
 	namespace_* current = NULL;
 	if (parent == NULL) {
 		current = namespace_create_at_root(ilnamespace->name);
@@ -147,6 +143,7 @@ static void CLBC_namespace(class_loader* self, il_namespace* ilnamespace, namesp
 }
 
 static void CLBC_type_list(class_loader* self, vector* iltype_list, namespace_* parent) {
+	CL_ERROR(self);
 	for (int i = 0; i < iltype_list->length; i++) {
 		vector_item e = vector_at(iltype_list, i);
 		il_type* ilt = (il_type*)e;
@@ -161,6 +158,7 @@ static void CLBC_type_list(class_loader* self, vector* iltype_list, namespace_* 
 }
 
 static void CLBC_enum(class_loader * self, il_type * iltype, namespace_ * parent) {
+	CL_ERROR(self);
 	assert(iltype->tag == iltype_enum);
 	il_enum* ilenum = iltype->u.enum_;
 	type* tp = namespace_get_type(parent, iltype->u.enum_->name);
@@ -188,6 +186,7 @@ static void CLBC_enum(class_loader * self, il_type * iltype, namespace_ * parent
 }
 
 static void CLBC_class(class_loader* self, il_type* iltype, namespace_* parent) {
+	CL_ERROR(self);
 	//*
 	//既に登録されていたら二重に登録しないように
 	//例えば、ネイティブメソッドを登録するために一時的にクラスが登録されている場合がある
@@ -270,6 +269,7 @@ static void CLBC_class(class_loader* self, il_type* iltype, namespace_* parent) 
 }
 
 static void CLBC_interface(class_loader * self, il_type * iltype, namespace_ * parent) {
+	CL_ERROR(self);
 	assert(iltype->tag == iltype_interface);
 	type* tp = namespace_get_type(parent, iltype->u.interface_->name);
 	interface_* inter = NULL;

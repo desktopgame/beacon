@@ -1,6 +1,7 @@
 #include "meta_impl.h"
 #include "../../il/il_argument.h"
 #include "../../il/il_argument.h"
+#include "../../il/il_error.h"
 #include "../parameter.h"
 #include "../type_interface.h"
 #include "../namespace.h"
@@ -23,6 +24,9 @@ int meta_calc_score(vector* params, vector* ilargs, enviroment* env, il_context*
 		int dist = 0;
 		generic_type* argType = il_factor_eval(arg->factor, env, ilctx);
 		virtual_type parvType = param->vtype;
+		if(il_error_panic()) {
+			return -1;
+		}
 		if (argType->core_type != CL_NULL) {
 			dist = virtual_type_distance(&parvType, argType, ilctx);
 		}

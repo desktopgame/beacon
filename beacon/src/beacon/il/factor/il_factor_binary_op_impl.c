@@ -173,6 +173,10 @@ void il_factor_binary_op_load(il_factor_binary_op * self, enviroment * env, il_c
 generic_type* il_factor_binary_op_eval(il_factor_binary_op * self, enviroment * env, il_context* ilctx) {
 	generic_type* ltype = il_factor_eval(self->left, env, ilctx);
 	generic_type* rtype = il_factor_eval(self->right, env, ilctx);
+	//左辺か右辺を解釈できなかった
+	if(il_error_panic()) {
+		return NULL;
+	}
 	if (ltype->core_type == CL_INT &&
 		rtype->core_type == CL_INT) {
 		if (ilbi_compare(self)) {

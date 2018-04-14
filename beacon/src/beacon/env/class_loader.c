@@ -34,6 +34,7 @@
 #include "../il/il_parameter.h"
 #include "../il/il_import.h"
 #include "../il/il_namespace.h"
+#include "../il/il_error.h"
 #include <string.h>
 
 #include "cll/class_loader_ilload_impl.h"
@@ -121,7 +122,7 @@ void class_loader_delete(class_loader * self) {
 	if(self == NULL) {
 		return;
 	}
-	text_printf("deleted loader %s\n", self->filename);
+	//text_printf("deleted loader %s\n", self->filename);
 	//free(self->source_code);
 	ast_delete(self->source_code);
 	il_top_level_delete(self->il_code);
@@ -167,8 +168,10 @@ static void class_loader_load_impl(class_loader* self) {
 	if (self->error) { return; }
 	//他のクラスローダーとリンク
 	if(self->type == content_entry_point) {
+		il_error_enter();
 		class_loader_link(self, link_decl);
 		class_loader_link(self, link_impl);
+		il_error_exit();
 	}
 	//トップレベルのステートメントを読み込む
 	il_context* ilctx = il_context_new();

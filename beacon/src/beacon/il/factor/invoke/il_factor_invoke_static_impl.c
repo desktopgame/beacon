@@ -30,6 +30,9 @@ void il_factor_invoke_static_generate(il_factor_invoke_static* self, enviroment*
 		il_argument* e = (il_argument*)vector_at(self->args, i);
 		il_factor_generate(e->factor, env, ilctx);
 	}
+	if(il_error_panic()) {
+		return;
+	}
 	opcode_buf_add(env->buf, (vector_item)op_invokestatic);
 	opcode_buf_add(env->buf, (vector_item)self->m->parent->absolute_index);
 	opcode_buf_add(env->buf, (vector_item)self->index);
@@ -43,6 +46,10 @@ void il_factor_invoke_static_load(il_factor_invoke_static * self, enviroment * e
 
 generic_type* il_factor_invoke_static_eval(il_factor_invoke_static * self, enviroment * env, il_context* ilctx) {
 	il_factor_invoke_static_check(self, env, ilctx);
+	//メソッドを解決できなかった場合
+	if(il_error_panic()) {
+		return NULL;
+	}
 	virtual_type returnvType = self->m->return_vtype;
 	if(returnvType.tag != virtualtype_default) {
 		resolve_non_default(self, env, ilctx);
@@ -89,16 +96,12 @@ static void resolve_default(il_factor_invoke_static * self, enviroment * env, il
 static void il_factor_invoke_static_check(il_factor_invoke_static * self, enviroment * env, il_context* ilctx) {
 	class_* cls = il_context_class(ilctx, self->fqcn);
 	int temp = -1;
-	for(int i=0; i<self->args->length; i++) {
-		il_argument* e = (il_argument*)vector_at(self->args, i);
-		il_factor* f = e->factor;
-		
-		//int a = 0;
-	}
 //	XSTREQ(self->name, "write");
 	self->m = class_find_smethod(cls, self->name, self->args, env, ilctx, &temp);
 	self->index = temp;
-	assert(temp != -1);
+	if(temp == -1) {
+		il_error_report(ilerror_undefined_method, self->name);
+	}
 }
 
 static void il_factor_invoke_static_args_delete(vector_item item) {

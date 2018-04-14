@@ -3,6 +3,7 @@
 #include <assert.h>
 #include "../util/vector.h"
 #include "../util/mem.h"
+#include "../util/test/xtest.h"
 
 //proto
 static void il_error_print(FILE* fp, il_error_id error_id, va_list ap);
@@ -44,6 +45,7 @@ void il_error_exit() {
 	MEM_FREE(ps);
 	if(gPanicStateVec->length == 0) {
 		vector_delete(gPanicStateVec, vector_deleter_null);
+		gPanicStateVec = NULL;
 	}
 }
 
@@ -71,8 +73,18 @@ static void il_error_print(FILE* fp, il_error_id error_id, va_list ap) {
 		case ilerror_undefined_method:
 			fmt = "undefined method: %s";
 			break;
+		case ilerror_undefined_field:
+			fmt = "undefined field: %s";
+			break;
 		default:
 			fmt = "if shown this message, it compiler bug";
 			break;
+	}
+	if(xtest_now()) {
+		xtest_vprintf(fmt, ap);
+		xtest_printf("\n");
+	} else {
+		vfprintf(fp, fmt, ap);
+		fprintf(fp, "\n");
 	}
 }

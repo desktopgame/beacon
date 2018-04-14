@@ -29,6 +29,9 @@ void il_factor_invoke_bound_generate(il_factor_invoke_bound* self, enviroment* e
 	for(int i=0; i<self->args->length; i++) {
 		il_argument* e = (il_argument*)vector_at(self->args, i);
 		il_factor_generate(e->factor, env, ilctx);
+		if(il_error_panic()) {
+			return;
+		}
 	}
 	if(modifier_is_static(self->m->modifier)) {
 		opcode_buf_add(env->buf, (vector_item)op_invokestatic);
@@ -53,7 +56,11 @@ void il_factor_invoke_bound_load(il_factor_invoke_bound * self, enviroment * env
 
 generic_type* il_factor_invoke_bound_eval(il_factor_invoke_bound * self, enviroment * env, il_context* ilctx) {
 	type* tp = (type*)vector_top(ilctx->type_vec);
+	//メソッドが見つからない
 	il_factor_invoke_bound_check(self, env, ilctx);
+	if(il_error_panic()) {
+		return NULL;
+	}
 	if(self->m->return_vtype.tag != virtualtype_default) {
 		resolve_non_default(self, env, ilctx);
 		return self->resolved;
@@ -108,13 +115,16 @@ static void il_factor_invoke_bound_check(il_factor_invoke_bound * self, envirome
 	if(self->index != -1) {
 		return;
 	}
+	//対応するメソッドを検索
 	type* ctype = (type*)vector_top(ilctx->type_vec);
 	int temp = -1;
 	vector_push(ilctx->receiver_vec, ctype->generic_self);
 	self->m = class_find_method(TYPE2CLASS(ctype), self->name, self->args, env, ilctx, &temp);
 	self->index = temp;
 	vector_pop(ilctx->receiver_vec);
-	assert(temp != -1);
+	if(temp == -1) {
+		il_error_report(ilerror_undefined_method, self->name);
+	}
 }
 static void il_factor_invoke_bound_args_delete(vector_item item) {
 	il_argument* e = (il_argument*)item;

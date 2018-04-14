@@ -72,6 +72,9 @@ void il_factor_dump(il_factor * self, int depth) {
 }
 
 void il_factor_generate(il_factor * self, enviroment* env, il_context* ilctx) {
+	if(il_error_panic()) {
+		return;
+	}
 	switch (self->type) {
 		case ilfactor_int:
 			il_factor_int_generate(self->u.int_, env, ilctx);
@@ -135,6 +138,9 @@ void il_factor_generate(il_factor * self, enviroment* env, il_context* ilctx) {
 }
 
 void il_factor_load(il_factor * self, enviroment * env, il_context* ilctx, il_ehandler * eh) {
+	if(il_error_panic()) {
+		return;
+	}
 	switch (self->type) {
 		case ilfactor_int:
 			il_factor_int_load(self->u.int_, env, ilctx, eh);
@@ -197,6 +203,9 @@ void il_factor_load(il_factor * self, enviroment * env, il_context* ilctx, il_eh
 }
 
 generic_type* il_factor_eval(il_factor * self, enviroment * env, il_context* ilctx) {
+	if(il_error_panic()) {
+		return NULL;
+	}
 	generic_type* ret = NULL;
 	switch (self->type) {
 		case ilfactor_int:
@@ -257,7 +266,7 @@ generic_type* il_factor_eval(il_factor * self, enviroment * env, il_context* ilc
 			ERROR("ファクターの型を取得出来ませんでした");
 			break;
 	}
-	assert(ret != NULL);
+	assert((ret != NULL || il_error_panic()));
 	return ret;
 }
 

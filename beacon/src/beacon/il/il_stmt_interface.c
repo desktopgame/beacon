@@ -49,6 +49,9 @@ void il_stmt_dump(il_stmt * self, int depth) {
 }
 
 void il_stmt_generate(il_stmt * self, struct enviroment* env, il_context* ilctx) {
+	if(il_error_panic()) {
+		return;
+	}
 	switch (self->type) {
 		case ilstmt_if:
 			il_stmt_if_generate(self->u.if_, env, ilctx);
@@ -93,6 +96,9 @@ void il_stmt_generate(il_stmt * self, struct enviroment* env, il_context* ilctx)
 }
 
 void il_stmt_load(il_stmt * self, enviroment* env, il_context* ilctx, il_ehandler * eh) {
+	if(il_error_panic()) {
+		return;
+	}
 	switch (self->type) {
 		case ilstmt_if:
 			il_stmt_if_load(self->u.if_, env, ilctx, eh);
