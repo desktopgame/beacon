@@ -52,6 +52,7 @@
 		IN OUT
 		CTOR DEF ARROW NAMESPACE RETURN
 		IF ELIF ELSE WHILE BREAK CONTINUE TRY CATCH THROW
+		ASSERT_T
 %type <ast_value> compilation_unit 
 					init_decl
 					body_decl
@@ -109,6 +110,7 @@
 						try_stmt
 						catch_stmt_list
 						catch_stmt
+						assert_stmt
 						scope
 						scope_optional
 %right ASSIGN ADD_ASSIGN SUB_ASSIGN MUL_ASSIGN DIV_ASSIGN MOD_ASSIGN AND_ASSIGN OR_ASSIGN LSHIFT_ASSIGN RSHIFT_ASSIGN EXC_OR_ASSIGN PRE_INC PRE_DEC
@@ -771,6 +773,7 @@ stmt
 	| return_stmt
 	| throw_stmt
 	| try_stmt
+	| assert_stmt
 	;
 variable_decl_stmt
 	: typename_T IDENT SEMI
@@ -873,8 +876,12 @@ catch_stmt
 		$$ = ast_new_catch($3, $4, $6);
 	}
 	;
-
-
+assert_stmt
+	: ASSERT_T expression COLON expression SEMI
+	{
+		$$ = ast_new_assert($2, $4);
+	}
+	;
 
 scope
 	: LCB stmt_list RCB

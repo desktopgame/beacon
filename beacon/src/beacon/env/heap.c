@@ -3,6 +3,8 @@
 #include <stdlib.h>
 #include <assert.h>
 #include "../util/mem.h"
+#include "../util/text.h"
+#include "../env/generic_type.h"
 #include "../thread/thread.h"
 #include "../vm/vm.h"
 
@@ -36,6 +38,9 @@ void heap_add(heap * self, object * obj) {
 }
 
 void heap_gc(heap * self) {
+	if(self->blocking > 0) {
+		return;
+	}
 	gc_clear(self);
 	gc_mark(self);
 	gc_sweep(self);

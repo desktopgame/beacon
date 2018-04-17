@@ -156,24 +156,24 @@ object * object_copy_s(object * self) {
 	return object_copy(self);
 }
 
-void object_markall(object * self) {
-	//field#static_valueは
+void object_paintall(object* self, object_paint paint) {
+//field#static_valueは
 	//実際に修飾子が static でないときは NULL
 	if (self == NULL) {
 		return;
 	}
-	if (self->paint == paint_marked) {
+	if (self->paint == paint) {
 		return;
 	}
 	if (self->paint != paint_onexit) {
-		self->paint = paint_marked;
+		self->paint = paint;
 	}
 	//フィールドを全てマーク
 	if (self->tag == object_string ||
 		self->tag == object_ref) {
 		for (int i = 0; i < self->u.field_vec->length; i++) {
 			object* e = (object*)vector_at(self->u.field_vec, i);
-			object_markall(e);
+			object_paintall(e, paint);
 		}
 	}
 	//配列型ならスロットも全てマーク
@@ -182,9 +182,13 @@ void object_markall(object * self) {
 		self->gtype->core_type == arrayType) {
 		for (int i = 0; i < self->native_slot_vec->length; i++) {
 			object* e = (object*)vector_at(self->native_slot_vec, i);
-			object_markall(e);
+			object_paintall(e, paint);
 		}
 	}
+}
+
+void object_markall(object * self) {
+	object_paintall(self, paint_marked);
 }
 
 int object_count() {

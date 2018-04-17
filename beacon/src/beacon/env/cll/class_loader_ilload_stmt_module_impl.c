@@ -20,6 +20,7 @@ static il_stmt_return* CLIL_return(class_loader* self, ast* source);
 static il_stmt_try* CLIL_try(class_loader* self, ast* source);
 static void CLIL_catch_list(class_loader* self, vector* dest, ast* source);
 static il_stmt_throw* CLIL_throw(class_loader* self, ast* source);
+static il_stmt_assert* CLIL_assert(class_loader* self, ast* source);
 
 il_stmt* CLIL_stmt(class_loader* self, ast* source) {
 	return CLIL_bodyImpl(self, source);
@@ -121,6 +122,11 @@ static il_stmt* CLIL_bodyImpl(class_loader* self, ast* source) {
 		{
 			il_stmt_throw* ilthrow = CLIL_throw(self, source);
 			return il_stmt_wrap_throw(ilthrow);
+		}
+		case ast_stmt_assert:
+		{
+			il_stmt_assert* ilas = CLIL_assert(self, source);
+			return il_stmt_wrap_assert(ilas);
 		}
 		default:
 			break;
@@ -258,5 +264,14 @@ static void CLIL_catch_list(class_loader* self, vector* dest, ast* source) {
 static il_stmt_throw* CLIL_throw(class_loader* self, ast* source) {
 	il_stmt_throw* ret = il_stmt_throw_new();
 	ret->fact = CLIL_factor(self, ast_first(source));
+	return ret;
+}
+
+static il_stmt_assert* CLIL_assert(class_loader* self, ast* source) {
+	il_stmt_assert* ret = il_stmt_assert_new();
+	ast* afact = ast_first(source);
+	ast* amsg = ast_second(source);
+	ret->condition = CLIL_factor(self, afact);
+	ret->message = CLIL_factor(self, amsg);
 	return ret;
 }

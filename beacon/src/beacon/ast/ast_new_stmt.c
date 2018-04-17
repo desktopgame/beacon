@@ -185,3 +185,10 @@ ast * ast_new_inferenced_type_init(const char * name, ast * fact) {
 	ast_push(ret, fact);
 	return ret;
 }
+
+ast* ast_new_assert(ast* afact, ast* amsg) {
+	ast* ret = ast_new(ast_stmt_assert);
+	ast_push(ret, afact);
+	ast_push(ret, amsg);
+	return ret;
+}

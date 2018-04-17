@@ -177,6 +177,7 @@ static void update_loc() {
 
 <INITIAL>"=="				{ return (EQUAL); }
 <INITIAL>"!="				{ return (NOTEQUAL); }
+<INITIAL>"assert"			{ return (ASSERT_T); }
 
 
 <INITIAL>"++"				{ return (INC); }

@@ -330,6 +330,7 @@ void ast_print(ast* self) {
 			break;
 		case ast_type_parameter_list: p("type parameter list");
 		case ast_type_parameter_rule_list: p("type parameter rule list");
+		case ast_stmt_assert: p("assert");
 		default: 
 			p("not implemented");
 	}
@@ -375,6 +376,7 @@ bool ast_is_stmt(ast* self) {
 		case ast_continue:
 		case ast_break:
 		case ast_proc:
+		case ast_stmt_assert:
 			return true;
 	}
 	return false;

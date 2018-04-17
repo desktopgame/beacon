@@ -211,4 +211,12 @@ ast* ast_new_variable_init(ast* type, char* name, ast* fact);
  * @return
  */
 ast* ast_new_inferenced_type_init(const char* name, ast* fact);
+
+/**
+ * assert 条件 を表す要素を作成します.
+ * @param afact
+ * @param amsg
+ * @return
+ */
+ast* ast_new_assert(ast* afact, ast* amsg);
 #endif // !SIGNAL_AST_AST_NEW_STMT_H

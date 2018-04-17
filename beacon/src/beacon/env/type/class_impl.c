@@ -17,6 +17,7 @@
 #include "../constructor.h"
 #include "../type_impl.h"
 #include "../../env/vtable.h"
+#include "../../env/heap.h"
 #include "../../util/logger.h"
 #include "meta_impl.h"
 #include "../type_parameter.h"
@@ -481,9 +482,10 @@ object * class_new_rinstance(class_ * self, vm* vmc, int count, ...) {
 	}
 	vm_execute(sub, ctor->env);
 	object* inst = vector_pop(sub->value_stack);
-	//開放
+	heap_get()->blocking++;
 	vm_delete(sub);
 	vector_delete(args, vector_deleter_null);
+	heap_get()->blocking--;
 	va_end(ap);
 	return inst;
 }

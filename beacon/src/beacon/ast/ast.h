@@ -162,6 +162,8 @@ typedef enum ast_tag {
 	ast_stmt_catch_list,
 	ast_stmt_throw,
 
+	ast_stmt_assert,
+
 	ast_parameter,
 	ast_parameter_type_name,
 	ast_parameter_access_name,

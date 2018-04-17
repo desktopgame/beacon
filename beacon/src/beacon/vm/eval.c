@@ -137,6 +137,9 @@ static bool eval_top_from_cll(class_loader* cll) {
 	vm* vm = vm_new();
 	sg_thread_set_vm_ref(sg_thread_current(), vm);
 	vm_execute(vm, cll->env);
+	if(vm->terminate) {
+		cll->error = true;
+	}
 	vm_delete(vm);
 	sg_thread_release_vm_ref(sg_thread_current());
 

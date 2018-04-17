@@ -25,6 +25,7 @@ stmt
 	| return_stmt
 	| throw_stmt
 	| try_stmt
+	| assert_stmt
 	;
 variable_decl_stmt
 	: typename_T IDENT SEMI
@@ -127,5 +128,9 @@ catch_stmt
 		$$ = ast_new_catch($3, $4, $6);
 	}
 	;
-
-
+assert_stmt
+	: ASSERT_T expression COLON expression SEMI
+	{
+		$$ = ast_new_assert($2, $4);
+	}
+	;

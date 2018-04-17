@@ -28,6 +28,7 @@
 		IN OUT
 		CTOR DEF ARROW NAMESPACE RETURN
 		IF ELIF ELSE WHILE BREAK CONTINUE TRY CATCH THROW
+		ASSERT_T
 $$SET root compilation_unit
 $$SET top_level program
 %type <ast_value> root 
@@ -87,6 +88,7 @@ $$SET top_level program
 						try_stmt
 						catch_stmt_list
 						catch_stmt
+						assert_stmt
 						scope
 						scope_optional
 %right ASSIGN ADD_ASSIGN SUB_ASSIGN MUL_ASSIGN DIV_ASSIGN MOD_ASSIGN AND_ASSIGN OR_ASSIGN LSHIFT_ASSIGN RSHIFT_ASSIGN EXC_OR_ASSIGN PRE_INC PRE_DEC

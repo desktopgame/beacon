@@ -152,6 +152,14 @@ object* object_copy_s(object* self);
  * このオブジェクトと
  * このオブジェクトから参照可能なオブジェクトを全てマークします.
  * @param self
+ * @param paint
+ */
+void object_paintall(object* self, object_paint paint);
+
+/**
+ * このオブジェクトと
+ * このオブジェクトから参照可能なオブジェクトを全てマークします.
+ * @param self
  */
 void object_markall(object* self);
 

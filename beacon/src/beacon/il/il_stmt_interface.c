@@ -42,6 +42,9 @@ void il_stmt_dump(il_stmt * self, int depth) {
 		case ilstmt_throw:
 			il_stmt_throw_dump(self->u.throw_, depth);
 			break;
+		case ilstmt_assert:
+			il_stmt_assert_dump(self->u.bcassert_, depth);
+			break;
 		default:
 			//ERROR("ステートメントをダンプ出来ませんでした。");
 			break;
@@ -88,6 +91,9 @@ void il_stmt_generate(il_stmt * self, struct enviroment* env, il_context* ilctx)
 		case ilstmt_throw:
 			il_stmt_throw_generate(self->u.throw_, env, ilctx);
 			break;
+		case ilstmt_assert:
+			il_stmt_assert_generate(self->u.bcassert_, env, ilctx);
+			break;
 		default:
 			//ERROR("ステートメントを開放出来ませんでした。");
 			break;
@@ -133,6 +139,9 @@ void il_stmt_load(il_stmt * self, enviroment* env, il_context* ilctx, il_ehandle
 		case ilstmt_throw:
 			il_stmt_throw_load(self->u.throw_, env, ilctx, eh);
 			break;
+		case ilstmt_assert:
+			il_stmt_assert_load(self->u.bcassert_, env, ilctx, eh);
+			break;
 		default:
 			//ERROR("ステートメントを開放出来ませんでした。");
 			break;
@@ -173,6 +182,9 @@ void il_stmt_delete(il_stmt * self) {
 			break;
 		case ilstmt_throw:
 			il_stmt_throw_delete(self->u.throw_);
+			break;
+		case ilstmt_assert:
+			il_stmt_assert_delete(self->u.bcassert_);
 			break;
 		default:
 			//ERROR("ステートメントを開放出来ませんでした。");

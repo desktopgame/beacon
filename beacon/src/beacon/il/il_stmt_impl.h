@@ -15,4 +15,5 @@
 #include "stmt/il_stmt_inferenced_type_init_impl.h"
 #include "stmt/il_stmt_try_impl.h"
 #include "stmt/il_stmt_throw_impl.h"
+#include "stmt/il_stmt_assert_impl.h"
 #endif // !SIGNAL_IL_IL_STMT_IMPL_H
