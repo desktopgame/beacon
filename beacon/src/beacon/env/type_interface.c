@@ -37,6 +37,9 @@ generic_type* type_init_generic(type* self, int counts) {
 
 char * type_name(type * self) {
 	//assert(self->tag == type_class);
+	if(self == NULL) {
+		return "NULL";
+	}
 	if (self->tag == type_class) {
 		return self->u.class_->name;
 	} else if (self->tag == type_interface) {

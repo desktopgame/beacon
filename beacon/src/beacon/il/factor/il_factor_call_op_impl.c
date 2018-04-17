@@ -60,14 +60,19 @@ void il_factor_call_op_load(il_factor_call_op* self, enviroment* env, il_context
 
 generic_type* il_factor_call_op_eval(il_factor_call_op* self, enviroment* env, il_context* ilctx) {
 	il_factor_call_op_check(self, env, ilctx);
+	generic_type* ret = NULL;
 	if(self->type == ilcall_type_invoke) {
-		return il_factor_invoke_eval(self->u.invoke_, env, ilctx);
+		ret = il_factor_invoke_eval(self->u.invoke_, env, ilctx);
 	} else if(self->type == ilcall_type_invoke_static) {
-		return il_factor_invoke_static_eval(self->u.invoke_static_, env, ilctx);
+		ret =  il_factor_invoke_static_eval(self->u.invoke_static_, env, ilctx);
 	} else if(self->type == ilcall_type_invoke_bound) {
-		return il_factor_invoke_bound_eval(self->u.invoke_bound_, env, ilctx);
+		ret = il_factor_invoke_bound_eval(self->u.invoke_bound_, env, ilctx);
 	}
-	return NULL;
+	if(il_error_panic()) {
+		return ret;
+	}
+	generic_type_validate(ret);
+	return ret;
 }
 
 void il_factor_call_op_generate(il_factor_call_op* self, enviroment* env, il_context* ilctx) {

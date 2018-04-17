@@ -11,6 +11,7 @@
 #include "../../il_argument.h"
 #include "../../il_factor_impl.h"
 #include <string.h>
+#include <stdio.h>
 
 //proto
 static void resolve_non_default(il_factor_invoke * self, enviroment * env, il_context* ilctx);
@@ -53,7 +54,7 @@ void il_factor_invoke_generate(il_factor_invoke* self, enviroment* env, il_conte
 
 void il_factor_invoke_load(il_factor_invoke * self, enviroment * env, il_context* ilctx, il_ehandler* eh) {
 	vector_push(ilctx->type_args_vec, self->type_args);
-	vector_push(ilctx->receiver_vec, il_factor_eval(self->receiver, env, ilctx));
+	vector_push(ilctx->receiver_vec, generic_type_validate(il_factor_eval(self->receiver, env, ilctx)));
 
 	il_factor_load(self->receiver, env, ilctx, eh);
 	il_factor_invoke_check(self, env, ilctx);
@@ -68,16 +69,21 @@ generic_type* il_factor_invoke_eval(il_factor_invoke * self, enviroment * env, i
 		return NULL;
 	}
 	virtual_type returnvType = self->m->return_vtype;
+	generic_type* ret = NULL;
 	//XSTREQ(self->name, "get");
 	//型変数をそのまま返す場合
 	if(returnvType.tag != virtualtype_default) {
 		resolve_non_default(self, env, ilctx);
-		return self->resolved;
+		ret = self->resolved;
 	//型変数ではない型を返す
 	} else {
 		resolve_default(self, env, ilctx);
-		return self->resolved;
+		ret = self->resolved;
 	}
+	//text_printf("invoke: ");
+	//generic_type_print(ret);
+	//text_printf("\n");
+	return ret;
 }
 
 void il_factor_invoke_delete(il_factor_invoke* self) {
@@ -94,18 +100,21 @@ static void resolve_non_default(il_factor_invoke * self, enviroment * env, il_co
 		return;
 	}
 	generic_type* receivergType = il_factor_eval(self->receiver, env, ilctx);
+	generic_type_validate(receivergType);
 	virtual_type returnvType = self->m->return_vtype;
 	if(returnvType.tag == virtualtype_class_tv) {
 		//レシーバの実体化された型の中で、
 		//メソッドの戻り値 'T' が表す位置に対応する実際の型を取り出す。
 		generic_type* instanced_type = (generic_type*)vector_at(receivergType->type_args_list, returnvType.u.index);
-		self->resolved = generic_type_make(instanced_type->core_type);
+		self->resolved = generic_type_gmake(instanced_type);
 		self->resolved->tag = generic_type_tag_class;
+		generic_type_validate(self->resolved);
 	} else if(returnvType.tag == virtualtype_method_tv) {
 		//メソッドに渡された型引数を参照する
 		generic_type* instanced_type = (generic_type*)vector_at(self->type_args, returnvType.u.index);
-		self->resolved = generic_type_make(instanced_type->core_type);
+		self->resolved = generic_type_gmake(instanced_type);
 		self->resolved->tag = generic_type_tag_class;
+		generic_type_validate(self->resolved);
 	}
 	self->resolved->ref_count++;
 }
@@ -116,14 +125,17 @@ static void resolve_default(il_factor_invoke * self, enviroment * env, il_contex
 	}
 	generic_type* receivergType = il_factor_eval(self->receiver, env, ilctx);
 	virtual_type returnvType = self->m->return_vtype;
+	generic_type_validate(receivergType);
 	//内側に型変数が含まれているかもしれないので、
 	//それをここで展開する。
 	vector_push(ilctx->type_args_vec, self->type_args);
 	vector_push(ilctx->receiver_vec, receivergType);
+	generic_type_validate(returnvType.u.gtype);
 	self->resolved = generic_type_apply(returnvType.u.gtype, ilctx);
 	vector_pop(ilctx->receiver_vec);
 	vector_pop(ilctx->type_args_vec);
 	self->resolved->ref_count++;
+	generic_type_validate(self->resolved);
 }
 
 static void il_factor_invoke_check(il_factor_invoke * self, enviroment * env, il_context* ilctx) {
@@ -142,8 +154,9 @@ static void il_factor_invoke_check(il_factor_invoke * self, enviroment * env, il
 		return;
 	}
 	//対応するメソッドを検索
-	vector_push(ilctx->receiver_vec, gtype);
+	vector_push(ilctx->receiver_vec, generic_type_validate(gtype));
 	type* ctype = gtype->core_type;
+	assert(ctype != NULL);
 	int temp = -1;
 	self->m = type_find_method(ctype, self->name, self->args, env, ilctx, &temp);
 	//self->m = class_find_method(TYPE2CLASS(ctype), self->name, self->args, env, cache, &temp);

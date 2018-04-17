@@ -33,16 +33,16 @@ static void test_parse_err_hdr(parser* p);
 
 //semantics
 static void test_semanticsImpl(const char* dirname, bool require) {
+	script_context* ctx = eval_push();
 	vector* files = io_list_files(dirname);
 	for(int i=0; i<files->length; i++) {
 		file_entry* e = (file_entry*)vector_at(files, i);
 		if(!io_extension(e->filename, "bc")) {
 			continue;
 		}
-		script_context* ctx = eval_push();
 		xtest_must_true(eval_top_from_file(e->filename) == require, e->filename);
-		eval_pop(ctx);
 	}
+	eval_pop(ctx);
 }
 
 static void test_semantics() {
@@ -104,7 +104,7 @@ static void test_bison_grammer() {
 
 bool test_run() {
 	xtest_group* gr = xtest_group_new("basic");
-	xtest_group_add(gr, "grammer", test_bison_grammer);
+	//xtest_group_add(gr, "grammer", test_bison_grammer);
 	xtest_group_add(gr, "semantics", test_semantics);
 	bool ret = xtest_group_run(gr);
 	xtest_group_delete(gr);

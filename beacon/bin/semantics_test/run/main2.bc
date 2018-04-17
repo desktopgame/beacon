@@ -13,13 +13,21 @@ import "VectorIterator"
 
 import "Exception"
 import "StackTraceElement"
-var vec = new Vector<|Int|>();
-vec.push(10);
-vec.push(20);
-vec.push(30);
-
+var vec = new Vector<|Vector<|Int|>|>();
+var a = new Vector<|Int|>();
+var b = new Vector<|Int|>();
 var iter = vec.iterate();
+vec.push(a);
+vec.push(b);
+a.push(10);
+b.push(20);
+//*
 while(iter.hasNext()) {
-	var ival = iter.next();
-	Console.writeLine(ival);
+	var xv = iter.next();
+	var viter = xv.iterate();
+	while(viter.hasNext()) {
+		var n = viter.next();
+		Console.writeLine(n);
+	}
 }
+//*/

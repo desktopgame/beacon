@@ -132,7 +132,7 @@ static bool eval_top_from_cll(class_loader* cll) {
 	ctx->heap->blocking++;
 	class_loader_load(cll);
 	ctx->heap->blocking--;
-	//opcode_buf_dump(cll->env->buf, 0);
+	opcode_buf_dump(cll->env->buf, 0);
 	//実行
 	vm* vm = vm_new();
 	sg_thread_set_vm_ref(sg_thread_current(), vm);

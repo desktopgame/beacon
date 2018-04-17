@@ -8,6 +8,7 @@
 #include "fqcn_cache.h"
 #include <assert.h>
 #include <string.h>
+#include <stdio.h>
 
 //proto
 static void generic_type_delete_self(vector_item item);
@@ -19,6 +20,17 @@ generic_type * generic_type_new(type * core_type) {
 
 }
 */
+
+generic_type* generic_type_validate(generic_type* self) {
+//	#if defined(VSCDEBUG)
+	assert(self != NULL);
+	assert((self)->core_type != NULL || self->virtual_type_index != -1);
+	for(int i=0; i<self->type_args_list->length; i++) {
+		generic_type_validate((generic_type*)vector_at(self->type_args_list, i));
+	}
+	return self;
+//	#endif
+}
 
 generic_type* generic_type_make(type* core_type) {
 	if(core_type == NULL) {
@@ -38,6 +50,21 @@ generic_type* generic_type_make(type* core_type) {
 		assert((len == 1));
 	}
 	return ret;
+}
+
+generic_type* generic_type_gmake(generic_type* gtype) {
+	if(gtype->core_type != NULL) {
+		return generic_type_make(gtype->core_type);
+	}
+	generic_type* a = generic_type_new(NULL);
+	a->virtual_type_index = gtype->virtual_type_index;
+	a->tag = gtype->tag;
+	if(gtype->tag == generic_type_tag_class) {
+		a->u.type_ = gtype->u.type_;
+	} else if(gtype->tag == generic_type_tag_method) {
+		a->u.method_ = gtype->u.method_;
+	}
+	return a;
 }
 
 generic_type* generic_type_malloc(struct type* core_type, const char* filename, int lineno) {
@@ -86,9 +113,13 @@ void generic_type_addargs(generic_type* self, generic_type* a) {
 //	assert(a->tag == generic_type_tag_class || 
 //	       a->tag == generic_type_tag_method ||
 //		   a->tag == generic_type_tag_none);
+	generic_type_validate(a);
 	a->ref_count++;
 	vector_push(self->type_args_list, a);
-	assert(self->type_args_list->length < 2);
+	if(self->type_args_list->length >= 2) {
+		//generic_type_print(self);
+		//printf("\n");
+	}
 }
 
 bool generic_type_castable(generic_type* a, generic_type* b) {
@@ -167,6 +198,7 @@ bool generic_type_bool(generic_type* self) {
 
 //Hash<String,List<Int>>
 generic_type* generic_type_apply(generic_type* self, il_context* ilctx) {
+	//ここで型変数が追加されちゃってた
 	generic_type* copy = generic_type_new(self->core_type);
 	generic_type* e = NULL;
 	int count = 0;
@@ -184,8 +216,6 @@ generic_type* generic_type_apply(generic_type* self, il_context* ilctx) {
 				vector* type_args = vector_top(ilctx->type_args_vec);
 				generic_type* a = vector_at(type_args, e->virtual_type_index);
 				generic_type_addargs(copy, generic_type_apply(a, ilctx));
-				//メソッド呼び出しが必要！！
-				//メソッドは仮想型しかもってない！！！
 			} else XBREAK(e->tag != generic_type_tag_none);
 		//
 		} else {
@@ -194,6 +224,12 @@ generic_type* generic_type_apply(generic_type* self, il_context* ilctx) {
 	}
 	assert(copy->core_type != NULL || count == 0);
 	copy->tag = generic_type_tag_none;
+	if(copy->core_type == NULL) {
+		copy->tag = self->tag;
+		copy->virtual_type_index = self->virtual_type_index;
+		if(self->tag == generic_type_tag_class) copy->u.type_ = self->u.type_;
+		else if (self->tag == generic_type_tag_method) copy->u.method_ = self->u.method_;
+	}
 	return copy;
 }
 //private

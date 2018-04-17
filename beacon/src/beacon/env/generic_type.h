@@ -3,6 +3,7 @@
 #define BEACON_ENV_GENERIC_TYPE_H
 #include "../util/vector.h"
 #include <stdbool.h>
+#include <assert.h>
 struct type;
 struct method;
 struct enviroment;
@@ -36,6 +37,8 @@ typedef struct generic_type {
 	bool mark;
 } generic_type;
 
+//#define generic_type_validate(self) assert((self)->core_type != NULL || self->virtual_type_index != -1)
+
 /**
  * 新しい型変数つきの型宣言を作成します.
  * @param ctype
@@ -44,12 +47,24 @@ typedef struct generic_type {
 #define generic_type_new(ctype) (generic_type_malloc(ctype, __FILE__, __LINE__))
 
 /**
+ * 型引数を検査します.
+ * @param self
+ */
+generic_type* generic_type_validate(generic_type* self);
+
+/**
  * 型変数つきの型宣言を作成し、
  * また type の持つクラス型変数を追加します。
  * @param core_type
  * @return
  */
 generic_type* generic_type_make(struct type* core_type);
+
+/**
+ * @param gtype
+ * @return
+ */
+generic_type* generic_type_gmake(generic_type* gtype);
 
 /**
  * 新しい型変数つきの型宣言を作成します.

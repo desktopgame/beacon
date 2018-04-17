@@ -59,12 +59,14 @@ void il_factor_variable_load(il_factor_variable * self, enviroment * env, il_con
 
 generic_type* il_factor_variable_eval(il_factor_variable * self, enviroment * env, il_context* ilctx) {
 	il_factor_variable_check(self, env, ilctx);
+	generic_type* ret = NULL;
 	if(self->type == ilvariable_type_local) {
-		return il_factor_variable_local_eval(self->u.local_, env, ilctx);
+		ret = il_factor_variable_local_eval(self->u.local_, env, ilctx);
 	} else if(self->type == ilvariable_type_static) {
-		return il_factor_variable_static_eval(self->u.static_, env, ilctx);
+		ret = il_factor_variable_static_eval(self->u.static_, env, ilctx);
 	}
-	return NULL;
+	generic_type_validate(ret);
+	return ret;
 }
 
 void il_factor_variable_delete(il_factor_variable * self) {

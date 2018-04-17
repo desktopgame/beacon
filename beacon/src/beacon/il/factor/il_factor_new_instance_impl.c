@@ -77,7 +77,12 @@ generic_type* il_factor_new_instance_eval(il_factor_new_instance * self, envirom
 	}
 	//型引数がないのでそのまま
 	if (self->type_args->length == 0) {
-		return generic_type_make(self->c->parent);
+		generic_type* ret = generic_type_make(self->c->parent);
+		generic_type_validate(ret);
+		//text_printf("new: ");
+		//generic_type_print(ret);
+		//text_printf("\n");
+		return ret;
 	}
 	//fqcn_cache typename_group
 	if (self->instance_type == NULL) {
@@ -91,6 +96,10 @@ generic_type* il_factor_new_instance_eval(il_factor_new_instance * self, envirom
 		}
 		self->instance_type = a;
 	}
+	generic_type_validate(self->instance_type);
+	//text_printf("new: ");
+	//generic_type_print(self->instance_type);
+	//text_printf("\n");
 	return self->instance_type;
 }
 
