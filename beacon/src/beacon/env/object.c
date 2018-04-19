@@ -15,39 +15,41 @@
 #include "generic_type.h"
 
 //proto
-static object* object_malloc(object_tag type);
+static object* object_mallocImpl(object_tag type, const char* filename, int lineno);
+#define object_malloc(type) (object_mallocImpl(type, __FILE__, __LINE__))
+//static object* object_malloc(object_tag type);
 static object* gObjectTrue = NULL;
 static object* gObjectFalse = NULL;
 static object* gObjectNull = NULL;
 static int gObjectCount = 0;
 
 
-object * object_int_new(int i) {
-	object* ret = object_malloc(object_int);
+object * object_int_malloc(int i, const char* filename, int lineno) {
+	object* ret = object_mallocImpl(object_int, filename, lineno);
 	ret->u.int_ = i;
 	ret->gtype = GEN_INT;
 	ret->vptr = type_vtable(CL_INT);
 	return ret;
 }
 
-object * object_double_new(double d) {
-	object* ret = object_malloc(object_double);
+object * object_double_malloc(double d, const char* filename, int lineno) {
+	object* ret = object_mallocImpl(object_double, filename, lineno);
 	ret->u.double_ = d;
 	ret->gtype = GEN_DOUBLE;
 	ret->vptr = type_vtable(CL_DOUBLE);
 	return ret;
 }
 
-object * object_char_new(char c) {
-	object* ret = object_malloc(object_char);
+object * object_char_malloc(char c, const char* filename, int lineno) {
+	object* ret = object_mallocImpl(object_char, filename, lineno);
 	ret->u.char_ = c;
 	ret->gtype = GEN_CHAR;
 	ret->vptr = type_vtable(CL_CHAR);
 	return ret;
 }
 
-object * object_string_new(const char * s) {
-	object* ret = object_malloc(object_string);
+object * object_string_malloc(const char * s, const char* filename, int lineno) {
+	object* ret = object_mallocImpl(object_string, filename, lineno);
 	//ret->u.string_ = s;
 	ret->u.field_vec = vector_new();
 	ret->gtype = GEN_STRING;
@@ -85,8 +87,8 @@ object * object_string_new(const char * s) {
 	return ret;
 }
 
-object * object_ref_new() {
-	object* ret= object_malloc(object_ref);
+object * object_ref_malloc(const char* filename, int lineno) {
+	object* ret= object_mallocImpl(object_ref, filename, lineno);
 	ret->u.field_vec = vector_new();
 	return ret;
 }
@@ -230,8 +232,8 @@ void object_delete(object * self) {
 }
 
 //private
-static object* object_malloc(object_tag type) {
-	object* ret = (object*)MEM_MALLOC(sizeof(object));
+static object* object_mallocImpl(object_tag type, const char* filename, int lineno) {
+	object* ret = (object*)mem_malloc(sizeof(object), filename, lineno);
 	ret->gtype = NULL;
 	ret->paint = paint_unmarked;
 	ret->tag = type;

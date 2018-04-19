@@ -65,34 +65,39 @@ typedef struct object {
  * @param i
  * @return
  */
-object* object_int_new(int i);
+#define object_int_new(i) (object_int_malloc(i, __FILE__, __LINE__))
+object* object_int_malloc(int i, const char* filename, int lineno);
 
 /**
  * 浮動小数型のオブジェクトを作成します.
  * @param d
  * @return
  */
-object* object_double_new(double d);
+#define object_double_new(d) (object_double_malloc(d, __FILE__, __LINE__))
+object* object_double_malloc(double d, const char* filename, int lineno);
 
 /**
  * 文字型のオブジェクトを作成します.
  * @param c
  * @return
  */
-object* object_char_new(char c);
+#define object_char_new(c) (object_char_malloc(c, __FILE__, __LINE__))
+object* object_char_malloc(char c, const char* filename, int lineno);
 
 /**
  * 文字列型のオブジェクトを作成します.
  * @param s
  * @return
  */
-object* object_string_new(const char* s);
+#define object_string_new(s) (object_string_malloc(s, __FILE__, __LINE__))
+object* object_string_malloc(const char* s, const char* filename, int lineno);
 
 /**
  * 参照型のオブジェクトを作成します.
  * @return
  */
-object* object_ref_new();
+#define object_ref_new() (object_ref_malloc(__FILE__, __LINE__))
+object* object_ref_malloc(const char* filename, int lineno);
 
 /**
  * 真偽値型の値を参照します.
