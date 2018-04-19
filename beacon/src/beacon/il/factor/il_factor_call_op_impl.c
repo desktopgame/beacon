@@ -164,14 +164,15 @@ static void il_factor_member_op_check(il_factor_call_op* self, enviroment* env, 
 			}
 			if(ctype != NULL) {
 				il_factor_invoke_static* st = il_factor_invoke_static_new(ilmem->name);
+				//XSTREQ(ilmem->name, "copy");
 				self->type = ilcall_type_invoke_static;
 				self->u.invoke_static_ = st;
 				//入れ替える
-				st->type_args = ilvar->type_args;
+				st->type_args = ilmem->type_args;
 				st->args = self->argument_list;
 				st->fqcn = ilvar->fqcn;
 				self->argument_list = NULL;
-				ilvar->type_args = NULL;
+				ilmem->type_args = NULL;
 				ilvar->fqcn = NULL;
 			} else {
 				il_factor_invoke* iv = il_factor_invoke_new(ilmem->name);

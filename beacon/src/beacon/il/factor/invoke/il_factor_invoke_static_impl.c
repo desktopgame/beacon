@@ -5,6 +5,7 @@
 #include "../../../env/type/class_impl.h"
 #include "../../../vm/enviroment.h"
 #include "../../il_argument.h"
+#include "../../il_type_argument.h"
 #include "../../../util/xassert.h"
 
 //proto
@@ -12,6 +13,7 @@ static void resolve_non_default(il_factor_invoke_static * self, enviroment * env
 static void resolve_default(il_factor_invoke_static * self, enviroment * env, il_context* ilctx);
 static void il_factor_invoke_static_check(il_factor_invoke_static * self, enviroment * env, il_context* ilctx);
 static void il_factor_invoke_static_args_delete(vector_item item);
+static void il_factor_invoke_static_typeargs_delete(vector_item item);
 
 il_factor_invoke_static* il_factor_invoke_static_new(const char* name) {
 	il_factor_invoke_static* ret = (il_factor_invoke_static*)MEM_MALLOC(sizeof(il_factor_invoke_static));
@@ -29,9 +31,9 @@ void il_factor_invoke_static_generate(il_factor_invoke_static* self, enviroment*
 	for(int i=0; i<self->args->length; i++) {
 		il_argument* e = (il_argument*)vector_at(self->args, i);
 		il_factor_generate(e->factor, env, ilctx);
-	}
-	if(il_error_panic()) {
-		return;
+		if(il_error_panic()) {
+			return;
+		}
 	}
 	opcode_buf_add(env->buf, (vector_item)op_invokestatic);
 	opcode_buf_add(env->buf, (vector_item)self->m->parent->absolute_index);
@@ -62,7 +64,7 @@ generic_type* il_factor_invoke_static_eval(il_factor_invoke_static * self, envir
 
 void il_factor_invoke_static_delete(il_factor_invoke_static* self) {
 	vector_delete(self->args, il_factor_invoke_static_args_delete);
-	vector_delete(self->type_args, vector_deleter_null);
+	vector_delete(self->type_args, il_factor_invoke_static_typeargs_delete);
 	fqcn_cache_delete(self->fqcn);
 //	generic_type_delete(self->resolved);
 	MEM_FREE(self->name);
@@ -107,4 +109,9 @@ static void il_factor_invoke_static_check(il_factor_invoke_static * self, enviro
 static void il_factor_invoke_static_args_delete(vector_item item) {
 	il_argument* e = (il_argument*)item;
 	il_argument_delete(e);
+}
+
+static void il_factor_invoke_static_typeargs_delete(vector_item item) {
+	il_type_argument* e = (il_type_argument*)item;
+	il_type_argument_delete(e);
 }

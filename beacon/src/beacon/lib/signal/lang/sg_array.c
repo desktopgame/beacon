@@ -86,11 +86,11 @@ static void sg_array_nativeGet(method* parent, vm* vm, enviroment* env) {
 }
 
 static void sg_array_nativeCopy(method* parent, vm* vm, enviroment* env) {
-	object* length = vector_pop(vm->value_stack);
-	object* dstOffset = vector_pop(vm->value_stack);
-	object* dst = vector_pop(vm->value_stack);
-	object* srcOffset = vector_pop(vm->value_stack);
 	object* src = vector_pop(vm->value_stack);
+	object* srcOffset = vector_pop(vm->value_stack);
+	object* dst = vector_pop(vm->value_stack);
+	object* dstOffset = vector_pop(vm->value_stack);
+	object* length = vector_pop(vm->value_stack);
 	int srcLen = src->native_slot_vec->length;
 	int dstLen = dst->native_slot_vec->length;
 	int cpyLen = length->u.int_;

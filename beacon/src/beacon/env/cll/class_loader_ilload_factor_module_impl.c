@@ -1,6 +1,7 @@
 #include "class_loader_ilload_factor_module_impl.h"
 #include "../../il/il_factor_impl.h"
 #include "../../util/mem.h"
+#include "../../util/xassert.h"
 #include "../class_loader.h"
 #include "class_loader_ilload_type_module_impl.h"
 //proto
@@ -233,5 +234,6 @@ static il_factor_member_op* CLIL_member_op(class_loader* self, ast* source) {
 	il_factor_member_op* ret = il_factor_member_op_new(aname->u.string_value);
 	ret->fact = CLIL_factor(self, afact);
 	CLIL_type_argument(self, atype_args, ret->type_args);
+	//XSTREQ(ret->name, "copy");
 	return ret;
 }
