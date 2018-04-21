@@ -2,6 +2,7 @@
 #ifndef BEACON_ENV_GENERIC_TYPE_H
 #define BEACON_ENV_GENERIC_TYPE_H
 #include "../util/vector.h"
+#include "type_parameter_rule.h"
 #include <stdbool.h>
 #include <assert.h>
 struct type;
@@ -14,6 +15,7 @@ struct il_context;
  */
 typedef enum generic_type_tag {
 	generic_type_tag_none,
+	generic_type_tag_ctor,
 	generic_type_tag_class,
 	generic_type_tag_method,
 } generic_type_tag;
@@ -58,12 +60,6 @@ generic_type* generic_type_validate(generic_type* self);
  * @return
  */
 generic_type* generic_type_make(struct type* core_type);
-
-/**
- * @param gtype
- * @return
- */
-generic_type* generic_type_gmake(generic_type* gtype);
 
 /**
  * 新しい型変数つきの型宣言を作成します.
@@ -140,4 +136,37 @@ bool generic_type_bool(generic_type* self);
  * @return
  */
 generic_type* generic_type_apply(generic_type* self, struct il_context* ilctx);
+
+/**
+ * self が型引数なら、それに適用されるルールを返します.
+ * @param self
+ * @param ilctx
+ */
+vector* generic_type_rule(generic_type* self, struct il_context* ilctx);
+
+/**
+ * selfのルール群が other を満たすなら true.
+ * @param self
+ * @param other
+ * @return
+ */
+bool generic_type_rule_valid(vector* self, vector* other);
+
+/**
+ * self が rules のルールに合格するなら true.
+ * @param self
+ * @param rules
+ * @param ilctx
+ * @return
+ */
+bool generic_type_rule_test(generic_type* self, vector* rules, struct il_context* ilctx);
+
+/**
+ * rules のなかに ポリモーフィックルールとして other を指定するものが含まれるなら true.
+ * @param rules
+ * @param other
+ * @param ilctx
+ * @return
+ */
+bool generic_type_rule_polymorphic(vector* rules, generic_type* other, struct il_context* ilctx);
 #endif // !SIGNAL_ENV_GENERIC_TYPE_H

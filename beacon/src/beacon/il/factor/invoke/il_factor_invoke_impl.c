@@ -100,13 +100,13 @@ static void resolve_non_default(il_factor_invoke * self, enviroment * env, il_co
 		//レシーバの実体化された型の中で、
 		//メソッドの戻り値 'T' が表す位置に対応する実際の型を取り出す。
 		generic_type* instanced_type = (generic_type*)vector_at(receivergType->type_args_list, returnvType.u.index);
-		self->resolved = generic_type_gmake(instanced_type);
+		self->resolved = instanced_type;
 		self->resolved->tag = generic_type_tag_class;
 		generic_type_validate(self->resolved);
 	} else if(returnvType.tag == virtualtype_method_tv) {
 		//メソッドに渡された型引数を参照する
 		generic_type* instanced_type = (generic_type*)vector_at(self->type_args, returnvType.u.index);
-		self->resolved = generic_type_gmake(instanced_type);
+		self->resolved = instanced_type;
 		self->resolved->tag = generic_type_tag_class;
 		generic_type_validate(self->resolved);
 	}
