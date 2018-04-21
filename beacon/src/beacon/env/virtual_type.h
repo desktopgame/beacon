@@ -48,5 +48,13 @@ bool virtual_type_char(virtual_type* self);
 
 bool virtual_type_null(virtual_type* self);
 
-int virtual_type_distance(virtual_type* self, struct generic_type* a, il_context* ilctx);
+/**
+ * self から現在のコンテキストで有効な generic_type を取得し、
+ * generic_type_distanceの値を返します.
+ * @param self
+ * @param other
+ * @param ilctx
+ * @return
+ */
+int virtual_type_distance(virtual_type* self, struct generic_type* other, il_context* ilctx);
 #endif

@@ -120,16 +120,16 @@ void generic_type_addargs(generic_type* self, generic_type* a) {
 	}
 }
 
-int generic_type_distance(generic_type * a, generic_type * b, il_context* ilctx) {
-	if(a->core_type == NULL) {
-		a = generic_type_get(a, ilctx);
+int generic_type_distance(generic_type * self, generic_type * other, il_context* ilctx) {
+	if(self->core_type == NULL) {
+		self = generic_type_get(self, ilctx);
 	}
-	if(b->core_type == NULL) {
-		b = generic_type_get(b, ilctx);
+	if(other->core_type == NULL) {
+		other = generic_type_get(other, ilctx);
 	}
-	assert(a->core_type != NULL);
-	assert(b->core_type != NULL);
-	int dist = type_distance(a->core_type, b->core_type);
+	assert(self->core_type != NULL);
+	assert(other->core_type != NULL);
+	int dist = type_distance(self->core_type, other->core_type);
 	return dist;
 }
 
