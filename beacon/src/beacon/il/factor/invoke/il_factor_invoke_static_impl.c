@@ -83,7 +83,6 @@ static void resolve_non_default(il_factor_invoke_static * self, enviroment * env
 	self->resolved = generic_type_make(instanced_type->core_type);
 	self->resolved->tag = generic_type_tag_method;
 	self->resolved->virtual_type_index = returnvType.u.index;
-	self->resolved->ref_count++;
 }
 
 static void resolve_default(il_factor_invoke_static * self, enviroment * env, il_context* ilctx) {
@@ -94,7 +93,6 @@ static void resolve_default(il_factor_invoke_static * self, enviroment * env, il
 	vector_push(ilctx->type_args_vec, self->type_args);
 	self->resolved = generic_type_apply(returnvType.u.gtype, ilctx);
 	vector_pop(ilctx->type_args_vec);
-	self->resolved->ref_count++;
 }
 
 static void il_factor_invoke_static_check(il_factor_invoke_static * self, enviroment * env, il_context* ilctx) {

@@ -110,7 +110,6 @@ static void resolve_non_default(il_factor_invoke * self, enviroment * env, il_co
 		self->resolved->tag = generic_type_tag_class;
 		generic_type_validate(self->resolved);
 	}
-	self->resolved->ref_count++;
 }
 
 static void resolve_default(il_factor_invoke * self, enviroment * env, il_context* ilctx) {
@@ -128,7 +127,6 @@ static void resolve_default(il_factor_invoke * self, enviroment * env, il_contex
 	self->resolved = generic_type_apply(returnvType.u.gtype, ilctx);
 	vector_pop(ilctx->receiver_vec);
 	vector_pop(ilctx->type_args_vec);
-	self->resolved->ref_count++;
 	generic_type_validate(self->resolved);
 }
 

@@ -71,7 +71,6 @@ void il_factor_variable_local_load(il_factor_variable_local * self, enviroment *
 			self->u.entry_ = ent;
 			self->gt = ent->gtype;
 		}
-		self->gt->ref_count++;
 	}
 }
 

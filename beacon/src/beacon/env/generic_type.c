@@ -72,7 +72,6 @@ generic_type* generic_type_malloc(struct type* core_type, const char* filename, 
 	ret->core_type = core_type;
 	ret->type_args_list = vector_new();
 	ret->virtual_type_index = -1;
-	ret->ref_count = 0;
 	//現在のスクリプトコンテキストに登録
 	script_context* ctx = script_context_get_current();
 	vector_push(ctx->all_generic_vec, ret);
@@ -114,7 +113,6 @@ void generic_type_addargs(generic_type* self, generic_type* a) {
 //	       a->tag == generic_type_tag_method ||
 //		   a->tag == generic_type_tag_none);
 	generic_type_validate(a);
-	a->ref_count++;
 	vector_push(self->type_args_list, a);
 	if(self->type_args_list->length >= 2) {
 		//generic_type_print(self);

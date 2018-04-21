@@ -30,7 +30,6 @@ generic_type* type_init_generic(type* self, int counts) {
 			arg->virtual_type_index = i;
 			generic_type_addargs(self->generic_self, arg);
 		}
-		self->generic_self->ref_count = 1;
 	}
 	return self->generic_self;
 }

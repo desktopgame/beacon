@@ -32,7 +32,6 @@ typedef struct generic_type {
 	//もしこの型が List<T> の Tを表すなら、
 	//外側のクラスの何番目の型変数かを格納する。
 	int virtual_type_index;
-	int ref_count;
 	generic_type_tag tag;
 	bool mark;
 } generic_type;
