@@ -14,7 +14,7 @@
 static void generic_type_delete_self(vector_item item);
 static void generic_type_deletercr_self(vector_item item);
 static void generic_type_recursive_mark(generic_type* a);
-
+static generic_type* generic_type_get(generic_type* a, il_context* ilctx);
 /*
 generic_type * generic_type_new(type * core_type) {
 
@@ -154,13 +154,17 @@ bool generic_type_castable(generic_type* a, generic_type* b) {
 	return ret;
 }
 
-int generic_type_distance(generic_type * a, generic_type * b) {
-	if (a->virtual_type_index == -1 &&
-		b->virtual_type_index == -1) {
-		assert(a->core_type != NULL && b->core_type != NULL);
-		return type_distance(a->core_type, b->core_type);
+int generic_type_distance(generic_type * a, generic_type * b, il_context* ilctx) {
+	if(a->core_type == NULL) {
+		a = generic_type_get(a, ilctx);
 	}
-	return 0;
+	if(b->core_type == NULL) {
+		b = generic_type_get(b, ilctx);
+	}
+	assert(a->core_type != NULL);
+	assert(b->core_type != NULL);
+	int dist = type_distance(a->core_type, b->core_type);
+	return dist;
 }
 
 void generic_type_print(generic_type * self) {
@@ -233,6 +237,20 @@ generic_type* generic_type_apply(generic_type* self, il_context* ilctx) {
 	return copy;
 }
 //private
+static generic_type* generic_type_get(generic_type* a, il_context* ilctx) {
+	if(a->virtual_type_index == -1) {
+		return a;
+	}
+	if(a->tag == generic_type_tag_class) {
+		generic_type* receiver = vector_at(ilctx->receiver_vec, a->virtual_type_index);
+		a = receiver;
+	} else if(a->tag == generic_type_tag_method) {
+		generic_type* at = vector_at(ilctx->type_args_vec, a->virtual_type_index);
+		a = at;
+	}
+	return a;
+}
+
 static void generic_type_delete_self(vector_item item) {
 	generic_type* e = (generic_type*)item;
 	vector_delete(e->type_args_list, vector_deleter_null);

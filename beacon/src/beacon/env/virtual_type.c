@@ -70,10 +70,15 @@ bool virtual_type_null(virtual_type* self){
 
 int virtual_type_distance(virtual_type* self, generic_type* a, il_context* ilctx) {
 	if(self->tag == virtualtype_default) {
-		return generic_type_distance(self->u.gtype, a);
+		return generic_type_distance(self->u.gtype, a, ilctx);
 	} else if(self->tag == virtualtype_class_tv) {
 		generic_type* r = (generic_type*)vector_top(ilctx->receiver_vec);
-		return generic_type_distance(vector_at(r->type_args_list, self->u.index), a);
+		generic_type* m = vector_at(r->type_args_list, self->u.index);
+		return generic_type_distance(m, a, ilctx);
+	} else if(self->tag == virtualtype_method_tv) {
+		vector* type_args = ilctx->type_args_vec;
+		generic_type* r = vector_at(type_args, self->u.index);
+		return generic_type_distance(r, a, ilctx);
 	}
 	return 0;
 }

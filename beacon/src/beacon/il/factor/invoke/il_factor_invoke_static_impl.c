@@ -5,8 +5,10 @@
 #include "../../../env/type/class_impl.h"
 #include "../../../vm/enviroment.h"
 #include "../../il_argument.h"
+#include "../../il_context.h"
 #include "../../il_type_argument.h"
 #include "../../../util/xassert.h"
+#include "../../../util/vector.h"
 
 //proto
 static void resolve_non_default(il_factor_invoke_static * self, enviroment * env, il_context* ilctx);
@@ -99,11 +101,14 @@ static void il_factor_invoke_static_check(il_factor_invoke_static * self, enviro
 	class_* cls = il_context_class(ilctx, self->fqcn);
 	int temp = -1;
 //	XSTREQ(self->name, "write");
+	vector_push(ilctx->type_args_vec, self->type_args);
 	self->m = class_find_smethod(cls, self->name, self->args, env, ilctx, &temp);
 	self->index = temp;
+	//メソッドが見つからない
 	if(temp == -1) {
 		il_error_report(ilerror_undefined_method, self->name);
 	}
+	vector_pop(ilctx->type_args_vec);
 }
 
 static void il_factor_invoke_static_args_delete(vector_item item) {

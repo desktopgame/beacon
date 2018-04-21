@@ -9,6 +9,7 @@
 #include "../constructor.h"
 #include "../object.h"
 #include "../method.h"
+#include "../../util/xassert.h"
 #include <string.h>
 
 int meta_calc_score(vector* params, vector* ilargs, enviroment* env, il_context* ilctx) {
@@ -90,6 +91,7 @@ method * meta_find_method(vector * method_vec, const char * name, vector * ilarg
 			(*outIndex) = i;
 			return m;
 		}
+		//XSTREQ(m->name, "copy");
 		//もっともスコアの高いメソッドを選択する
 		int score = meta_calc_score(m->parameter_list, ilargs, env, ilctx);
 		if(score == -1) {

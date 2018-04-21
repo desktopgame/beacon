@@ -53,14 +53,8 @@ void il_factor_invoke_generate(il_factor_invoke* self, enviroment* env, il_conte
 }
 
 void il_factor_invoke_load(il_factor_invoke * self, enviroment * env, il_context* ilctx, il_ehandler* eh) {
-	vector_push(ilctx->type_args_vec, self->type_args);
-	vector_push(ilctx->receiver_vec, generic_type_validate(il_factor_eval(self->receiver, env, ilctx)));
-
 	il_factor_load(self->receiver, env, ilctx, eh);
 	il_factor_invoke_check(self, env, ilctx);
-
-	vector_pop(ilctx->receiver_vec);
-	vector_pop(ilctx->type_args_vec);
 }
 
 generic_type* il_factor_invoke_eval(il_factor_invoke * self, enviroment * env, il_context* ilctx) {
@@ -154,14 +148,18 @@ static void il_factor_invoke_check(il_factor_invoke * self, enviroment * env, il
 		return;
 	}
 	//対応するメソッドを検索
-	vector_push(ilctx->receiver_vec, generic_type_validate(gtype));
+	vector_push(ilctx->type_args_vec, self->type_args);
+	vector_push(ilctx->receiver_vec, generic_type_validate(il_factor_eval(self->receiver, env, ilctx)));
+
 	type* ctype = gtype->core_type;
 	assert(ctype != NULL);
 	int temp = -1;
 	self->m = type_find_method(ctype, self->name, self->args, env, ilctx, &temp);
 	//self->m = class_find_method(TYPE2CLASS(ctype), self->name, self->args, env, cache, &temp);
 	self->index = temp;
+	
 	vector_pop(ilctx->receiver_vec);
+	vector_pop(ilctx->type_args_vec);
 	if(temp == -1) {
 		il_error_report(ilerror_undefined_method, self->name);
 		return;

@@ -56,7 +56,7 @@ int _main(int argc, char* argv[]) {
 	mem_set_trace(true);
 	//mem_break(17679);
 	logger_set_enabled(false);
-	bool test = false;
+	bool test = true;
 	int ret = 1;
 
 	if(test) {

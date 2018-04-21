@@ -107,9 +107,10 @@ bool generic_type_castable(generic_type* a, generic_type* b);
  * メソッドを解決する時、もっともマッチするオーバーロードを見つけるために使用されます。
  * @param a
  * @param b
+ * @param ilctx
  * @return
  */
-int generic_type_distance(generic_type* a, generic_type* b);
+int generic_type_distance(generic_type* a, generic_type* b, struct il_context* ilctx);
 
 /**
  * 型変数と型を出力します.

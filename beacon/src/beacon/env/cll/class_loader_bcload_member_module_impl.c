@@ -14,6 +14,7 @@
 #include "../../env/constructor.h"
 #include "../../env/parameter.h"
 #include "../../env/type_parameter.h"
+#include "../../util/xassert.h"
 #include <assert.h>
 
 //proto
