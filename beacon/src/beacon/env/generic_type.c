@@ -120,38 +120,6 @@ void generic_type_addargs(generic_type* self, generic_type* a) {
 	}
 }
 
-bool generic_type_castable(generic_type* a, generic_type* b) {
-	//完全に同じポインタなら比較は不要
-	if (a == b) {
-		return true;
-	}
-	if (a->core_type != NULL &&
-		b->core_type != NULL) {
-		//基本型か型引数の数が違うなら false
-		if (!type_castable(a->core_type, b->core_type) ||
-			a->type_args_list->length != b->type_args_list->length) {
-			return false;
-		}
-	}
-	//型引数が 0 個なら比較不要
-	if (a->type_args_list->length == 0 &&
-		b->type_args_list->length == 0) {
-		return true;
-	}
-	//TODO: in/out の考慮
-	//基本型と型引数が0個以上で一致するならそれらを比較
-	bool ret = true;
-	for (int i = 0; i < a->type_args_list->length; i++) {
-		generic_type* le = (generic_type*)vector_at(a->type_args_list, i);
-		generic_type* re = (generic_type*)vector_at(b->type_args_list, i);
-		if (!generic_type_castable(le, re)) {
-			ret = false;
-			break;
-		}
-	}
-	return ret;
-}
-
 int generic_type_distance(generic_type * a, generic_type * b, il_context* ilctx) {
 	if(a->core_type == NULL) {
 		a = generic_type_get(a, ilctx);

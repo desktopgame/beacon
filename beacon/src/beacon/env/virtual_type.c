@@ -83,13 +83,6 @@ int virtual_type_distance(virtual_type* self, generic_type* a, il_context* ilctx
 	return 0;
 }
 
-bool virtual_type_castable(virtual_type* self, struct generic_type* a) {
-	if(self->tag == virtualtype_default) {
-		return generic_type_castable(self->u.gtype, a);
-	}
-	return true;
-}
-
 //private
 static bool virtual_type_comp(virtual_type* self, type* tp) {
 	if(self->tag == virtualtype_default) {

@@ -105,18 +105,6 @@ int type_distance(type * a, type * b) {
 	return -1;
 }
 
-bool type_castable(type * self, type * other) {
-	assert(self != NULL);
-	assert(other != NULL);
-	if (self->tag != other->tag) {
-		return false;
-	}
-	if (self->tag == type_class) {
-		return class_castable(self->u.class_, other->u.class_);
-	}
-	return false;
-}
-
 void type_unlink(type * self) {
 	if (self->tag == type_class) {
 		class_unlink(self->u.class_);

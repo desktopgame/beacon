@@ -39,7 +39,7 @@ void il_stmt_variable_init_generate(il_stmt_variable_init * self, enviroment * e
 	//	opcode_buf_add(env->buf, op_lookup);
 	//	opcode_buf_add(env->buf, gb->core_type->absolute_index);
 	}
-	assert(generic_type_castable(ga, gb));
+	//assert(generic_type_castable(ga, gb));
 	opcode_buf_add(env->buf, op_store);
 	opcode_buf_add(env->buf, self->sym->index);
 }

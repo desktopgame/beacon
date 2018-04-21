@@ -49,6 +49,4 @@ bool virtual_type_char(virtual_type* self);
 bool virtual_type_null(virtual_type* self);
 
 int virtual_type_distance(virtual_type* self, struct generic_type* a, il_context* ilctx);
-
-bool virtual_type_castable(virtual_type* self, struct generic_type* a);
 #endif

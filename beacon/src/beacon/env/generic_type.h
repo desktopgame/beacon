@@ -94,14 +94,6 @@ void generic_type_lostownership(generic_type* a);
 void generic_type_addargs(generic_type* self, generic_type* a);
 
 /**
- * a を b へキャスト可能なら true.
- * @param a
- * @param b
- * @return
- */
-bool generic_type_castable(generic_type* a, generic_type* b);
-
-/**
  * a と b の距離を返します.
  * メソッドを解決する時、もっともマッチするオーバーロードを見つけるために使用されます。
  * @param a

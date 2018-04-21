@@ -113,14 +113,6 @@ void type_dump(type* self, int depth);
 int type_distance(type* a, type* b);
 
 /**
- * self を other に変換出来るなら true.
- * @param self
- * @param other
- * @return
- */
-bool type_castable(type* self, type* other);
-
-/**
  * 型情報を残してメソッドやフィールドなどのみを開放します.
  * @param self
  */
