@@ -103,9 +103,9 @@ class_loader * class_loader_new_entry_point_from_parser(parser * p) {
 
 void class_loader_load(class_loader * self) {
 	heap* hee = heap_get();
-	hee->blocking++;
+	hee->accept_blocking++;
 	class_loader_load_impl(self);
-	hee->blocking--;
+	hee->accept_blocking--;
 }
 
 void class_loader_sub(class_loader * self, char * fullPath) {

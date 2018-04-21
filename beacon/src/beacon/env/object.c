@@ -6,6 +6,7 @@
 #include "../util/mem.h"
 #include "../util/text.h"
 #include "type_interface.h"
+#include "script_context.h"
 #include <assert.h>
 #include "type_impl.h"
 #include "../lib/signal/lang/sg_array.h"
@@ -18,9 +19,9 @@
 static object* object_mallocImpl(object_tag type, const char* filename, int lineno);
 #define object_malloc(type) (object_mallocImpl(type, __FILE__, __LINE__))
 //static object* object_malloc(object_tag type);
-static object* gObjectTrue = NULL;
-static object* gObjectFalse = NULL;
-static object* gObjectNull = NULL;
+//static object* gObjectTrue = NULL;
+//static object* gObjectFalse = NULL;
+//static object* gObjectNull = NULL;
 static int gObjectCount = 0;
 
 
@@ -98,29 +99,32 @@ object * object_bool_get(bool b) {
 }
 
 object * object_get_true() {
-	if (gObjectTrue == NULL) {
-		gObjectTrue = object_malloc(object_bool);
-		gObjectTrue->u.bool_ = !false;
-		gObjectTrue->gtype = GEN_BOOL;
+	script_context* ctx = script_context_get_current();
+	if (ctx->oTrue == NULL) {
+		ctx->oTrue = object_malloc(object_bool);
+		ctx->oTrue->u.bool_ = !false;
+		ctx->oTrue->gtype = GEN_BOOL;
 	}
-	return gObjectTrue;
+	return ctx->oTrue;
 }
 
 object * object_get_false() {
-	if (gObjectFalse == NULL) {
-		gObjectFalse = object_malloc(object_bool);
-		gObjectFalse->u.bool_ = false;
-		gObjectFalse->gtype = GEN_BOOL;
+	script_context* ctx = script_context_get_current();
+	if (ctx->oFalse == NULL) {
+		ctx->oFalse = object_malloc(object_bool);
+		ctx->oFalse->u.bool_ = false;
+		ctx->oFalse->gtype = GEN_BOOL;
 	}
-	return gObjectFalse;
+	return ctx->oFalse;
 }
 
 object * object_get_null() {
-	if (gObjectNull == NULL) {
-		gObjectNull = object_malloc(object_null);
-		gObjectNull->gtype = generic_type_new(CL_NULL);
+	script_context* ctx = script_context_get_current();
+	if (ctx->oNull == NULL) {
+		ctx->oNull = object_malloc(object_null);
+		ctx->oNull->gtype = generic_type_new(CL_NULL);
 	}
-	return gObjectNull;
+	return ctx->oNull;
 }
 
 void object_inc(object * self) {

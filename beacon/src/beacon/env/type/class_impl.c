@@ -471,21 +471,21 @@ object * class_new_rinstance(class_ * self, vm* vmc, int count, ...) {
 	}
 	//コンストラクタを検索
 	int temp = 0;
-	
 	constructor* ctor = class_find_rconstructor(self, args, &temp);
 	assert(temp != -1);
 	//コンストラクタを実行
 	vm* sub = vm_sub(vmc);
+	heap* h = heap_get();
 	for (int i = args->length-1; i>=0; i--) {
 		object* o = vector_at(args, i);
 		vector_push(sub->value_stack, o);
 	}
 	vm_execute(sub, ctor->env);
 	object* inst = vector_pop(sub->value_stack);
-	heap_get()->blocking++;
+	h->collect_blocking++;
 	vm_delete(sub);
 	vector_delete(args, vector_deleter_null);
-	heap_get()->blocking--;
+	h->collect_blocking--;
 	va_end(ap);
 	return inst;
 }

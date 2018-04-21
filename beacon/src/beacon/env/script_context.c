@@ -128,7 +128,7 @@ void script_context_bootstrap(script_context* self) {
 	//FIXME:スタック?
 	script_context* selected = script_context_get_current();
 	script_context_set_current(self);
-	self->heap->blocking++;
+	self->heap->accept_blocking++;
 	//プリロード
 	namespace_* signal = namespace_create_at_root("signal");
 	namespace_* lang = namespace_add_namespace(signal, "lang");
@@ -161,7 +161,7 @@ void script_context_bootstrap(script_context* self) {
 	class_loader_rsub(self->bootstrap_class_loader, "Exception.signal");
 	class_loader_rsub(self->bootstrap_class_loader, "StackTraceElement.signal");
 	//退避していたコンテキストを復帰
-	self->heap->blocking--;
+	self->heap->accept_blocking--;
 	script_context_set_current(selected);
 }
 
@@ -208,13 +208,19 @@ static script_context* script_context_malloc(void) {
 	ret->thread_vec = vector_new();
 	ret->bootstrap_class_loader = NULL;
 	ret->all_generic_vec = vector_new();
+	ret->oTrue = NULL;
+	ret->oFalse = NULL;
+	ret->oNull = NULL;
 	vector_push(ret->thread_vec, sg_thread_main());
 	return ret;
 }
 
 static void script_context_free(script_context* self) {
 	int aa = object_count();
-
+	assert(heap_get()->collect_blocking == 0);
+	//全ての例外フラグをクリア
+	vm* thv = sg_thread_get_vm_ref(sg_thread_current());
+	vm_catch(thv);
 	class_loader_delete(self->bootstrap_class_loader);
 	heap_delete(self->heap);
 	generic_type_collect();

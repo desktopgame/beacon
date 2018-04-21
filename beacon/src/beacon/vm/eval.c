@@ -65,7 +65,7 @@ void eval_interactive() {
 	sg_thread_set_vm_ref(sg_thread_current(), xvm);
 	//すべての入力を記憶しておくバッファー
 	string_buffer* buff = string_buffer_new();
-	ctx->heap->blocking++;
+	ctx->heap->accept_blocking++;
 	while (true) {
 		//1行入力する
 		char* line = text_gets();
@@ -93,9 +93,9 @@ void eval_interactive() {
 			//バッファと今回の入力行を連結したソース
 			//を解析する
 			cll->source_code = p->root;
-			ctx->heap->blocking++;
+			ctx->heap->accept_blocking++;
 			class_loader_load(cll);
-			ctx->heap->blocking--;
+			ctx->heap->accept_blocking--;
 			//以前の最後の実行位置から開始
 			opcode_buf_add(cll->env->buf, op_nop);
 			vm_resume(xvm, cll->env, pc);
@@ -117,7 +117,7 @@ void eval_interactive() {
 	//インタラクティブモードでは
 	//GCを行わないよう保護していますが、
 	//ここではその保護を無効にしてGCを動作させます。
-	ctx->heap->blocking--;
+	ctx->heap->accept_blocking--;
 	vm_delete(xvm);
 	sg_thread_release_vm_ref(sg_thread_current());
 	class_loader_delete(cll);
@@ -129,13 +129,14 @@ static bool eval_top_from_cll(class_loader* cll) {
 	script_context* ctx = script_context_get_current();
 
 	//ソースコードを読み込む
-	ctx->heap->blocking++;
+	ctx->heap->accept_blocking++;
 	class_loader_load(cll);
-	ctx->heap->blocking--;
+	ctx->heap->accept_blocking--;
 	opcode_buf_dump(cll->env->buf, 0);
 	//実行
 	vm* vm = vm_new();
 	sg_thread_set_vm_ref(sg_thread_current(), vm);
+	opcode_buf_dump(cll->env->buf, 0);
 	vm_execute(vm, cll->env);
 	if(vm->terminate) {
 		cll->error = true;

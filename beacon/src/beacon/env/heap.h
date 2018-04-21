@@ -11,7 +11,14 @@
 typedef struct heap {
 	int threshold;
 	vector* object_vec;
-	int blocking;
+	//この値が 1以上 なら、新しく確保されたオブジェクトは
+	//ヒープに関連づけられません。
+	//つまり、オブジェクトを自分で解放する必要があります。
+	//これはリテラルのための機構です。
+	int accept_blocking;
+	//この値が 1以上 なら、新しくオブジェクトを確保した時に
+	//オブジェクトの総数が閾値を上回っていてもGCを施工しません。
+	int collect_blocking;
 } heap;
 
 /**

@@ -6,6 +6,7 @@
 #include "../util/tree_map.h"
 #include "../util/vector.h"
 struct heap;
+struct object;
 struct class_loader;
 
 /**
@@ -33,6 +34,9 @@ typedef struct script_context {
 	vector* type_vec;
 	vector* all_generic_vec;
 	struct heap* heap;
+	struct object* oTrue;
+	struct object* oFalse;
+	struct object* oNull;
 	struct script_context* prev;
 	struct script_context* next;
 } script_context;

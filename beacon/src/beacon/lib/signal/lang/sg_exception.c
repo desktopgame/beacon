@@ -22,7 +22,7 @@ static void sg_exception_nativeInit(method* parent, vm* vmc, enviroment* env) {
 	class_* exceptionClass = namespace_get_class(lang, "Exception");
 	object* self= (object*)vector_at(vmc->ref_stack, 0);
 	heap* h = heap_get();
-	h->blocking++;
+	h->collect_blocking++;
 	//スタックトレースを作成する
 	vm* temp = vmc;
 	vector* stackTraceElementVec = vector_new();
@@ -49,5 +49,6 @@ static void sg_exception_nativeInit(method* parent, vm* vmc, enviroment* env) {
 	int tempi = 0;
 	field* stackTraceF = class_find_field(exceptionClass, "stackTrace", &tempi);
 	vector_assign(self->u.field_vec, tempi, arr);
-	h->blocking--;
+	vector_delete(stackTraceElementVec, vector_deleter_null);
+	h->collect_blocking--;
 }
