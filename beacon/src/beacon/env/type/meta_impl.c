@@ -97,7 +97,7 @@ method * meta_find_method(vector * method_vec, const char * name, vector * ilarg
 			(*outIndex) = i;
 			return m;
 		}
-		XBREAK(!strcmp(m->name, "copy") && debug_get_gen_top());
+		//XBREAK(!strcmp(m->name, "copy") && debug_get_gen_top());
 		//XSTREQ(m->name, "copy");
 		//XSTREQ(m->name, "nativeCopy");
 		//もっともスコアの高いメソッドを選択する

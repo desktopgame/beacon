@@ -91,19 +91,6 @@ int virtual_type_adistance(virtual_type* self, struct generic_type* other, il_co
 	if(self->tag == virtualtype_default) {
 		generic_type* bld = generic_type_build(self->u.gtype, ilctx);
 		generic_type* bld2 = other;
-		if(self->u.gtype->type_args_list->length > 0) {
-			text_printfln("---");
-			generic_type_print(self->u.gtype);
-			text_printf(" ");
-			generic_type_print(other);
-
-			text_printfln("");
-			generic_type_print(bld);
-			text_printf(" ");
-			generic_type_print(bld2);
-
-			text_printfln("");
-		}
 		int dist = generic_type_distance(bld, bld2, ilctx);
 		return dist;
 	} else if(self->tag == virtualtype_class_tv) {

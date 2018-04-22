@@ -50,7 +50,7 @@ void il_stmt_inferenced_type_init_generate(il_stmt_inferenced_type_init * self, 
 void il_stmt_inferenced_type_init_load(il_stmt_inferenced_type_init * self, enviroment * env, il_context* ilctx, il_ehandler * eh) {
 	il_factor_load(self->fact, env, ilctx, eh);
 	//XSTREQ(self->name, "viter");
-	XSTREQ(self->name, "xv");
+	//XSTREQ(self->name, "xv");
 	generic_type* gtp = il_factor_eval(self->fact, env, ilctx);
 	if(il_error_panic()) {
 		return;
