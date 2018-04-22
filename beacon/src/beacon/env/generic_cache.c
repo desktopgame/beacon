@@ -72,16 +72,18 @@ generic_type * generic_cache_gtypeloc(generic_cache * self, namespace_ * scope, 
 		core_type == NULL) {
 		//読み込み中の型
 		generic_type* ret = generic_type_malloc(core_type, filename, lineno);
-		type* container = (type*)vector_top(ilctx->type_vec);
-		ret->u.type_ = container;
-		ret->tag = generic_type_tag_class;
-		ret->virtual_type_index = type_for_generic_index(container, self->fqcn->name);
-		//見つからなかったのでメソッドから調べる
-		if (ret->virtual_type_index == -1) {
+		if(ilctx->method_vec->length > 0) {
 			method* m = (method*)vector_top(ilctx->method_vec);
 			ret->u.type_ = m->parent;
 			ret->tag = generic_type_tag_method;
 			ret->virtual_type_index = method_for_generic_index(m, self->fqcn->name);
+		}
+		//見つからなかったのでクラスから調べる
+		if (ret->virtual_type_index == -1) {
+			type* container = (type*)vector_top(ilctx->type_vec);
+			ret->u.type_ = container;
+			ret->tag = generic_type_tag_class;
+			ret->virtual_type_index = type_for_generic_index(container, self->fqcn->name);
 		}
 		//しかし、Tに対して追加の型変数を与えることはできません。
 		assert(self->type_args->length == 0);

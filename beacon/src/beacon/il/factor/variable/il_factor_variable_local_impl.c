@@ -75,20 +75,9 @@ void il_factor_variable_local_load(il_factor_variable_local * self, enviroment *
 }
 
 generic_type* il_factor_variable_local_eval(il_factor_variable_local * self, enviroment * env, il_context* ilctx) {
-	//XSTREQ(self->name, "iter");
 	il_factor_variable_local_load(self, env, ilctx, NULL);
-	if(!strcmp(self->name, "iter")) {
-	//	text_printf("local: ");
-	//	generic_type_print(self->gt);
-	//	text_printf("\n");
-	}
 	assert(self->type != variable_local_undefined);
 	generic_type_validate(self->gt);
-	if(!strcmp(self->name, "viter")) {
-	//	generic_type_print(self->gt);
-	//	printf("\n");
-	//	int a = 0;
-	}
 	return self->gt;
 }
 

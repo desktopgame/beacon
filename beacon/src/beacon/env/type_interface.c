@@ -26,7 +26,7 @@ generic_type* type_init_generic(type* self, int counts) {
 		self->generic_self = generic_type_new(self);
 		for (int i = 0; i < counts; i++) {
 			generic_type* arg = generic_type_new(NULL);
-			arg->tag = generic_type_tag_none;
+			arg->tag = generic_type_tag_class;
 			arg->virtual_type_index = i;
 			generic_type_addargs(self->generic_self, arg);
 		}
@@ -163,6 +163,15 @@ generic_type * type_find_impl(type * self, type * a) {
 		}
 	}
 	return NULL;
+}
+
+vector* type_parameter_list(type* self) {
+	assert(self != NULL);
+	if(self->tag == type_class) {
+		return self->u.class_->type_parameter_list;
+	} else if(self->tag == type_interface) {
+		return self->u.interface_->type_parameter_list;
+	}
 }
 
 generic_type * type_type_parameter_at(type * self, int index) {

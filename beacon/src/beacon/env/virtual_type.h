@@ -57,4 +57,13 @@ bool virtual_type_null(virtual_type* self);
  * @return
  */
 int virtual_type_distance(virtual_type* self, struct generic_type* other, il_context* ilctx);
+
+/**
+ * メソッドの解決のために使用されます.
+ * @param self
+ * @param other
+ * @param ilctx
+ * @return
+ */
+int virtual_type_adistance(virtual_type* self, struct generic_type* other, il_context* ilctx);
 #endif

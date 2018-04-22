@@ -141,6 +141,9 @@ object* enviroment_constant_string_at(enviroment * self, int index) {
 }
 
 void enviroment_delete(enviroment * self) {
+	if(self == NULL) {
+		return;
+	}
 	//text_printfln("deleted env %s", self->context_cll->filename);
 	//text_printfln("delete pool---");
 	vector_delete(self->constant_pool, enviroment_constant_pool_delete);

@@ -9,6 +9,7 @@
 #include "../../../env/class_loader.h"
 #include "../../../vm/enviroment.h"
 #include "../../il_argument.h"
+#include "../../il_type_argument.h"
 #include "../../il_factor_impl.h"
 #include <string.h>
 #include <stdio.h>
@@ -146,6 +147,7 @@ static void il_factor_invoke_check(il_factor_invoke * self, enviroment * env, il
 		return;
 	}
 	//対応するメソッドを検索
+	il_type_argument_resolve(self->type_args, ilctx);
 	vector_push(ilctx->type_args_vec, self->type_args);
 	vector_push(ilctx->receiver_vec, generic_type_validate(il_factor_eval(self->receiver, env, ilctx)));
 
@@ -155,7 +157,6 @@ static void il_factor_invoke_check(il_factor_invoke * self, enviroment * env, il
 	self->m = type_find_method(ctype, self->name, self->args, env, ilctx, &temp);
 	//self->m = class_find_method(TYPE2CLASS(ctype), self->name, self->args, env, cache, &temp);
 	self->index = temp;
-	
 	vector_pop(ilctx->receiver_vec);
 	vector_pop(ilctx->type_args_vec);
 	if(temp == -1) {

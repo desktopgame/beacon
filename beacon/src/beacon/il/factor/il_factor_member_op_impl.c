@@ -7,6 +7,7 @@
 #include "../../env/type/class_impl.h"
 #include "../../env/field.h"
 #include "../../vm/enviroment.h"
+#include "../../il/il_type_argument.h"
 
 //proto
 static void il_factor_member_op_check(il_factor_member_op* self, enviroment* env, il_context* ilctx);
@@ -98,6 +99,8 @@ static void il_factor_member_op_check(il_factor_member_op* self, enviroment* env
 }
 
 static void il_factor_member_op_typearg_delete(vector_item item) {
-	generic_cache* e = (generic_cache*)item;
-	generic_cache_delete(e);
+//	generic_cache* e = (generic_cache*)item;
+//	generic_cache_delete(e);
+	il_type_argument* e = (il_type_argument*)item;
+	il_type_argument_delete(e);
 }

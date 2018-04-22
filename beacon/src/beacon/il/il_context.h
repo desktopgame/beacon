@@ -15,6 +15,15 @@ typedef struct il_context {
 	vector* type_args_vec;
 	vector* while_start_vec;
 	vector* while_end_vec;
+	//メソッドの探索とコンストラクタの探索は
+	//部分的には似ていますが、
+	//コンストラクタはレシーバがいないのにインスタンスメソッドのように
+	//クラスに定義された型変数を使用できるという点で特殊です。
+	//パラメータが T であり、インスタンスメソッドであるなら
+	//それを実行する実体化されたレシーバから型を取り出せますが、
+	//(つまり、receiver_vecの先頭を参照する)
+	//コンストラクタの場合ではnew演算子から参照する必要があります。
+	vector* eval_ctor_vec;
 	bool toplevel;
 } il_context;
 

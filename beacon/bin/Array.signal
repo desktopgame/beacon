@@ -41,7 +41,7 @@ namespace signal.lang {
 		}
 
 		static def copy<|T|>(Array<|T|> src, Int srcOffset, Array<|T|> dst, Int dstOffset, Int length) -> Void {
-			Array.nativeCopy(src, srcOffset, dst, dstOffset, length);
+			Array.nativeCopy<|T|>(src, srcOffset, dst, dstOffset, length);
 		}
 
 		def iterate() -> Iterator<|T|> {
@@ -57,6 +57,6 @@ namespace signal.lang {
 		native def nativeInit() -> Void;
 		native def nativeSet(Int index, Object v) -> Void;
 		native def nativeGet(Int index) -> Object;
-		static native def nativeCopy(Array src, Int srcOffset, Array dst, Int dstOffset, Int length) -> Void;
+		static native def nativeCopy<|T|>(Array<|T|> src, Int srcOffset, Array<|T|> dst, Int dstOffset, Int length) -> Void;
 	}
 }

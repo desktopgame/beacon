@@ -10,12 +10,15 @@
 #include "../object.h"
 #include "../method.h"
 #include "../../util/xassert.h"
+#include "../../debug.h"
 #include <string.h>
 
 int meta_calc_score(vector* params, vector* ilargs, enviroment* env, il_context* ilctx) {
 	assert(params->length == ilargs->length);
 	int score = 0;
 	bool illegal = false;
+	//assert(ilctx->type_args_vec->length != 0);
+	//vector* type_args = vector_top(ilctx->type_args_vec);
 	for (int i = 0; i < params->length; i++) {
 		vector_item varg = vector_at(ilargs, i);
 		vector_item vparam = vector_at(params, i);
@@ -25,11 +28,14 @@ int meta_calc_score(vector* params, vector* ilargs, enviroment* env, il_context*
 		int dist = 0;
 		generic_type* argType = il_factor_eval(arg->factor, env, ilctx);
 		virtual_type parvType = param->vtype;
+		//parvType.gtype
+		//のタグが　none
+		//インデックスが-1
 		if(il_error_panic()) {
 			return -1;
 		}
 		if (argType->core_type != CL_NULL) {
-			dist = virtual_type_distance(&parvType, argType, ilctx);
+			dist = virtual_type_adistance(&parvType, argType, ilctx);
 		}
 		score += dist;
 		//継承関係のないパラメータ
@@ -91,7 +97,9 @@ method * meta_find_method(vector * method_vec, const char * name, vector * ilarg
 			(*outIndex) = i;
 			return m;
 		}
+		XBREAK(!strcmp(m->name, "copy") && debug_get_gen_top());
 		//XSTREQ(m->name, "copy");
+		//XSTREQ(m->name, "nativeCopy");
 		//もっともスコアの高いメソッドを選択する
 		int score = meta_calc_score(m->parameter_list, ilargs, env, ilctx);
 		if(score == -1) {
@@ -124,7 +132,9 @@ constructor* meta_find_ctor(vector* ctor_vec, vector* ilargs, struct enviroment*
 			return ctor;
 		}
 		//もっともスコアの高いメソッドを選択する
+		vector_push(ilctx->eval_ctor_vec, ctor);
 		int score = meta_calc_score(ctor->parameter_list, ilargs, env, ilctx);
+		vector_pop(ilctx->eval_ctor_vec);
 		if(score == -1) {
 			continue;
 		}

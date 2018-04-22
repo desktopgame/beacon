@@ -1,6 +1,7 @@
 #ifndef BEACON_IL_IL_TYPE_ARGUMENT_H
 #define BEACON_IL_IL_TYPE_ARGUMENT_H
 #include "../env/generic_cache.h"
+#include "../env/generic_type.h"
 #include "../util/vector.h"
 
 /**
@@ -8,6 +9,7 @@
  */
 typedef struct il_type_argument {
 	generic_cache* gcache;
+	generic_type* gtype;
 } il_type_argument;
 
 /**
@@ -21,6 +23,13 @@ il_type_argument* il_type_argument_new();
  * @param iltype_args
  */
 void il_type_argument_print(vector* iltype_args);
+
+/**
+ * @param iltype_args
+ * @param ilctx
+ * @return
+ */
+void il_type_argument_resolve(vector* iltype_args, struct il_context* ilctx);
 
 /**
  * 型実引数を解放します.

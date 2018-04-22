@@ -139,6 +139,13 @@ int type_for_generic_index(type* self, char* name);
 struct generic_type* type_find_impl(type* self, type* a);
 
 /**
+ * この型の型引数の一覧を返します.
+ * @param self
+ * @return
+ */
+vector* type_parameter_list(type* self);
+
+/**
  * この型がクラス/インターフェイスを表すとき、
  * 指定位置の型変数を返します.
  * @param self

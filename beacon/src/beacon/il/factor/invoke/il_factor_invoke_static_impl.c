@@ -99,6 +99,7 @@ static void il_factor_invoke_static_check(il_factor_invoke_static * self, enviro
 	class_* cls = il_context_class(ilctx, self->fqcn);
 	int temp = -1;
 //	XSTREQ(self->name, "write");
+	il_type_argument_resolve(self->type_args, ilctx);
 	vector_push(ilctx->type_args_vec, self->type_args);
 	self->m = class_find_smethod(cls, self->name, self->args, env, ilctx, &temp);
 	self->index = temp;

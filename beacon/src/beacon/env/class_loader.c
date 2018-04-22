@@ -44,6 +44,7 @@
 #include "import_info.h"
 #include "type_cache.h"
 #include "heap.h"
+#include "../debug.h"
 
 //proto
 static void class_loader_load_impl(class_loader* self);
@@ -176,6 +177,9 @@ static void class_loader_load_impl(class_loader* self) {
 	//トップレベルのステートメントを読み込む
 	il_context* ilctx = il_context_new();
 	ilctx->toplevel = true;
+	if(self->type == content_entry_point) {
+		debug_set_gen_top(true);
+	}
 	CLBC_body(self, self->il_code->statement_list, self->env, NULL, ilctx);
 	il_context_delete(ilctx);
 	logger_log(log_info, __FILE__, __LINE__, "loaded file %s", self->filename);

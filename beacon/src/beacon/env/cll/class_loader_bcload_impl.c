@@ -233,6 +233,7 @@ static void CLBC_class(class_loader* self, il_type* iltype, namespace_* parent) 
 		type_parameter_list_dup(iltype->u.class_->type_parameter_list, cls->type_parameter_list, ilctx);
 	}
 	//デフォルトで親に Object を持つように
+	//XSTREQ(cls->name, "String");
 	class_* objClass = CL_OBJECT->u.class_;
 	if (cls != objClass) {
 		if (cls->super_class == NULL) {

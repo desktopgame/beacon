@@ -84,7 +84,8 @@ class_ * class_new_preload(const char * name) {
 	}
 	class_* objCls = CL_OBJECT->u.class_;
 	if (cl != objCls) {
-		cl->super_class = objCls;
+		type_init_generic(objCls->parent, 0);
+		cl->super_class = objCls->parent->generic_self;
 	}
 	return cl;
 }
@@ -455,7 +456,10 @@ int class_count_smethodall(class_ * self) {
 	int sum = 0;
 	do {
 		sum += (pt->smethod_list->length);
-		pt = pt->super_class;
+		if(pt->super_class == NULL) {
+			break;
+		}
+		pt = pt->super_class->core_type->u.class_;
 	} while (pt != NULL);
 	return sum;
 }

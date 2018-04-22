@@ -3,9 +3,11 @@
 #include "type_impl.h"
 #include "script_context.h"
 #include "type_parameter.h"
+#include "constructor.h"
 #include "../util/mem.h"
 #include "../util/text.h"
 #include "../util/xassert.h"
+#include "../il/il_type_argument.h"
 #include "fqcn_cache.h"
 #include <assert.h>
 #include <string.h>
@@ -34,6 +36,7 @@ generic_type* generic_type_validate(generic_type* self) {
 }
 
 generic_type* generic_type_make(type* core_type) {
+	/*
 	if(core_type == NULL) {
 		return generic_type_new(core_type);
 	}
@@ -51,6 +54,11 @@ generic_type* generic_type_make(type* core_type) {
 		assert((len == 1));
 	}
 	return ret;
+	*/
+	if(core_type == NULL) {
+		return generic_type_new(core_type);
+	}
+	return core_type->generic_self;
 }
 
 generic_type* generic_type_malloc(struct type* core_type, const char* filename, int lineno) {
@@ -58,6 +66,7 @@ generic_type* generic_type_malloc(struct type* core_type, const char* filename, 
 	ret->core_type = core_type;
 	ret->type_args_list = vector_new();
 	ret->virtual_type_index = -1;
+	ret->tag = generic_type_tag_none;
 	//現在のスクリプトコンテキストに登録
 	script_context* ctx = script_context_get_current();
 	vector_push(ctx->all_generic_vec, ret);
@@ -136,11 +145,36 @@ int generic_type_distance(generic_type * self, generic_type * other, il_context*
 				return 0;
 			} else return -1;
 		}
+	//どちらも具体的な型
+	} else {
+		int dist = type_distance(self->core_type, other->core_type);
+		assert(self->core_type != NULL);
+		assert(other->core_type != NULL);
+		//List : Dict みたいな型ならもうこの時点で次へ
+		if(dist == -1) {
+			return dist;
+		}
+		//otherからselfまで辿る
+		class_* baseline = self->core_type->u.class_;
+		class_* ptr = other->core_type->u.class_;
+		generic_type* target = other;
+		while(baseline != ptr) {
+			target = ptr->super_class;
+			ptr = ptr->super_class->core_type->u.class_;
+		}
+		assert(target != NULL);
+		assert(self->type_args_list->length == target->type_args_list->length);
+		for(int i=0; i<self->type_args_list->length; i++) {
+			generic_type* a = vector_at(self->type_args_list, i);
+			generic_type* b = vector_at(target->type_args_list, i);
+			int calc = generic_type_distance(a, b, ilctx);
+			if(calc == -1) {
+				dist = -1;
+				break;
+			}
+		}
+		return dist;
 	}
-	assert(self->core_type != NULL);
-	assert(other->core_type != NULL);
-	int dist = type_distance(self->core_type, other->core_type);
-	return dist;
 }
 
 void generic_type_print(generic_type * self) {
@@ -213,14 +247,57 @@ generic_type* generic_type_apply(generic_type* self, il_context* ilctx) {
 	return copy;
 }
 
+generic_type* generic_type_build(generic_type* self, il_context* ilctx) {
+	vector* type_args = NULL;
+	if(ilctx->type_args_vec->length > 0) {
+		type_args = (vector*)vector_top(ilctx->type_args_vec);
+	}
+	if(type_args == NULL || type_args->length == 0) {
+		return self;
+	}
+//	generic_type* a = vector_at(type_args, self->virtual_type_index);
+	generic_type* ret = NULL;
+	if(self->core_type != NULL) {
+		ret = generic_type_new(self->core_type);
+		ret->virtual_type_index = self->virtual_type_index;
+		ret->tag = self->tag;
+	} else {
+		if(self->tag == generic_type_tag_method) {
+			//vector* type_args = (vector*)vector_top(ilctx->type_args_vec);
+			il_type_argument* temp = vector_at(type_args, self->virtual_type_index);
+			ret = generic_type_clone(temp->gtype);
+		} else {
+			type* tp = vector_top(ilctx->type_vec);
+			generic_type* gtp = vector_at(tp->generic_self->type_args_list, self->virtual_type_index);
+			ret = generic_type_clone(gtp);
+		//	assert(false);
+		}
+	}
+	for(int i=0; i<self->type_args_list->length; i++) {
+		il_type_argument* ilarg = vector_at(type_args, i);
+		generic_type* bld = generic_type_build(ilarg->gtype, ilctx);
+		generic_type_addargs(ret, bld);
+	}
+	return ret;
+}
+
 vector* generic_type_rule(generic_type* self, il_context* ilctx) {
 	if(self->core_type != NULL) {
 		return NULL;
 	}
 	if(self->tag == generic_type_tag_class) {
-		generic_type* gt = (generic_type*)vector_top(ilctx->receiver_vec);
-		//type* tp = (type*)vector_top(ilctx->type_vec);
-		type* tp = gt->core_type;
+		type* tp = NULL;
+		//コンストラクタを検索している場合は
+		//特別扱い
+		if(ilctx->eval_ctor_vec->length > 0) {
+			constructor* ctor = vector_top(ilctx->eval_ctor_vec);
+			tp = ctor->parent;
+			assert(tp != NULL);
+		} else {
+			//generic_type* gt = (generic_type*)vector_top(ilctx->receiver_vec);
+			tp = (type*)vector_top(ilctx->type_vec);
+			//tp = gt->core_type;
+		}
 		//type* tp = self->core_type;
 		vector* params = type_parameter_list(tp);
 		type_parameter* param = vector_at(params, self->virtual_type_index);
@@ -233,6 +310,19 @@ vector* generic_type_rule(generic_type* self, il_context* ilctx) {
 	}
 	assert(false);
 	return NULL;
+}
+
+generic_type* generic_type_clone(generic_type* self) {
+	generic_type* ret = generic_type_new(self->core_type);
+	vector* v = vector_new();
+	for(int i=0; i<self->type_args_list->length; i++) {
+		generic_type* e = vector_at(self->type_args_list, i);
+		vector_push(v, e);
+	}
+	ret->tag = self->tag;
+	ret->type_args_list = v;
+	ret->virtual_type_index = self->virtual_type_index;
+	return ret;
 }
 
 bool generic_type_rule_valid(vector* self, vector* other) {

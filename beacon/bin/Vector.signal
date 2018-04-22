@@ -22,7 +22,7 @@ namespace signal.lang {
 			} elif (this.length >= this.capacity) {
 				var newLen = this.length + (this.length / 2);
 				var newArr = new Array(newLen);
-				Array.copy(this.proxy, 0, newArr, 0, this.length);
+				Array.copy<|T|>(this.proxy, 0, newArr, 0, this.length);
 				this.proxy = newArr;
 				this.proxy.set(this.length, o);
 			}

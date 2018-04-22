@@ -91,7 +91,7 @@ generic_type* il_factor_new_instance_eval(il_factor_new_instance * self, envirom
 		for (int i = 0; i < self->type_args->length; i++) {
 			il_type_argument* e = (il_type_argument*)vector_at(self->type_args, i);
 			generic_type* arg = generic_cache_gtype(e->gcache, scope, ilctx);
-			arg->tag = generic_type_tag_none;
+		//	arg->tag = generic_type_tag_ctor;
 			generic_type_addargs(a, arg);
 		}
 		self->instance_type = a;
@@ -131,6 +131,7 @@ static void il_factor_new_instance_find(il_factor_new_instance * self, enviromen
 		il_error_report(ilerror_undefined_class, self->fqcnc->name);
 		return;
 	}
+	//XSTREQ(cls->name, "String");
 	self->c = class_find_constructor(cls, self->argument_list, env, ilctx, &temp);
 	self->constructor_index = temp;
 	if(temp == -1) {

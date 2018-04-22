@@ -3,6 +3,7 @@
 #include "../util/text.h"
 #include "namespace.h"
 #include "type_impl.h"
+#include "../il/il_type_argument.h"
 
 //proto
 static bool virtual_type_comp(virtual_type* self, type* tp);
@@ -69,6 +70,7 @@ bool virtual_type_null(virtual_type* self){
 }
 
 int virtual_type_distance(virtual_type* self, generic_type* other, il_context* ilctx) {
+	//ここで再帰的に適用を行う
 	if(self->tag == virtualtype_default) {
 		return generic_type_distance(self->u.gtype, other, ilctx);
 	} else if(self->tag == virtualtype_class_tv) {
@@ -79,6 +81,43 @@ int virtual_type_distance(virtual_type* self, generic_type* other, il_context* i
 		vector* type_args = ilctx->type_args_vec;
 		generic_type* r = vector_at(type_args, self->u.index);
 		return generic_type_distance(r, other, ilctx);
+	}
+	assert(false);
+	return -1;
+}
+
+int virtual_type_adistance(virtual_type* self, struct generic_type* other, il_context* ilctx) {
+//ここで再帰的に適用を行う
+	if(self->tag == virtualtype_default) {
+		generic_type* bld = generic_type_build(self->u.gtype, ilctx);
+		generic_type* bld2 = other;
+		if(self->u.gtype->type_args_list->length > 0) {
+			text_printfln("---");
+			generic_type_print(self->u.gtype);
+			text_printf(" ");
+			generic_type_print(other);
+
+			text_printfln("");
+			generic_type_print(bld);
+			text_printf(" ");
+			generic_type_print(bld2);
+
+			text_printfln("");
+		}
+		int dist = generic_type_distance(bld, bld2, ilctx);
+		return dist;
+	} else if(self->tag == virtualtype_class_tv) {
+		generic_type* receivergtype = (generic_type*)vector_top(ilctx->receiver_vec);
+		generic_type* receiverargt = vector_at(receivergtype->type_args_list, self->u.index);
+		generic_type* bld = generic_type_build(receiverargt, ilctx);
+		generic_type* bld2 = other;
+		return generic_type_distance(bld, bld2, ilctx);
+	} else if(self->tag == virtualtype_method_tv) {
+		vector* type_args = ilctx->type_args_vec;
+		generic_type* r = vector_at(type_args, self->u.index);
+		generic_type* bld = generic_type_build(r, ilctx);
+		generic_type* bld2 = other;
+		return generic_type_distance(bld, bld2, ilctx);
 	}
 	assert(false);
 	return -1;

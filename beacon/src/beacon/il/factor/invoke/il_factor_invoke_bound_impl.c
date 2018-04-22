@@ -7,6 +7,7 @@
 #include "../../../env/type/class_impl.h"
 #include "../../../vm/enviroment.h"
 #include "../../il_argument.h"
+#include "../../il_type_argument.h"
 
 //proto
 static void resolve_non_default(il_factor_invoke_bound * self, enviroment * env, il_context* ilctx);
@@ -116,10 +117,13 @@ static void il_factor_invoke_bound_check(il_factor_invoke_bound * self, envirome
 	//対応するメソッドを検索
 	type* ctype = (type*)vector_top(ilctx->type_vec);
 	int temp = -1;
+	il_type_argument_resolve(self->type_args, ilctx);
 	vector_push(ilctx->receiver_vec, ctype->generic_self);
+	vector_push(ilctx->type_args_vec, self->type_args);
 	self->m = class_find_method(TYPE2CLASS(ctype), self->name, self->args, env, ilctx, &temp);
 	self->index = temp;
 	vector_pop(ilctx->receiver_vec);
+	vector_pop(ilctx->type_args_vec);
 	if(temp == -1) {
 		il_error_report(ilerror_undefined_method, self->name);
 	}

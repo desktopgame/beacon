@@ -107,6 +107,8 @@ void CLBC_methods_decl(class_loader* self, il_type* iltype, type* tp, vector* il
 			parameter* param = parameter_new(ilp->name);
 			vector_push(parameter_list, param);
 		}
+		//XSTREQ(method->name, "copy");
+		//XSTREQ(method->name, "copy");
 		CLBC_parameter_list(self, scope, ilmethod->parameter_list, method->parameter_list, ilctx);
 		//NOTE:クラスの登録が終わったらオペコードを作成する
 		type_add_method(tp, method);
@@ -160,9 +162,11 @@ void CLBC_methods_impl(class_loader* self, namespace_* scope, il_type* iltype, t
 			opcode_buf_add(env->buf, (vector_item)op_store);
 			opcode_buf_add(env->buf, (vector_item)0);
 		}
-		//NOTE:ここなら名前空間を設定出来る		
+		//NOTE:ここなら名前空間を設定出来る
+		vector_push(ilctx->method_vec, me);
 		CLBC_body(self, ilmethod->statement_list, env, scope, ilctx);
 		me->u.script_method->env = env;
+		vector_pop(ilctx->method_vec);
 		vector_pop(ilctx->type_vec);
 	}
 	il_context_delete(ilctx);
@@ -237,7 +241,7 @@ void CLBC_ctor_impl(class_loader* self, il_type* iltype, type* tp) {
 			opcode_buf_add(env->buf, (i + 1));
 		}
 		CLBC_chain(self, iltype, tp, ilcons, ilcons->chain, env);
-		//NOTE:ここなら名前空間を設定出来る		
+		//NOTE:ここなら名前空間を設定出来る
 		CLBC_body(self, ilcons->statement_list, env, scope, ilctx);
 		cons->env = env;
 		vector_pop(ilctx->type_vec);

@@ -8,6 +8,7 @@
 struct type;
 struct method;
 struct enviroment;
+struct virtual_type;
 struct il_context;
 /**
  * 型変数つきの型宣言の型引数では generic_type 自身が使われますが、
@@ -138,11 +139,25 @@ bool generic_type_bool(generic_type* self);
 generic_type* generic_type_apply(generic_type* self, struct il_context* ilctx);
 
 /**
+ * selfに実型引数を割り当てて返します.
+ * @param self
+ * @param ilctx
+ * @return
+ */
+generic_type* generic_type_build(generic_type* self, struct il_context* ilctx);
+
+/**
  * self が型引数なら、それに適用されるルールを返します.
  * @param self
  * @param ilctx
  */
 vector* generic_type_rule(generic_type* self, struct il_context* ilctx);
+
+/**
+ * @param self
+ * @return
+ */
+generic_type* generic_type_clone(generic_type* self);
 
 /**
  * selfのルール群が other を満たすなら true.

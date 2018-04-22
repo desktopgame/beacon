@@ -15,6 +15,7 @@ il_context * il_context_new() {
 	ret->toplevel = false;
 	ret->receiver_vec = vector_new();
 	ret->type_args_vec = vector_new();
+	ret->eval_ctor_vec = vector_new();
 	return ret;
 }
 
@@ -49,5 +50,6 @@ void il_context_delete(il_context * self) {
 	vector_delete(self->while_end_vec, vector_deleter_null);
 	vector_delete(self->receiver_vec, vector_deleter_null);
 	vector_delete(self->type_args_vec, vector_deleter_null);
+	vector_delete(self->eval_ctor_vec, vector_deleter_null);
 	MEM_FREE(self);
 }

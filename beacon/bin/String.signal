@@ -8,7 +8,7 @@ namespace signal.lang {
 		public:
 		ctor new(Array<|Char|> source) {
 			this.charArray = new Array<|Char|>(source.length());
-			Array.copy(source, 0, this.charArray, 0, source.length());
+			Array.copy<|Char|>(source, 0, this.charArray, 0, source.length());
 			this.nativeInit();
 		}
 

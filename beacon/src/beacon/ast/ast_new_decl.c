@@ -207,8 +207,8 @@ ast * ast_new_parameter_list(ast* atypename, char * parameter_access_name, ast *
 	ast* ret = ast_new(ast_parameter_list);
 //	ast_push(ret, atypename);
 //	ast_push(ret, ast_new_parameter(parameter_type_name, parameter_access_name));
-	ast_push(ret, ast_new_parameter(atypename, parameter_access_name));
 	ast_push(ret, parameter_list);
+	ast_push(ret, ast_new_parameter(atypename, parameter_access_name));
 	return ret;
 }
 
