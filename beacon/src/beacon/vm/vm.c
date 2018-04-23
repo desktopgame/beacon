@@ -96,7 +96,7 @@ void vm_resume(vm * self, enviroment * env, int pos) {
 			}
 		}
 		self->pc = i;
-		op_byte b = (op_byte)enviroment_source_at(env, i);
+		opcode b = (opcode)enviroment_source_at(env, i);
 		switch (b) {
 			//int & int
 			case op_iadd:

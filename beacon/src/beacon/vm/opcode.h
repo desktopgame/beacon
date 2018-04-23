@@ -2,11 +2,6 @@
 #ifndef BEACON_VM_OPCODE_H
 #define BEACON_VM_OPCODE_H
 #include "../util/vector.h"
-/**
- * バイトコードの中で、一つの命令を表すのに必要な領域を定義する型です.
- * 256種類の命令を使用出来ます。
- */
-typedef unsigned char op_byte;
 
 /**
  * 命令の一覧です.
