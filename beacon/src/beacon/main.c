@@ -12,7 +12,6 @@
 #include "test.h"
 #include "vm/eval.h"
 #include "util/string_buffer.h"
-#include "util/logger.h"
 #include "util/mem.h"
 #include "util/bench_mark.h"
 
@@ -22,8 +21,6 @@ void _start(int argc, char* argv[]) {
 	text_set_trace(true);
 	mem_set_trace(true);
 	//mem_break(311);
-	logger_open();
-	logger_set_enabled(!true);
 	//cmd_dump(argc, argv);
 
 	bench_start();
@@ -32,7 +29,6 @@ void _start(int argc, char* argv[]) {
 void _end(int argc, char* argv[]) {
 	bench_end("main", bench_simple);
 	//system("cls");
-	logger_close();
 
 	mem_dump();
 	mem_destroy();
@@ -40,11 +36,11 @@ void _end(int argc, char* argv[]) {
 }
 
 int run_script(int argc, char* argv[]) {
-#if defined(DEBUG)
+//#if defined(DEBUG)
 	if(!test_run()) {
 		return 0;
 	}
-#endif
+//#endif
 	//script_context_bootstrap(script_context_get_current());
 	//_start(argc, argv);
 	//TODO:ここにbeacon起動コード
@@ -55,7 +51,6 @@ int run_script(int argc, char* argv[]) {
 int _main(int argc, char* argv[]) {
 	mem_set_trace(true);
 	//mem_break(17679);
-	logger_set_enabled(false);
 	bool test = true;
 	int ret = 1;
 

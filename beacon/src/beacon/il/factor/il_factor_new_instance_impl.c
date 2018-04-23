@@ -12,7 +12,6 @@
 #include <stdio.h>
 #include <string.h>
 #include <assert.h>
-#include "../../util/logger.h"
 
 //proto
 static void il_factor_new_instance_delete_typearg(vector_item item);

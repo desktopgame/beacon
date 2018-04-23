@@ -1,5 +1,4 @@
 #include "script_context.h"
-#include "../util/logger.h"
 #include "heap.h"
 #include "namespace.h"
 #include "type_interface.h"
@@ -30,7 +29,6 @@ static bool gScriptBootstrap = true;
 void script_context_open() {
 	sg_thread_launch();
 	script_context_check_init();
-	INFO("script-context open");
 }
 
 script_context * script_context_add() {
@@ -118,7 +116,6 @@ void script_context_close() {
 	}
 	gScriptContext = NULL;
 	gScriptContextCurrent = NULL;
-	INFO("script-context close");
 	sg_thread_destroy();
 }
 

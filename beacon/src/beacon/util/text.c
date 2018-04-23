@@ -1,5 +1,4 @@
 #include "text.h"
-#include "logger.h"
 #include <assert.h>
 #include <stdio.h>
 #include <stdlib.h>

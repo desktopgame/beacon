@@ -1,6 +1,5 @@
 #include "il_factor_variable_static_impl.h"
 #include "../../../util/mem.h"
-#include "../../../util/logger.h"
 #include "../../../env/generic_type.h"
 #include "../../../vm/enviroment.h"
 
@@ -12,7 +11,7 @@ il_factor_variable_static* il_factor_variable_static_new() {
 }
 
 void il_factor_variable_static_generate(il_factor_variable_static* self, enviroment* env, il_context* ilctx) {
-	FATAL("not implemented, because must be wrapped by call operator");
+	//FATAL("not implemented, because must be wrapped by call operator");
 }
 
 void il_factor_variable_static_load(il_factor_variable_static * self, enviroment * env, il_context* ilctx, il_ehandler* eh) {
@@ -20,7 +19,7 @@ void il_factor_variable_static_load(il_factor_variable_static * self, enviroment
 }
 
 generic_type* il_factor_variable_static_eval(il_factor_variable_static * self, enviroment * env, il_context* ilctx) {
-	FATAL("not implemented, because must be wrapped by call operator");
+	//FATAL("not implemented, because must be wrapped by call operator");
 	return NULL;
 }
 

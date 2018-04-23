@@ -7,7 +7,6 @@
 #include "../../util/text.h"
 #include "../../util/io.h"
 #include "../../util/mem.h"
-#include "../../util/logger.h"
 #include "class_loader_bcload_link_module_impl.h"
 #include "class_loader_ilload_impl.h"
 #include <assert.h>
@@ -65,7 +64,6 @@ static void CLBC_new_load_internal(class_loader * self, char * fullPath) {
 		return;
 		//新たに読みこんだなら親に設定
 	} else {
-		logger_info(__FILE__, __LINE__, "import new %s", fullPath);
 		cll = CLBC_import_new(self, fullPath);
 	}
 	//そのローダーが破損しているなら
@@ -129,7 +127,6 @@ static class_loader* CLBC_import_new(class_loader* self, char* fullPath) {
 	//text_printf("nimport %s\n", cll->filename);
 	import_info* info = import_manager_import(self->import_manager, cll);
 	info->consume = false;
-	logger_info(__FILE__, __LINE__, "import put %s", fullPath);
 	tree_map_put(ctx->class_loader_map, fullPath, cll);
 	return cll;
 }

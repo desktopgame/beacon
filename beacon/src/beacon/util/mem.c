@@ -1,7 +1,6 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include "mem.h"
-#include "logger.h"
 #include "text.h"
 
 #if defined(_MSC_VER)
@@ -53,7 +52,7 @@ void * mem_malloc(size_t size, const char * filename, int lineno) {
 	}
 #endif
 	if (ret == NULL) {
-		logger_log(log_fatal, filename, lineno, "failed malloc");
+		exit(1);
 	}
 	return ret;
 }
@@ -154,9 +153,6 @@ void mem_destroy() {
 //private
 static void* defaultRealloc(void * block, size_t newSize, const char * filename, int lineno) {
 	void* ret = realloc(block, newSize);
-	if (ret == NULL) {
-		logger_log(log_fatal, filename, lineno, "failed realloc");
-	}
 	//allocCount++;
 	return ret;
 }

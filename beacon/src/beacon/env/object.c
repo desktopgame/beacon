@@ -12,7 +12,6 @@
 #include "../lib/signal/lang/sg_array.h"
 #include "heap.h"
 #include "../lib/signal/lang/sg_array.h"
-#include "../util/logger.h"
 #include "generic_type.h"
 
 //proto

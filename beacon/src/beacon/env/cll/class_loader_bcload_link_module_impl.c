@@ -2,7 +2,6 @@
 #include "../type_cache.h"
 #include "../type_impl.h"
 #include "../../il/il_type_impl.h"
-#include "../../util/logger.h"
 #include "../../util/text.h"
 #include "class_loader_bcload_member_module_impl.h"
 #include "class_loader_bcload_import_module_impl.h"
@@ -31,9 +30,6 @@ void CLBC_excec_class_decl(class_loader* self) {
 		e->consume = true;
 		CLBC_class_decl(e->context, e->iltype, e->tp, e->scope);
 	}
-	if (count > 0) {
-		logger_info(__FILE__, __LINE__, "loaded class decl %s", self->filename);
-	}
 	//*/
 }
 
@@ -49,9 +45,6 @@ void CLBC_excec_class_impl(class_loader* self) {
 		count++;
 		e->consume = true;
 		CLBC_class_impl(e->context, e->iltype, e->tp, e->scope);
-	}
-	if (count > 0) {
-		logger_info(__FILE__, __LINE__, "loaded class impl %s", self->filename);
 	}
 	//*/
 }
@@ -70,9 +63,6 @@ void CLBC_excec_interface_decl(class_loader* self) {
 		e->consume = true;
 		CLBC_interface_decl(e->context, e->iltype, e->tp, e->scope);
 	}
-	if(count > 0) {
-		logger_info(__FILE__, __LINE__, "loaded interface decl %s", self->filename);
-	}
 	//*/
 }
 
@@ -89,9 +79,6 @@ void CLBC_excec_interface_impl(class_loader* self) {
 		count++;
 		e->consume = true;
 		CLBC_interface_impl(e->context, e->iltype, e->tp, e->scope);
-	}
-	if(count > 0) {
-		logger_info(__FILE__, __LINE__, "loaded interface impl %s", self->filename);
 	}
 	//*/
 }

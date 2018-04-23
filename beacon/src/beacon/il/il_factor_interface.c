@@ -1,7 +1,6 @@
 #include "il_factor_interface.h"
 #include "il_factor_impl.h"
 #include "../util/text.h"
-#include "../util/logger.h"
 #include "../vm/enviroment.h"
 #include "../env/type_interface.h"
 #include "../util/mem.h"
@@ -66,7 +65,6 @@ void il_factor_dump(il_factor * self, int depth) {
 			il_factor_member_op_dump(self->u.member_, depth);
 			break;
 		default:
-			ERROR("ファクターをダンプ出来ませんでした");
 			break;
 	}
 }
@@ -131,7 +129,6 @@ void il_factor_generate(il_factor * self, enviroment* env, il_context* ilctx) {
 			il_factor_member_op_generate(self->u.member_, env, ilctx);
 			break;
 		default:
-			ERROR("ファクターを生成出来ませんでした");
 			break;
 	}
 	enviroment_add_range(env, self->lineno);
@@ -197,7 +194,6 @@ void il_factor_load(il_factor * self, enviroment * env, il_context* ilctx, il_eh
 			il_factor_member_op_load(self->u.member_, env, ilctx, eh);
 			break;
 		default:
-			ERROR("ファクターの型を取得出来ませんでした");
 			break;
 	}
 }
@@ -263,7 +259,6 @@ generic_type* il_factor_eval(il_factor * self, enviroment * env, il_context* ilc
 			ret = il_factor_member_op_eval(self->u.call_, env, ilctx);
 			break;
 		default:
-			ERROR("ファクターの型を取得出来ませんでした");
 			break;
 	}
 	assert((ret != NULL || il_error_panic()));
@@ -329,8 +324,6 @@ void il_factor_delete(il_factor * self) {
 			il_factor_member_op_delete(self->u.member_);
 			break;
 		default:
-			ERROR("ファクターを開放出来ませんでした");
-			{ int x = 0; }
 			break;
 	}
 	MEM_FREE(self);

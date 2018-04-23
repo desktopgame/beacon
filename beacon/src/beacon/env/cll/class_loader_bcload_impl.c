@@ -38,7 +38,6 @@
 #include "../type_cache.h"
 #include <string.h>
 #include "../import_info.h"
-#include "../../util/logger.h"
 #include "../../env/heap.h"
 //proto
 /**
@@ -104,7 +103,6 @@ void class_loader_bcload_impl(class_loader* self) {
 
 void class_loader_bcload_link(class_loader * self, link_type type) {
 	CL_ERROR(self);
-	logger_info(__FILE__, __LINE__, "link %s",self->filename);
 	if(type == link_decl) {
 		CLBC_excec_class_decl(self);
 		CLBC_excec_interface_decl(self);
@@ -171,7 +169,6 @@ static void CLBC_enum(class_loader * self, il_type * iltype, namespace_ * parent
 	} else {
 		cls = tp->u.class_;
 	}
-	logger_info(__FILE__, __LINE__, "register enum %s", cls->name);
 	//全ての列挙子を public static final フィールドとして追加
 	for (int i = 0; i < ilenum->item_vec->length; i++) {
 		char* str = (char*)vector_at(ilenum->item_vec, i);
@@ -240,7 +237,6 @@ static void CLBC_class(class_loader* self, il_type* iltype, namespace_* parent) 
 			cls->super_class = GEN_OBJECT;
 		}
 	}
-	logger_info(__FILE__, __LINE__, "register class %s", cls->name);
 	//text_printfln("(( %s ))", type_name(tp));
 	//宣言のロードを予約
 	type_cache* tc = type_cache_init(
@@ -303,7 +299,6 @@ static void CLBC_interface(class_loader * self, il_type * iltype, namespace_ * p
 		//既に登録されていたならここが型変数がNULLになってしまう
 		type_parameter_list_dup(iltype->u.class_->type_parameter_list, inter->type_parameter_list, ilctx);
 	}
-	logger_info(__FILE__, __LINE__, "register interface %s", inter->name);
 	//宣言のロードを予約
 	type_cache* tc = type_cache_init(
 		type_cache_new(),

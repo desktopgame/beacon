@@ -12,7 +12,6 @@
 #include "../env/native_method_ref.h"
 #include "../il/il_argument.h"
 #include "../util/vector.h"
-#include "../util/logger.h"
 #include "script_context.h"
 #include "../util/text.h"
 #include "../util/io.h"
@@ -182,7 +181,6 @@ static void class_loader_load_impl(class_loader* self) {
 	}
 	CLBC_body(self, self->il_code->statement_list, self->env, NULL, ilctx);
 	il_context_delete(ilctx);
-	logger_log(log_info, __FILE__, __LINE__, "loaded file %s", self->filename);
 }
 
 static void class_loader_link(class_loader* self, link_type type) {

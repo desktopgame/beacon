@@ -14,7 +14,6 @@
 #include "../env/constructor.h"
 #include "../env/script_context.h"
 #include "../thread/thread.h"
-#include "../util/logger.h"
 #include "../util/mem.h"
 #include "../util/xassert.h"
 #include "../util/string_buffer.h"
@@ -551,7 +550,6 @@ void vm_resume(vm * self, enviroment * env, int pos) {
 			{
 				int i = SPI(self);
 				text_printf("int: %d\n", i);
-				INFO("printi");
 				break;
 			}
 
@@ -559,7 +557,6 @@ void vm_resume(vm * self, enviroment * env, int pos) {
 			{
 				double d = SPD(self);
 				text_printf("double: %f\n", d);
-				INFO("printd");
 				break;
 			}
 
@@ -567,7 +564,6 @@ void vm_resume(vm * self, enviroment * env, int pos) {
 			{
 				char* s = SPS(self);
 				text_printf("string: %s\n", s);
-				INFO("prints");
 				break;
 			}
 			case op_breakpoint:

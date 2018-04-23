@@ -15,7 +15,6 @@
 #include "../../util/mem.h"
 #include "../../util/text.h"
 #include "../../util/xassert.h"
-#include "../../util/logger.h"
 #include <stdio.h>
 #include <string.h>
 #include <assert.h>
@@ -208,7 +207,6 @@ static il_namespace* class_loader_ilload_ast_to_namespace(ast* a) {
 		vector_push(parent->namespace_list, child);
 		return child;
 	}
-	ERROR("unsupported tag");
 	return NULL;
 }
 

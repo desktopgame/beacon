@@ -1,6 +1,5 @@
 #include "class_impl.h"
 #include "../../util/text.h"
-#include "../../util/logger.h"
 #include "../../util/xassert.h"
 #include "../parameter.h"
 #include "../../il/il_argument.h"
@@ -18,7 +17,6 @@
 #include "../type_impl.h"
 #include "../../env/vtable.h"
 #include "../../env/heap.h"
-#include "../../util/logger.h"
 #include "meta_impl.h"
 #include "../type_parameter.h"
 #include "../generic_type.h"
@@ -531,7 +529,6 @@ void class_delete(class_ * self) {
 //	assert(self->ref_count == 0);
 //	MEM_FREE(self->name);
 	//text_printf("delete %s\n", self->name);
-	logger_info(__FILE__, __LINE__, "deleted class %s", self->name);
 	vector_delete(self->type_parameter_list, class_type_parameter_delete);
 	MEM_FREE(self->name);
 	MEM_FREE(self);
