@@ -42,7 +42,7 @@ void il_factor_invoke_static_generate(il_factor_invoke_static* self, enviroment*
 	opcode_buf_add(env->buf, (vector_item)self->index);
 }
 
-void il_factor_invoke_static_load(il_factor_invoke_static * self, enviroment * env, il_context* ilctx, il_ehandler* eh) {
+void il_factor_invoke_static_load(il_factor_invoke_static * self, enviroment * env, il_context* ilctx) {
 	vector_push(ilctx->type_args_vec, self->type_args);
 	il_factor_invoke_static_check(self, env, ilctx);
 	vector_pop(ilctx->type_args_vec);

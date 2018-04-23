@@ -14,7 +14,7 @@ il_factor_variable_static* il_factor_variable_static_new();
 
 void il_factor_variable_static_generate(il_factor_variable_static* self, struct enviroment* env, il_context* ilctx);
 
-void il_factor_variable_static_load(il_factor_variable_static * self, struct enviroment * env, il_context* ilctx, il_ehandler* eh);
+void il_factor_variable_static_load(il_factor_variable_static * self, struct enviroment * env, il_context* ilctx);
 
 struct generic_type* il_factor_variable_static_eval(il_factor_variable_static * self, struct enviroment * env, il_context* ilctx);
 

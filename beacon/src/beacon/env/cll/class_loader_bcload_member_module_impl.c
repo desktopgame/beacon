@@ -7,7 +7,6 @@
 #include "../../il/il_parameter.h"
 #include "../../il/il_argument.h"
 #include "../../il/il_stmt_interface.h"
-#include "../../il/il_ehandler.h"
 #include "../../env/type_impl.h"
 #include "../../env/field.h"
 #include "../../env/method.h"
@@ -252,7 +251,6 @@ void CLBC_ctor_impl(class_loader* self, il_type* iltype, type* tp) {
 void CLBC_body(class_loader* self, vector* stmt_list, enviroment* dest, namespace_* range, il_context* ilctx) {
 	//	enviroment* ret = enviroment_new();
 	CL_ERROR(self);
-	il_ehandler* eh = il_ehandler_new();
 	vector_push(ilctx->namespace_vec, range);
 	il_error_enter();
 	//まずは全てのステートメントを読み込む
@@ -263,7 +261,7 @@ void CLBC_body(class_loader* self, vector* stmt_list, enviroment* dest, namespac
 		}
 		vector_item e = vector_at(stmt_list, i);
 		il_stmt* s = (il_stmt*)e;
-		il_stmt_load(s, dest, ilctx, eh);
+		il_stmt_load(s, dest, ilctx);
 	}
 	//オペコードを生成
 	for (int i = 0; i < stmt_list->length; i++) {
@@ -277,7 +275,6 @@ void CLBC_body(class_loader* self, vector* stmt_list, enviroment* dest, namespac
 	}
 	il_error_exit();
 	vector_pop(ilctx->namespace_vec);
-	il_ehandler_delete(eh);
 //	return ret;
 }
 

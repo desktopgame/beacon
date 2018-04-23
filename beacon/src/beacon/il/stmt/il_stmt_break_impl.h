@@ -9,7 +9,7 @@ il_stmt* il_stmt_wrap_break();
 
 void il_stmt_break_generate(void* empty, struct enviroment* env, il_context* ilctx);
 
-void il_stmt_break_load(void* empty, struct enviroment* env, il_context* ilctx, il_ehandler* eh);
+void il_stmt_break_load(void* empty, struct enviroment* env, il_context* ilctx);
 
 void il_stmt_break_dump(void* empty, int depth);
 

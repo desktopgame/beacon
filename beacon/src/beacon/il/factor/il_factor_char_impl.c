@@ -32,7 +32,7 @@ void il_factor_char_generate(il_factor_char * self, enviroment * env, il_context
 	opcode_buf_add(env->buf, index);
 }
 
-void il_factor_char_load(il_factor_char * self, enviroment * env, il_context* ilctx, il_ehandler * eh) {
+void il_factor_char_load(il_factor_char * self, enviroment * env, il_context* ilctx) {
 }
 
 generic_type* il_factor_char_eval(il_factor_char * self, enviroment * env, il_context* ilctx) {

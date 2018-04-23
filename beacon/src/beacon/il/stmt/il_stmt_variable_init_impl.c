@@ -44,8 +44,8 @@ void il_stmt_variable_init_generate(il_stmt_variable_init * self, enviroment * e
 	opcode_buf_add(env->buf, self->sym->index);
 }
 
-void il_stmt_variable_init_load(il_stmt_variable_init * self, enviroment * env, il_context* ilctx, il_ehandler * eh) {
-	il_factor_load(self->fact, env, ilctx, eh);
+void il_stmt_variable_init_load(il_stmt_variable_init * self, enviroment * env, il_context* ilctx) {
+	il_factor_load(self->fact, env, ilctx);
 	symbol_entry* e = symbol_table_entry(
 		env->sym_table,
 		generic_cache_gtype(self->fqcn, (namespace_*)vector_top(ilctx->namespace_vec), ilctx),

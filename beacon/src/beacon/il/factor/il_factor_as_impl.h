@@ -53,7 +53,7 @@ void il_factor_as_generate(il_factor_as* self, struct enviroment* env, il_contex
  * @param ilctx
  * @param eh
  */
-void il_factor_as_load(il_factor_as* self, struct enviroment* env, il_context* ilctx, il_ehandler* eh);
+void il_factor_as_load(il_factor_as* self, struct enviroment* env, il_context* ilctx);
 
 /**
  * as演算子の型を返します.

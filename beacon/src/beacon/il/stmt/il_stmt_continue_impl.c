@@ -15,7 +15,7 @@ void il_stmt_continue_generate(void * empty, enviroment * env, il_context* ilctx
 	opcode_buf_add(env->buf, lab);
 }
 
-void il_stmt_continue_load(void * empty, enviroment * env, il_context* ilctx, il_ehandler* eh) {
+void il_stmt_continue_load(void * empty, enviroment * env, il_context* ilctx) {
 }
 
 void il_stmt_continue_dump(void * empty, int depth) {

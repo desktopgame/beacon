@@ -100,46 +100,46 @@ void il_stmt_generate(il_stmt * self, struct enviroment* env, il_context* ilctx)
 	enviroment_add_range(env, self->lineno);
 }
 
-void il_stmt_load(il_stmt * self, enviroment* env, il_context* ilctx, il_ehandler * eh) {
+void il_stmt_load(il_stmt * self, enviroment* env, il_context* ilctx) {
 	if(il_error_panic()) {
 		return;
 	}
 	switch (self->type) {
 		case ilstmt_if:
-			il_stmt_if_load(self->u.if_, env, ilctx, eh);
+			il_stmt_if_load(self->u.if_, env, ilctx);
 			break;
 		case ilstmt_proc:
-			il_stmt_proc_load(self->u.proc_, env, ilctx, eh);
+			il_stmt_proc_load(self->u.proc_, env, ilctx);
 			break;
 		case ilstmt_variable_decl:
-			il_stmt_variable_decl_load(self->u.variable_decl, env, ilctx, eh);
+			il_stmt_variable_decl_load(self->u.variable_decl, env, ilctx);
 			break;
 		case ilstmt_variable_init:
-			il_stmt_variable_init_load(self->u.variable_init, env, ilctx, eh);
+			il_stmt_variable_init_load(self->u.variable_init, env, ilctx);
 			break;
 		case ilstmt_return:
-			il_stmt_return_load(self->u.return_, env, ilctx, eh);
+			il_stmt_return_load(self->u.return_, env, ilctx);
 			break;
 		case ilstmt_while:
-			il_stmt_while_load(self->u.while_, env, ilctx, eh);
+			il_stmt_while_load(self->u.while_, env, ilctx);
 			break;
 		case ilstmt_break:
-			il_stmt_break_load(NULL, env, ilctx, eh);
+			il_stmt_break_load(NULL, env, ilctx);
 			break;
 		case ilstmt_continue:
-			il_stmt_continue_load(NULL, env, ilctx, eh);
+			il_stmt_continue_load(NULL, env, ilctx);
 			break;
 		case ilstmt_inferenced_type_init:
-			il_stmt_inferenced_type_init_load(self->u.inferenced_type_init, env, ilctx, eh);
+			il_stmt_inferenced_type_init_load(self->u.inferenced_type_init, env, ilctx);
 			break;
 		case ilstmt_try:
-			il_stmt_try_load(self->u.try_, env, ilctx, eh);
+			il_stmt_try_load(self->u.try_, env, ilctx);
 			break;
 		case ilstmt_throw:
-			il_stmt_throw_load(self->u.throw_, env, ilctx, eh);
+			il_stmt_throw_load(self->u.throw_, env, ilctx);
 			break;
 		case ilstmt_assert:
-			il_stmt_assert_load(self->u.bcassert_, env, ilctx, eh);
+			il_stmt_assert_load(self->u.bcassert_, env, ilctx);
 			break;
 		default:
 			//ERROR("ステートメントを開放出来ませんでした。");

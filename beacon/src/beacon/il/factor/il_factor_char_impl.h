@@ -46,7 +46,7 @@ void il_factor_char_generate(il_factor_char* self, struct enviroment* env, il_co
  * @param cache
  * @param eh
  */
-void il_factor_char_load(il_factor_char* self, struct enviroment* env, il_context* ilctx, il_ehandler* eh);
+void il_factor_char_load(il_factor_char* self, struct enviroment* env, il_context* ilctx);
 
 /**
  * 文字を表す要素の型を返します.

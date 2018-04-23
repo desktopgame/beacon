@@ -50,7 +50,7 @@ void il_factor_dec_generate(il_factor_dec* self, struct enviroment* env, il_cont
  * @param ilctx
  * @param eh
  */
-void il_factor_dec_load(il_factor_dec* self, struct enviroment* env, il_context* ilctx, il_ehandler* eh);
+void il_factor_dec_load(il_factor_dec* self, struct enviroment* env, il_context* ilctx);
 
 /**
  * デクリメントを表す要素の方を返します.

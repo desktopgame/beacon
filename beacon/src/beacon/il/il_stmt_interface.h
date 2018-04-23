@@ -2,7 +2,6 @@
 #ifndef BEACON_IL_IL_STMT_INTERFACE_H
 #define BEACON_IL_IL_STMT_INTERFACE_H
 #include "../vm/enviroment.h"
-#include "il_ehandler.h"
 #include "il_context.h"
 #include "il_error.h"
 #include <stdint.h>
@@ -78,7 +77,7 @@ void il_stmt_generate(il_stmt* self, enviroment* env, il_context* ilctx);
  * @param cache
  * @param eh
  */
-void il_stmt_load(il_stmt * self, enviroment* env, il_context* ilctx, il_ehandler * eh);
+void il_stmt_load(il_stmt * self, enviroment* env, il_context* ilctx);
 
 /**
  * 文を開放します.

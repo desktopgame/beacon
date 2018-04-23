@@ -19,7 +19,7 @@ il_factor_invoke* il_factor_invoke_new(const char* name);
 
 void il_factor_invoke_generate(il_factor_invoke* self, struct enviroment* env, il_context* ilctx);
 
-void il_factor_invoke_load(il_factor_invoke * self, struct enviroment * env, il_context* ilctx, il_ehandler* eh);
+void il_factor_invoke_load(il_factor_invoke * self, struct enviroment * env, il_context* ilctx);
 
 struct generic_type* il_factor_invoke_eval(il_factor_invoke * self, struct enviroment * env, il_context* ilctx);
 

@@ -78,7 +78,7 @@ void il_factor_binary_op_generate(il_factor_binary_op* self, struct enviroment* 
  * @parma env
  * @param eh
  */
-void il_factor_binary_op_load(il_factor_binary_op* self, struct enviroment* env, il_context* ilctx, il_ehandler* eh);
+void il_factor_binary_op_load(il_factor_binary_op* self, struct enviroment* env, il_context* ilctx);
 
 /**
  * 二項演算子の結果の型を返します.

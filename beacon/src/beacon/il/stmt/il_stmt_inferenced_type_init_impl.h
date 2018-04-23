@@ -51,7 +51,7 @@ void il_stmt_inferenced_type_init_generate(il_stmt_inferenced_type_init* self, s
  * @param cache
  * @param eh
  */
-void il_stmt_inferenced_type_init_load(il_stmt_inferenced_type_init* self, struct enviroment* env, il_context* ilctx, il_ehandler* eh);
+void il_stmt_inferenced_type_init_load(il_stmt_inferenced_type_init* self, struct enviroment* env, il_context* ilctx);
 
 /**
  * 推論された型の初期化を表す要素を開放します.

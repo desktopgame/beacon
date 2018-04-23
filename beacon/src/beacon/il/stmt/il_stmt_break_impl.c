@@ -15,7 +15,7 @@ void il_stmt_break_generate(void * empty, enviroment * env, il_context* ilctx) {
 	opcode_buf_add(env->buf, lab);
 }
 
-void il_stmt_break_load(void * empty, enviroment * env, il_context* ilctx, il_ehandler* eh) {
+void il_stmt_break_load(void * empty, enviroment * env, il_context* ilctx) {
 }
 
 void il_stmt_break_dump(void * empty, int depth) {

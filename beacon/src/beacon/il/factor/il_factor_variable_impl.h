@@ -75,7 +75,7 @@ void il_factor_variable_generate(il_factor_variable* self, struct enviroment* en
  * @param cache
  * @param eh
  */
-void il_factor_variable_load(il_factor_variable* self, struct enviroment* env, il_context* ilctx, il_ehandler* eh);
+void il_factor_variable_load(il_factor_variable* self, struct enviroment* env, il_context* ilctx);
 
 /**
  * 変数の型を返します.

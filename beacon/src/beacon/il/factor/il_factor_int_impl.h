@@ -48,7 +48,7 @@ void il_factor_int_generate(il_factor_int* self, struct enviroment* env, il_cont
  * @param cache
  * @param eh
  */
-void il_factor_int_load(il_factor_int* self, struct enviroment* env, il_context* ilctx, il_ehandler* eh);
+void il_factor_int_load(il_factor_int* self, struct enviroment* env, il_context* ilctx);
 
 /**
  * 整数リテラルを表す要素の型を返します.

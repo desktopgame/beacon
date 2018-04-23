@@ -63,7 +63,7 @@ void il_factor_call_op_dump(il_factor_call_op* self, int depth);
  * @param ilctx
  * @param eh
  */
-void il_factor_call_op_load(il_factor_call_op* self, struct enviroment* env, il_context* ilctx, il_ehandler* eh);
+void il_factor_call_op_load(il_factor_call_op* self, struct enviroment* env, il_context* ilctx);
 
 /**
  * 関数呼び出し演算子の型を返します.

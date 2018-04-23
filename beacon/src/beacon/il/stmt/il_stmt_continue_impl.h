@@ -7,7 +7,7 @@ il_stmt* il_stmt_wrap_continue();
 
 void il_stmt_continue_generate(void* empty, struct enviroment* env, il_context* ilctx);
 
-void il_stmt_continue_load(void* empty, struct enviroment* env, il_context* ilctx, il_ehandler* eh);
+void il_stmt_continue_load(void* empty, struct enviroment* env, il_context* ilctx);
 
 void il_stmt_continue_dump(void* empty, int depth);
 

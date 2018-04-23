@@ -49,8 +49,8 @@ void il_factor_as_generate(il_factor_as * self, enviroment * env, il_context* il
 	*/
 }
 
-void il_factor_as_load(il_factor_as * self, enviroment * env, il_context* ilctx, il_ehandler * eh) {
-	il_factor_load(self->fact, env, ilctx, eh);
+void il_factor_as_load(il_factor_as * self, enviroment * env, il_context* ilctx) {
+	il_factor_load(self->fact, env, ilctx);
 }
 
 generic_type* il_factor_as_eval(il_factor_as * self, enviroment * env, il_context* ilctx) {

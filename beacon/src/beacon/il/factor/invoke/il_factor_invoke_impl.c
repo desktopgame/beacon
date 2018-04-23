@@ -53,8 +53,8 @@ void il_factor_invoke_generate(il_factor_invoke* self, enviroment* env, il_conte
 	}
 }
 
-void il_factor_invoke_load(il_factor_invoke * self, enviroment * env, il_context* ilctx, il_ehandler* eh) {
-	il_factor_load(self->receiver, env, ilctx, eh);
+void il_factor_invoke_load(il_factor_invoke * self, enviroment * env, il_context* ilctx) {
+	il_factor_load(self->receiver, env, ilctx);
 	il_factor_invoke_check(self, env, ilctx);
 }
 
@@ -133,7 +133,7 @@ static void resolve_default(il_factor_invoke * self, enviroment * env, il_contex
 
 static void il_factor_invoke_check(il_factor_invoke * self, enviroment * env, il_context* ilctx) {
 	//レシーバの読み込み
-	il_factor_load(self->receiver, env, ilctx, NULL);
+	il_factor_load(self->receiver, env, ilctx);
 	if(il_error_panic()) {
 		return;
 	}

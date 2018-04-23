@@ -28,7 +28,7 @@ void il_factor_null_generate(void* empty, struct enviroment* env, il_context* il
  * @param ilctx
  * @param eh
  */
-void il_factor_null_load(void* empty, struct enviroment* env, il_context* ilctx, il_ehandler* eh);
+void il_factor_null_load(void* empty, struct enviroment* env, il_context* ilctx);
 
 /**
  * nullを表す型を返します.

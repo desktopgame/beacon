@@ -31,9 +31,9 @@ void il_stmt_try_generate(il_stmt_try* self, struct enviroment* env, il_context*
 
 void il_stmt_catch_generate(il_stmt_catch* self, struct enviroment* env, il_context* ilctx);
 
-void il_stmt_try_load(il_stmt_try* self, struct enviroment* env, il_context* ilctx, il_ehandler* eh);
+void il_stmt_try_load(il_stmt_try* self, struct enviroment* env, il_context* ilctx);
 
-void il_stmt_catch_load(il_stmt_catch* self, struct enviroment* env, il_context* ilctx, il_ehandler* eh);
+void il_stmt_catch_load(il_stmt_catch* self, struct enviroment* env, il_context* ilctx);
 
 void il_stmt_catch_delete(il_stmt_catch* self);
 

@@ -47,7 +47,7 @@ void il_factor_double_generate(il_factor_double* self, struct enviroment* env, i
  * @param cache
  * @param eh
  */
-void il_factor_double_load(il_factor_double* self, struct enviroment* env, il_context* ilctx, il_ehandler* eh);
+void il_factor_double_load(il_factor_double* self, struct enviroment* env, il_context* ilctx);
 
 /**
  * 浮動小数リテラルを表す要素の型を返します.

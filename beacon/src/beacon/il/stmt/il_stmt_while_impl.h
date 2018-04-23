@@ -20,7 +20,7 @@ void il_stmt_while_dump(il_stmt_while* self, int depth);
 
 void il_stmt_while_generate(il_stmt_while* self, struct enviroment* env, il_context* ilctx);
 
-void il_stmt_while_load(il_stmt_while* self, struct enviroment* env, il_context* ilctx, il_ehandler* eh);
+void il_stmt_while_load(il_stmt_while* self, struct enviroment* env, il_context* ilctx);
 
 void il_stmt_while_delete(il_stmt_while* self);
 #endif // !SIGNAL_IL_IL_STMT_WHILE_H

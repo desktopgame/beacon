@@ -57,7 +57,7 @@ void il_factor_new_instance_generate(il_factor_new_instance* self, struct enviro
  * @param cache
  * @param eh
  */
-void il_factor_new_instance_load(il_factor_new_instance* self, struct enviroment* env, il_context* ilctx, il_ehandler* eh);
+void il_factor_new_instance_load(il_factor_new_instance* self, struct enviroment* env, il_context* ilctx);
 
 /**
  * コンストラクタで生成されるオブジェクトの型を返します.

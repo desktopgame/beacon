@@ -129,21 +129,21 @@ void il_stmt_catch_generate(il_stmt_catch* self, enviroment* env, il_context* il
 
 }
 
-void il_stmt_try_load(il_stmt_try* self, enviroment* env, il_context* ilctx, il_ehandler* eh) {
+void il_stmt_try_load(il_stmt_try* self, enviroment* env, il_context* ilctx) {
 	for(int i=0; i<self->statement_list->length; i++) {
 		il_stmt* e = (il_stmt*)vector_at(self->statement_list, i);
-		il_stmt_load(e, env, ilctx, eh);
+		il_stmt_load(e, env, ilctx);
 	}
 	for(int i=0; i<self->catch_list->length; i++) {
 		il_stmt_catch* e = (il_stmt_catch*)vector_at(self->catch_list, i);
-		il_stmt_catch_load(e, env, ilctx, eh);
+		il_stmt_catch_load(e, env, ilctx);
 	}
 }
 
-void il_stmt_catch_load(il_stmt_catch* self, enviroment* env, il_context* ilctx, il_ehandler* eh) {
+void il_stmt_catch_load(il_stmt_catch* self, enviroment* env, il_context* ilctx) {
 	for(int i=0; i<self->statement_list->length; i++) {
 		il_stmt* e = (il_stmt*)vector_at(self->statement_list, i);
-		il_stmt_load(e, env, ilctx, eh);
+		il_stmt_load(e, env, ilctx);
 	}
 }
 

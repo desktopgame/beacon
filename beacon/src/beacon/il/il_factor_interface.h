@@ -2,7 +2,6 @@
 #ifndef BEACON_IL_IL_FACTOR_INTERFACE_H
 #define BEACON_IL_IL_FACTOR_INTERFACE_H
 #include "../vm/enviroment.h"
-#include "il_ehandler.h"
 #include "il_context.h"
 #include "il_error.h"
 #include <stdint.h>
@@ -116,7 +115,7 @@ void il_factor_generate(il_factor* self, enviroment* env, il_context* ilctx);
  * @param cache
  * @param eh
  */
-void il_factor_load(il_factor* self, enviroment* env, il_context* ilctx, il_ehandler* eh);
+void il_factor_load(il_factor* self, enviroment* env, il_context* ilctx);
 
 /**
  * この因子が表す型を返します.

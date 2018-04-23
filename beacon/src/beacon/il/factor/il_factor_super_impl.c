@@ -23,7 +23,7 @@ void il_factor_super_generate(il_factor_super * self, enviroment * env, il_conte
 	opcode_buf_add(env->buf, op_super);
 }
 
-void il_factor_super_load(il_factor_super * self, enviroment * env, il_context* ilctx, il_ehandler * eh) {
+void il_factor_super_load(il_factor_super * self, enviroment * env, il_context* ilctx) {
 }
 
 generic_type* il_factor_super_eval(il_factor_super * self, enviroment * env, il_context* ilctx) {

@@ -24,8 +24,8 @@ void il_stmt_proc_generate(il_stmt_proc * self, enviroment * env, il_context* il
 	il_factor_generate(self->factor, env, ilctx);
 }
 
-void il_stmt_proc_load(il_stmt_proc * self, struct enviroment* env, il_context* ilctx, il_ehandler * eh) {
-	il_factor_load(self->factor, env, ilctx, eh);
+void il_stmt_proc_load(il_stmt_proc * self, struct enviroment* env, il_context* ilctx) {
+	il_factor_load(self->factor, env, ilctx);
 }
 
 void il_stmt_proc_delete(il_stmt_proc * self) {

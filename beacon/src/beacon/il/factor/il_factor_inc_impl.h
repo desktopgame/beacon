@@ -49,7 +49,7 @@ void il_factor_inc_generate(il_factor_inc* self, struct enviroment* env, il_cont
  * @param ilctx
  * @param eh
  */
-void il_factor_inc_load(il_factor_inc* self, struct enviroment* env, il_context* ilctx, il_ehandler* eh);
+void il_factor_inc_load(il_factor_inc* self, struct enviroment* env, il_context* ilctx);
 
 /**
  * インクリメントを表す要素の型を返します.

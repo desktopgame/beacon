@@ -1,7 +1,6 @@
 #pragma once
 #ifndef BEACON_IL_IL_FACTOR_SUPER_H
 #define BEACON_IL_IL_FACTOR_SUPER_H
-#include "../il_ehandler.h"
 #include "../il_context.h"
 #include "../../env/generic_type.h"
 struct enviroment;
@@ -39,7 +38,7 @@ void il_factor_super_generate(il_factor_super* self, struct enviroment* env, il_
  * @param cache
  * @param eh
  */
-void il_factor_super_load(il_factor_super* self, struct enviroment* env, il_context* ilctx, il_ehandler* eh);
+void il_factor_super_load(il_factor_super* self, struct enviroment* env, il_context* ilctx);
 
 /**
  * superで参照されるオブジェクトの型を返します.

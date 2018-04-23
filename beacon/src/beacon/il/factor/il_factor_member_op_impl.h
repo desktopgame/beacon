@@ -48,7 +48,7 @@ void il_factor_member_op_dump(il_factor_member_op* self, int depth);
  * @param ilctx
  * @param eh
  */
-void il_factor_member_op_load(il_factor_member_op* self, struct enviroment* env, il_context* ilctx, il_ehandler* eh);
+void il_factor_member_op_load(il_factor_member_op* self, struct enviroment* env, il_context* ilctx);
 
 /**
  * メンバアクセスを出力します.

@@ -165,9 +165,9 @@ void il_factor_binary_op_generate(il_factor_binary_op * self, enviroment* env, i
 	}
 }
 
-void il_factor_binary_op_load(il_factor_binary_op * self, enviroment * env, il_context* ilctx, il_ehandler * eh) {
-	il_factor_load(self->left, env, ilctx, eh);
-	il_factor_load(self->right, env, ilctx, eh);
+void il_factor_binary_op_load(il_factor_binary_op * self, enviroment * env, il_context* ilctx) {
+	il_factor_load(self->left, env, ilctx);
+	il_factor_load(self->right, env, ilctx);
 }
 
 generic_type* il_factor_binary_op_eval(il_factor_binary_op * self, enviroment * env, il_context* ilctx) {
@@ -402,7 +402,7 @@ static void assign_generate_putfield(il_factor_binary_op * self, enviroment* env
 		return;
 	}
 	il_factor_member_op* ilmem = IL_FACT2MEM(self->left);
-	il_factor_member_op_load(ilmem, env, ilctx, NULL);
+	il_factor_member_op_load(ilmem, env, ilctx);
 	il_factor* ilsrc = ilmem->fact;
 	if(ilsrc->type == ilfactor_variable) {
 		il_factor_variable* ilvar = IL_FACT2VAR(ilsrc);

@@ -49,7 +49,7 @@ void il_factor_invoke_bound_generate(il_factor_invoke_bound* self, enviroment* e
 	}
 }
 
-void il_factor_invoke_bound_load(il_factor_invoke_bound * self, enviroment * env, il_context* ilctx, il_ehandler* eh) {
+void il_factor_invoke_bound_load(il_factor_invoke_bound * self, enviroment * env, il_context* ilctx) {
 	vector_push(ilctx->type_args_vec, self->type_args);
 	il_factor_invoke_bound_check(self, env, ilctx);
 	vector_pop(ilctx->type_args_vec);

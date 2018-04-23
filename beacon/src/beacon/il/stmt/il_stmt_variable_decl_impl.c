@@ -30,7 +30,7 @@ void il_stmt_variable_decl_generate(il_stmt_variable_decl * self, enviroment * e
 
 }
 
-void il_stmt_variable_decl_load(il_stmt_variable_decl * self, struct enviroment* env, il_context* ilctx, il_ehandler * eh) {
+void il_stmt_variable_decl_load(il_stmt_variable_decl * self, struct enviroment* env, il_context* ilctx) {
 	symbol_table_entry(
 		env->sym_table,
 		generic_cache_gtype(self->fqcn, (namespace_*)vector_top(ilctx->namespace_vec), ilctx),

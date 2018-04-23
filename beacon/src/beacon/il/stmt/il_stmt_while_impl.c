@@ -63,11 +63,11 @@ void il_stmt_while_delete(il_stmt_while * self) {
 	MEM_FREE(self);
 }
 
-void il_stmt_while_load(il_stmt_while* self, struct enviroment* env, il_context* ilctx, il_ehandler* eh) {
-	il_factor_load(self->condition, env, ilctx, eh);
+void il_stmt_while_load(il_stmt_while* self, struct enviroment* env, il_context* ilctx) {
+	il_factor_load(self->condition, env, ilctx);
 	for(int i=0; i<self->statement_list->length; i++) {
 		il_stmt* e = (il_stmt*)vector_at(self->statement_list, i);
-		il_stmt_load(e, env, ilctx, eh);
+		il_stmt_load(e, env, ilctx);
 	}
 }
 

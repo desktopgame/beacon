@@ -1,7 +1,6 @@
 #pragma once
 #ifndef BEACON_IL_IL_FACTOR_THIS_H
 #define BEACON_IL_IL_FACTOR_THIS_H
-#include "../il_ehandler.h"
 #include "../il_context.h"
 #include "../../env/generic_type.h"
 struct enviroment;
@@ -37,7 +36,7 @@ void il_factor_this_generate(il_factor_this* self, struct enviroment* env, il_co
  * @param cache
  * @param eh
  */
-void il_factor_this_load(il_factor_this* self, struct enviroment* env, il_context* ilctx, il_ehandler* eh);
+void il_factor_this_load(il_factor_this* self, struct enviroment* env, il_context* ilctx);
 
 /**
  * thisで参照されるオブジェクトの型を返します.

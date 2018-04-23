@@ -53,7 +53,7 @@ void il_factor_cast_generate(il_factor_cast* self, struct enviroment* env, il_co
  * @param ilctx
  * @param eh
  */
-void il_factor_cast_load(il_factor_cast* self, struct enviroment* env, il_context* ilctx, il_ehandler* eh);
+void il_factor_cast_load(il_factor_cast* self, struct enviroment* env, il_context* ilctx);
 
 /**
  * キャストを表す要素の型を返します.

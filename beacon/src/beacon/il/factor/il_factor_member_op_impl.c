@@ -39,8 +39,8 @@ void il_factor_member_op_dump(il_factor_member_op* self, int depth) {
 	}
 }
 
-void il_factor_member_op_load(il_factor_member_op* self, enviroment* env, il_context* ilctx, il_ehandler* eh) {
-	il_factor_load(self->fact, env, ilctx, eh);
+void il_factor_member_op_load(il_factor_member_op* self, enviroment* env, il_context* ilctx) {
+	il_factor_load(self->fact, env, ilctx);
 	il_factor_member_op_check(self, env, ilctx);
 }
 

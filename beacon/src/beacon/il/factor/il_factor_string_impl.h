@@ -47,7 +47,7 @@ void il_factor_string_generate(il_factor_string* self, struct enviroment* env, i
  * @param cache
  * @param eh
  */
-void il_factor_string_load(il_factor_string* self, struct enviroment* env, il_context* ilctx, il_ehandler* eh);
+void il_factor_string_load(il_factor_string* self, struct enviroment* env, il_context* ilctx);
 
 /**
  * 文字列を表す要素の型を返します.

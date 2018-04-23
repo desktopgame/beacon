@@ -132,23 +132,23 @@ void il_stmt_if_generate(il_stmt_if * self, enviroment* env, il_context* ilctx) 
 	}
 }
 
-void il_stmt_if_load(il_stmt_if * self, struct enviroment* env, il_context* ilctx, il_ehandler * eh) {
-	il_factor_load(self->condition, env, ilctx, eh);
+void il_stmt_if_load(il_stmt_if * self, struct enviroment* env, il_context* ilctx) {
+	il_factor_load(self->condition, env, ilctx);
 	for(int i=0; i<self->body->length; i++) {
 		il_stmt* e = (il_stmt*)vector_at(self->body, i);
-		il_stmt_load(e, env, ilctx, eh);
+		il_stmt_load(e, env, ilctx);
 	}
 	for(int i=0; i<self->elif_list->length; i++) {
 		il_stmt_elif* e = (il_stmt_elif*)vector_at(self->elif_list, i);
-		il_factor_load(e->condition, env, ilctx, eh);
+		il_factor_load(e->condition, env, ilctx);
 		for(int j=0; j<e->body->length; j++) {
 			il_stmt* st = (il_stmt*)vector_at(e->body, j);
-			il_stmt_load(st, env, ilctx, eh);
+			il_stmt_load(st, env, ilctx);
 		}
 	}
 	for(int i=0; i<self->else_body->body->length; i++) {
 		il_stmt* e = (il_stmt*)vector_at(self->else_body->body, i);
-		il_stmt_load(e, env, ilctx, eh);
+		il_stmt_load(e, env, ilctx);
 	}
 }
 

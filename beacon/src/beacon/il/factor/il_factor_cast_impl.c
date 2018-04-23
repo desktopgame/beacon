@@ -37,7 +37,7 @@ void il_factor_cast_generate(il_factor_cast * self, enviroment * env, il_context
 //	opcode_buf_add(env->buf, t->absolute_index);
 }
 
-void il_factor_cast_load(il_factor_cast * self, enviroment * env, il_context* ilctx, il_ehandler * eh) {
+void il_factor_cast_load(il_factor_cast * self, enviroment * env, il_context* ilctx) {
 }
 
 generic_type* il_factor_cast_eval(il_factor_cast * self, enviroment * env, il_context* ilctx) {

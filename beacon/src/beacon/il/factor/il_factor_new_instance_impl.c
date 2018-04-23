@@ -63,7 +63,7 @@ void il_factor_new_instance_generate(il_factor_new_instance * self, enviroment *
 	opcode_buf_add(env->buf, self->constructor_index);
 }
 
-void il_factor_new_instance_load(il_factor_new_instance * self, enviroment * env, il_context* ilctx, il_ehandler * eh) {
+void il_factor_new_instance_load(il_factor_new_instance * self, enviroment * env, il_context* ilctx) {
 //	fqcn_cache_delete(self->fqcn);
 //	vector_delete(self->argument_list, il_Factor_new_instace_delete_arg);
 //	MEM_FREE(self);

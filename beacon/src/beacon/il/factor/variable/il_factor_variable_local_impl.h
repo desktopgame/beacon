@@ -31,7 +31,7 @@ il_factor_variable_local* il_factor_variable_local_new(const char* name);
 
 void il_factor_variable_local_generate(il_factor_variable_local* self, struct enviroment* env, il_context* ilctx);
 
-void il_factor_variable_local_load(il_factor_variable_local * self, struct enviroment * env, il_context* ilctx, il_ehandler* eh);
+void il_factor_variable_local_load(il_factor_variable_local * self, struct enviroment * env, il_context* ilctx);
 
 struct generic_type* il_factor_variable_local_eval(il_factor_variable_local * self, struct enviroment * env, il_context* ilctx);
 

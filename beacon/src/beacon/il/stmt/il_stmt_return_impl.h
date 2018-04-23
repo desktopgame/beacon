@@ -46,7 +46,7 @@ void il_stmt_return_generate(il_stmt_return* self, struct enviroment* env, il_co
  * @param cache
  * @param eh
  */
-void il_stmt_return_load(il_stmt_return* self, struct enviroment* env, il_context* ilctx, il_ehandler* eh);
+void il_stmt_return_load(il_stmt_return* self, struct enviroment* env, il_context* ilctx);
 
 /**
  * 式を返却する文を開放します.

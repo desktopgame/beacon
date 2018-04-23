@@ -48,12 +48,12 @@ void il_factor_variable_generate(il_factor_variable * self, enviroment* env, il_
 	}
 }
 
-void il_factor_variable_load(il_factor_variable * self, enviroment * env, il_context* ilctx, il_ehandler * eh) {
+void il_factor_variable_load(il_factor_variable * self, enviroment * env, il_context* ilctx) {
 	il_factor_variable_check(self, env, ilctx);
 	if(self->type == ilvariable_type_local) {
-		il_factor_variable_local_load(self->u.local_, env, ilctx, eh);
+		il_factor_variable_local_load(self->u.local_, env, ilctx);
 	} else if(self->type == ilvariable_type_static) {
-		il_factor_variable_static_load(self->u.static_, env, ilctx, eh);
+		il_factor_variable_static_load(self->u.static_, env, ilctx);
 	}
 }
 

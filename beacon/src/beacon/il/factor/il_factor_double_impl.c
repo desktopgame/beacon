@@ -32,7 +32,7 @@ void il_factor_double_generate(il_factor_double * self, enviroment* env, il_cont
 	opcode_buf_add(env->buf, index);
 }
 
-void il_factor_double_load(il_factor_double * self, enviroment * env, il_context* ilctx, il_ehandler * eh) {
+void il_factor_double_load(il_factor_double * self, enviroment * env, il_context* ilctx) {
 }
 
 generic_type* il_factor_double_eval(il_factor_double * self, enviroment * env, il_context* ilctx) {

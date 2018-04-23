@@ -14,7 +14,7 @@ void il_factor_variable_static_generate(il_factor_variable_static* self, envirom
 	//FATAL("not implemented, because must be wrapped by call operator");
 }
 
-void il_factor_variable_static_load(il_factor_variable_static * self, enviroment * env, il_context* ilctx, il_ehandler* eh) {
+void il_factor_variable_static_load(il_factor_variable_static * self, enviroment * env, il_context* ilctx) {
 //	FATAL("not implemented, because must be wrapped by call operator");
 }
 

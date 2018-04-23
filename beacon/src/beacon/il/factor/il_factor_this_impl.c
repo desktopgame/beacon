@@ -22,7 +22,7 @@ void il_factor_this_generate(il_factor_this * self, enviroment * env, il_context
 	opcode_buf_add(env->buf, op_this);
 }
 
-void il_factor_this_load(il_factor_this * self, enviroment * env, il_context* ilctx, il_ehandler * eh) {
+void il_factor_this_load(il_factor_this * self, enviroment * env, il_context* ilctx) {
 }
 
 generic_type* il_factor_this_eval(il_factor_this * self, enviroment * env, il_context* ilctx) {
