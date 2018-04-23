@@ -2,7 +2,6 @@
 #include <stdio.h>
 #include <string.h>
 #include "il/il_print_layout.h"
-#include "util/cmd.h"
 #include "util/io.h"
 #include "util/text.h"
 #include "env/script_context.h"
