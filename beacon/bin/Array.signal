@@ -3,7 +3,7 @@ import "String"
 import "Iterable"
 import "ArrayIterator"
 
-namespace signal.lang {
+namespace beacon.lang {
 	class Array<|T|> : Iterable<|T|> {
 		private:
 		Int length;

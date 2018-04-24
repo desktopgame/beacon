@@ -1,6 +1,6 @@
 //import "Console"
 
-namespace signal.lang {
+namespace beacon.lang {
 	class Int {
 		public:
 		ctor new(Int i) {

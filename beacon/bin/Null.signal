@@ -1,4 +1,4 @@
-namespace signal.lang {
+namespace beacon.lang {
 	class Null {
 	}
 }

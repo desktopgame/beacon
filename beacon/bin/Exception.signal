@@ -3,7 +3,7 @@ import "Array"
 import "Console"
 import "StackTraceElement"
 
-namespace signal.lang {
+namespace beacon.lang {
 	class Exception {
 		private:
 		String message;

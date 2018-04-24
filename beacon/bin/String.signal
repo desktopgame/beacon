@@ -1,6 +1,6 @@
 import "Array"
 
-namespace signal.lang {
+namespace beacon.lang {
 	class String {
 		private:
 		Array<|Char|> charArray;

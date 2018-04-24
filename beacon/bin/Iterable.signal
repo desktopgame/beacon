@@ -1,6 +1,6 @@
 import "Iterator"
 
-namespace signal.lang {
+namespace beacon.lang {
 	interface Iterable<|T|> {
 		public:
 		def iterate() -> Iterator<|T|>;

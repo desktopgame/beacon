@@ -1,7 +1,7 @@
 import "Iterator"
 import "Array"
 
-namespace signal.lang {
+namespace beacon.lang {
 	class ArrayIterator<|T|> : Iterator<|T|> {
 		private:
 		Array<|T|> source;

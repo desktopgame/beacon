@@ -2,7 +2,7 @@ import "Array"
 import "Exception"
 import "VectorIterator"
 
-namespace signal.lang {
+namespace beacon.lang {
 	class Vector<|T|> : Iterable<|T|> {
 		private:
 		Array<|T|> proxy;

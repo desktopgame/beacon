@@ -1,6 +1,6 @@
 import "Iterator"
 
-namespace signal.lang {
+namespace beacon.lang {
 	class ObjectIterator : Iterator {
 		private:
 		Object source;

@@ -1,6 +1,6 @@
 import "Bool"
 
-namespace signal.lang {
+namespace beacon.lang {
 	interface Iterator<|T|> {
 		public:
 		def hasNext() -> Bool;
