@@ -114,7 +114,7 @@ interface_ * namespace_get_interface(namespace_ * self, const char * name) {
 }
 
 namespace_ * namespace_signal() {
-	return namespace_get_at_root("signal");
+	return namespace_get_at_root("beacon");
 }
 
 namespace_ * namespace_lang() {
