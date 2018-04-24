@@ -57,7 +57,7 @@ static void test_bison_grammerImpl(const char* dirname, bool require) {
 	vector* files = io_list_files(dirname);
 	for(int i=0; i<files->length; i++) {
 		file_entry* e = (file_entry*)vector_at(files, i);
-		if(!io_extension(e->filename, "cn")) {
+		if(!io_extension(e->filename, "bc")) {
 			continue;
 		}
 		xtest_printf("%s\n", e->filename);
