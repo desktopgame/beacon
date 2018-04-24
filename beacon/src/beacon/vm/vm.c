@@ -692,7 +692,17 @@ void vm_uncaught(vm * self, enviroment* env, int pc) {
 	if (lr != NULL) {
 		line = lr->lineno;
 	}
+	//例外のメッセージを取得
+	type* tp = namespace_get_type(namespace_lang(), "Exception");
+	int temp = -1;
+	class_find_field(tp->u.class_, "message", &temp);
+	object* ex = self->exception;
+	object* msg = vector_at(ex->u.field_vec, temp);
+	string_buffer* cstr = vector_at(msg->native_slot_vec, 0);
+
 	text_printf("file: %s <%d>", env->context_ref->filename, line);
+	text_printf("\n");
+	text_printf("%s", cstr->text);
 	text_printf("\n");
 }
 

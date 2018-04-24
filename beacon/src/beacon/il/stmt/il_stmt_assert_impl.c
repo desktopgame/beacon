@@ -3,6 +3,7 @@
 #include "../../util/text.h"
 #include "../../env/namespace.h"
 #include "../../env/type_interface.h"
+#include "../il_factor_impl.h"
 
 il_stmt* il_stmt_wrap_assert(il_stmt_assert* self) {
 	il_stmt* ret = (il_stmt*)MEM_MALLOC(sizeof(il_stmt));
@@ -43,6 +44,12 @@ void il_stmt_assert_generate(il_stmt_assert* self, enviroment* env, il_context* 
 
 void il_stmt_assert_load(il_stmt_assert* self, enviroment* env, il_context* ilctx) {
 	il_factor_load(self->condition, env, ilctx);
+	if(self->message == NULL) {
+		char* str = il_factor_tostr(self->condition, env, ilctx);
+		il_factor_string* ilstr = il_factor_string_new(str);
+		self->message = il_factor_wrap_string(ilstr);
+		MEM_FREE(str);
+	}
 	il_factor_load(self->message, env, ilctx);
 }
 

@@ -14,4 +14,4 @@ import "VectorIterator"
 import "Exception"
 import "StackTraceElement"
 
-assert false : "Assert";
+assert false;

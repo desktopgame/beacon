@@ -35,7 +35,7 @@ static void sg_exception_nativeInit(method* parent, vm* vmc, enviroment* env) {
 			vmc,
 			2,
 			object_string_new(temp->context_ref->context_ref->filename),
-			object_int_new(lr->lineno)
+			object_int_new(lr == NULL ? -1 : lr->lineno)
 		);
 		vector_push(stackTraceElementVec, trace);
 		temp = temp->parent;

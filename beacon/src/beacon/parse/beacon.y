@@ -881,6 +881,10 @@ assert_stmt
 	{
 		$$ = ast_new_assert($2, $4);
 	}
+	| ASSERT_T expression SEMI
+	{
+		$$ = ast_new_assert($2, ast_new_blank());
+	}
 	;
 
 scope

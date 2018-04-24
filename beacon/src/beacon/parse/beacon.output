@@ -252,14 +252,15 @@ Grammar
   169 catch_stmt: CATCH LRB typename_T IDENT RRB scope
 
   170 assert_stmt: ASSERT_T expression COLON expression SEMI
+  171            | ASSERT_T expression SEMI
 
-  171 scope: LCB stmt_list RCB
-  172      | LCB RCB
+  172 scope: LCB stmt_list RCB
+  173      | LCB RCB
 
-  173 scope_optional: SEMI
-  174               | scope
+  174 scope_optional: SEMI
+  175               | scope
 
-  175 stmt_term: SEMI
+  176 stmt_term: SEMI
 
 
 Terminals, with rules where they appear
@@ -314,13 +315,13 @@ EXC_OR_ASSIGN (299) 109
 INC (300)
 DEC (301)
 EXC_OR (302) 98
-LCB (303) 10 34 35 36 37 38 39 171 172
-RCB (304) 10 34 35 36 37 38 39 171 172
+LCB (303) 10 34 35 36 37 38 39 172 173
+RCB (304) 10 34 35 36 37 38 39 172 173
 LRB (305) 33 50 51 52 53 58 59 60 61 84 121 122 123 124 169
 RRB (306) 33 50 51 52 53 58 59 60 61 84 121 122 123 124 169
 LSB (307)
 RSB (308)
-SEMI (309) 62 151 170 173 175
+SEMI (309) 62 151 170 171 174 176
 IMPORT (310) 23
 VAR (311) 153
 THIS_TOK (312) 55 125
@@ -354,7 +355,7 @@ CONTINUE (339) 163
 TRY (340) 166
 CATCH (341) 169
 THROW (342) 165
-ASSERT_T (343) 170
+ASSERT_T (343) 170 171
 PRE_DEC (344)
 PRE_INC (345)
 QUOTE (346)
@@ -455,7 +456,7 @@ expression (142)
     on left: 84 85 86, on right: 75 76 84 87 88 89 90 91 92 93 94 95
     96 97 98 99 100 101 102 103 104 105 106 107 108 109 110 111 112
     113 114 115 116 117 118 119 120 129 139 152 153 154 155 156 157
-    160 161 164 165 170
+    160 161 164 165 170 171
 expression_nobrace (143)
     on left: 87 88 89 90 91 92 93 94 95 96 97 98 99 100 101 102 103
     104 105 106 107 108 109 110 111 112 113 114 115 116 117 118 119
@@ -466,7 +467,7 @@ lhs (144)
 primary (145)
     on left: 130 131 132 133 134 135 136, on right: 85
 stmt_list (146)
-    on left: 137 138, on right: 138 171
+    on left: 137 138, on right: 138 172
 stmt (147)
     on left: 139 140 141 142 143 144 145 146 147 148 149 150,
     on right: 6 137 138
@@ -499,13 +500,13 @@ catch_stmt_list (160)
 catch_stmt (161)
     on left: 169, on right: 167 168
 assert_stmt (162)
-    on left: 170, on right: 150
+    on left: 170 171, on right: 150
 scope (163)
-    on left: 171 172, on right: 154 155 156 157 160 166 169 174
+    on left: 172 173, on right: 154 155 156 157 160 166 169 175
 scope_optional (164)
-    on left: 173 174, on right: 50 51 58 59 60 61 161
+    on left: 174 175, on right: 50 51 58 59 60 61 161
 stmt_term (165)
-    on left: 175, on right: 139 152 153 162 163 164 165
+    on left: 176, on right: 139 152 153 162 163 164 165
 
 
 state 0
@@ -663,6 +664,7 @@ state 3
   165 throw_stmt: . THROW expression stmt_term
   166 try_stmt: . TRY scope catch_stmt_list
   170 assert_stmt: . ASSERT_T expression COLON expression SEMI
+  171            | . ASSERT_T expression SEMI
 
     $end            shift, and go to state 9
     CHAR_LITERAL    shift, and go to state 10
@@ -807,6 +809,7 @@ state 4
   165 throw_stmt: . THROW expression stmt_term
   166 try_stmt: . TRY scope catch_stmt_list
   170 assert_stmt: . ASSERT_T expression COLON expression SEMI
+  171            | . ASSERT_T expression SEMI
 
     CHAR_LITERAL    shift, and go to state 10
     STRING_LITERAL  shift, and go to state 11
@@ -1678,7 +1681,7 @@ state 31
 state 32
 
   162 break_stmt: BREAK . stmt_term
-  175 stmt_term: . SEMI
+  176 stmt_term: . SEMI
 
     SEMI  shift, and go to state 74
 
@@ -1688,7 +1691,7 @@ state 32
 state 33
 
   163 continue_stmt: CONTINUE . stmt_term
-  175 stmt_term: . SEMI
+  176 stmt_term: . SEMI
 
     SEMI  shift, and go to state 74
 
@@ -1698,8 +1701,8 @@ state 33
 state 34
 
   166 try_stmt: TRY . scope catch_stmt_list
-  171 scope: . LCB stmt_list RCB
-  172      | . LCB RCB
+  172 scope: . LCB stmt_list RCB
+  173      | . LCB RCB
 
     LCB  shift, and go to state 77
 
@@ -1847,6 +1850,7 @@ state 36
   135        | . FALSE_TOK
   136        | . NULL_TOK
   170 assert_stmt: ASSERT_T . expression COLON expression SEMI
+  171            | ASSERT_T . expression SEMI
 
     CHAR_LITERAL    shift, and go to state 10
     STRING_LITERAL  shift, and go to state 11
@@ -1940,7 +1944,7 @@ state 42
   118                   | expression . AS typename_T
   129 lhs: expression . DOT IDENT typename_group
   139 stmt: expression . stmt_term
-  175 stmt_term: . SEMI
+  176 stmt_term: . SEMI
 
     DOT        shift, and go to state 85
     ADD        shift, and go to state 86
@@ -2449,7 +2453,7 @@ state 71
   118                   | expression . AS typename_T
   129 lhs: expression . DOT IDENT typename_group
   164 return_stmt: RETURN expression . stmt_term
-  175 stmt_term: . SEMI
+  176 stmt_term: . SEMI
 
     DOT        shift, and go to state 85
     ADD        shift, and go to state 86
@@ -2502,8 +2506,8 @@ state 72
   155        | IF expression . scope ELSE scope
   156        | IF expression . scope elif_list
   157        | IF expression . scope elif_list ELSE scope
-  171 scope: . LCB stmt_list RCB
-  172      | . LCB RCB
+  172 scope: . LCB stmt_list RCB
+  173      | . LCB RCB
 
     DOT        shift, and go to state 85
     ADD        shift, and go to state 86
@@ -2553,10 +2557,10 @@ state 73
   118                   | expression . AS typename_T
   129 lhs: expression . DOT IDENT typename_group
   161 while_stmt: WHILE expression . scope_optional
-  171 scope: . LCB stmt_list RCB
-  172      | . LCB RCB
-  173 scope_optional: . SEMI
-  174               | . scope
+  172 scope: . LCB stmt_list RCB
+  173      | . LCB RCB
+  174 scope_optional: . SEMI
+  175               | . scope
 
     DOT        shift, and go to state 85
     ADD        shift, and go to state 86
@@ -2587,9 +2591,9 @@ state 73
 
 state 74
 
-  175 stmt_term: SEMI .
+  176 stmt_term: SEMI .
 
-    $default  reduce using rule 175 (stmt_term)
+    $default  reduce using rule 176 (stmt_term)
 
 
 state 75
@@ -2692,8 +2696,9 @@ state 77
   165 throw_stmt: . THROW expression stmt_term
   166 try_stmt: . TRY scope catch_stmt_list
   170 assert_stmt: . ASSERT_T expression COLON expression SEMI
-  171 scope: LCB . stmt_list RCB
-  172      | LCB . RCB
+  171            | . ASSERT_T expression SEMI
+  172 scope: LCB . stmt_list RCB
+  173      | LCB . RCB
 
     CHAR_LITERAL    shift, and go to state 10
     STRING_LITERAL  shift, and go to state 11
@@ -2779,7 +2784,7 @@ state 79
   118                   | expression . AS typename_T
   129 lhs: expression . DOT IDENT typename_group
   165 throw_stmt: THROW expression . stmt_term
-  175 stmt_term: . SEMI
+  176 stmt_term: . SEMI
 
     DOT        shift, and go to state 85
     ADD        shift, and go to state 86
@@ -2829,6 +2834,7 @@ state 80
   118                   | expression . AS typename_T
   129 lhs: expression . DOT IDENT typename_group
   170 assert_stmt: ASSERT_T expression . COLON expression SEMI
+  171            | ASSERT_T expression . SEMI
 
     DOT        shift, and go to state 85
     COLON      shift, and go to state 138
@@ -2850,6 +2856,7 @@ state 80
     BIT_OR     shift, and go to state 101
     LOGIC_OR   shift, and go to state 102
     EXC_OR     shift, and go to state 103
+    SEMI       shift, and go to state 139
     AS         shift, and go to state 104
 
 
@@ -2858,15 +2865,15 @@ state 81
   151 variable_decl_stmt: typename_T IDENT . SEMI
   152 variable_init_stmt: typename_T IDENT . ASSIGN expression stmt_term
 
-    ASSIGN  shift, and go to state 139
-    SEMI    shift, and go to state 140
+    ASSIGN  shift, and go to state 140
+    SEMI    shift, and go to state 141
 
 
 state 82
 
    83 fqcn_part: fqcn_part COLO_COLO . IDENT
 
-    IDENT  shift, and go to state 141
+    IDENT  shift, and go to state 142
 
 
 state 83
@@ -2880,9 +2887,9 @@ state 83
 
     IDENT  shift, and go to state 14
 
-    typename_list  go to state 142
-    typename_T     go to state 143
-    fqcn_part      go to state 144
+    typename_list  go to state 143
+    typename_T     go to state 144
+    fqcn_part      go to state 145
 
 
 state 84
@@ -2898,7 +2905,7 @@ state 85
 
   129 lhs: expression DOT . IDENT typename_group
 
-    IDENT  shift, and go to state 145
+    IDENT  shift, and go to state 146
 
 
 state 86
@@ -2978,7 +2985,7 @@ state 86
     NEW             shift, and go to state 26
 
     fqcn_part           go to state 60
-    expression          go to state 146
+    expression          go to state 147
     expression_nobrace  go to state 43
     lhs                 go to state 44
     primary             go to state 45
@@ -3061,7 +3068,7 @@ state 87
     NEW             shift, and go to state 26
 
     fqcn_part           go to state 60
-    expression          go to state 147
+    expression          go to state 148
     expression_nobrace  go to state 43
     lhs                 go to state 44
     primary             go to state 45
@@ -3144,7 +3151,7 @@ state 88
     NEW             shift, and go to state 26
 
     fqcn_part           go to state 60
-    expression          go to state 148
+    expression          go to state 149
     expression_nobrace  go to state 43
     lhs                 go to state 44
     primary             go to state 45
@@ -3227,7 +3234,7 @@ state 89
     NEW             shift, and go to state 26
 
     fqcn_part           go to state 60
-    expression          go to state 149
+    expression          go to state 150
     expression_nobrace  go to state 43
     lhs                 go to state 44
     primary             go to state 45
@@ -3310,7 +3317,7 @@ state 90
     NEW             shift, and go to state 26
 
     fqcn_part           go to state 60
-    expression          go to state 150
+    expression          go to state 151
     expression_nobrace  go to state 43
     lhs                 go to state 44
     primary             go to state 45
@@ -3393,7 +3400,7 @@ state 91
     NEW             shift, and go to state 26
 
     fqcn_part           go to state 60
-    expression          go to state 151
+    expression          go to state 152
     expression_nobrace  go to state 43
     lhs                 go to state 44
     primary             go to state 45
@@ -3476,7 +3483,7 @@ state 92
     NEW             shift, and go to state 26
 
     fqcn_part           go to state 60
-    expression          go to state 152
+    expression          go to state 153
     expression_nobrace  go to state 43
     lhs                 go to state 44
     primary             go to state 45
@@ -3559,7 +3566,7 @@ state 93
     NEW             shift, and go to state 26
 
     fqcn_part           go to state 60
-    expression          go to state 153
+    expression          go to state 154
     expression_nobrace  go to state 43
     lhs                 go to state 44
     primary             go to state 45
@@ -3642,7 +3649,7 @@ state 94
     NEW             shift, and go to state 26
 
     fqcn_part           go to state 60
-    expression          go to state 154
+    expression          go to state 155
     expression_nobrace  go to state 43
     lhs                 go to state 44
     primary             go to state 45
@@ -3725,7 +3732,7 @@ state 95
     NEW             shift, and go to state 26
 
     fqcn_part           go to state 60
-    expression          go to state 155
+    expression          go to state 156
     expression_nobrace  go to state 43
     lhs                 go to state 44
     primary             go to state 45
@@ -3808,7 +3815,7 @@ state 96
     NEW             shift, and go to state 26
 
     fqcn_part           go to state 60
-    expression          go to state 156
+    expression          go to state 157
     expression_nobrace  go to state 43
     lhs                 go to state 44
     primary             go to state 45
@@ -3891,7 +3898,7 @@ state 97
     NEW             shift, and go to state 26
 
     fqcn_part           go to state 60
-    expression          go to state 157
+    expression          go to state 158
     expression_nobrace  go to state 43
     lhs                 go to state 44
     primary             go to state 45
@@ -3974,7 +3981,7 @@ state 98
     NEW             shift, and go to state 26
 
     fqcn_part           go to state 60
-    expression          go to state 158
+    expression          go to state 159
     expression_nobrace  go to state 43
     lhs                 go to state 44
     primary             go to state 45
@@ -4057,7 +4064,7 @@ state 99
     NEW             shift, and go to state 26
 
     fqcn_part           go to state 60
-    expression          go to state 159
+    expression          go to state 160
     expression_nobrace  go to state 43
     lhs                 go to state 44
     primary             go to state 45
@@ -4140,7 +4147,7 @@ state 100
     NEW             shift, and go to state 26
 
     fqcn_part           go to state 60
-    expression          go to state 160
+    expression          go to state 161
     expression_nobrace  go to state 43
     lhs                 go to state 44
     primary             go to state 45
@@ -4223,7 +4230,7 @@ state 101
     NEW             shift, and go to state 26
 
     fqcn_part           go to state 60
-    expression          go to state 161
+    expression          go to state 162
     expression_nobrace  go to state 43
     lhs                 go to state 44
     primary             go to state 45
@@ -4306,7 +4313,7 @@ state 102
     NEW             shift, and go to state 26
 
     fqcn_part           go to state 60
-    expression          go to state 162
+    expression          go to state 163
     expression_nobrace  go to state 43
     lhs                 go to state 44
     primary             go to state 45
@@ -4389,7 +4396,7 @@ state 103
     NEW             shift, and go to state 26
 
     fqcn_part           go to state 60
-    expression          go to state 163
+    expression          go to state 164
     expression_nobrace  go to state 43
     lhs                 go to state 44
     primary             go to state 45
@@ -4404,8 +4411,8 @@ state 104
 
     IDENT  shift, and go to state 14
 
-    typename_T  go to state 164
-    fqcn_part   go to state 144
+    typename_T  go to state 165
+    fqcn_part   go to state 145
 
 
 state 105
@@ -4487,7 +4494,7 @@ state 106
     NOT             shift, and go to state 17
     CHILDA          shift, and go to state 18
     LRB             shift, and go to state 19
-    RRB             shift, and go to state 165
+    RRB             shift, and go to state 166
     THIS_TOK        shift, and go to state 21
     SUPER_TOK       shift, and go to state 22
     TRUE_TOK        shift, and go to state 23
@@ -4495,9 +4502,9 @@ state 106
     NULL_TOK        shift, and go to state 25
     NEW             shift, and go to state 26
 
-    argument_list       go to state 166
+    argument_list       go to state 167
     fqcn_part           go to state 60
-    expression          go to state 167
+    expression          go to state 168
     expression_nobrace  go to state 43
     lhs                 go to state 44
     primary             go to state 45
@@ -4580,7 +4587,7 @@ state 107
     NEW             shift, and go to state 26
 
     fqcn_part           go to state 60
-    expression          go to state 168
+    expression          go to state 169
     expression_nobrace  go to state 43
     lhs                 go to state 44
     primary             go to state 45
@@ -4663,7 +4670,7 @@ state 108
     NEW             shift, and go to state 26
 
     fqcn_part           go to state 60
-    expression          go to state 169
+    expression          go to state 170
     expression_nobrace  go to state 43
     lhs                 go to state 44
     primary             go to state 45
@@ -4746,7 +4753,7 @@ state 109
     NEW             shift, and go to state 26
 
     fqcn_part           go to state 60
-    expression          go to state 170
+    expression          go to state 171
     expression_nobrace  go to state 43
     lhs                 go to state 44
     primary             go to state 45
@@ -4829,7 +4836,7 @@ state 110
     NEW             shift, and go to state 26
 
     fqcn_part           go to state 60
-    expression          go to state 171
+    expression          go to state 172
     expression_nobrace  go to state 43
     lhs                 go to state 44
     primary             go to state 45
@@ -4912,7 +4919,7 @@ state 111
     NEW             shift, and go to state 26
 
     fqcn_part           go to state 60
-    expression          go to state 172
+    expression          go to state 173
     expression_nobrace  go to state 43
     lhs                 go to state 44
     primary             go to state 45
@@ -4995,7 +5002,7 @@ state 112
     NEW             shift, and go to state 26
 
     fqcn_part           go to state 60
-    expression          go to state 173
+    expression          go to state 174
     expression_nobrace  go to state 43
     lhs                 go to state 44
     primary             go to state 45
@@ -5078,7 +5085,7 @@ state 113
     NEW             shift, and go to state 26
 
     fqcn_part           go to state 60
-    expression          go to state 174
+    expression          go to state 175
     expression_nobrace  go to state 43
     lhs                 go to state 44
     primary             go to state 45
@@ -5161,7 +5168,7 @@ state 114
     NEW             shift, and go to state 26
 
     fqcn_part           go to state 60
-    expression          go to state 175
+    expression          go to state 176
     expression_nobrace  go to state 43
     lhs                 go to state 44
     primary             go to state 45
@@ -5244,7 +5251,7 @@ state 115
     NEW             shift, and go to state 26
 
     fqcn_part           go to state 60
-    expression          go to state 176
+    expression          go to state 177
     expression_nobrace  go to state 43
     lhs                 go to state 44
     primary             go to state 45
@@ -5327,7 +5334,7 @@ state 116
     NEW             shift, and go to state 26
 
     fqcn_part           go to state 60
-    expression          go to state 177
+    expression          go to state 178
     expression_nobrace  go to state 43
     lhs                 go to state 44
     primary             go to state 45
@@ -5410,7 +5417,7 @@ state 117
     NEW             shift, and go to state 26
 
     fqcn_part           go to state 60
-    expression          go to state 178
+    expression          go to state 179
     expression_nobrace  go to state 43
     lhs                 go to state 44
     primary             go to state 45
@@ -5507,7 +5514,7 @@ state 120
     NEW             shift, and go to state 26
 
     fqcn_part           go to state 60
-    expression          go to state 179
+    expression          go to state 180
     expression_nobrace  go to state 43
     lhs                 go to state 44
     primary             go to state 45
@@ -5518,7 +5525,7 @@ state 121
   123 expression_nobrace: NEW fqcn_part typename_group . LRB argument_list RRB
   124                   | NEW fqcn_part typename_group . LRB RRB
 
-    LRB  shift, and go to state 180
+    LRB  shift, and go to state 181
 
 
 state 122
@@ -5532,18 +5539,18 @@ state 122
    83          | . fqcn_part COLO_COLO IDENT
 
     IDENT  shift, and go to state 14
-    RRB    shift, and go to state 181
+    RRB    shift, and go to state 182
 
-    parameter_list  go to state 182
-    typename_T      go to state 183
-    fqcn_part       go to state 144
+    parameter_list  go to state 183
+    typename_T      go to state 184
+    fqcn_part       go to state 145
 
 
 state 123
 
    20 namespace_path: namespace_path DOT . IDENT
 
-    IDENT  shift, and go to state 184
+    IDENT  shift, and go to state 185
 
 
 state 124
@@ -5564,19 +5571,19 @@ state 124
    38 interface_decl: . INTERFACE parameterized_typename LCB access_member_tree_opt RCB
    39               | . INTERFACE parameterized_typename COLON typename_list LCB access_member_tree_opt RCB
 
-    INTERFACE  shift, and go to state 185
-    CLASS      shift, and go to state 186
-    ENUM       shift, and go to state 187
-    NAMESPACE  shift, and go to state 188
+    INTERFACE  shift, and go to state 186
+    CLASS      shift, and go to state 187
+    ENUM       shift, and go to state 188
+    NAMESPACE  shift, and go to state 189
 
     $default  reduce using rule 17 (namespace_member_decl_optional)
 
-    namespace_member_decl           go to state 189
-    namespace_member_decl_list      go to state 190
-    namespace_member_decl_optional  go to state 191
-    class_decl                      go to state 192
-    enum_decl                       go to state 193
-    interface_decl                  go to state 194
+    namespace_member_decl           go to state 190
+    namespace_member_decl_list      go to state 191
+    namespace_member_decl_optional  go to state 192
+    class_decl                      go to state 193
+    enum_decl                       go to state 194
+    interface_decl                  go to state 195
 
 
 state 125
@@ -5603,27 +5610,27 @@ state 127
   159          | . elif_list elif
   160 elif: . ELIF expression scope
 
-    ELIF  shift, and go to state 195
-    ELSE  shift, and go to state 196
+    ELIF  shift, and go to state 196
+    ELSE  shift, and go to state 197
 
     $default  reduce using rule 154 (if_stmt)
 
-    elif_list  go to state 197
-    elif       go to state 198
+    elif_list  go to state 198
+    elif       go to state 199
 
 
 state 128
 
-  173 scope_optional: SEMI .
+  174 scope_optional: SEMI .
 
-    $default  reduce using rule 173 (scope_optional)
+    $default  reduce using rule 174 (scope_optional)
 
 
 state 129
 
-  174 scope_optional: scope .
+  175 scope_optional: scope .
 
-    $default  reduce using rule 174 (scope_optional)
+    $default  reduce using rule 175 (scope_optional)
 
 
 state 130
@@ -5635,9 +5642,9 @@ state 130
 
 state 131
 
-  172 scope: LCB RCB .
+  173 scope: LCB RCB .
 
-    $default  reduce using rule 172 (scope)
+    $default  reduce using rule 173 (scope)
 
 
 state 132
@@ -5725,7 +5732,8 @@ state 132
   165 throw_stmt: . THROW expression stmt_term
   166 try_stmt: . TRY scope catch_stmt_list
   170 assert_stmt: . ASSERT_T expression COLON expression SEMI
-  171 scope: LCB stmt_list . RCB
+  171            | . ASSERT_T expression SEMI
+  172 scope: LCB stmt_list . RCB
 
     CHAR_LITERAL    shift, and go to state 10
     STRING_LITERAL  shift, and go to state 11
@@ -5736,7 +5744,7 @@ state 132
     SUB             shift, and go to state 16
     NOT             shift, and go to state 17
     CHILDA          shift, and go to state 18
-    RCB             shift, and go to state 199
+    RCB             shift, and go to state 200
     LRB             shift, and go to state 19
     VAR             shift, and go to state 20
     THIS_TOK        shift, and go to state 21
@@ -5760,7 +5768,7 @@ state 132
     expression_nobrace         go to state 43
     lhs                        go to state 44
     primary                    go to state 45
-    stmt                       go to state 200
+    stmt                       go to state 201
     variable_decl_stmt         go to state 47
     variable_init_stmt         go to state 48
     inferenced_type_init_stmt  go to state 49
@@ -5785,7 +5793,7 @@ state 134
 
   169 catch_stmt: CATCH . LRB typename_T IDENT RRB scope
 
-    LRB  shift, and go to state 201
+    LRB  shift, and go to state 202
 
 
 state 135
@@ -5798,7 +5806,7 @@ state 135
 
     $default  reduce using rule 166 (try_stmt)
 
-    catch_stmt  go to state 202
+    catch_stmt  go to state 203
 
 
 state 136
@@ -5892,13 +5900,20 @@ state 138
     NEW             shift, and go to state 26
 
     fqcn_part           go to state 60
-    expression          go to state 203
+    expression          go to state 204
     expression_nobrace  go to state 43
     lhs                 go to state 44
     primary             go to state 45
 
 
 state 139
+
+  171 assert_stmt: ASSERT_T expression SEMI .
+
+    $default  reduce using rule 171 (assert_stmt)
+
+
+state 140
 
    82 fqcn_part: . IDENT
    83          | . fqcn_part COLO_COLO IDENT
@@ -5975,43 +5990,43 @@ state 139
     NEW             shift, and go to state 26
 
     fqcn_part           go to state 60
-    expression          go to state 204
+    expression          go to state 205
     expression_nobrace  go to state 43
     lhs                 go to state 44
     primary             go to state 45
 
 
-state 140
+state 141
 
   151 variable_decl_stmt: typename_T IDENT SEMI .
 
     $default  reduce using rule 151 (variable_decl_stmt)
 
 
-state 141
+state 142
 
    83 fqcn_part: fqcn_part COLO_COLO IDENT .
 
     $default  reduce using rule 83 (fqcn_part)
 
 
-state 142
+state 143
 
    78 typename_group: LGEN typename_list . RGEN
    80 typename_list: typename_list . COMMA typename_T
 
-    COMMA  shift, and go to state 205
-    RGEN   shift, and go to state 206
+    COMMA  shift, and go to state 206
+    RGEN   shift, and go to state 207
 
 
-state 143
+state 144
 
    79 typename_list: typename_T .
 
     $default  reduce using rule 79 (typename_list)
 
 
-state 144
+state 145
 
    77 typename_group: .  [IDENT, DOT, COMMA, COLON, ADD, SUB, MUL, DIV, MOD, LSHIFT, RSHIFT, EQUAL, NOTEQUAL, GT, GE, LT, LE, RGEN, BIT_AND, LOGIC_AND, BIT_OR, LOGIC_OR, EXC_OR, LCB, LRB, RRB, SEMI, AS]
    78               | . LGEN typename_list RGEN
@@ -6023,10 +6038,10 @@ state 144
 
     $default  reduce using rule 77 (typename_group)
 
-    typename_group  go to state 207
+    typename_group  go to state 208
 
 
-state 145
+state 146
 
    77 typename_group: .  [DOT, COMMA, COLON, ADD, SUB, MUL, DIV, MOD, LSHIFT, RSHIFT, EQUAL, NOTEQUAL, GT, GE, LT, LE, BIT_AND, LOGIC_AND, BIT_OR, LOGIC_OR, ASSIGN, ADD_ASSIGN, SUB_ASSIGN, MUL_ASSIGN, DIV_ASSIGN, MOD_ASSIGN, AND_ASSIGN, OR_ASSIGN, LSHIFT_ASSIGN, RSHIFT_ASSIGN, EXC_OR_ASSIGN, EXC_OR, LCB, LRB, RRB, SEMI, AS]
    78               | . LGEN typename_list RGEN
@@ -6036,10 +6051,10 @@ state 145
 
     $default  reduce using rule 77 (typename_group)
 
-    typename_group  go to state 208
+    typename_group  go to state 209
 
 
-state 146
+state 147
 
    89 expression_nobrace: expression . ADD expression  [COMMA, COLON, ADD, SUB, LSHIFT, RSHIFT, EQUAL, NOTEQUAL, GT, GE, LT, LE, BIT_AND, LOGIC_AND, BIT_OR, LOGIC_OR, EXC_OR, LCB, LRB, RRB, SEMI]
    89                   | expression ADD expression .  [COMMA, COLON, ADD, SUB, LSHIFT, RSHIFT, EQUAL, NOTEQUAL, GT, GE, LT, LE, BIT_AND, LOGIC_AND, BIT_OR, LOGIC_OR, EXC_OR, LCB, LRB, RRB, SEMI]
@@ -6093,7 +6108,7 @@ state 146
     Conflict between rule 89 and token AS resolved as shift (ADD < AS).
 
 
-state 147
+state 148
 
    89 expression_nobrace: expression . ADD expression
    90                   | expression . SUB expression  [COMMA, COLON, ADD, SUB, LSHIFT, RSHIFT, EQUAL, NOTEQUAL, GT, GE, LT, LE, BIT_AND, LOGIC_AND, BIT_OR, LOGIC_OR, EXC_OR, LCB, LRB, RRB, SEMI]
@@ -6147,7 +6162,7 @@ state 147
     Conflict between rule 90 and token AS resolved as shift (SUB < AS).
 
 
-state 148
+state 149
 
    89 expression_nobrace: expression . ADD expression
    90                   | expression . SUB expression
@@ -6198,7 +6213,7 @@ state 148
     Conflict between rule 91 and token AS resolved as shift (MUL < AS).
 
 
-state 149
+state 150
 
    89 expression_nobrace: expression . ADD expression
    90                   | expression . SUB expression
@@ -6249,7 +6264,7 @@ state 149
     Conflict between rule 92 and token AS resolved as shift (DIV < AS).
 
 
-state 150
+state 151
 
    89 expression_nobrace: expression . ADD expression
    90                   | expression . SUB expression
@@ -6300,7 +6315,7 @@ state 150
     Conflict between rule 93 and token AS resolved as shift (MOD < AS).
 
 
-state 151
+state 152
 
    89 expression_nobrace: expression . ADD expression
    90                   | expression . SUB expression
@@ -6360,7 +6375,7 @@ state 151
     Conflict between rule 116 and token AS resolved as shift (LSHIFT < AS).
 
 
-state 152
+state 153
 
    89 expression_nobrace: expression . ADD expression
    90                   | expression . SUB expression
@@ -6420,7 +6435,7 @@ state 152
     Conflict between rule 117 and token AS resolved as shift (RSHIFT < AS).
 
 
-state 153
+state 154
 
    89 expression_nobrace: expression . ADD expression
    90                   | expression . SUB expression
@@ -6487,7 +6502,7 @@ state 153
     Conflict between rule 95 and token AS resolved as shift (EQUAL < AS).
 
 
-state 154
+state 155
 
    89 expression_nobrace: expression . ADD expression
    90                   | expression . SUB expression
@@ -6554,7 +6569,7 @@ state 154
     Conflict between rule 96 and token AS resolved as shift (NOTEQUAL < AS).
 
 
-state 155
+state 156
 
    89 expression_nobrace: expression . ADD expression
    90                   | expression . SUB expression
@@ -6610,7 +6625,7 @@ state 155
     Conflict between rule 112 and token AS resolved as shift (GT < AS).
 
 
-state 156
+state 157
 
    89 expression_nobrace: expression . ADD expression
    90                   | expression . SUB expression
@@ -6666,7 +6681,7 @@ state 156
     Conflict between rule 113 and token AS resolved as shift (GE < AS).
 
 
-state 157
+state 158
 
    89 expression_nobrace: expression . ADD expression
    90                   | expression . SUB expression
@@ -6722,7 +6737,7 @@ state 157
     Conflict between rule 114 and token AS resolved as shift (LT < AS).
 
 
-state 158
+state 159
 
    89 expression_nobrace: expression . ADD expression
    90                   | expression . SUB expression
@@ -6778,7 +6793,7 @@ state 158
     Conflict between rule 115 and token AS resolved as shift (LE < AS).
 
 
-state 159
+state 160
 
    89 expression_nobrace: expression . ADD expression
    90                   | expression . SUB expression
@@ -6842,7 +6857,7 @@ state 159
     Conflict between rule 97 and token AS resolved as shift (BIT_AND < AS).
 
 
-state 160
+state 161
 
    89 expression_nobrace: expression . ADD expression
    90                   | expression . SUB expression
@@ -6907,7 +6922,7 @@ state 160
     Conflict between rule 100 and token AS resolved as shift (LOGIC_AND < AS).
 
 
-state 161
+state 162
 
    89 expression_nobrace: expression . ADD expression
    90                   | expression . SUB expression
@@ -6970,7 +6985,7 @@ state 161
     Conflict between rule 94 and token AS resolved as shift (BIT_OR < AS).
 
 
-state 162
+state 163
 
    89 expression_nobrace: expression . ADD expression
    90                   | expression . SUB expression
@@ -7036,7 +7051,7 @@ state 162
     Conflict between rule 99 and token AS resolved as shift (LOGIC_OR < AS).
 
 
-state 163
+state 164
 
    89 expression_nobrace: expression . ADD expression
    90                   | expression . SUB expression
@@ -7098,30 +7113,30 @@ state 163
     Conflict between rule 98 and token AS resolved as shift (EXC_OR < AS).
 
 
-state 164
+state 165
 
   118 expression_nobrace: expression AS typename_T .
 
     $default  reduce using rule 118 (expression_nobrace)
 
 
-state 165
+state 166
 
   122 expression_nobrace: expression_nobrace LRB RRB .
 
     $default  reduce using rule 122 (expression_nobrace)
 
 
-state 166
+state 167
 
    76 argument_list: argument_list . COMMA expression
   121 expression_nobrace: expression_nobrace LRB argument_list . RRB
 
-    COMMA  shift, and go to state 209
-    RRB    shift, and go to state 210
+    COMMA  shift, and go to state 210
+    RRB    shift, and go to state 211
 
 
-state 167
+state 168
 
    75 argument_list: expression .  [COMMA, RRB]
    89 expression_nobrace: expression . ADD expression
@@ -7169,7 +7184,7 @@ state 167
     $default  reduce using rule 75 (argument_list)
 
 
-state 168
+state 169
 
    89 expression_nobrace: expression . ADD expression
    90                   | expression . SUB expression
@@ -7238,7 +7253,7 @@ state 168
     Conflict between rule 101 and token AS resolved as shift (ASSIGN < AS).
 
 
-state 169
+state 170
 
    89 expression_nobrace: expression . ADD expression
    90                   | expression . SUB expression
@@ -7307,7 +7322,7 @@ state 169
     Conflict between rule 102 and token AS resolved as shift (ADD_ASSIGN < AS).
 
 
-state 170
+state 171
 
    89 expression_nobrace: expression . ADD expression
    90                   | expression . SUB expression
@@ -7376,7 +7391,7 @@ state 170
     Conflict between rule 103 and token AS resolved as shift (SUB_ASSIGN < AS).
 
 
-state 171
+state 172
 
    89 expression_nobrace: expression . ADD expression
    90                   | expression . SUB expression
@@ -7445,7 +7460,7 @@ state 171
     Conflict between rule 104 and token AS resolved as shift (MUL_ASSIGN < AS).
 
 
-state 172
+state 173
 
    89 expression_nobrace: expression . ADD expression
    90                   | expression . SUB expression
@@ -7514,7 +7529,7 @@ state 172
     Conflict between rule 105 and token AS resolved as shift (DIV_ASSIGN < AS).
 
 
-state 173
+state 174
 
    89 expression_nobrace: expression . ADD expression
    90                   | expression . SUB expression
@@ -7583,7 +7598,7 @@ state 173
     Conflict between rule 106 and token AS resolved as shift (MOD_ASSIGN < AS).
 
 
-state 174
+state 175
 
    89 expression_nobrace: expression . ADD expression
    90                   | expression . SUB expression
@@ -7652,7 +7667,7 @@ state 174
     Conflict between rule 107 and token AS resolved as shift (AND_ASSIGN < AS).
 
 
-state 175
+state 176
 
    89 expression_nobrace: expression . ADD expression
    90                   | expression . SUB expression
@@ -7721,7 +7736,7 @@ state 175
     Conflict between rule 108 and token AS resolved as shift (OR_ASSIGN < AS).
 
 
-state 176
+state 177
 
    89 expression_nobrace: expression . ADD expression
    90                   | expression . SUB expression
@@ -7790,7 +7805,7 @@ state 176
     Conflict between rule 110 and token AS resolved as shift (LSHIFT_ASSIGN < AS).
 
 
-state 177
+state 178
 
    89 expression_nobrace: expression . ADD expression
    90                   | expression . SUB expression
@@ -7859,7 +7874,7 @@ state 177
     Conflict between rule 111 and token AS resolved as shift (RSHIFT_ASSIGN < AS).
 
 
-state 178
+state 179
 
    89 expression_nobrace: expression . ADD expression
    90                   | expression . SUB expression
@@ -7928,7 +7943,7 @@ state 178
     Conflict between rule 109 and token AS resolved as shift (EXC_OR_ASSIGN < AS).
 
 
-state 179
+state 180
 
    89 expression_nobrace: expression . ADD expression
    90                   | expression . SUB expression
@@ -7951,7 +7966,7 @@ state 179
   118                   | expression . AS typename_T
   129 lhs: expression . DOT IDENT typename_group
   153 inferenced_type_init_stmt: VAR IDENT ASSIGN expression . stmt_term
-  175 stmt_term: . SEMI
+  176 stmt_term: . SEMI
 
     DOT        shift, and go to state 85
     ADD        shift, and go to state 86
@@ -7975,10 +7990,10 @@ state 179
     SEMI       shift, and go to state 74
     AS         shift, and go to state 104
 
-    stmt_term  go to state 211
+    stmt_term  go to state 212
 
 
-state 180
+state 181
 
    75 argument_list: . expression
    76              | . argument_list COMMA expression
@@ -8050,7 +8065,7 @@ state 180
     NOT             shift, and go to state 17
     CHILDA          shift, and go to state 18
     LRB             shift, and go to state 19
-    RRB             shift, and go to state 212
+    RRB             shift, and go to state 213
     THIS_TOK        shift, and go to state 21
     SUPER_TOK       shift, and go to state 22
     TRUE_TOK        shift, and go to state 23
@@ -8058,75 +8073,75 @@ state 180
     NULL_TOK        shift, and go to state 25
     NEW             shift, and go to state 26
 
-    argument_list       go to state 213
+    argument_list       go to state 214
     fqcn_part           go to state 60
-    expression          go to state 167
+    expression          go to state 168
     expression_nobrace  go to state 43
     lhs                 go to state 44
     primary             go to state 45
 
 
-state 181
+state 182
 
    59 function_define: DEF IDENT LRB RRB . ARROW typename_T scope_optional
 
-    ARROW  shift, and go to state 214
-
-
-state 182
-
-   58 function_define: DEF IDENT LRB parameter_list . RRB ARROW typename_T scope_optional
-   74 parameter_list: parameter_list . COMMA typename_T IDENT
-
-    COMMA  shift, and go to state 215
-    RRB    shift, and go to state 216
+    ARROW  shift, and go to state 215
 
 
 state 183
 
-   73 parameter_list: typename_T . IDENT
+   58 function_define: DEF IDENT LRB parameter_list . RRB ARROW typename_T scope_optional
+   74 parameter_list: parameter_list . COMMA typename_T IDENT
 
-    IDENT  shift, and go to state 217
+    COMMA  shift, and go to state 216
+    RRB    shift, and go to state 217
 
 
 state 184
+
+   73 parameter_list: typename_T . IDENT
+
+    IDENT  shift, and go to state 218
+
+
+state 185
 
    20 namespace_path: namespace_path DOT IDENT .
 
     $default  reduce using rule 20 (namespace_path)
 
 
-state 185
+state 186
 
    24 parameterized_typename: . IDENT type_parameter_group
    38 interface_decl: INTERFACE . parameterized_typename LCB access_member_tree_opt RCB
    39               | INTERFACE . parameterized_typename COLON typename_list LCB access_member_tree_opt RCB
 
-    IDENT  shift, and go to state 218
-
-    parameterized_typename  go to state 219
-
-
-state 186
-
-   24 parameterized_typename: . IDENT type_parameter_group
-   34 class_decl: CLASS . parameterized_typename LCB access_member_tree_opt RCB
-   35           | CLASS . parameterized_typename COLON typename_list LCB access_member_tree_opt RCB
-
-    IDENT  shift, and go to state 218
+    IDENT  shift, and go to state 219
 
     parameterized_typename  go to state 220
 
 
 state 187
 
-   36 enum_decl: ENUM . IDENT LCB ident_list RCB
-   37          | ENUM . IDENT LCB ident_list COMMA RCB
+   24 parameterized_typename: . IDENT type_parameter_group
+   34 class_decl: CLASS . parameterized_typename LCB access_member_tree_opt RCB
+   35           | CLASS . parameterized_typename COLON typename_list LCB access_member_tree_opt RCB
 
-    IDENT  shift, and go to state 221
+    IDENT  shift, and go to state 219
+
+    parameterized_typename  go to state 221
 
 
 state 188
+
+   36 enum_decl: ENUM . IDENT LCB ident_list RCB
+   37          | ENUM . IDENT LCB ident_list COMMA RCB
+
+    IDENT  shift, and go to state 222
+
+
+state 189
 
    11 namespace_member_decl: NAMESPACE . namespace_path namespace_body
    19 namespace_path: . IDENT
@@ -8134,17 +8149,17 @@ state 188
 
     IDENT  shift, and go to state 69
 
-    namespace_path  go to state 222
+    namespace_path  go to state 223
 
 
-state 189
+state 190
 
    15 namespace_member_decl_list: namespace_member_decl .
 
     $default  reduce using rule 15 (namespace_member_decl_list)
 
 
-state 190
+state 191
 
    11 namespace_member_decl: . NAMESPACE namespace_path namespace_body
    12                      | . class_decl
@@ -8159,48 +8174,48 @@ state 190
    38 interface_decl: . INTERFACE parameterized_typename LCB access_member_tree_opt RCB
    39               | . INTERFACE parameterized_typename COLON typename_list LCB access_member_tree_opt RCB
 
-    INTERFACE  shift, and go to state 185
-    CLASS      shift, and go to state 186
-    ENUM       shift, and go to state 187
-    NAMESPACE  shift, and go to state 188
+    INTERFACE  shift, and go to state 186
+    CLASS      shift, and go to state 187
+    ENUM       shift, and go to state 188
+    NAMESPACE  shift, and go to state 189
 
     $default  reduce using rule 18 (namespace_member_decl_optional)
 
-    namespace_member_decl  go to state 223
-    class_decl             go to state 192
-    enum_decl              go to state 193
-    interface_decl         go to state 194
-
-
-state 191
-
-   10 namespace_body: LCB namespace_member_decl_optional . RCB
-
-    RCB  shift, and go to state 224
+    namespace_member_decl  go to state 224
+    class_decl             go to state 193
+    enum_decl              go to state 194
+    interface_decl         go to state 195
 
 
 state 192
+
+   10 namespace_body: LCB namespace_member_decl_optional . RCB
+
+    RCB  shift, and go to state 225
+
+
+state 193
 
    12 namespace_member_decl: class_decl .
 
     $default  reduce using rule 12 (namespace_member_decl)
 
 
-state 193
+state 194
 
    14 namespace_member_decl: enum_decl .
 
     $default  reduce using rule 14 (namespace_member_decl)
 
 
-state 194
+state 195
 
    13 namespace_member_decl: interface_decl .
 
     $default  reduce using rule 13 (namespace_member_decl)
 
 
-state 195
+state 196
 
    82 fqcn_part: . IDENT
    83          | . fqcn_part COLO_COLO IDENT
@@ -8277,60 +8292,60 @@ state 195
     NEW             shift, and go to state 26
 
     fqcn_part           go to state 60
-    expression          go to state 225
+    expression          go to state 226
     expression_nobrace  go to state 43
     lhs                 go to state 44
     primary             go to state 45
 
 
-state 196
+state 197
 
   155 if_stmt: IF expression scope ELSE . scope
-  171 scope: . LCB stmt_list RCB
-  172      | . LCB RCB
+  172 scope: . LCB stmt_list RCB
+  173      | . LCB RCB
 
     LCB  shift, and go to state 77
 
-    scope  go to state 226
+    scope  go to state 227
 
 
-state 197
+state 198
 
   156 if_stmt: IF expression scope elif_list .  [$end, CHAR_LITERAL, STRING_LITERAL, INT, DOUBLE, IDENT, ADD, SUB, NOT, CHILDA, RCB, LRB, VAR, THIS_TOK, SUPER_TOK, TRUE_TOK, FALSE_TOK, NULL_TOK, NEW, DEF, NAMESPACE, RETURN, IF, WHILE, BREAK, CONTINUE, TRY, THROW, ASSERT_T]
   157        | IF expression scope elif_list . ELSE scope
   159 elif_list: elif_list . elif
   160 elif: . ELIF expression scope
 
-    ELIF  shift, and go to state 195
-    ELSE  shift, and go to state 227
+    ELIF  shift, and go to state 196
+    ELSE  shift, and go to state 228
 
     $default  reduce using rule 156 (if_stmt)
 
-    elif  go to state 228
+    elif  go to state 229
 
 
-state 198
+state 199
 
   158 elif_list: elif .
 
     $default  reduce using rule 158 (elif_list)
 
 
-state 199
-
-  171 scope: LCB stmt_list RCB .
-
-    $default  reduce using rule 171 (scope)
-
-
 state 200
+
+  172 scope: LCB stmt_list RCB .
+
+    $default  reduce using rule 172 (scope)
+
+
+state 201
 
   138 stmt_list: stmt_list stmt .
 
     $default  reduce using rule 138 (stmt_list)
 
 
-state 201
+state 202
 
    81 typename_T: . fqcn_part typename_group
    82 fqcn_part: . IDENT
@@ -8339,18 +8354,18 @@ state 201
 
     IDENT  shift, and go to state 14
 
-    typename_T  go to state 229
-    fqcn_part   go to state 144
+    typename_T  go to state 230
+    fqcn_part   go to state 145
 
 
-state 202
+state 203
 
   168 catch_stmt_list: catch_stmt_list catch_stmt .
 
     $default  reduce using rule 168 (catch_stmt_list)
 
 
-state 203
+state 204
 
    89 expression_nobrace: expression . ADD expression
    90                   | expression . SUB expression
@@ -8393,11 +8408,11 @@ state 203
     BIT_OR     shift, and go to state 101
     LOGIC_OR   shift, and go to state 102
     EXC_OR     shift, and go to state 103
-    SEMI       shift, and go to state 230
+    SEMI       shift, and go to state 231
     AS         shift, and go to state 104
 
 
-state 204
+state 205
 
    89 expression_nobrace: expression . ADD expression
    90                   | expression . SUB expression
@@ -8420,7 +8435,7 @@ state 204
   118                   | expression . AS typename_T
   129 lhs: expression . DOT IDENT typename_group
   152 variable_init_stmt: typename_T IDENT ASSIGN expression . stmt_term
-  175 stmt_term: . SEMI
+  176 stmt_term: . SEMI
 
     DOT        shift, and go to state 85
     ADD        shift, and go to state 86
@@ -8444,10 +8459,10 @@ state 204
     SEMI       shift, and go to state 74
     AS         shift, and go to state 104
 
-    stmt_term  go to state 231
+    stmt_term  go to state 232
 
 
-state 205
+state 206
 
    80 typename_list: typename_list COMMA . typename_T
    81 typename_T: . fqcn_part typename_group
@@ -8456,32 +8471,32 @@ state 205
 
     IDENT  shift, and go to state 14
 
-    typename_T  go to state 232
-    fqcn_part   go to state 144
+    typename_T  go to state 233
+    fqcn_part   go to state 145
 
 
-state 206
+state 207
 
    78 typename_group: LGEN typename_list RGEN .
 
     $default  reduce using rule 78 (typename_group)
 
 
-state 207
+state 208
 
    81 typename_T: fqcn_part typename_group .
 
     $default  reduce using rule 81 (typename_T)
 
 
-state 208
+state 209
 
   129 lhs: expression DOT IDENT typename_group .
 
     $default  reduce using rule 129 (lhs)
 
 
-state 209
+state 210
 
    76 argument_list: argument_list COMMA . expression
    82 fqcn_part: . IDENT
@@ -8558,43 +8573,43 @@ state 209
     NEW             shift, and go to state 26
 
     fqcn_part           go to state 60
-    expression          go to state 233
+    expression          go to state 234
     expression_nobrace  go to state 43
     lhs                 go to state 44
     primary             go to state 45
 
 
-state 210
+state 211
 
   121 expression_nobrace: expression_nobrace LRB argument_list RRB .
 
     $default  reduce using rule 121 (expression_nobrace)
 
 
-state 211
+state 212
 
   153 inferenced_type_init_stmt: VAR IDENT ASSIGN expression stmt_term .
 
     $default  reduce using rule 153 (inferenced_type_init_stmt)
 
 
-state 212
+state 213
 
   124 expression_nobrace: NEW fqcn_part typename_group LRB RRB .
 
     $default  reduce using rule 124 (expression_nobrace)
 
 
-state 213
+state 214
 
    76 argument_list: argument_list . COMMA expression
   123 expression_nobrace: NEW fqcn_part typename_group LRB argument_list . RRB
 
-    COMMA  shift, and go to state 209
-    RRB    shift, and go to state 234
+    COMMA  shift, and go to state 210
+    RRB    shift, and go to state 235
 
 
-state 214
+state 215
 
    59 function_define: DEF IDENT LRB RRB ARROW . typename_T scope_optional
    81 typename_T: . fqcn_part typename_group
@@ -8603,11 +8618,11 @@ state 214
 
     IDENT  shift, and go to state 14
 
-    typename_T  go to state 235
-    fqcn_part   go to state 144
+    typename_T  go to state 236
+    fqcn_part   go to state 145
 
 
-state 215
+state 216
 
    74 parameter_list: parameter_list COMMA . typename_T IDENT
    81 typename_T: . fqcn_part typename_group
@@ -8616,64 +8631,64 @@ state 215
 
     IDENT  shift, and go to state 14
 
-    typename_T  go to state 236
-    fqcn_part   go to state 144
-
-
-state 216
-
-   58 function_define: DEF IDENT LRB parameter_list RRB . ARROW typename_T scope_optional
-
-    ARROW  shift, and go to state 237
+    typename_T  go to state 237
+    fqcn_part   go to state 145
 
 
 state 217
+
+   58 function_define: DEF IDENT LRB parameter_list RRB . ARROW typename_T scope_optional
+
+    ARROW  shift, and go to state 238
+
+
+state 218
 
    73 parameter_list: typename_T IDENT .
 
     $default  reduce using rule 73 (parameter_list)
 
 
-state 218
+state 219
 
    24 parameterized_typename: IDENT . type_parameter_group
    25 type_parameter_group: .  [COLON, LCB]
    26                     | . LGEN type_parameter_list RGEN
 
-    LGEN  shift, and go to state 238
+    LGEN  shift, and go to state 239
 
     $default  reduce using rule 25 (type_parameter_group)
 
-    type_parameter_group  go to state 239
-
-
-state 219
-
-   38 interface_decl: INTERFACE parameterized_typename . LCB access_member_tree_opt RCB
-   39               | INTERFACE parameterized_typename . COLON typename_list LCB access_member_tree_opt RCB
-
-    COLON  shift, and go to state 240
-    LCB    shift, and go to state 241
+    type_parameter_group  go to state 240
 
 
 state 220
 
-   34 class_decl: CLASS parameterized_typename . LCB access_member_tree_opt RCB
-   35           | CLASS parameterized_typename . COLON typename_list LCB access_member_tree_opt RCB
+   38 interface_decl: INTERFACE parameterized_typename . LCB access_member_tree_opt RCB
+   39               | INTERFACE parameterized_typename . COLON typename_list LCB access_member_tree_opt RCB
 
-    COLON  shift, and go to state 242
-    LCB    shift, and go to state 243
+    COLON  shift, and go to state 241
+    LCB    shift, and go to state 242
 
 
 state 221
 
-   36 enum_decl: ENUM IDENT . LCB ident_list RCB
-   37          | ENUM IDENT . LCB ident_list COMMA RCB
+   34 class_decl: CLASS parameterized_typename . LCB access_member_tree_opt RCB
+   35           | CLASS parameterized_typename . COLON typename_list LCB access_member_tree_opt RCB
 
-    LCB  shift, and go to state 244
+    COLON  shift, and go to state 243
+    LCB    shift, and go to state 244
 
 
 state 222
+
+   36 enum_decl: ENUM IDENT . LCB ident_list RCB
+   37          | ENUM IDENT . LCB ident_list COMMA RCB
+
+    LCB  shift, and go to state 245
+
+
+state 223
 
    10 namespace_body: . LCB namespace_member_decl_optional RCB
    11 namespace_member_decl: NAMESPACE namespace_path . namespace_body
@@ -8682,24 +8697,24 @@ state 222
     DOT  shift, and go to state 123
     LCB  shift, and go to state 124
 
-    namespace_body  go to state 245
+    namespace_body  go to state 246
 
 
-state 223
+state 224
 
    16 namespace_member_decl_list: namespace_member_decl_list namespace_member_decl .
 
     $default  reduce using rule 16 (namespace_member_decl_list)
 
 
-state 224
+state 225
 
    10 namespace_body: LCB namespace_member_decl_optional RCB .
 
     $default  reduce using rule 10 (namespace_body)
 
 
-state 225
+state 226
 
    89 expression_nobrace: expression . ADD expression
    90                   | expression . SUB expression
@@ -8722,8 +8737,8 @@ state 225
   118                   | expression . AS typename_T
   129 lhs: expression . DOT IDENT typename_group
   160 elif: ELIF expression . scope
-  171 scope: . LCB stmt_list RCB
-  172      | . LCB RCB
+  172 scope: . LCB stmt_list RCB
+  173      | . LCB RCB
 
     DOT        shift, and go to state 85
     ADD        shift, and go to state 86
@@ -8747,63 +8762,63 @@ state 225
     LCB        shift, and go to state 77
     AS         shift, and go to state 104
 
-    scope  go to state 246
+    scope  go to state 247
 
 
-state 226
+state 227
 
   155 if_stmt: IF expression scope ELSE scope .
 
     $default  reduce using rule 155 (if_stmt)
 
 
-state 227
+state 228
 
   157 if_stmt: IF expression scope elif_list ELSE . scope
-  171 scope: . LCB stmt_list RCB
-  172      | . LCB RCB
+  172 scope: . LCB stmt_list RCB
+  173      | . LCB RCB
 
     LCB  shift, and go to state 77
 
-    scope  go to state 247
+    scope  go to state 248
 
 
-state 228
+state 229
 
   159 elif_list: elif_list elif .
 
     $default  reduce using rule 159 (elif_list)
 
 
-state 229
+state 230
 
   169 catch_stmt: CATCH LRB typename_T . IDENT RRB scope
 
-    IDENT  shift, and go to state 248
+    IDENT  shift, and go to state 249
 
 
-state 230
+state 231
 
   170 assert_stmt: ASSERT_T expression COLON expression SEMI .
 
     $default  reduce using rule 170 (assert_stmt)
 
 
-state 231
+state 232
 
   152 variable_init_stmt: typename_T IDENT ASSIGN expression stmt_term .
 
     $default  reduce using rule 152 (variable_init_stmt)
 
 
-state 232
+state 233
 
    80 typename_list: typename_list COMMA typename_T .
 
     $default  reduce using rule 80 (typename_list)
 
 
-state 233
+state 234
 
    76 argument_list: argument_list COMMA expression .  [COMMA, RRB]
    89 expression_nobrace: expression . ADD expression
@@ -8851,36 +8866,36 @@ state 233
     $default  reduce using rule 76 (argument_list)
 
 
-state 234
+state 235
 
   123 expression_nobrace: NEW fqcn_part typename_group LRB argument_list RRB .
 
     $default  reduce using rule 123 (expression_nobrace)
 
 
-state 235
+state 236
 
    59 function_define: DEF IDENT LRB RRB ARROW typename_T . scope_optional
-  171 scope: . LCB stmt_list RCB
-  172      | . LCB RCB
-  173 scope_optional: . SEMI
-  174               | . scope
+  172 scope: . LCB stmt_list RCB
+  173      | . LCB RCB
+  174 scope_optional: . SEMI
+  175               | . scope
 
     LCB   shift, and go to state 77
     SEMI  shift, and go to state 128
 
     scope           go to state 129
-    scope_optional  go to state 249
-
-
-state 236
-
-   74 parameter_list: parameter_list COMMA typename_T . IDENT
-
-    IDENT  shift, and go to state 250
+    scope_optional  go to state 250
 
 
 state 237
+
+   74 parameter_list: parameter_list COMMA typename_T . IDENT
+
+    IDENT  shift, and go to state 251
+
+
+state 238
 
    58 function_define: DEF IDENT LRB parameter_list RRB ARROW . typename_T scope_optional
    81 typename_T: . fqcn_part typename_group
@@ -8889,11 +8904,11 @@ state 237
 
     IDENT  shift, and go to state 14
 
-    typename_T  go to state 251
-    fqcn_part   go to state 144
+    typename_T  go to state 252
+    fqcn_part   go to state 145
 
 
-state 238
+state 239
 
    26 type_parameter_group: LGEN . type_parameter_list RGEN
    27 type_parameter_list: . type_parameter
@@ -8902,22 +8917,22 @@ state 238
    30               | . IN IDENT type_parameter_rule_list
    31               | . OUT IDENT type_parameter_rule_list
 
-    IDENT  shift, and go to state 252
-    IN     shift, and go to state 253
-    OUT    shift, and go to state 254
+    IDENT  shift, and go to state 253
+    IN     shift, and go to state 254
+    OUT    shift, and go to state 255
 
-    type_parameter_list  go to state 255
-    type_parameter       go to state 256
+    type_parameter_list  go to state 256
+    type_parameter       go to state 257
 
 
-state 239
+state 240
 
    24 parameterized_typename: IDENT type_parameter_group .
 
     $default  reduce using rule 24 (parameterized_typename)
 
 
-state 240
+state 241
 
    39 interface_decl: INTERFACE parameterized_typename COLON . typename_list LCB access_member_tree_opt RCB
    79 typename_list: . typename_T
@@ -8928,12 +8943,12 @@ state 240
 
     IDENT  shift, and go to state 14
 
-    typename_list  go to state 257
-    typename_T     go to state 143
-    fqcn_part      go to state 144
+    typename_list  go to state 258
+    typename_T     go to state 144
+    fqcn_part      go to state 145
 
 
-state 241
+state 242
 
    38 interface_decl: INTERFACE parameterized_typename LCB . access_member_tree_opt RCB
    40 access_member_tree_opt: .  [RCB]
@@ -8945,19 +8960,19 @@ state 241
    69               | . PRIVATE
    70               | . PROTECTED
 
-    PUBLIC     shift, and go to state 258
-    PRIVATE    shift, and go to state 259
-    PROTECTED  shift, and go to state 260
+    PUBLIC     shift, and go to state 259
+    PRIVATE    shift, and go to state 260
+    PROTECTED  shift, and go to state 261
 
     $default  reduce using rule 40 (access_member_tree_opt)
 
-    access_member_tree_opt  go to state 261
-    access_member_tree      go to state 262
-    access_member_list      go to state 263
-    access_level_T          go to state 264
+    access_member_tree_opt  go to state 262
+    access_member_tree      go to state 263
+    access_member_list      go to state 264
+    access_level_T          go to state 265
 
 
-state 242
+state 243
 
    35 class_decl: CLASS parameterized_typename COLON . typename_list LCB access_member_tree_opt RCB
    79 typename_list: . typename_T
@@ -8968,12 +8983,12 @@ state 242
 
     IDENT  shift, and go to state 14
 
-    typename_list  go to state 265
-    typename_T     go to state 143
-    fqcn_part      go to state 144
+    typename_list  go to state 266
+    typename_T     go to state 144
+    fqcn_part      go to state 145
 
 
-state 243
+state 244
 
    34 class_decl: CLASS parameterized_typename LCB . access_member_tree_opt RCB
    40 access_member_tree_opt: .  [RCB]
@@ -8985,168 +9000,168 @@ state 243
    69               | . PRIVATE
    70               | . PROTECTED
 
-    PUBLIC     shift, and go to state 258
-    PRIVATE    shift, and go to state 259
-    PROTECTED  shift, and go to state 260
+    PUBLIC     shift, and go to state 259
+    PRIVATE    shift, and go to state 260
+    PROTECTED  shift, and go to state 261
 
     $default  reduce using rule 40 (access_member_tree_opt)
 
-    access_member_tree_opt  go to state 266
-    access_member_tree      go to state 262
-    access_member_list      go to state 263
-    access_level_T          go to state 264
+    access_member_tree_opt  go to state 267
+    access_member_tree      go to state 263
+    access_member_list      go to state 264
+    access_level_T          go to state 265
 
 
-state 244
+state 245
 
    36 enum_decl: ENUM IDENT LCB . ident_list RCB
    37          | ENUM IDENT LCB . ident_list COMMA RCB
    71 ident_list: . IDENT
    72           | . ident_list COMMA IDENT
 
-    IDENT  shift, and go to state 267
+    IDENT  shift, and go to state 268
 
-    ident_list  go to state 268
+    ident_list  go to state 269
 
 
-state 245
+state 246
 
    11 namespace_member_decl: NAMESPACE namespace_path namespace_body .
 
     $default  reduce using rule 11 (namespace_member_decl)
 
 
-state 246
+state 247
 
   160 elif: ELIF expression scope .
 
     $default  reduce using rule 160 (elif)
 
 
-state 247
+state 248
 
   157 if_stmt: IF expression scope elif_list ELSE scope .
 
     $default  reduce using rule 157 (if_stmt)
 
 
-state 248
+state 249
 
   169 catch_stmt: CATCH LRB typename_T IDENT . RRB scope
 
-    RRB  shift, and go to state 269
+    RRB  shift, and go to state 270
 
 
-state 249
+state 250
 
    59 function_define: DEF IDENT LRB RRB ARROW typename_T scope_optional .
 
     $default  reduce using rule 59 (function_define)
 
 
-state 250
+state 251
 
    74 parameter_list: parameter_list COMMA typename_T IDENT .
 
     $default  reduce using rule 74 (parameter_list)
 
 
-state 251
+state 252
 
    58 function_define: DEF IDENT LRB parameter_list RRB ARROW typename_T . scope_optional
-  171 scope: . LCB stmt_list RCB
-  172      | . LCB RCB
-  173 scope_optional: . SEMI
-  174               | . scope
+  172 scope: . LCB stmt_list RCB
+  173      | . LCB RCB
+  174 scope_optional: . SEMI
+  175               | . scope
 
     LCB   shift, and go to state 77
     SEMI  shift, and go to state 128
 
     scope           go to state 129
-    scope_optional  go to state 270
+    scope_optional  go to state 271
 
 
-state 252
+state 253
 
    29 type_parameter: IDENT . type_parameter_rule_list
    32 type_parameter_rule_list: .  [COMMA, RGEN]
    33                         | . LRB typename_list RRB
 
-    LRB  shift, and go to state 271
+    LRB  shift, and go to state 272
 
     $default  reduce using rule 32 (type_parameter_rule_list)
 
-    type_parameter_rule_list  go to state 272
-
-
-state 253
-
-   30 type_parameter: IN . IDENT type_parameter_rule_list
-
-    IDENT  shift, and go to state 273
+    type_parameter_rule_list  go to state 273
 
 
 state 254
 
-   31 type_parameter: OUT . IDENT type_parameter_rule_list
+   30 type_parameter: IN . IDENT type_parameter_rule_list
 
     IDENT  shift, and go to state 274
 
 
 state 255
 
-   26 type_parameter_group: LGEN type_parameter_list . RGEN
-   28 type_parameter_list: type_parameter_list . COMMA type_parameter
+   31 type_parameter: OUT . IDENT type_parameter_rule_list
 
-    COMMA  shift, and go to state 275
-    RGEN   shift, and go to state 276
+    IDENT  shift, and go to state 275
 
 
 state 256
+
+   26 type_parameter_group: LGEN type_parameter_list . RGEN
+   28 type_parameter_list: type_parameter_list . COMMA type_parameter
+
+    COMMA  shift, and go to state 276
+    RGEN   shift, and go to state 277
+
+
+state 257
 
    27 type_parameter_list: type_parameter .
 
     $default  reduce using rule 27 (type_parameter_list)
 
 
-state 257
+state 258
 
    39 interface_decl: INTERFACE parameterized_typename COLON typename_list . LCB access_member_tree_opt RCB
    80 typename_list: typename_list . COMMA typename_T
 
-    COMMA  shift, and go to state 205
-    LCB    shift, and go to state 277
+    COMMA  shift, and go to state 206
+    LCB    shift, and go to state 278
 
 
-state 258
+state 259
 
    68 access_level_T: PUBLIC .
 
     $default  reduce using rule 68 (access_level_T)
 
 
-state 259
+state 260
 
    69 access_level_T: PRIVATE .
 
     $default  reduce using rule 69 (access_level_T)
 
 
-state 260
+state 261
 
    70 access_level_T: PROTECTED .
 
     $default  reduce using rule 70 (access_level_T)
 
 
-state 261
+state 262
 
    38 interface_decl: INTERFACE parameterized_typename LCB access_member_tree_opt . RCB
 
-    RCB  shift, and go to state 278
+    RCB  shift, and go to state 279
 
 
-state 262
+state 263
 
    41 access_member_tree_opt: access_member_tree .  [RCB]
    43 access_member_tree: access_member_tree . access_member_list
@@ -9155,82 +9170,82 @@ state 262
    69               | . PRIVATE
    70               | . PROTECTED
 
-    PUBLIC     shift, and go to state 258
-    PRIVATE    shift, and go to state 259
-    PROTECTED  shift, and go to state 260
+    PUBLIC     shift, and go to state 259
+    PRIVATE    shift, and go to state 260
+    PROTECTED  shift, and go to state 261
 
     $default  reduce using rule 41 (access_member_tree_opt)
 
-    access_member_list  go to state 279
-    access_level_T      go to state 264
+    access_member_list  go to state 280
+    access_level_T      go to state 265
 
 
-state 263
+state 264
 
    42 access_member_tree: access_member_list .
 
     $default  reduce using rule 42 (access_member_tree)
 
 
-state 264
+state 265
 
    44 access_member_list: access_level_T . COLON member_define_list
 
-    COLON  shift, and go to state 280
-
-
-state 265
-
-   35 class_decl: CLASS parameterized_typename COLON typename_list . LCB access_member_tree_opt RCB
-   80 typename_list: typename_list . COMMA typename_T
-
-    COMMA  shift, and go to state 205
-    LCB    shift, and go to state 281
+    COLON  shift, and go to state 281
 
 
 state 266
 
-   34 class_decl: CLASS parameterized_typename LCB access_member_tree_opt . RCB
+   35 class_decl: CLASS parameterized_typename COLON typename_list . LCB access_member_tree_opt RCB
+   80 typename_list: typename_list . COMMA typename_T
 
-    RCB  shift, and go to state 282
+    COMMA  shift, and go to state 206
+    LCB    shift, and go to state 282
 
 
 state 267
+
+   34 class_decl: CLASS parameterized_typename LCB access_member_tree_opt . RCB
+
+    RCB  shift, and go to state 283
+
+
+state 268
 
    71 ident_list: IDENT .
 
     $default  reduce using rule 71 (ident_list)
 
 
-state 268
+state 269
 
    36 enum_decl: ENUM IDENT LCB ident_list . RCB
    37          | ENUM IDENT LCB ident_list . COMMA RCB
    72 ident_list: ident_list . COMMA IDENT
 
-    COMMA  shift, and go to state 283
-    RCB    shift, and go to state 284
-
-
-state 269
-
-  169 catch_stmt: CATCH LRB typename_T IDENT RRB . scope
-  171 scope: . LCB stmt_list RCB
-  172      | . LCB RCB
-
-    LCB  shift, and go to state 77
-
-    scope  go to state 285
+    COMMA  shift, and go to state 284
+    RCB    shift, and go to state 285
 
 
 state 270
+
+  169 catch_stmt: CATCH LRB typename_T IDENT RRB . scope
+  172 scope: . LCB stmt_list RCB
+  173      | . LCB RCB
+
+    LCB  shift, and go to state 77
+
+    scope  go to state 286
+
+
+state 271
 
    58 function_define: DEF IDENT LRB parameter_list RRB ARROW typename_T scope_optional .
 
     $default  reduce using rule 58 (function_define)
 
 
-state 271
+state 272
 
    33 type_parameter_rule_list: LRB . typename_list RRB
    79 typename_list: . typename_T
@@ -9241,38 +9256,25 @@ state 271
 
     IDENT  shift, and go to state 14
 
-    typename_list  go to state 286
-    typename_T     go to state 143
-    fqcn_part      go to state 144
+    typename_list  go to state 287
+    typename_T     go to state 144
+    fqcn_part      go to state 145
 
 
-state 272
+state 273
 
    29 type_parameter: IDENT type_parameter_rule_list .
 
     $default  reduce using rule 29 (type_parameter)
 
 
-state 273
+state 274
 
    30 type_parameter: IN IDENT . type_parameter_rule_list
    32 type_parameter_rule_list: .  [COMMA, RGEN]
    33                         | . LRB typename_list RRB
 
-    LRB  shift, and go to state 271
-
-    $default  reduce using rule 32 (type_parameter_rule_list)
-
-    type_parameter_rule_list  go to state 287
-
-
-state 274
-
-   31 type_parameter: OUT IDENT . type_parameter_rule_list
-   32 type_parameter_rule_list: .  [COMMA, RGEN]
-   33                         | . LRB typename_list RRB
-
-    LRB  shift, and go to state 271
+    LRB  shift, and go to state 272
 
     $default  reduce using rule 32 (type_parameter_rule_list)
 
@@ -9281,26 +9283,39 @@ state 274
 
 state 275
 
+   31 type_parameter: OUT IDENT . type_parameter_rule_list
+   32 type_parameter_rule_list: .  [COMMA, RGEN]
+   33                         | . LRB typename_list RRB
+
+    LRB  shift, and go to state 272
+
+    $default  reduce using rule 32 (type_parameter_rule_list)
+
+    type_parameter_rule_list  go to state 289
+
+
+state 276
+
    28 type_parameter_list: type_parameter_list COMMA . type_parameter
    29 type_parameter: . IDENT type_parameter_rule_list
    30               | . IN IDENT type_parameter_rule_list
    31               | . OUT IDENT type_parameter_rule_list
 
-    IDENT  shift, and go to state 252
-    IN     shift, and go to state 253
-    OUT    shift, and go to state 254
+    IDENT  shift, and go to state 253
+    IN     shift, and go to state 254
+    OUT    shift, and go to state 255
 
-    type_parameter  go to state 289
+    type_parameter  go to state 290
 
 
-state 276
+state 277
 
    26 type_parameter_group: LGEN type_parameter_list RGEN .
 
     $default  reduce using rule 26 (type_parameter_group)
 
 
-state 277
+state 278
 
    39 interface_decl: INTERFACE parameterized_typename COLON typename_list LCB . access_member_tree_opt RCB
    40 access_member_tree_opt: .  [RCB]
@@ -9312,33 +9327,33 @@ state 277
    69               | . PRIVATE
    70               | . PROTECTED
 
-    PUBLIC     shift, and go to state 258
-    PRIVATE    shift, and go to state 259
-    PROTECTED  shift, and go to state 260
+    PUBLIC     shift, and go to state 259
+    PRIVATE    shift, and go to state 260
+    PROTECTED  shift, and go to state 261
 
     $default  reduce using rule 40 (access_member_tree_opt)
 
-    access_member_tree_opt  go to state 290
-    access_member_tree      go to state 262
-    access_member_list      go to state 263
-    access_level_T          go to state 264
+    access_member_tree_opt  go to state 291
+    access_member_tree      go to state 263
+    access_member_list      go to state 264
+    access_level_T          go to state 265
 
 
-state 278
+state 279
 
    38 interface_decl: INTERFACE parameterized_typename LCB access_member_tree_opt RCB .
 
     $default  reduce using rule 38 (interface_decl)
 
 
-state 279
+state 280
 
    43 access_member_tree: access_member_tree access_member_list .
 
     $default  reduce using rule 43 (access_member_tree)
 
 
-state 280
+state 281
 
    44 access_member_list: access_level_T COLON . member_define_list
    45 member_define_list: . member_define
@@ -9357,21 +9372,21 @@ state 280
    66                | . STATIC
    67                | . NATIVE
 
-    STATIC  shift, and go to state 291
-    NATIVE  shift, and go to state 292
-    CTOR    shift, and go to state 293
+    STATIC  shift, and go to state 292
+    NATIVE  shift, and go to state 293
+    CTOR    shift, and go to state 294
 
     $default  reduce using rule 63 (modifier_type_T)
 
-    member_define_list  go to state 294
-    member_define       go to state 295
-    constructor_define  go to state 296
-    method_define       go to state 297
-    field_define        go to state 298
-    modifier_type_T     go to state 299
+    member_define_list  go to state 295
+    member_define       go to state 296
+    constructor_define  go to state 297
+    method_define       go to state 298
+    field_define        go to state 299
+    modifier_type_T     go to state 300
 
 
-state 281
+state 282
 
    35 class_decl: CLASS parameterized_typename COLON typename_list LCB . access_member_tree_opt RCB
    40 access_member_tree_opt: .  [RCB]
@@ -9383,114 +9398,114 @@ state 281
    69               | . PRIVATE
    70               | . PROTECTED
 
-    PUBLIC     shift, and go to state 258
-    PRIVATE    shift, and go to state 259
-    PROTECTED  shift, and go to state 260
+    PUBLIC     shift, and go to state 259
+    PRIVATE    shift, and go to state 260
+    PROTECTED  shift, and go to state 261
 
     $default  reduce using rule 40 (access_member_tree_opt)
 
-    access_member_tree_opt  go to state 300
-    access_member_tree      go to state 262
-    access_member_list      go to state 263
-    access_level_T          go to state 264
+    access_member_tree_opt  go to state 301
+    access_member_tree      go to state 263
+    access_member_list      go to state 264
+    access_level_T          go to state 265
 
 
-state 282
+state 283
 
    34 class_decl: CLASS parameterized_typename LCB access_member_tree_opt RCB .
 
     $default  reduce using rule 34 (class_decl)
 
 
-state 283
+state 284
 
    37 enum_decl: ENUM IDENT LCB ident_list COMMA . RCB
    72 ident_list: ident_list COMMA . IDENT
 
-    IDENT  shift, and go to state 301
-    RCB    shift, and go to state 302
+    IDENT  shift, and go to state 302
+    RCB    shift, and go to state 303
 
 
-state 284
+state 285
 
    36 enum_decl: ENUM IDENT LCB ident_list RCB .
 
     $default  reduce using rule 36 (enum_decl)
 
 
-state 285
+state 286
 
   169 catch_stmt: CATCH LRB typename_T IDENT RRB scope .
 
     $default  reduce using rule 169 (catch_stmt)
 
 
-state 286
+state 287
 
    33 type_parameter_rule_list: LRB typename_list . RRB
    80 typename_list: typename_list . COMMA typename_T
 
-    COMMA  shift, and go to state 205
-    RRB    shift, and go to state 303
+    COMMA  shift, and go to state 206
+    RRB    shift, and go to state 304
 
 
-state 287
+state 288
 
    30 type_parameter: IN IDENT type_parameter_rule_list .
 
     $default  reduce using rule 30 (type_parameter)
 
 
-state 288
+state 289
 
    31 type_parameter: OUT IDENT type_parameter_rule_list .
 
     $default  reduce using rule 31 (type_parameter)
 
 
-state 289
+state 290
 
    28 type_parameter_list: type_parameter_list COMMA type_parameter .
 
     $default  reduce using rule 28 (type_parameter_list)
 
 
-state 290
+state 291
 
    39 interface_decl: INTERFACE parameterized_typename COLON typename_list LCB access_member_tree_opt . RCB
 
-    RCB  shift, and go to state 304
-
-
-state 291
-
-   64 modifier_type_T: STATIC . NATIVE
-   66                | STATIC .  [IDENT, DEF]
-
-    NATIVE  shift, and go to state 305
-
-    $default  reduce using rule 66 (modifier_type_T)
+    RCB  shift, and go to state 305
 
 
 state 292
 
-   65 modifier_type_T: NATIVE . STATIC
-   67                | NATIVE .  [IDENT, DEF]
+   64 modifier_type_T: STATIC . NATIVE
+   66                | STATIC .  [IDENT, DEF]
 
-    STATIC  shift, and go to state 306
+    NATIVE  shift, and go to state 306
 
-    $default  reduce using rule 67 (modifier_type_T)
+    $default  reduce using rule 66 (modifier_type_T)
 
 
 state 293
 
-   50 constructor_define: CTOR . NEW LRB parameter_list RRB constructor_chain_optional scope_optional
-   51                   | CTOR . NEW LRB RRB constructor_chain_optional scope_optional
+   65 modifier_type_T: NATIVE . STATIC
+   67                | NATIVE .  [IDENT, DEF]
 
-    NEW  shift, and go to state 307
+    STATIC  shift, and go to state 307
+
+    $default  reduce using rule 67 (modifier_type_T)
 
 
 state 294
+
+   50 constructor_define: CTOR . NEW LRB parameter_list RRB constructor_chain_optional scope_optional
+   51                   | CTOR . NEW LRB RRB constructor_chain_optional scope_optional
+
+    NEW  shift, and go to state 308
+
+
+state 295
 
    44 access_member_list: access_level_T COLON member_define_list .  [RCB, PUBLIC, PRIVATE, PROTECTED]
    46 member_define_list: member_define_list . member_define
@@ -9508,50 +9523,50 @@ state 294
    66                | . STATIC
    67                | . NATIVE
 
-    STATIC  shift, and go to state 291
-    NATIVE  shift, and go to state 292
-    CTOR    shift, and go to state 293
+    STATIC  shift, and go to state 292
+    NATIVE  shift, and go to state 293
+    CTOR    shift, and go to state 294
 
     IDENT     reduce using rule 63 (modifier_type_T)
     DEF       reduce using rule 63 (modifier_type_T)
     $default  reduce using rule 44 (access_member_list)
 
-    member_define       go to state 308
-    constructor_define  go to state 296
-    method_define       go to state 297
-    field_define        go to state 298
-    modifier_type_T     go to state 299
+    member_define       go to state 309
+    constructor_define  go to state 297
+    method_define       go to state 298
+    field_define        go to state 299
+    modifier_type_T     go to state 300
 
 
-state 295
+state 296
 
    45 member_define_list: member_define .
 
     $default  reduce using rule 45 (member_define_list)
 
 
-state 296
+state 297
 
    47 member_define: constructor_define .
 
     $default  reduce using rule 47 (member_define)
 
 
-state 297
+state 298
 
    48 member_define: method_define .
 
     $default  reduce using rule 48 (member_define)
 
 
-state 298
+state 299
 
    49 member_define: field_define .
 
     $default  reduce using rule 49 (member_define)
 
 
-state 299
+state 300
 
    60 method_define: modifier_type_T . DEF IDENT type_parameter_group LRB parameter_list RRB ARROW typename_T scope_optional
    61              | modifier_type_T . DEF IDENT type_parameter_group LRB RRB ARROW typename_T scope_optional
@@ -9561,99 +9576,99 @@ state 299
    83          | . fqcn_part COLO_COLO IDENT
 
     IDENT  shift, and go to state 14
-    DEF    shift, and go to state 309
+    DEF    shift, and go to state 310
 
-    typename_T  go to state 310
-    fqcn_part   go to state 144
-
-
-state 300
-
-   35 class_decl: CLASS parameterized_typename COLON typename_list LCB access_member_tree_opt . RCB
-
-    RCB  shift, and go to state 311
+    typename_T  go to state 311
+    fqcn_part   go to state 145
 
 
 state 301
+
+   35 class_decl: CLASS parameterized_typename COLON typename_list LCB access_member_tree_opt . RCB
+
+    RCB  shift, and go to state 312
+
+
+state 302
 
    72 ident_list: ident_list COMMA IDENT .
 
     $default  reduce using rule 72 (ident_list)
 
 
-state 302
+state 303
 
    37 enum_decl: ENUM IDENT LCB ident_list COMMA RCB .
 
     $default  reduce using rule 37 (enum_decl)
 
 
-state 303
+state 304
 
    33 type_parameter_rule_list: LRB typename_list RRB .
 
     $default  reduce using rule 33 (type_parameter_rule_list)
 
 
-state 304
+state 305
 
    39 interface_decl: INTERFACE parameterized_typename COLON typename_list LCB access_member_tree_opt RCB .
 
     $default  reduce using rule 39 (interface_decl)
 
 
-state 305
+state 306
 
    64 modifier_type_T: STATIC NATIVE .
 
     $default  reduce using rule 64 (modifier_type_T)
 
 
-state 306
+state 307
 
    65 modifier_type_T: NATIVE STATIC .
 
     $default  reduce using rule 65 (modifier_type_T)
 
 
-state 307
+state 308
 
    50 constructor_define: CTOR NEW . LRB parameter_list RRB constructor_chain_optional scope_optional
    51                   | CTOR NEW . LRB RRB constructor_chain_optional scope_optional
 
-    LRB  shift, and go to state 312
+    LRB  shift, and go to state 313
 
 
-state 308
+state 309
 
    46 member_define_list: member_define_list member_define .
 
     $default  reduce using rule 46 (member_define_list)
 
 
-state 309
+state 310
 
    60 method_define: modifier_type_T DEF . IDENT type_parameter_group LRB parameter_list RRB ARROW typename_T scope_optional
    61              | modifier_type_T DEF . IDENT type_parameter_group LRB RRB ARROW typename_T scope_optional
-
-    IDENT  shift, and go to state 313
-
-
-state 310
-
-   62 field_define: modifier_type_T typename_T . IDENT SEMI
 
     IDENT  shift, and go to state 314
 
 
 state 311
 
+   62 field_define: modifier_type_T typename_T . IDENT SEMI
+
+    IDENT  shift, and go to state 315
+
+
+state 312
+
    35 class_decl: CLASS parameterized_typename COLON typename_list LCB access_member_tree_opt RCB .
 
     $default  reduce using rule 35 (class_decl)
 
 
-state 312
+state 313
 
    50 constructor_define: CTOR NEW LRB . parameter_list RRB constructor_chain_optional scope_optional
    51                   | CTOR NEW LRB . RRB constructor_chain_optional scope_optional
@@ -9664,35 +9679,35 @@ state 312
    83          | . fqcn_part COLO_COLO IDENT
 
     IDENT  shift, and go to state 14
-    RRB    shift, and go to state 315
+    RRB    shift, and go to state 316
 
-    parameter_list  go to state 316
-    typename_T      go to state 183
-    fqcn_part       go to state 144
+    parameter_list  go to state 317
+    typename_T      go to state 184
+    fqcn_part       go to state 145
 
 
-state 313
+state 314
 
    25 type_parameter_group: .  [LRB]
    26                     | . LGEN type_parameter_list RGEN
    60 method_define: modifier_type_T DEF IDENT . type_parameter_group LRB parameter_list RRB ARROW typename_T scope_optional
    61              | modifier_type_T DEF IDENT . type_parameter_group LRB RRB ARROW typename_T scope_optional
 
-    LGEN  shift, and go to state 238
+    LGEN  shift, and go to state 239
 
     $default  reduce using rule 25 (type_parameter_group)
 
-    type_parameter_group  go to state 317
-
-
-state 314
-
-   62 field_define: modifier_type_T typename_T IDENT . SEMI
-
-    SEMI  shift, and go to state 318
+    type_parameter_group  go to state 318
 
 
 state 315
+
+   62 field_define: modifier_type_T typename_T IDENT . SEMI
+
+    SEMI  shift, and go to state 319
+
+
+state 316
 
    51 constructor_define: CTOR NEW LRB RRB . constructor_chain_optional scope_optional
    52 constructor_chain: . COLON constructor_chain_type_T LRB argument_list RRB
@@ -9700,74 +9715,74 @@ state 315
    56 constructor_chain_optional: .  [LCB, SEMI]
    57                           | . constructor_chain
 
-    COLON  shift, and go to state 319
+    COLON  shift, and go to state 320
 
     $default  reduce using rule 56 (constructor_chain_optional)
 
-    constructor_chain           go to state 320
-    constructor_chain_optional  go to state 321
-
-
-state 316
-
-   50 constructor_define: CTOR NEW LRB parameter_list . RRB constructor_chain_optional scope_optional
-   74 parameter_list: parameter_list . COMMA typename_T IDENT
-
-    COMMA  shift, and go to state 215
-    RRB    shift, and go to state 322
+    constructor_chain           go to state 321
+    constructor_chain_optional  go to state 322
 
 
 state 317
 
-   60 method_define: modifier_type_T DEF IDENT type_parameter_group . LRB parameter_list RRB ARROW typename_T scope_optional
-   61              | modifier_type_T DEF IDENT type_parameter_group . LRB RRB ARROW typename_T scope_optional
+   50 constructor_define: CTOR NEW LRB parameter_list . RRB constructor_chain_optional scope_optional
+   74 parameter_list: parameter_list . COMMA typename_T IDENT
 
-    LRB  shift, and go to state 323
+    COMMA  shift, and go to state 216
+    RRB    shift, and go to state 323
 
 
 state 318
+
+   60 method_define: modifier_type_T DEF IDENT type_parameter_group . LRB parameter_list RRB ARROW typename_T scope_optional
+   61              | modifier_type_T DEF IDENT type_parameter_group . LRB RRB ARROW typename_T scope_optional
+
+    LRB  shift, and go to state 324
+
+
+state 319
 
    62 field_define: modifier_type_T typename_T IDENT SEMI .
 
     $default  reduce using rule 62 (field_define)
 
 
-state 319
+state 320
 
    52 constructor_chain: COLON . constructor_chain_type_T LRB argument_list RRB
    53                  | COLON . constructor_chain_type_T LRB RRB
    54 constructor_chain_type_T: . SUPER_TOK
    55                         | . THIS_TOK
 
-    THIS_TOK   shift, and go to state 324
-    SUPER_TOK  shift, and go to state 325
+    THIS_TOK   shift, and go to state 325
+    SUPER_TOK  shift, and go to state 326
 
-    constructor_chain_type_T  go to state 326
+    constructor_chain_type_T  go to state 327
 
 
-state 320
+state 321
 
    57 constructor_chain_optional: constructor_chain .
 
     $default  reduce using rule 57 (constructor_chain_optional)
 
 
-state 321
+state 322
 
    51 constructor_define: CTOR NEW LRB RRB constructor_chain_optional . scope_optional
-  171 scope: . LCB stmt_list RCB
-  172      | . LCB RCB
-  173 scope_optional: . SEMI
-  174               | . scope
+  172 scope: . LCB stmt_list RCB
+  173      | . LCB RCB
+  174 scope_optional: . SEMI
+  175               | . scope
 
     LCB   shift, and go to state 77
     SEMI  shift, and go to state 128
 
     scope           go to state 129
-    scope_optional  go to state 327
+    scope_optional  go to state 328
 
 
-state 322
+state 323
 
    50 constructor_define: CTOR NEW LRB parameter_list RRB . constructor_chain_optional scope_optional
    52 constructor_chain: . COLON constructor_chain_type_T LRB argument_list RRB
@@ -9775,15 +9790,15 @@ state 322
    56 constructor_chain_optional: .  [LCB, SEMI]
    57                           | . constructor_chain
 
-    COLON  shift, and go to state 319
+    COLON  shift, and go to state 320
 
     $default  reduce using rule 56 (constructor_chain_optional)
 
-    constructor_chain           go to state 320
-    constructor_chain_optional  go to state 328
+    constructor_chain           go to state 321
+    constructor_chain_optional  go to state 329
 
 
-state 323
+state 324
 
    60 method_define: modifier_type_T DEF IDENT type_parameter_group LRB . parameter_list RRB ARROW typename_T scope_optional
    61              | modifier_type_T DEF IDENT type_parameter_group LRB . RRB ARROW typename_T scope_optional
@@ -9794,74 +9809,74 @@ state 323
    83          | . fqcn_part COLO_COLO IDENT
 
     IDENT  shift, and go to state 14
-    RRB    shift, and go to state 329
+    RRB    shift, and go to state 330
 
-    parameter_list  go to state 330
-    typename_T      go to state 183
-    fqcn_part       go to state 144
+    parameter_list  go to state 331
+    typename_T      go to state 184
+    fqcn_part       go to state 145
 
 
-state 324
+state 325
 
    55 constructor_chain_type_T: THIS_TOK .
 
     $default  reduce using rule 55 (constructor_chain_type_T)
 
 
-state 325
+state 326
 
    54 constructor_chain_type_T: SUPER_TOK .
 
     $default  reduce using rule 54 (constructor_chain_type_T)
 
 
-state 326
+state 327
 
    52 constructor_chain: COLON constructor_chain_type_T . LRB argument_list RRB
    53                  | COLON constructor_chain_type_T . LRB RRB
 
-    LRB  shift, and go to state 331
+    LRB  shift, and go to state 332
 
 
-state 327
+state 328
 
    51 constructor_define: CTOR NEW LRB RRB constructor_chain_optional scope_optional .
 
     $default  reduce using rule 51 (constructor_define)
 
 
-state 328
+state 329
 
    50 constructor_define: CTOR NEW LRB parameter_list RRB constructor_chain_optional . scope_optional
-  171 scope: . LCB stmt_list RCB
-  172      | . LCB RCB
-  173 scope_optional: . SEMI
-  174               | . scope
+  172 scope: . LCB stmt_list RCB
+  173      | . LCB RCB
+  174 scope_optional: . SEMI
+  175               | . scope
 
     LCB   shift, and go to state 77
     SEMI  shift, and go to state 128
 
     scope           go to state 129
-    scope_optional  go to state 332
-
-
-state 329
-
-   61 method_define: modifier_type_T DEF IDENT type_parameter_group LRB RRB . ARROW typename_T scope_optional
-
-    ARROW  shift, and go to state 333
+    scope_optional  go to state 333
 
 
 state 330
 
-   60 method_define: modifier_type_T DEF IDENT type_parameter_group LRB parameter_list . RRB ARROW typename_T scope_optional
-   74 parameter_list: parameter_list . COMMA typename_T IDENT
+   61 method_define: modifier_type_T DEF IDENT type_parameter_group LRB RRB . ARROW typename_T scope_optional
 
-    COMMA  shift, and go to state 215
-    RRB    shift, and go to state 334
+    ARROW  shift, and go to state 334
 
 
 state 331
+
+   60 method_define: modifier_type_T DEF IDENT type_parameter_group LRB parameter_list . RRB ARROW typename_T scope_optional
+   74 parameter_list: parameter_list . COMMA typename_T IDENT
+
+    COMMA  shift, and go to state 216
+    RRB    shift, and go to state 335
+
+
+state 332
 
    52 constructor_chain: COLON constructor_chain_type_T LRB . argument_list RRB
    53                  | COLON constructor_chain_type_T LRB . RRB
@@ -9933,7 +9948,7 @@ state 331
     NOT             shift, and go to state 17
     CHILDA          shift, and go to state 18
     LRB             shift, and go to state 19
-    RRB             shift, and go to state 335
+    RRB             shift, and go to state 336
     THIS_TOK        shift, and go to state 21
     SUPER_TOK       shift, and go to state 22
     TRUE_TOK        shift, and go to state 23
@@ -9941,22 +9956,22 @@ state 331
     NULL_TOK        shift, and go to state 25
     NEW             shift, and go to state 26
 
-    argument_list       go to state 336
+    argument_list       go to state 337
     fqcn_part           go to state 60
-    expression          go to state 167
+    expression          go to state 168
     expression_nobrace  go to state 43
     lhs                 go to state 44
     primary             go to state 45
 
 
-state 332
+state 333
 
    50 constructor_define: CTOR NEW LRB parameter_list RRB constructor_chain_optional scope_optional .
 
     $default  reduce using rule 50 (constructor_define)
 
 
-state 333
+state 334
 
    61 method_define: modifier_type_T DEF IDENT type_parameter_group LRB RRB ARROW . typename_T scope_optional
    81 typename_T: . fqcn_part typename_group
@@ -9965,49 +9980,49 @@ state 333
 
     IDENT  shift, and go to state 14
 
-    typename_T  go to state 337
-    fqcn_part   go to state 144
-
-
-state 334
-
-   60 method_define: modifier_type_T DEF IDENT type_parameter_group LRB parameter_list RRB . ARROW typename_T scope_optional
-
-    ARROW  shift, and go to state 338
+    typename_T  go to state 338
+    fqcn_part   go to state 145
 
 
 state 335
+
+   60 method_define: modifier_type_T DEF IDENT type_parameter_group LRB parameter_list RRB . ARROW typename_T scope_optional
+
+    ARROW  shift, and go to state 339
+
+
+state 336
 
    53 constructor_chain: COLON constructor_chain_type_T LRB RRB .
 
     $default  reduce using rule 53 (constructor_chain)
 
 
-state 336
+state 337
 
    52 constructor_chain: COLON constructor_chain_type_T LRB argument_list . RRB
    76 argument_list: argument_list . COMMA expression
 
-    COMMA  shift, and go to state 209
-    RRB    shift, and go to state 339
+    COMMA  shift, and go to state 210
+    RRB    shift, and go to state 340
 
 
-state 337
+state 338
 
    61 method_define: modifier_type_T DEF IDENT type_parameter_group LRB RRB ARROW typename_T . scope_optional
-  171 scope: . LCB stmt_list RCB
-  172      | . LCB RCB
-  173 scope_optional: . SEMI
-  174               | . scope
+  172 scope: . LCB stmt_list RCB
+  173      | . LCB RCB
+  174 scope_optional: . SEMI
+  175               | . scope
 
     LCB   shift, and go to state 77
     SEMI  shift, and go to state 128
 
     scope           go to state 129
-    scope_optional  go to state 340
+    scope_optional  go to state 341
 
 
-state 338
+state 339
 
    60 method_define: modifier_type_T DEF IDENT type_parameter_group LRB parameter_list RRB ARROW . typename_T scope_optional
    81 typename_T: . fqcn_part typename_group
@@ -10016,40 +10031,40 @@ state 338
 
     IDENT  shift, and go to state 14
 
-    typename_T  go to state 341
-    fqcn_part   go to state 144
+    typename_T  go to state 342
+    fqcn_part   go to state 145
 
 
-state 339
+state 340
 
    52 constructor_chain: COLON constructor_chain_type_T LRB argument_list RRB .
 
     $default  reduce using rule 52 (constructor_chain)
 
 
-state 340
+state 341
 
    61 method_define: modifier_type_T DEF IDENT type_parameter_group LRB RRB ARROW typename_T scope_optional .
 
     $default  reduce using rule 61 (method_define)
 
 
-state 341
+state 342
 
    60 method_define: modifier_type_T DEF IDENT type_parameter_group LRB parameter_list RRB ARROW typename_T . scope_optional
-  171 scope: . LCB stmt_list RCB
-  172      | . LCB RCB
-  173 scope_optional: . SEMI
-  174               | . scope
+  172 scope: . LCB stmt_list RCB
+  173      | . LCB RCB
+  174 scope_optional: . SEMI
+  175               | . scope
 
     LCB   shift, and go to state 77
     SEMI  shift, and go to state 128
 
     scope           go to state 129
-    scope_optional  go to state 342
+    scope_optional  go to state 343
 
 
-state 342
+state 343
 
    60 method_define: modifier_type_T DEF IDENT type_parameter_group LRB parameter_list RRB ARROW typename_T scope_optional .
 

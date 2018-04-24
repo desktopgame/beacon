@@ -272,6 +272,10 @@ static il_stmt_assert* CLIL_assert(class_loader* self, ast* source) {
 	ast* afact = ast_first(source);
 	ast* amsg = ast_second(source);
 	ret->condition = CLIL_factor(self, afact);
-	ret->message = CLIL_factor(self, amsg);
+	if(ast_is_blank(amsg)) {
+		ret->message = NULL;
+	} else {
+		ret->message = CLIL_factor(self, amsg);
+	}
 	return ret;
 }
