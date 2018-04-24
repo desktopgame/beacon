@@ -80,6 +80,13 @@ void generic_cache_print(generic_cache* self);
  * @param self
  */
 void generic_cache_dump(generic_cache* self, int depth);
+
+/**
+ * @param self
+ * @return
+ */
+char* generic_cache_tostr(generic_cache* self);
+
 /**
  * 型変数つきの型宣言を解放します.
  * @param self

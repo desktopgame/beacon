@@ -1,9 +1,11 @@
 #include "fqcn_cache.h"
 #include "../util/mem.h"
+#include "../util/string_buffer.h"
 #include "namespace.h"
 #include "type_interface.h"
 #include "type_impl.h"
 #include <assert.h>
+#include <string.h>
 
 //proto
 static type * fqcn_type_impl(fqcn_cache * self, namespace_* current);
@@ -100,6 +102,19 @@ class_ * fqcn_class(fqcn_cache * self, namespace_ * current) {
 		return NULL;
 	}
 	return tp->u.class_;
+}
+
+char* fqcn_cache_tostr(fqcn_cache* self) {
+	string_buffer* sb = string_buffer_new();
+	for(int i=0; i<self->scope_vec->length; i++) {
+		string_buffer_appends(sb, (char*)vector_at(self->scope_vec, i));
+		if(i == (self->scope_vec->length - 1)) {
+			break;
+		}
+		string_buffer_appends(sb, "::");
+	}
+	string_buffer_appends(sb, self->name);
+	return string_buffer_release(sb);
 }
 
 void fqcn_cache_delete(fqcn_cache * self) {

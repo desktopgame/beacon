@@ -77,6 +77,13 @@ struct interface_* fqcn_interface(fqcn_cache* self, struct namespace_* current);
 struct class_* fqcn_class(fqcn_cache* self, struct namespace_* current);
 
 /**
+ * 文字列に変換して返します.
+ * @param self
+ * @return
+ */
+char* fqcn_cache_tostr(fqcn_cache* self);
+
+/**
  * FQCNキャッシュを開放します.
  * @param self
  */
