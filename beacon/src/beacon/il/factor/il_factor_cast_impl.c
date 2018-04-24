@@ -44,6 +44,19 @@ generic_type* il_factor_cast_eval(il_factor_cast * self, enviroment * env, il_co
 	return generic_cache_gtype(self->fqcn, (namespace_*)vector_top(ilctx->namespace_vec), ilctx);
 }
 
+char* il_factor_cast_tostr(il_factor_cast* self, enviroment* env, il_context* ilctx) {
+	string_buffer* sb = string_buffer_new();
+	char* name = generic_cache_tostr(self->fqcn);
+	char* fact = il_factor_tostr(self->fact, env, ilctx);
+	string_buffer_append(sb, '(');
+	string_buffer_appends(sb, name);
+	string_buffer_append(sb, ')');
+	string_buffer_appends(sb, fact);
+	MEM_FREE(name);
+	MEM_FREE(fact);
+	return string_buffer_release(sb);
+}
+
 void il_factor_cast_delete(il_factor_cast * self) {
 	generic_cache_delete(self->fqcn);
 	il_factor_delete(self->fact);

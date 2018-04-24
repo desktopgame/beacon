@@ -64,6 +64,16 @@ void il_factor_as_delete(il_factor_as * self) {
 	MEM_FREE(self);
 }
 
+char* il_factor_as_tostr(il_factor_as* self, enviroment* env, il_context* ilctx) {
+	string_buffer* sb = string_buffer_new();
+	char* factstr = il_factor_tostr(self->fact, env, ilctx);
+	char* to = generic_cache_tostr(self->fqcn);
+	string_buffer_appendf(sb, "%s as %s", factstr, to);
+	MEM_FREE(factstr);
+	MEM_FREE(to);
+	return string_buffer_release(sb);
+}
+
 il_factor_as* il_factor_cast_as(il_factor* fact) {
 	assert(fact->type == ilfactor_as);
 	return fact->u.as_;

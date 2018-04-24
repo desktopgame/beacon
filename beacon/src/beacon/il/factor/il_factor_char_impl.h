@@ -11,56 +11,20 @@ typedef struct il_factor_char {
 	char value;
 } il_factor_char;
 
-/**
- * 文字を表す要素をスーパーセットにラップします.
- * @param self
- */
 il_factor* il_factor_wrap_char(il_factor_char* self);
 
-/**
- * 文字を表す要素を作成します.
- * @param c
- * @return
- */
 il_factor_char* il_factor_char_new(char c);
 
-/**
- * 文字を表す要素を出力します.
- * @param self
- * @param depth
- */
 void il_factor_char_dump(il_factor_char* self, int depth);
 
-/**
- * 文字を生成します.
- * @param self
- * @param env
- * @param cache
- */
 void il_factor_char_generate(il_factor_char* self, struct enviroment* env, il_context* ilctx);
 
-/**
- * 文字を表す要素を読み込みます.
- * @param self
- * @param env
- * @param cache
- * @param eh
- */
 void il_factor_char_load(il_factor_char* self, struct enviroment* env, il_context* ilctx);
 
-/**
- * 文字を表す要素の型を返します.
- * @param self
- * @param env
- * @param cache
- * @return
- */
 generic_type* il_factor_char_eval(il_factor_char* self, struct enviroment* env, il_context* ilctx);
 
-/**
- * 文字を表す要素を開放します.
- * @param self
- */
+char* il_factor_char_tostr(il_factor_char* self, struct enviroment* env, il_context* ilctx);
+
 void il_factor_char_delete(il_factor_char* self);
 
 il_factor_char* il_factor_cast_char(il_factor* fact);

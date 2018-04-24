@@ -22,56 +22,20 @@ typedef struct il_factor_new_instance {
 	int constructor_index;
 } il_factor_new_instance;
 
-/**
- * コンストラクタの呼び出しを表す要素をスーパーセットにラップします.
- * @param self
- * @return
- */
 il_factor* il_factor_wrap_new_instance(il_factor_new_instance* self);
 
-/**
- * コンストラクタの呼び出しを表す要素を作成します.
- * @return
- */
 il_factor_new_instance* il_factor_new_instance_new();
 
-/**
- * コンストラクタの呼び出しを表す要素を出力します.
- * @param self
- * @param depth
- */
 void il_factor_new_instance_dump(il_factor_new_instance* self, int depth);
 
-/**
- * コンストラクタの呼び出しを表す要素を出力します.
- * @param self
- * @param env
- * @param cache
- */
 void il_factor_new_instance_generate(il_factor_new_instance* self, struct enviroment* env, il_context* ilctx);
 
-/**
- * コンストラクタの呼び出しを読み込みます.
- * @param self
- * @param env
- * @param cache
- * @param eh
- */
 void il_factor_new_instance_load(il_factor_new_instance* self, struct enviroment* env, il_context* ilctx);
 
-/**
- * コンストラクタで生成されるオブジェクトの型を返します.
- * @param self
- * @param env
- * @param cache
- * @return
- */
 generic_type* il_factor_new_instance_eval(il_factor_new_instance* self, struct enviroment* env, il_context* ilctx);
 
-/**
- * コンストラクタの呼び出しを表す要素を開放します.
- * @param self
- */
+char* il_factor_new_instance_tostr(il_factor_new_instance* self, struct enviroment* env, il_context* ilctx);
+
 void il_factor_new_instance_delete(il_factor_new_instance* self);
 
 il_factor_new_instance* il_factor_cast_new_instance(il_factor* fact);

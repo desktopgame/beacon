@@ -35,5 +35,7 @@ void il_factor_variable_local_load(il_factor_variable_local * self, struct envir
 
 struct generic_type* il_factor_variable_local_eval(il_factor_variable_local * self, struct enviroment * env, il_context* ilctx);
 
+char* il_factor_variable_local_tostr(il_factor_variable_local * self, struct enviroment * env, il_context* ilctx);
+
 void il_factor_variable_local_delete(il_factor_variable_local* self);
 #endif

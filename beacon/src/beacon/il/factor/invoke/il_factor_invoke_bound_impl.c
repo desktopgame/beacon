@@ -72,6 +72,14 @@ generic_type* il_factor_invoke_bound_eval(il_factor_invoke_bound * self, envirom
 	return self->resolved;
 }
 
+char* il_factor_invoke_bound_tostr(il_factor_invoke_bound* self, enviroment* env, il_context* ilctx) {
+	string_buffer* sb = string_buffer_new();
+	string_buffer_appends(sb, self->name);
+	il_factor_type_args_tostr(sb, self->type_args, env, ilctx);
+	il_factor_args_tostr(sb, self->type_args, env, ilctx);
+	return string_buffer_release(sb);
+}
+
 void il_factor_invoke_bound_delete(il_factor_invoke_bound* self) {
 	vector_delete(self->args, il_factor_invoke_bound_args_delete);
 	vector_delete(self->type_args, vector_deleter_null);

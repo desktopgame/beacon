@@ -69,6 +69,15 @@ generic_type* il_factor_variable_eval(il_factor_variable * self, enviroment * en
 	return ret;
 }
 
+char* il_factor_variable_tostr(il_factor_variable* self, enviroment* env, il_context* ilctx) {
+	if(self->type == ilvariable_type_local) {
+		return il_factor_variable_local_tostr(self->u.local_, env, ilctx);
+	} else if(self->type == ilvariable_type_static) {
+		return il_factor_variable_static_tostr(self->u.static_, env, ilctx);
+	}
+	return NULL;
+}
+
 void il_factor_variable_delete(il_factor_variable * self) {
 	//MEM_FREE(self->name);
 	if(self->type == ilvariable_type_local) {

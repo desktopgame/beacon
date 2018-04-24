@@ -64,6 +64,18 @@ generic_type* il_factor_invoke_static_eval(il_factor_invoke_static * self, envir
 	}
 }
 
+char* il_factor_invoke_static_tostr(il_factor_invoke_static* self, enviroment* env, il_context* ilctx) {
+	string_buffer* sb = string_buffer_new();
+	char* name = fqcn_cache_tostr(self->fqcn);
+	string_buffer_appends(sb, name);
+	string_buffer_append(sb, '.');
+	string_buffer_appends(sb, self->name);
+	il_factor_type_args_tostr(sb, self->type_args, env, ilctx);
+	il_factor_args_tostr(sb, self->args, env, ilctx);
+	MEM_FREE(name);
+	return string_buffer_release(sb);
+}
+
 void il_factor_invoke_static_delete(il_factor_invoke_static* self) {
 	vector_delete(self->args, il_factor_invoke_static_args_delete);
 	vector_delete(self->type_args, il_factor_invoke_static_typeargs_delete);

@@ -25,3 +25,7 @@ generic_type* il_factor_null_eval(void * empty, enviroment * env, il_context* il
 	}
 	return gSelf;
 }
+
+char* il_factor_null_tostr(void* empty, enviroment* env, il_context* ilctx) {
+	return text_strdup("null");
+}

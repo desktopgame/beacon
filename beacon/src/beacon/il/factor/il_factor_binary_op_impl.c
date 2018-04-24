@@ -34,6 +34,7 @@ typedef enum bi_operator_t {
 } bi_operator_t;
 
 //proto
+static char* il_factor_binary_op_optostr(il_factor_binary_op* self);
 static void il_factor_binary_op_generate_impl(il_factor_binary_op * self, enviroment * env, il_context* ilctx, bi_operator_t c);
 static opcode bi_operator_to_opi(bi_operator_t bi);
 static opcode bi_operator_to_opd(bi_operator_t bi);
@@ -198,6 +199,16 @@ generic_type* il_factor_binary_op_eval(il_factor_binary_op * self, enviroment * 
 	return NULL;
 }
 
+char* il_factor_binary_op_tostr(il_factor_binary_op* self, enviroment* env, il_context* ilctx) {
+	string_buffer* sb = string_buffer_new();
+	char* left = il_factor_tostr(self->left, env, ilctx);
+	char* right = il_factor_tostr(self->right, env, ilctx);
+	string_buffer_appendf(sb, "%s %s %s", left, il_factor_binary_op_optostr(self), right);
+	MEM_FREE(left);
+	MEM_FREE(right);
+	return string_buffer_release(sb);
+}
+
 void il_factor_binary_op_delete(il_factor_binary_op * self) {
 	il_factor_delete(self->left);
 	il_factor_delete(self->right);
@@ -205,6 +216,27 @@ void il_factor_binary_op_delete(il_factor_binary_op * self) {
 }
 
 //private
+static char* il_factor_binary_op_optostr(il_factor_binary_op* self) {
+	switch(self->type) {
+		case ilbinary_add: return "+";
+		case ilbinary_sub: return "-";
+		case ilbinary_mul: return "*";
+		case ilbinary_div: return "/";
+		case ilbinary_mod: return "%%";
+		case ilbinary_bit_or: return "|";
+		case ilbinary_logic_or: return "||";
+		case ilbinary_eq: return "==";
+		case ilbinary_noteq: return "!=";
+		case ilbinary_assign: return "=";
+		case ilbinary_add_assign: return "+=";
+		case ilbinary_sub_assign: return "-=";
+		case ilbinary_mul_assign: return "*=";
+		case ilbinary_div_assign: return "/=";
+		case ilbinary_mod_assign: return "%%=";
+		default: return "NULL";
+	}
+}
+
 static void il_factor_binary_op_generate_impl(il_factor_binary_op * self, enviroment * env, il_context* ilctx, bi_operator_t c) {
 	//ここで逆にしておく
 	il_factor_generate(self->right, env, ilctx);

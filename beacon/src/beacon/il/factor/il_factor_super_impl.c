@@ -31,6 +31,10 @@ generic_type* il_factor_super_eval(il_factor_super * self, enviroment * env, il_
 	return t->u.class_->super_class;
 }
 
+char* il_factor_super_tostr(il_factor_super* self, enviroment* env, il_context* ilctx) {
+	return text_strdup("super");
+}
+
 void il_factor_super_delete(il_factor_super * self) {
 	//generic_type_delete(self->resolved);
 	MEM_FREE(self);

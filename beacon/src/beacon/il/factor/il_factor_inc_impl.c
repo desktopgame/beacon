@@ -52,6 +52,19 @@ generic_type* il_factor_inc_eval(il_factor_inc * self, enviroment * env, il_cont
 	return il_factor_eval(self->fact, env, ilctx);
 }
 
+char* il_factor_inc_tostr(il_factor_inc* self, enviroment* env, il_context* ilctx) {
+	string_buffer* sb = string_buffer_new();
+	if(self->type == fixtype_pre) {
+		string_buffer_appends(sb, "++");
+	}
+	char* fact = il_factor_tostr(self->fact, env, ilctx);
+	string_buffer_appends(sb, fact);
+	if(self->type == fixtype_post) {
+		string_buffer_appends(sb, "++");
+	}
+	return string_buffer_release(sb);
+}
+
 void il_factor_inc_delete(il_factor_inc * self) {
 	il_factor_delete(self->fact);
 	MEM_FREE(self);

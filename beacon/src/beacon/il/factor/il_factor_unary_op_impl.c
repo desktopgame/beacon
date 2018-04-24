@@ -13,6 +13,7 @@ typedef enum u_operator_t {
 	u_neg
 } u_operator_t;
 
+static char* u_tostr(il_factor_unary_op* self);
 static opcode u_operator_to_opi(u_operator_t c);
 static opcode u_operator_to_opd(u_operator_t c);
 static opcode u_operator_to_opb(u_operator_t c);
@@ -76,6 +77,14 @@ generic_type* il_factor_unary_op_eval(il_factor_unary_op * self, enviroment * en
 	return NULL;
 }
 
+char* il_factor_unary_op_tostr(il_factor_unary_op* self, enviroment* env, il_context* ilctx) {
+	string_buffer* sb = string_buffer_new();
+	char* fact = il_factor_tostr(self->a, env, ilctx);
+	string_buffer_appends(sb, u_tostr(self));
+	string_buffer_appends(sb, fact);
+	return string_buffer_release(sb);
+}
+
 void il_factor_unary_op_delete(il_factor_unary_op * self) {
 	il_factor_delete(self->a);
 	MEM_FREE(self);
@@ -84,6 +93,15 @@ void il_factor_unary_op_delete(il_factor_unary_op * self) {
 il_factor_unary_op* il_factor_cast_unary_op(il_factor* fact) {
 	assert(fact->type == ilfactor_unary_op);
 	return fact->u.unary_;
+}
+
+//private
+static char* u_tostr(il_factor_unary_op* self) {
+	switch(self->type) {
+		case ilunary_not: return "!";
+		case ilunary_neg: return "-";
+		default: return "NULL";
+	}
 }
 
 static opcode u_operator_to_opi(u_operator_t c) {

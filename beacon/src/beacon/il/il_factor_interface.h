@@ -2,6 +2,7 @@
 #ifndef BEACON_IL_IL_FACTOR_INTERFACE_H
 #define BEACON_IL_IL_FACTOR_INTERFACE_H
 #include "../vm/enviroment.h"
+#include "../util/string_buffer.h"
 #include "il_context.h"
 #include "il_error.h"
 #include <stdint.h>
@@ -126,6 +127,27 @@ void il_factor_load(il_factor* self, enviroment* env, il_context* ilctx);
  * @return
  */
 generic_type* il_factor_eval(il_factor* self, enviroment* env, il_context* ilctx);
+
+/**
+ * ファクターの文字列表現を返します.
+ * @param self
+ * @param env
+ * @param ilctx
+ * @return
+ */
+char* il_factor_tostr(il_factor* self, enviroment* env, il_context* ilctx);
+
+/**
+ * @param sb
+ * @param args
+ */
+void il_factor_args_tostr(string_buffer* sb, vector* args, struct enviroment* env, il_context* ilctx);
+
+/**
+ * @param sb
+ * @param type_args
+ */
+void il_factor_type_args_tostr(string_buffer* sb, vector* type_args, struct enviroment* env, il_context* ilctx);
 
 /**
  * 計算可能な要素を開放します.

@@ -81,6 +81,10 @@ generic_type* il_factor_variable_local_eval(il_factor_variable_local * self, env
 	return self->gt;
 }
 
+char* il_factor_variable_local_tostr(il_factor_variable_local * self, enviroment * env, il_context* ilctx) {
+	return text_strdup(self->name);
+}
+
 void il_factor_variable_local_delete(il_factor_variable_local* self) {
 	vector_delete(self->type_args, vector_deleter_null);
 //	generic_type_delete(self->gt);

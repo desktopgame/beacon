@@ -36,6 +36,10 @@ generic_type* il_factor_bool_eval(il_factor_bool * self, enviroment * env, il_co
 	return GEN_BOOL;
 }
 
+char* il_factor_bool_tostr(il_factor_bool* self, enviroment* env, il_context* ilctx) {
+	return text_strdup(self->a ? "true" : "false");
+}
+
 void il_factor_bool_delete(il_factor_bool * self) {
 	MEM_FREE(self);
 }

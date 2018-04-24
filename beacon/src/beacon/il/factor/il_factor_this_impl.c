@@ -29,6 +29,10 @@ generic_type* il_factor_this_eval(il_factor_this * self, enviroment * env, il_co
 	return ((type*)vector_top(ilctx->type_vec))->generic_self;
 }
 
+char* il_factor_this_tostr(il_factor_this* self, enviroment* env, il_context* ilctx) {
+	return text_strdup("this");
+}
+
 void il_factor_this_delete(il_factor_this * self) {
 	//generic_type_delete(self->resolved);
 	MEM_FREE(self);

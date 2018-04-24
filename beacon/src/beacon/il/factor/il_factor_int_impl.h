@@ -12,57 +12,20 @@ typedef struct il_factor_int {
 	int32_t value;
 } il_factor_int;
 
-/**
- * 整数リテラルをスーパーセットにラップします.
- * @param self
- * @return
- */
 il_factor* il_factor_wrap_int(il_factor_int* self);
 
-/**
- * 整数リテラルを表す要素を作成します.
- * @param i
- * @return
- */
 il_factor_int* il_factor_int_new(int32_t i);
 
-/**
- * 整数リテラルを出力します.
- * @param self
- * @param depth
- */
 void il_factor_int_dump(il_factor_int* self, int depth);
 
-/** 
- * 整数リテラルを生成します.
- * @param self
- * @param env
- * @param cache
- */
 void il_factor_int_generate(il_factor_int* self, struct enviroment* env, il_context* ilctx);
 
-/**
- * 整数リテラルを読み込みます.
- * @param self
- * @param env
- * @param cache
- * @param eh
- */
 void il_factor_int_load(il_factor_int* self, struct enviroment* env, il_context* ilctx);
 
-/**
- * 整数リテラルを表す要素の型を返します.
- * @param self
- * @param env
- * @param cache
- * @return
- */
 generic_type* il_factor_int_eval(il_factor_int* self, struct enviroment* env, il_context* ilctx);
 
-/**
- * 整数リテラルを表す要素を開放します.
- * @param self
- */
+char* il_factor_int_tostr(il_factor_int* self, struct enviroment* env, il_context* ilctx);
+
 void il_factor_int_delete(il_factor_int* self);
 
 il_factor_int* il_factor_cast_int(il_factor* fact);

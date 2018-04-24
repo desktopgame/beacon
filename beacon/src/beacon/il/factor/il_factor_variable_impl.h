@@ -40,55 +40,20 @@ typedef struct il_factor_variable {
 	} u;
 } il_factor_variable;
 
-/**
- * 変数をスーパーセットにラップします.
- * @param self
- * @return
- */
 il_factor* il_factor_wrap_variable(il_factor_variable* self);
 
-/**
- * 変数を作成します.
- * @return
- */
 il_factor_variable* il_factor_variable_new();
 
-/**
- * 変数を出力します.
- * @param self
- * @param depth
- */
 void il_factor_variable_dump(il_factor_variable* self, int depth);
 
-/**
- * 変数を生成します.
- * @param self
- * @param env
- * @param cache
- */
 void il_factor_variable_generate(il_factor_variable* self, struct enviroment* env, il_context* ilctx);
 
-/**
- * 変数を読み込みます.
- * @param self
- * @param env
- * @param cache
- * @param eh
- */
 void il_factor_variable_load(il_factor_variable* self, struct enviroment* env, il_context* ilctx);
 
-/**
- * 変数の型を返します.
- * @param self
- * @param env
- * @param cache
- * @return
- */
 generic_type* il_factor_variable_eval(il_factor_variable* self, struct enviroment* env, il_context* ilctx);
 
-/**
- * 変数を開放します.
- */
+char* il_factor_variable_tostr(il_factor_variable* self, struct enviroment* env, il_context* ilctx);
+
 void il_factor_variable_delete(il_factor_variable* self);
 
 il_factor_variable* il_factor_cast_variable(il_factor* fact);

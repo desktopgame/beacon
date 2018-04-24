@@ -102,6 +102,17 @@ generic_type* il_factor_new_instance_eval(il_factor_new_instance * self, envirom
 	return self->instance_type;
 }
 
+char* il_factor_new_instance_tostr(il_factor_new_instance* self, enviroment* env, il_context* ilctx) {
+	string_buffer* sb = string_buffer_new();
+	string_buffer_appends(sb, "new ");
+	char* type = fqcn_cache_tostr(self->fqcnc);
+	string_buffer_appends(sb, type);
+	il_factor_type_args_tostr(sb, self->type_args, env, ilctx);
+	il_factor_args_tostr(sb, self->argument_list, env, ilctx):
+	MEM_FREE(type);
+	return string_buffer_release(sb);
+}
+
 void il_factor_new_instance_delete(il_factor_new_instance * self) {
 	vector_delete(self->argument_list, il_Factor_new_instace_delete_arg);
 	vector_delete(self->type_args, il_factor_new_instance_delete_typearg);

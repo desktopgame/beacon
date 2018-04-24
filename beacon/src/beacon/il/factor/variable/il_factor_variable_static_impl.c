@@ -23,6 +23,10 @@ generic_type* il_factor_variable_static_eval(il_factor_variable_static * self, e
 	return NULL;
 }
 
+char* il_factor_variable_static_tostr(il_factor_variable_static * self, enviroment * env, il_context* ilctx) {
+	return NULL;
+}
+
 void il_factor_variable_static_delete(il_factor_variable_static* self) {
 	fqcn_cache_delete(self->fqcn);
 	vector_delete(self->type_args, vector_deleter_null);

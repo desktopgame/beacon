@@ -39,6 +39,15 @@ generic_type* il_factor_int_eval(il_factor_int * self, enviroment * env, il_cont
 	return GEN_INT;
 }
 
+char* il_factor_int_tostr(il_factor_int* self, enviroment* env, il_context* ilctx) {
+	string_buffer* sb = string_buffer_new();
+	char block[32];
+	int res = sprintf(block, "%d", self->value);
+	assert(res >= 0);
+	string_buffer_appends(sb, block);
+	return string_buffer_release(sb);
+}
+
 void il_factor_int_delete(il_factor_int * self) {
 	MEM_FREE(self);
 }

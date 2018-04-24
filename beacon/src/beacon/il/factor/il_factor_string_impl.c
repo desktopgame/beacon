@@ -41,6 +41,10 @@ generic_type* il_factor_string_eval(il_factor_string * self, enviroment * env, i
 	return GEN_STRING;
 }
 
+char* il_factor_string_tostr(il_factor_string* self, enviroment* env, il_context* ilctx) {
+	return text_strdup(self->value);
+}
+
 void il_factor_string_delete(il_factor_string * self) {
 	MEM_FREE(self->value);
 	MEM_FREE(self);

@@ -1,5 +1,7 @@
 #include "il_factor_interface.h"
 #include "il_factor_impl.h"
+#include "il_argument.h"
+#include "il_type_argument.h"
 #include "../util/text.h"
 #include "../vm/enviroment.h"
 #include "../env/type_interface.h"
@@ -263,6 +265,88 @@ generic_type* il_factor_eval(il_factor * self, enviroment * env, il_context* ilc
 	}
 	assert((ret != NULL || il_error_panic()));
 	return ret;
+}
+
+char* il_factor_tostr(il_factor* self, enviroment* env, il_context* ilctx) {
+	if(il_error_panic()) {
+		return NULL;
+	}
+	switch (self->type) {
+		case ilfactor_int:
+			return il_factor_int_tostr(self->u.int_, env, ilctx);
+		case ilfactor_double:
+			return il_factor_double_tostr(self->u.double_, env, ilctx);
+		case ilfactor_cquote:
+			return il_factor_char_tostr(self->u.char_, env, ilctx);
+		case ilfactor_squote:
+			return il_factor_string_tostr(self->u.string_, env, ilctx);
+		case ilfactor_variable:
+			return il_factor_variable_tostr(self->u.variable_, env, ilctx);
+		case ilfactor_unary_op:
+			return il_factor_unary_op_tostr(self->u.unary_, env, ilctx);
+		case ilfactor_binary_op:
+			return il_factor_binary_op_tostr(self->u.binary_, env, ilctx);
+		case ilfactor_this:
+			return il_factor_this_tostr(self->u.this_, env, ilctx);
+		case ilfactor_super:
+			return il_factor_super_tostr(self->u.super_, env, ilctx);
+		case ilfactor_new_instance:
+			return il_factor_new_instance_tostr(self->u.new_instance_, env, ilctx);
+		case ilfactor_cast:
+			return il_factor_cast_tostr(self->u.cast_, env, ilctx);
+		case ilfactor_bool:
+			return il_factor_bool_tostr(self->u.bool_, env, ilctx);
+		case ilfactor_null:
+			return il_factor_null_tostr(self->u.null_, env, ilctx);
+		case ilfactor_as:
+			return il_factor_as_tostr(self->u.as_, env, ilctx);
+		case ilfactor_inc:
+			return il_factor_inc_tostr(self->u.inc_, env,ilctx);
+		case ilfactor_dec:
+			return il_factor_dec_tostr(self->u.dec_, env, ilctx);
+		case ilfactor_call_op:
+			return il_factor_call_op_to_str(self->u.call_, env, ilctx);
+		case ilfactor_member_op:
+			return il_factor_member_op_tostr(self->u.member_, env, ilctx);
+		default:
+			break;
+	}
+}
+
+void il_factor_args_tostr(string_buffer* sb, vector* args, enviroment* env, il_context* ilctx) {
+	if(args->length > 0) {
+		string_buffer_append(sb, '(');
+	}
+	for(int i=0; i<args->length; i++) {
+		il_argument* e = (il_argument*)vector_at(args, i);
+		char* str = il_factor_tostr(e->factor, env, ilctx);
+		string_buffer_appends(sb, str);
+		if(i != (args->length)) {
+			string_buffer_appends(sb, ", ");
+		}
+		MEM_FREE(str);
+	}
+	if(args->length > 0) {
+		string_buffer_append(sb, ')');
+	}
+}
+
+void il_factor_type_args_tostr(string_buffer* sb, vector* type_args, enviroment* env, il_context* ilctx) {
+	if(type_args->length > 0) {
+		string_buffer_appends(sb, "<|");
+	}
+	for(int i=0; i<type_args->length; i++) {
+		il_type_argument* e = (il_type_argument*)vector_at(type_args, i);
+		char* str = generic_cache_tostr(e->gcache);
+		string_buffer_appends(sb, str);
+		if(i != (type_args->length - 1)) {
+			string_buffer_appends(sb, ", ");
+		}
+		MEM_FREE(str);
+	}
+	if(type_args->length > 0) {
+		string_buffer_appends(sb, "|>");
+	}
 }
 
 void il_factor_delete(il_factor * self) {

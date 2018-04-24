@@ -11,57 +11,20 @@ typedef struct il_factor_string {
 	char* value;
 } il_factor_string;
 
-/**
- * 文字列を表す要素をスーパーセットにラップします.
- * @param self
- * @return
- */
 il_factor* il_factor_wrap_string(il_factor_string* self);
 
-/**
- * 文字列を表す用をを作成します.
- * @param name
- * @return
- */
 il_factor_string* il_factor_string_new(const char* name);
 
-/**
- * 文字列を表す要素を出力します.
- * @param self
- * @param depth
- */
 void il_factor_string_dump(il_factor_string* self, int depth);
 
-/**
- * 文字列を生成します.
- * @param self
- * @param env
- * @param cache
- */
 void il_factor_string_generate(il_factor_string* self, struct enviroment* env, il_context* ilctx);
 
-/**
- * 文字列を表す要素を読み込みます.
- * @param self
- * @param env
- * @param cache
- * @param eh
- */
 void il_factor_string_load(il_factor_string* self, struct enviroment* env, il_context* ilctx);
 
-/**
- * 文字列を表す要素の型を返します.
- * @param self
- * @param env
- * @param cache
- * @return
- */
 generic_type* il_factor_string_eval(il_factor_string* self, struct enviroment* env, il_context* ilctx);
 
-/**
- * 文字列を表す要素を開放します.
- * @param self
- */
+char* il_factor_string_tostr(il_factor_string* self, struct enviroment* env, il_context* ilctx);
+
 void il_factor_string_delete(il_factor_string* self);
 
 il_factor_string* il_factor_cast_string(il_factor* fact);

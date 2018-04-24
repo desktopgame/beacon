@@ -66,6 +66,16 @@ generic_type* il_factor_member_op_eval(il_factor_member_op* self, enviroment* en
 	return vector_at(a->type_args_list, self->f->vtype.u.index);
 }
 
+char* il_factor_member_op_tostr(il_factor_member_op* self, enviroment* env, il_context* ilctx) {
+	string_buffer* sb = string_buffer_new();
+	char* name = il_factor_tostr(self->fact, env, ilctx);
+	string_buffer_appends(sb, name);
+	string_buffer_append(sb, '.');
+	string_buffer_appends(sb, self->name);
+	MEM_FREE(name);
+	return string_buffer_release(sb);
+}
+
 void il_factor_member_op_delete(il_factor_member_op* self) {
 	il_factor_delete(self->fact);
 	vector_delete(self->type_args, il_factor_member_op_typearg_delete);
