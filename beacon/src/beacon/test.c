@@ -33,16 +33,17 @@ static void test_parse_err_hdr(parser* p);
 
 //semantics
 static void test_semanticsImpl(const char* dirname, bool require) {
-	script_context* ctx = eval_push();
+	script_context* ctx = script_context_add();
+	script_context_set_current(ctx);
 	vector* files = io_list_files(dirname);
 	for(int i=0; i<files->length; i++) {
 		file_entry* e = (file_entry*)vector_at(files, i);
 		if(!io_extension(e->filename, "bc")) {
 			continue;
 		}
-		xtest_must_true(eval_top_from_file(e->filename) == require, e->filename);
+		xtest_must_true(eval_file(e->filename) == require, e->filename);
 	}
-	eval_pop(ctx);
+	script_context_remove(ctx);
 }
 
 static void test_semantics() {

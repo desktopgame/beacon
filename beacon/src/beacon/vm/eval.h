@@ -5,31 +5,32 @@
 struct script_context;
 
 /**
- * 新しいコンテキストをプッシュします.
- * 必ず eval_pop を呼び出してください。
- * @return 現在のコンテキスト
+ * 指定のファイルを解析して AST を出力します.
+ * @param filename
+ * @return
  */
-struct script_context* eval_push();
+bool eval_ast(const char* filename);
 
 /**
- * 指定のコンテキストを削除します.
- * @param ctx
+ * 指定のファイルを解析して IL を出力します.
+ * @param filename
+ * @return
  */
-void eval_pop(struct script_context* ctx);
+bool eval_il(const char* filename);
 
 /**
  * ファイルの中身を現在のコンテキストで実行します.
  * @param filename
  * @return 解析に成功したなら false
  */
-bool eval_top_from_file(const char* filename);
+bool eval_file(const char* filename);
 
 /**
  * 指定のソースを現在のコンテキストで実行します.
  * @param source
  * @return 解析に成功したなら false
  */
-bool eval_top_from_source(const char* source);
+bool eval_string(const char* source);
 
 /**
  * すべての行を連結して eval_top_from_source で実行します.
@@ -37,7 +38,6 @@ bool eval_top_from_source(const char* source);
  * @param lineCount
  * @return 解析に成功したなら false
  */
-bool eval_top_from_lines(const char** lines, int lineCount);
+bool eval_lines(const char** lines, int lineCount);
 
-void eval_interactive();
 #endif // !SIGNAL_VM_EVAL_H

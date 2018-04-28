@@ -50,7 +50,7 @@ int run_script(int argc, char* argv[]) {
 int _main(int argc, char* argv[]) {
 	mem_set_trace(true);
 	//mem_break(17679);
-	bool test = true;
+	bool test = false;
 	int ret = 1;
 
 	if(test) {
@@ -62,9 +62,7 @@ int _main(int argc, char* argv[]) {
 		script_context_close();
 	} else {
 		script_context_open();
-		script_context* ctx = eval_push();
-		eval_top_from_file("main.signal");
-		eval_pop(ctx);
+		eval_il("main.bc");
 		script_context_close();
 		ret = 0;
 	}
