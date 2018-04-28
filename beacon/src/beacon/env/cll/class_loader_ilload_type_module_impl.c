@@ -15,33 +15,13 @@
 #include <assert.h>
 
 //proto
+static void CLIL_fqcn_cache_impl(ast* afqcn, fqcn_cache* fqcn, int level);
 static void CLIL_generic_cache_impl(ast* fqcn, generic_cache* dest);
 static void CLIL_generic_cache_inner(ast* atype_args, generic_cache* dest);
 static void CLIL_type_parameter_rule(struct class_loader* self, struct ast* source, vector* dest);
 
 void CLIL_fqcn_cache(ast* afqcn, fqcn_cache* fqcn) {
-if(afqcn->tag == ast_fqcn_class_name) {
-		fqcn->name = text_strdup(afqcn->u.string_value);
-		return;
-	}
-	if(afqcn->tag == ast_fqcn ||
-	   afqcn->tag == ast_fqcn_part_list) {
-		if (afqcn->tag == ast_fqcn_part_list &&
-			afqcn->child_count == 0) {
-			//FIXME:もうちょっと高速に出来る
-			//FIXME:とりあえずここでタグを直してるけどast.cの時点でどうにかするべき
-			afqcn->tag = ast_fqcn_class_name;
-			fqcn->name = text_strdup(afqcn->u.string_value);
-			return;
-		}
-		for(int i=0; i<afqcn->child_count; i++) {
-			CLIL_fqcn_cache(ast_at(afqcn, i), fqcn);
-		}
-	} else {
-		char* name = text_strdup(afqcn->u.string_value);
-		vector_push(fqcn->scope_vec, name);
-		afqcn->tag = ast_fqcn_part;
-	}
+	CLIL_fqcn_cache_impl(afqcn, fqcn, 0);
 }
 
 void CLIL_generic_cache(ast* fqcn, generic_cache* dest) {
@@ -147,6 +127,26 @@ void CLIL_argument_list(class_loader* self, vector* list, ast* source) {
 	}
 }
 //private
+static void CLIL_fqcn_cache_impl(ast* afqcn, fqcn_cache* fqcn, int level) {
+	if(afqcn->tag == ast_fqcn_part) {
+		fqcn->name = text_strdup(afqcn->u.string_value);
+		return;
+	}
+	for(int i=0; i<afqcn->child_count; i++) {
+		ast* e = ast_at(afqcn, i);
+		if(e->tag == ast_fqcn_part_list) {
+			CLIL_fqcn_cache_impl(e, fqcn, level + 1);
+		} else {
+			assert(e->tag == ast_fqcn_part);
+			if(level == 0) {
+				fqcn->name = text_strdup(e->u.string_value);
+			} else {
+				vector_push(fqcn->scope_vec, text_strdup(e->u.string_value));
+			}
+		}
+	}
+}
+
 static void CLIL_generic_cache_impl(ast* fqcn, generic_cache* dest) {
 	fqcn_cache* body = dest->fqcn;
 	//型引数を解析する

@@ -138,23 +138,27 @@ ast * ast_new_fqcn(ast * part_list, char * class_name) {
 }
 
 ast* ast_malloc_fqcn_part(char* name, const char* filename, int lineno) {
-	ast* ret = ast_malloc(ast_fqcn_class_name, filename, lineno);
+	ast* ret = ast_malloc(ast_fqcn_part, filename, lineno);
 	ret->u.string_value = name;
 	return ret;
 }
 
 ast * ast_new_fqcn_part_list(ast * part, ast * part_list) {
-	/*
+	//*
+//	part->tag = ast_fqcn_part;
+//	part_list->tag = ast_fqcn_part;
 	ast* ret = ast_new(ast_fqcn_part_list);
-	ast_push(ret, part);
 	ast_push(ret, part_list);
+	ast_push(ret, part);
 	return ret;
-	*/
+	//*/
+/*
 	ast* ret = ast_new(ast_fqcn);
 	part->tag = ast_fqcn_class_name;
 	part_list->tag = ast_fqcn_part_list;
-	ast_push(ret, part);
 	ast_push(ret, part_list);
+	ast_push(ret, part);
+	*/
 	return ret;
 }
 
