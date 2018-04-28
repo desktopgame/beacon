@@ -5,6 +5,7 @@ Debug/
 
 # Prerequisites
 *.d
+*.code-workspace
 
 # Object files
 *.o
