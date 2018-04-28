@@ -29,6 +29,19 @@ il_factor_invoke_static* il_factor_invoke_static_new(const char* name) {
 	return ret;
 }
 
+void il_factor_invoke_static_dump(il_factor_invoke_static* self, int depth) {
+	text_putindent(depth);
+	text_printfln("invoke static");
+
+	text_putindent(depth + 1);
+	text_printfln("%s", self->m->name);
+
+	for(int i=0; i<self->args->length; i++) {
+		il_argument* e = (il_argument*)vector_at(self->args, i);
+		il_factor_dump(e->factor, depth + 1);
+	}
+}
+
 void il_factor_invoke_static_generate(il_factor_invoke_static* self, enviroment* env, il_context* ilctx) {
 	for(int i=0; i<self->args->length; i++) {
 		il_argument* e = (il_argument*)vector_at(self->args, i);

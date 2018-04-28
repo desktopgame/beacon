@@ -36,12 +36,20 @@ il_factor_call_op* il_factor_call_op_new() {
 }
 
 void il_factor_call_op_dump(il_factor_call_op* self, int depth) {
-	text_putindent(depth);
-	text_printf("call");
-	il_factor_dump(self->receiver, depth + 1);
-	for(int i=0; i<self->argument_list->length; i++) {
-		il_argument* e = (il_argument*)vector_at(self->argument_list, i);
-		il_argument_dump(e, depth + 1);
+	if(self->type == ilcall_type_invoke) {
+		il_factor_invoke_dump(self->u.invoke_, depth);
+	} else if(self->type == ilcall_type_invoke_bound) {
+		il_factor_invoke_bound_dump(self->u.invoke_bound_, depth);
+	} else if(self->type == ilcall_type_invoke_static) {
+		il_factor_invoke_static_dump(self->u.invoke_static_, depth);
+	} else {
+		text_putindent(depth);
+		text_printf("call");
+		il_factor_dump(self->receiver, depth + 1);
+		for(int i=0; i<self->argument_list->length; i++) {
+			il_argument* e = (il_argument*)vector_at(self->argument_list, i);
+			il_argument_dump(e, depth + 1);
+		}
 	}
 }
 

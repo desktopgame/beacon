@@ -32,6 +32,21 @@ il_factor_invoke* il_factor_invoke_new(const char* name) {
 	return ret;
 }
 
+void il_factor_invoke_dump(il_factor_invoke* self, int depth) {
+	text_putindent(depth);
+	text_printfln("invoke");
+
+	il_factor_dump(self->receiver, depth + 1);
+
+	text_putindent(depth + 1);
+	text_printfln("%s", self->m->name);
+
+	for(int i=0; i<self->args->length; i++) {
+		il_argument* e = (il_argument*)vector_at(self->args, i);
+		il_factor_dump(e->factor, depth + 1);
+	}
+}
+
 void il_factor_invoke_generate(il_factor_invoke* self, enviroment* env, il_context* ilctx) {
 	for(int i=0; i<self->args->length; i++) {
 		il_argument* e = (il_argument*)vector_at(self->args, i);

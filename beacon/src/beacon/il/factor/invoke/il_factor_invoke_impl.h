@@ -17,6 +17,8 @@ typedef struct il_factor_invoke {
 
 il_factor_invoke* il_factor_invoke_new(const char* name);
 
+void il_factor_invoke_dump(il_factor_invoke* self, int depth);
+
 void il_factor_invoke_generate(il_factor_invoke* self, struct enviroment* env, il_context* ilctx);
 
 void il_factor_invoke_load(il_factor_invoke * self, struct enviroment * env, il_context* ilctx);

@@ -18,6 +18,8 @@ typedef struct il_factor_invoke_static {
 
 il_factor_invoke_static* il_factor_invoke_static_new(const char* name);
 
+void il_factor_invoke_static_dump(il_factor_invoke_static* self, int depth);
+
 void il_factor_invoke_static_generate(il_factor_invoke_static* self, struct enviroment* env, il_context* ilctx);
 
 void il_factor_invoke_static_load(il_factor_invoke_static * self, struct enviroment * env, il_context* ilctx);

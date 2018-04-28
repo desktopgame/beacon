@@ -17,6 +17,8 @@ typedef struct il_factor_invoke_bound {
 
 il_factor_invoke_bound* il_factor_invoke_bound_new(const char* name);
 
+void il_factor_invoke_bound_dump(il_factor_invoke_bound* self, int depth);
+
 void il_factor_invoke_bound_generate(il_factor_invoke_bound* self, struct enviroment* env, il_context* ilctx);
 
 void il_factor_invoke_bound_load(il_factor_invoke_bound * self, struct enviroment * env, il_context* ilctx);
