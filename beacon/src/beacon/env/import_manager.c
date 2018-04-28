@@ -44,12 +44,16 @@ void import_manager_resolve(import_manager* self, namespace_* scope, generic_cac
 	//名前空間でラッピングされていなくて、
 	//型が見つからない
 	if(core_type == NULL && fqcn->fqcn->scope_vec->length == 0) {
+		//メソッドの型引数から見つけられなかったら
+		//クラスの型引数を参照する
+		bool found = false;
 		if(ilcache->method_vec->length > 0) {
 			method* m = (method*)vector_top(ilcache->method_vec);
 			dest->tag = virtualtype_method_tv;
 			dest->u.index = method_for_generic_index(m, fqcn->fqcn->name);
+			found = dest->u.index == -1 ? false : true;
 		}
-		if(dest->u.index == -1) {
+		if(!found) {
 			type* container = (type*)vector_top(ilcache->type_vec);
 			dest->tag = virtualtype_class_tv;
 			dest->u.index = type_for_generic_index(container, fqcn->fqcn->name);

@@ -2,8 +2,10 @@
 #include "../../il/il_factor_impl.h"
 #include "../../util/mem.h"
 #include "../../util/xassert.h"
+#include "../../debug.h"
 #include "../class_loader.h"
 #include "class_loader_ilload_type_module_impl.h"
+#include <stdio.h>
 //proto
 static il_factor* CLIL_factorImpl(class_loader* self, ast* source);
 static il_factor_bool* CLIL_true(class_loader* self, ast* source);
@@ -178,10 +180,14 @@ static il_factor_new_instance* CLIL_new_instance(class_loader* self, ast* source
 	ast* afqcn = ast_first(source);
 	ast* atype_args = ast_second(source);
 	ast* aargs = ast_at(source, 2);
+	//XBREAK(debug_get_gen_top());
 	il_factor_new_instance* ret = il_factor_new_instance_new();
 	CLIL_fqcn_cache(afqcn, ret->fqcnc);
 	CLIL_type_argument(self, atype_args, ret->type_args);
 	CLIL_argument_list(self, ret->argument_list, aargs);
+	//ast_print_tree(afqcn);
+	//fqcn_cache_dump(ret->fqcnc, 0);
+	//fflush(stdout);
 	return ret;
 }
 
