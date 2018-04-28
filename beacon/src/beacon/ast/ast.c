@@ -149,7 +149,7 @@ void ast_print(ast* self) {
 		case ast_sub:  p("-");
 		case ast_mul: p("*");
 		case ast_div: p("/");
-		case ast_mod: p("%");
+		case ast_mod: p("%%");
 		case ast_bit_or: p("|");
 		case ast_logic_or: p("||");
 		case ast_bit_and: p("&");
@@ -159,7 +159,7 @@ void ast_print(ast* self) {
 		case ast_sub_assign: p("-=");
 		case ast_mul_assign: p("*=");
 		case ast_div_assign: p("/=");
-		case ast_mod_assign: p("%=");
+		case ast_mod_assign: p("%%=");
 		case ast_equal: p("==");
 		case ast_notequal: p("!=");
 		case ast_gt: p(">");
@@ -331,6 +331,7 @@ void ast_print(ast* self) {
 		case ast_type_parameter_list: p("type parameter list");
 		case ast_type_parameter_rule_list: p("type parameter rule list");
 		case ast_stmt_assert: p("assert");
+		case ast_typename_list: p("typename list");
 		default: 
 			p("not implemented");
 	}
