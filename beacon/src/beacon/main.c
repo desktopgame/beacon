@@ -49,6 +49,7 @@ int run_script(int argc, char* argv[]) {
 
 int _main(int argc, char* argv[]) {
 	mem_set_trace(true);
+	il_print_layout_hide(true);
 	//mem_break(17679);
 	bool test = false;
 	int ret = 1;

@@ -35,7 +35,7 @@ void il_factor_invoke_bound_dump(il_factor_invoke_bound* self, int depth) {
 
 	for(int i=0; i<self->args->length; i++) {
 		il_argument* e = (il_argument*)vector_at(self->args, i);
-		il_factor_dump(e->factor, depth + 1);
+		il_factor_dump(e->factor, depth + 2);
 	}
 }
 
