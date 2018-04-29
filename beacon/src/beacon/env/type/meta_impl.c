@@ -27,16 +27,18 @@ int meta_calc_score(vector* params, vector* ilargs, enviroment* env, il_context*
 		//実引数が NULL なら常に許容する
 		int dist = 0;
 		generic_type* argType = il_factor_eval(arg->factor, env, ilctx);
-		virtual_type parvType = param->vtype;
+		//virtual_type parvType = param->vtype;
 		//parvType.gtype
 		//のタグが　none
 		//インデックスが-1
 		if(il_error_panic()) {
 			return -1;
 		}
+		/*
 		if (argType->core_type != CL_NULL) {
 			dist = virtual_type_adistance(&parvType, argType, ilctx);
 		}
+		*/
 		score += dist;
 		//継承関係のないパラメータ
 		if (dist == -1) {
@@ -61,10 +63,12 @@ int meta_rcalc_score(vector* params, vector* args) {
 		int dist = 0;
 		//generic_type* argType = il_factor_eval(arg->factor, env, ilctx);
 		generic_type* argType = arg->gtype;
+		/*
 		virtual_type parvType = param->vtype;
 		if (argType->core_type != CL_NULL) {
 			dist = virtual_type_distance(&parvType, argType, ilctx);
 		}
+		*/
 		score += dist;
 		//継承関係のないパラメータ
 		if (dist == -1) {

@@ -3,7 +3,7 @@
 #define BEACON_ENV_FIELD_H
 #include "../ast/access_level.h"
 #include "../ast/modifier_type.h"
-#include "virtual_type.h"
+//#include "virtual_type.h"
 struct type;
 struct generic_type;
 struct object;
@@ -13,7 +13,7 @@ struct object;
 typedef struct field {
 	char* name;
 	struct type* parent;
-	virtual_type vtype;
+//	virtual_type vtype;
 	struct object* static_value;
 	access_level access;
 	modifier_type modifier;

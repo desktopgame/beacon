@@ -78,6 +78,7 @@ generic_type* il_factor_invoke_eval(il_factor_invoke * self, enviroment * env, i
 	if(il_error_panic()) {
 		return NULL;
 	}
+	/*
 	virtual_type returnvType = self->m->return_vtype;
 	generic_type* ret = NULL;
 	//XSTREQ(self->name, "get");
@@ -94,6 +95,8 @@ generic_type* il_factor_invoke_eval(il_factor_invoke * self, enviroment * env, i
 	//generic_type_print(ret);
 	//text_printf("\n");
 	return ret;
+	*/
+	return NULL;
 }
 
 char* il_factor_invoke_tostr(il_factor_invoke* self, enviroment* env, il_context* ilctx) {
@@ -121,6 +124,7 @@ static void resolve_non_default(il_factor_invoke * self, enviroment * env, il_co
 	if(self->resolved != NULL) {
 		return;
 	}
+	/*
 	generic_type* receivergType = il_factor_eval(self->receiver, env, ilctx);
 	generic_type_validate(receivergType);
 	virtual_type returnvType = self->m->return_vtype;
@@ -138,12 +142,14 @@ static void resolve_non_default(il_factor_invoke * self, enviroment * env, il_co
 		self->resolved->tag = generic_type_tag_class;
 		generic_type_validate(self->resolved);
 	}
+	*/
 }
 
 static void resolve_default(il_factor_invoke * self, enviroment * env, il_context* ilctx) {
 	if(self->resolved != NULL) {
 		return;
 	}
+	/*
 	generic_type* receivergType = il_factor_eval(self->receiver, env, ilctx);
 	virtual_type returnvType = self->m->return_vtype;
 	generic_type_validate(receivergType);
@@ -156,6 +162,7 @@ static void resolve_default(il_factor_invoke * self, enviroment * env, il_contex
 	vector_pop(ilctx->receiver_vec);
 	vector_pop(ilctx->type_args_vec);
 	generic_type_validate(self->resolved);
+	*/
 }
 
 static void il_factor_invoke_check(il_factor_invoke * self, enviroment * env, il_context* ilctx) {

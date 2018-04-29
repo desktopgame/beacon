@@ -46,14 +46,14 @@ void method_dump(method * self, int depth) {
 	for (int i = 0; i < self->parameter_list->length; i++) {
 		vector_item e = vector_at(self->parameter_list, i);
 		parameter* p = (parameter*)e;
-		virtual_type_print(&p->vtype);
+		//virtual_type_print(&p->vtype);
 		text_printf(" %s", p->name);
 		if ((i + 1) < self->parameter_list->length) {
 			text_printf(" ");
 		}
 	}
 	text_printf(") -> ");
-	virtual_type_print(&self->return_vtype);
+	//virtual_type_print(&self->return_vtype);
 	text_putline();
 	if (self->type == method_type_script) {
 		opcode_buf_dump(self->u.script_method->env->buf, depth + 1);

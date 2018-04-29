@@ -38,7 +38,7 @@ void CLBC_fields_decl(class_loader* self, il_type* iltype, type* tp, vector* ilf
 		field->access = ilfield->access;
 		field->modifier = ilfield->modifier;
 		field->parent = tp;
-		import_manager_resolve(self->import_manager, scope, ilfield->fqcn, ilctx, &field->vtype);
+//		import_manager_resolve(self->import_manager, scope, ilfield->fqcn, ilctx, &field->vtype);
 		//NOTE:ここではフィールドの型を設定しません
 		//     class_loader_sgload_complete参照
 		//vector_push(classz->field_list, field);
@@ -96,7 +96,7 @@ void CLBC_methods_decl(class_loader* self, il_type* iltype, type* tp, vector* il
 			method->u.script_method = script_method_new();
 		}
 		method->parent = tp;
-		import_manager_resolve(self->import_manager, scope, ilmethod->return_fqcn, ilctx, &method->return_vtype);
+	//	import_manager_resolve(self->import_manager, scope, ilmethod->return_fqcn, ilctx, &method->return_vtype);
 		//ILパラメータを実行時パラメータへ変換
 		//NOTE:ここでは戻り値の型,引数の型を設定しません
 		//     class_loader_sgload_complete参照
@@ -288,6 +288,7 @@ static void CLBC_parameter_list(class_loader* self, namespace_* scope, vector* p
 		//FIXME:ILパラメータと実行時パラメータのインデックスが同じなのでとりあえず動く
 		//parameter* mep = (parameter*)vector_at(me->parameter_list, j);
 		parameter* mep = (parameter*)vector_at(sg_param_list, j);
+		/*
 		import_manager_resolve(
 			self->import_manager,
 			scope,
@@ -295,6 +296,7 @@ static void CLBC_parameter_list(class_loader* self, namespace_* scope, vector* p
 			ilctx,
 			&mep->vtype
 		);
+		*/
 	}
 }
 

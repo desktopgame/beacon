@@ -24,7 +24,7 @@ void field_dump(field * self, int depth) {
 	text_printf(" ");
 	modifier_print(self->modifier);
 	text_printf(" field ");
-	virtual_type_print(&self->vtype);
+	//virtual_type_print(&self->vtype);
 	text_printf(" %s", self->name);
 	text_putline();
 }

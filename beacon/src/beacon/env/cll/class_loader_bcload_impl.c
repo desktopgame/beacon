@@ -176,7 +176,7 @@ static void CLBC_enum(class_loader * self, il_type * iltype, namespace_ * parent
 		f->modifier = modifier_static;
 		f->access = access_public;
 		f->static_value = object_int_new(i);
-		virtual_type_nongeneric_init(&f->vtype, GEN_INT);
+		//virtual_type_nongeneric_init(&f->vtype, GEN_INT);
 		f->parent = tp;
 		class_add_field(cls, f);
 	}

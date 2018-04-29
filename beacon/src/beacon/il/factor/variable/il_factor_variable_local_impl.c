@@ -33,6 +33,7 @@ void il_factor_variable_local_generate(il_factor_variable_local* self, enviromen
 }
 
 void il_factor_variable_local_load(il_factor_variable_local * self, enviroment * env, il_context* ilctx) {
+	/*
 	if(self->type == variable_local_undefined) {
 		//NOTE:変数宣言の後にその変数を使用する場合、
 		//factorはload時点でシンボルエントリーを取得しようとするが、
@@ -72,6 +73,7 @@ void il_factor_variable_local_load(il_factor_variable_local * self, enviroment *
 			self->gt = ent->gtype;
 		}
 	}
+	*/
 }
 
 generic_type* il_factor_variable_local_eval(il_factor_variable_local * self, enviroment * env, il_context* ilctx) {

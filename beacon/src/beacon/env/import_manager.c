@@ -39,6 +39,7 @@ bool import_manager_loaded(import_manager * self, int index) {
 	return info->consume;
 }
 
+/*
 void import_manager_resolve(import_manager* self, namespace_* scope, generic_cache* fqcn, il_context* ilcache, virtual_type* dest) {
 	type* core_type = fqcn_type(fqcn->fqcn, scope);
 	//名前空間でラッピングされていなくて、
@@ -83,6 +84,7 @@ void import_manager_resolve(import_manager* self, namespace_* scope, generic_cac
 	dest->u.gtype = ret2;
 //	return generic_cache_gtype(fqcn, scope, ilcache);
 }
+*/
 
 void import_manager_delete(import_manager * self) {
 	vector_delete(self->info_vec, import_manager_delete_import_info);

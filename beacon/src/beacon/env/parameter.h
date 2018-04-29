@@ -1,13 +1,13 @@
 #pragma once
 #ifndef BEACON_ENV_PARAMETER_H
 #define BEACON_ENV_PARAMETER_H
-#include "virtual_type.h"
+//#include "virtual_type.h"
 /**
  * メソッドの仮引数を表す構造体です.
  */
 typedef struct parameter {
 	char* name;
-	virtual_type vtype;
+	//virtual_type vtype;
 } parameter;
 
 /**

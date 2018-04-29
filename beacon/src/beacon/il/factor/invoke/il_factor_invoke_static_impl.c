@@ -67,6 +67,7 @@ generic_type* il_factor_invoke_static_eval(il_factor_invoke_static * self, envir
 	if(il_error_panic()) {
 		return NULL;
 	}
+	/*
 	virtual_type returnvType = self->m->return_vtype;
 	if(returnvType.tag != virtualtype_default) {
 		resolve_non_default(self, env, ilctx);
@@ -75,6 +76,8 @@ generic_type* il_factor_invoke_static_eval(il_factor_invoke_static * self, envir
 		resolve_default(self, env, ilctx);
 		return self->resolved;
 	}
+	*/
+	return NULL;
 }
 
 char* il_factor_invoke_static_tostr(il_factor_invoke_static* self, enviroment* env, il_context* ilctx) {
@@ -103,21 +106,25 @@ static void resolve_non_default(il_factor_invoke_static * self, enviroment * env
 	if(self->resolved != NULL) {
 		return;
 	}
+	/*
 	virtual_type returnvType = self->m->return_vtype;
 	generic_type* instanced_type = (generic_type*)vector_at(self->type_args, returnvType.u.index);
 	self->resolved = generic_type_make(instanced_type->core_type);
 	self->resolved->tag = generic_type_tag_method;
 	self->resolved->virtual_type_index = returnvType.u.index;
+	*/
 }
 
 static void resolve_default(il_factor_invoke_static * self, enviroment * env, il_context* ilctx) {
 	if(self->resolved != NULL) {
 		return;
 	}
+	/*
 	virtual_type returnvType = self->m->return_vtype;
 	vector_push(ilctx->type_args_vec, self->type_args);
 	self->resolved = generic_type_apply(returnvType.u.gtype, ilctx);
 	vector_pop(ilctx->type_args_vec);
+	*/
 }
 
 static void il_factor_invoke_static_check(il_factor_invoke_static * self, enviroment * env, il_context* ilctx) {

@@ -5,7 +5,7 @@
 #include "../util/mem.h"
 #include "../util/text.h"
 #include "type_interface.h"
-#include "virtual_type.h"
+//#include "virtual_type.h"
 #include "namespace.h"
 #include "object.h"
 #include "generic_type.h"
@@ -31,10 +31,12 @@ void script_method_execute(script_method * self, method* parent, vm * vmachine, 
 	opcode_buf_dump(self->env->buf, sub->level);
 	vm_execute(sub, self->env);
 	//戻り値が Void 以外ならスタックトップの値を引き継ぐ
+	/*
 	if (!virtual_type_void(&parent->return_vtype)) {
 		object* o = (object*)vector_pop(sub->value_stack);
 		vector_push(vmachine->value_stack, o);
 	}
+	*/
 	vm_delete(sub);
 }
 
