@@ -100,7 +100,9 @@ method * meta_find_method(vector * method_vec, const char * name, vector * ilarg
 		//XSTREQ(m->name, "copy");
 		//XSTREQ(m->name, "nativeCopy");
 		//もっともスコアの高いメソッドを選択する
+		vector_push(ilctx->method_vec, m);
 		int score = meta_calc_score(m->parameter_list, ilargs, env, ilctx);
+		vector_pop(ilctx->method_vec);
 		if(score == -1) {
 			continue;
 		}
