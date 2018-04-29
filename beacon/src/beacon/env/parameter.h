@@ -7,7 +7,7 @@
  */
 typedef struct parameter {
 	char* name;
-	//virtual_type vtype;
+	struct generic_type* gtype;
 } parameter;
 
 /**

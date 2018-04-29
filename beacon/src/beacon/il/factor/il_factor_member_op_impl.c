@@ -54,19 +54,12 @@ generic_type* il_factor_member_op_eval(il_factor_member_op* self, enviroment* en
 	il_factor_member_op_check(self, env, ilctx);
 //	XSTREQ(self->name, "charArray");
 	assert(self->fact != NULL);
-	/*
-	if(self->f->vtype.tag == virtualtype_default) {
-		generic_type* a = self->f->vtype.u.gtype;
-		if(a->type_args_list->length > 0) {
-			generic_type* cc = (generic_type*)vector_at(a->type_args_list, 0);
-			int xx = 0;
-		}
-		return self->f->vtype.u.gtype;
+	if(self->f->gtype->tag == generic_type_tag_none) {
+		generic_type* a = self->f->gtype;
+		return a;
 	}
 	generic_type* a = il_factor_eval(self->fact, env, ilctx);
-	return vector_at(a->type_args_list, self->f->vtype.u.index);
-	*/
-	return NULL;
+	return vector_at(a->type_args_list, self->f->gtype->virtual_type_index);
 }
 
 char* il_factor_member_op_tostr(il_factor_member_op* self, enviroment* env, il_context* ilctx) {
@@ -105,12 +98,6 @@ static void il_factor_member_op_check(il_factor_member_op* self, enviroment* env
 	self->index = temp;
 	assert(self->f != NULL);
 	assert(temp != -1);
-	/*
-	if(self->f->vtype.tag == virtualtype_default) {
-		generic_type* a = self->f->vtype.u.gtype;
-		int aa = 0;
-	}
-	*/
 }
 
 static void il_factor_member_op_typearg_delete(vector_item item) {

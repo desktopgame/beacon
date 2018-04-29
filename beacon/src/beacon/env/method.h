@@ -3,7 +3,6 @@
 #define BEACON_ENV_METHOD_H
 #include "script_method.h"
 #include "native_method.h"
-//#include "virtual_type.h"
 #include "../util/vector.h"
 #include "../ast/access_level.h"
 #include "../ast/modifier_type.h"
@@ -29,8 +28,7 @@ typedef struct method {
 	method_type type;
 	//struct class_* decleared_type;
 	struct type* parent;
-	//virtual_type return_vtype;
-	//struct generic_type* return_gtype;
+	struct generic_type* return_gtype;
 	vector* parameter_list;
 	vector* type_parameter_list;
 	access_level access;

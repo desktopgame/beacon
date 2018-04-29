@@ -39,52 +39,50 @@ bool import_manager_loaded(import_manager * self, int index) {
 	return info->consume;
 }
 
-/*
-void import_manager_resolve(import_manager* self, namespace_* scope, generic_cache* fqcn, il_context* ilcache, virtual_type* dest) {
+generic_type* import_manager_resolve(import_manager* self, namespace_* scope, generic_cache* fqcn, il_context* ilctx) {
 	type* core_type = fqcn_type(fqcn->fqcn, scope);
 	//名前空間でラッピングされていなくて、
 	//型が見つからない
 	if(core_type == NULL && fqcn->fqcn->scope_vec->length == 0) {
+		generic_type* parameterized = generic_type_new(NULL);
 		//メソッドの型引数から見つけられなかったら
 		//クラスの型引数を参照する
 		bool found = false;
-		if(ilcache->method_vec->length > 0) {
-			method* m = (method*)vector_top(ilcache->method_vec);
-			dest->tag = virtualtype_method_tv;
-			dest->u.index = method_for_generic_index(m, fqcn->fqcn->name);
-			found = dest->u.index == -1 ? false : true;
+		if(ilctx->method_vec->length > 0) {
+			method* m = (method*)vector_top(ilctx->method_vec);
+			parameterized->tag = generic_type_tag_method;
+			parameterized->virtual_type_index = method_for_generic_index(m, fqcn->fqcn->name);
+			parameterized->u.method_ = m;
 		}
 		if(!found) {
-			type* container = (type*)vector_top(ilcache->type_vec);
-			dest->tag = virtualtype_class_tv;
-			dest->u.index = type_for_generic_index(container, fqcn->fqcn->name);
+			type* container = (type*)vector_top(ilctx->type_vec);
+			parameterized->tag = generic_type_tag_class;
+			parameterized->virtual_type_index = type_for_generic_index(container, fqcn->fqcn->name);
+			parameterized->u.type_ = container;
 		}
 		assert(fqcn->type_args->length == 0);
-		return;
+		return parameterized;
 	}
-	//型引数がない
+	//Int, String などはっきりした型が見つかった
+	//また、型引数もない
 	if(fqcn->type_args->length == 0) {
 		//assert(core_type->generic_self != NULL);
-		dest->tag = virtualtype_default;
+//		dest->tag = virtualtype_default;
 		//dest->u.gtype = core_type->generic_self;
-		dest->u.gtype = generic_type_make(core_type);
-		return;
+//		dest->u.gtype = generic_type_make(core_type);
+		return core_type->generic_self;
 	}
-
-	generic_type* ret2 = generic_type_new(core_type);
+	//Array, Dictionary などはっきりした型が見つかった
+	//が、型引数があるのでそれを解決する
+	generic_type* normalGType = generic_type_new(core_type);
 	assert(core_type->tag != type_enum);
 	for (int i = 0; i < fqcn->type_args->length; i++) {
 		generic_cache* e = (generic_cache*)vector_at(fqcn->type_args, i);
-		generic_type* child = generic_cache_gtype(e, scope, ilcache);
-		generic_type_addargs(ret2, child);
+		generic_type* child = generic_cache_gtype(e, scope, ilctx);
+		generic_type_addargs(normalGType, child);
 	}
-	ret2->tag = generic_type_tag_none;
-	assert(ret2 != NULL);
-	dest->tag = virtualtype_default;
-	dest->u.gtype = ret2;
-//	return generic_cache_gtype(fqcn, scope, ilcache);
+	return normalGType;
 }
-*/
 
 void import_manager_delete(import_manager * self) {
 	vector_delete(self->info_vec, import_manager_delete_import_info);

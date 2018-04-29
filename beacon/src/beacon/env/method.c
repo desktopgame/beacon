@@ -24,6 +24,7 @@ method * method_new(const char * name) {
 	ret->modifier = modifier_none;
 	ret->parent = NULL;
 	ret->type_parameter_list = vector_new();
+	ret->return_gtype = NULL;
 	return ret;
 }
 
@@ -46,14 +47,14 @@ void method_dump(method * self, int depth) {
 	for (int i = 0; i < self->parameter_list->length; i++) {
 		vector_item e = vector_at(self->parameter_list, i);
 		parameter* p = (parameter*)e;
-		//virtual_type_print(&p->vtype);
+		generic_type_print(p->gtype);
 		text_printf(" %s", p->name);
 		if ((i + 1) < self->parameter_list->length) {
 			text_printf(" ");
 		}
 	}
 	text_printf(") -> ");
-	//virtual_type_print(&self->return_vtype);
+	generic_type_print(self->return_gtype);
 	text_putline();
 	if (self->type == method_type_script) {
 		opcode_buf_dump(self->u.script_method->env->buf, depth + 1);

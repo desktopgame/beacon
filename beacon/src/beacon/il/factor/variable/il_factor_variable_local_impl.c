@@ -33,7 +33,6 @@ void il_factor_variable_local_generate(il_factor_variable_local* self, enviromen
 }
 
 void il_factor_variable_local_load(il_factor_variable_local * self, enviroment * env, il_context* ilctx) {
-	/*
 	if(self->type == variable_local_undefined) {
 		//NOTE:変数宣言の後にその変数を使用する場合、
 		//factorはload時点でシンボルエントリーを取得しようとするが、
@@ -56,24 +55,24 @@ void il_factor_variable_local_load(il_factor_variable_local * self, enviroment *
 				return;
 			}
 			//フィールドの型を調べる
-			virtual_type vt = f->vtype;
-			if(vt.tag == virtualtype_default) {
-				self->gt = vt.u.gtype;
-			} else if(vt.tag == virtualtype_class_tv) {
+			generic_type* gt = f->gtype;
+			//virtual_type vt = f->vtype;
+			if(gt->tag == generic_type_tag_none) {
+				self->gt = gt;
+			} else if(gt->tag == generic_type_tag_class) {
 				self->gt = generic_type_new(NULL);
 				self->gt->tag = generic_type_tag_class;
-				self->gt->virtual_type_index = vt.u.index;
-			} else if(vt.tag == virtualtype_method_tv) {
+				self->gt->virtual_type_index = gt->virtual_type_index;
+			} else if(gt->tag == generic_type_tag_method) {
 				self->gt = generic_type_new(NULL);
 				self->gt->tag = generic_type_tag_method;
-				self->gt->virtual_type_index = vt.u.index;
+				self->gt->virtual_type_index = gt->virtual_type_index;
 			}
 		} else {
 			self->u.entry_ = ent;
 			self->gt = ent->gtype;
 		}
 	}
-	*/
 }
 
 generic_type* il_factor_variable_local_eval(il_factor_variable_local * self, enviroment * env, il_context* ilctx) {

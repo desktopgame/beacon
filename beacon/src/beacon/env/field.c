@@ -14,6 +14,7 @@ field * field_new(const char * name) {
 	ret->modifier = modifier_none;
 	ret->parent = NULL;
 	ret->static_value = NULL;
+	ret->gtype = NULL;
 	return ret;
 }
 
@@ -24,7 +25,7 @@ void field_dump(field * self, int depth) {
 	text_printf(" ");
 	modifier_print(self->modifier);
 	text_printf(" field ");
-	//virtual_type_print(&self->vtype);
+	generic_type_print(self->gtype);
 	text_printf(" %s", self->name);
 	text_putline();
 }

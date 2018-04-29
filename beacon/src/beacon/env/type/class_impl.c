@@ -91,17 +91,17 @@ class_ * class_new_preload(const char * name) {
 void class_alloc_fields(class_ * self, object * o) {
 	assert(o->tag == object_ref);
 	for (int i = 0; i < self->field_list->length; i++) {
-		/*
+		//*
 		field* f = (field*)vector_at(self->field_list, i);
 		object* a = object_get_null();
 		//プリミティブ型のときはデフォルト値を入れておく
-		if (virtual_type_int(&f->vtype)) {
+		if (f->gtype == CL_INT->generic_self) {
 			a = object_int_new(0);
-		} else if (virtual_type_double(&f->vtype)) {
+		} else if (f->gtype == CL_DOUBLE->generic_self) {
 			a = object_double_new(0.0);
-		} else if (virtual_type_bool(&f->vtype)) {
+		} else if (f->gtype == CL_BOOL->generic_self) {
 			a = object_bool_get(false);
-		} else if (virtual_type_char(&f->vtype)) {
+		} else if (f->gtype == CL_CHAR->generic_self) {
 			a = object_char_new('\0');
 		}
 		//静的フィールドは別の場所に確保
@@ -109,7 +109,7 @@ void class_alloc_fields(class_ * self, object * o) {
 			continue;
 		}
 		vector_push(o->u.field_vec, a);
-		*/
+		//*/
 	}
 	class_create_vtable(self);
 	o->gtype = generic_type_make(self->parent);

@@ -13,7 +13,7 @@ struct object;
 typedef struct field {
 	char* name;
 	struct type* parent;
-//	virtual_type vtype;
+	struct generic_type* gtype;
 	struct object* static_value;
 	access_level access;
 	modifier_type modifier;

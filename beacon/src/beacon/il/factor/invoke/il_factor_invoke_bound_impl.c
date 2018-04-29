@@ -75,15 +75,13 @@ generic_type* il_factor_invoke_bound_eval(il_factor_invoke_bound * self, envirom
 	if(il_error_panic()) {
 		return NULL;
 	}
-	/*
-	if(self->m->return_vtype.tag != virtualtype_default) {
+	if(self->m->return_gtype != generic_type_tag_none) {
 		resolve_non_default(self, env, ilctx);
 		return self->resolved;
 	} else {
 		resolve_default(self, env, ilctx);
 		return self->resolved;
 	}
-	*/
 	return self->resolved;
 }
 
@@ -108,33 +106,30 @@ static void resolve_non_default(il_factor_invoke_bound * self, enviroment * env,
 	if(self->resolved != NULL) {
 		return;
 	}
-	/*
 	type* tp = (type*)vector_top(ilctx->type_vec);
 //	generic_type* receivergType = tp->generic_self;
-	virtual_type returnvType = self->m->return_vtype;
-	if(returnvType.tag == virtualtype_class_tv) {
+	generic_type* rgtp  = self->m->return_gtype;
+	if(rgtp->tag == generic_type_tag_class) {
 		self->resolved = generic_type_make(NULL);
 		self->resolved->tag = generic_type_tag_class;
-		self->resolved->virtual_type_index = returnvType.u.index;
-	} else if(returnvType.tag == virtualtype_method_tv) {
+		self->resolved->virtual_type_index = rgtp->virtual_type_index;
+	} else if(rgtp->tag == generic_type_tag_method) {
 		//メソッドに渡された型引数を参照する
-		generic_type* instanced_type = (generic_type*)vector_at(self->type_args, returnvType.u.index);
+		generic_type* instanced_type = (generic_type*)vector_at(self->type_args, rgtp->virtual_type_index);
 		self->resolved = generic_type_make(instanced_type->core_type);
 		self->resolved->tag = generic_type_tag_class;
 	}
-	*/
 }
 
 static void resolve_default(il_factor_invoke_bound * self, enviroment * env, il_context* ilctx) {
 	if(self->resolved != NULL) {
 		return;
 	}
-	/*
-	virtual_type returnvType = self->m->return_vtype;
+	generic_type* rgtp = self->m->return_gtype;
+//	virtual_type returnvType = self->m->return_vtype;
 	vector_push(ilctx->type_args_vec, self->type_args);
-	self->resolved = generic_type_apply(returnvType.u.gtype, ilctx);
+	self->resolved = generic_type_apply(rgtp, ilctx);
 	vector_pop(ilctx->type_args_vec);
-	*/
 }
 
 static void il_factor_invoke_bound_check(il_factor_invoke_bound * self, enviroment * env, il_context* ilctx) {
