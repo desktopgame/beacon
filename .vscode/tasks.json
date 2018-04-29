@@ -18,6 +18,53 @@
 				"cwd": "../beacon/beacon/src"
 			},
 			"command": "make"
+		},
+		{
+			"label": "test",
+			"type": "shell",
+			"options": {
+				"cwd": "../beacon/beacon/bin/"
+			},
+			"command": "./a.out",
+			"args": [
+				"--test"
+			]
+		},
+		{
+			"label": "ast",
+			"type": "shell",
+			"options": {
+				"cwd": "../beacon/beacon/bin/"
+			},
+			"command": "./a.out",
+			"args": [
+				"--ast",
+				"main.bc"
+			]
+		},
+		{
+			"label": "il",
+			"type": "shell",
+			"options": {
+				"cwd": "../beacon/beacon/bin/"
+			},
+			"command": "./a.out",
+			"args": [
+				"--il",
+				"main.bc"
+			]
+		},
+		{
+			"label": "run",
+			"type": "shell",
+			"options": {
+				"cwd": "../beacon/beacon/bin/"
+			},
+			"command": "./a.out",
+			"args": [
+				"--run",
+				"main.bc"
+			]
 		}
 	]
 }

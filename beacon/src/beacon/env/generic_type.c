@@ -256,17 +256,12 @@ vector* generic_type_rule(generic_type* self, il_context* ilctx) {
 		type* tp = NULL;
 		//コンストラクタを検索している場合は
 		//特別扱い
-		if(ilctx->eval_ctor_vec->length > 0) {
-			constructor* ctor = vector_top(ilctx->eval_ctor_vec);
-			tp = ctor->parent;
+		if(ilctx->find_static > ilctx->find_instance) {
+			tp = (type*)vector_top(ilctx->type_vec);
 			assert(tp != NULL);
 		} else {
-			if(ilctx->find_static > 0) {
-				tp = (type*)vector_top(ilctx->type_vec);
-			} else {
-				generic_type* gt = (generic_type*)vector_top(ilctx->receiver_vec);
-				tp = gt->core_type;
-			}
+			generic_type* gt = (generic_type*)vector_top(ilctx->receiver_vec);
+			tp = gt->core_type;
 		}
 		//type* tp = self->core_type;
 		vector* params = type_parameter_list(tp);

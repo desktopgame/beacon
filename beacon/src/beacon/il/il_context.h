@@ -29,8 +29,8 @@ typedef struct il_context {
 	//それを実行する実体化されたレシーバから型を取り出せますが、
 	//(つまり、receiver_vecの先頭を参照する)
 	//コンストラクタの場合ではnew演算子から参照する必要があります。
-	vector* eval_ctor_vec;
 	bool toplevel;
+	int find_instance;
 	int find_static;
 } il_context;
 

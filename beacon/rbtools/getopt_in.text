@@ -1,4 +1,4 @@
-:add, a, NOA
-:break, b, NOA
-:clear, c, REQ
-:delete, d, OPT
+:test, t, NOA
+:ast, a, REQ
+:il, i, REQ
+:run, r, REQ

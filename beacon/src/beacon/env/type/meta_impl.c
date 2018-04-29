@@ -103,7 +103,9 @@ method * meta_find_method(vector * method_vec, const char * name, vector * ilarg
 		}
 		//もっともスコアの高いメソッドを選択する
 		vector_push(ilctx->method_vec, m);
+		ilctx->find_instance++;
 		int score = meta_calc_score(m->parameter_list, ilargs, env, ilctx);
+		ilctx->find_instance--;
 		vector_pop(ilctx->method_vec);
 		if(score == -1) {
 			continue;
@@ -135,9 +137,9 @@ constructor* meta_find_ctor(vector* ctor_vec, vector* ilargs, struct enviroment*
 			return ctor;
 		}
 		//もっともスコアの高いメソッドを選択する
-		vector_push(ilctx->eval_ctor_vec, ctor);
+		ilctx->find_static++;
 		int score = meta_calc_score(ctor->parameter_list, ilargs, env, ilctx);
-		vector_pop(ilctx->eval_ctor_vec);
+		ilctx->find_static--;
 		if(score == -1) {
 			continue;
 		}

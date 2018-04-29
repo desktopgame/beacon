@@ -1,27 +1,27 @@
 struct option longopts[] = {
-	{ "add", no_argument, NULL, 'a' },
-	{ "break", no_argument, NULL, 'b' },
-	{ "clear", required_argument, NULL, 'c' },
-	{ "delete", optional_argument, NULL, 'd' },
+	{ "test", no_argument, NULL, 't' },
+	{ "ast", required_argument, NULL, 'a' },
+	{ "il", required_argument, NULL, 'i' },
+	{ "run", required_argument, NULL, 'r' },
 	{ 0, 0, 0, 0 }
 };
 extern char *optarg;
 extern int optind, opterr;
 int opt = 0;
 int longindex = 0;
-while ((opt = getopt_long(argc, argv, "abc:d::", longopts, &longindex)) != -1) {
+while ((opt = getopt_long(argc, argv, "ta:i:r:", longopts, &longindex)) != -1) {
 	switch(opt) {
+		case 't':
+			printf(":t :test\n");
+			break;
 		case 'a':
-			printf(":a :add\n");
+			printf(":a :ast\n");
 			break;
-		case 'b':
-			printf(":b :break\n");
+		case 'i':
+			printf(":i :il\n");
 			break;
-		case 'c':
-			printf(":c :clear\n");
-			break;
-		case 'd':
-			printf(":d :delete\n");
+		case 'r':
+			printf(":r :run\n");
 			break;
 		default:
 			printf("error! :%c :%c", opt, optopt);

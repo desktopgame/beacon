@@ -7,7 +7,8 @@
 	"settings": {
 		"files.associations": {
 			"parameter.h": "c",
-			"type_interface.h": "c"
+			"type_interface.h": "c",
+			"string.h": "c"
 		}
 	}
 }
