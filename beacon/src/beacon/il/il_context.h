@@ -4,6 +4,12 @@
 #include "../util/vector.h"
 #include <stdbool.h>
 
+#define ILCTX_NAMESPACE(ctx) ((namespace_*)vector_top(ctx->namespace_vec))
+#define ILCTX_TYPE(ctx) ((type*)vector_top(ctx->type_vec))
+#define ILCTX_METHOD(ctx) ((method*)vector_top(ctx->method_vec))
+#define ILCTX_RECEIVER(ctx) ((generic_type*)vector_top(ctx->receiver_vec))
+#define ILCTX_TYPE_ARGS(ctx) ((vector*)vector_top(ctx->type_args_vec))
+
 /**
  * ILを読み込むためのキャッシュです.
  */
@@ -25,6 +31,7 @@ typedef struct il_context {
 	//コンストラクタの場合ではnew演算子から参照する必要があります。
 	vector* eval_ctor_vec;
 	bool toplevel;
+	int find_static;
 } il_context;
 
 struct namespace_;
