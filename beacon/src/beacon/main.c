@@ -63,7 +63,7 @@ int _main(int argc, char* argv[]) {
 		script_context_close();
 	} else {
 		script_context_open();
-		eval_il("main.bc");
+		eval_file("main.bc");
 		script_context_close();
 		ret = 0;
 	}

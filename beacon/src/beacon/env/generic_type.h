@@ -139,14 +139,6 @@ bool generic_type_bool(generic_type* self);
 generic_type* generic_type_apply(generic_type* self, struct il_context* ilctx);
 
 /**
- * selfに実型引数を割り当てて返します.
- * @param self
- * @param ilctx
- * @return
- */
-generic_type* generic_type_build(generic_type* self, struct il_context* ilctx);
-
-/**
  * self が型引数なら、それに適用されるルールを返します.
  * @param self
  * @param ilctx

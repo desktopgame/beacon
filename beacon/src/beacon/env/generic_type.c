@@ -228,8 +228,9 @@ generic_type* generic_type_apply(generic_type* self, il_context* ilctx) {
 				generic_type_addargs(copy, generic_type_apply(instanced, ilctx));
 			} else if(e->tag == generic_type_tag_method) {
 				vector* type_args = vector_top(ilctx->type_args_vec);
-				generic_type* a = vector_at(type_args, e->virtual_type_index);
-				generic_type_addargs(copy, generic_type_apply(a, ilctx));
+				//generic_type* a = vector_at(type_args, e->virtual_type_index);
+				il_type_argument* a = vector_at(type_args, e->virtual_type_index);
+				generic_type_addargs(copy, generic_type_apply(a->gtype, ilctx));
 			} else XBREAK(e->tag != generic_type_tag_none);
 		//
 		} else {
@@ -247,40 +248,6 @@ generic_type* generic_type_apply(generic_type* self, il_context* ilctx) {
 	return copy;
 }
 
-generic_type* generic_type_build(generic_type* self, il_context* ilctx) {
-	vector* type_args = NULL;
-	if(ilctx->type_args_vec->length > 0) {
-		type_args = (vector*)vector_top(ilctx->type_args_vec);
-	}
-	if(type_args == NULL || type_args->length == 0) {
-		return self;
-	}
-//	generic_type* a = vector_at(type_args, self->virtual_type_index);
-	generic_type* ret = NULL;
-	if(self->core_type != NULL) {
-		ret = generic_type_new(self->core_type);
-		ret->virtual_type_index = self->virtual_type_index;
-		ret->tag = self->tag;
-	} else {
-		if(self->tag == generic_type_tag_method) {
-			//vector* type_args = (vector*)vector_top(ilctx->type_args_vec);
-			il_type_argument* temp = vector_at(type_args, self->virtual_type_index);
-			ret = generic_type_clone(temp->gtype);
-		} else {
-			type* tp = vector_top(ilctx->type_vec);
-			generic_type* gtp = vector_at(tp->generic_self->type_args_list, self->virtual_type_index);
-			ret = generic_type_clone(gtp);
-		//	assert(false);
-		}
-	}
-	for(int i=0; i<self->type_args_list->length; i++) {
-		il_type_argument* ilarg = vector_at(type_args, i);
-		generic_type* bld = generic_type_build(ilarg->gtype, ilctx);
-		generic_type_addargs(ret, bld);
-	}
-	return ret;
-}
-
 vector* generic_type_rule(generic_type* self, il_context* ilctx) {
 	if(self->core_type != NULL) {
 		return NULL;
@@ -294,9 +261,12 @@ vector* generic_type_rule(generic_type* self, il_context* ilctx) {
 			tp = ctor->parent;
 			assert(tp != NULL);
 		} else {
-			//generic_type* gt = (generic_type*)vector_top(ilctx->receiver_vec);
-			tp = (type*)vector_top(ilctx->type_vec);
-			//tp = gt->core_type;
+			if(ilctx->find_static > 0) {
+				tp = (type*)vector_top(ilctx->type_vec);
+			} else {
+				generic_type* gt = (generic_type*)vector_top(ilctx->receiver_vec);
+				tp = gt->core_type;
+			}
 		}
 		//type* tp = self->core_type;
 		vector* params = type_parameter_list(tp);

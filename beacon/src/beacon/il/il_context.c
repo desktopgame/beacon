@@ -16,6 +16,7 @@ il_context * il_context_new() {
 	ret->receiver_vec = vector_new();
 	ret->type_args_vec = vector_new();
 	ret->eval_ctor_vec = vector_new();
+	ret->find_static = 0;
 	return ret;
 }
 

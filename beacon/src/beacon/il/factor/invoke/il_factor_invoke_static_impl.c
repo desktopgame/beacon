@@ -129,13 +129,18 @@ static void il_factor_invoke_static_check(il_factor_invoke_static * self, enviro
 	int temp = -1;
 //	XSTREQ(self->name, "write");
 	il_type_argument_resolve(self->type_args, ilctx);
+	//環境を設定
 	vector_push(ilctx->type_args_vec, self->type_args);
+	ilctx->find_static++;
+	//メソッドを検索
 	self->m = class_find_smethod(cls, self->name, self->args, env, ilctx, &temp);
 	self->index = temp;
 	//メソッドが見つからない
 	if(temp == -1) {
 		il_error_report(ilerror_undefined_method, self->name);
 	}
+	//元に戻す
+	ilctx->find_static--;
 	vector_pop(ilctx->type_args_vec);
 }
 

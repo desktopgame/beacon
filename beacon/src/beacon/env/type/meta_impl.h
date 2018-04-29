@@ -56,4 +56,6 @@ constructor* meta_find_ctor(vector* ctor_vec, vector* ilargs, struct enviroment*
 
 
 constructor* meta_find_rctor(vector* ctor_vec, vector* args, int* outIndex);
+
+bool meta_rule_valid(vector* type_params, vector* type_args, il_context* ilctx);
 #endif // !SIGNAL_ENV_META_H
