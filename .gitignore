@@ -5,7 +5,8 @@ Debug/
 
 # Prerequisites
 *.d
-*.code-workspace
+.vscode/c_cpp_properties.json
+.vscode/settings.json
 
 # Object files
 *.o
