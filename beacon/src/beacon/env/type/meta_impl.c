@@ -34,7 +34,9 @@ int meta_calc_score(vector* params, vector* ilargs, enviroment* env, il_context*
 		if (argType->core_type != CL_NULL) {
 			dist = generic_type_distance(
 				generic_type_apply(param->gtype, ilctx),
-				generic_type_apply(argType, ilctx),
+			//	generic_type_apply(argType, ilctx),
+			//	param->gtype,
+				argType,
 				ilctx
 			);
 		}
@@ -103,9 +105,14 @@ method * meta_find_method(vector * method_vec, const char * name, vector * ilarg
 		}
 		//もっともスコアの高いメソッドを選択する
 		vector_push(ilctx->method_vec, m);
-		ilctx->find_instance++;
+		if(modifier_is_static(m->modifier)) {
+			ilctx->find_static++;
+		} else ilctx->find_instance++;
 		int score = meta_calc_score(m->parameter_list, ilargs, env, ilctx);
-		ilctx->find_instance--;
+		
+		if(modifier_is_static(m->modifier)) {
+			ilctx->find_static--;
+		} else ilctx->find_instance--;
 		vector_pop(ilctx->method_vec);
 		if(score == -1) {
 			continue;

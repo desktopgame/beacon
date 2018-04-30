@@ -53,12 +53,21 @@ generic_type* import_manager_resolve(import_manager* self, namespace_* scope, ge
 			parameterized->tag = generic_type_tag_method;
 			parameterized->virtual_type_index = method_for_generic_index(m, fqcn->fqcn->name);
 			parameterized->u.method_ = m;
+			found = (parameterized->virtual_type_index != -1);
+		}
+		if(!found && ilctx->ctor_vec->length > 0) {
+			type* container = (type*)vector_top(ilctx->type_vec);
+			parameterized->tag = generic_type_tag_ctor;
+			parameterized->virtual_type_index = type_for_generic_index(container, fqcn->fqcn->name);
+			parameterized->u.type_ = container;
+			found = (parameterized->virtual_type_index != -1);
 		}
 		if(!found) {
 			type* container = (type*)vector_top(ilctx->type_vec);
 			parameterized->tag = generic_type_tag_class;
 			parameterized->virtual_type_index = type_for_generic_index(container, fqcn->fqcn->name);
 			parameterized->u.type_ = container;
+			found = (parameterized->virtual_type_index != -1);
 		}
 		assert(fqcn->type_args->length == 0);
 		return parameterized;
@@ -78,7 +87,8 @@ generic_type* import_manager_resolve(import_manager* self, namespace_* scope, ge
 	assert(core_type->tag != type_enum);
 	for (int i = 0; i < fqcn->type_args->length; i++) {
 		generic_cache* e = (generic_cache*)vector_at(fqcn->type_args, i);
-		generic_type* child = generic_cache_gtype(e, scope, ilctx);
+		//generic_type* child = generic_cache_gtype(e, scope, ilctx);
+		generic_type* child = import_manager_resolve(self, scope, e, ilctx);
 		generic_type_addargs(normalGType, child);
 	}
 	return normalGType;

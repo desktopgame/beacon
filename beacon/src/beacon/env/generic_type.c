@@ -104,15 +104,8 @@ void generic_type_lostownership(generic_type* a) {
 
 void generic_type_addargs(generic_type* self, generic_type* a) {
 	assert(a != NULL);
-//	assert(a->tag == generic_type_tag_class || 
-//	       a->tag == generic_type_tag_method ||
-//		   a->tag == generic_type_tag_none);
 	generic_type_validate(a);
 	vector_push(self->type_args_list, a);
-	if(self->type_args_list->length >= 2) {
-		//generic_type_print(self);
-		//printf("\n");
-	}
 }
 
 int generic_type_distance(generic_type * self, generic_type * other, il_context* ilctx) {
@@ -231,6 +224,16 @@ generic_type* generic_type_apply(generic_type* self, il_context* ilctx) {
 				//generic_type* a = vector_at(type_args, e->virtual_type_index);
 				il_type_argument* a = vector_at(type_args, e->virtual_type_index);
 				generic_type_addargs(copy, generic_type_apply(a->gtype, ilctx));
+			} else if(e->tag == generic_type_tag_ctor) {
+				vector* type_args = vector_top(ilctx->type_args_vec);
+				//generic_type* a = vector_at(type_args, e->virtual_type_index);
+				//il_type_argument* a = vector_at(type_args, e->virtual_type_index);
+				generic_type* g = generic_type_new(NULL);
+				g->virtual_type_index = e->virtual_type_index;
+				g->tag = generic_type_tag_ctor;
+				generic_type_addargs(copy, g);
+			} else if(e->tag == generic_type_tag_self) {
+				generic_type_addargs(copy, e);
 			} else XBREAK(e->tag != generic_type_tag_none);
 		//
 		} else {
@@ -252,7 +255,9 @@ vector* generic_type_rule(generic_type* self, il_context* ilctx) {
 	if(self->core_type != NULL) {
 		return NULL;
 	}
-	if(self->tag == generic_type_tag_class) {
+	if(self->tag == generic_type_tag_class ||
+	self->tag == generic_type_tag_self ||
+	self->tag == generic_type_tag_ctor) {
 		type* tp = NULL;
 		//コンストラクタを検索している場合は
 		//特別扱い

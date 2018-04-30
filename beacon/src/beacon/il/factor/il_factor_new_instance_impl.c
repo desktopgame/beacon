@@ -142,11 +142,13 @@ static void il_factor_new_instance_find(il_factor_new_instance * self, enviromen
 		return;
 	}
 	//XSTREQ(cls->name, "String");
+	ILCTX_PUSH_TYPE_ARGS(ilctx, self->type_args);
 	self->c = class_find_constructor(cls, self->argument_list, env, ilctx, &temp);
 	self->constructor_index = temp;
 	if(temp == -1) {
 		il_error_report(ilerror_undefined_ctor, cls->name);
 	}
+	ILCTX_POP_TYPE_ARGS(ilctx);
 	//*/
 }
 

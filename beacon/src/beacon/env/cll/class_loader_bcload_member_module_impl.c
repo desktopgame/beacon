@@ -70,8 +70,8 @@ void CLBC_fields_impl(class_loader* self, namespace_* scope, vector* ilfields, v
 void CLBC_methods_decl(class_loader* self, il_type* iltype, type* tp, vector* ilmethods, namespace_* scope) {
 	CL_ERROR(self);
 	il_context* ilctx = il_context_new();
-	vector_push(ilctx->namespace_vec, scope);
-	vector_push(ilctx->type_vec, tp);
+	ILCTX_PUSH_NAMESPACE(ilctx, scope);
+	ILCTX_PUSH_TYPE(ilctx, tp);
 	//class_* classz = tp->u.class_;
 	for (int i = 0; i < ilmethods->length; i++) {
 		//メソッド一覧から取り出す
@@ -113,8 +113,8 @@ void CLBC_methods_decl(class_loader* self, il_type* iltype, type* tp, vector* il
 		type_add_method(tp, method);
 		vector_pop(ilctx->method_vec);
 	}
-	vector_pop(ilctx->type_vec);
-	vector_pop(ilctx->namespace_vec);
+	ILCTX_POP_TYPE(ilctx);
+	ILCTX_POP_NAMESPACE(ilctx);
 	il_context_delete(ilctx);
 }
 
@@ -123,6 +123,7 @@ void CLBC_methods_impl(class_loader* self, namespace_* scope, il_type* iltype, t
 	//class_* classz = tp->u.class_;
 	CL_ERROR(self);
 	il_context* ilctx = il_context_new();
+	ILCTX_PUSH_TYPE(ilctx, tp);
 	for (int i = 0; i < sgmethods->length; i++) {
 		vector_item e = vector_at(sgmethods, i);
 		method* me = (method*)e;
@@ -139,7 +140,7 @@ void CLBC_methods_impl(class_loader* self, namespace_* scope, il_type* iltype, t
 		//FIXME:ILメソッドと実行時メソッドのインデックスが同じなのでとりあえず動く
 		//まずは仮引数の一覧にインデックスを割り振る
 		enviroment* env = enviroment_new();
-		vector_push(ilctx->type_vec, tp);
+		ILCTX_PUSH_TYPE(ilctx, tp);
 		env->context_ref = self;
 		for (int i = 0; i < ilmethod->parameter_list->length; i++) {
 			il_parameter* ilparam = (il_parameter*)vector_at(ilmethod->parameter_list, i);
@@ -162,12 +163,13 @@ void CLBC_methods_impl(class_loader* self, namespace_* scope, il_type* iltype, t
 			opcode_buf_add(env->buf, (vector_item)0);
 		}
 		//NOTE:ここなら名前空間を設定出来る
-		vector_push(ilctx->method_vec, me);
+		ILCTX_PUSH_METHOD(ilctx, me);
 		CLBC_body(self, ilmethod->statement_list, env, scope, ilctx);
 		me->u.script_method->env = env;
-		vector_pop(ilctx->method_vec);
-		vector_pop(ilctx->type_vec);
+		ILCTX_POP_METHOD(ilctx);
+		ILCTX_POP_TYPE(ilctx);
 	}
+	ILCTX_POP_TYPE(ilctx);
 	il_context_delete(ilctx);
 }
 
@@ -177,7 +179,7 @@ void CLBC_ctor_decl(class_loader* self, il_type* iltype, type* tp, namespace_* s
 	class_* classz = tp->u.class_;
 	vector* ilcons_list = iltype->u.class_->constructor_list;
 	il_context* ilctx = il_context_new();
-	vector_push(ilctx->type_vec, tp);
+	ILCTX_PUSH_TYPE(ilctx, tp);
 	for (int i = 0; i < ilcons_list->length; i++) {
 		vector_item e = vector_at(ilcons_list, i);
 		il_constructor* ilcons = (il_constructor*)e;
@@ -188,6 +190,7 @@ void CLBC_ctor_decl(class_loader* self, il_type* iltype, type* tp, namespace_* s
 		vector* parameter_list = cons->parameter_list;
 		cons->access = ilcons->access;
 		cons->parent = tp;
+		ILCTX_PUSH_CTOR(ilctx, cons);
 		//NOTE:ここでは戻り値の型,引数の型を設定しません
 		//     class_loader_sgload_complete参照
 		for (int i = 0; i < ilparams->length; i++) {
@@ -199,8 +202,9 @@ void CLBC_ctor_decl(class_loader* self, il_type* iltype, type* tp, namespace_* s
 		CLBC_parameter_list(self, scope, ilcons->parameter_list, cons->parameter_list, ilctx);
 		//vector_push(classz->constructor_list, cons);
 		class_add_constructor(classz, cons);
+		ILCTX_POP_CTOR(ilctx);
 	}
-	vector_pop(ilctx->type_vec);
+	ILCTX_POP_TYPE(ilctx);
 	il_context_delete(ilctx);
 }
 
@@ -217,15 +221,16 @@ void CLBC_ctor_impl(class_loader* self, il_type* iltype, type* tp) {
 	//オペコードが空っぽになっているコンストラクタの一覧
 
 	il_context* ilctx = il_context_new();
+	ILCTX_PUSH_TYPE(ilctx, tp);
 	for (int i = 0; i < constructors->length; i++) {
 		vector_item e = vector_at(constructors, i);
 		constructor* cons = (constructor*)e;
 		il_constructor* ilcons = (il_constructor*)vector_at(iltype->u.class_->constructor_list, i);
+		ILCTX_PUSH_CTOR(ilctx, cons);
 		//仮引数に型を設定する
 		//class_loader_sgload_params(self, scope, ilcons->parameter_list, cons->parameter_list);
 		//まずは仮引数の一覧にインデックスを割り振る
 		enviroment* env = enviroment_new();
-		vector_push(ilctx->type_vec, tp);
 		env->context_ref = self;
 		for (int i = 0; i < cons->parameter_list->length; i++) {
 			il_parameter* ilparam = (il_parameter*)vector_at(ilcons->parameter_list, i);
@@ -243,15 +248,16 @@ void CLBC_ctor_impl(class_loader* self, il_type* iltype, type* tp) {
 		//NOTE:ここなら名前空間を設定出来る
 		CLBC_body(self, ilcons->statement_list, env, scope, ilctx);
 		cons->env = env;
-		vector_pop(ilctx->type_vec);
+		ILCTX_POP_CTOR(ilctx);
 	}
+	ILCTX_POP_TYPE(ilctx);
 	il_context_delete(ilctx);
 }
 
 void CLBC_body(class_loader* self, vector* stmt_list, enviroment* dest, namespace_* range, il_context* ilctx) {
 	//	enviroment* ret = enviroment_new();
 	CL_ERROR(self);
-	vector_push(ilctx->namespace_vec, range);
+	ILCTX_PUSH_NAMESPACE(ilctx, range);
 	il_error_enter();
 	//まずは全てのステートメントを読み込む
 	for (int i = 0; i < stmt_list->length; i++) {
@@ -274,7 +280,7 @@ void CLBC_body(class_loader* self, vector* stmt_list, enviroment* dest, namespac
 		il_stmt_generate(s, dest, ilctx);
 	}
 	il_error_exit();
-	vector_pop(ilctx->namespace_vec);
+	ILCTX_POP_NAMESPACE(ilctx);
 //	return ret;
 }
 

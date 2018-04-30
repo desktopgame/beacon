@@ -10,6 +10,7 @@ il_context * il_context_new() {
 	ret->namespace_vec = vector_new();
 	ret->type_vec = vector_new();
 	ret->method_vec = vector_new();
+	ret->ctor_vec = vector_new();
 	ret->while_start_vec = vector_new();
 	ret->while_end_vec = vector_new();
 	ret->toplevel = false;
@@ -51,5 +52,6 @@ void il_context_delete(il_context * self) {
 	vector_delete(self->while_end_vec, vector_deleter_null);
 	vector_delete(self->receiver_vec, vector_deleter_null);
 	vector_delete(self->type_args_vec, vector_deleter_null);
+	vector_delete(self->ctor_vec, vector_deleter_null);
 	MEM_FREE(self);
 }
