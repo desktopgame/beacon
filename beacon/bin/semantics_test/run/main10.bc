@@ -1,0 +1,28 @@
+import "Object"
+import "Array"
+import "Int"
+import "Double"
+import "Char"
+import "String"
+import "Bool"
+import "Null"
+import "Void"
+import "Console"
+import "Vector"
+import "VectorIterator"
+
+import "Exception"
+import "StackTraceElement"
+import "Tuple"
+
+namespace beacon.x {
+	class MyClassB {
+		public:
+		static def test<|A, B|>(A arg, B arg2) -> beacon::x::Tuple<|A, B|> {
+			return new beacon::x::Tuple<|A, B|>(arg, arg2);
+		}
+	}
+}
+var t = beacon::x::MyClassB.test<|Int, String|>(10, "Hello");
+Console.writeLine(t.left);
+Console.writeLine(t.right);
