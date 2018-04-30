@@ -143,6 +143,7 @@ static void il_factor_new_instance_find(il_factor_new_instance * self, enviromen
 	}
 	//XSTREQ(cls->name, "String");
 	ILCTX_PUSH_TYPE_ARGS(ilctx, self->type_args);
+	il_type_argument_resolve(self->type_args, ilctx);
 	self->c = class_find_constructor(cls, self->argument_list, env, ilctx, &temp);
 	self->constructor_index = temp;
 	if(temp == -1) {

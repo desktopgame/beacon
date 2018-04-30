@@ -11,6 +11,7 @@
 #include "../object.h"
 #include "../method.h"
 #include "../../util/xassert.h"
+#include "../../util/text.h"
 #include "../../debug.h"
 #include <string.h>
 
@@ -32,8 +33,14 @@ int meta_calc_score(vector* params, vector* ilargs, enviroment* env, il_context*
 			return -1;
 		}
 		if (argType->core_type != CL_NULL) {
+			generic_type* a = generic_type_apply(param->gtype, ilctx);
+			generic_type_print(a);
+			text_printfln("");
+			generic_type_print(argType);
+			text_printfln("");
+			text_printfln("---");
 			dist = generic_type_distance(
-				generic_type_apply(param->gtype, ilctx),
+				a,
 			//	generic_type_apply(argType, ilctx),
 			//	param->gtype,
 				argType,
@@ -137,6 +144,10 @@ constructor* meta_find_ctor(vector* ctor_vec, vector* ilargs, struct enviroment*
 		if (ctor->parameter_list->length != ilargs->length) {
 			continue;
 		}
+		//与えられた型引数の妥当性を検証する
+		if(ilctx != NULL && !meta_rule_valid(ctor->parent->u.class_->type_parameter_list, ILCTX_TYPE_ARGS(ilctx), ilctx)) {
+			continue;
+		}
 		//引数がひとつもないので、
 		//型のチェックを行わない
 		if (ilargs->length == 0) {
@@ -145,7 +156,9 @@ constructor* meta_find_ctor(vector* ctor_vec, vector* ilargs, struct enviroment*
 		}
 		//もっともスコアの高いメソッドを選択する
 		ilctx->find_static++;
+		ILCTX_PUSH_CTOR(ilctx, ctor);
 		int score = meta_calc_score(ctor->parameter_list, ilargs, env, ilctx);
+		ILCTX_POP_CTOR(ilctx);
 		ilctx->find_static--;
 		if(score == -1) {
 			continue;

@@ -21,7 +21,7 @@ namespace beacon.lang {
 				this.proxy.set(this.length, o);
 			} elif (this.length >= this.capacity) {
 				var newLen = this.length + (this.length / 2);
-				var newArr = new Array(newLen);
+				var newArr = new Array<|T|>(newLen);
 				Array.copy<|T|>(this.proxy, 0, newArr, 0, this.length);
 				this.proxy = newArr;
 				this.proxy.set(this.length, o);

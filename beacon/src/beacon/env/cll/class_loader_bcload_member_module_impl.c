@@ -373,14 +373,17 @@ static void CLBC_chain_super(class_loader * self, il_type * iltype, type * tp, i
 	constructor* chainTarget = NULL;
 	int temp = 0;
 	if (chain->type == chain_type_this) {
+		ILCTX_PUSH_TYPE_ARGS(ilctx, tp->generic_self->type_args_list);
 		chainTarget = class_find_constructor(classz, chain->argument_list, env, ilctx, &temp);
 		opcode_buf_add(env->buf, (vector_item)op_chain_this);
 		opcode_buf_add(env->buf, (vector_item)(tp->absolute_index));
 	} else if (chain->type == chain_type_super) {
-		chainTarget = class_find_constructor(classz->super_class, chain->argument_list, env, ilctx, &temp);
+		ILCTX_PUSH_TYPE_ARGS(ilctx, classz->super_class->type_args_list);
+		chainTarget = class_find_constructor(classz->super_class->core_type->u.class_, chain->argument_list, env, ilctx, &temp);
 		opcode_buf_add(env->buf, op_chain_super);
 		opcode_buf_add(env->buf, classz->super_class->core_type->u.class_->classIndex);
 	}
+	ILCTX_POP_TYPE_ARGS(ilctx);
 	chain->c = chainTarget;
 	chain->constructor_index = temp;
 	opcode_buf_add(env->buf, (vector_item)temp);

@@ -219,19 +219,12 @@ generic_type* generic_type_apply(generic_type* self, il_context* ilctx) {
 				generic_type* tp = vector_top(ilctx->receiver_vec);
 				generic_type* instanced = vector_at(tp->type_args_list, e->virtual_type_index);
 				generic_type_addargs(copy, generic_type_apply(instanced, ilctx));
-			} else if(e->tag == generic_type_tag_method) {
+			} else if(e->tag == generic_type_tag_method ||
+			e->tag == generic_type_tag_ctor) {
 				vector* type_args = vector_top(ilctx->type_args_vec);
 				//generic_type* a = vector_at(type_args, e->virtual_type_index);
 				il_type_argument* a = vector_at(type_args, e->virtual_type_index);
 				generic_type_addargs(copy, generic_type_apply(a->gtype, ilctx));
-			} else if(e->tag == generic_type_tag_ctor) {
-				vector* type_args = vector_top(ilctx->type_args_vec);
-				//generic_type* a = vector_at(type_args, e->virtual_type_index);
-				//il_type_argument* a = vector_at(type_args, e->virtual_type_index);
-				generic_type* g = generic_type_new(NULL);
-				g->virtual_type_index = e->virtual_type_index;
-				g->tag = generic_type_tag_ctor;
-				generic_type_addargs(copy, g);
 			} else if(e->tag == generic_type_tag_self) {
 				generic_type_addargs(copy, e);
 			} else XBREAK(e->tag != generic_type_tag_none);
@@ -242,6 +235,14 @@ generic_type* generic_type_apply(generic_type* self, il_context* ilctx) {
 	}
 	assert(copy->core_type != NULL || count == 0);
 	copy->tag = generic_type_tag_none;
+	if(copy->core_type == NULL) {
+		copy->virtual_type_index = -1;
+		if(self->tag == generic_type_tag_ctor) {
+			vector* type_args = vector_top(ilctx->type_args_vec);
+			il_type_argument* a = vector_at(type_args, self->virtual_type_index);
+			copy->core_type = a->gtype->core_type;
+		}
+	}
 	if(copy->core_type == NULL) {
 		copy->tag = self->tag;
 		copy->virtual_type_index = self->virtual_type_index;

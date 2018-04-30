@@ -8,7 +8,8 @@
 		"files.associations": {
 			"parameter.h": "c",
 			"type_interface.h": "c",
-			"string.h": "c"
+			"string.h": "c",
+			"xassert.h": "c"
 		}
 	}
 }
