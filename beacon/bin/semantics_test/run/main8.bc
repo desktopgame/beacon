@@ -1,0 +1,33 @@
+import "Object"
+import "Array"
+import "Int"
+import "Double"
+import "Char"
+import "String"
+import "Bool"
+import "Null"
+import "Void"
+import "Console"
+import "Vector"
+import "VectorIterator"
+
+import "Exception"
+import "StackTraceElement"
+import "Tuple"
+
+namespace beacon.x {
+	class MyClass<|T|> {
+		public:
+		Vector<|T|> v;
+
+		ctor new() {
+			this.v = new Vector<|T|>();
+		}
+	}
+}
+
+var mc = new beacon::x::MyClass<|beacon::x::Tuple<|Int, String|>|>();
+var v = mc.v;
+v.push(new beacon::x::Tuple<|Int, String|>(10, "mcAAA"));
+v.push(new beacon::x::Tuple<|Int, String|>(3, "mcBBB"));
+v.push(new beacon::x::Tuple<|Int, String|>(1, "mcCCC"));
