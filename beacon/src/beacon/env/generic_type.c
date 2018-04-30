@@ -206,6 +206,15 @@ bool generic_type_bool(generic_type* self) {
 //Hash<String,List<Int>>
 generic_type* generic_type_apply(generic_type* self, il_context* ilctx) {
 	//ここで型変数が追加されちゃってた
+	if(self->core_type == NULL) {
+		//copy->virtual_type_index = -1;
+		if(self->tag == generic_type_tag_ctor) {
+			vector* type_args = vector_top(ilctx->type_args_vec);
+			il_type_argument* a = vector_at(type_args, self->virtual_type_index);
+			//copy->core_type = a->gtype->core_type;
+			self = a->gtype;
+		}
+	}
 	generic_type* copy = generic_type_new(self->core_type);
 	generic_type* e = NULL;
 	int count = 0;
@@ -235,14 +244,7 @@ generic_type* generic_type_apply(generic_type* self, il_context* ilctx) {
 	}
 	assert(copy->core_type != NULL || count == 0);
 	copy->tag = generic_type_tag_none;
-	if(copy->core_type == NULL) {
-		copy->virtual_type_index = -1;
-		if(self->tag == generic_type_tag_ctor) {
-			vector* type_args = vector_top(ilctx->type_args_vec);
-			il_type_argument* a = vector_at(type_args, self->virtual_type_index);
-			copy->core_type = a->gtype->core_type;
-		}
-	}
+	
 	if(copy->core_type == NULL) {
 		copy->tag = self->tag;
 		copy->virtual_type_index = self->virtual_type_index;
