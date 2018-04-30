@@ -111,16 +111,20 @@ method * meta_find_method(vector * method_vec, const char * name, vector * ilarg
 			return m;
 		}
 		//もっともスコアの高いメソッドを選択する
-		vector_push(ilctx->method_vec, m);
 		if(modifier_is_static(m->modifier)) {
 			ilctx->find_static++;
-		} else ilctx->find_instance++;
+			vector_push(ilctx->method_vec, m);
+		} else {
+			ilctx->find_instance++;
+		}
 		int score = meta_calc_score(m->parameter_list, ilargs, env, ilctx);
 		
 		if(modifier_is_static(m->modifier)) {
 			ilctx->find_static--;
-		} else ilctx->find_instance--;
 		vector_pop(ilctx->method_vec);
+		} else {
+			ilctx->find_instance--;
+		}
 		if(score == -1) {
 			continue;
 		}

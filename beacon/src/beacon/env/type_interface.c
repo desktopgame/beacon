@@ -6,6 +6,7 @@
 #include "type_parameter.h"
 #include "generic_type.h"
 #include "../util/text.h"
+#include "../util/xassert.h"
 #include <assert.h>
 #include <string.h>
 
@@ -116,6 +117,7 @@ void type_unlink(type * self) {
 int type_for_generic_index(type * self, char * name) {
 	assert(self->tag != type_enum);
 	vector* v = NULL;
+	XSTREQ(name, "A");
 	if (self->tag == type_class) v = self->u.class_->type_parameter_list;
 	if (self->tag == type_interface) v = self->u.interface_->type_parameter_list;
 	//全ての型変数と比べる

@@ -141,12 +141,15 @@ void CLBC_methods_impl(class_loader* self, namespace_* scope, il_type* iltype, t
 		//まずは仮引数の一覧にインデックスを割り振る
 		enviroment* env = enviroment_new();
 		ILCTX_PUSH_TYPE(ilctx, tp);
+		ILCTX_PUSH_METHOD(ilctx, me);
 		env->context_ref = self;
+		//XSTREQ(ilmethod->name, "test");
 		for (int i = 0; i < ilmethod->parameter_list->length; i++) {
 			il_parameter* ilparam = (il_parameter*)vector_at(ilmethod->parameter_list, i);
 			symbol_table_entry(
 				env->sym_table,
-				generic_cache_gtype(ilparam->fqcn, scope, ilctx),
+				import_manager_resolve(self->import_manager, scope, ilparam->fqcn, ilctx),
+//				generic_cache_gtype(ilparam->fqcn, scope, ilctx),
 				ilparam->name
 			);
 			//text_printf("%s ", ilparam->name);
@@ -163,7 +166,6 @@ void CLBC_methods_impl(class_loader* self, namespace_* scope, il_type* iltype, t
 			opcode_buf_add(env->buf, (vector_item)0);
 		}
 		//NOTE:ここなら名前空間を設定出来る
-		ILCTX_PUSH_METHOD(ilctx, me);
 		CLBC_body(self, ilmethod->statement_list, env, scope, ilctx);
 		me->u.script_method->env = env;
 		ILCTX_POP_METHOD(ilctx);
@@ -236,7 +238,8 @@ void CLBC_ctor_impl(class_loader* self, il_type* iltype, type* tp) {
 			il_parameter* ilparam = (il_parameter*)vector_at(ilcons->parameter_list, i);
 			symbol_table_entry(
 				env->sym_table,
-				generic_cache_gtype(ilparam->fqcn, scope, ilctx),
+			//	generic_cache_gtype(ilparam->fqcn, scope, ilctx),
+				import_manager_resolve(self->import_manager, scope, ilparam->fqcn, ilctx),
 				ilparam->name
 			);
 			//実引数を保存

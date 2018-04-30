@@ -1,0 +1,34 @@
+import "Object"
+import "Array"
+import "Int"
+import "Double"
+import "Char"
+import "String"
+import "Bool"
+import "Null"
+import "Void"
+import "Console"
+import "Vector"
+import "VectorIterator"
+
+import "Exception"
+import "StackTraceElement"
+import "Tuple"
+
+namespace beacon.x {
+	class MyClassA {
+		public:
+		static def test<|A|>(A arg, A arg2) -> Vector<|A|> {
+			var v = new Vector<|A|>();
+			v.push(arg);
+			v.push(arg2);
+			return v;
+		}
+	}
+}
+var v = beacon::x::MyClassA.test<|Int|>(10, 4);
+var iter = v.iterate();
+while(iter.hasNext()) {
+	var E = iter.next();
+	Console.writeLine(E);
+}
