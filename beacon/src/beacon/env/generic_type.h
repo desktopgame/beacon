@@ -147,12 +147,6 @@ generic_type* generic_type_apply(generic_type* self, struct il_context* ilctx);
 vector* generic_type_rule(generic_type* self, struct il_context* ilctx);
 
 /**
- * @param self
- * @return
- */
-generic_type* generic_type_clone(generic_type* self);
-
-/**
  * selfのルール群が other を満たすなら true.
  * @param self
  * @param other

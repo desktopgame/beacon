@@ -285,19 +285,6 @@ vector* generic_type_rule(generic_type* self, il_context* ilctx) {
 	return NULL;
 }
 
-generic_type* generic_type_clone(generic_type* self) {
-	generic_type* ret = generic_type_new(self->core_type);
-	vector* v = vector_new();
-	for(int i=0; i<self->type_args_list->length; i++) {
-		generic_type* e = vector_at(self->type_args_list, i);
-		vector_push(v, e);
-	}
-	ret->tag = self->tag;
-	ret->type_args_list = v;
-	ret->virtual_type_index = self->virtual_type_index;
-	return ret;
-}
-
 bool generic_type_rule_valid(vector* self, vector* other) {
 	assert(self != NULL);
 	assert(other != NULL);

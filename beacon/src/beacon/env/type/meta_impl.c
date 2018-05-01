@@ -34,11 +34,6 @@ int meta_calc_score(vector* params, vector* ilargs, enviroment* env, il_context*
 		}
 		if (argType->core_type != CL_NULL) {
 			generic_type* a = generic_type_apply(param->gtype, ilctx);
-			generic_type_print(a);
-			text_printfln("");
-			generic_type_print(argType);
-			text_printfln("");
-			text_printfln("---");
 			dist = generic_type_distance(
 				a,
 			//	generic_type_apply(argType, ilctx),
