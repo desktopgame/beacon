@@ -26,8 +26,9 @@ typedef struct slot {
 } slot;
 
 static void* defaultRealloc(void * block, size_t newSize, const char * filename, int lineno);
+static slot* slot_create_or_add(size_t size);
 static slot* slot_new();
-static void slot_init(const char* filename, int lineno, void* arena, size_t size);
+static void slot_check_init(const char* filename, int lineno, void* arena, size_t size);
 static void slot_add(slot* head, slot* a);
 static void* slot_realloc(slot* head, void* arena, size_t newSize);
 static int slot_remove(slot* head, void* arena);
@@ -48,7 +49,7 @@ void * mem_malloc(size_t size, const char * filename, int lineno) {
 	void* ret = malloc(size);
 #if defined(DEBUG)
 	if (gMemTrace) {
-		slot_init(filename, lineno, ret, size);
+		slot_check_init(filename, lineno, ret, size);
 	}
 #endif
 	if (ret == NULL) {
@@ -112,7 +113,7 @@ void mem_mark(void* p, size_t size, const char* filename, int lineno) {
 	}
 #if defined(DEBUG)
 	if (gMemTrace) {
-		slot_init(filename, lineno, p, size);
+		slot_check_init(filename, lineno, p, size);
 	}
 #endif
 }
@@ -153,32 +154,39 @@ static slot* slot_new() {
 	return ret;
 }
 
-static void slot_init(const char* filename, int lineno, void* arena, size_t size) {
+static void slot_check_init(const char* filename, int lineno, void* arena, size_t size) {
 	//スロットの作成
 	assert(arena != NULL);
+	slot* ptr = slot_create_or_add(size);
+	ptr->filename = filename;
+	ptr->lineno = lineno;
+	ptr->arena = arena;
+	ptr->size = size;
+}
+
+static slot* slot_create_or_add(size_t size) {
 	slot* ptr = NULL;
 	if (gSlotHead == NULL) {
+		//まだ連結リストの先頭を作っていないならそれを作って返す
 		gSlotHead = slot_new();
 		ptr = gSlotHead;
 		gMemCounter = 1;
 		gMemNotFoundRealloc = 0;
 		gMemNotFoundFree = 0;
 		gMemUsedMemory = size;
-	} else {
-		ptr = slot_new();
-		slot_add(gSlotHead, ptr);
-
-		gMemCounter++;
-		gMemUsedMemory += size;
-		ptr->index = gMemCounter;
-		if (ptr->index == gMemBreak) {
-			mem_input();
-		}
+		return ptr;
 	}
-	ptr->filename = filename;
-	ptr->lineno = lineno;
-	ptr->arena = arena;
-	ptr->size = size;
+	//連結リストにくっつけて返す
+	ptr = slot_new();
+	slot_add(gSlotHead, ptr);
+
+	gMemCounter++;
+	gMemUsedMemory += size;
+	ptr->index = gMemCounter;
+	if (ptr->index == gMemBreak) {
+		mem_input();
+	}
+	return ptr;
 }
 
 static void slot_add(slot* head, slot* a) {
