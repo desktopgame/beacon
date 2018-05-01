@@ -18,7 +18,7 @@ void bc_object_init() {
 
 //private
 static void bc_object_nativeToString(method* parent, vm* vm, enviroment* env) {
-	object* self = (object*)vector_top(vm->value_stack);
+	object* self = (object*)vector_at(vm->ref_stack, 0);
 	string_buffer* sb = string_buffer_new();
 	//参照型
 	if (self->tag == object_ref) {

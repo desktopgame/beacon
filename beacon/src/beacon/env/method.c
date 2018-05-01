@@ -5,6 +5,8 @@
 #include "../util/text.h"
 #include "type_interface.h"
 #include "parameter.h"
+#include "namespace.h"
+#include "object.h"
 #include "../util/mem.h"
 #include "../vm/vm.h"
 #include "type_parameter.h"
@@ -28,11 +30,28 @@ method * method_new(const char * name) {
 	return ret;
 }
 
-void method_execute(method* self, vm * vm, enviroment* env) {
+void method_execute(method* self, vm * vmc, enviroment* env) {
 	if (self->type == method_type_script) {
-		script_method_execute(self->u.script_method, self, vm, env);
+		script_method_execute(self->u.script_method, self, vmc, env);
 	} else if (self->type == method_type_native) {
-		native_method_execute(self->u.native_method, self, vm, env);
+		vm* a = vm_sub(vmc);
+		//レシーバも
+		if(!modifier_is_static(self->modifier)) {
+			vector_assign(a->ref_stack, 0, vector_pop(vmc->value_stack));
+		}
+		//引数を引き継ぐ
+		int len = self->parameter_list->length;
+		for(int i=0; i<len; i++) {
+			object* ARG = vector_pop(vmc->value_stack);
+			assert(ARG != NULL);
+			vector_assign(a->ref_stack, (len - i), ARG);
+		}
+		native_method_execute(self->u.native_method, self, a, env);
+		//戻り値を残す
+		if(self->return_gtype != CL_VOID->generic_self) {
+			vector_push(vmc->value_stack, vector_pop(a->value_stack));
+		}
+		vm_delete(a);
 	}
 }
 

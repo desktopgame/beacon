@@ -28,17 +28,11 @@ void bc_array_init() {
 type * bc_array_class() {
 	namespace_* lang = namespace_lang();
 	return namespace_get_type(lang, "Array");
-	//if (gSgArrayType == NULL) {
-	//	namespace_* lang = namespace_lang();
-	//	gSgArrayType = namespace_get_type(lang, "Array");
-	//}
-	//return gSgArrayType;
 }
 
 object * bc_array_new(int length, vm * vmc) {
 	type* arrayType = bc_array_class();
 	object* ret = class_new_rinstance(arrayType->u.class_, vmc, 1, object_int_new(length));
-//	class_
 	return ret;
 }
 
@@ -69,16 +63,17 @@ static void bc_array_nativeInit(method* parent, vm* vm, enviroment* env) {
 }
 
 static void bc_array_nativeSet(method* parent, vm* vm, enviroment* env) {
-	object* self = vector_pop(vm->value_stack);
-	object* val = vector_pop(vm->value_stack);
-	object* idx = vector_pop(vm->value_stack);
+	object* self = vector_at(vm->ref_stack, 0);
+	object* idx = vector_at(vm->ref_stack, 1);
+	object* val = vector_at(vm->ref_stack, 2);
 	assert(idx->tag == object_int);
 	vector_assign(self->native_slot_vec, idx->u.int_, val);
 }
 
 static void bc_array_nativeGet(method* parent, vm* vm, enviroment* env) {
-	object* self = vector_pop(vm->value_stack);
-	object* idx = vector_pop(vm->value_stack);
+	object* self = vector_at(vm->ref_stack, 0);
+	object* idx = vector_at(vm->ref_stack, 1);
+//	object* a = vector_at(vm->ref_stack, 2);
 	assert(idx->tag == object_int);
 	object* ret = (object*)vector_at(self->native_slot_vec, idx->u.int_);
 	//text_printfln("array get %d", idx->u.int_);
@@ -86,11 +81,11 @@ static void bc_array_nativeGet(method* parent, vm* vm, enviroment* env) {
 }
 
 static void bc_array_nativeCopy(method* parent, vm* vm, enviroment* env) {
-	object* length = vector_pop(vm->value_stack);
-	object* dstOffset = vector_pop(vm->value_stack);
-	object* dst = vector_pop(vm->value_stack);
-	object* srcOffset = vector_pop(vm->value_stack);
-	object* src = vector_pop(vm->value_stack);
+	object* src = vector_at(vm->ref_stack, 1);
+	object* srcOffset = vector_at(vm->ref_stack, 2);
+	object* dst = vector_at(vm->ref_stack, 3);
+	object* dstOffset = vector_at(vm->ref_stack, 4);
+	object* length = vector_at(vm->ref_stack, 5);
 	int srcLen = src->native_slot_vec->length;
 	int dstLen = dst->native_slot_vec->length;
 	int cpyLen = length->u.int_;

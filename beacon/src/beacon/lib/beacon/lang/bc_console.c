@@ -23,7 +23,7 @@ void bc_console_init() {
 
 //private
 static void bc_console_writeLine(method* parent, vm* vm, enviroment* env) {
-	object* o = (object*)vector_pop(vm->value_stack);
+	object* o = vector_at(vm->ref_stack, 1);
 	if (o->tag == object_int) {
 		text_printf("%d\n", o->u.int_);
 	} else if(o->tag == object_double) {
@@ -41,7 +41,7 @@ static void bc_console_writeLine(method* parent, vm* vm, enviroment* env) {
 }
 
 static void bc_console_write(method* parent, vm* vm, enviroment* env) {
-	object* o = (object*)vector_pop(vm->value_stack);
+	object* o = vector_at(vm->ref_stack, 1);
 	if (o->tag == object_int) {
 		text_printf("%d", o->u.int_);
 	}  else if (o->tag == object_double) {

@@ -3,6 +3,7 @@
 #include "method.h"
 #include "type_interface.h"
 #include "type_impl.h"
+#include "object.h"
 #include "../vm/vm.h"
 #include "../util/mem.h"
 #include "native_method_ref.h"

@@ -13,8 +13,8 @@ void bc_char_init() {
 
 //private
 static void bc_char_nativeInit(method* parent, vm* vmc, enviroment* env) {
-	object* ch = vector_pop(vmc->value_stack);
 	object* self = vector_at(vmc->ref_stack, 0);
+	object* ch = vector_at(vmc->ref_stack, 1);
 
 	self->u.char_ = ch->u.char_;
 	self->tag = object_char;

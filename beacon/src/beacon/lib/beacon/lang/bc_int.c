@@ -12,8 +12,8 @@ void bc_int_init() {
 }
 //private
 static void bc_int_nativeInit(method* parent, vm* vmc, enviroment* env) {
-	object* i = vector_pop(vmc->value_stack);
 	object* self = vector_at(vmc->ref_stack, 0);
+	object* i = vector_at(vmc->ref_stack, 1);
 
 	self->u.int_ = i->u.int_;
 	self->tag = object_int;
