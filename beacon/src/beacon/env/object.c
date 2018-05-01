@@ -60,7 +60,7 @@ object * object_string_malloc(const char * s, const char* filename, int lineno) 
 	arr->tag = object_array;
 	type* arrType = sg_array_class();
 	type* strType = namespace_get_type(namespace_lang(), "String");
-	arr->gtype = generic_type_make(arrType);
+	arr->gtype = generic_type_ref(arrType);
 	arr->vptr = type_vtable(arrType);
 	//ボックス化
 	char* itr = s;

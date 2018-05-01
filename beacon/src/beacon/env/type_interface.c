@@ -143,7 +143,7 @@ generic_type * type_find_impl(type * self, type * a) {
 		while (ptr != NULL) {
 			if (a->tag == type_class &&
 				ptr == a->u.class_) {
-				return generic_type_make(ptr->parent);
+				return generic_type_ref(ptr->parent);
 			}
 			if (a->tag == type_interface) {
 				for (int i = 0; i < ptr->impl_list->length; i++) {

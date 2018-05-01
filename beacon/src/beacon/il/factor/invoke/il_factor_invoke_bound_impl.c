@@ -110,13 +110,13 @@ static void resolve_non_default(il_factor_invoke_bound * self, enviroment * env,
 //	generic_type* receivergType = tp->generic_self;
 	generic_type* rgtp  = self->m->return_gtype;
 	if(rgtp->tag == generic_type_tag_class) {
-		self->resolved = generic_type_make(NULL);
+		self->resolved = generic_type_new(NULL);
 		self->resolved->tag = generic_type_tag_class;
 		self->resolved->virtual_type_index = rgtp->virtual_type_index;
 	} else if(rgtp->tag == generic_type_tag_method) {
 		//メソッドに渡された型引数を参照する
 		generic_type* instanced_type = (generic_type*)vector_at(self->type_args, rgtp->virtual_type_index);
-		self->resolved = generic_type_make(instanced_type->core_type);
+		self->resolved = generic_type_new(instanced_type->core_type);
 		self->resolved->tag = generic_type_tag_class;
 	}
 }

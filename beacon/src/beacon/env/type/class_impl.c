@@ -112,7 +112,7 @@ void class_alloc_fields(class_ * self, object * o) {
 		//*/
 	}
 	class_create_vtable(self);
-	o->gtype = generic_type_make(self->parent);
+	o->gtype = generic_type_ref(self->parent);
 	o->vptr = self->vt;
 }
 

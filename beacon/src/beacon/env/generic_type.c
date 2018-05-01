@@ -35,26 +35,7 @@ generic_type* generic_type_validate(generic_type* self) {
 //	#endif
 }
 
-generic_type* generic_type_make(type* core_type) {
-	/*
-	if(core_type == NULL) {
-		return generic_type_new(core_type);
-	}
-	generic_type* ret = generic_type_new(core_type);
-	int len = type_type_parameter_len(core_type);
-	for(int i=0; i<len; i++) {
-		generic_type* a = generic_type_new(NULL);
-		a->tag = generic_type_tag_class;
-		a->virtual_type_index = i;
-		a->u.type_ = core_type;
-		generic_type_addargs(ret, a);
-	}
-	if(core_type->tag == type_class &&
-	   !strcmp(core_type->u.class_->name, "Array")) {
-		assert((len == 1));
-	}
-	return ret;
-	*/
+generic_type* generic_type_ref(type* core_type) {
 	if(core_type == NULL) {
 		return generic_type_new(core_type);
 	}

@@ -56,12 +56,12 @@ typedef struct generic_type {
 generic_type* generic_type_validate(generic_type* self);
 
 /**
- * 型変数つきの型宣言を作成し、
- * また type の持つクラス型変数を追加します。
+ * core_typeがNULL以外なら generic_selfを参照し、
+ * NULLなら新規作成します。
  * @param core_type
  * @return
  */
-generic_type* generic_type_make(struct type* core_type);
+generic_type* generic_type_ref(struct type* core_type);
 
 /**
  * 新しい型変数つきの型宣言を作成します.

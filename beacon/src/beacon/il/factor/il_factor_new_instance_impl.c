@@ -78,7 +78,7 @@ generic_type* il_factor_new_instance_eval(il_factor_new_instance * self, envirom
 	}
 	//型引数がないのでそのまま
 	if (self->type_args->length == 0) {
-		generic_type* ret = generic_type_make(self->c->parent);
+		generic_type* ret = generic_type_ref(self->c->parent);
 		generic_type_validate(ret);
 		//text_printf("new: ");
 		//generic_type_print(ret);
