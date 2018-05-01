@@ -11,7 +11,9 @@
 			"string.h": "c",
 			"xassert.h": "c",
 			"il_context.h": "c",
-			"type_impl.h": "c"
+			"type_impl.h": "c",
+			"bc_library_impl.h": "c",
+			"text.h": "c"
 		}
 	}
 }

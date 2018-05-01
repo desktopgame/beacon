@@ -3,7 +3,7 @@
 #define BEACON_LIB_SIGNAL_LANG_BOOL_H
 
 /**
- * signal::lang::Boolクラスを初期化します.
+ * beacon::lang::Boolクラスを初期化します.
  */
-void sg_bool_init();
+void bc_bool_init();
 #endif // !SIGNAL_LIB_SIGNAL_LANG_BOOL_H

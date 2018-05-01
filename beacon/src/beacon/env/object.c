@@ -9,9 +9,8 @@
 #include "script_context.h"
 #include <assert.h>
 #include "type_impl.h"
-#include "../lib/signal/lang/sg_array.h"
+#include "../lib/beacon/lang/bc_array.h"
 #include "heap.h"
-#include "../lib/signal/lang/sg_array.h"
 #include "generic_type.h"
 
 //proto
@@ -58,7 +57,7 @@ object * object_string_malloc(const char * s, const char* filename, int lineno) 
 	//配列を生成
 	object* arr = object_ref_new();
 	arr->tag = object_array;
-	type* arrType = sg_array_class();
+	type* arrType = bc_array_class();
 	type* strType = namespace_get_type(namespace_lang(), "String");
 	arr->gtype = generic_type_ref(arrType);
 	arr->vptr = type_vtable(arrType);
@@ -182,7 +181,7 @@ void object_paintall(object* self, object_paint paint) {
 		}
 	}
 	//配列型ならスロットも全てマーク
-	type* arrayType = sg_array_class();
+	type* arrayType = bc_array_class();
 	if (self->tag == object_ref &&
 		self->gtype->core_type == arrayType) {
 		for (int i = 0; i < self->native_slot_vec->length; i++) {

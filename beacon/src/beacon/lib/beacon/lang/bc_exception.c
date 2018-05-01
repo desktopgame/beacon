@@ -1,22 +1,22 @@
-#include "sg_exception.h"
-#include "../../sg_library_impl.h"
+#include "bc_exception.h"
+#include "../../bc_library_impl.h"
 #include "../../../env/constructor.h"
 #include "../../../env/class_loader.h"
 #include "../../../vm/line_range.h"
 #include "../../../env/field.h"
 #include "../../../env/heap.h"
-#include "sg_array.h"
+#include "bc_array.h"
 //proto
-static void sg_exception_nativeInit(method* parent, vm* vm, enviroment* env);
+static void bc_exception_nativeInit(method* parent, vm* vm, enviroment* env);
 
-void sg_exception_init() {
+void bc_exception_init() {
 	namespace_* lang = namespace_lang();
 	class_* excClass = class_new_preload("Exception");
 	namespace_add_type(lang, type_wrap_class(excClass));
-	class_define_native_method(excClass, "nativeInit", sg_exception_nativeInit);
+	class_define_native_method(excClass, "nativeInit", bc_exception_nativeInit);
 }
 //private
-static void sg_exception_nativeInit(method* parent, vm* vmc, enviroment* env) {
+static void bc_exception_nativeInit(method* parent, vm* vmc, enviroment* env) {
 	namespace_* lang = namespace_lang();
 	class_* stackTraceElementClass = namespace_get_class(lang, "StackTraceElement");
 	class_* exceptionClass = namespace_get_class(lang, "Exception");
@@ -41,9 +41,9 @@ static void sg_exception_nativeInit(method* parent, vm* vmc, enviroment* env) {
 		temp = temp->parent;
 	} while (temp != NULL);
 	//配列へ
-	object* arr = sg_array_new(stackTraceElementVec->length, vmc);
+	object* arr = bc_array_new(stackTraceElementVec->length, vmc);
 	for (int i = 0; i < stackTraceElementVec->length; i++) {
-		sg_array_set(arr, i, vector_at(stackTraceElementVec, i));
+		bc_array_set(arr, i, vector_at(stackTraceElementVec, i));
 	}
 	//Exception#stackTraceをここで初期化する
 	int tempi = 0;

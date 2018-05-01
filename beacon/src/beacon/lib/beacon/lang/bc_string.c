@@ -1,25 +1,25 @@
-#include "sg_string.h"
-#include "../../sg_library_impl.h"
+#include "bc_string.h"
+#include "../../bc_library_impl.h"
 #include <assert.h>
 
 //proto
-static void sg_string_nativeInit(method* parent, vm* vm, enviroment* env);
+static void bc_string_nativeInit(method* parent, vm* vm, enviroment* env);
 
-void sg_string_init() {
+void bc_string_init() {
 	namespace_* lang = namespace_lang();
 	class_* stringClass = class_new_preload("String");
 	namespace_add_type(lang, type_wrap_class(stringClass));
-	class_define_native_method(stringClass, "nativeInit", sg_string_nativeInit);
+	class_define_native_method(stringClass, "nativeInit", bc_string_nativeInit);
 }
 
-string_buffer * sg_string_raw(object* self) {
+string_buffer * bc_string_raw(object* self) {
 	vector_item e = vector_at(self->native_slot_vec, 0);
 	assert(self->tag == object_string);
 	return (string_buffer*)e;
 }
 
 //private
-static void sg_string_nativeInit(method* parent, vm* vm, enviroment* env) {
+static void bc_string_nativeInit(method* parent, vm* vm, enviroment* env) {
 	object* self = vector_at(vm->ref_stack, 0);
 	//プログラムの中で ダブルクォート("HelloWorld") によって
 	//文字列が作成された場合には object_string_new() 

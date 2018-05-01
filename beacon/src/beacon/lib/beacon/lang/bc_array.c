@@ -1,5 +1,5 @@
-#include "sg_array.h"
-#include "../../sg_library_impl.h"
+#include "bc_array.h"
+#include "../../bc_library_impl.h"
 #include "../../../env/field.h"
 #include "../../../env/constructor.h"
 #include "../../../env/exception.h"
@@ -8,24 +8,24 @@
 #include <assert.h>
 
 //proto
-static void sg_array_nativeInit(method* parent, vm* vm, enviroment* env);
-static void sg_array_nativeSet(method* parent, vm* vm, enviroment* env);
-static void sg_array_nativeGet(method* parent, vm* vm, enviroment* env);
-static void sg_array_nativeCopy(method* parent, vm* vm, enviroment* env);
+static void bc_array_nativeInit(method* parent, vm* vm, enviroment* env);
+static void bc_array_nativeSet(method* parent, vm* vm, enviroment* env);
+static void bc_array_nativeGet(method* parent, vm* vm, enviroment* env);
+static void bc_array_nativeCopy(method* parent, vm* vm, enviroment* env);
 
 static type* gSgArrayType = NULL;
 
-void sg_array_init() {
+void bc_array_init() {
 	namespace_* lang = namespace_lang();
 	class_* arrayClass = class_new_preload("Array");
 	namespace_add_type(lang, type_wrap_class(arrayClass));
-	class_define_native_method(arrayClass, "nativeInit", sg_array_nativeInit);
-	class_define_native_method(arrayClass, "nativeSet", sg_array_nativeSet);
-	class_define_native_method(arrayClass, "nativeGet", sg_array_nativeGet);
-	class_define_native_method(arrayClass, "nativeCopy", sg_array_nativeCopy);
+	class_define_native_method(arrayClass, "nativeInit", bc_array_nativeInit);
+	class_define_native_method(arrayClass, "nativeSet", bc_array_nativeSet);
+	class_define_native_method(arrayClass, "nativeGet", bc_array_nativeGet);
+	class_define_native_method(arrayClass, "nativeCopy", bc_array_nativeCopy);
 }
 
-type * sg_array_class() {
+type * bc_array_class() {
 	namespace_* lang = namespace_lang();
 	return namespace_get_type(lang, "Array");
 	//if (gSgArrayType == NULL) {
@@ -35,22 +35,22 @@ type * sg_array_class() {
 	//return gSgArrayType;
 }
 
-object * sg_array_new(int length, vm * vmc) {
-	type* arrayType = sg_array_class();
+object * bc_array_new(int length, vm * vmc) {
+	type* arrayType = bc_array_class();
 	object* ret = class_new_rinstance(arrayType->u.class_, vmc, 1, object_int_new(length));
 //	class_
 	return ret;
 }
 
-void sg_array_set(object * arr, int index, object * o) {
+void bc_array_set(object * arr, int index, object * o) {
 	vector_assign(arr->native_slot_vec, index, o);
 }
 
-object * sg_array_get(object * arr, int index) {
+object * bc_array_get(object * arr, int index) {
 	return (object*)vector_at(arr->native_slot_vec, index);
 }
 //private
-static void sg_array_nativeInit(method* parent, vm* vm, enviroment* env) {
+static void bc_array_nativeInit(method* parent, vm* vm, enviroment* env) {
 	type* tp = parent->parent;
 	//Array#lengthを取り出す
 	int temp = 0;
@@ -68,7 +68,7 @@ static void sg_array_nativeInit(method* parent, vm* vm, enviroment* env) {
 	}
 }
 
-static void sg_array_nativeSet(method* parent, vm* vm, enviroment* env) {
+static void bc_array_nativeSet(method* parent, vm* vm, enviroment* env) {
 	object* self = vector_pop(vm->value_stack);
 	object* val = vector_pop(vm->value_stack);
 	object* idx = vector_pop(vm->value_stack);
@@ -76,7 +76,7 @@ static void sg_array_nativeSet(method* parent, vm* vm, enviroment* env) {
 	vector_assign(self->native_slot_vec, idx->u.int_, val);
 }
 
-static void sg_array_nativeGet(method* parent, vm* vm, enviroment* env) {
+static void bc_array_nativeGet(method* parent, vm* vm, enviroment* env) {
 	object* self = vector_pop(vm->value_stack);
 	object* idx = vector_pop(vm->value_stack);
 	assert(idx->tag == object_int);
@@ -85,7 +85,7 @@ static void sg_array_nativeGet(method* parent, vm* vm, enviroment* env) {
 	vector_push(vm->value_stack, ret);
 }
 
-static void sg_array_nativeCopy(method* parent, vm* vm, enviroment* env) {
+static void bc_array_nativeCopy(method* parent, vm* vm, enviroment* env) {
 	object* length = vector_pop(vm->value_stack);
 	object* dstOffset = vector_pop(vm->value_stack);
 	object* dst = vector_pop(vm->value_stack);

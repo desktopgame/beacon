@@ -8,7 +8,7 @@
 #include <assert.h>
 #include "generic_type.h"
 #include "../util/mem.h"
-#include "../lib/sg_library_interface.h"
+#include "../lib/bc_library_interface.h"
 #include "../thread/thread.h"
 #include "../util/text.h"
 //proto
@@ -129,17 +129,17 @@ void script_context_bootstrap(script_context* self) {
 	//プリロード
 	namespace_* beacon = namespace_create_at_root("beacon");
 	namespace_* lang = namespace_add_namespace(beacon, "lang");
-	sg_object_init();
-	sg_array_init();
-	sg_exception_init();
-	sg_int_init();
-	sg_double_init();
-	sg_char_init();
-	sg_string_init();
-	sg_bool_init();
-	sg_void_init();
-	sg_console_init();
-	sg_null_init();
+	bc_object_init();
+	bc_array_init();
+	bc_exception_init();
+	bc_int_init();
+	bc_double_init();
+	bc_char_init();
+	bc_string_init();
+	bc_bool_init();
+	bc_void_init();
+	bc_console_init();
+	bc_null_init();
 	//ブートストラップクラスローダー
 	self->bootstrap_class_loader = class_loader_new(content_lib);
 	self->bootstrap_class_loader->filename = text_strdup("bootstrap");

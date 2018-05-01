@@ -3,7 +3,7 @@
 #define BEACON_LIB_SIGNAL_LANG_H
 
 /**
- * signal::lang::Objectクラスを初期化します.
+ * beacon::lang::Objectクラスを初期化します.
  */
-void sg_object_init();
+void bc_object_init();
 #endif // !SIGNAL_LIB_SIGNAL_LANG_H

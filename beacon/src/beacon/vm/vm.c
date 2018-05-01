@@ -19,7 +19,7 @@
 #include "../util/string_buffer.h"
 #include "../util/vector.h"
 #include "../util/text.h"
-#include "../lib/signal/lang/sg_string.h"
+#include "../lib/beacon/lang/bc_string.h"
 #include "line_range.h"
 #include "../env/heap.h"
 #include "../env/generic_type.h"
@@ -762,7 +762,7 @@ static char stack_topc(vm* self) {
 static char* stack_tops(vm* self) {
 	object* ret = (object*)vector_top(self->value_stack);
 	assert(ret->tag == object_string);
-	return sg_string_raw(ret)->text;
+	return bc_string_raw(ret)->text;
 }
 
 static bool stack_topb(vm* self) {
@@ -793,7 +793,7 @@ static char stack_popc(vm* self) {
 static char* stack_pops(vm* self) {
 	object* ret = (object*)vector_pop(self->value_stack);
 	assert(ret->tag == object_string);
-	return sg_string_raw(ret)->text;
+	return bc_string_raw(ret)->text;
 }
 
 static bool stack_popb(vm* self) {

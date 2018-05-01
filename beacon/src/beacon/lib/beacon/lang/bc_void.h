@@ -3,7 +3,7 @@
 #define BEACON_LIB_SIGNAL_LANG_VOID_H
 
 /**
- * signal::lang::Voidクラスを初期化します.
+ * beacon::lang::Voidクラスを初期化します.
  */
-void sg_void_init();
+void bc_void_init();
 #endif // !SIGNAL_LIB_SIGNAL_LANG_VOID_H

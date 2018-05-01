@@ -4,7 +4,7 @@
 #include "../env/type_impl.h"
 #include "../env/object.h"
 #include "../env/fqcn_cache.h"
-#include "../lib/signal/lang/sg_array.h"
+#include "../lib/beacon/lang/bc_array.h"
 #include "line_range.h"
 #include <stdlib.h>
 #include <assert.h>
