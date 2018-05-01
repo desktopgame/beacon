@@ -12,7 +12,6 @@
 #include "util/tree_map.h"
 #include "util/io.h"
 #include "util/file_entry.h"
-#include "util/props.h"
 #include "util/text.h"
 #include "util/file_path.h"
 #include "util/vector.h"
