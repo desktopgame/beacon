@@ -3,6 +3,18 @@
 #define BEACON_ENV_MEM_H
 #include <stdlib.h>
 #include <stdbool.h>
+/**
+ * 確保されたメモリを管理する連結リスト.
+ */
+typedef struct slot {
+	char* filename;
+	int lineno;
+	int index;
+	void* arena;
+	size_t size;
+	struct slot* prev;
+	struct slot* next;
+} slot;
 
 /**
  * malloc のラッパーです.

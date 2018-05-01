@@ -14,18 +14,7 @@
 #include <Windows.h>
 #endif
 
-//private struct
-typedef struct slot {
-	char* filename;
-	int lineno;
-	int index;
-	void* arena;
-	size_t size;
-	struct slot* prev;
-	struct slot* next;
-} slot;
-
-static void* defaultRealloc(void * block, size_t newSize, const char * filename, int lineno);
+static void* default_realloc(void * block, size_t newSize, const char * filename, int lineno);
 static slot* slot_create_or_add(size_t size);
 static slot* slot_new();
 static void slot_check_init(const char* filename, int lineno, void* arena, size_t size);
@@ -34,6 +23,10 @@ static void* slot_realloc(slot* head, void* arena, size_t newSize);
 static int slot_remove(slot* head, void* arena);
 static void slot_dump(slot* self);
 static void slot_destroy(slot* self);
+
+static slot* slot_find(slot* head, void* arena);
+static slot* slot_last(slot* head);
+
 static void mem_input();
 static char* mem_readline();
 
@@ -47,11 +40,9 @@ static int gMemBreak = -1;
 
 void * mem_malloc(size_t size, const char * filename, int lineno) {
 	void* ret = malloc(size);
-#if defined(DEBUG)
 	if (gMemTrace) {
 		slot_check_init(filename, lineno, ret, size);
 	}
-#endif
 	if (ret == NULL) {
 		exit(1);
 	}
@@ -59,15 +50,11 @@ void * mem_malloc(size_t size, const char * filename, int lineno) {
 }
 
 void * mem_realloc(void * block, size_t newSize, const char * filename, int lineno) {
-#if defined(DEBUG)
 	if (gMemTrace) {
 		return slot_realloc(gSlotHead, block, newSize);
 	} else {
-		return defaultRealloc(block, newSize, filename, lineno);
+		return default_realloc(block, newSize, filename, lineno);
 	}
-#else
-	return defaultRealloc(block, newSize, filename, lineno);
-#endif
 }
 
 void mem_free(void * block, const char * filename, int lineno) {
@@ -75,16 +62,13 @@ void mem_free(void * block, const char * filename, int lineno) {
 		return;
 	}
 	int index = -1;
-#if defined(DEBUG)
 	if (gMemTrace) {
 		index = slot_remove(gSlotHead, block);
 	}
-#endif
 	free(block);
 }
 
 void mem_dump() {
-#if defined(DEBUG)
 	if (!gMemTrace) {
 		return;
 	}
@@ -100,7 +84,6 @@ void mem_dump() {
 		text_printf("\n");
 		ptr = ptr->next;
 	}
-#endif
 }
 
 void mem_set_trace(bool trace) {
@@ -111,11 +94,9 @@ void mem_mark(void* p, size_t size, const char* filename, int lineno) {
 	if (p == NULL) {
 		return;
 	}
-#if defined(DEBUG)
 	if (gMemTrace) {
 		slot_check_init(filename, lineno, p, size);
 	}
-#endif
 }
 
 bool mem_get_trace() {
@@ -127,17 +108,15 @@ void mem_break(int count) {
 }
 
 void mem_destroy() {
-#if defined(DEBUG)
 	if (!gMemTrace) {
 		return;
 	}
 	slot_destroy(gSlotHead->next);
 	gSlotHead = NULL;
-#endif
 }
 
 //private
-static void* defaultRealloc(void * block, size_t newSize, const char * filename, int lineno) {
+static void* default_realloc(void * block, size_t newSize, const char * filename, int lineno) {
 	void* ret = realloc(block, newSize);
 	//allocCount++;
 	return ret;
@@ -190,27 +169,23 @@ static slot* slot_create_or_add(size_t size) {
 }
 
 static void slot_add(slot* head, slot* a) {
-	slot* ptr = head;
-	while (ptr->next != NULL) {
-		assert((ptr != NULL && ptr->arena != NULL));
-		ptr = ptr->next;
-	}
-	ptr->next = a;
-	a->prev = ptr;
+	slot* last = slot_last(head);
+	last->next = a;
+	a->prev = last;
 }
 
 static void* slot_realloc(slot* head, void* arena, size_t newSize) {
-	slot* ptr = head;
-	while (ptr->arena != arena) {
-		ptr = ptr->next;
-		//mem_malloc以外で確保されたメモリ
-		if (ptr == NULL) {
-			void* ret = realloc(arena, newSize);
-			assert(ret != NULL);
-			gMemNotFoundRealloc++;
-			return ret;
-		}
+	//arenaがmem_mallocによって確保されたものではないなら、
+	//適当に拡張して返す
+	slot* ptr = slot_find(head, arena);
+	if(ptr == NULL) {
+		void* ret = realloc(arena, newSize);
+		assert(ret != NULL);
+		gMemNotFoundRealloc++;
+		return ret;
 	}
+	//mem_mallocによって確保されたなら、
+	//差分を記録する
 	void* temp = realloc(arena, newSize);
 	assert(temp != NULL);
 	//縮んだ
@@ -229,15 +204,15 @@ static int slot_remove(slot* head, void* arena) {
 	if (head == NULL) {
 		return -1;
 	}
-	slot* ptr = head;
-	while (ptr->arena != arena) {
-		ptr = ptr->next;
-		//mem_malloc以外で確保されたメモリ
-		if (ptr == NULL) {
-			gMemNotFoundFree++;
-			return -1;
-		}
+	//mem_mallocによって確保されたものではないなら、
+	//何もしない
+	slot* ptr = slot_find(head, arena);
+	if(ptr == NULL) {
+		gMemNotFoundFree++;
+		return -1;
 	}
+	//スロットを削除するために、
+	//前と後ろを切り離す
 	if (ptr->prev != NULL) {
 		ptr->prev->next = ptr->next;
 	}
@@ -281,6 +256,31 @@ static void slot_destroy(slot* self) {
 		}
 		ptr = next;
 	}
+}
+
+static slot* slot_find(slot* head, void* arena) {
+	slot* ptr = head;
+	while (ptr->arena != arena) {
+		ptr = ptr->next;
+		//mem_malloc以外で確保されたメモリ
+		if (ptr == NULL) {
+			//void* ret = realloc(arena, newSize);
+			//assert(ret != NULL);
+			//gMemNotFoundRealloc++;
+			//return ret;
+			break;
+		}
+	}
+	return ptr;
+}
+
+static slot* slot_last(slot* head) {
+	slot* ptr = head;
+	while (ptr->next != NULL) {
+		assert((ptr != NULL && ptr->arena != NULL));
+		ptr = ptr->next;
+	}
+	return ptr;
 }
 
 static void mem_input() {
