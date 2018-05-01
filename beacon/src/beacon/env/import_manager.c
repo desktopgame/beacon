@@ -94,6 +94,46 @@ generic_type* import_manager_resolve(import_manager* self, namespace_* scope, ge
 	return normalGType;
 }
 
+generic_type* import_manager_resolvef(import_manager* self, namespace_* scope, fqcn_cache* fqcn, il_context* ilctx) {
+type* core_type = fqcn_type(fqcn, scope);
+	//名前空間でラッピングされていなくて、
+	//型が見つからない
+	if(core_type == NULL && fqcn->scope_vec->length == 0) {
+		generic_type* parameterized = generic_type_new(NULL);
+		//メソッドの型引数から見つけられなかったら
+		//クラスの型引数を参照する
+		bool found = false;
+		if(ilctx->method_vec->length > 0) {
+			method* m = (method*)vector_top(ilctx->method_vec);
+			parameterized->tag = generic_type_tag_method;
+			parameterized->virtual_type_index = method_for_generic_index(m, fqcn->name);
+			parameterized->u.method_ = m;
+			found = (parameterized->virtual_type_index != -1);
+		}
+		if(!found && ilctx->ctor_vec->length > 0) {
+			type* container = (type*)vector_top(ilctx->type_vec);
+			parameterized->tag = generic_type_tag_ctor;
+			parameterized->virtual_type_index = type_for_generic_index(container, fqcn->name);
+			parameterized->u.type_ = container;
+			found = (parameterized->virtual_type_index != -1);
+		}
+		if(!found) {
+			type* container = (type*)vector_top(ilctx->type_vec);
+			parameterized->tag = generic_type_tag_class;
+			parameterized->virtual_type_index = type_for_generic_index(container, fqcn->name);
+			parameterized->u.type_ = container;
+			found = (parameterized->virtual_type_index != -1);
+		}
+		//assert(fqcn->type_args->length == 0);
+		return parameterized;
+	}
+	//Array, Dictionary などはっきりした型が見つかった
+	//が、型引数があるのでそれを解決する
+	generic_type* normalGType = generic_type_new(core_type);
+	assert(core_type->tag != type_enum);
+	return normalGType;
+}
+
 void import_manager_delete(import_manager * self) {
 	vector_delete(self->info_vec, import_manager_delete_import_info);
 	MEM_FREE(self);

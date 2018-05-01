@@ -440,7 +440,7 @@ static void assign_generate_putfield(il_factor_binary_op * self, enviroment* env
 		il_factor_variable* ilvar = IL_FACT2VAR(ilsrc);
 		//staticなフィールドへの代入
 		if(ilvar->type == ilvariable_type_static) {
-			class_* cls = il_context_class(ilctx, ilvar->fqcn);
+			class_* cls = il_context_class(ilctx, ilvar->u.static_->fqcn);
 			int temp = -1;
 			class_find_sfield(cls, ilmem->name, &temp);
 			assert(temp != -1);

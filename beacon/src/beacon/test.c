@@ -41,6 +41,7 @@ static void test_semanticsImpl(const char* dirname, bool require) {
 			continue;
 		}
 		xtest_must_true(eval_file(e->filename) == require, e->filename);
+		script_context_static_clear(ctx);
 	}
 	script_context_remove(ctx);
 }

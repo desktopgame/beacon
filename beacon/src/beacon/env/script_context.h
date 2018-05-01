@@ -8,6 +8,13 @@
 struct heap;
 struct object;
 struct class_loader;
+struct field;
+
+/**
+ * 静的フィールドを訪問するための関数ポインタ.
+ * @param item
+ */
+typedef void(*static_each)(struct field* item);
 
 /**
  * 唯一のスクリプトコンテキストを表すIDです.
@@ -111,4 +118,25 @@ void script_context_set_bootstrap(bool b);
  * @return
  */
 bool script_context_get_bootstrap();
+
+/**
+ * 全ての静的フィールドを訪問します.
+ * @param self
+ * @param act
+ */
+void script_context_static_each(script_context* self, static_each act);
+
+/**
+ * 全ての静的フィールドをクリアします.
+ * 一つのコンテキストで複数回プログラムを実行する場合には、
+ * これを呼び出す必要がある...場合もあります。
+ * 一つのコンテキストで複数回実行するということは、
+ * その回数分エントリポイントの定数プールも作成/破棄されることになります。
+ * 静的フィールドが定数プールの値を参照したまま実行を終了した場合、
+ * 次の実行でそのポインタがGCによってマークされることになります。
+ * これはすでに解放されたポインタへのアクセスになってしまいます。
+ * なので、複数回実行する場合にはこれを使用して静的フィールドをクリアします。
+ * @param self
+ */
+void script_context_static_clear(script_context* self);
 #endif // !SIGNAL_ENV_SCRIPT_CONTEXT_H

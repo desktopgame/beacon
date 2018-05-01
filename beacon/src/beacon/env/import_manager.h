@@ -6,6 +6,7 @@
 //#include "fqcn_cache.h"
 struct generic_cache;
 struct generic_type;
+struct fqcn_cache;
 struct namespace_;
 struct class_loader;
 struct import_info;
@@ -48,6 +49,14 @@ bool import_manager_loaded(import_manager* self, int index);
  * @return 解決出来なかったなら NULL を返します.
  */
 struct generic_type* import_manager_resolve(import_manager* self, struct namespace_* scope, struct generic_cache* fqcn, struct il_context* ilctx);
+/**
+ * 指定の名前から型を解決します.
+ * @param self
+ * @param scope
+ * @param fqcn
+ * @return 解決出来なかったなら NULL を返します.
+ */
+struct generic_type* import_manager_resolvef(import_manager* self, struct namespace_* scope, struct fqcn_cache* fqcn, struct il_context* ilctx);
 
 /**
  * インポートマネージャを開放します.

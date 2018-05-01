@@ -159,7 +159,7 @@ static void class_loader_ilload_import(class_loader* self, ast* import_decl) {
 	assert(import_decl->tag == ast_import_decl);
 	ast* path = ast_first(import_decl);
 	il_import* ret = il_import_new(path->u.string_value);
-	vector_push(self->il_code->import_list, (vector_item)ret);
+	vector_push(self->il_code->import_list, ret);
 	//text_printf("import %s\n", path->u.string_value);
 }
 

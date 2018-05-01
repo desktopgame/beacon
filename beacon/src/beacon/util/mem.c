@@ -46,6 +46,7 @@ void * mem_malloc(size_t size, const char * filename, int lineno) {
 	if (ret == NULL) {
 		exit(1);
 	}
+	memset(ret, 0, size);
 	return ret;
 }
 
@@ -194,6 +195,7 @@ static void* slot_realloc(slot* head, void* arena, size_t newSize) {
 	//拡大した
 	} else if (ptr->size < newSize) {
 		gMemUsedMemory += (newSize - ptr->size);
+		memset(temp + ptr->size, 0, newSize - ptr->size);
 	}
 	ptr->arena = temp;
 	ptr->size = newSize;

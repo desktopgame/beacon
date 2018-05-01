@@ -65,7 +65,6 @@ generic_type* il_factor_variable_eval(il_factor_variable * self, enviroment * en
 	} else if(self->type == ilvariable_type_static) {
 		ret = il_factor_variable_static_eval(self->u.static_, env, ilctx);
 	}
-	generic_type_validate(ret);
 	return ret;
 }
 
@@ -127,7 +126,7 @@ static void il_factor_variable_check(il_factor_variable* self, enviroment* env, 
 		}
 	//Namespace::Hoge Namespace::Foo のような文字列の場合.
 	} else if(self->fqcn->scope_vec->length > 0) {
-		class_* cls = TYPE2CLASS((type*)vector_top(ilctx->type_vec));
+		//class_* cls = TYPE2CLASS((type*)vector_top(ilctx->type_vec));
 		il_factor_variable_static* st = il_factor_variable_static_new();
 		self->type = ilvariable_type_static;
 		//値を入れ替え

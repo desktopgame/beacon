@@ -269,16 +269,6 @@ struct method* class_get_smethod(class_* self, int index);
 struct method* class_get_impl_method(class_* self, type* interType, int interMIndex);
 
 /**
- * self を other の型に変換出来るなら true.
- * 例えば、クラスAとそれを継承したクラスBがあるとき、
- * class_castable(B.class, A.class) は true です。
- * @param self
- * @param other
- * @return
- */
-bool class_castable(class_* self, class_* other);
-
-/**
  * self と other の距離を返します.
  * @param self
  * @param other

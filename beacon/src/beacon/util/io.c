@@ -90,10 +90,8 @@ char * io_read_text(const char * filename) {
 		}
 		string_buffer_append(buff, c);
 	}
-	string_buffer_shrink(buff);
-	char* ret = buff->text;
+	char* ret = string_buffer_release(buff);
 	fclose(fp);
-	MEM_FREE(buff);
 	return ret;
 }
 

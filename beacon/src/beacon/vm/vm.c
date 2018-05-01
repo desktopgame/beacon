@@ -36,6 +36,7 @@ static char stack_popc(vm* self);
 static char* stack_pops(vm* self);
 static bool stack_popb(vm* self);
 static void remove_from_parent(vm* self);
+static void vm_markStatic(field* item);
 static void vm_markallImpl(vm* self);
 
 //Stack Top
@@ -73,6 +74,7 @@ vm * vm_sub(vm * parent) {
 	vm* ret = vm_new();
 	ret->parent = parent;
 	ret->level = parent->level + 1;
+	ret->context_ref = parent->context_ref;
 
 	vector_push(parent->children_vec, ret);
 	return ret;
@@ -433,7 +435,8 @@ void vm_resume(vm * self, enviroment * env, int pos) {
 				type* tp = (type*)vector_at(ctx->type_vec, absClsIndex);
 				class_* cls = tp->u.class_;
 				field* f = class_get_sfield(cls, fieldIndex);
-				f->static_value = (object*)vector_pop(self->value_stack);
+				object* sv = (object*)vector_pop(self->value_stack);
+				f->static_value = sv;
 				break;
 			}
 
@@ -709,17 +712,7 @@ void vm_uncaught(vm * self, enviroment* env, int pc) {
 void vm_markall(vm * self) {
 	//全ての静的フィールドをマークする
 	script_context* ctx = script_context_get_current();
-	for (int i = 0; i < ctx->type_vec->length; i++) {
-		type* e = (type*)vector_at(ctx->type_vec, i);
-		if (e->tag != type_class) {
-			continue;
-		}
-		class_* cls = e->u.class_;
-		for (int j = 0; j < cls->sfield_list->length; j++) {
-			field* f = (field*)vector_at(cls->sfield_list, j);
-			object_markall(f->static_value);
-		}
-	}
+	script_context_static_each(ctx, vm_markStatic);
 	//全ての子要素を巡回してマーキング
 	vm_markallImpl(self);
 }
@@ -807,6 +800,10 @@ static void remove_from_parent(vm* self) {
 		int idx = vector_find(self->parent->children_vec, self);
 		vector_remove(self->parent->children_vec, idx);
 	}
+}
+
+static void vm_markStatic(field* item) {
+	object_markall(item->static_value);
 }
 
 static void vm_markallImpl(vm* self) {

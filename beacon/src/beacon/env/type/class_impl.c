@@ -120,6 +120,7 @@ void class_free_fields(class_ * self, object * o) {
 }
 
 void class_add_field(class_ * self, field * f) {
+	assert(f != NULL);
 	if (modifier_is_static(f->modifier)) {
 		vector_push(self->sfield_list, f);
 	} else {
@@ -128,6 +129,7 @@ void class_add_field(class_ * self, field * f) {
 }
 
 void class_add_method(class_ * self, method * m) {
+	assert(m != NULL);
 	if (modifier_is_static(m->modifier)) {
 		vector_push(self->smethod_list, m);
 	} else {
@@ -244,7 +246,10 @@ field * class_find_sfield_tree(class_ * self, const char * name, int * outIndex)
 		if (f != NULL) {
 			return f;
 		}
-		pointee = pointee->super_class;
+		if(pointee->super_class == NULL) {
+			break;
+		}
+		pointee = pointee->super_class->core_type->u.class_;
 	} while (pointee != NULL);
 	return NULL;
 }
@@ -267,7 +272,7 @@ field * class_get_sfield(class_ * self, int index) {
 //		return vector_at(self->sfield_list, all - index);
 		return vector_at(self->sfield_list, self->sfield_list->length - (all - index));
 	}
-	return class_get_sfield(self->super_class, index);
+	return class_get_sfield(self->super_class->core_type->u.class_, index);
 }
 
 constructor * class_find_rconstructor(class_ * self, vector * args, int* outIndex) {
@@ -358,21 +363,6 @@ method * class_get_impl_method(class_ * self, type * interType, int interMIndex)
 	return vector_at(vtAt->elements, interMIndex);
 }
 
-bool class_castable(class_ * self, class_ * other) {
-	assert(self != NULL && other != NULL);
-	if (self == other) {
-		return true;
-	}
-	class_* pointee = self;
-	do {
-		if (pointee == other) {
-			return true;
-		}
-		pointee = pointee->super_class;
-	} while (pointee != NULL);
-	return false;
-}
-
 int class_distance(class_ * self, class_ * other) {
 	if (self == other) {
 		return 0;
@@ -436,7 +426,10 @@ int class_count_sfieldall(class_ * self) {
 	int sum = 0;
 	do {
 		sum += (pt->sfield_list->length);
-		pt = pt->super_class;
+		if(pt->super_class == NULL) {
+			break;
+		}
+		pt = pt->super_class->core_type->u.class_;
 	} while (pt != NULL);
 	return sum;
 }
@@ -446,7 +439,10 @@ int class_count_methodall(class_ * self) {
 	int sum = 0;
 	do {
 		sum += (pt->method_list->length);
-		pt = pt->super_class;
+		if(pt->super_class == NULL) {
+			break;
+		}
+		pt = pt->super_class->core_type->u.class_;
 	} while (pt != NULL);
 	return sum;
 }

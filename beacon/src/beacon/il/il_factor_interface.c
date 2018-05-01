@@ -258,12 +258,11 @@ generic_type* il_factor_eval(il_factor * self, enviroment * env, il_context* ilc
 			ret = il_factor_call_op_eval(self->u.call_, env, ilctx);
 			break;
 		case ilfactor_member_op:
-			ret = il_factor_member_op_eval(self->u.call_, env, ilctx);
+			ret = il_factor_member_op_eval(self->u.member_, env, ilctx);
 			break;
 		default:
 			break;
 	}
-	assert((ret != NULL || il_error_panic()));
 	return ret;
 }
 

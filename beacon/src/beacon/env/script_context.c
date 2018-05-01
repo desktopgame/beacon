@@ -1,6 +1,7 @@
 #include "script_context.h"
 #include "heap.h"
 #include "namespace.h"
+#include "field.h"
 #include "type_interface.h"
 #include "type/class_impl.h"
 #include "class_loader.h"
@@ -21,6 +22,7 @@ static void script_context_class_loader_delete(vector_item item);
 
 static void script_context_namespace_unlink(char* name, tree_item item);
 static void script_context_namespace_delete(tree_item item);
+static void script_context_static_clearImpl(field* item);
 
 static script_context* gScriptContext = NULL;
 static script_context* gScriptContextCurrent = NULL;
@@ -170,6 +172,27 @@ bool script_context_get_bootstrap() {
 	return gScriptBootstrap;
 }
 
+void script_context_static_each(script_context* self, static_each act) {
+	script_context* ctx = self;
+	for (int i = 0; i < ctx->type_vec->length; i++) {
+		type* e = (type*)vector_at(ctx->type_vec, i);
+		if (e->tag != type_class) {
+			continue;
+		}
+		class_* cls = e->u.class_;
+		for (int j = 0; j < cls->sfield_list->length; j++) {
+			field* f = (field*)vector_at(cls->sfield_list, j);
+			if(modifier_is_static(f->modifier)) {
+				act(f);
+			}
+		}
+	}
+}
+
+void script_context_static_clear(script_context* self) {
+	script_context_static_each(self, script_context_static_clearImpl);
+}
+
 //private
 static script_context* script_context_new() {
 	script_context* ret = script_context_malloc();
@@ -256,3 +279,6 @@ static void script_context_namespace_delete(tree_item item) {
 	namespace_delete(e);
 }
 
+static void script_context_static_clearImpl(field* item) {
+	item->static_value = object_get_null();
+}

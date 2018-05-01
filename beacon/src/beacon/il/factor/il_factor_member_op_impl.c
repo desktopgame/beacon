@@ -6,8 +6,11 @@
 #include "../../env/type_interface.h"
 #include "../../env/type/class_impl.h"
 #include "../../env/field.h"
+#include "../../env/class_loader.h"
+#include "../../env/import_manager.h"
 #include "../../vm/enviroment.h"
 #include "../../il/il_type_argument.h"
+#include "../../il/il_factor_impl.h"
 
 //proto
 static void il_factor_member_op_check(il_factor_member_op* self, enviroment* env, il_context* ilctx);
@@ -45,9 +48,15 @@ void il_factor_member_op_load(il_factor_member_op* self, enviroment* env, il_con
 }
 
 void il_factor_member_op_generate(il_factor_member_op* self, enviroment* env, il_context* ilctx) {
-	il_factor_generate(self->fact, env, ilctx);
-	opcode_buf_add(env->buf, op_get_field);
-	opcode_buf_add(env->buf, self->index);
+	if(modifier_is_static(self->f->modifier)) {
+		opcode_buf_add(env->buf, op_get_static);
+		opcode_buf_add(env->buf, self->f->parent->absolute_index);
+		opcode_buf_add(env->buf, self->index);
+	} else {
+		il_factor_generate(self->fact, env, ilctx);
+		opcode_buf_add(env->buf, op_get_field);
+		opcode_buf_add(env->buf, self->index);
+	}
 }
 
 generic_type* il_factor_member_op_eval(il_factor_member_op* self, enviroment* env, il_context* ilctx) {
@@ -91,6 +100,23 @@ static void il_factor_member_op_check(il_factor_member_op* self, enviroment* env
 	//XSTREQ(self->name, "charArray");
 	il_factor* fact = self->fact;
 	generic_type* gtype = il_factor_eval(fact, env, ilctx);
+	//ファクターから型が特定できない場合は
+	//変数めいを型として静的フィールドで解決する
+	if(gtype == NULL) {
+		il_factor_variable* ilvar = IL_FACT2VAR(fact);
+		generic_type* ref = import_manager_resolvef(ilctx->class_loader_ref->import_manager, ILCTX_NAMESPACE(ilctx), ilvar->u.static_->fqcn, ilctx);
+		gtype = ref;
+
+		type* ccT = gtype->core_type;
+		assert(ccT->tag == type_class);
+		int temp = -1;
+		self->f = class_find_sfield_tree(TYPE2CLASS(ccT), self->name, &temp);
+		self->index = temp;
+		assert(self->f != NULL);
+		assert(temp != -1);
+		return;
+	}
+	//インスタンスフィールドを検索
 	type* ctype = gtype->core_type;
 	assert(ctype->tag == type_class);
 	int temp = -1;
