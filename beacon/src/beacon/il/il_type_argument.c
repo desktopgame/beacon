@@ -2,6 +2,8 @@
 #include "../util/mem.h"
 #include "../util/text.h"
 #include "../env/namespace.h"
+#include "../env/class_loader.h"
+#include "../env/import_manager.h"
 #include "il_context.h"
 
 il_type_argument* il_type_argument_new() {
@@ -30,8 +32,9 @@ void il_type_argument_resolve(vector* iltype_args, il_context* ilctx) {
 	for(int i=0; i<iltype_args->length; i++) {
 		il_type_argument* e = (il_type_argument*)vector_at(iltype_args, i);
 		if(e->gtype == NULL) {
-			namespace_* scope = (namespace_*)vector_top(ilctx->namespace_vec);
-			e->gtype = generic_cache_gtype(e->gcache, scope, ilctx);
+			namespace_* scope = ILCTX_NAMESPACE(ilctx);
+			e->gtype = import_manager_resolve(ilctx->class_loader_ref->import_manager, scope, e->gcache, ilctx);
+			//e->gtype = generic_cache_gtype(e->gcache, scope, ilctx);
 		}
 	}
 }

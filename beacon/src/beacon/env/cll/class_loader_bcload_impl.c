@@ -191,7 +191,7 @@ static void CLBC_class(class_loader* self, il_type* iltype, namespace_* parent) 
 	type* tp = namespace_get_type(parent, iltype->u.class_->name);
 	class_* cls;
 	//FIXME:あとで親関数から渡すようにする
-	il_context* ilctx = il_context_new();
+	il_context* ilctx = il_context_new(self);
 	vector_push(ilctx->namespace_vec, parent);
 	type_init_generic(tp, iltype->u.class_->type_parameter_list->length);
 	//type_init_generic(tp, iltype->u.class_->type_parameter_list->length);
@@ -206,7 +206,8 @@ static void CLBC_class(class_loader* self, il_type* iltype, namespace_* parent) 
 			generic_cache* e = (generic_cache*)vector_at(iltype->u.class_->extend_list, i);
 			//最初の一つはクラスでもインターフェースでもよい
 			if (i == 0) {
-				generic_type* gtp = generic_cache_gtype(e, parent, ilctx);
+				generic_type* gtp = import_manager_resolve(self->import_manager, parent, e, ilctx);
+				//generic_type* gtp = generic_cache_gtype(e, parent, ilctx);
 				assert(gtp != NULL);
 				if (gtp->core_type->tag == type_class) {
 					cls->super_class = gtp;
@@ -215,7 +216,9 @@ static void CLBC_class(class_loader* self, il_type* iltype, namespace_* parent) 
 				}
 			//二つ目以降はインターフェースのみ
 			} else {
-				generic_type* gtp = generic_cache_gtype(e, parent, ilctx);
+
+				generic_type* gtp = import_manager_resolve(self->import_manager, parent, e, ilctx);
+				//generic_type* gtp = generic_cache_gtype(e, parent, ilctx);
 				vector_push(cls->impl_list, gtp);
 				assert(gtp->core_type->tag == type_interface);
 			}
@@ -271,7 +274,7 @@ static void CLBC_interface(class_loader * self, il_type * iltype, namespace_ * p
 	type* tp = namespace_get_type(parent, iltype->u.interface_->name);
 	interface_* inter = NULL;
 	//NOTE:後で親関数から渡すようにする
-	il_context* ilctx = il_context_new();
+	il_context* ilctx = il_context_new(self);
 	vector_push(ilctx->namespace_vec, parent);
 	type_init_generic(tp, iltype->u.interface_->type_parameter_list->length);
 	//type_init_generic(tp, iltype->u.interface_->type_parameter_list->length);
@@ -285,7 +288,8 @@ static void CLBC_interface(class_loader * self, il_type * iltype, namespace_ * p
 		for (int i = 0; i < iltype->u.interface_->extends_list->length; i++) {
 			generic_cache* e = (generic_cache*)vector_at(iltype->u.interface_->extends_list, i);
 			//インターフェースはインターフェースのみ継承
-			generic_type* gtp = generic_cache_gtype(e, parent, ilctx);
+				generic_type* gtp = import_manager_resolve(self->import_manager, parent, e, ilctx);
+			//generic_type* gtp = generic_cache_gtype(e, parent, ilctx);
 			assert(gtp->core_type->tag == type_interface);
 			vector_push(inter->impl_list, gtp);
 		}

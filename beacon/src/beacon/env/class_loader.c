@@ -174,7 +174,7 @@ static void class_loader_load_impl(class_loader* self) {
 		il_error_exit();
 	}
 	//トップレベルのステートメントを読み込む
-	il_context* ilctx = il_context_new();
+	il_context* ilctx = il_context_new(self);
 	ilctx->toplevel = true;
 	if(self->type == content_entry_point) {
 		debug_set_gen_top(true);

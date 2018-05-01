@@ -3,6 +3,8 @@
 #include "../../env/type_interface.h"
 #include "../../util/text.h"
 #include "../../env/namespace.h"
+#include "../../env/class_loader.h"
+#include "../../env/import_manager.h"
 #include <stdio.h>
 #include <assert.h>
 
@@ -55,7 +57,8 @@ void il_factor_as_load(il_factor_as * self, enviroment * env, il_context* ilctx)
 
 generic_type* il_factor_as_eval(il_factor_as * self, enviroment * env, il_context* ilctx) {
 	namespace_* n = (namespace_*)vector_top(ilctx->namespace_vec);
-	return generic_cache_gtype(self->fqcn, n, ilctx);
+	//return generic_cache_gtype(self->fqcn, n, ilctx);
+	return import_manager_resolve(ilctx->class_loader_ref->import_manager, n, self->fqcn, ilctx);
 }
 
 void il_factor_as_delete(il_factor_as * self) {

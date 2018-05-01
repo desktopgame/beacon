@@ -6,6 +6,8 @@
 #include "../../env/namespace.h"
 #include "../../env/type_interface.h"
 #include "../../env/generic_type.h"
+#include "../../env/class_loader.h"
+#include "../../env/import_manager.h"
 #include <stdio.h>
 
 //proto
@@ -85,7 +87,8 @@ void il_stmt_try_generate(il_stmt_try* self, enviroment* env, il_context* ilctx)
 	for (int i = 0; i < self->catch_list->length; i++) {
 		//例外を指定の名前でアクセス出来るように
 		il_stmt_catch* ilcatch = (il_stmt_catch*)vector_at(self->catch_list, i);
-		generic_type* exgType = generic_cache_gtype(ilcatch->fqcn, (namespace_*)vector_top(ilctx->namespace_vec), ilctx);
+		generic_type* exgType = import_manager_resolve(ilctx->class_loader_ref->import_manager, ILCTX_NAMESPACE(ilctx), ilcatch->fqcn, ilctx);
+		//generic_type* exgType = generic_cache_gtype(ilcatch->fqcn, (namespace_*)vector_top(ilctx->namespace_vec), ilctx);
 		int exIndex = symbol_table_entry(env->sym_table, exgType, ilcatch->name)->index;
 		//直前のケースのジャンプ先をここに
 		if (nextCause != NULL) {

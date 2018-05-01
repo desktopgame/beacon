@@ -6,6 +6,8 @@
 #include "../env/namespace.h"
 #include "../util/vector.h"
 #include "../env/generic_type.h"
+#include "../env/import_manager.h"
+#include "../env/class_loader.h"
 #include <assert.h>
 
 type_parameter_rule * type_parameter_rule_new() {
@@ -18,7 +20,8 @@ type_parameter_rule * type_parameter_rule_dup(il_type_parameter_rule * src, il_c
 	type_parameter_rule* ret = type_parameter_rule_new();
 	if (src->tag == il_type_parameter_rule_polymorphic) {
 		ret->tag = type_parameter_rule_tag_polymorphic;
-		ret->u.gtype_ = generic_cache_gtype(src->u.fqcn_, (namespace_*)vector_top(ilctx->namespace_vec), ilctx);
+		ret->u.gtype_ = import_manager_resolve(ilctx->class_loader_ref->import_manager, ILCTX_NAMESPACE(ilctx), src->u.fqcn_, ilctx);
+//		ret->u.gtype_ = generic_cache_gtype(src->u.fqcn_, (namespace_*)vector_top(ilctx->namespace_vec), ilctx);
 		assert(ret->u.gtype_ != NULL);
 	}
 	return ret;

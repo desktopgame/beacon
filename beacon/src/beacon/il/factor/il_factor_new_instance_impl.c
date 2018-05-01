@@ -9,6 +9,8 @@
 #include "../../env/constructor.h"
 #include "../../env/type_interface.h"
 #include "../../env/type_impl.h"
+#include "../../env/class_loader.h"
+#include "../../env/import_manager.h"
 #include <stdio.h>
 #include <string.h>
 #include <assert.h>
@@ -89,7 +91,8 @@ generic_type* il_factor_new_instance_eval(il_factor_new_instance * self, envirom
 		generic_type* a = generic_type_new(self->c->parent);
 		for (int i = 0; i < self->type_args->length; i++) {
 			il_type_argument* e = (il_type_argument*)vector_at(self->type_args, i);
-			generic_type* arg = generic_cache_gtype(e->gcache, scope, ilctx);
+			generic_type* arg = import_manager_resolve(ilctx->class_loader_ref->import_manager, scope, e->gcache, ilctx);
+		//	generic_type* arg = generic_cache_gtype(e->gcache, scope, ilctx);
 		//	arg->tag = generic_type_tag_ctor;
 			generic_type_addargs(a, arg);
 		}

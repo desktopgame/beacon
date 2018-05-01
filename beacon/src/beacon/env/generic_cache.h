@@ -26,51 +26,6 @@ typedef struct generic_cache {
 generic_cache* generic_cache_new();
 
 /**
- * 型変数付きの型宣言を実際の generic_type へ変換します.
- * @param self
- * @param scope
- * @param ilctx
- * @return
- */
-#define generic_cache_gtype(self, scope, ilctx) (generic_cache_gtypeloc(self, scope, ilctx, __FILE__, __LINE__))
-
-/**
- * 型変数付きの型宣言を実際の generic_type へ変換します.
- * 通常はこちらではなくマクロ版の generic_cache_gtype を使用します。
- * @param self
- * @param scope
- * @param ilctx
- * @return
- */
-struct generic_type* generic_cache_gtypeloc(generic_cache* self, struct namespace_* scope, il_context* ilctx, const char* filename, int lineno);
-
-/**
- * generic_cache を typeへ変換します.
- * 型変数は無視されます。
- * @param self
- * @param scope
- * @return
- */
-struct type* generic_cache_type(generic_cache* self, struct namespace_* scope);
-
-/**
- * generic_cache を classへ変換します.
- * 型変数は無視されます。
- * @param self
- * @param scope
- * @return
- */
-struct class_* generic_cache_class(generic_cache* self, struct namespace_* scope);
-/**
- * generic_cache を interfaceへ変換します.
- * 型変数は無視されます。
- * @param self
- * @param scope
- * @return
- */
-struct interface_* generic_cache_interface(generic_cache* self, struct namespace_* scope);
-
-/**
  * 型変数つきの型宣言をインデント無しで出力します.
  * @param self
  */

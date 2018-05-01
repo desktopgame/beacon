@@ -27,7 +27,7 @@ static void CLBC_chain_super(class_loader* self, il_type* iltype, type* tp, il_c
 void CLBC_fields_decl(class_loader* self, il_type* iltype, type* tp, vector* ilfields, namespace_* scope) {
 	//class_* cls = tp->u.class_;
 	CL_ERROR(self);
-	il_context* ilctx = il_context_new();
+	il_context* ilctx = il_context_new(self);
 	vector_push(ilctx->namespace_vec, scope);
 	vector_push(ilctx->type_vec, tp);
 	for (int i = 0; i < ilfields->length; i++) {
@@ -53,7 +53,7 @@ void CLBC_fields_decl(class_loader* self, il_type* iltype, type* tp, vector* ilf
 void CLBC_fields_impl(class_loader* self, namespace_* scope, vector* ilfields, vector* sgfields) {
 	CL_ERROR(self);
 	//	namespace_* scope = classz->location;
-	il_context* ilctx = il_context_new();
+	il_context* ilctx = il_context_new(self);
 	for (int i = 0; i < sgfields->length; i++) {
 		vector_item e = vector_at(sgfields, i);
 		field* fi = (field*)e;
@@ -69,7 +69,7 @@ void CLBC_fields_impl(class_loader* self, namespace_* scope, vector* ilfields, v
 
 void CLBC_methods_decl(class_loader* self, il_type* iltype, type* tp, vector* ilmethods, namespace_* scope) {
 	CL_ERROR(self);
-	il_context* ilctx = il_context_new();
+	il_context* ilctx = il_context_new(self);
 	ILCTX_PUSH_NAMESPACE(ilctx, scope);
 	ILCTX_PUSH_TYPE(ilctx, tp);
 	//class_* classz = tp->u.class_;
@@ -122,7 +122,7 @@ void CLBC_methods_impl(class_loader* self, namespace_* scope, il_type* iltype, t
 	//assert(tp->tag == type_class);
 	//class_* classz = tp->u.class_;
 	CL_ERROR(self);
-	il_context* ilctx = il_context_new();
+	il_context* ilctx = il_context_new(self);
 	ILCTX_PUSH_TYPE(ilctx, tp);
 	for (int i = 0; i < sgmethods->length; i++) {
 		vector_item e = vector_at(sgmethods, i);
@@ -180,7 +180,7 @@ void CLBC_ctor_decl(class_loader* self, il_type* iltype, type* tp, namespace_* s
 	CL_ERROR(self);
 	class_* classz = tp->u.class_;
 	vector* ilcons_list = iltype->u.class_->constructor_list;
-	il_context* ilctx = il_context_new();
+	il_context* ilctx = il_context_new(self);
 	ILCTX_PUSH_TYPE(ilctx, tp);
 	for (int i = 0; i < ilcons_list->length; i++) {
 		vector_item e = vector_at(ilcons_list, i);
@@ -222,7 +222,7 @@ void CLBC_ctor_impl(class_loader* self, il_type* iltype, type* tp) {
 	//既に登録されたが、
 	//オペコードが空っぽになっているコンストラクタの一覧
 
-	il_context* ilctx = il_context_new();
+	il_context* ilctx = il_context_new(self);
 	ILCTX_PUSH_TYPE(ilctx, tp);
 	for (int i = 0; i < constructors->length; i++) {
 		vector_item e = vector_at(constructors, i);
@@ -366,7 +366,7 @@ static void CLBC_chain_auto(class_loader * self, il_type * iltype, type * tp, il
 static void CLBC_chain_super(class_loader * self, il_type * iltype, type * tp, il_constructor * ilcons, il_constructor_chain * ilchain, enviroment * env) {
 	class_* classz = tp->u.class_;
 	//チェインコンストラクタの実引数をプッシュ
-	il_context* ilctx = il_context_new();
+	il_context* ilctx = il_context_new(self);
 	il_constructor_chain* chain = ilcons->chain;
 	for (int i = 0; i < chain->argument_list->length; i++) {
 		il_argument* ilarg = (il_argument*)vector_at(chain->argument_list, i);

@@ -5,6 +5,8 @@
 #include "../../util/text.h"
 #include "../../util/vector.h"
 #include "../../env/namespace.h"
+#include "../../env/class_loader.h"
+#include "../../env/import_manager.h"
 #include <stdio.h>
 #include "../../env/generic_cache.h"
 
@@ -32,7 +34,7 @@ void il_factor_cast_dump(il_factor_cast * self, int depth) {
 
 void il_factor_cast_generate(il_factor_cast * self, enviroment * env, il_context* ilctx) {
 	il_factor_generate(self->fact, env, ilctx);
-	type* t = generic_cache_type(self->fqcn, (namespace_*)vector_top(ilctx->namespace_vec));
+//	type* t = generic_cache_type(self->fqcn, (namespace_*)vector_top(ilctx->namespace_vec));
 //	opcode_buf_add(env->buf, op_lookup);
 //	opcode_buf_add(env->buf, t->absolute_index);
 }
@@ -41,7 +43,8 @@ void il_factor_cast_load(il_factor_cast * self, enviroment * env, il_context* il
 }
 
 generic_type* il_factor_cast_eval(il_factor_cast * self, enviroment * env, il_context* ilctx) {
-	return generic_cache_gtype(self->fqcn, (namespace_*)vector_top(ilctx->namespace_vec), ilctx);
+//	return generic_cache_gtype(self->fqcn, (namespace_*)vector_top(ilctx->namespace_vec), ilctx);
+	return import_manager_resolve(ilctx->class_loader_ref->import_manager, ILCTX_NAMESPACE(ilctx), self->fqcn, ilctx);
 }
 
 char* il_factor_cast_tostr(il_factor_cast* self, enviroment* env, il_context* ilctx) {

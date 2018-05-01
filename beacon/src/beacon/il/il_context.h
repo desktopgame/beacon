@@ -3,6 +3,7 @@
 #define BEACON_IL_il_context_H
 #include "../util/vector.h"
 #include <stdbool.h>
+struct class_loader;
 
 #define ILCTX_PUSH_NAMESPACE(ctx, a) vector_push(ctx->namespace_vec, a)
 #define ILCTX_PUSH_TYPE(ctx, a) vector_push(ctx->type_vec, a)
@@ -48,6 +49,7 @@ typedef struct il_context {
 	bool toplevel;
 	int find_instance;
 	int find_static;
+	struct class_loader* class_loader_ref;
 } il_context;
 
 struct namespace_;
@@ -56,9 +58,10 @@ struct fqcn_cache;
 
 /**
  * ILキャッシュを作成します.
+ * @param class_loader_ref
  * @return
  */
-il_context* il_context_new();
+il_context* il_context_new(struct class_loader* class_loader_ref);
 
 /**
  * 現在のスコープの名前空間を返します.

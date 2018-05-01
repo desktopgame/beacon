@@ -3,9 +3,10 @@
 #include "../env/type_impl.h"
 #include "../env/namespace.h"
 #include "../env/fqcn_cache.h"
+#include "../env/class_loader.h"
 
 
-il_context * il_context_new() {
+il_context * il_context_new(class_loader* class_loader_ref) {
 	il_context* ret = (il_context*)MEM_MALLOC(sizeof(il_context));
 	ret->namespace_vec = vector_new();
 	ret->type_vec = vector_new();
@@ -18,6 +19,7 @@ il_context * il_context_new() {
 	ret->type_args_vec = vector_new();
 	ret->find_instance = 0;
 	ret->find_static = 0;
+	ret->class_loader_ref = class_loader_ref;
 	return ret;
 }
 

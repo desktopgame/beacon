@@ -9,7 +9,9 @@
 			"parameter.h": "c",
 			"type_interface.h": "c",
 			"string.h": "c",
-			"xassert.h": "c"
+			"xassert.h": "c",
+			"il_context.h": "c",
+			"type_impl.h": "c"
 		}
 	}
 }

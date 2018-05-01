@@ -4,6 +4,8 @@
 #include "../../vm/symbol_entry.h"
 #include "../../env/namespace.h"
 #include "../../env/type_interface.h"
+#include "../../env/class_loader.h"
+#include "../../env/import_manager.h"
 #include <stdio.h>
 #include <assert.h>
 
@@ -34,7 +36,8 @@ void il_stmt_variable_init_generate(il_stmt_variable_init * self, enviroment * e
 	il_factor_generate(self->fact, env, ilctx);
 	//宣言型と代入型が異なる場合
 	generic_type* ga = il_factor_eval(self->fact, env, ilctx);
-	generic_type* gb = generic_cache_gtype(self->fqcn, (namespace_*)vector_top(ilctx->namespace_vec), ilctx);
+	generic_type* gb = import_manager_resolve(ilctx->class_loader_ref->import_manager, ILCTX_NAMESPACE(ilctx), self->fqcn, ilctx);
+	//generic_type* gb = generic_cache_gtype(self->fqcn, (namespace_*)vector_top(ilctx->namespace_vec), ilctx);
 	if (ga != gb) {
 	//	opcode_buf_add(env->buf, op_lookup);
 	//	opcode_buf_add(env->buf, gb->core_type->absolute_index);
@@ -48,7 +51,8 @@ void il_stmt_variable_init_load(il_stmt_variable_init * self, enviroment * env, 
 	il_factor_load(self->fact, env, ilctx);
 	symbol_entry* e = symbol_table_entry(
 		env->sym_table,
-		generic_cache_gtype(self->fqcn, (namespace_*)vector_top(ilctx->namespace_vec), ilctx),
+		import_manager_resolve(ilctx->class_loader_ref->import_manager, ILCTX_NAMESPACE(ilctx), self->fqcn, ilctx),
+		//generic_cache_gtype(self->fqcn, (namespace_*)vector_top(ilctx->namespace_vec), ilctx),
 		self->name
 	);
 	self->sym = e;
