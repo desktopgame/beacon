@@ -33,6 +33,9 @@ void il_factor_dump(il_factor * self, int depth) {
 		case ilfactor_binary_op:
 			il_factor_binary_op_dump(self->u.binary_, depth);
 			break;
+		case ilfactor_assign_op:
+			il_factor_assign_op_dump(self->u.assign_, depth);
+			break;
 		case ilfactor_this:
 			il_factor_this_dump(self->u.this_, depth);
 			break;
@@ -96,6 +99,9 @@ void il_factor_generate(il_factor * self, enviroment* env, il_context* ilctx) {
 			break;
 		case ilfactor_binary_op:
 			il_factor_binary_op_generate(self->u.binary_, env, ilctx);
+			break;
+		case ilfactor_assign_op:
+			il_factor_assign_op_generate(self->u.assign_, env, ilctx);
 			break;
 		case ilfactor_this:
 			il_factor_this_generate(self->u.this_, env, ilctx);
@@ -162,6 +168,9 @@ void il_factor_load(il_factor * self, enviroment * env, il_context* ilctx) {
 		case ilfactor_binary_op:
 			il_factor_binary_op_load(self->u.binary_, env, ilctx);
 			break;
+		case ilfactor_assign_op:
+			il_factor_assign_op_load(self->u.assign_, env, ilctx);
+			break;
 		case ilfactor_this:
 			il_factor_this_load(self->u.this_, env, ilctx);
 			break;
@@ -227,6 +236,9 @@ generic_type* il_factor_eval(il_factor * self, enviroment * env, il_context* ilc
 		case ilfactor_binary_op:
 			ret = il_factor_binary_op_eval(self->u.binary_, env, ilctx);
 			break;
+		case ilfactor_assign_op:
+			ret = il_factor_assign_op_eval(self->u.assign_, env, ilctx);
+			break;
 		case ilfactor_this:
 			ret = il_factor_this_eval(self->u.this_, env, ilctx);
 			break;
@@ -285,6 +297,8 @@ char* il_factor_tostr(il_factor* self, enviroment* env, il_context* ilctx) {
 			return il_factor_unary_op_tostr(self->u.unary_, env, ilctx);
 		case ilfactor_binary_op:
 			return il_factor_binary_op_tostr(self->u.binary_, env, ilctx);
+		case ilfactor_assign_op:
+			return NULL;
 		case ilfactor_this:
 			return il_factor_this_tostr(self->u.this_, env, ilctx);
 		case ilfactor_super:
@@ -373,6 +387,9 @@ void il_factor_delete(il_factor * self) {
 			break;
 		case ilfactor_binary_op:
 			il_factor_binary_op_delete(self->u.binary_);
+			break;
+		case ilfactor_assign_op:
+			il_factor_assign_op_delete(self->u.assign_);
 			break;
 		case ilfactor_this:
 			il_factor_this_delete(self->u.this_);

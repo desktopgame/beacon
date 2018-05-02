@@ -26,13 +26,9 @@ typedef enum ilbinary_op_type {
 	ilbinary_ge,
 	ilbinary_lt,
 	ilbinary_le,
-
-	ilbinary_assign,
-	ilbinary_add_assign,
-	ilbinary_sub_assign,
-	ilbinary_mul_assign,
-	ilbinary_div_assign,
-	ilbinary_mod_assign,
+	ilbinary_lshift,
+	ilbinary_rshift,
+	ilbinary_excor,
 } ilbinary_op_type;
 
 /**

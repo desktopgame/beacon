@@ -12,6 +12,7 @@
 #include "factor/il_factor_variable_impl.h"
 #include "factor/il_factor_unary_op_impl.h"
 #include "factor/il_factor_binary_op_impl.h"
+#include "factor/il_factor_assign_op_impl.h"
 #include "factor/il_factor_this_impl.h"
 #include "factor/il_factor_super_impl.h"
 #include "factor/il_factor_new_instance_impl.h"

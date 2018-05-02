@@ -22,6 +22,7 @@ typedef enum il_factor_type {
 	ilfactor_squote,
 	ilfactor_unary_op,
 	ilfactor_binary_op,
+	ilfactor_assign_op,
 	ilfactor_variable,
 	ilfactor_this,
 	ilfactor_super,
@@ -52,6 +53,7 @@ struct il_factor_string;
 struct il_factor_variable;
 struct il_factor_unary_op;
 struct il_factor_binary_op;
+struct il_factor_assign_op;
 struct il_factor_this;
 struct il_factor_super;
 struct il_factor_new_instance;
@@ -77,6 +79,7 @@ typedef struct il_factor {
 		struct il_factor_string* string_;
 		struct il_factor_variable* variable_;
 		struct il_factor_unary_op* unary_;
+		struct il_factor_assign_op* assign_;
 		struct il_factor_binary_op* binary_;
 		struct il_factor_this* this_;
 		struct il_factor_super* super_;
