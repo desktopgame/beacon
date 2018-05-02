@@ -1,0 +1,20 @@
+import "Object"
+import "Array"
+import "Int"
+import "Double"
+import "Char"
+import "String"
+import "Bool"
+import "Null"
+import "Void"
+import "Console"
+import "Vector"
+import "VectorIterator"
+
+import "Exception"
+import "StackTraceElement"
+import "Tuple"
+
+assert (1 << 1 == 2);
+assert (1 << 2 == 4);
+assert (1 << 3 == 8);
