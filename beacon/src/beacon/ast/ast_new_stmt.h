@@ -219,4 +219,11 @@ ast* ast_new_inferenced_type_init(const char* name, ast* fact);
  * @return
  */
 ast* ast_new_assert(ast* afact, ast* amsg);
+
+/**
+ * 強制実行を表す要素を作成します.
+ * @param astmt
+ * @return
+ */
+ast* ast_new_defer(ast* astmt);
 #endif // !SIGNAL_AST_AST_NEW_STMT_H

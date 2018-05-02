@@ -26,6 +26,7 @@ stmt
 	| throw_stmt
 	| try_stmt
 	| assert_stmt
+	| defer_stmt
 	;
 variable_decl_stmt
 	: typename_T IDENT SEMI
@@ -136,5 +137,11 @@ assert_stmt
 	| ASSERT_T expression SEMI
 	{
 		$$ = ast_new_assert($2, ast_new_blank());
+	}
+	;
+defer_stmt
+	: DEFER stmt
+	{
+		$$ = ast_new_defer($2);
 	}
 	;

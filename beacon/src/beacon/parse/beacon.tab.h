@@ -132,16 +132,17 @@
      CATCH = 341,
      THROW = 342,
      ASSERT_T = 343,
-     PRE_DEC = 344,
-     PRE_INC = 345,
-     QUOTE = 346,
-     POST_DEC = 347,
-     POST_INC = 348,
-     FUNCCALL = 349,
-     REF = 350,
-     POSITIVE = 351,
-     NEGATIVE = 352,
-     FORM_TYPE = 353
+     DEFER = 344,
+     PRE_DEC = 345,
+     PRE_INC = 346,
+     QUOTE = 347,
+     POST_DEC = 348,
+     POST_INC = 349,
+     FUNCCALL = 350,
+     REF = 351,
+     POSITIVE = 352,
+     NEGATIVE = 353,
+     FORM_TYPE = 354
    };
 #endif
 /* Tokens.  */
@@ -231,16 +232,17 @@
 #define CATCH 341
 #define THROW 342
 #define ASSERT_T 343
-#define PRE_DEC 344
-#define PRE_INC 345
-#define QUOTE 346
-#define POST_DEC 347
-#define POST_INC 348
-#define FUNCCALL 349
-#define REF 350
-#define POSITIVE 351
-#define NEGATIVE 352
-#define FORM_TYPE 353
+#define DEFER 344
+#define PRE_DEC 345
+#define PRE_INC 346
+#define QUOTE 347
+#define POST_DEC 348
+#define POST_INC 349
+#define FUNCCALL 350
+#define REF 351
+#define POSITIVE 352
+#define NEGATIVE 353
+#define FORM_TYPE 354
 
 
 
@@ -258,7 +260,7 @@ typedef union YYSTYPE
 	access_level access_level_value;
 }
 /* Line 1529 of yacc.c.  */
-#line 255 "beacon.tab.h"
+#line 257 "beacon.tab.h"
 	YYSTYPE;
 # define yystype YYSTYPE /* obsolescent; will be withdrawn */
 # define YYSTYPE_IS_DECLARED 1

@@ -52,7 +52,7 @@
 		IN OUT
 		CTOR DEF ARROW NAMESPACE RETURN
 		IF ELIF ELSE WHILE BREAK CONTINUE TRY CATCH THROW
-		ASSERT_T
+		ASSERT_T DEFER
 %type <ast_value> compilation_unit 
 					init_decl
 					body_decl
@@ -111,6 +111,7 @@
 						catch_stmt_list
 						catch_stmt
 						assert_stmt
+						defer_stmt
 						scope
 						scope_optional
 %right ASSIGN ADD_ASSIGN SUB_ASSIGN MUL_ASSIGN DIV_ASSIGN MOD_ASSIGN AND_ASSIGN OR_ASSIGN LSHIFT_ASSIGN RSHIFT_ASSIGN EXC_OR_ASSIGN PRE_INC PRE_DEC
@@ -774,6 +775,7 @@ stmt
 	| throw_stmt
 	| try_stmt
 	| assert_stmt
+	| defer_stmt
 	;
 variable_decl_stmt
 	: typename_T IDENT SEMI
@@ -884,6 +886,12 @@ assert_stmt
 	| ASSERT_T expression SEMI
 	{
 		$$ = ast_new_assert($2, ast_new_blank());
+	}
+	;
+defer_stmt
+	: DEFER stmt
+	{
+		$$ = ast_new_defer($2);
 	}
 	;
 

@@ -178,6 +178,7 @@ static void update_loc() {
 <INITIAL>"=="				{ return (EQUAL); }
 <INITIAL>"!="				{ return (NOTEQUAL); }
 <INITIAL>"assert"			{ return (ASSERT_T); }
+<INITIAL>"defer"			{ return (DEFER); }
 
 
 <INITIAL>"++"				{ return (INC); }

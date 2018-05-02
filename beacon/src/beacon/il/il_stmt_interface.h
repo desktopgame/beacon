@@ -21,6 +21,7 @@ typedef enum il_stmt_type {
 	ilstmt_try,
 	ilstmt_throw,
 	ilstmt_assert,
+	ilstmt_defer,
 } il_stmt_type;
 
 //詳細は il_stmt_impl.h を参照してください。
@@ -34,6 +35,7 @@ struct il_stmt_inferenced_type_init;
 struct il_stmt_try;
 struct il_stmt_throw;
 struct il_stmt_assert;
+struct il_stmt_defer;
 
 /**
  * 文を表す要素です.
@@ -52,6 +54,7 @@ typedef struct il_stmt {
 		struct il_stmt_try* try_;
 		struct il_stmt_throw* throw_;
 		struct il_stmt_assert* bcassert_;
+		struct il_stmt_defer* defer_;
 	} u;
 } il_stmt;
 

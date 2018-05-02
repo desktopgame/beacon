@@ -196,3 +196,9 @@ ast* ast_new_assert(ast* afact, ast* amsg) {
 	ast_push(ret, amsg);
 	return ret;
 }
+
+ast* ast_new_defer(ast* astmt) {
+	ast* ret = ast_new(ast_stmt_defer);
+	ast_push(ret, astmt);
+	return ret;
+}
