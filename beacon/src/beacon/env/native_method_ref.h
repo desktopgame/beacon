@@ -8,7 +8,7 @@
 /**
  * ネイティブメソッドの実装.
  */
-typedef void(*native_impl)(method* parent, vm* vm, enviroment* env);
+typedef void(*native_impl)(method* parent, frame* vm, enviroment* env);
 
 /**
  * ネイティブメソッドを表す関数ポインタをラップする構造体.

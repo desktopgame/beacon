@@ -1,7 +1,7 @@
 #pragma once
 #ifndef BEACON_LIB_SIGNAL_LANG_SG_ARRAY_H
 #define BEACON_LIB_SIGNAL_LANG_SG_ARRAY_H
-struct vm;
+struct frame;
 struct type;
 struct object;
 
@@ -19,10 +19,10 @@ struct type* bc_array_class();
 /**
  * beacon::lang::Arrayクラスを作成します.
  * @param length
- * @param vmc
+ * @param fr
  * @return
  */
-struct object* bc_array_new(int length, struct vm* vmc);
+struct object* bc_array_new(int length, struct frame* fr);
 
 /**
  * @param arr

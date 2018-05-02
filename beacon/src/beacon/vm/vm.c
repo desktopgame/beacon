@@ -1,4 +1,5 @@
 #include "vm.h"
+#include "frame.h"
 #include <stdlib.h>
 #include <stdio.h>
 #include <assert.h>
@@ -24,21 +25,21 @@
 #include "../env/heap.h"
 #include "../env/generic_type.h"
 //proto
-static void vm_run(vm * self, enviroment * env, int pos, int deferStart);
-static int stack_topi(vm* self);
-static double stack_topd(vm* self);
-static char stack_topc(vm* self);
-static char* stack_tops(vm* self);
-static bool stack_topb(vm* self);
+static void vm_run(frame * self, enviroment * env, int pos, int deferStart);
+static int stack_topi(frame* self);
+static double stack_topd(frame* self);
+static char stack_topc(frame* self);
+static char* stack_tops(frame* self);
+static bool stack_topb(frame* self);
 
-static int stack_popi(vm* self);
-static double stack_popd(vm* self);
-static char stack_popc(vm* self);
-static char* stack_pops(vm* self);
-static bool stack_popb(vm* self);
-static void remove_from_parent(vm* self);
-static void vm_markStatic(field* item);
-static void vm_markallImpl(vm* self);
+static int stack_popi(frame* self);
+static double stack_popd(frame* self);
+static char stack_popc(frame* self);
+static char* stack_pops(frame* self);
+static bool stack_popb(frame* self);
+static void remove_from_parent(frame* self);
+static void frame_markStatic(field* item);
+static void frame_markallImpl(frame* self);
 
 //Stack Top
 #define STI(a) stack_topi(a)
@@ -57,37 +58,13 @@ static void vm_markallImpl(vm* self);
 //Reference Store
 
 
-vm * vm_new() {
-	vm* ret = (vm*)MEM_MALLOC(sizeof(vm));
-	ret->value_stack = vector_new();
-	ret->ref_stack = vector_new();
-	ret->parent = NULL;
-	ret->level = 0;
-	ret->terminate = false;
-	ret->validate = false;
-	ret->native_throw_pos = -1;
-	ret->exception = NULL;
-	ret->children_vec = vector_new();
-	ret->defer_at = 0;
-	ret->defer_vec = vector_new();
-	return ret;
-}
 
-vm * vm_sub(vm * parent) {
-	vm* ret = vm_new();
-	ret->parent = parent;
-	ret->level = parent->level + 1;
-	ret->context_ref = parent->context_ref;
 
-	vector_push(parent->children_vec, ret);
-	return ret;
-}
-
-void vm_execute(vm* self, enviroment* env) {
+void vm_execute(frame* self, enviroment* env) {
 	vm_resume(self, env, 0);
 }
 
-void vm_resume(vm * self, enviroment * env, int pos) {
+void vm_resume(frame * self, enviroment * env, int pos) {
 	vm_run(self, env, pos, -1);
 	while(self->defer_vec->length > 0) {
 		label* e = (label*)vector_pop(self->defer_vec);
@@ -96,7 +73,7 @@ void vm_resume(vm * self, enviroment * env, int pos) {
 	vector_clear(self->defer_vec);
 }
 
-void vm_native_throw(vm * self, object * exc) {
+void vm_native_throw(frame * self, object * exc) {
 	self->exception = exc;
 
 	vm_throw(self, exc);
@@ -112,30 +89,30 @@ void vm_native_throw(vm * self, object * exc) {
 	}
 }
 
-void vm_throw(vm * self, object * exc) {
-	vm* temp = self;
+void vm_throw(frame * self, object * exc) {
+	frame* temp = self;
 	do {
 		temp->exception = exc;
 		temp = temp->parent;
 	} while (temp != NULL);
 }
 
-void vm_catch(vm * self) {
+void vm_catch(frame * self) {
 	if (self == NULL) {
 		return;
 	}
 	for (int i = 0; i < self->children_vec->length; i++) {
-		vm* e = (vm*)vector_at(self->children_vec, i);
+		frame* e = (frame*)vector_at(self->children_vec, i);
 		vm_catch(e);
 	}
 	self->exception = NULL;
 }
 
-bool vm_validate(vm* self, int source_len, int* pcDest) {
+bool vm_validate(frame* self, int source_len, int* pcDest) {
 	sg_thread* th = sg_thread_current();
 	vm_trace* trace = (vm_trace*)vector_top(th->trace_stack);
 	//ここなので catch節 へ向かう
-	if (trace->v == self) {
+	if (trace->fr == self) {
 		//ここでジャンプレベルを確認するのは
 		//例えば
 		// try { throw ... } catch { ... }
@@ -158,15 +135,15 @@ bool vm_validate(vm* self, int source_len, int* pcDest) {
 	}
 }
 
-void vm_terminate(vm * self) {
-	vm* temp = self;
+void vm_terminate(frame * self) {
+	frame* temp = self;
 	do {
 		temp->terminate = true;
 		temp = temp->parent;
 	} while (temp != NULL);
 }
 
-void vm_uncaught(vm * self, enviroment* env, int pc) {
+void vm_uncaught(frame * self, enviroment* env, int pc) {
 	line_range* lr = line_range_find(env->line_rangeVec, pc);
 	int line = -1;
 	if (lr != NULL) {
@@ -186,32 +163,10 @@ void vm_uncaught(vm * self, enviroment* env, int pc) {
 	text_printf("\n");
 }
 
-void vm_markall(vm * self) {
-	//全ての静的フィールドをマークする
-	script_context* ctx = script_context_get_current();
-	script_context_static_each(ctx, vm_markStatic);
-	//全ての子要素を巡回してマーキング
-	vm_markallImpl(self);
-}
 
-void vm_delete(vm * self) {
-
-	remove_from_parent(self);
-	vector_clear(self->value_stack);
-	vector_clear(self->ref_stack);
-
-	heap_gc(heap_get());
-
-	//constant_pool_delete(self->pool);
-	//operand_stack_delete(self->operand_stack);
-	vector_delete(self->value_stack, vector_deleter_null);
-	vector_delete(self->ref_stack, vector_deleter_null);
-	vector_delete(self->children_vec, vector_deleter_null);
-	MEM_FREE(self);
-}
 
 //private
-static void vm_run(vm * self, enviroment * env, int pos, int deferStart) {
+static void vm_run(frame * self, enviroment * env, int pos, int deferStart) {
 	script_context* ctx = script_context_get_current();
 	int source_len = env->buf->source->length;
 	self->context_ref = env;
@@ -474,7 +429,7 @@ static void vm_run(vm * self, enviroment * env, int pos, int deferStart) {
 				constructor* ctor = (constructor*)vector_at(cls->constructor_list, constructorIndex);
 				//新しいVMでコンストラクタを実行
 				//また、現在のVMから実引数をポップ
-				vm* sub = vm_sub(self);
+				frame* sub = frame_sub(self);
 				for (int i = 0; i < ctor->parameter_list->length; i++) {
 					vector_item e = vector_pop(self->value_stack);
 					object* o = (object*)e;
@@ -490,7 +445,7 @@ static void vm_run(vm * self, enviroment * env, int pos, int deferStart) {
 				vector_item returnV = vector_top(sub->value_stack);
 				object* returnO = (object*)returnV;
 				vector_push(self->value_stack, returnV);
-				vm_delete(sub);
+				frame_delete(sub);
 				break;
 			}
 			case op_chain_this:
@@ -503,7 +458,7 @@ static void vm_run(vm * self, enviroment * env, int pos, int deferStart) {
 				class_* cls = tp->u.class_;
 				constructor* ctor = (constructor*)vector_at(cls->constructor_list, ctorIndex);
 				//コンストラクタを実行するためのVMを作成
-				vm* sub = vm_sub(self);
+				frame* sub = frame_sub(self);
 				//チェインコンストラクタに渡された実引数をプッシュ
 				for (int i = 0; i < ctor->parameter_list->length; i++) {
 					object* o = (object*)vector_pop(self->value_stack);
@@ -519,7 +474,7 @@ static void vm_run(vm * self, enviroment * env, int pos, int deferStart) {
 				vector_assign(self->ref_stack, 0, returnV);
 				vector_push(self->value_stack, returnV);
 
-				vm_delete(sub);
+				frame_delete(sub);
 				//class_alloc_fields(cls, returnO);
 				break;
 			}
@@ -764,91 +719,63 @@ static void vm_run(vm * self, enviroment * env, int pos, int deferStart) {
 	}
 }
 
-static int stack_topi(vm* self) {
+static int stack_topi(frame* self) {
 	object* ret = (object*)vector_top(self->value_stack);
 	assert(ret->tag == object_int);
 	return ret->u.int_;
 }
 
-static double stack_topd(vm* self) {
+static double stack_topd(frame* self) {
 	object* ret = (object*)vector_top(self->value_stack);
 	assert(ret->tag == object_double);
 	return ret->u.double_;
 }
 
-static char stack_topc(vm* self) {
+static char stack_topc(frame* self) {
 	object* ret = (object*)vector_top(self->value_stack);
 	assert(ret->tag == object_char);
 	return ret->u.char_;
 }
 
-static char* stack_tops(vm* self) {
+static char* stack_tops(frame* self) {
 	object* ret = (object*)vector_top(self->value_stack);
 	assert(ret->tag == object_string);
 	return bc_string_raw(ret)->text;
 }
 
-static bool stack_topb(vm* self) {
+static bool stack_topb(frame* self) {
 	object* ret = (object*)vector_top(self->value_stack);
 	assert(ret->tag == object_bool);
 	return ret->u.bool_;
 }
 
 
-static int stack_popi(vm* self) {
+static int stack_popi(frame* self) {
 	object* ret = (object*)vector_pop(self->value_stack);
 	assert(ret->tag == object_int);
 	return ret->u.int_;
 }
 
-static double stack_popd(vm* self) {
+static double stack_popd(frame* self) {
 	object* ret = (object*)vector_pop(self->value_stack);
 	assert(ret->tag == object_double);
 	return ret->u.double_;
 }
 
-static char stack_popc(vm* self) {
+static char stack_popc(frame* self) {
 	object* ret = (object*)vector_pop(self->value_stack);
 	assert(ret->tag == object_char);
 	return ret->u.char_;
 }
 
-static char* stack_pops(vm* self) {
+static char* stack_pops(frame* self) {
 	object* ret = (object*)vector_pop(self->value_stack);
 	assert(ret->tag == object_string);
 	return bc_string_raw(ret)->text;
 }
 
-static bool stack_popb(vm* self) {
+static bool stack_popb(frame* self) {
 	object* ret = (object*)vector_pop(self->value_stack);
 	assert(ret->tag == object_bool);
 	return ret->u.bool_;
-}
-
-static void remove_from_parent(vm* self) {
-	if (self->parent != NULL) {
-		int idx = vector_find(self->parent->children_vec, self);
-		vector_remove(self->parent->children_vec, idx);
-	}
-}
-
-static void vm_markStatic(field* item) {
-	object_markall(item->static_value);
-}
-
-static void vm_markallImpl(vm* self) {
-	for (int i = 0; i < self->children_vec->length; i++) {
-		vm* e = (vm*)vector_at(self->children_vec, i);
-		vm_markallImpl(e);
-	}
-	for (int i = 0; i < self->value_stack->length; i++) {
-		object* e = (object*)vector_at(self->value_stack, i);
-		object_markall(e);
-	}
-	for (int i = 0; i < self->ref_stack->length; i++) {
-		object* e = (object*)vector_at(self->ref_stack, i);
-		object_markall(e);
-	}
-	//例外をマークする
-	object_markall(self->exception);
 }

@@ -4,17 +4,18 @@
 #include "type_impl.h"
 #include <assert.h>
 #include "../util/text.h"
+#include "../vm/frame.h"
 
 //proto
 static class_* exception_class();
 
-object * exception_new_simple(struct vm* vmc, const char* message) {
+object * exception_new_simple(frame* fr, const char* message) {
 	class_* excClass = exception_class();
-	object* e = class_new_rinstance(excClass, vmc, 1, object_string_new(message));
+	object* e = class_new_rinstance(excClass, fr, 1, object_string_new(message));
 	return e;
 }
 
-object * exception_new_simplef(vm * vmc, const char * message, ...) {
+object * exception_new_simplef(frame * fr, const char * message, ...) {
 	va_list ap;
 	va_start(ap, message);
 #define LEN 256
@@ -23,7 +24,7 @@ object * exception_new_simplef(vm * vmc, const char * message, ...) {
 	assert(res != -1);
 #undef LEN
 	va_end(ap);
-	return exception_new_simple(vmc, block);
+	return exception_new_simple(fr, block);
 }
 
 //private

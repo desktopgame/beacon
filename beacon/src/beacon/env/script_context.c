@@ -239,7 +239,7 @@ static void script_context_free(script_context* self) {
 	int aa = object_count();
 	assert(heap_get()->collect_blocking == 0);
 	//全ての例外フラグをクリア
-	vm* thv = sg_thread_get_vm_ref(sg_thread_current());
+	frame* thv = sg_thread_get_frame_ref(sg_thread_current());
 	vm_catch(thv);
 	class_loader_delete(self->bootstrap_class_loader);
 	heap_delete(self->heap);

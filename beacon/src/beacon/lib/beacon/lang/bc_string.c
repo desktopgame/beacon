@@ -3,7 +3,7 @@
 #include <assert.h>
 
 //proto
-static void bc_string_nativeInit(method* parent, vm* vm, enviroment* env);
+static void bc_string_nativeInit(method* parent, frame* fr, enviroment* env);
 
 void bc_string_init() {
 	namespace_* lang = namespace_lang();
@@ -19,8 +19,8 @@ string_buffer * bc_string_raw(object* self) {
 }
 
 //private
-static void bc_string_nativeInit(method* parent, vm* vm, enviroment* env) {
-	object* self = vector_at(vm->ref_stack, 0);
+static void bc_string_nativeInit(method* parent, frame* fr, enviroment* env) {
+	object* self = vector_at(fr->ref_stack, 0);
 	//プログラムの中で ダブルクォート("HelloWorld") によって
 	//文字列が作成された場合には object_string_new() 
 	//によって生成されます。

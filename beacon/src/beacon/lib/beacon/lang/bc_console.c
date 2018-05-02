@@ -6,10 +6,10 @@
 #include "../../../env/generic_type.h"
 
 //proto
-static void bc_console_writeLine(method* parent, vm* vm, enviroment* env);
-static void bc_console_write(method* parent, vm* vm, enviroment* env);
-static void bc_console_readLine(method* parent, vm* vm, enviroment* env);
-static void bc_console_read(method* parent, vm* vm, enviroment* env);
+static void bc_console_writeLine(method* parent, frame* fr, enviroment* env);
+static void bc_console_write(method* parent, frame* fr, enviroment* env);
+static void bc_console_readLine(method* parent, frame* fr, enviroment* env);
+static void bc_console_read(method* parent, frame* fr, enviroment* env);
 
 void bc_console_init() {
 	namespace_* lang = namespace_lang();
@@ -22,8 +22,8 @@ void bc_console_init() {
 }
 
 //private
-static void bc_console_writeLine(method* parent, vm* vm, enviroment* env) {
-	object* o = vector_at(vm->ref_stack, 1);
+static void bc_console_writeLine(method* parent, frame* fr, enviroment* env) {
+	object* o = vector_at(fr->ref_stack, 1);
 	if (o->tag == object_int) {
 		text_printf("%d\n", o->u.int_);
 	} else if(o->tag == object_double) {
@@ -40,8 +40,8 @@ static void bc_console_writeLine(method* parent, vm* vm, enviroment* env) {
 	}
 }
 
-static void bc_console_write(method* parent, vm* vm, enviroment* env) {
-	object* o = vector_at(vm->ref_stack, 1);
+static void bc_console_write(method* parent, frame* fr, enviroment* env) {
+	object* o = vector_at(fr->ref_stack, 1);
 	if (o->tag == object_int) {
 		text_printf("%d", o->u.int_);
 	}  else if (o->tag == object_double) {
@@ -58,14 +58,14 @@ static void bc_console_write(method* parent, vm* vm, enviroment* env) {
 	}
 }
 
-static void bc_console_read(method* parent, vm* vm, enviroment* env) {
+static void bc_console_read(method* parent, frame* fr, enviroment* env) {
 	char c = getchar();
 	object* o = object_char_new(c);
-	vector_push(vm->value_stack, o);
+	vector_push(fr->value_stack, o);
 }
 
-static void bc_console_readLine(method* parent, vm* vm, enviroment* env) {
+static void bc_console_readLine(method* parent, frame* fr, enviroment* env) {
 	char* s = text_gets();
 	object* o = object_string_new(s);
-	vector_push(vm->value_stack, o);
+	vector_push(fr->value_stack, o);
 }

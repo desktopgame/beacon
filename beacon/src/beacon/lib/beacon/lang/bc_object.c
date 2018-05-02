@@ -6,7 +6,7 @@
 #include <stdio.h>
 
 //proto
-static void bc_object_nativeToString(method* parent, vm* vm, enviroment* env);
+static void bc_object_nativeToString(method* parent, frame* fr, enviroment* env);
 
 
 void bc_object_init() {
@@ -17,8 +17,8 @@ void bc_object_init() {
 }
 
 //private
-static void bc_object_nativeToString(method* parent, vm* vm, enviroment* env) {
-	object* self = (object*)vector_at(vm->ref_stack, 0);
+static void bc_object_nativeToString(method* parent, frame* fr, enviroment* env) {
+	object* self = (object*)vector_at(fr->ref_stack, 0);
 	string_buffer* sb = string_buffer_new();
 	//参照型
 	if (self->tag == object_ref) {
@@ -44,5 +44,5 @@ static void bc_object_nativeToString(method* parent, vm* vm, enviroment* env) {
 	}
 	object* ret = object_string_new(sb->text);
 	MEM_FREE(sb);
-	vector_push(vm->value_stack, ret);
+	vector_push(fr->value_stack, ret);
 }

@@ -316,12 +316,12 @@ int class_count_smethodall(class_* self);
 
 /**
  * @param self
- * @param vmc
+ * @param fr
  * @param count
  * @param ...
  * @return
  */
-struct object* class_new_rinstance(class_* self, vm* vmc, int count, ...);
+struct object* class_new_rinstance(class_* self, frame* fr, int count, ...);
 
 /**
  * 全てのメンバーがこのクラスを参照できるようにします.

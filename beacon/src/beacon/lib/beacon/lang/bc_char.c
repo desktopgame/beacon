@@ -2,7 +2,7 @@
 #include "../../bc_library_impl.h"
 
 //proto
-static void bc_char_nativeInit(method* parent, vm* vmc, enviroment* env);
+static void bc_char_nativeInit(method* parent, frame* fr, enviroment* env);
 
 void bc_char_init() {
 	namespace_* lang = namespace_lang();
@@ -12,9 +12,9 @@ void bc_char_init() {
 }
 
 //private
-static void bc_char_nativeInit(method* parent, vm* vmc, enviroment* env) {
-	object* self = vector_at(vmc->ref_stack, 0);
-	object* ch = vector_at(vmc->ref_stack, 1);
+static void bc_char_nativeInit(method* parent, frame* fr, enviroment* env) {
+	object* self = vector_at(fr->ref_stack, 0);
+	object* ch = vector_at(fr->ref_stack, 1);
 
 	self->u.char_ = ch->u.char_;
 	self->tag = object_char;

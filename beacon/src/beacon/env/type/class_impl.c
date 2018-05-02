@@ -10,6 +10,7 @@
 #include "../../util/mem.h"
 #include "../object.h"
 #include "../../vm/enviroment.h"
+#include "../../vm/frame.h"
 #include "../../util/text.h"
 #include "../field.h"
 #include "../method.h"
@@ -460,7 +461,7 @@ int class_count_smethodall(class_ * self) {
 	return sum;
 }
 
-object * class_new_rinstance(class_ * self, vm* vmc, int count, ...) {
+object * class_new_rinstance(class_ * self, frame* fr, int count, ...) {
 	va_list ap;
 	va_start(ap, count);
 	//可変長引数をベクターへ
@@ -474,7 +475,7 @@ object * class_new_rinstance(class_ * self, vm* vmc, int count, ...) {
 	constructor* ctor = class_find_rconstructor(self, args, &temp);
 	assert(temp != -1);
 	//コンストラクタを実行
-	vm* sub = vm_sub(vmc);
+	frame* sub = frame_sub(fr);
 	heap* h = heap_get();
 	for (int i = args->length-1; i>=0; i--) {
 		object* o = vector_at(args, i);
@@ -483,7 +484,7 @@ object * class_new_rinstance(class_ * self, vm* vmc, int count, ...) {
 	vm_execute(sub, ctor->env);
 	object* inst = vector_pop(sub->value_stack);
 	h->collect_blocking++;
-	vm_delete(sub);
+	frame_delete(sub);
 	vector_delete(args, vector_deleter_null);
 	h->collect_blocking--;
 	va_end(ap);

@@ -30,28 +30,28 @@ method * method_new(const char * name) {
 	return ret;
 }
 
-void method_execute(method* self, vm * vmc, enviroment* env) {
+void method_execute(method* self, frame * fr, enviroment* env) {
 	if (self->type == method_type_script) {
-		script_method_execute(self->u.script_method, self, vmc, env);
+		script_method_execute(self->u.script_method, self, fr, env);
 	} else if (self->type == method_type_native) {
-		vm* a = vm_sub(vmc);
+		frame* a = frame_sub(fr);
 		//レシーバも
 		if(!modifier_is_static(self->modifier)) {
-			vector_assign(a->ref_stack, 0, vector_pop(vmc->value_stack));
+			vector_assign(a->ref_stack, 0, vector_pop(fr->value_stack));
 		}
 		//引数を引き継ぐ
 		int len = self->parameter_list->length;
 		for(int i=0; i<len; i++) {
-			object* ARG = vector_pop(vmc->value_stack);
+			object* ARG = vector_pop(fr->value_stack);
 			assert(ARG != NULL);
 			vector_assign(a->ref_stack, (len - i), ARG);
 		}
 		native_method_execute(self->u.native_method, self, a, env);
 		//戻り値を残す
 		if(self->return_gtype != CL_VOID->generic_self) {
-			vector_push(vmc->value_stack, vector_pop(a->value_stack));
+			vector_push(fr->value_stack, vector_pop(a->value_stack));
 		}
-		vm_delete(a);
+		frame_delete(a);
 	}
 }
 

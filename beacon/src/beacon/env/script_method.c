@@ -17,13 +17,13 @@ script_method * script_method_new() {
 	return ret;
 }
 
-void script_method_execute(script_method * self, method* parent, vm * vmachine, enviroment* env) {
-	vm* sub = vm_sub(vmachine);
+void script_method_execute(script_method * self, method* parent, frame * fr, enviroment* env) {
+	frame* sub = frame_sub(fr);
 	if (!modifier_is_static(parent->modifier)) {
-		vector_push(sub->value_stack, vector_pop(vmachine->value_stack));
+		vector_push(sub->value_stack, vector_pop(fr->value_stack));
 	}
 	for (int i = 0; i < parent->parameter_list->length; i++) {
-		vector_push(sub->value_stack, object_copy(vector_pop(vmachine->value_stack)));
+		vector_push(sub->value_stack, object_copy(vector_pop(fr->value_stack)));
 	}
 	text_putindent(sub->level);
 	//text_printfln("[ %s#%s ]", type_name(parent->parent), parent->name);
@@ -33,9 +33,9 @@ void script_method_execute(script_method * self, method* parent, vm * vmachine, 
 	//戻り値が Void 以外ならスタックトップの値を引き継ぐ
 	if(parent->return_gtype != CL_VOID->generic_self) {
 		object* o = (object*)vector_pop(sub->value_stack);
-		vector_push(vmachine->value_stack, o);
+		vector_push(fr->value_stack, o);
 	}
-	vm_delete(sub);
+	frame_delete(sub);
 }
 
 void script_method_delete(script_method * self) {

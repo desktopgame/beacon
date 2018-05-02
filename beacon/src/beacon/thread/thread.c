@@ -18,7 +18,7 @@ void sg_thread_launch() {
 sg_thread * sg_thread_new() {
 	sg_thread* ret = (sg_thread*)MEM_MALLOC(sizeof(sg_thread));
 	ret->trace_stack = vector_new();
-	ret->vmRef = NULL;
+	ret->frameRef = NULL;
 	return ret;
 }
 
@@ -41,19 +41,19 @@ void sg_thread_delete(sg_thread * self) {
 	MEM_FREE(self);
 }
 
-void sg_thread_set_vm_ref(sg_thread * self, vm * vmRef) {
+void sg_thread_set_frame_ref(sg_thread * self, frame * frameRef) {
 	//TODO:ここで同期をとる
-	assert(vmRef != NULL);
-	self->vmRef = vmRef;
+	assert(frameRef != NULL);
+	self->frameRef = frameRef;
 }
 
-vm * sg_thread_get_vm_ref(sg_thread * self) {
+frame * sg_thread_get_frame_ref(sg_thread * self) {
 	//TODO:ここで同期をとる
-	return self->vmRef;
+	return self->frameRef;
 }
 
-void sg_thread_release_vm_ref(sg_thread * self) {
-	self->vmRef = NULL;
+void sg_thread_release_frame_ref(sg_thread * self) {
+	self->frameRef = NULL;
 }
 
 sg_thread * sg_thread_main() {

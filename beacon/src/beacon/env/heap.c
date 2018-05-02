@@ -71,9 +71,9 @@ static void gc_mark(heap* self) {
 	//今はまだマルチスレッドに対応していないので、
 	//とりあえず実行中のスレッドのみを対象とする
 	sg_thread* th = sg_thread_current();
-	vm* top = sg_thread_get_vm_ref(th);
+	frame* top = sg_thread_get_frame_ref(th);
 	assert(top != NULL);
-	vm_markall(top);
+	frame_markall(top);
 
 	//true/false/nullは常にマーク
 	object_get_true()->paint = paint_marked;

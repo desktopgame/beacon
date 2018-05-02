@@ -25,6 +25,7 @@
 #include "env/heap.h"
 #include "vm/enviroment.h"
 #include "vm/eval.h"
+#include <assert.h>
 
 //proto
 static void test_cll(void);
@@ -113,29 +114,7 @@ bool test_run() {
 }
 
 static void test_cll(void) {
-	class_loader* cll = class_loader_new_entry_point_from_file("main.signal");
-	system("clear");
-//	ast_print_tree(cll->source_code);
-	class_loader_load(cll);
-//	il_top_level_dump(cll->il_code, 0);
-//	namespace_dump();
-	enviroment_op_dump(cll->env, 0);
-	vm* v = vm_new();
-	sg_thread_set_vm_ref(sg_thread_current(), v);
-	vm_execute(v, cll->env);
-	vm_delete(v);
-	sg_thread_release_vm_ref(sg_thread_current());
-	class_loader_delete(cll);
-//	script_context* temp = eval_push();
-//	char* lines[2] = {
-//		{ " import \"lib\" " },
-//		{ " Console.writeLine(\"Hello\") " }
-//	};
-	//	eval_interactive();
-//		eval_top_from_file("main.signal");
-	//	eval_top_from_source("import \"lib\"\nConsole.writeLine(\"Hello\")");
-	//	eval_top_from_lines(lines, 2);
-//	eval_pop(temp);
+	assert(false);
 }
 
 //FIXME:parser.cからのコピペ

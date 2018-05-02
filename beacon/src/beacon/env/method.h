@@ -9,7 +9,7 @@
 #include "../il/il_context.h"
 #include <stdbool.h>
 struct type;
-struct vm;
+struct frame;
 struct enviroment;
 
 /**
@@ -50,10 +50,10 @@ method* method_new(const char* name);
 /**
  * メソッドを実行します.
  * @param self
- * @param vm
+ * @param frame
  * @param env
  */
-void method_execute(method* self, struct vm* vm, struct enviroment* env);
+void method_execute(method* self, struct frame* fr, struct enviroment* env);
 
 /**
  * メソッドを出力します.

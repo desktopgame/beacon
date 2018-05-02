@@ -7,7 +7,7 @@ struct type;
 struct class_;
 struct enviroment;
 struct object;
-struct vm;
+struct frame;
 /**
  * コンストラクタを表す構造体.
  */
@@ -38,7 +38,7 @@ void constructor_dump(constructor* self, int depth);
  * @param parent
  * @return
  */
-struct object* constructor_new_instance(constructor* self, vector* args, struct vm* parent);
+struct object* constructor_new_instance(constructor* self, vector* args, struct frame* parent);
 
 /**
  * コンストラクタを開放します.

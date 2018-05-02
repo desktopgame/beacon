@@ -4,14 +4,14 @@
 //#include "../util/stack.h"
 #include "../util/vector.h"
 
-struct vm;
+struct frame;
 /**
  * 並列実行のための構造体です.
  * 現在の呼び出し位置を表すトレースのスタックを含みます。
  */
 typedef struct sg_thread {
 	vector* trace_stack;
-	struct vm* vmRef;
+	struct frame* frameRef;
 } sg_thread;
 
 /**
@@ -49,23 +49,23 @@ void sg_thread_delete(sg_thread* self);
  * スレッドからVMを参照できる必要があるので用意されています。
  * ここから参照されるVMはガベージコレクションの対象になります。
  * @param self
- * @param vmRef 呼び出し側で開放してください.
+ * @param frameRef 呼び出し側で開放してください.
  */
-void sg_thread_set_vm_ref(sg_thread* self, struct vm* vmRef);
+void sg_thread_set_frame_ref(sg_thread* self, struct frame* frameRef);
 
 /**
  * このスレッドが "実行中のVMのルート" を返します.
  * @param self
  * @return
  */
-struct vm* sg_thread_get_vm_ref(sg_thread* self);
+struct frame* sg_thread_get_frame_ref(sg_thread* self);
 
 /**
  * このスレッドからVMを参照出来ないようにします.
  * 通常、このスレッドに設定されたVMを開放したあとに呼び出します。
  * @param self
  */
-void sg_thread_release_vm_ref(sg_thread* self);
+void sg_thread_release_frame_ref(sg_thread* self);
 
 /**
  * メインスレッドを返します.

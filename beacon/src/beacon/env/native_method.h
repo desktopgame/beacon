@@ -4,7 +4,7 @@
 struct native_method_ref;
 struct enviroment;
 struct method;
-struct vm;
+struct frame;
 /**
  * Cで実装されたメソッド.
  */
@@ -21,10 +21,10 @@ native_method* native_method_new();
 /**
  * ネイティブメソッドを実行します.
  * @param self
- * @param vm
+ * @param fr
  * @param env
  */
-void native_method_execute(native_method* self, struct method* parent, struct vm* vm, struct enviroment* env);
+void native_method_execute(native_method* self, struct method* parent, struct frame* fr, struct enviroment* env);
 
 /**
  * ネイティブメソッドを開放します.
@@ -35,7 +35,7 @@ void native_method_delete(native_method* self);
 /**
  * ネイティブメソッドの空実装.
  * @param parent
- * @param vm
+ * @param fr
  */
-void native_method_empty(struct method* parent, struct vm* vm);
+void native_method_empty(struct method* parent, struct frame* fr);
 #endif // !SIGNAL_ENV_NATIVE_METHOD_H

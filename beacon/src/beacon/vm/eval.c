@@ -80,15 +80,15 @@ static bool eval_top_from_cll(class_loader* cll) {
 	ctx->heap->accept_blocking--;
 	opcode_buf_dump(cll->env->buf, 0);
 	//実行
-	vm* vm = vm_new();
-	sg_thread_set_vm_ref(sg_thread_current(), vm);
+	frame* fr = frame_new();
+	sg_thread_set_frame_ref(sg_thread_current(), fr);
 	opcode_buf_dump(cll->env->buf, 0);
-	vm_execute(vm, cll->env);
-	if(vm->terminate) {
+	vm_execute(fr, cll->env);
+	if(fr->terminate) {
 		cll->error = true;
 	}
-	vm_delete(vm);
-	sg_thread_release_vm_ref(sg_thread_current());
+	frame_delete(fr);
+	sg_thread_release_frame_ref(sg_thread_current());
 
 	bool ret = cll->error;
 	class_loader_delete(cll);
