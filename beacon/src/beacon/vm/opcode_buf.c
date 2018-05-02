@@ -15,8 +15,10 @@ opcode_buf * opcode_buf_new() {
 	return ret;
 }
 
-void opcode_buf_add(opcode_buf * self, vector_item item) {
+int opcode_buf_add(opcode_buf * self, vector_item item) {
+	int len = self->source->length;
 	vector_push(self->source, item);
+	return len;
 }
 
 label * opcode_buf_label(opcode_buf * self, int index) {

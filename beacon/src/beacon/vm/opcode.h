@@ -58,6 +58,9 @@ typedef enum opcode {
 	op_try_exit,
 	op_throw,
 	op_try_clear,
+	op_defer_enter,
+	op_defer_exit,
+	op_defer_register,
 	op_hexception,
 	op_instanceof,
 

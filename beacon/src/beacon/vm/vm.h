@@ -62,6 +62,12 @@ typedef struct vm {
 	//この変数自体を-1にリセットします。
 	int native_throw_pos;
 
+	//deferによる強制実行を記録するベクタ
+	vector* defer_vec;
+
+	//現在実行している強制実行
+	int defer_at;
+
 	//現在実行しているインストラクションの一覧や、
 	//定数プールを提供している enviroment への参照です。
 	//あくまで参照しているだけなので、

@@ -22,8 +22,9 @@ opcode_buf* opcode_buf_new();
  * self->source に item を追加します.
  * @param self
  * @param item
+ * @return
  */
-void opcode_buf_add(opcode_buf* self, vector_item item);
+int opcode_buf_add(opcode_buf* self, vector_item item);
 
 /**
  * このバッファーの開放時に開放されるラベルを作成します.

@@ -24,6 +24,7 @@
 #include "../env/heap.h"
 #include "../env/generic_type.h"
 //proto
+static void vm_run(vm * self, enviroment * env, int pos, int deferStart);
 static int stack_topi(vm* self);
 static double stack_topd(vm* self);
 static char stack_topc(vm* self);
@@ -67,6 +68,8 @@ vm * vm_new() {
 	ret->native_throw_pos = -1;
 	ret->exception = NULL;
 	ret->children_vec = vector_new();
+	ret->defer_at = 0;
+	ret->defer_vec = vector_new();
 	return ret;
 }
 
@@ -85,6 +88,130 @@ void vm_execute(vm* self, enviroment* env) {
 }
 
 void vm_resume(vm * self, enviroment * env, int pos) {
+	vm_run(self, env, pos, -1);
+	while(self->defer_vec->length > 0) {
+		label* e = (label*)vector_pop(self->defer_vec);
+		vm_run(self, env, e->cursor, e->cursor);
+	}
+	vector_clear(self->defer_vec);
+}
+
+void vm_native_throw(vm * self, object * exc) {
+	self->exception = exc;
+
+	vm_throw(self, exc);
+	sg_thread* th = sg_thread_current();
+	//空ならプログラムを終了
+	if (vector_empty(th->trace_stack)) {
+		vm_terminate(self);
+	//どこかでキャッチしようとしている
+	} else {
+		int temp = 0;
+		vm_validate(self, self->context_ref->buf->source->length, &temp);
+		self->native_throw_pos = temp;
+	}
+}
+
+void vm_throw(vm * self, object * exc) {
+	vm* temp = self;
+	do {
+		temp->exception = exc;
+		temp = temp->parent;
+	} while (temp != NULL);
+}
+
+void vm_catch(vm * self) {
+	if (self == NULL) {
+		return;
+	}
+	for (int i = 0; i < self->children_vec->length; i++) {
+		vm* e = (vm*)vector_at(self->children_vec, i);
+		vm_catch(e);
+	}
+	self->exception = NULL;
+}
+
+bool vm_validate(vm* self, int source_len, int* pcDest) {
+	sg_thread* th = sg_thread_current();
+	vm_trace* trace = (vm_trace*)vector_top(th->trace_stack);
+	//ここなので catch節 へ向かう
+	if (trace->v == self) {
+		//ここでジャンプレベルを確認するのは
+		//例えば
+		// try { throw ... } catch { ... }
+		//と、
+		// try { throwFunc() ... } catch { ... }
+		//では、
+		//プログラムカウンタの位置が異なるためです。
+		//
+		if (trace->jump_level > 0) {
+			*pcDest = trace->pc + 1;
+		} else *pcDest = trace->pc;
+		self->validate = false;
+		return true;
+	//ここではないので終了
+	} else {
+		trace->jump_level++;
+		self->parent->validate = true;
+		*pcDest = source_len;
+		return false;
+	}
+}
+
+void vm_terminate(vm * self) {
+	vm* temp = self;
+	do {
+		temp->terminate = true;
+		temp = temp->parent;
+	} while (temp != NULL);
+}
+
+void vm_uncaught(vm * self, enviroment* env, int pc) {
+	line_range* lr = line_range_find(env->line_rangeVec, pc);
+	int line = -1;
+	if (lr != NULL) {
+		line = lr->lineno;
+	}
+	//例外のメッセージを取得
+	type* tp = namespace_get_type(namespace_lang(), "Exception");
+	int temp = -1;
+	class_find_field(tp->u.class_, "message", &temp);
+	object* ex = self->exception;
+	object* msg = vector_at(ex->u.field_vec, temp);
+	string_buffer* cstr = vector_at(msg->native_slot_vec, 0);
+
+	text_printf("file: %s <%d>", env->context_ref->filename, line);
+	text_printf("\n");
+	text_printf("%s", cstr->text);
+	text_printf("\n");
+}
+
+void vm_markall(vm * self) {
+	//全ての静的フィールドをマークする
+	script_context* ctx = script_context_get_current();
+	script_context_static_each(ctx, vm_markStatic);
+	//全ての子要素を巡回してマーキング
+	vm_markallImpl(self);
+}
+
+void vm_delete(vm * self) {
+
+	remove_from_parent(self);
+	vector_clear(self->value_stack);
+	vector_clear(self->ref_stack);
+
+	heap_gc(heap_get());
+
+	//constant_pool_delete(self->pool);
+	//operand_stack_delete(self->operand_stack);
+	vector_delete(self->value_stack, vector_deleter_null);
+	vector_delete(self->ref_stack, vector_deleter_null);
+	vector_delete(self->children_vec, vector_deleter_null);
+	MEM_FREE(self);
+}
+
+//private
+static void vm_run(vm * self, enviroment * env, int pos, int deferStart) {
 	script_context* ctx = script_context_get_current();
 	int source_len = env->buf->source->length;
 	self->context_ref = env;
@@ -548,6 +675,24 @@ void vm_resume(vm * self, enviroment * env, int pos) {
 				method_execute(m, self, env);
 				break;
 			}
+			//defer
+			case op_defer_enter:
+			{
+				break;
+			}
+			case op_defer_exit:
+			{
+				if(pos == deferStart) {
+					i = source_len;
+				}
+				break;
+			}
+			case op_defer_register:
+			{
+				label* l = (label*)enviroment_source_at(env, ++i);
+				vector_push(self->defer_vec, l);
+				break;
+			}
 			//debug
 			case op_printi:
 			{
@@ -619,121 +764,6 @@ void vm_resume(vm * self, enviroment * env, int pos) {
 	}
 }
 
-void vm_native_throw(vm * self, object * exc) {
-	self->exception = exc;
-
-	vm_throw(self, exc);
-	sg_thread* th = sg_thread_current();
-	//空ならプログラムを終了
-	if (vector_empty(th->trace_stack)) {
-		vm_terminate(self);
-	//どこかでキャッチしようとしている
-	} else {
-		int temp = 0;
-		vm_validate(self, self->context_ref->buf->source->length, &temp);
-		self->native_throw_pos = temp;
-	}
-}
-
-void vm_throw(vm * self, object * exc) {
-	vm* temp = self;
-	do {
-		temp->exception = exc;
-		temp = temp->parent;
-	} while (temp != NULL);
-}
-
-void vm_catch(vm * self) {
-	if (self == NULL) {
-		return;
-	}
-	for (int i = 0; i < self->children_vec->length; i++) {
-		vm* e = (vm*)vector_at(self->children_vec, i);
-		vm_catch(e);
-	}
-	self->exception = NULL;
-}
-
-bool vm_validate(vm* self, int source_len, int* pcDest) {
-	sg_thread* th = sg_thread_current();
-	vm_trace* trace = (vm_trace*)vector_top(th->trace_stack);
-	//ここなので catch節 へ向かう
-	if (trace->v == self) {
-		//ここでジャンプレベルを確認するのは
-		//例えば
-		// try { throw ... } catch { ... }
-		//と、
-		// try { throwFunc() ... } catch { ... }
-		//では、
-		//プログラムカウンタの位置が異なるためです。
-		//
-		if (trace->jump_level > 0) {
-			*pcDest = trace->pc + 1;
-		} else *pcDest = trace->pc;
-		self->validate = false;
-		return true;
-	//ここではないので終了
-	} else {
-		trace->jump_level++;
-		self->parent->validate = true;
-		*pcDest = source_len;
-		return false;
-	}
-}
-
-void vm_terminate(vm * self) {
-	vm* temp = self;
-	do {
-		temp->terminate = true;
-		temp = temp->parent;
-	} while (temp != NULL);
-}
-
-void vm_uncaught(vm * self, enviroment* env, int pc) {
-	line_range* lr = line_range_find(env->line_rangeVec, pc);
-	int line = -1;
-	if (lr != NULL) {
-		line = lr->lineno;
-	}
-	//例外のメッセージを取得
-	type* tp = namespace_get_type(namespace_lang(), "Exception");
-	int temp = -1;
-	class_find_field(tp->u.class_, "message", &temp);
-	object* ex = self->exception;
-	object* msg = vector_at(ex->u.field_vec, temp);
-	string_buffer* cstr = vector_at(msg->native_slot_vec, 0);
-
-	text_printf("file: %s <%d>", env->context_ref->filename, line);
-	text_printf("\n");
-	text_printf("%s", cstr->text);
-	text_printf("\n");
-}
-
-void vm_markall(vm * self) {
-	//全ての静的フィールドをマークする
-	script_context* ctx = script_context_get_current();
-	script_context_static_each(ctx, vm_markStatic);
-	//全ての子要素を巡回してマーキング
-	vm_markallImpl(self);
-}
-
-void vm_delete(vm * self) {
-
-	remove_from_parent(self);
-	vector_clear(self->value_stack);
-	vector_clear(self->ref_stack);
-
-	heap_gc(heap_get());
-
-	//constant_pool_delete(self->pool);
-	//operand_stack_delete(self->operand_stack);
-	vector_delete(self->value_stack, vector_deleter_null);
-	vector_delete(self->ref_stack, vector_deleter_null);
-	vector_delete(self->children_vec, vector_deleter_null);
-	MEM_FREE(self);
-}
-
-//private
 static int stack_topi(vm* self) {
 	object* ret = (object*)vector_top(self->value_stack);
 	assert(ret->tag == object_int);
