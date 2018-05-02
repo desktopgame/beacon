@@ -22,6 +22,9 @@ typedef enum opcode {
 	op_ige,
 	op_ilt,
 	op_ile,
+	op_ilsh,
+	op_irsh,
+	op_iexcor,
 
 	op_dadd,
 	op_dsub,

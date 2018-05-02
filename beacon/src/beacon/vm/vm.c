@@ -228,6 +228,15 @@ static void vm_run(frame * self, enviroment * env, int pos, int deferStart) {
 			case op_ile:
 				vector_push(self->value_stack, object_bool_get(SPI(self) <= SPI(self)));
 				break;
+			case op_ilsh:
+				vector_push(self->value_stack, object_bool_get(SPI(self) << SPI(self)));
+				break;
+			case op_irsh:
+				vector_push(self->value_stack, object_bool_get(SPI(self) >> SPI(self)));
+				break;
+			case op_iexcor:
+				vector_push(self->value_stack, object_bool_get(SPI(self) ^ SPI(self)));
+				break;
 				//double & double
 			case op_dadd:
 				vector_push(self->value_stack, object_double_new(SPD(self) + SPD(self)));

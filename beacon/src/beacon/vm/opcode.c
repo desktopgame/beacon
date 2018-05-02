@@ -53,6 +53,15 @@ int opcode_print(vector* source, int index) {
 		case op_ile:
 			text_printf("ile");
 			break;
+		case op_ilsh:
+			text_printf("ilsh");
+			break;
+		case op_irsh:
+			text_printf("irsh");
+			break;
+		case op_iexcor:
+			text_printf("iexcor");
+			break;
 		//double & double
 		case op_dadd:
 			text_printf("dadd");

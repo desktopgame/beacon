@@ -159,6 +159,10 @@ static opcode bi_operator_to_opi(ilbinary_op_type type) {
 		case ilbinary_ge: return op_ige;
 		case ilbinary_lt: return op_ilt;
 		case ilbinary_le: return op_ile;
+
+		case ilbinary_lshift: return op_ilsh;
+		case ilbinary_rshift: return op_irsh;
+		case ilbinary_excor: return op_iexcor;
 		default: return -1;
 	}
 }
@@ -185,6 +189,12 @@ static opcode bi_operator_to_opd(ilbinary_op_type type) {
 		case ilbinary_ge: return op_dge;
 		case ilbinary_lt: return op_dlt;
 		case ilbinary_le: return op_dle;
+
+		case ilbinary_lshift:
+		case ilbinary_rshift:
+		case ilbinary_excor:
+			assert(false);
+			break;
 		default: return -1;
 	}
 }
