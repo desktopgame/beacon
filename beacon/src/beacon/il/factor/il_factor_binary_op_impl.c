@@ -19,7 +19,6 @@ static opcode bi_operator_to_opi(ilbinary_op_type type);
 static opcode bi_operator_to_opd(ilbinary_op_type type);
 static opcode bi_operator_to_opb(ilbinary_op_type type);
 static bool ilbi_compare(il_factor_binary_op* self);
-static void assign_dump_operator(il_factor_binary_op* self);
 
 il_factor * il_factor_wrap_binary(il_factor_binary_op * self) {
 	il_factor* ret = (il_factor*)MEM_MALLOC(sizeof(il_factor));
@@ -38,7 +37,7 @@ il_factor_binary_op * il_factor_binary_op_new(ilbinary_op_type type) {
 
 void il_factor_binary_op_dump(il_factor_binary_op * self, int depth) {
 	text_putindent(depth);
-	assign_dump_operator(self);
+	text_printf("%s", il_factor_binary_op_optostr(self));
 	text_putline();
 	il_factor_dump(self->left, depth + 1);
 	il_factor_dump(self->right, depth + 1);
@@ -109,6 +108,9 @@ static char* il_factor_binary_op_optostr(il_factor_binary_op* self) {
 		case ilbinary_logic_or: return "||";
 		case ilbinary_eq: return "==";
 		case ilbinary_noteq: return "!=";
+		case ilbinary_lshift: return "<<";
+		case ilbinary_rshift: return ">>";
+		case ilbinary_excor: return "^";
 		default: return "NULL";
 	}
 }
@@ -214,63 +216,6 @@ static bool ilbi_compare(il_factor_binary_op* self) {
 			break;
 	}
 	return false;
-}
-
-static void assign_dump_operator(il_factor_binary_op* self) {
-	switch (self->type) {
-		case ilbinary_add:
-			text_printf("+");
-			break;
-		case ilbinary_sub:
-			text_printf("-");
-			break;
-		case ilbinary_mul:
-			text_printf("*");
-			break;
-		case ilbinary_div:
-			text_printf("/");
-			break;
-		case ilbinary_mod:
-			text_printf("%");
-			break;
-
-
-		case ilbinary_bit_or:
-			text_printf("|");
-			break;
-		case ilbinary_logic_or:
-			text_printf("||");
-			break;
-
-
-		case ilbinary_bit_and:
-			text_printf("&");
-			break;
-		case ilbinary_logic_and:
-			text_printf("&&");
-			break;
-
-		case ilbinary_eq:
-			text_printf("==");
-			break;
-		case ilbinary_noteq:
-			text_printf("!=");
-			break;
-		case ilbinary_gt:
-			text_printf(">");
-			break;
-		case ilbinary_ge:
-			text_printf(">=");
-			break;
-		case ilbinary_lt:
-			text_printf("<");
-			break;
-		case ilbinary_le:
-			text_printf("<=");
-			break;
-		default:
-			break;
-	}
 }
 
 il_factor_binary_op* il_factor_cast_binary_op(il_factor* fact) {
