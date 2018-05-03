@@ -2,6 +2,7 @@
 #ifndef BEACON_VM_OPCODE_H
 #define BEACON_VM_OPCODE_H
 #include "../util/vector.h"
+#include <stdio.h>
 
 /**
  * 命令の一覧です.
@@ -114,4 +115,12 @@ typedef enum opcode {
  * @param index
  */
 int opcode_print(vector* source, int index);
+
+/**
+ * オペコードを出力します.
+ * @param fp
+ * @param source
+ * @param index
+ */
+int opcode_fprint(FILE* fp, vector* source, int index);
 #endif // !SIGNAL_VM_OPCODE_H
