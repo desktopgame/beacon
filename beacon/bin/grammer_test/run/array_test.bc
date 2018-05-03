@@ -1,5 +1,5 @@
-import "Iterator"
-import "Array"
+import "beacon/lang/Iterator"
+import "beacon/lang/Array"
 
 namespace signal.lang {
 	class ArrayIterator[T] : Iterator[T] {

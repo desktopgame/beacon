@@ -1,4 +1,4 @@
-import "Bool"
+import "beacon/lang/Bool"
 
 namespace beacon.lang {
 	interface Iterator[T] {

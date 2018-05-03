@@ -1,5 +1,5 @@
-import "Iterator"
-import "Vector"
+import "beacon/lang/Iterator"
+import "beacon/lang/Vector"
 
 namespace beacon.lang {
 	class VectorIterator[T] : Iterator[T] {

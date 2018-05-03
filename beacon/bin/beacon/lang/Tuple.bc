@@ -13,9 +13,16 @@ import "beacon/lang/VectorIterator"
 
 import "beacon/lang/Exception"
 import "beacon/lang/StackTraceElement"
-import "beacon/lang/Tuple"
 
-var val = 0;
-var val2 = "Hello";
-assert (val is Object);
-assert (val2 is String);
+namespace beacon.x {
+	class Tuple[L, R] {
+		public:
+		L left;
+		R right;
+
+		def new(L left, R right) {
+			this.left = left;
+			this.right = right;
+		}
+	}
+}

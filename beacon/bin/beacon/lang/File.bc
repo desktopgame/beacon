@@ -1,0 +1,35 @@
+namespace beacon.unsafe {
+	class File {
+		public:
+		def new(String filename, String mode) {
+			nativeInit(filename, mode);
+		}
+
+		def putc(Char c) -> Void {
+			nativePut(c);
+		}
+
+		def puts(String s) -> Void {
+			var offs = 0;
+			while(offs < s.length()) {
+				putc(s.charAt(offs));
+				offs += 1;
+			}
+		}
+
+		def getc() -> Char {
+			return nativeGet();
+		}
+
+		private:
+		def static native nativeInit(String filename, String mode) -> Void;
+
+		def static native nativePut(Char c) -> Void;
+
+		def static native nativeGet() -> Char;
+
+		def static native nativeGetStdin() -> File;
+
+		def static native nativeGetStdout() -> File;
+	}
+}

@@ -1,6 +1,6 @@
-import "Array"
-import "Exception"
-import "VectorIterator"
+import "beacon/lang/Array"
+import "beacon/lang/Exception"
+import "beacon/lang/VectorIterator"
 
 namespace beacon.lang {
 	class Vector[T] : Iterable[T] {

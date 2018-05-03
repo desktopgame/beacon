@@ -1,4 +1,4 @@
-//import "Console"
+//import "beacon/lang/Console"
 
 namespace beacon.lang {
 	class Int {

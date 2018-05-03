@@ -145,20 +145,20 @@ void script_context_bootstrap(script_context* self) {
 	//ブートストラップクラスローダー
 	self->bootstrap_class_loader = class_loader_new(content_lib);
 	self->bootstrap_class_loader->filename = text_strdup("bootstrap");
-	class_loader_rsub(self->bootstrap_class_loader, "Object.bc");
+	class_loader_rsub(self->bootstrap_class_loader, "beacon/lang/Object.bc");
 
-	class_loader_rsub(self->bootstrap_class_loader, "Int.bc");
-	class_loader_rsub(self->bootstrap_class_loader, "Double.bc");
-	class_loader_rsub(self->bootstrap_class_loader, "Char.bc");
-	class_loader_rsub(self->bootstrap_class_loader, "Bool.bc");
-	class_loader_rsub(self->bootstrap_class_loader, "Null.bc");
-	class_loader_rsub(self->bootstrap_class_loader, "Void.bc");
+	class_loader_rsub(self->bootstrap_class_loader, "beacon/lang/Int.bc");
+	class_loader_rsub(self->bootstrap_class_loader, "beacon/lang/Double.bc");
+	class_loader_rsub(self->bootstrap_class_loader, "beacon/lang/Char.bc");
+	class_loader_rsub(self->bootstrap_class_loader, "beacon/lang/Bool.bc");
+	class_loader_rsub(self->bootstrap_class_loader, "beacon/lang/Null.bc");
+	class_loader_rsub(self->bootstrap_class_loader, "beacon/lang/Void.bc");
 
-	class_loader_rsub(self->bootstrap_class_loader, "Array.bc");
-	class_loader_rsub(self->bootstrap_class_loader, "String.bc");
-	class_loader_rsub(self->bootstrap_class_loader, "Console.bc");
-	class_loader_rsub(self->bootstrap_class_loader, "Exception.bc");
-	class_loader_rsub(self->bootstrap_class_loader, "StackTraceElement.bc");
+	class_loader_rsub(self->bootstrap_class_loader, "beacon/lang/Array.bc");
+	class_loader_rsub(self->bootstrap_class_loader, "beacon/lang/String.bc");
+	class_loader_rsub(self->bootstrap_class_loader, "beacon/lang/Console.bc");
+	class_loader_rsub(self->bootstrap_class_loader, "beacon/lang/Exception.bc");
+	class_loader_rsub(self->bootstrap_class_loader, "beacon/lang/StackTraceElement.bc");
 	//退避していたコンテキストを復帰
 	self->heap->accept_blocking--;
 	script_context_set_current(selected);

@@ -8,14 +8,6 @@ import "beacon/lang/Bool"
 import "beacon/lang/Null"
 import "beacon/lang/Void"
 import "beacon/lang/Console"
-import "beacon/lang/Vector"
-import "beacon/lang/VectorIterator"
 
 import "beacon/lang/Exception"
 import "beacon/lang/StackTraceElement"
-import "beacon/lang/Tuple"
-
-var val = 0;
-var val2 = "Hello";
-assert (val is Object);
-assert (val2 is String);

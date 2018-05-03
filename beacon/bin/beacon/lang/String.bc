@@ -1,4 +1,4 @@
-import "Array"
+import "beacon/lang/Array"
 
 namespace beacon.lang {
 	class String {

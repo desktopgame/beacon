@@ -1,4 +1,4 @@
-import "Iterator"
+import "beacon/lang/Iterator"
 
 namespace beacon.lang {
 	class ObjectIterator : Iterator {
