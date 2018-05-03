@@ -14,4 +14,4 @@ import "VectorIterator"
 import "Exception"
 import "StackTraceElement"
 
-var vec = new Vector<|Int|>("Hello");
+var vec = new Vector[Int]("Hello");

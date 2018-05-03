@@ -15,7 +15,7 @@ import "Exception"
 import "StackTraceElement"
 
 namespace beacon.x {
-	class Tuple<|L, R|> {
+	class Tuple[L, R] {
 		public:
 		L left;
 		R right;

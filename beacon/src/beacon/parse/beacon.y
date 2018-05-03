@@ -248,7 +248,7 @@ type_parameter_group
 	{
 		$$ = ast_new_blank();
 	}
-	| LGEN type_parameter_list RGEN
+	| LSB type_parameter_list RSB
 	{
 		$$ = $2;
 	}
@@ -510,7 +510,7 @@ typename_group
 	{
 		$$ = ast_new_blank();
 	}
-	| LGEN typename_list RGEN
+	| LSB typename_list RSB
 	{
 		$$ = $2;
 	}

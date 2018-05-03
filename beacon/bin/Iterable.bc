@@ -1,8 +1,8 @@
 import "Iterator"
 
 namespace beacon.lang {
-	interface Iterable<|T|> {
+	interface Iterable[T] {
 		public:
-		def iterate() -> Iterator<|T|>;
+		def iterate() -> Iterator[T];
 	}
 }

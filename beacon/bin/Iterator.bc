@@ -1,7 +1,7 @@
 import "Bool"
 
 namespace beacon.lang {
-	interface Iterator<|T|> {
+	interface Iterator[T] {
 		public:
 		def hasNext() -> Bool;
 		def next() -> T;

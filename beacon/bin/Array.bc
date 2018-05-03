@@ -4,7 +4,7 @@ import "Iterable"
 import "ArrayIterator"
 
 namespace beacon.lang {
-	class Array<|T|> : Iterable<|T|> {
+	class Array[T] : Iterable[T] {
 		private:
 		Int length;
 
@@ -23,8 +23,8 @@ namespace beacon.lang {
 			nativeSet(index, v);
 		}
 
-		def sub(Int offs, Int len) -> Array<|T|> {
-			var range = new Array<|T|>(len);
+		def sub(Int offs, Int len) -> Array[T] {
+			var range = new Array[T](len);
 			var ptr = offs;
 
 			while(ptr < offs + len) {
@@ -40,12 +40,12 @@ namespace beacon.lang {
 			return nativeGet(index) as T;
 		}
 
-		static def copy<|T|>(Array<|T|> src, Int srcOffset, Array<|T|> dst, Int dstOffset, Int length) -> Void {
-			Array.nativeCopy<|T|>(src, srcOffset, dst, dstOffset, length);
+		static def copy[T](Array[T] src, Int srcOffset, Array[T] dst, Int dstOffset, Int length) -> Void {
+			Array.nativeCopy[T](src, srcOffset, dst, dstOffset, length);
 		}
 
-		def iterate() -> Iterator<|T|> {
-			return new ArrayIterator<|T|>(this);
+		def iterate() -> Iterator[T] {
+			return new ArrayIterator[T](this);
 		}
 
 		private:
@@ -57,6 +57,6 @@ namespace beacon.lang {
 		native def nativeInit() -> Void;
 		native def nativeSet(Int index, Object v) -> Void;
 		native def nativeGet(Int index) -> Object;
-		static native def nativeCopy<|T|>(Array<|T|> src, Int srcOffset, Array<|T|> dst, Int dstOffset, Int length) -> Void;
+		static native def nativeCopy[T](Array[T] src, Int srcOffset, Array[T] dst, Int dstOffset, Int length) -> Void;
 	}
 }

@@ -2,13 +2,13 @@ import "Iterator"
 import "Vector"
 
 namespace beacon.lang {
-	class VectorIterator<|T|> : Iterator<|T|> {
+	class VectorIterator[T] : Iterator[T] {
 		private:
-		Vector<|T|> source;
+		Vector[T] source;
 		Int offs;
 
 		public:
-		ctor new(Vector<|T|> source) {
+		ctor new(Vector[T] source) {
 			this.source = source;
 			this.offs = 0;
 		}

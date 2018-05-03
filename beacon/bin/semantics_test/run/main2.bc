@@ -13,9 +13,9 @@ import "VectorIterator"
 
 import "Exception"
 import "StackTraceElement"
-var vec = new Vector<|Vector<|Int|>|>();
-var a = new Vector<|Int|>();
-var b = new Vector<|Int|>();
+var vec = new Vector[Vector[Int]]();
+var a = new Vector[Int]();
+var b = new Vector[Int]();
 var iter = vec.iterate();
 vec.push(a);
 vec.push(b);

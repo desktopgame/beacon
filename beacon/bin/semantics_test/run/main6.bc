@@ -15,6 +15,6 @@ import "Exception"
 import "StackTraceElement"
 import "Tuple"
 
-var t = new beacon::x::Tuple<|beacon::x::Tuple<|Int, Int|>, String|>(new beacon::x::Tuple<|Int, Int|>(5, 5), "Hello");
+var t = new beacon::x::Tuple[beacon::x::Tuple[Int, Int], String](new beacon::x::Tuple[Int, Int](5, 5), "Hello");
 Console.writeLine(t.left.left);
 Console.writeLine(t.right);

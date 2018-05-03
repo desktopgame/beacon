@@ -1,7 +1,7 @@
 namespace beacon {
 	class Test {
 		public:
-		Namespace::Class<|Int|> a;
-		Namespace::Class<|Int, Int|> a;
+		Namespace::Class[Int] a;
+		Namespace::Class[Int, Int] a;
 	}
 }

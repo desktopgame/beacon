@@ -15,7 +15,7 @@ import "Exception"
 import "StackTraceElement"
 import "Tuple"
 
-var v = new Vector<|beacon::x::Tuple<|Int, String|>|>();
-v.push(new beacon::x::Tuple<|Int, String|>(10, "AAA"));
-v.push(new beacon::x::Tuple<|Int, String|>(3, "BBB"));
-v.push(new beacon::x::Tuple<|Int, String|>(1, "CCC"));
+var v = new Vector[beacon::x::Tuple[Int, String]]();
+v.push(new beacon::x::Tuple[Int, String](10, "AAA"));
+v.push(new beacon::x::Tuple[Int, String](3, "BBB"));
+v.push(new beacon::x::Tuple[Int, String](1, "CCC"));

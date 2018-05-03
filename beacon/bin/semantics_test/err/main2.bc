@@ -14,5 +14,5 @@ import "VectorIterator"
 import "Exception"
 import "StackTraceElement"
 
-var vec = new Vector<|Int|>();
+var vec = new Vector[Int]();
 Console.not_declared_method();

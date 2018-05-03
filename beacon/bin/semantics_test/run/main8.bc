@@ -16,18 +16,18 @@ import "StackTraceElement"
 import "Tuple"
 
 namespace beacon.x {
-	class MyClass<|T|> {
+	class MyClass[T] {
 		public:
-		Vector<|T|> v;
+		Vector[T] v;
 
 		ctor new() {
-			this.v = new Vector<|T|>();
+			this.v = new Vector[T]();
 		}
 	}
 }
 
-var mc = new beacon::x::MyClass<|beacon::x::Tuple<|Int, String|>|>();
+var mc = new beacon::x::MyClass[beacon::x::Tuple[Int, String]]();
 var v = mc.v;
-v.push(new beacon::x::Tuple<|Int, String|>(10, "mcAAA"));
-v.push(new beacon::x::Tuple<|Int, String|>(3, "mcBBB"));
-v.push(new beacon::x::Tuple<|Int, String|>(1, "mcCCC"));
+v.push(new beacon::x::Tuple[Int, String](10, "mcAAA"));
+v.push(new beacon::x::Tuple[Int, String](3, "mcBBB"));
+v.push(new beacon::x::Tuple[Int, String](1, "mcCCC"));

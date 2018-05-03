@@ -2,13 +2,13 @@ import "Iterator"
 import "Array"
 
 namespace signal.lang {
-	class ArrayIterator<|T|> : Iterator<|T|> {
+	class ArrayIterator[T] : Iterator[T] {
 		private:
-		Array<|T|> source;
+		Array[T] source;
 		Int offset;
 
 		public:
-		ctor new(Array<|T|> source) {
+		ctor new(Array[T] source) {
 			this.source = source;
 			this.offset = 0;
 		}

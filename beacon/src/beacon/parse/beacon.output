@@ -1,10 +1,10 @@
 Terminals which are not used
 
    LINE
+   LGEN
+   RGEN
    INC
    DEC
-   LSB
-   RSB
    PRE_DEC
    PRE_INC
    QUOTE
@@ -59,7 +59,7 @@ Grammar
    24 parameterized_typename: IDENT type_parameter_group
 
    25 type_parameter_group: /* empty */
-   26                     | LGEN type_parameter_list RGEN
+   26                     | LSB type_parameter_list RSB
 
    27 type_parameter_list: type_parameter
    28                    | type_parameter_list COMMA type_parameter
@@ -135,7 +135,7 @@ Grammar
    76              | argument_list COMMA expression
 
    77 typename_group: /* empty */
-   78               | LGEN typename_list RGEN
+   78               | LSB typename_list RSB
 
    79 typename_list: typename_T
    80              | typename_list COMMA typename_T
@@ -298,8 +298,8 @@ GT (279) 112
 GE (280) 113
 LT (281) 114
 LE (282) 115
-LGEN (283) 26 78
-RGEN (284) 26 78
+LGEN (283)
+RGEN (284)
 BIT_AND (285) 97
 LOGIC_AND (286) 100
 BIT_OR (287) 94
@@ -322,8 +322,8 @@ LCB (303) 10 34 35 36 37 38 39 174 175
 RCB (304) 10 34 35 36 37 38 39 174 175
 LRB (305) 33 50 51 52 53 58 59 60 61 84 121 122 123 124 170
 RRB (306) 33 50 51 52 53 58 59 60 61 84 121 122 123 124 170
-LSB (307)
-RSB (308)
+LSB (307) 26 78
+RSB (308) 26 78
 SEMI (309) 62 152 171 172 176 178
 IMPORT (310) 23
 VAR (311) 154
@@ -2060,13 +2060,13 @@ state 41
 state 42
 
    77 typename_group: .  [IDENT, DOT, ADD, SUB, MUL, DIV, MOD, LSHIFT, RSHIFT, EQUAL, NOTEQUAL, GT, GE, LT, LE, BIT_AND, LOGIC_AND, BIT_OR, LOGIC_OR, ASSIGN, ADD_ASSIGN, SUB_ASSIGN, MUL_ASSIGN, DIV_ASSIGN, MOD_ASSIGN, AND_ASSIGN, OR_ASSIGN, LSHIFT_ASSIGN, RSHIFT_ASSIGN, EXC_OR_ASSIGN, EXC_OR, LRB, SEMI, AS]
-   78               | . LGEN typename_list RGEN
+   78               | . LSB typename_list RSB
    81 typename_T: fqcn_part . typename_group
    83 fqcn_part: fqcn_part . COLO_COLO IDENT
   128 lhs: fqcn_part . typename_group
 
     COLO_COLO  shift, and go to state 85
-    LGEN       shift, and go to state 86
+    LSB        shift, and go to state 86
 
     $default  reduce using rule 77 (typename_group)
 
@@ -2280,12 +2280,12 @@ state 61
 state 62
 
    77 typename_group: .  [DOT, COMMA, COLON, ADD, SUB, MUL, DIV, MOD, LSHIFT, RSHIFT, EQUAL, NOTEQUAL, GT, GE, LT, LE, BIT_AND, LOGIC_AND, BIT_OR, LOGIC_OR, ASSIGN, ADD_ASSIGN, SUB_ASSIGN, MUL_ASSIGN, DIV_ASSIGN, MOD_ASSIGN, AND_ASSIGN, OR_ASSIGN, LSHIFT_ASSIGN, RSHIFT_ASSIGN, EXC_OR_ASSIGN, EXC_OR, LCB, LRB, RRB, SEMI, AS]
-   78               | . LGEN typename_list RGEN
+   78               | . LSB typename_list RSB
    83 fqcn_part: fqcn_part . COLO_COLO IDENT
   128 lhs: fqcn_part . typename_group
 
     COLO_COLO  shift, and go to state 85
-    LGEN       shift, and go to state 86
+    LSB        shift, and go to state 86
 
     $default  reduce using rule 77 (typename_group)
 
@@ -2549,13 +2549,13 @@ state 68
 state 69
 
    77 typename_group: .  [LRB]
-   78               | . LGEN typename_list RGEN
+   78               | . LSB typename_list RSB
    83 fqcn_part: fqcn_part . COLO_COLO IDENT
   123 expression_nobrace: NEW fqcn_part . typename_group LRB argument_list RRB
   124                   | NEW fqcn_part . typename_group LRB RRB
 
     COLO_COLO  shift, and go to state 85
-    LGEN       shift, and go to state 86
+    LSB        shift, and go to state 86
 
     $default  reduce using rule 77 (typename_group)
 
@@ -3048,7 +3048,7 @@ state 85
 
 state 86
 
-   78 typename_group: LGEN . typename_list RGEN
+   78 typename_group: LSB . typename_list RSB
    79 typename_list: . typename_T
    80              | . typename_list COMMA typename_T
    81 typename_T: . fqcn_part typename_group
@@ -6186,11 +6186,11 @@ state 145
 
 state 146
 
-   78 typename_group: LGEN typename_list . RGEN
+   78 typename_group: LSB typename_list . RSB
    80 typename_list: typename_list . COMMA typename_T
 
     COMMA  shift, and go to state 209
-    RGEN   shift, and go to state 210
+    RSB    shift, and go to state 210
 
 
 state 147
@@ -6202,13 +6202,13 @@ state 147
 
 state 148
 
-   77 typename_group: .  [IDENT, DOT, COMMA, COLON, ADD, SUB, MUL, DIV, MOD, LSHIFT, RSHIFT, EQUAL, NOTEQUAL, GT, GE, LT, LE, RGEN, BIT_AND, LOGIC_AND, BIT_OR, LOGIC_OR, EXC_OR, LCB, LRB, RRB, SEMI, AS]
-   78               | . LGEN typename_list RGEN
+   77 typename_group: .  [IDENT, DOT, COMMA, COLON, ADD, SUB, MUL, DIV, MOD, LSHIFT, RSHIFT, EQUAL, NOTEQUAL, GT, GE, LT, LE, BIT_AND, LOGIC_AND, BIT_OR, LOGIC_OR, EXC_OR, LCB, LRB, RRB, RSB, SEMI, AS]
+   78               | . LSB typename_list RSB
    81 typename_T: fqcn_part . typename_group
    83 fqcn_part: fqcn_part . COLO_COLO IDENT
 
     COLO_COLO  shift, and go to state 85
-    LGEN       shift, and go to state 86
+    LSB        shift, and go to state 86
 
     $default  reduce using rule 77 (typename_group)
 
@@ -6218,10 +6218,10 @@ state 148
 state 149
 
    77 typename_group: .  [DOT, COMMA, COLON, ADD, SUB, MUL, DIV, MOD, LSHIFT, RSHIFT, EQUAL, NOTEQUAL, GT, GE, LT, LE, BIT_AND, LOGIC_AND, BIT_OR, LOGIC_OR, ASSIGN, ADD_ASSIGN, SUB_ASSIGN, MUL_ASSIGN, DIV_ASSIGN, MOD_ASSIGN, AND_ASSIGN, OR_ASSIGN, LSHIFT_ASSIGN, RSHIFT_ASSIGN, EXC_OR_ASSIGN, EXC_OR, LCB, LRB, RRB, SEMI, AS]
-   78               | . LGEN typename_list RGEN
+   78               | . LSB typename_list RSB
   129 lhs: expression DOT IDENT . typename_group
 
-    LGEN  shift, and go to state 86
+    LSB  shift, and go to state 86
 
     $default  reduce using rule 77 (typename_group)
 
@@ -8651,7 +8651,7 @@ state 209
 
 state 210
 
-   78 typename_group: LGEN typename_list RGEN .
+   78 typename_group: LSB typename_list RSB .
 
     $default  reduce using rule 78 (typename_group)
 
@@ -8827,9 +8827,9 @@ state 222
 
    24 parameterized_typename: IDENT . type_parameter_group
    25 type_parameter_group: .  [COLON, LCB]
-   26                     | . LGEN type_parameter_list RGEN
+   26                     | . LSB type_parameter_list RSB
 
-    LGEN  shift, and go to state 242
+    LSB  shift, and go to state 242
 
     $default  reduce using rule 25 (type_parameter_group)
 
@@ -9084,7 +9084,7 @@ state 241
 
 state 242
 
-   26 type_parameter_group: LGEN . type_parameter_list RGEN
+   26 type_parameter_group: LSB . type_parameter_list RSB
    27 type_parameter_list: . type_parameter
    28                    | . type_parameter_list COMMA type_parameter
    29 type_parameter: . IDENT type_parameter_rule_list
@@ -9258,7 +9258,7 @@ state 255
 state 256
 
    29 type_parameter: IDENT . type_parameter_rule_list
-   32 type_parameter_rule_list: .  [COMMA, RGEN]
+   32 type_parameter_rule_list: .  [COMMA, RSB]
    33                         | . LRB typename_list RRB
 
     LRB  shift, and go to state 275
@@ -9284,11 +9284,11 @@ state 258
 
 state 259
 
-   26 type_parameter_group: LGEN type_parameter_list . RGEN
+   26 type_parameter_group: LSB type_parameter_list . RSB
    28 type_parameter_list: type_parameter_list . COMMA type_parameter
 
     COMMA  shift, and go to state 279
-    RGEN   shift, and go to state 280
+    RSB    shift, and go to state 280
 
 
 state 260
@@ -9445,7 +9445,7 @@ state 276
 state 277
 
    30 type_parameter: IN IDENT . type_parameter_rule_list
-   32 type_parameter_rule_list: .  [COMMA, RGEN]
+   32 type_parameter_rule_list: .  [COMMA, RSB]
    33                         | . LRB typename_list RRB
 
     LRB  shift, and go to state 275
@@ -9458,7 +9458,7 @@ state 277
 state 278
 
    31 type_parameter: OUT IDENT . type_parameter_rule_list
-   32 type_parameter_rule_list: .  [COMMA, RGEN]
+   32 type_parameter_rule_list: .  [COMMA, RSB]
    33                         | . LRB typename_list RRB
 
     LRB  shift, and go to state 275
@@ -9484,7 +9484,7 @@ state 279
 
 state 280
 
-   26 type_parameter_group: LGEN type_parameter_list RGEN .
+   26 type_parameter_group: LSB type_parameter_list RSB .
 
     $default  reduce using rule 26 (type_parameter_group)
 
@@ -9863,11 +9863,11 @@ state 316
 state 317
 
    25 type_parameter_group: .  [LRB]
-   26                     | . LGEN type_parameter_list RGEN
+   26                     | . LSB type_parameter_list RSB
    60 method_define: modifier_type_T DEF IDENT . type_parameter_group LRB parameter_list RRB ARROW typename_T scope_optional
    61              | modifier_type_T DEF IDENT . type_parameter_group LRB RRB ARROW typename_T scope_optional
 
-    LGEN  shift, and go to state 242
+    LSB  shift, and go to state 242
 
     $default  reduce using rule 25 (type_parameter_group)
 

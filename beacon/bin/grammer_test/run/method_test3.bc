@@ -1,7 +1,7 @@
 namespace beacon {
 	class Test {
 		public:
-		def invoke() -> Generic<|Int|> {
+		def invoke() -> Generic[Int] {
 
 		}
 	}

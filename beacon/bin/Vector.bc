@@ -3,9 +3,9 @@ import "Exception"
 import "VectorIterator"
 
 namespace beacon.lang {
-	class Vector<|T|> : Iterable<|T|> {
+	class Vector[T] : Iterable[T] {
 		private:
-		Array<|T|> proxy;
+		Array[T] proxy;
 		Int length;
 		Int capacity;
 
@@ -13,7 +13,7 @@ namespace beacon.lang {
 		ctor new() {
 			this.length = 0;
 			this.capacity = 16;
-			this.proxy = new Array<|T|>(this.capacity);
+			this.proxy = new Array[T](this.capacity);
 		}
 
 		def push(T o) -> Void {
@@ -21,8 +21,8 @@ namespace beacon.lang {
 				this.proxy.set(this.length, o);
 			} elif (this.length >= this.capacity) {
 				var newLen = this.length + (this.length / 2);
-				var newArr = new Array<|T|>(newLen);
-				Array.copy<|T|>(this.proxy, 0, newArr, 0, this.length);
+				var newArr = new Array[T](newLen);
+				Array.copy[T](this.proxy, 0, newArr, 0, this.length);
 				this.proxy = newArr;
 				this.proxy.set(this.length, o);
 			}
@@ -52,8 +52,8 @@ namespace beacon.lang {
 			return this.length;
 		}
 
-		def iterate() -> Iterator<|T|> {
-			return new VectorIterator<|T|>(this);
+		def iterate() -> Iterator[T] {
+			return new VectorIterator[T](this);
 		}
 
 		private:

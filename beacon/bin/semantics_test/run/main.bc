@@ -13,7 +13,7 @@ import "VectorIterator"
 
 import "Exception"
 import "StackTraceElement"
-var vec = new Vector<|Int|>();
+var vec = new Vector[Int]();
 vec.push(10);
 vec.push(20);
 vec.push(30);
