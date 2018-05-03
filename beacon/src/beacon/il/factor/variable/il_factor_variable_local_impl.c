@@ -45,6 +45,8 @@ void il_factor_variable_local_load(il_factor_variable_local * self, enviroment *
 		if(ent == NULL) {
 			//対応するフィールドを検索
 			self->type = variable_local_field;
+			//NOTE:トップレベルではここが空なので、
+			//定義されていない変数とみなせる？
 			type* tp = (type*)vector_top(ilctx->type_vec);
 			int temp = -1;
 			field* f = class_find_field(TYPE2CLASS(tp), self->name, &temp);
