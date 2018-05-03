@@ -24,6 +24,6 @@ namespace beacon.lang {
 			return this.charArray.length();
 		}
 		private:
-		native def nativeInit() -> Void;
+		def native nativeInit() -> Void;
 	}
 }

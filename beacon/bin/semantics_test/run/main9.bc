@@ -18,7 +18,7 @@ import "Tuple"
 namespace beacon.x {
 	class MyClassA {
 		public:
-		static def test[A](A arg, A arg2) -> Vector[A] {
+		def static test[A](A arg, A arg2) -> Vector[A] {
 			var v = new Vector[A]();
 			v.push(arg);
 			v.push(arg2);

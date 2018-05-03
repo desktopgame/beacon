@@ -11,6 +11,6 @@ namespace beacon.lang {
 		}
 
 		private:
-		native def nativeToString() -> String;
+		def native nativeToString() -> String;
 	}
 }

@@ -18,7 +18,7 @@ namespace beacon.x {
 	class Defer {
 		public:
 
-		static def test() -> Void {
+		def static test() -> Void {
 			defer Console.writeLine("write C");
 			Console.writeLine("write A");
 			Console.writeLine("write B");

@@ -1,20 +1,20 @@
 namespace beacon.lang {
 	class Console {
 		public:
-		static native def writeLine(String str) -> Void;
+		def static native writeLine(String str) -> Void;
 
-		static native def writeLine(Int i) -> Void;
+		def static native writeLine(Int i) -> Void;
 
-		static native def writeLine(Object i) -> Void;
+		def static native writeLine(Object i) -> Void;
 
-		static native def write(String str) -> Void;
+		def static native write(String str) -> Void;
 
-		static native def write(Int i) -> Void;
+		def static native write(Int i) -> Void;
 
-		static native def write(Object i) -> Void;
+		def static native write(Object i) -> Void;
 
-		static native def read() -> Char;
+		def static native read() -> Char;
 
-		static native def readLine() -> String;
+		def static native readLine() -> String;
 	}
 }

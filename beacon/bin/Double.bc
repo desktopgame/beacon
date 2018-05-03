@@ -6,6 +6,6 @@ namespace beacon.lang {
 		}
 
 		private:
-		native def nativeInit(Double d) -> Void;
+		def native nativeInit(Double d) -> Void;
 	}
 }

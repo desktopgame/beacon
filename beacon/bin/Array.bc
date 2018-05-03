@@ -40,7 +40,7 @@ namespace beacon.lang {
 			return nativeGet(index) as T;
 		}
 
-		static def copy[T](Array[T] src, Int srcOffset, Array[T] dst, Int dstOffset, Int length) -> Void {
+		def static copy[T](Array[T] src, Int srcOffset, Array[T] dst, Int dstOffset, Int length) -> Void {
 			Array.nativeCopy[T](src, srcOffset, dst, dstOffset, length);
 		}
 
@@ -54,9 +54,9 @@ namespace beacon.lang {
 				throw new Exception("Out Of Range");
 			}
 		}
-		native def nativeInit() -> Void;
-		native def nativeSet(Int index, Object v) -> Void;
-		native def nativeGet(Int index) -> Object;
-		static native def nativeCopy[T](Array[T] src, Int srcOffset, Array[T] dst, Int dstOffset, Int length) -> Void;
+		def native nativeInit() -> Void;
+		def native nativeSet(Int index, Object v) -> Void;
+		def native nativeGet(Int index) -> Object;
+		def static native nativeCopy[T](Array[T] src, Int srcOffset, Array[T] dst, Int dstOffset, Int length) -> Void;
 	}
 }

@@ -442,13 +442,13 @@ function_define
 ;;
 $$SET __GENERIC type_parameter_group
 method_define
-	: modifier_type_T DEF IDENT __GENERIC LRB parameter_list RRB ARROW typename_T scope_optional
+	: DEF modifier_type_T IDENT __GENERIC LRB parameter_list RRB ARROW typename_T scope_optional
 	{
-		$$ = ast_new_method_decl($1, $3, $4, $6, $10, $9);
+		$$ = ast_new_method_decl($2, $3, $4, $6, $10, $9);
 	}
-	| modifier_type_T DEF IDENT __GENERIC LRB RRB ARROW typename_T scope_optional
+	| DEF modifier_type_T IDENT __GENERIC LRB RRB ARROW typename_T scope_optional
 	{
-		$$ = ast_new_method_decl_empty_params($1, $3, $4, $9, $8);
+		$$ = ast_new_method_decl_empty_params($2, $3, $4, $9, $8);
 	}
 	;
 $$REM __GENERIC

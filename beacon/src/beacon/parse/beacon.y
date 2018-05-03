@@ -417,13 +417,13 @@ function_define
 	;
 
 method_define
-	: modifier_type_T DEF IDENT type_parameter_group LRB parameter_list RRB ARROW typename_T scope_optional
+	: DEF modifier_type_T IDENT type_parameter_group LRB parameter_list RRB ARROW typename_T scope_optional
 	{
-		$$ = ast_new_method_decl($1, $3, $4, $6, $10, $9);
+		$$ = ast_new_method_decl($2, $3, $4, $6, $10, $9);
 	}
-	| modifier_type_T DEF IDENT type_parameter_group LRB RRB ARROW typename_T scope_optional
+	| DEF modifier_type_T IDENT type_parameter_group LRB RRB ARROW typename_T scope_optional
 	{
-		$$ = ast_new_method_decl_empty_params($1, $3, $4, $9, $8);
+		$$ = ast_new_method_decl_empty_params($2, $3, $4, $9, $8);
 	}
 	;
 
