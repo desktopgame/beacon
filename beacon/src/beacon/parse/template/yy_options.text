@@ -25,10 +25,10 @@
 		THIS_TOK SUPER_TOK TRUE_TOK FALSE_TOK NULL_TOK AS
 
 		INTERFACE CLASS ENUM PUBLIC PRIVATE PROTECTED STATIC NATIVE NEW
-		IN OUT
-		CTOR DEF ARROW NAMESPACE RETURN
+		DEF ARROW NAMESPACE RETURN
 		IF ELIF ELSE WHILE BREAK CONTINUE TRY CATCH THROW
 		ASSERT_T DEFER INSTANCEOF
+		BOUNDS_EXTENDS BOUNDS_SUPER
 $$SET root compilation_unit
 $$SET top_level program
 %type <ast_value> root 
@@ -46,7 +46,6 @@ $$SET top_level program
 					type_parameter_group
 					type_parameter_list
 					type_parameter
-					type_parameter_rule_list
 					class_decl 
 					enum_decl
 					interface_decl

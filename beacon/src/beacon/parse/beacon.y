@@ -49,10 +49,10 @@
 		THIS_TOK SUPER_TOK TRUE_TOK FALSE_TOK NULL_TOK AS
 
 		INTERFACE CLASS ENUM PUBLIC PRIVATE PROTECTED STATIC NATIVE NEW
-		IN OUT
-		CTOR DEF ARROW NAMESPACE RETURN
+		DEF ARROW NAMESPACE RETURN
 		IF ELIF ELSE WHILE BREAK CONTINUE TRY CATCH THROW
 		ASSERT_T DEFER INSTANCEOF
+		BOUNDS_EXTENDS BOUNDS_SUPER
 %type <ast_value> compilation_unit 
 					init_decl
 					body_decl
@@ -68,7 +68,6 @@
 					type_parameter_group
 					type_parameter_list
 					type_parameter
-					type_parameter_rule_list
 					class_decl 
 					enum_decl
 					interface_decl
@@ -266,28 +265,9 @@ type_parameter_list
 	;
 
 type_parameter
-	: IDENT type_parameter_rule_list
+	: IDENT
 	{
-		$$ = ast_new_type_parameter($1, $2);
-	}
-	| IN IDENT type_parameter_rule_list
-	{
-		$$ = ast_new_type_in_parameter($2, $3);
-	}
-	| OUT IDENT type_parameter_rule_list
-	{
-		$$ = ast_new_type_out_parameter($2, $3);
-	}
-	;
-
-type_parameter_rule_list
-	: /* empty */
-	{
-		$$ = ast_new_blank();
-	}
-	| LRB typename_list RRB
-	{
-		$$ = ast_new_type_parameter_rule_list($2);
+		$$ = ast_new_type_parameter($1, ast_new_blank());
 	}
 	;
 

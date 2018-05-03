@@ -145,8 +145,6 @@ static void update_loc() {
 <INITIAL>":"				{ return (COLON); }
 <INITIAL>"::"				{ return (COLO_COLO); }
 <INITIAL>";"				{ return (SEMI); }
-<INITIAL>"in"				{ return (IN); }
-<INITIAL>"out"				{ return (OUT); }
 
 
 <INITIAL>"+"				{ return (ADD); }
@@ -204,6 +202,8 @@ static void update_loc() {
 <INITIAL>")"				{ return (RRB); }
 <INITIAL>"["				{ return (LSB); }
 <INITIAL>"]"				{ return (RSB); }
+<INITIAL>"<:"				{ return (BOUNDS_EXTENDS); }
+<INITIAL>":>"				{ return (BOUNDS_SUPER); }
 
 <INITIAL>"import"			{ return (IMPORT); }
 <INITIAL>"var"				{ return (VAR); }
@@ -241,7 +241,6 @@ static void update_loc() {
 <INITIAL>"native"			{ return (NATIVE); }
 <INITIAL>"return"			{ return (RETURN); }
 
-<INITIAL>"ctor"				{ return (CTOR); }
 <INITIAL>"def"				{ return (DEF); }
 <INITIAL>"->"				{ return (ARROW); }
 
