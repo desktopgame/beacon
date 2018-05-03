@@ -3,7 +3,7 @@
 namespace beacon.lang {
 	class Int {
 		public:
-		ctor new(Int i) {
+		def new(Int i) {
 			this.nativeInit(i);
 		}
 

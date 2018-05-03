@@ -10,7 +10,7 @@ namespace beacon.lang {
 		Int capacity;
 
 		public:
-		ctor new() {
+		def new() {
 			this.length = 0;
 			this.capacity = 16;
 			this.proxy = new Array[T](this.capacity);

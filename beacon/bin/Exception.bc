@@ -10,12 +10,12 @@ namespace beacon.lang {
 		Array[StackTraceElement] stackTrace;
 
 		public:
-		ctor new(String message) {
+		def new(String message) {
 			this.message = message;
 			this.nativeInit();
 		}
 
-		ctor new() : this("No Message") {
+		def new() : this("No Message") {
 		}
 
 		def print() -> Void {

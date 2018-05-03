@@ -5,7 +5,7 @@ namespace beacon.lang {
 		Int lineIndex;
 
 		public:
-		ctor new(String fileName, Int lineIndex) {
+		def new(String fileName, Int lineIndex) {
 			this.fileName = fileName;
 			this.lineIndex = lineIndex;
 		}

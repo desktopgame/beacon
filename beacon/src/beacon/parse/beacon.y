@@ -365,11 +365,11 @@ member_define
 	;
 
 constructor_define
-	: CTOR NEW LRB parameter_list RRB constructor_chain_optional scope_optional
+	: DEF NEW LRB parameter_list RRB constructor_chain_optional scope_optional
 	{
 		$$ = ast_new_constructor_decl($4, $6, $7);
 	}
-	| CTOR NEW LRB RRB constructor_chain_optional scope_optional
+	| DEF NEW LRB RRB constructor_chain_optional scope_optional
 	{
 		$$ = ast_new_constructor_decl(ast_new_blank(), $5, $6);
 	}

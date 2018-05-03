@@ -20,7 +20,7 @@ namespace beacon.x {
 		public:
 		Vector[T] v;
 
-		ctor new() {
+		def new() {
 			this.v = new Vector[T]();
 		}
 	}

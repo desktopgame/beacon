@@ -20,7 +20,7 @@ namespace beacon.x {
 		L left;
 		R right;
 
-		ctor new(L left, R right) {
+		def new(L left, R right) {
 			this.left = left;
 			this.right = right;
 		}

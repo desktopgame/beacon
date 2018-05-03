@@ -9,7 +9,7 @@ namespace beacon.lang {
 		Int length;
 
 		public:
-		ctor new(Int length) {
+		def new(Int length) {
 			this.length = length;
 			nativeInit();
 		}

@@ -1,7 +1,7 @@
 namespace beacon.lang {
 	class Char {
 		public:
-		ctor new(Char ch) {
+		def new(Char ch) {
 			this.nativeInit(ch);
 		}
 

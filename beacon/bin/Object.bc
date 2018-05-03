@@ -2,7 +2,7 @@
 namespace beacon.lang {
 	class Object {
 		public:
-		ctor new() {
+		def new() {
 		}
 
 		public:

@@ -1,7 +1,7 @@
 namespace beacon.lang {
 	class Double {
 		public:
-		ctor new(Double d) {
+		def new(Double d) {
 			this.nativeInit(d);
 		}
 

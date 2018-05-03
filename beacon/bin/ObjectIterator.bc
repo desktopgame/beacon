@@ -6,7 +6,7 @@ namespace beacon.lang {
 		Object source;
 
 		public:
-		ctor new(Object source) {
+		def new(Object source) {
 			this.source = source;
 		}
 

@@ -5,6 +5,7 @@ Terminals which are not used
    RGEN
    INC
    DEC
+   CTOR
    PRE_DEC
    PRE_INC
    QUOTE
@@ -95,8 +96,8 @@ Grammar
    48              | method_define
    49              | field_define
 
-   50 constructor_define: CTOR NEW LRB parameter_list RRB constructor_chain_optional scope_optional
-   51                   | CTOR NEW LRB RRB constructor_chain_optional scope_optional
+   50 constructor_define: DEF NEW LRB parameter_list RRB constructor_chain_optional scope_optional
+   51                   | DEF NEW LRB RRB constructor_chain_optional scope_optional
 
    52 constructor_chain: COLON constructor_chain_type_T LRB argument_list RRB
    53                  | COLON constructor_chain_type_T LRB RRB
@@ -345,8 +346,8 @@ NATIVE (325) 64 65 67
 NEW (326) 50 51 124 125
 IN (327) 30
 OUT (328) 31
-CTOR (329) 50 51
-DEF (330) 58 59 60 61
+CTOR (329)
+DEF (330) 50 51 58 59 60 61
 ARROW (331) 58 59 60 61
 NAMESPACE (332) 9 11
 RETURN (333) 166
@@ -9721,8 +9722,8 @@ state 286
    47 member_define: . constructor_define
    48              | . method_define
    49              | . field_define
-   50 constructor_define: . CTOR NEW LRB parameter_list RRB constructor_chain_optional scope_optional
-   51                   | . CTOR NEW LRB RRB constructor_chain_optional scope_optional
+   50 constructor_define: . DEF NEW LRB parameter_list RRB constructor_chain_optional scope_optional
+   51                   | . DEF NEW LRB RRB constructor_chain_optional scope_optional
    60 method_define: . DEF modifier_type_T IDENT type_parameter_group LRB parameter_list RRB ARROW typename_T scope_optional
    61              | . DEF modifier_type_T IDENT type_parameter_group LRB RRB ARROW typename_T scope_optional
    62 field_define: . modifier_type_T typename_T IDENT SEMI
@@ -9734,17 +9735,16 @@ state 286
 
     STATIC  shift, and go to state 297
     NATIVE  shift, and go to state 298
-    CTOR    shift, and go to state 299
-    DEF     shift, and go to state 300
+    DEF     shift, and go to state 299
 
     $default  reduce using rule 63 (modifier_type_T)
 
-    member_define_list  go to state 301
-    member_define       go to state 302
-    constructor_define  go to state 303
-    method_define       go to state 304
-    field_define        go to state 305
-    modifier_type_T     go to state 306
+    member_define_list  go to state 300
+    member_define       go to state 301
+    constructor_define  go to state 302
+    method_define       go to state 303
+    field_define        go to state 304
+    modifier_type_T     go to state 305
 
 
 state 287
@@ -9765,7 +9765,7 @@ state 287
 
     $default  reduce using rule 40 (access_member_tree_opt)
 
-    access_member_tree_opt  go to state 307
+    access_member_tree_opt  go to state 306
     access_member_tree      go to state 268
     access_member_list      go to state 269
     access_level_T          go to state 270
@@ -9783,8 +9783,8 @@ state 289
    37 enum_decl: ENUM IDENT LCB ident_list COMMA . RCB
    72 ident_list: ident_list COMMA . IDENT
 
-    IDENT  shift, and go to state 308
-    RCB    shift, and go to state 309
+    IDENT  shift, and go to state 307
+    RCB    shift, and go to state 308
 
 
 state 290
@@ -9807,7 +9807,7 @@ state 292
    80 typename_list: typename_list . COMMA typename_T
 
     COMMA  shift, and go to state 211
-    RRB    shift, and go to state 310
+    RRB    shift, and go to state 309
 
 
 state 293
@@ -9835,7 +9835,7 @@ state 296
 
    39 interface_decl: INTERFACE parameterized_typename COLON typename_list LCB access_member_tree_opt . RCB
 
-    RCB  shift, and go to state 311
+    RCB  shift, and go to state 310
 
 
 state 297
@@ -9843,7 +9843,7 @@ state 297
    64 modifier_type_T: STATIC . NATIVE
    66                | STATIC .  [IDENT]
 
-    NATIVE  shift, and go to state 312
+    NATIVE  shift, and go to state 311
 
     $default  reduce using rule 66 (modifier_type_T)
 
@@ -9853,21 +9853,15 @@ state 298
    65 modifier_type_T: NATIVE . STATIC
    67                | NATIVE .  [IDENT]
 
-    STATIC  shift, and go to state 313
+    STATIC  shift, and go to state 312
 
     $default  reduce using rule 67 (modifier_type_T)
 
 
 state 299
 
-   50 constructor_define: CTOR . NEW LRB parameter_list RRB constructor_chain_optional scope_optional
-   51                   | CTOR . NEW LRB RRB constructor_chain_optional scope_optional
-
-    NEW  shift, and go to state 314
-
-
-state 300
-
+   50 constructor_define: DEF . NEW LRB parameter_list RRB constructor_chain_optional scope_optional
+   51                   | DEF . NEW LRB RRB constructor_chain_optional scope_optional
    60 method_define: DEF . modifier_type_T IDENT type_parameter_group LRB parameter_list RRB ARROW typename_T scope_optional
    61              | DEF . modifier_type_T IDENT type_parameter_group LRB RRB ARROW typename_T scope_optional
    63 modifier_type_T: .  [IDENT]
@@ -9878,21 +9872,22 @@ state 300
 
     STATIC  shift, and go to state 297
     NATIVE  shift, and go to state 298
+    NEW     shift, and go to state 313
 
     $default  reduce using rule 63 (modifier_type_T)
 
-    modifier_type_T  go to state 315
+    modifier_type_T  go to state 314
 
 
-state 301
+state 300
 
    44 access_member_list: access_level_T COLON member_define_list .  [RCB, PUBLIC, PRIVATE, PROTECTED]
    46 member_define_list: member_define_list . member_define
    47 member_define: . constructor_define
    48              | . method_define
    49              | . field_define
-   50 constructor_define: . CTOR NEW LRB parameter_list RRB constructor_chain_optional scope_optional
-   51                   | . CTOR NEW LRB RRB constructor_chain_optional scope_optional
+   50 constructor_define: . DEF NEW LRB parameter_list RRB constructor_chain_optional scope_optional
+   51                   | . DEF NEW LRB RRB constructor_chain_optional scope_optional
    60 method_define: . DEF modifier_type_T IDENT type_parameter_group LRB parameter_list RRB ARROW typename_T scope_optional
    61              | . DEF modifier_type_T IDENT type_parameter_group LRB RRB ARROW typename_T scope_optional
    62 field_define: . modifier_type_T typename_T IDENT SEMI
@@ -9904,48 +9899,47 @@ state 301
 
     STATIC  shift, and go to state 297
     NATIVE  shift, and go to state 298
-    CTOR    shift, and go to state 299
-    DEF     shift, and go to state 300
+    DEF     shift, and go to state 299
 
     IDENT     reduce using rule 63 (modifier_type_T)
     $default  reduce using rule 44 (access_member_list)
 
-    member_define       go to state 316
-    constructor_define  go to state 303
-    method_define       go to state 304
-    field_define        go to state 305
-    modifier_type_T     go to state 306
+    member_define       go to state 315
+    constructor_define  go to state 302
+    method_define       go to state 303
+    field_define        go to state 304
+    modifier_type_T     go to state 305
 
 
-state 302
+state 301
 
    45 member_define_list: member_define .
 
     $default  reduce using rule 45 (member_define_list)
 
 
-state 303
+state 302
 
    47 member_define: constructor_define .
 
     $default  reduce using rule 47 (member_define)
 
 
-state 304
+state 303
 
    48 member_define: method_define .
 
     $default  reduce using rule 48 (member_define)
 
 
-state 305
+state 304
 
    49 member_define: field_define .
 
     $default  reduce using rule 49 (member_define)
 
 
-state 306
+state 305
 
    62 field_define: modifier_type_T . typename_T IDENT SEMI
    81 typename_T: . fqcn_part typename_group
@@ -9954,100 +9948,100 @@ state 306
 
     IDENT  shift, and go to state 14
 
-    typename_T  go to state 317
+    typename_T  go to state 316
     fqcn_part   go to state 149
 
 
-state 307
+state 306
 
    35 class_decl: CLASS parameterized_typename COLON typename_list LCB access_member_tree_opt . RCB
 
-    RCB  shift, and go to state 318
+    RCB  shift, and go to state 317
 
 
-state 308
+state 307
 
    72 ident_list: ident_list COMMA IDENT .
 
     $default  reduce using rule 72 (ident_list)
 
 
-state 309
+state 308
 
    37 enum_decl: ENUM IDENT LCB ident_list COMMA RCB .
 
     $default  reduce using rule 37 (enum_decl)
 
 
-state 310
+state 309
 
    33 type_parameter_rule_list: LRB typename_list RRB .
 
     $default  reduce using rule 33 (type_parameter_rule_list)
 
 
-state 311
+state 310
 
    39 interface_decl: INTERFACE parameterized_typename COLON typename_list LCB access_member_tree_opt RCB .
 
     $default  reduce using rule 39 (interface_decl)
 
 
-state 312
+state 311
 
    64 modifier_type_T: STATIC NATIVE .
 
     $default  reduce using rule 64 (modifier_type_T)
 
 
-state 313
+state 312
 
    65 modifier_type_T: NATIVE STATIC .
 
     $default  reduce using rule 65 (modifier_type_T)
 
 
+state 313
+
+   50 constructor_define: DEF NEW . LRB parameter_list RRB constructor_chain_optional scope_optional
+   51                   | DEF NEW . LRB RRB constructor_chain_optional scope_optional
+
+    LRB  shift, and go to state 318
+
+
 state 314
-
-   50 constructor_define: CTOR NEW . LRB parameter_list RRB constructor_chain_optional scope_optional
-   51                   | CTOR NEW . LRB RRB constructor_chain_optional scope_optional
-
-    LRB  shift, and go to state 319
-
-
-state 315
 
    60 method_define: DEF modifier_type_T . IDENT type_parameter_group LRB parameter_list RRB ARROW typename_T scope_optional
    61              | DEF modifier_type_T . IDENT type_parameter_group LRB RRB ARROW typename_T scope_optional
 
-    IDENT  shift, and go to state 320
+    IDENT  shift, and go to state 319
 
 
-state 316
+state 315
 
    46 member_define_list: member_define_list member_define .
 
     $default  reduce using rule 46 (member_define_list)
 
 
-state 317
+state 316
 
    62 field_define: modifier_type_T typename_T . IDENT SEMI
 
-    IDENT  shift, and go to state 321
+    IDENT  shift, and go to state 320
 
 
-state 318
+state 317
 
    35 class_decl: CLASS parameterized_typename COLON typename_list LCB access_member_tree_opt RCB .
 
     $default  reduce using rule 35 (class_decl)
 
 
-state 319
+state 318
 
-   50 constructor_define: CTOR NEW LRB . parameter_list RRB constructor_chain_optional scope_optional
-   51                   | CTOR NEW LRB . RRB constructor_chain_optional scope_optional
+   50 constructor_define: DEF NEW LRB . parameter_list RRB constructor_chain_optional scope_optional
+   51                   | DEF NEW LRB . RRB constructor_chain_optional scope_optional
    73 parameter_list: . typename_T IDENT
    74               | . parameter_list COMMA typename_T IDENT
    81 typename_T: . fqcn_part typename_group
@@ -10055,14 +10049,14 @@ state 319
    83          | . fqcn_part COLO_COLO IDENT
 
     IDENT  shift, and go to state 14
-    RRB    shift, and go to state 322
+    RRB    shift, and go to state 321
 
-    parameter_list  go to state 323
+    parameter_list  go to state 322
     typename_T      go to state 189
     fqcn_part       go to state 149
 
 
-state 320
+state 319
 
    25 type_parameter_group: .  [LRB]
    26                     | . LSB type_parameter_list RSB
@@ -10073,79 +10067,79 @@ state 320
 
     $default  reduce using rule 25 (type_parameter_group)
 
-    type_parameter_group  go to state 324
+    type_parameter_group  go to state 323
+
+
+state 320
+
+   62 field_define: modifier_type_T typename_T IDENT . SEMI
+
+    SEMI  shift, and go to state 324
 
 
 state 321
 
-   62 field_define: modifier_type_T typename_T IDENT . SEMI
-
-    SEMI  shift, and go to state 325
-
-
-state 322
-
-   51 constructor_define: CTOR NEW LRB RRB . constructor_chain_optional scope_optional
+   51 constructor_define: DEF NEW LRB RRB . constructor_chain_optional scope_optional
    52 constructor_chain: . COLON constructor_chain_type_T LRB argument_list RRB
    53                  | . COLON constructor_chain_type_T LRB RRB
    56 constructor_chain_optional: .  [LCB, SEMI]
    57                           | . constructor_chain
 
-    COLON  shift, and go to state 326
+    COLON  shift, and go to state 325
 
     $default  reduce using rule 56 (constructor_chain_optional)
 
-    constructor_chain           go to state 327
-    constructor_chain_optional  go to state 328
+    constructor_chain           go to state 326
+    constructor_chain_optional  go to state 327
+
+
+state 322
+
+   50 constructor_define: DEF NEW LRB parameter_list . RRB constructor_chain_optional scope_optional
+   74 parameter_list: parameter_list . COMMA typename_T IDENT
+
+    COMMA  shift, and go to state 221
+    RRB    shift, and go to state 328
 
 
 state 323
 
-   50 constructor_define: CTOR NEW LRB parameter_list . RRB constructor_chain_optional scope_optional
-   74 parameter_list: parameter_list . COMMA typename_T IDENT
-
-    COMMA  shift, and go to state 221
-    RRB    shift, and go to state 329
-
-
-state 324
-
    60 method_define: DEF modifier_type_T IDENT type_parameter_group . LRB parameter_list RRB ARROW typename_T scope_optional
    61              | DEF modifier_type_T IDENT type_parameter_group . LRB RRB ARROW typename_T scope_optional
 
-    LRB  shift, and go to state 330
+    LRB  shift, and go to state 329
 
 
-state 325
+state 324
 
    62 field_define: modifier_type_T typename_T IDENT SEMI .
 
     $default  reduce using rule 62 (field_define)
 
 
-state 326
+state 325
 
    52 constructor_chain: COLON . constructor_chain_type_T LRB argument_list RRB
    53                  | COLON . constructor_chain_type_T LRB RRB
    54 constructor_chain_type_T: . SUPER_TOK
    55                         | . THIS_TOK
 
-    THIS_TOK   shift, and go to state 331
-    SUPER_TOK  shift, and go to state 332
+    THIS_TOK   shift, and go to state 330
+    SUPER_TOK  shift, and go to state 331
 
-    constructor_chain_type_T  go to state 333
+    constructor_chain_type_T  go to state 332
 
 
-state 327
+state 326
 
    57 constructor_chain_optional: constructor_chain .
 
     $default  reduce using rule 57 (constructor_chain_optional)
 
 
-state 328
+state 327
 
-   51 constructor_define: CTOR NEW LRB RRB constructor_chain_optional . scope_optional
+   51 constructor_define: DEF NEW LRB RRB constructor_chain_optional . scope_optional
   175 scope: . LCB stmt_list RCB
   176      | . LCB RCB
   177 scope_optional: . SEMI
@@ -10155,26 +10149,26 @@ state 328
     SEMI  shift, and go to state 132
 
     scope           go to state 133
-    scope_optional  go to state 334
+    scope_optional  go to state 333
 
 
-state 329
+state 328
 
-   50 constructor_define: CTOR NEW LRB parameter_list RRB . constructor_chain_optional scope_optional
+   50 constructor_define: DEF NEW LRB parameter_list RRB . constructor_chain_optional scope_optional
    52 constructor_chain: . COLON constructor_chain_type_T LRB argument_list RRB
    53                  | . COLON constructor_chain_type_T LRB RRB
    56 constructor_chain_optional: .  [LCB, SEMI]
    57                           | . constructor_chain
 
-    COLON  shift, and go to state 326
+    COLON  shift, and go to state 325
 
     $default  reduce using rule 56 (constructor_chain_optional)
 
-    constructor_chain           go to state 327
-    constructor_chain_optional  go to state 335
+    constructor_chain           go to state 326
+    constructor_chain_optional  go to state 334
 
 
-state 330
+state 329
 
    60 method_define: DEF modifier_type_T IDENT type_parameter_group LRB . parameter_list RRB ARROW typename_T scope_optional
    61              | DEF modifier_type_T IDENT type_parameter_group LRB . RRB ARROW typename_T scope_optional
@@ -10185,45 +10179,45 @@ state 330
    83          | . fqcn_part COLO_COLO IDENT
 
     IDENT  shift, and go to state 14
-    RRB    shift, and go to state 336
+    RRB    shift, and go to state 335
 
-    parameter_list  go to state 337
+    parameter_list  go to state 336
     typename_T      go to state 189
     fqcn_part       go to state 149
 
 
-state 331
+state 330
 
    55 constructor_chain_type_T: THIS_TOK .
 
     $default  reduce using rule 55 (constructor_chain_type_T)
 
 
-state 332
+state 331
 
    54 constructor_chain_type_T: SUPER_TOK .
 
     $default  reduce using rule 54 (constructor_chain_type_T)
 
 
-state 333
+state 332
 
    52 constructor_chain: COLON constructor_chain_type_T . LRB argument_list RRB
    53                  | COLON constructor_chain_type_T . LRB RRB
 
-    LRB  shift, and go to state 338
+    LRB  shift, and go to state 337
 
 
-state 334
+state 333
 
-   51 constructor_define: CTOR NEW LRB RRB constructor_chain_optional scope_optional .
+   51 constructor_define: DEF NEW LRB RRB constructor_chain_optional scope_optional .
 
     $default  reduce using rule 51 (constructor_define)
 
 
-state 335
+state 334
 
-   50 constructor_define: CTOR NEW LRB parameter_list RRB constructor_chain_optional . scope_optional
+   50 constructor_define: DEF NEW LRB parameter_list RRB constructor_chain_optional . scope_optional
   175 scope: . LCB stmt_list RCB
   176      | . LCB RCB
   177 scope_optional: . SEMI
@@ -10233,26 +10227,26 @@ state 335
     SEMI  shift, and go to state 132
 
     scope           go to state 133
-    scope_optional  go to state 339
+    scope_optional  go to state 338
 
 
-state 336
+state 335
 
    61 method_define: DEF modifier_type_T IDENT type_parameter_group LRB RRB . ARROW typename_T scope_optional
 
-    ARROW  shift, and go to state 340
+    ARROW  shift, and go to state 339
 
 
-state 337
+state 336
 
    60 method_define: DEF modifier_type_T IDENT type_parameter_group LRB parameter_list . RRB ARROW typename_T scope_optional
    74 parameter_list: parameter_list . COMMA typename_T IDENT
 
     COMMA  shift, and go to state 221
-    RRB    shift, and go to state 341
+    RRB    shift, and go to state 340
 
 
-state 338
+state 337
 
    52 constructor_chain: COLON constructor_chain_type_T LRB . argument_list RRB
    53                  | COLON constructor_chain_type_T LRB . RRB
@@ -10325,7 +10319,7 @@ state 338
     NOT             shift, and go to state 17
     CHILDA          shift, and go to state 18
     LRB             shift, and go to state 19
-    RRB             shift, and go to state 342
+    RRB             shift, and go to state 341
     THIS_TOK        shift, and go to state 21
     SUPER_TOK       shift, and go to state 22
     TRUE_TOK        shift, and go to state 23
@@ -10333,7 +10327,7 @@ state 338
     NULL_TOK        shift, and go to state 25
     NEW             shift, and go to state 26
 
-    argument_list       go to state 343
+    argument_list       go to state 342
     fqcn_part           go to state 62
     expression          go to state 173
     expression_nobrace  go to state 44
@@ -10341,14 +10335,14 @@ state 338
     primary             go to state 46
 
 
-state 339
+state 338
 
-   50 constructor_define: CTOR NEW LRB parameter_list RRB constructor_chain_optional scope_optional .
+   50 constructor_define: DEF NEW LRB parameter_list RRB constructor_chain_optional scope_optional .
 
     $default  reduce using rule 50 (constructor_define)
 
 
-state 340
+state 339
 
    61 method_define: DEF modifier_type_T IDENT type_parameter_group LRB RRB ARROW . typename_T scope_optional
    81 typename_T: . fqcn_part typename_group
@@ -10357,34 +10351,34 @@ state 340
 
     IDENT  shift, and go to state 14
 
-    typename_T  go to state 344
+    typename_T  go to state 343
     fqcn_part   go to state 149
 
 
-state 341
+state 340
 
    60 method_define: DEF modifier_type_T IDENT type_parameter_group LRB parameter_list RRB . ARROW typename_T scope_optional
 
-    ARROW  shift, and go to state 345
+    ARROW  shift, and go to state 344
 
 
-state 342
+state 341
 
    53 constructor_chain: COLON constructor_chain_type_T LRB RRB .
 
     $default  reduce using rule 53 (constructor_chain)
 
 
-state 343
+state 342
 
    52 constructor_chain: COLON constructor_chain_type_T LRB argument_list . RRB
    76 argument_list: argument_list . COMMA expression
 
     COMMA  shift, and go to state 215
-    RRB    shift, and go to state 346
+    RRB    shift, and go to state 345
 
 
-state 344
+state 343
 
    61 method_define: DEF modifier_type_T IDENT type_parameter_group LRB RRB ARROW typename_T . scope_optional
   175 scope: . LCB stmt_list RCB
@@ -10396,10 +10390,10 @@ state 344
     SEMI  shift, and go to state 132
 
     scope           go to state 133
-    scope_optional  go to state 347
+    scope_optional  go to state 346
 
 
-state 345
+state 344
 
    60 method_define: DEF modifier_type_T IDENT type_parameter_group LRB parameter_list RRB ARROW . typename_T scope_optional
    81 typename_T: . fqcn_part typename_group
@@ -10408,25 +10402,25 @@ state 345
 
     IDENT  shift, and go to state 14
 
-    typename_T  go to state 348
+    typename_T  go to state 347
     fqcn_part   go to state 149
 
 
-state 346
+state 345
 
    52 constructor_chain: COLON constructor_chain_type_T LRB argument_list RRB .
 
     $default  reduce using rule 52 (constructor_chain)
 
 
-state 347
+state 346
 
    61 method_define: DEF modifier_type_T IDENT type_parameter_group LRB RRB ARROW typename_T scope_optional .
 
     $default  reduce using rule 61 (method_define)
 
 
-state 348
+state 347
 
    60 method_define: DEF modifier_type_T IDENT type_parameter_group LRB parameter_list RRB ARROW typename_T . scope_optional
   175 scope: . LCB stmt_list RCB
@@ -10438,10 +10432,10 @@ state 348
     SEMI  shift, and go to state 132
 
     scope           go to state 133
-    scope_optional  go to state 349
+    scope_optional  go to state 348
 
 
-state 349
+state 348
 
    60 method_define: DEF modifier_type_T IDENT type_parameter_group LRB parameter_list RRB ARROW typename_T scope_optional .
 
