@@ -24,6 +24,13 @@ int cl_ast(const char* filename);
 int cl_il(const char* filename);
 
 /**
+ * オペコードをダンプします.
+ * @param filename
+ * @return
+ */
+int cl_op(const char* filename);
+
+/**
  * 指定のファイルを実行します.
  * @param filename
  * @return

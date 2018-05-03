@@ -27,6 +27,13 @@ int cl_il(const char* filename){
 	return ret;
 }
 
+int cl_op(const char* filename) {
+	script_context_open();
+	int ret = eval_op(filename);
+	script_context_close();
+	return ret;
+}
+
 int cl_run(const char* filename) {
 	script_context_open();
 	int ret = eval_file(filename);

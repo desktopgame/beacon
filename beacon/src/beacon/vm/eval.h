@@ -19,6 +19,13 @@ bool eval_ast(const char* filename);
 bool eval_il(const char* filename);
 
 /**
+ * 指定のファイルを解析してオペコードを出力します.
+ * @param filename
+ * @return
+ */
+bool eval_op(const char* filename);
+
+/**
  * ファイルの中身を現在のコンテキストで実行します.
  * @param filename
  * @return 解析に成功したなら false

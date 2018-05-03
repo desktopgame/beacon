@@ -47,6 +47,23 @@ bool eval_il(const char* filename) {
 	return true;
 }
 
+bool eval_op(const char* filename) {
+	parser* p = parser_parse_from_file(filename);
+	if(p->fail) {
+		parser_pop();
+		return false;
+	}
+	class_loader* cl = class_loader_new(content_entry_point);
+	cl->source_code = p->root;
+	p->root = NULL;
+	class_loader_load(cl);
+
+	enviroment_op_dump(cl->env, 0);
+	parser_pop();
+	class_loader_delete(cl);
+	return true;
+}
+
 bool eval_file(const char * filename) {
 	class_loader* cll = class_loader_new_entry_point_from_file(filename);
 	return eval_top_from_cll(cll);
