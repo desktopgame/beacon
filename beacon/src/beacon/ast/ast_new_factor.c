@@ -109,3 +109,10 @@ ast * ast_new_new_instance(ast * afqcn, ast* atype_args, ast * argument_list) {
 	ast_push(ret, argument_list);
 	return ret;
 }
+
+ast* ast_new_instanceof(ast* afact, ast* atype) {
+	ast* ret = ast_new(ast_instanceof);
+	ast_push(ret, afact);
+	ast_push(ret, atype);
+	return ret;
+}

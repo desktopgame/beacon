@@ -28,7 +28,7 @@
 		IN OUT
 		CTOR DEF ARROW NAMESPACE RETURN
 		IF ELIF ELSE WHILE BREAK CONTINUE TRY CATCH THROW
-		ASSERT_T DEFER
+		ASSERT_T DEFER INSTANCEOF
 $$SET root compilation_unit
 $$SET top_level program
 %type <ast_value> root 
@@ -102,7 +102,7 @@ $$SET top_level program
 %left BIT_OR
 %left EXC_OR
 %left LSHIFT RSHIFT
-%left GT GE LT LE
+%left GT GE LT LE INSTANCEOF
 %left ADD SUB
 %left MUL DIV MOD
 %left DOT FUNCCALL POST_INC POST_DEC

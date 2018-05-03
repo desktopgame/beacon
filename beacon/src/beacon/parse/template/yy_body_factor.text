@@ -132,6 +132,10 @@ expression_nobrace
 	{
 		$$ = ast_new_binary(ast_rshift, $1, $3);
 	}
+	| __SELF INSTANCEOF fqcn_part
+	{
+		$$ = ast_new_instanceof($1, $3);
+	}
 	| __SELF AS typename_T
 	{
 		$$ = ast_new_as($1, $3);

@@ -49,6 +49,8 @@ typedef enum ast_tag {
 	ast_ge,
 	ast_lt,
 	ast_le,
+	//a is b
+	ast_instanceof,
 	//! -
 	ast_not,
 	ast_pos,

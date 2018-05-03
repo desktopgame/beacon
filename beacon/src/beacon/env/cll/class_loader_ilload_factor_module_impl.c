@@ -22,6 +22,7 @@ static il_factor_inc* CLIL_inc(class_loader* self, ast* source);
 static il_factor_dec* CLIL_dec(class_loader* self, ast* source);
 static il_factor_call_op* CLIL_call_op(class_loader* self, ast* source);
 static il_factor_member_op* CLIL_member_op(class_loader* self, ast* source);
+static il_factor_instanceof* CLIL_instanceof(class_loader* self, ast* source);
 
 il_factor* CLIL_factor(class_loader* self, ast* source) {
 	il_factor* ret = CLIL_factorImpl(self, source);
@@ -96,6 +97,9 @@ static il_factor* CLIL_factorImpl(class_loader* self, ast* source) {
 		return il_factor_wrap_assign(CLIL_assign_arithmetic(self, source, ilbinary_div));
 	} else if (source->tag == ast_mod_assign) {
 		return il_factor_wrap_assign(CLIL_assign_arithmetic(self, source, ilbinary_mod));
+	//instanceof
+	} else if(source->tag == ast_instanceof) {
+		return il_factor_wrap_instanceof(CLIL_instanceof(self, source));
 	//|= &=
 	} else if(source->tag == ast_or_assign) {
 		return il_factor_wrap_assign(CLIL_assign_arithmetic(self, source, ilbinary_bit_or));
@@ -284,5 +288,16 @@ static il_factor_member_op* CLIL_member_op(class_loader* self, ast* source) {
 	ret->fact = CLIL_factor(self, afact);
 	CLIL_type_argument(self, atype_args, ret->type_args);
 	//XSTREQ(ret->name, "copy");
+	return ret;
+}
+
+static il_factor_instanceof* CLIL_instanceof(class_loader* self, ast* source) {
+	assert(source->tag == ast_instanceof);
+	ast* afact = ast_first(source);
+	ast* atype = ast_second(source);
+	il_factor_instanceof* ret = il_factor_instanceof_new();
+	ret->fact = CLIL_factor(self, afact);
+	CLIL_fqcn_cache(atype, ret->cache);
+	//CLIL_generic_cache(atype, ret->gcache);
 	return ret;
 }

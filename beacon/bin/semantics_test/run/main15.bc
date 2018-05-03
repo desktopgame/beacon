@@ -1,0 +1,21 @@
+import "Object"
+import "Array"
+import "Int"
+import "Double"
+import "Char"
+import "String"
+import "Bool"
+import "Null"
+import "Void"
+import "Console"
+import "Vector"
+import "VectorIterator"
+
+import "Exception"
+import "StackTraceElement"
+import "Tuple"
+
+var val = 0;
+var val2 = "Hello";
+assert (val is Object);
+assert (val2 is String);

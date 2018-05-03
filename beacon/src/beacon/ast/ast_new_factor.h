@@ -128,4 +128,11 @@ ast* ast_new_field_access(ast* afact, char* name, ast* atype_args);
  */
 ast* ast_new_new_instance(ast* afqcn, ast* atype_args, ast* argument_list);
 
+/**
+ * a instanceof b を表す要素を作成します.
+ * @param afact
+ * @param atype
+ * @return
+ */
+ast* ast_new_instanceof(ast* afact, ast* atype);
 #endif // !SIGNAL_AST_AST_NEW_FACTOR_H

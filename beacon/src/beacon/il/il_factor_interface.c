@@ -69,6 +69,9 @@ void il_factor_dump(il_factor * self, int depth) {
 		case ilfactor_member_op:
 			il_factor_member_op_dump(self->u.member_, depth);
 			break;
+		case ilfactor_instanceof:
+			il_factor_instanceof_dump(self->u.instanceof_, depth);
+			break;
 		default:
 			break;
 	}
@@ -135,6 +138,9 @@ void il_factor_generate(il_factor * self, enviroment* env, il_context* ilctx) {
 			break;
 		case ilfactor_member_op:
 			il_factor_member_op_generate(self->u.member_, env, ilctx);
+			break;
+		case ilfactor_instanceof:
+			il_factor_instanceof_generate(self->u.instanceof_, env, ilctx);
 			break;
 		default:
 			break;
@@ -204,6 +210,9 @@ void il_factor_load(il_factor * self, enviroment * env, il_context* ilctx) {
 		case ilfactor_member_op:
 			il_factor_member_op_load(self->u.member_, env, ilctx);
 			break;
+		case ilfactor_instanceof:
+			il_factor_instanceof_load(self->u.instanceof_, env, ilctx);
+			break;
 		default:
 			break;
 	}
@@ -272,6 +281,9 @@ generic_type* il_factor_eval(il_factor * self, enviroment * env, il_context* ilc
 		case ilfactor_member_op:
 			ret = il_factor_member_op_eval(self->u.member_, env, ilctx);
 			break;
+		case ilfactor_instanceof:
+			ret = il_factor_instanceof_eval(self->u.instanceof_, env, ilctx);
+			break;
 		default:
 			break;
 	}
@@ -321,6 +333,8 @@ char* il_factor_tostr(il_factor* self, enviroment* env, il_context* ilctx) {
 			return il_factor_call_op_to_str(self->u.call_, env, ilctx);
 		case ilfactor_member_op:
 			return il_factor_member_op_tostr(self->u.member_, env, ilctx);
+		case ilfactor_instanceof:
+			return il_factor_instanceof_tostr(self->u.instanceof_, env, ilctx);
 		default:
 			break;
 	}
@@ -422,6 +436,9 @@ void il_factor_delete(il_factor * self) {
 			break;
 		case ilfactor_member_op:
 			il_factor_member_op_delete(self->u.member_);
+			break;
+		case ilfactor_instanceof:
+			il_factor_instanceof_delete(self->u.instanceof_);
 			break;
 		default:
 			break;

@@ -395,7 +395,7 @@ static void vm_run(frame * self, enviroment * env, int pos, int deferStart) {
 				int absClsIndex = (int)enviroment_source_at(env, ++i);
 				type* tp = (type*)vector_at(ctx->type_vec, absClsIndex);
 				object* v = (object*)vector_pop(self->value_stack);
-				int dist = type_distance(v->gtype->core_type, tp);
+				int dist = type_distance(tp, v->gtype->core_type);
 				object* b = object_bool_get(dist >= 0);
 				vector_push(self->value_stack, b);
 				break;

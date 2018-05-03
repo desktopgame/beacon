@@ -52,7 +52,7 @@
 		IN OUT
 		CTOR DEF ARROW NAMESPACE RETURN
 		IF ELIF ELSE WHILE BREAK CONTINUE TRY CATCH THROW
-		ASSERT_T DEFER
+		ASSERT_T DEFER INSTANCEOF
 %type <ast_value> compilation_unit 
 					init_decl
 					body_decl
@@ -124,7 +124,7 @@
 %left BIT_OR
 %left EXC_OR
 %left LSHIFT RSHIFT
-%left GT GE LT LE
+%left GT GE LT LE INSTANCEOF
 %left ADD SUB
 %left MUL DIV MOD
 %left DOT FUNCCALL POST_INC POST_DEC
@@ -679,6 +679,10 @@ expression_nobrace
 	| expression RSHIFT expression
 	{
 		$$ = ast_new_binary(ast_rshift, $1, $3);
+	}
+	| expression INSTANCEOF fqcn_part
+	{
+		$$ = ast_new_instanceof($1, $3);
 	}
 	| expression AS typename_T
 	{
