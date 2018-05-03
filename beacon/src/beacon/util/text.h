@@ -4,6 +4,7 @@
 #include "vector.h"
 #include <stdarg.h>
 #include <stdbool.h>
+#include <stdio.h>
 
 //clangでは errno_t が見つからない
 #if defined(__clang__)
@@ -47,6 +48,19 @@ void text_putb(bool b);
  * @param count
  */
 void text_printr(char ch, int count);
+
+/**
+ * @param fp
+ * @param message
+ * @param ...
+ */
+int text_fprintf(FILE* fp, const char* message, ...);
+/**
+ * @param fp
+ * @param message
+ * @param ap
+ */
+int text_vfprintf(FILE* fp, const char* message, va_list ap);
 
 /**
  * printfへの委譲です.

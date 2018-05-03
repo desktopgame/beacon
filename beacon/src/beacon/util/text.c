@@ -53,6 +53,19 @@ void text_printr(char ch, int count) {
 	}
 }
 
+int text_fprintf(FILE* fp, const char* message, ...) {
+	va_list ap;
+	va_start(ap, message);
+	int res = text_vfprintf(fp, message, ap);
+	va_end(ap);
+	return res;
+}
+
+int text_vfprintf(FILE* fp, const char* message, va_list ap) {
+	int res = vfprintf(fp, message, ap);
+	return res;
+}
+
 int text_printf(const char * message, ...) {
 	va_list ap;
 
