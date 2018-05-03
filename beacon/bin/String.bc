@@ -23,6 +23,20 @@ namespace beacon.lang {
 		def length() -> Int {
 			return this.charArray.length();
 		}
+
+		def concat(String other) -> String {
+			var arr = new Array[Char](this.length() + other.length());
+			var offs = 0;
+			while(offs < this.length()) {
+				arr.set(offs, this.charAt(offs));
+				offs += 1;
+			}
+			while(offs - this.length() < other.length()) {
+				arr.set(offs, other.charAt(offs - this.length()));
+				offs += 1;
+			}
+			return new String(arr);
+		}
 		private:
 		def native nativeInit() -> Void;
 	}
