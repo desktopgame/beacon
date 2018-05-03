@@ -113,12 +113,12 @@ interface_ * namespace_get_interface(namespace_ * self, const char * name) {
 	return ret->u.interface_;
 }
 
-namespace_ * namespace_signal() {
+namespace_ * namespace_beacon() {
 	return namespace_get_at_root("beacon");
 }
 
 namespace_ * namespace_lang() {
-	return namespace_get_namespace(namespace_signal(), "lang");
+	return namespace_get_namespace(namespace_beacon(), "lang");
 }
 
 type * namespace_object_class() {

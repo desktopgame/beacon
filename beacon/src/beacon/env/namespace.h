@@ -99,13 +99,13 @@ struct class_* namespace_get_class(namespace_* self, const char* name);
 struct interface_* namespace_get_interface(namespace_* self, const char* name);
 
 /**
- * signal 名前空間を返します.
+ * beacon 名前空間を返します.
  * @return
  */
-namespace_* namespace_signal();
+namespace_* namespace_beacon();
 
 /**
- * signal.lang 名前空間を返します.
+ * beacon.lang 名前空間を返します.
  * @return
  */
 namespace_* namespace_lang();
