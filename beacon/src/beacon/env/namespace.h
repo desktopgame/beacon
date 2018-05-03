@@ -3,24 +3,24 @@
 #define BEACON_ENV_NAMESPACE_H
 #include "../util/tree_map.h"
 #include <stdint.h>
-#define CL_OBJECT (namespace_object_class())
-#define CL_INT (namespace_int_class())
-#define CL_DOUBLE (namespace_double_class())
-#define CL_CHAR (namespace_char_class())
-#define CL_STRING (namespace_string_class())
-#define CL_BOOL (namespace_bool_class())
-#define CL_VOID (namespace_void_class())
-#define CL_NULL (namespace_null_class())
+#define CL_OBJECT (namespace_object_type())
+#define CL_INT (namespace_int_type())
+#define CL_DOUBLE (namespace_double_type())
+#define CL_CHAR (namespace_char_type())
+#define CL_STRING (namespace_string_type())
+#define CL_BOOL (namespace_bool_type())
+#define CL_VOID (namespace_void_type())
+#define CL_NULL (namespace_null_type())
 
 
-#define GEN_OBJECT ((namespace_object_class()->generic_self))
-#define GEN_INT ((namespace_int_class()->generic_self))
-#define GEN_DOUBLE ((namespace_double_class()->generic_self))
-#define GEN_CHAR ((namespace_char_class()->generic_self))
-#define GEN_STRING ((namespace_string_class()->generic_self))
-#define GEN_BOOL ((namespace_bool_class()->generic_self))
-#define GEN_VOID ((namespace_void_class()->generic_self))
-#define GEN_NULL ((namespace_null_class()->generic_self))
+#define GEN_OBJECT ((namespace_object_type()->generic_self))
+#define GEN_INT ((namespace_int_type()->generic_self))
+#define GEN_DOUBLE ((namespace_double_type()->generic_self))
+#define GEN_CHAR ((namespace_char_type()->generic_self))
+#define GEN_STRING ((namespace_string_type()->generic_self))
+#define GEN_BOOL ((namespace_bool_type()->generic_self))
+#define GEN_VOID ((namespace_void_type()->generic_self))
+#define GEN_NULL ((namespace_null_type()->generic_self))
 
 struct type;
 struct class_;
@@ -111,52 +111,52 @@ namespace_* namespace_beacon();
 namespace_* namespace_lang();
 
 /**
- * 現在のスクリプトコンテキストで int クラスを返します.
+ * 現在のスクリプトコンテキストで object タイプを返します.
  * @return
  */
-struct type* namespace_object_class();
+struct type* namespace_object_type();
 
 /**
- * 現在のスクリプトコンテキストで int クラスを返します.
+ * 現在のスクリプトコンテキストで int タイプを返します.
  * @return
  */
-struct type* namespace_int_class();
+struct type* namespace_int_type();
 
 /**
- * 現在のスクリプトコンテキストで double クラスを返します.
+ * 現在のスクリプトコンテキストで double タイプを返します.
  * @return
  */
-struct type* namespace_double_class();
+struct type* namespace_double_type();
 
 /**
- * 現在のスクリプトコンテキストで char クラスを返します.
+ * 現在のスクリプトコンテキストで char タイプを返します.
  * @return
  */
-struct type* namespace_char_class();
+struct type* namespace_char_type();
 
 /**
- * 現在のスクリプトコンテキストで string クラスを返します.
+ * 現在のスクリプトコンテキストで string タイプを返します.
  * @return
  */
-struct type* namespace_string_class();
+struct type* namespace_string_type();
 
 /**
- * 現在のスクリプトコンテキストで bool クラスを返します.
+ * 現在のスクリプトコンテキストで bool タイプを返します.
  * @return
  */
-struct type* namespace_bool_class();
+struct type* namespace_bool_type();
 
 /**
- * 現在のスクリプトコンテキストで void クラスを返します.
+ * 現在のスクリプトコンテキストで void タイプを返します.
  * @return
  */
-struct type* namespace_void_class();
+struct type* namespace_void_type();
 
 /**
- * 現在のスクリプトコンテキストで null クラスを返します.
+ * 現在のスクリプトコンテキストで null タイプを返します.
  * @return
  */
-struct type* namespace_null_class();
+struct type* namespace_null_type();
 
 /**
  * 全ての名前空間を出力します.

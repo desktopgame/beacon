@@ -20,8 +20,8 @@ static void namespace_dump_class(tree_map* root, bool isRoot, int depth);
 static void namespace_unlink_namespace(char* name, tree_item item);
 static void namespace_delete_namespace(tree_item item);
 
-static namespace_unlink_type(char* name, tree_item item);
-static namespace_delete_type(tree_item item);
+static void namespace_unlink_type(char* name, tree_item item);
+static void namespace_delete_type(tree_item item);
 
 namespace_ * namespace_create_at_root(char * name) {
 	assert(name != NULL);
@@ -121,35 +121,35 @@ namespace_ * namespace_lang() {
 	return namespace_get_namespace(namespace_beacon(), "lang");
 }
 
-type * namespace_object_class() {
+type * namespace_object_type() {
 	return namespace_get_type(namespace_lang(), "Object");
 }
 
-type * namespace_int_class() {
+type * namespace_int_type() {
 	return namespace_get_type(namespace_lang(), "Int");
 }
 
-type * namespace_double_class() {
+type * namespace_double_type() {
 	return namespace_get_type(namespace_lang(), "Double");
 }
 
-type * namespace_char_class() {
+type * namespace_char_type() {
 	return namespace_get_type(namespace_lang(), "Char");
 }
 
-type * namespace_string_class() {
+type * namespace_string_type() {
 	return namespace_get_type(namespace_lang(), "String");
 }
 
-type * namespace_bool_class() {
+type * namespace_bool_type() {
 	return namespace_get_type(namespace_lang(), "Bool");
 }
 
-type * namespace_void_class() {
+type * namespace_void_type() {
 	return namespace_get_type(namespace_lang(), "Void");
 }
 
-type * namespace_null_class() {
+type * namespace_null_type() {
 	return namespace_get_type(namespace_lang(), "Null");
 }
 
@@ -240,13 +240,13 @@ static void namespace_delete_namespace(tree_item item) {
 	namespace_delete(e);
 }
 
-static namespace_unlink_type(char* name, tree_item item) {
+static void namespace_unlink_type(char* name, tree_item item) {
 	type* e = (type*)item;
 	//text_printfln("unlink type %s", type_name(e));
 	type_unlink(e);
 }
 
-static namespace_delete_type(tree_item item) {
+static void namespace_delete_type(tree_item item) {
 	type* e = (type*)item;
 	//text_printfln("delete type %s", type_name(e));
 	type_delete(e);
