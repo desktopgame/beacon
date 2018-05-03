@@ -142,7 +142,7 @@ int generic_type_distance(generic_type * self, generic_type * other, il_context*
 			generic_type* a = vector_at(self->type_args_list, i);
 			generic_type* b = vector_at(target->type_args_list, i);
 			int calc = generic_type_distance(a, b, ilctx);
-			if(calc == -1) {
+			if(calc == -1 || calc > 0) {
 				dist = -1;
 				break;
 			}

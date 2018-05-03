@@ -29,7 +29,7 @@ namespace beacon.x {
 	}
 }
 
-var v = new Vector[Object]();
+var v = new Vector[Int]();
 v.push(10);
 v.push(20);
 v.push(30);
