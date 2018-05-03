@@ -22,13 +22,14 @@ int main_cl(int argc, char *argv[]) {
 		{ "ast", required_argument, NULL, 'a' },
 		{ "il", required_argument, NULL, 'i' },
 		{ "run", required_argument, NULL, 'r' },
+		{ "op", required_argument, NULL, 'o' },
 		{ 0, 0, 0, 0 }
 	};
 	extern char *optarg;
 	extern int optind, opterr;
 	int opt = 0;
 	int longindex = 0;
-	while ((opt = getopt_long(argc, argv, "ta:i:r:", longopts, &longindex)) != -1) {
+	while ((opt = getopt_long(argc, argv, "ta:i:r:o:", longopts, &longindex)) != -1) {
 		switch(opt) {
 			case 't':
 				printf(":t :test\n");
@@ -46,12 +47,15 @@ int main_cl(int argc, char *argv[]) {
 				printf(":r :run\n");
 				cl_run(optarg);
 				break;
+			case 'o':
+				printf(":o :op\n");
+				cl_op(optarg);
+				break;
 			default:
 				printf("error! :%c :%c", opt, optopt);
 				break;
 		}
 	}
-	return 0;
 }
 
 int main(int argc, char *argv[]) {

@@ -65,6 +65,18 @@
 				"--run",
 				"main.bc"
 			]
+		},
+		{
+			"label": "op",
+			"type": "shell",
+			"options": {
+				"cwd": "../beacon/beacon/bin/"
+			},
+			"command": "./a.out",
+			"args": [
+				"--op",
+				"main.bc"
+			]
 		}
 	]
 }
