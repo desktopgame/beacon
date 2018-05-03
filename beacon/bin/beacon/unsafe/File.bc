@@ -1,8 +1,17 @@
 namespace beacon.unsafe {
 	class File {
-		public:
+		private:
 		def new(String filename, String mode) {
 			nativeInit(filename, mode);
+		}
+
+		public:
+		def static open(String filename, String mode) {
+			return new File(filename, mode);
+		}
+
+		def close() -> Void {
+			this.nativeClose();
 		}
 
 		def putc(Char c) -> Void {
@@ -21,6 +30,16 @@ namespace beacon.unsafe {
 			return nativeGet();
 		}
 
+		def gets() -> String {
+			var buf = new StringBuffer();
+			while(true) {
+				var ch = getc();
+				if(ch == '\n') { break; }
+				buf.append(ch);
+			}
+			return buf.toString();
+		}
+
 		private:
 		def static native nativeInit(String filename, String mode) -> Void;
 
@@ -31,5 +50,7 @@ namespace beacon.unsafe {
 		def static native nativeGetStdin() -> File;
 
 		def static native nativeGetStdout() -> File;
+
+		def native native nativeClose() -> Void;
 	}
 }
