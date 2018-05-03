@@ -177,7 +177,7 @@ static void CLBC_enum(class_loader * self, il_type * iltype, namespace_ * parent
 		f->access = access_public;
 		f->static_value = object_int_new(i);
 		f->gtype = TYPE_INT->generic_self;
-		//virtual_type_nongeneric_init(&f->vtype, GEN_INT);
+		//virtual_type_nongeneric_init(&f->vtype, GENERIC_INT);
 		f->parent = tp;
 		f->static_value->paint = paint_marked;
 		class_add_field(cls, f);
@@ -239,7 +239,7 @@ static void CLBC_class(class_loader* self, il_type* iltype, namespace_* parent) 
 	class_* objClass = TYPE_OBJECT->u.class_;
 	if (cls != objClass) {
 		if (cls->super_class == NULL) {
-			cls->super_class = GEN_OBJECT;
+			cls->super_class = GENERIC_OBJECT;
 		}
 	}
 	//text_printfln("(( %s ))", type_name(tp));

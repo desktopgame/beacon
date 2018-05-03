@@ -36,7 +36,7 @@ void il_factor_char_load(il_factor_char * self, enviroment * env, il_context* il
 }
 
 generic_type* il_factor_char_eval(il_factor_char * self, enviroment * env, il_context* ilctx) {
-	return GEN_CHAR;
+	return GENERIC_CHAR;
 }
 
 char* il_factor_char_tostr(il_factor_char* self, enviroment* env, il_context* ilctx) {

@@ -33,7 +33,7 @@ void il_factor_bool_generate(il_factor_bool * self, enviroment * env, il_context
 }
 
 generic_type* il_factor_bool_eval(il_factor_bool * self, enviroment * env, il_context* ilctx) {
-	return GEN_BOOL;
+	return GENERIC_BOOL;
 }
 
 char* il_factor_bool_tostr(il_factor_bool* self, enviroment* env, il_context* ilctx) {

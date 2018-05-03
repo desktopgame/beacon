@@ -72,7 +72,7 @@ generic_type* il_factor_unary_op_eval(il_factor_unary_op * self, enviroment * en
 	if (self->type == ilunary_neg) {
 		return il_factor_eval(self->a, env, ilctx);
 	} else if (self->type == ilunary_not) {
-		return GEN_BOOL;
+		return GENERIC_BOOL;
 	}
 	return NULL;
 }

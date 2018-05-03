@@ -26,7 +26,7 @@ static int gObjectCount = 0;
 object * object_int_malloc(int i, const char* filename, int lineno) {
 	object* ret = object_mallocImpl(object_int, filename, lineno);
 	ret->u.int_ = i;
-	ret->gtype = GEN_INT;
+	ret->gtype = GENERIC_INT;
 	ret->vptr = type_vtable(TYPE_INT);
 	return ret;
 }
@@ -34,7 +34,7 @@ object * object_int_malloc(int i, const char* filename, int lineno) {
 object * object_double_malloc(double d, const char* filename, int lineno) {
 	object* ret = object_mallocImpl(object_double, filename, lineno);
 	ret->u.double_ = d;
-	ret->gtype = GEN_DOUBLE;
+	ret->gtype = GENERIC_DOUBLE;
 	ret->vptr = type_vtable(TYPE_DOUBLE);
 	return ret;
 }
@@ -42,7 +42,7 @@ object * object_double_malloc(double d, const char* filename, int lineno) {
 object * object_char_malloc(char c, const char* filename, int lineno) {
 	object* ret = object_mallocImpl(object_char, filename, lineno);
 	ret->u.char_ = c;
-	ret->gtype = GEN_CHAR;
+	ret->gtype = GENERIC_CHAR;
 	ret->vptr = type_vtable(TYPE_CHAR);
 	return ret;
 }
@@ -51,7 +51,7 @@ object * object_string_malloc(const char * s, const char* filename, int lineno) 
 	object* ret = object_mallocImpl(object_string, filename, lineno);
 	//ret->u.string_ = s;
 	ret->u.field_vec = vector_new();
-	ret->gtype = GEN_STRING;
+	ret->gtype = GENERIC_STRING;
 	ret->vptr = type_vtable(TYPE_STRING);
 
 	//配列を生成
@@ -101,7 +101,7 @@ object * object_get_true() {
 	if (ctx->oTrue == NULL) {
 		ctx->oTrue = object_malloc(object_bool);
 		ctx->oTrue->u.bool_ = !false;
-		ctx->oTrue->gtype = GEN_BOOL;
+		ctx->oTrue->gtype = GENERIC_BOOL;
 	}
 	return ctx->oTrue;
 }
@@ -111,7 +111,7 @@ object * object_get_false() {
 	if (ctx->oFalse == NULL) {
 		ctx->oFalse = object_malloc(object_bool);
 		ctx->oFalse->u.bool_ = false;
-		ctx->oFalse->gtype = GEN_BOOL;
+		ctx->oFalse->gtype = GENERIC_BOOL;
 	}
 	return ctx->oFalse;
 }
