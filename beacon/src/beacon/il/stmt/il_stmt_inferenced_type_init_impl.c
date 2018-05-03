@@ -33,10 +33,10 @@ void il_stmt_inferenced_type_init_generate(il_stmt_inferenced_type_init * self, 
 	//右辺の方で宣言する
 	il_factor_generate(self->fact, env, ilctx);
 	/*
-	if (gtp == CL_INT->generic_self ||
-		gtp == CL_DOUBLE->generic_self ||
-		gtp == CL_BOOL->generic_self ||
-		gtp == CL_CHAR->generic_self) {
+	if (gtp == TYPE_INT->generic_self ||
+		gtp == TYPE_DOUBLE->generic_self ||
+		gtp == TYPE_BOOL->generic_self ||
+		gtp == TYPE_CHAR->generic_self) {
 		//複製を代入する
 		opcode_buf_add(env->buf, op_copy);
 		opcode_buf_add(env->buf, op_swap);

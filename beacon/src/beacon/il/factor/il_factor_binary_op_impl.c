@@ -59,22 +59,22 @@ generic_type* il_factor_binary_op_eval(il_factor_binary_op * self, enviroment * 
 	if(il_error_panic()) {
 		return NULL;
 	}
-	if (ltype->core_type == CL_INT &&
-		rtype->core_type == CL_INT) {
+	if (ltype->core_type == TYPE_INT &&
+		rtype->core_type == TYPE_INT) {
 		if (ilbi_compare(self)) {
 			return GEN_BOOL;
 		}
 		return GEN_INT;
 	}
-	if (ltype->core_type == CL_DOUBLE &&
-		rtype->core_type == CL_DOUBLE) {
+	if (ltype->core_type == TYPE_DOUBLE &&
+		rtype->core_type == TYPE_DOUBLE) {
 		if (ilbi_compare(self)) {
 			return GEN_BOOL;
 		}
 		return GEN_DOUBLE;
 	}
-	if (ltype->core_type == CL_BOOL &&
-		rtype->core_type == CL_BOOL) {
+	if (ltype->core_type == TYPE_BOOL &&
+		rtype->core_type == TYPE_BOOL) {
 		return GEN_BOOL;
 	}
 	return NULL;

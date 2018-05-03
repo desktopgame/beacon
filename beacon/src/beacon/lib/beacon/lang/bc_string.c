@@ -30,7 +30,7 @@ static void bc_string_nativeInit(method* parent, frame* fr, enviroment* env) {
 
 	//String#charArrayを取得
 	int temp = 0;
-	class_find_field(CL_STRING->u.class_, "charArray", &temp);
+	class_find_field(TYPE_STRING->u.class_, "charArray", &temp);
 	object* charArr = vector_at(self->u.field_vec, temp);
 	//これを char* へ変換
 	string_buffer* sb = string_buffer_new();

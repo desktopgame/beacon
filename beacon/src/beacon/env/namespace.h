@@ -3,14 +3,14 @@
 #define BEACON_ENV_NAMESPACE_H
 #include "../util/tree_map.h"
 #include <stdint.h>
-#define CL_OBJECT (namespace_object_type())
-#define CL_INT (namespace_int_type())
-#define CL_DOUBLE (namespace_double_type())
-#define CL_CHAR (namespace_char_type())
-#define CL_STRING (namespace_string_type())
-#define CL_BOOL (namespace_bool_type())
-#define CL_VOID (namespace_void_type())
-#define CL_NULL (namespace_null_type())
+#define TYPE_OBJECT (namespace_object_type())
+#define TYPE_INT (namespace_int_type())
+#define TYPE_DOUBLE (namespace_double_type())
+#define TYPE_CHAR (namespace_char_type())
+#define TYPE_STRING (namespace_string_type())
+#define TYPE_BOOL (namespace_bool_type())
+#define TYPE_VOID (namespace_void_type())
+#define TYPE_NULL (namespace_null_type())
 
 
 #define GEN_OBJECT ((namespace_object_type()->generic_self))

@@ -21,7 +21,7 @@ void il_factor_null_load(void * empty, enviroment * env, il_context* ilctx) {
 
 generic_type* il_factor_null_eval(void * empty, enviroment * env, il_context* ilctx) {
 	if(gSelf == NULL) {
-		gSelf =  generic_type_new(CL_NULL);
+		gSelf =  generic_type_new(TYPE_NULL);
 	}
 	return gSelf;
 }

@@ -43,7 +43,7 @@ void il_factor_instanceof_generate(il_factor_instanceof* self, enviroment* env, 
 }
 
 generic_type* il_factor_instanceof_eval(il_factor_instanceof* self, enviroment* env, il_context* ilctx) {
-	return CL_BOOL->generic_self;
+	return TYPE_BOOL->generic_self;
 }
 
 char* il_factor_instanceof_tostr(il_factor_instanceof* self, enviroment* env, il_context* ilctx) {

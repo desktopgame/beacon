@@ -31,7 +31,7 @@ void script_method_execute(script_method * self, method* parent, frame * fr, env
 	opcode_buf_dump(self->env->buf, sub->level);
 	vm_execute(sub, self->env);
 	//戻り値が Void 以外ならスタックトップの値を引き継ぐ
-	if(parent->return_gtype != CL_VOID->generic_self) {
+	if(parent->return_gtype != TYPE_VOID->generic_self) {
 		object* o = (object*)vector_pop(sub->value_stack);
 		vector_push(fr->value_stack, o);
 	}

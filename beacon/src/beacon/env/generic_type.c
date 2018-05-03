@@ -109,7 +109,7 @@ int generic_type_distance(generic_type * self, generic_type * other, il_context*
 		//要求されているのは具体的な型
 		if(self->core_type != NULL) {
 			//T が 具体的な型の要件を満たしているか？
-			if(self->core_type == CL_OBJECT ||
+			if(self->core_type == TYPE_OBJECT ||
 				generic_type_rule_polymorphic(generic_type_rule(other, ilctx), self, ilctx)) {
 				return 0;
 			} else return -1;
@@ -173,15 +173,15 @@ void generic_type_print(generic_type * self) {
 }
 
 bool generic_type_int(generic_type* self) {
-	return self->core_type == CL_INT;
+	return self->core_type == TYPE_INT;
 }
 
 bool generic_type_double(generic_type* self) {
-	return self->core_type == CL_DOUBLE;
+	return self->core_type == TYPE_DOUBLE;
 }
 
 bool generic_type_bool(generic_type* self) {
-	return self->core_type == CL_BOOL;
+	return self->core_type == TYPE_BOOL;
 }
 
 //Hash<String,List<Int>>

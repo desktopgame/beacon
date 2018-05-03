@@ -32,7 +32,7 @@ int meta_calc_score(vector* params, vector* ilargs, enviroment* env, il_context*
 		if(il_error_panic()) {
 			return -1;
 		}
-		if (argType->core_type != CL_NULL) {
+		if (argType->core_type != TYPE_NULL) {
 			generic_type* a = generic_type_apply(param->gtype, ilctx);
 			dist = generic_type_distance(
 				a,
@@ -66,7 +66,7 @@ int meta_rcalc_score(vector* params, vector* args) {
 		int dist = 0;
 		//generic_type* argType = il_factor_eval(arg->factor, env, ilctx);
 		generic_type* argType = arg->gtype;
-		if (argType->core_type != CL_NULL) {
+		if (argType->core_type != TYPE_NULL) {
 			dist = generic_type_distance(param->gtype, argType, ilctx);
 		}
 		score += dist;

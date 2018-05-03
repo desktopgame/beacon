@@ -37,7 +37,7 @@ void il_factor_string_load(il_factor_string * self, enviroment * env, il_context
 }
 
 generic_type* il_factor_string_eval(il_factor_string * self, enviroment * env, il_context* ilctx) {
-//	assert(CL_STRING->generic_self->core_type != NULL);
+//	assert(TYPE_STRING->generic_self->core_type != NULL);
 	return GEN_STRING;
 }
 

@@ -176,7 +176,7 @@ static void CLBC_enum(class_loader * self, il_type * iltype, namespace_ * parent
 		f->modifier = modifier_static;
 		f->access = access_public;
 		f->static_value = object_int_new(i);
-		f->gtype = CL_INT->generic_self;
+		f->gtype = TYPE_INT->generic_self;
 		//virtual_type_nongeneric_init(&f->vtype, GEN_INT);
 		f->parent = tp;
 		f->static_value->paint = paint_marked;
@@ -236,7 +236,7 @@ static void CLBC_class(class_loader* self, il_type* iltype, namespace_* parent) 
 	}
 	//デフォルトで親に Object を持つように
 	//XSTREQ(cls->name, "String");
-	class_* objClass = CL_OBJECT->u.class_;
+	class_* objClass = TYPE_OBJECT->u.class_;
 	if (cls != objClass) {
 		if (cls->super_class == NULL) {
 			cls->super_class = GEN_OBJECT;

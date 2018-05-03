@@ -48,7 +48,7 @@ void method_execute(method* self, frame * fr, enviroment* env) {
 		}
 		native_method_execute(self->u.native_method, self, a, env);
 		//戻り値を残す
-		if(self->return_gtype != CL_VOID->generic_self) {
+		if(self->return_gtype != TYPE_VOID->generic_self) {
 			vector_push(fr->value_stack, vector_pop(a->value_stack));
 		}
 		frame_delete(a);

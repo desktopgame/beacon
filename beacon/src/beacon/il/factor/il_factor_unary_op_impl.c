@@ -51,13 +51,13 @@ void il_factor_unary_op_dump(il_factor_unary_op * self, int depth) {
 void il_factor_unary_op_generate(il_factor_unary_op * self, enviroment* env, il_context* ilctx) {
 	il_factor_generate(self->a, env, ilctx);
 	type* cls = il_factor_eval(self->a, env, ilctx);
-	if (cls == CL_INT) {
+	if (cls == TYPE_INT) {
 		assert(self->type == ilunary_neg);
 		opcode_buf_add(env->buf, (vector_item)u_operator_to_opi(u_neg));
-	} else if (cls == CL_DOUBLE) {
+	} else if (cls == TYPE_DOUBLE) {
 		assert(self->type == ilunary_neg);
 		opcode_buf_add(env->buf, (vector_item)u_operator_to_opd(u_neg));
-	} else if (cls == CL_BOOL) {
+	} else if (cls == TYPE_BOOL) {
 		assert(self->type == ilunary_not);
 		opcode_buf_add(env->buf, (vector_item)u_operator_to_opb(u_not));
 	} else {

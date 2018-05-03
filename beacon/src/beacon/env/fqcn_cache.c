@@ -132,19 +132,19 @@ static type * fqcn_type_impl(fqcn_cache * self, namespace_* current) {
 		char* name = self->name;
 		//プリミティブ型はどこからでも参照できる
 		if (!strcmp(name, "Object")) {
-			return CL_OBJECT;
+			return TYPE_OBJECT;
 		} else if (!strcmp(name, "Int")) {
-			return CL_INT;
+			return TYPE_INT;
 		} else if (!strcmp(name, "Double")) {
-			return CL_DOUBLE;
+			return TYPE_DOUBLE;
 		} else if (!strcmp(name, "Char")) {
-			return CL_CHAR;
+			return TYPE_CHAR;
 		} else if (!strcmp(name, "String")) {
-			return CL_STRING;
+			return TYPE_STRING;
 		} else if (!strcmp(name, "Bool")) {
-			return CL_BOOL;
+			return TYPE_BOOL;
 		} else if (!strcmp(name, "Void")) {
-			return CL_VOID;
+			return TYPE_VOID;
 		}
 		if (current == NULL) {
 			return NULL;

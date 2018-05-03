@@ -78,10 +78,10 @@ class_ * class_new(const char * name) {
 class_ * class_new_preload(const char * name) {
 	class_* cl = class_new(name);
 	cl->state = class_pending;
-	if (CL_OBJECT == NULL) {
+	if (TYPE_OBJECT == NULL) {
 		return cl;
 	}
-	class_* objCls = CL_OBJECT->u.class_;
+	class_* objCls = TYPE_OBJECT->u.class_;
 	if (cl != objCls) {
 		type_init_generic(objCls->parent, 0);
 		cl->super_class = objCls->parent->generic_self;
@@ -96,13 +96,13 @@ void class_alloc_fields(class_ * self, object * o) {
 		field* f = (field*)vector_at(self->field_list, i);
 		object* a = object_get_null();
 		//プリミティブ型のときはデフォルト値を入れておく
-		if (f->gtype == CL_INT->generic_self) {
+		if (f->gtype == TYPE_INT->generic_self) {
 			a = object_int_new(0);
-		} else if (f->gtype == CL_DOUBLE->generic_self) {
+		} else if (f->gtype == TYPE_DOUBLE->generic_self) {
 			a = object_double_new(0.0);
-		} else if (f->gtype == CL_BOOL->generic_self) {
+		} else if (f->gtype == TYPE_BOOL->generic_self) {
 			a = object_bool_get(false);
-		} else if (f->gtype == CL_CHAR->generic_self) {
+		} else if (f->gtype == TYPE_CHAR->generic_self) {
 			a = object_char_new('\0');
 		}
 		//静的フィールドは別の場所に確保

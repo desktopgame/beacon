@@ -27,7 +27,7 @@ object * object_int_malloc(int i, const char* filename, int lineno) {
 	object* ret = object_mallocImpl(object_int, filename, lineno);
 	ret->u.int_ = i;
 	ret->gtype = GEN_INT;
-	ret->vptr = type_vtable(CL_INT);
+	ret->vptr = type_vtable(TYPE_INT);
 	return ret;
 }
 
@@ -35,7 +35,7 @@ object * object_double_malloc(double d, const char* filename, int lineno) {
 	object* ret = object_mallocImpl(object_double, filename, lineno);
 	ret->u.double_ = d;
 	ret->gtype = GEN_DOUBLE;
-	ret->vptr = type_vtable(CL_DOUBLE);
+	ret->vptr = type_vtable(TYPE_DOUBLE);
 	return ret;
 }
 
@@ -43,7 +43,7 @@ object * object_char_malloc(char c, const char* filename, int lineno) {
 	object* ret = object_mallocImpl(object_char, filename, lineno);
 	ret->u.char_ = c;
 	ret->gtype = GEN_CHAR;
-	ret->vptr = type_vtable(CL_CHAR);
+	ret->vptr = type_vtable(TYPE_CHAR);
 	return ret;
 }
 
@@ -52,7 +52,7 @@ object * object_string_malloc(const char * s, const char* filename, int lineno) 
 	//ret->u.string_ = s;
 	ret->u.field_vec = vector_new();
 	ret->gtype = GEN_STRING;
-	ret->vptr = type_vtable(CL_STRING);
+	ret->vptr = type_vtable(TYPE_STRING);
 
 	//配列を生成
 	object* arr = object_ref_new();
@@ -120,7 +120,7 @@ object * object_get_null() {
 	script_context* ctx = script_context_get_current();
 	if (ctx->oNull == NULL) {
 		ctx->oNull = object_malloc(object_null);
-		ctx->oNull->gtype = generic_type_new(CL_NULL);
+		ctx->oNull->gtype = generic_type_new(TYPE_NULL);
 	}
 	return ctx->oNull;
 }
