@@ -227,14 +227,10 @@ static il_factor_new_instance* CLIL_new_instance(class_loader* self, ast* source
 	ast* afqcn = ast_first(source);
 	ast* atype_args = ast_second(source);
 	ast* aargs = ast_at(source, 2);
-	//XBREAK(debug_get_gen_top());
 	il_factor_new_instance* ret = il_factor_new_instance_new();
 	CLIL_fqcn_cache(afqcn, ret->fqcnc);
 	CLIL_type_argument(self, atype_args, ret->type_args);
 	CLIL_argument_list(self, ret->argument_list, aargs);
-	//ast_print_tree(afqcn);
-	//fqcn_cache_dump(ret->fqcnc, 0);
-	//fflush(stdout);
 	return ret;
 }
 
@@ -272,10 +268,8 @@ static il_factor_call_op* CLIL_call_op(class_loader* self, ast* source) {
 	il_factor_call_op* ret = il_factor_call_op_new();
 	ast* afact = ast_first(source);
 	ast* aargs = ast_second(source);
-	//ast* aargs = ast_at(source, 2);
 	ret->receiver = CLIL_factor(self, afact);
 	CLIL_argument_list(self, ret->argument_list, aargs);
-	//il_factor_dump(ret->receiver, 0);
 	return ret;
 }
 
@@ -287,7 +281,6 @@ static il_factor_member_op* CLIL_member_op(class_loader* self, ast* source) {
 	il_factor_member_op* ret = il_factor_member_op_new(aname->u.string_value);
 	ret->fact = CLIL_factor(self, afact);
 	CLIL_type_argument(self, atype_args, ret->type_args);
-	//XSTREQ(ret->name, "copy");
 	return ret;
 }
 
@@ -298,6 +291,5 @@ static il_factor_instanceof* CLIL_instanceof(class_loader* self, ast* source) {
 	il_factor_instanceof* ret = il_factor_instanceof_new();
 	ret->fact = CLIL_factor(self, afact);
 	CLIL_fqcn_cache(atype, ret->cache);
-	//CLIL_generic_cache(atype, ret->gcache);
 	return ret;
 }

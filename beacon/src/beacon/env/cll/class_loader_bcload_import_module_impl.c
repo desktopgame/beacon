@@ -54,7 +54,6 @@ static void CLBC_import_internal(class_loader* self, vector* ilimports, int i) {
 static void CLBC_new_load_internal(class_loader * self, char * fullPath) {
 	CL_ERROR(self);
 	script_context* ctx = script_context_get_current();
-	//text_printf("%s\n", fullPath);
 	//そのファイルパスに対応した
 	//クラスローダが既に存在するなら無視
 	class_loader* cll = tree_map_get(ctx->class_loader_map, fullPath);
@@ -76,14 +75,12 @@ static void CLBC_new_load_internal(class_loader * self, char * fullPath) {
 	}
 	cll->filename = text_strdup(fullPath);
 	cll->level = (self->level + 1);
-	//cll->link = classlink_unlinked;
 	char* text = io_read_text(fullPath);
 	parser* p = parser_parse_from_source_swap(text, fullPath);
 	assert(p->root != NULL);
 	assert(!p->fail);
 	//パースに失敗
 	if (p->fail) {
-		//class_loader_errors(cll, "parse failed --- %s", p->source_name);
 		MEM_FREE(text);
 		parser_pop();
 		return;
@@ -107,13 +104,11 @@ static void CLBC_import_already(class_loader* self, class_loader* cll) {
 	info->consume = false;
 	assert(cll->source_code != NULL);
 	assert(cll->il_code != NULL);
-	//text_printf("aimport %s\n", cll->filename);
 	//そのローダーが破損しているなら
 	if (cll->error) {
 		class_loader_report(self, "error %s\n", cll->filename);
 		return;
 	}
-	//CLBC_import(cll, cll->il_code->import_list);
 }
 
 static class_loader* CLBC_import_new(class_loader* self, char* fullPath) {
@@ -123,7 +118,6 @@ static class_loader* CLBC_import_new(class_loader* self, char* fullPath) {
 	cll->type = content_lib;
 	cll->filename = fullPath;
 	cll->parent = self;
-	//text_printf("nimport %s\n", cll->filename);
 	import_info* info = import_manager_import(self->import_manager, cll);
 	info->consume = false;
 	tree_map_put(ctx->class_loader_map, fullPath, cll);

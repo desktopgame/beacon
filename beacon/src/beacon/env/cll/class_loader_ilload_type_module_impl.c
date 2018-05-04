@@ -25,7 +25,6 @@ void CLIL_fqcn_cache(ast* afqcn, fqcn_cache* fqcn) {
 }
 
 void CLIL_generic_cache(ast* fqcn, generic_cache* dest) {
-//assert(fqcn->tag == ast_typename);
 	if(fqcn->tag == ast_fqcn_class_name) {
 		dest->fqcn->name = text_strdup(fqcn->u.string_value);
 		return;
@@ -44,7 +43,6 @@ void CLIL_typename_list(class_loader * self, vector * dst, ast * typename_list) 
 		return;
 	}
 	if (typename_list->tag == ast_typename) {
-		//fqcn_cache* e = fqcn_cache_new();
 		generic_cache* e = generic_cache_new();
 		//[typename [fqcn]]
 		CLIL_generic_cache(typename_list, e);
@@ -108,7 +106,6 @@ void CLIL_parameter_list(class_loader* self, vector* list, ast* source) {
 		ast* access_name = ast_second(source);
 		il_parameter* p = il_parameter_new(access_name->u.string_value);
 		CLIL_generic_cache(type_name, p->fqcn);
-		//p->type = il_type_new(type_name->u.string_value);
 		vector_push(list, p);
 	}
 }
@@ -122,7 +119,6 @@ void CLIL_argument_list(class_loader* self, vector* list, ast* source) {
 		ast* primary = ast_first(source);
 		il_argument* ilarg = il_argument_new();
 		ilarg->factor = CLIL_factor(self, primary);
-		//il_argument_list_push(list, ilarg);
 		vector_push(list, ilarg);
 	}
 }

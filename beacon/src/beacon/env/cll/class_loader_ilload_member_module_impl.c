@@ -46,12 +46,9 @@ void CLIL_field(class_loader* self, il_type* current, ast* field, access_level l
 	ast* access_name = ast_at(field, 2);
 	il_field* v = il_field_new(access_name->u.string_value);
 	CLIL_generic_cache(type_name, v->fqcn);
-	//v->type = il_type_new(type_name->u.string_value);
 	v->access = level;
 	v->modifier = ast_cast_to_modifier(modifier);
 	il_type_add_field(current, v);
-	//il_class_add_field(current->u.class_, v);
-	//vector_push(current->u.class_->field_list, v);
 }
 
 void CLIL_method(class_loader* self, il_type* current, ast* method, access_level level) {
@@ -65,20 +62,15 @@ void CLIL_method(class_loader* self, il_type* current, ast* method, access_level
 	il_method* v = il_method_new(func_name->u.string_value);
 	CLIL_type_parameter(self, ageneric, v->type_parameter_list);
 	CLIL_generic_cache(ret_name, v->return_fqcn);
-//	v->return_type = il_type_new(ret_name->u.string_value);
 	v->access = level;
 	v->modifier = ast_cast_to_modifier(modifier);
-	//TEST((!strcmp(v->name, "main")));
 	CLIL_parameter_list(self, v->parameter_list, param_list);
 	CLIL_body(self, v->statement_list, func_body);
 	il_type_add_method(current, v);
-	//il_class_add_method(current->u.class_, v);
-	//vector_push(il_type_method_vec(current), v);
 }
 
 void CLIL_ctor(class_loader* self, il_type* current, ast* constructor, access_level level) {
 	assert(current->tag == iltype_class);
-	//ast* amodifier = ast_at(constructor, 0);
 	ast* aparams = ast_at(constructor, 0);
 	ast* achain = ast_at(constructor, 1);
 	ast* abody = ast_at(constructor, 2);
@@ -93,7 +85,6 @@ void CLIL_ctor(class_loader* self, il_type* current, ast* constructor, access_le
 	il_constructor* ilcons = il_constructor_new();
 	ilcons->access = level;
 	ilcons->chain = ilchain;
-	//ilcons->modifier = ast_cast_to_modifier(amodifier);
 	CLIL_parameter_list(self, ilcons->parameter_list, aparams);
 	CLIL_body(self, ilcons->statement_list, abody);
 	vector_push(current->u.class_->constructor_list, ilcons);

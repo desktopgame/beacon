@@ -25,7 +25,6 @@ static void CLBC_chain_auto(class_loader* self, il_type* iltype, type* tp, il_co
 static void CLBC_chain_super(class_loader* self, il_type* iltype, type* tp, il_constructor* ilcons, il_constructor_chain* ilchain, enviroment* env);
 
 void CLBC_fields_decl(class_loader* self, il_type* iltype, type* tp, vector* ilfields, namespace_* scope) {
-	//class_* cls = tp->u.class_;
 	CL_ERROR(self);
 	il_context* ilctx = il_context_new(self);
 	vector_push(ilctx->namespace_vec, scope);
@@ -34,15 +33,11 @@ void CLBC_fields_decl(class_loader* self, il_type* iltype, type* tp, vector* ilf
 		vector_item e = vector_at(ilfields, i);
 		il_field* ilfield = (il_field*)e;
 		field* field = field_new(ilfield->name);
-		//XSTREQ(ilfield->name, "charArray");
 		field->access = ilfield->access;
 		field->modifier = ilfield->modifier;
 		field->parent = tp;
 		field->gtype = import_manager_resolve(self->import_manager, scope, ilfield->fqcn, ilctx);
 		//NOTE:ここではフィールドの型を設定しません
-		//     class_loader_sgload_complete参照
-		//vector_push(classz->field_list, field);
-		//class_add_field(cls, field);
 		type_add_field(tp, field);
 	}
 	vector_pop(ilctx->namespace_vec);
@@ -52,7 +47,6 @@ void CLBC_fields_decl(class_loader* self, il_type* iltype, type* tp, vector* ilf
 
 void CLBC_fields_impl(class_loader* self, namespace_* scope, vector* ilfields, vector* sgfields) {
 	CL_ERROR(self);
-	//	namespace_* scope = classz->location;
 	il_context* ilctx = il_context_new(self);
 	for (int i = 0; i < sgfields->length; i++) {
 		vector_item e = vector_at(sgfields, i);
@@ -61,7 +55,6 @@ void CLBC_fields_impl(class_loader* self, namespace_* scope, vector* ilfields, v
 		vector_push(ilctx->type_vec, fi->parent);
 		//FIXME:ILフィールドと実行時フィールドのインデックスが同じなのでとりあえず動く
 		il_field* ilfield = ((il_field*)vector_at(ilfields, i));
-	//	import_manager_resolve(self->import_manager, scope, ilfield->fqcn, ilctx, &fi->vtype);
 		vector_pop(ilctx->type_vec);
 	}
 	il_context_delete(ilctx);
@@ -72,7 +65,6 @@ void CLBC_methods_decl(class_loader* self, il_type* iltype, type* tp, vector* il
 	il_context* ilctx = il_context_new(self);
 	ILCTX_PUSH_NAMESPACE(ilctx, scope);
 	ILCTX_PUSH_TYPE(ilctx, tp);
-	//class_* classz = tp->u.class_;
 	for (int i = 0; i < ilmethods->length; i++) {
 		//メソッド一覧から取り出す
 		vector_item e = vector_at(ilmethods, i);
@@ -81,7 +73,6 @@ void CLBC_methods_decl(class_loader* self, il_type* iltype, type* tp, vector* il
 		vector* ilparams = ilmethod->parameter_list;
 		//実行時のメソッド情報を作成する
 		method* method = method_new(ilmethod->name);
-		//XSTREQ(ilmethod->name, "sub");
 		vector_push(ilctx->method_vec, method);
 		vector* parameter_list = method->parameter_list;
 		method->type = modifier_is_native(ilmethod->modifier) ? method_type_native : method_type_script;
@@ -106,8 +97,6 @@ void CLBC_methods_decl(class_loader* self, il_type* iltype, type* tp, vector* il
 			parameter* param = parameter_new(ilp->name);
 			vector_push(parameter_list, param);
 		}
-		//XSTREQ(method->name, "copy");
-		//XSTREQ(method->name, "copy");
 		CLBC_parameter_list(self, scope, ilmethod->parameter_list, method->parameter_list, ilctx);
 		//NOTE:クラスの登録が終わったらオペコードを作成する
 		type_add_method(tp, method);
@@ -119,8 +108,6 @@ void CLBC_methods_decl(class_loader* self, il_type* iltype, type* tp, vector* il
 }
 
 void CLBC_methods_impl(class_loader* self, namespace_* scope, il_type* iltype, type* tp, vector* ilmethods, vector* sgmethods) {
-	//assert(tp->tag == type_class);
-	//class_* classz = tp->u.class_;
 	CL_ERROR(self);
 	il_context* ilctx = il_context_new(self);
 	ILCTX_PUSH_TYPE(ilctx, tp);
@@ -128,12 +115,9 @@ void CLBC_methods_impl(class_loader* self, namespace_* scope, il_type* iltype, t
 		vector_item e = vector_at(sgmethods, i);
 		method* me = (method*)e;
 		il_method* ilmethod = (il_method*)vector_at(ilmethods, i);
-		//TEST(!strcmp(me->name, "main"));
-		//class_loader_sgload_params(self, scope, ilmethod->parameter_list, me->parameter_list);
 		//ネイティブメソッドならオペコードは不要
 		if (me->type == method_type_native ||
 			me->type == method_type_abstract) {
-			//class_loader_sgload_attach_native_method(self, iltype, classz, ilmethod, me);
 			continue;
 		}
 		//オペコードを作成
@@ -143,22 +127,18 @@ void CLBC_methods_impl(class_loader* self, namespace_* scope, il_type* iltype, t
 		ILCTX_PUSH_TYPE(ilctx, tp);
 		ILCTX_PUSH_METHOD(ilctx, me);
 		env->context_ref = self;
-		//XSTREQ(ilmethod->name, "test");
 		for (int i = 0; i < ilmethod->parameter_list->length; i++) {
 			il_parameter* ilparam = (il_parameter*)vector_at(ilmethod->parameter_list, i);
 			symbol_table_entry(
 				env->sym_table,
 				import_manager_resolve(self->import_manager, scope, ilparam->fqcn, ilctx),
-//				generic_cache_gtype(ilparam->fqcn, scope, ilctx),
 				ilparam->name
 			);
-			//text_printf("%s ", ilparam->name);
 			//実引数を保存
 			//0番目は this のために開けておく
 			opcode_buf_add(env->buf, (vector_item)op_store);
 			opcode_buf_add(env->buf, (vector_item)(i + 1));
 		}
-		//text_printf("\n");
 		//インスタンスメソッドなら
 		//0番目を this で埋める
 		if (!modifier_is_static(me->modifier)) {
@@ -202,7 +182,6 @@ void CLBC_ctor_decl(class_loader* self, il_type* iltype, type* tp, namespace_* s
 			vector_push(parameter_list, param);
 		}
 		CLBC_parameter_list(self, scope, ilcons->parameter_list, cons->parameter_list, ilctx);
-		//vector_push(classz->constructor_list, cons);
 		class_add_constructor(classz, cons);
 		ILCTX_POP_CTOR(ilctx);
 	}
@@ -221,7 +200,6 @@ void CLBC_ctor_impl(class_loader* self, il_type* iltype, type* tp) {
 	}
 	//既に登録されたが、
 	//オペコードが空っぽになっているコンストラクタの一覧
-
 	il_context* ilctx = il_context_new(self);
 	ILCTX_PUSH_TYPE(ilctx, tp);
 	for (int i = 0; i < constructors->length; i++) {
@@ -238,7 +216,6 @@ void CLBC_ctor_impl(class_loader* self, il_type* iltype, type* tp) {
 			il_parameter* ilparam = (il_parameter*)vector_at(ilcons->parameter_list, i);
 			symbol_table_entry(
 				env->sym_table,
-			//	generic_cache_gtype(ilparam->fqcn, scope, ilctx),
 				import_manager_resolve(self->import_manager, scope, ilparam->fqcn, ilctx),
 				ilparam->name
 			);
@@ -258,7 +235,6 @@ void CLBC_ctor_impl(class_loader* self, il_type* iltype, type* tp) {
 }
 
 void CLBC_body(class_loader* self, vector* stmt_list, enviroment* dest, namespace_* range, il_context* ilctx) {
-	//	enviroment* ret = enviroment_new();
 	CL_ERROR(self);
 	ILCTX_PUSH_NAMESPACE(ilctx, range);
 	il_error_enter();
@@ -284,18 +260,14 @@ void CLBC_body(class_loader* self, vector* stmt_list, enviroment* dest, namespac
 	}
 	il_error_exit();
 	ILCTX_POP_NAMESPACE(ilctx);
-//	return ret;
 }
 
 //private
 static void CLBC_parameter_list(class_loader* self, namespace_* scope, vector* param_list, vector* sg_param_list, il_context* ilctx) {
-	//	for (int j = 0; j < ilmethod->parameter_list->length; j++) {
 	for (int j = 0; j < param_list->length; j++) {
-		//vector_item d = vector_at(ilmethod->parameter_list, j);
 		vector_item e = vector_at(param_list, j);
 		il_parameter* ilparam = (il_parameter*)e;
 		//FIXME:ILパラメータと実行時パラメータのインデックスが同じなのでとりあえず動く
-		//parameter* mep = (parameter*)vector_at(me->parameter_list, j);
 		parameter* mep = (parameter*)vector_at(sg_param_list, j);
 		mep->gtype = import_manager_resolve(
 			self->import_manager,
@@ -303,15 +275,6 @@ static void CLBC_parameter_list(class_loader* self, namespace_* scope, vector* p
 			ilparam->fqcn,
 			ilctx
 		);
-		/*
-		import_manager_resolve(
-			self->import_manager,
-			scope,
-			ilparam->fqcn,
-			ilctx,
-			&mep->vtype
-		);
-		*/
 	}
 }
 

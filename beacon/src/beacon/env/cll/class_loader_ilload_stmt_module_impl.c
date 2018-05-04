@@ -44,9 +44,6 @@ void CLIL_body(class_loader* self, vector* list, ast* source) {
 
 //private
 static il_stmt* CLIL_bodyImpl(class_loader* self, ast* source) {
-	//text_printf("    ");
-	//ast_print(source);
-	//text_printf("\n");
 	switch (source->tag) {
 		case ast_stmt:
 		{
@@ -173,10 +170,8 @@ static il_stmt_if* CLIL_if(class_loader* self, ast* source) {
 	ast* acond = ast_first(source);
 	ast* abody = ast_second(source);
 	il_factor* ilcond = CLIL_factor(self, acond);
-	//il_stmt_list* ilbody = il_stmt_list_new();
 	CLIL_body(self, ret->body, abody);
 	ret->condition = ilcond;
-	//ret->body = ilbody;
 	return ret;
 }
 
@@ -185,7 +180,6 @@ static il_stmt_if* CLIL_if_elif_list(class_loader* self, ast* source) {
 	ast* aelif_list = ast_second(source);
 	il_stmt_if* ilif = CLIL_if(self, aif);
 	CLIL_elif_list(self, ilif->elif_list, aelif_list);
-	//il_stmt_list_push(list, ilif);
 	return ilif;
 }
 
@@ -223,11 +217,9 @@ static void CLIL_elif_list(class_loader* self, vector* list, ast* source) {
 	} else if (source->tag == ast_elif) {
 		ast* acond = ast_first(source);
 		ast* abody = ast_second(source);
-		//il_stmt* ilif = il_stmt_if_new();
 		il_stmt_elif* ilelif = il_stmt_elif_new();
 		ilelif->condition = CLIL_factor(self, acond);
 		CLIL_body(self, ilelif->body, abody);
-		//il_stmt_list_push(list, ilelif);
 		il_stmt_elif_list_push(list, ilelif);
 	}
 }

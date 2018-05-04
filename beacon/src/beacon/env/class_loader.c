@@ -116,8 +116,6 @@ void class_loader_delete(class_loader * self) {
 	if(self == NULL) {
 		return;
 	}
-	//text_printf("deleted loader %s\n", self->filename);
-	//free(self->source_code);
 	ast_delete(self->source_code);
 	il_top_level_delete(self->il_code);
 	vector_delete(self->type_cache_vec, class_loader_cache_delete);
@@ -178,13 +176,8 @@ static void class_loader_link_recursive(class_loader* self, link_type type) {
 		if (info->consume) {
 			continue;
 		}
-		//info->consume = true;
 		class_loader_link_recursive(info->context, type);
 	}
-//	XBREAK((
-//		!text_contains(self->filename, "Array") &&
-//		text_contains(self->filename, "Iterator"))
-//	);
 	class_loader_link(self, type);
 }
 

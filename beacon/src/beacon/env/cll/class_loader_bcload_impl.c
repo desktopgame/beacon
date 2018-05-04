@@ -185,20 +185,17 @@ static void CLBC_class(class_loader* self, il_type* iltype, namespace_* parent) 
 	il_context* ilctx = il_context_new(self);
 	vector_push(ilctx->namespace_vec, parent);
 	type_init_generic(tp, iltype->u.class_->type_parameter_list->length);
-	//type_init_generic(tp, iltype->u.class_->type_parameter_list->length);
 	if (tp == NULL) {
 		cls = class_new(iltype->u.class_->name);
 		tp = type_wrap_class(cls);
 		vector_push(ilctx->type_vec, tp);
 		type_init_generic(tp, iltype->u.class_->type_parameter_list->length);
-		//type_init_generic(tp, iltype->u.class_->type_parameter_list->length);
 		type_parameter_list_dup(iltype->u.class_->type_parameter_list, cls->type_parameter_list, ilctx);
 		for (int i = 0; i < iltype->u.class_->extend_list->length; i++) {
 			generic_cache* e = (generic_cache*)vector_at(iltype->u.class_->extend_list, i);
 			//最初の一つはクラスでもインターフェースでもよい
 			if (i == 0) {
 				generic_type* gtp = import_manager_resolve(self->import_manager, parent, e, ilctx);
-				//generic_type* gtp = generic_cache_gtype(e, parent, ilctx);
 				assert(gtp != NULL);
 				if (gtp->core_type->tag == type_class) {
 					cls->super_class = gtp;
@@ -207,9 +204,7 @@ static void CLBC_class(class_loader* self, il_type* iltype, namespace_* parent) 
 				}
 			//二つ目以降はインターフェースのみ
 			} else {
-
 				generic_type* gtp = import_manager_resolve(self->import_manager, parent, e, ilctx);
-				//generic_type* gtp = generic_cache_gtype(e, parent, ilctx);
 				vector_push(cls->impl_list, gtp);
 				assert(gtp->core_type->tag == type_interface);
 			}
@@ -224,14 +219,12 @@ static void CLBC_class(class_loader* self, il_type* iltype, namespace_* parent) 
 		type_parameter_list_dup(iltype->u.class_->type_parameter_list, cls->type_parameter_list, ilctx);
 	}
 	//デフォルトで親に Object を持つように
-	//XSTREQ(cls->name, "String");
 	class_* objClass = TYPE_OBJECT->u.class_;
 	if (cls != objClass) {
 		if (cls->super_class == NULL) {
 			cls->super_class = GENERIC_OBJECT;
 		}
 	}
-	//text_printfln("(( %s ))", type_name(tp));
 	//宣言のロードを予約
 	type_cache* tc = type_cache_init(
 		type_cache_new(),
@@ -242,7 +235,6 @@ static void CLBC_class(class_loader* self, il_type* iltype, namespace_* parent) 
 		cachekind_class_decl
 	);
 	vector_push(self->type_cache_vec, tc);
-//	class_loader_sgload_class_decl(self, iltype, tp, parent);
 	//実装のロードを予約
 	type_cache* mtc = type_cache_init(
 		type_cache_new(),
@@ -256,7 +248,6 @@ static void CLBC_class(class_loader* self, il_type* iltype, namespace_* parent) 
 	vector_pop(ilctx->type_vec);
 	vector_pop(ilctx->namespace_vec);
 	il_context_delete(ilctx);
-	//text_printf("loaded %s\n", type_name(tp));
 }
 
 static void CLBC_interface(class_loader * self, il_type * iltype, namespace_ * parent) {
@@ -268,19 +259,16 @@ static void CLBC_interface(class_loader * self, il_type * iltype, namespace_ * p
 	il_context* ilctx = il_context_new(self);
 	vector_push(ilctx->namespace_vec, parent);
 	type_init_generic(tp, iltype->u.interface_->type_parameter_list->length);
-	//type_init_generic(tp, iltype->u.interface_->type_parameter_list->length);
 	if (tp == NULL) {
 		inter = interface_new(iltype->u.interface_->name);
 		tp = type_wrap_interface(inter);
 		vector_push(ilctx->type_vec, tp);
 		type_init_generic(tp, iltype->u.interface_->type_parameter_list->length);
-		//type_init_generic(tp, iltype->u.interface_->type_parameter_list->length);
 		type_parameter_list_dup(iltype->u.interface_->type_parameter_list, inter->type_parameter_list, ilctx);
 		for (int i = 0; i < iltype->u.interface_->extends_list->length; i++) {
 			generic_cache* e = (generic_cache*)vector_at(iltype->u.interface_->extends_list, i);
 			//インターフェースはインターフェースのみ継承
-				generic_type* gtp = import_manager_resolve(self->import_manager, parent, e, ilctx);
-			//generic_type* gtp = generic_cache_gtype(e, parent, ilctx);
+			generic_type* gtp = import_manager_resolve(self->import_manager, parent, e, ilctx);
 			assert(gtp->core_type->tag == type_interface);
 			vector_push(inter->impl_list, gtp);
 		}
@@ -317,7 +305,6 @@ static void CLBC_interface(class_loader * self, il_type * iltype, namespace_ * p
 	vector_pop(ilctx->type_vec);
 	vector_pop(ilctx->namespace_vec);
 	il_context_delete(ilctx);
-	//text_printf("loaded %s\n", type_name(tp));
 }
 
 static void CLBC_attach_native_method(class_loader* self, il_type* ilclass, class_* classz, il_method* ilmethod, method* me) {

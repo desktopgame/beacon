@@ -127,7 +127,6 @@ void class_loader_ilload_impl(class_loader* self, ast* source_code) {
 			text_putline();
 		}
 	}
-	//il_top_level_dump(self->il_code, 0);
 }
 
 //private
@@ -160,29 +159,23 @@ static void class_loader_ilload_import(class_loader* self, ast* import_decl) {
 	ast* path = ast_first(import_decl);
 	il_import* ret = il_import_new(path->u.string_value);
 	vector_push(self->il_code->import_list, ret);
-	//text_printf("import %s\n", path->u.string_value);
 }
 
 static void class_loader_ilload_namespace(class_loader* self, vector* parent, ast* namespace_decl) {
 	assert(namespace_decl->tag == ast_namespace_decl);
-	//text_printf("namespace");
 	ast* namespace_path = ast_first(namespace_decl);
 	ast* namespace_body = ast_second(namespace_decl);
 	il_namespace* iln = class_loader_ilload_ast_to_namespace(namespace_path);
 	il_namespace* top = il_namespace_root(iln);
-	//text_printf("%s", top->name);
 	vector_push(parent, top);
 	class_loader_ilload_namespace_path_recursive(self, namespace_path, namespace_body);
-	//text_printf("\n");
 	class_loader_ilload_namespace_body(self, iln, iln->namespace_list, namespace_body);
-	//text_printf("\n");
 }
 
 static void class_loader_ilload_namespace_path_recursive(class_loader* self, ast* namespace_path, ast* namespace_body) {
 	assert(namespace_path->tag == ast_namespace_path ||
 		   namespace_path->tag == ast_namespace_path_list);
 	if (namespace_path->tag == ast_namespace_path) {
-	//	text_printf(" %s", namespace_path->u.string_value);
 	} else if (namespace_path->tag == ast_namespace_path_list) {
 		for (int i = 0; i < namespace_path->child_count; i++) {
 			class_loader_ilload_namespace_path_recursive(self, ast_at(namespace_path, i), namespace_body);
@@ -194,8 +187,6 @@ static il_namespace* class_loader_ilload_ast_to_namespace(ast* a) {
 	assert(a->tag == ast_namespace_path ||
 	       a->tag == ast_namespace_path_list);
 	if(a->tag == ast_namespace_path) {
-		//text_printf("-  %s", a->u.string_value);
-		//text_putline();
 		il_namespace* ret = il_namespace_new(a->u.string_value);
 		return ret;
 	} else if(a->tag == ast_namespace_path_list) {
@@ -214,14 +205,12 @@ static void class_loader_ilload_namespace_body(class_loader* self, il_namespace*
 	if (ast_is_blank(namespace_body)) {
 		return;
 	}
-	//assert(namespace_body->tag == ast_namespace_member_decl_list);
 	//namespace xxx { ...
 	//namespace xxx { namespace yyy { ...
 	if (namespace_body->tag == ast_namespace_decl) {
 		class_loader_ilload_namespace(self, parent, namespace_body);
 		//namespace xxx { class yyy { ...
 	} else if (namespace_body->tag == ast_class_decl) {
-		//text_printf("class decl\n");
 		class_loader_ilload_class(self, current, namespace_body);
 		//namespace xxx { interface yyy { ...
 	} else if (namespace_body->tag == ast_interface_decl) {
@@ -256,8 +245,6 @@ static void class_loader_ilload_class(class_loader* self, il_namespace* current,
 		CLIL_member_tree(self, iltype, amember_tree);
 	}
 	vector_push(current->type_list, iltype);
-	//il_namespace_add_entity(current, classz);
-	//vector_push(current->class_list, classz);
 }
 
 static void class_loader_ilload_interface(class_loader* self, il_namespace* current, ast* interface_decl) {
