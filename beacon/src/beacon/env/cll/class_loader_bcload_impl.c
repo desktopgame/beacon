@@ -90,8 +90,9 @@ static void CLBC_interface(class_loader* self, il_type* iltype, namespace_* pare
 
 static void CLBC_attach_native_method(class_loader* self, il_type* iltype, class_* classz, il_method* ilmethod, method* me);
 static void CLBC_debug_native_method(method* parent, frame* fr, enviroment* env);
-static void CLBC_check_superclass(class_* cls);
 
+static void CLBC_check_superclass(class_* cls);
+static type* CLBC_get_or_load_enum(namespace_* parent, il_type* iltype, class_* outClass);
 
 void class_loader_bcload_impl(class_loader* self) {
 	CL_ERROR(self);
@@ -148,16 +149,8 @@ static void CLBC_enum(class_loader * self, il_type * iltype, namespace_ * parent
 	CL_ERROR(self);
 	assert(iltype->tag == iltype_enum);
 	il_enum* ilenum = iltype->u.enum_;
-	type* tp = namespace_get_type(parent, iltype->u.enum_->name);
 	class_* cls;
-	if (tp == NULL) {
-		cls = class_new(iltype->u.enum_->name);
-		cls->location = parent;
-		tp = type_wrap_class(cls);
-		namespace_add_type(parent, tp);
-	} else {
-		cls = tp->u.class_;
-	}
+	type* tp = CLBC_get_or_load_enum(parent, iltype, cls);
 	//全ての列挙子を public static final フィールドとして追加
 	for (int i = 0; i < ilenum->item_vec->length; i++) {
 		char* str = (char*)vector_at(ilenum->item_vec, i);
@@ -318,4 +311,18 @@ static void CLBC_check_superclass(class_* cls) {
 			cls->super_class = GENERIC_OBJECT;
 		}
 	}
+}
+
+static type* CLBC_get_or_load_enum(namespace_* parent, il_type* iltype, class_* outClass) {
+	outClass = NULL;
+	type* tp = namespace_get_type(parent, iltype->u.enum_->name);
+	if (tp == NULL) {
+		outClass = class_new(iltype->u.enum_->name);
+		outClass->location = parent;
+		tp = type_wrap_class(outClass);
+		namespace_add_type(parent, tp);
+	} else {
+		outClass = tp->u.class_;
+	}
+	return tp;
 }
