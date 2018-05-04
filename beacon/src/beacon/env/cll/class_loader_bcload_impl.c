@@ -90,7 +90,7 @@ static void CLBC_interface(class_loader* self, il_type* iltype, namespace_* pare
 
 static void CLBC_attach_native_method(class_loader* self, il_type* iltype, class_* classz, il_method* ilmethod, method* me);
 static void CLBC_debug_native_method(method* parent, frame* fr, enviroment* env);
-
+static void CLBC_check_superclass(class_* cls);
 
 
 void class_loader_bcload_impl(class_loader* self) {
@@ -219,12 +219,7 @@ static void CLBC_class(class_loader* self, il_type* iltype, namespace_* parent) 
 		type_parameter_list_dup(iltype->u.class_->type_parameter_list, cls->type_parameter_list, ilctx);
 	}
 	//デフォルトで親に Object を持つように
-	class_* objClass = TYPE_OBJECT->u.class_;
-	if (cls != objClass) {
-		if (cls->super_class == NULL) {
-			cls->super_class = GENERIC_OBJECT;
-		}
-	}
+	CLBC_check_superclass(cls);
 	//宣言のロードを予約
 	type_cache* tc = type_cache_init(
 		type_cache_new(),
@@ -314,4 +309,13 @@ static void CLBC_attach_native_method(class_loader* self, il_type* ilclass, clas
 
 static void CLBC_debug_native_method(method* parent, frame*fr, enviroment* env) {
 
+}
+
+static void CLBC_check_superclass(class_* cls) {
+	class_* objClass = TYPE_OBJECT->u.class_;
+	if (cls != objClass) {
+		if (cls->super_class == NULL) {
+			cls->super_class = GENERIC_OBJECT;
+		}
+	}
 }
