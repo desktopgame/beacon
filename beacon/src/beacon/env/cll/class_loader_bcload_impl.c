@@ -39,6 +39,7 @@
 #include "../import_info.h"
 #include "../../env/heap.h"
 //proto
+static void CLBC_namespace_tree(class_loader* self);
 /**
  * 名前空間の一覧を読み込みます.
  * @param self
@@ -100,12 +101,12 @@ void class_loader_bcload_impl(class_loader* self) {
 	CLBC_namespace_tree(self);
 }
 
-void CLBC_namespace_tree(class_loader* self) {
+//private
+static void CLBC_namespace_tree(class_loader* self) {
 	CL_ERROR(self);
 	CLBC_namespace_list(self, self->il_code->namespace_list, NULL);
 }
 
-//private
 static void CLBC_namespace_list(class_loader* self, vector* ilnamespace_list, namespace_* parent) {
 	//self->link = classlink_resume;
 	CL_ERROR(self);
