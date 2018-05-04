@@ -10,7 +10,7 @@
 
 il_factor * il_factor_wrap_string(il_factor_string * self) {
 	il_factor* ret = (il_factor*)MEM_MALLOC(sizeof(il_factor));
-	ret->type = ilfactor_squote;
+	ret->type = ilfactor_string;
 	ret->u.string_ = self;
 	return ret;
 }
@@ -51,6 +51,6 @@ void il_factor_string_delete(il_factor_string * self) {
 }
 
 il_factor_string* il_factor_cast_string(il_factor* fact) {
-	assert(fact->type == ilfactor_squote);
+	assert(fact->type == ilfactor_string);
 	return fact->u.string_;
 }

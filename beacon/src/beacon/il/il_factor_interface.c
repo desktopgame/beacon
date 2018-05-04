@@ -18,10 +18,10 @@ void il_factor_dump(il_factor * self, int depth) {
 		case ilfactor_double:
 			il_factor_double_dump(self->u.double_, depth);
 			break;
-		case ilfactor_cquote:
+		case ilfactor_char:
 			il_factor_char_dump(self->u.char_, depth);
 			break;
-		case ilfactor_squote:
+		case ilfactor_string:
 			il_factor_string_dump(self->u.string_, depth);
 			break;
 		case ilfactor_variable:
@@ -88,10 +88,10 @@ void il_factor_generate(il_factor * self, enviroment* env, il_context* ilctx) {
 		case ilfactor_double:
 			il_factor_double_generate(self->u.double_, env, ilctx);
 			break;
-		case ilfactor_cquote:
+		case ilfactor_char:
 			il_factor_char_generate(self->u.char_, env, ilctx);
 			break;
-		case ilfactor_squote:
+		case ilfactor_string:
 			il_factor_string_generate(self->u.string_, env, ilctx);
 			break;
 		case ilfactor_variable:
@@ -159,10 +159,10 @@ void il_factor_load(il_factor * self, enviroment * env, il_context* ilctx) {
 		case ilfactor_double:
 			il_factor_double_load(self->u.double_, env, ilctx);
 			break;
-		case ilfactor_cquote:
+		case ilfactor_char:
 			il_factor_char_load(self->u.char_, env, ilctx);
 			break;
-		case ilfactor_squote:
+		case ilfactor_string:
 			il_factor_string_load(self->u.string_, env, ilctx);
 			break;
 		case ilfactor_variable:
@@ -230,10 +230,10 @@ generic_type* il_factor_eval(il_factor * self, enviroment * env, il_context* ilc
 		case ilfactor_double:
 			ret = il_factor_double_eval(self->u.double_, env, ilctx);
 			break;
-		case ilfactor_cquote:
+		case ilfactor_char:
 			ret = il_factor_char_eval(self->u.char_, env, ilctx);
 			break;
-		case ilfactor_squote:
+		case ilfactor_string:
 			ret = il_factor_string_eval(self->u.string_, env, ilctx);
 			break;
 		case ilfactor_variable:
@@ -299,9 +299,9 @@ char* il_factor_tostr(il_factor* self, enviroment* env, il_context* ilctx) {
 			return il_factor_int_tostr(self->u.int_, env, ilctx);
 		case ilfactor_double:
 			return il_factor_double_tostr(self->u.double_, env, ilctx);
-		case ilfactor_cquote:
+		case ilfactor_char:
 			return il_factor_char_tostr(self->u.char_, env, ilctx);
-		case ilfactor_squote:
+		case ilfactor_string:
 			return il_factor_string_tostr(self->u.string_, env, ilctx);
 		case ilfactor_variable:
 			return il_factor_variable_tostr(self->u.variable_, env, ilctx);
@@ -387,10 +387,10 @@ void il_factor_delete(il_factor * self) {
 		case ilfactor_double:
 			il_factor_double_delete(self->u.double_);
 			break;
-		case ilfactor_cquote:
+		case ilfactor_char:
 			il_factor_char_delete(self->u.char_);
 			break;
-		case ilfactor_squote:
+		case ilfactor_string:
 			il_factor_string_delete(self->u.string_);
 			break;
 		case ilfactor_variable:

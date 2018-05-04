@@ -18,8 +18,8 @@
 typedef enum il_factor_type {
 	ilfactor_int,
 	ilfactor_double,
-	ilfactor_cquote,
-	ilfactor_squote,
+	ilfactor_char,
+	ilfactor_string,
 	ilfactor_unary_op,
 	ilfactor_binary_op,
 	ilfactor_assign_op,

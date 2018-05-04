@@ -9,7 +9,7 @@
 
 il_factor * il_factor_wrap_char(il_factor_char * self) {
 	il_factor* ret = (il_factor*)MEM_MALLOC(sizeof(il_factor));
-	ret->type = ilfactor_cquote;
+	ret->type = ilfactor_char;
 	ret->u.char_ = self;
 	return ret;
 }
@@ -52,6 +52,6 @@ void il_factor_char_delete(il_factor_char * self) {
 }
 
 il_factor_char* il_factor_cast_char(il_factor* fact) {
-	assert(fact->type == ilfactor_cquote);
+	assert(fact->type == ilfactor_char);
 	return fact->u.char_;
 }
