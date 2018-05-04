@@ -27,7 +27,6 @@
 #include "../field.h"
 #include "../method.h"
 #include "../constructor.h"
-#include "class_loader_bcload_link_module_impl.h"
 #include "class_loader_bcload_import_module_impl.h"
 #include "../../util/mem.h"
 #include "../../util/xassert.h"
@@ -99,17 +98,6 @@ void class_loader_bcload_impl(class_loader* self) {
 	il_top_level* iltop = self->il_code;
 	CLBC_import(self, self->il_code->import_list);
 	CLBC_namespace_tree(self);
-}
-
-void class_loader_bcload_link(class_loader * self, link_type type) {
-	CL_ERROR(self);
-	if(type == link_decl) {
-		CLBC_excec_class_decl(self);
-		CLBC_excec_interface_decl(self);
-	} else if(type == link_impl) {
-		CLBC_excec_class_impl(self);
-		CLBC_excec_interface_impl(self);
-	} else assert(false);
 }
 
 void CLBC_namespace_tree(class_loader* self) {

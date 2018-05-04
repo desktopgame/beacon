@@ -40,6 +40,7 @@
 #include "cll/class_loader_bcload_impl.h"
 #include "cll/class_loader_bcload_import_module_impl.h"
 #include "cll/class_loader_bcload_member_module_impl.h"
+#include "cll/class_loader_link_impl.h"
 #include "import_info.h"
 #include "type_cache.h"
 #include "heap.h"
@@ -47,7 +48,7 @@
 
 //proto
 static void class_loader_load_impl(class_loader* self);
-static void class_loader_link(class_loader* self, link_type type);
+static void class_loader_link_recursive(class_loader* self, link_type type);
 static void class_loader_cache_delete(vector_item item);
 
 class_loader* class_loader_new(content_type type) {
@@ -152,8 +153,8 @@ static void class_loader_load_impl(class_loader* self) {
 	//他のクラスローダーとリンク
 	if(self->type == content_entry_point) {
 		il_error_enter();
-		class_loader_link(self, link_decl);
-		class_loader_link(self, link_impl);
+		class_loader_link_recursive(self, link_decl);
+		class_loader_link_recursive(self, link_impl);
 		il_error_exit();
 	}
 	//トップレベルのステートメントを読み込む
@@ -166,7 +167,7 @@ static void class_loader_load_impl(class_loader* self) {
 	il_context_delete(ilctx);
 }
 
-static void class_loader_link(class_loader* self, link_type type) {
+static void class_loader_link_recursive(class_loader* self, link_type type) {
 	if (self->link == type) {
 		return;
 	}
@@ -178,13 +179,13 @@ static void class_loader_link(class_loader* self, link_type type) {
 			continue;
 		}
 		//info->consume = true;
-		class_loader_link(info->context, type);
+		class_loader_link_recursive(info->context, type);
 	}
 //	XBREAK((
 //		!text_contains(self->filename, "Array") &&
 //		text_contains(self->filename, "Iterator"))
 //	);
-	class_loader_bcload_link(self, type);
+	class_loader_link(self, type);
 }
 
 static void class_loader_cache_delete(vector_item item) {

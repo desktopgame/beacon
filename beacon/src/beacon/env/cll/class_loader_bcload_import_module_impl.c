@@ -7,7 +7,6 @@
 #include "../../util/text.h"
 #include "../../util/io.h"
 #include "../../util/mem.h"
-#include "class_loader_bcload_link_module_impl.h"
 #include "class_loader_ilload_impl.h"
 #include <assert.h>
 

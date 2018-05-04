@@ -12,7 +12,5 @@
  */
 void class_loader_bcload_impl(class_loader* self);
 
-void class_loader_bcload_link(class_loader* self, link_type type);
-
 void CLBC_namespace_tree(class_loader* self);
 #endif
