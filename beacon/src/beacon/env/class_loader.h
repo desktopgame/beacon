@@ -28,7 +28,6 @@ typedef struct class_loader {
 	struct class_loader* parent;
 	int level;
 	char* filename;
-	char* error_message;
 	bool error;
 } class_loader;
 
@@ -103,19 +102,22 @@ void class_loader_rsub(class_loader* self, char* relativePath);
 void class_loader_delete(class_loader* self);
 
 /**
- * エラーを報告します.
+ * エラー情報を出力してクラスローダーをマークします.
  * @param self
- * @param message
+ * @param fmt
+ * @param ...
+ * @return
  */
-void class_loader_error(class_loader* self, const char* message);
+int class_loader_report(class_loader* self, const char* fmt, ...);
 
 /**
- * エラーをフォーマット付きで報告します.
+ * エラー情報を出力してクラスローダーをマークします.
  * @param self
- * @param message
- * @param ...
+ * @param fmt
+ * @param ap
+ * @return
  */
-void class_loader_errorf(class_loader* self, const char* message, ...);
+int class_loader_vreport(class_loader* self, const char* fmt, va_list ap);
 
 /**
  * ブートストラップクラスローダーを返します.

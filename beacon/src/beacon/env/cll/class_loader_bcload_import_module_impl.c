@@ -68,7 +68,7 @@ static void CLBC_new_load_internal(class_loader * self, char * fullPath) {
 	}
 	//そのローダーが破損しているなら
 	if (cll->error) {
-		class_loader_error(self, cll->error_message);
+		class_loader_report(self, "error %s\n", cll->filename);
 	}
 	//パースをキャンセル
 	if (self->error) {
@@ -111,7 +111,7 @@ static void CLBC_import_already(class_loader* self, class_loader* cll) {
 	//text_printf("aimport %s\n", cll->filename);
 	//そのローダーが破損しているなら
 	if (cll->error) {
-		class_loader_error(self, cll->error_message);
+		class_loader_report(self, "error %s\n", cll->filename);
 		return;
 	}
 	//CLBC_import(cll, cll->il_code->import_list);

@@ -62,11 +62,7 @@ class_loader* class_loader_new(content_type type) {
 	ret->error = false;
 	ret->level = 0;
 	ret->type_cache_vec = vector_new();
-	//ret->linked_allimports = false;
-	ret->error_message = NULL;
 	ret->env->context_ref = ret;
-	//text_printfln("new classloader");
-	//ret->link = classlink_unlinked;
 	return ret;
 }
 
@@ -90,14 +86,11 @@ class_loader * class_loader_new_entry_point_from_parser(parser * p) {
 	class_loader* ret = class_loader_new(content_entry_point);
 	//解析に失敗した場合
 	if (p->fail) {
-		class_loader_errorf(ret, "parse failed --- %s", p->source_name);
-		//MEM_FREE(text);
-		//parser_pop();
+		class_loader_report(ret, "parser failed --- %s\n", p->source_name);
 		return ret;
 	}
 	ret->source_code = p->root;
 	p->root = NULL;
-	//MEM_FREE(text);
 	return ret;
 }
 
@@ -130,30 +123,20 @@ void class_loader_delete(class_loader * self) {
 	import_manager_delete(self->import_manager);
 	enviroment_delete(self->env);
 	MEM_FREE(self->filename);
-	MEM_FREE(self->error_message);
 	MEM_FREE(self);
 }
 
-//utilitiy
-void class_loader_error(class_loader* self, const char* message) {
-	self->error_message = text_strdup(message);
-	self->error = true;
-	text_printf("%s", message);
-	text_putline();
+int class_loader_report(class_loader* self, const char* fmt, ...) {
+	va_list ap;
+	va_start(ap, fmt);
+	int ret = class_loader_vreport(self, fmt, ap);
+	va_end(ap);
+	return ret;
 }
 
-void class_loader_errorf(class_loader* self, const char* message, ...) {
-	va_list ap;
-	va_start(ap, message);
-	char buff[100];
-	int res = text_sprintf(buff, 100, message, ap);
-	if (res == -1) {
-		//on error
-		text_printf("internal error: %s %d", __FILE__, __LINE__);
-	} else {
-		class_loader_error(self, buff);
-	}
-	va_end(ap);
+int class_loader_vreport(class_loader* self, const char* fmt, va_list ap) {
+	self->error = true;
+	return text_vprintf(fmt, ap);
 }
 
 //private
