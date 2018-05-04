@@ -99,9 +99,6 @@ typedef enum opcode {
 	op_invokespecial,
 	op_invokeinterface,
 
-	op_printi,
-	op_printd,
-	op_prints,
 	op_breakpoint,
 
 	op_goto,

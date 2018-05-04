@@ -657,27 +657,6 @@ static void vm_run(frame * self, enviroment * env, int pos, int deferStart) {
 				vector_push(self->defer_vec, l);
 				break;
 			}
-			//debug
-			case op_printi:
-			{
-				int i = SPI(self);
-				text_printf("int: %d\n", i);
-				break;
-			}
-
-			case op_printd:
-			{
-				double d = SPD(self);
-				text_printf("double: %f\n", d);
-				break;
-			}
-
-			case op_prints:
-			{
-				char* s = SPS(self);
-				text_printf("string: %s\n", s);
-				break;
-			}
 			case op_breakpoint:
 			{
 				break;

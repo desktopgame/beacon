@@ -343,22 +343,6 @@ int opcode_fprint(FILE* fp, vector* source, int index) {
 			text_fprintf(fp,"instanceof(%d)", a);
 			break;
 		}
-		//debug
-		case op_printi:
-		{
-			text_fprintf(fp,"printi");
-			break;
-		}
-		case op_printd:
-		{
-			text_fprintf(fp,"printd");
-			break;
-		}
-		case op_prints:
-		{
-			text_fprintf(fp,"prints");
-			break;
-		}
 		case op_breakpoint:
 		{
 			text_fprintf(fp,"breakpoint");
