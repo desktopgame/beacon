@@ -92,7 +92,8 @@ static void CLBC_attach_native_method(class_loader* self, il_type* iltype, class
 static void CLBC_debug_native_method(method* parent, frame* fr, enviroment* env);
 
 static void CLBC_check_superclass(class_* cls);
-static type* CLBC_get_or_load_enum(namespace_* parent, il_type* iltype, class_* outClass);
+static type* CLBC_get_or_load_enum(namespace_* parent, il_type* iltype);
+static type* CLBC_get_or_load_class(class_loader* self, namespace_* parent, il_type* iltype, il_context* ilctx);
 
 void class_loader_bcload_impl(class_loader* self) {
 	CL_ERROR(self);
@@ -149,8 +150,8 @@ static void CLBC_enum(class_loader * self, il_type * iltype, namespace_ * parent
 	CL_ERROR(self);
 	assert(iltype->tag == iltype_enum);
 	il_enum* ilenum = iltype->u.enum_;
-	class_* cls;
-	type* tp = CLBC_get_or_load_enum(parent, iltype, cls);
+	type* tp = CLBC_get_or_load_enum(parent, iltype);
+	class_* cls = TYPE2CLASS(tp);
 	//全ての列挙子を public static final フィールドとして追加
 	for (int i = 0; i < ilenum->item_vec->length; i++) {
 		char* str = (char*)vector_at(ilenum->item_vec, i);
@@ -172,45 +173,13 @@ static void CLBC_class(class_loader* self, il_type* iltype, namespace_* parent) 
 	//既に登録されていたら二重に登録しないように
 	//例えば、ネイティブメソッドを登録するために一時的にクラスが登録されている場合がある
 	assert(iltype->tag == iltype_class);
-	type* tp = namespace_get_type(parent, iltype->u.class_->name);
-	class_* cls;
 	//FIXME:あとで親関数から渡すようにする
 	il_context* ilctx = il_context_new(self);
 	vector_push(ilctx->namespace_vec, parent);
+	//すでに宣言されているならそれを取得
+	type* tp = CLBC_get_or_load_class(self, parent, iltype, ilctx);
+	class_* cls = TYPE2CLASS(tp);
 	type_init_generic(tp, iltype->u.class_->type_parameter_list->length);
-	if (tp == NULL) {
-		cls = class_new(iltype->u.class_->name);
-		tp = type_wrap_class(cls);
-		vector_push(ilctx->type_vec, tp);
-		type_init_generic(tp, iltype->u.class_->type_parameter_list->length);
-		type_parameter_list_dup(iltype->u.class_->type_parameter_list, cls->type_parameter_list, ilctx);
-		for (int i = 0; i < iltype->u.class_->extend_list->length; i++) {
-			generic_cache* e = (generic_cache*)vector_at(iltype->u.class_->extend_list, i);
-			//最初の一つはクラスでもインターフェースでもよい
-			if (i == 0) {
-				generic_type* gtp = import_manager_resolve(self->import_manager, parent, e, ilctx);
-				assert(gtp != NULL);
-				if (gtp->core_type->tag == type_class) {
-					cls->super_class = gtp;
-				} else if (gtp->core_type->tag == type_interface) {
-					vector_push(cls->impl_list, gtp);
-				}
-			//二つ目以降はインターフェースのみ
-			} else {
-				generic_type* gtp = import_manager_resolve(self->import_manager, parent, e, ilctx);
-				vector_push(cls->impl_list, gtp);
-				assert(gtp->core_type->tag == type_interface);
-			}
-		}
-		cls->location = parent;
-		namespace_add_type(parent, tp);
-	} else {
-		vector_push(ilctx->type_vec, tp);
-		cls = tp->u.class_;
-		//もしネイティブメソッドのために
-		//既に登録されていたならここが型変数がNULLになってしまう
-		type_parameter_list_dup(iltype->u.class_->type_parameter_list, cls->type_parameter_list, ilctx);
-	}
 	//デフォルトで親に Object を持つように
 	CLBC_check_superclass(cls);
 	//宣言のロードを予約
@@ -313,8 +282,8 @@ static void CLBC_check_superclass(class_* cls) {
 	}
 }
 
-static type* CLBC_get_or_load_enum(namespace_* parent, il_type* iltype, class_* outClass) {
-	outClass = NULL;
+static type* CLBC_get_or_load_enum(namespace_* parent, il_type* iltype) {
+	class_* outClass = NULL;
 	type* tp = namespace_get_type(parent, iltype->u.enum_->name);
 	if (tp == NULL) {
 		outClass = class_new(iltype->u.enum_->name);
@@ -323,6 +292,46 @@ static type* CLBC_get_or_load_enum(namespace_* parent, il_type* iltype, class_* 
 		namespace_add_type(parent, tp);
 	} else {
 		outClass = tp->u.class_;
+	}
+	return tp;
+}
+
+static type* CLBC_get_or_load_class(class_loader* self, namespace_* parent, il_type* iltype, il_context* ilctx) {
+	type* tp = namespace_get_type(parent, iltype->u.class_->name);
+	class_* outClass = NULL;
+	//取得できなかった
+	if (tp == NULL) {
+		outClass = class_new(iltype->u.class_->name);
+		tp = type_wrap_class(outClass);
+		vector_push(ilctx->type_vec, tp);
+		type_init_generic(tp, iltype->u.class_->type_parameter_list->length);
+		type_parameter_list_dup(iltype->u.class_->type_parameter_list, outClass->type_parameter_list, ilctx);
+		for (int i = 0; i < iltype->u.class_->extend_list->length; i++) {
+			generic_cache* e = (generic_cache*)vector_at(iltype->u.class_->extend_list, i);
+			//最初の一つはクラスでもインターフェースでもよい
+			if (i == 0) {
+				generic_type* gtp = import_manager_resolve(self->import_manager, parent, e, ilctx);
+				assert(gtp != NULL);
+				if (gtp->core_type->tag == type_class) {
+					outClass->super_class = gtp;
+				} else if (gtp->core_type->tag == type_interface) {
+					vector_push(outClass->impl_list, gtp);
+				}
+			//二つ目以降はインターフェースのみ
+			} else {
+				generic_type* gtp = import_manager_resolve(self->import_manager, parent, e, ilctx);
+				vector_push(outClass->impl_list, gtp);
+				assert(gtp->core_type->tag == type_interface);
+			}
+		}
+		outClass->location = parent;
+		namespace_add_type(parent, tp);
+	} else {
+		vector_push(ilctx->type_vec, tp);
+		outClass = tp->u.class_;
+		//もしネイティブメソッドのために
+		//既に登録されていたならここが型変数がNULLになってしまう
+		type_parameter_list_dup(iltype->u.class_->type_parameter_list, outClass->type_parameter_list, ilctx);
 	}
 	return tp;
 }
