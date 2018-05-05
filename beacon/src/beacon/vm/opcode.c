@@ -366,6 +366,22 @@ int opcode_fprint(FILE* fp, vector* source, int index) {
 			text_fprintf(fp,"try clear");
 			break;
 		}
+		case op_defer_enter:
+		{
+			text_fprintf(fp, "defer enter");
+			break;
+		}
+		case op_defer_register:
+		{
+			label* l = (label*)vector_at(source, ++index);
+			text_fprintf(fp, "defer enter(%d)", l->cursor);
+			break;
+		}
+		case op_defer_exit:
+		{
+			text_fprintf(fp, "defer exit");
+			break;
+		}
 		case op_hexception:
 		{
 			text_fprintf(fp,"hexception");
@@ -373,8 +389,7 @@ int opcode_fprint(FILE* fp, vector* source, int index) {
 		}
 		case op_instanceof:
 		{
-			int a = (int)vector_at(source, ++index);
-			text_fprintf(fp,"instanceof(%d)", a);
+			text_fprintf(fp,"instanceof");
 			break;
 		}
 		case op_breakpoint:

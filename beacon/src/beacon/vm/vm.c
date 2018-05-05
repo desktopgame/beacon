@@ -394,6 +394,10 @@ static void vm_run(frame * self, enviroment * env, int pos, int deferStart) {
 			{
 				generic_type* gtype = (generic_type*)vector_pop(self->type_args_vec);
 				object* v = (object*)vector_pop(self->value_stack);
+				generic_type_print(gtype);
+				text_printfln("");
+				generic_type_print(v->gtype);
+				text_printfln("");
 				int dist = generic_type_distance(gtype, v->gtype, NULL);
 				object* b = object_bool_get(dist >= 0);
 				vector_push(self->value_stack, b);
@@ -421,9 +425,19 @@ static void vm_run(frame * self, enviroment * env, int pos, int deferStart) {
 			case op_alloc_field:
 			{
 				int absClsIndex = (int)enviroment_source_at(env, ++i);
-				type* cls = (type*)vector_at(ctx->type_vec, absClsIndex);
+				type* tp = (type*)vector_at(ctx->type_vec, absClsIndex);
+				class_* cls = TYPE2CLASS(tp);
 				object* obj = (object*)vector_top(self->value_stack);
-				class_alloc_fields(cls->u.class_, obj);
+				class_alloc_fields(cls, obj);
+				if(cls->type_parameter_list->length == 0) {
+					obj->gtype = tp->generic_self;
+				} else {
+					generic_type* g = generic_type_new(tp);
+					for(int i=0; i<cls->type_parameter_list->length; i++) {
+						generic_type_addargs(g, (generic_type*)vector_at(self->type_args_vec, i));
+					}
+					obj->gtype = g;
+				}
 				break;
 			}
 			case op_new_instance:
@@ -645,6 +659,7 @@ static void vm_run(frame * self, enviroment * env, int pos, int deferStart) {
 			}
 			case op_generic_add:
 			{
+				//TODO:ここで親フレームを遡るように
 				//ジェネリックタイプを作成する
 				int depth = 0;
 				int pos = i;
@@ -657,7 +672,7 @@ static void vm_run(frame * self, enviroment * env, int pos, int deferStart) {
 						int count = (int)enviroment_source_at(env, ++i);
 						depth++;
 						vector_push(counts, count);
-						vector_push(stack, generic_type_new(NULL));
+						//vector_push(stack, generic_type_new(NULL));
 					} else if(code == op_generic_exit) {
 						depth--;
 						int count = (int)vector_pop(counts);
@@ -675,17 +690,16 @@ static void vm_run(frame * self, enviroment * env, int pos, int deferStart) {
 							  code == op_generic_static_type) {
 						assert(depth > 0);
 						int arg = (int)enviroment_source_at(env, ++i);
-						generic_type* a = vector_top(stack);
+						generic_type* a = NULL;
 						if(code == op_generic_unique_type) {
-							a->core_type = (type*)vector_at(ctx->type_vec, arg);
-							a->virtual_type_index = -1;
+							a = generic_type_new((type*)vector_at(ctx->type_vec, arg));
 						} else if(code == op_generic_instance_type) {
-							a->virtual_type_index = arg;
-							a->tag = generic_type_tag_class;
+							object* receiver = (object*)vector_at(self->ref_stack, 0);
+							a = (generic_type*)vector_at(receiver->gtype->type_args_list, arg);
 						} else if(code == op_generic_static_type) {
-							a->virtual_type_index = arg;
-							a->tag = generic_type_tag_method;
+							a = (generic_type*)vector_at(self->type_args_vec, arg);
 						}
+						vector_push(stack, a);
 					}
 				}
 				assert(ret != NULL);
