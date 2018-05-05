@@ -184,6 +184,29 @@ bool generic_type_bool(generic_type* self) {
 	return self->core_type == TYPE_BOOL;
 }
 
+void generic_type_generate(generic_type* self, enviroment* env, il_context* ilctx) {
+	opcode_buf_add(env->buf, op_generic_enter);
+	if(self->core_type == NULL) {
+		if(self->tag == generic_type_tag_ctor ||
+		   self->tag == generic_type_tag_class ||
+		   self->tag == generic_type_tag_method) {
+			   opcode_buf_add(env->buf, op_generic_static_type);
+			   opcode_buf_add(env->buf, self->virtual_type_index);
+		} else {
+			opcode_buf_add(env->buf, op_generic_instance_type);
+			opcode_buf_add(env->buf, self->virtual_type_index);
+		}
+	} else {
+		opcode_buf_add(env->buf, op_generic_unique_type);
+		opcode_buf_add(env->buf, self->core_type->absolute_index);
+	}
+	for(int i=0; i<self->type_args_list->length; i++) {
+		generic_type* e = (generic_type*)vector_at(self->type_args_list, i);
+		generic_type_generate(e, env, ilctx);
+	}
+	opcode_buf_add(env->buf, op_generic_exit);
+}
+
 //Hash<String,List<Int>>
 generic_type* generic_type_apply(generic_type* self, il_context* ilctx) {
 	//ここで型変数が追加されちゃってた

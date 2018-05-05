@@ -99,6 +99,12 @@ typedef enum opcode {
 	op_invokespecial,
 	op_invokeinterface,
 
+	op_generic_enter,
+	op_generic_unique_type,
+	op_generic_instance_type,
+	op_generic_static_type,
+	op_generic_exit,
+
 	op_breakpoint,
 
 	op_goto,

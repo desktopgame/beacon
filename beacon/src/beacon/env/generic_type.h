@@ -131,6 +131,14 @@ bool generic_type_double(generic_type* self);
 bool generic_type_bool(generic_type* self);
 
 /**
+ * ジェネリックタイプをオペコードとして出力します.
+ * @param self
+ * @param env
+ * @param ilctx
+ */
+void generic_type_generate(generic_type* self, struct enviroment* env, struct il_context* ilctx);
+
+/**
  * 現在のコンテキストで self の型変数を解決します.
  * T ではなく T を内包する型(List<T>) などが戻り値になる時に使用されます。
  * @param self
