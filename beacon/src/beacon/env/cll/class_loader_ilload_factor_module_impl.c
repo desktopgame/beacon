@@ -290,6 +290,6 @@ static il_factor_instanceof* CLIL_instanceof(class_loader* self, ast* source) {
 	ast* atype = ast_second(source);
 	il_factor_instanceof* ret = il_factor_instanceof_new();
 	ret->fact = CLIL_factor(self, afact);
-	CLIL_fqcn_cache(atype, ret->cache);
+	CLIL_generic_cache(atype, ret->gcache);
 	return ret;
 }

@@ -177,7 +177,7 @@ Grammar
   111                   | expression LE expression
   112                   | expression LSHIFT expression
   113                   | expression RSHIFT expression
-  114                   | expression INSTANCEOF fqcn_part
+  114                   | expression INSTANCEOF typename_T
   115                   | expression AS typename_T
   116                   | CHILDA expression
   117                   | NOT expression
@@ -449,9 +449,10 @@ typename_group (138)
 typename_list (139)
     on left: 75 76, on right: 31 35 74 76
 typename_T (140)
-    on left: 77, on right: 54 55 56 57 58 69 70 75 76 115 149 150 167
+    on left: 77, on right: 54 55 56 57 58 69 70 75 76 114 115 149 150
+    167
 fqcn_part (141)
-    on left: 78 79, on right: 77 79 114 120 121 125
+    on left: 78 79, on right: 77 79 120 121 125
 expression (142)
     on left: 80 81 82, on right: 71 72 80 83 84 85 86 87 88 89 90 91
     92 93 94 95 96 97 98 99 100 101 102 103 104 105 106 107 108 109
@@ -622,7 +623,7 @@ state 3
   111                   | . expression LE expression
   112                   | . expression LSHIFT expression
   113                   | . expression RSHIFT expression
-  114                   | . expression INSTANCEOF fqcn_part
+  114                   | . expression INSTANCEOF typename_T
   115                   | . expression AS typename_T
   116                   | . CHILDA expression
   117                   | . NOT expression
@@ -772,7 +773,7 @@ state 4
   111                   | . expression LE expression
   112                   | . expression LSHIFT expression
   113                   | . expression RSHIFT expression
-  114                   | . expression INSTANCEOF fqcn_part
+  114                   | . expression INSTANCEOF typename_T
   115                   | . expression AS typename_T
   116                   | . CHILDA expression
   117                   | . NOT expression
@@ -990,7 +991,7 @@ state 15
   111                   | . expression LE expression
   112                   | . expression LSHIFT expression
   113                   | . expression RSHIFT expression
-  114                   | . expression INSTANCEOF fqcn_part
+  114                   | . expression INSTANCEOF typename_T
   115                   | . expression AS typename_T
   116                   | . CHILDA expression
   117                   | . NOT expression
@@ -1074,7 +1075,7 @@ state 16
   111                   | . expression LE expression
   112                   | . expression LSHIFT expression
   113                   | . expression RSHIFT expression
-  114                   | . expression INSTANCEOF fqcn_part
+  114                   | . expression INSTANCEOF typename_T
   115                   | . expression AS typename_T
   116                   | . CHILDA expression
   117                   | . NOT expression
@@ -1157,7 +1158,7 @@ state 17
   111                   | . expression LE expression
   112                   | . expression LSHIFT expression
   113                   | . expression RSHIFT expression
-  114                   | . expression INSTANCEOF fqcn_part
+  114                   | . expression INSTANCEOF typename_T
   115                   | . expression AS typename_T
   116                   | . CHILDA expression
   117                   | . NOT expression
@@ -1241,7 +1242,7 @@ state 18
   111                   | . expression LE expression
   112                   | . expression LSHIFT expression
   113                   | . expression RSHIFT expression
-  114                   | . expression INSTANCEOF fqcn_part
+  114                   | . expression INSTANCEOF typename_T
   115                   | . expression AS typename_T
   116                   | . CHILDA expression
   116                   | CHILDA . expression
@@ -1326,7 +1327,7 @@ state 19
   111                   | . expression LE expression
   112                   | . expression LSHIFT expression
   113                   | . expression RSHIFT expression
-  114                   | . expression INSTANCEOF fqcn_part
+  114                   | . expression INSTANCEOF typename_T
   115                   | . expression AS typename_T
   116                   | . CHILDA expression
   117                   | . NOT expression
@@ -1482,7 +1483,7 @@ state 29
   111                   | . expression LE expression
   112                   | . expression LSHIFT expression
   113                   | . expression RSHIFT expression
-  114                   | . expression INSTANCEOF fqcn_part
+  114                   | . expression INSTANCEOF typename_T
   115                   | . expression AS typename_T
   116                   | . CHILDA expression
   117                   | . NOT expression
@@ -1566,7 +1567,7 @@ state 30
   111                   | . expression LE expression
   112                   | . expression LSHIFT expression
   113                   | . expression RSHIFT expression
-  114                   | . expression INSTANCEOF fqcn_part
+  114                   | . expression INSTANCEOF typename_T
   115                   | . expression AS typename_T
   116                   | . CHILDA expression
   117                   | . NOT expression
@@ -1653,7 +1654,7 @@ state 31
   111                   | . expression LE expression
   112                   | . expression LSHIFT expression
   113                   | . expression RSHIFT expression
-  114                   | . expression INSTANCEOF fqcn_part
+  114                   | . expression INSTANCEOF typename_T
   115                   | . expression AS typename_T
   116                   | . CHILDA expression
   117                   | . NOT expression
@@ -1768,7 +1769,7 @@ state 35
   111                   | . expression LE expression
   112                   | . expression LSHIFT expression
   113                   | . expression RSHIFT expression
-  114                   | . expression INSTANCEOF fqcn_part
+  114                   | . expression INSTANCEOF typename_T
   115                   | . expression AS typename_T
   116                   | . CHILDA expression
   117                   | . NOT expression
@@ -1852,7 +1853,7 @@ state 36
   111                   | . expression LE expression
   112                   | . expression LSHIFT expression
   113                   | . expression RSHIFT expression
-  114                   | . expression INSTANCEOF fqcn_part
+  114                   | . expression INSTANCEOF typename_T
   115                   | . expression AS typename_T
   116                   | . CHILDA expression
   117                   | . NOT expression
@@ -1938,7 +1939,7 @@ state 37
   111                   | . expression LE expression
   112                   | . expression LSHIFT expression
   113                   | . expression RSHIFT expression
-  114                   | . expression INSTANCEOF fqcn_part
+  114                   | . expression INSTANCEOF typename_T
   115                   | . expression AS typename_T
   116                   | . CHILDA expression
   117                   | . NOT expression
@@ -2102,7 +2103,7 @@ state 43
   111                   | expression . LE expression
   112                   | expression . LSHIFT expression
   113                   | expression . RSHIFT expression
-  114                   | expression . INSTANCEOF fqcn_part
+  114                   | expression . INSTANCEOF typename_T
   115                   | expression . AS typename_T
   126 lhs: expression . DOT IDENT typename_group
   136 stmt: expression . stmt_term
@@ -2324,7 +2325,7 @@ state 63
   111                   | expression . LE expression
   112                   | expression . LSHIFT expression
   113                   | expression . RSHIFT expression
-  114                   | expression . INSTANCEOF fqcn_part
+  114                   | expression . INSTANCEOF typename_T
   115                   | expression . AS typename_T
   126 lhs: expression . DOT IDENT typename_group
 
@@ -2376,7 +2377,7 @@ state 64
   111                   | expression . LE expression
   112                   | expression . LSHIFT expression
   113                   | expression . RSHIFT expression
-  114                   | expression . INSTANCEOF fqcn_part
+  114                   | expression . INSTANCEOF typename_T
   115                   | expression . AS typename_T
   126 lhs: expression . DOT IDENT typename_group
 
@@ -2427,7 +2428,7 @@ state 65
   111                   | expression . LE expression
   112                   | expression . LSHIFT expression
   113                   | expression . RSHIFT expression
-  114                   | expression . INSTANCEOF fqcn_part
+  114                   | expression . INSTANCEOF typename_T
   115                   | expression . AS typename_T
   117                   | NOT expression .  [DOT, COMMA, COLON, ADD, SUB, MUL, DIV, MOD, LSHIFT, RSHIFT, EQUAL, NOTEQUAL, GT, GE, LT, LE, BIT_AND, LOGIC_AND, BIT_OR, LOGIC_OR, EXC_OR, LCB, LRB, RRB, SEMI, INSTANCEOF]
   126 lhs: expression . DOT IDENT typename_group
@@ -2479,7 +2480,7 @@ state 66
   111                   | expression . LE expression
   112                   | expression . LSHIFT expression
   113                   | expression . RSHIFT expression
-  114                   | expression . INSTANCEOF fqcn_part
+  114                   | expression . INSTANCEOF typename_T
   115                   | expression . AS typename_T
   116                   | CHILDA expression .  [DOT, COMMA, COLON, ADD, SUB, MUL, DIV, MOD, LSHIFT, RSHIFT, EQUAL, NOTEQUAL, GT, GE, LT, LE, BIT_AND, LOGIC_AND, BIT_OR, LOGIC_OR, EXC_OR, LCB, LRB, RRB, SEMI, INSTANCEOF]
   126 lhs: expression . DOT IDENT typename_group
@@ -2532,7 +2533,7 @@ state 67
   111                   | expression . LE expression
   112                   | expression . LSHIFT expression
   113                   | expression . RSHIFT expression
-  114                   | expression . INSTANCEOF fqcn_part
+  114                   | expression . INSTANCEOF typename_T
   115                   | expression . AS typename_T
   126 lhs: expression . DOT IDENT typename_group
 
@@ -2630,7 +2631,7 @@ state 73
   111                   | expression . LE expression
   112                   | expression . LSHIFT expression
   113                   | expression . RSHIFT expression
-  114                   | expression . INSTANCEOF fqcn_part
+  114                   | expression . INSTANCEOF typename_T
   115                   | expression . AS typename_T
   126 lhs: expression . DOT IDENT typename_group
   162 return_stmt: RETURN expression . stmt_term
@@ -2682,7 +2683,7 @@ state 74
   111                   | expression . LE expression
   112                   | expression . LSHIFT expression
   113                   | expression . RSHIFT expression
-  114                   | expression . INSTANCEOF fqcn_part
+  114                   | expression . INSTANCEOF typename_T
   115                   | expression . AS typename_T
   126 lhs: expression . DOT IDENT typename_group
   152 if_stmt: IF expression . scope
@@ -2738,7 +2739,7 @@ state 75
   111                   | expression . LE expression
   112                   | expression . LSHIFT expression
   113                   | expression . RSHIFT expression
-  114                   | expression . INSTANCEOF fqcn_part
+  114                   | expression . INSTANCEOF typename_T
   115                   | expression . AS typename_T
   126 lhs: expression . DOT IDENT typename_group
   159 while_stmt: WHILE expression . scope_optional
@@ -2835,7 +2836,7 @@ state 79
   111                   | . expression LE expression
   112                   | . expression LSHIFT expression
   113                   | . expression RSHIFT expression
-  114                   | . expression INSTANCEOF fqcn_part
+  114                   | . expression INSTANCEOF typename_T
   115                   | . expression AS typename_T
   116                   | . CHILDA expression
   117                   | . NOT expression
@@ -2972,7 +2973,7 @@ state 81
   111                   | expression . LE expression
   112                   | expression . LSHIFT expression
   113                   | expression . RSHIFT expression
-  114                   | expression . INSTANCEOF fqcn_part
+  114                   | expression . INSTANCEOF typename_T
   115                   | expression . AS typename_T
   126 lhs: expression . DOT IDENT typename_group
   163 throw_stmt: THROW expression . stmt_term
@@ -3024,7 +3025,7 @@ state 82
   111                   | expression . LE expression
   112                   | expression . LSHIFT expression
   113                   | expression . RSHIFT expression
-  114                   | expression . INSTANCEOF fqcn_part
+  114                   | expression . INSTANCEOF typename_T
   115                   | expression . AS typename_T
   126 lhs: expression . DOT IDENT typename_group
   168 assert_stmt: ASSERT_T expression . COLON expression SEMI
@@ -3149,7 +3150,7 @@ state 89
   111                   | . expression LE expression
   112                   | . expression LSHIFT expression
   113                   | . expression RSHIFT expression
-  114                   | . expression INSTANCEOF fqcn_part
+  114                   | . expression INSTANCEOF typename_T
   115                   | . expression AS typename_T
   116                   | . CHILDA expression
   117                   | . NOT expression
@@ -3233,7 +3234,7 @@ state 90
   111                   | . expression LE expression
   112                   | . expression LSHIFT expression
   113                   | . expression RSHIFT expression
-  114                   | . expression INSTANCEOF fqcn_part
+  114                   | . expression INSTANCEOF typename_T
   115                   | . expression AS typename_T
   116                   | . CHILDA expression
   117                   | . NOT expression
@@ -3317,7 +3318,7 @@ state 91
   111                   | . expression LE expression
   112                   | . expression LSHIFT expression
   113                   | . expression RSHIFT expression
-  114                   | . expression INSTANCEOF fqcn_part
+  114                   | . expression INSTANCEOF typename_T
   115                   | . expression AS typename_T
   116                   | . CHILDA expression
   117                   | . NOT expression
@@ -3401,7 +3402,7 @@ state 92
   111                   | . expression LE expression
   112                   | . expression LSHIFT expression
   113                   | . expression RSHIFT expression
-  114                   | . expression INSTANCEOF fqcn_part
+  114                   | . expression INSTANCEOF typename_T
   115                   | . expression AS typename_T
   116                   | . CHILDA expression
   117                   | . NOT expression
@@ -3485,7 +3486,7 @@ state 93
   111                   | . expression LE expression
   112                   | . expression LSHIFT expression
   113                   | . expression RSHIFT expression
-  114                   | . expression INSTANCEOF fqcn_part
+  114                   | . expression INSTANCEOF typename_T
   115                   | . expression AS typename_T
   116                   | . CHILDA expression
   117                   | . NOT expression
@@ -3569,7 +3570,7 @@ state 94
   112                   | . expression LSHIFT expression
   112                   | expression LSHIFT . expression
   113                   | . expression RSHIFT expression
-  114                   | . expression INSTANCEOF fqcn_part
+  114                   | . expression INSTANCEOF typename_T
   115                   | . expression AS typename_T
   116                   | . CHILDA expression
   117                   | . NOT expression
@@ -3653,7 +3654,7 @@ state 95
   112                   | . expression LSHIFT expression
   113                   | . expression RSHIFT expression
   113                   | expression RSHIFT . expression
-  114                   | . expression INSTANCEOF fqcn_part
+  114                   | . expression INSTANCEOF typename_T
   115                   | . expression AS typename_T
   116                   | . CHILDA expression
   117                   | . NOT expression
@@ -3737,7 +3738,7 @@ state 96
   111                   | . expression LE expression
   112                   | . expression LSHIFT expression
   113                   | . expression RSHIFT expression
-  114                   | . expression INSTANCEOF fqcn_part
+  114                   | . expression INSTANCEOF typename_T
   115                   | . expression AS typename_T
   116                   | . CHILDA expression
   117                   | . NOT expression
@@ -3821,7 +3822,7 @@ state 97
   111                   | . expression LE expression
   112                   | . expression LSHIFT expression
   113                   | . expression RSHIFT expression
-  114                   | . expression INSTANCEOF fqcn_part
+  114                   | . expression INSTANCEOF typename_T
   115                   | . expression AS typename_T
   116                   | . CHILDA expression
   117                   | . NOT expression
@@ -3905,7 +3906,7 @@ state 98
   111                   | . expression LE expression
   112                   | . expression LSHIFT expression
   113                   | . expression RSHIFT expression
-  114                   | . expression INSTANCEOF fqcn_part
+  114                   | . expression INSTANCEOF typename_T
   115                   | . expression AS typename_T
   116                   | . CHILDA expression
   117                   | . NOT expression
@@ -3989,7 +3990,7 @@ state 99
   111                   | . expression LE expression
   112                   | . expression LSHIFT expression
   113                   | . expression RSHIFT expression
-  114                   | . expression INSTANCEOF fqcn_part
+  114                   | . expression INSTANCEOF typename_T
   115                   | . expression AS typename_T
   116                   | . CHILDA expression
   117                   | . NOT expression
@@ -4073,7 +4074,7 @@ state 100
   111                   | . expression LE expression
   112                   | . expression LSHIFT expression
   113                   | . expression RSHIFT expression
-  114                   | . expression INSTANCEOF fqcn_part
+  114                   | . expression INSTANCEOF typename_T
   115                   | . expression AS typename_T
   116                   | . CHILDA expression
   117                   | . NOT expression
@@ -4157,7 +4158,7 @@ state 101
   111                   | expression LE . expression
   112                   | . expression LSHIFT expression
   113                   | . expression RSHIFT expression
-  114                   | . expression INSTANCEOF fqcn_part
+  114                   | . expression INSTANCEOF typename_T
   115                   | . expression AS typename_T
   116                   | . CHILDA expression
   117                   | . NOT expression
@@ -4241,7 +4242,7 @@ state 102
   111                   | . expression LE expression
   112                   | . expression LSHIFT expression
   113                   | . expression RSHIFT expression
-  114                   | . expression INSTANCEOF fqcn_part
+  114                   | . expression INSTANCEOF typename_T
   115                   | . expression AS typename_T
   116                   | . CHILDA expression
   117                   | . NOT expression
@@ -4325,7 +4326,7 @@ state 103
   111                   | . expression LE expression
   112                   | . expression LSHIFT expression
   113                   | . expression RSHIFT expression
-  114                   | . expression INSTANCEOF fqcn_part
+  114                   | . expression INSTANCEOF typename_T
   115                   | . expression AS typename_T
   116                   | . CHILDA expression
   117                   | . NOT expression
@@ -4409,7 +4410,7 @@ state 104
   111                   | . expression LE expression
   112                   | . expression LSHIFT expression
   113                   | . expression RSHIFT expression
-  114                   | . expression INSTANCEOF fqcn_part
+  114                   | . expression INSTANCEOF typename_T
   115                   | . expression AS typename_T
   116                   | . CHILDA expression
   117                   | . NOT expression
@@ -4493,7 +4494,7 @@ state 105
   111                   | . expression LE expression
   112                   | . expression LSHIFT expression
   113                   | . expression RSHIFT expression
-  114                   | . expression INSTANCEOF fqcn_part
+  114                   | . expression INSTANCEOF typename_T
   115                   | . expression AS typename_T
   116                   | . CHILDA expression
   117                   | . NOT expression
@@ -4577,7 +4578,7 @@ state 106
   111                   | . expression LE expression
   112                   | . expression LSHIFT expression
   113                   | . expression RSHIFT expression
-  114                   | . expression INSTANCEOF fqcn_part
+  114                   | . expression INSTANCEOF typename_T
   115                   | . expression AS typename_T
   116                   | . CHILDA expression
   117                   | . NOT expression
@@ -4637,13 +4638,15 @@ state 107
 
 state 108
 
+   77 typename_T: . fqcn_part typename_group
    78 fqcn_part: . IDENT
    79          | . fqcn_part COLO_COLO IDENT
-  114 expression_nobrace: expression INSTANCEOF . fqcn_part
+  114 expression_nobrace: expression INSTANCEOF . typename_T
 
     IDENT  shift, and go to state 14
 
-    fqcn_part  go to state 170
+    typename_T  go to state 170
+    fqcn_part   go to state 149
 
 
 state 109
@@ -4693,7 +4696,7 @@ state 110
   111                   | . expression LE expression
   112                   | . expression LSHIFT expression
   113                   | . expression RSHIFT expression
-  114                   | . expression INSTANCEOF fqcn_part
+  114                   | . expression INSTANCEOF typename_T
   115                   | . expression AS typename_T
   116                   | . CHILDA expression
   117                   | . NOT expression
@@ -4781,7 +4784,7 @@ state 111
   111                   | . expression LE expression
   112                   | . expression LSHIFT expression
   113                   | . expression RSHIFT expression
-  114                   | . expression INSTANCEOF fqcn_part
+  114                   | . expression INSTANCEOF typename_T
   115                   | . expression AS typename_T
   116                   | . CHILDA expression
   117                   | . NOT expression
@@ -4865,7 +4868,7 @@ state 112
   111                   | . expression LE expression
   112                   | . expression LSHIFT expression
   113                   | . expression RSHIFT expression
-  114                   | . expression INSTANCEOF fqcn_part
+  114                   | . expression INSTANCEOF typename_T
   115                   | . expression AS typename_T
   116                   | . CHILDA expression
   117                   | . NOT expression
@@ -4949,7 +4952,7 @@ state 113
   111                   | . expression LE expression
   112                   | . expression LSHIFT expression
   113                   | . expression RSHIFT expression
-  114                   | . expression INSTANCEOF fqcn_part
+  114                   | . expression INSTANCEOF typename_T
   115                   | . expression AS typename_T
   116                   | . CHILDA expression
   117                   | . NOT expression
@@ -5033,7 +5036,7 @@ state 114
   111                   | . expression LE expression
   112                   | . expression LSHIFT expression
   113                   | . expression RSHIFT expression
-  114                   | . expression INSTANCEOF fqcn_part
+  114                   | . expression INSTANCEOF typename_T
   115                   | . expression AS typename_T
   116                   | . CHILDA expression
   117                   | . NOT expression
@@ -5117,7 +5120,7 @@ state 115
   111                   | . expression LE expression
   112                   | . expression LSHIFT expression
   113                   | . expression RSHIFT expression
-  114                   | . expression INSTANCEOF fqcn_part
+  114                   | . expression INSTANCEOF typename_T
   115                   | . expression AS typename_T
   116                   | . CHILDA expression
   117                   | . NOT expression
@@ -5201,7 +5204,7 @@ state 116
   111                   | . expression LE expression
   112                   | . expression LSHIFT expression
   113                   | . expression RSHIFT expression
-  114                   | . expression INSTANCEOF fqcn_part
+  114                   | . expression INSTANCEOF typename_T
   115                   | . expression AS typename_T
   116                   | . CHILDA expression
   117                   | . NOT expression
@@ -5285,7 +5288,7 @@ state 117
   111                   | . expression LE expression
   112                   | . expression LSHIFT expression
   113                   | . expression RSHIFT expression
-  114                   | . expression INSTANCEOF fqcn_part
+  114                   | . expression INSTANCEOF typename_T
   115                   | . expression AS typename_T
   116                   | . CHILDA expression
   117                   | . NOT expression
@@ -5369,7 +5372,7 @@ state 118
   111                   | . expression LE expression
   112                   | . expression LSHIFT expression
   113                   | . expression RSHIFT expression
-  114                   | . expression INSTANCEOF fqcn_part
+  114                   | . expression INSTANCEOF typename_T
   115                   | . expression AS typename_T
   116                   | . CHILDA expression
   117                   | . NOT expression
@@ -5453,7 +5456,7 @@ state 119
   111                   | . expression LE expression
   112                   | . expression LSHIFT expression
   113                   | . expression RSHIFT expression
-  114                   | . expression INSTANCEOF fqcn_part
+  114                   | . expression INSTANCEOF typename_T
   115                   | . expression AS typename_T
   116                   | . CHILDA expression
   117                   | . NOT expression
@@ -5537,7 +5540,7 @@ state 120
   111                   | . expression LE expression
   112                   | . expression LSHIFT expression
   113                   | . expression RSHIFT expression
-  114                   | . expression INSTANCEOF fqcn_part
+  114                   | . expression INSTANCEOF typename_T
   115                   | . expression AS typename_T
   116                   | . CHILDA expression
   117                   | . NOT expression
@@ -5621,7 +5624,7 @@ state 121
   111                   | . expression LE expression
   112                   | . expression LSHIFT expression
   113                   | . expression RSHIFT expression
-  114                   | . expression INSTANCEOF fqcn_part
+  114                   | . expression INSTANCEOF typename_T
   115                   | . expression AS typename_T
   116                   | . CHILDA expression
   117                   | . NOT expression
@@ -5718,7 +5721,7 @@ state 124
   111                   | . expression LE expression
   112                   | . expression LSHIFT expression
   113                   | . expression RSHIFT expression
-  114                   | . expression INSTANCEOF fqcn_part
+  114                   | . expression INSTANCEOF typename_T
   115                   | . expression AS typename_T
   116                   | . CHILDA expression
   117                   | . NOT expression
@@ -5930,7 +5933,7 @@ state 136
   111                   | . expression LE expression
   112                   | . expression LSHIFT expression
   113                   | . expression RSHIFT expression
-  114                   | . expression INSTANCEOF fqcn_part
+  114                   | . expression INSTANCEOF typename_T
   115                   | . expression AS typename_T
   116                   | . CHILDA expression
   117                   | . NOT expression
@@ -6110,7 +6113,7 @@ state 142
   111                   | . expression LE expression
   112                   | . expression LSHIFT expression
   113                   | . expression RSHIFT expression
-  114                   | . expression INSTANCEOF fqcn_part
+  114                   | . expression INSTANCEOF typename_T
   115                   | . expression AS typename_T
   116                   | . CHILDA expression
   117                   | . NOT expression
@@ -6201,7 +6204,7 @@ state 144
   111                   | . expression LE expression
   112                   | . expression LSHIFT expression
   113                   | . expression RSHIFT expression
-  114                   | . expression INSTANCEOF fqcn_part
+  114                   | . expression INSTANCEOF typename_T
   115                   | . expression AS typename_T
   116                   | . CHILDA expression
   117                   | . NOT expression
@@ -6326,7 +6329,7 @@ state 151
   111                   | expression . LE expression
   112                   | expression . LSHIFT expression
   113                   | expression . RSHIFT expression
-  114                   | expression . INSTANCEOF fqcn_part
+  114                   | expression . INSTANCEOF typename_T
   115                   | expression . AS typename_T
   126 lhs: expression . DOT IDENT typename_group
 
@@ -6382,7 +6385,7 @@ state 152
   111                   | expression . LE expression
   112                   | expression . LSHIFT expression
   113                   | expression . RSHIFT expression
-  114                   | expression . INSTANCEOF fqcn_part
+  114                   | expression . INSTANCEOF typename_T
   115                   | expression . AS typename_T
   126 lhs: expression . DOT IDENT typename_group
 
@@ -6438,7 +6441,7 @@ state 153
   111                   | expression . LE expression
   112                   | expression . LSHIFT expression
   113                   | expression . RSHIFT expression
-  114                   | expression . INSTANCEOF fqcn_part
+  114                   | expression . INSTANCEOF typename_T
   115                   | expression . AS typename_T
   126 lhs: expression . DOT IDENT typename_group
 
@@ -6491,7 +6494,7 @@ state 154
   111                   | expression . LE expression
   112                   | expression . LSHIFT expression
   113                   | expression . RSHIFT expression
-  114                   | expression . INSTANCEOF fqcn_part
+  114                   | expression . INSTANCEOF typename_T
   115                   | expression . AS typename_T
   126 lhs: expression . DOT IDENT typename_group
 
@@ -6544,7 +6547,7 @@ state 155
   111                   | expression . LE expression
   112                   | expression . LSHIFT expression
   113                   | expression . RSHIFT expression
-  114                   | expression . INSTANCEOF fqcn_part
+  114                   | expression . INSTANCEOF typename_T
   115                   | expression . AS typename_T
   126 lhs: expression . DOT IDENT typename_group
 
@@ -6597,7 +6600,7 @@ state 156
   112                   | expression . LSHIFT expression  [COMMA, COLON, LSHIFT, RSHIFT, EQUAL, NOTEQUAL, BIT_AND, LOGIC_AND, BIT_OR, LOGIC_OR, EXC_OR, LCB, LRB, RRB, SEMI]
   112                   | expression LSHIFT expression .  [COMMA, COLON, LSHIFT, RSHIFT, EQUAL, NOTEQUAL, BIT_AND, LOGIC_AND, BIT_OR, LOGIC_OR, EXC_OR, LCB, LRB, RRB, SEMI]
   113                   | expression . RSHIFT expression
-  114                   | expression . INSTANCEOF fqcn_part
+  114                   | expression . INSTANCEOF typename_T
   115                   | expression . AS typename_T
   126 lhs: expression . DOT IDENT typename_group
 
@@ -6660,7 +6663,7 @@ state 157
   112                   | expression . LSHIFT expression
   113                   | expression . RSHIFT expression  [COMMA, COLON, LSHIFT, RSHIFT, EQUAL, NOTEQUAL, BIT_AND, LOGIC_AND, BIT_OR, LOGIC_OR, EXC_OR, LCB, LRB, RRB, SEMI]
   113                   | expression RSHIFT expression .  [COMMA, COLON, LSHIFT, RSHIFT, EQUAL, NOTEQUAL, BIT_AND, LOGIC_AND, BIT_OR, LOGIC_OR, EXC_OR, LCB, LRB, RRB, SEMI]
-  114                   | expression . INSTANCEOF fqcn_part
+  114                   | expression . INSTANCEOF typename_T
   115                   | expression . AS typename_T
   126 lhs: expression . DOT IDENT typename_group
 
@@ -6723,7 +6726,7 @@ state 158
   111                   | expression . LE expression
   112                   | expression . LSHIFT expression
   113                   | expression . RSHIFT expression
-  114                   | expression . INSTANCEOF fqcn_part
+  114                   | expression . INSTANCEOF typename_T
   115                   | expression . AS typename_T
   126 lhs: expression . DOT IDENT typename_group
 
@@ -6793,7 +6796,7 @@ state 159
   111                   | expression . LE expression
   112                   | expression . LSHIFT expression
   113                   | expression . RSHIFT expression
-  114                   | expression . INSTANCEOF fqcn_part
+  114                   | expression . INSTANCEOF typename_T
   115                   | expression . AS typename_T
   126 lhs: expression . DOT IDENT typename_group
 
@@ -6863,7 +6866,7 @@ state 160
   111                   | expression . LE expression
   112                   | expression . LSHIFT expression
   113                   | expression . RSHIFT expression
-  114                   | expression . INSTANCEOF fqcn_part
+  114                   | expression . INSTANCEOF typename_T
   115                   | expression . AS typename_T
   126 lhs: expression . DOT IDENT typename_group
 
@@ -6921,7 +6924,7 @@ state 161
   111                   | expression . LE expression
   112                   | expression . LSHIFT expression
   113                   | expression . RSHIFT expression
-  114                   | expression . INSTANCEOF fqcn_part
+  114                   | expression . INSTANCEOF typename_T
   115                   | expression . AS typename_T
   126 lhs: expression . DOT IDENT typename_group
 
@@ -6979,7 +6982,7 @@ state 162
   111                   | expression . LE expression
   112                   | expression . LSHIFT expression
   113                   | expression . RSHIFT expression
-  114                   | expression . INSTANCEOF fqcn_part
+  114                   | expression . INSTANCEOF typename_T
   115                   | expression . AS typename_T
   126 lhs: expression . DOT IDENT typename_group
 
@@ -7037,7 +7040,7 @@ state 163
   111                   | expression LE expression .  [COMMA, COLON, LSHIFT, RSHIFT, EQUAL, NOTEQUAL, GT, GE, LT, LE, BIT_AND, LOGIC_AND, BIT_OR, LOGIC_OR, EXC_OR, LCB, LRB, RRB, SEMI, INSTANCEOF]
   112                   | expression . LSHIFT expression
   113                   | expression . RSHIFT expression
-  114                   | expression . INSTANCEOF fqcn_part
+  114                   | expression . INSTANCEOF typename_T
   115                   | expression . AS typename_T
   126 lhs: expression . DOT IDENT typename_group
 
@@ -7095,7 +7098,7 @@ state 164
   111                   | expression . LE expression
   112                   | expression . LSHIFT expression
   113                   | expression . RSHIFT expression
-  114                   | expression . INSTANCEOF fqcn_part
+  114                   | expression . INSTANCEOF typename_T
   115                   | expression . AS typename_T
   126 lhs: expression . DOT IDENT typename_group
 
@@ -7162,7 +7165,7 @@ state 165
   111                   | expression . LE expression
   112                   | expression . LSHIFT expression
   113                   | expression . RSHIFT expression
-  114                   | expression . INSTANCEOF fqcn_part
+  114                   | expression . INSTANCEOF typename_T
   115                   | expression . AS typename_T
   126 lhs: expression . DOT IDENT typename_group
 
@@ -7230,7 +7233,7 @@ state 166
   111                   | expression . LE expression
   112                   | expression . LSHIFT expression
   113                   | expression . RSHIFT expression
-  114                   | expression . INSTANCEOF fqcn_part
+  114                   | expression . INSTANCEOF typename_T
   115                   | expression . AS typename_T
   126 lhs: expression . DOT IDENT typename_group
 
@@ -7296,7 +7299,7 @@ state 167
   111                   | expression . LE expression
   112                   | expression . LSHIFT expression
   113                   | expression . RSHIFT expression
-  114                   | expression . INSTANCEOF fqcn_part
+  114                   | expression . INSTANCEOF typename_T
   115                   | expression . AS typename_T
   126 lhs: expression . DOT IDENT typename_group
 
@@ -7365,7 +7368,7 @@ state 168
   111                   | expression . LE expression
   112                   | expression . LSHIFT expression
   113                   | expression . RSHIFT expression
-  114                   | expression . INSTANCEOF fqcn_part
+  114                   | expression . INSTANCEOF typename_T
   115                   | expression . AS typename_T
   126 lhs: expression . DOT IDENT typename_group
 
@@ -7418,10 +7421,7 @@ state 169
 
 state 170
 
-   79 fqcn_part: fqcn_part . COLO_COLO IDENT
-  114 expression_nobrace: expression INSTANCEOF fqcn_part .  [DOT, COMMA, COLON, ADD, SUB, MUL, DIV, MOD, LSHIFT, RSHIFT, EQUAL, NOTEQUAL, GT, GE, LT, LE, BIT_AND, LOGIC_AND, BIT_OR, LOGIC_OR, EXC_OR, LCB, LRB, RRB, SEMI, AS, INSTANCEOF]
-
-    COLO_COLO  shift, and go to state 85
+  114 expression_nobrace: expression INSTANCEOF typename_T .
 
     $default  reduce using rule 114 (expression_nobrace)
 
@@ -7463,7 +7463,7 @@ state 173
   111                   | expression . LE expression
   112                   | expression . LSHIFT expression
   113                   | expression . RSHIFT expression
-  114                   | expression . INSTANCEOF fqcn_part
+  114                   | expression . INSTANCEOF typename_T
   115                   | expression . AS typename_T
   126 lhs: expression . DOT IDENT typename_group
 
@@ -7513,7 +7513,7 @@ state 174
   111                   | expression . LE expression
   112                   | expression . LSHIFT expression
   113                   | expression . RSHIFT expression
-  114                   | expression . INSTANCEOF fqcn_part
+  114                   | expression . INSTANCEOF typename_T
   115                   | expression . AS typename_T
   126 lhs: expression . DOT IDENT typename_group
 
@@ -7585,7 +7585,7 @@ state 175
   111                   | expression . LE expression
   112                   | expression . LSHIFT expression
   113                   | expression . RSHIFT expression
-  114                   | expression . INSTANCEOF fqcn_part
+  114                   | expression . INSTANCEOF typename_T
   115                   | expression . AS typename_T
   126 lhs: expression . DOT IDENT typename_group
 
@@ -7657,7 +7657,7 @@ state 176
   111                   | expression . LE expression
   112                   | expression . LSHIFT expression
   113                   | expression . RSHIFT expression
-  114                   | expression . INSTANCEOF fqcn_part
+  114                   | expression . INSTANCEOF typename_T
   115                   | expression . AS typename_T
   126 lhs: expression . DOT IDENT typename_group
 
@@ -7729,7 +7729,7 @@ state 177
   111                   | expression . LE expression
   112                   | expression . LSHIFT expression
   113                   | expression . RSHIFT expression
-  114                   | expression . INSTANCEOF fqcn_part
+  114                   | expression . INSTANCEOF typename_T
   115                   | expression . AS typename_T
   126 lhs: expression . DOT IDENT typename_group
 
@@ -7801,7 +7801,7 @@ state 178
   111                   | expression . LE expression
   112                   | expression . LSHIFT expression
   113                   | expression . RSHIFT expression
-  114                   | expression . INSTANCEOF fqcn_part
+  114                   | expression . INSTANCEOF typename_T
   115                   | expression . AS typename_T
   126 lhs: expression . DOT IDENT typename_group
 
@@ -7873,7 +7873,7 @@ state 179
   111                   | expression . LE expression
   112                   | expression . LSHIFT expression
   113                   | expression . RSHIFT expression
-  114                   | expression . INSTANCEOF fqcn_part
+  114                   | expression . INSTANCEOF typename_T
   115                   | expression . AS typename_T
   126 lhs: expression . DOT IDENT typename_group
 
@@ -7945,7 +7945,7 @@ state 180
   111                   | expression . LE expression
   112                   | expression . LSHIFT expression
   113                   | expression . RSHIFT expression
-  114                   | expression . INSTANCEOF fqcn_part
+  114                   | expression . INSTANCEOF typename_T
   115                   | expression . AS typename_T
   126 lhs: expression . DOT IDENT typename_group
 
@@ -8017,7 +8017,7 @@ state 181
   111                   | expression . LE expression
   112                   | expression . LSHIFT expression
   113                   | expression . RSHIFT expression
-  114                   | expression . INSTANCEOF fqcn_part
+  114                   | expression . INSTANCEOF typename_T
   115                   | expression . AS typename_T
   126 lhs: expression . DOT IDENT typename_group
 
@@ -8089,7 +8089,7 @@ state 182
   111                   | expression . LE expression
   112                   | expression . LSHIFT expression
   113                   | expression . RSHIFT expression
-  114                   | expression . INSTANCEOF fqcn_part
+  114                   | expression . INSTANCEOF typename_T
   115                   | expression . AS typename_T
   126 lhs: expression . DOT IDENT typename_group
 
@@ -8161,7 +8161,7 @@ state 183
   111                   | expression . LE expression
   112                   | expression . LSHIFT expression
   113                   | expression . RSHIFT expression
-  114                   | expression . INSTANCEOF fqcn_part
+  114                   | expression . INSTANCEOF typename_T
   115                   | expression . AS typename_T
   126 lhs: expression . DOT IDENT typename_group
 
@@ -8233,7 +8233,7 @@ state 184
   111                   | expression . LE expression
   112                   | expression . LSHIFT expression
   113                   | expression . RSHIFT expression
-  114                   | expression . INSTANCEOF fqcn_part
+  114                   | expression . INSTANCEOF typename_T
   115                   | expression . AS typename_T
   126 lhs: expression . DOT IDENT typename_group
 
@@ -8304,7 +8304,7 @@ state 185
   111                   | expression . LE expression
   112                   | expression . LSHIFT expression
   113                   | expression . RSHIFT expression
-  114                   | expression . INSTANCEOF fqcn_part
+  114                   | expression . INSTANCEOF typename_T
   115                   | expression . AS typename_T
   126 lhs: expression . DOT IDENT typename_group
   151 inferenced_type_init_stmt: VAR IDENT ASSIGN expression . stmt_term
@@ -8376,7 +8376,7 @@ state 186
   111                   | . expression LE expression
   112                   | . expression LSHIFT expression
   113                   | . expression RSHIFT expression
-  114                   | . expression INSTANCEOF fqcn_part
+  114                   | . expression INSTANCEOF typename_T
   115                   | . expression AS typename_T
   116                   | . CHILDA expression
   117                   | . NOT expression
@@ -8597,7 +8597,7 @@ state 201
   111                   | . expression LE expression
   112                   | . expression LSHIFT expression
   113                   | . expression RSHIFT expression
-  114                   | . expression INSTANCEOF fqcn_part
+  114                   | . expression INSTANCEOF typename_T
   115                   | . expression AS typename_T
   116                   | . CHILDA expression
   117                   | . NOT expression
@@ -8730,7 +8730,7 @@ state 209
   111                   | expression . LE expression
   112                   | expression . LSHIFT expression
   113                   | expression . RSHIFT expression
-  114                   | expression . INSTANCEOF fqcn_part
+  114                   | expression . INSTANCEOF typename_T
   115                   | expression . AS typename_T
   126 lhs: expression . DOT IDENT typename_group
   168 assert_stmt: ASSERT_T expression COLON expression . SEMI
@@ -8779,7 +8779,7 @@ state 210
   111                   | expression . LE expression
   112                   | expression . LSHIFT expression
   113                   | expression . RSHIFT expression
-  114                   | expression . INSTANCEOF fqcn_part
+  114                   | expression . INSTANCEOF typename_T
   115                   | expression . AS typename_T
   126 lhs: expression . DOT IDENT typename_group
   150 variable_init_stmt: typename_T IDENT ASSIGN expression . stmt_term
@@ -8884,7 +8884,7 @@ state 215
   111                   | . expression LE expression
   112                   | . expression LSHIFT expression
   113                   | . expression RSHIFT expression
-  114                   | . expression INSTANCEOF fqcn_part
+  114                   | . expression INSTANCEOF typename_T
   115                   | . expression AS typename_T
   116                   | . CHILDA expression
   117                   | . NOT expression
@@ -9084,7 +9084,7 @@ state 231
   111                   | expression . LE expression
   112                   | expression . LSHIFT expression
   113                   | expression . RSHIFT expression
-  114                   | expression . INSTANCEOF fqcn_part
+  114                   | expression . INSTANCEOF typename_T
   115                   | expression . AS typename_T
   126 lhs: expression . DOT IDENT typename_group
   158 elif: ELIF expression . scope
@@ -9191,7 +9191,7 @@ state 239
   111                   | expression . LE expression
   112                   | expression . LSHIFT expression
   113                   | expression . RSHIFT expression
-  114                   | expression . INSTANCEOF fqcn_part
+  114                   | expression . INSTANCEOF typename_T
   115                   | expression . AS typename_T
   126 lhs: expression . DOT IDENT typename_group
 
@@ -10174,7 +10174,7 @@ state 327
   111                   | . expression LE expression
   112                   | . expression LSHIFT expression
   113                   | . expression RSHIFT expression
-  114                   | . expression INSTANCEOF fqcn_part
+  114                   | . expression INSTANCEOF typename_T
   115                   | . expression AS typename_T
   116                   | . CHILDA expression
   117                   | . NOT expression

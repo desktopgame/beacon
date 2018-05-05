@@ -7,7 +7,7 @@ struct fqcn_cache;
 
 typedef struct il_factor_instanceof {
 	il_factor* fact;
-	struct fqcn_cache* cache;
+	struct generic_cache* gcache;
 } il_factor_instanceof;
 
 il_factor* il_factor_wrap_instanceof(il_factor_instanceof* self);

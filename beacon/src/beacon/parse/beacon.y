@@ -660,7 +660,7 @@ expression_nobrace
 	{
 		$$ = ast_new_binary(ast_rshift, $1, $3);
 	}
-	| expression INSTANCEOF fqcn_part
+	| expression INSTANCEOF typename_T
 	{
 		$$ = ast_new_instanceof($1, $3);
 	}
