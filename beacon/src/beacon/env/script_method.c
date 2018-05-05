@@ -25,6 +25,11 @@ void script_method_execute(script_method * self, method* parent, frame * fr, env
 	for (int i = 0; i < parent->parameter_list->length; i++) {
 		vector_push(sub->value_stack, object_copy(vector_pop(fr->value_stack)));
 	}
+	//メソッドに渡された型引数を引き継ぐ
+	int typeparams = parent->type_parameter_list->length;
+	for(int i=0; i<typeparams; i++) {
+		vector_assign(sub->type_args_vec, (typeparams - i) - 1, vector_pop(fr->type_args_vec));
+	}
 	text_putindent(sub->level);
 	//text_printfln("[ %s#%s ]", type_name(parent->parent), parent->name);
 	//enviroment_op_dump(self->env, sub->level);

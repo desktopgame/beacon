@@ -46,6 +46,11 @@ void method_execute(method* self, frame * fr, enviroment* env) {
 			assert(ARG != NULL);
 			vector_assign(a->ref_stack, (len - i), ARG);
 		}
+		//メソッドに渡された型引数を引き継ぐ
+		int typeparams = self->type_parameter_list->length;
+		for(int i=0; i<typeparams; i++) {
+			vector_assign(a->type_args_vec, (typeparams - i) - 1, vector_pop(fr->type_args_vec));
+		}
 		native_method_execute(self->u.native_method, self, a, env);
 		//戻り値を残す
 		if(self->return_gtype != TYPE_VOID->generic_self) {

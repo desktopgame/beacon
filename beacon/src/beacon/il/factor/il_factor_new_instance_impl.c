@@ -51,6 +51,12 @@ void il_factor_new_instance_dump(il_factor_new_instance * self, int depth) {
 
 void il_factor_new_instance_generate(il_factor_new_instance * self, enviroment * env, il_context* ilctx) {
 	il_factor_new_instance_find(self, env, ilctx);
+	for(int i=0; i<self->type_args->length; i++) {
+		il_type_argument* e = (il_type_argument*)vector_at(self->type_args, i);
+		assert(e->gtype != NULL);
+		opcode_buf_add(env->buf, op_generic_add);
+		generic_type_generate(e->gtype, env, ilctx);
+	}
 	//実引数を全てスタックへ
 	for (int i = 0; i < self->argument_list->length; i++) {
 		il_argument* ilarg = (il_argument*)vector_at(self->argument_list, i);

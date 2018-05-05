@@ -434,7 +434,7 @@ static void vm_run(frame * self, enviroment * env, int pos, int deferStart) {
 				int constructorIndex = (int)enviroment_source_at(env, ++i);
 				type* tp = (type*)vector_at(ctx->type_vec, absClsIndex);
 				assert(tp->tag == type_class);
-				class_* cls = tp->u.class_;
+				class_* cls = TYPE2CLASS(tp);
 				constructor* ctor = (constructor*)vector_at(cls->constructor_list, constructorIndex);
 				//新しいVMでコンストラクタを実行
 				//また、現在のVMから実引数をポップ
@@ -443,6 +443,11 @@ static void vm_run(frame * self, enviroment * env, int pos, int deferStart) {
 					vector_item e = vector_pop(self->value_stack);
 					object* o = (object*)e;
 					vector_push(sub->value_stack, e);
+				}
+				//コンストラクタに渡された型引数を引き継ぐ
+				int typeparams = cls->type_parameter_list->length;
+				for(int i=0; i<typeparams; i++) {
+					vector_assign(sub->type_args_vec, (typeparams - i) - 1, vector_pop(self->type_args_vec));
 				}
 				text_putindent(self->level);
 				//text_printfln("[ %s#new ]", type_name(ctor->parent));
@@ -643,17 +648,20 @@ static void vm_run(frame * self, enviroment * env, int pos, int deferStart) {
 			{
 				//ジェネリックタイプを作成する
 				int depth = 0;
-				int count = 0;
+				int pos = i;
 				vector* stack = vector_new();
+				vector* counts = vector_new();
 				generic_type* ret = NULL;
 				while(1) {
 					int code = (int)enviroment_source_at(env, ++i);
 					if(code == op_generic_enter) {
-						count = (int)enviroment_source_at(env, ++i);
+						int count = (int)enviroment_source_at(env, ++i);
 						depth++;
+						vector_push(counts, count);
 						vector_push(stack, generic_type_new(NULL));
 					} else if(code == op_generic_exit) {
 						depth--;
+						int count = (int)vector_pop(counts);
 						generic_type* head = vector_at(stack, 0);
 						for(int i=0; i<count; i++) {
 							generic_type_addargs(head, (generic_type*)vector_pop(stack));
