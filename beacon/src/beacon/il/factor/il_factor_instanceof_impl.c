@@ -38,8 +38,9 @@ void il_factor_instanceof_generate(il_factor_instanceof* self, enviroment* env, 
 	type* type = gtype->core_type;
 	assert(type != NULL);
 	il_factor_generate(self->fact, env, ilctx);
+	opcode_buf_add(env->buf, op_generic_add);
+	generic_type_generate(gtype, env, ilctx);
 	opcode_buf_add(env->buf, op_instanceof);
-	opcode_buf_add(env->buf, type->absolute_index);
 }
 
 generic_type* il_factor_instanceof_eval(il_factor_instanceof* self, enviroment* env, il_context* ilctx) {

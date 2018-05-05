@@ -392,10 +392,9 @@ static void vm_run(frame * self, enviroment * env, int pos, int deferStart) {
 			}
 			case op_instanceof:
 			{
-				int absClsIndex = (int)enviroment_source_at(env, ++i);
-				type* tp = (type*)vector_at(ctx->type_vec, absClsIndex);
+				generic_type* gtype = (generic_type*)vector_pop(self->type_args_vec);
 				object* v = (object*)vector_pop(self->value_stack);
-				int dist = type_distance(tp, v->gtype->core_type);
+				int dist = generic_type_distance(gtype, v->gtype, NULL);
 				object* b = object_bool_get(dist >= 0);
 				vector_push(self->value_stack, b);
 				break;
