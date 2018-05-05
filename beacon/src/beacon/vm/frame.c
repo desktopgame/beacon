@@ -23,6 +23,7 @@ frame * frame_new() {
 	ret->children_vec = vector_new();
 	ret->defer_at = 0;
 	ret->defer_vec = vector_new();
+	ret->type_args_vec = vector_new();
 	return ret;
 }
 
@@ -56,6 +57,7 @@ void frame_delete(frame * self) {
 	vector_delete(self->value_stack, vector_deleter_null);
 	vector_delete(self->ref_stack, vector_deleter_null);
 	vector_delete(self->children_vec, vector_deleter_null);
+	vector_delete(self->type_args_vec, vector_deleter_null);
 	MEM_FREE(self);
 }
 

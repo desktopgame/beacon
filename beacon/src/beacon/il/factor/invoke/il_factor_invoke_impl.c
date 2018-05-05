@@ -48,6 +48,12 @@ void il_factor_invoke_dump(il_factor_invoke* self, int depth) {
 }
 
 void il_factor_invoke_generate(il_factor_invoke* self, enviroment* env, il_context* ilctx) {
+	for(int i=0; i<self->type_args->length; i++) {
+		il_type_argument* e = (il_type_argument*)vector_at(self->type_args, i);
+		assert(e->gtype != NULL);
+		opcode_buf_add(env->buf, op_generic_add);
+		generic_type_generate(e->gtype, env, ilctx);
+	}
 	for(int i=0; i<self->args->length; i++) {
 		il_argument* e = (il_argument*)vector_at(self->args, i);
 		il_factor_generate(e->factor, env, ilctx);

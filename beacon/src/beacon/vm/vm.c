@@ -639,6 +639,59 @@ static void vm_run(frame * self, enviroment * env, int pos, int deferStart) {
 				method_execute(m, self, env);
 				break;
 			}
+			case op_generic_add:
+			{
+				//ジェネリックタイプを作成する
+				int depth = 0;
+				int count = 0;
+				vector* stack = vector_new();
+				generic_type* ret = NULL;
+				while(1) {
+					int code = (int)enviroment_source_at(env, ++i);
+					if(code == op_generic_enter) {
+						count = (int)enviroment_source_at(env, ++i);
+						depth++;
+						vector_push(stack, generic_type_new(NULL));
+					} else if(code == op_generic_exit) {
+						depth--;
+						generic_type* head = vector_at(stack, 0);
+						for(int i=0; i<count; i++) {
+							generic_type_addargs(head, (generic_type*)vector_pop(stack));
+						}
+						if(depth == 0) {
+							assert(stack->length == 1);
+							ret = head;
+							break;
+						}
+					} else if(code == op_generic_unique_type ||
+					          code == op_generic_instance_type ||
+							  code == op_generic_static_type) {
+						assert(depth > 0);
+						int arg = (int)enviroment_source_at(env, ++i);
+						generic_type* a = vector_top(stack);
+						if(code == op_generic_unique_type) {
+							a->core_type = (type*)vector_at(ctx->type_vec, arg);
+							a->virtual_type_index = -1;
+						} else if(code == op_generic_instance_type) {
+							a->virtual_type_index = arg;
+							a->tag = generic_type_tag_class;
+						} else if(code == op_generic_static_type) {
+							a->virtual_type_index = arg;
+							a->tag = generic_type_tag_method;
+						}
+					}
+				}
+				assert(ret != NULL);
+				vector_push(self->type_args_vec, ret);
+				break;
+			}
+			case op_generic_enter:
+			case op_generic_unique_type:
+			case op_generic_instance_type:
+			case op_generic_static_type:
+			case op_generic_exit:
+				assert(false);
+				break;
 			//defer
 			case op_defer_enter:
 			{
