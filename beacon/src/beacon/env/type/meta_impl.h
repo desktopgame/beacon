@@ -25,11 +25,11 @@ int meta_calc_score(vector* params, vector* ilargs, struct enviroment* env, il_c
  * こちらは object* を 使用します。
  * @param params
  * @param args
- * @param env
- * @param ilctx
+ * @param typeargs
+ * @param fr
  * @return
  */
-int meta_rcalc_score(vector* params, vector* args);
+int meta_rcalc_score(vector* params, vector* args, vector* typeargs, struct frame* fr);
 
 /**
  * もっとも一致するメソッドを返します.
@@ -55,7 +55,9 @@ method* meta_find_method(vector* method_vec, const char * name, vector * ilargs,
 constructor* meta_find_ctor(vector* ctor_vec, vector* ilargs, struct enviroment* env, il_context* ilctx, int* outIndex);
 
 
-constructor* meta_find_rctor(vector* ctor_vec, vector* args, int* outIndex);
+constructor* meta_find_rctor(vector* ctor_vec, vector* args, vector* typeargs, struct frame* fr, int* outIndex);
 
 bool meta_rule_valid(vector* type_params, vector* type_args, il_context* ilctx);
+
+bool meta_rule_rvalid(vector* type_params, vector* type_args, struct frame* fr);
 #endif // !SIGNAL_ENV_META_H

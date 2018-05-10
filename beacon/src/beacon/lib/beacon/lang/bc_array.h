@@ -4,6 +4,7 @@
 struct frame;
 struct type;
 struct object;
+struct generic_type;
 
 /**
  * beacon::lang::Arrayクラスを初期化します.
@@ -18,11 +19,12 @@ struct type* bc_array_class();
 
 /**
  * beacon::lang::Arrayクラスを作成します.
+ * @param gtype
  * @param length
  * @param fr
  * @return
  */
-struct object* bc_array_new(int length, struct frame* fr);
+struct object* bc_array_new(struct generic_type* gtype, int length, struct frame* fr);
 
 /**
  * @param arr

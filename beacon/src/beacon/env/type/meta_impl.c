@@ -52,9 +52,9 @@ int meta_calc_score(vector* params, vector* ilargs, enviroment* env, il_context*
 	return score;
 }
 
-int meta_rcalc_score(vector* params, vector* args) {
+int meta_rcalc_score(vector* params, vector* args, vector* typeargs, frame* fr) {
 	assert(params->length == args->length);
-	il_context* ilctx = il_context_new(NULL);
+	//il_context* ilctx = il_context_new(NULL);
 	int score = 0;
 	bool illegal = false;
 	for (int i = 0; i < params->length; i++) {
@@ -67,7 +67,8 @@ int meta_rcalc_score(vector* params, vector* args) {
 		//generic_type* argType = il_factor_eval(arg->factor, env, ilctx);
 		generic_type* argType = arg->gtype;
 		if (argType->core_type != TYPE_NULL) {
-			dist = generic_type_distance(param->gtype, argType, ilctx);
+			generic_type* a = generic_type_rapply(param->gtype, fr);
+			dist = generic_type_distance(a, argType, ilctx);
 		}
 		score += dist;
 		//継承関係のないパラメータ
@@ -76,7 +77,7 @@ int meta_rcalc_score(vector* params, vector* args) {
 			break;
 		}
 	}
-	il_context_delete(ilctx);
+	//il_context_delete(ilctx);
 	return score;
 }
 
@@ -171,14 +172,24 @@ constructor* meta_find_ctor(vector* ctor_vec, vector* ilargs, struct enviroment*
 	return ret;
 }
 
-constructor* meta_find_rctor(vector* ctor_vec, vector* args, int* outIndex) {
+constructor* meta_find_rctor(vector* ctor_vec, vector* args, vector* typeargs, frame* fr, int* outIndex) {
 	//見つかった中からもっとも一致するコンストラクタを選択する
 	int min = 1024;
 	constructor* ret = NULL;
 	for (int i = 0; i < ctor_vec->length; i++) {
 		vector_item ve = vector_at(ctor_vec, i);
 		constructor* ctor = (constructor*)ve;
-		int score = meta_rcalc_score(ctor->parameter_list, args);
+		class_* cls = TYPE2CLASS(ctor->parent);
+		//引数の個数が違うので無視
+		if (ctor->parameter_list->length != args->length) {
+			continue;
+		}
+		//与えられた型引数の妥当性を検証する
+		if(cls->type_parameter_list->length > 0 && 
+		   !meta_rule_rvalid(cls->type_parameter_list, typeargs, fr)) {
+			continue;
+		}
+		int score = meta_rcalc_score(ctor->parameter_list, args, typeargs, fr);
 		if (score < min) {
 			min = score;
 			ret = ctor;
@@ -215,4 +226,8 @@ bool meta_rule_valid(vector* type_params, vector* type_args, il_context* ilctx) 
 		}
 	}
 	return valid;
+}
+
+bool meta_rule_rvalid(vector* type_params, vector* type_args, frame* fr) {
+	assert(false);
 }

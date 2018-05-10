@@ -276,11 +276,11 @@ field * class_get_sfield(class_ * self, int index) {
 	return class_get_sfield(self->super_class->core_type->u.class_, index);
 }
 
-constructor * class_find_rconstructor(class_ * self, vector * args, int* outIndex) {
+constructor * class_find_rconstructor(class_ * self, vector * args, vector* typeargs, frame* fr, int* outIndex) {
 //	vector* v = meta_find_rconstructors(self, args);
 //	(*outIndex) = -1;
 //	return class_find_rconstructor_impl(v, args, outIndex);
-	return meta_find_rctor(self->constructor_list, args, outIndex);
+	return meta_find_rctor(self->constructor_list, args, typeargs, fr, outIndex);
 }
 
 constructor * class_find_constructor(class_ * self, vector * args, enviroment * env, il_context* ilctx, int* outIndex) {
@@ -461,7 +461,8 @@ int class_count_smethodall(class_ * self) {
 	return sum;
 }
 
-object * class_new_rinstance(class_ * self, frame* fr, int count, ...) {
+object * class_new_rinstance(class_ * self, il_context* ilctx, frame* fr, int count, ...) {
+	//オブジェクトから型推論を行う必要があるぞ
 	va_list ap;
 	va_start(ap, count);
 	//可変長引数をベクターへ
@@ -472,7 +473,7 @@ object * class_new_rinstance(class_ * self, frame* fr, int count, ...) {
 	}
 	//コンストラクタを検索
 	int temp = 0;
-	constructor* ctor = class_find_rconstructor(self, args, &temp);
+	constructor* ctor = class_find_rconstructor(self, args, NULL, fr, &temp);
 	assert(temp != -1);
 	//コンストラクタを実行
 	frame* sub = frame_sub(fr);

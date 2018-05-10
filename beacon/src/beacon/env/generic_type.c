@@ -4,16 +4,21 @@
 #include "script_context.h"
 #include "type_parameter.h"
 #include "constructor.h"
+#include "../env/object.h"
 #include "../util/mem.h"
 #include "../util/text.h"
 #include "../util/xassert.h"
 #include "../il/il_type_argument.h"
+#include "../vm/frame.h"
 #include "fqcn_cache.h"
 #include <assert.h>
 #include <string.h>
 #include <stdio.h>
 
 //proto
+static generic_type* generic_type_applyImpl(generic_type* self, il_context* ilctx, frame* fr);
+static generic_type* generic_type_typeargs_at(il_context* ilctx, frame* fr, int index);
+static generic_type* generic_type_receiver_at(il_context* ilctx, frame* fr, int index);
 static void generic_type_delete_self(vector_item item);
 static void generic_type_deletercr_self(vector_item item);
 static void generic_type_recursive_mark(generic_type* a);
@@ -208,53 +213,11 @@ void generic_type_generate(generic_type* self, enviroment* env, il_context* ilct
 
 //Hash<String,List<Int>>
 generic_type* generic_type_apply(generic_type* self, il_context* ilctx) {
-	//ここで型変数が追加されちゃってた
-	if(self->core_type == NULL) {
-		//copy->virtual_type_index = -1;
-		if(self->tag == generic_type_tag_ctor) {
-			vector* type_args = vector_top(ilctx->type_args_vec);
-			il_type_argument* a = vector_at(type_args, self->virtual_type_index);
-			//copy->core_type = a->gtype->core_type;
-			self = a->gtype;
-		}
-	}
-	generic_type* copy = generic_type_new(self->core_type);
-	generic_type* e = NULL;
-	int count = 0;
-	//全ての実型引数
-	for(int i=0; i<self->type_args_list->length; i++) {
-		e = (generic_type*)vector_at(self->type_args_list, i);
-		//この型がクラスやメソッドに定義された仮装型なら
-		if(e->virtual_type_index != -1) {
-			count++;
-			if(e->tag == generic_type_tag_class) {
-				generic_type* tp = vector_top(ilctx->receiver_vec);
-				generic_type* instanced = vector_at(tp->type_args_list, e->virtual_type_index);
-				generic_type_addargs(copy, generic_type_apply(instanced, ilctx));
-			} else if(e->tag == generic_type_tag_method ||
-			e->tag == generic_type_tag_ctor) {
-				vector* type_args = vector_top(ilctx->type_args_vec);
-				//generic_type* a = vector_at(type_args, e->virtual_type_index);
-				il_type_argument* a = vector_at(type_args, e->virtual_type_index);
-				generic_type_addargs(copy, generic_type_apply(a->gtype, ilctx));
-			} else if(e->tag == generic_type_tag_self) {
-				generic_type_addargs(copy, e);
-			} else XBREAK(e->tag != generic_type_tag_none);
-		//
-		} else {
-			generic_type_addargs(copy, generic_type_apply(e, ilctx));
-		}
-	}
-	assert(copy->core_type != NULL || count == 0);
-	copy->tag = generic_type_tag_none;
-	
-	if(copy->core_type == NULL) {
-		copy->tag = self->tag;
-		copy->virtual_type_index = self->virtual_type_index;
-		if(self->tag == generic_type_tag_class) copy->u.type_ = self->u.type_;
-		else if (self->tag == generic_type_tag_method) copy->u.method_ = self->u.method_;
-	}
-	return copy;
+	return generic_type_applyImpl(self, ilctx, NULL);
+}
+
+generic_type* generic_type_rapply(generic_type* self, frame* fr) {
+	return generic_type_applyImpl(self, NULL, fr);
 }
 
 vector* generic_type_rule(generic_type* self, il_context* ilctx) {
@@ -360,6 +323,71 @@ bool generic_type_rule_polymorphic(vector* rules, generic_type* other, il_contex
 }
 
 //private
+static generic_type* generic_type_applyImpl(generic_type* self, il_context* ilctx, frame* fr) {
+	//ここで型変数が追加されちゃってた
+	if(self->core_type == NULL) {
+		//copy->virtual_type_index = -1;
+		if(self->tag == generic_type_tag_ctor) {
+			self = generic_type_typeargs_at(ilctx, fr, self->virtual_type_index);
+		}
+	}
+	generic_type* copy = generic_type_new(self->core_type);
+	generic_type* e = NULL;
+	int count = 0;
+	//全ての実型引数
+	for(int i=0; i<self->type_args_list->length; i++) {
+		e = (generic_type*)vector_at(self->type_args_list, i);
+		//この型がクラスやメソッドに定義された仮装型なら
+		if(e->virtual_type_index != -1) {
+			count++;
+			if(e->tag == generic_type_tag_class) {
+				generic_type_addargs(copy, generic_type_receiver_at(ilctx, fr, e->virtual_type_index));
+			} else if(e->tag == generic_type_tag_method ||
+			e->tag == generic_type_tag_ctor) {
+				//vector* type_args = vector_top(ilctx->type_args_vec);
+				//il_type_argument* a = vector_at(type_args, e->virtual_type_index);
+				generic_type_addargs(copy, generic_type_apply(generic_type_typeargs_at(ilctx, fr, e->virtual_type_index), ilctx));
+			} else if(e->tag == generic_type_tag_self) {
+				generic_type_addargs(copy, e);
+			} else XBREAK(e->tag != generic_type_tag_none);
+		//
+		} else {
+			generic_type_addargs(copy, generic_type_apply(e, ilctx));
+		}
+	}
+	assert(copy->core_type != NULL || count == 0);
+	copy->tag = generic_type_tag_none;
+	if(copy->core_type == NULL) {
+		copy->tag = self->tag;
+		copy->virtual_type_index = self->virtual_type_index;
+		if(self->tag == generic_type_tag_class) copy->u.type_ = self->u.type_;
+		else if (self->tag == generic_type_tag_method) copy->u.method_ = self->u.method_;
+	}
+	return copy;
+}
+
+static generic_type* generic_type_typeargs_at(il_context* ilctx, frame* fr, int index) {
+	if(ilctx != NULL) {
+		vector* type_args = vector_top(ilctx->type_args_vec);
+		il_type_argument* a = vector_at(type_args, index);
+		return a->gtype;
+	} else {
+		generic_type* a = vector_at(fr->type_args_vec, index);
+		return a;
+	}
+}
+
+static generic_type* generic_type_receiver_at(il_context* ilctx, frame* fr, int index) {
+	if(ilctx != NULL) {
+		generic_type* tp = vector_top(ilctx->receiver_vec);
+		generic_type* instanced = vector_at(tp->type_args_list, index);
+		return instanced;
+	} else {
+		object* a = vector_at(fr->ref_stack, 0);
+		return vector_at(a->gtype->type_args_list, index);
+	}
+}
+
 static generic_type* generic_type_get(generic_type* a, il_context* ilctx) {
 	if(a->virtual_type_index == -1) {
 		return a;

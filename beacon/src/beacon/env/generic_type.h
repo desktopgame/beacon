@@ -10,6 +10,7 @@ struct method;
 struct enviroment;
 struct virtual_type;
 struct il_context;
+struct frame;
 /**
  * 型変数つきの型宣言の型引数では generic_type 自身が使われますが、
  * それ自体が型変数の場合、何の型変数を指しているかを示す列挙型です.
@@ -146,6 +147,14 @@ void generic_type_generate(generic_type* self, struct enviroment* env, struct il
  * @return
  */
 generic_type* generic_type_apply(generic_type* self, struct il_context* ilctx);
+/**
+ * 現在のコンテキストで self の型変数を解決します.
+ * T ではなく T を内包する型(List<T>) などが戻り値になる時に使用されます。
+ * @param self
+ * @param fr
+ * @return
+ */
+generic_type* generic_type_rapply(generic_type* self, struct frame* fr);
 
 /**
  * self が型引数なら、それに適用されるルールを返します.

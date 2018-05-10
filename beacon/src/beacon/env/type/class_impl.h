@@ -188,10 +188,11 @@ struct field* class_get_sfield(class_* self, int index);
  * もっとも一致するコンストラクタを返します.
  * @param self
  * @param args<object*> 呼び出し側で開放してください.
+ * @param typeargs
  * @param outIndex
  * @return 無ければ空
  */
-struct constructor* class_find_rconstructor(class_* self, vector* args, int* outIndex);
+struct constructor* class_find_rconstructor(class_* self, vector* args, vector* typeargs, frame* fr, int* outIndex);
 
 /**
  * もっとも一致するコンストラクタを返します.
@@ -316,12 +317,13 @@ int class_count_smethodall(class_* self);
 
 /**
  * @param self
+ * @param ilctx
  * @param fr
  * @param count
  * @param ...
  * @return
  */
-struct object* class_new_rinstance(class_* self, frame* fr, int count, ...);
+struct object* class_new_rinstance(class_* self, il_context* ilctx, frame* fr, int count, ...);
 
 /**
  * 全てのメンバーがこのクラスを参照できるようにします.
