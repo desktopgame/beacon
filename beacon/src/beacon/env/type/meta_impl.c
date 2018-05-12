@@ -68,7 +68,7 @@ int meta_rcalc_score(vector* params, vector* args, vector* typeargs, frame* fr) 
 		generic_type* argType = arg->gtype;
 		if (argType->core_type != TYPE_NULL) {
 			generic_type* a = generic_type_rapply(param->gtype, fr);
-			dist = generic_type_distance(a, argType, ilctx);
+			dist = generic_type_rdistance(a, argType, fr);
 		}
 		score += dist;
 		//継承関係のないパラメータ

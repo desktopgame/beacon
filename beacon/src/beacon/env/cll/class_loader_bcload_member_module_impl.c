@@ -15,6 +15,7 @@
 #include "../../env/type_parameter.h"
 #include "../../util/xassert.h"
 #include <assert.h>
+#include <string.h>
 
 //proto
 static void CLBC_parameter_list(class_loader* self, namespace_* scope, vector* param_list, vector* sg_param_liste, il_context* ilctx);
@@ -87,6 +88,9 @@ void CLBC_methods_decl(class_loader* self, il_type* iltype, type* tp, vector* il
 			method->u.script_method = script_method_new();
 		}
 		method->parent = tp;
+		if(tp->tag == type_class) {
+			XBREAK(!strcmp(TYPE2CLASS(tp)->name, "String") && !strcmp(method->name, "length"));
+		}
 		method->return_gtype = import_manager_resolve(self->import_manager, scope, ilmethod->return_fqcn, ilctx);
 		//ILパラメータを実行時パラメータへ変換
 		//NOTE:ここでは戻り値の型,引数の型を設定しません

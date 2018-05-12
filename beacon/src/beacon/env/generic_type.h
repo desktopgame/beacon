@@ -103,6 +103,17 @@ void generic_type_addargs(generic_type* self, generic_type* a);
  *         サブタイプなら階層の数
  */
 int generic_type_distance(generic_type* self, generic_type* other, struct il_context* ilctx);
+/**
+ * a と b の距離を返します.
+ * メソッドを解決する時、もっともマッチするオーバーロードを見つけるために使用されます。
+ * @param self
+ * @param other
+ * @param fr
+ * @return 同じなら 0
+ *         異なる継承階層なら -1
+ *         サブタイプなら階層の数
+ */
+int generic_type_rdistance(generic_type* self, generic_type* other, struct frame* fr);
 
 /**
  * 型変数と型を出力します.

@@ -13,7 +13,21 @@
 			"il_context.h": "c",
 			"type_impl.h": "c",
 			"bc_library_impl.h": "c",
-			"text.h": "c"
+			"text.h": "c",
+			"gtk.h": "c",
+			"enviroment.h": "c",
+			"symbol_entry.h": "c",
+			"limits": "c",
+			"type_traits": "c",
+			"class_loader_bcload_import_module_impl.h": "c",
+			"class_loader_link_impl.h": "c",
+			"il_type_argument.h": "c",
+			"mem.h": "c",
+			"__locale": "c",
+			"__string": "c",
+			"string": "c",
+			"string_view": "c",
+			"memory": "c"
 		}
 	}
 }
