@@ -465,7 +465,7 @@ static void vm_run(frame * self, enviroment * env, int pos, int deferStart) {
 				text_putindent(self->level);
 				//text_printfln("[ %s#new ]", type_name(ctor->parent));
 				//enviroment_op_dump(ctor->env, sub->level);
-				opcode_buf_dump(ctor->env->buf, sub->level);
+				//opcode_buf_dump(ctor->env->buf, sub->level);
 				vm_execute(sub, ctor->env);
 				//コンストラクタを実行した場合、
 				//objectがスタックのトップに残っているはず
@@ -492,7 +492,7 @@ static void vm_run(frame * self, enviroment * env, int pos, int deferStart) {
 					vector_push(sub->value_stack, o);
 				}
 				//		enviroment_op_dump(ctor->env, sub->level);
-				opcode_buf_dump(ctor->env->buf, sub->level);
+				//opcode_buf_dump(ctor->env->buf, sub->level);
 				vm_execute(sub, ctor->env);
 				//コンストラクタを実行した場合、
 				//objectがスタックのトップに残っているはず

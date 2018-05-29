@@ -95,11 +95,11 @@ static bool eval_top_from_cll(class_loader* cll) {
 	ctx->heap->accept_blocking++;
 	class_loader_load(cll);
 	ctx->heap->accept_blocking--;
-	opcode_buf_dump(cll->env->buf, 0);
+	//opcode_buf_dump(cll->env->buf, 0);
 	//実行
 	frame* fr = frame_new();
 	sg_thread_set_frame_ref(sg_thread_current(), fr);
-	opcode_buf_dump(cll->env->buf, 0);
+	//opcode_buf_dump(cll->env->buf, 0);
 	vm_execute(fr, cll->env);
 	if(fr->terminate) {
 		cll->error = true;
