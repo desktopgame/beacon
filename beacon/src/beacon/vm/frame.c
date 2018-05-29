@@ -54,6 +54,7 @@ void frame_delete(frame * self) {
 
 	//constant_pool_delete(self->pool);
 	//operand_stack_delete(self->operand_stack);
+	vector_delete(self->defer_vec, vector_deleter_null);
 	vector_delete(self->value_stack, vector_deleter_null);
 	vector_delete(self->ref_stack, vector_deleter_null);
 	vector_delete(self->children_vec, vector_deleter_null);
