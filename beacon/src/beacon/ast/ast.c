@@ -398,6 +398,17 @@ access_level ast_cast_to_access(ast * self) {
 }
 
 modifier_type ast_cast_to_modifier(ast * self) {
+	if(self->tag == ast_modifier_list) {
+		int ret = -1;
+		for(int i=0; i<self->child_count; i++) {
+			if(ret == -1) {
+				ret = ast_cast_to_modifier(ast_at(self, i));
+			} else {
+				ret |= ast_cast_to_modifier(ast_at(self, i));
+			}
+		}
+		return (modifier_type)ret;
+	}
 	assert(ast_is_modifier(self));
 	return self->u.modifier_value;
 }

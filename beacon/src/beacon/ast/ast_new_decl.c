@@ -87,6 +87,13 @@ ast * ast_new_access(access_level level) {
 	return NULL;
 }
 
+ast* ast_new_modifier_list(ast* amod, ast* amod_list) {
+	ast* ret = ast_new(ast_modifier_list);
+	ast_push(ret, amod);
+	ast_push(ret, amod_list);
+	return ret;
+}
+
 ast * ast_new_modifier(modifier_type type) {
 	ast* ret = ast_new(ast_modifier);
 	ret->u.modifier_value = type;

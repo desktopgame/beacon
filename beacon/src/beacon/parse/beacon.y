@@ -81,6 +81,7 @@
 						function_define
 						method_define
 						field_define
+						modifier_type_T_list
 						modifier_type_T
 						ident_list
 						parameter_list
@@ -407,11 +408,11 @@ function_define
 	;
 
 method_define
-	: DEF modifier_type_T IDENT type_parameter_group LRB parameter_list RRB ARROW typename_T scope_optional
+	: DEF modifier_type_T_list IDENT type_parameter_group LRB parameter_list RRB ARROW typename_T scope_optional
 	{
 		$$ = ast_new_method_decl($2, $3, $4, $6, $10, $9);
 	}
-	| DEF modifier_type_T IDENT type_parameter_group LRB RRB ARROW typename_T scope_optional
+	| DEF modifier_type_T_list IDENT type_parameter_group LRB RRB ARROW typename_T scope_optional
 	{
 		$$ = ast_new_method_decl_empty_params($2, $3, $4, $9, $8);
 	}
@@ -421,6 +422,17 @@ field_define
 	: modifier_type_T typename_T IDENT SEMI
 	{
 		$$ = ast_new_field_decl($1, $2, $3);
+	}
+	;
+
+modifier_type_T_list
+	: modifier_type_T
+	{
+		$$ = $1;
+	}
+	| modifier_type_T_list modifier_type_T
+	{
+		$$ = ast_new_modifier_list($2, $1);
 	}
 	;
 

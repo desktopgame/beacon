@@ -118,6 +118,7 @@ typedef enum ast_tag {
 	ast_field_type_name,
 	ast_field_access_name,
 
+	ast_modifier_list,
 	ast_modifier,
 
 	ast_function_decl,

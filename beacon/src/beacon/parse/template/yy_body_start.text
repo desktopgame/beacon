@@ -433,11 +433,11 @@ function_define
 ;;
 $$SET __GENERIC type_parameter_group
 method_define
-	: DEF modifier_type_T IDENT __GENERIC LRB parameter_list RRB ARROW typename_T scope_optional
+	: DEF modifier_type_T_list IDENT __GENERIC LRB parameter_list RRB ARROW typename_T scope_optional
 	{
 		$$ = ast_new_method_decl($2, $3, $4, $6, $10, $9);
 	}
-	| DEF modifier_type_T IDENT __GENERIC LRB RRB ARROW typename_T scope_optional
+	| DEF modifier_type_T_list IDENT __GENERIC LRB RRB ARROW typename_T scope_optional
 	{
 		$$ = ast_new_method_decl_empty_params($2, $3, $4, $9, $8);
 	}
@@ -459,6 +459,17 @@ field_define
 ;;
 ;;}}}
 ;;
+
+modifier_type_T_list
+	: modifier_type_T
+	{
+		$$ = $1;
+	}
+	| modifier_type_T_list modifier_type_T
+	{
+		$$ = ast_new_modifier_list($2, $1);
+	}
+	;
 
 ;;
 ;;修飾子{{{

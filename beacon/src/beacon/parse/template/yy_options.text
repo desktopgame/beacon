@@ -60,6 +60,7 @@ $$SET top_level program
 						function_define
 						method_define
 						field_define
+						modifier_type_T_list
 						modifier_type_T
 						ident_list
 						parameter_list

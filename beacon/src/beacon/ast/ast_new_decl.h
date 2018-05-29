@@ -95,6 +95,14 @@ ast* ast_new_access_member_list(access_level level, ast* member_list);
 ast* ast_new_access(access_level level);
 
 /**
+ * 修飾子の一覧を表す要素を作成します.
+ * @param amod
+ * @param amod_list
+ * @return
+ */
+ast* ast_new_modifier_list(ast* amod, ast* amod_list);
+
+/**
  * 修飾子を表す要素を作成します.
  * @param type
  * @return
