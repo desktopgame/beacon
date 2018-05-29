@@ -433,6 +433,7 @@ function_define
 ;;
 $$SET __GENERIC type_parameter_group
 method_define
+;;modifier あり
 	: DEF modifier_type_T_list IDENT __GENERIC LRB parameter_list RRB ARROW typename_T scope_optional
 	{
 		$$ = ast_new_method_decl($2, $3, $4, $6, $10, $9);
@@ -440,6 +441,15 @@ method_define
 	| DEF modifier_type_T_list IDENT __GENERIC LRB RRB ARROW typename_T scope_optional
 	{
 		$$ = ast_new_method_decl_empty_params($2, $3, $4, $9, $8);
+	}
+;;modifier なし
+	| DEF IDENT __GENERIC LRB parameter_list RRB ARROW typename_T scope_optional
+	{
+		$$ = ast_new_method_decl(ast_new_modifier(modifier_none), $2, $3, $5, $9, $8);
+	}
+	| DEF IDENT __GENERIC LRB RRB ARROW typename_T scope_optional
+	{
+		$$ = ast_new_method_decl_empty_params(ast_new_modifier(modifier_none), $2, $3, $8, $7);
 	}
 	;
 $$REM __GENERIC
@@ -454,6 +464,10 @@ field_define
 	: modifier_type_T typename_T IDENT SEMI
 	{
 		$$ = ast_new_field_decl($1, $2, $3);
+	}
+	| typename_T IDENT SEMI
+	{
+		$$ = ast_new_field_decl(ast_new_modifier(modifier_none), $1, $2);
 	}
 	;
 ;;
@@ -475,17 +489,17 @@ modifier_type_T_list
 ;;修飾子{{{
 ;;
 modifier_type_T
-	: /* empty */
-	{
-		$$ = ast_new_modifier(modifier_none);
-	}
-	| STATIC
+	: STATIC
 	{
 		$$ = ast_new_modifier(modifier_static);
 	}
 	| NATIVE
 	{
 		$$ = ast_new_modifier(modifier_native);
+	}
+	| ABSTRACT
+	{
+		$$ = ast_new_modifier(modifier_abstract);
 	}
 	;
 ;;

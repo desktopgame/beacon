@@ -416,12 +416,24 @@ method_define
 	{
 		$$ = ast_new_method_decl_empty_params($2, $3, $4, $9, $8);
 	}
+	| DEF IDENT type_parameter_group LRB parameter_list RRB ARROW typename_T scope_optional
+	{
+		$$ = ast_new_method_decl(ast_new_modifier(modifier_none), $2, $3, $5, $9, $8);
+	}
+	| DEF IDENT type_parameter_group LRB RRB ARROW typename_T scope_optional
+	{
+		$$ = ast_new_method_decl_empty_params(ast_new_modifier(modifier_none), $2, $3, $8, $7);
+	}
 	;
 
 field_define
 	: modifier_type_T typename_T IDENT SEMI
 	{
 		$$ = ast_new_field_decl($1, $2, $3);
+	}
+	| typename_T IDENT SEMI
+	{
+		$$ = ast_new_field_decl(ast_new_modifier(modifier_none), $1, $2);
 	}
 	;
 
@@ -437,17 +449,17 @@ modifier_type_T_list
 	;
 
 modifier_type_T
-	: /* empty */
-	{
-		$$ = ast_new_modifier(modifier_none);
-	}
-	| STATIC
+	: STATIC
 	{
 		$$ = ast_new_modifier(modifier_static);
 	}
 	| NATIVE
 	{
 		$$ = ast_new_modifier(modifier_native);
+	}
+	| ABSTRACT
+	{
+		$$ = ast_new_modifier(modifier_abstract);
 	}
 	;
 
