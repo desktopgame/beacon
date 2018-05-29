@@ -107,43 +107,44 @@
      NULL_TOK = 316,
      AS = 317,
      ABSTRACT = 318,
-     INTERFACE = 319,
-     CLASS = 320,
-     ENUM = 321,
-     PUBLIC = 322,
-     PRIVATE = 323,
-     PROTECTED = 324,
-     STATIC = 325,
-     NATIVE = 326,
-     NEW = 327,
-     DEF = 328,
-     ARROW = 329,
-     NAMESPACE = 330,
-     RETURN = 331,
-     IF = 332,
-     ELIF = 333,
-     ELSE = 334,
-     WHILE = 335,
-     BREAK = 336,
-     CONTINUE = 337,
-     TRY = 338,
-     CATCH = 339,
-     THROW = 340,
-     ASSERT_T = 341,
-     DEFER = 342,
-     INSTANCEOF = 343,
-     BOUNDS_EXTENDS = 344,
-     BOUNDS_SUPER = 345,
-     PRE_DEC = 346,
-     PRE_INC = 347,
-     QUOTE = 348,
-     POST_DEC = 349,
-     POST_INC = 350,
-     FUNCCALL = 351,
-     REF = 352,
-     POSITIVE = 353,
-     NEGATIVE = 354,
-     FORM_TYPE = 355
+     OVERRIDE = 319,
+     INTERFACE = 320,
+     CLASS = 321,
+     ENUM = 322,
+     PUBLIC = 323,
+     PRIVATE = 324,
+     PROTECTED = 325,
+     STATIC = 326,
+     NATIVE = 327,
+     NEW = 328,
+     DEF = 329,
+     ARROW = 330,
+     NAMESPACE = 331,
+     RETURN = 332,
+     IF = 333,
+     ELIF = 334,
+     ELSE = 335,
+     WHILE = 336,
+     BREAK = 337,
+     CONTINUE = 338,
+     TRY = 339,
+     CATCH = 340,
+     THROW = 341,
+     ASSERT_T = 342,
+     DEFER = 343,
+     INSTANCEOF = 344,
+     BOUNDS_EXTENDS = 345,
+     BOUNDS_SUPER = 346,
+     PRE_DEC = 347,
+     PRE_INC = 348,
+     QUOTE = 349,
+     POST_DEC = 350,
+     POST_INC = 351,
+     FUNCCALL = 352,
+     REF = 353,
+     POSITIVE = 354,
+     NEGATIVE = 355,
+     FORM_TYPE = 356
    };
 #endif
 /* Tokens.  */
@@ -208,43 +209,44 @@
 #define NULL_TOK 316
 #define AS 317
 #define ABSTRACT 318
-#define INTERFACE 319
-#define CLASS 320
-#define ENUM 321
-#define PUBLIC 322
-#define PRIVATE 323
-#define PROTECTED 324
-#define STATIC 325
-#define NATIVE 326
-#define NEW 327
-#define DEF 328
-#define ARROW 329
-#define NAMESPACE 330
-#define RETURN 331
-#define IF 332
-#define ELIF 333
-#define ELSE 334
-#define WHILE 335
-#define BREAK 336
-#define CONTINUE 337
-#define TRY 338
-#define CATCH 339
-#define THROW 340
-#define ASSERT_T 341
-#define DEFER 342
-#define INSTANCEOF 343
-#define BOUNDS_EXTENDS 344
-#define BOUNDS_SUPER 345
-#define PRE_DEC 346
-#define PRE_INC 347
-#define QUOTE 348
-#define POST_DEC 349
-#define POST_INC 350
-#define FUNCCALL 351
-#define REF 352
-#define POSITIVE 353
-#define NEGATIVE 354
-#define FORM_TYPE 355
+#define OVERRIDE 319
+#define INTERFACE 320
+#define CLASS 321
+#define ENUM 322
+#define PUBLIC 323
+#define PRIVATE 324
+#define PROTECTED 325
+#define STATIC 326
+#define NATIVE 327
+#define NEW 328
+#define DEF 329
+#define ARROW 330
+#define NAMESPACE 331
+#define RETURN 332
+#define IF 333
+#define ELIF 334
+#define ELSE 335
+#define WHILE 336
+#define BREAK 337
+#define CONTINUE 338
+#define TRY 339
+#define CATCH 340
+#define THROW 341
+#define ASSERT_T 342
+#define DEFER 343
+#define INSTANCEOF 344
+#define BOUNDS_EXTENDS 345
+#define BOUNDS_SUPER 346
+#define PRE_DEC 347
+#define PRE_INC 348
+#define QUOTE 349
+#define POST_DEC 350
+#define POST_INC 351
+#define FUNCCALL 352
+#define REF 353
+#define POSITIVE 354
+#define NEGATIVE 355
+#define FORM_TYPE 356
 
 
 
@@ -261,7 +263,7 @@ typedef union YYSTYPE
 	access_level access_level_value;
 }
 /* Line 1529 of yacc.c.  */
-#line 258 "beacon.tab.h"
+#line 260 "beacon.tab.h"
 	YYSTYPE;
 # define yystype YYSTYPE /* obsolescent; will be withdrawn */
 # define YYSTYPE_IS_DECLARED 1

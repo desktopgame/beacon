@@ -501,6 +501,10 @@ modifier_type_T
 	{
 		$$ = ast_new_modifier(modifier_abstract);
 	}
+	| OVERRIDE
+	{
+		$$ = ast_new_modifier(modifier_override);
+	}
 	;
 ;;
 ;;}}}
