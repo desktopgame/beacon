@@ -32,14 +32,17 @@ static void bc_exception_nativeInit(method* parent, frame* fr, enviroment* env) 
 		//実行中のインストラクションの行番号を取得
 		line_range* lr = line_range_find(temp->context_ref->line_rangeVec, temp->pc);
 		//スタックトレースを作成
-		object* trace = class_new_rinstance(
+		vector* args = vector_new();
+		vector_push(args, object_string_new(temp->context_ref->context_ref->filename));
+		vector_push(args, object_int_new(lr == NULL ? -1 : lr->lineno));
+		object* trace = class_new_instance(
 			stackTraceElementClass,
 			ilctx,
 			fr,
-			2,
-			object_string_new(temp->context_ref->context_ref->filename),
-			object_int_new(lr == NULL ? -1 : lr->lineno)
+			args,
+			NULL
 		);
+		vector_delete(args, vector_deleter_null);
 		vector_push(stackTraceElementVec, trace);
 		temp = temp->parent;
 	} while (temp != NULL);

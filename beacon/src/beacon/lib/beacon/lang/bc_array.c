@@ -33,12 +33,15 @@ type * bc_array_class() {
 object * bc_array_new(struct generic_type* gtype, int length, frame * fr) {
 	il_context* ilctx = il_context_new(NULL);
 	type* arrayType = bc_array_class();
-	vector* targs = vector_new();
-	vector_push(targs, gtype);
-	vector_push(ilctx->type_args_vec, targs);
-	object* ret = class_new_rinstance(arrayType->u.class_, ilctx, fr, 1, object_int_new(length));
-	vector_pop(ilctx->type_args_vec);
-	vector_delete(targs, vector_deleter_null);
+
+	vector* args = vector_new();
+	vector* type_args = vector_new();
+	vector_push(args, object_int_new(length));
+	vector_push(type_args, gtype);
+	object* ret = class_new_instance(arrayType->u.class_, ilctx, fr, args,type_args);
+	vector_delete(args, vector_deleter_null);
+	vector_delete(type_args, vector_deleter_null);
+
 	il_context_delete(ilctx);
 	return ret;
 }

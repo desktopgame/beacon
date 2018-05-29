@@ -185,11 +185,13 @@ static void il_factor_invoke_check(il_factor_invoke * self, enviroment * env, il
 	assert(ctype != NULL);
 	int temp = -1;
 	self->m = type_find_method(ctype, self->name, self->args, env, ilctx, &temp);
-	XBREAK(
-		!strcmp(self->m->name, "length") && 
-		!strcmp(type_name(ctype), "String") &&
-		self->m->return_gtype->tag != generic_type_tag_none
-	);
+	if(self->m != NULL) {
+		XBREAK(
+			!strcmp(self->m->name, "length") && 
+			!strcmp(type_name(ctype), "String") &&
+			self->m->return_gtype->tag != generic_type_tag_none
+		);
+	}
 	//self->m = class_find_method(TYPE2CLASS(ctype), self->name, self->args, env, cache, &temp);
 	self->index = temp;
 	vector_pop(ilctx->receiver_vec);

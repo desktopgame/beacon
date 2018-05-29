@@ -461,16 +461,7 @@ int class_count_smethodall(class_ * self) {
 	return sum;
 }
 
-object * class_new_rinstance(class_ * self, il_context* ilctx, frame* fr, int count, ...) {
-	//オブジェクトから型推論を行う必要があるぞ
-	va_list ap;
-	va_start(ap, count);
-	//可変長引数をベクターへ
-	vector* args = vector_new();
-	for (int i = 0; i < count; i++) {
-		object* o = va_arg(ap, object*);
-		vector_push(args, o);
-	}
+object * class_new_instance(class_* self, il_context* ilctx, frame* fr, vector* args, vector* type_args) {
 	//コンストラクタを検索
 	int temp = 0;
 	constructor* ctor = class_find_rconstructor(self, args, NULL, fr, &temp);
@@ -478,17 +469,22 @@ object * class_new_rinstance(class_ * self, il_context* ilctx, frame* fr, int co
 	//コンストラクタを実行
 	frame* sub = frame_sub(fr);
 	heap* h = heap_get();
-	for (int i = args->length-1; i>=0; i--) {
-		object* o = vector_at(args, i);
-		vector_push(sub->value_stack, o);
+	if(args != NULL) {
+		for (int i = args->length-1; i>=0; i--) {
+			object* o = vector_at(args, i);
+			vector_push(sub->value_stack, o);
+		}
+	}
+	if(type_args != NULL) {
+		for(int i = 0; i<type_args->length; i++) {
+			vector_push(sub->type_args_vec, vector_at(type_args, i));
+		}
 	}
 	vm_execute(sub, ctor->env);
 	object* inst = vector_pop(sub->value_stack);
 	h->collect_blocking++;
 	frame_delete(sub);
-	vector_delete(args, vector_deleter_null);
 	h->collect_blocking--;
-	va_end(ap);
 	return inst;
 }
 

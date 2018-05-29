@@ -320,10 +320,11 @@ int class_count_smethodall(class_* self);
  * @param ilctx
  * @param fr
  * @param count
- * @param ...
+ * @param args
+ * @param type_args
  * @return
  */
-struct object* class_new_rinstance(class_* self, il_context* ilctx, frame* fr, int count, ...);
+struct object* class_new_instance(class_* self, il_context* ilctx, frame* fr, vector* args, vector* type_args);
 
 /**
  * 全てのメンバーがこのクラスを参照できるようにします.
