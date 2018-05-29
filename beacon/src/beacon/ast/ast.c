@@ -235,6 +235,9 @@ void ast_print(ast* self) {
 		case ast_import_path:
 			text_printf("%s", self->u.string_value);
 			break;
+		case ast_abstract_class_decl:
+			text_printf("abstract class");
+			break;
 		case ast_class_decl:
 			text_printf("class");
 			break;

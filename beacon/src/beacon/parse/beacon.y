@@ -48,7 +48,7 @@
 
 		THIS_TOK SUPER_TOK TRUE_TOK FALSE_TOK NULL_TOK AS
 
-		INTERFACE CLASS ENUM PUBLIC PRIVATE PROTECTED STATIC NATIVE NEW
+		ABSTRACT INTERFACE CLASS ENUM PUBLIC PRIVATE PROTECTED STATIC NATIVE NEW
 		DEF ARROW NAMESPACE RETURN
 		IF ELIF ELSE WHILE BREAK CONTINUE TRY CATCH THROW
 		ASSERT_T DEFER INSTANCEOF
@@ -68,6 +68,7 @@
 					type_parameter_group
 					type_parameter_list
 					type_parameter
+					abstract_class_decl
 					class_decl 
 					enum_decl
 					interface_decl
@@ -185,6 +186,7 @@ namespace_member_decl
 	{
 		$$ = ast_new_namespace_namespace_decl($2, $3);
 	}
+	| abstract_class_decl
 	| class_decl
 	| interface_decl
 	| enum_decl
@@ -270,7 +272,16 @@ type_parameter
 		$$ = ast_new_type_parameter($1, ast_new_blank());
 	}
 	;
-
+abstract_class_decl
+	: ABSTRACT CLASS parameterized_typename LCB access_member_tree_opt RCB
+	{
+		$$ = ast_new_abstract_class_decl($3, ast_new_blank(), $5);
+	}
+	| ABSTRACT CLASS parameterized_typename COLON typename_list LCB access_member_tree_opt RCB
+	{
+		$$ = ast_new_abstract_class_decl($3, $5, $7);
+	}
+	;
 class_decl
 	: CLASS parameterized_typename LCB access_member_tree_opt RCB
 	{

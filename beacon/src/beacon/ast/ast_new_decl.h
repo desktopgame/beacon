@@ -31,6 +31,14 @@ ast* ast_new_namespace_namespace_decl(ast* namespace_path, ast* body);
 ast* ast_new_namespace_member_decl_list(ast* forward, ast* list);
 
 /**
+ * 抽象クラス宣言を表す要素を作成します.
+ * @param aclass_name
+ * @param extend_list
+ * @param member_list
+ */
+ast* ast_new_abstract_class_decl(ast* aclass_name, ast* extend_list, ast* member_list);
+
+/**
  * クラス宣言を表す要素を作成します.
  * @param aclass_name
  * @param extend_list

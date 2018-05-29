@@ -99,6 +99,7 @@ typedef enum ast_tag {
 
 	ast_class_decl_unit,
 	//ast_class_decl_list,
+	ast_abstract_class_decl,
 	ast_class_decl,
 	ast_enum_decl,
 	ast_interface_decl,

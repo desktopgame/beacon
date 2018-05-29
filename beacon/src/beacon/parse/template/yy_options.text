@@ -24,7 +24,7 @@
 
 		THIS_TOK SUPER_TOK TRUE_TOK FALSE_TOK NULL_TOK AS
 
-		INTERFACE CLASS ENUM PUBLIC PRIVATE PROTECTED STATIC NATIVE NEW
+		ABSTRACT INTERFACE CLASS ENUM PUBLIC PRIVATE PROTECTED STATIC NATIVE NEW
 		DEF ARROW NAMESPACE RETURN
 		IF ELIF ELSE WHILE BREAK CONTINUE TRY CATCH THROW
 		ASSERT_T DEFER INSTANCEOF
@@ -46,6 +46,7 @@ $$SET top_level program
 					type_parameter_group
 					type_parameter_list
 					type_parameter
+					abstract_class_decl
 					class_decl 
 					enum_decl
 					interface_decl

@@ -217,6 +217,7 @@ static void update_loc() {
 <INITIAL>"continue"			{ return (CONTINUE); }
 
 <INITIAL>"namespace"		{ return (NAMESPACE); }
+<INITIAL>"abstract"			{ return (ABSTRACT); }
 <INITIAL>"class"			{ return (CLASS); }
 <INITIAL>"enum"				{ return (ENUM); }
 <INITIAL>"interface"		{ return (INTERFACE); }

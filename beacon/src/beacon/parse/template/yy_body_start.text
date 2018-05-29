@@ -71,6 +71,7 @@ namespace_member_decl
 	{
 		$$ = ast_new_namespace_namespace_decl($2, $3);
 	}
+	| abstract_class_decl
 	| class_decl
 	| interface_decl
 	| enum_decl
@@ -214,7 +215,22 @@ type_parameter
 ;;
 ;;}}}
 ;;
-
+;;
+;;クラス宣言{{{
+;;
+abstract_class_decl
+	: ABSTRACT CLASS parameterized_typename LCB access_member_tree_opt RCB
+	{
+		$$ = ast_new_abstract_class_decl($3, ast_new_blank(), $5);
+	}
+	| ABSTRACT CLASS parameterized_typename COLON typename_list LCB access_member_tree_opt RCB
+	{
+		$$ = ast_new_abstract_class_decl($3, $5, $7);
+	}
+	;
+;;
+;;}}}
+;;
 ;;
 ;;クラス宣言{{{
 ;;

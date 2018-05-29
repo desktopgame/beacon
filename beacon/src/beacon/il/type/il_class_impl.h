@@ -3,6 +3,7 @@
 #include "../../util/vector.h"
 #include "../../env/fqcn_cache.h"
 #include "../il_type_interface.h"
+#include <stdbool.h>
 struct il_field;
 struct il_method;
 /**
@@ -19,6 +20,7 @@ typedef struct il_class {
 	vector* smethod_list;
 	vector* constructor_list;
 	vector* type_parameter_list;
+	bool is_abstract;
 } il_class;
 
 /**

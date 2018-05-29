@@ -33,6 +33,7 @@ il_class* il_class_new(const char* name) {
 	ret->smethod_list = vector_new();
 	ret->constructor_list = vector_new();
 	ret->type_parameter_list = vector_new();
+	ret->is_abstract = false;
 	return ret;
 }
 
@@ -54,6 +55,9 @@ void il_class_add_method(il_class * self, il_method * m) {
 
 void il_class_dump(il_class * self, int depth) {
 	text_putindent(depth);
+	if(self->is_abstract) {
+		text_printf("abstract ");
+	}
 	text_printf("class %s", self->name);
 	il_type_parameter_list_print(self->type_parameter_list);
 	text_putline();

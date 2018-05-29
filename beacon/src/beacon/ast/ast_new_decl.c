@@ -9,6 +9,7 @@ static ast* ast_new_method_name(char* func_name);
 static ast* ast_new_method_return_name(char* return_type_name);
 static ast* ast_new_parameter_type_name(char* type_name);
 static ast* ast_new_parameter_access_name(char* parameter_name);
+static ast* ast_new_class_declImpl(ast* aclass_name, ast* extend_list, ast* member_list, ast_tag tag);
 
 ast * ast_new_namespace_decl(ast * namespace_path, ast * body) {
 	ast* ret = ast_new(ast_namespace_decl);
@@ -28,15 +29,12 @@ ast * ast_new_namespace_member_decl_list(ast * forward, ast * list) {
 	return ret;
 }
 
+ast* ast_new_abstract_class_decl(ast* aclass_name, ast* extend_list, ast* member_list) {
+	return ast_new_class_declImpl(aclass_name, extend_list, member_list, ast_abstract_class_decl);
+}
+
 ast * ast_new_class_decl(ast* aclass_name, ast* extend_list, ast* member_list) {
-	ast* ret = ast_new(ast_class_decl);
-//	ret->u.string_value = class_name;
-//	ast_push(ret, super_class);
-//	ast_push(ret, impl_list);
-	ast_push(ret, aclass_name);
-	ast_push(ret, extend_list);
-	ast_push(ret, member_list);
-	return ret;
+	return ast_new_class_declImpl(aclass_name, extend_list, member_list, ast_class_decl);
 }
 
 ast * ast_new_interface_decl(ast* ainterface_name, ast* super_interface_list, ast * member_list) {
@@ -307,5 +305,16 @@ static ast* ast_new_parameter_type_name(char* type_name) {
 static ast* ast_new_parameter_access_name(char* parameter_name) {
 	ast* ret = ast_new(ast_parameter_access_name);
 	ret->u.string_value = parameter_name;
+	return ret;
+}
+
+static ast* ast_new_class_declImpl(ast* aclass_name, ast* extend_list, ast* member_list, ast_tag tag) {
+	ast* ret = ast_new(tag);
+//	ret->u.string_value = class_name;
+//	ast_push(ret, super_class);
+//	ast_push(ret, impl_list);
+	ast_push(ret, aclass_name);
+	ast_push(ret, extend_list);
+	ast_push(ret, member_list);
 	return ret;
 }

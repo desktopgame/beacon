@@ -90,7 +90,9 @@ static void class_loader_ilload_namespace_body(class_loader* self, il_namespace*
  * @param current
  * @param class_decl
  */
+static void class_loader_ilload_abstract_class(class_loader* self, il_namespace* current, ast* class_decl);
 static void class_loader_ilload_class(class_loader* self, il_namespace* current, ast* class_decl);
+static il_class* class_loader_ilload_classImpl(class_loader* self, il_namespace* current, ast* class_decl);
 static void class_loader_ilload_interface(class_loader* self, il_namespace* current, ast* interface_decl);
 static void class_loader_ilload_enum(class_loader* self, il_namespace* current, ast* enum_decl);
 
@@ -209,6 +211,9 @@ static void class_loader_ilload_namespace_body(class_loader* self, il_namespace*
 	//namespace xxx { namespace yyy { ...
 	if (namespace_body->tag == ast_namespace_decl) {
 		class_loader_ilload_namespace(self, parent, namespace_body);
+		//namespace xxx { abstract class yyy { ...
+	} else if(namespace_body->tag == ast_abstract_class_decl) {
+		class_loader_ilload_abstract_class(self, current, namespace_body);
 		//namespace xxx { class yyy { ...
 	} else if (namespace_body->tag == ast_class_decl) {
 		class_loader_ilload_class(self, current, namespace_body);
@@ -227,8 +232,19 @@ static void class_loader_ilload_namespace_body(class_loader* self, il_namespace*
 	}
 }
 
+static void class_loader_ilload_abstract_class(class_loader* self, il_namespace* current, ast* class_decl) {
+	assert(class_decl->tag == ast_abstract_class_decl);
+	il_class* ilc = class_loader_ilload_classImpl(self, current, class_decl);
+	ilc->is_abstract = true;
+}
+
 static void class_loader_ilload_class(class_loader* self, il_namespace* current, ast* class_decl) {
 	assert(class_decl->tag == ast_class_decl);
+	il_class* ilc = class_loader_ilload_classImpl(self, current, class_decl);
+	ilc->is_abstract = false;
+}
+
+static il_class* class_loader_ilload_classImpl(class_loader* self, il_namespace* current, ast* class_decl) {
 	ast* atypename = ast_first(class_decl);
 	ast* aextend_list = ast_second(class_decl);
 	ast* amember_tree = ast_at(class_decl, 2);
@@ -245,6 +261,7 @@ static void class_loader_ilload_class(class_loader* self, il_namespace* current,
 		CLIL_member_tree(self, iltype, amember_tree);
 	}
 	vector_push(current->type_list, iltype);
+	return ilclassz;
 }
 
 static void class_loader_ilload_interface(class_loader* self, il_namespace* current, ast* interface_decl) {
