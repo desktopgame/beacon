@@ -88,6 +88,14 @@ void CLBC_methods_decl(class_loader* self, il_type* iltype, type* tp, vector* il
 		} else {
 			method->u.script_method = script_method_new();
 		}
+		//メソッドが抽象メソッドだが、
+		//インターフェイスでも抽象クラスでもない
+		if(modifier_is_abstract(method->modifier) &&
+		  (tp->tag == type_class &&
+		  !TYPE2CLASS(tp)->is_abstract)) {
+			  class_loader_report(self, "abstract method should be defined on the abstract class: %s\n", method->name);
+			  return;
+		}
 		method->parent = tp;
 		method->return_gtype = import_manager_resolve(self->import_manager, scope, ilmethod->return_fqcn, ilctx);
 		if(tp->tag == type_class) {

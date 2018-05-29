@@ -72,6 +72,7 @@ class_ * class_new(const char * name) {
 	ret->classIndex = -1;
 	//ret->absoluteIndex = -1;
 	ret->vt = NULL;
+	ret->is_abstract = false;
 	return ret;
 }
 

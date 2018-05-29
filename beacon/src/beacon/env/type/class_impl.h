@@ -46,6 +46,7 @@ typedef struct class_ {
 	//vector* static_fieldval_vec;
 	vtable* vt;
 	int classIndex;
+	bool is_abstract;
 } class_;
 
 /**

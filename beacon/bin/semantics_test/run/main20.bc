@@ -1,5 +1,5 @@
 namespace beacon {
-	class AbstractAction2 {
+	abstract class AbstractAction {
 		public:
 		def abstract Foo() -> Void;
 

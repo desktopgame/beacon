@@ -180,6 +180,7 @@ static void CLBC_class(class_loader* self, il_type* iltype, namespace_* parent) 
 	//すでに宣言されているならそれを取得
 	type* tp = CLBC_get_or_load_class(self, parent, iltype, ilctx);
 	class_* cls = TYPE2CLASS(tp);
+	cls->is_abstract = iltype->u.class_->is_abstract;
 	type_init_generic(tp, iltype->u.class_->type_parameter_list->length);
 	//デフォルトで親に Object を持つように
 	CLBC_check_superclass(cls);
