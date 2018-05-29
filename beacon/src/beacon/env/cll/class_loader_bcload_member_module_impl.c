@@ -38,6 +38,12 @@ void CLBC_fields_decl(class_loader* self, il_type* iltype, type* tp, vector* ilf
 		field->modifier = ilfield->modifier;
 		field->parent = tp;
 		field->gtype = import_manager_resolve(self->import_manager, scope, ilfield->fqcn, ilctx);
+		if(modifier_is_abstract(field->modifier) ||
+		   modifier_is_override(field->modifier) ||
+		   modifier_is_native(field->modifier)) {
+			   class_loader_report(self, "shouldn't define field of abstract or native: %s", field->name);
+			   return;
+		   }
 		//NOTE:ここではフィールドの型を設定しません
 		type_add_field(tp, field);
 	}

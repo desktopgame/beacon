@@ -1,0 +1,6 @@
+namespace beacon {
+	class NativeField {
+		public:
+		native String name;
+	}
+}
