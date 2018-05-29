@@ -88,30 +88,9 @@ ast * ast_new_access(access_level level) {
 }
 
 ast * ast_new_modifier(modifier_type type) {
-	if (type == (modifier_static | modifier_native)) {
-		return ast_new(ast_modifier_static_native);
-	}
-	switch (type) {
-//		case modifier_type_public:
-//			return ast_new(ast_modifier_public);
-
-//		case modifier_type_private:
-//			return ast_new(ast_modifier_private);
-
-//		case modifier_type_protected:
-//			return ast_new(ast_modifier_protected);
-		case modifier_none:
-			return ast_new(ast_modifier_none);
-
-		case modifier_static:
-			return ast_new(ast_modifier_static);
-
-		case modifier_native:
-			return ast_new(ast_modifier_native);
-		default:
-			break;
-	}
-	return NULL;
+	ast* ret = ast_new(ast_modifier);
+	ret->u.modifier_value = type;
+	return ret;
 }
 
 ast * ast_new_member_decl(ast * mem) {
@@ -133,9 +112,9 @@ ast * ast_new_member_decl_list(ast* member_list, ast* member) {
 	return ret;
 }
 
-ast * ast_new_field_decl(modifier_type modifier, ast* type_name, char * field_name) {
+ast * ast_new_field_decl(ast* amodifier, ast* type_name, char * field_name) {
 	ast* ret = ast_new(ast_field_decl);
-	ast_push(ret, ast_new_modifier(modifier));
+	ast_push(ret, amodifier);
 //	ast_push(ret, ast_new_field_type_name(type_name));
 	ast_push(ret, type_name);
 	ast_push(ret, ast_new_field_access_name(field_name));
@@ -157,9 +136,9 @@ ast * ast_new_function_decl_empty_params(char * function_name, ast * body, ast *
 	return ast_new_function_decl(function_name, ast_new_blank(), body, return_type);
 }
 
-ast * ast_new_method_decl(modifier_type type, char * func_name, ast* atype_parameter, ast * parameter_list, ast* body, ast* return_type) {
+ast * ast_new_method_decl(ast* amodifier, char * func_name, ast* atype_parameter, ast * parameter_list, ast* body, ast* return_type) {
 	ast* ret = ast_new(ast_method_decl);
-	ast_push(ret, ast_new_modifier(type));
+	ast_push(ret, amodifier);
 	ast_push(ret, ast_new_method_name(func_name));
 	ast_push(ret, atype_parameter);
 	ast_push(ret, parameter_list);
@@ -169,8 +148,8 @@ ast * ast_new_method_decl(modifier_type type, char * func_name, ast* atype_param
 	return ret;
 }
 
-ast * ast_new_method_decl_empty_params(modifier_type type, char * func_name, ast* atype_parameter, ast* body, ast* return_type) {
-	return ast_new_method_decl(type, func_name, atype_parameter, ast_new_blank(), body, return_type);
+ast * ast_new_method_decl_empty_params(ast* amodifier, char * func_name, ast* atype_parameter, ast* body, ast* return_type) {
+	return ast_new_method_decl(amodifier, func_name, atype_parameter, ast_new_blank(), body, return_type);
 }
 
 ast * ast_new_constructor_decl(ast * parameter_list, ast * constructor_chain, ast * body) {

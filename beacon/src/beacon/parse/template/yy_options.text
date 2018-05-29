@@ -7,7 +7,6 @@
 %token <string_value>		IDENT
 %type <chain_type_value>	constructor_chain_type_T
 %type <access_level_value>	access_level_T
-%type <modifier_type_value> modifier_type_T;
 %token DOT COMMA COLON COLO_COLO LINE
 		ADD SUB MUL DIV MOD NOT LSHIFT RSHIFT CHILDA
 		EQUAL NOTEQUAL
@@ -61,6 +60,7 @@ $$SET top_level program
 						function_define
 						method_define
 						field_define
+						modifier_type_T
 						ident_list
 						parameter_list
 						argument_list

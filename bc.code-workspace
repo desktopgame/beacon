@@ -29,7 +29,17 @@
 			"string_view": "c",
 			"memory": "c",
 			"random": "c",
-			"*.ipp": "c"
+			"*.ipp": "c",
+			"__functional_base": "c",
+			"__functional_base_03": "c",
+			"__tree": "c",
+			"__tuple": "c",
+			"array": "c",
+			"chrono": "c",
+			"functional": "c",
+			"ratio": "c",
+			"tuple": "c",
+			"utility": "c"
 		}
 	}
 }

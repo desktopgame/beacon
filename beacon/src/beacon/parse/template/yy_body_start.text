@@ -466,23 +466,15 @@ field_define
 modifier_type_T
 	: /* empty */
 	{
-		$$ = modifier_none;
-	}
-	| STATIC NATIVE
-	{
-		$$ = modifier_static_native();
-	}
-	| NATIVE STATIC
-	{
-		$$ = modifier_static_native();
+		$$ = ast_new_modifier(modifier_none);
 	}
 	| STATIC
 	{
-		$$ = modifier_static;
+		$$ = ast_new_modifier(modifier_static);
 	}
 	| NATIVE
 	{
-		$$ = modifier_native;
+		$$ = ast_new_modifier(modifier_native);
 	}
 	;
 ;;

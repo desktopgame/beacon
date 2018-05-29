@@ -18,7 +18,6 @@
 	ast* ast_value;
 	assign_operator_type assign_otype_value;
 	constructor_chain_type chain_type_value;
-	modifier_type modifier_type_value;
 	access_level access_level_value;
 }
 
@@ -31,7 +30,6 @@
 %token <string_value>		IDENT
 %type <chain_type_value>	constructor_chain_type_T
 %type <access_level_value>	access_level_T
-%type <modifier_type_value> modifier_type_T;
 %token DOT COMMA COLON COLO_COLO LINE
 		ADD SUB MUL DIV MOD NOT LSHIFT RSHIFT CHILDA
 		EQUAL NOTEQUAL
@@ -83,6 +81,7 @@
 						function_define
 						method_define
 						field_define
+						modifier_type_T
 						ident_list
 						parameter_list
 						argument_list
@@ -428,23 +427,15 @@ field_define
 modifier_type_T
 	: /* empty */
 	{
-		$$ = modifier_none;
-	}
-	| STATIC NATIVE
-	{
-		$$ = modifier_static_native();
-	}
-	| NATIVE STATIC
-	{
-		$$ = modifier_static_native();
+		$$ = ast_new_modifier(modifier_none);
 	}
 	| STATIC
 	{
-		$$ = modifier_static;
+		$$ = ast_new_modifier(modifier_static);
 	}
 	| NATIVE
 	{
-		$$ = modifier_native;
+		$$ = ast_new_modifier(modifier_native);
 	}
 	;
 

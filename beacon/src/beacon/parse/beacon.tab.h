@@ -258,11 +258,10 @@ typedef union YYSTYPE
 	ast* ast_value;
 	assign_operator_type assign_otype_value;
 	constructor_chain_type chain_type_value;
-	modifier_type modifier_type_value;
 	access_level access_level_value;
 }
 /* Line 1529 of yacc.c.  */
-#line 259 "beacon.tab.h"
+#line 258 "beacon.tab.h"
 	YYSTYPE;
 # define yystype YYSTYPE /* obsolescent; will be withdrawn */
 # define YYSTYPE_IS_DECLARED 1

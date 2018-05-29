@@ -252,10 +252,7 @@ void ast_print(ast* self) {
 		case ast_access_public: p("public");
 		case ast_access_private: p("private");
 		case ast_access_protected: p("protected");
-		case ast_modifier_none: p("none");
-		case ast_modifier_static: p("static");
-		case ast_modifier_native: p("native");
-		case ast_modifier_static_native: p("static | native");
+		case ast_modifier: p("modifier");
 		case ast_constructor_decl: p("constructor");
 		case ast_constructor_chain: p("constructor chain");
 		case ast_constructor_chain_this: p("this");
@@ -360,10 +357,7 @@ bool ast_is_access(ast * self) {
 }
 
 bool ast_is_modifier(ast * self) {
-	return self->tag == ast_modifier_static ||
-		self->tag == ast_modifier_native ||
-		self->tag == ast_modifier_none ||
-		self->tag == ast_modifier_static_native;
+	return self->tag == ast_modifier;
 }
 
 bool ast_is_stmt(ast* self) {
@@ -405,23 +399,7 @@ access_level ast_cast_to_access(ast * self) {
 
 modifier_type ast_cast_to_modifier(ast * self) {
 	assert(ast_is_modifier(self));
-	switch (self->tag) {
-		case ast_modifier_none:
-			return modifier_none;
-
-		case ast_modifier_static:
-			return modifier_static;
-
-		case ast_modifier_native:
-			return modifier_native;
-
-		case ast_modifier_static_native:
-			return modifier_static | modifier_native;
-
-		default:
-			break;
-	}
-	return modifier_none;
+	return self->u.modifier_value;
 }
 
 constructor_chain_type ast_cast_to_chain_type(ast * self) {

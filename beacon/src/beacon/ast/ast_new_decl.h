@@ -118,12 +118,12 @@ ast* ast_new_member_decl_list(ast* member_list, ast* member);
 
 /**
  * フィールド宣言を表す要素を作成します.
- * @param modifier
+ * @param amodifier
  * @param type_name
  * @param field_name
  * @return
  */
-ast* ast_new_field_decl(modifier_type modifier, ast* type_name, char* field_name);
+ast* ast_new_field_decl(ast* amodifier, ast* type_name, char* field_name);
 
 /**
  * 関数宣言を表す要素を作成します.
@@ -145,7 +145,7 @@ ast* ast_new_function_decl_empty_params(char* function_name, ast* body, ast* ret
 
 /**
  * メソッド宣言を表す要素を作成します.
- * @param modifier
+ * @param amodifier
  * @param func_name
  * @param atype_parameter
  * @param parameter_list
@@ -153,18 +153,18 @@ ast* ast_new_function_decl_empty_params(char* function_name, ast* body, ast* ret
  * @param return_type_name
  * @return
  */
-ast* ast_new_method_decl(modifier_type type, char* func_name, ast* atype_parameter, ast* parameter_list, ast* body, ast* return_type);
+ast* ast_new_method_decl(ast* amodifier, char* func_name, ast* atype_parameter, ast* parameter_list, ast* body, ast* return_type);
 
 /**
  * 引数のないメソッド宣言を表す要素を作成します.
- * @param modifier
+ * @param amodifier
  * @param func_name
  * @param atype_parameter
  * @param body
  * @param return_type_name
  * @return
  */
-ast* ast_new_method_decl_empty_params(modifier_type type, char* func_name, ast* atype_parameter, ast* body, ast* return_type);
+ast* ast_new_method_decl_empty_params(ast* amodifier, char* func_name, ast* atype_parameter, ast* body, ast* return_type);
 
 /**
  * コンストラクタ宣言を表す要素を作成します.

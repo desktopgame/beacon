@@ -111,17 +111,14 @@ typedef enum ast_tag {
 	ast_access_member_list,
 	ast_access_member_tree,
 
-	ast_modifier_none,
-	ast_modifier_static,
-	ast_modifier_native,
-	ast_modifier_static_native,
-
 	ast_member_decl,
 	ast_member_decl_list,
 
 	ast_field_decl,
 	ast_field_type_name,
 	ast_field_access_name,
+
+	ast_modifier,
 
 	ast_function_decl,
 	ast_function_name,
@@ -209,6 +206,7 @@ typedef struct ast {
 		double double_value;
 		char char_value;
 		char* string_value;
+		modifier_type modifier_value;
 	} u;
 	ast_tag tag;
 	uint32_t child_count;
