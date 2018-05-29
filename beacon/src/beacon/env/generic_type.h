@@ -73,6 +73,13 @@ generic_type* generic_type_ref(struct type* core_type);
 generic_type* generic_type_malloc(struct type* core_type, const char* filename, int lineno);
 
 /**
+ * ジェネリックタイプを複製します.
+ * @param self
+ * @return
+ */
+generic_type* generic_type_clone(generic_type* self);
+
+/**
  * 現在のスクリプトコンテキストでどこからも参照されていない
  * generic_type の一覧を解放します。
  */

@@ -130,13 +130,13 @@ static void resolve_non_default(il_factor_invoke * self, enviroment * env, il_co
 		//レシーバの実体化された型の中で、
 		//メソッドの戻り値 'T' が表す位置に対応する実際の型を取り出す。
 		generic_type* instanced_type = (generic_type*)vector_at(receivergType->type_args_list, rgtp->virtual_type_index);
-		self->resolved = instanced_type;
+		self->resolved = generic_type_clone(instanced_type);
 		self->resolved->tag = generic_type_tag_class;
 		generic_type_validate(self->resolved);
 	} else if(rgtp->tag == generic_type_tag_method) {
 		//メソッドに渡された型引数を参照する
 		generic_type* instanced_type = (generic_type*)vector_at(self->type_args, rgtp->virtual_type_index);
-		self->resolved = instanced_type;
+		self->resolved = generic_type_clone(instanced_type);
 		self->resolved->tag = generic_type_tag_class;
 		generic_type_validate(self->resolved);
 	}
@@ -185,6 +185,11 @@ static void il_factor_invoke_check(il_factor_invoke * self, enviroment * env, il
 	assert(ctype != NULL);
 	int temp = -1;
 	self->m = type_find_method(ctype, self->name, self->args, env, ilctx, &temp);
+	XBREAK(
+		!strcmp(self->m->name, "length") && 
+		!strcmp(type_name(ctype), "String") &&
+		self->m->return_gtype->tag != generic_type_tag_none
+	);
 	//self->m = class_find_method(TYPE2CLASS(ctype), self->name, self->args, env, cache, &temp);
 	self->index = temp;
 	vector_pop(ilctx->receiver_vec);

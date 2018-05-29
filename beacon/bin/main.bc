@@ -13,8 +13,13 @@ import "beacon/lang/VectorIterator"
 
 import "beacon/lang/Exception"
 import "beacon/lang/StackTraceElement"
-import "beacon/lang/Tuple"
 
-var t = new beacon::x::Tuple[beacon::x::Tuple[Int, Int], String](new beacon::x::Tuple[Int, Int](5, 5), "Hello");
-Console.writeLine(t.left.left);
-Console.writeLine(t.right);
+var a = new Array[Int](3);
+var b = new Array[Int](3);
+a.set(0, 10);
+a.set(1, 20);
+a.set(2, 5);
+Array.copy[Int](a, 0, b, 0, 3);
+assert b.get(0) != 10;
+assert b.get(1) != 20;
+assert b.get(2) != 5;

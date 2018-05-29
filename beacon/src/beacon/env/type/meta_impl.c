@@ -229,5 +229,6 @@ bool meta_rule_valid(vector* type_params, vector* type_args, il_context* ilctx) 
 }
 
 bool meta_rule_rvalid(vector* type_params, vector* type_args, frame* fr) {
-	assert(false);
+//	assert(false);
+	return true;
 }

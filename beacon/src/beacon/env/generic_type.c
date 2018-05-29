@@ -61,6 +61,17 @@ generic_type* generic_type_malloc(struct type* core_type, const char* filename, 
 	return ret;
 }
 
+generic_type* generic_type_clone(generic_type* self) {
+	generic_type* a = generic_type_new(self->core_type);
+	for(int i=0; i<self->type_args_list->length; i++) {
+		generic_type* e = vector_at(self->type_args_list, i);
+		generic_type_addargs(a, generic_type_clone(e));
+	}
+	a->tag = self->tag;
+	a->virtual_type_index = self->virtual_type_index;
+	return a;
+}
+
 void generic_type_collect() {
 	script_context* ctx = script_context_get_current();
 	//マークを外す

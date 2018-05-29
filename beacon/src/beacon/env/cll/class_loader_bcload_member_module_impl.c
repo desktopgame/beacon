@@ -88,10 +88,14 @@ void CLBC_methods_decl(class_loader* self, il_type* iltype, type* tp, vector* il
 			method->u.script_method = script_method_new();
 		}
 		method->parent = tp;
-		if(tp->tag == type_class) {
-			XBREAK(!strcmp(TYPE2CLASS(tp)->name, "String") && !strcmp(method->name, "length"));
-		}
 		method->return_gtype = import_manager_resolve(self->import_manager, scope, ilmethod->return_fqcn, ilctx);
+		if(tp->tag == type_class) {
+			XBREAK(
+				!strcmp(TYPE2CLASS(tp)->name, "String") &&
+				!strcmp(method->name, "length") &&
+				method->return_gtype->tag != generic_type_tag_none
+			);
+		}
 		//ILパラメータを実行時パラメータへ変換
 		//NOTE:ここでは戻り値の型,引数の型を設定しません
 		//     class_loader_sgload_complete参照
