@@ -81,7 +81,8 @@ void CLBC_methods_decl(class_loader* self, il_type* iltype, type* tp, vector* il
 		method->modifier = ilmethod->modifier;
 		type_parameter_list_dup(ilmethod->type_parameter_list, method->type_parameter_list, ilctx);
 		//インターフェースなら空
-		if (tp->tag == type_interface) {
+		if (tp->tag == type_interface ||
+		   modifier_is_abstract(method->modifier)) {
 			method->type = method_type_abstract;
 			method->u.script_method = NULL;
 		} else {
