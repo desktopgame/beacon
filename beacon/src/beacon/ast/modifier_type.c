@@ -17,6 +17,10 @@ bool modifier_is_abstract(modifier_type type) {
 	return (type & modifier_abstract);
 }
 
+bool modifier_is_override(modifier_type type) {
+	return (type & modifier_override);
+}
+
 void modifier_print(modifier_type type) {
 	if (type == (modifier_static | modifier_native)) {
 		text_printf("static native");
@@ -37,6 +41,10 @@ void modifier_print(modifier_type type) {
 
 		case modifier_abstract:
 			text_printf("abstract");
+			break;
+
+		case modifier_override:
+			text_printf("override");
 			break;
 
 		default:
