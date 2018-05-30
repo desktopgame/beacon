@@ -39,6 +39,20 @@ method * interface_find_method(interface_ * self, const char * name, vector * ar
 	return meta_find_method(self->method_list, name, args, env, ilctx, outIndex);
 }
 
+vector* interface_method_flatten_list(vector* inter_list) {
+	vector* ret = vector_new();
+	for(int i=0; i<inter_list->length; i++) {
+		interface_* inter = vector_at(inter_list, i);
+		//インターフェイスのメソッド一覧を挿入
+		vector* list = interface_method_flatten(inter);
+		for(int j=0; j<list->length; j++) {
+			vector_push(ret, vector_at(list, j));
+		}
+		vector_delete(list, vector_deleter_null);
+	}
+	return ret;
+}
+
 vector* interface_method_flatten(interface_* self) {
 	vector* ret = vector_new();
 	interface_method_flattenImpl(self, ret, 0);
