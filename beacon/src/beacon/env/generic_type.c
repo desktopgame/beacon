@@ -281,6 +281,10 @@ bool generic_type_rule_polymorphic(vector* rules, generic_type* other, il_contex
 	return valid;
 }
 
+struct type* generic_type_to_type(generic_type* self) {
+	return self->core_type;
+}
+
 //private
 static generic_type* generic_type_applyImpl(generic_type* self, il_context* ilctx, frame* fr) {
 	//ここで型変数が追加されちゃってた

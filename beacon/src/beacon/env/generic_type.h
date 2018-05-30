@@ -5,6 +5,8 @@
 #include "type_parameter_rule.h"
 #include <stdbool.h>
 #include <assert.h>
+
+#define GENERIC2TYPE(gtype) (generic_type_to_type(gtype))
 struct type;
 struct method;
 struct enviroment;
@@ -206,4 +208,11 @@ bool generic_type_rule_test(generic_type* self, vector* rules, struct il_context
  * @return
  */
 bool generic_type_rule_polymorphic(vector* rules, generic_type* other, struct il_context* ilctx);
+
+/**
+ * generic_type を type へ変換します.
+ * @param self
+ * @return
+ */
+struct type* generic_type_to_type(generic_type* self);
 #endif // !SIGNAL_ENV_GENERIC_TYPE_H
