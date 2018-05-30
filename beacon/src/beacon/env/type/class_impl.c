@@ -365,6 +365,39 @@ method * class_get_impl_method(class_ * self, type * interType, int interMIndex)
 	return vector_at(vtAt->elements, interMIndex);
 }
 
+bool class_contains_method_tree(class_* self, method* m) {
+	assert(self != NULL);
+	assert(m != NULL);
+	class_* ptr = self;
+	bool ret = false;
+	do {
+		if(class_contains_method(ptr->method_list, m)) {
+			ret = true;
+			break;
+		}
+		//親クラスへ
+		if(ptr->super_class != NULL) {
+			ptr = ptr->super_class->core_type->u.class_;
+		} else {
+			ptr = NULL;
+		}
+	} while(ptr != NULL);
+	return ret;
+}
+
+bool class_contains_method(vector* method_list, method* m) {
+	assert(!modifier_is_static(m->modifier));
+	bool ret = false;
+	for(int i=0; i<method_list->length; i++) {
+		method* mE = vector_at(method_list, i);
+		if(method_override(m, mE)) {
+			ret = true;
+			break;
+		}
+	}
+	return ret;
+}
+
 int class_distance(class_ * self, class_ * other) {
 	if (self == other) {
 		return 0;

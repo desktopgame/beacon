@@ -271,6 +271,22 @@ struct method* class_get_smethod(class_* self, int index);
 struct method* class_get_impl_method(class_* self, type* interType, int interMIndex);
 
 /**
+ * 指定のクラスから Object クラスまでのいずれかの階層に m が含まれるなら true.
+ * @param self
+ * @param m
+ * @return
+ */
+bool class_contains_method_tree(class_* self, method* m);
+
+/**
+ * 指定のメソッド一覧に指定のメソッドが含まれるなら true.
+ * 静的メソッドの場合はエラーを発生させます。
+ * @param method_list
+ * @param m
+ */
+bool class_contains_method(vector* method_list, method* m);
+
+/**
  * self と other の距離を返します.
  * @param self
  * @param other
