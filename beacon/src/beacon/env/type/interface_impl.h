@@ -55,6 +55,14 @@ void interface_add_method(interface_* self, struct method* m);
 struct method* interface_find_method(interface_* self, const char * name, vector * args, struct enviroment * env, il_context* ilctx, int * outIndex);
 
 /**
+ * あるインターフェイスとそれ自体が実装しているインターフェイスの一覧の
+ * メソッドを一つのリストにして返します.
+ * @param self
+ * @return 呼び出し側で開放してください
+ */
+vector* interface_method_flatten(interface_* self);
+
+/**
  * インターフェイスをダンプします.
  * @param self
  * @param depth

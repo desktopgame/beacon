@@ -11,6 +11,7 @@
 static void interface_delete_method(vector_item item);
 static void interface_type_parameter_delete(vector_item item);
 static void interface_generic_type_list_delete(vector_item item);
+static void interface_method_flattenImpl(interface_* self, vector* dest, int depth);
 
 type * type_wrap_interface(interface_ * self) {
 	type* ret = type_new();
@@ -36,6 +37,12 @@ void interface_add_method(interface_ * self, method * m) {
 
 method * interface_find_method(interface_ * self, const char * name, vector * args, enviroment * env, il_context* ilctx, int * outIndex) {
 	return meta_find_method(self->method_list, name, args, env, ilctx, outIndex);
+}
+
+vector* interface_method_flatten(interface_* self) {
+	vector* ret = vector_new();
+	interface_method_flattenImpl(self, ret, 0);
+	return ret;
 }
 
 void interface_dump(interface_ * self, int depth) {
@@ -107,4 +114,18 @@ static void interface_type_parameter_delete(vector_item item) {
 static void interface_generic_type_list_delete(vector_item item) {
 	generic_type* e = (generic_type*)item;
 	generic_type_delete(e);
+}
+
+static void interface_method_flattenImpl(interface_* self, vector* dest, int depth) {
+	//tekitou
+	assert(depth < 42);
+	for(int i=0; i<self->method_list->length; i++) {
+		method* m = vector_at(self->method_list, i);
+		vector_push(dest, m);
+	}
+	for(int i=0; i<self->impl_list->length; i++) {
+		generic_type* e = vector_at(self->impl_list, i);
+		interface_* inter = TYPE2INTERFACE(e->core_type);
+		interface_method_flattenImpl(inter, dest, depth + 1);
+	}
 }
