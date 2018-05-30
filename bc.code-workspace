@@ -39,7 +39,9 @@
 			"functional": "c",
 			"ratio": "c",
 			"tuple": "c",
-			"utility": "c"
+			"utility": "c",
+			"ios": "cpp",
+			"locale": "cpp"
 		}
 	}
 }

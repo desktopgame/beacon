@@ -1,0 +1,9 @@
+import "beacon/lang/Iterable"
+
+namespace beacon {
+	class FieldOverwrap {
+		public:
+		String name;
+		Int name;
+	}
+}

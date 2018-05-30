@@ -380,7 +380,17 @@ vector* class_generic_type_list_to_interface_list(vector* list);
  * クラスが全てのメソッドを正しく実装しているなら true.
  * インターフェイスを一つも持っていないなら 常にtrue です。
  * @param cls
+ * @param out
  * @return
  */
-bool class_implement_valid(class_* cls);
+bool class_implement_valid(class_* cls, method** out);
+
+/**
+ * クラスのフィールド名のうち重複するものがないなら true.
+ * 親クラスのフィールドとの重複は無視されます。
+ * @param cls
+ * @param out
+ * @return
+ */
+bool class_field_valid(class_* cls, struct field** out);
 #endif // !SIGNAL_ENV_CLASS_H

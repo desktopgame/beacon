@@ -582,7 +582,8 @@ vector* class_generic_type_list_to_interface_list(vector* list) {
 	return ret;
 }
 
-bool class_implement_valid(class_* cls) {
+bool class_implement_valid(class_* cls, method** out) {
+	(*out) = NULL;
 	if(cls->impl_list->length == 0) {
 		return true;
 	}
@@ -592,6 +593,7 @@ bool class_implement_valid(class_* cls) {
 	for(int i=0; i<methods->length; i++) {
 		method* m = vector_at(methods, i);
 		if(!class_contains_method_tree(cls, m)) {
+			(*out) = m;
 			contains = false;
 			break;
 		}
@@ -599,6 +601,24 @@ bool class_implement_valid(class_* cls) {
 	vector_delete(inter_list, vector_deleter_null);
 	vector_delete(methods, vector_deleter_null);
 	return contains;
+}
+
+bool class_field_valid(class_* cls, field** out) {
+	(*out) = NULL;
+	bool ret = true;
+	for(int i=0; i<cls->field_list->length; i++) {
+		field* f = (field*)vector_at(cls->field_list, i);
+		for(int j=0; j<cls->field_list->length; j++) {
+			field* fE = (field*)vector_at(cls->field_list, j);
+			if(f == fE) { continue; }
+			if(!strcmp(f->name, fE->name)) {
+				ret = false;
+				(*out) = fE;
+				break;
+			}
+		}
+	}
+	return ret;
 }
 
 //private
