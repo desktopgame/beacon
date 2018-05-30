@@ -81,11 +81,7 @@ type * fqcn_type(fqcn_cache * self, namespace_ * current) {
 interface_ * fqcn_interface(fqcn_cache * self, namespace_ * current) {
 	//FIXME:コピペ(fqcn_class)
 	type* tp = fqcn_type(self, current);
-	if (tp == NULL) {
-		return NULL;
-	}
-	assert(tp->tag == type_interface);
-	if (tp->tag != type_interface) {
+	if (tp == NULL || tp->tag != type_interface) {
 		return NULL;
 	}
 	return tp->u.interface_;
@@ -94,11 +90,7 @@ interface_ * fqcn_interface(fqcn_cache * self, namespace_ * current) {
 class_ * fqcn_class(fqcn_cache * self, namespace_ * current) {
 	//FIXME:コピペ(fqcn_interface)
 	type* tp = fqcn_type(self, current);
-	if (tp == NULL) {
-		return NULL;
-	}
-	//assert(tp->tag == type_class);
-	if (tp->tag != type_class) {
+	if (tp == NULL || tp->tag != type_class) {
 		return NULL;
 	}
 	return tp->u.class_;
