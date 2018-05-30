@@ -12,9 +12,7 @@ typedef enum access_domain {
 	domain_none,
 	domain_public,
 	domain_private,
-	domain_protected,
-	domain_static,
-	domain_native,
+	domain_protected
 } access_domain;
 
 /**
@@ -37,25 +35,4 @@ bool domain_is_private(access_domain a);
  */
 bool domain_is_protected(access_domain a);
 
-/**
- * 指定のフラグが static を含むなら true.
- * @param a
- * @return
- */
-bool domain_is_static(access_domain a);
-/**
- * 指定のフラグが native を含むなら true.
- * @param a
- * @return
- */
-bool domain_is_native(access_domain a);
-
-/**
- * 指定のドメイン空間で 引数の修飾子&アクセスレベル が許容されるならtrue.
- * @param self
- * @param m
- * @param a
- * @return
- */
-bool domain_accept(access_domain self, modifier_type m, access_level a);
 #endif // !SIGNAL_ENV_ACCESS_DOMAIN_H
