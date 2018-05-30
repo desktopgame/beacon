@@ -9,12 +9,21 @@
 #include "bc_array.h"
 //proto
 static void bc_exception_nativeInit(method* parent, frame* fr, enviroment* env);
+static type* gBCExceptionType = NULL;
 
 void bc_exception_init() {
 	namespace_* lang = namespace_lang();
 	class_* excClass = class_new_preload("Exception");
 	namespace_add_type(lang, type_wrap_class(excClass));
 	class_define_native_method(excClass, "nativeInit", bc_exception_nativeInit);
+}
+
+type* bc_exception_type() {
+	if(gBCExceptionType == NULL) {
+		namespace_* lang = namespace_lang();
+		gBCExceptionType = namespace_get_type(lang, "Exception");
+	}
+	return gBCExceptionType;
 }
 //private
 static void bc_exception_nativeInit(method* parent, frame* fr, enviroment* env) {

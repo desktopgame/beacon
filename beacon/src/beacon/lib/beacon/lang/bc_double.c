@@ -3,12 +3,21 @@
 
 //proto
 static void bc_double_nativeInit(method* parent, frame* fr, enviroment* env);
+static type* gBCDoubleType = NULL;
 
 void bc_double_init() {
 	namespace_* lang = namespace_lang();
 	class_* doubleClass = class_new_preload("Double");
 	namespace_add_type(lang, type_wrap_class(doubleClass));
 	class_define_native_method(doubleClass, "nativeInit", bc_double_nativeInit);
+}
+
+type* bc_double_type() {
+	if(gBCDoubleType == NULL) {
+		namespace_* lang = namespace_lang();
+		gBCDoubleType = namespace_get_type(lang, "Double");
+	}
+	return gBCDoubleType;
 }
 //private
 static void bc_double_nativeInit(method* parent, frame* fr, enviroment* env) {

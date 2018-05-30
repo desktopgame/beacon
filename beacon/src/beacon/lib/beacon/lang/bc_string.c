@@ -4,6 +4,7 @@
 
 //proto
 static void bc_string_nativeInit(method* parent, frame* fr, enviroment* env);
+static type* gBCStringType = NULL;
 
 void bc_string_init() {
 	namespace_* lang = namespace_lang();
@@ -16,6 +17,14 @@ string_buffer * bc_string_raw(object* self) {
 	vector_item e = vector_at(self->native_slot_vec, 0);
 	assert(self->tag == object_string);
 	return (string_buffer*)e;
+}
+
+type* bc_string_type() {
+	if(gBCStringType == NULL) {
+		namespace_* lang = namespace_lang();
+		gBCStringType = namespace_get_type(lang, "String");
+	}
+	return gBCStringType;
 }
 
 //private

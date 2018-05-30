@@ -7,13 +7,21 @@
 
 //proto
 static void bc_object_nativeToString(method* parent, frame* fr, enviroment* env);
-
+static type* gBCObjectType = NULL;
 
 void bc_object_init() {
 	namespace_* lang = namespace_lang();
 	class_* objClass = class_new_preload("Object");
 	namespace_add_type(lang, type_wrap_class(objClass));
 	class_define_native_method(objClass, "nativeToString", bc_object_nativeToString);
+}
+
+type* bc_object_type() {
+	if(gBCObjectType == NULL) {
+		namespace_* lang = namespace_lang();
+		gBCObjectType = namespace_get_type(lang, "Object");
+	}
+	return gBCObjectType;
 }
 
 //private

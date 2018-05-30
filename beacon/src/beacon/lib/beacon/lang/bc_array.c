@@ -13,7 +13,7 @@ static void bc_array_nativeSet(method* parent, frame* fr, enviroment* env);
 static void bc_array_nativeGet(method* parent, frame* fr, enviroment* env);
 static void bc_array_nativeCopy(method* parent, frame* fr, enviroment* env);
 
-static type* gSgArrayType = NULL;
+static type* gBCArrayType = NULL;
 
 void bc_array_init() {
 	namespace_* lang = namespace_lang();
@@ -26,8 +26,11 @@ void bc_array_init() {
 }
 
 type * bc_array_type() {
-	namespace_* lang = namespace_lang();
-	return namespace_get_type(lang, "Array");
+	if(gBCArrayType == NULL) {
+		namespace_* lang = namespace_lang();
+		gBCArrayType = namespace_get_type(lang, "Array");
+	}
+	return gBCArrayType;
 }
 
 object * bc_array_new(struct generic_type* gtype, int length, frame * fr) {
