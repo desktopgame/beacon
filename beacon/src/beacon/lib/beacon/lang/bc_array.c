@@ -25,14 +25,14 @@ void bc_array_init() {
 	class_define_native_method(arrayClass, "nativeCopy", bc_array_nativeCopy);
 }
 
-type * bc_array_class() {
+type * bc_array_type() {
 	namespace_* lang = namespace_lang();
 	return namespace_get_type(lang, "Array");
 }
 
 object * bc_array_new(struct generic_type* gtype, int length, frame * fr) {
 	il_context* ilctx = il_context_new(NULL);
-	type* arrayType = bc_array_class();
+	type* arrayType = bc_array_type();
 
 	vector* args = vector_new();
 	vector* type_args = vector_new();

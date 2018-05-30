@@ -15,7 +15,7 @@ void bc_array_init();
  * beacon::lang::Arrayクラスを返します.
  * @return
  */
-struct type* bc_array_class();
+struct type* bc_array_type();
 
 /**
  * beacon::lang::Arrayクラスを作成します.
