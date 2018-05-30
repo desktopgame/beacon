@@ -582,6 +582,25 @@ vector* class_generic_type_list_to_interface_list(vector* list) {
 	return ret;
 }
 
+bool class_implement_valid(class_* cls) {
+	if(cls->impl_list->length == 0) {
+		return true;
+	}
+	bool contains = true;
+	vector* inter_list = class_generic_type_list_to_interface_list(cls->impl_list);
+	vector* methods = interface_method_flatten_list(inter_list);
+	for(int i=0; i<methods->length; i++) {
+		method* m = vector_at(methods, i);
+		if(!class_contains_method_tree(cls, m)) {
+			contains = false;
+			break;
+		}
+	}
+	vector_delete(inter_list, vector_deleter_null);
+	vector_delete(methods, vector_deleter_null);
+	return contains;
+}
+
 //private
 static void class_create_vtable_top(class_* self) {
 	for (int i = 0; i < self->method_list->length; i++) {

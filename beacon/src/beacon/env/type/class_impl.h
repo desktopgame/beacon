@@ -375,4 +375,12 @@ vector* class_generic_type_list_to_class_list(vector* list);
  * @return
  */
 vector* class_generic_type_list_to_interface_list(vector* list);
+
+/**
+ * クラスが全てのメソッドを正しく実装しているなら true.
+ * インターフェイスを一つも持っていないなら 常にtrue です。
+ * @param cls
+ * @return
+ */
+bool class_implement_valid(class_* cls);
 #endif // !SIGNAL_ENV_CLASS_H

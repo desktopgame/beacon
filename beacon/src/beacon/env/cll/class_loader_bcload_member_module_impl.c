@@ -14,6 +14,7 @@
 #include "../../env/parameter.h"
 #include "../../env/type_parameter.h"
 #include "../../util/xassert.h"
+#include "../../util/text.h"
 #include <assert.h>
 #include <string.h>
 
@@ -41,7 +42,7 @@ void CLBC_fields_decl(class_loader* self, il_type* iltype, type* tp, vector* ilf
 		if(modifier_is_abstract(field->modifier) ||
 		   modifier_is_override(field->modifier) ||
 		   modifier_is_native(field->modifier)) {
-			   class_loader_report(self, "shouldn't define field of abstract or native: %s", field->name);
+			   class_loader_report(self, "shouldn't define field of abstract or native: %s\n", field->name);
 			   return;
 		   }
 		//NOTE:ここではフィールドの型を設定しません
@@ -128,6 +129,11 @@ void CLBC_methods_decl(class_loader* self, il_type* iltype, type* tp, vector* il
 	ILCTX_POP_TYPE(ilctx);
 	ILCTX_POP_NAMESPACE(ilctx);
 	il_context_delete(ilctx);
+	//実装されていないインターフェイスを確認する
+	if(tp->tag == type_class &&
+	  !class_implement_valid(tp->u.class_)) {
+		class_loader_report(self, "invalid implement: %s\n", tp->u.class_->name);
+	}
 }
 
 void CLBC_methods_impl(class_loader* self, namespace_* scope, il_type* iltype, type* tp, vector* ilmethods, vector* sgmethods) {

@@ -38,12 +38,15 @@ static void CLBC_class_decl(class_loader * self, il_type * iltype, type * tp, na
 	CL_ERROR(self);
 	CLBC_fields_decl(self, iltype, tp, iltype->u.class_->field_list, scope);
 	CLBC_fields_decl(self, iltype, tp, iltype->u.class_->sfield_list, scope);
+	CL_ERROR(self);
 
 	CLBC_methods_decl(self, iltype, tp, iltype->u.class_->method_list, scope);
 	CLBC_methods_decl(self, iltype, tp, iltype->u.class_->smethod_list, scope);
+	CL_ERROR(self);
 
 	CLBC_ctor_decl(self, iltype, tp, scope);
 	class_create_vtable(tp->u.class_);
+	CL_ERROR(self);
 }
 
 static void CLBC_class_impl(class_loader * self, il_type * iltype, type * tp, namespace_ * scope) {
