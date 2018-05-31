@@ -16,6 +16,9 @@ typedef enum cache_kind {
 
 	cachekind_interface_decl,
 	cachekind_interface_impl,
+
+	cachekind_enum_decl,
+	cachekind_enum_impl,
 } cache_kind;
 
 /**

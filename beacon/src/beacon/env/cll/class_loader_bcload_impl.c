@@ -166,6 +166,26 @@ static void CLBC_enum(class_loader * self, il_type * iltype, namespace_ * parent
 		f->static_value->paint = paint_marked;
 		class_add_field(cls, f);
 	}
+	//宣言のロードを予約
+	type_cache* tc = type_cache_init(
+		type_cache_new(),
+		self,
+		iltype,
+		tp,
+		parent,
+		cachekind_enum_decl
+	);
+	vector_push(self->type_cache_vec, tc);
+	//実装のロードを予約
+	type_cache* mtc = type_cache_init(
+		type_cache_new(),
+		self,
+		iltype,
+		tp,
+		parent,
+		cachekind_enum_decl
+	);
+	vector_push(self->type_cache_vec, mtc);
 }
 
 static void CLBC_class(class_loader* self, il_type* iltype, namespace_* parent) {

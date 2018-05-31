@@ -1,6 +1,7 @@
 #include "class_loader_link_impl.h"
 #include "../type_cache.h"
 #include "../type_impl.h"
+#include "../field.h"
 #include "../../il/il_type_impl.h"
 #include "../../util/text.h"
 #include "class_loader_bcload_member_module_impl.h"
@@ -14,10 +15,15 @@ static void CLBC_class_impl(class_loader* self, il_type* iltype, type* tp, names
 static void CLBC_interface_decl(class_loader* self, il_type* iltype, type* tp, namespace_* scope);
 static void CLBC_interface_impl(class_loader* self, il_type* iltype, type* tp, namespace_* scope);
 
+static void CLBC_enum_decl(class_loader * self, il_type * iltype, type * tp, namespace_ * scope);
+static void CLBC_enum_impl(class_loader * self, il_type * iltype, type * tp, namespace_ * scope);
+
 static void CLBC_excec_class_decl(class_loader* self);
 static void CLBC_excec_class_impl(class_loader* self);
 static void CLBC_excec_interface_decl(class_loader* self);
 static void CLBC_excec_interface_impl(class_loader* self);
+static void CLBC_excec_enum_decl(class_loader* self);
+static void CLBC_excec_enum_impl(class_loader* self);
 static void CLBC_yield(class_loader* parent, class_loader* target);
 
 void class_loader_link(class_loader* self, link_type type) {
@@ -25,9 +31,11 @@ void class_loader_link(class_loader* self, link_type type) {
 	if(type == link_decl) {
 		CLBC_excec_class_decl(self);
 		CLBC_excec_interface_decl(self);
+		CLBC_excec_enum_decl(self);
 	} else if(type == link_impl) {
 		CLBC_excec_class_impl(self);
 		CLBC_excec_interface_impl(self);
+		CLBC_excec_enum_impl(self);
 	} else assert(false);
 }
 
@@ -68,6 +76,19 @@ static void CLBC_interface_decl(class_loader * self, il_type * iltype, type * tp
 static void CLBC_interface_impl(class_loader * self, il_type * iltype, type * tp, namespace_ * scope) {
 	CL_ERROR(self);
 	CLBC_methods_impl(self, scope, iltype, tp, iltype->u.interface_->method_list, tp->u.interface_->method_list);
+}
+
+static void CLBC_enum_decl(class_loader * self, il_type * iltype, type * tp, namespace_ * scope) {
+	//重複するフィールドを確認する
+	field* outField = NULL;
+	if((tp->tag == type_enum ||
+	   tp->tag == type_class) &&
+	   !class_field_valid(tp->u.class_, &outField)) {
+		class_loader_report(self, "invalid field declaration: %s @%s\n", tp->u.class_->name, outField->name);
+	}
+}
+
+static void CLBC_enum_impl(class_loader * self, il_type * iltype, type * tp, namespace_ * scope) {
 }
 
 static void CLBC_excec_class_decl(class_loader* self) {
@@ -124,6 +145,35 @@ static void CLBC_excec_interface_impl(class_loader* self) {
 		CLBC_interface_impl(e->context, e->iltype, e->tp, e->scope);
 	}
 }
+
+static void CLBC_excec_enum_decl(class_loader* self) {
+	CL_ERROR(self);
+	int count = 0;
+	for (int i = 0; i < self->type_cache_vec->length; i++) {
+		type_cache* e = (type_cache*)vector_at(self->type_cache_vec, i);
+		if (e->kind != cachekind_enum_decl || e->consume) {
+			continue;
+		}
+		count++;
+		e->consume = true;
+		CLBC_enum_decl(e->context, e->iltype, e->tp, e->scope);
+	}
+}
+
+static void CLBC_excec_enum_impl(class_loader* self) {
+	CL_ERROR(self);
+	int count = 0;
+	for (int i = 0; i < self->type_cache_vec->length; i++) {
+		type_cache* e = (type_cache*)vector_at(self->type_cache_vec, i);
+		if (e->kind != cachekind_enum_impl || e->consume) {
+			continue;
+		}
+		count++;
+		e->consume = true;
+		CLBC_enum_impl(e->context, e->iltype, e->tp, e->scope);
+	}
+}
+//FIXME:コピペ
 
 static void CLBC_yield(class_loader* parent, class_loader* target) {
 	CL_ERROR(parent);

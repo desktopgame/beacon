@@ -96,6 +96,11 @@ void generic_type_collect() {
 }
 
 void generic_type_lostownership(generic_type* a) {
+	//enumはクラスの一種だが、
+	//generic_Selfを持たない
+	if(a == NULL) {
+		return;
+	}
 	assert(a->core_type != NULL);
 	assert(a->core_type->generic_self == a);
 	generic_type_deletercr_self(a);

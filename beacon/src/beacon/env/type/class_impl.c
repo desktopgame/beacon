@@ -41,6 +41,7 @@ static method* class_find_impl_method(class_* self, method* virtualMethod);
 static void class_vtable_vec_delete(vector_item item);
 static void class_type_parameter_delete(vector_item item);
 static void class_generic_type_list_delete(vector_item item);
+static bool class_field_validImpl(vector* field_vec, field** out);
 
 type * type_wrap_class(class_ * self) {
 	type* ret = type_new();
@@ -604,21 +605,8 @@ bool class_implement_valid(class_* cls, method** out) {
 }
 
 bool class_field_valid(class_* cls, field** out) {
-	(*out) = NULL;
-	bool ret = true;
-	for(int i=0; i<cls->field_list->length; i++) {
-		field* f = (field*)vector_at(cls->field_list, i);
-		for(int j=0; j<cls->field_list->length; j++) {
-			field* fE = (field*)vector_at(cls->field_list, j);
-			if(f == fE) { continue; }
-			if(!strcmp(f->name, fE->name)) {
-				ret = false;
-				(*out) = fE;
-				break;
-			}
-		}
-	}
-	return ret;
+	return class_field_validImpl(cls->field_list, out) &&
+		   class_field_validImpl(cls->sfield_list, out);
 }
 
 //private
@@ -718,4 +706,23 @@ static void class_type_parameter_delete(vector_item item) {
 static void class_generic_type_list_delete(vector_item item) {
 	generic_type* e = (generic_type*)item;
 //	generic_type_delete(e);
+}
+
+
+static bool class_field_validImpl(vector* field_vec, field** out) {
+	(*out) = NULL;
+	bool ret = true;
+	for(int i=0; i<field_vec->length; i++) {
+		field* f = (field*)vector_at(field_vec, i);
+		for(int j=0; j<field_vec->length; j++) {
+			field* fE = (field*)vector_at(field_vec, j);
+			if(f == fE) { continue; }
+			if(!strcmp(f->name, fE->name)) {
+				ret = false;
+				(*out) = fE;
+				break;
+			}
+		}
+	}
+	return ret;
 }
