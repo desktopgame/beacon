@@ -3,7 +3,6 @@
 
 //proto
 static void bc_double_nativeInit(method* parent, frame* fr, enviroment* env);
-static type* gBCDoubleType = NULL;
 
 void bc_double_init() {
 	namespace_* lang = namespace_lang();
@@ -13,11 +12,8 @@ void bc_double_init() {
 }
 
 type* bc_double_type() {
-	if(gBCDoubleType == NULL) {
-		namespace_* lang = namespace_lang();
-		gBCDoubleType = namespace_get_type(lang, "Double");
-	}
-	return gBCDoubleType;
+	namespace_* lang = namespace_lang();
+	return namespace_get_type(lang, "Double");
 }
 //private
 static void bc_double_nativeInit(method* parent, frame* fr, enviroment* env) {

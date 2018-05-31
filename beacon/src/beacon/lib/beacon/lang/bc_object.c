@@ -7,7 +7,6 @@
 
 //proto
 static void bc_object_nativeToString(method* parent, frame* fr, enviroment* env);
-static type* gBCObjectType = NULL;
 
 void bc_object_init() {
 	namespace_* lang = namespace_lang();
@@ -17,11 +16,8 @@ void bc_object_init() {
 }
 
 type* bc_object_type() {
-	if(gBCObjectType == NULL) {
-		namespace_* lang = namespace_lang();
-		gBCObjectType = namespace_get_type(lang, "Object");
-	}
-	return gBCObjectType;
+	namespace_* lang = namespace_lang();
+	return namespace_get_type(lang, "Object");
 }
 
 //private

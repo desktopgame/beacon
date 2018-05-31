@@ -3,7 +3,6 @@
 
 //proto
 static void bc_char_nativeInit(method* parent, frame* fr, enviroment* env);
-static type* gBCCharType = NULL;
 
 void bc_char_init() {
 	namespace_* lang = namespace_lang();
@@ -13,11 +12,8 @@ void bc_char_init() {
 }
 
 type* bc_char_type() {
-	if(gBCCharType == NULL) {
-		namespace_* lang = namespace_lang();
-		gBCCharType = namespace_get_type(lang, "Char");
-	}
-	return gBCCharType;
+	namespace_* lang = namespace_lang();
+	return namespace_get_type(lang, "Char");
 }
 
 //private

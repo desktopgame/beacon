@@ -3,7 +3,6 @@
 
 //proto
 static void bc_int_nativeInit(method* parent, frame* fr, enviroment* env);
-static type* gBCIntType = NULL;
 
 void bc_int_init() {
 	namespace_* lang =  namespace_lang();
@@ -13,11 +12,8 @@ void bc_int_init() {
 }
 
 type* bc_int_type() {
-	if(gBCIntType == NULL) {
-		namespace_* lang = namespace_lang();
-		gBCIntType = namespace_get_type(lang, "Int");
-	}
-	return gBCIntType;
+	namespace_* lang = namespace_lang();
+	return namespace_get_type(lang, "Int");
 }
 //private
 static void bc_int_nativeInit(method* parent, frame* fr, enviroment* env) {

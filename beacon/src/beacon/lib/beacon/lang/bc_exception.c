@@ -9,7 +9,6 @@
 #include "bc_array.h"
 //proto
 static void bc_exception_nativeInit(method* parent, frame* fr, enviroment* env);
-static type* gBCExceptionType = NULL;
 
 void bc_exception_init() {
 	namespace_* lang = namespace_lang();
@@ -19,11 +18,8 @@ void bc_exception_init() {
 }
 
 type* bc_exception_type() {
-	if(gBCExceptionType == NULL) {
-		namespace_* lang = namespace_lang();
-		gBCExceptionType = namespace_get_type(lang, "Exception");
-	}
-	return gBCExceptionType;
+	namespace_* lang = namespace_lang();
+	return namespace_get_type(lang, "Exception");
 }
 //private
 static void bc_exception_nativeInit(method* parent, frame* fr, enviroment* env) {

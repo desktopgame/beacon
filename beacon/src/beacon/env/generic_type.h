@@ -7,6 +7,8 @@
 #include <assert.h>
 
 #define GENERIC2TYPE(gtype) (generic_type_to_type(gtype))
+#define TYPE2GENERIC(type) (type->generic_self)
+
 struct type;
 struct method;
 struct enviroment;

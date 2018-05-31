@@ -10,7 +10,6 @@ static void bc_console_writeLine(method* parent, frame* fr, enviroment* env);
 static void bc_console_write(method* parent, frame* fr, enviroment* env);
 static void bc_console_readLine(method* parent, frame* fr, enviroment* env);
 static void bc_console_read(method* parent, frame* fr, enviroment* env);
-static type* gBCConsoleType = NULL;
 
 void bc_console_init() {
 	namespace_* lang = namespace_lang();
@@ -23,11 +22,8 @@ void bc_console_init() {
 }
 
 type* bc_console_type() {
-	if(gBCConsoleType == NULL) {
-		namespace_* lang = namespace_lang();
-		gBCConsoleType = namespace_get_type(lang, "Console");
-	}
-	return gBCConsoleType;
+	namespace_* lang = namespace_lang();
+	return namespace_get_type(lang, "Console");
 }
 
 //private

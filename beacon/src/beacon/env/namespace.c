@@ -6,6 +6,7 @@
 #include "type_interface.h"
 #include "type_impl.h"
 #include "script_context.h"
+#include "../lib/bc_library_interface.h"
 #include "../util/text.h"
 #include "../util/mem.h"
 
@@ -122,35 +123,35 @@ namespace_ * namespace_lang() {
 }
 
 type * namespace_object_type() {
-	return namespace_get_type(namespace_lang(), "Object");
+	return bc_object_type();
 }
 
 type * namespace_int_type() {
-	return namespace_get_type(namespace_lang(), "Int");
+	return bc_int_type();
 }
 
 type * namespace_double_type() {
-	return namespace_get_type(namespace_lang(), "Double");
+	return bc_double_type();
 }
 
 type * namespace_char_type() {
-	return namespace_get_type(namespace_lang(), "Char");
+	return bc_char_type();
 }
 
 type * namespace_string_type() {
-	return namespace_get_type(namespace_lang(), "String");
+	return bc_string_type();
 }
 
 type * namespace_bool_type() {
-	return namespace_get_type(namespace_lang(), "Bool");
+	return bc_bool_type();
 }
 
 type * namespace_void_type() {
-	return namespace_get_type(namespace_lang(), "Void");
+	return bc_void_type();
 }
 
 type * namespace_null_type() {
-	return namespace_get_type(namespace_lang(), "Null");
+	return bc_null_type();
 }
 
 void namespace_dump() {

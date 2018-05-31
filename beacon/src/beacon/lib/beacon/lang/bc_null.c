@@ -1,7 +1,6 @@
 #include "bc_null.h"
 #include "../../bc_library_impl.h"
 
-static type* gBCNullType = NULL;
 
 void bc_null_init() {
 	namespace_* lang = namespace_lang();
@@ -10,9 +9,6 @@ void bc_null_init() {
 }
 
 type* bc_null_type() {
-	if(gBCNullType == NULL) {
-		namespace_* lang = namespace_lang();
-		gBCNullType = namespace_get_type(lang, "Null");
-	}
-	return gBCNullType;
+	namespace_* lang = namespace_lang();
+	return namespace_get_type(lang, "Null");
 }

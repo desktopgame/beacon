@@ -1,7 +1,6 @@
 #include "bc_bool.h"
 #include "../../bc_library_impl.h"
 
-static type* gBCBoolType = NULL;
 
 void bc_bool_init() {
 	namespace_* lang = namespace_lang();
@@ -10,9 +9,6 @@ void bc_bool_init() {
 }
 
 type* bc_bool_type() {
-	if(gBCBoolType == NULL) {
-		namespace_* lang = namespace_lang();
-		gBCBoolType = namespace_get_type(lang, "Bool");
-	}
-	return gBCBoolType;
+	namespace_* lang = namespace_lang();
+	return namespace_get_type(lang, "Bool");
 }
