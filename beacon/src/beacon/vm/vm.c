@@ -78,6 +78,7 @@ void vm_resume(frame * self, enviroment * env, int pos) {
 		self->ref_stack = save;
 	}
 	vector_delete(self->defer_vec, vm_delete_defctx);
+	self->defer_vec = NULL;
 }
 
 void vm_native_throw(frame * self, object * exc) {

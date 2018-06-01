@@ -10,6 +10,7 @@
 static void remove_from_parent(frame* self);
 static void frame_markStatic(field* item);
 static void frame_markRecursive(frame* self);
+static void frame_mark_defer(frame* self);
 
 frame * frame_new() {
 	frame* ret = (frame*)MEM_MALLOC(sizeof(frame));
@@ -24,6 +25,7 @@ frame * frame_new() {
 	ret->children_vec = vector_new();
 	ret->defer_at = 0;
 	//ret->defer_vec = vector_new();
+	ret->defer_vec = NULL;
 	ret->type_args_vec = vector_new();
 	return ret;
 }
@@ -86,6 +88,16 @@ static void frame_markRecursive(frame* self) {
 		object* e = (object*)vector_at(self->ref_stack, i);
 		object_markall(e);
 	}
+	//deferのために一時的に保存された領域
+	frame_mark_defer(self);
+	//例外をマークする
+	object_markall(self->exception);
+}
+
+static void frame_mark_defer(frame* self) {
+	if(self->defer_vec == NULL) {
+		return;
+	}
 	for(int i=0; i<self->defer_vec->length; i++) {
 		defer_context* defctx = vector_at(self->defer_vec, i);
 		vector* bind = defctx->bind;
@@ -94,6 +106,4 @@ static void frame_markRecursive(frame* self) {
 			object_markall(e);
 		}
 	}
-	//例外をマークする
-	object_markall(self->exception);
 }
