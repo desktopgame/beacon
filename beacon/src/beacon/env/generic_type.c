@@ -298,7 +298,15 @@ bool generic_type_override(generic_type* super, generic_type* sub) {
 		//ここでsubの境界がsuperを含む必要がある
 		return false;
 	}
-	return type_distance(super->core_type, sub->core_type) != -1;
+	int ret = type_distance(super->core_type, sub->core_type);
+	if(ret == -1) {
+		return false;
+	}
+	for(int i=0; i<super->type_args_list->length; i++) {
+		generic_type* superP = vector_at(super->type_args_list, i);
+		generic_type* subP = vector_at(sub->type_args_list, i);
+	}
+	return true;
 }
 
 //private

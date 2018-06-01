@@ -4,6 +4,7 @@
 #include "../env/field.h"
 #include "../env/heap.h"
 #include "../util/mem.h"
+#include "defer_context.h"
 
 //proto
 static void remove_from_parent(frame* self);
@@ -22,7 +23,7 @@ frame * frame_new() {
 	ret->exception = NULL;
 	ret->children_vec = vector_new();
 	ret->defer_at = 0;
-	ret->defer_vec = vector_new();
+	//ret->defer_vec = vector_new();
 	ret->type_args_vec = vector_new();
 	return ret;
 }
@@ -45,16 +46,13 @@ void frame_markall(frame * self) {
 }
 
 void frame_delete(frame * self) {
-
 	remove_from_parent(self);
 	vector_clear(self->value_stack);
 	vector_clear(self->ref_stack);
-
 	heap_gc(heap_get());
-
-	//constant_pool_delete(self->pool);
-	//operand_stack_delete(self->operand_stack);
-	vector_delete(self->defer_vec, vector_deleter_null);
+	//これは使い回せないので、
+	//VMを起動する前に毎回確保して、毎回捨てる
+	//vector_delete(self->defer_vec, vector_deleter_null);
 	vector_delete(self->value_stack, vector_deleter_null);
 	vector_delete(self->ref_stack, vector_deleter_null);
 	vector_delete(self->children_vec, vector_deleter_null);
@@ -87,6 +85,14 @@ static void frame_markRecursive(frame* self) {
 	for (int i = 0; i < self->ref_stack->length; i++) {
 		object* e = (object*)vector_at(self->ref_stack, i);
 		object_markall(e);
+	}
+	for(int i=0; i<self->defer_vec->length; i++) {
+		defer_context* defctx = vector_at(self->defer_vec, i);
+		vector* bind = defctx->bind;
+		for(int j=0; j<bind->length; j++) {
+			object* e = vector_at(bind, j);
+			object_markall(e);
+		}
 	}
 	//例外をマークする
 	object_markall(self->exception);

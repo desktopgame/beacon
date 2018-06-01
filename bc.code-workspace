@@ -41,7 +41,10 @@
 			"tuple": "c",
 			"utility": "c",
 			"ios": "cpp",
-			"locale": "cpp"
+			"locale": "cpp",
+			"iosfwd": "cpp",
+			"iterator": "cpp",
+			"vector": "cpp"
 		}
 	}
 }

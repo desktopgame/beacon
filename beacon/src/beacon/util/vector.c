@@ -149,4 +149,11 @@ void vector_deleter_free(vector_item item) {
 void vector_deleter_null(vector_item item) {
 }
 
+vector* vector_clone(vector* source) {
+	vector* ret = vector_new();
+	for(int i=0; i<source->length; i++) {
+		vector_push(ret, vector_at(source, i));
+	}
+	return ret;
+}
 #undef SLOT_SIZE

@@ -173,4 +173,10 @@ void vector_deleter_free(vector_item item);
  * @param item
  */
 void vector_deleter_null(vector_item item);
+
+/**
+ * @param source
+ * @return
+ */
+vector* vector_clone(vector* source);
 #endif // !SIGNAL_UTIL_VECTOR_H

@@ -22,6 +22,7 @@
 #include "../util/text.h"
 #include "../lib/beacon/lang/bc_string.h"
 #include "line_range.h"
+#include "defer_context.h"
 #include "../env/heap.h"
 #include "../env/generic_type.h"
 //proto
@@ -40,6 +41,7 @@ static bool stack_popb(frame* self);
 static void remove_from_parent(frame* self);
 static void frame_markStatic(field* item);
 static void frame_markallImpl(frame* self);
+static void vm_delete_defctx(vector_item e);
 
 //Stack Top
 #define STI(a) stack_topi(a)
@@ -65,12 +67,17 @@ void vm_execute(frame* self, enviroment* env) {
 }
 
 void vm_resume(frame * self, enviroment * env, int pos) {
+	self->defer_vec = vector_new();
 	vm_run(self, env, pos, -1);
 	while(self->defer_vec->length > 0) {
-		label* e = (label*)vector_pop(self->defer_vec);
-		vm_run(self, env, e->cursor, e->cursor);
+		defer_context* defctx = (defer_context*)vector_pop(self->defer_vec);
+		label* offset = defctx->offset;
+		vector* save = self->ref_stack;
+		self->ref_stack = defctx->bind;
+		vm_run(self, env, offset->cursor, offset->cursor);
+		self->ref_stack = save;
 	}
-	vector_clear(self->defer_vec);
+	vector_delete(self->defer_vec, vm_delete_defctx);
 }
 
 void vm_native_throw(frame * self, object * exc) {
@@ -727,8 +734,12 @@ static void vm_run(frame * self, enviroment * env, int pos, int deferStart) {
 			}
 			case op_defer_register:
 			{
-				label* l = (label*)enviroment_source_at(env, ++IDX);
-				vector_push(self->defer_vec, l);
+				label* offset = (label*)enviroment_source_at(env, ++IDX);
+				vector* bind = vector_clone(self->ref_stack);
+				defer_context* defctx = defer_context_new();
+				defctx->offset = offset;
+				defctx->bind = bind;
+				vector_push(self->defer_vec, defctx);
 				break;
 			}
 			case op_breakpoint:
@@ -840,4 +851,9 @@ static bool stack_popb(frame* self) {
 	object* ret = (object*)vector_pop(self->value_stack);
 	assert(ret->tag == object_bool);
 	return ret->u.bool_;
+}
+
+static void vm_delete_defctx(vector_item e) {
+	defer_context* defctx = (defer_context*)e;
+	defer_context_delete(defctx);
 }
