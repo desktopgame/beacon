@@ -217,4 +217,11 @@ bool generic_type_rule_polymorphic(vector* rules, generic_type* other, struct il
  * @return
  */
 struct type* generic_type_to_type(generic_type* self);
+
+/**
+ * @param super
+ * @param sub
+ * @return
+ */
+bool generic_type_override(generic_type* super, generic_type* sub);
 #endif // !SIGNAL_ENV_GENERIC_TYPE_H

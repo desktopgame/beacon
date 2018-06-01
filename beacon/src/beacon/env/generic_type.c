@@ -290,6 +290,17 @@ struct type* generic_type_to_type(generic_type* self) {
 	return self->core_type;
 }
 
+bool generic_type_override(generic_type* super, generic_type* sub) {
+	if(super->virtual_type_index != -1) {
+		return true;
+	}
+	if(sub->virtual_type_index != -1) {
+		//ここでsubの境界がsuperを含む必要がある
+		return false;
+	}
+	return type_distance(super->core_type, sub->core_type) != -1;
+}
+
 //private
 static generic_type* generic_type_applyImpl(generic_type* self, il_context* ilctx, frame* fr) {
 	//ここで型変数が追加されちゃってた
