@@ -55,12 +55,6 @@ typedef struct generic_type {
 #define generic_type_new(ctype) (generic_type_malloc(ctype, __FILE__, __LINE__))
 
 /**
- * 型引数を検査します.
- * @param self
- */
-generic_type* generic_type_validate(generic_type* self);
-
-/**
  * core_typeがNULL以外なら generic_selfを参照し、
  * NULLなら新規作成します。
  * @param core_type

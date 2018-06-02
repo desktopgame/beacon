@@ -80,7 +80,6 @@ void il_factor_variable_local_load(il_factor_variable_local * self, enviroment *
 generic_type* il_factor_variable_local_eval(il_factor_variable_local * self, enviroment * env, il_context* ilctx) {
 	il_factor_variable_local_load(self, env, ilctx);
 	assert(self->type != variable_local_undefined);
-	generic_type_validate(self->gt);
 	return self->gt;
 }
 

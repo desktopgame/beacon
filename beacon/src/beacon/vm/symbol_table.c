@@ -29,7 +29,6 @@ symbol_entry* symbol_table_entry(symbol_table* self, generic_type* gtp, const ch
 	if (gtp == NULL) {
 		return NULL;
 	}
-	generic_type_validate(gtp);
 	int ret = self->count;
 	symbol_entry* e = symbol_entry_new(name);
 	e->index = self->count;

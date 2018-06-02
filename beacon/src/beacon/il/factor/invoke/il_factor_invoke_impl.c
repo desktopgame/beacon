@@ -124,7 +124,6 @@ static void resolve_non_default(il_factor_invoke * self, enviroment * env, il_co
 		return;
 	}
 	generic_type* receivergType = il_factor_eval(self->receiver, env, ilctx);
-	generic_type_validate(receivergType);
 	generic_type* rgtp = self->m->return_gtype;
 	if(rgtp->tag == generic_type_tag_class) {
 		//レシーバの実体化された型の中で、
@@ -132,13 +131,11 @@ static void resolve_non_default(il_factor_invoke * self, enviroment * env, il_co
 		generic_type* instanced_type = (generic_type*)vector_at(receivergType->type_args_list, rgtp->virtual_type_index);
 		self->resolved = generic_type_clone(instanced_type);
 		self->resolved->tag = generic_type_tag_class;
-		generic_type_validate(self->resolved);
 	} else if(rgtp->tag == generic_type_tag_method) {
 		//メソッドに渡された型引数を参照する
 		generic_type* instanced_type = (generic_type*)vector_at(self->type_args, rgtp->virtual_type_index);
 		self->resolved = generic_type_clone(instanced_type);
 		self->resolved->tag = generic_type_tag_class;
-		generic_type_validate(self->resolved);
 	}
 }
 
@@ -149,16 +146,13 @@ static void resolve_default(il_factor_invoke * self, enviroment * env, il_contex
 	generic_type* receivergType = il_factor_eval(self->receiver, env, ilctx);
 	generic_type* rgtp = self->m->return_gtype;
 //	virtual_type returnvType = self->m->return_vtype;
-	generic_type_validate(receivergType);
 	//内側に型変数が含まれているかもしれないので、
 	//それをここで展開する。
 	vector_push(ilctx->type_args_vec, self->type_args);
 	vector_push(ilctx->receiver_vec, receivergType);
-	generic_type_validate(rgtp);
 	self->resolved = generic_type_apply(rgtp, ilctx);
 	vector_pop(ilctx->receiver_vec);
 	vector_pop(ilctx->type_args_vec);
-	generic_type_validate(self->resolved);
 }
 
 static void il_factor_invoke_check(il_factor_invoke * self, enviroment * env, il_context* ilctx) {
@@ -179,7 +173,7 @@ static void il_factor_invoke_check(il_factor_invoke * self, enviroment * env, il
 	//対応するメソッドを検索
 	il_type_argument_resolve(self->type_args, ilctx);
 	vector_push(ilctx->type_args_vec, self->type_args);
-	vector_push(ilctx->receiver_vec, generic_type_validate(il_factor_eval(self->receiver, env, ilctx)));
+	vector_push(ilctx->receiver_vec, il_factor_eval(self->receiver, env, ilctx));
 
 	type* ctype = gtype->core_type;
 	assert(ctype != NULL);

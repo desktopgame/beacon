@@ -31,17 +31,6 @@ generic_type * generic_type_new(type * core_type) {
 }
 */
 
-generic_type* generic_type_validate(generic_type* self) {
-//	#if defined(VSCDEBUG)
-	assert(self != NULL);
-	assert((self)->core_type != NULL || self->virtual_type_index != -1);
-	for(int i=0; i<self->type_args_list->length; i++) {
-		generic_type_validate((generic_type*)vector_at(self->type_args_list, i));
-	}
-	return self;
-//	#endif
-}
-
 generic_type* generic_type_ref(type* core_type) {
 	if(core_type == NULL) {
 		return generic_type_new(core_type);
@@ -108,7 +97,6 @@ void generic_type_lostownership(generic_type* a) {
 
 void generic_type_addargs(generic_type* self, generic_type* a) {
 	assert(a != NULL);
-	generic_type_validate(a);
 	vector_push(self->type_args_list, a);
 }
 

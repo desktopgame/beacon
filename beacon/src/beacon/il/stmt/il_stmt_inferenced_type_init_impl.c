@@ -55,7 +55,6 @@ void il_stmt_inferenced_type_init_load(il_stmt_inferenced_type_init * self, envi
 	if(il_error_panic()) {
 		return;
 	}
-	generic_type_validate(gtp);
 	if(gtp->type_args_list->length > 0) {
 		generic_type* a = (generic_type*)vector_at(gtp->type_args_list, 0);
 		int x = 0;

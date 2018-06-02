@@ -79,7 +79,6 @@ generic_type* il_factor_call_op_eval(il_factor_call_op* self, enviroment* env, i
 	if(il_error_panic()) {
 		return ret;
 	}
-	generic_type_validate(ret);
 	return ret;
 }
 
