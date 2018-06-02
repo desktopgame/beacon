@@ -1,0 +1,8 @@
+namespace beacon {
+	class OverrideError : Iterable[Int] {
+		public:
+		def iterate() -> Iterator[String] {
+			
+		}
+	}
+}
