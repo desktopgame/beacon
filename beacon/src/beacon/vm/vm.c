@@ -407,7 +407,7 @@ static void vm_run(frame * self, enviroment * env, int pos, int deferStart) {
 				text_printfln("");
 				generic_type_print(v->gtype);
 				text_printfln("");
-				int dist = generic_type_distance(gtype, v->gtype, NULL);
+				int dist = generic_type_distance(gtype, v->gtype);
 				object* b = object_bool_get(dist >= 0);
 				vector_push(self->value_stack, b);
 				break;

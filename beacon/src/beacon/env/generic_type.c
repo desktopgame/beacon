@@ -17,8 +17,8 @@
 
 //proto
 static generic_type* generic_type_applyImpl(generic_type* self, il_context* ilctx, frame* fr);
-static int generic_type_distanceImpl(generic_type* self, generic_type* other, il_context* ilctx, frame* fr);
-static int generic_type_distanceForm(generic_type* self, generic_type* other, il_context* ilctx, frame* fr);
+static int generic_type_distanceImpl(generic_type* self, generic_type* other, frame* fr);
+static int generic_type_distanceForm(generic_type* self, generic_type* other, frame* fr);
 static generic_type* generic_type_typeargs_at(il_context* ilctx, frame* fr, int index);
 static generic_type* generic_type_receiver_at(il_context* ilctx, frame* fr, int index);
 static void generic_type_delete_self(vector_item item);
@@ -100,12 +100,12 @@ void generic_type_addargs(generic_type* self, generic_type* a) {
 	vector_push(self->type_args_list, a);
 }
 
-int generic_type_distance(generic_type * self, generic_type * other, il_context* ilctx) {
-	return generic_type_distanceImpl(self, other, ilctx, NULL);
+int generic_type_distance(generic_type * self, generic_type * other) {
+	return generic_type_distanceImpl(self, other, NULL);
 }
 
 int generic_type_rdistance(generic_type* self, generic_type* other, frame* fr) {
-	return generic_type_distanceImpl(self, other, NULL, fr);
+	return generic_type_distanceImpl(self, other, fr);
 }
 
 void generic_type_print(generic_type * self) {
@@ -240,9 +240,9 @@ static generic_type* generic_type_applyImpl(generic_type* self, il_context* ilct
 	return copy;
 }
 
-static int generic_type_distanceImpl(generic_type* self, generic_type* other, il_context* ilctx, frame* fr) {
+static int generic_type_distanceImpl(generic_type* self, generic_type* other, frame* fr) {
 	if(fr != NULL) {
-		return generic_type_distanceForm(self, other, ilctx, fr);
+		return generic_type_distanceForm(self, other, fr);
 	}
 //*
 //要求されている型は T
@@ -281,11 +281,11 @@ static int generic_type_distanceImpl(generic_type* self, generic_type* other, il
 	//どちらも具体的な型
 	} else {
 //*/
-		return generic_type_distanceForm(self, other, ilctx, fr);
+		return generic_type_distanceForm(self, other, fr);
 	}
 }
 
-static int generic_type_distanceForm(generic_type* self, generic_type* other, il_context* ilctx, frame* fr) {
+static int generic_type_distanceForm(generic_type* self, generic_type* other, frame* fr) {
 	assert(self->core_type != NULL);
 	assert(other->core_type != NULL);
 	int dist = type_distance(self->core_type, other->core_type);
@@ -308,7 +308,7 @@ static int generic_type_distanceForm(generic_type* self, generic_type* other, il
 	for(int i=0; i<self->type_args_list->length; i++) {
 		generic_type* a = vector_at(self->type_args_list, i);
 		generic_type* b = vector_at(target->type_args_list, i);
-		int calc = generic_type_distanceImpl(a, b, ilctx, fr);
+		int calc = generic_type_distanceImpl(a, b, fr);
 		if(calc == -1 || calc > 0) {
 			dist = -1;
 			break;

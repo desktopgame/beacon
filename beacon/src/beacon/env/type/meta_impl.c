@@ -38,8 +38,8 @@ int meta_calc_score(vector* params, vector* ilargs, enviroment* env, il_context*
 				a,
 			//	generic_type_apply(argType, ilctx),
 			//	param->gtype,
-				argType,
-				ilctx
+				argType
+			//	ilctx
 			);
 		}
 		score += dist;

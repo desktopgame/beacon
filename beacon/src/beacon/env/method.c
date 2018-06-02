@@ -91,19 +91,27 @@ bool method_override(method* superM, method* subM) {
 		superM->parameter_list->length != subM->parameter_list->length) {
 		return false;
 	}
-	//return true;
-	//*
+	il_context* ilctx = il_context_new(NULL);
+	vector_push(ilctx->type_vec, superM->parent);
 	//全ての引数を比較
 	for (int i = 0; i < superM->parameter_list->length; i++) {
 		parameter* superP = ((parameter*)vector_at(superM->parameter_list, i));
 		parameter* subP = ((parameter*)vector_at(subM->parameter_list, i));
 		generic_type* superGT = superP->gtype;
+		generic_type* superGT2 = generic_type_apply(superGT, ilctx);
 		generic_type* subGT = subP->gtype;
-		if(!generic_type_override(superGT, subGT)) { return false; }
+		if(generic_type_distance(superGT2, subGT) != 0) { return false; }
 	}
 	generic_type* superRet = superM->return_gtype;
+	generic_type* superRet2 = generic_type_apply(superRet, ilctx);
 	generic_type* subRet = subM->return_gtype;
-	return generic_type_override(superRet, subRet);
+	generic_type_print(superRet); text_printfln("");
+	generic_type_print(superRet2); text_printfln("");
+	generic_type_print(subRet); text_printfln("");
+	int ret =generic_type_distance(superRet2, subRet);
+	vector_pop(ilctx->type_vec);
+	il_context_delete(ilctx);
+	return ret != -1;
 }
 
 int method_for_generic_index(method * self, const char * name) {
