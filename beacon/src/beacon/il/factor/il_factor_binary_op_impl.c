@@ -44,17 +44,17 @@ void il_factor_binary_op_dump(il_factor_binary_op * self, int depth) {
 }
 
 void il_factor_binary_op_generate(il_factor_binary_op * self, enviroment* env) {
-	il_factor_binary_op_generate_impl(self, env, ilctx, self->type);
+	il_factor_binary_op_generate_impl(self, env, self->type);
 }
 
 void il_factor_binary_op_load(il_factor_binary_op * self, enviroment * env) {
-	il_factor_load(self->left, env, ilctx);
-	il_factor_load(self->right, env, ilctx);
+	il_factor_load(self->left, env);
+	il_factor_load(self->right, env);
 }
 
 generic_type* il_factor_binary_op_eval(il_factor_binary_op * self, enviroment * env) {
-	generic_type* ltype = il_factor_eval(self->left, env, ilctx);
-	generic_type* rtype = il_factor_eval(self->right, env, ilctx);
+	generic_type* ltype = il_factor_eval(self->left, env);
+	generic_type* rtype = il_factor_eval(self->right, env);
 	//左辺か右辺を解釈できなかった
 	if(il_error_panic()) {
 		return NULL;
@@ -82,8 +82,8 @@ generic_type* il_factor_binary_op_eval(il_factor_binary_op * self, enviroment * 
 
 char* il_factor_binary_op_tostr(il_factor_binary_op* self, enviroment* env) {
 	string_buffer* sb = string_buffer_new();
-	char* left = il_factor_tostr(self->left, env, ilctx);
-	char* right = il_factor_tostr(self->right, env, ilctx);
+	char* left = il_factor_tostr(self->left, env);
+	char* right = il_factor_tostr(self->right, env);
 	string_buffer_appendf(sb, "%s %s %s", left, il_factor_binary_op_optostr(self), right);
 	MEM_FREE(left);
 	MEM_FREE(right);
@@ -117,11 +117,11 @@ static char* il_factor_binary_op_optostr(il_factor_binary_op* self) {
 
 static void il_factor_binary_op_generate_impl(il_factor_binary_op * self, enviroment * env, ilbinary_op_type c) {
 	//ここで逆にしておく
-	il_factor_generate(self->right, env, ilctx);
-	il_factor_generate(self->left, env, ilctx);
+	il_factor_generate(self->right, env);
+	il_factor_generate(self->left, env);
 	int counts = 0;
-	generic_type* ltype = (generic_type*)il_factor_eval(self->left, env, ilctx);
-	generic_type* rtype = (generic_type*)il_factor_eval(self->right, env, ilctx);
+	generic_type* ltype = (generic_type*)il_factor_eval(self->left, env);
+	generic_type* rtype = (generic_type*)il_factor_eval(self->right, env);
 	if (generic_type_int(ltype) &&
 		generic_type_int(rtype)) {
 		opcode_buf_add(env->buf, (vector_item)bi_operator_to_opi(c));

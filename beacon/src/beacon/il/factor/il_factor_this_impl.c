@@ -4,6 +4,7 @@
 #include "../../util/mem.h"
 #include "../../vm/enviroment.h"
 #include "../../env/type_interface.h"
+#include "../../env/compile_context.h"
 #include <assert.h>
 
 il_factor_this* il_factor_this_new() {
@@ -26,7 +27,7 @@ void il_factor_this_load(il_factor_this * self, enviroment * env) {
 }
 
 generic_type* il_factor_this_eval(il_factor_this * self, enviroment * env) {
-	return ((type*)vector_top(ilctx->type_vec))->generic_self;
+	return cctop_type()->generic_self;
 }
 
 char* il_factor_this_tostr(il_factor_this* self, enviroment* env) {

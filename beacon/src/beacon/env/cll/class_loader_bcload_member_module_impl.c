@@ -31,6 +31,7 @@ void CLBC_fields_decl(class_loader* self, il_type* iltype, type* tp, vector* ilf
 	CL_ERROR(self);
 	ccpush_namespace(scope);
 	ccpush_type(tp);
+	ccset_class_loader(self);
 	for (int i = 0; i < ilfields->length; i++) {
 		vector_item e = vector_at(ilfields, i);
 		il_field* ilfield = (il_field*)e;
@@ -50,10 +51,12 @@ void CLBC_fields_decl(class_loader* self, il_type* iltype, type* tp, vector* ilf
 	}
 	ccpop_namespace();
 	ccpop_type();
+	ccset_class_loader(NULL);
 }
 
 void CLBC_fields_impl(class_loader* self, namespace_* scope, vector* ilfields, vector* sgfields) {
 	CL_ERROR(self);
+	ccset_class_loader(self);
 	for (int i = 0; i < sgfields->length; i++) {
 		vector_item e = vector_at(sgfields, i);
 		field* fi = (field*)e;
@@ -62,12 +65,14 @@ void CLBC_fields_impl(class_loader* self, namespace_* scope, vector* ilfields, v
 		il_field* ilfield = ((il_field*)vector_at(ilfields, i));
 		ccpop_type();
 	}
+	ccset_class_loader(NULL);
 }
 
 void CLBC_methods_decl(class_loader* self, il_type* iltype, type* tp, vector* ilmethods, namespace_* scope) {
 	CL_ERROR(self);
 	ccpush_namespace(scope);
 	ccpush_type(tp);
+	ccset_class_loader(self);
 	for (int i = 0; i < ilmethods->length; i++) {
 		//メソッド一覧から取り出す
 		vector_item e = vector_at(ilmethods, i);
@@ -123,6 +128,7 @@ void CLBC_methods_decl(class_loader* self, il_type* iltype, type* tp, vector* il
 	}
 	ccpop_type();
 	ccpop_namespace();
+	ccset_class_loader(NULL);
 	//実装されていないインターフェイスを確認する
 	method* outMethod = NULL;
 	if(tp->tag == type_class &&
@@ -140,6 +146,7 @@ void CLBC_methods_decl(class_loader* self, il_type* iltype, type* tp, vector* il
 void CLBC_methods_impl(class_loader* self, namespace_* scope, il_type* iltype, type* tp, vector* ilmethods, vector* sgmethods) {
 	CL_ERROR(self);
 	ccpush_type(tp);
+	ccset_class_loader(self);
 	for (int i = 0; i < sgmethods->length; i++) {
 		vector_item e = vector_at(sgmethods, i);
 		method* me = (method*)e;
@@ -181,6 +188,7 @@ void CLBC_methods_impl(class_loader* self, namespace_* scope, il_type* iltype, t
 		ccpop_type();
 	}
 	ccpop_type();
+	ccset_class_loader(NULL);
 }
 
 
@@ -227,6 +235,7 @@ void CLBC_ctor_impl(class_loader* self, il_type* iltype, type* tp) {
 	//既に登録されたが、
 	//オペコードが空っぽになっているコンストラクタの一覧
 	ccpush_type(tp);
+	ccset_class_loader(self);
 	for (int i = 0; i < constructors->length; i++) {
 		vector_item e = vector_at(constructors, i);
 		constructor* cons = (constructor*)e;
@@ -256,6 +265,7 @@ void CLBC_ctor_impl(class_loader* self, il_type* iltype, type* tp) {
 		ccpop_ctor();
 	}
 	ccpop_type();
+	ccset_class_loader(NULL);
 }
 
 void CLBC_body(class_loader* self, vector* stmt_list, enviroment* dest, namespace_* range) {
@@ -351,6 +361,7 @@ static void CLBC_chain_auto(class_loader * self, il_type * iltype, type * tp, il
 
 static void CLBC_chain_super(class_loader * self, il_type * iltype, type * tp, il_constructor * ilcons, il_constructor_chain * ilchain, enviroment * env) {
 	class_* classz = tp->u.class_;
+	ccset_class_loader(self);
 	//チェインコンストラクタの実引数をプッシュ
 	il_constructor_chain* chain = ilcons->chain;
 	for (int i = 0; i < chain->argument_list->length; i++) {
@@ -378,4 +389,5 @@ static void CLBC_chain_super(class_loader * self, il_type * iltype, type * tp, i
 	//親クラスへのチェインなら即座にフィールドを確保
 	opcode_buf_add(env->buf, (vector_item)op_alloc_field);
 	opcode_buf_add(env->buf, (vector_item)tp->absolute_index);
+	ccset_class_loader(NULL);
 }

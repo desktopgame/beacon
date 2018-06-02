@@ -31,7 +31,7 @@ void il_factor_as_dump(il_factor_as * self, int depth) {
 }
 
 void il_factor_as_generate(il_factor_as * self, enviroment * env) {
-	il_factor_generate(self->fact, env, ilctx);
+	il_factor_generate(self->fact, env);
 /*
 	generic_type* from = il_factor_eval(self->fact, env, ilctx);
 	generic_type* to = generic_cache_gtype(self->fqcn, (namespace_*)vector_top(ilctx->namespace_vec), ilctx);
@@ -52,13 +52,13 @@ void il_factor_as_generate(il_factor_as * self, enviroment * env) {
 }
 
 void il_factor_as_load(il_factor_as * self, enviroment * env) {
-	il_factor_load(self->fact, env, ilctx);
+	il_factor_load(self->fact, env);
 }
 
 generic_type* il_factor_as_eval(il_factor_as * self, enviroment * env) {
-	namespace_* n = (namespace_*)vector_top(ilctx->namespace_vec);
+	namespace_* n = cctop_namespace();
 	//return generic_cache_gtype(self->fqcn, n, ilctx);
-	return import_manager_resolve(ilctx->class_loader_ref->import_manager, n, self->fqcn, ilctx);
+	return import_manager_resolve(ccget_class_loader()->import_manager, n, self->fqcn);
 }
 
 void il_factor_as_delete(il_factor_as * self) {
@@ -69,7 +69,7 @@ void il_factor_as_delete(il_factor_as * self) {
 
 char* il_factor_as_tostr(il_factor_as* self, enviroment* env) {
 	string_buffer* sb = string_buffer_new();
-	char* factstr = il_factor_tostr(self->fact, env, ilctx);
+	char* factstr = il_factor_tostr(self->fact, env);
 	char* to = generic_cache_tostr(self->fqcn);
 	string_buffer_appendf(sb, "%s as %s", factstr, to);
 	MEM_FREE(factstr);

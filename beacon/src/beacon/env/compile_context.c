@@ -6,6 +6,7 @@
 #include "constructor.h"
 #include "fqcn_cache.h"
 #include "generic_type.h"
+#include "class_loader.h"
 
 vector* gContextVec = NULL;
 static compile_context* compile_context_new();
@@ -196,6 +197,14 @@ void cc_disable(compile_state state) {
 
 bool cc_test(compile_state state) {
 	return (cc_current()->state & state) > 0;
+}
+
+void ccset_class_loader(class_loader* cll) {
+	cc_current()->class_loader_ref = cll;
+}
+
+class_loader* ccget_class_loader() {
+	return cc_current()->class_loader_ref;
 }
 
 //private

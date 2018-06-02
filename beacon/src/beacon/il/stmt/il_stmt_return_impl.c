@@ -24,12 +24,12 @@ void il_stmt_return_dump(il_stmt_return * self, int depth) {
 }
 
 void il_stmt_return_generate(il_stmt_return * self, enviroment * env) {
-	il_factor_generate(self->fact, env, ilctx);
+	il_factor_generate(self->fact, env);
 	opcode_buf_add(env->buf, op_return);
 }
 
 void il_stmt_return_load(il_stmt_return * self, enviroment * env) {
-	il_factor_load(self->fact, env, ilctx);
+	il_factor_load(self->fact, env);
 }
 
 void il_stmt_return_delete(il_stmt_return * self) {

@@ -126,4 +126,8 @@ void cc_enable(compile_state state);
 void cc_disable(compile_state state);
 
 bool cc_test(compile_state state);
+
+void ccset_class_loader(struct class_loader* cll);
+
+struct class_loader* ccget_class_loader();
 #endif

@@ -88,7 +88,7 @@ void il_stmt_if_dump(il_stmt_if * self, int depth) {
 
 void il_stmt_if_generate(il_stmt_if * self, enviroment* env) {
 	//if(...)
-	il_factor_generate(self->condition, env, ilctx);
+	il_factor_generate(self->condition, env);
 	label* l1 = opcode_buf_label(env->buf, -1);
 	label* tail = opcode_buf_label(env->buf, -1);
 	// { ... }
@@ -96,7 +96,7 @@ void il_stmt_if_generate(il_stmt_if * self, enviroment* env) {
 	opcode_buf_add(env->buf, l1);
 	for (int i = 0; i < self->body->length; i++) {
 		il_stmt* stmt = (il_stmt*)vector_at(self->body, i);
-		il_stmt_generate(stmt, env, ilctx);
+		il_stmt_generate(stmt, env);
 	}
 	//条件が満たされて実行されたら最後までジャンプ
 	opcode_buf_add(env->buf, op_goto);
@@ -105,14 +105,14 @@ void il_stmt_if_generate(il_stmt_if * self, enviroment* env) {
 	// elif(...)
 	for (int i = 0; i < self->elif_list->length; i++) {
 		il_stmt_elif* elif = (il_stmt_elif*)vector_at(self->elif_list, i);
-		il_factor_generate(elif->condition, env, ilctx);
+		il_factor_generate(elif->condition, env);
 		label* l2 = opcode_buf_label(env->buf, -1);
 		// { ... }
 		opcode_buf_add(env->buf, op_goto_if_false);
 		opcode_buf_add(env->buf, l2);
 		for (int j = 0; j < elif->body->length; j++) {
 			il_stmt* stmt = (il_stmt*)vector_at(elif->body, j);
-			il_stmt_generate(stmt, env, ilctx);
+			il_stmt_generate(stmt, env);
 		}
 		//条件が満たされて実行されたら最後までジャンプ
 		opcode_buf_add(env->buf, op_goto);
@@ -126,29 +126,29 @@ void il_stmt_if_generate(il_stmt_if * self, enviroment* env) {
 	} else {
 		for (int i = 0; i < self->else_body->body->length; i++) {
 			il_stmt* stmt = (il_stmt*)vector_at(self->else_body->body, i);
-			il_stmt_generate(stmt, env, ilctx);
+			il_stmt_generate(stmt, env);
 		}
 		tail->cursor = opcode_buf_nop(env->buf);
 	}
 }
 
 void il_stmt_if_load(il_stmt_if * self, struct enviroment* env) {
-	il_factor_load(self->condition, env, ilctx);
+	il_factor_load(self->condition, env);
 	for(int i=0; i<self->body->length; i++) {
 		il_stmt* e = (il_stmt*)vector_at(self->body, i);
-		il_stmt_load(e, env, ilctx);
+		il_stmt_load(e, env);
 	}
 	for(int i=0; i<self->elif_list->length; i++) {
 		il_stmt_elif* e = (il_stmt_elif*)vector_at(self->elif_list, i);
-		il_factor_load(e->condition, env, ilctx);
+		il_factor_load(e->condition, env);
 		for(int j=0; j<e->body->length; j++) {
 			il_stmt* st = (il_stmt*)vector_at(e->body, j);
-			il_stmt_load(st, env, ilctx);
+			il_stmt_load(st, env);
 		}
 	}
 	for(int i=0; i<self->else_body->body->length; i++) {
 		il_stmt* e = (il_stmt*)vector_at(self->else_body->body, i);
-		il_stmt_load(e, env, ilctx);
+		il_stmt_load(e, env);
 	}
 }
 

@@ -40,39 +40,39 @@ void il_factor_variable_dump(il_factor_variable * self, int depth) {
 }
 
 void il_factor_variable_generate(il_factor_variable * self, enviroment* env) {
-	il_factor_variable_check(self, env, ilctx);
+	il_factor_variable_check(self, env);
 	if(self->type == ilvariable_type_local) {
-		il_factor_variable_local_generate(self->u.local_, env, ilctx);
+		il_factor_variable_local_generate(self->u.local_, env);
 	} else if(self->type == ilvariable_type_static) {
-		il_factor_variable_static_generate(self->u.static_, env, ilctx);
+		il_factor_variable_static_generate(self->u.static_, env);
 	}
 }
 
 void il_factor_variable_load(il_factor_variable * self, enviroment * env) {
-	il_factor_variable_check(self, env, ilctx);
+	il_factor_variable_check(self, env);
 	if(self->type == ilvariable_type_local) {
-		il_factor_variable_local_load(self->u.local_, env, ilctx);
+		il_factor_variable_local_load(self->u.local_, env);
 	} else if(self->type == ilvariable_type_static) {
-		il_factor_variable_static_load(self->u.static_, env, ilctx);
+		il_factor_variable_static_load(self->u.static_, env);
 	}
 }
 
 generic_type* il_factor_variable_eval(il_factor_variable * self, enviroment * env) {
-	il_factor_variable_check(self, env, ilctx);
+	il_factor_variable_check(self, env);
 	generic_type* ret = NULL;
 	if(self->type == ilvariable_type_local) {
-		ret = il_factor_variable_local_eval(self->u.local_, env, ilctx);
+		ret = il_factor_variable_local_eval(self->u.local_, env);
 	} else if(self->type == ilvariable_type_static) {
-		ret = il_factor_variable_static_eval(self->u.static_, env, ilctx);
+		ret = il_factor_variable_static_eval(self->u.static_, env);
 	}
 	return ret;
 }
 
 char* il_factor_variable_tostr(il_factor_variable* self, enviroment* env) {
 	if(self->type == ilvariable_type_local) {
-		return il_factor_variable_local_tostr(self->u.local_, env, ilctx);
+		return il_factor_variable_local_tostr(self->u.local_, env);
 	} else if(self->type == ilvariable_type_static) {
-		return il_factor_variable_static_tostr(self->u.static_, env, ilctx);
+		return il_factor_variable_static_tostr(self->u.static_, env);
 	}
 	return NULL;
 }
@@ -98,7 +98,7 @@ static void il_factor_variable_check(il_factor_variable* self, enviroment* env) 
 	assert(self->fqcn != NULL);
 	//hoge, foo のような文字列の場合
 	if(self->fqcn->scope_vec->length == 0) {
-		namespace_* cur = il_context_namespace(ilctx);
+		namespace_* cur = cc_namespace();
 		class_* ctype = namespace_get_class(cur, self->fqcn->name);
 		if(ctype == NULL) {
 			ctype = namespace_get_class(namespace_lang(), self->fqcn->name);

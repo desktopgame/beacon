@@ -46,11 +46,11 @@ void il_factor_invoke_static_generate(il_factor_invoke_static* self, enviroment*
 		il_type_argument* e = (il_type_argument*)vector_at(self->type_args, i);
 		assert(e->gtype != NULL);
 		opcode_buf_add(env->buf, op_generic_add);
-		generic_type_generate(e->gtype, env, ilctx);
+		generic_type_generate(e->gtype, env);
 	}
 	for(int i=0; i<self->args->length; i++) {
 		il_argument* e = (il_argument*)vector_at(self->args, i);
-		il_factor_generate(e->factor, env, ilctx);
+		il_factor_generate(e->factor, env);
 		if(il_error_panic()) {
 			return;
 		}
@@ -61,13 +61,13 @@ void il_factor_invoke_static_generate(il_factor_invoke_static* self, enviroment*
 }
 
 void il_factor_invoke_static_load(il_factor_invoke_static * self, enviroment * env) {
-	vector_push(ilctx->type_args_vec, self->type_args);
-	il_factor_invoke_static_check(self, env, ilctx);
-	vector_pop(ilctx->type_args_vec);
+	ccpush_type_args(self->type_args);
+	il_factor_invoke_static_check(self, env);
+	ccpop_type_args();
 }
 
 generic_type* il_factor_invoke_static_eval(il_factor_invoke_static * self, enviroment * env) {
-	il_factor_invoke_static_check(self, env, ilctx);
+	il_factor_invoke_static_check(self, env);
 	//メソッドを解決できなかった場合
 	if(il_error_panic()) {
 		return NULL;
@@ -75,10 +75,10 @@ generic_type* il_factor_invoke_static_eval(il_factor_invoke_static * self, envir
 	generic_type* rgtp = self->m->return_gtype;
 //	virtual_type returnvType = self->m->return_vtype;
 	if(rgtp->tag != generic_type_tag_none) {
-		resolve_non_default(self, env, ilctx);
+		resolve_non_default(self, env);
 		return self->resolved;
 	} else {
-		resolve_default(self, env, ilctx);
+		resolve_default(self, env);
 		return self->resolved;
 	}
 	return NULL;
@@ -90,8 +90,8 @@ char* il_factor_invoke_static_tostr(il_factor_invoke_static* self, enviroment* e
 	string_buffer_appends(sb, name);
 	string_buffer_append(sb, '.');
 	string_buffer_appends(sb, self->name);
-	il_factor_type_args_tostr(sb, self->type_args, env, ilctx);
-	il_factor_args_tostr(sb, self->args, env, ilctx);
+	il_factor_type_args_tostr(sb, self->type_args, env);
+	il_factor_args_tostr(sb, self->args, env);
 	MEM_FREE(name);
 	return string_buffer_release(sb);
 }
@@ -124,29 +124,27 @@ static void resolve_default(il_factor_invoke_static * self, enviroment * env) {
 	}
 	generic_type* rgtp = self->m->return_gtype;
 //	virtual_type returnvType = self->m->return_vtype;
-	vector_push(ilctx->type_args_vec, self->type_args);
-	self->resolved = generic_type_apply(rgtp, ilctx);
-	vector_pop(ilctx->type_args_vec);
+	ccpush_type_args(self->type_args);
+	self->resolved = generic_type_apply(rgtp);
+	ccpop_type_args();
 }
 
 static void il_factor_invoke_static_check(il_factor_invoke_static * self, enviroment * env) {
-	class_* cls = il_context_class(ilctx, self->fqcn);
+	class_* cls = cc_class(self->fqcn);
 	int temp = -1;
 //	XSTREQ(self->name, "write");
-	il_type_argument_resolve(self->type_args, ilctx);
+	il_type_argument_resolve(self->type_args);
 	//環境を設定
-	vector_push(ilctx->type_args_vec, self->type_args);
-	ilctx->find_static++;
+	ccpush_type_args(self->type_args);
 	//メソッドを検索
-	self->m = class_find_smethod(cls, self->name, self->args, env, ilctx, &temp);
+	self->m = class_find_smethod(cls, self->name, self->args, env, &temp);
 	self->index = temp;
 	//メソッドが見つからない
 	if(temp == -1) {
 		il_error_report(ilerror_undefined_method, self->name);
 	}
 	//元に戻す
-	ilctx->find_static--;
-	vector_pop(ilctx->type_args_vec);
+	ccpop_type_args();
 }
 
 static void il_factor_invoke_static_args_delete(vector_item item) {

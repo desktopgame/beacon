@@ -27,8 +27,8 @@ void il_factor_assign_op_dump(il_factor_assign_op* self, int depth) {
 }
 
 void il_factor_assign_op_load(il_factor_assign_op* self, enviroment* env) {
-	il_factor_load(self->left, env, ilctx);
-	il_factor_load(self->right, env, ilctx);
+	il_factor_load(self->left, env);
+	il_factor_load(self->right, env);
 }
 
 void il_factor_assign_op_generate(il_factor_assign_op* self, enviroment* env) {
@@ -36,7 +36,7 @@ void il_factor_assign_op_generate(il_factor_assign_op* self, enviroment* env) {
 	if(self->left->type == ilfactor_variable) {
 		il_factor_variable* ilvar = IL_FACT2VAR(self->left);
 		symbol_entry* e = symbol_table_entry(env->sym_table, NULL, ilvar->fqcn->name);
-		il_factor_generate(self->right, env, ilctx);
+		il_factor_generate(self->right, env);
 		opcode_buf_add(env->buf, op_store);
 		opcode_buf_add(env->buf, e->index);
 	} else if(self->left->type == ilfactor_member_op) {
@@ -46,11 +46,11 @@ void il_factor_assign_op_generate(il_factor_assign_op* self, enviroment* env) {
 			il_factor_variable* ilvar = IL_FACT2VAR(ilsrc);
 			//staticなフィールドへの代入
 			if(ilvar->type == ilvariable_type_static) {
-				class_* cls = il_context_class(ilctx, ilvar->u.static_->fqcn);
+				class_* cls = cc_class(ilvar->u.static_->fqcn);
 				int temp = -1;
 				class_find_sfield(cls, ilmem->name, &temp);
 				assert(temp != -1);
-				il_factor_generate(self->right, env, ilctx);
+				il_factor_generate(self->right, env);
 				opcode_buf_add(env->buf, (vector_item)op_put_static);
 				opcode_buf_add(env->buf, (vector_item)cls->parent->absolute_index);
 				opcode_buf_add(env->buf, (vector_item)temp);
@@ -58,13 +58,13 @@ void il_factor_assign_op_generate(il_factor_assign_op* self, enviroment* env) {
 			//インスタンスフィールドへの代入
 			} else {
 			inst: {
-				generic_type* gt = il_factor_eval(ilmem->fact, env, ilctx);
+				generic_type* gt = il_factor_eval(ilmem->fact, env);
 				class_* cls = TYPE2CLASS(gt->core_type);
 				int temp = -1;
 				class_find_field(cls, ilmem->name, &temp);
 				assert(temp != -1);
-				il_factor_generate(ilmem->fact, env, ilctx);
-				il_factor_generate(self->right, env, ilctx);
+				il_factor_generate(ilmem->fact, env);
+				il_factor_generate(self->right, env);
 				opcode_buf_add(env->buf, (vector_item)op_put_field);
 				opcode_buf_add(env->buf, (vector_item)temp);
 			}
@@ -73,7 +73,7 @@ void il_factor_assign_op_generate(il_factor_assign_op* self, enviroment* env) {
 }
 
 generic_type* il_factor_assign_op_eval(il_factor_assign_op* self, enviroment* env) {
-	return il_factor_eval(self->right, env, ilctx);
+	return il_factor_eval(self->right, env);
 }
 
 void il_factor_assign_op_delete(il_factor_assign_op* self) {

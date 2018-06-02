@@ -43,8 +43,8 @@ void il_factor_member_op_dump(il_factor_member_op* self, int depth) {
 }
 
 void il_factor_member_op_load(il_factor_member_op* self, enviroment* env) {
-	il_factor_load(self->fact, env, ilctx);
-	il_factor_member_op_check(self, env, ilctx);
+	il_factor_load(self->fact, env);
+	il_factor_member_op_check(self, env);
 }
 
 void il_factor_member_op_generate(il_factor_member_op* self, enviroment* env) {
@@ -53,27 +53,27 @@ void il_factor_member_op_generate(il_factor_member_op* self, enviroment* env) {
 		opcode_buf_add(env->buf, self->f->parent->absolute_index);
 		opcode_buf_add(env->buf, self->index);
 	} else {
-		il_factor_generate(self->fact, env, ilctx);
+		il_factor_generate(self->fact, env);
 		opcode_buf_add(env->buf, op_get_field);
 		opcode_buf_add(env->buf, self->index);
 	}
 }
 
 generic_type* il_factor_member_op_eval(il_factor_member_op* self, enviroment* env) {
-	il_factor_member_op_check(self, env, ilctx);
+	il_factor_member_op_check(self, env);
 //	XSTREQ(self->name, "charArray");
 	assert(self->fact != NULL);
 	if(self->f->gtype->tag == generic_type_tag_none) {
 		generic_type* a = self->f->gtype;
 		return a;
 	}
-	generic_type* a = il_factor_eval(self->fact, env, ilctx);
+	generic_type* a = il_factor_eval(self->fact, env);
 	return vector_at(a->type_args_list, self->f->gtype->virtual_type_index);
 }
 
 char* il_factor_member_op_tostr(il_factor_member_op* self, enviroment* env) {
 	string_buffer* sb = string_buffer_new();
-	char* name = il_factor_tostr(self->fact, env, ilctx);
+	char* name = il_factor_tostr(self->fact, env);
 	string_buffer_appends(sb, name);
 	string_buffer_append(sb, '.');
 	string_buffer_appends(sb, self->name);
@@ -99,12 +99,12 @@ static void il_factor_member_op_check(il_factor_member_op* self, enviroment* env
 	}
 	//XSTREQ(self->name, "charArray");
 	il_factor* fact = self->fact;
-	generic_type* gtype = il_factor_eval(fact, env, ilctx);
+	generic_type* gtype = il_factor_eval(fact, env);
 	//ファクターから型が特定できない場合は
 	//変数めいを型として静的フィールドで解決する
 	if(gtype == NULL) {
 		il_factor_variable* ilvar = IL_FACT2VAR(fact);
-		generic_type* ref = import_manager_resolvef(ilctx->class_loader_ref->import_manager, ILCTX_NAMESPACE(ilctx), ilvar->u.static_->fqcn, ilctx);
+		generic_type* ref = import_manager_resolvef(ccget_class_loader()->import_manager, cc_namespace(), ilvar->u.static_->fqcn);
 		gtype = ref;
 
 		type* ccT = gtype->core_type;

@@ -31,7 +31,7 @@ void il_stmt_inferenced_type_init_dump(il_stmt_inferenced_type_init * self, int 
 
 void il_stmt_inferenced_type_init_generate(il_stmt_inferenced_type_init * self, enviroment * env) {
 	//右辺の方で宣言する
-	il_factor_generate(self->fact, env, ilctx);
+	il_factor_generate(self->fact, env);
 	/*
 	if (gtp == TYPE_INT->generic_self ||
 		gtp == TYPE_DOUBLE->generic_self ||
@@ -48,10 +48,10 @@ void il_stmt_inferenced_type_init_generate(il_stmt_inferenced_type_init * self, 
 }
 
 void il_stmt_inferenced_type_init_load(il_stmt_inferenced_type_init * self, enviroment * env) {
-	il_factor_load(self->fact, env, ilctx);
+	il_factor_load(self->fact, env);
 	//XSTREQ(self->name, "viter");
 	//XSTREQ(self->name, "xv");
-	generic_type* gtp = il_factor_eval(self->fact, env, ilctx);
+	generic_type* gtp = il_factor_eval(self->fact, env);
 	if(il_error_panic()) {
 		return;
 	}

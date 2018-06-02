@@ -47,7 +47,8 @@
 			"vector": "cpp",
 			"generic_type.h": "c",
 			"object.h": "c",
-			"import_manager.h": "c"
+			"import_manager.h": "c",
+			"compile_context.h": "c"
 		}
 	}
 }

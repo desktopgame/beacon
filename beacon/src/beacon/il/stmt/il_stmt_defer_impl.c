@@ -22,7 +22,7 @@ void il_stmt_defer_dump(il_stmt_defer* self, int depth) {
 }
 
 void il_stmt_defer_load(il_stmt_defer* self, enviroment* env) {
-	il_stmt_load(self->stmt, env, ilctx);
+	il_stmt_load(self->stmt, env);
 }
 
 void il_stmt_defer_generate(il_stmt_defer* self, enviroment* env) {
@@ -33,7 +33,7 @@ void il_stmt_defer_generate(il_stmt_defer* self, enviroment* env) {
 	opcode_buf_add(env->buf, op_goto);
 	opcode_buf_add(env->buf, lb);
 	lb2->cursor = opcode_buf_add(env->buf, op_defer_enter);
-	il_stmt_generate(self->stmt, env, ilctx);
+	il_stmt_generate(self->stmt, env);
 	opcode_buf_add(env->buf, op_defer_exit);
 	lb->cursor = opcode_buf_nop(env->buf);
 }

@@ -196,6 +196,7 @@ static void CLBC_class(class_loader* self, il_type* iltype, namespace_* parent) 
 	assert(iltype->tag == iltype_class);
 	//FIXME:あとで親関数から渡すようにする
 	ccpush_namespace(parent);
+	ccset_class_loader(self);
 	//すでに宣言されているならそれを取得
 	type* tp = CLBC_get_or_load_class(self, parent, iltype);
 	class_* cls = TYPE2CLASS(tp);
@@ -225,6 +226,7 @@ static void CLBC_class(class_loader* self, il_type* iltype, namespace_* parent) 
 	vector_push(self->type_cache_vec, mtc);
 	ccpop_type();
 	ccpop_namespace();
+	ccset_class_loader(NULL);
 }
 
 static void CLBC_interface(class_loader * self, il_type * iltype, namespace_ * parent) {
@@ -232,6 +234,7 @@ static void CLBC_interface(class_loader * self, il_type * iltype, namespace_ * p
 	assert(iltype->tag == iltype_interface);
 	//NOTE:後で親関数から渡すようにする
 	ccpush_namespace(parent);
+	ccset_class_loader(self);
 	type* tp = CLBC_get_or_load_interface(self, parent, iltype);
 	interface_* inter = TYPE2INTERFACE(tp);
 	type_init_generic(tp, iltype->u.interface_->type_parameter_list->length);
@@ -257,6 +260,7 @@ static void CLBC_interface(class_loader * self, il_type * iltype, namespace_ * p
 	vector_push(self->type_cache_vec, mtc);
 	ccpop_type();
 	ccpop_namespace();
+	ccset_class_loader(NULL);
 }
 
 static void CLBC_attach_native_method(class_loader* self, il_type* ilclass, class_* classz, il_method* ilmethod, method* me) {

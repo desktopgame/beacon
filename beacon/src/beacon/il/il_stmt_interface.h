@@ -3,6 +3,7 @@
 #define BEACON_IL_IL_STMT_INTERFACE_H
 #include "../vm/enviroment.h"
 #include "il_error.h"
+#include "../env/compile_context.h"
 #include <stdint.h>
 /**
  * 文の種類を表す列挙型.

@@ -49,15 +49,15 @@ void il_factor_unary_op_dump(il_factor_unary_op * self, int depth) {
 }
 
 void il_factor_unary_op_generate(il_factor_unary_op * self, enviroment* env) {
-	il_factor_generate(self->a, env, ilctx);
-	type* cls = il_factor_eval(self->a, env, ilctx);
-	if (cls == TYPE_INT) {
+	il_factor_generate(self->a, env);
+	generic_type* cls = il_factor_eval(self->a, env);
+	if (cls == GENERIC_INT) {
 		assert(self->type == ilunary_neg);
 		opcode_buf_add(env->buf, (vector_item)u_operator_to_opi(u_neg));
-	} else if (cls == TYPE_DOUBLE) {
+	} else if (cls == GENERIC_DOUBLE) {
 		assert(self->type == ilunary_neg);
 		opcode_buf_add(env->buf, (vector_item)u_operator_to_opd(u_neg));
-	} else if (cls == TYPE_BOOL) {
+	} else if (cls == GENERIC_BOOL) {
 		assert(self->type == ilunary_not);
 		opcode_buf_add(env->buf, (vector_item)u_operator_to_opb(u_not));
 	} else {
@@ -70,7 +70,7 @@ void il_factor_unary_op_load(il_factor_unary_op * self, enviroment * env) {
 
 generic_type* il_factor_unary_op_eval(il_factor_unary_op * self, enviroment * env) {
 	if (self->type == ilunary_neg) {
-		return il_factor_eval(self->a, env, ilctx);
+		return il_factor_eval(self->a, env);
 	} else if (self->type == ilunary_not) {
 		return GENERIC_BOOL;
 	}
@@ -79,7 +79,7 @@ generic_type* il_factor_unary_op_eval(il_factor_unary_op * self, enviroment * en
 
 char* il_factor_unary_op_tostr(il_factor_unary_op* self, enviroment* env) {
 	string_buffer* sb = string_buffer_new();
-	char* fact = il_factor_tostr(self->a, env, ilctx);
+	char* fact = il_factor_tostr(self->a, env);
 	string_buffer_appends(sb, u_tostr(self));
 	string_buffer_appends(sb, fact);
 	return string_buffer_release(sb);

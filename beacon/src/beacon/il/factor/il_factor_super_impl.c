@@ -6,6 +6,7 @@
 #include "../../util/mem.h"
 #include "../../env/type_interface.h"
 #include "../../env/type_impl.h"
+#include "../../env/compile_context.h"
 
 il_factor_super* il_factor_super_new() {
 	il_factor_super* ret = (il_factor_super*)MEM_MALLOC(sizeof(il_factor_super));
@@ -27,7 +28,7 @@ void il_factor_super_load(il_factor_super * self, enviroment * env) {
 }
 
 generic_type* il_factor_super_eval(il_factor_super * self, enviroment * env) {
-	type* t = ((type*)vector_top(ilctx->type_vec));
+	type* t = cctop_type();
 	return t->u.class_->super_class;
 }
 

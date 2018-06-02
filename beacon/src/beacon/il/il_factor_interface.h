@@ -7,6 +7,7 @@
 #include <stdint.h>
 #include <assert.h>
 #include "../env/generic_type.h"
+#include "../env/compile_context.h"
 //#include "../vm/opcode.h"
 //#include "../vm/opcode_buf.h"
 //struct opcode_buf;

@@ -26,12 +26,12 @@ void il_factor_dec_dump(il_factor_dec * self, int depth) {
 
 void il_factor_dec_generate(il_factor_dec * self, enviroment * env) {
 	if (self->type == fixtype_pre) {
-		il_factor_generate(self->fact, env, ilctx);
+		il_factor_generate(self->fact, env);
 		opcode_buf_add(env->buf, op_dec);
 	} else if (self->type == fixtype_post) {
 		//FIXME:コピペ
 		//
-		il_factor_generate(self->fact, env, ilctx);
+		il_factor_generate(self->fact, env);
 		//複製
 		opcode_buf_add(env->buf, op_copy);
 		//オリジナルをインクリメント
@@ -44,11 +44,11 @@ void il_factor_dec_generate(il_factor_dec * self, enviroment * env) {
 }
 
 void il_factor_dec_load(il_factor_dec * self, enviroment * env) {
-	il_factor_load(self->fact, env, ilctx);
+	il_factor_load(self->fact, env);
 }
 
 generic_type* il_factor_dec_eval(il_factor_dec * self, enviroment * env) {
-	return il_factor_eval(self->fact, env, ilctx);
+	return il_factor_eval(self->fact, env);
 }
 
 char* il_factor_dec_tostr(il_factor_dec* self, enviroment* env) {
@@ -56,7 +56,7 @@ char* il_factor_dec_tostr(il_factor_dec* self, enviroment* env) {
 	if(self->type == fixtype_pre) {
 		string_buffer_appends(sb, "--");
 	}
-	char* fact = il_factor_tostr(self->fact, env, ilctx);
+	char* fact = il_factor_tostr(self->fact, env);
 	string_buffer_appends(sb, fact);
 	if(self->type == fixtype_post) {
 		string_buffer_appends(sb, "--");

@@ -44,11 +44,11 @@ void il_factor_invoke_bound_generate(il_factor_invoke_bound* self, enviroment* e
 		il_type_argument* e = (il_type_argument*)vector_at(self->type_args, i);
 		assert(e->gtype != NULL);
 		opcode_buf_add(env->buf, op_generic_add);
-		generic_type_generate(e->gtype, env, ilctx);
+		generic_type_generate(e->gtype, env);
 	}
 	for(int i=0; i<self->args->length; i++) {
 		il_argument* e = (il_argument*)vector_at(self->args, i);
-		il_factor_generate(e->factor, env, ilctx);
+		il_factor_generate(e->factor, env);
 		if(il_error_panic()) {
 			return;
 		}
@@ -69,23 +69,23 @@ void il_factor_invoke_bound_generate(il_factor_invoke_bound* self, enviroment* e
 }
 
 void il_factor_invoke_bound_load(il_factor_invoke_bound * self, enviroment * env) {
-	vector_push(ilctx->type_args_vec, self->type_args);
-	il_factor_invoke_bound_check(self, env, ilctx);
-	vector_pop(ilctx->type_args_vec);
+	ccpush_type_args(self->type_args);
+	il_factor_invoke_bound_check(self, env);
+	ccpop_type_args();
 }
 
 generic_type* il_factor_invoke_bound_eval(il_factor_invoke_bound * self, enviroment * env) {
-	type* tp = (type*)vector_top(ilctx->type_vec);
+	type* tp = cctop_type();
 	//メソッドが見つからない
-	il_factor_invoke_bound_check(self, env, ilctx);
+	il_factor_invoke_bound_check(self, env);
 	if(il_error_panic()) {
 		return NULL;
 	}
 	if(self->m->return_gtype != generic_type_tag_none) {
-		resolve_non_default(self, env, ilctx);
+		resolve_non_default(self, env);
 		return self->resolved;
 	} else {
-		resolve_default(self, env, ilctx);
+		resolve_default(self, env);
 		return self->resolved;
 	}
 	return self->resolved;
@@ -94,8 +94,8 @@ generic_type* il_factor_invoke_bound_eval(il_factor_invoke_bound * self, envirom
 char* il_factor_invoke_bound_tostr(il_factor_invoke_bound* self, enviroment* env) {
 	string_buffer* sb = string_buffer_new();
 	string_buffer_appends(sb, self->name);
-	il_factor_type_args_tostr(sb, self->type_args, env, ilctx);
-	il_factor_args_tostr(sb, self->type_args, env, ilctx);
+	il_factor_type_args_tostr(sb, self->type_args, env);
+	il_factor_args_tostr(sb, self->type_args, env);
 	return string_buffer_release(sb);
 }
 
@@ -112,7 +112,7 @@ static void resolve_non_default(il_factor_invoke_bound * self, enviroment * env)
 	if(self->resolved != NULL) {
 		return;
 	}
-	type* tp = (type*)vector_top(ilctx->type_vec);
+	type* tp = cctop_type();
 //	generic_type* receivergType = tp->generic_self;
 	generic_type* rgtp  = self->m->return_gtype;
 	if(rgtp->tag == generic_type_tag_class) {
@@ -133,9 +133,9 @@ static void resolve_default(il_factor_invoke_bound * self, enviroment * env) {
 	}
 	generic_type* rgtp = self->m->return_gtype;
 //	virtual_type returnvType = self->m->return_vtype;
-	vector_push(ilctx->type_args_vec, self->type_args);
-	self->resolved = generic_type_apply(rgtp, ilctx);
-	vector_pop(ilctx->type_args_vec);
+	ccpush_type_args(self->type_args);
+	self->resolved = generic_type_apply(rgtp);
+	ccpop_type_args();
 }
 
 static void il_factor_invoke_bound_check(il_factor_invoke_bound * self, enviroment * env) {
@@ -143,15 +143,15 @@ static void il_factor_invoke_bound_check(il_factor_invoke_bound * self, envirome
 		return;
 	}
 	//対応するメソッドを検索
-	type* ctype = (type*)vector_top(ilctx->type_vec);
+	type* ctype =cctop_type();
 	int temp = -1;
-	il_type_argument_resolve(self->type_args, ilctx);
-	vector_push(ilctx->receiver_vec, ctype->generic_self);
-	vector_push(ilctx->type_args_vec, self->type_args);
-	self->m = class_find_method(TYPE2CLASS(ctype), self->name, self->args, env, ilctx, &temp);
+	il_type_argument_resolve(self->type_args);
+	ccpush_receiver(ctype->generic_self);
+	ccpush_type_args(self->type_args);
+	self->m = class_find_method(TYPE2CLASS(ctype), self->name, self->args, env, &temp);
 	self->index = temp;
-	vector_pop(ilctx->receiver_vec);
-	vector_pop(ilctx->type_args_vec);
+	ccpop_receiver();
+	ccpop_type_args();
 	if(temp == -1) {
 		il_error_report(ilerror_undefined_method, self->name);
 	}

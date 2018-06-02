@@ -36,16 +36,16 @@ void il_stmt_while_generate(il_stmt_while * self, enviroment * env) {
 	int prev = opcode_buf_nop(env->buf);
 	label* prevLab = opcode_buf_label(env->buf, prev);
 	label* nextLab = opcode_buf_label(env->buf, -1);
-	vector_push(ilctx->while_start_vec, prevLab);
-	vector_push(ilctx->while_end_vec, nextLab);
+	ccpush_while_start(prevLab);
+	ccpush_while_end(nextLab);
 	//条件を満たさないなら nextLab へ
-	il_factor_generate(self->condition, env, ilctx);
+	il_factor_generate(self->condition, env);
 	opcode_buf_add(env->buf, op_goto_if_false);
 	opcode_buf_add(env->buf, nextLab);
 	//全てのステートメントを実行
 	for (int i = 0; i < self->statement_list->length; i++) {
 		il_stmt* e = (il_stmt*)vector_at(self->statement_list, i);
-		il_stmt_generate(e, env, ilctx);
+		il_stmt_generate(e, env);
 	}
 	//prevLab へ行って再判定
 	opcode_buf_add(env->buf, op_goto);
@@ -53,8 +53,8 @@ void il_stmt_while_generate(il_stmt_while * self, enviroment * env) {
 
 	int next = opcode_buf_nop(env->buf);
 	nextLab->cursor = next;
-	vector_pop(ilctx->while_start_vec);
-	vector_pop(ilctx->while_end_vec);
+	ccpop_while_start();
+	ccpop_while_end();
 }
 
 void il_stmt_while_delete(il_stmt_while * self) {
@@ -64,10 +64,10 @@ void il_stmt_while_delete(il_stmt_while * self) {
 }
 
 void il_stmt_while_load(il_stmt_while* self, struct enviroment* env) {
-	il_factor_load(self->condition, env, ilctx);
+	il_factor_load(self->condition, env);
 	for(int i=0; i<self->statement_list->length; i++) {
 		il_stmt* e = (il_stmt*)vector_at(self->statement_list, i);
-		il_stmt_load(e, env, ilctx);
+		il_stmt_load(e, env);
 	}
 }
 

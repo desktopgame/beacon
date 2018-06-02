@@ -157,12 +157,14 @@ static void class_loader_load_impl(class_loader* self) {
 		il_error_exit();
 	}
 	//トップレベルのステートメントを読み込む
+	ccset_class_loader(self);
 	cc_enable(ccstate_toplevel);
 	if(self->type == content_entry_point) {
 		debug_set_gen_top(true);
 	}
 	CLBC_body(self, self->il_code->statement_list, self->env, NULL);
 	cc_disable(ccstate_toplevel);
+	ccset_class_loader(NULL);
 }
 
 static void class_loader_link_recursive(class_loader* self, link_type type) {

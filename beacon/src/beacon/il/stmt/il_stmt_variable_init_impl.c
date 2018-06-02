@@ -33,10 +33,10 @@ void il_stmt_variable_init_dump(il_stmt_variable_init * self, int depth) {
 }
 
 void il_stmt_variable_init_generate(il_stmt_variable_init * self, enviroment * env) {
-	il_factor_generate(self->fact, env, ilctx);
+	il_factor_generate(self->fact, env);
 	//宣言型と代入型が異なる場合
-	generic_type* ga = il_factor_eval(self->fact, env, ilctx);
-	generic_type* gb = import_manager_resolve(ilctx->class_loader_ref->import_manager, ILCTX_NAMESPACE(ilctx), self->fqcn, ilctx);
+	generic_type* ga = il_factor_eval(self->fact, env);
+	generic_type* gb = import_manager_resolve(ccget_class_loader()->import_manager, cc_namespace(), self->fqcn);
 	//generic_type* gb = generic_cache_gtype(self->fqcn, (namespace_*)vector_top(ilctx->namespace_vec), ilctx);
 	if (ga != gb) {
 	//	opcode_buf_add(env->buf, op_lookup);
@@ -48,10 +48,10 @@ void il_stmt_variable_init_generate(il_stmt_variable_init * self, enviroment * e
 }
 
 void il_stmt_variable_init_load(il_stmt_variable_init * self, enviroment * env) {
-	il_factor_load(self->fact, env, ilctx);
+	il_factor_load(self->fact, env);
 	symbol_entry* e = symbol_table_entry(
 		env->sym_table,
-		import_manager_resolve(ilctx->class_loader_ref->import_manager, ILCTX_NAMESPACE(ilctx), self->fqcn, ilctx),
+		import_manager_resolve(ccget_class_loader()->import_manager, cc_namespace(), self->fqcn),
 		//generic_cache_gtype(self->fqcn, (namespace_*)vector_top(ilctx->namespace_vec), ilctx),
 		self->name
 	);

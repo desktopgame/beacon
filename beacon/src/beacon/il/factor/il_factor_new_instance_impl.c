@@ -50,17 +50,17 @@ void il_factor_new_instance_dump(il_factor_new_instance * self, int depth) {
 }
 
 void il_factor_new_instance_generate(il_factor_new_instance * self, enviroment * env) {
-	il_factor_new_instance_find(self, env, ilctx);
+	il_factor_new_instance_find(self, env);
 	for(int i=0; i<self->type_args->length; i++) {
 		il_type_argument* e = (il_type_argument*)vector_at(self->type_args, i);
 		assert(e->gtype != NULL);
 		opcode_buf_add(env->buf, op_generic_add);
-		generic_type_generate(e->gtype, env, ilctx);
+		generic_type_generate(e->gtype, env);
 	}
 	//実引数を全てスタックへ
 	for (int i = 0; i < self->argument_list->length; i++) {
 		il_argument* ilarg = (il_argument*)vector_at(self->argument_list, i);
-		il_factor_generate(ilarg->factor, env, ilctx);
+		il_factor_generate(ilarg->factor, env);
 		if(il_error_panic()) {
 			return;
 		}
@@ -78,7 +78,7 @@ void il_factor_new_instance_load(il_factor_new_instance * self, enviroment * env
 }
 
 generic_type* il_factor_new_instance_eval(il_factor_new_instance * self, enviroment * env) {
-	il_factor_new_instance_find(self, env, ilctx);
+	il_factor_new_instance_find(self, env);
 	if(il_error_panic()) {
 		return NULL;
 	}
@@ -92,11 +92,11 @@ generic_type* il_factor_new_instance_eval(il_factor_new_instance * self, envirom
 	}
 	//fqcn_cache typename_group
 	if (self->instance_type == NULL) {
-		namespace_* scope = (namespace_*)vector_top(ilctx->namespace_vec);
+		namespace_* scope = cctop_namespace();
 		generic_type* a = generic_type_new(self->c->parent);
 		for (int i = 0; i < self->type_args->length; i++) {
 			il_type_argument* e = (il_type_argument*)vector_at(self->type_args, i);
-			generic_type* arg = import_manager_resolve(ilctx->class_loader_ref->import_manager, scope, e->gcache, ilctx);
+			generic_type* arg = import_manager_resolve(ccget_class_loader()->import_manager, scope, e->gcache);
 		//	generic_type* arg = generic_cache_gtype(e->gcache, scope, ilctx);
 		//	arg->tag = generic_type_tag_ctor;
 			generic_type_addargs(a, arg);
@@ -114,8 +114,8 @@ char* il_factor_new_instance_tostr(il_factor_new_instance* self, enviroment* env
 	string_buffer_appends(sb, "new ");
 	char* type = fqcn_cache_tostr(self->fqcnc);
 	string_buffer_appends(sb, type);
-	il_factor_type_args_tostr(sb, self->type_args, env, ilctx);
-	il_factor_args_tostr(sb, self->argument_list, env, ilctx);
+	il_factor_type_args_tostr(sb, self->type_args, env);
+	il_factor_args_tostr(sb, self->argument_list, env);
 	MEM_FREE(type);
 	return string_buffer_release(sb);
 }
@@ -140,7 +140,7 @@ static void il_factor_new_instance_delete_typearg(vector_item item) {
 
 static void il_factor_new_instance_find(il_factor_new_instance * self, enviroment * env) {
 	//*
-	class_* cls = il_context_class(ilctx, self->fqcnc);
+	class_* cls = cc_class(self->fqcnc);
 	int temp = -1;
 	//TEST(!strcmp(cls->name, "Point3D"));
 	//XSTREQ(cls->name, "ArrayIterator");
@@ -149,14 +149,14 @@ static void il_factor_new_instance_find(il_factor_new_instance * self, enviromen
 		return;
 	}
 	//XSTREQ(cls->name, "String");
-	ILCTX_PUSH_TYPE_ARGS(ilctx, self->type_args);
-	il_type_argument_resolve(self->type_args, ilctx);
-	self->c = class_find_constructor(cls, self->argument_list, env, ilctx, &temp);
+	ccpush_type_args(self->type_args);
+	il_type_argument_resolve(self->type_args);
+	self->c = class_find_constructor(cls, self->argument_list, env, &temp);
 	self->constructor_index = temp;
 	if(temp == -1) {
 		il_error_report(ilerror_undefined_ctor, cls->name);
 	}
-	ILCTX_POP_TYPE_ARGS(ilctx);
+	ccpop_type_args();
 	//*/
 }
 

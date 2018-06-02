@@ -56,25 +56,25 @@ void il_factor_call_op_dump(il_factor_call_op* self, int depth) {
 void il_factor_call_op_load(il_factor_call_op* self, enviroment* env) {
 	//argumentlistはサブクラスに渡しちゃってる
 	//il_factor_load(self->receiver, env, ilctx, eh);
-	il_factor_call_op_check(self, env, ilctx);
+	il_factor_call_op_check(self, env);
 	if(self->type == ilcall_type_invoke) {
-		il_factor_invoke_load(self->u.invoke_, env, ilctx);
+		il_factor_invoke_load(self->u.invoke_, env);
 	} else if(self->type == ilcall_type_invoke_static) {
-		il_factor_invoke_static_load(self->u.invoke_static_, env, ilctx);
+		il_factor_invoke_static_load(self->u.invoke_static_, env);
 	} else if(self->type == ilcall_type_invoke_bound) {
-		il_factor_invoke_bound_load(self->u.invoke_bound_, env, ilctx);
+		il_factor_invoke_bound_load(self->u.invoke_bound_, env);
 	}
 }
 
 generic_type* il_factor_call_op_eval(il_factor_call_op* self, enviroment* env) {
-	il_factor_call_op_check(self, env, ilctx);
+	il_factor_call_op_check(self, env);
 	generic_type* ret = NULL;
 	if(self->type == ilcall_type_invoke) {
-		ret = il_factor_invoke_eval(self->u.invoke_, env, ilctx);
+		ret = il_factor_invoke_eval(self->u.invoke_, env);
 	} else if(self->type == ilcall_type_invoke_static) {
-		ret =  il_factor_invoke_static_eval(self->u.invoke_static_, env, ilctx);
+		ret =  il_factor_invoke_static_eval(self->u.invoke_static_, env);
 	} else if(self->type == ilcall_type_invoke_bound) {
-		ret = il_factor_invoke_bound_eval(self->u.invoke_bound_, env, ilctx);
+		ret = il_factor_invoke_bound_eval(self->u.invoke_bound_, env);
 	}
 	if(il_error_panic()) {
 		return ret;
@@ -83,25 +83,25 @@ generic_type* il_factor_call_op_eval(il_factor_call_op* self, enviroment* env) {
 }
 
 char* il_factor_call_op_to_str(il_factor_call_op* self, enviroment* env) {
-	il_factor_call_op_load(self, env, ilctx);
+	il_factor_call_op_load(self, env);
 	if(self->type == ilcall_type_invoke) {
-		return il_factor_invoke_tostr(self->u.invoke_, env, ilctx);
+		return il_factor_invoke_tostr(self->u.invoke_, env);
 	} else if(self->type == ilcall_type_invoke_bound) {
-		return il_factor_invoke_bound_tostr(self->u.invoke_bound_, env, ilctx);
+		return il_factor_invoke_bound_tostr(self->u.invoke_bound_, env);
 	} else if(self->type == ilcall_type_invoke_static) {
-		return il_factor_invoke_static_tostr(self->u.invoke_static_, env, ilctx);
+		return il_factor_invoke_static_tostr(self->u.invoke_static_, env);
 	}
 	return NULL;
 }
 
 void il_factor_call_op_generate(il_factor_call_op* self, enviroment* env) {
-	il_factor_call_op_load(self, env, ilctx);
+	il_factor_call_op_load(self, env);
 	if(self->type == ilcall_type_invoke) {
-		return il_factor_invoke_generate(self->u.invoke_, env, ilctx);
+		return il_factor_invoke_generate(self->u.invoke_, env);
 	} else if(self->type == ilcall_type_invoke_static) {
-		return il_factor_invoke_static_generate(self->u.invoke_static_, env, ilctx);
+		return il_factor_invoke_static_generate(self->u.invoke_static_, env);
 	} else if(self->type == ilcall_type_invoke_bound) {
-		return il_factor_invoke_bound_generate(self->u.invoke_bound_, env, ilctx);
+		return il_factor_invoke_bound_generate(self->u.invoke_bound_, env);
 	}
 }
 
@@ -132,10 +132,10 @@ static void il_factor_call_op_check(il_factor_call_op* self, enviroment* env) {
 	il_factor* receiver = self->receiver;
 	//hoge() foo() Namespace::Class() の場合
 	if(receiver->type == ilfactor_variable) {
-		il_factor_invoke_bound_check(self, env, ilctx);
+		il_factor_invoke_bound_check(self, env);
 	//hoge().hoge() Namespace::Class.foo() の場合
 	} else if(receiver->type == ilfactor_member_op) {
-		il_factor_member_op_check(self, env, ilctx);
+		il_factor_member_op_check(self, env);
 	}
 	assert(self->type != ilcall_type_undefined);
 }
@@ -176,7 +176,7 @@ static void il_factor_member_op_check(il_factor_call_op* self, enviroment* env) 
 		//hoge.foo()
 		} else {
 			//FIXME:kコピペ
-			namespace_* cur = il_context_namespace(ilctx);
+			namespace_* cur = cc_namespace();
 			class_* ctype = namespace_get_class(cur, ilvar->fqcn->name);
 			if(ctype == NULL) {
 				ctype = namespace_get_class(namespace_lang(), ilvar->fqcn->name);

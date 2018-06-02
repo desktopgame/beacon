@@ -1,6 +1,7 @@
 #include "il_stmt_continue_impl.h"
 #include "../../util/mem.h"
 #include "../../util/text.h"
+#include "../../env/compile_context.h"
 #include <stdio.h>
 
 il_stmt * il_stmt_wrap_continue() {
@@ -10,7 +11,7 @@ il_stmt * il_stmt_wrap_continue() {
 }
 
 void il_stmt_continue_generate(void * empty, enviroment * env) {
-	label* lab = (label*)vector_top(ilctx->while_start_vec);
+	label* lab = cctop_while_start();
 	opcode_buf_add(env->buf, op_goto);
 	opcode_buf_add(env->buf, lab);
 }

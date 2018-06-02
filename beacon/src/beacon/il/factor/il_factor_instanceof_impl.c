@@ -30,16 +30,16 @@ void il_factor_instanceof_dump(il_factor_instanceof* self, int depth) {
 }
 
 void il_factor_instanceof_load(il_factor_instanceof* self, enviroment* env) {
-	il_factor_load(self->fact, env, ilctx);
+	il_factor_load(self->fact, env);
 }
 
 void il_factor_instanceof_generate(il_factor_instanceof* self, enviroment* env) {
-	generic_type* gtype = import_manager_resolve(ilctx->class_loader_ref->import_manager, ILCTX_NAMESPACE(ilctx), self->gcache, ilctx);
+	generic_type* gtype = import_manager_resolve(ccget_class_loader()->import_manager, cc_namespace(), self->gcache);
 	type* type = gtype->core_type;
 	assert(type != NULL);
-	il_factor_generate(self->fact, env, ilctx);
+	il_factor_generate(self->fact, env);
 	opcode_buf_add(env->buf, op_generic_add);
-	generic_type_generate(gtype, env, ilctx);
+	generic_type_generate(gtype, env);
 	opcode_buf_add(env->buf, op_instanceof);
 }
 
@@ -49,7 +49,7 @@ generic_type* il_factor_instanceof_eval(il_factor_instanceof* self, enviroment* 
 
 char* il_factor_instanceof_tostr(il_factor_instanceof* self, enviroment* env) {
 	string_buffer* sb = string_buffer_new();
-	string_buffer_appends(sb, il_factor_tostr(self->fact, env, ilctx));
+	string_buffer_appends(sb, il_factor_tostr(self->fact, env));
 	string_buffer_appends(sb, " is ");
 	string_buffer_appends(sb, generic_cache_tostr(self->gcache));
 	return string_buffer_release(sb);

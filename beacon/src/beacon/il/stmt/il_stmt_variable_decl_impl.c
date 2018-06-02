@@ -35,7 +35,7 @@ void il_stmt_variable_decl_generate(il_stmt_variable_decl * self, enviroment * e
 void il_stmt_variable_decl_load(il_stmt_variable_decl * self, struct enviroment* env) {
 	symbol_table_entry(
 		env->sym_table,
-		import_manager_resolve(ilctx->class_loader_ref->import_manager, ILCTX_NAMESPACE(ilctx), self->fqcn, ilctx),
+		import_manager_resolve(ccget_class_loader()->import_manager, cc_namespace(), self->fqcn),
 		//generic_cache_gtype(self->fqcn, (namespace_*)vector_top(ilctx->namespace_vec), ilctx),
 		self->name
 	);
