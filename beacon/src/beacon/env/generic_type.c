@@ -217,7 +217,7 @@ static generic_type* generic_type_applyImpl(generic_type* self, frame* fr) {
 			count++;
 			if(e->tag == generic_type_tag_class) {
 				if(cc_test(ccstate_override)) {
-					generic_type_addargs(copy, ccget_override());
+					generic_type_addargs(copy, vector_at(ccget_override()->type_args_list, e->virtual_type_index));
 				} else {
 					generic_type_addargs(copy, generic_type_receiver_at(fr, e->virtual_type_index));
 				}
