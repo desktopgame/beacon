@@ -107,9 +107,9 @@ bool method_override(method* superM, method* subM) {
 	generic_type* superRet = superM->return_gtype;
 	generic_type* superRet2 = generic_type_apply(superRet);
 	generic_type* subRet = subM->return_gtype;
-	generic_type_print(superRet); text_printfln("");
-	generic_type_print(superRet2); text_printfln("");
-	generic_type_print(subRet); text_printfln("");
+//	generic_type_print(superRet); text_printfln("");
+//	generic_type_print(superRet2); text_printfln("");
+//	generic_type_print(subRet); text_printfln("");
 	int ret =generic_type_distance(superRet2, subRet);
 	ccpop_type();
 	cc_disable(ccstate_override);

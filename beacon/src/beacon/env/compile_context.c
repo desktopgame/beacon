@@ -7,6 +7,7 @@
 #include "fqcn_cache.h"
 #include "generic_type.h"
 #include "class_loader.h"
+#include <assert.h>
 
 vector* gContextVec = NULL;
 static compile_context* compile_context_new();
@@ -22,6 +23,10 @@ void cc_push() {
 
 //namespace
 void ccpush_namespace(namespace_* e) {
+	if(e == NULL) {
+		e = namespace_lang();
+	}
+	assert(e != NULL);
 	vector_push(cc_current()->namespace_vec, e);
 }
 
@@ -36,6 +41,7 @@ namespace_* ccpop_namespace() {
 //type
 
 void ccpush_type(type* e) {
+	assert(e != NULL);
 	vector_push(cc_current()->type_vec, e);
 }
 
@@ -50,6 +56,7 @@ type* ccpop_type() {
 //method
 
 void ccpush_method(method* e) {
+	assert(e != NULL);
 	vector_push(cc_current()->method_vec, e);
 }
 
@@ -68,6 +75,7 @@ bool cchas_method() {
 //ctor
 
 void ccpush_ctor(constructor* e) {
+	assert(e != NULL);
 	vector_push(cc_current()->ctor_vec, e);
 }
 
@@ -86,6 +94,7 @@ bool cchas_ctor() {
 //receiver
 
 void ccpush_receiver(generic_type* e) {
+	assert(e != NULL);
 	vector_push(cc_current()->receiver_vec, e);
 }
 
@@ -104,6 +113,7 @@ generic_type* ccat_receiver(int index) {
 //typeargs
 
 void ccpush_type_args(vector* type_args) {
+	assert(type_args != NULL);
 	vector_push(cc_current()->type_args_vec, type_args);
 }
 
@@ -118,6 +128,7 @@ vector* ccpop_type_args() {
 //while_start
 
 void ccpush_while_start(label* e) {
+	assert(e != NULL);
 	vector_push(cc_current()->while_start_vec, e);
 }
 
@@ -132,6 +143,7 @@ label* ccpop_while_start() {
 //while_end
 
 void ccpush_while_end(label* e) {
+	assert(e != NULL);
 	vector_push(cc_current()->while_end_vec, e);
 }
 
