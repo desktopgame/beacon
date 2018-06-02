@@ -21,6 +21,7 @@ il_factor_variable_local* il_factor_variable_local_new(const char* name) {
 }
 
 void il_factor_variable_local_generate(il_factor_variable_local* self, enviroment* env, il_context* ilctx) {
+	il_factor_variable_local_load(self, env, ilctx);
 	assert(self->type != variable_local_undefined);
 	if(self->type == variable_local_scope) {
 		opcode_buf_add(env->buf, (vector_item)op_load);

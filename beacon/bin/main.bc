@@ -1,22 +1,19 @@
 import "beacon/lang/Object"
-import "beacon/lang/Iterable"
+import "beacon/lang/Array"
+import "beacon/lang/Int"
+import "beacon/lang/Double"
+import "beacon/lang/Char"
+import "beacon/lang/String"
+import "beacon/lang/Bool"
+import "beacon/lang/Null"
+import "beacon/lang/Void"
 import "beacon/lang/Console"
+import "beacon/lang/Vector"
+import "beacon/lang/VectorIterator"
 
-namespace beacon.x {
-	class DeferTest {
-		public:
-		def new() {
+import "beacon/lang/Exception"
+import "beacon/lang/StackTraceElement"
+import "beacon/lang/Tuple"
 
-		}
-		def test() -> Void {
-			var i = 0;
-			while(i < 5) {
-				defer Console.writeLine(i);
-				Console.writeLine(i);
-				i = i + 1;
-			}
-		}
-	}
-}
-var d = new beacon::x::DeferTest();
-d.test();
+var v = new Vector[Int]();
+assert (v is Vector[Int]);

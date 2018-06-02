@@ -18,7 +18,7 @@ typedef enum il_type_parameter_kind {
 typedef struct il_type_parameter {
 	il_type_parameter_kind kind;
 	char* name;
-	vector* rule_vec;
+//	vector* rule_vec;
 } il_type_parameter;
 
 /**

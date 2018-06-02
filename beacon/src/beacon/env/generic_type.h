@@ -2,7 +2,7 @@
 #ifndef BEACON_ENV_GENERIC_TYPE_H
 #define BEACON_ENV_GENERIC_TYPE_H
 #include "../util/vector.h"
-#include "type_parameter_rule.h"
+//#include "type_parameter_rule.h"
 #include <stdbool.h>
 #include <assert.h>
 
@@ -171,39 +171,6 @@ generic_type* generic_type_apply(generic_type* self, struct il_context* ilctx);
  * @return
  */
 generic_type* generic_type_rapply(generic_type* self, struct frame* fr);
-
-/**
- * self が型引数なら、それに適用されるルールを返します.
- * @param self
- * @param ilctx
- */
-vector* generic_type_rule(generic_type* self, struct il_context* ilctx);
-
-/**
- * selfのルール群が other を満たすなら true.
- * @param self
- * @param other
- * @return
- */
-bool generic_type_rule_valid(vector* self, vector* other);
-
-/**
- * self が rules のルールに合格するなら true.
- * @param self
- * @param rules
- * @param ilctx
- * @return
- */
-bool generic_type_rule_test(generic_type* self, vector* rules, struct il_context* ilctx);
-
-/**
- * rules のなかに ポリモーフィックルールとして other を指定するものが含まれるなら true.
- * @param rules
- * @param other
- * @param ilctx
- * @return
- */
-bool generic_type_rule_polymorphic(vector* rules, generic_type* other, struct il_context* ilctx);
 
 /**
  * generic_type を type へ変換します.

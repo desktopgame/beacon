@@ -172,107 +172,6 @@ generic_type* generic_type_rapply(generic_type* self, frame* fr) {
 	return generic_type_applyImpl(self, NULL, fr);
 }
 
-vector* generic_type_rule(generic_type* self, il_context* ilctx) {
-	if(self->core_type != NULL) {
-		return NULL;
-	}
-	if(self->tag == generic_type_tag_class ||
-	self->tag == generic_type_tag_self ||
-	self->tag == generic_type_tag_ctor) {
-		type* tp = NULL;
-		//コンストラクタを検索している場合は
-		//特別扱い
-		if(ilctx->find_static > ilctx->find_instance) {
-			tp = (type*)vector_top(ilctx->type_vec);
-			assert(tp != NULL);
-		} else {
-			generic_type* gt = (generic_type*)vector_top(ilctx->receiver_vec);
-			tp = gt->core_type;
-		}
-		//type* tp = self->core_type;
-		vector* params = type_parameter_list(tp);
-		type_parameter* param = vector_at(params, self->virtual_type_index);
-		return param->rule_vec;
-	} else if(self->tag == generic_type_tag_method) {
-		method* m = (method*)vector_top(ilctx->method_vec);
-		vector* params = m->type_parameter_list;
-		type_parameter* param = vector_at(params, self->virtual_type_index);
-		return param->rule_vec;
-	}
-	assert(false);
-	return NULL;
-}
-
-bool generic_type_rule_valid(vector* self, vector* other) {
-	assert(self != NULL);
-	assert(other != NULL);
-	if(other->length == 0) {
-		return true;
-	}
-	bool valid = true;
-	//満たすべきルール全て
-	for(int i=0; i<other->length; i++) {
-		type_parameter_rule* otherR = vector_at(other, i);
-		//満たすべきルールの中に newable を見つけたなら
-		//self にもそれが必要
-		if(otherR->tag == type_parameter_rule_tag_neweable) {
-			for(int j=0; j<self->length; j++) {
-				type_parameter_rule* selfR = vector_at(self, j);
-				if(selfR->tag == type_parameter_rule_tag_neweable) {
-					break;
-				}
-			}
-		//満たすべきルールの中に polymorphic を見つけたなら
-		//self にもそれが必要
-		} else if(otherR->tag == type_parameter_rule_tag_polymorphic) {
-			//未実装
-			assert(false);
-		}
-	}
-	return valid;
-}
-
-bool generic_type_rule_test(generic_type* self, vector* rules, il_context* ilctx) {
-	assert(self != NULL);
-	assert(rules != NULL);
-	if(rules->length == 0) {
-		return true;
-	}
-	bool valid = true;
-	for(int i=0; i<rules->length; i++) {
-		type_parameter_rule* r = vector_at(rules, i);
-		if(r->tag == type_parameter_rule_tag_neweable) {
-
-		} else if(r->tag == type_parameter_rule_tag_polymorphic) {
-			generic_type* protocol = r->u.gtype_;
-			if(generic_type_distance(self, protocol, ilctx) == -1) {
-				valid = false;
-				break;
-			}
-		}
-	}
-	return valid;
-}
-
-bool generic_type_rule_polymorphic(vector* rules, generic_type* other, il_context* ilctx) {
-	assert(rules != NULL);
-	assert(other != NULL);
-	if(rules->length == 0) {
-		return false;
-	}
-	bool valid = false;
-	for(int i=0; i<rules->length; i++) {
-		type_parameter_rule* r = vector_at(rules, i);
-		if(r->tag == type_parameter_rule_tag_polymorphic) {
-			generic_type* protocol = r->u.gtype_;
-			if(generic_type_distance(other, protocol, ilctx) != -1) {
-				valid = true;
-				break;
-			}
-		}
-	}
-	return valid;
-}
 
 struct type* generic_type_to_type(generic_type* self) {
 	return self->core_type;
@@ -350,30 +249,34 @@ static int generic_type_distanceImpl(generic_type* self, generic_type* other, il
 	if(self->core_type == NULL) {
 		//提供されているのは T
 		if(other->core_type == NULL) {
-			if(generic_type_rule_valid(generic_type_rule(self, ilctx), generic_type_rule(other, ilctx))) {
-				return 0;
-			} else return -1;
+//			if(generic_type_rule_valid(generic_type_rule(self, ilctx), generic_type_rule(other, ilctx))) {
+//				return 0;
+//			} else return -1;
+			return 0;
 		//提供されているのは具体的な型
 		} else {
 			//具体的な型が T のルールを満たしているか？
-			if(generic_type_rule_test(other, generic_type_rule(self, ilctx), ilctx)) {
-				return 0;
-			} else return -1;
+//			if(generic_type_rule_test(other, generic_type_rule(self, ilctx), ilctx)) {
+//				return 0;
+//			} else return -1;
+			return 0;
 		}
 	//提供している型は T
 	} else if(other->core_type == NULL) {
 		//要求されているのは具体的な型
 		if(self->core_type != NULL) {
 			//T が 具体的な型の要件を満たしているか？
-			if(self->core_type == TYPE_OBJECT ||
-				generic_type_rule_polymorphic(generic_type_rule(other, ilctx), self, ilctx)) {
-				return 0;
-			} else return -1;
+//			if(self->core_type == TYPE_OBJECT ||
+//				generic_type_rule_polymorphic(generic_type_rule(other, ilctx), self, ilctx)) {
+//				return 0;
+//			} else return -1;
+			return -1;
 		//要求されているのは T
 		} else {
-			if(generic_type_rule_valid(generic_type_rule(self, ilctx), generic_type_rule(other, ilctx))) {
-				return 0;
-			} else return -1;
+//			if(generic_type_rule_valid(generic_type_rule(self, ilctx), generic_type_rule(other, ilctx))) {
+//				return 0;
+//			} else return -1;
+			return 0;
 		}
 	//どちらも具体的な型
 	} else {

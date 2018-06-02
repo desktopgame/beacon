@@ -6,7 +6,7 @@
 #include "../../util/text.h"
 
 #include "../class_loader.h"
-#include "../../il/il_type_parameter_rule.h"
+//#include "../../il/il_type_parameter_rule.h"
 #include "../../il/il_type_parameter.h"
 #include "../../il/il_type_argument.h"
 #include "../../il/il_parameter.h"
@@ -74,10 +74,8 @@ void CLIL_type_parameter(class_loader* self, ast* source, vector* dest) {
 	if (source->tag == ast_type_out_parameter) iltypeparam->kind = il_type_parameter_kind_out;
 	vector_push(dest, iltypeparam);
 	//制約があるならそれも設定
-	if (!ast_is_blank(arule_list) &&
-		arule_list->tag == ast_type_parameter_rule_list) {
-		CLIL_type_parameter_rule(self, ast_first(arule_list), iltypeparam->rule_vec);
-	}
+	//制約はとりあえずなしで
+	assert(ast_is_blank(arule_list));
 }
 
 void CLIL_type_argument(class_loader* self, ast* atype_args, vector* dest) {
@@ -191,6 +189,8 @@ static void CLIL_generic_cache_inner(ast* atype_args, generic_cache* dest) {
 }
 
 static void CLIL_type_parameter_rule(class_loader* self, ast* source, vector* dest) {
+	assert(false);
+	/*
 	if (source->tag == ast_type_parameter_list) {
 		for (int i = 0; i < source->child_count; i++) {
 			CLIL_type_parameter_rule(self, ast_at(source, i), dest);
@@ -204,4 +204,5 @@ static void CLIL_type_parameter_rule(class_loader* self, ast* source, vector* de
 			vector_push(dest, rule);
 		}
 	}
+	*/
 }

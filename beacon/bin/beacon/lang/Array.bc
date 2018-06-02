@@ -20,7 +20,7 @@ namespace beacon.lang {
 
 		def set(Int index, T v) -> Void {
 			checkRange(index);
-			nativeSet(index, v);
+			nativeSet(index, v as Object);
 		}
 
 		def sub(Int offs, Int len) -> Array[T] {

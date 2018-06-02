@@ -96,10 +96,6 @@ method * meta_find_method(vector * method_vec, const char * name, vector * ilarg
 			) {
 			continue;
 		}
-		//与えられた型引数の妥当性を検証する
-		if(!meta_rule_valid(m->type_parameter_list, ILCTX_TYPE_ARGS(ilctx), ilctx)) {
-			continue;
-		}
 		//引数がひとつもないので、
 		//型のチェックを行わない
 		if (ilargs->length == 0) {
@@ -144,10 +140,6 @@ constructor* meta_find_ctor(vector* ctor_vec, vector* ilargs, struct enviroment*
 		if (ctor->parameter_list->length != ilargs->length) {
 			continue;
 		}
-		//与えられた型引数の妥当性を検証する
-		if(ilctx != NULL && !meta_rule_valid(ctor->parent->u.class_->type_parameter_list, ILCTX_TYPE_ARGS(ilctx), ilctx)) {
-			continue;
-		}
 		//引数がひとつもないので、
 		//型のチェックを行わない
 		if (ilargs->length == 0) {
@@ -184,11 +176,6 @@ constructor* meta_find_rctor(vector* ctor_vec, vector* args, vector* typeargs, f
 		if (ctor->parameter_list->length != args->length) {
 			continue;
 		}
-		//与えられた型引数の妥当性を検証する
-		if(cls->type_parameter_list->length > 0 && 
-		   !meta_rule_rvalid(cls->type_parameter_list, typeargs, fr)) {
-			continue;
-		}
 		int score = meta_rcalc_score(ctor->parameter_list, args, typeargs, fr);
 		if (score < min) {
 			min = score;
@@ -197,38 +184,4 @@ constructor* meta_find_rctor(vector* ctor_vec, vector* args, vector* typeargs, f
 		}
 	}
 	return ret;
-}
-
-bool meta_rule_valid(vector* type_params, vector* type_args, il_context* ilctx) {
-	assert(type_params->length == type_args->length);
-	//全ての型引数に
-	bool valid = true;
-	for(int i=0; i<type_args->length; i++) {
-		type_parameter* par = (type_parameter*)vector_at(type_params, i);
-		generic_type* arg = (generic_type*)vector_at(type_args, i);
-		//ルールを検証
-		bool validr = true;
-		for(int j=0; j<par->rule_vec->length; j++) {
-			type_parameter_rule* rule = vector_at(par->rule_vec, j);
-			if(rule->tag == type_parameter_rule_tag_neweable) {
-				assert(false);
-			} else if(rule->tag == type_parameter_rule_tag_polymorphic) {
-				generic_type* base = rule->u.gtype_;
-				if(generic_type_distance(base, arg, ilctx) == -1) {
-					validr = false;
-					break;
-				}
-			}
-		}
-		if(!validr) {
-			valid = false;
-			break;
-		}
-	}
-	return valid;
-}
-
-bool meta_rule_rvalid(vector* type_params, vector* type_args, frame* fr) {
-//	assert(false);
-	return true;
 }

@@ -175,6 +175,7 @@ void vm_uncaught(frame * self, enviroment* env, int pc) {
 
 //private
 static void vm_run(frame * self, enviroment * env, int pos, int deferStart) {
+	assert(env != NULL);
 	script_context* ctx = script_context_get_current();
 	int source_len = env->buf->source->length;
 	self->context_ref = env;

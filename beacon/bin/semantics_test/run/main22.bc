@@ -1,0 +1,22 @@
+import "beacon/lang/Object"
+import "beacon/lang/Iterable"
+import "beacon/lang/Console"
+
+namespace beacon.x {
+	class DeferTest {
+		public:
+		def new() {
+
+		}
+		def test() -> Void {
+			var i = 0;
+			while(i < 5) {
+				defer Console.writeLine(i);
+				Console.writeLine(i);
+				i = i + 1;
+			}
+		}
+	}
+}
+var d = new beacon::x::DeferTest();
+d.test();
