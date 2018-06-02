@@ -21,11 +21,11 @@ void il_stmt_defer_dump(il_stmt_defer* self, int depth) {
 	il_stmt_dump(self->stmt, depth + 1);
 }
 
-void il_stmt_defer_load(il_stmt_defer* self, enviroment* env, il_context* ilctx) {
+void il_stmt_defer_load(il_stmt_defer* self, enviroment* env) {
 	il_stmt_load(self->stmt, env, ilctx);
 }
 
-void il_stmt_defer_generate(il_stmt_defer* self, enviroment* env, il_context* ilctx) {
+void il_stmt_defer_generate(il_stmt_defer* self, enviroment* env) {
 	label* lb = opcode_buf_label(env->buf, 0);
 	label* lb2 = opcode_buf_label(env->buf, 0);
 	opcode_buf_add(env->buf, op_defer_register);

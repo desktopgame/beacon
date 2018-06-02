@@ -14,7 +14,7 @@
 #include <string.h>
 
 //proto
-static void il_factor_variable_check(il_factor_variable* self, enviroment* env, il_context* ilctx);
+static void il_factor_variable_check(il_factor_variable* self, enviroment* env);
 static void il_factor_delete_typeargs(vector_item item);
 
 il_factor * il_factor_wrap_variable(il_factor_variable * self) {
@@ -39,7 +39,7 @@ void il_factor_variable_dump(il_factor_variable * self, int depth) {
 	text_putline();
 }
 
-void il_factor_variable_generate(il_factor_variable * self, enviroment* env, il_context* ilctx) {
+void il_factor_variable_generate(il_factor_variable * self, enviroment* env) {
 	il_factor_variable_check(self, env, ilctx);
 	if(self->type == ilvariable_type_local) {
 		il_factor_variable_local_generate(self->u.local_, env, ilctx);
@@ -48,7 +48,7 @@ void il_factor_variable_generate(il_factor_variable * self, enviroment* env, il_
 	}
 }
 
-void il_factor_variable_load(il_factor_variable * self, enviroment * env, il_context* ilctx) {
+void il_factor_variable_load(il_factor_variable * self, enviroment * env) {
 	il_factor_variable_check(self, env, ilctx);
 	if(self->type == ilvariable_type_local) {
 		il_factor_variable_local_load(self->u.local_, env, ilctx);
@@ -57,7 +57,7 @@ void il_factor_variable_load(il_factor_variable * self, enviroment * env, il_con
 	}
 }
 
-generic_type* il_factor_variable_eval(il_factor_variable * self, enviroment * env, il_context* ilctx) {
+generic_type* il_factor_variable_eval(il_factor_variable * self, enviroment * env) {
 	il_factor_variable_check(self, env, ilctx);
 	generic_type* ret = NULL;
 	if(self->type == ilvariable_type_local) {
@@ -68,7 +68,7 @@ generic_type* il_factor_variable_eval(il_factor_variable * self, enviroment * en
 	return ret;
 }
 
-char* il_factor_variable_tostr(il_factor_variable* self, enviroment* env, il_context* ilctx) {
+char* il_factor_variable_tostr(il_factor_variable* self, enviroment* env) {
 	if(self->type == ilvariable_type_local) {
 		return il_factor_variable_local_tostr(self->u.local_, env, ilctx);
 	} else if(self->type == ilvariable_type_static) {
@@ -91,7 +91,7 @@ void il_factor_variable_delete(il_factor_variable * self) {
 }
 
 //private
-static void il_factor_variable_check(il_factor_variable* self, enviroment* env, il_context* ilctx) {
+static void il_factor_variable_check(il_factor_variable* self, enviroment* env) {
 	if(self->type != ilvariable_type_undefined) {
 		return;
 	}

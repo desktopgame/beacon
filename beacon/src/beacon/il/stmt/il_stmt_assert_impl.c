@@ -27,7 +27,7 @@ void il_stmt_assert_dump(il_stmt_assert* self, int depth) {
 	il_factor_dump(self->message, depth + 1);
 }
 
-void il_stmt_assert_generate(il_stmt_assert* self, enviroment* env, il_context* ilctx) {
+void il_stmt_assert_generate(il_stmt_assert* self, enviroment* env) {
 	//https://code.i-harness.com/ja/q/2a1650
 	label* gt = opcode_buf_label(env->buf, 0);
 	il_factor_generate(self->condition, env, ilctx);
@@ -42,7 +42,7 @@ void il_stmt_assert_generate(il_stmt_assert* self, enviroment* env, il_context* 
 	gt->cursor = opcode_buf_nop(env->buf);
 }
 
-void il_stmt_assert_load(il_stmt_assert* self, enviroment* env, il_context* ilctx) {
+void il_stmt_assert_load(il_stmt_assert* self, enviroment* env) {
 	il_factor_load(self->condition, env, ilctx);
 	if(self->message == NULL) {
 		char* str = il_factor_tostr(self->condition, env, ilctx);

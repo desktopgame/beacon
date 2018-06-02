@@ -13,7 +13,6 @@ struct type;
 struct method;
 struct enviroment;
 struct virtual_type;
-struct il_context;
 struct frame;
 /**
  * 型変数つきの型宣言の型引数では generic_type 自身が使われますが、
@@ -152,7 +151,7 @@ bool generic_type_bool(generic_type* self);
  * @param env
  * @param ilctx
  */
-void generic_type_generate(generic_type* self, struct enviroment* env, struct il_context* ilctx);
+void generic_type_generate(generic_type* self, struct enviroment* env);
 
 /**
  * 現在のコンテキストで self の型変数を解決します.
@@ -161,7 +160,7 @@ void generic_type_generate(generic_type* self, struct enviroment* env, struct il
  * @param ilctx
  * @return
  */
-generic_type* generic_type_apply(generic_type* self, struct il_context* ilctx);
+generic_type* generic_type_apply(generic_type* self);
 /**
  * 現在のコンテキストで self の型変数を解決します.
  * T ではなく T を内包する型(List<T>) などが戻り値になる時に使用されます。

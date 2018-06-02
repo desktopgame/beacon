@@ -29,7 +29,7 @@ void il_stmt_inferenced_type_init_dump(il_stmt_inferenced_type_init * self, int 
 	il_factor_dump(self->fact, depth + 1);
 }
 
-void il_stmt_inferenced_type_init_generate(il_stmt_inferenced_type_init * self, enviroment * env, il_context* ilctx) {
+void il_stmt_inferenced_type_init_generate(il_stmt_inferenced_type_init * self, enviroment * env) {
 	//右辺の方で宣言する
 	il_factor_generate(self->fact, env, ilctx);
 	/*
@@ -47,7 +47,7 @@ void il_stmt_inferenced_type_init_generate(il_stmt_inferenced_type_init * self, 
 	opcode_buf_add(env->buf, self->sym->index);
 }
 
-void il_stmt_inferenced_type_init_load(il_stmt_inferenced_type_init * self, enviroment * env, il_context* ilctx) {
+void il_stmt_inferenced_type_init_load(il_stmt_inferenced_type_init * self, enviroment * env) {
 	il_factor_load(self->fact, env, ilctx);
 	//XSTREQ(self->name, "viter");
 	//XSTREQ(self->name, "xv");

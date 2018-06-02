@@ -2,7 +2,6 @@
 #ifndef BEACON_ENV_GENERIC_CACHE_H
 #define BEACON_ENV_GENERIC_CACHE_H
 #include "fqcn_cache.h"
-#include "../il/il_context.h"
 #include "../util/vector.h"
 
 struct generic_type;

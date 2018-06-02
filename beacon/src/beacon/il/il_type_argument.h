@@ -29,7 +29,7 @@ void il_type_argument_print(vector* iltype_args);
  * @param ilctx
  * @return
  */
-void il_type_argument_resolve(vector* iltype_args, struct il_context* ilctx);
+void il_type_argument_resolve(vector* iltype_args);
 
 /**
  * 型実引数を解放します.

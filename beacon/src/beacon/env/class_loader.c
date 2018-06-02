@@ -23,6 +23,7 @@
 #include "method.h"
 #include "parameter.h"
 #include "constructor.h"
+#include "compile_context.h"
 #include "../il/il_constructor.h"
 #include "../il/il_constructor_chain.h"
 #include "../il/il_type_impl.h"
@@ -156,13 +157,12 @@ static void class_loader_load_impl(class_loader* self) {
 		il_error_exit();
 	}
 	//トップレベルのステートメントを読み込む
-	il_context* ilctx = il_context_new(self);
-	ilctx->toplevel = true;
+	cc_enable(ccstate_toplevel);
 	if(self->type == content_entry_point) {
 		debug_set_gen_top(true);
 	}
-	CLBC_body(self, self->il_code->statement_list, self->env, NULL, ilctx);
-	il_context_delete(ilctx);
+	CLBC_body(self, self->il_code->statement_list, self->env, NULL);
+	cc_disable(ccstate_toplevel);
 }
 
 static void class_loader_link_recursive(class_loader* self, link_type type) {

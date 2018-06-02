@@ -26,20 +26,20 @@ void il_factor_double_dump(il_factor_double * self, int depth) {
 	text_putline();
 }
 
-void il_factor_double_generate(il_factor_double * self, enviroment* env, il_context* ilctx) {
+void il_factor_double_generate(il_factor_double * self, enviroment* env) {
 	int index = enviroment_add_constant_double(env, self->value);
 	opcode_buf_add(env->buf, op_dconst);
 	opcode_buf_add(env->buf, index);
 }
 
-void il_factor_double_load(il_factor_double * self, enviroment * env, il_context* ilctx) {
+void il_factor_double_load(il_factor_double * self, enviroment * env) {
 }
 
-generic_type* il_factor_double_eval(il_factor_double * self, enviroment * env, il_context* ilctx) {
+generic_type* il_factor_double_eval(il_factor_double * self, enviroment * env) {
 	return GENERIC_DOUBLE;
 }
 
-char* il_factor_double_tostr(il_factor_double* self, enviroment* env, il_context* ilctx) {
+char* il_factor_double_tostr(il_factor_double* self, enviroment* env) {
 	string_buffer* sb = string_buffer_new();
 	char block[32] = {0};
 	int res = sprintf(block, "%lf", self->value);

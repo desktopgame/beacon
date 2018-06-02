@@ -24,7 +24,7 @@ void il_factor_bool_dump(il_factor_bool * self, int depth) {
 	text_putline();
 }
 
-void il_factor_bool_generate(il_factor_bool * self, enviroment * env, il_context* ilctx) {
+void il_factor_bool_generate(il_factor_bool * self, enviroment * env) {
 	if (self->a) {
 		opcode_buf_add(env->buf, op_true);
 	} else {
@@ -32,11 +32,11 @@ void il_factor_bool_generate(il_factor_bool * self, enviroment * env, il_context
 	}
 }
 
-generic_type* il_factor_bool_eval(il_factor_bool * self, enviroment * env, il_context* ilctx) {
+generic_type* il_factor_bool_eval(il_factor_bool * self, enviroment * env) {
 	return GENERIC_BOOL;
 }
 
-char* il_factor_bool_tostr(il_factor_bool* self, enviroment* env, il_context* ilctx) {
+char* il_factor_bool_tostr(il_factor_bool* self, enviroment* env) {
 	return text_strdup(self->a ? "true" : "false");
 }
 

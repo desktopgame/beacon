@@ -20,13 +20,13 @@ il_factor_dec* il_factor_dec_new(fix_type type);
 
 void il_factor_dec_dump(il_factor_dec* self, int depth);
 
-void il_factor_dec_generate(il_factor_dec* self, struct enviroment* env, il_context* ilctx);
+void il_factor_dec_generate(il_factor_dec* self, struct enviroment* env);
 
-void il_factor_dec_load(il_factor_dec* self, struct enviroment* env, il_context* ilctx);
+void il_factor_dec_load(il_factor_dec* self, struct enviroment* env);
 
-generic_type* il_factor_dec_eval(il_factor_dec* self, struct enviroment* env, il_context* ilctx);
+generic_type* il_factor_dec_eval(il_factor_dec* self, struct enviroment* env);
 
-char* il_factor_dec_tostr(il_factor_dec* self, struct enviroment* env, il_context* ilctx);
+char* il_factor_dec_tostr(il_factor_dec* self, struct enviroment* env);
 
 void il_factor_dec_delete(il_factor_dec* self);
 

@@ -285,45 +285,45 @@ constructor * class_find_rconstructor(class_ * self, vector * args, vector* type
 	return meta_find_rctor(self->constructor_list, args, typeargs, fr, outIndex);
 }
 
-constructor * class_find_constructor(class_ * self, vector * args, enviroment * env, il_context* ilctx, int* outIndex) {
+constructor * class_find_constructor(class_ * self, vector * args, enviroment * env, int* outIndex) {
 	//	vector* v = meta_find_constructors(self, args, env, ilctx);
 	//	(*outIndex) = -1;
 	//	return class_find_constructor_impl(v, args, env, ilctx, outIndex);
-	return meta_find_ctor(self->constructor_list, args, env, ilctx, outIndex);
+	return meta_find_ctor(self->constructor_list, args, env, outIndex);
 }
 
-constructor * class_find_empty_constructor(class_ * self, enviroment * env, il_context* ilctx, int * outIndex) {
+constructor * class_find_empty_constructor(class_ * self, enviroment * env, int * outIndex) {
 	vector* emptyArgs = vector_new();
-	constructor* ret = class_find_constructor(self, emptyArgs, env, ilctx, outIndex);
+	constructor* ret = class_find_constructor(self, emptyArgs, env, outIndex);
 	vector_delete(emptyArgs, vector_deleter_null);
 	return ret;
 }
 
-method * class_find_method(class_ * self, const char * name, vector * args, enviroment * env, il_context* ilctx, int * outIndex) {
+method * class_find_method(class_ * self, const char * name, vector * args, enviroment * env, int * outIndex) {
 	(*outIndex) = -1;
 	class_create_vtable(self);
 	//assert(self->vt->elements->length > 0);
 	method* ret = NULL;
-	if((ret = meta_find_method(self->vt->elements, name, args, env, ilctx, outIndex))
+	if((ret = meta_find_method(self->vt->elements, name, args, env, outIndex))
 	   != NULL) {
 		   return ret;
 	}
-	if((ret = meta_find_method(self->method_list, name, args, env, ilctx, outIndex))
+	if((ret = meta_find_method(self->method_list, name, args, env, outIndex))
 	   != NULL) {
 		   return ret;
 	}
-	if((ret = meta_find_method(self->smethod_list, name, args, env, ilctx, outIndex))
+	if((ret = meta_find_method(self->smethod_list, name, args, env, outIndex))
 	   != NULL) {
 		   return ret;
 	}
 	return NULL;
 }
 
-method * class_find_smethod(class_ * self, const char * name, vector * args, enviroment * env, il_context* ilctx, int * outIndex) {
+method * class_find_smethod(class_ * self, const char * name, vector * args, enviroment * env, int * outIndex) {
 	(*outIndex) = -1;
 	class_create_vtable(self);
 	int temp = 0;
-	method* ret = meta_find_method(self->smethod_list, name, args, env, ilctx, &temp);
+	method* ret = meta_find_method(self->smethod_list, name, args, env, &temp);
 	temp += (class_count_smethodall(self) - self->smethod_list->length);
 	(*outIndex) = temp;
 	return ret;
@@ -496,7 +496,7 @@ int class_count_smethodall(class_ * self) {
 	return sum;
 }
 
-object * class_new_instance(class_* self, il_context* ilctx, frame* fr, vector* args, vector* type_args) {
+object * class_new_instance(class_* self, frame* fr, vector* args, vector* type_args) {
 	//コンストラクタを検索
 	int temp = 0;
 	constructor* ctor = class_find_rconstructor(self, args, NULL, fr, &temp);

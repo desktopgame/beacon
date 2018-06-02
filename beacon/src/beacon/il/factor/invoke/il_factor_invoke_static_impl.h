@@ -20,13 +20,13 @@ il_factor_invoke_static* il_factor_invoke_static_new(const char* name);
 
 void il_factor_invoke_static_dump(il_factor_invoke_static* self, int depth);
 
-void il_factor_invoke_static_generate(il_factor_invoke_static* self, struct enviroment* env, il_context* ilctx);
+void il_factor_invoke_static_generate(il_factor_invoke_static* self, struct enviroment* env);
 
-void il_factor_invoke_static_load(il_factor_invoke_static * self, struct enviroment * env, il_context* ilctx);
+void il_factor_invoke_static_load(il_factor_invoke_static * self, struct enviroment * env);
 
-struct generic_type* il_factor_invoke_static_eval(il_factor_invoke_static * self, struct enviroment * env, il_context* ilctx);
+struct generic_type* il_factor_invoke_static_eval(il_factor_invoke_static * self, struct enviroment * env);
 
-char* il_factor_invoke_static_tostr(il_factor_invoke_static* self, struct enviroment* env, il_context* ilctx);
+char* il_factor_invoke_static_tostr(il_factor_invoke_static* self, struct enviroment* env);
 
 void il_factor_invoke_static_delete(il_factor_invoke_static* self);
 #endif

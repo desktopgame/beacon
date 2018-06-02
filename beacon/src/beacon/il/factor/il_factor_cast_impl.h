@@ -23,13 +23,13 @@ il_factor_cast* il_factor_cast_new(il_factor* fact);
 
 void il_factor_cast_dump(il_factor_cast* self, int depth);
 
-void il_factor_cast_generate(il_factor_cast* self, struct enviroment* env, il_context* ilctx);
+void il_factor_cast_generate(il_factor_cast* self, struct enviroment* env);
 
-void il_factor_cast_load(il_factor_cast* self, struct enviroment* env, il_context* ilctx);
+void il_factor_cast_load(il_factor_cast* self, struct enviroment* env);
 
-generic_type* il_factor_cast_eval(il_factor_cast* self, struct enviroment* env, il_context* ilctx);
+generic_type* il_factor_cast_eval(il_factor_cast* self, struct enviroment* env);
 
-char* il_factor_cast_tostr(il_factor_cast* self, struct enviroment* env, il_context* ilctx);
+char* il_factor_cast_tostr(il_factor_cast* self, struct enviroment* env);
 
 void il_factor_cast_delete(il_factor_cast* self);
 

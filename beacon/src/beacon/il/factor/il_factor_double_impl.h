@@ -17,13 +17,13 @@ il_factor_double* il_factor_double_new(double d);
 
 void il_factor_double_dump(il_factor_double* self, int depth);
 
-void il_factor_double_generate(il_factor_double* self, struct enviroment* env, il_context* ilctx);
+void il_factor_double_generate(il_factor_double* self, struct enviroment* env);
 
-void il_factor_double_load(il_factor_double* self, struct enviroment* env, il_context* ilctx);
+void il_factor_double_load(il_factor_double* self, struct enviroment* env);
 
-generic_type* il_factor_double_eval(il_factor_double* self, struct enviroment* env, il_context* ilctx);
+generic_type* il_factor_double_eval(il_factor_double* self, struct enviroment* env);
 
-char* il_factor_double_tostr(il_factor_double* self, struct enviroment* env, il_context* ilctx);
+char* il_factor_double_tostr(il_factor_double* self, struct enviroment* env);
 
 void il_factor_double_delete(il_factor_double* self);
 

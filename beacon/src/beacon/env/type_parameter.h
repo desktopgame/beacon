@@ -3,7 +3,6 @@
 #define BEACON_ENV_TYPE_PARAMETER_H
 struct vector;
 struct il_type_parameter;
-struct il_context;
 
 typedef enum type_parameter_kind {
 	type_parameter_kind_default,
@@ -19,9 +18,9 @@ typedef struct type_parameter {
 
 type_parameter* type_parameter_new(char* name);
 
-type_parameter* type_parameter_dup(struct il_type_parameter* src, struct il_context* ilctx);
+type_parameter* type_parameter_dup(struct il_type_parameter* src);
 
-void type_parameter_list_dup(struct vector* ilSource, struct vector* sgDest, struct il_context* ilctx);
+void type_parameter_list_dup(struct vector* ilSource, struct vector* sgDest);
 
 void type_parameter_print(struct vector* v);
 

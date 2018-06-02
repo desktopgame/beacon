@@ -3,7 +3,6 @@
 #include "../util/text.h"
 #include "../util/vector.h"
 #include "../il/il_type_parameter.h"
-#include "../il/il_context.h"
 
 //proto
 static void type_parameter_rule_list_delete(vector_item item);
@@ -15,7 +14,7 @@ type_parameter * type_parameter_new(char * name) {
 	return ret;
 }
 
-type_parameter * type_parameter_dup(il_type_parameter * src, il_context* ilctx) {
+type_parameter * type_parameter_dup(il_type_parameter * src) {
 	type_parameter* ret = type_parameter_new(src->name);
 	switch (src->kind) {
 		case il_type_parameter_kind_default:
@@ -34,7 +33,7 @@ type_parameter * type_parameter_dup(il_type_parameter * src, il_context* ilctx) 
 	return ret;
 }
 
-void type_parameter_list_dup(vector* ilSource, vector* sgDest, il_context* ilctx) {
+void type_parameter_list_dup(vector* ilSource, vector* sgDest) {
 	//これはILレベルの<K, V>の並びを
 	//SGレベルの<K, V> へ変換します。
 	//<K(IComparable<K>), V>のような宣言をするとき、
@@ -44,7 +43,7 @@ void type_parameter_list_dup(vector* ilSource, vector* sgDest, il_context* ilctx
 	//type_parameter_dupからルールの複製を削除したのもそのためです。
 	for (int i = 0; i < ilSource->length; i++) {
 		il_type_parameter* e = (il_type_parameter*)vector_at(ilSource, i);
-		type_parameter* newTP = type_parameter_dup(e, ilctx);
+		type_parameter* newTP = type_parameter_dup(e);
 		vector_push(sgDest, newTP);
 		//type_parameter_rule_list_dup(e->rule_vec, newTP->rule_vec, cache);
 	}

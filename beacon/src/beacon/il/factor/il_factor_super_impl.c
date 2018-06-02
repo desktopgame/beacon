@@ -19,19 +19,19 @@ void il_factor_super_dump(il_factor_super * self, int depth) {
 	text_putline();
 }
 
-void il_factor_super_generate(il_factor_super * self, enviroment * env, il_context* ilctx) {
+void il_factor_super_generate(il_factor_super * self, enviroment * env) {
 	opcode_buf_add(env->buf, op_super);
 }
 
-void il_factor_super_load(il_factor_super * self, enviroment * env, il_context* ilctx) {
+void il_factor_super_load(il_factor_super * self, enviroment * env) {
 }
 
-generic_type* il_factor_super_eval(il_factor_super * self, enviroment * env, il_context* ilctx) {
+generic_type* il_factor_super_eval(il_factor_super * self, enviroment * env) {
 	type* t = ((type*)vector_top(ilctx->type_vec));
 	return t->u.class_->super_class;
 }
 
-char* il_factor_super_tostr(il_factor_super* self, enviroment* env, il_context* ilctx) {
+char* il_factor_super_tostr(il_factor_super* self, enviroment* env) {
 	return text_strdup("super");
 }
 

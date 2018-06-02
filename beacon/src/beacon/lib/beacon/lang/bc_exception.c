@@ -32,7 +32,6 @@ static void bc_exception_nativeInit(method* parent, frame* fr, enviroment* env) 
 	//スタックトレースを作成する
 	frame* temp = fr;
 	vector* stackTraceElementVec = vector_new();
-	il_context* ilctx = il_context_new(NULL);
 	do {
 		//実行中のインストラクションの行番号を取得
 		line_range* lr = line_range_find(temp->context_ref->line_rangeVec, temp->pc);
@@ -42,7 +41,7 @@ static void bc_exception_nativeInit(method* parent, frame* fr, enviroment* env) 
 		vector_push(args, object_int_new(lr == NULL ? -1 : lr->lineno));
 		object* trace = class_new_instance(
 			stackTraceElementClass,
-			ilctx,
+			//ilctx,
 			fr,
 			args,
 			NULL
@@ -51,7 +50,6 @@ static void bc_exception_nativeInit(method* parent, frame* fr, enviroment* env) 
 		vector_push(stackTraceElementVec, trace);
 		temp = temp->parent;
 	} while (temp != NULL);
-	il_context_delete(ilctx);
 	//配列へ
 	object* arr = bc_array_new(stackTraceElementClass->parent->generic_self, stackTraceElementVec->length, fr);
 	for (int i = 0; i < stackTraceElementVec->length; i++) {

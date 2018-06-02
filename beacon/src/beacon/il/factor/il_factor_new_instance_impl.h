@@ -28,13 +28,13 @@ il_factor_new_instance* il_factor_new_instance_new();
 
 void il_factor_new_instance_dump(il_factor_new_instance* self, int depth);
 
-void il_factor_new_instance_generate(il_factor_new_instance* self, struct enviroment* env, il_context* ilctx);
+void il_factor_new_instance_generate(il_factor_new_instance* self, struct enviroment* env);
 
-void il_factor_new_instance_load(il_factor_new_instance* self, struct enviroment* env, il_context* ilctx);
+void il_factor_new_instance_load(il_factor_new_instance* self, struct enviroment* env);
 
-generic_type* il_factor_new_instance_eval(il_factor_new_instance* self, struct enviroment* env, il_context* ilctx);
+generic_type* il_factor_new_instance_eval(il_factor_new_instance* self, struct enviroment* env);
 
-char* il_factor_new_instance_tostr(il_factor_new_instance* self, struct enviroment* env, il_context* ilctx);
+char* il_factor_new_instance_tostr(il_factor_new_instance* self, struct enviroment* env);
 
 void il_factor_new_instance_delete(il_factor_new_instance* self);
 

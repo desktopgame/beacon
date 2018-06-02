@@ -17,7 +17,7 @@
 
 //proto
 static void il_factor_new_instance_delete_typearg(vector_item item);
-static void il_factor_new_instance_find(il_factor_new_instance * self, enviroment * env, il_context* ilctx);
+static void il_factor_new_instance_find(il_factor_new_instance * self, enviroment * env);
 static void il_Factor_new_instace_delete_arg(vector_item item);
 
 il_factor * il_factor_wrap_new_instance(il_factor_new_instance * self) {
@@ -49,7 +49,7 @@ void il_factor_new_instance_dump(il_factor_new_instance * self, int depth) {
 	}
 }
 
-void il_factor_new_instance_generate(il_factor_new_instance * self, enviroment * env, il_context* ilctx) {
+void il_factor_new_instance_generate(il_factor_new_instance * self, enviroment * env) {
 	il_factor_new_instance_find(self, env, ilctx);
 	for(int i=0; i<self->type_args->length; i++) {
 		il_type_argument* e = (il_type_argument*)vector_at(self->type_args, i);
@@ -71,13 +71,13 @@ void il_factor_new_instance_generate(il_factor_new_instance * self, enviroment *
 	opcode_buf_add(env->buf, self->constructor_index);
 }
 
-void il_factor_new_instance_load(il_factor_new_instance * self, enviroment * env, il_context* ilctx) {
+void il_factor_new_instance_load(il_factor_new_instance * self, enviroment * env) {
 //	fqcn_cache_delete(self->fqcn);
 //	vector_delete(self->argument_list, il_Factor_new_instace_delete_arg);
 //	MEM_FREE(self);
 }
 
-generic_type* il_factor_new_instance_eval(il_factor_new_instance * self, enviroment * env, il_context* ilctx) {
+generic_type* il_factor_new_instance_eval(il_factor_new_instance * self, enviroment * env) {
 	il_factor_new_instance_find(self, env, ilctx);
 	if(il_error_panic()) {
 		return NULL;
@@ -109,7 +109,7 @@ generic_type* il_factor_new_instance_eval(il_factor_new_instance * self, envirom
 	return self->instance_type;
 }
 
-char* il_factor_new_instance_tostr(il_factor_new_instance* self, enviroment* env, il_context* ilctx) {
+char* il_factor_new_instance_tostr(il_factor_new_instance* self, enviroment* env) {
 	string_buffer* sb = string_buffer_new();
 	string_buffer_appends(sb, "new ");
 	char* type = fqcn_cache_tostr(self->fqcnc);
@@ -138,7 +138,7 @@ static void il_factor_new_instance_delete_typearg(vector_item item) {
 	il_type_argument_delete(e);
 }
 
-static void il_factor_new_instance_find(il_factor_new_instance * self, enviroment * env, il_context* ilctx) {
+static void il_factor_new_instance_find(il_factor_new_instance * self, enviroment * env) {
 	//*
 	class_* cls = il_context_class(ilctx, self->fqcnc);
 	int temp = -1;

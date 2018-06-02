@@ -42,13 +42,13 @@ il_factor_call_op* il_factor_call_op_new();
 
 void il_factor_call_op_dump(il_factor_call_op* self, int depth);
 
-void il_factor_call_op_load(il_factor_call_op* self, struct enviroment* env, il_context* ilctx);
+void il_factor_call_op_load(il_factor_call_op* self, struct enviroment* env);
 
-struct generic_type* il_factor_call_op_eval(il_factor_call_op* self, struct enviroment* env, il_context* ilctx);
+struct generic_type* il_factor_call_op_eval(il_factor_call_op* self, struct enviroment* env);
 
-char* il_factor_call_op_to_str(il_factor_call_op* self, struct enviroment* env, il_context* ilctx);
+char* il_factor_call_op_to_str(il_factor_call_op* self, struct enviroment* env);
 
-void il_factor_call_op_generate(il_factor_call_op* self, struct enviroment* env, il_context* ilctx);
+void il_factor_call_op_generate(il_factor_call_op* self, struct enviroment* env);
 
 void il_factor_call_op_delete(il_factor_call_op* self);
 

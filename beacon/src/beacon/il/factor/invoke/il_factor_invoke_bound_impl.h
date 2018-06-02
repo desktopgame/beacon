@@ -19,13 +19,13 @@ il_factor_invoke_bound* il_factor_invoke_bound_new(const char* name);
 
 void il_factor_invoke_bound_dump(il_factor_invoke_bound* self, int depth);
 
-void il_factor_invoke_bound_generate(il_factor_invoke_bound* self, struct enviroment* env, il_context* ilctx);
+void il_factor_invoke_bound_generate(il_factor_invoke_bound* self, struct enviroment* env);
 
-void il_factor_invoke_bound_load(il_factor_invoke_bound * self, struct enviroment * env, il_context* ilctx);
+void il_factor_invoke_bound_load(il_factor_invoke_bound * self, struct enviroment * env);
 
-struct generic_type* il_factor_invoke_bound_eval(il_factor_invoke_bound * self, struct enviroment * env, il_context* ilctx);
+struct generic_type* il_factor_invoke_bound_eval(il_factor_invoke_bound * self, struct enviroment * env);
 
-char* il_factor_invoke_bound_tostr(il_factor_invoke_bound* self, struct enviroment* env, il_context* ilctx);
+char* il_factor_invoke_bound_tostr(il_factor_invoke_bound* self, struct enviroment* env);
 
 void il_factor_invoke_bound_delete(il_factor_invoke_bound* self);
 #endif

@@ -27,13 +27,13 @@ il_factor_unary_op* il_factor_unary_op_new(ilunary_op_type type);
 
 void il_factor_unary_op_dump(il_factor_unary_op* self, int depth);
 
-void il_factor_unary_op_generate(il_factor_unary_op* self, struct enviroment* env, il_context* ilctx);
+void il_factor_unary_op_generate(il_factor_unary_op* self, struct enviroment* env);
 
-void il_factor_unary_op_load(il_factor_unary_op* self, struct enviroment* env, il_context* ilctx);
+void il_factor_unary_op_load(il_factor_unary_op* self, struct enviroment* env);
 
-generic_type* il_factor_unary_op_eval(il_factor_unary_op* self, struct enviroment* env, il_context* ilctx);
+generic_type* il_factor_unary_op_eval(il_factor_unary_op* self, struct enviroment* env);
 
-char* il_factor_unary_op_tostr(il_factor_unary_op* self, struct enviroment* env, il_context* ilctx);
+char* il_factor_unary_op_tostr(il_factor_unary_op* self, struct enviroment* env);
 
 void il_factor_unary_op_delete(il_factor_unary_op* self);
 

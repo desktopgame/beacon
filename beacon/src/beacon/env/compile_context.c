@@ -1,9 +1,10 @@
 #include "compile_context.h"
 #include "../util/mem.h"
 #include "namespace.h"
-#include "type_interface.h"
+#include "type_impl.h"
 #include "method.h"
 #include "constructor.h"
+#include "fqcn_cache.h"
 #include "generic_type.h"
 
 vector* gContextVec = NULL;
@@ -59,6 +60,10 @@ method* ccpop_method() {
 	return vector_pop(cc_current()->method_vec);
 }
 
+bool cchas_method() {
+	return cc_current()->method_vec->length > 0;
+}
+
 //ctor
 
 void ccpush_ctor(constructor* e) {
@@ -73,6 +78,10 @@ constructor* ccpop_ctor() {
 	return vector_pop(cc_current()->ctor_vec);
 }
 
+bool cchas_ctor() {
+	return cc_current()->ctor_vec->length > 0;
+}
+
 //receiver
 
 void ccpush_receiver(generic_type* e) {
@@ -85,6 +94,10 @@ generic_type* cctop_receiver() {
 
 generic_type* ccpop_receiver() {
 	return vector_pop(cc_current()->receiver_vec);
+}
+
+generic_type* ccat_receiver(int index) {
+	return vector_at(cc_current()->receiver_vec, index);
 }
 
 //typeargs
@@ -147,6 +160,44 @@ void cc_pop() {
 	}
 }
 
+struct namespace_* cc_namespace() {
+	compile_context* cc = cc_current();
+	if(cc->namespace_vec->length == 0) {
+		return namespace_lang();
+	}
+	return cctop_namespace();
+}
+
+class_* cc_class(fqcn_cache* cache) {
+	compile_context* self = cc_current();
+	class_* tp = NULL;
+	if (self->namespace_vec->length > 0) {
+		namespace_* scope = (namespace_*)vector_top(self->namespace_vec);
+		tp = fqcn_class(cache, scope);
+	} else {
+		tp = fqcn_class(cache, NULL);
+	}
+	if(tp == NULL) {
+		tp = fqcn_class(cache, namespace_lang());
+	}
+	return tp;
+
+}
+
+void cc_enable(compile_state state) {
+	compile_context* cc = cc_current();
+	cc->state = cc->state | state;
+}
+
+void cc_disable(compile_state state) {
+	compile_context* cc = cc_current();
+	cc->state = cc->state & (~state);
+}
+
+bool cc_test(compile_state state) {
+	return (cc_current()->state & state) > 0;
+}
+
 //private
 static compile_context* compile_context_new() {
 	compile_context* ret = (compile_context*)MEM_MALLOC(sizeof(compile_context));
@@ -156,7 +207,6 @@ static compile_context* compile_context_new() {
 	ret->ctor_vec = vector_new();
 	ret->while_start_vec = vector_new();
 	ret->while_end_vec = vector_new();
-	ret->toplevel = false;
 	ret->receiver_vec = vector_new();
 	ret->type_args_vec = vector_new();
 	ret->find_instance = 0;

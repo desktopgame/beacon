@@ -1,6 +1,13 @@
 #ifndef BEACON_ENV_CONTEXT_H
 #define BEACON_ENV_CONTEXT_H
 #include "../util/vector.h"
+
+typedef enum compile_state {
+	ccstate_none,
+	ccstate_toplevel
+} compile_state;
+
+
 typedef struct compile_context {
 	vector* namespace_vec;
 	vector* type_vec;
@@ -18,17 +25,20 @@ typedef struct compile_context {
 	//それを実行する実体化されたレシーバから型を取り出せますが、
 	//(つまり、receiver_vecの先頭を参照する)
 	//コンストラクタの場合ではnew演算子から参照する必要があります。
-	bool toplevel;
+	compile_state state;
 	int find_instance;
 	int find_static;
 	struct class_loader* class_loader_ref;
 } compile_context;
+
 struct namespace_;
 struct type;
+struct class_;
 struct method;
 struct constructor;
 struct label;
 struct generic_type;
+struct fqcn_cache;
 
 void cc_push();
 
@@ -55,6 +65,8 @@ struct method* cctop_method();
 
 struct method* ccpop_method();
 
+bool cchas_method();
+
 //ctor
 
 void ccpush_ctor(struct constructor* e);
@@ -63,6 +75,8 @@ struct constructor* cctop_ctor();
 
 struct constructor* ccpop_ctor();
 
+bool cchas_ctor();
+
 //receiver
 
 void ccpush_receiver(struct generic_type* e);
@@ -70,6 +84,8 @@ void ccpush_receiver(struct generic_type* e);
 struct generic_type* cctop_receiver();
 
 struct generic_type* ccpop_receiver();
+
+struct generic_type* ccat_receiver(int index);
 
 //typeargs
 
@@ -100,4 +116,14 @@ compile_context* cc_current();
 compile_context* cc_top();
 
 void cc_pop();
+
+struct namespace_* cc_namespace();
+
+struct class_* cc_class(struct fqcn_cache* cache);
+
+void cc_enable(compile_state state);
+
+void cc_disable(compile_state state);
+
+bool cc_test(compile_state state);
 #endif

@@ -5,15 +5,14 @@
 #include "../../../env/type/class_impl.h"
 #include "../../../vm/enviroment.h"
 #include "../../il_argument.h"
-#include "../../il_context.h"
 #include "../../il_type_argument.h"
 #include "../../../util/xassert.h"
 #include "../../../util/vector.h"
 
 //proto
-static void resolve_non_default(il_factor_invoke_static * self, enviroment * env, il_context* ilctx);
-static void resolve_default(il_factor_invoke_static * self, enviroment * env, il_context* ilctx);
-static void il_factor_invoke_static_check(il_factor_invoke_static * self, enviroment * env, il_context* ilctx);
+static void resolve_non_default(il_factor_invoke_static * self, enviroment * env);
+static void resolve_default(il_factor_invoke_static * self, enviroment * env);
+static void il_factor_invoke_static_check(il_factor_invoke_static * self, enviroment * env);
 static void il_factor_invoke_static_args_delete(vector_item item);
 static void il_factor_invoke_static_typeargs_delete(vector_item item);
 
@@ -42,7 +41,7 @@ void il_factor_invoke_static_dump(il_factor_invoke_static* self, int depth) {
 	}
 }
 
-void il_factor_invoke_static_generate(il_factor_invoke_static* self, enviroment* env, il_context* ilctx) {
+void il_factor_invoke_static_generate(il_factor_invoke_static* self, enviroment* env) {
 	for(int i=0; i<self->type_args->length; i++) {
 		il_type_argument* e = (il_type_argument*)vector_at(self->type_args, i);
 		assert(e->gtype != NULL);
@@ -61,13 +60,13 @@ void il_factor_invoke_static_generate(il_factor_invoke_static* self, enviroment*
 	opcode_buf_add(env->buf, (vector_item)self->index);
 }
 
-void il_factor_invoke_static_load(il_factor_invoke_static * self, enviroment * env, il_context* ilctx) {
+void il_factor_invoke_static_load(il_factor_invoke_static * self, enviroment * env) {
 	vector_push(ilctx->type_args_vec, self->type_args);
 	il_factor_invoke_static_check(self, env, ilctx);
 	vector_pop(ilctx->type_args_vec);
 }
 
-generic_type* il_factor_invoke_static_eval(il_factor_invoke_static * self, enviroment * env, il_context* ilctx) {
+generic_type* il_factor_invoke_static_eval(il_factor_invoke_static * self, enviroment * env) {
 	il_factor_invoke_static_check(self, env, ilctx);
 	//メソッドを解決できなかった場合
 	if(il_error_panic()) {
@@ -85,7 +84,7 @@ generic_type* il_factor_invoke_static_eval(il_factor_invoke_static * self, envir
 	return NULL;
 }
 
-char* il_factor_invoke_static_tostr(il_factor_invoke_static* self, enviroment* env, il_context* ilctx) {
+char* il_factor_invoke_static_tostr(il_factor_invoke_static* self, enviroment* env) {
 	string_buffer* sb = string_buffer_new();
 	char* name = fqcn_cache_tostr(self->fqcn);
 	string_buffer_appends(sb, name);
@@ -107,7 +106,7 @@ void il_factor_invoke_static_delete(il_factor_invoke_static* self) {
 }
 //private
 //FIXME:il_factor_invokeからのコピペ
-static void resolve_non_default(il_factor_invoke_static * self, enviroment * env, il_context* ilctx) {
+static void resolve_non_default(il_factor_invoke_static * self, enviroment * env) {
 	if(self->resolved != NULL) {
 		return;
 	}
@@ -119,7 +118,7 @@ static void resolve_non_default(il_factor_invoke_static * self, enviroment * env
 	self->resolved->virtual_type_index = rgtp->virtual_type_index;
 }
 
-static void resolve_default(il_factor_invoke_static * self, enviroment * env, il_context* ilctx) {
+static void resolve_default(il_factor_invoke_static * self, enviroment * env) {
 	if(self->resolved != NULL) {
 		return;
 	}
@@ -130,7 +129,7 @@ static void resolve_default(il_factor_invoke_static * self, enviroment * env, il
 	vector_pop(ilctx->type_args_vec);
 }
 
-static void il_factor_invoke_static_check(il_factor_invoke_static * self, enviroment * env, il_context* ilctx) {
+static void il_factor_invoke_static_check(il_factor_invoke_static * self, enviroment * env) {
 	class_* cls = il_context_class(ilctx, self->fqcn);
 	int temp = -1;
 //	XSTREQ(self->name, "write");

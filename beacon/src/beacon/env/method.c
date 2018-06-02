@@ -3,6 +3,7 @@
 #include <stdio.h>
 #include <string.h>
 #include "../util/text.h"
+#include "compile_context.h"
 #include "type_interface.h"
 #include "parameter.h"
 #include "namespace.h"
@@ -91,26 +92,24 @@ bool method_override(method* superM, method* subM) {
 		superM->parameter_list->length != subM->parameter_list->length) {
 		return false;
 	}
-	il_context* ilctx = il_context_new(NULL);
-	vector_push(ilctx->type_vec, superM->parent);
+	ccpush_type(superM->parent);
 	//全ての引数を比較
 	for (int i = 0; i < superM->parameter_list->length; i++) {
 		parameter* superP = ((parameter*)vector_at(superM->parameter_list, i));
 		parameter* subP = ((parameter*)vector_at(subM->parameter_list, i));
 		generic_type* superGT = superP->gtype;
-		generic_type* superGT2 = generic_type_apply(superGT, ilctx);
+		generic_type* superGT2 = generic_type_apply(superGT);
 		generic_type* subGT = subP->gtype;
 		if(generic_type_distance(superGT2, subGT) != 0) { return false; }
 	}
 	generic_type* superRet = superM->return_gtype;
-	generic_type* superRet2 = generic_type_apply(superRet, ilctx);
+	generic_type* superRet2 = generic_type_apply(superRet);
 	generic_type* subRet = subM->return_gtype;
 	generic_type_print(superRet); text_printfln("");
 	generic_type_print(superRet2); text_printfln("");
 	generic_type_print(subRet); text_printfln("");
 	int ret =generic_type_distance(superRet2, subRet);
-	vector_pop(ilctx->type_vec);
-	il_context_delete(ilctx);
+	ccpop_type();
 	return ret != -1;
 }
 

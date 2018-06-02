@@ -24,7 +24,7 @@ void il_factor_inc_dump(il_factor_inc * self, int depth) {
 	il_factor_dump(self->fact, depth + 1);
 }
 
-void il_factor_inc_generate(il_factor_inc * self, enviroment * env, il_context* ilctx) {
+void il_factor_inc_generate(il_factor_inc * self, enviroment * env) {
 	if (self->type == fixtype_pre) {
 		il_factor_generate(self->fact, env, ilctx);
 		opcode_buf_add(env->buf, op_inc);
@@ -44,15 +44,15 @@ void il_factor_inc_generate(il_factor_inc * self, enviroment * env, il_context* 
 	}
 }
 
-void il_factor_inc_load(il_factor_inc * self, enviroment * env, il_context* ilctx) {
+void il_factor_inc_load(il_factor_inc * self, enviroment * env) {
 	il_factor_load(self->fact, env, ilctx);
 }
 
-generic_type* il_factor_inc_eval(il_factor_inc * self, enviroment * env, il_context* ilctx) {
+generic_type* il_factor_inc_eval(il_factor_inc * self, enviroment * env) {
 	return il_factor_eval(self->fact, env, ilctx);
 }
 
-char* il_factor_inc_tostr(il_factor_inc* self, enviroment* env, il_context* ilctx) {
+char* il_factor_inc_tostr(il_factor_inc* self, enviroment* env) {
 	string_buffer* sb = string_buffer_new();
 	if(self->type == fixtype_pre) {
 		string_buffer_appends(sb, "++");

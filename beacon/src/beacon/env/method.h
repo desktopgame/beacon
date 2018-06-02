@@ -6,7 +6,6 @@
 #include "../util/vector.h"
 #include "../ast/access_level.h"
 #include "../ast/modifier_type.h"
-#include "../il/il_context.h"
 #include <stdbool.h>
 struct type;
 struct frame;

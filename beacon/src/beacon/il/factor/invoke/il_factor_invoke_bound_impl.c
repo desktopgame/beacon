@@ -10,9 +10,9 @@
 #include "../../il_type_argument.h"
 
 //proto
-static void resolve_non_default(il_factor_invoke_bound * self, enviroment * env, il_context* ilctx);
-static void resolve_default(il_factor_invoke_bound * self, enviroment * env, il_context* ilctx);
-static void il_factor_invoke_bound_check(il_factor_invoke_bound * self, enviroment * env, il_context* ilctx);
+static void resolve_non_default(il_factor_invoke_bound * self, enviroment * env);
+static void resolve_default(il_factor_invoke_bound * self, enviroment * env);
+static void il_factor_invoke_bound_check(il_factor_invoke_bound * self, enviroment * env);
 static void il_factor_invoke_bound_args_delete(vector_item item);
 
 il_factor_invoke_bound* il_factor_invoke_bound_new(const char* name) {
@@ -39,7 +39,7 @@ void il_factor_invoke_bound_dump(il_factor_invoke_bound* self, int depth) {
 	}
 }
 
-void il_factor_invoke_bound_generate(il_factor_invoke_bound* self, enviroment* env, il_context* ilctx) {
+void il_factor_invoke_bound_generate(il_factor_invoke_bound* self, enviroment* env) {
 	for(int i=0; i<self->type_args->length; i++) {
 		il_type_argument* e = (il_type_argument*)vector_at(self->type_args, i);
 		assert(e->gtype != NULL);
@@ -68,13 +68,13 @@ void il_factor_invoke_bound_generate(il_factor_invoke_bound* self, enviroment* e
 	}
 }
 
-void il_factor_invoke_bound_load(il_factor_invoke_bound * self, enviroment * env, il_context* ilctx) {
+void il_factor_invoke_bound_load(il_factor_invoke_bound * self, enviroment * env) {
 	vector_push(ilctx->type_args_vec, self->type_args);
 	il_factor_invoke_bound_check(self, env, ilctx);
 	vector_pop(ilctx->type_args_vec);
 }
 
-generic_type* il_factor_invoke_bound_eval(il_factor_invoke_bound * self, enviroment * env, il_context* ilctx) {
+generic_type* il_factor_invoke_bound_eval(il_factor_invoke_bound * self, enviroment * env) {
 	type* tp = (type*)vector_top(ilctx->type_vec);
 	//メソッドが見つからない
 	il_factor_invoke_bound_check(self, env, ilctx);
@@ -91,7 +91,7 @@ generic_type* il_factor_invoke_bound_eval(il_factor_invoke_bound * self, envirom
 	return self->resolved;
 }
 
-char* il_factor_invoke_bound_tostr(il_factor_invoke_bound* self, enviroment* env, il_context* ilctx) {
+char* il_factor_invoke_bound_tostr(il_factor_invoke_bound* self, enviroment* env) {
 	string_buffer* sb = string_buffer_new();
 	string_buffer_appends(sb, self->name);
 	il_factor_type_args_tostr(sb, self->type_args, env, ilctx);
@@ -108,7 +108,7 @@ void il_factor_invoke_bound_delete(il_factor_invoke_bound* self) {
 }
 //private
 //FIXME:il_factor_invokeからのコピペ
-static void resolve_non_default(il_factor_invoke_bound * self, enviroment * env, il_context* ilctx) {
+static void resolve_non_default(il_factor_invoke_bound * self, enviroment * env) {
 	if(self->resolved != NULL) {
 		return;
 	}
@@ -127,7 +127,7 @@ static void resolve_non_default(il_factor_invoke_bound * self, enviroment * env,
 	}
 }
 
-static void resolve_default(il_factor_invoke_bound * self, enviroment * env, il_context* ilctx) {
+static void resolve_default(il_factor_invoke_bound * self, enviroment * env) {
 	if(self->resolved != NULL) {
 		return;
 	}
@@ -138,7 +138,7 @@ static void resolve_default(il_factor_invoke_bound * self, enviroment * env, il_
 	vector_pop(ilctx->type_args_vec);
 }
 
-static void il_factor_invoke_bound_check(il_factor_invoke_bound * self, enviroment * env, il_context* ilctx) {
+static void il_factor_invoke_bound_check(il_factor_invoke_bound * self, enviroment * env) {
 	if(self->index != -1) {
 		return;
 	}

@@ -15,9 +15,9 @@ il_stmt_assert* il_stmt_assert_new();
 
 void il_stmt_assert_dump(il_stmt_assert* self, int depth);
 
-void il_stmt_assert_generate(il_stmt_assert* self, struct enviroment* env, il_context* ilctx);
+void il_stmt_assert_generate(il_stmt_assert* self, struct enviroment* env);
 
-void il_stmt_assert_load(il_stmt_assert* self, struct enviroment* env, il_context* ilctx);
+void il_stmt_assert_load(il_stmt_assert* self, struct enviroment* env);
 
 void il_stmt_assert_delete(il_stmt_assert* self);
 #endif

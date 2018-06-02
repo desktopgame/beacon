@@ -26,20 +26,20 @@ void il_factor_char_dump(il_factor_char * self, int depth) {
 	text_putline();
 }
 
-void il_factor_char_generate(il_factor_char * self, enviroment * env, il_context* ilctx) {
+void il_factor_char_generate(il_factor_char * self, enviroment * env) {
 	int index = enviroment_add_constant_char(env, self->value);
 	opcode_buf_add(env->buf, op_cconst);
 	opcode_buf_add(env->buf, index);
 }
 
-void il_factor_char_load(il_factor_char * self, enviroment * env, il_context* ilctx) {
+void il_factor_char_load(il_factor_char * self, enviroment * env) {
 }
 
-generic_type* il_factor_char_eval(il_factor_char * self, enviroment * env, il_context* ilctx) {
+generic_type* il_factor_char_eval(il_factor_char * self, enviroment * env) {
 	return GENERIC_CHAR;
 }
 
-char* il_factor_char_tostr(il_factor_char* self, enviroment* env, il_context* ilctx) {
+char* il_factor_char_tostr(il_factor_char* self, enviroment* env) {
 	string_buffer* sb = string_buffer_new();
 	string_buffer_append(sb, '\'');
 	string_buffer_append(sb, self->value);

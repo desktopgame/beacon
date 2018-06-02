@@ -3,7 +3,6 @@
 #define BEACON_IL_IL_FACTOR_INTERFACE_H
 #include "../vm/enviroment.h"
 #include "../util/string_buffer.h"
-#include "il_context.h"
 #include "il_error.h"
 #include <stdint.h>
 #include <assert.h>
@@ -112,7 +111,7 @@ void il_factor_dump(il_factor* self, int depth);
  * @param env
  * @param cache
  */
-void il_factor_generate(il_factor* self, enviroment* env, il_context* ilctx);
+void il_factor_generate(il_factor* self, enviroment* env);
 
 /**
  * 因子を読み込みます.
@@ -122,7 +121,7 @@ void il_factor_generate(il_factor* self, enviroment* env, il_context* ilctx);
  * @param cache
  * @param eh
  */
-void il_factor_load(il_factor* self, enviroment* env, il_context* ilctx);
+void il_factor_load(il_factor* self, enviroment* env);
 
 /**
  * この因子が表す型を返します.
@@ -132,7 +131,7 @@ void il_factor_load(il_factor* self, enviroment* env, il_context* ilctx);
  * @param cache
  * @return
  */
-generic_type* il_factor_eval(il_factor* self, enviroment* env, il_context* ilctx);
+generic_type* il_factor_eval(il_factor* self, enviroment* env);
 
 /**
  * ファクターの文字列表現を返します.
@@ -141,19 +140,19 @@ generic_type* il_factor_eval(il_factor* self, enviroment* env, il_context* ilctx
  * @param ilctx
  * @return
  */
-char* il_factor_tostr(il_factor* self, enviroment* env, il_context* ilctx);
+char* il_factor_tostr(il_factor* self, enviroment* env);
 
 /**
  * @param sb
  * @param args
  */
-void il_factor_args_tostr(string_buffer* sb, vector* args, struct enviroment* env, il_context* ilctx);
+void il_factor_args_tostr(string_buffer* sb, vector* args, struct enviroment* env);
 
 /**
  * @param sb
  * @param type_args
  */
-void il_factor_type_args_tostr(string_buffer* sb, vector* type_args, struct enviroment* env, il_context* ilctx);
+void il_factor_type_args_tostr(string_buffer* sb, vector* type_args, struct enviroment* env);
 
 /**
  * 計算可能な要素を開放します.

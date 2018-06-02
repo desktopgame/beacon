@@ -13,7 +13,7 @@
 #include "../../il/il_factor_impl.h"
 
 //proto
-static void il_factor_member_op_check(il_factor_member_op* self, enviroment* env, il_context* ilctx);
+static void il_factor_member_op_check(il_factor_member_op* self, enviroment* env);
 static void il_factor_member_op_typearg_delete(vector_item item);
 
 il_factor* il_factor_wrap_member_op(il_factor_member_op* self) {
@@ -42,12 +42,12 @@ void il_factor_member_op_dump(il_factor_member_op* self, int depth) {
 	}
 }
 
-void il_factor_member_op_load(il_factor_member_op* self, enviroment* env, il_context* ilctx) {
+void il_factor_member_op_load(il_factor_member_op* self, enviroment* env) {
 	il_factor_load(self->fact, env, ilctx);
 	il_factor_member_op_check(self, env, ilctx);
 }
 
-void il_factor_member_op_generate(il_factor_member_op* self, enviroment* env, il_context* ilctx) {
+void il_factor_member_op_generate(il_factor_member_op* self, enviroment* env) {
 	if(modifier_is_static(self->f->modifier)) {
 		opcode_buf_add(env->buf, op_get_static);
 		opcode_buf_add(env->buf, self->f->parent->absolute_index);
@@ -59,7 +59,7 @@ void il_factor_member_op_generate(il_factor_member_op* self, enviroment* env, il
 	}
 }
 
-generic_type* il_factor_member_op_eval(il_factor_member_op* self, enviroment* env, il_context* ilctx) {
+generic_type* il_factor_member_op_eval(il_factor_member_op* self, enviroment* env) {
 	il_factor_member_op_check(self, env, ilctx);
 //	XSTREQ(self->name, "charArray");
 	assert(self->fact != NULL);
@@ -71,7 +71,7 @@ generic_type* il_factor_member_op_eval(il_factor_member_op* self, enviroment* en
 	return vector_at(a->type_args_list, self->f->gtype->virtual_type_index);
 }
 
-char* il_factor_member_op_tostr(il_factor_member_op* self, enviroment* env, il_context* ilctx) {
+char* il_factor_member_op_tostr(il_factor_member_op* self, enviroment* env) {
 	string_buffer* sb = string_buffer_new();
 	char* name = il_factor_tostr(self->fact, env, ilctx);
 	string_buffer_appends(sb, name);
@@ -93,7 +93,7 @@ il_factor_member_op* il_factor_cast_member_op(il_factor* fact) {
 	return fact->u.member_;
 }
 //private
-static void il_factor_member_op_check(il_factor_member_op* self, enviroment* env, il_context* ilctx) {
+static void il_factor_member_op_check(il_factor_member_op* self, enviroment* env) {
 	if(self->index != -1) {
 		return;
 	}

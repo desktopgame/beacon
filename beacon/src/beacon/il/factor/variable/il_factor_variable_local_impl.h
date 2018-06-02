@@ -29,13 +29,13 @@ typedef struct il_factor_variable_local {
 
 il_factor_variable_local* il_factor_variable_local_new(const char* name);
 
-void il_factor_variable_local_generate(il_factor_variable_local* self, struct enviroment* env, il_context* ilctx);
+void il_factor_variable_local_generate(il_factor_variable_local* self, struct enviroment* env);
 
-void il_factor_variable_local_load(il_factor_variable_local * self, struct enviroment * env, il_context* ilctx);
+void il_factor_variable_local_load(il_factor_variable_local * self, struct enviroment * env);
 
-struct generic_type* il_factor_variable_local_eval(il_factor_variable_local * self, struct enviroment * env, il_context* ilctx);
+struct generic_type* il_factor_variable_local_eval(il_factor_variable_local * self, struct enviroment * env);
 
-char* il_factor_variable_local_tostr(il_factor_variable_local * self, struct enviroment * env, il_context* ilctx);
+char* il_factor_variable_local_tostr(il_factor_variable_local * self, struct enviroment * env);
 
 void il_factor_variable_local_delete(il_factor_variable_local* self);
 #endif

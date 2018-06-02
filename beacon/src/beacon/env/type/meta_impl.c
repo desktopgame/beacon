@@ -5,6 +5,7 @@
 #include "../parameter.h"
 #include "../type_parameter.h"
 #include "../type_interface.h"
+#include "../compile_context.h"
 #include "../namespace.h"
 #include "class_impl.h"
 #include "../constructor.h"
@@ -15,7 +16,7 @@
 #include "../../debug.h"
 #include <string.h>
 
-int meta_calc_score(vector* params, vector* ilargs, enviroment* env, il_context* ilctx) {
+int meta_calc_score(vector* params, vector* ilargs, enviroment* env) {
 	assert(params->length == ilargs->length);
 	int score = 0;
 	bool illegal = false;
@@ -28,12 +29,12 @@ int meta_calc_score(vector* params, vector* ilargs, enviroment* env, il_context*
 		parameter* param = (parameter*)vparam;
 		//実引数が NULL なら常に許容する
 		int dist = 0;
-		generic_type* argType = il_factor_eval(arg->factor, env, ilctx);
+		generic_type* argType = il_factor_eval(arg->factor, env);
 		if(il_error_panic()) {
 			return -1;
 		}
 		if (argType->core_type != TYPE_NULL) {
-			generic_type* a = generic_type_apply(param->gtype, ilctx);
+			generic_type* a = generic_type_apply(param->gtype);
 			dist = generic_type_distance(
 				a,
 			//	generic_type_apply(argType, ilctx),
@@ -54,7 +55,6 @@ int meta_calc_score(vector* params, vector* ilargs, enviroment* env, il_context*
 
 int meta_rcalc_score(vector* params, vector* args, vector* typeargs, frame* fr) {
 	assert(params->length == args->length);
-	//il_context* ilctx = il_context_new(NULL);
 	int score = 0;
 	bool illegal = false;
 	for (int i = 0; i < params->length; i++) {
@@ -77,11 +77,10 @@ int meta_rcalc_score(vector* params, vector* args, vector* typeargs, frame* fr) 
 			break;
 		}
 	}
-	//il_context_delete(ilctx);
 	return score;
 }
 
-method * meta_find_method(vector * method_vec, const char * name, vector * ilargs, enviroment * env, il_context* ilctx, int * outIndex) {
+method * meta_find_method(vector * method_vec, const char * name, vector * ilargs, enviroment * env, int * outIndex) {
 	(*outIndex) = -1;
 	//class_create_vtable(self);
 	method* ret = NULL;
@@ -104,18 +103,12 @@ method * meta_find_method(vector * method_vec, const char * name, vector * ilarg
 		}
 		//もっともスコアの高いメソッドを選択する
 		if(modifier_is_static(m->modifier)) {
-			ilctx->find_static++;
-			vector_push(ilctx->method_vec, m);
-		} else {
-			ilctx->find_instance++;
+			ccpush_method(m);
 		}
-		int score = meta_calc_score(m->parameter_list, ilargs, env, ilctx);
+		int score = meta_calc_score(m->parameter_list, ilargs, env);
 		
 		if(modifier_is_static(m->modifier)) {
-			ilctx->find_static--;
-		vector_pop(ilctx->method_vec);
-		} else {
-			ilctx->find_instance--;
+			ccpop_method();
 		}
 		if(score == -1) {
 			continue;
@@ -129,7 +122,7 @@ method * meta_find_method(vector * method_vec, const char * name, vector * ilarg
 	return ret;
 }
 
-constructor* meta_find_ctor(vector* ctor_vec, vector* ilargs, struct enviroment* env, il_context* ilctx, int* outIndex) {
+constructor* meta_find_ctor(vector* ctor_vec, vector* ilargs, struct enviroment* env, int* outIndex) {
 	//見つかった中からもっとも一致するコンストラクタを選択する
 	int min = 1024;
 	constructor* ret = NULL;
@@ -147,11 +140,9 @@ constructor* meta_find_ctor(vector* ctor_vec, vector* ilargs, struct enviroment*
 			return ctor;
 		}
 		//もっともスコアの高いメソッドを選択する
-		ilctx->find_static++;
-		ILCTX_PUSH_CTOR(ilctx, ctor);
-		int score = meta_calc_score(ctor->parameter_list, ilargs, env, ilctx);
-		ILCTX_POP_CTOR(ilctx);
-		ilctx->find_static--;
+		ccpush_ctor(ctor);
+		int score = meta_calc_score(ctor->parameter_list, ilargs, env);
+		ccpop_ctor();
 		if(score == -1) {
 			continue;
 		}

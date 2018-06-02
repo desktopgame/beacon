@@ -18,18 +18,18 @@ void il_factor_this_dump(il_factor_this * self, int depth) {
 	text_putline();
 }
 
-void il_factor_this_generate(il_factor_this * self, enviroment * env, il_context* ilctx) {
+void il_factor_this_generate(il_factor_this * self, enviroment * env) {
 	opcode_buf_add(env->buf, op_this);
 }
 
-void il_factor_this_load(il_factor_this * self, enviroment * env, il_context* ilctx) {
+void il_factor_this_load(il_factor_this * self, enviroment * env) {
 }
 
-generic_type* il_factor_this_eval(il_factor_this * self, enviroment * env, il_context* ilctx) {
+generic_type* il_factor_this_eval(il_factor_this * self, enviroment * env) {
 	return ((type*)vector_top(ilctx->type_vec))->generic_self;
 }
 
-char* il_factor_this_tostr(il_factor_this* self, enviroment* env, il_context* ilctx) {
+char* il_factor_this_tostr(il_factor_this* self, enviroment* env) {
 	return text_strdup("this");
 }
 

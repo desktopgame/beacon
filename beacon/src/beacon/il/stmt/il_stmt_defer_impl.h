@@ -12,9 +12,9 @@ il_stmt_defer* il_stmt_defer_new();
 
 void il_stmt_defer_dump(il_stmt_defer* self, int depth);
 
-void il_stmt_defer_load(il_stmt_defer* self, enviroment* env, il_context* ilctx);
+void il_stmt_defer_load(il_stmt_defer* self, enviroment* env);
 
-void il_stmt_defer_generate(il_stmt_defer* self, enviroment* env, il_context* ilctx);
+void il_stmt_defer_generate(il_stmt_defer* self, enviroment* env);
 
 void il_stmt_defer_delete(il_stmt_defer* self);
 #endif

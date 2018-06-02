@@ -86,7 +86,7 @@ void il_stmt_if_dump(il_stmt_if * self, int depth) {
 	text_putline();
 }
 
-void il_stmt_if_generate(il_stmt_if * self, enviroment* env, il_context* ilctx) {
+void il_stmt_if_generate(il_stmt_if * self, enviroment* env) {
 	//if(...)
 	il_factor_generate(self->condition, env, ilctx);
 	label* l1 = opcode_buf_label(env->buf, -1);
@@ -132,7 +132,7 @@ void il_stmt_if_generate(il_stmt_if * self, enviroment* env, il_context* ilctx) 
 	}
 }
 
-void il_stmt_if_load(il_stmt_if * self, struct enviroment* env, il_context* ilctx) {
+void il_stmt_if_load(il_stmt_if * self, struct enviroment* env) {
 	il_factor_load(self->condition, env, ilctx);
 	for(int i=0; i<self->body->length; i++) {
 		il_stmt* e = (il_stmt*)vector_at(self->body, i);

@@ -4,6 +4,7 @@
 #include "namespace.h"
 #include "fqcn_cache.h"
 #include "import_info.h"
+#include "compile_context.h"
 #include "method.h"
 #include "../util/mem.h"
 #include <string.h>
@@ -12,7 +13,6 @@
 #include"generic_cache.h"
 #include "generic_type.h"
 #include "type_impl.h"
-#include "../il/il_context.h"
 
 //proto
 static void import_manager_delete_import_info(vector_item item);
@@ -39,7 +39,7 @@ bool import_manager_loaded(import_manager * self, int index) {
 	return info->consume;
 }
 
-generic_type* import_manager_resolve(import_manager* self, namespace_* scope, generic_cache* fqcn, il_context* ilctx) {
+generic_type* import_manager_resolve(import_manager* self, namespace_* scope, generic_cache* fqcn) {
 	type* core_type = fqcn_type(fqcn->fqcn, scope);
 	//名前空間でラッピングされていなくて、
 	//型が見つからない
@@ -48,22 +48,22 @@ generic_type* import_manager_resolve(import_manager* self, namespace_* scope, ge
 		//メソッドの型引数から見つけられなかったら
 		//クラスの型引数を参照する
 		bool found = false;
-		if(ilctx->method_vec->length > 0) {
-			method* m = (method*)vector_top(ilctx->method_vec);
+		if(cchas_method()) {
+			method* m = cctop_method();
 			parameterized->tag = generic_type_tag_method;
 			parameterized->virtual_type_index = method_for_generic_index(m, fqcn->fqcn->name);
 			parameterized->u.method_ = m;
 			found = (parameterized->virtual_type_index != -1);
 		}
-		if(!found && ilctx->ctor_vec->length > 0) {
-			type* container = (type*)vector_top(ilctx->type_vec);
+		if(!found && cchas_ctor()) {
+			type* container = cctop_type();
 			parameterized->tag = generic_type_tag_ctor;
 			parameterized->virtual_type_index = type_for_generic_index(container, fqcn->fqcn->name);
 			parameterized->u.type_ = container;
 			found = (parameterized->virtual_type_index != -1);
 		}
 		if(!found) {
-			type* container = (type*)vector_top(ilctx->type_vec);
+			type* container = cctop_type();
 			parameterized->tag = generic_type_tag_class;
 			parameterized->virtual_type_index = type_for_generic_index(container, fqcn->fqcn->name);
 			parameterized->u.type_ = container;
@@ -88,13 +88,13 @@ generic_type* import_manager_resolve(import_manager* self, namespace_* scope, ge
 	for (int i = 0; i < fqcn->type_args->length; i++) {
 		generic_cache* e = (generic_cache*)vector_at(fqcn->type_args, i);
 		//generic_type* child = generic_cache_gtype(e, scope, ilctx);
-		generic_type* child = import_manager_resolve(self, scope, e, ilctx);
+		generic_type* child = import_manager_resolve(self, scope, e);
 		generic_type_addargs(normalGType, child);
 	}
 	return normalGType;
 }
 
-generic_type* import_manager_resolvef(import_manager* self, namespace_* scope, fqcn_cache* fqcn, il_context* ilctx) {
+generic_type* import_manager_resolvef(import_manager* self, namespace_* scope, fqcn_cache* fqcn) {
 type* core_type = fqcn_type(fqcn, scope);
 	//名前空間でラッピングされていなくて、
 	//型が見つからない
@@ -103,22 +103,22 @@ type* core_type = fqcn_type(fqcn, scope);
 		//メソッドの型引数から見つけられなかったら
 		//クラスの型引数を参照する
 		bool found = false;
-		if(ilctx->method_vec->length > 0) {
-			method* m = (method*)vector_top(ilctx->method_vec);
+		if(cchas_method()) {
+			method* m = cctop_method();
 			parameterized->tag = generic_type_tag_method;
 			parameterized->virtual_type_index = method_for_generic_index(m, fqcn->name);
 			parameterized->u.method_ = m;
 			found = (parameterized->virtual_type_index != -1);
 		}
-		if(!found && ilctx->ctor_vec->length > 0) {
-			type* container = (type*)vector_top(ilctx->type_vec);
+		if(!found && cchas_ctor()) {
+			type* container = cctop_type();
 			parameterized->tag = generic_type_tag_ctor;
 			parameterized->virtual_type_index = type_for_generic_index(container, fqcn->name);
 			parameterized->u.type_ = container;
 			found = (parameterized->virtual_type_index != -1);
 		}
 		if(!found) {
-			type* container = (type*)vector_top(ilctx->type_vec);
+			type* container = cctop_type();
 			parameterized->tag = generic_type_tag_class;
 			parameterized->virtual_type_index = type_for_generic_index(container, fqcn->name);
 			parameterized->u.type_ = container;

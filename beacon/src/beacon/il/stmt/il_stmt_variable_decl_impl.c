@@ -28,11 +28,11 @@ void il_stmt_variable_decl_dump(il_stmt_variable_decl * self, int depth) {
 	generic_cache_dump(self->fqcn, depth + 1);
 }
 
-void il_stmt_variable_decl_generate(il_stmt_variable_decl * self, enviroment * env, il_context* ilctx) {
+void il_stmt_variable_decl_generate(il_stmt_variable_decl * self, enviroment * env) {
 
 }
 
-void il_stmt_variable_decl_load(il_stmt_variable_decl * self, struct enviroment* env, il_context* ilctx) {
+void il_stmt_variable_decl_load(il_stmt_variable_decl * self, struct enviroment* env) {
 	symbol_table_entry(
 		env->sym_table,
 		import_manager_resolve(ilctx->class_loader_ref->import_manager, ILCTX_NAMESPACE(ilctx), self->fqcn, ilctx),

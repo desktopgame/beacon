@@ -15,10 +15,10 @@
 #include <stdio.h>
 
 //proto
-static void resolve_non_default(il_factor_invoke * self, enviroment * env, il_context* ilctx);
-static void resolve_default(il_factor_invoke * self, enviroment * env, il_context* ilctx);
+static void resolve_non_default(il_factor_invoke * self, enviroment * env);
+static void resolve_default(il_factor_invoke * self, enviroment * env);
 static void il_factor_invoke_args_delete(vector_item item);
-static void il_factor_invoke_check(il_factor_invoke * self, enviroment * env, il_context* ilctx);
+static void il_factor_invoke_check(il_factor_invoke * self, enviroment * env);
 
 il_factor_invoke* il_factor_invoke_new(const char* name) {
 	il_factor_invoke* ret = (il_factor_invoke*)MEM_MALLOC(sizeof(il_factor_invoke));
@@ -47,7 +47,7 @@ void il_factor_invoke_dump(il_factor_invoke* self, int depth) {
 	}
 }
 
-void il_factor_invoke_generate(il_factor_invoke* self, enviroment* env, il_context* ilctx) {
+void il_factor_invoke_generate(il_factor_invoke* self, enviroment* env) {
 	for(int i=0; i<self->type_args->length; i++) {
 		il_type_argument* e = (il_type_argument*)vector_at(self->type_args, i);
 		assert(e->gtype != NULL);
@@ -74,12 +74,12 @@ void il_factor_invoke_generate(il_factor_invoke* self, enviroment* env, il_conte
 	}
 }
 
-void il_factor_invoke_load(il_factor_invoke * self, enviroment * env, il_context* ilctx) {
+void il_factor_invoke_load(il_factor_invoke * self, enviroment * env) {
 	il_factor_load(self->receiver, env, ilctx);
 	il_factor_invoke_check(self, env, ilctx);
 }
 
-generic_type* il_factor_invoke_eval(il_factor_invoke * self, enviroment * env, il_context* ilctx) {
+generic_type* il_factor_invoke_eval(il_factor_invoke * self, enviroment * env) {
 	il_factor_invoke_check(self, env, ilctx);
 	if(il_error_panic()) {
 		return NULL;
@@ -98,7 +98,7 @@ generic_type* il_factor_invoke_eval(il_factor_invoke * self, enviroment * env, i
 	return ret;
 }
 
-char* il_factor_invoke_tostr(il_factor_invoke* self, enviroment* env, il_context* ilctx) {
+char* il_factor_invoke_tostr(il_factor_invoke* self, enviroment* env) {
 	string_buffer* sb = string_buffer_new();
 	char* invstr = il_factor_tostr(self->receiver, env, ilctx);
 	string_buffer_appends(sb, invstr);
@@ -119,7 +119,7 @@ void il_factor_invoke_delete(il_factor_invoke* self) {
 	MEM_FREE(self);
 }
 //private
-static void resolve_non_default(il_factor_invoke * self, enviroment * env, il_context* ilctx) {
+static void resolve_non_default(il_factor_invoke * self, enviroment * env) {
 	if(self->resolved != NULL) {
 		return;
 	}
@@ -139,7 +139,7 @@ static void resolve_non_default(il_factor_invoke * self, enviroment * env, il_co
 	}
 }
 
-static void resolve_default(il_factor_invoke * self, enviroment * env, il_context* ilctx) {
+static void resolve_default(il_factor_invoke * self, enviroment * env) {
 	if(self->resolved != NULL) {
 		return;
 	}
@@ -155,7 +155,7 @@ static void resolve_default(il_factor_invoke * self, enviroment * env, il_contex
 	vector_pop(ilctx->type_args_vec);
 }
 
-static void il_factor_invoke_check(il_factor_invoke * self, enviroment * env, il_context* ilctx) {
+static void il_factor_invoke_check(il_factor_invoke * self, enviroment * env) {
 	//レシーバの読み込み
 	il_factor_load(self->receiver, env, ilctx);
 	if(il_error_panic()) {

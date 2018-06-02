@@ -3,7 +3,6 @@
 #define BEACON_ENV_TYPE_INTERFACE_H
 #include <stdbool.h>
 #include "../util/vector.h"
-#include "../il/il_context.h"
 
 #define TYPE2CLASS(type) (type_cast_class(type))
 #define TYPE2INTERFACE(type) (type_cast_interface(type))
@@ -77,7 +76,7 @@ void type_add_method(type* self, struct method* m);
  * @param outIndex
  * @return
  */
-struct method* type_find_method(type* self, const char* name, vector* args, struct enviroment* env, il_context* ilctx, int* outIndex);
+struct method* type_find_method(type* self, const char* name, vector* args, struct enviroment* env, int* outIndex);
 
 /**
  * この型から静的メソッドを検索します.
@@ -88,7 +87,7 @@ struct method* type_find_method(type* self, const char* name, vector* args, stru
  * @param outIndex
  * @return
  */
-struct method* type_find_smethod(type* self, const char* name, vector* args, struct enviroment* env, il_context* ilctx, int* outIndex);
+struct method* type_find_smethod(type* self, const char* name, vector* args, struct enviroment* env, int* outIndex);
 
 /**
  * 仮想関数の一覧を返します.

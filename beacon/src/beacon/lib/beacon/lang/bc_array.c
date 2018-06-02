@@ -29,18 +29,16 @@ type * bc_array_type() {
 }
 
 object * bc_array_new(struct generic_type* gtype, int length, frame * fr) {
-	il_context* ilctx = il_context_new(NULL);
 	type* arrayType = bc_array_type();
 
 	vector* args = vector_new();
 	vector* type_args = vector_new();
 	vector_push(args, object_int_new(length));
 	vector_push(type_args, gtype);
-	object* ret = class_new_instance(arrayType->u.class_, ilctx, fr, args,type_args);
+	object* ret = class_new_instance(arrayType->u.class_, fr, args,type_args);
 	vector_delete(args, vector_deleter_null);
 	vector_delete(type_args, vector_deleter_null);
 
-	il_context_delete(ilctx);
 	return ret;
 }
 

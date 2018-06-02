@@ -26,12 +26,12 @@ void il_factor_assign_op_dump(il_factor_assign_op* self, int depth) {
 	il_factor_dump(self->right, depth + 1);
 }
 
-void il_factor_assign_op_load(il_factor_assign_op* self, enviroment* env, il_context* ilctx) {
+void il_factor_assign_op_load(il_factor_assign_op* self, enviroment* env) {
 	il_factor_load(self->left, env, ilctx);
 	il_factor_load(self->right, env, ilctx);
 }
 
-void il_factor_assign_op_generate(il_factor_assign_op* self, enviroment* env, il_context* ilctx) {
+void il_factor_assign_op_generate(il_factor_assign_op* self, enviroment* env) {
 	//a = foo
 	if(self->left->type == ilfactor_variable) {
 		il_factor_variable* ilvar = IL_FACT2VAR(self->left);
@@ -72,7 +72,7 @@ void il_factor_assign_op_generate(il_factor_assign_op* self, enviroment* env, il
 	}
 }
 
-generic_type* il_factor_assign_op_eval(il_factor_assign_op* self, enviroment* env, il_context* ilctx) {
+generic_type* il_factor_assign_op_eval(il_factor_assign_op* self, enviroment* env) {
 	return il_factor_eval(self->right, env, ilctx);
 }
 

@@ -5,6 +5,7 @@
 #include "type_parameter.h"
 #include "constructor.h"
 #include "../env/object.h"
+#include "../env/compile_context.h"
 #include "../util/mem.h"
 #include "../util/text.h"
 #include "../util/xassert.h"
@@ -16,15 +17,15 @@
 #include <stdio.h>
 
 //proto
-static generic_type* generic_type_applyImpl(generic_type* self, il_context* ilctx, frame* fr);
+static generic_type* generic_type_applyImpl(generic_type* self, frame* fr);
 static int generic_type_distanceImpl(generic_type* self, generic_type* other, frame* fr);
 static int generic_type_distanceForm(generic_type* self, generic_type* other, frame* fr);
-static generic_type* generic_type_typeargs_at(il_context* ilctx, frame* fr, int index);
-static generic_type* generic_type_receiver_at(il_context* ilctx, frame* fr, int index);
+static generic_type* generic_type_typeargs_at(frame* fr, int index);
+static generic_type* generic_type_receiver_at(frame* fr, int index);
 static void generic_type_delete_self(vector_item item);
 static void generic_type_deletercr_self(vector_item item);
 static void generic_type_recursive_mark(generic_type* a);
-static generic_type* generic_type_get(generic_type* a, il_context* ilctx);
+static generic_type* generic_type_get(generic_type* a);
 /*
 generic_type * generic_type_new(type * core_type) {
 
@@ -141,7 +142,7 @@ bool generic_type_bool(generic_type* self) {
 	return self->core_type == TYPE_BOOL;
 }
 
-void generic_type_generate(generic_type* self, enviroment* env, il_context* ilctx) {
+void generic_type_generate(generic_type* self, enviroment* env) {
 	opcode_buf_add(env->buf, op_generic_enter);
 	opcode_buf_add(env->buf, self->type_args_list->length);
 	if(self->core_type == NULL) {
@@ -158,18 +159,18 @@ void generic_type_generate(generic_type* self, enviroment* env, il_context* ilct
 	}
 	for(int i=0; i<self->type_args_list->length; i++) {
 		generic_type* e = (generic_type*)vector_at(self->type_args_list, i);
-		generic_type_generate(e, env, ilctx);
+		generic_type_generate(e, env);
 	}
 	opcode_buf_add(env->buf, op_generic_exit);
 }
 
 //Hash<String,List<Int>>
-generic_type* generic_type_apply(generic_type* self, il_context* ilctx) {
-	return generic_type_applyImpl(self, ilctx, NULL);
+generic_type* generic_type_apply(generic_type* self) {
+	return generic_type_applyImpl(self, NULL);
 }
 
 generic_type* generic_type_rapply(generic_type* self, frame* fr) {
-	return generic_type_applyImpl(self, NULL, fr);
+	return generic_type_applyImpl(self, fr);
 }
 
 
@@ -197,12 +198,12 @@ bool generic_type_override(generic_type* super, generic_type* sub) {
 }
 
 //private
-static generic_type* generic_type_applyImpl(generic_type* self, il_context* ilctx, frame* fr) {
+static generic_type* generic_type_applyImpl(generic_type* self, frame* fr) {
 	//ここで型変数が追加されちゃってた
 	if(self->core_type == NULL) {
 		//copy->virtual_type_index = -1;
 		if(self->tag == generic_type_tag_ctor) {
-			self = generic_type_typeargs_at(ilctx, fr, self->virtual_type_index);
+			self = generic_type_typeargs_at(fr, self->virtual_type_index);
 		}
 	}
 	generic_type* copy = generic_type_new(self->core_type);
@@ -215,18 +216,18 @@ static generic_type* generic_type_applyImpl(generic_type* self, il_context* ilct
 		if(e->virtual_type_index != -1) {
 			count++;
 			if(e->tag == generic_type_tag_class) {
-				generic_type_addargs(copy, generic_type_receiver_at(ilctx, fr, e->virtual_type_index));
+				generic_type_addargs(copy, generic_type_receiver_at(fr, e->virtual_type_index));
 			} else if(e->tag == generic_type_tag_method ||
 			e->tag == generic_type_tag_ctor) {
 				//vector* type_args = vector_top(ilctx->type_args_vec);
 				//il_type_argument* a = vector_at(type_args, e->virtual_type_index);
-				generic_type_addargs(copy, generic_type_applyImpl(generic_type_typeargs_at(ilctx, fr, e->virtual_type_index), ilctx, fr));
+				generic_type_addargs(copy, generic_type_applyImpl(generic_type_typeargs_at(fr, e->virtual_type_index), fr));
 			} else if(e->tag == generic_type_tag_self) {
 				generic_type_addargs(copy, e);
 			} else XBREAK(e->tag != generic_type_tag_none);
 		//
 		} else {
-			generic_type_addargs(copy, generic_type_applyImpl(e, ilctx, fr));
+			generic_type_addargs(copy, generic_type_applyImpl(e, fr));
 		}
 	}
 	assert(copy->core_type != NULL || count == 0);
@@ -317,9 +318,9 @@ static int generic_type_distanceForm(generic_type* self, generic_type* other, fr
 	return dist;
 }
 
-static generic_type* generic_type_typeargs_at(il_context* ilctx, frame* fr, int index) {
-	if(ilctx != NULL) {
-		vector* type_args = vector_top(ilctx->type_args_vec);
+static generic_type* generic_type_typeargs_at(frame* fr, int index) {
+	if(fr == NULL) {
+		vector* type_args = cctop_type_args();
 		il_type_argument* a = vector_at(type_args, index);
 		return a->gtype;
 	} else {
@@ -328,9 +329,9 @@ static generic_type* generic_type_typeargs_at(il_context* ilctx, frame* fr, int 
 	}
 }
 
-static generic_type* generic_type_receiver_at(il_context* ilctx, frame* fr, int index) {
-	if(ilctx != NULL) {
-		generic_type* tp = vector_top(ilctx->receiver_vec);
+static generic_type* generic_type_receiver_at(frame* fr, int index) {
+	if(fr == NULL) {
+		generic_type* tp = cctop_receiver();
 		generic_type* instanced = vector_at(tp->type_args_list, index);
 		return instanced;
 	} else {
@@ -339,15 +340,15 @@ static generic_type* generic_type_receiver_at(il_context* ilctx, frame* fr, int 
 	}
 }
 
-static generic_type* generic_type_get(generic_type* a, il_context* ilctx) {
+static generic_type* generic_type_get(generic_type* a) {
 	if(a->virtual_type_index == -1) {
 		return a;
 	}
 	if(a->tag == generic_type_tag_class) {
-		generic_type* receiver = vector_at(ilctx->receiver_vec, a->virtual_type_index);
+		generic_type* receiver = ccat_receiver(a->virtual_type_index);
 		a = receiver;
 	} else if(a->tag == generic_type_tag_method) {
-		generic_type* at = vector_at(ilctx->type_args_vec, a->virtual_type_index);
+		generic_type* at = vector_at(cctop_type_args(), a->virtual_type_index);
 		a = at;
 	}
 	return a;

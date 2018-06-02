@@ -16,13 +16,13 @@ il_factor_instanceof* il_factor_instanceof_new();
 
 void il_factor_instanceof_dump(il_factor_instanceof* self, int depth);
 
-void il_factor_instanceof_load(il_factor_instanceof* self, enviroment* env, il_context* ilctx);
+void il_factor_instanceof_load(il_factor_instanceof* self, enviroment* env);
 
-void il_factor_instanceof_generate(il_factor_instanceof* self, enviroment* env, il_context* ilctx);
+void il_factor_instanceof_generate(il_factor_instanceof* self, enviroment* env);
 
-struct generic_type* il_factor_instanceof_eval(il_factor_instanceof* self, enviroment* env, il_context* ilctx);
+struct generic_type* il_factor_instanceof_eval(il_factor_instanceof* self, enviroment* env);
 
-char* il_factor_instanceof_tostr(il_factor_instanceof* self, enviroment* env, il_context* ilctx);
+char* il_factor_instanceof_tostr(il_factor_instanceof* self, enviroment* env);
 
 void il_factor_instanceof_delete(il_factor_instanceof* self);
 #endif

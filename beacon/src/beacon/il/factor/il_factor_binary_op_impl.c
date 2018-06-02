@@ -14,7 +14,7 @@
 
 //proto
 static char* il_factor_binary_op_optostr(il_factor_binary_op* self);
-static void il_factor_binary_op_generate_impl(il_factor_binary_op * self, enviroment * env, il_context* ilctx, ilbinary_op_type c);
+static void il_factor_binary_op_generate_impl(il_factor_binary_op * self, enviroment * env, ilbinary_op_type c);
 static opcode bi_operator_to_opi(ilbinary_op_type type);
 static opcode bi_operator_to_opd(ilbinary_op_type type);
 static opcode bi_operator_to_opb(ilbinary_op_type type);
@@ -43,16 +43,16 @@ void il_factor_binary_op_dump(il_factor_binary_op * self, int depth) {
 	il_factor_dump(self->right, depth + 1);
 }
 
-void il_factor_binary_op_generate(il_factor_binary_op * self, enviroment* env, il_context* ilctx) {
+void il_factor_binary_op_generate(il_factor_binary_op * self, enviroment* env) {
 	il_factor_binary_op_generate_impl(self, env, ilctx, self->type);
 }
 
-void il_factor_binary_op_load(il_factor_binary_op * self, enviroment * env, il_context* ilctx) {
+void il_factor_binary_op_load(il_factor_binary_op * self, enviroment * env) {
 	il_factor_load(self->left, env, ilctx);
 	il_factor_load(self->right, env, ilctx);
 }
 
-generic_type* il_factor_binary_op_eval(il_factor_binary_op * self, enviroment * env, il_context* ilctx) {
+generic_type* il_factor_binary_op_eval(il_factor_binary_op * self, enviroment * env) {
 	generic_type* ltype = il_factor_eval(self->left, env, ilctx);
 	generic_type* rtype = il_factor_eval(self->right, env, ilctx);
 	//左辺か右辺を解釈できなかった
@@ -80,7 +80,7 @@ generic_type* il_factor_binary_op_eval(il_factor_binary_op * self, enviroment * 
 	return NULL;
 }
 
-char* il_factor_binary_op_tostr(il_factor_binary_op* self, enviroment* env, il_context* ilctx) {
+char* il_factor_binary_op_tostr(il_factor_binary_op* self, enviroment* env) {
 	string_buffer* sb = string_buffer_new();
 	char* left = il_factor_tostr(self->left, env, ilctx);
 	char* right = il_factor_tostr(self->right, env, ilctx);
@@ -115,7 +115,7 @@ static char* il_factor_binary_op_optostr(il_factor_binary_op* self) {
 	}
 }
 
-static void il_factor_binary_op_generate_impl(il_factor_binary_op * self, enviroment * env, il_context* ilctx, ilbinary_op_type c) {
+static void il_factor_binary_op_generate_impl(il_factor_binary_op * self, enviroment * env, ilbinary_op_type c) {
 	//ここで逆にしておく
 	il_factor_generate(self->right, env, ilctx);
 	il_factor_generate(self->left, env, ilctx);

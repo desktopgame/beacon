@@ -46,13 +46,13 @@ il_factor_variable* il_factor_variable_new();
 
 void il_factor_variable_dump(il_factor_variable* self, int depth);
 
-void il_factor_variable_generate(il_factor_variable* self, struct enviroment* env, il_context* ilctx);
+void il_factor_variable_generate(il_factor_variable* self, struct enviroment* env);
 
-void il_factor_variable_load(il_factor_variable* self, struct enviroment* env, il_context* ilctx);
+void il_factor_variable_load(il_factor_variable* self, struct enviroment* env);
 
-generic_type* il_factor_variable_eval(il_factor_variable* self, struct enviroment* env, il_context* ilctx);
+generic_type* il_factor_variable_eval(il_factor_variable* self, struct enviroment* env);
 
-char* il_factor_variable_tostr(il_factor_variable* self, struct enviroment* env, il_context* ilctx);
+char* il_factor_variable_tostr(il_factor_variable* self, struct enviroment* env);
 
 void il_factor_variable_delete(il_factor_variable* self);
 

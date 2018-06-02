@@ -18,13 +18,13 @@ il_factor_int* il_factor_int_new(int32_t i);
 
 void il_factor_int_dump(il_factor_int* self, int depth);
 
-void il_factor_int_generate(il_factor_int* self, struct enviroment* env, il_context* ilctx);
+void il_factor_int_generate(il_factor_int* self, struct enviroment* env);
 
-void il_factor_int_load(il_factor_int* self, struct enviroment* env, il_context* ilctx);
+void il_factor_int_load(il_factor_int* self, struct enviroment* env);
 
-generic_type* il_factor_int_eval(il_factor_int* self, struct enviroment* env, il_context* ilctx);
+generic_type* il_factor_int_eval(il_factor_int* self, struct enviroment* env);
 
-char* il_factor_int_tostr(il_factor_int* self, struct enviroment* env, il_context* ilctx);
+char* il_factor_int_tostr(il_factor_int* self, struct enviroment* env);
 
 void il_factor_int_delete(il_factor_int* self);
 
