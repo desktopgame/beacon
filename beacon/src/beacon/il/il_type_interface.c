@@ -70,3 +70,7 @@ void il_type_delete(il_type * self) {
 	}
 	MEM_FREE(self);
 }
+
+vector* il_type_type_parameter_list(il_type* self) {
+	return self->tag == iltype_interface ? self->u.interface_->type_parameter_list : self->u.class_->type_parameter_list;
+}

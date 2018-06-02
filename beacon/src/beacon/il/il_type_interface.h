@@ -83,4 +83,11 @@ void il_type_dump(il_type* self, int depth);
  * @param self
  */
 void il_type_delete(il_type* self);
+
+/**
+ * 型変数の一覧を返します.
+ * @param self
+ * @return
+ */
+vector* il_type_type_parameter_list(il_type* self);
 #endif // !SIGNAL_IL_IL_TYPE_INTERFACE_H

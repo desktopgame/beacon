@@ -3,6 +3,7 @@
 #include "../util/text.h"
 #include "../util/vector.h"
 #include "../il/il_type_parameter.h"
+#include <assert.h>
 
 //proto
 static void type_parameter_rule_list_delete(vector_item item);
@@ -34,6 +35,7 @@ type_parameter * type_parameter_dup(il_type_parameter * src) {
 }
 
 void type_parameter_list_dup(vector* ilSource, vector* sgDest) {
+	assert(ilSource != NULL);
 	//これはILレベルの<K, V>の並びを
 	//SGレベルの<K, V> へ変換します。
 	//<K(IComparable<K>), V>のような宣言をするとき、

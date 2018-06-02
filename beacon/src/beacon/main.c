@@ -9,6 +9,8 @@
 #include "cl.h"
 #include "util/mem.h"
 #include "util/text.h"
+#include "util/io.h"
+#include "util/file_entry.h"
 
 /**
  * コマンドライン文字列を解析します.

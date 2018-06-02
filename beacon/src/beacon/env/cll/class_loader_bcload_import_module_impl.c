@@ -7,6 +7,7 @@
 #include "../../util/text.h"
 #include "../../util/io.h"
 #include "../../util/mem.h"
+#include "../../util/file_entry.h"
 #include "class_loader_ilload_impl.h"
 #include <assert.h>
 
@@ -24,6 +25,15 @@ void CLBC_import(class_loader* self, vector* ilimports) {
 	for (int i = self->import_manager->info_vec->length; i < ilimports->length; i++) {
 		CLBC_import_internal(self, ilimports, i);
 		CL_ERROR(self);
+	}
+	//Javaがjava.langをインポートせずに使用できるのと同じように、
+	//全てのクラスローダーはデフォルトで beacon/lang をロードする
+	script_context* ctx = script_context_get_current();
+	for(int i=0; i<ctx->include_vec->length; i++) {
+		file_entry* fe = vector_at(ctx->include_vec, i);
+		if(fe->is_file && io_extension(fe->filename, "bc")) {
+			CLBC_new_load(self, fe->filename);
+		}
 	}
 }
 

@@ -359,7 +359,7 @@ static type* CLBC_get_or_load_interface(class_loader* self, namespace_* parent, 
 		inter = tp->u.interface_;
 		//もしネイティブメソッドのために
 		//既に登録されていたならここが型変数がNULLになってしまう
-		type_parameter_list_dup(iltype->u.class_->type_parameter_list, inter->type_parameter_list);
+		type_parameter_list_dup(il_type_type_parameter_list(iltype), inter->type_parameter_list);
 	}
 	return tp;
 }

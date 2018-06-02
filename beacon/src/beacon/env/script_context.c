@@ -9,6 +9,7 @@
 #include <assert.h>
 #include "generic_type.h"
 #include "../util/mem.h"
+#include "../util/io.h"
 #include "../lib/bc_library_interface.h"
 #include "../thread/thread.h"
 #include "../util/text.h"
@@ -234,6 +235,7 @@ static script_context* script_context_malloc(void) {
 	ret->oTrue = NULL;
 	ret->oFalse = NULL;
 	ret->oNull = NULL;
+	ret->include_vec = io_list_files("beacon/lang");
 	vector_push(ret->thread_vec, sg_thread_main());
 	return ret;
 }
@@ -264,6 +266,7 @@ static void script_context_free(script_context* self) {
 //	mem_dump();
 //	text_printfln("---");
 	tree_map_delete(self->namespace_map, script_context_namespace_delete);
+	io_list_files_delete(self->include_vec);
 	MEM_FREE(self);
 }
 

@@ -36,6 +36,7 @@ typedef struct script_context {
 	tree_map* namespace_map;
 	tree_map* class_loader_map;
 	vector* thread_vec;
+	vector* include_vec;
 	struct class_loader* bootstrap_class_loader;
 	//通し番号でクラスを参照するためのベクター
 	vector* type_vec;
