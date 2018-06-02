@@ -16,6 +16,7 @@ type * type_new() {
 	ret->location = NULL;
 	ret->absolute_index = -1;
 	ret->generic_self = NULL;
+	ret->state = type_none;
 	return ret;
 }
 

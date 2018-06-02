@@ -12,9 +12,10 @@ static void bc_exception_nativeInit(method* parent, frame* fr, enviroment* env);
 
 void bc_exception_init() {
 	namespace_* lang = namespace_lang();
-	class_* excClass = class_new_preload("Exception");
-	namespace_add_type(lang, type_wrap_class(excClass));
-	class_define_native_method(excClass, "nativeInit", bc_exception_nativeInit);
+	type* exceptionType = class_new_preload("Exception");
+	class_* exceptionClass = TYPE2CLASS(exceptionType);
+	namespace_add_type(lang, exceptionType);
+	class_define_native_method(exceptionClass, "nativeInit", bc_exception_nativeInit);
 }
 
 type* bc_exception_type() {

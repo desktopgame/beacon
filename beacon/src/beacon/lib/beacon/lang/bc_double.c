@@ -6,8 +6,9 @@ static void bc_double_nativeInit(method* parent, frame* fr, enviroment* env);
 
 void bc_double_init() {
 	namespace_* lang = namespace_lang();
-	class_* doubleClass = class_new_preload("Double");
-	namespace_add_type(lang, type_wrap_class(doubleClass));
+	type* doubleType = class_new_preload("Double");
+	class_* doubleClass = TYPE2CLASS(doubleType);
+	namespace_add_type(lang, doubleType);
 	class_define_native_method(doubleClass, "nativeInit", bc_double_nativeInit);
 }
 

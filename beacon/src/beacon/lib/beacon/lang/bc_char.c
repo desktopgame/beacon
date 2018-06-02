@@ -6,8 +6,9 @@ static void bc_char_nativeInit(method* parent, frame* fr, enviroment* env);
 
 void bc_char_init() {
 	namespace_* lang = namespace_lang();
-	class_* charClass = class_new_preload("Char");
-	namespace_add_type(lang, type_wrap_class(charClass));
+	type* charType = class_new_preload("Char");
+	class_* charClass = TYPE2CLASS(charType);
+	namespace_add_type(lang, charType);
 	class_define_native_method(charClass, "nativeInit", bc_char_nativeInit);
 }
 

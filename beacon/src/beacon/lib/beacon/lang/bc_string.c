@@ -7,8 +7,9 @@ static void bc_string_nativeInit(method* parent, frame* fr, enviroment* env);
 
 void bc_string_init() {
 	namespace_* lang = namespace_lang();
-	class_* stringClass = class_new_preload("String");
-	namespace_add_type(lang, type_wrap_class(stringClass));
+	type* stringType = class_new_preload("String");
+	class_* stringClass = TYPE2CLASS(stringType);
+	namespace_add_type(lang, stringType);
 	class_define_native_method(stringClass, "nativeInit", bc_string_nativeInit);
 }
 

@@ -57,7 +57,6 @@ class_ * class_new(const char * name) {
 	ret->name = text_strdup(name);
 	ret->parent = NULL;
 	ret->location = NULL;
-	ret->state = class_none;
 	ret->ref_count = 0;
 	ret->super_class = NULL;
 	ret->impl_list = vector_new();
@@ -77,18 +76,19 @@ class_ * class_new(const char * name) {
 	return ret;
 }
 
-class_ * class_new_preload(const char * name) {
+type* class_new_preload(const char * name) {
 	class_* cl = class_new(name);
-	cl->state = class_pending;
+	type* tp = type_wrap_class(cl);
+	tp->state = type_pending;
 	if (TYPE_OBJECT == NULL) {
-		return cl;
+		return tp;
 	}
 	class_* objCls = TYPE_OBJECT->u.class_;
 	if (cl != objCls) {
 		type_init_generic(objCls->parent, 0);
 		cl->super_class = objCls->parent->generic_self;
 	}
-	return cl;
+	return tp;
 }
 
 void class_alloc_fields(class_ * self, object * o) {

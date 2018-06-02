@@ -2,7 +2,6 @@
 #ifndef BEACON_ENV_CLASS_H
 #define BEACON_ENV_CLASS_H
 #include "../namespace.h"
-#include "../class_state.h"
 #include "../native_method_ref.h"
 #include "../vtable.h"
 #include "../type_interface.h"
@@ -34,7 +33,6 @@ typedef struct class_ {
 	vector* smethod_list;
 	vector* constructor_list;
 	//class_type type;
-	class_state state;
 	uint32_t ref_count;
 	tree_map* native_method_ref_map;
 	vector* type_parameter_list;
@@ -67,7 +65,7 @@ class_* class_new(const char* name);
  * 事前に読みこまれる必要があるクラスを作成します.
  * @param name
  */
-class_* class_new_preload(const char* name);
+type* class_new_preload(const char* name);
 
 /**
  * 指定のオブジェクトにこのクラスのフィールドを表す

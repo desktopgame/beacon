@@ -4,8 +4,8 @@
 
 void bc_null_init() {
 	namespace_* lang = namespace_lang();
-	class_* nullClass = class_new_preload("Null");
-	namespace_add_type(lang, type_wrap_class(nullClass));
+	type* nullType = class_new_preload("Null");
+	namespace_add_type(lang, nullType);
 }
 
 type* bc_null_type() {

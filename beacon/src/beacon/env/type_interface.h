@@ -24,6 +24,22 @@ struct enviroment;
 struct vtable;
 struct generic_type;
 
+typedef enum type_state {
+	/**
+	 * 生成直後.
+	 */
+	type_none,
+	/**
+	 * 言語仕様のためにプリロードされるクラス.
+	 * 後で正式に読み込まれるまで "保留" 状態とします。
+	 */
+	type_pending,
+	/**
+	 * 正式に読み込みの完了したクラス.
+	 */
+	type_complete,
+} type_state;
+
 /**
  * 型を表す構造体.
  */
@@ -32,6 +48,7 @@ typedef struct type {
 	struct namespace_* location;
 	struct generic_type* generic_self;
 	int absolute_index;
+	type_state state;
 	union {
 		struct class_* class_;
 		struct interface_* interface_;

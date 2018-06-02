@@ -4,8 +4,8 @@
 
 void bc_bool_init() {
 	namespace_* lang = namespace_lang();
-	class_* boolClass = class_new_preload("Bool");
-	namespace_add_type(lang, type_wrap_class(boolClass));
+	type* boolType = class_new_preload("Bool");
+	namespace_add_type(lang, boolType);
 }
 
 type* bc_bool_type() {

@@ -4,8 +4,9 @@
 
 void bc_void_init() {
 	namespace_* lang = namespace_lang();
-	class_* voidClass = class_new_preload("Void");
-	namespace_add_type(lang, type_wrap_class(voidClass));
+	type* voidType = class_new_preload("Void");
+	class_* voidClass = TYPE2CLASS(voidType);
+	namespace_add_type(lang, voidType);
 }
 
 type* bc_void_type() {
