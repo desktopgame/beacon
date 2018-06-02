@@ -44,7 +44,8 @@
 			"locale": "cpp",
 			"iosfwd": "cpp",
 			"iterator": "cpp",
-			"vector": "cpp"
+			"vector": "cpp",
+			"generic_type.h": "c"
 		}
 	}
 }
