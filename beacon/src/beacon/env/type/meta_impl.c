@@ -13,7 +13,6 @@
 #include "../method.h"
 #include "../../util/xassert.h"
 #include "../../util/text.h"
-#include "../../debug.h"
 #include <string.h>
 
 int meta_calc_score(vector* params, vector* ilargs, enviroment* env) {
