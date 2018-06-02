@@ -93,6 +93,8 @@ bool method_override(method* superM, method* subM) {
 		return false;
 	}
 	ccpush_type(superM->parent);
+	cc_enable(ccstate_override);
+	ccset_override(superM, subM);
 	//全ての引数を比較
 	for (int i = 0; i < superM->parameter_list->length; i++) {
 		parameter* superP = ((parameter*)vector_at(superM->parameter_list, i));
@@ -110,6 +112,8 @@ bool method_override(method* superM, method* subM) {
 	generic_type_print(subRet); text_printfln("");
 	int ret =generic_type_distance(superRet2, subRet);
 	ccpop_type();
+	cc_disable(ccstate_override);
+	ccset_override(NULL, NULL);
 	return ret != -1;
 }
 
@@ -136,6 +140,15 @@ void method_delete(method * self) {
 		native_method_delete(self->u.native_method);
 	}
 	MEM_FREE(self);
+}
+
+generic_type* method_diff(method* abstract, method* concrete) {
+	type* abstractT = abstract->parent;
+	type* implT = concrete->parent;
+	//int dist = type_distance(abstractT, implT);
+	//assert(dist != -1);
+	generic_type* bounds = type_baseline(abstractT, implT);
+	return bounds;
 }
 
 //private

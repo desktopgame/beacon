@@ -48,7 +48,13 @@
 			"generic_type.h": "c",
 			"object.h": "c",
 			"import_manager.h": "c",
-			"compile_context.h": "c"
+			"compile_context.h": "c",
+			"algorithm": "cpp",
+			"__bit_reference": "cpp",
+			"__hash_table": "cpp",
+			"map": "cpp",
+			"set": "cpp",
+			"unordered_map": "cpp"
 		}
 	}
 }

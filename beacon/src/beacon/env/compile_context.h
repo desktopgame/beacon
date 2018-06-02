@@ -1,12 +1,13 @@
 #ifndef BEACON_ENV_CONTEXT_H
 #define BEACON_ENV_CONTEXT_H
 #include "../util/vector.h"
+struct method;
 
 typedef enum compile_state {
 	ccstate_none,
-	ccstate_toplevel
+	ccstate_toplevel,
+	ccstate_override,
 } compile_state;
-
 
 typedef struct compile_context {
 	vector* namespace_vec;
@@ -17,6 +18,8 @@ typedef struct compile_context {
 	vector* type_args_vec;
 	vector* while_start_vec;
 	vector* while_end_vec;
+	struct method* abstract_method;
+	struct method* concrete_method;
 	//メソッドの探索とコンストラクタの探索は
 	//部分的には似ていますが、
 	//コンストラクタはレシーバがいないのにインスタンスメソッドのように
@@ -26,8 +29,6 @@ typedef struct compile_context {
 	//(つまり、receiver_vecの先頭を参照する)
 	//コンストラクタの場合ではnew演算子から参照する必要があります。
 	compile_state state;
-	int find_instance;
-	int find_static;
 	struct class_loader* class_loader_ref;
 } compile_context;
 
@@ -130,4 +131,8 @@ bool cc_test(compile_state state);
 void ccset_class_loader(struct class_loader* cll);
 
 struct class_loader* ccget_class_loader();
+
+void ccset_override(struct method* abstract_method, struct method* concrete_method);
+
+struct generic_type* ccget_override();
 #endif

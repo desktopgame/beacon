@@ -83,4 +83,11 @@ int method_for_generic_index(method* self, const char* name);
  * @param self
  */
 void method_delete(method* self);
+
+/**
+ * @param abstract
+ * @param concrete
+ * @return
+ */
+struct generic_type* method_diff(method* abstract, method* concrete);
 #endif // !SIGNAL_ENV_METHOD_H

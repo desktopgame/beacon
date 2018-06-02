@@ -216,7 +216,11 @@ static generic_type* generic_type_applyImpl(generic_type* self, frame* fr) {
 		if(e->virtual_type_index != -1) {
 			count++;
 			if(e->tag == generic_type_tag_class) {
-				generic_type_addargs(copy, generic_type_receiver_at(fr, e->virtual_type_index));
+				if(cc_test(ccstate_override)) {
+					generic_type_addargs(copy, ccget_override());
+				} else {
+					generic_type_addargs(copy, generic_type_receiver_at(fr, e->virtual_type_index));
+				}
 			} else if(e->tag == generic_type_tag_method ||
 			e->tag == generic_type_tag_ctor) {
 				//vector* type_args = vector_top(ilctx->type_args_vec);

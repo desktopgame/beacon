@@ -399,14 +399,14 @@ bool class_contains_method(vector* method_list, method* m) {
 	return ret;
 }
 
-int class_distance(class_ * self, class_ * other) {
-	if (self == other) {
+int class_distance(class_ * super, class_ * sub) {
+	if (super == sub) {
 		return 0;
 	}
 	int depth = 0;
-	class_* pointee = other;
+	class_* pointee = sub;
 	do {
-		if (pointee == self) {
+		if (pointee == super) {
 			return depth;
 		}
 		generic_type* super_gtype = pointee->super_class;

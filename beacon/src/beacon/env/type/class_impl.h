@@ -286,14 +286,14 @@ bool class_contains_method_tree(class_* self, method* m);
 bool class_contains_method(vector* method_list, method* m);
 
 /**
- * self と other の距離を返します.
- * @param self
- * @param other
+ * super と sub の距離を返します.
+ * @param super
+ * @param sub
  * @return 同じクラスなら 0
  *         otherがselfのサブクラスなら正の数(階層の深さ)
  *         継承関係が異なるなら -1
  */
-int class_distance(class_* self, class_* other);
+int class_distance(class_* super, class_* sub);
 
 /**
  * このクラスの vtable を、現在のメソッド一覧に基づいて作成します.

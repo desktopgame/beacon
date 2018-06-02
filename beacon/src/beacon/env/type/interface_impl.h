@@ -7,11 +7,13 @@
 #include "../../util/vector.h"
 struct method;
 struct enviroment;
-//struct type;
+struct generic_type;
+struct type;
 /**
  * インターフェースを表す構造体.
  */
 typedef struct interface_ {
+	struct type* parent;
 	char* name;
 	vector* impl_list;
 	vector* method_list;
@@ -92,4 +94,12 @@ void interface_unlink(interface_* self);
  * @param self
  */
 void interface_delete(interface_* self);
+
+/**
+ * self に find が含まれるなら NULL 以外の値を返します.
+ * @param source
+ * @param find
+ * @return
+ */
+struct generic_type* interface_contains(struct generic_type* source, interface_* find);
 #endif // !SIGNAL_ENV_TYPE_IINTERFACE_H

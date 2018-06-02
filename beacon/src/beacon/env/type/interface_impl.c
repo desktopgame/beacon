@@ -3,6 +3,7 @@
 #include "../../util/mem.h"
 #include "../../util/text.h"
 #include "../../env/method.h"
+#include "../../env/generic_type.h"
 #include "meta_impl.h"
 #include "../generic_type.h"
 #include "../type_parameter.h"
@@ -17,6 +18,7 @@ type * type_wrap_interface(interface_ * self) {
 	type* ret = type_new();
 	ret->tag = type_interface;
 	ret->u.interface_ = self;
+	self->parent = ret;
 	return ret;
 }
 
@@ -28,6 +30,7 @@ interface_ * interface_new(const char * name) {
 	ret->method_list = vector_new();
 	ret->vt = NULL;
 	ret->type_parameter_list = vector_new();
+	ret->parent = NULL;
 	return ret;
 }
 
@@ -112,6 +115,20 @@ void interface_delete(interface_ * self) {
 	vector_delete(self->type_parameter_list, interface_type_parameter_delete);
 	MEM_FREE(self->name);
 	MEM_FREE(self);
+}
+
+generic_type* interface_contains(generic_type* source, interface_* find) {
+	interface_* self = source->core_type->u.interface_;
+	if(self == find) {
+		return source;
+	}
+	for(int i=0; i<self->impl_list->length; i++) {
+		generic_type* gE = vector_at(self->impl_list, i);
+		if(gE->core_type->u.interface_ == find) {
+			return gE;
+		}
+	}
+	return NULL;
 }
 
 //private

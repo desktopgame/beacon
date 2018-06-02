@@ -105,11 +105,11 @@ void type_dump(type* self, int depth);
 
 /**
  * 型の距離を返します.
- * @param a
- * @param b
+ * @param super
+ * @param sub
  * @return
  */
-int type_distance(type* a, type* b);
+int type_distance(type* super, type* sub);
 
 /**
  * 型情報を残してメソッドやフィールドなどのみを開放します.
@@ -163,4 +163,13 @@ void type_delete(type* self);
 
 struct class_* type_cast_class(type* self);
 struct interface_* type_cast_interface(type* self);
+
+/**
+ * abstractにはクラス/インターフェイスを渡します.
+ * concreteの親クラス/実装インターフェイス一覧から abstract を検索し、 generic_type で返します。
+ * @param abstract
+ * @param concrete
+ * @return
+ */
+struct generic_type* type_baseline(type* abstract, type* concrete);
 #endif // !SIGNAL_ENV_TYPE_INTERFACE_H

@@ -94,13 +94,13 @@ void type_dump(type * self, int depth) {
 	}
 }
 
-int type_distance(type * a, type * b) {
-	if (a == b) {
+int type_distance(type * super, type * sub) {
+	if (super == sub) {
 		return 0;
 	}
-	if (a->tag == type_class &&
-		b->tag == type_class) {
-		int dist = class_distance(a->u.class_, b->u.class_);
+	if (super->tag == type_class &&
+		sub->tag == type_class) {
+		int dist = class_distance(super->u.class_, sub->u.class_);
 		return dist;
 	}
 	return -1;
@@ -216,4 +216,31 @@ class_* type_cast_class(type* self) {
 interface_* type_cast_interface(type* self) {
 	assert(self->tag == type_interface);
 	return self->u.interface_;
+}
+
+generic_type* type_baseline(type* abstract, type* concrete) {
+	type* ptr = concrete;
+	do {
+		class_* cls = TYPE2CLASS(ptr);
+		if(cls->super_class != NULL &&
+		   cls->super_class->core_type == abstract) {
+			return cls->super_class;
+		}
+		if(abstract->tag == type_interface) {
+			for(int i=0; i<cls->impl_list->length; i++) {
+				generic_type* gE = (generic_type*)vector_at(cls->impl_list, i);
+				generic_type* impl = interface_contains(gE, abstract->u.interface_);
+				if(impl) {
+					return impl;
+				}
+			}
+		}
+		//次へ
+		if(cls->super_class == NULL) {
+			ptr = NULL;
+		} else {
+			ptr = cls->super_class->core_type;
+		}
+	} while(ptr != NULL);
+	return NULL;
 }

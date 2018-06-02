@@ -207,6 +207,15 @@ class_loader* ccget_class_loader() {
 	return cc_current()->class_loader_ref;
 }
 
+void ccset_override(method* abstract_method, method* concrete_method) {
+	cc_current()->abstract_method = abstract_method;
+	cc_current()->concrete_method = concrete_method;
+}
+
+generic_type* ccget_override() {
+	return method_diff(cc_current()->abstract_method, cc_current()->concrete_method);
+}
+
 //private
 static compile_context* compile_context_new() {
 	compile_context* ret = (compile_context*)MEM_MALLOC(sizeof(compile_context));
@@ -218,9 +227,9 @@ static compile_context* compile_context_new() {
 	ret->while_end_vec = vector_new();
 	ret->receiver_vec = vector_new();
 	ret->type_args_vec = vector_new();
-	ret->find_instance = 0;
-	ret->find_static = 0;
 	ret->class_loader_ref = NULL;
+	ret->abstract_method = NULL;
+	ret->concrete_method = NULL;
 	return ret;
 }
 
