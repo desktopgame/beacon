@@ -1,0 +1,4 @@
+namespace beacon {
+	interface ClassImplTestX : Iterable[Int], Iterable[Int] {
+	}
+}

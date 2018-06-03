@@ -156,6 +156,7 @@ static void CLBC_enum(class_loader * self, il_type * iltype, namespace_ * parent
 	assert(iltype->tag == iltype_enum);
 	il_enum* ilenum = iltype->u.enum_;
 	type* tp = CLBC_get_or_load_enum(parent, iltype);
+	CL_ERROR(self);
 	class_* cls = TYPE2CLASS(tp);
 	if((tp->state & type_register) > 0) {
 		return;
@@ -207,6 +208,7 @@ static void CLBC_class(class_loader* self, il_type* iltype, namespace_* parent) 
 	ccset_class_loader(self);
 	//すでに宣言されているならそれを取得
 	type* tp = CLBC_get_or_load_class(self, parent, iltype);
+	CL_ERROR(self);
 	class_* cls = TYPE2CLASS(tp);
 	if((tp->state & type_register) > 0) {
 		return;
@@ -248,6 +250,7 @@ static void CLBC_interface(class_loader * self, il_type * iltype, namespace_ * p
 	ccpush_namespace(parent);
 	ccset_class_loader(self);
 	type* tp = CLBC_get_or_load_interface(self, parent, iltype);
+	CL_ERROR(self);
 	interface_* inter = TYPE2INTERFACE(tp);
 	if((tp->state & type_register) > 0) {
 		return;
@@ -319,6 +322,7 @@ static type* CLBC_get_or_load_class(class_loader* self, namespace_* parent, il_t
 		outClass = class_new(iltype->u.class_->name);
 		tp = type_wrap_class(outClass);
 		CLBC_register_class(self, parent, iltype, tp, outClass);
+		CL_ERROR_RET(self, tp);
 	} else {
 		ccpush_type(tp);
 		outClass = tp->u.class_;
@@ -353,11 +357,18 @@ static void CLBC_register_class(class_loader* self, namespace_* parent, il_type*
 			vector_push(cls->impl_list, gtp);
 			if(E->tag != type_interface) {
 				class_loader_report(self, "must be class first: %s\n", type_name(tp));
+				namespace_add_type(parent, tp);
+				return;
 			}
 		}
 	}
 	cls->location = parent;
 	namespace_add_type(parent, tp);
+	//重複するインターフェイスを検出
+	interface_* inter = NULL;
+	if((inter = type_interface_valid(tp))) {
+		class_loader_report(self, "should'nt implement equal interface a multiple: %s\n", inter->name);
+	}
 }
 
 static type* CLBC_get_or_load_interface(class_loader* self, namespace_* parent, il_type* iltype) {
@@ -367,6 +378,7 @@ static type* CLBC_get_or_load_interface(class_loader* self, namespace_* parent, 
 		inter = interface_new(iltype->u.interface_->name);
 		tp = type_wrap_interface(inter);
 		CLBC_register_interface(self, parent, iltype, tp, inter);
+		CL_ERROR_RET(self, tp);
 	} else {
 		ccpush_type(tp);
 		inter = tp->u.interface_;
@@ -391,9 +403,16 @@ static void CLBC_register_interface(class_loader* self, namespace_* parent, il_t
 		vector_push(inter->impl_list, gtp);
 		if(E->tag != type_interface) {
 			class_loader_report(self, "must be interface only: %s\n", type_name(tp));
+			namespace_add_type(parent, tp);
+			return;
 		}
 	}
 	//場所を設定
 	inter->location = parent;
 	namespace_add_type(parent, tp);
+	//重複するインターフェイスを検出
+	interface_* ovinter = NULL;
+	if((ovinter = type_interface_valid(tp))) {
+		class_loader_report(self, "should'nt implement equal interface a multiple: %s\n", ovinter->name);
+	}
 }

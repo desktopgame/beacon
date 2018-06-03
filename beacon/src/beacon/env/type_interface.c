@@ -177,6 +177,15 @@ vector* type_parameter_list(type* self) {
 	}
 }
 
+vector* type_implement_list(type* self) {
+	assert(self != NULL);
+	if(self->tag == type_class) {
+		return self->u.class_->impl_list;
+	} else if(self->tag == type_interface) {
+		return self->u.interface_->impl_list;
+	}
+}
+
 generic_type * type_type_parameter_at(type * self, int index) {
 	assert(self->tag != type_enum);
 	if (self->tag == type_class) {
@@ -243,5 +252,22 @@ generic_type* type_baseline(type* abstract, type* concrete) {
 			ptr = cls->super_class->core_type;
 		}
 	} while(ptr != NULL);
+	return NULL;
+}
+
+interface_* type_interface_valid(type* self) {
+	vector* impl_list = type_implement_list(self);
+	for(int i=0; i<impl_list->length; i++) {
+		generic_type* gE = vector_at(impl_list, i);
+		interface_* iE = TYPE2INTERFACE(GENERIC2TYPE(gE));
+		for(int j=0; j<impl_list->length; j++) {
+			if(i == j) { continue; }
+			generic_type* gE2 = vector_at(impl_list, j);
+			interface_* iE2 = TYPE2INTERFACE(GENERIC2TYPE(gE));
+			if(iE == iE2) {
+				return iE2;
+			}
+		}
+	}
 	return NULL;
 }

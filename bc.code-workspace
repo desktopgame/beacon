@@ -55,7 +55,9 @@
 			"map": "cpp",
 			"set": "cpp",
 			"unordered_map": "cpp",
-			"bc_library_interface.h": "c"
+			"bc_library_interface.h": "c",
+			"sstream": "c",
+			"strstream": "c"
 		}
 	}
 }

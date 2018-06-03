@@ -170,6 +170,13 @@ struct generic_type* type_find_impl(type* self, type* a);
 vector* type_parameter_list(type* self);
 
 /**
+ * この型の実装インターフェイスの一覧を返します.
+ * @param self
+ * @return
+ */
+vector* type_implement_list(type* self);
+
+/**
  * この型がクラス/インターフェイスを表すとき、
  * 指定位置の型変数を返します.
  * @param self
@@ -197,4 +204,11 @@ struct interface_* type_cast_interface(type* self);
  * @return
  */
 struct generic_type* type_baseline(type* abstract, type* concrete);
+
+/**
+ * 同じインターフェイスが二回現れるなら NULL 以外.
+ * @param self
+ * @return
+ */
+struct interface_* type_interface_valid(type* self);
 #endif // !SIGNAL_ENV_TYPE_INTERFACE_H
