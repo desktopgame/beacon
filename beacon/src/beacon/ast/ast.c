@@ -12,6 +12,7 @@ static void ast_print_tree_impl(ast* self, int depth);
 static void ast_delete_impl(ast* self);
 static void ast_list_deleter(list_item item);
 static bool ast_has_str(ast* self);
+static modifier_type ast_cast_to_modifierImpl(ast * self, bool* error);
 
 void ast_compile_entry(ast * self) {
 	parser* p = parser_top();
@@ -397,17 +398,10 @@ access_level ast_cast_to_access(ast * self) {
 	return access_public;
 }
 
-modifier_type ast_cast_to_modifier(ast * self) {
+modifier_type ast_cast_to_modifier(ast * self, bool* error) {
+	(*error) = false;
 	if(self->tag == ast_modifier_list) {
-		int ret = -1;
-		for(int i=0; i<self->child_count; i++) {
-			if(ret == -1) {
-				ret = ast_cast_to_modifier(ast_at(self, i));
-			} else {
-				ret |= ast_cast_to_modifier(ast_at(self, i));
-			}
-		}
-		return (modifier_type)ret;
+		return ast_cast_to_modifierImpl(self, error);
 	}
 	assert(ast_is_modifier(self));
 	return self->u.modifier_value;
@@ -502,4 +496,37 @@ static bool ast_has_str(ast* self) {
 		t == ast_type_out_parameter ||
 		t == ast_parameterized_typename;
 		//t == ast_class_super;
+}
+
+static modifier_type ast_cast_to_modifierImpl(ast * self, bool* error) {
+	int ret = -1;
+	for(int i=0; i<self->child_count; i++) {
+		if((*error)) {
+			break;
+		}
+		//フラグを合体させる
+		if(ret == -1) {
+			ret = ast_cast_to_modifier(ast_at(self, i), error);
+		} else {
+			//追加の属性がすでに含まれているかどうか
+			modifier_type add = ast_cast_to_modifier(ast_at(self, i), error);
+			if((ret & add) > 0) {
+				(*error) = true;
+			}
+			ret |= add;
+		}
+	}
+	modifier_type mt = (modifier_type)ret;
+	//不正な組み合わせを検出
+	if(((mt & modifier_abstract) > 0) || 
+	   ((mt & modifier_override) > 0)) {
+		if((mt & modifier_static) > 0) {
+			(*error) = true;
+		}
+	}
+	if(((mt & modifier_native) > 0) &&
+	   ((mt & modifier_abstract) > 0)) {
+		(*error) = true;
+	}
+	return mt;
 }

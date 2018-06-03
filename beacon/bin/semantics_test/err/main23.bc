@@ -1,0 +1,8 @@
+namespace beacon {
+	class ModifierError2 {
+		public:
+		def static abstract foo() -> Object {
+			
+		}
+	}
+}

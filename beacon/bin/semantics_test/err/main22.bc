@@ -1,0 +1,8 @@
+namespace beacon {
+	class ModifierError {
+		public:
+		def static static iterate() -> Object {
+			
+		}
+	}
+}

@@ -46,9 +46,14 @@ void CLIL_field(class_loader* self, il_type* current, ast* field, access_level l
 	ast* access_name = ast_at(field, 2);
 	il_field* v = il_field_new(access_name->u.string_value);
 	CLIL_generic_cache(type_name, v->fqcn);
+	bool error;
 	v->access = level;
-	v->modifier = ast_cast_to_modifier(modifier);
+	v->modifier = ast_cast_to_modifier(modifier, &error);
 	il_type_add_field(current, v);
+	//重複する修飾子を検出
+	if(error) {
+		class_loader_report(self, "invalid modifier: %s\n", v->name);
+	}
 }
 
 void CLIL_method(class_loader* self, il_type* current, ast* method, access_level level) {
@@ -62,11 +67,16 @@ void CLIL_method(class_loader* self, il_type* current, ast* method, access_level
 	il_method* v = il_method_new(func_name->u.string_value);
 	CLIL_type_parameter(self, ageneric, v->type_parameter_list);
 	CLIL_generic_cache(ret_name, v->return_fqcn);
+	bool error;
 	v->access = level;
-	v->modifier = ast_cast_to_modifier(modifier);
+	v->modifier = ast_cast_to_modifier(modifier, &error);
 	CLIL_parameter_list(self, v->parameter_list, param_list);
 	CLIL_body(self, v->statement_list, func_body);
 	il_type_add_method(current, v);
+	//重複する修飾子を検出
+	if(error) {
+		class_loader_report(self, "invalid modifier: %s\n", v->name);
+	}
 }
 
 void CLIL_ctor(class_loader* self, il_type* current, ast* constructor, access_level level) {
