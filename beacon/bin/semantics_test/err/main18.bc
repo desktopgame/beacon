@@ -1,0 +1,8 @@
+namespace beacon {
+	class XXXX : Iterable[Int], Array[Int] {
+		public:
+		def iterate() -> Iterator[Int] {
+
+		}
+	}
+}

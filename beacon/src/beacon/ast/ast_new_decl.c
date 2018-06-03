@@ -198,8 +198,8 @@ ast * ast_new_parameter_list(ast* atypename, char * parameter_access_name, ast *
 
 ast * ast_new_typename_list(ast * atypename, ast * typename_list) {
 	ast* ret = ast_new(ast_typename_list);
-	ast_push(ret, atypename);
 	ast_push(ret, typename_list);
+	ast_push(ret, atypename);
 	return ret;
 }
 
@@ -233,8 +233,8 @@ ast * ast_new_type_out_parameter(char * name, ast* arule_list) {
 
 ast * ast_new_type_parameter_list(ast* aparam, ast * alist) {
 	ast* ret = ast_new(ast_type_parameter_list);
-	ast_push(ret, aparam);
 	ast_push(ret, alist);
+	ast_push(ret, aparam);
 	return ret;
 }
 

@@ -94,7 +94,9 @@ static void CLBC_debug_native_method(method* parent, frame* fr, enviroment* env)
 static void CLBC_check_superclass(class_* cls);
 static type* CLBC_get_or_load_enum(namespace_* parent, il_type* iltype);
 static type* CLBC_get_or_load_class(class_loader* self, namespace_* parent, il_type* iltype);
+static void CLBC_register_class(class_loader* self, namespace_* parent, il_type* iltype, type* tp, class_* cls);
 static type* CLBC_get_or_load_interface(class_loader* self, namespace_* parent, il_type* iltype);
+static void CLBC_register_interface(class_loader* self, namespace_* parent, il_type* iltype, type* tp, interface_* inter);
 
 void class_loader_bcload_impl(class_loader* self) {
 	CL_ERROR(self);
@@ -117,6 +119,7 @@ static void CLBC_namespace_list(class_loader* self, vector* ilnamespace_list, na
 		vector_item e = vector_at(ilnamespace_list, i);
 		il_namespace* iln = (il_namespace*)e;
 		CLBC_namespace(self, iln, parent);
+		CL_ERROR(self);
 	}
 }
 
@@ -144,6 +147,7 @@ static void CLBC_type_list(class_loader* self, vector* iltype_list, namespace_* 
 		} else if (ilt->tag == iltype_enum) {
 			CLBC_enum(self, ilt, parent);
 		}
+		CL_ERROR(self);
 	}
 }
 
@@ -314,29 +318,7 @@ static type* CLBC_get_or_load_class(class_loader* self, namespace_* parent, il_t
 	if (tp == NULL) {
 		outClass = class_new(iltype->u.class_->name);
 		tp = type_wrap_class(outClass);
-		ccpush_type(tp);
-		type_init_generic(tp, iltype->u.class_->type_parameter_list->length);
-		type_parameter_list_dup(iltype->u.class_->type_parameter_list, outClass->type_parameter_list);
-		for (int i = 0; i < iltype->u.class_->extend_list->length; i++) {
-			generic_cache* e = (generic_cache*)vector_at(iltype->u.class_->extend_list, i);
-			//最初の一つはクラスでもインターフェースでもよい
-			if (i == 0) {
-				generic_type* gtp = import_manager_resolve(self->import_manager, parent, e);
-				assert(gtp != NULL);
-				if (gtp->core_type->tag == type_class) {
-					outClass->super_class = gtp;
-				} else if (gtp->core_type->tag == type_interface) {
-					vector_push(outClass->impl_list, gtp);
-				}
-			//二つ目以降はインターフェースのみ
-			} else {
-				generic_type* gtp = import_manager_resolve(self->import_manager, parent, e);
-				vector_push(outClass->impl_list, gtp);
-				assert(gtp->core_type->tag == type_interface);
-			}
-		}
-		outClass->location = parent;
-		namespace_add_type(parent, tp);
+		CLBC_register_class(self, parent, iltype, tp, outClass);
 	} else {
 		ccpush_type(tp);
 		outClass = tp->u.class_;
@@ -349,25 +331,42 @@ static type* CLBC_get_or_load_class(class_loader* self, namespace_* parent, il_t
 	return tp;
 }
 
+static void CLBC_register_class(class_loader* self, namespace_* parent, il_type* iltype, type* tp, class_* cls) {
+	ccpush_type(tp);
+	type_init_generic(tp, iltype->u.class_->type_parameter_list->length);
+	type_parameter_list_dup(iltype->u.class_->type_parameter_list, cls->type_parameter_list);
+	for (int i = 0; i < iltype->u.class_->extend_list->length; i++) {
+		generic_cache* e = (generic_cache*)vector_at(iltype->u.class_->extend_list, i);
+		//最初の一つはクラスでもインターフェースでもよい
+		if (i == 0) {
+			generic_type* gtp = import_manager_resolve(self->import_manager, parent, e);
+			assert(gtp != NULL);
+			if (gtp->core_type->tag == type_class) {
+				cls->super_class = gtp;
+			} else if (gtp->core_type->tag == type_interface) {
+				vector_push(cls->impl_list, gtp);
+			}
+		//二つ目以降はインターフェースのみ
+		} else {
+			generic_type* gtp = import_manager_resolve(self->import_manager, parent, e);
+			type* E = GENERIC2TYPE(gtp);
+			vector_push(cls->impl_list, gtp);
+			if(E->tag != type_interface) {
+				class_loader_report(self, "must be class first: %s\n", type_name(tp));
+			}
+		}
+	}
+	cls->location = parent;
+	namespace_add_type(parent, tp);
+}
+
 static type* CLBC_get_or_load_interface(class_loader* self, namespace_* parent, il_type* iltype) {
 	type* tp = namespace_get_type(parent, iltype->u.interface_->name);
 	interface_* inter = NULL;
 	if (tp == NULL) {
 		inter = interface_new(iltype->u.interface_->name);
 		tp = type_wrap_interface(inter);
-		ccpush_type(tp);
-		type_init_generic(tp, iltype->u.interface_->type_parameter_list->length);
-		type_parameter_list_dup(iltype->u.interface_->type_parameter_list, inter->type_parameter_list);
-		for (int i = 0; i < iltype->u.interface_->extends_list->length; i++) {
-			generic_cache* e = (generic_cache*)vector_at(iltype->u.interface_->extends_list, i);
-			//インターフェースはインターフェースのみ継承
-			generic_type* gtp = import_manager_resolve(self->import_manager, parent, e);
-			assert(gtp->core_type->tag == type_interface);
-			vector_push(inter->impl_list, gtp);
-		}
-		//場所を設定
-		inter->location = parent;
-		namespace_add_type(parent, tp);
+		CLBC_register_interface(self, parent, iltype, tp, inter);
 	} else {
 		ccpush_type(tp);
 		inter = tp->u.interface_;
@@ -378,4 +377,23 @@ static type* CLBC_get_or_load_interface(class_loader* self, namespace_* parent, 
 		}
 	}
 	return tp;
+}
+
+static void CLBC_register_interface(class_loader* self, namespace_* parent, il_type* iltype, type* tp, interface_* inter) {
+	ccpush_type(tp);
+	type_init_generic(tp, iltype->u.interface_->type_parameter_list->length);
+	type_parameter_list_dup(iltype->u.interface_->type_parameter_list, inter->type_parameter_list);
+	for (int i = 0; i < iltype->u.interface_->extends_list->length; i++) {
+		generic_cache* e = (generic_cache*)vector_at(iltype->u.interface_->extends_list, i);
+		//インターフェースはインターフェースのみ継承
+		generic_type* gtp = import_manager_resolve(self->import_manager, parent, e);
+		type* E = GENERIC2TYPE(gtp);
+		vector_push(inter->impl_list, gtp);
+		if(E->tag != type_interface) {
+			class_loader_report(self, "must be interface only: %s\n", type_name(tp));
+		}
+	}
+	//場所を設定
+	inter->location = parent;
+	namespace_add_type(parent, tp);
 }

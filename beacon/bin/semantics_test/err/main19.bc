@@ -1,0 +1,4 @@
+namespace beacon {
+	interface ImplTest : Array[Int] {
+	}
+}

@@ -30,11 +30,15 @@ void class_loader_link(class_loader* self, link_type type) {
 	CL_ERROR(self);
 	if(type == link_decl) {
 		CLBC_excec_class_decl(self);
+		CL_ERROR(self);
 		CLBC_excec_interface_decl(self);
+		CL_ERROR(self);
 		CLBC_excec_enum_decl(self);
 	} else if(type == link_impl) {
 		CLBC_excec_class_impl(self);
+		CL_ERROR(self);
 		CLBC_excec_interface_impl(self);
+		CL_ERROR(self);
 		CLBC_excec_enum_impl(self);
 	} else assert(false);
 }
