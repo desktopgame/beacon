@@ -153,6 +153,9 @@ static void CLBC_enum(class_loader * self, il_type * iltype, namespace_ * parent
 	il_enum* ilenum = iltype->u.enum_;
 	type* tp = CLBC_get_or_load_enum(parent, iltype);
 	class_* cls = TYPE2CLASS(tp);
+	if((tp->state & type_register) > 0) {
+		return;
+	}
 	//全ての列挙子を public static final フィールドとして追加
 	for (int i = 0; i < ilenum->item_vec->length; i++) {
 		char* str = (char*)vector_at(ilenum->item_vec, i);
@@ -186,6 +189,7 @@ static void CLBC_enum(class_loader * self, il_type * iltype, namespace_ * parent
 		cachekind_enum_decl
 	);
 	vector_push(self->type_cache_vec, mtc);
+	tp->state = tp->state | type_register;
 }
 
 static void CLBC_class(class_loader* self, il_type* iltype, namespace_* parent) {
@@ -200,6 +204,9 @@ static void CLBC_class(class_loader* self, il_type* iltype, namespace_* parent) 
 	//すでに宣言されているならそれを取得
 	type* tp = CLBC_get_or_load_class(self, parent, iltype);
 	class_* cls = TYPE2CLASS(tp);
+	if((tp->state & type_register) > 0) {
+		return;
+	}
 	cls->is_abstract = iltype->u.class_->is_abstract;
 	type_init_generic(tp, iltype->u.class_->type_parameter_list->length);
 	//デフォルトで親に Object を持つように
@@ -227,6 +234,7 @@ static void CLBC_class(class_loader* self, il_type* iltype, namespace_* parent) 
 	ccpop_type();
 	ccpop_namespace();
 	ccset_class_loader(NULL);
+	tp->state = tp->state | type_register;
 }
 
 static void CLBC_interface(class_loader * self, il_type * iltype, namespace_ * parent) {
@@ -237,6 +245,9 @@ static void CLBC_interface(class_loader * self, il_type * iltype, namespace_ * p
 	ccset_class_loader(self);
 	type* tp = CLBC_get_or_load_interface(self, parent, iltype);
 	interface_* inter = TYPE2INTERFACE(tp);
+	if((tp->state & type_register) > 0) {
+		return;
+	}
 	type_init_generic(tp, iltype->u.interface_->type_parameter_list->length);
 	//宣言のロードを予約
 	type_cache* tc = type_cache_init(
@@ -261,6 +272,7 @@ static void CLBC_interface(class_loader * self, il_type * iltype, namespace_ * p
 	ccpop_type();
 	ccpop_namespace();
 	ccset_class_loader(NULL);
+	tp->state = tp->state | type_register;
 }
 
 static void CLBC_attach_native_method(class_loader* self, il_type* ilclass, class_* classz, il_method* ilmethod, method* me) {
@@ -328,9 +340,11 @@ static type* CLBC_get_or_load_class(class_loader* self, namespace_* parent, il_t
 	} else {
 		ccpush_type(tp);
 		outClass = tp->u.class_;
-		//もしネイティブメソッドのために
-		//既に登録されていたならここが型変数がNULLになってしまう
-		type_parameter_list_dup(iltype->u.class_->type_parameter_list, outClass->type_parameter_list);
+		if((tp->state & type_register) == 0) {
+			//もしネイティブメソッドのために
+			//既に登録されていたならここが型変数がNULLになってしまう
+			type_parameter_list_dup(iltype->u.class_->type_parameter_list, outClass->type_parameter_list);
+		}
 	}
 	return tp;
 }
@@ -357,9 +371,11 @@ static type* CLBC_get_or_load_interface(class_loader* self, namespace_* parent, 
 	} else {
 		ccpush_type(tp);
 		inter = tp->u.interface_;
-		//もしネイティブメソッドのために
-		//既に登録されていたならここが型変数がNULLになってしまう
-		type_parameter_list_dup(il_type_type_parameter_list(iltype), inter->type_parameter_list);
+		if((tp->state & type_register) == 0) {
+			//もしネイティブメソッドのために
+			//既に登録されていたならここが型変数がNULLになってしまう
+			type_parameter_list_dup(il_type_type_parameter_list(iltype), inter->type_parameter_list);
+		}
 	}
 	return tp;
 }

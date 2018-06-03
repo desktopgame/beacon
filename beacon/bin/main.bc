@@ -1,10 +1,19 @@
-import "beacon/lang/Iterable"
+import "beacon/lang/Object"
+import "beacon/lang/Array"
+import "beacon/lang/Int"
+import "beacon/lang/Double"
+import "beacon/lang/Char"
+import "beacon/lang/String"
+import "beacon/lang/Bool"
+import "beacon/lang/Null"
+import "beacon/lang/Void"
+import "beacon/lang/Console"
+import "beacon/lang/Vector"
+import "beacon/lang/VectorIterator"
 
-namespace beacon {
-	class OverrideError : Iterable[Int] {
-		public:
-		def iterate() -> Iterator[String] {
-			
-		}
-	}
-}
+import "beacon/lang/Exception"
+import "beacon/lang/StackTraceElement"
+import "beacon/lang/Tuple"
+
+var v = new Vector[Int]();
+assert (v is Vector[Int]);

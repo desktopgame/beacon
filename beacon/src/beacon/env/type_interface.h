@@ -28,14 +28,24 @@ typedef enum type_state {
 	/**
 	 * 生成直後.
 	 */
-	type_none,
+	type_none = 1 << 0,
 	/**
 	 * 言語仕様のためにプリロードされるクラス.
 	 * 後で正式に読み込まれるまで "保留" 状態とします。
 	 */
-	type_pending,
-	type_decl,
-	type_impl
+	type_pending = 1 << 1,
+	/**
+	 * 型宣言を発見し、名前空間へ登録されたことを示します.
+	 */
+	type_register = 1 << 2,
+	/**
+	 * ある型のメンバ宣言を読み込んだことを示します.
+	 */
+	type_decl = 1 << 3,
+	/**
+	 * ある型のメンバ実装を読み込んだことを示します.
+	 */
+	type_impl = 1 << 4
 } type_state;
 
 /**
