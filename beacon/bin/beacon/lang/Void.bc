@@ -1,4 +1,4 @@
-namespace beacon.lang {
+namespace beacon::lang {
 	class Void {
 	}
 }

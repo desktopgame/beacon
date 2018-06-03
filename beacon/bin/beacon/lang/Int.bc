@@ -1,6 +1,6 @@
 //import "beacon/lang/Console"
 
-namespace beacon.lang {
+namespace beacon::lang {
 	class Int {
 		public:
 		def new(Int i) {

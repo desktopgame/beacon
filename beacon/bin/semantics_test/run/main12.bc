@@ -14,7 +14,7 @@ import "beacon/lang/VectorIterator"
 import "beacon/lang/Exception"
 import "beacon/lang/StackTraceElement"
 import "beacon/lang/Tuple"
-namespace beacon.x {
+namespace beacon::x {
 	class Defer {
 		public:
 

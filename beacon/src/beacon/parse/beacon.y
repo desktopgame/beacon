@@ -216,7 +216,7 @@ namespace_path
 	{
 		$$ = ast_new_namespace_path($1);
 	}
-	| namespace_path DOT IDENT
+	| namespace_path COLO_COLO IDENT
 	{
 		$$ = ast_new_namespace_path_list($1, $3);
 	}

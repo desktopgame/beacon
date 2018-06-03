@@ -3,7 +3,7 @@ import "beacon/lang/String"
 import "beacon/lang/Iterable"
 import "beacon/lang/ArrayIterator"
 
-namespace beacon.lang {
+namespace beacon::lang {
 	class Array[T] : Iterable[T] {
 		private:
 		Int length;

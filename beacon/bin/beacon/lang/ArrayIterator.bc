@@ -1,7 +1,7 @@
 import "beacon/lang/Iterator"
 import "beacon/lang/Array"
 
-namespace beacon.lang {
+namespace beacon::lang {
 	class ArrayIterator[T] : Iterator[T] {
 		private:
 		Array[T] source;

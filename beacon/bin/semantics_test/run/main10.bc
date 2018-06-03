@@ -15,7 +15,7 @@ import "beacon/lang/Exception"
 import "beacon/lang/StackTraceElement"
 import "beacon/lang/Tuple"
 
-namespace beacon.x {
+namespace beacon::x {
 	class MyClassB {
 		public:
 		def static test[A, B](A arg, B arg2) -> beacon::x::Tuple[A, B] {

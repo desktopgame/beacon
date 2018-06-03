@@ -52,7 +52,7 @@ Grammar
    19                               | namespace_member_decl_list
 
    20 namespace_path: IDENT
-   21               | namespace_path DOT IDENT
+   21               | namespace_path COLO_COLO IDENT
 
    22 import_list: import
    23            | import_list import
@@ -285,10 +285,10 @@ INT (260) 134
 DOUBLE (261) 135
 IDENT (262) 20 21 25 30 35 36 57 58 59 60 61 62 63 64 74 75 76 77 85
     86 133 156 157 158 174
-DOT (263) 21 133
+DOT (263) 133
 COMMA (264) 29 36 75 77 79 83
 COLON (265) 32 34 38 43 51 52 175
-COLO_COLO (266) 86
+COLO_COLO (266) 21 86
 LINE (267)
 ADD (268) 90 92
 SUB (269) 91 93
@@ -1453,7 +1453,7 @@ state 28
 
     9 namespace_decl: NAMESPACE . namespace_path namespace_body
    20 namespace_path: . IDENT
-   21               | . namespace_path DOT IDENT
+   21               | . namespace_path COLO_COLO IDENT
 
     IDENT  shift, and go to state 71
 
@@ -2618,10 +2618,10 @@ state 72
 
     9 namespace_decl: NAMESPACE namespace_path . namespace_body
    10 namespace_body: . LCB namespace_member_decl_optional RCB
-   21 namespace_path: namespace_path . DOT IDENT
+   21 namespace_path: namespace_path . COLO_COLO IDENT
 
-    DOT  shift, and go to state 127
-    LCB  shift, and go to state 128
+    COLO_COLO  shift, and go to state 127
+    LCB        shift, and go to state 128
 
     namespace_body  go to state 129
 
@@ -5810,7 +5810,7 @@ state 126
 
 state 127
 
-   21 namespace_path: namespace_path DOT . IDENT
+   21 namespace_path: namespace_path COLO_COLO . IDENT
 
     IDENT  shift, and go to state 190
 
@@ -8470,7 +8470,7 @@ state 189
 
 state 190
 
-   21 namespace_path: namespace_path DOT IDENT .
+   21 namespace_path: namespace_path COLO_COLO IDENT .
 
     $default  reduce using rule 21 (namespace_path)
 
@@ -8517,7 +8517,7 @@ state 195
 
    11 namespace_member_decl: NAMESPACE . namespace_path namespace_body
    20 namespace_path: . IDENT
-   21               | . namespace_path DOT IDENT
+   21               | . namespace_path COLO_COLO IDENT
 
     IDENT  shift, and go to state 71
 
@@ -9093,10 +9093,10 @@ state 231
 
    10 namespace_body: . LCB namespace_member_decl_optional RCB
    11 namespace_member_decl: NAMESPACE namespace_path . namespace_body
-   21 namespace_path: namespace_path . DOT IDENT
+   21 namespace_path: namespace_path . COLO_COLO IDENT
 
-    DOT  shift, and go to state 127
-    LCB  shift, and go to state 128
+    COLO_COLO  shift, and go to state 127
+    LCB        shift, and go to state 128
 
     namespace_body  go to state 255
 

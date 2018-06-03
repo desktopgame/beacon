@@ -3,7 +3,7 @@ import "beacon/lang/Array"
 import "beacon/lang/Console"
 import "beacon/lang/StackTraceElement"
 
-namespace beacon.lang {
+namespace beacon::lang {
 	class Exception {
 		private:
 		String message;

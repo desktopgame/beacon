@@ -1,4 +1,4 @@
-namespace beacon.unsafe {
+namespace beacon::unsafe {
 	class File {
 		private:
 		def new(String filename, String mode) {

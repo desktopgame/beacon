@@ -1,5 +1,5 @@
 
-namespace beacon.lang {
+namespace beacon::lang {
 	class Object {
 		public:
 		def new() {
