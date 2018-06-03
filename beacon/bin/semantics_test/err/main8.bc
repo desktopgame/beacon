@@ -15,6 +15,6 @@ import "beacon/lang/Exception"
 import "beacon/lang/StackTraceElement"
 import "beacon/lang/Tuple"
 
-var t = new beacon::x::Tuple[Int, String]("Foo", "Hello");
+var t = new Tuple[Int, String]("Foo", "Hello");
 Console.writeLine(t.left);
 Console.writeLine(t.right);

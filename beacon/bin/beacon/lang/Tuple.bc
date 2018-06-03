@@ -14,7 +14,7 @@ import "beacon/lang/VectorIterator"
 import "beacon/lang/Exception"
 import "beacon/lang/StackTraceElement"
 
-namespace beacon::x {
+namespace beacon::lang {
 	class Tuple[L, R] {
 		public:
 		L left;

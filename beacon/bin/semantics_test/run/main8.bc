@@ -26,8 +26,8 @@ namespace beacon::x {
 	}
 }
 
-var mc = new beacon::x::MyClass[beacon::x::Tuple[Int, String]]();
+var mc = new beacon::x::MyClass[Tuple[Int, String]]();
 var v = mc.v;
-v.push(new beacon::x::Tuple[Int, String](10, "mcAAA"));
-v.push(new beacon::x::Tuple[Int, String](3, "mcBBB"));
-v.push(new beacon::x::Tuple[Int, String](1, "mcCCC"));
+v.push(new Tuple[Int, String](10, "mcAAA"));
+v.push(new Tuple[Int, String](3, "mcBBB"));
+v.push(new Tuple[Int, String](1, "mcCCC"));
