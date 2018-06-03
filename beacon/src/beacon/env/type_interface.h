@@ -34,10 +34,8 @@ typedef enum type_state {
 	 * 後で正式に読み込まれるまで "保留" 状態とします。
 	 */
 	type_pending,
-	/**
-	 * 正式に読み込みの完了したクラス.
-	 */
-	type_complete,
+	type_decl,
+	type_impl
 } type_state;
 
 /**

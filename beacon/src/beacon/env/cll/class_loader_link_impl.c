@@ -41,6 +41,9 @@ void class_loader_link(class_loader* self, link_type type) {
 
 //private
 static void CLBC_class_decl(class_loader * self, il_type * iltype, type * tp, namespace_ * scope) {
+	if((tp->state & type_decl) > 0) {
+		return;
+	}
 	assert(tp->u.class_->method_list->length == 0);
 	assert(tp->u.class_->smethod_list->length == 0);
 	CL_ERROR(self);
@@ -55,30 +58,46 @@ static void CLBC_class_decl(class_loader * self, il_type * iltype, type * tp, na
 	CLBC_ctor_decl(self, iltype, tp, scope);
 	class_create_vtable(tp->u.class_);
 	CL_ERROR(self);
+	tp->state = tp->state | type_decl;
 }
 
 static void CLBC_class_impl(class_loader * self, il_type * iltype, type * tp, namespace_ * scope) {
+	if((tp->state & type_impl) > 0) {
+		return;
+	}
 	CL_ERROR(self);
 	CLBC_fields_impl(self, scope, iltype->u.class_->field_list, (TYPE2CLASS(tp))->field_list);
 	CLBC_fields_impl(self, scope, iltype->u.class_->sfield_list, (TYPE2CLASS(tp))->sfield_list);
 	CLBC_methods_impl(self, scope, iltype, tp, iltype->u.class_->method_list, ((TYPE2CLASS(tp))->method_list));
 	CLBC_methods_impl(self, scope, iltype, tp, iltype->u.class_->smethod_list, ((TYPE2CLASS(tp))->smethod_list));
 	CLBC_ctor_impl(self, iltype, tp);
+	tp->state = tp->state | type_impl;
 }
 
 static void CLBC_interface_decl(class_loader * self, il_type * iltype, type * tp, namespace_ * scope) {
+	if((tp->state & type_decl) > 0) {
+		return;
+	}
 	assert(tp->u.interface_->method_list->length == 0);
 	CL_ERROR(self);
 	CLBC_methods_decl(self, iltype, tp, iltype->u.interface_->method_list, scope);
 	interface_create_vtable(tp->u.interface_);
+	tp->state = tp->state | type_decl;
 }
 
 static void CLBC_interface_impl(class_loader * self, il_type * iltype, type * tp, namespace_ * scope) {
+	if((tp->state & type_impl) > 0) {
+		return;
+	}
 	CL_ERROR(self);
 	CLBC_methods_impl(self, scope, iltype, tp, iltype->u.interface_->method_list, tp->u.interface_->method_list);
+	tp->state = tp->state | type_impl;
 }
 
 static void CLBC_enum_decl(class_loader * self, il_type * iltype, type * tp, namespace_ * scope) {
+	if((tp->state & type_decl) > 0) {
+		return;
+	}
 	//重複するフィールドを確認する
 	field* outField = NULL;
 	if((tp->tag == type_enum ||
@@ -86,9 +105,14 @@ static void CLBC_enum_decl(class_loader * self, il_type * iltype, type * tp, nam
 	   !class_field_valid(tp->u.class_, &outField)) {
 		class_loader_report(self, "invalid field declaration: %s @%s\n", tp->u.class_->name, outField->name);
 	}
+	tp->state = tp->state | type_decl;
 }
 
 static void CLBC_enum_impl(class_loader * self, il_type * iltype, type * tp, namespace_ * scope) {
+	if((tp->state & type_impl) > 0) {
+		return;
+	}
+	tp->state = tp->state | type_impl;
 }
 
 static void CLBC_excec_class_decl(class_loader* self) {
