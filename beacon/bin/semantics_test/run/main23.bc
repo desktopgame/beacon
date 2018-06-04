@@ -3,11 +3,10 @@ namespace beacon {
 		public:
 		ExceptionChain_B next;
 		def new() {
-			this.next = new beacon::ExceptionChain_B();
+			this.next = new ExceptionChain_B();
 		}
 
 		def test() -> Void {
-			Console.writeLine("FOOO");
 			next.test();
 		}
 	}
@@ -34,7 +33,6 @@ namespace beacon {
 }
 try {
 	var a = new beacon::ExceptionChain_A();
-	a.test();
 } catch(Exception e) {
 	Console.writeLine("---");
 	e.print();

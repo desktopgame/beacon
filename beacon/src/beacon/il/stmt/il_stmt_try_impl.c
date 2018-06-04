@@ -98,9 +98,11 @@ void il_stmt_try_generate(il_stmt_try* self, enviroment* env) {
 		}
 		nextCause = opcode_buf_label(env->buf, -1);
 		//現在の例外と catch節 の型に互換性があるなら続行
-		opcode_buf_add(env->buf, op_hexception);
+		opcode_buf_add(env->buf, op_hexception);;
+		opcode_buf_add(env->buf, op_generic_add);
+		generic_type_generate(exgType, env);
 		opcode_buf_add(env->buf, op_instanceof);
-		opcode_buf_add(env->buf, exgType->core_type->absolute_index);
+//		opcode_buf_add(env->buf, exgType->core_type->absolute_index);
 		//互換性がないので次のケースへ
 		opcode_buf_add(env->buf, op_goto_if_false);
 		opcode_buf_add(env->buf, nextCause);
@@ -145,6 +147,8 @@ void il_stmt_try_load(il_stmt_try* self, enviroment* env) {
 }
 
 void il_stmt_catch_load(il_stmt_catch* self, enviroment* env) {
+	generic_type* exgType = import_manager_resolve(ccget_class_loader()->import_manager, cc_namespace(), self->fqcn);
+	symbol_table_entry(env->sym_table, exgType, self->name);
 	for(int i=0; i<self->statement_list->length; i++) {
 		il_stmt* e = (il_stmt*)vector_at(self->statement_list, i);
 		il_stmt_load(e, env);

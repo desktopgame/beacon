@@ -376,6 +376,10 @@ bool ast_is_stmt(ast* self) {
 		case ast_break:
 		case ast_proc:
 		case ast_stmt_assert:
+		case ast_stmt_try:
+		case ast_stmt_catch:
+		case ast_stmt_catch_list:
+		case ast_stmt_defer:
 			return true;
 	}
 	return false;

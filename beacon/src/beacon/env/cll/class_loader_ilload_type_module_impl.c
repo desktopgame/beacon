@@ -19,6 +19,7 @@ static void CLIL_fqcn_cache_impl(ast* afqcn, fqcn_cache* fqcn, int level);
 static void CLIL_generic_cache_impl(ast* fqcn, generic_cache* dest);
 static void CLIL_generic_cache_inner(ast* atype_args, generic_cache* dest);
 static void CLIL_type_parameter_rule(struct class_loader* self, struct ast* source, vector* dest);
+static void ast_fqcn_flatten(ast* afqcn, vector* dest);
 
 void CLIL_fqcn_cache(ast* afqcn, fqcn_cache* fqcn) {
 	CLIL_fqcn_cache_impl(afqcn, fqcn, 0);
@@ -122,23 +123,17 @@ void CLIL_argument_list(class_loader* self, vector* list, ast* source) {
 }
 //private
 static void CLIL_fqcn_cache_impl(ast* afqcn, fqcn_cache* fqcn, int level) {
-	if(afqcn->tag == ast_fqcn_part) {
-		fqcn->name = text_strdup(afqcn->u.string_value);
-		return;
-	}
-	for(int i=0; i<afqcn->child_count; i++) {
-		ast* e = ast_at(afqcn, i);
-		if(e->tag == ast_fqcn_part_list) {
-			CLIL_fqcn_cache_impl(e, fqcn, level + 1);
+	vector* v = vector_new();
+	ast_fqcn_flatten(afqcn, v);
+	for(int i=0; i<v->length; i++) {
+		char* S = text_strdup(vector_at(v, i));
+		if(i < v->length - 1) {
+			vector_push(fqcn->scope_vec, S);
 		} else {
-			assert(e->tag == ast_fqcn_part);
-			if(level == 0) {
-				fqcn->name = text_strdup(e->u.string_value);
-			} else {
-				vector_push(fqcn->scope_vec, text_strdup(e->u.string_value));
-			}
+			fqcn->name = S;
 		}
 	}
+	vector_delete(v, vector_deleter_null);
 }
 
 static void CLIL_generic_cache_impl(ast* fqcn, generic_cache* dest) {
@@ -205,4 +200,14 @@ static void CLIL_type_parameter_rule(class_loader* self, ast* source, vector* de
 		}
 	}
 	*/
+}
+
+static void ast_fqcn_flatten(ast* afqcn, vector* dest) {
+	if(afqcn->tag == ast_fqcn_part) {
+		vector_push(dest, afqcn->u.string_value);
+	} else {
+		for(int i=0; i<afqcn->child_count; i++) {
+			ast_fqcn_flatten(ast_at(afqcn, i), dest);
+		}
+	}
 }

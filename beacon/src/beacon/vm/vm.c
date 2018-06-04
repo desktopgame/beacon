@@ -119,6 +119,13 @@ void vm_catch(frame * self) {
 bool vm_validate(frame* self, int source_len, int* pcDest) {
 	sg_thread* th = sg_thread_current();
 	vm_trace* trace = (vm_trace*)vector_top(th->trace_stack);
+	self->validate = true;
+	//汚染
+	frame* p = self->parent;
+	while(p != NULL) {
+		p->validate = true;
+		p = p->parent;
+	}
 	//ここなので catch節 へ向かう
 	if (trace->fr == self) {
 		//ここでジャンプレベルを確認するのは
@@ -137,7 +144,6 @@ bool vm_validate(frame* self, int source_len, int* pcDest) {
 	//ここではないので終了
 	} else {
 		trace->jump_level++;
-		self->parent->validate = true;
 		*pcDest = source_len;
 		return false;
 	}

@@ -1,6 +1,8 @@
 #include "il_error.h"
 #include <stdio.h>
+#include <stdbool.h>
 #include <assert.h>
+#include "../env/compile_context.h"
 #include "../util/vector.h"
 #include "../util/mem.h"
 #include "../util/test/xtest.h"
@@ -63,6 +65,7 @@ bool il_error_panic() {
 //private
 static void il_error_print(FILE* fp, il_error_id error_id, va_list ap) {
 	char* fmt = NULL;
+	bool aa = cc_test(ccstate_toplevel);
 	switch(error_id) {
 		case ilerror_undefined_class:
 			fmt = "undefined class: %s";
