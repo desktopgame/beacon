@@ -293,6 +293,11 @@ void CLBC_operator_overload_decl(class_loader* self, il_type* iltype, type* tp, 
 		}
 		CLBC_parameter_list(self, scope, ilopov->parameter_list, opov->parameter_list);
 		vector_push(tp->u.class_->operator_overload_list, opov);
+		//アクセスレベルを確認する
+		if(opov->access != access_public) {
+			class_loader_report(self, "must be public a access level of operator: %s", type_name(tp));
+			break;
+		}
 	}
 	ccpop_type();
 	ccpop_namespace();
