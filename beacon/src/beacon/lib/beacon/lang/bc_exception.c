@@ -7,6 +7,8 @@
 #include "../../../env/field.h"
 #include "../../../env/heap.h"
 #include "bc_array.h"
+#include <string.h>
+#include <assert.h>
 //proto
 static void bc_exception_nativeInit(method* parent, frame* fr, enviroment* env);
 
@@ -33,13 +35,24 @@ static void bc_exception_nativeInit(method* parent, frame* fr, enviroment* env) 
 	//スタックトレースを作成する
 	frame* temp = fr;
 	vector* stackTraceElementVec = vector_new();
+	char* lfilename = NULL;
+	int llineno = -1;
 	do {
 		//実行中のインストラクションの行番号を取得
 		line_range* lr = line_range_find(temp->context_ref->line_rangeVec, temp->pc);
+		int lineno = lr == NULL ? -1 : lr->lineno;
+		assert(lineno != -1);
+		//直前の表示と同じ
+		if(lfilename != NULL &&
+		   !strcmp(temp->context_ref->context_ref->filename, lfilename) &&
+		   llineno == lineno) {
+			temp = temp->parent;
+			continue;
+		}
 		//スタックトレースを作成
 		vector* args = vector_new();
 		vector_push(args, object_string_new(temp->context_ref->context_ref->filename));
-		vector_push(args, object_int_new(lr == NULL ? -1 : lr->lineno));
+		vector_push(args, object_int_new(lineno));
 		object* trace = class_new_instance(
 			stackTraceElementClass,
 			//ilctx,
@@ -50,6 +63,11 @@ static void bc_exception_nativeInit(method* parent, frame* fr, enviroment* env) 
 		vector_delete(args, vector_deleter_null);
 		vector_push(stackTraceElementVec, trace);
 		temp = temp->parent;
+		//今回の表示情報を記録
+		if(temp != NULL) {
+			lfilename = temp->context_ref->context_ref->filename;
+			llineno = lineno;
+		}
 	} while (temp != NULL);
 	//配列へ
 	object* arr = bc_array_new(stackTraceElementClass->parent->generic_self, stackTraceElementVec->length, fr);
