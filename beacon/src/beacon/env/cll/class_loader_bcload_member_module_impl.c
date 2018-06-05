@@ -298,6 +298,18 @@ void CLBC_operator_overload_decl(class_loader* self, il_type* iltype, type* tp, 
 			class_loader_report(self, "must be public a access level of operator: %s", type_name(tp));
 			break;
 		}
+		//二項演算子であるなら引数は二つ
+		if(operator_arg2(opov->type) &&
+		   opov->parameter_list->length != 2) {
+			class_loader_report(self, "illegal of parameter count, must be binary operator argument count is two.: %s", type_name(tp));
+			break;
+		}
+		//単項演算子であるなら引数は一つ
+		if(operator_arg1(opov->type) &&
+		  opov->parameter_list->length != 1) {
+			  class_loader_report(self, "illegal of parameter count, must be unary operator argument count is one.: %s", type_name(tp));
+			  break;
+		  }
 	}
 	ccpop_type();
 	ccpop_namespace();

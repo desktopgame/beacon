@@ -9,8 +9,8 @@ namespace test {
 			this.y = 0;
 		}
 
-		private:
-		operator +(Int a, Int b) -> Int {
+		public:
+		operator +(Int a) -> Int {
 		}
 		operator -(Int a, Int b) -> Int {
 		}
