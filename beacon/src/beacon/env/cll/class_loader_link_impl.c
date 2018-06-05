@@ -60,6 +60,11 @@ static void CLBC_class_decl(class_loader * self, il_type * iltype, type * tp, na
 	CL_ERROR(self);
 
 	CLBC_ctor_decl(self, iltype, tp, scope);
+	CL_ERROR(self);
+
+	CLBC_operator_overload_decl(self, iltype, tp, scope);
+	CL_ERROR(self);
+
 	class_create_vtable(tp->u.class_);
 	CL_ERROR(self);
 	tp->state = tp->state | type_decl;
@@ -72,9 +77,17 @@ static void CLBC_class_impl(class_loader * self, il_type * iltype, type * tp, na
 	CL_ERROR(self);
 	CLBC_fields_impl(self, scope, iltype->u.class_->field_list, (TYPE2CLASS(tp))->field_list);
 	CLBC_fields_impl(self, scope, iltype->u.class_->sfield_list, (TYPE2CLASS(tp))->sfield_list);
+	CL_ERROR(self);
+
 	CLBC_methods_impl(self, scope, iltype, tp, iltype->u.class_->method_list, ((TYPE2CLASS(tp))->method_list));
 	CLBC_methods_impl(self, scope, iltype, tp, iltype->u.class_->smethod_list, ((TYPE2CLASS(tp))->smethod_list));
+	CL_ERROR(self);
+
 	CLBC_ctor_impl(self, iltype, tp);
+	CL_ERROR(self);
+
+	CLBC_operator_overload_impl(self, iltype, tp);
+	CL_ERROR(self);
 	tp->state = tp->state | type_impl;
 }
 

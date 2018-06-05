@@ -37,5 +37,9 @@ void CLBC_ctor_decl(class_loader* self, il_type* iltype, type* tp, namespace_* s
 
 void CLBC_ctor_impl(class_loader* self, il_type* iltype, type* tp);
 
+void CLBC_operator_overload_decl(class_loader* self, il_type* iltype, type* tp, namespace_* scope);
+
+void CLBC_operator_overload_impl(class_loader* self, il_type* iltype, type* tp);
+
 void CLBC_body(class_loader* self, vector* stmt_list, struct enviroment* dest, namespace_* range);
 #endif

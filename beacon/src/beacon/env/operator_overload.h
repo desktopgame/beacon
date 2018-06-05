@@ -4,8 +4,10 @@
 #include "../util/vector.h"
 struct type;
 struct enviroment;
+struct generic_type;
 typedef struct operator_overload {
 	struct type* parent;
+	struct generic_type* return_gtype;
 	operator_type type;
 	vector* parameter_list;
 	struct enviroment* env;

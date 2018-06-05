@@ -22,6 +22,7 @@
 #include "../type_parameter.h"
 #include "../generic_type.h"
 #include "../generic_type.h"
+#include "../operator_overload.h"
 
 //http://jumble-note.blogspot.jp/2012/09/c-vacopy.html
 #ifndef va_copy
@@ -42,6 +43,7 @@ static void class_vtable_vec_delete(vector_item item);
 static void class_type_parameter_delete(vector_item item);
 static void class_generic_type_list_delete(vector_item item);
 static bool class_field_validImpl(vector* field_vec, field** out);
+static void class_delete_operator_overload(vector_item item);
 
 type * type_wrap_class(class_ * self) {
 	type* ret = type_new();
@@ -73,6 +75,7 @@ class_ * class_new(const char * name) {
 	//ret->absoluteIndex = -1;
 	ret->vt = NULL;
 	ret->is_abstract = false;
+	ret->operator_overload_list = vector_new();
 	return ret;
 }
 
@@ -552,6 +555,7 @@ void class_unlink(class_ * self) {
 	vector_delete(self->method_list, class_method_delete);
 	vector_delete(self->smethod_list, class_method_delete);
 	vector_delete(self->constructor_list, class_ctor_delete);
+	vector_delete(self->operator_overload_list, class_delete_operator_overload);
 	vtable_delete(self->vt);
 	vector_delete(self->vt_vec, class_vtable_vec_delete);
 }
@@ -725,4 +729,9 @@ static bool class_field_validImpl(vector* field_vec, field** out) {
 		}
 	}
 	return ret;
+}
+
+static void class_delete_operator_overload(vector_item item) {
+	operator_overload* e = (operator_overload*)item;
+	operator_overload_delete(e);
 }

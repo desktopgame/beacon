@@ -32,6 +32,7 @@ typedef struct class_ {
 	vector* method_list;
 	vector* smethod_list;
 	vector* constructor_list;
+	vector* operator_overload_list;
 	//class_type type;
 	uint32_t ref_count;
 	tree_map* native_method_ref_map;

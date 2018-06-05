@@ -7,6 +7,7 @@
 #include "../../il/il_parameter.h"
 #include "../../il/il_argument.h"
 #include "../../il/il_stmt_interface.h"
+#include "../../il/il_operator_overload.h"
 #include "../../env/type_impl.h"
 #include "../../env/compile_context.h"
 #include "../../env/field.h"
@@ -14,6 +15,7 @@
 #include "../../env/constructor.h"
 #include "../../env/parameter.h"
 #include "../../env/type_parameter.h"
+#include "../../env/operator_overload.h"
 #include "../../util/xassert.h"
 #include "../../util/text.h"
 #include <assert.h>
@@ -266,6 +268,38 @@ void CLBC_ctor_impl(class_loader* self, il_type* iltype, type* tp) {
 	}
 	ccpop_type();
 	ccset_class_loader(NULL);
+}
+
+void CLBC_operator_overload_decl(class_loader* self, il_type* iltype, type* tp, namespace_* scope) {
+	CL_ERROR(self);
+	ccpush_namespace(scope);
+	ccpush_type(tp);
+	ccset_class_loader(self);
+	vector* opov_list = iltype->u.class_->operator_overload_list;
+	for (int i = 0; i < opov_list->length; i++) {
+		//演算子オーバーロード一覧から取り出す
+		vector_item e = vector_at(opov_list, i);
+		il_operator_overload* ilopov = (il_operator_overload*)e;
+		operator_overload* opov = operator_overload_new(ilopov->op);
+		//戻り値読み込み
+		opov->parent = tp;
+		opov->return_gtype = import_manager_resolve(self->import_manager, scope, ilopov->return_fqcn);
+		//パラメータ読み込み
+		for(int j=0; j<ilopov->parameter_list->length; j++) {
+			il_parameter* ilparam = vector_at(ilopov->parameter_list, j);
+			parameter* param = parameter_new(ilparam->name);
+			vector_push(opov->parameter_list, param);
+		}
+		CLBC_parameter_list(self, scope, ilopov->parameter_list, opov->parameter_list);
+		vector_push(tp->u.class_->operator_overload_list, opov);
+	}
+	ccpop_type();
+	ccpop_namespace();
+	ccset_class_loader(NULL);
+}
+
+void CLBC_operator_overload_impl(class_loader* self, il_type* iltype, type* tp) {
+
 }
 
 void CLBC_body(class_loader* self, vector* stmt_list, enviroment* dest, namespace_* range) {

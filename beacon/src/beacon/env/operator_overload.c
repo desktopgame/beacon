@@ -11,6 +11,7 @@ operator_overload* operator_overload_new(operator_type type) {
 	ret->parameter_list = vector_new();
 	ret->type = type;
 	ret->env = NULL;
+	ret->return_gtype = NULL;
 	return ret;
 }
 
