@@ -84,6 +84,11 @@ void il_class_dump(il_class * self, int depth) {
 		il_constructor* ilcons = (il_constructor*)e;
 		il_constructor_dump(ilcons, depth + 1);
 	}
+	for(int i=0; i<self->operator_overload_list->length; i++) {
+		vector_item e = vector_at(self->operator_overload_list, i);
+		il_operator_overload* ilopov = (il_operator_overload*)e;
+		il_operator_overload_dump(ilopov, depth + 1);
+	}
 }
 
 void il_class_delete(il_class * self) {

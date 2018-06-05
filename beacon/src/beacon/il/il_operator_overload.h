@@ -13,5 +13,7 @@ typedef struct il_operator_overload {
 
 il_operator_overload* il_operator_overload_new(operator_type type);
 
+void il_operator_overload_dump(il_operator_overload* self, int depth);
+
 void il_operator_overload_delete(il_operator_overload* self);
 #endif
