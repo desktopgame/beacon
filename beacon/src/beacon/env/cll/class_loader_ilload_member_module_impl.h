@@ -49,4 +49,13 @@ void CLIL_method(class_loader* self, il_type* current, ast* method, access_level
  * @param level
  */
 void CLIL_ctor(class_loader* self, il_type* current, ast* constructor, access_level level);
+
+/**
+ * 演算子オーバーロードを IL に変換します.
+ * @param self
+ * @param current
+ * @param opov
+ * @param level
+ */
+void CLIL_operator_overload(class_loader* self, il_type* current, ast* opov, access_level level);
 #endif

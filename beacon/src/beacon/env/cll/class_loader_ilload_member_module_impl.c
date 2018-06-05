@@ -4,6 +4,7 @@
 #include "../../il/il_method.h"
 #include "../../il/il_constructor.h"
 #include "../../il/il_constructor_chain.h"
+#include "../../il/il_operator_overload.h"
 #include "class_loader_ilload_type_module_impl.h"
 #include "class_loader_ilload_stmt_module_impl.h"
 #include <assert.h>
@@ -35,6 +36,8 @@ void CLIL_member_list(class_loader* self, il_type* current, ast* member, access_
 			CLIL_method(self, current, child, level);
 		} else if (child->tag == ast_constructor_decl) {
 			CLIL_ctor(self, current, child, level);
+		} else if(child->tag == ast_operator_overload) {
+			CLIL_operator_overload(self, current, child, level);
 		}
 	}
 }
@@ -98,4 +101,17 @@ void CLIL_ctor(class_loader* self, il_type* current, ast* constructor, access_le
 	CLIL_parameter_list(self, ilcons->parameter_list, aparams);
 	CLIL_body(self, ilcons->statement_list, abody);
 	vector_push(current->u.class_->constructor_list, ilcons);
+}
+
+void CLIL_operator_overload(class_loader* self, il_type* current, ast* opov, access_level level) {
+	assert(opov->tag == ast_operator_overload);
+	operator_type ot = opov->u.operator_value;
+	ast* aparam_list = ast_at(opov, 0);
+	ast* abody = ast_at(opov, 1);
+	ast* areturn = ast_at(opov, 2);
+	il_operator_overload* ilopov = il_operator_overload_new(ot);
+	CLIL_parameter_list(self, ilopov->parameter_list, aparam_list);
+	CLIL_body(self, ilopov->statement_list, abody);
+	CLIL_generic_cache(areturn, ilopov->return_fqcn);
+	vector_push(current->u.class_->operator_overload_list, ilopov);
 }
