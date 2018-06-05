@@ -1,6 +1,0 @@
-try {
-	var arr = new Array[Int](5);
-	arr.set(10, 10);
-} catch(Exception e) {
-	e.print();
-}

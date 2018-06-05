@@ -106,9 +106,7 @@ typedef enum ast_tag {
 	ast_interface_decl,
 	ast_class_super,
 
-	ast_access_public,
-	ast_access_private,
-	ast_access_protected,
+	ast_access_level,
 	ast_access_member_list,
 	ast_access_member_tree,
 
@@ -210,6 +208,7 @@ typedef struct ast {
 		double double_value;
 		char char_value;
 		char* string_value;
+		access_level access_value;
 		modifier_type modifier_value;
 		operator_type operator_value;
 	} u;

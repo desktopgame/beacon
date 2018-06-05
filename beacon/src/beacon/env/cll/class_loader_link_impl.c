@@ -86,7 +86,7 @@ static void CLBC_class_impl(class_loader * self, il_type * iltype, type * tp, na
 	CLBC_ctor_impl(self, iltype, tp);
 	CL_ERROR(self);
 
-	CLBC_operator_overload_impl(self, iltype, tp);
+	CLBC_operator_overload_impl(self, iltype, tp, scope);
 	CL_ERROR(self);
 	tp->state = tp->state | type_impl;
 }

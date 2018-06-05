@@ -250,9 +250,7 @@ void ast_print(ast* self) {
 			break;
 		case ast_access_member_tree: p("access member_tree");
 		case ast_access_member_list: p("access member_list");
-		case ast_access_public: p("public");
-		case ast_access_private: p("private");
-		case ast_access_protected: p("protected");
+		case ast_access_level: p("access");
 		case ast_modifier: p("modifier");
 		case ast_constructor_decl: p("constructor");
 		case ast_constructor_chain: p("constructor chain");
@@ -352,9 +350,7 @@ bool ast_is_blank(ast * self) {
 }
 
 bool ast_is_access(ast * self) {
-	return self->tag == ast_access_public ||
-		self->tag == ast_access_private ||
-		self->tag == ast_access_protected;
+	return self->tag == ast_access_level;
 }
 
 bool ast_is_modifier(ast * self) {
@@ -387,19 +383,7 @@ bool ast_is_stmt(ast* self) {
 
 access_level ast_cast_to_access(ast * self) {
 	assert(ast_is_access(self));
-	switch (self->tag) {
-		case ast_access_public:
-			return access_public;
-
-		case ast_access_private:
-			return access_private;
-
-		case ast_access_protected:
-			return access_protected;
-		default:
-			break;
-	}
-	return access_public;
+	return self->u.access_value;
 }
 
 modifier_type ast_cast_to_modifier(ast * self, bool* error) {

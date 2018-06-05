@@ -1,41 +1,6 @@
-namespace beacon {
-	class ExceptionChain_A {
-		public:
-		ExceptionChain_B next;
-		def new() {
-			this.next = new beacon::ExceptionChain_B();
-		}
-
-		def test() -> Void {
-			Console.writeLine("FOOO");
-			next.test();
-		}
-	}
-	class ExceptionChain_B {
-		public:
-		ExceptionChain_C next;
-		def new() {
-			this.next = new ExceptionChain_C();
-		}
-
-		def test() -> Void {
-			next.test();
-		}
-	}
-	class ExceptionChain_C {
-		public:
-		def new() {
-		}
-
-		def test() -> Void {
-			throw new Exception();
-		}
-	}
-}
 try {
-	var a = new beacon::ExceptionChain_A();
-	a.test();
+	var arr = new Array[Int](5);
+	arr.set(10, 10);
 } catch(Exception e) {
-	Console.writeLine("---");
 	e.print();
 }

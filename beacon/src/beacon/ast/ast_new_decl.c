@@ -76,15 +76,9 @@ ast * ast_new_access_member_list(access_level level, ast * member_list) {
 }
 
 ast * ast_new_access(access_level level) {
-	switch (level) {
-		case access_public:
-			return ast_new(ast_access_public);
-		case access_private:
-			return ast_new(ast_access_private);
-		case access_protected:
-			return ast_new(ast_access_protected);
-	}
-	return NULL;
+	ast* ret = ast_new(ast_access_level);
+	ret->u.access_value = level;
+	return ret;
 }
 
 ast* ast_new_modifier_list(ast* amod, ast* amod_list) {
