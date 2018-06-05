@@ -7,7 +7,7 @@
 #include "../type_interface.h"
 #include "../../vm/enviroment.h"
 #include "../../util/vector.h"
-#include "../access_domain.h"
+//#include "../access_domain.h"
 #include <stdint.h>
 #include <stdbool.h>
 #include <stdarg.h>
