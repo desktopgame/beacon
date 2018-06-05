@@ -7,6 +7,7 @@
 #include "../il_method.h"
 #include "../il_constructor.h"
 #include "../il_type_parameter.h"
+#include "../il_operator_overload.h"
 #include "../../util/mem.h"
 
 //proto
@@ -15,6 +16,7 @@ static void il_class_method_delete(vector_item item);
 static void il_class_ctor_delete(vector_item item);
 static void il_class_extend_delete(vector_item item);
 static void il_class_type_parameter_delete(vector_item item);
+static void il_class_delete_operator_overload(vector_item item);
 
 il_type * il_type_wrap_class(il_class * self) {
 	il_type* ret = il_type_new();
@@ -33,6 +35,7 @@ il_class* il_class_new(const char* name) {
 	ret->smethod_list = vector_new();
 	ret->constructor_list = vector_new();
 	ret->type_parameter_list = vector_new();
+	ret->operator_overload_list = vector_new();
 	ret->is_abstract = false;
 	return ret;
 }
@@ -97,6 +100,7 @@ void il_class_delete(il_class * self) {
 	vector_delete(self->constructor_list, il_class_ctor_delete);
 	vector_delete(self->extend_list, il_class_extend_delete);
 	vector_delete(self->type_parameter_list, il_class_type_parameter_delete);
+	vector_delete(self->operator_overload_list, il_class_delete_operator_overload);
 	MEM_FREE(self);
 }
 
@@ -126,4 +130,9 @@ static void il_class_extend_delete(vector_item item) {
 static void il_class_type_parameter_delete(vector_item item) {
 	il_type_parameter* e = (il_type_parameter*)item;
 	il_type_parameter_delete(e);
+}
+
+static void il_class_delete_operator_overload(vector_item item) {
+	il_operator_overload* e = (il_operator_overload*)item;
+	il_operator_overload_delete(e);
 }

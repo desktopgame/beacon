@@ -20,6 +20,7 @@ typedef struct il_class {
 	vector* smethod_list;
 	vector* constructor_list;
 	vector* type_parameter_list;
+	vector* operator_overload_list;
 	bool is_abstract;
 } il_class;
 
