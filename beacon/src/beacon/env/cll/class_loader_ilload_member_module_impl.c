@@ -110,6 +110,7 @@ void CLIL_operator_overload(class_loader* self, il_type* current, ast* opov, acc
 	ast* abody = ast_at(opov, 1);
 	ast* areturn = ast_at(opov, 2);
 	il_operator_overload* ilopov = il_operator_overload_new(ot);
+	ilopov->access = level;
 	CLIL_parameter_list(self, ilopov->parameter_list, aparam_list);
 	CLIL_body(self, ilopov->statement_list, abody);
 	CLIL_generic_cache(areturn, ilopov->return_fqcn);

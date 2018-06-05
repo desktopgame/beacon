@@ -1,6 +1,15 @@
 namespace test {
-	class OperatorOverload {
+	class Vec2 {
 		public:
+		Int x;
+		Int y;
+
+		def new() {
+			this.x = 0;
+			this.y = 0;
+		}
+
+		private:
 		operator +(Int a, Int b) -> Int {
 		}
 		operator -(Int a, Int b) -> Int {
@@ -13,3 +22,11 @@ namespace test {
 		}
 	}
 }
+var v2a = new test::Vec2();
+v2a.x = 100;
+v2a.y = 20;
+var v2b = new test::Vec2();
+v2b.x = 100;
+v2b.y = 20;
+Console.writeLine(v2a.x);
+Console.writeLine(v2a.y);

@@ -281,6 +281,7 @@ void CLBC_operator_overload_decl(class_loader* self, il_type* iltype, type* tp, 
 		vector_item e = vector_at(opov_list, i);
 		il_operator_overload* ilopov = (il_operator_overload*)e;
 		operator_overload* opov = operator_overload_new(ilopov->op);
+		opov->access = ilopov->access;
 		//戻り値読み込み
 		opov->parent = tp;
 		opov->return_gtype = import_manager_resolve(self->import_manager, scope, ilopov->return_fqcn);
