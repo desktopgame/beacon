@@ -26,7 +26,7 @@
 		ABSTRACT OVERRIDE INTERFACE CLASS ENUM PUBLIC PRIVATE PROTECTED STATIC NATIVE NEW
 		DEF ARROW NAMESPACE RETURN
 		IF ELIF ELSE WHILE BREAK CONTINUE TRY CATCH THROW
-		ASSERT_T DEFER INSTANCEOF
+		ASSERT_T DEFER INSTANCEOF OPERATOR
 		BOUNDS_EXTENDS BOUNDS_SUPER
 $$SET root compilation_unit
 $$SET top_level program
@@ -58,6 +58,7 @@ $$SET top_level program
 						constructor_chain
 						constructor_chain_optional
 						function_define
+						operator_define
 						method_define
 						field_define
 						modifier_type_T_list

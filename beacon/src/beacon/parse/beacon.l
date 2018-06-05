@@ -244,6 +244,7 @@ static void update_loc() {
 <INITIAL>"return"			{ return (RETURN); }
 
 <INITIAL>"def"				{ return (DEF); }
+<INITIAL>"operator"			{ return (OPERATOR); }
 <INITIAL>"->"				{ return (ARROW); }
 
 <INITIAL>"0" {

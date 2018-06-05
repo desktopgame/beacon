@@ -340,6 +340,7 @@ member_define_list
 member_define
 	: constructor_define
 	| method_define
+	| operator_define
 	| field_define
 	;
 ;;
@@ -453,6 +454,36 @@ method_define
 	}
 	;
 $$REM __GENERIC
+;;
+;;}}}
+;;
+
+;;
+;;オペレーター宣言{{{
+;;
+operator_define
+	;;operator +(Param p, Param p) -> Param { ... }
+	: OPERATOR ADD LRB parameter_list RRB ARROW typename_T scope_optional
+	{
+		$$ = ast_new_operator_overload(operator_add, $4, $8, $7);
+	}
+	| OPERATOR SUB LRB parameter_list RRB ARROW typename_T scope_optional
+	{
+		$$ = ast_new_operator_overload(operator_sub, $4, $8, $7);
+	}
+	| OPERATOR MUL LRB parameter_list RRB ARROW typename_T scope_optional
+	{
+		$$ = ast_new_operator_overload(operator_mul, $4, $8, $7);
+	}
+	| OPERATOR DIV LRB parameter_list RRB ARROW typename_T scope_optional
+	{
+		$$ = ast_new_operator_overload(operator_div, $4, $8, $7);
+	}
+	| OPERATOR MOD LRB parameter_list RRB ARROW typename_T scope_optional
+	{
+		$$ = ast_new_operator_overload(operator_mod, $4, $8, $7);
+	}
+	;
 ;;
 ;;}}}
 ;;

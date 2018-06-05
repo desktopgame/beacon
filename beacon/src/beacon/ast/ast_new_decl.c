@@ -251,6 +251,15 @@ ast * ast_new_type_parameter_rule_list(ast * arule_list) {
 	return ret;
 }
 
+ast* ast_new_operator_overload(operator_type type, ast* aparam_list, ast* abody, ast* areturn) {
+	ast* ret = ast_new(ast_operator_overload);
+	ret->u.operator_value = type;
+	ast_push(ret, aparam_list);
+	ast_push(ret, abody);
+	ast_push(ret, areturn);
+	return ret;
+}
+
 //private
 static ast* ast_new_field_type_name(char* type_name) {
 	ast* ret = ast_new(ast_field_type_name);

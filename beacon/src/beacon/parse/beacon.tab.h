@@ -133,18 +133,19 @@
      ASSERT_T = 342,
      DEFER = 343,
      INSTANCEOF = 344,
-     BOUNDS_EXTENDS = 345,
-     BOUNDS_SUPER = 346,
-     PRE_DEC = 347,
-     PRE_INC = 348,
-     QUOTE = 349,
-     POST_DEC = 350,
-     POST_INC = 351,
-     FUNCCALL = 352,
-     REF = 353,
-     POSITIVE = 354,
-     NEGATIVE = 355,
-     FORM_TYPE = 356
+     OPERATOR = 345,
+     BOUNDS_EXTENDS = 346,
+     BOUNDS_SUPER = 347,
+     PRE_DEC = 348,
+     PRE_INC = 349,
+     QUOTE = 350,
+     POST_DEC = 351,
+     POST_INC = 352,
+     FUNCCALL = 353,
+     REF = 354,
+     POSITIVE = 355,
+     NEGATIVE = 356,
+     FORM_TYPE = 357
    };
 #endif
 /* Tokens.  */
@@ -235,18 +236,19 @@
 #define ASSERT_T 342
 #define DEFER 343
 #define INSTANCEOF 344
-#define BOUNDS_EXTENDS 345
-#define BOUNDS_SUPER 346
-#define PRE_DEC 347
-#define PRE_INC 348
-#define QUOTE 349
-#define POST_DEC 350
-#define POST_INC 351
-#define FUNCCALL 352
-#define REF 353
-#define POSITIVE 354
-#define NEGATIVE 355
-#define FORM_TYPE 356
+#define OPERATOR 345
+#define BOUNDS_EXTENDS 346
+#define BOUNDS_SUPER 347
+#define PRE_DEC 348
+#define PRE_INC 349
+#define QUOTE 350
+#define POST_DEC 351
+#define POST_INC 352
+#define FUNCCALL 353
+#define REF 354
+#define POSITIVE 355
+#define NEGATIVE 356
+#define FORM_TYPE 357
 
 
 
@@ -263,7 +265,7 @@ typedef union YYSTYPE
 	access_level access_level_value;
 }
 /* Line 1529 of yacc.c.  */
-#line 260 "beacon.tab.h"
+#line 262 "beacon.tab.h"
 	YYSTYPE;
 # define yystype YYSTYPE /* obsolescent; will be withdrawn */
 # define YYSTYPE_IS_DECLARED 1

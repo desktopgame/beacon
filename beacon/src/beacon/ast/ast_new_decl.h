@@ -5,6 +5,7 @@
 #include "constructor_chain_type.h"
 #include "modifier_type.h"
 #include "access_level.h"
+#include "operator_type.h"
 
 /**
  * 名前空間を表す要素を作成します.
@@ -257,4 +258,13 @@ ast * ast_new_parameterized_typename(char* name, ast* aparams);
  * @return
  */
 ast* ast_new_type_parameter_rule_list(ast* arule_list);
+
+/**
+ * 演算子オーバーロードを表す要素を作成します.
+ * @param type
+ * @param aparam_list
+ * @param abody
+ * @param areturn
+ */
+ast* ast_new_operator_overload(operator_type type, ast* aparam_list, ast* abody, ast* areturn);
 #endif // !SIGNAL_AST_AST_NEW_DECL_H

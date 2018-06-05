@@ -7,6 +7,7 @@
 #include "modifier_type.h"
 #include "constructor_chain_type.h"
 #include "../util/list.h"
+#include "operator_type.h"
 /**
  * AST(AbstractSourceTree) の種類を表すタグです.
  */
@@ -114,6 +115,8 @@ typedef enum ast_tag {
 	ast_member_decl,
 	ast_member_decl_list,
 
+	ast_operator_overload,
+
 	ast_field_decl,
 	ast_field_type_name,
 	ast_field_access_name,
@@ -208,6 +211,7 @@ typedef struct ast {
 		char char_value;
 		char* string_value;
 		modifier_type modifier_value;
+		operator_type operator_value;
 	} u;
 	ast_tag tag;
 	uint32_t child_count;

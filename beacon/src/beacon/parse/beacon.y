@@ -49,7 +49,7 @@
 		ABSTRACT OVERRIDE INTERFACE CLASS ENUM PUBLIC PRIVATE PROTECTED STATIC NATIVE NEW
 		DEF ARROW NAMESPACE RETURN
 		IF ELIF ELSE WHILE BREAK CONTINUE TRY CATCH THROW
-		ASSERT_T DEFER INSTANCEOF
+		ASSERT_T DEFER INSTANCEOF OPERATOR
 		BOUNDS_EXTENDS BOUNDS_SUPER
 %type <ast_value> compilation_unit 
 					init_decl
@@ -79,6 +79,7 @@
 						constructor_chain
 						constructor_chain_optional
 						function_define
+						operator_define
 						method_define
 						field_define
 						modifier_type_T_list
@@ -352,6 +353,7 @@ member_define_list
 member_define
 	: constructor_define
 	| method_define
+	| operator_define
 	| field_define
 	;
 
@@ -423,6 +425,29 @@ method_define
 	| DEF IDENT type_parameter_group LRB RRB ARROW typename_T scope_optional
 	{
 		$$ = ast_new_method_decl_empty_params(ast_new_modifier(modifier_none), $2, $3, $8, $7);
+	}
+	;
+
+operator_define
+	: OPERATOR ADD LRB parameter_list RRB ARROW typename_T scope_optional
+	{
+		$$ = ast_new_operator_overload(operator_add, $4, $8, $7);
+	}
+	| OPERATOR SUB LRB parameter_list RRB ARROW typename_T scope_optional
+	{
+		$$ = ast_new_operator_overload(operator_sub, $4, $8, $7);
+	}
+	| OPERATOR MUL LRB parameter_list RRB ARROW typename_T scope_optional
+	{
+		$$ = ast_new_operator_overload(operator_mul, $4, $8, $7);
+	}
+	| OPERATOR DIV LRB parameter_list RRB ARROW typename_T scope_optional
+	{
+		$$ = ast_new_operator_overload(operator_div, $4, $8, $7);
+	}
+	| OPERATOR MOD LRB parameter_list RRB ARROW typename_T scope_optional
+	{
+		$$ = ast_new_operator_overload(operator_mod, $4, $8, $7);
 	}
 	;
 
