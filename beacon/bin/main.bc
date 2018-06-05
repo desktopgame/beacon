@@ -10,15 +10,15 @@ namespace test {
 		}
 
 		public:
-		operator +(Int a) -> Int {
+		operator +(Vec2 a, Int b) -> Int {
 		}
-		operator -(Int a, Int b) -> Int {
+		operator -(Vec2 a, Int b) -> Int {
 		}
-		operator *(Int a, Int b) -> Int {
+		operator *(Vec2 a, Int b) -> Int {
 		}
-		operator /(Int a, Int b) -> Int {
+		operator /(Vec2 a, Int b) -> Int {
 		}
-		operator %(Int a, Int b) -> Int {
+		operator %(Vec2 a, Int b) -> Int {
 		}
 	}
 }

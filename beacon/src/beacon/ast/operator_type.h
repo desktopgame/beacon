@@ -13,6 +13,8 @@ typedef enum operator_type {
 
 void operator_fprintf(operator_type self, FILE* fp);
 
+char* operator_tostring(operator_type self);
+
 bool operator_arg2(operator_type self);
 
 bool operator_arg1(operator_type self);
