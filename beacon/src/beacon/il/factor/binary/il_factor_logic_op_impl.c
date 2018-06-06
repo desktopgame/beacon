@@ -5,6 +5,8 @@
 #include "../../../env/generic_type.h"
 #include "../../../vm/enviroment.h"
 #include "../../il_factor_impl.h"
+#include "../../../env/namespace.h"
+#include "../../../env/type_interface.h"
 
 il_factor_logic_op* il_factor_logic_op_new(operator_type type) {
 	il_factor_logic_op* ret = (il_factor_logic_op*)MEM_MALLOC(sizeof(il_factor_logic_op));
@@ -20,7 +22,7 @@ void il_factor_logic_op_dump(il_factor_logic_op* self, int depth) {
 }
 
 generic_type* il_factor_logic_op_eval(il_factor_logic_op* self, enviroment* env) {
-	return NULL;
+	return TYPE2GENERIC(TYPE_BOOL);
 }
 
 void il_factor_logic_op_generate(il_factor_logic_op* self, enviroment* env) {

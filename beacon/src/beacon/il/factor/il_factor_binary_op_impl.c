@@ -29,6 +29,7 @@ il_factor_binary_op * il_factor_binary_op_new(operator_type type) {
 	ret->type = type;
 	ret->left = NULL;
 	ret->right = NULL;
+	ret->load = false;
 	return ret;
 }
 
@@ -63,6 +64,10 @@ void il_factor_binary_op_generate(il_factor_binary_op * self, enviroment* env) {
 }
 
 void il_factor_binary_op_load(il_factor_binary_op * self, enviroment * env) {
+	if(self->load) {
+		return;
+	}
+	self->load = true;
 	il_factor_load(self->left, env);
 	il_factor_load(self->right, env);
 	//カテゴリーわけ
@@ -90,6 +95,7 @@ void il_factor_binary_op_load(il_factor_binary_op * self, enviroment * env) {
 }
 
 generic_type* il_factor_binary_op_eval(il_factor_binary_op * self, enviroment * env) {
+	il_factor_binary_op_load(self, env);
 	generic_type* ret = NULL;
 	switch(self->category) {
 		case operator_carithmeric:

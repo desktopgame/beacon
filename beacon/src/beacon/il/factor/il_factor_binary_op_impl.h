@@ -3,6 +3,7 @@
 #define BEACON_IL_IL_FACTOR_BINARY_OP_H
 #include "../il_factor_interface.h"
 #include "../../ast/operator_type.h"
+#include <stdbool.h>
 
 #define IL_FACT2BIN(fact) (il_factor_cast_binary_op(fact))
 
@@ -19,6 +20,7 @@ typedef struct il_factor_binary_op {
 	operator_category category;
 	il_factor* left;
 	il_factor* right;
+	bool load;
 	union {
 		struct il_factor_arithmetic_op* arithmetic_op;
 		struct il_factor_logic_op* logic_op;

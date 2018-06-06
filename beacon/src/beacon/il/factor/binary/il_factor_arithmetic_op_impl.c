@@ -5,6 +5,8 @@
 #include "../../../env/generic_type.h"
 #include "../../../vm/enviroment.h"
 #include "../../il_factor_impl.h"
+#include "../../../env/namespace.h"
+#include "../../../env/type_interface.h"
 
 il_factor_arithmetic_op* il_factor_arithmetic_op_new(operator_type type) {
 	il_factor_arithmetic_op* ret = (il_factor_arithmetic_op*)MEM_MALLOC(sizeof(il_factor_arithmetic_op));
@@ -20,6 +22,20 @@ void il_factor_arithmetic_op_dump(il_factor_arithmetic_op* self, int depth) {
 }
 
 generic_type* il_factor_arithmetic_op_eval(il_factor_arithmetic_op * self, enviroment * env) {
+	generic_type* lgtype = il_factor_eval(self->parent->left, env);
+	generic_type* rgtype = il_factor_eval(self->parent->right, env);
+	assert(lgtype != NULL);
+	assert(rgtype != NULL);
+	type* cint = TYPE_INT;
+	type* cdouble = TYPE_DOUBLE;
+	if(GENERIC2TYPE(lgtype) == cint &&
+	   GENERIC2TYPE(rgtype) == cint) {
+		return TYPE2GENERIC(cint);
+	}
+	if(GENERIC2TYPE(lgtype) == cint &&
+	   GENERIC2TYPE(rgtype) == cint) {
+		return TYPE2GENERIC(cdouble);
+	}
 	return NULL;
 }
 
