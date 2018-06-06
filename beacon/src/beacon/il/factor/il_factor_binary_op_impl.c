@@ -33,9 +33,6 @@ il_factor_binary_op * il_factor_binary_op_new(operator_type type) {
 }
 
 void il_factor_binary_op_dump(il_factor_binary_op * self, int depth) {
-//	text_putindent(depth);
-//	text_printf("%s", il_factor_binary_op_optostr(self));
-//	text_putline();
 	switch(self->category) {
 		case operator_carithmeric:
 			il_factor_arithmetic_op_dump(self->u.arithmetic_op, depth);

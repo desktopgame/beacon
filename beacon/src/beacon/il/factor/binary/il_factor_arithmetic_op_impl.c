@@ -1,5 +1,6 @@
 #include "il_factor_arithmetic_op_impl.h"
 #include "../../../util/mem.h"
+#include "../../../util/text.h"
 #include "../../../env/generic_type.h"
 #include "../../../vm/enviroment.h"
 
@@ -11,6 +12,9 @@ il_factor_arithmetic_op* il_factor_arithmetic_op_new(operator_type type) {
 }
 
 void il_factor_arithmetic_op_dump(il_factor_arithmetic_op* self, int depth) {
+	text_putindent(depth);
+	operator_fprintf(self->type, stdout);
+	text_putline();
 }
 
 generic_type* il_factor_arithmetic_op_eval(il_factor_arithmetic_op * self, enviroment * env) {
@@ -30,3 +34,4 @@ void il_factor_arithmetic_op_delete(il_factor_arithmetic_op* self) {
 char* il_factor_arithmetic_op_tostr(il_factor_arithmetic_op* self, enviroment* env) {
 	return NULL;
 }
+//static

@@ -11,6 +11,24 @@ char* operator_tostring(operator_type self) {
 		case operator_mul: return "*";
 		case operator_div: return "/";
 		case operator_mod: return "%%";
+
+		case operator_bit_or: return "|";
+		case operator_bit_and: return "&";
+
+		case operator_logic_or: return "||";
+		case operator_logic_and: return "&&";
+
+		case operator_eq: return "==";
+		case operator_noteq: return "!=";
+
+		case operator_gt: return ">";
+		case operator_ge: return ">=";
+		case operator_lt: return "<";
+		case operator_le: return "<=";
+
+		case operator_lshift: return "<<";
+		case operator_rshift: return ">>";
+		case operator_excor: return "^";
 	}
 }
 
