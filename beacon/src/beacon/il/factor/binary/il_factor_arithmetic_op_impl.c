@@ -1,8 +1,10 @@
 #include "il_factor_arithmetic_op_impl.h"
 #include "../../../util/mem.h"
 #include "../../../util/text.h"
+#include "../../../util/string_buffer.h"
 #include "../../../env/generic_type.h"
 #include "../../../vm/enviroment.h"
+#include "../../il_factor_impl.h"
 
 il_factor_arithmetic_op* il_factor_arithmetic_op_new(operator_type type) {
 	il_factor_arithmetic_op* ret = (il_factor_arithmetic_op*)MEM_MALLOC(sizeof(il_factor_arithmetic_op));
@@ -32,6 +34,6 @@ void il_factor_arithmetic_op_delete(il_factor_arithmetic_op* self) {
 }
 
 char* il_factor_arithmetic_op_tostr(il_factor_arithmetic_op* self, enviroment* env) {
-	return NULL;
+	return il_factor_binary_op_tostr_simple(self->parent, env);
 }
 //static

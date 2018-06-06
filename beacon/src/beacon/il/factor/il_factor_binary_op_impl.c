@@ -137,3 +137,11 @@ void il_factor_binary_op_delete(il_factor_binary_op * self) {
 	}
 	MEM_FREE(self);
 }
+
+char* il_factor_binary_op_tostr_simple(il_factor_binary_op* self, enviroment* env) {
+	string_buffer* sb = string_buffer_new();
+	string_buffer_appends(sb, il_factor_tostr(self->left, env));
+	string_buffer_appendf(sb, " %s ", operator_tostring(self->type));
+	string_buffer_appends(sb, il_factor_tostr(self->right, env));
+	return string_buffer_release(sb);
+}

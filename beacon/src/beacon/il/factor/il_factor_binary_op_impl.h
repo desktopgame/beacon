@@ -44,4 +44,6 @@ char* il_factor_binary_op_tostr(il_factor_binary_op* self, struct enviroment* en
 void il_factor_binary_op_delete(il_factor_binary_op* self);
 
 il_factor_binary_op* il_factor_cast_binary_op(il_factor* fact);
+
+char* il_factor_binary_op_tostr_simple(il_factor_binary_op* self, struct enviroment* env);
 #endif // !SIGNAL_IL_IL_FACTOR_BINARY_OP_H
