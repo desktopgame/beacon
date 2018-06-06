@@ -174,3 +174,17 @@ char* il_factor_binary_op_tostr_simple(il_factor_binary_op* self, enviroment* en
 	string_buffer_appends(sb, il_factor_tostr(self->right, env));
 	return string_buffer_release(sb);
 }
+
+bool il_factor_binary_op_int_int(il_factor_binary_op* self, enviroment* env) {
+	generic_type* lgtype = il_factor_eval(self->left, env);
+	generic_type* rgtype = il_factor_eval(self->right, env);
+	return GENERIC2TYPE(lgtype) == TYPE_INT &&
+	       GENERIC2TYPE(rgtype) == TYPE_INT;
+}
+
+bool il_factor_binary_op_double_double(il_factor_binary_op* self, enviroment* env) {
+	generic_type* lgtype = il_factor_eval(self->left, env);
+	generic_type* rgtype = il_factor_eval(self->right, env);
+	return GENERIC2TYPE(lgtype) == TYPE_DOUBLE &&
+	       GENERIC2TYPE(rgtype) == TYPE_DOUBLE;
+}
