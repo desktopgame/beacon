@@ -9,8 +9,8 @@
 
 struct il_factor_arithmetic_op;
 struct il_factor_logic_op;
-struct il_factor_assign_op;
 struct il_factor_compare_op;
+struct il_factor_shift_op;
 
 /**
  * 二項演算子を表す要素.
@@ -24,8 +24,8 @@ typedef struct il_factor_binary_op {
 	union {
 		struct il_factor_arithmetic_op* arithmetic_op;
 		struct il_factor_logic_op* logic_op;
-		struct il_factor_assign_op* assign_op;
 		struct il_factor_compare_op* compare_op;
+		struct il_factor_shift_op* shift_op;
 	} u;
 } il_factor_binary_op;
 

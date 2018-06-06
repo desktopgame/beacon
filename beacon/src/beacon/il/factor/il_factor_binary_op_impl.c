@@ -15,7 +15,7 @@
 #include "binary/il_factor_compare_op_impl.h"
 //#include "binary/il_factor_assign_op_impl.h"
 #include "binary/il_factor_logic_op_impl.h"
-
+#include "binary/il_factor_shift_op_impl.h"
 
 il_factor * il_factor_wrap_binary(il_factor_binary_op * self) {
 	il_factor* ret = (il_factor*)MEM_MALLOC(sizeof(il_factor));
@@ -44,6 +44,9 @@ void il_factor_binary_op_dump(il_factor_binary_op * self, int depth) {
 		case operator_clogic:
 			il_factor_logic_op_dump(self->u.logic_op, depth);
 			break;
+		case operator_cshift:
+			il_factor_shift_op_dump(self->u.shift_op, depth);
+			break;
 	}
 	il_factor_dump(self->left, depth + 1);
 	il_factor_dump(self->right, depth + 1);
@@ -59,6 +62,9 @@ void il_factor_binary_op_generate(il_factor_binary_op * self, enviroment* env) {
 			break;
 		case operator_clogic:
 			il_factor_logic_op_generate(self->u.logic_op, env);
+			break;
+		case operator_cshift:
+			il_factor_shift_op_generate(self->u.shift_op, env);
 			break;
 	}
 }
@@ -89,6 +95,12 @@ void il_factor_binary_op_load(il_factor_binary_op * self, enviroment * env) {
 		logic->parent = self;
 		self->u.logic_op = logic;
 		il_factor_logic_op_load(logic, env);
+	} else if(operator_shift(self->type)) {
+		self->category = operator_cshift;
+		il_factor_shift_op* shift = il_factor_shift_op_new(self->type);
+		shift->parent = self;
+		self->u.shift_op = shift;
+		il_factor_shift_op_load(shift, env);
 	} else {
 		assert(false);
 	}
@@ -107,6 +119,9 @@ generic_type* il_factor_binary_op_eval(il_factor_binary_op * self, enviroment * 
 		case operator_clogic:
 			ret = il_factor_logic_op_eval(self->u.logic_op, env);
 			break;
+		case operator_cshift:
+			ret = il_factor_shift_op_eval(self->u.shift_op, env);
+			break;
 	}
 	assert(ret != NULL);
 	return ret;
@@ -123,6 +138,9 @@ char* il_factor_binary_op_tostr(il_factor_binary_op* self, enviroment* env) {
 			break;
 		case operator_ccompare:
 			ret = il_factor_compare_op_tostr(self->u.compare_op, env);
+			break;
+		case operator_cshift:
+			ret = il_factor_shift_op_tostr(self->u.shift_op, env);
 			break;
 	}
 	assert(ret != NULL);
@@ -141,6 +159,9 @@ void il_factor_binary_op_delete(il_factor_binary_op * self) {
 			break;
 		case operator_ccompare:
 			il_factor_compare_op_delete(self->u.compare_op);
+			break;
+		case operator_cshift:
+			il_factor_shift_op_delete(self->u.shift_op);
 			break;
 	}
 	MEM_FREE(self);

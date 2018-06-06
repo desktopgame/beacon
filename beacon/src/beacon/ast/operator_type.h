@@ -7,6 +7,7 @@ typedef enum operator_category {
 	operator_carithmeric,
 	operator_clogic,
 	operator_ccompare,
+	operator_cshift
 } operator_category;
 
 typedef enum operator_type {
