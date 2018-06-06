@@ -57,9 +57,9 @@ void il_factor_binary_op_load(il_factor_binary_op * self, enviroment * env) {
 	//カテゴリーわけ
 	if(operator_arithmetic(self->type)) {
 		self->category = operator_carithmeric;
-		il_factor_arithmeric_op* arith = il_factor_arithmeric_op_new(self->type);
+		il_factor_arithmetic_op* arith = il_factor_arithmetic_op_new(self->type);
 		arith->parent = self;
-		self->u.arithmeric_op = arith;
+		self->u.arithmetic_op = arith;
 	} else if(operator_compare(self->type)) {
 		self->category = operator_ccompare;
 		il_factor_compare_op* comp = il_factor_compare_op_new(self->type);

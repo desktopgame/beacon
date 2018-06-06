@@ -6,7 +6,7 @@
 
 #define IL_FACT2BIN(fact) (il_factor_cast_binary_op(fact))
 
-struct il_factor_arithmeric_op;
+struct il_factor_arithmetic_op;
 struct il_factor_logic_op;
 struct il_factor_assign_op;
 struct il_factor_compare_op;
@@ -20,7 +20,7 @@ typedef struct il_factor_binary_op {
 	il_factor* left;
 	il_factor* right;
 	union {
-		struct il_factor_arithmeric_op* arithmeric_op;
+		struct il_factor_arithmetic_op* arithmetic_op;
 		struct il_factor_logic_op* logic_op;
 		struct il_factor_assign_op* assign_op;
 		struct il_factor_compare_op* compare_op;
