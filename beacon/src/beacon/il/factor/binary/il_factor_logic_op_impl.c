@@ -29,8 +29,8 @@ generic_type* il_factor_logic_op_eval(il_factor_logic_op* self, enviroment* env)
 }
 
 void il_factor_logic_op_generate(il_factor_logic_op* self, enviroment* env) {
-	il_factor_generate(self->parent->left, env);
 	il_factor_generate(self->parent->right, env);
+	il_factor_generate(self->parent->left, env);
 	if(il_factor_binary_op_int_int(self->parent, env)) {
 		opcode_buf_add(env->buf, operator_to_iopcode(self->type));
 	} else if(il_factor_binary_op_double_double(self->parent, env)) {
