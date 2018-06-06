@@ -14,6 +14,58 @@ char* operator_tostring(operator_type self) {
 	}
 }
 
+bool operator_arithmetic(operator_type self) {
+	switch(self) {
+		case operator_add:
+		case operator_sub:
+		case operator_mul:
+		case operator_div:
+		case operator_mod:
+			return true;
+	}
+	return false;
+}
+
+bool operator_bit(operator_type self) {
+	switch(self) {
+		case operator_bit_or:
+		case operator_bit_and:
+			return true;
+	}
+	return false;
+}
+
+bool operator_logic(operator_type self) {
+	switch(self) {
+		case operator_logic_or:
+		case operator_logic_and:
+			return true;
+	}
+	return false;
+}
+
+bool operator_compare(operator_type self) {
+	switch(self) {
+		case operator_eq:
+		case operator_noteq:
+		case operator_gt:
+		case operator_ge:
+		case operator_lt:
+		case operator_le:
+			return true;
+	}
+	return false;
+}
+
+bool operator_shift(operator_type self) {
+	switch(self) {
+		case operator_lshift:
+		case operator_rshift:
+			return true;
+	}
+	return false;
+}
+
 bool operator_arg2(operator_type self) {
 	switch(self) {
 		case operator_add:

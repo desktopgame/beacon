@@ -8,17 +8,26 @@ namespace test {
 			this.x = 0;
 			this.y = 0;
 		}
+		def new(Int x, Int y) {
+			this.x = x;
+			this.y = y;
+		}
 
 		public:
-		operator +(Vec2 a, Int b) -> Int {
+		operator +(Vec2 a, Vec2 b) -> Vec2 {
+			return new Vec2(a.x + b.x, a.y + b.y);
 		}
-		operator -(Vec2 a, Int b) -> Int {
+		operator -(Vec2 a, Vec2 b) -> Vec2 {
+			return new Vec2(a.x - b.x, a.y - b.y);
 		}
-		operator *(Vec2 a, Int b) -> Int {
+		operator *(Vec2 a, Vec2 b) -> Vec2 {
+			return new Vec2(a.x * b.x, a.y * b.y);
 		}
-		operator /(Vec2 a, Int b) -> Int {
+		operator /(Vec2 a, Vec2 b) -> Vec2 {
+			return new Vec2(a.x / b.x, a.y / b.y);
 		}
-		operator %(Vec2 a, Int b) -> Int {
+		operator %(Vec2 a, Vec2 b) -> Vec2 {
+			return new Vec2(a.x % b.x, a.y % b.y);
 		}
 	}
 }

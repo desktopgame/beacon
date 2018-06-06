@@ -2,47 +2,34 @@
 #ifndef BEACON_IL_IL_FACTOR_BINARY_OP_H
 #define BEACON_IL_IL_FACTOR_BINARY_OP_H
 #include "../il_factor_interface.h"
+#include "../../ast/operator_type.h"
 
 #define IL_FACT2BIN(fact) (il_factor_cast_binary_op(fact))
-/**
- * 二項演算子の種類を表す列挙型.
- */
-typedef enum ilbinary_op_type {
-	ilbinary_add,
-	ilbinary_sub,
-	ilbinary_mul,
-	ilbinary_div,
-	ilbinary_mod,
 
-	ilbinary_bit_or,
-	ilbinary_logic_or,
-
-	ilbinary_bit_and,
-	ilbinary_logic_and,
-
-	ilbinary_eq,
-	ilbinary_noteq,
-	ilbinary_gt,
-	ilbinary_ge,
-	ilbinary_lt,
-	ilbinary_le,
-	ilbinary_lshift,
-	ilbinary_rshift,
-	ilbinary_excor,
-} ilbinary_op_type;
+struct il_factor_arithmeric_op;
+struct il_factor_logic_op;
+struct il_factor_assign_op;
+struct il_factor_compare_op;
 
 /**
  * 二項演算子を表す要素.
  */
 typedef struct il_factor_binary_op {
-	ilbinary_op_type type;
+	operator_type type;
+	operator_category category;
 	il_factor* left;
 	il_factor* right;
+	union {
+		struct il_factor_arithmeric_op* arithmeric_op;
+		struct il_factor_logic_op* logic_op;
+		struct il_factor_assign_op* assign_op;
+		struct il_factor_compare_op* compare_op;
+	} u;
 } il_factor_binary_op;
 
 il_factor* il_factor_wrap_binary(il_factor_binary_op* self);
 
-il_factor_binary_op* il_factor_binary_op_new(ilbinary_op_type type);
+il_factor_binary_op* il_factor_binary_op_new(operator_type type);
 
 void il_factor_binary_op_dump(il_factor_binary_op* self, int depth);
 

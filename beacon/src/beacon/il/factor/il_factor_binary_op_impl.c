@@ -11,13 +11,17 @@
 #include "../../vm/enviroment.h"
 #include "../../vm/symbol_entry.h"
 #include "../../util/mem.h"
+#include "binary/il_factor_arithmetic_op_impl.h"
+#include "binary/il_factor_compare_op_impl.h"
+//#include "binary/il_factor_assign_op_impl.h"
+#include "binary/il_factor_logic_op_impl.h"
 
 //proto
 static char* il_factor_binary_op_optostr(il_factor_binary_op* self);
-static void il_factor_binary_op_generate_impl(il_factor_binary_op * self, enviroment * env, ilbinary_op_type c);
-static opcode bi_operator_to_opi(ilbinary_op_type type);
-static opcode bi_operator_to_opd(ilbinary_op_type type);
-static opcode bi_operator_to_opb(ilbinary_op_type type);
+static void il_factor_binary_op_generate_impl(il_factor_binary_op * self, enviroment * env, operator_type c);
+static opcode bi_operator_to_opi(operator_type type);
+static opcode bi_operator_to_opd(operator_type type);
+static opcode bi_operator_to_opb(operator_type type);
 static bool ilbi_compare(il_factor_binary_op* self);
 
 il_factor * il_factor_wrap_binary(il_factor_binary_op * self) {
@@ -27,7 +31,7 @@ il_factor * il_factor_wrap_binary(il_factor_binary_op * self) {
 	return ret;
 }
 
-il_factor_binary_op * il_factor_binary_op_new(ilbinary_op_type type) {
+il_factor_binary_op * il_factor_binary_op_new(operator_type type) {
 	il_factor_binary_op* ret = (il_factor_binary_op*)MEM_MALLOC(sizeof(il_factor_binary_op));
 	ret->type = type;
 	ret->left = NULL;
@@ -50,6 +54,23 @@ void il_factor_binary_op_generate(il_factor_binary_op * self, enviroment* env) {
 void il_factor_binary_op_load(il_factor_binary_op * self, enviroment * env) {
 	il_factor_load(self->left, env);
 	il_factor_load(self->right, env);
+	//カテゴリーわけ
+	if(operator_arithmetic(self->type)) {
+		self->category = operator_carithmeric;
+		il_factor_arithmeric_op* arith = il_factor_arithmeric_op_new(self->type);
+		arith->parent = self;
+		self->u.arithmeric_op = arith;
+	} else if(operator_compare(self->type)) {
+		self->category = operator_ccompare;
+		il_factor_compare_op* comp = il_factor_compare_op_new(self->type);
+		comp->parent = self;
+		self->u.compare_op = comp;
+	} else if(operator_bit(self->type) || operator_logic(self->type)) {
+		self->category = operator_clogic;
+		il_factor_logic_op* logic = il_factor_logic_op_new(self->type);
+		logic->parent = self;
+		self->u.logic_op = logic;
+	}
 }
 
 generic_type* il_factor_binary_op_eval(il_factor_binary_op * self, enviroment * env) {
@@ -99,23 +120,23 @@ void il_factor_binary_op_delete(il_factor_binary_op * self) {
 //private
 static char* il_factor_binary_op_optostr(il_factor_binary_op* self) {
 	switch(self->type) {
-		case ilbinary_add: return "+";
-		case ilbinary_sub: return "-";
-		case ilbinary_mul: return "*";
-		case ilbinary_div: return "/";
-		case ilbinary_mod: return "%%";
-		case ilbinary_bit_or: return "|";
-		case ilbinary_logic_or: return "||";
-		case ilbinary_eq: return "==";
-		case ilbinary_noteq: return "!=";
-		case ilbinary_lshift: return "<<";
-		case ilbinary_rshift: return ">>";
-		case ilbinary_excor: return "^";
+		case operator_add: return "+";
+		case operator_sub: return "-";
+		case operator_mul: return "*";
+		case operator_div: return "/";
+		case operator_mod: return "%%";
+		case operator_bit_or: return "|";
+		case operator_logic_or: return "||";
+		case operator_eq: return "==";
+		case operator_noteq: return "!=";
+		case operator_lshift: return "<<";
+		case operator_rshift: return ">>";
+		case operator_excor: return "^";
 		default: return "NULL";
 	}
 }
 
-static void il_factor_binary_op_generate_impl(il_factor_binary_op * self, enviroment * env, ilbinary_op_type c) {
+static void il_factor_binary_op_generate_impl(il_factor_binary_op * self, enviroment * env, operator_type c) {
 	//ここで逆にしておく
 	il_factor_generate(self->right, env);
 	il_factor_generate(self->left, env);
@@ -140,71 +161,71 @@ static void il_factor_binary_op_generate_impl(il_factor_binary_op * self, enviro
 	assert(counts > 0);
 }
 
-static opcode bi_operator_to_opi(ilbinary_op_type type) {
+static opcode bi_operator_to_opi(operator_type type) {
 	switch (type) {
-		case ilbinary_add: return op_iadd;
-		case ilbinary_sub: return op_isub;
-		case ilbinary_mul: return op_imul;
-		case ilbinary_div: return op_idiv;
-		case ilbinary_mod: return op_imod;
+		case operator_add: return op_iadd;
+		case operator_sub: return op_isub;
+		case operator_mul: return op_imul;
+		case operator_div: return op_idiv;
+		case operator_mod: return op_imod;
 
-		case ilbinary_bit_or: return op_ibit_or;
-		case ilbinary_logic_or: return op_ilogic_or;
-		case ilbinary_bit_and: return op_ibit_and;
-		case ilbinary_logic_and: return op_ilogic_and;
+		case operator_bit_or: return op_ibit_or;
+		case operator_logic_or: return op_ilogic_or;
+		case operator_bit_and: return op_ibit_and;
+		case operator_logic_and: return op_ilogic_and;
 
-		case ilbinary_eq: return op_ieq;
-		case ilbinary_noteq: return op_inoteq;
-		case ilbinary_gt: return op_igt;
-		case ilbinary_ge: return op_ige;
-		case ilbinary_lt: return op_ilt;
-		case ilbinary_le: return op_ile;
+		case operator_eq: return op_ieq;
+		case operator_noteq: return op_inoteq;
+		case operator_gt: return op_igt;
+		case operator_ge: return op_ige;
+		case operator_lt: return op_ilt;
+		case operator_le: return op_ile;
 
-		case ilbinary_lshift: return op_ilsh;
-		case ilbinary_rshift: return op_irsh;
-		case ilbinary_excor: return op_iexcor;
+		case operator_lshift: return op_ilsh;
+		case operator_rshift: return op_irsh;
+		case operator_excor: return op_iexcor;
 		default: return -1;
 	}
 }
 
-static opcode bi_operator_to_opd(ilbinary_op_type type) {
+static opcode bi_operator_to_opd(operator_type type) {
 	switch (type) {
-		case ilbinary_add: return op_dadd;
-		case ilbinary_sub: return op_dsub;
-		case ilbinary_mul: return op_dmul;
-		case ilbinary_div: return op_ddiv;
-		case ilbinary_mod: return op_dmod;
+		case operator_add: return op_dadd;
+		case operator_sub: return op_dsub;
+		case operator_mul: return op_dmul;
+		case operator_div: return op_ddiv;
+		case operator_mod: return op_dmod;
 
-		case ilbinary_bit_or:
-		case ilbinary_logic_or:
-		case ilbinary_bit_and:
-		case ilbinary_logic_and:
+		case operator_bit_or:
+		case operator_logic_or:
+		case operator_bit_and:
+		case operator_logic_and:
 			//未対応
 			assert(false);
 			break;
 
-		case ilbinary_eq: return op_deq;
-		case ilbinary_noteq: return op_dnoteq;
-		case ilbinary_gt: return op_dgt;
-		case ilbinary_ge: return op_dge;
-		case ilbinary_lt: return op_dlt;
-		case ilbinary_le: return op_dle;
+		case operator_eq: return op_deq;
+		case operator_noteq: return op_dnoteq;
+		case operator_gt: return op_dgt;
+		case operator_ge: return op_dge;
+		case operator_lt: return op_dlt;
+		case operator_le: return op_dle;
 
-		case ilbinary_lshift:
-		case ilbinary_rshift:
-		case ilbinary_excor:
+		case operator_lshift:
+		case operator_rshift:
+		case operator_excor:
 			assert(false);
 			break;
 		default: return -1;
 	}
 }
 
-static opcode bi_operator_to_opb(ilbinary_op_type type) {
+static opcode bi_operator_to_opb(operator_type type) {
 	switch (type) {
-		case ilbinary_bit_or: return op_bbit_or;
-		case ilbinary_logic_or: return op_blogic_or;
-		case ilbinary_bit_and: return op_bbit_and;
-		case ilbinary_logic_and: return op_blogic_and;
+		case operator_bit_or: return op_bbit_or;
+		case operator_logic_or: return op_blogic_or;
+		case operator_bit_and: return op_bbit_and;
+		case operator_logic_and: return op_blogic_and;
 
 		default:
 			assert(false);
@@ -213,14 +234,14 @@ static opcode bi_operator_to_opb(ilbinary_op_type type) {
 }
 
 static bool ilbi_compare(il_factor_binary_op* self) {
-	ilbinary_op_type t = self->type;
+	operator_type t = self->type;
 	switch (t) {
-		case ilbinary_eq:
-		case ilbinary_noteq:
-		case ilbinary_gt:
-		case ilbinary_ge:
-		case ilbinary_lt:
-		case ilbinary_le:
+		case operator_eq:
+		case operator_noteq:
+		case operator_gt:
+		case operator_ge:
+		case operator_lt:
+		case operator_le:
 			return true;
 		default:
 			break;
