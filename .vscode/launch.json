@@ -9,7 +9,7 @@
 			"type": "cppdbg",
 			"request": "launch",
 			"program": "${workspaceFolder}/beacon/bin/a.out",
-			"args": ["--run", "main.bc"],
+			"args": ["--il", "main.bc"],
 			"stopAtEntry": false,
 			"cwd": "${workspaceFolder}/beacon/bin",
 			"environment": [],

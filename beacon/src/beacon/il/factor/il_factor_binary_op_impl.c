@@ -102,6 +102,7 @@ generic_type* il_factor_binary_op_eval(il_factor_binary_op * self, enviroment * 
 			ret = il_factor_logic_op_eval(self->u.logic_op, env);
 			break;
 	}
+	assert(ret != NULL);
 	return ret;
 }
 
@@ -118,6 +119,7 @@ char* il_factor_binary_op_tostr(il_factor_binary_op* self, enviroment* env) {
 			ret = il_factor_compare_op_tostr(self->u.compare_op, env);
 			break;
 	}
+	assert(ret != NULL);
 	return ret;
 }
 
