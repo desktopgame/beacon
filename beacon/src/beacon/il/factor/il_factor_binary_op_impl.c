@@ -40,15 +40,36 @@ il_factor_binary_op * il_factor_binary_op_new(operator_type type) {
 }
 
 void il_factor_binary_op_dump(il_factor_binary_op * self, int depth) {
-	text_putindent(depth);
-	text_printf("%s", il_factor_binary_op_optostr(self));
-	text_putline();
+//	text_putindent(depth);
+//	text_printf("%s", il_factor_binary_op_optostr(self));
+//	text_putline();
+	switch(self->category) {
+		case operator_carithmeric:
+			il_factor_arithmetic_op_dump(self->u.arithmetic_op, depth);
+			break;
+		case operator_ccompare:
+			il_factor_compare_op_dump(self->u.compare_op, depth);
+			break;
+		case operator_clogic:
+			il_factor_logic_op_dump(self->u.logic_op, depth);
+			break;
+	}
 	il_factor_dump(self->left, depth + 1);
 	il_factor_dump(self->right, depth + 1);
 }
 
 void il_factor_binary_op_generate(il_factor_binary_op * self, enviroment* env) {
-	il_factor_binary_op_generate_impl(self, env, self->type);
+	switch(self->category) {
+		case operator_carithmeric:
+			il_factor_arithmetic_op_generate(self->u.arithmetic_op, env);
+			break;
+		case operator_ccompare:
+			il_factor_compare_op_generate(self->u.compare_op, env);
+			break;
+		case operator_clogic:
+			il_factor_logic_op_generate(self->u.logic_op, env);
+			break;
+	}
 }
 
 void il_factor_binary_op_load(il_factor_binary_op * self, enviroment * env) {
@@ -60,45 +81,38 @@ void il_factor_binary_op_load(il_factor_binary_op * self, enviroment * env) {
 		il_factor_arithmetic_op* arith = il_factor_arithmetic_op_new(self->type);
 		arith->parent = self;
 		self->u.arithmetic_op = arith;
+		il_factor_arithmetic_op_load(arith, env);
 	} else if(operator_compare(self->type)) {
 		self->category = operator_ccompare;
 		il_factor_compare_op* comp = il_factor_compare_op_new(self->type);
 		comp->parent = self;
 		self->u.compare_op = comp;
+		il_factor_compare_op_load(comp, env);
 	} else if(operator_bit(self->type) || operator_logic(self->type)) {
 		self->category = operator_clogic;
 		il_factor_logic_op* logic = il_factor_logic_op_new(self->type);
 		logic->parent = self;
 		self->u.logic_op = logic;
+		il_factor_logic_op_load(logic, env);
+	} else {
+		assert(false);
 	}
 }
 
 generic_type* il_factor_binary_op_eval(il_factor_binary_op * self, enviroment * env) {
-	generic_type* ltype = il_factor_eval(self->left, env);
-	generic_type* rtype = il_factor_eval(self->right, env);
-	//左辺か右辺を解釈できなかった
-	if(il_error_panic()) {
-		return NULL;
+	generic_type* ret = NULL;
+	switch(self->category) {
+		case operator_carithmeric:
+			ret = il_factor_arithmetic_op_eval(self->u.arithmetic_op, env);
+			break;
+		case operator_ccompare:
+			ret = il_factor_compare_op_eval(self->u.compare_op, env);
+			break;
+		case operator_clogic:
+			ret = il_factor_logic_op_eval(self->u.logic_op, env);
+			break;
 	}
-	if (ltype->core_type == TYPE_INT &&
-		rtype->core_type == TYPE_INT) {
-		if (ilbi_compare(self)) {
-			return GENERIC_BOOL;
-		}
-		return GENERIC_INT;
-	}
-	if (ltype->core_type == TYPE_DOUBLE &&
-		rtype->core_type == TYPE_DOUBLE) {
-		if (ilbi_compare(self)) {
-			return GENERIC_BOOL;
-		}
-		return GENERIC_DOUBLE;
-	}
-	if (ltype->core_type == TYPE_BOOL &&
-		rtype->core_type == TYPE_BOOL) {
-		return GENERIC_BOOL;
-	}
-	return NULL;
+	return ret;
 }
 
 char* il_factor_binary_op_tostr(il_factor_binary_op* self, enviroment* env) {
