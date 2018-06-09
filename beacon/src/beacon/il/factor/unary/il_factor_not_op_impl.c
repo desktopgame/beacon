@@ -24,7 +24,7 @@ void il_factor_not_op_dump(il_factor_not_op* self, int depth) {
 }
 
 generic_type* il_factor_not_op_eval(il_factor_not_op * self, enviroment * env) {
-	return TYPE_BOOL;
+	return TYPE2GENERIC(TYPE_BOOL);
 }
 
 void il_factor_not_op_generate(il_factor_not_op* self, enviroment* env) {

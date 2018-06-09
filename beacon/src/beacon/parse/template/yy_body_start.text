@@ -543,14 +543,14 @@ operator_define
 		$$ = ast_new_operator_overload(operator_excor, $4, $8, $7);
 	}
 	//!
-	| OPERATOR NOT LRB parameter_list RRB ARROW typename_T scope_optional
+	| OPERATOR NOT LRB RRB ARROW typename_T scope_optional
 	{
-		$$ = ast_new_operator_overload(operator_not, $4, $8, $7);
+		$$ = ast_new_operator_overload(operator_not, ast_new_blank(), $7, $6);
 	}
 	//~
-	| OPERATOR CHILDA LRB parameter_list RRB ARROW typename_T scope_optional
+	| OPERATOR CHILDA LRB RRB ARROW typename_T scope_optional
 	{
-		$$ = ast_new_operator_overload(operator_childa, $4, $8, $7);
+		$$ = ast_new_operator_overload(operator_childa, ast_new_blank(), $7, $6);
 	}
 	;
 ;;
