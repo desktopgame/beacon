@@ -332,6 +332,9 @@ void CLBC_operator_overload_impl(class_loader* self, il_type* iltype, type* tp, 
 			opcode_buf_add(env->buf, (vector_item)op_store);
 			opcode_buf_add(env->buf, (vector_item)(i + 1));
 		}
+		//0番目をthisで埋める
+		opcode_buf_add(env->buf, (vector_item)op_store);
+		opcode_buf_add(env->buf, (vector_item)0);
 		//NOTE:ここなら名前空間を設定出来る
 		CLBC_body(self, ilopov->statement_list, env, scope);
 		//ccpop_method();
