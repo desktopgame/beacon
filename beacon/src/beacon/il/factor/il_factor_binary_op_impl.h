@@ -52,4 +52,6 @@ char* il_factor_binary_op_tostr_simple(il_factor_binary_op* self, struct envirom
 bool il_factor_binary_op_int_int(il_factor_binary_op* self, struct enviroment* env);
 
 bool il_factor_binary_op_double_double(il_factor_binary_op* self, struct enviroment* env);
+
+int il_factor_binary_op_index(il_factor_binary_op* self, struct enviroment* env);
 #endif // !SIGNAL_IL_IL_FACTOR_BINARY_OP_H

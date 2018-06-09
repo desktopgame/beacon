@@ -188,3 +188,25 @@ bool il_factor_binary_op_double_double(il_factor_binary_op* self, enviroment* en
 	return GENERIC2TYPE(lgtype) == TYPE_DOUBLE &&
 	       GENERIC2TYPE(rgtype) == TYPE_DOUBLE;
 }
+
+int il_factor_binary_op_index(il_factor_binary_op* self, enviroment* env) {
+vector* args = vector_new();
+	generic_type* lgtype = il_factor_eval(self->left, env);
+	generic_type* rgtype = il_factor_eval(self->right, env);
+	if(il_factor_binary_op_int_int(self, env) ||
+	  il_factor_binary_op_double_double(self, env)) {
+		  return -1;
+	}
+	if(lgtype->virtual_type_index != -1) {
+		assert(false);
+	}
+	//vector_push(args, lgtype);
+	vector_push(args, rgtype);
+	type* lctype = GENERIC2TYPE(lgtype);
+	assert(lctype->tag == type_class);
+	class_* lclass = TYPE2CLASS(lctype);
+	int temp = 0;
+	class_find_operator_overload(lclass, self->type, args, env, &temp);
+	vector_delete(args, vector_deleter_null);
+	return temp;
+}

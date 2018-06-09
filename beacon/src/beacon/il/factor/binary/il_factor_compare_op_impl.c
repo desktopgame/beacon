@@ -51,25 +51,7 @@ void il_factor_compare_op_generate(il_factor_compare_op* self, enviroment* env) 
 }
 
 void il_factor_compare_op_load(il_factor_compare_op* self, enviroment* env) {
-	vector* args = vector_new();
-	generic_type* lgtype = il_factor_eval(self->parent->left, env);
-	generic_type* rgtype = il_factor_eval(self->parent->right, env);
-	if(il_factor_binary_op_int_int(self->parent, env) ||
-	  il_factor_binary_op_double_double(self->parent, env)) {
-		  return;
-	}
-	if(lgtype->virtual_type_index != -1) {
-		assert(false);
-	}
-	//vector_push(args, lgtype);
-	vector_push(args, rgtype);
-	type* lctype = GENERIC2TYPE(lgtype);
-	assert(lctype->tag == type_class);
-	class_* lclass = TYPE2CLASS(lctype);
-	int temp = 0;
-	class_find_operator_overload(lclass, self->type, args, env, &temp);
-	vector_delete(args, vector_deleter_null);
-	self->operator_index = temp;
+	self->operator_index = il_factor_binary_op_index(self->parent, env);
 }
 
 void il_factor_compare_op_delete(il_factor_compare_op* self) {
