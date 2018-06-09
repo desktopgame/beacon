@@ -26,6 +26,7 @@ typedef enum opcode {
 	op_ilsh,
 	op_irsh,
 	op_iexcor,
+	op_iflip,
 
 	op_dadd,
 	op_dsub,
@@ -49,6 +50,8 @@ typedef enum opcode {
 	op_blogic_or,
 	op_bbit_and,
 	op_blogic_and,
+	op_bexcor,
+	op_bflip,
 
 	op_iconst,
 	op_dconst,

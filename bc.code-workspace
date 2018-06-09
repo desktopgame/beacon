@@ -62,7 +62,9 @@
 			"assert.h": "c",
 			"bitset": "c",
 			"script_context.h": "c",
-			"operator_overload.h": "c"
+			"operator_overload.h": "c",
+			"system_error": "cpp",
+			"il_factor_impl.h": "c"
 		},
 		"ruby.lint": {
 			"reek": true,

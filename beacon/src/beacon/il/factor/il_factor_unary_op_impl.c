@@ -138,3 +138,16 @@ il_factor_unary_op* il_factor_cast_unary_op(il_factor* fact) {
 	assert(fact->type == ilfactor_unary_op);
 	return fact->u.unary_;
 }
+
+int il_factor_unary_op_index(il_factor_unary_op* self, enviroment* env) {
+	vector* args = vector_new();
+	generic_type* gtype = il_factor_eval(self->a, env);
+	if(gtype->virtual_type_index != -1) {
+		assert(false);
+	}
+	class_* lclass = TYPE2CLASS(GENERIC2TYPE(gtype));
+	int temp = 0;
+	class_find_operator_overload(lclass, self->type, args, env, &temp);
+	vector_delete(args, vector_deleter_null);
+	return temp;
+}

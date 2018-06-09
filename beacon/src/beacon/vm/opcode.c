@@ -67,6 +67,9 @@ int opcode_fprint(FILE* fp, vector* source, int index) {
 		case op_iexcor:
 			text_fprintf(fp,"iexcor");
 			break;
+		case op_iflip:
+			text_fprintf(fp, "iflip");
+			break;
 		//double & double
 		case op_dadd:
 			text_fprintf(fp,"dadd");
@@ -121,6 +124,12 @@ int opcode_fprint(FILE* fp, vector* source, int index) {
 			break;
 		case op_blogic_and:
 			text_fprintf(fp,"blogic_and");
+			break;
+		case op_bexcor:
+			text_fprintf(fp, "bexcor");
+			break;
+		case op_bflip:
+			text_fprintf(fp, "bflip");
 			break;
 		//push const
 		case op_iconst:

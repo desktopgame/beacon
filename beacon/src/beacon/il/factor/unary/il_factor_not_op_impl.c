@@ -5,6 +5,9 @@
 #include "../../../vm/enviroment.h"
 #include "../../../env/namespace.h"
 #include "../../il_factor_impl.h"
+#include "../../../env/type_impl.h"
+#include "../../../env/operator_overload.h"
+#include "../il_factor_unary_op_impl.h"
 
 il_factor_not_op* il_factor_not_op_new(operator_type type) {
 	il_factor_not_op* ret = (il_factor_not_op*)MEM_MALLOC(sizeof(il_factor_not_op));
@@ -34,6 +37,7 @@ void il_factor_not_op_generate(il_factor_not_op* self, enviroment* env) {
 }
 
 void il_factor_not_op_load(il_factor_not_op* self, enviroment* env) {
+	self->operator_index = il_factor_unary_op_index(self->parent, env);
 }
 
 void il_factor_not_op_delete(il_factor_not_op* self) {

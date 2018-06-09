@@ -11,6 +11,7 @@ typedef enum operator_category {
 	operator_cchilda,
 	operator_cnegative,
 	operator_cnot,
+	operator_cexcor
 } operator_category;
 
 typedef enum operator_type {

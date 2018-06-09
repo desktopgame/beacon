@@ -16,6 +16,7 @@
 //#include "binary/il_factor_assign_op_impl.h"
 #include "binary/il_factor_logic_op_impl.h"
 #include "binary/il_factor_shift_op_impl.h"
+#include "binary/il_factor_excor_op_impl.h"
 
 static bool type_test(il_factor_binary_op* self, enviroment* env, type* t);
 
@@ -49,6 +50,9 @@ void il_factor_binary_op_dump(il_factor_binary_op * self, int depth) {
 		case operator_cshift:
 			il_factor_shift_op_dump(self->u.shift_op, depth);
 			break;
+		case operator_cexcor:
+			il_factor_excor_op_dump(self->u.excor_op, depth);
+			break;
 	}
 	il_factor_dump(self->left, depth + 1);
 	il_factor_dump(self->right, depth + 1);
@@ -67,6 +71,9 @@ void il_factor_binary_op_generate(il_factor_binary_op * self, enviroment* env) {
 			break;
 		case operator_cshift:
 			il_factor_shift_op_generate(self->u.shift_op, env);
+			break;
+		case operator_cexcor:
+			il_factor_excor_op_generate(self->u.excor_op, env);
 			break;
 	}
 }
@@ -103,6 +110,12 @@ void il_factor_binary_op_load(il_factor_binary_op * self, enviroment * env) {
 		shift->parent = self;
 		self->u.shift_op = shift;
 		il_factor_shift_op_load(shift, env);
+	} else if(self->type == operator_excor) {
+		self->category = operator_cexcor;
+		il_factor_excor_op* excor = il_factor_excor_op_new(self->type);
+		excor->parent = self;
+		self->u.excor_op = excor;
+		il_factor_excor_op_load(excor, env);
 	} else {
 		assert(false);
 	}
@@ -124,6 +137,9 @@ generic_type* il_factor_binary_op_eval(il_factor_binary_op * self, enviroment * 
 		case operator_cshift:
 			ret = il_factor_shift_op_eval(self->u.shift_op, env);
 			break;
+		case operator_cexcor:
+			ret = il_factor_excor_op_eval(self->u.excor_op, env);
+			break;
 	}
 	assert(ret != NULL);
 	return ret;
@@ -143,6 +159,9 @@ char* il_factor_binary_op_tostr(il_factor_binary_op* self, enviroment* env) {
 			break;
 		case operator_cshift:
 			ret = il_factor_shift_op_tostr(self->u.shift_op, env);
+			break;
+		case operator_cexcor:
+			ret = il_factor_excor_op_tostr(self->u.excor_op, env);
 			break;
 	}
 	assert(ret != NULL);
@@ -164,6 +183,9 @@ void il_factor_binary_op_delete(il_factor_binary_op * self) {
 			break;
 		case operator_cshift:
 			il_factor_shift_op_delete(self->u.shift_op);
+			break;
+		case operator_cexcor:
+			il_factor_excor_op_delete(self->u.excor_op);
 			break;
 	}
 	MEM_FREE(self);
@@ -190,7 +212,7 @@ bool il_factor_binary_op_bool_bool(il_factor_binary_op* self, enviroment* env) {
 }
 
 int il_factor_binary_op_index(il_factor_binary_op* self, enviroment* env) {
-vector* args = vector_new();
+	vector* args = vector_new();
 	generic_type* lgtype = il_factor_eval(self->left, env);
 	generic_type* rgtype = il_factor_eval(self->right, env);
 	if(il_factor_binary_op_int_int(self, env) ||

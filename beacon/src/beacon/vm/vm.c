@@ -270,6 +270,9 @@ static void vm_run(frame * self, enviroment * env, int pos, int deferStart) {
 			case op_iexcor:
 				vector_push(self->value_stack, object_int_new(SPI(self) ^ SPI(self)));
 				break;
+			case op_iflip:
+				vector_push(self->value_stack, object_bool_get(~SPI(self)));
+				break;
 				//double & double
 			case op_dadd:
 				vector_push(self->value_stack, object_double_new(SPD(self) + SPD(self)));
@@ -325,6 +328,12 @@ static void vm_run(frame * self, enviroment * env, int pos, int deferStart) {
 				break;
 			case op_blogic_and:
 				vector_push(self->value_stack, object_bool_get(SPB(self) && SPB(self)));
+				break;
+			case op_bexcor:
+				vector_push(self->value_stack, object_bool_get(SPB(self) ^ SPB(self)));
+				break;
+			case op_bflip:
+				vector_push(self->value_stack, object_bool_get(~SPB(self)));
 				break;
 				//push const
 			case op_iconst:

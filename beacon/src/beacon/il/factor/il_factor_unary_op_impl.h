@@ -43,4 +43,6 @@ void il_factor_unary_op_delete(il_factor_unary_op* self);
 char* il_factor_unary_op_tostr_simple(il_factor_unary_op* self, struct enviroment* env);
 
 il_factor_unary_op* il_factor_cast_unary_op(il_factor* fact);
+
+int il_factor_unary_op_index(il_factor_unary_op* self, struct enviroment* env);
 #endif // !SIGNAL_IL_IL_FACTOR_UNARY_OP_H
