@@ -1,0 +1,47 @@
+namespace test {
+	class Scale {
+		public:
+		Int value;
+		def new(Int value) {
+			this.value = value;
+		}
+
+		public:
+		operator <(Int a) -> Bool {
+			return this.value < a;
+		}
+		operator <=(Int a) -> Bool {
+			return this.value <= a;
+		}
+		operator >(Int a) -> Bool {
+			return this.value > a;
+		}
+		operator >=(Int a) -> Bool {
+			return this.value >= a;
+		}
+		operator ==(Int a) -> Bool {
+			return this.value == a;
+		}
+		operator !=(Int a) -> Bool {
+			return this.value != a;
+		}
+	}
+}
+var scale = new test::Scale(5);
+Console.writeLine(scale == 5);
+Console.writeLine(scale == 4);
+Console.writeLine("---");
+Console.writeLine(scale != 4);
+Console.writeLine(scale != 5);
+Console.writeLine("---");
+Console.writeLine(scale > 0);
+Console.writeLine(scale > 5);
+Console.writeLine("---");
+Console.writeLine(scale >= 5);
+Console.writeLine(scale >= 6);
+Console.writeLine("---");
+Console.writeLine(scale < 6);
+Console.writeLine(scale < 5);
+Console.writeLine("---");
+Console.writeLine(scale <= 5);
+Console.writeLine(scale <= 4);
