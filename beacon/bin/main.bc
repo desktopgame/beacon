@@ -14,20 +14,20 @@ namespace test {
 		}
 
 		public:
-		operator +(Vec2 a, Vec2 b) -> Vec2 {
-			return new Vec2(a.x + b.x, a.y + b.y);
+		operator +(Vec2 a) -> Vec2 {
+			return new Vec2(x + a.x, y + a.y);
 		}
-		operator -(Vec2 a, Vec2 b) -> Vec2 {
-			return new Vec2(a.x - b.x, a.y - b.y);
+		operator -(Vec2 a) -> Vec2 {
+			return new Vec2(x - a.x, y - a.y);
 		}
-		operator *(Vec2 a, Vec2 b) -> Vec2 {
-			return new Vec2(a.x * b.x, a.y * b.y);
+		operator *(Vec2 a) -> Vec2 {
+			return new Vec2(x * a.x, y * a.y);
 		}
-		operator /(Vec2 a, Vec2 b) -> Vec2 {
-			return new Vec2(a.x / b.x, a.y / b.y);
+		operator /(Vec2 a) -> Vec2 {
+			return new Vec2(x / a.x, y / a.y);
 		}
-		operator %(Vec2 a, Vec2 b) -> Vec2 {
-			return new Vec2(a.x % b.x, a.y % b.y);
+		operator %(Vec2 a) -> Vec2 {
+			return new Vec2(x % a.x, y % a.y);
 		}
 	}
 }

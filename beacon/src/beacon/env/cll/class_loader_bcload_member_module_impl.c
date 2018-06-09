@@ -472,36 +472,15 @@ static bool CLBC_test_operator_overlaod(class_loader* self, il_type* iltype, typ
 		class_loader_report(self, "must be public a access level of operator: %s", type_name(tp));
 		return true;
 	}
-	//二項演算子であるなら引数は二つ
-	if(operator_arg2(opov->type) &&
-		opov->parameter_list->length != 2) {
-		class_loader_report(self, "illegal of parameter count, must be binary operator argument count is two.: %s#%s", type_name(tp), operator_tostring(opov->type));
+	//二項演算子であるなら引数は1
+	if(operator_arg2(opov->type) && opov->parameter_list->length != 1) {
+		class_loader_report(self, "illegal of parameter count, must be binary operator argument count is one.: %s#%s", type_name(tp), operator_tostring(opov->type));
 		return true;
 	}
-	//二項演算子であるなら
-	if(operator_arg2(opov->type)) {
-		parameter* parama = vector_at(opov->parameter_list, 0);
-		parameter* paramb = vector_at(opov->parameter_list, 1);
-		if(GENERIC2TYPE(parama->gtype) != opov->parent &&
-		   GENERIC2TYPE(paramb->gtype) != opov->parent) {
-			//引数のうちどちらかは自分であるの英訳がわからない
-			class_loader_report(self, "invalid parameter: %s#%s", type_name(tp), operator_tostring(opov->type));
-			return true;
-		}
-	}
-	//単項演算子であるなら引数は一つ
-	if(operator_arg1(opov->type) && opov->parameter_list->length != 1) {
-		class_loader_report(self, "illegal of parameter count, must be unary operator argument count is one.: %s#%s", type_name(tp), operator_tostring(opov->type));
+	//単項演算子であるなら引数は0
+	if(operator_arg1(opov->type) && opov->parameter_list->length != 0) {
+		class_loader_report(self, "illegal of parameter count, must be unary operator argument count is zero.: %s#%s", type_name(tp), operator_tostring(opov->type));
 		return true;
-	}
-	//単項演算子であるなら
-	if(operator_arg1(opov->type)) {
-		parameter* parama = vector_at(opov->parameter_list, 0);
-		if(GENERIC2TYPE(parama->gtype) != opov->parent) {
-			//引数のうちどちらかは自分であるの英訳がわからない
-			class_loader_report(self, "invalid parameter: %s#%s", type_name(tp), operator_tostring(opov->type));
-			return true;
-		}
 	}
 	return false;
 }
