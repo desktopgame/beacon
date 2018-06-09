@@ -8,6 +8,7 @@ struct enviroment;
 typedef struct il_factor_logic_op {
 	struct il_factor_binary_op* parent;
 	operator_type type;
+	int operator_index;
 } il_factor_logic_op;
 
 il_factor_logic_op* il_factor_logic_op_new(operator_type type);

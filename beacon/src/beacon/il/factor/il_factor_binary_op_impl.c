@@ -17,6 +17,8 @@
 #include "binary/il_factor_logic_op_impl.h"
 #include "binary/il_factor_shift_op_impl.h"
 
+static bool type_test(il_factor_binary_op* self, enviroment* env, type* t);
+
 il_factor * il_factor_wrap_binary(il_factor_binary_op * self) {
 	il_factor* ret = (il_factor*)MEM_MALLOC(sizeof(il_factor));
 	ret->type = ilfactor_binary_op;
@@ -176,17 +178,15 @@ char* il_factor_binary_op_tostr_simple(il_factor_binary_op* self, enviroment* en
 }
 
 bool il_factor_binary_op_int_int(il_factor_binary_op* self, enviroment* env) {
-	generic_type* lgtype = il_factor_eval(self->left, env);
-	generic_type* rgtype = il_factor_eval(self->right, env);
-	return GENERIC2TYPE(lgtype) == TYPE_INT &&
-	       GENERIC2TYPE(rgtype) == TYPE_INT;
+	return type_test(self, env, TYPE_INT);
 }
 
 bool il_factor_binary_op_double_double(il_factor_binary_op* self, enviroment* env) {
-	generic_type* lgtype = il_factor_eval(self->left, env);
-	generic_type* rgtype = il_factor_eval(self->right, env);
-	return GENERIC2TYPE(lgtype) == TYPE_DOUBLE &&
-	       GENERIC2TYPE(rgtype) == TYPE_DOUBLE;
+	return type_test(self, env, TYPE_DOUBLE);
+}
+
+bool il_factor_binary_op_bool_bool(il_factor_binary_op* self, enviroment* env) {
+	return type_test(self, env, TYPE_BOOL);
 }
 
 int il_factor_binary_op_index(il_factor_binary_op* self, enviroment* env) {
@@ -209,4 +209,11 @@ vector* args = vector_new();
 	class_find_operator_overload(lclass, self->type, args, env, &temp);
 	vector_delete(args, vector_deleter_null);
 	return temp;
+}
+
+static bool type_test(il_factor_binary_op* self, enviroment* env, type* t) {
+	generic_type* lgtype = il_factor_eval(self->left, env);
+	generic_type* rgtype = il_factor_eval(self->right, env);
+	return GENERIC2TYPE(lgtype) == t &&
+	       GENERIC2TYPE(rgtype) == t;
 }
