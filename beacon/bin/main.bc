@@ -1,61 +1,47 @@
 namespace test {
-	class Vec2 {
+	class Scale {
 		public:
-		Int x;
-		Int y;
-
-		def new() {
-			this.x = 0;
-			this.y = 0;
-		}
-		def new(Int x, Int y) {
-			this.x = x;
-			this.y = y;
+		Int value;
+		def new(Int value) {
+			this.value = value;
 		}
 
 		public:
-		operator +(Vec2 a) -> Vec2 {
-			return new Vec2(x + a.x, y + a.y);
+		operator <(Int a) -> Bool {
+			return this.value < a;
 		}
-		operator -(Vec2 a) -> Vec2 {
-			return new Vec2(x - a.x, y - a.y);
+		operator <=(Int a) -> Bool {
+			return this.value <= a;
 		}
-		operator *(Vec2 a) -> Vec2 {
-			return new Vec2(x * a.x, y * a.y);
+		operator >(Int a) -> Bool {
+			return this.value > a;
 		}
-		operator *(Int scale) -> Vec2 {
-			return new Vec2(x * scale, y * scale);
+		operator >=(Int a) -> Bool {
+			return this.value >= a;
 		}
-		operator /(Vec2 a) -> Vec2 {
-			return new Vec2(x / a.x, y / a.y);
+		operator ==(Int a) -> Bool {
+			return this.value == a;
 		}
-		operator %(Vec2 a) -> Vec2 {
-			return new Vec2(x % a.x, y % a.y);
+		operator !=(Int a) -> Bool {
+			return this.value != a;
 		}
 	}
 }
-var v2a = new test::Vec2();
-v2a.x = 100;
-v2a.y = 20;
-
-var v2b = new test::Vec2();
-v2b.x = 150;
-v2b.y = 20;
-Console.writeLine(v2a.x);
-Console.writeLine(v2a.y);
+var scale = new test::Scale(5);
+Console.writeLine(scale == 5);
+Console.writeLine(scale == 4);
 Console.writeLine("---");
-Console.writeLine(v2b.x);
-Console.writeLine(v2b.y);
+Console.writeLine(scale != 4);
+Console.writeLine(scale != 5);
 Console.writeLine("---");
-var v2x = v2a + v2b;
-Console.writeLine(v2x.x);
-Console.writeLine(v2x.y);
+Console.writeLine(scale > 0);
+Console.writeLine(scale > 5);
 Console.writeLine("---");
-var v2y = v2a - v2b;
-Console.writeLine(v2y.x);
-Console.writeLine(v2y.y);
+Console.writeLine(scale >= 5);
+Console.writeLine(scale >= 6);
 Console.writeLine("---");
-
-var v2z = v2a * 3;
-Console.writeLine(v2z.x);
-Console.writeLine(v2z.y);
+Console.writeLine(scale < 6);
+Console.writeLine(scale < 5);
+Console.writeLine("---");
+Console.writeLine(scale <= 5);
+Console.writeLine(scale <= 4);
