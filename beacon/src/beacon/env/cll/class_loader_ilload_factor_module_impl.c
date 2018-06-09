@@ -65,6 +65,8 @@ static il_factor* CLIL_factorImpl(class_loader* self, ast* source) {
 	//^
 	} else if(source->tag == ast_exc_or) {
 		return il_factor_wrap_binary(CLIL_binary(self, source, operator_excor));
+	} else if(source->tag == ast_childa) {
+		return il_factor_wrap_unary(CLIL_unary(self, source, operator_childa));
 	//<< >>
 	} else if(source->tag == ast_lshift) {
 		return il_factor_wrap_binary(CLIL_binary(self, source, operator_lshift));

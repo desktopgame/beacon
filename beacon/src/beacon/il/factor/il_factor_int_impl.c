@@ -17,6 +17,7 @@ il_factor * il_factor_wrap_int(il_factor_int * self) {
 il_factor_int * il_factor_int_new(int32_t i) {
 	il_factor_int* ret = (il_factor_int*)MEM_MALLOC(sizeof(il_factor_int));
 	ret->value = i;
+	ret->count = 0;
 	return ret;
 }
 
@@ -27,9 +28,11 @@ void il_factor_int_dump(il_factor_int * self, int depth) {
 }
 
 void il_factor_int_generate(il_factor_int * self, enviroment* env) {
+	assert(self->count == 0);
 	int index = enviroment_add_constant_int(env, self->value);
 	opcode_buf_add(env->buf, op_iconst);
 	opcode_buf_add(env->buf, index);
+	self->count++;
 }
 
 void il_factor_int_load(il_factor_int * self, enviroment * env) {

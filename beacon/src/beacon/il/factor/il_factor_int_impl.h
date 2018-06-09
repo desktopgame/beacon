@@ -10,6 +10,7 @@
  */
 typedef struct il_factor_int {
 	int32_t value;
+	int count;
 } il_factor_int;
 
 il_factor* il_factor_wrap_int(il_factor_int* self);

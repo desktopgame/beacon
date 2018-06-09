@@ -271,7 +271,7 @@ static void vm_run(frame * self, enviroment * env, int pos, int deferStart) {
 				vector_push(self->value_stack, object_int_new(SPI(self) ^ SPI(self)));
 				break;
 			case op_iflip:
-				vector_push(self->value_stack, object_bool_get(~SPI(self)));
+				vector_push(self->value_stack, object_int_new(~SPI(self)));
 				break;
 				//double & double
 			case op_dadd:

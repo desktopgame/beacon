@@ -1,4 +1,6 @@
-assert (1 ^ 1) == 0;
-assert (1 ^ 2) == 3;
-assert (true ^ false);
-assert !(true ^ true);
+//Console.writeLine(~1);
+//Console.writeLine(~2);
+//Console.writeLine(~3);
+assert (~1) == -2;
+//assert (~2) == -3;
+//assert (~3) == -4;

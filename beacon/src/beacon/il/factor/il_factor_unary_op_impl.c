@@ -37,6 +37,7 @@ void il_factor_unary_op_dump(il_factor_unary_op * self, int depth) {
 			il_factor_negative_op_dump(self->u.negative_op, depth);
 			break;
 	}
+	il_factor_dump(self->a, depth + 1);
 }
 
 void il_factor_unary_op_generate(il_factor_unary_op * self, enviroment* env) {
@@ -80,6 +81,7 @@ void il_factor_unary_op_load(il_factor_unary_op * self, enviroment * env) {
 }
 
 generic_type* il_factor_unary_op_eval(il_factor_unary_op * self, enviroment * env) {
+	il_factor_unary_op_load(self, env);
 	generic_type* ret = NULL;
 	switch(self->type) {
 		case operator_not:

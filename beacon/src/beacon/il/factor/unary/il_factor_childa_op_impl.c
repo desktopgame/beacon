@@ -25,7 +25,7 @@ void il_factor_childa_op_dump(il_factor_childa_op* self, int depth) {
 generic_type* il_factor_childa_op_eval(il_factor_childa_op * self, enviroment * env) {
 	generic_type* gtype = il_factor_eval(self->parent->a, env);
 	if(self->operator_index == -1) {
-		il_factor_generate(self->parent->a, env);
+		//il_factor_generate(self->parent->a, env);
 		if(GENERIC2TYPE(gtype) == TYPE_INT) {
 			return TYPE2GENERIC(TYPE_INT);
 		} else if(GENERIC2TYPE(gtype) == TYPE_BOOL) {

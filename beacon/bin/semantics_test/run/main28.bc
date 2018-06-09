@@ -1,0 +1,4 @@
+assert (1 ^ 1) == 0;
+assert (1 ^ 2) == 3;
+assert (true ^ false);
+assert !(true ^ true);
