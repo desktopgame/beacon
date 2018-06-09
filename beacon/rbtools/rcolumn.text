@@ -1,0 +1,896 @@
+/Users/koya/Work/VSCode/beacon/beacon/src/beacon/util/text.h
+    <90>SG_errno_t text_strncpy(char* outChar, size_t index, const char* source, size_t dataSize);
+/Users/koya/Work/VSCode/beacon/beacon/src/beacon/util/test/xtest.h
+    <145>bool xtest_expect_vtrue(xtest* self, bool condition, bool isRecord, bool isThrow, const char* filename, int lineno, const char* fmt, va_list ap);
+    <137>bool xtest_expect_true(xtest* self, bool condition, bool isRecord, bool isThrow, const char* filename, int lineno, const char* fmt, ...);
+    <112>#define MUST_FALSE(condition) xtest_expect_true(xtest_get(), !(condition), true, true, __FILE__, __LINE__, NULL)
+    <112>#define REQ_FALSE(condition) xtest_expect_true(xtest_get(), !(condition), true, false, __FILE__, __LINE__, NULL)
+    <112>#define MUST_STREQ(a, b) xtest_expect_true(xtest_get(), !strcmp((a), (b)), true, true, __FILE__, __LINE__, NULL)
+    <112>#define REQ_STREQ(a, b) xtest_expect_true(xtest_get(), !strcmp((a), (b)), true, false, __FILE__, __LINE__, NULL)
+    <108>#define MUST_TRUE(condition) xtest_expect_true(xtest_get(), condition, true, true, __FILE__, __LINE__, NULL)
+    <108>#define REQ_TRUE(condition) xtest_expect_true(xtest_get(), condition, true, false, __FILE__, __LINE__, NULL)
+    <104>#define MUST_EQ(a, b) xtest_expect_true(xtest_get(), ((a) == (b)), true, true, __FILE__, __LINE__, NULL)
+    <104>#define REQ_EQ(a, b) xtest_expect_true(xtest_get(), ((a) == (b)), true, false, __FILE__, __LINE__, NULL)
+/Users/koya/Work/VSCode/beacon/beacon/src/beacon/util/test/xtest.h
+    <145>bool xtest_expect_vtrue(xtest* self, bool condition, bool isRecord, bool isThrow, const char* filename, int lineno, const char* fmt, va_list ap);
+    <137>bool xtest_expect_true(xtest* self, bool condition, bool isRecord, bool isThrow, const char* filename, int lineno, const char* fmt, ...);
+    <112>#define MUST_FALSE(condition) xtest_expect_true(xtest_get(), !(condition), true, true, __FILE__, __LINE__, NULL)
+    <112>#define REQ_FALSE(condition) xtest_expect_true(xtest_get(), !(condition), true, false, __FILE__, __LINE__, NULL)
+    <112>#define MUST_STREQ(a, b) xtest_expect_true(xtest_get(), !strcmp((a), (b)), true, true, __FILE__, __LINE__, NULL)
+    <112>#define REQ_STREQ(a, b) xtest_expect_true(xtest_get(), !strcmp((a), (b)), true, false, __FILE__, __LINE__, NULL)
+    <108>#define MUST_TRUE(condition) xtest_expect_true(xtest_get(), condition, true, true, __FILE__, __LINE__, NULL)
+    <108>#define REQ_TRUE(condition) xtest_expect_true(xtest_get(), condition, true, false, __FILE__, __LINE__, NULL)
+    <104>#define MUST_EQ(a, b) xtest_expect_true(xtest_get(), ((a) == (b)), true, true, __FILE__, __LINE__, NULL)
+    <104>#define REQ_EQ(a, b) xtest_expect_true(xtest_get(), ((a) == (b)), true, false, __FILE__, __LINE__, NULL)
+/Users/koya/Work/VSCode/beacon/beacon/src/beacon/util/test/xtest.h
+    <145>bool xtest_expect_vtrue(xtest* self, bool condition, bool isRecord, bool isThrow, const char* filename, int lineno, const char* fmt, va_list ap);
+    <137>bool xtest_expect_true(xtest* self, bool condition, bool isRecord, bool isThrow, const char* filename, int lineno, const char* fmt, ...);
+    <112>#define MUST_FALSE(condition) xtest_expect_true(xtest_get(), !(condition), true, true, __FILE__, __LINE__, NULL)
+    <112>#define REQ_FALSE(condition) xtest_expect_true(xtest_get(), !(condition), true, false, __FILE__, __LINE__, NULL)
+    <112>#define MUST_STREQ(a, b) xtest_expect_true(xtest_get(), !strcmp((a), (b)), true, true, __FILE__, __LINE__, NULL)
+    <112>#define REQ_STREQ(a, b) xtest_expect_true(xtest_get(), !strcmp((a), (b)), true, false, __FILE__, __LINE__, NULL)
+    <108>#define MUST_TRUE(condition) xtest_expect_true(xtest_get(), condition, true, true, __FILE__, __LINE__, NULL)
+    <108>#define REQ_TRUE(condition) xtest_expect_true(xtest_get(), condition, true, false, __FILE__, __LINE__, NULL)
+    <104>#define MUST_EQ(a, b) xtest_expect_true(xtest_get(), ((a) == (b)), true, true, __FILE__, __LINE__, NULL)
+    <104>#define REQ_EQ(a, b) xtest_expect_true(xtest_get(), ((a) == (b)), true, false, __FILE__, __LINE__, NULL)
+/Users/koya/Work/VSCode/beacon/beacon/src/beacon/util/test/xtest.h
+    <145>bool xtest_expect_vtrue(xtest* self, bool condition, bool isRecord, bool isThrow, const char* filename, int lineno, const char* fmt, va_list ap);
+    <137>bool xtest_expect_true(xtest* self, bool condition, bool isRecord, bool isThrow, const char* filename, int lineno, const char* fmt, ...);
+    <112>#define MUST_FALSE(condition) xtest_expect_true(xtest_get(), !(condition), true, true, __FILE__, __LINE__, NULL)
+    <112>#define REQ_FALSE(condition) xtest_expect_true(xtest_get(), !(condition), true, false, __FILE__, __LINE__, NULL)
+    <112>#define MUST_STREQ(a, b) xtest_expect_true(xtest_get(), !strcmp((a), (b)), true, true, __FILE__, __LINE__, NULL)
+    <112>#define REQ_STREQ(a, b) xtest_expect_true(xtest_get(), !strcmp((a), (b)), true, false, __FILE__, __LINE__, NULL)
+    <108>#define MUST_TRUE(condition) xtest_expect_true(xtest_get(), condition, true, true, __FILE__, __LINE__, NULL)
+    <108>#define REQ_TRUE(condition) xtest_expect_true(xtest_get(), condition, true, false, __FILE__, __LINE__, NULL)
+    <104>#define MUST_EQ(a, b) xtest_expect_true(xtest_get(), ((a) == (b)), true, true, __FILE__, __LINE__, NULL)
+    <104>#define REQ_EQ(a, b) xtest_expect_true(xtest_get(), ((a) == (b)), true, false, __FILE__, __LINE__, NULL)
+/Users/koya/Work/VSCode/beacon/beacon/src/beacon/util/test/xtest.h
+    <145>bool xtest_expect_vtrue(xtest* self, bool condition, bool isRecord, bool isThrow, const char* filename, int lineno, const char* fmt, va_list ap);
+    <137>bool xtest_expect_true(xtest* self, bool condition, bool isRecord, bool isThrow, const char* filename, int lineno, const char* fmt, ...);
+    <112>#define MUST_FALSE(condition) xtest_expect_true(xtest_get(), !(condition), true, true, __FILE__, __LINE__, NULL)
+    <112>#define REQ_FALSE(condition) xtest_expect_true(xtest_get(), !(condition), true, false, __FILE__, __LINE__, NULL)
+    <112>#define MUST_STREQ(a, b) xtest_expect_true(xtest_get(), !strcmp((a), (b)), true, true, __FILE__, __LINE__, NULL)
+    <112>#define REQ_STREQ(a, b) xtest_expect_true(xtest_get(), !strcmp((a), (b)), true, false, __FILE__, __LINE__, NULL)
+    <108>#define MUST_TRUE(condition) xtest_expect_true(xtest_get(), condition, true, true, __FILE__, __LINE__, NULL)
+    <108>#define REQ_TRUE(condition) xtest_expect_true(xtest_get(), condition, true, false, __FILE__, __LINE__, NULL)
+    <104>#define MUST_EQ(a, b) xtest_expect_true(xtest_get(), ((a) == (b)), true, true, __FILE__, __LINE__, NULL)
+    <104>#define REQ_EQ(a, b) xtest_expect_true(xtest_get(), ((a) == (b)), true, false, __FILE__, __LINE__, NULL)
+/Users/koya/Work/VSCode/beacon/beacon/src/beacon/util/test/xtest.h
+    <145>bool xtest_expect_vtrue(xtest* self, bool condition, bool isRecord, bool isThrow, const char* filename, int lineno, const char* fmt, va_list ap);
+    <137>bool xtest_expect_true(xtest* self, bool condition, bool isRecord, bool isThrow, const char* filename, int lineno, const char* fmt, ...);
+    <112>#define MUST_FALSE(condition) xtest_expect_true(xtest_get(), !(condition), true, true, __FILE__, __LINE__, NULL)
+    <112>#define REQ_FALSE(condition) xtest_expect_true(xtest_get(), !(condition), true, false, __FILE__, __LINE__, NULL)
+    <112>#define MUST_STREQ(a, b) xtest_expect_true(xtest_get(), !strcmp((a), (b)), true, true, __FILE__, __LINE__, NULL)
+    <112>#define REQ_STREQ(a, b) xtest_expect_true(xtest_get(), !strcmp((a), (b)), true, false, __FILE__, __LINE__, NULL)
+    <108>#define MUST_TRUE(condition) xtest_expect_true(xtest_get(), condition, true, true, __FILE__, __LINE__, NULL)
+    <108>#define REQ_TRUE(condition) xtest_expect_true(xtest_get(), condition, true, false, __FILE__, __LINE__, NULL)
+    <104>#define MUST_EQ(a, b) xtest_expect_true(xtest_get(), ((a) == (b)), true, true, __FILE__, __LINE__, NULL)
+    <104>#define REQ_EQ(a, b) xtest_expect_true(xtest_get(), ((a) == (b)), true, false, __FILE__, __LINE__, NULL)
+/Users/koya/Work/VSCode/beacon/beacon/src/beacon/util/test/xtest.h
+    <145>bool xtest_expect_vtrue(xtest* self, bool condition, bool isRecord, bool isThrow, const char* filename, int lineno, const char* fmt, va_list ap);
+    <137>bool xtest_expect_true(xtest* self, bool condition, bool isRecord, bool isThrow, const char* filename, int lineno, const char* fmt, ...);
+    <112>#define MUST_FALSE(condition) xtest_expect_true(xtest_get(), !(condition), true, true, __FILE__, __LINE__, NULL)
+    <112>#define REQ_FALSE(condition) xtest_expect_true(xtest_get(), !(condition), true, false, __FILE__, __LINE__, NULL)
+    <112>#define MUST_STREQ(a, b) xtest_expect_true(xtest_get(), !strcmp((a), (b)), true, true, __FILE__, __LINE__, NULL)
+    <112>#define REQ_STREQ(a, b) xtest_expect_true(xtest_get(), !strcmp((a), (b)), true, false, __FILE__, __LINE__, NULL)
+    <108>#define MUST_TRUE(condition) xtest_expect_true(xtest_get(), condition, true, true, __FILE__, __LINE__, NULL)
+    <108>#define REQ_TRUE(condition) xtest_expect_true(xtest_get(), condition, true, false, __FILE__, __LINE__, NULL)
+    <104>#define MUST_EQ(a, b) xtest_expect_true(xtest_get(), ((a) == (b)), true, true, __FILE__, __LINE__, NULL)
+    <104>#define REQ_EQ(a, b) xtest_expect_true(xtest_get(), ((a) == (b)), true, false, __FILE__, __LINE__, NULL)
+/Users/koya/Work/VSCode/beacon/beacon/src/beacon/util/test/xtest.h
+    <145>bool xtest_expect_vtrue(xtest* self, bool condition, bool isRecord, bool isThrow, const char* filename, int lineno, const char* fmt, va_list ap);
+    <137>bool xtest_expect_true(xtest* self, bool condition, bool isRecord, bool isThrow, const char* filename, int lineno, const char* fmt, ...);
+    <112>#define MUST_FALSE(condition) xtest_expect_true(xtest_get(), !(condition), true, true, __FILE__, __LINE__, NULL)
+    <112>#define REQ_FALSE(condition) xtest_expect_true(xtest_get(), !(condition), true, false, __FILE__, __LINE__, NULL)
+    <112>#define MUST_STREQ(a, b) xtest_expect_true(xtest_get(), !strcmp((a), (b)), true, true, __FILE__, __LINE__, NULL)
+    <112>#define REQ_STREQ(a, b) xtest_expect_true(xtest_get(), !strcmp((a), (b)), true, false, __FILE__, __LINE__, NULL)
+    <108>#define MUST_TRUE(condition) xtest_expect_true(xtest_get(), condition, true, true, __FILE__, __LINE__, NULL)
+    <108>#define REQ_TRUE(condition) xtest_expect_true(xtest_get(), condition, true, false, __FILE__, __LINE__, NULL)
+    <104>#define MUST_EQ(a, b) xtest_expect_true(xtest_get(), ((a) == (b)), true, true, __FILE__, __LINE__, NULL)
+    <104>#define REQ_EQ(a, b) xtest_expect_true(xtest_get(), ((a) == (b)), true, false, __FILE__, __LINE__, NULL)
+/Users/koya/Work/VSCode/beacon/beacon/src/beacon/util/test/xtest.h
+    <145>bool xtest_expect_vtrue(xtest* self, bool condition, bool isRecord, bool isThrow, const char* filename, int lineno, const char* fmt, va_list ap);
+    <137>bool xtest_expect_true(xtest* self, bool condition, bool isRecord, bool isThrow, const char* filename, int lineno, const char* fmt, ...);
+    <112>#define MUST_FALSE(condition) xtest_expect_true(xtest_get(), !(condition), true, true, __FILE__, __LINE__, NULL)
+    <112>#define REQ_FALSE(condition) xtest_expect_true(xtest_get(), !(condition), true, false, __FILE__, __LINE__, NULL)
+    <112>#define MUST_STREQ(a, b) xtest_expect_true(xtest_get(), !strcmp((a), (b)), true, true, __FILE__, __LINE__, NULL)
+    <112>#define REQ_STREQ(a, b) xtest_expect_true(xtest_get(), !strcmp((a), (b)), true, false, __FILE__, __LINE__, NULL)
+    <108>#define MUST_TRUE(condition) xtest_expect_true(xtest_get(), condition, true, true, __FILE__, __LINE__, NULL)
+    <108>#define REQ_TRUE(condition) xtest_expect_true(xtest_get(), condition, true, false, __FILE__, __LINE__, NULL)
+    <104>#define MUST_EQ(a, b) xtest_expect_true(xtest_get(), ((a) == (b)), true, true, __FILE__, __LINE__, NULL)
+    <104>#define REQ_EQ(a, b) xtest_expect_true(xtest_get(), ((a) == (b)), true, false, __FILE__, __LINE__, NULL)
+/Users/koya/Work/VSCode/beacon/beacon/src/beacon/util/test/xtest.h
+    <145>bool xtest_expect_vtrue(xtest* self, bool condition, bool isRecord, bool isThrow, const char* filename, int lineno, const char* fmt, va_list ap);
+    <137>bool xtest_expect_true(xtest* self, bool condition, bool isRecord, bool isThrow, const char* filename, int lineno, const char* fmt, ...);
+    <112>#define MUST_FALSE(condition) xtest_expect_true(xtest_get(), !(condition), true, true, __FILE__, __LINE__, NULL)
+    <112>#define REQ_FALSE(condition) xtest_expect_true(xtest_get(), !(condition), true, false, __FILE__, __LINE__, NULL)
+    <112>#define MUST_STREQ(a, b) xtest_expect_true(xtest_get(), !strcmp((a), (b)), true, true, __FILE__, __LINE__, NULL)
+    <112>#define REQ_STREQ(a, b) xtest_expect_true(xtest_get(), !strcmp((a), (b)), true, false, __FILE__, __LINE__, NULL)
+    <108>#define MUST_TRUE(condition) xtest_expect_true(xtest_get(), condition, true, true, __FILE__, __LINE__, NULL)
+    <108>#define REQ_TRUE(condition) xtest_expect_true(xtest_get(), condition, true, false, __FILE__, __LINE__, NULL)
+    <104>#define MUST_EQ(a, b) xtest_expect_true(xtest_get(), ((a) == (b)), true, true, __FILE__, __LINE__, NULL)
+    <104>#define REQ_EQ(a, b) xtest_expect_true(xtest_get(), ((a) == (b)), true, false, __FILE__, __LINE__, NULL)
+/Users/koya/Work/VSCode/beacon/beacon/src/beacon/util/string_buffer.h
+    <82>void string_buffer_vappendf(string_buffer* self, const char* message, va_list ap);
+/Users/koya/Work/VSCode/beacon/beacon/src/beacon/util/mem.h
+    <81>void* mem_realloc(void* block, size_t newSize, const char* filename, int lineno);
+/Users/koya/Work/VSCode/beacon/beacon/src/beacon/util/bench_mark.h
+    <80>typedef void(*time_printer)(const char* name, time_ref* befor, time_ref* after);
+/Users/koya/Work/VSCode/beacon/beacon/src/beacon/env/class_loader.h
+    <107>class_loader* class_loader_new_entry_point_from_source(const char* source, const char* contextDescription);
+/Users/koya/Work/VSCode/beacon/beacon/src/beacon/env/generic_type.h
+    <105>//#define generic_type_validate(self) assert((self)->core_type != NULL || self->virtual_type_index != -1)
+    <92>generic_type* generic_type_malloc(struct type* core_type, const char* filename, int lineno);
+    <86>int generic_type_rdistance(generic_type* self, generic_type* other, struct frame* fr);
+    <80>#define generic_type_new(ctype) (generic_type_malloc(ctype, __FILE__, __LINE__))
+/Users/koya/Work/VSCode/beacon/beacon/src/beacon/env/generic_type.h
+    <105>//#define generic_type_validate(self) assert((self)->core_type != NULL || self->virtual_type_index != -1)
+    <92>generic_type* generic_type_malloc(struct type* core_type, const char* filename, int lineno);
+    <86>int generic_type_rdistance(generic_type* self, generic_type* other, struct frame* fr);
+    <80>#define generic_type_new(ctype) (generic_type_malloc(ctype, __FILE__, __LINE__))
+/Users/koya/Work/VSCode/beacon/beacon/src/beacon/env/generic_type.h
+    <105>//#define generic_type_validate(self) assert((self)->core_type != NULL || self->virtual_type_index != -1)
+    <92>generic_type* generic_type_malloc(struct type* core_type, const char* filename, int lineno);
+    <86>int generic_type_rdistance(generic_type* self, generic_type* other, struct frame* fr);
+    <80>#define generic_type_new(ctype) (generic_type_malloc(ctype, __FILE__, __LINE__))
+/Users/koya/Work/VSCode/beacon/beacon/src/beacon/env/generic_type.h
+    <105>//#define generic_type_validate(self) assert((self)->core_type != NULL || self->virtual_type_index != -1)
+    <92>generic_type* generic_type_malloc(struct type* core_type, const char* filename, int lineno);
+    <86>int generic_type_rdistance(generic_type* self, generic_type* other, struct frame* fr);
+    <80>#define generic_type_new(ctype) (generic_type_malloc(ctype, __FILE__, __LINE__))
+/Users/koya/Work/VSCode/beacon/beacon/src/beacon/env/constructor.h
+    <95>struct object* constructor_new_instance(constructor* self, vector* args, struct frame* parent);
+/Users/koya/Work/VSCode/beacon/beacon/src/beacon/env/import_manager.h
+    <120>struct generic_type* import_manager_resolve(import_manager* self, struct namespace_* scope, struct generic_cache* fqcn);
+    <118>struct generic_type* import_manager_resolvef(import_manager* self, struct namespace_* scope, struct fqcn_cache* fqcn);
+    <93>struct import_info* import_manager_import(import_manager* self, struct class_loader* target);
+/Users/koya/Work/VSCode/beacon/beacon/src/beacon/env/import_manager.h
+    <120>struct generic_type* import_manager_resolve(import_manager* self, struct namespace_* scope, struct generic_cache* fqcn);
+    <118>struct generic_type* import_manager_resolvef(import_manager* self, struct namespace_* scope, struct fqcn_cache* fqcn);
+    <93>struct import_info* import_manager_import(import_manager* self, struct class_loader* target);
+/Users/koya/Work/VSCode/beacon/beacon/src/beacon/env/import_manager.h
+    <120>struct generic_type* import_manager_resolve(import_manager* self, struct namespace_* scope, struct generic_cache* fqcn);
+    <118>struct generic_type* import_manager_resolvef(import_manager* self, struct namespace_* scope, struct fqcn_cache* fqcn);
+    <93>struct import_info* import_manager_import(import_manager* self, struct class_loader* target);
+/Users/koya/Work/VSCode/beacon/beacon/src/beacon/env/native_method.h
+    <113>void native_method_execute(native_method* self, struct method* parent, struct frame* fr, struct enviroment* env);
+/Users/koya/Work/VSCode/beacon/beacon/src/beacon/env/compile_context.h
+    <84>void ccset_override(struct method* abstract_method, struct method* concrete_method);
+/Users/koya/Work/VSCode/beacon/beacon/src/beacon/env/type/interface_impl.h
+    <130>struct method* interface_find_method(interface_* self, const char * name, vector * args, struct enviroment * env, int * outIndex);
+    <87>struct generic_type* interface_contains(struct generic_type* source, interface_* find);
+/Users/koya/Work/VSCode/beacon/beacon/src/beacon/env/type/interface_impl.h
+    <130>struct method* interface_find_method(interface_* self, const char * name, vector * args, struct enviroment * env, int * outIndex);
+    <87>struct generic_type* interface_contains(struct generic_type* source, interface_* find);
+/Users/koya/Work/VSCode/beacon/beacon/src/beacon/env/type/class_impl.h
+    <116>struct constructor* class_find_rconstructor(class_* self, vector* args, vector* typeargs, frame* fr, int* outIndex);
+    <112>struct method* class_find_smethod(class_* self, const char* name, vector* args, enviroment* env, int* outIndex);
+    <111>struct method* class_find_method(class_* self, const char* name, vector* args, enviroment* env, int* outIndex);
+    <103>struct constructor* class_find_constructor(class_* self, vector* args, enviroment* env, int* outIndex);
+    <95>struct constructor* class_find_empty_constructor(class_* self, enviroment* env, int* outIndex);
+    <92>struct object* class_new_instance(class_* self, frame* fr, vector* args, vector* type_args);
+    <85>struct method* class_get_impl_method(class_* self, type* interType, int interMIndex);
+    <84>struct field* class_find_sfield_tree(class_* self, const char* name, int* outIndex);
+    <83>struct field* class_find_field_tree(class_* self, const char* name, int* outIndex);
+    <82>void class_define_native_method(class_* self, const char* name, native_impl impl);
+/Users/koya/Work/VSCode/beacon/beacon/src/beacon/env/type/class_impl.h
+    <116>struct constructor* class_find_rconstructor(class_* self, vector* args, vector* typeargs, frame* fr, int* outIndex);
+    <112>struct method* class_find_smethod(class_* self, const char* name, vector* args, enviroment* env, int* outIndex);
+    <111>struct method* class_find_method(class_* self, const char* name, vector* args, enviroment* env, int* outIndex);
+    <103>struct constructor* class_find_constructor(class_* self, vector* args, enviroment* env, int* outIndex);
+    <95>struct constructor* class_find_empty_constructor(class_* self, enviroment* env, int* outIndex);
+    <92>struct object* class_new_instance(class_* self, frame* fr, vector* args, vector* type_args);
+    <85>struct method* class_get_impl_method(class_* self, type* interType, int interMIndex);
+    <84>struct field* class_find_sfield_tree(class_* self, const char* name, int* outIndex);
+    <83>struct field* class_find_field_tree(class_* self, const char* name, int* outIndex);
+    <82>void class_define_native_method(class_* self, const char* name, native_impl impl);
+/Users/koya/Work/VSCode/beacon/beacon/src/beacon/env/type/class_impl.h
+    <116>struct constructor* class_find_rconstructor(class_* self, vector* args, vector* typeargs, frame* fr, int* outIndex);
+    <112>struct method* class_find_smethod(class_* self, const char* name, vector* args, enviroment* env, int* outIndex);
+    <111>struct method* class_find_method(class_* self, const char* name, vector* args, enviroment* env, int* outIndex);
+    <103>struct constructor* class_find_constructor(class_* self, vector* args, enviroment* env, int* outIndex);
+    <95>struct constructor* class_find_empty_constructor(class_* self, enviroment* env, int* outIndex);
+    <92>struct object* class_new_instance(class_* self, frame* fr, vector* args, vector* type_args);
+    <85>struct method* class_get_impl_method(class_* self, type* interType, int interMIndex);
+    <84>struct field* class_find_sfield_tree(class_* self, const char* name, int* outIndex);
+    <83>struct field* class_find_field_tree(class_* self, const char* name, int* outIndex);
+    <82>void class_define_native_method(class_* self, const char* name, native_impl impl);
+/Users/koya/Work/VSCode/beacon/beacon/src/beacon/env/type/class_impl.h
+    <116>struct constructor* class_find_rconstructor(class_* self, vector* args, vector* typeargs, frame* fr, int* outIndex);
+    <112>struct method* class_find_smethod(class_* self, const char* name, vector* args, enviroment* env, int* outIndex);
+    <111>struct method* class_find_method(class_* self, const char* name, vector* args, enviroment* env, int* outIndex);
+    <103>struct constructor* class_find_constructor(class_* self, vector* args, enviroment* env, int* outIndex);
+    <95>struct constructor* class_find_empty_constructor(class_* self, enviroment* env, int* outIndex);
+    <92>struct object* class_new_instance(class_* self, frame* fr, vector* args, vector* type_args);
+    <85>struct method* class_get_impl_method(class_* self, type* interType, int interMIndex);
+    <84>struct field* class_find_sfield_tree(class_* self, const char* name, int* outIndex);
+    <83>struct field* class_find_field_tree(class_* self, const char* name, int* outIndex);
+    <82>void class_define_native_method(class_* self, const char* name, native_impl impl);
+/Users/koya/Work/VSCode/beacon/beacon/src/beacon/env/type/class_impl.h
+    <116>struct constructor* class_find_rconstructor(class_* self, vector* args, vector* typeargs, frame* fr, int* outIndex);
+    <112>struct method* class_find_smethod(class_* self, const char* name, vector* args, enviroment* env, int* outIndex);
+    <111>struct method* class_find_method(class_* self, const char* name, vector* args, enviroment* env, int* outIndex);
+    <103>struct constructor* class_find_constructor(class_* self, vector* args, enviroment* env, int* outIndex);
+    <95>struct constructor* class_find_empty_constructor(class_* self, enviroment* env, int* outIndex);
+    <92>struct object* class_new_instance(class_* self, frame* fr, vector* args, vector* type_args);
+    <85>struct method* class_get_impl_method(class_* self, type* interType, int interMIndex);
+    <84>struct field* class_find_sfield_tree(class_* self, const char* name, int* outIndex);
+    <83>struct field* class_find_field_tree(class_* self, const char* name, int* outIndex);
+    <82>void class_define_native_method(class_* self, const char* name, native_impl impl);
+/Users/koya/Work/VSCode/beacon/beacon/src/beacon/env/type/class_impl.h
+    <116>struct constructor* class_find_rconstructor(class_* self, vector* args, vector* typeargs, frame* fr, int* outIndex);
+    <112>struct method* class_find_smethod(class_* self, const char* name, vector* args, enviroment* env, int* outIndex);
+    <111>struct method* class_find_method(class_* self, const char* name, vector* args, enviroment* env, int* outIndex);
+    <103>struct constructor* class_find_constructor(class_* self, vector* args, enviroment* env, int* outIndex);
+    <95>struct constructor* class_find_empty_constructor(class_* self, enviroment* env, int* outIndex);
+    <92>struct object* class_new_instance(class_* self, frame* fr, vector* args, vector* type_args);
+    <85>struct method* class_get_impl_method(class_* self, type* interType, int interMIndex);
+    <84>struct field* class_find_sfield_tree(class_* self, const char* name, int* outIndex);
+    <83>struct field* class_find_field_tree(class_* self, const char* name, int* outIndex);
+    <82>void class_define_native_method(class_* self, const char* name, native_impl impl);
+/Users/koya/Work/VSCode/beacon/beacon/src/beacon/env/type/class_impl.h
+    <116>struct constructor* class_find_rconstructor(class_* self, vector* args, vector* typeargs, frame* fr, int* outIndex);
+    <112>struct method* class_find_smethod(class_* self, const char* name, vector* args, enviroment* env, int* outIndex);
+    <111>struct method* class_find_method(class_* self, const char* name, vector* args, enviroment* env, int* outIndex);
+    <103>struct constructor* class_find_constructor(class_* self, vector* args, enviroment* env, int* outIndex);
+    <95>struct constructor* class_find_empty_constructor(class_* self, enviroment* env, int* outIndex);
+    <92>struct object* class_new_instance(class_* self, frame* fr, vector* args, vector* type_args);
+    <85>struct method* class_get_impl_method(class_* self, type* interType, int interMIndex);
+    <84>struct field* class_find_sfield_tree(class_* self, const char* name, int* outIndex);
+    <83>struct field* class_find_field_tree(class_* self, const char* name, int* outIndex);
+    <82>void class_define_native_method(class_* self, const char* name, native_impl impl);
+/Users/koya/Work/VSCode/beacon/beacon/src/beacon/env/type/class_impl.h
+    <116>struct constructor* class_find_rconstructor(class_* self, vector* args, vector* typeargs, frame* fr, int* outIndex);
+    <112>struct method* class_find_smethod(class_* self, const char* name, vector* args, enviroment* env, int* outIndex);
+    <111>struct method* class_find_method(class_* self, const char* name, vector* args, enviroment* env, int* outIndex);
+    <103>struct constructor* class_find_constructor(class_* self, vector* args, enviroment* env, int* outIndex);
+    <95>struct constructor* class_find_empty_constructor(class_* self, enviroment* env, int* outIndex);
+    <92>struct object* class_new_instance(class_* self, frame* fr, vector* args, vector* type_args);
+    <85>struct method* class_get_impl_method(class_* self, type* interType, int interMIndex);
+    <84>struct field* class_find_sfield_tree(class_* self, const char* name, int* outIndex);
+    <83>struct field* class_find_field_tree(class_* self, const char* name, int* outIndex);
+    <82>void class_define_native_method(class_* self, const char* name, native_impl impl);
+/Users/koya/Work/VSCode/beacon/beacon/src/beacon/env/type/class_impl.h
+    <116>struct constructor* class_find_rconstructor(class_* self, vector* args, vector* typeargs, frame* fr, int* outIndex);
+    <112>struct method* class_find_smethod(class_* self, const char* name, vector* args, enviroment* env, int* outIndex);
+    <111>struct method* class_find_method(class_* self, const char* name, vector* args, enviroment* env, int* outIndex);
+    <103>struct constructor* class_find_constructor(class_* self, vector* args, enviroment* env, int* outIndex);
+    <95>struct constructor* class_find_empty_constructor(class_* self, enviroment* env, int* outIndex);
+    <92>struct object* class_new_instance(class_* self, frame* fr, vector* args, vector* type_args);
+    <85>struct method* class_get_impl_method(class_* self, type* interType, int interMIndex);
+    <84>struct field* class_find_sfield_tree(class_* self, const char* name, int* outIndex);
+    <83>struct field* class_find_field_tree(class_* self, const char* name, int* outIndex);
+    <82>void class_define_native_method(class_* self, const char* name, native_impl impl);
+/Users/koya/Work/VSCode/beacon/beacon/src/beacon/env/type/class_impl.h
+    <116>struct constructor* class_find_rconstructor(class_* self, vector* args, vector* typeargs, frame* fr, int* outIndex);
+    <112>struct method* class_find_smethod(class_* self, const char* name, vector* args, enviroment* env, int* outIndex);
+    <111>struct method* class_find_method(class_* self, const char* name, vector* args, enviroment* env, int* outIndex);
+    <103>struct constructor* class_find_constructor(class_* self, vector* args, enviroment* env, int* outIndex);
+    <95>struct constructor* class_find_empty_constructor(class_* self, enviroment* env, int* outIndex);
+    <92>struct object* class_new_instance(class_* self, frame* fr, vector* args, vector* type_args);
+    <85>struct method* class_get_impl_method(class_* self, type* interType, int interMIndex);
+    <84>struct field* class_find_sfield_tree(class_* self, const char* name, int* outIndex);
+    <83>struct field* class_find_field_tree(class_* self, const char* name, int* outIndex);
+    <82>void class_define_native_method(class_* self, const char* name, native_impl impl);
+/Users/koya/Work/VSCode/beacon/beacon/src/beacon/env/type/meta_impl.h
+    <115>method* meta_find_method(vector* method_vec, const char * name, vector * ilargs, enviroment * env, int * outIndex);
+    <112>constructor* meta_find_rctor(vector* ctor_vec, vector* args, vector* typeargs, struct frame* fr, int* outIndex);
+    <101>constructor* meta_find_ctor(vector* ctor_vec, vector* ilargs, struct enviroment* env, int* outIndex);
+    <87>int meta_rcalc_score(vector* params, vector* args, vector* typeargs, struct frame* fr);
+/Users/koya/Work/VSCode/beacon/beacon/src/beacon/env/type/meta_impl.h
+    <115>method* meta_find_method(vector* method_vec, const char * name, vector * ilargs, enviroment * env, int * outIndex);
+    <112>constructor* meta_find_rctor(vector* ctor_vec, vector* args, vector* typeargs, struct frame* fr, int* outIndex);
+    <101>constructor* meta_find_ctor(vector* ctor_vec, vector* ilargs, struct enviroment* env, int* outIndex);
+    <87>int meta_rcalc_score(vector* params, vector* args, vector* typeargs, struct frame* fr);
+/Users/koya/Work/VSCode/beacon/beacon/src/beacon/env/type/meta_impl.h
+    <115>method* meta_find_method(vector* method_vec, const char * name, vector * ilargs, enviroment * env, int * outIndex);
+    <112>constructor* meta_find_rctor(vector* ctor_vec, vector* args, vector* typeargs, struct frame* fr, int* outIndex);
+    <101>constructor* meta_find_ctor(vector* ctor_vec, vector* ilargs, struct enviroment* env, int* outIndex);
+    <87>int meta_rcalc_score(vector* params, vector* args, vector* typeargs, struct frame* fr);
+/Users/koya/Work/VSCode/beacon/beacon/src/beacon/env/type/meta_impl.h
+    <115>method* meta_find_method(vector* method_vec, const char * name, vector * ilargs, enviroment * env, int * outIndex);
+    <112>constructor* meta_find_rctor(vector* ctor_vec, vector* args, vector* typeargs, struct frame* fr, int* outIndex);
+    <101>constructor* meta_find_ctor(vector* ctor_vec, vector* ilargs, struct enviroment* env, int* outIndex);
+    <87>int meta_rcalc_score(vector* params, vector* args, vector* typeargs, struct frame* fr);
+/Users/koya/Work/VSCode/beacon/beacon/src/beacon/env/script_method.h
+    <113>void script_method_execute(script_method* self, struct method* parent, struct frame* fr, struct enviroment* env);
+/Users/koya/Work/VSCode/beacon/beacon/src/beacon/env/type_interface.h
+    <116>struct method* type_find_smethod(type* self, const char* name, vector* args, struct enviroment* env, int* outIndex);
+    <115>struct method* type_find_method(type* self, const char* name, vector* args, struct enviroment* env, int* outIndex);
+/Users/koya/Work/VSCode/beacon/beacon/src/beacon/env/type_interface.h
+    <116>struct method* type_find_smethod(type* self, const char* name, vector* args, struct enviroment* env, int* outIndex);
+    <115>struct method* type_find_method(type* self, const char* name, vector* args, struct enviroment* env, int* outIndex);
+/Users/koya/Work/VSCode/beacon/beacon/src/beacon/env/fqcn_cache.h
+    <80>struct interface_* fqcn_interface(fqcn_cache* self, struct namespace_* current);
+/Users/koya/Work/VSCode/beacon/beacon/src/beacon/env/exception.h
+    <81>struct object* exception_new_simplef(struct frame* fr, const char* message, ...);
+/Users/koya/Work/VSCode/beacon/beacon/src/beacon/env/cll/class_loader_ilload_type_module_impl.h
+    <91>void CLIL_typename_list(struct class_loader* self, vector* dst, struct ast* typename_list);
+    <89>void CLIL_type_argument(struct class_loader* self, struct ast* atype_args, vector* dest);
+    <86>void CLIL_type_parameter(struct class_loader* self, struct ast* source, vector* dest);
+    <86>void CLIL_parameter_list(struct class_loader* self, vector* list, struct ast* source);
+    <85>void CLIL_argument_list(struct class_loader* self, vector* list, struct ast* source);
+/Users/koya/Work/VSCode/beacon/beacon/src/beacon/env/cll/class_loader_ilload_type_module_impl.h
+    <91>void CLIL_typename_list(struct class_loader* self, vector* dst, struct ast* typename_list);
+    <89>void CLIL_type_argument(struct class_loader* self, struct ast* atype_args, vector* dest);
+    <86>void CLIL_type_parameter(struct class_loader* self, struct ast* source, vector* dest);
+    <86>void CLIL_parameter_list(struct class_loader* self, vector* list, struct ast* source);
+    <85>void CLIL_argument_list(struct class_loader* self, vector* list, struct ast* source);
+/Users/koya/Work/VSCode/beacon/beacon/src/beacon/env/cll/class_loader_ilload_type_module_impl.h
+    <91>void CLIL_typename_list(struct class_loader* self, vector* dst, struct ast* typename_list);
+    <89>void CLIL_type_argument(struct class_loader* self, struct ast* atype_args, vector* dest);
+    <86>void CLIL_type_parameter(struct class_loader* self, struct ast* source, vector* dest);
+    <86>void CLIL_parameter_list(struct class_loader* self, vector* list, struct ast* source);
+    <85>void CLIL_argument_list(struct class_loader* self, vector* list, struct ast* source);
+/Users/koya/Work/VSCode/beacon/beacon/src/beacon/env/cll/class_loader_ilload_type_module_impl.h
+    <91>void CLIL_typename_list(struct class_loader* self, vector* dst, struct ast* typename_list);
+    <89>void CLIL_type_argument(struct class_loader* self, struct ast* atype_args, vector* dest);
+    <86>void CLIL_type_parameter(struct class_loader* self, struct ast* source, vector* dest);
+    <86>void CLIL_parameter_list(struct class_loader* self, vector* list, struct ast* source);
+    <85>void CLIL_argument_list(struct class_loader* self, vector* list, struct ast* source);
+/Users/koya/Work/VSCode/beacon/beacon/src/beacon/env/cll/class_loader_ilload_type_module_impl.h
+    <91>void CLIL_typename_list(struct class_loader* self, vector* dst, struct ast* typename_list);
+    <89>void CLIL_type_argument(struct class_loader* self, struct ast* atype_args, vector* dest);
+    <86>void CLIL_type_parameter(struct class_loader* self, struct ast* source, vector* dest);
+    <86>void CLIL_parameter_list(struct class_loader* self, vector* list, struct ast* source);
+    <85>void CLIL_argument_list(struct class_loader* self, vector* list, struct ast* source);
+/Users/koya/Work/VSCode/beacon/beacon/src/beacon/env/cll/class_loader_ilload_member_module_impl.h
+    <97>void CLIL_operator_overload(class_loader* self, il_type* current, ast* opov, access_level level);
+    <93>void CLIL_member_list(class_loader* self, il_type* current, ast* member, access_level level);
+    <91>void CLIL_ctor(class_loader* self, il_type* current, ast* constructor, access_level level);
+    <88>void CLIL_method(class_loader* self, il_type* current, ast* method, access_level level);
+    <86>void CLIL_field(class_loader* self, il_type* current, ast* field, access_level level);
+/Users/koya/Work/VSCode/beacon/beacon/src/beacon/env/cll/class_loader_ilload_member_module_impl.h
+    <97>void CLIL_operator_overload(class_loader* self, il_type* current, ast* opov, access_level level);
+    <93>void CLIL_member_list(class_loader* self, il_type* current, ast* member, access_level level);
+    <91>void CLIL_ctor(class_loader* self, il_type* current, ast* constructor, access_level level);
+    <88>void CLIL_method(class_loader* self, il_type* current, ast* method, access_level level);
+    <86>void CLIL_field(class_loader* self, il_type* current, ast* field, access_level level);
+/Users/koya/Work/VSCode/beacon/beacon/src/beacon/env/cll/class_loader_ilload_member_module_impl.h
+    <97>void CLIL_operator_overload(class_loader* self, il_type* current, ast* opov, access_level level);
+    <93>void CLIL_member_list(class_loader* self, il_type* current, ast* member, access_level level);
+    <91>void CLIL_ctor(class_loader* self, il_type* current, ast* constructor, access_level level);
+    <88>void CLIL_method(class_loader* self, il_type* current, ast* method, access_level level);
+    <86>void CLIL_field(class_loader* self, il_type* current, ast* field, access_level level);
+/Users/koya/Work/VSCode/beacon/beacon/src/beacon/env/cll/class_loader_ilload_member_module_impl.h
+    <97>void CLIL_operator_overload(class_loader* self, il_type* current, ast* opov, access_level level);
+    <93>void CLIL_member_list(class_loader* self, il_type* current, ast* member, access_level level);
+    <91>void CLIL_ctor(class_loader* self, il_type* current, ast* constructor, access_level level);
+    <88>void CLIL_method(class_loader* self, il_type* current, ast* method, access_level level);
+    <86>void CLIL_field(class_loader* self, il_type* current, ast* field, access_level level);
+/Users/koya/Work/VSCode/beacon/beacon/src/beacon/env/cll/class_loader_ilload_member_module_impl.h
+    <97>void CLIL_operator_overload(class_loader* self, il_type* current, ast* opov, access_level level);
+    <93>void CLIL_member_list(class_loader* self, il_type* current, ast* member, access_level level);
+    <91>void CLIL_ctor(class_loader* self, il_type* current, ast* constructor, access_level level);
+    <88>void CLIL_method(class_loader* self, il_type* current, ast* method, access_level level);
+    <86>void CLIL_field(class_loader* self, il_type* current, ast* field, access_level level);
+/Users/koya/Work/VSCode/beacon/beacon/src/beacon/env/cll/class_loader_bcload_member_module_impl.h
+    <127>void CLBC_methods_impl(class_loader* self, namespace_* scope, il_type* iltype, type* tp, vector* ilmethods, vector* sgmethods);
+    <108>void CLBC_methods_decl(class_loader* self, il_type* iltype, type* tp, vector* ilmethods, namespace_* scope);
+    <106>void CLBC_fields_decl(class_loader* self, il_type* iltype, type* tp, vector* ilfields, namespace_* scope);
+    <99>void CLBC_operator_overload_impl(class_loader* self, il_type* iltype, type* tp, namespace_* scope);
+    <99>void CLBC_operator_overload_decl(class_loader* self, il_type* iltype, type* tp, namespace_* scope);
+    <98>void CLBC_body(class_loader* self, vector* stmt_list, struct enviroment* dest, namespace_* range);
+    <97>void CLBC_fields_impl(class_loader* self, namespace_* scope, vector* ilfields, vector* sgfields);
+    <86>void CLBC_ctor_decl(class_loader* self, il_type* iltype, type* tp, namespace_* scope);
+/Users/koya/Work/VSCode/beacon/beacon/src/beacon/env/cll/class_loader_bcload_member_module_impl.h
+    <127>void CLBC_methods_impl(class_loader* self, namespace_* scope, il_type* iltype, type* tp, vector* ilmethods, vector* sgmethods);
+    <108>void CLBC_methods_decl(class_loader* self, il_type* iltype, type* tp, vector* ilmethods, namespace_* scope);
+    <106>void CLBC_fields_decl(class_loader* self, il_type* iltype, type* tp, vector* ilfields, namespace_* scope);
+    <99>void CLBC_operator_overload_impl(class_loader* self, il_type* iltype, type* tp, namespace_* scope);
+    <99>void CLBC_operator_overload_decl(class_loader* self, il_type* iltype, type* tp, namespace_* scope);
+    <98>void CLBC_body(class_loader* self, vector* stmt_list, struct enviroment* dest, namespace_* range);
+    <97>void CLBC_fields_impl(class_loader* self, namespace_* scope, vector* ilfields, vector* sgfields);
+    <86>void CLBC_ctor_decl(class_loader* self, il_type* iltype, type* tp, namespace_* scope);
+/Users/koya/Work/VSCode/beacon/beacon/src/beacon/env/cll/class_loader_bcload_member_module_impl.h
+    <127>void CLBC_methods_impl(class_loader* self, namespace_* scope, il_type* iltype, type* tp, vector* ilmethods, vector* sgmethods);
+    <108>void CLBC_methods_decl(class_loader* self, il_type* iltype, type* tp, vector* ilmethods, namespace_* scope);
+    <106>void CLBC_fields_decl(class_loader* self, il_type* iltype, type* tp, vector* ilfields, namespace_* scope);
+    <99>void CLBC_operator_overload_impl(class_loader* self, il_type* iltype, type* tp, namespace_* scope);
+    <99>void CLBC_operator_overload_decl(class_loader* self, il_type* iltype, type* tp, namespace_* scope);
+    <98>void CLBC_body(class_loader* self, vector* stmt_list, struct enviroment* dest, namespace_* range);
+    <97>void CLBC_fields_impl(class_loader* self, namespace_* scope, vector* ilfields, vector* sgfields);
+    <86>void CLBC_ctor_decl(class_loader* self, il_type* iltype, type* tp, namespace_* scope);
+/Users/koya/Work/VSCode/beacon/beacon/src/beacon/env/cll/class_loader_bcload_member_module_impl.h
+    <127>void CLBC_methods_impl(class_loader* self, namespace_* scope, il_type* iltype, type* tp, vector* ilmethods, vector* sgmethods);
+    <108>void CLBC_methods_decl(class_loader* self, il_type* iltype, type* tp, vector* ilmethods, namespace_* scope);
+    <106>void CLBC_fields_decl(class_loader* self, il_type* iltype, type* tp, vector* ilfields, namespace_* scope);
+    <99>void CLBC_operator_overload_impl(class_loader* self, il_type* iltype, type* tp, namespace_* scope);
+    <99>void CLBC_operator_overload_decl(class_loader* self, il_type* iltype, type* tp, namespace_* scope);
+    <98>void CLBC_body(class_loader* self, vector* stmt_list, struct enviroment* dest, namespace_* range);
+    <97>void CLBC_fields_impl(class_loader* self, namespace_* scope, vector* ilfields, vector* sgfields);
+    <86>void CLBC_ctor_decl(class_loader* self, il_type* iltype, type* tp, namespace_* scope);
+/Users/koya/Work/VSCode/beacon/beacon/src/beacon/env/cll/class_loader_bcload_member_module_impl.h
+    <127>void CLBC_methods_impl(class_loader* self, namespace_* scope, il_type* iltype, type* tp, vector* ilmethods, vector* sgmethods);
+    <108>void CLBC_methods_decl(class_loader* self, il_type* iltype, type* tp, vector* ilmethods, namespace_* scope);
+    <106>void CLBC_fields_decl(class_loader* self, il_type* iltype, type* tp, vector* ilfields, namespace_* scope);
+    <99>void CLBC_operator_overload_impl(class_loader* self, il_type* iltype, type* tp, namespace_* scope);
+    <99>void CLBC_operator_overload_decl(class_loader* self, il_type* iltype, type* tp, namespace_* scope);
+    <98>void CLBC_body(class_loader* self, vector* stmt_list, struct enviroment* dest, namespace_* range);
+    <97>void CLBC_fields_impl(class_loader* self, namespace_* scope, vector* ilfields, vector* sgfields);
+    <86>void CLBC_ctor_decl(class_loader* self, il_type* iltype, type* tp, namespace_* scope);
+/Users/koya/Work/VSCode/beacon/beacon/src/beacon/env/cll/class_loader_bcload_member_module_impl.h
+    <127>void CLBC_methods_impl(class_loader* self, namespace_* scope, il_type* iltype, type* tp, vector* ilmethods, vector* sgmethods);
+    <108>void CLBC_methods_decl(class_loader* self, il_type* iltype, type* tp, vector* ilmethods, namespace_* scope);
+    <106>void CLBC_fields_decl(class_loader* self, il_type* iltype, type* tp, vector* ilfields, namespace_* scope);
+    <99>void CLBC_operator_overload_impl(class_loader* self, il_type* iltype, type* tp, namespace_* scope);
+    <99>void CLBC_operator_overload_decl(class_loader* self, il_type* iltype, type* tp, namespace_* scope);
+    <98>void CLBC_body(class_loader* self, vector* stmt_list, struct enviroment* dest, namespace_* range);
+    <97>void CLBC_fields_impl(class_loader* self, namespace_* scope, vector* ilfields, vector* sgfields);
+    <86>void CLBC_ctor_decl(class_loader* self, il_type* iltype, type* tp, namespace_* scope);
+/Users/koya/Work/VSCode/beacon/beacon/src/beacon/env/cll/class_loader_bcload_member_module_impl.h
+    <127>void CLBC_methods_impl(class_loader* self, namespace_* scope, il_type* iltype, type* tp, vector* ilmethods, vector* sgmethods);
+    <108>void CLBC_methods_decl(class_loader* self, il_type* iltype, type* tp, vector* ilmethods, namespace_* scope);
+    <106>void CLBC_fields_decl(class_loader* self, il_type* iltype, type* tp, vector* ilfields, namespace_* scope);
+    <99>void CLBC_operator_overload_impl(class_loader* self, il_type* iltype, type* tp, namespace_* scope);
+    <99>void CLBC_operator_overload_decl(class_loader* self, il_type* iltype, type* tp, namespace_* scope);
+    <98>void CLBC_body(class_loader* self, vector* stmt_list, struct enviroment* dest, namespace_* range);
+    <97>void CLBC_fields_impl(class_loader* self, namespace_* scope, vector* ilfields, vector* sgfields);
+    <86>void CLBC_ctor_decl(class_loader* self, il_type* iltype, type* tp, namespace_* scope);
+/Users/koya/Work/VSCode/beacon/beacon/src/beacon/env/cll/class_loader_bcload_member_module_impl.h
+    <127>void CLBC_methods_impl(class_loader* self, namespace_* scope, il_type* iltype, type* tp, vector* ilmethods, vector* sgmethods);
+    <108>void CLBC_methods_decl(class_loader* self, il_type* iltype, type* tp, vector* ilmethods, namespace_* scope);
+    <106>void CLBC_fields_decl(class_loader* self, il_type* iltype, type* tp, vector* ilfields, namespace_* scope);
+    <99>void CLBC_operator_overload_impl(class_loader* self, il_type* iltype, type* tp, namespace_* scope);
+    <99>void CLBC_operator_overload_decl(class_loader* self, il_type* iltype, type* tp, namespace_* scope);
+    <98>void CLBC_body(class_loader* self, vector* stmt_list, struct enviroment* dest, namespace_* range);
+    <97>void CLBC_fields_impl(class_loader* self, namespace_* scope, vector* ilfields, vector* sgfields);
+    <86>void CLBC_ctor_decl(class_loader* self, il_type* iltype, type* tp, namespace_* scope);
+/Users/koya/Work/VSCode/beacon/beacon/src/beacon/vm/symbol_table.h
+    <104>struct symbol_entry* symbol_table_entry(symbol_table* self, struct generic_type* gtp, const char* name);
+/Users/koya/Work/VSCode/beacon/beacon/src/beacon/lib/beacon/lang/bc_array.h
+    <86>struct object* bc_array_new(struct generic_type* gtype, int length, struct frame* fr);
+/Users/koya/Work/VSCode/beacon/beacon/src/beacon/ast/ast_new_stmt.h
+    <87>ast* ast_new_if_elif_list_else(ast* cond, ast* trueBody, ast* elifList, ast* elseBody);
+    <80>#define ast_new_fqcn_part(name) (ast_malloc_fqcn_part(name, __FILE__, __LINE__))
+/Users/koya/Work/VSCode/beacon/beacon/src/beacon/ast/ast_new_stmt.h
+    <87>ast* ast_new_if_elif_list_else(ast* cond, ast* trueBody, ast* elifList, ast* elseBody);
+    <80>#define ast_new_fqcn_part(name) (ast_malloc_fqcn_part(name, __FILE__, __LINE__))
+/Users/koya/Work/VSCode/beacon/beacon/src/beacon/ast/ast_new_decl.h
+    <130>ast* ast_new_method_decl(ast* amodifier, char* func_name, ast* atype_parameter, ast* parameter_list, ast* body, ast* return_type);
+    <122>ast* ast_new_method_decl_empty_params(ast* amodifier, char* func_name, ast* atype_parameter, ast* body, ast* return_type);
+    <98>ast* ast_new_function_decl(char* function_name, ast* parameter_list, ast* body, ast* return_type);
+    <95>ast* ast_new_operator_overload(operator_type type, ast* aparam_list, ast* abody, ast* areturn);
+    <95>ast* ast_new_interface_decl(ast* ainterface_name, ast* super_interface_list, ast* member_list);
+    <94>ast* ast_new_parameter_list(ast* atypename, char* parameter_access_name, ast* parameter_list);
+    <90>ast* ast_new_function_decl_empty_params(char* function_name, ast* body, ast* return_type);
+    <87>ast* ast_new_abstract_class_decl(ast* aclass_name, ast* extend_list, ast* member_list);
+    <86>ast* ast_new_constructor_decl(ast* parameter_list, ast* constructor_chain, ast* body);
+    <86>ast* ast_new_constructor_chain(constructor_chain_type chain_type, ast* argument_list);
+/Users/koya/Work/VSCode/beacon/beacon/src/beacon/ast/ast_new_decl.h
+    <130>ast* ast_new_method_decl(ast* amodifier, char* func_name, ast* atype_parameter, ast* parameter_list, ast* body, ast* return_type);
+    <122>ast* ast_new_method_decl_empty_params(ast* amodifier, char* func_name, ast* atype_parameter, ast* body, ast* return_type);
+    <98>ast* ast_new_function_decl(char* function_name, ast* parameter_list, ast* body, ast* return_type);
+    <95>ast* ast_new_operator_overload(operator_type type, ast* aparam_list, ast* abody, ast* areturn);
+    <95>ast* ast_new_interface_decl(ast* ainterface_name, ast* super_interface_list, ast* member_list);
+    <94>ast* ast_new_parameter_list(ast* atypename, char* parameter_access_name, ast* parameter_list);
+    <90>ast* ast_new_function_decl_empty_params(char* function_name, ast* body, ast* return_type);
+    <87>ast* ast_new_abstract_class_decl(ast* aclass_name, ast* extend_list, ast* member_list);
+    <86>ast* ast_new_constructor_decl(ast* parameter_list, ast* constructor_chain, ast* body);
+    <86>ast* ast_new_constructor_chain(constructor_chain_type chain_type, ast* argument_list);
+/Users/koya/Work/VSCode/beacon/beacon/src/beacon/ast/ast_new_decl.h
+    <130>ast* ast_new_method_decl(ast* amodifier, char* func_name, ast* atype_parameter, ast* parameter_list, ast* body, ast* return_type);
+    <122>ast* ast_new_method_decl_empty_params(ast* amodifier, char* func_name, ast* atype_parameter, ast* body, ast* return_type);
+    <98>ast* ast_new_function_decl(char* function_name, ast* parameter_list, ast* body, ast* return_type);
+    <95>ast* ast_new_operator_overload(operator_type type, ast* aparam_list, ast* abody, ast* areturn);
+    <95>ast* ast_new_interface_decl(ast* ainterface_name, ast* super_interface_list, ast* member_list);
+    <94>ast* ast_new_parameter_list(ast* atypename, char* parameter_access_name, ast* parameter_list);
+    <90>ast* ast_new_function_decl_empty_params(char* function_name, ast* body, ast* return_type);
+    <87>ast* ast_new_abstract_class_decl(ast* aclass_name, ast* extend_list, ast* member_list);
+    <86>ast* ast_new_constructor_decl(ast* parameter_list, ast* constructor_chain, ast* body);
+    <86>ast* ast_new_constructor_chain(constructor_chain_type chain_type, ast* argument_list);
+/Users/koya/Work/VSCode/beacon/beacon/src/beacon/ast/ast_new_decl.h
+    <130>ast* ast_new_method_decl(ast* amodifier, char* func_name, ast* atype_parameter, ast* parameter_list, ast* body, ast* return_type);
+    <122>ast* ast_new_method_decl_empty_params(ast* amodifier, char* func_name, ast* atype_parameter, ast* body, ast* return_type);
+    <98>ast* ast_new_function_decl(char* function_name, ast* parameter_list, ast* body, ast* return_type);
+    <95>ast* ast_new_operator_overload(operator_type type, ast* aparam_list, ast* abody, ast* areturn);
+    <95>ast* ast_new_interface_decl(ast* ainterface_name, ast* super_interface_list, ast* member_list);
+    <94>ast* ast_new_parameter_list(ast* atypename, char* parameter_access_name, ast* parameter_list);
+    <90>ast* ast_new_function_decl_empty_params(char* function_name, ast* body, ast* return_type);
+    <87>ast* ast_new_abstract_class_decl(ast* aclass_name, ast* extend_list, ast* member_list);
+    <86>ast* ast_new_constructor_decl(ast* parameter_list, ast* constructor_chain, ast* body);
+    <86>ast* ast_new_constructor_chain(constructor_chain_type chain_type, ast* argument_list);
+/Users/koya/Work/VSCode/beacon/beacon/src/beacon/ast/ast_new_decl.h
+    <130>ast* ast_new_method_decl(ast* amodifier, char* func_name, ast* atype_parameter, ast* parameter_list, ast* body, ast* return_type);
+    <122>ast* ast_new_method_decl_empty_params(ast* amodifier, char* func_name, ast* atype_parameter, ast* body, ast* return_type);
+    <98>ast* ast_new_function_decl(char* function_name, ast* parameter_list, ast* body, ast* return_type);
+    <95>ast* ast_new_operator_overload(operator_type type, ast* aparam_list, ast* abody, ast* areturn);
+    <95>ast* ast_new_interface_decl(ast* ainterface_name, ast* super_interface_list, ast* member_list);
+    <94>ast* ast_new_parameter_list(ast* atypename, char* parameter_access_name, ast* parameter_list);
+    <90>ast* ast_new_function_decl_empty_params(char* function_name, ast* body, ast* return_type);
+    <87>ast* ast_new_abstract_class_decl(ast* aclass_name, ast* extend_list, ast* member_list);
+    <86>ast* ast_new_constructor_decl(ast* parameter_list, ast* constructor_chain, ast* body);
+    <86>ast* ast_new_constructor_chain(constructor_chain_type chain_type, ast* argument_list);
+/Users/koya/Work/VSCode/beacon/beacon/src/beacon/ast/ast_new_decl.h
+    <130>ast* ast_new_method_decl(ast* amodifier, char* func_name, ast* atype_parameter, ast* parameter_list, ast* body, ast* return_type);
+    <122>ast* ast_new_method_decl_empty_params(ast* amodifier, char* func_name, ast* atype_parameter, ast* body, ast* return_type);
+    <98>ast* ast_new_function_decl(char* function_name, ast* parameter_list, ast* body, ast* return_type);
+    <95>ast* ast_new_operator_overload(operator_type type, ast* aparam_list, ast* abody, ast* areturn);
+    <95>ast* ast_new_interface_decl(ast* ainterface_name, ast* super_interface_list, ast* member_list);
+    <94>ast* ast_new_parameter_list(ast* atypename, char* parameter_access_name, ast* parameter_list);
+    <90>ast* ast_new_function_decl_empty_params(char* function_name, ast* body, ast* return_type);
+    <87>ast* ast_new_abstract_class_decl(ast* aclass_name, ast* extend_list, ast* member_list);
+    <86>ast* ast_new_constructor_decl(ast* parameter_list, ast* constructor_chain, ast* body);
+    <86>ast* ast_new_constructor_chain(constructor_chain_type chain_type, ast* argument_list);
+/Users/koya/Work/VSCode/beacon/beacon/src/beacon/ast/ast_new_decl.h
+    <130>ast* ast_new_method_decl(ast* amodifier, char* func_name, ast* atype_parameter, ast* parameter_list, ast* body, ast* return_type);
+    <122>ast* ast_new_method_decl_empty_params(ast* amodifier, char* func_name, ast* atype_parameter, ast* body, ast* return_type);
+    <98>ast* ast_new_function_decl(char* function_name, ast* parameter_list, ast* body, ast* return_type);
+    <95>ast* ast_new_operator_overload(operator_type type, ast* aparam_list, ast* abody, ast* areturn);
+    <95>ast* ast_new_interface_decl(ast* ainterface_name, ast* super_interface_list, ast* member_list);
+    <94>ast* ast_new_parameter_list(ast* atypename, char* parameter_access_name, ast* parameter_list);
+    <90>ast* ast_new_function_decl_empty_params(char* function_name, ast* body, ast* return_type);
+    <87>ast* ast_new_abstract_class_decl(ast* aclass_name, ast* extend_list, ast* member_list);
+    <86>ast* ast_new_constructor_decl(ast* parameter_list, ast* constructor_chain, ast* body);
+    <86>ast* ast_new_constructor_chain(constructor_chain_type chain_type, ast* argument_list);
+/Users/koya/Work/VSCode/beacon/beacon/src/beacon/ast/ast_new_decl.h
+    <130>ast* ast_new_method_decl(ast* amodifier, char* func_name, ast* atype_parameter, ast* parameter_list, ast* body, ast* return_type);
+    <122>ast* ast_new_method_decl_empty_params(ast* amodifier, char* func_name, ast* atype_parameter, ast* body, ast* return_type);
+    <98>ast* ast_new_function_decl(char* function_name, ast* parameter_list, ast* body, ast* return_type);
+    <95>ast* ast_new_operator_overload(operator_type type, ast* aparam_list, ast* abody, ast* areturn);
+    <95>ast* ast_new_interface_decl(ast* ainterface_name, ast* super_interface_list, ast* member_list);
+    <94>ast* ast_new_parameter_list(ast* atypename, char* parameter_access_name, ast* parameter_list);
+    <90>ast* ast_new_function_decl_empty_params(char* function_name, ast* body, ast* return_type);
+    <87>ast* ast_new_abstract_class_decl(ast* aclass_name, ast* extend_list, ast* member_list);
+    <86>ast* ast_new_constructor_decl(ast* parameter_list, ast* constructor_chain, ast* body);
+    <86>ast* ast_new_constructor_chain(constructor_chain_type chain_type, ast* argument_list);
+/Users/koya/Work/VSCode/beacon/beacon/src/beacon/ast/ast_new_decl.h
+    <130>ast* ast_new_method_decl(ast* amodifier, char* func_name, ast* atype_parameter, ast* parameter_list, ast* body, ast* return_type);
+    <122>ast* ast_new_method_decl_empty_params(ast* amodifier, char* func_name, ast* atype_parameter, ast* body, ast* return_type);
+    <98>ast* ast_new_function_decl(char* function_name, ast* parameter_list, ast* body, ast* return_type);
+    <95>ast* ast_new_operator_overload(operator_type type, ast* aparam_list, ast* abody, ast* areturn);
+    <95>ast* ast_new_interface_decl(ast* ainterface_name, ast* super_interface_list, ast* member_list);
+    <94>ast* ast_new_parameter_list(ast* atypename, char* parameter_access_name, ast* parameter_list);
+    <90>ast* ast_new_function_decl_empty_params(char* function_name, ast* body, ast* return_type);
+    <87>ast* ast_new_abstract_class_decl(ast* aclass_name, ast* extend_list, ast* member_list);
+    <86>ast* ast_new_constructor_decl(ast* parameter_list, ast* constructor_chain, ast* body);
+    <86>ast* ast_new_constructor_chain(constructor_chain_type chain_type, ast* argument_list);
+/Users/koya/Work/VSCode/beacon/beacon/src/beacon/ast/ast_new_decl.h
+    <130>ast* ast_new_method_decl(ast* amodifier, char* func_name, ast* atype_parameter, ast* parameter_list, ast* body, ast* return_type);
+    <122>ast* ast_new_method_decl_empty_params(ast* amodifier, char* func_name, ast* atype_parameter, ast* body, ast* return_type);
+    <98>ast* ast_new_function_decl(char* function_name, ast* parameter_list, ast* body, ast* return_type);
+    <95>ast* ast_new_operator_overload(operator_type type, ast* aparam_list, ast* abody, ast* areturn);
+    <95>ast* ast_new_interface_decl(ast* ainterface_name, ast* super_interface_list, ast* member_list);
+    <94>ast* ast_new_parameter_list(ast* atypename, char* parameter_access_name, ast* parameter_list);
+    <90>ast* ast_new_function_decl_empty_params(char* function_name, ast* body, ast* return_type);
+    <87>ast* ast_new_abstract_class_decl(ast* aclass_name, ast* extend_list, ast* member_list);
+    <86>ast* ast_new_constructor_decl(ast* parameter_list, ast* constructor_chain, ast* body);
+    <86>ast* ast_new_constructor_chain(constructor_chain_type chain_type, ast* argument_list);
+/Users/koya/Work/VSCode/beacon/beacon/src/beacon/il/stmt/il_stmt_variable_decl_impl.h
+    <89>void il_stmt_variable_decl_generate(il_stmt_variable_decl* self, struct enviroment* env);
+    <85>void il_stmt_variable_decl_load(il_stmt_variable_decl* self, struct enviroment* env);
+/Users/koya/Work/VSCode/beacon/beacon/src/beacon/il/stmt/il_stmt_variable_decl_impl.h
+    <89>void il_stmt_variable_decl_generate(il_stmt_variable_decl* self, struct enviroment* env);
+    <85>void il_stmt_variable_decl_load(il_stmt_variable_decl* self, struct enviroment* env);
+/Users/koya/Work/VSCode/beacon/beacon/src/beacon/il/stmt/il_stmt_variable_init_impl.h
+    <89>void il_stmt_variable_init_generate(il_stmt_variable_init* self, struct enviroment* env);
+    <85>void il_stmt_variable_init_load(il_stmt_variable_init* self, struct enviroment* env);
+/Users/koya/Work/VSCode/beacon/beacon/src/beacon/il/stmt/il_stmt_variable_init_impl.h
+    <89>void il_stmt_variable_init_generate(il_stmt_variable_init* self, struct enviroment* env);
+    <85>void il_stmt_variable_init_load(il_stmt_variable_init* self, struct enviroment* env);
+/Users/koya/Work/VSCode/beacon/beacon/src/beacon/il/stmt/il_stmt_inferenced_type_init_impl.h
+    <103>void il_stmt_inferenced_type_init_generate(il_stmt_inferenced_type_init* self, struct enviroment* env);
+    <99>void il_stmt_inferenced_type_init_load(il_stmt_inferenced_type_init* self, struct enviroment* env);
+    <86>void il_stmt_inferenced_type_init_dump(il_stmt_inferenced_type_init* self, int depth);
+    <81>il_stmt_inferenced_type_init* il_stmt_inferenced_type_init_new(const char* name);
+/Users/koya/Work/VSCode/beacon/beacon/src/beacon/il/stmt/il_stmt_inferenced_type_init_impl.h
+    <103>void il_stmt_inferenced_type_init_generate(il_stmt_inferenced_type_init* self, struct enviroment* env);
+    <99>void il_stmt_inferenced_type_init_load(il_stmt_inferenced_type_init* self, struct enviroment* env);
+    <86>void il_stmt_inferenced_type_init_dump(il_stmt_inferenced_type_init* self, int depth);
+    <81>il_stmt_inferenced_type_init* il_stmt_inferenced_type_init_new(const char* name);
+/Users/koya/Work/VSCode/beacon/beacon/src/beacon/il/stmt/il_stmt_inferenced_type_init_impl.h
+    <103>void il_stmt_inferenced_type_init_generate(il_stmt_inferenced_type_init* self, struct enviroment* env);
+    <99>void il_stmt_inferenced_type_init_load(il_stmt_inferenced_type_init* self, struct enviroment* env);
+    <86>void il_stmt_inferenced_type_init_dump(il_stmt_inferenced_type_init* self, int depth);
+    <81>il_stmt_inferenced_type_init* il_stmt_inferenced_type_init_new(const char* name);
+/Users/koya/Work/VSCode/beacon/beacon/src/beacon/il/stmt/il_stmt_inferenced_type_init_impl.h
+    <103>void il_stmt_inferenced_type_init_generate(il_stmt_inferenced_type_init* self, struct enviroment* env);
+    <99>void il_stmt_inferenced_type_init_load(il_stmt_inferenced_type_init* self, struct enviroment* env);
+    <86>void il_stmt_inferenced_type_init_dump(il_stmt_inferenced_type_init* self, int depth);
+    <81>il_stmt_inferenced_type_init* il_stmt_inferenced_type_init_new(const char* name);
+/Users/koya/Work/VSCode/beacon/beacon/src/beacon/il/factor/il_factor_call_op_impl.h
+    <93>struct generic_type* il_factor_call_op_eval(il_factor_call_op* self, struct enviroment* env);
+    <81>void il_factor_call_op_generate(il_factor_call_op* self, struct enviroment* env);
+    <80>char* il_factor_call_op_to_str(il_factor_call_op* self, struct enviroment* env);
+/Users/koya/Work/VSCode/beacon/beacon/src/beacon/il/factor/il_factor_call_op_impl.h
+    <93>struct generic_type* il_factor_call_op_eval(il_factor_call_op* self, struct enviroment* env);
+    <81>void il_factor_call_op_generate(il_factor_call_op* self, struct enviroment* env);
+    <80>char* il_factor_call_op_to_str(il_factor_call_op* self, struct enviroment* env);
+/Users/koya/Work/VSCode/beacon/beacon/src/beacon/il/factor/il_factor_call_op_impl.h
+    <93>struct generic_type* il_factor_call_op_eval(il_factor_call_op* self, struct enviroment* env);
+    <81>void il_factor_call_op_generate(il_factor_call_op* self, struct enviroment* env);
+    <80>char* il_factor_call_op_to_str(il_factor_call_op* self, struct enviroment* env);
+/Users/koya/Work/VSCode/beacon/beacon/src/beacon/il/factor/il_factor_binary_op_impl.h
+    <90>generic_type* il_factor_binary_op_eval(il_factor_binary_op* self, struct enviroment* env);
+    <90>char* il_factor_binary_op_tostr_simple(il_factor_binary_op* self, struct enviroment* env);
+    <90>bool il_factor_binary_op_double_double(il_factor_binary_op* self, struct enviroment* env);
+    <85>void il_factor_binary_op_generate(il_factor_binary_op* self, struct enviroment* env);
+    <84>bool il_factor_binary_op_int_int(il_factor_binary_op* self, struct enviroment* env);
+    <83>char* il_factor_binary_op_tostr(il_factor_binary_op* self, struct enviroment* env);
+    <81>void il_factor_binary_op_load(il_factor_binary_op* self, struct enviroment* env);
+/Users/koya/Work/VSCode/beacon/beacon/src/beacon/il/factor/il_factor_binary_op_impl.h
+    <90>generic_type* il_factor_binary_op_eval(il_factor_binary_op* self, struct enviroment* env);
+    <90>char* il_factor_binary_op_tostr_simple(il_factor_binary_op* self, struct enviroment* env);
+    <90>bool il_factor_binary_op_double_double(il_factor_binary_op* self, struct enviroment* env);
+    <85>void il_factor_binary_op_generate(il_factor_binary_op* self, struct enviroment* env);
+    <84>bool il_factor_binary_op_int_int(il_factor_binary_op* self, struct enviroment* env);
+    <83>char* il_factor_binary_op_tostr(il_factor_binary_op* self, struct enviroment* env);
+    <81>void il_factor_binary_op_load(il_factor_binary_op* self, struct enviroment* env);
+/Users/koya/Work/VSCode/beacon/beacon/src/beacon/il/factor/il_factor_binary_op_impl.h
+    <90>generic_type* il_factor_binary_op_eval(il_factor_binary_op* self, struct enviroment* env);
+    <90>char* il_factor_binary_op_tostr_simple(il_factor_binary_op* self, struct enviroment* env);
+    <90>bool il_factor_binary_op_double_double(il_factor_binary_op* self, struct enviroment* env);
+    <85>void il_factor_binary_op_generate(il_factor_binary_op* self, struct enviroment* env);
+    <84>bool il_factor_binary_op_int_int(il_factor_binary_op* self, struct enviroment* env);
+    <83>char* il_factor_binary_op_tostr(il_factor_binary_op* self, struct enviroment* env);
+    <81>void il_factor_binary_op_load(il_factor_binary_op* self, struct enviroment* env);
+/Users/koya/Work/VSCode/beacon/beacon/src/beacon/il/factor/il_factor_binary_op_impl.h
+    <90>generic_type* il_factor_binary_op_eval(il_factor_binary_op* self, struct enviroment* env);
+    <90>char* il_factor_binary_op_tostr_simple(il_factor_binary_op* self, struct enviroment* env);
+    <90>bool il_factor_binary_op_double_double(il_factor_binary_op* self, struct enviroment* env);
+    <85>void il_factor_binary_op_generate(il_factor_binary_op* self, struct enviroment* env);
+    <84>bool il_factor_binary_op_int_int(il_factor_binary_op* self, struct enviroment* env);
+    <83>char* il_factor_binary_op_tostr(il_factor_binary_op* self, struct enviroment* env);
+    <81>void il_factor_binary_op_load(il_factor_binary_op* self, struct enviroment* env);
+/Users/koya/Work/VSCode/beacon/beacon/src/beacon/il/factor/il_factor_binary_op_impl.h
+    <90>generic_type* il_factor_binary_op_eval(il_factor_binary_op* self, struct enviroment* env);
+    <90>char* il_factor_binary_op_tostr_simple(il_factor_binary_op* self, struct enviroment* env);
+    <90>bool il_factor_binary_op_double_double(il_factor_binary_op* self, struct enviroment* env);
+    <85>void il_factor_binary_op_generate(il_factor_binary_op* self, struct enviroment* env);
+    <84>bool il_factor_binary_op_int_int(il_factor_binary_op* self, struct enviroment* env);
+    <83>char* il_factor_binary_op_tostr(il_factor_binary_op* self, struct enviroment* env);
+    <81>void il_factor_binary_op_load(il_factor_binary_op* self, struct enviroment* env);
+/Users/koya/Work/VSCode/beacon/beacon/src/beacon/il/factor/il_factor_binary_op_impl.h
+    <90>generic_type* il_factor_binary_op_eval(il_factor_binary_op* self, struct enviroment* env);
+    <90>char* il_factor_binary_op_tostr_simple(il_factor_binary_op* self, struct enviroment* env);
+    <90>bool il_factor_binary_op_double_double(il_factor_binary_op* self, struct enviroment* env);
+    <85>void il_factor_binary_op_generate(il_factor_binary_op* self, struct enviroment* env);
+    <84>bool il_factor_binary_op_int_int(il_factor_binary_op* self, struct enviroment* env);
+    <83>char* il_factor_binary_op_tostr(il_factor_binary_op* self, struct enviroment* env);
+    <81>void il_factor_binary_op_load(il_factor_binary_op* self, struct enviroment* env);
+/Users/koya/Work/VSCode/beacon/beacon/src/beacon/il/factor/il_factor_binary_op_impl.h
+    <90>generic_type* il_factor_binary_op_eval(il_factor_binary_op* self, struct enviroment* env);
+    <90>char* il_factor_binary_op_tostr_simple(il_factor_binary_op* self, struct enviroment* env);
+    <90>bool il_factor_binary_op_double_double(il_factor_binary_op* self, struct enviroment* env);
+    <85>void il_factor_binary_op_generate(il_factor_binary_op* self, struct enviroment* env);
+    <84>bool il_factor_binary_op_int_int(il_factor_binary_op* self, struct enviroment* env);
+    <83>char* il_factor_binary_op_tostr(il_factor_binary_op* self, struct enviroment* env);
+    <81>void il_factor_binary_op_load(il_factor_binary_op* self, struct enviroment* env);
+/Users/koya/Work/VSCode/beacon/beacon/src/beacon/il/factor/il_factor_double_impl.h
+    <84>generic_type* il_factor_double_eval(il_factor_double* self, struct enviroment* env);
+/Users/koya/Work/VSCode/beacon/beacon/src/beacon/il/factor/il_factor_cast_impl.h
+    <80>generic_type* il_factor_cast_eval(il_factor_cast* self, struct enviroment* env);
+/Users/koya/Work/VSCode/beacon/beacon/src/beacon/il/factor/variable/il_factor_variable_local_impl.h
+    <109>struct generic_type* il_factor_variable_local_eval(il_factor_variable_local * self, struct enviroment * env);
+    <95>void il_factor_variable_local_generate(il_factor_variable_local* self, struct enviroment* env);
+    <95>char* il_factor_variable_local_tostr(il_factor_variable_local * self, struct enviroment * env);
+    <93>void il_factor_variable_local_load(il_factor_variable_local * self, struct enviroment * env);
+/Users/koya/Work/VSCode/beacon/beacon/src/beacon/il/factor/variable/il_factor_variable_local_impl.h
+    <109>struct generic_type* il_factor_variable_local_eval(il_factor_variable_local * self, struct enviroment * env);
+    <95>void il_factor_variable_local_generate(il_factor_variable_local* self, struct enviroment* env);
+    <95>char* il_factor_variable_local_tostr(il_factor_variable_local * self, struct enviroment * env);
+    <93>void il_factor_variable_local_load(il_factor_variable_local * self, struct enviroment * env);
+/Users/koya/Work/VSCode/beacon/beacon/src/beacon/il/factor/variable/il_factor_variable_local_impl.h
+    <109>struct generic_type* il_factor_variable_local_eval(il_factor_variable_local * self, struct enviroment * env);
+    <95>void il_factor_variable_local_generate(il_factor_variable_local* self, struct enviroment* env);
+    <95>char* il_factor_variable_local_tostr(il_factor_variable_local * self, struct enviroment * env);
+    <93>void il_factor_variable_local_load(il_factor_variable_local * self, struct enviroment * env);
+/Users/koya/Work/VSCode/beacon/beacon/src/beacon/il/factor/variable/il_factor_variable_local_impl.h
+    <109>struct generic_type* il_factor_variable_local_eval(il_factor_variable_local * self, struct enviroment * env);
+    <95>void il_factor_variable_local_generate(il_factor_variable_local* self, struct enviroment* env);
+    <95>char* il_factor_variable_local_tostr(il_factor_variable_local * self, struct enviroment * env);
+    <93>void il_factor_variable_local_load(il_factor_variable_local * self, struct enviroment * env);
+/Users/koya/Work/VSCode/beacon/beacon/src/beacon/il/factor/variable/il_factor_variable_static_impl.h
+    <111>struct generic_type* il_factor_variable_static_eval(il_factor_variable_static * self, struct enviroment * env);
+    <97>void il_factor_variable_static_generate(il_factor_variable_static* self, struct enviroment* env);
+    <97>char* il_factor_variable_static_tostr(il_factor_variable_static * self, struct enviroment * env);
+    <95>void il_factor_variable_static_load(il_factor_variable_static * self, struct enviroment * env);
+/Users/koya/Work/VSCode/beacon/beacon/src/beacon/il/factor/variable/il_factor_variable_static_impl.h
+    <111>struct generic_type* il_factor_variable_static_eval(il_factor_variable_static * self, struct enviroment * env);
+    <97>void il_factor_variable_static_generate(il_factor_variable_static* self, struct enviroment* env);
+    <97>char* il_factor_variable_static_tostr(il_factor_variable_static * self, struct enviroment * env);
+    <95>void il_factor_variable_static_load(il_factor_variable_static * self, struct enviroment * env);
+/Users/koya/Work/VSCode/beacon/beacon/src/beacon/il/factor/variable/il_factor_variable_static_impl.h
+    <111>struct generic_type* il_factor_variable_static_eval(il_factor_variable_static * self, struct enviroment * env);
+    <97>void il_factor_variable_static_generate(il_factor_variable_static* self, struct enviroment* env);
+    <97>char* il_factor_variable_static_tostr(il_factor_variable_static * self, struct enviroment * env);
+    <95>void il_factor_variable_static_load(il_factor_variable_static * self, struct enviroment * env);
+/Users/koya/Work/VSCode/beacon/beacon/src/beacon/il/factor/variable/il_factor_variable_static_impl.h
+    <111>struct generic_type* il_factor_variable_static_eval(il_factor_variable_static * self, struct enviroment * env);
+    <97>void il_factor_variable_static_generate(il_factor_variable_static* self, struct enviroment* env);
+    <97>char* il_factor_variable_static_tostr(il_factor_variable_static * self, struct enviroment * env);
+    <95>void il_factor_variable_static_load(il_factor_variable_static * self, struct enviroment * env);
+/Users/koya/Work/VSCode/beacon/beacon/src/beacon/il/factor/invoke/il_factor_invoke_bound_impl.h
+    <105>struct generic_type* il_factor_invoke_bound_eval(il_factor_invoke_bound * self, struct enviroment * env);
+    <91>void il_factor_invoke_bound_generate(il_factor_invoke_bound* self, struct enviroment* env);
+    <89>void il_factor_invoke_bound_load(il_factor_invoke_bound * self, struct enviroment * env);
+    <89>char* il_factor_invoke_bound_tostr(il_factor_invoke_bound* self, struct enviroment* env);
+/Users/koya/Work/VSCode/beacon/beacon/src/beacon/il/factor/invoke/il_factor_invoke_bound_impl.h
+    <105>struct generic_type* il_factor_invoke_bound_eval(il_factor_invoke_bound * self, struct enviroment * env);
+    <91>void il_factor_invoke_bound_generate(il_factor_invoke_bound* self, struct enviroment* env);
+    <89>void il_factor_invoke_bound_load(il_factor_invoke_bound * self, struct enviroment * env);
+    <89>char* il_factor_invoke_bound_tostr(il_factor_invoke_bound* self, struct enviroment* env);
+/Users/koya/Work/VSCode/beacon/beacon/src/beacon/il/factor/invoke/il_factor_invoke_bound_impl.h
+    <105>struct generic_type* il_factor_invoke_bound_eval(il_factor_invoke_bound * self, struct enviroment * env);
+    <91>void il_factor_invoke_bound_generate(il_factor_invoke_bound* self, struct enviroment* env);
+    <89>void il_factor_invoke_bound_load(il_factor_invoke_bound * self, struct enviroment * env);
+    <89>char* il_factor_invoke_bound_tostr(il_factor_invoke_bound* self, struct enviroment* env);
+/Users/koya/Work/VSCode/beacon/beacon/src/beacon/il/factor/invoke/il_factor_invoke_bound_impl.h
+    <105>struct generic_type* il_factor_invoke_bound_eval(il_factor_invoke_bound * self, struct enviroment * env);
+    <91>void il_factor_invoke_bound_generate(il_factor_invoke_bound* self, struct enviroment* env);
+    <89>void il_factor_invoke_bound_load(il_factor_invoke_bound * self, struct enviroment * env);
+    <89>char* il_factor_invoke_bound_tostr(il_factor_invoke_bound* self, struct enviroment* env);
+/Users/koya/Work/VSCode/beacon/beacon/src/beacon/il/factor/invoke/il_factor_invoke_impl.h
+    <93>struct generic_type* il_factor_invoke_eval(il_factor_invoke * self, struct enviroment * env);
+/Users/koya/Work/VSCode/beacon/beacon/src/beacon/il/factor/invoke/il_factor_invoke_static_impl.h
+    <107>struct generic_type* il_factor_invoke_static_eval(il_factor_invoke_static * self, struct enviroment * env);
+    <93>void il_factor_invoke_static_generate(il_factor_invoke_static* self, struct enviroment* env);
+    <91>void il_factor_invoke_static_load(il_factor_invoke_static * self, struct enviroment * env);
+    <91>char* il_factor_invoke_static_tostr(il_factor_invoke_static* self, struct enviroment* env);
+/Users/koya/Work/VSCode/beacon/beacon/src/beacon/il/factor/invoke/il_factor_invoke_static_impl.h
+    <107>struct generic_type* il_factor_invoke_static_eval(il_factor_invoke_static * self, struct enviroment * env);
+    <93>void il_factor_invoke_static_generate(il_factor_invoke_static* self, struct enviroment* env);
+    <91>void il_factor_invoke_static_load(il_factor_invoke_static * self, struct enviroment * env);
+    <91>char* il_factor_invoke_static_tostr(il_factor_invoke_static* self, struct enviroment* env);
+/Users/koya/Work/VSCode/beacon/beacon/src/beacon/il/factor/invoke/il_factor_invoke_static_impl.h
+    <107>struct generic_type* il_factor_invoke_static_eval(il_factor_invoke_static * self, struct enviroment * env);
+    <93>void il_factor_invoke_static_generate(il_factor_invoke_static* self, struct enviroment* env);
+    <91>void il_factor_invoke_static_load(il_factor_invoke_static * self, struct enviroment * env);
+    <91>char* il_factor_invoke_static_tostr(il_factor_invoke_static* self, struct enviroment* env);
+/Users/koya/Work/VSCode/beacon/beacon/src/beacon/il/factor/invoke/il_factor_invoke_static_impl.h
+    <107>struct generic_type* il_factor_invoke_static_eval(il_factor_invoke_static * self, struct enviroment * env);
+    <93>void il_factor_invoke_static_generate(il_factor_invoke_static* self, struct enviroment* env);
+    <91>void il_factor_invoke_static_load(il_factor_invoke_static * self, struct enviroment * env);
+    <91>char* il_factor_invoke_static_tostr(il_factor_invoke_static* self, struct enviroment* env);
+/Users/koya/Work/VSCode/beacon/beacon/src/beacon/il/factor/il_factor_variable_impl.h
+    <88>generic_type* il_factor_variable_eval(il_factor_variable* self, struct enviroment* env);
+    <83>void il_factor_variable_generate(il_factor_variable* self, struct enviroment* env);
+    <81>char* il_factor_variable_tostr(il_factor_variable* self, struct enviroment* env);
+/Users/koya/Work/VSCode/beacon/beacon/src/beacon/il/factor/il_factor_variable_impl.h
+    <88>generic_type* il_factor_variable_eval(il_factor_variable* self, struct enviroment* env);
+    <83>void il_factor_variable_generate(il_factor_variable* self, struct enviroment* env);
+    <81>char* il_factor_variable_tostr(il_factor_variable* self, struct enviroment* env);
+/Users/koya/Work/VSCode/beacon/beacon/src/beacon/il/factor/il_factor_variable_impl.h
+    <88>generic_type* il_factor_variable_eval(il_factor_variable* self, struct enviroment* env);
+    <83>void il_factor_variable_generate(il_factor_variable* self, struct enviroment* env);
+    <81>char* il_factor_variable_tostr(il_factor_variable* self, struct enviroment* env);
+/Users/koya/Work/VSCode/beacon/beacon/src/beacon/il/factor/il_factor_char_impl.h
+    <80>generic_type* il_factor_char_eval(il_factor_char* self, struct enviroment* env);
+/Users/koya/Work/VSCode/beacon/beacon/src/beacon/il/factor/il_factor_this_impl.h
+    <80>generic_type* il_factor_this_eval(il_factor_this* self, struct enviroment* env);
+/Users/koya/Work/VSCode/beacon/beacon/src/beacon/il/factor/il_factor_string_impl.h
+    <84>generic_type* il_factor_string_eval(il_factor_string* self, struct enviroment* env);
+/Users/koya/Work/VSCode/beacon/beacon/src/beacon/il/factor/il_factor_new_instance_impl.h
+    <96>generic_type* il_factor_new_instance_eval(il_factor_new_instance* self, struct enviroment* env);
+    <91>void il_factor_new_instance_generate(il_factor_new_instance* self, struct enviroment* env);
+    <89>char* il_factor_new_instance_tostr(il_factor_new_instance* self, struct enviroment* env);
+    <87>void il_factor_new_instance_load(il_factor_new_instance* self, struct enviroment* env);
+/Users/koya/Work/VSCode/beacon/beacon/src/beacon/il/factor/il_factor_new_instance_impl.h
+    <96>generic_type* il_factor_new_instance_eval(il_factor_new_instance* self, struct enviroment* env);
+    <91>void il_factor_new_instance_generate(il_factor_new_instance* self, struct enviroment* env);
+    <89>char* il_factor_new_instance_tostr(il_factor_new_instance* self, struct enviroment* env);
+    <87>void il_factor_new_instance_load(il_factor_new_instance* self, struct enviroment* env);
+/Users/koya/Work/VSCode/beacon/beacon/src/beacon/il/factor/il_factor_new_instance_impl.h
+    <96>generic_type* il_factor_new_instance_eval(il_factor_new_instance* self, struct enviroment* env);
+    <91>void il_factor_new_instance_generate(il_factor_new_instance* self, struct enviroment* env);
+    <89>char* il_factor_new_instance_tostr(il_factor_new_instance* self, struct enviroment* env);
+    <87>void il_factor_new_instance_load(il_factor_new_instance* self, struct enviroment* env);
+/Users/koya/Work/VSCode/beacon/beacon/src/beacon/il/factor/il_factor_new_instance_impl.h
+    <96>generic_type* il_factor_new_instance_eval(il_factor_new_instance* self, struct enviroment* env);
+    <91>void il_factor_new_instance_generate(il_factor_new_instance* self, struct enviroment* env);
+    <89>char* il_factor_new_instance_tostr(il_factor_new_instance* self, struct enviroment* env);
+    <87>void il_factor_new_instance_load(il_factor_new_instance* self, struct enviroment* env);
+/Users/koya/Work/VSCode/beacon/beacon/src/beacon/il/factor/il_factor_member_op_impl.h
+    <90>generic_type* il_factor_member_op_eval(il_factor_member_op* self, struct enviroment* env);
+    <85>void il_factor_member_op_generate(il_factor_member_op* self, struct enviroment* env);
+    <83>char* il_factor_member_op_tostr(il_factor_member_op* self, struct enviroment* env);
+    <81>void il_factor_member_op_load(il_factor_member_op* self, struct enviroment* env);
+/Users/koya/Work/VSCode/beacon/beacon/src/beacon/il/factor/il_factor_member_op_impl.h
+    <90>generic_type* il_factor_member_op_eval(il_factor_member_op* self, struct enviroment* env);
+    <85>void il_factor_member_op_generate(il_factor_member_op* self, struct enviroment* env);
+    <83>char* il_factor_member_op_tostr(il_factor_member_op* self, struct enviroment* env);
+    <81>void il_factor_member_op_load(il_factor_member_op* self, struct enviroment* env);
+/Users/koya/Work/VSCode/beacon/beacon/src/beacon/il/factor/il_factor_member_op_impl.h
+    <90>generic_type* il_factor_member_op_eval(il_factor_member_op* self, struct enviroment* env);
+    <85>void il_factor_member_op_generate(il_factor_member_op* self, struct enviroment* env);
+    <83>char* il_factor_member_op_tostr(il_factor_member_op* self, struct enviroment* env);
+    <81>void il_factor_member_op_load(il_factor_member_op* self, struct enviroment* env);
+/Users/koya/Work/VSCode/beacon/beacon/src/beacon/il/factor/il_factor_member_op_impl.h
+    <90>generic_type* il_factor_member_op_eval(il_factor_member_op* self, struct enviroment* env);
+    <85>void il_factor_member_op_generate(il_factor_member_op* self, struct enviroment* env);
+    <83>char* il_factor_member_op_tostr(il_factor_member_op* self, struct enviroment* env);
+    <81>void il_factor_member_op_load(il_factor_member_op* self, struct enviroment* env);
+/Users/koya/Work/VSCode/beacon/beacon/src/beacon/il/factor/il_factor_bool_impl.h
+    <80>generic_type* il_factor_bool_eval(il_factor_bool* self, struct enviroment* env);
+/Users/koya/Work/VSCode/beacon/beacon/src/beacon/il/factor/binary/il_factor_logic_op_impl.h
+    <95>struct generic_type* il_factor_logic_op_eval(il_factor_logic_op* self, struct enviroment* env);
+    <83>void il_factor_logic_op_generate(il_factor_logic_op* self, struct enviroment* env);
+    <81>char* il_factor_logic_op_tostr(il_factor_logic_op* self, struct enviroment* env);
+/Users/koya/Work/VSCode/beacon/beacon/src/beacon/il/factor/binary/il_factor_logic_op_impl.h
+    <95>struct generic_type* il_factor_logic_op_eval(il_factor_logic_op* self, struct enviroment* env);
+    <83>void il_factor_logic_op_generate(il_factor_logic_op* self, struct enviroment* env);
+    <81>char* il_factor_logic_op_tostr(il_factor_logic_op* self, struct enviroment* env);
+/Users/koya/Work/VSCode/beacon/beacon/src/beacon/il/factor/binary/il_factor_logic_op_impl.h
+    <95>struct generic_type* il_factor_logic_op_eval(il_factor_logic_op* self, struct enviroment* env);
+    <83>void il_factor_logic_op_generate(il_factor_logic_op* self, struct enviroment* env);
+    <81>char* il_factor_logic_op_tostr(il_factor_logic_op* self, struct enviroment* env);
+/Users/koya/Work/VSCode/beacon/beacon/src/beacon/il/factor/binary/il_factor_arithmetic_op_impl.h
+    <107>struct generic_type* il_factor_arithmetic_op_eval(il_factor_arithmetic_op * self, struct enviroment * env);
+    <93>void il_factor_arithmetic_op_generate(il_factor_arithmetic_op* self, struct enviroment* env);
+    <91>char* il_factor_arithmetic_op_tostr(il_factor_arithmetic_op* self, struct enviroment* env);
+    <89>void il_factor_arithmetic_op_load(il_factor_arithmetic_op* self, struct enviroment* env);
+/Users/koya/Work/VSCode/beacon/beacon/src/beacon/il/factor/binary/il_factor_arithmetic_op_impl.h
+    <107>struct generic_type* il_factor_arithmetic_op_eval(il_factor_arithmetic_op * self, struct enviroment * env);
+    <93>void il_factor_arithmetic_op_generate(il_factor_arithmetic_op* self, struct enviroment* env);
+    <91>char* il_factor_arithmetic_op_tostr(il_factor_arithmetic_op* self, struct enviroment* env);
+    <89>void il_factor_arithmetic_op_load(il_factor_arithmetic_op* self, struct enviroment* env);
+/Users/koya/Work/VSCode/beacon/beacon/src/beacon/il/factor/binary/il_factor_arithmetic_op_impl.h
+    <107>struct generic_type* il_factor_arithmetic_op_eval(il_factor_arithmetic_op * self, struct enviroment * env);
+    <93>void il_factor_arithmetic_op_generate(il_factor_arithmetic_op* self, struct enviroment* env);
+    <91>char* il_factor_arithmetic_op_tostr(il_factor_arithmetic_op* self, struct enviroment* env);
+    <89>void il_factor_arithmetic_op_load(il_factor_arithmetic_op* self, struct enviroment* env);
+/Users/koya/Work/VSCode/beacon/beacon/src/beacon/il/factor/binary/il_factor_arithmetic_op_impl.h
+    <107>struct generic_type* il_factor_arithmetic_op_eval(il_factor_arithmetic_op * self, struct enviroment * env);
+    <93>void il_factor_arithmetic_op_generate(il_factor_arithmetic_op* self, struct enviroment* env);
+    <91>char* il_factor_arithmetic_op_tostr(il_factor_arithmetic_op* self, struct enviroment* env);
+    <89>void il_factor_arithmetic_op_load(il_factor_arithmetic_op* self, struct enviroment* env);
+/Users/koya/Work/VSCode/beacon/beacon/src/beacon/il/factor/binary/il_factor_compare_op_impl.h
+    <101>struct generic_type* il_factor_compare_op_eval(il_factor_compare_op * self, struct enviroment * env);
+    <87>void il_factor_compare_op_generate(il_factor_compare_op* self, struct enviroment* env);
+    <85>char* il_factor_compare_op_tostr(il_factor_compare_op* self, struct enviroment* env);
+    <83>void il_factor_compare_op_load(il_factor_compare_op* self, struct enviroment* env);
+/Users/koya/Work/VSCode/beacon/beacon/src/beacon/il/factor/binary/il_factor_compare_op_impl.h
+    <101>struct generic_type* il_factor_compare_op_eval(il_factor_compare_op * self, struct enviroment * env);
+    <87>void il_factor_compare_op_generate(il_factor_compare_op* self, struct enviroment* env);
+    <85>char* il_factor_compare_op_tostr(il_factor_compare_op* self, struct enviroment* env);
+    <83>void il_factor_compare_op_load(il_factor_compare_op* self, struct enviroment* env);
+/Users/koya/Work/VSCode/beacon/beacon/src/beacon/il/factor/binary/il_factor_compare_op_impl.h
+    <101>struct generic_type* il_factor_compare_op_eval(il_factor_compare_op * self, struct enviroment * env);
+    <87>void il_factor_compare_op_generate(il_factor_compare_op* self, struct enviroment* env);
+    <85>char* il_factor_compare_op_tostr(il_factor_compare_op* self, struct enviroment* env);
+    <83>void il_factor_compare_op_load(il_factor_compare_op* self, struct enviroment* env);
+/Users/koya/Work/VSCode/beacon/beacon/src/beacon/il/factor/binary/il_factor_compare_op_impl.h
+    <101>struct generic_type* il_factor_compare_op_eval(il_factor_compare_op * self, struct enviroment * env);
+    <87>void il_factor_compare_op_generate(il_factor_compare_op* self, struct enviroment* env);
+    <85>char* il_factor_compare_op_tostr(il_factor_compare_op* self, struct enviroment* env);
+    <83>void il_factor_compare_op_load(il_factor_compare_op* self, struct enviroment* env);
+/Users/koya/Work/VSCode/beacon/beacon/src/beacon/il/factor/binary/il_factor_shift_op_impl.h
+    <97>struct generic_type* il_factor_shift_op_eval(il_factor_shift_op * self, struct enviroment * env);
+    <83>void il_factor_shift_op_generate(il_factor_shift_op* self, struct enviroment* env);
+    <81>char* il_factor_shift_op_tostr(il_factor_shift_op* self, struct enviroment* env);
+/Users/koya/Work/VSCode/beacon/beacon/src/beacon/il/factor/binary/il_factor_shift_op_impl.h
+    <97>struct generic_type* il_factor_shift_op_eval(il_factor_shift_op * self, struct enviroment * env);
+    <83>void il_factor_shift_op_generate(il_factor_shift_op* self, struct enviroment* env);
+    <81>char* il_factor_shift_op_tostr(il_factor_shift_op* self, struct enviroment* env);
+/Users/koya/Work/VSCode/beacon/beacon/src/beacon/il/factor/binary/il_factor_shift_op_impl.h
+    <97>struct generic_type* il_factor_shift_op_eval(il_factor_shift_op * self, struct enviroment * env);
+    <83>void il_factor_shift_op_generate(il_factor_shift_op* self, struct enviroment* env);
+    <81>char* il_factor_shift_op_tostr(il_factor_shift_op* self, struct enviroment* env);
+/Users/koya/Work/VSCode/beacon/beacon/src/beacon/il/factor/il_factor_instanceof_impl.h
+    <92>struct generic_type* il_factor_instanceof_eval(il_factor_instanceof* self, enviroment* env);
+    <80>void il_factor_instanceof_generate(il_factor_instanceof* self, enviroment* env);
+/Users/koya/Work/VSCode/beacon/beacon/src/beacon/il/factor/il_factor_instanceof_impl.h
+    <92>struct generic_type* il_factor_instanceof_eval(il_factor_instanceof* self, enviroment* env);
+    <80>void il_factor_instanceof_generate(il_factor_instanceof* self, enviroment* env);
+/Users/koya/Work/VSCode/beacon/beacon/src/beacon/il/factor/il_factor_super_impl.h
+    <82>generic_type* il_factor_super_eval(il_factor_super* self, struct enviroment* env);
+/Users/koya/Work/VSCode/beacon/beacon/src/beacon/il/factor/il_factor_assign_op_impl.h
+    <90>struct generic_type* il_factor_assign_op_eval(il_factor_assign_op* self, enviroment* env);
+/Users/koya/Work/VSCode/beacon/beacon/src/beacon/il/factor/il_factor_unary_op_impl.h
+    <88>generic_type* il_factor_unary_op_eval(il_factor_unary_op* self, struct enviroment* env);
+    <83>void il_factor_unary_op_generate(il_factor_unary_op* self, struct enviroment* env);
+    <81>char* il_factor_unary_op_tostr(il_factor_unary_op* self, struct enviroment* env);
+/Users/koya/Work/VSCode/beacon/beacon/src/beacon/il/factor/il_factor_unary_op_impl.h
+    <88>generic_type* il_factor_unary_op_eval(il_factor_unary_op* self, struct enviroment* env);
+    <83>void il_factor_unary_op_generate(il_factor_unary_op* self, struct enviroment* env);
+    <81>char* il_factor_unary_op_tostr(il_factor_unary_op* self, struct enviroment* env);
+/Users/koya/Work/VSCode/beacon/beacon/src/beacon/il/factor/il_factor_unary_op_impl.h
+    <88>generic_type* il_factor_unary_op_eval(il_factor_unary_op* self, struct enviroment* env);
+    <83>void il_factor_unary_op_generate(il_factor_unary_op* self, struct enviroment* env);
+    <81>char* il_factor_unary_op_tostr(il_factor_unary_op* self, struct enviroment* env);
+/Users/koya/Work/VSCode/beacon/beacon/src/beacon/il/il_factor_interface.h
+    <93>void il_factor_type_args_tostr(string_buffer* sb, vector* type_args, struct enviroment* env);
+    <83>void il_factor_args_tostr(string_buffer* sb, vector* args, struct enviroment* env);
+/Users/koya/Work/VSCode/beacon/beacon/src/beacon/il/il_factor_interface.h
+    <93>void il_factor_type_args_tostr(string_buffer* sb, vector* type_args, struct enviroment* env);
+    <83>void il_factor_args_tostr(string_buffer* sb, vector* args, struct enviroment* env);

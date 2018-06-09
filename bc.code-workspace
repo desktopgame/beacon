@@ -4,6 +4,7 @@
 			"path": "."
 		}
 	],
+	
 	"settings": {
 		"files.associations": {
 			"parameter.h": "c",
@@ -60,6 +61,15 @@
 			"strstream": "c",
 			"assert.h": "c",
 			"bitset": "c"
-		}
+		},
+		"ruby.lint": {
+			"reek": true,
+			"rubocop": true,
+			"ruby": false, //Runs ruby -wc
+			"fasterer": true,
+			"debride": true,
+			"ruby-lint": true
+		},
+		"editor.rulers": [80]
 	}
 }
