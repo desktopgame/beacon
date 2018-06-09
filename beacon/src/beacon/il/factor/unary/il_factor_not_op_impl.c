@@ -13,6 +13,7 @@ il_factor_not_op* il_factor_not_op_new(operator_type type) {
 	il_factor_not_op* ret = (il_factor_not_op*)MEM_MALLOC(sizeof(il_factor_not_op));
 	ret->parent = NULL;
 	ret->type = type;
+	ret->operator_index = -1;
 	return ret;
 }
 
@@ -27,12 +28,18 @@ generic_type* il_factor_not_op_eval(il_factor_not_op * self, enviroment * env) {
 }
 
 void il_factor_not_op_generate(il_factor_not_op* self, enviroment* env) {
-	il_factor_generate(self->parent->a, env);
-	generic_type* gt = il_factor_eval(self->parent->a, env);
-	if(GENERIC2TYPE(gt) == TYPE_BOOL) {
-		opcode_buf_add(env->buf, op_bnot);
+	if(self->operator_index == -1) {
+		il_factor_generate(self->parent->a, env);
+		generic_type* gt = il_factor_eval(self->parent->a, env);
+		if(GENERIC2TYPE(gt) == TYPE_BOOL) {
+			opcode_buf_add(env->buf, op_bnot);
+		} else {
+			assert(false);
+		}
 	} else {
-		assert(false);
+		il_factor_generate(self->parent->a, env);
+		opcode_buf_add(env->buf, op_invokeoperator);
+		opcode_buf_add(env->buf, self->operator_index);
 	}
 }
 
