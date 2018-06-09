@@ -10,7 +10,7 @@ class LineData
 	end
 end
 Dir.glob(File.expand_path('./../src/**/*')) do | filename |
-	if(!filename.end_with?(".h")) then
+	if(!filename.end_with?(".c")) then
 		next
 	end
 	File.open(filename) do | file |
