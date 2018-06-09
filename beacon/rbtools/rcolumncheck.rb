@@ -13,12 +13,18 @@ Dir.glob(File.expand_path('./../src/**/*')) do | filename |
 	if(!filename.end_with?(".c")) then
 		next
 	end
+	if(filename.end_with?("beacon.tab.c") ||
+	   filename.end_with?("lex.yy.c")) then
+		next
+	end
 	File.open(filename) do | file |
 		content = file.read()
 		content.lines {|line|
 			line = line.lstrip().rstrip()
 			if(line.length() >= 80) then
-				file_list << filename
+				if(!file_list.include?(filename)) then
+					file_list << filename
+				end
 				if(!line_dict.has_key?(filename)) then
 					line_dict[filename] = []
 				end
