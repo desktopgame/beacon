@@ -449,6 +449,74 @@ operator_define
 	{
 		$$ = ast_new_operator_overload(operator_mod, $4, $8, $7);
 	}
+	//> >= < <=
+	| OPERATOR GT LRB parameter_list RRB ARROW typename_T scope_optional
+	{
+		$$ = ast_new_operator_overload(operator_gt, $4, $8, $7);
+	}
+	| OPERATOR GE LRB parameter_list RRB ARROW typename_T scope_optional
+	{
+		$$ = ast_new_operator_overload(operator_ge, $4, $8, $7);
+	}
+	| OPERATOR LT LRB parameter_list RRB ARROW typename_T scope_optional
+	{
+		$$ = ast_new_operator_overload(operator_lt, $4, $8, $7);
+	}
+	| OPERATOR LE LRB parameter_list RRB ARROW typename_T scope_optional
+	{
+		$$ = ast_new_operator_overload(operator_le, $4, $8, $7);
+	}
+	//== !=
+	| OPERATOR EQUAL LRB parameter_list RRB ARROW typename_T scope_optional
+	{
+		$$ = ast_new_operator_overload(operator_eq, $4, $8, $7);
+	}
+	| OPERATOR NOTEQUAL LRB parameter_list RRB ARROW typename_T scope_optional
+	{
+		$$ = ast_new_operator_overload(operator_noteq, $4, $8, $7);
+	}
+	//| &
+	| OPERATOR BIT_OR LRB parameter_list RRB ARROW typename_T scope_optional
+	{
+		$$ = ast_new_operator_overload(operator_bit_or, $4, $8, $7);
+	}
+	| OPERATOR BIT_AND LRB parameter_list RRB ARROW typename_T scope_optional
+	{
+		$$ = ast_new_operator_overload(operator_bit_and, $4, $8, $7);
+	}
+	//|| &&
+	| OPERATOR LOGIC_OR LRB parameter_list RRB ARROW typename_T scope_optional
+	{
+		$$ = ast_new_operator_overload(operator_logic_or, $4, $8, $7);
+	}
+	| OPERATOR LOGIC_AND LRB parameter_list RRB ARROW typename_T scope_optional
+	{
+		$$ = ast_new_operator_overload(operator_logic_and, $4, $8, $7);
+	}
+	//<< >>
+	| OPERATOR LSHIFT LRB parameter_list RRB ARROW typename_T scope_optional
+	{
+		$$ = ast_new_operator_overload(operator_lshift, $4, $8, $7);
+	}
+	| OPERATOR RSHIFT LRB parameter_list RRB ARROW typename_T scope_optional
+	{
+		$$ = ast_new_operator_overload(operator_rshift, $4, $8, $7);
+	}
+	//^
+	| OPERATOR EXC_OR LRB parameter_list RRB ARROW typename_T scope_optional
+	{
+		$$ = ast_new_operator_overload(operator_excor, $4, $8, $7);
+	}
+	//!
+	| OPERATOR NOT LRB parameter_list RRB ARROW typename_T scope_optional
+	{
+		$$ = ast_new_operator_overload(operator_not, $4, $8, $7);
+	}
+	//~
+	| OPERATOR CHILDA LRB parameter_list RRB ARROW typename_T scope_optional
+	{
+		$$ = ast_new_operator_overload(operator_childa, $4, $8, $7);
+	}
 	;
 
 field_define
