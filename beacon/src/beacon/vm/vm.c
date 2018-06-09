@@ -223,14 +223,26 @@ static void vm_run(frame * self, enviroment * env, int pos, int deferStart) {
 				vector_push(self->value_stack, object_int_new(SPI(self) | SPI(self)));
 				break;
 			case op_ilogic_or:
-				vector_push(self->value_stack, object_int_new(SPI(self) || SPI(self)));
+			{
+				//SPI(self) をそのまま埋めると正常に動作しない
+				//おそらくマクロの展開によるもの
+				int a = SPI(self);
+				int b = SPI(self);
+				vector_push(self->value_stack, object_int_new(a || b));
 				break;
+			}
 			case op_ibit_and:
 				vector_push(self->value_stack, object_int_new(SPI(self) & SPI(self)));
 				break;
 			case op_ilogic_and:
-				vector_push(self->value_stack, object_int_new(SPI(self) && SPI(self)));
+			{
+				//SPI(self) をそのまま埋めると正常に動作しない
+				//おそらくマクロの展開によるもの
+				int a = SPI(self);
+				int b = SPI(self);
+				vector_push(self->value_stack, object_int_new(a && b));
 				break;
+			}
 			case op_ieq:
 				vector_push(self->value_stack, object_bool_get(SPI(self) == SPI(self)));
 				break;
