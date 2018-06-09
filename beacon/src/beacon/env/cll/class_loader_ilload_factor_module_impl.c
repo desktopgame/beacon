@@ -10,7 +10,7 @@ static il_factor* CLIL_factorImpl(class_loader* self, ast* source);
 static il_factor_bool* CLIL_true(class_loader* self, ast* source);
 static il_factor_bool* CLIL_false(class_loader* self, ast* source);
 static il_factor_cast* CLIL_cast(class_loader* self, ast* source);
-static il_factor_unary_op* CLIL_unary(class_loader* self, ast* source, ilunary_op_type type);
+static il_factor_unary_op* CLIL_unary(class_loader* self, ast* source, operator_type type);
 static il_factor_binary_op* CLIL_binary(class_loader* self, ast* source, operator_type type);
 static il_factor_assign_op* CLIL_assign(class_loader* self, ast* source);
 static il_factor_assign_op* CLIL_assign_arithmetic(class_loader* self, ast* source, operator_type type);
@@ -111,9 +111,9 @@ static il_factor* CLIL_factorImpl(class_loader* self, ast* source) {
 		return il_factor_wrap_assign(CLIL_assign_arithmetic(self, source, operator_rshift));
 	//!-
 	} else if (source->tag == ast_not) {
-		return il_factor_wrap_unary(CLIL_unary(self, source, ilunary_not));
+		return il_factor_wrap_unary(CLIL_unary(self, source, operator_not));
 	} else if (source->tag == ast_neg) {
-		return il_factor_wrap_unary(CLIL_unary(self, source, ilunary_neg));
+		return il_factor_wrap_unary(CLIL_unary(self, source, operator_negative));
 		//this super
 	} else if (source->tag == ast_this) {
 		il_factor* ret = (il_factor*)MEM_MALLOC(sizeof(il_factor));
@@ -173,7 +173,7 @@ static il_factor_cast * CLIL_cast(class_loader * self, ast * source) {
 	return ret;
 }
 
-static il_factor_unary_op* CLIL_unary(class_loader* self, ast* source, ilunary_op_type type) {
+static il_factor_unary_op* CLIL_unary(class_loader* self, ast* source, operator_type type) {
 	il_factor_unary_op* ret = il_factor_unary_op_new(type);
 	ast* a = ast_first(source);
 	ret->a = CLIL_factor(self, a);

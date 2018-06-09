@@ -29,6 +29,10 @@ char* operator_tostring(operator_type self) {
 		case operator_lshift: return "<<";
 		case operator_rshift: return ">>";
 		case operator_excor: return "^";
+
+		case operator_not: return "!";
+		case operator_negative: return "-";
+		case operator_childa: return "~";
 	}
 }
 

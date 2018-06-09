@@ -7,7 +7,10 @@ typedef enum operator_category {
 	operator_carithmeric,
 	operator_clogic,
 	operator_ccompare,
-	operator_cshift
+	operator_cshift,
+	operator_cchilda,
+	operator_cnegative,
+	operator_cnot,
 } operator_category;
 
 typedef enum operator_type {
@@ -33,6 +36,10 @@ typedef enum operator_type {
 	operator_lshift,
 	operator_rshift,
 	operator_excor,
+
+	operator_childa,
+	operator_negative,
+	operator_not,
 } operator_type;
 
 void operator_fprintf(operator_type self, FILE* fp);

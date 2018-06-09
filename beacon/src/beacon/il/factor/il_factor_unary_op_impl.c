@@ -7,16 +7,9 @@
 #include "../../env/namespace.h"
 #include "../../env/type_impl.h"
 #include "../../util/mem.h"
-
-typedef enum u_operator_t {
-	u_not,
-	u_neg
-} u_operator_t;
-
-static char* u_tostr(il_factor_unary_op* self);
-static opcode u_operator_to_opi(u_operator_t c);
-static opcode u_operator_to_opd(u_operator_t c);
-static opcode u_operator_to_opb(u_operator_t c);
+#include "unary/il_factor_childa_op_impl.h"
+#include "unary/il_factor_negative_op_impl.h"
+#include "unary/il_factor_not_op_impl.h"
 
 il_factor * il_factor_wrap_unary(il_factor_unary_op * self) {
 	il_factor* ret = (il_factor*)MEM_MALLOC(sizeof(il_factor));
@@ -25,7 +18,7 @@ il_factor * il_factor_wrap_unary(il_factor_unary_op * self) {
 	return ret;
 }
 
-il_factor_unary_op * il_factor_unary_op_new(ilunary_op_type type) {
+il_factor_unary_op * il_factor_unary_op_new(operator_type type) {
 	il_factor_unary_op* ret = (il_factor_unary_op*)MEM_MALLOC(sizeof(il_factor_unary_op));
 	ret->type = type;
 	ret->a = NULL;
@@ -33,88 +26,115 @@ il_factor_unary_op * il_factor_unary_op_new(ilunary_op_type type) {
 }
 
 void il_factor_unary_op_dump(il_factor_unary_op * self, int depth) {
-	text_putindent(depth);
-	switch (self->type) {
-		case ilunary_not:
-			text_printf("!");
+	switch(self->type) {
+		case operator_not:
+			il_factor_not_op_dump(self->u.not_op, depth);
 			break;
-		case ilunary_neg:
-			text_printf("-");
+		case operator_childa:
+			il_factor_childa_op_dump(self->u.childa_op, depth);
 			break;
-		default:
+		case operator_negative:
+			il_factor_negative_op_dump(self->u.negative_op, depth);
 			break;
 	}
-	text_putline();
-	il_factor_dump(self->a, depth + 1);
 }
 
 void il_factor_unary_op_generate(il_factor_unary_op * self, enviroment* env) {
-	il_factor_generate(self->a, env);
-	generic_type* cls = il_factor_eval(self->a, env);
-	if (cls == GENERIC_INT) {
-		assert(self->type == ilunary_neg);
-		opcode_buf_add(env->buf, (vector_item)u_operator_to_opi(u_neg));
-	} else if (cls == GENERIC_DOUBLE) {
-		assert(self->type == ilunary_neg);
-		opcode_buf_add(env->buf, (vector_item)u_operator_to_opd(u_neg));
-	} else if (cls == GENERIC_BOOL) {
-		assert(self->type == ilunary_not);
-		opcode_buf_add(env->buf, (vector_item)u_operator_to_opb(u_not));
+	switch(self->type) {
+		case operator_not:
+			il_factor_not_op_generate(self->u.not_op, env);
+			break;
+		case operator_childa:
+			il_factor_childa_op_generate(self->u.childa_op, env);
+			break;
+		case operator_negative:
+			il_factor_negative_op_generate(self->u.negative_op, env);
+			break;
+	}
+}
+
+void il_factor_unary_op_load(il_factor_unary_op * self, enviroment * env) {
+	il_factor_load(self->a, env);
+	//カテゴリーわけ
+	if(self->type == operator_not) {
+		self->category = operator_cnot;
+		il_factor_not_op* not = il_factor_not_op_new(self->type);
+		not->parent = self;
+		self->u.not_op = not;
+		il_factor_not_op_load(not, env);
+	} else if(self->type == operator_negative) {
+		self->category = operator_negative;
+		il_factor_negative_op* neg = il_factor_negative_op_new(self->type);
+		neg->parent = self;
+		self->u.negative_op = neg;
+		il_factor_negative_op_load(neg, env);
+	} else if(self->type == operator_childa) {
+		self->category = operator_cchilda;
+		il_factor_childa_op* childa = il_factor_childa_op_new(self->type);
+		childa->parent = self;
+		self->u.childa_op = childa;
+		il_factor_childa_op_load(childa, env);
 	} else {
 		assert(false);
 	}
 }
 
-void il_factor_unary_op_load(il_factor_unary_op * self, enviroment * env) {
-}
-
 generic_type* il_factor_unary_op_eval(il_factor_unary_op * self, enviroment * env) {
-	if (self->type == ilunary_neg) {
-		return il_factor_eval(self->a, env);
-	} else if (self->type == ilunary_not) {
-		return GENERIC_BOOL;
+	generic_type* ret = NULL;
+	switch(self->type) {
+		case operator_not:
+			ret = il_factor_not_op_eval(self->u.not_op, env);
+			break;
+		case operator_childa:
+			ret = il_factor_childa_op_eval(self->u.childa_op, env);
+			break;
+		case operator_negative:
+			ret = il_factor_negative_op_eval(self->u.negative_op, env);
+			break;
 	}
-	return NULL;
+	return ret;
 }
 
 char* il_factor_unary_op_tostr(il_factor_unary_op* self, enviroment* env) {
-	string_buffer* sb = string_buffer_new();
-	char* fact = il_factor_tostr(self->a, env);
-	string_buffer_appends(sb, u_tostr(self));
-	string_buffer_appends(sb, fact);
-	return string_buffer_release(sb);
+	char* ret = NULL;
+	switch(self->type) {
+		case operator_not:
+			ret = il_factor_not_op_tostr(self->u.not_op, env);
+			break;
+		case operator_childa:
+			ret = il_factor_childa_op_tostr(self->u.childa_op, env);
+			break;
+		case operator_negative:
+			ret = il_factor_negative_op_tostr(self->u.negative_op, env);
+			break;
+	}
+	return ret;
 }
 
 void il_factor_unary_op_delete(il_factor_unary_op * self) {
 	il_factor_delete(self->a);
+	switch(self->type) {
+		case operator_not:
+			il_factor_not_op_delete(self->u.not_op);
+			break;
+		case operator_childa:
+			il_factor_childa_op_delete(self->u.childa_op);
+			break;
+		case operator_negative:
+			il_factor_negative_op_delete(self->u.negative_op);
+			break;
+	}
 	MEM_FREE(self);
+}
+
+char* il_factor_unary_op_tostr_simple(il_factor_unary_op* self, enviroment* env) {
+	string_buffer* sb = string_buffer_new();
+	string_buffer_appendf(sb, "%s", operator_tostring(self->type));
+	string_buffer_appends(sb, il_factor_tostr(self->a, env));
+	return string_buffer_release(sb);
 }
 
 il_factor_unary_op* il_factor_cast_unary_op(il_factor* fact) {
 	assert(fact->type == ilfactor_unary_op);
 	return fact->u.unary_;
-}
-
-//private
-static char* u_tostr(il_factor_unary_op* self) {
-	switch(self->type) {
-		case ilunary_not: return "!";
-		case ilunary_neg: return "-";
-		default: return "NULL";
-	}
-}
-
-static opcode u_operator_to_opi(u_operator_t c) {
-	assert(c == u_neg);
-	return op_ineg;
-}
-
-static opcode u_operator_to_opd(u_operator_t c) {
-	assert(c == u_neg);
-	return op_dneg;
-}
-
-static opcode u_operator_to_opb(u_operator_t c) {
-	assert(c == u_not);
-	return op_bnot;
 }
