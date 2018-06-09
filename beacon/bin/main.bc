@@ -1,2 +1,3 @@
 import "beacon/unsafe/File"
-var f = beacon::unsafe::File.open("FileName", "r");
+var f = beacon::unsafe::File.open("FileName.text", "w");
+defer f.close();
