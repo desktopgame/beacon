@@ -147,6 +147,7 @@ void script_context_bootstrap(script_context* self) {
 	bc_void_init();
 	bc_console_init();
 	bc_null_init();
+	bc_file_init();
 	//ブートストラップクラスローダー
 	self->bootstrap_class_loader = class_loader_new(content_lib);
 	self->bootstrap_class_loader->filename = text_strdup("bootstrap");
