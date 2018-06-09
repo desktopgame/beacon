@@ -122,6 +122,10 @@ namespace_ * namespace_lang() {
 	return namespace_get_namespace(namespace_beacon(), "lang");
 }
 
+namespace_* namespace_unsafe() {
+	return namespace_get_namespace(namespace_beacon(), "unsafe");
+}
+
 type * namespace_object_type() {
 	return bc_object_type();
 }

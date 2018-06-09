@@ -111,6 +111,13 @@ namespace_* namespace_beacon();
 namespace_* namespace_lang();
 
 /**
+ * beacon.unsafe 名前空間を返します.
+ * @param
+ * @return
+ */
+namespace_* namespace_unsafe();
+
+/**
  * 現在のスクリプトコンテキストで object タイプを返します.
  * @return
  */

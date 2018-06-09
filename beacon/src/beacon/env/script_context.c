@@ -135,6 +135,7 @@ void script_context_bootstrap(script_context* self) {
 	//プリロード
 	namespace_* beacon = namespace_create_at_root("beacon");
 	namespace_* lang = namespace_add_namespace(beacon, "lang");
+	namespace_* unsafe = namespace_add_namespace(beacon, "unsafe");
 	bc_object_init();
 	bc_array_init();
 	bc_exception_init();
