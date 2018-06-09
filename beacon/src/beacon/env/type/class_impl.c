@@ -18,6 +18,7 @@
 #include "../type_impl.h"
 #include "../../env/vtable.h"
 #include "../../env/heap.h"
+#include "../../env/operator_overload.h"
 #include "meta_impl.h"
 #include "../type_parameter.h"
 #include "../generic_type.h"
@@ -367,6 +368,44 @@ method * class_get_impl_method(class_ * self, type * interType, int interMIndex)
 	assert(declIndex != -1);
 	vtable* vtAt = vector_at(self->vt_vec, declIndex);
 	return vector_at(vtAt->elements, interMIndex);
+}
+
+operator_overload* class_find_operator_overload(class_* self, operator_type type, vector* args, enviroment* env, int* outIndex) {
+	(*outIndex) = -1;
+	operator_overload* ret = NULL;
+	for(int i=0; i<self->operator_overload_list->length; i++) {
+		operator_overload* operator_ov = vector_at(self->operator_overload_list, i);
+		if(operator_ov->type != type) {
+			continue;
+		}
+		bool nomatch = false;
+		int score = 1024;
+		int sum = 0;
+		vector* params = operator_ov->parameter_list;
+		for(int j=0; j<params->length; j++) {
+			parameter* param = vector_at(params, j);
+			generic_type* arg = vector_at(args, j);
+			int dist = generic_type_distance(param->gtype, arg);
+			if(dist == -1) {
+				nomatch = true;
+				break;
+			}
+			sum += dist;
+		}
+		if(nomatch) {
+			continue;
+		}
+		if(sum < score) {
+			score = sum;
+			(*outIndex) = i;
+			ret = operator_ov;
+		}
+	}
+	return ret;
+}
+
+operator_overload* class_get_operator_overload(class_* self, int index) {
+	return vector_at(self->operator_overload_list, index);
 }
 
 bool class_contains_method_tree(class_* self, method* m) {

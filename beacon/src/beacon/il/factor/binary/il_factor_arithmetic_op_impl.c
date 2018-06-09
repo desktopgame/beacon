@@ -3,10 +3,11 @@
 #include "../../../util/text.h"
 #include "../../../util/string_buffer.h"
 #include "../../../env/generic_type.h"
+#include "../../../env/operator_overload.h"
 #include "../../../vm/enviroment.h"
 #include "../../il_factor_impl.h"
 #include "../../../env/namespace.h"
-#include "../../../env/type_interface.h"
+#include "../../../env/type_impl.h"
 #include <assert.h>
 
 static opcode operator_to_iopcode(operator_type type);
@@ -16,6 +17,7 @@ il_factor_arithmetic_op* il_factor_arithmetic_op_new(operator_type type) {
 	il_factor_arithmetic_op* ret = (il_factor_arithmetic_op*)MEM_MALLOC(sizeof(il_factor_arithmetic_op));
 	ret->type = type;
 	ret->parent = NULL;
+	ret->operator_index = -1;
 	return ret;
 }
 
@@ -38,20 +40,53 @@ generic_type* il_factor_arithmetic_op_eval(il_factor_arithmetic_op * self, envir
 	if(il_factor_binary_op_double_double(self->parent, env)) {
 		return TYPE2GENERIC(cdouble);
 	}
-	return NULL;
+	//プリミティブ型同士でないのに
+	//演算子オーバーロードもない
+	assert(self->operator_index != -1);
+	operator_overload* operator_ov = class_get_operator_overload(TYPE2CLASS(GENERIC2TYPE(lgtype)), self->operator_index);
+	return operator_ov->return_gtype;
 }
 
 void il_factor_arithmetic_op_generate(il_factor_arithmetic_op* self, enviroment* env) {
-	il_factor_generate(self->parent->right, env);
-	il_factor_generate(self->parent->left, env);
-	if(il_factor_binary_op_int_int(self->parent, env)) {
-		opcode_buf_add(env->buf, operator_to_iopcode(self->type));
-	} else if(il_factor_binary_op_double_double(self->parent, env)) {
-		opcode_buf_add(env->buf, operator_to_dopcode(self->type));
+	//演算子オーバーロードが見つからない
+	if(self->operator_index == -1) {
+		il_factor_generate(self->parent->right, env);
+		il_factor_generate(self->parent->left, env);
+		if(il_factor_binary_op_int_int(self->parent, env)) {
+			opcode_buf_add(env->buf, operator_to_iopcode(self->type));
+		} else if(il_factor_binary_op_double_double(self->parent, env)) {
+			opcode_buf_add(env->buf, operator_to_dopcode(self->type));
+		} else {
+			assert(false);
+		}
+	} else {
+		il_factor_generate(self->parent->right, env);
+		il_factor_generate(self->parent->left, env);
+		opcode_buf_add(env->buf, op_invokeoperator);
+		opcode_buf_add(env->buf, self->operator_index);
 	}
 }
 
 void il_factor_arithmetic_op_load(il_factor_arithmetic_op* self, enviroment* env) {
+	vector* args = vector_new();
+	generic_type* lgtype = il_factor_eval(self->parent->left, env);
+	generic_type* rgtype = il_factor_eval(self->parent->right, env);
+	if(il_factor_binary_op_int_int(self->parent, env) ||
+	  il_factor_binary_op_double_double(self->parent, env)) {
+		  return;
+	}
+	if(lgtype->virtual_type_index != -1) {
+		assert(false);
+	}
+	//vector_push(args, lgtype);
+	vector_push(args, rgtype);
+	type* lctype = GENERIC2TYPE(lgtype);
+	assert(lctype->tag == type_class);
+	class_* lclass = TYPE2CLASS(lctype);
+	int temp = 0;
+	class_find_operator_overload(lclass, self->type, args, env, &temp);
+	vector_delete(args, vector_deleter_null);
+	self->operator_index = temp;
 }
 
 void il_factor_arithmetic_op_delete(il_factor_arithmetic_op* self) {

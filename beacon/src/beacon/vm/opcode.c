@@ -306,6 +306,12 @@ int opcode_fprint(FILE* fp, vector* source, int index) {
 			text_fprintf(fp,"invoke interface(%d %d)", a, b);
 			break;
 		}
+		case op_invokeoperator:
+		{
+			int a = (int)vector_at(source, ++index);
+			text_fprintf(fp,"invoke operator(%d)", a);
+			break;
+		}
 		case op_generic_add:
 		{
 			text_fprintf(fp, "generic add");

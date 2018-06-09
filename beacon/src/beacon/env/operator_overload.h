@@ -6,6 +6,7 @@
 struct type;
 struct enviroment;
 struct generic_type;
+struct frame;
 typedef struct operator_overload {
 	struct type* parent;
 	struct generic_type* return_gtype;
@@ -16,6 +17,8 @@ typedef struct operator_overload {
 } operator_overload;
 
 operator_overload* operator_overload_new(operator_type type);
+
+void operator_overload_execute(operator_overload* self, struct frame* fr, struct enviroment* env);
 
 void operator_overload_delete(operator_overload* self);
 #endif

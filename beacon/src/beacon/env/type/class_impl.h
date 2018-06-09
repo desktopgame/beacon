@@ -5,6 +5,7 @@
 #include "../native_method_ref.h"
 #include "../vtable.h"
 #include "../type_interface.h"
+#include "../../ast/operator_type.h"
 #include "../../vm/enviroment.h"
 #include "../../util/vector.h"
 //#include "../access_domain.h"
@@ -18,6 +19,7 @@ struct field;
 struct method;
 struct constructor;
 struct generic_type;
+struct operator_overload;
 /**
  * クラスを表す構造体です.
  */
@@ -267,6 +269,23 @@ struct method* class_get_smethod(class_* self, int index);
  * @return
  */
 struct method* class_get_impl_method(class_* self, type* interType, int interMIndex);
+
+/**
+ * @param self
+ * @param type
+ * @param args
+ * @param env
+ * @param outIndex
+ * @return
+ */
+struct operator_overload* class_find_operator_overload(class_* self, operator_type type, vector* args, enviroment* env, int* outIndex);
+
+/**
+ * @param self
+ * @param index
+ * @return
+ */
+struct operator_overload* class_get_operator_overload(class_* self, int index);
 
 /**
  * 指定のクラスから Object クラスまでのいずれかの階層に m が含まれるなら true.

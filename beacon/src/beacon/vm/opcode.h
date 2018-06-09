@@ -98,6 +98,7 @@ typedef enum opcode {
 	op_invokestatic,
 	op_invokespecial,
 	op_invokeinterface,
+	op_invokeoperator,
 
 	op_generic_add,
 	op_generic_enter,

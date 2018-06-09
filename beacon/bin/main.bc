@@ -23,6 +23,9 @@ namespace test {
 		operator *(Vec2 a) -> Vec2 {
 			return new Vec2(x * a.x, y * a.y);
 		}
+		operator *(Int scale) -> Vec2 {
+			return new Vec2(x * scale, y * scale);
+		}
 		operator /(Vec2 a) -> Vec2 {
 			return new Vec2(x / a.x, y / a.y);
 		}
@@ -34,8 +37,25 @@ namespace test {
 var v2a = new test::Vec2();
 v2a.x = 100;
 v2a.y = 20;
+
 var v2b = new test::Vec2();
-v2b.x = 100;
+v2b.x = 150;
 v2b.y = 20;
 Console.writeLine(v2a.x);
 Console.writeLine(v2a.y);
+Console.writeLine("---");
+Console.writeLine(v2b.x);
+Console.writeLine(v2b.y);
+Console.writeLine("---");
+var v2x = v2a + v2b;
+Console.writeLine(v2x.x);
+Console.writeLine(v2x.y);
+Console.writeLine("---");
+var v2y = v2a - v2b;
+Console.writeLine(v2y.x);
+Console.writeLine(v2y.y);
+Console.writeLine("---");
+
+var v2z = v2a * 3;
+Console.writeLine(v2z.x);
+Console.writeLine(v2z.y);

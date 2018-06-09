@@ -14,6 +14,7 @@
 #include "../env/type_impl.h"
 #include "../env/constructor.h"
 #include "../env/script_context.h"
+#include "../env/operator_overload.h"
 #include "../thread/thread.h"
 #include "../util/mem.h"
 #include "../util/xassert.h"
@@ -675,6 +676,15 @@ static void vm_run(frame * self, enviroment * env, int pos, int deferStart) {
 				class_* cl = TYPE2CLASS(o->gtype->core_type);
 				method* m = (method*)vector_at(cl->method_list, index);
 				method_execute(m, self, env);
+				break;
+			}
+			case op_invokeoperator:
+			{
+				int index = (int)enviroment_source_at(env, ++IDX);
+				object* o = (object*)vector_top(self->value_stack);
+				class_* cl = TYPE2CLASS(o->gtype->core_type);
+				operator_overload* operator_ov = (operator_overload*)vector_at(cl->operator_overload_list, index);
+				operator_overload_execute(operator_ov, self, env);
 				break;
 			}
 			case op_generic_add:

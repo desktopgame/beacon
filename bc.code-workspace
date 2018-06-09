@@ -60,7 +60,8 @@
 			"sstream": "c",
 			"strstream": "c",
 			"assert.h": "c",
-			"bitset": "c"
+			"bitset": "c",
+			"script_context.h": "c"
 		},
 		"ruby.lint": {
 			"reek": true,

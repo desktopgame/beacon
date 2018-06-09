@@ -6,6 +6,7 @@ struct generic_type;
 struct enviroment;
 typedef struct il_factor_arithmetic_op {
 	struct il_factor_binary_op* parent;
+	int operator_index;
 	operator_type type;
 } il_factor_arithmetic_op;
 
