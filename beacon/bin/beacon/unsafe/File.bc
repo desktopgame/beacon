@@ -4,8 +4,8 @@ namespace beacon::unsafe {
 		def new() { }
 
 		public:
-		def static open(String filename, String mode) {
-			return nativeOpen(filename, mode);
+		def static open(String filename, String mode) -> File {
+			return File.nativeOpen(filename, mode);
 		}
 
 		def close() -> Void {
@@ -41,6 +41,6 @@ namespace beacon::unsafe {
 
 		def static native nativeGetStdErr() -> File;
 
-		def native native nativeClose() -> Void;
+		def native nativeClose() -> Void;
 	}
 }
