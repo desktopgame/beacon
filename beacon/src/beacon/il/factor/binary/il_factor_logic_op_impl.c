@@ -29,6 +29,8 @@ void il_factor_logic_op_dump(il_factor_logic_op* self, int depth) {
 generic_type* il_factor_logic_op_eval(il_factor_logic_op* self, enviroment* env) {
 	if(il_factor_binary_op_int_int(self->parent, env)) {
 		return TYPE2GENERIC(TYPE_INT);
+	} else if(il_factor_binary_op_bool_bool(self->parent, env)) {
+		return TYPE2GENERIC(TYPE_BOOL);
 	} else {
 		generic_type* lgtype = il_factor_eval(self->parent->left, env);
 		//プリミティブ型同士でないのに

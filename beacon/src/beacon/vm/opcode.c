@@ -70,6 +70,24 @@ int opcode_fprint(FILE* fp, vector* source, int index) {
 		case op_iflip:
 			text_fprintf(fp, "iflip");
 			break;
+		case op_ceq:
+			text_fprintf(fp, "ceq");
+			break;
+		case op_cnoteq:
+			text_fprintf(fp, "cnoteq");
+			break;
+		case op_cgt:
+			text_fprintf(fp, "cgt");
+			break;
+		case op_cge:
+			text_fprintf(fp, "cge");
+			break;
+		case op_clt:
+			text_fprintf(fp, "clt");
+			break;
+		case op_cle:
+			text_fprintf(fp, "cle");
+			break;
 		//double & double
 		case op_dadd:
 			text_fprintf(fp,"dadd");

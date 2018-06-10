@@ -273,6 +273,24 @@ static void vm_run(frame * self, enviroment * env, int pos, int deferStart) {
 			case op_iflip:
 				vector_push(self->value_stack, object_int_new(~SPI(self)));
 				break;
+			case op_ceq:
+				vector_push(self->value_stack, object_bool_get(SPC(self) == SPC(self)));
+				break;
+			case op_cnoteq:
+				vector_push(self->value_stack, object_bool_get(SPC(self) != SPC(self)));
+				break;
+			case op_cgt:
+				vector_push(self->value_stack, object_bool_get(SPC(self) > SPC(self)));
+				break;
+			case op_cge:
+				vector_push(self->value_stack, object_bool_get(SPC(self) >= SPC(self)));
+				break;
+			case op_clt:
+				vector_push(self->value_stack, object_bool_get(SPC(self) < SPC(self)));
+				break;
+			case op_cle:
+				vector_push(self->value_stack, object_bool_get(SPC(self) <= SPC(self)));
+				break;
 				//double & double
 			case op_dadd:
 				vector_push(self->value_stack, object_double_new(SPD(self) + SPD(self)));

@@ -28,12 +28,30 @@ namespace beacon::unsafe {
 			return nativeGet();
 		}
 
+		def gets() -> String {
+			var sb = new StringBuilder();
+			while(nativeAvailable()) {
+				var c = getc();
+				if(c == '\n') {
+					break;
+				}
+				sb.append(c);
+			}
+			return sb.toString();
+		}
+
+		def available() -> Bool {
+			return nativeAvailable();
+		}
+
 		private:
 		def static native nativeOpen(String filename, String mode) -> File;
 
 		def native nativePut(Char c) -> Void;
 
 		def native nativeGet() -> Char;
+
+		def native nativeAvailable() -> Bool;
 
 		def static native nativeGetStdIn() -> File;
 

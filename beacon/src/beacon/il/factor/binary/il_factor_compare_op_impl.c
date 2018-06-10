@@ -11,6 +11,7 @@
 
 static opcode operator_to_iopcode(operator_type type);
 static opcode operator_to_dopcode(operator_type type);
+static opcode operator_to_copcode(operator_type type);
 
 il_factor_compare_op* il_factor_compare_op_new(operator_type type) {
 	il_factor_compare_op* ret = (il_factor_compare_op*)MEM_MALLOC(sizeof(il_factor_compare_op));
@@ -39,6 +40,8 @@ void il_factor_compare_op_generate(il_factor_compare_op* self, enviroment* env) 
 			opcode_buf_add(env->buf, operator_to_iopcode(self->type));
 		} else if(il_factor_binary_op_double_double(self->parent, env)) {
 			opcode_buf_add(env->buf, operator_to_dopcode(self->type));
+		} else if(il_factor_binary_op_char_char(self->parent, env)) {
+			opcode_buf_add(env->buf, operator_to_copcode(self->type));
 		} else {
 			assert(false);
 		}
@@ -82,6 +85,17 @@ static opcode operator_to_dopcode(operator_type type) {
 		case operator_le: return op_dle;
 		case operator_eq: return op_deq;
 		case operator_noteq: return op_dnoteq;
+	}
+	assert(false);
+}
+static opcode operator_to_copcode(operator_type type) {
+	switch(type) {
+		case operator_gt: return op_cgt;
+		case operator_ge: return op_cge;
+		case operator_lt: return op_clt;
+		case operator_le: return op_cle;
+		case operator_eq: return op_ceq;
+		case operator_noteq: return op_cnoteq;
 	}
 	assert(false);
 }

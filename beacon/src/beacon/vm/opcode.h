@@ -28,6 +28,13 @@ typedef enum opcode {
 	op_iexcor,
 	op_iflip,
 
+	op_ceq,
+	op_cnoteq,
+	op_cgt,
+	op_cge,
+	op_clt,
+	op_cle,
+
 	op_dadd,
 	op_dsub,
 	op_dmul,

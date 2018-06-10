@@ -10,6 +10,7 @@
 static void bc_file_nativeOpen(method* parent, frame* fr, enviroment* env);
 static void bc_file_nativePut(method* parent, frame* fr, enviroment* env);
 static void bc_file_nativeGet(method* parent, frame* fr, enviroment* env);
+static void bc_file_nativeAvailable(method* parent, frame* fr, enviroment* env);
 static void bc_file_nativeGetStdIn(method* parent, frame* fr, enviroment* env);
 static void bc_file_nativeGetStdOut(method* parent, frame* fr, enviroment* env);
 static void bc_file_nativeGetStdErr(method* parent, frame* fr, enviroment* env);
@@ -23,6 +24,7 @@ void bc_file_init() {
 	class_define_native_method(fileClass, "nativeOpen", bc_file_nativeOpen);
 	class_define_native_method(fileClass, "nativePut", bc_file_nativePut);
 	class_define_native_method(fileClass, "nativeGet", bc_file_nativeGet);
+	class_define_native_method(fileClass, "nativeAvailable", bc_file_nativeAvailable);
 	class_define_native_method(fileClass, "nativeStdIn", bc_file_nativeGetStdIn);
 	class_define_native_method(fileClass, "nativeStdOut", bc_file_nativeGetStdOut);
 	class_define_native_method(fileClass, "nativeStdErr", bc_file_nativeGetStdErr);
@@ -65,6 +67,13 @@ static void bc_file_nativeGet(method* parent, frame* fr, enviroment* env) {
 	assert(fp != NULL);
 	char ret = fgetc(fp);
 	vector_push(fr->value_stack, object_char_new(ret));
+}
+
+static void bc_file_nativeAvailable(method* parent, frame* fr, enviroment* env) {
+	object* self = vector_at(fr->ref_stack, 0);
+	FILE* fp = vector_at(self->native_slot_vec, 0);
+	assert(fp != NULL);
+	vector_push(fr->value_stack, object_bool_get(!feof(fp)));
 }
 
 static void bc_file_nativeGetStdIn(method* parent, frame* fr, enviroment* env) {

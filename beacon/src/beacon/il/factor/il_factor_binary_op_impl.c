@@ -211,6 +211,10 @@ bool il_factor_binary_op_bool_bool(il_factor_binary_op* self, enviroment* env) {
 	return type_test(self, env, TYPE_BOOL);
 }
 
+bool il_factor_binary_op_char_char(il_factor_binary_op* self, enviroment* env) {
+	return type_test(self, env, TYPE_CHAR);
+}
+
 int il_factor_binary_op_index(il_factor_binary_op* self, enviroment* env) {
 	vector* args = vector_new();
 	generic_type* lgtype = il_factor_eval(self->left, env);
