@@ -176,6 +176,11 @@ static void il_factor_invoke_check(il_factor_invoke * self, enviroment * env) {
 	ccpush_receiver(il_factor_eval(self->receiver, env));
 
 	type* ctype = gtype->core_type;
+	//ジェネリックな変数に対しても
+	//Objectクラスのメソッドは呼び出せる
+	if(ctype == NULL) {
+		ctype = TYPE_OBJECT;
+	}
 	assert(ctype != NULL);
 	int temp = -1;
 	self->m = type_find_method(ctype, self->name, self->args, env, &temp);

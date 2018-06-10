@@ -271,6 +271,10 @@ static int generic_type_distanceImpl(generic_type* self, generic_type* other, fr
 	} else if(other->core_type == NULL) {
 		//要求されているのは具体的な型
 		if(self->core_type != NULL) {
+			//Object型にのみ変換可能
+			if(self->core_type == TYPE_OBJECT) {
+				return 0;
+			}
 			//T が 具体的な型の要件を満たしているか？
 //			if(self->core_type == TYPE_OBJECT ||
 //				generic_type_rule_polymorphic(generic_type_rule(other, ilctx), self, ilctx)) {

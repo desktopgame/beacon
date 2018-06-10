@@ -40,6 +40,24 @@ namespace beacon::lang {
 			return nativeGet(index) as T;
 		}
 
+		def static deepEquals[T](Array[T] a, Array[T] b) -> Bool {
+			if(a.length() != b.length()) {
+				return false;
+			}
+			var ret = true;
+			var offset = 0;
+			while(offset < a.length()) {
+				var aE = a.get(offset);
+				var bE = b.get(offset);
+				if(!(aE.equals(bE))) {
+					ret = false;
+					break;
+				}
+				offset = offset + 1;
+			}
+			return ret;
+		}
+
 		def static copy[T](Array[T] src, Int srcOffset, Array[T] dst, Int dstOffset, Int length) -> Void {
 			Array.nativeCopy[T](src, srcOffset, dst, dstOffset, length);
 		}
