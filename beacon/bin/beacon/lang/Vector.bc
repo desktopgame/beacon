@@ -48,6 +48,17 @@ namespace beacon::lang {
 			return this.proxy.get(index);
 		}
 
+		def remove(Int index) -> T {
+			T ret = get(index);
+			Int offs = index + 1;
+			while(offs < length) {
+				set(offs - 1, get(offs));
+				offs = offs + 1;
+			}
+			this.length = length - 1;
+			return ret;
+		}
+
 		def length() -> Int {
 			return this.length;
 		}

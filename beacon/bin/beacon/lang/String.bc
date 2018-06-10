@@ -1,7 +1,7 @@
 import "beacon/lang/Array"
 
 namespace beacon::lang {
-	class String {
+	class String : Iterable[Char] {
 		private:
 		Array[Char] charArray;
 
@@ -36,6 +36,10 @@ namespace beacon::lang {
 				offs += 1;
 			}
 			return new String(arr);
+		}
+
+		def iterate() -> Iterator[Char] {
+			return new ArrayIterator[Char](charArray);
 		}
 		private:
 		def native nativeInit() -> Void;
