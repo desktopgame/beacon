@@ -19,6 +19,7 @@ script_method * script_method_new() {
 
 void script_method_execute(script_method * self, method* parent, frame * fr, enviroment* env) {
 	frame* sub = frame_sub(fr);
+	sub->receiver = parent->parent;
 	if (!modifier_is_static(parent->modifier)) {
 		vector_push(sub->value_stack, vector_pop(fr->value_stack));
 	}

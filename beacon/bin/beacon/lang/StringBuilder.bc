@@ -1,0 +1,46 @@
+namespace beacon::lang {
+	class StringBuilder {
+		public:
+		def new() {
+			this.chars = new Vector[Char]();
+		}
+
+		def append(Char ch) -> StringBuilder {
+			chars.push(ch);
+			return this;
+		}
+
+		def append(String s) -> StringBuilder {
+			var iter = s.iterate();
+			while(iter.hasNext()) {
+				append(iter.next());
+			}
+			return this;
+		}
+
+		def append(Object o) -> StringBuilder {
+			return append(o.toString());
+		}
+
+		def remove(Int offset) -> StringBuilder {
+			chars.remove(offset);
+			return this;
+		}
+
+		def remove(Int offset, Int len) -> StringBuilder {
+			Int p = 0;
+			while(p < len) {
+				remove(offset + len - p);
+				p = p + 1;
+			}
+			return this;
+		}
+
+		def toString() -> String {
+			return new String(chars.toArray());
+		}
+
+		private:
+		Vector[Char] chars;
+	}
+}

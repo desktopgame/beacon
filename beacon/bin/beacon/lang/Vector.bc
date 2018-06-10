@@ -67,6 +67,12 @@ namespace beacon::lang {
 			return new VectorIterator[T](this);
 		}
 
+		def toArray() -> Array[T] {
+			var ret = new Array[T](length());
+			Array.copy[T](this.proxy, 0, ret, 0, this.length);
+			return ret;
+		}
+
 		private:
 		def checkRange(Int index) -> Void {
 			if(index < 0 || index >= this.length) {

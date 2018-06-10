@@ -81,13 +81,16 @@ generic_type* il_factor_invoke_bound_eval(il_factor_invoke_bound * self, envirom
 	if(il_error_panic()) {
 		return NULL;
 	}
-	if(self->m->return_gtype != generic_type_tag_none) {
+	if(self->m->return_gtype->tag != generic_type_tag_none) {
 		resolve_non_default(self, env);
+		assert(self->resolved != NULL);
 		return self->resolved;
 	} else {
 		resolve_default(self, env);
+		assert(self->resolved != NULL);
 		return self->resolved;
 	}
+	assert(self->resolved != NULL);
 	return self->resolved;
 }
 

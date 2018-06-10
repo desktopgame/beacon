@@ -494,6 +494,7 @@ static void vm_run(frame * self, enviroment * env, int pos, int deferStart) {
 				//新しいVMでコンストラクタを実行
 				//また、現在のVMから実引数をポップ
 				frame* sub = frame_sub(self);
+				sub->receiver = tp;
 				for (int i = 0; i < ctor->parameter_list->length; i++) {
 					vector_item e = vector_pop(self->value_stack);
 					object* o = (object*)e;
@@ -528,6 +529,7 @@ static void vm_run(frame * self, enviroment * env, int pos, int deferStart) {
 				constructor* ctor = (constructor*)vector_at(cls->constructor_list, ctorIndex);
 				//コンストラクタを実行するためのVMを作成
 				frame* sub = frame_sub(self);
+				sub->receiver = tp;
 				//チェインコンストラクタに渡された実引数をプッシュ
 				for (int i = 0; i < ctor->parameter_list->length; i++) {
 					object* o = (object*)vector_pop(self->value_stack);
@@ -692,9 +694,12 @@ static void vm_run(frame * self, enviroment * env, int pos, int deferStart) {
 			}
 			case op_invokespecial:
 			{
+				//privateメソッドには常にレシーバがいないはず
+				//オブジェクトから直接型を取り出してしまうと具象すぎる
 				int index = (int)enviroment_source_at(env, ++IDX);
 				object* o = (object*)vector_top(self->value_stack);
-				class_* cl = TYPE2CLASS(o->gtype->core_type);
+				//class_* cl = TYPE2CLASS(o->gtype->core_type);
+				class_* cl = TYPE2CLASS(self->receiver);
 				method* m = (method*)vector_at(cl->method_list, index);
 				method_execute(m, self, env);
 				break;

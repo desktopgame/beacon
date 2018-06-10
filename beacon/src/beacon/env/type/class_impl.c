@@ -664,6 +664,7 @@ static void class_create_vtable_top(class_* self) {
 }
 
 static void class_create_vtable_ov(class_* self) {
+	//XBREAK(!strcmp(self->name, "StringBuilder"));
 	class_create_vtable(self->super_class->core_type->u.class_);
 	vtable_copy(self->super_class->core_type->u.class_->vt, self->vt);
 	for (int i = 0; i < self->method_list->length; i++) {

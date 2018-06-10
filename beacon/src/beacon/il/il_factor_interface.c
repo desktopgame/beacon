@@ -287,6 +287,7 @@ generic_type* il_factor_eval(il_factor * self, enviroment * env) {
 		default:
 			break;
 	}
+	assert(ret != NULL);
 	return ret;
 }
 

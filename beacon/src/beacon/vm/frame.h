@@ -4,6 +4,7 @@
 #include "../util/vector.h"
 #include "enviroment.h"
 struct object;
+struct type;
 /**
  * 実行時の情報を格納する構造体.
  */
@@ -42,6 +43,9 @@ typedef struct frame {
 
 	//最後にスローされた例外です.
 	struct object* exception;
+
+	//メソッドを実行中のレシーバ型
+	struct type* receiver;
 
 	//VMの階層の深さです.
 	//デバッグ用の情報です。
