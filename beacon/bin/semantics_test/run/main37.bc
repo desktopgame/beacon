@@ -1,0 +1,12 @@
+var a = new Array[Int](3);
+var b = new Array[Int](3);
+a.set(0, 10);
+a.set(1, 20);
+a.set(2, 30);
+
+b.set(0, 10);
+b.set(1, 20);
+b.set(2, 30);
+Console.writeLine(Array.deepEquals[Int](a,b));
+b.set(2, 40);
+Console.writeLine(Array.deepEquals[Int](a,b));

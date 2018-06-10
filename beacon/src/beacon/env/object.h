@@ -4,6 +4,16 @@
 #include "../util/vector.h"
 #include <stdbool.h>
 
+#define OBJ2INT(a) (object_obj2int(a))
+#define OBJ2DOUBLE(a) (object_obj2double(a))
+#define OBJ2BOOL(a) (object_obj2bool(a))
+#define OBJ2CHAR(a) (object_obj2char(a))
+
+#define INT2OBJ(a) (object_int2obj(a))
+#define DOUBLE2OBJ(a) (object_double2obj(a))
+#define BOOL2OBJ(a) (object_bool2obj(a))
+#define CHAR2OBJ(a) (object_char2obj(a))
+
 struct generic_type;
 struct vtable;
 /** 
@@ -185,4 +195,60 @@ void object_print(object* self);
  * @param self
  */
 void object_delete(object* self);
+
+/**
+ * beaconからCの int へ変換します.
+ * @param self
+ * @return
+ */
+int object_obj2int(object* self);
+
+/**
+ * beaconからCの double へ変換します.
+ * @param self
+ * @return
+ */
+double object_obj2double(object* self);
+
+/**
+ * beaconからCの bool へ変換します.
+ * @param self
+ * @return
+ */
+bool object_obj2bool(object* self);
+
+/**
+ * beaconからCの char へ変換します.
+ * @param self
+ * @return
+ */
+char object_obj2char(object* self);
+
+/**
+ * Cからbeaconの Int へ変換します.
+ * @param i
+ * @return
+ */
+object* object_int2obj(int i);
+
+/**
+ * Cからbeaconの Double へ変換します.
+ * @param d
+ * @return
+ */
+object* object_double2obj(double d);
+
+/**
+ * Cからbeaconの bool へ変換します.
+ * @param b
+ * @return
+ */
+object* object_bool2obj(bool b);
+
+/**
+ * Cからbeaconの char へ変換します.
+ * @param c
+ * @return
+ */
+object* object_char2obj(char c);
 #endif // !SIGNAL_ENV_OBJECT_H

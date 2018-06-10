@@ -233,6 +233,42 @@ void object_delete(object * self) {
 	MEM_FREE(self);
 }
 
+int object_obj2int(object* self) {
+	assert(self->tag == object_int);
+	return self->u.int_;
+}
+
+double object_obj2double(object* self) {
+	assert(self->tag == object_double);
+	return self->u.double_;
+}
+
+bool object_obj2bool(object* self) {
+	assert(self->tag == object_bool);
+	return self->u.bool_;
+}
+
+char object_obj2char(object* self) {
+	assert(self->tag == object_char);
+	return self->u.char_;
+}
+
+object* object_int2obj(int i) {
+	return object_int_new(i);
+}
+
+object* object_double2obj(double d) {
+	return object_double_new(d);
+}
+
+object* object_bool2obj(bool b) {
+	return object_bool_get(b);
+}
+
+object* object_char2obj(char c) {
+	return object_char_new(c);
+}
+
 //private
 static object* object_mallocImpl(object_tag type, const char* filename, int lineno) {
 	object* ret = (object*)mem_malloc(sizeof(object), filename, lineno);

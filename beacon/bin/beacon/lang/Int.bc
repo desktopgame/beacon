@@ -7,7 +7,16 @@ namespace beacon::lang {
 			this.nativeInit(i);
 		}
 
+		def equals(Object a) -> Bool {
+			if(!(a is Int)) {
+				return false;
+			}
+			return nativeEquals(a);
+		}
+
 		private:
 		def native nativeInit(Int i) -> Void;
+
+		def native nativeEquals(Object a) -> Bool;
 	}
 }

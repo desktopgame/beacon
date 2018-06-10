@@ -31,7 +31,7 @@ void script_method_execute(script_method * self, method* parent, frame * fr, env
 	for(int i=0; i<typeparams; i++) {
 		vector_assign(sub->type_args_vec, (typeparams - i) - 1, vector_pop(fr->type_args_vec));
 	}
-	text_putindent(sub->level);
+	//text_putindent(sub->level);
 	//text_printfln("[ %s#%s ]", type_name(parent->parent), parent->name);
 	//enviroment_op_dump(self->env, sub->level);
 	//opcode_buf_dump(self->env->buf, sub->level);

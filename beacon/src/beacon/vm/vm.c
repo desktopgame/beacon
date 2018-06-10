@@ -454,10 +454,10 @@ static void vm_run(frame * self, enviroment * env, int pos, int deferStart) {
 			{
 				generic_type* gtype = (generic_type*)vector_pop(self->type_args_vec);
 				object* v = (object*)vector_pop(self->value_stack);
-				generic_type_print(gtype);
-				text_printfln("");
-				generic_type_print(v->gtype);
-				text_printfln("");
+				//generic_type_print(gtype);
+				//text_printfln("");
+				//generic_type_print(v->gtype);
+				//text_printfln("");
 				int dist = generic_type_distance(gtype, v->gtype);
 				object* b = object_bool_get(dist >= 0);
 				vector_push(self->value_stack, b);
