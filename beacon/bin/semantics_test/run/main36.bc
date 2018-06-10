@@ -1,0 +1,4 @@
+var v = new Vector[Int]();
+Console.writeLine(v.equals("Hello"));
+Console.writeLine(v.equals(v));
+//f.puts("Hello");

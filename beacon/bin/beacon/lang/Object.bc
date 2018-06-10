@@ -10,6 +10,10 @@ namespace beacon::lang {
 			return this.nativeToString();
 		}
 
+		def equals(Object a) -> Bool {
+			return Object.referenceEquals(this, a);
+		}
+
 		def static referenceEquals(Object a, Object b) -> Bool {
 			return Object.nativeReferenceEquals(a, b);
 		}
