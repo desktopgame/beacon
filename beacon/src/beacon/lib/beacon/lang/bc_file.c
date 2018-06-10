@@ -15,6 +15,7 @@ static void bc_file_nativeGetStdIn(method* parent, frame* fr, enviroment* env);
 static void bc_file_nativeGetStdOut(method* parent, frame* fr, enviroment* env);
 static void bc_file_nativeGetStdErr(method* parent, frame* fr, enviroment* env);
 static void bc_file_nativeClose(method* parent, frame* fr, enviroment* env);
+static object* file_new(FILE* fp, bool std);
 
 void bc_file_init() {
 	namespace_* unsafe = namespace_unsafe();
@@ -45,11 +46,7 @@ static void bc_file_nativeOpen(method* parent, frame* fr, enviroment* env) {
 
 	FILE* fp = fopen(fileStr->text, modeStr->text);
 	assert(fp != NULL);
-	object* file = object_ref_new();
-	type* fileType = bc_file_type();
-	file->gtype = fileType->generic_self;
-	file->vptr = TYPE2CLASS(fileType)->vt;
-	vector_assign(file->native_slot_vec, 0, fp);
+	object* file = file_new(fp, false);
 	vector_push(fr->value_stack, file);
 }
 
@@ -77,12 +74,18 @@ static void bc_file_nativeAvailable(method* parent, frame* fr, enviroment* env) 
 }
 
 static void bc_file_nativeGetStdIn(method* parent, frame* fr, enviroment* env) {
+	object* file = file_new(stdin, true);
+	vector_push(fr->value_stack, file);
 }
 
 static void bc_file_nativeGetStdOut(method* parent, frame* fr, enviroment* env) {
+	object* file = file_new(stdout, true);
+	vector_push(fr->value_stack, file);
 }
 
 static void bc_file_nativeGetStdErr(method* parent, frame* fr, enviroment* env) {
+	object* file = file_new(stderr, true);
+	vector_push(fr->value_stack, file);
 }
 
 static void bc_file_nativeClose(method* parent, frame* fr, enviroment* env) {
@@ -90,4 +93,13 @@ static void bc_file_nativeClose(method* parent, frame* fr, enviroment* env) {
 	FILE* fp = vector_at(self->native_slot_vec, 0);
 	assert(fp != NULL);
 	fclose(fp);
+}
+
+static object* file_new(FILE* fp, bool std) {
+	object* file = object_ref_new();
+	type* fileType = bc_file_type();
+	file->gtype = fileType->generic_self;
+	file->vptr = TYPE2CLASS(fileType)->vt;
+	vector_assign(file->native_slot_vec, 0, fp);
+	return file;
 }

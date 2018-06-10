@@ -1,0 +1,4 @@
+var v = new Vector[Int]();
+Console.writeLine(Object.referenceEquals(v, "Hello"));
+Console.writeLine(Object.referenceEquals(v, v));
+//f.puts("Hello");

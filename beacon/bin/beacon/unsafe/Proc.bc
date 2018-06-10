@@ -1,0 +1,32 @@
+namespace beacon::unsafe {
+	class Proc {
+		private:
+		def new() { }
+
+		public:
+		def static system(String s) -> Void {
+			return nativeSystem(s);
+		}
+
+		def static open(String s) -> Proc {
+			return nativeOpen(s);
+		}
+
+		def stream() -> File {
+			return nativeStream();
+		}
+
+		def close() -> Void {
+			nativeClose();
+		}
+
+		private:
+		def static nativeSystem(String s) -> Void;
+
+		def static nativeOpen(String s) -> Proc;
+
+		def static nativeClose() -> Void;
+
+		def static nativeStream() -> File;
+	}
+}

@@ -7,6 +7,7 @@
 
 //proto
 static void bc_object_nativeToString(method* parent, frame* fr, enviroment* env);
+static void bc_object_nativeReferenceEquals(method* parent, frame* fr, enviroment* env);
 
 void bc_object_init() {
 	namespace_* lang = namespace_lang();
@@ -14,6 +15,7 @@ void bc_object_init() {
 	class_* objectClass = TYPE2CLASS(objectType);
 	namespace_add_type(lang, objectType);
 	class_define_native_method(objectClass, "nativeToString", bc_object_nativeToString);
+	class_define_native_method(objectClass, "nativeReferenceEquals", bc_object_nativeReferenceEquals);
 }
 
 type* bc_object_type() {
@@ -50,4 +52,10 @@ static void bc_object_nativeToString(method* parent, frame* fr, enviroment* env)
 	object* ret = object_string_new(sb->text);
 	MEM_FREE(sb);
 	vector_push(fr->value_stack, ret);
+}
+
+static void bc_object_nativeReferenceEquals(method* parent, frame* fr, enviroment* env) {
+	object* a = (object*)vector_at(fr->ref_stack, 1);
+	object* b = (object*)vector_at(fr->ref_stack, 2);
+	vector_push(fr->value_stack, object_bool_get(a == b));
 }

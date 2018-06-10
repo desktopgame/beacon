@@ -1,6 +1,10 @@
 namespace beacon::unsafe {
 	class File {
 		private:
+		static File STDIN;
+		static File STDOUT;
+		static File STDERR;
+
 		def new() { }
 
 		public:
@@ -42,6 +46,27 @@ namespace beacon::unsafe {
 
 		def available() -> Bool {
 			return nativeAvailable();
+		}
+
+		def static stdin() -> File {
+			if(File.STDIN == null) {
+				File.STDIN = nativeGetStdIn();
+			}
+			return File.STDIN;
+		}
+
+		def static stdout() -> File {
+			if(File.STDOUT == null) {
+				File.STDOUT = nativeGetStdOut();
+			}
+			return File.STDOUT;
+		}
+
+		def static stderr() -> File {
+			if(File.STDERR == null) {
+				File.STDERR = nativeGetStdErr();
+			}
+			return File.STDERR;
 		}
 
 		private:
