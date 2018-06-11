@@ -53,7 +53,7 @@ void interface_add_method(interface_* self, struct method* m);
  * @param outIndex
  * @return
  */
-struct method* interface_find_method(interface_* self, const char * name, vector * args, struct enviroment * env, int * outIndex);
+struct method* interface_ilfind_method(interface_* self, const char * name, vector * args, struct enviroment * env, int * outIndex);
 
 /**
  * 全てのインターフェイスに定義されたメソッドをフラットにして返します.

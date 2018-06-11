@@ -67,7 +67,7 @@ method * type_find_method(type * self, const char * name, vector * args, envirom
 	if (self->tag == type_class) {
 		return class_ilfind_method(self->u.class_, name, args, env, outIndex);
 	} else if (self->tag == type_interface) {
-		return interface_find_method(self->u.interface_, name, args, env, outIndex);
+		return interface_ilfind_method(self->u.interface_, name, args, env, outIndex);
 	}
 	return NULL;
 }
