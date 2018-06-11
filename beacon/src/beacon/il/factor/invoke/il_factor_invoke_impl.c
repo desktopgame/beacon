@@ -183,7 +183,7 @@ static void il_factor_invoke_check(il_factor_invoke * self, enviroment * env) {
 	}
 	assert(ctype != NULL);
 	int temp = -1;
-	self->m = type_find_method(ctype, self->name, self->args, env, &temp);
+	self->m = type_ilfind_method(ctype, self->name, self->args, env, &temp);
 	if(self->m != NULL) {
 		XBREAK(
 			!strcmp(self->m->name, "length") && 
