@@ -159,6 +159,47 @@ method * meta_ilfind_method(vector * method_vec, const char * name, vector * ila
 	return ret;
 }
 
+method* meta_gfind_method(vector* method_vec, const char * name, vector * gargs, int* outIndex) {
+	(*outIndex) = -1;
+	//class_create_vtable(self);
+	method* ret = NULL;
+	int min = 1024;
+	//全てのメソッドへ
+	for (int i = 0; i < method_vec->length; i++) {
+		vector_item ve = vector_at(method_vec, i);
+		method* m = (method*)ve;
+		//名前か引数の個数が違うので無視
+		if (strcmp(m->name, name) ||
+			m->parameter_list->length != gargs->length
+			) {
+			continue;
+		}
+		//引数がひとつもないので、
+		//型のチェックを行わない
+		if (gargs->length == 0) {
+			(*outIndex) = i;
+			return m;
+		}
+		//もっともスコアの高いメソッドを選択する
+		if(modifier_is_static(m->modifier)) {
+			ccpush_method(m);
+		}
+		int score = meta_gcalc_score(m->parameter_list, gargs);
+		if(modifier_is_static(m->modifier)) {
+			ccpop_method();
+		}
+		if(score == -1) {
+			continue;
+		}
+		if (score < min) {
+			min = score;
+			ret = m;
+			(*outIndex) = i;
+		}
+	}
+	return ret;
+}
+
 constructor* meta_ilfind_ctor(vector* ctor_vec, vector* ilargs, struct enviroment* env, int* outIndex) {
 	//見つかった中からもっとも一致するコンストラクタを選択する
 	int min = 1024;

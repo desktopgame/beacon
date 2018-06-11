@@ -320,11 +320,41 @@ method * class_ilfind_method(class_ * self, const char * name, vector * args, en
 	return NULL;
 }
 
+struct method* class_gfind_method(class_* self, const char* name, vector* gargs, int* outIndex) {
+	(*outIndex) = -1;
+	class_create_vtable(self);
+	//assert(self->vt->elements->length > 0);
+	method* ret = NULL;
+	if((ret = meta_gfind_method(self->vt->elements, name, gargs, outIndex))
+	   != NULL) {
+		   return ret;
+	}
+	if((ret = meta_gfind_method(self->method_list, name, gargs, outIndex))
+	   != NULL) {
+		   return ret;
+	}
+	if((ret = meta_gfind_method(self->smethod_list, name, gargs, outIndex))
+	   != NULL) {
+		   return ret;
+	}
+	return NULL;
+}
+
 method * class_ilfind_smethod(class_ * self, const char * name, vector * args, enviroment * env, int * outIndex) {
 	(*outIndex) = -1;
 	class_create_vtable(self);
 	int temp = 0;
 	method* ret = meta_ilfind_method(self->smethod_list, name, args, env, &temp);
+	temp += (class_count_smethodall(self) - self->smethod_list->length);
+	(*outIndex) = temp;
+	return ret;
+}
+
+method* class_gfind_smethod(class_* self, const char* name, vector* gargs, int* outIndex) {
+	(*outIndex) = -1;
+	class_create_vtable(self);
+	int temp = 0;
+	method* ret = meta_gfind_method(self->smethod_list, name, gargs, &temp);
 	temp += (class_count_smethodall(self) - self->smethod_list->length);
 	(*outIndex) = temp;
 	return ret;

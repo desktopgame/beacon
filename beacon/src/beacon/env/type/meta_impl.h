@@ -51,6 +51,17 @@ int meta_rcalc_score(vector* params, vector* args, vector* typeargs, struct fram
  * @return
  */
 method* meta_ilfind_method(vector* method_vec, const char * name, vector * ilargs, enviroment * env, int * outIndex);
+
+/**
+ * もっとも一致するメソッドを返します.
+ * @param method_vec
+ * @param name
+ * @param gargs
+ * @param outIndex
+ * @return
+ */
+method* meta_gfind_method(vector* method_vec, const char * name, vector * gargs, int* outIndex);
+
 /**
  * もっとも一致するコンストラクタを返します.
  * @param method_vec

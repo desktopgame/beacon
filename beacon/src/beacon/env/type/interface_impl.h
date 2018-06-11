@@ -56,6 +56,16 @@ void interface_add_method(interface_* self, struct method* m);
 struct method* interface_ilfind_method(interface_* self, const char * name, vector * args, struct enviroment * env, int * outIndex);
 
 /**
+ * インターフェイスからメソッドを検索します.
+ * @param self
+ * @param name
+ * @param gargs
+ * @param outIndex
+ * @return
+ */
+struct method* interface_gfind_method(interface_* self, const char* name, vector* gargs, int* outIndex);
+
+/**
  * 全てのインターフェイスに定義されたメソッドをフラットにして返します.
  * @param inter_list
  * @return

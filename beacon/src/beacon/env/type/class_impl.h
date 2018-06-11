@@ -229,6 +229,16 @@ struct constructor* class_ilfind_empty_constructor(class_* self, enviroment* env
 struct method* class_ilfind_method(class_* self, const char* name, vector* args, enviroment* env, int* outIndex);
 
 /**
+ * もっとも一致するメソッドを返します.
+ * @param self
+ * @param name
+ * @param gargs
+ * @param outIndex
+ * @return
+ */
+struct method* class_gfind_method(class_* self, const char* name, vector* gargs, int* outIndex);
+
+/**
  * もっとも一致する静的メソッドを返します.
  * @param self
  * @param name
@@ -239,6 +249,16 @@ struct method* class_ilfind_method(class_* self, const char* name, vector* args,
  * @return
  */
 struct method* class_ilfind_smethod(class_* self, const char* name, vector* args, enviroment* env, int* outIndex);
+
+/**
+ * もっとも一致する静的メソッドを返します.
+ * @param self
+ * @param name
+ * @param gargs
+ * @param outIndex
+ * @return
+ */
+struct method* class_gfind_smethod(class_* self, const char* name, vector* gargs, int* outIndex);
 
 /**
  * 指定位置のメソッドを返します.

@@ -42,6 +42,10 @@ method * interface_ilfind_method(interface_ * self, const char * name, vector * 
 	return meta_ilfind_method(self->method_list, name, args, env, outIndex);
 }
 
+method* interface_gfind_method(interface_* self, const char* name, vector* gargs, int* outIndex) {
+	return meta_gfind_method(self->method_list, name, gargs, outIndex);
+}
+
 vector* interface_method_flatten_list(vector* inter_list) {
 	vector* ret = vector_new();
 	for(int i=0; i<inter_list->length; i++) {
