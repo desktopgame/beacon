@@ -151,7 +151,7 @@ static void il_factor_invoke_bound_check(il_factor_invoke_bound * self, envirome
 	il_type_argument_resolve(self->type_args);
 	ccpush_receiver(ctype->generic_self);
 	ccpush_type_args(self->type_args);
-	self->m = class_find_method(TYPE2CLASS(ctype), self->name, self->args, env, &temp);
+	self->m = class_ilfind_method(TYPE2CLASS(ctype), self->name, self->args, env, &temp);
 	self->index = temp;
 	ccpop_receiver();
 	ccpop_type_args();

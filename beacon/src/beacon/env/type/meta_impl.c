@@ -15,7 +15,7 @@
 #include "../../util/text.h"
 #include <string.h>
 
-int meta_calc_score(vector* params, vector* ilargs, enviroment* env) {
+int meta_ilcalc_score(vector* params, vector* ilargs, enviroment* env) {
 	assert(params->length == ilargs->length);
 	int score = 0;
 	bool illegal = false;
@@ -79,7 +79,7 @@ int meta_rcalc_score(vector* params, vector* args, vector* typeargs, frame* fr) 
 	return score;
 }
 
-method * meta_find_method(vector * method_vec, const char * name, vector * ilargs, enviroment * env, int * outIndex) {
+method * meta_ilfind_method(vector * method_vec, const char * name, vector * ilargs, enviroment * env, int * outIndex) {
 	(*outIndex) = -1;
 	//class_create_vtable(self);
 	method* ret = NULL;
@@ -104,7 +104,7 @@ method * meta_find_method(vector * method_vec, const char * name, vector * ilarg
 		if(modifier_is_static(m->modifier)) {
 			ccpush_method(m);
 		}
-		int score = meta_calc_score(m->parameter_list, ilargs, env);
+		int score = meta_ilcalc_score(m->parameter_list, ilargs, env);
 		
 		if(modifier_is_static(m->modifier)) {
 			ccpop_method();
@@ -121,7 +121,7 @@ method * meta_find_method(vector * method_vec, const char * name, vector * ilarg
 	return ret;
 }
 
-constructor* meta_find_ctor(vector* ctor_vec, vector* ilargs, struct enviroment* env, int* outIndex) {
+constructor* meta_ilfind_ctor(vector* ctor_vec, vector* ilargs, struct enviroment* env, int* outIndex) {
 	//見つかった中からもっとも一致するコンストラクタを選択する
 	int min = 1024;
 	constructor* ret = NULL;
@@ -140,7 +140,7 @@ constructor* meta_find_ctor(vector* ctor_vec, vector* ilargs, struct enviroment*
 		}
 		//もっともスコアの高いメソッドを選択する
 		ccpush_ctor(ctor);
-		int score = meta_calc_score(ctor->parameter_list, ilargs, env);
+		int score = meta_ilcalc_score(ctor->parameter_list, ilargs, env);
 		ccpop_ctor();
 		if(score == -1) {
 			continue;
@@ -154,7 +154,7 @@ constructor* meta_find_ctor(vector* ctor_vec, vector* ilargs, struct enviroment*
 	return ret;
 }
 
-constructor* meta_find_rctor(vector* ctor_vec, vector* args, vector* typeargs, frame* fr, int* outIndex) {
+constructor* meta_rfind_ctor(vector* ctor_vec, vector* args, vector* typeargs, frame* fr, int* outIndex) {
 	//見つかった中からもっとも一致するコンストラクタを選択する
 	int min = 1024;
 	constructor* ret = NULL;

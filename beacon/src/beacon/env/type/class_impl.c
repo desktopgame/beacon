@@ -282,52 +282,49 @@ field * class_get_sfield(class_ * self, int index) {
 	return class_get_sfield(self->super_class->core_type->u.class_, index);
 }
 
-constructor * class_find_rconstructor(class_ * self, vector * args, vector* typeargs, frame* fr, int* outIndex) {
-//	vector* v = meta_find_rconstructors(self, args);
-//	(*outIndex) = -1;
-//	return class_find_rconstructor_impl(v, args, outIndex);
-	return meta_find_rctor(self->constructor_list, args, typeargs, fr, outIndex);
+constructor * class_rfind_constructor(class_ * self, vector * args, vector* typeargs, frame* fr, int* outIndex) {
+	return meta_rfind_ctor(self->constructor_list, args, typeargs, fr, outIndex);
 }
 
-constructor * class_find_constructor(class_ * self, vector * args, enviroment * env, int* outIndex) {
+constructor * class_ilfind_constructor(class_ * self, vector * args, enviroment * env, int* outIndex) {
 	//	vector* v = meta_find_constructors(self, args, env, ilctx);
 	//	(*outIndex) = -1;
 	//	return class_find_constructor_impl(v, args, env, ilctx, outIndex);
-	return meta_find_ctor(self->constructor_list, args, env, outIndex);
+	return meta_ilfind_ctor(self->constructor_list, args, env, outIndex);
 }
 
-constructor * class_find_empty_constructor(class_ * self, enviroment * env, int * outIndex) {
+constructor * class_ilfind_empty_constructor(class_ * self, enviroment * env, int * outIndex) {
 	vector* emptyArgs = vector_new();
-	constructor* ret = class_find_constructor(self, emptyArgs, env, outIndex);
+	constructor* ret = class_ilfind_constructor(self, emptyArgs, env, outIndex);
 	vector_delete(emptyArgs, vector_deleter_null);
 	return ret;
 }
 
-method * class_find_method(class_ * self, const char * name, vector * args, enviroment * env, int * outIndex) {
+method * class_ilfind_method(class_ * self, const char * name, vector * args, enviroment * env, int * outIndex) {
 	(*outIndex) = -1;
 	class_create_vtable(self);
 	//assert(self->vt->elements->length > 0);
 	method* ret = NULL;
-	if((ret = meta_find_method(self->vt->elements, name, args, env, outIndex))
+	if((ret = meta_ilfind_method(self->vt->elements, name, args, env, outIndex))
 	   != NULL) {
 		   return ret;
 	}
-	if((ret = meta_find_method(self->method_list, name, args, env, outIndex))
+	if((ret = meta_ilfind_method(self->method_list, name, args, env, outIndex))
 	   != NULL) {
 		   return ret;
 	}
-	if((ret = meta_find_method(self->smethod_list, name, args, env, outIndex))
+	if((ret = meta_ilfind_method(self->smethod_list, name, args, env, outIndex))
 	   != NULL) {
 		   return ret;
 	}
 	return NULL;
 }
 
-method * class_find_smethod(class_ * self, const char * name, vector * args, enviroment * env, int * outIndex) {
+method * class_ilfind_smethod(class_ * self, const char * name, vector * args, enviroment * env, int * outIndex) {
 	(*outIndex) = -1;
 	class_create_vtable(self);
 	int temp = 0;
-	method* ret = meta_find_method(self->smethod_list, name, args, env, &temp);
+	method* ret = meta_ilfind_method(self->smethod_list, name, args, env, &temp);
 	temp += (class_count_smethodall(self) - self->smethod_list->length);
 	(*outIndex) = temp;
 	return ret;
@@ -541,7 +538,7 @@ int class_count_smethodall(class_ * self) {
 object * class_new_instance(class_* self, frame* fr, vector* args, vector* type_args) {
 	//コンストラクタを検索
 	int temp = 0;
-	constructor* ctor = class_find_rconstructor(self, args, NULL, fr, &temp);
+	constructor* ctor = class_rfind_constructor(self, args, NULL, fr, &temp);
 	assert(temp != -1);
 	//コンストラクタを実行
 	frame* sub = frame_sub(fr);

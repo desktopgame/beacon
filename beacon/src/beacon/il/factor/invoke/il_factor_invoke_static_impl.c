@@ -137,7 +137,7 @@ static void il_factor_invoke_static_check(il_factor_invoke_static * self, enviro
 	//環境を設定
 	ccpush_type_args(self->type_args);
 	//メソッドを検索
-	self->m = class_find_smethod(cls, self->name, self->args, env, &temp);
+	self->m = class_ilfind_smethod(cls, self->name, self->args, env, &temp);
 	self->index = temp;
 	//メソッドが見つからない
 	if(temp == -1) {

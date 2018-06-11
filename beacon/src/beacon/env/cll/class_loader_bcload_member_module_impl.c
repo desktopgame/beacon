@@ -415,7 +415,7 @@ static void CLBC_chain_root(class_loader * self, il_type * iltype, type * tp, il
 static void CLBC_chain_auto(class_loader * self, il_type * iltype, type * tp, il_constructor * ilcons, il_constructor_chain * ilchain, enviroment * env) {
 	class_* classz = tp->u.class_;
 	int emptyTemp = 0;
-	constructor* emptyTarget = class_find_empty_constructor(classz->super_class->core_type->u.class_, env, &emptyTemp);
+	constructor* emptyTarget = class_ilfind_empty_constructor(classz->super_class->core_type->u.class_, env, &emptyTemp);
 	//連鎖を明示的に書いていないのに、
 	//親クラスにも空のコンストラクタが存在しない=エラー
 	//(この場合自動的にチェインコンストラクタを補うことが出来ないため。)
@@ -450,12 +450,12 @@ static void CLBC_chain_super(class_loader * self, il_type * iltype, type * tp, i
 	int temp = 0;
 	if (chain->type == chain_type_this) {
 		ccpush_type_args(tp->generic_self->type_args_list);
-		chainTarget = class_find_constructor(classz, chain->argument_list, env, &temp);
+		chainTarget = class_ilfind_constructor(classz, chain->argument_list, env, &temp);
 		opcode_buf_add(env->buf, (vector_item)op_chain_this);
 		opcode_buf_add(env->buf, (vector_item)(tp->absolute_index));
 	} else if (chain->type == chain_type_super) {
 		ccpush_type_args(classz->super_class->type_args_list);
-		chainTarget = class_find_constructor(classz->super_class->core_type->u.class_, chain->argument_list, env, &temp);
+		chainTarget = class_ilfind_constructor(classz->super_class->core_type->u.class_, chain->argument_list, env, &temp);
 		opcode_buf_add(env->buf, op_chain_super);
 		opcode_buf_add(env->buf, classz->super_class->core_type->u.class_->classIndex);
 	}

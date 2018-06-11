@@ -151,7 +151,7 @@ static void il_factor_new_instance_find(il_factor_new_instance * self, enviromen
 	//XSTREQ(cls->name, "String");
 	ccpush_type_args(self->type_args);
 	il_type_argument_resolve(self->type_args);
-	self->c = class_find_constructor(cls, self->argument_list, env, &temp);
+	self->c = class_ilfind_constructor(cls, self->argument_list, env, &temp);
 	self->constructor_index = temp;
 	if(temp == -1) {
 		il_error_report(ilerror_undefined_ctor, cls->name);

@@ -65,7 +65,7 @@ void type_add_method(type* self, method * m) {
 method * type_find_method(type * self, const char * name, vector * args, enviroment * env, int * outIndex) {
 	assert(self != NULL);
 	if (self->tag == type_class) {
-		return class_find_method(self->u.class_, name, args, env, outIndex);
+		return class_ilfind_method(self->u.class_, name, args, env, outIndex);
 	} else if (self->tag == type_interface) {
 		return interface_find_method(self->u.interface_, name, args, env, outIndex);
 	}
@@ -74,7 +74,7 @@ method * type_find_method(type * self, const char * name, vector * args, envirom
 
 method* type_find_smethod(type* self, const char* name, vector* args, struct enviroment* env, int* outIndex) {
 	assert(self->tag == type_class);
-	return class_find_smethod(self->u.class_, name, args, env, outIndex);
+	return class_ilfind_smethod(self->u.class_, name, args, env, outIndex);
 }
 
 vtable * type_vtable(type * self) {

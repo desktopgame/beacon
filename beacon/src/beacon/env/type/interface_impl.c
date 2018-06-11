@@ -39,7 +39,7 @@ void interface_add_method(interface_ * self, method * m) {
 }
 
 method * interface_find_method(interface_ * self, const char * name, vector * args, enviroment * env, int * outIndex) {
-	return meta_find_method(self->method_list, name, args, env, outIndex);
+	return meta_ilfind_method(self->method_list, name, args, env, outIndex);
 }
 
 vector* interface_method_flatten_list(vector* inter_list) {

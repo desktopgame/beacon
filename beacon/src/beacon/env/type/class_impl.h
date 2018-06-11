@@ -193,7 +193,7 @@ struct field* class_get_sfield(class_* self, int index);
  * @param outIndex
  * @return 無ければ空
  */
-struct constructor* class_find_rconstructor(class_* self, vector* args, vector* typeargs, frame* fr, int* outIndex);
+struct constructor* class_rfind_constructor(class_* self, vector* args, vector* typeargs, frame* fr, int* outIndex);
 
 /**
  * もっとも一致するコンストラクタを返します.
@@ -204,7 +204,7 @@ struct constructor* class_find_rconstructor(class_* self, vector* args, vector* 
  * @param outIndex
  * @return 無ければ空
  */
-struct constructor* class_find_constructor(class_* self, vector* args, enviroment* env, int* outIndex);
+struct constructor* class_ilfind_constructor(class_* self, vector* args, enviroment* env, int* outIndex);
 
 /**
  * 引数が一つもないコンストラクタを検索して返します.
@@ -214,7 +214,7 @@ struct constructor* class_find_constructor(class_* self, vector* args, enviromen
  * @param outIndex
  * @return
  */
-struct constructor* class_find_empty_constructor(class_* self, enviroment* env, int* outIndex);
+struct constructor* class_ilfind_empty_constructor(class_* self, enviroment* env, int* outIndex);
 
 /**
  * もっとも一致するメソッドを返します.
@@ -226,7 +226,7 @@ struct constructor* class_find_empty_constructor(class_* self, enviroment* env, 
  * @param outIndex メソッドへのインデックス
  * @return
  */
-struct method* class_find_method(class_* self, const char* name, vector* args, enviroment* env, int* outIndex);
+struct method* class_ilfind_method(class_* self, const char* name, vector* args, enviroment* env, int* outIndex);
 
 /**
  * もっとも一致する静的メソッドを返します.
@@ -238,7 +238,7 @@ struct method* class_find_method(class_* self, const char* name, vector* args, e
  * @param outIndex メソッドへのインデックス
  * @return
  */
-struct method* class_find_smethod(class_* self, const char* name, vector* args, enviroment* env, int* outIndex);
+struct method* class_ilfind_smethod(class_* self, const char* name, vector* args, enviroment* env, int* outIndex);
 
 /**
  * 指定位置のメソッドを返します.

@@ -18,7 +18,7 @@ struct class_;
  * @param ilctx
  * @return
  */
-int meta_calc_score(vector* params, vector* ilargs, struct enviroment* env);
+int meta_ilcalc_score(vector* params, vector* ilargs, struct enviroment* env);
 /**
  * 仮引数と実引数のマッチ率を返します.
  * こちらは object* を 使用します。
@@ -40,7 +40,7 @@ int meta_rcalc_score(vector* params, vector* args, vector* typeargs, struct fram
  * @param outIndex
  * @return
  */
-method* meta_find_method(vector* method_vec, const char * name, vector * ilargs, enviroment * env, int * outIndex);
+method* meta_ilfind_method(vector* method_vec, const char * name, vector * ilargs, enviroment * env, int * outIndex);
 /**
  * もっとも一致するコンストラクタを返します.
  * @param method_vec
@@ -51,9 +51,9 @@ method* meta_find_method(vector* method_vec, const char * name, vector * ilargs,
  * @param outIndex
  * @return
  */
-constructor* meta_find_ctor(vector* ctor_vec, vector* ilargs, struct enviroment* env, int* outIndex);
+constructor* meta_ilfind_ctor(vector* ctor_vec, vector* ilargs, struct enviroment* env, int* outIndex);
 
 
-constructor* meta_find_rctor(vector* ctor_vec, vector* args, vector* typeargs, struct frame* fr, int* outIndex);
+constructor* meta_rfind_ctor(vector* ctor_vec, vector* args, vector* typeargs, struct frame* fr, int* outIndex);
 
 #endif // !SIGNAL_ENV_META_H
