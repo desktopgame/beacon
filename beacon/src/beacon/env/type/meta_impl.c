@@ -52,7 +52,7 @@ int meta_ilcalc_score(vector* params, vector* ilargs, enviroment* env) {
 	return score;
 }
 
-int meta_gcalc_score(vector* params, vector* gargs, enviroment* env) {
+int meta_gcalc_score(vector* params, vector* gargs) {
 	assert(params->length == gargs->length);
 	//meta_ilcalc_scoreからのコピペ
 	int score = 0;
