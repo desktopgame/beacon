@@ -52,6 +52,44 @@ int meta_ilcalc_score(vector* params, vector* ilargs, enviroment* env) {
 	return score;
 }
 
+int meta_gcalc_score(vector* params, vector* gargs, enviroment* env) {
+	assert(params->length == gargs->length);
+	//meta_ilcalc_scoreからのコピペ
+	int score = 0;
+	bool illegal = false;
+	//assert(ilctx->type_args_vec->length != 0);
+	//vector* type_args = vector_top(ilctx->type_args_vec);
+	for (int i = 0; i < params->length; i++) {
+		vector_item varg = vector_at(gargs, i);
+		vector_item vparam = vector_at(params, i);
+		//il_argument* arg = (il_argument*)varg;
+		parameter* param = (parameter*)vparam;
+		//実引数が NULL なら常に許容する
+		int dist = 0;
+		generic_type* argType = (generic_type*)varg;
+		if(il_error_panic()) {
+			return -1;
+		}
+		if (argType->core_type != TYPE_NULL) {
+			generic_type* a = generic_type_apply(param->gtype);
+			dist = generic_type_distance(
+				a,
+			//	generic_type_apply(argType, ilctx),
+			//	param->gtype,
+				argType
+			//	ilctx
+			);
+		}
+		score += dist;
+		//継承関係のないパラメータ
+		if (dist == -1) {
+			illegal = true;
+			return -1;
+		}
+	}
+	return score;
+}
+
 int meta_rcalc_score(vector* params, vector* args, vector* typeargs, frame* fr) {
 	assert(params->length == args->length);
 	int score = 0;

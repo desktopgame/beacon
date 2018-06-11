@@ -19,6 +19,18 @@ struct class_;
  * @return
  */
 int meta_ilcalc_score(vector* params, vector* ilargs, struct enviroment* env);
+
+/**
+ * 仮引数と実引数のマッチ率を返します.
+ * こちらは generic_type* を 使用します。
+ * @param params
+ * @param gargs
+ * @param typeargs
+ * @param fr
+ * @return
+ */
+int meta_gcalc_score(vector* params, vector* gargs, struct enviroment* env);
+
 /**
  * 仮引数と実引数のマッチ率を返します.
  * こちらは object* を 使用します。
