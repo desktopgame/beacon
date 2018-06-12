@@ -27,6 +27,7 @@ operator_overload* operator_overload_new(operator_type type) {
 
 void operator_overload_execute(operator_overload* self, frame* fr, enviroment* env) {
 	frame* sub = frame_sub(fr);
+	sub->receiver = fr->receiver;
 	vector_push(sub->value_stack, vector_pop(fr->value_stack));
 	for (int i = 0; i < self->parameter_list->length; i++) {
 		vector_push(sub->value_stack, object_copy(vector_pop(fr->value_stack)));

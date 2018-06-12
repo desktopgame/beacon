@@ -140,7 +140,7 @@ static void il_factor_invoke_static_check(il_factor_invoke_static * self, enviro
 	self->m = class_ilfind_smethod(cls, self->name, self->args, env, &temp);
 	self->index = temp;
 	//メソッドが見つからない
-	if(temp == -1) {
+	if(temp == -1 || self->m == NULL) {
 		il_error_report(ilerror_undefined_method, self->name);
 	}
 	//元に戻す

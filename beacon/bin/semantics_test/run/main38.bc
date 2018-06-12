@@ -1,0 +1,5 @@
+var v = new Vector[Int]();
+var v2 = new Vector[Int]();
+assert (v == v);
+assert !(v == v2);
+assert (true == true);

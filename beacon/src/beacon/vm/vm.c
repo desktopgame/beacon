@@ -716,8 +716,10 @@ static void vm_run(frame * self, enviroment * env, int pos, int deferStart) {
 				//オブジェクトから直接型を取り出してしまうと具象すぎる
 				int index = (int)enviroment_source_at(env, ++IDX);
 				object* o = (object*)vector_top(self->value_stack);
-				//class_* cl = TYPE2CLASS(o->gtype->core_type);
-				class_* cl = TYPE2CLASS(self->receiver);
+				class_* cl = TYPE2CLASS(o->gtype->core_type);
+				if(self->receiver != NULL) {
+					cl = TYPE2CLASS(self->receiver);
+				}
 				method* m = (method*)vector_at(cl->method_list, index);
 				method_execute(m, self, env);
 				break;

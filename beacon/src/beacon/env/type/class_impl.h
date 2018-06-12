@@ -239,6 +239,14 @@ struct method* class_ilfind_method(class_* self, const char* name, vector* args,
 struct method* class_gfind_method(class_* self, const char* name, vector* gargs, int* outIndex);
 
 /**
+ * equalsメソッドを検索します.
+ * @param self
+ * @param outIndex
+ * @return
+ */
+struct method* class_gfind_eqmethod(class_* self, int* outIndex);
+
+/**
  * もっとも一致する静的メソッドを返します.
  * @param self
  * @param name

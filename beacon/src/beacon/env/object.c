@@ -102,6 +102,7 @@ object * object_get_true() {
 		ctx->oTrue = object_malloc(object_bool);
 		ctx->oTrue->u.bool_ = !false;
 		ctx->oTrue->gtype = GENERIC_BOOL;
+		ctx->oTrue->vptr = TYPE2CLASS(TYPE_BOOL)->vt;
 	}
 	return ctx->oTrue;
 }
@@ -112,6 +113,7 @@ object * object_get_false() {
 		ctx->oFalse = object_malloc(object_bool);
 		ctx->oFalse->u.bool_ = false;
 		ctx->oFalse->gtype = GENERIC_BOOL;
+		ctx->oFalse->vptr = TYPE2CLASS(TYPE_BOOL)->vt;
 	}
 	return ctx->oFalse;
 }

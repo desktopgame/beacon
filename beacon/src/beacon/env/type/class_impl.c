@@ -340,6 +340,14 @@ struct method* class_gfind_method(class_* self, const char* name, vector* gargs,
 	return NULL;
 }
 
+method* class_gfind_eqmethod(class_* self, int* outIndex) {
+	vector* gargs = vector_new();
+	vector_push(gargs, TYPE_OBJECT->generic_self);
+	method* ret = class_gfind_method(self, "equals", gargs, outIndex);
+	vector_delete(gargs, vector_deleter_null);
+	return ret;
+}
+
 method * class_ilfind_smethod(class_ * self, const char * name, vector * args, enviroment * env, int * outIndex) {
 	(*outIndex) = -1;
 	class_create_vtable(self);

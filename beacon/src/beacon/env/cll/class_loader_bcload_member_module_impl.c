@@ -300,12 +300,6 @@ void CLBC_operator_overload_decl(class_loader* self, il_type* iltype, type* tp, 
 			break;
 		}
 	}
-	//equalsメソッドを検索する
-	int outIndex = 0;
-	operator_overload* opov_defeq = meta_gfind_operator_default_eq(TYPE2CLASS(tp)->operator_overload_list, &outIndex);
-	if(opov_defeq == NULL) {
-		
-	}
 	ccpop_type();
 	ccpop_namespace();
 	ccset_class_loader(NULL);
@@ -347,6 +341,47 @@ void CLBC_operator_overload_impl(class_loader* self, il_type* iltype, type* tp, 
 		//ccpop_method();
 		opov->env = env;
 		ccpop_type();
+	}
+	//==(Object a)を検索する
+	int outIndex = 0;
+	operator_overload* opov_defeq = meta_gfind_operator_default_eq(TYPE2CLASS(tp)->operator_overload_list, &outIndex);
+	if(opov_defeq == NULL) {
+		//equals(Object a)を検索する
+		//これによって == を自動実装する
+		int methodPos = 0;
+		method* eqM = class_gfind_eqmethod(TYPE2CLASS(tp), &methodPos);
+		assert(eqM != NULL);
+		operator_overload* opov_eq = operator_overload_new(operator_eq);
+		opov_eq->access = access_public;
+		//戻り値読み込み
+		opov_eq->parent = tp;
+		opov_eq->return_gtype = TYPE_BOOL->generic_self;
+		vector_push(TYPE2CLASS(tp)->operator_overload_list, opov_eq);
+		//引数作成
+		parameter* paramOBJ = parameter_new("a");
+		paramOBJ->gtype = TYPE_OBJECT->generic_self;
+		vector_push(opov_eq->parameter_list, paramOBJ);
+		//オペコード作成
+		enviroment* env = enviroment_new();
+		ccpush_type(tp);
+		env->context_ref = self;
+		//引数を読み取る
+		symbol_table_entry(env->sym_table, paramOBJ->gtype, paramOBJ->name);
+		opcode_buf_add(env->buf, (vector_item)op_store);
+		opcode_buf_add(env->buf, (vector_item)1);
+		//thisを参照できるように
+		opcode_buf_add(env->buf, (vector_item)op_store);
+		opcode_buf_add(env->buf, (vector_item)0);
+		//equalsメソッドを呼び出す
+		opcode_buf_add(env->buf, (vector_item)op_load);
+		opcode_buf_add(env->buf, (vector_item)1);
+		opcode_buf_add(env->buf, (vector_item)op_load);
+		opcode_buf_add(env->buf, (vector_item)0);
+		opcode_buf_add(env->buf, (vector_item)op_invokevirtual);
+		opcode_buf_add(env->buf, (vector_item)methodPos);
+		opcode_buf_add(env->buf, (vector_item)op_return);
+		ccpop_type();
+		opov_eq->env = env;
 	}
 	ccpop_type();
 	ccset_class_loader(NULL);

@@ -47,7 +47,7 @@ namespace beacon::unsafe {
 		def available() -> Bool {
 			return nativeAvailable();
 		}
-
+/*
 		def static stdin() -> File {
 			if(File.STDIN == null) {
 				File.STDIN = nativeGetStdIn();
@@ -68,7 +68,7 @@ namespace beacon::unsafe {
 			}
 			return File.STDERR;
 		}
-
+*/
 		private:
 		def static native nativeOpen(String filename, String mode) -> File;
 
