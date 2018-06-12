@@ -733,6 +733,14 @@ static void vm_run(frame * self, enviroment * env, int pos, int deferStart) {
 				operator_overload_execute(operator_ov, self, env);
 				break;
 			}
+			case op_invokevirtual_lazy:
+			{
+				lazy_int* index = (lazy_int*)enviroment_source_at(env, ++IDX);
+				object* o = (object*)vector_top(self->value_stack);
+				method* m = class_get_method(o, index->value);
+				method_execute(m, self, env);
+				break;
+			}
 			case op_generic_add:
 			{
 				//TODO:ここで親フレームを遡るように

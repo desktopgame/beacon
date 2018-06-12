@@ -47,28 +47,28 @@ namespace beacon::unsafe {
 		def available() -> Bool {
 			return nativeAvailable();
 		}
-/*
+
 		def static stdin() -> File {
 			if(File.STDIN == null) {
-				File.STDIN = nativeGetStdIn();
+				File.STDIN = File.nativeGetStdIn();
 			}
 			return File.STDIN;
 		}
 
 		def static stdout() -> File {
 			if(File.STDOUT == null) {
-				File.STDOUT = nativeGetStdOut();
+				File.STDOUT = File.nativeGetStdOut();
 			}
 			return File.STDOUT;
 		}
 
 		def static stderr() -> File {
 			if(File.STDERR == null) {
-				File.STDERR = nativeGetStdErr();
+				File.STDERR = File.nativeGetStdErr();
 			}
 			return File.STDERR;
 		}
-*/
+
 		private:
 		def static native nativeOpen(String filename, String mode) -> File;
 

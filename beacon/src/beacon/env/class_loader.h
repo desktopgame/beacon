@@ -24,6 +24,7 @@ typedef struct class_loader {
 	content_type type;
 	link_type link;
 	vector* type_cache_vec;
+	vector* lazy_resolve_vec;
 
 	struct class_loader* parent;
 	int level;

@@ -1,0 +1,23 @@
+#ifndef BEACON_ENV_LAZY_RESOLVE_H
+#define BEACON_ENV_LAZY_RESOLVE_H
+#include <stdbool.h>
+struct default_operator_resolve;
+
+typedef enum lazy_resolve_tag {
+	resolve_default_operator,
+} lazy_resolve_tag;
+
+typedef struct lazy_resolve {
+	lazy_resolve_tag tag;
+	bool active;
+	union {
+		struct default_operator_resolve* def_operator;
+	} u;
+} lazy_resolve;
+
+lazy_resolve* lazy_resolve_new(lazy_resolve_tag tag);
+
+void lazy_resolve_apply(lazy_resolve* self);
+
+void lazy_resolve_delete(lazy_resolve* self);
+#endif

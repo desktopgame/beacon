@@ -9,6 +9,7 @@
 #include "../../il/il_stmt_interface.h"
 #include "../../il/il_operator_overload.h"
 #include "../../env/type_impl.h"
+#include "../../env/object.h"
 #include "../../env/compile_context.h"
 #include "../../env/field.h"
 #include "../../env/method.h"
@@ -20,6 +21,8 @@
 #include "../../env/cll/class_loader_link_impl.h"
 #include "../../util/xassert.h"
 #include "../../util/text.h"
+#include "../lazy_resolve.h"
+#include "../resolve/default_operator_resolve.h"
 #include <assert.h>
 #include <string.h>
 
@@ -66,6 +69,7 @@ void CLBC_fields_impl(class_loader* self, namespace_* scope, vector* ilfields, v
 	for (int i = 0; i < sgfields->length; i++) {
 		vector_item e = vector_at(sgfields, i);
 		field* fi = (field*)e;
+		fi->static_value = object_get_null();
 		ccpush_type(fi->parent);
 		//FIXME:ILフィールドと実行時フィールドのインデックスが同じなのでとりあえず動く
 		il_field* ilfield = ((il_field*)vector_at(ilfields, i));
@@ -302,6 +306,7 @@ void CLBC_operator_overload_decl(class_loader* self, il_type* iltype, type* tp, 
 			break;
 		}
 	}
+	CLBC_default_operator_overload(self, tp);
 	ccpop_type();
 	ccpop_namespace();
 	ccset_class_loader(NULL);
@@ -312,7 +317,8 @@ void CLBC_operator_overload_impl(class_loader* self, il_type* iltype, type* tp, 
 	ccpush_type(tp);
 	ccset_class_loader(self);
 	vector* opov_list = tp->u.class_->operator_overload_list;
-	for (int i = 0; i < opov_list->length; i++) {
+	//ここで暗黙的に作成される == != によって長さが合わなくなる
+	for (int i = 0; i < iltype->u.class_->operator_overload_list->length; i++) {
 		vector_item e = vector_at(opov_list, i);
 		operator_overload* opov = (operator_overload*)e;
 		il_operator_overload* ilopov = (il_operator_overload*)vector_at(iltype->u.class_->operator_overload_list, i);
@@ -499,18 +505,14 @@ static void CLBC_default_operator_overload(class_loader* self, type* tp) {
 	int outIndex = 0;
 	operator_overload* opov_defeq = meta_gfind_operator_default_eq(TYPE2CLASS(tp)->operator_overload_list, &outIndex);
 	if(opov_defeq != NULL) {
+		//すでに存在するので何もしない
 		return;
 	}
 	//equals(Object a)を検索する
 	//これによって == を自動実装する
 	int methodPos = 0;
-	method* eqM = class_gfind_eqmethod(TYPE2CLASS(tp), &methodPos);
-	if(eqM == NULL) {
-		//Arrayなどではここに入る
-		class_loader_link(self, link_decl);
-		eqM = class_gfind_eqmethod(TYPE2CLASS(tp), &methodPos);
-	}
-	assert(eqM != NULL);
+	//method* eqM = class_gfind_eqmethod(TYPE2CLASS(tp), &methodPos);
+	//assert(eqM != NULL);
 	operator_overload* opov_eq = operator_overload_new(operator_eq);
 	opov_eq->access = access_public;
 	//戻り値読み込み
@@ -537,8 +539,19 @@ static void CLBC_default_operator_overload(class_loader* self, type* tp) {
 	opcode_buf_add(env->buf, (vector_item)1);
 	opcode_buf_add(env->buf, (vector_item)op_load);
 	opcode_buf_add(env->buf, (vector_item)0);
-	opcode_buf_add(env->buf, (vector_item)op_invokevirtual);
-	opcode_buf_add(env->buf, (vector_item)methodPos);
+	//equalsが見つからないのであとで解決する
+//	if(eqM != NULL) {
+//		opcode_buf_add(env->buf, (vector_item)op_invokevirtual);
+//		opcode_buf_add(env->buf, (vector_item)methodPos);
+//	} else {
+		opcode_buf_add(env->buf, (vector_item)op_invokevirtual_lazy);
+		lazy_int* li = opcode_buf_lazy(env->buf, -1);
+		lazy_resolve* resolve = lazy_resolve_new(resolve_default_operator);
+		resolve->u.def_operator->lazyi_ref = li;
+		resolve->u.def_operator->type_ref = tp;
+		vector_push(self->lazy_resolve_vec, resolve);
+//	}
+	opcode_buf_add(env->buf, (vector_item)li);
 	opcode_buf_add(env->buf, (vector_item)op_return);
 	ccpop_type();
 	opov_eq->env = env;

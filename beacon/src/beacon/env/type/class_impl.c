@@ -370,6 +370,9 @@ method* class_gfind_smethod(class_* self, const char* name, vector* gargs, int* 
 
 method * class_get_method(object * o, int index) {
 	assert(index >= 0);
+	if(o->tag == object_null) {
+		o->vptr = TYPE2CLASS(TYPE_OBJECT)->vt;
+	}
 	vtable* vx = (o->vptr);
 	return (method*)vector_at(vx->elements, index);
 }
@@ -508,7 +511,6 @@ void class_create_vtable(class_ * self) {
 	if (self->vt != NULL) {
 		return;
 	}
-	//XSTREQ(self->name, "Int");
 	self->vt = vtable_new();
 	//トップレベルではメソッドの一覧を配列に入れるだけ
 	if (self->super_class == NULL) {

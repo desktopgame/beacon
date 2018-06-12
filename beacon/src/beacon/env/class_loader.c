@@ -9,6 +9,7 @@
 #include "../vm/vm.h"
 #include "../vm/opcode.h"
 #include "../vm/opcode_buf.h"
+#include "lazy_resolve.h"
 #include "../env/native_method_ref.h"
 #include "../il/il_argument.h"
 #include "../util/vector.h"
@@ -50,6 +51,9 @@
 static void class_loader_load_impl(class_loader* self);
 static void class_loader_link_recursive(class_loader* self, link_type type);
 static void class_loader_cache_delete(vector_item item);
+static void class_loader_lazy_resolve_delete(vector_item item);
+static void class_loader_lazy_resolve(class_loader* self);
+static void class_loader_lazy_resolve_recursive(class_loader* self);
 
 class_loader* class_loader_new(content_type type) {
 	class_loader* ret = (class_loader*)MEM_MALLOC(sizeof(class_loader));
@@ -63,6 +67,7 @@ class_loader* class_loader_new(content_type type) {
 	ret->error = false;
 	ret->level = 0;
 	ret->type_cache_vec = vector_new();
+	ret->lazy_resolve_vec = vector_new();
 	ret->env->context_ref = ret;
 	return ret;
 }
@@ -119,6 +124,7 @@ void class_loader_delete(class_loader * self) {
 	ast_delete(self->source_code);
 	il_top_level_delete(self->il_code);
 	vector_delete(self->type_cache_vec, class_loader_cache_delete);
+	vector_delete(self->lazy_resolve_vec, class_loader_lazy_resolve_delete);
 	import_manager_delete(self->import_manager);
 	enviroment_delete(self->env);
 	MEM_FREE(self->filename);
@@ -153,6 +159,7 @@ static void class_loader_load_impl(class_loader* self) {
 		il_error_enter();
 		class_loader_link_recursive(self, link_decl);
 		class_loader_link_recursive(self, link_impl);
+		class_loader_lazy_resolve_recursive(self);
 		il_error_exit();
 	}
 	//トップレベルのステートメントを読み込む
@@ -182,4 +189,29 @@ static void class_loader_link_recursive(class_loader* self, link_type type) {
 static void class_loader_cache_delete(vector_item item) {
 	type_cache* e = (type_cache*)item;
 	type_cache_delete(e);
+}
+
+static void class_loader_lazy_resolve_delete(vector_item item) {
+	lazy_resolve* e = (lazy_resolve*)item;
+	lazy_resolve_delete(e);
+}
+
+static void class_loader_lazy_resolve(class_loader* self) {
+	for(int i=0; i<self->lazy_resolve_vec->length; i++) {
+		lazy_resolve* lr = (lazy_resolve*)vector_at(self->lazy_resolve_vec, i);
+		if(!lr->active) {
+			continue;
+		}
+		lazy_resolve_apply(lr);
+		lr->active = false;
+	}
+}
+
+static void class_loader_lazy_resolve_recursive(class_loader* self) {
+	import_manager* importMgr = self->import_manager;
+	for (int i = 0; i < importMgr->info_vec->length; i++) {
+		import_info* info = (import_info*)vector_at(importMgr->info_vec, i);
+		class_loader_lazy_resolve(info->context);
+	}
+	class_loader_lazy_resolve(self);
 }

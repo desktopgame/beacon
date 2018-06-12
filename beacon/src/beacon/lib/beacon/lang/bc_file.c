@@ -26,9 +26,9 @@ void bc_file_init() {
 	class_define_native_method(fileClass, "nativePut", bc_file_nativePut);
 	class_define_native_method(fileClass, "nativeGet", bc_file_nativeGet);
 	class_define_native_method(fileClass, "nativeAvailable", bc_file_nativeAvailable);
-	class_define_native_method(fileClass, "nativeStdIn", bc_file_nativeGetStdIn);
-	class_define_native_method(fileClass, "nativeStdOut", bc_file_nativeGetStdOut);
-	class_define_native_method(fileClass, "nativeStdErr", bc_file_nativeGetStdErr);
+	class_define_native_method(fileClass, "nativeGetStdIn", bc_file_nativeGetStdIn);
+	class_define_native_method(fileClass, "nativeGetStdOut", bc_file_nativeGetStdOut);
+	class_define_native_method(fileClass, "nativeGetStdErr", bc_file_nativeGetStdErr);
 	class_define_native_method(fileClass, "nativeClose", bc_file_nativeClose);
 }
 

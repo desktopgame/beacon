@@ -34,7 +34,7 @@ void script_method_execute(script_method * self, method* parent, frame * fr, env
 	//text_putindent(sub->level);
 	//text_printfln("[ %s#%s ]", type_name(parent->parent), parent->name);
 	//enviroment_op_dump(self->env, sub->level);
-	//opcode_buf_dump(self->env->buf, sub->level);
+//	opcode_buf_dump(self->env->buf, sub->level);
 	vm_execute(sub, self->env);
 	//戻り値が Void 以外ならスタックトップの値を引き継ぐ
 	if(parent->return_gtype != TYPE_VOID->generic_self) {

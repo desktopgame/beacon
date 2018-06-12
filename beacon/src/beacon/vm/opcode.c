@@ -2,6 +2,7 @@
 #include "opcode_buf.h"
 #include <stdio.h>
 #include "../util/text.h"
+#include "lazy_int.h"
 
 int opcode_print(vector* source, int index) {
 	return opcode_fprint(stdout, source, index);
@@ -337,6 +338,12 @@ int opcode_fprint(FILE* fp, vector* source, int index) {
 		{
 			int a = (int)vector_at(source, ++index);
 			text_fprintf(fp,"invoke operator(%d)", a);
+			break;
+		}
+		case op_invokevirtual_lazy:
+		{
+			lazy_int* a = (lazy_int*)vector_at(source, ++index);
+			text_fprintf(fp,"invoke virtual(%d)", a->value);
 			break;
 		}
 		case op_generic_add:
