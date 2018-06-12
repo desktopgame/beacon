@@ -16,6 +16,7 @@
 #include "../../env/parameter.h"
 #include "../../env/type_parameter.h"
 #include "../../env/operator_overload.h"
+#include "../../env/type/meta_impl.h"
 #include "../../util/xassert.h"
 #include "../../util/text.h"
 #include <assert.h>
@@ -298,6 +299,12 @@ void CLBC_operator_overload_decl(class_loader* self, il_type* iltype, type* tp, 
 		if(CLBC_test_operator_overlaod(self, iltype, tp, opov)) {
 			break;
 		}
+	}
+	//equalsメソッドを検索する
+	int outIndex = 0;
+	operator_overload* opov_defeq = meta_gfind_operator_default_eq(TYPE2CLASS(tp)->operator_overload_list, &outIndex);
+	if(opov_defeq == NULL) {
+		
 	}
 	ccpop_type();
 	ccpop_namespace();

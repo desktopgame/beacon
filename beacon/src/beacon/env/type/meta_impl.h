@@ -4,8 +4,10 @@
 //クラス自体の実装に関わるメタ関数
 #include "../method.h"
 #include "../constructor.h"
+#include "../operator_overload.h"
 #include "../../util/vector.h"
 #include "../../vm/enviroment.h"
+struct type;
 struct class_;
 
 /**
@@ -74,7 +76,32 @@ method* meta_gfind_method(vector* method_vec, const char * name, vector * gargs,
  */
 constructor* meta_ilfind_ctor(vector* ctor_vec, vector* ilargs, struct enviroment* env, int* outIndex);
 
-
+/**
+ * もっとも一致するコンストラクタを返します.
+ * @param ctor_vec
+ * @param args
+ * @param type_args
+ * @param fr
+ * @param outIndex
+ * @return
+ */
 constructor* meta_rfind_ctor(vector* ctor_vec, vector* args, vector* typeargs, struct frame* fr, int* outIndex);
 
+/**
+ * 演算子オーバーロードを検索します.
+ * @param opov_vec
+ * @param type
+ * @param gargs
+ * @param outIndex
+ * @return
+ */
+operator_overload* meta_gfind_operator(vector* opov_vec, operator_type type, vector* gargs, int* outIndex);
+
+/**
+ * @param opov_vec
+ * @param gargs
+ * @param outIndex
+ * @return
+ */
+operator_overload* meta_gfind_operator_default_eq(vector* opov_vec, int* outIndex);
 #endif // !SIGNAL_ENV_META_H
