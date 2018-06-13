@@ -295,7 +295,9 @@ void text_stdout_enabled(bool enabled) {
 			stdout = real_stdout;
 			real_stdout = NULL;
 		}
+		fpurge(stdout);
 	} else {
+		fpurge(stdout);
 		assert(fake_stdout == NULL);
 		assert(real_stdout == NULL);
 		errno = 0;

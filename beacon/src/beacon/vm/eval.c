@@ -100,6 +100,7 @@ static bool eval_top_from_cll(class_loader* cll) {
 	frame* fr = frame_new();
 	sg_thread_set_frame_ref(sg_thread_current(), fr);
 	//opcode_buf_dump(cll->env->buf, 0);
+	fpurge(stdout);
 	vm_execute(fr, cll->env);
 	if(fr->terminate) {
 		cll->error = true;

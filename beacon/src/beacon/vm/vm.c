@@ -523,7 +523,7 @@ static void vm_run(frame * self, enviroment * env, int pos, int deferStart) {
 				for(int i=0; i<typeparams; i++) {
 					vector_assign(sub->type_args_vec, (typeparams - i) - 1, vector_pop(self->type_args_vec));
 				}
-				text_putindent(self->level);
+				//text_putindent(self->level);
 				//text_printfln("[ %s#new ]", type_name(ctor->parent));
 				//enviroment_op_dump(ctor->env, sub->level);
 				//opcode_buf_dump(ctor->env->buf, sub->level);
