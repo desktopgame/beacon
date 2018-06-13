@@ -40,6 +40,14 @@ namespace beacon::lang {
 			return new String(chars.toArray());
 		}
 
+		operator <<(Char s) -> StringBuilder {
+			return append(s);
+		}
+
+		operator <<(String s) -> StringBuilder {
+			return append(s);
+		}
+
 		private:
 		Vector[Char] chars;
 	}
