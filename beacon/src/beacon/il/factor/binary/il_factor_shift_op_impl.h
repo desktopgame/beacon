@@ -7,6 +7,7 @@ struct il_factor_binary_op;
 typedef struct il_factor_shift_op {
 	struct il_factor_binary_op* parent;
 	operator_type type;
+	int operator_index;
 } il_factor_shift_op;
 
 il_factor_shift_op* il_factor_shift_op_new(operator_type type);

@@ -11,9 +11,7 @@ namespace beacon::lang {
 
 		public:
 		def new() {
-			this.length = 0;
-			this.capacity = 16;
-			this.proxy = new Array[T](this.capacity);
+			init();
 		}
 
 		def push(T o) -> Void {
@@ -59,6 +57,10 @@ namespace beacon::lang {
 			return ret;
 		}
 
+		def clear() -> Void {
+			init();
+		}
+
 		def length() -> Int {
 			return this.length;
 		}
@@ -73,7 +75,18 @@ namespace beacon::lang {
 			return ret;
 		}
 
+		operator <<(T e) -> Vector[T] {
+			push(e);
+			return this;
+		}
+
 		private:
+		def init() -> Void {
+			this.length = 0;
+			this.capacity = 16;
+			this.proxy = new Array[T](this.capacity);
+		}
+
 		def checkRange(Int index) -> Void {
 			if(index < 0 || index >= this.length) {
 				throw new Exception("Out Of Range");

@@ -6,7 +6,8 @@
 #include "../../../vm/enviroment.h"
 #include "../../il_factor_impl.h"
 #include "../../../env/namespace.h"
-#include "../../../env/type_interface.h"
+#include "../../../env/type_impl.h"
+#include "../../../env/operator_overload.h"
 
 static opcode operator_to_iopcode(operator_type type);
 static opcode operator_to_dopcode(operator_type type);
@@ -15,6 +16,7 @@ il_factor_shift_op* il_factor_shift_op_new(operator_type type) {
 	il_factor_shift_op* ret = (il_factor_shift_op*)MEM_MALLOC(sizeof(il_factor_shift_op));
 	ret->parent = NULL;
 	ret->type = type;
+	ret->operator_index = -1;
 	return ret;
 }
 
@@ -36,20 +38,33 @@ generic_type* il_factor_shift_op_eval(il_factor_shift_op * self, enviroment * en
 	   GENERIC2TYPE(rgtype) == cint) {
 		return TYPE2GENERIC(cdouble);
 	}
-	return NULL;
+	assert(self->operator_index != -1);
+	operator_overload* operator_ov = class_get_operator_overload(TYPE2CLASS(GENERIC2TYPE(lgtype)), self->operator_index);
+	//Vector[Int] Vector[T]
+	return operator_ov->return_gtype;
 }
 
 void il_factor_shift_op_generate(il_factor_shift_op* self, enviroment* env) {
-	il_factor_generate(self->parent->right, env);
-	il_factor_generate(self->parent->left, env);
-	if(il_factor_binary_op_int_int(self->parent, env)) {
-		opcode_buf_add(env->buf, operator_to_iopcode(self->type));
-	} else if(il_factor_binary_op_double_double(self->parent, env)) {
-		opcode_buf_add(env->buf, operator_to_dopcode(self->type));
+	if(self->operator_index == -1) {
+		il_factor_generate(self->parent->right, env);
+		il_factor_generate(self->parent->left, env);
+		if(il_factor_binary_op_int_int(self->parent, env)) {
+			opcode_buf_add(env->buf, operator_to_iopcode(self->type));
+		} else if(il_factor_binary_op_double_double(self->parent, env)) {
+			opcode_buf_add(env->buf, operator_to_dopcode(self->type));
+		} else {
+			assert(false);
+		}
+	} else {
+		il_factor_generate(self->parent->right, env);
+		il_factor_generate(self->parent->left, env);
+		opcode_buf_add(env->buf, op_invokeoperator);
+		opcode_buf_add(env->buf, self->operator_index);
 	}
 }
 
 void il_factor_shift_op_load(il_factor_shift_op* self, enviroment* env) {
+	self->operator_index = il_factor_binary_op_index(self->parent, env);
 }
 
 void il_factor_shift_op_delete(il_factor_shift_op* self) {
