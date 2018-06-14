@@ -7,7 +7,7 @@ bool xassert_break(bool condition) {
 	if(condition) {
 		//visual studio code
 		//	-c_cpp_properties.json
-		#if defined(VSCDEBUG)
+		#if defined(DEBUG)
 			assert(false);
 		#endif
 		return true;
