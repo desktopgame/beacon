@@ -4,7 +4,8 @@
 struct default_operator_resolve;
 
 typedef enum lazy_resolve_tag {
-	resolve_default_operator,
+	resolve_default_eqoperator,
+	resolve_default_noteqoperator,
 } lazy_resolve_tag;
 
 typedef struct lazy_resolve {

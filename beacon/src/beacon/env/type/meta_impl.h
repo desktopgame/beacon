@@ -104,4 +104,11 @@ operator_overload* meta_gfind_operator(vector* opov_vec, operator_type type, vec
  * @return
  */
 operator_overload* meta_gfind_operator_default_eq(vector* opov_vec, int* outIndex);
+
+/**
+ * @param opov_vec
+ * @param outIndex
+ * @return
+ */
+operator_overload* meta_gfind_operator_default_noteq(vector* opov_vec, int* outIndex);
 #endif // !SIGNAL_ENV_META_H

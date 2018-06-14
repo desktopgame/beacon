@@ -289,3 +289,11 @@ operator_overload* meta_gfind_operator_default_eq(vector* opov_vec, int* outInde
 	vector_delete(gargs, vector_deleter_null);
 	return ret;
 }
+
+operator_overload* meta_gfind_operator_default_noteq(vector* opov_vec, int* outIndex) {
+	vector* gargs = vector_new();
+	vector_push(gargs, TYPE_OBJECT->generic_self);
+	operator_overload* ret = meta_gfind_operator(opov_vec, operator_noteq, gargs, outIndex);
+	vector_delete(gargs, vector_deleter_null);
+	return ret;
+}

@@ -7,7 +7,8 @@ lazy_resolve* lazy_resolve_new(lazy_resolve_tag tag) {
 	ret->tag = tag;
 	ret->active = true;
 	switch(ret->tag) {
-		case resolve_default_operator:
+		case resolve_default_eqoperator:
+		case resolve_default_noteqoperator:
 			ret->u.def_operator = default_operator_resolve_new();
 			break;
 	}
@@ -16,7 +17,8 @@ lazy_resolve* lazy_resolve_new(lazy_resolve_tag tag) {
 
 void lazy_resolve_apply(lazy_resolve* self) {
 	switch(self->tag) {
-		case resolve_default_operator:
+		case resolve_default_eqoperator:
+		case resolve_default_noteqoperator:
 			default_operator_resolve_apply(self->u.def_operator);
 			break;
 	}
@@ -24,7 +26,8 @@ void lazy_resolve_apply(lazy_resolve* self) {
 
 void lazy_resolve_delete(lazy_resolve* self) {
 	switch(self->tag) {
-		case resolve_default_operator:
+		case resolve_default_eqoperator:
+		case resolve_default_noteqoperator:
 			default_operator_resolve_delete(self->u.def_operator);
 			break;
 	}
