@@ -30,6 +30,9 @@ generic_type* il_factor_not_op_eval(il_factor_not_op * self, enviroment * env) {
 void il_factor_not_op_generate(il_factor_not_op* self, enviroment* env) {
 	if(self->operator_index == -1) {
 		il_factor_generate(self->parent->a, env);
+		if(il_error_panic()) {
+			return;
+		}
 		generic_type* gt = il_factor_eval(self->parent->a, env);
 		if(GENERIC2TYPE(gt) == TYPE_BOOL) {
 			opcode_buf_add(env->buf, op_bnot);

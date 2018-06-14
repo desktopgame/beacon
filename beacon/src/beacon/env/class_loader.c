@@ -53,7 +53,8 @@ static void class_loader_link_recursive(class_loader* self, link_type type);
 static void class_loader_cache_delete(vector_item item);
 static void class_loader_lazy_resolve_delete(vector_item item);
 static void class_loader_lazy_resolve(class_loader* self);
-static void class_loader_lazy_resolve_recursive(class_loader* self);
+static void class_loader_lazy_resolve_all(class_loader* self);
+static void class_loader_lazy_resolve_at(char* name, tree_item item);
 
 class_loader* class_loader_new(content_type type) {
 	class_loader* ret = (class_loader*)MEM_MALLOC(sizeof(class_loader));
@@ -159,7 +160,7 @@ static void class_loader_load_impl(class_loader* self) {
 		il_error_enter();
 		class_loader_link_recursive(self, link_decl);
 		class_loader_link_recursive(self, link_impl);
-		class_loader_lazy_resolve_recursive(self);
+		class_loader_lazy_resolve_all(self);
 		il_error_exit();
 	}
 	//トップレベルのステートメントを読み込む
@@ -197,6 +198,7 @@ static void class_loader_lazy_resolve_delete(vector_item item) {
 }
 
 static void class_loader_lazy_resolve(class_loader* self) {
+	text_printfln("apply %s", self->filename);
 	for(int i=0; i<self->lazy_resolve_vec->length; i++) {
 		lazy_resolve* lr = (lazy_resolve*)vector_at(self->lazy_resolve_vec, i);
 		if(!lr->active) {
@@ -207,11 +209,12 @@ static void class_loader_lazy_resolve(class_loader* self) {
 	}
 }
 
-static void class_loader_lazy_resolve_recursive(class_loader* self) {
-	import_manager* importMgr = self->import_manager;
-	for (int i = 0; i < importMgr->info_vec->length; i++) {
-		import_info* info = (import_info*)vector_at(importMgr->info_vec, i);
-		class_loader_lazy_resolve(info->context);
-	}
-	class_loader_lazy_resolve(self);
+static void class_loader_lazy_resolve_all(class_loader* self) {
+	script_context* sc = script_context_get_current();
+	tree_map_each(sc->class_loader_map, class_loader_lazy_resolve_at);
+}
+
+static void class_loader_lazy_resolve_at(char* name, tree_item item) {
+	class_loader* cl = (class_loader*)item;
+	class_loader_lazy_resolve(cl);
 }

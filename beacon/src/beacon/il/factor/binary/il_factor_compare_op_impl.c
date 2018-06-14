@@ -28,7 +28,9 @@ void il_factor_compare_op_dump(il_factor_compare_op* self, int depth) {
 }
 
 generic_type* il_factor_compare_op_eval(il_factor_compare_op * self, enviroment * env) {
-	return TYPE2GENERIC(TYPE_BOOL);
+	generic_type* ret = TYPE2GENERIC(TYPE_BOOL);
+	assert(ret != NULL);
+	return ret;
 }
 
 void il_factor_compare_op_generate(il_factor_compare_op* self, enviroment* env) {

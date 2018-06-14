@@ -22,7 +22,8 @@
 #include "../../util/xassert.h"
 #include "../../util/text.h"
 #include "../lazy_resolve.h"
-#include "../resolve/default_operator_resolve.h"
+#include "../resolve/default_eqoperator_resolve.h"
+#include "../resolve/default_noteqoperator_resolve.h"
 #include <assert.h>
 #include <string.h>
 
@@ -501,6 +502,7 @@ static bool CLBC_test_operator_overlaod(class_loader* self, il_type* iltype, typ
 
 static void CLBC_default_operator_overload(class_loader* self, type* tp) {
 	CLBC_default_eqoperator_overload(self, tp);
+	CLBC_default_noteqoperator_overload(self, tp);
 }
 
 static void CLBC_default_eqoperator_overload(class_loader* self, type* tp) {
@@ -547,8 +549,8 @@ static void CLBC_default_eqoperator_overload(class_loader* self, type* tp) {
 	opcode_buf_add(env->buf, (vector_item)op_invokevirtual_lazy);
 	lazy_int* li = opcode_buf_lazy(env->buf, -1);
 	lazy_resolve* resolve = lazy_resolve_new(resolve_default_eqoperator);
-	resolve->u.def_operator->lazyi_ref = li;
-	resolve->u.def_operator->type_ref = tp;
+	resolve->u.def_eqoperator->lazyi_ref = li;
+	resolve->u.def_eqoperator->type_ref = tp;
 	vector_push(self->lazy_resolve_vec, resolve);
 	opcode_buf_add(env->buf, (vector_item)li);
 	opcode_buf_add(env->buf, (vector_item)op_return);
@@ -570,7 +572,7 @@ static void CLBC_default_noteqoperator_overload(class_loader* self, type* tp) {
 	//equals(Object a)を検索する
 	//これによって != を自動実装する
 	int methodPos = 0;
-	operator_overload* opov_noteq = operator_overload_new(operator_eq);
+	operator_overload* opov_noteq = operator_overload_new(operator_noteq);
 	opov_noteq->access = access_public;
 	//戻り値読み込み
 	opov_noteq->parent = tp;
@@ -600,8 +602,8 @@ static void CLBC_default_noteqoperator_overload(class_loader* self, type* tp) {
 	opcode_buf_add(env->buf, (vector_item)op_invokevirtual_lazy);
 	lazy_int* li = opcode_buf_lazy(env->buf, -1);
 	lazy_resolve* resolve = lazy_resolve_new(resolve_default_noteqoperator);
-	resolve->u.def_operator->lazyi_ref = li;
-	resolve->u.def_operator->type_ref = tp;
+	resolve->u.def_noteqoperator->lazyi_ref = li;
+	resolve->u.def_noteqoperator->type_ref = tp;
 	vector_push(self->lazy_resolve_vec, resolve);
 	opcode_buf_add(env->buf, (vector_item)li);
 	opcode_buf_add(env->buf, (vector_item)op_bnot);

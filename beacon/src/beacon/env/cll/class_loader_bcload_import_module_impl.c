@@ -32,7 +32,9 @@ void CLBC_import(class_loader* self, vector* ilimports) {
 	for(int i=0; i<ctx->include_vec->length; i++) {
 		file_entry* fe = vector_at(ctx->include_vec, i);
 		if(fe->is_file && io_extension(fe->filename, "bc")) {
+		//	char* p = io_absolute_path(fe->filename);
 			CLBC_new_load(self, fe->filename);
+		//	MEM_FREE(p);
 		}
 	}
 }
