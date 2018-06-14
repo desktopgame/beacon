@@ -18,7 +18,7 @@ static void CLBC_import_internal(class_loader* self, vector* ilimports, int i);
 static void CLBC_new_load_internal(class_loader * self, char * fullPath);
 
 static void CLBC_import_already(class_loader* self, class_loader* cll);
-static class_loader* CLBC_import_new(class_loader* self, char* fullPath);
+//static class_loader* CLBC_import_new(class_loader* self, char* fullPath);
 
 void CLBC_import(class_loader* self, vector* ilimports) {
 	CL_ERROR(self);
@@ -32,9 +32,9 @@ void CLBC_import(class_loader* self, vector* ilimports) {
 	for(int i=0; i<ctx->include_vec->length; i++) {
 		file_entry* fe = vector_at(ctx->include_vec, i);
 		if(fe->is_file && io_extension(fe->filename, "bc")) {
-		//	char* p = io_absolute_path(fe->filename);
-			CLBC_new_load(self, fe->filename);
-		//	MEM_FREE(p);
+			char* p = io_absolute_path(fe->filename);
+			CLBC_new_load(self, p);
+			MEM_FREE(p);
 		}
 	}
 }
@@ -45,6 +45,19 @@ void CLBC_new_load(class_loader * self, char * fullPath) {
 	ctx->heap->accept_blocking++;
 	CLBC_new_load_internal(self, fullPath);
 	ctx->heap->accept_blocking--;
+}
+
+class_loader* CLBC_import_new(class_loader* self, char* fullPath) {
+	CL_ERROR_RET(self, self);
+	script_context* ctx = script_context_get_current();
+	class_loader* cll = class_loader_new(content_lib);
+	cll->type = content_lib;
+	cll->filename = fullPath;
+	cll->parent = self;
+	import_info* info = import_manager_import(self->import_manager, cll);
+	info->consume = false;
+	tree_map_put(ctx->class_loader_map, fullPath, cll);
+	return cll;
 }
 
 //private
@@ -121,17 +134,4 @@ static void CLBC_import_already(class_loader* self, class_loader* cll) {
 		class_loader_report(self, "error %s\n", cll->filename);
 		return;
 	}
-}
-
-static class_loader* CLBC_import_new(class_loader* self, char* fullPath) {
-	CL_ERROR_RET(self, self);
-	script_context* ctx = script_context_get_current();
-	class_loader* cll = class_loader_new(content_lib);
-	cll->type = content_lib;
-	cll->filename = fullPath;
-	cll->parent = self;
-	import_info* info = import_manager_import(self->import_manager, cll);
-	info->consume = false;
-	tree_map_put(ctx->class_loader_map, fullPath, cll);
-	return cll;
 }

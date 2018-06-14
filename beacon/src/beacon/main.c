@@ -7,6 +7,7 @@
 #include "env/script_context.h"
 #include "test.h"
 #include "cl.h"
+#include "debug.h"
 #include "util/mem.h"
 #include "util/text.h"
 #include "util/io.h"
@@ -61,9 +62,6 @@ int main_cl(int argc, char *argv[]) {
 }
 
 int main(int argc, char *argv[]) {
-	bool a = (~1) == -2;
-	bool b = (~2) == -3;
-	bool c = (~3) == -4;
 	//先んじて設定を行っておく
 	mem_set_trace(false);
 	il_print_layout_hide(true);

@@ -97,6 +97,14 @@ void class_loader_sub(class_loader* self, char* fullPath);
 void class_loader_rsub(class_loader* self, char* relativePath);
 
 /**
+ * 実行時ディレクトリからの相対パスでファイルを仮読み込みします.
+ * beacon/langの読み込みのための使用されます。
+ * @param self
+ * @param relativePath
+ */
+void class_loader_special(class_loader* self, char* relativePath);
+
+/**
  * このクラスローダーを開放します.
  * @param self
  */

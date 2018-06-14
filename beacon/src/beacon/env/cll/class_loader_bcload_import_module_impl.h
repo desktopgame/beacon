@@ -14,4 +14,12 @@ void CLBC_import(class_loader* self, vector* ilimports);
  * @param fullPath
  */
 void CLBC_new_load(class_loader* self, char* fullPath);
+
+/**
+ * fullPathをロードするためのローダを作成して返します.
+ * @param self
+ * @param fullPath
+ * @return
+ */
+class_loader* CLBC_import_new(class_loader* self, char* fullPath);
 #endif

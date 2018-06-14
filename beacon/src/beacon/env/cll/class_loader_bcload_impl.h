@@ -10,4 +10,10 @@
  * @param self
  */
 void class_loader_bcload_impl(class_loader* self);
+
+/**
+ * beacon/langを仮読み込みするための関数.
+ * @param self
+ */
+void class_loader_bcload_special(class_loader* self);
 #endif

@@ -30,6 +30,7 @@
 #include "class_loader_bcload_import_module_impl.h"
 #include "../../util/mem.h"
 #include "../../util/xassert.h"
+#include "../../debug.h"
 #include <assert.h>
 //
 //sgload
@@ -103,6 +104,14 @@ void class_loader_bcload_impl(class_loader* self) {
 	script_context* ctx = script_context_get_current();
 	il_top_level* iltop = self->il_code;
 	CLBC_import(self, self->il_code->import_list);
+	CLBC_namespace_tree(self);
+}
+
+void class_loader_bcload_special(class_loader* self) {
+	CL_ERROR(self);
+	script_context* ctx = script_context_get_current();
+	il_top_level* iltop = self->il_code;
+//	CLBC_import(self, self->il_code->import_list);
 	CLBC_namespace_tree(self);
 }
 

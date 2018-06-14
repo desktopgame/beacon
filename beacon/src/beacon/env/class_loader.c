@@ -118,6 +118,35 @@ void class_loader_rsub(class_loader * self, char * relativePath) {
 	MEM_FREE(a);
 }
 
+void class_loader_special(class_loader* self, char* relativePath) {
+	char* fullP = io_absolute_path(relativePath);
+	script_context* ctx = script_context_get_current();
+	class_loader* cll = tree_map_get(ctx->class_loader_map, fullP);
+	ctx->heap->accept_blocking++;
+	if(cll == NULL) {
+		cll = CLBC_import_new(self,fullP);
+		//parser
+		char* text = io_read_text(fullP);
+		parser* p = parser_parse_from_source_swap(text, fullP);
+		assert(p->root != NULL);
+		assert(!p->fail);
+		//ASTをclassloaderへ
+		cll->source_code = p->root;
+		p->root = NULL;
+		MEM_FREE(text);
+		parser_pop();
+		//AST -> IL へ
+		class_loader_ilload_impl(cll, cll->source_code);
+		if (cll->error) { return; }
+		//IL -> SG へ
+		class_loader_bcload_special(cll);
+		if (cll->error) { return; }
+		assert(cll->type == content_lib);
+	}
+	ctx->heap->accept_blocking--;
+	//MEM_FREE(fullP);
+}
+
 void class_loader_delete(class_loader * self) {
 	if(self == NULL) {
 		return;
@@ -198,7 +227,6 @@ static void class_loader_lazy_resolve_delete(vector_item item) {
 }
 
 static void class_loader_lazy_resolve(class_loader* self) {
-	text_printfln("apply %s", self->filename);
 	for(int i=0; i<self->lazy_resolve_vec->length; i++) {
 		lazy_resolve* lr = (lazy_resolve*)vector_at(self->lazy_resolve_vec, i);
 		if(!lr->active) {
