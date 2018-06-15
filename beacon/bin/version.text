@@ -1,3 +1,11 @@
 beacon
 	VERSION:	$version
 	TIME:		$time
+
+history
+	ALPHA0
+		最初のリリース
+
+	ALPHA1
+		- 内部的に同じファイルに二回クラスローダーが生成されていたのを修正
+		- 定義されていなければ !=(Object) を自動で実装するように

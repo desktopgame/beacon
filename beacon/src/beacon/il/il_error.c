@@ -5,7 +5,6 @@
 #include "../env/compile_context.h"
 #include "../util/vector.h"
 #include "../util/mem.h"
-#include "../util/test/xtest.h"
 
 //proto
 static void il_error_print(FILE* fp, il_error_id error_id, va_list ap);
@@ -89,11 +88,6 @@ static void il_error_print(FILE* fp, il_error_id error_id, va_list ap) {
 			fmt = "if shown this message, it compiler bug";
 			break;
 	}
-	if(xtest_now()) {
-		xtest_vprintf(fmt, ap);
-		xtest_printf("\n");
-	} else {
-		vfprintf(fp, fmt, ap);
-		fprintf(fp, "\n");
-	}
+	vfprintf(fp, fmt, ap);
+	fprintf(fp, "\n");
 }

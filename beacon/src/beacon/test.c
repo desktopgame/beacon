@@ -15,8 +15,6 @@
 #include "util/text.h"
 #include "util/file_path.h"
 #include "util/vector.h"
-#include "util/test/xtest.h"
-#include "util/test/xtest_group.h"
 #include <stdio.h>
 #include <stdlib.h>
 #include "util/mem.h"
@@ -30,6 +28,15 @@
 //proto
 static void test_cll(void);
 static void test_parse_err_hdr(parser* p);
+static void test_semanticsImpl(const char* dirname, bool require);
+static void test_semantics();
+static void test_bison_grammerImpl(const char* dirname, bool require);
+static void test_bison_grammer();
+
+bool test_run() {
+	test_semantics();
+	return true;
+}
 
 //semantics
 static void test_semanticsImpl(const char* dirname, bool require) {
@@ -41,7 +48,7 @@ static void test_semanticsImpl(const char* dirname, bool require) {
 		if(!io_extension(e->filename, "bc")) {
 			continue;
 		}
-		xtest_must_true(eval_file(e->filename) == require, e->filename);
+//		xtest_must_true(eval_file(e->filename) == require, e->filename);
 		script_context_static_clear(ctx);
 	}
 	script_context_remove(ctx);
@@ -62,7 +69,7 @@ static void test_bison_grammerImpl(const char* dirname, bool require) {
 		if(!io_extension(e->filename, "bc")) {
 			continue;
 		}
-		xtest_printf("%s\n", e->filename);
+//		text_printf("%s\n", e->filename);
 		char* input = io_read_text(e->filename);
 		char* iter = input;
 		//最初の行を取り出す
@@ -86,7 +93,7 @@ static void test_bison_grammerImpl(const char* dirname, bool require) {
 			ast_print_tree(p->root);
 		}
 		MEM_FREE(firstline);
-		xtest_must_true(p->fail == require, "%s", e->filename);
+//		xtest_must_true(p->fail == require, "%s", e->filename);
 		parser_pop();
 		MEM_FREE(input);
 	}
@@ -97,20 +104,11 @@ static void test_bison_grammer() {
 	const char* rundir = "./grammer_test/run";
 	const char* errdir = "./grammer_test/err";
 	parser_set_err_hdr(test_parse_err_hdr);
-	//xtest_printf("-%s-\n", rundir);
+	//text_printf("-%s-\n", rundir);
 	//成功するはず
 	test_bison_grammerImpl(rundir, false);
 	test_bison_grammerImpl(errdir, true);
 	parser_set_err_hdr(parser_default_err_hdr);
-}
-
-bool test_run() {
-	xtest_group* gr = xtest_group_new("basic");
-	//xtest_group_add(gr, "grammer", test_bison_grammer);
-	xtest_group_add(gr, "semantics", test_semantics);
-	bool ret = xtest_group_run(gr);
-	xtest_group_delete(gr);
-	return ret;
 }
 
 static void test_cll(void) {
@@ -122,25 +120,25 @@ static void test_parse_err_hdr(parser* p) {
 	//system("cls");
 	//put filename
 	for(int i=0; i<4; i++) {
-		xtest_printf(" ");
+		text_printf(" ");
 	}
-	xtest_printf("file=%s ", p->source_name);
+	text_printf("file=%s ", p->source_name);
 	//put line
-	xtest_printf("line=%d ", p->error_line_index);
+	text_printf("line=%d ", p->error_line_index);
 	//put column
-	xtest_printf("column=%d", p->error_column_index);
-	xtest_printf("\n");
+	text_printf("column=%d", p->error_column_index);
+	text_printf("\n");
 	//put str
 	for(int i=0; i<4; i++) {
-		xtest_printf(" ");
+		text_printf(" ");
 	}
-	xtest_printf("%s", p->error_message);
-	xtest_printf("\n");
+	text_printf("%s", p->error_message);
+	text_printf("\n");
 	//put line
 	for(int i=0; i<4; i++) {
-		xtest_printf(" ");
+		text_printf(" ");
 	}
-	xtest_printf("%s", p->error_line_text);
-	xtest_printf("\n");
+	text_printf("%s", p->error_line_text);
+	text_printf("\n");
 	fflush(stdout);
 }
