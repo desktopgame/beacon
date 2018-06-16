@@ -16,6 +16,7 @@
 #include "script_context.h"
 #include "../util/text.h"
 #include "../util/io.h"
+#include "../util/panic.h"
 #include "../util/xassert.h"
 #include "../parse/parser.h"
 #include "namespace.h"
@@ -55,6 +56,7 @@ static void class_loader_lazy_resolve_delete(vector_item item);
 static void class_loader_lazy_resolve(class_loader* self);
 static void class_loader_lazy_resolve_all(class_loader* self);
 static void class_loader_lazy_resolve_at(char* name, tree_item item);
+static class_loader* class_loader_load_specialImpl(class_loader* self, class_loader* cll, char* fullP);
 
 class_loader* class_loader_new(content_type type) {
 	class_loader* ret = (class_loader*)MEM_MALLOC(sizeof(class_loader));
@@ -124,24 +126,7 @@ void class_loader_special(class_loader* self, char* relativePath) {
 	class_loader* cll = tree_map_get(ctx->class_loader_map, fullP);
 	ctx->heap->accept_blocking++;
 	if(cll == NULL) {
-		cll = CLBC_import_new(self,fullP);
-		//parser
-		char* text = io_read_text(fullP);
-		parser* p = parser_parse_from_source_swap(text, fullP);
-		assert(p->root != NULL);
-		assert(!p->fail);
-		//ASTをclassloaderへ
-		cll->source_code = p->root;
-		p->root = NULL;
-		MEM_FREE(text);
-		parser_pop();
-		//AST -> IL へ
-		class_loader_ilload_impl(cll, cll->source_code);
-		if (cll->error) { return; }
-		//IL -> SG へ
-		class_loader_bcload_special(cll);
-		if (cll->error) { return; }
-		assert(cll->type == content_lib);
+		cll = class_loader_load_specialImpl(self, cll, fullP);
 	}
 	ctx->heap->accept_blocking--;
 	//MEM_FREE(fullP);
@@ -166,6 +151,7 @@ int class_loader_report(class_loader* self, const char* fmt, ...) {
 	va_start(ap, fmt);
 	int ret = class_loader_vreport(self, fmt, ap);
 	va_end(ap);
+	panic(class_loader_exception_fail);
 	return ret;
 }
 
@@ -245,4 +231,26 @@ static void class_loader_lazy_resolve_all(class_loader* self) {
 static void class_loader_lazy_resolve_at(char* name, tree_item item) {
 	class_loader* cl = (class_loader*)item;
 	class_loader_lazy_resolve(cl);
+}
+
+static class_loader* class_loader_load_specialImpl(class_loader* self, class_loader* cll, char* fullP) {
+	cll = CLBC_import_new(self,fullP);
+	//parser
+	char* text = io_read_text(fullP);
+	parser* p = parser_parse_from_source_swap(text, fullP);
+	assert(p->root != NULL);
+	assert(!p->fail);
+	//ASTをclassloaderへ
+	cll->source_code = p->root;
+	p->root = NULL;
+	MEM_FREE(text);
+	parser_pop();
+	//AST -> IL へ
+	class_loader_ilload_impl(cll, cll->source_code);
+	if (cll->error) { return cll; }
+	//IL -> SG へ
+	class_loader_bcload_special(cll);
+	if (cll->error) { return cll; }
+	assert(cll->type == content_lib);
+	return cll;
 }
