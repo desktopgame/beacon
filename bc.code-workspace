@@ -68,7 +68,9 @@
 			"atomic": "cpp",
 			"deque": "cpp",
 			"default_operator_resolve.h": "c",
-			"field.h": "c"
+			"field.h": "c",
+			"panic.h": "c",
+			"stdlib.h": "c"
 		},
 		"ruby.lint": {
 			"reek": true,
