@@ -134,6 +134,8 @@ typedef enum ast_tag {
 	ast_constructor_chain,
 	ast_constructor_chain_this,
 	ast_constructor_chain_super,
+	ast_explicit_bioperator,
+	ast_explicit_uoperator,
 
 	ast_true,
 	ast_false,

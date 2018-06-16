@@ -135,4 +135,21 @@ ast* ast_new_new_instance(ast* afqcn, ast* atype_args, ast* argument_list);
  * @return
  */
 ast* ast_new_instanceof(ast* afact, ast* atype);
+
+/**
+ * 明示的な二項演算の呼び出しを表す要素を作成します.
+ * @param afact
+ * @param type
+ * @param aarg
+ * @return
+ */
+ast* ast_new_explicit_bioperator(ast* afact, operator_type type, ast* aarg);
+
+/**
+ * 明示的な単項演算の呼び出しを表す要素を作成します.
+ * @param afact
+ * @param type
+ * @return
+ */
+ast* ast_new_explicit_uoperator(ast* afact, operator_type type);
 #endif // !SIGNAL_AST_AST_NEW_FACTOR_H

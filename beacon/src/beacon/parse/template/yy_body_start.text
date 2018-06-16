@@ -484,7 +484,7 @@ operator_define
 	{
 		$$ = ast_new_operator_overload(operator_mod, $4, $8, $7);
 	}
-	//> >= < <=
+	;;> >= < <=
 	| OPERATOR GT LRB parameter_list RRB ARROW typename_T scope_optional
 	{
 		$$ = ast_new_operator_overload(operator_gt, $4, $8, $7);

@@ -183,6 +183,95 @@ lhs
 	{
 		$$ = ast_new_field_access($1, $3, $4);
 	}
+	;;+-*/%
+	| __SELF DOT ADD LRB __SELF RRB
+	{
+		$$ = ast_new_explicit_bioperator($1, operator_add, $5);
+	}
+	| __SELF DOT SUB LRB __SELF RRB
+	{
+		$$ = ast_new_explicit_bioperator($1, operator_sub, $5);
+	}
+	| __SELF DOT MUL LRB __SELF RRB
+	{
+		$$ = ast_new_explicit_bioperator($1, operator_mul, $5);
+	}
+	| __SELF DOT DIV LRB __SELF RRB
+	{
+		$$ = ast_new_explicit_bioperator($1, operator_div, $5);
+	}
+	| __SELF DOT MOD LRB __SELF RRB
+	{
+		$$ = ast_new_explicit_bioperator($1, operator_mod, $5);
+	}
+	;;> >= < <=
+	| __SELF DOT GT LRB __SELF RRB
+	{
+		$$ = ast_new_explicit_bioperator($1, operator_gt, $5);
+	}
+	| __SELF DOT GE LRB __SELF RRB
+	{
+		$$ = ast_new_explicit_bioperator($1, operator_ge, $5);
+	}
+	| __SELF DOT LT LRB __SELF RRB
+	{
+		$$ = ast_new_explicit_bioperator($1, operator_lt, $5);
+	}
+	| __SELF DOT LE LRB __SELF RRB
+	{
+		$$ = ast_new_explicit_bioperator($1, operator_le, $5);
+	}
+	;;== !=
+	| __SELF DOT EQUAL LRB __SELF RRB
+	{
+		$$ = ast_new_explicit_bioperator($1, operator_eq, $5);
+	}
+	| __SELF DOT NOTEQUAL LRB __SELF RRB
+	{
+		$$ = ast_new_explicit_bioperator($1, operator_noteq, $5);
+	}
+	;;| &
+	| __SELF DOT BIT_OR LRB __SELF RRB
+	{
+		$$ = ast_new_explicit_bioperator($1, operator_bit_or, $5);
+	}
+	| __SELF DOT BIT_AND LRB __SELF RRB
+	{
+		$$ = ast_new_explicit_bioperator($1, operator_bit_and, $5);
+	}
+	;;|| &&
+	| __SELF DOT LOGIC_OR LRB __SELF RRB
+	{
+		$$ = ast_new_explicit_bioperator($1, operator_logic_or, $5);
+	}
+	| __SELF DOT LOGIC_AND LRB __SELF RRB
+	{
+		$$ = ast_new_explicit_bioperator($1, operator_logic_and, $5);
+	}
+	;;<< >>
+	| __SELF DOT LSHIFT LRB __SELF RRB
+	{
+		$$ = ast_new_explicit_bioperator($1, operator_lshift, $5);
+	}
+	| __SELF DOT RSHIFT LRB __SELF RRB
+	{
+		$$ = ast_new_explicit_bioperator($1, operator_rshift, $5);
+	}
+	;;^
+	| __SELF DOT EXC_OR LRB __SELF RRB
+	{
+		$$ = ast_new_explicit_bioperator($1, operator_excor, $5);
+	}
+	;;!
+	| __SELF DOT NOT LRB RRB
+	{
+		$$ = ast_new_explicit_uoperator($1, operator_not);
+	}
+	;;~
+	| __SELF DOT CHILDA LRB RRB
+	{
+		$$ = ast_new_explicit_uoperator($1, operator_childa);
+	}
 	;
 $$REM __SELF
 primary

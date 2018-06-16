@@ -449,7 +449,6 @@ operator_define
 	{
 		$$ = ast_new_operator_overload(operator_mod, $4, $8, $7);
 	}
-	//> >= < <=
 	| OPERATOR GT LRB parameter_list RRB ARROW typename_T scope_optional
 	{
 		$$ = ast_new_operator_overload(operator_gt, $4, $8, $7);
@@ -833,6 +832,86 @@ lhs
 	| expression DOT IDENT typename_group
 	{
 		$$ = ast_new_field_access($1, $3, $4);
+	}
+	| expression DOT ADD LRB expression RRB
+	{
+		$$ = ast_new_explicit_bioperator($1, operator_add, $5);
+	}
+	| expression DOT SUB LRB expression RRB
+	{
+		$$ = ast_new_explicit_bioperator($1, operator_sub, $5);
+	}
+	| expression DOT MUL LRB expression RRB
+	{
+		$$ = ast_new_explicit_bioperator($1, operator_mul, $5);
+	}
+	| expression DOT DIV LRB expression RRB
+	{
+		$$ = ast_new_explicit_bioperator($1, operator_div, $5);
+	}
+	| expression DOT MOD LRB expression RRB
+	{
+		$$ = ast_new_explicit_bioperator($1, operator_mod, $5);
+	}
+	| expression DOT GT LRB expression RRB
+	{
+		$$ = ast_new_explicit_bioperator($1, operator_gt, $5);
+	}
+	| expression DOT GE LRB expression RRB
+	{
+		$$ = ast_new_explicit_bioperator($1, operator_ge, $5);
+	}
+	| expression DOT LT LRB expression RRB
+	{
+		$$ = ast_new_explicit_bioperator($1, operator_lt, $5);
+	}
+	| expression DOT LE LRB expression RRB
+	{
+		$$ = ast_new_explicit_bioperator($1, operator_le, $5);
+	}
+	| expression DOT EQUAL LRB expression RRB
+	{
+		$$ = ast_new_explicit_bioperator($1, operator_eq, $5);
+	}
+	| expression DOT NOTEQUAL LRB expression RRB
+	{
+		$$ = ast_new_explicit_bioperator($1, operator_noteq, $5);
+	}
+	| expression DOT BIT_OR LRB expression RRB
+	{
+		$$ = ast_new_explicit_bioperator($1, operator_bit_or, $5);
+	}
+	| expression DOT BIT_AND LRB expression RRB
+	{
+		$$ = ast_new_explicit_bioperator($1, operator_bit_and, $5);
+	}
+	| expression DOT LOGIC_OR LRB expression RRB
+	{
+		$$ = ast_new_explicit_bioperator($1, operator_logic_or, $5);
+	}
+	| expression DOT LOGIC_AND LRB expression RRB
+	{
+		$$ = ast_new_explicit_bioperator($1, operator_logic_and, $5);
+	}
+	| expression DOT LSHIFT LRB expression RRB
+	{
+		$$ = ast_new_explicit_bioperator($1, operator_lshift, $5);
+	}
+	| expression DOT RSHIFT LRB expression RRB
+	{
+		$$ = ast_new_explicit_bioperator($1, operator_rshift, $5);
+	}
+	| expression DOT EXC_OR LRB expression RRB
+	{
+		$$ = ast_new_explicit_bioperator($1, operator_excor, $5);
+	}
+	| expression DOT NOT LRB RRB
+	{
+		$$ = ast_new_explicit_uoperator($1, operator_not);
+	}
+	| expression DOT CHILDA LRB RRB
+	{
+		$$ = ast_new_explicit_uoperator($1, operator_childa);
 	}
 	;
 primary

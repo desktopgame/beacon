@@ -116,3 +116,18 @@ ast* ast_new_instanceof(ast* afact, ast* atype) {
 	ast_push(ret, atype);
 	return ret;
 }
+
+ast* ast_new_explicit_bioperator(ast* afact, operator_type type, ast* aarg) {
+	ast* ret = ast_new(ast_explicit_bioperator);
+	ret->u.operator_value = type;
+	ast_push(ret, afact);
+	ast_push(ret, aarg);
+	return ret;
+}
+
+ast* ast_new_explicit_uoperator(ast* afact, operator_type type) {
+	ast* ret = ast_new(ast_explicit_uoperator);
+	ret->u.operator_value = type;
+	ast_push(ret, afact);
+	return ret;
+}
