@@ -12,6 +12,7 @@
 //proto
 static char* text_strclone(const char* source);
 static void text_printfdbg(const char* message, va_list ap);
+static char* text_readlineImpl(FILE* fp);
 static FILE* text_fp = NULL;
 static FILE* fake_stdout = NULL;
 static FILE* real_stdout = NULL;
@@ -270,15 +271,11 @@ bool text_contains(const char* source, const char* text) {
 }
 
 char* text_readline() {
-	string_buffer* sb = string_buffer_new();
-	while(1) {
-		char ch = getc(stdin);
-		if(ch == '\0') {
-			break;
-		}
-		string_buffer_append(sb, ch);
-	}
-	return string_buffer_release(sb);
+	return text_readlineImpl(stdin);
+}
+
+char* text_freadline(FILE* fp) {
+	return text_readlineImpl(fp);
 }
 
 void text_stdout_enabled(bool enabled) {
@@ -364,4 +361,16 @@ static void text_printfdbg(const char* message, va_list ap) {
 	fprintf(text_fp, "%s", block);
 	fflush(text_fp);
 #endif
+}
+
+static char* text_readlineImpl(FILE* fp) {
+	string_buffer* sb = string_buffer_new();
+	while(1) {
+		char ch = getc(fp);
+		if(ch == '\0' || ch == '\n' || feof(fp)) {
+			break;
+		}
+		string_buffer_append(sb, ch);
+	}
+	return string_buffer_release(sb);
 }

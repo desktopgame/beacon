@@ -177,6 +177,13 @@ bool text_contains(const char* source, const char* text);
 char* text_readline();
 
 /**
+ * 指定のファイルから一行読み込みます.
+ * @param fp
+ * @return
+ */
+char* text_freadline(FILE* fp);
+
+/**
  * stdoutの有効/無効を設定します.
  * @param enabled
  */
