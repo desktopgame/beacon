@@ -151,7 +151,6 @@ int class_loader_report(class_loader* self, const char* fmt, ...) {
 	va_start(ap, fmt);
 	int ret = class_loader_vreport(self, fmt, ap);
 	va_end(ap);
-	panic(class_loader_exception_fail);
 	return ret;
 }
 

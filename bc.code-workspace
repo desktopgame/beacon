@@ -70,7 +70,8 @@
 			"default_operator_resolve.h": "c",
 			"field.h": "c",
 			"panic.h": "c",
-			"stdlib.h": "c"
+			"stdlib.h": "c",
+			"stack.h": "c"
 		},
 		"ruby.lint": {
 			"reek": true,
