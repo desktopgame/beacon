@@ -2,6 +2,13 @@
 #include "../../util/mem.h"
 #include "../il_factor_interface.h"
 
+il_factor* il_factor_wrap_explicit_binary_op(il_factor_explicit_binary_op* self) {
+	il_factor* ret = (il_factor*)MEM_MALLOC(sizeof(il_factor));
+	ret->type = ilfactor_explicit_binary_op;
+	ret->u.exp_binary_op = self;
+	return ret;
+}
+
 il_factor_explicit_binary_op* il_factor_explicit_binary_op_new(operator_type type) {
 	il_factor_explicit_binary_op* ret = (il_factor_explicit_binary_op*)MEM_MALLOC(sizeof(il_factor_explicit_binary_op));
 	ret->type = type;

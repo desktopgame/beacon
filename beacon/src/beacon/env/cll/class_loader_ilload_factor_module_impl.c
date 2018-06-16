@@ -12,6 +12,8 @@ static il_factor_bool* CLIL_false(class_loader* self, ast* source);
 static il_factor_cast* CLIL_cast(class_loader* self, ast* source);
 static il_factor_unary_op* CLIL_unary(class_loader* self, ast* source, operator_type type);
 static il_factor_binary_op* CLIL_binary(class_loader* self, ast* source, operator_type type);
+static il_factor_explicit_unary_op* CLIL_explicit_unary(class_loader* self, ast* source, operator_type type);
+static il_factor_explicit_binary_op* CLIL_explicit_binary(class_loader* self, ast* source, operator_type type);
 static il_factor_assign_op* CLIL_assign(class_loader* self, ast* source);
 static il_factor_assign_op* CLIL_assign_arithmetic(class_loader* self, ast* source, operator_type type);
 static il_factor_variable* CLIL_variable(class_loader* self, ast* source);
@@ -116,6 +118,10 @@ static il_factor* CLIL_factorImpl(class_loader* self, ast* source) {
 		return il_factor_wrap_unary(CLIL_unary(self, source, operator_not));
 	} else if (source->tag == ast_neg) {
 		return il_factor_wrap_unary(CLIL_unary(self, source, operator_negative));
+	} else if(source->tag == ast_explicit_uoperator) {
+		return il_factor_wrap_explicit_unary_op(CLIL_explicit_unary(self, source, source->u.operator_value));
+	} else if(source->tag == ast_explicit_bioperator) {
+		return il_factor_wrap_explicit_binary_op(CLIL_explicit_binary(self, source, source->u.operator_value));
 		//this super
 	} else if (source->tag == ast_this) {
 		il_factor* ret = (il_factor*)MEM_MALLOC(sizeof(il_factor));
@@ -188,6 +194,19 @@ static il_factor_binary_op* CLIL_binary(class_loader* self, ast* source, operato
 	ast* aright = ast_second(source);
 	ret->left = CLIL_factor(self, aleft);
 	ret->right = CLIL_factor(self, aright);
+	return ret;
+}
+
+static il_factor_explicit_unary_op* CLIL_explicit_unary(class_loader* self, ast* source, operator_type type) {
+	il_factor_explicit_unary_op* ret = il_factor_explicit_unary_op_new(type);
+	ret->receiver = CLIL_factor(self, ast_first(source));
+	return ret;
+}
+
+static il_factor_explicit_binary_op* CLIL_explicit_binary(class_loader* self, ast* source, operator_type type) {
+	il_factor_explicit_binary_op* ret = il_factor_explicit_binary_op_new(type);
+	ret->receiver = CLIL_factor(self, ast_first(source));
+	ret->arg = CLIL_factor(self, ast_second(source));
 	return ret;
 }
 

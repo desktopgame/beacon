@@ -71,7 +71,8 @@
 			"field.h": "c",
 			"panic.h": "c",
 			"stdlib.h": "c",
-			"stack.h": "c"
+			"stack.h": "c",
+			"il_factor_instanceof_impl.h": "c"
 		},
 		"ruby.lint": {
 			"reek": true,

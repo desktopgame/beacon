@@ -8,6 +8,8 @@ typedef struct il_factor_explicit_unary_op {
 	operator_type type;
 } il_factor_explicit_unary_op;
 
+struct il_factor* il_factor_wrap_explicit_unary_op(il_factor_explicit_unary_op* self);
+
 il_factor_explicit_unary_op* il_factor_explicit_unary_op_new(operator_type type);
 
 void il_factor_explicit_unary_op_delete(il_factor_explicit_unary_op* self);

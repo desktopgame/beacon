@@ -9,6 +9,8 @@ typedef struct il_factor_explicit_binary_op {
 	operator_type type;
 } il_factor_explicit_binary_op;
 
+struct il_factor* il_factor_wrap_explicit_binary_op(il_factor_explicit_binary_op* self);
+
 il_factor_explicit_binary_op* il_factor_explicit_binary_op_new(operator_type type);
 
 void il_factor_explicit_binary_op_delete(il_factor_explicit_binary_op* self);
