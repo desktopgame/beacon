@@ -36,6 +36,8 @@ typedef enum il_factor_type {
 	ilfactor_call_op,
 	ilfactor_member_op,
 	ilfactor_instanceof,
+	ilfactor_explicit_binary_op,
+	ilfactor_explicit_unary_op,
 } il_factor_type;
 
 //ファクターとして扱える要素自身が内側にファクターを含む(再帰)
@@ -67,6 +69,8 @@ struct il_factor_dec;
 struct il_factor_call_op;
 struct il_factor_member_op;
 struct il_factor_instanceof;
+struct il_factor_explicit_binary_op;
+struct il_factor_explicit_unary_op;
 
 /**
  * 計算可能な要素.
@@ -95,6 +99,8 @@ typedef struct il_factor {
 		struct il_factor_call_op* call_;
 		struct il_factor_member_op* member_;
 		struct il_factor_instanceof* instanceof_;
+		struct il_factor_explicit_binary_op* exp_binary_op;
+		struct il_factor_explicit_unary_op* exp_unary_op;
 	} u;
 } il_factor;
 
