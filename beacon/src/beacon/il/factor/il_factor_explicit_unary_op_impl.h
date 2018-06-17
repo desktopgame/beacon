@@ -8,6 +8,7 @@ struct generic_type;
 typedef struct il_factor_explicit_unary_op {
 	struct il_factor* receiver;
 	operator_type type;
+	int index;
 } il_factor_explicit_unary_op;
 
 struct il_factor* il_factor_wrap_explicit_unary_op(il_factor_explicit_unary_op* self);
