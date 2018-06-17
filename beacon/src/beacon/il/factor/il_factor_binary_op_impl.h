@@ -60,4 +60,6 @@ bool il_factor_binary_op_bool_bool(il_factor_binary_op* self, struct enviroment*
 bool il_factor_binary_op_char_char(il_factor_binary_op* self, struct enviroment* env);
 
 int il_factor_binary_op_index(il_factor_binary_op* self, struct enviroment* env);
+
+int il_factor_binary_op_index2(il_factor* receiver, il_factor* arg, operator_type otype, struct enviroment* env);
 #endif // !SIGNAL_IL_IL_FACTOR_BINARY_OP_H
