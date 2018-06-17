@@ -5,7 +5,74 @@ namespace beacon::lang {
 			this.nativeInit(d);
 		}
 
+		def equals(Object a) -> Bool {
+			if(!(a is Double)) {
+				return false;
+			}
+			return nativeEquals(a);
+		}
+
+		operator +(Double a) -> Double {
+			return nativeAdd(a);
+		}
+
+		operator -(Double a) -> Double {
+			return nativeSub(a);
+		}
+
+		operator *(Double a) -> Double {
+			return nativeMul(a);
+		}
+
+		operator /(Double a) -> Double {
+			return nativeDiv(a);
+		}
+
+		operator >(Double a) -> Bool {
+			return nativeGT(a);
+		}
+
+		operator >=(Double a) -> Bool {
+			return nativeGE(a);
+		}
+
+		operator <(Double a) -> Bool {
+			return nativeLT(a);
+		}
+
+		operator <=(Double a) -> Bool {
+			return nativeLE(a);
+		}
+
+		operator ==(Double a) -> Bool {
+			return nativeEQ(a);
+		}
+
+		operator != (Double a) -> Bool {
+			return !nativeEQ(a);
+		}
+
 		private:
 		def native nativeInit(Double d) -> Void;
+
+		def native nativeAdd(Double a) -> Double;
+
+		def native nativeSub(Double a) -> Double;
+
+		def native nativeMul(Double a) -> Double;
+
+		def native nativeDiv(Double a) -> Double;
+
+		def native nativeGT(Double a) -> Bool;
+
+		def native nativeGE(Double a) -> Bool;
+
+		def native nativeLT(Double a) -> Bool;
+
+		def native nativeLE(Double a) -> Bool;
+
+		def native nativeEQ(Double a) -> Bool;
+
+		def native nativeEquals(Object a) -> Bool;
 	}
 }

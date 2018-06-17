@@ -62,6 +62,8 @@ int main_cl(int argc, char *argv[]) {
 }
 
 int main(int argc, char *argv[]) {
+	double a = 0;
+	double b = 0;
 	//先んじて設定を行っておく
 	mem_set_trace(false);
 	il_print_layout_hide(true);
