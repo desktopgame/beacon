@@ -14,8 +14,84 @@ namespace beacon::lang {
 			return nativeEquals(a);
 		}
 
+		operator +(Int a) -> Int {
+			return nativeAdd(a);
+		}
+
+		operator -(Int a) -> Int {
+			return nativeSub(a);
+		}
+
+		operator *(Int a) -> Int {
+			return nativeMul(a);
+		}
+
+		operator /(Int a) -> Int {
+			return nativeDiv(a);
+		}
+
+		operator %(Int a) -> Int {
+			return nativeMod(a);
+		}
+
+		operator |(Int a) -> Int {
+			return nativeBitOr(a);
+		}
+
+		operator &(Int a) -> Int {
+			return nativeBitAnd(a);
+		}
+
+		operator >(Int a) -> Bool {
+			return nativeGT(a);
+		}
+
+		operator >=(Int a) -> Bool {
+			return nativeGE(a);
+		}
+
+		operator <(Int a) -> Bool {
+			return nativeLT(a);
+		}
+
+		operator <=(Int a) -> Bool {
+			return nativeLE(a);
+		}
+
+		operator ==(Int a) -> Bool {
+			return nativeEQ(a);
+		}
+
+		operator != (Int a) -> Bool {
+			return !nativeEQ(a);
+		}
+
 		private:
 		def native nativeInit(Int i) -> Void;
+
+		def native nativeAdd(Int a) -> Int;
+
+		def native nativeSub(Int a) -> Int;
+
+		def native nativeMul(Int a) -> Int;
+
+		def native nativeDiv(Int a) -> Int;
+
+		def native nativeMod(Int a) -> Int;
+
+		def native nativeGT(Int a) -> Bool;
+
+		def native nativeGE(Int a) -> Bool;
+
+		def native nativeLT(Int a) -> Bool;
+
+		def native nativeLE(Int a) -> Bool;
+
+		def native nativeBitOr(Int a) -> Int;
+
+		def native nativeBitAnd(Int a) -> Int;
+
+		def native nativeEQ(Int a) -> Bool;
 
 		def native nativeEquals(Object a) -> Bool;
 	}

@@ -33,6 +33,10 @@ void il_factor_explicit_binary_op_dump(il_factor_explicit_binary_op* self, int d
 }
 
 void il_factor_explicit_binary_op_generate(il_factor_explicit_binary_op* self, enviroment* env) {
+	il_factor_generate(self->arg, env);
+	il_factor_generate(self->receiver, env);
+	opcode_buf_add(env->buf, op_invokeoperator);
+	opcode_buf_add(env->buf, self->index);
 }
 
 void il_factor_explicit_binary_op_load(il_factor_explicit_binary_op* self, enviroment* env) {

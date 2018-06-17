@@ -30,6 +30,9 @@ void il_factor_explicit_unary_op_dump(il_factor_explicit_unary_op* self, int dep
 }
 
 void il_factor_explicit_unary_op_generate(il_factor_explicit_unary_op* self, enviroment* env) {
+	il_factor_generate(self->receiver, env);
+	opcode_buf_add(env->buf, op_invokeoperator);
+	opcode_buf_add(env->buf, self->index);
 }
 
 void il_factor_explicit_unary_op_load(il_factor_explicit_unary_op* self, enviroment* env) {
