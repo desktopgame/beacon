@@ -917,6 +917,10 @@ lhs
 	{
 		$$ = ast_new_explicit_uoperator($1, operator_childa);
 	}
+	| expression DOT SUB LRB RRB
+	{
+		$$ = ast_new_explicit_uoperator($1, operator_negative);
+	}
 	;
 primary
 	: INT

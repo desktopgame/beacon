@@ -272,6 +272,10 @@ lhs
 	{
 		$$ = ast_new_explicit_uoperator($1, operator_childa);
 	}
+	| __SELF DOT SUB LRB RRB
+	{
+		$$ = ast_new_explicit_uoperator($1, operator_negative);
+	}
 	;
 $$REM __SELF
 primary
