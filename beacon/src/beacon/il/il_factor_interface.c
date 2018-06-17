@@ -72,6 +72,12 @@ void il_factor_dump(il_factor * self, int depth) {
 		case ilfactor_instanceof:
 			il_factor_instanceof_dump(self->u.instanceof_, depth);
 			break;
+		case ilfactor_explicit_unary_op:
+			il_factor_explicit_unary_op_dump(self->u.exp_unary_op, depth);
+			break;
+		case ilfactor_explicit_binary_op:
+			il_factor_explicit_binary_op_dump(self->u.exp_binary_op, depth);
+			break;
 		default:
 			break;
 	}
@@ -141,6 +147,12 @@ void il_factor_generate(il_factor * self, enviroment* env) {
 			break;
 		case ilfactor_instanceof:
 			il_factor_instanceof_generate(self->u.instanceof_, env);
+			break;
+		case ilfactor_explicit_unary_op:
+			il_factor_explicit_unary_op_generate(self->u.exp_unary_op, env);
+			break;
+		case ilfactor_explicit_binary_op:
+			il_factor_explicit_binary_op_generate(self->u.exp_binary_op, env);
 			break;
 		default:
 			break;
@@ -213,6 +225,12 @@ void il_factor_load(il_factor * self, enviroment * env) {
 		case ilfactor_instanceof:
 			il_factor_instanceof_load(self->u.instanceof_, env);
 			break;
+		case ilfactor_explicit_unary_op:
+			il_factor_explicit_unary_op_load(self->u.exp_unary_op, env);
+			break;
+		case ilfactor_explicit_binary_op:
+			il_factor_explicit_binary_op_load(self->u.exp_binary_op, env);
+			break;
 		default:
 			break;
 	}
@@ -284,6 +302,12 @@ generic_type* il_factor_eval(il_factor * self, enviroment * env) {
 		case ilfactor_instanceof:
 			ret = il_factor_instanceof_eval(self->u.instanceof_, env);
 			break;
+		case ilfactor_explicit_unary_op:
+			ret = il_factor_explicit_unary_op_eval(self->u.exp_unary_op, env);
+			break;
+		case ilfactor_explicit_binary_op:
+			ret = il_factor_explicit_binary_op_eval(self->u.exp_binary_op, env);
+			break;
 		default:
 			break;
 	}
@@ -336,6 +360,11 @@ char* il_factor_tostr(il_factor* self, enviroment* env) {
 			return il_factor_member_op_tostr(self->u.member_, env);
 		case ilfactor_instanceof:
 			return il_factor_instanceof_tostr(self->u.instanceof_, env);
+		//あとで
+		case ilfactor_explicit_unary_op:
+			return NULL;
+		case ilfactor_explicit_binary_op:
+			return NULL;
 		default:
 			break;
 	}
@@ -440,6 +469,12 @@ void il_factor_delete(il_factor * self) {
 			break;
 		case ilfactor_instanceof:
 			il_factor_instanceof_delete(self->u.instanceof_);
+			break;
+		case ilfactor_explicit_unary_op:
+			il_factor_explicit_unary_op_delete(self->u.exp_unary_op);
+			break;
+		case ilfactor_explicit_binary_op:
+			il_factor_explicit_binary_op_delete(self->u.exp_binary_op);
 			break;
 		default:
 			break;
