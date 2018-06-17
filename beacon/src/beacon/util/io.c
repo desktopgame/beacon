@@ -161,7 +161,15 @@ vector* io_list_files(const char* dirname) {
 		}
 	}
 	closedir(dir);
+	qsort(ret->memory, ret->length, sizeof(void*), io_list_files_sort);
+	//vector_sort(ret, io_list_files_sort);
 	return ret;
+}
+
+int io_list_files_sort(const void* a, const void* b) {
+	file_entry* aF = *(file_entry**)a;
+	file_entry* bF = *(file_entry**)b;
+	return strcmp(aF->filename, bF->filename);
 }
 
 void io_list_files_delete(vector* files) {

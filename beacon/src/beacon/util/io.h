@@ -65,6 +65,14 @@ char* io_absolute_path(const char* target);
 vector* io_list_files(const char* dirname);
 
 /**
+ * ファイル一覧をソートするための比較関数.
+ * @param a
+ * @param b
+ * @return
+ */
+int io_list_files_sort(const void* a, const void* b);
+
+/**
  * io_list_files によって確保された vector を解放します.s
  * @param files
  */
