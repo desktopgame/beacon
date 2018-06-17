@@ -27,14 +27,20 @@ generic_type* il_factor_negative_op_eval(il_factor_negative_op * self, enviromen
 }
 
 void il_factor_negative_op_generate(il_factor_negative_op* self, enviroment* env) {
-	il_factor_generate(self->parent->a, env);
 	generic_type* gt = il_factor_eval(self->parent->a, env);
-	if(GENERIC2TYPE(gt) == TYPE_INT) {
-		opcode_buf_add(env->buf, op_ineg);
-	} else if(GENERIC2TYPE(gt) == TYPE_DOUBLE) {
-		opcode_buf_add(env->buf, op_dneg);
+	if(self->operator_index != -1) {
+		il_factor_generate(self->parent->a, env);
+		if(GENERIC2TYPE(gt) == TYPE_INT) {
+			opcode_buf_add(env->buf, op_ineg);
+		} else if(GENERIC2TYPE(gt) == TYPE_DOUBLE) {
+			opcode_buf_add(env->buf, op_dneg);
+		} else {
+			assert(false);
+		}
 	} else {
-		assert(false);
+		il_factor_generate(self->parent->a, env);
+		opcode_buf_add(env->buf, op_invokeoperator);
+		opcode_buf_add(env->buf, self->operator_index);
 	}
 }
 

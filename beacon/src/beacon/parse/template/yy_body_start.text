@@ -552,6 +552,10 @@ operator_define
 	{
 		$$ = ast_new_operator_overload(operator_childa, ast_new_blank(), $7, $6);
 	}
+	| OPERATOR SUB LRB RRB ARROW typename_T scope_optional
+	{
+		$$ = ast_new_operator_overload(operator_negative, ast_new_blank(), $7, $6);
+	}
 	;
 ;;
 ;;}}}
