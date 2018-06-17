@@ -1,11 +1,27 @@
-var dd = 0.5;
-var ddp = dd.+(0.1);
-var ddn = dd.==(0.5);
-var ddv = dd.-();
-Console.writeLine(dd);
-Console.writeLine(ddp);
-Console.writeLine(ddn);
-Console.writeLine(ddv);
-assert (dd == 0.5);
-//assert (dd == 0.6);
-assert (ddn);
+var index = 0;
+var indexp = index.+(1);
+var indexn = index.<=(3);
+
+var v = 1;
+var indexv = v.-();
+
+var indexxa = v.<<(1);
+var indexxb = v.<<(2);
+var indexxc = v.<<(3);
+var indexya = v.>>(1);
+var indexyb = v.>>(2);
+var indexyc = v.>>(3);
+Console.writeLine(index);
+Console.writeLine(indexp);
+Console.writeLine(indexn);
+Console.writeLine(indexv);
+Console.writeLine(indexxa);
+Console.writeLine(indexxb);
+Console.writeLine(indexxc);
+Console.writeLine(indexya);
+Console.writeLine(indexyb);
+Console.writeLine(indexyc);
+assert (index == 0);
+assert (indexp == 1);
+assert (indexn);
+assert (indexv == -1);

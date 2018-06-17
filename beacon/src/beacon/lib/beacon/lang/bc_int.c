@@ -9,6 +9,8 @@ static void bc_int_nativeSub(method* parent, frame* fr, enviroment* env);
 static void bc_int_nativeMul(method* parent, frame* fr, enviroment* env);
 static void bc_int_nativeDiv(method* parent, frame* fr, enviroment* env);
 static void bc_int_nativeMod(method* parent, frame* fr, enviroment* env);
+static void bc_int_nativeLShift(method* parent, frame* fr, enviroment* env);
+static void bc_int_nativeRShift(method* parent, frame* fr, enviroment* env);
 static void bc_int_nativeGT(method* parent, frame* fr, enviroment* env);
 static void bc_int_nativeGE(method* parent, frame* fr, enviroment* env);
 static void bc_int_nativeLT(method* parent, frame* fr, enviroment* env);
@@ -29,6 +31,8 @@ void bc_int_init() {
 	class_define_native_method(intClass, "nativeMul", bc_int_nativeMul);
 	class_define_native_method(intClass, "nativeDiv", bc_int_nativeDiv);
 	class_define_native_method(intClass, "nativeMod", bc_int_nativeMod);
+	class_define_native_method(intClass, "nativeLShift", bc_int_nativeLShift);
+	class_define_native_method(intClass, "nativeRShift", bc_int_nativeRShift);
 	class_define_native_method(intClass, "nativeGT", bc_int_nativeGT);
 	class_define_native_method(intClass, "nativeGE", bc_int_nativeGE);
 	class_define_native_method(intClass, "nativeLT", bc_int_nativeLT);
@@ -89,6 +93,20 @@ static void bc_int_nativeMod(method* parent, frame* fr, enviroment* env) {
 	object* self = vector_at(fr->ref_stack, 0);
 	object* a = vector_at(fr->ref_stack, 1);
 	object* ret = object_int_new(self->u.int_ % a->u.int_);
+	vector_push(fr->value_stack, ret);
+}
+
+static void bc_int_nativeLShift(method* parent, frame* fr, enviroment* env) {
+	object* self = vector_at(fr->ref_stack, 0);
+	object* a = vector_at(fr->ref_stack, 1);
+	object* ret = object_int_new(self->u.int_ << a->u.int_);
+	vector_push(fr->value_stack, ret);
+}
+
+static void bc_int_nativeRShift(method* parent, frame* fr, enviroment* env) {
+	object* self = vector_at(fr->ref_stack, 0);
+	object* a = vector_at(fr->ref_stack, 1);
+	object* ret = object_int_new(self->u.int_ >> a->u.int_);
 	vector_push(fr->value_stack, ret);
 }
 

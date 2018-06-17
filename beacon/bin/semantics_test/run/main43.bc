@@ -4,10 +4,23 @@ var indexn = index.<=(3);
 
 var v = 1;
 var indexv = v.-();
+
+var indexxa = v.<<(1);
+var indexxb = v.<<(2);
+var indexxc = v.<<(3);
+var indexya = v.>>(1);
+var indexyb = v.>>(2);
+var indexyc = v.>>(3);
 Console.writeLine(index);
 Console.writeLine(indexp);
 Console.writeLine(indexn);
 Console.writeLine(indexv);
+Console.writeLine(indexxa);
+Console.writeLine(indexxb);
+Console.writeLine(indexxc);
+Console.writeLine(indexya);
+Console.writeLine(indexyb);
+Console.writeLine(indexyc);
 assert (index == 0);
 assert (indexp == 1);
 assert (indexn);
