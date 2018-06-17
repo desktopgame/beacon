@@ -47,7 +47,10 @@ void il_factor_not_op_generate(il_factor_not_op* self, enviroment* env) {
 }
 
 void il_factor_not_op_load(il_factor_not_op* self, enviroment* env) {
-	self->operator_index = il_factor_unary_op_index(self->parent, env);
+	generic_type* gt = il_factor_eval(self->parent->a, env);
+	if(GENERIC2TYPE(gt) != TYPE_BOOL) {
+		self->operator_index = il_factor_unary_op_index(self->parent, env);
+	}
 }
 
 void il_factor_not_op_delete(il_factor_not_op* self) {

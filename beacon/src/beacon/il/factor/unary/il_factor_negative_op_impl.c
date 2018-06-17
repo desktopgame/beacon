@@ -13,6 +13,7 @@ il_factor_negative_op* il_factor_negative_op_new(operator_type type) {
 	il_factor_negative_op* ret = (il_factor_negative_op*)MEM_MALLOC(sizeof(il_factor_negative_op));
 	ret->type = type;
 	ret->parent = NULL;
+	ret->operator_index = -1;
 	return ret;
 }
 
@@ -45,7 +46,11 @@ void il_factor_negative_op_generate(il_factor_negative_op* self, enviroment* env
 }
 
 void il_factor_negative_op_load(il_factor_negative_op* self, enviroment* env) {
-	self->operator_index = il_factor_unary_op_index(self->parent, env);
+	generic_type* gt = il_factor_eval(self->parent->a, env);
+	if(GENERIC2TYPE(gt) != TYPE_INT &&
+	   GENERIC2TYPE(gt) != TYPE_DOUBLE) {
+		self->operator_index = il_factor_unary_op_index(self->parent, env);
+	}
 }
 
 void il_factor_negative_op_delete(il_factor_negative_op* self) {

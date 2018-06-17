@@ -66,6 +66,10 @@ namespace beacon::lang {
 			return !nativeEQ(a);
 		}
 
+		operator -() -> Int {
+			return nativeMul(-1);
+		}
+
 		private:
 		def native nativeInit(Int i) -> Void;
 

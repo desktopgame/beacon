@@ -1,9 +1,14 @@
 var index = 0;
 var indexp = index.+(1);
 var indexn = index.<=(3);
+
+var v = 1;
+var indexv = v.-();
 Console.writeLine(index);
 Console.writeLine(indexp);
 Console.writeLine(indexn);
+Console.writeLine(indexv);
 assert (index == 0);
 assert (indexp == 1);
 assert (indexn);
+assert (indexv == -1);

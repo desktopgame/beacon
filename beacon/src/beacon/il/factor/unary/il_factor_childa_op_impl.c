@@ -61,7 +61,11 @@ void il_factor_childa_op_generate(il_factor_childa_op* self, enviroment* env) {
 }
 
 void il_factor_childa_op_load(il_factor_childa_op* self, enviroment* env) {
-	self->operator_index = il_factor_unary_op_index(self->parent, env);
+	generic_type* gtype = il_factor_eval(self->parent->a, env);
+	if(GENERIC2TYPE(gtype) != TYPE_INT &&
+	   GENERIC2TYPE(gtype) != TYPE_BOOL) {
+		self->operator_index = il_factor_unary_op_index(self->parent, env);
+	}
 }
 
 void il_factor_childa_op_delete(il_factor_childa_op* self) {

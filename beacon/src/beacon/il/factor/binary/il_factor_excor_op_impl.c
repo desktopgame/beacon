@@ -60,7 +60,10 @@ void il_factor_excor_op_generate(il_factor_excor_op* self, enviroment* env) {
 }
 
 void il_factor_excor_op_load(il_factor_excor_op* self, enviroment* env) {
+	if(!il_factor_binary_op_int_int(self->parent, env) &&
+	   !il_factor_binary_op_bool_bool(self->parent, env)) {
 	self->operator_index = il_factor_binary_op_index(self->parent, env);
+	}
 }
 
 void il_factor_excor_op_delete(il_factor_excor_op* self) {

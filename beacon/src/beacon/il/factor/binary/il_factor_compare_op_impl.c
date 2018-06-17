@@ -57,7 +57,11 @@ void il_factor_compare_op_generate(il_factor_compare_op* self, enviroment* env) 
 }
 
 void il_factor_compare_op_load(il_factor_compare_op* self, enviroment* env) {
+	if(!il_factor_binary_op_int_int(self->parent, env) &&
+	   !il_factor_binary_op_double_double(self->parent, env) &&
+	   !il_factor_binary_op_char_char(self->parent, env)) {
 	self->operator_index = il_factor_binary_op_index(self->parent, env);
+	}
 }
 
 void il_factor_compare_op_delete(il_factor_compare_op* self) {

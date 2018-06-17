@@ -1,9 +1,11 @@
 var dd = 0.5;
 var ddp = dd.+(0.1);
 var ddn = dd.==(0.5);
+var ddv = dd.-();
 Console.writeLine(dd);
 Console.writeLine(ddp);
 Console.writeLine(ddn);
+Console.writeLine(ddv);
 assert (dd == 0.5);
 //assert (dd == 0.6);
 assert (ddn);
