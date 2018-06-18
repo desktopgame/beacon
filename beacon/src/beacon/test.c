@@ -28,7 +28,7 @@
 //proto
 static void test_cll(void);
 static void test_parse_err_hdr(parser* p);
-static void test_semanticsImpl(const char* dirname, bool require);
+static void test_semanticsImpl(const char* dirname, bool require, char** outFileName, bool* outFail);
 static void test_semantics();
 static void test_bison_grammerImpl(const char* dirname, bool require);
 static void test_bison_grammer();
@@ -39,10 +39,11 @@ bool test_run() {
 }
 
 //semantics
-static void test_semanticsImpl(const char* dirname, bool require) {
+static void test_semanticsImpl(const char* dirname, bool require, char** outFileName, bool* outFail) {
 	script_context* ctx = script_context_add();
 	script_context_set_current(ctx);
 	//stdoutを入れ替える
+	char* filename = NULL;
 	FILE* out = tmpfile();
 	FILE* STDOUT = stdout;
 	stdout = out;
@@ -55,6 +56,7 @@ static void test_semanticsImpl(const char* dirname, bool require) {
 		if(!io_extension(e->filename, "bc")) {
 			continue;
 		}
+		filename = e->filename;
 		fprintf(STDOUT, "[%s]\n", e->filename);
 		bool result = eval_file(e->filename);
 		rewind(out);
@@ -72,11 +74,8 @@ static void test_semanticsImpl(const char* dirname, bool require) {
 		}
 		script_context_static_clear(ctx);
 	}
-	if(fail) {
-		fprintf(STDOUT, "--- TEST FAIL! ---");
-	} else {
-		fprintf(STDOUT, "--- TEST SUCCEESS! ---");
-	}
+	(*outFileName) = filename;
+	(*outFail) = fail;
 	script_context_remove(ctx);
 	//元に戻す
 	stdout = STDOUT;
@@ -86,8 +85,24 @@ static void test_semanticsImpl(const char* dirname, bool require) {
 static void test_semantics() {
 	const char* rundir = "./semantics_test/run";
 	const char* errdir = "./semantics_test/err";
-	test_semanticsImpl(rundir, false);
-	test_semanticsImpl(errdir, true);
+	char* runFN = NULL;
+	char* errFN = NULL;
+	bool runRL = false;
+	bool errRL = false;
+	test_semanticsImpl(rundir, false, &runFN, &runRL);
+	test_semanticsImpl(errdir, true, &errFN, &errRL);
+	if(runRL) {
+		fprintf(stdout, "[RUN]FAIL. %s", runFN);
+	} else {
+		fprintf(stdout, "[RUN]SUCCEESS!");
+	}
+	fprintf(stdout, "\n");
+	if(errRL) {
+		fprintf(stdout, "[ERR]FAIL. %s", errFN);
+	} else {
+		fprintf(stdout, "[ERR]SUCCEESS!");
+	}
+	fprintf(stdout, "\n");
 }
 
 //FIXME:parser.cからのコピペ
