@@ -13,6 +13,7 @@ il_factor_childa_op* il_factor_childa_op_new(operator_type type) {
 	il_factor_childa_op* ret = (il_factor_childa_op*)MEM_MALLOC(sizeof(il_factor_childa_op));
 	ret->type = type;
 	ret->parent = NULL;
+	ret->operator_index = -1;
 	return ret;
 }
 

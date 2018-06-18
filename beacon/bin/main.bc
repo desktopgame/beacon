@@ -1,8 +1,5 @@
-var t = true;
-var f = false;
-Console.writeLine(t);
-Console.writeLine(f);
-//Console.writeLine(t.!());
-//Console.writeLine(f.!());
-Console.writeLine(t.|(f));
-Console.writeLine(f.&(t));
+Console.writeLine(1 ^ 1);
+assert (1 ^ 1) == 0;
+assert (1 ^ 2) == 3;
+assert (true ^ false);
+assert !(true ^ true);
