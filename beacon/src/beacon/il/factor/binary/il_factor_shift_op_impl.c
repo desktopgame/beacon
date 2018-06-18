@@ -62,7 +62,7 @@ void il_factor_shift_op_generate(il_factor_shift_op* self, enviroment* env) {
 }
 
 void il_factor_shift_op_load(il_factor_shift_op* self, enviroment* env) {
-	if(il_factor_binary_op_int_int(self->parent, env)) {
+	if(!il_factor_binary_op_int_int(self->parent, env)) {
 		self->operator_index = il_factor_binary_op_index(self->parent, env);
 	}
 }
