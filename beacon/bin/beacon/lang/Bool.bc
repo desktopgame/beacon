@@ -1,4 +1,21 @@
 namespace beacon::lang {
 	class Bool {
+		public:
+		operator |(Bool a) -> Bool {
+			return nativeBitOr(a);
+		}
+
+		operator &(Bool a) -> Bool {
+			return nativeBitAnd(a);
+		}
+
+		operator !() -> Bool {
+			return nativeBitAnd(false);
+		}
+
+		private:
+		def native nativeBitOr(Bool a) -> Bool;
+
+		def native nativeBitAnd(Bool a) -> Bool;
 	}
 }

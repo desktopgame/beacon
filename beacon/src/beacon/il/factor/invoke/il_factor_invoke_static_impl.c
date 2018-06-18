@@ -137,6 +137,10 @@ static void il_factor_invoke_static_check(il_factor_invoke_static * self, enviro
 	//環境を設定
 	ccpush_type_args(self->type_args);
 	//メソッドを検索
+	for(int i=0; i<self->args->length; i++) {
+		il_argument* ilarg = vector_at(self->args, i);
+		il_factor_load(ilarg->factor, env);
+	}
 	self->m = class_ilfind_smethod(cls, self->name, self->args, env, &temp);
 	self->index = temp;
 	//メソッドが見つからない
