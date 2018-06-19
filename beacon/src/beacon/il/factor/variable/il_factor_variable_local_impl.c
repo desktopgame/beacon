@@ -49,6 +49,10 @@ void il_factor_variable_local_load(il_factor_variable_local * self, enviroment *
 			//NOTE:トップレベルではここが空なので、
 			//定義されていない変数とみなせる？
 			type* tp = cctop_type();
+			if(tp->tag == type_interface/* この条件は構文規則からして満たさないはず */) {
+				il_error_report(ilerror_undefined_variable, self->name);
+				return;
+			}
 			int temp = -1;
 			field* f = class_find_field(TYPE2CLASS(tp), self->name, &temp);
 			self->u.field_index = temp;
