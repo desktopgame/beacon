@@ -99,7 +99,10 @@ void interface_create_vtable(interface_ * self) {
 		}
 	} else {
 		for (int i = 0; i < self->impl_list->length; i++) {
-			interface_* inter = (interface_*)vector_at(self->impl_list, i);
+			generic_type* ginter = (generic_type*)vector_at(self->impl_list, i);
+			type* cinter = GENERIC2TYPE(ginter);
+			interface_* inter = TYPE2INTERFACE(cinter);
+//			interface_* inter = (interface_*)vector_at(self->impl_list, i);
 			interface_create_vtable(inter);
 			vtable_copy(inter->vt, self->vt);
 		}
