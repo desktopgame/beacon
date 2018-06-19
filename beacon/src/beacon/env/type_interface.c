@@ -263,7 +263,7 @@ interface_* type_interface_valid(type* self) {
 		for(int j=0; j<impl_list->length; j++) {
 			if(i == j) { continue; }
 			generic_type* gE2 = vector_at(impl_list, j);
-			interface_* iE2 = TYPE2INTERFACE(GENERIC2TYPE(gE));
+			interface_* iE2 = TYPE2INTERFACE(GENERIC2TYPE(gE2));
 			if(iE == iE2) {
 				return iE2;
 			}
