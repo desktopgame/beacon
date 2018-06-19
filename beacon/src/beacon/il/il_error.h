@@ -50,4 +50,16 @@ void il_error_clear();
  * 現在のスコープで現在のパニックフラグを返します.
  */
 bool il_error_panic();
+
+/**
+ * 行番号を記録します.
+ */
+int il_error_line(int line);
+
+/**
+ * ファイル名を記録します.
+ * @param filename
+ * @return
+ */
+const char* il_error_file(const char* filename);
 #endif

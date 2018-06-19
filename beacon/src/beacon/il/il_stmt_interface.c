@@ -1,5 +1,6 @@
 #include "il_stmt_interface.h"
 #include "il_stmt_impl.h"
+#include "../env/class_loader.h"
 #include "../env/type_interface.h"
 #include "../vm/enviroment.h"
 #include "../util/mem.h"
@@ -110,6 +111,8 @@ void il_stmt_load(il_stmt * self, enviroment* env) {
 	if(il_error_panic()) {
 		return;
 	}
+	il_error_file(env->context_ref->filename);
+	il_error_line(self->lineno);
 	switch (self->type) {
 		case ilstmt_if:
 			il_stmt_if_load(self->u.if_, env);

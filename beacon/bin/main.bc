@@ -1,13 +1,8 @@
-namespace beacon::err25 {
-	class UndefVar {
+namespace beacon {
+	class ModifierError2 {
 		public:
-		def new() {
-		}
-
-		def call() -> Void {
-			variable.fun();
+		def static abstract foo() -> Object {
+			
 		}
 	}
 }
-var v = new beacon::err25::UndefVar();
-v.call();

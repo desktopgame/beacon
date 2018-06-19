@@ -9,6 +9,8 @@
 //proto
 static void il_error_print(FILE* fp, il_error_id error_id, va_list ap);
 static vector* gPanicStateVec = NULL;
+static int gLine = -1;
+static const char* gFile = NULL;
 
 typedef struct panic_state {
 	bool panic;
@@ -61,6 +63,16 @@ bool il_error_panic() {
 	panic_state* ps = (panic_state*)vector_top(gPanicStateVec);
 	return ps->panic;
 }
+
+int il_error_line(int line) {
+	gLine = line;
+	return line;
+}
+
+const char* il_error_file(const char* filename) {
+	gFile = filename;
+	return gFile;
+}
 //private
 static void il_error_print(FILE* fp, il_error_id error_id, va_list ap) {
 	char* fmt = NULL;
@@ -88,6 +100,7 @@ static void il_error_print(FILE* fp, il_error_id error_id, va_list ap) {
 			fmt = "if shown this message, it compiler bug";
 			break;
 	}
+	fprintf(fp, "%s<%d>\n", gFile, gLine);
 	vfprintf(fp, fmt, ap);
 	fprintf(fp, "\n");
 }

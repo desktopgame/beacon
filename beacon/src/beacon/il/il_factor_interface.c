@@ -5,6 +5,7 @@
 #include "../util/text.h"
 #include "../vm/enviroment.h"
 #include "../env/type_interface.h"
+#include "../env/class_loader.h"
 #include "../util/mem.h"
 #include <stdio.h>
 #include <assert.h>
@@ -164,6 +165,8 @@ void il_factor_load(il_factor * self, enviroment * env) {
 	if(il_error_panic()) {
 		return;
 	}
+	il_error_file(env->context_ref->filename);
+	il_error_line(self->lineno);
 	switch (self->type) {
 		case ilfactor_int:
 			il_factor_int_load(self->u.int_, env);
@@ -240,6 +243,8 @@ generic_type* il_factor_eval(il_factor * self, enviroment * env) {
 	if(il_error_panic()) {
 		return NULL;
 	}
+	il_error_file(env->context_ref->filename);
+	il_error_line(self->lineno);
 	generic_type* ret = NULL;
 	switch (self->type) {
 		case ilfactor_int:
