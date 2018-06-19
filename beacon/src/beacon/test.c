@@ -32,10 +32,17 @@ static void test_semanticsImpl(const char* dirname, bool require, char** outFile
 static void test_semantics();
 static void test_bison_grammerImpl(const char* dirname, bool require);
 static void test_bison_grammer();
+static bool gTest = false;
 
 bool test_run() {
+	gTest = true;
 	test_semantics();
+	gTest = false;
 	return true;
+}
+
+bool test_now() {
+	return gTest;
 }
 
 //semantics
