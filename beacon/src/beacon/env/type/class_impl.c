@@ -663,12 +663,13 @@ vector* class_generic_type_list_to_interface_list(vector* list) {
 	return ret;
 }
 
-bool class_implement_valid(class_* cls, method** out) {
+bool class_interface_implement_valid(class_* cls, method** out) {
 	(*out) = NULL;
 	if(cls->impl_list->length == 0) {
 		return true;
 	}
 	bool contains = true;
+	//全ての実装インターフェイスを取得する
 	vector* inter_list = class_generic_type_list_to_interface_list(cls->impl_list);
 	vector* methods = interface_method_flatten_list(inter_list);
 	for(int i=0; i<methods->length; i++) {

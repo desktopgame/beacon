@@ -428,7 +428,7 @@ vector* class_generic_type_list_to_interface_list(vector* list);
  * @param out
  * @return
  */
-bool class_implement_valid(class_* cls, method** out);
+bool class_interface_implement_valid(class_* cls, method** out);
 
 /**
  * クラスのフィールド名のうち重複するものがないなら true.

@@ -145,7 +145,7 @@ void CLBC_methods_decl(class_loader* self, il_type* iltype, type* tp, vector* il
 	//実装されていないインターフェイスを確認する
 	method* outMethod = NULL;
 	if(tp->tag == type_class &&
-	  !class_implement_valid(tp->u.class_, &outMethod)) {
+	  !class_interface_implement_valid(tp->u.class_, &outMethod)) {
 		class_loader_report(self, "invalid implement: %s @%s\n", tp->u.class_->name, outMethod->name);
 	}
 	//重複するフィールドを確認する
