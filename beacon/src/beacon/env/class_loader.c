@@ -156,7 +156,8 @@ int class_loader_report(class_loader* self, const char* fmt, ...) {
 
 int class_loader_vreport(class_loader* self, const char* fmt, va_list ap) {
 	self->error = true;
-	return text_vprintf(fmt, ap);
+	return vfprintf(stderr, fmt, ap);
+	//return text_vprintf(fmt, ap);
 }
 
 //private
