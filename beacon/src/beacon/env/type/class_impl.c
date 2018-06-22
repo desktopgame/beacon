@@ -32,7 +32,7 @@
 
 //private
 static void class_create_vtable_top(class_* self);
-static void class_create_vtable_ov(class_* self);
+static void class_create_vtable_override(class_* self);
 static void class_create_vtable_interface(class_* self);
 static void class_impl_delete(vector_item item);
 static void class_field_delete(vector_item item);
@@ -518,7 +518,7 @@ void class_create_vtable(class_ * self) {
 	//あるクラスを継承する場合には、
 	//重複するメソッドを上書きするように
 	} else {
-		class_create_vtable_ov(self);
+		class_create_vtable_override(self);
 	}
 	class_create_vtable_interface(self);
 }
@@ -730,7 +730,7 @@ static void class_create_vtable_top(class_* self) {
 	}
 }
 
-static void class_create_vtable_ov(class_* self) {
+static void class_create_vtable_override(class_* self) {
 	//XBREAK(!strcmp(self->name, "StringBuilder"));
 	class_create_vtable(self->super_class->core_type->u.class_);
 	vtable_copy(self->super_class->core_type->u.class_->vt, self->vt);
