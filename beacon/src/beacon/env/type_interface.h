@@ -211,4 +211,11 @@ struct generic_type* type_baseline(type* abstract, type* concrete);
  * @return
  */
 struct interface_* type_interface_valid(type* self);
+
+/**
+ * 抽象クラスかインターフェイスなら true.
+ * @param self
+ * @return
+ */
+bool type_is_abstract(type* self);
 #endif // !SIGNAL_ENV_TYPE_INTERFACE_H

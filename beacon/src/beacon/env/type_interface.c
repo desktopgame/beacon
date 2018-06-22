@@ -271,3 +271,10 @@ interface_* type_interface_valid(type* self) {
 	}
 	return NULL;
 }
+
+bool type_is_abstract(type* self) {
+	if(self->tag == type_class) {
+		return TYPE2CLASS(self)->is_abstract;
+	}
+	return self->tag == type_interface;
+}
