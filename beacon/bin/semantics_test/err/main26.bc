@@ -1,0 +1,11 @@
+namespace beacon::err26 {
+	abstract class AbstractClass {
+		public:
+		def new() {
+		}
+
+		def abstract foo() -> Void;
+	}
+	class ImplClass : AbstractClass {
+	}
+}

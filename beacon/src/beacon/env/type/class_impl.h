@@ -431,6 +431,15 @@ vector* class_generic_type_list_to_interface_list(vector* list);
 bool class_interface_implement_valid(class_* cls, method** out);
 
 /**
+ * クラスが親の抽象メソッドを正しく実装しているなら true.
+ * 親が具象クラスであるか、このクラスも抽象クラスなら 常にtrue です。
+ * @param cls
+ * @param out
+ * @return
+ */
+bool class_abstract_class_implement_valid(class_* cls, method** out);
+
+/**
  * クラスのフィールド名のうち重複するものがないなら true.
  * 親クラスのフィールドとの重複は無視されます。
  * @param cls

@@ -1,8 +1,10 @@
-namespace beacon {
-	class ModifierError2 {
+namespace beacon::errd {
+	interface IFoo {
 		public:
-		def static abstract foo() -> Object {
-			
-		}
+		def foo() -> Void;
+	}
+	abstract class Foo : IFoo {
+	}
+	class Bar : Foo {
 	}
 }

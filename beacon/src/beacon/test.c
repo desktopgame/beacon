@@ -87,6 +87,7 @@ static void test_semanticsImpl(const char* dirname, bool require, char** outFile
 	//元に戻す
 	stdout = STDOUT;
 	fclose(out);
+	fflush(stdout);
 }
 
 static void test_semantics() {

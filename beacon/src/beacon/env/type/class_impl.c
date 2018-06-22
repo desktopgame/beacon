@@ -665,7 +665,7 @@ vector* class_generic_type_list_to_interface_list(vector* list) {
 
 bool class_interface_implement_valid(class_* cls, method** out) {
 	(*out) = NULL;
-	if(cls->impl_list->length == 0) {
+	if(cls->impl_list->length == 0 || cls->is_abstract) {
 		return true;
 	}
 	bool contains = true;
@@ -683,6 +683,35 @@ bool class_interface_implement_valid(class_* cls, method** out) {
 	vector_delete(inter_list, vector_deleter_null);
 	vector_delete(methods, vector_deleter_null);
 	return contains;
+}
+
+bool class_abstract_class_implement_valid(class_* cls, method** out) {
+	(*out) = NULL;
+	//これ自体が抽象クラス
+	if(cls->is_abstract) {
+		return true;
+	}
+	//Objectクラス
+	generic_type* gsuper = cls->super_class;
+	if(gsuper == NULL) {
+		return true;
+	}
+	class_* csuper = TYPE2CLASS(GENERIC2TYPE(gsuper));
+	//親が具象クラスならtrue
+	if(!csuper->is_abstract) {
+		return true;
+	}
+	bool ret = true;
+	for(int i=0; i<csuper->method_list->length; i++) {
+		method* me = vector_at(csuper->method_list, i);
+		if(((me->modifier & modifier_abstract) > 0) &&
+		   !class_contains_method(cls->method_list, me)) {
+			   (*out) = me;
+			   ret = false;
+			   break;
+		}
+	}
+	return ret;
 }
 
 bool class_field_valid(class_* cls, field** out) {

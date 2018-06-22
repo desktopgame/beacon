@@ -143,11 +143,17 @@ void CLBC_methods_decl(class_loader* self, il_type* iltype, type* tp, vector* il
 	ccpop_namespace();
 	ccset_class_loader(NULL);
 	//実装されていないインターフェイスを確認する
-	method* outMethod = NULL;
+	method* outiMethod = NULL;
 	if(tp->tag == type_class &&
-	  !class_interface_implement_valid(tp->u.class_, &outMethod)) {
-		class_loader_report(self, "invalid implement: %s @%s\n", tp->u.class_->name, outMethod->name);
+	  !class_interface_implement_valid(TYPE2CLASS(tp), &outiMethod)) {
+		class_loader_report(self, "invalid implement: %s @%s\n", tp->u.class_->name, outiMethod->name);
 	}
+	//実装されていない抽象メソッドを確認する
+	method* outaMethod = NULL;
+	if(tp->tag == type_class &&
+	   !class_abstract_class_implement_valid(TYPE2CLASS(tp), &outaMethod)) {
+		class_loader_report(self, "invalid implement: %s @%s\n", tp->u.class_->name, outaMethod->name);
+	   }
 	//重複するフィールドを確認する
 	field* outField = NULL;
 	if(tp->tag == type_class &&
