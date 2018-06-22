@@ -116,6 +116,23 @@ void CLBC_methods_decl(class_loader* self, il_type* iltype, type* tp, vector* il
 			  class_loader_report(self, "abstract method should be defined on the abstract class: %s\n", method->name);
 			  return;
 		}
+		//メソッドの本文が省略されているが、
+		//ネイティブメソッドでも抽象メソッドでもない
+		if(tp->tag == type_class &&
+		   ilmethod->no_stmt &&
+			(!modifier_is_abstract(method->modifier) && !modifier_is_native(method->modifier))
+		) {
+			  class_loader_report(self, "must be not empty statement if modifier of method is native or abstract: %s\n", method->name);
+			return;
+		}
+		//ネイティブメソッドもしくは抽象メソッドなのに本文が書かれている
+		if(tp->tag == type_class &&
+		   !ilmethod->no_stmt &&
+			(modifier_is_abstract(method->modifier) || modifier_is_native(method->modifier))
+		) {
+			  class_loader_report(self, "must be empty statement if modifier of method is native or abstract: %s\n", method->name);
+			return;
+		}
 		method->parent = tp;
 		method->return_gtype = import_manager_resolve(self->import_manager, scope, ilmethod->return_fqcn);
 		if(tp->tag == type_class) {

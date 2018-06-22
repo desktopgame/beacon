@@ -21,6 +21,7 @@ il_method * il_method_new(const char * name) {
 	ret->modifier = modifier_none;
 	ret->statement_list = vector_new();
 	ret->type_parameter_list = vector_new();
+	ret->no_stmt = false;
 	return ret;
 }
 

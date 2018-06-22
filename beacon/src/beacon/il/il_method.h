@@ -5,6 +5,7 @@
 #include "../util/vector.h"
 #include "../ast/access_level.h"
 #include "../ast/modifier_type.h"
+#include <stdbool.h>
 /**
  * メソッドの定義を表す要素.
  */
@@ -17,6 +18,7 @@ typedef struct il_method {
 	access_level access;
 	modifier_type modifier;
 	vector* type_parameter_list;
+	bool no_stmt;
 } il_method;
 /**
  * メソッドを作成します.

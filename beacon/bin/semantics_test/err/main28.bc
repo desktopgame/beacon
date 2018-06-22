@@ -1,0 +1,9 @@
+namespace beacon::err28 {
+	abstract class AbstractClass {
+		public:
+		def new() {
+		}
+
+		def foo() -> Void;
+	}
+}

@@ -75,6 +75,11 @@ void CLIL_method(class_loader* self, il_type* current, ast* method, access_level
 	v->modifier = ast_cast_to_modifier(modifier, &error);
 	CLIL_parameter_list(self, v->parameter_list, param_list);
 	CLIL_body(self, v->statement_list, func_body);
+	//メソッドの本文が省略されているかどうか
+	//例えばネイティブメソッドや抽象メソッドは省略されているべき
+	if(ast_is_blank(func_body)) {
+		v->no_stmt = true;
+	}
 	il_type_add_method(current, v);
 	//重複する修飾子を検出
 	if(error) {
