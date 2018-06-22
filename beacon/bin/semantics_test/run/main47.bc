@@ -1,0 +1,11 @@
+namespace beacon::run47 {
+	interface ICall {
+		public:
+		def call() -> Void;
+	}
+
+	abstract class CallImpl : ICall {
+		public:
+		def abstract call() -> Void;
+	}
+}
