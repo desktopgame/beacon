@@ -72,9 +72,14 @@ void il_factor_new_instance_generate(il_factor_new_instance * self, enviroment *
 }
 
 void il_factor_new_instance_load(il_factor_new_instance * self, enviroment * env) {
-//	fqcn_cache_delete(self->fqcn);
-//	vector_delete(self->argument_list, il_Factor_new_instace_delete_arg);
-//	MEM_FREE(self);
+	il_factor_new_instance_find(self, env);
+	if(il_error_panic()) {
+		return;
+	}
+	//抽象クラスはインスタンス化できない
+	if(type_is_abstract(self->c->parent)) {
+		il_error_report(ilerror_construct_abstract_type, type_name(self->c->parent));
+	}
 }
 
 generic_type* il_factor_new_instance_eval(il_factor_new_instance * self, enviroment * env) {
@@ -140,6 +145,9 @@ static void il_factor_new_instance_delete_typearg(vector_item item) {
 
 static void il_factor_new_instance_find(il_factor_new_instance * self, enviroment * env) {
 	//*
+	if(self->constructor_index != -1) {
+		return;
+	}
 	class_* cls = cc_class(self->fqcnc);
 	int temp = -1;
 	//TEST(!strcmp(cls->name, "Point3D"));

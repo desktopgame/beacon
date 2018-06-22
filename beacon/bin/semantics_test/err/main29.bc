@@ -1,0 +1,15 @@
+namespace beacon::err29 {
+	interface ICall {
+		public:
+		def call() -> Void;
+	}
+
+	abstract class CallImpl : ICall {
+		public:
+		def new() {
+		}
+
+		def abstract call() -> Void;
+	}
+}
+var a = new beacon::err29::CallImpl();

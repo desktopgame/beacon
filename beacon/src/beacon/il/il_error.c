@@ -25,7 +25,7 @@ void il_error_report(il_error_id error_id, ...) {
 }
 
 void il_error_vreport(il_error_id error_id, va_list ap) {
-	il_error_print(stdout, error_id, ap);
+	il_error_print(stderr, error_id, ap);
 	assert(gPanicStateVec != NULL);
 	assert(gPanicStateVec->length > 0);
 	panic_state* ps = (panic_state*)vector_top(gPanicStateVec);
@@ -95,6 +95,9 @@ static void il_error_print(FILE* fp, il_error_id error_id, va_list ap) {
 			break;
 		case ilerror_undefined_operator:
 			fmt = "undefined operator: %s";
+			break;
+		case ilerror_construct_abstract_type:
+			fmt = "can't construct a abstract type by new operator: %s";
 			break;
 		default:
 			fmt = "if shown this message, it compiler bug";
