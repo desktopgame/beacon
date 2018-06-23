@@ -1,0 +1,3 @@
+0.printLine();
+"Hello".printLine();
+"Hello".printLine("World");

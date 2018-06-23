@@ -6,6 +6,22 @@ namespace beacon::lang {
 		}
 
 		public:
+		def print() -> Void {
+			Console.write(this);
+		}
+
+		def print(Object a) -> Void {
+			Console.write(a);
+		}
+
+		def printLine() -> Void {
+			Console.writeLine(this);
+		}
+
+		def printLine(Object a) -> Void {
+			Console.writeLine(a);
+		}
+
 		def toString() -> String {
 			return this.nativeToString();
 		}
