@@ -57,6 +57,8 @@ static void class_loader_lazy_resolve(class_loader* self);
 static void class_loader_lazy_resolve_all(class_loader* self);
 static void class_loader_lazy_resolve_at(char* name, tree_item item);
 static class_loader* class_loader_load_specialImpl(class_loader* self, class_loader* cll, char* fullP);
+static void class_loader_load_toplevel(class_loader* self);
+static void class_loader_load_linkall(class_loader* self);
 
 class_loader* class_loader_new(content_type type) {
 	class_loader* ret = (class_loader*)MEM_MALLOC(sizeof(class_loader));
@@ -231,19 +233,8 @@ static void class_loader_load_impl(class_loader* self) {
 	class_loader_bcload_impl(self);
 	if (self->error) { return; }
 	//他のクラスローダーとリンク
-	if(self->type == content_entry_point) {
-		il_error_enter();
-		class_loader_link_recursive(self, link_decl);
-		class_loader_link_recursive(self, link_impl);
-		class_loader_lazy_resolve_all(self);
-		il_error_exit();
-	}
-	//トップレベルのステートメントを読み込む
-	ccset_class_loader(self);
-	cc_enable(ccstate_toplevel);
-	CLBC_body(self, self->il_code->statement_list, self->env, NULL);
-	cc_disable(ccstate_toplevel);
-	ccset_class_loader(NULL);
+	class_loader_load_linkall(self);
+	class_loader_load_toplevel(self);
 }
 
 static void class_loader_link_recursive(class_loader* self, link_type type) {
@@ -313,4 +304,27 @@ static class_loader* class_loader_load_specialImpl(class_loader* self, class_loa
 	if (cll->error) { return cll; }
 	assert(cll->type == content_lib);
 	return cll;
+}
+
+static void class_loader_load_linkall(class_loader* self) {
+	if(self->type != content_entry_point) {
+		return;
+	}
+	il_error_enter();
+	class_loader_link_recursive(self, link_decl);
+	class_loader_link_recursive(self, link_impl);
+	class_loader_lazy_resolve_all(self);
+	il_error_exit();
+}
+
+static void class_loader_load_toplevel(class_loader* self) {
+	//トップレベルのステートメントを読み込む
+	if(self->level != 0) {
+		return;
+	}
+	ccset_class_loader(self);
+	cc_enable(ccstate_toplevel);
+	CLBC_body(self, self->il_code->statement_list, self->env, NULL);
+	cc_disable(ccstate_toplevel);
+	ccset_class_loader(NULL);
 }
