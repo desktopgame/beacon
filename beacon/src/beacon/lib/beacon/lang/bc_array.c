@@ -52,7 +52,7 @@ object * bc_array_get(object * arr, int index) {
 }
 
 int bc_array_length(object* arr) {
-	assert(arr->tag == object_array);
+	//assert(arr->tag == object_array);
 	return arr->native_slot_vec->length;
 }
 //private

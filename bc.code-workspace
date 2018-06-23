@@ -74,7 +74,8 @@
 			"stack.h": "c",
 			"il_factor_instanceof_impl.h": "c",
 			"il_factor_explicit_unary_op_impl.h": "c",
-			"thread": "c"
+			"thread": "c",
+			"thread.h": "c"
 		},
 		"ruby.lint": {
 			"reek": true,

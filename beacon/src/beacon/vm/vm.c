@@ -15,6 +15,7 @@
 #include "../env/constructor.h"
 #include "../env/script_context.h"
 #include "../env/operator_overload.h"
+#include "../lib/beacon/lang/bc_array.h"
 #include "../thread/thread.h"
 #include "../util/mem.h"
 #include "../util/xassert.h"
@@ -165,9 +166,9 @@ void vm_uncaught(frame * self, enviroment* env, int pc) {
 		line = lr->lineno;
 	}
 	//例外のメッセージを取得
-	type* tp = namespace_get_type(namespace_lang(), "Exception");
+	type* exceptionT = namespace_get_type(namespace_lang(), "Exception");
 	int temp = -1;
-	class_find_field(tp->u.class_, "message", &temp);
+	class_find_field(exceptionT->u.class_, "message", &temp);
 	object* ex = self->exception;
 	object* msg = vector_at(ex->u.field_vec, temp);
 	string_buffer* cstr = vector_at(msg->native_slot_vec, 0);
@@ -176,6 +177,26 @@ void vm_uncaught(frame * self, enviroment* env, int pc) {
 	fprintf(stderr, "\n");
 	fprintf(stderr, "%s", cstr->text);
 	fprintf(stderr, "\n");
+	//スタックトレースの表示
+	type* stackTraceElementT = namespace_get_type(namespace_lang(), "StackTraceElement");
+	//Exception#stackTraceを取得
+	temp = -1;
+	class_find_field(exceptionT->u.class_, "stackTrace", &temp);
+	object* stackTraceObj = vector_at(ex->u.field_vec, temp);
+	//assert(stackTraceObj->tag == object_array);
+	//StackTraceElement#fileName
+	//StackTraceElement#lineIndex を取得
+	int fileNameptr = -1;
+	int lineIndexptr = -1;
+	class_find_field(stackTraceElementT->u.class_, "fileName", &fileNameptr);
+	class_find_field(stackTraceElementT->u.class_, "lineIndex", &lineIndexptr);
+	int stackLen = bc_array_length(stackTraceObj);
+	for(int i=0; i<stackLen; i++) {
+		object* e = bc_array_get(stackTraceObj, i);
+		object* fileNameObj = vector_at(e->u.field_vec, fileNameptr);
+		object* lineIndexObj = vector_at(e->u.field_vec, lineIndexptr);
+		fprintf(stderr, "    @%d: %s\n", OBJ2INT(lineIndexObj), bc_string_raw(fileNameObj)->text);
+	}
 }
 
 
