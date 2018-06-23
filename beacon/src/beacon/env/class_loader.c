@@ -324,7 +324,27 @@ static void class_loader_load_toplevel(class_loader* self) {
 	}
 	ccset_class_loader(self);
 	cc_enable(ccstate_toplevel);
+	//var $world = new beacon::lang::World();
+	il_stmt_inferenced_type_init* createWorldStmt = il_stmt_inferenced_type_init_new("$world");
+	il_factor_new_instance* newWorldInstance = il_factor_new_instance_new();
+	newWorldInstance->fqcnc->name = text_strdup("World");
+	createWorldStmt->fact = il_factor_wrap_new_instance(newWorldInstance);
+	il_stmt* body = il_stmt_wrap_inferenced_type_init(createWorldStmt);
+	//worldをselfにする
+	ccpush_type(namespace_get_type(namespace_lang(), "World"));
+	il_error_enter();
+	il_stmt_load(body, self->env);
+	il_stmt_generate(body, self->env);
+	il_error_exit();
+	//$worldをthisにする
+	opcode_buf_add(self->env->buf, op_load);
+	opcode_buf_add(self->env->buf, 1);
+	opcode_buf_add(self->env->buf, op_store);
+	opcode_buf_add(self->env->buf, 0);
+	//以下読み込み
 	CLBC_body(self, self->il_code->statement_list, self->env, NULL);
+	il_stmt_delete(body);
+	ccpop_type();
 	cc_disable(ccstate_toplevel);
 	ccset_class_loader(NULL);
 }

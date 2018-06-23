@@ -167,6 +167,8 @@ void script_context_bootstrap(script_context* self) {
 	class_loader_special(self->bootstrap_class_loader, "beacon/lang/Console.bc");
 	class_loader_special(self->bootstrap_class_loader, "beacon/lang/Exception.bc");
 	class_loader_special(self->bootstrap_class_loader, "beacon/lang/StackTraceElement.bc");
+
+	class_loader_special(self->bootstrap_class_loader, "beacon/lang/World.bc");
 	//退避していたコンテキストを復帰
 	self->heap->accept_blocking--;
 	script_context_set_current(selected);

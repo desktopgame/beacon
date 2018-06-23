@@ -1,0 +1,7 @@
+namespace beacon::lang {
+	class World {
+		private:
+		def new() {
+		}
+	}
+}
