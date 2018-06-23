@@ -1,0 +1,40 @@
+namespace beacon::run48 {
+	interface IInterface {
+		public:
+		def a() -> Int;
+
+		def b() -> Int;
+	}
+	abstract class Abstract : IInterface {
+		public:
+		def new() {
+		}
+
+		def a() -> Int {
+			return 0;
+		}
+
+		def abstract b() -> Int;
+	}
+	class Concrete : Abstract {
+		public:
+		def new() {
+		}
+
+		def p() -> Int {
+			return 3;
+		}
+
+		def b() -> Int {
+			return 1;
+		}
+	}
+}
+
+var a = new beacon::run48::Concrete();
+Console.writeLine(a.p());
+Console.writeLine(a.a());
+Console.writeLine(a.b());
+assert a.p() == 3;
+assert a.a() == 0;
+assert a.b() == 1;
