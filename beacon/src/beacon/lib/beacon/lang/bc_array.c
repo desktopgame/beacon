@@ -50,6 +50,11 @@ void bc_array_set(object * arr, int index, object * o) {
 object * bc_array_get(object * arr, int index) {
 	return (object*)vector_at(arr->native_slot_vec, index);
 }
+
+int bc_array_length(object* arr) {
+	assert(arr->tag == object_array);
+	return arr->native_slot_vec->length;
+}
 //private
 static void bc_array_nativeInit(method* parent, frame* fr, enviroment* env) {
 	type* tp = parent->parent;

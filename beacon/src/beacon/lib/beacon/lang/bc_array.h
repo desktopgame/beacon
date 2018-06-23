@@ -40,4 +40,10 @@ void bc_array_set(struct object* arr, int index, struct object* o);
  * @return
  */
 struct object* bc_array_get(struct object* arr, int index);
+
+/**
+ * @param arr
+ * @return
+ */
+int bc_array_length(struct object* arr);
 #endif // !SIGNAL_LIB_SIGNAL_LANG_SG_ARRAY_H
