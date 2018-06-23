@@ -100,8 +100,10 @@ static void il_error_print(FILE* fp, il_error_id error_id, va_list ap) {
 			fmt = "can't construct a abstract type by new operator: %s";
 			break;
 		default:
-			fmt = "if shown this message, it compiler bug";
-			break;
+			{
+				fprintf(stderr, "if shown this message, it compiler bug\n");
+				return;
+			}
 	}
 	fprintf(fp, "%s<%d>\n", gFile, gLine);
 	vfprintf(fp, fmt, ap);

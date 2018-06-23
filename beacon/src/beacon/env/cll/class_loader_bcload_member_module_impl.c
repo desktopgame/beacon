@@ -55,7 +55,7 @@ void CLBC_fields_decl(class_loader* self, il_type* iltype, type* tp, vector* ilf
 		if(modifier_is_abstract(field->modifier) ||
 		   modifier_is_override(field->modifier) ||
 		   modifier_is_native(field->modifier)) {
-			   class_loader_report(self, "shouldn't define field of abstract or native: %s\n", field->name);
+			   class_loader_report(self, clerror_native_field, field->name);
 			   return;
 		   }
 		//NOTE:ここではフィールドの型を設定しません
@@ -113,7 +113,7 @@ void CLBC_methods_decl(class_loader* self, il_type* iltype, type* tp, vector* il
 		if(modifier_is_abstract(method->modifier) &&
 		  (tp->tag == type_class &&
 		  !TYPE2CLASS(tp)->is_abstract)) {
-			  class_loader_report(self, "abstract method should be defined on the abstract class: %s\n", method->name);
+			  class_loader_report(self, clerror_abstract_method_by, method->name);
 			  return;
 		}
 		//メソッドの本文が省略されているが、
@@ -122,7 +122,7 @@ void CLBC_methods_decl(class_loader* self, il_type* iltype, type* tp, vector* il
 		   ilmethod->no_stmt &&
 			(!modifier_is_abstract(method->modifier) && !modifier_is_native(method->modifier))
 		) {
-			  class_loader_report(self, "must be not empty statement if modifier of method is native or abstract: %s\n", method->name);
+			  class_loader_report(self, clerror_empty_method_body, method->name);
 			return;
 		}
 		//ネイティブメソッドもしくは抽象メソッドなのに本文が書かれている
@@ -130,7 +130,7 @@ void CLBC_methods_decl(class_loader* self, il_type* iltype, type* tp, vector* il
 		   !ilmethod->no_stmt &&
 			(modifier_is_abstract(method->modifier) || modifier_is_native(method->modifier))
 		) {
-			  class_loader_report(self, "must be empty statement if modifier of method is native or abstract: %s\n", method->name);
+			  class_loader_report(self, clerror_not_empty_method_body, method->name);
 			return;
 		}
 		method->parent = tp;
@@ -163,19 +163,19 @@ void CLBC_methods_decl(class_loader* self, il_type* iltype, type* tp, vector* il
 	method* outiMethod = NULL;
 	if(tp->tag == type_class &&
 	  !class_interface_implement_valid(TYPE2CLASS(tp), &outiMethod)) {
-		class_loader_report(self, "invalid implement: %s @%s\n", tp->u.class_->name, outiMethod->name);
+		class_loader_report(self, clerror_not_implement_interface, tp->u.class_->name, outiMethod->name);
 	}
 	//実装されていない抽象メソッドを確認する
 	method* outaMethod = NULL;
 	if(tp->tag == type_class &&
 	   !class_abstract_class_implement_valid(TYPE2CLASS(tp), &outaMethod)) {
-		class_loader_report(self, "invalid implement: %s @%s\n", tp->u.class_->name, outaMethod->name);
+		class_loader_report(self, clerror_not_implement_abstract_method, tp->u.class_->name, outaMethod->name);
 	   }
 	//重複するフィールドを確認する
 	field* outField = NULL;
 	if(tp->tag == type_class &&
 	   !class_field_valid(tp->u.class_, &outField)) {
-		class_loader_report(self, "invalid field declaration: %s @%s\n", tp->u.class_->name, outField->name);
+		class_loader_report(self, clerror_field_name_a_overlapped, tp->u.class_->name, outField->name);
 	}
 }
 
@@ -507,17 +507,17 @@ static void CLBC_chain_super(class_loader * self, il_type * iltype, type * tp, i
 static bool CLBC_test_operator_overlaod(class_loader* self, il_type* iltype, type* tp, operator_overload* opov) {
 	//アクセスレベルを確認する
 	if(opov->access != access_public) {
-		class_loader_report(self, "must be public a access level of operator: %s", type_name(tp));
+		class_loader_report(self, clerror_private_operator, type_name(tp));
 		return true;
 	}
 	//二項演算子であるなら引数は1
 	if(operator_arg2(opov->type) && opov->parameter_list->length != 1) {
-		class_loader_report(self, "illegal of parameter count, must be binary operator argument count is one.: %s#%s", type_name(tp), operator_tostring(opov->type));
+		class_loader_report(self, clerror_illegal_argument_bioperator, type_name(tp), operator_tostring(opov->type));
 		return true;
 	}
 	//単項演算子であるなら引数は0
 	if(operator_arg1(opov->type) && opov->parameter_list->length != 0) {
-		class_loader_report(self, "illegal of parameter count, must be unary operator argument count is zero.: %s#%s", type_name(tp), operator_tostring(opov->type));
+		class_loader_report(self, clerror_illegal_argument_uoperator, type_name(tp), operator_tostring(opov->type));
 		return true;
 	}
 	return false;

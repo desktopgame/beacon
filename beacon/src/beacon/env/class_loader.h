@@ -33,6 +33,28 @@ typedef struct class_loader {
 } class_loader;
 
 /**
+ * クラスローダーのエラーを表すID.
+ */
+typedef enum cl_error_id {
+	clerror_parse,
+	clerror_class_first,
+	clerror_multi_eqinterface,
+	clerror_interface_only,
+	clerror_chain,
+	clerror_modifier_a_overlapped,
+	clerror_field_name_a_overlapped,
+	clerror_native_field,
+	clerror_abstract_method_by,
+	clerror_empty_method_body,
+	clerror_not_empty_method_body,
+	clerror_not_implement_interface,
+	clerror_not_implement_abstract_method,
+	clerror_private_operator,
+	clerror_illegal_argument_bioperator,
+	clerror_illegal_argument_uoperator,
+} cl_error_id;
+
+/**
  * 引数のクラスローダの error が true なら return します.
  * @param self
  */
@@ -113,20 +135,20 @@ void class_loader_delete(class_loader* self);
 /**
  * エラー情報を出力してクラスローダーをマークします.
  * @param self
- * @param fmt
+ * @param id
  * @param ...
  * @return
  */
-int class_loader_report(class_loader* self, const char* fmt, ...);
+int class_loader_report(class_loader* self, cl_error_id id, ...);
 
 /**
  * エラー情報を出力してクラスローダーをマークします.
  * @param self
- * @param fmt
+ * @param id
  * @param ap
  * @return
  */
-int class_loader_vreport(class_loader* self, const char* fmt, va_list ap);
+int class_loader_vreport(class_loader* self, cl_error_id id, va_list ap);
 
 /**
  * ブートストラップクラスローダーを返します.

@@ -365,7 +365,7 @@ static void CLBC_register_class(class_loader* self, namespace_* parent, il_type*
 			type* E = GENERIC2TYPE(gtp);
 			vector_push(cls->impl_list, gtp);
 			if(E->tag != type_interface) {
-				class_loader_report(self, "must be class first: %s\n", type_name(tp));
+				class_loader_report(self, clerror_class_first, type_name(tp));
 				namespace_add_type(parent, tp);
 				return;
 			}
@@ -376,7 +376,7 @@ static void CLBC_register_class(class_loader* self, namespace_* parent, il_type*
 	//重複するインターフェイスを検出
 	interface_* inter = NULL;
 	if((inter = type_interface_valid(tp))) {
-		class_loader_report(self, "should'nt implement equal interface a multiple: %s\n", inter->name);
+		class_loader_report(self, clerror_multi_eqinterface, inter->name);
 	}
 }
 
@@ -411,7 +411,7 @@ static void CLBC_register_interface(class_loader* self, namespace_* parent, il_t
 		type* E = GENERIC2TYPE(gtp);
 		vector_push(inter->impl_list, gtp);
 		if(E->tag != type_interface) {
-			class_loader_report(self, "must be interface only: %s\n", type_name(tp));
+			class_loader_report(self, clerror_interface_only, type_name(tp));
 			namespace_add_type(parent, tp);
 			return;
 		}
@@ -422,6 +422,6 @@ static void CLBC_register_interface(class_loader* self, namespace_* parent, il_t
 	//重複するインターフェイスを検出
 	interface_* ovinter = NULL;
 	if((ovinter = type_interface_valid(tp))) {
-		class_loader_report(self, "should'nt implement equal interface a multiple: %s\n", ovinter->name);
+		class_loader_report(self, clerror_multi_eqinterface, ovinter->name);
 	}
 }

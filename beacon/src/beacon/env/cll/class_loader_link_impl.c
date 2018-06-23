@@ -120,7 +120,7 @@ static void CLBC_enum_decl(class_loader * self, il_type * iltype, type * tp, nam
 	if((tp->tag == type_enum ||
 	   tp->tag == type_class) &&
 	   !class_field_valid(tp->u.class_, &outField)) {
-		class_loader_report(self, "invalid field declaration: %s @%s\n", tp->u.class_->name, outField->name);
+		class_loader_report(self, clerror_field_name_a_overlapped, tp->u.class_->name, outField->name);
 	}
 	tp->state = tp->state | type_decl;
 }
