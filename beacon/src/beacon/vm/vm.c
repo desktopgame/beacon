@@ -172,10 +172,10 @@ void vm_uncaught(frame * self, enviroment* env, int pc) {
 	object* msg = vector_at(ex->u.field_vec, temp);
 	string_buffer* cstr = vector_at(msg->native_slot_vec, 0);
 
-	text_printf("file: %s <%d>", env->context_ref->filename, line);
-	text_printf("\n");
-	text_printf("%s", cstr->text);
-	text_printf("\n");
+	fprintf(stderr, "file: %s <%d>", env->context_ref->filename, line);
+	fprintf(stderr, "\n");
+	fprintf(stderr, "%s", cstr->text);
+	fprintf(stderr, "\n");
 }
 
 
