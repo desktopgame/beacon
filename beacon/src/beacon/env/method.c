@@ -18,8 +18,8 @@
 static void method_parameter_delete(vector_item item);
 static void method_type_parameter_delete(vector_item item);
 
-method * method_new(const char * name) {
-	method* ret = (method*)MEM_MALLOC(sizeof(method));
+method* method_malloc(const char* name, const char* filename, int lineno) {
+	method* ret = (method*)mem_malloc(sizeof(method), filename, lineno);
 	ret->name = text_strdup(name);
 	ret->parameter_list = vector_new();
 	ret->type = method_type_script;

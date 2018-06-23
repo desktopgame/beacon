@@ -131,8 +131,10 @@ void il_factor_unary_op_delete(il_factor_unary_op * self) {
 
 char* il_factor_unary_op_tostr_simple(il_factor_unary_op* self, enviroment* env) {
 	string_buffer* sb = string_buffer_new();
+	char* a = il_factor_tostr(self->a, env);
 	string_buffer_appendf(sb, "%s", operator_tostring(self->type));
-	string_buffer_appends(sb, il_factor_tostr(self->a, env));
+	string_buffer_appends(sb, a);
+	MEM_FREE(a);
 	return string_buffer_release(sb);
 }
 

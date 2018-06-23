@@ -246,5 +246,12 @@ static compile_context* compile_context_new() {
 }
 
 static void compile_context_delete(compile_context* self) {
-
+	vector_delete(self->namespace_vec, vector_deleter_null);
+	vector_delete(self->type_vec, vector_deleter_null);
+	vector_delete(self->method_vec, vector_deleter_null);
+	vector_delete(self->ctor_vec, vector_deleter_null);
+	vector_delete(self->while_start_vec, vector_deleter_null);
+	vector_delete(self->while_end_vec, vector_deleter_null);
+	vector_delete(self->receiver_vec, vector_deleter_null);
+	vector_delete(self->type_args_vec, vector_deleter_null);
 }

@@ -42,9 +42,12 @@ typedef struct method {
 /**
  * メソッドを作成します.
  * @param name
+ * @param filename
+ * @param lineno
  * @return
  */
-method* method_new(const char* name);
+method* method_malloc(const char* name, const char* filename, int lineno);
+#define method_new(name) (method_malloc(name, __FILE__, __LINE__))
 
 /**
  * メソッドを実行します.

@@ -55,7 +55,7 @@ object * object_string_malloc(const char * s, const char* filename, int lineno) 
 	ret->vptr = type_vtable(TYPE_STRING);
 
 	//配列を生成
-	object* arr = object_ref_new();
+	object* arr = object_ref_malloc(filename, lineno);
 	arr->tag = object_array;
 	type* arrType = bc_array_type();
 	type* strType = namespace_get_type(namespace_lang(), "String");
@@ -88,7 +88,7 @@ object * object_string_malloc(const char * s, const char* filename, int lineno) 
 
 object * object_ref_malloc(const char* filename, int lineno) {
 	object* ret= object_mallocImpl(object_ref, filename, lineno);
-	ret->u.field_vec = vector_new();
+	ret->u.field_vec = vector_malloc(filename, lineno);
 	return ret;
 }
 
@@ -278,7 +278,7 @@ static object* object_mallocImpl(object_tag type, const char* filename, int line
 	ret->paint = paint_unmarked;
 	ret->tag = type;
 	ret->vptr = NULL;
-	ret->native_slot_vec = vector_new();
+	ret->native_slot_vec = vector_malloc(filename, lineno);
 	heap_add(heap_get(), ret);
 	gObjectCount++;
 	return ret;

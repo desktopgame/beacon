@@ -11,6 +11,7 @@ static void remove_from_parent(frame* self);
 static void frame_markStatic(field* item);
 static void frame_markRecursive(frame* self);
 static void frame_mark_defer(frame* self);
+static void frame_delete_defctx(vector_item e);
 
 frame * frame_new() {
 	frame* ret = (frame*)MEM_MALLOC(sizeof(frame));
@@ -60,6 +61,7 @@ void frame_delete(frame * self) {
 	vector_delete(self->ref_stack, vector_deleter_null);
 	vector_delete(self->children_vec, vector_deleter_null);
 	vector_delete(self->type_args_vec, vector_deleter_null);
+	vector_delete(self->defer_vec, frame_delete_defctx);
 	MEM_FREE(self);
 }
 
@@ -107,4 +109,8 @@ static void frame_mark_defer(frame* self) {
 			object_markall(e);
 		}
 	}
+}
+static void frame_delete_defctx(vector_item e) {
+	defer_context* defctx = (defer_context*)e;
+	defer_context_delete(defctx);
 }

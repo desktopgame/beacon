@@ -61,6 +61,7 @@ char* il_factor_dec_tostr(il_factor_dec* self, enviroment* env) {
 	if(self->type == fixtype_post) {
 		string_buffer_appends(sb, "--");
 	}
+	MEM_FREE(fact);
 	return string_buffer_release(sb);
 }
 

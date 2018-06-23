@@ -18,7 +18,7 @@ string_buffer* string_buffer_malloc(const char* filename, int lineno) {
 	string_buffer* ret = (string_buffer*)mem_malloc(sizeof(string_buffer), filename, lineno);
 	ret->length = 0;
 	ret->capacity = 16;
-	ret->text = (char*)MEM_MALLOC(sizeof(char) * 16);
+	ret->text = (char*)mem_malloc(sizeof(char) * 16, filename, lineno);
 	string_buffer_fill_zero(ret, 0, 16);
 	return ret;
 }

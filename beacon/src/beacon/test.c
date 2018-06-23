@@ -70,6 +70,7 @@ static void test_semanticsImpl(const char* dirname, bool require, char** outFile
 		while(!feof(out)) {
 			char* line = text_freadline(out);
 			fprintf(STDOUT, "    %s\n", line);
+			MEM_FREE(line);
 		}
 		fclose(out);
 		out = tmpfile();
@@ -84,6 +85,7 @@ static void test_semanticsImpl(const char* dirname, bool require, char** outFile
 	(*outFileName) = filename;
 	(*outFail) = fail;
 	script_context_remove(ctx);
+	io_list_files_delete(files);
 	//元に戻す
 	stdout = STDOUT;
 	fclose(out);

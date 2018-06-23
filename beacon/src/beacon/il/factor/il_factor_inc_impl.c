@@ -62,6 +62,7 @@ char* il_factor_inc_tostr(il_factor_inc* self, enviroment* env) {
 	if(self->type == fixtype_post) {
 		string_buffer_appends(sb, "++");
 	}
+	MEM_FREE(fact);
 	return string_buffer_release(sb);
 }
 

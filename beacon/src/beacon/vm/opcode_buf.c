@@ -64,6 +64,7 @@ void opcode_buf_delete(opcode_buf * self) {
 	}
 	vector_delete(self->source, vector_deleter_null);
 	vector_delete(self->labels, opcode_buf_delete_label);
+	vector_delete(self->lazy_tbl, opcode_buf_delete_lazy_int);
 	MEM_FREE(self);
 }
 

@@ -49,9 +49,13 @@ generic_type* il_factor_instanceof_eval(il_factor_instanceof* self, enviroment* 
 
 char* il_factor_instanceof_tostr(il_factor_instanceof* self, enviroment* env) {
 	string_buffer* sb = string_buffer_new();
-	string_buffer_appends(sb, il_factor_tostr(self->fact, env));
+	char* a = il_factor_tostr(self->fact, env);
+	char* b = generic_cache_tostr(self->gcache);
+	string_buffer_appends(sb, a);
 	string_buffer_appends(sb, " is ");
-	string_buffer_appends(sb, generic_cache_tostr(self->gcache));
+	string_buffer_appends(sb, b);
+	MEM_FREE(a);
+	MEM_FREE(b);
 	return string_buffer_release(sb);
 }
 

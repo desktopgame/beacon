@@ -1,10 +1,34 @@
-namespace beacon::errd {
-	interface IFoo {
+import "beacon/lang/Object"
+import "beacon/lang/Array"
+import "beacon/lang/Int"
+import "beacon/lang/Double"
+import "beacon/lang/Char"
+import "beacon/lang/String"
+import "beacon/lang/Bool"
+import "beacon/lang/Null"
+import "beacon/lang/Void"
+import "beacon/lang/Console"
+import "beacon/lang/Vector"
+import "beacon/lang/VectorIterator"
+
+import "beacon/lang/Exception"
+import "beacon/lang/StackTraceElement"
+import "beacon/lang/Tuple"
+
+namespace beacon::x {
+	class MyClassA {
 		public:
-		def foo() -> Void;
+		def static test[A](A arg, A arg2) -> Vector[A] {
+			var v = new Vector[A]();
+			v.push(arg);
+			v.push(arg2);
+			return v;
+		}
 	}
-	abstract class Foo : IFoo {
-	}
-	class Bar : Foo {
-	}
+}
+var v = beacon::x::MyClassA.test[Int](10, 4);
+var iter = v.iterate();
+while(iter.hasNext()) {
+	var E = iter.next();
+	Console.writeLine(E);
 }

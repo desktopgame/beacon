@@ -193,9 +193,13 @@ void il_factor_binary_op_delete(il_factor_binary_op * self) {
 
 char* il_factor_binary_op_tostr_simple(il_factor_binary_op* self, enviroment* env) {
 	string_buffer* sb = string_buffer_new();
-	string_buffer_appends(sb, il_factor_tostr(self->left, env));
+	char* a = il_factor_tostr(self->left, env);
+	char* b = il_factor_tostr(self->right, env);
+	string_buffer_appends(sb, a);
 	string_buffer_appendf(sb, " %s ", operator_tostring(self->type));
-	string_buffer_appends(sb, il_factor_tostr(self->right, env));
+	string_buffer_appends(sb, b);
+	MEM_FREE(a);
+	MEM_FREE(b);
 	return string_buffer_release(sb);
 }
 

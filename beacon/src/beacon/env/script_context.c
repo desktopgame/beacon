@@ -252,6 +252,7 @@ static void script_context_free(script_context* self) {
 	vm_catch(thv);
 	class_loader_delete(self->bootstrap_class_loader);
 	heap_delete(self->heap);
+	//object_delete(self->oNull);
 	generic_type_collect();
 	vector_delete(self->all_generic_vec, vector_deleter_null);
 	int x = object_count();

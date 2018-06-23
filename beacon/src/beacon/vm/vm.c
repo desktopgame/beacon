@@ -788,6 +788,8 @@ static void vm_run(frame * self, enviroment * env, int pos, int deferStart) {
 				}
 				assert(ret != NULL);
 				vector_push(self->type_args_vec, ret);
+				vector_delete(stack, vector_deleter_null);
+				vector_delete(counts, vector_deleter_null);
 				break;
 			}
 			case op_generic_enter:
