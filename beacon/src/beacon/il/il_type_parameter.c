@@ -38,6 +38,4 @@ void il_type_parameter_delete(il_type_parameter * self) {
 }
 //private
 static void il_type_parameter_rule_list_delete(vector_item item) {
-//	il_type_parameter_rule* e = (il_type_parameter_rule*)item;
-//	il_type_parameter_rule_delete(e);
 }

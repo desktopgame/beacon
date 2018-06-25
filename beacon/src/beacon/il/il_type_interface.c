@@ -25,7 +25,6 @@ vector * il_type_smethod_vec(il_type * self) {
 	if (self->tag == iltype_class) {
 		return self->u.class_->smethod_list;
 	} else if (self->tag == iltype_interface) {
-		//return self->u.interface_->smethod_list;
 		return NULL;
 	}
 	return NULL;

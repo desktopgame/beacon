@@ -54,7 +54,6 @@ void il_method_delete(il_method * self) {
 	MEM_FREE(self->name);
 	generic_cache_delete(self->return_fqcn);
 	vector_delete(self->parameter_list, il_method_parameter_delete);
-	//il_type_delete(self->return_type);
 	vector_delete(self->statement_list, il_method_stmt_delete);
 	vector_delete(self->type_parameter_list, il_method_type_parameter_delete);
 	MEM_FREE(self);

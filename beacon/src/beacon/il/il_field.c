@@ -7,7 +7,6 @@
 
 il_field * il_field_new(const char * name) {
 	il_field* ret = (il_field*)MEM_MALLOC(sizeof(il_field));
-	//ret->type = NULL;
 	ret->fqcn = generic_cache_new();
 	ret->access = access_public;
 	ret->modifier = modifier_none;
@@ -30,7 +29,6 @@ void il_field_delete(il_field * self) {
 	if (self == NULL) {
 		return;
 	}
-//	il_type_delete(self->type);
 	generic_cache_delete(self->fqcn);
 	MEM_FREE(self->name);
 	MEM_FREE(self);

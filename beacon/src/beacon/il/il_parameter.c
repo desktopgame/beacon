@@ -25,8 +25,6 @@ void il_parameter_delete(il_parameter * self) {
 		return;
 	}
 	generic_cache_delete(self->fqcn);
-//	fqcn_delete(self->fqcn);
 	MEM_FREE(self->name);
-//	il_type_delete(self->type);
 	MEM_FREE(self);
 }

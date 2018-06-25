@@ -1,5 +1,6 @@
 #include "il_constructor.h"
 #include "../util/mem.h"
+#include "../util/text.h"
 #include "il_parameter.h"
 #include "il_stmt_interface.h"
 #include "il_constructor_chain.h"
@@ -20,10 +21,7 @@ il_constructor * il_constructor_new() {
 void il_constructor_dump(il_constructor * self, int depth) {
 	text_putindent(depth);
 	access_print(self->access);
-//	text_printf(" ");
-//	modifier_print(self->modifier);
 	text_printf(" constructor");
-//	fqcn_cache_print(self->return_fqcn);
 	text_putline();
 	if (self->chain != NULL) {
 		il_constructor_chain_dump(self->chain, depth + 1);
@@ -43,7 +41,6 @@ void il_constructor_dump(il_constructor * self, int depth) {
 void il_constructor_delete(il_constructor * self) {
 	il_constructor_chain_delete(self->chain);
 	vector_delete(self->parameter_list, il_constructor_parameter_delete);
-	//il_type_delete(self->return_type);
 	vector_delete(self->statement_list, il_constructor_stmt_delete);
 	MEM_FREE(self);
 }

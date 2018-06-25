@@ -10,7 +10,6 @@ il_argument * il_argument_new() {
 	void* block = MEM_MALLOC(sizeof(il_argument));
 	assert(block != NULL);
 	il_argument* ret = (il_argument*)block;
-	//ret->name = text_strdup(name);
 	ret->factor = NULL;
 	return ret;
 }

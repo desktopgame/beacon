@@ -34,7 +34,6 @@ void il_type_argument_resolve(vector* iltype_args) {
 		if(e->gtype == NULL) {
 			namespace_* scope = cc_namespace();
 			e->gtype = import_manager_resolve(ccget_class_loader()->import_manager, scope, e->gcache);
-			//e->gtype = generic_cache_gtype(e->gcache, scope, ilctx);
 		}
 	}
 }
