@@ -8,12 +8,6 @@
 //proto
 static void string_buffer_fill_zero(string_buffer* self, int offs, int len);
 
-/*
-string_buffer * string_buffer_new() {
-	
-}
-*/
-
 string_buffer* string_buffer_malloc(const char* filename, int lineno) {
 	string_buffer* ret = (string_buffer*)mem_malloc(sizeof(string_buffer), filename, lineno);
 	ret->length = 0;
@@ -45,8 +39,6 @@ void string_buffer_prepend(string_buffer* self, char_t c) {
 }
 
 void string_buffer_append(string_buffer * self, char_t c) {
-	//text_printf("%c", c);
-	//text_printf("[%c]\n", c);
 	if (self->length >= self->capacity) {
 		string_buffer_reserve(self);
 	}
@@ -104,13 +96,9 @@ void string_buffer_reserve(string_buffer* self) {
 	//新しく確保された部分を 0埋め
 	self->text = temp;
 	self->capacity = newSize;
-		//string_buffer_fill_zero(self, self->length, newSize);
 }
 
 void string_buffer_shrink(string_buffer * self) {
-	if (self->length == self->capacity) {
-		//return;
-	}
 	if (self->length == 0) {
 		return;
 	}
