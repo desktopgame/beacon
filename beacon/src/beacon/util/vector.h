@@ -72,6 +72,14 @@ vector* vector_malloc(const char* filename, int lineno);
 void vector_push(vector* self, vector_item item);
 
 /**
+ * selfが空なら新規作成して返します.
+ * @param self
+ * @param item
+ * @return
+ */
+vector* vector_append(vector* self, vector_item item);
+
+/**
  * 末尾の要素を削除せずに返します.
  * @param self
  * @return

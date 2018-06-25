@@ -32,6 +32,14 @@ void vector_push(vector * self, vector_item item) {
 	self->length++;
 }
 
+vector* vector_append(vector* self, vector_item item) {
+	if(self == NULL) {
+		self = vector_new();
+	}
+	vector_push(self, item);
+	return self;
+}
+
 vector_item vector_top(vector * self) {
 	assert(self != NULL);
 	assert(self->length > 0);
