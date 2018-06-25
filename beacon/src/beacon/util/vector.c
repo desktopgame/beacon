@@ -3,15 +3,6 @@
 #include "mem.h"
 
 #define SLOT_SIZE sizeof(void*)
-/*
-vector * vector_new() {
-	vector* ret = (vector*)MEM_MALLOC(sizeof(vector));
-	ret->length = 0;
-	ret->capacity = 16;
-	ret->memory = (vector_item*)MEM_MALLOC(SLOT_SIZE * 16);
-	return ret;
-}
-*/
 
 vector* vector_malloc(const char* filename, int lineno) {
 	vector* ret = (vector*)mem_malloc(sizeof(vector), filename, lineno);
@@ -43,7 +34,6 @@ vector* vector_append(vector* self, vector_item item) {
 vector_item vector_top(vector * self) {
 	assert(self != NULL);
 	assert(self->length > 0);
-//	return self->memory[self->length];
 	return *(self->memory + (self->length - 1));
 }
 
@@ -108,7 +98,6 @@ void vector_assign(vector * self, int index, vector_item item) {
 vector_item vector_at(vector * self, int index) {
 	assert(index >= 0 && index < self->length);
 	return self->memory[index];
-//	return *(self->memory + index);
 }
 
 bool vector_empty(vector * self) {
