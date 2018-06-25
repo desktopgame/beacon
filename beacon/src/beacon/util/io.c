@@ -113,7 +113,6 @@ void io_write_text(const char * filename, const char * text) {
 	int len = strlen(text);
 	for (int i = 0; i < len; i++) {
 		char c = text[i];
-		//text_printf("%c", c);
 		fputc(c, fp);
 	}
 	fclose(fp);
@@ -138,8 +137,6 @@ char * io_absolute_path(const char * target) {
 		}
 	}
 	char* a = text_concat(full, target);
-	//text_printf("path %s", a);
-	//return text_strdup(a);
 	return a;
 #endif
 }
@@ -154,7 +151,6 @@ vector* io_list_files(const char* dirname) {
 		if (dp->d_name[0] != '.') {
 			char* fullp = io_join_path(dirname, dp->d_name);
 			file_entry* ent = file_entry_ref(fullp);
-			//joinpath(path2, dirname, dp->d_name);
 			stat(fullp, &fi);
 			ent->is_file = !S_ISDIR(fi.st_mode);
 			vector_push(ret, ent);
@@ -162,7 +158,6 @@ vector* io_list_files(const char* dirname) {
 	}
 	closedir(dir);
 	qsort(ret->memory, ret->length, sizeof(void*), io_list_files_sort);
-	//vector_sort(ret, io_list_files_sort);
 	return ret;
 }
 
