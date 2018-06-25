@@ -6,6 +6,7 @@
 #include "fqcn_cache.h"
 #include "../util/mem.h"
 #include "../il/il_type_interface.h"
+#include "../il/il_function.h"
 #include "../vm/vm.h"
 #include "../vm/opcode.h"
 #include "../vm/opcode_buf.h"
@@ -40,6 +41,7 @@
 #include <string.h>
 
 #include "cll/class_loader_ilload_impl.h"
+#include "cll/class_loader_ilload_type_module_impl.h"
 #include "cll/class_loader_bcload_impl.h"
 #include "cll/class_loader_bcload_import_module_impl.h"
 #include "cll/class_loader_bcload_member_module_impl.h"
@@ -59,6 +61,7 @@ static void class_loader_lazy_resolve_at(char* name, tree_item item);
 static class_loader* class_loader_load_specialImpl(class_loader* self, class_loader* cll, char* fullP);
 static void class_loader_load_toplevel(class_loader* self);
 static void class_loader_load_linkall(class_loader* self);
+static void class_loader_load_toplevel_function(class_loader* self);
 
 class_loader* class_loader_new(content_type type) {
 	class_loader* ret = (class_loader*)MEM_MALLOC(sizeof(class_loader));
@@ -234,6 +237,7 @@ static void class_loader_load_impl(class_loader* self) {
 	if (self->error) { return; }
 	//他のクラスローダーとリンク
 	class_loader_load_linkall(self);
+	class_loader_load_toplevel_function(self);
 	class_loader_load_toplevel(self);
 }
 
@@ -347,4 +351,61 @@ static void class_loader_load_toplevel(class_loader* self) {
 	ccpop_type();
 	cc_disable(ccstate_toplevel);
 	ccset_class_loader(NULL);
+}
+
+static void class_loader_load_toplevel_function(class_loader* self) {
+	if(self->level != 0) {
+		return;
+	}
+	vector* funcs = self->il_code->function_list;
+	type* worldT = namespace_get_type(namespace_lang(), "World");
+	ccpush_type(worldT);
+	ccset_class_loader(self);
+	for(int i=0; i<funcs->length; i++) {
+		il_function* ilfunc = vector_at(funcs, i);
+		method* m = method_new(ilfunc->name);
+		script_method* sm = script_method_new();
+		enviroment* env = enviroment_new();
+		env->context_ref = self;
+		sm->env = env;
+		m->access = access_private;
+		m->u.script_method = sm;
+		ccpush_method(m);
+		//戻り値を指定
+		m->return_gtype = import_manager_resolve(self->import_manager, cc_namespace(), ilfunc->return_fqcn);
+		//引数を指定
+		for(int j=0; j<ilfunc->parameter_list->length; j++) {
+			il_parameter* ilparam = vector_at(ilfunc->parameter_list, j);
+			parameter* param = parameter_new(ilparam->name);
+			vector_push(m->parameter_list, param);
+			param->gtype = import_manager_resolve(self->import_manager, cc_namespace(), ilparam->fqcn);
+			symbol_table_entry(
+				env->sym_table,
+				import_manager_resolve(self->import_manager, cc_namespace(), ilparam->fqcn),
+				ilparam->name
+			);
+			//実引数を保存
+			//0番目は this のために開けておく
+			opcode_buf_add(env->buf, op_store);
+			opcode_buf_add(env->buf, (i + 1));
+		}
+		opcode_buf_add(env->buf, (vector_item)op_store);
+		opcode_buf_add(env->buf, (vector_item)0);
+		il_error_enter();
+		//中身をロード
+		for(int j=0; j<ilfunc->statement_list->length; j++) {
+			il_stmt* stmt = vector_at(ilfunc->statement_list, j);
+			il_stmt_load(stmt, env);
+		}
+		//生成
+		for(int j=0; j<ilfunc->statement_list->length; j++) {
+			il_stmt* stmt = vector_at(ilfunc->statement_list, j);
+			il_stmt_generate(stmt, env);
+		}
+		vector_push(worldT->u.class_->method_list, m);
+		il_error_exit();
+		ccpop_method();
+	}
+	ccset_class_loader(NULL);
+	ccpop_type();
 }

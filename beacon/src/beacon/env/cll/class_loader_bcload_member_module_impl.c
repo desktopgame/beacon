@@ -183,7 +183,7 @@ void CLBC_methods_impl(class_loader* self, namespace_* scope, il_type* iltype, t
 	CL_ERROR(self);
 	ccpush_type(tp);
 	ccset_class_loader(self);
-	for (int i = 0; i < sgmethods->length; i++) {
+	for (int i = 0; i < ilmethods->length; i++) {
 		vector_item e = vector_at(sgmethods, i);
 		method* me = (method*)e;
 		il_method* ilmethod = (il_method*)vector_at(ilmethods, i);

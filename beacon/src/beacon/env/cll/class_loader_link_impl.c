@@ -48,8 +48,8 @@ static void CLBC_class_decl(class_loader * self, il_type * iltype, type * tp, na
 	if((tp->state & type_decl) > 0) {
 		return;
 	}
-	assert(tp->u.class_->method_list->length == 0);
-	assert(tp->u.class_->smethod_list->length == 0);
+//	assert(tp->u.class_->method_list->length == 0);
+//	assert(tp->u.class_->smethod_list->length == 0);
 	CL_ERROR(self);
 	CLBC_fields_decl(self, iltype, tp, iltype->u.class_->field_list, scope);
 	CLBC_fields_decl(self, iltype, tp, iltype->u.class_->sfield_list, scope);
