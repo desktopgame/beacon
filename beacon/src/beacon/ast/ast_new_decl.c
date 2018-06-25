@@ -39,7 +39,6 @@ ast * ast_new_class_decl(ast* aclass_name, ast* extend_list, ast* member_list) {
 
 ast * ast_new_interface_decl(ast* ainterface_name, ast* super_interface_list, ast * member_list) {
 	ast* ret = ast_new(ast_interface_decl);
-	//ret->u.string_value = interface_name;
 	ast_push(ret, ainterface_name);
 	ast_push(ret, super_interface_list);
 	ast_push(ret, member_list);
@@ -56,7 +55,6 @@ ast * ast_new_enum_decl(char * enum_name, ast * ident_list) {
 ast * ast_new_superclass(ast* fqcn) {
 	ast* ret = ast_new(ast_class_super);
 	ast_push(ret, fqcn);
-//	ret->u.string_value = class_name;
 	return ret;
 }
 
@@ -101,12 +99,6 @@ ast * ast_new_member_decl(ast * mem) {
 }
 
 ast * ast_new_member_decl_list(ast* member_list, ast* member) {
-	/*
-	ast* ret = ast_new(ast_member_decl_list);
-	ast_push(ret, mem);
-	ast_push(ret, member_list);
-	return ret;
-	*/
 	ast* ret = ast_new(ast_member_decl_list);
 	ast_push(ret, member_list);
 	ast_push(ret, member);
@@ -116,7 +108,6 @@ ast * ast_new_member_decl_list(ast* member_list, ast* member) {
 ast * ast_new_field_decl(ast* amodifier, ast* type_name, char * field_name) {
 	ast* ret = ast_new(ast_field_decl);
 	ast_push(ret, amodifier);
-//	ast_push(ret, ast_new_field_type_name(type_name));
 	ast_push(ret, type_name);
 	ast_push(ret, ast_new_field_access_name(field_name));
 	return ret;
@@ -124,12 +115,10 @@ ast * ast_new_field_decl(ast* amodifier, ast* type_name, char * field_name) {
 
 ast * ast_new_function_decl(char * function_name, ast * parameter_list, ast * body, ast * return_type) {
 	ast* ret = ast_new(ast_function_decl);
-//	ast_push(ret, ast_new_modifier(type));
 	ast_push(ret, ast_new_function_name(function_name));
 	ast_push(ret, parameter_list);
 	ast_push(ret, body);
 	ast_push(ret, return_type);
-	//ast_push(ret, ast_new_function_return_name(return_type_name));
 	return ret;
 }
 
@@ -145,7 +134,6 @@ ast * ast_new_method_decl(ast* amodifier, char * func_name, ast* atype_parameter
 	ast_push(ret, parameter_list);
 	ast_push(ret, body);
 	ast_push(ret, return_type);
-	//ast_push(ret, ast_new_function_return_name(return_type_name));
 	return ret;
 }
 
@@ -155,7 +143,6 @@ ast * ast_new_method_decl_empty_params(ast* amodifier, char * func_name, ast* at
 
 ast * ast_new_constructor_decl(ast * parameter_list, ast * constructor_chain, ast * body) {
 	ast* ret = ast_new(ast_constructor_decl);
-//	ast_push(ret, ast_new_modifier(modifier));
 	ast_push(ret, parameter_list);
 	ast_push(ret, constructor_chain);
 	ast_push(ret, body);
@@ -175,7 +162,6 @@ ast * ast_new_constructor_chain(constructor_chain_type chain_type, ast * argumen
 
 ast * ast_new_parameter(ast* atypename, char * parameter_access_name) {
 	ast* ret = ast_new(ast_parameter);
-//	ast_push(ret, ast_new_parameter_type_name(parameter_type_name));
 	ast_push(ret, atypename);
 	ast_push(ret, ast_new_parameter_access_name(parameter_access_name));
 	return ret;
@@ -183,8 +169,6 @@ ast * ast_new_parameter(ast* atypename, char * parameter_access_name) {
 
 ast * ast_new_parameter_list(ast* atypename, char * parameter_access_name, ast * parameter_list) {
 	ast* ret = ast_new(ast_parameter_list);
-//	ast_push(ret, atypename);
-//	ast_push(ret, ast_new_parameter(parameter_type_name, parameter_access_name));
 	ast_push(ret, parameter_list);
 	ast_push(ret, ast_new_parameter(atypename, parameter_access_name));
 	return ret;
@@ -299,9 +283,6 @@ static ast* ast_new_parameter_access_name(char* parameter_name) {
 
 static ast* ast_new_class_declImpl(ast* aclass_name, ast* extend_list, ast* member_list, ast_tag tag) {
 	ast* ret = ast_new(tag);
-//	ret->u.string_value = class_name;
-//	ast_push(ret, super_class);
-//	ast_push(ret, impl_list);
 	ast_push(ret, aclass_name);
 	ast_push(ret, extend_list);
 	ast_push(ret, member_list);

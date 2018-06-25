@@ -424,24 +424,16 @@ static void ast_print_tree_impl(ast* self, int depth) {
 }
 
 static void ast_delete_impl(ast* self) {
-	//*
 	for (int i = 0; i < self->child_count; i++) {
 		ast_delete((ast*)list_at(self->children, i));
 	}
 	list_delete(self->children, list_deleter_null);
 	ast_tag t = self->tag;
 	if (ast_has_str(self)) {
-		//text_printf("free(%s)\n", self->u.string_value);
 		char* temp = self->u.string_value;
-		//self->u.string_value = NULL;
-		//text_printf("_%s\n", temp);
 		MEM_FREE(temp);
-		//self->u.string_value = NULL;
 	}
 	MEM_FREE(self);
-	//*/
-	//list_delete(self->children, ast_list_deleter);
-	//free(self);
 }
 
 static void ast_list_deleter(list_item item) {
@@ -451,9 +443,7 @@ static void ast_list_deleter(list_item item) {
 	}
 	if (ast_has_str(self)) {
 		//IL側で開放するように
-		//text_printf("free(%s)\n", self->u.string_value);
 		MEM_FREE(self->u.string_value);
-		//self->u.string_value = NULL;
 	}
 	MEM_FREE(self);
 }
@@ -461,7 +451,6 @@ static void ast_list_deleter(list_item item) {
 static bool ast_has_str(ast* self) {
 	ast_tag t = self->tag;
 	return
-		//t == ast_typename ||
 		t == ast_identifier ||
 		t == ast_variable ||
 		t == ast_string ||
@@ -474,8 +463,6 @@ static bool ast_has_str(ast* self) {
 		t == ast_method_return_name ||
 		t == ast_parameter_type_name ||
 		t == ast_parameter_access_name ||
-	//	t == ast_class_decl ||
-	//	t == ast_interface_decl ||
 		t == ast_enum_decl ||
 		t == ast_fqcn_part ||
 		t == ast_fqcn_class_name ||
@@ -483,7 +470,6 @@ static bool ast_has_str(ast* self) {
 		t == ast_type_in_parameter ||
 		t == ast_type_out_parameter ||
 		t == ast_parameterized_typename;
-		//t == ast_class_super;
 }
 
 static modifier_type ast_cast_to_modifierImpl(ast * self, bool* error) {

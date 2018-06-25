@@ -28,7 +28,7 @@ ast * ast_new_else(ast * body) {
 
 ast * ast_new_if_else(ast * cond, ast * trueBody, ast * falseBody) {
 	ast* ret = ast_new(ast_if_else);
-	ast_push(ret, ast_new_if(cond, trueBody));	
+	ast_push(ret, ast_new_if(cond, trueBody));
 	ast_push(ret, ast_new_else(falseBody));
 	return ret;
 }
@@ -98,9 +98,7 @@ ast* ast_new_try(ast* abody, ast* acatch_list) {
 
 ast* ast_new_catch(ast* stypename, char* sname, ast* abody) {
 	ast* ret = ast_new(ast_stmt_catch);
-	//ast* atypename = ast_new(ast_identifier);
 	ast* aname = ast_new(ast_identifier);
-	//atypename->u.string_value = stypename;
 	aname->u.string_value = sname;
 	ast_push(ret, stypename);
 	ast_push(ret, aname);
