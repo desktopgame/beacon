@@ -19,7 +19,7 @@ il_factor_negative_op* il_factor_negative_op_new(operator_type type) {
 
 void il_factor_negative_op_dump(il_factor_negative_op* self, int depth) {
 	text_putindent(depth);
-	operator_fprintf(self->type, stdout);
+	operator_fprintf(stdout, self->type);
 	text_putline();
 }
 

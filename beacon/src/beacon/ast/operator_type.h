@@ -3,6 +3,9 @@
 #include <stdio.h>
 #include <stdbool.h>
 
+/**
+ * 演算子のカテゴリを表す列挙.
+ */
 typedef enum operator_category {
 	operator_carithmeric,
 	operator_clogic,
@@ -14,6 +17,9 @@ typedef enum operator_category {
 	operator_cexcor
 } operator_category;
 
+/**
+ * 演算子の種類を表す列挙.
+ */
 typedef enum operator_type {
 	operator_add,
 	operator_sub,
@@ -43,7 +49,7 @@ typedef enum operator_type {
 	operator_not,
 } operator_type;
 
-void operator_fprintf(operator_type self, FILE* fp);
+void operator_fprintf(FILE* fp, operator_type self);
 
 char* operator_tostring(operator_type self);
 

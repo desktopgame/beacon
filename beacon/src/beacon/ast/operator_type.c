@@ -1,6 +1,6 @@
 #include "operator_type.h"
 
-void operator_fprintf(operator_type self, FILE* fp) {
+void operator_fprintf(FILE* fp, operator_type self) {
 	fprintf(fp, "%s", operator_tostring(self));
 }
 

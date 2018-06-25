@@ -19,7 +19,7 @@ il_operator_overload* il_operator_overload_new(operator_type type) {
 void il_operator_overload_dump(il_operator_overload* self, int depth) {
 	text_putindent(depth);
 	text_printf("operator-overload ");
-	operator_fprintf(self->op, stdout);
+	operator_fprintf(stdout, self->op);
 	text_printf(" -> ");
 	generic_cache_print(self->return_fqcn);
 	text_printfln("");
