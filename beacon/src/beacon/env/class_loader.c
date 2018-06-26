@@ -218,6 +218,7 @@ int class_loader_vreport(class_loader* self, cl_error_id id, va_list ap) {
 			}
 			break;
 	}
+	fprintf(stderr, "%s\n", self->filename);
 	int res = vfprintf(stderr, fmt, ap);
 	fprintf(stderr, "\n");
 	return res;
