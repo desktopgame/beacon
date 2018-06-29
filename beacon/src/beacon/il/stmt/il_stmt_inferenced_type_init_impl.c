@@ -32,30 +32,16 @@ void il_stmt_inferenced_type_init_dump(il_stmt_inferenced_type_init * self, int 
 void il_stmt_inferenced_type_init_generate(il_stmt_inferenced_type_init * self, enviroment * env) {
 	//右辺の方で宣言する
 	il_factor_generate(self->fact, env);
-	/*
-	if (gtp == TYPE_INT->generic_self ||
-		gtp == TYPE_DOUBLE->generic_self ||
-		gtp == TYPE_BOOL->generic_self ||
-		gtp == TYPE_CHAR->generic_self) {
-		//複製を代入する
-		opcode_buf_add(env->buf, op_copy);
-		opcode_buf_add(env->buf, op_swap);
-		opcode_buf_add(env->buf, op_pop);
-	}
-	*/
 	opcode_buf_add(env->buf, op_store);
 	opcode_buf_add(env->buf, self->sym->index);
 }
 
 void il_stmt_inferenced_type_init_load(il_stmt_inferenced_type_init * self, enviroment * env) {
 	il_factor_load(self->fact, env);
-	//XSTREQ(self->name, "viter");
-	//XSTREQ(self->name, "xv");
 	generic_type* gtp = il_factor_eval(self->fact, env);
 	if(il_error_panic()) {
 		return;
 	}
-//
 	if(gtp->type_args_list->length > 0) {
 		generic_type* a = (generic_type*)vector_at(gtp->type_args_list, 0);
 		int x = 0;
@@ -63,11 +49,9 @@ void il_stmt_inferenced_type_init_load(il_stmt_inferenced_type_init * self, envi
 	symbol_entry* e = symbol_table_entry(
 		env->sym_table,
 		gtp,
-//		fqcn_type(self->fqcn, (namespace_*)vector_top(env->namespace_vec)),
 		self->name
 	);
 	self->sym = e;
-//	XSTREQ(self->name, "st");
 }
 
 void il_stmt_inferenced_type_init_delete(il_stmt_inferenced_type_init * self) {

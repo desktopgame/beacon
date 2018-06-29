@@ -37,7 +37,6 @@ generic_type* type_init_generic(type* self, int counts) {
 }
 
 char * type_name(type * self) {
-	//assert(self->tag == type_class);
 	if(self == NULL) {
 		return "NULL";
 	}
@@ -213,7 +212,6 @@ void type_delete(type * self) {
 	} else if (self->tag == type_interface) {
 		interface_delete(self->u.interface_);
 	}
-//	generic_type_delete(self->generic_self);
 	generic_type_lostownership(self->generic_self);
 	MEM_FREE(self);
 }

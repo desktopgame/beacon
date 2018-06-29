@@ -202,7 +202,6 @@ bool generic_type_override(generic_type* super, generic_type* sub) {
 static generic_type* generic_type_applyImpl(generic_type* self, frame* fr) {
 	//ここで型変数が追加されちゃってた
 	if(self->core_type == NULL) {
-		//copy->virtual_type_index = -1;
 		if(self->tag == generic_type_tag_ctor) {
 			self = generic_type_typeargs_at(fr, self->virtual_type_index);
 		}
@@ -224,13 +223,10 @@ static generic_type* generic_type_applyImpl(generic_type* self, frame* fr) {
 				}
 			} else if(e->tag == generic_type_tag_method ||
 			e->tag == generic_type_tag_ctor) {
-				//vector* type_args = vector_top(ilctx->type_args_vec);
-				//il_type_argument* a = vector_at(type_args, e->virtual_type_index);
 				generic_type_addargs(copy, generic_type_applyImpl(generic_type_typeargs_at(fr, e->virtual_type_index), fr));
 			} else if(e->tag == generic_type_tag_self) {
 				generic_type_addargs(copy, e);
 			} else XBREAK(e->tag != generic_type_tag_none);
-		//
 		} else {
 			generic_type_addargs(copy, generic_type_applyImpl(e, fr));
 		}
@@ -250,21 +246,14 @@ static int generic_type_distanceImpl(generic_type* self, generic_type* other, fr
 	if(fr != NULL) {
 		return generic_type_distanceForm(self, other, fr);
 	}
-//*
-//要求されている型は T
+	//要求されている型は T
 	if(self->core_type == NULL) {
 		//提供されているのは T
 		if(other->core_type == NULL) {
-//			if(generic_type_rule_valid(generic_type_rule(self, ilctx), generic_type_rule(other, ilctx))) {
-//				return 0;
-//			} else return -1;
 			return 0;
 		//提供されているのは具体的な型
 		} else {
 			//具体的な型が T のルールを満たしているか？
-//			if(generic_type_rule_test(other, generic_type_rule(self, ilctx), ilctx)) {
-//				return 0;
-//			} else return -1;
 			return 0;
 		}
 	//提供している型は T
@@ -276,21 +265,13 @@ static int generic_type_distanceImpl(generic_type* self, generic_type* other, fr
 				return 0;
 			}
 			//T が 具体的な型の要件を満たしているか？
-//			if(self->core_type == TYPE_OBJECT ||
-//				generic_type_rule_polymorphic(generic_type_rule(other, ilctx), self, ilctx)) {
-//				return 0;
-//			} else return -1;
 			return -1;
 		//要求されているのは T
 		} else {
-//			if(generic_type_rule_valid(generic_type_rule(self, ilctx), generic_type_rule(other, ilctx))) {
-//				return 0;
-//			} else return -1;
 			return 0;
 		}
 	//どちらも具体的な型
 	} else {
-//*/
 		return generic_type_distanceForm(self, other, fr);
 	}
 }

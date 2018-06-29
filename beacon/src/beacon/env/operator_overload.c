@@ -32,10 +32,6 @@ void operator_overload_execute(operator_overload* self, frame* fr, enviroment* e
 	for (int i = 0; i < self->parameter_list->length; i++) {
 		vector_push(sub->value_stack, object_copy(vector_pop(fr->value_stack)));
 	}
-	//text_putindent(sub->level);
-	//text_printfln("[ %s#%s ]", type_name(parent->parent), parent->name);
-	//enviroment_op_dump(self->env, sub->level);
-	//opcode_buf_dump(self->env->buf, sub->level);
 	vm_execute(sub, self->env);
 	//戻り値が Void 以外ならスタックトップの値を引き継ぐ
 	if(self->return_gtype != TYPE_VOID->generic_self) {

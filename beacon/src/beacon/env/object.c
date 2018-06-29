@@ -163,7 +163,7 @@ object * object_copy_s(object * self) {
 }
 
 void object_paintall(object* self, object_paint paint) {
-//field#static_valueは
+	//field#static_valueは
 	//実際に修飾子が static でないときは NULL
 	if (self == NULL) {
 		return;
@@ -221,7 +221,6 @@ void object_print(object * self) {
 
 void object_delete(object * self) {
 	gObjectCount--;
-	//sg_info(__FILE__, __LINE__, "deleted object %s", type_name(self->type));
 	if (self->tag == object_string) {
 		string_buffer* sb = vector_at(self->native_slot_vec, 0);
 		vector_remove(self->native_slot_vec, 0);

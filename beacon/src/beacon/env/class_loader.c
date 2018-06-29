@@ -1,8 +1,6 @@
 #include "class_loader.h"
 #include <stdlib.h>
 #include <assert.h>
-//#include <uni>
-//#include <uni>
 #include "fqcn_cache.h"
 #include "../util/mem.h"
 #include "../il/il_type_interface.h"
@@ -83,7 +81,6 @@ class_loader* class_loader_new(content_type type) {
 class_loader * class_loader_new_entry_point_from_file(const char * filename) {
 	char* text = io_read_text(filename);
 	class_loader* ret = class_loader_new_entry_point_from_source(text, filename);
-	//ret->filename = text_strdup(filename);
 	MEM_FREE(text);
 	return ret;
 }
@@ -222,8 +219,6 @@ int class_loader_vreport(class_loader* self, cl_error_id id, va_list ap) {
 	int res = vfprintf(stderr, fmt, ap);
 	fprintf(stderr, "\n");
 	return res;
-	//return vfprintf(stderr, fmt, ap);
-	//return text_vprintf(fmt, ap);
 }
 
 //private

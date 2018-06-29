@@ -269,9 +269,6 @@ static void script_context_free(script_context* self) {
 	}
 
 	int a = object_count();
-//	text_printfln("---");
-//	mem_dump();
-//	text_printfln("---");
 	tree_map_delete(self->namespace_map, script_context_namespace_delete);
 	io_list_files_delete(self->include_vec);
 	MEM_FREE(self);

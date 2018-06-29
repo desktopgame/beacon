@@ -12,7 +12,6 @@
 
 script_method * script_method_new() {
 	script_method* ret = (script_method*)MEM_MALLOC(sizeof(script_method));
-	//ret->source = vector_new();
 	ret->env = NULL;
 	return ret;
 }
@@ -31,10 +30,6 @@ void script_method_execute(script_method * self, method* parent, frame * fr, env
 	for(int i=0; i<typeparams; i++) {
 		vector_assign(sub->type_args_vec, (typeparams - i) - 1, vector_pop(fr->type_args_vec));
 	}
-	//text_putindent(sub->level);
-	//text_printfln("[ %s#%s ]", type_name(parent->parent), parent->name);
-	//enviroment_op_dump(self->env, sub->level);
-//	opcode_buf_dump(self->env->buf, sub->level);
 	vm_execute(sub, self->env);
 	//戻り値が Void 以外ならスタックトップの値を引き継ぐ
 	if(parent->return_gtype != TYPE_VOID->generic_self) {
@@ -46,6 +41,5 @@ void script_method_execute(script_method * self, method* parent, frame * fr, env
 
 void script_method_delete(script_method * self) {
 	enviroment_delete(self->env);
-//	vector_delete(self->source, vector_deleter_null);
 	MEM_FREE(self);
 }

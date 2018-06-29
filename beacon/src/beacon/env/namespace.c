@@ -64,7 +64,6 @@ namespace_ * namespace_add_namespace(namespace_ * self, char * name) {
 struct type* namespace_add_type(namespace_* self, type* type) {
 	script_context* ctx = script_context_get_current();
 	type->location = self;
-	//classz->ref_count++;
 	tree_map_put(self->type_map, type_name(type), type);
 	type->absolute_index = ctx->type_vec->length;
 	if (type->tag == type_class) {
@@ -173,7 +172,6 @@ void namespace_unlink(namespace_ * self) {
 }
 
 void namespace_delete(namespace_ * self) {
-//	text_text_printfln("delete namespace %s", self->name);
 	tree_map_delete(self->namespace_map, namespace_delete_namespace);
 	tree_map_delete(self->type_map, namespace_delete_type);
 	MEM_FREE(self->name);
@@ -235,24 +233,20 @@ static void namespace_dump_class(tree_map* root, bool isRoot, int depth) {
 
 static void namespace_unlink_namespace(char* name, tree_item item) {
 	namespace_* e = (namespace_*)item;
-	//text_printfln("unlink namespace %s", e->name);
 	namespace_unlink(e);
 }
 
 static void namespace_delete_namespace(tree_item item) {
 	namespace_* e = (namespace_*)item;
-	//text_printfln("delete namespace %s", e->name);
 	namespace_delete(e);
 }
 
 static void namespace_unlink_type(char* name, tree_item item) {
 	type* e = (type*)item;
-	//text_printfln("unlink type %s", type_name(e));
 	type_unlink(e);
 }
 
 static void namespace_delete_type(tree_item item) {
 	type* e = (type*)item;
-	//text_printfln("delete type %s", type_name(e));
 	type_delete(e);
 }

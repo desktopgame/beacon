@@ -32,7 +32,6 @@ void il_factor_assign_op_load(il_factor_assign_op* self, enviroment* env) {
 }
 
 void il_factor_assign_op_generate(il_factor_assign_op* self, enviroment* env) {
-	//a = foo
 	if(self->left->type == ilfactor_variable) {
 		il_factor_variable* ilvar = IL_FACT2VAR(self->left);
 		symbol_entry* e = symbol_table_entry(env->sym_table, NULL, ilvar->fqcn->name);

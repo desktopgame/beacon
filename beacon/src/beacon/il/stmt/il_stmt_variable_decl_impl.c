@@ -36,7 +36,6 @@ void il_stmt_variable_decl_load(il_stmt_variable_decl * self, struct enviroment*
 	symbol_table_entry(
 		env->sym_table,
 		import_manager_resolve(ccget_class_loader()->import_manager, cc_namespace(), self->fqcn),
-		//generic_cache_gtype(self->fqcn, (namespace_*)vector_top(ilctx->namespace_vec), ilctx),
 		self->name
 	);
 }
@@ -45,7 +44,6 @@ void il_stmt_variable_decl_delete(il_stmt_variable_decl * self) {
 	if (self == NULL) {
 		return;
 	}
-//	il_type_delete(self->type);
 	MEM_FREE(self->name);
 	MEM_FREE(self);
 }

@@ -73,7 +73,6 @@ generic_type* il_factor_invoke_static_eval(il_factor_invoke_static * self, envir
 		return NULL;
 	}
 	generic_type* rgtp = self->m->return_gtype;
-//	virtual_type returnvType = self->m->return_vtype;
 	if(rgtp->tag != generic_type_tag_none) {
 		resolve_non_default(self, env);
 		return self->resolved;
@@ -100,7 +99,6 @@ void il_factor_invoke_static_delete(il_factor_invoke_static* self) {
 	vector_delete(self->args, il_factor_invoke_static_args_delete);
 	vector_delete(self->type_args, il_factor_invoke_static_typeargs_delete);
 	fqcn_cache_delete(self->fqcn);
-//	generic_type_delete(self->resolved);
 	MEM_FREE(self->name);
 	MEM_FREE(self);
 }
@@ -111,7 +109,6 @@ static void resolve_non_default(il_factor_invoke_static * self, enviroment * env
 		return;
 	}
 	generic_type* rgtp = self->m->return_gtype;
-//	virtual_type returnvType = self->m->return_vtype;
 	generic_type* instanced_type = (generic_type*)vector_at(self->type_args, rgtp->virtual_type_index);
 	self->resolved = generic_type_new(instanced_type->core_type);
 	self->resolved->tag = generic_type_tag_method;
@@ -123,7 +120,6 @@ static void resolve_default(il_factor_invoke_static * self, enviroment * env) {
 		return;
 	}
 	generic_type* rgtp = self->m->return_gtype;
-//	virtual_type returnvType = self->m->return_vtype;
 	ccpush_type_args(self->type_args);
 	self->resolved = generic_type_apply(rgtp);
 	ccpop_type_args();
@@ -132,7 +128,6 @@ static void resolve_default(il_factor_invoke_static * self, enviroment * env) {
 static void il_factor_invoke_static_check(il_factor_invoke_static * self, enviroment * env) {
 	class_* cls = cc_class(self->fqcn);
 	int temp = -1;
-//	XSTREQ(self->name, "write");
 	il_type_argument_resolve(self->type_args);
 	//環境を設定
 	ccpush_type_args(self->type_args);

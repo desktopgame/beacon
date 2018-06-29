@@ -43,16 +43,6 @@ vtable* vtable_lookup(vtable * self, vtable * castTo) {
 	if (self == castTo) {
 		return self;
 	}
-	//複製
-	//戻り値がvtable
-	//o->vptrを書き換える
-	//proxy parentは不要
-	//変換を記録して二回目以降はキャッシュを返す
-	//
-	//if (self->proxy != NULL) {
-	//	vtable_lookup(self->proxy, castTo);
-	//	return;
-	//}
 	vtable* newVT = vtable_new();
 	newVT->parent = self;
 	//self->proxy = newVT;

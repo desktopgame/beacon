@@ -19,7 +19,6 @@ void il_factor_variable_static_load(il_factor_variable_static * self, enviroment
 }
 
 generic_type* il_factor_variable_static_eval(il_factor_variable_static * self, enviroment * env) {
-	//FATAL("not implemented, because must be wrapped by call operator");
 	return NULL;
 }
 

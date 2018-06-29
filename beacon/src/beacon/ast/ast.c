@@ -229,9 +229,6 @@ void ast_print(ast* self) {
 		case ast_argument_list: p("argument-list");
 		case ast_argument: p("argument");
 		case ast_new_instance: p("new-instance");
-		//case ast_class_decl_list:
-		//	text_printf("class decl_list");
-		//	break;
 		case ast_import_decl: p("import");
 		case ast_import_path:
 			text_printf("%s", self->u.string_value);

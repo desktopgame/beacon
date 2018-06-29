@@ -37,12 +37,6 @@ void il_stmt_variable_init_generate(il_stmt_variable_init * self, enviroment * e
 	//宣言型と代入型が異なる場合
 	generic_type* ga = il_factor_eval(self->fact, env);
 	generic_type* gb = import_manager_resolve(ccget_class_loader()->import_manager, cc_namespace(), self->fqcn);
-	//generic_type* gb = generic_cache_gtype(self->fqcn, (namespace_*)vector_top(ilctx->namespace_vec), ilctx);
-	if (ga != gb) {
-	//	opcode_buf_add(env->buf, op_lookup);
-	//	opcode_buf_add(env->buf, gb->core_type->absolute_index);
-	}
-	//assert(generic_type_castable(ga, gb));
 	opcode_buf_add(env->buf, op_store);
 	opcode_buf_add(env->buf, self->sym->index);
 }
@@ -52,7 +46,6 @@ void il_stmt_variable_init_load(il_stmt_variable_init * self, enviroment * env) 
 	symbol_entry* e = symbol_table_entry(
 		env->sym_table,
 		import_manager_resolve(ccget_class_loader()->import_manager, cc_namespace(), self->fqcn),
-		//generic_cache_gtype(self->fqcn, (namespace_*)vector_top(ilctx->namespace_vec), ilctx),
 		self->name
 	);
 	self->sym = e;

@@ -34,16 +34,12 @@ void il_factor_cast_dump(il_factor_cast * self, int depth) {
 
 void il_factor_cast_generate(il_factor_cast * self, enviroment * env) {
 	il_factor_generate(self->fact, env);
-//	type* t = generic_cache_type(self->fqcn, (namespace_*)vector_top(ilctx->namespace_vec));
-//	opcode_buf_add(env->buf, op_lookup);
-//	opcode_buf_add(env->buf, t->absolute_index);
 }
 
 void il_factor_cast_load(il_factor_cast * self, enviroment * env) {
 }
 
 generic_type* il_factor_cast_eval(il_factor_cast * self, enviroment * env) {
-//	return generic_cache_gtype(self->fqcn, (namespace_*)vector_top(ilctx->namespace_vec), ilctx);
 	return import_manager_resolve(ccget_class_loader()->import_manager, cc_namespace(), self->fqcn);
 }
 

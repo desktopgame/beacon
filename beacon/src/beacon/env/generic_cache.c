@@ -25,7 +25,6 @@ void generic_cache_print(generic_cache * self) {
 	for (int i = 0; i < self->type_args->length; i++) {
 		generic_cache* e = (generic_cache*)vector_at(self->type_args, i);
 		generic_cache_print(e);
-		//il_type_parameter_rule_list_print(e->rule_vec);
 		if (i != self->type_args->length - 1) {
 			text_printf(", ");
 		}

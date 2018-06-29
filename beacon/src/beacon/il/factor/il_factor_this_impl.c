@@ -35,6 +35,5 @@ char* il_factor_this_tostr(il_factor_this* self, enviroment* env) {
 }
 
 void il_factor_this_delete(il_factor_this * self) {
-	//generic_type_delete(self->resolved);
 	MEM_FREE(self);
 }

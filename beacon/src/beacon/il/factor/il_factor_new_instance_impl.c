@@ -90,9 +90,6 @@ generic_type* il_factor_new_instance_eval(il_factor_new_instance * self, envirom
 	//型引数がないのでそのまま
 	if (self->type_args->length == 0) {
 		generic_type* ret = generic_type_ref(self->c->parent);
-		//text_printf("new: ");
-		//generic_type_print(ret);
-		//text_printf("\n");
 		return ret;
 	}
 	//fqcn_cache typename_group
@@ -102,15 +99,10 @@ generic_type* il_factor_new_instance_eval(il_factor_new_instance * self, envirom
 		for (int i = 0; i < self->type_args->length; i++) {
 			il_type_argument* e = (il_type_argument*)vector_at(self->type_args, i);
 			generic_type* arg = import_manager_resolve(ccget_class_loader()->import_manager, scope, e->gcache);
-		//	generic_type* arg = generic_cache_gtype(e->gcache, scope, ilctx);
-		//	arg->tag = generic_type_tag_ctor;
 			generic_type_addargs(a, arg);
 		}
 		self->instance_type = a;
 	}
-	//text_printf("new: ");
-	//generic_type_print(self->instance_type);
-	//text_printf("\n");
 	return self->instance_type;
 }
 
@@ -144,19 +136,15 @@ static void il_factor_new_instance_delete_typearg(vector_item item) {
 }
 
 static void il_factor_new_instance_find(il_factor_new_instance * self, enviroment * env) {
-	//*
 	if(self->constructor_index != -1) {
 		return;
 	}
 	class_* cls = cc_class(self->fqcnc);
 	int temp = -1;
-	//TEST(!strcmp(cls->name, "Point3D"));
-	//XSTREQ(cls->name, "ArrayIterator");
 	if(cls == NULL) {
 		il_error_report(ilerror_undefined_class, self->fqcnc->name);
 		return;
 	}
-	//XSTREQ(cls->name, "String");
 	ccpush_type_args(self->type_args);
 	il_type_argument_resolve(self->type_args);
 	self->c = class_ilfind_constructor(cls, self->argument_list, env, &temp);
@@ -165,7 +153,6 @@ static void il_factor_new_instance_find(il_factor_new_instance * self, enviromen
 		il_error_report(ilerror_undefined_ctor, cls->name);
 	}
 	ccpop_type_args();
-	//*/
 }
 
 static void il_Factor_new_instace_delete_arg(vector_item item) {

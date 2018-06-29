@@ -32,23 +32,6 @@ void il_factor_as_dump(il_factor_as * self, int depth) {
 
 void il_factor_as_generate(il_factor_as * self, enviroment * env) {
 	il_factor_generate(self->fact, env);
-/*
-	generic_type* from = il_factor_eval(self->fact, env, ilctx);
-	generic_type* to = generic_cache_gtype(self->fqcn, (namespace_*)vector_top(ilctx->namespace_vec), ilctx);
-//	int dist = type_distance(to, from);
-//	assert(dist != -1);
-	if (to->virtual_type_index != -1) {
-//		opcode_buf_add(env->buf, op_glookup);
-//		opcode_buf_add(env->buf, to->virtual_type_index);
-		return;
-	}
-	bool cast = generic_type_castable(from, to);
-	assert(cast);
-	if (cast) {
-//		opcode_buf_add(env->buf, op_lookup);
-//		opcode_buf_add(env->buf, to->core_type->absolute_index);
-	}
-	*/
 }
 
 void il_factor_as_load(il_factor_as * self, enviroment * env) {
@@ -57,7 +40,6 @@ void il_factor_as_load(il_factor_as * self, enviroment * env) {
 
 generic_type* il_factor_as_eval(il_factor_as * self, enviroment * env) {
 	namespace_* n = cctop_namespace();
-	//return generic_cache_gtype(self->fqcn, n, ilctx);
 	return import_manager_resolve(ccget_class_loader()->import_manager, n, self->fqcn);
 }
 

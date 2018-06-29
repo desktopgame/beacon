@@ -24,7 +24,6 @@ void native_method_execute(native_method * self, method * parent, frame * fr, en
 }
 
 void native_method_delete(native_method * self) {
-//	native_method_ref_delete(self->ref);
 	MEM_FREE(self);
 }
 

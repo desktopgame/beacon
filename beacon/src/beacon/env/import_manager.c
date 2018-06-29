@@ -27,7 +27,6 @@ import_info* import_manager_import(import_manager * self, class_loader * target)
 	import_info* info = import_info_new();
 	info->context = target;
 	vector_push(self->info_vec, info);
-//	vector_push(self->class_loader_list, target);
 	return info;
 }
 
@@ -75,10 +74,6 @@ generic_type* import_manager_resolve(import_manager* self, namespace_* scope, ge
 	//Int, String などはっきりした型が見つかった
 	//また、型引数もない
 	if(fqcn->type_args->length == 0) {
-		//assert(core_type->generic_self != NULL);
-//		dest->tag = virtualtype_default;
-		//dest->u.gtype = core_type->generic_self;
-//		dest->u.gtype = generic_type_make(core_type);
 		return core_type->generic_self;
 	}
 	//Array, Dictionary などはっきりした型が見つかった
@@ -87,7 +82,6 @@ generic_type* import_manager_resolve(import_manager* self, namespace_* scope, ge
 	assert(core_type->tag != type_enum);
 	for (int i = 0; i < fqcn->type_args->length; i++) {
 		generic_cache* e = (generic_cache*)vector_at(fqcn->type_args, i);
-		//generic_type* child = generic_cache_gtype(e, scope, ilctx);
 		generic_type* child = import_manager_resolve(self, scope, e);
 		generic_type_addargs(normalGType, child);
 	}
@@ -124,7 +118,6 @@ type* core_type = fqcn_type(fqcn, scope);
 			parameterized->u.type_ = container;
 			found = (parameterized->virtual_type_index != -1);
 		}
-		//assert(fqcn->type_args->length == 0);
 		return parameterized;
 	}
 	//Array, Dictionary などはっきりした型が見つかった

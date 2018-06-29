@@ -44,7 +44,6 @@ il_stmt_else * il_stmt_else_new() {
 }
 
 void il_stmt_elif_list_push(vector * self, il_stmt_elif * child) {
-//	list_add(self, child);
 	vector_push(self, child);
 }
 
@@ -153,10 +152,8 @@ void il_stmt_if_load(il_stmt_if * self, struct enviroment* env) {
 }
 
 void il_stmt_if_delete(il_stmt_if * self) {
-//	il_stmt_elif_list_delete(self->elif_list);
 	vector_delete(self->elif_list, il_stmt_elif_list_delete_impl);
 	il_stmt_else_delete(self->else_body);
-	//vector_delete(self->else_body, il_stmt_if_delete_stmt);
 	vector_delete(self->body, il_stmt_if_delete_stmt);
 	il_factor_delete(self->condition);
 	MEM_FREE(self);
@@ -165,7 +162,6 @@ void il_stmt_if_delete(il_stmt_if * self) {
 void il_stmt_elif_delete(il_stmt_elif * self) {
 	il_factor_delete(self->condition);
 	vector_delete(self->body, il_stmt_if_delete_stmt);
-	//il_stmt_list_delete(self->body);
 	MEM_FREE(self);
 }
 

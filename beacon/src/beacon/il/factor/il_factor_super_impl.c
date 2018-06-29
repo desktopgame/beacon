@@ -37,6 +37,5 @@ char* il_factor_super_tostr(il_factor_super* self, enviroment* env) {
 }
 
 void il_factor_super_delete(il_factor_super * self) {
-	//generic_type_delete(self->resolved);
 	MEM_FREE(self);
 }

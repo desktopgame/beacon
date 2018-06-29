@@ -142,21 +142,9 @@ ast* ast_malloc_fqcn_part(char* name, const char* filename, int lineno) {
 }
 
 ast * ast_new_fqcn_part_list(ast * part, ast * part_list) {
-	//*
-//	part->tag = ast_fqcn_part;
-//	part_list->tag = ast_fqcn_part;
 	ast* ret = ast_new(ast_fqcn_part_list);
 	ast_push(ret, part_list);
 	ast_push(ret, part);
-	return ret;
-	//*/
-/*
-	ast* ret = ast_new(ast_fqcn);
-	part->tag = ast_fqcn_class_name;
-	part_list->tag = ast_fqcn_part_list;
-	ast_push(ret, part_list);
-	ast_push(ret, part);
-	*/
 	return ret;
 }
 

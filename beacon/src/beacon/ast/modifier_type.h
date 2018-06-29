@@ -12,10 +12,6 @@ typedef enum modifier_type {
 	modifier_abstract	= (1 << 3),
 	modifier_override	= (1 << 4),
 } modifier_type;
-//typedef int modifier_type;
-//const int modifier_none = (1 << 0);
-//const int modifier_static = (1 << 1);
-//const int modifier_native = (1 << 2);
 
 /**
  * static | native を返します.

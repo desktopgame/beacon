@@ -107,9 +107,6 @@ bool method_override(method* superM, method* subM) {
 	generic_type* superRet = superM->return_gtype;
 	generic_type* superRet2 = generic_type_apply(superRet);
 	generic_type* subRet = subM->return_gtype;
-//	generic_type_print(superRet); text_printfln("");
-//	generic_type_print(superRet2); text_printfln("");
-//	generic_type_print(subRet); text_printfln("");
 	int ret =generic_type_distance(superRet2, subRet);
 	ccpop_type();
 	cc_disable(ccstate_override);
@@ -130,7 +127,6 @@ int method_for_generic_index(method * self, const char * name) {
 }
 
 void method_delete(method * self) {
-	//text_printf("%s#%s\n", type_name(self->parent), self->name);
 	MEM_FREE(self->name);
 	vector_delete(self->type_parameter_list, method_type_parameter_delete);
 	vector_delete(self->parameter_list, method_parameter_delete);
@@ -145,8 +141,6 @@ void method_delete(method * self) {
 generic_type* method_diff(method* abstract, method* concrete) {
 	type* abstractT = abstract->parent;
 	type* implT = concrete->parent;
-	//int dist = type_distance(abstractT, implT);
-	//assert(dist != -1);
 	generic_type* bounds = type_baseline(abstractT, implT);
 	return bounds;
 }
