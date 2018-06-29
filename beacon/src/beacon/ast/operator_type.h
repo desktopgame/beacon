@@ -48,22 +48,66 @@ typedef enum operator_type {
 	operator_negative,
 	operator_not,
 } operator_type;
-
+/**
+ * オペレータを文字列として出力します.
+ * @param fp
+ * @param self
+ */
 void operator_fprintf(FILE* fp, operator_type self);
 
+/**
+ * オペレータを文字列にして返します.
+ * @param self
+ * @return
+ */
 char* operator_tostring(operator_type self);
 
+/**
+ * オペレータが算術演算子なら true.
+ * @param self
+ * @return
+ */
 bool operator_arithmetic(operator_type self);
 
+/**
+ * オペレータがビット演算子なら true.
+ * @param self
+ * @return
+ */
 bool operator_bit(operator_type self);
 
+/**
+ * オペレータが論理演算子なら true.
+ * @param self
+ * @return
+ */
 bool operator_logic(operator_type self);
 
+/**
+ * オペレータが比較演算子なら true.
+ * @param self
+ * @return
+ */
 bool operator_compare(operator_type self);
 
+/**
+ * オペレータがシフト演算子なら true.
+ * @param self
+ * @return
+ */
 bool operator_shift(operator_type self);
 
+/**
+ * オペレータが二項演算子なら true.
+ * @param self
+ * @return
+ */
 bool operator_arg2(operator_type self);
 
+/**
+ * オペレータが単項演算子なら true.
+ * @param self
+ * @return
+ */
 bool operator_arg1(operator_type self);
 #endif
