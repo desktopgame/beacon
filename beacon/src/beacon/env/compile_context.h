@@ -3,12 +3,18 @@
 #include "../util/vector.h"
 struct method;
 
+/**
+ * コンパイラの現在の状態.
+ */
 typedef enum compile_state {
 	ccstate_none,
 	ccstate_toplevel,
 	ccstate_override,
 } compile_state;
 
+/**
+ * コンパイラが現在解析しているコンテキストを表す構造体.
+ */
 typedef struct compile_context {
 	vector* namespace_vec;
 	vector* type_vec;
