@@ -15,6 +15,7 @@
 
 //proto
 static object* object_mallocImpl(object_tag type, const char* filename, int lineno);
+static void object_delete_self(vector_item item);
 #define object_malloc(type) (object_mallocImpl(type, __FILE__, __LINE__))
 //static object* object_malloc(object_tag type);
 //static object* gObjectTrue = NULL;
@@ -29,6 +30,13 @@ object * object_int_malloc(int i, const char* filename, int lineno) {
 	ret->gtype = GENERIC_INT;
 	ret->vptr = type_vtable(TYPE_INT);
 	return ret;
+}
+
+object* object_int_get(int i) {
+	script_context* ctx = script_context_get_current();
+	if(ctx == NULL || (i < -9) || i > 99) { return object_int_new(i); }
+	if(i < 0) { return (object*)vector_at(ctx->neg_int_vec, (-i) - 1); }
+	return (object*)vector_at(ctx->pos_int_vec, i);
 }
 
 object * object_double_malloc(double d, const char* filename, int lineno) {
@@ -234,6 +242,38 @@ void object_delete(object * self) {
 	MEM_FREE(self);
 }
 
+void object_destroy(object* self) {
+	if (self == NULL) {
+		return;
+	}
+	type* tp = self->gtype->core_type;
+	//char* name = type_name(tp);
+	assert(self->paint == paint_onexit);
+	//*
+	//enviromentが削除される時点では、
+	//すでにスレッドとVMの関連付けが解除されていて、
+	//GCを実行することができないので自分で開放する。
+	//FIXME:この方法だと、
+	//定数がフィールドに定数を含む場合に二重開放される
+	if (self->tag == object_ref) {
+		vector_delete(self->u.field_vec, object_delete_self);
+		self->u.field_vec = NULL;
+	}
+	if (self->tag == object_string) {
+		vector_delete(self->u.field_vec, object_delete_self);
+		self->u.field_vec = NULL;
+	}
+	//String#charArray
+	if (self->tag == object_array) {
+		vector_delete(self->u.field_vec, object_delete_self);
+		vector_delete(self->native_slot_vec, object_delete_self);
+		self->native_slot_vec = NULL;
+		self->u.field_vec = NULL;
+	}
+	//text_printfln("delete object %s", type_name(obj->type));
+	object_delete(self);
+}
+
 int object_obj2int(object* self) {
 	assert(self->tag == object_int);
 	return self->u.int_;
@@ -281,4 +321,9 @@ static object* object_mallocImpl(object_tag type, const char* filename, int line
 	heap_add(heap_get(), ret);
 	gObjectCount++;
 	return ret;
+}
+
+static void object_delete_self(vector_item item) {
+	object* e = (object*)item;
+	object_destroy(e);
 }

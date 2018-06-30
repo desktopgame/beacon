@@ -181,6 +181,7 @@ void CLBC_methods_decl(class_loader* self, il_type* iltype, type* tp, vector* il
 
 void CLBC_methods_impl(class_loader* self, namespace_* scope, il_type* iltype, type* tp, vector* ilmethods, vector* sgmethods) {
 	CL_ERROR(self);
+	cc_push();
 	ccpush_type(tp);
 	ccset_class_loader(self);
 	for (int i = 0; i < ilmethods->length; i++) {
@@ -225,6 +226,7 @@ void CLBC_methods_impl(class_loader* self, namespace_* scope, il_type* iltype, t
 	}
 	ccpop_type();
 	ccset_class_loader(NULL);
+	cc_pop();
 }
 
 

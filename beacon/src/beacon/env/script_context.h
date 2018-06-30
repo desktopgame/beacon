@@ -41,6 +41,9 @@ typedef struct script_context {
 	//通し番号でクラスを参照するためのベクター
 	vector* type_vec;
 	vector* all_generic_vec;
+	//整数のキャッシュ
+	vector* pos_int_vec;
+	vector* neg_int_vec;
 	struct heap* heap;
 	struct object* oTrue;
 	struct object* oFalse;

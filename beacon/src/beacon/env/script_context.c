@@ -25,6 +25,8 @@ static void script_context_class_loader_delete(vector_item item);
 static void script_context_namespace_unlink(char* name, tree_item item);
 static void script_context_namespace_delete(tree_item item);
 static void script_context_static_clearImpl(field* item);
+static void script_context_cache(script_context* self);
+static void script_context_cache_delete(vector_item item);
 
 static script_context* gScriptContext = NULL;
 static script_context* gScriptContextCurrent = NULL;
@@ -171,6 +173,7 @@ void script_context_bootstrap(script_context* self) {
 	class_loader_special(self->bootstrap_class_loader, "beacon/lang/World.bc");
 	//退避していたコンテキストを復帰
 	self->heap->accept_blocking--;
+	script_context_cache(self);
 	script_context_set_current(selected);
 }
 
@@ -242,6 +245,8 @@ static script_context* script_context_malloc(void) {
 	ret->oFalse = NULL;
 	ret->oNull = NULL;
 	ret->include_vec = io_list_files("beacon/lang");
+	ret->pos_int_vec = vector_new();
+	ret->neg_int_vec = vector_new();
 	vector_push(ret->thread_vec, sg_thread_main());
 	return ret;
 }
@@ -254,6 +259,8 @@ static void script_context_free(script_context* self) {
 	vm_catch(thv);
 	class_loader_delete(self->bootstrap_class_loader);
 	heap_delete(self->heap);
+	vector_delete(self->neg_int_vec, script_context_cache_delete);
+	vector_delete(self->pos_int_vec, script_context_cache_delete);
 	//object_delete(self->oNull);
 	generic_type_collect();
 	vector_delete(self->all_generic_vec, vector_deleter_null);
@@ -291,4 +298,26 @@ static void script_context_namespace_delete(tree_item item) {
 
 static void script_context_static_clearImpl(field* item) {
 	item->static_value = object_get_null();
+}
+
+static void script_context_cache(script_context* self) {
+	heap* h = heap_get();
+	if(h != NULL) h->accept_blocking++;
+	//正の数のキャッシュ
+	for(int i=0; i<100; i++) {
+		object* a = object_int_new(i);
+		vector_push(self->pos_int_vec, a);
+		a->paint = paint_onexit;
+	}
+	//負の数のキャッシュ
+	for(int i=1; i<10; i++) {
+		object* a = object_int_new(-i);
+		vector_push(self->neg_int_vec, a);
+		a->paint = paint_onexit;
+	}
+	if(h != NULL) h->accept_blocking--;
+}
+
+static void script_context_cache_delete(vector_item item) {
+	object_destroy((object*)item);
 }

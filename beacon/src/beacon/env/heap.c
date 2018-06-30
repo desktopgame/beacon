@@ -27,10 +27,15 @@ heap * heap_new() {
 
 heap * heap_get() {
 	script_context* ctx = script_context_get_current();
+	if(ctx == NULL) { return NULL; }
 	return ctx->heap;
 }
 
 void heap_add(heap * self, object * obj) {
+	if(self == NULL) {
+		obj->paint = paint_onexit;
+		return;
+	}
 	if (self->accept_blocking > 0) {
 		obj->paint = paint_onexit;
 		return;

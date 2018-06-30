@@ -79,6 +79,13 @@ typedef struct object {
 object* object_int_malloc(int i, const char* filename, int lineno);
 
 /**
+ * 可能ならキャッシュを返します.
+ * @param i
+ * @return
+ */
+object* object_int_get(int i);
+
+/**
  * 浮動小数型のオブジェクトを作成します.
  * @param d
  * @return
@@ -195,6 +202,12 @@ void object_print(object* self);
  * @param self
  */
 void object_delete(object* self);
+
+/**
+ * 定数などを解放するための関数.
+ * @param self
+ */
+void object_destroy(object* self);
 
 /**
  * beaconからCの int へ変換します.

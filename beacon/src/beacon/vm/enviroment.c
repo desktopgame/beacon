@@ -174,38 +174,8 @@ static void enviroment_add_constant(enviroment* self, object* o) {
 }
 
 static void enviroment_object_delete_self(vector_item item) {
-	object* e = (object*)item;
-	enviroment_object_delete(e);
 }
 
 static void enviroment_object_delete(object* obj) {
-	if (obj == NULL) {
-		return;
-	}
-	type* tp = obj->gtype->core_type;
-	//char* name = type_name(tp);
-	assert(obj->paint == paint_onexit);
-	//*
-	//enviromentが削除される時点では、
-	//すでにスレッドとVMの関連付けが解除されていて、
-	//GCを実行することができないので自分で開放する。
-	//FIXME:この方法だと、
-	//定数がフィールドに定数を含む場合に二重開放される
-	if (obj->tag == object_ref) {
-		vector_delete(obj->u.field_vec, enviroment_object_delete_self);
-		obj->u.field_vec = NULL;
-	}
-	if (obj->tag == object_string) {
-		vector_delete(obj->u.field_vec, enviroment_object_delete_self);
-		obj->u.field_vec = NULL;
-	}
-	//String#charArray
-	if (obj->tag == object_array) {
-		vector_delete(obj->u.field_vec, enviroment_object_delete_self);
-		vector_delete(obj->native_slot_vec, enviroment_object_delete_self);
-		obj->native_slot_vec = NULL;
-		obj->u.field_vec = NULL;
-	}
-	//text_printfln("delete object %s", type_name(obj->type));
-	object_delete(obj);
+	object_destroy(obj);
 }
