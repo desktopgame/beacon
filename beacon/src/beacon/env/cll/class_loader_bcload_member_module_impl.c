@@ -114,6 +114,7 @@ void CLBC_methods_decl(class_loader* self, il_type* iltype, type* tp, vector* il
 		  (tp->tag == type_class &&
 		  !TYPE2CLASS(tp)->is_abstract)) {
 			  class_loader_report(self, clerror_abstract_method_by, method->name);
+			  method_delete(method);
 			  return;
 		}
 		//メソッドの本文が省略されているが、
@@ -123,6 +124,7 @@ void CLBC_methods_decl(class_loader* self, il_type* iltype, type* tp, vector* il
 			(!modifier_is_abstract(method->modifier) && !modifier_is_native(method->modifier))
 		) {
 			  class_loader_report(self, clerror_empty_method_body, method->name);
+			  method_delete(method);
 			return;
 		}
 		//ネイティブメソッドもしくは抽象メソッドなのに本文が書かれている
@@ -131,6 +133,7 @@ void CLBC_methods_decl(class_loader* self, il_type* iltype, type* tp, vector* il
 			(modifier_is_abstract(method->modifier) || modifier_is_native(method->modifier))
 		) {
 			  class_loader_report(self, clerror_not_empty_method_body, method->name);
+			  method_delete(method);
 			return;
 		}
 		method->parent = tp;

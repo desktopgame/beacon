@@ -14,8 +14,8 @@ il_factor * il_factor_wrap_int(il_factor_int * self) {
 	return ret;
 }
 
-il_factor_int * il_factor_int_new(int32_t i) {
-	il_factor_int* ret = (il_factor_int*)MEM_MALLOC(sizeof(il_factor_int));
+il_factor_int * il_factor_int_malloc(int32_t i, const char* filename, int lineno) {
+	il_factor_int* ret = (il_factor_int*)mem_malloc(sizeof(il_factor_int), filename, lineno);
 	ret->value = i;
 	ret->count = 0;
 	return ret;

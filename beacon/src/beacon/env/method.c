@@ -21,12 +21,12 @@ static void method_type_parameter_delete(vector_item item);
 method* method_malloc(const char* name, const char* filename, int lineno) {
 	method* ret = (method*)mem_malloc(sizeof(method), filename, lineno);
 	ret->name = text_strdup(name);
-	ret->parameter_list = vector_new();
+	ret->parameter_list = vector_malloc(filename, lineno);
 	ret->type = method_type_script;
 	ret->access = access_public;
 	ret->modifier = modifier_none;
 	ret->parent = NULL;
-	ret->type_parameter_list = vector_new();
+	ret->type_parameter_list = vector_malloc(filename, lineno);
 	ret->return_gtype = NULL;
 	return ret;
 }

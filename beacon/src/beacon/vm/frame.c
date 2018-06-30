@@ -79,7 +79,10 @@ static void remove_from_parent(frame* self) {
 }
 
 static void frame_markStatic(field* item) {
-	object_markall(item->static_value);
+	//フィールドがintなどならここでマークしない
+	if(item->static_value->paint != paint_onexit) {
+		object_markall(item->static_value);
+	}
 }
 
 static void frame_markRecursive(frame* self) {

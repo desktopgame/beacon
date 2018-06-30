@@ -15,7 +15,8 @@ typedef struct il_factor_int {
 
 il_factor* il_factor_wrap_int(il_factor_int* self);
 
-il_factor_int* il_factor_int_new(int32_t i);
+#define il_factor_int_new(i) (il_factor_int_malloc(i, __FILE__, __LINE__))
+il_factor_int* il_factor_int_malloc(int32_t i, const char* filename, int lineno);
 
 void il_factor_int_dump(il_factor_int* self, int depth);
 

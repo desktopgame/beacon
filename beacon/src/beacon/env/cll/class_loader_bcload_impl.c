@@ -176,11 +176,11 @@ static void CLBC_enum(class_loader * self, il_type * iltype, namespace_ * parent
 		field* f = field_new(str);
 		f->modifier = modifier_static;
 		f->access = access_public;
-		f->static_value = object_int_new(i);
+		f->static_value = object_int_get(i);
 		f->gtype = TYPE_INT->generic_self;
 		//virtual_type_nongeneric_init(&f->vtype, GENERIC_INT);
 		f->parent = tp;
-		f->static_value->paint = paint_marked;
+		//f->static_value->paint = paint_marked;
 		class_add_field(cls, f);
 	}
 	//宣言のロードを予約
