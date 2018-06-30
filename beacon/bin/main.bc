@@ -1,12 +1,8 @@
-def tak(Int x, Int y, Int z) -> Int {
-	if x <= y {
-		return y;
-	} else {
-		return tak(
-			tak(x-1, y, z),
-        	tak(y-1, z, x),
-        	tak(z-1, x, y)
-		);
+def fact(Int a) -> Int {
+	if(a == 0) {
+		return 1;
 	}
+	return a * fact(a - 1);
 }
-printLine(tak(12, 6, 0));
+printLine(fact(3));
+printLine(fact(5));

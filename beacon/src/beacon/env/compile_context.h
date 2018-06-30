@@ -47,7 +47,8 @@ struct label;
 struct generic_type;
 struct fqcn_cache;
 
-void cc_push();
+#define cc_push() (cc_push_impl(__FILE__, __LINE__))
+void cc_push_impl(const char* filename, int lineno);
 
 //namespace
 void ccpush_namespace(struct namespace_* e);

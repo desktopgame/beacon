@@ -63,7 +63,8 @@ int main_cl(int argc, char *argv[]) {
 
 int main(int argc, char *argv[]) {
 	//先んじて設定を行っておく
-	//mem_set_trace(true);
+	mem_set_trace(true);
+	//mem_break(20158);
 	il_print_layout_hide(true);
 	//コマンドライン引数を解析して実行
 	int ret = main_cl(argc, argv);

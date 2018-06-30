@@ -10,14 +10,14 @@
 #include <assert.h>
 
 vector* gContextVec = NULL;
-static compile_context* compile_context_new();
+static compile_context* compile_context_malloc(const char* filename, int lineno);
 static void compile_context_delete(compile_context* self);
 
-void cc_push() {
+void cc_push_impl(const char* filename, int lineno) {
 	if(gContextVec == NULL) {
 		gContextVec = vector_new();
 	}
-	compile_context* cc = compile_context_new();
+	compile_context* cc = compile_context_malloc(filename, lineno);
 	vector_push(gContextVec, cc);
 }
 
@@ -229,8 +229,8 @@ generic_type* ccget_override() {
 }
 
 //private
-static compile_context* compile_context_new() {
-	compile_context* ret = (compile_context*)MEM_MALLOC(sizeof(compile_context));
+static compile_context* compile_context_malloc(const char* filename, int lineno) {
+	compile_context* ret = (compile_context*)mem_malloc(sizeof(compile_context), filename, lineno);
 	ret->namespace_vec = vector_new();
 	ret->type_vec = vector_new();
 	ret->method_vec = vector_new();
@@ -254,4 +254,5 @@ static void compile_context_delete(compile_context* self) {
 	vector_delete(self->while_end_vec, vector_deleter_null);
 	vector_delete(self->receiver_vec, vector_deleter_null);
 	vector_delete(self->type_args_vec, vector_deleter_null);
+	MEM_FREE(self);
 }

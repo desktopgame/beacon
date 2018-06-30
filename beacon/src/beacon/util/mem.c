@@ -78,6 +78,7 @@ void mem_dump() {
 	text_printfln("    not found realloc(%d)", gMemNotFoundRealloc);
 	text_printfln("    not found free(%d)", gMemNotFoundFree);
 
+	if(gSlotHead == NULL) { return; }
 	slot* ptr = gSlotHead->next;
 	while (ptr != NULL) {
 		text_printf("    ");
@@ -109,7 +110,7 @@ void mem_break(int count) {
 }
 
 void mem_destroy() {
-	if (!gMemTrace) {
+	if (!gMemTrace || gSlotHead == NULL) {
 		return;
 	}
 	slot_destroy(gSlotHead->next);
@@ -224,7 +225,13 @@ static int slot_remove(slot* head, void* arena) {
 	int ret = ptr->index;
 	gMemCounter--;
 	gMemUsedMemory -= ptr->size;
-	free(ptr);
+	if(ptr == gSlotHead) {
+		//ちゃんとメモリリークがなく全て実行されるとここにくる
+		free(ptr);
+		gSlotHead = NULL;
+	} else {
+		free(ptr);
+	}
 	assert(gMemCounter >= 0);
 	return ret;
 }
