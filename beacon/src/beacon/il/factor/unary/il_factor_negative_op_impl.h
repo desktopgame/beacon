@@ -11,7 +11,8 @@ typedef struct il_factor_negative_op {
 	int operator_index;
 } il_factor_negative_op;
 
-il_factor_negative_op* il_factor_negative_op_new(operator_type type);
+#define il_factor_negative_op_new(type) (il_factor_negative_op_malloc(type, __FILE__, __LINE__))
+il_factor_negative_op* il_factor_negative_op_malloc(operator_type type, const char* filename, int lineno);
 
 void il_factor_negative_op_dump(il_factor_negative_op* self, int depth);
 

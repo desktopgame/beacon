@@ -227,8 +227,8 @@ static int slot_remove(slot* head, void* arena) {
 	gMemUsedMemory -= ptr->size;
 	if(ptr == gSlotHead) {
 		//ちゃんとメモリリークがなく全て実行されるとここにくる
+		gSlotHead = gSlotHead->next;
 		free(ptr);
-		gSlotHead = NULL;
 	} else {
 		free(ptr);
 	}

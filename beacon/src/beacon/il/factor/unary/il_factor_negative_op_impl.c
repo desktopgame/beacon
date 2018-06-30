@@ -9,8 +9,8 @@
 #include "../../../env/operator_overload.h"
 #include "../il_factor_unary_op_impl.h"
 
-il_factor_negative_op* il_factor_negative_op_new(operator_type type) {
-	il_factor_negative_op* ret = (il_factor_negative_op*)MEM_MALLOC(sizeof(il_factor_negative_op));
+il_factor_negative_op* il_factor_negative_op_malloc(operator_type type, const char* filename, int lineno) {
+	il_factor_negative_op* ret = (il_factor_negative_op*)mem_malloc(sizeof(il_factor_negative_op), filename, lineno);
 	ret->type = type;
 	ret->parent = NULL;
 	ret->operator_index = -1;

@@ -22,6 +22,9 @@ il_factor_unary_op * il_factor_unary_op_new(operator_type type) {
 	il_factor_unary_op* ret = (il_factor_unary_op*)MEM_MALLOC(sizeof(il_factor_unary_op));
 	ret->type = type;
 	ret->a = NULL;
+	if(type == operator_not) ret->u.not_op = NULL;
+	if(type == operator_childa) ret->u.childa_op= NULL;
+	if(type == operator_negative) ret->u.negative_op = NULL;
 	return ret;
 }
 
@@ -55,6 +58,9 @@ void il_factor_unary_op_generate(il_factor_unary_op * self, enviroment* env) {
 }
 
 void il_factor_unary_op_load(il_factor_unary_op * self, enviroment * env) {
+	if(self->type == operator_not && self->u.not_op != NULL) return;
+	if(self->type == operator_childa && self->u.childa_op != NULL) return;
+	if(self->type == operator_negative && self->u.negative_op != NULL) return;
 	il_factor_load(self->a, env);
 	//カテゴリーわけ
 	if(self->type == operator_not) {

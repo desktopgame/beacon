@@ -111,6 +111,7 @@ object * object_get_true() {
 		ctx->oTrue->u.bool_ = !false;
 		ctx->oTrue->gtype = GENERIC_BOOL;
 		ctx->oTrue->vptr = TYPE2CLASS(TYPE_BOOL)->vt;
+		ctx->oTrue->paint = paint_onexit;
 	}
 	return ctx->oTrue;
 }
@@ -122,6 +123,7 @@ object * object_get_false() {
 		ctx->oFalse->u.bool_ = false;
 		ctx->oFalse->gtype = GENERIC_BOOL;
 		ctx->oFalse->vptr = TYPE2CLASS(TYPE_BOOL)->vt;
+		ctx->oFalse->paint = paint_onexit;
 	}
 	return ctx->oFalse;
 }
@@ -131,6 +133,7 @@ object * object_get_null() {
 	if (ctx->oNull == NULL) {
 		ctx->oNull = object_malloc(object_null);
 		ctx->oNull->gtype = generic_type_new(TYPE_NULL);
+		ctx->oNull->paint = paint_onexit;
 	}
 	return ctx->oNull;
 }
