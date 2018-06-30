@@ -387,6 +387,7 @@ static void class_loader_load_toplevel_function(class_loader* self) {
 		}
 		opcode_buf_add(env->buf, (vector_item)op_store);
 		opcode_buf_add(env->buf, (vector_item)0);
+		vector_push(worldT->u.class_->method_list, m);
 		il_error_enter();
 		//中身をロード
 		for(int j=0; j<ilfunc->statement_list->length; j++) {
@@ -398,7 +399,6 @@ static void class_loader_load_toplevel_function(class_loader* self) {
 			il_stmt* stmt = vector_at(ilfunc->statement_list, j);
 			il_stmt_generate(stmt, env);
 		}
-		vector_push(worldT->u.class_->method_list, m);
 		il_error_exit();
 		ccpop_method();
 	}

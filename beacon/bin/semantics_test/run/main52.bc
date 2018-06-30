@@ -4,5 +4,5 @@ def fact(Int a) -> Int {
 	}
 	return a * fact(a - 1);
 }
-printLine(fact(3));
-printLine(fact(5));
+assert (fact(3) == 6);
+assert (fact(5) == 120);

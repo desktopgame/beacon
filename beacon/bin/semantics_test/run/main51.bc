@@ -5,5 +5,4 @@ def test(String word, Int len) -> Void {
 		a = a + 1;
 	}
 }
-//test("Hello", 10);
-printLine("Hello");
+test("Hello", 10);
