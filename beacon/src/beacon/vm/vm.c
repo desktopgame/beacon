@@ -78,6 +78,7 @@ void vm_resume(frame * self, enviroment * env, int pos) {
 		self->ref_stack = defctx->bind;
 		vm_run(self, env, offset->cursor, offset->cursor);
 		self->ref_stack = save;
+		defer_context_delete(defctx);
 	}
 	vector_delete(self->defer_vec, vm_delete_defctx);
 	self->defer_vec = NULL;
