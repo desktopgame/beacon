@@ -6,6 +6,14 @@
 #include <stdbool.h>
 
 /**
+ * GCの実行モード.
+ */
+typedef enum gc_mode {
+	gc_full,
+	gc_mini,
+} gc_mode;
+
+/**
  * オブジェクトの一覧を格納します.
  */
 typedef struct heap {
@@ -45,8 +53,9 @@ void heap_add(heap* self, object* obj);
 /**
  * GCを実行します.
  * @param self
+ * @param mode
  */
-void heap_gc(heap* self);
+void heap_gc(heap* self, gc_mode mode);
 
 /**
  * ヒープを開放します.

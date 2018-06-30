@@ -221,27 +221,27 @@ static void vm_run(frame * self, enviroment * env, int pos, int deferStart) {
 		switch (b) {
 			//int & int
 			case op_iadd:
-				vector_push(self->value_stack, object_int_new(SPI(self) + SPI(self)));
+				vector_push(self->value_stack, object_int_get(SPI(self) + SPI(self)));
 				break;
 			case op_isub:
-				vector_push(self->value_stack, object_int_new(SPI(self) - SPI(self)));
+				vector_push(self->value_stack, object_int_get(SPI(self) - SPI(self)));
 				break;
 			case op_imul:
-				vector_push(self->value_stack, object_int_new(SPI(self) * SPI(self)));
+				vector_push(self->value_stack, object_int_get(SPI(self) * SPI(self)));
 				break;
 			case op_idiv:
 			{
 				int a = SPI(self);
 				int b = SPI(self);
 				assert(b != 0);
-				vector_push(self->value_stack, object_int_new(a / b));
+				vector_push(self->value_stack, object_int_get(a / b));
 				break;
 			}
 			case op_imod:
-				vector_push(self->value_stack, object_int_new(SPI(self) % SPI(self)));
+				vector_push(self->value_stack, object_int_get(SPI(self) % SPI(self)));
 				break;
 			case op_ibit_or:
-				vector_push(self->value_stack, object_int_new(SPI(self) | SPI(self)));
+				vector_push(self->value_stack, object_int_get(SPI(self) | SPI(self)));
 				break;
 			case op_ilogic_or:
 			{
@@ -249,11 +249,11 @@ static void vm_run(frame * self, enviroment * env, int pos, int deferStart) {
 				//おそらくマクロの展開によるもの
 				int a = SPI(self);
 				int b = SPI(self);
-				vector_push(self->value_stack, object_int_new(a || b));
+				vector_push(self->value_stack, object_int_get(a || b));
 				break;
 			}
 			case op_ibit_and:
-				vector_push(self->value_stack, object_int_new(SPI(self) & SPI(self)));
+				vector_push(self->value_stack, object_int_get(SPI(self) & SPI(self)));
 				break;
 			case op_ilogic_and:
 			{
@@ -261,7 +261,7 @@ static void vm_run(frame * self, enviroment * env, int pos, int deferStart) {
 				//おそらくマクロの展開によるもの
 				int a = SPI(self);
 				int b = SPI(self);
-				vector_push(self->value_stack, object_int_new(a && b));
+				vector_push(self->value_stack, object_int_get(a && b));
 				break;
 			}
 			case op_ieq:
@@ -288,16 +288,16 @@ static void vm_run(frame * self, enviroment * env, int pos, int deferStart) {
 				vector_push(self->value_stack, object_bool_get(SPI(self) <= SPI(self)));
 				break;
 			case op_ilsh:
-				vector_push(self->value_stack, object_int_new(SPI(self) << SPI(self)));
+				vector_push(self->value_stack, object_int_get(SPI(self) << SPI(self)));
 				break;
 			case op_irsh:
-				vector_push(self->value_stack, object_int_new(SPI(self) >> SPI(self)));
+				vector_push(self->value_stack, object_int_get(SPI(self) >> SPI(self)));
 				break;
 			case op_iexcor:
-				vector_push(self->value_stack, object_int_new(SPI(self) ^ SPI(self)));
+				vector_push(self->value_stack, object_int_get(SPI(self) ^ SPI(self)));
 				break;
 			case op_iflip:
-				vector_push(self->value_stack, object_int_new(~SPI(self)));
+				vector_push(self->value_stack, object_int_get(~SPI(self)));
 				break;
 			case op_ceq:
 				vector_push(self->value_stack, object_bool_get(SPC(self) == SPC(self)));
@@ -352,7 +352,7 @@ static void vm_run(frame * self, enviroment * env, int pos, int deferStart) {
 				vector_push(self->value_stack, object_bool_get(SPD(self) <= SPD(self)));
 				break;
 			case op_ineg:
-				vector_push(self->value_stack, object_int_new(-SPI(self)));
+				vector_push(self->value_stack, object_int_get(-SPI(self)));
 				break;
 			case op_dneg:
 				vector_push(self->value_stack, object_double_new(-SPD(self)));

@@ -143,4 +143,9 @@ void script_context_static_each(script_context* self, static_each act);
  * @param self
  */
 void script_context_static_clear(script_context* self);
+
+/**
+ * 現在のコンテキストでリテラルをキャッシュします.
+ */
+void script_context_cache();
 #endif // !SIGNAL_ENV_SCRIPT_CONTEXT_H

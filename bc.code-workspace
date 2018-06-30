@@ -77,7 +77,8 @@
 			"thread": "c",
 			"thread.h": "c",
 			"typeindex": "c",
-			"typeinfo": "c"
+			"typeinfo": "c",
+			"future": "c"
 		},
 		"ruby.lint": {
 			"reek": true,

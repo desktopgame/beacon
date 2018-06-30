@@ -521,6 +521,7 @@ void class_create_vtable(class_ * self) {
 		class_create_vtable_override(self);
 	}
 	class_create_vtable_interface(self);
+	assert(self->vt->elements->length != 0);
 }
 
 int class_count_fieldall(class_ * self) {

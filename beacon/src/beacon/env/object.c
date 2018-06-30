@@ -34,7 +34,7 @@ object * object_int_malloc(int i, const char* filename, int lineno) {
 
 object* object_int_get(int i) {
 	script_context* ctx = script_context_get_current();
-	if(ctx == NULL || (i < -9) || i > 99) { return object_int_new(i); }
+	if((i < -9) || i > 99) { return object_int_new(i); }
 	if(i < 0) { return (object*)vector_at(ctx->neg_int_vec, (-i) - 1); }
 	return (object*)vector_at(ctx->pos_int_vec, i);
 }
@@ -152,6 +152,7 @@ void object_dec(object * self) {
 }
 
 object* object_copy(object * self) {
+	/*
 	object* ret = NULL;
 	if (self->tag == object_int) {
 		ret = object_int_new(self->u.int_);
@@ -163,6 +164,8 @@ object* object_copy(object * self) {
 		ret = self;
 	}
 	return ret;
+	*/
+	return self;
 }
 
 object * object_copy_s(object * self) {

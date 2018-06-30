@@ -43,13 +43,17 @@ void heap_add(heap * self, object * obj) {
 	vector_push(self->object_vec, obj);
 }
 
-void heap_gc(heap * self) {
+void heap_gc(heap * self, gc_mode mode) {
 	if(self->collect_blocking > 0) {
+		return;
+	}
+	if(mode == gc_mini && self->object_vec->length < self->threshold) {
 		return;
 	}
 	gc_clear(self);
 	gc_mark(self);
 	gc_sweep(self);
+	self->threshold = self->object_vec->length + self->threshold;
 }
 
 void heap_delete(heap * self) {

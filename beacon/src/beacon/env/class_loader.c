@@ -347,6 +347,7 @@ static void class_loader_load_toplevel(class_loader* self) {
 	ccpop_type();
 	cc_disable(ccstate_toplevel);
 	ccset_class_loader(NULL);
+	script_context_cache();
 }
 
 static void class_loader_load_toplevel_function(class_loader* self) {
