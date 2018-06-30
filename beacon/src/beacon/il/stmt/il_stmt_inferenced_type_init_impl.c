@@ -56,6 +56,6 @@ void il_stmt_inferenced_type_init_load(il_stmt_inferenced_type_init * self, envi
 
 void il_stmt_inferenced_type_init_delete(il_stmt_inferenced_type_init * self) {
 	MEM_FREE(self->name);
-	MEM_FREE(self);
 	il_factor_delete(self->fact);
+	MEM_FREE(self);
 }
