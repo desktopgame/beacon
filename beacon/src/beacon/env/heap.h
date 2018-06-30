@@ -62,4 +62,10 @@ void heap_gc(heap* self, gc_mode mode);
  * @param self
  */
 void heap_delete(heap* self);
+
+/**
+ * ヒープの中身をダンプします.
+ * @param self
+ */
+void heap_dump(heap* self);
 #endif // !SIGNAL_ENV_HEAP_H

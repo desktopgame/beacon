@@ -61,6 +61,16 @@ void heap_delete(heap * self) {
 	MEM_FREE(self);
 }
 
+void heap_dump(heap* self) {
+	text_printf("heap dump:\n");
+	for(int i=0; i<self->object_vec->length; i++) {
+		object* a = vector_at(self->object_vec, i);
+		text_printf("    ");
+		generic_type_print(a->gtype);
+		text_printf("\n");
+	}
+}
+
 //private
 static void heap_delete_object(vector_item item) {
 	object* e = (object*)item;
