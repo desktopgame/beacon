@@ -42,7 +42,8 @@ typedef struct il_factor_variable {
 
 il_factor* il_factor_wrap_variable(il_factor_variable* self);
 
-il_factor_variable* il_factor_variable_new();
+#define il_factor_variable_new() (il_factor_variable_malloc(__FILE__, __LINE__))
+il_factor_variable* il_factor_variable_malloc(const char* filename, int lineno);
 
 void il_factor_variable_dump(il_factor_variable* self, int depth);
 

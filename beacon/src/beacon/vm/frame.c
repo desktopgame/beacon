@@ -65,6 +65,10 @@ void frame_delete(frame * self) {
 	MEM_FREE(self);
 }
 
+frame* frame_root(frame* self) {
+	return self->parent != NULL ? frame_root(self->parent) : self->parent;
+}
+
 //private
 
 static void remove_from_parent(frame* self) {

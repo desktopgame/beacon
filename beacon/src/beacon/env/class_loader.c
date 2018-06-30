@@ -125,12 +125,13 @@ void class_loader_rsub(class_loader * self, char * relativePath) {
 void class_loader_special(class_loader* self, char* relativePath) {
 	char* fullP = io_absolute_path(relativePath);
 	script_context* ctx = script_context_get_current();
+	heap* he = heap_get();
 	class_loader* cll = tree_map_get(ctx->class_loader_map, fullP);
-	ctx->heap->accept_blocking++;
+	he->accept_blocking++;
 	if(cll == NULL) {
 		cll = class_loader_load_specialImpl(self, cll, fullP);
 	}
-	ctx->heap->accept_blocking--;
+	he->accept_blocking--;
 	//MEM_FREE(fullP);
 }
 

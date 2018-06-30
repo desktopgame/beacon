@@ -64,7 +64,7 @@ object * object_string_malloc(const char * s, const char* filename, int lineno) 
 
 	//配列を生成
 	object* arr = object_ref_malloc(filename, lineno);
-	arr->tag = object_array;
+	//arr->tag = object_array;
 	type* arrType = bc_array_type();
 	type* strType = namespace_get_type(namespace_lang(), "String");
 	arr->gtype = generic_type_ref(arrType);
@@ -74,7 +74,7 @@ object * object_string_malloc(const char * s, const char* filename, int lineno) 
 	string_buffer* sb = string_buffer_new();
 	while ((*itr) != '\0') {
 		char e = (*itr);
-		vector_push(arr->native_slot_vec, object_char_new(e));
+		vector_push(arr->native_slot_vec, object_char_malloc(e, filename, lineno));
 		itr++;
 		string_buffer_append(sb, e);
 	}
@@ -270,7 +270,7 @@ void object_destroy(object* self) {
 		self->u.field_vec = NULL;
 	}
 	//String#charArray
-	if (self->tag == object_array) {
+	if (self->gtype->core_type == bc_array_type()) {
 		vector_delete(self->u.field_vec, object_delete_self);
 		vector_delete(self->native_slot_vec, object_delete_self);
 		self->native_slot_vec = NULL;

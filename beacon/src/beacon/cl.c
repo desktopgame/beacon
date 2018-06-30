@@ -4,9 +4,9 @@
 #include "test.h"
 
 int cl_test(int argc, char* argv[]) {
-	script_context_set_bootstrap(false);
+//	script_context_set_bootstrap(false);
 	script_context_open();
-	script_context_set_bootstrap(true);
+//	script_context_set_bootstrap(true);
 
 	int ret = test_run(argc, argv);
 	script_context_close();

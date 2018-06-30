@@ -90,11 +90,12 @@ bool eval_lines(const char ** lines, int lineCount) {
 //private
 static bool eval_top_from_cll(class_loader* cll) {
 	script_context* ctx = script_context_get_current();
-
+	heap* he = heap_get();
 	//ソースコードを読み込む
-	ctx->heap->accept_blocking++;
+	assert(he->accept_blocking == 0);
+	he->accept_blocking++;
 	class_loader_load(cll);
-	ctx->heap->accept_blocking--;
+	he->accept_blocking--;
 	//opcode_buf_dump(cll->env->buf, 0);
 	//実行
 	frame* fr = frame_new();
@@ -104,7 +105,11 @@ static bool eval_top_from_cll(class_loader* cll) {
 	if(fr->terminate) {
 		cll->error = true;
 	}
+	vm_catch(fr);
+	heap_gc(heap_get(), gc_full);
 	frame_delete(fr);
+	heap_get()->accept_blocking = 0;
+	//heap_dump(heap_get());
 	sg_thread_release_frame_ref(sg_thread_current());
 
 	bool ret = cll->error;

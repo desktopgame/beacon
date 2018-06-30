@@ -1,8 +1,12 @@
-def fact(Int a) -> Int {
-	if(a == 0) {
-		return 1;
-	}
-	return a * fact(a - 1);
-}
-printLine(fact(3));
-printLine(fact(5));
+var strbuff = new StringBuilder();
+strbuff.append("trans/trans");
+Console.writeLine(strbuff.toString());
+Console.writeLine("---");
+
+strbuff.append("\n");
+strbuff.append("bucket/bucket");
+Console.writeLine(strbuff.toString());
+Console.writeLine("---");
+
+strbuff.remove(0, 4);
+Console.writeLine(strbuff.toString());

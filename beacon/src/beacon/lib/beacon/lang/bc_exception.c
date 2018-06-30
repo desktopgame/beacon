@@ -30,8 +30,11 @@ static void bc_exception_nativeInit(method* parent, frame* fr, enviroment* env) 
 	class_* stackTraceElementClass = namespace_get_class(lang, "StackTraceElement");
 	class_* exceptionClass = namespace_get_class(lang, "Exception");
 	object* self= (object*)vector_at(fr->ref_stack, 0);
+	//FXIME:???
 	heap* h = heap_get();
 	h->collect_blocking++;
+	int ac = h->accept_blocking;
+	h->accept_blocking = 0;
 	//スタックトレースを作成する
 	frame* temp = fr;
 	vector* stackTraceElementVec = vector_new();
@@ -80,4 +83,5 @@ static void bc_exception_nativeInit(method* parent, frame* fr, enviroment* env) 
 	vector_assign(self->u.field_vec, tempi, arr);
 	vector_delete(stackTraceElementVec, vector_deleter_null);
 	h->collect_blocking--;
+	h->accept_blocking = ac;
 }

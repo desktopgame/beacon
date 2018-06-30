@@ -47,8 +47,6 @@ bool test_now() {
 
 //semantics
 static void test_semanticsImpl(const char* dirname, bool require, char** outFileName, bool* outFail) {
-	script_context* ctx = script_context_add();
-	script_context_set_current(ctx);
 	//stdoutを入れ替える
 	char* filename = NULL;
 	FILE* out = tmpfile();
@@ -80,11 +78,10 @@ static void test_semanticsImpl(const char* dirname, bool require, char** outFile
 			fail = true;
 			break;
 		}
-		script_context_static_clear(ctx);
+		//script_context_static_clear(script_context_get_current());
 	}
 	(*outFileName) = filename;
 	(*outFail) = fail;
-	script_context_remove(ctx);
 	io_list_files_delete(files);
 	//元に戻す
 	stdout = STDOUT;

@@ -115,7 +115,10 @@ void vm_catch(frame * self) {
 		frame* e = (frame*)vector_at(self->children_vec, i);
 		vm_catch(e);
 	}
-	self->exception = NULL;
+	if(self->exception != NULL) {
+		self->exception->paint = paint_unmarked;
+		self->exception = NULL;
+	}
 }
 
 bool vm_validate(frame* self, int source_len, int* pcDest) {
@@ -197,6 +200,8 @@ void vm_uncaught(frame * self, enviroment* env, int pc) {
 		object* lineIndexObj = vector_at(e->u.field_vec, lineIndexptr);
 		fprintf(stderr, "    @%d: %s\n", OBJ2INT(lineIndexObj), bc_string_raw(fileNameObj)->text);
 	}
+	vm_catch(frame_root(self));
+	heap_gc(heap_get(), gc_full);
 }
 
 
@@ -207,6 +212,7 @@ static void vm_run(frame * self, enviroment * env, int pos, int deferStart) {
 	script_context* ctx = script_context_get_current();
 	int source_len = env->buf->source->length;
 	self->context_ref = env;
+	heap* he = heap_get();
 	for (int IDX = pos; IDX < source_len; IDX++) {
 		//このVMの子要素で例外がスローされ、
 		//それを子要素自身で処理できなかった場合には、
@@ -502,7 +508,12 @@ static void vm_run(frame * self, enviroment * env, int pos, int deferStart) {
 			{
 				//コンストラクタをさかのぼり、
 				//トップレベルまで到達するとこの処理によって生成が行われます。
+				//FIXME:???
+				int ac = he->accept_blocking;
+				he->accept_blocking = 0;
 				object* o = object_ref_new();
+				he->accept_blocking = ac;
+				assert(o->paint != paint_onexit);
 				vector_push(self->value_stack, o);
 				//これを this とする
 				vector_assign(self->ref_stack, 0, o);

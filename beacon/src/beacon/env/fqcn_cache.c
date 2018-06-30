@@ -17,7 +17,7 @@ fqcn_cache * fqcn_cache_new() {
 
 fqcn_cache* fqcn_cache_malloc(const char* filename, int lineno) {
 	fqcn_cache* ret = (fqcn_cache*)mem_malloc(sizeof(fqcn_cache), filename, lineno);
-	ret->scope_vec = vector_new();
+	ret->scope_vec = vector_malloc(filename, lineno);
 	ret->name = NULL;
 	return ret;
 }

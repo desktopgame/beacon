@@ -122,4 +122,11 @@ void frame_markall(frame* self);
  * @param self
  */
 void frame_delete(frame* self);
+
+/**
+ * フレームのルートを返します.
+ * @param self
+ * @return
+ */
+frame* frame_root(frame* self);
 #endif

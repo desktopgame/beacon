@@ -295,6 +295,7 @@ static slot* slot_last(slot* head) {
 static void mem_input() {
 	int breakNow = 1;
 	text_printfln("stop program!");
+	/*
 	while (breakNow != 0) {
 		char* line = mem_readline();
 		bool breakLoop = false;
@@ -311,6 +312,7 @@ static void mem_input() {
 			break;
 		}
 	}
+	*/
 }
 
 static char* mem_readline() {

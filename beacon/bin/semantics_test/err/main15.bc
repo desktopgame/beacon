@@ -1,5 +1,5 @@
 namespace beacon {
-	class NotIterableImpl : Iterable[Int] {
+	class NotIterableImplXX : Iterable[Int] {
 		public:
 		def iterate() -> Object {
 			

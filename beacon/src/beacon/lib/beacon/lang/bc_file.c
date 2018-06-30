@@ -97,6 +97,7 @@ static void bc_file_nativeClose(method* parent, frame* fr, enviroment* env) {
 
 static object* file_new(FILE* fp, bool std) {
 	object* file = object_ref_new();
+	assert(file->paint != paint_onexit);
 	type* fileType = bc_file_type();
 	file->gtype = fileType->generic_self;
 	file->vptr = TYPE2CLASS(fileType)->vt;

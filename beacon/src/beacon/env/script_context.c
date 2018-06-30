@@ -281,9 +281,11 @@ static void script_context_free(script_context* self) {
 	frame* thv = sg_thread_get_frame_ref(sg_thread_current());
 	vm_catch(thv);
 	class_loader_delete(self->bootstrap_class_loader);
-	self->oNull->paint = paint_onexit;
+	if(self->oNull != NULL) {
+		self->oNull->paint = paint_onexit;
+		object_destroy(self->oNull);
+	}
 	heap_delete(self->heap);
-	object_destroy(self->oNull);
 	vector_delete(self->neg_int_vec, script_context_cache_delete);
 	vector_delete(self->pos_int_vec, script_context_cache_delete);
 	//object_delete(self->oNull);

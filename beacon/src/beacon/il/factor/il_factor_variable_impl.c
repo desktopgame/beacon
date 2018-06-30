@@ -24,10 +24,10 @@ il_factor * il_factor_wrap_variable(il_factor_variable * self) {
 	return ret;
 }
 
-il_factor_variable * il_factor_variable_new() {
-	il_factor_variable* ret = (il_factor_variable*)MEM_MALLOC(sizeof(il_factor_variable));
-	ret->fqcn = fqcn_cache_new();
-	ret->type_args = vector_new();
+il_factor_variable * il_factor_variable_malloc(const char* filename, int lineno) {
+	il_factor_variable* ret = (il_factor_variable*)mem_malloc(sizeof(il_factor_variable), filename, lineno);
+	ret->fqcn = fqcn_cache_malloc(filename, lineno);
+	ret->type_args = vector_malloc(filename, lineno);
 	ret->type = ilvariable_type_undefined;
 	return ret;
 }
@@ -83,10 +83,9 @@ void il_factor_variable_delete(il_factor_variable * self) {
 		il_factor_variable_local_delete(self->u.local_);
 	} else if(self->type == ilvariable_type_static) {
 		il_factor_variable_static_delete(self->u.static_);
-	} else if(self->type == ilvariable_type_undefined) {
-		vector_delete(self->type_args, il_factor_delete_typeargs);
 	}
 	fqcn_cache_delete(self->fqcn);
+	vector_delete(self->type_args, il_factor_delete_typeargs);
 	MEM_FREE(self);
 }
 

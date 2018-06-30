@@ -103,7 +103,7 @@ void class_alloc_fields(class_ * self, object * o) {
 		object* a = object_get_null();
 		//プリミティブ型のときはデフォルト値を入れておく
 		if (f->gtype == TYPE_INT->generic_self) {
-			a = object_int_new(0);
+			a = object_int_get(0);
 		} else if (f->gtype == TYPE_DOUBLE->generic_self) {
 			a = object_double_new(0.0);
 		} else if (f->gtype == TYPE_BOOL->generic_self) {

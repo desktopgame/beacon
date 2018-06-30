@@ -48,7 +48,7 @@ void heap_gc(heap * self, gc_mode mode) {
 		return;
 	}
 	if(mode == gc_mini && self->object_vec->length < self->threshold) {
-		return;
+	//	return;
 	}
 	gc_clear(self);
 	gc_mark(self);
