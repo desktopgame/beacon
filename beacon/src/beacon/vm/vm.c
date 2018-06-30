@@ -509,10 +509,7 @@ static void vm_run(frame * self, enviroment * env, int pos, int deferStart) {
 				//コンストラクタをさかのぼり、
 				//トップレベルまで到達するとこの処理によって生成が行われます。
 				//FIXME:???
-				int ac = he->accept_blocking;
-				he->accept_blocking = 0;
 				object* o = object_ref_new();
-				he->accept_blocking = ac;
 				assert(o->paint != paint_onexit);
 				vector_push(self->value_stack, o);
 				//これを this とする
