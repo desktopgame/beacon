@@ -383,7 +383,7 @@ static void class_loader_load_toplevel_function(class_loader* self) {
 			//実引数を保存
 			//0番目は this のために開けておく
 			opcode_buf_add(env->buf, op_store);
-			opcode_buf_add(env->buf, (i + 1));
+			opcode_buf_add(env->buf, (j + 1));
 		}
 		opcode_buf_add(env->buf, (vector_item)op_store);
 		opcode_buf_add(env->buf, (vector_item)0);
