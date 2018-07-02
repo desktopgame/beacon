@@ -27,4 +27,5 @@
 #include "factor/il_factor_instanceof_impl.h"
 #include "factor/il_factor_explicit_unary_op_impl.h"
 #include "factor/il_factor_explicit_binary_op_impl.h"
+#include "factor/il_factor_lambda_impl.h"
 #endif // !SIGNAL_IL_IL_FACTOR_IMPL_H

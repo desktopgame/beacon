@@ -1,5 +1,6 @@
 #include "class_loader_ilload_type_module_impl.h"
 #include "class_loader_ilload_factor_module_impl.h"
+#include "class_loader_ilload_stmt_module_impl.h"
 #include "../../ast/ast.h"
 #include "../../env/fqcn_cache.h"
 #include "../../env/generic_cache.h"
@@ -118,6 +119,19 @@ void CLIL_argument_list(class_loader* self, vector* list, ast* source) {
 		ast* primary = ast_first(source);
 		il_argument* ilarg = il_argument_new();
 		ilarg->factor = CLIL_factor(self, primary);
+		vector_push(list, ilarg);
+	} else if(source->tag == ast_lambda) {
+		//ラムダは実引数列にしかおけない仕様
+		ast* aparam_list = ast_first(source);
+		ast* areturn = ast_second(source);
+		ast* abody = ast_at(source, 2);
+		il_factor_lambda* lbd = il_factor_lambda_new();
+		CLIL_parameter_list(self, lbd->parameter_vec, aparam_list);
+		CLIL_generic_cache(areturn, lbd->return_gtype);
+		CLIL_body(self,lbd->statement_vec, abody);
+		//ラムダを実引数でラップする
+		il_argument* ilarg = il_argument_new();
+		ilarg->factor = il_factor_wrap_lambda(lbd);
 		vector_push(list, ilarg);
 	}
 }
