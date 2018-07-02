@@ -79,6 +79,9 @@ void il_factor_dump(il_factor * self, int depth) {
 		case ilfactor_explicit_binary_op:
 			il_factor_explicit_binary_op_dump(self->u.exp_binary_op, depth);
 			break;
+		case ilfactor_lambda:
+			il_factor_lambda_dump(self->u.lambda_, depth);
+			break;
 		default:
 			break;
 	}
@@ -154,6 +157,9 @@ void il_factor_generate(il_factor * self, enviroment* env) {
 			break;
 		case ilfactor_explicit_binary_op:
 			il_factor_explicit_binary_op_generate(self->u.exp_binary_op, env);
+			break;
+		case ilfactor_lambda:
+			il_factor_lambda_generate(self->u.lambda_, env);
 			break;
 		default:
 			break;
@@ -234,6 +240,9 @@ void il_factor_load(il_factor * self, enviroment * env) {
 		case ilfactor_explicit_binary_op:
 			il_factor_explicit_binary_op_load(self->u.exp_binary_op, env);
 			break;
+		case ilfactor_lambda:
+			il_factor_lambda_load(self->u.lambda_, env);
+			break;
 		default:
 			break;
 	}
@@ -313,6 +322,9 @@ generic_type* il_factor_eval(il_factor * self, enviroment * env) {
 		case ilfactor_explicit_binary_op:
 			ret = il_factor_explicit_binary_op_eval(self->u.exp_binary_op, env);
 			break;
+		case ilfactor_lambda:
+			ret = il_factor_lambda_eval(self->u.lambda_, env);
+			break;
 		default:
 			break;
 	}
@@ -370,6 +382,8 @@ char* il_factor_tostr(il_factor* self, enviroment* env) {
 			return NULL;
 		case ilfactor_explicit_binary_op:
 			return NULL;
+		case ilfactor_lambda:
+			return il_factor_lambda_tostr(self->u.lambda_, env);
 		default:
 			break;
 	}
@@ -480,6 +494,9 @@ void il_factor_delete(il_factor * self) {
 			break;
 		case ilfactor_explicit_binary_op:
 			il_factor_explicit_binary_op_delete(self->u.exp_binary_op);
+			break;
+		case ilfactor_lambda:
+			il_factor_lambda_delete(self->u.lambda_);
 			break;
 		default:
 			break;

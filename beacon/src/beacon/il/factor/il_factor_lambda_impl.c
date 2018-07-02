@@ -21,6 +21,23 @@ il_factor_lambda* il_factor_lambda_new() {
 	return ret;
 }
 
+void il_factor_lambda_dump(il_factor_lambda* self, int depth) {
+}
+
+void il_factor_lambda_generate(il_factor_lambda* self, enviroment* env) {
+}
+
+void il_factor_lambda_load(il_factor_lambda* self, enviroment* env) {
+}
+
+generic_type* il_factor_lambda_eval(il_factor_lambda* self, enviroment* env) {
+	return NULL;
+}
+
+char* il_factor_lambda_tostr(il_factor_lambda* self, enviroment* env) {
+	return NULL;
+}
+
 void il_factor_lambda_delete(il_factor_lambda* self) {
 	vector_delete(self->parameter_vec, il_factor_lambda_param_delete);
 	vector_delete(self->statement_vec, il_factor_lambda_stmt_delete);
