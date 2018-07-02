@@ -128,3 +128,11 @@ ast* ast_new_explicit_uoperator(ast* afact, operator_type type) {
 	ast_push(ret, afact);
 	return ret;
 }
+
+ast* ast_new_lambda(ast* aparameter_list, ast* areturn, ast* abody) {
+	ast* ret = ast_new(ast_lambda);
+	ast_push(ret, aparameter_list);
+	ast_push(ret, areturn);
+	ast_push(ret, abody);
+	return ret;
+}

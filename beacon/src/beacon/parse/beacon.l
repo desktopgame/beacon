@@ -145,6 +145,8 @@ static void update_loc() {
 <INITIAL>":"				{ return (COLON); }
 <INITIAL>"::"				{ return (COLO_COLO); }
 <INITIAL>";"				{ return (SEMI); }
+<INITIAL>"`"				{ return (QUOTE); }
+
 
 
 <INITIAL>"+"				{ return (ADD); }

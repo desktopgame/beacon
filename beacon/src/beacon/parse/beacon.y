@@ -605,6 +605,10 @@ argument_list
 	{
 		$$ = ast_new_argument($1);
 	}
+	| QUOTE LRB parameter_list RRB ARROW typename_T scope
+	{
+		$$ = ast_new_lambda($3, $6, $7);
+	}
 	| argument_list COMMA expression
 	{
 		$$ = ast_new_argument_list(ast_new_argument($3), $1);

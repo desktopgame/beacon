@@ -77,6 +77,7 @@ typedef enum ast_tag {
 	ast_this,
 	ast_super,
 	ast_new_instance,
+	ast_lambda,
 
 	ast_field_access,
 	ast_static_field_access,
