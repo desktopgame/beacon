@@ -114,6 +114,7 @@ void il_factor_call_op_delete(il_factor_call_op* self) {
 	} else if(self->type == ilcall_type_invoke_bound) {
 		il_factor_invoke_bound_delete(self->u.invoke_bound_);
 	}
+	vector_delete(self->argument_list, il_factor_call_op_argument_delete);
 	MEM_FREE(self);
 }
 
@@ -199,6 +200,7 @@ static void il_factor_member_op_check(il_factor_call_op* self, enviroment* env) 
 				iv->type_args = ilvar->type_args;
 				ilmem->fact = NULL;
 				ilvar->type_args = NULL;
+				self->argument_list = NULL;
 				self->type = ilcall_type_invoke;
 				self->u.invoke_ = iv;
 			}
