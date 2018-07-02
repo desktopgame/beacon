@@ -66,6 +66,8 @@ void il_type_delete(il_type * self) {
 		il_class_delete(self->u.class_);
 	} else if (self->tag == iltype_interface) {
 		il_interface_delete(self->u.interface_);
+	} else if(self->tag == iltype_enum) {
+		il_enum_delete(self->u.enum_);
 	}
 	MEM_FREE(self);
 }
