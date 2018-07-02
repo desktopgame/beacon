@@ -96,7 +96,7 @@ static void test_semantics() {
 	char* errFN = NULL;
 	bool runRL = false;
 	bool errRL = false;
-//	test_semanticsImpl(rundir, false, &runFN, &runRL);
+	test_semanticsImpl(rundir, false, &runFN, &runRL);
 	test_semanticsImpl(errdir, true, &errFN, &errRL);
 	if(runRL) {
 		fprintf(stdout, "[RUN]FAIL. %s", runFN);

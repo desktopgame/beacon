@@ -1,12 +1,2 @@
-var strbuff = new StringBuilder();
-strbuff.append("trans/trans");
-Console.writeLine(strbuff.toString());
-Console.writeLine("---");
-
-strbuff.append("\n");
-strbuff.append("bucket/bucket");
-Console.writeLine(strbuff.toString());
-Console.writeLine("---");
-
-strbuff.remove(0, 4);
-Console.writeLine(strbuff.toString());
+printLine(1.+(1));
+printLine(1 + 1);
