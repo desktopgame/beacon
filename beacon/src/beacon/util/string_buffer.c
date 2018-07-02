@@ -17,7 +17,7 @@ string_buffer* string_buffer_malloc(const char* filename, int lineno) {
 	return ret;
 }
 
-void string_buffer_prepend(string_buffer* self, char_t c) {
+void string_buffer_prepend(string_buffer* self, char c) {
 	if(self->length == 0) {
 		string_buffer_append(self, c);
 		return;
@@ -38,7 +38,7 @@ void string_buffer_prepend(string_buffer* self, char_t c) {
 	self->length++;
 }
 
-void string_buffer_append(string_buffer * self, char_t c) {
+void string_buffer_append(string_buffer * self, char c) {
 	if (self->length >= self->capacity) {
 		string_buffer_reserve(self);
 	}
@@ -91,7 +91,7 @@ char* string_buffer_release(string_buffer* self) {
 
 void string_buffer_reserve(string_buffer* self) {
 	int newSize = self->capacity + (self->capacity / 2);
-	char_t* temp = (char*)MEM_REALLOC(self->text, newSize);
+	char* temp = (char*)MEM_REALLOC(self->text, newSize);
 	assert(temp != NULL);
 	//新しく確保された部分を 0埋め
 	self->text = temp;
@@ -102,7 +102,7 @@ void string_buffer_shrink(string_buffer * self) {
 	if (self->length == 0) {
 		return;
 	}
-	char_t* temp = (char*)MEM_REALLOC(self->text, self->length + 1);
+	char* temp = (char*)MEM_REALLOC(self->text, self->length + 1);
 	assert(temp != NULL);
 	temp[self->length] = '\0';
 	self->text = temp;

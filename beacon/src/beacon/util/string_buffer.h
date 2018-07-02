@@ -4,18 +4,13 @@
 #include <stdarg.h>
 
 /**
- * 格納される文字の型.
- */
-typedef char char_t;
-
-/**
  * 可変長の文字列を格納する構造体.
  * 文字を格納する場合はこちらを使用します。
  */
 typedef struct string_buffer {
 	int length;
 	int capacity;
-	char_t* text;
+	char* text;
 } string_buffer;
 
 /**
@@ -37,14 +32,14 @@ string_buffer* string_buffer_malloc(const char* filename, int lineno);
  * @param self
  * @param c
  */
-void string_buffer_prepend(string_buffer* self, char_t c);
+void string_buffer_prepend(string_buffer* self, char c);
 
 /**
  * バッファーの最後に追記します.
  * @param self
  * @param c
  */
-void string_buffer_append(string_buffer* self, char_t c);
+void string_buffer_append(string_buffer* self, char c);
 
 /**
  * フォーマットして追記します.
