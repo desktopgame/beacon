@@ -119,4 +119,11 @@ struct generic_type* interface_contains(struct generic_type* source, interface_*
  * @return
  */
 bool interface_is_functional(interface_* self);
+
+/**
+ * 関数型インターフェイスであるなら一つだけ定義されたメソッドを返します.
+ * @param self
+ * @return
+ */
+struct method* interface_get_function(interface_* self);
 #endif // !SIGNAL_ENV_TYPE_IINTERFACE_H

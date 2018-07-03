@@ -139,8 +139,15 @@ generic_type* interface_contains(generic_type* source, interface_* find) {
 }
 
 bool interface_is_functional(interface_* self) {
+	return interface_get_function(self) != NULL;
+}
+
+method* interface_get_function(interface_* self) {
 	vector* v = interface_method_flatten(self);
-	bool ret = (v->length == 1);
+	method* ret = NULL;
+	if(v->length == 1) {
+		ret = vector_at(v, 0);
+	}
 	vector_delete(v, vector_deleter_null);
 	return ret;
 }
