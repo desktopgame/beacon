@@ -138,6 +138,13 @@ generic_type* interface_contains(generic_type* source, interface_* find) {
 	return NULL;
 }
 
+bool interface_is_functional(interface_* self) {
+	vector* v = interface_method_flatten(self);
+	bool ret = (v->length == 1);
+	vector_delete(v, vector_deleter_null);
+	return ret;
+}
+
 //private
 static void interface_delete_method(vector_item item) {
 	method* e = (method*)item;

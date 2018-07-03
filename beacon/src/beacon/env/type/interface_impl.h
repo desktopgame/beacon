@@ -112,4 +112,11 @@ void interface_delete(interface_* self);
  * @return
  */
 struct generic_type* interface_contains(struct generic_type* source, interface_* find);
+
+/**
+ * 関数型インターフェイスであるならtrue.
+ * @param self
+ * @return
+ */
+bool interface_is_functional(interface_* self);
 #endif // !SIGNAL_ENV_TYPE_IINTERFACE_H
