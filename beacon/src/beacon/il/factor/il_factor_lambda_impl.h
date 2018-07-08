@@ -4,6 +4,7 @@
 #include "../../util/vector.h"
 #include "../../env/generic_cache.h"
 struct il_factor;
+struct type;
 struct enviroment;
 typedef struct il_factor_lambda {
 	vector* statement_vec;

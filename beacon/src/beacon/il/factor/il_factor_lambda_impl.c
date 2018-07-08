@@ -1,7 +1,11 @@
 #include "il_factor_lambda_impl.h"
 #include "../il_factor_impl.h"
 #include "../il_stmt_impl.h"
+#include "../../env/type_impl.h"
+#include "../../env/import_manager.h"
+#include "../../env/class_loader.h"
 #include "../../util/mem.h"
+#include "../../util/text.h"
 
 static void il_factor_lambda_param_delete(vector_item item);
 static void il_factor_lambda_stmt_delete(vector_item item);
@@ -22,6 +26,29 @@ il_factor_lambda* il_factor_lambda_new() {
 }
 
 void il_factor_lambda_dump(il_factor_lambda* self, int depth) {
+	/*
+	`(
+		Int a
+	 ) -> Void {
+		 ...
+}
+	*/
+	text_putindent(depth);
+	text_printfln("`(");
+	for(int i=0; i<self->parameter_vec->length; i++) {
+		il_parameter* e = (il_parameter*)vector_at(self->parameter_vec, i);
+		il_parameter_dump(e, depth + 1);
+	}
+	text_putindent(depth);
+	text_printfln(" ) -> ");
+	generic_cache_print(self->return_gtype);
+	text_printf("{");
+	for(int i=0; i<self->statement_vec->length; i++) {
+		il_stmt* e = (il_stmt*)vector_at(self->statement_vec, i);
+		il_stmt_dump(e, depth + 1);
+	}
+	text_printf("}");
+	text_putline();
 }
 
 void il_factor_lambda_generate(il_factor_lambda* self, enviroment* env) {
