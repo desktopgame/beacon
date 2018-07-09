@@ -4,7 +4,7 @@
 /**
  * ツリーマップに格納可能なキーの型.
  */
-typedef char* tree_key;
+typedef const char* tree_key;
 
 /**
  * ツリーマップに格納可能な値の型.

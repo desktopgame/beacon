@@ -12,6 +12,7 @@
 #include "util/text.h"
 #include "util/io.h"
 #include "util/file_entry.h"
+#include "pcode/cell.h"
 
 /**
  * コマンドライン文字列を解析します.
@@ -62,6 +63,13 @@ int main_cl(int argc, char *argv[]) {
 }
 
 int main(int argc, char *argv[]) {
+	cell_symbol_allocate();
+	cell_debug(cell_eval(cell_lists(cell_int(0), cell_string("hello"), NULL)));
+	cell_debug(cell_eval(cell_call("+", cell_int(5), cell_int(5), NULL)));
+	fflush(stdout);
+	cell_symbol_destroy();
+	return 0;
+	/*
 	//先んじて設定を行っておく
 	mem_set_trace(true);
 	//mem_break(33221);
@@ -72,4 +80,5 @@ int main(int argc, char *argv[]) {
 	mem_dump();
 	mem_destroy();
 	return ret;
+	*/
 }
