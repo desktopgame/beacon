@@ -22,7 +22,7 @@ symbol* symbol_function_lisp(cell* code);
 
 symbol* symbol_variable(cell* var);
 
-cell* symbol_function_call(symbol* self, cell* args);
+cell* symbol_function_call(symbol* self, cell* args, tree_map* ctx);
 
 void symbol_delete(symbol* self);
 #endif

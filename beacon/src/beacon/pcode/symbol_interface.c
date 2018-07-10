@@ -22,15 +22,15 @@ symbol* symbol_function_lisp(cell* code) {
 
 symbol* symbol_variable(cell* var) {
 	symbol* ret = symbol_new();
-	ret->tag = symbol_variable;
+	ret->tag = symbol_variable_T;
 	ret->u.var = var;
 	return ret;
 }
 
-cell* symbol_function_call(symbol* self, cell* args) {
+cell* symbol_function_call(symbol* self, cell* args, tree_map* ctx) {
 	assert(self->tag == symbol_function_T);
 	symbol_function* f = self->u.func_;
-	return symbol_function_apply(f, args);
+	return symbol_function_apply(f, args, ctx);
 }
 
 void symbol_delete(symbol* self) {

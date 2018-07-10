@@ -64,8 +64,38 @@ int main_cl(int argc, char *argv[]) {
 
 int main(int argc, char *argv[]) {
 	cell_symbol_allocate();
-	cell_debug(cell_eval(cell_lists(cell_int(0), cell_string("hello"), NULL)));
-	cell_debug(cell_eval(cell_call("+", cell_int(5), cell_int(5), NULL)));
+	//int sum(int...) [
+	//	return car(args) + cdr(args)
+	//]
+	//
+	cell_eval(cell_call("defun",
+		cell_identifier("sum"),
+		cell_lists(cell_identifier("args"), NULL),
+		cell_call("cond",
+			cell_call("nilp", cell_identifier("args"), NULL),
+			cell_int(0),
+			cell_call("+",
+				cell_call("car", cell_identifier("args"), NULL),
+				cell_call("sum",
+					cell_call("cdr", cell_identifier("args"), NULL),
+					NULL
+				),
+				NULL
+			),
+			NULL
+		),
+		NULL
+	));
+	system("cls");
+	cell_debug(cell_eval(cell_call("sum",
+		cell_lists(
+			cell_int(8),
+			cell_int(4),
+			cell_int(3),
+			NULL
+		),
+		NULL
+	)));
 	fflush(stdout);
 	cell_symbol_destroy();
 	return 0;

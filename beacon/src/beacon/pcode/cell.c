@@ -12,27 +12,30 @@ static int cell_fprintfImpl(FILE* fp, cell* a, int depth);
 static void cell_indent(FILE* fp, int depth);
 //static cell* cell_push(cell** out, cell* d, cell* a);
 static void cell_symbol_delete(vector_item item);
+static void cell_assert(bool condition, const char* fmt, ...);
 
-static cell* blt_atomp(cell* args);
-static cell* blt_eq(cell* args);
-static cell* blt_car(cell* args);
-static cell* blt_cdr(cell* args);
-static cell* blt_cons(cell* args);
-static cell* blt_cond(cell* args);
-static cell* blt_or(cell* args);
-static cell* blt_and(cell* args);
-static cell* blt_eval(cell* args);
-static cell* blt_quote(cell* args);
+static cell* blt_atomp(cell* args, tree_map* ctx);
+static cell* blt_eq(cell* args, tree_map* ctx);
+static cell* blt_car(cell* args, tree_map* ctx);
+static cell* blt_cdr(cell* args, tree_map* ctx);
+static cell* blt_cons(cell* args, tree_map* ctx);
+static cell* blt_cond(cell* args, tree_map* ctx);
+static cell* blt_or(cell* args, tree_map* ctx);
+static cell* blt_and(cell* args, tree_map* ctx);
+static cell* blt_eval(cell* args, tree_map* ctx);
+static cell* blt_quote(cell* args, tree_map* ctx);
 
-static cell* blt_add(cell* args);
-static cell* blt_sub(cell* args);
-static cell* blt_mul(cell* args);
-static cell* blt_div(cell* args);
-static cell* blt_mod(cell* args);
-static cell* blt_gt(cell* args);
-static cell* blt_ge(cell* args);
-static cell* blt_lt(cell* args);
-static cell* blt_le(cell* args);
+static cell* blt_add(cell* args, tree_map* ctx);
+static cell* blt_sub(cell* args, tree_map* ctx);
+static cell* blt_mul(cell* args, tree_map* ctx);
+static cell* blt_div(cell* args, tree_map* ctx);
+static cell* blt_mod(cell* args, tree_map* ctx);
+static cell* blt_gt(cell* args, tree_map* ctx);
+static cell* blt_ge(cell* args, tree_map* ctx);
+static cell* blt_lt(cell* args, tree_map* ctx);
+static cell* blt_le(cell* args, tree_map* ctx);
+static cell* blt_defun(cell* args, tree_map* ctx);
+static cell* blt_nilp(cell* args, tree_map* ctx);
 
 
 static tree_map* gSymbolMap = NULL;
@@ -65,6 +68,10 @@ cell* cell_string(const char* str) {
 }
 
 cell* cell_function(const char* str) {
+	return cell_identifier(str);
+}
+
+cell* cell_identifier(const char* str) {
 	assert(str != NULL);
 	cell* ret = cell_new(cell_symbol_T);
 	ret->u.string_ = str;
@@ -157,6 +164,9 @@ cell* cell_append(cell* self, cell* a) {
 }
 
 cell* cell_dup(cell* src) {
+	if(src == NULL) {
+		return NULL;
+	}
 	if(cell_atomp(src)) {
 		cell* ret = cell_new(src->tag);
 		switch(src->tag) {
@@ -188,26 +198,38 @@ cell* cell_dup(cell* src) {
 }
 
 cell* cell_eval(cell* code) {
+	return cell_scoped_eval(code, NULL);
+}
+
+cell* cell_scoped_eval(cell* code, tree_map* ctx) {
+//	cell_fprintf(stdout, code);
+//	printf("\n");
+	//末端ならNULL
 	if(code == NULL) {
 		return cell_nil();
 	}
+	//アトムはそのまま
 	if(cell_atomp(code)) {
 		return code;
 	}
+	//シンボルなら名前表を検索する
 	if(code->u.first->tag == cell_symbol_T) {
 		cell* first = code->u.first;
 		symbol* s = cell_symbol_key(first->u.string_);
-		if(s->tag == symbol_function_T) {
-			return symbol_function_call(s, code->rest);
-		} else if(s->tag == symbol_variable_T) {
-			return cell_eval(s->u.var);
+		text_printf("ref: %s\n", first->u.string_);
+		//シンボルが見つからないなら環境から検索する
+		if(s == NULL && ctx != NULL) {
+			s = (symbol*)tree_map_get(ctx, first->u.string_);
 		}
-	} else {
-		cell* a = cell_eval(code->u.first);
-		cell* b = cell_eval(code->rest);
-		return cell_blank(b) ? a : b;
+		//シンボルには関数か値
+		if(s->tag == symbol_function_T) {
+			return symbol_function_call(s, code->rest, ctx);
+		} else if(s->tag == symbol_variable_T) {
+			return cell_scoped_eval(s->u.var, ctx);
+		}
+		assert(false);
 	}
-	return cell_nil();
+	return code;
 }
 
 cell* cell_at(cell* code, int index) {
@@ -216,6 +238,10 @@ cell* cell_at(cell* code, int index) {
 		a = a->rest;
 	}
 	return a->u.first;
+}
+
+bool cell_numberp(cell* self) {
+	return self->tag == cell_int_T || self->tag == cell_double_T;
 }
 
 bool cell_consp(cell* self) {
@@ -255,6 +281,32 @@ bool cell_2bool(cell* a) {
 	return a->u.bool_;
 }
 
+const char* cell_2str(cell* a) {
+	assert(a->tag == cell_string_T || a->tag == cell_symbol_T);
+	return a->u.string_;
+}
+
+tree_map* cell_2map(cell* params, cell* args, tree_map* ctx) {
+	tree_map* ret = tree_map_new();
+	while(true) {
+		cell* arg = cell_scoped_eval(args->u.first, ctx);
+		symbol* s = symbol_variable(arg);
+		tree_map_put(ret, cell_2str(params->u.first), s);
+		text_printf("arg: %s  ", cell_2str(params->u.first));
+		text_printf("val: ");
+		cell_fprintf(stdout, arg);
+		text_putline();
+		params = params->rest;
+		args = args->rest;
+		//どちらかだけが null
+		assert(!((params == NULL || args == NULL) && params != args));
+		if(params == NULL && args == NULL) {
+			break;
+		}
+	}
+	return ret;
+}
+
 int cell_fprintf(FILE* fp, cell* a) {
 	int ret = cell_fprintfImpl(fp, a, 0);
 	return ret;
@@ -291,6 +343,8 @@ void cell_symbol_allocate() {
 		cell_symbol_intern("and", symbol_function_c(blt_and));
 		cell_symbol_intern("eval", symbol_function_c(blt_eval));
 		cell_symbol_intern("quote", symbol_function_c(blt_quote));
+		cell_symbol_intern("defun", symbol_function_c(blt_defun));
+		cell_symbol_intern("nilp", symbol_function_c(blt_nilp));
 		cell_symbol_intern("'", symbol_function_c(blt_quote));
 
 		cell_symbol_intern("+", symbol_function_c(blt_add));
@@ -375,54 +429,65 @@ static void cell_symbol_delete(vector_item item) {
 	symbol* e = (symbol*)item;
 	symbol_delete(e);
 }
+
+static void cell_assert(bool condition, const char* fmt, ...) {
+	va_list ap;
+	va_start(ap, fmt);
+	vfprintf(stderr, fmt, ap);
+	fprintf(stderr, "\n");
+	assert(condition);
+	va_end(ap);
+}
 //blt
-static cell* blt_atomp(cell* args) {
-	return cell_bool(cell_atomp(args));
+static cell* blt_atomp(cell* args, tree_map* ctx) {
+	return cell_bool(cell_atomp(cell_at(args, 0)));
 }
 
-static cell* blt_eq(cell* args) {
+static cell* blt_eq(cell* args, tree_map* ctx) {
 	return cell_bool(cell_eq(cell_at(args, 0), cell_at(args, 1)));
 }
 
-static cell* blt_car(cell* args) {
-	return args->u.first;
+static cell* blt_car(cell* args, tree_map* ctx) {
+	return cell_at(args, 0)->u.first;
 }
 
-static cell* blt_cdr(cell* args) {
-	return args->rest;
+static cell* blt_cdr(cell* args, tree_map* ctx) {
+	return cell_at(args, 0)->rest;
 }
 
-static cell* blt_cons(cell* args) {
-	return cell_cons(args->u.first, args->rest);
+static cell* blt_cons(cell* args, tree_map* ctx) {
+	return cell_cons(cell_at(args, 0), cell_at(args, 1));
 }
 
-static cell* blt_cond(cell* args) {
+static cell* blt_cond(cell* args, tree_map* ctx) {
 	cell* c0 = cell_at(args, 0);
 	cell* c1 = cell_at(args, 1);
 	cell* c2 = cell_at(args, 2);
 	bool wh = cell_2bool(cell_eval(c0));
-	return wh ? c1 : c2;
+	return cell_scoped_eval(wh ? c1 : c2, ctx);
 }
 
-static cell* blt_or(cell* args) {
+static cell* blt_or(cell* args, tree_map* ctx) {
 	return cell_bool(cell_2bool(cell_at(args, 0)) || cell_2bool(cell_at(args, 1)));
 }
 
-static cell* blt_and(cell* args) {
+static cell* blt_and(cell* args, tree_map* ctx) {
 	return cell_bool(cell_2bool(cell_at(args, 0)) && cell_2bool(cell_at(args, 1)));
 }
 
-static cell* blt_eval(cell* args) {
-	return cell_eval(cell_at(args, 0));
+static cell* blt_eval(cell* args, tree_map* ctx) {
+	return cell_scoped_eval(cell_at(args, 0), ctx);
 }
 
-static cell* blt_quote(cell* args) {
-	return cell_at(args, 0);
+static cell* blt_quote(cell* args, tree_map* ctx) {
+	cell* ret = cell_at(args, 0);
+	return ret;
 }
 
-static cell* blt_add(cell* args) {
-	cell* a = cell_at(args, 0);
-	cell* b = cell_at(args, 1);
+static cell* blt_add(cell* args, tree_map* ctx) {
+	cell* a = eval_at(args, 0, ctx);
+	cell* b = eval_at(args, 1, ctx);
+	assert(cell_numberp(a) && cell_numberp(b));
 	if(a->tag != b->tag) {
 		return cell_nil();
 	}
@@ -434,9 +499,10 @@ static cell* blt_add(cell* args) {
 	return cell_nil();
 }
 
-static cell* blt_sub(cell* args) {
+static cell* blt_sub(cell* args, tree_map* ctx) {
 	cell* a = cell_at(args, 0);
 	cell* b = cell_at(args, 1);
+	assert(cell_numberp(a) && cell_numberp(b));
 	if(a->tag != b->tag) {
 		return cell_nil();
 	}
@@ -448,9 +514,10 @@ static cell* blt_sub(cell* args) {
 	return cell_nil();
 }
 
-static cell* blt_mul(cell* args) {
+static cell* blt_mul(cell* args, tree_map* ctx) {
 	cell* a = cell_at(args, 0);
 	cell* b = cell_at(args, 1);
+	assert(cell_numberp(a) && cell_numberp(b));
 	if(a->tag != b->tag) {
 		return cell_nil();
 	}
@@ -461,9 +528,11 @@ static cell* blt_mul(cell* args) {
 	}
 	return cell_nil();
 }
-static cell* blt_div(cell* args) {
+
+static cell* blt_div(cell* args, tree_map* ctx) {
 	cell* a = cell_at(args, 0);
 	cell* b = cell_at(args, 1);
+	assert(cell_numberp(a) && cell_numberp(b));
 	if(a->tag != b->tag) {
 		return cell_nil();
 	}
@@ -475,9 +544,10 @@ static cell* blt_div(cell* args) {
 	return cell_nil();
 }
 
-static cell* blt_mod(cell* args) {
+static cell* blt_mod(cell* args, tree_map* ctx) {
 	cell* a = cell_at(args, 0);
 	cell* b = cell_at(args, 1);
+	assert(cell_numberp(a) && cell_numberp(b));
 	if(a->tag != b->tag) {
 		return cell_nil();
 	}
@@ -489,9 +559,10 @@ static cell* blt_mod(cell* args) {
 	return cell_nil();
 }
 
-static cell* blt_gt(cell* args) {
+static cell* blt_gt(cell* args, tree_map* ctx) {
 	cell* a = cell_at(args, 0);
 	cell* b = cell_at(args, 1);
+	assert(cell_numberp(a) && cell_numberp(b));
 	if(a->tag != b->tag) {
 		return cell_nil();
 	}
@@ -503,9 +574,10 @@ static cell* blt_gt(cell* args) {
 	return cell_nil();
 }
 
-static cell* blt_ge(cell* args) {
+static cell* blt_ge(cell* args, tree_map* ctx) {
 	cell* a = cell_at(args, 0);
 	cell* b = cell_at(args, 1);
+	assert(cell_numberp(a) && cell_numberp(b));
 	if(a->tag != b->tag) {
 		return cell_nil();
 	}
@@ -517,9 +589,10 @@ static cell* blt_ge(cell* args) {
 	return cell_nil();
 }
 
-static cell* blt_lt(cell* args) {
+static cell* blt_lt(cell* args, tree_map* ctx) {
 	cell* a = cell_at(args, 0);
 	cell* b = cell_at(args, 1);
+	assert(cell_numberp(a) && cell_numberp(b));
 	if(a->tag != b->tag) {
 		return cell_nil();
 	}
@@ -531,9 +604,10 @@ static cell* blt_lt(cell* args) {
 	return cell_nil();
 }
 
-static cell* blt_le(cell* args) {
+static cell* blt_le(cell* args, tree_map* ctx) {
 	cell* a = cell_at(args, 0);
 	cell* b = cell_at(args, 1);
+	assert(cell_numberp(a) && cell_numberp(b));
 	if(a->tag != b->tag) {
 		return cell_nil();
 	}
@@ -543,4 +617,20 @@ static cell* blt_le(cell* args) {
 		return cell_bool(a->u.double_ <= b->u.double_);
 	}
 	return cell_nil();
+}
+
+static cell* blt_defun(cell* args, tree_map* ctx) {
+	cell* clone = cell_dup(args);
+	cell* c0 = cell_at(clone, 0);
+	cell* c1 = cell_at(clone, 1);
+	cell* c2 = cell_at(clone, 2);
+	const char* name = cell_2str(c0);
+	cell_symbol_intern(name, symbol_function_lisp(clone));
+	return clone;
+}
+
+static cell* blt_nilp(cell* args, tree_map* ctx) {
+	cell* a = cell_at(args, 0);
+	bool b = a == NULL || a->tag == cell_nil_T;
+	return cell_bool(b);
 }

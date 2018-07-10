@@ -19,7 +19,7 @@ symbol_function* symbol_function_create_c(cell_apply a);
 
 symbol_function* symbol_function_create_lisp(cell* code);
 
-cell* symbol_function_apply(symbol_function* func, cell* args);
+cell* symbol_function_apply(symbol_function* func, cell* args, tree_map* ctx);
 
 void symbol_function_delete(symbol_function* self);
 #endif

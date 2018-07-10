@@ -4,6 +4,7 @@
 #include <stdarg.h>
 #include <stdio.h>
 #include "../util/vector.h"
+#include "../util/tree_map.h"
 struct symbol;
 
 /**
@@ -42,10 +43,11 @@ typedef struct cell {
 /**
  * 関数の評価器です.
  */
-typedef cell*(*cell_apply)(cell* args);
+typedef cell*(*cell_apply)(cell* args, tree_map* ctx);
 
 #define cell_new(tag) (cell_malloc(tag, __FILE__, __LINE__))
 #define cell_lists(...) (cell_list(-1, __VA_ARGS__))
+#define eval_at(args, index, ctx) (cell_scoped_eval(cell_at(args, index), ctx))
 
 cell* cell_malloc(cell_tag tag, const char* filename, int lineno);
 
@@ -56,6 +58,8 @@ cell* cell_double(double d);
 cell* cell_string(const char* str);
 
 cell* cell_function(const char* str);
+
+cell* cell_identifier(const char* str);
 
 cell* cell_bool(bool a);
 
@@ -77,7 +81,11 @@ cell* cell_dup(cell* src);
 
 cell* cell_eval(cell* code);
 
+cell* cell_scoped_eval(cell* code, tree_map* ctx);
+
 cell* cell_at(cell* code, int index);
+
+bool cell_numberp(cell* self);
 
 bool cell_consp(cell* self);
 
@@ -88,6 +96,10 @@ bool cell_eq(cell* a, cell* b);
 bool cell_blank(cell* a);
 
 bool cell_2bool(cell* a);
+
+const char* cell_2str(cell* a);
+
+tree_map* cell_2map(cell* params, cell* args, tree_map* ctx);
 
 void cell_delete(cell* self);
 
