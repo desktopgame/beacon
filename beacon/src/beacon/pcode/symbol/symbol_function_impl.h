@@ -1,25 +1,32 @@
-#ifndef BEACON_PCODE_FUNCTION_H
-#define BEACON_PCODE_FUNCTION_H
+#ifndef BEACON_PCODE_SYMBOL_SYMBOL_FUNCTION_IMPL_H
+#define BEACON_PCODE_SYMBOL_SYMBOL_FUNCTION_IMPL_H
 #include "../cell.h"
 
 typedef enum symbol_function_tag {
-	symbol_function_user_T,
-	symbol_function_blt_T,
+	symbol_function_builtin,
+	symbol_function_user
 } symbol_function_tag;
+
+typedef struct user_function {
+	vector* parameter_vec;
+	cell* code;
+} user_function;
 
 typedef struct symbol_function {
 	symbol_function_tag tag;
 	union {
-		cell* code;
-		cell_apply a_;
+		user_function* userF;
+		cell_apply a;
 	} u;
 } symbol_function;
 
-symbol_function* symbol_function_create_c(cell_apply a);
+symbol_function* symbol_function_new(symbol_function_tag tag);
 
-symbol_function* symbol_function_create_lisp(cell* code);
+symbol_function* symbol_function_new_builtin(cell_apply a);
 
-cell* symbol_function_apply(symbol_function* func, cell* args, tree_map* ctx);
+symbol_function* symbol_function_new_user(vector* parameter_vec, cell* code);
+
+cell* symbol_function_apply(symbol_function* self, vector* args, tree_map* ctx);
 
 void symbol_function_delete(symbol_function* self);
 #endif

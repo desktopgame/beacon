@@ -63,43 +63,7 @@ int main_cl(int argc, char *argv[]) {
 }
 
 int main(int argc, char *argv[]) {
-	cell_symbol_allocate();
-	//int sum(int...) [
-	//	return car(args) + cdr(args)
-	//]
-	//
-	cell_eval(cell_call("defun",
-		cell_identifier("sum"),
-		cell_lists(cell_identifier("args"), NULL),
-		cell_call("cond",
-			cell_call("nilp", cell_identifier("args"), NULL),
-			cell_int(0),
-			cell_call("+",
-				cell_call("car", cell_identifier("args"), NULL),
-				cell_call("sum",
-					cell_call("cdr", cell_identifier("args"), NULL),
-					NULL
-				),
-				NULL
-			),
-			NULL
-		),
-		NULL
-	));
-	system("cls");
-	cell_debug(cell_eval(cell_call("sum",
-		cell_lists(
-			cell_int(8),
-			cell_int(4),
-			cell_int(3),
-			NULL
-		),
-		NULL
-	)));
-	fflush(stdout);
-	cell_symbol_destroy();
-	return 0;
-	/*
+	//*
 	//先んじて設定を行っておく
 	mem_set_trace(true);
 	//mem_break(33221);
@@ -110,5 +74,5 @@ int main(int argc, char *argv[]) {
 	mem_dump();
 	mem_destroy();
 	return ret;
-	*/
+	//*/
 }
