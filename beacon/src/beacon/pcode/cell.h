@@ -29,6 +29,8 @@ typedef struct cell {
 
 typedef cell*(*cell_apply)(vector* args, tree_map* ctx);
 
+#define CELL_VOID (0)
+
 cell* cell_new(cell_tag tag);
 
 cell* cell_int(int i);

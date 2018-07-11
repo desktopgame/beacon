@@ -1,5 +1,6 @@
 #include "symbol_function_impl.h"
 #include "../../util/mem.h"
+#include <assert.h>
 
 static void user_function_delete(user_function* self);
 
@@ -26,7 +27,9 @@ symbol_function* symbol_function_new_user(vector* parameter_vec, cell* code) {
 	return ret;
 }
 
-cell* symbol_function_apply(symbol_function* self, vector* args, tree_map* ctx) {
+cell* symbol_function_apply(symbol_function* self, cell* cArgs, tree_map* ctx) {
+	//引数を計算する
+	vector* args = cArgs->u.args;
 	vector* ARGS = vector_new();
 	for(int i=0; i<args->length; i++) {
 		if(i == 0) {
@@ -35,10 +38,12 @@ cell* symbol_function_apply(symbol_function* self, vector* args, tree_map* ctx) 
 		}
 		vector_push(ARGS, cell_eval(vector_at(args, i), ctx));
 	}
+	//組み込み関数を実行する
 	if(self->tag == symbol_function_builtin) {
 		cell* ret = self->u.a(ARGS, ctx);
 		vector_delete(ARGS, vector_deleter_null);
-		return ret;
+		return ret == CELL_VOID ? cArgs : ret;
+	//ユーザ定義関数を実行する
 	} else if(self->tag == symbol_function_user) {
 		tree_map* newctx = tree_map_new();
 		for(int i=1; i<ARGS->length; i++) {
@@ -51,8 +56,9 @@ cell* symbol_function_apply(symbol_function* self, vector* args, tree_map* ctx) 
 		cell* ret = cell_eval(self->u.userF->code, newctx);
 		tree_map_delete(newctx, tree_map_deleter_null);
 		vector_delete(ARGS, vector_deleter_null);
-		return ret;
+		return ret == CELL_VOID ? cArgs : ret;
 	}
+	assert(false);
 }
 
 void symbol_function_delete(symbol_function* self) {

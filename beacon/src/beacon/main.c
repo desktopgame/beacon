@@ -63,7 +63,18 @@ int main_cl(int argc, char *argv[]) {
 }
 
 int main(int argc, char *argv[]) {
-	//*
+	cell_symbol_allocate();
+	cell_eval(cell_call("println",
+			cell_call("progn",
+				cell_call("println", cell_string("HelloWorld"), NULL),
+				cell_call("println", cell_string("2d2d"), NULL),
+			NULL
+		),
+		NULL),
+		NULL
+	);
+	cell_symbol_destroy();
+	/*
 	//先んじて設定を行っておく
 	mem_set_trace(true);
 	//mem_break(33221);

@@ -26,7 +26,7 @@ symbol_function* symbol_function_new_builtin(cell_apply a);
 
 symbol_function* symbol_function_new_user(vector* parameter_vec, cell* code);
 
-cell* symbol_function_apply(symbol_function* self, vector* args, tree_map* ctx);
+cell* symbol_function_apply(symbol_function* self, cell* cArgs, tree_map* ctx);
 
 void symbol_function_delete(symbol_function* self);
 #endif

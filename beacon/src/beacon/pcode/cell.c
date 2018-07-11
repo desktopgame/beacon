@@ -30,6 +30,7 @@ static cell* blt_ge(vector* args, tree_map* ctx);
 static cell* blt_lt(vector* args, tree_map* ctx);
 static cell* blt_le(vector* args, tree_map* ctx);
 static cell* blt_eval(vector* args, tree_map* ctx);
+static cell* blt_progn(vector* args, tree_map* ctx);
 
 cell* cell_new(cell_tag tag) {
 	cell* ret = (cell*)MEM_MALLOC(sizeof(cell));
@@ -109,7 +110,7 @@ cell* cell_eval(cell* code, tree_map* ctx) {
 			s = (symbol*)tree_map_get(ctx, name);
 		}
 		if(s->tag == symbol_function_T) {
-			return symbol_function_apply(s->u.func, code->u.args, ctx);
+			return symbol_function_apply(s->u.func, code, ctx);
 		} else if(s->tag == symbol_variable_T) {
 			return s->u.code;
 		}
@@ -209,6 +210,7 @@ void cell_symbol_allocate() {
 		cell_define_function_builtin("<", blt_lt);
 		cell_define_function_builtin("<=", blt_le);
 		cell_define_function_builtin("eval", blt_eval);
+		cell_define_function_builtin("progn", blt_progn);
 	}
 }
 
@@ -275,7 +277,7 @@ static cell* blt_print(vector* args, tree_map* ctx) {
 	args_check(args, 1);
 	cell* a = args_at(args, 0);
 	cell_fprintf(stdout, a);
-	return a;
+	return CELL_VOID;
 }
 
 static cell* blt_println(vector* args, tree_map* ctx) {
@@ -283,7 +285,7 @@ static cell* blt_println(vector* args, tree_map* ctx) {
 	cell* a = args_at(args, 0);
 	cell_fprintf(stdout, a);
 	text_putline();
-	return a;
+	return CELL_VOID;
 }
 
 static cell* blt_add(vector* args, tree_map* ctx) {
@@ -352,4 +354,14 @@ static cell* blt_le(vector* args, tree_map* ctx) {
 static cell* blt_eval(vector* args, tree_map* ctx) {
 	args_check(args, 1);
 	return cell_eval(args_at(args, 0), ctx);
+}
+
+static cell* blt_progn(vector* args, tree_map* ctx) {
+	cell* ret = NULL;
+	for(int i=1; i<args->length; i++) {
+		cell* e = (cell*)vector_at(args, i);
+		if(e == NULL) { break; }
+		ret = cell_eval(e, ctx);
+	}
+	return ret;
 }
