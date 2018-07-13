@@ -21,6 +21,7 @@ static void CLIL_generic_cache_impl(ast* fqcn, generic_cache* dest);
 static void CLIL_generic_cache_inner(ast* atype_args, generic_cache* dest);
 static void CLIL_type_parameter_rule(struct class_loader* self, struct ast* source, vector* dest);
 static void ast_fqcn_flatten(ast* afqcn, vector* dest);
+static void CLIL_argument_listImpl(class_loader* self, vector* list, ast* source);
 
 void CLIL_fqcn_cache(ast* afqcn, fqcn_cache* fqcn) {
 	CLIL_fqcn_cache_impl(afqcn, fqcn, 0);
@@ -111,28 +112,15 @@ void CLIL_parameter_list(class_loader* self, vector* list, ast* source) {
 }
 
 void CLIL_argument_list(class_loader* self, vector* list, ast* source) {
-	if (source->tag == ast_argument_list) {
-		for (int i = 0; i < source->child_count; i++) {
-			CLIL_argument_list(self, list, ast_at(source, i));
+	CLIL_argument_listImpl(self, list, source);
+	//ラムダに自分が引数列の中で何番目であるかを教える
+	for(int i=0; i<list->length; i++) {
+		il_argument* e = (il_argument*)vector_at(list, i);
+		il_factor* f = e->factor;
+		if(f->type == ilfactor_lambda) {
+			il_factor_lambda* lambda = f->u.lambda_;
+			lambda->offset = i;
 		}
-	} else if (source->tag == ast_argument) {
-		ast* primary = ast_first(source);
-		il_argument* ilarg = il_argument_new();
-		ilarg->factor = CLIL_factor(self, primary);
-		vector_push(list, ilarg);
-	} else if(source->tag == ast_lambda) {
-		//ラムダは実引数列にしかおけない仕様
-		ast* aparam_list = ast_first(source);
-		ast* areturn = ast_second(source);
-		ast* abody = ast_at(source, 2);
-		il_factor_lambda* lbd = il_factor_lambda_new();
-		CLIL_parameter_list(self, lbd->parameter_vec, aparam_list);
-		CLIL_generic_cache(areturn, lbd->return_gtype);
-		CLIL_body(self,lbd->statement_vec, abody);
-		//ラムダを実引数でラップする
-		il_argument* ilarg = il_argument_new();
-		ilarg->factor = il_factor_wrap_lambda(lbd);
-		vector_push(list, ilarg);
 	}
 }
 //private
@@ -223,5 +211,31 @@ static void ast_fqcn_flatten(ast* afqcn, vector* dest) {
 		for(int i=0; i<afqcn->child_count; i++) {
 			ast_fqcn_flatten(ast_at(afqcn, i), dest);
 		}
+	}
+}
+
+static void CLIL_argument_listImpl(class_loader* self, vector* list, ast* source) {
+	if (source->tag == ast_argument_list) {
+		for (int i = 0; i < source->child_count; i++) {
+			CLIL_argument_listImpl(self, list, ast_at(source, i));
+		}
+	} else if (source->tag == ast_argument) {
+		ast* primary = ast_first(source);
+		il_argument* ilarg = il_argument_new();
+		ilarg->factor = CLIL_factor(self, primary);
+		vector_push(list, ilarg);
+	} else if(source->tag == ast_lambda) {
+		//ラムダは実引数列にしかおけない仕様
+		ast* aparam_list = ast_first(source);
+		ast* areturn = ast_second(source);
+		ast* abody = ast_at(source, 2);
+		il_factor_lambda* lbd = il_factor_lambda_new();
+		CLIL_parameter_list(self, lbd->parameter_vec, aparam_list);
+		CLIL_generic_cache(areturn, lbd->return_gtype);
+		CLIL_body(self,lbd->statement_vec, abody);
+		//ラムダを実引数でラップする
+		il_argument* ilarg = il_argument_new();
+		ilarg->factor = il_factor_wrap_lambda(lbd);
+		vector_push(list, ilarg);
 	}
 }

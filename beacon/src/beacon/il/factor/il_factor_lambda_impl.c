@@ -4,6 +4,7 @@
 #include "../../env/type_impl.h"
 #include "../../env/import_manager.h"
 #include "../../env/class_loader.h"
+#include "../../env/parameter.h"
 #include "../../util/mem.h"
 #include "../../util/text.h"
 
@@ -22,6 +23,7 @@ il_factor_lambda* il_factor_lambda_new() {
 	ret->parameter_vec = vector_new();
 	ret->statement_vec = vector_new();
 	ret->return_gtype = generic_cache_new();
+	ret->offset = 0;
 	return ret;
 }
 
