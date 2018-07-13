@@ -7,6 +7,7 @@
 #include "modifier_type.h"
 #include "constructor_chain_type.h"
 #include "../util/list.h"
+#include "../util/vector.h"
 #include "operator_type.h"
 /**
  * AST(AbstractSourceTree) の種類を表すタグです.
@@ -216,9 +217,10 @@ typedef struct ast {
 		operator_type operator_value;
 	} u;
 	ast_tag tag;
-	uint32_t child_count;
+	//uint32_t child_count;
 	uint32_t lineno;
-	list* children;
+	vector* vchildren;
+	//list* children;
 } ast;
 
 /**

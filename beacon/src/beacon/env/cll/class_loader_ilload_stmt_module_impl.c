@@ -29,7 +29,7 @@ il_stmt* CLIL_stmt(class_loader* self, ast* source) {
 
 void CLIL_body(class_loader* self, vector* list, ast* source) {
 	if (source->tag == ast_stmt_list || source->tag == ast_scope) {
-		for (int i = 0; i < source->child_count; i++) {
+		for (int i = 0; i < source->vchildren->length; i++) {
 			CLIL_body(self, list, ast_at(source, i));
 		}
 	} else {
@@ -211,7 +211,7 @@ static il_stmt_while * CLIL_while(class_loader * self, ast * source) {
 
 static void CLIL_elif_list(class_loader* self, vector* list, ast* source) {
 	if (source->tag == ast_elif_list) {
-		for (int i = 0; i < source->child_count; i++) {
+		for (int i = 0; i < source->vchildren->length; i++) {
 			CLIL_elif_list(self, list, ast_at(source, i));
 		}
 	} else if (source->tag == ast_elif) {
@@ -253,7 +253,7 @@ static void CLIL_catch_list(class_loader* self, vector* dest, ast* source) {
 		vector_push(dest, ilcatch);
 
 	} else if(source->tag == ast_stmt_catch_list) {
-		for(int i=0; i<source->child_count; i++) {
+		for(int i=0; i<source->vchildren->length; i++) {
 			CLIL_catch_list(self, dest, ast_at(source, i));
 		}
 	}

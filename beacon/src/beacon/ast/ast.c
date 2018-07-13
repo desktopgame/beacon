@@ -27,8 +27,7 @@ ast * ast_malloc(ast_tag tag, const char* filename, int lineno) {
 	ast* ret = (ast*)mem_malloc(sizeof(ast), filename, lineno);
 	assert(ret != NULL);
 	ret->tag = tag;
-	ret->child_count = 0;
-	ret->children = NULL;
+	ret->vchildren = NULL;
 	//行番号を取得
 	parser* p = parser_top();
 	if (p != NULL) {
@@ -108,11 +107,10 @@ ast * ast_new_proc(ast * expr) {
 ast * ast_push(ast * self, ast * child) {
 	assert(self != NULL);
 	assert(child != NULL);
-	if (self->children == NULL) {
-		self->children = list_new();
+	if (self->vchildren == NULL) {
+		self->vchildren = vector_new();
 	}
-	list_add(self->children, child);
-	self->child_count++;
+	vector_push(self->vchildren, child);
 	//行番号を補正
 	parser* p = parser_top();
 	if (p != NULL) {
@@ -126,8 +124,7 @@ ast * ast_push(ast * self, ast * child) {
 
 ast* ast_at(ast * self, int index) {
 	assert(self != NULL);
-	assert(index >= 0 && index < self->child_count);
-	return (ast*)list_at(self->children, index);
+	return (ast*)vector_at(self->vchildren, index);
 }
 
 ast * ast_first(ast * self) {
@@ -416,16 +413,18 @@ static void ast_print_tree_impl(ast* self, int depth) {
 	ast_print_indent(depth);
 	ast_print(self);
 	text_putline();
-	for (int i = 0; i < self->child_count; i++) {
+	for (int i = 0; i < self->vchildren->length; i++) {
 		ast_print_tree_impl(ast_at(self, i), depth + 1);
 	}
 }
 
 static void ast_delete_impl(ast* self) {
-	for (int i = 0; i < self->child_count; i++) {
-		ast_delete((ast*)list_at(self->children, i));
+	if(self->vchildren != NULL) {
+		for (int i = 0; i < self->vchildren->length; i++) {
+			ast_delete((ast*)vector_at(self->vchildren, i));
+		}
 	}
-	list_delete(self->children, list_deleter_null);
+	vector_delete(self->vchildren, vector_deleter_null);
 	ast_tag t = self->tag;
 	if (ast_has_str(self)) {
 		char* temp = self->u.string_value;
@@ -436,7 +435,7 @@ static void ast_delete_impl(ast* self) {
 
 static void ast_list_deleter(list_item item) {
 	ast* self = (ast*)item;
-	for (int i = 0; i < self->child_count; i++) {
+	for (int i = 0; i < self->vchildren->length; i++) {
 		ast_delete(ast_at(self, i));
 	}
 	if (ast_has_str(self)) {
@@ -472,7 +471,7 @@ static bool ast_has_str(ast* self) {
 
 static modifier_type ast_cast_to_modifierImpl(ast * self, bool* error) {
 	int ret = -1;
-	for(int i=0; i<self->child_count; i++) {
+	for(int i=0; i<self->vchildren->length; i++) {
 		if((*error)) {
 			break;
 		}

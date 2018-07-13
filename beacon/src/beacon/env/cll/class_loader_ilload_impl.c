@@ -110,7 +110,7 @@ static void class_loader_ilload_identifier_list(class_loader* self, vector* list
 void class_loader_ilload_impl(class_loader* self, ast* source_code) {
 	assert(self->il_code == NULL);
 	self->il_code = il_top_level_new();
-	for (int i = 0; i < source_code->child_count; i++) {
+	for (int i = 0; i < source_code->vchildren->length; i++) {
 		ast* child = ast_at(self->source_code, i);
 		//import a
 		if (child->tag == ast_import_decl || child->tag == ast_import_decl_list) {
@@ -147,7 +147,7 @@ static void class_loader_ilload_function(class_loader * self, ast * source) {
 
 static void class_loader_ilload_import_list(class_loader* self, ast* source) {
 	if(source->tag == ast_import_decl_list) {
-		for(int i=0; i<source->child_count; i++) {
+		for(int i=0; i<source->vchildren->length; i++) {
 			class_loader_ilload_import_list(self, ast_at(source, i));
 		}
 	} else {
@@ -179,7 +179,7 @@ static void class_loader_ilload_namespace_path_recursive(class_loader* self, ast
 		   namespace_path->tag == ast_namespace_path_list);
 	if (namespace_path->tag == ast_namespace_path) {
 	} else if (namespace_path->tag == ast_namespace_path_list) {
-		for (int i = 0; i < namespace_path->child_count; i++) {
+		for (int i = 0; i < namespace_path->vchildren->length; i++) {
 			class_loader_ilload_namespace_path_recursive(self, ast_at(namespace_path, i), namespace_body);
 		}
 	}
@@ -225,7 +225,7 @@ static void class_loader_ilload_namespace_body(class_loader* self, il_namespace*
 		class_loader_ilload_enum(self, current, namespace_body);
 		//namespace xxx { any yyy { ...
 	} else if (namespace_body->tag == ast_namespace_member_decl_list) {
-		for (int i = 0; i < namespace_body->child_count; i++) {
+		for (int i = 0; i < namespace_body->vchildren->length; i++) {
 			ast* member = ast_at(namespace_body, i);
 			class_loader_ilload_namespace_body(self, current, parent, member);
 		}
@@ -292,7 +292,7 @@ static void class_loader_ilload_enum(class_loader * self, il_namespace * current
 
 static void class_loader_ilload_identifier_list(class_loader * self, vector * list, ast * source) {
 	if (source->tag == ast_identifier_list) {
-		for (int i = 0; i < source->child_count; i++) {
+		for (int i = 0; i < source->vchildren->length; i++) {
 			class_loader_ilload_identifier_list(self, list, ast_at(source, i));
 		}
 	} else if(source->tag == ast_identifier) {

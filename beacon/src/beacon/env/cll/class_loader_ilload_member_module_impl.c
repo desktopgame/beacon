@@ -12,7 +12,7 @@
 
 void CLIL_member_tree(class_loader* self, il_type* current, ast* tree) {
 	if (tree->tag == ast_access_member_tree) {
-		for (int i = 0; i < tree->child_count; i++) {
+		for (int i = 0; i < tree->vchildren->length; i++) {
 			CLIL_member_tree(self, current, ast_at(tree, i));
 		}
 	} else if (tree->tag == ast_access_member_list) {
@@ -25,7 +25,7 @@ void CLIL_member_tree(class_loader* self, il_type* current, ast* tree) {
 
 void CLIL_member_list(class_loader* self, il_type* current, ast* member, access_level level) {
 	if(member->tag == ast_member_decl_list) {
-		for(int i=0; i<member->child_count; i++) {
+		for(int i=0; i<member->vchildren->length; i++) {
 			CLIL_member_list(self, current, ast_at(member, i), level);
 		}
 	} else if(member->tag == ast_member_decl) {

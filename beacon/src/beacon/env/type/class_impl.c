@@ -283,14 +283,14 @@ field * class_get_sfield(class_ * self, int index) {
 }
 
 constructor * class_rfind_constructor(class_ * self, vector * args, vector* typeargs, frame* fr, int* outIndex) {
-	return meta_rfind_ctor(self->constructor_list, args, typeargs, fr, outIndex);
+	return meta_scoped_rfind_ctor(self, self->constructor_list, args, typeargs, fr, outIndex);
 }
 
 constructor * class_ilfind_constructor(class_ * self, vector * args, enviroment * env, int* outIndex) {
 	//	vector* v = meta_find_constructors(self, args, env, ilctx);
 	//	(*outIndex) = -1;
 	//	return class_find_constructor_impl(v, args, env, ilctx, outIndex);
-	return meta_ilfind_ctor(self->constructor_list, args, env, outIndex);
+	return meta_scoped_ilfind_ctor(self, self->constructor_list, args, env, outIndex);
 }
 
 constructor * class_ilfind_empty_constructor(class_ * self, enviroment * env, int * outIndex) {
@@ -305,15 +305,15 @@ method * class_ilfind_method(class_ * self, const char * name, vector * args, en
 	class_create_vtable(self);
 	//assert(self->vt->elements->length > 0);
 	method* ret = NULL;
-	if((ret = meta_ilfind_method(self->vt->elements, name, args, env, outIndex))
+	if((ret = meta_scoped_ilfind_method(self, self->vt->elements, name, args, env, outIndex))
 	   != NULL) {
 		   return ret;
 	}
-	if((ret = meta_ilfind_method(self->method_list, name, args, env, outIndex))
+	if((ret = meta_scoped_ilfind_method(self, self->method_list, name, args, env, outIndex))
 	   != NULL) {
 		   return ret;
 	}
-	if((ret = meta_ilfind_method(self->smethod_list, name, args, env, outIndex))
+	if((ret = meta_scoped_ilfind_method(self, self->smethod_list, name, args, env, outIndex))
 	   != NULL) {
 		   return ret;
 	}
@@ -325,15 +325,15 @@ struct method* class_gfind_method(class_* self, const char* name, vector* gargs,
 	class_create_vtable(self);
 	//assert(self->vt->elements->length > 0);
 	method* ret = NULL;
-	if((ret = meta_gfind_method(self->vt->elements, name, gargs, outIndex))
+	if((ret = meta_scoped_gfind_method(self, self->vt->elements, name, gargs, outIndex))
 	   != NULL) {
 		   return ret;
 	}
-	if((ret = meta_gfind_method(self->method_list, name, gargs, outIndex))
+	if((ret = meta_scoped_gfind_method(self, self->method_list, name, gargs, outIndex))
 	   != NULL) {
 		   return ret;
 	}
-	if((ret = meta_gfind_method(self->smethod_list, name, gargs, outIndex))
+	if((ret = meta_scoped_gfind_method(self, self->smethod_list, name, gargs, outIndex))
 	   != NULL) {
 		   return ret;
 	}

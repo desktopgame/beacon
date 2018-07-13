@@ -1,0 +1,19 @@
+namespace err30 {
+	class AccessTest {
+		public:
+		def new() {
+		}
+
+		def publicPrintLine() {
+			printLine("public");
+		}
+
+		private:
+		def privatePrintLine() {
+			printLine("private");
+		}
+	}
+}
+var a = new err30::AccessTest();
+a.publicPrintLine();
+a.privatePrintLine();
