@@ -63,6 +63,7 @@ int main_cl(int argc, char *argv[]) {
 }
 
 int main(int argc, char *argv[]) {
+	mem_set_trace(true);
 	cell_symbol_allocate();
 	tree_map* m = tree_map_new();
 	cell_define_function_user("add",
@@ -72,6 +73,8 @@ int main(int argc, char *argv[]) {
 	cell_eval(cell_call("println", cell_call("add", cell_int(5), cell_int(2), NULL), NULL), m);
 	tree_map_delete(m, tree_map_deleter_null);
 	cell_symbol_destroy();
+	mem_dump();
+	mem_destroy();
 	/*
 	//先んじて設定を行っておく
 	mem_set_trace(true);

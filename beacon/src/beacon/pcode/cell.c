@@ -219,7 +219,7 @@ void cell_delete(cell* self) {
 	}
 	if(self->tag == cell_string_T) {
 		MEM_FREE(self->u.str);
-	} else if(self->tag == cell_call_T) {
+	} else if(self->tag == cell_call_T || self->tag == cell_list_T) {
 		vector_delete(self->u.vec, cell_cell_delete);
 	}
 	MEM_FREE(self);

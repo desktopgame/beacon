@@ -3,6 +3,7 @@
 #include <assert.h>
 
 static void user_function_delete(user_function* self);
+static void user_function_symbol_delete(tree_item item);
 
 symbol_function* symbol_function_new(symbol_function_tag tag) {
 	symbol_function* ret = (symbol_function*)MEM_MALLOC(sizeof(symbol_function));
@@ -57,7 +58,7 @@ cell* symbol_function_apply(symbol_function* self, cell* cArgs, tree_map* ctx) {
 		}
 		cell* ret = cell_eval(code, newctx);
 		vector_delete(ARGS, vector_deleter_null);
-		tree_map_delete(newctx, tree_map_deleter_null);
+		tree_map_delete(newctx, user_function_symbol_delete);
 		return ret == CELL_VOID ? cArgs : ret;
 	}
 	assert(false);
@@ -74,4 +75,9 @@ static void user_function_delete(user_function* self) {
 	//vector_delete(self->parameter_vec, vector_deleter_null);
 	cell_delete(self->params);
 	cell_delete(self->code);
+}
+
+static void user_function_symbol_delete(tree_item item) {
+	symbol* e = (symbol*)item;
+	symbol_delete(e);
 }
