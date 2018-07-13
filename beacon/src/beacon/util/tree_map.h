@@ -28,7 +28,7 @@ typedef struct tree_map {
  * ツリーのアクション関数です.
  * @param item
  */
-typedef void(*tree_action)(char* name, tree_item item);
+typedef void(*tree_action)(const char* name, tree_item item);
 
 /**
  * ツリーのデリータ関数です.

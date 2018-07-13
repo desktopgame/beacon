@@ -3,7 +3,8 @@
 #include <assert.h>
 
 static void user_function_delete(user_function* self);
-static void user_function_symbol_delete(tree_item item);
+static void symbol_function_symbol_delete(tree_item item);
+static void symbol_function_argument_delete(vector_item item);
 
 symbol_function* symbol_function_new(symbol_function_tag tag) {
 	symbol_function* ret = (symbol_function*)MEM_MALLOC(sizeof(symbol_function));
@@ -33,18 +34,23 @@ cell* symbol_function_apply(symbol_function* self, cell* cArgs, tree_map* ctx) {
 	vector* args = cArgs->u.vec;
 	vector* ARGS = vector_new();
 	for(int i=0; i<args->length; i++) {
+		cell* e =vector_at(args, i);
+		e->paint = cell_protect;
 		if(i == 0) {
-			vector_push(ARGS, vector_at(args, i));
+			e->paint = cell_protect;
+			vector_push(ARGS, e);
 			continue;
 		}
-		vector_push(ARGS, cell_eval(vector_at(args, i), ctx));
+		cell* d = cell_eval(vector_at(args, i), ctx);
+		vector_push(ARGS, d);
+		d->paint = cell_protect;
 	}
 	//組み込み関数を実行する
 	if(self->tag == symbol_function_builtin) {
 		tree_map* newctx = tree_map_new();
 		cell* ret = self->u.a(ARGS, newctx);
-		vector_delete(ARGS, vector_deleter_null);
-		tree_map_delete(newctx, tree_map_deleter_null);
+		vector_delete(ARGS, symbol_function_argument_delete);
+		tree_map_delete(newctx, symbol_function_symbol_delete);
 		return ret == CELL_VOID ? cArgs : ret;
 	//ユーザ定義関数を実行する
 	} else if(self->tag == symbol_function_user) {
@@ -57,8 +63,8 @@ cell* symbol_function_apply(symbol_function* self, cell* cArgs, tree_map* ctx) {
 			tree_map_put(newctx, cell_2str(vector_at(params->u.vec, i)), s);
 		}
 		cell* ret = cell_eval(code, newctx);
-		vector_delete(ARGS, vector_deleter_null);
-		tree_map_delete(newctx, user_function_symbol_delete);
+		vector_delete(ARGS, symbol_function_argument_delete);
+		tree_map_delete(newctx, symbol_function_symbol_delete);
 		return ret == CELL_VOID ? cArgs : ret;
 	}
 	assert(false);
@@ -77,7 +83,14 @@ static void user_function_delete(user_function* self) {
 	cell_delete(self->code);
 }
 
-static void user_function_symbol_delete(tree_item item) {
+static void symbol_function_symbol_delete(tree_item item) {
 	symbol* e = (symbol*)item;
 	symbol_delete(e);
+}
+
+static void symbol_function_argument_delete(vector_item item) {
+	cell* e = (cell*)item;
+	if(e->paint == cell_protect) {
+		e->paint = cell_unmark;
+	}
 }

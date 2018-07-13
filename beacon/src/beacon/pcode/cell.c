@@ -10,11 +10,14 @@
 #define args_first(v) (vector_at(v, 1))
 #define args_second(v) (vector_at(v, 2))
 
+static cell* cell_evalImpl(cell* code, tree_map* ctx);
+static void cell_context_mark(const char* name, tree_item item);
 static void cell_cell_delete(vector_item item);
 static void cell_symbol_delete(vector_item item);
 static tree_map* gMap = NULL;
 static vector* gVec = NULL;
 static vector* gHeap = NULL;
+static vector* gStack = NULL;
 
 static cell* blt_print(vector* args, tree_map* ctx);
 static cell* blt_println(vector* args, tree_map* ctx);
@@ -38,10 +41,11 @@ static cell* blt_let(vector* args, tree_map* ctx);
 cell* cell_new(cell_tag tag) {
 	cell* ret = (cell*)MEM_MALLOC(sizeof(cell));
 	ret->tag = tag;
+	ret->paint = cell_mark;
 	if(tag == cell_call_T) {
 		ret->u.vec = vector_new();
 	}
-	//vector_push(gHeap, ret);
+	vector_push(gHeap, ret);
 	return ret;
 }
 
@@ -119,29 +123,29 @@ cell* cell_at(cell* self, int index) {
 }
 
 cell* cell_eval(cell* code, tree_map* ctx) {
-	assert(ctx != NULL);
-	//アトムはそのまま返す
-	if(cell_atom(code)) {
-		return code;
+	if(gStack == NULL) {
+		gStack = vector_new();
 	}
-	//関数呼び出しなら
-	if(code->tag == cell_call_T) {
-		//シンボルを検索
-		char* name = cell_2str(cell_at(code, 0));
-		symbol* s = cell_find_symbol(name, ctx);
-		if(s->tag == symbol_function_T) {
-			return symbol_function_apply(s->u.func, code, ctx);
-		}
-	//シンボルなら
-	} else if(code->tag == cell_symbol_T) {
-		//シンボルを検索
-		char* name = cell_2str(code);
-		symbol* s = cell_find_symbol(name, ctx);
-		if(s->tag == symbol_variable_T) {
-			return cell_eval(s->u.code, ctx);
-		}
-	}
-	assert(false);
+	vector_push(gStack, ctx);
+	cell* ret = cell_evalImpl(code, ctx);
+	vector_pop(gStack);
+	cell_gc_clear();
+	cell_gc_mark();
+	cell_mark_recursive(ret);
+	cell_gc_collect();
+	return ret;
+}
+
+tree_map* cell_frame_top() {
+	return vector_top(gStack);
+}
+
+tree_map* cell_frame_at(int depth) {
+	return (tree_map*)vector_at(gStack, depth);
+}
+
+int cell_frame_depth() {
+	return gStack->length;
 }
 
 symbol* cell_find_symbol(const char* name, tree_map* ctx) {
@@ -217,12 +221,58 @@ void cell_delete(cell* self) {
 	if(self == NULL) {
 		return;
 	}
+//	cell_fprintf(stdout, self);
+//	printf("\n");
 	if(self->tag == cell_string_T) {
 		MEM_FREE(self->u.str);
-	} else if(self->tag == cell_call_T || self->tag == cell_list_T) {
-		vector_delete(self->u.vec, cell_cell_delete);
 	}
 	MEM_FREE(self);
+}
+
+void cell_mark_recursive(cell* self) {
+	if(self->paint == cell_mark || self->paint == cell_protect) {
+		return;
+	}
+	self->paint = cell_mark;
+	if(self->tag == cell_call_T ||
+	   self->tag == cell_list_T) {
+		for(int i=0; i<self->u.vec->length; i++) {
+			cell_mark_recursive(vector_at(self->u.vec, i));
+		}
+	}
+}
+
+void cell_gc_clear() {
+	for(int i=0; i<gHeap->length; i++) {
+		cell* e = (cell*)vector_at(gHeap, i);
+		if(e->paint != cell_protect) {
+			e->paint = cell_unmark;
+		}
+	}
+}
+
+void cell_gc_mark() {
+	//シンボルをマーク
+	for(int i=0; i<gVec->length; i++) {
+		symbol* s = vector_at(gVec, i);
+		symbol_mark_recursive(s);
+	}
+	for(int i=0; i<cell_frame_depth(); i++) {
+		tree_map_each(cell_frame_at(i), cell_context_mark);
+	}
+}
+
+void cell_gc_collect() {
+	vector* alive = vector_new();
+	vector* dead = vector_new();
+	for(int i=0; i<gHeap->length; i++) {
+		cell* e = (cell*)vector_at(gHeap, i);
+		vector* dest = (e->paint == cell_unmark) ? dead : alive;
+		vector_push(dest, e);
+	}
+	vector_delete(gHeap, vector_deleter_null);
+	gHeap = alive;
+	vector_delete(dead, cell_cell_delete);
 }
 
 void cell_symbol_allocate() {
@@ -293,13 +343,43 @@ void cell_define_variable(const char* name, cell* value) {
 void cell_symbol_destroy() {
 	tree_map_delete(gMap, tree_map_deleter_null);
 	vector_delete(gVec, cell_symbol_delete);
-	vector_delete(gHeap, cell_cell_delete);
 	gMap = NULL;
 	gVec = NULL;
 	gHeap = NULL;
 }
 
 //private
+static cell* cell_evalImpl(cell* code, tree_map* ctx) {
+	assert(ctx != NULL);
+	//アトムはそのまま返す
+	if(cell_atom(code)) {
+		return code;
+	}
+	//関数呼び出しなら
+	if(code->tag == cell_call_T) {
+		//シンボルを検索
+		char* name = cell_2str(cell_at(code, 0));
+		symbol* s = cell_find_symbol(name, ctx);
+		if(s->tag == symbol_function_T) {
+			return symbol_function_apply(s->u.func, code, ctx);
+		}
+	//シンボルなら
+	} else if(code->tag == cell_symbol_T) {
+		//シンボルを検索
+		char* name = cell_2str(code);
+		symbol* s = cell_find_symbol(name, ctx);
+		if(s->tag == symbol_variable_T) {
+			return cell_eval(s->u.code, ctx);
+		}
+	}
+	assert(false);
+}
+
+static void cell_context_mark(const char* name, tree_item item) {
+	symbol* e = (symbol*)item;
+	symbol_mark_recursive(e);
+}
+
 static void cell_cell_delete(vector_item item) {
 	cell* e = (cell*)item;
 	cell_delete(e);

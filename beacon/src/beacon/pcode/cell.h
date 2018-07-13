@@ -5,6 +5,12 @@
 #include "symbol_interface.h"
 #include <stdio.h>
 
+typedef enum cell_paint {
+	cell_mark,
+	cell_unmark,
+	cell_protect,
+} cell_paint;
+
 typedef enum cell_tag {
 	cell_int_T,
 	cell_double_T,
@@ -26,6 +32,7 @@ typedef struct cell {
 		char* str;
 		vector* vec;
 	} u;
+	cell_paint paint;
 } cell;
 
 typedef cell*(*cell_apply)(vector* args, tree_map* ctx);
@@ -54,6 +61,12 @@ cell* cell_at(cell* self, int index);
 
 cell* cell_eval(cell* code, tree_map* ctx);
 
+tree_map* cell_frame_top();
+
+tree_map* cell_frame_at(int depth);
+
+int cell_frame_depth();
+
 symbol* cell_find_symbol(const char* name, tree_map* ctx);
 
 int cell_2int(cell* self);
@@ -73,6 +86,14 @@ int cell_fprintf(FILE* fp, cell* c);
 void cell_debug(cell* self);
 
 void cell_delete(cell* self);
+
+void cell_mark_recursive(cell* self);
+
+void cell_gc_clear();
+
+void cell_gc_mark();
+
+void cell_gc_collect();
 
 void cell_symbol_allocate();
 

@@ -18,5 +18,7 @@ typedef struct symbol {
 
 symbol* symbol_new(symbol_tag tag);
 
+void symbol_mark_recursive(symbol* self);
+
 void symbol_delete(symbol* self);
 #endif
