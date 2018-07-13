@@ -12,7 +12,6 @@
 #include "util/text.h"
 #include "util/io.h"
 #include "util/file_entry.h"
-#include "pcode/cell.h"
 
 /**
  * コマンドライン文字列を解析します.
@@ -63,19 +62,7 @@ int main_cl(int argc, char *argv[]) {
 }
 
 int main(int argc, char *argv[]) {
-	mem_set_trace(true);
-	cell_symbol_allocate();
-	tree_map* m = tree_map_new();
-	cell_define_function_user("add",
-		cell_list(2, cell_symbol("a"), cell_symbol("b")),
-		cell_call("+", cell_symbol("a"), cell_symbol("b"), NULL)
-	);
-	cell_eval(cell_call("println", cell_call("add", cell_int(5), cell_int(2), NULL), NULL), m);
-	tree_map_delete(m, tree_map_deleter_null);
-	cell_symbol_destroy();
-	mem_dump();
-	mem_destroy();
-	/*
+	//*
 	//先んじて設定を行っておく
 	mem_set_trace(true);
 	//mem_break(33221);
