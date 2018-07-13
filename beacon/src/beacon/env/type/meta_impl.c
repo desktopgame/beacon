@@ -120,6 +120,14 @@ int meta_rcalc_score(vector* params, vector* args, vector* typeargs, frame* fr) 
 }
 
 method * meta_ilfind_method(vector * method_vec, const char * name, vector * ilargs, enviroment * env, int * outIndex) {
+	return meta_scoped_ilfind_method(NULL, method_vec, name, ilargs, env, outIndex);
+}
+
+method* meta_gfind_method(vector* method_vec, const char * name, vector * gargs, int* outIndex) {
+	return meta_scoped_gfind_method(NULL, method_vec, name, gargs, outIndex);
+}
+
+method* meta_scoped_ilfind_method(class_* context, vector* method_vec, const char * name, vector * ilargs, enviroment * env, int * outIndex) {
 	(*outIndex) = -1;
 	//class_create_vtable(self);
 	method* ret = NULL;
@@ -128,6 +136,9 @@ method * meta_ilfind_method(vector * method_vec, const char * name, vector * ila
 	for (int i = 0; i < method_vec->length; i++) {
 		vector_item ve = vector_at(method_vec, i);
 		method* m = (method*)ve;
+		if(!meta_access_valid(context, m)) {
+			continue;
+		}
 		//名前か引数の個数が違うので無視
 		if (strcmp(m->name, name) ||
 			m->parameter_list->length != ilargs->length
@@ -146,7 +157,6 @@ method * meta_ilfind_method(vector * method_vec, const char * name, vector * ila
 			ccpush_method(m);
 		}
 		int score = meta_ilcalc_score(m->parameter_list, ilargs, env);
-		
 		if(modifier_is_static(m->modifier)) {
 			ccpop_method();
 		}
@@ -163,7 +173,7 @@ method * meta_ilfind_method(vector * method_vec, const char * name, vector * ila
 	return ret;
 }
 
-method* meta_gfind_method(vector* method_vec, const char * name, vector * gargs, int* outIndex) {
+method* meta_scoped_gfind_method(class_* context, vector* method_vec, const char * name, vector * gargs, int * outIndex) {
 	(*outIndex) = -1;
 	//class_create_vtable(self);
 	method* ret = NULL;
@@ -172,6 +182,9 @@ method* meta_gfind_method(vector* method_vec, const char * name, vector * gargs,
 	for (int i = 0; i < method_vec->length; i++) {
 		vector_item ve = vector_at(method_vec, i);
 		method* m = (method*)ve;
+		if(!meta_access_valid(context, m)) {
+			continue;
+		}
 		//名前か引数の個数が違うので無視
 		if (strcmp(m->name, name) ||
 			m->parameter_list->length != gargs->length
@@ -206,13 +219,24 @@ method* meta_gfind_method(vector* method_vec, const char * name, vector * gargs,
 	return ret;
 }
 
-constructor* meta_ilfind_ctor(vector* ctor_vec, vector* ilargs, struct enviroment* env, int* outIndex) {
+constructor* meta_ilfind_ctor(vector* ctor_vec, vector* ilargs, enviroment* env, int* outIndex) {
+	return meta_scoped_ilfind_ctor(NULL, ctor_vec, ilargs, env, outIndex);
+}
+
+constructor* meta_rfind_ctor(vector* ctor_vec, vector* args, vector* typeargs, frame* fr, int* outIndex) {
+	return meta_scoped_rfind_ctor(NULL, ctor_vec, args, typeargs, fr, outIndex);
+}
+
+constructor* meta_scoped_ilfind_ctor(class_* context, vector* ctor_vec, vector* ilargs, enviroment* env, int* outIndex) {
 	//見つかった中からもっとも一致するコンストラクタを選択する
 	int min = 1024;
 	constructor* ret = NULL;
 	for (int i = 0; i < ctor_vec->length; i++) {
 		vector_item ve = vector_at(ctor_vec, i);
 		constructor* ctor = (constructor*)ve;
+		if(!meta_access_validc(context, ctor)) {
+			continue;
+		}
 		//引数の個数が違うので無視
 		if (ctor->parameter_list->length != ilargs->length) {
 			continue;
@@ -239,7 +263,7 @@ constructor* meta_ilfind_ctor(vector* ctor_vec, vector* ilargs, struct enviromen
 	return ret;
 }
 
-constructor* meta_rfind_ctor(vector* ctor_vec, vector* args, vector* typeargs, frame* fr, int* outIndex) {
+constructor* meta_scoped_rfind_ctor(class_* context, vector* ctor_vec, vector* gargs, vector* typeargs, frame* fr, int* outIndex) {
 	//見つかった中からもっとも一致するコンストラクタを選択する
 	int min = 1024;
 	constructor* ret = NULL;
@@ -247,11 +271,14 @@ constructor* meta_rfind_ctor(vector* ctor_vec, vector* args, vector* typeargs, f
 		vector_item ve = vector_at(ctor_vec, i);
 		constructor* ctor = (constructor*)ve;
 		class_* cls = TYPE2CLASS(ctor->parent);
-		//引数の個数が違うので無視
-		if (ctor->parameter_list->length != args->length) {
+		if(!meta_access_validc(context, ctor)) {
 			continue;
 		}
-		int score = meta_rcalc_score(ctor->parameter_list, args, typeargs, fr);
+		//引数の個数が違うので無視
+		if (ctor->parameter_list->length != gargs->length) {
+			continue;
+		}
+		int score = meta_rcalc_score(ctor->parameter_list, gargs, typeargs, fr);
 		if (score < min) {
 			min = score;
 			ret = ctor;
@@ -302,4 +329,36 @@ operator_overload* meta_gfind_operator_default_noteq(vector* opov_vec, int* outI
 	operator_overload* ret = meta_gfind_operator(opov_vec, operator_noteq, gargs, outIndex);
 	vector_delete(gargs, vector_deleter_null);
 	return ret;
+}
+
+bool meta_access_valid(class_* context, method* m) {
+	//privateメソッドなのに現在のコンテキストではない
+	if(context != NULL &&
+		m->access == access_private &&
+		TYPE2CLASS(m->parent) != context) {
+		return false;
+	}
+	//protectedメソッドなのにそのサブクラスではない
+	if(context != NULL &&
+		m->access == access_protected &&
+		class_distance(TYPE2CLASS(m->parent), context) < 0) {
+		return false;
+	}
+	return true;
+}
+
+bool meta_access_validc(class_* context, constructor* ctor) {
+	//privateメソッドなのに現在のコンテキストではない
+	if(context != NULL &&
+		ctor->access == access_private &&
+		TYPE2CLASS(ctor->parent) != context) {
+		return false;
+	}
+	//protectedメソッドなのにそのサブクラスではない
+	if(context != NULL &&
+		ctor->access == access_protected &&
+		class_distance(TYPE2CLASS(ctor->parent), context) < 0) {
+		return false;
+	}
+	return true;
 }
