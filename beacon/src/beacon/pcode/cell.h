@@ -12,7 +12,8 @@ typedef enum cell_tag {
 	cell_char_T,
 	cell_string_T,
 	cell_symbol_T,
-	cell_call_T
+	cell_call_T,
+	cell_list_T
 } cell_tag;
 
 typedef struct cell {
@@ -23,7 +24,7 @@ typedef struct cell {
 		bool bool_;
 		char char_;
 		char* str;
-		vector* args;
+		vector* vec;
 	} u;
 } cell;
 
@@ -45,11 +46,15 @@ cell* cell_bool(bool b);
 
 cell* cell_symbol(char* str);
 
+cell* cell_list(int count, ...);
+
 cell* cell_call(const char* name, ...);
 
 cell* cell_at(cell* self, int index);
 
 cell* cell_eval(cell* code, tree_map* ctx);
+
+symbol* cell_find_symbol(const char* name, tree_map* ctx);
 
 int cell_2int(cell* self);
 
@@ -57,7 +62,7 @@ double cell_2double(cell* self);
 
 char cell_2char(cell* self);
 
-char* cell_str(cell* self);
+char* cell_2str(cell* self);
 
 bool cell_atom(cell* self);
 
@@ -79,7 +84,7 @@ symbol* cell_symbol_key(const char* key);
 
 void cell_define_function_builtin(const char* name, cell_apply a);
 
-void cell_define_function_user(const char* name, vector* parameter_vec,cell* code);
+void cell_define_function_user(const char* name, cell* params, cell* code);
 
 void cell_define_variable(const char* name, cell* value);
 

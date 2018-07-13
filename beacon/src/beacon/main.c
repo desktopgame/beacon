@@ -64,15 +64,13 @@ int main_cl(int argc, char *argv[]) {
 
 int main(int argc, char *argv[]) {
 	cell_symbol_allocate();
-	cell_eval(cell_call("println",
-			cell_call("progn",
-				cell_call("println", cell_string("HelloWorld"), NULL),
-				cell_call("println", cell_string("2d2d"), NULL),
-			NULL
-		),
-		NULL),
-		NULL
+	tree_map* m = tree_map_new();
+	cell_define_function_user("add",
+		cell_list(2, cell_symbol("a"), cell_symbol("b")),
+		cell_call("+", cell_symbol("a"), cell_symbol("b"), NULL)
 	);
+	cell_eval(cell_call("println", cell_call("add", cell_int(5), cell_int(2), NULL), NULL), m);
+	tree_map_delete(m, tree_map_deleter_null);
 	cell_symbol_destroy();
 	/*
 	//先んじて設定を行っておく

@@ -8,7 +8,7 @@ typedef enum symbol_function_tag {
 } symbol_function_tag;
 
 typedef struct user_function {
-	vector* parameter_vec;
+	cell* params;
 	cell* code;
 } user_function;
 
@@ -24,7 +24,7 @@ symbol_function* symbol_function_new(symbol_function_tag tag);
 
 symbol_function* symbol_function_new_builtin(cell_apply a);
 
-symbol_function* symbol_function_new_user(vector* parameter_vec, cell* code);
+symbol_function* symbol_function_new_user(cell* params, cell* code);
 
 cell* symbol_function_apply(symbol_function* self, cell* cArgs, tree_map* ctx);
 

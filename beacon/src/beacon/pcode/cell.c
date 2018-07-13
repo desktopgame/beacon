@@ -31,12 +31,15 @@ static cell* blt_lt(vector* args, tree_map* ctx);
 static cell* blt_le(vector* args, tree_map* ctx);
 static cell* blt_eval(vector* args, tree_map* ctx);
 static cell* blt_progn(vector* args, tree_map* ctx);
+static cell* blt_defun(vector* args, tree_map* ctx);
+static cell* blt_defvar(vector* args, tree_map* ctx);
+static cell* blt_let(vector* args, tree_map* ctx);
 
 cell* cell_new(cell_tag tag) {
 	cell* ret = (cell*)MEM_MALLOC(sizeof(cell));
 	ret->tag = tag;
 	if(tag == cell_call_T) {
-		ret->u.args = vector_new();
+		ret->u.vec = vector_new();
 	}
 	//vector_push(gHeap, ret);
 	return ret;
@@ -78,6 +81,24 @@ cell* cell_symbol(char* str) {
 	return ret;
 }
 
+cell* cell_list(int count, ...) {
+	va_list ap;
+	va_start(ap, count);
+	assert(count <= 16);
+	cell* ret = cell_new(cell_list_T);
+	ret->u.vec = vector_new();
+	if(count < 0) {
+		count = 16;
+	}
+	for(int i=0; i<count; i++) {
+		cell* e = va_arg(ap, cell*);
+		if(count < 0 && e == NULL) { break; }
+		vector_push(ret->u.vec, e);
+	}
+	va_end(ap);
+	return ret;
+}
+
 cell* cell_call(const char* name, ...) {
 	va_list ap;
 	va_start(ap, name);
@@ -94,29 +115,41 @@ cell* cell_call(const char* name, ...) {
 
 cell* cell_at(cell* self, int index) {
 	assert(self->tag == cell_call_T);
-	return (cell*)vector_at(self->u.args, index);
+	return (cell*)vector_at(self->u.vec, index);
 }
 
 cell* cell_eval(cell* code, tree_map* ctx) {
+	assert(ctx != NULL);
+	//アトムはそのまま返す
 	if(cell_atom(code)) {
 		return code;
 	}
+	//関数呼び出しなら
 	if(code->tag == cell_call_T) {
-		cell* cname = cell_at(code, 0);
-		char* name = cname->u.str;
 		//シンボルを検索
-		symbol* s = cell_symbol_key(name);
-		if(s == NULL && ctx != NULL) {
-			s = (symbol*)tree_map_get(ctx, name);
-		}
+		char* name = cell_2str(cell_at(code, 0));
+		symbol* s = cell_find_symbol(name, ctx);
 		if(s->tag == symbol_function_T) {
 			return symbol_function_apply(s->u.func, code, ctx);
-		} else if(s->tag == symbol_variable_T) {
-			return s->u.code;
 		}
-		assert(false);
+	//シンボルなら
+	} else if(code->tag == cell_symbol_T) {
+		//シンボルを検索
+		char* name = cell_2str(code);
+		symbol* s = cell_find_symbol(name, ctx);
+		if(s->tag == symbol_variable_T) {
+			return cell_eval(s->u.code, ctx);
+		}
 	}
 	assert(false);
+}
+
+symbol* cell_find_symbol(const char* name, tree_map* ctx) {
+	symbol* s = cell_symbol_key(name);
+	if(s == NULL && ctx != NULL) {
+		s = (symbol*)tree_map_get(ctx, name);
+	}
+	return s;
 }
 
 int cell_2int(cell* self) {
@@ -134,8 +167,8 @@ char cell_2char(cell* self) {
 	return self->u.char_;
 }
 
-char* cell_str(cell* self) {
-	assert(self->tag == cell_string_T);
+char* cell_2str(cell* self) {
+	assert(self->tag == cell_string_T || self->tag == cell_symbol_T);
 	return self->u.str;
 }
 
@@ -148,7 +181,7 @@ bool cell_atom(cell* self) {
 
 void cell_append(cell* self, cell* a) {
 	assert(self->tag == cell_call_T);
-	vector_push(self->u.args, a);
+	vector_push(self->u.vec, a);
 }
 
 int cell_fprintf(FILE* fp, cell* c) {
@@ -163,7 +196,7 @@ int cell_fprintf(FILE* fp, cell* c) {
 		{
 			cell* name = cell_at(c, 0);
 			fprintf(fp, "(%s", name->u.str);
-			for(int i=1; i<c->u.args->length; i++) {
+			for(int i=1; i<c->u.vec->length; i++) {
 				fprintf(fp, " ");
 				cell_fprintf(fp, cell_at(c, i));
 			}
@@ -187,7 +220,7 @@ void cell_delete(cell* self) {
 	if(self->tag == cell_string_T) {
 		MEM_FREE(self->u.str);
 	} else if(self->tag == cell_call_T) {
-		vector_delete(self->u.args, cell_cell_delete);
+		vector_delete(self->u.vec, cell_cell_delete);
 	}
 	MEM_FREE(self);
 }
@@ -211,6 +244,9 @@ void cell_symbol_allocate() {
 		cell_define_function_builtin("<=", blt_le);
 		cell_define_function_builtin("eval", blt_eval);
 		cell_define_function_builtin("progn", blt_progn);
+		cell_define_function_builtin("defun", blt_defun);
+		cell_define_function_builtin("defvar", blt_defvar);
+		cell_define_function_builtin("let", blt_let);
 	}
 }
 
@@ -231,7 +267,9 @@ symbol* cell_symbol_id(int id) {
 }
 
 symbol* cell_symbol_key(const char* key) {
-	return (symbol*)vector_at(gVec, (int)tree_map_get(gMap, key) - 1);
+	int index = (int)tree_map_get(gMap, key) - 1;
+	if(index < 0) return NULL;
+	return (symbol*)vector_at(gVec, index);
 }
 
 void cell_define_function_builtin(const char* name, cell_apply a) {
@@ -240,9 +278,9 @@ void cell_define_function_builtin(const char* name, cell_apply a) {
 	cell_symbol_intern(name, ret);
 }
 
-void cell_define_function_user(const char* name, vector* parameter_vec, cell* code) {
+void cell_define_function_user(const char* name, cell* params, cell* code) {
 	symbol* ret = symbol_new(symbol_function_T);
-	ret->u.func = symbol_function_new_user(parameter_vec,code);
+	ret->u.func = symbol_function_new_user(params, code);
 	cell_symbol_intern(name, ret);
 }
 
@@ -364,4 +402,37 @@ static cell* blt_progn(vector* args, tree_map* ctx) {
 		ret = cell_eval(e, ctx);
 	}
 	return ret;
+}
+
+static cell* blt_defun(vector* args, tree_map* ctx) {
+	args_check(args, 2);
+	cell* cname = args_at(args, 0);
+	cell* params = args_at(args, 1);
+	cell* code = args_at(args, 2);
+	cell_define_function_user(cell_2str(cname), params, code);
+	return CELL_VOID;
+}
+
+static cell* blt_defvar(vector* args, tree_map* ctx) {
+	args_check(args, 2);
+	cell* cname = args_at(args, 0);
+	cell* code = args_at(args, 1);
+	char* name = cell_2str(cname);
+	cell_define_variable(name, code);
+	return code;
+}
+
+static cell* blt_let(vector* args, tree_map* ctx) {
+	args_check(args, 2);
+	cell* cname = args_at(args, 0);
+	cell* code = args_at(args, 1);
+	char* name = cell_2str(cname);
+	if(ctx == NULL) {
+		cell_define_variable(name, code);
+	} else {
+		symbol* s = symbol_new(symbol_variable_T);
+		s->u.code = code;
+		tree_map_put(ctx, name, s);
+	}
+	return code;
 }
