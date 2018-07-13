@@ -135,6 +135,14 @@ void vector_assign(vector* self, int index, vector_item item);
 vector_item vector_at(vector* self, int index);
 
 /**
+ * @param self
+ * @param offset
+ * @param len
+ * @return
+ */
+vector* vector_sub(vector* self, int offset, int len);
+
+/**
  * 空なら true.
  * @param self
  * @return

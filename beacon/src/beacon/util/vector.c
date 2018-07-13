@@ -100,6 +100,18 @@ vector_item vector_at(vector * self, int index) {
 	return self->memory[index];
 }
 
+vector* vector_sub(vector* self, int offset, int len) {
+	assert(offset >= 0);
+	if(len == 0) {
+		return vector_new();
+	}
+	vector* v = vector_new();
+	for(int i=offset; i<offset+len; i++) {
+		vector_push(v, vector_at(self, i));
+	}
+	return v;
+}
+
 bool vector_empty(vector * self) {
 	return self->length == 0;
 }
