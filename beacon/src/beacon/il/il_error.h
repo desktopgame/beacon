@@ -13,6 +13,8 @@ typedef enum il_error_id {
 	ilerror_undefined_ctor,
 	ilerror_undefined_operator,
 	ilerror_construct_abstract_type,
+	ilerror_can_t_resolve_lambda,
+	ilerror_not_functional_interface,
 	ilerror_end,
 } il_error_id;
 

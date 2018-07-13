@@ -6,11 +6,14 @@
 struct il_factor;
 struct type;
 struct enviroment;
+struct generic_type;
 typedef struct il_factor_lambda {
 	vector* statement_vec;
 	vector* parameter_vec;
-	generic_cache* return_gtype;
+	generic_cache* return_gcache;
+	struct generic_type* return_gtype;
 	int offset;
+	struct generic_type* resolved;
 } il_factor_lambda;
 
 struct il_factor* il_factor_wrap_lambda(il_factor_lambda* self);

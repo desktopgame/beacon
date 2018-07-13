@@ -99,6 +99,12 @@ static void il_error_print(FILE* fp, il_error_id error_id, va_list ap) {
 		case ilerror_construct_abstract_type:
 			fmt = "can't construct a abstract type by new operator: %s";
 			break;
+		case ilerror_can_t_resolve_lambda:
+			fmt = "can't resolve lambda interface type: %s@%s";
+			break;
+		case ilerror_not_functional_interface:
+			fmt = "not functional interface: %s";
+			break;
 		default:
 			{
 				fprintf(stderr, "if shown this message, it compiler bug\n");

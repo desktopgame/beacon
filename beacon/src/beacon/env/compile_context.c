@@ -155,6 +155,29 @@ label* ccpop_while_end() {
 	return vector_pop(cc_current()->while_end_vec);
 }
 
+//lambda scope
+void ccpush_lambda_scope(method* scope) {
+	lambda_scope* a = lambda_scope_new(scope);
+	vector_push(cc_current()->lambda_scope_vec, a);
+}
+
+lambda_scope* ccpop_lambda_scope() {
+	return (lambda_scope*)vector_pop(cc_current()->lambda_scope_vec);
+}
+
+lambda_scope* cctop_lambda_scope() {
+	return (lambda_scope*)vector_top(cc_current()->lambda_scope_vec);
+}
+
+void cctop_lambda_scope_offset(int offset) {
+	//引数の型検査はメソッドでもオペレータでも行われるが、
+	//オペレータの時はラムダスコープが存在しない
+	vector* v = cc_top()->lambda_scope_vec;
+	if(v->length > 0) {
+		cctop_lambda_scope()->offset = offset;
+	}
+}
+
 compile_context* cc_current() {
 	return cc_top();
 }
@@ -242,6 +265,7 @@ static compile_context* compile_context_malloc(const char* filename, int lineno)
 	ret->class_loader_ref = NULL;
 	ret->abstract_method = NULL;
 	ret->concrete_method = NULL;
+	ret->lambda_scope_vec = vector_new();
 	return ret;
 }
 
@@ -254,5 +278,6 @@ static void compile_context_delete(compile_context* self) {
 	vector_delete(self->while_end_vec, vector_deleter_null);
 	vector_delete(self->receiver_vec, vector_deleter_null);
 	vector_delete(self->type_args_vec, vector_deleter_null);
+	vector_delete(self->lambda_scope_vec, vector_deleter_null);
 	MEM_FREE(self);
 }

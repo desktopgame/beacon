@@ -1,6 +1,7 @@
 #ifndef BEACON_ENV_CONTEXT_H
 #define BEACON_ENV_CONTEXT_H
 #include "../util/vector.h"
+#include "lambda_scope.h"
 struct method;
 
 /**
@@ -26,14 +27,10 @@ typedef struct compile_context {
 	vector* while_end_vec;
 	struct method* abstract_method;
 	struct method* concrete_method;
-	//メソッドの探索とコンストラクタの探索は
-	//部分的には似ていますが、
-	//コンストラクタはレシーバがいないのにインスタンスメソッドのように
-	//クラスに定義された型変数を使用できるという点で特殊です。
-	//パラメータが T であり、インスタンスメソッドであるなら
-	//それを実行する実体化されたレシーバから型を取り出せますが、
-	//(つまり、receiver_vecの先頭を参照する)
-	//コンストラクタの場合ではnew演算子から参照する必要があります。
+
+	//ラムダ式が評価される時、
+	//呼び出そうとしているメソッドを保持しておく
+	vector* lambda_scope_vec;
 	compile_state state;
 	struct class_loader* class_loader_ref;
 } compile_context;
@@ -118,6 +115,15 @@ void ccpush_while_end(struct label* e);
 struct label* cctop_while_end();
 
 struct label* ccpop_while_end();
+
+//lambda scope
+void ccpush_lambda_scope(struct method* scope);
+
+lambda_scope* ccpop_lambda_scope();
+
+lambda_scope* cctop_lambda_scope();
+
+void cctop_lambda_scope_offset(int offset);
 
 compile_context* cc_current();
 

@@ -26,6 +26,7 @@ int meta_ilcalc_score(vector* params, vector* ilargs, enviroment* env) {
 		vector_item vparam = vector_at(params, i);
 		il_argument* arg = (il_argument*)varg;
 		parameter* param = (parameter*)vparam;
+		cctop_lambda_scope_offset(i);
 		//実引数が NULL なら常に許容する
 		int dist = 0;
 		generic_type* argType = il_factor_eval(arg->factor, env);
@@ -67,6 +68,7 @@ int meta_gcalc_score(vector* params, vector* gargs) {
 		//実引数が NULL なら常に許容する
 		int dist = 0;
 		generic_type* argType = (generic_type*)varg;
+		cctop_lambda_scope_offset(i);
 		if(il_error_panic()) {
 			return -1;
 		}
@@ -138,6 +140,7 @@ method * meta_ilfind_method(vector * method_vec, const char * name, vector * ila
 			(*outIndex) = i;
 			return m;
 		}
+		ccpush_lambda_scope(m);
 		//もっともスコアの高いメソッドを選択する
 		if(modifier_is_static(m->modifier)) {
 			ccpush_method(m);
@@ -147,6 +150,7 @@ method * meta_ilfind_method(vector * method_vec, const char * name, vector * ila
 		if(modifier_is_static(m->modifier)) {
 			ccpop_method();
 		}
+		lambda_scope_delete(ccpop_lambda_scope());
 		if(score == -1) {
 			continue;
 		}
@@ -180,6 +184,7 @@ method* meta_gfind_method(vector* method_vec, const char * name, vector * gargs,
 			(*outIndex) = i;
 			return m;
 		}
+		ccpush_lambda_scope(m);
 		//もっともスコアの高いメソッドを選択する
 		if(modifier_is_static(m->modifier)) {
 			ccpush_method(m);
@@ -188,6 +193,7 @@ method* meta_gfind_method(vector* method_vec, const char * name, vector * gargs,
 		if(modifier_is_static(m->modifier)) {
 			ccpop_method();
 		}
+		lambda_scope_delete(ccpop_lambda_scope());
 		if(score == -1) {
 			continue;
 		}
