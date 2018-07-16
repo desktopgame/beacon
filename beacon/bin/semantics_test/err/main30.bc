@@ -4,12 +4,12 @@ namespace err30 {
 		def new() {
 		}
 
-		def publicPrintLine() {
+		def publicPrintLine() -> Void {
 			printLine("public");
 		}
 
 		private:
-		def privatePrintLine() {
+		def privatePrintLine() -> Void {
 			printLine("private");
 		}
 	}
