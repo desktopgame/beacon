@@ -332,6 +332,7 @@ operator_overload* meta_gfind_operator_default_noteq(vector* opov_vec, int* outI
 }
 
 bool meta_access_valid(class_* context, method* m) {
+/*
 	//privateメソッドなのに現在のコンテキストではない
 	if(context != NULL &&
 		m->access == access_private &&
@@ -344,10 +345,12 @@ bool meta_access_valid(class_* context, method* m) {
 		class_distance(TYPE2CLASS(m->parent), context) < 0) {
 		return false;
 	}
+*/
 	return true;
 }
 
 bool meta_access_validc(class_* context, constructor* ctor) {
+/*
 	//privateメソッドなのに現在のコンテキストではない
 	if(context != NULL &&
 		ctor->access == access_private &&
@@ -360,5 +363,6 @@ bool meta_access_validc(class_* context, constructor* ctor) {
 		class_distance(TYPE2CLASS(ctor->parent), context) < 0) {
 		return false;
 	}
+*/
 	return true;
 }
