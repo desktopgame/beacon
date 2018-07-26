@@ -44,7 +44,7 @@ static int gBreak = -1;
 void * mem_malloc(size_t size, const char * filename, int lineno) {
 	void* ret = malloc(size);
 	memset(ret, 0, size);
-	#if defined(DEBUG)
+	#if defined(MEMORY_MANAGEMENT)
 	slot_append(slot_new(size, ret, filename, lineno));
 	#endif
 	if(ret == NULL) {
@@ -54,7 +54,7 @@ void * mem_malloc(size_t size, const char * filename, int lineno) {
 }
 
 void * mem_realloc(void * block, size_t newSize, const char * filename, int lineno) {
-	#if defined(DEBUG)
+	#if defined(MEMORY_MANAGEMENT)
 	return slot_realloc(block, newSize, filename, lineno);
 	#else
 	return fixed_realloc(block, newSize);
@@ -62,7 +62,7 @@ void * mem_realloc(void * block, size_t newSize, const char * filename, int line
 }
 
 void mem_free(void * block, const char * filename, int lineno) {
-	#if defined(DEBUG)
+	#if defined(MEMORY_MANAGEMENT)
 	slot_free(block, filename, lineno);
 	#else
 	free(block);
@@ -70,7 +70,7 @@ void mem_free(void * block, const char * filename, int lineno) {
 }
 
 void mem_dump() {
-	#if defined(DEBUG)
+	#if defined(MEMORY_MANAGEMENT)
 	slot* iter = gHead;
 	text_printf("mem dump---\n");
 	while(iter != NULL) {
@@ -81,7 +81,7 @@ void mem_dump() {
 }
 
 void mem_read(const char* filename) {
-	#if defined(DEBUG)
+	#if defined(MEMORY_MANAGEMENT)
 	FILE* fp = fopen(filename, "rb");
 	if(fp == NULL) {
 		fprintf(stderr, "can't opening file: %s", filename);
@@ -103,7 +103,7 @@ void mem_read(const char* filename) {
 }
 
 void mem_write(const char* filename) {
-	#if defined(DEBUG)
+	#if defined(MEMORY_MANAGEMENT)
 	FILE* fp = fopen(filename, "wb");
 	if(fp == NULL) {
 		fprintf(stderr, "can't opening file: %s", filename);
@@ -124,7 +124,7 @@ void mem_write(const char* filename) {
 }
 
 void mem_mark(void* p, size_t size, const char* filename, int lineno) {
-	#if defined(DEBUG)
+	#if defined(MEMORY_MANAGEMENT)
 	slot_append(slot_new(size, p, filename, lineno));
 	#endif
 }
@@ -134,7 +134,7 @@ void mem_break(int count) {
 }
 
 void mem_destroy() {
-	#if defined(DEBUG)
+	#if defined(MEMORY_MANAGEMENT)
 	slot_delete(gHead);
 	gHead = NULL;
 	gCount = 0;
