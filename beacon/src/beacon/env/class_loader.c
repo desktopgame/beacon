@@ -74,6 +74,7 @@ class_loader* class_loader_new(content_type type) {
 	ret->level = 0;
 	ret->type_cache_vec = vector_new();
 	ret->lazy_resolve_vec = vector_new();
+	ret->filename = NULL;
 	ret->env->context_ref = ret;
 	return ret;
 }
@@ -225,7 +226,10 @@ int class_loader_vreport(class_loader* self, cl_error_id id, va_list ap) {
 //private
 static void class_loader_load_impl(class_loader* self) {
 	assert(self != NULL);
-	assert(self->source_code != NULL);
+	if(self->source_code == NULL) {
+		self->error = true;
+		return;
+	}
 	//AST -> IL へ
 	class_loader_ilload_impl(self, self->source_code);
 	if (self->error) { return; }
