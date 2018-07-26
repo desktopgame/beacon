@@ -52,12 +52,6 @@ void mem_free(void* block, const char* filename, int lineno);
 void mem_dump();
 
 /**
- * メモリリーク検出のためのトレースを実行するなら true.
- * @param trace
- */
-void mem_set_trace(bool trace);
-
-/**
  * mem_malloc以外の方法で確保されたメモリを
  * このモジュールが管理するメモリの一覧に加えます.
  * ここで追加されたメモリは mem_free で開放してください。
@@ -67,11 +61,6 @@ void mem_set_trace(bool trace);
  * @param lineno
  */
 void mem_mark(void* p, size_t size, const char* filename, int lineno);
-
-/**
- * @return
- */
-bool mem_get_trace();
 
 /**
  * 指定の位置で確保されたメモリを監視します.

@@ -31,7 +31,6 @@ static void mem_input();
 static char* mem_readline();
 
 static slot* gSlotHead = NULL;
-static bool gMemTrace = false;
 static int gMemCounter = 0;
 static int gMemNotFoundRealloc = 0;
 static int gMemNotFoundFree = 0;
@@ -40,9 +39,9 @@ static int gMemBreak = -1;
 
 void * mem_malloc(size_t size, const char * filename, int lineno) {
 	void* ret = malloc(size);
-	if (gMemTrace) {
+	#if defined(DEBUG)
 		slot_check_init(filename, lineno, ret, size);
-	}
+	#endif
 	if (ret == NULL) {
 		exit(1);
 	}
@@ -51,11 +50,11 @@ void * mem_malloc(size_t size, const char * filename, int lineno) {
 }
 
 void * mem_realloc(void * block, size_t newSize, const char * filename, int lineno) {
-	if (gMemTrace) {
+	#if defined(DEBUG)
 		return slot_realloc(gSlotHead, block, newSize);
-	} else {
+	#else
 		return default_realloc(block, newSize, filename, lineno);
-	}
+	#endif
 }
 
 void mem_free(void * block, const char * filename, int lineno) {
@@ -63,16 +62,14 @@ void mem_free(void * block, const char * filename, int lineno) {
 		return;
 	}
 	int index = -1;
-	if (gMemTrace) {
+	#if defined(DEBUG)
 		index = slot_remove(gSlotHead, block);
-	}
+	#endif
 	free(block);
 }
 
 void mem_dump() {
-	if (!gMemTrace) {
-		return;
-	}
+	#if defined(DEBUG)
 	text_printfln(" - memory leaks(%d) -", gMemCounter);
 	text_printfln("    used memory(%d)", gMemUsedMemory);
 	text_printfln("    not found realloc(%d)", gMemNotFoundRealloc);
@@ -86,23 +83,16 @@ void mem_dump() {
 		text_printf("\n");
 		ptr = ptr->next;
 	}
-}
-
-void mem_set_trace(bool trace) {
-	gMemTrace = trace;
+	#endif
 }
 
 void mem_mark(void* p, size_t size, const char* filename, int lineno) {
 	if (p == NULL) {
 		return;
 	}
-	if (gMemTrace) {
+	#if defined(DEBUG)
 		slot_check_init(filename, lineno, p, size);
-	}
-}
-
-bool mem_get_trace() {
-	return gMemTrace;
+	#endif
 }
 
 void mem_break(int count) {
@@ -110,11 +100,13 @@ void mem_break(int count) {
 }
 
 void mem_destroy() {
-	if (!gMemTrace || gSlotHead == NULL) {
+	if (gSlotHead == NULL) {
 		return;
 	}
+	#if defined(DEBUG)
 	slot_destroy(gSlotHead->next);
 	gSlotHead = NULL;
+	#endif
 }
 
 //private
