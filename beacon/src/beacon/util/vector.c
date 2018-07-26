@@ -72,6 +72,12 @@ vector_item vector_remove(vector * self, int index) {
 	return ret;
 }
 
+void vector_pack(vector* self) {
+	assert(self != NULL);
+	self->memory = MEM_REALLOC(self->memory, SLOT_SIZE * self->length);
+	self->capacity = self->length;
+}
+
 int vector_reserve(vector * self) {
 	assert(self->capacity > 0);
 	int newCapacitySize = self->capacity + (self->capacity / 2);

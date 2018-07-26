@@ -111,6 +111,12 @@ void vector_insert(vector* self, int index, vector_item item);
 vector_item vector_remove(vector* self, int index);
 
 /**
+ * 容量を圧縮します.
+ * @param self
+ */
+void vector_pack(vector* self);
+
+/**
  * 容量を拡張します.
  * @param self
  * @return 新しいキャパシティサイズ
