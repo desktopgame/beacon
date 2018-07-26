@@ -169,8 +169,6 @@ char* il_factor_binary_op_tostr(il_factor_binary_op* self, enviroment* env) {
 }
 
 void il_factor_binary_op_delete(il_factor_binary_op * self) {
-	il_factor_delete(self->left);
-	il_factor_delete(self->right);
 	switch(self->category) {
 		case operator_carithmeric:
 			il_factor_arithmetic_op_delete(self->u.arithmetic_op);
@@ -188,6 +186,8 @@ void il_factor_binary_op_delete(il_factor_binary_op * self) {
 			il_factor_excor_op_delete(self->u.excor_op);
 			break;
 	}
+	il_factor_delete(self->left);
+	il_factor_delete(self->right);
 	MEM_FREE(self);
 }
 

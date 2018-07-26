@@ -78,7 +78,12 @@
 			"thread.h": "c",
 			"typeindex": "c",
 			"typeinfo": "c",
-			"future": "c"
+			"future": "c",
+			"__split_buffer": "c",
+			"initializer_list": "c",
+			"list": "c",
+			"queue": "c",
+			"stack": "c"
 		},
 		"ruby.lint": {
 			"reek": true,

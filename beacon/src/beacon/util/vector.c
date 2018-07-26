@@ -148,6 +148,7 @@ void vector_delete(vector * self, vector_element_deleter deleter) {
 	if (self == NULL) {
 		return;
 	}
+	vector_pack(self);
 	for (int i = 0; i < self->length; i++) {
 		vector_item e = self->memory[i];
 		self->memory[i] = NULL;

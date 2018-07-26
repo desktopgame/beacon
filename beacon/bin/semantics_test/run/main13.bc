@@ -1,19 +1,4 @@
-import "beacon/lang/Object"
-import "beacon/lang/Array"
-import "beacon/lang/Int"
-import "beacon/lang/Double"
-import "beacon/lang/Char"
-import "beacon/lang/String"
-import "beacon/lang/Bool"
-import "beacon/lang/Null"
-import "beacon/lang/Void"
-import "beacon/lang/Console"
-import "beacon/lang/Vector"
-import "beacon/lang/VectorIterator"
 
-import "beacon/lang/Exception"
-import "beacon/lang/StackTraceElement"
-import "beacon/lang/Tuple"
 
 assert (1 << 1 == 2);
 assert (1 << 2 == 4);
