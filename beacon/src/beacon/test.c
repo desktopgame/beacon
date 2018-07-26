@@ -29,16 +29,16 @@
 static void test_cll(void);
 static void test_parse_err_hdr(parser* p);
 static void test_semanticsImpl(const char* dirname, bool require, char** outFileName, bool* outFail);
-static void test_semantics();
+static int test_semantics();
 static void test_bison_grammerImpl(const char* dirname, bool require);
 static void test_bison_grammer();
 static bool gTest = false;
 
-bool test_run() {
+int test_run() {
 	gTest = true;
-	test_semantics();
+	int ret = test_semantics();
 	gTest = false;
-	return true;
+	return ret;
 }
 
 bool test_now() {
@@ -89,7 +89,7 @@ static void test_semanticsImpl(const char* dirname, bool require, char** outFile
 	fflush(stdout);
 }
 
-static void test_semantics() {
+static int test_semantics() {
 	const char* rundir = "./semantics_test/run";
 	const char* errdir = "./semantics_test/err";
 	char* runFN = NULL;
@@ -112,6 +112,7 @@ static void test_semantics() {
 		fprintf(stdout, "[ERR]SUCCEESS!");
 	}
 	fprintf(stdout, "\n");
+	return runRL || errRL ? 1 : 0;
 }
 
 //FIXME:parser.cからのコピペ

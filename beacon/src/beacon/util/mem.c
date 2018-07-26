@@ -38,7 +38,6 @@ static void slot_delete(slot* self);
 static void* fixed_realloc(void* block, size_t newSize);
 
 static slot* gHead = NULL;
-static slot* gTail = NULL;
 static int gCount = 0;
 static int gBreak = -1;
 
@@ -75,9 +74,52 @@ void mem_dump() {
 	slot* iter = gHead;
 	text_printf("mem dump---\n");
 	while(iter != NULL) {
-		text_printf("    %p %s<%d>\n", iter->arena, iter->filename, iter->lineno);
+		text_printf("    %p(%d) %s<%d>\n", iter->arena, iter->index, iter->filename, iter->lineno);
 		iter = iter->next;
 	}
+	#endif
+}
+
+void mem_read(const char* filename) {
+	#if defined(DEBUG)
+	FILE* fp = fopen(filename, "rb");
+	if(fp == NULL) {
+		fprintf(stderr, "can't opening file: %s", filename);
+		return;
+	}
+	//全てのメモリリークの数を取得する
+	int count = -1;
+	fread(&count, sizeof(int), 1, fp);
+	for(int i=0; i<count; i++) {
+		int index = -1;
+		fread(&index, sizeof(int), 1, fp);
+		fprintf(stderr, "leak: %d\n", index);
+		if(i == 0) {
+			mem_break(index);
+		}
+	}
+	fclose(fp);
+	#endif
+}
+
+void mem_write(const char* filename) {
+	#if defined(DEBUG)
+	FILE* fp = fopen(filename, "wb");
+	if(fp == NULL) {
+		fprintf(stderr, "can't opening file: %s", filename);
+		return;
+	}
+	//全ての情報を出力します
+	slot* iter = gHead;
+	int count = 0;
+	while(iter != NULL) {
+		fwrite(&iter->index, sizeof(int), 1, fp);
+		iter = iter->next;
+		count++;
+	}
+	rewind(fp);
+	fwrite(&count, sizeof(int), 1, fp);
+	fclose(fp);
 	#endif
 }
 
@@ -134,21 +176,19 @@ static void slot_append(slot* arg) {
 		gCount++;
 		slot_cat(slot_tail(), arg);
 		arg->index = gCount;
-		gTail = arg;
+	}
+	if(arg->index == gBreak) {
+		abort();
 	}
 }
 
 static slot* slot_tail() {
 	assert(gHead != NULL);
-	if(gTail != NULL) {
-		return gTail;
-	}
 	slot* iter = gHead;
 	while(1) {
 		slot* temp = iter;
 		iter = iter->next;
 		if(iter == NULL) {
-			gTail = temp;
 			return temp;
 		}
 	}
@@ -193,7 +233,6 @@ static void slot_free(void* block, const char* fillename, int lineno) {
 	}
 	loc->arena = NULL;
 	loc->filename = NULL;
-	gTail = NULL;
 	free(block);
 	free(loc);
 }

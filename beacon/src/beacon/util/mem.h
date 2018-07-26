@@ -40,6 +40,21 @@ void mem_free(void* block, const char* filename, int lineno);
 void mem_dump();
 
 /**
+ * 前回実行した時のデータを元に予想されるメモリリークのタイミングを監視します.
+ * データが存在しない場合には何もしません。
+ * @param filename
+ */
+void mem_read(const char* filename);
+
+/**
+ * このメソッドを呼び出した時点でわかっているメモリリークを出力します.
+ * ユーザ向けの情報ではなく、#mem_read によって読み込み可能なフォーマットで出力します。
+ * @param filename
+ * @return
+ */
+void mem_write(const char* filename);
+
+/**
  * mem_malloc以外の方法で確保されたメモリを
  * このモジュールが管理するメモリの一覧に加えます.
  * ここで追加されたメモリは mem_free で開放してください。
