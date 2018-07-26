@@ -18,19 +18,20 @@ static void* default_realloc(void * block, size_t newSize, const char * filename
 static slot* slot_create_or_add(size_t size);
 static slot* slot_new();
 static void slot_check_init(const char* filename, int lineno, void* arena, size_t size);
-static void slot_add(slot* head, slot* a);
-static void* slot_realloc(slot* head, void* arena, size_t newSize);
-static int slot_remove(slot* head, void* arena);
+static void slot_add(slot* a);
+static void* slot_realloc(void* arena, size_t newSize);
+static int slot_remove(void* arena);
 static void slot_dump(slot* self);
 static void slot_destroy(slot* self);
 
-static slot* slot_find(slot* head, void* arena);
-static slot* slot_last(slot* head);
+static slot* slot_find(void* arena);
+static slot* slot_last();
 
 static void mem_input();
 static char* mem_readline();
 
 static slot* gSlotHead = NULL;
+static slot* gSlotTail = NULL;
 static int gMemCounter = 0;
 static int gMemNotFoundRealloc = 0;
 static int gMemNotFoundFree = 0;
@@ -51,7 +52,7 @@ void * mem_malloc(size_t size, const char * filename, int lineno) {
 
 void * mem_realloc(void * block, size_t newSize, const char * filename, int lineno) {
 	#if defined(DEBUG)
-		return slot_realloc(gSlotHead, block, newSize);
+		return slot_realloc(block, newSize);
 	#else
 		return default_realloc(block, newSize, filename, lineno);
 	#endif
@@ -63,7 +64,7 @@ void mem_free(void * block, const char * filename, int lineno) {
 	}
 	int index = -1;
 	#if defined(DEBUG)
-		index = slot_remove(gSlotHead, block);
+		index = slot_remove(block);
 	#endif
 	free(block);
 }
@@ -151,7 +152,7 @@ static slot* slot_create_or_add(size_t size) {
 	}
 	//連結リストにくっつけて返す
 	ptr = slot_new();
-	slot_add(gSlotHead, ptr);
+	slot_add(ptr);
 
 	gMemCounter++;
 	gMemUsedMemory += size;
@@ -162,16 +163,16 @@ static slot* slot_create_or_add(size_t size) {
 	return ptr;
 }
 
-static void slot_add(slot* head, slot* a) {
-	slot* last = slot_last(head);
+static void slot_add(slot* a) {
+	slot* last = slot_last();
 	last->next = a;
 	a->prev = last;
 }
 
-static void* slot_realloc(slot* head, void* arena, size_t newSize) {
+static void* slot_realloc(void* arena, size_t newSize) {
 	//arenaがmem_mallocによって確保されたものではないなら、
 	//適当に拡張して返す
-	slot* ptr = slot_find(head, arena);
+	slot* ptr = slot_find(arena);
 	if(ptr == NULL) {
 		void* ret = realloc(arena, newSize);
 		assert(ret != NULL);
@@ -188,20 +189,20 @@ static void* slot_realloc(slot* head, void* arena, size_t newSize) {
 	//拡大した
 	} else if (ptr->size < newSize) {
 		gMemUsedMemory += (newSize - ptr->size);
-		memset(temp + ptr->size, 0, newSize - ptr->size);
+	//	memset(temp + (newSize-ptr->size), 0, newSize - ptr->size);
 	}
 	ptr->arena = temp;
 	ptr->size = newSize;
 	return temp;
 }
 
-static int slot_remove(slot* head, void* arena) {
-	if (head == NULL) {
+static int slot_remove(void* arena) {
+	if (gSlotHead == NULL) {
 		return -1;
 	}
 	//mem_mallocによって確保されたものではないなら、
 	//何もしない
-	slot* ptr = slot_find(head, arena);
+	slot* ptr = slot_find(arena);
 	if(ptr == NULL) {
 		gMemNotFoundFree++;
 		return -1;
@@ -259,24 +260,19 @@ static void slot_destroy(slot* self) {
 	}
 }
 
-static slot* slot_find(slot* head, void* arena) {
-	slot* ptr = head;
-	while (ptr->arena != arena) {
-		ptr = ptr->next;
-		//mem_malloc以外で確保されたメモリ
-		if (ptr == NULL) {
-			//void* ret = realloc(arena, newSize);
-			//assert(ret != NULL);
-			//gMemNotFoundRealloc++;
-			//return ret;
-			break;
+static slot* slot_find(void* arena) {
+	slot* iter = gSlotHead;
+	while(iter != NULL) {
+		if(iter->arena == arena) {
+			return iter;
 		}
+		iter = iter->next;
 	}
-	return ptr;
+	return NULL;
 }
 
-static slot* slot_last(slot* head) {
-	slot* ptr = head;
+static slot* slot_last() {
+	slot* ptr = gSlotHead;
 	while (ptr->next != NULL) {
 		assert((ptr != NULL && ptr->arena != NULL));
 		ptr = ptr->next;

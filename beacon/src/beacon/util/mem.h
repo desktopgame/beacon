@@ -73,8 +73,15 @@ void mem_break(int count);
  */
 void mem_destroy();
 
-#define MEM_MALLOC(size) (mem_malloc(size, __FILE__, __LINE__))
-#define MEM_FREE(size) (mem_free(size, __FILE__, __LINE__))
-#define MEM_REALLOC(block, size) (mem_realloc(block, size, __FILE__, __LINE__))
-#define MEM_MARK(block, size) (mem_mark(block, size, __FILE__, __LINE__))
+#if defined(DEBUG)
+	#define MEM_MALLOC(size) (mem_malloc(size, __FILE__, __LINE__))
+	#define MEM_FREE(size) (mem_free(size, __FILE__, __LINE__))
+	#define MEM_REALLOC(block, size) (mem_realloc(block, size, __FILE__, __LINE__))
+	#define MEM_MARK(block, size) (mem_mark(block, size, __FILE__, __LINE__))
+#else
+	#define MEM_MALLOC(size) (malloc(size))
+	#define MEM_FREE(size) free(size)
+	#define MEM_REALLOC(block, size) (realloc(block, size))
+	#define MEM_MARK(block, size) (void)(0)
+#endif
 #endif // !SIGNAL_ENV_MEM_H
