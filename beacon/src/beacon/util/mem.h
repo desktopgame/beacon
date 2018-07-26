@@ -7,7 +7,7 @@
  * 確保されたメモリを管理する連結リスト.
  */
 typedef struct slot {
-	char* filename;
+	const char* filename;
 	int lineno;
 	int index;
 	void* arena;
