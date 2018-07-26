@@ -238,6 +238,9 @@ static void slot_free(void* block, const char* fillename, int lineno) {
 }
 
 static void slot_delete(slot* self) {
+	if(self == NULL) {
+		return;
+	}
 	if(self->next != NULL) {
 		slot_delete(self->next);
 	}
