@@ -13,7 +13,6 @@
 #include "util/io.h"
 #include "util/file_entry.h"
 #include "util/text.h"
-#include "util/file_path.h"
 #include "util/vector.h"
 #include <stdio.h>
 #include <stdlib.h>
