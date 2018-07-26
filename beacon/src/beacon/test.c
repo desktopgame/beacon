@@ -80,7 +80,7 @@ static void test_semanticsImpl(const char* dirname, bool require, char** outFile
 		}
 		//script_context_static_clear(script_context_get_current());
 	}
-	(*outFileName) = filename;
+	(*outFileName) = text_strdup(filename);
 	(*outFail) = fail;
 	io_list_files_delete(files);
 	//元に戻す
@@ -100,12 +100,14 @@ static void test_semantics() {
 	test_semanticsImpl(errdir, true, &errFN, &errRL);
 	if(runRL) {
 		fprintf(stdout, "[RUN]FAIL. %s", runFN);
+		MEM_FREE(runFN);
 	} else {
 		fprintf(stdout, "[RUN]SUCCEESS!");
 	}
 	fprintf(stdout, "\n");
 	if(errRL) {
 		fprintf(stdout, "[ERR]FAIL. %s", errFN);
+		MEM_FREE(errFN);
 	} else {
 		fprintf(stdout, "[ERR]SUCCEESS!");
 	}
