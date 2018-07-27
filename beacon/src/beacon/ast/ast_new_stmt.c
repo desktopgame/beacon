@@ -96,10 +96,10 @@ ast* ast_new_try(ast* abody, ast* acatch_list) {
 	return ret;
 }
 
-ast* ast_new_catch(ast* stypename, char* sname, ast* abody) {
+ast* ast_new_catch(ast* stypename, string_view snamev, ast* abody) {
 	ast* ret = ast_new(ast_stmt_catch);
 	ast* aname = ast_new(ast_identifier);
-	aname->u.stringv_value = string_pool_intern(sname);
+	aname->u.stringv_value = snamev;
 	ast_push(ret, stypename);
 	ast_push(ret, aname);
 	ast_push(ret, abody);
@@ -126,18 +126,18 @@ ast * ast_new_argument_list(ast * factor, ast * argument_list) {
 	return ret;
 }
 
-ast * ast_new_fqcn(ast * part_list, char * class_name) {
+ast * ast_new_fqcn(ast * part_list, string_view class_namev) {
 	ast* ret = ast_new(ast_fqcn);
 	ast* a = ast_new(ast_fqcn_class_name);
-	a->u.stringv_value = string_pool_intern(class_name);
+	a->u.stringv_value = class_namev;
 	ast_push(ret, part_list);
 	ast_push(ret, a);
 	return ret;
 }
 
-ast* ast_malloc_fqcn_part(char* name, const char* filename, int lineno) {
+ast* ast_malloc_fqcn_part(string_view namev, const char* filename, int lineno) {
 	ast* ret = ast_malloc(ast_fqcn_part, filename, lineno);
-	ret->u.stringv_value = string_pool_intern(name);
+	ret->u.stringv_value = namev;
 	return ret;
 }
 
@@ -148,29 +148,29 @@ ast * ast_new_fqcn_part_list(ast * part, ast * part_list) {
 	return ret;
 }
 
-ast * ast_new_variable_decl(ast * type, char * name) {
+ast * ast_new_variable_decl(ast * type, string_view namev) {
 	ast* ret = ast_new(ast_stmt_variable_decl);
 	ast* aname = ast_new(ast_identifier);
-	aname->u.stringv_value = string_pool_intern(name);
+	aname->u.stringv_value = namev;
 	ast_push(ret, type);
 	ast_push(ret, aname);
 	return ret;
 }
 
-ast * ast_new_variable_init(ast * type, char * name, ast * fact) {
+ast * ast_new_variable_init(ast * type, string_view namev, ast * fact) {
 	ast* ret = ast_new(ast_stmt_variable_init);
 	ast* aname = ast_new(ast_identifier);
-	aname->u.stringv_value = string_pool_intern(name);
+	aname->u.stringv_value = namev;
 	ast_push(ret, type);
 	ast_push(ret, aname);
 	ast_push(ret, fact);
 	return ret;
 }
 
-ast * ast_new_inferenced_type_init(const char * name, ast * fact) {
+ast * ast_new_inferenced_type_init(string_view namev, ast * fact) {
 	ast* ret = ast_new(ast_inferenced_type_init);
 	ast* aname = ast_new(ast_identifier);
-	aname->u.stringv_value = string_pool_intern(name);
+	aname->u.stringv_value = namev;
 	ast_push(ret, aname);
 	ast_push(ret, fact);
 	return ret;

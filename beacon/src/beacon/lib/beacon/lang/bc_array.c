@@ -16,7 +16,7 @@ static type* gArrayT = NULL;
 
 void bc_array_init() {
 	namespace_* lang = namespace_lang();
-	type* arrayType = class_new_preload("Array");
+	type* arrayType = class_new_preload(string_pool_intern("Array"));
 	class_* arrayClass = TYPE2CLASS(arrayType);
 	namespace_add_type(lang, arrayType);
 	class_define_native_method(arrayClass, "nativeInit", bc_array_nativeInit);
@@ -29,7 +29,7 @@ void bc_array_init() {
 type * bc_array_type() {
 	if(gArrayT != NULL) return gArrayT;
 	namespace_* lang = namespace_lang();
-	gArrayT = namespace_get_type(lang, "Array");
+	gArrayT = namespace_get_type(lang, string_pool_intern("Array"));
 	return gArrayT;
 }
 
@@ -64,7 +64,7 @@ static void bc_array_nativeInit(method* parent, frame* fr, enviroment* env) {
 	type* tp = parent->parent;
 	//Array#lengthを取り出す
 	int temp = 0;
-	field* lengthField = class_find_field(tp->u.class_, "length", &temp);
+	field* lengthField = class_find_field(tp->u.class_, string_pool_intern("length"), &temp);
 	assert(lengthField != NULL && temp != -1);
 	//対応する位置のオブジェクトを取り出す
 	object* self = vector_at(fr->ref_stack, 0);

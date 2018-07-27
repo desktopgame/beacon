@@ -16,7 +16,7 @@
 %}
 %union {
 	char char_value;
-	char* string_value;
+	string_view stringv_value;
 	ast* ast_value;
 	assign_operator_type assign_otype_value;
 	constructor_chain_type chain_type_value;
@@ -29,7 +29,7 @@
 %token <ast_value>			STRING_LITERAL
 %token <ast_value>			INT
 %token <ast_value>			DOUBLE
-%token <string_value>		IDENT
+%token <stringv_value>		IDENT
 %type <chain_type_value>	constructor_chain_type_T
 %type <access_level_value>	access_level_T
 %token DOT COMMA COLON COLO_COLO LINE

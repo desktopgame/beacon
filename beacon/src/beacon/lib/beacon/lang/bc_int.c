@@ -22,7 +22,7 @@ static type* gIntT = NULL;
 
 void bc_int_init() {
 	namespace_* lang =  namespace_lang();
-	type* intType = class_new_preload("Int");
+	type* intType = class_new_preload(string_pool_intern("Int"));
 	class_* intClass = TYPE2CLASS(intType);
 	namespace_add_type(lang, intType);
 	class_define_native_method(intClass, "nativeInit", bc_int_nativeInit);
@@ -47,7 +47,7 @@ void bc_int_init() {
 type* bc_int_type() {
 	if(gIntT != NULL) return gIntT;
 	namespace_* lang = namespace_lang();
-	gIntT = namespace_get_type(lang, "Int");
+	gIntT = namespace_get_type(lang, string_pool_intern("Int"));
 	return gIntT;
 }
 //private

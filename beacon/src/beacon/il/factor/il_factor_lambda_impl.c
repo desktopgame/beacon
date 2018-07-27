@@ -78,7 +78,7 @@ generic_type* il_factor_lambda_eval(il_factor_lambda* self, enviroment* env) {
 	//関数型インターフェイスでない
 	interface_* inter = TYPE2INTERFACE(interT);
 	if(!interface_is_functional(inter)) {
-		il_error_report(ilerror_not_functional_interface, type_name(interT));
+		il_error_report(ilerror_not_functional_interface, string_pool_ref2str(type_name(interT)));
 		return NULL;
 	}
 	//関数型インターフェイスだが、戻り値がマッチしない

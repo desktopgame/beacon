@@ -128,11 +128,11 @@ ast* ast_new_try(ast* abody, ast* acatch_list);
 /**
  * 例外を捕捉するステートメントを作成します.
  * @param typename
- * @param name
+ * @param snamev
  * @param abody
  * @return
  */
-ast* ast_new_catch(ast* stypename, char* sname, ast* abody);
+ast* ast_new_catch(ast* stypename, string_view snamev, ast* abody);
 
 /**
  * キャッチ節の一覧を作成します.
@@ -163,7 +163,7 @@ ast* ast_new_argument_list(ast* factor, ast* argument_list);
  * @param class_name
  * @return
  */
-ast* ast_new_fqcn(ast* part_list, char* class_name);
+ast* ast_new_fqcn(ast* part_list, string_view class_namev);
 
 /**
  * 完全修飾クラス名の 1節 を表す要素を作成します.
@@ -177,7 +177,7 @@ ast* ast_new_fqcn(ast* part_list, char* class_name);
  * @param lineno
  * @return
  */
-ast* ast_malloc_fqcn_part(char* name, const char* filename, int lineno);
+ast* ast_malloc_fqcn_part(string_view namev, const char* filename, int lineno);
 
 /**
  * 完全修飾クラス名の名前空間部分(XX::YY::)の一覧を表す要素を作成します.
@@ -190,19 +190,19 @@ ast* ast_new_fqcn_part_list(ast* part, ast* part_list);
 /**
  * X::Y y; を表す要素を作成します.
  * @param type
- * @param name
+ * @param namev
  * @return
  */
-ast* ast_new_variable_decl(ast* type, char* name);
+ast* ast_new_variable_decl(ast* type, string_view namev);
 
 /**
  * X::Y y = new X::Y() のような初期化を表す要素を作成します.
  * @param type
- * @param name
+ * @param namev
  * @param fact
  * @return
  */
-ast* ast_new_variable_init(ast* type, char* name, ast* fact);
+ast* ast_new_variable_init(ast* type, string_view namev, ast* fact);
 
 /**
  * var y = new X::Y() のような初期化を表す要素を作成します.
@@ -210,7 +210,7 @@ ast* ast_new_variable_init(ast* type, char* name, ast* fact);
  * @param fact
  * @return
  */
-ast* ast_new_inferenced_type_init(const char* name, ast* fact);
+ast* ast_new_inferenced_type_init(string_view namev, ast* fact);
 
 /**
  * assert 条件 を表す要素を作成します.

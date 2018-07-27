@@ -36,16 +36,16 @@ ast * ast_malloc(ast_tag tag, const char* filename, int lineno) {
 	return ret;
 }
 
-ast * ast_new_namespace_path(char * name) {
+ast * ast_new_namespace_path(string_view namev) {
 	ast* ret = ast_new(ast_namespace_path);
-	ret->u.stringv_value = string_pool_intern(name);
+	ret->u.stringv_value = namev;
 	return ret;
 }
 
-ast * ast_new_namespace_path_list(ast * forward, char * name) {
+ast * ast_new_namespace_path_list(ast * forward, string_view namev) {
 	ast* ret = ast_new(ast_namespace_path_list);
 	ast_push(ret, forward);
-	ast_push(ret, ast_new_namespace_path(name));
+	ast_push(ret, ast_new_namespace_path(namev));
 	return ret;
 }
 
@@ -84,15 +84,15 @@ ast * ast_new_blank() {
 	return ast_new(ast_blank);
 }
 
-ast * ast_new_identifier(char * str) {
+ast * ast_new_identifier(string_view strv) {
 	ast* ret = ast_new(ast_identifier);
-	ret->u.stringv_value = string_pool_intern(str);
+	ret->u.stringv_value = strv;
 	return ret;
 }
 
-ast * ast_new_identifier_list(char * str, ast * ident_list) {
+ast * ast_new_identifier_list(string_view strv, ast * ident_list) {
 	ast* ret = ast_new(ast_identifier_list);
-	ast_push(ret, ast_new_identifier(str));
+	ast_push(ret, ast_new_identifier(strv));
 	ast_push(ret, ident_list);
 	return ret;
 }

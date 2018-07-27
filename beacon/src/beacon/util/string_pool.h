@@ -3,6 +3,13 @@
 #include <stdio.h>
 
 struct string_buffer;
+
+//NULL
+#define NULL_VIEW (0)
+
+//""
+#define ZERO_VIEW (1)
+
 /**
  * 符号化された文字列.
  */

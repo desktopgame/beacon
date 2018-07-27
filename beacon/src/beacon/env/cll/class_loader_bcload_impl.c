@@ -172,7 +172,7 @@ static void CLBC_enum(class_loader * self, il_type * iltype, namespace_ * parent
 	}
 	//全ての列挙子を public static final フィールドとして追加
 	for (int i = 0; i < ilenum->item_vec->length; i++) {
-		char* str = (char*)vector_at(ilenum->item_vec, i);
+		string_view str = (string_view)vector_at(ilenum->item_vec, i);
 		field* f = field_new(str);
 		f->modifier = modifier_static;
 		f->access = access_public;
@@ -365,7 +365,7 @@ static void CLBC_register_class(class_loader* self, namespace_* parent, il_type*
 			type* E = GENERIC2TYPE(gtp);
 			vector_push(cls->impl_list, gtp);
 			if(E->tag != type_interface) {
-				class_loader_report(self, clerror_class_first, type_name(tp));
+				class_loader_report(self, clerror_class_first, string_pool_ref2str(type_name(tp)));
 				namespace_add_type(parent, tp);
 				return;
 			}
@@ -411,7 +411,7 @@ static void CLBC_register_interface(class_loader* self, namespace_* parent, il_t
 		type* E = GENERIC2TYPE(gtp);
 		vector_push(inter->impl_list, gtp);
 		if(E->tag != type_interface) {
-			class_loader_report(self, clerror_interface_only, type_name(tp));
+			class_loader_report(self, clerror_interface_only, string_pool_ref2str(type_name(tp)));
 			namespace_add_type(parent, tp);
 			return;
 		}

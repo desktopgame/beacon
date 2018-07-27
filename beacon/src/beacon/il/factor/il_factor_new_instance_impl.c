@@ -78,7 +78,7 @@ void il_factor_new_instance_load(il_factor_new_instance * self, enviroment * env
 	}
 	//抽象クラスはインスタンス化できない
 	if(type_is_abstract(self->c->parent)) {
-		il_error_report(ilerror_construct_abstract_type, type_name(self->c->parent));
+		il_error_report(ilerror_construct_abstract_type, string_pool_ref2str(type_name(self->c->parent)));
 	}
 }
 

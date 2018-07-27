@@ -258,7 +258,7 @@ typedef union YYSTYPE
 #line 17 "beacon.y"
 {
 	char char_value;
-	char* string_value;
+	string_view stringv_value;
 	ast* ast_value;
 	assign_operator_type assign_otype_value;
 	constructor_chain_type chain_type_value;

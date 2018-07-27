@@ -268,7 +268,7 @@ static void update_loc() {
 }
 
 <INITIAL>[A-Za-z_][A-Za-z_0-9]* {
-	yylval.string_value = yytext;
+	yylval.stringv_value = string_pool_intern(yytext);
 	return IDENT;
 }
 

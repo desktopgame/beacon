@@ -67,9 +67,9 @@ ast * ast_new_variable(ast* a, ast* atype_args) {
 	return ret;
 }
 
-ast * ast_new_variable_fromstr(char * str, ast* atype_args) {
+ast * ast_new_variable_fromstr(string_view strv, ast* atype_args) {
 	ast* ret = ast_new(ast_variable);
-	ret->u.stringv_value = string_pool_intern(str);
+	ret->u.stringv_value = strv;
 	ast_push(ret, atype_args);
 	return ret;
 }
@@ -89,10 +89,10 @@ ast * ast_new_super() {
 	return ast_new(ast_super);
 }
 
-ast * ast_new_field_access(ast * afact, char * name, ast* atype_args) {
+ast * ast_new_field_access(ast * afact, string_view namev, ast* atype_args) {
 	ast* ret = ast_new(ast_field_access);
 	ast* aname = ast_new(ast_identifier);
-	aname->u.stringv_value = string_pool_intern(name);
+	aname->u.stringv_value = namev;
 	ast_push(ret, afact);
 	ast_push(ret, aname);
 	ast_push(ret, atype_args);

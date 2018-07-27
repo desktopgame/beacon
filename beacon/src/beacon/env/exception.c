@@ -33,7 +33,7 @@ object * exception_new_simplef(frame * fr, const char * message, ...) {
 //private
 static class_* exception_class() {
 	namespace_* lang = namespace_lang();
-	class_* excClass = namespace_get_class(lang, "Exception");
+	class_* excClass = namespace_get_class(lang, string_pool_intern("Exception"));
 	assert(excClass != NULL);
 	return excClass;
 }

@@ -59,11 +59,11 @@ ast* ast_new_interface_decl(ast* ainterface_name, ast* super_interface_list, ast
 
 /**
  * 列挙宣言を表す要素を作成します.
- * @param enum_name
+ * @param enum_namev
  * @param ident_list
  * @return
  */
-ast* ast_new_enum_decl(char* enum_name, ast* ident_list);
+ast* ast_new_enum_decl(string_view enum_namev, ast* ident_list);
 
 /**
  * スーパークラスを表す要素を作成します.
@@ -129,51 +129,51 @@ ast* ast_new_member_decl_list(ast* member_list, ast* member);
  * フィールド宣言を表す要素を作成します.
  * @param amodifier
  * @param type_name
- * @param field_name
+ * @param field_namev
  * @return
  */
-ast* ast_new_field_decl(ast* amodifier, ast* type_name, char* field_name);
+ast* ast_new_field_decl(ast* amodifier, ast* type_name, string_view field_namev);
 
 /**
  * 関数宣言を表す要素を作成します.
- * @param function_name
+ * @param function_namev
  * @parma parameter_list
  * @param body
  * @param return_type
  */
-ast* ast_new_function_decl(char* function_name, ast* parameter_list, ast* body, ast* return_type);
+ast* ast_new_function_decl(string_view function_namev, ast* parameter_list, ast* body, ast* return_type);
 
 /**
  * 引数のない関数宣言を表す要素を作成します.
- * @param function_name
+ * @param function_namev
  * @param body
  * @param return_name
  * @return
  */
-ast* ast_new_function_decl_empty_params(char* function_name, ast* body, ast* return_type);
+ast* ast_new_function_decl_empty_params(string_view function_namev, ast* body, ast* return_type);
 
 /**
  * メソッド宣言を表す要素を作成します.
  * @param amodifier
- * @param func_name
+ * @param func_namev
  * @param atype_parameter
  * @param parameter_list
  * @param body
  * @param return_type_name
  * @return
  */
-ast* ast_new_method_decl(ast* amodifier, char* func_name, ast* atype_parameter, ast* parameter_list, ast* body, ast* return_type);
+ast* ast_new_method_decl(ast* amodifier, string_view func_namev, ast* atype_parameter, ast* parameter_list, ast* body, ast* return_type);
 
 /**
  * 引数のないメソッド宣言を表す要素を作成します.
  * @param amodifier
- * @param func_name
+ * @param func_namev
  * @param atype_parameter
  * @param body
  * @param return_type_name
  * @return
  */
-ast* ast_new_method_decl_empty_params(ast* amodifier, char* func_name, ast* atype_parameter, ast* body, ast* return_type);
+ast* ast_new_method_decl_empty_params(ast* amodifier, string_view func_namev, ast* atype_parameter, ast* body, ast* return_type);
 
 /**
  * コンストラクタ宣言を表す要素を作成します.
@@ -195,19 +195,19 @@ ast* ast_new_constructor_chain(constructor_chain_type chain_type, ast* argument_
 /**
  * 仮引数を表す要素を作成します.
  * @param atypename
- * @param parameter_access_name
+ * @param parameter_access_namev
  * @return
  */
-ast* ast_new_parameter(ast* atypename, char* parameter_access_name);
+ast* ast_new_parameter(ast* atypename, string_view parameter_access_namev);
 
 /**
  * 仮引数を表す要素を作成します.
  * @param atypename
- * @param parameter_access_name
+ * @param parameter_access_namev
  * @param parameter_list
  * @return
  */
-ast* ast_new_parameter_list(ast* atypename, char* parameter_access_name, ast* parameter_list);
+ast* ast_new_parameter_list(ast* atypename, string_view parameter_access_namev, ast* parameter_list);
 
 /**
  * クラスが実装するインターフェイスの一覧として使用される、
@@ -232,9 +232,9 @@ ast* ast_new_typename(ast* fqcn, ast* atype_args);
  * @param arule_list
  * @return
  */
-ast* ast_new_type_parameter(char* name, ast* arule_list);
-ast* ast_new_type_in_parameter(char* name, ast* arule_list);
-ast* ast_new_type_out_parameter(char* name, ast* arule_list);
+ast* ast_new_type_parameter(string_view namev, ast* arule_list);
+ast* ast_new_type_in_parameter(string_view namev, ast* arule_list);
+ast* ast_new_type_out_parameter(string_view namev, ast* arule_list);
 
 /** 
  * T や K V の要素のリストを作成します.
@@ -250,7 +250,7 @@ ast* ast_new_type_parameter_list(ast* aparam, ast* alist);
  * @param aparams
  * @return
  */
-ast * ast_new_parameterized_typename(char* name, ast* aparams);
+ast * ast_new_parameterized_typename(string_view namev, ast* aparams);
 
 /**
  * 型制約の一覧を表す要素を作成します.

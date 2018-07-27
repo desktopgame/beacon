@@ -23,6 +23,7 @@ numeric_map* numeric_map_put(numeric_map* self, numeric_key key, numeric_map_ite
 			numeric_map* nl = numeric_map_new();
 			self->left = nl;
 			nl->parent = self;
+			nl->key = key;
 			nl->item = item;
 		} else {
 			return numeric_map_put(self->left, key, item);
@@ -32,6 +33,7 @@ numeric_map* numeric_map_put(numeric_map* self, numeric_key key, numeric_map_ite
 			numeric_map* nr = numeric_map_new();
 			self->right = nr;
 			nr->parent = self;
+			nr->key = key;
 			nr->item = item;
 		} else {
 			return numeric_map_put(self->right, key, item);
@@ -45,8 +47,14 @@ numeric_map* numeric_map_cell(numeric_map* self, numeric_key key) {
 	if(comp == 0) {
 		return self;
 	} else if(comp < 0) {
+		if(self->left == NULL) {
+			return NULL;
+		}
 		return numeric_map_cell(self->left, key);
 	} else if(comp > 0) {
+		if(self->right == NULL) {
+			return NULL;
+		}
 		return numeric_map_cell(self->right, key);
 	}
 	return NULL;
@@ -100,7 +108,7 @@ static void numeric_map_eachImpl(numeric_map* self, numeric_tree_action a) {
 		numeric_map_eachImpl(self->left, a);
 	}
 	//同じならそれはルート要素
-	if (self->key == 0) {
+	if (self->key != 0) {
 		a(self->key, self->item);
 	}
 	if (self->right != NULL) {

@@ -115,7 +115,7 @@ void fqcn_cache_delete(fqcn_cache * self) {
 	if(self == NULL) {
 		return;
 	}
-	vector_delete(self->scope_vec, vector_deleter_free);
+	vector_delete(self->scope_vec, vector_deleter_null);
 	MEM_FREE(self);
 }
 //private

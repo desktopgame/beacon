@@ -84,11 +84,11 @@ ast* ast_new_variable(ast* a, ast* atype_args);
 
 /**
  * 変数を表す要素を作成します.
- * @param str
+ * @param strv
  * @param atype_args
  * @return
  */
-ast* ast_new_variable_fromstr(char* str, ast* atype_args);
+ast* ast_new_variable_fromstr(string_view strv, ast* atype_args);
 
 /**
  * 関数呼び出し演算子を表す要素を作成します.
@@ -117,7 +117,7 @@ ast* ast_new_super();
  * @param atype_args
  * @return
  */
-ast* ast_new_field_access(ast* afact, char* name, ast* atype_args);
+ast* ast_new_field_access(ast* afact, string_view namev, ast* atype_args);
 
 /**
  * new X::Y(...) を表す因子を作成します.

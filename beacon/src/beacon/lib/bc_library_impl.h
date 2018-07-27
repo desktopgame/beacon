@@ -8,6 +8,8 @@
 #include "../env/object.h"
 #include "../env/type/class_impl.h"
 
+#include "../util/string_pool.h"
+
 #include "../vm/vm.h"
 #include "../vm/enviroment.h"
 #include "../vm/opcode_buf.h"

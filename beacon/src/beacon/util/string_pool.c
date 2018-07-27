@@ -10,6 +10,8 @@ static tree_map* gMap = NULL;
 static vector* gVec = NULL;
 static void string_pool_string_delete(vector_item item);
 
+#define HEADER (2)
+
 void string_pool_init() {
 	assert(gMap == NULL);
 	assert(gVec == NULL);
@@ -22,9 +24,13 @@ string_view string_pool_intern(const char* str) {
 	assert(gVec != NULL);
 	tree_map* cell = tree_map_cell(gMap, str);
 	if(cell == NULL) {
-		cell = tree_map_put(gMap, str, (void*)(gVec->length + 1));
+		cell = tree_map_put(gMap, str, (void*)(gVec->length + HEADER));
 		vector_push(gVec, text_strdup(str));
 	}
+	if(cell == gMap) {
+		return ZERO_VIEW;
+	}
+	assert(cell->item != 0);
 	return (string_view)cell->item;
 }
 
@@ -32,16 +38,24 @@ string_view string_pool_intern2(string_buffer* buffer) {
 	char* raw = string_buffer_release(buffer);
 	string_view sv = string_pool_intern(raw);
 	MEM_FREE(raw);
+	assert(sv != 0);
 	return sv;
 }
 
 string_view string_pool_str2ref(const char* str) {
 	tree_map* cell = tree_map_cell(gMap, str);
+	if(cell == gMap) {
+		return ZERO_VIEW;
+	}
 	return (string_view)cell->item;
 }
 
 const char* string_pool_ref2str(string_view ref) {
-	const char* str = (const char*)vector_at(gVec, ref - 1);
+	if(ref == ZERO_VIEW) {
+		return "";
+	}
+	assert(ref != 0);
+	const char* str = (const char*)vector_at(gVec, ref - HEADER);
 	return str;
 }
 
@@ -66,3 +80,4 @@ static void string_pool_string_delete(vector_item item) {
 	char* e = (char*)item;
 	MEM_FREE(e);
 }
+#undef HEADER

@@ -7,6 +7,7 @@
 #include "compile_context.h"
 #include "method.h"
 #include "../util/mem.h"
+#include "../util/text.h"
 #include <string.h>
 #include <stdlib.h>
 #include <assert.h>
@@ -74,6 +75,8 @@ generic_type* import_manager_resolve(import_manager* self, namespace_* scope, ge
 	//Int, String などはっきりした型が見つかった
 	//また、型引数もない
 	if(fqcn->type_args->length == 0) {
+		text_printfln("`[%s]\n", string_pool_ref2str(type_name(core_type)));
+		assert(core_type->generic_self != NULL);
 		return core_type->generic_self;
 	}
 	//Array, Dictionary などはっきりした型が見つかった

@@ -245,18 +245,18 @@ ast* ast_malloc(ast_tag tag, const char* filename, int lineno);
 
 /**
  * 名前空間の一節(. ~~~ .)を表す要素を作成します.
- * @param name
+ * @param namev
  * @return
  */
-ast* ast_new_namespace_path(char* name);
+ast* ast_new_namespace_path(string_view namev);
 
 /**
  * 二つの名前空間を連結します.
  * @param forward
- * @param name
+ * @param namev
  * @return
  */
-ast* ast_new_namespace_path_list(ast* forward, char* name);
+ast* ast_new_namespace_path_list(ast* forward, string_view namev);
 
 /**
  * インポート先のファイルを表す要素を作成します.
@@ -300,18 +300,18 @@ ast* ast_new_blank();
 
 /**
  * 識別子を表す要素を作成します.
- * @param str
+ * @param strv
  * @return
  */
-ast* ast_new_identifier(char* str);
+ast* ast_new_identifier(string_view strv);
 
 /**
  * 識別子のリストを表す要素を作成します.
- * @param str
+ * @param strv
  * @param ident_list
  * @return
  */
-ast* ast_new_identifier_list(char* str, ast* ident_list);
+ast* ast_new_identifier_list(string_view strv, ast* ident_list);
 
 /**
  * 計算可能な要素だけで構成される文を作成します.
