@@ -11,9 +11,9 @@
 #include <string.h>
 #include <stdio.h>
 
-il_factor_variable_local* il_factor_variable_local_new(const char* name) {
+il_factor_variable_local* il_factor_variable_local_new(string_view namev) {
 	il_factor_variable_local* ret = (il_factor_variable_local*)MEM_MALLOC(sizeof(il_factor_variable_local));
-	ret->name = text_strdup(name);
+	ret->namev = namev;
 	ret->type = variable_local_undefined;
 	ret->type_args = NULL;
 	ret->gt = NULL;
@@ -40,7 +40,7 @@ void il_factor_variable_local_load(il_factor_variable_local * self, enviroment *
 		//stmtはgenerate時点でシンボルテーブルへ書き込むので、
 		//NULLになることがある。
 		self->type = variable_local_scope;
-		symbol_entry* ent = symbol_table_entry(env->sym_table, NULL, self->name);
+		symbol_entry* ent = symbol_table_entry(env->sym_table, NULL, self->namev);
 		//ローカル変数として解決出来なかったので、
 		//フィールドとして解決する
 		if(ent == NULL) {
@@ -50,15 +50,15 @@ void il_factor_variable_local_load(il_factor_variable_local * self, enviroment *
 			//定義されていない変数とみなせる？
 			type* tp = cctop_type();
 			if(tp->tag == type_interface/* この条件は構文規則からして満たさないはず */) {
-				il_error_report(ilerror_undefined_variable, self->name);
+				il_error_report(ilerror_undefined_variable, string_pool_ref2str(self->namev));
 				return;
 			}
 			int temp = -1;
-			field* f = class_find_field(TYPE2CLASS(tp), self->name, &temp);
+			field* f = class_find_field(TYPE2CLASS(tp), self->namev, &temp);
 			self->u.field_index = temp;
 			self->type = variable_local_field;
 			if(temp == -1) {
-				il_error_report(ilerror_undefined_field, self->name);
+				il_error_report(ilerror_undefined_field, string_pool_ref2str(self->namev));
 				return;
 			}
 			//フィールドの型を調べる
@@ -89,12 +89,11 @@ generic_type* il_factor_variable_local_eval(il_factor_variable_local * self, env
 }
 
 char* il_factor_variable_local_tostr(il_factor_variable_local * self, enviroment * env) {
-	return text_strdup(self->name);
+	return text_strdup(string_pool_ref2str(self->namev));
 }
 
 void il_factor_variable_local_delete(il_factor_variable_local* self) {
 	vector_delete(self->type_args, vector_deleter_null);
 //	generic_type_delete(self->gt);
-	MEM_FREE(self->name);
 	MEM_FREE(self);
 }

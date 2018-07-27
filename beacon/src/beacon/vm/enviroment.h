@@ -2,6 +2,7 @@
 #ifndef BEACON_VM_ENVIROMENT_H
 #define BEACON_VM_ENVIROMENT_H
 #include "../util/vector.h"
+#include "../util/string_pool.h"
 #include "opcode_buf.h"
 #include "symbol_table.h"
 #include <stdbool.h>
@@ -67,10 +68,10 @@ int enviroment_add_constant_char(enviroment* self, char c);
 
 /**
  * 定数プールに文字列を追加して、その位置を返します.
- * @param s
+ * @param sv
  * @return
  */
-int enviroment_add_constant_string(enviroment* self, const char* s);
+int enviroment_add_constant_string(enviroment* self, string_view sv);
 
 /**
  * 指定位置のオペコード/オペランドを返します.

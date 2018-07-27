@@ -2,6 +2,7 @@
 #ifndef BEACON_ENV_FQCN_CACHE_H
 #define BEACON_ENV_FQCN_CACHE_H
 #include "../util/vector.h"
+#include "../util/string_pool.h"
 struct namespace_;
 struct type;
 struct class_;
@@ -12,7 +13,7 @@ struct interface_;
  */
 typedef struct fqcn_cache {
 	vector* scope_vec;
-	char* name;
+	string_view namev;
 } fqcn_cache;
 
 /**

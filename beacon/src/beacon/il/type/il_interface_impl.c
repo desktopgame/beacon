@@ -16,11 +16,11 @@ il_type * il_type_wrap_interface(il_interface * self) {
 	return ret;
 }
 
-il_interface * il_interface_new(const char * name) {
+il_interface * il_interface_new(string_view namev) {
 	il_interface* ret = (il_interface*)MEM_MALLOC(sizeof(il_interface));
 	ret->extends_list = vector_new();
 	ret->method_list = vector_new();
-	ret->name = text_strdup(name);
+	ret->namev = namev;
 	ret->type_parameter_list = vector_new();
 	return ret;
 }
@@ -31,7 +31,7 @@ void il_interface_add_method(il_interface * self, il_method * method) {
 
 void il_interface_dump(il_interface * self, int depth) {
 	text_putindent(depth);
-	text_printf("interface %s", self->name);
+	text_printf("interface %s", string_pool_ref2str(self->namev));
 	il_type_parameter_list_print(self->type_parameter_list);
 	text_putline();
 	//継承するインターフェイスの一覧を出力
@@ -51,7 +51,6 @@ void il_interface_delete(il_interface * self) {
 	vector_delete(self->extends_list, il_interface_fqcn_delete);
 	vector_delete(self->method_list, il_interface_method_delete);
 	vector_delete(self->type_parameter_list, il_interface_type_parameter_delete);
-	MEM_FREE(self->name);
 	MEM_FREE(self);
 }
 //private 

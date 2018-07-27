@@ -47,7 +47,7 @@ void CLBC_fields_decl(class_loader* self, il_type* iltype, type* tp, vector* ilf
 	for (int i = 0; i < ilfields->length; i++) {
 		vector_item e = vector_at(ilfields, i);
 		il_field* ilfield = (il_field*)e;
-		field* field = field_new(ilfield->name);
+		field* field = field_new(ilfield->namev);
 		field->access = ilfield->access;
 		field->modifier = ilfield->modifier;
 		field->parent = tp;
@@ -55,7 +55,7 @@ void CLBC_fields_decl(class_loader* self, il_type* iltype, type* tp, vector* ilf
 		if(modifier_is_abstract(field->modifier) ||
 		   modifier_is_override(field->modifier) ||
 		   modifier_is_native(field->modifier)) {
-			   class_loader_report(self, clerror_native_field, field->name);
+			   class_loader_report(self, clerror_native_field, string_pool_ref2str(field->namev));
 			   return;
 		   }
 		//NOTE:ここではフィールドの型を設定しません
@@ -93,7 +93,7 @@ void CLBC_methods_decl(class_loader* self, il_type* iltype, type* tp, vector* il
 		//メソッドから仮引数一覧を取りだす
 		vector* ilparams = ilmethod->parameter_list;
 		//実行時のメソッド情報を作成する
-		method* method = method_new(ilmethod->name);
+		method* method = method_new(ilmethod->namev);
 		ccpush_method(method);
 		vector* parameter_list = method->parameter_list;
 		method->type = modifier_is_native(ilmethod->modifier) ? method_type_native : method_type_script;
@@ -113,7 +113,7 @@ void CLBC_methods_decl(class_loader* self, il_type* iltype, type* tp, vector* il
 		if(modifier_is_abstract(method->modifier) &&
 		  (tp->tag == type_class &&
 		  !TYPE2CLASS(tp)->is_abstract)) {
-			  class_loader_report(self, clerror_abstract_method_by, method->name);
+			  class_loader_report(self, clerror_abstract_method_by, string_pool_ref2str(method->namev));
 			  method_delete(method);
 			  return;
 		}
@@ -123,7 +123,7 @@ void CLBC_methods_decl(class_loader* self, il_type* iltype, type* tp, vector* il
 		   ilmethod->no_stmt &&
 			(!modifier_is_abstract(method->modifier) && !modifier_is_native(method->modifier))
 		) {
-			  class_loader_report(self, clerror_empty_method_body, method->name);
+			  class_loader_report(self, clerror_empty_method_body, string_pool_ref2str(method->namev));
 			  method_delete(method);
 			return;
 		}
@@ -132,26 +132,19 @@ void CLBC_methods_decl(class_loader* self, il_type* iltype, type* tp, vector* il
 		   !ilmethod->no_stmt &&
 			(modifier_is_abstract(method->modifier) || modifier_is_native(method->modifier))
 		) {
-			  class_loader_report(self, clerror_not_empty_method_body, method->name);
+			  class_loader_report(self, clerror_not_empty_method_body, string_pool_ref2str(method->namev));
 			  method_delete(method);
 			return;
 		}
 		method->parent = tp;
 		method->return_gtype = import_manager_resolve(self->import_manager, scope, ilmethod->return_fqcn);
-		if(tp->tag == type_class) {
-			XBREAK(
-				!strcmp(TYPE2CLASS(tp)->name, "String") &&
-				!strcmp(method->name, "length") &&
-				method->return_gtype->tag != generic_type_tag_none
-			);
-		}
 		//ILパラメータを実行時パラメータへ変換
 		//NOTE:ここでは戻り値の型,引数の型を設定しません
 		//     class_loader_sgload_complete参照
 		for (int i = 0; i < ilparams->length; i++) {
 			vector_item e = vector_at(ilparams, i);
 			il_parameter* ilp = (il_parameter*)e;
-			parameter* param = parameter_new(ilp->name);
+			parameter* param = parameter_new(ilp->namev);
 			vector_push(parameter_list, param);
 		}
 		CLBC_parameter_list(self, scope, ilmethod->parameter_list, method->parameter_list);
@@ -166,19 +159,19 @@ void CLBC_methods_decl(class_loader* self, il_type* iltype, type* tp, vector* il
 	method* outiMethod = NULL;
 	if(tp->tag == type_class &&
 	  !class_interface_implement_valid(TYPE2CLASS(tp), &outiMethod)) {
-		class_loader_report(self, clerror_not_implement_interface, tp->u.class_->name, outiMethod->name);
+		class_loader_report(self, clerror_not_implement_interface, string_pool_ref2str(tp->u.class_->namev), string_pool_ref2str(outiMethod->namev));
 	}
 	//実装されていない抽象メソッドを確認する
 	method* outaMethod = NULL;
 	if(tp->tag == type_class &&
 	   !class_abstract_class_implement_valid(TYPE2CLASS(tp), &outaMethod)) {
-		class_loader_report(self, clerror_not_implement_abstract_method, tp->u.class_->name, outaMethod->name);
+		class_loader_report(self, clerror_not_implement_abstract_method, string_pool_ref2str(tp->u.class_->namev), string_pool_ref2str(outaMethod->namev));
 	   }
 	//重複するフィールドを確認する
 	field* outField = NULL;
 	if(tp->tag == type_class &&
 	   !class_field_valid(tp->u.class_, &outField)) {
-		class_loader_report(self, clerror_field_name_a_overlapped, tp->u.class_->name, outField->name);
+		class_loader_report(self, clerror_field_name_a_overlapped, string_pool_ref2str(tp->u.class_->namev), string_pool_ref2str(outField->namev));
 	}
 }
 
@@ -208,7 +201,7 @@ void CLBC_methods_impl(class_loader* self, namespace_* scope, il_type* iltype, t
 			symbol_table_entry(
 				env->sym_table,
 				import_manager_resolve(self->import_manager, scope, ilparam->fqcn),
-				ilparam->name
+				ilparam->namev
 			);
 			//実引数を保存
 			//0番目は this のために開けておく
@@ -254,7 +247,7 @@ void CLBC_ctor_decl(class_loader* self, il_type* iltype, type* tp, namespace_* s
 		for (int i = 0; i < ilparams->length; i++) {
 			vector_item e = vector_at(ilparams, i);
 			il_parameter* ilp = (il_parameter*)e;
-			parameter* param = parameter_new(ilp->name);
+			parameter* param = parameter_new(ilp->namev);
 			vector_push(parameter_list, param);
 		}
 		CLBC_parameter_list(self, scope, ilcons->parameter_list, cons->parameter_list);
@@ -292,7 +285,7 @@ void CLBC_ctor_impl(class_loader* self, il_type* iltype, type* tp) {
 			symbol_table_entry(
 				env->sym_table,
 				import_manager_resolve(self->import_manager, scope, ilparam->fqcn),
-				ilparam->name
+				ilparam->namev
 			);
 			//実引数を保存
 			//0番目は this のために開けておく
@@ -327,7 +320,7 @@ void CLBC_operator_overload_decl(class_loader* self, il_type* iltype, type* tp, 
 		//パラメータ読み込み
 		for(int j=0; j<ilopov->parameter_list->length; j++) {
 			il_parameter* ilparam = vector_at(ilopov->parameter_list, j);
-			parameter* param = parameter_new(ilparam->name);
+			parameter* param = parameter_new(ilparam->namev);
 			vector_push(opov->parameter_list, param);
 		}
 		CLBC_parameter_list(self, scope, ilopov->parameter_list, opov->parameter_list);
@@ -365,7 +358,7 @@ void CLBC_operator_overload_impl(class_loader* self, il_type* iltype, type* tp, 
 			symbol_table_entry(
 				env->sym_table,
 				import_manager_resolve(self->import_manager, scope, ilparam->fqcn),
-				ilparam->name
+				ilparam->namev
 			);
 			//実引数を保存
 			//0番目は this のために開けておく
@@ -562,7 +555,7 @@ static void CLBC_default_eqoperator_overload(class_loader* self, type* tp) {
 	ccpush_type(tp);
 	env->context_ref = self;
 	//引数を読み取る
-	symbol_table_entry(env->sym_table, paramOBJ->gtype, paramOBJ->name);
+	symbol_table_entry(env->sym_table, paramOBJ->gtype, paramOBJ->namev);
 	opcode_buf_add(env->buf, (vector_item)op_store);
 	opcode_buf_add(env->buf, (vector_item)1);
 	//thisを参照できるように
@@ -615,7 +608,7 @@ static void CLBC_default_noteqoperator_overload(class_loader* self, type* tp) {
 	ccpush_type(tp);
 	env->context_ref = self;
 	//引数を読み取る
-	symbol_table_entry(env->sym_table, paramOBJ->gtype, paramOBJ->name);
+	symbol_table_entry(env->sym_table, paramOBJ->gtype, paramOBJ->namev);
 	opcode_buf_add(env->buf, (vector_item)op_store);
 	opcode_buf_add(env->buf, (vector_item)1);
 	//thisを参照できるように

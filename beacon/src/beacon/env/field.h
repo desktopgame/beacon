@@ -3,6 +3,7 @@
 #define BEACON_ENV_FIELD_H
 #include "../ast/access_level.h"
 #include "../ast/modifier_type.h"
+#include "../util/string_pool.h"
 //#include "virtual_type.h"
 struct type;
 struct generic_type;
@@ -11,7 +12,7 @@ struct object;
  * フィールドを表す構造体.
  */
 typedef struct field {
-	char* name;
+	string_view namev;
 	struct type* parent;
 	struct generic_type* gtype;
 	struct object* static_value;
@@ -21,10 +22,10 @@ typedef struct field {
 
 /**
  * 新しいフィールドを作成します.
- * @param name
+ * @param namev
  * @return
  */
-field* field_new(const char* name);
+field* field_new(string_view namev);
 
 /**
  * フィールドを出力します.

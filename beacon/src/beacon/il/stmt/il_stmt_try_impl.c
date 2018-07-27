@@ -29,9 +29,9 @@ il_stmt_try* il_stmt_try_new() {
 	return ret;
 }
 
-il_stmt_catch* il_stmt_catch_new(const char* name) {
+il_stmt_catch* il_stmt_catch_new(string_view namev) {
 	il_stmt_catch* ret = (il_stmt_catch*)MEM_MALLOC(sizeof(il_stmt_catch));
-	ret->name = text_strdup(name);
+	ret->namev = namev;
 	ret->fqcn = generic_cache_new();
 	ret->statement_list = vector_new();
 	return ret;
@@ -55,7 +55,7 @@ void il_stmt_catch_dump(il_stmt_catch* self, int depth) {
 	text_putindent(depth);
 	text_printf("catch(");
 	generic_cache_print(self->fqcn);
-	text_printf(" %s)", self->name);
+	text_printf(" %s)", string_pool_ref2str(self->namev));
 	text_putline();
 	for(int i=0; i<self->statement_list->length; i++) {
 		il_stmt* e = (il_stmt*)vector_at(self->statement_list, i);
@@ -89,7 +89,7 @@ void il_stmt_try_generate(il_stmt_try* self, enviroment* env) {
 		//例外を指定の名前でアクセス出来るように
 		il_stmt_catch* ilcatch = (il_stmt_catch*)vector_at(self->catch_list, i);
 		generic_type* exgType = import_manager_resolve(ccget_class_loader()->import_manager, cc_namespace(), ilcatch->fqcn);
-		int exIndex = symbol_table_entry(env->sym_table, exgType, ilcatch->name)->index;
+		int exIndex = symbol_table_entry(env->sym_table, exgType, ilcatch->namev)->index;
 		//直前のケースのジャンプ先をここに
 		if (nextCause != NULL) {
 			int head = opcode_buf_nop(env->buf);
@@ -145,7 +145,7 @@ void il_stmt_try_load(il_stmt_try* self, enviroment* env) {
 
 void il_stmt_catch_load(il_stmt_catch* self, enviroment* env) {
 	generic_type* exgType = import_manager_resolve(ccget_class_loader()->import_manager, cc_namespace(), self->fqcn);
-	symbol_table_entry(env->sym_table, exgType, self->name);
+	symbol_table_entry(env->sym_table, exgType, self->namev);
 	for(int i=0; i<self->statement_list->length; i++) {
 		il_stmt* e = (il_stmt*)vector_at(self->statement_list, i);
 		il_stmt_load(e, env);
@@ -155,7 +155,6 @@ void il_stmt_catch_load(il_stmt_catch* self, enviroment* env) {
 void il_stmt_catch_delete(il_stmt_catch* self) {
 	generic_cache_delete(self->fqcn);
 	vector_delete(self->statement_list, il_stmt_catch_stmt_delete);
-	MEM_FREE(self->name);
 	MEM_FREE(self);
 }
 

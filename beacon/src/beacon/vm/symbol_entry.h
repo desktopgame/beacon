@@ -2,6 +2,7 @@
 #ifndef BEACON_VM_SYMBOL_ENTRY_H
 #define BEACON_VM_SYMBOL_ENTRY_H
 //#include "../env/class.h"
+#include "../util/string_pool.h"
 struct generic_type;
 /**
  * シンボルを表す構造体.
@@ -13,10 +14,9 @@ typedef struct symbol_entry {
 
 /**
  * エントリを作成します.
- * @param name
  * @return
  */
-symbol_entry* symbol_entry_new(const char* name);
+symbol_entry* symbol_entry_new();
 
 /**
  * エントリを開放します.

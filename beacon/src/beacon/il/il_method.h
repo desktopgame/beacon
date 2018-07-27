@@ -3,6 +3,7 @@
 #define BEACON_IL_IL_METHOD_H
 #include "../env/generic_cache.h"
 #include "../util/vector.h"
+#include "../util/string_pool.h"
 #include "../ast/access_level.h"
 #include "../ast/modifier_type.h"
 #include <stdbool.h>
@@ -10,7 +11,7 @@
  * メソッドの定義を表す要素.
  */
 typedef struct il_method {
-	char* name;
+	string_view namev;
 	vector* parameter_list;
 	vector* statement_list;
 	//il_type* return_type;
@@ -25,7 +26,7 @@ typedef struct il_method {
  * @param name
  * @return
  */
-il_method* il_method_new(const char* name);
+il_method* il_method_new(string_view namev);
 
 /**
  * メソッドを出力します.

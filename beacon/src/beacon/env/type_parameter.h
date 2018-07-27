@@ -1,6 +1,7 @@
 #pragma once
 #ifndef BEACON_ENV_TYPE_PARAMETER_H
 #define BEACON_ENV_TYPE_PARAMETER_H
+#include "../util/string_pool.h"
 struct vector;
 struct il_type_parameter;
 /**
@@ -16,7 +17,7 @@ typedef enum type_parameter_kind {
  * 型変数を表す構造体.
  */
 typedef struct type_parameter {
-	char* name;
+	string_view namev;
 	type_parameter_kind kind;
 //	struct vector* rule_vec;
 } type_parameter;
@@ -25,7 +26,7 @@ typedef struct type_parameter {
  * @param name
  * @return
  */
-type_parameter* type_parameter_new(char* name);
+type_parameter* type_parameter_new(string_view namev);
 
 /**
  * ILから型変数を生成します.

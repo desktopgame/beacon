@@ -3,6 +3,7 @@
 #define BEACON_IL_IL_STMT_INFERENCED_TYPE_INIT
 #include "../il_factor_interface.h"
 #include "../il_stmt_interface.h"
+#include "../../util/string_pool.h"
 struct enviroment;
 struct symbol_entry;
 /**
@@ -10,7 +11,7 @@ struct symbol_entry;
  * var y = new X::Y();
  */
 typedef struct il_stmt_inferenced_type_init {
-	char* name;
+	string_view namev;
 	il_factor* fact;
 	struct symbol_entry* sym;
 } il_stmt_inferenced_type_init;
@@ -24,10 +25,10 @@ il_stmt* il_stmt_wrap_inferenced_type_init(il_stmt_inferenced_type_init* self);
 
 /**
  * 推論された型の初期化を表す要素を作成します.
- * @param name
+ * @param namev
  * @return
  */
-il_stmt_inferenced_type_init* il_stmt_inferenced_type_init_new(const char* name);
+il_stmt_inferenced_type_init* il_stmt_inferenced_type_init_new(string_view namev);
 
 /**
  * 推論された型の初期化を表す要素を出力します.

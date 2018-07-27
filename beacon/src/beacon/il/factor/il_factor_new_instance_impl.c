@@ -142,7 +142,7 @@ static void il_factor_new_instance_find(il_factor_new_instance * self, enviromen
 	class_* cls = cc_class(self->fqcnc);
 	int temp = -1;
 	if(cls == NULL) {
-		il_error_report(ilerror_undefined_class, self->fqcnc->name);
+		il_error_report(ilerror_undefined_class, string_pool_ref2str(self->fqcnc->namev));
 		return;
 	}
 	ccpush_type_args(self->type_args);
@@ -150,7 +150,7 @@ static void il_factor_new_instance_find(il_factor_new_instance * self, enviromen
 	self->c = class_ilfind_constructor(cls, self->argument_list, env, &temp);
 	self->constructor_index = temp;
 	if(temp == -1) {
-		il_error_report(ilerror_undefined_ctor, cls->name);
+		il_error_report(ilerror_undefined_ctor, string_pool_ref2str(cls->namev));
 	}
 	ccpop_type_args();
 }

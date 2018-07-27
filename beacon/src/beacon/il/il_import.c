@@ -4,16 +4,15 @@
 #include <assert.h>
 #include "../util/mem.h"
 
-il_import* il_import_new(const char* path) {
-	assert(path != NULL);
+il_import* il_import_new(string_view pathv) {
 	il_import* ret = (il_import*)MEM_MALLOC(sizeof(il_import));
-	ret->path = text_strdup(path);
+	ret->pathv = pathv;
 	return ret;
 }
 
 void il_import_dump(il_import* self, int depth) {
 	text_putindent(depth);
-	text_printf("import %s", self->path);
+	text_printf("import %s", string_pool_ref2str(self->pathv));
 	text_putline();
 }
 
@@ -21,6 +20,5 @@ void il_import_delete(il_import* self) {
 	if(self == NULL) {
 		return;
 	}
-	MEM_FREE(self->path);
 	MEM_FREE(self);
 }

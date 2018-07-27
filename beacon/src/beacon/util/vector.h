@@ -52,6 +52,8 @@ typedef struct vector {
  */
 typedef void(*vector_element_deleter)(vector_item item);
 
+typedef void(*vector_action)(vector_item item);
+
 /**
  * ベクターを作成します.
  */
@@ -201,4 +203,10 @@ void vector_deleter_null(vector_item item);
  * @return
  */
 vector* vector_clone(vector* source);
+
+/**
+ * @param self
+ * @param a
+ */
+void vector_each(vector* self, vector_action a);
 #endif // !SIGNAL_UTIL_VECTOR_H

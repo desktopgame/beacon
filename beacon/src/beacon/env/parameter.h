@@ -1,21 +1,22 @@
 #pragma once
 #ifndef BEACON_ENV_PARAMETER_H
 #define BEACON_ENV_PARAMETER_H
+#include "../util/string_pool.h"
 //#include "virtual_type.h"
 /**
  * メソッドの仮引数を表す構造体です.
  */
 typedef struct parameter {
-	char* name;
+	string_view namev;
 	struct generic_type* gtype;
 } parameter;
 
 /**
  * 新しいパラメータを作成します.
- * @param name
+ * @param namev
  * @return
  */
-parameter* parameter_new(const char* name);
+parameter* parameter_new(string_view namev);
 
 /**
  * パラメータを開放します.

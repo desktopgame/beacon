@@ -332,11 +332,11 @@ static void class_loader_load_toplevel(class_loader* self) {
 	//var $world = new beacon::lang::World();
 	il_stmt_inferenced_type_init* createWorldStmt = il_stmt_inferenced_type_init_new("$world");
 	il_factor_new_instance* newWorldInstance = il_factor_new_instance_new();
-	newWorldInstance->fqcnc->name = text_strdup("World");
+	newWorldInstance->fqcnc->namev = string_pool_intern("World");
 	createWorldStmt->fact = il_factor_wrap_new_instance(newWorldInstance);
 	il_stmt* body = il_stmt_wrap_inferenced_type_init(createWorldStmt);
 	//worldをselfにする
-	ccpush_type(namespace_get_type(namespace_lang(), "World"));
+	ccpush_type(namespace_get_type(namespace_lang(), string_pool_intern("World")));
 	il_error_enter();
 	il_stmt_load(body, self->env);
 	il_stmt_generate(body, self->env);
@@ -360,12 +360,12 @@ static void class_loader_load_toplevel_function(class_loader* self) {
 		return;
 	}
 	vector* funcs = self->il_code->function_list;
-	type* worldT = namespace_get_type(namespace_lang(), "World");
+	type* worldT = namespace_get_type(namespace_lang(), string_pool_intern("World"));
 	ccpush_type(worldT);
 	ccset_class_loader(self);
 	for(int i=0; i<funcs->length; i++) {
 		il_function* ilfunc = vector_at(funcs, i);
-		method* m = method_new(ilfunc->name);
+		method* m = method_new(ilfunc->namev);
 		script_method* sm = script_method_new();
 		enviroment* env = enviroment_new();
 		env->context_ref = self;
@@ -378,13 +378,13 @@ static void class_loader_load_toplevel_function(class_loader* self) {
 		//引数を指定
 		for(int j=0; j<ilfunc->parameter_list->length; j++) {
 			il_parameter* ilparam = vector_at(ilfunc->parameter_list, j);
-			parameter* param = parameter_new(ilparam->name);
+			parameter* param = parameter_new(ilparam->namev);
 			vector_push(m->parameter_list, param);
 			param->gtype = import_manager_resolve(self->import_manager, cc_namespace(), ilparam->fqcn);
 			symbol_table_entry(
 				env->sym_table,
 				import_manager_resolve(self->import_manager, cc_namespace(), ilparam->fqcn),
-				ilparam->name
+				ilparam->namev
 			);
 			//実引数を保存
 			//0番目は this のために開けておく

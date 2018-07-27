@@ -16,12 +16,12 @@ static void il_factor_invoke_static_check(il_factor_invoke_static * self, enviro
 static void il_factor_invoke_static_args_delete(vector_item item);
 static void il_factor_invoke_static_typeargs_delete(vector_item item);
 
-il_factor_invoke_static* il_factor_invoke_static_new(const char* name) {
+il_factor_invoke_static* il_factor_invoke_static_new(string_view namev) {
 	il_factor_invoke_static* ret = (il_factor_invoke_static*)MEM_MALLOC(sizeof(il_factor_invoke_static));
 	ret->args = NULL;
 	ret->fqcn = NULL;
 	ret->type_args = NULL;
-	ret->name = text_strdup(name);
+	ret->namev = namev;
 	ret->m = NULL;
 	ret->index = -1;
 	ret->resolved = NULL;
@@ -33,7 +33,7 @@ void il_factor_invoke_static_dump(il_factor_invoke_static* self, int depth) {
 	text_printfln("invoke static");
 
 	text_putindent(depth + 1);
-	text_printfln("%s", self->m->name);
+	text_printfln("%s", string_pool_ref2str(self->m->namev));
 
 	for(int i=0; i<self->args->length; i++) {
 		il_argument* e = (il_argument*)vector_at(self->args, i);
@@ -88,7 +88,7 @@ char* il_factor_invoke_static_tostr(il_factor_invoke_static* self, enviroment* e
 	char* name = fqcn_cache_tostr(self->fqcn);
 	string_buffer_appends(sb, name);
 	string_buffer_append(sb, '.');
-	string_buffer_appends(sb, self->name);
+	string_buffer_appends(sb, string_pool_ref2str(self->namev));
 	il_factor_type_args_tostr(sb, self->type_args, env);
 	il_factor_args_tostr(sb, self->args, env);
 	MEM_FREE(name);
@@ -99,7 +99,6 @@ void il_factor_invoke_static_delete(il_factor_invoke_static* self) {
 	vector_delete(self->args, il_factor_invoke_static_args_delete);
 	vector_delete(self->type_args, il_factor_invoke_static_typeargs_delete);
 	fqcn_cache_delete(self->fqcn);
-	MEM_FREE(self->name);
 	MEM_FREE(self);
 }
 //private
@@ -136,11 +135,11 @@ static void il_factor_invoke_static_check(il_factor_invoke_static * self, enviro
 		il_argument* ilarg = vector_at(self->args, i);
 		il_factor_load(ilarg->factor, env);
 	}
-	self->m = class_ilfind_smethod(cls, self->name, self->args, env, &temp);
+	self->m = class_ilfind_smethod(cls, self->namev, self->args, env, &temp);
 	self->index = temp;
 	//メソッドが見つからない
 	if(temp == -1 || self->m == NULL) {
-		il_error_report(ilerror_undefined_method, self->name);
+		il_error_report(ilerror_undefined_method, string_pool_ref2str(self->namev));
 	}
 	//元に戻す
 	ccpop_type_args();

@@ -15,16 +15,16 @@ il_stmt * il_stmt_wrap_inferenced_type_init(il_stmt_inferenced_type_init * self)
 	return ret;
 }
 
-il_stmt_inferenced_type_init * il_stmt_inferenced_type_init_new(const char * name) {
+il_stmt_inferenced_type_init * il_stmt_inferenced_type_init_new(string_view namev) {
 	il_stmt_inferenced_type_init* ret = (il_stmt_inferenced_type_init*)MEM_MALLOC(sizeof(il_stmt_inferenced_type_init));
-	ret->name = text_strdup(name);
+	ret->namev = namev;
 	ret->fact = NULL;
 	return ret;
 }
 
 void il_stmt_inferenced_type_init_dump(il_stmt_inferenced_type_init * self, int depth) {
 	text_putindent(depth);
-	text_printf("var init %s", self->name);
+	text_printf("var init %s", string_pool_ref2str(self->namev));
 	text_putline();
 	il_factor_dump(self->fact, depth + 1);
 }
@@ -49,13 +49,12 @@ void il_stmt_inferenced_type_init_load(il_stmt_inferenced_type_init * self, envi
 	symbol_entry* e = symbol_table_entry(
 		env->sym_table,
 		gtp,
-		self->name
+		self->namev
 	);
 	self->sym = e;
 }
 
 void il_stmt_inferenced_type_init_delete(il_stmt_inferenced_type_init * self) {
-	MEM_FREE(self->name);
 	il_factor_delete(self->fact);
 	MEM_FREE(self);
 }

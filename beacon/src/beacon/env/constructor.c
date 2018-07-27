@@ -30,7 +30,7 @@ void constructor_dump(constructor * self, int depth) {
 		vector_item e = vector_at(self->parameter_list, i);
 		parameter* p = (parameter*)e;
 		generic_type_print(p->gtype);
-		text_printf(" %s", p->name);
+		text_printf(" %s", string_pool_ref2str(p->namev));
 		if ((i + 1) < self->parameter_list->length) {
 			text_printf(" ");
 		}

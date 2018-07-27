@@ -41,7 +41,7 @@ static il_factor* CLIL_factorImpl(class_loader* self, ast* source) {
 	} else if (source->tag == ast_char) {
 		return il_factor_wrap_char(il_factor_char_new(source->u.char_value));
 	} else if (source->tag == ast_string) {
-		return il_factor_wrap_string(il_factor_string_new(source->u.string_value));
+		return il_factor_wrap_string(il_factor_string_new(source->u.stringv_value));
 	} else if (source->tag == ast_variable) {
 		return il_factor_wrap_variable(CLIL_variable(self, source));
 		//operator(+ - * / %)
@@ -298,7 +298,7 @@ static il_factor_member_op* CLIL_member_op(class_loader* self, ast* source) {
 	ast* afact = ast_first(source);
 	ast* aname = ast_second(source);
 	ast* atype_args = ast_at(source, 2);
-	il_factor_member_op* ret = il_factor_member_op_new(aname->u.string_value);
+	il_factor_member_op* ret = il_factor_member_op_new(aname->u.stringv_value);
 	ret->fact = CLIL_factor(self, afact);
 	CLIL_type_argument(self, atype_args, ret->type_args);
 	return ret;

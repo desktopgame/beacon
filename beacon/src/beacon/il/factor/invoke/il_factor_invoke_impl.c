@@ -20,14 +20,14 @@ static void resolve_default(il_factor_invoke * self, enviroment * env);
 static void il_factor_invoke_args_delete(vector_item item);
 static void il_factor_invoke_check(il_factor_invoke * self, enviroment * env);
 
-il_factor_invoke* il_factor_invoke_new(const char* name) {
+il_factor_invoke* il_factor_invoke_new(string_view namev) {
 	il_factor_invoke* ret = (il_factor_invoke*)MEM_MALLOC(sizeof(il_factor_invoke));
 	ret->args = NULL;
 	ret->receiver = NULL;
 	ret->type_args = NULL;
 	ret->index = -1;
 	ret->m = NULL;
-	ret->name = text_strdup(name);
+	ret->namev = namev;
 	ret->resolved = NULL;
 	return ret;
 }
@@ -39,7 +39,7 @@ void il_factor_invoke_dump(il_factor_invoke* self, int depth) {
 	il_factor_dump(self->receiver, depth + 1);
 
 	text_putindent(depth + 1);
-	text_printfln("%s", self->m->name);
+	text_printfln("%s", string_pool_ref2str(self->m->namev));
 
 	for(int i=0; i<self->args->length; i++) {
 		il_argument* e = (il_argument*)vector_at(self->args, i);
@@ -103,7 +103,7 @@ char* il_factor_invoke_tostr(il_factor_invoke* self, enviroment* env) {
 	char* invstr = il_factor_tostr(self->receiver, env);
 	string_buffer_appends(sb, invstr);
 	string_buffer_append(sb, '.');
-	string_buffer_appends(sb, self->name);
+	string_buffer_appends(sb, string_pool_ref2str(self->namev));
 	il_factor_type_args_tostr(sb, self->type_args, env);
 	il_factor_args_tostr(sb, self->type_args, env);
 	MEM_FREE(invstr);
@@ -115,7 +115,6 @@ void il_factor_invoke_delete(il_factor_invoke* self) {
 	vector_delete(self->type_args, vector_deleter_null);
 	il_factor_delete(self->receiver);
 	//generic_type_delete(self->resolved);
-	MEM_FREE(self->name);
 	MEM_FREE(self);
 }
 //private
@@ -183,20 +182,13 @@ static void il_factor_invoke_check(il_factor_invoke * self, enviroment * env) {
 	}
 	assert(ctype != NULL);
 	int temp = -1;
-	self->m = type_ilfind_method(ctype, self->name, self->args, env, &temp);
-	if(self->m != NULL) {
-		XBREAK(
-			!strcmp(self->m->name, "length") && 
-			!strcmp(type_name(ctype), "String") &&
-			self->m->return_gtype->tag != generic_type_tag_none
-		);
-	}
+	self->m = type_ilfind_method(ctype, self->namev, self->args, env, &temp);
 	//self->m = class_find_method(TYPE2CLASS(ctype), self->name, self->args, env, cache, &temp);
 	self->index = temp;
 	ccpop_receiver();
 	ccpop_type_args();
 	if(temp == -1) {
-		il_error_report(ilerror_undefined_method, self->name);
+		il_error_report(ilerror_undefined_method, string_pool_ref2str(self->namev));
 		return;
 	}
 }

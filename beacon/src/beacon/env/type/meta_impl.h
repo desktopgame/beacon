@@ -6,6 +6,7 @@
 #include "../constructor.h"
 #include "../operator_overload.h"
 #include "../../util/vector.h"
+#include "../../util/string_pool.h"
 #include "../../vm/enviroment.h"
 struct type;
 struct class_;
@@ -45,45 +46,45 @@ int meta_rcalc_score(vector* params, vector* args, vector* typeargs, struct fram
 /**
  * もっとも一致するメソッドを返します.
  * @param method_vec
- * @param name
+ * @param namev
  * @param ilargs
  * @param env
  * @param outIndex
  * @return
  */
-method* meta_ilfind_method(vector* method_vec, const char * name, vector * ilargs, enviroment * env, int * outIndex);
+method* meta_ilfind_method(vector* method_vec, string_view namev, vector * ilargs, enviroment * env, int * outIndex);
 
 /**
  * もっとも一致するメソッドを返します.
  * @param method_vec
- * @param name
+ * @param namev
  * @param gargs
  * @param outIndex
  * @return
  */
-method* meta_gfind_method(vector* method_vec, const char * name, vector * gargs, int* outIndex);
+method* meta_gfind_method(vector* method_vec, string_view namev, vector * gargs, int* outIndex);
 
 /**
  * スコープに基づく方法でもっとも一致するメソッドを返します.
  * @param context
  * @param method_vec
- * @param name
+ * @param namev
  * @param ilargs
  * @param env
  * @param outIndex
  * @return
  */
-method* meta_scoped_ilfind_method(struct class_* context, vector* method_vec, const char * name, vector * ilargs, struct enviroment * env, int * outIndex);
+method* meta_scoped_ilfind_method(struct class_* context, vector* method_vec, string_view namev, vector * ilargs, struct enviroment * env, int * outIndex);
 /**
  * スコープに基づく方法でもっとも一致するメソッドを返します.
  * @param context
  * @param method_vec
- * @param name
+ * @param namev
  * @param gargs
  * @param outIndex
  * @return
  */
-method* meta_scoped_gfind_method(struct class_* context, vector* method_vec, const char * name, vector * gargs, int * outIndex);
+method* meta_scoped_gfind_method(struct class_* context, vector* method_vec, string_view namev, vector * gargs, int * outIndex);
 
 /**
  * もっとも一致するコンストラクタを返します.

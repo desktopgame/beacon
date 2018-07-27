@@ -1,6 +1,7 @@
 #ifndef BEACON_IL_IL_STMT_TRY_H
 #define BEACON_IL_IL_STMT_TRY_H
 #include "../../util/vector.h"
+#include "../../util/string_pool.h"
 #include "../../env/generic_cache.h"
 #include "../il_stmt_interface.h"
 
@@ -13,7 +14,7 @@ typedef struct il_stmt_try {
 
 typedef struct il_stmt_catch {
 	generic_cache* fqcn;
-	char* name;
+	string_view namev;
 	vector* statement_list;
 } il_stmt_catch;
 
@@ -21,7 +22,7 @@ il_stmt* il_stmt_wrap_try(il_stmt_try* self);
 
 il_stmt_try* il_stmt_try_new();
 
-il_stmt_catch* il_stmt_catch_new(const char* name);
+il_stmt_catch* il_stmt_catch_new(string_view namev);
 
 void il_stmt_try_dump(il_stmt_try* self, int depth);
 

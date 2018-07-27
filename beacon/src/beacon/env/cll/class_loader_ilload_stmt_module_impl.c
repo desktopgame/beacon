@@ -140,7 +140,7 @@ static il_stmt* CLIL_bodyImpl(class_loader* self, ast* source) {
 static il_stmt_inferenced_type_init * CLIL_inferenced_type_init(class_loader * self, ast * source) {
 	ast* aname = ast_first(source);
 	ast* afact = ast_second(source);
-	il_stmt_inferenced_type_init* ret = il_stmt_inferenced_type_init_new(aname->u.string_value);
+	il_stmt_inferenced_type_init* ret = il_stmt_inferenced_type_init_new(aname->u.stringv_value);
 	ret->fact = CLIL_factor(self, afact);
 	return ret;
 }
@@ -148,8 +148,8 @@ static il_stmt_inferenced_type_init * CLIL_inferenced_type_init(class_loader * s
 static il_stmt_variable_decl* CLIL_variable_decl(class_loader* self, ast* source) {
 	ast* afqcn = ast_first(source);
 	ast* aname = ast_second(source);
-	il_stmt_variable_decl* ret = il_stmt_variable_decl_new(aname->u.string_value);
-	ret->name = text_strdup(aname->u.string_value);
+	il_stmt_variable_decl* ret = il_stmt_variable_decl_new(aname->u.stringv_value);
+	ret->namev = aname->u.stringv_value;
 	CLIL_generic_cache(ast_first(afqcn), ret->fqcn);
 	return ret;
 }
@@ -158,7 +158,7 @@ static il_stmt_variable_init* CLIL_variable_init(class_loader* self, ast* source
 	ast* afqcn = ast_first(source);
 	ast* aident = ast_second(source);
 	ast* afact = ast_at(source, 2);
-	il_stmt_variable_init* ret = il_stmt_variable_init_new(aident->u.string_value);
+	il_stmt_variable_init* ret = il_stmt_variable_init_new(aident->u.stringv_value);
 	CLIL_generic_cache(afqcn, ret->fqcn);
 	ret->fact = CLIL_factor(self, afact);
 	return ret;
@@ -247,7 +247,7 @@ static void CLIL_catch_list(class_loader* self, vector* dest, ast* source) {
 		ast* atypename = ast_first(source);
 		ast* aname = ast_second(source);
 		ast* abody = ast_at(source, 2);
-		il_stmt_catch* ilcatch = il_stmt_catch_new(aname->u.string_value);
+		il_stmt_catch* ilcatch = il_stmt_catch_new(aname->u.stringv_value);
 		CLIL_generic_cache(ast_first(atypename), ilcatch->fqcn);
 		CLIL_body(self, ilcatch->statement_list, abody);
 		vector_push(dest, ilcatch);

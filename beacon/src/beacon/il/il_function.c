@@ -10,9 +10,9 @@
 static void il_function_parameter_delete(vector_item item);
 static void il_function_stmt_delete(vector_item item);
 
-il_function * il_function_new(const char * name) {
+il_function * il_function_new(string_view namev) {
 	il_function* ret = (il_function*)MEM_MALLOC(sizeof(il_function));
-	ret->name = text_strdup(name);
+	ret->namev = namev;
 	ret->parameter_list = vector_new();
 	ret->statement_list = vector_new();
 	ret->return_fqcn = generic_cache_new();
@@ -21,7 +21,7 @@ il_function * il_function_new(const char * name) {
 
 void il_function_dump(il_function * self, int depth) {
 	text_putindent(depth);
-	text_printf("function %s -> ", self->name);
+	text_printf("function %s -> ", string_pool_ref2str(self->namev));
 	generic_cache_print(self->return_fqcn);
 	text_putline();
 	for (int i = 0; i < self->parameter_list->length; i++) {
@@ -43,7 +43,6 @@ void il_function_delete(il_function * self) {
 	vector_delete(self->parameter_list, il_function_parameter_delete);
 	vector_delete(self->statement_list, il_function_stmt_delete);
 	generic_cache_delete(self->return_fqcn);
-	MEM_FREE(self->name);
 	MEM_FREE(self);
 }
 

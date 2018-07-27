@@ -172,4 +172,10 @@ vector* vector_clone(vector* source) {
 	}
 	return ret;
 }
+
+void vector_each(vector* self, vector_action a) {
+	for(int i=0; i<self->length; i++) {
+		a(vector_at(self, i));
+	}
+}
 #undef SLOT_SIZE

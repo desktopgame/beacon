@@ -2,6 +2,8 @@
 #ifndef BEACON_VM_SYMBOL_TABLE_H
 #define BEACON_VM_SYMBOL_TABLE_H
 #include "../util/tree_map.h"
+#include "../util/numeric_map.h"
+#include "../util/string_pool.h"
 //#include "../env/class.h"
 struct generic_type;
 struct symbol_entry;
@@ -10,7 +12,7 @@ struct symbol_entry;
  * オペコードの中では、添え字で変数アクセスを行います。
  */
 typedef struct symbol_table {
-	tree_map* map;
+	numeric_map* map;
 	int count;
 } symbol_table;
 
@@ -25,10 +27,10 @@ symbol_table* symbol_table_new();
  * もしくは、既に登録されているならそれを返します。
  * @param self
  * @param gtp
- * @param name
+ * @param namev
  * @return nameに対応するエントリが存在せず、clsがNULLならNULL
  */
-struct symbol_entry* symbol_table_entry(symbol_table* self, struct generic_type* gtp, const char* name);
+struct symbol_entry* symbol_table_entry(symbol_table* self, struct generic_type* gtp, string_view namev);
 
 /**
  * シンボルテーブルを開放します.

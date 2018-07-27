@@ -29,15 +29,15 @@ void CLIL_fqcn_cache(ast* afqcn, fqcn_cache* fqcn) {
 
 void CLIL_generic_cache(ast* fqcn, generic_cache* dest) {
 	if(fqcn->tag == ast_fqcn_class_name) {
-		dest->fqcn->name = text_strdup(fqcn->u.string_value);
+		dest->fqcn->namev = fqcn->u.stringv_value;
 		return;
 	}
 	CLIL_generic_cache_impl(fqcn, dest);
 	fqcn_cache* body = dest->fqcn;
 	//FIXME: Int のような文字パースで失敗してしまうので対策
-	if (body->name == NULL &&
+	if (body->namev == 0 &&
 		body->scope_vec->length > 0) {
-		body->name = (char*)vector_pop(body->scope_vec);
+		body->namev = (string_view)vector_pop(body->scope_vec);
 	}
 }
 
@@ -72,7 +72,7 @@ void CLIL_type_parameter(class_loader* self, ast* source, vector* dest) {
 		   source->tag == ast_type_in_parameter ||
 		   source->tag == ast_type_out_parameter);
 	ast* arule_list = ast_first(source);
-	il_type_parameter* iltypeparam = il_type_parameter_new(source->u.string_value);
+	il_type_parameter* iltypeparam = il_type_parameter_new(source->u.stringv_value);
 	if (source->tag == ast_type_in_parameter) iltypeparam->kind = il_type_parameter_kind_in;
 	if (source->tag == ast_type_out_parameter) iltypeparam->kind = il_type_parameter_kind_out;
 	vector_push(dest, iltypeparam);
@@ -105,7 +105,7 @@ void CLIL_parameter_list(class_loader* self, vector* list, ast* source) {
 	} else if (source->tag == ast_parameter) {
 		ast* type_name = ast_first(source);
 		ast* access_name = ast_second(source);
-		il_parameter* p = il_parameter_new(access_name->u.string_value);
+		il_parameter* p = il_parameter_new(access_name->u.stringv_value);
 		CLIL_generic_cache(type_name, p->fqcn);
 		vector_push(list, p);
 	}
@@ -128,11 +128,11 @@ static void CLIL_fqcn_cache_impl(ast* afqcn, fqcn_cache* fqcn, int level) {
 	vector* v = vector_new();
 	ast_fqcn_flatten(afqcn, v);
 	for(int i=0; i<v->length; i++) {
-		char* S = text_strdup(vector_at(v, i));
+		string_view S = (string_view)vector_at(v, i);
 		if(i < v->length - 1) {
 			vector_push(fqcn->scope_vec, S);
 		} else {
-			fqcn->name = S;
+			fqcn->namev = S;
 		}
 	}
 	vector_delete(v, vector_deleter_null);
@@ -158,7 +158,7 @@ static void CLIL_generic_cache_impl(ast* fqcn, generic_cache* dest) {
 			//FIXME:もうちょっと高速に出来る
 			//FIXME:とりあえずここでタグを直してるけどast.cの時点でどうにかするべき
 			fqcn->tag = ast_fqcn_class_name;
-			body->name = text_strdup(fqcn->u.string_value);
+			body->namev = fqcn->u.stringv_value;
 			return;
 		}
 		for (int i = 0; i < fqcn->vchildren->length; i++) {
@@ -167,7 +167,7 @@ static void CLIL_generic_cache_impl(ast* fqcn, generic_cache* dest) {
 		}
 	} else {
 		//FIXME:とりあえずここでタグを直してるけどast.cの時点でどうにかするべき
-		vector_push(body->scope_vec, text_strdup(fqcn->u.string_value));
+		vector_push(body->scope_vec, fqcn->u.stringv_value);
 		fqcn->tag = ast_fqcn_part;
 	}
 }
@@ -206,7 +206,7 @@ static void CLIL_type_parameter_rule(class_loader* self, ast* source, vector* de
 
 static void ast_fqcn_flatten(ast* afqcn, vector* dest) {
 	if(afqcn->tag == ast_fqcn_part) {
-		vector_push(dest, afqcn->u.string_value);
+		vector_push(dest, afqcn->u.stringv_value);
 	} else {
 		for(int i=0; i<afqcn->vchildren->length; i++) {
 			ast_fqcn_flatten(ast_at(afqcn, i), dest);

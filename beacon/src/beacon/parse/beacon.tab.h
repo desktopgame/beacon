@@ -255,10 +255,10 @@
 
 #if ! defined YYSTYPE && ! defined YYSTYPE_IS_DECLARED
 typedef union YYSTYPE
-#line 15 "beacon.y"
+#line 17 "beacon.y"
 {
 	char char_value;
-	const char* string_value;
+	char* string_value;
 	ast* ast_value;
 	assign_operator_type assign_otype_value;
 	constructor_chain_type chain_type_value;

@@ -54,10 +54,9 @@ type * type_wrap_class(class_ * self) {
 	return ret;
 }
 
-class_ * class_new(const char * name) {
-	assert(name != NULL);
+class_ * class_new(string_view namev) {
 	class_* ret = (class_*)MEM_MALLOC(sizeof(class_));
-	ret->name = text_strdup(name);
+	ret->namev = namev;
 	ret->parent = NULL;
 	ret->location = NULL;
 	ret->ref_count = 0;
@@ -80,8 +79,8 @@ class_ * class_new(const char * name) {
 	return ret;
 }
 
-type* class_new_preload(const char * name) {
-	class_* cl = class_new(name);
+type* class_new_preload(string_view namev) {
+	class_* cl = class_new(namev);
 	type* tp = type_wrap_class(cl);
 	tp->state = type_pending;
 	if (TYPE_OBJECT == NULL) {
@@ -150,7 +149,7 @@ void class_add_constructor(class_ * self, constructor * c) {
 
 void class_dump(class_ * self, int depth) {
 	text_putindent(depth);
-	text_printf("class %s", self->name);
+	text_printf("class %s", string_pool_ref2str(self->namev));
 	type_parameter_print(self->type_parameter_list);
 	text_putline();
 	//親クラスがあるなら表示
@@ -166,7 +165,7 @@ void class_dump(class_ * self, int depth) {
 		generic_type* e = (generic_type*)vector_at(self->impl_list, i);
 		interface_* inter = e->core_type->u.interface_;
 		text_putindent(depth + 1);
-		text_printf("impl %s", inter->name);
+		text_printf("impl %s", string_pool_ref2str(inter->namev));
 		text_putline();
 	}
 	//フィールドの一覧をダンプ
@@ -204,12 +203,12 @@ void class_define_native_method(class_ * self, const char * name, native_impl im
 	tree_map_put(self->native_method_ref_map, name, ref);
 }
 
-field * class_find_field(class_* self, const char * name, int* outIndex) {
+field * class_find_field(class_* self, string_view namev, int* outIndex) {
 	(*outIndex) = -1;
 	for (int i = 0; i < self->field_list->length; i++) {
 		vector_item e = vector_at(self->field_list, i);
 		field* f = (field*)e;
-		if (!strcmp(name, f->name)) {
+		if (namev == f->namev) {
 			(*outIndex) = (class_count_fieldall(self) - self->field_list->length) + i;
 			return f;
 		}
@@ -217,10 +216,10 @@ field * class_find_field(class_* self, const char * name, int* outIndex) {
 	return NULL;
 }
 
-field * class_find_field_tree(class_ * self, const char * name, int * outIndex) {
+field * class_find_field_tree(class_ * self, string_view namev, int * outIndex) {
 	class_* pointee = self;
 	do {
-		field* f = class_find_field(pointee, name, outIndex);
+		field* f = class_find_field(pointee, namev, outIndex);
 		if (f != NULL) {
 			return f;
 		}
@@ -233,12 +232,12 @@ field * class_find_field_tree(class_ * self, const char * name, int * outIndex) 
 	return NULL;
 }
 
-field * class_find_sfield(class_ * self, const char * name, int * outIndex) {
+field * class_find_sfield(class_ * self, string_view namev, int * outIndex) {
 	(*outIndex) = -1;
 	for (int i = 0; i < self->sfield_list->length; i++) {
 		vector_item e = vector_at(self->sfield_list, i);
 		field* f = (field*)e;
-		if (!strcmp(name, f->name)) {
+		if (namev == f->namev) {
 			(*outIndex) = (class_count_sfieldall(self) - self->sfield_list->length) + i;
 			return f;
 		}
@@ -246,10 +245,10 @@ field * class_find_sfield(class_ * self, const char * name, int * outIndex) {
 	return NULL;
 }
 
-field * class_find_sfield_tree(class_ * self, const char * name, int * outIndex) {
+field * class_find_sfield_tree(class_ * self, string_view namev, int * outIndex) {
 	class_* pointee = self;
 	do {
-		field* f = class_find_sfield(pointee, name, outIndex);
+		field* f = class_find_sfield(pointee, namev, outIndex);
 		if (f != NULL) {
 			return f;
 		}
@@ -300,40 +299,40 @@ constructor * class_ilfind_empty_constructor(class_ * self, enviroment * env, in
 	return ret;
 }
 
-method * class_ilfind_method(class_ * self, const char * name, vector * args, enviroment * env, int * outIndex) {
+method * class_ilfind_method(class_ * self, string_view namev, vector * args, enviroment * env, int * outIndex) {
 	(*outIndex) = -1;
 	class_create_vtable(self);
 	//assert(self->vt->elements->length > 0);
 	method* ret = NULL;
-	if((ret = meta_scoped_ilfind_method(self, self->vt->elements, name, args, env, outIndex))
+	if((ret = meta_scoped_ilfind_method(self, self->vt->elements, namev, args, env, outIndex))
 	   != NULL) {
 		   return ret;
 	}
-	if((ret = meta_scoped_ilfind_method(self, self->method_list, name, args, env, outIndex))
+	if((ret = meta_scoped_ilfind_method(self, self->method_list, namev, args, env, outIndex))
 	   != NULL) {
 		   return ret;
 	}
-	if((ret = meta_scoped_ilfind_method(self, self->smethod_list, name, args, env, outIndex))
+	if((ret = meta_scoped_ilfind_method(self, self->smethod_list, namev, args, env, outIndex))
 	   != NULL) {
 		   return ret;
 	}
 	return NULL;
 }
 
-struct method* class_gfind_method(class_* self, const char* name, vector* gargs, int* outIndex) {
+struct method* class_gfind_method(class_* self, string_view namev, vector* gargs, int* outIndex) {
 	(*outIndex) = -1;
 	class_create_vtable(self);
 	//assert(self->vt->elements->length > 0);
 	method* ret = NULL;
-	if((ret = meta_scoped_gfind_method(self, self->vt->elements, name, gargs, outIndex))
+	if((ret = meta_scoped_gfind_method(self, self->vt->elements, namev, gargs, outIndex))
 	   != NULL) {
 		   return ret;
 	}
-	if((ret = meta_scoped_gfind_method(self, self->method_list, name, gargs, outIndex))
+	if((ret = meta_scoped_gfind_method(self, self->method_list, namev, gargs, outIndex))
 	   != NULL) {
 		   return ret;
 	}
-	if((ret = meta_scoped_gfind_method(self, self->smethod_list, name, gargs, outIndex))
+	if((ret = meta_scoped_gfind_method(self, self->smethod_list, namev, gargs, outIndex))
 	   != NULL) {
 		   return ret;
 	}
@@ -343,26 +342,26 @@ struct method* class_gfind_method(class_* self, const char* name, vector* gargs,
 method* class_gfind_eqmethod(class_* self, int* outIndex) {
 	vector* gargs = vector_new();
 	vector_push(gargs, TYPE_OBJECT->generic_self);
-	method* ret = class_gfind_method(self, "equals", gargs, outIndex);
+	method* ret = class_gfind_method(self, string_pool_intern("equals"), gargs, outIndex);
 	vector_delete(gargs, vector_deleter_null);
 	return ret;
 }
 
-method * class_ilfind_smethod(class_ * self, const char * name, vector * args, enviroment * env, int * outIndex) {
+method * class_ilfind_smethod(class_ * self, string_view namev, vector * args, enviroment * env, int * outIndex) {
 	(*outIndex) = -1;
 	class_create_vtable(self);
 	int temp = 0;
-	method* ret = meta_ilfind_method(self->smethod_list, name, args, env, &temp);
+	method* ret = meta_ilfind_method(self->smethod_list, namev, args, env, &temp);
 	temp += (class_count_smethodall(self) - self->smethod_list->length);
 	(*outIndex) = temp;
 	return ret;
 }
 
-method* class_gfind_smethod(class_* self, const char* name, vector* gargs, int* outIndex) {
+method* class_gfind_smethod(class_* self, string_view namev, vector* gargs, int* outIndex) {
 	(*outIndex) = -1;
 	class_create_vtable(self);
 	int temp = 0;
-	method* ret = meta_gfind_method(self->smethod_list, name, gargs, &temp);
+	method* ret = meta_gfind_method(self->smethod_list, namev, gargs, &temp);
 	temp += (class_count_smethodall(self) - self->smethod_list->length);
 	(*outIndex) = temp;
 	return ret;
@@ -642,7 +641,6 @@ void class_delete(class_ * self) {
 //	MEM_FREE(self->name);
 	//text_printf("delete %s\n", self->name);
 	vector_delete(self->type_parameter_list, class_type_parameter_delete);
-	MEM_FREE(self->name);
 	MEM_FREE(self);
 }
 
@@ -829,7 +827,7 @@ static bool class_field_validImpl(vector* field_vec, field** out) {
 		for(int j=0; j<field_vec->length; j++) {
 			field* fE = (field*)vector_at(field_vec, j);
 			if(f == fE) { continue; }
-			if(!strcmp(f->name, fE->name)) {
+			if(f->namev == fE->namev) {
 				ret = false;
 				(*out) = fE;
 				break;

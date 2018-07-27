@@ -50,21 +50,21 @@ generic_type* import_manager_resolve(import_manager* self, namespace_* scope, ge
 		if(cchas_method()) {
 			method* m = cctop_method();
 			parameterized->tag = generic_type_tag_method;
-			parameterized->virtual_type_index = method_for_generic_index(m, fqcn->fqcn->name);
+			parameterized->virtual_type_index = method_for_generic_index(m, fqcn->fqcn->namev);
 			parameterized->u.method_ = m;
 			found = (parameterized->virtual_type_index != -1);
 		}
 		if(!found && cchas_ctor()) {
 			type* container = cctop_type();
 			parameterized->tag = generic_type_tag_ctor;
-			parameterized->virtual_type_index = type_for_generic_index(container, fqcn->fqcn->name);
+			parameterized->virtual_type_index = type_for_generic_index(container, fqcn->fqcn->namev);
 			parameterized->u.type_ = container;
 			found = (parameterized->virtual_type_index != -1);
 		}
 		if(!found) {
 			type* container = cctop_type();
 			parameterized->tag = generic_type_tag_class;
-			parameterized->virtual_type_index = type_for_generic_index(container, fqcn->fqcn->name);
+			parameterized->virtual_type_index = type_for_generic_index(container, fqcn->fqcn->namev);
 			parameterized->u.type_ = container;
 			found = (parameterized->virtual_type_index != -1);
 		}
@@ -100,21 +100,21 @@ type* core_type = fqcn_type(fqcn, scope);
 		if(cchas_method()) {
 			method* m = cctop_method();
 			parameterized->tag = generic_type_tag_method;
-			parameterized->virtual_type_index = method_for_generic_index(m, fqcn->name);
+			parameterized->virtual_type_index = method_for_generic_index(m, fqcn->namev);
 			parameterized->u.method_ = m;
 			found = (parameterized->virtual_type_index != -1);
 		}
 		if(!found && cchas_ctor()) {
 			type* container = cctop_type();
 			parameterized->tag = generic_type_tag_ctor;
-			parameterized->virtual_type_index = type_for_generic_index(container, fqcn->name);
+			parameterized->virtual_type_index = type_for_generic_index(container, fqcn->namev);
 			parameterized->u.type_ = container;
 			found = (parameterized->virtual_type_index != -1);
 		}
 		if(!found) {
 			type* container = cctop_type();
 			parameterized->tag = generic_type_tag_class;
-			parameterized->virtual_type_index = type_for_generic_index(container, fqcn->name);
+			parameterized->virtual_type_index = type_for_generic_index(container, fqcn->namev);
 			parameterized->u.type_ = container;
 			found = (parameterized->virtual_type_index != -1);
 		}

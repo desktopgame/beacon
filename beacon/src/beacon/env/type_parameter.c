@@ -8,15 +8,15 @@
 //proto
 static void type_parameter_rule_list_delete(vector_item item);
 
-type_parameter * type_parameter_new(char * name) {
+type_parameter * type_parameter_new(string_view namev) {
 	type_parameter* ret = (type_parameter*)MEM_MALLOC(sizeof(type_parameter));
-	ret->name = text_strdup(name);
+	ret->namev = namev;
 	ret->kind = type_parameter_kind_default;
 	return ret;
 }
 
 type_parameter * type_parameter_dup(il_type_parameter * src) {
-	type_parameter* ret = type_parameter_new(src->name);
+	type_parameter* ret = type_parameter_new(src->namev);
 	switch (src->kind) {
 		case il_type_parameter_kind_default:
 			ret->kind = type_parameter_kind_default;
@@ -64,7 +64,7 @@ void type_parameter_print(vector* v) {
 		} else if (e->kind == type_parameter_kind_out) {
 			text_printf("out ");
 		}
-		text_printf("%s", e->name);
+		text_printf("%s", string_pool_ref2str(e->namev));
 		if (i != v->length - 1) {
 			text_printf(", ");
 		}
@@ -73,7 +73,6 @@ void type_parameter_print(vector* v) {
 }
 
 void type_parameter_delete(type_parameter * self) {
-	MEM_FREE(self->name);
 	MEM_FREE(self);
 }
 //private

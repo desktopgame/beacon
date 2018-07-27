@@ -98,9 +98,9 @@ static void il_factor_variable_check(il_factor_variable* self, enviroment* env) 
 	//hoge, foo のような文字列の場合
 	if(self->fqcn->scope_vec->length == 0) {
 		namespace_* cur = cc_namespace();
-		class_* ctype = namespace_get_class(cur, self->fqcn->name);
+		class_* ctype = namespace_get_class(cur, self->fqcn->namev);
 		if(ctype == NULL) {
-			ctype = namespace_get_class(namespace_lang(), self->fqcn->name);
+			ctype = namespace_get_class(namespace_lang(), self->fqcn->namev);
 		}
 		//現在の名前空間から参照できるクラスがある場合
 		if(ctype != NULL) {
@@ -115,7 +115,7 @@ static void il_factor_variable_check(il_factor_variable* self, enviroment* env) 
 			self->u.static_ = st;
 		//ただのローカル変数の場合
 		} else {
-			il_factor_variable_local* lc = il_factor_variable_local_new(self->fqcn->name);
+			il_factor_variable_local* lc = il_factor_variable_local_new(self->fqcn->namev);
 			self->type = ilvariable_type_local;
 			//値を入れ替え
 			lc->type_args = self->type_args;

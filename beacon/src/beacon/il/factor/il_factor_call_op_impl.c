@@ -142,7 +142,7 @@ static void il_factor_call_op_check(il_factor_call_op* self, enviroment* env) {
 static void il_factor_invoke_bound_check(il_factor_call_op* self, enviroment* env) {
 	il_factor* receiver = self->receiver;
 	il_factor_variable* ilvar = IL_FACT2VAR(receiver);
-	il_factor_invoke_bound* bnd = il_factor_invoke_bound_new(ilvar->fqcn->name);
+	il_factor_invoke_bound* bnd = il_factor_invoke_bound_new(ilvar->fqcn->namev);
 	assert(ilvar->fqcn->scope_vec->length == 0);
 	//入れ替え
 	bnd->args = self->argument_list;
@@ -162,7 +162,7 @@ static void il_factor_member_op_check(il_factor_call_op* self, enviroment* env) 
 		il_factor_variable* ilvar = IL_FACT2VAR(ilmem->fact);
 		//Namespace::Class.foo()
 		if(ilvar->fqcn->scope_vec->length > 0) {
-			il_factor_invoke_static* st = il_factor_invoke_static_new(ilmem->name);
+			il_factor_invoke_static* st = il_factor_invoke_static_new(ilmem->namev);
 			self->type = ilcall_type_invoke_static;
 			self->u.invoke_static_ = st;
 			//入れ替える
@@ -176,12 +176,12 @@ static void il_factor_member_op_check(il_factor_call_op* self, enviroment* env) 
 		} else {
 			//FIXME:kコピペ
 			namespace_* cur = cc_namespace();
-			class_* ctype = namespace_get_class(cur, ilvar->fqcn->name);
+			class_* ctype = namespace_get_class(cur, ilvar->fqcn->namev);
 			if(ctype == NULL) {
-				ctype = namespace_get_class(namespace_lang(), ilvar->fqcn->name);
+				ctype = namespace_get_class(namespace_lang(), ilvar->fqcn->namev);
 			}
 			if(ctype != NULL) {
-				il_factor_invoke_static* st = il_factor_invoke_static_new(ilmem->name);
+				il_factor_invoke_static* st = il_factor_invoke_static_new(ilmem->namev);
 				//XSTREQ(ilmem->name, "copy");
 				self->type = ilcall_type_invoke_static;
 				self->u.invoke_static_ = st;
@@ -193,7 +193,7 @@ static void il_factor_member_op_check(il_factor_call_op* self, enviroment* env) 
 				ilmem->type_args = NULL;
 				ilvar->fqcn = NULL;
 			} else {
-				il_factor_invoke* iv = il_factor_invoke_new(ilmem->name);
+				il_factor_invoke* iv = il_factor_invoke_new(ilmem->namev);
 				//入れ替える
 				iv->args = self->argument_list;
 				iv->receiver = ilmem->fact;
@@ -208,7 +208,7 @@ static void il_factor_member_op_check(il_factor_call_op* self, enviroment* env) 
 	} else {
 		XBREAK(self->receiver->type == ilfactor_this);
 		//入れ替える
-		il_factor_invoke* iv = il_factor_invoke_new(ilmem->name);
+		il_factor_invoke* iv = il_factor_invoke_new(ilmem->namev);
 		iv->args = self->argument_list;
 		iv->receiver = ilmem->fact;
 		iv->type_args = ilmem->type_args;

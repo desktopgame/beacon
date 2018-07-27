@@ -69,7 +69,7 @@ static void CLBC_import_internal(class_loader* self, vector* ilimports, int i) {
 	}
 	vector_item e = vector_at(ilimports, i);
 	il_import* import = (il_import*)e;
-	char* withExt = text_concat(import->path, ".bc");
+	char* withExt = text_concat(string_pool_ref2str(import->pathv), ".bc");
 	char* fullPath = io_absolute_path(withExt);
 	CLBC_new_load(self, fullPath);
 	MEM_FREE(withExt);

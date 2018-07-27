@@ -3,6 +3,7 @@
 #define BEACON_IL_IL_FIELD_H
 #include "../ast/access_level.h"
 #include "../ast/modifier_type.h"
+#include "../util/string_pool.h"
 //#include "../env/fqcn_cache.h"
 struct generic_cache;
 /**
@@ -11,16 +12,16 @@ struct generic_cache;
 typedef struct il_field {
 	//il_type* type;
 	struct generic_cache* fqcn;
-	char* name;
+	string_view namev;
 	access_level access;
 	modifier_type modifier;
 } il_field;
 /**
  * 新しいフィールドを作成します.
- * @param name
+ * @param namev
  * @return
  */
-il_field* il_field_new(const char* name);
+il_field* il_field_new(string_view namev);
 
 /**
  * フィールドを出力します.

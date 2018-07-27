@@ -13,16 +13,16 @@ il_type * il_type_wrap_enum(il_enum * self) {
 	return ret;
 }
 
-il_enum * il_enum_new(const char * name) {
+il_enum * il_enum_new(string_view namev) {
 	il_enum* ret = (il_enum*)MEM_MALLOC(sizeof(il_enum));
-	ret->name = text_strdup(name);
+	ret->namev = namev;
 	ret->item_vec = vector_new();
 	return ret;
 }
 
 void il_enum_dump(il_enum * self, int depth) {
 	text_putindent(depth);
-	text_printf("enum %s", self->name);
+	text_printf("enum %s", string_pool_ref2str(self->namev));
 	text_putline();
 	for (int i = 0; i < self->item_vec->length; i++) {
 		char* str = (char*)vector_at(self->item_vec, i);
@@ -34,7 +34,6 @@ void il_enum_dump(il_enum * self, int depth) {
 }
 
 void il_enum_delete(il_enum * self) {
-	MEM_FREE(self->name);
 	vector_delete(self->item_vec, il_enum_name_delete);
 	MEM_FREE(self);
 }

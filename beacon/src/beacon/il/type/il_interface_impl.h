@@ -2,13 +2,14 @@
 #ifndef BEACON_IL_IL_INTERFACE_H
 #define BEACON_IL_IL_INTERFACE_H
 #include "../../util/vector.h"
+#include "../../util/string_pool.h"
 #include "../il_type_interface.h"
 struct il_method;
 /**
  * インターフェースを表す要素.
  */
 typedef struct il_interface {
-	char* name;
+	string_view namev;
 	vector* method_list;
 	vector* extends_list;
 	vector* type_parameter_list;
@@ -23,10 +24,10 @@ il_type* il_type_wrap_interface(il_interface* self);
 
 /**
  * インターフェースを作成します.
- * @param name
+ * @param namev
  * @return
  */
-il_interface* il_interface_new(const char* name);
+il_interface* il_interface_new(string_view namev);
 
 void il_interface_add_method(il_interface* self, struct il_method* method);
 

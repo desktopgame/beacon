@@ -3,7 +3,7 @@
 #include "../util/text.h"
 #include "../env/type_interface.h"
 #include "../env/generic_type.h"
-symbol_entry * symbol_entry_new(const char * name) {
+symbol_entry * symbol_entry_new() {
 	symbol_entry* ret = (symbol_entry*)MEM_MALLOC(sizeof(symbol_entry));
 	ret->index = 0;
 	ret->gtype = NULL;

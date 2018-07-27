@@ -136,9 +136,9 @@ static void CLBC_namespace(class_loader* self, il_namespace* ilnamespace, namesp
 	CL_ERROR(self);
 	namespace_* current = NULL;
 	if (parent == NULL) {
-		current = namespace_create_at_root(ilnamespace->name);
+		current = namespace_create_at_root(ilnamespace->namev);
 	} else {
-		current = namespace_add_namespace(parent, ilnamespace->name);
+		current = namespace_add_namespace(parent, ilnamespace->namev);
 	}
 	CLBC_namespace_list(self, ilnamespace->namespace_list, current);
 	CLBC_type_list(self, ilnamespace->type_list, current);
@@ -311,9 +311,9 @@ static void CLBC_check_superclass(class_* cls) {
 
 static type* CLBC_get_or_load_enum(namespace_* parent, il_type* iltype) {
 	class_* outClass = NULL;
-	type* tp = namespace_get_type(parent, iltype->u.enum_->name);
+	type* tp = namespace_get_type(parent, iltype->u.enum_->namev);
 	if (tp == NULL) {
-		outClass = class_new(iltype->u.enum_->name);
+		outClass = class_new(iltype->u.enum_->namev);
 		outClass->location = parent;
 		tp = type_wrap_class(outClass);
 		namespace_add_type(parent, tp);
@@ -324,11 +324,11 @@ static type* CLBC_get_or_load_enum(namespace_* parent, il_type* iltype) {
 }
 
 static type* CLBC_get_or_load_class(class_loader* self, namespace_* parent, il_type* iltype) {
-	type* tp = namespace_get_type(parent, iltype->u.class_->name);
+	type* tp = namespace_get_type(parent, iltype->u.class_->namev);
 	class_* outClass = NULL;
 	//取得できなかった
 	if (tp == NULL) {
-		outClass = class_new(iltype->u.class_->name);
+		outClass = class_new(iltype->u.class_->namev);
 		tp = type_wrap_class(outClass);
 		CLBC_register_class(self, parent, iltype, tp, outClass);
 		CL_ERROR_RET(self, tp);
@@ -376,15 +376,15 @@ static void CLBC_register_class(class_loader* self, namespace_* parent, il_type*
 	//重複するインターフェイスを検出
 	interface_* inter = NULL;
 	if((inter = type_interface_valid(tp))) {
-		class_loader_report(self, clerror_multi_eqinterface, inter->name);
+		class_loader_report(self, clerror_multi_eqinterface, string_pool_ref2str(inter->namev));
 	}
 }
 
 static type* CLBC_get_or_load_interface(class_loader* self, namespace_* parent, il_type* iltype) {
-	type* tp = namespace_get_type(parent, iltype->u.interface_->name);
+	type* tp = namespace_get_type(parent, iltype->u.interface_->namev);
 	interface_* inter = NULL;
 	if (tp == NULL) {
-		inter = interface_new(iltype->u.interface_->name);
+		inter = interface_new(iltype->u.interface_->namev);
 		tp = type_wrap_interface(inter);
 		CLBC_register_interface(self, parent, iltype, tp, inter);
 		CL_ERROR_RET(self, tp);
@@ -422,6 +422,6 @@ static void CLBC_register_interface(class_loader* self, namespace_* parent, il_t
 	//重複するインターフェイスを検出
 	interface_* ovinter = NULL;
 	if((ovinter = type_interface_valid(tp))) {
-		class_loader_report(self, clerror_multi_eqinterface, ovinter->name);
+		class_loader_report(self, clerror_multi_eqinterface, string_pool_ref2str(ovinter->namev));
 	}
 }

@@ -72,7 +72,7 @@ generic_type* il_factor_lambda_eval(il_factor_lambda* self, enviroment* env) {
 	type* interT = ins->core_type;
 	//ターゲット引数がインターフェイスではない
 	if(interT == NULL || interT->tag != type_interface) {
-		il_error_report(ilerror_can_t_resolve_lambda, scope->body->name, param->name);
+		il_error_report(ilerror_can_t_resolve_lambda, string_pool_ref2str(scope->body->namev), string_pool_ref2str(param->namev));
 		return NULL;
 	}
 	//関数型インターフェイスでない
@@ -84,12 +84,12 @@ generic_type* il_factor_lambda_eval(il_factor_lambda* self, enviroment* env) {
 	//関数型インターフェイスだが、戻り値がマッチしない
 	method* f = interface_get_function(inter);
 	if(generic_type_distance(f->return_gtype, self->return_gtype) < 0) {
-		il_error_report(ilerror_can_t_resolve_lambda, scope->body->name, param->name);
+		il_error_report(ilerror_can_t_resolve_lambda, string_pool_ref2str(scope->body->namev), string_pool_ref2str(param->namev));
 		return NULL;
 	}
 	//、引数の数が違う
 	if(f->parameter_list->length != self->parameter_vec->length) {
-		il_error_report(ilerror_can_t_resolve_lambda, scope->body->name, param->name);
+		il_error_report(ilerror_can_t_resolve_lambda, string_pool_ref2str(scope->body->namev), string_pool_ref2str(param->namev));
 		return NULL;
 	}
 	//、戻り値が違う

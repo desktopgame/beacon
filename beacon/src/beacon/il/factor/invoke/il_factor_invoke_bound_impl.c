@@ -15,9 +15,9 @@ static void resolve_default(il_factor_invoke_bound * self, enviroment * env);
 static void il_factor_invoke_bound_check(il_factor_invoke_bound * self, enviroment * env);
 static void il_factor_invoke_bound_args_delete(vector_item item);
 
-il_factor_invoke_bound* il_factor_invoke_bound_new(const char* name) {
+il_factor_invoke_bound* il_factor_invoke_bound_new(string_view namev) {
 	il_factor_invoke_bound* ret = (il_factor_invoke_bound*)MEM_MALLOC(sizeof(il_factor_invoke_bound));
-	ret->name = text_strdup(name);
+	ret->namev = namev;
 	ret->args = NULL;
 	ret->type_args = NULL;
 	ret->m = NULL;
@@ -31,7 +31,7 @@ void il_factor_invoke_bound_dump(il_factor_invoke_bound* self, int depth) {
 	text_printfln("invoke bound");
 
 	text_putindent(depth + 1);
-	text_printfln("%s", self->m->name);
+	text_printfln("%s", string_pool_ref2str(self->m->namev));
 
 	for(int i=0; i<self->args->length; i++) {
 		il_argument* e = (il_argument*)vector_at(self->args, i);
@@ -96,7 +96,7 @@ generic_type* il_factor_invoke_bound_eval(il_factor_invoke_bound * self, envirom
 
 char* il_factor_invoke_bound_tostr(il_factor_invoke_bound* self, enviroment* env) {
 	string_buffer* sb = string_buffer_new();
-	string_buffer_appends(sb, self->name);
+	string_buffer_appends(sb, string_pool_ref2str(self->namev));
 	il_factor_type_args_tostr(sb, self->type_args, env);
 	il_factor_args_tostr(sb, self->type_args, env);
 	return string_buffer_release(sb);
@@ -106,7 +106,6 @@ void il_factor_invoke_bound_delete(il_factor_invoke_bound* self) {
 	vector_delete(self->args, il_factor_invoke_bound_args_delete);
 	vector_delete(self->type_args, vector_deleter_null);
 	//generic_type_delete(self->resolved);
-	MEM_FREE(self->name);
 	MEM_FREE(self);
 }
 //private
@@ -155,12 +154,12 @@ static void il_factor_invoke_bound_check(il_factor_invoke_bound * self, envirome
 		il_argument* ilarg = vector_at(self->args, i);
 		il_factor_load(ilarg->factor, env);
 	}
-	self->m = class_ilfind_method(TYPE2CLASS(ctype), self->name, self->args, env, &temp);
+	self->m = class_ilfind_method(TYPE2CLASS(ctype), self->namev, self->args, env, &temp);
 	self->index = temp;
 	ccpop_receiver();
 	ccpop_type_args();
 	if(temp == -1) {
-		il_error_report(ilerror_undefined_method, self->name);
+		il_error_report(ilerror_undefined_method, string_pool_ref2str(self->namev));
 	}
 }
 static void il_factor_invoke_bound_args_delete(vector_item item) {

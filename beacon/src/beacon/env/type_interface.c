@@ -36,16 +36,16 @@ generic_type* type_init_generic(type* self, int counts) {
 	return self->generic_self;
 }
 
-char * type_name(type * self) {
+string_view type_name(type * self) {
 	if(self == NULL) {
-		return "NULL";
+		return string_pool_intern("NULL");
 	}
 	if (self->tag == type_class) {
-		return self->u.class_->name;
+		return self->u.class_->namev;
 	} else if (self->tag == type_interface) {
-		return self->u.interface_->name;
+		return self->u.interface_->namev;
 	}
-	return NULL;
+	return 0;
 }
 
 void type_add_field(type* self, field * f) {
@@ -61,19 +61,19 @@ void type_add_method(type* self, method * m) {
 	}
 }
 
-method * type_ilfind_method(type * self, const char * name, vector * args, enviroment * env, int * outIndex) {
+method * type_ilfind_method(type * self, string_view namev, vector * args, enviroment * env, int * outIndex) {
 	assert(self != NULL);
 	if (self->tag == type_class) {
-		return class_ilfind_method(self->u.class_, name, args, env, outIndex);
+		return class_ilfind_method(self->u.class_, namev, args, env, outIndex);
 	} else if (self->tag == type_interface) {
-		return interface_ilfind_method(self->u.interface_, name, args, env, outIndex);
+		return interface_ilfind_method(self->u.interface_, namev, args, env, outIndex);
 	}
 	return NULL;
 }
 
-method* type_ilfind_smethod(type* self, const char* name, vector* args, struct enviroment* env, int* outIndex) {
+method* type_ilfind_smethod(type* self, string_view namev, vector* args, struct enviroment* env, int* outIndex) {
 	assert(self->tag == type_class);
-	return class_ilfind_smethod(self->u.class_, name, args, env, outIndex);
+	return class_ilfind_smethod(self->u.class_, namev, args, env, outIndex);
 }
 
 vtable * type_vtable(type * self) {
@@ -114,17 +114,16 @@ void type_unlink(type * self) {
 	}
 }
 
-int type_for_generic_index(type * self, char * name) {
+int type_for_generic_index(type * self, string_view namev) {
 	assert(self->tag != type_enum);
 	vector* v = NULL;
-	XSTREQ(name, "A");
 	if (self->tag == type_class) v = self->u.class_->type_parameter_list;
 	if (self->tag == type_interface) v = self->u.interface_->type_parameter_list;
 	//全ての型変数と比べる
 	int ret = -1;
 	for (int i = 0; i < v->length; i++) {
 		type_parameter* e = (type_parameter*)vector_at(v, i);
-		if (!strcmp(e->name, name)) {
+		if (e->namev == namev) {
 			ret = i;
 			break;
 		}
@@ -188,9 +187,9 @@ vector* type_implement_list(type* self) {
 generic_type * type_type_parameter_at(type * self, int index) {
 	assert(self->tag != type_enum);
 	if (self->tag == type_class) {
-		return (generic_type*)vector_at(self->u.class_, index);
+		return (generic_type*)vector_at(self->u.class_->type_parameter_list, index);
 	} else if (self->tag == type_interface) {
-		return (generic_type*)vector_at(self->u.interface_, index);
+		return (generic_type*)vector_at(self->u.interface_->type_parameter_list, index);
 	}
 	return NULL;
 }

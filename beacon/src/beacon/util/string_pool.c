@@ -3,6 +3,7 @@
 #include "vector.h"
 #include "text.h"
 #include "mem.h"
+#include "string_buffer.h"
 #include <assert.h>
 
 static tree_map* gMap = NULL;
@@ -17,12 +18,21 @@ void string_pool_init() {
 }
 
 string_view string_pool_intern(const char* str) {
+	assert(gMap != NULL);
+	assert(gVec != NULL);
 	tree_map* cell = tree_map_cell(gMap, str);
 	if(cell == NULL) {
-		cell = tree_map_put(gMap, str, (void*)gVec->length);
+		cell = tree_map_put(gMap, str, (void*)(gVec->length + 1));
 		vector_push(gVec, text_strdup(str));
 	}
 	return (string_view)cell->item;
+}
+
+string_view string_pool_intern2(string_buffer* buffer) {
+	char* raw = string_buffer_release(buffer);
+	string_view sv = string_pool_intern(raw);
+	MEM_FREE(raw);
+	return sv;
 }
 
 string_view string_pool_str2ref(const char* str) {
@@ -31,7 +41,7 @@ string_view string_pool_str2ref(const char* str) {
 }
 
 const char* string_pool_ref2str(string_view ref) {
-	const char* str = (const char*)vector_at(gVec, ref);
+	const char* str = (const char*)vector_at(gVec, ref - 1);
 	return str;
 }
 

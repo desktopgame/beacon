@@ -8,6 +8,7 @@
 #include "constructor_chain_type.h"
 #include "../util/list.h"
 #include "../util/vector.h"
+#include "../util/string_pool.h"
 #include "operator_type.h"
 /**
  * AST(AbstractSourceTree) の種類を表すタグです.
@@ -211,7 +212,7 @@ typedef struct ast {
 		int int_value;
 		double double_value;
 		char char_value;
-		char* string_value;
+		string_view stringv_value;
 		access_level access_value;
 		modifier_type modifier_value;
 		operator_type operator_value;

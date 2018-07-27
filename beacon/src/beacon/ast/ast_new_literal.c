@@ -19,8 +19,8 @@ ast * ast_new_char(char ch) {
 	return ret;
 }
 
-ast * ast_new_string(char * str) {
+ast * ast_new_string(string_view sv) {
 	ast* ret = ast_new(ast_string);
-	ret->u.string_value = str;
+	ret->u.stringv_value = sv;
 	return ret;
 }

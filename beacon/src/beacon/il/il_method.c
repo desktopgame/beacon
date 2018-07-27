@@ -12,9 +12,9 @@ static void il_method_parameter_delete(vector_item item);
 static void il_method_stmt_delete(vector_item item);
 static void il_method_type_parameter_delete(vector_item item);
 
-il_method * il_method_new(const char * name) {
+il_method * il_method_new(string_view namev) {
 	il_method* ret = (il_method*)MEM_MALLOC(sizeof(il_method));
-	ret->name = text_strdup(name);
+	ret->namev = namev;
 	ret->parameter_list = vector_new();
 	ret->return_fqcn = generic_cache_new();
 	ret->access = access_public;
@@ -30,7 +30,7 @@ void il_method_dump(il_method * self, int depth) {
 	access_print(self->access);
 	text_printf(" ");
 	modifier_print(self->modifier);
-	text_printf(" method %s", self->name);
+	text_printf(" method %s", string_pool_ref2str(self->namev));
 	il_type_parameter_list_print(self->type_parameter_list);
 	text_printf(" -> ");
 	generic_cache_print(self->return_fqcn);
@@ -51,7 +51,6 @@ void il_method_delete(il_method * self) {
 	if (self == NULL) {
 		return;
 	}
-	MEM_FREE(self->name);
 	generic_cache_delete(self->return_fqcn);
 	vector_delete(self->parameter_list, il_method_parameter_delete);
 	vector_delete(self->statement_list, il_method_stmt_delete);

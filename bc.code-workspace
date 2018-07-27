@@ -83,7 +83,9 @@
 			"initializer_list": "c",
 			"list": "c",
 			"queue": "c",
-			"stack": "c"
+			"stack": "c",
+			"heap.h": "c",
+			"stdbool.h": "c"
 		},
 		"ruby.lint": {
 			"reek": true,

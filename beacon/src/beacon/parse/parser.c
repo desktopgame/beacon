@@ -58,12 +58,9 @@ void parser_append_buffer(parser * self, char ch) {
 ast * parser_reduce_buffer(parser * self) {
 	//""のような空文字の場合
 	if (self->literal_buffer == NULL) {
-		return ast_new_string(text_strdup(""));
+		return ast_new_string(string_pool_intern(""));
 	}
-	string_buffer_shrink(self->literal_buffer);
-	ast* ret = ast_new_string(self->literal_buffer->text);
-	self->literal_buffer->text = NULL;
-	MEM_FREE(self->literal_buffer);
+	ast* ret = ast_new_string(string_pool_intern2(self->literal_buffer));
 	self->literal_buffer = NULL;
 	return ret;
 }

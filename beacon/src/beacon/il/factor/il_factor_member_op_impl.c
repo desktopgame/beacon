@@ -23,18 +23,18 @@ il_factor* il_factor_wrap_member_op(il_factor_member_op* self) {
 	return ret;
 }
 
-il_factor_member_op* il_factor_member_op_new(const char* name) {
+il_factor_member_op* il_factor_member_op_new(string_view namev) {
 	il_factor_member_op* ret = (il_factor_member_op*)MEM_MALLOC(sizeof(il_factor_member_op));
 	ret->fact = NULL;
 	ret->type_args = vector_new();
-	ret->name = text_strdup(name);
+	ret->namev = namev;
 	ret->index = -1;
 	return ret;
 }
 
 void il_factor_member_op_dump(il_factor_member_op* self, int depth) {
 	text_putindent(depth);
-	text_printfln("member %s", self->name);
+	text_printfln("member %s", string_pool_ref2str(self->namev));
 	il_factor_dump(self->fact, depth + 1);
 	for(int i=0; i<self->type_args->length; i++) {
 		generic_cache* e = (generic_cache*)vector_at(self->type_args, i);
@@ -76,7 +76,7 @@ char* il_factor_member_op_tostr(il_factor_member_op* self, enviroment* env) {
 	char* name = il_factor_tostr(self->fact, env);
 	string_buffer_appends(sb, name);
 	string_buffer_append(sb, '.');
-	string_buffer_appends(sb, self->name);
+	string_buffer_appends(sb, string_pool_ref2str(self->namev));
 	MEM_FREE(name);
 	return string_buffer_release(sb);
 }
@@ -84,7 +84,6 @@ char* il_factor_member_op_tostr(il_factor_member_op* self, enviroment* env) {
 void il_factor_member_op_delete(il_factor_member_op* self) {
 	il_factor_delete(self->fact);
 	vector_delete(self->type_args, il_factor_member_op_typearg_delete);
-	MEM_FREE(self->name);
 	MEM_FREE(self);
 }
 
@@ -110,7 +109,7 @@ static void il_factor_member_op_check(il_factor_member_op* self, enviroment* env
 		type* ccT = gtype->core_type;
 		assert(ccT->tag == type_class);
 		int temp = -1;
-		self->f = class_find_sfield_tree(TYPE2CLASS(ccT), self->name, &temp);
+		self->f = class_find_sfield_tree(TYPE2CLASS(ccT), self->namev, &temp);
 		self->index = temp;
 		assert(self->f != NULL);
 		assert(temp != -1);
@@ -120,7 +119,7 @@ static void il_factor_member_op_check(il_factor_member_op* self, enviroment* env
 	type* ctype = gtype->core_type;
 	assert(ctype->tag == type_class);
 	int temp = -1;
-	self->f = class_find_field_tree(TYPE2CLASS(ctype), self->name, &temp);
+	self->f = class_find_field_tree(TYPE2CLASS(ctype), self->namev, &temp);
 	self->index = temp;
 	assert(self->f != NULL);
 	assert(temp != -1);

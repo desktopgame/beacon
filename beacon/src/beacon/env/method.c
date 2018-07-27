@@ -18,9 +18,9 @@
 static void method_parameter_delete(vector_item item);
 static void method_type_parameter_delete(vector_item item);
 
-method* method_malloc(const char* name, const char* filename, int lineno) {
+method* method_malloc(string_view namev, const char* filename, int lineno) {
 	method* ret = (method*)mem_malloc(sizeof(method), filename, lineno);
-	ret->name = text_strdup(name);
+	ret->namev = namev;
 	ret->parameter_list = vector_malloc(filename, lineno);
 	ret->type = method_type_script;
 	ret->access = access_public;
@@ -66,14 +66,14 @@ void method_dump(method * self, int depth) {
 	access_print(self->access);
 	text_printf(" ");
 	modifier_print(self->modifier);
-	text_printf(" method %s", self->name);
+	text_printf(" method %s", string_pool_ref2str(self->namev));
 	type_parameter_print(self->type_parameter_list);
 	text_printf("(");
 	for (int i = 0; i < self->parameter_list->length; i++) {
 		vector_item e = vector_at(self->parameter_list, i);
 		parameter* p = (parameter*)e;
 		generic_type_print(p->gtype);
-		text_printf(" %s", p->name);
+		text_printf(" %s", string_pool_ref2str(p->namev));
 		if ((i + 1) < self->parameter_list->length) {
 			text_printf(" ");
 		}
@@ -88,7 +88,7 @@ void method_dump(method * self, int depth) {
 
 bool method_override(method* superM, method* subM) {
 	//名前が違うか引数の数が違う
-	if (strcmp(superM->name, subM->name) ||
+	if (superM->namev != subM->namev ||
 		superM->parameter_list->length != subM->parameter_list->length) {
 		return false;
 	}
@@ -114,11 +114,11 @@ bool method_override(method* superM, method* subM) {
 	return ret != -1;
 }
 
-int method_for_generic_index(method * self, const char * name) {
+int method_for_generic_index(method * self, string_view namev) {
 	int ret = -1;
 	for (int i = 0; i < self->type_parameter_list->length; i++) {
 		type_parameter* e = (type_parameter*)vector_at(self->type_parameter_list, i);
-		if (!strcmp(e->name, name)) {
+		if (e->namev == namev) {
 			ret = i;
 			break;
 		}
@@ -127,7 +127,6 @@ int method_for_generic_index(method * self, const char * name) {
 }
 
 void method_delete(method * self) {
-	MEM_FREE(self->name);
 	vector_delete(self->type_parameter_list, method_type_parameter_delete);
 	vector_delete(self->parameter_list, method_parameter_delete);
 	if (self->type == method_type_script) {

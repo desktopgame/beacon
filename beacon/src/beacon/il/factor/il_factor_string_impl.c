@@ -15,20 +15,20 @@ il_factor * il_factor_wrap_string(il_factor_string * self) {
 	return ret;
 }
 
-il_factor_string * il_factor_string_new(const char * name) {
+il_factor_string * il_factor_string_new(string_view valuev) {
 	il_factor_string* ret = (il_factor_string*)MEM_MALLOC(sizeof(il_factor_string));
-	ret->value = text_strdup(name);
+	ret->valuev = valuev;
 	return ret;
 }
 
 void il_factor_string_dump(il_factor_string * self, int depth) {
 	text_putindent(depth);
-	text_printf("String %s", self->value);
+	text_printf("String %s", string_pool_ref2str(self->valuev));
 	text_putline();
 }
 
 void il_factor_string_generate(il_factor_string * self, enviroment* env) {
-	int index = enviroment_add_constant_string(env, self->value);
+	int index = enviroment_add_constant_string(env, self->valuev);
 	opcode_buf_add(env->buf, (vector_item)op_sconst);
 	opcode_buf_add(env->buf, (vector_item)index);
 }
@@ -42,11 +42,10 @@ generic_type* il_factor_string_eval(il_factor_string * self, enviroment * env) {
 }
 
 char* il_factor_string_tostr(il_factor_string* self, enviroment* env) {
-	return text_strdup(self->value);
+	return text_strdup(string_pool_ref2str(self->valuev));
 }
 
 void il_factor_string_delete(il_factor_string * self) {
-	MEM_FREE(self->value);
 	MEM_FREE(self);
 }
 

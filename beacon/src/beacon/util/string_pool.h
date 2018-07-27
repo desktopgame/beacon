@@ -2,6 +2,7 @@
 #define BEACON_UTIL_STRINGPOOL_H
 #include <stdio.h>
 
+struct string_buffer;
 /**
  * 符号化された文字列.
  */
@@ -18,6 +19,13 @@ void string_pool_init();
  * @return
  */
 string_view string_pool_intern(const char* str);
+
+/**
+ * 引数の文字列を符号化して返します.
+ * @param buffer
+ * @return
+ */
+string_view string_pool_intern2(struct string_buffer* buffer);
 
 /**
  * 文字列が既に符号化されているならそれを返します.

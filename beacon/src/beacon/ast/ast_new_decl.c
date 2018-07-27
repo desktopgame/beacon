@@ -47,7 +47,7 @@ ast * ast_new_interface_decl(ast* ainterface_name, ast* super_interface_list, as
 
 ast * ast_new_enum_decl(char * enum_name, ast * ident_list) {
 	ast* ret = ast_new(ast_enum_decl);
-	ret->u.string_value = enum_name;
+	ret->u.stringv_value = string_pool_intern(enum_name);
 	ast_push(ret, ident_list);
 	return ret;
 }
@@ -190,21 +190,21 @@ ast * ast_new_typename(ast * fqcn, ast* atype_args) {
 
 ast * ast_new_type_parameter(char * name, ast* arule_list) {
 	ast* ret = ast_new(ast_type_parameter);
-	ret->u.string_value = name;
+	ret->u.stringv_value = string_pool_intern(name);
 	ast_push(ret, arule_list);
 	return ret;
 }
 
 ast * ast_new_type_in_parameter(char * name, ast* arule_list) {
 	ast* ret = ast_new(ast_type_in_parameter);
-	ret->u.string_value = name;
+	ret->u.stringv_value = string_pool_intern(name);
 	ast_push(ret, arule_list);
 	return ret;
 }
 
 ast * ast_new_type_out_parameter(char * name, ast* arule_list) {
 	ast* ret = ast_new(ast_type_out_parameter);
-	ret->u.string_value = name;
+	ret->u.stringv_value = string_pool_intern(name);
 	ast_push(ret, arule_list);
 	return ret;
 }
@@ -218,7 +218,7 @@ ast * ast_new_type_parameter_list(ast* aparam, ast * alist) {
 
 ast * ast_new_parameterized_typename(char * name, ast * aparams) {
 	ast* ret = ast_new(ast_parameterized_typename);
-	ret->u.string_value = name;
+	ret->u.stringv_value = string_pool_intern(name);
 	ast_push(ret, aparams);
 	return ret;
 }
@@ -241,43 +241,43 @@ ast* ast_new_operator_overload(operator_type type, ast* aparam_list, ast* abody,
 //private
 static ast* ast_new_field_type_name(char* type_name) {
 	ast* ret = ast_new(ast_field_type_name);
-	ret->u.string_value = type_name;
+	ret->u.stringv_value = string_pool_intern(type_name);
 	return ret;
 }
 
 static ast* ast_new_field_access_name(char* field_name) {
 	ast* ret = ast_new(ast_field_access_name);
-	ret->u.string_value = field_name;
+	ret->u.stringv_value = string_pool_intern(field_name);
 	return ret;
 }
 
 static ast* ast_new_function_name(char* func_name) {
 	ast* ret = ast_new(ast_function_name);
-	ret->u.string_value = func_name;
+	ret->u.stringv_value = string_pool_intern(func_name);
 	return ret;
 }
 
 static ast* ast_new_method_name(char* func_name) {
 	ast* ret = ast_new(ast_method_name);
-	ret->u.string_value = func_name;
+	ret->u.stringv_value = string_pool_intern(func_name);
 	return ret;
 }
 
 static ast* ast_new_method_return_name(char* return_type_name) {
 	ast* ret = ast_new(ast_method_return_name);
-	ret->u.string_value = return_type_name;
+	ret->u.stringv_value = string_pool_intern(return_type_name);
 	return ret;
 }
 
 static ast* ast_new_parameter_type_name(char* type_name) {
 	ast* ret = ast_new(ast_parameter_type_name);
-	ret->u.string_value = type_name;
+	ret->u.stringv_value = string_pool_intern(type_name);
 	return ret;
 }
 
 static ast* ast_new_parameter_access_name(char* parameter_name) {
 	ast* ret = ast_new(ast_parameter_access_name);
-	ret->u.string_value = parameter_name;
+	ret->u.stringv_value = string_pool_intern(parameter_name);
 	return ret;
 }
 

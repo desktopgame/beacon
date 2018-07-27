@@ -119,15 +119,15 @@ int meta_rcalc_score(vector* params, vector* args, vector* typeargs, frame* fr) 
 	return score;
 }
 
-method * meta_ilfind_method(vector * method_vec, const char * name, vector * ilargs, enviroment * env, int * outIndex) {
-	return meta_scoped_ilfind_method(NULL, method_vec, name, ilargs, env, outIndex);
+method * meta_ilfind_method(vector * method_vec, string_view namev, vector * ilargs, enviroment * env, int * outIndex) {
+	return meta_scoped_ilfind_method(NULL, method_vec, namev, ilargs, env, outIndex);
 }
 
-method* meta_gfind_method(vector* method_vec, const char * name, vector * gargs, int* outIndex) {
-	return meta_scoped_gfind_method(NULL, method_vec, name, gargs, outIndex);
+method* meta_gfind_method(vector* method_vec, string_view namev, vector * gargs, int* outIndex) {
+	return meta_scoped_gfind_method(NULL, method_vec, namev, gargs, outIndex);
 }
 
-method* meta_scoped_ilfind_method(class_* context, vector* method_vec, const char * name, vector * ilargs, enviroment * env, int * outIndex) {
+method* meta_scoped_ilfind_method(class_* context, vector* method_vec, string_view namev, vector * ilargs, enviroment * env, int * outIndex) {
 	(*outIndex) = -1;
 	//class_create_vtable(self);
 	method* ret = NULL;
@@ -140,7 +140,7 @@ method* meta_scoped_ilfind_method(class_* context, vector* method_vec, const cha
 			continue;
 		}
 		//名前か引数の個数が違うので無視
-		if (strcmp(m->name, name) ||
+		if (m->namev != namev ||
 			m->parameter_list->length != ilargs->length
 			) {
 			continue;
@@ -173,7 +173,7 @@ method* meta_scoped_ilfind_method(class_* context, vector* method_vec, const cha
 	return ret;
 }
 
-method* meta_scoped_gfind_method(class_* context, vector* method_vec, const char * name, vector * gargs, int * outIndex) {
+method* meta_scoped_gfind_method(class_* context, vector* method_vec, string_view namev, vector * gargs, int * outIndex) {
 	(*outIndex) = -1;
 	//class_create_vtable(self);
 	method* ret = NULL;
@@ -186,7 +186,7 @@ method* meta_scoped_gfind_method(class_* context, vector* method_vec, const char
 			continue;
 		}
 		//名前か引数の個数が違うので無視
-		if (strcmp(m->name, name) ||
+		if (m->namev != namev ||
 			m->parameter_list->length != gargs->length
 			) {
 			continue;

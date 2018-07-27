@@ -102,9 +102,9 @@ int enviroment_add_constant_char(enviroment * self, char c) {
 	return len;
 }
 
-int enviroment_add_constant_string(enviroment * self, const char * s) {
+int enviroment_add_constant_string(enviroment * self, string_view sv) {
 	int len = self->constant_pool->length;
-	enviroment_add_constant(self, object_string_new(s));
+	enviroment_add_constant(self, object_string_new(string_pool_ref2str(sv)));
 	return len;
 }
 

@@ -138,7 +138,7 @@ static void class_loader_ilload_function(class_loader * self, ast * source) {
 	ast* aparam_list = ast_at(source, 1);
 	ast* afunc_body = ast_at(source, 2);
 	ast* aret_name = ast_at(source, 3);
-	il_function* ilfunc = il_function_new(afunc_name->u.string_value);
+	il_function* ilfunc = il_function_new(afunc_name->u.stringv_value);
 	CLIL_parameter_list(self, ilfunc->parameter_list, aparam_list);
 	CLIL_body(self, ilfunc->statement_list, afunc_body);
 	CLIL_generic_cache(ast_first(aret_name), ilfunc->return_fqcn);
@@ -159,7 +159,7 @@ static void class_loader_ilload_import_list(class_loader* self, ast* source) {
 static void class_loader_ilload_import(class_loader* self, ast* import_decl) {
 	assert(import_decl->tag == ast_import_decl);
 	ast* path = ast_first(import_decl);
-	il_import* ret = il_import_new(path->u.string_value);
+	il_import* ret = il_import_new(path->u.stringv_value);
 	vector_push(self->il_code->import_list, ret);
 }
 
@@ -189,7 +189,7 @@ static il_namespace* class_loader_ilload_ast_to_namespace(ast* a) {
 	assert(a->tag == ast_namespace_path ||
 	       a->tag == ast_namespace_path_list);
 	if(a->tag == ast_namespace_path) {
-		il_namespace* ret = il_namespace_new(a->u.string_value);
+		il_namespace* ret = il_namespace_new(a->u.stringv_value);
 		return ret;
 	} else if(a->tag == ast_namespace_path_list) {
 		ast* l = ast_first(a);
@@ -248,7 +248,7 @@ static il_class* class_loader_ilload_classImpl(class_loader* self, il_namespace*
 	ast* atypename = ast_first(class_decl);
 	ast* aextend_list = ast_second(class_decl);
 	ast* amember_tree = ast_at(class_decl, 2);
-	il_class* ilclassz = il_class_new(atypename->u.string_value);
+	il_class* ilclassz = il_class_new(atypename->u.stringv_value);
 	il_type* iltype = il_type_wrap_class(ilclassz);
 	//class Foo<A, B>
 	CLIL_type_parameter(self, ast_first(atypename), ilclassz->type_parameter_list);
@@ -268,7 +268,7 @@ static void class_loader_ilload_interface(class_loader* self, il_namespace* curr
 	ast* atypename = ast_first(interface_decl);
 	ast* aextends_list = ast_second(interface_decl);
 	ast* amember_tree = ast_at(interface_decl, 2);
-	il_interface* ilinter = il_interface_new(atypename->u.string_value);
+	il_interface* ilinter = il_interface_new(atypename->u.stringv_value);
 	il_type* iltype = il_type_wrap_interface(ilinter);
 	//interface Foo<A, B>
 	CLIL_type_parameter(self, ast_first(atypename), ilinter->type_parameter_list);
@@ -285,7 +285,7 @@ static void class_loader_ilload_interface(class_loader* self, il_namespace* curr
 static void class_loader_ilload_enum(class_loader * self, il_namespace * current, ast * enum_decl) {
 	assert(enum_decl->tag == ast_enum_decl);
 	ast* aname_list = ast_first(enum_decl);
-	il_enum* ilenum = il_enum_new(enum_decl->u.string_value);
+	il_enum* ilenum = il_enum_new(enum_decl->u.stringv_value);
 	class_loader_ilload_identifier_list(self, ilenum->item_vec, aname_list);
 	vector_push(current->type_list, il_type_wrap_enum(ilenum));
 }
@@ -296,7 +296,7 @@ static void class_loader_ilload_identifier_list(class_loader * self, vector * li
 			class_loader_ilload_identifier_list(self, list, ast_at(source, i));
 		}
 	} else if(source->tag == ast_identifier) {
-		char* str = source->u.string_value;
+		string_view str = source->u.stringv_value;
 		vector_push(list, str);
 	}
 }

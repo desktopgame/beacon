@@ -5,6 +5,7 @@
 #include "../namespace.h"
 #include "../vtable.h"
 #include "../../util/vector.h"
+#include "../../util/string_pool.h"
 struct method;
 struct enviroment;
 struct generic_type;
@@ -14,7 +15,7 @@ struct type;
  */
 typedef struct interface_ {
 	struct type* parent;
-	char* name;
+	string_view namev;
 	vector* impl_list;
 	vector* method_list;
 	namespace_* location;
@@ -31,10 +32,10 @@ type* type_wrap_interface(interface_* self);
 
 /** 
  * インターフェイスを作成します.
- * @param name
+ * @param namev
  * @return
  */
-interface_* interface_new(const char* name);
+interface_* interface_new(string_view namev);
 
 /**
  * インターフェイスにメソッドを追加します.
@@ -46,24 +47,24 @@ void interface_add_method(interface_* self, struct method* m);
 /**
  * インターフェイスからメソッドを検索します.
  * @param self
- * @param name
+ * @param namev
  * @param args
  * @param env
  * @param cache
  * @param outIndex
  * @return
  */
-struct method* interface_ilfind_method(interface_* self, const char * name, vector * args, struct enviroment * env, int * outIndex);
+struct method* interface_ilfind_method(interface_* self, string_view namev, vector * args, struct enviroment * env, int * outIndex);
 
 /**
  * インターフェイスからメソッドを検索します.
  * @param self
- * @param name
+ * @param namev
  * @param gargs
  * @param outIndex
  * @return
  */
-struct method* interface_gfind_method(interface_* self, const char* name, vector* gargs, int* outIndex);
+struct method* interface_gfind_method(interface_* self, string_view namev, vector* gargs, int* outIndex);
 
 /**
  * 全てのインターフェイスに定義されたメソッドをフラットにして返します.

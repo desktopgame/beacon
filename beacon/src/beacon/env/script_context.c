@@ -22,8 +22,8 @@ static script_context* script_context_malloc(void);
 static void script_context_free(script_context* self);
 static void script_context_class_loader_delete(vector_item item);
 
-static void script_context_namespace_unlink(char* name, tree_item item);
-static void script_context_namespace_delete(tree_item item);
+static void script_context_namespace_unlink(vector_item item);
+static void script_context_namespace_delete(vector_item item);
 static void script_context_static_clearImpl(field* item);
 static void script_context_cache_delete(vector_item item);
 
@@ -134,9 +134,9 @@ void script_context_bootstrap(script_context* self) {
 	script_context_set_current(self);
 	self->heap->accept_blocking++;
 	//プリロード
-	namespace_* beacon = namespace_create_at_root("beacon");
-	namespace_* lang = namespace_add_namespace(beacon, "lang");
-	namespace_* unsafe = namespace_add_namespace(beacon, "unsafe");
+	namespace_* beacon = namespace_create_at_root(string_pool_intern("beacon"));
+	namespace_* lang = namespace_add_namespace(beacon, string_pool_intern("lang"));
+	namespace_* unsafe = namespace_add_namespace(beacon, string_pool_intern("unsafe"));
 	bc_object_init();
 	bc_array_init();
 	bc_exception_init();
@@ -255,7 +255,7 @@ static void script_context_launch(script_context* self) {
 static script_context* script_context_malloc(void) {
 	script_context* ret = (script_context*)MEM_MALLOC(sizeof(script_context));
 	ret->parser_stack = NULL;
-	ret->namespace_map = NULL;
+	ret->namespace_vec = NULL;
 	ret->class_loader_map = tree_map_new();
 	ret->heap = heap_new();
 	ret->type_vec = vector_new();
@@ -298,12 +298,15 @@ static void script_context_free(script_context* self) {
 	tree_map_delete(self->class_loader_map, script_context_class_loader_delete);
 	//ブートストラップクラスローダを意図的に起動していないなら、
 	//ここはまだNULL
-	if(self->namespace_map != NULL) {
-		tree_map_each(self->namespace_map, script_context_namespace_unlink);
+	if(self->namespace_vec != NULL) {
+		for(int i=0; i<self->namespace_vec->length; i++) {
+			namespace_* e = (namespace_*)vector_at(self->namespace_vec, i);
+			namespace_unlink(e);
+		}
 	}
 
 	int a = object_count();
-	tree_map_delete(self->namespace_map, script_context_namespace_delete);
+	vector_delete(self->namespace_vec, script_context_namespace_delete);
 	io_list_files_delete(self->include_vec);
 	MEM_FREE(self);
 }
@@ -313,12 +316,12 @@ static void script_context_class_loader_delete(vector_item item) {
 	class_loader_delete(e);
 }
 
-static void script_context_namespace_unlink(char* name, tree_item item) {
+static void script_context_namespace_unlink(vector_item item) {
 	namespace_* e = (namespace_*)item;
 	namespace_unlink(e);
 }
 
-static void script_context_namespace_delete(tree_item item) {
+static void script_context_namespace_delete(vector_item item) {
 	namespace_* e = (namespace_*)item;
 	namespace_delete(e);
 }

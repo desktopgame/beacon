@@ -25,9 +25,9 @@ il_type * il_type_wrap_class(il_class * self) {
 	return ret;
 }
 
-il_class* il_class_new(const char* name) {
+il_class* il_class_new(string_view namev) {
 	il_class* ret = (il_class*)MEM_MALLOC(sizeof(il_class));
-	ret->name = text_strdup(name);
+	ret->namev = namev;
 	ret->extend_list = vector_new();
 	ret->field_list = vector_new();
 	ret->sfield_list = vector_new();
@@ -61,7 +61,7 @@ void il_class_dump(il_class * self, int depth) {
 	if(self->is_abstract) {
 		text_printf("abstract ");
 	}
-	text_printf("class %s", self->name);
+	text_printf("class %s", string_pool_ref2str(self->namev));
 	il_type_parameter_list_print(self->type_parameter_list);
 	text_putline();
 	//ここでは親クラスとインターフェースをごちゃまぜで表示
@@ -96,7 +96,6 @@ void il_class_delete(il_class * self) {
 		return;
 	}
 	//text_printf("free class %s\n", self->name);
-	MEM_FREE(self->name);
 	//MEM_FREE(self->super);
 	vector_delete(self->field_list, il_class_field_delete);
 	vector_delete(self->sfield_list, il_class_field_delete);

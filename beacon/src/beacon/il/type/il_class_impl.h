@@ -1,6 +1,7 @@
 #ifndef BEACON_IL_IL_CLASS_H
 #define BEACON_IL_IL_CLASS_H
 #include "../../util/vector.h"
+#include "../../util/string_pool.h"
 #include "../../env/fqcn_cache.h"
 #include "../il_type_interface.h"
 #include <stdbool.h>
@@ -10,7 +11,7 @@ struct il_method;
  * クラスを表す要素.
  */
 typedef struct il_class {
-	char* name;
+	string_view namev;
 //	fqcn_cache* super;
 //	vector* implement_list;
 	vector* extend_list;
@@ -33,10 +34,10 @@ il_type* il_type_wrap_class(il_class* self);
 
 /**
  * クラスを表す要素を作成します.
- * @param name
+ * @param namev
  * @return
  */
-il_class* il_class_new(const char* name);
+il_class* il_class_new(string_view namev);
 
 /**
  * フィールドを追加します.

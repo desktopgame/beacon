@@ -8,6 +8,7 @@
 #include "test.h"
 #include "cl.h"
 #include "debug.h"
+#include "util/string_pool.h"
 #include "util/mem.h"
 #include "util/text.h"
 #include "util/io.h"
@@ -67,10 +68,13 @@ int main(int argc, char *argv[]) {
 	//*
 	//先んじて設定を行っておく
 	//mem_read("mem.dbg");
+	string_pool_init();
 	il_print_layout_hide(true);
 	//コマンドライン引数を解析して実行
 	int ret = main_cl(argc, argv);
 	//設定を元に戻す
+	string_pool_dump(stdout);
+	string_pool_destroy();
 	mem_write("mem.dbg");
 	mem_dump();
 	mem_destroy();

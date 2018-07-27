@@ -2,12 +2,13 @@
 #define BEACON_IL_IL_FACTOR_INVOKE_STATIC_H
 #include "../../il_factor_interface.h"
 #include "../../../env/fqcn_cache.h"
+#include "../../../util/string_pool.h"
 struct enviroment;
 struct generic_type;
 struct method;
 
 typedef struct il_factor_invoke_static {
-	char* name;
+	string_view namev;
 	fqcn_cache* fqcn;
 	vector* args;
 	vector* type_args;
@@ -16,7 +17,7 @@ typedef struct il_factor_invoke_static {
 	struct generic_type* resolved;
 } il_factor_invoke_static;
 
-il_factor_invoke_static* il_factor_invoke_static_new(const char* name);
+il_factor_invoke_static* il_factor_invoke_static_new(string_view namev);
 
 void il_factor_invoke_static_dump(il_factor_invoke_static* self, int depth);
 

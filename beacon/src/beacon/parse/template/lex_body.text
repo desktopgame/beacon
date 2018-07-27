@@ -109,44 +109,44 @@
 <INITIAL>"->"				{ return (ARROW); }
 
 <INITIAL>"0" {
-$$TNO	yylval.ast_value = ast_new_int(0);
+	yylval.ast_value = ast_new_int(0);
 	return INT;
 }
 
 <INITIAL>"\n" {
-$$TNO	parser_top()->lineno++;
+	parser_top()->lineno++;
 }
 
 <INITIAL>[1-9][0-9]* {
-$$TNO	yylval.ast_value = ast_new_int(atoi(yytext));
+	yylval.ast_value = ast_new_int(atoi(yytext));
 	return INT;
 }
 
 <INITIAL>[0-9]+\.[0-9]+ {
-$$TNO	yylval.ast_value = ast_new_double(atof(yytext));
+	yylval.ast_value = ast_new_double(atof(yytext));
 	return DOUBLE;
 }
 
 <INITIAL>[A-Za-z_][A-Za-z_0-9]* {
-$$TNO	yylval.string_value = text_strdup(yytext);
+	yylval.string_value = yytext;
 	return IDENT;
 }
 
 <INITIAL>\" {
-$$TNO	parser_clear_buffer(parser_top());
+	parser_clear_buffer(parser_top());
     BEGIN STRING_LITERAL_STATE;
 }
 <INITIAL>"/*"     BEGIN ML_COMMENT;
 <INITIAL>"//"     BEGIN L_COMMENT;
 <ML_COMMENT>\n     {
-$$TNO	parser_top()->lineno++;
+	parser_top()->lineno++;
 }
 <ML_COMMENT>"*/"     {
     BEGIN INITIAL;
 }
 <ML_COMMENT>.      ;
 <L_COMMENT>\n  {
-$$TNO	parser_top()->lineno++;
+	parser_top()->lineno++;
 	BEGIN INITIAL;
 }
 <L_COMMENT><<EOF>>   {
@@ -154,49 +154,49 @@ $$TNO	parser_top()->lineno++;
 }
 <L_COMMENT>.   ;
 <INITIAL>\'\\r\' {
-$$TNO	yylval.ast_value = ast_new_char('\r');
+	yylval.ast_value = ast_new_char('\r');
 	return CHAR_LITERAL;
 }
 <INITIAL>\'\\n\' {
-$$TNO	yylval.ast_value = ast_new_char('\n');
+	yylval.ast_value = ast_new_char('\n');
 	return CHAR_LITERAL;
 }
 <INITIAL>\'\\t\' {
-$$TNO	yylval.ast_value = ast_new_char('\t');
+	yylval.ast_value = ast_new_char('\t');
 	return CHAR_LITERAL;
 }
 <INITIAL>\'\\b\' {
-$$TNO	yylval.ast_value = ast_new_char('\b');
+	yylval.ast_value = ast_new_char('\b');
 	return CHAR_LITERAL;
 }
 <INITIAL>\'.\' {
-$$TNO	yylval.ast_value = ast_new_char(yytext[1]);
+	yylval.ast_value = ast_new_char(yytext[1]);
 	return CHAR_LITERAL;
 }
 <STRING_LITERAL_STATE>\" {
-$$TNO	yylval.ast_value = parser_reduce_buffer(parser_top());
+	yylval.ast_value = parser_reduce_buffer(parser_top());
     BEGIN INITIAL;
 	return STRING_LITERAL;
 }
 <STRING_LITERAL_STATE>\\\"	{
-$$TNO	parser_append_buffer(parser_top(), '"');
+	parser_append_buffer(parser_top(), '"');
 }
 <STRING_LITERAL_STATE>\\\'	{
-$$TNO	parser_append_buffer(parser_top(), '\'');
+	parser_append_buffer(parser_top(), '\'');
 }
 <STRING_LITERAL_STATE>\\r	{
-$$TNO	parser_append_buffer(parser_top(), '\r');
+	parser_append_buffer(parser_top(), '\r');
 }
 <STRING_LITERAL_STATE>\\n	{
-$$TNO	parser_append_buffer(parser_top(), '\n');
+	parser_append_buffer(parser_top(), '\n');
 }
 <STRING_LITERAL_STATE>\\t	{
-$$TNO	parser_append_buffer(parser_top(), '\t');
+	parser_append_buffer(parser_top(), '\t');
 }
 <STRING_LITERAL_STATE>\\\\	{
-$$TNO	parser_append_buffer(parser_top(), '\\');
+	parser_append_buffer(parser_top(), '\\');
 }
 <STRING_LITERAL_STATE>.	{
-$$TNO	parser_append_buffer(parser_top(), yytext[0]);
+	parser_append_buffer(parser_top(), yytext[0]);
 }
 %%

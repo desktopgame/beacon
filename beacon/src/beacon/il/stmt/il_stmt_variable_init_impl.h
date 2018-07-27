@@ -2,6 +2,7 @@
 #ifndef BEACON_IL_IL_STMT_VARIABLE_INIT_H
 #define BEACON_IL_IL_STMT_VARIABLE_INIT_H
 #include "../../env/generic_cache.h"
+#include "../../util/string_pool.h"
 #include "../il_stmt_interface.h"
 #include "../il_factor_interface.h"
 struct enviroment;
@@ -11,7 +12,7 @@ struct symbol_entry;
  */
 typedef struct il_stmt_variable_init {
 	generic_cache* fqcn;
-	char* name;
+	string_view namev;
 	il_factor* fact;
 	struct symbol_entry* sym;
 } il_stmt_variable_init;
@@ -25,10 +26,10 @@ il_stmt* il_stmt_wrap_variable_init(il_stmt_variable_init* self);
 
 /**
  * 変数の初期化を表す要素を作成します.
- * @param name
+ * @param namev
  * @return
  */
-il_stmt_variable_init* il_stmt_variable_init_new(const char* name);
+il_stmt_variable_init* il_stmt_variable_init_new(string_view namev);
 
 /**
  * 変数の初期化を表す要素を出力します.

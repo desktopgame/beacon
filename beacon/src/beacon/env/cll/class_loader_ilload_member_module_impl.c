@@ -47,7 +47,7 @@ void CLIL_field(class_loader* self, il_type* current, ast* field, access_level l
 	ast* modifier = ast_first(field);
 	ast* type_name = ast_second(field);
 	ast* access_name = ast_at(field, 2);
-	il_field* v = il_field_new(access_name->u.string_value);
+	il_field* v = il_field_new(access_name->u.stringv_value);
 	CLIL_generic_cache(type_name, v->fqcn);
 	bool error;
 	v->access = level;
@@ -55,7 +55,7 @@ void CLIL_field(class_loader* self, il_type* current, ast* field, access_level l
 	il_type_add_field(current, v);
 	//重複する修飾子を検出
 	if(error) {
-		class_loader_report(self, clerror_modifier_a_overlapped, v->name);
+		class_loader_report(self, clerror_modifier_a_overlapped, string_pool_ref2str(v->namev));
 	}
 }
 
@@ -67,7 +67,7 @@ void CLIL_method(class_loader* self, il_type* current, ast* method, access_level
 	ast* param_list = ast_at(method, 3);
 	ast* func_body = ast_at(method, 4);
 	ast* ret_name = ast_at(method, 5);
-	il_method* v = il_method_new(func_name->u.string_value);
+	il_method* v = il_method_new(func_name->u.stringv_value);
 	CLIL_type_parameter(self, ageneric, v->type_parameter_list);
 	CLIL_generic_cache(ret_name, v->return_fqcn);
 	bool error;
@@ -83,7 +83,7 @@ void CLIL_method(class_loader* self, il_type* current, ast* method, access_level
 	il_type_add_method(current, v);
 	//重複する修飾子を検出
 	if(error) {
-		class_loader_report(self, clerror_modifier_a_overlapped, v->name);
+		class_loader_report(self, clerror_modifier_a_overlapped, string_pool_ref2str(v->namev));
 	}
 }
 

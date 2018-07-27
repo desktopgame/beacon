@@ -66,11 +66,11 @@ object * object_string_malloc(const char * s, const char* filename, int lineno) 
 	object* arr = object_ref_malloc(filename, lineno);
 	//arr->tag = object_array;
 	type* arrType = bc_array_type();
-	type* strType = namespace_get_type(namespace_lang(), "String");
+	type* strType = namespace_get_type(namespace_lang(), string_pool_intern("String"));
 	arr->gtype = generic_type_ref(arrType);
 	arr->vptr = type_vtable(arrType);
 	//ボックス化
-	char* itr = s;
+	const char* itr = s;
 	string_buffer* sb = string_buffer_new();
 	while ((*itr) != '\0') {
 		char e = (*itr);
@@ -81,13 +81,13 @@ object * object_string_malloc(const char * s, const char* filename, int lineno) 
 	string_buffer_shrink(sb);
 	//String#charArrayを埋める
 	int temp = 0;
-	class_find_field(strType->u.class_, "charArray", &temp);
+	class_find_field(strType->u.class_, string_pool_intern("charArray"), &temp);
 	vector_assign(ret->u.field_vec, temp, arr);
 	vector_item* test = vector_at(ret->u.field_vec, temp);
 	assert(test != NULL);
 	//Array#lengthを埋める
 	temp = 0;
-	class_find_field(arrType->u.class_, "length", &temp);
+	class_find_field(arrType->u.class_, string_pool_intern("length"), &temp);
 	vector_assign(arr->u.field_vec, temp, object_int_new(sb->length));
 	//C形式の文字列でも保存
 	vector_assign(ret->native_slot_vec, 0, sb);

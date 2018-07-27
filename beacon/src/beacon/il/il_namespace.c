@@ -8,9 +8,9 @@
 static void il_namespace_type_delete(vector_item item);
 static void il_namespace_namespace_delete(vector_item item);
 
-il_namespace* il_namespace_new(const char* name) {
+il_namespace* il_namespace_new(string_view namev) {
 	il_namespace* ret = (il_namespace*)MEM_MALLOC(sizeof(il_namespace));
-	ret->name = text_strdup(name);
+	ret->namev = namev;
 	ret->namespace_list = vector_new();
 	ret->type_list = vector_new();
 	ret->parent = NULL;
@@ -29,7 +29,7 @@ il_namespace* il_namespace_root(il_namespace* self) {
 
 void il_namespace_dump(il_namespace* self, int depth) {
 	text_putindent(depth);
-	text_printf("namespace %s", self->name);
+	text_printf("namespace %s", string_pool_ref2str(self->namev));
 	text_putline();
 
 	text_putindent(depth);
@@ -56,7 +56,6 @@ void il_namespace_delete(il_namespace* self) {
 	if(self == NULL) {
 		return;
 	}
-	MEM_FREE(self->name);
 	vector_delete(self->namespace_list, il_namespace_namespace_delete);
 	vector_delete(self->type_list, il_namespace_type_delete);
 	MEM_FREE(self);

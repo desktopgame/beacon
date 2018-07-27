@@ -34,7 +34,7 @@ void il_factor_assign_op_load(il_factor_assign_op* self, enviroment* env) {
 void il_factor_assign_op_generate(il_factor_assign_op* self, enviroment* env) {
 	if(self->left->type == ilfactor_variable) {
 		il_factor_variable* ilvar = IL_FACT2VAR(self->left);
-		symbol_entry* e = symbol_table_entry(env->sym_table, NULL, ilvar->fqcn->name);
+		symbol_entry* e = symbol_table_entry(env->sym_table, NULL, ilvar->fqcn->namev);
 		il_factor_generate(self->right, env);
 		opcode_buf_add(env->buf, op_store);
 		opcode_buf_add(env->buf, e->index);
@@ -47,7 +47,7 @@ void il_factor_assign_op_generate(il_factor_assign_op* self, enviroment* env) {
 			if(ilvar->type == ilvariable_type_static) {
 				class_* cls = cc_class(ilvar->u.static_->fqcn);
 				int temp = -1;
-				class_find_sfield(cls, ilmem->name, &temp);
+				class_find_sfield(cls, ilmem->namev, &temp);
 				assert(temp != -1);
 				il_factor_generate(self->right, env);
 				opcode_buf_add(env->buf, (vector_item)op_put_static);
@@ -60,7 +60,7 @@ void il_factor_assign_op_generate(il_factor_assign_op* self, enviroment* env) {
 				generic_type* gt = il_factor_eval(ilmem->fact, env);
 				class_* cls = TYPE2CLASS(gt->core_type);
 				int temp = -1;
-				class_find_field(cls, ilmem->name, &temp);
+				class_find_field(cls, ilmem->namev, &temp);
 				assert(temp != -1);
 				il_factor_generate(ilmem->fact, env);
 				il_factor_generate(self->right, env);

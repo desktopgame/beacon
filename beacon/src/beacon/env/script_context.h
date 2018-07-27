@@ -33,7 +33,7 @@ typedef unsigned long script_cid;
  */
 typedef struct script_context {
 	stack* parser_stack;
-	tree_map* namespace_map;
+	vector* namespace_vec;
 	tree_map* class_loader_map;
 	vector* thread_vec;
 	vector* include_vec;

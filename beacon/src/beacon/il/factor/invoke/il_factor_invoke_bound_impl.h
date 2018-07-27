@@ -1,13 +1,14 @@
 #ifndef BEACON_IL_IL_FACTOR_INVOKE_BOUND_H
 #define BEACON_IL_IL_FACTOR_INVOKE_BOUND_H
 #include "../../il_factor_interface.h"
+#include "../../../util/string_pool.h"
 struct enviroment;
 struct generic_type;
 struct method;
 //binded? bound?
 
 typedef struct il_factor_invoke_bound {
-	char* name;
+	string_view namev;
 	vector* type_args;
 	vector* args;
 	struct method* m;
@@ -15,7 +16,7 @@ typedef struct il_factor_invoke_bound {
 	struct generic_type* resolved;
 } il_factor_invoke_bound;
 
-il_factor_invoke_bound* il_factor_invoke_bound_new(const char* name);
+il_factor_invoke_bound* il_factor_invoke_bound_new(string_view namev);
 
 void il_factor_invoke_bound_dump(il_factor_invoke_bound* self, int depth);
 

@@ -4,6 +4,7 @@
 #include "script_method.h"
 #include "native_method.h"
 #include "../util/vector.h"
+#include "../util/string_pool.h"
 #include "../ast/access_level.h"
 #include "../ast/modifier_type.h"
 #include <stdbool.h>
@@ -24,7 +25,7 @@ typedef enum method_type {
  * メソッドを表す構造体.
  */
 typedef struct method {
-	char* name;
+	string_view namev;
 	method_type type;
 	//struct class_* decleared_type;
 	struct type* parent;
@@ -41,13 +42,13 @@ typedef struct method {
 
 /**
  * メソッドを作成します.
- * @param name
+ * @param namev
  * @param filename
  * @param lineno
  * @return
  */
-method* method_malloc(const char* name, const char* filename, int lineno);
-#define method_new(name) (method_malloc(name, __FILE__, __LINE__))
+method* method_malloc(string_view namev, const char* filename, int lineno);
+#define method_new(namev) (method_malloc(namev, __FILE__, __LINE__))
 
 /**
  * メソッドを実行します.
@@ -79,7 +80,7 @@ bool method_override(method* superM, method* subM);
  * @param name
  * @return
  */
-int method_for_generic_index(method* self, const char* name);
+int method_for_generic_index(method* self, string_view namev);
 
 /**
  * メソッドを開放します.

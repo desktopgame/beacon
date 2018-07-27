@@ -12,50 +12,45 @@
 
 //static tree_map* tree_map_root = NULL;
 //proto
-static namespace_* namespace_malloc(char* name);
-static void namespace_dump_root(tree_map* root, bool callSelf, int depth);
-static void namespace_dump_impl(namespace_* root, int depth);
-static void namespace_put_indent(int depth);
-static void namespace_dump_class(tree_map* root, bool isRoot, int depth);
+static namespace_* namespace_malloc(string_view namev);
 
-static void namespace_unlink_namespace(char* name, tree_item item);
-static void namespace_delete_namespace(tree_item item);
+static void namespace_unlink_namespace(vector_item item);
+static void namespace_delete_namespace(vector_item item);
 
-static void namespace_unlink_type(char* name, tree_item item);
-static void namespace_delete_type(tree_item item);
+static void namespace_unlink_type(vector_item item);
+static void namespace_delete_type(vector_item item);
+static namespace_* namespace_vfind_namespace(vector* source, string_view namev);
+static type* namespace_vfind_type(vector* source, string_view namev);
 
-namespace_ * namespace_create_at_root(char * name) {
-	assert(name != NULL);
+namespace_ * namespace_create_at_root(string_view namev) {
 	script_context* ctx = script_context_get_current();
-	if (ctx->namespace_map == NULL) {
-		ctx->namespace_map = tree_map_new();
+	if (ctx->namespace_vec == NULL) {
+		ctx->namespace_vec = vector_new();
 	}
-	tree_item item = tree_map_get(ctx->namespace_map, name);
+	tree_item item = namespace_vfind_namespace(ctx->namespace_vec, namev);
 	if (item == NULL) {
-		char* dup = name;//_strdup(name);
-		namespace_* newNamespace = namespace_malloc(dup);
-		tree_map_put(ctx->namespace_map, name, newNamespace);
+		namespace_* newNamespace = namespace_malloc(namev);
+		vector_push(ctx->namespace_vec, newNamespace);
 		return newNamespace;
 	} else return (namespace_*)item;
 }
 
-namespace_ * namespace_get_at_root(char * name) {
+namespace_ * namespace_get_at_root(string_view namev) {
 	script_context* ctx = script_context_get_current();
-	if (ctx->namespace_map == NULL) {
+	if (ctx->namespace_vec == NULL) {
 		return NULL;
 	}
-	return (namespace_*)tree_map_get(ctx->namespace_map, name);
+	return (namespace_*)namespace_vfind_namespace(ctx->namespace_vec, namev);
 }
 
-namespace_ * namespace_add_namespace(namespace_ * self, char * name) {
+namespace_ * namespace_add_namespace(namespace_ * self, string_view namev) {
 	assert(self != NULL);
-	assert(name != NULL);
-	namespace_* child = namespace_get_namespace(self, name);
+	namespace_* child = namespace_get_namespace(self, namev);
 	if (child == NULL) {
-		namespace_* newNamespace = namespace_malloc(name);
+		namespace_* newNamespace = namespace_malloc(namev);
 		newNamespace->parent = self;
 		child = newNamespace;
-		tree_map_put(self->namespace_map, name, child);
+		vector_push(self->namespace_vec, child);
 		self->ref_count++;
 	}
 	return child;
@@ -64,7 +59,7 @@ namespace_ * namespace_add_namespace(namespace_ * self, char * name) {
 struct type* namespace_add_type(namespace_* self, type* type) {
 	script_context* ctx = script_context_get_current();
 	type->location = self;
-	tree_map_put(self->type_map, type_name(type), type);
+	vector_push(self->type_vec, type);
 	type->absolute_index = ctx->type_vec->length;
 	if (type->tag == type_class) {
 		type->u.class_->classIndex = type->absolute_index;
@@ -73,21 +68,19 @@ struct type* namespace_add_type(namespace_* self, type* type) {
 	return type;
 }
 
-namespace_ * namespace_get_namespace(namespace_ * self, const char * name) {
+namespace_ * namespace_get_namespace(namespace_ * self, string_view namev) {
 	assert(self != NULL);
-	assert(name != NULL);
-	return (namespace_*)tree_map_get(self->namespace_map, name);
+	return (namespace_*)namespace_vfind_namespace(self->namespace_vec, namev);
 }
 
-type * namespace_get_type(namespace_ * self, const char * name) {
+type * namespace_get_type(namespace_ * self, string_view namev) {
 	assert(self != NULL);
-	assert(name != NULL);
-	return (type*)tree_map_get(self->type_map, name);
+	return (type*)namespace_vfind_type(self->type_vec, namev);
 }
 
-class_ * namespace_get_class(namespace_ * self, const char * name) {
+class_ * namespace_get_class(namespace_ * self, string_view namev) {
 	//FIXME:コピペ(namespace_get_interface)
-	type* ret = namespace_get_type(self, name);
+	type* ret = namespace_get_type(self, namev);
 	if (ret != NULL && 
 		ret->tag != type_class) {
 		assert(false);
@@ -99,9 +92,9 @@ class_ * namespace_get_class(namespace_ * self, const char * name) {
 	return ret->u.class_;
 }
 
-interface_ * namespace_get_interface(namespace_ * self, const char * name) {
+interface_ * namespace_get_interface(namespace_ * self, string_view namev) {
 	//FIXME:コピペ(namespace_get_class)
-	type* ret = namespace_get_type(self, name);
+	type* ret = namespace_get_type(self, namev);
 	if (ret != NULL &&
 		ret->tag != type_interface) {
 		assert(false);
@@ -114,15 +107,15 @@ interface_ * namespace_get_interface(namespace_ * self, const char * name) {
 }
 
 namespace_ * namespace_beacon() {
-	return namespace_get_at_root("beacon");
+	return namespace_get_at_root(string_pool_intern("beacon"));
 }
 
 namespace_ * namespace_lang() {
-	return namespace_get_namespace(namespace_beacon(), "lang");
+	return namespace_get_namespace(namespace_beacon(), string_pool_intern("lang"));
 }
 
 namespace_* namespace_unsafe() {
-	return namespace_get_namespace(namespace_beacon(), "unsafe");
+	return namespace_get_namespace(namespace_beacon(), string_pool_intern("unsafe"));
 }
 
 type * namespace_object_type() {
@@ -158,95 +151,74 @@ type * namespace_null_type() {
 }
 
 void namespace_dump() {
+	/*
 	script_context* ctx = script_context_get_current();
 	if (ctx->namespace_map == NULL) {
 		return;
 	}
 	namespace_dump_root(ctx->namespace_map->left, true, 0);
 	namespace_dump_root(ctx->namespace_map->right, true, 0);
+	*/
 }
 
 void namespace_unlink(namespace_ * self) {
-	tree_map_each(self->namespace_map, namespace_unlink_namespace);
-	tree_map_each(self->type_map, namespace_unlink_type);
+	vector_each(self->namespace_vec, namespace_unlink_namespace);
+	vector_each(self->type_vec, namespace_unlink_type);
 }
 
 void namespace_delete(namespace_ * self) {
-	tree_map_delete(self->namespace_map, namespace_delete_namespace);
-	tree_map_delete(self->type_map, namespace_delete_type);
-	MEM_FREE(self->name);
+	vector_delete(self->namespace_vec, namespace_delete_namespace);
+	vector_delete(self->type_vec, namespace_delete_type);
 	MEM_FREE(self);
 }
 
 //private
-static namespace_* namespace_malloc(char* name) {
+static namespace_* namespace_malloc(string_view namev) {
 	namespace_* ret = (namespace_*)MEM_MALLOC(sizeof(namespace_));
-	ret->type_map = NULL;
-	ret->namespace_map = tree_map_new();
-	ret->type_map = tree_map_new();
+	ret->type_vec = NULL;
+	ret->namespace_vec = vector_new();
+	ret->type_vec = vector_new();
 	ret->parent = NULL;
-	ret->name = text_strdup(name);
+	ret->namev = namev;
 	ret->ref_count = 0;
 	return ret;
 }
 
-static void namespace_dump_root(tree_map* root, bool callSelf, int depth) {
-	if (root == NULL) {
-		return;
-	}
-	if (callSelf) {
-		namespace_dump_impl((namespace_*)root->item, depth);
-	}
-	if (root->left != NULL) {
-		namespace_dump_root(root->left, true, depth);
-	}
-	if (root->right != NULL) {
-		namespace_dump_root(root->right, true, depth);
-	}
-}
-
-static void namespace_dump_impl(namespace_* root, int depth) {
-	namespace_put_indent(depth);
-	text_printf("%s", root->name);
-	text_putline();
-	namespace_dump_class(root->type_map, true, depth + 1);
-	namespace_dump_root(root->namespace_map, false, depth + 1);
-}
-
-static void namespace_put_indent(int depth) {
-	for (int i = 0; i < depth; i++) {
-		text_printf("    ");
-	}
-}
-
-static void namespace_dump_class(tree_map* root, bool isRoot, int depth) {
-	if (!isRoot && (root == NULL || root->item == NULL)) {
-		return;
-	}
-	if (!isRoot) {
-		type* e = ((type*)root->item);
-		type_dump(e, depth);
-	}
-	namespace_dump_class(root->left, false, depth);
-	namespace_dump_class(root->right, false, depth);
-}
-
-static void namespace_unlink_namespace(char* name, tree_item item) {
+static void namespace_unlink_namespace(vector_item item) {
 	namespace_* e = (namespace_*)item;
 	namespace_unlink(e);
 }
 
-static void namespace_delete_namespace(tree_item item) {
+static void namespace_delete_namespace(vector_item item) {
 	namespace_* e = (namespace_*)item;
 	namespace_delete(e);
 }
 
-static void namespace_unlink_type(char* name, tree_item item) {
+static void namespace_unlink_type(vector_item item) {
 	type* e = (type*)item;
 	type_unlink(e);
 }
 
-static void namespace_delete_type(tree_item item) {
+static void namespace_delete_type(vector_item item) {
 	type* e = (type*)item;
 	type_delete(e);
+}
+
+static namespace_* namespace_vfind_namespace(vector* source, string_view namev) {
+	for(int i=0; i<source->length; i++) {
+		namespace_* e = vector_at(source, i);
+		if(e->namev == namev) {
+			return e;
+		}
+	}
+	return NULL;
+}
+static type* namespace_vfind_type(vector* source, string_view namev) {
+	for(int i=0; i<source->length; i++) {
+		type* e = vector_at(source, i);
+		if(type_name(e) == namev) {
+			return e;
+		}
+	}
+	return NULL;
 }

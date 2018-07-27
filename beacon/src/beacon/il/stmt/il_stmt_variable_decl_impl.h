@@ -2,6 +2,7 @@
 #ifndef BEACON_IL_IL_STMT_VARIABLE_DECL_H
 #define BEACON_IL_IL_STMT_VARIABLE_DECL_H
 #include "../il_stmt_interface.h"
+#include "../../util/string_pool.h"
 #include "../../env/generic_cache.h"
 struct enviroment;
 /**
@@ -9,7 +10,7 @@ struct enviroment;
  */
 typedef struct il_stmt_variable_decl {
 	generic_cache* fqcn;
-	char* name;
+	string_view namev;
 } il_stmt_variable_decl;
 /**
  * 型宣言を表す要素をスーパーセットにラップします.
@@ -20,10 +21,10 @@ il_stmt* il_stmt_wrap_variable_decl(il_stmt_variable_decl* self);
 
 /**
  * 型宣言を表す要素を作成します.
- * @param name
+ * @param namev
  * @return
  */
-il_stmt_variable_decl* il_stmt_variable_decl_new(const char* name);
+il_stmt_variable_decl* il_stmt_variable_decl_new(string_view namev);
 
 /**
  * 型宣言を表す要素を出力します.

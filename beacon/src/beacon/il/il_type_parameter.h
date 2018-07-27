@@ -2,6 +2,7 @@
 #ifndef BEACON_IL_IL_TYPE_PARAMETER_H
 #define BEACON_IL_IL_TYPE_PARAMETER_H
 #include "../util/vector.h"
+#include "../util/string_pool.h"
 
 /**
  * 型引数の属性を表す列挙型.
@@ -17,7 +18,7 @@ typedef enum il_type_parameter_kind {
  */
 typedef struct il_type_parameter {
 	il_type_parameter_kind kind;
-	char* name;
+	string_view namev;
 //	vector* rule_vec;
 } il_type_parameter;
 
@@ -26,7 +27,7 @@ typedef struct il_type_parameter {
  * @param name
  * @return
  */
-il_type_parameter* il_type_parameter_new(char* name);
+il_type_parameter* il_type_parameter_new(string_view namev);
 
 /**
  * 型引数の一覧を出力します.

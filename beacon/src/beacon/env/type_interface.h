@@ -3,6 +3,7 @@
 #define BEACON_ENV_TYPE_INTERFACE_H
 #include <stdbool.h>
 #include "../util/vector.h"
+#include "../util/string_pool.h"
 
 #define TYPE2CLASS(type) (type_cast_class(type))
 #define TYPE2INTERFACE(type) (type_cast_interface(type))
@@ -76,7 +77,7 @@ struct generic_type* type_init_generic(type* self, int counts);
  * @param self
  * @return
  */
-char* type_name(type* self);
+string_view type_name(type* self);
 
 /**
  * この型にフィールドを追加します.
@@ -95,24 +96,24 @@ void type_add_method(type* self, struct method* m);
 /**
  * この型からメソッドを検索します.
  * @param self
- * @param name
+ * @param namev
  * @param args
  * @param env
  * @param outIndex
  * @return
  */
-struct method* type_ilfind_method(type* self, const char* name, vector* args, struct enviroment* env, int* outIndex);
+struct method* type_ilfind_method(type* self, string_view namev, vector* args, struct enviroment* env, int* outIndex);
 
 /**
  * この型から静的メソッドを検索します.
  * @param self
- * @param name
+ * @param namev
  * @param args
  * @param env
  * @param outIndex
  * @return
  */
-struct method* type_ilfind_smethod(type* self, const char* name, vector* args, struct enviroment* env, int* outIndex);
+struct method* type_ilfind_smethod(type* self, string_view namev, vector* args, struct enviroment* env, int* outIndex);
 
 /**
  * 仮想関数の一覧を返します.
@@ -145,10 +146,10 @@ void type_unlink(type* self);
 /**
  * 指定の名前の型変数が何番目に表れるかを返します.
  * @param self
- * @param name
+ * @param namev
  * @return
  */
-int type_for_generic_index(type* self, char* name);
+int type_for_generic_index(type* self, string_view namev);
 
 /**
  * selfの継承クラスや実装インターフェイスに a が現れるなら型変数付きで返します.

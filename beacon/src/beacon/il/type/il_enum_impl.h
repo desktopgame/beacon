@@ -2,16 +2,17 @@
 #ifndef BEACON_IL_IL_ENUM_H
 #define BEACON_IL_IL_ENUM_H
 #include "../../util/vector.h"
+#include "../../util/string_pool.h"
 #include "../il_type_interface.h"
 
 typedef struct il_enum {
-	char* name;
+	string_view namev;
 	vector* item_vec;
 } il_enum;
 
 il_type* il_type_wrap_enum(il_enum* self);
 
-il_enum* il_enum_new(const char* name);
+il_enum* il_enum_new(string_view namev);
 
 void il_enum_dump(il_enum* self, int depth);
 

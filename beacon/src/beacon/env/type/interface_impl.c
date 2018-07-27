@@ -22,9 +22,9 @@ type * type_wrap_interface(interface_ * self) {
 	return ret;
 }
 
-interface_ * interface_new(const char * name) {
+interface_ * interface_new(string_view namev) {
 	interface_* ret = (interface_*)MEM_MALLOC(sizeof(interface_));
-	ret->name = text_strdup(name);
+	ret->namev = namev;
 	ret->impl_list = vector_new();
 	ret->location = NULL;
 	ret->method_list = vector_new();
@@ -38,12 +38,12 @@ void interface_add_method(interface_ * self, method * m) {
 	vector_push(self->method_list, m);
 }
 
-method * interface_ilfind_method(interface_ * self, const char * name, vector * args, enviroment * env, int * outIndex) {
-	return meta_ilfind_method(self->method_list, name, args, env, outIndex);
+method * interface_ilfind_method(interface_ * self, string_view namev, vector * args, enviroment * env, int * outIndex) {
+	return meta_ilfind_method(self->method_list, namev, args, env, outIndex);
 }
 
-method* interface_gfind_method(interface_* self, const char* name, vector* gargs, int* outIndex) {
-	return meta_gfind_method(self->method_list, name, gargs, outIndex);
+method* interface_gfind_method(interface_* self, string_view namev, vector* gargs, int* outIndex) {
+	return meta_gfind_method(self->method_list, namev, gargs, outIndex);
 }
 
 vector* interface_method_flatten_list(vector* inter_list) {
@@ -68,14 +68,14 @@ vector* interface_method_flatten(interface_* self) {
 
 void interface_dump(interface_ * self, int depth) {
 	text_putindent(depth);
-	text_printf("interface %s", self->name);
+	text_printf("interface %s", string_pool_ref2str(self->namev));
 	type_parameter_print(self->type_parameter_list);
 	text_putline();
 	//継承するインターフェイスの一覧
 	for (int i = 0; i < self->impl_list->length; i++) {
 		interface_* inter = (interface_*)vector_at(self->impl_list, i);
 		text_putindent(depth + 1);
-		text_printf("extend %s", inter->name);
+		text_printf("extend %s", string_pool_ref2str(inter->namev));
 		text_putline();
 	}
 	//メソッドの一覧をダンプ
@@ -120,7 +120,6 @@ void interface_unlink(interface_ * self) {
 
 void interface_delete(interface_ * self) {
 	vector_delete(self->type_parameter_list, interface_type_parameter_delete);
-	MEM_FREE(self->name);
 	MEM_FREE(self);
 }
 

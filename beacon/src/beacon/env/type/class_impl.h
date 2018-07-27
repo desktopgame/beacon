@@ -8,6 +8,7 @@
 #include "../../ast/operator_type.h"
 #include "../../vm/enviroment.h"
 #include "../../util/vector.h"
+#include "../../util/string_pool.h"
 //#include "../access_domain.h"
 #include <stdint.h>
 #include <stdbool.h>
@@ -25,7 +26,7 @@ struct operator_overload;
  */
 typedef struct class_ {
 	type* parent;
-	char* name;
+	string_view namev;
 	namespace_* location;
 	struct generic_type* super_class;
 	vector* impl_list;
@@ -59,16 +60,16 @@ type* type_wrap_class(class_* self);
 /**
  * 新しいクラスを作成します.
  * 呼び出し側で対応する名前空間を紐づけてください。
- * @param name これは呼び出し側で開放してください。
+ * @param namev
  * @return
  */
-class_* class_new(const char* name);
+class_* class_new(string_view namev);
 
 /**
  * 事前に読みこまれる必要があるクラスを作成します.
- * @param name
+ * @param namev
  */
-type* class_new_preload(const char* name);
+type* class_new_preload(string_view namev);
 
 /**
  * 指定のオブジェクトにこのクラスのフィールドを表す
@@ -129,41 +130,41 @@ void class_define_native_method(class_* self, const char* name, native_impl impl
 /**
  * 指定の名前を持つフィールドを返します.
  * @param self
- * @param name
+ * @param namev
  * @param outIndex
  * @return 無ければ NULL
  */
-struct field* class_find_field(class_* self, const char* name, int* outIndex);
+struct field* class_find_field(class_* self, string_view namev, int* outIndex);
 
 /**
  * 指定の名前を持つフィールドを返します.
  * selfの中に見つけられなかった場合には親クラスも検索します。
  * @param self
- * @param name
+ * @param namev
  * @param domain
  * @param outIndex
  * @return
  */
-struct field* class_find_field_tree(class_* self, const char* name, int* outIndex);
+struct field* class_find_field_tree(class_* self, string_view namev, int* outIndex);
 
 /**
  * 指定の名前を持つ静的フィールドを返します.
  * @param self
- * @param name
+ * @param namev
  * @param outIndex
  * @return 無ければ NULL
  */
-struct field* class_find_sfield(class_* self, const char* name, int* outIndex);
+struct field* class_find_sfield(class_* self, string_view namev, int* outIndex);
 
 /**
  * 指定の名前を持つ静的フィールドを返します.
  * selfの中に見つけられなかった場合には親クラスも検索します。
  * @param self
- * @param name
+ * @param namev
  * @param outIndex
  * @return 無ければ NULL
  */
-struct field* class_find_sfield_tree(class_* self, const char* name, int* outIndex);
+struct field* class_find_sfield_tree(class_* self, string_view namev, int* outIndex);
 
 /**
  * 指定位置のフィールドを返します.
@@ -219,24 +220,24 @@ struct constructor* class_ilfind_empty_constructor(class_* self, enviroment* env
 /**
  * もっとも一致するメソッドを返します.
  * @param self
- * @param name
+ * @param namev
  * @param env
  * @param cache
  * @param args<il_argument*>
  * @param outIndex メソッドへのインデックス
  * @return
  */
-struct method* class_ilfind_method(class_* self, const char* name, vector* args, enviroment* env, int* outIndex);
+struct method* class_ilfind_method(class_* self, string_view namev, vector* args, enviroment* env, int* outIndex);
 
 /**
  * もっとも一致するメソッドを返します.
  * @param self
- * @param name
+ * @param namev
  * @param gargs
  * @param outIndex
  * @return
  */
-struct method* class_gfind_method(class_* self, const char* name, vector* gargs, int* outIndex);
+struct method* class_gfind_method(class_* self, string_view namev, vector* gargs, int* outIndex);
 
 /**
  * equalsメソッドを検索します.
@@ -249,24 +250,24 @@ struct method* class_gfind_eqmethod(class_* self, int* outIndex);
 /**
  * もっとも一致する静的メソッドを返します.
  * @param self
- * @param name
+ * @param namev
  * @param env
  * @param cache
  * @param args<il_argument*>
  * @param outIndex メソッドへのインデックス
  * @return
  */
-struct method* class_ilfind_smethod(class_* self, const char* name, vector* args, enviroment* env, int* outIndex);
+struct method* class_ilfind_smethod(class_* self, string_view namev, vector* args, enviroment* env, int* outIndex);
 
 /**
  * もっとも一致する静的メソッドを返します.
  * @param self
- * @param name
+ * @param namev
  * @param gargs
  * @param outIndex
  * @return
  */
-struct method* class_gfind_smethod(class_* self, const char* name, vector* gargs, int* outIndex);
+struct method* class_gfind_smethod(class_* self, string_view namev, vector* gargs, int* outIndex);
 
 /**
  * 指定位置のメソッドを返します.

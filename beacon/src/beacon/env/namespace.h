@@ -2,6 +2,8 @@
 #ifndef BEACON_ENV_NAMESPACE_H
 #define BEACON_ENV_NAMESPACE_H
 #include "../util/tree_map.h"
+#include "../util/string_pool.h"
+#include "../util/vector.h"
 #include <stdint.h>
 #define TYPE_OBJECT (namespace_object_type())
 #define TYPE_INT (namespace_int_type())
@@ -29,34 +31,34 @@ struct interface_;
  * 名前空間を表す構造体.
  */
 typedef struct namespace_ {
-	char* name;
+	string_view namev;
 	struct namespace_* parent;
-	tree_map* namespace_map;
-	tree_map* type_map;
+	vector* namespace_vec;
+	vector* type_vec;
 	uint32_t ref_count;
 } namespace_;
 
 /**
  * 指定の名前でトップレベルに新しい名前空間を定義します.
- * @param name
+ * @param namev
  * @return 既に存在するならそれを返します.
  */
-namespace_* namespace_create_at_root(char* name);
+namespace_* namespace_create_at_root(string_view namev);
 
 /**
  * 指定の名前でトップレベルから名前空間を検索します.
- * @param name
+ * @param namev
  * @return
  */
-namespace_* namespace_get_at_root(char* name);
+namespace_* namespace_get_at_root(string_view namev);
 
 /**
  * 指定の名前空間に新しい名前空間を定義します.
  * @param self
- * @param name
+ * @param namev
  * @return 既に存在するならそれを返します.
  */
-namespace_* namespace_add_namespace(namespace_* self, char* name);
+namespace_* namespace_add_namespace(namespace_* self, string_view namev);
 
 /**
  * この名前空間にクラスを含めます.
@@ -69,34 +71,34 @@ struct type* namespace_add_type(namespace_* self, struct type* type);
 /**
  * 指定の名前空間から指定の名前の名前空間を検索します.
  * @param self
- * @param name
+ * @param namev
  * @return 見つからないなら NULL
  */
-namespace_* namespace_get_namespace(namespace_* self, const char* name);
+namespace_* namespace_get_namespace(namespace_* self, string_view namev);
 
 /**
  * 指定の名前空間で指定の名前のタイプを検索します.
  * @param self
- * @param name
+ * @param namev
  * @return 見つからないなら NULL
  */
-struct type* namespace_get_type(namespace_* self, const char* name);
+struct type* namespace_get_type(namespace_* self, string_view namev);
 
 /**
  * 指定の名前空間で指定の名前のクラスを検索します.
  * @param self
- * @param name
+ * @param namev
  * @return 見つからないなら NULL
  */
-struct class_* namespace_get_class(namespace_* self, const char* name);
+struct class_* namespace_get_class(namespace_* self, string_view namev);
 
 /**
  * 指定の名前空間で指定の名前のインターフェースを検索します.
  * @param self
- * @param name
+ * @param namev
  * @return 見つからないなら NULL
  */
-struct interface_* namespace_get_interface(namespace_* self, const char* name);
+struct interface_* namespace_get_interface(namespace_* self, string_view namev);
 
 /**
  * beacon 名前空間を返します.
