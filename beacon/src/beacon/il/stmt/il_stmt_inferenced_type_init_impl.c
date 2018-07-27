@@ -1,7 +1,6 @@
 #include "il_stmt_inferenced_type_init_impl.h"
 #include "../../util/mem.h"
 #include "../../util/text.h"
-#include "../../util/xassert.h"
 #include "../../vm/symbol_entry.h"
 #include "../../env/type_interface.h"
 #include "../../env/namespace.h"

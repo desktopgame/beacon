@@ -19,7 +19,6 @@
 #include "../../env/operator_overload.h"
 #include "../../env/type/meta_impl.h"
 #include "../../env/cll/class_loader_link_impl.h"
-#include "../../util/xassert.h"
 #include "../../util/text.h"
 #include "../lazy_resolve.h"
 #include "../resolve/default_eqoperator_resolve.h"

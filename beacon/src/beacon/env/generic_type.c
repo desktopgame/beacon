@@ -8,7 +8,6 @@
 #include "../env/compile_context.h"
 #include "../util/mem.h"
 #include "../util/text.h"
-#include "../util/xassert.h"
 #include "../il/il_type_argument.h"
 #include "../vm/frame.h"
 #include "fqcn_cache.h"
@@ -228,7 +227,7 @@ static generic_type* generic_type_applyImpl(generic_type* self, frame* fr) {
 				generic_type_addargs(copy, generic_type_applyImpl(generic_type_typeargs_at(fr, e->virtual_type_index), fr));
 			} else if(e->tag == generic_type_tag_self) {
 				generic_type_addargs(copy, e);
-			} else XBREAK(e->tag != generic_type_tag_none);
+			}
 		} else {
 			generic_type_addargs(copy, generic_type_applyImpl(e, fr));
 		}

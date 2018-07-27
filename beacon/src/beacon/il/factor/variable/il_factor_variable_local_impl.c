@@ -1,7 +1,6 @@
 #include "il_factor_variable_local_impl.h"
 #include "../../../util/mem.h"
 #include "../../../util/text.h"
-#include "../../../util/xassert.h"
 #include "../../../env/generic_type.h"
 #include "../../../env/type_impl.h"
 #include "../../../env/field.h"

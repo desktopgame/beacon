@@ -1,6 +1,5 @@
 #include "class_impl.h"
 #include "../../util/text.h"
-#include "../../util/xassert.h"
 #include "../parameter.h"
 #include "../../il/il_argument.h"
 #include <assert.h>
@@ -730,7 +729,6 @@ static void class_create_vtable_top(class_* self) {
 }
 
 static void class_create_vtable_override(class_* self) {
-	//XBREAK(!strcmp(self->name, "StringBuilder"));
 	class_create_vtable(self->super_class->core_type->u.class_);
 	vtable_copy(self->super_class->core_type->u.class_->vt, self->vt);
 	for (int i = 0; i < self->method_list->length; i++) {

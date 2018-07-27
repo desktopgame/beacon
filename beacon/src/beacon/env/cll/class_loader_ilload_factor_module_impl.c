@@ -1,7 +1,6 @@
 #include "class_loader_ilload_factor_module_impl.h"
 #include "../../il/il_factor_impl.h"
 #include "../../util/mem.h"
-#include "../../util/xassert.h"
 #include "../class_loader.h"
 #include "class_loader_ilload_type_module_impl.h"
 #include <stdio.h>

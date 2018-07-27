@@ -6,7 +6,6 @@
 #include "type_parameter.h"
 #include "generic_type.h"
 #include "../util/text.h"
-#include "../util/xassert.h"
 #include <assert.h>
 #include <string.h>
 

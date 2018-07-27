@@ -1,6 +1,5 @@
 #include "il_factor_new_instance_impl.h"
 #include "../../util/mem.h"
-#include "../../util/xassert.h"
 #include "../il_argument.h"
 #include "../il_type_argument.h"
 #include "../../vm/enviroment.h"

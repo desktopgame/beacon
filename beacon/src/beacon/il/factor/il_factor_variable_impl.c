@@ -8,7 +8,6 @@
 #include "../../env/type_impl.h"
 #include "../../env/field.h"
 #include "../../util/mem.h"
-#include "../../util/xassert.h"
 #include "../../vm/symbol_entry.h"
 #include <assert.h>
 #include <string.h>

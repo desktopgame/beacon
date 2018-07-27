@@ -1,6 +1,5 @@
 #include "symbol_table.h"
 #include "../util/mem.h"
-#include "../util/xassert.h"
 #include "symbol_entry.h"
 #include "../env/type_interface.h"
 #include "../env/type_impl.h"
@@ -22,7 +21,6 @@ symbol_table * symbol_table_new() {
 }
 
 symbol_entry* symbol_table_entry(symbol_table* self, generic_type* gtp, string_view namev) {
-	//XBREAK(!strcmp(name, "st"));
 	numeric_map* data = numeric_map_cell(self->map, namev);
 	if (data) {
 		return ((symbol_entry*)data->item);

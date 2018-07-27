@@ -1,7 +1,6 @@
 #include "il_factor_call_op_impl.h"
 #include "../../util/mem.h"
 #include "../../util/text.h"
-#include "../../util/xassert.h"
 #include "../il_argument.h"
 #include "../il_type_argument.h"
 #include "../il_factor_impl.h"
@@ -158,7 +157,6 @@ static void il_factor_member_op_check(il_factor_call_op* self, enviroment* env) 
 	il_factor_member_op* ilmem = IL_FACT2MEM(receiver);
 	//hoge.foo
 	if(ilmem->fact->type == ilfactor_variable) {
-		//XBREAK(!strcmp(ilmem->name, "writeLine"));
 		il_factor_variable* ilvar = IL_FACT2VAR(ilmem->fact);
 		//Namespace::Class.foo()
 		if(ilvar->fqcn->scope_vec->length > 0) {
@@ -206,7 +204,6 @@ static void il_factor_member_op_check(il_factor_call_op* self, enviroment* env) 
 			}
 		}
 	} else {
-		XBREAK(self->receiver->type == ilfactor_this);
 		//入れ替える
 		il_factor_invoke* iv = il_factor_invoke_new(ilmem->namev);
 		iv->args = self->argument_list;

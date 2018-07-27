@@ -2,7 +2,6 @@
 #include "../script_context.h"
 #include "../../util/text.h"
 #include "../../util/io.h"
-#include "../../util/xassert.h"
 #include "../../parse/parser.h"
 #include "../../il/il_type_impl.h"
 #include "../../il/il_import.h"
@@ -29,7 +28,6 @@
 #include "../constructor.h"
 #include "class_loader_bcload_import_module_impl.h"
 #include "../../util/mem.h"
-#include "../../util/xassert.h"
 #include "../../debug.h"
 #include <assert.h>
 //

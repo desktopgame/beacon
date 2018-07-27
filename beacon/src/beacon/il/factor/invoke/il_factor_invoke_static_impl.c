@@ -6,7 +6,6 @@
 #include "../../../vm/enviroment.h"
 #include "../../il_argument.h"
 #include "../../il_type_argument.h"
-#include "../../../util/xassert.h"
 #include "../../../util/vector.h"
 
 //proto

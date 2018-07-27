@@ -11,7 +11,6 @@
 #include "../constructor.h"
 #include "../object.h"
 #include "../method.h"
-#include "../../util/xassert.h"
 #include "../../util/text.h"
 #include <string.h>
 

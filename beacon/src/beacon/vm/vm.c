@@ -18,7 +18,6 @@
 #include "../lib/beacon/lang/bc_array.h"
 #include "../thread/thread.h"
 #include "../util/mem.h"
-#include "../util/xassert.h"
 #include "../util/string_buffer.h"
 #include "../util/vector.h"
 #include "../util/text.h"
@@ -666,7 +665,6 @@ static void vm_run(frame * self, enviroment * env, int pos, int deferStart) {
 			}
 			case op_load:
 			{
-				//XBREAK(i == 7);
 				int index = (int)enviroment_source_at(env, ++IDX);
 				vector_item e = vector_at(self->ref_stack, index);
 				object*  o = (object*)e;

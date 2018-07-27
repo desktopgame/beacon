@@ -16,7 +16,6 @@
 #include "../util/text.h"
 #include "../util/io.h"
 #include "../util/panic.h"
-#include "../util/xassert.h"
 #include "../parse/parser.h"
 #include "namespace.h"
 #include "type_impl.h"
