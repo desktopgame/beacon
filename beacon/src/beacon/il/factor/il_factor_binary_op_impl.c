@@ -21,8 +21,7 @@
 static bool type_test(il_factor_binary_op* self, enviroment* env, type* t);
 
 il_factor * il_factor_wrap_binary(il_factor_binary_op * self) {
-	il_factor* ret = (il_factor*)MEM_MALLOC(sizeof(il_factor));
-	ret->type = ilfactor_binary_op;
+	il_factor* ret = il_factor_new(ilfactor_binary_op);
 	ret->u.binary_ = self;
 	return ret;
 }

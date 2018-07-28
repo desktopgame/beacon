@@ -114,10 +114,15 @@ namespace_* namespace_lang();
 
 /**
  * beacon.unsafe 名前空間を返します.
- * @param
  * @return
  */
 namespace_* namespace_unsafe();
+
+/**
+ * $placeholder 名前空間を返します.
+ * @return
+ */
+namespace_* namespace_placeholder();
 
 /**
  * 現在のスクリプトコンテキストで object タイプを返します.

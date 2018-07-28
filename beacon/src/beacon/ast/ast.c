@@ -31,8 +31,11 @@ ast * ast_malloc(ast_tag tag, const char* filename, int lineno) {
 	parser* p = parser_top();
 	if (p != NULL) {
 		ret->lineno = p->lineno;
+		assert(p->lineno >= 0);
 		vector_push(p->lineno_vec, p->lineno);
-	} else ret->lineno = -1;
+	} else {
+		ret->lineno = -1;
+	}
 	return ret;
 }
 
@@ -115,6 +118,7 @@ ast * ast_push(ast * self, ast * child) {
 	if (p != NULL) {
 		if (!vector_empty(p->lineno_vec)) {
 			int lineno = (int)vector_pop(p->lineno_vec);
+			assert(lineno >= 0);
 			self->lineno = lineno;
 		}
 	}

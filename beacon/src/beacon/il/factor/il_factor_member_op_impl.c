@@ -16,8 +16,7 @@ static void il_factor_member_op_check(il_factor_member_op* self, enviroment* env
 static void il_factor_member_op_typearg_delete(vector_item item);
 
 il_factor* il_factor_wrap_member_op(il_factor_member_op* self) {
-	il_factor* ret = (il_factor*)MEM_MALLOC(sizeof(il_factor));
-	ret->type = ilfactor_member_op;
+	il_factor* ret = il_factor_new(ilfactor_member_op);
 	ret->u.member_ = self;
 	return ret;
 }

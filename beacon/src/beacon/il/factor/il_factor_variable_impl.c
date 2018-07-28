@@ -17,8 +17,7 @@ static void il_factor_variable_check(il_factor_variable* self, enviroment* env);
 static void il_factor_delete_typeargs(vector_item item);
 
 il_factor * il_factor_wrap_variable(il_factor_variable * self) {
-	il_factor* ret = (il_factor*)MEM_MALLOC(sizeof(il_factor));
-	ret->type = ilfactor_variable;
+	il_factor* ret = il_factor_new(ilfactor_variable);
 	ret->u.variable_ = self;
 	return ret;
 }

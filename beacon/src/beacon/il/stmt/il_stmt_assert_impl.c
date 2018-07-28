@@ -7,9 +7,9 @@
 #include <assert.h>
 
 il_stmt* il_stmt_wrap_assert(il_stmt_assert* self) {
-	il_stmt* ret = (il_stmt*)MEM_MALLOC(sizeof(il_stmt));
-	ret->type = ilstmt_assert;
+	il_stmt* ret = il_stmt_new(ilstmt_assert);
 	ret->u.bcassert_ = self;
+	self->parent = ret;
 	return ret;
 }
 
@@ -17,6 +17,7 @@ il_stmt_assert* il_stmt_assert_new() {
 	il_stmt_assert* ret = (il_stmt_assert*)MEM_MALLOC(sizeof(il_stmt_assert));
 	ret->condition = NULL;
 	ret->message = NULL;
+	ret->parent = NULL;
 	return ret;
 }
 
@@ -51,6 +52,7 @@ void il_stmt_assert_load(il_stmt_assert* self, enviroment* env) {
 		self->message = il_factor_wrap_string(ilstr);
 		assert(ilstr->valuev != 0);
 		MEM_FREE(str);
+		self->message->lineno = self->parent->lineno;
 	}
 	il_factor_load(self->message, env);
 }

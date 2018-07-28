@@ -42,7 +42,7 @@ struct il_stmt_defer;
  */
 typedef struct il_stmt {
 	il_stmt_type type;
-	uint32_t lineno;
+	int lineno;
 	union {
 		struct il_stmt_proc* proc_;
 		struct il_stmt_if* if_;
@@ -57,6 +57,9 @@ typedef struct il_stmt {
 		struct il_stmt_defer* defer_;
 	} u;
 } il_stmt;
+
+#define il_stmt_new(type) (il_stmt_malloc(type, __FILE__, __LINE__))
+il_stmt* il_stmt_malloc(il_stmt_type type, const char* filename, int lineno);
 
 /**
  * 文を出力します.

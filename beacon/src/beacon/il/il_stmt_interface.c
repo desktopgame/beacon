@@ -6,6 +6,13 @@
 #include "../util/mem.h"
 #include "il_print_layout.h"
 
+il_stmt* il_stmt_malloc(il_stmt_type type, const char* filename, int lineno) {
+	il_stmt* ret = mem_malloc(sizeof(il_stmt), filename, lineno);
+	ret->type = type;
+	ret->lineno = -1;
+	return ret;
+}
+
 void il_stmt_dump(il_stmt * self, int depth) {
 	il_print_layout_form(self->lineno);
 	switch (self->type) {
@@ -111,6 +118,7 @@ void il_stmt_load(il_stmt * self, enviroment* env) {
 	if(il_error_panic()) {
 		return;
 	}
+	assert(self->lineno >= 0);
 	il_error_file(env->context_ref->filename);
 	il_error_line(self->lineno);
 	switch (self->type) {

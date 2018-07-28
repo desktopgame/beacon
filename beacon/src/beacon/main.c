@@ -1,18 +1,14 @@
-#include <stdlib.h>
-#include <stdio.h>
-#include <string.h>
 #include <unistd.h>
 #include <getopt.h>
-#include "il/il_print_layout.h"
-#include "env/script_context.h"
+#include <stdio.h>
+#include <string.h>
 #include "test.h"
 #include "cl.h"
-#include "debug.h"
+#include "il/il_print_layout.h"
+#include "env/script_context.h"
 #include "util/string_pool.h"
 #include "util/mem.h"
-#include "util/text.h"
-#include "util/io.h"
-#include "util/file_entry.h"
+
 
 /**
  * コマンドライン文字列を解析します.
@@ -23,6 +19,7 @@
 int main_cl(int argc, char *argv[]) {
 	struct option longopts[] = {
 		{ "test", no_argument, NULL, 't' },
+		{ "bug", required_argument, NULL, 'b' },
 		{ "ast", required_argument, NULL, 'a' },
 		{ "il", required_argument, NULL, 'i' },
 		{ "run", required_argument, NULL, 'r' },
@@ -31,14 +28,18 @@ int main_cl(int argc, char *argv[]) {
 	};
 	extern char *optarg;
 	extern int optind, opterr;
+	int ret = -1;
 	int opt = 0;
 	int longindex = 0;
-	int ret = -1;
-	while ((opt = getopt_long(argc, argv, "ta:i:r:o:", longopts, &longindex)) != -1) {
+	while ((opt = getopt_long(argc, argv, "tb:a:i:r:o:", longopts, &longindex)) != -1) {
 		switch(opt) {
 			case 't':
 				printf(":t :test\n");
 				ret = cl_test(argc, argv);
+				break;
+			case 'b':
+				printf(":b :bug\n");
+				ret = cl_bug(argc, argv);
 				break;
 			case 'a':
 				printf(":a :ast\n");
@@ -65,6 +66,13 @@ int main_cl(int argc, char *argv[]) {
 }
 
 int main(int argc, char *argv[]) {
+	/*
+	typedef unsigned char uchar;
+	uchar* a = malloc(sizeof(uchar) * 24);
+	mem_fprint(stdout, a, 24);
+	memset(a, 0xCD, 24);
+	mem_fprint(stdout, a, 24);
+	*/
 	//*
 	//先んじて設定を行っておく
 	//mem_read("mem.dbg");

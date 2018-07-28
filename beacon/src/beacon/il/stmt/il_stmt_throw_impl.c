@@ -6,8 +6,7 @@
 #include <stdio.h>
 
 il_stmt* il_stmt_wrap_throw(il_stmt_throw* self) {
-	il_stmt* ret = (il_stmt*)MEM_MALLOC(sizeof(il_stmt));
-	ret->type = ilstmt_throw;
+	il_stmt* ret = il_stmt_new(ilstmt_throw);
 	ret->u.throw_ = self;
 	return ret;
 }

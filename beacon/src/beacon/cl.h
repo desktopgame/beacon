@@ -10,6 +10,14 @@
 int cl_test(int argc, char* argv[]);
 
 /**
+ * 前回のテストで失敗した箇所を実行します.
+ * @param argc
+ * @param argv
+ * @return
+ */
+int cl_bug(int argc, char* argv[]);
+
+/**
  * ASTをダンプします.
  * @param filename
  * @return

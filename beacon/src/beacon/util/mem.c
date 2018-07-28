@@ -15,6 +15,18 @@
 #endif
 
 /**
+ * ユーザに返すメモリ領域の前後に挟み込まれるメモリの大きさ.
+ */
+#define BORDER_SIZE (4)
+
+/**
+ * ユーザに返す領域の前後のボーダを示す.
+ */
+#define BORDER (0xCD)
+
+#define REAL_SIZE(size) ((size) + BORDER_SIZE + BORDER_SIZE)
+
+/**
  * 確保されたメモリを管理する連結リスト.
  */
 typedef struct slot {
@@ -27,14 +39,18 @@ typedef struct slot {
 	struct slot* next;
 } slot;
 
-static slot* slot_new(size_t size, void* arena, const char* filename, int lineno);
+static slot* slot_new(size_t size, const char* filename, int lineno);
+static void* slot_application_area(slot* self);
 static slot* slot_find(void* arena);
 static void slot_append(slot* arg);
 static slot* slot_tail();
 static void slot_cat(slot* left, slot* right);
 static void* slot_realloc(void* block, size_t newSize, const char* filename, int lineno);
 static void slot_free(void* block, const char* fillename, int lineno);
+static void slot_validate(slot* self);
 static void slot_delete(slot* self);
+
+static void* fixed_malloc(size_t newSize);
 static void* fixed_realloc(void* block, size_t newSize);
 
 static slot* gHead = NULL;
@@ -42,15 +58,15 @@ static int gCount = 0;
 static int gBreak = -1;
 
 void * mem_malloc(size_t size, const char * filename, int lineno) {
-	void* ret = malloc(size);
-	memset(ret, 0, size);
 	#if defined(MEMORY_MANAGEMENT)
-	slot_append(slot_new(size, ret, filename, lineno));
-	#endif
-	if(ret == NULL) {
-		abort();
-	}
+	slot* slot = slot_new(size, filename, lineno);
+	slot_append(slot);
+	return slot_application_area(slot);
+	#else
+	void* ret = fixed_malloc(size);
+	memset(ret, 0xCC, size);
 	return ret;
+	#endif
 }
 
 void * mem_realloc(void * block, size_t newSize, const char * filename, int lineno) {
@@ -62,6 +78,9 @@ void * mem_realloc(void * block, size_t newSize, const char * filename, int line
 }
 
 void mem_free(void * block, const char * filename, int lineno) {
+	if(block == NULL) {
+		return;
+	}
 	#if defined(MEMORY_MANAGEMENT)
 	slot_free(block, filename, lineno);
 	#else
@@ -125,7 +144,7 @@ void mem_write(const char* filename) {
 
 void mem_mark(void* p, size_t size, const char* filename, int lineno) {
 	#if defined(MEMORY_MANAGEMENT)
-	slot_append(slot_new(size, p, filename, lineno));
+//	slot_append(slot_new(size, p, filename, lineno));
 	#endif
 }
 
@@ -142,15 +161,33 @@ void mem_destroy() {
 	#endif
 }
 
+int mem_fprint(FILE* fp, void* block, int len) {
+	unsigned char* ublock = block;
+	for(int i=0; i<len; i++) {
+		fprintf(fp, "%hhu ", (unsigned char)ublock[i]);
+	}
+	fprintf(fp, "\n");
+	return 0;
+}
+
 //private
-static slot* slot_new(size_t size, void* arena, const char* filename, int lineno) {
-	slot* ret = malloc(sizeof(slot));
+static slot* slot_new(size_t size, const char* filename, int lineno) {
+	slot* ret = fixed_malloc(sizeof(slot));
 	ret->prev = NULL;
 	ret->next = NULL;
-	ret->arena = arena;
+	ret->arena = fixed_malloc(REAL_SIZE(size));
 	ret->filename = filename;
 	ret->lineno = lineno;
+	ret->size = size;
+	muchar_t* uarena = ret->arena;
+	memset(uarena, 0xCC, REAL_SIZE(size));
+	memset(uarena, BORDER, BORDER_SIZE);
+	memset(uarena + BORDER_SIZE + size, BORDER, BORDER_SIZE);
 	return ret;
+}
+
+static void* slot_application_area(slot* self) {
+	return self->arena + BORDER_SIZE;
 }
 
 static slot* slot_find(void* arena) {
@@ -159,7 +196,8 @@ static slot* slot_find(void* arena) {
 	}
 	slot* iter = gHead;
 	while(iter != NULL) {
-		if(iter->arena == arena) {
+		muchar_t* uarena = iter->arena;
+		if((uarena + BORDER_SIZE) == arena) {
 			return iter;
 		}
 		iter = iter->next;
@@ -206,12 +244,22 @@ static void* slot_realloc(void* block, size_t newSize, const char* filename, int
 	if(loc == NULL) {
 		return fixed_realloc(block, newSize);
 	}
-	//mem.h の malloc によって確保された
-	void* temp = fixed_realloc(block, newSize);
-	loc->arena = temp;
+	slot_validate(loc);
+	//再確保されたので情報を更新
 	loc->filename = filename;
 	loc->lineno = lineno;
-	return temp;
+	loc->size = newSize;
+	//mem.h の malloc によって確保された
+	size_t oldSize = loc->size;
+	void* temp = fixed_realloc(loc->arena, REAL_SIZE(newSize));
+	muchar_t * utemp = (muchar_t*)temp;
+	loc->arena = temp;
+	memset(utemp, BORDER, BORDER_SIZE);
+	memset(utemp + BORDER_SIZE + newSize, BORDER, BORDER_SIZE);
+	if(newSize > oldSize) {
+		memset(utemp + BORDER_SIZE + oldSize, 0xCC, (newSize-oldSize));
+	}
+	return slot_application_area(loc);
 }
 
 static void slot_free(void* block, const char* fillename, int lineno) {
@@ -221,6 +269,7 @@ static void slot_free(void* block, const char* fillename, int lineno) {
 		free(block);
 		return;
 	}
+	slot_validate(loc);
 	//mem.h の malloc によって確保された
 	if(loc->prev != NULL) {
 		loc->prev->next = loc->next;
@@ -230,11 +279,25 @@ static void slot_free(void* block, const char* fillename, int lineno) {
 	}
 	if(loc == gHead) {
 		gHead = loc->next;
+		gHead->prev = NULL;
 	}
 	loc->arena = NULL;
 	loc->filename = NULL;
-	free(block);
+	free(loc->arena);
 	free(loc);
+}
+
+static void slot_validate(slot* self) {
+#if defined(DEBUG)
+	muchar_t* uarena = self->arena;
+	for(int i=0; i<BORDER_SIZE; i++) {
+		muchar_t a = (muchar_t)(uarena[i]);
+		muchar_t b = (muchar_t)(uarena[BORDER_SIZE + self->size + i]);
+		if(a != BORDER || b != BORDER) {
+			abort();
+		}
+	}
+#endif
 }
 
 static void slot_delete(slot* self) {
@@ -248,6 +311,14 @@ static void slot_delete(slot* self) {
 		self->prev->next = NULL;
 	}
 	free(self);
+}
+
+static void* fixed_malloc(size_t newSize) {
+	void* ret = malloc(newSize);
+	if(ret == NULL) {
+		abort();
+	}
+	return ret;
 }
 
 static void* fixed_realloc(void* block, size_t newSize) {

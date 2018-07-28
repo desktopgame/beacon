@@ -79,7 +79,7 @@ struct il_factor_lambda;
  */
 typedef struct il_factor {
 	il_factor_type type;
-	uint32_t lineno;
+	int lineno;
 	union {
 		struct il_factor_int* int_;
 		struct il_factor_double* double_;
@@ -106,6 +106,9 @@ typedef struct il_factor {
 		struct il_factor_lambda* lambda_;
 	} u;
 } il_factor;
+
+#define il_factor_new(type) (il_factor_malloc(type, __FILE__, __LINE__))
+il_factor* il_factor_malloc(il_factor_type type, const char* filename, int lineno);
 
 /**
  * 計算可能な要素を出力します.

@@ -11,8 +11,7 @@
 #include "../../env/generic_cache.h"
 
 il_factor * il_factor_wrap_cast(il_factor_cast * self) {
-	il_factor* ret = (il_factor*)MEM_MALLOC(sizeof(il_factor));
-	ret->type = ilfactor_cast;
+	il_factor* ret = il_factor_new(ilfactor_cast);
 	ret->u.cast_ = self;
 	return ret;
 }

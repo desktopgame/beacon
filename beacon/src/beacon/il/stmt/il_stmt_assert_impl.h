@@ -3,10 +3,12 @@
 #include "../il_factor_interface.h"
 #include "../il_stmt_interface.h"
 struct enviroment;
+struct il_stmt;
 
 typedef struct il_stmt_assert {
 	il_factor* condition;
 	il_factor* message;
+	struct il_stmt* parent;
 } il_stmt_assert;
 
 il_stmt* il_stmt_wrap_assert(il_stmt_assert* self);

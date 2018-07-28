@@ -33,6 +33,7 @@ enviroment * enviroment_new() {
 }
 
 void enviroment_add_range(enviroment* self, int lineno) {
+	assert(lineno >= 0);
 	//空なので追加
 	if (vector_empty(self->line_rangeVec)) {
 		line_range* lr = line_range_new();

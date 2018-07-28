@@ -4,8 +4,7 @@
 #include <stdio.h>
 
 il_stmt * il_stmt_wrap_return(il_stmt_return * self) {
-	il_stmt* ret = (il_stmt*)MEM_MALLOC(sizeof(il_stmt));
-	ret->type = ilstmt_return;
+	il_stmt* ret = il_stmt_new(ilstmt_return);
 	ret->u.return_ = self;
 	return ret;
 }

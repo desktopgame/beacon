@@ -11,8 +11,7 @@ static void il_stmt_elif_list_delete_impl(vector_item item);
 static void il_stmt_if_delete_stmt(vector_item item);
 
 il_stmt * il_stmt_wrap_if(il_stmt_if * self) {
-	il_stmt* ret = (il_stmt*)MEM_MALLOC(sizeof(il_stmt));
-	ret->type = ilstmt_if;
+	il_stmt* ret = il_stmt_new(ilstmt_if);
 	ret->u.if_ = self;
 	return ret;
 }

@@ -26,6 +26,7 @@ static il_factor_instanceof* CLIL_instanceof(class_loader* self, ast* source);
 
 il_factor* CLIL_factor(class_loader* self, ast* source) {
 	il_factor* ret = CLIL_factorImpl(self, source);
+	assert(source->lineno >= 0);
 	ret->lineno = source->lineno;
 	return ret;
 }
@@ -123,15 +124,13 @@ static il_factor* CLIL_factorImpl(class_loader* self, ast* source) {
 		return il_factor_wrap_explicit_binary_op(CLIL_explicit_binary(self, source, source->u.operator_value));
 		//this super
 	} else if (source->tag == ast_this) {
-		il_factor* ret = (il_factor*)MEM_MALLOC(sizeof(il_factor));
+		il_factor* ret = il_factor_new(ilfactor_this);
 		il_factor_this* th = il_factor_this_new();
-		ret->type = ilfactor_this;
 		ret->u.this_ = th;
 		return ret;
 	} else if (source->tag == ast_super) {
-		il_factor* ret = (il_factor*)MEM_MALLOC(sizeof(il_factor));
+		il_factor* ret = il_factor_new(ilfactor_super);
 		il_factor_super* sp = il_factor_super_new();
-		ret->type = ilfactor_super;
 		ret->u.super_ = sp;
 		return ret;
 	} else if (source->tag == ast_new_instance) {
@@ -143,8 +142,7 @@ static il_factor* CLIL_factorImpl(class_loader* self, ast* source) {
 	} else if (source->tag == ast_false) {
 		return il_factor_wrap_bool(CLIL_false(self, source));
 	} else if (source->tag == ast_null) {
-		il_factor* ret = (il_factor*)MEM_MALLOC(sizeof(il_factor));
-		ret->type = ilfactor_null;
+		il_factor* ret = il_factor_new(ilfactor_null);
 		ret->u.null_ = NULL;
 		return ret;
 	} else if (source->tag == ast_as) {
@@ -160,7 +158,7 @@ static il_factor* CLIL_factorImpl(class_loader* self, ast* source) {
 	} else if(source->tag == ast_field_access) {
 		return il_factor_wrap_member_op(CLIL_member_op(self, source));
 	}
-	il_factor* fact = (il_factor*)MEM_MALLOC(sizeof(il_factor));
+	il_factor* fact = il_factor_new(ilfactor_unary_op);
 	return fact;
 }
 
@@ -228,6 +226,7 @@ static il_factor_assign_op* CLIL_assign_arithmetic(class_loader* self, ast* sour
 	bin->right = CLIL_factor(self, aright);
 	ret->left = CLIL_factor(self, aleft);
 	ret->right = il_factor_wrap_binary(bin);
+	ret->right->lineno = aright->lineno;
 	return ret;
 }
 

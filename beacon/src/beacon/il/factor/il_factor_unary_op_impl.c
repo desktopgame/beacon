@@ -12,8 +12,7 @@
 #include "unary/il_factor_not_op_impl.h"
 
 il_factor * il_factor_wrap_unary(il_factor_unary_op * self) {
-	il_factor* ret = (il_factor*)MEM_MALLOC(sizeof(il_factor));
-	ret->type = ilfactor_unary_op;
+	il_factor* ret = il_factor_new(ilfactor_unary_op);
 	ret->u.unary_ = self;
 	return ret;
 }

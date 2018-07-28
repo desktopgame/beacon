@@ -9,8 +9,7 @@
 #include "../../util/text.h"
 
 il_factor* il_factor_wrap_instanceof(il_factor_instanceof* self) {
-	il_factor* ret = (il_factor*)MEM_MALLOC(sizeof(il_factor));
-	ret->type = ilfactor_instanceof;
+	il_factor* ret = il_factor_new(ilfactor_instanceof);
 	ret->u.instanceof_ = self;
 	return ret;
 }

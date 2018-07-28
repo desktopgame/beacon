@@ -334,6 +334,9 @@ static void class_loader_load_toplevel(class_loader* self) {
 	newWorldInstance->fqcnc->namev = string_pool_intern("World");
 	createWorldStmt->fact = il_factor_wrap_new_instance(newWorldInstance);
 	il_stmt* body = il_stmt_wrap_inferenced_type_init(createWorldStmt);
+	//これをやらないと -1 のまま
+	body->lineno = 0;
+	createWorldStmt->fact->lineno = 0;
 	//worldをselfにする
 	ccpush_type(namespace_get_type(namespace_lang(), string_pool_intern("World")));
 	il_error_enter();

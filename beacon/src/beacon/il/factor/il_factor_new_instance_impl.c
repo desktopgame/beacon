@@ -20,8 +20,7 @@ static void il_factor_new_instance_find(il_factor_new_instance * self, enviromen
 static void il_Factor_new_instace_delete_arg(vector_item item);
 
 il_factor * il_factor_wrap_new_instance(il_factor_new_instance * self) {
-	il_factor* ret = (il_factor*)MEM_MALLOC(sizeof(il_factor));
-	ret->type = ilfactor_new_instance;
+	il_factor* ret = il_factor_new(ilfactor_new_instance);
 	ret->u.new_instance_ = self;
 	return ret;
 }

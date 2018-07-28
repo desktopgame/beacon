@@ -8,8 +8,7 @@
 #include "../../util/mem.h"
 
 il_factor * il_factor_wrap_char(il_factor_char * self) {
-	il_factor* ret = (il_factor*)MEM_MALLOC(sizeof(il_factor));
-	ret->type = ilfactor_char;
+	il_factor* ret = il_factor_new(ilfactor_char);
 	ret->u.char_ = self;
 	return ret;
 }

@@ -5,8 +5,7 @@
 #include <stdio.h>
 
 il_stmt * il_stmt_wrap_break() {
-	il_stmt* ret = (il_stmt*)MEM_MALLOC(sizeof(il_stmt));
-	ret->type = ilstmt_break;
+	il_stmt* ret = il_stmt_new(ilstmt_break);
 	return ret;
 }
 

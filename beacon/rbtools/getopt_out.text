@@ -1,5 +1,6 @@
 struct option longopts[] = {
 	{ "test", no_argument, NULL, 't' },
+	{ "bug", required_argument, NULL, 'b' },
 	{ "ast", required_argument, NULL, 'a' },
 	{ "il", required_argument, NULL, 'i' },
 	{ "run", required_argument, NULL, 'r' },
@@ -10,10 +11,13 @@ extern char *optarg;
 extern int optind, opterr;
 int opt = 0;
 int longindex = 0;
-while ((opt = getopt_long(argc, argv, "ta:i:r:o:", longopts, &longindex)) != -1) {
+while ((opt = getopt_long(argc, argv, "tb:a:i:r:o:", longopts, &longindex)) != -1) {
 	switch(opt) {
 		case 't':
 			printf(":t :test\n");
+			break;
+		case 'b':
+			printf(":b :bug\n");
 			break;
 		case 'a':
 			printf(":a :ast\n");

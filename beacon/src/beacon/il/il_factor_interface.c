@@ -10,6 +10,13 @@
 #include <stdio.h>
 #include <assert.h>
 
+il_factor* il_factor_malloc(il_factor_type type, const char* filename, int lineno) {
+	il_factor* ret = mem_malloc(sizeof(il_factor), filename, lineno);
+	ret->type = type;
+	ret->lineno = -1;
+	return ret;
+}
+
 void il_factor_dump(il_factor * self, int depth) {
 	il_print_layout_form(self->lineno);
 	switch (self->type) {
@@ -164,6 +171,7 @@ void il_factor_generate(il_factor * self, enviroment* env) {
 		default:
 			break;
 	}
+	assert(self->lineno >= 0);
 	enviroment_add_range(env, self->lineno);
 }
 
@@ -171,6 +179,7 @@ void il_factor_load(il_factor * self, enviroment * env) {
 	if(il_error_panic()) {
 		return;
 	}
+	assert(self->lineno >= 0);
 	il_error_file(env->context_ref->filename);
 	il_error_line(self->lineno);
 	switch (self->type) {

@@ -118,6 +118,10 @@ namespace_* namespace_unsafe() {
 	return namespace_get_namespace(namespace_beacon(), string_pool_intern("unsafe"));
 }
 
+namespace_* namespace_placeholder() {
+	return namespace_get_at_root(string_pool_intern("$placeholder"));
+}
+
 type * namespace_object_type() {
 	return bc_object_type();
 }

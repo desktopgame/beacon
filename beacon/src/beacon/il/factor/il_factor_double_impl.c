@@ -8,8 +8,7 @@
 #include "../../util/mem.h"
 
 il_factor * il_factor_wrap_double(il_factor_double * self) {
-	il_factor* ret = (il_factor*)MEM_MALLOC(sizeof(il_factor));
-	ret->type = ilfactor_double;
+	il_factor* ret = il_factor_new(ilfactor_double);
 	ret->u.double_ = self;
 	return ret;
 }

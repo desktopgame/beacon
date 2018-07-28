@@ -24,7 +24,10 @@ static il_stmt_assert* CLIL_assert(class_loader* self, ast* source);
 static il_stmt_defer* CLIL_defer(class_loader* self, ast* source);
 
 il_stmt* CLIL_stmt(class_loader* self, ast* source) {
-	return CLIL_bodyImpl(self, source);
+	il_stmt* ret = CLIL_bodyImpl(self, source);
+	assert(source->lineno >= 0);
+	ret->lineno = source->lineno;
+	return ret;
 }
 
 void CLIL_body(class_loader* self, vector* list, ast* source) {
@@ -36,6 +39,7 @@ void CLIL_body(class_loader* self, vector* list, ast* source) {
 		il_stmt* stmt = CLIL_bodyImpl(self, source);
 		if (stmt != NULL) {
 			stmt->lineno = source->lineno;
+			assert(source->lineno >= 0);
 			vector_push(list, stmt);
 		}
 	}

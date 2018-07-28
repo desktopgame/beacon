@@ -6,8 +6,7 @@
 #include "../../vm/symbol_entry.h"
 
 il_factor* il_factor_wrap_assign(il_factor_assign_op* self) {
-	il_factor* ret = (il_factor*)MEM_MALLOC(sizeof(il_factor));
-	ret->type = ilfactor_assign_op;
+	il_factor* ret = il_factor_new(ilfactor_assign_op);
 	ret->u.assign_ = self;
 	return ret;
 }

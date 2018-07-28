@@ -3,22 +3,18 @@
 #define BEACON_ENV_MEM_H
 #include <stdlib.h>
 #include <stdbool.h>
+#include <stdio.h>
+
+typedef unsigned char muchar_t;
 
 #if defined(DEBUG)
 #define MEMORY_MANAGEMENT (1)
 #endif
 
-#if defined(MEMORY_MANAGEMENT)
-	#define MEM_MALLOC(size) (mem_malloc(size, __FILE__, __LINE__))
-	#define MEM_FREE(size) (mem_free(size, __FILE__, __LINE__))
-	#define MEM_REALLOC(block, size) (mem_realloc(block, size, __FILE__, __LINE__))
-	#define MEM_MARK(block, size) (mem_mark(block, size, __FILE__, __LINE__))
-#else
-	#define MEM_MALLOC(size) (malloc(size))
-	#define MEM_FREE(size) free(size)
-	#define MEM_REALLOC(block, size) (realloc(block, size))
-	#define MEM_MARK(block, size) (void)(0)
-#endif
+#define MEM_MALLOC(size) (mem_malloc(size, __FILE__, __LINE__))
+#define MEM_FREE(size) (mem_free(size, __FILE__, __LINE__))
+#define MEM_REALLOC(block, size) (mem_realloc(block, size, __FILE__, __LINE__))
+#define MEM_MARK(block, size) (mem_mark(block, size, __FILE__, __LINE__))
 /**
  * malloc のラッパーです.
  * 通常はこちらではなくマクロ版を使用します。
@@ -91,5 +87,11 @@ void mem_break(int count);
  */
 void mem_destroy();
 
-
+/**
+ * @param fp
+ * @param block
+ * @param len
+ * @return
+ */
+int mem_fprint(FILE* fp, void* block, int len);
 #endif // !SIGNAL_ENV_MEM_H

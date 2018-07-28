@@ -7,8 +7,7 @@
 #include "../../env/import_manager.h"
 
 il_stmt * il_stmt_wrap_variable_decl(il_stmt_variable_decl * self) {
-	il_stmt* ret = (il_stmt*)MEM_MALLOC(sizeof(il_stmt));
-	ret->type = ilstmt_variable_decl;
+	il_stmt* ret = il_stmt_new(ilstmt_variable_decl);
 	ret->u.variable_decl = self;
 	return ret;
 }

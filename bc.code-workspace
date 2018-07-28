@@ -85,7 +85,11 @@
 			"queue": "c",
 			"stack": "c",
 			"heap.h": "c",
-			"stdbool.h": "c"
+			"stdbool.h": "c",
+			"stdint.h": "c",
+			"stdio.h": "c",
+			"il_print_layout.h": "c",
+			"il_factor_assign_op_impl.h": "c"
 		},
 		"ruby.lint": {
 			"reek": true,

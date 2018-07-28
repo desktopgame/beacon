@@ -9,8 +9,7 @@
 #include <assert.h>
 
 il_factor * il_factor_wrap_as(il_factor_as * self) {
-	il_factor* ret = (il_factor*)MEM_MALLOC(sizeof(il_factor));
-	ret->type = ilfactor_as;
+	il_factor* ret = il_factor_new(ilfactor_as);
 	ret->u.as_ = self;
 	return ret;
 }

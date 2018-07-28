@@ -8,8 +8,7 @@
 static void il_stmt_while_stmt_delete(vector_item item);
 
 il_stmt * il_stmt_wrap_while(il_stmt_while * self) {
-	il_stmt* ret = (il_stmt*)MEM_MALLOC(sizeof(il_stmt));
-	ret->type = ilstmt_while;
+	il_stmt* ret = il_stmt_new(ilstmt_while);
 	ret->u.while_ = self;
 	return ret;
 }

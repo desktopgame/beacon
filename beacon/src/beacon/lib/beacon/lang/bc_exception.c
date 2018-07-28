@@ -51,6 +51,7 @@ static void bc_exception_nativeInit(method* parent, frame* fr, enviroment* env) 
 			continue;
 		}
 		//スタックトレースを作成
+		assert(lineno >= 0);
 		vector* args = vector_new();
 		vector_push(args, object_string_new(temp->context_ref->context_ref->filename));
 		vector_push(args, object_int_new(lineno));

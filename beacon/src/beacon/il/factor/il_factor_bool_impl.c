@@ -6,8 +6,7 @@
 #include "../../env/type_impl.h"
 
 il_factor * il_factor_wrap_bool(il_factor_bool * self) {
-	il_factor* ret = (il_factor*)MEM_MALLOC(sizeof(il_factor));
-	ret->type = ilfactor_bool;
+	il_factor* ret = il_factor_new(ilfactor_bool);
 	ret->u.bool_ = self;
 	return ret;
 }

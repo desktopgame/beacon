@@ -4,8 +4,7 @@
 #include "../../env/type_interface.h"
 
 il_factor * il_factor_wrap_inc(il_factor_inc * self) {
-	il_factor* ret = (il_factor*)MEM_MALLOC(sizeof(il_factor));
-	ret->type = ilfactor_inc;
+	il_factor* ret = il_factor_new(ilfactor_inc);
 	ret->u.inc_ = self;
 	return ret;
 }

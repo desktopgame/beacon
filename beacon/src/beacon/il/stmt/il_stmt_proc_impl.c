@@ -4,8 +4,7 @@
 #include "../../util/mem.h"
 
 il_stmt * il_stmt_wrap_proc(il_stmt_proc * self) {
-	il_stmt* ret = (il_stmt*)MEM_MALLOC(sizeof(il_stmt));
-	ret->type = ilstmt_proc;
+	il_stmt* ret = il_stmt_new(ilstmt_proc);
 	ret->u.proc_ = self;
 	return ret;
 }
