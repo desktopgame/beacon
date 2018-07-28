@@ -8,6 +8,7 @@
 #include "../../ast/operator_type.h"
 #include "../../vm/enviroment.h"
 #include "../../util/vector.h"
+#include "../../util/numeric_map.h"
 #include "../../util/string_pool.h"
 //#include "../access_domain.h"
 #include <stdint.h>
@@ -38,7 +39,7 @@ typedef struct class_ {
 	vector* operator_overload_list;
 	//class_type type;
 	uint32_t ref_count;
-	tree_map* native_method_ref_map;
+	numeric_map* native_method_ref_nmap;
 	vector* type_parameter_list;
 	//インターフェースに対応した
 	//実装メソッドのテーブルのベクター
@@ -118,14 +119,21 @@ void class_add_constructor(class_* self, struct constructor* c);
  * @param depth
  */
 void class_dump(class_* self, int depth);
-
 /**
- * 指定の名前に対応するネイティブ関数を登録します.s
+ * 指定の名前に対応するネイティブ関数を登録します.
  * @param self
  * @param name
  * @param impl
  */
 void class_define_native_method(class_* self, const char* name, native_impl impl);
+
+/**
+ * 指定の名前に対応するネイティブ関数を登録します.
+ * @param self
+ * @param namev
+ * @param impl
+ */
+void class_define_native_method_by_ref(class_* self, string_view namev, native_impl impl);
 
 /**
  * 指定の名前を持つフィールドを返します.

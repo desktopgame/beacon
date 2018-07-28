@@ -37,7 +37,7 @@ static void class_impl_delete(vector_item item);
 static void class_field_delete(vector_item item);
 static void class_method_delete(vector_item item);
 static void class_ctor_delete(vector_item item);
-static void class_native_method_ref_delete(vector_item item);
+static void class_native_method_ref_delete(numeric_key key, numeric_map_item item);
 static method* class_find_impl_method(class_* self, method* virtualMethod);
 static void class_vtable_vec_delete(vector_item item);
 static void class_type_parameter_delete(vector_item item);
@@ -66,7 +66,7 @@ class_ * class_new(string_view namev) {
 	ret->method_list = vector_new();
 	ret->smethod_list = vector_new();
 	ret->constructor_list = vector_new();
-	ret->native_method_ref_map = tree_map_new();
+	ret->native_method_ref_nmap = numeric_map_new();
 	ret->vt_vec = vector_new();
 	ret->type_parameter_list = vector_new();
 	//FIXME:ここで持つ必要はない
@@ -197,9 +197,13 @@ void class_dump(class_ * self, int depth) {
 	}
 }
 
-void class_define_native_method(class_ * self, const char * name, native_impl impl) {
+void class_define_native_method(class_* self, const char* name, native_impl impl) {
+	class_define_native_method_by_ref(self, string_pool_intern(name), impl);
+}
+
+void class_define_native_method_by_ref(class_ * self, string_view namev, native_impl impl) {
 	native_method_ref* ref = native_method_ref_new(impl);
-	tree_map_put(self->native_method_ref_map, name, ref);
+	numeric_map_put(self->native_method_ref_nmap, namev, ref);
 }
 
 field * class_find_field(class_* self, string_view namev, int* outIndex) {
@@ -623,7 +627,7 @@ void class_unlink(class_ * self) {
 	//XSTREQ(self->name, "Object");
 	//generic_type_delete(self->super_class);
 	//text_printf("unlink %s\n", self->name);
-	tree_map_delete(self->native_method_ref_map, class_native_method_ref_delete);
+	numeric_map_delete(self->native_method_ref_nmap, class_native_method_ref_delete);
 	vector_delete(self->impl_list, class_impl_delete);
 	vector_delete(self->field_list, class_field_delete);
 	vector_delete(self->sfield_list, class_field_delete);
@@ -783,7 +787,7 @@ static void class_ctor_delete(vector_item item) {
 	constructor_delete(e);
 }
 
-static void class_native_method_ref_delete(vector_item item) {
+static void class_native_method_ref_delete(numeric_key key, numeric_map_item item) {
 	native_method_ref* e = (native_method_ref*)item;
 	native_method_ref_delete(e);
 }
