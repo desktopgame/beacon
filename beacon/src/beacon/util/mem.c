@@ -279,7 +279,9 @@ static void slot_free(void* block, const char* fillename, int lineno) {
 	}
 	if(loc == gHead) {
 		gHead = loc->next;
-		gHead->prev = NULL;
+		if(gHead != NULL) {
+			gHead->prev = NULL;
+		}
 	}
 	loc->arena = NULL;
 	loc->filename = NULL;
