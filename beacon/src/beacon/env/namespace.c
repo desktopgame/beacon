@@ -14,11 +14,11 @@
 //proto
 static namespace_* namespace_malloc(string_view namev);
 
-static void namespace_unlink_namespace(vector_item item);
-static void namespace_delete_namespace(vector_item item);
+static void namespace_unlink_namespace(numeric_key key, numeric_map_item item);
+static void namespace_delete_namespace(numeric_key key, numeric_map_item item);
 
-static void namespace_unlink_type(vector_item item);
-static void namespace_delete_type(vector_item item);
+static void namespace_unlink_type(numeric_key key, numeric_map_item item);
+static void namespace_delete_type(numeric_key key, numeric_map_item item);
 static namespace_* namespace_vfind_namespace(vector* source, string_view namev);
 static type* namespace_vfind_type(vector* source, string_view namev);
 
@@ -50,7 +50,8 @@ namespace_ * namespace_add_namespace(namespace_ * self, string_view namev) {
 		namespace_* newNamespace = namespace_malloc(namev);
 		newNamespace->parent = self;
 		child = newNamespace;
-		vector_push(self->namespace_vec, child);
+		numeric_map_put(self->namespace_map, namev, child);
+		//vector_push(self->namespace_vec, child);
 		self->ref_count++;
 	}
 	return child;
@@ -59,7 +60,7 @@ namespace_ * namespace_add_namespace(namespace_ * self, string_view namev) {
 struct type* namespace_add_type(namespace_* self, type* type) {
 	script_context* ctx = script_context_get_current();
 	type->location = self;
-	vector_push(self->type_vec, type);
+	numeric_map_put(self->type_map, type_name(type), type);
 	type->absolute_index = ctx->type_vec->length;
 	if (type->tag == type_class) {
 		type->u.class_->classIndex = type->absolute_index;
@@ -70,12 +71,12 @@ struct type* namespace_add_type(namespace_* self, type* type) {
 
 namespace_ * namespace_get_namespace(namespace_ * self, string_view namev) {
 	assert(self != NULL);
-	return (namespace_*)namespace_vfind_namespace(self->namespace_vec, namev);
+	return numeric_map_get(self->namespace_map, namev);
 }
 
 type * namespace_get_type(namespace_ * self, string_view namev) {
 	assert(self != NULL);
-	return (type*)namespace_vfind_type(self->type_vec, namev);
+	return numeric_map_get(self->type_map, namev);
 }
 
 class_ * namespace_get_class(namespace_ * self, string_view namev) {
@@ -166,44 +167,43 @@ void namespace_dump() {
 }
 
 void namespace_unlink(namespace_ * self) {
-	vector_each(self->namespace_vec, namespace_unlink_namespace);
-	vector_each(self->type_vec, namespace_unlink_type);
+	numeric_map_each(self->namespace_map, namespace_unlink_namespace);
+	numeric_map_each(self->type_map, namespace_unlink_type);
 }
 
 void namespace_delete(namespace_ * self) {
-	vector_delete(self->namespace_vec, namespace_delete_namespace);
-	vector_delete(self->type_vec, namespace_delete_type);
+	numeric_map_delete(self->namespace_map, namespace_delete_namespace);
+	numeric_map_delete(self->type_map, namespace_delete_type);
 	MEM_FREE(self);
 }
 
 //private
 static namespace_* namespace_malloc(string_view namev) {
 	namespace_* ret = (namespace_*)MEM_MALLOC(sizeof(namespace_));
-	ret->type_vec = NULL;
-	ret->namespace_vec = vector_new();
-	ret->type_vec = vector_new();
+	ret->namespace_map = numeric_map_new();
+	ret->type_map = numeric_map_new();
 	ret->parent = NULL;
 	ret->namev = namev;
 	ret->ref_count = 0;
 	return ret;
 }
 
-static void namespace_unlink_namespace(vector_item item) {
+static void namespace_unlink_namespace(numeric_key key, numeric_map_item item) {
 	namespace_* e = (namespace_*)item;
 	namespace_unlink(e);
 }
 
-static void namespace_delete_namespace(vector_item item) {
+static void namespace_delete_namespace(numeric_key key, numeric_map_item item) {
 	namespace_* e = (namespace_*)item;
 	namespace_delete(e);
 }
 
-static void namespace_unlink_type(vector_item item) {
+static void namespace_unlink_type(numeric_key key, numeric_map_item item) {
 	type* e = (type*)item;
 	type_unlink(e);
 }
 
-static void namespace_delete_type(vector_item item) {
+static void namespace_delete_type(numeric_key key, numeric_map_item item) {
 	type* e = (type*)item;
 	type_delete(e);
 }

@@ -4,6 +4,7 @@
 #include "../util/tree_map.h"
 #include "../util/string_pool.h"
 #include "../util/vector.h"
+#include "../util/numeric_map.h"
 #include <stdint.h>
 #define TYPE_OBJECT (namespace_object_type())
 #define TYPE_INT (namespace_int_type())
@@ -33,8 +34,8 @@ struct interface_;
 typedef struct namespace_ {
 	string_view namev;
 	struct namespace_* parent;
-	vector* namespace_vec;
-	vector* type_vec;
+	numeric_map* namespace_map;
+	numeric_map* type_map;
 	uint32_t ref_count;
 } namespace_;
 
