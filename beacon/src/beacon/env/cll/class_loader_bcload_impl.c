@@ -407,11 +407,13 @@ static void CLBC_register_interface(class_loader* self, namespace_* parent, il_t
 		//インターフェースはインターフェースのみ継承
 		generic_type* gtp = import_manager_resolve(self->import_manager, parent, e);
 		type* E = GENERIC2TYPE(gtp);
-		vector_push(inter->impl_list, gtp);
 		if(E->tag != type_interface) {
 			class_loader_report(self, clerror_interface_only, string_pool_ref2str(type_name(tp)));
 			namespace_add_type(parent, tp);
 			return;
+		//インターフェイスの時のみ追加
+		} else {
+			vector_push(inter->impl_list, gtp);
 		}
 	}
 	//場所を設定

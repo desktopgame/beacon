@@ -37,6 +37,7 @@ static bool gTest = false;
 int test_run() {
 	gTest = true;
 	int ret = test_semantics();
+	namespace_dump();
 	gTest = false;
 	return ret;
 }

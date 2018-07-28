@@ -113,7 +113,7 @@ void generic_type_print(generic_type * self) {
 	if (self->virtual_type_index != -1) {
 		text_printf("[%d]", self->virtual_type_index);
 	} else {
-		text_printf("%s", type_name(self->core_type));
+		text_printf("%s", string_pool_ref2str(type_name(self->core_type)));
 	}
 	if (self->type_args_list->length == 0) {
 		return;

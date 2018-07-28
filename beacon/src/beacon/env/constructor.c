@@ -37,7 +37,9 @@ void constructor_dump(constructor * self, int depth) {
 	}
 	text_printf(")");
 	text_putline();
-	opcode_buf_dump(self->env->buf, depth + 1);
+	if(self->env != NULL) {
+		opcode_buf_dump(self->env->buf, depth + 1);
+	}
 }
 
 object * constructor_new_instance(constructor * self, vector * args, frame * parent) {

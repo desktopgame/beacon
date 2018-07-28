@@ -19,28 +19,31 @@ static void namespace_delete_namespace(numeric_key key, numeric_map_item item);
 
 static void namespace_unlink_type(numeric_key key, numeric_map_item item);
 static void namespace_delete_type(numeric_key key, numeric_map_item item);
-static namespace_* namespace_vfind_namespace(vector* source, string_view namev);
-static type* namespace_vfind_type(vector* source, string_view namev);
+
+static void namespace_dump_root(numeric_map* root, bool callSelf, int depth);
+static void namespace_dump_impl(namespace_* root, int depth);
+static void namespace_put_indent(int depth);
+static void namespace_dump_class(numeric_map* root, bool isRoot, int depth);
 
 namespace_ * namespace_create_at_root(string_view namev) {
 	script_context* ctx = script_context_get_current();
-	if (ctx->namespace_vec == NULL) {
-		ctx->namespace_vec = vector_new();
+	if (ctx->namespace_nmap == NULL) {
+		ctx->namespace_nmap = numeric_map_new();
 	}
-	tree_item item = namespace_vfind_namespace(ctx->namespace_vec, namev);
+	tree_item item = numeric_map_get(ctx->namespace_nmap, namev);
 	if (item == NULL) {
 		namespace_* newNamespace = namespace_malloc(namev);
-		vector_push(ctx->namespace_vec, newNamespace);
+		numeric_map_put(ctx->namespace_nmap, namev, newNamespace);
 		return newNamespace;
 	} else return (namespace_*)item;
 }
 
 namespace_ * namespace_get_at_root(string_view namev) {
 	script_context* ctx = script_context_get_current();
-	if (ctx->namespace_vec == NULL) {
+	if (ctx->namespace_nmap == NULL) {
 		return NULL;
 	}
-	return (namespace_*)namespace_vfind_namespace(ctx->namespace_vec, namev);
+	return (namespace_*)numeric_map_get(ctx->namespace_nmap, namev);
 }
 
 namespace_ * namespace_add_namespace(namespace_ * self, string_view namev) {
@@ -156,14 +159,12 @@ type * namespace_null_type() {
 }
 
 void namespace_dump() {
-	/*
 	script_context* ctx = script_context_get_current();
-	if (ctx->namespace_map == NULL) {
+	if (ctx->namespace_nmap == NULL) {
 		return;
 	}
-	namespace_dump_root(ctx->namespace_map->left, true, 0);
-	namespace_dump_root(ctx->namespace_map->right, true, 0);
-	*/
+	namespace_dump_root(ctx->namespace_nmap->left, true, 0);
+	namespace_dump_root(ctx->namespace_nmap->right, true, 0);
 }
 
 void namespace_unlink(namespace_ * self) {
@@ -208,21 +209,43 @@ static void namespace_delete_type(numeric_key key, numeric_map_item item) {
 	type_delete(e);
 }
 
-static namespace_* namespace_vfind_namespace(vector* source, string_view namev) {
-	for(int i=0; i<source->length; i++) {
-		namespace_* e = vector_at(source, i);
-		if(e->namev == namev) {
-			return e;
-		}
+static void namespace_dump_root(numeric_map* root, bool callSelf, int depth) {
+	if (root == NULL) {
+		return;
 	}
-	return NULL;
+	if (callSelf) {
+		namespace_dump_impl((namespace_*)root->item, depth);
+	}
+	if (root->left != NULL) {
+		namespace_dump_root(root->left, true, depth);
+	}
+	if (root->right != NULL) {
+		namespace_dump_root(root->right, true, depth);
+	}
 }
-static type* namespace_vfind_type(vector* source, string_view namev) {
-	for(int i=0; i<source->length; i++) {
-		type* e = vector_at(source, i);
-		if(type_name(e) == namev) {
-			return e;
-		}
+
+static void namespace_dump_impl(namespace_* root, int depth) {
+	namespace_put_indent(depth);
+	text_printf("%s", string_pool_ref2str(root->namev));
+	text_putline();
+	namespace_dump_class(root->type_map, true, depth + 1);
+	namespace_dump_root(root->namespace_map, false, depth + 1);
+}
+
+static void namespace_put_indent(int depth) {
+	for (int i = 0; i < depth; i++) {
+		text_printf("    ");
 	}
-	return NULL;
+}
+
+static void namespace_dump_class(numeric_map* root, bool isRoot, int depth) {
+	if (!isRoot && (root == NULL || root->item == NULL)) {
+		return;
+	}
+	if (!isRoot) {
+		type* e = ((type*)root->item);
+		type_dump(e, depth);
+	}
+	namespace_dump_class(root->left, false, depth);
+	namespace_dump_class(root->right, false, depth);
 }

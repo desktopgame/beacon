@@ -5,6 +5,7 @@
 #include "../util/stack.h"
 #include "../util/tree_map.h"
 #include "../util/vector.h"
+#include "../util/numeric_map.h"
 struct heap;
 struct object;
 struct class_loader;
@@ -33,7 +34,7 @@ typedef unsigned long script_cid;
  */
 typedef struct script_context {
 	stack* parser_stack;
-	vector* namespace_vec;
+	numeric_map* namespace_nmap;
 	tree_map* class_loader_map;
 	vector* thread_vec;
 	vector* include_vec;

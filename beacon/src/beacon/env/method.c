@@ -81,7 +81,10 @@ void method_dump(method * self, int depth) {
 	text_printf(") -> ");
 	generic_type_print(self->return_gtype);
 	text_putline();
-	if (self->type == method_type_script) {
+	if (self->type == method_type_script &&
+	    self->u.script_method->env != NULL) {
+		//スクリプトを読み込み、クラスを登録したあとで
+		//エラーが発生した場合、クラスは登録されているがオペコードは存在しない状態になる
 		opcode_buf_dump(self->u.script_method->env->buf, depth + 1);
 	}
 }

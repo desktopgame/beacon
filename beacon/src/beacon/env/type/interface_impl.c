@@ -73,7 +73,9 @@ void interface_dump(interface_ * self, int depth) {
 	text_putline();
 	//継承するインターフェイスの一覧
 	for (int i = 0; i < self->impl_list->length; i++) {
-		interface_* inter = (interface_*)vector_at(self->impl_list, i);
+		//interface_* inter = (interface_*)vector_at(self->impl_list, i);
+		generic_type* gt = vector_at(self->impl_list, i);
+		interface_* inter = TYPE2INTERFACE(GENERIC2TYPE(gt));
 		text_putindent(depth + 1);
 		text_printf("extend %s", string_pool_ref2str(inter->namev));
 		text_putline();

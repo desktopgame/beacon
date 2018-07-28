@@ -155,7 +155,7 @@ void class_dump(class_ * self, int depth) {
 	if (self->super_class != NULL) {
 		text_putindent(depth + 1);
 		text_printf("super ");
-		text_printf("%s", type_name(self->super_class->core_type));
+		text_printf("%s", string_pool_ref2str(type_name(self->super_class->core_type)));
 //		generic_type_print(self->super_class->);
 		text_putline();
 	}
