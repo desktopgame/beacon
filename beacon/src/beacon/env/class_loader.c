@@ -329,7 +329,7 @@ static void class_loader_load_toplevel(class_loader* self) {
 	ccset_class_loader(self);
 	cc_enable(ccstate_toplevel);
 	//var $world = new beacon::lang::World();
-	il_stmt_inferenced_type_init* createWorldStmt = il_stmt_inferenced_type_init_new("$world");
+	il_stmt_inferenced_type_init* createWorldStmt = il_stmt_inferenced_type_init_new(string_pool_intern("$world"));
 	il_factor_new_instance* newWorldInstance = il_factor_new_instance_new();
 	newWorldInstance->fqcnc->namev = string_pool_intern("World");
 	createWorldStmt->fact = il_factor_wrap_new_instance(newWorldInstance);
