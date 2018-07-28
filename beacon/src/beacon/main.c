@@ -58,7 +58,7 @@ int main_cl(int argc, char *argv[]) {
 				ret = cl_op(optarg);
 				break;
 			default:
-				printf("error! :%c :%c", opt, optopt);
+				printf("error! :%c :%c\n", opt, optopt);
 				break;
 		}
 	}
