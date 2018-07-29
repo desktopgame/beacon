@@ -68,13 +68,11 @@ void il_factor_invoke_bound_generate(il_factor_invoke_bound* self, enviroment* e
 }
 
 void il_factor_invoke_bound_load(il_factor_invoke_bound * self, enviroment * env, call_context* cctx) {
-	ccpush_type_args(self->type_args);
 	il_factor_invoke_bound_check(self, env, cctx);
-	ccpop_type_args();
 }
 
 generic_type* il_factor_invoke_bound_eval(il_factor_invoke_bound * self, enviroment * env, call_context* cctx) {
-	type* tp = cctop_type();
+	type* tp = NULL;
 	//メソッドが見つからない
 	il_factor_invoke_bound_check(self, env, cctx);
 	if(il_error_panic()) {
@@ -113,7 +111,7 @@ static void resolve_non_default(il_factor_invoke_bound * self, enviroment * env)
 	if(self->resolved != NULL) {
 		return;
 	}
-	type* tp = cctop_type();
+	type* tp = NULL;
 //	generic_type* receivergType = tp->generic_self;
 	generic_type* rgtp  = self->m->return_gtype;
 	if(rgtp->tag == generic_type_tag_class) {
@@ -134,9 +132,7 @@ static void resolve_default(il_factor_invoke_bound * self, enviroment * env) {
 	}
 	generic_type* rgtp = self->m->return_gtype;
 //	virtual_type returnvType = self->m->return_vtype;
-	ccpush_type_args(self->type_args);
 	self->resolved = generic_type_apply(rgtp);
-	ccpop_type_args();
 }
 
 static void il_factor_invoke_bound_check(il_factor_invoke_bound * self, enviroment * env, call_context* cctx) {
@@ -144,19 +140,15 @@ static void il_factor_invoke_bound_check(il_factor_invoke_bound * self, envirome
 		return;
 	}
 	//対応するメソッドを検索
-	type* ctype =cctop_type();
+	type* ctype = NULL;
 	int temp = -1;
 	il_type_argument_resolve(self->type_args);
-	ccpush_receiver(ctype->generic_self);
-	ccpush_type_args(self->type_args);
 	for(int i=0; i<self->args->length; i++) {
 		il_argument* ilarg = vector_at(self->args, i);
 		il_factor_load(ilarg->factor, env, cctx);
 	}
 	self->m = class_ilfind_method(TYPE2CLASS(ctype), self->namev, self->args, env, cctx, &temp);
 	self->index = temp;
-	ccpop_receiver();
-	ccpop_type_args();
 	if(temp == -1) {
 		il_error_report(ilerror_undefined_method, string_pool_ref2str(self->namev));
 	}

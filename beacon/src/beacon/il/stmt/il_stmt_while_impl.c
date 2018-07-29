@@ -35,8 +35,6 @@ void il_stmt_while_generate(il_stmt_while * self, enviroment * env, call_context
 	int prev = opcode_buf_nop(env->buf);
 	label* prevLab = opcode_buf_label(env->buf, prev);
 	label* nextLab = opcode_buf_label(env->buf, -1);
-	ccpush_while_start(prevLab);
-	ccpush_while_end(nextLab);
 	//条件を満たさないなら nextLab へ
 	il_factor_generate(self->condition, env, cctx);
 	opcode_buf_add(env->buf, op_goto_if_false);
@@ -52,8 +50,6 @@ void il_stmt_while_generate(il_stmt_while * self, enviroment * env, call_context
 
 	int next = opcode_buf_nop(env->buf);
 	nextLab->cursor = next;
-	ccpop_while_start();
-	ccpop_while_end();
 }
 
 void il_stmt_while_delete(il_stmt_while * self) {

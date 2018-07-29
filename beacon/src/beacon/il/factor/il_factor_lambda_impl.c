@@ -53,12 +53,13 @@ void il_factor_lambda_generate(il_factor_lambda* self, enviroment* env, call_con
 
 void il_factor_lambda_load(il_factor_lambda* self, enviroment* env, call_context* cctx) {
 	if(self->return_gtype == NULL) {
-		self->return_gtype = import_manager_resolve(env->context_ref->import_manager,cc_namespace(),self->return_gcache);
+		self->return_gtype = import_manager_resolve(NULL, NULL, self->return_gcache);
 	}
 }
 
 generic_type* il_factor_lambda_eval(il_factor_lambda* self, enviroment* env, call_context* cctx) {
-	lambda_scope* scope = cctop_lambda_scope();
+	/*
+	//lambda_scope* scope = cctop_lambda_scope();
 	if(self->offset != scope->offset) {
 		return NULL;
 	}
@@ -106,6 +107,8 @@ generic_type* il_factor_lambda_eval(il_factor_lambda* self, enviroment* env, cal
 	}
 	self->resolved = ins;
 	return ins;
+	*/
+	return NULL;
 }
 
 char* il_factor_lambda_tostr(il_factor_lambda* self, enviroment* env) {

@@ -4,7 +4,6 @@
 #include "namespace.h"
 #include "fqcn_cache.h"
 #include "import_info.h"
-#include "compile_context.h"
 #include "method.h"
 #include "../util/mem.h"
 #include "../util/text.h"
@@ -40,7 +39,7 @@ bool import_manager_loaded(import_manager * self, int index) {
 }
 
 generic_type* import_manager_resolve(import_manager* self, namespace_* scope, generic_cache* fqcn) {
-	type* core_type = fqcn_type(fqcn->fqcn, scope);
+	/*type* core_type = fqcn_type(fqcn->fqcn, scope);
 	//名前空間でラッピングされていなくて、
 	//型が見つからない
 	if(core_type == NULL && fqcn->fqcn->scope_vec->length == 0) {
@@ -89,9 +88,12 @@ generic_type* import_manager_resolve(import_manager* self, namespace_* scope, ge
 		generic_type_addargs(normalGType, child);
 	}
 	return normalGType;
+	*/
+	return NULL;
 }
 
 generic_type* import_manager_resolvef(import_manager* self, namespace_* scope, fqcn_cache* fqcn) {
+	/*
 type* core_type = fqcn_type(fqcn, scope);
 	//名前空間でラッピングされていなくて、
 	//型が見つからない
@@ -128,6 +130,8 @@ type* core_type = fqcn_type(fqcn, scope);
 	generic_type* normalGType = generic_type_new(core_type);
 	assert(core_type->tag != type_enum);
 	return normalGType;
+	*/
+	return NULL;
 }
 
 void import_manager_delete(import_manager * self) {

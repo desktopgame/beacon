@@ -4,7 +4,6 @@
 #include "../../util/mem.h"
 #include "../../vm/enviroment.h"
 #include "../../env/type_interface.h"
-#include "../../env/compile_context.h"
 #include "../call_context.h"
 #include <assert.h>
 
@@ -28,7 +27,7 @@ void il_factor_this_load(il_factor_this * self, enviroment * env, call_context* 
 }
 
 generic_type* il_factor_this_eval(il_factor_this * self, enviroment * env, call_context* cctx) {
-	return cctop_type()->generic_self;
+	return NULL;
 }
 
 char* il_factor_this_tostr(il_factor_this* self, enviroment* env) {

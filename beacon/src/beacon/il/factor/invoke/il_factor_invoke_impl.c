@@ -146,11 +146,7 @@ static void resolve_default(il_factor_invoke * self, enviroment * env, call_cont
 //	virtual_type returnvType = self->m->return_vtype;
 	//内側に型変数が含まれているかもしれないので、
 	//それをここで展開する。
-	ccpush_type_args(self->type_args);
-	ccpush_receiver(receivergType);
 	self->resolved = generic_type_apply(rgtp);
-	ccpop_receiver();
-	ccpop_type_args();
 }
 
 static void il_factor_invoke_check(il_factor_invoke * self, enviroment * env, call_context* cctx) {
@@ -170,8 +166,6 @@ static void il_factor_invoke_check(il_factor_invoke * self, enviroment * env, ca
 	}
 	//対応するメソッドを検索
 	il_type_argument_resolve(self->type_args);
-	ccpush_type_args(self->type_args);
-	ccpush_receiver(il_factor_eval(self->receiver, env, cctx));
 
 	type* ctype = gtype->core_type;
 	//ジェネリックな変数に対しても
@@ -184,8 +178,6 @@ static void il_factor_invoke_check(il_factor_invoke * self, enviroment * env, ca
 	self->m = type_ilfind_method(ctype, self->namev, self->args, env, cctx, &temp);
 	//self->m = class_find_method(TYPE2CLASS(ctype), self->name, self->args, env, cache, &temp);
 	self->index = temp;
-	ccpop_receiver();
-	ccpop_type_args();
 	if(temp == -1) {
 		il_error_report(ilerror_undefined_method, string_pool_ref2str(self->namev));
 		return;

@@ -4,7 +4,6 @@
 #include "../vm/enviroment.h"
 #include "il_error.h"
 #include "call_context.h"
-#include "../env/compile_context.h"
 #include <stdint.h>
 /**
  * 文の種類を表す列挙型.

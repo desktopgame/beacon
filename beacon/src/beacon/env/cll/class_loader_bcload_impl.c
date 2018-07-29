@@ -24,7 +24,6 @@
 #include "../parameter.h"
 #include "../field.h"
 #include "../method.h"
-#include "../compile_context.h"
 #include "../constructor.h"
 #include "class_loader_bcload_import_module_impl.h"
 #include "../../util/mem.h"
@@ -211,8 +210,6 @@ static void CLBC_class(class_loader* self, il_type* iltype, namespace_* parent) 
 	//例えば、ネイティブメソッドを登録するために一時的にクラスが登録されている場合がある
 	assert(iltype->tag == iltype_class);
 	//FIXME:あとで親関数から渡すようにする
-	ccpush_namespace(parent);
-	ccset_class_loader(self);
 	//すでに宣言されているならそれを取得
 	type* tp = CLBC_get_or_load_class(self, parent, iltype);
 	CL_ERROR(self);
@@ -244,9 +241,6 @@ static void CLBC_class(class_loader* self, il_type* iltype, namespace_* parent) 
 		cachekind_class_impl
 	);
 	vector_push(self->type_cache_vec, mtc);
-	ccpop_type();
-	ccpop_namespace();
-	ccset_class_loader(NULL);
 	tp->state = tp->state | type_register;
 }
 
@@ -254,8 +248,6 @@ static void CLBC_interface(class_loader * self, il_type * iltype, namespace_ * p
 	CL_ERROR(self);
 	assert(iltype->tag == iltype_interface);
 	//NOTE:後で親関数から渡すようにする
-	ccpush_namespace(parent);
-	ccset_class_loader(self);
 	type* tp = CLBC_get_or_load_interface(self, parent, iltype);
 	CL_ERROR(self);
 	interface_* inter = TYPE2INTERFACE(tp);
@@ -283,9 +275,6 @@ static void CLBC_interface(class_loader * self, il_type * iltype, namespace_ * p
 		cachekind_interface_impl
 	);
 	vector_push(self->type_cache_vec, mtc);
-	ccpop_type();
-	ccpop_namespace();
-	ccset_class_loader(NULL);
 	tp->state = tp->state | type_register;
 }
 
@@ -331,7 +320,6 @@ static type* CLBC_get_or_load_class(class_loader* self, namespace_* parent, il_t
 		CLBC_register_class(self, parent, iltype, tp, outClass);
 		CL_ERROR_RET(self, tp);
 	} else {
-		ccpush_type(tp);
 		outClass = tp->u.class_;
 		if((tp->state & type_register) == 0) {
 			//もしネイティブメソッドのために
@@ -343,7 +331,6 @@ static type* CLBC_get_or_load_class(class_loader* self, namespace_* parent, il_t
 }
 
 static void CLBC_register_class(class_loader* self, namespace_* parent, il_type* iltype, type* tp, class_* cls) {
-	ccpush_type(tp);
 	type_init_generic(tp, iltype->u.class_->type_parameter_list->length);
 	type_parameter_list_dup(iltype->u.class_->type_parameter_list, cls->type_parameter_list);
 	for (int i = 0; i < iltype->u.class_->extend_list->length; i++) {
@@ -387,7 +374,6 @@ static type* CLBC_get_or_load_interface(class_loader* self, namespace_* parent, 
 		CLBC_register_interface(self, parent, iltype, tp, inter);
 		CL_ERROR_RET(self, tp);
 	} else {
-		ccpush_type(tp);
 		inter = tp->u.interface_;
 		if((tp->state & type_register) == 0) {
 			//もしネイティブメソッドのために
@@ -399,7 +385,6 @@ static type* CLBC_get_or_load_interface(class_loader* self, namespace_* parent, 
 }
 
 static void CLBC_register_interface(class_loader* self, namespace_* parent, il_type* iltype, type* tp, interface_* inter) {
-	ccpush_type(tp);
 	type_init_generic(tp, iltype->u.interface_->type_parameter_list->length);
 	type_parameter_list_dup(iltype->u.interface_->type_parameter_list, inter->type_parameter_list);
 	for (int i = 0; i < iltype->u.interface_->extends_list->length; i++) {

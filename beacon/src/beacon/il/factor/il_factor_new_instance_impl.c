@@ -92,11 +92,11 @@ generic_type* il_factor_new_instance_eval(il_factor_new_instance * self, envirom
 	}
 	//fqcn_cache typename_group
 	if (self->instance_type == NULL) {
-		namespace_* scope = cctop_namespace();
+		namespace_* scope = NULL;
 		generic_type* a = generic_type_new(self->c->parent);
 		for (int i = 0; i < self->type_args->length; i++) {
 			il_type_argument* e = (il_type_argument*)vector_at(self->type_args, i);
-			generic_type* arg = import_manager_resolve(ccget_class_loader()->import_manager, scope, e->gcache);
+			generic_type* arg = import_manager_resolve(NULL, NULL, e->gcache);
 			generic_type_addargs(a, arg);
 		}
 		self->instance_type = a;
@@ -137,20 +137,18 @@ static void il_factor_new_instance_find(il_factor_new_instance * self, enviromen
 	if(self->constructor_index != -1) {
 		return;
 	}
-	class_* cls = cc_class(self->fqcnc);
+	class_* cls = NULL;
 	int temp = -1;
 	if(cls == NULL) {
 		il_error_report(ilerror_undefined_class, string_pool_ref2str(self->fqcnc->namev));
 		return;
 	}
-	ccpush_type_args(self->type_args);
 	il_type_argument_resolve(self->type_args);
 	self->c = class_ilfind_constructor(cls, self->argument_list, env, cctx, &temp);
 	self->constructor_index = temp;
 	if(temp == -1) {
 		il_error_report(ilerror_undefined_ctor, string_pool_ref2str(cls->namev));
 	}
-	ccpop_type_args();
 }
 
 static void il_Factor_new_instace_delete_arg(vector_item item) {

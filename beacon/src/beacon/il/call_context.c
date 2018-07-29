@@ -1,9 +1,12 @@
 #include "call_context.h"
 #include "../util/mem.h"
+#include "../env/namespace.h"
 
 call_context* call_context_malloc(const char* filename, int lineno) {
 	call_context* ret = mem_malloc(sizeof(call_context), filename, lineno);
 	ret->call_stack = vector_new();
+	ret->space = NULL;
+	ret->ty = NULL;
 	return ret;
 }
 
@@ -15,6 +18,13 @@ call_frame* call_context_push(call_context* self, call_frame_tag tag) {
 
 call_frame* call_context_top(call_context* self) {
 	return vector_top(self->call_stack);
+}
+
+namespace_* call_context_namespace(call_context* self) {
+	if(self->space != NULL) {
+		return self->space;
+	}
+	return namespace_lang();
 }
 
 void call_context_pop(call_context* self) {

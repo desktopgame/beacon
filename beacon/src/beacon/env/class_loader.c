@@ -23,7 +23,6 @@
 #include "method.h"
 #include "parameter.h"
 #include "constructor.h"
-#include "compile_context.h"
 #include "../il/il_constructor.h"
 #include "../il/il_constructor_chain.h"
 #include "../il/il_type_impl.h"
@@ -54,7 +53,7 @@ static void class_loader_cache_delete(vector_item item);
 static void class_loader_lazy_resolve_delete(vector_item item);
 static void class_loader_lazy_resolve(class_loader* self);
 static void class_loader_lazy_resolve_all(class_loader* self);
-static void class_loader_lazy_resolve_at(char* name, tree_item item);
+static void class_loader_lazy_resolve_at(const char* name, tree_item item);
 static class_loader* class_loader_load_specialImpl(class_loader* self, class_loader* cll, char* fullP);
 static void class_loader_load_toplevel(class_loader* self);
 static void class_loader_load_linkall(class_loader* self);
@@ -283,7 +282,7 @@ static void class_loader_lazy_resolve_all(class_loader* self) {
 	tree_map_each(sc->class_loader_map, class_loader_lazy_resolve_at);
 }
 
-static void class_loader_lazy_resolve_at(char* name, tree_item item) {
+static void class_loader_lazy_resolve_at(const char* name, tree_item item) {
 	class_loader* cl = (class_loader*)item;
 	class_loader_lazy_resolve(cl);
 }
@@ -326,8 +325,6 @@ static void class_loader_load_toplevel(class_loader* self) {
 	if(self->level != 0) {
 		return;
 	}
-	ccset_class_loader(self);
-	cc_enable(ccstate_toplevel);
 	//var $world = new beacon::lang::World();
 	il_stmt_inferenced_type_init* createWorldStmt = il_stmt_inferenced_type_init_new(string_pool_intern("$world"));
 	il_factor_new_instance* newWorldInstance = il_factor_new_instance_new();
@@ -338,7 +335,6 @@ static void class_loader_load_toplevel(class_loader* self) {
 	body->lineno = 0;
 	createWorldStmt->fact->lineno = 0;
 	//worldをselfにする
-	ccpush_type(namespace_get_type(namespace_lang(), string_pool_intern("World")));
 	il_error_enter();
 	call_context* cctx = call_context_new();
 	call_frame* cfr = call_context_push(cctx, call_top_T);
@@ -353,11 +349,8 @@ static void class_loader_load_toplevel(class_loader* self) {
 	//以下読み込み
 	CLBC_body(self, self->il_code->statement_list, self->env, cctx, NULL);
 	il_stmt_delete(body);
-	ccpop_type();
 	call_context_pop(cctx);
 	call_context_delete(cctx);
-	cc_disable(ccstate_toplevel);
-	ccset_class_loader(NULL);
 	script_context_cache();
 }
 
@@ -365,10 +358,11 @@ static void class_loader_load_toplevel_function(class_loader* self) {
 	if(self->level != 0) {
 		return;
 	}
+	call_context* cctx = call_context_new();
+	cctx->space = namespace_lang();
 	vector* funcs = self->il_code->function_list;
 	type* worldT = namespace_get_type(namespace_lang(), string_pool_intern("World"));
-	ccpush_type(worldT);
-	ccset_class_loader(self);
+	namespace_* loc = call_context_namespace(cctx);
 	for(int i=0; i<funcs->length; i++) {
 		il_function* ilfunc = vector_at(funcs, i);
 		method* m = method_new(ilfunc->namev);
@@ -378,18 +372,17 @@ static void class_loader_load_toplevel_function(class_loader* self) {
 		sm->env = env;
 		m->access = access_private;
 		m->u.script_method = sm;
-		ccpush_method(m);
 		//戻り値を指定
-		m->return_gtype = import_manager_resolve(self->import_manager, cc_namespace(), ilfunc->return_fqcn);
+		m->return_gtype = import_manager_resolve(self->import_manager, loc, ilfunc->return_fqcn);
 		//引数を指定
 		for(int j=0; j<ilfunc->parameter_list->length; j++) {
 			il_parameter* ilparam = vector_at(ilfunc->parameter_list, j);
 			parameter* param = parameter_new(ilparam->namev);
 			vector_push(m->parameter_list, param);
-			param->gtype = import_manager_resolve(self->import_manager, cc_namespace(), ilparam->fqcn);
+			param->gtype = import_manager_resolve(self->import_manager, loc, ilparam->fqcn);
 			symbol_table_entry(
 				env->sym_table,
-				import_manager_resolve(self->import_manager, cc_namespace(), ilparam->fqcn),
+				import_manager_resolve(self->import_manager, loc, ilparam->fqcn),
 				ilparam->namev
 			);
 			//実引数を保存
@@ -402,7 +395,6 @@ static void class_loader_load_toplevel_function(class_loader* self) {
 		vector_push(worldT->u.class_->method_list, m);
 		il_error_enter();
 		//中身をロード
-		call_context* cctx = call_context_new();
 		call_frame* cfr = call_context_push(cctx, call_method_T);
 		cfr->u.m = m;
 		for(int j=0; j<ilfunc->statement_list->length; j++) {
@@ -415,10 +407,7 @@ static void class_loader_load_toplevel_function(class_loader* self) {
 			il_stmt_generate(stmt, env, cctx);
 		}
 		call_context_pop(cctx);
-		call_context_delete(cctx);
 		il_error_exit();
-		ccpop_method();
 	}
-	ccset_class_loader(NULL);
-	ccpop_type();
+	call_context_delete(cctx);
 }

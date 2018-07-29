@@ -34,7 +34,7 @@ typedef void(*tree_action)(const char* name, tree_item item);
  * ツリーのデリータ関数です.
  * @param item
  */
-typedef void(*tree_element_deleter)(tree_item item);
+typedef void(*tree_element_deleter)(const char* name, tree_item item);
 
 /**
  * 新しいツリーマップを作成します.

@@ -60,9 +60,7 @@ void il_factor_invoke_static_generate(il_factor_invoke_static* self, enviroment*
 }
 
 void il_factor_invoke_static_load(il_factor_invoke_static * self, enviroment * env, call_context* cctx) {
-	ccpush_type_args(self->type_args);
 	il_factor_invoke_static_check(self, env, cctx);
-	ccpop_type_args();
 }
 
 generic_type* il_factor_invoke_static_eval(il_factor_invoke_static * self, enviroment * env, call_context* cctx) {
@@ -118,17 +116,14 @@ static void resolve_default(il_factor_invoke_static * self, enviroment * env) {
 		return;
 	}
 	generic_type* rgtp = self->m->return_gtype;
-	ccpush_type_args(self->type_args);
 	self->resolved = generic_type_apply(rgtp);
-	ccpop_type_args();
 }
 
 static void il_factor_invoke_static_check(il_factor_invoke_static * self, enviroment * env, call_context* cctx) {
-	class_* cls = cc_class(self->fqcn);
+	class_* cls = NULL;
 	int temp = -1;
 	il_type_argument_resolve(self->type_args);
 	//環境を設定
-	ccpush_type_args(self->type_args);
 	//メソッドを検索
 	for(int i=0; i<self->args->length; i++) {
 		il_argument* ilarg = vector_at(self->args, i);
@@ -140,8 +135,6 @@ static void il_factor_invoke_static_check(il_factor_invoke_static * self, enviro
 	if(temp == -1 || self->m == NULL) {
 		il_error_report(ilerror_undefined_method, string_pool_ref2str(self->namev));
 	}
-	//元に戻す
-	ccpop_type_args();
 }
 
 static void il_factor_invoke_static_args_delete(vector_item item) {

@@ -1,0 +1,19 @@
+namespace run54 {
+	class GenericA[T] {
+		public:
+		T value;
+
+		def new(T value) {
+			this.value = value;
+		}
+		def get() -> T {
+			return value;
+		}
+	}
+}
+var b = new run54::GenericA[Bool](true);
+if(b.get()) {
+	printLine("TRUE");
+} else {
+	printLine("FALSE");
+}

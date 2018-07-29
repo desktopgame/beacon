@@ -13,14 +13,13 @@
 #include "../lib/bc_library_interface.h"
 #include "../thread/thread.h"
 #include "../util/text.h"
-#include "../env/compile_context.h"
 //proto
 static script_context* script_context_new();
 static script_context* script_context_check_init(void);
 static void script_context_launch(script_context* self);
 static script_context* script_context_malloc(void);
 static void script_context_free(script_context* self);
-static void script_context_class_loader_delete(vector_item item);
+static void script_context_class_loader_delete(const char* name, tree_item item);
 
 static void script_context_namespace_unlink(numeric_key key, numeric_map_item item);
 static void script_context_namespace_delete(numeric_key key, numeric_map_item item);
@@ -32,7 +31,6 @@ static script_context* gScriptContextCurrent = NULL;
 static bool gScriptBootstrap = true;
 
 void script_context_open() {
-	cc_push();
 	sg_thread_launch();
 	script_context_check_init();
 }
@@ -120,7 +118,6 @@ void script_context_close() {
 		script_context_free(temp);
 		//free(temp);
 	}
-	cc_pop();
 	gScriptContext = NULL;
 	gScriptContextCurrent = NULL;
 	sg_thread_destroy();
@@ -309,7 +306,7 @@ static void script_context_free(script_context* self) {
 	MEM_FREE(self);
 }
 
-static void script_context_class_loader_delete(vector_item item) {
+static void script_context_class_loader_delete(const char* name, tree_item item) {
 	class_loader* e = (class_loader*)item;
 	class_loader_delete(e);
 }

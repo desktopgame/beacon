@@ -101,7 +101,7 @@ static void il_factor_member_op_check(il_factor_member_op* self, enviroment* env
 	//変数めいを型として静的フィールドで解決する
 	if(gtype == NULL) {
 		il_factor_variable* ilvar = IL_FACT2VAR(fact);
-		generic_type* ref = import_manager_resolvef(ccget_class_loader()->import_manager, cc_namespace(), ilvar->u.static_->fqcn);
+		generic_type* ref = import_manager_resolvef(NULL, NULL, ilvar->u.static_->fqcn);
 		gtype = ref;
 
 		type* ccT = gtype->core_type;

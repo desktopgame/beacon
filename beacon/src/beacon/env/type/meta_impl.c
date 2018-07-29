@@ -5,7 +5,6 @@
 #include "../parameter.h"
 #include "../type_parameter.h"
 #include "../type_interface.h"
-#include "../compile_context.h"
 #include "../namespace.h"
 #include "class_impl.h"
 #include "../constructor.h"
@@ -25,7 +24,6 @@ int meta_ilcalc_score(vector* params, vector* ilargs, enviroment* env, call_cont
 		vector_item vparam = vector_at(params, i);
 		il_argument* arg = (il_argument*)varg;
 		parameter* param = (parameter*)vparam;
-		cctop_lambda_scope_offset(i);
 		//実引数が NULL なら常に許容する
 		int dist = 0;
 		generic_type* argType = il_factor_eval(arg->factor, env, cctx);
@@ -67,7 +65,6 @@ int meta_gcalc_score(vector* params, vector* gargs) {
 		//実引数が NULL なら常に許容する
 		int dist = 0;
 		generic_type* argType = (generic_type*)varg;
-		cctop_lambda_scope_offset(i);
 		if(il_error_panic()) {
 			return -1;
 		}
@@ -150,16 +147,7 @@ method* meta_scoped_ilfind_method(class_* context, vector* method_vec, string_vi
 			(*outIndex) = i;
 			return m;
 		}
-		ccpush_lambda_scope(m);
-		//もっともスコアの高いメソッドを選択する
-		if(modifier_is_static(m->modifier)) {
-			ccpush_method(m);
-		}
 		int score = meta_ilcalc_score(m->parameter_list, ilargs, env, cctx);
-		if(modifier_is_static(m->modifier)) {
-			ccpop_method();
-		}
-		lambda_scope_delete(ccpop_lambda_scope());
 		if(score == -1) {
 			continue;
 		}
@@ -196,16 +184,7 @@ method* meta_scoped_gfind_method(class_* context, vector* method_vec, string_vie
 			(*outIndex) = i;
 			return m;
 		}
-		ccpush_lambda_scope(m);
-		//もっともスコアの高いメソッドを選択する
-		if(modifier_is_static(m->modifier)) {
-			ccpush_method(m);
-		}
 		int score = meta_gcalc_score(m->parameter_list, gargs);
-		if(modifier_is_static(m->modifier)) {
-			ccpop_method();
-		}
-		lambda_scope_delete(ccpop_lambda_scope());
 		if(score == -1) {
 			continue;
 		}
@@ -247,9 +226,7 @@ constructor* meta_scoped_ilfind_ctor(class_* context, vector* ctor_vec, vector* 
 			return ctor;
 		}
 		//もっともスコアの高いメソッドを選択する
-		ccpush_ctor(ctor);
 		int score = meta_ilcalc_score(ctor->parameter_list, ilargs, env, cctx);
-		ccpop_ctor();
 		if(score == -1) {
 			continue;
 		}

@@ -5,7 +5,6 @@
 #include "type_parameter.h"
 #include "constructor.h"
 #include "../env/object.h"
-#include "../env/compile_context.h"
 #include "../util/mem.h"
 #include "../util/text.h"
 #include "../il/il_type_argument.h"
@@ -199,6 +198,7 @@ bool generic_type_override(generic_type* super, generic_type* sub) {
 
 //private
 static generic_type* generic_type_applyImpl(generic_type* self, frame* fr) {
+	/*
 	//ここで型変数が追加されちゃってた
 	if(self->core_type == NULL) {
 		if(self->tag == generic_type_tag_ctor) {
@@ -241,6 +241,8 @@ static generic_type* generic_type_applyImpl(generic_type* self, frame* fr) {
 		else if (self->tag == generic_type_tag_method) copy->u.method_ = self->u.method_;
 	}
 	return copy;
+	*/
+	return NULL;
 }
 
 static int generic_type_distanceImpl(generic_type* self, generic_type* other, frame* fr) {
@@ -310,6 +312,7 @@ static int generic_type_distanceForm(generic_type* self, generic_type* other, fr
 }
 
 static generic_type* generic_type_typeargs_at(frame* fr, int index) {
+	/*
 	if(fr == NULL) {
 		vector* type_args = cctop_type_args();
 		il_type_argument* a = vector_at(type_args, index);
@@ -318,9 +321,12 @@ static generic_type* generic_type_typeargs_at(frame* fr, int index) {
 		generic_type* a = vector_at(fr->type_args_vec, index);
 		return a;
 	}
+	*/
+	return NULL;
 }
 
 static generic_type* generic_type_receiver_at(frame* fr, int index) {
+	/*
 	if(fr == NULL) {
 		generic_type* tp = cctop_receiver();
 		generic_type* instanced = vector_at(tp->type_args_list, index);
@@ -329,9 +335,12 @@ static generic_type* generic_type_receiver_at(frame* fr, int index) {
 		object* a = vector_at(fr->ref_stack, 0);
 		return vector_at(a->gtype->type_args_list, index);
 	}
+	*/
+	return NULL;
 }
 
 static generic_type* generic_type_get(generic_type* a) {
+	/*
 	if(a->virtual_type_index == -1) {
 		return a;
 	}
@@ -343,6 +352,8 @@ static generic_type* generic_type_get(generic_type* a) {
 		a = at;
 	}
 	return a;
+	*/
+	return NULL;
 }
 
 static void generic_type_delete_self(vector_item item) {

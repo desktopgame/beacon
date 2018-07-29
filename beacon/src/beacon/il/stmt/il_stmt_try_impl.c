@@ -8,7 +8,6 @@
 #include "../../env/generic_type.h"
 #include "../../env/class_loader.h"
 #include "../../env/import_manager.h"
-#include "../../env/compile_context.h"
 #include <stdio.h>
 
 //proto
@@ -88,7 +87,7 @@ void il_stmt_try_generate(il_stmt_try* self, enviroment* env, call_context* cctx
 	for (int i = 0; i < self->catch_list->length; i++) {
 		//例外を指定の名前でアクセス出来るように
 		il_stmt_catch* ilcatch = (il_stmt_catch*)vector_at(self->catch_list, i);
-		generic_type* exgType = import_manager_resolve(ccget_class_loader()->import_manager, cc_namespace(), ilcatch->fqcn);
+		generic_type* exgType = import_manager_resolve(NULL, NULL, ilcatch->fqcn);
 		int exIndex = symbol_table_entry(env->sym_table, exgType, ilcatch->namev)->index;
 		//直前のケースのジャンプ先をここに
 		if (nextCause != NULL) {
@@ -144,7 +143,7 @@ void il_stmt_try_load(il_stmt_try* self, enviroment* env, call_context* cctx) {
 }
 
 void il_stmt_catch_load(il_stmt_catch* self, enviroment* env, call_context* cctx) {
-	generic_type* exgType = import_manager_resolve(ccget_class_loader()->import_manager, cc_namespace(), self->fqcn);
+	generic_type* exgType = import_manager_resolve(NULL, NULL, self->fqcn);
 	symbol_table_entry(env->sym_table, exgType, self->namev);
 	for(int i=0; i<self->statement_list->length; i++) {
 		il_stmt* e = (il_stmt*)vector_at(self->statement_list, i);

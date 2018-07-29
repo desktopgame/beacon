@@ -109,7 +109,7 @@ void tree_map_delete(tree_map * self, tree_element_deleter deleter) {
 	}
 	//text_printf("delete %s\n", self->key);
 	if (self->item != NULL) {
-		deleter(self->item);
+		deleter(self->key, self->item);
 		MEM_FREE(self->key);
 	}
 	MEM_FREE(self);

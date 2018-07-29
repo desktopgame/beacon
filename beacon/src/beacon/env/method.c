@@ -3,7 +3,6 @@
 #include <stdio.h>
 #include <string.h>
 #include "../util/text.h"
-#include "compile_context.h"
 #include "type_interface.h"
 #include "parameter.h"
 #include "namespace.h"
@@ -95,9 +94,6 @@ bool method_override(method* superM, method* subM) {
 		superM->parameter_list->length != subM->parameter_list->length) {
 		return false;
 	}
-	ccpush_type(superM->parent);
-	cc_enable(ccstate_override);
-	ccset_override(superM, subM);
 	//全ての引数を比較
 	for (int i = 0; i < superM->parameter_list->length; i++) {
 		parameter* superP = ((parameter*)vector_at(superM->parameter_list, i));
@@ -111,9 +107,6 @@ bool method_override(method* superM, method* subM) {
 	generic_type* superRet2 = generic_type_apply(superRet);
 	generic_type* subRet = subM->return_gtype;
 	int ret =generic_type_distance(superRet2, subRet);
-	ccpop_type();
-	cc_disable(ccstate_override);
-	ccset_override(NULL, NULL);
 	return ret != -1;
 }
 

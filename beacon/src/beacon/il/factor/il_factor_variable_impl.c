@@ -95,7 +95,7 @@ static void il_factor_variable_check(il_factor_variable* self, enviroment* env) 
 	assert(self->fqcn != NULL);
 	//hoge, foo のような文字列の場合
 	if(self->fqcn->scope_vec->length == 0) {
-		namespace_* cur = cc_namespace();
+		namespace_* cur = NULL;
 		class_* ctype = namespace_get_class(cur, self->fqcn->namev);
 		if(ctype == NULL) {
 			ctype = namespace_get_class(namespace_lang(), self->fqcn->namev);
