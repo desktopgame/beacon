@@ -354,6 +354,7 @@ static void class_loader_load_toplevel(class_loader* self) {
 	CLBC_body(self, self->il_code->statement_list, self->env, cctx, NULL);
 	il_stmt_delete(body);
 	ccpop_type();
+	call_context_pop(cctx);
 	call_context_delete(cctx);
 	cc_disable(ccstate_toplevel);
 	ccset_class_loader(NULL);

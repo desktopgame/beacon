@@ -24,4 +24,5 @@ void call_context_pop(call_context* self) {
 
 void call_context_delete(call_context* self) {
 	MEM_FREE(self);
+	vector_delete(self->call_stack, vector_deleter_null);
 }
