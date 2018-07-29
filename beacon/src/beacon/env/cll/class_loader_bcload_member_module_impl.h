@@ -2,6 +2,7 @@
 #define BEACON_ENV_CLL_CLASS_LOADER_BCLOAD_MEMBER_MODULE_IMPL_H
 #include "../class_loader.h"
 #include "../../il/il_type_interface.h"
+#include "../../il/call_context.h"
 #include "../../env/type_interface.h"
 #include "../../env/namespace.h"
 /**
@@ -41,5 +42,5 @@ void CLBC_operator_overload_decl(class_loader* self, il_type* iltype, type* tp, 
 
 void CLBC_operator_overload_impl(class_loader* self, il_type* iltype, type* tp, namespace_* scope);
 
-void CLBC_body(class_loader* self, vector* stmt_list, struct enviroment* dest, namespace_* range);
+void CLBC_body(class_loader* self, vector* stmt_list, struct enviroment* dest, call_context* cctx, namespace_* range);
 #endif

@@ -214,8 +214,13 @@ void CLBC_methods_impl(class_loader* self, namespace_* scope, il_type* iltype, t
 			opcode_buf_add(env->buf, (vector_item)0);
 		}
 		//NOTE:ここなら名前空間を設定出来る
-		CLBC_body(self, ilmethod->statement_list, env, scope);
+		call_context* cctx = call_context_new();
+		call_frame* cfr = call_context_push(cctx, call_method_T);
+		cfr->u.m = me;
+		CLBC_body(self, ilmethod->statement_list, env, cctx, scope);
 		me->u.script_method->env = env;
+		call_context_pop(cctx);
+		call_context_delete(cctx);
 		ccpop_method();
 		ccpop_type();
 	}
@@ -293,8 +298,13 @@ void CLBC_ctor_impl(class_loader* self, il_type* iltype, type* tp) {
 		}
 		CLBC_chain(self, iltype, tp, ilcons, ilcons->chain, env);
 		//NOTE:ここなら名前空間を設定出来る
-		CLBC_body(self, ilcons->statement_list, env, scope);
+		call_context* cctx = call_context_new();
+		call_frame* cfr = call_context_push(cctx, call_ctor_T);
+		cfr->u.ctor = cons;
+		CLBC_body(self, ilcons->statement_list, env, cctx, scope);
 		cons->env = env;
+		call_context_pop(cctx);
+		call_context_delete(cctx);
 		ccpop_ctor();
 	}
 	ccpop_type();
@@ -368,7 +378,12 @@ void CLBC_operator_overload_impl(class_loader* self, il_type* iltype, type* tp, 
 		opcode_buf_add(env->buf, (vector_item)op_store);
 		opcode_buf_add(env->buf, (vector_item)0);
 		//NOTE:ここなら名前空間を設定出来る
-		CLBC_body(self, ilopov->statement_list, env, scope);
+		call_context* cctx = call_context_new();
+		call_frame* cfr = call_context_push(cctx, call_opov_T);
+		cfr->u.opov = opov;
+		CLBC_body(self, ilopov->statement_list, env, cctx, scope);
+		call_context_pop(cctx);
+		call_context_delete(cctx);
 		//ccpop_method();
 		opov->env = env;
 		ccpop_type();
@@ -377,11 +392,10 @@ void CLBC_operator_overload_impl(class_loader* self, il_type* iltype, type* tp, 
 	ccset_class_loader(NULL);
 }
 
-void CLBC_body(class_loader* self, vector* stmt_list, enviroment* dest, namespace_* range) {
+void CLBC_body(class_loader* self, vector* stmt_list, enviroment* dest, call_context* cctx, namespace_* range) {
 	CL_ERROR(self);
 	ccpush_namespace(range);
 	il_error_enter();
-	call_context* cctx = call_context_new();
 	//まずは全てのステートメントを読み込む
 	for (int i = 0; i < stmt_list->length; i++) {
 		if(il_error_panic()) {
@@ -402,7 +416,6 @@ void CLBC_body(class_loader* self, vector* stmt_list, enviroment* dest, namespac
 		il_stmt* s = (il_stmt*)e;
 		il_stmt_generate(s, dest, cctx);
 	}
-	call_context_delete(cctx);
 	il_error_exit();
 	ccpop_namespace();
 }

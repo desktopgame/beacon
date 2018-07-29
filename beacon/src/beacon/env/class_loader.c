@@ -341,9 +341,9 @@ static void class_loader_load_toplevel(class_loader* self) {
 	ccpush_type(namespace_get_type(namespace_lang(), string_pool_intern("World")));
 	il_error_enter();
 	call_context* cctx = call_context_new();
+	call_frame* cfr = call_context_push(cctx, call_top_T);
 	il_stmt_load(body, self->env, cctx);
 	il_stmt_generate(body, self->env, cctx);
-	call_context_delete(cctx);
 	il_error_exit();
 	//$worldをthisにする
 	opcode_buf_add(self->env->buf, op_load);
@@ -351,9 +351,10 @@ static void class_loader_load_toplevel(class_loader* self) {
 	opcode_buf_add(self->env->buf, op_store);
 	opcode_buf_add(self->env->buf, 0);
 	//以下読み込み
-	CLBC_body(self, self->il_code->statement_list, self->env, NULL);
+	CLBC_body(self, self->il_code->statement_list, self->env, cctx, NULL);
 	il_stmt_delete(body);
 	ccpop_type();
+	call_context_delete(cctx);
 	cc_disable(ccstate_toplevel);
 	ccset_class_loader(NULL);
 	script_context_cache();
@@ -401,6 +402,8 @@ static void class_loader_load_toplevel_function(class_loader* self) {
 		il_error_enter();
 		//中身をロード
 		call_context* cctx = call_context_new();
+		call_frame* cfr = call_context_push(cctx, call_method_T);
+		cfr->u.m = m;
 		for(int j=0; j<ilfunc->statement_list->length; j++) {
 			il_stmt* stmt = vector_at(ilfunc->statement_list, j);
 			il_stmt_load(stmt, env, cctx);
@@ -410,6 +413,7 @@ static void class_loader_load_toplevel_function(class_loader* self) {
 			il_stmt* stmt = vector_at(ilfunc->statement_list, j);
 			il_stmt_generate(stmt, env, cctx);
 		}
+		call_context_pop(cctx);
 		call_context_delete(cctx);
 		il_error_exit();
 		ccpop_method();
