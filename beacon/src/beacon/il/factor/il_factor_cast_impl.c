@@ -31,14 +31,14 @@ void il_factor_cast_dump(il_factor_cast * self, int depth) {
 	il_factor_dump(self->fact, depth + 1);
 }
 
-void il_factor_cast_generate(il_factor_cast * self, enviroment * env) {
-	il_factor_generate(self->fact, env);
+void il_factor_cast_generate(il_factor_cast * self, enviroment * env, call_context* cctx) {
+	il_factor_generate(self->fact, env, cctx);
 }
 
-void il_factor_cast_load(il_factor_cast * self, enviroment * env) {
+void il_factor_cast_load(il_factor_cast * self, enviroment * env, call_context* cctx) {
 }
 
-generic_type* il_factor_cast_eval(il_factor_cast * self, enviroment * env) {
+generic_type* il_factor_cast_eval(il_factor_cast * self, enviroment * env, call_context* cctx) {
 	return import_manager_resolve(ccget_class_loader()->import_manager, cc_namespace(), self->fqcn);
 }
 

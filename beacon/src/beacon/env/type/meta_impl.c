@@ -14,7 +14,7 @@
 #include "../../util/text.h"
 #include <string.h>
 
-int meta_ilcalc_score(vector* params, vector* ilargs, enviroment* env) {
+int meta_ilcalc_score(vector* params, vector* ilargs, enviroment* env, call_context* cctx) {
 	assert(params->length == ilargs->length);
 	int score = 0;
 	bool illegal = false;
@@ -28,7 +28,7 @@ int meta_ilcalc_score(vector* params, vector* ilargs, enviroment* env) {
 		cctop_lambda_scope_offset(i);
 		//実引数が NULL なら常に許容する
 		int dist = 0;
-		generic_type* argType = il_factor_eval(arg->factor, env);
+		generic_type* argType = il_factor_eval(arg->factor, env, cctx);
 		if(il_error_panic()) {
 			return -1;
 		}
@@ -118,15 +118,15 @@ int meta_rcalc_score(vector* params, vector* args, vector* typeargs, frame* fr) 
 	return score;
 }
 
-method * meta_ilfind_method(vector * method_vec, string_view namev, vector * ilargs, enviroment * env, int * outIndex) {
-	return meta_scoped_ilfind_method(NULL, method_vec, namev, ilargs, env, outIndex);
+method * meta_ilfind_method(vector * method_vec, string_view namev, vector * ilargs, enviroment * env, call_context* cctx, int * outIndex) {
+	return meta_scoped_ilfind_method(NULL, method_vec, namev, ilargs, env, cctx, outIndex);
 }
 
 method* meta_gfind_method(vector* method_vec, string_view namev, vector * gargs, int* outIndex) {
 	return meta_scoped_gfind_method(NULL, method_vec, namev, gargs, outIndex);
 }
 
-method* meta_scoped_ilfind_method(class_* context, vector* method_vec, string_view namev, vector * ilargs, enviroment * env, int * outIndex) {
+method* meta_scoped_ilfind_method(class_* context, vector* method_vec, string_view namev, vector * ilargs, enviroment * env, call_context* cctx, int * outIndex) {
 	(*outIndex) = -1;
 	//class_create_vtable(self);
 	method* ret = NULL;
@@ -155,7 +155,7 @@ method* meta_scoped_ilfind_method(class_* context, vector* method_vec, string_vi
 		if(modifier_is_static(m->modifier)) {
 			ccpush_method(m);
 		}
-		int score = meta_ilcalc_score(m->parameter_list, ilargs, env);
+		int score = meta_ilcalc_score(m->parameter_list, ilargs, env, cctx);
 		if(modifier_is_static(m->modifier)) {
 			ccpop_method();
 		}
@@ -218,15 +218,15 @@ method* meta_scoped_gfind_method(class_* context, vector* method_vec, string_vie
 	return ret;
 }
 
-constructor* meta_ilfind_ctor(vector* ctor_vec, vector* ilargs, enviroment* env, int* outIndex) {
-	return meta_scoped_ilfind_ctor(NULL, ctor_vec, ilargs, env, outIndex);
+constructor* meta_ilfind_ctor(vector* ctor_vec, vector* ilargs, enviroment* env, call_context* cctx, int* outIndex) {
+	return meta_scoped_ilfind_ctor(NULL, ctor_vec, ilargs, env, cctx, outIndex);
 }
 
 constructor* meta_rfind_ctor(vector* ctor_vec, vector* args, vector* typeargs, frame* fr, int* outIndex) {
 	return meta_scoped_rfind_ctor(NULL, ctor_vec, args, typeargs, fr, outIndex);
 }
 
-constructor* meta_scoped_ilfind_ctor(class_* context, vector* ctor_vec, vector* ilargs, enviroment* env, int* outIndex) {
+constructor* meta_scoped_ilfind_ctor(class_* context, vector* ctor_vec, vector* ilargs, enviroment* env, call_context* cctx, int* outIndex) {
 	//見つかった中からもっとも一致するコンストラクタを選択する
 	int min = 1024;
 	constructor* ret = NULL;
@@ -248,7 +248,7 @@ constructor* meta_scoped_ilfind_ctor(class_* context, vector* ctor_vec, vector* 
 		}
 		//もっともスコアの高いメソッドを選択する
 		ccpush_ctor(ctor);
-		int score = meta_ilcalc_score(ctor->parameter_list, ilargs, env);
+		int score = meta_ilcalc_score(ctor->parameter_list, ilargs, env, cctx);
 		ccpop_ctor();
 		if(score == -1) {
 			continue;

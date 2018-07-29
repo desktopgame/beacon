@@ -20,11 +20,11 @@ void il_stmt_defer_dump(il_stmt_defer* self, int depth) {
 	il_stmt_dump(self->stmt, depth + 1);
 }
 
-void il_stmt_defer_load(il_stmt_defer* self, enviroment* env) {
-	il_stmt_load(self->stmt, env);
+void il_stmt_defer_load(il_stmt_defer* self, enviroment* env, call_context* cctx) {
+	il_stmt_load(self->stmt, env, cctx);
 }
 
-void il_stmt_defer_generate(il_stmt_defer* self, enviroment* env) {
+void il_stmt_defer_generate(il_stmt_defer* self, enviroment* env, call_context* cctx) {
 	label* lb = opcode_buf_label(env->buf, 0);
 	label* lb2 = opcode_buf_label(env->buf, 0);
 	opcode_buf_add(env->buf, op_defer_register);
@@ -32,7 +32,7 @@ void il_stmt_defer_generate(il_stmt_defer* self, enviroment* env) {
 	opcode_buf_add(env->buf, op_goto);
 	opcode_buf_add(env->buf, lb);
 	lb2->cursor = opcode_buf_add(env->buf, op_defer_enter);
-	il_stmt_generate(self->stmt, env);
+	il_stmt_generate(self->stmt, env, cctx);
 	opcode_buf_add(env->buf, op_defer_exit);
 	lb->cursor = opcode_buf_nop(env->buf);
 }

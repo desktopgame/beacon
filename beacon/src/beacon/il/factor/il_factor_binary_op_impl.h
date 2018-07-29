@@ -37,11 +37,11 @@ il_factor_binary_op* il_factor_binary_op_new(operator_type type);
 
 void il_factor_binary_op_dump(il_factor_binary_op* self, int depth);
 
-void il_factor_binary_op_generate(il_factor_binary_op* self, struct enviroment* env);
+void il_factor_binary_op_generate(il_factor_binary_op* self, struct enviroment* env, call_context* cctx);
 
-void il_factor_binary_op_load(il_factor_binary_op* self, struct enviroment* env);
+void il_factor_binary_op_load(il_factor_binary_op* self, struct enviroment* env, call_context* cctx);
 
-generic_type* il_factor_binary_op_eval(il_factor_binary_op* self, struct enviroment* env);
+generic_type* il_factor_binary_op_eval(il_factor_binary_op* self, struct enviroment* env, call_context* cctx);
 
 char* il_factor_binary_op_tostr(il_factor_binary_op* self, struct enviroment* env);
 
@@ -51,15 +51,15 @@ il_factor_binary_op* il_factor_cast_binary_op(il_factor* fact);
 
 char* il_factor_binary_op_tostr_simple(il_factor_binary_op* self, struct enviroment* env);
 
-bool il_factor_binary_op_int_int(il_factor_binary_op* self, struct enviroment* env);
+bool il_factor_binary_op_int_int(il_factor_binary_op* self, struct enviroment* env, call_context* cctx);
 
-bool il_factor_binary_op_double_double(il_factor_binary_op* self, struct enviroment* env);
+bool il_factor_binary_op_double_double(il_factor_binary_op* self, struct enviroment* env, call_context* cctx);
 
-bool il_factor_binary_op_bool_bool(il_factor_binary_op* self, struct enviroment* env);
+bool il_factor_binary_op_bool_bool(il_factor_binary_op* self, struct enviroment* env, call_context* cctx);
 
-bool il_factor_binary_op_char_char(il_factor_binary_op* self, struct enviroment* env);
+bool il_factor_binary_op_char_char(il_factor_binary_op* self, struct enviroment* env, call_context* cctx);
 
-int il_factor_binary_op_index(il_factor_binary_op* self, struct enviroment* env);
+int il_factor_binary_op_index(il_factor_binary_op* self, struct enviroment* env, call_context* cctx);
 
-int il_factor_binary_op_index2(il_factor* receiver, il_factor* arg, operator_type otype, struct enviroment* env);
+int il_factor_binary_op_index2(il_factor* receiver, il_factor* arg, operator_type otype, struct enviroment* env, call_context* cctx);
 #endif // !SIGNAL_IL_IL_FACTOR_BINARY_OP_H

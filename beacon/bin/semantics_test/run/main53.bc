@@ -1,0 +1,27 @@
+namespace run53 {
+	class GenericA[T] {
+		public:
+		T value;
+
+		def new(T value) {
+			this.value = value;
+		}
+		def get() -> T {
+			return value;
+		}
+	}
+	class GenericB[T] {
+		public:
+		GenericA[T] value;
+
+		def new(T value) {
+			this.value = new GenericA[T](value);
+		}
+		def get() -> GenericA[T] {
+			return value;
+		}
+	}
+}
+var b = new run53::GenericB[Int](30);
+var x = b.get().get() * 2;
+printLine(x);

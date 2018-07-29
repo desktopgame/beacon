@@ -11,7 +11,7 @@
 //proto
 static void resolve_non_default(il_factor_invoke_bound * self, enviroment * env);
 static void resolve_default(il_factor_invoke_bound * self, enviroment * env);
-static void il_factor_invoke_bound_check(il_factor_invoke_bound * self, enviroment * env);
+static void il_factor_invoke_bound_check(il_factor_invoke_bound * self, enviroment * env, call_context* cctx);
 static void il_factor_invoke_bound_args_delete(vector_item item);
 
 il_factor_invoke_bound* il_factor_invoke_bound_new(string_view namev) {
@@ -38,7 +38,7 @@ void il_factor_invoke_bound_dump(il_factor_invoke_bound* self, int depth) {
 	}
 }
 
-void il_factor_invoke_bound_generate(il_factor_invoke_bound* self, enviroment* env) {
+void il_factor_invoke_bound_generate(il_factor_invoke_bound* self, enviroment* env, call_context* cctx) {
 	for(int i=0; i<self->type_args->length; i++) {
 		il_type_argument* e = (il_type_argument*)vector_at(self->type_args, i);
 		assert(e->gtype != NULL);
@@ -47,7 +47,7 @@ void il_factor_invoke_bound_generate(il_factor_invoke_bound* self, enviroment* e
 	}
 	for(int i=0; i<self->args->length; i++) {
 		il_argument* e = (il_argument*)vector_at(self->args, i);
-		il_factor_generate(e->factor, env);
+		il_factor_generate(e->factor, env, cctx);
 		if(il_error_panic()) {
 			return;
 		}
@@ -67,16 +67,16 @@ void il_factor_invoke_bound_generate(il_factor_invoke_bound* self, enviroment* e
 	}
 }
 
-void il_factor_invoke_bound_load(il_factor_invoke_bound * self, enviroment * env) {
+void il_factor_invoke_bound_load(il_factor_invoke_bound * self, enviroment * env, call_context* cctx) {
 	ccpush_type_args(self->type_args);
-	il_factor_invoke_bound_check(self, env);
+	il_factor_invoke_bound_check(self, env, cctx);
 	ccpop_type_args();
 }
 
-generic_type* il_factor_invoke_bound_eval(il_factor_invoke_bound * self, enviroment * env) {
+generic_type* il_factor_invoke_bound_eval(il_factor_invoke_bound * self, enviroment * env, call_context* cctx) {
 	type* tp = cctop_type();
 	//メソッドが見つからない
-	il_factor_invoke_bound_check(self, env);
+	il_factor_invoke_bound_check(self, env, cctx);
 	if(il_error_panic()) {
 		return NULL;
 	}
@@ -139,7 +139,7 @@ static void resolve_default(il_factor_invoke_bound * self, enviroment * env) {
 	ccpop_type_args();
 }
 
-static void il_factor_invoke_bound_check(il_factor_invoke_bound * self, enviroment * env) {
+static void il_factor_invoke_bound_check(il_factor_invoke_bound * self, enviroment * env, call_context* cctx) {
 	if(self->index != -1) {
 		return;
 	}
@@ -151,9 +151,9 @@ static void il_factor_invoke_bound_check(il_factor_invoke_bound * self, envirome
 	ccpush_type_args(self->type_args);
 	for(int i=0; i<self->args->length; i++) {
 		il_argument* ilarg = vector_at(self->args, i);
-		il_factor_load(ilarg->factor, env);
+		il_factor_load(ilarg->factor, env, cctx);
 	}
-	self->m = class_ilfind_method(TYPE2CLASS(ctype), self->namev, self->args, env, &temp);
+	self->m = class_ilfind_method(TYPE2CLASS(ctype), self->namev, self->args, env, cctx, &temp);
 	self->index = temp;
 	ccpop_receiver();
 	ccpop_type_args();

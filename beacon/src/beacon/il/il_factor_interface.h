@@ -4,6 +4,7 @@
 #include "../vm/enviroment.h"
 #include "../util/string_buffer.h"
 #include "il_error.h"
+#include "call_context.h"
 #include <stdint.h>
 #include <assert.h>
 #include "../env/generic_type.h"
@@ -122,29 +123,28 @@ void il_factor_dump(il_factor* self, int depth);
  * この関数は ILパニック を発生させることがあります。
  * @param self
  * @param env
- * @param cache
+ * @param cctx
  */
-void il_factor_generate(il_factor* self, enviroment* env);
+void il_factor_generate(il_factor* self, enviroment* env, call_context* cctx);
 
 /**
  * 因子を読み込みます.
  * この関数は ILパニック を発生させることがあります。
  * @param self
  * @param env
- * @param cache
- * @param eh
+ * @param cctx
  */
-void il_factor_load(il_factor* self, enviroment* env);
+void il_factor_load(il_factor* self, enviroment* env, call_context* cctx);
 
 /**
  * この因子が表す型を返します.
  * この関数は ILパニック を発生させることがあります。
  * @param self
  * @param env
- * @param cache
+ * @param cctx
  * @return
  */
-generic_type* il_factor_eval(il_factor* self, enviroment* env);
+generic_type* il_factor_eval(il_factor* self, enviroment* env, call_context* cctx);
 
 /**
  * ファクターの文字列表現を返します.

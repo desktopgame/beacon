@@ -381,6 +381,7 @@ void CLBC_body(class_loader* self, vector* stmt_list, enviroment* dest, namespac
 	CL_ERROR(self);
 	ccpush_namespace(range);
 	il_error_enter();
+	call_context* cctx = call_context_new();
 	//まずは全てのステートメントを読み込む
 	for (int i = 0; i < stmt_list->length; i++) {
 		if(il_error_panic()) {
@@ -389,7 +390,7 @@ void CLBC_body(class_loader* self, vector* stmt_list, enviroment* dest, namespac
 		}
 		vector_item e = vector_at(stmt_list, i);
 		il_stmt* s = (il_stmt*)e;
-		il_stmt_load(s, dest);
+		il_stmt_load(s, dest, cctx);
 	}
 	//オペコードを生成
 	for (int i = 0; i < stmt_list->length; i++) {
@@ -399,8 +400,9 @@ void CLBC_body(class_loader* self, vector* stmt_list, enviroment* dest, namespac
 		}
 		vector_item e = vector_at(stmt_list, i);
 		il_stmt* s = (il_stmt*)e;
-		il_stmt_generate(s, dest);
+		il_stmt_generate(s, dest, cctx);
 	}
+	call_context_delete(cctx);
 	il_error_exit();
 	ccpop_namespace();
 }
@@ -447,7 +449,9 @@ static void CLBC_chain_root(class_loader * self, il_type * iltype, type * tp, il
 static void CLBC_chain_auto(class_loader * self, il_type * iltype, type * tp, il_constructor * ilcons, il_constructor_chain * ilchain, enviroment * env) {
 	class_* classz = tp->u.class_;
 	int emptyTemp = 0;
-	constructor* emptyTarget = class_ilfind_empty_constructor(classz->super_class->core_type->u.class_, env, &emptyTemp);
+	call_context* cctx = call_context_new();
+	constructor* emptyTarget = class_ilfind_empty_constructor(classz->super_class->core_type->u.class_, env, cctx, &emptyTemp);
+	call_context_delete(cctx);
 	//連鎖を明示的に書いていないのに、
 	//親クラスにも空のコンストラクタが存在しない=エラー
 	//(この場合自動的にチェインコンストラクタを補うことが出来ないため。)
@@ -472,25 +476,27 @@ static void CLBC_chain_super(class_loader * self, il_type * iltype, type * tp, i
 	class_* classz = tp->u.class_;
 	ccset_class_loader(self);
 	//チェインコンストラクタの実引数をプッシュ
+	call_context* cctx = call_context_new();
 	il_constructor_chain* chain = ilcons->chain;
 	for (int i = 0; i < chain->argument_list->length; i++) {
 		il_argument* ilarg = (il_argument*)vector_at(chain->argument_list, i);
-		il_factor_generate(ilarg->factor, env);
+		il_factor_generate(ilarg->factor, env, cctx);
 	}
 	//連鎖先のコンストラクタを検索する
 	constructor* chainTarget = NULL;
 	int temp = 0;
 	if (chain->type == chain_type_this) {
 		ccpush_type_args(tp->generic_self->type_args_list);
-		chainTarget = class_ilfind_constructor(classz, chain->argument_list, env, &temp);
+		chainTarget = class_ilfind_constructor(classz, chain->argument_list, env, cctx, &temp);
 		opcode_buf_add(env->buf, (vector_item)op_chain_this);
 		opcode_buf_add(env->buf, (vector_item)(tp->absolute_index));
 	} else if (chain->type == chain_type_super) {
 		ccpush_type_args(classz->super_class->type_args_list);
-		chainTarget = class_ilfind_constructor(classz->super_class->core_type->u.class_, chain->argument_list, env, &temp);
+		chainTarget = class_ilfind_constructor(classz->super_class->core_type->u.class_, chain->argument_list, env, cctx, &temp);
 		opcode_buf_add(env->buf, op_chain_super);
 		opcode_buf_add(env->buf, classz->super_class->core_type->u.class_->classIndex);
 	}
+	call_context_delete(cctx);
 	ccpop_type_args();
 	chain->c = chainTarget;
 	chain->constructor_index = temp;

@@ -28,20 +28,20 @@ void il_factor_explicit_unary_op_dump(il_factor_explicit_unary_op* self, int dep
 	il_factor_dump(self->receiver, depth + 1);
 }
 
-void il_factor_explicit_unary_op_generate(il_factor_explicit_unary_op* self, enviroment* env) {
-	il_factor_generate(self->receiver, env);
+void il_factor_explicit_unary_op_generate(il_factor_explicit_unary_op* self, enviroment* env, call_context* cctx) {
+	il_factor_generate(self->receiver, env, cctx);
 	opcode_buf_add(env->buf, op_invokeoperator);
 	opcode_buf_add(env->buf, self->index);
 }
 
-void il_factor_explicit_unary_op_load(il_factor_explicit_unary_op* self, enviroment* env) {
-	il_factor_load(self->receiver, env);
-	self->index = il_factor_unary_op_index2(self->receiver, self->type, env);
+void il_factor_explicit_unary_op_load(il_factor_explicit_unary_op* self, enviroment* env, call_context* cctx) {
+	il_factor_load(self->receiver, env, cctx);
+	self->index = il_factor_unary_op_index2(self->receiver, self->type, env, cctx);
 	assert(self->index != -1);
 }
 
-generic_type* il_factor_explicit_unary_op_eval(il_factor_explicit_unary_op* self, enviroment* env) {
-	generic_type* gt = il_factor_eval(self->receiver, env);
+generic_type* il_factor_explicit_unary_op_eval(il_factor_explicit_unary_op* self, enviroment* env, call_context* cctx) {
+	generic_type* gt = il_factor_eval(self->receiver, env, cctx);
 	operator_overload* operator_ov = class_get_operator_overload(TYPE2CLASS(GENERIC2TYPE(gt)), self->index);
 	return operator_ov->return_gtype;
 }

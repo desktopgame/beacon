@@ -37,31 +37,31 @@ void il_factor_variable_dump(il_factor_variable * self, int depth) {
 	text_putline();
 }
 
-void il_factor_variable_generate(il_factor_variable * self, enviroment* env) {
+void il_factor_variable_generate(il_factor_variable * self, enviroment* env, call_context* cctx) {
 	il_factor_variable_check(self, env);
 	if(self->type == ilvariable_type_local) {
-		il_factor_variable_local_generate(self->u.local_, env);
+		il_factor_variable_local_generate(self->u.local_, env, cctx);
 	} else if(self->type == ilvariable_type_static) {
-		il_factor_variable_static_generate(self->u.static_, env);
+		il_factor_variable_static_generate(self->u.static_, env, cctx);
 	}
 }
 
-void il_factor_variable_load(il_factor_variable * self, enviroment * env) {
+void il_factor_variable_load(il_factor_variable * self, enviroment * env, call_context* cctx) {
 	il_factor_variable_check(self, env);
 	if(self->type == ilvariable_type_local) {
-		il_factor_variable_local_load(self->u.local_, env);
+		il_factor_variable_local_load(self->u.local_, env, cctx);
 	} else if(self->type == ilvariable_type_static) {
-		il_factor_variable_static_load(self->u.static_, env);
+		il_factor_variable_static_load(self->u.static_, env, cctx);
 	}
 }
 
-generic_type* il_factor_variable_eval(il_factor_variable * self, enviroment * env) {
+generic_type* il_factor_variable_eval(il_factor_variable * self, enviroment * env, call_context* cctx) {
 	il_factor_variable_check(self, env);
 	generic_type* ret = NULL;
 	if(self->type == ilvariable_type_local) {
-		ret = il_factor_variable_local_eval(self->u.local_, env);
+		ret = il_factor_variable_local_eval(self->u.local_, env, cctx);
 	} else if(self->type == ilvariable_type_static) {
-		ret = il_factor_variable_static_eval(self->u.static_, env);
+		ret = il_factor_variable_static_eval(self->u.static_, env, cctx);
 	}
 	return ret;
 }

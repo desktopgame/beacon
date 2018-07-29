@@ -288,34 +288,34 @@ constructor * class_rfind_constructor(class_ * self, vector * args, vector* type
 	return meta_scoped_rfind_ctor(self, self->constructor_list, args, typeargs, fr, outIndex);
 }
 
-constructor * class_ilfind_constructor(class_ * self, vector * args, enviroment * env, int* outIndex) {
+constructor * class_ilfind_constructor(class_ * self, vector * args, enviroment * env, call_context* cctx, int* outIndex) {
 	//	vector* v = meta_find_constructors(self, args, env, ilctx);
 	//	(*outIndex) = -1;
 	//	return class_find_constructor_impl(v, args, env, ilctx, outIndex);
-	return meta_scoped_ilfind_ctor(self, self->constructor_list, args, env, outIndex);
+	return meta_scoped_ilfind_ctor(self, self->constructor_list, args, env, cctx, outIndex);
 }
 
-constructor * class_ilfind_empty_constructor(class_ * self, enviroment * env, int * outIndex) {
+constructor * class_ilfind_empty_constructor(class_ * self, enviroment * env, call_context* cctx, int * outIndex) {
 	vector* emptyArgs = vector_new();
-	constructor* ret = class_ilfind_constructor(self, emptyArgs, env, outIndex);
+	constructor* ret = class_ilfind_constructor(self, emptyArgs, env, cctx, outIndex);
 	vector_delete(emptyArgs, vector_deleter_null);
 	return ret;
 }
 
-method * class_ilfind_method(class_ * self, string_view namev, vector * args, enviroment * env, int * outIndex) {
+method * class_ilfind_method(class_ * self, string_view namev, vector * args, enviroment * env, call_context* cctx, int * outIndex) {
 	(*outIndex) = -1;
 	class_create_vtable(self);
 	//assert(self->vt->elements->length > 0);
 	method* ret = NULL;
-	if((ret = meta_scoped_ilfind_method(self, self->vt->elements, namev, args, env, outIndex))
+	if((ret = meta_scoped_ilfind_method(self, self->vt->elements, namev, args, env, cctx, outIndex))
 	   != NULL) {
 		   return ret;
 	}
-	if((ret = meta_scoped_ilfind_method(self, self->method_list, namev, args, env, outIndex))
+	if((ret = meta_scoped_ilfind_method(self, self->method_list, namev, args, env, cctx, outIndex))
 	   != NULL) {
 		   return ret;
 	}
-	if((ret = meta_scoped_ilfind_method(self, self->smethod_list, namev, args, env, outIndex))
+	if((ret = meta_scoped_ilfind_method(self, self->smethod_list, namev, args, env, cctx, outIndex))
 	   != NULL) {
 		   return ret;
 	}
@@ -350,11 +350,11 @@ method* class_gfind_eqmethod(class_* self, int* outIndex) {
 	return ret;
 }
 
-method * class_ilfind_smethod(class_ * self, string_view namev, vector * args, enviroment * env, int * outIndex) {
+method * class_ilfind_smethod(class_ * self, string_view namev, vector * args, enviroment * env, call_context* cctx, int * outIndex) {
 	(*outIndex) = -1;
 	class_create_vtable(self);
 	int temp = 0;
-	method* ret = meta_ilfind_method(self->smethod_list, namev, args, env, &temp);
+	method* ret = meta_ilfind_method(self->smethod_list, namev, args, env, cctx, &temp);
 	temp += (class_count_smethodall(self) - self->smethod_list->length);
 	(*outIndex) = temp;
 	return ret;

@@ -18,7 +18,7 @@
 #include "binary/il_factor_shift_op_impl.h"
 #include "binary/il_factor_excor_op_impl.h"
 
-static bool type_test(il_factor_binary_op* self, enviroment* env, type* t);
+static bool type_test(il_factor_binary_op* self, enviroment* env, call_context* cctx, type* t);
 
 il_factor * il_factor_wrap_binary(il_factor_binary_op * self) {
 	il_factor* ret = il_factor_new(ilfactor_binary_op);
@@ -57,87 +57,87 @@ void il_factor_binary_op_dump(il_factor_binary_op * self, int depth) {
 	il_factor_dump(self->right, depth + 1);
 }
 
-void il_factor_binary_op_generate(il_factor_binary_op * self, enviroment* env) {
+void il_factor_binary_op_generate(il_factor_binary_op * self, enviroment* env, call_context* cctx) {
 	switch(self->category) {
 		case operator_carithmeric:
-			il_factor_arithmetic_op_generate(self->u.arithmetic_op, env);
+			il_factor_arithmetic_op_generate(self->u.arithmetic_op, env, cctx);
 			break;
 		case operator_ccompare:
-			il_factor_compare_op_generate(self->u.compare_op, env);
+			il_factor_compare_op_generate(self->u.compare_op, env, cctx);
 			break;
 		case operator_clogic:
-			il_factor_logic_op_generate(self->u.logic_op, env);
+			il_factor_logic_op_generate(self->u.logic_op, env, cctx);
 			break;
 		case operator_cshift:
-			il_factor_shift_op_generate(self->u.shift_op, env);
+			il_factor_shift_op_generate(self->u.shift_op, env, cctx);
 			break;
 		case operator_cexcor:
-			il_factor_excor_op_generate(self->u.excor_op, env);
+			il_factor_excor_op_generate(self->u.excor_op, env, cctx);
 			break;
 	}
 }
 
-void il_factor_binary_op_load(il_factor_binary_op * self, enviroment * env) {
+void il_factor_binary_op_load(il_factor_binary_op * self, enviroment * env, call_context* cctx) {
 	if(self->load) {
 		return;
 	}
 	self->load = true;
-	il_factor_load(self->left, env);
-	il_factor_load(self->right, env);
+	il_factor_load(self->left, env, cctx);
+	il_factor_load(self->right, env, cctx);
 	//カテゴリーわけ
 	if(operator_arithmetic(self->type)) {
 		self->category = operator_carithmeric;
 		il_factor_arithmetic_op* arith = il_factor_arithmetic_op_new(self->type);
 		arith->parent = self;
 		self->u.arithmetic_op = arith;
-		il_factor_arithmetic_op_load(arith, env);
+		il_factor_arithmetic_op_load(arith, env, cctx);
 	} else if(operator_compare(self->type)) {
 		self->category = operator_ccompare;
 		il_factor_compare_op* comp = il_factor_compare_op_new(self->type);
 		comp->parent = self;
 		self->u.compare_op = comp;
-		il_factor_compare_op_load(comp, env);
+		il_factor_compare_op_load(comp, env, cctx);
 	} else if(operator_bit(self->type) || operator_logic(self->type)) {
 		self->category = operator_clogic;
 		il_factor_logic_op* logic = il_factor_logic_op_new(self->type);
 		logic->parent = self;
 		self->u.logic_op = logic;
-		il_factor_logic_op_load(logic, env);
+		il_factor_logic_op_load(logic, env, cctx);
 	} else if(operator_shift(self->type)) {
 		self->category = operator_cshift;
 		il_factor_shift_op* shift = il_factor_shift_op_new(self->type);
 		shift->parent = self;
 		self->u.shift_op = shift;
-		il_factor_shift_op_load(shift, env);
+		il_factor_shift_op_load(shift, env, cctx);
 	} else if(self->type == operator_excor) {
 		self->category = operator_cexcor;
 		il_factor_excor_op* excor = il_factor_excor_op_new(self->type);
 		excor->parent = self;
 		self->u.excor_op = excor;
-		il_factor_excor_op_load(excor, env);
+		il_factor_excor_op_load(excor, env, cctx);
 	} else {
 		assert(false);
 	}
 }
 
-generic_type* il_factor_binary_op_eval(il_factor_binary_op * self, enviroment * env) {
-	il_factor_binary_op_load(self, env);
+generic_type* il_factor_binary_op_eval(il_factor_binary_op * self, enviroment * env, call_context* cctx) {
+	il_factor_binary_op_load(self, env, cctx);
 	generic_type* ret = NULL;
 	switch(self->category) {
 		case operator_carithmeric:
-			ret = il_factor_arithmetic_op_eval(self->u.arithmetic_op, env);
+			ret = il_factor_arithmetic_op_eval(self->u.arithmetic_op, env, cctx);
 			break;
 		case operator_ccompare:
-			ret = il_factor_compare_op_eval(self->u.compare_op, env);
+			ret = il_factor_compare_op_eval(self->u.compare_op, env, cctx);
 			break;
 		case operator_clogic:
-			ret = il_factor_logic_op_eval(self->u.logic_op, env);
+			ret = il_factor_logic_op_eval(self->u.logic_op, env, cctx);
 			break;
 		case operator_cshift:
-			ret = il_factor_shift_op_eval(self->u.shift_op, env);
+			ret = il_factor_shift_op_eval(self->u.shift_op, env, cctx);
 			break;
 		case operator_cexcor:
-			ret = il_factor_excor_op_eval(self->u.excor_op, env);
+			ret = il_factor_excor_op_eval(self->u.excor_op, env, cctx);
 			break;
 	}
 	assert(ret != NULL);
@@ -202,34 +202,34 @@ char* il_factor_binary_op_tostr_simple(il_factor_binary_op* self, enviroment* en
 	return string_buffer_release(sb);
 }
 
-bool il_factor_binary_op_int_int(il_factor_binary_op* self, enviroment* env) {
-	return type_test(self, env, TYPE_INT);
+bool il_factor_binary_op_int_int(il_factor_binary_op* self, enviroment* env, call_context* cctx) {
+	return type_test(self, env, cctx, TYPE_INT);
 }
 
-bool il_factor_binary_op_double_double(il_factor_binary_op* self, enviroment* env) {
-	return type_test(self, env, TYPE_DOUBLE);
+bool il_factor_binary_op_double_double(il_factor_binary_op* self, enviroment* env, call_context* cctx) {
+	return type_test(self, env, cctx, TYPE_DOUBLE);
 }
 
-bool il_factor_binary_op_bool_bool(il_factor_binary_op* self, enviroment* env) {
-	return type_test(self, env, TYPE_BOOL);
+bool il_factor_binary_op_bool_bool(il_factor_binary_op* self, enviroment* env, call_context* cctx) {
+	return type_test(self, env, cctx, TYPE_BOOL);
 }
 
-bool il_factor_binary_op_char_char(il_factor_binary_op* self, enviroment* env) {
-	return type_test(self, env, TYPE_CHAR);
+bool il_factor_binary_op_char_char(il_factor_binary_op* self, enviroment* env, call_context* cctx) {
+	return type_test(self, env, cctx, TYPE_CHAR);
 }
 
-int il_factor_binary_op_index(il_factor_binary_op* self, enviroment* env) {
-	if(il_factor_binary_op_int_int(self, env) ||
-	  il_factor_binary_op_double_double(self, env)) {
+int il_factor_binary_op_index(il_factor_binary_op* self, enviroment* env, call_context* cctx) {
+	if(il_factor_binary_op_int_int(self, env, cctx) ||
+	  il_factor_binary_op_double_double(self, env, cctx)) {
 		  return -1;
 	}
-	return il_factor_binary_op_index2(self->left, self->right, self->type, env);
+	return il_factor_binary_op_index2(self->left, self->right, self->type, env, cctx);
 }
 
-int il_factor_binary_op_index2(il_factor* receiver, il_factor* arg, operator_type otype, enviroment* env) {
+int il_factor_binary_op_index2(il_factor* receiver, il_factor* arg, operator_type otype, enviroment* env, call_context* cctx) {
 	vector* args = vector_new();
-	generic_type* lgtype = il_factor_eval(receiver, env);
-	generic_type* rgtype = il_factor_eval(arg, env);
+	generic_type* lgtype = il_factor_eval(receiver, env, cctx);
+	generic_type* rgtype = il_factor_eval(arg, env, cctx);
 	
 	if(lgtype->virtual_type_index != -1) {
 		assert(false);
@@ -245,9 +245,9 @@ int il_factor_binary_op_index2(il_factor* receiver, il_factor* arg, operator_typ
 	return temp;
 }
 
-static bool type_test(il_factor_binary_op* self, enviroment* env, type* t) {
-	generic_type* lgtype = il_factor_eval(self->left, env);
-	generic_type* rgtype = il_factor_eval(self->right, env);
+static bool type_test(il_factor_binary_op* self, enviroment* env, call_context* cctx, type* t) {
+	generic_type* lgtype = il_factor_eval(self->left, env, cctx);
+	generic_type* rgtype = il_factor_eval(self->right, env, cctx);
 	return GENERIC2TYPE(lgtype) == t &&
 	       GENERIC2TYPE(rgtype) == t;
 }

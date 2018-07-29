@@ -10,15 +10,15 @@ il_factor_variable_static* il_factor_variable_static_new() {
 	return ret;
 }
 
-void il_factor_variable_static_generate(il_factor_variable_static* self, enviroment* env) {
+void il_factor_variable_static_generate(il_factor_variable_static* self, enviroment* env, call_context* cctx) {
 	//FATAL("not implemented, because must be wrapped by call operator");
 }
 
-void il_factor_variable_static_load(il_factor_variable_static * self, enviroment * env) {
+void il_factor_variable_static_load(il_factor_variable_static * self, enviroment * env, call_context* cctx) {
 //	FATAL("not implemented, because must be wrapped by call operator");
 }
 
-generic_type* il_factor_variable_static_eval(il_factor_variable_static * self, enviroment * env) {
+generic_type* il_factor_variable_static_eval(il_factor_variable_static * self, enviroment * env, call_context* cctx) {
 	return NULL;
 }
 

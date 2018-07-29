@@ -3,6 +3,7 @@
 #define BEACON_IL_IL_STMT_INTERFACE_H
 #include "../vm/enviroment.h"
 #include "il_error.h"
+#include "call_context.h"
 #include "../env/compile_context.h"
 #include <stdint.h>
 /**
@@ -72,18 +73,17 @@ void il_stmt_dump(il_stmt* self, int depth);
  * 文を生成します.
  * @param self
  * @param env
- * @param cache
+ * @param cctx
  */
-void il_stmt_generate(il_stmt* self, enviroment* env);
+void il_stmt_generate(il_stmt* self, enviroment* env, call_context* cctx);
 
 /**
  * ステートメントを読み込んでエラーがあれば記録します.
  * @param self
  * @param env
- * @param cache
- * @param eh
+ * @param cctx
  */
-void il_stmt_load(il_stmt * self, enviroment* env);
+void il_stmt_load(il_stmt * self, enviroment* env, call_context* cctx);
 
 /**
  * 文を開放します.

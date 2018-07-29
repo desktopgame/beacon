@@ -23,33 +23,33 @@ void il_factor_not_op_dump(il_factor_not_op* self, int depth) {
 	text_putline();
 }
 
-generic_type* il_factor_not_op_eval(il_factor_not_op * self, enviroment * env) {
+generic_type* il_factor_not_op_eval(il_factor_not_op * self, enviroment * env, call_context* cctx) {
 	return TYPE2GENERIC(TYPE_BOOL);
 }
 
-void il_factor_not_op_generate(il_factor_not_op* self, enviroment* env) {
+void il_factor_not_op_generate(il_factor_not_op* self, enviroment* env, call_context* cctx) {
 	if(self->operator_index == -1) {
-		il_factor_generate(self->parent->a, env);
+		il_factor_generate(self->parent->a, env, cctx);
 		if(il_error_panic()) {
 			return;
 		}
-		generic_type* gt = il_factor_eval(self->parent->a, env);
+		generic_type* gt = il_factor_eval(self->parent->a, env, cctx);
 		if(GENERIC2TYPE(gt) == TYPE_BOOL) {
 			opcode_buf_add(env->buf, op_bnot);
 		} else {
 			assert(false);
 		}
 	} else {
-		il_factor_generate(self->parent->a, env);
+		il_factor_generate(self->parent->a, env, cctx);
 		opcode_buf_add(env->buf, op_invokeoperator);
 		opcode_buf_add(env->buf, self->operator_index);
 	}
 }
 
-void il_factor_not_op_load(il_factor_not_op* self, enviroment* env) {
-	generic_type* gt = il_factor_eval(self->parent->a, env);
+void il_factor_not_op_load(il_factor_not_op* self, enviroment* env, call_context* cctx) {
+	generic_type* gt = il_factor_eval(self->parent->a, env, cctx);
 	if(GENERIC2TYPE(gt) != TYPE_BOOL) {
-		self->operator_index = il_factor_unary_op_index(self->parent, env);
+		self->operator_index = il_factor_unary_op_index(self->parent, env, cctx);
 	}
 }
 

@@ -23,15 +23,15 @@ void il_factor_inc_dump(il_factor_inc * self, int depth) {
 	il_factor_dump(self->fact, depth + 1);
 }
 
-void il_factor_inc_generate(il_factor_inc * self, enviroment * env) {
+void il_factor_inc_generate(il_factor_inc * self, enviroment * env, call_context* cctx) {
 	if (self->type == fixtype_pre) {
-		il_factor_generate(self->fact, env);
+		il_factor_generate(self->fact, env, cctx);
 		opcode_buf_add(env->buf, op_inc);
 
 	} else if (self->type == fixtype_post) {
 		//FIXME:コピペ
 		//
-		il_factor_generate(self->fact, env);
+		il_factor_generate(self->fact, env, cctx);
 		//複製
 		opcode_buf_add(env->buf, op_copy);
 		//オリジナルをインクリメント
@@ -43,12 +43,12 @@ void il_factor_inc_generate(il_factor_inc * self, enviroment * env) {
 	}
 }
 
-void il_factor_inc_load(il_factor_inc * self, enviroment * env) {
-	il_factor_load(self->fact, env);
+void il_factor_inc_load(il_factor_inc * self, enviroment * env, call_context* cctx) {
+	il_factor_load(self->fact, env, cctx);
 }
 
-generic_type* il_factor_inc_eval(il_factor_inc * self, enviroment * env) {
-	return il_factor_eval(self->fact, env);
+generic_type* il_factor_inc_eval(il_factor_inc * self, enviroment * env, call_context* cctx) {
+	return il_factor_eval(self->fact, env, cctx);
 }
 
 char* il_factor_inc_tostr(il_factor_inc* self, enviroment* env) {

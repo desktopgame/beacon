@@ -19,11 +19,11 @@ il_factor_inc* il_factor_inc_new(fix_type type);
 
 void il_factor_inc_dump(il_factor_inc* self, int depth);
 
-void il_factor_inc_generate(il_factor_inc* self, struct enviroment* env);
+void il_factor_inc_generate(il_factor_inc* self, struct enviroment* env, call_context* cctx);
 
-void il_factor_inc_load(il_factor_inc* self, struct enviroment* env);
+void il_factor_inc_load(il_factor_inc* self, struct enviroment* env, call_context* cctx);
 
-generic_type* il_factor_inc_eval(il_factor_inc* self, struct enviroment* env);
+generic_type* il_factor_inc_eval(il_factor_inc* self, struct enviroment* env, call_context* cctx);
 
 char* il_factor_inc_tostr(il_factor_inc* self, struct enviroment* env);
 

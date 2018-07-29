@@ -38,8 +38,8 @@ void interface_add_method(interface_ * self, method * m) {
 	vector_push(self->method_list, m);
 }
 
-method * interface_ilfind_method(interface_ * self, string_view namev, vector * args, enviroment * env, int * outIndex) {
-	return meta_ilfind_method(self->method_list, namev, args, env, outIndex);
+method * interface_ilfind_method(interface_ * self, string_view namev, vector * args, enviroment * env, call_context* cctx, int * outIndex) {
+	return meta_ilfind_method(self->method_list, namev, args, env,cctx, outIndex);
 }
 
 method* interface_gfind_method(interface_* self, string_view namev, vector* gargs, int* outIndex) {

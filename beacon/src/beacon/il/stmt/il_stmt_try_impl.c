@@ -63,7 +63,7 @@ void il_stmt_catch_dump(il_stmt_catch* self, int depth) {
 	}
 }
 
-void il_stmt_try_generate(il_stmt_try* self, enviroment* env) {
+void il_stmt_try_generate(il_stmt_try* self, enviroment* env, call_context* cctx) {
 	label* try_end = opcode_buf_label(env->buf, -1);
 	label* catch_start = opcode_buf_label(env->buf, -1);
 	opcode_buf_add(env->buf, op_try_enter);
@@ -75,7 +75,7 @@ void il_stmt_try_generate(il_stmt_try* self, enviroment* env) {
 	//ステートメントの一覧
 	for (int i = 0; i < self->statement_list->length; i++) {
 		il_stmt* e = (il_stmt*)vector_at(self->statement_list, i);
-		il_stmt_generate(e, env);
+		il_stmt_generate(e, env, cctx);
 	}
 	opcode_buf_add(env->buf, op_try_exit);
 	//例外が発生しなかったならcatchをスキップ
@@ -111,7 +111,7 @@ void il_stmt_try_generate(il_stmt_try* self, enviroment* env) {
 		//catchの内側のステートメントを生成
 		for (int j = 0; j < ilcatch->statement_list->length; j++) {
 			il_stmt* e = (il_stmt*)vector_at(ilcatch->statement_list, j);
-			il_stmt_generate(e, env);
+			il_stmt_generate(e, env, cctx);
 		}
 		//catchされたので、
 		//例外フラグをクリアする
@@ -128,27 +128,27 @@ void il_stmt_try_generate(il_stmt_try* self, enviroment* env) {
 	try_end->cursor = opcode_buf_nop(env->buf);
 }
 
-void il_stmt_catch_generate(il_stmt_catch* self, enviroment* env) {
+void il_stmt_catch_generate(il_stmt_catch* self, enviroment* env, call_context* cctx) {
 
 }
 
-void il_stmt_try_load(il_stmt_try* self, enviroment* env) {
+void il_stmt_try_load(il_stmt_try* self, enviroment* env, call_context* cctx) {
 	for(int i=0; i<self->statement_list->length; i++) {
 		il_stmt* e = (il_stmt*)vector_at(self->statement_list, i);
-		il_stmt_load(e, env);
+		il_stmt_load(e, env, cctx);
 	}
 	for(int i=0; i<self->catch_list->length; i++) {
 		il_stmt_catch* e = (il_stmt_catch*)vector_at(self->catch_list, i);
-		il_stmt_catch_load(e, env);
+		il_stmt_catch_load(e, env, cctx);
 	}
 }
 
-void il_stmt_catch_load(il_stmt_catch* self, enviroment* env) {
+void il_stmt_catch_load(il_stmt_catch* self, enviroment* env, call_context* cctx) {
 	generic_type* exgType = import_manager_resolve(ccget_class_loader()->import_manager, cc_namespace(), self->fqcn);
 	symbol_table_entry(env->sym_table, exgType, self->namev);
 	for(int i=0; i<self->statement_list->length; i++) {
 		il_stmt* e = (il_stmt*)vector_at(self->statement_list, i);
-		il_stmt_load(e, env);
+		il_stmt_load(e, env, cctx);
 	}
 }
 

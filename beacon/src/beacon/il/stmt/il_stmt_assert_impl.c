@@ -29,14 +29,14 @@ void il_stmt_assert_dump(il_stmt_assert* self, int depth) {
 	il_factor_dump(self->message, depth + 1);
 }
 
-void il_stmt_assert_generate(il_stmt_assert* self, enviroment* env) {
+void il_stmt_assert_generate(il_stmt_assert* self, enviroment* env, call_context* cctx) {
 	//https://code.i-harness.com/ja/q/2a1650
 	label* gt = opcode_buf_label(env->buf, 0);
-	il_factor_generate(self->condition, env);
+	il_factor_generate(self->condition, env, cctx);
 	opcode_buf_add(env->buf, op_goto_if_true);
 	opcode_buf_add(env->buf, gt);
 
-	il_factor_generate(self->message, env);
+	il_factor_generate(self->message, env, cctx);
 	opcode_buf_add(env->buf, op_new_instance);
 	opcode_buf_add(env->buf, namespace_get_type(namespace_lang(), string_pool_intern("Exception"))->absolute_index);
 	opcode_buf_add(env->buf, 0);
@@ -44,8 +44,8 @@ void il_stmt_assert_generate(il_stmt_assert* self, enviroment* env) {
 	gt->cursor = opcode_buf_nop(env->buf);
 }
 
-void il_stmt_assert_load(il_stmt_assert* self, enviroment* env) {
-	il_factor_load(self->condition, env);
+void il_stmt_assert_load(il_stmt_assert* self, enviroment* env, call_context* cctx) {
+	il_factor_load(self->condition, env, cctx);
 	if(self->message == NULL) {
 		char* str = il_factor_tostr(self->condition, env);
 		il_factor_string* ilstr = il_factor_string_new(string_pool_intern(str));
@@ -54,7 +54,7 @@ void il_stmt_assert_load(il_stmt_assert* self, enviroment* env) {
 		MEM_FREE(str);
 		self->message->lineno = self->parent->lineno;
 	}
-	il_factor_load(self->message, env);
+	il_factor_load(self->message, env, cctx);
 }
 
 void il_stmt_assert_delete(il_stmt_assert* self) {

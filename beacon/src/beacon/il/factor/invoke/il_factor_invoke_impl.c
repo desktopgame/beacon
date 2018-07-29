@@ -14,10 +14,10 @@
 #include <stdio.h>
 
 //proto
-static void resolve_non_default(il_factor_invoke * self, enviroment * env);
-static void resolve_default(il_factor_invoke * self, enviroment * env);
+static void resolve_non_default(il_factor_invoke * self, enviroment * env, call_context* cctx);
+static void resolve_default(il_factor_invoke * self, enviroment * env, call_context* cctx);
 static void il_factor_invoke_args_delete(vector_item item);
-static void il_factor_invoke_check(il_factor_invoke * self, enviroment * env);
+static void il_factor_invoke_check(il_factor_invoke * self, enviroment * env, call_context* cctx);
 
 il_factor_invoke* il_factor_invoke_new(string_view namev) {
 	il_factor_invoke* ret = (il_factor_invoke*)MEM_MALLOC(sizeof(il_factor_invoke));
@@ -46,7 +46,7 @@ void il_factor_invoke_dump(il_factor_invoke* self, int depth) {
 	}
 }
 
-void il_factor_invoke_generate(il_factor_invoke* self, enviroment* env) {
+void il_factor_invoke_generate(il_factor_invoke* self, enviroment* env, call_context* cctx) {
 	for(int i=0; i<self->type_args->length; i++) {
 		il_type_argument* e = (il_type_argument*)vector_at(self->type_args, i);
 		assert(e->gtype != NULL);
@@ -55,9 +55,9 @@ void il_factor_invoke_generate(il_factor_invoke* self, enviroment* env) {
 	}
 	for(int i=0; i<self->args->length; i++) {
 		il_argument* e = (il_argument*)vector_at(self->args, i);
-		il_factor_generate(e->factor, env);
+		il_factor_generate(e->factor, env, cctx);
 	}
-	il_factor_generate(self->receiver, env);
+	il_factor_generate(self->receiver, env, cctx);
 	if(self->m->parent->tag == type_interface) {
 		opcode_buf_add(env->buf, (vector_item)op_invokeinterface);
 		opcode_buf_add(env->buf, (vector_item)self->m->parent->absolute_index);
@@ -73,13 +73,13 @@ void il_factor_invoke_generate(il_factor_invoke* self, enviroment* env) {
 	}
 }
 
-void il_factor_invoke_load(il_factor_invoke * self, enviroment * env) {
-	il_factor_load(self->receiver, env);
-	il_factor_invoke_check(self, env);
+void il_factor_invoke_load(il_factor_invoke * self, enviroment * env, call_context* cctx) {
+	il_factor_load(self->receiver, env, cctx);
+	il_factor_invoke_check(self, env, cctx);
 }
 
-generic_type* il_factor_invoke_eval(il_factor_invoke * self, enviroment * env) {
-	il_factor_invoke_check(self, env);
+generic_type* il_factor_invoke_eval(il_factor_invoke * self, enviroment * env, call_context* cctx) {
+	il_factor_invoke_check(self, env, cctx);
 	if(il_error_panic()) {
 		return NULL;
 	}
@@ -87,11 +87,11 @@ generic_type* il_factor_invoke_eval(il_factor_invoke * self, enviroment * env) {
 	generic_type* ret = NULL;
 	//型変数をそのまま返す場合
 	if(rgtp->tag != generic_type_tag_none) {
-		resolve_non_default(self, env);
+		resolve_non_default(self, env, cctx);
 		ret = self->resolved;
 	//型変数ではない型を返す
 	} else {
-		resolve_default(self, env);
+		resolve_default(self, env, cctx);
 		ret = self->resolved;
 	}
 	return ret;
@@ -117,11 +117,11 @@ void il_factor_invoke_delete(il_factor_invoke* self) {
 	MEM_FREE(self);
 }
 //private
-static void resolve_non_default(il_factor_invoke * self, enviroment * env) {
+static void resolve_non_default(il_factor_invoke * self, enviroment * env, call_context* cctx) {
 	if(self->resolved != NULL) {
 		return;
 	}
-	generic_type* receivergType = il_factor_eval(self->receiver, env);
+	generic_type* receivergType = il_factor_eval(self->receiver, env, cctx);
 	generic_type* rgtp = self->m->return_gtype;
 	if(rgtp->tag == generic_type_tag_class) {
 		//レシーバの実体化された型の中で、
@@ -137,11 +137,11 @@ static void resolve_non_default(il_factor_invoke * self, enviroment * env) {
 	}
 }
 
-static void resolve_default(il_factor_invoke * self, enviroment * env) {
+static void resolve_default(il_factor_invoke * self, enviroment * env, call_context* cctx) {
 	if(self->resolved != NULL) {
 		return;
 	}
-	generic_type* receivergType = il_factor_eval(self->receiver, env);
+	generic_type* receivergType = il_factor_eval(self->receiver, env, cctx);
 	generic_type* rgtp = self->m->return_gtype;
 //	virtual_type returnvType = self->m->return_vtype;
 	//内側に型変数が含まれているかもしれないので、
@@ -153,9 +153,9 @@ static void resolve_default(il_factor_invoke * self, enviroment * env) {
 	ccpop_type_args();
 }
 
-static void il_factor_invoke_check(il_factor_invoke * self, enviroment * env) {
+static void il_factor_invoke_check(il_factor_invoke * self, enviroment * env, call_context* cctx) {
 	//レシーバの読み込み
-	il_factor_load(self->receiver, env);
+	il_factor_load(self->receiver, env, cctx);
 	if(il_error_panic()) {
 		return;
 	}
@@ -164,14 +164,14 @@ static void il_factor_invoke_check(il_factor_invoke * self, enviroment * env) {
 		assert(ilvar->type != ilvariable_type_static);
 	}
 	//レシーバの型を評価
-	generic_type* gtype = il_factor_eval(self->receiver, env);
+	generic_type* gtype = il_factor_eval(self->receiver, env, cctx);
 	if(il_error_panic()) {
 		return;
 	}
 	//対応するメソッドを検索
 	il_type_argument_resolve(self->type_args);
 	ccpush_type_args(self->type_args);
-	ccpush_receiver(il_factor_eval(self->receiver, env));
+	ccpush_receiver(il_factor_eval(self->receiver, env, cctx));
 
 	type* ctype = gtype->core_type;
 	//ジェネリックな変数に対しても
@@ -181,7 +181,7 @@ static void il_factor_invoke_check(il_factor_invoke * self, enviroment * env) {
 	}
 	assert(ctype != NULL);
 	int temp = -1;
-	self->m = type_ilfind_method(ctype, self->namev, self->args, env, &temp);
+	self->m = type_ilfind_method(ctype, self->namev, self->args, env, cctx, &temp);
 	//self->m = class_find_method(TYPE2CLASS(ctype), self->name, self->args, env, cache, &temp);
 	self->index = temp;
 	ccpop_receiver();

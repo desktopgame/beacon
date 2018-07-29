@@ -30,11 +30,11 @@ typedef struct il_factor_variable_local {
 
 il_factor_variable_local* il_factor_variable_local_new(string_view namev);
 
-void il_factor_variable_local_generate(il_factor_variable_local* self, struct enviroment* env);
+void il_factor_variable_local_generate(il_factor_variable_local* self, struct enviroment* env, call_context* cctx);
 
-void il_factor_variable_local_load(il_factor_variable_local * self, struct enviroment * env);
+void il_factor_variable_local_load(il_factor_variable_local * self, struct enviroment * env, call_context* cctx);
 
-struct generic_type* il_factor_variable_local_eval(il_factor_variable_local * self, struct enviroment * env);
+struct generic_type* il_factor_variable_local_eval(il_factor_variable_local * self, struct enviroment * env, call_context* cctx);
 
 char* il_factor_variable_local_tostr(il_factor_variable_local * self, struct enviroment * env);
 

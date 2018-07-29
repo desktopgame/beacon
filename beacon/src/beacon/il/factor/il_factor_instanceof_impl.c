@@ -28,21 +28,21 @@ void il_factor_instanceof_dump(il_factor_instanceof* self, int depth) {
 	generic_cache_dump(self->gcache, depth + 1);
 }
 
-void il_factor_instanceof_load(il_factor_instanceof* self, enviroment* env) {
-	il_factor_load(self->fact, env);
+void il_factor_instanceof_load(il_factor_instanceof* self, enviroment* env, call_context* cctx) {
+	il_factor_load(self->fact, env, cctx);
 }
 
-void il_factor_instanceof_generate(il_factor_instanceof* self, enviroment* env) {
+void il_factor_instanceof_generate(il_factor_instanceof* self, enviroment* env, call_context* cctx) {
 	generic_type* gtype = import_manager_resolve(ccget_class_loader()->import_manager, cc_namespace(), self->gcache);
 	type* type = gtype->core_type;
 	assert(type != NULL);
-	il_factor_generate(self->fact, env);
+	il_factor_generate(self->fact, env, cctx);
 	opcode_buf_add(env->buf, op_generic_add);
 	generic_type_generate(gtype, env);
 	opcode_buf_add(env->buf, op_instanceof);
 }
 
-generic_type* il_factor_instanceof_eval(il_factor_instanceof* self, enviroment* env) {
+generic_type* il_factor_instanceof_eval(il_factor_instanceof* self, enviroment* env, call_context* cctx) {
 	return TYPE_BOOL->generic_self;
 }
 

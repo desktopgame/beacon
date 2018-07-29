@@ -16,7 +16,7 @@
 
 //proto
 static void il_factor_new_instance_delete_typearg(vector_item item);
-static void il_factor_new_instance_find(il_factor_new_instance * self, enviroment * env);
+static void il_factor_new_instance_find(il_factor_new_instance * self, enviroment * env, call_context* cctx);
 static void il_Factor_new_instace_delete_arg(vector_item item);
 
 il_factor * il_factor_wrap_new_instance(il_factor_new_instance * self) {
@@ -47,8 +47,8 @@ void il_factor_new_instance_dump(il_factor_new_instance * self, int depth) {
 	}
 }
 
-void il_factor_new_instance_generate(il_factor_new_instance * self, enviroment * env) {
-	il_factor_new_instance_find(self, env);
+void il_factor_new_instance_generate(il_factor_new_instance * self, enviroment * env, call_context* cctx) {
+	il_factor_new_instance_find(self, env, cctx);
 	for(int i=0; i<self->type_args->length; i++) {
 		il_type_argument* e = (il_type_argument*)vector_at(self->type_args, i);
 		assert(e->gtype != NULL);
@@ -58,7 +58,7 @@ void il_factor_new_instance_generate(il_factor_new_instance * self, enviroment *
 	//実引数を全てスタックへ
 	for (int i = 0; i < self->argument_list->length; i++) {
 		il_argument* ilarg = (il_argument*)vector_at(self->argument_list, i);
-		il_factor_generate(ilarg->factor, env);
+		il_factor_generate(ilarg->factor, env, cctx);
 		if(il_error_panic()) {
 			return;
 		}
@@ -69,8 +69,8 @@ void il_factor_new_instance_generate(il_factor_new_instance * self, enviroment *
 	opcode_buf_add(env->buf, self->constructor_index);
 }
 
-void il_factor_new_instance_load(il_factor_new_instance * self, enviroment * env) {
-	il_factor_new_instance_find(self, env);
+void il_factor_new_instance_load(il_factor_new_instance * self, enviroment * env, call_context* cctx) {
+	il_factor_new_instance_find(self, env, cctx);
 	if(il_error_panic()) {
 		return;
 	}
@@ -80,8 +80,8 @@ void il_factor_new_instance_load(il_factor_new_instance * self, enviroment * env
 	}
 }
 
-generic_type* il_factor_new_instance_eval(il_factor_new_instance * self, enviroment * env) {
-	il_factor_new_instance_find(self, env);
+generic_type* il_factor_new_instance_eval(il_factor_new_instance * self, enviroment * env, call_context* cctx) {
+	il_factor_new_instance_find(self, env, cctx);
 	if(il_error_panic()) {
 		return NULL;
 	}
@@ -133,7 +133,7 @@ static void il_factor_new_instance_delete_typearg(vector_item item) {
 	il_type_argument_delete(e);
 }
 
-static void il_factor_new_instance_find(il_factor_new_instance * self, enviroment * env) {
+static void il_factor_new_instance_find(il_factor_new_instance * self, enviroment * env, call_context* cctx) {
 	if(self->constructor_index != -1) {
 		return;
 	}
@@ -145,7 +145,7 @@ static void il_factor_new_instance_find(il_factor_new_instance * self, enviromen
 	}
 	ccpush_type_args(self->type_args);
 	il_type_argument_resolve(self->type_args);
-	self->c = class_ilfind_constructor(cls, self->argument_list, env, &temp);
+	self->c = class_ilfind_constructor(cls, self->argument_list, env, cctx, &temp);
 	self->constructor_index = temp;
 	if(temp == -1) {
 		il_error_report(ilerror_undefined_ctor, string_pool_ref2str(cls->namev));

@@ -28,13 +28,13 @@ void il_stmt_try_dump(il_stmt_try* self, int depth);
 
 void il_stmt_catch_dump(il_stmt_catch* self, int depth);
 
-void il_stmt_try_generate(il_stmt_try* self, struct enviroment* env);
+void il_stmt_try_generate(il_stmt_try* self, struct enviroment* env, call_context* cctx);
 
-void il_stmt_catch_generate(il_stmt_catch* self, struct enviroment* env);
+void il_stmt_catch_generate(il_stmt_catch* self, struct enviroment* env, call_context* cctx);
 
-void il_stmt_try_load(il_stmt_try* self, struct enviroment* env);
+void il_stmt_try_load(il_stmt_try* self, struct enviroment* env, call_context* cctx);
 
-void il_stmt_catch_load(il_stmt_catch* self, struct enviroment* env);
+void il_stmt_catch_load(il_stmt_catch* self, struct enviroment* env, call_context* cctx);
 
 void il_stmt_catch_delete(il_stmt_catch* self);
 

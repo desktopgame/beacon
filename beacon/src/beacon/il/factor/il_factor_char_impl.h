@@ -17,11 +17,11 @@ il_factor_char* il_factor_char_new(char c);
 
 void il_factor_char_dump(il_factor_char* self, int depth);
 
-void il_factor_char_generate(il_factor_char* self, struct enviroment* env);
+void il_factor_char_generate(il_factor_char* self, struct enviroment* env, call_context* cctx);
 
-void il_factor_char_load(il_factor_char* self, struct enviroment* env);
+void il_factor_char_load(il_factor_char* self, struct enviroment* env, call_context* cctx);
 
-generic_type* il_factor_char_eval(il_factor_char* self, struct enviroment* env);
+generic_type* il_factor_char_eval(il_factor_char* self, struct enviroment* env, call_context* cctx);
 
 char* il_factor_char_tostr(il_factor_char* self, struct enviroment* env);
 

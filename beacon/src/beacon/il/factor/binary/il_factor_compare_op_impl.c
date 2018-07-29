@@ -27,40 +27,40 @@ void il_factor_compare_op_dump(il_factor_compare_op* self, int depth) {
 	text_putline();
 }
 
-generic_type* il_factor_compare_op_eval(il_factor_compare_op * self, enviroment * env) {
+generic_type* il_factor_compare_op_eval(il_factor_compare_op * self, enviroment * env, call_context* cctx) {
 	generic_type* ret = TYPE2GENERIC(TYPE_BOOL);
 	assert(ret != NULL);
 	return ret;
 }
 
-void il_factor_compare_op_generate(il_factor_compare_op* self, enviroment* env) {
+void il_factor_compare_op_generate(il_factor_compare_op* self, enviroment* env, call_context* cctx) {
 	//演算子オーバーロードが見つからない
 	if(self->operator_index == -1) {
-		il_factor_generate(self->parent->right, env);
-		il_factor_generate(self->parent->left, env);
-		if(il_factor_binary_op_int_int(self->parent, env)) {
+		il_factor_generate(self->parent->right, env, cctx);
+		il_factor_generate(self->parent->left, env, cctx);
+		if(il_factor_binary_op_int_int(self->parent, env, cctx)) {
 			opcode_buf_add(env->buf, operator_to_iopcode(self->type));
-		} else if(il_factor_binary_op_double_double(self->parent, env)) {
+		} else if(il_factor_binary_op_double_double(self->parent, env, cctx)) {
 			opcode_buf_add(env->buf, operator_to_dopcode(self->type));
-		} else if(il_factor_binary_op_char_char(self->parent, env)) {
+		} else if(il_factor_binary_op_char_char(self->parent, env, cctx)) {
 			opcode_buf_add(env->buf, operator_to_copcode(self->type));
 		} else {
 			il_error_report(ilerror_undefined_operator, operator_tostring(self->type));
 //			assert(false);
 		}
 	} else {
-		il_factor_generate(self->parent->right, env);
-		il_factor_generate(self->parent->left, env);
+		il_factor_generate(self->parent->right, env, cctx);
+		il_factor_generate(self->parent->left, env, cctx);
 		opcode_buf_add(env->buf, op_invokeoperator);
 		opcode_buf_add(env->buf, self->operator_index);
 	}
 }
 
-void il_factor_compare_op_load(il_factor_compare_op* self, enviroment* env) {
-	if(!il_factor_binary_op_int_int(self->parent, env) &&
-	   !il_factor_binary_op_double_double(self->parent, env) &&
-	   !il_factor_binary_op_char_char(self->parent, env)) {
-	self->operator_index = il_factor_binary_op_index(self->parent, env);
+void il_factor_compare_op_load(il_factor_compare_op* self, enviroment* env, call_context* cctx) {
+	if(!il_factor_binary_op_int_int(self->parent, env, cctx) &&
+	   !il_factor_binary_op_double_double(self->parent, env, cctx) &&
+	   !il_factor_binary_op_char_char(self->parent, env, cctx)) {
+	self->operator_index = il_factor_binary_op_index(self->parent, env, cctx);
 	}
 }
 

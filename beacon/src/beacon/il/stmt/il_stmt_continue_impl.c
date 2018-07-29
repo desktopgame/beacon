@@ -9,13 +9,13 @@ il_stmt * il_stmt_wrap_continue() {
 	return ret;
 }
 
-void il_stmt_continue_generate(void * empty, enviroment * env) {
+void il_stmt_continue_generate(void * empty, enviroment * env, call_context* cctx) {
 	label* lab = cctop_while_start();
 	opcode_buf_add(env->buf, op_goto);
 	opcode_buf_add(env->buf, lab);
 }
 
-void il_stmt_continue_load(void * empty, enviroment * env) {
+void il_stmt_continue_load(void * empty, enviroment * env, call_context* cctx) {
 }
 
 void il_stmt_continue_dump(void * empty, int depth) {

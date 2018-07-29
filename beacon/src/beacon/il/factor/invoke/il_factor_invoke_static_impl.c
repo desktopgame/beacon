@@ -11,7 +11,7 @@
 //proto
 static void resolve_non_default(il_factor_invoke_static * self, enviroment * env);
 static void resolve_default(il_factor_invoke_static * self, enviroment * env);
-static void il_factor_invoke_static_check(il_factor_invoke_static * self, enviroment * env);
+static void il_factor_invoke_static_check(il_factor_invoke_static * self, enviroment * env, call_context* cctx);
 static void il_factor_invoke_static_args_delete(vector_item item);
 static void il_factor_invoke_static_typeargs_delete(vector_item item);
 
@@ -40,7 +40,7 @@ void il_factor_invoke_static_dump(il_factor_invoke_static* self, int depth) {
 	}
 }
 
-void il_factor_invoke_static_generate(il_factor_invoke_static* self, enviroment* env) {
+void il_factor_invoke_static_generate(il_factor_invoke_static* self, enviroment* env, call_context* cctx) {
 	for(int i=0; i<self->type_args->length; i++) {
 		il_type_argument* e = (il_type_argument*)vector_at(self->type_args, i);
 		assert(e->gtype != NULL);
@@ -49,7 +49,7 @@ void il_factor_invoke_static_generate(il_factor_invoke_static* self, enviroment*
 	}
 	for(int i=0; i<self->args->length; i++) {
 		il_argument* e = (il_argument*)vector_at(self->args, i);
-		il_factor_generate(e->factor, env);
+		il_factor_generate(e->factor, env, cctx);
 		if(il_error_panic()) {
 			return;
 		}
@@ -59,14 +59,14 @@ void il_factor_invoke_static_generate(il_factor_invoke_static* self, enviroment*
 	opcode_buf_add(env->buf, (vector_item)self->index);
 }
 
-void il_factor_invoke_static_load(il_factor_invoke_static * self, enviroment * env) {
+void il_factor_invoke_static_load(il_factor_invoke_static * self, enviroment * env, call_context* cctx) {
 	ccpush_type_args(self->type_args);
-	il_factor_invoke_static_check(self, env);
+	il_factor_invoke_static_check(self, env, cctx);
 	ccpop_type_args();
 }
 
-generic_type* il_factor_invoke_static_eval(il_factor_invoke_static * self, enviroment * env) {
-	il_factor_invoke_static_check(self, env);
+generic_type* il_factor_invoke_static_eval(il_factor_invoke_static * self, enviroment * env, call_context* cctx) {
+	il_factor_invoke_static_check(self, env, cctx);
 	//メソッドを解決できなかった場合
 	if(il_error_panic()) {
 		return NULL;
@@ -123,7 +123,7 @@ static void resolve_default(il_factor_invoke_static * self, enviroment * env) {
 	ccpop_type_args();
 }
 
-static void il_factor_invoke_static_check(il_factor_invoke_static * self, enviroment * env) {
+static void il_factor_invoke_static_check(il_factor_invoke_static * self, enviroment * env, call_context* cctx) {
 	class_* cls = cc_class(self->fqcn);
 	int temp = -1;
 	il_type_argument_resolve(self->type_args);
@@ -132,9 +132,9 @@ static void il_factor_invoke_static_check(il_factor_invoke_static * self, enviro
 	//メソッドを検索
 	for(int i=0; i<self->args->length; i++) {
 		il_argument* ilarg = vector_at(self->args, i);
-		il_factor_load(ilarg->factor, env);
+		il_factor_load(ilarg->factor, env, cctx);
 	}
-	self->m = class_ilfind_smethod(cls, self->namev, self->args, env, &temp);
+	self->m = class_ilfind_smethod(cls, self->namev, self->args, env, cctx, &temp);
 	self->index = temp;
 	//メソッドが見つからない
 	if(temp == -1 || self->m == NULL) {

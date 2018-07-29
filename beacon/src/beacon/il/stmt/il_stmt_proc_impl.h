@@ -34,18 +34,17 @@ void il_stmt_proc_dump(il_stmt_proc* self, int depth);
  * 式のみで構成される文を生成します.
  * @param self
  * @param env
- * @param cache
+ * @param cctx
  */
-void il_stmt_proc_generate(il_stmt_proc* self, struct enviroment* env);
+void il_stmt_proc_generate(il_stmt_proc* self, struct enviroment* env, call_context* cctx);
 
 /**
  * 式のみで構成される文を読み込みます.
  * @param self
  * @param env
- * @param cache
- * @param eh
+ * @param cctx
  */
-void il_stmt_proc_load(il_stmt_proc* self, struct enviroment* env);
+void il_stmt_proc_load(il_stmt_proc* self, struct enviroment* env, call_context* cctx);
 
 /**
  * 式のみで構成される文を表す要素を開放します.

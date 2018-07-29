@@ -18,11 +18,11 @@ il_factor_string* il_factor_string_new(string_view valuev);
 
 void il_factor_string_dump(il_factor_string* self, int depth);
 
-void il_factor_string_generate(il_factor_string* self, struct enviroment* env);
+void il_factor_string_generate(il_factor_string* self, struct enviroment* env, call_context* cctx);
 
-void il_factor_string_load(il_factor_string* self, struct enviroment* env);
+void il_factor_string_load(il_factor_string* self, struct enviroment* env, call_context* cctx);
 
-generic_type* il_factor_string_eval(il_factor_string* self, struct enviroment* env);
+generic_type* il_factor_string_eval(il_factor_string* self, struct enviroment* env, call_context* cctx);
 
 char* il_factor_string_tostr(il_factor_string* self, struct enviroment* env);
 

@@ -12,14 +12,14 @@ void il_factor_null_dump(void * empty, int depth) {
 	text_putline();
 }
 
-void il_factor_null_generate(void * empty, enviroment * env) {
+void il_factor_null_generate(void * empty, enviroment * env, call_context* cctx) {
 	opcode_buf_add(env->buf, op_null);
 }
 
-void il_factor_null_load(void * empty, enviroment * env) {
+void il_factor_null_load(void * empty, enviroment * env, call_context* cctx) {
 }
 
-generic_type* il_factor_null_eval(void * empty, enviroment * env) {
+generic_type* il_factor_null_eval(void * empty, enviroment * env, call_context* cctx) {
 	if(gSelf == NULL) {
 		gSelf =  generic_type_new(TYPE_NULL);
 	}

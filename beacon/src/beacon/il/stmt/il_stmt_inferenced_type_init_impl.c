@@ -27,16 +27,16 @@ void il_stmt_inferenced_type_init_dump(il_stmt_inferenced_type_init * self, int 
 	il_factor_dump(self->fact, depth + 1);
 }
 
-void il_stmt_inferenced_type_init_generate(il_stmt_inferenced_type_init * self, enviroment * env) {
+void il_stmt_inferenced_type_init_generate(il_stmt_inferenced_type_init * self, enviroment * env, call_context* cctx) {
 	//右辺の方で宣言する
-	il_factor_generate(self->fact, env);
+	il_factor_generate(self->fact, env, cctx);
 	opcode_buf_add(env->buf, op_store);
 	opcode_buf_add(env->buf, self->sym->index);
 }
 
-void il_stmt_inferenced_type_init_load(il_stmt_inferenced_type_init * self, enviroment * env) {
-	il_factor_load(self->fact, env);
-	generic_type* gtp = il_factor_eval(self->fact, env);
+void il_stmt_inferenced_type_init_load(il_stmt_inferenced_type_init * self, enviroment * env, call_context* cctx) {
+	il_factor_load(self->fact, env, cctx);
+	generic_type* gtp = il_factor_eval(self->fact, env, cctx);
 	if(il_error_panic()) {
 		return;
 	}

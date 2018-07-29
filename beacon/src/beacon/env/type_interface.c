@@ -60,19 +60,19 @@ void type_add_method(type* self, method * m) {
 	}
 }
 
-method * type_ilfind_method(type * self, string_view namev, vector * args, enviroment * env, int * outIndex) {
+method * type_ilfind_method(type * self, string_view namev, vector * args, enviroment * env, call_context* cctx, int * outIndex) {
 	assert(self != NULL);
 	if (self->tag == type_class) {
-		return class_ilfind_method(self->u.class_, namev, args, env, outIndex);
+		return class_ilfind_method(self->u.class_, namev, args, env, cctx, outIndex);
 	} else if (self->tag == type_interface) {
-		return interface_ilfind_method(self->u.interface_, namev, args, env, outIndex);
+		return interface_ilfind_method(self->u.interface_, namev, args, env, cctx, outIndex);
 	}
 	return NULL;
 }
 
-method* type_ilfind_smethod(type* self, string_view namev, vector* args, struct enviroment* env, int* outIndex) {
+method* type_ilfind_smethod(type* self, string_view namev, vector* args, struct enviroment* env, call_context* cctx, int* outIndex) {
 	assert(self->tag == type_class);
-	return class_ilfind_smethod(self->u.class_, namev, args, env, outIndex);
+	return class_ilfind_smethod(self->u.class_, namev, args, env, cctx, outIndex);
 }
 
 vtable * type_vtable(type * self) {

@@ -51,28 +51,28 @@ void il_factor_call_op_dump(il_factor_call_op* self, int depth) {
 	}
 }
 
-void il_factor_call_op_load(il_factor_call_op* self, enviroment* env) {
+void il_factor_call_op_load(il_factor_call_op* self, enviroment* env, call_context* cctx) {
 	//argumentlistはサブクラスに渡しちゃってる
 	//il_factor_load(self->receiver, env, ilctx, eh);
 	il_factor_call_op_check(self, env);
 	if(self->type == ilcall_type_invoke) {
-		il_factor_invoke_load(self->u.invoke_, env);
+		il_factor_invoke_load(self->u.invoke_, env, cctx);
 	} else if(self->type == ilcall_type_invoke_static) {
-		il_factor_invoke_static_load(self->u.invoke_static_, env);
+		il_factor_invoke_static_load(self->u.invoke_static_, env, cctx);
 	} else if(self->type == ilcall_type_invoke_bound) {
-		il_factor_invoke_bound_load(self->u.invoke_bound_, env);
+		il_factor_invoke_bound_load(self->u.invoke_bound_, env, cctx);
 	}
 }
 
-generic_type* il_factor_call_op_eval(il_factor_call_op* self, enviroment* env) {
+generic_type* il_factor_call_op_eval(il_factor_call_op* self, enviroment* env, call_context* cctx) {
 	il_factor_call_op_check(self, env);
 	generic_type* ret = NULL;
 	if(self->type == ilcall_type_invoke) {
-		ret = il_factor_invoke_eval(self->u.invoke_, env);
+		ret = il_factor_invoke_eval(self->u.invoke_, env, cctx);
 	} else if(self->type == ilcall_type_invoke_static) {
-		ret =  il_factor_invoke_static_eval(self->u.invoke_static_, env);
+		ret =  il_factor_invoke_static_eval(self->u.invoke_static_, env, cctx);
 	} else if(self->type == ilcall_type_invoke_bound) {
-		ret = il_factor_invoke_bound_eval(self->u.invoke_bound_, env);
+		ret = il_factor_invoke_bound_eval(self->u.invoke_bound_, env, cctx);
 	}
 	if(il_error_panic()) {
 		return ret;
@@ -81,7 +81,7 @@ generic_type* il_factor_call_op_eval(il_factor_call_op* self, enviroment* env) {
 }
 
 char* il_factor_call_op_to_str(il_factor_call_op* self, enviroment* env) {
-	il_factor_call_op_load(self, env);
+//	il_factor_call_op_load(self, env);
 	if(self->type == ilcall_type_invoke) {
 		return il_factor_invoke_tostr(self->u.invoke_, env);
 	} else if(self->type == ilcall_type_invoke_bound) {
@@ -92,14 +92,14 @@ char* il_factor_call_op_to_str(il_factor_call_op* self, enviroment* env) {
 	return NULL;
 }
 
-void il_factor_call_op_generate(il_factor_call_op* self, enviroment* env) {
-	il_factor_call_op_load(self, env);
+void il_factor_call_op_generate(il_factor_call_op* self, enviroment* env, call_context* cctx) {
+	il_factor_call_op_load(self, env, cctx);
 	if(self->type == ilcall_type_invoke) {
-		return il_factor_invoke_generate(self->u.invoke_, env);
+		return il_factor_invoke_generate(self->u.invoke_, env, cctx);
 	} else if(self->type == ilcall_type_invoke_static) {
-		return il_factor_invoke_static_generate(self->u.invoke_static_, env);
+		return il_factor_invoke_static_generate(self->u.invoke_static_, env, cctx);
 	} else if(self->type == ilcall_type_invoke_bound) {
-		return il_factor_invoke_bound_generate(self->u.invoke_bound_, env);
+		return il_factor_invoke_bound_generate(self->u.invoke_bound_, env, cctx);
 	}
 }
 

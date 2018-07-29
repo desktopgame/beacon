@@ -12,7 +12,7 @@
 #include "../../il/il_factor_impl.h"
 
 //proto
-static void il_factor_member_op_check(il_factor_member_op* self, enviroment* env);
+static void il_factor_member_op_check(il_factor_member_op* self, enviroment* env, call_context* cctx);
 static void il_factor_member_op_typearg_delete(vector_item item);
 
 il_factor* il_factor_wrap_member_op(il_factor_member_op* self) {
@@ -40,32 +40,32 @@ void il_factor_member_op_dump(il_factor_member_op* self, int depth) {
 	}
 }
 
-void il_factor_member_op_load(il_factor_member_op* self, enviroment* env) {
-	il_factor_load(self->fact, env);
-	il_factor_member_op_check(self, env);
+void il_factor_member_op_load(il_factor_member_op* self, enviroment* env, call_context* cctx) {
+	il_factor_load(self->fact, env, cctx);
+	il_factor_member_op_check(self, env, cctx);
 }
 
-void il_factor_member_op_generate(il_factor_member_op* self, enviroment* env) {
+void il_factor_member_op_generate(il_factor_member_op* self, enviroment* env, call_context* cctx) {
 	if(modifier_is_static(self->f->modifier)) {
 		opcode_buf_add(env->buf, op_get_static);
 		opcode_buf_add(env->buf, self->f->parent->absolute_index);
 		opcode_buf_add(env->buf, self->index);
 	} else {
-		il_factor_generate(self->fact, env);
+		il_factor_generate(self->fact, env, cctx);
 		opcode_buf_add(env->buf, op_get_field);
 		opcode_buf_add(env->buf, self->index);
 	}
 }
 
-generic_type* il_factor_member_op_eval(il_factor_member_op* self, enviroment* env) {
-	il_factor_member_op_check(self, env);
+generic_type* il_factor_member_op_eval(il_factor_member_op* self, enviroment* env, call_context* cctx) {
+	il_factor_member_op_check(self, env, cctx);
 //	XSTREQ(self->name, "charArray");
 	assert(self->fact != NULL);
 	if(self->f->gtype->tag == generic_type_tag_none) {
 		generic_type* a = self->f->gtype;
 		return a;
 	}
-	generic_type* a = il_factor_eval(self->fact, env);
+	generic_type* a = il_factor_eval(self->fact, env, cctx);
 	return vector_at(a->type_args_list, self->f->gtype->virtual_type_index);
 }
 
@@ -90,13 +90,13 @@ il_factor_member_op* il_factor_cast_member_op(il_factor* fact) {
 	return fact->u.member_;
 }
 //private
-static void il_factor_member_op_check(il_factor_member_op* self, enviroment* env) {
+static void il_factor_member_op_check(il_factor_member_op* self, enviroment* env, call_context* cctx) {
 	if(self->index != -1) {
 		return;
 	}
 	//XSTREQ(self->name, "charArray");
 	il_factor* fact = self->fact;
-	generic_type* gtype = il_factor_eval(fact, env);
+	generic_type* gtype = il_factor_eval(fact, env, cctx);
 	//ファクターから型が特定できない場合は
 	//変数めいを型として静的フィールドで解決する
 	if(gtype == NULL) {

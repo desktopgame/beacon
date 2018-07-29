@@ -20,14 +20,14 @@ void il_factor_super_dump(il_factor_super * self, int depth) {
 	text_putline();
 }
 
-void il_factor_super_generate(il_factor_super * self, enviroment * env) {
+void il_factor_super_generate(il_factor_super * self, enviroment * env, call_context* cctx) {
 	opcode_buf_add(env->buf, op_super);
 }
 
-void il_factor_super_load(il_factor_super * self, enviroment * env) {
+void il_factor_super_load(il_factor_super * self, enviroment * env, call_context* cctx) {
 }
 
-generic_type* il_factor_super_eval(il_factor_super * self, enviroment * env) {
+generic_type* il_factor_super_eval(il_factor_super * self, enviroment * env, call_context* cctx) {
 	type* t = cctop_type();
 	return t->u.class_->super_class;
 }

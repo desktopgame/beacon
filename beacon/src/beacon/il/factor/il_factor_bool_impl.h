@@ -21,9 +21,9 @@ il_factor_bool* il_factor_bool_new(bool b);
 
 void il_factor_bool_dump(il_factor_bool* self, int depth);
 
-void il_factor_bool_generate(il_factor_bool* self, struct enviroment* env);
+void il_factor_bool_generate(il_factor_bool* self, struct enviroment* env, call_context* cctx);
 
-generic_type* il_factor_bool_eval(il_factor_bool* self, struct enviroment* env);
+generic_type* il_factor_bool_eval(il_factor_bool* self, struct enviroment* env, call_context* cctx);
 
 char* il_factor_bool_tostr(il_factor_bool* self, struct enviroment* env);
 

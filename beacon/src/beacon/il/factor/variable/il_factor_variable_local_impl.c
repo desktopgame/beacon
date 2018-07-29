@@ -19,8 +19,8 @@ il_factor_variable_local* il_factor_variable_local_new(string_view namev) {
 	return ret;
 }
 
-void il_factor_variable_local_generate(il_factor_variable_local* self, enviroment* env) {
-	il_factor_variable_local_load(self, env);
+void il_factor_variable_local_generate(il_factor_variable_local* self, enviroment* env, call_context* cctx) {
+	il_factor_variable_local_load(self, env, cctx);
 	assert(self->type != variable_local_undefined);
 	if(self->type == variable_local_scope) {
 		opcode_buf_add(env->buf, (vector_item)op_load);
@@ -32,7 +32,7 @@ void il_factor_variable_local_generate(il_factor_variable_local* self, enviromen
 	}
 }
 
-void il_factor_variable_local_load(il_factor_variable_local * self, enviroment * env) {
+void il_factor_variable_local_load(il_factor_variable_local * self, enviroment * env, call_context* cctx) {
 	if(self->type == variable_local_undefined) {
 		//NOTE:変数宣言の後にその変数を使用する場合、
 		//factorはload時点でシンボルエントリーを取得しようとするが、
@@ -81,8 +81,8 @@ void il_factor_variable_local_load(il_factor_variable_local * self, enviroment *
 	}
 }
 
-generic_type* il_factor_variable_local_eval(il_factor_variable_local * self, enviroment * env) {
-	il_factor_variable_local_load(self, env);
+generic_type* il_factor_variable_local_eval(il_factor_variable_local * self, enviroment * env, call_context* cctx) {
+	il_factor_variable_local_load(self, env, cctx);
 	assert(self->type != variable_local_undefined);
 	return self->gt;
 }

@@ -1,0 +1,19 @@
+namespace err30 {
+	class GenericA[T] {
+		public:
+		T value;
+
+		def new(T value) {
+			this.value = value;
+		}
+	}
+	class GenericB[T] {
+		public:
+		GenericA[T] value;
+
+		def new(T value) {
+			this.value = new GenericA[T](value);
+		}
+	}
+}
+var b = new err30::GenericB[Int]("Hello");

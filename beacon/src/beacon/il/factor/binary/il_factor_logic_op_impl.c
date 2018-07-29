@@ -26,13 +26,13 @@ void il_factor_logic_op_dump(il_factor_logic_op* self, int depth) {
 	text_putline();
 }
 
-generic_type* il_factor_logic_op_eval(il_factor_logic_op* self, enviroment* env) {
-	if(il_factor_binary_op_int_int(self->parent, env)) {
+generic_type* il_factor_logic_op_eval(il_factor_logic_op* self, enviroment* env, call_context* cctx) {
+	if(il_factor_binary_op_int_int(self->parent, env, cctx)) {
 		return TYPE2GENERIC(TYPE_INT);
-	} else if(il_factor_binary_op_bool_bool(self->parent, env)) {
+	} else if(il_factor_binary_op_bool_bool(self->parent, env, cctx)) {
 		return TYPE2GENERIC(TYPE_BOOL);
 	} else {
-		generic_type* lgtype = il_factor_eval(self->parent->left, env);
+		generic_type* lgtype = il_factor_eval(self->parent->left, env, cctx);
 		//プリミティブ型同士でないのに
 		//演算子オーバーロードもない
 		assert(self->operator_index != -1);
@@ -41,29 +41,29 @@ generic_type* il_factor_logic_op_eval(il_factor_logic_op* self, enviroment* env)
 	}
 }
 
-void il_factor_logic_op_generate(il_factor_logic_op* self, enviroment* env) {
+void il_factor_logic_op_generate(il_factor_logic_op* self, enviroment* env, call_context* cctx) {
 	if(self->operator_index == -1) {
-		il_factor_generate(self->parent->right, env);
-		il_factor_generate(self->parent->left, env);
-		if(il_factor_binary_op_int_int(self->parent, env)) {
+		il_factor_generate(self->parent->right, env, cctx);
+		il_factor_generate(self->parent->left, env, cctx);
+		if(il_factor_binary_op_int_int(self->parent, env, cctx)) {
 			opcode_buf_add(env->buf, operator_to_iopcode(self->type));
-		} else if(il_factor_binary_op_bool_bool(self->parent, env)) {
+		} else if(il_factor_binary_op_bool_bool(self->parent, env, cctx)) {
 			opcode_buf_add(env->buf, operator_to_bopcode(self->type));
 		} else {
 			assert(false);
 		}
 	} else {
-		il_factor_generate(self->parent->right, env);
-		il_factor_generate(self->parent->left, env);
+		il_factor_generate(self->parent->right, env, cctx);
+		il_factor_generate(self->parent->left, env, cctx);
 		opcode_buf_add(env->buf, op_invokeoperator);
 		opcode_buf_add(env->buf, self->operator_index);
 	}
 }
 
-void il_factor_logic_op_load(il_factor_logic_op* self, enviroment* env) {
-	if(!il_factor_binary_op_int_int(self->parent, env) &&
-	   !il_factor_binary_op_bool_bool(self->parent, env)) {
-	self->operator_index = il_factor_binary_op_index(self->parent, env);
+void il_factor_logic_op_load(il_factor_logic_op* self, enviroment* env, call_context* cctx) {
+	if(!il_factor_binary_op_int_int(self->parent, env, cctx) &&
+	   !il_factor_binary_op_bool_bool(self->parent, env, cctx)) {
+	self->operator_index = il_factor_binary_op_index(self->parent, env, cctx);
 	}
 }
 

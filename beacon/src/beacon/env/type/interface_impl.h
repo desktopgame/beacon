@@ -4,6 +4,7 @@
 #include "../type_interface.h"
 #include "../namespace.h"
 #include "../vtable.h"
+#include "../../il/call_context.h"
 #include "../../util/vector.h"
 #include "../../util/string_pool.h"
 struct method;
@@ -50,11 +51,11 @@ void interface_add_method(interface_* self, struct method* m);
  * @param namev
  * @param args
  * @param env
- * @param cache
+ * @param cctx
  * @param outIndex
  * @return
  */
-struct method* interface_ilfind_method(interface_* self, string_view namev, vector * args, struct enviroment * env, int * outIndex);
+struct method* interface_ilfind_method(interface_* self, string_view namev, vector * args, struct enviroment * env, call_context* cctx, int * outIndex);
 
 /**
  * インターフェイスからメソッドを検索します.

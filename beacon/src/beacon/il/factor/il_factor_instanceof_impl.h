@@ -16,11 +16,11 @@ il_factor_instanceof* il_factor_instanceof_new();
 
 void il_factor_instanceof_dump(il_factor_instanceof* self, int depth);
 
-void il_factor_instanceof_load(il_factor_instanceof* self, enviroment* env);
+void il_factor_instanceof_load(il_factor_instanceof* self, enviroment* env, call_context* cctx);
 
-void il_factor_instanceof_generate(il_factor_instanceof* self, enviroment* env);
+void il_factor_instanceof_generate(il_factor_instanceof* self, enviroment* env, call_context* cctx);
 
-struct generic_type* il_factor_instanceof_eval(il_factor_instanceof* self, enviroment* env);
+struct generic_type* il_factor_instanceof_eval(il_factor_instanceof* self, enviroment* env, call_context* cctx);
 
 char* il_factor_instanceof_tostr(il_factor_instanceof* self, enviroment* env);
 

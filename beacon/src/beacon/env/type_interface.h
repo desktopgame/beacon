@@ -4,6 +4,7 @@
 #include <stdbool.h>
 #include "../util/vector.h"
 #include "../util/string_pool.h"
+#include "../il/call_context.h"
 
 #define TYPE2CLASS(type) (type_cast_class(type))
 #define TYPE2INTERFACE(type) (type_cast_interface(type))
@@ -99,10 +100,11 @@ void type_add_method(type* self, struct method* m);
  * @param namev
  * @param args
  * @param env
+ * @param cctx
  * @param outIndex
  * @return
  */
-struct method* type_ilfind_method(type* self, string_view namev, vector* args, struct enviroment* env, int* outIndex);
+struct method* type_ilfind_method(type* self, string_view namev, vector* args, struct enviroment* env, call_context* cctx, int* outIndex);
 
 /**
  * この型から静的メソッドを検索します.
@@ -110,10 +112,11 @@ struct method* type_ilfind_method(type* self, string_view namev, vector* args, s
  * @param namev
  * @param args
  * @param env
+ * @param cctx
  * @param outIndex
  * @return
  */
-struct method* type_ilfind_smethod(type* self, string_view namev, vector* args, struct enviroment* env, int* outIndex);
+struct method* type_ilfind_smethod(type* self, string_view namev, vector* args, struct enviroment* env, call_context* cctx, int* outIndex);
 
 /**
  * 仮想関数の一覧を返します.

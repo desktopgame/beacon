@@ -3,6 +3,7 @@
 #include "../il_parameter.h"
 #include "../../util/vector.h"
 #include "../../env/generic_cache.h"
+#include "../call_context.h"
 struct il_factor;
 struct type;
 struct enviroment;
@@ -22,11 +23,11 @@ il_factor_lambda* il_factor_lambda_new();
 
 void il_factor_lambda_dump(il_factor_lambda* self, int depth);
 
-void il_factor_lambda_generate(il_factor_lambda* self, struct enviroment* env);
+void il_factor_lambda_generate(il_factor_lambda* self, struct enviroment* env, call_context* cctx);
 
-void il_factor_lambda_load(il_factor_lambda* self, struct enviroment* env);
+void il_factor_lambda_load(il_factor_lambda* self, struct enviroment* env, call_context* cctx);
 
-struct generic_type* il_factor_lambda_eval(il_factor_lambda* self, struct enviroment* env);
+struct generic_type* il_factor_lambda_eval(il_factor_lambda* self, struct enviroment* env, call_context* cctx);
 
 char* il_factor_lambda_tostr(il_factor_lambda* self, struct enviroment* env);
 

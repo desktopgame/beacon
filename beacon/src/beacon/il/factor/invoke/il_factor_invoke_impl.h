@@ -20,11 +20,11 @@ il_factor_invoke* il_factor_invoke_new(string_view namev);
 
 void il_factor_invoke_dump(il_factor_invoke* self, int depth);
 
-void il_factor_invoke_generate(il_factor_invoke* self, struct enviroment* env);
+void il_factor_invoke_generate(il_factor_invoke* self, struct enviroment* env, call_context* cctx);
 
-void il_factor_invoke_load(il_factor_invoke * self, struct enviroment * env);
+void il_factor_invoke_load(il_factor_invoke * self, struct enviroment * env, call_context* cctx);
 
-struct generic_type* il_factor_invoke_eval(il_factor_invoke * self, struct enviroment * env);
+struct generic_type* il_factor_invoke_eval(il_factor_invoke * self, struct enviroment * env, call_context* cctx);
 
 char* il_factor_invoke_tostr(il_factor_invoke* self, struct enviroment* env);
 

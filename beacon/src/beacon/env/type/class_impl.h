@@ -8,6 +8,7 @@
 #include "../../ast/operator_type.h"
 #include "../../vm/enviroment.h"
 #include "../../util/vector.h"
+#include "../../il/call_context.h"
 #include "../../util/numeric_map.h"
 #include "../../util/string_pool.h"
 //#include "../access_domain.h"
@@ -209,33 +210,33 @@ struct constructor* class_rfind_constructor(class_* self, vector* args, vector* 
  * @param self
  * @param args<il_argument*> 呼び出し側で開放してください.
  * @param env
- * @param cache
+ * @param cctx
  * @param outIndex
  * @return 無ければ空
  */
-struct constructor* class_ilfind_constructor(class_* self, vector* args, enviroment* env, int* outIndex);
+struct constructor* class_ilfind_constructor(class_* self, vector* args, enviroment* env, call_context* cctx, int* outIndex);
 
 /**
  * 引数が一つもないコンストラクタを検索して返します.
  * @param self
  * @param env
- * @param cache
+ * @param cctx
  * @param outIndex
  * @return
  */
-struct constructor* class_ilfind_empty_constructor(class_* self, enviroment* env, int* outIndex);
+struct constructor* class_ilfind_empty_constructor(class_* self, enviroment* env, call_context* cctx, int* outIndex);
 
 /**
  * もっとも一致するメソッドを返します.
  * @param self
  * @param namev
  * @param env
- * @param cache
+ * @param cctx
  * @param args<il_argument*>
  * @param outIndex メソッドへのインデックス
  * @return
  */
-struct method* class_ilfind_method(class_* self, string_view namev, vector* args, enviroment* env, int* outIndex);
+struct method* class_ilfind_method(class_* self, string_view namev, vector* args, enviroment* env, call_context* cctx, int* outIndex);
 
 /**
  * もっとも一致するメソッドを返します.
@@ -260,12 +261,12 @@ struct method* class_gfind_eqmethod(class_* self, int* outIndex);
  * @param self
  * @param namev
  * @param env
- * @param cache
+ * @param cctx
  * @param args<il_argument*>
  * @param outIndex メソッドへのインデックス
  * @return
  */
-struct method* class_ilfind_smethod(class_* self, string_view namev, vector* args, enviroment* env, int* outIndex);
+struct method* class_ilfind_smethod(class_* self, string_view namev, vector* args, enviroment* env, call_context* cctx, int* outIndex);
 
 /**
  * もっとも一致する静的メソッドを返します.

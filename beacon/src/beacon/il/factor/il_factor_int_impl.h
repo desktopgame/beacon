@@ -20,11 +20,11 @@ il_factor_int* il_factor_int_malloc(int32_t i, const char* filename, int lineno)
 
 void il_factor_int_dump(il_factor_int* self, int depth);
 
-void il_factor_int_generate(il_factor_int* self, struct enviroment* env);
+void il_factor_int_generate(il_factor_int* self, struct enviroment* env, call_context* cctx);
 
-void il_factor_int_load(il_factor_int* self, struct enviroment* env);
+void il_factor_int_load(il_factor_int* self, struct enviroment* env, call_context* cctx);
 
-generic_type* il_factor_int_eval(il_factor_int* self, struct enviroment* env);
+generic_type* il_factor_int_eval(il_factor_int* self, struct enviroment* env, call_context* cctx);
 
 char* il_factor_int_tostr(il_factor_int* self, struct enviroment* env);
 

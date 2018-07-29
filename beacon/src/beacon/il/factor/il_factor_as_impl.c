@@ -29,15 +29,15 @@ void il_factor_as_dump(il_factor_as * self, int depth) {
 	il_factor_dump(self->fact, depth + 1);
 }
 
-void il_factor_as_generate(il_factor_as * self, enviroment * env) {
-	il_factor_generate(self->fact, env);
+void il_factor_as_generate(il_factor_as * self, enviroment * env, call_context* cctx) {
+	il_factor_generate(self->fact, env, cctx);
 }
 
-void il_factor_as_load(il_factor_as * self, enviroment * env) {
-	il_factor_load(self->fact, env);
+void il_factor_as_load(il_factor_as * self, enviroment * env, call_context* cctx) {
+	il_factor_load(self->fact, env, cctx);
 }
 
-generic_type* il_factor_as_eval(il_factor_as * self, enviroment * env) {
+generic_type* il_factor_as_eval(il_factor_as * self, enviroment * env, call_context* cctx) {
 	namespace_* n = cctop_namespace();
 	return import_manager_resolve(ccget_class_loader()->import_manager, n, self->fqcn);
 }
