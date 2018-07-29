@@ -99,55 +99,6 @@ void mem_dump() {
 	#endif
 }
 
-void mem_read(const char* filename) {
-	#if defined(MEMORY_MANAGEMENT)
-	FILE* fp = fopen(filename, "rb");
-	if(fp == NULL) {
-		fprintf(stderr, "can't opening file: %s", filename);
-		return;
-	}
-	//全てのメモリリークの数を取得する
-	int count = -1;
-	fread(&count, sizeof(int), 1, fp);
-	for(int i=0; i<count; i++) {
-		int index = -1;
-		fread(&index, sizeof(int), 1, fp);
-		fprintf(stderr, "leak: %d\n", index);
-		if(i == 0) {
-			mem_break(index);
-		}
-	}
-	fclose(fp);
-	#endif
-}
-
-void mem_write(const char* filename) {
-	#if defined(MEMORY_MANAGEMENT)
-	FILE* fp = fopen(filename, "wb");
-	if(fp == NULL) {
-		fprintf(stderr, "can't opening file: %s", filename);
-		return;
-	}
-	//全ての情報を出力します
-	slot* iter = gHead;
-	int count = 0;
-	while(iter != NULL) {
-		fwrite(&iter->index, sizeof(int), 1, fp);
-		iter = iter->next;
-		count++;
-	}
-	rewind(fp);
-	fwrite(&count, sizeof(int), 1, fp);
-	fclose(fp);
-	#endif
-}
-
-void mem_mark(void* p, size_t size, const char* filename, int lineno) {
-	#if defined(MEMORY_MANAGEMENT)
-//	slot_append(slot_new(size, p, filename, lineno));
-	#endif
-}
-
 void mem_break(int count) {
 	gBreak = count;
 }

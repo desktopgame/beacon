@@ -66,16 +66,6 @@ int main_cl(int argc, char *argv[]) {
 }
 
 int main(int argc, char *argv[]) {
-	/*
-	typedef unsigned char uchar;
-	uchar* a = malloc(sizeof(uchar) * 24);
-	mem_fprint(stdout, a, 24);
-	memset(a, 0xCD, 24);
-	mem_fprint(stdout, a, 24);
-	*/
-	//*
-	//先んじて設定を行っておく
-	//mem_read("mem.dbg");
 	string_pool_init();
 	il_print_layout_hide(true);
 	//コマンドライン引数を解析して実行
@@ -83,9 +73,7 @@ int main(int argc, char *argv[]) {
 	//設定を元に戻す
 	string_pool_dump(stdout);
 	string_pool_destroy();
-	mem_write("mem.dbg");
 	mem_dump();
 	mem_destroy();
 	return ret;
-	//*/
 }
