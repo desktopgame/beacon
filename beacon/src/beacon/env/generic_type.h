@@ -180,13 +180,6 @@ generic_type* generic_type_rapply(generic_type* self, struct call_context* cctx,
 struct type* generic_type_to_type(generic_type* self);
 
 /**
- * @param super
- * @param sub
- * @return
- */
-bool generic_type_override(generic_type* super, generic_type* sub);
-
-/**
  * @param a
  * @param b
  * @return

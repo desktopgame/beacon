@@ -203,28 +203,8 @@ generic_type* generic_type_rapply(generic_type* self, call_context* cctx, frame*
 	return generic_type_applyImpl(self, cctx, fr);
 }
 
-
 struct type* generic_type_to_type(generic_type* self) {
 	return self->core_type;
-}
-
-bool generic_type_override(generic_type* super, generic_type* sub) {
-	if(super->virtual_type_index != -1) {
-		return true;
-	}
-	if(sub->virtual_type_index != -1) {
-		//ここでsubの境界がsuperを含む必要がある
-		return false;
-	}
-	int ret = type_distance(super->core_type, sub->core_type);
-	if(ret == -1) {
-		return false;
-	}
-	for(int i=0; i<super->type_args_list->length; i++) {
-		generic_type* superP = vector_at(super->type_args_list, i);
-		generic_type* subP = vector_at(sub->type_args_list, i);
-	}
-	return true;
 }
 
 bool generic_type_equals(generic_type* a, generic_type* b) {
