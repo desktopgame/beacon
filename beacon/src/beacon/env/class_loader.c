@@ -336,8 +336,7 @@ static void class_loader_load_toplevel(class_loader* self) {
 	createWorldStmt->fact->lineno = 0;
 	//worldをselfにする
 	il_error_enter();
-	call_context* cctx = call_context_new();
-	call_frame* cfr = call_context_push(cctx, call_top_T);
+	call_context* cctx = call_context_new(call_top_T);
 	il_stmt_load(body, self->env, cctx);
 	il_stmt_generate(body, self->env, cctx);
 	il_error_exit();
@@ -349,7 +348,6 @@ static void class_loader_load_toplevel(class_loader* self) {
 	//以下読み込み
 	CLBC_body(self, self->il_code->statement_list, self->env, cctx, NULL);
 	il_stmt_delete(body);
-	call_context_pop(cctx);
 	call_context_delete(cctx);
 	script_context_cache();
 }
@@ -358,31 +356,34 @@ static void class_loader_load_toplevel_function(class_loader* self) {
 	if(self->level != 0) {
 		return;
 	}
-	call_context* cctx = call_context_new();
-	cctx->space = namespace_lang();
 	vector* funcs = self->il_code->function_list;
 	type* worldT = namespace_get_type(namespace_lang(), string_pool_intern("World"));
-	namespace_* loc = call_context_namespace(cctx);
 	for(int i=0; i<funcs->length; i++) {
 		il_function* ilfunc = vector_at(funcs, i);
 		method* m = method_new(ilfunc->namev);
 		script_method* sm = script_method_new();
 		enviroment* env = enviroment_new();
+		//call_contextの設定
+		call_context* cctx = call_context_new(call_method_T);
+		cctx->space = namespace_lang();
+		cctx->ty = worldT;
+		cctx->u.mt = m;
+		namespace_* loc = call_context_namespace(cctx);
 		env->context_ref = self;
 		sm->env = env;
 		m->access = access_private;
 		m->u.script_method = sm;
 		//戻り値を指定
-		m->return_gtype = import_manager_resolve(self->import_manager, loc, ilfunc->return_fqcn);
+		m->return_gtype = import_manager_resolve(self->import_manager, loc, ilfunc->return_fqcn, cctx);
 		//引数を指定
 		for(int j=0; j<ilfunc->parameter_list->length; j++) {
 			il_parameter* ilparam = vector_at(ilfunc->parameter_list, j);
 			parameter* param = parameter_new(ilparam->namev);
 			vector_push(m->parameter_list, param);
-			param->gtype = import_manager_resolve(self->import_manager, loc, ilparam->fqcn);
+			param->gtype = import_manager_resolve(self->import_manager, loc, ilparam->fqcn, cctx);
 			symbol_table_entry(
 				env->sym_table,
-				import_manager_resolve(self->import_manager, loc, ilparam->fqcn),
+				import_manager_resolve(self->import_manager, loc, ilparam->fqcn, cctx),
 				ilparam->namev
 			);
 			//実引数を保存
@@ -395,8 +396,6 @@ static void class_loader_load_toplevel_function(class_loader* self) {
 		vector_push(worldT->u.class_->method_list, m);
 		il_error_enter();
 		//中身をロード
-		call_frame* cfr = call_context_push(cctx, call_method_T);
-		cfr->u.m = m;
 		for(int j=0; j<ilfunc->statement_list->length; j++) {
 			il_stmt* stmt = vector_at(ilfunc->statement_list, j);
 			il_stmt_load(stmt, env, cctx);
@@ -406,8 +405,7 @@ static void class_loader_load_toplevel_function(class_loader* self) {
 			il_stmt* stmt = vector_at(ilfunc->statement_list, j);
 			il_stmt_generate(stmt, env, cctx);
 		}
-		call_context_pop(cctx);
+		call_context_delete(cctx);
 		il_error_exit();
 	}
-	call_context_delete(cctx);
 }

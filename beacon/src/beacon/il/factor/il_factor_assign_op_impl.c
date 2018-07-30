@@ -44,7 +44,7 @@ void il_factor_assign_op_generate(il_factor_assign_op* self, enviroment* env, ca
 			il_factor_variable* ilvar = IL_FACT2VAR(ilsrc);
 			//staticなフィールドへの代入
 			if(ilvar->type == ilvariable_type_static) {
-				class_* cls = NULL;
+				class_* cls = TYPE2CLASS(call_context_eval_type(cctx, ilvar->u.static_->fqcn));
 				int temp = -1;
 				class_find_sfield(cls, ilmem->namev, &temp);
 				assert(temp != -1);

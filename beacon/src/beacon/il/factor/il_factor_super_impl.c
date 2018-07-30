@@ -27,7 +27,7 @@ void il_factor_super_load(il_factor_super * self, enviroment * env, call_context
 }
 
 generic_type* il_factor_super_eval(il_factor_super * self, enviroment * env, call_context* cctx) {
-	type* t = NULL;
+	type* t = call_context_type(cctx);
 	return t->u.class_->super_class;
 }
 

@@ -8,6 +8,7 @@
 #include "namespace.h"
 #include "object.h"
 #include "../util/mem.h"
+#include "../il/call_context.h"
 #include "../vm/vm.h"
 #include "type_parameter.h"
 #include "generic_type.h"
@@ -16,6 +17,7 @@
 //proto
 static void method_parameter_delete(vector_item item);
 static void method_type_parameter_delete(vector_item item);
+static void generic_type_diff(generic_type* a, generic_type* b);
 
 method* method_malloc(string_view namev, const char* filename, int lineno) {
 	method* ret = (method*)mem_malloc(sizeof(method), filename, lineno);
@@ -88,25 +90,41 @@ void method_dump(method * self, int depth) {
 	}
 }
 
-bool method_override(method* superM, method* subM) {
+bool method_override(method* superM, method* subM, call_context* cctx) {
 	//名前が違うか引数の数が違う
 	if (superM->namev != subM->namev ||
 		superM->parameter_list->length != subM->parameter_list->length) {
 		return false;
 	}
+	generic_type* bl = type_baseline(superM->parent, subM->parent);
+	assert(bl != NULL);
 	//全ての引数を比較
 	for (int i = 0; i < superM->parameter_list->length; i++) {
 		parameter* superP = ((parameter*)vector_at(superM->parameter_list, i));
 		parameter* subP = ((parameter*)vector_at(subM->parameter_list, i));
 		generic_type* superGT = superP->gtype;
-		generic_type* superGT2 = generic_type_apply(superGT);
 		generic_type* subGT = subP->gtype;
-		if(generic_type_distance(superGT2, subGT) != 0) { return false; }
+
+		call_frame* cfr = call_context_push(cctx, call_ctor_call_T);
+		cfr->u.ctor_call.self = bl;
+		generic_type* superGT2 = generic_type_apply(superGT, cctx);
+		call_context_pop(cctx);
+//		assert(!generic_type_equals(superGT, superGT2));
+
+//		generic_type_diff(superGT, superGT2);
+		if(generic_type_distance(superGT2, subGT) != 0) {
+			return false;
+		}
 	}
 	generic_type* superRet = superM->return_gtype;
-	generic_type* superRet2 = generic_type_apply(superRet);
 	generic_type* subRet = subM->return_gtype;
+	call_frame* cfr = call_context_push(cctx, call_ctor_call_T);
+	cfr->u.ctor_call.self = bl;
+	generic_type* superRet2 = generic_type_apply(superRet, cctx);
+//	generic_type_diff(superRet, superRet2);
+//	assert(!generic_type_equals(superRet, superRet2));
 	int ret =generic_type_distance(superRet2, subRet);
+	call_context_pop(cctx);
 	return ret != -1;
 }
 
@@ -149,4 +167,11 @@ static void method_parameter_delete(vector_item item) {
 static void method_type_parameter_delete(vector_item item) {
 	type_parameter* e = (type_parameter*)item;
 	type_parameter_delete(e);
+}
+
+static void generic_type_diff(generic_type* a, generic_type* b) {
+	generic_type_print(a);
+	text_printf(" ");
+	generic_type_print(b);
+	text_putline();
 }

@@ -14,13 +14,13 @@ struct method;
 struct enviroment;
 struct virtual_type;
 struct frame;
+struct call_context;
 /**
  * 型変数つきの型宣言の型引数では generic_type 自身が使われますが、
  * それ自体が型変数の場合、何の型変数を指しているかを示す列挙型です.
  */
 typedef enum generic_type_tag {
 	generic_type_tag_none,
-	generic_type_tag_ctor,
 	generic_type_tag_class,
 	generic_type_tag_method,
 	generic_type_tag_self,
@@ -157,10 +157,10 @@ void generic_type_generate(generic_type* self, struct enviroment* env);
  * 現在のコンテキストで self の型変数を解決します.
  * T ではなく T を内包する型(List<T>) などが戻り値になる時に使用されます。
  * @param self
- * @param ilctx
+ * @param cctx
  * @return
  */
-generic_type* generic_type_apply(generic_type* self);
+generic_type* generic_type_apply(generic_type* self, struct call_context* cctx);
 /**
  * 現在のコンテキストで self の型変数を解決します.
  * T ではなく T を内包する型(List<T>) などが戻り値になる時に使用されます。
@@ -168,7 +168,7 @@ generic_type* generic_type_apply(generic_type* self);
  * @param fr
  * @return
  */
-generic_type* generic_type_rapply(generic_type* self, struct frame* fr);
+generic_type* generic_type_rapply(generic_type* self, struct call_context* cctx, struct frame* fr);
 
 /**
  * generic_type を type へ変換します.
@@ -183,4 +183,11 @@ struct type* generic_type_to_type(generic_type* self);
  * @return
  */
 bool generic_type_override(generic_type* super, generic_type* sub);
+
+/**
+ * @param a
+ * @param b
+ * @return
+ */
+bool generic_type_equals(generic_type* a, generic_type* b);
 #endif // !SIGNAL_ENV_GENERIC_TYPE_H

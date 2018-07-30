@@ -11,9 +11,9 @@
 #include <assert.h>
 
 //proto
-static void il_factor_call_op_check(il_factor_call_op* self, enviroment* env);
+static void il_factor_call_op_check(il_factor_call_op* self, enviroment* env, call_context* cctx);
 static void il_factor_invoke_bound_check(il_factor_call_op* self, enviroment* env);
-static void il_factor_member_op_check(il_factor_call_op* self, enviroment* env);
+static void il_factor_member_op_check(il_factor_call_op* self, enviroment* env, call_context* cctx);
 
 static void il_factor_call_op_argument_delete(vector_item item);
 static void il_factor_call_op_type_argument_delete(vector_item item);
@@ -54,7 +54,7 @@ void il_factor_call_op_dump(il_factor_call_op* self, int depth) {
 void il_factor_call_op_load(il_factor_call_op* self, enviroment* env, call_context* cctx) {
 	//argumentlistはサブクラスに渡しちゃってる
 	//il_factor_load(self->receiver, env, ilctx, eh);
-	il_factor_call_op_check(self, env);
+	il_factor_call_op_check(self, env, cctx);
 	if(self->type == ilcall_type_invoke) {
 		il_factor_invoke_load(self->u.invoke_, env, cctx);
 	} else if(self->type == ilcall_type_invoke_static) {
@@ -65,7 +65,7 @@ void il_factor_call_op_load(il_factor_call_op* self, enviroment* env, call_conte
 }
 
 generic_type* il_factor_call_op_eval(il_factor_call_op* self, enviroment* env, call_context* cctx) {
-	il_factor_call_op_check(self, env);
+	il_factor_call_op_check(self, env, cctx);
 	generic_type* ret = NULL;
 	if(self->type == ilcall_type_invoke) {
 		ret = il_factor_invoke_eval(self->u.invoke_, env, cctx);
@@ -122,7 +122,7 @@ il_factor_call_op* il_factor_cast_call_op(il_factor* fact) {
 }
 
 //private
-static void il_factor_call_op_check(il_factor_call_op* self, enviroment* env) {
+static void il_factor_call_op_check(il_factor_call_op* self, enviroment* env, call_context* cctx) {
 	if(self->type != ilcall_type_undefined) {
 		return;
 	}
@@ -132,7 +132,7 @@ static void il_factor_call_op_check(il_factor_call_op* self, enviroment* env) {
 		il_factor_invoke_bound_check(self, env);
 	//hoge().hoge() Namespace::Class.foo() の場合
 	} else if(receiver->type == ilfactor_member_op) {
-		il_factor_member_op_check(self, env);
+		il_factor_member_op_check(self, env, cctx);
 	}
 	assert(self->type != ilcall_type_undefined);
 }
@@ -151,7 +151,7 @@ static void il_factor_invoke_bound_check(il_factor_call_op* self, enviroment* en
 	self->type = ilcall_type_invoke_bound;
 }
 
-static void il_factor_member_op_check(il_factor_call_op* self, enviroment* env) {
+static void il_factor_member_op_check(il_factor_call_op* self, enviroment* env, call_context* cctx) {
 	il_factor* receiver = self->receiver;
 	il_factor_member_op* ilmem = IL_FACT2MEM(receiver);
 	//hoge.foo
@@ -172,7 +172,7 @@ static void il_factor_member_op_check(il_factor_call_op* self, enviroment* env) 
 		//hoge.foo()
 		} else {
 			//FIXME:kコピペ
-			namespace_* cur = NULL;
+			namespace_* cur = call_context_namespace(cctx);
 			class_* ctype = namespace_get_class(cur, ilvar->fqcn->namev);
 			if(ctype == NULL) {
 				ctype = namespace_get_class(namespace_lang(), ilvar->fqcn->namev);

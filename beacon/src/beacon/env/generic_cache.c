@@ -70,6 +70,26 @@ void generic_cache_delete(generic_cache * self) {
 	vector_delete(self->type_args, generic_cache_tree_delete);
 	MEM_FREE(self);
 }
+
+bool generic_cache_equals(generic_cache* a, generic_cache* b) {
+	if(a->type_args->length != b->type_args->length) {
+		return false;
+	}
+	if(!fqcn_cache_equals(a->fqcn, b->fqcn)) {
+		return false;
+	}
+	if(a == b) {
+		return true;
+	}
+	for(int i=0; i<a->type_args->length; i++) {
+		generic_cache* ag = vector_at(a->type_args, i);
+		generic_cache* bg = vector_at(b->type_args, i);
+		if(!generic_cache_equals(ag, bg)) {
+			return false;
+		}
+	}
+	return true;
+}
 //private
 static void generic_cache_tree_delete(vector_item item) {
 	generic_cache* e = (generic_cache*)item;

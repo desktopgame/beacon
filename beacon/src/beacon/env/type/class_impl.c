@@ -292,7 +292,11 @@ constructor * class_ilfind_constructor(class_ * self, vector * args, enviroment 
 	//	vector* v = meta_find_constructors(self, args, env, ilctx);
 	//	(*outIndex) = -1;
 	//	return class_find_constructor_impl(v, args, env, ilctx, outIndex);
-	return meta_scoped_ilfind_ctor(self, self->constructor_list, args, env, cctx, outIndex);
+	call_frame* cfr = call_context_push(cctx, call_ctor_call_T);
+	cfr->u.ctor_call.self = self->parent->generic_self;
+	constructor* ctor = meta_scoped_ilfind_ctor(self, self->constructor_list, args, env, cctx, outIndex);
+	call_context_pop(cctx);
+	return ctor;
 }
 
 constructor * class_ilfind_empty_constructor(class_ * self, enviroment * env, call_context* cctx, int * outIndex) {
@@ -351,6 +355,9 @@ method* class_gfind_eqmethod(class_* self, int* outIndex) {
 }
 
 method * class_ilfind_smethod(class_ * self, string_view namev, vector * args, enviroment * env, call_context* cctx, int * outIndex) {
+	#if defined(DEBUG)
+	const char* str = string_pool_ref2str(namev);
+	#endif
 	(*outIndex) = -1;
 	class_create_vtable(self);
 	int temp = 0;
@@ -471,13 +478,17 @@ bool class_contains_method_tree(class_* self, method* m) {
 bool class_contains_method(vector* method_list, method* m) {
 	assert(!modifier_is_static(m->modifier));
 	bool ret = false;
+	call_context* cctx = call_context_new(call_decl_T);
+	cctx->space = m->parent->location;
+	cctx->ty = m->parent;
 	for(int i=0; i<method_list->length; i++) {
 		method* mE = vector_at(method_list, i);
-		if(method_override(m, mE)) {
+		if(method_override(m, mE, cctx)) {
 			ret = true;
 			break;
 		}
 	}
+	call_context_delete(cctx);
 	return ret;
 }
 
@@ -733,15 +744,22 @@ static void class_create_vtable_top(class_* self) {
 }
 
 static void class_create_vtable_override(class_* self) {
+	#if defined(DEBUG)
+	const char* clname = string_pool_ref2str(self->namev);
+	#endif
+	call_context* cctx = call_context_new(call_decl_T);
+	cctx->space = self->parent->location;
+	cctx->ty = self->super_class->core_type;
 	class_create_vtable(self->super_class->core_type->u.class_);
 	vtable_copy(self->super_class->core_type->u.class_->vt, self->vt);
 	for (int i = 0; i < self->method_list->length; i++) {
 		method* m = (method*)vector_at(self->method_list, i);
 		if(m->access != access_private &&
 		   !modifier_is_static(m->modifier)) {
-			vtable_replace(self->vt, m);
+			vtable_replace(self->vt, m, cctx);
 		}
 	}
+	call_context_delete(cctx);
 }
 
 static void class_create_vtable_interface(class_* self) {
@@ -793,15 +811,19 @@ static void class_native_method_ref_delete(numeric_key key, numeric_map_item ite
 }
 
 static method* class_find_impl_method(class_* self, method* virtualMethod) {
+	call_context* cctx = call_context_new(call_decl_T);
+	cctx->space = self->parent->location;
+	cctx->ty = self->parent;
 	method* ret = NULL;
 	vtable* clVT = self->vt;
 	for (int i = 0; i < clVT->elements->length; i++) {
 		method* clM = vector_at(clVT->elements, i);
-		if (method_override(virtualMethod, clM)) {
+		if (method_override(virtualMethod, clM, cctx)) {
 			ret = clM;
 			break;
 		}
 	}
+	call_context_delete(cctx);
 	return ret;
 }
 

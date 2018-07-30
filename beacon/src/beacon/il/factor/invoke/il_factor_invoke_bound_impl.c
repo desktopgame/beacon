@@ -9,8 +9,8 @@
 #include "../../il_type_argument.h"
 
 //proto
-static void resolve_non_default(il_factor_invoke_bound * self, enviroment * env);
-static void resolve_default(il_factor_invoke_bound * self, enviroment * env);
+static void resolve_non_default(il_factor_invoke_bound * self, enviroment * env, call_context* cctx);
+static void resolve_default(il_factor_invoke_bound * self, enviroment * env, call_context* cctx);
 static void il_factor_invoke_bound_check(il_factor_invoke_bound * self, enviroment * env, call_context* cctx);
 static void il_factor_invoke_bound_args_delete(vector_item item);
 
@@ -79,11 +79,11 @@ generic_type* il_factor_invoke_bound_eval(il_factor_invoke_bound * self, envirom
 		return NULL;
 	}
 	if(self->m->return_gtype->tag != generic_type_tag_none) {
-		resolve_non_default(self, env);
+		resolve_non_default(self, env, cctx);
 		assert(self->resolved != NULL);
 		return self->resolved;
 	} else {
-		resolve_default(self, env);
+		resolve_default(self, env, cctx);
 		assert(self->resolved != NULL);
 		return self->resolved;
 	}
@@ -107,7 +107,7 @@ void il_factor_invoke_bound_delete(il_factor_invoke_bound* self) {
 }
 //private
 //FIXME:il_factor_invokeからのコピペ
-static void resolve_non_default(il_factor_invoke_bound * self, enviroment * env) {
+static void resolve_non_default(il_factor_invoke_bound * self, enviroment * env, call_context* cctx) {
 	if(self->resolved != NULL) {
 		return;
 	}
@@ -126,13 +126,13 @@ static void resolve_non_default(il_factor_invoke_bound * self, enviroment * env)
 	}
 }
 
-static void resolve_default(il_factor_invoke_bound * self, enviroment * env) {
+static void resolve_default(il_factor_invoke_bound * self, enviroment * env, call_context* cctx) {
 	if(self->resolved != NULL) {
 		return;
 	}
 	generic_type* rgtp = self->m->return_gtype;
 //	virtual_type returnvType = self->m->return_vtype;
-	self->resolved = generic_type_apply(rgtp);
+	self->resolved = generic_type_apply(rgtp, cctx);
 }
 
 static void il_factor_invoke_bound_check(il_factor_invoke_bound * self, enviroment * env, call_context* cctx) {
@@ -140,9 +140,9 @@ static void il_factor_invoke_bound_check(il_factor_invoke_bound * self, envirome
 		return;
 	}
 	//対応するメソッドを検索
-	type* ctype = NULL;
+	type* ctype = call_context_type(cctx);
 	int temp = -1;
-	il_type_argument_resolve(self->type_args);
+	il_type_argument_resolve(self->type_args, cctx);
 	for(int i=0; i<self->args->length; i++) {
 		il_argument* ilarg = vector_at(self->args, i);
 		il_factor_load(ilarg->factor, env, cctx);

@@ -1,2 +1,8 @@
-printLine(1.+(1));
-printLine(1 + 1);
+namespace beacon {
+	class NotIterableImplXX : Iterable[Int] {
+		public:
+		def iterate() -> Object {
+			
+		}
+	}
+}

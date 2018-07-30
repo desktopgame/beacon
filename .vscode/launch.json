@@ -5,7 +5,7 @@
 	"version": "0.2.0",
 	"configurations": [
 		{
-			"name": "(lldb) Launch",
+			"name": "(lldb) Test",
 			"type": "cppdbg",
 			"request": "launch",
 			"program": "${workspaceFolder}/beacon/bin/a.out",
@@ -16,7 +16,18 @@
 			"MIMode": "lldb"
 		},
 		{
-			"name": "(lldb) Test",
+			"name": "(lldb) Run",
+			"type": "cppdbg",
+			"request": "launch",
+			"program": "${workspaceFolder}/beacon/bin/a.out",
+			"args": ["--run", "main.bc"],
+			"stopAtEntry": false,
+			"cwd": "${workspaceFolder}/beacon/bin",
+			"environment": [],
+			"MIMode": "lldb"
+		},
+		{
+			"name": "(lldb) Scratch",
 			"type": "cppdbg",
 			"request": "launch",
 			"program": "${workspaceFolder}/beacon/scratch/bin/a.out",

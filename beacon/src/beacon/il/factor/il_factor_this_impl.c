@@ -27,7 +27,7 @@ void il_factor_this_load(il_factor_this * self, enviroment * env, call_context* 
 }
 
 generic_type* il_factor_this_eval(il_factor_this * self, enviroment * env, call_context* cctx) {
-	return NULL;
+	return call_context_type(cctx)->generic_self;
 }
 
 char* il_factor_this_tostr(il_factor_this* self, enviroment* env) {

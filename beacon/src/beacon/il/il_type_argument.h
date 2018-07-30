@@ -3,6 +3,7 @@
 #include "../env/generic_cache.h"
 #include "../env/generic_type.h"
 #include "../util/vector.h"
+struct call_context;
 
 /**
  * 型実引数を表す構造体.
@@ -26,10 +27,10 @@ void il_type_argument_print(vector* iltype_args);
 
 /**
  * @param iltype_args
- * @param ilctx
+ * @param cctx
  * @return
  */
-void il_type_argument_resolve(vector* iltype_args);
+void il_type_argument_resolve(vector* iltype_args, struct call_context* cctx);
 
 /**
  * 型実引数を解放します.

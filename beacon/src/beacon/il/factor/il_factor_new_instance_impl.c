@@ -96,7 +96,7 @@ generic_type* il_factor_new_instance_eval(il_factor_new_instance * self, envirom
 		generic_type* a = generic_type_new(self->c->parent);
 		for (int i = 0; i < self->type_args->length; i++) {
 			il_type_argument* e = (il_type_argument*)vector_at(self->type_args, i);
-			generic_type* arg = import_manager_resolve(NULL, NULL, e->gcache);
+			generic_type* arg = import_manager_resolve(NULL, NULL, e->gcache, cctx);
 			generic_type_addargs(a, arg);
 		}
 		self->instance_type = a;
@@ -137,13 +137,17 @@ static void il_factor_new_instance_find(il_factor_new_instance * self, enviromen
 	if(self->constructor_index != -1) {
 		return;
 	}
-	class_* cls = NULL;
-	int temp = -1;
-	if(cls == NULL) {
+	#if defined(DEBUG)
+	const char* namea = string_pool_ref2str(self->fqcnc->namev);
+	#endif
+	type* ty = call_context_eval_type(cctx, self->fqcnc);
+	if(ty == NULL) {
 		il_error_report(ilerror_undefined_class, string_pool_ref2str(self->fqcnc->namev));
 		return;
 	}
-	il_type_argument_resolve(self->type_args);
+	class_* cls = TYPE2CLASS(ty);
+	int temp = -1;
+	il_type_argument_resolve(self->type_args, cctx);
 	self->c = class_ilfind_constructor(cls, self->argument_list, env, cctx, &temp);
 	self->constructor_index = temp;
 	if(temp == -1) {

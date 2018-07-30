@@ -89,7 +89,9 @@
 			"stdint.h": "c",
 			"stdio.h": "c",
 			"il_print_layout.h": "c",
-			"il_factor_assign_op_impl.h": "c"
+			"il_factor_assign_op_impl.h": "c",
+			"method.h": "c",
+			"logger.h": "c"
 		},
 		"ruby.lint": {
 			"reek": true,

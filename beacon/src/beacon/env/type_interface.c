@@ -225,6 +225,13 @@ interface_* type_cast_interface(type* self) {
 }
 
 generic_type* type_baseline(type* abstract, type* concrete) {
+	if(abstract == concrete) {
+		return abstract->generic_self;
+	}
+	#if defined(DEBUG)
+	const char* abstractname = string_pool_ref2str(type_name(abstract));
+	const char* concretename = string_pool_ref2str(type_name(concrete));
+	#endif
 	type* ptr = concrete;
 	do {
 		class_* cls = TYPE2CLASS(ptr);

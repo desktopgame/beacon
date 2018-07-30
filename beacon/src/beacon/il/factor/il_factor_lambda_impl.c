@@ -53,7 +53,7 @@ void il_factor_lambda_generate(il_factor_lambda* self, enviroment* env, call_con
 
 void il_factor_lambda_load(il_factor_lambda* self, enviroment* env, call_context* cctx) {
 	if(self->return_gtype == NULL) {
-		self->return_gtype = import_manager_resolve(NULL, NULL, self->return_gcache);
+		self->return_gtype = import_manager_resolve(NULL, NULL, self->return_gcache, cctx);
 	}
 }
 

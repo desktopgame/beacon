@@ -39,7 +39,7 @@ void il_factor_cast_load(il_factor_cast * self, enviroment * env, call_context* 
 }
 
 generic_type* il_factor_cast_eval(il_factor_cast * self, enviroment * env, call_context* cctx) {
-	return import_manager_resolve(NULL, NULL, self->fqcn);
+	return import_manager_resolve(NULL, NULL, self->fqcn, cctx);
 }
 
 char* il_factor_cast_tostr(il_factor_cast* self, enviroment* env) {

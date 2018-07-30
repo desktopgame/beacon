@@ -38,7 +38,7 @@ void il_factor_as_load(il_factor_as * self, enviroment * env, call_context* cctx
 }
 
 generic_type* il_factor_as_eval(il_factor_as * self, enviroment * env, call_context* cctx) {
-	return import_manager_resolve(NULL, NULL, self->fqcn);
+	return import_manager_resolve(NULL, NULL, self->fqcn, cctx);
 }
 
 void il_factor_as_delete(il_factor_as * self) {

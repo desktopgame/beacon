@@ -7,6 +7,7 @@
 #include "method.h"
 #include "../util/mem.h"
 #include "../util/text.h"
+#include "../il/call_context.h"
 #include <string.h>
 #include <stdlib.h>
 #include <assert.h>
@@ -38,100 +39,86 @@ bool import_manager_loaded(import_manager * self, int index) {
 	return info->consume;
 }
 
-generic_type* import_manager_resolve(import_manager* self, namespace_* scope, generic_cache* fqcn) {
-	/*type* core_type = fqcn_type(fqcn->fqcn, scope);
-	//名前空間でラッピングされていなくて、
-	//型が見つからない
-	if(core_type == NULL && fqcn->fqcn->scope_vec->length == 0) {
-		generic_type* parameterized = generic_type_new(NULL);
-		//メソッドの型引数から見つけられなかったら
-		//クラスの型引数を参照する
-		bool found = false;
-		if(cchas_method()) {
-			method* m = cctop_method();
-			parameterized->tag = generic_type_tag_method;
-			parameterized->virtual_type_index = method_for_generic_index(m, fqcn->fqcn->namev);
-			parameterized->u.method_ = m;
-			found = (parameterized->virtual_type_index != -1);
-		}
-		if(!found && cchas_ctor()) {
-			type* container = cctop_type();
-			parameterized->tag = generic_type_tag_ctor;
-			parameterized->virtual_type_index = type_for_generic_index(container, fqcn->fqcn->namev);
-			parameterized->u.type_ = container;
-			found = (parameterized->virtual_type_index != -1);
-		}
-		if(!found) {
-			type* container = cctop_type();
-			parameterized->tag = generic_type_tag_class;
-			parameterized->virtual_type_index = type_for_generic_index(container, fqcn->fqcn->namev);
-			parameterized->u.type_ = container;
-			found = (parameterized->virtual_type_index != -1);
-		}
-		assert(fqcn->type_args->length == 0);
-		return parameterized;
-	}
-	//Int, String などはっきりした型が見つかった
-	//また、型引数もない
-	if(fqcn->type_args->length == 0) {
-		//text_printfln("`[%s]\n", string_pool_ref2str(type_name(core_type)));
+generic_type* import_manager_resolve(import_manager* self, namespace_* scope, generic_cache* fqcn, call_context* cctx) {
+	type* core_type = fqcn_type(fqcn->fqcn, scope);
+	//Int, Double
+	if(core_type != NULL && fqcn->type_args->length == 0) {
 		assert(core_type->generic_self != NULL);
 		return core_type->generic_self;
 	}
-	//Array, Dictionary などはっきりした型が見つかった
-	//が、型引数があるのでそれを解決する
-	generic_type* normalGType = generic_type_new(core_type);
-	assert(core_type->tag != type_enum);
-	for (int i = 0; i < fqcn->type_args->length; i++) {
-		generic_cache* e = (generic_cache*)vector_at(fqcn->type_args, i);
-		generic_type* child = import_manager_resolve(self, scope, e);
-		generic_type_addargs(normalGType, child);
+	//Array[T], Dictionary[K, V]
+	if(core_type != NULL && fqcn->type_args->length > 0) {
+		//Array, Dictionary などはっきりした型が見つかった
+		//が、型引数があるのでそれを解決する
+		generic_type* normalGType = generic_type_new(core_type);
+		assert(core_type->tag != type_enum);
+		for (int i = 0; i < fqcn->type_args->length; i++) {
+			generic_cache* e = (generic_cache*)vector_at(fqcn->type_args, i);
+			generic_type* child = import_manager_resolve(self, scope, e, cctx);
+			generic_type_addargs(normalGType, child);
+		}
+		return normalGType;
 	}
-	return normalGType;
-	*/
-	return NULL;
+	assert(core_type == NULL);
+	assert(fqcn->fqcn->scope_vec->length == 0);
+	generic_type* parameterized = generic_type_new(NULL);
+	//T, Eなど
+	method* mt = call_context_method(cctx);
+	if(parameterized->virtual_type_index == -1 && mt != NULL) {
+		parameterized->tag = generic_type_tag_method;
+		parameterized->virtual_type_index = method_for_generic_index(mt, fqcn->fqcn->namev);
+		parameterized->u.method_ = mt;
+	}
+	type* ty = call_context_type(cctx);
+	if(parameterized->virtual_type_index == -1 &&  ty != NULL) {
+		parameterized->tag = generic_type_tag_class;
+		parameterized->virtual_type_index = type_for_generic_index(ty, fqcn->fqcn->namev);
+		parameterized->u.type_ = ty;
+	}
+	assert(fqcn->type_args->length == 0);
+	return parameterized;
 }
 
-generic_type* import_manager_resolvef(import_manager* self, namespace_* scope, fqcn_cache* fqcn) {
-	/*
-type* core_type = fqcn_type(fqcn, scope);
-	//名前空間でラッピングされていなくて、
-	//型が見つからない
-	if(core_type == NULL && fqcn->scope_vec->length == 0) {
-		generic_type* parameterized = generic_type_new(NULL);
-		//メソッドの型引数から見つけられなかったら
-		//クラスの型引数を参照する
-		bool found = false;
-		if(cchas_method()) {
-			method* m = cctop_method();
-			parameterized->tag = generic_type_tag_method;
-			parameterized->virtual_type_index = method_for_generic_index(m, fqcn->namev);
-			parameterized->u.method_ = m;
-			found = (parameterized->virtual_type_index != -1);
-		}
-		if(!found && cchas_ctor()) {
-			type* container = cctop_type();
-			parameterized->tag = generic_type_tag_ctor;
-			parameterized->virtual_type_index = type_for_generic_index(container, fqcn->namev);
-			parameterized->u.type_ = container;
-			found = (parameterized->virtual_type_index != -1);
-		}
-		if(!found) {
-			type* container = cctop_type();
-			parameterized->tag = generic_type_tag_class;
-			parameterized->virtual_type_index = type_for_generic_index(container, fqcn->namev);
-			parameterized->u.type_ = container;
-			found = (parameterized->virtual_type_index != -1);
-		}
-		return parameterized;
+generic_type* import_manager_resolvef(import_manager* self, namespace_* scope, fqcn_cache* fqcn, call_context* cctx) {
+	type* core_type = fqcn_type(fqcn, scope);
+	//Int
+	//Foo::MyClass
+	if(core_type != NULL) {
+		return core_type->generic_self;
 	}
-	//Array, Dictionary などはっきりした型が見つかった
-	//が、型引数があるのでそれを解決する
-	generic_type* normalGType = generic_type_new(core_type);
-	assert(core_type->tag != type_enum);
-	return normalGType;
-	*/
-	return NULL;
+	//Foo::UndefinedClassName
+	if(fqcn->scope_vec->length > 0) {
+		return NULL;
+	}
+	//T, E などの型変数
+	//例えば Dictionary[K, V] なら
+	//K = class_tag 0
+	//V = class_tag 1
+	generic_type* parameterized = generic_type_new(NULL);
+	//まずはメソッドの型変数を調べる
+	method* mt = call_context_method(cctx);
+	if(parameterized->virtual_type_index == -1 && mt != NULL) {
+		#if defined(DEBUG)
+		const char* methodname = string_pool_ref2str(mt->namev);
+		#endif
+		int index = method_for_generic_index(mt, fqcn->namev);
+		parameterized->tag = generic_type_tag_method;
+		parameterized->virtual_type_index = index;
+		parameterized->u.method_ = mt;
+	}
+	//次にクラスの型変数を調べる
+	type* ty = call_context_type(cctx);
+	if(parameterized->virtual_type_index == -1 && ty != NULL) {
+		#if defined(DEBUG)
+		const char* typename_ = string_pool_ref2str(type_name(ty));
+		#endif
+		int index = type_for_generic_index(ty, fqcn->namev);
+		parameterized->tag = generic_type_tag_class;
+		parameterized->virtual_type_index = index;
+		parameterized->u.type_ = ty;
+	}
+	assert(parameterized->virtual_type_index != -1);
+	return parameterized;
 }
 
 void import_manager_delete(import_manager * self) {

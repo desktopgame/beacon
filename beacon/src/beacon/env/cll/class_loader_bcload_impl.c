@@ -333,11 +333,14 @@ static type* CLBC_get_or_load_class(class_loader* self, namespace_* parent, il_t
 static void CLBC_register_class(class_loader* self, namespace_* parent, il_type* iltype, type* tp, class_* cls) {
 	type_init_generic(tp, iltype->u.class_->type_parameter_list->length);
 	type_parameter_list_dup(iltype->u.class_->type_parameter_list, cls->type_parameter_list);
+	call_context* cctx = call_context_new(call_decl_T);
+	cctx->space = parent;
+	cctx->ty = tp;
 	for (int i = 0; i < iltype->u.class_->extend_list->length; i++) {
 		generic_cache* e = (generic_cache*)vector_at(iltype->u.class_->extend_list, i);
 		//最初の一つはクラスでもインターフェースでもよい
 		if (i == 0) {
-			generic_type* gtp = import_manager_resolve(self->import_manager, parent, e);
+			generic_type* gtp = import_manager_resolve(self->import_manager, parent, e, cctx);
 			assert(gtp != NULL);
 			if (gtp->core_type->tag == type_class) {
 				cls->super_class = gtp;
@@ -346,7 +349,7 @@ static void CLBC_register_class(class_loader* self, namespace_* parent, il_type*
 			}
 		//二つ目以降はインターフェースのみ
 		} else {
-			generic_type* gtp = import_manager_resolve(self->import_manager, parent, e);
+			generic_type* gtp = import_manager_resolve(self->import_manager, parent, e, cctx);
 			type* E = GENERIC2TYPE(gtp);
 			vector_push(cls->impl_list, gtp);
 			if(E->tag != type_interface) {
@@ -356,6 +359,7 @@ static void CLBC_register_class(class_loader* self, namespace_* parent, il_type*
 			}
 		}
 	}
+	call_context_delete(cctx);
 	cls->location = parent;
 	namespace_add_type(parent, tp);
 	//重複するインターフェイスを検出
@@ -387,10 +391,13 @@ static type* CLBC_get_or_load_interface(class_loader* self, namespace_* parent, 
 static void CLBC_register_interface(class_loader* self, namespace_* parent, il_type* iltype, type* tp, interface_* inter) {
 	type_init_generic(tp, iltype->u.interface_->type_parameter_list->length);
 	type_parameter_list_dup(iltype->u.interface_->type_parameter_list, inter->type_parameter_list);
+	call_context* cctx = call_context_new(call_decl_T);
+	cctx->space = parent;
+	cctx->ty = tp;
 	for (int i = 0; i < iltype->u.interface_->extends_list->length; i++) {
 		generic_cache* e = (generic_cache*)vector_at(iltype->u.interface_->extends_list, i);
 		//インターフェースはインターフェースのみ継承
-		generic_type* gtp = import_manager_resolve(self->import_manager, parent, e);
+		generic_type* gtp = import_manager_resolve(self->import_manager, parent, e, cctx);
 		type* E = GENERIC2TYPE(gtp);
 		if(E->tag != type_interface) {
 			class_loader_report(self, clerror_interface_only, string_pool_ref2str(type_name(tp)));
@@ -403,6 +410,7 @@ static void CLBC_register_interface(class_loader* self, namespace_* parent, il_t
 	}
 	//場所を設定
 	inter->location = parent;
+	call_context_delete(cctx);
 	namespace_add_type(parent, tp);
 	//重複するインターフェイスを検出
 	interface_* ovinter = NULL;

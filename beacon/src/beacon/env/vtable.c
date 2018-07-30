@@ -2,6 +2,7 @@
 #include "../util/mem.h"
 #include "method.h"
 #include <assert.h>
+#include "../il/call_context.h"
 
 vtable * vtable_new() {
 	vtable* ret = (vtable*)MEM_MALLOC(sizeof(vtable));
@@ -23,13 +24,17 @@ void vtable_add(vtable * self, method * m) {
 	vector_push(self->elements, m);
 }
 
-void vtable_replace(vtable * self, method * m) {
+void vtable_replace(vtable * self, method * m, call_context* cctx) {
 	if (modifier_is_static(m->modifier)) {
 		return;
 	}
+	#if defined(DEBUG)
+	const char* methodname = string_pool_ref2str(m->namev);
+	#endif
 	for (int i = 0; i < self->elements->length; i++) {
 		method* e = (method*)vector_at(self->elements, i);
-		if (method_override(m, e)) {
+		//if (method_override(m, e, cctx)) {
+		if (method_override(e, m, cctx)) {
 			vector_assign(self->elements, i, m);
 			return;
 		}
@@ -37,7 +42,7 @@ void vtable_replace(vtable * self, method * m) {
 	vector_push(self->elements, m);
 }
 
-vtable* vtable_lookup(vtable * self, vtable * castTo) {
+vtable* vtable_lookup(vtable * self, vtable * castTo, call_context* cctx) {
 	assert(self != NULL);
 	assert(castTo != NULL);
 	if (self == castTo) {
@@ -54,7 +59,7 @@ vtable* vtable_lookup(vtable * self, vtable * castTo) {
 			//互換性があるなら、
 			//具象メソッドを追加
 			method* li = (method*)vector_at(self->elements, j);
-			if (method_override(e, li)) {
+			if (method_override(e, li, cctx)) {
 				vtable_add(newVT, li);
 				break;
 			}

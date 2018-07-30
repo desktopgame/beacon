@@ -3,6 +3,7 @@
 #define BEACON_ENV_VTABLE_H
 #include "../util/vector.h"
 struct method;
+struct call_context;
 /**
  * メソッドの一覧をフラットに格納する配列です.
  * 同じシグネチャのメソッドが複数現れる場合には、
@@ -42,16 +43,18 @@ void vtable_add(vtable* self, struct method* m);
  * 静的メソッドの場合は無視されます。
  * @param self
  * @param m
+ * @param cctx
  */
-void vtable_replace(vtable* self, struct method* m);
+void vtable_replace(vtable* self, struct method* m, struct call_context* cctx);
 
 /**
  * この仮想関数テーブルを指定のインターフェイス型の関数へキャストします.
  * @param self
  * @param castTo
+ * @param cctx
  * @return
  */
-vtable* vtable_lookup(vtable* self, vtable* castTo);
+vtable* vtable_lookup(vtable* self, vtable* castTo, struct call_context* cctx);
 
 /**
  * vtableを開放します.

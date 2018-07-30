@@ -47,7 +47,7 @@ void il_factor_variable_local_load(il_factor_variable_local * self, enviroment *
 			self->type = variable_local_field;
 			//NOTE:トップレベルではここが空なので、
 			//定義されていない変数とみなせる？
-			type* tp = NULL;
+			type* tp = call_context_type(cctx);
 			if(tp->tag == type_interface/* この条件は構文規則からして満たさないはず */) {
 				il_error_report(ilerror_undefined_variable, string_pool_ref2str(self->namev));
 				return;

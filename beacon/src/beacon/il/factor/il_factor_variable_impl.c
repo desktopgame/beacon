@@ -13,7 +13,7 @@
 #include <string.h>
 
 //proto
-static void il_factor_variable_check(il_factor_variable* self, enviroment* env);
+static void il_factor_variable_check(il_factor_variable* self, enviroment* env, call_context* cctx);
 static void il_factor_delete_typeargs(vector_item item);
 
 il_factor * il_factor_wrap_variable(il_factor_variable * self) {
@@ -38,7 +38,7 @@ void il_factor_variable_dump(il_factor_variable * self, int depth) {
 }
 
 void il_factor_variable_generate(il_factor_variable * self, enviroment* env, call_context* cctx) {
-	il_factor_variable_check(self, env);
+	il_factor_variable_check(self, env, cctx);
 	if(self->type == ilvariable_type_local) {
 		il_factor_variable_local_generate(self->u.local_, env, cctx);
 	} else if(self->type == ilvariable_type_static) {
@@ -47,7 +47,7 @@ void il_factor_variable_generate(il_factor_variable * self, enviroment* env, cal
 }
 
 void il_factor_variable_load(il_factor_variable * self, enviroment * env, call_context* cctx) {
-	il_factor_variable_check(self, env);
+	il_factor_variable_check(self, env, cctx);
 	if(self->type == ilvariable_type_local) {
 		il_factor_variable_local_load(self->u.local_, env, cctx);
 	} else if(self->type == ilvariable_type_static) {
@@ -56,7 +56,7 @@ void il_factor_variable_load(il_factor_variable * self, enviroment * env, call_c
 }
 
 generic_type* il_factor_variable_eval(il_factor_variable * self, enviroment * env, call_context* cctx) {
-	il_factor_variable_check(self, env);
+	il_factor_variable_check(self, env, cctx);
 	generic_type* ret = NULL;
 	if(self->type == ilvariable_type_local) {
 		ret = il_factor_variable_local_eval(self->u.local_, env, cctx);
@@ -88,14 +88,14 @@ void il_factor_variable_delete(il_factor_variable * self) {
 }
 
 //private
-static void il_factor_variable_check(il_factor_variable* self, enviroment* env) {
+static void il_factor_variable_check(il_factor_variable* self, enviroment* env, call_context* cctx) {
 	if(self->type != ilvariable_type_undefined) {
 		return;
 	}
 	assert(self->fqcn != NULL);
 	//hoge, foo のような文字列の場合
 	if(self->fqcn->scope_vec->length == 0) {
-		namespace_* cur = NULL;
+		namespace_* cur = call_context_namespace(cctx);
 		class_* ctype = namespace_get_class(cur, self->fqcn->namev);
 		if(ctype == NULL) {
 			ctype = namespace_get_class(namespace_lang(), self->fqcn->namev);

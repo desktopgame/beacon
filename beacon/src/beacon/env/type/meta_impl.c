@@ -31,7 +31,7 @@ int meta_ilcalc_score(vector* params, vector* ilargs, enviroment* env, call_cont
 			return -1;
 		}
 		if (argType->core_type != TYPE_NULL) {
-			generic_type* a = generic_type_apply(param->gtype);
+			generic_type* a = generic_type_apply(param->gtype, cctx);
 			dist = generic_type_distance(
 				a,
 			//	generic_type_apply(argType, ilctx),
@@ -69,7 +69,7 @@ int meta_gcalc_score(vector* params, vector* gargs) {
 			return -1;
 		}
 		if (argType->core_type != TYPE_NULL) {
-			generic_type* a = generic_type_apply(param->gtype);
+			generic_type* a = generic_type_apply(param->gtype, NULL);
 			dist = generic_type_distance(
 				a,
 			//	generic_type_apply(argType, ilctx),
@@ -102,7 +102,7 @@ int meta_rcalc_score(vector* params, vector* args, vector* typeargs, frame* fr) 
 		//generic_type* argType = il_factor_eval(arg->factor, env, ilctx);
 		generic_type* argType = arg->gtype;
 		if (argType->core_type != TYPE_NULL) {
-			generic_type* a = generic_type_rapply(param->gtype, fr);
+			generic_type* a = generic_type_rapply(param->gtype, NULL,fr);
 			dist = generic_type_rdistance(a, argType, fr);
 		}
 		score += dist;

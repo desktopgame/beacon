@@ -46,4 +46,11 @@ char* generic_cache_tostr(generic_cache* self);
  * @param self
  */
 void generic_cache_delete(generic_cache* self);
+
+/**
+ * @param a
+ * @param b
+ * @return
+ */
+bool generic_cache_equals(generic_cache* a, generic_cache* b);
 #endif // !SIGNAL_ENV_GENERIC_CACHE_H

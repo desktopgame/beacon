@@ -11,6 +11,7 @@
 struct type;
 struct frame;
 struct enviroment;
+struct call_context;
 
 /**
  * メソッドの種類を表す列挙.
@@ -71,9 +72,10 @@ void method_dump(method* self, int depth);
  * @see http://www.ne.jp/asahi/hishidama/home/tech/java/covariant.html
  * @param superM
  * @param subM
+ * @param cctx
  * @return
  */
-bool method_override(method* superM, method* subM);
+bool method_override(method* superM, method* subM, struct call_context* cctx);
 
 /**
  * @param self

@@ -9,8 +9,8 @@
 #include "../../../util/vector.h"
 
 //proto
-static void resolve_non_default(il_factor_invoke_static * self, enviroment * env);
-static void resolve_default(il_factor_invoke_static * self, enviroment * env);
+static void resolve_non_default(il_factor_invoke_static * self, enviroment * env, call_context* cctx);
+static void resolve_default(il_factor_invoke_static * self, enviroment * env, call_context* cctx);
 static void il_factor_invoke_static_check(il_factor_invoke_static * self, enviroment * env, call_context* cctx);
 static void il_factor_invoke_static_args_delete(vector_item item);
 static void il_factor_invoke_static_typeargs_delete(vector_item item);
@@ -71,10 +71,10 @@ generic_type* il_factor_invoke_static_eval(il_factor_invoke_static * self, envir
 	}
 	generic_type* rgtp = self->m->return_gtype;
 	if(rgtp->tag != generic_type_tag_none) {
-		resolve_non_default(self, env);
+		resolve_non_default(self, env, cctx);
 		return self->resolved;
 	} else {
-		resolve_default(self, env);
+		resolve_default(self, env, cctx);
 		return self->resolved;
 	}
 	return NULL;
@@ -100,7 +100,7 @@ void il_factor_invoke_static_delete(il_factor_invoke_static* self) {
 }
 //private
 //FIXME:il_factor_invokeからのコピペ
-static void resolve_non_default(il_factor_invoke_static * self, enviroment * env) {
+static void resolve_non_default(il_factor_invoke_static * self, enviroment * env, call_context* cctx) {
 	if(self->resolved != NULL) {
 		return;
 	}
@@ -111,30 +111,42 @@ static void resolve_non_default(il_factor_invoke_static * self, enviroment * env
 	self->resolved->virtual_type_index = rgtp->virtual_type_index;
 }
 
-static void resolve_default(il_factor_invoke_static * self, enviroment * env) {
+static void resolve_default(il_factor_invoke_static * self, enviroment * env, call_context* cctx) {
 	if(self->resolved != NULL) {
 		return;
 	}
+	call_frame* cfr = call_context_push(cctx, call_static_invoke_T);
+	cfr->u.static_invoke.args = self->args;
+	cfr->u.static_invoke.typeargs = self->type_args;
 	generic_type* rgtp = self->m->return_gtype;
-	self->resolved = generic_type_apply(rgtp);
+	self->resolved = generic_type_apply(rgtp, cctx);
+	call_context_pop(cctx);
 }
 
 static void il_factor_invoke_static_check(il_factor_invoke_static * self, enviroment * env, call_context* cctx) {
-	class_* cls = NULL;
+	class_* cls = TYPE2CLASS(call_context_eval_type(cctx, self->fqcn));
+	#if defined(DEBUG)
+	const char* classname = string_pool_ref2str(cls->namev);
+	const char* methodname = string_pool_ref2str(self->namev);
+	#endif
 	int temp = -1;
-	il_type_argument_resolve(self->type_args);
+	il_type_argument_resolve(self->type_args, cctx);
 	//環境を設定
 	//メソッドを検索
 	for(int i=0; i<self->args->length; i++) {
 		il_argument* ilarg = vector_at(self->args, i);
 		il_factor_load(ilarg->factor, env, cctx);
 	}
+	call_frame* cfr = call_context_push(cctx, call_static_invoke_T);
+	cfr->u.static_invoke.args = self->args;
+	cfr->u.static_invoke.typeargs = self->type_args;
 	self->m = class_ilfind_smethod(cls, self->namev, self->args, env, cctx, &temp);
 	self->index = temp;
 	//メソッドが見つからない
 	if(temp == -1 || self->m == NULL) {
 		il_error_report(ilerror_undefined_method, string_pool_ref2str(self->namev));
 	}
+	call_context_pop(cctx);
 }
 
 static void il_factor_invoke_static_args_delete(vector_item item) {

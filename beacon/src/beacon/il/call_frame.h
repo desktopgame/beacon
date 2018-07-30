@@ -1,20 +1,22 @@
 #ifndef BEACON_IL_CALL_FRAME_H
 #define BEACON_IL_CALL_FRAME_H
 #include "../util/vector.h"
+
 struct method;
 struct constructor;
 struct operator_overload;
 struct generic_type;
 
 typedef enum call_frame_tag {
-	call_top_T,
-	call_method_T,
-	call_ctor_T,
-	call_opov_T,
+	call_ctor_call_T,
 	call_self_invoke_T,
 	call_static_invoke_T,
 	call_instance_invoke_T,
 } call_frame_tag;
+
+typedef struct call_ctor_call {
+	struct generic_type* self;
+} call_ctor_call;
 
 typedef struct call_self_invoke {
 	vector* args;
@@ -33,12 +35,9 @@ typedef struct call_instance_invoke {
 } call_instance_invoke;
 
 typedef struct call_frame {
-	vector* typeargs;
 	call_frame_tag tag;
 	union {
-		struct method* m;
-		struct constructor* ctor;
-		struct operator_overload* opov;
+		call_ctor_call ctor_call;
 		call_self_invoke self_invoke;
 		call_static_invoke static_invoke;
 		call_instance_invoke instance_invoke;

@@ -4,7 +4,6 @@
 call_frame* call_frame_malloc(call_frame_tag tag, const char* filename, int lineno) {
 	call_frame* ret = mem_malloc(sizeof(call_frame), filename, lineno);
 	ret->tag = tag;
-	ret->typeargs = NULL;
 	return ret;
 }
 
