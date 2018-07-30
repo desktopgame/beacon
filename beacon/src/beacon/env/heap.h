@@ -58,6 +58,13 @@ void heap_add(heap* self, object* obj);
 void heap_gc(heap* self, gc_mode mode);
 
 /**
+ * 指定のオブジェクトをヒープから取り除きます.
+ * @param self
+ * @param o
+ */
+void heap_ignore(heap* self, object* o);
+
+/**
  * ヒープを開放します.
  * @param self
  */

@@ -56,6 +56,13 @@ void heap_gc(heap * self, gc_mode mode) {
 	self->threshold = self->object_vec->length + self->threshold;
 }
 
+void heap_ignore(heap* self, object* o) {
+	int i = vector_find(self->object_vec, o);
+	if(i >= 0) {
+		vector_remove(self->object_vec, i);
+	}
+}
+
 void heap_delete(heap * self) {
 	vector_delete(self->object_vec,heap_delete_object);
 	MEM_FREE(self);
