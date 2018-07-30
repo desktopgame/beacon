@@ -89,4 +89,12 @@ char* fqcn_cache_tostr(fqcn_cache* self);
  * @param self
  */
 void fqcn_cache_delete(fqcn_cache* self);
+
+/**
+ * 二つが同じなら true.
+ * @param a
+ * @param b
+ * @return
+ */
+bool fqcn_cache_equals(fqcn_cache* a, fqcn_cache* b);
 #endif // !SIGNAL_ENV_FQCN_CACHE_H

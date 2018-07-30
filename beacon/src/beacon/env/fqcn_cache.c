@@ -118,6 +118,23 @@ void fqcn_cache_delete(fqcn_cache * self) {
 	vector_delete(self->scope_vec, vector_deleter_null);
 	MEM_FREE(self);
 }
+
+bool fqcn_cache_equals(fqcn_cache* a, fqcn_cache* b) {
+	if(a->namev != b->namev || a->scope_vec->length != b->scope_vec->length) {
+		return false;
+	}
+	if(a == b) {
+		return true;
+	}
+	for(int i=0; i<a->scope_vec->length; i++) {
+		string_view as = (string_view)vector_at(a->scope_vec, i);
+		string_view bs = (string_view)vector_at(b->scope_vec, i);
+		if(as != bs) {
+			return false;
+		}
+	}
+	return true;
+}
 //private
 static type * fqcn_type_impl(fqcn_cache * self, namespace_* current) {
 	//Y形式
