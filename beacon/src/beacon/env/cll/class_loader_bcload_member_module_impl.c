@@ -28,6 +28,7 @@
 
 //proto
 static void CLBC_parameter_list(class_loader* self, namespace_* scope, vector* param_list, vector* sg_param_liste, call_context* cctx);
+static void CLBC_parameter_list_ctor(vector* param_list);
 
 static void CLBC_chain(class_loader* self, il_type* iltype, type* tp, il_constructor* ilcons, il_constructor_chain* ilchain, enviroment* env);
 static void CLBC_chain_root(class_loader* self, il_type* iltype, type* tp, il_constructor* ilcons, il_constructor_chain* ilchain, enviroment* env);
@@ -243,6 +244,7 @@ void CLBC_ctor_decl(class_loader* self, il_type* iltype, type* tp, namespace_* s
 			vector_push(parameter_list, param);
 		}
 		CLBC_parameter_list(self, scope, ilcons->parameter_list, cons->parameter_list, cctx);
+		CLBC_parameter_list_ctor(cons->parameter_list);
 		class_add_constructor(classz, cons);
 		call_context_delete(cctx);
 	}
@@ -407,6 +409,13 @@ static void CLBC_parameter_list(class_loader* self, namespace_* scope, vector* p
 			ilparam->fqcn,
 			cctx
 		);
+	}
+}
+
+static void CLBC_parameter_list_ctor(vector* param_list) {
+	for(int i=0; i<param_list->length; i++) {
+		parameter* param = vector_at(param_list, i);
+		param->gtype->is_ctor = true;
 	}
 }
 

@@ -8,15 +8,16 @@ struct operator_overload;
 struct generic_type;
 
 typedef enum call_frame_tag {
-	call_ctor_call_T,
+	call_resolve_T,
 	call_self_invoke_T,
 	call_static_invoke_T,
 	call_instance_invoke_T,
 } call_frame_tag;
 
-typedef struct call_ctor_call {
-	struct generic_type* self;
-} call_ctor_call;
+typedef struct call_resolve {
+	struct generic_type* gtype;
+	vector* typeargs;
+} call_resolve;
 
 typedef struct call_self_invoke {
 	vector* args;
@@ -37,7 +38,7 @@ typedef struct call_instance_invoke {
 typedef struct call_frame {
 	call_frame_tag tag;
 	union {
-		call_ctor_call ctor_call;
+		call_resolve resolve;
 		call_self_invoke self_invoke;
 		call_static_invoke static_invoke;
 		call_instance_invoke instance_invoke;

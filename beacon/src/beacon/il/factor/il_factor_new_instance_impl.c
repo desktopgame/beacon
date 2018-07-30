@@ -140,16 +140,22 @@ static void il_factor_new_instance_find(il_factor_new_instance * self, enviromen
 	#if defined(DEBUG)
 	const char* namea = string_pool_ref2str(self->fqcnc->namev);
 	#endif
+	//コンストラクタで生成するオブジェクトの肩を取得
 	type* ty = call_context_eval_type(cctx, self->fqcnc);
 	if(ty == NULL) {
 		il_error_report(ilerror_undefined_class, string_pool_ref2str(self->fqcnc->namev));
 		return;
 	}
+	//使用するコンストラクタを取得
 	class_* cls = TYPE2CLASS(ty);
 	int temp = -1;
+	call_frame* cfr = call_context_push(cctx, call_resolve_T);
+	cfr->u.resolve.gtype = cls->parent->generic_self;
+	cfr->u.resolve.typeargs = self->type_args;
 	il_type_argument_resolve(self->type_args, cctx);
 	self->c = class_ilfind_constructor(cls, self->argument_list, env, cctx, &temp);
 	self->constructor_index = temp;
+	call_context_pop(cctx);
 	if(temp == -1) {
 		il_error_report(ilerror_undefined_ctor, string_pool_ref2str(cls->namev));
 	}

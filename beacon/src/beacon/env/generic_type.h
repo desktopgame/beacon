@@ -21,9 +21,10 @@ struct call_context;
  */
 typedef enum generic_type_tag {
 	generic_type_tag_none,
+	//クラスの型変数
 	generic_type_tag_class,
+	//メソッドの型変数
 	generic_type_tag_method,
-	generic_type_tag_self,
 } generic_type_tag;
 
 /**
@@ -42,6 +43,7 @@ typedef struct generic_type {
 	int virtual_type_index;
 	generic_type_tag tag;
 	bool mark;
+	bool is_ctor;
 } generic_type;
 
 //#define generic_type_validate(self) assert((self)->core_type != NULL || self->virtual_type_index != -1)
@@ -190,4 +192,17 @@ bool generic_type_override(generic_type* super, generic_type* sub);
  * @return
  */
 bool generic_type_equals(generic_type* a, generic_type* b);
+
+/**
+ * @param self
+ * @param name
+ * @return
+ */
+bool generic_type_compare(generic_type* self, const char* name);
+
+/**
+ * @param a
+ * @param b
+ */
+void generic_type_print2(generic_type* a, generic_type* b);
 #endif // !SIGNAL_ENV_GENERIC_TYPE_H

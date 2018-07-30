@@ -30,8 +30,15 @@ int meta_ilcalc_score(vector* params, vector* ilargs, enviroment* env, call_cont
 		if(il_error_panic()) {
 			return -1;
 		}
+		if(param->gtype->core_type != NULL) {
+			text_printf(": %s\n", string_pool_ref2str(type_name(param->gtype->core_type)));
+		}
+		if(generic_type_compare(param->gtype, "GenericA")) {
+			int a = 0;
+		}
 		if (argType->core_type != TYPE_NULL) {
 			generic_type* a = generic_type_apply(param->gtype, cctx);
+			//generic_type_print2(param->gtype, a);
 			dist = generic_type_distance(
 				a,
 			//	generic_type_apply(argType, ilctx),

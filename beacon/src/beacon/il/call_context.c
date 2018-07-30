@@ -65,9 +65,9 @@ generic_type* call_context_receiver(call_context* self) {
 	if(cfr->tag == call_instance_invoke_T) {
 		return cfr->u.instance_invoke.receiver;
 	} else if(cfr->tag == call_self_invoke_T) {
-		return NULL;
-	} else if(cfr->tag == call_ctor_call_T) {
-		return cfr->u.ctor_call.self;
+		return self->ty->generic_self;
+	} else if(cfr->tag == call_resolve_T) {
+		return cfr->u.resolve.gtype;
 	}
 	return NULL;
 }
@@ -88,6 +88,8 @@ vector* call_context_typeargs(call_context* self) {
 		return cfr->u.static_invoke.typeargs;
 	} else if(cfr->tag == call_self_invoke_T) {
 		return cfr->u.self_invoke.typeargs;
+	} else if(cfr->tag == call_resolve_T) {
+		return cfr->u.resolve.typeargs;
 	}
 	return NULL;
 }

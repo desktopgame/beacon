@@ -17,7 +17,6 @@
 //proto
 static void method_parameter_delete(vector_item item);
 static void method_type_parameter_delete(vector_item item);
-static void generic_type_diff(generic_type* a, generic_type* b);
 
 method* method_malloc(string_view namev, const char* filename, int lineno) {
 	method* ret = (method*)mem_malloc(sizeof(method), filename, lineno);
@@ -105,8 +104,8 @@ bool method_override(method* superM, method* subM, call_context* cctx) {
 		generic_type* superGT = superP->gtype;
 		generic_type* subGT = subP->gtype;
 
-		call_frame* cfr = call_context_push(cctx, call_ctor_call_T);
-		cfr->u.ctor_call.self = bl;
+		call_frame* cfr = call_context_push(cctx, call_resolve_T);
+		cfr->u.resolve.gtype = bl;
 		generic_type* superGT2 = generic_type_apply(superGT, cctx);
 		call_context_pop(cctx);
 //		assert(!generic_type_equals(superGT, superGT2));
@@ -118,8 +117,8 @@ bool method_override(method* superM, method* subM, call_context* cctx) {
 	}
 	generic_type* superRet = superM->return_gtype;
 	generic_type* subRet = subM->return_gtype;
-	call_frame* cfr = call_context_push(cctx, call_ctor_call_T);
-	cfr->u.ctor_call.self = bl;
+	call_frame* cfr = call_context_push(cctx, call_resolve_T);
+	cfr->u.resolve.gtype = bl;
 	generic_type* superRet2 = generic_type_apply(superRet, cctx);
 //	generic_type_diff(superRet, superRet2);
 //	assert(!generic_type_equals(superRet, superRet2));
@@ -167,11 +166,4 @@ static void method_parameter_delete(vector_item item) {
 static void method_type_parameter_delete(vector_item item) {
 	type_parameter* e = (type_parameter*)item;
 	type_parameter_delete(e);
-}
-
-static void generic_type_diff(generic_type* a, generic_type* b) {
-	generic_type_print(a);
-	text_printf(" ");
-	generic_type_print(b);
-	text_putline();
 }

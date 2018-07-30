@@ -1,39 +1,19 @@
-import "beacon/lang/Object"
-import "beacon/lang/Array"
-import "beacon/lang/Int"
-import "beacon/lang/Double"
-import "beacon/lang/Char"
-import "beacon/lang/String"
-import "beacon/lang/Bool"
-import "beacon/lang/Null"
-import "beacon/lang/Void"
-import "beacon/lang/Console"
-import "beacon/lang/Vector"
-import "beacon/lang/VectorIterator"
-
-import "beacon/lang/Exception"
-import "beacon/lang/StackTraceElement"
-import "beacon/lang/Tuple"
-
-namespace beacon::x {
-	class MyClassA {
+namespace err30 {
+	class GenericA[T] {
 		public:
-		def static test[A](A arg, A arg2) -> Vector[A] {
-			var v = new Vector[A]();
-			v.push(arg);
-			v.push(arg2);
-			return v;
+		T value;
+
+		def new(T value) {
+			this.value = value;
+		}
+	}
+	class GenericB[T] {
+		public:
+		GenericA[T] value;
+
+		def new(T value) {
+			this.value = new GenericA[T](value);
 		}
 	}
 }
-var v = beacon::x::MyClassA.test[Int](10, 4);
-var iter = v.iterate();
-var count = 0;
-while(iter.hasNext()) {
-	if(count == 1) {
-		break;
-	}
-	count = count + 1;
-	var E = iter.next();
-	Console.writeLine(E);
-}
+var b = new err30::GenericB[Int]("Hello");

@@ -43,6 +43,7 @@ generic_type* generic_type_malloc(struct type* core_type, const char* filename, 
 	ret->type_args_list = vector_new();
 	ret->virtual_type_index = -1;
 	ret->tag = generic_type_tag_none;
+	ret->is_ctor = false;
 	//現在のスクリプトコンテキストに登録
 	script_context* ctx = script_context_get_current();
 	vector_push(ctx->all_generic_vec, ret);
@@ -57,6 +58,11 @@ generic_type* generic_type_clone(generic_type* self) {
 	}
 	a->tag = self->tag;
 	a->virtual_type_index = self->virtual_type_index;
+	if(a->tag == generic_type_tag_class) {
+		a->u.type_ = self->u.type_;
+	} else if(a->tag == generic_type_tag_method) {
+		a->u.method_ = self->u.method_;
+	}
 	return a;
 }
 
@@ -109,15 +115,40 @@ int generic_type_rdistance(generic_type* self, generic_type* other, frame* fr) {
 
 void generic_type_print(generic_type * self) {
 	assert(self != NULL);
+	//タグを出力
+	switch(self->tag) {
+		case generic_type_tag_none:
+			text_printf("::");
+			break;
+		case generic_type_tag_class:
+			text_printf("@@");
+			break;
+		case generic_type_tag_method:
+			text_printf("##");
+			break;
+	}
+	//T, Uなど
 	if (self->virtual_type_index != -1) {
+		//(Array)[0]
+		if(self->tag == generic_type_tag_class) {
+			text_printf("(%s)", string_pool_ref2str(type_name(self->u.type_)));
+		//copy[0]
+		} else if(self->tag == generic_type_tag_method) {
+			text_printf("(%s)", string_pool_ref2str(self->u.method_->namev));
+		}
 		text_printf("[%d]", self->virtual_type_index);
+	//Intなど
 	} else {
 		text_printf("%s", string_pool_ref2str(type_name(self->core_type)));
+	}
+	if(self->is_ctor) {
+		text_printf("!!");
 	}
 	if (self->type_args_list->length == 0) {
 		return;
 	}
-	text_printf("<");
+	//[...]
+	text_printf("[");
 	for (int i = 0; i < self->type_args_list->length; i++) {
 		generic_type* e = (generic_type*)vector_at(self->type_args_list, i);
 		generic_type_print(e);
@@ -125,7 +156,7 @@ void generic_type_print(generic_type * self) {
 			text_printf(",");
 		}
 	}
-	text_printf(">");
+	text_printf("]");
 }
 
 bool generic_type_int(generic_type* self) {
@@ -216,37 +247,46 @@ bool generic_type_equals(generic_type* a, generic_type* b) {
 	return true;
 }
 
+bool generic_type_compare(generic_type* self, const char* name) {
+	if(self->core_type == NULL) {
+		return false;
+	}
+	return type_name(self->core_type) == string_pool_intern(name);
+}
+
+void generic_type_print2(generic_type* a, generic_type* b) {
+	generic_type_print(a);
+	text_printf(" ");
+	generic_type_print(b);
+	text_putline();
+}
+
 //private
 static generic_type* generic_type_applyImpl(generic_type* self, call_context* cctx, frame* fr) {
-	generic_type* copy = generic_type_new(self->core_type);
-	generic_type* e = NULL;
 	int count = 0;
-	//全ての実型引数
-	for(int i=0; i<self->type_args_list->length; i++) {
-		e = (generic_type*)vector_at(self->type_args_list, i);
-		//この型がクラスやメソッドに定義された仮装型なら
-		if(e->virtual_type_index != -1) {
-			count++;
-			if(e->tag == generic_type_tag_class) {
-				generic_type_addargs(copy, generic_type_receiver_at(cctx, fr, e->virtual_type_index));
-			} else if(e->tag == generic_type_tag_method) {
-				generic_type_addargs(copy, generic_type_applyImpl(generic_type_typeargs_at(cctx, fr, e->virtual_type_index), cctx, fr));
-			} else if(e->tag == generic_type_tag_self) {
-				generic_type_addargs(copy, e);
+	//型変数なら変換
+	generic_type* ret = NULL;
+	if(self->virtual_type_index != -1) {
+		count++;
+		if(self->tag == generic_type_tag_class) {
+			if(self->is_ctor) {
+				ret = generic_type_clone(generic_type_typeargs_at(cctx, fr, self->virtual_type_index));
+			} else {
+				ret = generic_type_clone(generic_type_receiver_at(cctx, fr, self->virtual_type_index));
 			}
-		} else {
-			generic_type_addargs(copy, generic_type_applyImpl(e, cctx, fr));
+		} else if(self->tag == generic_type_tag_method) {
+			ret = generic_type_clone(generic_type_typeargs_at(cctx, fr, self->virtual_type_index));
 		}
+	} else {
+		ret = generic_type_new(self->core_type);
+		ret->tag = self->tag;
+		ret->virtual_type_index = self->virtual_type_index;
 	}
-	assert(copy->core_type != NULL || count == 0);
-	copy->tag = generic_type_tag_none;
-	if(copy->core_type == NULL) {
-		copy->tag = self->tag;
-		copy->virtual_type_index = self->virtual_type_index;
-		if(self->tag == generic_type_tag_class) copy->u.type_ = self->u.type_;
-		else if (self->tag == generic_type_tag_method) copy->u.method_ = self->u.method_;
+	assert(ret != NULL);
+	for(int i=0; i<self->type_args_list->length; i++) {
+		generic_type_addargs(ret, generic_type_apply(vector_at(self->type_args_list, i), cctx));
 	}
-	return copy;
+	return ret;
 }
 
 static int generic_type_distanceImpl(generic_type* self, generic_type* other, frame* fr) {

@@ -292,10 +292,7 @@ constructor * class_ilfind_constructor(class_ * self, vector * args, enviroment 
 	//	vector* v = meta_find_constructors(self, args, env, ilctx);
 	//	(*outIndex) = -1;
 	//	return class_find_constructor_impl(v, args, env, ilctx, outIndex);
-	call_frame* cfr = call_context_push(cctx, call_ctor_call_T);
-	cfr->u.ctor_call.self = self->parent->generic_self;
 	constructor* ctor = meta_scoped_ilfind_ctor(self, self->constructor_list, args, env, cctx, outIndex);
-	call_context_pop(cctx);
 	return ctor;
 }
 

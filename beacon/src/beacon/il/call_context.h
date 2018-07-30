@@ -13,10 +13,15 @@ struct generic_type;
 struct fqcn_cache;
 
 typedef enum call_context_tag {
+	//プログラムのトップレベル
 	call_top_T,
+	//メソッド
 	call_method_T,
+	//コンストラクタ
 	call_ctor_T,
+	//演算子オーバーロード
 	call_opov_T,
+	//コンストラクタの連鎖
 	call_ctor_args_T,
 
 	call_decl_T
