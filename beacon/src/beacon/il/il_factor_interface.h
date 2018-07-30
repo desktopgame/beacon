@@ -3,7 +3,7 @@
 #define BEACON_IL_IL_FACTOR_INTERFACE_H
 #include "../vm/enviroment.h"
 #include "../util/string_buffer.h"
-#include "il_error.h"
+#include "../error.h"
 #include "call_context.h"
 #include <stdint.h>
 #include <assert.h>

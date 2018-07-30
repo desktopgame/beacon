@@ -50,7 +50,7 @@ void il_factor_invoke_static_generate(il_factor_invoke_static* self, enviroment*
 	for(int i=0; i<self->args->length; i++) {
 		il_argument* e = (il_argument*)vector_at(self->args, i);
 		il_factor_generate(e->factor, env, cctx);
-		if(il_error_panic()) {
+		if(bc_error_last()) {
 			return;
 		}
 	}
@@ -66,7 +66,7 @@ void il_factor_invoke_static_load(il_factor_invoke_static * self, enviroment * e
 generic_type* il_factor_invoke_static_eval(il_factor_invoke_static * self, enviroment * env, call_context* cctx) {
 	il_factor_invoke_static_check(self, env, cctx);
 	//メソッドを解決できなかった場合
-	if(il_error_panic()) {
+	if(bc_error_last()) {
 		return NULL;
 	}
 	generic_type* rgtp = self->m->return_gtype;
@@ -144,7 +144,7 @@ static void il_factor_invoke_static_check(il_factor_invoke_static * self, enviro
 	self->index = temp;
 	//メソッドが見つからない
 	if(temp == -1 || self->m == NULL) {
-		il_error_report(ilerror_undefined_method, string_pool_ref2str(self->namev));
+		bc_error_throw(bcerror_undefined_method, string_pool_ref2str(self->namev));
 	}
 	call_context_pop(cctx);
 }

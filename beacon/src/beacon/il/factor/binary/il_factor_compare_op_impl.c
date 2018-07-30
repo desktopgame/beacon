@@ -45,7 +45,7 @@ void il_factor_compare_op_generate(il_factor_compare_op* self, enviroment* env, 
 		} else if(il_factor_binary_op_char_char(self->parent, env, cctx)) {
 			opcode_buf_add(env->buf, operator_to_copcode(self->type));
 		} else {
-			il_error_report(ilerror_undefined_operator, operator_tostring(self->type));
+			bc_error_throw(bcerror_undefined_operator, operator_tostring(self->type));
 //			assert(false);
 		}
 	} else {

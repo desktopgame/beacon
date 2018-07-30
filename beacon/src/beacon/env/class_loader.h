@@ -58,7 +58,7 @@ typedef enum cl_error_id {
  * 引数のクラスローダの error が true なら return します.
  * @param self
  */
-#define CL_ERROR(self) if((self)->error) return
+#define CL_ERROR(self) if((self)->error || bc_error_last()) return
 
 /**
  * 引数のクラスローダの error が true なら a を return します.
@@ -131,24 +131,6 @@ void class_loader_special(class_loader* self, char* relativePath);
  * @param self
  */
 void class_loader_delete(class_loader* self);
-
-/**
- * エラー情報を出力してクラスローダーをマークします.
- * @param self
- * @param id
- * @param ...
- * @return
- */
-int class_loader_report(class_loader* self, cl_error_id id, ...);
-
-/**
- * エラー情報を出力してクラスローダーをマークします.
- * @param self
- * @param id
- * @param ap
- * @return
- */
-int class_loader_vreport(class_loader* self, cl_error_id id, va_list ap);
 
 /**
  * ブートストラップクラスローダーを返します.

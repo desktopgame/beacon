@@ -62,7 +62,7 @@ void il_stmt_dump(il_stmt * self, int depth) {
 }
 
 void il_stmt_generate(il_stmt * self, struct enviroment* env, call_context* cctx) {
-	if(il_error_panic()) {
+	if(bc_error_last()) {
 		return;
 	}
 	switch (self->type) {
@@ -115,12 +115,12 @@ void il_stmt_generate(il_stmt * self, struct enviroment* env, call_context* cctx
 }
 
 void il_stmt_load(il_stmt * self, enviroment* env, call_context* cctx) {
-	if(il_error_panic()) {
+	if(bc_error_last()) {
 		return;
 	}
 	assert(self->lineno >= 0);
-	il_error_file(env->context_ref->filename);
-	il_error_line(self->lineno);
+	bc_error_file(env->context_ref->filename);
+	bc_error_line(self->lineno);
 	switch (self->type) {
 		case ilstmt_if:
 			il_stmt_if_load(self->u.if_, env, cctx);

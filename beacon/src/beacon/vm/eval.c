@@ -8,6 +8,7 @@
 #include "../util/string_buffer.h"
 #include "../util/text.h"
 #include "../util/mem.h"
+#include "../error.h"
 #include <assert.h>
 #include <string.h>
 
@@ -102,7 +103,9 @@ static bool eval_top_from_cll(class_loader* cll) {
 	sg_thread_set_frame_ref(sg_thread_current(), fr);
 	fpurge(stdout);
 	he->accept_blocking = 0;
-	vm_execute(fr, cll->env);
+	if(!bc_error_last()) {
+		vm_execute(fr, cll->env);
+	}
 	if(fr->terminate) {
 		cll->error = true;
 	}

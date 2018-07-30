@@ -5,6 +5,7 @@
 #include "../../il/il_constructor.h"
 #include "../../il/il_constructor_chain.h"
 #include "../../il/il_operator_overload.h"
+#include "../../error.h"
 #include "class_loader_ilload_type_module_impl.h"
 #include "class_loader_ilload_stmt_module_impl.h"
 #include <assert.h>
@@ -55,7 +56,7 @@ void CLIL_field(class_loader* self, il_type* current, ast* field, access_level l
 	il_type_add_field(current, v);
 	//重複する修飾子を検出
 	if(error) {
-		class_loader_report(self, clerror_modifier_a_overlapped, string_pool_ref2str(v->namev));
+		bc_error_throw(bcerror_modifier_a_overlapped, string_pool_ref2str(v->namev));
 	}
 }
 
@@ -83,7 +84,7 @@ void CLIL_method(class_loader* self, il_type* current, ast* method, access_level
 	il_type_add_method(current, v);
 	//重複する修飾子を検出
 	if(error) {
-		class_loader_report(self, clerror_modifier_a_overlapped, string_pool_ref2str(v->namev));
+		bc_error_throw(bcerror_modifier_a_overlapped, string_pool_ref2str(v->namev));
 	}
 }
 

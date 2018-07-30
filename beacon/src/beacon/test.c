@@ -23,6 +23,7 @@
 #include "env/heap.h"
 #include "vm/enviroment.h"
 #include "vm/eval.h"
+#include "error.h"
 #include <assert.h>
 
 //proto
@@ -62,6 +63,7 @@ static void test_semanticsImpl(const char* dirname, bool require, char** outFile
 			continue;
 		}
 		//これから実行するファイルを記録
+		bc_error_clear();
 		filename = e->filename;
 		save(string_pool_intern(filename));
 		//標準出力を入れ替えて実行

@@ -1,8 +1,10 @@
 #include "class_loader_link_impl.h"
 #include "../type_cache.h"
+#include "../../error.h"
 #include "../type_impl.h"
 #include "../field.h"
 #include "../../il/il_type_impl.h"
+#include "../../error.h"
 #include "../../util/text.h"
 #include "class_loader_bcload_member_module_impl.h"
 #include "class_loader_bcload_import_module_impl.h"
@@ -123,7 +125,7 @@ static void CLBC_enum_decl(class_loader * self, il_type * iltype, type * tp, nam
 	if((tp->tag == type_enum ||
 	   tp->tag == type_class) &&
 	   !class_field_valid(tp->u.class_, &outField)) {
-		class_loader_report(self, clerror_field_name_a_overlapped, string_pool_ref2str(tp->u.class_->namev), string_pool_ref2str(outField->namev));
+		bc_error_throw(bcerror_field_name_a_overlapped, string_pool_ref2str(tp->u.class_->namev), string_pool_ref2str(outField->namev));
 	}
 	tp->state = tp->state | type_decl;
 }

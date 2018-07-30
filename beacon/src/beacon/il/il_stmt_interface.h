@@ -2,7 +2,7 @@
 #ifndef BEACON_IL_IL_STMT_INTERFACE_H
 #define BEACON_IL_IL_STMT_INTERFACE_H
 #include "../vm/enviroment.h"
-#include "il_error.h"
+#include "../error.h"
 #include "call_context.h"
 #include <stdint.h>
 /**

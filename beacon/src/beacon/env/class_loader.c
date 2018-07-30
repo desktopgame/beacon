@@ -33,7 +33,7 @@
 #include "../il/il_parameter.h"
 #include "../il/il_import.h"
 #include "../il/il_namespace.h"
-#include "../il/il_error.h"
+#include "../error.h"
 #include <string.h>
 
 #include "cll/class_loader_ilload_impl.h"
@@ -96,7 +96,7 @@ class_loader * class_loader_new_entry_point_from_parser(parser * p) {
 	class_loader* ret = class_loader_new(content_entry_point);
 	//解析に失敗した場合
 	if (p->fail) {
-		class_loader_report(ret, clerror_parse, p->source_name);
+		bc_error_throw(bcerror_parse, p->source_name);
 		return ret;
 	}
 	ret->source_code = p->root;
@@ -148,78 +148,6 @@ void class_loader_delete(class_loader * self) {
 	MEM_FREE(self);
 }
 
-int class_loader_report(class_loader* self, cl_error_id id, ...) {
-	va_list ap;
-	va_start(ap, id);
-	int ret = class_loader_vreport(self, id, ap);
-	va_end(ap);
-	return ret;
-}
-
-int class_loader_vreport(class_loader* self, cl_error_id id, va_list ap) {
-	self->error = true;
-	char* fmt = NULL;
-	switch(id) {
-		case clerror_parse:
-			fmt = "parser failed --- %s";
-			break;
-		case clerror_class_first:
-			fmt = "must be class first: %s";
-			break;
-		case clerror_multi_eqinterface:
-			fmt = "should'nt implement equal interface a multiple: %s";
-			break;
-		case clerror_interface_only:
-			fmt = "must be interface only: %s";
-			break;
-		case clerror_chain:
-			fmt = "error %s";
-			break;
-		case clerror_modifier_a_overlapped:
-			fmt = "invalid modifier: %s";
-			break;
-		case clerror_field_name_a_overlapped:
-			fmt = "invalid field declaration: %s @%s";
-			break;
-		case clerror_native_field:
-			fmt = "shouldn't define field of abstract or native: %s";
-			break;
-		case clerror_abstract_method_by:
-			fmt = "abstract method should be defined on the abstract class: %s";
-			break;
-		case clerror_empty_method_body:
-			fmt = "must be not empty statement if modifier of method is native or abstract: %s";
-			break;
-		case clerror_not_empty_method_body:
-			fmt = "must be empty statement if modifier of method is native or abstract: %s";
-			break;
-		case clerror_not_implement_interface:
-			fmt = "invalid implement: %s @%s";
-			break;
-		case clerror_not_implement_abstract_method:
-			fmt = "invalid implement: %s @%s";
-			break;
-		case clerror_private_operator:
-			fmt = "must be public a access level of operator: %s";
-			break;
-		case clerror_illegal_argument_bioperator:
-			fmt = "illegal of parameter count, must be binary operator argument count is one.: %s#%s";
-			break;
-		case clerror_illegal_argument_uoperator:
-			fmt = "illegal of parameter count, must be unary operator argument count is zero.: %s#%s";
-			break;
-		default:
-			{
-				fprintf(stderr, "if shown this message, it compiler bug\n");
-				return 0;
-			}
-			break;
-	}
-	fprintf(stderr, "%s\n", self->filename);
-	int res = vfprintf(stderr, fmt, ap);
-	fprintf(stderr, "\n");
-	return res;
-}
 
 //private
 static void class_loader_load_impl(class_loader* self) {
@@ -242,6 +170,9 @@ static void class_loader_load_impl(class_loader* self) {
 
 static void class_loader_link_recursive(class_loader* self, link_type type) {
 	if (self->link == type) {
+		return;
+	}
+	if(bc_error_last()) {
 		return;
 	}
 	self->link = type;
@@ -313,11 +244,9 @@ static void class_loader_load_linkall(class_loader* self) {
 	if(self->type != content_entry_point) {
 		return;
 	}
-	il_error_enter();
 	class_loader_link_recursive(self, link_decl);
 	class_loader_link_recursive(self, link_impl);
 	class_loader_lazy_resolve_all(self);
-	il_error_exit();
 }
 
 static void class_loader_load_toplevel(class_loader* self) {
@@ -335,11 +264,9 @@ static void class_loader_load_toplevel(class_loader* self) {
 	body->lineno = 0;
 	createWorldStmt->fact->lineno = 0;
 	//worldをselfにする
-	il_error_enter();
 	call_context* cctx = call_context_new(call_top_T);
 	il_stmt_load(body, self->env, cctx);
 	il_stmt_generate(body, self->env, cctx);
-	il_error_exit();
 	//$worldをthisにする
 	opcode_buf_add(self->env->buf, op_load);
 	opcode_buf_add(self->env->buf, 1);
@@ -394,7 +321,6 @@ static void class_loader_load_toplevel_function(class_loader* self) {
 		opcode_buf_add(env->buf, (vector_item)op_store);
 		opcode_buf_add(env->buf, (vector_item)0);
 		vector_push(worldT->u.class_->method_list, m);
-		il_error_enter();
 		//中身をロード
 		for(int j=0; j<ilfunc->statement_list->length; j++) {
 			il_stmt* stmt = vector_at(ilfunc->statement_list, j);
@@ -406,6 +332,5 @@ static void class_loader_load_toplevel_function(class_loader* self) {
 			il_stmt_generate(stmt, env, cctx);
 		}
 		call_context_delete(cctx);
-		il_error_exit();
 	}
 }

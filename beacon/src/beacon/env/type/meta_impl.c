@@ -1,7 +1,7 @@
 #include "meta_impl.h"
 #include "../../il/il_argument.h"
 #include "../../il/il_argument.h"
-#include "../../il/il_error.h"
+#include "../../error.h"
 #include "../parameter.h"
 #include "../type_parameter.h"
 #include "../type_interface.h"
@@ -27,7 +27,7 @@ int meta_ilcalc_score(vector* params, vector* ilargs, enviroment* env, call_cont
 		//実引数が NULL なら常に許容する
 		int dist = 0;
 		generic_type* argType = il_factor_eval(arg->factor, env, cctx);
-		if(il_error_panic()) {
+		if(bc_error_last()) {
 			return -1;
 		}
 		if(param->gtype->core_type != NULL) {
@@ -72,7 +72,7 @@ int meta_gcalc_score(vector* params, vector* gargs) {
 		//実引数が NULL なら常に許容する
 		int dist = 0;
 		generic_type* argType = (generic_type*)varg;
-		if(il_error_panic()) {
+		if(bc_error_last()) {
 			return -1;
 		}
 		if (argType->core_type != TYPE_NULL) {

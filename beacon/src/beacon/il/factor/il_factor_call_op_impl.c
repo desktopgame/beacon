@@ -74,7 +74,7 @@ generic_type* il_factor_call_op_eval(il_factor_call_op* self, enviroment* env, c
 	} else if(self->type == ilcall_type_invoke_bound) {
 		ret = il_factor_invoke_bound_eval(self->u.invoke_bound_, env, cctx);
 	}
-	if(il_error_panic()) {
+	if(bc_error_last()) {
 		return ret;
 	}
 	return ret;

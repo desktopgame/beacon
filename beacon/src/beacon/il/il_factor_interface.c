@@ -95,7 +95,7 @@ void il_factor_dump(il_factor * self, int depth) {
 }
 
 void il_factor_generate(il_factor * self, enviroment* env, call_context* cctx) {
-	if(il_error_panic()) {
+	if(bc_error_last()) {
 		return;
 	}
 	switch (self->type) {
@@ -176,12 +176,12 @@ void il_factor_generate(il_factor * self, enviroment* env, call_context* cctx) {
 }
 
 void il_factor_load(il_factor * self, enviroment * env, call_context* cctx) {
-	if(il_error_panic()) {
+	if(bc_error_last()) {
 		return;
 	}
 	assert(self->lineno >= 0);
-	il_error_file(env->context_ref->filename);
-	il_error_line(self->lineno);
+	bc_error_file(env->context_ref->filename);
+	bc_error_line(self->lineno);
 	switch (self->type) {
 		case ilfactor_int:
 			il_factor_int_load(self->u.int_, env, cctx);
@@ -258,11 +258,11 @@ void il_factor_load(il_factor * self, enviroment * env, call_context* cctx) {
 }
 
 generic_type* il_factor_eval(il_factor * self, enviroment * env, call_context* cctx) {
-	if(il_error_panic()) {
+	if(bc_error_last()) {
 		return NULL;
 	}
-	il_error_file(env->context_ref->filename);
-	il_error_line(self->lineno);
+	bc_error_file(env->context_ref->filename);
+	bc_error_line(self->lineno);
 	generic_type* ret = NULL;
 	switch (self->type) {
 		case ilfactor_int:
@@ -342,7 +342,7 @@ generic_type* il_factor_eval(il_factor * self, enviroment * env, call_context* c
 }
 
 char* il_factor_tostr(il_factor* self, enviroment* env) {
-	if(il_error_panic()) {
+	if(bc_error_last()) {
 		return NULL;
 	}
 	switch (self->type) {

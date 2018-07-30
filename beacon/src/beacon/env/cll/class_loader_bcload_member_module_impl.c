@@ -55,7 +55,7 @@ void CLBC_fields_decl(class_loader* self, il_type* iltype, type* tp, vector* ilf
 		if(modifier_is_abstract(field->modifier) ||
 		   modifier_is_override(field->modifier) ||
 		   modifier_is_native(field->modifier)) {
-			   class_loader_report(self, clerror_native_field, string_pool_ref2str(field->namev));
+			   bc_error_throw(bcerror_native_field, string_pool_ref2str(field->namev));
 				call_context_delete(cctx);
 			   return;
 		   }
@@ -108,7 +108,7 @@ void CLBC_methods_decl(class_loader* self, il_type* iltype, type* tp, vector* il
 		if(modifier_is_abstract(method->modifier) &&
 		  (tp->tag == type_class &&
 		  !TYPE2CLASS(tp)->is_abstract)) {
-			  class_loader_report(self, clerror_abstract_method_by, string_pool_ref2str(method->namev));
+			  bc_error_throw(bcerror_abstract_method_by, string_pool_ref2str(method->namev));
 			  method_delete(method);
 				call_context_delete(cctx);
 			  return;
@@ -119,7 +119,7 @@ void CLBC_methods_decl(class_loader* self, il_type* iltype, type* tp, vector* il
 		   ilmethod->no_stmt &&
 			(!modifier_is_abstract(method->modifier) && !modifier_is_native(method->modifier))
 		) {
-			  class_loader_report(self, clerror_empty_method_body, string_pool_ref2str(method->namev));
+			  bc_error_throw(bcerror_empty_method_body, string_pool_ref2str(method->namev));
 			  method_delete(method);
 			call_context_delete(cctx);
 			return;
@@ -129,7 +129,7 @@ void CLBC_methods_decl(class_loader* self, il_type* iltype, type* tp, vector* il
 		   !ilmethod->no_stmt &&
 			(modifier_is_abstract(method->modifier) || modifier_is_native(method->modifier))
 		) {
-			  class_loader_report(self, clerror_not_empty_method_body, string_pool_ref2str(method->namev));
+			  bc_error_throw(bcerror_not_empty_method_body, string_pool_ref2str(method->namev));
 			  method_delete(method);
 			call_context_delete(cctx);
 			return;
@@ -155,19 +155,19 @@ void CLBC_methods_decl(class_loader* self, il_type* iltype, type* tp, vector* il
 	method* outiMethod = NULL;
 	if(tp->tag == type_class &&
 	  !class_interface_implement_valid(TYPE2CLASS(tp), &outiMethod)) {
-		class_loader_report(self, clerror_not_implement_interface, string_pool_ref2str(tp->u.class_->namev), string_pool_ref2str(outiMethod->namev));
+		bc_error_throw(bcerror_not_implement_interface, string_pool_ref2str(tp->u.class_->namev), string_pool_ref2str(outiMethod->namev));
 	}
 	//実装されていない抽象メソッドを確認する
 	method* outaMethod = NULL;
 	if(tp->tag == type_class &&
 	   !class_abstract_class_implement_valid(TYPE2CLASS(tp), &outaMethod)) {
-		class_loader_report(self, clerror_not_implement_abstract_method, string_pool_ref2str(tp->u.class_->namev), string_pool_ref2str(outaMethod->namev));
+		bc_error_throw(bcerror_not_implement_abstract_method, string_pool_ref2str(tp->u.class_->namev), string_pool_ref2str(outaMethod->namev));
 	   }
 	//重複するフィールドを確認する
 	field* outField = NULL;
 	if(tp->tag == type_class &&
 	   !class_field_valid(tp->u.class_, &outField)) {
-		class_loader_report(self, clerror_field_name_a_overlapped, string_pool_ref2str(tp->u.class_->namev), string_pool_ref2str(outField->namev));
+		bc_error_throw(bcerror_field_name_a_overlapped, string_pool_ref2str(tp->u.class_->namev), string_pool_ref2str(outField->namev));
 	}
 }
 
@@ -372,10 +372,9 @@ void CLBC_operator_overload_impl(class_loader* self, il_type* iltype, type* tp, 
 
 void CLBC_body(class_loader* self, vector* stmt_list, enviroment* dest, call_context* cctx, namespace_* range) {
 	CL_ERROR(self);
-	il_error_enter();
 	//まずは全てのステートメントを読み込む
 	for (int i = 0; i < stmt_list->length; i++) {
-		if(il_error_panic()) {
+		if(bc_error_last()) {
 			self->error = true;
 			break;
 		}
@@ -385,7 +384,7 @@ void CLBC_body(class_loader* self, vector* stmt_list, enviroment* dest, call_con
 	}
 	//オペコードを生成
 	for (int i = 0; i < stmt_list->length; i++) {
-		if(il_error_panic()) {
+		if(bc_error_last()) {
 			self->error = true;
 			break;
 		}
@@ -393,7 +392,6 @@ void CLBC_body(class_loader* self, vector* stmt_list, enviroment* dest, call_con
 		il_stmt* s = (il_stmt*)e;
 		il_stmt_generate(s, dest, cctx);
 	}
-	il_error_exit();
 }
 
 //private
@@ -502,17 +500,17 @@ static void CLBC_chain_super(class_loader * self, il_type * iltype, type * tp, i
 static bool CLBC_test_operator_overlaod(class_loader* self, il_type* iltype, type* tp, operator_overload* opov) {
 	//アクセスレベルを確認する
 	if(opov->access != access_public) {
-		class_loader_report(self, clerror_private_operator, type_name(tp));
+		bc_error_throw(bcerror_private_operator, type_name(tp));
 		return true;
 	}
 	//二項演算子であるなら引数は1
 	if(operator_arg2(opov->type) && opov->parameter_list->length != 1) {
-		class_loader_report(self, clerror_illegal_argument_bioperator, type_name(tp), operator_tostring(opov->type));
+		bc_error_throw(bcerror_illegal_argument_bioperator, type_name(tp), operator_tostring(opov->type));
 		return true;
 	}
 	//単項演算子であるなら引数は0
 	if(operator_arg1(opov->type) && opov->parameter_list->length != 0) {
-		class_loader_report(self, clerror_illegal_argument_uoperator, type_name(tp), operator_tostring(opov->type));
+		bc_error_throw(bcerror_illegal_argument_uoperator, type_name(tp), operator_tostring(opov->type));
 		return true;
 	}
 	return false;

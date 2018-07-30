@@ -91,7 +91,10 @@
 			"il_print_layout.h": "c",
 			"il_factor_assign_op_impl.h": "c",
 			"method.h": "c",
-			"logger.h": "c"
+			"logger.h": "c",
+			"class_loader_bcload_member_module_impl.h": "c",
+			"il_parameter.h": "c",
+			"il_import.h": "c"
 		},
 		"ruby.lint": {
 			"reek": true,

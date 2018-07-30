@@ -37,7 +37,7 @@ void il_stmt_inferenced_type_init_generate(il_stmt_inferenced_type_init * self, 
 void il_stmt_inferenced_type_init_load(il_stmt_inferenced_type_init * self, enviroment * env, call_context* cctx) {
 	il_factor_load(self->fact, env, cctx);
 	generic_type* gtp = il_factor_eval(self->fact, env, cctx);
-	if(il_error_panic()) {
+	if(bc_error_last()) {
 		return;
 	}
 	if(gtp->type_args_list->length > 0) {

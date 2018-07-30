@@ -49,7 +49,7 @@ void il_factor_variable_local_load(il_factor_variable_local * self, enviroment *
 			//定義されていない変数とみなせる？
 			type* tp = call_context_type(cctx);
 			if(tp->tag == type_interface/* この条件は構文規則からして満たさないはず */) {
-				il_error_report(ilerror_undefined_variable, string_pool_ref2str(self->namev));
+				bc_error_throw(bcerror_undefined_variable, string_pool_ref2str(self->namev));
 				return;
 			}
 			int temp = -1;
@@ -57,7 +57,7 @@ void il_factor_variable_local_load(il_factor_variable_local * self, enviroment *
 			self->u.field_index = temp;
 			self->type = variable_local_field;
 			if(temp == -1) {
-				il_error_report(ilerror_undefined_field, string_pool_ref2str(self->namev));
+				bc_error_throw(bcerror_undefined_field, string_pool_ref2str(self->namev));
 				return;
 			}
 			//フィールドの型を調べる

@@ -85,7 +85,7 @@ void il_factor_invoke_load(il_factor_invoke * self, enviroment * env, call_conte
 
 generic_type* il_factor_invoke_eval(il_factor_invoke * self, enviroment * env, call_context* cctx) {
 	il_factor_invoke_check(self, env, cctx);
-	if(il_error_panic()) {
+	if(bc_error_last()) {
 		return NULL;
 	}
 	generic_type* rgtp = self->m->return_gtype;
@@ -162,7 +162,7 @@ static void resolve_default(il_factor_invoke * self, enviroment * env, call_cont
 static void il_factor_invoke_check(il_factor_invoke * self, enviroment * env, call_context* cctx) {
 	//レシーバの読み込み
 	il_factor_load(self->receiver, env, cctx);
-	if(il_error_panic()) {
+	if(bc_error_last()) {
 		return;
 	}
 	if(self->receiver->type == ilfactor_variable) {
@@ -171,7 +171,7 @@ static void il_factor_invoke_check(il_factor_invoke * self, enviroment * env, ca
 	}
 	//レシーバの型を評価
 	generic_type* gtype = il_factor_eval(self->receiver, env, cctx);
-	if(il_error_panic()) {
+	if(bc_error_last()) {
 		return;
 	}
 	//対応するメソッドを検索
@@ -189,7 +189,7 @@ static void il_factor_invoke_check(il_factor_invoke * self, enviroment * env, ca
 	//self->m = class_find_method(TYPE2CLASS(ctype), self->name, self->args, env, cache, &temp);
 	self->index = temp;
 	if(temp == -1) {
-		il_error_report(ilerror_undefined_method, string_pool_ref2str(self->namev));
+		bc_error_throw(bcerror_undefined_method, string_pool_ref2str(self->namev));
 		return;
 	}
 }

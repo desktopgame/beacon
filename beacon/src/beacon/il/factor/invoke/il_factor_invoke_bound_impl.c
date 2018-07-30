@@ -48,7 +48,7 @@ void il_factor_invoke_bound_generate(il_factor_invoke_bound* self, enviroment* e
 	for(int i=0; i<self->args->length; i++) {
 		il_argument* e = (il_argument*)vector_at(self->args, i);
 		il_factor_generate(e->factor, env, cctx);
-		if(il_error_panic()) {
+		if(bc_error_last()) {
 			return;
 		}
 	}
@@ -75,7 +75,7 @@ generic_type* il_factor_invoke_bound_eval(il_factor_invoke_bound * self, envirom
 	type* tp = NULL;
 	//メソッドが見つからない
 	il_factor_invoke_bound_check(self, env, cctx);
-	if(il_error_panic()) {
+	if(bc_error_last()) {
 		return NULL;
 	}
 	if(self->m->return_gtype->tag != generic_type_tag_none) {
@@ -154,7 +154,7 @@ static void il_factor_invoke_bound_check(il_factor_invoke_bound * self, envirome
 	self->index = temp;
 	call_context_pop(cctx);
 	if(temp == -1) {
-		il_error_report(ilerror_undefined_method, string_pool_ref2str(self->namev));
+		bc_error_throw(bcerror_undefined_method, string_pool_ref2str(self->namev));
 	}
 }
 static void il_factor_invoke_bound_args_delete(vector_item item) {
