@@ -2,7 +2,9 @@
 #define BEACON_ERROR_H
 #include <stdarg.h>
 #include <stdio.h>
-
+/**
+ * beaconインタプリタがソース解析中に検出したエラーを表す列挙.
+ */
 typedef enum bc_error_id {
 	bcerror_none = 0,
 	bcerror_generic,
@@ -33,15 +35,40 @@ typedef enum bc_error_id {
 	bcerror_illegal_argument_uoperator,
 } bc_error_id;
 
+/**
+ * 指定のIDでエラーを発生させます.
+ * @param id
+ * @param ...
+ */
 void bc_error_throw(bc_error_id id, ...);
 
+/**
+ * 指定のIDでエラーを発生させます.
+ * @param id
+ * @param ap
+ */
 void bc_error_vthrow(bc_error_id id, va_list ap);
 
+/**
+ * エラーフラグをクリアします.
+ */
 void bc_error_clear();
 
+/**
+ * エラーが発生したファイルを記録します.
+ * @param filename
+ */
 void bc_error_file(const char* filename);
 
+/**
+ * エラーが発生した行を記録します.
+ * @param lineno
+ */
 void bc_error_line(int lineno);
 
+/**
+ * 現在発生中のエラーを返します.
+ * @return
+ */
 bc_error_id bc_error_last();
 #endif
