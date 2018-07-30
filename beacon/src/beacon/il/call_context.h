@@ -2,6 +2,7 @@
 #define BEACON_IL_CALL_CONTEXT_H
 #include "../util/vector.h"
 #include "call_frame.h"
+#include "control_structure.h"
 struct namespace_;
 struct type;
 struct class_;
@@ -23,6 +24,7 @@ typedef enum call_context_tag {
 
 typedef struct call_context {
 	vector* call_stack;
+	control_structure control;
 	call_context_tag tag;
 	struct namespace_* space;
 	struct type* ty;

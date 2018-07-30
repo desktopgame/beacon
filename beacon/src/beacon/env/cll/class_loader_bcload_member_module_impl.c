@@ -55,6 +55,7 @@ void CLBC_fields_decl(class_loader* self, il_type* iltype, type* tp, vector* ilf
 		   modifier_is_override(field->modifier) ||
 		   modifier_is_native(field->modifier)) {
 			   class_loader_report(self, clerror_native_field, string_pool_ref2str(field->namev));
+				call_context_delete(cctx);
 			   return;
 		   }
 		//NOTE:ここではフィールドの型を設定しません
@@ -108,6 +109,7 @@ void CLBC_methods_decl(class_loader* self, il_type* iltype, type* tp, vector* il
 		  !TYPE2CLASS(tp)->is_abstract)) {
 			  class_loader_report(self, clerror_abstract_method_by, string_pool_ref2str(method->namev));
 			  method_delete(method);
+				call_context_delete(cctx);
 			  return;
 		}
 		//メソッドの本文が省略されているが、
@@ -118,6 +120,7 @@ void CLBC_methods_decl(class_loader* self, il_type* iltype, type* tp, vector* il
 		) {
 			  class_loader_report(self, clerror_empty_method_body, string_pool_ref2str(method->namev));
 			  method_delete(method);
+			call_context_delete(cctx);
 			return;
 		}
 		//ネイティブメソッドもしくは抽象メソッドなのに本文が書かれている
@@ -127,6 +130,7 @@ void CLBC_methods_decl(class_loader* self, il_type* iltype, type* tp, vector* il
 		) {
 			  class_loader_report(self, clerror_not_empty_method_body, string_pool_ref2str(method->namev));
 			  method_delete(method);
+			call_context_delete(cctx);
 			return;
 		}
 		method->parent = tp;

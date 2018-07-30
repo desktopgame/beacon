@@ -9,10 +9,13 @@
 
 call_context* call_context_malloc(call_context_tag tag, const char* filename, int lineno) {
 	call_context* ret = mem_malloc(sizeof(call_context), filename, lineno);
-	ret->call_stack = vector_new();
+	control_structure cs = {};
+	ret->call_stack = vector_malloc(filename, lineno);
 	ret->space = NULL;
 	ret->ty = NULL;
 	ret->tag = tag;
+	ret->control = cs;
+	control_structure_alloc(&ret->control);
 	return ret;
 }
 
@@ -91,5 +94,6 @@ vector* call_context_typeargs(call_context* self) {
 
 void call_context_delete(call_context* self) {
 	MEM_FREE(self);
+	control_structure_free(self->control);
 	vector_delete(self->call_stack, vector_deleter_null);
 }

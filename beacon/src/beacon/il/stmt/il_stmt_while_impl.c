@@ -3,6 +3,7 @@
 #include "../../util/text.h"
 #include "../../vm/enviroment.h"
 #include <stdio.h>
+#include "../call_context.h"
 
 //proto
 static void il_stmt_while_stmt_delete(vector_item item);
@@ -35,6 +36,8 @@ void il_stmt_while_generate(il_stmt_while * self, enviroment * env, call_context
 	int prev = opcode_buf_nop(env->buf);
 	label* prevLab = opcode_buf_label(env->buf, prev);
 	label* nextLab = opcode_buf_label(env->buf, -1);
+	vector_push(cctx->control.while_start, prevLab);
+	vector_push(cctx->control.while_end, nextLab);
 	//条件を満たさないなら nextLab へ
 	il_factor_generate(self->condition, env, cctx);
 	opcode_buf_add(env->buf, op_goto_if_false);
@@ -47,7 +50,8 @@ void il_stmt_while_generate(il_stmt_while * self, enviroment * env, call_context
 	//prevLab へ行って再判定
 	opcode_buf_add(env->buf, op_goto);
 	opcode_buf_add(env->buf, prevLab);
-
+	vector_pop(cctx->control.while_start);
+	vector_pop(cctx->control.while_end);
 	int next = opcode_buf_nop(env->buf);
 	nextLab->cursor = next;
 }

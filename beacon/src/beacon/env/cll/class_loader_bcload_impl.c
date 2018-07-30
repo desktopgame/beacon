@@ -355,6 +355,7 @@ static void CLBC_register_class(class_loader* self, namespace_* parent, il_type*
 			if(E->tag != type_interface) {
 				class_loader_report(self, clerror_class_first, string_pool_ref2str(type_name(tp)));
 				namespace_add_type(parent, tp);
+				call_context_delete(cctx);
 				return;
 			}
 		}
@@ -402,6 +403,7 @@ static void CLBC_register_interface(class_loader* self, namespace_* parent, il_t
 		if(E->tag != type_interface) {
 			class_loader_report(self, clerror_interface_only, string_pool_ref2str(type_name(tp)));
 			namespace_add_type(parent, tp);
+			call_context_delete(cctx);
 			return;
 		//インターフェイスの時のみ追加
 		} else {
