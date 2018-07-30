@@ -375,7 +375,6 @@ void CLBC_body(class_loader* self, vector* stmt_list, enviroment* dest, call_con
 	//まずは全てのステートメントを読み込む
 	for (int i = 0; i < stmt_list->length; i++) {
 		if(bc_error_last()) {
-			self->error = true;
 			break;
 		}
 		vector_item e = vector_at(stmt_list, i);
@@ -385,7 +384,6 @@ void CLBC_body(class_loader* self, vector* stmt_list, enviroment* dest, call_con
 	//オペコードを生成
 	for (int i = 0; i < stmt_list->length; i++) {
 		if(bc_error_last()) {
-			self->error = true;
 			break;
 		}
 		vector_item e = vector_at(stmt_list, i);

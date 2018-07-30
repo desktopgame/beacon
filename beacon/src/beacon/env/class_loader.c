@@ -68,7 +68,6 @@ class_loader* class_loader_new(content_type type) {
 	ret->link = link_none;
 	ret->import_manager = import_manager_new();
 	ret->env = enviroment_new();
-	ret->error = false;
 	ret->level = 0;
 	ret->type_cache_vec = vector_new();
 	ret->lazy_resolve_vec = vector_new();
@@ -105,6 +104,7 @@ class_loader * class_loader_new_entry_point_from_parser(parser * p) {
 }
 
 void class_loader_load(class_loader * self) {
+	bc_error_clear();
 	heap* hee = heap_get();
 	hee->accept_blocking++;
 	class_loader_load_impl(self);
@@ -153,15 +153,15 @@ void class_loader_delete(class_loader * self) {
 static void class_loader_load_impl(class_loader* self) {
 	assert(self != NULL);
 	if(self->source_code == NULL) {
-		self->error = true;
+		bc_error_throw(bcerror_generic, "can't parse file");
 		return;
 	}
 	//AST -> IL へ
 	class_loader_ilload_impl(self, self->source_code);
-	if (self->error) { return; }
+	if (bc_error_last()) { return; }
 	//IL -> SG へ
 	class_loader_bcload_impl(self);
-	if (self->error) { return; }
+	if (bc_error_last()) { return; }
 	//他のクラスローダーとリンク
 	class_loader_load_linkall(self);
 	class_loader_load_toplevel_function(self);
@@ -232,10 +232,10 @@ static class_loader* class_loader_load_specialImpl(class_loader* self, class_loa
 	parser_pop();
 	//AST -> IL へ
 	class_loader_ilload_impl(cll, cll->source_code);
-	if (cll->error) { return cll; }
+	if (bc_error_last()) { return cll; }
 	//IL -> SG へ
 	class_loader_bcload_special(cll);
-	if (cll->error) { return cll; }
+	if (bc_error_last()) { return cll; }
 	assert(cll->type == content_lib);
 	return cll;
 }

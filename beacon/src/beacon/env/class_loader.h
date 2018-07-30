@@ -29,7 +29,7 @@ typedef struct class_loader {
 	struct class_loader* parent;
 	int level;
 	char* filename;
-	bool error;
+//	bool error;
 } class_loader;
 
 /**
@@ -58,7 +58,7 @@ typedef enum cl_error_id {
  * 引数のクラスローダの error が true なら return します.
  * @param self
  */
-#define CL_ERROR(self) if((self)->error || bc_error_last()) return
+#define CL_ERROR(self) if(bc_error_last()) return
 
 /**
  * 引数のクラスローダの error が true なら a を return します.
@@ -66,7 +66,7 @@ typedef enum cl_error_id {
  * @param a
  * @return
  */
-#define CL_ERROR_RET(self, a) if((self)->error) return (a)
+#define CL_ERROR_RET(self, a) if(bc_error_last()) return (a)
 
 /**
  * クラスローダーを作成します.

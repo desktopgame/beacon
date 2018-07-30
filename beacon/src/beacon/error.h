@@ -5,6 +5,7 @@
 
 typedef enum bc_error_id {
 	bcerror_none = 0,
+	bcerror_generic,
 	bcerror_undefined_class,
 	bcerror_undefined_variable,
 	bcerror_undefined_field,

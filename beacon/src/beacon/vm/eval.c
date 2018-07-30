@@ -107,7 +107,7 @@ static bool eval_top_from_cll(class_loader* cll) {
 		vm_execute(fr, cll->env);
 	}
 	if(fr->terminate) {
-		cll->error = true;
+		bc_error_throw(bcerror_generic, "unexpected terminate");
 	}
 	vm_catch(fr);
 	heap_gc(heap_get(), gc_full);
@@ -116,7 +116,7 @@ static bool eval_top_from_cll(class_loader* cll) {
 	//heap_dump(heap_get());
 	sg_thread_release_frame_ref(sg_thread_current());
 
-	bool ret = cll->error;
+	bool ret = bc_error_last();
 	class_loader_delete(cll);
 	return ret;
 }

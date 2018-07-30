@@ -19,6 +19,9 @@ void bc_error_vthrow(bc_error_id id, va_list ap) {
 	switch(id) {
 		case bcerror_none:
 			break;
+		case bcerror_generic:
+			fmt = "%s";
+			break;
 		case bcerror_undefined_class:
 			fmt = "undefined class: %s";
 			break;
@@ -101,8 +104,8 @@ void bc_error_vthrow(bc_error_id id, va_list ap) {
 			}
 	}
 	gGlobalError = id;
-	text_vprintf(fmt, ap);
-	text_printf("\n");
+	text_vfprintf(stderr, fmt, ap);
+	text_fprintf(stderr, "\n");
 }
 
 void bc_error_clear() {

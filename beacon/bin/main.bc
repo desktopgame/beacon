@@ -1,19 +1,18 @@
-namespace err30 {
-	class GenericA[T] {
-		public:
-		T value;
+import "beacon/lang/Object"
+import "beacon/lang/Array"
+import "beacon/lang/Int"
+import "beacon/lang/Double"
+import "beacon/lang/Char"
+import "beacon/lang/String"
+import "beacon/lang/Bool"
+import "beacon/lang/Null"
+import "beacon/lang/Void"
+import "beacon/lang/Console"
+import "beacon/lang/Vector"
+import "beacon/lang/VectorIterator"
 
-		def new(T value) {
-			this.value = value;
-		}
-	}
-	class GenericB[T] {
-		public:
-		GenericA[T] value;
+import "beacon/lang/Exception"
+import "beacon/lang/StackTraceElement"
 
-		def new(T value) {
-			this.value = new GenericA[T](value);
-		}
-	}
-}
-var b = new err30::GenericB[Int]("Hello");
+var vec = new Vector[Int]();
+Console.writeLine(vec.a());
