@@ -443,6 +443,7 @@ static void CLBC_chain_auto(class_loader * self, il_type * iltype, type * tp, il
 	class_* classz = tp->u.class_;
 	int emptyTemp = 0;
 	call_context* cctx = call_context_new(call_ctor_args_T);
+	cctx->ty = tp;
 	constructor* emptyTarget = class_ilfind_empty_constructor(classz->super_class->core_type->u.class_, env, cctx, &emptyTemp);
 	call_context_delete(cctx);
 	//連鎖を明示的に書いていないのに、
@@ -469,6 +470,7 @@ static void CLBC_chain_super(class_loader * self, il_type * iltype, type * tp, i
 	class_* classz = tp->u.class_;
 	//チェインコンストラクタの実引数をプッシュ
 	call_context* cctx = call_context_new(call_ctor_args_T);
+	cctx->ty = tp;
 	il_constructor_chain* chain = ilcons->chain;
 	for (int i = 0; i < chain->argument_list->length; i++) {
 		il_argument* ilarg = (il_argument*)vector_at(chain->argument_list, i);

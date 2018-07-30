@@ -143,3 +143,5 @@
 [debug]AbstractClass@foo                   [beacon/env/cll/class_loader_bcload_member_module_impl.c<150>]
 [debug]CallImpl@call                       [beacon/env/cll/class_loader_bcload_member_module_impl.c<150>]
 [debug]ICall@call                          [beacon/env/cll/class_loader_bcload_member_module_impl.c<150>]
+[debug]Private@call                        [beacon/env/cll/class_loader_bcload_member_module_impl.c<150>]
+[debug]Private@call                        [beacon/env/cll/class_loader_bcload_member_module_impl.c<150>]

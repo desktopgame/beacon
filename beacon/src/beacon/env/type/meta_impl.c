@@ -133,7 +133,7 @@ method* meta_scoped_ilfind_method(class_* context, vector* method_vec, string_vi
 	for (int i = 0; i < method_vec->length; i++) {
 		vector_item ve = vector_at(method_vec, i);
 		method* m = (method*)ve;
-		if(!meta_access_valid(context, m)) {
+		if(!meta_method_access_valid(m, cctx)) {
 			continue;
 		}
 		//名前か引数の個数が違うので無視
@@ -170,9 +170,6 @@ method* meta_scoped_gfind_method(class_* context, vector* method_vec, string_vie
 	for (int i = 0; i < method_vec->length; i++) {
 		vector_item ve = vector_at(method_vec, i);
 		method* m = (method*)ve;
-		if(!meta_access_valid(context, m)) {
-			continue;
-		}
 		//名前か引数の個数が違うので無視
 		if (m->namev != namev ||
 			m->parameter_list->length != gargs->length
@@ -213,7 +210,7 @@ constructor* meta_scoped_ilfind_ctor(class_* context, vector* ctor_vec, vector* 
 	for (int i = 0; i < ctor_vec->length; i++) {
 		vector_item ve = vector_at(ctor_vec, i);
 		constructor* ctor = (constructor*)ve;
-		if(!meta_access_validc(context, ctor)) {
+		if(!meta_ctor_access_valid(ctor, cctx)) {
 			continue;
 		}
 		//引数の個数が違うので無視
@@ -248,9 +245,6 @@ constructor* meta_scoped_rfind_ctor(class_* context, vector* ctor_vec, vector* g
 		vector_item ve = vector_at(ctor_vec, i);
 		constructor* ctor = (constructor*)ve;
 		class_* cls = TYPE2CLASS(ctor->parent);
-		if(!meta_access_validc(context, ctor)) {
-			continue;
-		}
 		//引数の個数が違うので無視
 		if (ctor->parameter_list->length != gargs->length) {
 			continue;
@@ -308,8 +302,8 @@ operator_overload* meta_gfind_operator_default_noteq(vector* opov_vec, int* outI
 	return ret;
 }
 
-bool meta_access_valid(class_* context, method* m) {
-/*
+bool meta_method_access_valid(method* m, call_context* cctx) {
+	class_* context = call_context_class(cctx);
 	//privateメソッドなのに現在のコンテキストではない
 	if(context != NULL &&
 		m->access == access_private &&
@@ -322,12 +316,11 @@ bool meta_access_valid(class_* context, method* m) {
 		class_distance(TYPE2CLASS(m->parent), context) < 0) {
 		return false;
 	}
-*/
 	return true;
 }
 
-bool meta_access_validc(class_* context, constructor* ctor) {
-/*
+bool meta_ctor_access_valid(constructor* ctor, call_context* cctx) {
+	class_* context = call_context_class(cctx);
 	//privateメソッドなのに現在のコンテキストではない
 	if(context != NULL &&
 		ctor->access == access_private &&
@@ -340,6 +333,5 @@ bool meta_access_validc(class_* context, constructor* ctor) {
 		class_distance(TYPE2CLASS(ctor->parent), context) < 0) {
 		return false;
 	}
-*/
 	return true;
 }

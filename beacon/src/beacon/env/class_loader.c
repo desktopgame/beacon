@@ -265,6 +265,7 @@ static void class_loader_load_toplevel(class_loader* self) {
 	createWorldStmt->fact->lineno = 0;
 	//worldをselfにする
 	call_context* cctx = call_context_new(call_top_T);
+	cctx->ty = namespace_get_type(namespace_lang(), string_pool_intern("World"));
 	il_stmt_load(body, self->env, cctx);
 	il_stmt_generate(body, self->env, cctx);
 	//$worldをthisにする
@@ -300,6 +301,7 @@ static void class_loader_load_toplevel_function(class_loader* self) {
 		sm->env = env;
 		m->access = access_private;
 		m->u.script_method = sm;
+		m->parent = worldT;
 		//戻り値を指定
 		m->return_gtype = import_manager_resolve(self->import_manager, loc, ilfunc->return_fqcn, cctx);
 		//引数を指定

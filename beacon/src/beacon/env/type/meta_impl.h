@@ -161,16 +161,16 @@ operator_overload* meta_gfind_operator_default_noteq(vector* opov_vec, int* outI
 
 /**
  * 指定のメソッドが現在のコンテキストで有効なら true.
- * @param context
  * @param m
+ * @param cctx
  * @return
  */
-bool meta_access_valid(struct class_* context, struct method* m);
+bool meta_method_access_valid(struct method* m, call_context* cctx);
 /**
  * 指定のメソッドが現在のコンテキストで有効なら true.
- * @param context
  * @param m
+ * @param cctx
  * @return
  */
-bool meta_access_validc(struct class_* context, struct constructor* ctor);
+bool meta_ctor_access_valid(struct constructor* ctor, call_context* cctx);
 #endif // !SIGNAL_ENV_META_H

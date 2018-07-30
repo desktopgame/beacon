@@ -280,6 +280,7 @@ static void script_context_free(script_context* self) {
 	vm_catch(thv);
 	class_loader_delete(self->bootstrap_class_loader);
 	if(self->oNull != NULL) {
+		heap_ignore(self->heap, self->oNull);
 		self->oNull->paint = paint_onexit;
 		object_destroy(self->oNull);
 	}

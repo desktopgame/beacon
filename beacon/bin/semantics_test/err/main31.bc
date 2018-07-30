@@ -1,14 +1,14 @@
-namespace err32 {
+namespace err31 {
 	class Private {
 		public:
 		def new() {
 		}
 
-		protected:
+		private:
 		def call() -> Void {
 			Console.writeLine("Hello");
 		}
 	}
 }
-var a = new err32::Private();
+var a = new err31::Private();
 a.call();
