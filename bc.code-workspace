@@ -96,7 +96,9 @@
 			"il_parameter.h": "c",
 			"il_import.h": "c",
 			"il_type_parameter.h": "c",
-			"il_method.h": "c"
+			"il_method.h": "c",
+			"vector.h": "c",
+			"interface_impl.h": "c"
 		},
 		"ruby.lint": {
 			"reek": true,
