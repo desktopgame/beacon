@@ -89,6 +89,9 @@ void il_factor_dump(il_factor * self, int depth) {
 		case ilfactor_lambda:
 			il_factor_lambda_dump(self->u.lambda_, depth);
 			break;
+		case ilfactor_property:
+			il_factor_property_dump(self->u.prop, depth);
+			break;
 		default:
 			break;
 	}
@@ -167,6 +170,9 @@ void il_factor_generate(il_factor * self, enviroment* env, call_context* cctx) {
 			break;
 		case ilfactor_lambda:
 			il_factor_lambda_generate(self->u.lambda_, env, cctx);
+			break;
+		case ilfactor_property:
+			il_factor_property_generate(self->u.prop, env, cctx);
 			break;
 		default:
 			break;
@@ -252,6 +258,9 @@ void il_factor_load(il_factor * self, enviroment * env, call_context* cctx) {
 		case ilfactor_lambda:
 			il_factor_lambda_load(self->u.lambda_, env, cctx);
 			break;
+		case ilfactor_property:
+			il_factor_property_load(self->u.prop, env, cctx);
+			break;
 		default:
 			break;
 	}
@@ -334,6 +343,9 @@ generic_type* il_factor_eval(il_factor * self, enviroment * env, call_context* c
 		case ilfactor_lambda:
 			ret = il_factor_lambda_eval(self->u.lambda_, env, cctx);
 			break;
+		case ilfactor_property:
+			ret = il_factor_property_eval(self->u.prop, env, cctx);
+			break;
 		default:
 			break;
 	}
@@ -393,6 +405,8 @@ char* il_factor_tostr(il_factor* self, enviroment* env) {
 			return NULL;
 		case ilfactor_lambda:
 			return il_factor_lambda_tostr(self->u.lambda_, env);
+		case ilfactor_property:
+			return il_factor_property_tostr(self->u.prop, env);
 		default:
 			break;
 	}
@@ -506,6 +520,9 @@ void il_factor_delete(il_factor * self) {
 			break;
 		case ilfactor_lambda:
 			il_factor_lambda_delete(self->u.lambda_);
+			break;
+		case ilfactor_property:
+			il_factor_property_delete(self->u.prop);
 			break;
 		default:
 			break;
