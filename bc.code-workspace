@@ -98,7 +98,14 @@
 			"il_type_parameter.h": "c",
 			"il_method.h": "c",
 			"vector.h": "c",
-			"interface_impl.h": "c"
+			"interface_impl.h": "c",
+			"__functional_03": "c",
+			"__mutex_base": "c",
+			"optional": "c",
+			"fstream": "c",
+			"istream": "c",
+			"ostream": "c",
+			"streambuf": "c"
 		},
 		"ruby.lint": {
 			"reek": true,

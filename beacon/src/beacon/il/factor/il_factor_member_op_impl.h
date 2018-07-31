@@ -15,6 +15,7 @@ struct field;
  * メンバアクセスを表す要素.
  */
 typedef struct il_factor_member_op {
+	il_factor* parent;
 	il_factor* fact;
 	string_view namev;
 	vector* type_args;
