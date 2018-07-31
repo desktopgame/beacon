@@ -13,5 +13,7 @@ property* property_malloc(string_view namev, const char* filename, int lineno) {
 	return ret;
 }
 void property_delete(property* self) {
+	property_body_delete(self->set);
+	property_body_delete(self->get);
 	MEM_FREE(self);
 }

@@ -10,5 +10,6 @@ property_body* property_body_malloc(property_body_tag tag, const char* filename,
 }
 
 void property_body_delete(property_body* self) {
+	enviroment_delete(self->env);
 	MEM_FREE(self);
 }
