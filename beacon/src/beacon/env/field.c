@@ -18,18 +18,6 @@ field * field_new(string_view namev) {
 	return ret;
 }
 
-void field_dump(field * self, int depth) {
-	assert(self != NULL);
-	text_putindent(depth);
-	access_print(self->access);
-	text_printf(" ");
-	modifier_print(self->modifier);
-	text_printf(" field ");
-	generic_type_print(self->gtype);
-	text_printf(" %s", string_pool_ref2str(self->namev));
-	text_putline();
-}
-
 void field_delete(field * self) {
 	if (self == NULL) {
 		return;

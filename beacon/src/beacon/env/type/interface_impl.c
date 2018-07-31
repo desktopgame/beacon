@@ -66,28 +66,6 @@ vector* interface_method_flatten(interface_* self) {
 	return ret;
 }
 
-void interface_dump(interface_ * self, int depth) {
-	text_putindent(depth);
-	text_printf("interface %s", string_pool_ref2str(self->namev));
-	type_parameter_print(self->type_parameter_list);
-	text_putline();
-	//継承するインターフェイスの一覧
-	for (int i = 0; i < self->impl_list->length; i++) {
-		//interface_* inter = (interface_*)vector_at(self->impl_list, i);
-		generic_type* gt = vector_at(self->impl_list, i);
-		interface_* inter = TYPE2INTERFACE(GENERIC2TYPE(gt));
-		text_putindent(depth + 1);
-		text_printf("extend %s", string_pool_ref2str(inter->namev));
-		text_putline();
-	}
-	//メソッドの一覧をダンプ
-	for (int i = 0; i < self->method_list->length; i++) {
-		vector_item e = vector_at(self->method_list, i);
-		method* m = (method*)e;
-		method_dump(m, depth + 1);
-	}
-}
-
 void interface_create_vtable(interface_ * self) {
 	//初期化済み
 	if (self->vt != NULL) {

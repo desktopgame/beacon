@@ -25,13 +25,6 @@ typedef struct constructor {
 constructor* constructor_new();
 
 /**
- * コンストラクタを出力します.
- * @param self
- * @param depth
- */
-void constructor_dump(constructor* self, int depth);
-
-/**
  * このコンストラクタを使用してオブジェクトを生成します.
  * @param self
  * @param args

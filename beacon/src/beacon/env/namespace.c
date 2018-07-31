@@ -158,15 +158,6 @@ type * namespace_null_type() {
 	return bc_null_type();
 }
 
-void namespace_dump() {
-	script_context* ctx = script_context_get_current();
-	if (ctx->namespace_nmap == NULL) {
-		return;
-	}
-	namespace_dump_root(ctx->namespace_nmap->left, true, 0);
-	namespace_dump_root(ctx->namespace_nmap->right, true, 0);
-}
-
 void namespace_unlink(namespace_ * self) {
 	numeric_map_each(self->namespace_map, namespace_unlink_namespace);
 	numeric_map_each(self->type_map, namespace_unlink_type);

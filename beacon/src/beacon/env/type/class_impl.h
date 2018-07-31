@@ -115,12 +115,6 @@ void class_add_method(class_* self, struct method* m);
 void class_add_constructor(class_* self, struct constructor* c);
 
 /**
- * クラスを出力します.
- * @param self
- * @param depth
- */
-void class_dump(class_* self, int depth);
-/**
  * 指定の名前に対応するネイティブ関数を登録します.
  * @param self
  * @param name

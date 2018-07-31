@@ -21,27 +21,6 @@ constructor * constructor_new() {
 	return ret;
 }
 
-void constructor_dump(constructor * self, int depth) {
-	text_putindent(depth);
-	access_print(self->access);
-	text_printf(" constructor");
-	text_printf("(");
-	for (int i = 0; i < self->parameter_list->length; i++) {
-		vector_item e = vector_at(self->parameter_list, i);
-		parameter* p = (parameter*)e;
-		generic_type_print(p->gtype);
-		text_printf(" %s", string_pool_ref2str(p->namev));
-		if ((i + 1) < self->parameter_list->length) {
-			text_printf(" ");
-		}
-	}
-	text_printf(")");
-	text_putline();
-	if(self->env != NULL) {
-		opcode_buf_dump(self->env->buf, depth + 1);
-	}
-}
-
 object * constructor_new_instance(constructor * self, vector * args, frame * parent) {
 	frame* sub = frame_sub(parent);
 	for (int i = 0; i < args->length; i++) {

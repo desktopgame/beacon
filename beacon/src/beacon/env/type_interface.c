@@ -86,14 +86,6 @@ vtable * type_vtable(type * self) {
 	return NULL;
 }
 
-void type_dump(type * self, int depth) {
-	if (self->tag == type_class) {
-		class_dump(self->u.class_, depth);
-	} else if (self->tag == type_interface) {
-		interface_dump(self->u.interface_, depth);
-	}
-}
-
 int type_distance(type * super, type * sub) {
 	if (super == sub) {
 		return 0;

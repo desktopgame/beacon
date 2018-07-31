@@ -60,13 +60,6 @@ method* method_malloc(string_view namev, const char* filename, int lineno);
 void method_execute(method* self, struct frame* fr, struct enviroment* env);
 
 /**
- * メソッドを出力します.
- * @param self
- * @param depth
- */
-void method_dump(method* self, int depth);
-
-/**
  * メソッドa とb が完全に等価である場合に true を返します.
  * もしくは戻り値がサブクラス型でオーバライドされている場合でも true です。
  * @see http://www.ne.jp/asahi/hishidama/home/tech/java/covariant.html

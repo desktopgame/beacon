@@ -28,13 +28,6 @@ typedef struct field {
 field* field_new(string_view namev);
 
 /**
- * フィールドを出力します.
- * @param self
- * @param depth
- */
-void field_dump(field* self, int depth);
-
-/**
  * フィールドを開放します.
  * @param self
  */

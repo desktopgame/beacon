@@ -146,57 +146,6 @@ void class_add_constructor(class_ * self, constructor * c) {
 	vector_push(self->constructor_list, c);
 }
 
-void class_dump(class_ * self, int depth) {
-	text_putindent(depth);
-	text_printf("class %s", string_pool_ref2str(self->namev));
-	type_parameter_print(self->type_parameter_list);
-	text_putline();
-	//親クラスがあるなら表示
-	if (self->super_class != NULL) {
-		text_putindent(depth + 1);
-		text_printf("super ");
-		text_printf("%s", string_pool_ref2str(type_name(self->super_class->core_type)));
-//		generic_type_print(self->super_class->);
-		text_putline();
-	}
-	//実装インターフェースがあるなら表示
-	for (int i = 0; i < self->impl_list->length; i++) {
-		generic_type* e = (generic_type*)vector_at(self->impl_list, i);
-		interface_* inter = e->core_type->u.interface_;
-		text_putindent(depth + 1);
-		text_printf("impl %s", string_pool_ref2str(inter->namev));
-		text_putline();
-	}
-	//フィールドの一覧をダンプ
-	for (int i = 0; i < self->field_list->length; i++) {
-		vector_item e = vector_at(self->field_list, i);
-		field* f = (field*)e;
-		field_dump(f, depth + 1);
-	}
-	for (int i = 0; i < self->sfield_list->length; i++) {
-		vector_item e = vector_at(self->sfield_list, i);
-		field* f = (field*)e;
-		field_dump(f, depth + 1);
-	}
-	//メソッドの一覧をダンプ
-	for (int i = 0; i < self->method_list->length; i++) {
-		vector_item e = vector_at(self->method_list, i);
-		method* m = (method*)e;
-		method_dump(m, depth + 1);
-	}
-	for (int i = 0; i < self->smethod_list->length; i++) {
-		vector_item e = vector_at(self->smethod_list, i);
-		method* m = (method*)e;
-		method_dump(m, depth + 1);
-	}
-	//コンストラクタの一覧をダンプ
-	for (int i = 0; i < self->constructor_list->length; i++) {
-		vector_item e = vector_at(self->constructor_list, i);
-		constructor* c = (constructor*)e;
-		constructor_dump(c, depth + 1);
-	}
-}
-
 void class_define_native_method(class_* self, const char* name, native_impl impl) {
 	class_define_native_method_by_ref(self, string_pool_intern(name), impl);
 }

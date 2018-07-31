@@ -126,13 +126,6 @@ struct method* type_ilfind_smethod(type* self, string_view namev, vector* args, 
 struct vtable* type_vtable(type* self);
 
 /**
- * この型の名前を出力します.
- * @param self
- * @param depth
- */
-void type_dump(type* self, int depth);
-
-/**
  * 型の距離を返します.
  * @param super
  * @param sub

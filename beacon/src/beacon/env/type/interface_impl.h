@@ -83,13 +83,6 @@ vector* interface_method_flatten_list(vector* inter_list);
 vector* interface_method_flatten(interface_* self);
 
 /**
- * インターフェイスをダンプします.
- * @param self
- * @param depth
- */
-void interface_dump(interface_* self, int depth);
-
-/**
  * メソッドの一覧から vtable を作成します.
  * @param self
  */

@@ -174,11 +174,6 @@ struct type* namespace_void_type();
 struct type* namespace_null_type();
 
 /**
- * 全ての名前空間を出力します.
- */
-void namespace_dump();
-
-/**
  * 指定の名前空間のすべての型で unlink を呼び出します.
  * @param self
  */

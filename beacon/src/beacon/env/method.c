@@ -61,34 +61,6 @@ void method_execute(method* self, frame * fr, enviroment* env) {
 	}
 }
 
-void method_dump(method * self, int depth) {
-	text_putindent(depth);
-	access_print(self->access);
-	text_printf(" ");
-	modifier_print(self->modifier);
-	text_printf(" method %s", string_pool_ref2str(self->namev));
-	type_parameter_print(self->type_parameter_list);
-	text_printf("(");
-	for (int i = 0; i < self->parameter_list->length; i++) {
-		vector_item e = vector_at(self->parameter_list, i);
-		parameter* p = (parameter*)e;
-		generic_type_print(p->gtype);
-		text_printf(" %s", string_pool_ref2str(p->namev));
-		if ((i + 1) < self->parameter_list->length) {
-			text_printf(" ");
-		}
-	}
-	text_printf(") -> ");
-	generic_type_print(self->return_gtype);
-	text_putline();
-	if (self->type == method_type_script &&
-	    self->u.script_method->env != NULL) {
-		//スクリプトを読み込み、クラスを登録したあとで
-		//エラーが発生した場合、クラスは登録されているがオペコードは存在しない状態になる
-		opcode_buf_dump(self->u.script_method->env->buf, depth + 1);
-	}
-}
-
 bool method_override(method* superM, method* subM, call_context* cctx) {
 	//名前が違うか引数の数が違う
 	if (superM->namev != subM->namev ||
