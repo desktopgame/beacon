@@ -151,5 +151,9 @@ static il_property_body* CLIL_prop_body(class_loader* self, il_type* current, as
 	if(!ast_is_blank(aacess)) {
 		ret->access = aacess->u.access_value;
 	}
+	if(ret->statement_list->length == 0) {
+		ret->is_short = true;
+		
+	}
 	return ret;
 }

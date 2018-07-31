@@ -10,6 +10,7 @@ il_property_body* il_property_body_malloc(il_property_body_tag tag, const char* 
 	il_property_body* ret = mem_malloc(sizeof(il_property_body), filename, lineno);
 	ret->statement_list = vector_new();
 	ret->tag = tag;
+	ret->is_short = false;
 	return ret;
 }
 
@@ -21,6 +22,9 @@ void il_property_body_dump(il_property_body* self, int depth) {
 		text_printf("set");
 	} else {
 		text_printf("get");
+	}
+	if(self->is_short) {
+		text_printf(" simple");
 	}
 	text_putline();
 	for(int i=0; i<self->statement_list->length; i++) {
