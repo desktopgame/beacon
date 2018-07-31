@@ -6,6 +6,7 @@
 #include "../../vm/symbol_entry.h"
 
 static void assign_to_field(il_factor* receiver, il_factor* source, string_view namev, enviroment* env, call_context* cctx);
+static void assign_to_property(il_factor_assign_op* self, enviroment* env, call_context* cctx);
 
 il_factor* il_factor_wrap_assign(il_factor_assign_op* self) {
 	il_factor* ret = il_factor_new(ilfactor_assign_op);
@@ -63,7 +64,7 @@ void il_factor_assign_op_generate(il_factor_assign_op* self, enviroment* env, ca
 			assign_to_field(ilmem->fact, self->right, ilmem->namev, env, cctx);
 		}
 	} else if(self->left->type == ilfactor_property) {
-
+		assign_to_property(self, env, cctx);
 	}
 }
 
@@ -87,4 +88,16 @@ static void assign_to_field(il_factor* receiver, il_factor* source, string_view 
 	il_factor_generate(source, env, cctx);
 	opcode_buf_add(env->buf, (vector_item)op_put_field);
 	opcode_buf_add(env->buf, (vector_item)temp);
+}
+
+static void assign_to_property(il_factor_assign_op* self, enviroment* env, call_context* cctx) {
+	il_factor_property* prop = self->left->u.prop;
+	if(prop->p->is_short) {
+		il_factor_generate(prop->fact, env, cctx);
+		il_factor_generate(self->right, env, cctx);
+		opcode_buf_add(env->buf, (vector_item)op_put_field);
+		opcode_buf_add(env->buf, (vector_item)prop->index);
+	} else {
+
+	}
 }

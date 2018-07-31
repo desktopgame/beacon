@@ -17,6 +17,6 @@ namespace run55 {
 }
 var d = new run55::Base();
 //d.age = 0;
-//d.property = 10;
+d.property = 10;
 printLine(d.age);
 printLine(d.property);
