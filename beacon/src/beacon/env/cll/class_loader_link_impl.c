@@ -86,8 +86,8 @@ static void CLBC_class_impl(class_loader * self, il_type * iltype, type * tp, na
 	CLBC_fields_impl(self, scope, iltype->u.class_->field_list, (TYPE2CLASS(tp))->field_list);
 	CLBC_fields_impl(self, scope, iltype->u.class_->sfield_list, (TYPE2CLASS(tp))->sfield_list);
 	CL_ERROR(self);
-	CLBC_property_impl(self, scope, iltype->u.class_->prop_list, tp->u.class_->prop_list);
-	CLBC_property_impl(self, scope, iltype->u.class_->sprop_list, tp->u.class_->sprop_list);
+	CLBC_property_impl(self, iltype, tp, iltype->u.class_->prop_list, tp->u.class_->prop_list, scope);
+	CLBC_property_impl(self, iltype, tp, iltype->u.class_->sprop_list, tp->u.class_->sprop_list, scope);
 	CL_ERROR(self);
 
 	CLBC_methods_impl(self, scope, iltype, tp, iltype->u.class_->method_list, ((TYPE2CLASS(tp))->method_list));

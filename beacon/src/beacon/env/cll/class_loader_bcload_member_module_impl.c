@@ -25,6 +25,7 @@
 #include "../lazy_resolve.h"
 #include "../resolve/default_eqoperator_resolve.h"
 #include "../resolve/default_noteqoperator_resolve.h"
+#include "class_loader_ilload_stmt_module_impl.h"
 #include <assert.h>
 #include <string.h>
 
@@ -106,13 +107,28 @@ void CLBC_property_decl(class_loader* self, il_type* iltype, type* tp, vector* i
 	call_context_delete(cctx);
 }
 
-void CLBC_property_impl(class_loader* self, namespace_* scope, vector* ilprops, vector* sgprops) {
+void CLBC_property_impl(class_loader* self,  il_type* iltype, type* tp, vector* ilprops, vector* sgprops, namespace_* scope) {
 	CL_ERROR(self);
+	call_context* cctx = call_context_new(call_decl_T);
+	cctx->space = scope;
+	cctx->ty = tp;
 	for (int i = 0; i < sgprops->length; i++) {
 		vector_item e = vector_at(sgprops, i);
 		property* pr = (property*)e;
+		il_property* ilpr = (il_property*)vector_at(ilprops, i);
 		pr->static_value = object_get_null();
+		if(pr->is_short) { continue; }
+		property_body* set = pr->set;
+		property_body* get = pr->get;
+		vector* set_stmt_list = ilpr->set->statement_list;
+		vector* get_stmt_list = ilpr->get->statement_list;
+		//setterのオペコードを生成
+		symbol_table_entry(set->env->sym_table, pr->gtype, string_pool_intern("value"));
+		CLBC_body(self, set_stmt_list, set->env, cctx, scope);
+		//getterのオペコードを生成
+		CLBC_body(self, get_stmt_list, get->env, cctx, scope);
 	}
+	call_context_delete(cctx);
 }
 
 void CLBC_methods_decl(class_loader* self, il_type* iltype, type* tp, vector* ilmethods, namespace_* scope) {
