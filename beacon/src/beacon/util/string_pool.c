@@ -41,6 +41,18 @@ string_view string_pool_intern2(string_buffer* buffer) {
 	return sv;
 }
 
+string_view string_pool_concat(const char* head, string_view foot) {
+	//連結する
+	const char* footstr = string_pool_ref2str(foot);
+	string_buffer* buf = string_buffer_new();
+	string_buffer_appends(buf, head);
+	string_buffer_appends(buf, footstr);
+	char* retstr = string_buffer_release(buf);
+	string_view ret = string_pool_intern(retstr);
+	MEM_FREE(retstr);
+	return ret;
+}
+
 string_view string_pool_str2ref(const char* str) {
 	tree_map* cell = tree_map_cell(gMap, str);
 	if(cell == gMap) {

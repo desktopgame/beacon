@@ -35,6 +35,14 @@ string_view string_pool_intern(const char* str);
 string_view string_pool_intern2(struct string_buffer* buffer);
 
 /**
+ * 二つの文字列を連結してインターンします.
+ * @param head
+ * @param foot
+ * @return
+ */
+string_view string_pool_concat(const char* head, string_view foot);
+
+/**
  * 文字列が既に符号化されているならそれを返します.
  * @param str
  * @return
