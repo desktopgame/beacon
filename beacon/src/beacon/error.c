@@ -115,6 +115,9 @@ void bc_error_clear() {
 }
 
 void bc_error_file(const char* filename) {
+	if(filename == NULL) {
+		filename = "NULL";
+	}
 	gErrorMessageV = string_pool_intern(filename);
 }
 

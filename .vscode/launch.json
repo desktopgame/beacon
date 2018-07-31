@@ -27,6 +27,28 @@
 			"MIMode": "lldb"
 		},
 		{
+			"name": "(lldb) AST",
+			"type": "cppdbg",
+			"request": "launch",
+			"program": "${workspaceFolder}/beacon/bin/a.out",
+			"args": ["--ast", "main.bc"],
+			"stopAtEntry": false,
+			"cwd": "${workspaceFolder}/beacon/bin",
+			"environment": [],
+			"MIMode": "lldb"
+		},
+		{
+			"name": "(lldb) IL",
+			"type": "cppdbg",
+			"request": "launch",
+			"program": "${workspaceFolder}/beacon/bin/a.out",
+			"args": ["--il", "main.bc"],
+			"stopAtEntry": false,
+			"cwd": "${workspaceFolder}/beacon/bin",
+			"environment": [],
+			"MIMode": "lldb"
+		},
+		{
 			"name": "(lldb) Scratch",
 			"type": "cppdbg",
 			"request": "launch",

@@ -5,11 +5,13 @@
 #include "../../il/il_constructor.h"
 #include "../../il/il_constructor_chain.h"
 #include "../../il/il_operator_overload.h"
+#include "../../il/il_property.h"
 #include "../../error.h"
 #include "class_loader_ilload_type_module_impl.h"
 #include "class_loader_ilload_stmt_module_impl.h"
 #include <assert.h>
 
+static il_property_body* CLIL_prop_body(class_loader* self, il_type* current, ast* abody, il_property_body_tag tag);
 
 void CLIL_member_tree(class_loader* self, il_type* current, ast* tree) {
 	if (tree->tag == ast_access_member_tree) {
@@ -33,6 +35,8 @@ void CLIL_member_list(class_loader* self, il_type* current, ast* member, access_
 		ast* child = ast_first(member);
 		if (child->tag == ast_field_decl) {
 			CLIL_field(self, current, child, level);
+		} else if(child->tag == ast_prop_decl) {
+			CLIL_prop(self, current, child, level);
 		} else if (child->tag == ast_method_decl) {
 			CLIL_method(self, current, child, level);
 		} else if (child->tag == ast_constructor_decl) {
@@ -58,6 +62,20 @@ void CLIL_field(class_loader* self, il_type* current, ast* field, access_level l
 	if(error) {
 		bc_error_throw(bcerror_modifier_a_overlapped, string_pool_ref2str(v->namev));
 	}
+}
+
+void CLIL_prop(class_loader* self, il_type* current, ast* aprop, access_level level) {
+	ast* amod = ast_at(aprop, 0);
+	ast* atypename = ast_at(aprop, 1);
+	ast* aset = ast_at(aprop, 2);
+	ast* aget = ast_at(aprop, 3);
+	string_view propname = aprop->u.stringv_value;
+	il_property* ret = il_property_new(propname);
+	CLIL_generic_cache(atypename, ret->fqcn);
+	ret->access = level;
+	ret->set = CLIL_prop_body(self, current, aset, ilproperty_set);
+	ret->get = CLIL_prop_body(self, current, aget, ilproperty_get);
+	il_type_add_property(current, ret);
 }
 
 void CLIL_method(class_loader* self, il_type* current, ast* method, access_level level) {
@@ -121,4 +139,12 @@ void CLIL_operator_overload(class_loader* self, il_type* current, ast* opov, acc
 	CLIL_body(self, ilopov->statement_list, abody);
 	CLIL_generic_cache(areturn, ilopov->return_fqcn);
 	vector_push(current->u.class_->operator_overload_list, ilopov);
+}
+//private
+static il_property_body* CLIL_prop_body(class_loader* self, il_type* current, ast* abody, il_property_body_tag tag) {
+	il_property_body* ret = il_property_body_new(tag);
+	assert(abody->tag == ast_prop_set || abody->tag == ast_prop_get);
+	ast* astmt_list = ast_first(abody);
+	CLIL_body(self, ret->statement_list, astmt_list);
+	return ret;
 }

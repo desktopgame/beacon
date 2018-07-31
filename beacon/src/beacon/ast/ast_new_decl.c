@@ -238,6 +238,28 @@ ast* ast_new_operator_overload(operator_type type, ast* aparam_list, ast* abody,
 	return ret;
 }
 
+ast* ast_new_prop_set(ast* abody) {
+	ast* aret = ast_new(ast_prop_set);
+	ast_push(aret, abody);
+	return aret;
+}
+
+ast* ast_new_prop_get(ast* abody) {
+	ast* aret = ast_new(ast_prop_get);
+	ast_push(aret, abody);
+	return aret;
+}
+
+ast* ast_new_prop_decl(ast* amodifier, ast* atypename, string_view namev, ast* aset, ast* aget) {
+	ast* aprop = ast_new(ast_prop_decl);
+	aprop->u.stringv_value = namev;
+	ast_push(aprop, amodifier);
+	ast_push(aprop, atypename);
+	ast_push(aprop, aset);
+	ast_push(aprop, aget);
+	return aprop;
+}
+
 //private
 static ast* ast_new_field_type_name(string_view type_namev) {
 	ast* ret = ast_new(ast_field_type_name);

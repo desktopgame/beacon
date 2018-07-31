@@ -267,4 +267,28 @@ ast* ast_new_type_parameter_rule_list(ast* arule_list);
  * @param areturn
  */
 ast* ast_new_operator_overload(operator_type type, ast* aparam_list, ast* abody, ast* areturn);
+
+/**
+ * プロパティの set部分 を表す要素を作成します.
+ * @param abody
+ * @areturn
+ */
+ast* ast_new_prop_set(ast* abody);
+
+/**
+ * プロパティの get部分 を表す要素を作成します.
+ * @param abody
+ * @return
+ */
+ast* ast_new_prop_get(ast* abody);
+
+/**
+ * プロパティ宣言を作成します.
+ * @param amodifier
+ * @param atypename
+ * @param namev
+ * @param aset
+ * @param aget
+ */
+ast* ast_new_prop_decl(ast* amodifier, ast* atypename, string_view namev, ast* aset, ast* aget);
 #endif // !SIGNAL_AST_AST_NEW_DECL_H

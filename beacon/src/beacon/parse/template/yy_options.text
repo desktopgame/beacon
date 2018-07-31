@@ -19,7 +19,7 @@
 		INC DEC EXC_OR
 
 		LCB RCB LRB RRB LSB RSB
-		SEMI IMPORT VAR
+		SEMI IMPORT VAR DEFSET DEFGET
 
 		THIS_TOK SUPER_TOK TRUE_TOK FALSE_TOK NULL_TOK AS
 
@@ -61,6 +61,9 @@ $$SET top_level program
 						operator_define
 						method_define
 						field_define
+						prop_set
+						prop_get
+						prop_define
 						modifier_type_T_list
 						modifier_type_T
 						ident_list

@@ -1,0 +1,22 @@
+#ifndef BEACON_IL_IL_PROPERTY_BODY_H
+#define BEACON_IL_IL_PROPERTY_BODY_H
+#include "../util/vector.h"
+struct generic_cache;
+
+typedef enum il_property_body_tag {
+	ilproperty_set,
+	ilproperty_get,
+} il_property_body_tag;
+
+typedef struct il_property_body {
+	vector* statement_list;
+	il_property_body_tag tag;
+} il_property_body;
+
+#define il_property_body_new(tag) (il_property_body_malloc(tag, __FILE__, __LINE__))
+il_property_body* il_property_body_malloc(il_property_body_tag tag, const char* filename, int lineno);
+
+void il_property_body_dump(il_property_body* self, int depth);
+
+void il_property_body_delete(il_property_body* self);
+#endif

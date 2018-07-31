@@ -33,9 +33,9 @@ void fqcn_cache_dump(fqcn_cache * self, int depth) {
 		text_printf("scope");
 		text_putline();
 		for (int i = 0; i < self->scope_vec->length; i++) {
-			char* e = (char*)vector_at(self->scope_vec, i);
+			string_view sv = (string_view)vector_at(self->scope_vec, i);
 			text_putindent(depth + 1);
-			text_printf("%s", e);
+			text_printf("%s", string_pool_ref2str(sv));
 			text_putline();
 		}
 	}

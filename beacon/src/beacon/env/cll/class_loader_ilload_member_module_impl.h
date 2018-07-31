@@ -33,6 +33,15 @@ void CLIL_member_list(class_loader* self, il_type* current, ast* member, access_
 void CLIL_field(class_loader* self, il_type* current, ast* field, access_level level);
 
 /**
+ * プロパティを IL に変換します.
+ * @param self
+ * @param current
+ * @param aprop
+ * @param level
+ */
+void CLIL_prop(class_loader* self, il_type* current, ast* aprop, access_level level);
+
+/**
  * メソッドを IL に変換します.
  * @param self
  * @param current

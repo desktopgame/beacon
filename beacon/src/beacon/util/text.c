@@ -202,6 +202,9 @@ char * text_concat(const char * a, const char * b) {
 char * text_lineat(const char * src, int lineno) {
 	//text_printf("%s", src);
 	//return NULL;
+	if(src == NULL) {
+		return NULL;
+	}
 	int len = strlen(src);
 	int curLine = 0;
 	string_buffer* buf = string_buffer_new();

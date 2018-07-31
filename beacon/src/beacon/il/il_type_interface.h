@@ -16,6 +16,7 @@ struct il_interface;
 struct il_enum;
 struct il_field;
 struct il_method;
+struct il_property;
 struct il_constructor;
 
 /**
@@ -63,6 +64,13 @@ void il_type_add_constructor(il_type* self, struct il_constructor* ctor);
  * @param field
  */
 void il_type_add_field(il_type* self, struct il_field* field);
+
+/**
+ * プロパティを追加します.
+ * @param self
+ * @param prop
+ */
+void il_type_add_property(il_type* self, struct il_property* prop);
 
 /**
  * メソッドを追加します.

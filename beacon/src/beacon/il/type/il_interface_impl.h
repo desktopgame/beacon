@@ -13,6 +13,7 @@ typedef struct il_interface {
 	vector* method_list;
 	vector* extends_list;
 	vector* type_parameter_list;
+	vector* prop_list;
 } il_interface;
 
 /**
@@ -29,6 +30,18 @@ il_type* il_type_wrap_interface(il_interface* self);
  */
 il_interface* il_interface_new(string_view namev);
 
+/**
+ * プロパティを追加します.
+ * @param self
+ * @param prop
+ */
+void il_interface_add_property(il_interface* self, struct il_property* prop);
+
+/**
+ * プロパティを追加します.
+ * @param self
+ * @param method
+ */
 void il_interface_add_method(il_interface* self, struct il_method* method);
 
 /**

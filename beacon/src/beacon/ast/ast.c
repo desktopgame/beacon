@@ -213,8 +213,11 @@ void ast_print(ast* self) {
 			text_printf("class decl_unit");
 			break;
 		case ast_variable:
-			text_printf("variable %s", string_pool_ref2str(self->u.stringv_value));
+		{
+			ast* a = ast_first(self);
+			text_printf("variable %s", string_pool_ref2str(a->u.stringv_value));
 			break;
+		}
 		case ast_static_invoke: p("static invoke");
 		case ast_fqcn: p("fqcn");
 		case ast_fqcn_part_list: p("fqcn part-list");
@@ -262,6 +265,15 @@ void ast_print(ast* self) {
 			break;
 		case ast_field_access_name:
 			text_printf("access_name(%s)", string_pool_ref2str(self->u.stringv_value));
+			break;
+		case ast_prop_decl:
+			text_printf("prop %s", string_pool_ref2str(self->u.stringv_value));
+			break;
+		case ast_prop_set:
+			text_printf("prop-set");
+			break;
+		case ast_prop_get:
+			text_printf("prop-get");
 			break;
 		case ast_method_decl: p("method decl");
 		case ast_method_name:
@@ -416,8 +428,10 @@ static void ast_print_tree_impl(ast* self, int depth) {
 	ast_print_indent(depth);
 	ast_print(self);
 	text_putline();
-	for (int i = 0; i < self->vchildren->length; i++) {
-		ast_print_tree_impl(ast_at(self, i), depth + 1);
+	if(self->vchildren != NULL) {
+		for (int i = 0; i < self->vchildren->length; i++) {
+			ast_print_tree_impl(ast_at(self, i), depth + 1);
+		}
 	}
 }
 

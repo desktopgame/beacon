@@ -1,22 +1,12 @@
 namespace run55 {
 	class Base {
 		public:
-		def new() {
+		Int property {
+			defset;
+			defget;
 		}
 
-		protected:
-		def callP() -> Void {
-			Console.writeLine("callP");
-		}
-	}
-	class Derive : Base {
-		public:
 		def new() {
-
-		}
-		public:
-		def call() -> Void {
-			callP();
 		}
 	}
 }

@@ -9,6 +9,7 @@
 #include "../il_type_parameter.h"
 #include "../il_operator_overload.h"
 #include "../../util/mem.h"
+#include "../il_property.h"
 
 //proto
 static void il_class_field_delete(vector_item item);
@@ -17,6 +18,7 @@ static void il_class_ctor_delete(vector_item item);
 static void il_class_extend_delete(vector_item item);
 static void il_class_type_parameter_delete(vector_item item);
 static void il_class_delete_operator_overload(vector_item item);
+static void il_class_prop_delete(vector_item item );
 
 il_type * il_type_wrap_class(il_class * self) {
 	il_type* ret = il_type_new();
@@ -36,6 +38,8 @@ il_class* il_class_new(string_view namev) {
 	ret->constructor_list = vector_new();
 	ret->type_parameter_list = vector_new();
 	ret->operator_overload_list = vector_new();
+	ret->prop_list = vector_new();
+	ret->sprop_list = vector_new();
 	ret->is_abstract = false;
 	return ret;
 }
@@ -45,6 +49,14 @@ void il_class_add_field(il_class * self, il_field * f) {
 		vector_push(self->sfield_list, f);
 	} else {
 		vector_push(self->field_list, f);
+	}
+}
+
+void il_class_add_property(il_class* self, il_property* prop) {
+	if(modifier_is_static(prop->modifier)) {
+		vector_push(self->sprop_list, prop);
+	} else {
+		vector_push(self->prop_list, prop);
 	}
 }
 
@@ -89,6 +101,14 @@ void il_class_dump(il_class * self, int depth) {
 		il_operator_overload* ilopov = (il_operator_overload*)e;
 		il_operator_overload_dump(ilopov, depth + 1);
 	}
+	for(int i=0; i<self->prop_list->length; i++) {
+		il_property* e = vector_at(self->prop_list, i);
+		il_property_dump(e, depth + 1);
+	}
+	for(int i=0; i<self->sprop_list->length; i++) {
+		il_property* e = vector_at(self->sprop_list, i);
+		il_property_dump(e, depth + 1);
+	}
 }
 
 void il_class_delete(il_class * self) {
@@ -105,6 +125,8 @@ void il_class_delete(il_class * self) {
 	vector_delete(self->extend_list, il_class_extend_delete);
 	vector_delete(self->type_parameter_list, il_class_type_parameter_delete);
 	vector_delete(self->operator_overload_list, il_class_delete_operator_overload);
+	vector_delete(self->prop_list, il_class_prop_delete);
+	vector_delete(self->sprop_list, il_class_prop_delete);
 	MEM_FREE(self);
 }
 
@@ -139,4 +161,9 @@ static void il_class_type_parameter_delete(vector_item item) {
 static void il_class_delete_operator_overload(vector_item item) {
 	il_operator_overload* e = (il_operator_overload*)item;
 	il_operator_overload_delete(e);
+}
+
+static void il_class_prop_delete(vector_item item ) {
+	il_property* e = (il_property*)item;
+	il_property_delete(e);
 }

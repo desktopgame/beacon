@@ -1,6 +1,7 @@
 #include "il_type_interface.h"
 #include "../util/mem.h"
 #include "il_type_impl.h"
+#include "il_property.h"
 #include "il_constructor.h"
 #include "il_field.h"
 #include "il_method.h"
@@ -40,6 +41,14 @@ void il_type_add_field(il_type * self, il_field * field) {
 	assert(self->tag == iltype_class);
 	if (self->tag == iltype_class) {
 		il_class_add_field(self->u.class_, field);
+	}
+}
+
+void il_type_add_property(il_type* self, il_property* prop) {
+	if (self->tag == iltype_class) {
+		il_class_add_property(self->u.class_, prop);
+	} else if(self->tag == iltype_interface) {
+		il_interface_add_property(self->u.interface_, prop);
 	}
 }
 

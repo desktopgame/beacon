@@ -44,7 +44,7 @@
 		INC DEC EXC_OR
 
 		LCB RCB LRB RRB LSB RSB
-		SEMI IMPORT VAR
+		SEMI IMPORT VAR DEFSET DEFGET
 
 		THIS_TOK SUPER_TOK TRUE_TOK FALSE_TOK NULL_TOK AS
 
@@ -84,6 +84,9 @@
 						operator_define
 						method_define
 						field_define
+						prop_set
+						prop_get
+						prop_define
 						modifier_type_T_list
 						modifier_type_T
 						ident_list
@@ -357,6 +360,7 @@ member_define
 	| method_define
 	| operator_define
 	| field_define
+	| prop_define
 	;
 
 constructor_define
@@ -532,6 +536,47 @@ field_define
 	| typename_T IDENT SEMI
 	{
 		$$ = ast_new_field_decl(ast_new_modifier(modifier_none), $1, $2);
+	}
+	;
+
+prop_set
+	: DEFSET SEMI
+	{
+		$$ = ast_new_prop_set(ast_new_blank());
+	}
+	| DEFSET scope
+	{
+		$$ = ast_new_prop_set($2);
+	}
+	;
+
+prop_get
+	: DEFGET SEMI
+	{
+		$$ = ast_new_prop_get(ast_new_blank());
+	}
+	| DEFGET scope
+	{
+		$$ = ast_new_prop_get($2);
+	}
+	;
+
+prop_define
+	: modifier_type_T_list typename_T IDENT LCB prop_set prop_get RCB
+	{
+		$$ = ast_new_prop_decl($1, $2, $3, $5, $6);
+	}
+	| modifier_type_T_list typename_T IDENT LCB prop_get RCB
+	{
+		$$ = ast_new_prop_decl($1, $2, $3, ast_new_blank(), $5);
+	}
+	| typename_T IDENT LCB prop_set prop_get RCB
+	{
+		$$ = ast_new_prop_decl(ast_new_modifier(modifier_none), $1, $2, $4, $5);
+	}
+	| typename_T IDENT LCB prop_get RCB
+	{
+		$$ = ast_new_prop_decl(ast_new_modifier(modifier_none), $1, $2, ast_new_blank(), $4);
 	}
 	;
 

@@ -22,6 +22,8 @@ typedef struct il_class {
 	vector* constructor_list;
 	vector* type_parameter_list;
 	vector* operator_overload_list;
+	vector* prop_list;
+	vector* sprop_list;
 	bool is_abstract;
 } il_class;
 
@@ -45,6 +47,13 @@ il_class* il_class_new(string_view namev);
  * @param f
  */
 void il_class_add_field(il_class* self, struct il_field* f);
+
+/**
+ * プロパティを追加します.
+ * @param self
+ * @param prop
+ */
+void il_class_add_property(il_class* self, struct il_property* prop);
 
 /**
  * メソッドを追加します.
