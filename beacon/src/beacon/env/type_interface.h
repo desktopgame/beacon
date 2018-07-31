@@ -22,6 +22,7 @@ struct class_;
 struct interface_;
 struct field;
 struct method;
+struct property;
 struct enviroment;
 struct vtable;
 struct generic_type;
@@ -86,6 +87,13 @@ string_view type_name(type* self);
  * @param f
  */
 void type_add_field(type* self, struct field* f);
+
+/**
+ * この型にプロパティを追加します.
+ * @param self
+ * @param p
+ */
+void type_add_property(type* self, struct property* p);
 
 /**
  * この型にメソッドを追加します.

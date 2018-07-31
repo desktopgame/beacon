@@ -8,6 +8,7 @@
 #include "../../util/vector.h"
 #include "../../util/string_pool.h"
 struct method;
+struct property;
 struct enviroment;
 struct generic_type;
 struct type;
@@ -18,6 +19,7 @@ typedef struct interface_ {
 	struct type* parent;
 	string_view namev;
 	vector* impl_list;
+	vector* prop_list;
 	vector* method_list;
 	namespace_* location;
 	vtable* vt;
@@ -44,6 +46,13 @@ interface_* interface_new(string_view namev);
  * @param m
  */
 void interface_add_method(interface_* self, struct method* m);
+
+/**
+ * プロパティを追加します.
+ * @param self
+ * @param p
+ */
+void interface_add_property(interface_* self, struct property* p);
 
 /**
  * インターフェイスからメソッドを検索します.

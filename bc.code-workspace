@@ -95,7 +95,8 @@
 			"class_loader_bcload_member_module_impl.h": "c",
 			"il_parameter.h": "c",
 			"il_import.h": "c",
-			"il_type_parameter.h": "c"
+			"il_type_parameter.h": "c",
+			"il_method.h": "c"
 		},
 		"ruby.lint": {
 			"reek": true,

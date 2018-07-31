@@ -16,6 +16,15 @@ void CLBC_fields_decl(class_loader* self, il_type* iltype, type* tp, vector* ilf
 void CLBC_fields_impl(class_loader* self, namespace_* scope, vector* ilfields, vector* sgfields);
 
 /**
+ * @param self
+ * @param iltype
+ * @param tp
+ * @param scope
+ */
+void CLBC_property_decl(class_loader* self, il_type* iltype, type* tp, vector* ilprops, namespace_* scope);
+void CLBC_property_impl(class_loader* self, namespace_* scope, vector* ilprops, vector* sgprops);
+
+/**
  * メソッド宣言を読み込んでクラスに追加します.
  * @param self
  * @param iltype

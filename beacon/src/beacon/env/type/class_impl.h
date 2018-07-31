@@ -19,6 +19,7 @@
 //struct method_list;
 struct object;
 struct field;
+struct property;
 struct method;
 struct constructor;
 struct generic_type;
@@ -34,6 +35,8 @@ typedef struct class_ {
 	vector* impl_list;
 	vector* field_list;
 	vector* sfield_list;
+	vector* prop_list;
+	vector* sprop_list;
 	vector* method_list;
 	vector* smethod_list;
 	vector* constructor_list;
@@ -99,6 +102,13 @@ void class_free_fields(class_* self, struct object* o);
  * @param f
  */
 void class_add_field(class_* self, struct field* f);
+
+/**
+ * このクラスにプロパティを追加します.
+ * @param self
+ * @param p
+ */
+void class_add_property(class_* self, struct property* p);
 
 /**
  * このクラスにメソッドを追加します.

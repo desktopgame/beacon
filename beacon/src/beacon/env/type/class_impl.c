@@ -12,6 +12,7 @@
 #include "../../vm/frame.h"
 #include "../../util/text.h"
 #include "../field.h"
+#include "../property.h"
 #include "../method.h"
 #include "../constructor.h"
 #include "../type_impl.h"
@@ -44,6 +45,7 @@ static void class_type_parameter_delete(vector_item item);
 static void class_generic_type_list_delete(vector_item item);
 static bool class_field_validImpl(vector* field_vec, field** out);
 static void class_delete_operator_overload(vector_item item);
+static void class_delete_property(vector_item item);
 
 type * type_wrap_class(class_ * self) {
 	type* ret = type_new();
@@ -63,6 +65,8 @@ class_ * class_new(string_view namev) {
 	ret->impl_list = vector_new();
 	ret->field_list = vector_new();
 	ret->sfield_list = vector_new();
+	ret->prop_list = vector_new();
+	ret->sprop_list = vector_new();
 	ret->method_list = vector_new();
 	ret->smethod_list = vector_new();
 	ret->constructor_list = vector_new();
@@ -130,6 +134,14 @@ void class_add_field(class_ * self, field * f) {
 		vector_push(self->sfield_list, f);
 	} else {
 		vector_push(self->field_list, f);
+	}
+}
+
+void class_add_property(class_* self, property* p) {
+	if (modifier_is_static(p->modifier)) {
+		vector_push(self->sprop_list, p);
+	} else {
+		vector_push(self->prop_list, p);
 	}
 }
 
@@ -592,6 +604,8 @@ void class_unlink(class_ * self) {
 	vector_delete(self->smethod_list, class_method_delete);
 	vector_delete(self->constructor_list, class_ctor_delete);
 	vector_delete(self->operator_overload_list, class_delete_operator_overload);
+	vector_delete(self->prop_list, class_delete_property);
+	vector_delete(self->sprop_list, class_delete_property);
 	vtable_delete(self->vt);
 	vector_delete(self->vt_vec, class_vtable_vec_delete);
 }
@@ -810,4 +824,9 @@ static bool class_field_validImpl(vector* field_vec, field** out) {
 static void class_delete_operator_overload(vector_item item) {
 	operator_overload* e = (operator_overload*)item;
 	operator_overload_delete(e);
+}
+
+static void class_delete_property(vector_item item) {
+	property* e = (property*)item;
+	property_delete(e);
 }

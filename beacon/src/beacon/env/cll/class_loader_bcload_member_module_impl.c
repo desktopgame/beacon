@@ -1,6 +1,7 @@
 #include "class_loader_bcload_member_module_impl.h"
 #include "../../il/il_type_impl.h"
 #include "../../il/il_field.h"
+#include "../../il/il_property.h"
 #include "../../il/il_method.h"
 #include "../../il/il_constructor.h"
 #include "../../il/il_constructor_chain.h"
@@ -11,6 +12,7 @@
 #include "../../env/type_impl.h"
 #include "../../env/object.h"
 #include "../../env/field.h"
+#include "../../env/property.h"
 #include "../../env/method.h"
 #include "../../env/constructor.h"
 #include "../../env/parameter.h"
@@ -73,6 +75,40 @@ void CLBC_fields_impl(class_loader* self, namespace_* scope, vector* ilfields, v
 		fi->static_value = object_get_null();
 		//FIXME:ILフィールドと実行時フィールドのインデックスが同じなのでとりあえず動く
 		il_field* ilfield = ((il_field*)vector_at(ilfields, i));
+	}
+}
+
+void CLBC_property_decl(class_loader* self, il_type* iltype, type* tp, vector* ilprops, namespace_* scope) {
+	CL_ERROR(self);
+	call_context* cctx = call_context_new(call_decl_T);
+	cctx->space = scope;
+	cctx->ty = tp;
+	for (int i = 0; i < ilprops->length; i++) {
+		vector_item e = vector_at(ilprops, i);
+		il_property* ilprop = e;
+		property* prop = property_new(ilprop->namev);
+		prop->access = ilprop->access;
+		prop->modifier = ilprop->modifier;
+		prop->parent = tp;
+		prop->gtype = import_manager_resolve(self->import_manager, scope, ilprop->fqcn, cctx);
+		if(modifier_is_abstract(prop->modifier) ||
+		   modifier_is_override(prop->modifier) ||
+		   modifier_is_native(prop->modifier)) {
+			   bc_error_throw(bcerror_native_field, string_pool_ref2str(prop->namev));
+				call_context_delete(cctx);
+			   return;
+		   }
+		   type_add_property(tp, prop);
+	}
+	call_context_delete(cctx);
+}
+
+void CLBC_property_impl(class_loader* self, namespace_* scope, vector* ilprops, vector* sgprops) {
+	CL_ERROR(self);
+	for (int i = 0; i < sgprops->length; i++) {
+		vector_item e = vector_at(sgprops, i);
+		property* pr = (property*)e;
+		pr->static_value = object_get_null();
 	}
 }
 

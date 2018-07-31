@@ -4,6 +4,7 @@
 #include "../../util/text.h"
 #include "../../env/method.h"
 #include "../../env/generic_type.h"
+#include "../../env/property.h"
 #include "meta_impl.h"
 #include "../generic_type.h"
 #include "../type_parameter.h"
@@ -13,6 +14,7 @@ static void interface_delete_method(vector_item item);
 static void interface_type_parameter_delete(vector_item item);
 static void interface_generic_type_list_delete(vector_item item);
 static void interface_method_flattenImpl(interface_* self, vector* dest, int depth);
+static void interface_delete_property(vector_item item);
 
 type * type_wrap_interface(interface_ * self) {
 	type* ret = type_new();
@@ -28,6 +30,7 @@ interface_ * interface_new(string_view namev) {
 	ret->impl_list = vector_new();
 	ret->location = NULL;
 	ret->method_list = vector_new();
+	ret->prop_list = vector_new();
 	ret->vt = NULL;
 	ret->type_parameter_list = vector_new();
 	ret->parent = NULL;
@@ -36,6 +39,10 @@ interface_ * interface_new(string_view namev) {
 
 void interface_add_method(interface_ * self, method * m) {
 	vector_push(self->method_list, m);
+}
+
+void interface_add_property(interface_* self, property* p) {
+	vector_push(self->prop_list, p);
 }
 
 method * interface_ilfind_method(interface_ * self, string_view namev, vector * args, enviroment * env, call_context* cctx, int * outIndex) {
@@ -94,6 +101,7 @@ void interface_create_vtable(interface_ * self) {
 
 void interface_unlink(interface_ * self) {
 	vector_delete(self->method_list, interface_delete_method);
+	vector_delete(self->prop_list, interface_delete_property);
 	vector_delete(self->impl_list, vector_deleter_null);
 	vtable_delete(self->vt);
 }
@@ -159,4 +167,9 @@ static void interface_method_flattenImpl(interface_* self, vector* dest, int dep
 		interface_* inter = TYPE2INTERFACE(e->core_type);
 		interface_method_flattenImpl(inter, dest, depth + 1);
 	}
+}
+
+static void interface_delete_property(vector_item item) {
+	property* e = (property*)item;
+	property_delete(e);
 }

@@ -3,6 +3,7 @@
 #include "type_impl.h"
 #include "field.h"
 #include "method.h"
+#include "property.h"
 #include "type_parameter.h"
 #include "generic_type.h"
 #include "../util/text.h"
@@ -51,6 +52,14 @@ string_view type_name(type * self) {
 void type_add_field(type* self, field * f) {
 	assert(self->tag == type_class);
 	class_add_field(self->u.class_, f);
+}
+
+void type_add_property(type* self, property* p) {
+	if(self->tag == type_class) {
+		class_add_property(self->u.class_, p);
+	} else if(self->tag == type_interface) {
+		interface_add_property(self->u.interface_, p);
+	}
 }
 
 void type_add_method(type* self, method * m) {
