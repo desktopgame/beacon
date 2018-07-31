@@ -3,6 +3,7 @@
 #include "../object.h"
 #include "interface_impl.h"
 #include "../field.h"
+#include "../property.h"
 #include "../parameter.h"
 #include "../generic_type.h"
 #include "../../util/vector.h"
@@ -82,6 +83,66 @@ field * class_get_sfield(class_ * self, int index) {
 		return vector_at(self->sfield_list, self->sfield_list->length - (all - index));
 	}
 	return class_get_sfield(self->super_class->core_type->u.class_, index);
+}
+
+
+
+property* class_find_property(class_* self, string_view namev, int* outIndex) {
+	(*outIndex) = -1;
+	for (int i = 0; i < self->prop_list->length; i++) {
+		vector_item e = vector_at(self->prop_list, i);
+		property* p = (property*)e;
+		if (namev == p->namev) {
+			(*outIndex) = (class_count_propertyall(self) - self->prop_list->length) + i;
+			return p;
+		}
+	}
+	return NULL;
+}
+
+property* class_find_property_tree(class_* self, string_view namev, int* outIndex) {
+	class_* pointee = self;
+	do {
+		property* p = class_find_property(pointee, namev, outIndex);
+		if (p != NULL) {
+			return p;
+		}
+		generic_type* supergtype = pointee->super_class;
+		if(supergtype == NULL) {
+			break;
+		}
+		pointee = supergtype->core_type->u.class_;
+	} while (pointee != NULL);
+	return NULL;
+}
+
+property* class_find_sproperty(class_* self, string_view namev, int* outIndex) {
+	(*outIndex) = -1;
+	for (int i = 0; i < self->sprop_list->length; i++) {
+		vector_item e = vector_at(self->sprop_list, i);
+		property* p = (property*)e;
+		if (namev == p->namev) {
+			(*outIndex) = (class_count_spropertyall(self) - self->sprop_list->length) + i;
+			return p;
+		}
+	}
+	return NULL;
+}
+
+property* class_find_sproperty_tree(class_* self, string_view namev, int* outIndex) {
+	class_* pointee = self;
+	do {
+		property* p = class_find_sproperty(pointee, namev, outIndex);
+		if (p != NULL) {
+			return p;
+		}
+		generic_type* supergtype = pointee->super_class;
+		if(supergtype == NULL) {
+			break;
+		}
+		pointee = supergtype->core_type->u.class_;
+	} while (pointee != NULL);
+	return NULL;
 }
 
 

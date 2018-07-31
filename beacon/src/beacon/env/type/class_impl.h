@@ -142,24 +142,6 @@ void class_define_native_method(class_* self, const char* name, native_impl impl
 void class_define_native_method_by_ref(class_* self, string_view namev, native_impl impl);
 
 /**
- * 指定の名前のプロパティを検索します.
- * @param self
- * @param namev
- * @param outIndex
- * @return
- */
-struct property* class_find_property(class_* self, string_view namev, int* outIndex);
-
-/**
- * 指定の名前の静的プロパティを検索します.
- * @param self
- * @param namev
- * @param outIndex
- * @return
- */
-struct property* class_find_sproperty(class_* self, string_view namev, int* outIndex);
-
-/**
  * super と sub の距離を返します.
  * @param super
  * @param sub
@@ -190,6 +172,19 @@ int class_count_fieldall(class_* self);
  * @return
  */
 int class_count_sfieldall(class_* self);
+
+/**
+ * このクラスとその親全てに定義されたプロパティの合計を返します.
+ * @return
+ */
+int class_count_propertyall(class_* self);
+
+/**
+ * このクラスとその親全てに定義された静的プロパティの合計を返します.
+ * @param self
+ * @return
+ */
+int class_count_spropertyall(class_* self);
 
 /**
  * このクラスとその親全てに定義されたメソッドの合計を返します.

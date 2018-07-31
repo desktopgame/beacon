@@ -16,7 +16,6 @@ struct field* class_find_field(class_* self, string_view namev, int* outIndex);
  * selfの中に見つけられなかった場合には親クラスも検索します。
  * @param self
  * @param namev
- * @param domain
  * @param outIndex
  * @return
  */
@@ -62,6 +61,44 @@ struct field* class_get_field(class_* self, int index);
 struct field* class_get_sfield(class_* self, int index);
 
 
+
+/**
+ * 指定の名前のプロパティを検索します.
+ * @param self
+ * @param namev
+ * @param outIndex
+ * @return
+ */
+struct property* class_find_property(class_* self, string_view namev, int* outIndex);
+
+/**
+ * 指定の名前を持つプロパティを返します.
+ * selfの中に見つけられなかった場合には親クラスも検索します。
+ * @param self
+ * @param namev
+ * @param outIndex
+ * @return
+ */
+struct property* class_find_property_tree(class_* self, string_view namev, int* outIndex);
+
+/**
+ * 指定の名前の静的プロパティを検索します.
+ * @param self
+ * @param namev
+ * @param outIndex
+ * @return
+ */
+struct property* class_find_sproperty(class_* self, string_view namev, int* outIndex);
+
+/**
+ * 指定の名前を持つ静的プロパティを返します.
+ * selfの中に見つけられなかった場合には親クラスも検索します。
+ * @param self
+ * @param namev
+ * @param outIndex
+ * @return
+ */
+struct property* class_find_sproperty_tree(class_* self, string_view namev, int* outIndex);
 
 
 

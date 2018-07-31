@@ -167,14 +167,6 @@ void class_define_native_method_by_ref(class_ * self, string_view namev, native_
 	numeric_map_put(self->native_method_ref_nmap, namev, ref);
 }
 
-property* class_find_property(class_* self, string_view namev, int* outIndex) {
-	return NULL;
-}
-
-property* class_find_sproperty(class_* self, string_view namev, int* outIndex) {
-	return NULL;
-}
-
 int class_distance(class_ * super, class_ * sub) {
 	if (super == sub) {
 		return 0;
@@ -238,6 +230,32 @@ int class_count_sfieldall(class_ * self) {
 	int sum = 0;
 	do {
 		sum += (pt->sfield_list->length);
+		if(pt->super_class == NULL) {
+			break;
+		}
+		pt = pt->super_class->core_type->u.class_;
+	} while (pt != NULL);
+	return sum;
+}
+
+int class_count_propertyall(class_* self) {
+	class_* pt = self;
+	int sum = 0;
+	do {
+		sum += (pt->prop_list->length);
+		if(pt->super_class == NULL) {
+			break;
+		}
+		pt = pt->super_class->core_type->u.class_;
+	} while (pt != NULL);
+	return sum;
+}
+
+int class_count_spropertyall(class_* self) {
+	class_* pt = self;
+	int sum = 0;
+	do {
+		sum += (pt->sprop_list->length);
 		if(pt->super_class == NULL) {
 			break;
 		}
