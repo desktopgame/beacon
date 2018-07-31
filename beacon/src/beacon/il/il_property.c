@@ -19,7 +19,7 @@ void il_property_dump(il_property* self, int depth) {
 	modifier_print(self->modifier);
 	text_printf(" property ");
 	generic_cache_print(self->fqcn);
-	text_printf("%s", string_pool_ref2str(self->namev));
+	text_printf(" %s", string_pool_ref2str(self->namev));
 	text_putline();
 	if(self->set != NULL) {
 		il_property_body_dump(self->set, depth + 1);
