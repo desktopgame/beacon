@@ -74,7 +74,9 @@ void CLBC_fields_impl(class_loader* self, namespace_* scope, vector* ilfields, v
 		field* fi = (field*)e;
 		fi->static_value = object_get_null();
 		//FIXME:ILフィールドと実行時フィールドのインデックスが同じなのでとりあえず動く
-		il_field* ilfield = ((il_field*)vector_at(ilfields, i));
+		//プロパティが追加されたタイミングで対応する
+		//バッキングフィールドが追加されることもある
+		//il_field* ilfield = ((il_field*)vector_at(ilfields, i));
 	}
 }
 

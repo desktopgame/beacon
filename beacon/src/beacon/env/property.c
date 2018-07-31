@@ -9,6 +9,7 @@ property* property_malloc(string_view namev, const char* filename, int lineno) {
 	ret->set = property_body_new(property_set);
 	ret->get = property_body_new(property_get);
 	ret->is_short = false;
+	ret->source_ref = NULL;
 	return ret;
 }
 void property_delete(property* self) {

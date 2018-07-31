@@ -155,8 +155,11 @@ static void il_factor_member_op_check_static(il_factor_member_op* self, envirome
 
 static void il_factor_member_op_check_prop(il_factor_member_op* self, enviroment* env, call_context* cctx, generic_type* receiver_type,bool* swap) {
 	int temp = -1;
+	#if defined(DEBUG)
+	const char* name = string_pool_ref2str(self->namev);
+	#endif
 	type* ctype = receiver_type->core_type;
-	property* p = class_find_property(TYPE2CLASS(ctype), self->namev, &temp);
+	property* p = class_find_property_tree(TYPE2CLASS(ctype), self->namev, &temp);
 	il_factor_property* factp = il_factor_property_new();
 	factp->fact = self->fact;
 	factp->namev = self->namev;
@@ -172,7 +175,7 @@ static void il_factor_member_op_check_prop(il_factor_member_op* self, enviroment
 static void il_factor_member_op_check_static_prop(il_factor_member_op* self, enviroment* env, call_context* cctx, generic_type* receiver_type,bool* swap) {
 	int temp = -1;
 	type* ctype = receiver_type->core_type;
-	property* p = class_find_sproperty(TYPE2CLASS(ctype), self->namev, &temp);
+	property* p = class_find_sproperty_tree(TYPE2CLASS(ctype), self->namev, &temp);
 	il_factor_property* factp = il_factor_property_new();
 	factp->fact = self->fact;
 	factp->namev = self->namev;

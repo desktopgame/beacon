@@ -72,6 +72,11 @@ void CLIL_prop(class_loader* self, il_type* current, ast* aprop, access_level le
 	string_view propname = aprop->u.stringv_value;
 	il_property* ret = il_property_new(propname);
 	CLIL_generic_cache(atypename, ret->fqcn);
+	if(ast_is_blank(amod)) {
+		ret->modifier = modifier_none;
+	} else {
+		ret->modifier = amod->u.modifier_value;
+	}
 	ret->access = level;
 	ret->set = CLIL_prop_body(self, current, aset, ilproperty_set, level);
 	ret->get = CLIL_prop_body(self, current, aget, ilproperty_get, level);

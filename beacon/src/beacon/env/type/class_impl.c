@@ -143,6 +143,21 @@ void class_add_property(class_* self, property* p) {
 	} else {
 		vector_push(self->prop_list, p);
 	}
+	//プロパティが単純な省略形として記述されているなら、
+	//それはフィールドと同じなのでフィールドも定義する
+	#if defined(DEBUG)
+	const char* name = string_pool_ref2str(p->namev);
+	#endif
+	if(p->is_short) {
+		field* f = field_new(string_pool_concat("$propery.", p->namev));
+		f->access = access_private;
+		f->gtype = p->gtype;
+		f->modifier = p->modifier;
+		f->parent = self->parent;
+		f->static_value = object_get_null();
+		p->source_ref = f;
+		class_add_field(self, f);
+	}
 }
 
 void class_add_method(class_ * self, method * m) {

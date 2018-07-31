@@ -7,14 +7,7 @@ namespace run55 {
 		}
 
 		Int age {
-			private defset;
-			defget;
-		}
-
-		Int error {
-			defset {
-				Int a = 0;
-			}
+			defset;
 			defget;
 		}
 
@@ -22,5 +15,8 @@ namespace run55 {
 		}
 	}
 }
-var d = new run55::Derive();
-d.call();
+var d = new run55::Base();
+//d.age = 0;
+//d.property = 10;
+printLine(d.age);
+printLine(d.property);
