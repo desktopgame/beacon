@@ -5,6 +5,8 @@
 #include "../../env/type_impl.h"
 #include "../../vm/symbol_entry.h"
 
+static void assign_to_field(il_factor* receiver, il_factor* source, string_view namev, enviroment* env, call_context* cctx);
+
 il_factor* il_factor_wrap_assign(il_factor_assign_op* self) {
 	il_factor* ret = il_factor_new(ilfactor_assign_op);
 	ret->u.assign_ = self;
@@ -37,6 +39,7 @@ void il_factor_assign_op_generate(il_factor_assign_op* self, enviroment* env, ca
 		il_factor_generate(self->right, env, cctx);
 		opcode_buf_add(env->buf, op_store);
 		opcode_buf_add(env->buf, e->index);
+	//foo.bar = xxx
 	} else if(self->left->type == ilfactor_member_op) {
 		il_factor_member_op* ilmem = IL_FACT2MEM(self->left);
 		il_factor* ilsrc = ilmem->fact;
@@ -52,21 +55,15 @@ void il_factor_assign_op_generate(il_factor_assign_op* self, enviroment* env, ca
 				opcode_buf_add(env->buf, (vector_item)op_put_static);
 				opcode_buf_add(env->buf, (vector_item)cls->parent->absolute_index);
 				opcode_buf_add(env->buf, (vector_item)temp);
-			} else goto inst;
-			//インスタンスフィールドへの代入
 			} else {
-			inst: {
-				generic_type* gt = il_factor_eval(ilmem->fact, env, cctx);
-				class_* cls = TYPE2CLASS(gt->core_type);
-				int temp = -1;
-				class_find_field(cls, ilmem->namev, &temp);
-				assert(temp != -1);
-				il_factor_generate(ilmem->fact, env, cctx);
-				il_factor_generate(self->right, env, cctx);
-				opcode_buf_add(env->buf, (vector_item)op_put_field);
-				opcode_buf_add(env->buf, (vector_item)temp);
+				assign_to_field(ilmem->fact, self->right, ilmem->namev, env, cctx);
 			}
+		//インスタンスフィールドへの代入
+		} else {
+			assign_to_field(ilmem->fact, self->right, ilmem->namev, env, cctx);
 		}
+	} else if(self->left->type == ilfactor_property) {
+
 	}
 }
 
@@ -78,4 +75,16 @@ void il_factor_assign_op_delete(il_factor_assign_op* self) {
 	il_factor_delete(self->left);
 	il_factor_delete(self->right);
 	MEM_FREE(self);
+}
+//private
+static void assign_to_field(il_factor* receiver, il_factor* source, string_view namev, enviroment* env, call_context* cctx) {
+	generic_type* gt = il_factor_eval(receiver, env, cctx);
+	class_* cls = TYPE2CLASS(gt->core_type);
+	int temp = -1;
+	class_find_field(cls, namev, &temp);
+	assert(temp != -1);
+	il_factor_generate(receiver, env, cctx);
+	il_factor_generate(source, env, cctx);
+	opcode_buf_add(env->buf, (vector_item)op_put_field);
+	opcode_buf_add(env->buf, (vector_item)temp);
 }
