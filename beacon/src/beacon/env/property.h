@@ -17,6 +17,7 @@ typedef struct property {
 	access_level access;
 	property_body* set;
 	property_body* get;
+	bool is_short;
 } property;
 
 #define property_new(namev) (property_malloc(namev, __FILE__, __LINE__))

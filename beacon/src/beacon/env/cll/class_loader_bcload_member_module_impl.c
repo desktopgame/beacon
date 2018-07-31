@@ -91,6 +91,7 @@ void CLBC_property_decl(class_loader* self, il_type* iltype, type* tp, vector* i
 		prop->modifier = ilprop->modifier;
 		prop->parent = tp;
 		prop->gtype = import_manager_resolve(self->import_manager, scope, ilprop->fqcn, cctx);
+		prop->is_short = ilprop->set->is_short && ilprop->get->is_short;
 		if(modifier_is_abstract(prop->modifier) ||
 		   modifier_is_override(prop->modifier) ||
 		   modifier_is_native(prop->modifier)) {
