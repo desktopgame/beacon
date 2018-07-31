@@ -115,11 +115,11 @@ void tree_map_delete(tree_map * self, tree_element_deleter deleter) {
 	MEM_FREE(self);
 }
 
-void tree_map_deleter_free(tree_item item) {
+void tree_map_deleter_free(const char* key, tree_item item) {
 	MEM_FREE(item);
 }
 
-void tree_map_deleter_null(tree_item item) {
+void tree_map_deleter_null(const char* key, tree_item item) {
 }
 
 //private

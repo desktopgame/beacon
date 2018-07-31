@@ -92,11 +92,11 @@ void tree_map_delete(tree_map* self, tree_element_deleter deleter);
  * freeによって解放するデリータの実装です.
  * @param item
  */
-void tree_map_deleter_free(tree_item item);
+void tree_map_deleter_free(const char* key, tree_item item);
 
 /**
  * 何も行わないデリータの実装です.
  * @param item
  */
-void tree_map_deleter_null(tree_item item);
+void tree_map_deleter_null(const char* key, tree_item item);
 #endif // !SIGNAL_UTIL_TREE_MAP_H

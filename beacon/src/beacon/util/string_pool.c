@@ -8,7 +8,6 @@
 
 static tree_map* gMap = NULL;
 static vector* gVec = NULL;
-static void string_pool_string_delete(vector_item item);
 
 #define HEADER (2)
 
@@ -25,7 +24,7 @@ string_view string_pool_intern(const char* str) {
 	tree_map* cell = tree_map_cell(gMap, str);
 	if(cell == NULL) {
 		cell = tree_map_put(gMap, str, (void*)(gVec->length + HEADER));
-		vector_push(gVec, text_strdup(str));
+		vector_push(gVec, cell->key);
 	}
 	if(cell == gMap) {
 		return ZERO_VIEW;
@@ -71,13 +70,8 @@ void string_pool_dump(FILE* fp) {
 
 void string_pool_destroy() {
 	tree_map_delete(gMap, tree_map_deleter_null);
-	vector_delete(gVec, string_pool_string_delete);
+	vector_delete(gVec, vector_deleter_null);
 	gMap = NULL;
 	gVec = NULL;
-}
-//private
-static void string_pool_string_delete(vector_item item) {
-	char* e = (char*)item;
-	MEM_FREE(e);
 }
 #undef HEADER
