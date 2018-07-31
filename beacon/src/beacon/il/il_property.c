@@ -14,6 +14,8 @@ il_property* il_property_malloc(string_view namev, const char* filename, int lin
 
 void il_property_dump(il_property* self, int depth) {
 	text_putindent(depth);
+	access_print(self->access);
+	text_printf(" ");
 	modifier_print(self->modifier);
 	text_printf(" property ");
 	generic_cache_print(self->fqcn);

@@ -11,7 +11,7 @@
 #include "class_loader_ilload_stmt_module_impl.h"
 #include <assert.h>
 
-static il_property_body* CLIL_prop_body(class_loader* self, il_type* current, ast* abody, il_property_body_tag tag);
+static il_property_body* CLIL_prop_body(class_loader* self, il_type* current, ast* abody, il_property_body_tag tag, access_level level);
 
 void CLIL_member_tree(class_loader* self, il_type* current, ast* tree) {
 	if (tree->tag == ast_access_member_tree) {
@@ -73,8 +73,8 @@ void CLIL_prop(class_loader* self, il_type* current, ast* aprop, access_level le
 	il_property* ret = il_property_new(propname);
 	CLIL_generic_cache(atypename, ret->fqcn);
 	ret->access = level;
-	ret->set = CLIL_prop_body(self, current, aset, ilproperty_set);
-	ret->get = CLIL_prop_body(self, current, aget, ilproperty_get);
+	ret->set = CLIL_prop_body(self, current, aset, ilproperty_set, level);
+	ret->get = CLIL_prop_body(self, current, aget, ilproperty_get, level);
 	il_type_add_property(current, ret);
 }
 
@@ -141,10 +141,15 @@ void CLIL_operator_overload(class_loader* self, il_type* current, ast* opov, acc
 	vector_push(current->u.class_->operator_overload_list, ilopov);
 }
 //private
-static il_property_body* CLIL_prop_body(class_loader* self, il_type* current, ast* abody, il_property_body_tag tag) {
+static il_property_body* CLIL_prop_body(class_loader* self, il_type* current, ast* abody, il_property_body_tag tag, access_level level) {
 	il_property_body* ret = il_property_body_new(tag);
 	assert(abody->tag == ast_prop_set || abody->tag == ast_prop_get);
-	ast* astmt_list = ast_first(abody);
+	ast* aacess = ast_first(abody);
+	ast* astmt_list = ast_second(abody);
+	ret->access = level;
 	CLIL_body(self, ret->statement_list, astmt_list);
+	if(!ast_is_blank(aacess)) {
+		ret->access = aacess->u.access_value;
+	}
 	return ret;
 }

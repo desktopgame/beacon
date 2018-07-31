@@ -15,6 +15,8 @@ il_property_body* il_property_body_malloc(il_property_body_tag tag, const char* 
 
 void il_property_body_dump(il_property_body* self, int depth) {
 	text_putindent(depth);
+	access_print(self->access);
+	text_printf(" ");
 	if(self->tag == ilproperty_set) {
 		text_printf("set");
 	} else {

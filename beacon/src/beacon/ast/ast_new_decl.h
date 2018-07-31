@@ -270,17 +270,19 @@ ast* ast_new_operator_overload(operator_type type, ast* aparam_list, ast* abody,
 
 /**
  * プロパティの set部分 を表す要素を作成します.
+ * @param aacess
  * @param abody
  * @areturn
  */
-ast* ast_new_prop_set(ast* abody);
+ast* ast_new_prop_set(ast* aacess, ast* abody);
 
 /**
  * プロパティの get部分 を表す要素を作成します.
+ * @param aacess
  * @param abody
  * @return
  */
-ast* ast_new_prop_get(ast* abody);
+ast* ast_new_prop_get(ast* aacess, ast* abody);
 
 /**
  * プロパティ宣言を作成します.

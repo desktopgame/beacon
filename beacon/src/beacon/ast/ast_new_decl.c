@@ -238,14 +238,16 @@ ast* ast_new_operator_overload(operator_type type, ast* aparam_list, ast* abody,
 	return ret;
 }
 
-ast* ast_new_prop_set(ast* abody) {
+ast* ast_new_prop_set(ast* aacess, ast* abody) {
 	ast* aret = ast_new(ast_prop_set);
+	ast_push(aret, aacess);
 	ast_push(aret, abody);
 	return aret;
 }
 
-ast* ast_new_prop_get(ast* abody) {
+ast* ast_new_prop_get(ast* aacess, ast* abody) {
 	ast* aret = ast_new(ast_prop_get);
+	ast_push(aret, aacess);
 	ast_push(aret, abody);
 	return aret;
 }

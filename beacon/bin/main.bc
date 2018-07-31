@@ -6,6 +6,11 @@ namespace run55 {
 			defget;
 		}
 
+		Int age {
+			private defset;
+			defget;
+		}
+
 		def new() {
 		}
 	}

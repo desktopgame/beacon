@@ -542,22 +542,38 @@ field_define
 prop_set
 	: DEFSET SEMI
 	{
-		$$ = ast_new_prop_set(ast_new_blank());
+		$$ = ast_new_prop_set(ast_new_blank(), ast_new_blank());
 	}
 	| DEFSET scope
 	{
-		$$ = ast_new_prop_set($2);
+		$$ = ast_new_prop_set(ast_new_blank(), $2);
+	}
+	| access_level_T DEFSET SEMI
+	{
+		$$ = ast_new_prop_set(ast_new_access($1), ast_new_blank());
+	}
+	| access_level_T DEFSET scope
+	{
+		$$ = ast_new_prop_set(ast_new_access($1), ast_new_blank());
 	}
 	;
 
 prop_get
 	: DEFGET SEMI
 	{
-		$$ = ast_new_prop_get(ast_new_blank());
+		$$ = ast_new_prop_get(ast_new_blank(), ast_new_blank());
 	}
 	| DEFGET scope
 	{
-		$$ = ast_new_prop_get($2);
+		$$ = ast_new_prop_get(ast_new_blank(), $2);
+	}
+	| access_level_T DEFGET SEMI
+	{
+		$$ = ast_new_prop_get(ast_new_access($1), ast_new_blank());
+	}
+	| access_level_T DEFGET scope
+	{
+		$$ = ast_new_prop_get(ast_new_access($1), ast_new_blank());
 	}
 	;
 

@@ -1,6 +1,7 @@
 #ifndef BEACON_IL_IL_PROPERTY_BODY_H
 #define BEACON_IL_IL_PROPERTY_BODY_H
 #include "../util/vector.h"
+#include "../ast/access_level.h"
 struct generic_cache;
 
 typedef enum il_property_body_tag {
@@ -9,6 +10,7 @@ typedef enum il_property_body_tag {
 } il_property_body_tag;
 
 typedef struct il_property_body {
+	access_level access;
 	vector* statement_list;
 	il_property_body_tag tag;
 } il_property_body;
