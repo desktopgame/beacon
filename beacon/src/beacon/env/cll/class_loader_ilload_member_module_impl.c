@@ -76,6 +76,9 @@ void CLIL_prop(class_loader* self, il_type* current, ast* aprop, access_level le
 	ret->set = CLIL_prop_body(self, current, aset, ilproperty_set, level);
 	ret->get = CLIL_prop_body(self, current, aget, ilproperty_get, level);
 	il_type_add_property(current, ret);
+	if(ret->set->is_short != ret->get->is_short) {
+		bc_error_throw(bcerror_invalid_property_decl, string_pool_ref2str(current->u.class_->namev), string_pool_ref2str(propname));
+	}
 }
 
 void CLIL_method(class_loader* self, il_type* current, ast* method, access_level level) {
@@ -153,7 +156,6 @@ static il_property_body* CLIL_prop_body(class_loader* self, il_type* current, as
 	}
 	if(ret->statement_list->length == 0) {
 		ret->is_short = true;
-		
 	}
 	return ret;
 }

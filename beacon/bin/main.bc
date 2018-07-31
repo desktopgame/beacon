@@ -11,6 +11,13 @@ namespace run55 {
 			defget;
 		}
 
+		Int error {
+			defset {
+				Int a = 0;
+			}
+			defget;
+		}
+
 		def new() {
 		}
 	}

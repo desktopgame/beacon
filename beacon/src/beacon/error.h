@@ -33,6 +33,7 @@ typedef enum bc_error_id {
 	bcerror_private_operator,
 	bcerror_illegal_argument_bioperator,
 	bcerror_illegal_argument_uoperator,
+	bcerror_invalid_property_decl
 } bc_error_id;
 
 /**
