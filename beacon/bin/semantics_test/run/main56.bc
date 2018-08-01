@@ -1,0 +1,33 @@
+namespace run56 {
+	class Base {
+		public:
+		property Int A {
+			defset;
+			defget;
+		}
+
+		property Int age {
+			defset { this.mAge = value; }
+			defget { return this.mAge; }
+		}
+
+		property static String name {
+			defset;
+			defget;
+		}
+
+		def new() {
+		}
+		private:
+		Int mAge;
+	}
+}
+var d = new run56::Base();
+d.A = 10;
+assert (d.age == 0);
+assert (d.A == 10);
+printLine(run56::Base.name);
+printLine(d.age);
+printLine(d.A);
+run56::Base.name = "Hello";
+printLine(run56::Base.name);
