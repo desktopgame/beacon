@@ -100,6 +100,9 @@ void bc_error_vthrow(bc_error_id id, va_list ap) {
 		case bcerror_invalid_property_decl:
 			fmt = "can't use abbrev expression for only one property accessor: %s#%s";
 			break;
+		case bcerror_can_t_access_field:
+			fmt = "can't access field: %s#%s";
+			break;
 		default:
 			{
 				fprintf(stderr, "if shown this message, it compiler bug\n");

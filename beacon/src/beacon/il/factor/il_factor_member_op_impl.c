@@ -128,6 +128,11 @@ static void il_factor_member_op_check(il_factor_member_op* self, enviroment* env
 	//インスタンスフィールドではない場合プロパティを検索
 	if(temp == -1) {
 		il_factor_member_op_check_prop(self, env, cctx, gtype, swap);
+	} else {
+		//フィールドの可視性を確認
+		if(!class_accessible_field(call_context_class(cctx), self->f)) {
+			bc_error_throw(bcerror_can_t_access_field, string_pool_ref2str(type_name(ctype)), string_pool_ref2str(self->f->namev));
+		}
 	}
 }
 

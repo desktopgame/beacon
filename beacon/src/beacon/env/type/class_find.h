@@ -60,6 +60,30 @@ struct field* class_get_field(class_* self, int index);
  */
 struct field* class_get_sfield(class_* self, int index);
 
+/**
+ * クラスに指定のフィールドが含まれるなら true.
+ * @param self
+ * @param f
+ * @return
+ */
+bool class_contains_field(class_* self, struct field* f);
+
+/**
+ * クラスに指定の静的フィールドが含まれるなら true.
+ * @param self
+ * @param f
+ * @return
+ */
+bool class_contains_sfield(class_* self, struct field* f);
+
+/**
+ * 指定のクラスからフィールドにアクセスできるなら true.
+ * @param self
+ * @param f
+ * @return
+ */
+bool class_accessible_field(class_* self, struct field* f);
+
 
 
 /**

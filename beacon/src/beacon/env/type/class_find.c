@@ -8,6 +8,8 @@
 #include "../generic_type.h"
 #include "../../util/vector.h"
 
+static bool class_contains_fieldImpl(vector* fields, field* f);
+
 field * class_find_field(class_* self, string_view namev, int* outIndex) {
 	(*outIndex) = -1;
 	for (int i = 0; i < self->field_list->length; i++) {
@@ -83,6 +85,36 @@ field * class_get_sfield(class_ * self, int index) {
 		return vector_at(self->sfield_list, self->sfield_list->length - (all - index));
 	}
 	return class_get_sfield(self->super_class->core_type->u.class_, index);
+}
+
+bool class_contains_field(class_* self, field* f) {
+	return class_contains_fieldImpl(self->field_list, f);
+}
+
+bool class_contains_sfield(class_* self, field* f) {
+	return class_contains_fieldImpl(self->sfield_list, f);
+}
+
+bool class_accessible_field(class_* self, field* f) {
+	if(f->access == access_public) {
+		return true;
+	}
+	if(f->access == access_private) {
+		return self == TYPE2CLASS(f->parent);
+	}
+	type* ty = f->parent;
+	while(true) {
+		class_* c = TYPE2CLASS(ty);
+		if(self == c) {
+			return true;
+		}
+		//次へ
+		if(c->super_class == NULL) {
+			break;
+		}
+		ty = c->super_class->core_type;
+	}
+	return false;
 }
 
 
@@ -385,4 +417,14 @@ bool class_contains_method(vector* method_list, method* m) {
 	}
 	call_context_delete(cctx);
 	return ret;
+}
+//private
+static bool class_contains_fieldImpl(vector* fields, field* f) {
+	for(int i=0; i<fields->length; i++) {
+		field* e = (field*)vector_at(fields, i);
+		if(e == f) {
+			return true;
+		}
+	}
+	return false;
 }

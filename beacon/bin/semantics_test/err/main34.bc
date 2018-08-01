@@ -14,4 +14,4 @@ namespace err33 {
 }
 var d = new err33::Base();
 printLine(d.a);
-printLine(d.b);
+printLine(d.c);
