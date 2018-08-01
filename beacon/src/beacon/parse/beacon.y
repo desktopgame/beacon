@@ -582,17 +582,9 @@ prop_define
 	{
 		$$ = ast_new_prop_decl($2, $3, $4, $6, $7);
 	}
-	| PROPERTY modifier_type_T_list typename_T IDENT LCB prop_get RCB
-	{
-		$$ = ast_new_prop_decl($2, $3, $4, ast_new_blank(), $6);
-	}
 	| PROPERTY typename_T IDENT LCB prop_set prop_get RCB
 	{
 		$$ = ast_new_prop_decl(ast_new_modifier(modifier_none), $2, $3, $5, $6);
-	}
-	| PROPERTY typename_T IDENT LCB prop_get RCB
-	{
-		$$ = ast_new_prop_decl(ast_new_modifier(modifier_none), $2, $3, ast_new_blank(), $5);
 	}
 	;
 
