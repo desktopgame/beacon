@@ -7,8 +7,8 @@ namespace run55 {
 		}
 
 		property Int age {
-			defset;
-			defget;
+			defset { this.mAge = value; }
+			defget { return this.mAge; }
 		}
 
 		property static String name {
@@ -18,11 +18,14 @@ namespace run55 {
 
 		def new() {
 		}
+		private:
+		Int mAge;
 	}
 }
 var d = new run55::Base();
-//d.age = 0;
 d.A = 10;
+assert (d.age == 0);
+assert (d.A == 10);
 printLine(run55::Base.name);
 printLine(d.age);
 printLine(d.A);

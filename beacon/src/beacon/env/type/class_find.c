@@ -87,6 +87,37 @@ field * class_get_sfield(class_ * self, int index) {
 
 
 
+int class_get_field_by_property(class_* self, property* p) {
+	int temp = -1;
+	assert(p->source_ref != NULL);
+	if(modifier_is_static(p->modifier)) {
+		class_find_sfield(self, p->source_ref->namev, &temp);
+	} else {
+		class_find_field(self, p->source_ref->namev, &temp);
+	}
+	return temp;
+}
+
+property* class_get_property(class_* self, int index) {
+	assert(index >= 0);
+	int all = class_count_propertyall(self);
+	if (index >= (all - self->prop_list->length) &&
+		index < all) {
+		return vector_at(self->prop_list, self->prop_list->length - (all - index));
+	}
+	return class_get_property(self->super_class->core_type->u.class_, index);
+}
+
+property* class_get_sproperty(class_* self, int index) {
+	assert(index >= 0);
+	int all = class_count_spropertyall(self);
+	if (index >= (all - self->sprop_list->length) &&
+		index < all) {
+		return vector_at(self->sprop_list, self->sprop_list->length - (all - index));
+	}
+	return class_get_property(self->super_class->core_type->u.class_, index);
+}
+
 property* class_find_property(class_* self, string_view namev, int* outIndex) {
 	(*outIndex) = -1;
 	for (int i = 0; i < self->prop_list->length; i++) {

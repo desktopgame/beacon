@@ -98,12 +98,12 @@ static void assign_to_property(il_factor_assign_op* self, enviroment* env, call_
 			il_factor_generate(self->right, env, cctx);
 			opcode_buf_add(env->buf, (vector_item)op_put_static);
 			opcode_buf_add(env->buf, (vector_item)prop->p->parent->absolute_index);
-			opcode_buf_add(env->buf, (vector_item)prop->index);
+			opcode_buf_add(env->buf, (vector_item)class_get_field_by_property(TYPE2CLASS(prop->p->parent), prop->p));
 		} else {
 			il_factor_generate(prop->fact, env, cctx);
 			il_factor_generate(self->right, env, cctx);
 			opcode_buf_add(env->buf, (vector_item)op_put_field);
-			opcode_buf_add(env->buf, (vector_item)prop->index);
+			opcode_buf_add(env->buf, (vector_item)class_get_field_by_property(TYPE2CLASS(prop->p->parent), prop->p));
 		}
 	} else {
 		if(is_static) {

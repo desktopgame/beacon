@@ -49,6 +49,17 @@
 			"MIMode": "lldb"
 		},
 		{
+			"name": "(lldb) Op",
+			"type": "cppdbg",
+			"request": "launch",
+			"program": "${workspaceFolder}/beacon/bin/a.out",
+			"args": ["--op", "main.bc"],
+			"stopAtEntry": false,
+			"cwd": "${workspaceFolder}/beacon/bin",
+			"environment": [],
+			"MIMode": "lldb"
+		},
+		{
 			"name": "(lldb) Scratch",
 			"type": "cppdbg",
 			"request": "launch",

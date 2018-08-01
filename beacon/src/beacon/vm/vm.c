@@ -15,6 +15,7 @@
 #include "../env/constructor.h"
 #include "../env/script_context.h"
 #include "../env/operator_overload.h"
+#include "../env/property.h"
 #include "../lib/beacon/lang/bc_array.h"
 #include "../thread/thread.h"
 #include "../util/mem.h"
@@ -652,6 +653,76 @@ static void vm_run(frame * self, enviroment * env, int pos, int deferStart) {
 				type* cls = (type*)vector_at(ctx->type_vec, absClsIndex);
 				field* f = class_get_sfield(cls->u.class_, fieldIndex);
 				vector_push(self->value_stack, f->static_value);
+				break;
+			}
+			case op_put_property:
+			{
+				object* assignValue = (object*)vector_pop(self->value_stack);
+				object* assignTarget = (object*)vector_pop(self->value_stack);
+				assert(assignTarget->tag == object_ref);
+				int propIndex = (int)enviroment_source_at(env, ++IDX);
+				property* pro = class_get_property(TYPE2CLASS(GENERIC2TYPE(assignTarget->gtype)), propIndex);
+				//プロパティを実行
+				frame* sub = frame_sub(self);
+				sub->receiver = pro->parent;
+				vector_push(sub->value_stack, assignValue);
+				vector_push(sub->value_stack, assignTarget);
+				vm_execute(sub, pro->set->env);
+				frame_delete(sub);
+				break;
+			}
+			case op_get_property:
+			{
+				object* sourceObject = (object*)vector_pop(self->value_stack);
+				int propIndex = (int)enviroment_source_at(env, ++IDX);
+				property* pro = class_get_property(TYPE2CLASS(GENERIC2TYPE(sourceObject->gtype)), propIndex);
+				//プロパティを実行
+				frame* sub = frame_sub(self);
+				sub->receiver = pro->parent;
+				vector_push(sub->value_stack, sourceObject);
+				vm_execute(sub, pro->get->env);
+				//戻り値をスタックに残す
+				vector_item returnV = vector_top(sub->value_stack);
+				object* returnO = (object*)returnV;
+				vector_assign(self->ref_stack, 0, returnV);
+				vector_push(self->value_stack, returnV);
+				frame_delete(sub);
+				break;
+			}
+			case op_put_static_property:
+			{
+				object* sv = (object*)vector_pop(self->value_stack);
+				int absClsIndex = (int)enviroment_source_at(env, ++IDX);
+				int propIndex = (int)enviroment_source_at(env, ++IDX);
+				type* tp = (type*)vector_at(ctx->type_vec, absClsIndex);
+				class_* cls = tp->u.class_;
+				property * p = class_get_sproperty(cls, propIndex);
+				//プロパティを実行
+				frame* sub = frame_sub(self);
+				sub->receiver = NULL;
+				vector_push(sub->value_stack, sv);
+				vm_execute(sub, p->set->env);
+				frame_delete(sub);
+				break;
+			}
+			case op_get_static_property:
+			{
+				object* sv = (object*)vector_pop(self->value_stack);
+				int absClsIndex = (int)enviroment_source_at(env, ++IDX);
+				int propIndex = (int)enviroment_source_at(env, ++IDX);
+				type* tp = (type*)vector_at(ctx->type_vec, absClsIndex);
+				class_* cls = tp->u.class_;
+				property * p = class_get_sproperty(cls, propIndex);
+				//プロパティを実行
+				frame* sub = frame_sub(self);
+				sub->receiver = NULL;
+				vm_execute(sub, p->get->env);
+				//戻り値をスタックに残す
+				vector_item returnV = vector_top(sub->value_stack);
+				object* returnO = (object*)returnV;
+				vector_assign(self->ref_stack, 0, returnV);
+				vector_push(self->value_stack, returnV);
+				frame_delete(sub);
 				break;
 			}
 			case op_store:

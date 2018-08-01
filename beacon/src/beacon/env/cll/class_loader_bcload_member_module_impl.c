@@ -20,6 +20,7 @@
 #include "../../env/operator_overload.h"
 #include "../../env/type/meta_impl.h"
 #include "../../env/cll/class_loader_link_impl.h"
+#include "../../vm/symbol_entry.h"
 #include "../../util/text.h"
 #include "../../util/logger.h"
 #include "../lazy_resolve.h"
@@ -122,10 +123,22 @@ void CLBC_property_impl(class_loader* self,  il_type* iltype, type* tp, vector* 
 		property_body* get = pr->get;
 		vector* set_stmt_list = ilpr->set->statement_list;
 		vector* get_stmt_list = ilpr->get->statement_list;
+		set->env->context_ref = self;
+		get->env->context_ref = self;
 		//setterのオペコードを生成
-		symbol_table_entry(set->env->sym_table, pr->gtype, string_pool_intern("value"));
+		symbol_entry* valueE = symbol_table_entry(set->env->sym_table, pr->gtype, string_pool_intern("value"));
+		if(!modifier_is_static(pr->modifier)) {
+			opcode_buf_add(set->env->buf, op_store);
+			opcode_buf_add(set->env->buf, 0);
+		}
+		opcode_buf_add(set->env->buf, op_store);
+		opcode_buf_add(set->env->buf, valueE->index);
 		CLBC_body(self, set_stmt_list, set->env, cctx, scope);
 		//getterのオペコードを生成
+		if(!modifier_is_static(pr->modifier)) {
+			opcode_buf_add(get->env->buf, op_store);
+			opcode_buf_add(get->env->buf, 0);
+		}
 		CLBC_body(self, get_stmt_list, get->env, cctx, scope);
 	}
 	call_context_delete(cctx);

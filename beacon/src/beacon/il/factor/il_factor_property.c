@@ -20,7 +20,7 @@ il_factor_property* il_factor_property_malloc(const char* filename, int lineno) 
 }
 
 void il_factor_property_generate(il_factor_property* self, enviroment* env, call_context* cctx) {
-	if(self->index == -1) {
+	if(!self->p->is_short) {
 		il_factor_generate_property(self, env, cctx);
 	} else {
 		il_factor_generate_field(self, env, cctx);
@@ -45,7 +45,13 @@ generic_type* il_factor_property_eval(il_factor_property* self, enviroment* env,
 }
 
 char* il_factor_property_tostr(il_factor_property* self, enviroment* env) {
-	return NULL;
+	string_buffer* sb = string_buffer_new();
+	char* name = il_factor_tostr(self->fact, env);
+	string_buffer_appends(sb, name);
+	string_buffer_append(sb, '.');
+	string_buffer_appends(sb, string_pool_ref2str(self->namev));
+	MEM_FREE(name);
+	return string_buffer_release(sb);
 }
 
 void il_factor_property_dump(il_factor_property* self, int depth) {
@@ -61,11 +67,11 @@ static void il_factor_generate_field(il_factor_property* self, enviroment* env, 
 	if(modifier_is_static(f->modifier)) {
 		opcode_buf_add(env->buf, op_get_static);
 		opcode_buf_add(env->buf, f->parent->absolute_index);
-		opcode_buf_add(env->buf, self->index);
+		opcode_buf_add(env->buf, class_get_field_by_property(TYPE2CLASS(self->p->parent), self->p));
 	} else {
 		il_factor_generate(self->fact, env, cctx);
 		opcode_buf_add(env->buf, op_get_field);
-		opcode_buf_add(env->buf, self->index);
+		opcode_buf_add(env->buf, class_get_field_by_property(TYPE2CLASS(self->p->parent), self->p));
 	}
 }
 

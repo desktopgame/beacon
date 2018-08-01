@@ -63,6 +63,27 @@ struct field* class_get_sfield(class_* self, int index);
 
 
 /**
+ * 指定のプロパティが内部的に使用しているフィールドを返します.
+ * @param self
+ * @param p
+ * @return
+ */
+int class_get_field_by_property(class_* self, struct property* p);
+
+/**
+ * @param self
+ * @param index
+ * @return
+ */
+struct property* class_get_property(class_* self, int index);
+/**
+ * @param self
+ * @param index
+ * @return
+ */
+struct property* class_get_sproperty(class_* self, int index);
+
+/**
  * 指定の名前のプロパティを検索します.
  * @param self
  * @param namev

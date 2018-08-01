@@ -75,7 +75,8 @@ void CLIL_prop(class_loader* self, il_type* current, ast* aprop, access_level le
 	if(ast_is_blank(amod)) {
 		ret->modifier = modifier_none;
 	} else {
-		ret->modifier = amod->u.modifier_value;
+		bool err = false;
+		ret->modifier = ast_cast_to_modifier(amod, &err);
 	}
 	ret->access = level;
 	ret->set = CLIL_prop_body(self, current, aset, ilproperty_set, level);
