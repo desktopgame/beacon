@@ -172,19 +172,25 @@ void io_list_files_delete(vector* files) {
 }
 
 bool io_extension(const char* filename, const char* ext) {
-	int len = strlen(filename);
-	string_buffer* buf = string_buffer_new();
-	for(int i=(len-1); i>=0; i--) {
-		char ch = filename[i];
-		if(ch == '.') {
+	int fn_len = strlen(filename);
+	int ext_len = strlen(ext);
+	int mat_len = 0;
+	for(int i=0; i<fn_len; i++) {
+		int offset = fn_len - i;
+		char c = filename[fn_len-(i+1)];
+		if(c == '.') {
 			break;
+		} else {
+			if(i >= ext_len) {
+				return false;
+			}
+			if(ext[ext_len-(i+1)] != c) {
+				return false;
+			}
+			mat_len++;
 		}
-		string_buffer_prepend(buf, ch);
 	}
-	char* real_ext = string_buffer_release(buf);
-	bool ret = !(strcmp(ext, real_ext));
-	MEM_FREE(real_ext);
-	return ret;
+	return mat_len == ext_len;
 }
 
 char* io_join_path(const char* a, const char* b) {
