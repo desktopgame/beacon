@@ -95,7 +95,7 @@ vector* call_context_typeargs(call_context* self) {
 }
 
 void call_context_delete(call_context* self) {
-	MEM_FREE(self);
 	control_structure_free(self->control);
 	vector_delete(self->call_stack, vector_deleter_null);
+	MEM_FREE(self);
 }
