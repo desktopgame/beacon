@@ -1,7 +1,7 @@
-import "beacon/lang/Exception"
-import "beacon/lang/String"
-import "beacon/lang/Iterable"
-import "beacon/lang/ArrayIterator"
+require "beacon/lang/Exception"
+require "beacon/lang/String"
+require "beacon/lang/Iterable"
+require "beacon/lang/ArrayIterator"
 
 namespace beacon::lang {
 	class Array[T] : Iterable[T] {

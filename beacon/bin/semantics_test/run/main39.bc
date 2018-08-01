@@ -1,4 +1,4 @@
-import "beacon/unsafe/File"
+require "beacon/unsafe/File"
 var f = beacon::unsafe::File.stdout();
 f.puts("HelloWorld\n");
 f.puts("2D OR NOT 2D");

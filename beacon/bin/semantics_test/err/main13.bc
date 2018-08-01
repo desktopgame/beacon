@@ -1,4 +1,4 @@
-import "beacon/lang/Iterable"
+require "beacon/lang/Iterable"
 
 namespace beacon {
 	class InterfaceNotImpl : Iterable[Int] {

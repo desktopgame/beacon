@@ -1,7 +1,7 @@
-import "beacon/lang/String"
-import "beacon/lang/Array"
-import "beacon/lang/Console"
-import "beacon/lang/StackTraceElement"
+require "beacon/lang/String"
+require "beacon/lang/Array"
+require "beacon/lang/Console"
+require "beacon/lang/StackTraceElement"
 
 namespace beacon::lang {
 	class Exception {

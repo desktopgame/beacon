@@ -1,4 +1,4 @@
-import "beacon/unsafe/File"
+require "beacon/unsafe/File"
 var f = beacon::unsafe::File.open("File.text", "r");
 defer f.close();
 Console.writeLine(f.gets());

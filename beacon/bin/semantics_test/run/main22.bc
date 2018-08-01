@@ -1,6 +1,6 @@
-import "beacon/lang/Object"
-import "beacon/lang/Iterable"
-import "beacon/lang/Console"
+require "beacon/lang/Object"
+require "beacon/lang/Iterable"
+require "beacon/lang/Console"
 
 namespace beacon::x {
 	class DeferTest {

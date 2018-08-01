@@ -206,7 +206,7 @@ static void update_loc() {
 <INITIAL>"<:"				{ return (BOUNDS_EXTENDS); }
 <INITIAL>":>"				{ return (BOUNDS_SUPER); }
 
-<INITIAL>"import"			{ return (IMPORT); }
+<INITIAL>"require"			{ return (IMPORT); }
 <INITIAL>"var"				{ return (VAR); }
 
 <INITIAL>"if"				{ return (IF); }

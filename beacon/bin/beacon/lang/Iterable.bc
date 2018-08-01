@@ -1,4 +1,4 @@
-import "beacon/lang/Iterator"
+require "beacon/lang/Iterator"
 
 namespace beacon::lang {
 	interface Iterable[T] {

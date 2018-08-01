@@ -1,4 +1,4 @@
-import "beacon/lang/Array"
+require "beacon/lang/Array"
 
 namespace beacon::lang {
 	class String : Iterable[Char] {

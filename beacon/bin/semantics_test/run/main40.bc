@@ -1,4 +1,4 @@
-import "beacon/unsafe/File"
+require "beacon/unsafe/File"
 var v = new Vector[Int]();
 v << 10;
 v << 20;
