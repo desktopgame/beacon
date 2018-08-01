@@ -1,12 +1,17 @@
 namespace run55 {
 	class Base {
 		public:
-		Int property {
+		property Int A {
 			defset;
 			defget;
 		}
 
-		Int age {
+		property Int age {
+			defset;
+			defget;
+		}
+
+		property static String name {
 			defset;
 			defget;
 		}
@@ -17,6 +22,9 @@ namespace run55 {
 }
 var d = new run55::Base();
 //d.age = 0;
-d.property = 10;
+d.A = 10;
+printLine(run55::Base.name);
 printLine(d.age);
-printLine(d.property);
+printLine(d.A);
+run55::Base.name = "Hello";
+printLine(run55::Base.name);

@@ -7,6 +7,8 @@
 #include <assert.h>
 
 static void il_factor_generate_field(il_factor_property* self, enviroment* env, call_context* cctx);
+static void il_factor_generate_property(il_factor_property* self, enviroment* env, call_context* cctx);
+
 
 il_factor_property* il_factor_property_malloc(const char* filename, int lineno) {
 	il_factor_property* ret = mem_malloc(sizeof(il_factor_property), filename, lineno);
@@ -19,7 +21,7 @@ il_factor_property* il_factor_property_malloc(const char* filename, int lineno) 
 
 void il_factor_property_generate(il_factor_property* self, enviroment* env, call_context* cctx) {
 	if(self->index == -1) {
-
+		il_factor_generate_property(self, env, cctx);
 	} else {
 		il_factor_generate_field(self, env, cctx);
 	}
@@ -63,6 +65,18 @@ static void il_factor_generate_field(il_factor_property* self, enviroment* env, 
 	} else {
 		il_factor_generate(self->fact, env, cctx);
 		opcode_buf_add(env->buf, op_get_field);
+		opcode_buf_add(env->buf, self->index);
+	}
+}
+
+static void il_factor_generate_property(il_factor_property* self, enviroment* env, call_context* cctx) {
+	if(modifier_is_static(self->p->modifier)) {
+		opcode_buf_add(env->buf, op_get_static_property);
+		opcode_buf_add(env->buf, self->p->parent->absolute_index);
+		opcode_buf_add(env->buf, self->index);
+	} else {
+		il_factor_generate(self->fact, env, cctx);
+		opcode_buf_add(env->buf, op_get_property);
 		opcode_buf_add(env->buf, self->index);
 	}
 }

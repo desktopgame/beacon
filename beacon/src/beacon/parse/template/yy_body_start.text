@@ -627,22 +627,22 @@ prop_get
 ;;プロパティの宣言
 ;;
 prop_define
-	: modifier_type_T_list typename_T IDENT LCB prop_set prop_get RCB
+	: PROPERTY modifier_type_T_list typename_T IDENT LCB prop_set prop_get RCB
 	{
-		$$ = ast_new_prop_decl($1, $2, $3, $5, $6);
+		$$ = ast_new_prop_decl($2, $3, $4, $6, $7);
 	}
-	| modifier_type_T_list typename_T IDENT LCB prop_get RCB
+	| PROPERTY modifier_type_T_list typename_T IDENT LCB prop_get RCB
 	{
-		$$ = ast_new_prop_decl($1, $2, $3, ast_new_blank(), $5);
+		$$ = ast_new_prop_decl($2, $3, $4, ast_new_blank(), $6);
 	}
 	;;modifierなし
-	| typename_T IDENT LCB prop_set prop_get RCB
+	| PROPERTY typename_T IDENT LCB prop_set prop_get RCB
 	{
-		$$ = ast_new_prop_decl(ast_new_modifier(modifier_none), $1, $2, $4, $5);
+		$$ = ast_new_prop_decl(ast_new_modifier(modifier_none), $2, $3, $5, $6);
 	}
-	| typename_T IDENT LCB prop_get RCB
+	| PROPERTY typename_T IDENT LCB prop_get RCB
 	{
-		$$ = ast_new_prop_decl(ast_new_modifier(modifier_none), $1, $2, ast_new_blank(), $4);
+		$$ = ast_new_prop_decl(ast_new_modifier(modifier_none), $2, $3, ast_new_blank(), $5);
 	}
 	;
 

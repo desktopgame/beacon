@@ -44,7 +44,7 @@
 		INC DEC EXC_OR
 
 		LCB RCB LRB RRB LSB RSB
-		SEMI IMPORT VAR DEFSET DEFGET
+		SEMI IMPORT VAR PROPERTY DEFSET DEFGET
 
 		THIS_TOK SUPER_TOK TRUE_TOK FALSE_TOK NULL_TOK AS
 
@@ -578,21 +578,21 @@ prop_get
 	;
 
 prop_define
-	: modifier_type_T_list typename_T IDENT LCB prop_set prop_get RCB
+	: PROPERTY modifier_type_T_list typename_T IDENT LCB prop_set prop_get RCB
 	{
-		$$ = ast_new_prop_decl($1, $2, $3, $5, $6);
+		$$ = ast_new_prop_decl($2, $3, $4, $6, $7);
 	}
-	| modifier_type_T_list typename_T IDENT LCB prop_get RCB
+	| PROPERTY modifier_type_T_list typename_T IDENT LCB prop_get RCB
 	{
-		$$ = ast_new_prop_decl($1, $2, $3, ast_new_blank(), $5);
+		$$ = ast_new_prop_decl($2, $3, $4, ast_new_blank(), $6);
 	}
-	| typename_T IDENT LCB prop_set prop_get RCB
+	| PROPERTY typename_T IDENT LCB prop_set prop_get RCB
 	{
-		$$ = ast_new_prop_decl(ast_new_modifier(modifier_none), $1, $2, $4, $5);
+		$$ = ast_new_prop_decl(ast_new_modifier(modifier_none), $2, $3, $5, $6);
 	}
-	| typename_T IDENT LCB prop_get RCB
+	| PROPERTY typename_T IDENT LCB prop_get RCB
 	{
-		$$ = ast_new_prop_decl(ast_new_modifier(modifier_none), $1, $2, ast_new_blank(), $4);
+		$$ = ast_new_prop_decl(ast_new_modifier(modifier_none), $2, $3, ast_new_blank(), $5);
 	}
 	;
 

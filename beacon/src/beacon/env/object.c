@@ -316,6 +316,20 @@ object* object_char2obj(char c) {
 	return object_char_new(c);
 }
 
+object* object_default(generic_type* gt) {
+	object* a = object_get_null();
+	if (gt == TYPE_INT->generic_self) {
+		a = object_int_get(0);
+	} else if (gt == TYPE_DOUBLE->generic_self) {
+		a = object_double_new(0.0);
+	} else if (gt == TYPE_BOOL->generic_self) {
+		a = object_bool_get(false);
+	} else if (gt == TYPE_CHAR->generic_self) {
+		a = object_char_new('\0');
+	}
+	return a;
+}
+
 //private
 static object* object_mallocImpl(object_tag type, const char* filename, int lineno) {
 	object* ret = (object*)mem_malloc(sizeof(object), filename, lineno);

@@ -92,12 +92,30 @@ static void assign_to_field(il_factor* receiver, il_factor* source, string_view 
 
 static void assign_to_property(il_factor_assign_op* self, enviroment* env, call_context* cctx) {
 	il_factor_property* prop = self->left->u.prop;
+	bool is_static = modifier_is_static(prop->p->modifier);
 	if(prop->p->is_short) {
-		il_factor_generate(prop->fact, env, cctx);
-		il_factor_generate(self->right, env, cctx);
-		opcode_buf_add(env->buf, (vector_item)op_put_field);
-		opcode_buf_add(env->buf, (vector_item)prop->index);
+		if(is_static) {
+			il_factor_generate(self->right, env, cctx);
+			opcode_buf_add(env->buf, (vector_item)op_put_static);
+			opcode_buf_add(env->buf, (vector_item)prop->p->parent->absolute_index);
+			opcode_buf_add(env->buf, (vector_item)prop->index);
+		} else {
+			il_factor_generate(prop->fact, env, cctx);
+			il_factor_generate(self->right, env, cctx);
+			opcode_buf_add(env->buf, (vector_item)op_put_field);
+			opcode_buf_add(env->buf, (vector_item)prop->index);
+		}
 	} else {
-
+		if(is_static) {
+			il_factor_generate(self->right, env, cctx);
+			opcode_buf_add(env->buf, (vector_item)op_put_static_property);
+			opcode_buf_add(env->buf, (vector_item)prop->p->parent->absolute_index);
+			opcode_buf_add(env->buf, (vector_item)prop->index);
+		} else {
+			il_factor_generate(prop->fact, env, cctx);
+			il_factor_generate(self->right, env, cctx);
+			opcode_buf_add(env->buf, (vector_item)op_put_property);
+			opcode_buf_add(env->buf, (vector_item)prop->index);
+		}
 	}
 }

@@ -233,6 +233,33 @@ int opcode_fprint(FILE* fp, vector* source, int index) {
 			text_fprintf(fp,"get static(%d %d)", a, b);
 			break;
 		}
+		case op_put_property:
+		{
+			int a = (int)vector_at(source, ++index);
+			text_fprintf(fp,"put property(%d)", a);
+			break;
+		}
+		case op_get_property:
+		{
+			//int a = (int)vector_at(source, ++index);
+			int b = (int)vector_at(source, ++index);
+			text_fprintf(fp,"get property(%d)", b);
+			break;
+		}
+		case op_put_static_property:
+		{
+			int a = (int)vector_at(source, ++index);
+			int b = (int)vector_at(source, ++index);
+			text_fprintf(fp,"put static_property(%d %d)", a, b);
+			break;
+		}
+		case op_get_static_property:
+		{
+			int a = (int)vector_at(source, ++index);
+			int b = (int)vector_at(source, ++index);
+			text_fprintf(fp,"get static_property(%d %d)", a, b);
+			break;
+		}
 		case op_store:
 		{
 			int a = (int)vector_at(source, ++index);

@@ -232,6 +232,7 @@ static void update_loc() {
 <INITIAL>"null"			{ return (NULL_TOK); }
 <INITIAL>"as"			{ return (AS); }
 <INITIAL>"is"			{ return (INSTANCEOF); }
+<INITIAL>"property"		{ return (PROPERTY); }
 <INITIAL>"defset"		{ return (DEFSET); }
 <INITIAL>"defget"		{ return (DEFGET); }
 

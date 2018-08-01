@@ -100,25 +100,13 @@ type* class_new_preload(string_view namev) {
 void class_alloc_fields(class_ * self, object * o) {
 	assert(o->tag == object_ref);
 	for (int i = 0; i < self->field_list->length; i++) {
-		//*
 		field* f = (field*)vector_at(self->field_list, i);
-		object* a = object_get_null();
-		//プリミティブ型のときはデフォルト値を入れておく
-		if (f->gtype == TYPE_INT->generic_self) {
-			a = object_int_get(0);
-		} else if (f->gtype == TYPE_DOUBLE->generic_self) {
-			a = object_double_new(0.0);
-		} else if (f->gtype == TYPE_BOOL->generic_self) {
-			a = object_bool_get(false);
-		} else if (f->gtype == TYPE_CHAR->generic_self) {
-			a = object_char_new('\0');
-		}
+		object* a = object_default(f->gtype);
 		//静的フィールドは別の場所に確保
 		if (modifier_is_static(f->modifier)) {
 			continue;
 		}
 		vector_push(o->u.field_vec, a);
-		//*/
 	}
 	class_create_vtable(self);
 	o->gtype = generic_type_ref(self->parent);

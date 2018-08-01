@@ -100,54 +100,55 @@
      SEMI = 309,
      IMPORT = 310,
      VAR = 311,
-     DEFSET = 312,
-     DEFGET = 313,
-     THIS_TOK = 314,
-     SUPER_TOK = 315,
-     TRUE_TOK = 316,
-     FALSE_TOK = 317,
-     NULL_TOK = 318,
-     AS = 319,
-     ABSTRACT = 320,
-     OVERRIDE = 321,
-     INTERFACE = 322,
-     CLASS = 323,
-     ENUM = 324,
-     PUBLIC = 325,
-     PRIVATE = 326,
-     PROTECTED = 327,
-     STATIC = 328,
-     NATIVE = 329,
-     NEW = 330,
-     DEF = 331,
-     ARROW = 332,
-     NAMESPACE = 333,
-     RETURN = 334,
-     IF = 335,
-     ELIF = 336,
-     ELSE = 337,
-     WHILE = 338,
-     BREAK = 339,
-     CONTINUE = 340,
-     TRY = 341,
-     CATCH = 342,
-     THROW = 343,
-     ASSERT_T = 344,
-     DEFER = 345,
-     INSTANCEOF = 346,
-     OPERATOR = 347,
-     BOUNDS_EXTENDS = 348,
-     BOUNDS_SUPER = 349,
-     PRE_DEC = 350,
-     PRE_INC = 351,
-     QUOTE = 352,
-     POST_DEC = 353,
-     POST_INC = 354,
-     FUNCCALL = 355,
-     REF = 356,
-     POSITIVE = 357,
-     NEGATIVE = 358,
-     FORM_TYPE = 359
+     PROPERTY = 312,
+     DEFSET = 313,
+     DEFGET = 314,
+     THIS_TOK = 315,
+     SUPER_TOK = 316,
+     TRUE_TOK = 317,
+     FALSE_TOK = 318,
+     NULL_TOK = 319,
+     AS = 320,
+     ABSTRACT = 321,
+     OVERRIDE = 322,
+     INTERFACE = 323,
+     CLASS = 324,
+     ENUM = 325,
+     PUBLIC = 326,
+     PRIVATE = 327,
+     PROTECTED = 328,
+     STATIC = 329,
+     NATIVE = 330,
+     NEW = 331,
+     DEF = 332,
+     ARROW = 333,
+     NAMESPACE = 334,
+     RETURN = 335,
+     IF = 336,
+     ELIF = 337,
+     ELSE = 338,
+     WHILE = 339,
+     BREAK = 340,
+     CONTINUE = 341,
+     TRY = 342,
+     CATCH = 343,
+     THROW = 344,
+     ASSERT_T = 345,
+     DEFER = 346,
+     INSTANCEOF = 347,
+     OPERATOR = 348,
+     BOUNDS_EXTENDS = 349,
+     BOUNDS_SUPER = 350,
+     PRE_DEC = 351,
+     PRE_INC = 352,
+     QUOTE = 353,
+     POST_DEC = 354,
+     POST_INC = 355,
+     FUNCCALL = 356,
+     REF = 357,
+     POSITIVE = 358,
+     NEGATIVE = 359,
+     FORM_TYPE = 360
    };
 #endif
 /* Tokens.  */
@@ -205,54 +206,55 @@
 #define SEMI 309
 #define IMPORT 310
 #define VAR 311
-#define DEFSET 312
-#define DEFGET 313
-#define THIS_TOK 314
-#define SUPER_TOK 315
-#define TRUE_TOK 316
-#define FALSE_TOK 317
-#define NULL_TOK 318
-#define AS 319
-#define ABSTRACT 320
-#define OVERRIDE 321
-#define INTERFACE 322
-#define CLASS 323
-#define ENUM 324
-#define PUBLIC 325
-#define PRIVATE 326
-#define PROTECTED 327
-#define STATIC 328
-#define NATIVE 329
-#define NEW 330
-#define DEF 331
-#define ARROW 332
-#define NAMESPACE 333
-#define RETURN 334
-#define IF 335
-#define ELIF 336
-#define ELSE 337
-#define WHILE 338
-#define BREAK 339
-#define CONTINUE 340
-#define TRY 341
-#define CATCH 342
-#define THROW 343
-#define ASSERT_T 344
-#define DEFER 345
-#define INSTANCEOF 346
-#define OPERATOR 347
-#define BOUNDS_EXTENDS 348
-#define BOUNDS_SUPER 349
-#define PRE_DEC 350
-#define PRE_INC 351
-#define QUOTE 352
-#define POST_DEC 353
-#define POST_INC 354
-#define FUNCCALL 355
-#define REF 356
-#define POSITIVE 357
-#define NEGATIVE 358
-#define FORM_TYPE 359
+#define PROPERTY 312
+#define DEFSET 313
+#define DEFGET 314
+#define THIS_TOK 315
+#define SUPER_TOK 316
+#define TRUE_TOK 317
+#define FALSE_TOK 318
+#define NULL_TOK 319
+#define AS 320
+#define ABSTRACT 321
+#define OVERRIDE 322
+#define INTERFACE 323
+#define CLASS 324
+#define ENUM 325
+#define PUBLIC 326
+#define PRIVATE 327
+#define PROTECTED 328
+#define STATIC 329
+#define NATIVE 330
+#define NEW 331
+#define DEF 332
+#define ARROW 333
+#define NAMESPACE 334
+#define RETURN 335
+#define IF 336
+#define ELIF 337
+#define ELSE 338
+#define WHILE 339
+#define BREAK 340
+#define CONTINUE 341
+#define TRY 342
+#define CATCH 343
+#define THROW 344
+#define ASSERT_T 345
+#define DEFER 346
+#define INSTANCEOF 347
+#define OPERATOR 348
+#define BOUNDS_EXTENDS 349
+#define BOUNDS_SUPER 350
+#define PRE_DEC 351
+#define PRE_INC 352
+#define QUOTE 353
+#define POST_DEC 354
+#define POST_INC 355
+#define FUNCCALL 356
+#define REF 357
+#define POSITIVE 358
+#define NEGATIVE 359
+#define FORM_TYPE 360
 
 
 
@@ -269,7 +271,7 @@ typedef union YYSTYPE
 	access_level access_level_value;
 }
 /* Line 1529 of yacc.c.  */
-#line 266 "beacon.tab.h"
+#line 268 "beacon.tab.h"
 	YYSTYPE;
 # define yystype YYSTYPE /* obsolescent; will be withdrawn */
 # define YYSTYPE_IS_DECLARED 1

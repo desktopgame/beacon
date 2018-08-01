@@ -17,7 +17,6 @@ Terminals which are not used
 
 
 State 44 conflicts: 1 shift/reduce
-State 397 conflicts: 1 shift/reduce
 
 
 Grammar
@@ -153,10 +152,10 @@ Grammar
    94         | access_level_T DEFGET SEMI
    95         | access_level_T DEFGET scope
 
-   96 prop_define: modifier_type_T_list typename_T IDENT LCB prop_set prop_get RCB
-   97            | modifier_type_T_list typename_T IDENT LCB prop_get RCB
-   98            | typename_T IDENT LCB prop_set prop_get RCB
-   99            | typename_T IDENT LCB prop_get RCB
+   96 prop_define: PROPERTY modifier_type_T_list typename_T IDENT LCB prop_set prop_get RCB
+   97            | PROPERTY modifier_type_T_list typename_T IDENT LCB prop_get RCB
+   98            | PROPERTY typename_T IDENT LCB prop_set prop_get RCB
+   99            | PROPERTY typename_T IDENT LCB prop_get RCB
 
   100 modifier_type_T_list: modifier_type_T
   101                     | modifier_type_T_list modifier_type_T
@@ -402,218 +401,219 @@ RSB (308) 27 117
 SEMI (309) 86 87 88 90 92 94 213 232 233 237 239
 IMPORT (310) 24
 VAR (311) 215
-DEFSET (312) 88 89 90 91
-DEFGET (313) 92 93 94 95
-THIS_TOK (314) 56 165
-SUPER_TOK (315) 55 166
-TRUE_TOK (316) 195
-FALSE_TOK (317) 196
-NULL_TOK (318) 197
-AS (319) 158
-ABSTRACT (320) 31 32 104
-OVERRIDE (321) 105
-INTERFACE (322) 37 38
-CLASS (323) 31 32 33 34
-ENUM (324) 35 36
-PUBLIC (325) 106
-PRIVATE (326) 107
-PROTECTED (327) 108
-STATIC (328) 102
-NATIVE (329) 103
-NEW (330) 51 52 163 164
-DEF (331) 51 52 59 60 61 62 63 64
-ARROW (332) 59 60 61 62 63 64 65 66 67 68 69 70 71 72 73 74 75 76 77
+PROPERTY (312) 96 97 98 99
+DEFSET (313) 88 89 90 91
+DEFGET (314) 92 93 94 95
+THIS_TOK (315) 56 165
+SUPER_TOK (316) 55 166
+TRUE_TOK (317) 195
+FALSE_TOK (318) 196
+NULL_TOK (319) 197
+AS (320) 158
+ABSTRACT (321) 31 32 104
+OVERRIDE (322) 105
+INTERFACE (323) 37 38
+CLASS (324) 31 32 33 34
+ENUM (325) 35 36
+PUBLIC (326) 106
+PRIVATE (327) 107
+PROTECTED (328) 108
+STATIC (329) 102
+NATIVE (330) 103
+NEW (331) 51 52 163 164
+DEF (332) 51 52 59 60 61 62 63 64
+ARROW (333) 59 60 61 62 63 64 65 66 67 68 69 70 71 72 73 74 75 76 77
     78 79 80 81 82 83 84 85 114
-NAMESPACE (333) 9 11
-RETURN (334) 226
-IF (335) 216 217 218 219
-ELIF (336) 222
-ELSE (337) 217 219
-WHILE (338) 223
-BREAK (339) 224
-CONTINUE (340) 225
-TRY (341) 228
-CATCH (342) 231
-THROW (343) 227
-ASSERT_T (344) 232 233
-DEFER (345) 234
-INSTANCEOF (346) 157
-OPERATOR (347) 65 66 67 68 69 70 71 72 73 74 75 76 77 78 79 80 81 82
+NAMESPACE (334) 9 11
+RETURN (335) 226
+IF (336) 216 217 218 219
+ELIF (337) 222
+ELSE (338) 217 219
+WHILE (339) 223
+BREAK (340) 224
+CONTINUE (341) 225
+TRY (342) 228
+CATCH (343) 231
+THROW (344) 227
+ASSERT_T (345) 232 233
+DEFER (346) 234
+INSTANCEOF (347) 157
+OPERATOR (348) 65 66 67 68 69 70 71 72 73 74 75 76 77 78 79 80 81 82
     83 84 85
-BOUNDS_EXTENDS (348)
-BOUNDS_SUPER (349)
-PRE_DEC (350)
-PRE_INC (351)
-QUOTE (352) 114
-POST_DEC (353)
-POST_INC (354)
-FUNCCALL (355)
-REF (356)
-POSITIVE (357)
-NEGATIVE (358)
-FORM_TYPE (359)
+BOUNDS_EXTENDS (349)
+BOUNDS_SUPER (350)
+PRE_DEC (351)
+PRE_INC (352)
+QUOTE (353) 114
+POST_DEC (354)
+POST_INC (355)
+FUNCCALL (356)
+REF (357)
+POSITIVE (358)
+NEGATIVE (359)
+FORM_TYPE (360)
 
 
 Nonterminals, with rules where they appear
 
-$accept (107)
+$accept (108)
     on left: 0
-compilation_unit (108)
+compilation_unit (109)
     on left: 1 2 3, on right: 0 2
-init_decl (109)
+init_decl (110)
     on left: 4 5, on right: 1
-body_decl (110)
+body_decl (111)
     on left: 6 7 8, on right: 1 2
-namespace_decl (111)
+namespace_decl (112)
     on left: 9, on right: 7
-namespace_body (112)
+namespace_body (113)
     on left: 10, on right: 9 11
-namespace_member_decl (113)
+namespace_member_decl (114)
     on left: 11 12 13 14 15, on right: 16 17
-namespace_member_decl_list (114)
+namespace_member_decl_list (115)
     on left: 16 17, on right: 17 19
-namespace_member_decl_optional (115)
+namespace_member_decl_optional (116)
     on left: 18 19, on right: 10
-namespace_path (116)
+namespace_path (117)
     on left: 20 21, on right: 9 11 21
-import_list (117)
+import_list (118)
     on left: 22 23, on right: 5 23
-import (118)
+import (119)
     on left: 24, on right: 22 23
-parameterized_typename (119)
+parameterized_typename (120)
     on left: 25, on right: 31 32 33 34 37 38
-type_parameter_group (120)
+type_parameter_group (121)
     on left: 26 27, on right: 25 61 62 63 64
-type_parameter_list (121)
+type_parameter_list (122)
     on left: 28 29, on right: 27 29
-type_parameter (122)
+type_parameter (123)
     on left: 30, on right: 28 29
-abstract_class_decl (123)
+abstract_class_decl (124)
     on left: 31 32, on right: 12
-class_decl (124)
+class_decl (125)
     on left: 33 34, on right: 13
-enum_decl (125)
+enum_decl (126)
     on left: 35 36, on right: 15
-interface_decl (126)
+interface_decl (127)
     on left: 37 38, on right: 14
-access_member_tree_opt (127)
+access_member_tree_opt (128)
     on left: 39 40, on right: 31 32 33 34 37 38
-access_member_tree (128)
+access_member_tree (129)
     on left: 41 42, on right: 40 42
-access_member_list (129)
+access_member_list (130)
     on left: 43, on right: 41 42
-member_define_list (130)
+member_define_list (131)
     on left: 44 45, on right: 43 45
-member_define (131)
+member_define (132)
     on left: 46 47 48 49 50, on right: 44 45
-constructor_define (132)
+constructor_define (133)
     on left: 51 52, on right: 46
-constructor_chain (133)
+constructor_chain (134)
     on left: 53 54, on right: 58
-constructor_chain_type_T (134)
+constructor_chain_type_T (135)
     on left: 55 56, on right: 53 54
-constructor_chain_optional (135)
+constructor_chain_optional (136)
     on left: 57 58, on right: 51 52
-function_define (136)
+function_define (137)
     on left: 59 60, on right: 8
-method_define (137)
+method_define (138)
     on left: 61 62 63 64, on right: 47
-operator_define (138)
+operator_define (139)
     on left: 65 66 67 68 69 70 71 72 73 74 75 76 77 78 79 80 81 82
     83 84 85, on right: 48
-field_define (139)
+field_define (140)
     on left: 86 87, on right: 49
-prop_set (140)
+prop_set (141)
     on left: 88 89 90 91, on right: 96 98
-prop_get (141)
+prop_get (142)
     on left: 92 93 94 95, on right: 96 97 98 99
-prop_define (142)
+prop_define (143)
     on left: 96 97 98 99, on right: 50
-modifier_type_T_list (143)
+modifier_type_T_list (144)
     on left: 100 101, on right: 61 62 96 97 101
-modifier_type_T (144)
+modifier_type_T (145)
     on left: 102 103 104 105, on right: 86 100 101
-access_level_T (145)
+access_level_T (146)
     on left: 106 107 108, on right: 43 90 91 94 95
-ident_list (146)
+ident_list (147)
     on left: 109 110, on right: 35 36 110
-parameter_list (147)
+parameter_list (148)
     on left: 111 112, on right: 51 59 61 63 65 66 67 68 69 70 71 72
     73 74 75 76 77 78 79 80 81 82 112 114
-argument_list (148)
+argument_list (149)
     on left: 113 114 115, on right: 53 115 161 163
-typename_group (149)
+typename_group (150)
     on left: 116 117, on right: 120 163 164 168 169
-typename_list (150)
+typename_list (151)
     on left: 118 119, on right: 32 34 38 117 119
-typename_T (151)
+typename_T (152)
     on left: 120, on right: 59 60 61 62 63 64 65 66 67 68 69 70 71
     72 73 74 75 76 77 78 79 80 81 82 83 84 85 86 87 96 97 98 99 111
     112 114 118 119 157 158 213 214 231
-fqcn_part (152)
+fqcn_part (153)
     on left: 121 122, on right: 120 122 163 164 168
-expression (153)
+expression (154)
     on left: 123 124 125, on right: 113 115 123 126 127 128 129 130
     131 132 133 134 135 136 137 138 139 140 141 142 143 144 145 146
     147 148 149 150 151 152 153 154 155 156 157 158 159 160 169 170
     171 172 173 174 175 176 177 178 179 180 181 182 183 184 185 186
     187 188 189 190 200 214 215 216 217 218 219 222 223 226 227 232
     233
-expression_nobrace (154)
+expression_nobrace (155)
     on left: 126 127 128 129 130 131 132 133 134 135 136 137 138 139
     140 141 142 143 144 145 146 147 148 149 150 151 152 153 154 155
     156 157 158 159 160 161 162 163 164 165 166 167,
     on right: 125 161 162
-lhs (155)
+lhs (156)
     on left: 168 169 170 171 172 173 174 175 176 177 178 179 180 181
     182 183 184 185 186 187 188 189 190, on right: 140 141 142 143
     144 145 146 147 148 149 150 167
-primary (156)
+primary (157)
     on left: 191 192 193 194 195 196 197, on right: 124
-stmt_list (157)
+stmt_list (158)
     on left: 198 199, on right: 199 235
-stmt (158)
+stmt (159)
     on left: 200 201 202 203 204 205 206 207 208 209 210 211 212,
     on right: 6 198 199 234
-variable_decl_stmt (159)
+variable_decl_stmt (160)
     on left: 213, on right: 201
-variable_init_stmt (160)
+variable_init_stmt (161)
     on left: 214, on right: 202
-inferenced_type_init_stmt (161)
+inferenced_type_init_stmt (162)
     on left: 215, on right: 203
-if_stmt (162)
+if_stmt (163)
     on left: 216 217 218 219, on right: 204
-elif_list (163)
+elif_list (164)
     on left: 220 221, on right: 218 219 221
-elif (164)
+elif (165)
     on left: 222, on right: 220 221
-while_stmt (165)
+while_stmt (166)
     on left: 223, on right: 205
-break_stmt (166)
+break_stmt (167)
     on left: 224, on right: 206
-continue_stmt (167)
+continue_stmt (168)
     on left: 225, on right: 207
-return_stmt (168)
+return_stmt (169)
     on left: 226, on right: 208
-throw_stmt (169)
+throw_stmt (170)
     on left: 227, on right: 209
-try_stmt (170)
+try_stmt (171)
     on left: 228, on right: 210
-catch_stmt_list (171)
+catch_stmt_list (172)
     on left: 229 230, on right: 228 230
-catch_stmt (172)
+catch_stmt (173)
     on left: 231, on right: 229 230
-assert_stmt (173)
+assert_stmt (174)
     on left: 232 233, on right: 211
-defer_stmt (174)
+defer_stmt (175)
     on left: 234, on right: 212
-scope (175)
+scope (176)
     on left: 235 236, on right: 89 91 93 95 114 216 217 218 219 222
     228 231 238
-scope_optional (176)
+scope_optional (177)
     on left: 237 238, on right: 51 52 59 60 61 62 63 64 65 66 67 68
     69 70 71 72 73 74 75 76 77 78 79 80 81 82 83 84 85 223
-stmt_term (177)
+stmt_term (178)
     on left: 239, on right: 200 214 215 224 225 226 227
 
 
@@ -15463,12 +15463,10 @@ state 372
    85                | . OPERATOR SUB LRB RRB ARROW typename_T scope_optional
    86 field_define: . modifier_type_T typename_T IDENT SEMI
    87             | . typename_T IDENT SEMI
-   96 prop_define: . modifier_type_T_list typename_T IDENT LCB prop_set prop_get RCB
-   97            | . modifier_type_T_list typename_T IDENT LCB prop_get RCB
-   98            | . typename_T IDENT LCB prop_set prop_get RCB
-   99            | . typename_T IDENT LCB prop_get RCB
-  100 modifier_type_T_list: . modifier_type_T
-  101                     | . modifier_type_T_list modifier_type_T
+   96 prop_define: . PROPERTY modifier_type_T_list typename_T IDENT LCB prop_set prop_get RCB
+   97            | . PROPERTY modifier_type_T_list typename_T IDENT LCB prop_get RCB
+   98            | . PROPERTY typename_T IDENT LCB prop_set prop_get RCB
+   99            | . PROPERTY typename_T IDENT LCB prop_get RCB
   102 modifier_type_T: . STATIC
   103                | . NATIVE
   104                | . ABSTRACT
@@ -15478,24 +15476,24 @@ state 372
   122          | . fqcn_part COLO_COLO IDENT
 
     IDENT     shift, and go to state 14
-    ABSTRACT  shift, and go to state 383
-    OVERRIDE  shift, and go to state 384
-    STATIC    shift, and go to state 385
-    NATIVE    shift, and go to state 386
-    DEF       shift, and go to state 387
-    OPERATOR  shift, and go to state 388
+    PROPERTY  shift, and go to state 383
+    ABSTRACT  shift, and go to state 384
+    OVERRIDE  shift, and go to state 385
+    STATIC    shift, and go to state 386
+    NATIVE    shift, and go to state 387
+    DEF       shift, and go to state 388
+    OPERATOR  shift, and go to state 389
 
-    member_define_list    go to state 389
-    member_define         go to state 390
-    constructor_define    go to state 391
-    method_define         go to state 392
-    operator_define       go to state 393
-    field_define          go to state 394
-    prop_define           go to state 395
-    modifier_type_T_list  go to state 396
-    modifier_type_T       go to state 397
-    typename_T            go to state 398
-    fqcn_part             go to state 149
+    member_define_list  go to state 390
+    member_define       go to state 391
+    constructor_define  go to state 392
+    method_define       go to state 393
+    operator_define     go to state 394
+    field_define        go to state 395
+    prop_define         go to state 396
+    modifier_type_T     go to state 397
+    typename_T          go to state 398
+    fqcn_part           go to state 149
 
 
 state 373
@@ -15610,33 +15608,61 @@ state 382
 
 state 383
 
+   96 prop_define: PROPERTY . modifier_type_T_list typename_T IDENT LCB prop_set prop_get RCB
+   97            | PROPERTY . modifier_type_T_list typename_T IDENT LCB prop_get RCB
+   98            | PROPERTY . typename_T IDENT LCB prop_set prop_get RCB
+   99            | PROPERTY . typename_T IDENT LCB prop_get RCB
+  100 modifier_type_T_list: . modifier_type_T
+  101                     | . modifier_type_T_list modifier_type_T
+  102 modifier_type_T: . STATIC
+  103                | . NATIVE
+  104                | . ABSTRACT
+  105                | . OVERRIDE
+  120 typename_T: . fqcn_part typename_group
+  121 fqcn_part: . IDENT
+  122          | . fqcn_part COLO_COLO IDENT
+
+    IDENT     shift, and go to state 14
+    ABSTRACT  shift, and go to state 384
+    OVERRIDE  shift, and go to state 385
+    STATIC    shift, and go to state 386
+    NATIVE    shift, and go to state 387
+
+    modifier_type_T_list  go to state 405
+    modifier_type_T       go to state 406
+    typename_T            go to state 407
+    fqcn_part             go to state 149
+
+
+state 384
+
   104 modifier_type_T: ABSTRACT .
 
     $default  reduce using rule 104 (modifier_type_T)
 
 
-state 384
+state 385
 
   105 modifier_type_T: OVERRIDE .
 
     $default  reduce using rule 105 (modifier_type_T)
 
 
-state 385
+state 386
 
   102 modifier_type_T: STATIC .
 
     $default  reduce using rule 102 (modifier_type_T)
 
 
-state 386
+state 387
 
   103 modifier_type_T: NATIVE .
 
     $default  reduce using rule 103 (modifier_type_T)
 
 
-state 387
+state 388
 
    51 constructor_define: DEF . NEW LRB parameter_list RRB constructor_chain_optional scope_optional
    52                   | DEF . NEW LRB RRB constructor_chain_optional scope_optional
@@ -15651,18 +15677,18 @@ state 387
   104                | . ABSTRACT
   105                | . OVERRIDE
 
-    IDENT     shift, and go to state 405
-    ABSTRACT  shift, and go to state 383
-    OVERRIDE  shift, and go to state 384
-    STATIC    shift, and go to state 385
-    NATIVE    shift, and go to state 386
-    NEW       shift, and go to state 406
+    IDENT     shift, and go to state 408
+    ABSTRACT  shift, and go to state 384
+    OVERRIDE  shift, and go to state 385
+    STATIC    shift, and go to state 386
+    NATIVE    shift, and go to state 387
+    NEW       shift, and go to state 409
 
-    modifier_type_T_list  go to state 407
-    modifier_type_T       go to state 408
+    modifier_type_T_list  go to state 410
+    modifier_type_T       go to state 406
 
 
-state 388
+state 389
 
    65 operator_define: OPERATOR . ADD LRB parameter_list RRB ARROW typename_T scope_optional
    66                | OPERATOR . SUB LRB parameter_list RRB ARROW typename_T scope_optional
@@ -15686,29 +15712,29 @@ state 388
    84                | OPERATOR . CHILDA LRB RRB ARROW typename_T scope_optional
    85                | OPERATOR . SUB LRB RRB ARROW typename_T scope_optional
 
-    ADD        shift, and go to state 409
-    SUB        shift, and go to state 410
-    MUL        shift, and go to state 411
-    DIV        shift, and go to state 412
-    MOD        shift, and go to state 413
-    NOT        shift, and go to state 414
-    LSHIFT     shift, and go to state 415
-    RSHIFT     shift, and go to state 416
-    CHILDA     shift, and go to state 417
-    EQUAL      shift, and go to state 418
-    NOTEQUAL   shift, and go to state 419
-    GT         shift, and go to state 420
-    GE         shift, and go to state 421
-    LT         shift, and go to state 422
-    LE         shift, and go to state 423
-    BIT_AND    shift, and go to state 424
-    LOGIC_AND  shift, and go to state 425
-    BIT_OR     shift, and go to state 426
-    LOGIC_OR   shift, and go to state 427
-    EXC_OR     shift, and go to state 428
+    ADD        shift, and go to state 411
+    SUB        shift, and go to state 412
+    MUL        shift, and go to state 413
+    DIV        shift, and go to state 414
+    MOD        shift, and go to state 415
+    NOT        shift, and go to state 416
+    LSHIFT     shift, and go to state 417
+    RSHIFT     shift, and go to state 418
+    CHILDA     shift, and go to state 419
+    EQUAL      shift, and go to state 420
+    NOTEQUAL   shift, and go to state 421
+    GT         shift, and go to state 422
+    GE         shift, and go to state 423
+    LT         shift, and go to state 424
+    LE         shift, and go to state 425
+    BIT_AND    shift, and go to state 426
+    LOGIC_AND  shift, and go to state 427
+    BIT_OR     shift, and go to state 428
+    LOGIC_OR   shift, and go to state 429
+    EXC_OR     shift, and go to state 430
 
 
-state 389
+state 390
 
    43 access_member_list: access_level_T COLON member_define_list .  [RCB, PUBLIC, PRIVATE, PROTECTED]
    45 member_define_list: member_define_list . member_define
@@ -15746,12 +15772,10 @@ state 389
    85                | . OPERATOR SUB LRB RRB ARROW typename_T scope_optional
    86 field_define: . modifier_type_T typename_T IDENT SEMI
    87             | . typename_T IDENT SEMI
-   96 prop_define: . modifier_type_T_list typename_T IDENT LCB prop_set prop_get RCB
-   97            | . modifier_type_T_list typename_T IDENT LCB prop_get RCB
-   98            | . typename_T IDENT LCB prop_set prop_get RCB
-   99            | . typename_T IDENT LCB prop_get RCB
-  100 modifier_type_T_list: . modifier_type_T
-  101                     | . modifier_type_T_list modifier_type_T
+   96 prop_define: . PROPERTY modifier_type_T_list typename_T IDENT LCB prop_set prop_get RCB
+   97            | . PROPERTY modifier_type_T_list typename_T IDENT LCB prop_get RCB
+   98            | . PROPERTY typename_T IDENT LCB prop_set prop_get RCB
+   99            | . PROPERTY typename_T IDENT LCB prop_get RCB
   102 modifier_type_T: . STATIC
   103                | . NATIVE
   104                | . ABSTRACT
@@ -15761,105 +15785,77 @@ state 389
   122          | . fqcn_part COLO_COLO IDENT
 
     IDENT     shift, and go to state 14
-    ABSTRACT  shift, and go to state 383
-    OVERRIDE  shift, and go to state 384
-    STATIC    shift, and go to state 385
-    NATIVE    shift, and go to state 386
-    DEF       shift, and go to state 387
-    OPERATOR  shift, and go to state 388
+    PROPERTY  shift, and go to state 383
+    ABSTRACT  shift, and go to state 384
+    OVERRIDE  shift, and go to state 385
+    STATIC    shift, and go to state 386
+    NATIVE    shift, and go to state 387
+    DEF       shift, and go to state 388
+    OPERATOR  shift, and go to state 389
 
     $default  reduce using rule 43 (access_member_list)
 
-    member_define         go to state 429
-    constructor_define    go to state 391
-    method_define         go to state 392
-    operator_define       go to state 393
-    field_define          go to state 394
-    prop_define           go to state 395
-    modifier_type_T_list  go to state 396
-    modifier_type_T       go to state 397
-    typename_T            go to state 398
-    fqcn_part             go to state 149
+    member_define       go to state 431
+    constructor_define  go to state 392
+    method_define       go to state 393
+    operator_define     go to state 394
+    field_define        go to state 395
+    prop_define         go to state 396
+    modifier_type_T     go to state 397
+    typename_T          go to state 398
+    fqcn_part           go to state 149
 
 
-state 390
+state 391
 
    44 member_define_list: member_define .
 
     $default  reduce using rule 44 (member_define_list)
 
 
-state 391
+state 392
 
    46 member_define: constructor_define .
 
     $default  reduce using rule 46 (member_define)
 
 
-state 392
+state 393
 
    47 member_define: method_define .
 
     $default  reduce using rule 47 (member_define)
 
 
-state 393
+state 394
 
    48 member_define: operator_define .
 
     $default  reduce using rule 48 (member_define)
 
 
-state 394
+state 395
 
    49 member_define: field_define .
 
     $default  reduce using rule 49 (member_define)
 
 
-state 395
+state 396
 
    50 member_define: prop_define .
 
     $default  reduce using rule 50 (member_define)
 
 
-state 396
-
-   96 prop_define: modifier_type_T_list . typename_T IDENT LCB prop_set prop_get RCB
-   97            | modifier_type_T_list . typename_T IDENT LCB prop_get RCB
-  101 modifier_type_T_list: modifier_type_T_list . modifier_type_T
-  102 modifier_type_T: . STATIC
-  103                | . NATIVE
-  104                | . ABSTRACT
-  105                | . OVERRIDE
-  120 typename_T: . fqcn_part typename_group
-  121 fqcn_part: . IDENT
-  122          | . fqcn_part COLO_COLO IDENT
-
-    IDENT     shift, and go to state 14
-    ABSTRACT  shift, and go to state 383
-    OVERRIDE  shift, and go to state 384
-    STATIC    shift, and go to state 385
-    NATIVE    shift, and go to state 386
-
-    modifier_type_T  go to state 430
-    typename_T       go to state 431
-    fqcn_part        go to state 149
-
-
 state 397
 
    86 field_define: modifier_type_T . typename_T IDENT SEMI
-  100 modifier_type_T_list: modifier_type_T .  [IDENT, ABSTRACT, OVERRIDE, STATIC, NATIVE]
   120 typename_T: . fqcn_part typename_group
   121 fqcn_part: . IDENT
   122          | . fqcn_part COLO_COLO IDENT
 
     IDENT  shift, and go to state 14
-
-    IDENT     [reduce using rule 100 (modifier_type_T_list)]
-    $default  reduce using rule 100 (modifier_type_T_list)
 
     typename_T  go to state 432
     fqcn_part   go to state 149
@@ -15868,8 +15864,6 @@ state 397
 state 398
 
    87 field_define: typename_T . IDENT SEMI
-   98 prop_define: typename_T . IDENT LCB prop_set prop_get RCB
-   99            | typename_T . IDENT LCB prop_get RCB
 
     IDENT  shift, and go to state 433
 
@@ -15918,6 +15912,45 @@ state 404
 
 state 405
 
+   96 prop_define: PROPERTY modifier_type_T_list . typename_T IDENT LCB prop_set prop_get RCB
+   97            | PROPERTY modifier_type_T_list . typename_T IDENT LCB prop_get RCB
+  101 modifier_type_T_list: modifier_type_T_list . modifier_type_T
+  102 modifier_type_T: . STATIC
+  103                | . NATIVE
+  104                | . ABSTRACT
+  105                | . OVERRIDE
+  120 typename_T: . fqcn_part typename_group
+  121 fqcn_part: . IDENT
+  122          | . fqcn_part COLO_COLO IDENT
+
+    IDENT     shift, and go to state 14
+    ABSTRACT  shift, and go to state 384
+    OVERRIDE  shift, and go to state 385
+    STATIC    shift, and go to state 386
+    NATIVE    shift, and go to state 387
+
+    modifier_type_T  go to state 436
+    typename_T       go to state 437
+    fqcn_part        go to state 149
+
+
+state 406
+
+  100 modifier_type_T_list: modifier_type_T .
+
+    $default  reduce using rule 100 (modifier_type_T_list)
+
+
+state 407
+
+   98 prop_define: PROPERTY typename_T . IDENT LCB prop_set prop_get RCB
+   99            | PROPERTY typename_T . IDENT LCB prop_get RCB
+
+    IDENT  shift, and go to state 438
+
+
+state 408
+
    26 type_parameter_group: .  [LRB]
    27                     | . LSB type_parameter_list RSB
    63 method_define: DEF IDENT . type_parameter_group LRB parameter_list RRB ARROW typename_T scope_optional
@@ -15927,18 +15960,18 @@ state 405
 
     $default  reduce using rule 26 (type_parameter_group)
 
-    type_parameter_group  go to state 436
+    type_parameter_group  go to state 439
 
 
-state 406
+state 409
 
    51 constructor_define: DEF NEW . LRB parameter_list RRB constructor_chain_optional scope_optional
    52                   | DEF NEW . LRB RRB constructor_chain_optional scope_optional
 
-    LRB  shift, and go to state 437
+    LRB  shift, and go to state 440
 
 
-state 407
+state 410
 
    61 method_define: DEF modifier_type_T_list . IDENT type_parameter_group LRB parameter_list RRB ARROW typename_T scope_optional
    62              | DEF modifier_type_T_list . IDENT type_parameter_group LRB RRB ARROW typename_T scope_optional
@@ -15948,200 +15981,175 @@ state 407
   104                | . ABSTRACT
   105                | . OVERRIDE
 
-    IDENT     shift, and go to state 438
-    ABSTRACT  shift, and go to state 383
-    OVERRIDE  shift, and go to state 384
-    STATIC    shift, and go to state 385
-    NATIVE    shift, and go to state 386
+    IDENT     shift, and go to state 441
+    ABSTRACT  shift, and go to state 384
+    OVERRIDE  shift, and go to state 385
+    STATIC    shift, and go to state 386
+    NATIVE    shift, and go to state 387
 
-    modifier_type_T  go to state 430
-
-
-state 408
-
-  100 modifier_type_T_list: modifier_type_T .
-
-    $default  reduce using rule 100 (modifier_type_T_list)
-
-
-state 409
-
-   65 operator_define: OPERATOR ADD . LRB parameter_list RRB ARROW typename_T scope_optional
-
-    LRB  shift, and go to state 439
-
-
-state 410
-
-   66 operator_define: OPERATOR SUB . LRB parameter_list RRB ARROW typename_T scope_optional
-   85                | OPERATOR SUB . LRB RRB ARROW typename_T scope_optional
-
-    LRB  shift, and go to state 440
+    modifier_type_T  go to state 436
 
 
 state 411
 
-   67 operator_define: OPERATOR MUL . LRB parameter_list RRB ARROW typename_T scope_optional
-
-    LRB  shift, and go to state 441
-
-
-state 412
-
-   68 operator_define: OPERATOR DIV . LRB parameter_list RRB ARROW typename_T scope_optional
+   65 operator_define: OPERATOR ADD . LRB parameter_list RRB ARROW typename_T scope_optional
 
     LRB  shift, and go to state 442
 
 
-state 413
+state 412
 
-   69 operator_define: OPERATOR MOD . LRB parameter_list RRB ARROW typename_T scope_optional
+   66 operator_define: OPERATOR SUB . LRB parameter_list RRB ARROW typename_T scope_optional
+   85                | OPERATOR SUB . LRB RRB ARROW typename_T scope_optional
 
     LRB  shift, and go to state 443
 
 
-state 414
+state 413
 
-   83 operator_define: OPERATOR NOT . LRB RRB ARROW typename_T scope_optional
+   67 operator_define: OPERATOR MUL . LRB parameter_list RRB ARROW typename_T scope_optional
 
     LRB  shift, and go to state 444
 
 
-state 415
+state 414
 
-   80 operator_define: OPERATOR LSHIFT . LRB parameter_list RRB ARROW typename_T scope_optional
+   68 operator_define: OPERATOR DIV . LRB parameter_list RRB ARROW typename_T scope_optional
 
     LRB  shift, and go to state 445
 
 
-state 416
+state 415
 
-   81 operator_define: OPERATOR RSHIFT . LRB parameter_list RRB ARROW typename_T scope_optional
+   69 operator_define: OPERATOR MOD . LRB parameter_list RRB ARROW typename_T scope_optional
 
     LRB  shift, and go to state 446
 
 
-state 417
+state 416
 
-   84 operator_define: OPERATOR CHILDA . LRB RRB ARROW typename_T scope_optional
+   83 operator_define: OPERATOR NOT . LRB RRB ARROW typename_T scope_optional
 
     LRB  shift, and go to state 447
 
 
-state 418
+state 417
 
-   74 operator_define: OPERATOR EQUAL . LRB parameter_list RRB ARROW typename_T scope_optional
+   80 operator_define: OPERATOR LSHIFT . LRB parameter_list RRB ARROW typename_T scope_optional
 
     LRB  shift, and go to state 448
 
 
-state 419
+state 418
 
-   75 operator_define: OPERATOR NOTEQUAL . LRB parameter_list RRB ARROW typename_T scope_optional
+   81 operator_define: OPERATOR RSHIFT . LRB parameter_list RRB ARROW typename_T scope_optional
 
     LRB  shift, and go to state 449
 
 
-state 420
+state 419
 
-   70 operator_define: OPERATOR GT . LRB parameter_list RRB ARROW typename_T scope_optional
+   84 operator_define: OPERATOR CHILDA . LRB RRB ARROW typename_T scope_optional
 
     LRB  shift, and go to state 450
 
 
-state 421
+state 420
 
-   71 operator_define: OPERATOR GE . LRB parameter_list RRB ARROW typename_T scope_optional
+   74 operator_define: OPERATOR EQUAL . LRB parameter_list RRB ARROW typename_T scope_optional
 
     LRB  shift, and go to state 451
 
 
-state 422
+state 421
 
-   72 operator_define: OPERATOR LT . LRB parameter_list RRB ARROW typename_T scope_optional
+   75 operator_define: OPERATOR NOTEQUAL . LRB parameter_list RRB ARROW typename_T scope_optional
 
     LRB  shift, and go to state 452
 
 
-state 423
+state 422
 
-   73 operator_define: OPERATOR LE . LRB parameter_list RRB ARROW typename_T scope_optional
+   70 operator_define: OPERATOR GT . LRB parameter_list RRB ARROW typename_T scope_optional
 
     LRB  shift, and go to state 453
 
 
-state 424
+state 423
 
-   77 operator_define: OPERATOR BIT_AND . LRB parameter_list RRB ARROW typename_T scope_optional
+   71 operator_define: OPERATOR GE . LRB parameter_list RRB ARROW typename_T scope_optional
 
     LRB  shift, and go to state 454
 
 
-state 425
+state 424
 
-   79 operator_define: OPERATOR LOGIC_AND . LRB parameter_list RRB ARROW typename_T scope_optional
+   72 operator_define: OPERATOR LT . LRB parameter_list RRB ARROW typename_T scope_optional
 
     LRB  shift, and go to state 455
 
 
-state 426
+state 425
 
-   76 operator_define: OPERATOR BIT_OR . LRB parameter_list RRB ARROW typename_T scope_optional
+   73 operator_define: OPERATOR LE . LRB parameter_list RRB ARROW typename_T scope_optional
 
     LRB  shift, and go to state 456
 
 
-state 427
+state 426
 
-   78 operator_define: OPERATOR LOGIC_OR . LRB parameter_list RRB ARROW typename_T scope_optional
+   77 operator_define: OPERATOR BIT_AND . LRB parameter_list RRB ARROW typename_T scope_optional
 
     LRB  shift, and go to state 457
 
 
-state 428
+state 427
 
-   82 operator_define: OPERATOR EXC_OR . LRB parameter_list RRB ARROW typename_T scope_optional
+   79 operator_define: OPERATOR LOGIC_AND . LRB parameter_list RRB ARROW typename_T scope_optional
 
     LRB  shift, and go to state 458
 
 
+state 428
+
+   76 operator_define: OPERATOR BIT_OR . LRB parameter_list RRB ARROW typename_T scope_optional
+
+    LRB  shift, and go to state 459
+
+
 state 429
+
+   78 operator_define: OPERATOR LOGIC_OR . LRB parameter_list RRB ARROW typename_T scope_optional
+
+    LRB  shift, and go to state 460
+
+
+state 430
+
+   82 operator_define: OPERATOR EXC_OR . LRB parameter_list RRB ARROW typename_T scope_optional
+
+    LRB  shift, and go to state 461
+
+
+state 431
 
    45 member_define_list: member_define_list member_define .
 
     $default  reduce using rule 45 (member_define_list)
 
 
-state 430
-
-  101 modifier_type_T_list: modifier_type_T_list modifier_type_T .
-
-    $default  reduce using rule 101 (modifier_type_T_list)
-
-
-state 431
-
-   96 prop_define: modifier_type_T_list typename_T . IDENT LCB prop_set prop_get RCB
-   97            | modifier_type_T_list typename_T . IDENT LCB prop_get RCB
-
-    IDENT  shift, and go to state 459
-
-
 state 432
 
    86 field_define: modifier_type_T typename_T . IDENT SEMI
 
-    IDENT  shift, and go to state 460
+    IDENT  shift, and go to state 462
 
 
 state 433
 
    87 field_define: typename_T IDENT . SEMI
-   98 prop_define: typename_T IDENT . LCB prop_set prop_get RCB
-   99            | typename_T IDENT . LCB prop_get RCB
 
-    LCB   shift, and go to state 461
-    SEMI  shift, and go to state 462
+    SEMI  shift, and go to state 463
 
 
 state 434
@@ -16160,13 +16168,36 @@ state 435
 
 state 436
 
-   63 method_define: DEF IDENT type_parameter_group . LRB parameter_list RRB ARROW typename_T scope_optional
-   64              | DEF IDENT type_parameter_group . LRB RRB ARROW typename_T scope_optional
+  101 modifier_type_T_list: modifier_type_T_list modifier_type_T .
 
-    LRB  shift, and go to state 463
+    $default  reduce using rule 101 (modifier_type_T_list)
 
 
 state 437
+
+   96 prop_define: PROPERTY modifier_type_T_list typename_T . IDENT LCB prop_set prop_get RCB
+   97            | PROPERTY modifier_type_T_list typename_T . IDENT LCB prop_get RCB
+
+    IDENT  shift, and go to state 464
+
+
+state 438
+
+   98 prop_define: PROPERTY typename_T IDENT . LCB prop_set prop_get RCB
+   99            | PROPERTY typename_T IDENT . LCB prop_get RCB
+
+    LCB  shift, and go to state 465
+
+
+state 439
+
+   63 method_define: DEF IDENT type_parameter_group . LRB parameter_list RRB ARROW typename_T scope_optional
+   64              | DEF IDENT type_parameter_group . LRB RRB ARROW typename_T scope_optional
+
+    LRB  shift, and go to state 466
+
+
+state 440
 
    51 constructor_define: DEF NEW LRB . parameter_list RRB constructor_chain_optional scope_optional
    52                   | DEF NEW LRB . RRB constructor_chain_optional scope_optional
@@ -16177,14 +16208,14 @@ state 437
   122          | . fqcn_part COLO_COLO IDENT
 
     IDENT  shift, and go to state 14
-    RRB    shift, and go to state 464
+    RRB    shift, and go to state 467
 
-    parameter_list  go to state 465
+    parameter_list  go to state 468
     typename_T      go to state 210
     fqcn_part       go to state 149
 
 
-state 438
+state 441
 
    26 type_parameter_group: .  [LRB]
    27                     | . LSB type_parameter_list RSB
@@ -16195,46 +16226,12 @@ state 438
 
     $default  reduce using rule 26 (type_parameter_group)
 
-    type_parameter_group  go to state 466
+    type_parameter_group  go to state 469
 
 
-state 439
+state 442
 
    65 operator_define: OPERATOR ADD LRB . parameter_list RRB ARROW typename_T scope_optional
-  111 parameter_list: . typename_T IDENT
-  112               | . parameter_list COMMA typename_T IDENT
-  120 typename_T: . fqcn_part typename_group
-  121 fqcn_part: . IDENT
-  122          | . fqcn_part COLO_COLO IDENT
-
-    IDENT  shift, and go to state 14
-
-    parameter_list  go to state 467
-    typename_T      go to state 210
-    fqcn_part       go to state 149
-
-
-state 440
-
-   66 operator_define: OPERATOR SUB LRB . parameter_list RRB ARROW typename_T scope_optional
-   85                | OPERATOR SUB LRB . RRB ARROW typename_T scope_optional
-  111 parameter_list: . typename_T IDENT
-  112               | . parameter_list COMMA typename_T IDENT
-  120 typename_T: . fqcn_part typename_group
-  121 fqcn_part: . IDENT
-  122          | . fqcn_part COLO_COLO IDENT
-
-    IDENT  shift, and go to state 14
-    RRB    shift, and go to state 468
-
-    parameter_list  go to state 469
-    typename_T      go to state 210
-    fqcn_part       go to state 149
-
-
-state 441
-
-   67 operator_define: OPERATOR MUL LRB . parameter_list RRB ARROW typename_T scope_optional
   111 parameter_list: . typename_T IDENT
   112               | . parameter_list COMMA typename_T IDENT
   120 typename_T: . fqcn_part typename_group
@@ -16248,25 +16245,10 @@ state 441
     fqcn_part       go to state 149
 
 
-state 442
-
-   68 operator_define: OPERATOR DIV LRB . parameter_list RRB ARROW typename_T scope_optional
-  111 parameter_list: . typename_T IDENT
-  112               | . parameter_list COMMA typename_T IDENT
-  120 typename_T: . fqcn_part typename_group
-  121 fqcn_part: . IDENT
-  122          | . fqcn_part COLO_COLO IDENT
-
-    IDENT  shift, and go to state 14
-
-    parameter_list  go to state 471
-    typename_T      go to state 210
-    fqcn_part       go to state 149
-
-
 state 443
 
-   69 operator_define: OPERATOR MOD LRB . parameter_list RRB ARROW typename_T scope_optional
+   66 operator_define: OPERATOR SUB LRB . parameter_list RRB ARROW typename_T scope_optional
+   85                | OPERATOR SUB LRB . RRB ARROW typename_T scope_optional
   111 parameter_list: . typename_T IDENT
   112               | . parameter_list COMMA typename_T IDENT
   120 typename_T: . fqcn_part typename_group
@@ -16274,6 +16256,7 @@ state 443
   122          | . fqcn_part COLO_COLO IDENT
 
     IDENT  shift, and go to state 14
+    RRB    shift, and go to state 471
 
     parameter_list  go to state 472
     typename_T      go to state 210
@@ -16282,14 +16265,23 @@ state 443
 
 state 444
 
-   83 operator_define: OPERATOR NOT LRB . RRB ARROW typename_T scope_optional
+   67 operator_define: OPERATOR MUL LRB . parameter_list RRB ARROW typename_T scope_optional
+  111 parameter_list: . typename_T IDENT
+  112               | . parameter_list COMMA typename_T IDENT
+  120 typename_T: . fqcn_part typename_group
+  121 fqcn_part: . IDENT
+  122          | . fqcn_part COLO_COLO IDENT
 
-    RRB  shift, and go to state 473
+    IDENT  shift, and go to state 14
+
+    parameter_list  go to state 473
+    typename_T      go to state 210
+    fqcn_part       go to state 149
 
 
 state 445
 
-   80 operator_define: OPERATOR LSHIFT LRB . parameter_list RRB ARROW typename_T scope_optional
+   68 operator_define: OPERATOR DIV LRB . parameter_list RRB ARROW typename_T scope_optional
   111 parameter_list: . typename_T IDENT
   112               | . parameter_list COMMA typename_T IDENT
   120 typename_T: . fqcn_part typename_group
@@ -16305,7 +16297,7 @@ state 445
 
 state 446
 
-   81 operator_define: OPERATOR RSHIFT LRB . parameter_list RRB ARROW typename_T scope_optional
+   69 operator_define: OPERATOR MOD LRB . parameter_list RRB ARROW typename_T scope_optional
   111 parameter_list: . typename_T IDENT
   112               | . parameter_list COMMA typename_T IDENT
   120 typename_T: . fqcn_part typename_group
@@ -16321,14 +16313,14 @@ state 446
 
 state 447
 
-   84 operator_define: OPERATOR CHILDA LRB . RRB ARROW typename_T scope_optional
+   83 operator_define: OPERATOR NOT LRB . RRB ARROW typename_T scope_optional
 
     RRB  shift, and go to state 476
 
 
 state 448
 
-   74 operator_define: OPERATOR EQUAL LRB . parameter_list RRB ARROW typename_T scope_optional
+   80 operator_define: OPERATOR LSHIFT LRB . parameter_list RRB ARROW typename_T scope_optional
   111 parameter_list: . typename_T IDENT
   112               | . parameter_list COMMA typename_T IDENT
   120 typename_T: . fqcn_part typename_group
@@ -16344,7 +16336,7 @@ state 448
 
 state 449
 
-   75 operator_define: OPERATOR NOTEQUAL LRB . parameter_list RRB ARROW typename_T scope_optional
+   81 operator_define: OPERATOR RSHIFT LRB . parameter_list RRB ARROW typename_T scope_optional
   111 parameter_list: . typename_T IDENT
   112               | . parameter_list COMMA typename_T IDENT
   120 typename_T: . fqcn_part typename_group
@@ -16360,23 +16352,14 @@ state 449
 
 state 450
 
-   70 operator_define: OPERATOR GT LRB . parameter_list RRB ARROW typename_T scope_optional
-  111 parameter_list: . typename_T IDENT
-  112               | . parameter_list COMMA typename_T IDENT
-  120 typename_T: . fqcn_part typename_group
-  121 fqcn_part: . IDENT
-  122          | . fqcn_part COLO_COLO IDENT
+   84 operator_define: OPERATOR CHILDA LRB . RRB ARROW typename_T scope_optional
 
-    IDENT  shift, and go to state 14
-
-    parameter_list  go to state 479
-    typename_T      go to state 210
-    fqcn_part       go to state 149
+    RRB  shift, and go to state 479
 
 
 state 451
 
-   71 operator_define: OPERATOR GE LRB . parameter_list RRB ARROW typename_T scope_optional
+   74 operator_define: OPERATOR EQUAL LRB . parameter_list RRB ARROW typename_T scope_optional
   111 parameter_list: . typename_T IDENT
   112               | . parameter_list COMMA typename_T IDENT
   120 typename_T: . fqcn_part typename_group
@@ -16392,7 +16375,7 @@ state 451
 
 state 452
 
-   72 operator_define: OPERATOR LT LRB . parameter_list RRB ARROW typename_T scope_optional
+   75 operator_define: OPERATOR NOTEQUAL LRB . parameter_list RRB ARROW typename_T scope_optional
   111 parameter_list: . typename_T IDENT
   112               | . parameter_list COMMA typename_T IDENT
   120 typename_T: . fqcn_part typename_group
@@ -16408,7 +16391,7 @@ state 452
 
 state 453
 
-   73 operator_define: OPERATOR LE LRB . parameter_list RRB ARROW typename_T scope_optional
+   70 operator_define: OPERATOR GT LRB . parameter_list RRB ARROW typename_T scope_optional
   111 parameter_list: . typename_T IDENT
   112               | . parameter_list COMMA typename_T IDENT
   120 typename_T: . fqcn_part typename_group
@@ -16424,7 +16407,7 @@ state 453
 
 state 454
 
-   77 operator_define: OPERATOR BIT_AND LRB . parameter_list RRB ARROW typename_T scope_optional
+   71 operator_define: OPERATOR GE LRB . parameter_list RRB ARROW typename_T scope_optional
   111 parameter_list: . typename_T IDENT
   112               | . parameter_list COMMA typename_T IDENT
   120 typename_T: . fqcn_part typename_group
@@ -16440,7 +16423,7 @@ state 454
 
 state 455
 
-   79 operator_define: OPERATOR LOGIC_AND LRB . parameter_list RRB ARROW typename_T scope_optional
+   72 operator_define: OPERATOR LT LRB . parameter_list RRB ARROW typename_T scope_optional
   111 parameter_list: . typename_T IDENT
   112               | . parameter_list COMMA typename_T IDENT
   120 typename_T: . fqcn_part typename_group
@@ -16456,7 +16439,7 @@ state 455
 
 state 456
 
-   76 operator_define: OPERATOR BIT_OR LRB . parameter_list RRB ARROW typename_T scope_optional
+   73 operator_define: OPERATOR LE LRB . parameter_list RRB ARROW typename_T scope_optional
   111 parameter_list: . typename_T IDENT
   112               | . parameter_list COMMA typename_T IDENT
   120 typename_T: . fqcn_part typename_group
@@ -16472,7 +16455,7 @@ state 456
 
 state 457
 
-   78 operator_define: OPERATOR LOGIC_OR LRB . parameter_list RRB ARROW typename_T scope_optional
+   77 operator_define: OPERATOR BIT_AND LRB . parameter_list RRB ARROW typename_T scope_optional
   111 parameter_list: . typename_T IDENT
   112               | . parameter_list COMMA typename_T IDENT
   120 typename_T: . fqcn_part typename_group
@@ -16488,7 +16471,7 @@ state 457
 
 state 458
 
-   82 operator_define: OPERATOR EXC_OR LRB . parameter_list RRB ARROW typename_T scope_optional
+   79 operator_define: OPERATOR LOGIC_AND LRB . parameter_list RRB ARROW typename_T scope_optional
   111 parameter_list: . typename_T IDENT
   112               | . parameter_list COMMA typename_T IDENT
   120 typename_T: . fqcn_part typename_group
@@ -16504,20 +16487,75 @@ state 458
 
 state 459
 
-   96 prop_define: modifier_type_T_list typename_T IDENT . LCB prop_set prop_get RCB
-   97            | modifier_type_T_list typename_T IDENT . LCB prop_get RCB
+   76 operator_define: OPERATOR BIT_OR LRB . parameter_list RRB ARROW typename_T scope_optional
+  111 parameter_list: . typename_T IDENT
+  112               | . parameter_list COMMA typename_T IDENT
+  120 typename_T: . fqcn_part typename_group
+  121 fqcn_part: . IDENT
+  122          | . fqcn_part COLO_COLO IDENT
 
-    LCB  shift, and go to state 488
+    IDENT  shift, and go to state 14
+
+    parameter_list  go to state 488
+    typename_T      go to state 210
+    fqcn_part       go to state 149
 
 
 state 460
 
-   86 field_define: modifier_type_T typename_T IDENT . SEMI
+   78 operator_define: OPERATOR LOGIC_OR LRB . parameter_list RRB ARROW typename_T scope_optional
+  111 parameter_list: . typename_T IDENT
+  112               | . parameter_list COMMA typename_T IDENT
+  120 typename_T: . fqcn_part typename_group
+  121 fqcn_part: . IDENT
+  122          | . fqcn_part COLO_COLO IDENT
 
-    SEMI  shift, and go to state 489
+    IDENT  shift, and go to state 14
+
+    parameter_list  go to state 489
+    typename_T      go to state 210
+    fqcn_part       go to state 149
 
 
 state 461
+
+   82 operator_define: OPERATOR EXC_OR LRB . parameter_list RRB ARROW typename_T scope_optional
+  111 parameter_list: . typename_T IDENT
+  112               | . parameter_list COMMA typename_T IDENT
+  120 typename_T: . fqcn_part typename_group
+  121 fqcn_part: . IDENT
+  122          | . fqcn_part COLO_COLO IDENT
+
+    IDENT  shift, and go to state 14
+
+    parameter_list  go to state 490
+    typename_T      go to state 210
+    fqcn_part       go to state 149
+
+
+state 462
+
+   86 field_define: modifier_type_T typename_T IDENT . SEMI
+
+    SEMI  shift, and go to state 491
+
+
+state 463
+
+   87 field_define: typename_T IDENT SEMI .
+
+    $default  reduce using rule 87 (field_define)
+
+
+state 464
+
+   96 prop_define: PROPERTY modifier_type_T_list typename_T IDENT . LCB prop_set prop_get RCB
+   97            | PROPERTY modifier_type_T_list typename_T IDENT . LCB prop_get RCB
+
+    LCB  shift, and go to state 492
+
+
+state 465
 
    88 prop_set: . DEFSET SEMI
    89         | . DEFSET scope
@@ -16527,31 +16565,24 @@ state 461
    93         | . DEFGET scope
    94         | . access_level_T DEFGET SEMI
    95         | . access_level_T DEFGET scope
-   98 prop_define: typename_T IDENT LCB . prop_set prop_get RCB
-   99            | typename_T IDENT LCB . prop_get RCB
+   98 prop_define: PROPERTY typename_T IDENT LCB . prop_set prop_get RCB
+   99            | PROPERTY typename_T IDENT LCB . prop_get RCB
   106 access_level_T: . PUBLIC
   107               | . PRIVATE
   108               | . PROTECTED
 
-    DEFSET     shift, and go to state 490
-    DEFGET     shift, and go to state 491
+    DEFSET     shift, and go to state 493
+    DEFGET     shift, and go to state 494
     PUBLIC     shift, and go to state 351
     PRIVATE    shift, and go to state 352
     PROTECTED  shift, and go to state 353
 
-    prop_set        go to state 492
-    prop_get        go to state 493
-    access_level_T  go to state 494
+    prop_set        go to state 495
+    prop_get        go to state 496
+    access_level_T  go to state 497
 
 
-state 462
-
-   87 field_define: typename_T IDENT SEMI .
-
-    $default  reduce using rule 87 (field_define)
-
-
-state 463
+state 466
 
    63 method_define: DEF IDENT type_parameter_group LRB . parameter_list RRB ARROW typename_T scope_optional
    64              | DEF IDENT type_parameter_group LRB . RRB ARROW typename_T scope_optional
@@ -16562,14 +16593,14 @@ state 463
   122          | . fqcn_part COLO_COLO IDENT
 
     IDENT  shift, and go to state 14
-    RRB    shift, and go to state 495
+    RRB    shift, and go to state 498
 
-    parameter_list  go to state 496
+    parameter_list  go to state 499
     typename_T      go to state 210
     fqcn_part       go to state 149
 
 
-state 464
+state 467
 
    52 constructor_define: DEF NEW LRB RRB . constructor_chain_optional scope_optional
    53 constructor_chain: . COLON constructor_chain_type_T LRB argument_list RRB
@@ -16577,59 +16608,34 @@ state 464
    57 constructor_chain_optional: .  [LCB, SEMI]
    58                           | . constructor_chain
 
-    COLON  shift, and go to state 497
+    COLON  shift, and go to state 500
 
     $default  reduce using rule 57 (constructor_chain_optional)
 
-    constructor_chain           go to state 498
-    constructor_chain_optional  go to state 499
+    constructor_chain           go to state 501
+    constructor_chain_optional  go to state 502
 
 
-state 465
+state 468
 
    51 constructor_define: DEF NEW LRB parameter_list . RRB constructor_chain_optional scope_optional
   112 parameter_list: parameter_list . COMMA typename_T IDENT
 
     COMMA  shift, and go to state 265
-    RRB    shift, and go to state 500
-
-
-state 466
-
-   61 method_define: DEF modifier_type_T_list IDENT type_parameter_group . LRB parameter_list RRB ARROW typename_T scope_optional
-   62              | DEF modifier_type_T_list IDENT type_parameter_group . LRB RRB ARROW typename_T scope_optional
-
-    LRB  shift, and go to state 501
-
-
-state 467
-
-   65 operator_define: OPERATOR ADD LRB parameter_list . RRB ARROW typename_T scope_optional
-  112 parameter_list: parameter_list . COMMA typename_T IDENT
-
-    COMMA  shift, and go to state 265
-    RRB    shift, and go to state 502
-
-
-state 468
-
-   85 operator_define: OPERATOR SUB LRB RRB . ARROW typename_T scope_optional
-
-    ARROW  shift, and go to state 503
+    RRB    shift, and go to state 503
 
 
 state 469
 
-   66 operator_define: OPERATOR SUB LRB parameter_list . RRB ARROW typename_T scope_optional
-  112 parameter_list: parameter_list . COMMA typename_T IDENT
+   61 method_define: DEF modifier_type_T_list IDENT type_parameter_group . LRB parameter_list RRB ARROW typename_T scope_optional
+   62              | DEF modifier_type_T_list IDENT type_parameter_group . LRB RRB ARROW typename_T scope_optional
 
-    COMMA  shift, and go to state 265
-    RRB    shift, and go to state 504
+    LRB  shift, and go to state 504
 
 
 state 470
 
-   67 operator_define: OPERATOR MUL LRB parameter_list . RRB ARROW typename_T scope_optional
+   65 operator_define: OPERATOR ADD LRB parameter_list . RRB ARROW typename_T scope_optional
   112 parameter_list: parameter_list . COMMA typename_T IDENT
 
     COMMA  shift, and go to state 265
@@ -16638,16 +16644,14 @@ state 470
 
 state 471
 
-   68 operator_define: OPERATOR DIV LRB parameter_list . RRB ARROW typename_T scope_optional
-  112 parameter_list: parameter_list . COMMA typename_T IDENT
+   85 operator_define: OPERATOR SUB LRB RRB . ARROW typename_T scope_optional
 
-    COMMA  shift, and go to state 265
-    RRB    shift, and go to state 506
+    ARROW  shift, and go to state 506
 
 
 state 472
 
-   69 operator_define: OPERATOR MOD LRB parameter_list . RRB ARROW typename_T scope_optional
+   66 operator_define: OPERATOR SUB LRB parameter_list . RRB ARROW typename_T scope_optional
   112 parameter_list: parameter_list . COMMA typename_T IDENT
 
     COMMA  shift, and go to state 265
@@ -16656,14 +16660,16 @@ state 472
 
 state 473
 
-   83 operator_define: OPERATOR NOT LRB RRB . ARROW typename_T scope_optional
+   67 operator_define: OPERATOR MUL LRB parameter_list . RRB ARROW typename_T scope_optional
+  112 parameter_list: parameter_list . COMMA typename_T IDENT
 
-    ARROW  shift, and go to state 508
+    COMMA  shift, and go to state 265
+    RRB    shift, and go to state 508
 
 
 state 474
 
-   80 operator_define: OPERATOR LSHIFT LRB parameter_list . RRB ARROW typename_T scope_optional
+   68 operator_define: OPERATOR DIV LRB parameter_list . RRB ARROW typename_T scope_optional
   112 parameter_list: parameter_list . COMMA typename_T IDENT
 
     COMMA  shift, and go to state 265
@@ -16672,7 +16678,7 @@ state 474
 
 state 475
 
-   81 operator_define: OPERATOR RSHIFT LRB parameter_list . RRB ARROW typename_T scope_optional
+   69 operator_define: OPERATOR MOD LRB parameter_list . RRB ARROW typename_T scope_optional
   112 parameter_list: parameter_list . COMMA typename_T IDENT
 
     COMMA  shift, and go to state 265
@@ -16681,14 +16687,14 @@ state 475
 
 state 476
 
-   84 operator_define: OPERATOR CHILDA LRB RRB . ARROW typename_T scope_optional
+   83 operator_define: OPERATOR NOT LRB RRB . ARROW typename_T scope_optional
 
     ARROW  shift, and go to state 511
 
 
 state 477
 
-   74 operator_define: OPERATOR EQUAL LRB parameter_list . RRB ARROW typename_T scope_optional
+   80 operator_define: OPERATOR LSHIFT LRB parameter_list . RRB ARROW typename_T scope_optional
   112 parameter_list: parameter_list . COMMA typename_T IDENT
 
     COMMA  shift, and go to state 265
@@ -16697,7 +16703,7 @@ state 477
 
 state 478
 
-   75 operator_define: OPERATOR NOTEQUAL LRB parameter_list . RRB ARROW typename_T scope_optional
+   81 operator_define: OPERATOR RSHIFT LRB parameter_list . RRB ARROW typename_T scope_optional
   112 parameter_list: parameter_list . COMMA typename_T IDENT
 
     COMMA  shift, and go to state 265
@@ -16706,16 +16712,14 @@ state 478
 
 state 479
 
-   70 operator_define: OPERATOR GT LRB parameter_list . RRB ARROW typename_T scope_optional
-  112 parameter_list: parameter_list . COMMA typename_T IDENT
+   84 operator_define: OPERATOR CHILDA LRB RRB . ARROW typename_T scope_optional
 
-    COMMA  shift, and go to state 265
-    RRB    shift, and go to state 514
+    ARROW  shift, and go to state 514
 
 
 state 480
 
-   71 operator_define: OPERATOR GE LRB parameter_list . RRB ARROW typename_T scope_optional
+   74 operator_define: OPERATOR EQUAL LRB parameter_list . RRB ARROW typename_T scope_optional
   112 parameter_list: parameter_list . COMMA typename_T IDENT
 
     COMMA  shift, and go to state 265
@@ -16724,7 +16728,7 @@ state 480
 
 state 481
 
-   72 operator_define: OPERATOR LT LRB parameter_list . RRB ARROW typename_T scope_optional
+   75 operator_define: OPERATOR NOTEQUAL LRB parameter_list . RRB ARROW typename_T scope_optional
   112 parameter_list: parameter_list . COMMA typename_T IDENT
 
     COMMA  shift, and go to state 265
@@ -16733,7 +16737,7 @@ state 481
 
 state 482
 
-   73 operator_define: OPERATOR LE LRB parameter_list . RRB ARROW typename_T scope_optional
+   70 operator_define: OPERATOR GT LRB parameter_list . RRB ARROW typename_T scope_optional
   112 parameter_list: parameter_list . COMMA typename_T IDENT
 
     COMMA  shift, and go to state 265
@@ -16742,7 +16746,7 @@ state 482
 
 state 483
 
-   77 operator_define: OPERATOR BIT_AND LRB parameter_list . RRB ARROW typename_T scope_optional
+   71 operator_define: OPERATOR GE LRB parameter_list . RRB ARROW typename_T scope_optional
   112 parameter_list: parameter_list . COMMA typename_T IDENT
 
     COMMA  shift, and go to state 265
@@ -16751,7 +16755,7 @@ state 483
 
 state 484
 
-   79 operator_define: OPERATOR LOGIC_AND LRB parameter_list . RRB ARROW typename_T scope_optional
+   72 operator_define: OPERATOR LT LRB parameter_list . RRB ARROW typename_T scope_optional
   112 parameter_list: parameter_list . COMMA typename_T IDENT
 
     COMMA  shift, and go to state 265
@@ -16760,7 +16764,7 @@ state 484
 
 state 485
 
-   76 operator_define: OPERATOR BIT_OR LRB parameter_list . RRB ARROW typename_T scope_optional
+   73 operator_define: OPERATOR LE LRB parameter_list . RRB ARROW typename_T scope_optional
   112 parameter_list: parameter_list . COMMA typename_T IDENT
 
     COMMA  shift, and go to state 265
@@ -16769,7 +16773,7 @@ state 485
 
 state 486
 
-   78 operator_define: OPERATOR LOGIC_OR LRB parameter_list . RRB ARROW typename_T scope_optional
+   77 operator_define: OPERATOR BIT_AND LRB parameter_list . RRB ARROW typename_T scope_optional
   112 parameter_list: parameter_list . COMMA typename_T IDENT
 
     COMMA  shift, and go to state 265
@@ -16778,7 +16782,7 @@ state 486
 
 state 487
 
-   82 operator_define: OPERATOR EXC_OR LRB parameter_list . RRB ARROW typename_T scope_optional
+   79 operator_define: OPERATOR LOGIC_AND LRB parameter_list . RRB ARROW typename_T scope_optional
   112 parameter_list: parameter_list . COMMA typename_T IDENT
 
     COMMA  shift, and go to state 265
@@ -16786,6 +16790,40 @@ state 487
 
 
 state 488
+
+   76 operator_define: OPERATOR BIT_OR LRB parameter_list . RRB ARROW typename_T scope_optional
+  112 parameter_list: parameter_list . COMMA typename_T IDENT
+
+    COMMA  shift, and go to state 265
+    RRB    shift, and go to state 523
+
+
+state 489
+
+   78 operator_define: OPERATOR LOGIC_OR LRB parameter_list . RRB ARROW typename_T scope_optional
+  112 parameter_list: parameter_list . COMMA typename_T IDENT
+
+    COMMA  shift, and go to state 265
+    RRB    shift, and go to state 524
+
+
+state 490
+
+   82 operator_define: OPERATOR EXC_OR LRB parameter_list . RRB ARROW typename_T scope_optional
+  112 parameter_list: parameter_list . COMMA typename_T IDENT
+
+    COMMA  shift, and go to state 265
+    RRB    shift, and go to state 525
+
+
+state 491
+
+   86 field_define: modifier_type_T typename_T IDENT SEMI .
+
+    $default  reduce using rule 86 (field_define)
+
+
+state 492
 
    88 prop_set: . DEFSET SEMI
    89         | . DEFSET scope
@@ -16795,31 +16833,24 @@ state 488
    93         | . DEFGET scope
    94         | . access_level_T DEFGET SEMI
    95         | . access_level_T DEFGET scope
-   96 prop_define: modifier_type_T_list typename_T IDENT LCB . prop_set prop_get RCB
-   97            | modifier_type_T_list typename_T IDENT LCB . prop_get RCB
+   96 prop_define: PROPERTY modifier_type_T_list typename_T IDENT LCB . prop_set prop_get RCB
+   97            | PROPERTY modifier_type_T_list typename_T IDENT LCB . prop_get RCB
   106 access_level_T: . PUBLIC
   107               | . PRIVATE
   108               | . PROTECTED
 
-    DEFSET     shift, and go to state 490
-    DEFGET     shift, and go to state 491
+    DEFSET     shift, and go to state 493
+    DEFGET     shift, and go to state 494
     PUBLIC     shift, and go to state 351
     PRIVATE    shift, and go to state 352
     PROTECTED  shift, and go to state 353
 
-    prop_set        go to state 523
-    prop_get        go to state 524
-    access_level_T  go to state 494
+    prop_set        go to state 526
+    prop_get        go to state 527
+    access_level_T  go to state 497
 
 
-state 489
-
-   86 field_define: modifier_type_T typename_T IDENT SEMI .
-
-    $default  reduce using rule 86 (field_define)
-
-
-state 490
+state 493
 
    88 prop_set: DEFSET . SEMI
    89         | DEFSET . scope
@@ -16827,12 +16858,12 @@ state 490
   236      | . LCB RCB
 
     LCB   shift, and go to state 79
-    SEMI  shift, and go to state 525
+    SEMI  shift, and go to state 528
 
-    scope  go to state 526
+    scope  go to state 529
 
 
-state 491
+state 494
 
    92 prop_get: DEFGET . SEMI
    93         | DEFGET . scope
@@ -16840,86 +16871,86 @@ state 491
   236      | . LCB RCB
 
     LCB   shift, and go to state 79
-    SEMI  shift, and go to state 527
+    SEMI  shift, and go to state 530
 
-    scope  go to state 528
+    scope  go to state 531
 
 
-state 492
+state 495
 
    92 prop_get: . DEFGET SEMI
    93         | . DEFGET scope
    94         | . access_level_T DEFGET SEMI
    95         | . access_level_T DEFGET scope
-   98 prop_define: typename_T IDENT LCB prop_set . prop_get RCB
+   98 prop_define: PROPERTY typename_T IDENT LCB prop_set . prop_get RCB
   106 access_level_T: . PUBLIC
   107               | . PRIVATE
   108               | . PROTECTED
 
-    DEFGET     shift, and go to state 491
+    DEFGET     shift, and go to state 494
     PUBLIC     shift, and go to state 351
     PRIVATE    shift, and go to state 352
     PROTECTED  shift, and go to state 353
 
-    prop_get        go to state 529
-    access_level_T  go to state 530
+    prop_get        go to state 532
+    access_level_T  go to state 533
 
 
-state 493
+state 496
 
-   99 prop_define: typename_T IDENT LCB prop_get . RCB
+   99 prop_define: PROPERTY typename_T IDENT LCB prop_get . RCB
 
-    RCB  shift, and go to state 531
+    RCB  shift, and go to state 534
 
 
-state 494
+state 497
 
    90 prop_set: access_level_T . DEFSET SEMI
    91         | access_level_T . DEFSET scope
    94 prop_get: access_level_T . DEFGET SEMI
    95         | access_level_T . DEFGET scope
 
-    DEFSET  shift, and go to state 532
-    DEFGET  shift, and go to state 533
+    DEFSET  shift, and go to state 535
+    DEFGET  shift, and go to state 536
 
 
-state 495
+state 498
 
    64 method_define: DEF IDENT type_parameter_group LRB RRB . ARROW typename_T scope_optional
 
-    ARROW  shift, and go to state 534
+    ARROW  shift, and go to state 537
 
 
-state 496
+state 499
 
    63 method_define: DEF IDENT type_parameter_group LRB parameter_list . RRB ARROW typename_T scope_optional
   112 parameter_list: parameter_list . COMMA typename_T IDENT
 
     COMMA  shift, and go to state 265
-    RRB    shift, and go to state 535
+    RRB    shift, and go to state 538
 
 
-state 497
+state 500
 
    53 constructor_chain: COLON . constructor_chain_type_T LRB argument_list RRB
    54                  | COLON . constructor_chain_type_T LRB RRB
    55 constructor_chain_type_T: . SUPER_TOK
    56                         | . THIS_TOK
 
-    THIS_TOK   shift, and go to state 536
-    SUPER_TOK  shift, and go to state 537
+    THIS_TOK   shift, and go to state 539
+    SUPER_TOK  shift, and go to state 540
 
-    constructor_chain_type_T  go to state 538
+    constructor_chain_type_T  go to state 541
 
 
-state 498
+state 501
 
    58 constructor_chain_optional: constructor_chain .
 
     $default  reduce using rule 58 (constructor_chain_optional)
 
 
-state 499
+state 502
 
    52 constructor_define: DEF NEW LRB RRB constructor_chain_optional . scope_optional
   235 scope: . LCB stmt_list RCB
@@ -16931,10 +16962,10 @@ state 499
     SEMI  shift, and go to state 132
 
     scope           go to state 133
-    scope_optional  go to state 539
+    scope_optional  go to state 542
 
 
-state 500
+state 503
 
    51 constructor_define: DEF NEW LRB parameter_list RRB . constructor_chain_optional scope_optional
    53 constructor_chain: . COLON constructor_chain_type_T LRB argument_list RRB
@@ -16942,15 +16973,15 @@ state 500
    57 constructor_chain_optional: .  [LCB, SEMI]
    58                           | . constructor_chain
 
-    COLON  shift, and go to state 497
+    COLON  shift, and go to state 500
 
     $default  reduce using rule 57 (constructor_chain_optional)
 
-    constructor_chain           go to state 498
-    constructor_chain_optional  go to state 540
+    constructor_chain           go to state 501
+    constructor_chain_optional  go to state 543
 
 
-state 501
+state 504
 
    61 method_define: DEF modifier_type_T_list IDENT type_parameter_group LRB . parameter_list RRB ARROW typename_T scope_optional
    62              | DEF modifier_type_T_list IDENT type_parameter_group LRB . RRB ARROW typename_T scope_optional
@@ -16961,21 +16992,21 @@ state 501
   122          | . fqcn_part COLO_COLO IDENT
 
     IDENT  shift, and go to state 14
-    RRB    shift, and go to state 541
+    RRB    shift, and go to state 544
 
-    parameter_list  go to state 542
+    parameter_list  go to state 545
     typename_T      go to state 210
     fqcn_part       go to state 149
 
 
-state 502
+state 505
 
    65 operator_define: OPERATOR ADD LRB parameter_list RRB . ARROW typename_T scope_optional
 
-    ARROW  shift, and go to state 543
+    ARROW  shift, and go to state 546
 
 
-state 503
+state 506
 
    85 operator_define: OPERATOR SUB LRB RRB ARROW . typename_T scope_optional
   120 typename_T: . fqcn_part typename_group
@@ -16984,68 +17015,41 @@ state 503
 
     IDENT  shift, and go to state 14
 
-    typename_T  go to state 544
+    typename_T  go to state 547
     fqcn_part   go to state 149
-
-
-state 504
-
-   66 operator_define: OPERATOR SUB LRB parameter_list RRB . ARROW typename_T scope_optional
-
-    ARROW  shift, and go to state 545
-
-
-state 505
-
-   67 operator_define: OPERATOR MUL LRB parameter_list RRB . ARROW typename_T scope_optional
-
-    ARROW  shift, and go to state 546
-
-
-state 506
-
-   68 operator_define: OPERATOR DIV LRB parameter_list RRB . ARROW typename_T scope_optional
-
-    ARROW  shift, and go to state 547
 
 
 state 507
 
-   69 operator_define: OPERATOR MOD LRB parameter_list RRB . ARROW typename_T scope_optional
+   66 operator_define: OPERATOR SUB LRB parameter_list RRB . ARROW typename_T scope_optional
 
     ARROW  shift, and go to state 548
 
 
 state 508
 
-   83 operator_define: OPERATOR NOT LRB RRB ARROW . typename_T scope_optional
-  120 typename_T: . fqcn_part typename_group
-  121 fqcn_part: . IDENT
-  122          | . fqcn_part COLO_COLO IDENT
+   67 operator_define: OPERATOR MUL LRB parameter_list RRB . ARROW typename_T scope_optional
 
-    IDENT  shift, and go to state 14
-
-    typename_T  go to state 549
-    fqcn_part   go to state 149
+    ARROW  shift, and go to state 549
 
 
 state 509
 
-   80 operator_define: OPERATOR LSHIFT LRB parameter_list RRB . ARROW typename_T scope_optional
+   68 operator_define: OPERATOR DIV LRB parameter_list RRB . ARROW typename_T scope_optional
 
     ARROW  shift, and go to state 550
 
 
 state 510
 
-   81 operator_define: OPERATOR RSHIFT LRB parameter_list RRB . ARROW typename_T scope_optional
+   69 operator_define: OPERATOR MOD LRB parameter_list RRB . ARROW typename_T scope_optional
 
     ARROW  shift, and go to state 551
 
 
 state 511
 
-   84 operator_define: OPERATOR CHILDA LRB RRB ARROW . typename_T scope_optional
+   83 operator_define: OPERATOR NOT LRB RRB ARROW . typename_T scope_optional
   120 typename_T: . fqcn_part typename_group
   121 fqcn_part: . IDENT
   122          | . fqcn_part COLO_COLO IDENT
@@ -17058,159 +17062,186 @@ state 511
 
 state 512
 
-   74 operator_define: OPERATOR EQUAL LRB parameter_list RRB . ARROW typename_T scope_optional
+   80 operator_define: OPERATOR LSHIFT LRB parameter_list RRB . ARROW typename_T scope_optional
 
     ARROW  shift, and go to state 553
 
 
 state 513
 
-   75 operator_define: OPERATOR NOTEQUAL LRB parameter_list RRB . ARROW typename_T scope_optional
+   81 operator_define: OPERATOR RSHIFT LRB parameter_list RRB . ARROW typename_T scope_optional
 
     ARROW  shift, and go to state 554
 
 
 state 514
 
-   70 operator_define: OPERATOR GT LRB parameter_list RRB . ARROW typename_T scope_optional
+   84 operator_define: OPERATOR CHILDA LRB RRB ARROW . typename_T scope_optional
+  120 typename_T: . fqcn_part typename_group
+  121 fqcn_part: . IDENT
+  122          | . fqcn_part COLO_COLO IDENT
 
-    ARROW  shift, and go to state 555
+    IDENT  shift, and go to state 14
+
+    typename_T  go to state 555
+    fqcn_part   go to state 149
 
 
 state 515
 
-   71 operator_define: OPERATOR GE LRB parameter_list RRB . ARROW typename_T scope_optional
+   74 operator_define: OPERATOR EQUAL LRB parameter_list RRB . ARROW typename_T scope_optional
 
     ARROW  shift, and go to state 556
 
 
 state 516
 
-   72 operator_define: OPERATOR LT LRB parameter_list RRB . ARROW typename_T scope_optional
+   75 operator_define: OPERATOR NOTEQUAL LRB parameter_list RRB . ARROW typename_T scope_optional
 
     ARROW  shift, and go to state 557
 
 
 state 517
 
-   73 operator_define: OPERATOR LE LRB parameter_list RRB . ARROW typename_T scope_optional
+   70 operator_define: OPERATOR GT LRB parameter_list RRB . ARROW typename_T scope_optional
 
     ARROW  shift, and go to state 558
 
 
 state 518
 
-   77 operator_define: OPERATOR BIT_AND LRB parameter_list RRB . ARROW typename_T scope_optional
+   71 operator_define: OPERATOR GE LRB parameter_list RRB . ARROW typename_T scope_optional
 
     ARROW  shift, and go to state 559
 
 
 state 519
 
-   79 operator_define: OPERATOR LOGIC_AND LRB parameter_list RRB . ARROW typename_T scope_optional
+   72 operator_define: OPERATOR LT LRB parameter_list RRB . ARROW typename_T scope_optional
 
     ARROW  shift, and go to state 560
 
 
 state 520
 
-   76 operator_define: OPERATOR BIT_OR LRB parameter_list RRB . ARROW typename_T scope_optional
+   73 operator_define: OPERATOR LE LRB parameter_list RRB . ARROW typename_T scope_optional
 
     ARROW  shift, and go to state 561
 
 
 state 521
 
-   78 operator_define: OPERATOR LOGIC_OR LRB parameter_list RRB . ARROW typename_T scope_optional
+   77 operator_define: OPERATOR BIT_AND LRB parameter_list RRB . ARROW typename_T scope_optional
 
     ARROW  shift, and go to state 562
 
 
 state 522
 
-   82 operator_define: OPERATOR EXC_OR LRB parameter_list RRB . ARROW typename_T scope_optional
+   79 operator_define: OPERATOR LOGIC_AND LRB parameter_list RRB . ARROW typename_T scope_optional
 
     ARROW  shift, and go to state 563
 
 
 state 523
 
-   92 prop_get: . DEFGET SEMI
-   93         | . DEFGET scope
-   94         | . access_level_T DEFGET SEMI
-   95         | . access_level_T DEFGET scope
-   96 prop_define: modifier_type_T_list typename_T IDENT LCB prop_set . prop_get RCB
-  106 access_level_T: . PUBLIC
-  107               | . PRIVATE
-  108               | . PROTECTED
+   76 operator_define: OPERATOR BIT_OR LRB parameter_list RRB . ARROW typename_T scope_optional
 
-    DEFGET     shift, and go to state 491
-    PUBLIC     shift, and go to state 351
-    PRIVATE    shift, and go to state 352
-    PROTECTED  shift, and go to state 353
-
-    prop_get        go to state 564
-    access_level_T  go to state 530
+    ARROW  shift, and go to state 564
 
 
 state 524
 
-   97 prop_define: modifier_type_T_list typename_T IDENT LCB prop_get . RCB
+   78 operator_define: OPERATOR LOGIC_OR LRB parameter_list RRB . ARROW typename_T scope_optional
 
-    RCB  shift, and go to state 565
+    ARROW  shift, and go to state 565
 
 
 state 525
+
+   82 operator_define: OPERATOR EXC_OR LRB parameter_list RRB . ARROW typename_T scope_optional
+
+    ARROW  shift, and go to state 566
+
+
+state 526
+
+   92 prop_get: . DEFGET SEMI
+   93         | . DEFGET scope
+   94         | . access_level_T DEFGET SEMI
+   95         | . access_level_T DEFGET scope
+   96 prop_define: PROPERTY modifier_type_T_list typename_T IDENT LCB prop_set . prop_get RCB
+  106 access_level_T: . PUBLIC
+  107               | . PRIVATE
+  108               | . PROTECTED
+
+    DEFGET     shift, and go to state 494
+    PUBLIC     shift, and go to state 351
+    PRIVATE    shift, and go to state 352
+    PROTECTED  shift, and go to state 353
+
+    prop_get        go to state 567
+    access_level_T  go to state 533
+
+
+state 527
+
+   97 prop_define: PROPERTY modifier_type_T_list typename_T IDENT LCB prop_get . RCB
+
+    RCB  shift, and go to state 568
+
+
+state 528
 
    88 prop_set: DEFSET SEMI .
 
     $default  reduce using rule 88 (prop_set)
 
 
-state 526
+state 529
 
    89 prop_set: DEFSET scope .
 
     $default  reduce using rule 89 (prop_set)
 
 
-state 527
+state 530
 
    92 prop_get: DEFGET SEMI .
 
     $default  reduce using rule 92 (prop_get)
 
 
-state 528
+state 531
 
    93 prop_get: DEFGET scope .
 
     $default  reduce using rule 93 (prop_get)
 
 
-state 529
+state 532
 
-   98 prop_define: typename_T IDENT LCB prop_set prop_get . RCB
+   98 prop_define: PROPERTY typename_T IDENT LCB prop_set prop_get . RCB
 
-    RCB  shift, and go to state 566
+    RCB  shift, and go to state 569
 
 
-state 530
+state 533
 
    94 prop_get: access_level_T . DEFGET SEMI
    95         | access_level_T . DEFGET scope
 
-    DEFGET  shift, and go to state 533
+    DEFGET  shift, and go to state 536
 
 
-state 531
+state 534
 
-   99 prop_define: typename_T IDENT LCB prop_get RCB .
+   99 prop_define: PROPERTY typename_T IDENT LCB prop_get RCB .
 
     $default  reduce using rule 99 (prop_define)
 
 
-state 532
+state 535
 
    90 prop_set: access_level_T DEFSET . SEMI
    91         | access_level_T DEFSET . scope
@@ -17218,12 +17249,12 @@ state 532
   236      | . LCB RCB
 
     LCB   shift, and go to state 79
-    SEMI  shift, and go to state 567
+    SEMI  shift, and go to state 570
 
-    scope  go to state 568
+    scope  go to state 571
 
 
-state 533
+state 536
 
    94 prop_get: access_level_T DEFGET . SEMI
    95         | access_level_T DEFGET . scope
@@ -17231,12 +17262,12 @@ state 533
   236      | . LCB RCB
 
     LCB   shift, and go to state 79
-    SEMI  shift, and go to state 569
+    SEMI  shift, and go to state 572
 
-    scope  go to state 570
+    scope  go to state 573
 
 
-state 534
+state 537
 
    64 method_define: DEF IDENT type_parameter_group LRB RRB ARROW . typename_T scope_optional
   120 typename_T: . fqcn_part typename_group
@@ -17245,47 +17276,47 @@ state 534
 
     IDENT  shift, and go to state 14
 
-    typename_T  go to state 571
+    typename_T  go to state 574
     fqcn_part   go to state 149
 
 
-state 535
+state 538
 
    63 method_define: DEF IDENT type_parameter_group LRB parameter_list RRB . ARROW typename_T scope_optional
 
-    ARROW  shift, and go to state 572
+    ARROW  shift, and go to state 575
 
 
-state 536
+state 539
 
    56 constructor_chain_type_T: THIS_TOK .
 
     $default  reduce using rule 56 (constructor_chain_type_T)
 
 
-state 537
+state 540
 
    55 constructor_chain_type_T: SUPER_TOK .
 
     $default  reduce using rule 55 (constructor_chain_type_T)
 
 
-state 538
+state 541
 
    53 constructor_chain: COLON constructor_chain_type_T . LRB argument_list RRB
    54                  | COLON constructor_chain_type_T . LRB RRB
 
-    LRB  shift, and go to state 573
+    LRB  shift, and go to state 576
 
 
-state 539
+state 542
 
    52 constructor_define: DEF NEW LRB RRB constructor_chain_optional scope_optional .
 
     $default  reduce using rule 52 (constructor_define)
 
 
-state 540
+state 543
 
    51 constructor_define: DEF NEW LRB parameter_list RRB constructor_chain_optional . scope_optional
   235 scope: . LCB stmt_list RCB
@@ -17297,69 +17328,28 @@ state 540
     SEMI  shift, and go to state 132
 
     scope           go to state 133
-    scope_optional  go to state 574
+    scope_optional  go to state 577
 
 
-state 541
+state 544
 
    62 method_define: DEF modifier_type_T_list IDENT type_parameter_group LRB RRB . ARROW typename_T scope_optional
 
-    ARROW  shift, and go to state 575
+    ARROW  shift, and go to state 578
 
 
-state 542
+state 545
 
    61 method_define: DEF modifier_type_T_list IDENT type_parameter_group LRB parameter_list . RRB ARROW typename_T scope_optional
   112 parameter_list: parameter_list . COMMA typename_T IDENT
 
     COMMA  shift, and go to state 265
-    RRB    shift, and go to state 576
-
-
-state 543
-
-   65 operator_define: OPERATOR ADD LRB parameter_list RRB ARROW . typename_T scope_optional
-  120 typename_T: . fqcn_part typename_group
-  121 fqcn_part: . IDENT
-  122          | . fqcn_part COLO_COLO IDENT
-
-    IDENT  shift, and go to state 14
-
-    typename_T  go to state 577
-    fqcn_part   go to state 149
-
-
-state 544
-
-   85 operator_define: OPERATOR SUB LRB RRB ARROW typename_T . scope_optional
-  235 scope: . LCB stmt_list RCB
-  236      | . LCB RCB
-  237 scope_optional: . SEMI
-  238               | . scope
-
-    LCB   shift, and go to state 79
-    SEMI  shift, and go to state 132
-
-    scope           go to state 133
-    scope_optional  go to state 578
-
-
-state 545
-
-   66 operator_define: OPERATOR SUB LRB parameter_list RRB ARROW . typename_T scope_optional
-  120 typename_T: . fqcn_part typename_group
-  121 fqcn_part: . IDENT
-  122          | . fqcn_part COLO_COLO IDENT
-
-    IDENT  shift, and go to state 14
-
-    typename_T  go to state 579
-    fqcn_part   go to state 149
+    RRB    shift, and go to state 579
 
 
 state 546
 
-   67 operator_define: OPERATOR MUL LRB parameter_list RRB ARROW . typename_T scope_optional
+   65 operator_define: OPERATOR ADD LRB parameter_list RRB ARROW . typename_T scope_optional
   120 typename_T: . fqcn_part typename_group
   121 fqcn_part: . IDENT
   122          | . fqcn_part COLO_COLO IDENT
@@ -17372,20 +17362,22 @@ state 546
 
 state 547
 
-   68 operator_define: OPERATOR DIV LRB parameter_list RRB ARROW . typename_T scope_optional
-  120 typename_T: . fqcn_part typename_group
-  121 fqcn_part: . IDENT
-  122          | . fqcn_part COLO_COLO IDENT
+   85 operator_define: OPERATOR SUB LRB RRB ARROW typename_T . scope_optional
+  235 scope: . LCB stmt_list RCB
+  236      | . LCB RCB
+  237 scope_optional: . SEMI
+  238               | . scope
 
-    IDENT  shift, and go to state 14
+    LCB   shift, and go to state 79
+    SEMI  shift, and go to state 132
 
-    typename_T  go to state 581
-    fqcn_part   go to state 149
+    scope           go to state 133
+    scope_optional  go to state 581
 
 
 state 548
 
-   69 operator_define: OPERATOR MOD LRB parameter_list RRB ARROW . typename_T scope_optional
+   66 operator_define: OPERATOR SUB LRB parameter_list RRB ARROW . typename_T scope_optional
   120 typename_T: . fqcn_part typename_group
   121 fqcn_part: . IDENT
   122          | . fqcn_part COLO_COLO IDENT
@@ -17398,22 +17390,20 @@ state 548
 
 state 549
 
-   83 operator_define: OPERATOR NOT LRB RRB ARROW typename_T . scope_optional
-  235 scope: . LCB stmt_list RCB
-  236      | . LCB RCB
-  237 scope_optional: . SEMI
-  238               | . scope
+   67 operator_define: OPERATOR MUL LRB parameter_list RRB ARROW . typename_T scope_optional
+  120 typename_T: . fqcn_part typename_group
+  121 fqcn_part: . IDENT
+  122          | . fqcn_part COLO_COLO IDENT
 
-    LCB   shift, and go to state 79
-    SEMI  shift, and go to state 132
+    IDENT  shift, and go to state 14
 
-    scope           go to state 133
-    scope_optional  go to state 583
+    typename_T  go to state 583
+    fqcn_part   go to state 149
 
 
 state 550
 
-   80 operator_define: OPERATOR LSHIFT LRB parameter_list RRB ARROW . typename_T scope_optional
+   68 operator_define: OPERATOR DIV LRB parameter_list RRB ARROW . typename_T scope_optional
   120 typename_T: . fqcn_part typename_group
   121 fqcn_part: . IDENT
   122          | . fqcn_part COLO_COLO IDENT
@@ -17426,7 +17416,7 @@ state 550
 
 state 551
 
-   81 operator_define: OPERATOR RSHIFT LRB parameter_list RRB ARROW . typename_T scope_optional
+   69 operator_define: OPERATOR MOD LRB parameter_list RRB ARROW . typename_T scope_optional
   120 typename_T: . fqcn_part typename_group
   121 fqcn_part: . IDENT
   122          | . fqcn_part COLO_COLO IDENT
@@ -17439,7 +17429,7 @@ state 551
 
 state 552
 
-   84 operator_define: OPERATOR CHILDA LRB RRB ARROW typename_T . scope_optional
+   83 operator_define: OPERATOR NOT LRB RRB ARROW typename_T . scope_optional
   235 scope: . LCB stmt_list RCB
   236      | . LCB RCB
   237 scope_optional: . SEMI
@@ -17454,7 +17444,7 @@ state 552
 
 state 553
 
-   74 operator_define: OPERATOR EQUAL LRB parameter_list RRB ARROW . typename_T scope_optional
+   80 operator_define: OPERATOR LSHIFT LRB parameter_list RRB ARROW . typename_T scope_optional
   120 typename_T: . fqcn_part typename_group
   121 fqcn_part: . IDENT
   122          | . fqcn_part COLO_COLO IDENT
@@ -17467,7 +17457,7 @@ state 553
 
 state 554
 
-   75 operator_define: OPERATOR NOTEQUAL LRB parameter_list RRB ARROW . typename_T scope_optional
+   81 operator_define: OPERATOR RSHIFT LRB parameter_list RRB ARROW . typename_T scope_optional
   120 typename_T: . fqcn_part typename_group
   121 fqcn_part: . IDENT
   122          | . fqcn_part COLO_COLO IDENT
@@ -17480,20 +17470,22 @@ state 554
 
 state 555
 
-   70 operator_define: OPERATOR GT LRB parameter_list RRB ARROW . typename_T scope_optional
-  120 typename_T: . fqcn_part typename_group
-  121 fqcn_part: . IDENT
-  122          | . fqcn_part COLO_COLO IDENT
+   84 operator_define: OPERATOR CHILDA LRB RRB ARROW typename_T . scope_optional
+  235 scope: . LCB stmt_list RCB
+  236      | . LCB RCB
+  237 scope_optional: . SEMI
+  238               | . scope
 
-    IDENT  shift, and go to state 14
+    LCB   shift, and go to state 79
+    SEMI  shift, and go to state 132
 
-    typename_T  go to state 589
-    fqcn_part   go to state 149
+    scope           go to state 133
+    scope_optional  go to state 589
 
 
 state 556
 
-   71 operator_define: OPERATOR GE LRB parameter_list RRB ARROW . typename_T scope_optional
+   74 operator_define: OPERATOR EQUAL LRB parameter_list RRB ARROW . typename_T scope_optional
   120 typename_T: . fqcn_part typename_group
   121 fqcn_part: . IDENT
   122          | . fqcn_part COLO_COLO IDENT
@@ -17506,7 +17498,7 @@ state 556
 
 state 557
 
-   72 operator_define: OPERATOR LT LRB parameter_list RRB ARROW . typename_T scope_optional
+   75 operator_define: OPERATOR NOTEQUAL LRB parameter_list RRB ARROW . typename_T scope_optional
   120 typename_T: . fqcn_part typename_group
   121 fqcn_part: . IDENT
   122          | . fqcn_part COLO_COLO IDENT
@@ -17519,7 +17511,7 @@ state 557
 
 state 558
 
-   73 operator_define: OPERATOR LE LRB parameter_list RRB ARROW . typename_T scope_optional
+   70 operator_define: OPERATOR GT LRB parameter_list RRB ARROW . typename_T scope_optional
   120 typename_T: . fqcn_part typename_group
   121 fqcn_part: . IDENT
   122          | . fqcn_part COLO_COLO IDENT
@@ -17532,7 +17524,7 @@ state 558
 
 state 559
 
-   77 operator_define: OPERATOR BIT_AND LRB parameter_list RRB ARROW . typename_T scope_optional
+   71 operator_define: OPERATOR GE LRB parameter_list RRB ARROW . typename_T scope_optional
   120 typename_T: . fqcn_part typename_group
   121 fqcn_part: . IDENT
   122          | . fqcn_part COLO_COLO IDENT
@@ -17545,7 +17537,7 @@ state 559
 
 state 560
 
-   79 operator_define: OPERATOR LOGIC_AND LRB parameter_list RRB ARROW . typename_T scope_optional
+   72 operator_define: OPERATOR LT LRB parameter_list RRB ARROW . typename_T scope_optional
   120 typename_T: . fqcn_part typename_group
   121 fqcn_part: . IDENT
   122          | . fqcn_part COLO_COLO IDENT
@@ -17558,7 +17550,7 @@ state 560
 
 state 561
 
-   76 operator_define: OPERATOR BIT_OR LRB parameter_list RRB ARROW . typename_T scope_optional
+   73 operator_define: OPERATOR LE LRB parameter_list RRB ARROW . typename_T scope_optional
   120 typename_T: . fqcn_part typename_group
   121 fqcn_part: . IDENT
   122          | . fqcn_part COLO_COLO IDENT
@@ -17571,7 +17563,7 @@ state 561
 
 state 562
 
-   78 operator_define: OPERATOR LOGIC_OR LRB parameter_list RRB ARROW . typename_T scope_optional
+   77 operator_define: OPERATOR BIT_AND LRB parameter_list RRB ARROW . typename_T scope_optional
   120 typename_T: . fqcn_part typename_group
   121 fqcn_part: . IDENT
   122          | . fqcn_part COLO_COLO IDENT
@@ -17584,7 +17576,7 @@ state 562
 
 state 563
 
-   82 operator_define: OPERATOR EXC_OR LRB parameter_list RRB ARROW . typename_T scope_optional
+   79 operator_define: OPERATOR LOGIC_AND LRB parameter_list RRB ARROW . typename_T scope_optional
   120 typename_T: . fqcn_part typename_group
   121 fqcn_part: . IDENT
   122          | . fqcn_part COLO_COLO IDENT
@@ -17597,54 +17589,93 @@ state 563
 
 state 564
 
-   96 prop_define: modifier_type_T_list typename_T IDENT LCB prop_set prop_get . RCB
+   76 operator_define: OPERATOR BIT_OR LRB parameter_list RRB ARROW . typename_T scope_optional
+  120 typename_T: . fqcn_part typename_group
+  121 fqcn_part: . IDENT
+  122          | . fqcn_part COLO_COLO IDENT
 
-    RCB  shift, and go to state 598
+    IDENT  shift, and go to state 14
+
+    typename_T  go to state 598
+    fqcn_part   go to state 149
 
 
 state 565
 
-   97 prop_define: modifier_type_T_list typename_T IDENT LCB prop_get RCB .
+   78 operator_define: OPERATOR LOGIC_OR LRB parameter_list RRB ARROW . typename_T scope_optional
+  120 typename_T: . fqcn_part typename_group
+  121 fqcn_part: . IDENT
+  122          | . fqcn_part COLO_COLO IDENT
 
-    $default  reduce using rule 97 (prop_define)
+    IDENT  shift, and go to state 14
+
+    typename_T  go to state 599
+    fqcn_part   go to state 149
 
 
 state 566
 
-   98 prop_define: typename_T IDENT LCB prop_set prop_get RCB .
+   82 operator_define: OPERATOR EXC_OR LRB parameter_list RRB ARROW . typename_T scope_optional
+  120 typename_T: . fqcn_part typename_group
+  121 fqcn_part: . IDENT
+  122          | . fqcn_part COLO_COLO IDENT
+
+    IDENT  shift, and go to state 14
+
+    typename_T  go to state 600
+    fqcn_part   go to state 149
+
+
+state 567
+
+   96 prop_define: PROPERTY modifier_type_T_list typename_T IDENT LCB prop_set prop_get . RCB
+
+    RCB  shift, and go to state 601
+
+
+state 568
+
+   97 prop_define: PROPERTY modifier_type_T_list typename_T IDENT LCB prop_get RCB .
+
+    $default  reduce using rule 97 (prop_define)
+
+
+state 569
+
+   98 prop_define: PROPERTY typename_T IDENT LCB prop_set prop_get RCB .
 
     $default  reduce using rule 98 (prop_define)
 
 
-state 567
+state 570
 
    90 prop_set: access_level_T DEFSET SEMI .
 
     $default  reduce using rule 90 (prop_set)
 
 
-state 568
+state 571
 
    91 prop_set: access_level_T DEFSET scope .
 
     $default  reduce using rule 91 (prop_set)
 
 
-state 569
+state 572
 
    94 prop_get: access_level_T DEFGET SEMI .
 
     $default  reduce using rule 94 (prop_get)
 
 
-state 570
+state 573
 
    95 prop_get: access_level_T DEFGET scope .
 
     $default  reduce using rule 95 (prop_get)
 
 
-state 571
+state 574
 
    64 method_define: DEF IDENT type_parameter_group LRB RRB ARROW typename_T . scope_optional
   235 scope: . LCB stmt_list RCB
@@ -17656,10 +17687,10 @@ state 571
     SEMI  shift, and go to state 132
 
     scope           go to state 133
-    scope_optional  go to state 599
+    scope_optional  go to state 602
 
 
-state 572
+state 575
 
    63 method_define: DEF IDENT type_parameter_group LRB parameter_list RRB ARROW . typename_T scope_optional
   120 typename_T: . fqcn_part typename_group
@@ -17668,11 +17699,11 @@ state 572
 
     IDENT  shift, and go to state 14
 
-    typename_T  go to state 600
+    typename_T  go to state 603
     fqcn_part   go to state 149
 
 
-state 573
+state 576
 
    53 constructor_chain: COLON constructor_chain_type_T LRB . argument_list RRB
    54                  | COLON constructor_chain_type_T LRB . RRB
@@ -17767,7 +17798,7 @@ state 573
     NOT             shift, and go to state 17
     CHILDA          shift, and go to state 18
     LRB             shift, and go to state 19
-    RRB             shift, and go to state 601
+    RRB             shift, and go to state 604
     THIS_TOK        shift, and go to state 21
     SUPER_TOK       shift, and go to state 22
     TRUE_TOK        shift, and go to state 23
@@ -17776,7 +17807,7 @@ state 573
     NEW             shift, and go to state 26
     QUOTE           shift, and go to state 192
 
-    argument_list       go to state 602
+    argument_list       go to state 605
     fqcn_part           go to state 62
     expression          go to state 194
     expression_nobrace  go to state 44
@@ -17784,14 +17815,14 @@ state 573
     primary             go to state 46
 
 
-state 574
+state 577
 
    51 constructor_define: DEF NEW LRB parameter_list RRB constructor_chain_optional scope_optional .
 
     $default  reduce using rule 51 (constructor_define)
 
 
-state 575
+state 578
 
    62 method_define: DEF modifier_type_T_list IDENT type_parameter_group LRB RRB ARROW . typename_T scope_optional
   120 typename_T: . fqcn_part typename_group
@@ -17800,72 +17831,20 @@ state 575
 
     IDENT  shift, and go to state 14
 
-    typename_T  go to state 603
+    typename_T  go to state 606
     fqcn_part   go to state 149
-
-
-state 576
-
-   61 method_define: DEF modifier_type_T_list IDENT type_parameter_group LRB parameter_list RRB . ARROW typename_T scope_optional
-
-    ARROW  shift, and go to state 604
-
-
-state 577
-
-   65 operator_define: OPERATOR ADD LRB parameter_list RRB ARROW typename_T . scope_optional
-  235 scope: . LCB stmt_list RCB
-  236      | . LCB RCB
-  237 scope_optional: . SEMI
-  238               | . scope
-
-    LCB   shift, and go to state 79
-    SEMI  shift, and go to state 132
-
-    scope           go to state 133
-    scope_optional  go to state 605
-
-
-state 578
-
-   85 operator_define: OPERATOR SUB LRB RRB ARROW typename_T scope_optional .
-
-    $default  reduce using rule 85 (operator_define)
 
 
 state 579
 
-   66 operator_define: OPERATOR SUB LRB parameter_list RRB ARROW typename_T . scope_optional
-  235 scope: . LCB stmt_list RCB
-  236      | . LCB RCB
-  237 scope_optional: . SEMI
-  238               | . scope
+   61 method_define: DEF modifier_type_T_list IDENT type_parameter_group LRB parameter_list RRB . ARROW typename_T scope_optional
 
-    LCB   shift, and go to state 79
-    SEMI  shift, and go to state 132
-
-    scope           go to state 133
-    scope_optional  go to state 606
+    ARROW  shift, and go to state 607
 
 
 state 580
 
-   67 operator_define: OPERATOR MUL LRB parameter_list RRB ARROW typename_T . scope_optional
-  235 scope: . LCB stmt_list RCB
-  236      | . LCB RCB
-  237 scope_optional: . SEMI
-  238               | . scope
-
-    LCB   shift, and go to state 79
-    SEMI  shift, and go to state 132
-
-    scope           go to state 133
-    scope_optional  go to state 607
-
-
-state 581
-
-   68 operator_define: OPERATOR DIV LRB parameter_list RRB ARROW typename_T . scope_optional
+   65 operator_define: OPERATOR ADD LRB parameter_list RRB ARROW typename_T . scope_optional
   235 scope: . LCB stmt_list RCB
   236      | . LCB RCB
   237 scope_optional: . SEMI
@@ -17878,9 +17857,16 @@ state 581
     scope_optional  go to state 608
 
 
+state 581
+
+   85 operator_define: OPERATOR SUB LRB RRB ARROW typename_T scope_optional .
+
+    $default  reduce using rule 85 (operator_define)
+
+
 state 582
 
-   69 operator_define: OPERATOR MOD LRB parameter_list RRB ARROW typename_T . scope_optional
+   66 operator_define: OPERATOR SUB LRB parameter_list RRB ARROW typename_T . scope_optional
   235 scope: . LCB stmt_list RCB
   236      | . LCB RCB
   237 scope_optional: . SEMI
@@ -17895,14 +17881,7 @@ state 582
 
 state 583
 
-   83 operator_define: OPERATOR NOT LRB RRB ARROW typename_T scope_optional .
-
-    $default  reduce using rule 83 (operator_define)
-
-
-state 584
-
-   80 operator_define: OPERATOR LSHIFT LRB parameter_list RRB ARROW typename_T . scope_optional
+   67 operator_define: OPERATOR MUL LRB parameter_list RRB ARROW typename_T . scope_optional
   235 scope: . LCB stmt_list RCB
   236      | . LCB RCB
   237 scope_optional: . SEMI
@@ -17915,9 +17894,9 @@ state 584
     scope_optional  go to state 610
 
 
-state 585
+state 584
 
-   81 operator_define: OPERATOR RSHIFT LRB parameter_list RRB ARROW typename_T . scope_optional
+   68 operator_define: OPERATOR DIV LRB parameter_list RRB ARROW typename_T . scope_optional
   235 scope: . LCB stmt_list RCB
   236      | . LCB RCB
   237 scope_optional: . SEMI
@@ -17930,16 +17909,9 @@ state 585
     scope_optional  go to state 611
 
 
-state 586
+state 585
 
-   84 operator_define: OPERATOR CHILDA LRB RRB ARROW typename_T scope_optional .
-
-    $default  reduce using rule 84 (operator_define)
-
-
-state 587
-
-   74 operator_define: OPERATOR EQUAL LRB parameter_list RRB ARROW typename_T . scope_optional
+   69 operator_define: OPERATOR MOD LRB parameter_list RRB ARROW typename_T . scope_optional
   235 scope: . LCB stmt_list RCB
   236      | . LCB RCB
   237 scope_optional: . SEMI
@@ -17952,9 +17924,16 @@ state 587
     scope_optional  go to state 612
 
 
-state 588
+state 586
 
-   75 operator_define: OPERATOR NOTEQUAL LRB parameter_list RRB ARROW typename_T . scope_optional
+   83 operator_define: OPERATOR NOT LRB RRB ARROW typename_T scope_optional .
+
+    $default  reduce using rule 83 (operator_define)
+
+
+state 587
+
+   80 operator_define: OPERATOR LSHIFT LRB parameter_list RRB ARROW typename_T . scope_optional
   235 scope: . LCB stmt_list RCB
   236      | . LCB RCB
   237 scope_optional: . SEMI
@@ -17967,9 +17946,9 @@ state 588
     scope_optional  go to state 613
 
 
-state 589
+state 588
 
-   70 operator_define: OPERATOR GT LRB parameter_list RRB ARROW typename_T . scope_optional
+   81 operator_define: OPERATOR RSHIFT LRB parameter_list RRB ARROW typename_T . scope_optional
   235 scope: . LCB stmt_list RCB
   236      | . LCB RCB
   237 scope_optional: . SEMI
@@ -17982,9 +17961,16 @@ state 589
     scope_optional  go to state 614
 
 
+state 589
+
+   84 operator_define: OPERATOR CHILDA LRB RRB ARROW typename_T scope_optional .
+
+    $default  reduce using rule 84 (operator_define)
+
+
 state 590
 
-   71 operator_define: OPERATOR GE LRB parameter_list RRB ARROW typename_T . scope_optional
+   74 operator_define: OPERATOR EQUAL LRB parameter_list RRB ARROW typename_T . scope_optional
   235 scope: . LCB stmt_list RCB
   236      | . LCB RCB
   237 scope_optional: . SEMI
@@ -17999,7 +17985,7 @@ state 590
 
 state 591
 
-   72 operator_define: OPERATOR LT LRB parameter_list RRB ARROW typename_T . scope_optional
+   75 operator_define: OPERATOR NOTEQUAL LRB parameter_list RRB ARROW typename_T . scope_optional
   235 scope: . LCB stmt_list RCB
   236      | . LCB RCB
   237 scope_optional: . SEMI
@@ -18014,7 +18000,7 @@ state 591
 
 state 592
 
-   73 operator_define: OPERATOR LE LRB parameter_list RRB ARROW typename_T . scope_optional
+   70 operator_define: OPERATOR GT LRB parameter_list RRB ARROW typename_T . scope_optional
   235 scope: . LCB stmt_list RCB
   236      | . LCB RCB
   237 scope_optional: . SEMI
@@ -18029,7 +18015,7 @@ state 592
 
 state 593
 
-   77 operator_define: OPERATOR BIT_AND LRB parameter_list RRB ARROW typename_T . scope_optional
+   71 operator_define: OPERATOR GE LRB parameter_list RRB ARROW typename_T . scope_optional
   235 scope: . LCB stmt_list RCB
   236      | . LCB RCB
   237 scope_optional: . SEMI
@@ -18044,7 +18030,7 @@ state 593
 
 state 594
 
-   79 operator_define: OPERATOR LOGIC_AND LRB parameter_list RRB ARROW typename_T . scope_optional
+   72 operator_define: OPERATOR LT LRB parameter_list RRB ARROW typename_T . scope_optional
   235 scope: . LCB stmt_list RCB
   236      | . LCB RCB
   237 scope_optional: . SEMI
@@ -18059,7 +18045,7 @@ state 594
 
 state 595
 
-   76 operator_define: OPERATOR BIT_OR LRB parameter_list RRB ARROW typename_T . scope_optional
+   73 operator_define: OPERATOR LE LRB parameter_list RRB ARROW typename_T . scope_optional
   235 scope: . LCB stmt_list RCB
   236      | . LCB RCB
   237 scope_optional: . SEMI
@@ -18074,7 +18060,7 @@ state 595
 
 state 596
 
-   78 operator_define: OPERATOR LOGIC_OR LRB parameter_list RRB ARROW typename_T . scope_optional
+   77 operator_define: OPERATOR BIT_AND LRB parameter_list RRB ARROW typename_T . scope_optional
   235 scope: . LCB stmt_list RCB
   236      | . LCB RCB
   237 scope_optional: . SEMI
@@ -18089,7 +18075,7 @@ state 596
 
 state 597
 
-   82 operator_define: OPERATOR EXC_OR LRB parameter_list RRB ARROW typename_T . scope_optional
+   79 operator_define: OPERATOR LOGIC_AND LRB parameter_list RRB ARROW typename_T . scope_optional
   235 scope: . LCB stmt_list RCB
   236      | . LCB RCB
   237 scope_optional: . SEMI
@@ -18104,21 +18090,7 @@ state 597
 
 state 598
 
-   96 prop_define: modifier_type_T_list typename_T IDENT LCB prop_set prop_get RCB .
-
-    $default  reduce using rule 96 (prop_define)
-
-
-state 599
-
-   64 method_define: DEF IDENT type_parameter_group LRB RRB ARROW typename_T scope_optional .
-
-    $default  reduce using rule 64 (method_define)
-
-
-state 600
-
-   63 method_define: DEF IDENT type_parameter_group LRB parameter_list RRB ARROW typename_T . scope_optional
+   76 operator_define: OPERATOR BIT_OR LRB parameter_list RRB ARROW typename_T . scope_optional
   235 scope: . LCB stmt_list RCB
   236      | . LCB RCB
   237 scope_optional: . SEMI
@@ -18131,25 +18103,24 @@ state 600
     scope_optional  go to state 623
 
 
-state 601
+state 599
 
-   54 constructor_chain: COLON constructor_chain_type_T LRB RRB .
+   78 operator_define: OPERATOR LOGIC_OR LRB parameter_list RRB ARROW typename_T . scope_optional
+  235 scope: . LCB stmt_list RCB
+  236      | . LCB RCB
+  237 scope_optional: . SEMI
+  238               | . scope
 
-    $default  reduce using rule 54 (constructor_chain)
+    LCB   shift, and go to state 79
+    SEMI  shift, and go to state 132
+
+    scope           go to state 133
+    scope_optional  go to state 624
 
 
-state 602
+state 600
 
-   53 constructor_chain: COLON constructor_chain_type_T LRB argument_list . RRB
-  115 argument_list: argument_list . COMMA expression
-
-    COMMA  shift, and go to state 259
-    RRB    shift, and go to state 624
-
-
-state 603
-
-   62 method_define: DEF modifier_type_T_list IDENT type_parameter_group LRB RRB ARROW typename_T . scope_optional
+   82 operator_define: OPERATOR EXC_OR LRB parameter_list RRB ARROW typename_T . scope_optional
   235 scope: . LCB stmt_list RCB
   236      | . LCB RCB
   237 scope_optional: . SEMI
@@ -18162,7 +18133,67 @@ state 603
     scope_optional  go to state 625
 
 
+state 601
+
+   96 prop_define: PROPERTY modifier_type_T_list typename_T IDENT LCB prop_set prop_get RCB .
+
+    $default  reduce using rule 96 (prop_define)
+
+
+state 602
+
+   64 method_define: DEF IDENT type_parameter_group LRB RRB ARROW typename_T scope_optional .
+
+    $default  reduce using rule 64 (method_define)
+
+
+state 603
+
+   63 method_define: DEF IDENT type_parameter_group LRB parameter_list RRB ARROW typename_T . scope_optional
+  235 scope: . LCB stmt_list RCB
+  236      | . LCB RCB
+  237 scope_optional: . SEMI
+  238               | . scope
+
+    LCB   shift, and go to state 79
+    SEMI  shift, and go to state 132
+
+    scope           go to state 133
+    scope_optional  go to state 626
+
+
 state 604
+
+   54 constructor_chain: COLON constructor_chain_type_T LRB RRB .
+
+    $default  reduce using rule 54 (constructor_chain)
+
+
+state 605
+
+   53 constructor_chain: COLON constructor_chain_type_T LRB argument_list . RRB
+  115 argument_list: argument_list . COMMA expression
+
+    COMMA  shift, and go to state 259
+    RRB    shift, and go to state 627
+
+
+state 606
+
+   62 method_define: DEF modifier_type_T_list IDENT type_parameter_group LRB RRB ARROW typename_T . scope_optional
+  235 scope: . LCB stmt_list RCB
+  236      | . LCB RCB
+  237 scope_optional: . SEMI
+  238               | . scope
+
+    LCB   shift, and go to state 79
+    SEMI  shift, and go to state 132
+
+    scope           go to state 133
+    scope_optional  go to state 628
+
+
+state 607
 
    61 method_define: DEF modifier_type_T_list IDENT type_parameter_group LRB parameter_list RRB ARROW . typename_T scope_optional
   120 typename_T: . fqcn_part typename_group
@@ -18171,158 +18202,158 @@ state 604
 
     IDENT  shift, and go to state 14
 
-    typename_T  go to state 626
+    typename_T  go to state 629
     fqcn_part   go to state 149
 
 
-state 605
+state 608
 
    65 operator_define: OPERATOR ADD LRB parameter_list RRB ARROW typename_T scope_optional .
 
     $default  reduce using rule 65 (operator_define)
 
 
-state 606
+state 609
 
    66 operator_define: OPERATOR SUB LRB parameter_list RRB ARROW typename_T scope_optional .
 
     $default  reduce using rule 66 (operator_define)
 
 
-state 607
+state 610
 
    67 operator_define: OPERATOR MUL LRB parameter_list RRB ARROW typename_T scope_optional .
 
     $default  reduce using rule 67 (operator_define)
 
 
-state 608
+state 611
 
    68 operator_define: OPERATOR DIV LRB parameter_list RRB ARROW typename_T scope_optional .
 
     $default  reduce using rule 68 (operator_define)
 
 
-state 609
+state 612
 
    69 operator_define: OPERATOR MOD LRB parameter_list RRB ARROW typename_T scope_optional .
 
     $default  reduce using rule 69 (operator_define)
 
 
-state 610
+state 613
 
    80 operator_define: OPERATOR LSHIFT LRB parameter_list RRB ARROW typename_T scope_optional .
 
     $default  reduce using rule 80 (operator_define)
 
 
-state 611
+state 614
 
    81 operator_define: OPERATOR RSHIFT LRB parameter_list RRB ARROW typename_T scope_optional .
 
     $default  reduce using rule 81 (operator_define)
 
 
-state 612
+state 615
 
    74 operator_define: OPERATOR EQUAL LRB parameter_list RRB ARROW typename_T scope_optional .
 
     $default  reduce using rule 74 (operator_define)
 
 
-state 613
+state 616
 
    75 operator_define: OPERATOR NOTEQUAL LRB parameter_list RRB ARROW typename_T scope_optional .
 
     $default  reduce using rule 75 (operator_define)
 
 
-state 614
+state 617
 
    70 operator_define: OPERATOR GT LRB parameter_list RRB ARROW typename_T scope_optional .
 
     $default  reduce using rule 70 (operator_define)
 
 
-state 615
+state 618
 
    71 operator_define: OPERATOR GE LRB parameter_list RRB ARROW typename_T scope_optional .
 
     $default  reduce using rule 71 (operator_define)
 
 
-state 616
+state 619
 
    72 operator_define: OPERATOR LT LRB parameter_list RRB ARROW typename_T scope_optional .
 
     $default  reduce using rule 72 (operator_define)
 
 
-state 617
+state 620
 
    73 operator_define: OPERATOR LE LRB parameter_list RRB ARROW typename_T scope_optional .
 
     $default  reduce using rule 73 (operator_define)
 
 
-state 618
+state 621
 
    77 operator_define: OPERATOR BIT_AND LRB parameter_list RRB ARROW typename_T scope_optional .
 
     $default  reduce using rule 77 (operator_define)
 
 
-state 619
+state 622
 
    79 operator_define: OPERATOR LOGIC_AND LRB parameter_list RRB ARROW typename_T scope_optional .
 
     $default  reduce using rule 79 (operator_define)
 
 
-state 620
+state 623
 
    76 operator_define: OPERATOR BIT_OR LRB parameter_list RRB ARROW typename_T scope_optional .
 
     $default  reduce using rule 76 (operator_define)
 
 
-state 621
+state 624
 
    78 operator_define: OPERATOR LOGIC_OR LRB parameter_list RRB ARROW typename_T scope_optional .
 
     $default  reduce using rule 78 (operator_define)
 
 
-state 622
+state 625
 
    82 operator_define: OPERATOR EXC_OR LRB parameter_list RRB ARROW typename_T scope_optional .
 
     $default  reduce using rule 82 (operator_define)
 
 
-state 623
+state 626
 
    63 method_define: DEF IDENT type_parameter_group LRB parameter_list RRB ARROW typename_T scope_optional .
 
     $default  reduce using rule 63 (method_define)
 
 
-state 624
+state 627
 
    53 constructor_chain: COLON constructor_chain_type_T LRB argument_list RRB .
 
     $default  reduce using rule 53 (constructor_chain)
 
 
-state 625
+state 628
 
    62 method_define: DEF modifier_type_T_list IDENT type_parameter_group LRB RRB ARROW typename_T scope_optional .
 
     $default  reduce using rule 62 (method_define)
 
 
-state 626
+state 629
 
    61 method_define: DEF modifier_type_T_list IDENT type_parameter_group LRB parameter_list RRB ARROW typename_T . scope_optional
   235 scope: . LCB stmt_list RCB
@@ -18334,10 +18365,10 @@ state 626
     SEMI  shift, and go to state 132
 
     scope           go to state 133
-    scope_optional  go to state 627
+    scope_optional  go to state 630
 
 
-state 627
+state 630
 
    61 method_define: DEF modifier_type_T_list IDENT type_parameter_group LRB parameter_list RRB ARROW typename_T scope_optional .
 

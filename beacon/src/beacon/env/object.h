@@ -264,4 +264,11 @@ object* object_bool2obj(bool b);
  * @return
  */
 object* object_char2obj(char c);
+
+/**
+ * 指定の型のデフォルト値を返します.
+ * @param gt
+ * @return
+ */
+object* object_default(struct generic_type* gt);
 #endif // !SIGNAL_ENV_OBJECT_H

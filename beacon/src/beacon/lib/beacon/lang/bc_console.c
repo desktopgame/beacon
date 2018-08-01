@@ -43,6 +43,8 @@ static void bc_console_writeLine(method* parent, frame* fr, enviroment* env) {
 		text_printf("%c\n", o->u.char_);
 	} else if (o->tag == object_bool) {
 		text_printf("%s\n", o->u.bool_ ? "true" : "false");
+	} else if(o->tag == object_null) {
+		text_printf("null\n");
 	}
 }
 
@@ -61,6 +63,8 @@ static void bc_console_write(method* parent, frame* fr, enviroment* env) {
 		text_printf("%c", o->u.char_);
 	} else if (o->tag == object_bool) {
 		text_printf("%s", o->u.bool_ ? "true" : "false");
+	} else if(o->tag == object_null) {
+		text_printf("null");
 	}
 }
 

@@ -88,6 +88,11 @@ typedef enum opcode {
 	op_put_static,
 	op_get_static,
 
+	op_put_property,
+	op_get_property,
+	op_put_static_property,
+	op_get_static_property,
+
 	//op_lookup,
 	//op_glookup,
 	op_store,
