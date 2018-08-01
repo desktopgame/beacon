@@ -241,7 +241,7 @@ static void slot_free(void* block, const char* fillename, int lineno) {
 }
 
 static void slot_validate(slot* self) {
-#if defined(DEBUG)
+#if defined(MEMORY_MANAGEMENT)
 	muchar_t* uarena = self->arena;
 	for(int i=0; i<BORDER_SIZE; i++) {
 		muchar_t a = (muchar_t)(uarena[i]);
