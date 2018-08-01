@@ -210,6 +210,7 @@ static void* slot_realloc(void* block, size_t newSize, const char* filename, int
 	if(newSize > oldSize) {
 		memset(utemp + BORDER_SIZE + oldSize, 0xCC, (newSize-oldSize));
 	}
+	slot_validate(loc);
 	return slot_application_area(loc);
 }
 
@@ -279,5 +280,14 @@ static void* fixed_realloc(void* block, size_t newSize) {
 	if(ret == NULL) {
 		abort();
 	}
+	#if defined(MEMORY_MANAGEMENT)
+	muchar_t* uarena = ret;
+	for(int i=0; i<BORDER_SIZE; i++) {
+		muchar_t a = (muchar_t)(uarena[i]);
+		if(a != BORDER) {
+			abort();
+		}
+	}
+	#endif
 	return ret;
 }
