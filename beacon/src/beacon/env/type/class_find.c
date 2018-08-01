@@ -96,16 +96,18 @@ bool class_contains_sfield(class_* self, field* f) {
 }
 
 bool class_accessible_field(class_* self, field* f) {
+	assert(f != NULL);
 	if(f->access == access_public) {
 		return true;
 	}
 	if(f->access == access_private) {
 		return self == TYPE2CLASS(f->parent);
 	}
-	type* ty = f->parent;
+	type* ty = self->parent;
+	class_* fcl = TYPE2CLASS(f->parent);
 	while(true) {
 		class_* c = TYPE2CLASS(ty);
-		if(self == c) {
+		if(c == fcl) {
 			return true;
 		}
 		//次へ

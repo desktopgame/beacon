@@ -1,4 +1,4 @@
-namespace err33 {
+namespace err34 {
 	class Base {
 		public:
 		Int a;
@@ -12,6 +12,6 @@ namespace err33 {
 		Int c;
 	}
 }
-var d = new err33::Base();
+var d = new err34::Base();
 printLine(d.a);
 printLine(d.c);

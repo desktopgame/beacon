@@ -53,7 +53,7 @@ void il_factor_variable_local_load(il_factor_variable_local * self, enviroment *
 				return;
 			}
 			int temp = -1;
-			field* f = class_find_field(TYPE2CLASS(tp), self->namev, &temp);
+			field* f = class_find_field_tree(TYPE2CLASS(tp), self->namev, &temp);
 			self->u.field_index = temp;
 			self->type = variable_local_field;
 			if(temp == -1) {

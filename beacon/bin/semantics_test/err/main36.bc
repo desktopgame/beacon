@@ -1,4 +1,4 @@
-namespace main58 {
+namespace err36 {
 	class Base {
 		public:
 		Int a;
@@ -19,10 +19,10 @@ namespace main58 {
 		}
 
 		def changeSub(Int a) -> Void {
-			this.c = a;
+			this.b = a;
 			printLine(c);
 		}
 	}
 }
-var d = new main58::Sub();
+var d = new err36::Sub();
 d.changeSub(15);

@@ -1,0 +1,22 @@
+namespace main57 {
+	class Base {
+		public:
+		Int a;
+
+		def new() {
+		}
+
+		def change(Int b) -> Void {
+			this.b = b;
+			printLine(this.b);
+		}
+
+		private:
+		Int b;
+
+		protected:
+		Int c;
+	}
+}
+var d = new main57::Base();
+d.change(10);

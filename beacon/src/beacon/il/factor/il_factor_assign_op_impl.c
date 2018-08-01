@@ -82,7 +82,7 @@ static void assign_to_field(il_factor* receiver, il_factor* source, string_view 
 	generic_type* gt = il_factor_eval(receiver, env, cctx);
 	class_* cls = TYPE2CLASS(gt->core_type);
 	int temp = -1;
-	class_find_field(cls, namev, &temp);
+	class_find_field_tree(cls, namev, &temp);
 	assert(temp != -1);
 	il_factor_generate(receiver, env, cctx);
 	il_factor_generate(source, env, cctx);
