@@ -209,6 +209,9 @@ static void class_loader_lazy_resolve(class_loader* self) {
 }
 
 static void class_loader_lazy_resolve_all(class_loader* self) {
+	if(bc_error_last()) {
+		return;
+	}
 	script_context* sc = script_context_get_current();
 	tree_map_each(sc->class_loader_map, class_loader_lazy_resolve_at);
 }

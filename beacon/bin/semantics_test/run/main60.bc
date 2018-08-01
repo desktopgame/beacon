@@ -1,11 +1,11 @@
-namespace main60 {
+namespace run60 {
 	class Base {
 		public:
 
 		def new() {
 		}
 
-		private:
+		public:
 		property Int a {
 			defset;
 			defget;
@@ -21,5 +21,5 @@ namespace main60 {
 		}
 	}
 }
-var d = new main60::Sub();
+var d = new run60::Sub();
 d.printA();

@@ -1,4 +1,4 @@
-namespace main60 {
+namespace err39 {
 	class Base {
 		public:
 
@@ -6,10 +6,7 @@ namespace main60 {
 		}
 
 		private:
-		property Int a {
-			defset;
-			defget;
-		}
+		Int a;
 	}
 	class Sub : Base {
 		public:
@@ -21,5 +18,5 @@ namespace main60 {
 		}
 	}
 }
-var d = new main60::Sub();
+var d = new err39::Sub();
 d.printA();
