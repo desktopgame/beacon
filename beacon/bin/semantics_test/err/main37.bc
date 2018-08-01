@@ -1,4 +1,4 @@
-namespace main59 {
+namespace err37 {
 	class Base {
 		public:
 
@@ -12,5 +12,5 @@ namespace main59 {
 		}
 	}
 }
-var d = new main59::Base();
+var d = new err37::Base();
 printLine(d.a);

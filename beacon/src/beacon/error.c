@@ -103,6 +103,9 @@ void bc_error_vthrow(bc_error_id id, va_list ap) {
 		case bcerror_can_t_access_field:
 			fmt = "can't access field: %s#%s";
 			break;
+		case bcerror_can_t_access_property:
+			fmt = "can't access property: %s#%s";
+			break;
 		default:
 			{
 				fprintf(stderr, "if shown this message, it compiler bug\n");

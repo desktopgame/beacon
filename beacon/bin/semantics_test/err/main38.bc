@@ -1,16 +1,16 @@
-namespace main59 {
+namespace err38 {
 	class Base {
 		public:
 
 		def new() {
 		}
 
-		private:
+		protected:
 		property Int a {
 			defset;
 			defget;
 		}
 	}
 }
-var d = new main59::Base();
+var d = new err38::Base();
 printLine(d.a);

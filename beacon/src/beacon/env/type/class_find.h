@@ -86,6 +86,30 @@ bool class_accessible_field(class_* self, struct field* f);
 
 
 
+
+/**
+ * クラスに指定のプロパティが含まれるなら true.
+ * @param self
+ * @param p
+ * @return
+ */
+bool class_contains_property(class_* self, struct property* p);
+
+/**
+ * クラスに指定のプロパティが含まれるなら true.
+ * @param self
+ * @param p
+ * @return
+ */
+bool class_contains_sproperty(class_* self, struct property* p);
+
+/**
+ * 指定のクラスからプロパティにアクセスできるなら true.
+ * @param self
+ * @param p
+ */
+bool class_accessible_property(class_* self, struct property* p);
+
 /**
  * 指定のプロパティが内部的に使用しているフィールドを返します.
  * @param self

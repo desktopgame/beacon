@@ -9,6 +9,7 @@
 #include "../../util/vector.h"
 
 static bool class_contains_fieldImpl(vector* fields, field* f);
+static bool class_contains_propertyImpl(vector* props, property* p);
 
 field * class_find_field(class_* self, string_view namev, int* outIndex) {
 	(*outIndex) = -1;
@@ -120,6 +121,38 @@ bool class_accessible_field(class_* self, field* f) {
 }
 
 
+
+bool class_contains_property(class_* self, property* p) {
+	return class_contains_propertyImpl(self->prop_list, p);
+}
+
+bool class_contains_sproperty(class_* self, property* p) {
+	return class_contains_propertyImpl(self->sprop_list, p);
+}
+
+bool class_accessible_property(class_* self, property* p) {
+	assert(p != NULL);
+	if(p->access == access_public) {
+		return true;
+	}
+	if(p->access == access_private) {
+		return self == TYPE2CLASS(p->parent);
+	}
+	type* ty = self->parent;
+	class_* fcl = TYPE2CLASS(p->parent);
+	while(true) {
+		class_* c = TYPE2CLASS(ty);
+		if(c == fcl) {
+			return true;
+		}
+		//次へ
+		if(c->super_class == NULL) {
+			break;
+		}
+		ty = c->super_class->core_type;
+	}
+	return false;
+}
 
 int class_get_field_by_property(class_* self, property* p) {
 	int temp = -1;
@@ -425,6 +458,16 @@ static bool class_contains_fieldImpl(vector* fields, field* f) {
 	for(int i=0; i<fields->length; i++) {
 		field* e = (field*)vector_at(fields, i);
 		if(e == f) {
+			return true;
+		}
+	}
+	return false;
+}
+
+static bool class_contains_propertyImpl(vector* props, property* p) {
+	for(int i=0; i<props->length; i++) {
+		property* e = (property*)vector_at(props, i);
+		if(e == p) {
 			return true;
 		}
 	}
