@@ -12,6 +12,7 @@ static void ast_print_tree_impl(ast* self, int depth);
 static void ast_delete_impl(ast* self);
 static void ast_list_deleter(list_item item);
 static modifier_type ast_cast_to_modifierImpl(ast * self, bool* error);
+static void ast_delete_self(vector_item item);
 
 void ast_compile_entry(ast * self) {
 	parser* p = parser_top();
@@ -436,12 +437,7 @@ static void ast_print_tree_impl(ast* self, int depth) {
 }
 
 static void ast_delete_impl(ast* self) {
-	if(self->vchildren != NULL) {
-		for (int i = 0; i < self->vchildren->length; i++) {
-			ast_delete((ast*)vector_at(self->vchildren, i));
-		}
-	}
-	vector_delete(self->vchildren, vector_deleter_null);
+	vector_delete(self->vchildren, ast_delete_self);
 	MEM_FREE(self);
 }
 
@@ -485,4 +481,9 @@ static modifier_type ast_cast_to_modifierImpl(ast * self, bool* error) {
 		(*error) = true;
 	}
 	return mt;
+}
+
+static void ast_delete_self(vector_item item) {
+	ast* e = (ast*)item;
+	ast_delete(e);
 }
