@@ -226,4 +226,17 @@ ast* ast_new_assert(ast* afact, ast* amsg);
  * @return
  */
 ast* ast_new_defer(ast* astmt);
+
+/**
+ * コルーチンの区切りを表す要素を作成します.
+ * @param afact
+ * @return
+ */
+ast* ast_new_yield_return(ast* afact);
+
+/**
+ * コルーチンの終了を表す要素を作成します.
+ * @return
+ */
+ast* ast_new_yield_break();
 #endif // !SIGNAL_AST_AST_NEW_STMT_H

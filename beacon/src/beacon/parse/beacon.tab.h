@@ -124,31 +124,32 @@
      ARROW = 333,
      NAMESPACE = 334,
      RETURN = 335,
-     IF = 336,
-     ELIF = 337,
-     ELSE = 338,
-     WHILE = 339,
-     BREAK = 340,
-     CONTINUE = 341,
-     TRY = 342,
-     CATCH = 343,
-     THROW = 344,
-     ASSERT_T = 345,
-     DEFER = 346,
-     INSTANCEOF = 347,
-     OPERATOR = 348,
-     BOUNDS_EXTENDS = 349,
-     BOUNDS_SUPER = 350,
-     PRE_DEC = 351,
-     PRE_INC = 352,
-     QUOTE = 353,
-     POST_DEC = 354,
-     POST_INC = 355,
-     FUNCCALL = 356,
-     REF = 357,
-     POSITIVE = 358,
-     NEGATIVE = 359,
-     FORM_TYPE = 360
+     YIELD = 336,
+     IF = 337,
+     ELIF = 338,
+     ELSE = 339,
+     WHILE = 340,
+     BREAK = 341,
+     CONTINUE = 342,
+     TRY = 343,
+     CATCH = 344,
+     THROW = 345,
+     ASSERT_T = 346,
+     DEFER = 347,
+     INSTANCEOF = 348,
+     OPERATOR = 349,
+     BOUNDS_EXTENDS = 350,
+     BOUNDS_SUPER = 351,
+     PRE_DEC = 352,
+     PRE_INC = 353,
+     QUOTE = 354,
+     POST_DEC = 355,
+     POST_INC = 356,
+     FUNCCALL = 357,
+     REF = 358,
+     POSITIVE = 359,
+     NEGATIVE = 360,
+     FORM_TYPE = 361
    };
 #endif
 /* Tokens.  */
@@ -230,31 +231,32 @@
 #define ARROW 333
 #define NAMESPACE 334
 #define RETURN 335
-#define IF 336
-#define ELIF 337
-#define ELSE 338
-#define WHILE 339
-#define BREAK 340
-#define CONTINUE 341
-#define TRY 342
-#define CATCH 343
-#define THROW 344
-#define ASSERT_T 345
-#define DEFER 346
-#define INSTANCEOF 347
-#define OPERATOR 348
-#define BOUNDS_EXTENDS 349
-#define BOUNDS_SUPER 350
-#define PRE_DEC 351
-#define PRE_INC 352
-#define QUOTE 353
-#define POST_DEC 354
-#define POST_INC 355
-#define FUNCCALL 356
-#define REF 357
-#define POSITIVE 358
-#define NEGATIVE 359
-#define FORM_TYPE 360
+#define YIELD 336
+#define IF 337
+#define ELIF 338
+#define ELSE 339
+#define WHILE 340
+#define BREAK 341
+#define CONTINUE 342
+#define TRY 343
+#define CATCH 344
+#define THROW 345
+#define ASSERT_T 346
+#define DEFER 347
+#define INSTANCEOF 348
+#define OPERATOR 349
+#define BOUNDS_EXTENDS 350
+#define BOUNDS_SUPER 351
+#define PRE_DEC 352
+#define PRE_INC 353
+#define QUOTE 354
+#define POST_DEC 355
+#define POST_INC 356
+#define FUNCCALL 357
+#define REF 358
+#define POSITIVE 359
+#define NEGATIVE 360
+#define FORM_TYPE 361
 
 
 
@@ -271,7 +273,7 @@ typedef union YYSTYPE
 	access_level access_level_value;
 }
 /* Line 1529 of yacc.c.  */
-#line 268 "beacon.tab.h"
+#line 270 "beacon.tab.h"
 	YYSTYPE;
 # define yystype YYSTYPE /* obsolescent; will be withdrawn */
 # define YYSTYPE_IS_DECLARED 1

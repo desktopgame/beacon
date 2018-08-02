@@ -246,6 +246,7 @@ static void update_loc() {
 <INITIAL>"static"			{ return (STATIC); }
 <INITIAL>"native"			{ return (NATIVE); }
 <INITIAL>"return"			{ return (RETURN); }
+<INITIAL>"yield"			{ return (YIELD); }
 
 <INITIAL>"def"				{ return (DEF); }
 <INITIAL>"operator"			{ return (OPERATOR); }

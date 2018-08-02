@@ -49,7 +49,7 @@
 		THIS_TOK SUPER_TOK TRUE_TOK FALSE_TOK NULL_TOK AS
 
 		ABSTRACT OVERRIDE INTERFACE CLASS ENUM PUBLIC PRIVATE PROTECTED STATIC NATIVE NEW
-		DEF ARROW NAMESPACE RETURN
+		DEF ARROW NAMESPACE RETURN YIELD
 		IF ELIF ELSE WHILE BREAK CONTINUE TRY CATCH THROW
 		ASSERT_T DEFER INSTANCEOF OPERATOR
 		BOUNDS_EXTENDS BOUNDS_SUPER
@@ -118,6 +118,8 @@
 						catch_stmt
 						assert_stmt
 						defer_stmt
+						yield_return_stmt
+						yield_break_stmt
 						scope
 						scope_optional
 %right ASSIGN ADD_ASSIGN SUB_ASSIGN MUL_ASSIGN DIV_ASSIGN MOD_ASSIGN AND_ASSIGN OR_ASSIGN LSHIFT_ASSIGN RSHIFT_ASSIGN EXC_OR_ASSIGN PRE_INC PRE_DEC
@@ -1029,6 +1031,8 @@ stmt
 	| try_stmt
 	| assert_stmt
 	| defer_stmt
+	| yield_return_stmt
+	| yield_break_stmt
 	;
 variable_decl_stmt
 	: typename_T IDENT SEMI
@@ -1132,11 +1136,11 @@ catch_stmt
 	}
 	;
 assert_stmt
-	: ASSERT_T expression COLON expression SEMI
+	: ASSERT_T expression COLON expression stmt_term
 	{
 		$$ = ast_new_assert($2, $4);
 	}
-	| ASSERT_T expression SEMI
+	| ASSERT_T expression stmt_term
 	{
 		$$ = ast_new_assert($2, ast_new_blank());
 	}
@@ -1147,7 +1151,18 @@ defer_stmt
 		$$ = ast_new_defer($2);
 	}
 	;
-
+yield_return_stmt
+	: YIELD RETURN expression stmt_term
+	{
+		$$ = ast_new_yield_return($3);
+	}
+	;
+yield_break_stmt
+	: YIELD BREAK stmt_term
+	{
+		$$ = ast_new_yield_break();
+	}
+	;
 scope
 	: LCB stmt_list RCB
 	{

@@ -154,6 +154,8 @@ typedef enum ast_tag {
 	ast_while,
 	ast_break,
 	ast_continue,
+	ast_yield_return,
+	ast_yield_break,
 	//
 	//call(); 
 	//a.invoke();

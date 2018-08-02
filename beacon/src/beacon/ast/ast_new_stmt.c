@@ -188,3 +188,13 @@ ast* ast_new_defer(ast* astmt) {
 	ast_push(ret, astmt);
 	return ret;
 }
+
+ast* ast_new_yield_return(ast* afact) {
+	ast* ret = ast_new(ast_yield_return);
+	ast_push(ret, afact);
+	return ret;
+}
+
+ast* ast_new_yield_break() {
+	return ast_new(ast_yield_break);
+}
