@@ -98,6 +98,13 @@ string_view method_mangle(method* self);
 string_view method_unique(method* self);
 
 /**
+ * メソッドがコルーチンとして機能できるなら true.
+ * @param self
+ * @return
+ */
+bool method_coroutine(method* self);
+
+/**
  * @param abstract
  * @param concrete
  * @return

@@ -172,6 +172,11 @@ string_view method_unique(method* self) {
 	return sv;
 }
 
+bool method_coroutine(method* self) {
+	type* iteratorT = namespace_get_type(namespace_lang(), string_pool_intern("Iterator"));
+	return (iteratorT && self->return_gtype->core_type == iteratorT);
+}
+
 generic_type* method_diff(method* abstract, method* concrete) {
 	type* abstractT = abstract->parent;
 	type* implT = concrete->parent;
