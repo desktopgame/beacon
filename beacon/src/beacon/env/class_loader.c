@@ -77,9 +77,13 @@ class_loader* class_loader_new(content_type type) {
 }
 
 class_loader * class_loader_new_entry_point_from_file(const char * filename) {
-	char* text = io_read_text(filename);
-	class_loader* ret = class_loader_new_entry_point_from_source(text, filename);
-	MEM_FREE(text);
+//	char* text = io_read_text(filename);
+//	class_loader* ret = class_loader_new_entry_point_from_source(text, filename);
+//	MEM_FREE(text);
+	parser* p = parser_parse_from_file(filename);
+	class_loader* ret = class_loader_new_entry_point_from_parser(p);
+	parser_pop();
+	ret->filename = text_strdup(filename);
 	return ret;
 }
 
