@@ -163,6 +163,19 @@ void namespace_unlink(namespace_ * self) {
 	numeric_map_each(self->type_map, namespace_unlink_type);
 }
 
+string_view namespace_tostr(namespace_* self) {
+	if(self->parent == NULL) {
+		return self->namev;
+	}
+	return string_pool_concat(
+		string_pool_ref2str(string_pool_concat(
+			string_pool_ref2str(namespace_tostr(self->parent)),
+			string_pool_intern("::")
+		)),
+		self->namev
+	);
+}
+
 void namespace_delete(namespace_ * self) {
 	numeric_map_delete(self->namespace_map, namespace_delete_namespace);
 	numeric_map_delete(self->type_map, namespace_delete_type);

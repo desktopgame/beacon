@@ -180,6 +180,13 @@ struct type* namespace_null_type();
 void namespace_unlink(namespace_* self);
 
 /**
+ * 名前空間を完全な文字列として返します.
+ * @param self
+ * @return
+ */
+string_view namespace_tostr(namespace_* self);
+
+/**
  * 名前空間を開放します.
  * @param self
  */
