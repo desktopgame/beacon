@@ -91,6 +91,13 @@ void method_delete(method* self);
 string_view method_mangle(method* self);
 
 /**
+ * 型の完全名とマングル表現を連結して返します.
+ * @param self
+ * @return
+ */
+string_view method_unique(method* self);
+
+/**
  * @param abstract
  * @param concrete
  * @return

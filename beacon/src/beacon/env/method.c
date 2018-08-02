@@ -162,6 +162,16 @@ string_view method_mangle(method* self) {
 	return sv;
 }
 
+string_view method_unique(method* self) {
+	string_buffer* ret = string_buffer_new();
+	string_buffer_appends(ret, string_pool_ref2str(type_full_name(self->parent)));
+	string_buffer_appends(ret, string_pool_ref2str(method_mangle(self)));
+	char* raw = string_buffer_release(ret);
+	string_view sv = string_pool_intern(raw);
+	MEM_FREE(raw);
+	return sv;
+}
+
 generic_type* method_diff(method* abstract, method* concrete) {
 	type* abstractT = abstract->parent;
 	type* implT = concrete->parent;
