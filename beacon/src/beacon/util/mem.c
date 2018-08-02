@@ -180,6 +180,7 @@ static void slot_append(slot* arg) {
 	if(arg->index == gBreak) {
 		abort();
 	}
+	slot_validate_all();
 }
 
 static slot* slot_tail() {
@@ -221,7 +222,7 @@ static void* slot_realloc(void* block, size_t newSize, const char* filename, int
 	if(newSize > oldSize) {
 		memset(utemp + BORDER_SIZE + oldSize, 0xCC, (newSize-oldSize));
 	}
-	slot_validate(loc);
+	slot_validate_all();
 	return slot_application_area(loc);
 }
 

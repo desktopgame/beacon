@@ -9,7 +9,7 @@ typedef unsigned char muchar_t;
 
 #if defined(DEBUG)
 #define MEMORY_MANAGEMENT (1)
-//#define FREE_FREEZE (1)
+#define FREE_FREEZE (1)
 #endif
 
 #define MEM_MALLOC(size) (mem_malloc(size, __FILE__, __LINE__))
