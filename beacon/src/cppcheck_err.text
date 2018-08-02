@@ -1,0 +1,344 @@
+[beacon/ast/ast.c:35]: (style) Unsigned variable '.' can't be negative so it is unnecessary to test it.
+[beacon/env/cll/class_loader_bcload_impl.c:101]: (style) Variable 'ctx' is assigned a value that is never used.
+[beacon/env/cll/class_loader_bcload_impl.c:102]: (style) Variable 'iltop' is assigned a value that is never used.
+[beacon/env/cll/class_loader_bcload_impl.c:109]: (style) Variable 'ctx' is assigned a value that is never used.
+[beacon/env/cll/class_loader_bcload_impl.c:110]: (style) Variable 'iltop' is assigned a value that is never used.
+[beacon/env/cll/class_loader_bcload_impl.c:253]: (style) Variable 'inter' is assigned a value that is never used.
+[beacon/env/cll/class_loader_bcload_member_module_impl.c:605]: (style) Variable 'methodPos' is assigned a value that is never used.
+[beacon/env/cll/class_loader_bcload_member_module_impl.c:656]: (style) Variable 'methodPos' is assigned a value that is never used.
+[beacon/env/cll/class_loader_ilload_factor_module_impl.c:29]: (style) Unsigned variable '.' can't be negative so it is unnecessary to test it.
+[beacon/env/cll/class_loader_ilload_stmt_module_impl.c:28]: (style) Unsigned variable '.' can't be negative so it is unnecessary to test it.
+[beacon/env/cll/class_loader_ilload_stmt_module_impl.c:42]: (style) Unsigned variable '.' can't be negative so it is unnecessary to test it.
+[beacon/env/cll/class_loader_link_impl.c:156]: (style) Variable 'count' is modified but its new value is never used.
+[beacon/env/cll/class_loader_link_impl.c:169]: (style) Variable 'count' is modified but its new value is never used.
+[beacon/env/cll/class_loader_link_impl.c:183]: (style) Variable 'count' is modified but its new value is never used.
+[beacon/env/cll/class_loader_link_impl.c:197]: (style) Variable 'count' is modified but its new value is never used.
+[beacon/env/cll/class_loader_link_impl.c:211]: (style) Variable 'count' is modified but its new value is never used.
+[beacon/env/cll/class_loader_link_impl.c:225]: (style) Variable 'count' is modified but its new value is never used.
+[beacon/env/cll/class_loader_link_impl.c:82]: (style) Variable 'tyname' is assigned a value that is never used.
+[beacon/env/generic_type.c:246]: (style) The scope of the variable 'count' can be reduced.
+[beacon/env/generic_type.c:250]: (style) Variable 'count' is modified but its new value is never used.
+[beacon/env/heap.c:118]: (style) Variable 'sweep' is modified but its new value is never used.
+[beacon/env/import_manager.c:102]: (style) Variable 'methodname' is assigned a value that is never used.
+[beacon/env/import_manager.c:113]: (style) Variable 'typename_' is assigned a value that is never used.
+[beacon/env/object.c:255]: (style) Variable 'tp' is assigned a value that is never used.
+[beacon/env/script_context.c:135]: (style) Variable 'lang' is assigned a value that is never used.
+[beacon/env/script_context.c:136]: (style) Variable 'unsafe' is assigned a value that is never used.
+[beacon/env/script_context.c:137]: (style) Variable 'placeholder' is assigned a value that is never used.
+[beacon/env/script_context.c:276]: (style) Variable 'aa' is assigned a value that is never used.
+[beacon/env/script_context.c:293]: (style) Variable 'x' is assigned a value that is never used.
+[beacon/env/script_context.c:304]: (style) Variable 'a' is assigned a value that is never used.
+[beacon/env/type/class_find.c:319]: (style) Variable 'str' is assigned a value that is never used.
+[beacon/env/type/class_impl.c:495]: (style) Variable 'e' is assigned a value that is never used.
+[beacon/env/type/class_impl.c:547]: (style) Variable 'e' is assigned a value that is never used.
+[beacon/env/type/class_impl.c:137]: (style) Variable 'name' is assigned a value that is never used.
+[beacon/env/type/class_impl.c:454]: (style) Variable 'clname' is assigned a value that is never used.
+[beacon/env/type/meta_impl.c:19]: (style) The scope of the variable 'illegal' can be reduced.
+[beacon/env/type/meta_impl.c:58]: (style) The scope of the variable 'illegal' can be reduced.
+[beacon/env/type/meta_impl.c:95]: (style) The scope of the variable 'illegal' can be reduced.
+[beacon/env/type/meta_impl.c:47]: (style) Variable 'illegal' is assigned a value that is never used.
+[beacon/env/type/meta_impl.c:85]: (style) Variable 'illegal' is assigned a value that is never used.
+[beacon/env/type/meta_impl.c:247]: (style) Variable 'cls' is assigned a value that is never used.
+[beacon/env/type_interface.c:133]: (style) Variable 'a' is assigned a value that is never used.
+[beacon/env/type_interface.c:234]: (style) Variable 'abstractname' is assigned a value that is never used.
+[beacon/env/type_interface.c:235]: (style) Variable 'concretename' is assigned a value that is never used.
+[beacon/env/vtable.c:32]: (style) Variable 'methodname' is assigned a value that is never used.
+[beacon/il/factor/il_factor_member_op_impl.c:133]: (style) Variable 'clname' is assigned a value that is never used.
+[beacon/il/factor/il_factor_member_op_impl.c:146]: (style) Variable 'ilvarname' is assigned a value that is never used.
+[beacon/il/factor/il_factor_member_op_impl.c:167]: (style) Variable 'name' is assigned a value that is never used.
+[beacon/il/factor/il_factor_new_instance_impl.c:141]: (style) Variable 'namea' is assigned a value that is never used.
+[beacon/il/factor/invoke/il_factor_invoke_static_impl.c:129]: (style) Variable 'classname' is assigned a value that is never used.
+[beacon/il/factor/invoke/il_factor_invoke_static_impl.c:130]: (style) Variable 'methodname' is assigned a value that is never used.
+[beacon/il/stmt/il_stmt_inferenced_type_init_impl.c:45]: (style) Variable 'x' is assigned a value that is never used.
+[beacon/il/stmt/il_stmt_variable_init_impl.c:38]: (style) Variable 'ga' is assigned a value that is never used.
+[beacon/il/stmt/il_stmt_variable_init_impl.c:39]: (style) Variable 'gb' is assigned a value that is never used.
+[beacon/lib/beacon/lang/bc_exception.c:81]: (style) Variable 'stackTraceF' is assigned a value that is never used.
+[beacon/lib/beacon/lang/bc_object.c:48]: (style) Variable 'res' is assigned a value that is never used.
+[beacon/lib/beacon/lang/bc_void.c:8]: (style) Variable 'voidClass' is assigned a value that is never used.
+[beacon/parse/beacon.tab.c]: (information) Too many #ifdef configurations - cppcheck only checks 12 of 35 configurations. Use --force to check all configurations.
+[beacon.y:285]: (error) Invalid number of character '{' when no macros are defined.
+[beacon.y:285]: (error) Invalid number of character '{' when these macros are defined: 'ENABLE_NLS;YYENABLE_NLS'.
+[beacon.y:285]: (error) Invalid number of character '{' when these macros are defined: 'YYENABLE_NLS'.
+[beacon.y:285]: (error) Invalid number of character '{' when these macros are defined: 'YYERROR_VERBOSE=0'.
+[beacon.tab.c:2404]: (information) Skipping configuration 'YYLEX_PARAM' since the value of 'YYLEX_PARAM' is unknown. Use -D if you want to check it. You can use -U to skip it explicitly.
+[beacon.tab.c:522]: (information) Skipping configuration 'YYLTYPE;YYLTYPE_IS_DECLARED' since the value of 'YYLTYPE' is unknown. Use -D if you want to check it. You can use -U to skip it explicitly.
+[beacon.tab.c:1783]: (information) Skipping configuration 'YYLTYPE;YYLTYPE_IS_DECLARED' since the value of 'YYLTYPE' is unknown. Use -D if you want to check it. You can use -U to skip it explicitly.
+[beacon.tab.c:1817]: (information) Skipping configuration 'YYLTYPE;YYLTYPE_IS_DECLARED' since the value of 'YYLTYPE' is unknown. Use -D if you want to check it. You can use -U to skip it explicitly.
+[beacon.tab.c:1872]: (information) Skipping configuration 'YYLTYPE;YYLTYPE_IS_DECLARED' since the value of 'YYLTYPE' is unknown. Use -D if you want to check it. You can use -U to skip it explicitly.
+[beacon.tab.c:2153]: (information) Skipping configuration 'YYLTYPE;YYLTYPE_IS_DECLARED' since the value of 'YYLTYPE' is unknown. Use -D if you want to check it. You can use -U to skip it explicitly.
+[beacon.tab.c:2199]: (information) Skipping configuration 'YYLTYPE;YYLTYPE_IS_DECLARED' since the value of 'YYLTYPE' is unknown. Use -D if you want to check it. You can use -U to skip it explicitly.
+[beacon.tab.c:2263]: (information) Skipping configuration 'YYLTYPE;YYLTYPE_IS_DECLARED' since the value of 'YYLTYPE' is unknown. Use -D if you want to check it. You can use -U to skip it explicitly.
+[beacon.tab.c:2264]: (information) Skipping configuration 'YYLTYPE;YYLTYPE_IS_DECLARED' since the value of 'YYLTYPE' is unknown. Use -D if you want to check it. You can use -U to skip it explicitly.
+[beacon.tab.c:2265]: (information) Skipping configuration 'YYLTYPE;YYLTYPE_IS_DECLARED' since the value of 'YYLTYPE' is unknown. Use -D if you want to check it. You can use -U to skip it explicitly.
+[beacon.tab.c:2267]: (information) Skipping configuration 'YYLTYPE;YYLTYPE_IS_DECLARED' since the value of 'YYLTYPE' is unknown. Use -D if you want to check it. You can use -U to skip it explicitly.
+[beacon.tab.c:2276]: (information) Skipping configuration 'YYLTYPE;YYLTYPE_IS_DECLARED' since the value of 'YYLTYPE' is unknown. Use -D if you want to check it. You can use -U to skip it explicitly.
+[beacon.tab.c:2357]: (information) Skipping configuration 'YYLTYPE;YYLTYPE_IS_DECLARED' since the value of 'YYLTYPE' is unknown. Use -D if you want to check it. You can use -U to skip it explicitly.
+[beacon.tab.c:2214]: (information) Skipping configuration 'YYPARSE_PARAM' since the value of 'YYPARSE_PARAM' is unknown. Use -D if you want to check it. You can use -U to skip it explicitly.
+[beacon.tab.c:2215]: (information) Skipping configuration 'YYPARSE_PARAM' since the value of 'YYPARSE_PARAM' is unknown. Use -D if you want to check it. You can use -U to skip it explicitly.
+[beacon.tab.c:2176]: (information) Skipping configuration 'YYPARSE_PARAM;_MSC_VER;__C99__FUNC__;__STDC__' since the value of 'YYPARSE_PARAM' is unknown. Use -D if you want to check it. You can use -U to skip it explicitly.
+[beacon.tab.c:2211]: (information) Skipping configuration 'YYPARSE_PARAM;_MSC_VER;__C99__FUNC__;__STDC__' since the value of 'YYPARSE_PARAM' is unknown. Use -D if you want to check it. You can use -U to skip it explicitly.
+[beacon.tab.c:2176]: (information) Skipping configuration 'YYPARSE_PARAM;__STDC__' since the value of 'YYPARSE_PARAM' is unknown. Use -D if you want to check it. You can use -U to skip it explicitly.
+[beacon.tab.c:2211]: (information) Skipping configuration 'YYPARSE_PARAM;__STDC__' since the value of 'YYPARSE_PARAM' is unknown. Use -D if you want to check it. You can use -U to skip it explicitly.
+[beacon.tab.c:1791]: (information) Skipping configuration 'YYPRINT' since the value of 'YYPRINT' is unknown. Use -D if you want to check it. You can use -U to skip it explicitly.
+[beacon.tab.c:2334]: (information) Skipping configuration 'YYSTACK_USE_ALLOCA;_AIX;yyoverflow' since the value of 'yyoverflow' is unknown. Use -D if you want to check it. You can use -U to skip it explicitly.
+[beacon.tab.c:2334]: (information) Skipping configuration 'YYSTACK_USE_ALLOCA;_ALLOCA_H;_MSC_VER;_STDLIB_H;__C99__FUNC__;__STDC__;yyoverflow' since the value of 'yyoverflow' is unknown. Use -D if you want to check it. You can use -U to skip it explicitly.
+[lex.yy.c:1896]: (warning) Possible null pointer dereference: b
+[lex.yy.c:1898]: (warning) Possible null pointer dereference: b
+[lex.yy.c:2274]: (warning) Possible null pointer dereference: b
+[lex.yy.c:2275]: (warning) Possible null pointer dereference: b
+[lex.yy.c:2286]: (warning) Possible null pointer dereference: b
+[beacon.l:56]: (style) The scope of the variable 'ch' can be reduced.
+[lex.yy.c:1889]: (style) Checking if unsigned variable 'num_to_read' is less than zero.
+[lex.yy.c:1902]: (style) Checking if unsigned variable 'new_size' is less than zero.
+[lex.yy.c:966]: (information) Skipping configuration 'YY_USER_INIT' since the value of 'YY_USER_INIT' is unknown. Use -D if you want to check it. You can use -U to skip it explicitly.
+[beacon/util/io.c:58]: (style) Variable 'tmp' is assigned a value that is never used.
+[beacon/util/io.c:88]: (warning) Storing fgetc() return value in char variable and then comparing with EOF.
+[beacon/util/logger.c:24]: (style) Variable 'ret' is assigned a value that is never used.
+[beacon/util/mem.c:142]: (portability) 'self->arena' is of type 'void *'. When using void pointers in calculations, the behaviour is undefined.
+[beacon/util/text.c:129] -> [beacon/util/text.c:133]: (style) Variable 'ret' is reassigned a value before the old one has been used.
+[beacon/util/text.c:92]: (style) Variable 'res' is assigned a value that is never used.
+[beacon/util/text.c:238]: (style) Variable 'ptr' is assigned a value that is never used.
+[beacon/util/text.c:129] -> [beacon/util/text.c:131]: (style) Variable 'ret' is reassigned a value before the old one has been used.
+[beacon/vm/eval.c:93]: (style) Variable 'ctx' is assigned a value that is never used.
+[beacon/vm/opcode.c:156]: (portability) Assigning a pointer to an integer is not portable.
+[beacon/vm/opcode.c:162]: (portability) Assigning a pointer to an integer is not portable.
+[beacon/vm/opcode.c:168]: (portability) Assigning a pointer to an integer is not portable.
+[beacon/vm/opcode.c:174]: (portability) Assigning a pointer to an integer is not portable.
+[beacon/vm/symbol_table.c:32]: (style) Variable 'ret' is assigned a value that is never used.
+[beacon/env/cll/class_loader_bcload_impl.c:281]: (style) The function 'CLBC_attach_native_method' is never used.
+[beacon/env/cll/class_loader_bcload_impl.c:286]: (style) The function 'CLBC_debug_native_method' is never used.
+[beacon/env/cll/class_loader_link_impl.c:232]: (style) The function 'CLBC_yield' is never used.
+[beacon/env/cll/class_loader_ilload_type_module_impl.c:188]: (style) The function 'CLIL_type_parameter_rule' is never used.
+[beacon/ast/ast.c:17]: (style) The function 'ast_compile_entry' is never used.
+[beacon/ast/ast.c:444]: (style) The function 'ast_list_deleter' is never used.
+[beacon/ast/ast_new_stmt.c:138]: (style) The function 'ast_malloc_fqcn_part' is never used.
+[beacon/ast/ast_new_stmt.c:3]: (style) The function 'ast_malloc_stmt' is never used.
+[beacon/ast/ast_new_decl.c:32]: (style) The function 'ast_new_abstract_class_decl' is never used.
+[beacon/ast/ast_new_decl.c:68]: (style) The function 'ast_new_access_member_list' is never used.
+[beacon/ast/ast_new_decl.c:61]: (style) The function 'ast_new_access_member_tree' is never used.
+[beacon/ast/ast_new_stmt.c:116]: (style) The function 'ast_new_argument' is never used.
+[beacon/ast/ast_new_stmt.c:122]: (style) The function 'ast_new_argument_list' is never used.
+[beacon/ast/ast_new_factor.c:19]: (style) The function 'ast_new_as' is never used.
+[beacon/ast/ast_new_stmt.c:179]: (style) The function 'ast_new_assert' is never used.
+[beacon/ast/ast_new_operator.c:13]: (style) The function 'ast_new_binary' is never used.
+[beacon/ast/ast_new_stmt.c:71]: (style) The function 'ast_new_break' is never used.
+[beacon/ast/ast_new_factor.c:26]: (style) The function 'ast_new_cast' is never used.
+[beacon/ast/ast_new_stmt.c:99]: (style) The function 'ast_new_catch' is never used.
+[beacon/ast/ast_new_stmt.c:109]: (style) The function 'ast_new_catch_list' is never used.
+[beacon/ast/ast_new_decl.c:36]: (style) The function 'ast_new_class_decl' is never used.
+[beacon/ast/ast_new_decl.c:152]: (style) The function 'ast_new_constructor_chain' is never used.
+[beacon/ast/ast_new_decl.c:144]: (style) The function 'ast_new_constructor_decl' is never used.
+[beacon/ast/ast_new_stmt.c:75]: (style) The function 'ast_new_continue' is never used.
+[beacon/ast/ast_new_stmt.c:186]: (style) The function 'ast_new_defer' is never used.
+[beacon/ast/ast_new_stmt.c:57]: (style) The function 'ast_new_elif' is never used.
+[beacon/ast/ast_new_stmt.c:50]: (style) The function 'ast_new_elif_list' is never used.
+[beacon/ast/ast_new_decl.c:48]: (style) The function 'ast_new_enum_decl' is never used.
+[beacon/ast/ast_new_factor.c:117]: (style) The function 'ast_new_explicit_bioperator' is never used.
+[beacon/ast/ast_new_factor.c:125]: (style) The function 'ast_new_explicit_uoperator' is never used.
+[beacon/ast/ast_new_factor.c:11]: (style) The function 'ast_new_false' is never used.
+[beacon/ast/ast_new_factor.c:92]: (style) The function 'ast_new_field_access' is never used.
+[beacon/ast/ast_new_decl.c:108]: (style) The function 'ast_new_field_decl' is never used.
+[beacon/ast/ast_new_decl.c:266]: (style) The function 'ast_new_field_type_name' is never used.
+[beacon/ast/ast_new_stmt.c:129]: (style) The function 'ast_new_fqcn' is never used.
+[beacon/ast/ast_new_stmt.c:144]: (style) The function 'ast_new_fqcn_part_list' is never used.
+[beacon/ast/ast_new_decl.c:125]: (style) The function 'ast_new_function_decl_empty_params' is never used.
+[beacon/ast/ast.c:97]: (style) The function 'ast_new_identifier_list' is never used.
+[beacon/ast/ast_new_stmt.c:43]: (style) The function 'ast_new_if_elif_list_else' is never used.
+[beacon/ast/ast_new_stmt.c:29]: (style) The function 'ast_new_if_else' is never used.
+[beacon/ast/ast.c:64]: (style) The function 'ast_new_import_decl' is never used.
+[beacon/ast/ast.c:70]: (style) The function 'ast_new_import_decl_list' is never used.
+[beacon/ast/ast.c:56]: (style) The function 'ast_new_import_path' is never used.
+[beacon/ast/ast_new_stmt.c:170]: (style) The function 'ast_new_inferenced_type_init' is never used.
+[beacon/ast/ast_new_factor.c:110]: (style) The function 'ast_new_instanceof' is never used.
+[beacon/ast/ast_new_decl.c:40]: (style) The function 'ast_new_interface_decl' is never used.
+[beacon/ast/ast_new_factor.c:132]: (style) The function 'ast_new_lambda' is never used.
+[beacon/ast/ast_new_decl.c:95]: (style) The function 'ast_new_member_decl' is never used.
+[beacon/ast/ast_new_decl.c:101]: (style) The function 'ast_new_member_decl_list' is never used.
+[beacon/ast/ast_new_decl.c:140]: (style) The function 'ast_new_method_decl_empty_params' is never used.
+[beacon/ast/ast_new_decl.c:290]: (style) The function 'ast_new_method_return_name' is never used.
+[beacon/ast/ast_new_decl.c:89]: (style) The function 'ast_new_modifier' is never used.
+[beacon/ast/ast_new_decl.c:82]: (style) The function 'ast_new_modifier_list' is never used.
+[beacon/ast/ast_new_factor.c:57]: (style) The function 'ast_new_name_reference' is never used.
+[beacon/ast/ast_new_decl.c:25]: (style) The function 'ast_new_namespace_member_decl_list' is never used.
+[beacon/ast/ast_new_decl.c:21]: (style) The function 'ast_new_namespace_namespace_decl' is never used.
+[beacon/ast/ast.c:49]: (style) The function 'ast_new_namespace_path_list' is never used.
+[beacon/ast/ast_new_factor.c:102]: (style) The function 'ast_new_new_instance' is never used.
+[beacon/ast/ast_new_factor.c:15]: (style) The function 'ast_new_null' is never used.
+[beacon/ast/ast_new_factor.c:77]: (style) The function 'ast_new_op_call' is never used.
+[beacon/ast/ast_new_decl.c:232]: (style) The function 'ast_new_operator_overload' is never used.
+[beacon/ast/ast_new_decl.c:170]: (style) The function 'ast_new_parameter_list' is never used.
+[beacon/ast/ast_new_decl.c:296]: (style) The function 'ast_new_parameter_type_name' is never used.
+[beacon/ast/ast_new_decl.c:219]: (style) The function 'ast_new_parameterized_typename' is never used.
+[beacon/ast/ast_new_factor.c:51]: (style) The function 'ast_new_post_dec' is never used.
+[beacon/ast/ast_new_factor.c:45]: (style) The function 'ast_new_post_inc' is never used.
+[beacon/ast/ast_new_factor.c:39]: (style) The function 'ast_new_pre_dec' is never used.
+[beacon/ast/ast_new_factor.c:33]: (style) The function 'ast_new_pre_inc' is never used.
+[beacon/ast/ast.c:104]: (style) The function 'ast_new_proc' is never used.
+[beacon/ast/ast_new_decl.c:255]: (style) The function 'ast_new_prop_decl' is never used.
+[beacon/ast/ast_new_decl.c:248]: (style) The function 'ast_new_prop_get' is never used.
+[beacon/ast/ast_new_decl.c:241]: (style) The function 'ast_new_prop_set' is never used.
+[beacon/ast/ast_new_stmt.c:79]: (style) The function 'ast_new_return' is never used.
+[beacon/ast/ast.c:83]: (style) The function 'ast_new_scope_empty' is never used.
+[beacon/ast/ast_new_stmt.c:9]: (style) The function 'ast_new_stmt_list' is never used.
+[beacon/ast/ast_new_factor.c:88]: (style) The function 'ast_new_super' is never used.
+[beacon/ast/ast_new_decl.c:55]: (style) The function 'ast_new_superclass' is never used.
+[beacon/ast/ast_new_factor.c:84]: (style) The function 'ast_new_this' is never used.
+[beacon/ast/ast_new_stmt.c:86]: (style) The function 'ast_new_throw' is never used.
+[beacon/ast/ast_new_factor.c:7]: (style) The function 'ast_new_true' is never used.
+[beacon/ast/ast_new_stmt.c:92]: (style) The function 'ast_new_try' is never used.
+[beacon/ast/ast_new_decl.c:198]: (style) The function 'ast_new_type_in_parameter' is never used.
+[beacon/ast/ast_new_decl.c:205]: (style) The function 'ast_new_type_out_parameter' is never used.
+[beacon/ast/ast_new_decl.c:191]: (style) The function 'ast_new_type_parameter' is never used.
+[beacon/ast/ast_new_decl.c:212]: (style) The function 'ast_new_type_parameter_list' is never used.
+[beacon/ast/ast_new_decl.c:226]: (style) The function 'ast_new_type_parameter_rule_list' is never used.
+[beacon/ast/ast_new_decl.c:184]: (style) The function 'ast_new_typename' is never used.
+[beacon/ast/ast_new_decl.c:177]: (style) The function 'ast_new_typename_list' is never used.
+[beacon/ast/ast_new_operator.c:7]: (style) The function 'ast_new_unary' is never used.
+[beacon/ast/ast_new_factor.c:63]: (style) The function 'ast_new_variable' is never used.
+[beacon/ast/ast_new_stmt.c:151]: (style) The function 'ast_new_variable_decl' is never used.
+[beacon/ast/ast_new_factor.c:70]: (style) The function 'ast_new_variable_fromstr' is never used.
+[beacon/ast/ast_new_stmt.c:160]: (style) The function 'ast_new_variable_init' is never used.
+[beacon/ast/ast_new_stmt.c:64]: (style) The function 'ast_new_while' is never used.
+[beacon/lib/beacon/lang/bc_console.c:25]: (style) The function 'bc_console_type' is never used.
+[beacon/debug.c:5]: (style) The function 'bc_dprintf' is never used.
+[beacon/debug.c:19]: (style) The function 'bc_dprintfln' is never used.
+[beacon/lib/beacon/lang/bc_exception.c:23]: (style) The function 'bc_exception_type' is never used.
+[beacon/util/bench_mark.c:21]: (style) The function 'bench_end' is never used.
+[beacon/util/bench_mark.c:35]: (style) The function 'bench_simple' is never used.
+[beacon/util/bench_mark.c:14]: (style) The function 'bench_start' is never used.
+[beacon/il/call_context.c:29]: (style) The function 'call_context_top' is never used.
+[beacon/il/call_frame.c:4]: (style) The function 'call_frame_malloc' is never used.
+[beacon/env/type/class_find.c:91]: (style) The function 'class_contains_field' is never used.
+[beacon/env/type/class_find.c:125]: (style) The function 'class_contains_property' is never used.
+[beacon/env/type/class_find.c:95]: (style) The function 'class_contains_sfield' is never used.
+[beacon/env/type/class_find.c:129]: (style) The function 'class_contains_sproperty' is never used.
+[beacon/env/type/class_impl.c:270]: (style) The function 'class_count_methodall' is never used.
+[beacon/env/type/class_impl.c:116]: (style) The function 'class_free_fields' is never used.
+[beacon/env/type/class_impl.c:546]: (style) The function 'class_generic_type_list_delete' is never used.
+[beacon/env/type/class_impl.c:367]: (style) The function 'class_generic_type_list_to_class_list' is never used.
+[beacon/env/type/class_find.c:330]: (style) The function 'class_gfind_smethod' is never used.
+[beacon/env/type/class_impl.c:323]: (style) The function 'class_linkall' is never used.
+[beacon/env/class_loader.c:118]: (style) The function 'class_loader_rsub' is never used.
+[beacon/env/constructor.c:24]: (style) The function 'constructor_new_instance' is never used.
+[beacon/vm/enviroment.c:177]: (style) The function 'enviroment_object_delete_self' is never used.
+[beacon/vm/eval.c:124]: (style) The function 'eval_clear_ast' is never used.
+[beacon/vm/eval.c:138]: (style) The function 'eval_clear_env' is never used.
+[beacon/vm/eval.c:131]: (style) The function 'eval_clear_il' is never used.
+[beacon/vm/eval.c:78]: (style) The function 'eval_lines' is never used.
+[beacon/util/file_entry.c:5]: (style) The function 'file_entry_dup' is never used.
+[beacon/env/fqcn_cache.c:91]: (style) The function 'fqcn_class' is never used.
+[beacon/env/fqcn_cache.c:82]: (style) The function 'fqcn_interface' is never used.
+[beacon/env/generic_type.c:170]: (style) The function 'generic_type_bool' is never used.
+[beacon/env/generic_type.c:230]: (style) The function 'generic_type_compare' is never used.
+[beacon/env/generic_type.c:166]: (style) The function 'generic_type_double' is never used.
+[beacon/env/generic_type.c:362]: (style) The function 'generic_type_get' is never used.
+[beacon/env/generic_type.c:162]: (style) The function 'generic_type_int' is never used.
+[beacon/env/generic_type.c:237]: (style) The function 'generic_type_print2' is never used.
+[beacon/env/heap.c:71]: (style) The function 'heap_dump' is never used.
+[beacon/il/factor/il_factor_call_op_impl.c:224]: (style) The function 'il_factor_call_op_type_argument_delete' is never used.
+[beacon/il/factor/il_factor_as_impl.c:60]: (style) The function 'il_factor_cast_as' is never used.
+[beacon/il/factor/il_factor_bool_impl.c:46]: (style) The function 'il_factor_cast_bool' is never used.
+[beacon/il/factor/il_factor_call_op_impl.c:119]: (style) The function 'il_factor_cast_call_op' is never used.
+[beacon/il/factor/il_factor_cast_impl.c:64]: (style) The function 'il_factor_cast_cast' is never used.
+[beacon/il/factor/il_factor_char_impl.c:53]: (style) The function 'il_factor_cast_char' is never used.
+[beacon/il/factor/il_factor_dec_impl.c:72]: (style) The function 'il_factor_cast_dec' is never used.
+[beacon/il/factor/il_factor_double_impl.c:54]: (style) The function 'il_factor_cast_double' is never used.
+[beacon/il/factor/il_factor_inc_impl.c:73]: (style) The function 'il_factor_cast_inc' is never used.
+[beacon/il/factor/il_factor_int_impl.c:57]: (style) The function 'il_factor_cast_int' is never used.
+[beacon/il/factor/il_factor_new_instance_impl.c:125]: (style) The function 'il_factor_cast_new_instance' is never used.
+[beacon/il/factor/il_factor_string_impl.c:51]: (style) The function 'il_factor_cast_string' is never used.
+[beacon/il/factor/il_factor_unary_op_impl.c:146]: (style) The function 'il_factor_cast_unary_op' is never used.
+[beacon/il/stmt/il_stmt_try_impl.c:130]: (style) The function 'il_stmt_catch_generate' is never used.
+[beacon/il/stmt/il_stmt_if_impl.c:167]: (style) The function 'il_stmt_elif_list_delete' is never used.
+[beacon/il/stmt/il_stmt_if_impl.c:35]: (style) The function 'il_stmt_elif_list_new' is never used.
+[beacon/il/il_type_interface.c:34]: (style) The function 'il_type_add_constructor' is never used.
+[beacon/il/il_type_argument.c:16]: (style) The function 'il_type_argument_print' is never used.
+[beacon/il/il_type_interface.c:16]: (style) The function 'il_type_method_vec' is never used.
+[beacon/il/il_type_parameter.c:39]: (style) The function 'il_type_parameter_rule_list_delete' is never used.
+[beacon/il/il_type_interface.c:25]: (style) The function 'il_type_smethod_vec' is never used.
+[beacon/env/type/interface_impl.c:153]: (style) The function 'interface_generic_type_list_delete' is never used.
+[beacon/env/type/interface_impl.c:52]: (style) The function 'interface_gfind_method' is never used.
+[beacon/env/type/interface_impl.c:128]: (style) The function 'interface_is_functional' is never used.
+[beacon/util/io.c:20]: (style) The function 'io_new_file' is never used.
+[beacon/util/io.c:98]: (style) The function 'io_write_text' is never used.
+[beacon/vm/label.c:11]: (style) The function 'label_clone' is never used.
+[beacon/env/lambda_scope.c:12]: (style) The function 'lambda_scope_delete' is never used.
+[beacon/env/lambda_scope.c:5]: (style) The function 'lambda_scope_new' is never used.
+[beacon/util/list.c:31]: (style) The function 'list_at' is never used.
+[beacon/util/list.c:64]: (style) The function 'list_delete' is never used.
+[beacon/util/list.c:88]: (style) The function 'list_deleter_free' is never used.
+[beacon/util/list.c:92]: (style) The function 'list_deleter_null' is never used.
+[beacon/util/list.c:50]: (style) The function 'list_foreach' is never used.
+[beacon/util/logger.c:15]: (style) The function 'logger_flog' is never used.
+[beacon/util/mem.c:103]: (style) The function 'mem_break' is never used.
+[beacon/util/mem.c:116]: (style) The function 'mem_fprint' is never used.
+[beacon/env/type/meta_impl.c:198]: (style) The function 'meta_ilfind_ctor' is never used.
+[beacon/env/type/meta_impl.c:202]: (style) The function 'meta_rfind_ctor' is never used.
+[beacon/env/method.c:125]: (style) The function 'method_diff' is never used.
+[beacon/ast/modifier_type.c:4]: (style) The function 'modifier_static_native' is never used.
+[beacon/env/namespace.c:99]: (style) The function 'namespace_get_interface' is never used.
+[beacon/env/namespace.c:125]: (style) The function 'namespace_placeholder' is never used.
+[beacon/env/native_method.c:30]: (style) The function 'native_method_empty' is never used.
+[beacon/env/native_method.c:12]: (style) The function 'native_method_new' is never used.
+[beacon/util/numeric_map.c:102]: (style) The function 'numeric_map_deleter_free' is never used.
+[beacon/util/numeric_map.c:99]: (style) The function 'numeric_map_deleter_null' is never used.
+[beacon/env/object.c:315]: (style) The function 'object_char2obj' is never used.
+[beacon/env/object.c:174]: (style) The function 'object_copy_s' is never used.
+[beacon/env/object.c:307]: (style) The function 'object_double2obj' is never used.
+[beacon/env/object.c:303]: (style) The function 'object_int2obj' is never used.
+[beacon/env/object.c:293]: (style) The function 'object_obj2bool' is never used.
+[beacon/env/object.c:298]: (style) The function 'object_obj2char' is never used.
+[beacon/env/object.c:218]: (style) The function 'object_print' is never used.
+[beacon/vm/opcode_buf.c:44]: (style) The function 'opcode_buf_dump' is never used.
+[beacon/vm/opcode_buf.c:54]: (style) The function 'opcode_buf_merge' is never used.
+[beacon/parse/parser.c:105]: (style) The function 'parser_parse_from_source' is never used.
+[beacon/parse/parser.c:172]: (style) The function 'parser_set_err_hdr' is never used.
+[beacon/pcode/pcode.c:6]: (style) The function 'pcode_new' is never used.
+[beacon/pcode/pcode.c:17]: (style) The function 'pcode_print' is never used.
+[beacon/pcode/pcode.c:13]: (style) The function 'pcode_push' is never used.
+[beacon/env/script_context.c:38]: (style) The function 'script_context_add' is never used.
+[beacon/env/script_context.c:63]: (style) The function 'script_context_back' is never used.
+[beacon/env/script_context.c:86]: (style) The function 'script_context_delete' is never used.
+[beacon/env/script_context.c:180]: (style) The function 'script_context_get_bootstrap' is never used.
+[beacon/env/script_context.c:49]: (style) The function 'script_context_remove' is never used.
+[beacon/env/script_context.c:176]: (style) The function 'script_context_set_bootstrap' is never used.
+[beacon/env/script_context.c:201]: (style) The function 'script_context_static_clear' is never used.
+[beacon/thread/thread.c:32]: (style) The function 'sg_thread_clear' is never used.
+[beacon/util/stack.c:87]: (style) The function 'stack_deleter_free' is never used.
+[beacon/vm/vm.c:1027]: (style) The function 'stack_pops' is never used.
+[beacon/vm/vm.c:1002]: (style) The function 'stack_topb' is never used.
+[beacon/vm/vm.c:990]: (style) The function 'stack_topc' is never used.
+[beacon/vm/vm.c:984]: (style) The function 'stack_topd' is never used.
+[beacon/vm/vm.c:978]: (style) The function 'stack_topi' is never used.
+[beacon/vm/vm.c:996]: (style) The function 'stack_tops' is never used.
+[beacon/util/string_pool.c:73]: (style) The function 'string_pool_dump' is never used.
+[beacon/util/string_pool.c:56]: (style) The function 'string_pool_str2ref' is never used.
+[beacon/vm/symbol_table.c:41]: (style) The function 'symbol_table_dump' is never used.
+[beacon/util/system.c:8]: (style) The function 'system_abort' is never used.
+[beacon/util/system.c:4]: (style) The function 'system_exit' is never used.
+[beacon/test.c:45]: (style) The function 'test_now' is never used.
+[beacon/test.c:125]: (style) The function 'test_parse_err_hdr' is never used.
+[beacon/util/text.c:254]: (style) The function 'text_contains' is never used.
+[beacon/util/text.c:30]: (style) The function 'text_flush_trace' is never used.
+[beacon/util/text.c:26]: (style) The function 'text_is_trace' is never used.
+[beacon/util/text.c:51]: (style) The function 'text_printr' is never used.
+[beacon/util/text.c:276]: (style) The function 'text_readline' is never used.
+[beacon/util/text.c:22]: (style) The function 'text_set_trace' is never used.
+[beacon/util/text.c:325]: (style) The function 'text_strclone' is never used.
+[beacon/util/text.c:169]: (style) The function 'text_strncpy' is never used.
+[beacon/util/text.c:232]: (style) The function 'text_sum' is never used.
+[beacon/util/tree_map.c:118]: (style) The function 'tree_map_deleter_free' is never used.
+[beacon/env/type_interface.c:138]: (style) The function 'type_find_impl' is never used.
+[beacon/env/type_interface.c:83]: (style) The function 'type_ilfind_smethod' is never used.
+[beacon/env/type_parameter.c:54]: (style) The function 'type_parameter_print' is never used.
+[beacon/env/type_parameter.c:79]: (style) The function 'type_parameter_rule_list_delete' is never used.
+[beacon/env/type_interface.c:188]: (style) The function 'type_type_parameter_at' is never used.
+[beacon/env/type_interface.c:198]: (style) The function 'type_type_parameter_len' is never used.
+[beacon/util/vector.c:26]: (style) The function 'vector_append' is never used.
+[beacon/util/vector.c:137]: (style) The function 'vector_contains' is never used.
+[beacon/util/vector.c:162]: (style) The function 'vector_deleter_free' is never used.
+[beacon/util/vector.c:177]: (style) The function 'vector_each' is never used.
+[beacon/util/vector.c:50]: (style) The function 'vector_insert' is never used.
+[beacon/util/vector.c:109]: (style) The function 'vector_sub' is never used.
+[beacon/env/vtable.c:45]: (style) The function 'vtable_lookup' is never used.
+(information) Cppcheck cannot find all the include files (use --check-config for details)
