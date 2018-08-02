@@ -37,6 +37,11 @@ typedef struct slot {
 	size_t size;
 	struct slot* prev;
 	struct slot* next;
+	#if defined(FREE_FREEZE)
+	const char* free_location;
+	int free_lineno;
+	bool freed;
+	#endif
 } slot;
 
 static slot* slot_new(size_t size, const char* filename, int lineno);
@@ -46,7 +51,8 @@ static void slot_append(slot* arg);
 static slot* slot_tail();
 static void slot_cat(slot* left, slot* right);
 static void* slot_realloc(void* block, size_t newSize, const char* filename, int lineno);
-static void slot_free(void* block, const char* fillename, int lineno);
+static void slot_free(void* block, const char* filename, int lineno);
+static void slot_validate_all();
 static void slot_validate(slot* self);
 static void slot_delete(slot* self);
 
@@ -130,6 +136,11 @@ static slot* slot_new(size_t size, const char* filename, int lineno) {
 	ret->filename = filename;
 	ret->lineno = lineno;
 	ret->size = size;
+	#if defined(FREE_FREEZE)
+	ret->freed = false;
+	ret->free_location = NULL;
+	ret->free_lineno = -1;
+	#endif
 	muchar_t* uarena = ret->arena;
 	memset(uarena, 0xCC, REAL_SIZE(size));
 	memset(uarena, BORDER, BORDER_SIZE);
@@ -214,7 +225,7 @@ static void* slot_realloc(void* block, size_t newSize, const char* filename, int
 	return slot_application_area(loc);
 }
 
-static void slot_free(void* block, const char* fillename, int lineno) {
+static void slot_free(void* block, const char* filename, int lineno) {
 	//mem.h の malloc によって確保されたメモリではない
 	slot* loc = slot_find(block);
 	if(loc == NULL) {
@@ -222,6 +233,14 @@ static void slot_free(void* block, const char* fillename, int lineno) {
 		return;
 	}
 	slot_validate(loc);
+	#if defined(FREE_FREEZE)
+	loc->freed = true;
+	loc->free_lineno = lineno;
+	loc->free_location = filename;
+	muchar_t* uarena = loc->arena;
+	memset(uarena + BORDER_SIZE, BORDER, loc->size);
+	slot_validate_all();
+	#else
 	//mem.h の malloc によって確保された
 	if(loc->prev != NULL) {
 		loc->prev->next = loc->next;
@@ -239,6 +258,19 @@ static void slot_free(void* block, const char* fillename, int lineno) {
 	loc->filename = NULL;
 	free(loc->arena);
 	free(loc);
+	slot_validate_all();
+	#endif
+}
+
+static void slot_validate_all() {
+	if(gHead == NULL) {
+		return;
+	}
+	slot* iter = gHead;
+	while(iter != NULL) {
+		slot_validate(iter);
+		iter = iter->next;
+	}
 }
 
 static void slot_validate(slot* self) {
@@ -251,6 +283,16 @@ static void slot_validate(slot* self) {
 			abort();
 		}
 	}
+#if defined(FREE_FREEZE)
+	if(self->freed) {
+		for(int i=0; i<self->size; i++) {
+			muchar_t e = (muchar_t)(uarena[i + BORDER_SIZE]);
+			if(e != BORDER) {
+				abort();
+			}
+		}
+	}
+#endif
 #endif
 }
 
