@@ -59,6 +59,7 @@ void il_factor_property_dump(il_factor_property* self, int depth) {
 }
 
 void il_factor_property_delete(il_factor_property* self) {
+	il_factor_delete(self->fact);
 	MEM_FREE(self);
 }
 //private

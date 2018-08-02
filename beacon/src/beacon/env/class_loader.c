@@ -15,7 +15,6 @@
 #include "script_context.h"
 #include "../util/text.h"
 #include "../util/io.h"
-#include "../util/panic.h"
 #include "../parse/parser.h"
 #include "namespace.h"
 #include "type_impl.h"

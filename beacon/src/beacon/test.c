@@ -14,7 +14,6 @@
 #include "util/file_entry.h"
 #include "util/text.h"
 #include "util/vector.h"
-#include "util/panic.h"
 #include <stdio.h>
 #include <stdlib.h>
 #include "util/mem.h"
@@ -65,7 +64,6 @@ static void test_semanticsImpl(const char* dirname, bool require, char** outFile
 		//これから実行するファイルを記録
 		bc_error_clear();
 		filename = e->filename;
-		save(string_pool_intern(filename));
 		//標準出力を入れ替えて実行
 		fprintf(STDOUT, "[%s]\n", e->filename);
 		bool result = eval_file(e->filename);
@@ -81,7 +79,6 @@ static void test_semanticsImpl(const char* dirname, bool require, char** outFile
 		//期待していた結果でないなら終了
 		if(result != require) {
 			fail = true;
-			panic();
 			break;
 		}
 		//ここで静的領域を解放しないと、
