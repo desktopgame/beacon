@@ -17,27 +17,6 @@ string_buffer* string_buffer_malloc(const char* filename, int lineno) {
 	return ret;
 }
 
-void string_buffer_prepend(string_buffer* self, char c) {
-	if(self->length == 0) {
-		string_buffer_append(self, c);
-		return;
-	}
-	if((self->length + 1) >= self->capacity) {
-		string_buffer_reserve(self);
-	}
-	char temp = self->text[0];
-	for(int i=0; i<self->capacity; i++) {
-		if(temp == '\0') {
-			break;
-		}
-		char next = self->text[i+1];
-		self->text[i+1] = temp;
-		temp = next;
-	}
-	self->text[0] = c;
-	self->length++;
-}
-
 void string_buffer_append(string_buffer * self, char c) {
 	if (self->length >= self->capacity) {
 		string_buffer_reserve(self);
@@ -85,6 +64,7 @@ void string_buffer_appends(string_buffer * self, const char * s) {
 char* string_buffer_release(string_buffer* self) {
 	string_buffer_shrink(self);
 	char* ret = self->text;
+	self->text = NULL;
 	MEM_FREE(self);
 	return ret;
 }

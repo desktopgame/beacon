@@ -28,13 +28,6 @@ typedef struct string_buffer {
 string_buffer* string_buffer_malloc(const char* filename, int lineno);
 
 /**
- * バッファの先頭に挿入します.
- * @param self
- * @param c
- */
-void string_buffer_prepend(string_buffer* self, char c);
-
-/**
  * バッファーの最後に追記します.
  * @param self
  * @param c
