@@ -22,6 +22,7 @@ static void CLIL_catch_list(class_loader* self, vector* dest, ast* source);
 static il_stmt_throw* CLIL_throw(class_loader* self, ast* source);
 static il_stmt_assert* CLIL_assert(class_loader* self, ast* source);
 static il_stmt_defer* CLIL_defer(class_loader* self, ast* source);
+static il_stmt_yield_return* CLIL_yield_return(class_loader* self, ast* source);
 
 il_stmt* CLIL_stmt(class_loader* self, ast* source) {
 	il_stmt* ret = CLIL_bodyImpl(self, source);
@@ -134,6 +135,16 @@ static il_stmt* CLIL_bodyImpl(class_loader* self, ast* source) {
 		{
 			il_stmt_defer* ildef = CLIL_defer(self, source);
 			return il_stmt_wrap_defer(ildef);
+		}
+		case ast_yield_return:
+		{
+			return il_stmt_wrap_yield_return(CLIL_yield_return(self, source));
+		}
+		case ast_yield_break:
+		{
+			il_stmt* ret = il_stmt_new(ilstmt_yield_break);
+			ret->u.yield_break = NULL;
+			return ret;
 		}
 		default:
 			break;
@@ -287,5 +298,11 @@ static il_stmt_defer* CLIL_defer(class_loader* self, ast* source) {
 	ast* astmt = ast_first(source);
 	il_stmt_defer* ret = il_stmt_defer_new();
 	ret->stmt = CLIL_stmt(self, astmt);
+	return ret;
+}
+
+static il_stmt_yield_return* CLIL_yield_return(class_loader* self, ast* source) {
+	il_stmt_yield_return* ret = il_stmt_yield_return_new();
+	ret->fact = CLIL_factor(self, ast_first(source));
 	return ret;
 }

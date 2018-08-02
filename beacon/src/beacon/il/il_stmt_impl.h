@@ -17,4 +17,6 @@
 #include "stmt/il_stmt_throw_impl.h"
 #include "stmt/il_stmt_assert_impl.h"
 #include "stmt/il_stmt_defer_impl.h"
+#include "stmt/il_stmt_yield_return_impl.h"
+#include "stmt/il_stmt_yield_break_impl.h"
 #endif // !SIGNAL_IL_IL_STMT_IMPL_H

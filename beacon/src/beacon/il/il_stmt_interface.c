@@ -55,6 +55,12 @@ void il_stmt_dump(il_stmt * self, int depth) {
 		case ilstmt_defer:
 			il_stmt_defer_dump(self->u.defer_, depth);
 			break;
+		case ilstmt_yield_return:
+			il_stmt_yield_return_dump(self->u.yield_return, depth);
+			break;
+		case ilstmt_yield_break:
+			il_stmt_yield_break_dump(self->u.yield_break, depth);
+			break;
 		default:
 			//ERROR("ステートメントをダンプ出来ませんでした。");
 			break;
@@ -106,6 +112,12 @@ void il_stmt_generate(il_stmt * self, struct enviroment* env, call_context* cctx
 			break;
 		case ilstmt_defer:
 			il_stmt_defer_generate(self->u.defer_, env, cctx);
+			break;
+		case ilstmt_yield_return:
+			il_stmt_yield_return_generate(self->u.yield_return, env, cctx);
+			break;
+		case ilstmt_yield_break:
+			il_stmt_yield_break_generate(self->u.yield_break, env, cctx);
 			break;
 		default:
 			//ERROR("ステートメントを開放出来ませんでした。");
@@ -161,6 +173,12 @@ void il_stmt_load(il_stmt * self, enviroment* env, call_context* cctx) {
 		case ilstmt_defer:
 			il_stmt_defer_load(self->u.defer_, env, cctx);
 			break;
+		case ilstmt_yield_return:
+			il_stmt_yield_return_load(self->u.yield_return, env, cctx);
+			break;
+		case ilstmt_yield_break:
+			il_stmt_yield_break_load(self->u.yield_break, env, cctx);
+			break;
 		default:
 			//ERROR("ステートメントを開放出来ませんでした。");
 			break;
@@ -207,6 +225,12 @@ void il_stmt_delete(il_stmt * self) {
 			break;
 		case ilstmt_defer:
 			il_stmt_defer_delete(self->u.defer_);
+			break;
+		case ilstmt_yield_return:
+			il_stmt_yield_return_delete(self->u.yield_return);
+			break;
+		case ilstmt_yield_break:
+			//il_stmt_yield_break_delete(self->u.yield_break);
 			break;
 		default:
 			//ERROR("ステートメントを開放出来ませんでした。");
