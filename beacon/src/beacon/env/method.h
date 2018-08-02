@@ -84,6 +84,13 @@ int method_for_generic_index(method* self, string_view namev);
 void method_delete(method* self);
 
 /**
+ * このメソッドのマングル表現を返します.
+ * @param self
+ * @return
+ */
+string_view method_mangle(method* self);
+
+/**
  * @param abstract
  * @param concrete
  * @return

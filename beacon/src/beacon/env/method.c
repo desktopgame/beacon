@@ -3,6 +3,7 @@
 #include <stdio.h>
 #include <string.h>
 #include "../util/text.h"
+#include "../util/string_buffer.h"
 #include "type_interface.h"
 #include "parameter.h"
 #include "namespace.h"
@@ -120,6 +121,45 @@ void method_delete(method * self) {
 		native_method_delete(self->u.native_method);
 	}
 	MEM_FREE(self);
+}
+
+string_view method_mangle(method* self) {
+	string_buffer* ret = string_buffer_new();
+	string_buffer_appends(ret, string_pool_ref2str(self->namev));
+	//引数が一つもないので終了
+	if(self->parameter_list->length == 0) {
+		char* raw = string_buffer_release(ret);
+		string_view sv = string_pool_intern(raw);
+		MEM_FREE(raw);
+		return sv;
+	}
+	for(int i=0; i<self->parameter_list->length; i++) {
+		parameter* e = (parameter*)vector_at(self->parameter_list, i);
+		generic_type* gt = e->gtype;
+		string_buffer_append(ret, '_');
+		if(gt->core_type == NULL) {
+			//ジェネリックの場合は methodname_c0 のように
+			//何番目の型変数であるかを入れる
+			if(gt->tag == generic_type_tag_class) {
+				string_buffer_append(ret, 'c');
+			} else if(gt->tag == generic_type_tag_method) {
+				string_buffer_append(ret, 'm');
+			} else {
+				assert(false);
+			}
+			//数値 -> 文字
+			char buff[256];
+			memset(buff, '\0', 256);
+			sprintf(buff, "%d", gt->virtual_type_index);
+			string_buffer_appends(ret, buff);
+		} else {
+			string_buffer_appends(ret, string_pool_ref2str(type_full_name(gt->core_type)));
+		}
+	}
+	char* raw = string_buffer_release(ret);
+	string_view sv = string_pool_intern(raw);
+	MEM_FREE(raw);
+	return sv;
 }
 
 generic_type* method_diff(method* abstract, method* concrete) {
