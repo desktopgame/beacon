@@ -7,7 +7,7 @@
 
 typedef unsigned char muchar_t;
 
-#if defined(DEBUG)
+#if !defined(DEBUG)
 #define MEMORY_MANAGEMENT (1)
 #define FREE_FREEZE (1)
 #endif

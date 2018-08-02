@@ -173,6 +173,7 @@ static void il_factor_member_op_check_prop(il_factor_member_op* self, enviroment
 	factp->namev = self->namev;
 	factp->p = p;
 	factp->index = temp;
+	self->fact = NULL;
 	self->parent->type = ilfactor_property;
 	self->parent->u.prop = factp;
 	//プロパティの可視性を確認
@@ -193,6 +194,7 @@ static void il_factor_member_op_check_static_prop(il_factor_member_op* self, env
 	factp->namev = self->namev;
 	factp->p = p;
 	factp->index = temp;
+	self->fact = NULL;
 	self->parent->type = ilfactor_property;
 	self->parent->u.prop = factp;
 	//プロパティの可視性を確認

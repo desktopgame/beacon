@@ -437,7 +437,9 @@ static void ast_print_tree_impl(ast* self, int depth) {
 }
 
 static void ast_delete_impl(ast* self) {
+	ast_tag tag =self->tag;
 	vector_delete(self->vchildren, ast_delete_self);
+	self->vchildren = NULL;
 	MEM_FREE(self);
 }
 

@@ -84,7 +84,9 @@ static void test_semanticsImpl(const char* dirname, bool require, char** outFile
 			panic();
 			break;
 		}
-		//script_context_static_clear(script_context_get_current());
+		//ここで静的領域を解放しないと、
+		//enviromentの削除後も静的フィールドが定数を掴んだまま
+		script_context_static_clear(script_context_get_current());
 	}
 	(*outFileName) = text_strdup(filename);
 	(*outFail) = fail;
