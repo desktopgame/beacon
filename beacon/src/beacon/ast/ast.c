@@ -324,6 +324,8 @@ void ast_print(ast* self) {
 		case ast_stmt_try: p("try");
 		case ast_stmt_catch_list: p("catch list");
 		case ast_stmt_catch: p("catch");
+		case ast_yield_return: p("yield return");
+		case ast_yield_break: p("yield break");
 		case ast_null: p("null");
 		case ast_as: p("as");
 		case ast_type_parameter: 
