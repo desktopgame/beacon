@@ -82,6 +82,13 @@ class_ * class_new(string_view namev) {
 	return ret;
 }
 
+class_* class_new_proxy(generic_type* gt, string_view namev) {
+	assert(gt->core_type->tag == type_interface);
+	class_* ret = class_new(namev);
+	vector_push(ret->impl_list, gt);
+	return ret;
+}
+
 type* class_new_preload(string_view namev) {
 	class_* cl = class_new(namev);
 	type* tp = type_wrap_class(cl);

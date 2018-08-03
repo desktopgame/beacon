@@ -373,6 +373,33 @@ int opcode_fprint(FILE* fp, vector* source, int index) {
 			text_fprintf(fp,"invoke virtual(%d)", a->value);
 			break;
 		}
+
+		case op_coro_init:
+		{
+			int a = (int)vector_at(source, ++index);
+			text_printf("coro init(%d)", a);
+			break;
+		}
+		case op_coro_next:
+		{
+			text_printf("coro next");
+			break;
+		}
+		case op_coro_exit:
+		{
+			text_printf("coro exit");
+			break;
+		}
+		case op_coro_resume:
+		{
+			text_printf("coro resume");
+			break;
+		}
+		case op_coro_more:
+		{
+			text_printf("coro more");
+			break;
+		}
 		case op_generic_add:
 		{
 			text_fprintf(fp, "generic add");

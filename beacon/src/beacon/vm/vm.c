@@ -27,6 +27,7 @@
 #include "defer_context.h"
 #include "../env/heap.h"
 #include "../env/generic_type.h"
+#include "yield_context.h"
 //proto
 static void vm_run(frame * self, enviroment * env, int pos, int deferStart);
 static int stack_topi(frame* self);
@@ -533,6 +534,7 @@ static void vm_run(frame * self, enviroment * env, int pos, int deferStart) {
 					}
 					obj->gtype = g;
 				}
+				assert(obj->gtype != NULL);
 				break;
 			}
 			case op_new_instance:
@@ -843,6 +845,75 @@ static void vm_run(frame * self, enviroment * env, int pos, int deferStart) {
 				object* o = (object*)vector_top(self->value_stack);
 				method* m = class_get_method(o, index->value);
 				method_execute(m, self, env);
+				break;
+			}
+			case op_coro_init:
+			{
+				object* o = (object*)vector_at(self->ref_stack, 0);
+				if(o->native_slot_vec == NULL) {
+					o->native_slot_vec = vector_new();
+				}
+				yield_context* yctx = yield_context_new();
+				yctx->yield_offset = 0;
+				yctx->yield_count = 0;
+				yctx->len = (int)enviroment_source_at(env, ++IDX);
+				vector_push(o->native_slot_vec, yctx);
+				o->is_coroutine = true;
+				break;
+			}
+			case op_coro_next:
+			{
+				object* o = (object*)vector_at(self->ref_stack, 0);
+				object* ret = (object*)vector_pop(self->value_stack);
+				assert(o->is_coroutine);
+				yield_context* yctx = (yield_context*)vector_at(o->native_slot_vec, 0);
+				yctx->backup_ref_stack = vector_clone(self->ref_stack);
+				yctx->backup_value_stack = vector_clone(self->ref_stack);
+				yctx->yield_offset = IDX + 1;
+				yctx->yield_count++;
+				IDX = source_len;
+				if(yctx->vm_ref_stack != NULL) {
+					self->ref_stack = yctx->vm_ref_stack;
+					self->value_stack = yctx->vm_value_stack;
+				}
+				vector_push(self->value_stack, ret);
+				break;
+			}
+			case op_coro_exit:
+			{
+				object* o = (object*)vector_at(self->ref_stack, 0);
+				assert(o->is_coroutine);
+				yield_context* yctx = (yield_context*)vector_at(o->native_slot_vec, 0);
+				IDX = source_len;
+				yctx->yield_offset = source_len;
+				if(yctx->vm_ref_stack != NULL) {
+					self->ref_stack = yctx->vm_ref_stack;
+					self->value_stack = yctx->vm_value_stack;
+				}
+				break;
+			}
+			case op_coro_resume:
+			{
+				object* o = (object*)vector_at(self->ref_stack, 0);
+				assert(o->is_coroutine);
+				yield_context* yctx = (yield_context*)vector_at(o->native_slot_vec, 0);
+				//前回の位置が記録されているのでそこから
+				if(yctx->yield_offset != 0) {
+					IDX = yctx->yield_offset - 1;
+					yctx->vm_ref_stack = self->ref_stack;
+					yctx->vm_value_stack = self->value_stack;
+					self->ref_stack = yctx->backup_ref_stack;
+					self->value_stack = yctx->backup_value_stack;
+				}
+				break;
+			}
+			case op_coro_more:
+			{
+				object* o = (object*)vector_at(self->ref_stack, 0);
+				assert(o->is_coroutine);
+				yield_context* yctx = (yield_context*)vector_at(o->native_slot_vec, 0);
+				object* hasNext = object_bool_get(yctx->yield_offset + 1 < yctx->len);
+				vector_push(self->value_stack, hasNext);
 				break;
 			}
 			case op_generic_add:

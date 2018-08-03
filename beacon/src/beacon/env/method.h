@@ -9,6 +9,7 @@
 #include "../ast/modifier_type.h"
 #include <stdbool.h>
 struct type;
+struct interface_;
 struct frame;
 struct enviroment;
 struct call_context;
@@ -116,9 +117,10 @@ bool method_yield(method* self, vector* stmt_list, bool* error);
  * このメソッドのためのユニークなイテレータ型を作成します.
  * 戻り値が Iterator である必要があります。
  * @param self
+ * @param stmt_list
  * @return
  */
-struct type* method_create_iterator_type(method* self);
+struct type* method_create_iterator_type(method* self, vector* stmt_list);
 
 /**
  * @param abstract

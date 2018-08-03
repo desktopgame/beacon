@@ -60,6 +60,7 @@ typedef struct object {
 	object_paint paint;
 	object_tag tag;
 	vector* native_slot_vec;
+	bool is_coroutine;
 	union {
 		int int_;
 		double double_;

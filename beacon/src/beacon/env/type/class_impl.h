@@ -72,6 +72,14 @@ type* type_wrap_class(class_* self);
 class_* class_new(string_view namev);
 
 /**
+ * 指定のインターフェイスを実装するクラスを作成します.
+ * @param gt
+ * @param namev
+ * @return
+ */
+class_* class_new_proxy(struct generic_type* gt, string_view namev);
+
+/**
  * 事前に読みこまれる必要があるクラスを作成します.
  * @param namev
  */

@@ -259,6 +259,7 @@ void CLBC_methods_impl(class_loader* self, namespace_* scope, il_type* iltype, t
 		cctx->space = scope;
 		cctx->ty = tp;
 		cctx->u.mt = me;
+		//引数を保存
 		for (int i = 0; i < ilmethod->parameter_list->length; i++) {
 			il_parameter* ilparam = (il_parameter*)vector_at(ilmethod->parameter_list, i);
 			symbol_table_entry(
@@ -276,6 +277,28 @@ void CLBC_methods_impl(class_loader* self, namespace_* scope, il_type* iltype, t
 		if (!modifier_is_static(me->modifier)) {
 			opcode_buf_add(env->buf, (vector_item)op_store);
 			opcode_buf_add(env->buf, (vector_item)0);
+		}
+		//戻り値が iterator なら、
+		//コルーチンとして使えるようにする
+		bool yield_err = false;
+		if(method_yield(me, ilmethod->statement_list, &yield_err)) {
+			if(yield_err) {
+				abort();
+			}
+			//メソッド名からクラス名を作成して、
+			//beacon::$placeholderへ肩を格納する
+			type* iterT = method_create_iterator_type(me, ilmethod->statement_list);
+			for(int i=0; i<ilmethod->parameter_list->length; i++) {
+				opcode_buf_add(env->buf, op_load);
+				opcode_buf_add(env->buf, i);
+			}
+			me->u.script_method->env = env;
+			opcode_buf_add(env->buf, op_new_instance);
+			opcode_buf_add(env->buf, iterT->absolute_index);
+			opcode_buf_add(env->buf, 0);
+			opcode_buf_add(env->buf, op_return);
+			call_context_delete(cctx);
+			continue;
 		}
 		//NOTE:ここなら名前空間を設定出来る
 		CLBC_body(self, ilmethod->statement_list, env, cctx, scope);

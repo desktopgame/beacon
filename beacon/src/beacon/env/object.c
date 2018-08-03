@@ -12,10 +12,12 @@
 #include "../lib/beacon/lang/bc_array.h"
 #include "heap.h"
 #include "generic_type.h"
+#include "../vm/yield_context.h"
 
 //proto
 static object* object_mallocImpl(object_tag type, const char* filename, int lineno);
 static void object_delete_self(vector_item item);
+static void object_mark_coroutine(object* self);
 #define object_malloc(type) (object_mallocImpl(type, __FILE__, __LINE__))
 //static object* object_malloc(object_tag type);
 //static object* gObjectTrue = NULL;
@@ -205,6 +207,8 @@ void object_paintall(object* self, object_paint paint) {
 			object_paintall(e, paint);
 		}
 	}
+	//コルーチンならその中身をマークする
+	object_mark_coroutine(self);
 }
 
 void object_markall(object * self) {
@@ -333,6 +337,7 @@ object* object_default(generic_type* gt) {
 //private
 static object* object_mallocImpl(object_tag type, const char* filename, int lineno) {
 	object* ret = (object*)mem_malloc(sizeof(object), filename, lineno);
+	ret->is_coroutine = false;
 	ret->gtype = NULL;
 	ret->paint = paint_unmarked;
 	ret->tag = type;
@@ -346,4 +351,21 @@ static object* object_mallocImpl(object_tag type, const char* filename, int line
 static void object_delete_self(vector_item item) {
 	object* e = (object*)item;
 	object_destroy(e);
+}
+
+static void object_mark_coroutine(object* self) {
+	if(!self->is_coroutine) {
+		return;
+	}
+	yield_context* yctx = vector_at(self->native_slot_vec, 0);
+	if(yctx->backup_ref_stack == NULL ||
+	   yctx->backup_value_stack == NULL) {
+		   return;
+	   }
+	for(int i=0; i<yctx->backup_ref_stack->length; i++) {
+		object_markall(vector_at(yctx->backup_ref_stack, i));
+	}
+	for(int i=0; i<yctx->backup_value_stack->length; i++) {
+		object_markall(vector_at(yctx->backup_value_stack, i));
+	}
 }

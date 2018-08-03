@@ -49,6 +49,18 @@ string_view type_name(type * self) {
 	return 0;
 }
 
+string_view type_full_name(type* self) {
+	if(self == NULL) {
+		return string_pool_intern("NULL");
+	}
+	string_view namespace_str = namespace_tostr(self->location);
+	string_view self_str = type_name(self);
+	return string_pool_concat(
+		string_pool_ref2str(namespace_str),
+		string_pool_concat(".", self_str)
+	);
+}
+
 void type_add_field(type* self, field * f) {
 	assert(self->tag == type_class);
 	class_add_field(self->u.class_, f);
@@ -282,4 +294,10 @@ bool type_is_abstract(type* self) {
 		return TYPE2CLASS(self)->is_abstract;
 	}
 	return self->tag == type_interface;
+}
+
+generic_type* type_instanced(type* self, generic_type* targ) {
+	generic_type* gt = generic_type_new(self);
+	generic_type_addargs(gt, generic_type_clone(targ));
+	return gt;
 }

@@ -82,6 +82,13 @@ struct generic_type* type_init_generic(type* self, int counts);
 string_view type_name(type* self);
 
 /**
+ * この型の完全な名前を返します.
+ * @param self
+ * @return
+ */
+string_view type_full_name(type* self);
+
+/**
  * この型にフィールドを追加します.
  * @param self
  * @param f
@@ -223,4 +230,12 @@ struct interface_* type_interface_valid(type* self);
  * @return
  */
 bool type_is_abstract(type* self);
+
+/**
+ * targ を型実引数として generic_type を生成します.
+ * @param self
+ * @param targ
+ * @return
+ */
+struct generic_type* type_instanced(type* self, struct generic_type* targ);
 #endif // !SIGNAL_ENV_TYPE_INTERFACE_H
