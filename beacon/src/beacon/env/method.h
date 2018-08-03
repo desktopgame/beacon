@@ -13,6 +13,7 @@ struct interface_;
 struct frame;
 struct enviroment;
 struct call_context;
+struct class_loader;
 
 /**
  * メソッドの種類を表す列挙.
@@ -117,10 +118,11 @@ bool method_yield(method* self, vector* stmt_list, bool* error);
  * このメソッドのためのユニークなイテレータ型を作成します.
  * 戻り値が Iterator である必要があります。
  * @param self
+ * @param cll
  * @param stmt_list
  * @return
  */
-struct type* method_create_iterator_type(method* self, vector* stmt_list);
+struct type* method_create_iterator_type(method* self, struct class_loader* cll, vector* stmt_list);
 
 /**
  * @param abstract

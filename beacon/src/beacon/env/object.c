@@ -239,6 +239,11 @@ void object_print(object * self) {
 
 void object_delete(object * self) {
 	gObjectCount--;
+	if(self->is_coroutine) {
+		yield_context* yctx = vector_at(self->native_slot_vec, 0);
+		vector_remove(self->native_slot_vec, 0);
+		yield_context_delete(yctx);
+	}
 	if (self->tag == object_string) {
 		string_buffer* sb = vector_at(self->native_slot_vec, 0);
 		vector_remove(self->native_slot_vec, 0);

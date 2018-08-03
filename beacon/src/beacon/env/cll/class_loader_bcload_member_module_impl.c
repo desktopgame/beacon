@@ -287,7 +287,7 @@ void CLBC_methods_impl(class_loader* self, namespace_* scope, il_type* iltype, t
 			}
 			//メソッド名からクラス名を作成して、
 			//beacon::$placeholderへ肩を格納する
-			type* iterT = method_create_iterator_type(me, ilmethod->statement_list);
+			type* iterT = method_create_iterator_type(me, self, ilmethod->statement_list);
 			for(int i=0; i<ilmethod->parameter_list->length; i++) {
 				opcode_buf_add(env->buf, op_load);
 				opcode_buf_add(env->buf, i);

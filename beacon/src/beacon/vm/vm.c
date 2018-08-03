@@ -867,16 +867,21 @@ static void vm_run(frame * self, enviroment * env, int pos, int deferStart) {
 				object* ret = (object*)vector_pop(self->value_stack);
 				assert(o->is_coroutine);
 				yield_context* yctx = (yield_context*)vector_at(o->native_slot_vec, 0);
-				yctx->backup_ref_stack = vector_clone(self->ref_stack);
-				yctx->backup_value_stack = vector_clone(self->ref_stack);
-				yctx->yield_offset = IDX + 1;
-				yctx->yield_count++;
-				IDX = source_len;
+				//この実行コードが
+				//前回からの再開によって開始した場合、それを元に戻す
 				if(yctx->vm_ref_stack != NULL) {
 					self->ref_stack = yctx->vm_ref_stack;
 					self->value_stack = yctx->vm_value_stack;
 				}
 				vector_push(self->value_stack, ret);
+				//最初に実行された yield return に時点でコピーする
+				if(yctx->vm_ref_stack == NULL) {
+					yctx->backup_ref_stack = vector_clone(self->ref_stack);
+					yctx->backup_value_stack = vector_clone(self->value_stack);
+				}
+				yctx->yield_offset = IDX + 1;
+				yctx->yield_count++;
+				IDX = source_len;
 				break;
 			}
 			case op_coro_exit:
@@ -889,6 +894,10 @@ static void vm_run(frame * self, enviroment * env, int pos, int deferStart) {
 				if(yctx->vm_ref_stack != NULL) {
 					self->ref_stack = yctx->vm_ref_stack;
 					self->value_stack = yctx->vm_value_stack;
+				}
+				//イテレータの最後の呼び出しで戻り値を返さない場合の処理
+				if(self->value_stack->length == 0) {
+					vector_push(self->value_stack, object_get_null());
 				}
 				break;
 			}
@@ -909,6 +918,8 @@ static void vm_run(frame * self, enviroment * env, int pos, int deferStart) {
 			}
 			case op_coro_more:
 			{
+				//最後の中断位置を確認して、
+				//まだ全ての命令を実行していないなら true(まだ next を呼べる)
 				object* o = (object*)vector_at(self->ref_stack, 0);
 				assert(o->is_coroutine);
 				yield_context* yctx = (yield_context*)vector_at(o->native_slot_vec, 0);
