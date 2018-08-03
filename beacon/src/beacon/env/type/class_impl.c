@@ -85,6 +85,7 @@ class_ * class_new(string_view namev) {
 class_* class_new_proxy(generic_type* gt, string_view namev) {
 	assert(gt->core_type->tag == type_interface);
 	class_* ret = class_new(namev);
+	ret->super_class = GENERIC_OBJECT;
 	vector_push(ret->impl_list, gt);
 	return ret;
 }

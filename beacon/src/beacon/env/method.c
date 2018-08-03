@@ -369,6 +369,8 @@ static method* create_has_next(method* self, type* ty, class_loader* cll, vector
 	script_method* smt = script_method_new();
 	enviroment* envSmt = enviroment_new();
 	call_context* cctx = call_context_new(call_method_T);
+	cctx->space = self->parent->location;
+	cctx->ty = self->parent;
 	envSmt->context_ref = cll;
 
 	opcode_buf_add(envSmt->buf, (vector_item)op_store);
