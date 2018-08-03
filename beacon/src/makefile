@@ -30,7 +30,7 @@ rb : all
 #Clean
 .PHONY: clean
 clean:
-	echo "a" | cd $(OBJROOT) | rm -f *.o
+	ruby clean.rb
 
 all : $(TARGETS)
 
