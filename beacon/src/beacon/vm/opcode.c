@@ -395,9 +395,9 @@ int opcode_fprint(FILE* fp, vector* source, int index) {
 			text_printf("coro resume");
 			break;
 		}
-		case op_coro_more:
+		case op_coro_current:
 		{
-			text_printf("coro more");
+			text_printf("core current");
 			break;
 		}
 		case op_generic_add:

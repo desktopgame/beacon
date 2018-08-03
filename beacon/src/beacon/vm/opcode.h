@@ -120,7 +120,7 @@ typedef enum opcode {
 	op_coro_next,
 	op_coro_exit,
 	op_coro_resume,
-	op_coro_more,
+	op_coro_current,
 
 	op_generic_add,
 	op_generic_enter,

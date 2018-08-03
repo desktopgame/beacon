@@ -363,14 +363,5 @@ static void object_mark_coroutine(object* self) {
 		return;
 	}
 	yield_context* yctx = vector_at(self->native_slot_vec, 0);
-	if(yctx->backup_ref_stack == NULL ||
-	   yctx->backup_value_stack == NULL) {
-		   return;
-	   }
-	for(int i=0; i<yctx->backup_ref_stack->length; i++) {
-		object_markall(vector_at(yctx->backup_ref_stack, i));
-	}
-	for(int i=0; i<yctx->backup_value_stack->length; i++) {
-		object_markall(vector_at(yctx->backup_value_stack, i));
-	}
+	object_markall(yctx->stockObject);
 }

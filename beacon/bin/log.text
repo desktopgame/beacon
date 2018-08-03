@@ -142,6 +142,8 @@
 [debug]Sub@changeSub                       [beacon/env/cll/class_loader_bcload_member_module_impl.c<218>]
 [debug]Sub@printA                          [beacon/env/cll/class_loader_bcload_member_module_impl.c<218>]
 [debug]Sub@printA                          [beacon/env/cll/class_loader_bcload_member_module_impl.c<218>]
+[debug]Base@hoge                           [beacon/env/cll/class_loader_bcload_member_module_impl.c<218>]
+[debug]Base@hoge                           [beacon/env/cll/class_loader_bcload_member_module_impl.c<218>]
 [debug]MyClassA@test                       [beacon/env/cll/class_loader_bcload_member_module_impl.c<218>]
 [debug]NotIterableImplXX@iterate           [beacon/env/cll/class_loader_bcload_member_module_impl.c<218>]
 [debug]OverrideError@iterate               [beacon/env/cll/class_loader_bcload_member_module_impl.c<218>]

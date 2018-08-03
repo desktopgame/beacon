@@ -24,7 +24,7 @@ static void method_parameter_delete(vector_item item);
 static void method_type_parameter_delete(vector_item item);
 static void method_count(il_stmt* s, int* yeild_ret, int* ret);
 static constructor* create_delegate_ctor(method* self, type* ty, class_loader* cll,int op_len);
-static method* create_has_next(method* self, type* ty,class_loader* cll);
+static method* create_has_next(method* self, type* ty,class_loader* cll, vector* stmt_list, int* out_op_len);
 static method* create_next(method* self, type* ty,class_loader* cll, generic_type* a, vector* stmt_list, int* out_op_len);
 
 method* method_malloc(string_view namev, const char* filename, int lineno) {
@@ -225,7 +225,7 @@ type* method_create_iterator_type(method* self,  class_loader* cll, vector* stmt
 	type_init_generic(iterImplT, 0);
 	//イテレータのコンストラクタ追加
 	int op_len = 0;
-	class_add_method(iterImplC, create_has_next(self,  iterImplT, cll));
+	class_add_method(iterImplC, create_has_next(self,  iterImplT, cll, stmt_list, &op_len));
 	class_add_method(iterImplC, create_next(self, iterImplT, cll, vector_at(self->return_gtype->type_args_list, 0), stmt_list, &op_len));
 	class_add_constructor(iterImplC, create_delegate_ctor(self, iterImplT, cll, op_len));
 	call_context_pop(lCctx);
@@ -360,27 +360,9 @@ static constructor* create_delegate_ctor(method* self, type* ty, class_loader* c
 	return iterCons;
 }
 
-static method* create_has_next(method* self, type* ty, class_loader* cll) {
-	method* mt = method_new(string_pool_intern("hasNext"));
+static method* create_has_next(method* self, type* ty, class_loader* cll, vector* stmt_list, int* out_op_len) {
+	method* mt = method_new(string_pool_intern("moveNext"));
 	mt->return_gtype = GENERIC_BOOL;
-	mt->modifier = modifier_none;
-	mt->access = access_public;
-	mt->type = method_type_script;
-	script_method* smt = script_method_new();
-	enviroment* envSmt = enviroment_new();
-	envSmt->context_ref = cll;
-	opcode_buf_add(envSmt->buf, (vector_item)op_store);
-	opcode_buf_add(envSmt->buf, (vector_item)0);
-	opcode_buf_add(envSmt->buf, (vector_item)op_coro_more);
-	smt->env = envSmt;
-	mt->u.script_method = smt;
-	mt->parent = ty;
-	return mt;
-}
-
-static method* create_next(method* self, type* ty, class_loader* cll,generic_type* a, vector* stmt_list, int* out_op_len) {
-	method* mt = method_new(string_pool_intern("next"));
-	mt->return_gtype = a;
 	mt->modifier = modifier_none;
 	mt->access = access_public;
 	mt->type = method_type_script;
@@ -388,9 +370,7 @@ static method* create_next(method* self, type* ty, class_loader* cll,generic_typ
 	enviroment* envSmt = enviroment_new();
 	call_context* cctx = call_context_new(call_method_T);
 	envSmt->context_ref = cll;
-	cctx->space = self->parent->location;
-	cctx->ty = self->parent;
-	cctx->u.mt = self;
+
 	opcode_buf_add(envSmt->buf, (vector_item)op_store);
 	opcode_buf_add(envSmt->buf, (vector_item)0);
 	opcode_buf_add(envSmt->buf, (vector_item)op_coro_resume);
@@ -404,6 +384,32 @@ static method* create_next(method* self, type* ty, class_loader* cll,generic_typ
 	}
 	opcode_buf_add(envSmt->buf, op_coro_exit);
 	(*out_op_len) = envSmt->buf->source->length;
+	call_context_delete(cctx);
+	smt->env = envSmt;
+	mt->u.script_method = smt;
+	mt->parent = ty;
+	return mt;
+}
+
+static method* create_next(method* self, type* ty, class_loader* cll,generic_type* a, vector* stmt_list, int* out_op_len) {
+	method* mt = method_new(string_pool_intern("current"));
+	mt->return_gtype = a;
+	mt->modifier = modifier_none;
+	mt->access = access_public;
+	mt->type = method_type_script;
+	script_method* smt = script_method_new();
+	enviroment* envSmt = enviroment_new();
+	call_context* cctx = call_context_new(call_method_T);
+
+	opcode_buf_add(envSmt->buf, (vector_item)op_store);
+	opcode_buf_add(envSmt->buf, (vector_item)0);
+	opcode_buf_add(envSmt->buf, (vector_item)op_coro_current);
+
+	envSmt->context_ref = cll;
+	cctx->space = self->parent->location;
+	cctx->ty = self->parent;
+	cctx->u.mt = self;
+	
 	smt->env = envSmt;
 	mt->u.script_method = smt;
 	mt->parent = ty;
