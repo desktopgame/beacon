@@ -1,25 +1,25 @@
 namespace beacon {
 	class ExceptionChain_A {
 		public:
-		ExceptionChain_B next;
+		ExceptionChain_B current;
 		def new() {
-			this.next = new beacon::ExceptionChain_B();
+			this.current = new beacon::ExceptionChain_B();
 		}
 
 		def test() -> Void {
 			Console.writeLine("FOOO");
-			next.test();
+			current.test();
 		}
 	}
 	class ExceptionChain_B {
 		public:
-		ExceptionChain_C next;
+		ExceptionChain_C current;
 		def new() {
-			this.next = new ExceptionChain_C();
+			this.current = new ExceptionChain_C();
 		}
 
 		def test() -> Void {
-			next.test();
+			current.test();
 		}
 	}
 	class ExceptionChain_C {

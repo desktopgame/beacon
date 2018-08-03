@@ -18,6 +18,6 @@ namespace run62 {
 }
 var d = new run62::Base();
 var iter = d.hoge();
-while(iter.hasNext()) {
-	printLine(iter.next());
+while(iter.moveNext()) {
+	printLine(iter.current());
 }

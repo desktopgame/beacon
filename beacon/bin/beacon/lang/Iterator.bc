@@ -3,7 +3,7 @@ require "beacon/lang/Bool"
 namespace beacon::lang {
 	interface Iterator[T] {
 		public:
-		def hasNext() -> Bool;
-		def next() -> T;
+		def moveNext() -> Bool;
+		def current() -> T;
 	}
 }

@@ -5,8 +5,8 @@ v << 20;
 v << 30;
 //表示
 var iter = v.iterate();
-while(iter.hasNext()) {
-	var e = iter.next();
+while(iter.moveNext()) {
+	var e = iter.current();
 	Console.writeLine(e);
 }
 v.clear();
@@ -14,7 +14,7 @@ Console.writeLine("---");
 v << 5 << 6 << 7;
 //表示
 iter = v.iterate();
-while(iter.hasNext()) {
-	var e = iter.next();
+while(iter.moveNext()) {
+	var e = iter.current();
 	Console.writeLine(e);
 }

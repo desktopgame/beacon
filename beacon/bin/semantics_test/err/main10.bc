@@ -21,8 +21,8 @@ namespace beacon::x {
 
 		def static beep(Vector[Object] v) -> Void {
 			var iter = v.iterate();
-			while(iter.hasNext()) {
-				var e = iter.next();
+			while(iter.moveNext()) {
+				var e = iter.current();
 				Console.writeLine(e);
 			}
 		}

@@ -13,11 +13,11 @@ namespace signal::lang {
 			this.offset = 0;
 		}
 
-		def hasNext() -> Bool {
+		def moveNext() -> Bool {
 			return offset < source.length();
 		}
 
-		def next() -> T {
+		def current() -> T {
 			var ret = source.get(offset);
 			this.offset = offset + 1;
 			return ret;

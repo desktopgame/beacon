@@ -19,7 +19,7 @@ vec.push(20);
 vec.push(30);
 
 var iter = vec.iterate();
-while(iter.hasNext()) {
-	var ival = iter.next();
+while(iter.moveNext()) {
+	var ival = iter.current();
 	Console.writeLine(ival);
 }

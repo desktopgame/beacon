@@ -5,22 +5,24 @@ namespace beacon::lang {
 	class VectorIterator[T] : Iterator[T] {
 		private:
 		Vector[T] source;
-		Int offs;
+		Int offset;
 
 		public:
 		def new(Vector[T] source) {
 			this.source = source;
-			this.offs = 0;
+			this.offset = -1;
 		}
 
-		def hasNext() -> Bool {
-			return this.offs < source.length();
+		def moveNext() -> Bool {
+			this.offset += 1;
+			if(offset >= source.length()) {
+				return false;
+			}
+			return true;
 		}
 
-		def next() -> T {
-			T ret = source.get(offs);
-			this.offs = offs + 1;
-			return ret;
+		def current() -> T {
+			return source.get(offset);
 		}
 	}
 }

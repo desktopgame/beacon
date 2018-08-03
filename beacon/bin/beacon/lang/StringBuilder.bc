@@ -12,8 +12,8 @@ namespace beacon::lang {
 
 		def append(String s) -> StringBuilder {
 			var iter = s.iterate();
-			while(iter.hasNext()) {
-				append(iter.next());
+			while(iter.moveNext()) {
+				append(iter.current());
 			}
 			return this;
 		}

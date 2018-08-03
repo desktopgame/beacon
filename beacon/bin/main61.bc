@@ -16,6 +16,6 @@ namespace run61 {
 }
 var d = new run61::Base();
 var iter = d.hoge();
-while(iter.hasNext()) {
-	printLine(iter.next());
+while(iter.moveNext()) {
+	printLine(iter.current());
 }

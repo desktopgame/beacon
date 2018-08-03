@@ -28,7 +28,7 @@ namespace beacon::x {
 }
 var v = beacon::x::MyClassA.test[Int](10, 4);
 var iter = v.iterate();
-while(iter.hasNext()) {
-	var E = iter.next();
+while(iter.moveNext()) {
+	var E = iter.current();
 	Console.writeLine(E);
 }

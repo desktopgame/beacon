@@ -22,11 +22,11 @@ vec.push(b);
 a.push(10);
 b.push(20);
 //*
-while(iter.hasNext()) {
-	var xv = iter.next();
+while(iter.moveNext()) {
+	var xv = iter.current();
 	var viter = xv.iterate();
-	while(viter.hasNext()) {
-		var n = viter.next();
+	while(viter.moveNext()) {
+		var n = viter.current();
 		Console.writeLine(n);
 	}
 }

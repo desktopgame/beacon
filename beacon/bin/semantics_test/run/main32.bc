@@ -3,12 +3,12 @@ v.push("SSS");
 v.push("AXIS");
 v.push("XYZ");
 var iter = v.iterate();
-while(iter.hasNext()) {
-	Console.writeLine(iter.next());
+while(iter.moveNext()) {
+	Console.writeLine(iter.current());
 }
 Console.writeLine("---");
 v.remove(1);
 var iter2 = v.iterate();
-while(iter2.hasNext()) {
-	Console.writeLine(iter2.next());
+while(iter2.moveNext()) {
+	Console.writeLine(iter2.current());
 }

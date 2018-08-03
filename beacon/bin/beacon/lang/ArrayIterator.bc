@@ -10,17 +10,19 @@ namespace beacon::lang {
 		public:
 		def new(Array[T] source) {
 			this.source = source;
-			this.offset = 0;
+			this.offset = -1;
 		}
 
-		def hasNext() -> Bool {
-			return offset < source.length();
+		def moveNext() -> Bool {
+			this.offset += 1;
+			if(offset >= source.length()) {
+				return false;
+			}
+			return true;
 		}
 
-		def next() -> T {
-			var ret = source.get(offset);
-			this.offset = offset + 1;
-			return ret;
+		def current() -> T {
+			return source.get(offset);
 		}
 	}
 }
