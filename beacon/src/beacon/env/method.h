@@ -105,6 +105,22 @@ string_view method_unique(method* self);
 bool method_coroutine(method* self);
 
 /**
+ * メソッドがイールドパターンで実装されているなら true.
+ * @param self
+ * @param error
+ * @return
+ */
+bool method_yield(method* self, vector* stmt_list, bool* error);
+
+/**
+ * このメソッドのためのユニークなイテレータ型を作成します.
+ * 戻り値が Iterator である必要があります。
+ * @param self
+ * @return
+ */
+struct type* method_create_iterator_type(method* self);
+
+/**
  * @param abstract
  * @param concrete
  * @return

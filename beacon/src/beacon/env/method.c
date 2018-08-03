@@ -10,7 +10,9 @@
 #include "object.h"
 #include "../util/mem.h"
 #include "../il/call_context.h"
+#include "../il/il_stmt_impl.h"
 #include "../vm/vm.h"
+#include "type_impl.h"
 #include "type_parameter.h"
 #include "generic_type.h"
 #include <assert.h>
@@ -18,6 +20,7 @@
 //proto
 static void method_parameter_delete(vector_item item);
 static void method_type_parameter_delete(vector_item item);
+static void method_count(il_stmt* s, int* yeild_ret, int* ret);
 
 method* method_malloc(string_view namev, const char* filename, int lineno) {
 	method* ret = (method*)mem_malloc(sizeof(method), filename, lineno);
@@ -177,6 +180,46 @@ bool method_coroutine(method* self) {
 	return (iteratorT && self->return_gtype->core_type == iteratorT);
 }
 
+bool method_yield(method* self, vector* stmt_list, bool* error) {
+	(*error) = false;
+	if(self->type != method_type_script || !method_coroutine(self)) {
+		return false;
+	}
+	int yield_ret = 0;
+	int ret = 0;
+	for(int i=0; i<stmt_list->length; i++) {
+		int yrtemp = 0;
+		int rtemp = 0;
+		il_stmt* e = (il_stmt*)vector_at(stmt_list, i);
+		method_count(e, &yrtemp, &rtemp);
+		yield_ret += yrtemp;
+		ret += rtemp;
+	}
+	//yield return, return の混在
+	if(yield_ret > 0 && ret > 0) {
+		(*error) = true;
+		return true;
+	}
+	return yield_ret > 0 ? true : false;
+}
+
+type* method_create_iterator_type(method* self) {
+	call_context* lCctx = call_context_new(call_ctor_T);
+	call_frame* lCfr = call_context_push(lCctx, call_resolve_T);
+	lCfr->u.resolve.gtype = self->return_gtype;
+	string_view iterName = method_unique(self);
+	type* iterT = namespace_get_type(namespace_lang(), string_pool_intern("Iterator"));
+	generic_type* iterImplGT = generic_type_apply(self->return_gtype, lCctx);
+	class_* iterImplC = class_new_proxy(iterImplGT, iterName);
+	type* iterImplT = type_wrap_class(iterImplC);
+	namespace_add_type(namespace_placeholder(), iterImplT);
+	//text_printfln(string_pool_ref2str(type_full_name(iterImplT)));
+	//generic_type_print(iterImplGT); text_putline();
+	call_context_pop(lCctx);
+	call_context_delete(lCctx);
+	return iterImplT;
+}
+
 generic_type* method_diff(method* abstract, method* concrete) {
 	type* abstractT = abstract->parent;
 	type* implT = concrete->parent;
@@ -193,4 +236,76 @@ static void method_parameter_delete(vector_item item) {
 static void method_type_parameter_delete(vector_item item) {
 	type_parameter* e = (type_parameter*)item;
 	type_parameter_delete(e);
+}
+
+static void method_count(il_stmt* s, int* yield_ret, int* ret) {
+	switch (s->type) {
+		case ilstmt_if:
+		{
+			//if() { ... }
+			il_stmt_if* sif = s->u.if_;
+			for(int i=0; i<sif->body->length; i++) {
+				method_count((il_stmt*)vector_at(sif->body, i), yield_ret, ret);
+			}
+			for(int i=0; i<sif->elif_list->length; i++) {
+				il_stmt_elif* seif = (il_stmt_elif*)vector_at(sif->elif_list, i);
+				vector* body = seif->body;
+				for(int j=0; j<body->length; j++) {
+					method_count((il_stmt*)vector_at(body, j), yield_ret, ret);
+				}
+			}
+			for(int i=0; i<sif->else_body->body->length; i++) {
+				il_stmt* e = vector_at(sif->else_body->body, i);
+				method_count(e, yield_ret, ret);
+			}
+			break;
+		}
+		case ilstmt_proc:
+		case ilstmt_variable_decl:
+		case ilstmt_variable_init:
+		case ilstmt_return:
+			(*ret)++;
+			break;
+		case ilstmt_while:
+		{
+			il_stmt_while* whi = s->u.while_;
+			for(int i=0; i<whi->statement_list->length; i++) {
+				il_stmt* e = vector_at(whi->statement_list, i);
+				method_count(e, yield_ret, ret);
+			}
+			break;
+		}
+		case ilstmt_break:
+		case ilstmt_continue:
+		case ilstmt_inferenced_type_init:
+			break;
+		case ilstmt_try:
+		{
+			il_stmt_try* tr = s->u.try_;
+			for(int i=0; i<tr->statement_list->length; i++) {
+				il_stmt* e = (il_stmt*)vector_at(tr->statement_list, i);
+				method_count(e, yield_ret, ret);
+			}
+			vector* catches = tr->catch_list;
+			for(int i=0; i<catches->length; i++) {
+				il_stmt_catch* ce = (il_stmt_catch*)vector_at(catches, i);
+				for(int j=0; j<ce->statement_list->length; j++) {
+					il_stmt* e = (il_stmt*)vector_at(ce->statement_list, j);
+					method_count(e, yield_ret, ret);
+				}
+			}
+			break;
+		}
+		case ilstmt_throw:
+		case ilstmt_assert:
+		case ilstmt_defer:
+			break;
+		case ilstmt_yield_return:
+			(*yield_ret)++;
+			break;
+		case ilstmt_yield_break:
+		default:
+			//ERROR("ステートメントをダンプ出来ませんでした。");
+			break;
+	}
 }
