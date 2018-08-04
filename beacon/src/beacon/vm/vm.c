@@ -853,17 +853,30 @@ static void vm_run(frame * self, enviroment * env, int pos, int deferStart) {
 				if(o->native_slot_vec == NULL) {
 					o->native_slot_vec = vector_new();
 				}
+				int param_len = (int)enviroment_source_at(env, ++IDX);
+				int op_len = (int)enviroment_source_at(env, ++IDX);
 				yield_context* yctx = yield_context_new();
 				yctx->yield_offset = 0;
 				yctx->yield_count = 0;
-				yctx->len = (int)enviroment_source_at(env, ++IDX);
+				yctx->len = op_len;
+				yctx->parameter_v = vector_new();
+				//iterate(int, int) の int, int を受け取る
+				yctx->sourceObject = vector_at(self->ref_stack, 1);
+				#if defined(DEBUG)
+				const char* yname = object_name(yctx->sourceObject);
+				#endif
+				for(int i=2; i<param_len; i++) {
+					vector_push(yctx->parameter_v, vector_at(self->ref_stack, i));
+				}
+				//暗黙的に生成されるイテレータ実装クラスのコンストラクタは、
+				//必ず最後に iterate() を定義したクラスのオブジェクトを受け取る。
 				vector_push(o->native_slot_vec, yctx);
 				o->is_coroutine = true;
 				break;
 			}
 			case op_coro_next:
 			{
-				object* o = (object*)vector_at(self->ref_stack, 0);
+				object* o = self->coroutine;
 				object* ret = (object*)vector_pop(self->value_stack);
 				assert(o->is_coroutine);
 				yield_context* yctx = (yield_context*)vector_at(o->native_slot_vec, 0);
@@ -889,7 +902,7 @@ static void vm_run(frame * self, enviroment * env, int pos, int deferStart) {
 			}
 			case op_coro_exit:
 			{
-				object* o = (object*)vector_at(self->ref_stack, 0);
+				object* o = self->coroutine;
 				assert(o->is_coroutine);
 				yield_context* yctx = (yield_context*)vector_at(o->native_slot_vec, 0);
 				IDX = source_len;
@@ -903,7 +916,7 @@ static void vm_run(frame * self, enviroment * env, int pos, int deferStart) {
 			}
 			case op_coro_resume:
 			{
-				object* o = (object*)vector_at(self->ref_stack, 0);
+				object* o = self->coroutine;
 				assert(o->is_coroutine);
 				yield_context* yctx = (yield_context*)vector_at(o->native_slot_vec, 0);
 				//前回の位置が記録されているのでそこから
@@ -918,10 +931,30 @@ static void vm_run(frame * self, enviroment * env, int pos, int deferStart) {
 			}
 			case op_coro_current:
 			{
-				object* o = (object*)vector_at(self->ref_stack, 0);
+				object* o = self->coroutine;
 				assert(o->is_coroutine);
 				yield_context* yctx = (yield_context*)vector_at(o->native_slot_vec, 0);
 				vector_push(self->value_stack, yctx->stockObject);
+				break;
+			}
+			case op_coro_swap_self:
+			{
+				assert(self->coroutine == NULL);
+				object* o = (object*)vector_at(self->ref_stack, 0);
+				assert(o->is_coroutine);
+				yield_context* yctx = vector_at(o->native_slot_vec, 0);
+				#if defined(DEBUG)
+				const char* oname = object_name(o);
+				const char* yname = object_name(yctx->sourceObject);
+				#endif
+				//[0] = Array
+				//[1] = ArrayIterator
+				vector_assign(self->ref_stack, 0, yctx->sourceObject);
+				for(int i=0; i<yctx->parameter_v->length - 1; i++) {
+					object* e = vector_at(yctx->parameter_v, i);
+					vector_assign(self->ref_stack, 1 + i, e);
+				}
+				self->coroutine = o;
 				break;
 			}
 			case op_generic_add:

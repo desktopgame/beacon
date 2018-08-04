@@ -8,7 +8,8 @@ typedef struct yield_context {
 	vector* backup_value_stack;
 	vector* vm_ref_stack;
 	vector* vm_value_stack;
-	bool stock;
+	vector* parameter_v;
+	struct object* sourceObject;
 	struct object* stockObject;
 	int yield_count;
 	int yield_offset;

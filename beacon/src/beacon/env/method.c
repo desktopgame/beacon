@@ -328,15 +328,19 @@ static constructor* create_delegate_ctor(method* self, type* ty, class_loader* c
 	//イテレータのコンストラクタを作成
 	constructor* iterCons = constructor_new();
 	enviroment* envIterCons = enviroment_new();
+	//コルーチンを生成したオブジェクトを受け取るパラメータ追加
+	parameter* coroOwnerParam = parameter_new(string_pool_intern("owner"));
+	vector_push(iterCons->parameter_list, coroOwnerParam);
 	envIterCons->context_ref = cll;
+	//コルーチンに渡された引数を引き継ぐパラメータ追加
 	for(int i=0; i<self->parameter_list->length; i++) {
 		parameter* methP = (parameter*)vector_at(self->parameter_list, i);
 		parameter* consP = parameter_new(methP->namev);
 		consP->gtype = methP->gtype;
 		vector_push(iterCons->parameter_list, consP);
 	}
-	for (int i = 0; i < self->parameter_list->length; i++) {
-		parameter* e = (parameter*)vector_at(self->parameter_list, i);
+	for (int i = 0; i < iterCons->parameter_list->length; i++) {
+		parameter* e = (parameter*)vector_at(iterCons->parameter_list, i);
 		symbol_table_entry(
 			envIterCons->sym_table,
 			e->gtype,
@@ -355,6 +359,7 @@ static constructor* create_delegate_ctor(method* self, type* ty, class_loader* c
 	opcode_buf_add(envIterCons->buf, (vector_item)op_alloc_field);
 	opcode_buf_add(envIterCons->buf, (vector_item)ty->absolute_index);
 	opcode_buf_add(envIterCons->buf, op_coro_init);
+	opcode_buf_add(envIterCons->buf, self->parameter_list->length);
 	opcode_buf_add(envIterCons->buf, op_len);
 	iterCons->env = envIterCons;
 	return iterCons;
@@ -373,8 +378,18 @@ static method* create_has_next(method* self, type* ty, class_loader* cll, vector
 	cctx->ty = self->parent;
 	envSmt->context_ref = cll;
 
+	//iterate(int,int)のint,intを受け取る
+	for(int i=0; i<self->parameter_list->length; i++) {
+		parameter* e = vector_at(self->parameter_list, i);
+		symbol_table_entry(
+			envSmt->sym_table,
+			e->gtype,
+			e->namev
+		);
+	}
 	opcode_buf_add(envSmt->buf, (vector_item)op_store);
 	opcode_buf_add(envSmt->buf, (vector_item)0);
+	opcode_buf_add(envSmt->buf, (vector_item)op_coro_swap_self);
 	opcode_buf_add(envSmt->buf, (vector_item)op_coro_resume);
 	for(int i=0; i<stmt_list->length; i++) {
 		il_stmt* e = (il_stmt*)vector_at(stmt_list, i);
@@ -405,6 +420,7 @@ static method* create_next(method* self, type* ty, class_loader* cll,generic_typ
 
 	opcode_buf_add(envSmt->buf, (vector_item)op_store);
 	opcode_buf_add(envSmt->buf, (vector_item)0);
+	opcode_buf_add(envSmt->buf, (vector_item)op_coro_swap_self);
 	opcode_buf_add(envSmt->buf, (vector_item)op_coro_current);
 
 	envSmt->context_ref = cll;

@@ -339,6 +339,14 @@ object* object_default(generic_type* gt) {
 	return a;
 }
 
+const char* object_name(object* self) {
+	const char* name = "NULL";
+	if(self->gtype->core_type != NULL) {
+		name = string_pool_ref2str(type_full_name(self->gtype->core_type));
+	}
+	return name;
+}
+
 //private
 static object* object_mallocImpl(object_tag type, const char* filename, int lineno) {
 	object* ret = (object*)mem_malloc(sizeof(object), filename, lineno);
@@ -362,6 +370,11 @@ static void object_mark_coroutine(object* self) {
 	if(!self->is_coroutine) {
 		return;
 	}
+	//コルーチンの現在の値
 	yield_context* yctx = vector_at(self->native_slot_vec, 0);
 	object_markall(yctx->stockObject);
+	//コルーチンに渡された引数
+	for(int i=0; i<yctx->parameter_v->length; i++) {
+		object_markall(vector_at(yctx->parameter_v, i));
+	}
 }

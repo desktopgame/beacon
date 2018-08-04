@@ -44,6 +44,9 @@ typedef struct frame {
 	//最後にスローされた例外です.
 	struct object* exception;
 
+	//コルーチンの実装クラスオブジェクトです.
+	struct object* coroutine;
+
 	//メソッドを実行中のレシーバ型
 	struct type* receiver;
 

@@ -121,6 +121,8 @@ typedef enum opcode {
 	op_coro_exit,
 	op_coro_resume,
 	op_coro_current,
+	op_coro_parameter,
+	op_coro_swap_self,
 
 	op_generic_add,
 	op_generic_enter,

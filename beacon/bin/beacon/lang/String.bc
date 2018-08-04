@@ -39,7 +39,11 @@ namespace beacon::lang {
 		}
 
 		def iterate() -> Iterator[Char] {
-			return new ArrayIterator[Char](charArray);
+			var offset = 0;
+			while(offset < this.length()) {
+				yield return this.charAt(offset);
+				offset += 1;
+			}
 		}
 		private:
 		def native nativeInit() -> Void;

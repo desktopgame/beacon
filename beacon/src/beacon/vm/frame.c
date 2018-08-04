@@ -29,6 +29,7 @@ frame * frame_new() {
 	ret->defer_vec = NULL;
 	ret->type_args_vec = vector_new();
 	ret->receiver = NULL;
+	ret->coroutine = NULL;
 	return ret;
 }
 

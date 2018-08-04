@@ -9,7 +9,6 @@ require "beacon/lang/Null"
 require "beacon/lang/Void"
 require "beacon/lang/Console"
 require "beacon/lang/Vector"
-require "beacon/lang/VectorIterator"
 
 require "beacon/lang/Exception"
 require "beacon/lang/StackTraceElement"

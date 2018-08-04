@@ -272,4 +272,11 @@ object* object_char2obj(char c);
  * @return
  */
 object* object_default(struct generic_type* gt);
+
+/**
+ * このオブジェクトのデバッグ表現を返します.
+ * @param self
+ * @return
+ */
+const char* object_name(object* self);
 #endif // !SIGNAL_ENV_OBJECT_H

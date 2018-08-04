@@ -1,6 +1,5 @@
 require "beacon/lang/Array"
 require "beacon/lang/Exception"
-require "beacon/lang/VectorIterator"
 
 namespace beacon::lang {
 	class Vector[T] : Iterable[T] {
@@ -66,7 +65,11 @@ namespace beacon::lang {
 		}
 
 		def iterate() -> Iterator[T] {
-			return new VectorIterator[T](this);
+			var offset = 0;
+			while(offset < this.length()) {
+				yield return this.get(offset);
+				offset += 1;
+			}
 		}
 
 		def toArray() -> Array[T] {
