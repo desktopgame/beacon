@@ -13,6 +13,7 @@ yield_context* yield_context_malloc(const char* filename, int lineno) {
 	ret->stockObject = NULL;
 	ret->sourceObject = NULL;
 	ret->parameter_v = NULL;
+	ret->cached = false;
 	return ret;
 }
 

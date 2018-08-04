@@ -43,6 +43,9 @@ method* method_malloc(string_view namev, const char* filename, int lineno) {
 void method_execute(method* self, frame * fr, enviroment* env) {
 	#if defined(DEBUG)
 	const char* namestr = string_pool_ref2str(self->namev);
+	if(self->namev == string_pool_intern("writeLine")) {
+		int a = 0;
+	}
 	#endif
 	if (self->type == method_type_script) {
 		script_method_execute(self->u.script_method, self, fr, env);
@@ -359,7 +362,7 @@ static constructor* create_delegate_ctor(method* self, type* ty, class_loader* c
 	opcode_buf_add(envIterCons->buf, (vector_item)op_alloc_field);
 	opcode_buf_add(envIterCons->buf, (vector_item)ty->absolute_index);
 	opcode_buf_add(envIterCons->buf, op_coro_init);
-	opcode_buf_add(envIterCons->buf, self->parameter_list->length);
+	opcode_buf_add(envIterCons->buf, iterCons->parameter_list->length);
 	opcode_buf_add(envIterCons->buf, op_len);
 	iterCons->env = envIterCons;
 	return iterCons;
@@ -386,6 +389,10 @@ static method* create_has_next(method* self, type* ty, class_loader* cll, vector
 			e->gtype,
 			e->namev
 		);
+		//実引数を保存
+		//0番目は this のために開けておく
+		//opcode_buf_add(envSmt->buf, (vector_item)op_store);
+		//opcode_buf_add(envSmt->buf, (vector_item)(i + 1));
 	}
 	opcode_buf_add(envSmt->buf, (vector_item)op_store);
 	opcode_buf_add(envSmt->buf, (vector_item)0);
@@ -400,6 +407,9 @@ static method* create_has_next(method* self, type* ty, class_loader* cll, vector
 		il_stmt_generate(e, envSmt, cctx);
 	}
 	opcode_buf_add(envSmt->buf, op_coro_exit);
+	if(type_name(self->parent) == string_pool_intern("Base")) {
+	//	enviroment_op_dump(envSmt, 0);
+	}
 	(*out_op_len) = envSmt->buf->source->length;
 	call_context_delete(cctx);
 	smt->env = envSmt;

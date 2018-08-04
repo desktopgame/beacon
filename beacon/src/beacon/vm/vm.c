@@ -732,6 +732,7 @@ static void vm_run(frame * self, enviroment * env, int pos, int deferStart) {
 				int index = (int)enviroment_source_at(env, ++IDX);
 				vector_item e = vector_pop(self->value_stack);
 				object* o = (object*)e;
+				assert(o != NULL);
 				vector_assign(self->ref_stack, index, e);
 				//INFO("store");
 				break;
@@ -741,6 +742,7 @@ static void vm_run(frame * self, enviroment * env, int pos, int deferStart) {
 				int index = (int)enviroment_source_at(env, ++IDX);
 				vector_item e = vector_at(self->ref_stack, index);
 				object*  o = (object*)e;
+				assert(o != NULL);
 				vector_push(self->value_stack, e);
 				//INFO("load");
 				break;
@@ -865,8 +867,10 @@ static void vm_run(frame * self, enviroment * env, int pos, int deferStart) {
 				#if defined(DEBUG)
 				const char* yname = object_name(yctx->sourceObject);
 				#endif
-				for(int i=2; i<param_len; i++) {
-					vector_push(yctx->parameter_v, vector_at(self->ref_stack, i));
+				for(int i=2; i<param_len + 1; i++) {
+					object* a = vector_at(self->ref_stack, i);
+					assert(a != NULL);
+					vector_push(yctx->parameter_v, a);
 				}
 				//暗黙的に生成されるイテレータ実装クラスのコンストラクタは、
 				//必ず最後に iterate() を定義したクラスのオブジェクトを受け取る。
@@ -886,11 +890,12 @@ static void vm_run(frame * self, enviroment * env, int pos, int deferStart) {
 					self->ref_stack = yctx->vm_ref_stack;
 					self->value_stack = yctx->vm_value_stack;
 				}
+				assert(ret != NULL);
 				yctx->stockObject = ret;
 				//最初に実行された yield return に時点でコピーする
 				if(yctx->vm_ref_stack == NULL) {
 					yctx->backup_ref_stack = vector_clone(self->ref_stack);
-					yctx->backup_value_stack = vector_clone(self->value_stack);
+					yctx->backup_value_stack = vector_new();
 				}
 				yctx->yield_offset = IDX + 1;
 				yctx->yield_count++;
@@ -943,6 +948,10 @@ static void vm_run(frame * self, enviroment * env, int pos, int deferStart) {
 				object* o = (object*)vector_at(self->ref_stack, 0);
 				assert(o->is_coroutine);
 				yield_context* yctx = vector_at(o->native_slot_vec, 0);
+				if(yctx->cached) {
+					self->coroutine = o;
+					break;
+				}
 				#if defined(DEBUG)
 				const char* oname = object_name(o);
 				const char* yname = object_name(yctx->sourceObject);
@@ -950,11 +959,14 @@ static void vm_run(frame * self, enviroment * env, int pos, int deferStart) {
 				//[0] = Array
 				//[1] = ArrayIterator
 				vector_assign(self->ref_stack, 0, yctx->sourceObject);
-				for(int i=0; i<yctx->parameter_v->length - 1; i++) {
+				assert(yctx->sourceObject != NULL);
+				for(int i=0; i<yctx->parameter_v->length; i++) {
 					object* e = vector_at(yctx->parameter_v, i);
-					vector_assign(self->ref_stack, 1 + i, e);
+					assert(e != NULL);
+					vector_assign(self->ref_stack, i + 1, e);
 				}
 				self->coroutine = o;
+				yctx->cached = true;
 				break;
 			}
 			case op_generic_add:

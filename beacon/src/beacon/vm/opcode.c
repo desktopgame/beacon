@@ -400,6 +400,11 @@ int opcode_fprint(FILE* fp, vector* source, int index) {
 			text_printf("core current");
 			break;
 		}
+		case op_coro_swap_self:
+		{
+			text_printf("core swap");
+			break;
+		}
 		case op_generic_add:
 		{
 			text_fprintf(fp, "generic add");

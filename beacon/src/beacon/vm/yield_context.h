@@ -11,6 +11,7 @@ typedef struct yield_context {
 	vector* parameter_v;
 	struct object* sourceObject;
 	struct object* stockObject;
+	bool cached;
 	int yield_count;
 	int yield_offset;
 	int len;
