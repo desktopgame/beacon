@@ -19,3 +19,15 @@ void access_print(access_level level) {
 			break;
 	}
 }
+
+bool access_secure(access_level self, access_level other) {
+	int oi = (int)other;
+	int si = (int)self;
+	return oi > si;
+}
+
+bool access_weak(access_level self, access_level other) {
+	int oi = (int)other;
+	int si = (int)self;
+	return oi < si;
+}

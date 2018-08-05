@@ -10,4 +10,4 @@ namespace err42 {
 		Int mAge;
 	}
 }
-run64::Base.page = 0;
+err42::Base.page = 0;

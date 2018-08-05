@@ -1,0 +1,16 @@
+namespace err49 {
+	class Base {
+		public:
+
+		def new() {
+		}
+
+		private:
+		property Int age {
+			public defset;
+			defget;
+		}
+	}
+}
+var d = new err49::Base();
+printLine(d.age);

@@ -93,9 +93,12 @@ void CLBC_property_decl(class_loader* self, il_type* iltype, type* tp, vector* i
 		property* prop = property_new(ilprop->namev);
 		prop->access = ilprop->access;
 		prop->modifier = ilprop->modifier;
+		prop->set->access = ilprop->set->access;
+		prop->get->access = ilprop->get->access;
 		prop->parent = tp;
 		prop->gtype = import_manager_resolve(self->import_manager, scope, ilprop->fqcn, cctx);
 		prop->is_short = ilprop->set->is_short && ilprop->get->is_short;
+		   type_add_property(tp, prop);
 		if(modifier_is_abstract(prop->modifier) ||
 		   modifier_is_override(prop->modifier) ||
 		   modifier_is_native(prop->modifier)) {
@@ -103,7 +106,15 @@ void CLBC_property_decl(class_loader* self, il_type* iltype, type* tp, vector* i
 				call_context_delete(cctx);
 			   return;
 		   }
-		   type_add_property(tp, prop);
+		//プロパティアクセサの方がプロパティよりも緩いアクセスになっている
+		if(access_weak(ilprop->access, ilprop->set->access) ||
+		   access_weak(ilprop->access, ilprop->get->access)) {
+			bc_error_throw(bcerror_invalid_access_level_of_property,
+				string_pool_ref2str(type_name(tp)),
+				string_pool_ref2str(ilprop->namev)
+			);
+			break;
+		}
 	}
 	call_context_delete(cctx);
 }
