@@ -32,6 +32,11 @@ rb : all
 clean:
 	ruby clean.rb
 
+#install
+.PHONY: install
+install:
+	echo "install"
+
 all : $(TARGETS)
 
 # 依存ファイルを元に実行ファイルを作る

@@ -34,8 +34,10 @@ bool eval_il(const char* filename) {
 	class_loader* cl = class_loader_new(filename, content_entry_point);
 	class_loader_load(cl);
 
-	il_top_level* il = cl->il_code;
-	il_top_level_dump(il, 0);
+	if(!bc_error_last()) {
+		il_top_level* il = cl->il_code;
+		il_top_level_dump(il, 0);
+	}
 	class_loader_delete(cl);
 	return true;
 }
@@ -44,7 +46,9 @@ bool eval_op(const char* filename) {
 	class_loader* cl = class_loader_new(filename, content_entry_point);
 	class_loader_load(cl);
 
-	enviroment_op_dump(cl->env, 0);
+	if(!bc_error_last()) {
+		enviroment_op_dump(cl->env, 0);
+	}
 	class_loader_delete(cl);
 	return true;
 }
