@@ -4,10 +4,14 @@
 
 struct string_buffer;
 
-//NULL
+/**
+ * NULL に対応する string_view です.
+ */
 #define NULL_VIEW (0)
 
-//""
+/**
+ * 空文字に対応する string_view です.
+ */
 #define ZERO_VIEW (1)
 
 /**
