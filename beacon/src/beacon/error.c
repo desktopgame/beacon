@@ -22,6 +22,12 @@ void bc_error_vthrow(bc_error_id id, va_list ap) {
 		case bcerror_generic:
 			fmt = "%s";
 			break;
+		case bcerror_parse:
+			fmt = "parser failed --- %s";
+			break;
+		case bcerror_require_not_found:
+			fmt = "not found of required file: %s";
+			break;
 		case bcerror_undefined_class:
 			fmt = "undefined class: %s";
 			break;
@@ -48,9 +54,6 @@ void bc_error_vthrow(bc_error_id id, va_list ap) {
 			break;
 		case bcerror_not_functional_interface:
 			fmt = "not functional interface: %s";
-			break;
-		case bcerror_parse:
-			fmt = "parser failed --- %s";
 			break;
 		case bcerror_class_first:
 			fmt = "must be class first: %s";

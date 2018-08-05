@@ -19,11 +19,11 @@ static bool eval_top_from_cll(class_loader* cll);
 bool eval_ast(const char* filename) {
 	parser* p = parse_file(filename);
 	//結果を表示
-	if(!p->fail) {
+	if(p->result != parse_complete_T) {
 		ast_print_tree(p->root);
 	}
 	//パーサーを破棄
-	bool ret = p->fail;
+	bool ret = p->result != parse_complete_T;
 	parser_destroy(p);
 	return ret;
 }

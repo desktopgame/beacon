@@ -9,6 +9,16 @@
 #include <stdint.h>
 
 /**
+ * 解析の結果を表す構造体.
+ */
+typedef enum parse_result {
+	parse_await = -1,
+	parse_complete_T = 0,
+	parse_open_error_T,
+	parse_syntax_error_T
+} parse_result;
+
+/**
  * Yacc/Bisonの解析結果を保存する構造体です.
  */
 typedef struct parser {
@@ -21,7 +31,7 @@ typedef struct parser {
 	int error_line_index;
 	int error_column_index;
 	yacc_input_type input_type;
-	bool fail;
+	parse_result result;
 	int lineno;
 	vector* lineno_vec;
 } parser;

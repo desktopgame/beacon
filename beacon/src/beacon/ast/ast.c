@@ -15,10 +15,6 @@ static void ast_delete_self(vector_item item);
 
 void ast_compile_entry(ast * self) {
 	parser* p = parser_current();
-	if (p->fail) {
-		MEM_FREE(self);
-		return;
-	}
 	ast_push(p->root, self);
 }
 

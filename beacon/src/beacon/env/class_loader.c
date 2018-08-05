@@ -57,6 +57,7 @@ static class_loader* class_loader_load_specialImpl(class_loader* self, class_loa
 static void class_loader_load_toplevel(class_loader* self);
 static void class_loader_load_linkall(class_loader* self);
 static void class_loader_load_toplevel_function(class_loader* self);
+static bool check_parser_error(parser* p);
 
 class_loader* class_loader_new(const char* filename, content_type type) {
 	class_loader* ret = (class_loader*)MEM_MALLOC(sizeof(class_loader));
@@ -117,9 +118,7 @@ static void class_loader_load_impl(class_loader* self) {
 	//ASTを読み込む
 	parser* p = parse_file(self->filename);
 	//解析に失敗した場合
-	if (p->fail) {
-		bc_error_throw(bcerror_parse, p->source_name);
-		parser_destroy(p);
+	if (check_parser_error(p)) {
 		return;
 	}
 	self->source_code = parser_release_ast(p);
@@ -193,8 +192,9 @@ static class_loader* class_loader_load_specialImpl(class_loader* self, class_loa
 	cll = CLBC_import_new(self, full_path);
 	//parser
 	parser* p = parse_file(full_path);
-	assert(p->root != NULL);
-	assert(!p->fail);
+	if(check_parser_error(p)) {
+		return cll;
+	}
 	//ASTをclassloaderへ
 	cll->source_code = parser_release_ast(p);
 	parser_destroy(p);
@@ -303,4 +303,17 @@ static void class_loader_load_toplevel_function(class_loader* self) {
 		}
 		call_context_delete(cctx);
 	}
+}
+
+static bool check_parser_error(parser* p) {
+	if(p->result == parse_syntax_error_T) {
+		bc_error_throw(bcerror_parse, p->source_name);
+		parser_destroy(p);
+		return true;
+	} else if(p->result == parse_open_error_T) {
+		bc_error_throw(bcerror_require_not_found, p->source_name);
+		parser_destroy(p);
+		return true;
+	}
+	return false;
 }

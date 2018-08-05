@@ -19,7 +19,7 @@ parser* parse_string(const char* source) {
 	text_stdout_enabled(false);
 	if (yyparse()) {
 		yy_clearstr();
-		gParser->fail = true;
+		gParser->result = parse_syntax_error_T;
 		text_stdout_enabled(true);
 		parser_print_error(gParser);
 		return gParser;
@@ -39,11 +39,12 @@ parser* parse_file(const char* filename) {
 	gParser->source_name = text_strdup(filename);
 	//対象のファイルを開けなかった
 	if(!yyin) {
+		gParser->result = parse_open_error_T;
 		return gParser;
 	}
 	text_stdout_enabled(false);
 	if (yyparse()) {
-		gParser->fail = true;
+		gParser->result = parse_syntax_error_T;
 		text_stdout_enabled(true);
 		parser_print_error(gParser);
 		return gParser;
@@ -119,7 +120,7 @@ static parser* parser_new() {
 	ret->error_line_index = -1;
 	ret->error_column_index = -1;
 	ret->input_type = yinput_file;
-	ret->fail = false;
+	ret->result = parse_await;
 	ret->lineno = 0;
 	ret->literal_buffer = NULL;
 	ret->lineno_vec = vector_new();

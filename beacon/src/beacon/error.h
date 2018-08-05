@@ -8,6 +8,8 @@
 typedef enum bc_error_id {
 	bcerror_none = 0,
 	bcerror_generic,
+	bcerror_parse,
+	bcerror_require_not_found,
 	bcerror_undefined_class,
 	bcerror_undefined_variable,
 	bcerror_undefined_field,
@@ -17,7 +19,6 @@ typedef enum bc_error_id {
 	bcerror_construct_abstract_type,
 	bcerror_can_t_resolve_lambda,
 	bcerror_not_functional_interface,
-	bcerror_parse,
 	bcerror_class_first,
 	bcerror_multi_eqinterface,
 	bcerror_interface_only,

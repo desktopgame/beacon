@@ -1,0 +1,2 @@
+require "beacon_err/NotFound"
+printLine("Hello");

@@ -41,7 +41,7 @@ int yywrap(void) {
 
 int yyerror(char * err_str) {
 	parser* p = parser_current();
-	p->fail = true;
+	p->result = parse_syntax_error_T;
 	p->error_line_index = yylloc.last_line;
 	p->error_column_index = yylloc.last_column;
 	p->error_message = text_strdup(err_str);
