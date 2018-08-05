@@ -97,17 +97,16 @@ ast* parser_release_ast(parser* self) {
 }
 
 void parser_print_error(parser* p) {
-	text_printf("file=%s ", p->source_name);
-	text_printf("line=%d ", p->error_line_index);
-	text_printf("column=%d", p->error_column_index);
-	text_putline();
+	text_fprintf(stderr, "file=%s ", p->source_name);
+	text_fprintf(stderr, "line=%d ", p->error_line_index);
+	text_fprintf(stderr, "column=%d", p->error_column_index);
+	text_fprintf(stderr, "\n");
 
-	text_printf("%s", p->error_message);
-	text_putline();
+	text_fprintf(stderr, "%s", p->error_message);
+	text_fprintf(stderr, "\n");
 
-	text_printf("%s", p->error_line_text);
-	text_putline();
-	fflush(stdout);
+	text_fprintf(stderr, "%s", p->error_line_text);
+	text_fprintf(stderr, "\n");
 }
 
 //private
