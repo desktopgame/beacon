@@ -151,6 +151,10 @@ bool interface_method_parameter_valid(interface_* inter, method** out_method, st
 	return true;
 }
 
+bool interface_type_type_parameter_valid(interface_* inter, string_view* out_name) {
+	return !type_parameter_is_overwrapped_name(inter->type_parameter_list, out_name);
+}
+
 //private
 static void interface_delete_method(vector_item item) {
 	method* e = (method*)item;

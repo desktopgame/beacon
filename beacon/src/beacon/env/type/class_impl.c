@@ -475,6 +475,10 @@ bool class_ctor_parameter_valid(class_* self, constructor** out_ctor, string_vie
 	return true;
 }
 
+bool class_type_type_parameter_valid(class_* self, string_view* out_name) {
+	return !type_parameter_is_overwrapped_name(self->type_parameter_list, out_name);
+}
+
 
 //private
 static void class_create_vtable_top(class_* self) {

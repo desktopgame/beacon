@@ -51,6 +51,9 @@ static void CLBC_class_decl(class_loader * self, il_type * iltype, type * tp, na
 	if((tp->state & type_decl) > 0) {
 		return;
 	}
+	#if defined(DEBUG)
+	const char* name = string_pool_ref2str(type_name(tp));
+	#endif
 //	assert(tp->u.class_->method_list->length == 0);
 //	assert(tp->u.class_->smethod_list->length == 0);
 	CL_ERROR(self);
@@ -111,6 +114,14 @@ static void CLBC_class_decl(class_loader * self, il_type * iltype, type * tp, na
 			string_pool_ref2str(out_overwrap_cname)
 		);
 	}
+	//クラスの重複する型パラメータ名を検出する
+	string_view out_overwrap_tpname;
+	if(!class_type_type_parameter_valid(tp->u.class_, &out_overwrap_tpname)) {
+		bc_error_throw(bcerror_overwrap_type_type_parameter_name,
+			string_pool_ref2str(type_name(tp)),
+			string_pool_ref2str(out_overwrap_tpname)
+		);
+	}
 }
 
 static void CLBC_class_impl(class_loader * self, il_type * iltype, type * tp, namespace_ * scope) {
@@ -160,6 +171,14 @@ static void CLBC_interface_decl(class_loader * self, il_type * iltype, type * tp
 			string_pool_ref2str(type_name(tp)),
 			string_pool_ref2str(out_overwrap_m->namev),
 			string_pool_ref2str(out_overwrap_name)
+		);
+	}
+	//インターフェイスの重複する型パラメータ名を検出する
+	string_view out_overwrap_tpname;
+	if(!interface_type_type_parameter_valid(tp->u.interface_, &out_overwrap_tpname)) {
+		bc_error_throw(bcerror_overwrap_type_type_parameter_name,
+			string_pool_ref2str(type_name(tp)),
+			string_pool_ref2str(out_overwrap_tpname)
 		);
 	}
 }

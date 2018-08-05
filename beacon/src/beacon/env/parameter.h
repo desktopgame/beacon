@@ -28,6 +28,7 @@ void parameter_delete(parameter* self);
 /**
  * 重複するパラメータ名が存在するなら true.
  * @param parameters
+ * @param namev
  * @return
  */
 bool parameter_is_overwrapped_name(vector* parameters, string_view* namev);

@@ -75,6 +75,25 @@ void type_parameter_print(vector* v) {
 void type_parameter_delete(type_parameter * self) {
 	MEM_FREE(self);
 }
+
+bool type_parameter_is_overwrapped_name(vector* tparameters, string_view* namev) {
+	if(tparameters->length <= 1) {
+		return false;
+	}
+	for(int i=0; i<tparameters->length; i++) {
+		type_parameter* e = (type_parameter*)vector_at(tparameters, i);
+		for(int j=0; j<tparameters->length; j++) {
+			if(i == j) { continue; }
+			type_parameter* e2 = (type_parameter*)vector_at(tparameters, j);
+			if(e->namev == e2->namev) {
+				(*namev) = e->namev;
+				return true;
+			}
+		}
+	}
+	return false;
+}
+
 //private
 static void type_parameter_rule_list_delete(vector_item item) {
 //	type_parameter_rule* e = (type_parameter_rule*)item;

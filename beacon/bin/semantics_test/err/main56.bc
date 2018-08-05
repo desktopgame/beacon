@@ -1,0 +1,8 @@
+namespace err56 {
+	class IBase[T, A, T] {
+		public:
+		def new(Int a, Int x) {
+		}
+	}
+}
+printLine("Hello");

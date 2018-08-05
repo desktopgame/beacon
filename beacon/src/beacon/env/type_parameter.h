@@ -2,6 +2,8 @@
 #ifndef BEACON_ENV_TYPE_PARAMETER_H
 #define BEACON_ENV_TYPE_PARAMETER_H
 #include "../util/string_pool.h"
+#include "../util/vector.h"
+#include <stdbool.h>
 struct vector;
 struct il_type_parameter;
 /**
@@ -53,4 +55,12 @@ void type_parameter_print(struct vector* v);
  * @param self
  */
 void type_parameter_delete(type_parameter* self);
+
+/**
+ * 重複するパラメータ名が存在するなら true.
+ * @param tparameters
+ * @param namev
+ * @return
+ */
+bool type_parameter_is_overwrapped_name(vector* tparameters, string_view* namev);
 #endif // !SIGNAL_ENV_TYPE_PARAMETER_H

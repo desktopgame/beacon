@@ -297,4 +297,12 @@ bool class_method_parameter_valid(class_* cls, struct method** out_method, strin
  * @return
  */
 bool class_ctor_parameter_valid(class_* self, struct constructor** out_ctor, string_view* out_name);
+
+/**
+ * クラスの型変数に重複する名前がないなら true.
+ * @param self
+ * @param out_name
+ * @return
+ */
+bool class_type_type_parameter_valid(class_* self, string_view* out_name);
 #endif // !SIGNAL_ENV_CLASS_H
