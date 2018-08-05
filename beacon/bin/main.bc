@@ -15,7 +15,7 @@ namespace run64 {
 		}
 		private:
 		Int mAge;
-	}a
+	}
 }
 var d = new run64::Base();
 var iter = d.hoge("Hage");

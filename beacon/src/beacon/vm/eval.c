@@ -14,9 +14,7 @@
 
 //proto
 static bool eval_top_from_cll(class_loader* cll);
-static void eval_clear_ast(class_loader* cll);
-static void eval_clear_il(class_loader* cll);
-static void eval_clear_env(class_loader* cll);
+
 
 bool eval_ast(const char* filename) {
 	parser* p = parse_file(filename);
@@ -89,25 +87,4 @@ static bool eval_top_from_cll(class_loader* cll) {
 	bool ret = bc_error_last();
 	class_loader_delete(cll);
 	return ret;
-}
-
-static void eval_clear_ast(class_loader* cll) {
-	if (cll->source_code != NULL) {
-		ast_delete(cll->source_code);
-		cll->source_code = NULL;
-	}
-}
-
-static void eval_clear_il(class_loader* cll) {
-	if (cll->il_code != NULL) {
-		il_top_level_delete(cll->il_code);
-		cll->il_code = NULL;
-	}
-}
-
-static void eval_clear_env(class_loader* cll) {
-	if (cll->env != NULL) {
-		enviroment_delete(cll->env);
-		cll->env = enviroment_new();
-	}
 }
