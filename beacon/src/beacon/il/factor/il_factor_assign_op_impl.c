@@ -115,7 +115,16 @@ static void assign_to_field(il_factor* receiver, il_factor* source, string_view 
 
 static void assign_to_property(il_factor_assign_op* self, enviroment* env, call_context* cctx) {
 	il_factor_property* prop = self->left->u.prop;
+	property* pp = prop->p;
 	bool is_static = modifier_is_static(prop->p->modifier);
+	//プロパティへアクセスできない
+	if(!class_accessible_property(call_context_class(cctx), pp)) {
+		bc_error_throw(bcerror_can_t_access_field,
+			string_pool_ref2str(type_name(pp->parent)),
+			string_pool_ref2str(pp->namev)
+		);
+		return;
+	}
 	if(prop->p->is_short) {
 		if(is_static) {
 			il_factor_generate(self->right, env, cctx);
