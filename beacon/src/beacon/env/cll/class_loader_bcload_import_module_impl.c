@@ -107,11 +107,9 @@ static void CLBC_new_load_internal(class_loader * self, char * full_path) {
 		parser_destroy(p);
 		return;
 		//成功
-	} else {
-		cll->source_code = p->root;
-		p->root = NULL;
-		parser_destroy(p);
 	}
+	cll->source_code = parser_release_ast(p);
+	parser_destroy(p);
 	//ロード
 	class_loader_load(cll);
 	assert(cll->source_code != NULL);

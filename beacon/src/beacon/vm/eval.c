@@ -37,8 +37,7 @@ bool eval_il(const char* filename) {
 		return false;
 	}
 	class_loader* cl = class_loader_new(content_entry_point);
-	cl->source_code = p->root;
-	p->root = NULL;
+	cl->source_code = parser_release_ast(p);
 	class_loader_load(cl);
 
 	il_top_level* il = cl->il_code;
@@ -55,8 +54,7 @@ bool eval_op(const char* filename) {
 		return false;
 	}
 	class_loader* cl = class_loader_new(content_entry_point);
-	cl->source_code = p->root;
-	p->root = NULL;
+	cl->source_code = parser_release_ast(p);
 	class_loader_load(cl);
 
 	enviroment_op_dump(cl->env, 0);

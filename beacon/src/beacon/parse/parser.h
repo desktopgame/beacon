@@ -40,5 +40,7 @@ void parser_append_buffer(parser* self, char ch);
 
 ast* parser_reduce_buffer(parser* self);
 
+ast* parser_release_ast(parser* self);
+
 void parser_print_error(parser* p);
 #endif // !SIGNAL_PARSE_PARSER_H

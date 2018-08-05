@@ -84,10 +84,9 @@ class_loader * class_loader_main(const char * filename) {
 		parser_destroy(p);
 		return ret;
 	}
-	ret->source_code = p->root;
-	p->root = NULL;
-	parser_destroy(p);
+	ret->source_code = parser_release_ast(p);
 	ret->filename = text_strdup(filename);
+	parser_destroy(p);
 	return ret;
 }
 
@@ -216,8 +215,7 @@ static class_loader* class_loader_load_specialImpl(class_loader* self, class_loa
 	assert(p->root != NULL);
 	assert(!p->fail);
 	//ASTをclassloaderへ
-	cll->source_code = p->root;
-	p->root = NULL;
+	cll->source_code = parser_release_ast(p);
 	parser_destroy(p);
 	//AST -> IL へ
 	class_loader_ilload_impl(cll, cll->source_code);

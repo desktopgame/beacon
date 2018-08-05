@@ -89,6 +89,12 @@ ast* parser_reduce_buffer(parser* self) {
 	return ret;
 }
 
+ast* parser_release_ast(parser* self) {
+	ast* ret = self->root;
+	self->root = NULL;
+	return ret;
+}
+
 void parser_print_error(parser* p) {
 	text_printf("file=%s ", p->source_name);
 	text_printf("line=%d ", p->error_line_index);
