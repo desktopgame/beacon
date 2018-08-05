@@ -33,7 +33,6 @@ typedef unsigned long script_cid;
  * 付随するすべては script_context(あるいはそのフィールド)のフィールドとして持たせます。
  */
 typedef struct script_context {
-	stack* parser_stack;
 	numeric_map* namespace_nmap;
 	tree_map* class_loader_map;
 	vector* thread_vec;
