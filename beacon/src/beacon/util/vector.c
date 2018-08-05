@@ -16,10 +16,8 @@ void vector_push(vector * self, vector_item item) {
 	assert(self != NULL);
 	if (self->length >= self->capacity) {
 		vector_reserve(self);
-		self->memory[self->length] = item;
-	} else {
-		self->memory[self->length] = item;
 	}
+	self->memory[self->length] = item;
 	self->length++;
 }
 
@@ -81,7 +79,7 @@ void vector_pack(vector* self) {
 int vector_reserve(vector * self) {
 	assert(self->capacity > 0);
 	int newCapacitySize = self->capacity + (self->capacity / 2);
-	vector_item* temp = (vector_item*)MEM_REALLOC(self->memory, SLOT_SIZE * newCapacitySize);
+	vector_item* temp = MEM_REALLOC(self->memory, SLOT_SIZE * newCapacitySize);
 	assert(temp != NULL);
 	self->memory = temp;
 	self->capacity = newCapacitySize;
