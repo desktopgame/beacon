@@ -96,8 +96,6 @@ static void CLBC_new_load_internal(class_loader * self, char * full_path) {
 		return;
 	}
 	class_loader_load(cll);
-	assert(cll->source_code != NULL);
-	assert(cll->il_code != NULL);
 }
 
 static void CLBC_import_already(class_loader* self, class_loader* cll) {
