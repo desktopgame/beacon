@@ -109,6 +109,9 @@ void bc_error_vthrow(bc_error_id id, va_list ap) {
 		case bcerror_invalid_access_level_of_property:
 			fmt = "access level of property accessor must be secure level more than property: %s#%s";
 			break;
+		case bcerror_specified_both_property_accessor:
+			fmt = "specified both access level of property accessor: %s#%s";
+			break;
 		default:
 			{
 				fprintf(stderr, "if shown this message, it compiler bug\n");

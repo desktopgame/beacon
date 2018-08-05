@@ -1,4 +1,4 @@
-namespace run56 {
+namespace err50 {
 	class Base {
 		public:
 		property Int a {

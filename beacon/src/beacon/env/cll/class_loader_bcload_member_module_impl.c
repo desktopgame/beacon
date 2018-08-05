@@ -115,6 +115,15 @@ void CLBC_property_decl(class_loader* self, il_type* iltype, type* tp, vector* i
 			);
 			break;
 		}
+		//二つのアクセサがどちらもプロパティと異なるアクセスレベル
+		if((ilprop->access != ilprop->set->access) &&
+		    ilprop->access != ilprop->get->access) {
+			bc_error_throw(bcerror_specified_both_property_accessor,
+				string_pool_ref2str(type_name(tp)),
+				string_pool_ref2str(ilprop->namev)
+			);
+			break;
+		}
 	}
 	call_context_delete(cctx);
 }

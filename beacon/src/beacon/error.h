@@ -37,6 +37,7 @@ typedef enum bc_error_id {
 	bcerror_can_t_access_field,
 	bcerror_can_t_access_property,
 	bcerror_invalid_access_level_of_property,
+	bcerror_specified_both_property_accessor,
 } bc_error_id;
 
 /**
