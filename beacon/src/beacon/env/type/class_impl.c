@@ -479,6 +479,24 @@ bool class_type_type_parameter_valid(class_* self, string_view* out_name) {
 	return !type_parameter_is_overwrapped_name(self->type_parameter_list, out_name);
 }
 
+bool class_method_type_parameter_valid(class_* self, method** out_method, string_view* out_name) {
+	for(int i=0; i<self->method_list->length; i++) {
+		method* m = (method*)vector_at(self->method_list, i);
+		if(type_parameter_is_overwrapped_name(m->type_parameter_list, out_name)) {
+			(*out_method) = m;
+			return false;
+		}
+	}
+	for(int i=0; i<self->smethod_list->length; i++) {
+		method* m = (method*)vector_at(self->smethod_list, i);
+		if(type_parameter_is_overwrapped_name(m->type_parameter_list, out_name)) {
+			(*out_method) = m;
+			return false;
+		}
+	}
+	return true;
+}
+
 
 //private
 static void class_create_vtable_top(class_* self) {

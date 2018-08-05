@@ -145,4 +145,13 @@ bool interface_method_parameter_valid(interface_* inter, struct method** out_met
  * @return
  */
 bool interface_type_type_parameter_valid(interface_* inter, string_view* out_name);
+
+/**
+ * メソッドの型変数に重複するものがないなら true.
+ * @param self
+ * @param out_method
+ * @param out_name
+ * @return
+ */
+bool interface_method_type_parameter_valid(interface_* inter, struct method** out_method, string_view* out_name);
 #endif // !SIGNAL_ENV_TYPE_IINTERFACE_H

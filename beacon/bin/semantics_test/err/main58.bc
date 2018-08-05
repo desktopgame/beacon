@@ -1,6 +1,9 @@
-namespace err59 {
-	interface IBase {
+namespace err58 {
+	class Base {
 		public:
+		def new() {
+		}
+
 		def call[T, A, A]() -> Void {
 		}
 	}

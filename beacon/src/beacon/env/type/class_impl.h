@@ -305,4 +305,13 @@ bool class_ctor_parameter_valid(class_* self, struct constructor** out_ctor, str
  * @return
  */
 bool class_type_type_parameter_valid(class_* self, string_view* out_name);
+
+/**
+ * メソッドの型変数に重複するものがないなら true.
+ * @param self
+ * @param out_method
+ * @param out_name
+ * @return
+ */
+bool class_method_type_parameter_valid(class_* self, struct method** out_method, string_view* out_name);
 #endif // !SIGNAL_ENV_CLASS_H
