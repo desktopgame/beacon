@@ -90,20 +90,6 @@ class_loader* class_loader_main(const char* filename);
 void class_loader_load(class_loader* self);
 
 /**
- * self を 親として fullPath のファイルを読み込みます.
- * @param self
- * @parma fullPath
- */
-void class_loader_sub(class_loader* self, char* fullPath);
-
-/**
- * 実行時ディレクトリからの相対パスでファイルを読み込みます.
- * @param self
- * @param rpath
- */
-void class_loader_rsub(class_loader* self, char* relativePath);
-
-/**
  * 実行時ディレクトリからの相対パスでファイルを仮読み込みします.
  * beacon/langの読み込みのための使用されます。
  * @param self

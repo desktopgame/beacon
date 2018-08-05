@@ -98,16 +98,6 @@ void class_loader_load(class_loader * self) {
 	hee->accept_blocking--;
 }
 
-void class_loader_sub(class_loader * self, char * fullPath) {
-	CLBC_new_load(self, fullPath);
-}
-
-void class_loader_rsub(class_loader * self, char * relativePath) {
-	char* a = io_absolute_path(relativePath);
-	class_loader_sub(self, a);
-	MEM_FREE(a);
-}
-
 void class_loader_special(class_loader* self, char* relativePath) {
 	char* fullP = io_absolute_path(relativePath);
 	script_context* ctx = script_context_get_current();
