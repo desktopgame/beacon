@@ -288,4 +288,13 @@ bool class_field_valid(class_* cls, struct field** out);
  * @return
  */
 bool class_method_parameter_valid(class_* cls, struct method** out_method, string_view* out_name);
+
+/**
+ * 全てのコンストラクタを巡回して、全てにおいてパラメータ名の重複がないなら true.
+ * @param self
+ * @param out_ctor
+ * @param out_name
+ * @return
+ */
+bool class_ctor_parameter_valid(class_* self, struct constructor** out_ctor, string_view* out_name);
 #endif // !SIGNAL_ENV_CLASS_H

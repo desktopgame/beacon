@@ -5,6 +5,7 @@
 #include "../field.h"
 #include "../../il/il_type_impl.h"
 #include "../../error.h"
+#include "../../env/constructor.h"
 #include "../../util/text.h"
 #include "class_loader_bcload_member_module_impl.h"
 #include "class_loader_bcload_import_module_impl.h"
@@ -90,14 +91,24 @@ static void CLBC_class_decl(class_loader * self, il_type * iltype, type * tp, na
 	if(!class_field_valid(tp->u.class_, &outField)) {
 		bc_error_throw(bcerror_field_name_a_overlapped, string_pool_ref2str(tp->u.class_->namev), string_pool_ref2str(outField->namev));
 	}
-	//重複するパラメータ名を検出する
+	//メソッドの重複するパラメータ名を検出する
 	method* out_overwrap_m = NULL;
-	string_view out_overwrap_name;
-	if(!class_method_parameter_valid(tp->u.class_, &out_overwrap_m, &out_overwrap_name)) {
+	string_view out_overwrap_mname;
+	if(!class_method_parameter_valid(tp->u.class_, &out_overwrap_m, &out_overwrap_mname)) {
 		bc_error_throw(bcerror_overwrap_parameter_name,
 			string_pool_ref2str(type_name(tp)),
 			string_pool_ref2str(out_overwrap_m->namev),
-			string_pool_ref2str(out_overwrap_name)
+			string_pool_ref2str(out_overwrap_mname)
+		);
+	}
+	//コンストラクタの重複するパラメータ名を検出する
+	constructor* out_overwrap_c = NULL;
+	string_view out_overwrap_cname;
+	if(!class_ctor_parameter_valid(tp->u.class_, &out_overwrap_c, &out_overwrap_cname)) {
+		bc_error_throw(bcerror_overwrap_parameter_name,
+			string_pool_ref2str(type_name(tp)),
+			"new",
+			string_pool_ref2str(out_overwrap_cname)
 		);
 	}
 }

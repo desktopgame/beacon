@@ -464,6 +464,18 @@ bool class_method_parameter_valid(class_* cls, method** out_method, string_view*
 	return true;
 }
 
+bool class_ctor_parameter_valid(class_* self, constructor** out_ctor, string_view* out_name) {
+	for(int i=0; i<self->constructor_list->length; i++) {
+		constructor* ctor = (constructor*)vector_at(self->constructor_list, i);
+		if(parameter_is_overwrapped_name(ctor->parameter_list, out_name)) {
+			(*out_ctor) = ctor;
+			return false;
+		}
+	}
+	return true;
+}
+
+
 //private
 static void class_create_vtable_top(class_* self) {
 	for (int i = 0; i < self->method_list->length; i++) {
