@@ -1,0 +1,15 @@
+namespace err44 {
+	class Base {
+		public:
+		def new() {
+		}
+
+		protected:
+		Int page;
+
+		private:
+		Int mAge;
+	}
+}
+var d = new err44::Base();
+d.page = 10;

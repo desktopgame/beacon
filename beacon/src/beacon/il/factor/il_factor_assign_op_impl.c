@@ -98,12 +98,19 @@ static void assign_to_field(il_factor* receiver, il_factor* source, string_view 
 	generic_type* gt = il_factor_eval(receiver, env, cctx);
 	class_* cls = TYPE2CLASS(gt->core_type);
 	int temp = -1;
-	class_find_field_tree(cls, namev, &temp);
+	field* f = class_find_field_tree(cls, namev, &temp);
 	assert(temp != -1);
 	il_factor_generate(receiver, env, cctx);
 	il_factor_generate(source, env, cctx);
 	opcode_buf_add(env->buf, (vector_item)op_put_field);
 	opcode_buf_add(env->buf, (vector_item)temp);
+	//指定のインスタンスフィールドにアクセスできない
+	if(!class_accessible_field(call_context_class(cctx), f)) {
+		bc_error_throw(bcerror_can_t_access_field,
+			string_pool_ref2str(type_name(cls->parent)),
+			string_pool_ref2str(f->namev)
+		);
+	}
 }
 
 static void assign_to_property(il_factor_assign_op* self, enviroment* env, call_context* cctx) {
