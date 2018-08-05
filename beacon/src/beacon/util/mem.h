@@ -8,7 +8,14 @@
 typedef unsigned char muchar_t;
 
 #if defined(DEBUG)
+/**
+ * メモリリーク・オーバーランなどを検出するならこのマクロをオンにします.
+ */
 #define MEMORY_MANAGEMENT (1)
+
+/**
+ * 既に解放された領域へのアクセスを検出するならこのマクロをオンにします.
+ */
 //#define FREE_FREEZE (1)
 #endif
 
