@@ -6,7 +6,6 @@
 #include "parse/parser.h"
 #include "vm/vm.h"
 #include "vm/opcode_buf.h"
-#include "util/list.h"
 #include "util/stack.h"
 #include "util/string_buffer.h"
 #include "util/tree_map.h"

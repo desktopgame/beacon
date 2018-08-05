@@ -10,7 +10,6 @@
 static void ast_print_indent(int depth);
 static void ast_print_tree_impl(ast* self, int depth);
 static void ast_delete_impl(ast* self);
-static void ast_list_deleter(list_item item);
 static modifier_type ast_cast_to_modifierImpl(ast * self, bool* error);
 static void ast_delete_self(vector_item item);
 
@@ -444,15 +443,6 @@ static void ast_delete_impl(ast* self) {
 	self->vchildren = NULL;
 	MEM_FREE(self);
 }
-
-static void ast_list_deleter(list_item item) {
-	ast* self = (ast*)item;
-	for (int i = 0; i < self->vchildren->length; i++) {
-		ast_delete(ast_at(self, i));
-	}
-	MEM_FREE(self);
-}
-
 
 static modifier_type ast_cast_to_modifierImpl(ast * self, bool* error) {
 	int ret = -1;

@@ -6,7 +6,6 @@
 #include "access_level.h"
 #include "modifier_type.h"
 #include "constructor_chain_type.h"
-#include "../util/list.h"
 #include "../util/vector.h"
 #include "../util/string_pool.h"
 #include "operator_type.h"
