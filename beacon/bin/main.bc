@@ -1,15 +1,24 @@
-namespace run56 {
+namespace run64 {
 	class Base {
 		public:
-		property Int a {
-			private defset;
-			private defget;
-		}
 
 		def new() {
-		
+		}
+
+		def hoge(String s) -> Iterator[Int] {
+			var o = 0;
+			while(o < 3) {
+				yield return o;
+				printLine(s);
+				o = o + 1;
+			}
+		}
 		private:
 		Int mAge;
 	}
 }
-printLine("Hello");
+var d = new run64::Base();
+var iter = d.hoge("Hage");
+while(iter.moveNext()) {
+	printLine(iter.current());
+}

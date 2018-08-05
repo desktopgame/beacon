@@ -31,40 +31,26 @@ bool eval_ast(const char* filename) {
 }
 
 bool eval_il(const char* filename) {
-	parser* p = parse_file(filename);
-	if(p->fail) {
-		parser_destroy(p);
-		return false;
-	}
-	class_loader* cl = class_loader_new(content_entry_point);
-	cl->source_code = parser_release_ast(p);
+	class_loader* cl = class_loader_new(filename, content_entry_point);
 	class_loader_load(cl);
 
 	il_top_level* il = cl->il_code;
 	il_top_level_dump(il, 0);
-	parser_destroy(p);
 	class_loader_delete(cl);
 	return true;
 }
 
 bool eval_op(const char* filename) {
-	parser* p = parse_file(filename);
-	if(p->fail) {
-		parser_destroy(p);
-		return false;
-	}
-	class_loader* cl = class_loader_new(content_entry_point);
-	cl->source_code = parser_release_ast(p);
+	class_loader* cl = class_loader_new(filename, content_entry_point);
 	class_loader_load(cl);
 
 	enviroment_op_dump(cl->env, 0);
-	parser_destroy(p);
 	class_loader_delete(cl);
 	return true;
 }
 
 bool eval_file(const char * filename) {
-	class_loader* cll = class_loader_main(filename);
+	class_loader* cll = class_loader_new(filename, content_entry_point);
 	return eval_top_from_cll(cll);
 }
 

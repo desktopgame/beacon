@@ -148,8 +148,7 @@ void script_context_bootstrap(script_context* self) {
 	bc_null_init();
 	bc_file_init();
 	//ブートストラップクラスローダー
-	self->bootstrap_class_loader = class_loader_new(content_lib);
-	self->bootstrap_class_loader->filename = text_strdup("bootstrap");
+	self->bootstrap_class_loader = class_loader_new("bootstrap", content_lib);
 	class_loader_special(self->bootstrap_class_loader, "beacon/lang/Object.bc");
 
 	class_loader_special(self->bootstrap_class_loader, "beacon/lang/Int.bc");

@@ -58,7 +58,7 @@ static void class_loader_load_toplevel(class_loader* self);
 static void class_loader_load_linkall(class_loader* self);
 static void class_loader_load_toplevel_function(class_loader* self);
 
-class_loader* class_loader_new(content_type type) {
+class_loader* class_loader_new(const char* filename, content_type type) {
 	class_loader* ret = (class_loader*)MEM_MALLOC(sizeof(class_loader));
 	ret->source_code = NULL;
 	ret->il_code = NULL;
@@ -70,23 +70,8 @@ class_loader* class_loader_new(content_type type) {
 	ret->level = 0;
 	ret->type_cache_vec = vector_new();
 	ret->lazy_resolve_vec = vector_new();
-	ret->filename = NULL;
-	ret->env->context_ref = ret;
-	return ret;
-}
-
-class_loader * class_loader_main(const char * filename) {
-	parser* p = parse_file(filename);
-	class_loader* ret = class_loader_new(content_entry_point);
-	//解析に失敗した場合
-	if (p->fail) {
-		bc_error_throw(bcerror_parse, p->source_name);
-		parser_destroy(p);
-		return ret;
-	}
-	ret->source_code = parser_release_ast(p);
 	ret->filename = text_strdup(filename);
-	parser_destroy(p);
+	ret->env->context_ref = ret;
 	return ret;
 }
 
@@ -108,7 +93,7 @@ void class_loader_special(class_loader* self, char* relativePath) {
 		cll = class_loader_load_specialImpl(self, cll, fullP);
 	}
 	he->accept_blocking--;
-	//MEM_FREE(fullP);
+	MEM_FREE(fullP);
 }
 
 void class_loader_delete(class_loader * self) {
@@ -129,10 +114,16 @@ void class_loader_delete(class_loader * self) {
 //private
 static void class_loader_load_impl(class_loader* self) {
 	assert(self != NULL);
-	if(self->source_code == NULL) {
-		bc_error_throw(bcerror_generic, "can't parse file");
+	//ASTを読み込む
+	parser* p = parse_file(self->filename);
+	//解析に失敗した場合
+	if (p->fail) {
+		bc_error_throw(bcerror_parse, p->source_name);
+		parser_destroy(p);
 		return;
 	}
+	self->source_code = parser_release_ast(p);
+	parser_destroy(p);
 	//AST -> IL へ
 	class_loader_ilload_impl(self, self->source_code);
 	if (bc_error_last()) { return; }
@@ -228,7 +219,7 @@ static void class_loader_load_linkall(class_loader* self) {
 
 static void class_loader_load_toplevel(class_loader* self) {
 	//トップレベルのステートメントを読み込む
-	if(self->level != 0) {
+	if(self->type != content_entry_point) {
 		return;
 	}
 	//var $world = new beacon::lang::World();

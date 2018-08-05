@@ -192,9 +192,7 @@ char * text_concat(const char * a, const char * b) {
 	string_buffer* buff = string_buffer_new();
 	string_buffer_appends(buff, a);
 	string_buffer_appends(buff, b);
-	string_buffer_shrink(buff);
-	char* ret = buff->text;
-	MEM_FREE(buff);
+	char* ret = string_buffer_release(buff);
 	return ret;
 	#endif
 }

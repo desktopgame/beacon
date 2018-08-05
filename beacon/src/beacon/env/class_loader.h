@@ -70,17 +70,11 @@ typedef enum cl_error_id {
 
 /**
  * クラスローダーを作成します.
+ * @param filename
  * @param type
  * @return
  */
-class_loader* class_loader_new(content_type type);
-
-/**
- * エントリポイントを示すクラスローダーを作成します.
- * @param filename
- * @return
- */
-class_loader* class_loader_main(const char* filename);
+class_loader* class_loader_new(const char* filename, content_type type);
 
 /**
  * ファイルの内容を解析して必要に応じてインポート先のファイルの読み込み、

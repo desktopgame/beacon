@@ -47,16 +47,14 @@ void CLBC_new_load(class_loader * self, char * fullPath) {
 	ctx->heap->accept_blocking--;
 }
 
-class_loader* CLBC_import_new(class_loader* self, char* fullPath) {
+class_loader* CLBC_import_new(class_loader* self, char* full_path) {
 	CL_ERROR_RET(self, self);
 	script_context* ctx = script_context_get_current();
-	class_loader* cll = class_loader_new(content_lib);
-	cll->type = content_lib;
-	cll->filename = fullPath;
+	class_loader* cll = class_loader_new(full_path, content_lib);
 	cll->parent = self;
 	import_info* info = import_manager_import(self->import_manager, cll);
 	info->consume = false;
-	tree_map_put(ctx->class_loader_map, fullPath, cll);
+	tree_map_put(ctx->class_loader_map, full_path, cll);
 	return cll;
 }
 
@@ -97,20 +95,6 @@ static void CLBC_new_load_internal(class_loader * self, char * full_path) {
 	if (bc_error_last()) {
 		return;
 	}
-	cll->filename = text_strdup(full_path);
-	cll->level = (self->level + 1);
-	parser* p = parse_file(full_path);
-	assert(p->root != NULL);
-	assert(!p->fail);
-	//パースに失敗
-	if (p->fail) {
-		parser_destroy(p);
-		return;
-		//成功
-	}
-	cll->source_code = parser_release_ast(p);
-	parser_destroy(p);
-	//ロード
 	class_loader_load(cll);
 	assert(cll->source_code != NULL);
 	assert(cll->il_code != NULL);

@@ -213,8 +213,8 @@ static void* slot_realloc(void* block, size_t newSize, const char* filename, int
 	}
 	slot_validate(loc);
 	//再確保されたので情報を更新
-	loc->filename = filename;
-	loc->lineno = lineno;
+	//loc->filename = filename;
+	//loc->lineno = lineno;
 	loc->size = newSize;
 	//mem.h の malloc によって確保された
 	size_t oldSize = loc->size;
