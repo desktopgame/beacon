@@ -103,11 +103,5 @@ void class_loader_special(class_loader* self, char* relativePath);
  */
 void class_loader_delete(class_loader* self);
 
-/**
- * ブートストラップクラスローダーを返します.
- * @return
- */
-class_loader* class_loader_bootstrap();
-
 //void class_link_print(class_link link);
 #endif // !SIGNAL_PARSER_CLASS_LOADER_H
