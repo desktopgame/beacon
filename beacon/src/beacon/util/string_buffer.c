@@ -6,14 +6,12 @@
 #include <string.h>
 
 //proto
-static void string_buffer_fill_zero(string_buffer* self, int offs, int len);
-
 string_buffer* string_buffer_malloc(const char* filename, int lineno) {
-	string_buffer* ret = (string_buffer*)mem_malloc(sizeof(string_buffer), filename, lineno);
+	string_buffer* ret = mem_malloc(sizeof(string_buffer), filename, lineno);
 	ret->length = 0;
 	ret->capacity = 16;
 	ret->text = (char*)mem_malloc(sizeof(char) * 16, filename, lineno);
-	string_buffer_fill_zero(ret, 0, 16);
+	memset(ret->text, '\0', 16);
 	return ret;
 }
 
@@ -25,22 +23,22 @@ void string_buffer_append(string_buffer * self, char c) {
 	self->length++;
 }
 
-void string_buffer_appendf(string_buffer * self, const char * message, ...) {
+void string_buffer_appendf(string_buffer * self, const char * fmt, ...) {
 	va_list ap;
-	va_start(ap, message);
+	va_start(ap, fmt);
 
-	string_buffer_vappendf(self, message, ap);
+	string_buffer_vappendf(self, fmt, ap);
 	va_end(ap);
 }
 
-void string_buffer_vappendf(string_buffer * self, const char * message, va_list ap) {
+void string_buffer_vappendf(string_buffer * self, const char * fmt, va_list ap) {
 #define BUFF_LEN (256)
 	char block[BUFF_LEN];
 	memset(block, '\0', BUFF_LEN);
 	#if defined(_MSC_VER)
 	int res = vsprintf_s(block, BUFF_LEN, message, ap);
 	#else
-	int res = vsprintf(block, message, ap);
+	int res = vsprintf(block, fmt, ap);
 	#endif
 	assert(res != -1);
 	int len = strlen(block);
@@ -92,11 +90,4 @@ void string_buffer_shrink(string_buffer * self) {
 void string_buffer_delete(string_buffer * self) {
 	MEM_FREE(self->text);
 	MEM_FREE(self);
-}
-
-//private
-static void string_buffer_fill_zero(string_buffer* self, int offs, int len) {
-	for (int i = offs; i < offs + len; i++) {
-		self->text[i] = '\0';
-	}
 }

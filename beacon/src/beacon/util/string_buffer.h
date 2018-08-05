@@ -37,18 +37,18 @@ void string_buffer_append(string_buffer* self, char c);
 /**
  * フォーマットして追記します.
  * @param self
- * @param message
+ * @param fmt
  * @param ...
  */
-void string_buffer_appendf(string_buffer* self, const char* message, ...);
+void string_buffer_appendf(string_buffer* self, const char* fmt, ...);
 
 /**
  * フォーマットして追記します.
  * @param self
- * @param message
+ * @param fmt
  * @param ap
  */
-void string_buffer_vappendf(string_buffer* self, const char* message, va_list ap);
+void string_buffer_vappendf(string_buffer* self, const char* fmt, va_list ap);
 
 /**
  * 全て追記します.
