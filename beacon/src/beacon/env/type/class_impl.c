@@ -446,6 +446,24 @@ bool class_field_valid(class_* cls, field** out) {
 		   class_field_validImpl(cls->sfield_list, out);
 }
 
+bool class_method_parameter_valid(class_* cls, method** out_method, string_view* out_name) {
+	for(int i=0; i<cls->method_list->length; i++) {
+		method* m = (method*)vector_at(cls->method_list, i);
+		if(parameter_is_overwrapped_name(m->parameter_list, out_name)) {
+			(*out_method) = m;
+			return false;
+		}
+	}
+	for(int i=0; i<cls->smethod_list->length; i++) {
+		method* m = (method*)vector_at(cls->smethod_list, i);
+		if(parameter_is_overwrapped_name(m->parameter_list, out_name)) {
+			(*out_method) = m;
+			return false;
+		}
+	}
+	return true;
+}
+
 //private
 static void class_create_vtable_top(class_* self) {
 	for (int i = 0; i < self->method_list->length; i++) {

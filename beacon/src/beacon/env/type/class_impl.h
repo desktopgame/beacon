@@ -279,4 +279,13 @@ bool class_abstract_class_implement_valid(class_* cls, method** out);
  * @return
  */
 bool class_field_valid(class_* cls, struct field** out);
+
+/**
+ * 全てのメソッドを巡回して、全てにおいてパラメータ名の重複がないなら true.
+ * @param cls
+ * @param out_method
+ * @param out_name
+ * @return
+ */
+bool class_method_parameter_valid(class_* cls, struct method** out_method, string_view* out_name);
 #endif // !SIGNAL_ENV_CLASS_H

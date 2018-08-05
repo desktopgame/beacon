@@ -72,6 +72,34 @@ static void CLBC_class_decl(class_loader * self, il_type * iltype, type * tp, na
 
 	CL_ERROR(self);
 	tp->state = tp->state | type_decl;
+
+	//実装されていないインターフェイスを確認する
+	method* outiMethod = NULL;
+	if(tp->tag == type_class &&
+	  !class_interface_implement_valid(TYPE2CLASS(tp), &outiMethod)) {
+		bc_error_throw(bcerror_not_implement_interface, string_pool_ref2str(tp->u.class_->namev), string_pool_ref2str(outiMethod->namev));
+	}
+	//実装されていない抽象メソッドを確認する
+	method* outaMethod = NULL;
+	if(tp->tag == type_class &&
+	   !class_abstract_class_implement_valid(TYPE2CLASS(tp), &outaMethod)) {
+		bc_error_throw(bcerror_not_implement_abstract_method, string_pool_ref2str(tp->u.class_->namev), string_pool_ref2str(outaMethod->namev));
+	   }
+	//重複するフィールドを確認する
+	field* outField = NULL;
+	if(!class_field_valid(tp->u.class_, &outField)) {
+		bc_error_throw(bcerror_field_name_a_overlapped, string_pool_ref2str(tp->u.class_->namev), string_pool_ref2str(outField->namev));
+	}
+	//重複するパラメータ名を検出する
+	method* out_overwrap_m = NULL;
+	string_view out_overwrap_name;
+	if(!class_method_parameter_valid(tp->u.class_, &out_overwrap_m, &out_overwrap_name)) {
+		bc_error_throw(bcerror_overwrap_parameter_name,
+			string_pool_ref2str(type_name(tp)),
+			string_pool_ref2str(out_overwrap_m->namev),
+			string_pool_ref2str(out_overwrap_name)
+		);
+	}
 }
 
 static void CLBC_class_impl(class_loader * self, il_type * iltype, type * tp, namespace_ * scope) {
@@ -113,6 +141,16 @@ static void CLBC_interface_decl(class_loader * self, il_type * iltype, type * tp
 	CL_ERROR(self);
 	interface_create_vtable(tp->u.interface_);
 	tp->state = tp->state | type_decl;
+	//重複するパラメータ名を検出する
+	method* out_overwrap_m = NULL;
+	string_view out_overwrap_name;
+	if(!interface_method_parameter_valid(tp->u.interface_, &out_overwrap_m, &out_overwrap_name)) {
+		bc_error_throw(bcerror_overwrap_parameter_name,
+			string_pool_ref2str(type_name(tp)),
+			string_pool_ref2str(out_overwrap_m->namev),
+			string_pool_ref2str(out_overwrap_name)
+		);
+	}
 }
 
 static void CLBC_interface_impl(class_loader * self, il_type * iltype, type * tp, namespace_ * scope) {

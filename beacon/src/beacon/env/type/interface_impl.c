@@ -5,6 +5,7 @@
 #include "../../env/method.h"
 #include "../../env/generic_type.h"
 #include "../../env/property.h"
+#include "../../env/parameter.h"
 #include "meta_impl.h"
 #include "../generic_type.h"
 #include "../type_parameter.h"
@@ -137,6 +138,17 @@ method* interface_get_function(interface_* self) {
 	}
 	vector_delete(v, vector_deleter_null);
 	return ret;
+}
+
+bool interface_method_parameter_valid(interface_* inter, method** out_method, string_view* out_name) {
+	for(int i=0; i<inter->method_list->length; i++) {
+		method* m = (method*)vector_at(inter->method_list, i);
+		if(parameter_is_overwrapped_name(m->parameter_list, out_name)) {
+			(*out_method) = m;
+			return false;
+		}
+	}
+	return true;
 }
 
 //private

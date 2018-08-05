@@ -2,6 +2,7 @@
 #ifndef BEACON_ENV_PARAMETER_H
 #define BEACON_ENV_PARAMETER_H
 #include "../util/string_pool.h"
+#include "../util/vector.h"
 //#include "virtual_type.h"
 /**
  * メソッドの仮引数を表す構造体です.
@@ -23,4 +24,11 @@ parameter* parameter_new(string_view namev);
  * @param self
  */
 void parameter_delete(parameter* self);
+
+/**
+ * 重複するパラメータ名が存在するなら true.
+ * @param parameters
+ * @return
+ */
+bool parameter_is_overwrapped_name(vector* parameters, string_view* namev);
 #endif // !SIGNAL_ENV_PARAMETER_H

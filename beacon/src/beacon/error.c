@@ -28,6 +28,9 @@ void bc_error_vthrow(bc_error_id id, va_list ap) {
 		case bcerror_require_not_found:
 			fmt = "not found of required file: %s";
 			break;
+		case bcerror_overwrap_parameter_name:
+			fmt = "overwrap of parameter name: %s#%s(%s)";
+			break;
 		case bcerror_undefined_class:
 			fmt = "undefined class: %s";
 			break;

@@ -1,0 +1,14 @@
+namespace err53 {
+	class Base {
+		public:
+		def new() {
+		}
+
+		def hoge(Int a, Int b, String b) -> Void {
+		}
+
+		private:
+		Int mAge;
+	}
+}
+printLine("Hello");

@@ -130,4 +130,11 @@ bool interface_is_functional(interface_* self);
  * @return
  */
 struct method* interface_get_function(interface_* self);
+/**
+ * 全てのメソッドを巡回して、全てにおいてパラメータ名の重複がないなら true.
+ * @param inter
+ * @param out
+ * @return
+ */
+bool interface_method_parameter_valid(interface_* inter, struct method** out_method, string_view* out_name);
 #endif // !SIGNAL_ENV_TYPE_IINTERFACE_H

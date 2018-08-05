@@ -239,24 +239,6 @@ void CLBC_methods_decl(class_loader* self, il_type* iltype, type* tp, vector* il
 		type_add_method(tp, method);
 		call_context_delete(cctx);
 	}
-	//実装されていないインターフェイスを確認する
-	method* outiMethod = NULL;
-	if(tp->tag == type_class &&
-	  !class_interface_implement_valid(TYPE2CLASS(tp), &outiMethod)) {
-		bc_error_throw(bcerror_not_implement_interface, string_pool_ref2str(tp->u.class_->namev), string_pool_ref2str(outiMethod->namev));
-	}
-	//実装されていない抽象メソッドを確認する
-	method* outaMethod = NULL;
-	if(tp->tag == type_class &&
-	   !class_abstract_class_implement_valid(TYPE2CLASS(tp), &outaMethod)) {
-		bc_error_throw(bcerror_not_implement_abstract_method, string_pool_ref2str(tp->u.class_->namev), string_pool_ref2str(outaMethod->namev));
-	   }
-	//重複するフィールドを確認する
-	field* outField = NULL;
-	if(tp->tag == type_class &&
-	   !class_field_valid(tp->u.class_, &outField)) {
-		bc_error_throw(bcerror_field_name_a_overlapped, string_pool_ref2str(tp->u.class_->namev), string_pool_ref2str(outField->namev));
-	}
 }
 
 void CLBC_methods_impl(class_loader* self, namespace_* scope, il_type* iltype, type* tp, vector* ilmethods, vector* sgmethods) {
