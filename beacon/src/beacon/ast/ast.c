@@ -14,7 +14,7 @@ static modifier_type ast_cast_to_modifierImpl(ast * self, bool* error);
 static void ast_delete_self(vector_item item);
 
 void ast_compile_entry(ast * self) {
-	parser* p = parser_top();
+	parser* p = parser_current();
 	if (p->fail) {
 		MEM_FREE(self);
 		return;
@@ -28,7 +28,7 @@ ast * ast_malloc(ast_tag tag, const char* filename, int lineno) {
 	ret->tag = tag;
 	ret->vchildren = NULL;
 	//行番号を取得
-	parser* p = parser_top();
+	parser* p = parser_current();
 	if (p != NULL) {
 		ret->lineno = p->lineno;
 		assert(p->lineno >= 0);
@@ -114,7 +114,7 @@ ast * ast_push(ast * self, ast * child) {
 	}
 	vector_push(self->vchildren, child);
 	//行番号を補正
-	parser* p = parser_top();
+	parser* p = parser_current();
 	if (p != NULL) {
 		if (!vector_empty(p->lineno_vec)) {
 			int lineno = (int)vector_pop(p->lineno_vec);

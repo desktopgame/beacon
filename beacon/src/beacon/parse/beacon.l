@@ -40,7 +40,7 @@ int yywrap(void) {
 #endif SIGNAL_YYWRAP_PART
 
 int yyerror(char * err_str) {
-	parser* p = parser_top();
+	parser* p = parser_current();
 	p->fail = true;
 	p->error_line_index = yylloc.last_line;
 	p->error_column_index = yylloc.last_column;
@@ -98,7 +98,7 @@ static int string_input(char *buf, int max_size) {
 
 static int my_yyinput(char *buf, int max_size) {
 	int result;
-	parser* p = parser_top();
+	parser* p = parser_current();
 	switch (p->input_type) {
 		case yinput_file:
 			result = file_input(buf, max_size);
@@ -258,7 +258,7 @@ static void update_loc() {
 }
 
 <INITIAL>"\n" {
-	parser_top()->lineno++;
+	parser_current()->lineno++;
 }
 
 <INITIAL>[1-9][0-9]* {
@@ -277,20 +277,20 @@ static void update_loc() {
 }
 
 <INITIAL>\" {
-	parser_clear_buffer(parser_top());
+	parser_clear_buffer(parser_current());
     BEGIN STRING_LITERAL_STATE;
 }
 <INITIAL>"/*"     BEGIN ML_COMMENT;
 <INITIAL>"//"     BEGIN L_COMMENT;
 <ML_COMMENT>\n     {
-	parser_top()->lineno++;
+	parser_current()->lineno++;
 }
 <ML_COMMENT>"*/"     {
     BEGIN INITIAL;
 }
 <ML_COMMENT>.      ;
 <L_COMMENT>\n  {
-	parser_top()->lineno++;
+	parser_current()->lineno++;
 	BEGIN INITIAL;
 }
 <L_COMMENT><<EOF>>   {
@@ -318,29 +318,29 @@ static void update_loc() {
 	return CHAR_LITERAL;
 }
 <STRING_LITERAL_STATE>\" {
-	yylval.ast_value = parser_reduce_buffer(parser_top());
+	yylval.ast_value = parser_reduce_buffer(parser_current());
     BEGIN INITIAL;
 	return STRING_LITERAL;
 }
 <STRING_LITERAL_STATE>\\\"	{
-	parser_append_buffer(parser_top(), '"');
+	parser_append_buffer(parser_current(), '"');
 }
 <STRING_LITERAL_STATE>\\\'	{
-	parser_append_buffer(parser_top(), '\'');
+	parser_append_buffer(parser_current(), '\'');
 }
 <STRING_LITERAL_STATE>\\r	{
-	parser_append_buffer(parser_top(), '\r');
+	parser_append_buffer(parser_current(), '\r');
 }
 <STRING_LITERAL_STATE>\\n	{
-	parser_append_buffer(parser_top(), '\n');
+	parser_append_buffer(parser_current(), '\n');
 }
 <STRING_LITERAL_STATE>\\t	{
-	parser_append_buffer(parser_top(), '\t');
+	parser_append_buffer(parser_current(), '\t');
 }
 <STRING_LITERAL_STATE>\\\\	{
-	parser_append_buffer(parser_top(), '\\');
+	parser_append_buffer(parser_current(), '\\');
 }
 <STRING_LITERAL_STATE>.	{
-	parser_append_buffer(parser_top(), yytext[0]);
+	parser_append_buffer(parser_current(), yytext[0]);
 }
 %%

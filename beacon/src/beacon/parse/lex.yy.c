@@ -679,7 +679,7 @@ int yywrap(void) {
 #endif SIGNAL_YYWRAP_PART
 
 int yyerror(char * err_str) {
-	parser* p = parser_top();
+	parser* p = parser_current();
 	p->fail = true;
 	p->error_line_index = yylloc.last_line;
 	p->error_column_index = yylloc.last_column;
@@ -737,7 +737,7 @@ static int string_input(char *buf, int max_size) {
 
 static int my_yyinput(char *buf, int max_size) {
 	int result;
-	parser* p = parser_top();
+	parser* p = parser_current();
 	switch (p->input_type) {
 		case yinput_file:
 			result = file_input(buf, max_size);
@@ -1515,7 +1515,7 @@ case 92:
 YY_RULE_SETUP
 #line 260 "beacon.l"
 {
-	parser_top()->lineno++;
+	parser_current()->lineno++;
 }
 	YY_BREAK
 case 93:
@@ -1546,7 +1546,7 @@ case 96:
 YY_RULE_SETUP
 #line 279 "beacon.l"
 {
-	parser_clear_buffer(parser_top());
+	parser_clear_buffer(parser_current());
     BEGIN STRING_LITERAL_STATE;
 }
 	YY_BREAK
@@ -1565,7 +1565,7 @@ case 99:
 YY_RULE_SETUP
 #line 285 "beacon.l"
 {
-	parser_top()->lineno++;
+	parser_current()->lineno++;
 }
 	YY_BREAK
 case 100:
@@ -1585,7 +1585,7 @@ case 102:
 YY_RULE_SETUP
 #line 292 "beacon.l"
 {
-	parser_top()->lineno++;
+	parser_current()->lineno++;
 	BEGIN INITIAL;
 }
 	YY_BREAK
@@ -1644,7 +1644,7 @@ case 109:
 YY_RULE_SETUP
 #line 320 "beacon.l"
 {
-	yylval.ast_value = parser_reduce_buffer(parser_top());
+	yylval.ast_value = parser_reduce_buffer(parser_current());
     BEGIN INITIAL;
 	return STRING_LITERAL;
 }
@@ -1653,49 +1653,49 @@ case 110:
 YY_RULE_SETUP
 #line 325 "beacon.l"
 {
-	parser_append_buffer(parser_top(), '"');
+	parser_append_buffer(parser_current(), '"');
 }
 	YY_BREAK
 case 111:
 YY_RULE_SETUP
 #line 328 "beacon.l"
 {
-	parser_append_buffer(parser_top(), '\'');
+	parser_append_buffer(parser_current(), '\'');
 }
 	YY_BREAK
 case 112:
 YY_RULE_SETUP
 #line 331 "beacon.l"
 {
-	parser_append_buffer(parser_top(), '\r');
+	parser_append_buffer(parser_current(), '\r');
 }
 	YY_BREAK
 case 113:
 YY_RULE_SETUP
 #line 334 "beacon.l"
 {
-	parser_append_buffer(parser_top(), '\n');
+	parser_append_buffer(parser_current(), '\n');
 }
 	YY_BREAK
 case 114:
 YY_RULE_SETUP
 #line 337 "beacon.l"
 {
-	parser_append_buffer(parser_top(), '\t');
+	parser_append_buffer(parser_current(), '\t');
 }
 	YY_BREAK
 case 115:
 YY_RULE_SETUP
 #line 340 "beacon.l"
 {
-	parser_append_buffer(parser_top(), '\\');
+	parser_append_buffer(parser_current(), '\\');
 }
 	YY_BREAK
 case 116:
 YY_RULE_SETUP
 #line 343 "beacon.l"
 {
-	parser_append_buffer(parser_top(), yytext[0]);
+	parser_append_buffer(parser_current(), yytext[0]);
 }
 	YY_BREAK
 case 117:

@@ -53,7 +53,7 @@ static void class_loader_lazy_resolve_delete(vector_item item);
 static void class_loader_lazy_resolve(class_loader* self);
 static void class_loader_lazy_resolve_all(class_loader* self);
 static void class_loader_lazy_resolve_at(const char* name, tree_item item);
-static class_loader* class_loader_load_specialImpl(class_loader* self, class_loader* cll, char* fullP);
+static class_loader* class_loader_load_specialImpl(class_loader* self, class_loader* cll, char* full_path);
 static void class_loader_load_toplevel(class_loader* self);
 static void class_loader_load_linkall(class_loader* self);
 static void class_loader_load_toplevel_function(class_loader* self);
@@ -75,34 +75,19 @@ class_loader* class_loader_new(content_type type) {
 	return ret;
 }
 
-class_loader * class_loader_new_entry_point_from_file(const char * filename) {
-//	char* text = io_read_text(filename);
-//	class_loader* ret = class_loader_new_entry_point_from_source(text, filename);
-//	MEM_FREE(text);
-	parser* p = parser_parse_from_file(filename);
-	class_loader* ret = class_loader_new_entry_point_from_parser(p);
-	parser_pop();
-	ret->filename = text_strdup(filename);
-	return ret;
-}
-
-class_loader * class_loader_new_entry_point_from_source(const char * source, const char* contextDescription) {
-	parser* p = parser_parse_from_source_swap(source, contextDescription);
-	class_loader* ret = class_loader_new_entry_point_from_parser(p);
-	parser_pop();
-	ret->filename = text_strdup(contextDescription);
-	return ret;
-}
-
-class_loader * class_loader_new_entry_point_from_parser(parser * p) {
+class_loader * class_loader_main(const char * filename) {
+	parser* p = parse_file(filename);
 	class_loader* ret = class_loader_new(content_entry_point);
 	//解析に失敗した場合
 	if (p->fail) {
 		bc_error_throw(bcerror_parse, p->source_name);
+		parser_destroy(p);
 		return ret;
 	}
 	ret->source_code = p->root;
 	p->root = NULL;
+	parser_destroy(p);
+	ret->filename = text_strdup(filename);
 	return ret;
 }
 
@@ -224,18 +209,16 @@ static void class_loader_lazy_resolve_at(const char* name, tree_item item) {
 	class_loader_lazy_resolve(cl);
 }
 
-static class_loader* class_loader_load_specialImpl(class_loader* self, class_loader* cll, char* fullP) {
-	cll = CLBC_import_new(self,fullP);
+static class_loader* class_loader_load_specialImpl(class_loader* self, class_loader* cll, char* full_path) {
+	cll = CLBC_import_new(self, full_path);
 	//parser
-	char* text = io_read_text(fullP);
-	parser* p = parser_parse_from_source_swap(text, fullP);
+	parser* p = parse_file(full_path);
 	assert(p->root != NULL);
 	assert(!p->fail);
 	//ASTをclassloaderへ
 	cll->source_code = p->root;
 	p->root = NULL;
-	MEM_FREE(text);
-	parser_pop();
+	parser_destroy(p);
 	//AST -> IL へ
 	class_loader_ilload_impl(cll, cll->source_code);
 	if (bc_error_last()) { return cll; }

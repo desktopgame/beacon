@@ -118,7 +118,7 @@
 }
 
 <INITIAL>"\n" {
-	parser_top()->lineno++;
+	parser_current()->lineno++;
 }
 
 <INITIAL>[1-9][0-9]* {
@@ -137,20 +137,20 @@
 }
 
 <INITIAL>\" {
-	parser_clear_buffer(parser_top());
+	parser_clear_buffer(parser_current());
     BEGIN STRING_LITERAL_STATE;
 }
 <INITIAL>"/*"     BEGIN ML_COMMENT;
 <INITIAL>"//"     BEGIN L_COMMENT;
 <ML_COMMENT>\n     {
-	parser_top()->lineno++;
+	parser_current()->lineno++;
 }
 <ML_COMMENT>"*/"     {
     BEGIN INITIAL;
 }
 <ML_COMMENT>.      ;
 <L_COMMENT>\n  {
-	parser_top()->lineno++;
+	parser_current()->lineno++;
 	BEGIN INITIAL;
 }
 <L_COMMENT><<EOF>>   {
@@ -178,29 +178,29 @@
 	return CHAR_LITERAL;
 }
 <STRING_LITERAL_STATE>\" {
-	yylval.ast_value = parser_reduce_buffer(parser_top());
+	yylval.ast_value = parser_reduce_buffer(parser_current());
     BEGIN INITIAL;
 	return STRING_LITERAL;
 }
 <STRING_LITERAL_STATE>\\\"	{
-	parser_append_buffer(parser_top(), '"');
+	parser_append_buffer(parser_current(), '"');
 }
 <STRING_LITERAL_STATE>\\\'	{
-	parser_append_buffer(parser_top(), '\'');
+	parser_append_buffer(parser_current(), '\'');
 }
 <STRING_LITERAL_STATE>\\r	{
-	parser_append_buffer(parser_top(), '\r');
+	parser_append_buffer(parser_current(), '\r');
 }
 <STRING_LITERAL_STATE>\\n	{
-	parser_append_buffer(parser_top(), '\n');
+	parser_append_buffer(parser_current(), '\n');
 }
 <STRING_LITERAL_STATE>\\t	{
-	parser_append_buffer(parser_top(), '\t');
+	parser_append_buffer(parser_current(), '\t');
 }
 <STRING_LITERAL_STATE>\\\\	{
-	parser_append_buffer(parser_top(), '\\');
+	parser_append_buffer(parser_current(), '\\');
 }
 <STRING_LITERAL_STATE>.	{
-	parser_append_buffer(parser_top(), yytext[0]);
+	parser_append_buffer(parser_current(), yytext[0]);
 }
 %%

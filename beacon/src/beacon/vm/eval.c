@@ -19,21 +19,21 @@ static void eval_clear_il(class_loader* cll);
 static void eval_clear_env(class_loader* cll);
 
 bool eval_ast(const char* filename) {
-	parser* p = parser_parse_from_file(filename);
+	parser* p = parse_file(filename);
 	//結果を表示
 	if(!p->fail) {
 		ast_print_tree(p->root);
 	}
 	//パーサーを破棄
 	bool ret = p->fail;
-	parser_pop();
+	parser_destroy(p);
 	return ret;
 }
 
 bool eval_il(const char* filename) {
-	parser* p = parser_parse_from_file(filename);
+	parser* p = parse_file(filename);
 	if(p->fail) {
-		parser_pop();
+		parser_destroy(p);
 		return false;
 	}
 	class_loader* cl = class_loader_new(content_entry_point);
@@ -43,15 +43,15 @@ bool eval_il(const char* filename) {
 
 	il_top_level* il = cl->il_code;
 	il_top_level_dump(il, 0);
-	parser_pop();
+	parser_destroy(p);
 	class_loader_delete(cl);
 	return true;
 }
 
 bool eval_op(const char* filename) {
-	parser* p = parser_parse_from_file(filename);
+	parser* p = parse_file(filename);
 	if(p->fail) {
-		parser_pop();
+		parser_destroy(p);
 		return false;
 	}
 	class_loader* cl = class_loader_new(content_entry_point);
@@ -60,32 +60,14 @@ bool eval_op(const char* filename) {
 	class_loader_load(cl);
 
 	enviroment_op_dump(cl->env, 0);
-	parser_pop();
+	parser_destroy(p);
 	class_loader_delete(cl);
 	return true;
 }
 
 bool eval_file(const char * filename) {
-	class_loader* cll = class_loader_new_entry_point_from_file(filename);
+	class_loader* cll = class_loader_main(filename);
 	return eval_top_from_cll(cll);
-}
-
-bool eval_string(const char * source) {
-	class_loader* cll = class_loader_new_entry_point_from_source(source, "eval-top");
-	return eval_top_from_cll(cll);
-}
-
-bool eval_lines(const char ** lines, int lineCount) {
-	string_buffer* sb = string_buffer_new();
-	for (int i = 0; i < lineCount; i++) {
-		char* line = (char*)lines[i];
-		string_buffer_appends(sb, line);
-		string_buffer_append(sb, '\n');
-	}
-	string_buffer_shrink(sb);
-	bool ret = eval_string(sb->text);
-	string_buffer_delete(sb);
-	return ret;
 }
 
 //private

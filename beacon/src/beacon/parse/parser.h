@@ -26,96 +26,19 @@ typedef struct parser {
 	vector* lineno_vec;
 } parser;
 
-/**
- * 構文解析器で生じたエラーをハンドルする関数.s
- */
-typedef void(*parse_err_haner)(parser* p);
+parser* parse_string(const char* source);
 
-/**
- * 新しいパーサーをプッシュします.
- * @param input_type
- */
-parser* parser_push(yacc_input_type input_type);
+parser* parse_file(const char* filename);
 
-/**
- * 現在のパーサーを返します.
- */
-parser* parser_top();
+parser* parser_current();
 
-/**
- * バッファーをクリアします.
- * @param self
- */
+void parser_destroy(parser* self);
+
 void parser_clear_buffer(parser* self);
 
-/**
- * 指定の文字を現在のバッファーへ追加します.
- * @parma self
- * @param ch
- */
 void parser_append_buffer(parser* self, char ch);
 
-/**
- * バッファーを文字列リテラルをASTへ還元します.
- * @param self
- * @return
- */
 ast* parser_reduce_buffer(parser* self);
 
-/**
- * ファイルを入力として解析を実行します.
- * パーサースタックは +1 されます。
- * @param filename
- * @return
- */
-parser* parser_parse_from_file(const char* filename);
-
-/**
- * 文字を入力として解析を実行します.
- * パーサースタックは +1 されます。
- * @param source 呼び出し側で開放してください.
- * @return
- */
-parser* parser_parse_from_source(const char* source);
-
-/**
- * 情報を入れ替えてからパースします.
- * @param source
- * @param info
- * @return
- */
-parser* parser_parse_from_source_swap(const char* source, const char* info);
-
-/**
- * デバッグ情報として使用される入力元の情報を設定します.
- * 以前の情報は開放されます。
- * また、この時渡す引数は呼び出し側で開放してください。
- * @param source_name
- */
-void parser_swap_source_name(char* source_name);
-
-/**
- * エラー情報を表示します.
- * @param p
- */
 void parser_print_error(parser* p);
-
-/**
- * 現在のパーサーを削除します.
- * パーサースタックは -1 されます。
- * また、このときパーサが持っているASTは開放されます。
- */
-void parser_pop();
-
-/**
- * エラーハンドラを設定します.
- * @param hdr
- */
-void parser_set_err_hdr(parse_err_haner hdr);
-
-/**
- * デフォルトのエラーハンドラです.
- * @param p
- */
-void parser_default_err_hdr(parser* p);
 #endif // !SIGNAL_PARSE_PARSER_H
