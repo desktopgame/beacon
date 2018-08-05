@@ -5,6 +5,7 @@
 #include "../../env/type_impl.h"
 #include "../../vm/symbol_entry.h"
 
+static void assign_by_namebase(il_factor_assign_op* self, enviroment* env, call_context* cctx);
 static void assign_to_field(il_factor* receiver, il_factor* source, string_view namev, enviroment* env, call_context* cctx);
 static void assign_to_property(il_factor_assign_op* self, enviroment* env, call_context* cctx);
 
@@ -40,25 +41,13 @@ void il_factor_assign_op_generate(il_factor_assign_op* self, enviroment* env, ca
 		il_factor_generate(self->right, env, cctx);
 		opcode_buf_add(env->buf, op_store);
 		opcode_buf_add(env->buf, e->index);
+		//NOTE:constかどうかの検査
 	//foo.bar = xxx
 	} else if(self->left->type == ilfactor_member_op) {
 		il_factor_member_op* ilmem = IL_FACT2MEM(self->left);
 		il_factor* ilsrc = ilmem->fact;
 		if(ilsrc->type == ilfactor_variable) {
-			il_factor_variable* ilvar = IL_FACT2VAR(ilsrc);
-			//staticなフィールドへの代入
-			if(ilvar->type == ilvariable_type_static) {
-				class_* cls = TYPE2CLASS(call_context_eval_type(cctx, ilvar->u.static_->fqcn));
-				int temp = -1;
-				class_find_sfield(cls, ilmem->namev, &temp);
-				assert(temp != -1);
-				il_factor_generate(self->right, env, cctx);
-				opcode_buf_add(env->buf, (vector_item)op_put_static);
-				opcode_buf_add(env->buf, (vector_item)cls->parent->absolute_index);
-				opcode_buf_add(env->buf, (vector_item)temp);
-			} else {
-				assign_to_field(ilmem->fact, self->right, ilmem->namev, env, cctx);
-			}
+			assign_by_namebase(self, env, cctx);
 		//インスタンスフィールドへの代入
 		} else {
 			assign_to_field(ilmem->fact, self->right, ilmem->namev, env, cctx);
@@ -78,6 +67,25 @@ void il_factor_assign_op_delete(il_factor_assign_op* self) {
 	MEM_FREE(self);
 }
 //private
+static void assign_by_namebase(il_factor_assign_op* self, enviroment* env, call_context* cctx) {
+	il_factor_member_op* ilmem = IL_FACT2MEM(self->left);
+	il_factor* ilsrc = ilmem->fact;
+	il_factor_variable* ilvar = IL_FACT2VAR(ilsrc);
+	//staticなフィールドへの代入
+	if(ilvar->type == ilvariable_type_static) {
+		class_* cls = TYPE2CLASS(call_context_eval_type(cctx, ilvar->u.static_->fqcn));
+		int temp = -1;
+		class_find_sfield(cls, ilmem->namev, &temp);
+		assert(temp != -1);
+		il_factor_generate(self->right, env, cctx);
+		opcode_buf_add(env->buf, (vector_item)op_put_static);
+		opcode_buf_add(env->buf, (vector_item)cls->parent->absolute_index);
+		opcode_buf_add(env->buf, (vector_item)temp);
+	} else {
+		assign_to_field(ilmem->fact, self->right, ilmem->namev, env, cctx);
+	}
+}
+
 static void assign_to_field(il_factor* receiver, il_factor* source, string_view namev, enviroment* env, call_context* cctx) {
 	generic_type* gt = il_factor_eval(receiver, env, cctx);
 	class_* cls = TYPE2CLASS(gt->core_type);
