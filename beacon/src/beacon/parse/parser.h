@@ -22,7 +22,7 @@ typedef struct parser {
 	int error_column_index;
 	yacc_input_type input_type;
 	bool fail;
-	uint32_t lineno;
+	int lineno;
 	vector* lineno_vec;
 } parser;
 

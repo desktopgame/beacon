@@ -7,7 +7,7 @@ namespace run56 {
 		}
 
 		def new() {
-		}
+		
 		private:
 		Int mAge;
 	}

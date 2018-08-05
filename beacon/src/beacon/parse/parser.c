@@ -30,8 +30,10 @@ parser* parse_string(const char* source) {
 
 parser* parse_file(const char* filename) {
 	assert(gParser == NULL);
+	extern void yy_setstr(char *source);
 	extern int yyparse(void);
 	extern FILE *yyin;
+	yy_setstr(NULL);
 	yyin = fopen(filename, "r");
 	gParser = parser_new();
 	gParser->source_name = text_strdup(filename);
