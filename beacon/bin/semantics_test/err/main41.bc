@@ -1,0 +1,13 @@
+namespace err41 {
+	class Base {
+		private:
+		static Int age;
+
+		def new() {
+		}
+
+		private:
+		Int mAge;
+	}
+}
+err41::Base.age = 0;

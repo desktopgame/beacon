@@ -4,6 +4,7 @@
 #include "../../util/text.h"
 #include "../../env/type_impl.h"
 #include "../../vm/symbol_entry.h"
+#include "../../env/field.h"
 
 static void assign_by_namebase(il_factor_assign_op* self, enviroment* env, call_context* cctx);
 static void assign_to_field(il_factor* receiver, il_factor* source, string_view namev, enviroment* env, call_context* cctx);
@@ -75,12 +76,19 @@ static void assign_by_namebase(il_factor_assign_op* self, enviroment* env, call_
 	if(ilvar->type == ilvariable_type_static) {
 		class_* cls = TYPE2CLASS(call_context_eval_type(cctx, ilvar->u.static_->fqcn));
 		int temp = -1;
-		class_find_sfield(cls, ilmem->namev, &temp);
+		field* sf = class_find_sfield(cls, ilmem->namev, &temp);
 		assert(temp != -1);
 		il_factor_generate(self->right, env, cctx);
 		opcode_buf_add(env->buf, (vector_item)op_put_static);
 		opcode_buf_add(env->buf, (vector_item)cls->parent->absolute_index);
 		opcode_buf_add(env->buf, (vector_item)temp);
+		//指定の静的フィールドにアクセスできない
+		if(!class_accessible_field(call_context_class(cctx), sf)) {
+			bc_error_throw(bcerror_can_t_access_field,
+				string_pool_ref2str(type_name(cls->parent)),
+				string_pool_ref2str(sf->namev)
+			);
+		}
 	} else {
 		assign_to_field(ilmem->fact, self->right, ilmem->namev, env, cctx);
 	}

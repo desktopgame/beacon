@@ -1,0 +1,13 @@
+namespace err42 {
+	class Base {
+		protected:
+		static Int page;
+
+		def new() {
+		}
+
+		private:
+		Int mAge;
+	}
+}
+run64::Base.page = 0;
