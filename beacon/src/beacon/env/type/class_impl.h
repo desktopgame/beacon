@@ -20,6 +20,7 @@
 struct object;
 struct field;
 struct property;
+struct property_body;
 struct method;
 struct constructor;
 struct generic_type;

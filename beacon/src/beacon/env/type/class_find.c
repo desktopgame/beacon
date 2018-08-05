@@ -4,6 +4,7 @@
 #include "interface_impl.h"
 #include "../field.h"
 #include "../property.h"
+#include "../property_body.h"
 #include "../parameter.h"
 #include "../generic_type.h"
 #include "../../util/vector.h"
@@ -140,6 +141,30 @@ bool class_accessible_property(class_* self, property* p) {
 	}
 	type* ty = self->parent;
 	class_* fcl = TYPE2CLASS(p->parent);
+	while(true) {
+		class_* c = TYPE2CLASS(ty);
+		if(c == fcl) {
+			return true;
+		}
+		//次へ
+		if(c->super_class == NULL) {
+			break;
+		}
+		ty = c->super_class->core_type;
+	}
+	return false;
+}
+
+bool class_accessible_property_accessor(class_* self, property_body* pb) {
+	assert(pb != NULL);
+	if(pb->access == access_public) {
+		return true;
+	}
+	if(pb->access == access_private) {
+		return self == TYPE2CLASS(pb->parent->parent);
+	}
+	type* ty = self->parent;
+	class_* fcl = TYPE2CLASS(pb->parent->parent);
 	while(true) {
 		class_* c = TYPE2CLASS(ty);
 		if(c == fcl) {

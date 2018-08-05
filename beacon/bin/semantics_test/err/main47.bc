@@ -1,0 +1,17 @@
+namespace err47 {
+	class Base {
+		public:
+		property Int age {
+			private defset;
+			defget;
+		}
+
+		def new() {
+		}
+
+		private:
+		Int mAge;
+	}
+}
+var d = new err47::Base();
+d.age = 10;

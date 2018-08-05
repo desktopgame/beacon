@@ -3,6 +3,8 @@
 #include "../../util/mem.h"
 #include "../../util/text.h"
 #include "../../env/type_impl.h"
+#include "../../env/property.h"
+#include "../../env/property_body.h"
 #include "../../vm/symbol_entry.h"
 #include "../../env/field.h"
 
@@ -119,6 +121,13 @@ static void assign_to_property(il_factor_assign_op* self, enviroment* env, call_
 	bool is_static = modifier_is_static(prop->p->modifier);
 	//プロパティへアクセスできない
 	if(!class_accessible_property(call_context_class(cctx), pp)) {
+		bc_error_throw(bcerror_can_t_access_field,
+			string_pool_ref2str(type_name(pp->parent)),
+			string_pool_ref2str(pp->namev)
+		);
+		return;
+	}
+	if(!class_accessible_property_accessor(call_context_class(cctx), pp->set)) {
 		bc_error_throw(bcerror_can_t_access_field,
 			string_pool_ref2str(type_name(pp->parent)),
 			string_pool_ref2str(pp->namev)

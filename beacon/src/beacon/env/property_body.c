@@ -6,6 +6,7 @@ property_body* property_body_malloc(property_body_tag tag, const char* filename,
 	property_body* ret = mem_malloc(sizeof(property_body), filename, lineno);
 	ret->tag = tag;
 	ret->env = enviroment_new();
+	ret->parent = NULL;
 	return ret;
 }
 

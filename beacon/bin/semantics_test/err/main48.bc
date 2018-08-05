@@ -1,0 +1,17 @@
+namespace err48 {
+	class Base {
+		public:
+		property Int page {
+			protected defset;
+			defget;
+		}
+
+		def new() {
+		}
+
+		private:
+		Int mAge;
+	}
+}
+var d = new err48::Base();
+d.page = 10;

@@ -2,6 +2,7 @@
 #define BEACON_ENV_PROPERTY_BODY_H
 #include "../ast/access_level.h"
 struct enviroment;
+struct property;
 
 typedef enum property_body_tag {
 	property_set,
@@ -9,6 +10,7 @@ typedef enum property_body_tag {
 } property_body_tag;
 
 typedef struct property_body {
+	struct property* parent;
 	access_level access;
 	property_body_tag tag;
 	struct enviroment* env;

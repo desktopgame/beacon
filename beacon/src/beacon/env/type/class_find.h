@@ -111,6 +111,14 @@ bool class_contains_sproperty(class_* self, struct property* p);
 bool class_accessible_property(class_* self, struct property* p);
 
 /**
+ * 指定のクラスからアクセサにアクセスできるなら true.
+ * @param self
+ * @param pb
+ * @return
+ */
+bool class_accessible_property_accessor(class_* self, struct property_body* pb);
+
+/**
  * 指定のプロパティが内部的に使用しているフィールドを返します.
  * @param self
  * @param p
