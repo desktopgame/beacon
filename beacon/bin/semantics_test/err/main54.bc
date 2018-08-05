@@ -4,4 +4,4 @@ namespace err54 {
 		def hoge(Int a, Int b, String b) -> Void;
 	}
 }
-printLine("Hello");z
+printLine("Hello");
