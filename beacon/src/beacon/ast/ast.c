@@ -459,17 +459,6 @@ static modifier_type ast_cast_to_modifierImpl(ast * self, bool* error) {
 		}
 	}
 	modifier_type mt = (modifier_type)ret;
-	//不正な組み合わせを検出
-	if(((mt & modifier_abstract) > 0) || 
-	   ((mt & modifier_override) > 0)) {
-		if((mt & modifier_static) > 0) {
-			(*error) = true;
-		}
-	}
-	if(((mt & modifier_native) > 0) &&
-	   ((mt & modifier_abstract) > 0)) {
-		(*error) = true;
-	}
 	return mt;
 }
 
