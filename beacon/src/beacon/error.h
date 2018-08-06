@@ -35,6 +35,9 @@ typedef enum bc_error_id {
 
 	bcerror_yield_return_value_type_is_not_compatible,
 
+	bcerror_if_expr_type_of_not_bool,
+	bcerror_while_expr_type_of_not_bool,
+
 	bcerror_undefined_class,
 	bcerror_undefined_variable,
 	bcerror_undefined_field,

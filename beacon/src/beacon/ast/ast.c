@@ -373,6 +373,8 @@ bool ast_is_stmt(ast* self) {
 		case ast_stmt_variable_init:
 		case ast_inferenced_type_init:
 		case ast_if:
+		case ast_if_elif_list:
+		case ast_if_elif_list_else:
 		case ast_elif:
 		case ast_else:
 		case ast_while:

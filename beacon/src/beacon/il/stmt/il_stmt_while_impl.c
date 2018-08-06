@@ -1,12 +1,14 @@
 #include "il_stmt_while_impl.h"
 #include "../../util/mem.h"
 #include "../../util/text.h"
+#include "../../env/namespace.h"
 #include "../../vm/enviroment.h"
 #include <stdio.h>
 #include "../call_context.h"
 
 //proto
 static void il_stmt_while_stmt_delete(vector_item item);
+static void check_condition_type(il_factor* fact, enviroment* env, call_context* cctx);
 
 il_stmt * il_stmt_wrap_while(il_stmt_while * self) {
 	il_stmt* ret = il_stmt_new(ilstmt_while);
@@ -68,10 +70,22 @@ void il_stmt_while_load(il_stmt_while* self, struct enviroment* env, call_contex
 		il_stmt* e = (il_stmt*)vector_at(self->statement_list, i);
 		il_stmt_load(e, env, cctx);
 	}
+	check_condition_type(self->condition, env, cctx);
 }
 
 //private
 static void il_stmt_while_stmt_delete(vector_item item) {
 	il_stmt* e = (il_stmt*)item;
 	il_stmt_delete(e);
+}
+
+static void check_condition_type(il_factor* fact, enviroment* env, call_context* cctx) {
+	generic_type* cond_T = il_factor_eval(fact, env, cctx);
+	if(cond_T->core_type != TYPE_BOOL) {
+		char* condstr = il_factor_tostr(fact, env);
+		bc_error_throw(bcerror_if_expr_type_of_not_bool,
+			condstr
+		);
+		MEM_FREE(condstr);
+	}
 }

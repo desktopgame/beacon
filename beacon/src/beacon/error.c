@@ -97,6 +97,14 @@ void bc_error_vthrow(bc_error_id id, va_list ap) {
 			break;
 
 
+		case bcerror_if_expr_type_of_not_bool:
+			fmt = "must be condition formula is bool: %s";
+			break;
+		case bcerror_while_expr_type_of_not_bool:
+			fmt = "must be condition formula is bool: %s";
+			break;
+
+
 		case bcerror_undefined_class:
 			fmt = "undefined class: %s";
 			break;

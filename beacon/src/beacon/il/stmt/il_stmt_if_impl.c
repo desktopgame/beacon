@@ -1,6 +1,7 @@
 #include "il_stmt_if_impl.h"
 #include "../../util/text.h"
 #include "../../util/mem.h"
+#include "../../env/namespace.h"
 #include "../../vm/opcode_buf.h"
 #include "../../vm/enviroment.h"
 #include <stdlib.h>
@@ -9,6 +10,7 @@
 //proto
 static void il_stmt_elif_list_delete_impl(vector_item item);
 static void il_stmt_if_delete_stmt(vector_item item);
+static void check_condition_type(il_factor* fact, enviroment* env, call_context* cctx);
 
 il_stmt * il_stmt_wrap_if(il_stmt_if * self) {
 	il_stmt* ret = il_stmt_new(ilstmt_if);
@@ -148,6 +150,12 @@ void il_stmt_if_load(il_stmt_if * self, struct enviroment* env, call_context* cc
 		il_stmt* e = (il_stmt*)vector_at(self->else_body->body, i);
 		il_stmt_load(e, env, cctx);
 	}
+	//条件が bool を返さない
+	check_condition_type(self->condition, env, cctx);
+	for(int i=0; i<self->elif_list->length; i++) {
+		il_stmt_elif* elif = vector_at(self->elif_list, i);
+		check_condition_type(elif->condition, env, cctx);
+	}
 }
 
 void il_stmt_if_delete(il_stmt_if * self) {
@@ -182,4 +190,15 @@ static void il_stmt_elif_list_delete_impl(vector_item item) {
 static void il_stmt_if_delete_stmt(vector_item item) {
 	il_stmt* e = (il_stmt*)item;
 	il_stmt_delete(e);
+}
+
+static void check_condition_type(il_factor* fact, enviroment* env, call_context* cctx) {
+	generic_type* cond_T = il_factor_eval(fact, env, cctx);
+	if(cond_T->core_type != TYPE_BOOL) {
+		char* condstr = il_factor_tostr(fact, env);
+		bc_error_throw(bcerror_if_expr_type_of_not_bool,
+			condstr
+		);
+		MEM_FREE(condstr);
+	}
 }
