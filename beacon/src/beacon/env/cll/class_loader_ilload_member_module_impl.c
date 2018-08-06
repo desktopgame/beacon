@@ -60,7 +60,7 @@ void CLIL_field(class_loader* self, il_type* current, ast* field, access_level l
 	il_type_add_field(current, v);
 	//重複する修飾子を検出
 	if(error) {
-		bc_error_throw(bcerror_modifier_a_overlapped, string_pool_ref2str(v->namev));
+		bc_error_throw(bcerror_overwrap_modifier, string_pool_ref2str(v->namev));
 	}
 }
 
@@ -77,6 +77,9 @@ void CLIL_prop(class_loader* self, il_type* current, ast* aprop, access_level le
 	} else {
 		bool err = false;
 		ret->modifier = ast_cast_to_modifier(amod, &err);
+		if(err) {
+			bc_error_throw(bcerror_overwrap_modifier, string_pool_ref2str(ret->namev));
+		}
 	}
 	ret->access = level;
 	ret->set = CLIL_prop_body(self, current, aset, ilproperty_set, level);
@@ -111,7 +114,7 @@ void CLIL_method(class_loader* self, il_type* current, ast* method, access_level
 	il_type_add_method(current, v);
 	//重複する修飾子を検出
 	if(error) {
-		bc_error_throw(bcerror_modifier_a_overlapped, string_pool_ref2str(v->namev));
+		bc_error_throw(bcerror_overwrap_modifier, string_pool_ref2str(v->namev));
 	}
 }
 
