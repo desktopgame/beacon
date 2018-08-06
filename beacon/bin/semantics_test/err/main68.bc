@@ -1,10 +1,10 @@
-namespace err69 {
+namespace err68 {
 	class Base {
 		public:
 		def new() {
 		}
 
-		def returnInt() -> Void {
+		def returnInt() -> Int {
 			return "Hello";
 		}
 	}

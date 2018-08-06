@@ -75,6 +75,16 @@ void bc_error_vthrow(bc_error_id id, va_list ap) {
 			fmt = "must be empty statement if modifier of method is native or abstract: %s";
 			break;
 
+		case bcerror_return_value_void_method:
+			fmt = "must be not return a value if return type of Void: %s#%s";
+			break;
+		case bcerror_not_return_value_not_void_method:
+			fmt = "must be return a value if return type of not Void: %s#%s";
+			break;
+		case bcerror_return_value_type_is_not_compatible_not_void_method:
+			fmt = "return value is must be compatible to method return type: %s#%s";
+			break;
+
 		case bcerror_undefined_class:
 			fmt = "undefined class: %s";
 			break;
