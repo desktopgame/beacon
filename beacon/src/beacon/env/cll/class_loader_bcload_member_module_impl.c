@@ -223,7 +223,7 @@ void CLBC_methods_decl(class_loader* self, il_type* iltype, type* tp, vector* il
 		   ilmethod->no_stmt &&
 			(!modifier_is_abstract(method->modifier) && !modifier_is_native(method->modifier))
 		) {
-			bc_error_throw(bcerror_empty_method_body, string_pool_ref2str(method->namev));
+			bc_error_throw(bcerror_empty_stmt_method, string_pool_ref2str(method->namev));
 			method_delete(method);
 			call_context_delete(cctx);
 			break;
@@ -233,7 +233,7 @@ void CLBC_methods_decl(class_loader* self, il_type* iltype, type* tp, vector* il
 		   !ilmethod->no_stmt &&
 			(modifier_is_abstract(method->modifier) || modifier_is_native(method->modifier))
 		) {
-			bc_error_throw(bcerror_not_empty_method_body, string_pool_ref2str(method->namev));
+			bc_error_throw(bcerror_not_empty_stmt_method, string_pool_ref2str(method->namev));
 			method_delete(method);
 			call_context_delete(cctx);
 			break;

@@ -25,6 +25,9 @@ typedef enum bc_error_id {
 	bcerror_abstract_override_method,
 	bcerror_abstract_static_method,
 
+	bcerror_empty_stmt_method,
+	bcerror_not_empty_stmt_method,
+
 	bcerror_undefined_class,
 	bcerror_undefined_variable,
 	bcerror_undefined_field,
@@ -39,8 +42,6 @@ typedef enum bc_error_id {
 	bcerror_interface_only,
 	bcerror_chain,
 	bcerror_abstract_method_by,
-	bcerror_empty_method_body,
-	bcerror_not_empty_method_body,
 	bcerror_not_implement_interface,
 	bcerror_not_implement_abstract_method,
 	bcerror_private_operator,

@@ -67,6 +67,14 @@ void bc_error_vthrow(bc_error_id id, va_list ap) {
 			fmt = "`abstract` and `static` modifier is can't use with: %s#%s";
 			break;
 
+
+		case bcerror_empty_stmt_method:
+			fmt = "must be not empty statement if modifier of method is native or abstract: %s";
+			break;
+		case bcerror_not_empty_stmt_method:
+			fmt = "must be empty statement if modifier of method is native or abstract: %s";
+			break;
+
 		case bcerror_undefined_class:
 			fmt = "undefined class: %s";
 			break;
@@ -108,12 +116,6 @@ void bc_error_vthrow(bc_error_id id, va_list ap) {
 			break;
 		case bcerror_abstract_method_by:
 			fmt = "abstract method should be defined on the abstract class: %s";
-			break;
-		case bcerror_empty_method_body:
-			fmt = "must be not empty statement if modifier of method is native or abstract: %s";
-			break;
-		case bcerror_not_empty_method_body:
-			fmt = "must be empty statement if modifier of method is native or abstract: %s";
 			break;
 		case bcerror_not_implement_interface:
 			fmt = "invalid implement: %s @%s";
