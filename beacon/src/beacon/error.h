@@ -32,6 +32,8 @@ typedef enum bc_error_id {
 	bcerror_not_return_value_not_void_method,
 	bcerror_return_value_type_is_not_compatible_not_void_method,
 
+	bcerror_yield_return_value_type_is_not_compatible,
+
 	bcerror_undefined_class,
 	bcerror_undefined_variable,
 	bcerror_undefined_field,

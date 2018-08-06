@@ -379,6 +379,7 @@ static method* create_has_next(method* self, type* ty, class_loader* cll, vector
 	call_context* cctx = call_context_new(call_method_T);
 	cctx->space = self->parent->location;
 	cctx->ty = self->parent;
+	cctx->u.mt = self;
 	envSmt->context_ref = cll;
 
 	//iterate(int,int)のint,intを受け取る
@@ -427,6 +428,9 @@ static method* create_next(method* self, type* ty, class_loader* cll,generic_typ
 	script_method* smt = script_method_new();
 	enviroment* envSmt = enviroment_new();
 	call_context* cctx = call_context_new(call_method_T);
+	cctx->space = self->parent->location;
+	cctx->ty = self->parent;
+	cctx->u.mt = mt;
 
 	opcode_buf_add(envSmt->buf, (vector_item)op_store);
 	opcode_buf_add(envSmt->buf, (vector_item)0);
