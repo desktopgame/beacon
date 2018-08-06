@@ -172,6 +172,13 @@ vector* vector_clone(vector* source) {
 	return ret;
 }
 
+void vector_copy(vector* src, vector* dst) {
+	assert(dst->length == 0);
+	for(int i=0; i<src->length; i++) {
+		vector_push(dst, vector_at(src, i));
+	}
+}
+
 void vector_each(vector* self, vector_action a) {
 	for(int i=0; i<self->length; i++) {
 		a(vector_at(self, i));

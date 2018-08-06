@@ -1,0 +1,15 @@
+namespace run67 {
+	class AAA[T] {
+		public:
+		Vector[T] v = new Vector[T]();
+
+		def new() {
+		}
+	}
+}
+var a = new run67::AAA[Int]();
+a.v << 10 << 20 << 30;
+var iter = a.v.iterate();
+while(iter.moveNext()) {
+	iter.current().printLine();
+}

@@ -107,7 +107,9 @@ void CLBC_fields_impl(class_loader* self, namespace_* scope, type* tp,vector* il
 			continue;
 		}
 		enviroment* env = enviroment_new();
+		env->context_ref = self;
 		fi->initial_value_env = env;
+		il_factor_load(fi->initial_value, env, cctx);
 		il_factor_generate(fi->initial_value, env, cctx);
 		//静的フィールドならついでに初期化
 		//FIXME:sg_threadをちゃんと設定すればいいんだけどとりあえずこれで

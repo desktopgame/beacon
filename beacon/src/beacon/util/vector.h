@@ -205,6 +205,13 @@ void vector_deleter_null(vector_item item);
 vector* vector_clone(vector* source);
 
 /**
+ * srcからdestへコピーします.
+ * @param src
+ * @param dest
+ */
+void vector_copy(vector* src, vector* dst);
+
+/**
  * @param self
  * @param a
  */

@@ -529,7 +529,6 @@ static void vm_run(frame * self, enviroment * env, int pos, int deferStart) {
 				type* tp = (type*)vector_at(ctx->type_vec, absClsIndex);
 				class_* cls = TYPE2CLASS(tp);
 				object* obj = (object*)vector_top(self->value_stack);
-				class_alloc_fields(cls, obj, self);
 				if(cls->type_parameter_list->length == 0) {
 					obj->gtype = tp->generic_self;
 				} else {
@@ -539,6 +538,7 @@ static void vm_run(frame * self, enviroment * env, int pos, int deferStart) {
 					}
 					obj->gtype = g;
 				}
+				class_alloc_fields(cls, obj, self);
 				assert(obj->gtype != NULL);
 				break;
 			}

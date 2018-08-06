@@ -108,6 +108,7 @@ type* class_new_preload(string_view namev) {
 
 void class_alloc_fields(class_ * self, object * o, frame* fr) {
 	assert(o->tag == object_ref);
+	heap* he = heap_get();
 	for (int i = 0; i < self->field_list->length; i++) {
 		field* f = (field*)vector_at(self->field_list, i);
 		object* a = object_default(f->gtype);
@@ -115,13 +116,20 @@ void class_alloc_fields(class_ * self, object * o, frame* fr) {
 		if (modifier_is_static(f->modifier)) {
 			continue;
 		}
+		he->collect_blocking++;
 		if(f->initial_value != NULL) {
 			frame* sub = frame_sub(fr);
+			for(int i=0; i<fr->type_args_vec->length; i++) {
+				vector_push(sub->type_args_vec, vector_at(fr->type_args_vec, i));
+			}
+			sub->receiver = self->parent;
+			vector_copy(fr->ref_stack, sub->ref_stack);
 			vm_execute(sub, f->initial_value_env);
 			a = vector_pop(sub->value_stack);
 			frame_delete(sub);
 		}
 		vector_push(o->u.field_vec, a);
+		he->collect_blocking--;
 	}
 	class_create_vtable(self);
 	o->gtype = generic_type_ref(self->parent);
