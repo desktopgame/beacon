@@ -28,6 +28,8 @@ static void CLBC_excec_interface_impl(class_loader* self);
 static void CLBC_excec_enum_decl(class_loader* self);
 static void CLBC_excec_enum_impl(class_loader* self);
 static void CLBC_yield(class_loader* parent, class_loader* target);
+static void CLBC_check_class(class_loader * self, il_type * iltype, type * tp, namespace_ * scope);
+static void CLBC_check_interface(class_loader * self, il_type * iltype, type * tp, namespace_ * scope);
 
 void class_loader_link(class_loader* self, link_type type) {
 	CL_ERROR(self);
@@ -54,8 +56,6 @@ static void CLBC_class_decl(class_loader * self, il_type * iltype, type * tp, na
 	#if defined(DEBUG)
 	const char* name = string_pool_ref2str(type_name(tp));
 	#endif
-//	assert(tp->u.class_->method_list->length == 0);
-//	assert(tp->u.class_->smethod_list->length == 0);
 	CL_ERROR(self);
 	CLBC_fields_decl(self, iltype, tp, iltype->u.class_->field_list, scope);
 	CLBC_fields_decl(self, iltype, tp, iltype->u.class_->sfield_list, scope);
@@ -76,62 +76,7 @@ static void CLBC_class_decl(class_loader * self, il_type * iltype, type * tp, na
 
 	CL_ERROR(self);
 	tp->state = tp->state | type_decl;
-
-	//実装されていないインターフェイスを確認する
-	method* outiMethod = NULL;
-	if(tp->tag == type_class &&
-	  !class_interface_implement_valid(TYPE2CLASS(tp), &outiMethod)) {
-		bc_error_throw(bcerror_not_implement_interface, string_pool_ref2str(tp->u.class_->namev), string_pool_ref2str(outiMethod->namev));
-	}
-	//実装されていない抽象メソッドを確認する
-	method* outaMethod = NULL;
-	if(tp->tag == type_class &&
-	   !class_abstract_class_implement_valid(TYPE2CLASS(tp), &outaMethod)) {
-		bc_error_throw(bcerror_not_implement_abstract_method, string_pool_ref2str(tp->u.class_->namev), string_pool_ref2str(outaMethod->namev));
-	   }
-	//重複するフィールドを確認する
-	field* outField = NULL;
-	if(!class_field_valid(tp->u.class_, &outField)) {
-		bc_error_throw(bcerror_field_name_a_overlapped, string_pool_ref2str(tp->u.class_->namev), string_pool_ref2str(outField->namev));
-	}
-	//メソッドの重複するパラメータ名を検出する
-	method* out_overwrap_m = NULL;
-	string_view out_overwrap_mname;
-	if(!class_method_parameter_valid(tp->u.class_, &out_overwrap_m, &out_overwrap_mname)) {
-		bc_error_throw(bcerror_overwrap_parameter_name,
-			string_pool_ref2str(type_name(tp)),
-			string_pool_ref2str(out_overwrap_m->namev),
-			string_pool_ref2str(out_overwrap_mname)
-		);
-	}
-	//コンストラクタの重複するパラメータ名を検出する
-	constructor* out_overwrap_c = NULL;
-	string_view out_overwrap_cname;
-	if(!class_ctor_parameter_valid(tp->u.class_, &out_overwrap_c, &out_overwrap_cname)) {
-		bc_error_throw(bcerror_overwrap_parameter_name,
-			string_pool_ref2str(type_name(tp)),
-			"new",
-			string_pool_ref2str(out_overwrap_cname)
-		);
-	}
-	//クラスの重複する型パラメータ名を検出する
-	string_view out_overwrap_tpname;
-	if(!class_type_type_parameter_valid(tp->u.class_, &out_overwrap_tpname)) {
-		bc_error_throw(bcerror_overwrap_type_type_parameter_name,
-			string_pool_ref2str(type_name(tp)),
-			string_pool_ref2str(out_overwrap_tpname)
-		);
-	}
-	//メソッドの重複する型パラメータ名を検出する
-	method* out_overwrap_tpm = NULL;
-	string_view out_overwrap_tpmname;
-	if(!class_method_type_parameter_valid(tp->u.class_, &out_overwrap_tpm, &out_overwrap_tpmname)) {
-		bc_error_throw(bcerror_overwrap_method_type_parameter_name,
-			string_pool_ref2str(type_name(tp)),
-			string_pool_ref2str(out_overwrap_tpm->namev),
-			string_pool_ref2str(out_overwrap_tpmname)
-		);
-	}
+	CLBC_check_class(self, iltype, tp, scope);
 }
 
 static void CLBC_class_impl(class_loader * self, il_type * iltype, type * tp, namespace_ * scope) {
@@ -173,34 +118,7 @@ static void CLBC_interface_decl(class_loader * self, il_type * iltype, type * tp
 	CL_ERROR(self);
 	interface_create_vtable(tp->u.interface_);
 	tp->state = tp->state | type_decl;
-	//重複するパラメータ名を検出する
-	method* out_overwrap_m = NULL;
-	string_view out_overwrap_name;
-	if(!interface_method_parameter_valid(tp->u.interface_, &out_overwrap_m, &out_overwrap_name)) {
-		bc_error_throw(bcerror_overwrap_parameter_name,
-			string_pool_ref2str(type_name(tp)),
-			string_pool_ref2str(out_overwrap_m->namev),
-			string_pool_ref2str(out_overwrap_name)
-		);
-	}
-	//インターフェイスの重複する型パラメータ名を検出する
-	string_view out_overwrap_tpname;
-	if(!interface_type_type_parameter_valid(tp->u.interface_, &out_overwrap_tpname)) {
-		bc_error_throw(bcerror_overwrap_type_type_parameter_name,
-			string_pool_ref2str(type_name(tp)),
-			string_pool_ref2str(out_overwrap_tpname)
-		);
-	}
-	//メソッドの重複する型パラメータ名を検出する
-	method* out_overwrap_tpm = NULL;
-	string_view out_overwrap_tpmname;
-	if(!interface_method_type_parameter_valid(tp->u.interface_, &out_overwrap_tpm, &out_overwrap_tpmname)) {
-		bc_error_throw(bcerror_overwrap_method_type_parameter_name,
-			string_pool_ref2str(type_name(tp)),
-			string_pool_ref2str(out_overwrap_tpm->namev),
-			string_pool_ref2str(out_overwrap_tpmname)
-		);
-	}
+	CLBC_check_interface(self, iltype, tp, scope);
 }
 
 static void CLBC_interface_impl(class_loader * self, il_type * iltype, type * tp, namespace_ * scope) {
@@ -323,4 +241,93 @@ static void CLBC_yield(class_loader* parent, class_loader* target) {
 	assert(target->source_code != NULL);
 	CLBC_import(target, target->il_code->import_list);
 //	CLBC_namespace_tree(target);
+}
+
+static void CLBC_check_class(class_loader * self, il_type * iltype, type * tp, namespace_ * scope) {
+	//実装されていないインターフェイスを確認する
+	method* outiMethod = NULL;
+	if(tp->tag == type_class &&
+	  !class_interface_implement_valid(TYPE2CLASS(tp), &outiMethod)) {
+		bc_error_throw(bcerror_not_implement_interface, string_pool_ref2str(tp->u.class_->namev), string_pool_ref2str(outiMethod->namev));
+	}
+	//実装されていない抽象メソッドを確認する
+	method* outaMethod = NULL;
+	if(tp->tag == type_class &&
+	   !class_abstract_class_implement_valid(TYPE2CLASS(tp), &outaMethod)) {
+		bc_error_throw(bcerror_not_implement_abstract_method, string_pool_ref2str(tp->u.class_->namev), string_pool_ref2str(outaMethod->namev));
+	   }
+	//重複するフィールドを確認する
+	field* outField = NULL;
+	if(!class_field_valid(tp->u.class_, &outField)) {
+		bc_error_throw(bcerror_field_name_a_overlapped, string_pool_ref2str(tp->u.class_->namev), string_pool_ref2str(outField->namev));
+	}
+	//メソッドの重複するパラメータ名を検出する
+	method* out_overwrap_m = NULL;
+	string_view out_overwrap_mname;
+	if(!class_method_parameter_valid(tp->u.class_, &out_overwrap_m, &out_overwrap_mname)) {
+		bc_error_throw(bcerror_overwrap_parameter_name,
+			string_pool_ref2str(type_name(tp)),
+			string_pool_ref2str(out_overwrap_m->namev),
+			string_pool_ref2str(out_overwrap_mname)
+		);
+	}
+	//コンストラクタの重複するパラメータ名を検出する
+	constructor* out_overwrap_c = NULL;
+	string_view out_overwrap_cname;
+	if(!class_ctor_parameter_valid(tp->u.class_, &out_overwrap_c, &out_overwrap_cname)) {
+		bc_error_throw(bcerror_overwrap_parameter_name,
+			string_pool_ref2str(type_name(tp)),
+			"new",
+			string_pool_ref2str(out_overwrap_cname)
+		);
+	}
+	//クラスの重複する型パラメータ名を検出する
+	string_view out_overwrap_tpname;
+	if(!class_type_type_parameter_valid(tp->u.class_, &out_overwrap_tpname)) {
+		bc_error_throw(bcerror_overwrap_type_type_parameter_name,
+			string_pool_ref2str(type_name(tp)),
+			string_pool_ref2str(out_overwrap_tpname)
+		);
+	}
+	//メソッドの重複する型パラメータ名を検出する
+	method* out_overwrap_tpm = NULL;
+	string_view out_overwrap_tpmname;
+	if(!class_method_type_parameter_valid(tp->u.class_, &out_overwrap_tpm, &out_overwrap_tpmname)) {
+		bc_error_throw(bcerror_overwrap_method_type_parameter_name,
+			string_pool_ref2str(type_name(tp)),
+			string_pool_ref2str(out_overwrap_tpm->namev),
+			string_pool_ref2str(out_overwrap_tpmname)
+		);
+	}
+}
+
+static void CLBC_check_interface(class_loader * self, il_type * iltype, type * tp, namespace_ * scope) {
+	//重複するパラメータ名を検出する
+	method* out_overwrap_m = NULL;
+	string_view out_overwrap_name;
+	if(!interface_method_parameter_valid(tp->u.interface_, &out_overwrap_m, &out_overwrap_name)) {
+		bc_error_throw(bcerror_overwrap_parameter_name,
+			string_pool_ref2str(type_name(tp)),
+			string_pool_ref2str(out_overwrap_m->namev),
+			string_pool_ref2str(out_overwrap_name)
+		);
+	}
+	//インターフェイスの重複する型パラメータ名を検出する
+	string_view out_overwrap_tpname;
+	if(!interface_type_type_parameter_valid(tp->u.interface_, &out_overwrap_tpname)) {
+		bc_error_throw(bcerror_overwrap_type_type_parameter_name,
+			string_pool_ref2str(type_name(tp)),
+			string_pool_ref2str(out_overwrap_tpname)
+		);
+	}
+	//メソッドの重複する型パラメータ名を検出する
+	method* out_overwrap_tpm = NULL;
+	string_view out_overwrap_tpmname;
+	if(!interface_method_type_parameter_valid(tp->u.interface_, &out_overwrap_tpm, &out_overwrap_tpmname)) {
+		bc_error_throw(bcerror_overwrap_method_type_parameter_name,
+			string_pool_ref2str(type_name(tp)),
+			string_pool_ref2str(out_overwrap_tpm->namev),
+			string_pool_ref2str(out_overwrap_tpmname)
+		);
+	}
 }
