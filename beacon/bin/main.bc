@@ -1,14 +1,18 @@
-namespace run68 {
-	class AAA {
-		public:
-		Vector[Int] v = new Vector[Int]() << 1 << 3 << 5;
+require "beacon/lang/Object"
+require "beacon/lang/Array"
+require "beacon/lang/Int"
+require "beacon/lang/Double"
+require "beacon/lang/Char"
+require "beacon/lang/String"
+require "beacon/lang/Bool"
+require "beacon/lang/Null"
+require "beacon/lang/Void"
+require "beacon/lang/Console"
+require "beacon/lang/Vector"
 
-		def new() {
-		}
-	}
-}
-var a = new run68::AAA();
-var iter = a.v.iterate();
-while(iter.moveNext()) {
-	iter.current().printLine();
-}
+require "beacon/lang/Exception"
+require "beacon/lang/StackTraceElement"
+require "beacon/lang/Tuple"
+
+var v = new Vector[Int]();
+assert (v is Vector[Int]);

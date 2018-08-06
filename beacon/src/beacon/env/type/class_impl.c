@@ -131,9 +131,6 @@ void class_alloc_fields(class_ * self, object * o, frame* fr) {
 		vector_push(o->u.field_vec, a);
 		he->collect_blocking--;
 	}
-	class_create_vtable(self);
-	o->gtype = generic_type_ref(self->parent);
-	o->vptr = self->vt;
 }
 
 void class_free_fields(class_ * self, object * o) {
