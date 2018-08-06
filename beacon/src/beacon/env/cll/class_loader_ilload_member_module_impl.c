@@ -8,6 +8,7 @@
 #include "../../il/il_property.h"
 #include "../../error.h"
 #include "class_loader_ilload_type_module_impl.h"
+#include "class_loader_ilload_factor_module_impl.h"
 #include "class_loader_ilload_stmt_module_impl.h"
 #include <assert.h>
 
@@ -52,12 +53,17 @@ void CLIL_field(class_loader* self, il_type* current, ast* field, access_level l
 	ast* modifier = ast_first(field);
 	ast* type_name = ast_second(field);
 	ast* access_name = ast_at(field, 2);
+	ast* afact = ast_at(field, 3);
 	il_field* v = il_field_new(access_name->u.stringv_value);
 	CLIL_generic_cache(type_name, v->fqcn);
 	bool error;
 	v->access = level;
 	v->modifier = ast_cast_to_modifier(modifier, &error);
 	il_type_add_field(current, v);
+	//設定されているなら初期値も
+	if(!ast_is_blank(afact)) {
+		v->initial_value = CLIL_factor(self, afact);
+	}
 	//重複する修飾子を検出
 	if(error) {
 		bc_error_throw(bcerror_overwrap_modifier, string_pool_ref2str(v->namev));

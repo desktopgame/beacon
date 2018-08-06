@@ -8,6 +8,7 @@
 struct type;
 struct generic_type;
 struct object;
+struct il_factor;
 /**
  * フィールドを表す構造体.
  */
@@ -18,6 +19,7 @@ typedef struct field {
 	struct object* static_value;
 	access_level access;
 	modifier_type modifier;
+	struct il_factor* initial_value;
 } field;
 
 /**

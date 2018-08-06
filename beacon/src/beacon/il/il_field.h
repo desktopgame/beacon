@@ -6,6 +6,7 @@
 #include "../util/string_pool.h"
 //#include "../env/fqcn_cache.h"
 struct generic_cache;
+struct il_factor;
 /**
  * フィールドを表す要素.
  */
@@ -15,6 +16,7 @@ typedef struct il_field {
 	string_view namev;
 	access_level access;
 	modifier_type modifier;
+	struct il_factor* initial_value;
 } il_field;
 /**
  * 新しいフィールドを作成します.

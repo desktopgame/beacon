@@ -5,6 +5,7 @@
 #include "type_interface.h"
 #include "../util/mem.h"
 #include "../util/text.h"
+#include "../il/il_factor_interface.h"
 #include "generic_type.h"
 
 field * field_new(string_view namev) {
@@ -15,6 +16,7 @@ field * field_new(string_view namev) {
 	ret->parent = NULL;
 	ret->static_value = NULL;
 	ret->gtype = NULL;
+	ret->initial_value = NULL;
 	return ret;
 }
 
@@ -22,5 +24,6 @@ void field_delete(field * self) {
 	if (self == NULL) {
 		return;
 	}
+	il_factor_delete(self->initial_value);
 	MEM_FREE(self);
 }

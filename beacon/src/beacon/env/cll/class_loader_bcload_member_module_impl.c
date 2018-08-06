@@ -57,6 +57,9 @@ void CLBC_fields_decl(class_loader* self, il_type* iltype, type* tp, vector* ilf
 		field->parent = tp;
 		field->gtype = import_manager_resolve(self->import_manager, scope, ilfield->fqcn, cctx);
 		type_add_field(tp, field);
+		//フィールドの初期値
+		field->initial_value = ilfield->initial_value;
+		ilfield->initial_value = NULL;
 		//フィールドの修飾子に native が使用されている
 		if(modifier_is_native(field->modifier)) {
 			bc_error_throw(bcerror_native_field,
