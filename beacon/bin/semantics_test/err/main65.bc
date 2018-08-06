@@ -1,0 +1,11 @@
+namespace err65 {
+	class Base {
+		public:
+		def new() {
+		}
+
+		def static override hoge() -> Void {
+		}
+	}
+}
+printLine("Hello");

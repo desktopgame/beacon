@@ -21,6 +21,10 @@ typedef enum bc_error_id {
 	bcerror_abstract_field,
 	bcerror_override_field,
 
+	bcerror_static_override_method,
+	bcerror_abstract_override_method,
+	bcerror_abstract_static_method,
+
 	bcerror_undefined_class,
 	bcerror_undefined_variable,
 	bcerror_undefined_field,

@@ -212,10 +212,10 @@ void CLBC_methods_decl(class_loader* self, il_type* iltype, type* tp, vector* il
 		if(modifier_is_abstract(method->modifier) &&
 		  (tp->tag == type_class &&
 		  !TYPE2CLASS(tp)->is_abstract)) {
-			  bc_error_throw(bcerror_abstract_method_by, string_pool_ref2str(method->namev));
-			  method_delete(method);
-				call_context_delete(cctx);
-			  return;
+			bc_error_throw(bcerror_abstract_method_by, string_pool_ref2str(method->namev));
+			method_delete(method);
+			call_context_delete(cctx);
+			break;
 		}
 		//メソッドの本文が省略されているが、
 		//ネイティブメソッドでも抽象メソッドでもない
@@ -223,20 +223,53 @@ void CLBC_methods_decl(class_loader* self, il_type* iltype, type* tp, vector* il
 		   ilmethod->no_stmt &&
 			(!modifier_is_abstract(method->modifier) && !modifier_is_native(method->modifier))
 		) {
-			  bc_error_throw(bcerror_empty_method_body, string_pool_ref2str(method->namev));
-			  method_delete(method);
+			bc_error_throw(bcerror_empty_method_body, string_pool_ref2str(method->namev));
+			method_delete(method);
 			call_context_delete(cctx);
-			return;
+			break;
 		}
 		//ネイティブメソッドもしくは抽象メソッドなのに本文が書かれている
 		if(tp->tag == type_class &&
 		   !ilmethod->no_stmt &&
 			(modifier_is_abstract(method->modifier) || modifier_is_native(method->modifier))
 		) {
-			  bc_error_throw(bcerror_not_empty_method_body, string_pool_ref2str(method->namev));
-			  method_delete(method);
+			bc_error_throw(bcerror_not_empty_method_body, string_pool_ref2str(method->namev));
+			method_delete(method);
 			call_context_delete(cctx);
-			return;
+			break;
+		}
+		//メソッドの修飾子が static override
+		if(modifier_is_static(method->modifier) &&
+		   modifier_is_override(method->modifier)) {
+			bc_error_throw(bcerror_static_override_method,
+				string_pool_ref2str(type_name(tp)),
+				string_pool_ref2str(method->namev)
+			);
+			method_delete(method);
+			call_context_delete(cctx);
+			break;
+		}
+		//.. abstract override
+		if(modifier_is_abstract(method->modifier) &&
+		   modifier_is_override(method->modifier)) {
+			bc_error_throw(bcerror_abstract_override_method,
+				string_pool_ref2str(type_name(tp)),
+				string_pool_ref2str(method->namev)
+			);
+			method_delete(method);
+			call_context_delete(cctx);
+			break;
+		}
+		//.. abstract static
+		if(modifier_is_abstract(method->modifier) &&
+		   modifier_is_static(method->modifier)) {
+			bc_error_throw(bcerror_abstract_static_method,
+				string_pool_ref2str(type_name(tp)),
+				string_pool_ref2str(method->namev)
+			);
+			method_delete(method);
+			call_context_delete(cctx);
+			break;
 		}
 		method->parent = tp;
 		method->return_gtype = import_manager_resolve(self->import_manager, scope, ilmethod->return_fqcn, cctx);

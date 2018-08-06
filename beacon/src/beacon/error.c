@@ -57,6 +57,16 @@ void bc_error_vthrow(bc_error_id id, va_list ap) {
 			fmt = "`override` modifier is can't use for field: %s#%s";
 			break;
 
+		case bcerror_static_override_method:
+			fmt = "`static` and `override` modifier is can't use with: %s#%s";
+			break;
+		case bcerror_abstract_override_method:
+			fmt = "`abstract` and `override` modifier is can't use with: %s#%s";
+			break;
+		case bcerror_abstract_static_method:
+			fmt = "`abstract` and `static` modifier is can't use with: %s#%s";
+			break;
+
 		case bcerror_undefined_class:
 			fmt = "undefined class: %s";
 			break;
