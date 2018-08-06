@@ -533,11 +533,19 @@ operator_define
 field_define
 	: modifier_type_T_list typename_T IDENT SEMI
 	{
-		$$ = ast_new_field_decl($1, $2, $3);
+		$$ = ast_new_field_decl($1, $2, $3, ast_new_blank());
 	}
 	| typename_T IDENT SEMI
 	{
-		$$ = ast_new_field_decl(ast_new_modifier(modifier_none), $1, $2);
+		$$ = ast_new_field_decl(ast_new_modifier(modifier_none), $1, $2, ast_new_blank());
+	}
+	| modifier_type_T_list typename_T IDENT ASSIGN expression SEMI
+	{
+		$$ = ast_new_field_decl($1, $2, $3, $5);
+	}
+	| typename_T IDENT ASSIGN expression SEMI
+	{
+		$$ = ast_new_field_decl(ast_new_modifier(modifier_none), $1, $2, $4);
 	}
 	;
 

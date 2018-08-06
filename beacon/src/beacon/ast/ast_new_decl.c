@@ -105,11 +105,12 @@ ast * ast_new_member_decl_list(ast* member_list, ast* member) {
 	return ret;
 }
 
-ast * ast_new_field_decl(ast* amodifier, ast* type_name, string_view field_namev) {
+ast * ast_new_field_decl(ast* amodifier, ast* type_name, string_view field_namev, ast* afact) {
 	ast* ret = ast_new(ast_field_decl);
 	ast_push(ret, amodifier);
 	ast_push(ret, type_name);
 	ast_push(ret, ast_new_field_access_name(field_namev));
+	ast_push(ret, afact);
 	return ret;
 }
 

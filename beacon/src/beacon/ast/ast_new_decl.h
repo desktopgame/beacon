@@ -130,9 +130,10 @@ ast* ast_new_member_decl_list(ast* member_list, ast* member);
  * @param amodifier
  * @param type_name
  * @param field_namev
+ * @param afact
  * @return
  */
-ast* ast_new_field_decl(ast* amodifier, ast* type_name, string_view field_namev);
+ast* ast_new_field_decl(ast* amodifier, ast* type_name, string_view field_namev, ast* afact);
 
 /**
  * 関数宣言を表す要素を作成します.
