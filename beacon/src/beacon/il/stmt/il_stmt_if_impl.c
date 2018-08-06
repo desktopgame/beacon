@@ -137,6 +137,7 @@ void il_stmt_if_load(il_stmt_if * self, struct enviroment* env, call_context* cc
 	for(int i=0; i<self->body->length; i++) {
 		il_stmt* e = (il_stmt*)vector_at(self->body, i);
 		il_stmt_load(e, env, cctx);
+		BC_ERROR();
 	}
 	for(int i=0; i<self->elif_list->length; i++) {
 		il_stmt_elif* e = (il_stmt_elif*)vector_at(self->elif_list, i);
@@ -144,17 +145,22 @@ void il_stmt_if_load(il_stmt_if * self, struct enviroment* env, call_context* cc
 		for(int j=0; j<e->body->length; j++) {
 			il_stmt* st = (il_stmt*)vector_at(e->body, j);
 			il_stmt_load(st, env, cctx);
+			BC_ERROR();
 		}
+		BC_ERROR();
 	}
 	for(int i=0; i<self->else_body->body->length; i++) {
 		il_stmt* e = (il_stmt*)vector_at(self->else_body->body, i);
 		il_stmt_load(e, env, cctx);
+		BC_ERROR();
 	}
 	//条件が bool を返さない
+	BC_ERROR();
 	check_condition_type(self->condition, env, cctx);
 	for(int i=0; i<self->elif_list->length; i++) {
 		il_stmt_elif* elif = vector_at(self->elif_list, i);
 		check_condition_type(elif->condition, env, cctx);
+		BC_ERROR();
 	}
 }
 
