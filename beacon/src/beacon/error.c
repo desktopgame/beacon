@@ -46,6 +46,17 @@ void bc_error_vthrow(bc_error_id id, va_list ap) {
 		case bcerror_overwrap_field_name:
 			fmt = "overwrap of field name: %s @%s";
 			break;
+
+		case bcerror_native_field:
+			fmt = "`native` modifier is can't use for field: %s#%s";
+			break;
+		case bcerror_abstract_field:
+			fmt = "`abstract` modifier is can't use for field: %s#%s";
+			break;
+		case bcerror_override_field:
+			fmt = "`override` modifier is can't use for field: %s#%s";
+			break;
+
 		case bcerror_undefined_class:
 			fmt = "undefined class: %s";
 			break;
@@ -84,9 +95,6 @@ void bc_error_vthrow(bc_error_id id, va_list ap) {
 			break;
 		case bcerror_chain:
 			fmt = "error %s";
-			break;
-		case bcerror_native_field:
-			fmt = "shouldn't define field of abstract or native: %s";
 			break;
 		case bcerror_abstract_method_by:
 			fmt = "abstract method should be defined on the abstract class: %s";

@@ -1,7 +1,7 @@
-namespace err64 {
+namespace err63 {
 	class Base {
 		public:
-		override Int v;
+		abstract Int z;
 	}
 }
 printLine("Hello");

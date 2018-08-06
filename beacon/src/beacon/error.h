@@ -16,6 +16,11 @@ typedef enum bc_error_id {
 	bcerror_overwrap_variable_name,
 	bcerror_overwrap_modifier,
 	bcerror_overwrap_field_name,
+
+	bcerror_native_field,
+	bcerror_abstract_field,
+	bcerror_override_field,
+
 	bcerror_undefined_class,
 	bcerror_undefined_variable,
 	bcerror_undefined_field,
@@ -29,7 +34,6 @@ typedef enum bc_error_id {
 	bcerror_multi_eqinterface,
 	bcerror_interface_only,
 	bcerror_chain,
-	bcerror_native_field,
 	bcerror_abstract_method_by,
 	bcerror_empty_method_body,
 	bcerror_not_empty_method_body,

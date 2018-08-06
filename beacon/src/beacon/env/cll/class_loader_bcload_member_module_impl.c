@@ -56,15 +56,31 @@ void CLBC_fields_decl(class_loader* self, il_type* iltype, type* tp, vector* ilf
 		field->modifier = ilfield->modifier;
 		field->parent = tp;
 		field->gtype = import_manager_resolve(self->import_manager, scope, ilfield->fqcn, cctx);
-		if(modifier_is_abstract(field->modifier) ||
-		   modifier_is_override(field->modifier) ||
-		   modifier_is_native(field->modifier)) {
-			   bc_error_throw(bcerror_native_field, string_pool_ref2str(field->namev));
-				call_context_delete(cctx);
-			   return;
-		   }
-		//NOTE:ここではフィールドの型を設定しません
 		type_add_field(tp, field);
+		//フィールドの修飾子に native が使用されている
+		if(modifier_is_native(field->modifier)) {
+			bc_error_throw(bcerror_native_field,
+				string_pool_ref2str(type_name(tp)),
+				string_pool_ref2str(field->namev)
+			);
+			break;
+		}
+		//.. abstractが使用されている
+		if(modifier_is_abstract(field->modifier)) {
+			bc_error_throw(bcerror_abstract_field,
+				string_pool_ref2str(type_name(tp)),
+				string_pool_ref2str(field->namev)
+			);
+			break;
+		}
+		//.. overrideが使用されている
+		if(modifier_is_override(field->modifier)) {
+			bc_error_throw(bcerror_override_field,
+				string_pool_ref2str(type_name(tp)),
+				string_pool_ref2str(field->namev)
+			);
+			break;
+		}
 	}
 	call_context_delete(cctx);
 }
