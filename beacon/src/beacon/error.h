@@ -13,6 +13,7 @@ typedef enum bc_error_id {
 	bcerror_overwrap_parameter_name,
 	bcerror_overwrap_type_type_parameter_name,
 	bcerror_overwrap_method_type_parameter_name,
+	bcerror_overwrap_variable_name,
 	bcerror_undefined_class,
 	bcerror_undefined_variable,
 	bcerror_undefined_field,

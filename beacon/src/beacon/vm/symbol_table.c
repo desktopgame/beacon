@@ -38,6 +38,10 @@ symbol_entry* symbol_table_entry(symbol_table* self, generic_type* gtp, string_v
 	return e;
 }
 
+bool symbol_table_contains(symbol_table* self, string_view namev) {
+	return numeric_map_cell(self->map, namev) != NULL;
+}
+
 void symbol_table_dump(symbol_table* self) {
 	numeric_map_each(self->map, symbol_table_dump_entry);
 }

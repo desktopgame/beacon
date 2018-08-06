@@ -35,14 +35,17 @@ void il_stmt_inferenced_type_init_generate(il_stmt_inferenced_type_init * self, 
 }
 
 void il_stmt_inferenced_type_init_load(il_stmt_inferenced_type_init * self, enviroment * env, call_context* cctx) {
+	//代入するオブジェクトを計算
 	il_factor_load(self->fact, env, cctx);
 	generic_type* gtp = il_factor_eval(self->fact, env, cctx);
 	if(bc_error_last()) {
 		return;
 	}
-	if(gtp->type_args_list->length > 0) {
-		generic_type* a = (generic_type*)vector_at(gtp->type_args_list, 0);
-		int x = 0;
+	//変数を登録
+	if(symbol_table_contains(env->sym_table, self->namev)) {
+		bc_error_throw(bcerror_overwrap_variable_name,
+			string_pool_ref2str(self->namev)
+		);
 	}
 	symbol_entry* e = symbol_table_entry(
 		env->sym_table,

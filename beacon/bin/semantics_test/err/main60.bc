@@ -1,9 +1,9 @@
-namespace err61 {
+namespace err60 {
 	class Base {
 		public:
 		def new() {
-			Int z = 0;
-			String z = 0;
+			var a = 0;
+			var a = 0;
 		}
 	}
 }

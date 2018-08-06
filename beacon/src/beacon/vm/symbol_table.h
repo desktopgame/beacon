@@ -5,6 +5,7 @@
 #include "../util/numeric_map.h"
 #include "../util/string_pool.h"
 #include <stdio.h>
+#include <stdbool.h>
 //#include "../env/class.h"
 struct generic_type;
 struct symbol_entry;
@@ -32,6 +33,14 @@ symbol_table* symbol_table_new();
  * @return nameに対応するエントリが存在せず、clsがNULLならNULL
  */
 struct symbol_entry* symbol_table_entry(symbol_table* self, struct generic_type* gtp, string_view namev);
+
+/**
+ * 既に指定の名前が含まれるなら true.
+ * @param self
+ * @param namev
+ * @return
+ */
+bool symbol_table_contains(symbol_table* self, string_view namev);
 
 /**
  * シンボルテーブルをダンプします.

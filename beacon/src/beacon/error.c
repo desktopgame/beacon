@@ -37,6 +37,9 @@ void bc_error_vthrow(bc_error_id id, va_list ap) {
 		case bcerror_overwrap_method_type_parameter_name:
 			fmt = "overwrap of type parameter name: %s#%s[%s]";
 			break;
+		case bcerror_overwrap_variable_name:
+			fmt = "overwrap of variable name: %s";
+			break;
 		case bcerror_undefined_class:
 			fmt = "undefined class: %s";
 			break;
