@@ -44,6 +44,9 @@ typedef enum bc_error_id {
 	bcerror_break_at_not_loop,
 	bcerror_continue_at_not_loop,
 
+	bcerror_access_to_this_at_static_method,
+	bcerror_access_to_super_at_static_method,
+
 	bcerror_undefined_class,
 	bcerror_undefined_variable,
 	bcerror_undefined_field,

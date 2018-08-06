@@ -112,6 +112,14 @@ void bc_error_vthrow(bc_error_id id, va_list ap) {
 			break;
 
 
+		case bcerror_access_to_this_at_static_method:
+			fmt = "access to `this` at static method: %s#%s";
+			break;
+		case bcerror_access_to_super_at_static_method:
+			fmt = "access to `super` at static method: %s#%s";
+			break;
+
+
 		case bcerror_undefined_class:
 			fmt = "undefined class: %s";
 			break;

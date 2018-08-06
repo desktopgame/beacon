@@ -1,11 +1,11 @@
-namespace err81 {
+namespace err80 {
 	class AAA {
 		public:
 		def new() {
 		}
 
 		def static test() -> Void {
-			super.printLine();
+			this.printLine();
 		}
 	}
 }
