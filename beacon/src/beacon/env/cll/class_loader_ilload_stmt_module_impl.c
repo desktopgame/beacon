@@ -116,6 +116,12 @@ static il_stmt* CLIL_bodyImpl(class_loader* self, ast* source) {
 			il_stmt_return* ilret = CLIL_return(self, source);
 			return il_stmt_wrap_return(ilret);
 		}
+		case ast_return_empty:
+		{
+			il_stmt* ret = il_stmt_new(ilstmt_return_empty);
+			ret->u.return_empty = NULL;
+			return ret;
+		}
 		case ast_stmt_try:
 		{
 			il_stmt_try* iltry = CLIL_try(self, source);

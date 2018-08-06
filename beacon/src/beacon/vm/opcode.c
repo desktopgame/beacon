@@ -444,6 +444,11 @@ int opcode_fprint(FILE* fp, vector* source, int index) {
 			text_fprintf(fp,"return");
 			break;
 		}
+		case op_return_void:
+		{
+			text_fprintf(fp, "return void");
+			break;
+		}
 		case op_throw:
 		{
 			text_fprintf(fp,"throw");

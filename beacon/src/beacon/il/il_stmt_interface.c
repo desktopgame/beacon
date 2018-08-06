@@ -31,6 +31,9 @@ void il_stmt_dump(il_stmt * self, int depth) {
 		case ilstmt_return:
 			il_stmt_return_dump(self->u.return_, depth);
 			break;
+		case ilstmt_return_empty:
+			il_stmt_return_empty_dump(NULL, depth);
+			break;
 		case ilstmt_while:
 			il_stmt_while_dump(self->u.while_, depth);
 			break;
@@ -88,6 +91,9 @@ void il_stmt_generate(il_stmt * self, struct enviroment* env, call_context* cctx
 			break;
 		case ilstmt_return:
 			il_stmt_return_generate(self->u.return_, env, cctx);
+			break;
+		case ilstmt_return_empty:
+			il_stmt_return_empty_generate(NULL, env, cctx);
 			break;
 		case ilstmt_while:
 			il_stmt_while_generate(self->u.while_, env, cctx);
@@ -148,6 +154,9 @@ void il_stmt_load(il_stmt * self, enviroment* env, call_context* cctx) {
 			break;
 		case ilstmt_return:
 			il_stmt_return_load(self->u.return_, env, cctx);
+			break;
+		case ilstmt_return_empty:
+			il_stmt_return_empty_load(NULL, env, cctx);
 			break;
 		case ilstmt_while:
 			il_stmt_while_load(self->u.while_, env, cctx);

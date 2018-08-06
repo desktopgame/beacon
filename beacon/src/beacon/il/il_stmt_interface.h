@@ -15,6 +15,7 @@ typedef enum il_stmt_type {
 	ilstmt_variable_decl,
 	ilstmt_variable_init,
 	ilstmt_return,
+	ilstmt_return_empty,
 	ilstmt_break,
 	ilstmt_continue,
 	ilstmt_inferenced_type_init,
@@ -33,6 +34,7 @@ struct il_stmt_while;
 struct il_stmt_variable_decl;
 struct il_stmt_variable_init;
 struct il_stmt_return;
+typedef void* il_stmt_return_empty;
 struct il_stmt_inferenced_type_init;
 struct il_stmt_try;
 struct il_stmt_throw;
@@ -54,13 +56,14 @@ typedef struct il_stmt {
 		struct il_stmt_variable_decl* variable_decl;
 		struct il_stmt_variable_init* variable_init;
 		struct il_stmt_return* return_;
+		il_stmt_return_empty return_empty;
 		struct il_stmt_inferenced_type_init* inferenced_type_init;
 		struct il_stmt_try* try_;
 		struct il_stmt_throw* throw_;
 		struct il_stmt_assert* bcassert_;
 		struct il_stmt_defer* defer_;
 		struct il_stmt_yield_return* yield_return;
-		il_stmt_yield_break* yield_break;
+		il_stmt_yield_break yield_break;
 	} u;
 } il_stmt;
 

@@ -436,6 +436,11 @@ static void vm_run(frame * self, enviroment * env, int pos, int deferStart) {
 				IDX = source_len;
 				break;
 			}
+			case op_return_void:
+			{
+				IDX = source_len;
+				break;
+			}
 			case op_throw:
 			{
 				//例外は呼び出し全てへ伝播

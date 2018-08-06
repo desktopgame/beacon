@@ -112,6 +112,11 @@ ast* ast_new_continue();
 ast* ast_new_return(ast* fact);
 
 /**
+ * @return
+ */
+ast* ast_new_return_empty();
+
+/**
  * 例外をスローするステートメントを作成します.
  * @param fact
  * @return

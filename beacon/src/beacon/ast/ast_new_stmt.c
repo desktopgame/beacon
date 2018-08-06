@@ -82,6 +82,10 @@ ast * ast_new_return(ast * fact) {
 	return ret;
 }
 
+ast* ast_new_return_empty() {
+	return ast_new(ast_return_empty);
+}
+
 
 ast* ast_new_throw(ast* fact) {
 	ast* ret = ast_new(ast_stmt_throw);

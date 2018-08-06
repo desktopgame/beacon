@@ -68,6 +68,7 @@ typedef enum opcode {
 	op_false,
 	op_null,
 	op_return,
+	op_return_void,
 	op_try_enter,
 	op_try_exit,
 	op_throw,

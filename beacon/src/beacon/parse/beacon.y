@@ -1106,6 +1106,10 @@ return_stmt
 	{
 		$$ = ast_new_return($2);
 	}
+	| RETURN stmt_term
+	{
+		$$ = ast_new_return_empty();
+	}
 	;
 throw_stmt
 	: THROW expression stmt_term
