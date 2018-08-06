@@ -281,6 +281,14 @@ bool class_abstract_class_implement_valid(class_* cls, method** out);
 bool class_field_valid(class_* cls, struct field** out);
 
 /**
+ * クラスのプロパティ名のうち重複するものがないなら true.
+ * @param self
+ * @param out
+ * @return
+ */
+bool class_property_valid(class_* self, struct property** out);
+
+/**
  * 全てのメソッドを巡回して、全てにおいてパラメータ名の重複がないなら true.
  * @param cls
  * @param out_method

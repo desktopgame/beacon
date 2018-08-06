@@ -46,6 +46,9 @@ void bc_error_vthrow(bc_error_id id, va_list ap) {
 		case bcerror_overwrap_field_name:
 			fmt = "overwrap of field name: %s @%s";
 			break;
+		case bcerror_overwrap_property_name:
+			fmt = "overwrap of property name: %s @%s";
+			break;
 
 
 		case bcerror_native_field:

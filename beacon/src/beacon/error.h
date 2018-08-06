@@ -16,6 +16,7 @@ typedef enum bc_error_id {
 	bcerror_overwrap_variable_name,
 	bcerror_overwrap_modifier,
 	bcerror_overwrap_field_name,
+	bcerror_overwrap_property_name,
 
 	bcerror_native_field,
 	bcerror_abstract_field,

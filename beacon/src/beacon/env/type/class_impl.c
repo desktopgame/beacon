@@ -44,6 +44,7 @@ static void class_vtable_vec_delete(vector_item item);
 static void class_type_parameter_delete(vector_item item);
 static void class_generic_type_list_delete(vector_item item);
 static bool class_field_validImpl(vector* field_vec, field** out);
+static bool class_property_validImpl(vector* prop_vec, property** out);
 static void class_delete_operator_overload(vector_item item);
 static void class_delete_property(vector_item item);
 
@@ -446,6 +447,11 @@ bool class_field_valid(class_* cls, field** out) {
 		   class_field_validImpl(cls->sfield_list, out);
 }
 
+bool class_property_valid(class_* self, property** out) {
+	return class_property_validImpl(self->prop_list, out) &&
+	       class_property_validImpl(self->sprop_list, out);
+}
+
 bool class_method_parameter_valid(class_* cls, method** out_method, string_view* out_name) {
 	for(int i=0; i<cls->method_list->length; i++) {
 		method* m = (method*)vector_at(cls->method_list, i);
@@ -620,6 +626,24 @@ static bool class_field_validImpl(vector* field_vec, field** out) {
 			if(f->namev == fE->namev) {
 				ret = false;
 				(*out) = fE;
+				break;
+			}
+		}
+	}
+	return ret;
+}
+
+static bool class_property_validImpl(vector* prop_vec, property** out) {
+	(*out) = NULL;
+	bool ret = true;
+	for(int i=0; i<prop_vec->length; i++) {
+		property* p = (property*)vector_at(prop_vec, i);
+		for(int j=0; j<prop_vec->length; j++) {
+			property* pE = (property*)vector_at(prop_vec, j);
+			if(i == j) { continue; }
+			if(p->namev == pE->namev) {
+				ret = false;
+				(*out) = p;
 				break;
 			}
 		}

@@ -6,6 +6,7 @@
 #include "../../il/il_type_impl.h"
 #include "../../error.h"
 #include "../../env/constructor.h"
+#include "../../env/property.h"
 #include "../../util/text.h"
 #include "class_loader_bcload_member_module_impl.h"
 #include "class_loader_bcload_import_module_impl.h"
@@ -256,10 +257,22 @@ static void CLBC_check_class(class_loader * self, il_type * iltype, type * tp, n
 	   !class_abstract_class_implement_valid(TYPE2CLASS(tp), &outaMethod)) {
 		bc_error_throw(bcerror_not_implement_abstract_method, string_pool_ref2str(tp->u.class_->namev), string_pool_ref2str(outaMethod->namev));
 	   }
+	//重複するプロパティを確認する
+	property* outProp = NULL;
+	if(!class_property_valid(tp->u.class_, &outProp)) {
+		bc_error_throw(bcerror_overwrap_property_name,
+			string_pool_ref2str(tp->u.class_->namev),
+			string_pool_ref2str(outProp->namev)
+		);
+		return;
+	}
 	//重複するフィールドを確認する
 	field* outField = NULL;
 	if(!class_field_valid(tp->u.class_, &outField)) {
-		bc_error_throw(bcerror_overwrap_field_name, string_pool_ref2str(tp->u.class_->namev), string_pool_ref2str(outField->namev));
+		bc_error_throw(bcerror_overwrap_field_name,
+			string_pool_ref2str(tp->u.class_->namev),
+			string_pool_ref2str(outField->namev)
+		);
 	}
 	//メソッドの重複するパラメータ名を検出する
 	method* out_overwrap_m = NULL;
