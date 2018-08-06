@@ -677,6 +677,10 @@ modifier_type_T
 	{
 		$$ = ast_new_modifier(modifier_override);
 	}
+	| FINAL
+	{
+		$$ = ast_new_modifier(modifier_final);
+	}
 	;
 ;;
 ;;}}}

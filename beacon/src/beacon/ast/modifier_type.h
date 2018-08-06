@@ -11,6 +11,7 @@ typedef enum modifier_type {
 	modifier_native		= (1 << 2),
 	modifier_abstract	= (1 << 3),
 	modifier_override	= (1 << 4),
+	modifier_final		= (1 << 5)
 } modifier_type;
 
 /**

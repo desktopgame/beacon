@@ -77,79 +77,80 @@
      LOGIC_AND = 286,
      BIT_OR = 287,
      LOGIC_OR = 288,
-     ASSIGN = 289,
-     ADD_ASSIGN = 290,
-     SUB_ASSIGN = 291,
-     MUL_ASSIGN = 292,
-     DIV_ASSIGN = 293,
-     MOD_ASSIGN = 294,
-     AND_ASSIGN = 295,
-     OR_ASSIGN = 296,
-     LSHIFT_ASSIGN = 297,
-     RSHIFT_ASSIGN = 298,
-     EXC_OR_ASSIGN = 299,
-     INC = 300,
-     DEC = 301,
-     EXC_OR = 302,
-     LCB = 303,
-     RCB = 304,
-     LRB = 305,
-     RRB = 306,
-     LSB = 307,
-     RSB = 308,
-     SEMI = 309,
-     IMPORT = 310,
-     VAR = 311,
-     PROPERTY = 312,
-     DEFSET = 313,
-     DEFGET = 314,
-     THIS_TOK = 315,
-     SUPER_TOK = 316,
-     TRUE_TOK = 317,
-     FALSE_TOK = 318,
-     NULL_TOK = 319,
-     AS = 320,
-     ABSTRACT = 321,
-     OVERRIDE = 322,
-     INTERFACE = 323,
-     CLASS = 324,
-     ENUM = 325,
-     PUBLIC = 326,
-     PRIVATE = 327,
-     PROTECTED = 328,
-     STATIC = 329,
-     NATIVE = 330,
-     NEW = 331,
-     DEF = 332,
-     ARROW = 333,
-     NAMESPACE = 334,
-     RETURN = 335,
-     YIELD = 336,
-     IF = 337,
-     ELIF = 338,
-     ELSE = 339,
-     WHILE = 340,
-     BREAK = 341,
-     CONTINUE = 342,
-     TRY = 343,
-     CATCH = 344,
-     THROW = 345,
-     ASSERT_T = 346,
-     DEFER = 347,
-     INSTANCEOF = 348,
-     OPERATOR = 349,
-     BOUNDS_EXTENDS = 350,
-     BOUNDS_SUPER = 351,
-     PRE_DEC = 352,
-     PRE_INC = 353,
-     QUOTE = 354,
-     POST_DEC = 355,
-     POST_INC = 356,
-     FUNCCALL = 357,
-     REF = 358,
-     POSITIVE = 359,
-     NEGATIVE = 360,
-     FORM_TYPE = 361
+     FINAL = 289,
+     ASSIGN = 290,
+     ADD_ASSIGN = 291,
+     SUB_ASSIGN = 292,
+     MUL_ASSIGN = 293,
+     DIV_ASSIGN = 294,
+     MOD_ASSIGN = 295,
+     AND_ASSIGN = 296,
+     OR_ASSIGN = 297,
+     LSHIFT_ASSIGN = 298,
+     RSHIFT_ASSIGN = 299,
+     EXC_OR_ASSIGN = 300,
+     INC = 301,
+     DEC = 302,
+     EXC_OR = 303,
+     LCB = 304,
+     RCB = 305,
+     LRB = 306,
+     RRB = 307,
+     LSB = 308,
+     RSB = 309,
+     SEMI = 310,
+     IMPORT = 311,
+     VAR = 312,
+     PROPERTY = 313,
+     DEFSET = 314,
+     DEFGET = 315,
+     THIS_TOK = 316,
+     SUPER_TOK = 317,
+     TRUE_TOK = 318,
+     FALSE_TOK = 319,
+     NULL_TOK = 320,
+     AS = 321,
+     ABSTRACT = 322,
+     OVERRIDE = 323,
+     INTERFACE = 324,
+     CLASS = 325,
+     ENUM = 326,
+     PUBLIC = 327,
+     PRIVATE = 328,
+     PROTECTED = 329,
+     STATIC = 330,
+     NATIVE = 331,
+     NEW = 332,
+     DEF = 333,
+     ARROW = 334,
+     NAMESPACE = 335,
+     RETURN = 336,
+     YIELD = 337,
+     IF = 338,
+     ELIF = 339,
+     ELSE = 340,
+     WHILE = 341,
+     BREAK = 342,
+     CONTINUE = 343,
+     TRY = 344,
+     CATCH = 345,
+     THROW = 346,
+     ASSERT_T = 347,
+     DEFER = 348,
+     INSTANCEOF = 349,
+     OPERATOR = 350,
+     BOUNDS_EXTENDS = 351,
+     BOUNDS_SUPER = 352,
+     PRE_DEC = 353,
+     PRE_INC = 354,
+     QUOTE = 355,
+     POST_DEC = 356,
+     POST_INC = 357,
+     FUNCCALL = 358,
+     REF = 359,
+     POSITIVE = 360,
+     NEGATIVE = 361,
+     FORM_TYPE = 362
    };
 #endif
 /* Tokens.  */
@@ -184,79 +185,80 @@
 #define LOGIC_AND 286
 #define BIT_OR 287
 #define LOGIC_OR 288
-#define ASSIGN 289
-#define ADD_ASSIGN 290
-#define SUB_ASSIGN 291
-#define MUL_ASSIGN 292
-#define DIV_ASSIGN 293
-#define MOD_ASSIGN 294
-#define AND_ASSIGN 295
-#define OR_ASSIGN 296
-#define LSHIFT_ASSIGN 297
-#define RSHIFT_ASSIGN 298
-#define EXC_OR_ASSIGN 299
-#define INC 300
-#define DEC 301
-#define EXC_OR 302
-#define LCB 303
-#define RCB 304
-#define LRB 305
-#define RRB 306
-#define LSB 307
-#define RSB 308
-#define SEMI 309
-#define IMPORT 310
-#define VAR 311
-#define PROPERTY 312
-#define DEFSET 313
-#define DEFGET 314
-#define THIS_TOK 315
-#define SUPER_TOK 316
-#define TRUE_TOK 317
-#define FALSE_TOK 318
-#define NULL_TOK 319
-#define AS 320
-#define ABSTRACT 321
-#define OVERRIDE 322
-#define INTERFACE 323
-#define CLASS 324
-#define ENUM 325
-#define PUBLIC 326
-#define PRIVATE 327
-#define PROTECTED 328
-#define STATIC 329
-#define NATIVE 330
-#define NEW 331
-#define DEF 332
-#define ARROW 333
-#define NAMESPACE 334
-#define RETURN 335
-#define YIELD 336
-#define IF 337
-#define ELIF 338
-#define ELSE 339
-#define WHILE 340
-#define BREAK 341
-#define CONTINUE 342
-#define TRY 343
-#define CATCH 344
-#define THROW 345
-#define ASSERT_T 346
-#define DEFER 347
-#define INSTANCEOF 348
-#define OPERATOR 349
-#define BOUNDS_EXTENDS 350
-#define BOUNDS_SUPER 351
-#define PRE_DEC 352
-#define PRE_INC 353
-#define QUOTE 354
-#define POST_DEC 355
-#define POST_INC 356
-#define FUNCCALL 357
-#define REF 358
-#define POSITIVE 359
-#define NEGATIVE 360
-#define FORM_TYPE 361
+#define FINAL 289
+#define ASSIGN 290
+#define ADD_ASSIGN 291
+#define SUB_ASSIGN 292
+#define MUL_ASSIGN 293
+#define DIV_ASSIGN 294
+#define MOD_ASSIGN 295
+#define AND_ASSIGN 296
+#define OR_ASSIGN 297
+#define LSHIFT_ASSIGN 298
+#define RSHIFT_ASSIGN 299
+#define EXC_OR_ASSIGN 300
+#define INC 301
+#define DEC 302
+#define EXC_OR 303
+#define LCB 304
+#define RCB 305
+#define LRB 306
+#define RRB 307
+#define LSB 308
+#define RSB 309
+#define SEMI 310
+#define IMPORT 311
+#define VAR 312
+#define PROPERTY 313
+#define DEFSET 314
+#define DEFGET 315
+#define THIS_TOK 316
+#define SUPER_TOK 317
+#define TRUE_TOK 318
+#define FALSE_TOK 319
+#define NULL_TOK 320
+#define AS 321
+#define ABSTRACT 322
+#define OVERRIDE 323
+#define INTERFACE 324
+#define CLASS 325
+#define ENUM 326
+#define PUBLIC 327
+#define PRIVATE 328
+#define PROTECTED 329
+#define STATIC 330
+#define NATIVE 331
+#define NEW 332
+#define DEF 333
+#define ARROW 334
+#define NAMESPACE 335
+#define RETURN 336
+#define YIELD 337
+#define IF 338
+#define ELIF 339
+#define ELSE 340
+#define WHILE 341
+#define BREAK 342
+#define CONTINUE 343
+#define TRY 344
+#define CATCH 345
+#define THROW 346
+#define ASSERT_T 347
+#define DEFER 348
+#define INSTANCEOF 349
+#define OPERATOR 350
+#define BOUNDS_EXTENDS 351
+#define BOUNDS_SUPER 352
+#define PRE_DEC 353
+#define PRE_INC 354
+#define QUOTE 355
+#define POST_DEC 356
+#define POST_INC 357
+#define FUNCCALL 358
+#define REF 359
+#define POSITIVE 360
+#define NEGATIVE 361
+#define FORM_TYPE 362
 
 
 
@@ -273,7 +275,7 @@ typedef union YYSTYPE
 	access_level access_level_value;
 }
 /* Line 1529 of yacc.c.  */
-#line 270 "beacon.tab.h"
+#line 272 "beacon.tab.h"
 	YYSTYPE;
 # define yystype YYSTYPE /* obsolescent; will be withdrawn */
 # define YYSTYPE_IS_DECLARED 1

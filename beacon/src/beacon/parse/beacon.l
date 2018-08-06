@@ -212,6 +212,7 @@ static void update_loc() {
 <INITIAL>"if"				{ return (IF); }
 <INITIAL>"elif"				{ return (ELIF); }
 <INITIAL>"else"				{ return (ELSE); }
+<INITIAL>"final"			{ return (FINAL); }
 
 <INITIAL>"while"			{ return (WHILE); }
 <INITIAL>"break"			{ return (BREAK); }
