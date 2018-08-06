@@ -11,6 +11,7 @@
 #include "../../il/il_operator_overload.h"
 #include "../../env/type_impl.h"
 #include "../../env/object.h"
+#include "../../env/heap.h"
 #include "../../env/field.h"
 #include "../../env/property.h"
 #include "../../env/method.h"
@@ -88,8 +89,12 @@ void CLBC_fields_decl(class_loader* self, il_type* iltype, type* tp, vector* ilf
 	call_context_delete(cctx);
 }
 
-void CLBC_fields_impl(class_loader* self, namespace_* scope, vector* ilfields, vector* sgfields) {
+void CLBC_fields_impl(class_loader* self, namespace_* scope, type* tp,vector* ilfields, vector* sgfields) {
 	CL_ERROR(self);
+	heap* he = heap_get();
+	call_context* cctx = call_context_new(call_ctor_T);
+	cctx->space = scope;
+	cctx->ty = tp;
 	for (int i = 0; i < sgfields->length; i++) {
 		vector_item e = vector_at(sgfields, i);
 		field* fi = (field*)e;
@@ -98,7 +103,25 @@ void CLBC_fields_impl(class_loader* self, namespace_* scope, vector* ilfields, v
 		//プロパティが追加されたタイミングで対応する
 		//バッキングフィールドが追加されることもある
 		//il_field* ilfield = ((il_field*)vector_at(ilfields, i));
+		if(fi->initial_value == NULL) {
+			continue;
+		}
+		enviroment* env = enviroment_new();
+		fi->initial_value_env = env;
+		il_factor_generate(fi->initial_value, env, cctx);
+		//静的フィールドならついでに初期化
+		//FIXME:sg_threadをちゃんと設定すればいいんだけどとりあえずこれで
+		//静的フィールドでものすごいでかいオブジェクトを確保すると重くなるかも
+		he->collect_blocking++;
+		if(modifier_is_static(fi->modifier)) {
+			frame* f = frame_new();
+			vm_execute(f, env);
+			fi->static_value = vector_pop(f->value_stack);
+			frame_delete(f);
+		}
+		he->collect_blocking--;
 	}
+	call_context_delete(cctx);
 }
 
 void CLBC_property_decl(class_loader* self, il_type* iltype, type* tp, vector* ilprops, namespace_* scope) {

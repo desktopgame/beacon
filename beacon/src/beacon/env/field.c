@@ -17,6 +17,7 @@ field * field_new(string_view namev) {
 	ret->static_value = NULL;
 	ret->gtype = NULL;
 	ret->initial_value = NULL;
+	ret->initial_value_env = NULL;
 	return ret;
 }
 
@@ -25,5 +26,6 @@ void field_delete(field * self) {
 		return;
 	}
 	il_factor_delete(self->initial_value);
+	enviroment_delete(self->initial_value_env);
 	MEM_FREE(self);
 }

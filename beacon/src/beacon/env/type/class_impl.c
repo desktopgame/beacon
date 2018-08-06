@@ -106,7 +106,7 @@ type* class_new_preload(string_view namev) {
 	return tp;
 }
 
-void class_alloc_fields(class_ * self, object * o) {
+void class_alloc_fields(class_ * self, object * o, frame* fr) {
 	assert(o->tag == object_ref);
 	for (int i = 0; i < self->field_list->length; i++) {
 		field* f = (field*)vector_at(self->field_list, i);
@@ -114,6 +114,12 @@ void class_alloc_fields(class_ * self, object * o) {
 		//静的フィールドは別の場所に確保
 		if (modifier_is_static(f->modifier)) {
 			continue;
+		}
+		if(f->initial_value != NULL) {
+			frame* sub = frame_sub(fr);
+			vm_execute(sub, f->initial_value_env);
+			a = vector_pop(sub->value_stack);
+			frame_delete(sub);
 		}
 		vector_push(o->u.field_vec, a);
 	}

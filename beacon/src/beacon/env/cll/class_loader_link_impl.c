@@ -89,8 +89,8 @@ static void CLBC_class_impl(class_loader * self, il_type * iltype, type * tp, na
 	#endif
 	class_create_vtable(tp->u.class_);
 	CL_ERROR(self);
-	CLBC_fields_impl(self, scope, iltype->u.class_->field_list, (TYPE2CLASS(tp))->field_list);
-	CLBC_fields_impl(self, scope, iltype->u.class_->sfield_list, (TYPE2CLASS(tp))->sfield_list);
+	CLBC_fields_impl(self, scope, tp, iltype->u.class_->field_list, (TYPE2CLASS(tp))->field_list);
+	CLBC_fields_impl(self, scope, tp, iltype->u.class_->sfield_list, (TYPE2CLASS(tp))->sfield_list);
 	CL_ERROR(self);
 	CLBC_property_impl(self, iltype, tp, iltype->u.class_->prop_list, tp->u.class_->prop_list, scope);
 	CLBC_property_impl(self, iltype, tp, iltype->u.class_->sprop_list, tp->u.class_->sprop_list, scope);

@@ -13,7 +13,7 @@
  * @param ilfields
  */
 void CLBC_fields_decl(class_loader* self, il_type* iltype, type* tp, vector* ilfields, namespace_* scope);
-void CLBC_fields_impl(class_loader* self, namespace_* scope, vector* ilfields, vector* sgfields);
+void CLBC_fields_impl(class_loader* self, namespace_* scope, type* tp,vector* ilfields, vector* sgfields);
 
 /**
  * @param self

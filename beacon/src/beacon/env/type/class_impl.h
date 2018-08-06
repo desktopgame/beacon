@@ -95,8 +95,9 @@ type* class_new_preload(string_view namev);
  * - o->vptr は self->vt で上書きされます。
  * @param self
  * @param o
+ * @param fr
  */
-void class_alloc_fields(class_* self, struct object* o);
+void class_alloc_fields(class_* self, struct object* o, frame* fr);
 
 /**
  * 指定のオブジェクトに追加されたフィールドの一覧を開放します.

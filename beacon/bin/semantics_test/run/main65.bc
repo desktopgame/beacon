@@ -1,0 +1,19 @@
+namespace run65 {
+	class AAA {
+		public:
+		Int a;
+		Int value = 1;
+		String name = "Name";
+
+		def new() {
+		}
+
+		def print() -> Void {
+			printLine(a);
+			printLine(value);
+			printLine(name);
+		}
+	}
+}
+var a = new run65::AAA();
+a.print();
