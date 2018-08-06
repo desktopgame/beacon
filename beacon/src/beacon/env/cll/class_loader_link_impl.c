@@ -139,7 +139,7 @@ static void CLBC_enum_decl(class_loader * self, il_type * iltype, type * tp, nam
 	if((tp->tag == type_enum ||
 	   tp->tag == type_class) &&
 	   !class_field_valid(tp->u.class_, &outField)) {
-		bc_error_throw(bcerror_field_name_a_overlapped, string_pool_ref2str(tp->u.class_->namev), string_pool_ref2str(outField->namev));
+		bc_error_throw(bcerror_overwrap_field_name, string_pool_ref2str(tp->u.class_->namev), string_pool_ref2str(outField->namev));
 	}
 	tp->state = tp->state | type_decl;
 }
@@ -259,7 +259,7 @@ static void CLBC_check_class(class_loader * self, il_type * iltype, type * tp, n
 	//重複するフィールドを確認する
 	field* outField = NULL;
 	if(!class_field_valid(tp->u.class_, &outField)) {
-		bc_error_throw(bcerror_field_name_a_overlapped, string_pool_ref2str(tp->u.class_->namev), string_pool_ref2str(outField->namev));
+		bc_error_throw(bcerror_overwrap_field_name, string_pool_ref2str(tp->u.class_->namev), string_pool_ref2str(outField->namev));
 	}
 	//メソッドの重複するパラメータ名を検出する
 	method* out_overwrap_m = NULL;

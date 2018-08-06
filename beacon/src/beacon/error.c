@@ -43,6 +43,9 @@ void bc_error_vthrow(bc_error_id id, va_list ap) {
 		case bcerror_overwrap_modifier:
 			fmt = "overwrap of modifier: %s";
 			break;
+		case bcerror_overwrap_field_name:
+			fmt = "overwrap of field name: %s @%s";
+			break;
 		case bcerror_undefined_class:
 			fmt = "undefined class: %s";
 			break;
@@ -81,9 +84,6 @@ void bc_error_vthrow(bc_error_id id, va_list ap) {
 			break;
 		case bcerror_chain:
 			fmt = "error %s";
-			break;
-		case bcerror_field_name_a_overlapped:
-			fmt = "invalid field declaration: %s @%s";
 			break;
 		case bcerror_native_field:
 			fmt = "shouldn't define field of abstract or native: %s";
