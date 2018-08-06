@@ -139,7 +139,7 @@ Grammar
    84                | OPERATOR CHILDA LRB RRB ARROW typename_T scope_optional
    85                | OPERATOR SUB LRB RRB ARROW typename_T scope_optional
 
-   86 field_define: modifier_type_T typename_T IDENT SEMI
+   86 field_define: modifier_type_T_list typename_T IDENT SEMI
    87             | typename_T IDENT SEMI
 
    88 prop_set: DEFSET SEMI
@@ -536,9 +536,9 @@ prop_get (143)
 prop_define (144)
     on left: 96 97, on right: 50
 modifier_type_T_list (145)
-    on left: 98 99, on right: 61 62 96 99
+    on left: 98 99, on right: 61 62 86 96 99
 modifier_type_T (146)
-    on left: 100 101 102 103, on right: 86 98 99
+    on left: 100 101 102 103, on right: 98 99
 access_level_T (147)
     on left: 104 105 106, on right: 43 90 91 94 95
 ident_list (148)
@@ -15755,10 +15755,12 @@ state 381
    83                | . OPERATOR NOT LRB RRB ARROW typename_T scope_optional
    84                | . OPERATOR CHILDA LRB RRB ARROW typename_T scope_optional
    85                | . OPERATOR SUB LRB RRB ARROW typename_T scope_optional
-   86 field_define: . modifier_type_T typename_T IDENT SEMI
+   86 field_define: . modifier_type_T_list typename_T IDENT SEMI
    87             | . typename_T IDENT SEMI
    96 prop_define: . PROPERTY modifier_type_T_list typename_T IDENT LCB prop_set prop_get RCB
    97            | . PROPERTY typename_T IDENT LCB prop_set prop_get RCB
+   98 modifier_type_T_list: . modifier_type_T
+   99                     | . modifier_type_T_list modifier_type_T
   100 modifier_type_T: . STATIC
   101                | . NATIVE
   102                | . ABSTRACT
@@ -15776,16 +15778,17 @@ state 381
     DEF       shift, and go to state 397
     OPERATOR  shift, and go to state 398
 
-    member_define_list  go to state 399
-    member_define       go to state 400
-    constructor_define  go to state 401
-    method_define       go to state 402
-    operator_define     go to state 403
-    field_define        go to state 404
-    prop_define         go to state 405
-    modifier_type_T     go to state 406
-    typename_T          go to state 407
-    fqcn_part           go to state 157
+    member_define_list    go to state 399
+    member_define         go to state 400
+    constructor_define    go to state 401
+    method_define         go to state 402
+    operator_define       go to state 403
+    field_define          go to state 404
+    prop_define           go to state 405
+    modifier_type_T_list  go to state 406
+    modifier_type_T       go to state 407
+    typename_T            go to state 408
+    fqcn_part             go to state 157
 
 
 state 382
@@ -15806,7 +15809,7 @@ state 382
 
     $default  reduce using rule 39 (access_member_tree_opt)
 
-    access_member_tree_opt  go to state 408
+    access_member_tree_opt  go to state 409
     access_member_tree      go to state 364
     access_member_list      go to state 365
     access_level_T          go to state 366
@@ -15824,8 +15827,8 @@ state 384
    36 enum_decl: ENUM IDENT LCB ident_list COMMA . RCB
   108 ident_list: ident_list COMMA . IDENT
 
-    IDENT  shift, and go to state 409
-    RCB    shift, and go to state 410
+    IDENT  shift, and go to state 410
+    RCB    shift, and go to state 411
 
 
 state 385
@@ -15850,7 +15853,7 @@ state 387
 
     LCB  shift, and go to state 85
 
-    scope  go to state 411
+    scope  go to state 412
 
 
 state 388
@@ -15871,7 +15874,7 @@ state 388
 
     $default  reduce using rule 39 (access_member_tree_opt)
 
-    access_member_tree_opt  go to state 412
+    access_member_tree_opt  go to state 413
     access_member_tree      go to state 364
     access_member_list      go to state 365
     access_level_T          go to state 366
@@ -15895,7 +15898,7 @@ state 391
 
    38 interface_decl: INTERFACE parameterized_typename COLON typename_list LCB access_member_tree_opt . RCB
 
-    RCB  shift, and go to state 413
+    RCB  shift, and go to state 414
 
 
 state 392
@@ -15918,8 +15921,8 @@ state 392
     STATIC    shift, and go to state 395
     NATIVE    shift, and go to state 396
 
-    modifier_type_T_list  go to state 414
-    modifier_type_T       go to state 415
+    modifier_type_T_list  go to state 415
+    modifier_type_T       go to state 407
     typename_T            go to state 416
     fqcn_part             go to state 157
 
@@ -15975,7 +15978,7 @@ state 397
     NEW       shift, and go to state 418
 
     modifier_type_T_list  go to state 419
-    modifier_type_T       go to state 415
+    modifier_type_T       go to state 407
 
 
 state 398
@@ -16060,10 +16063,12 @@ state 399
    83                | . OPERATOR NOT LRB RRB ARROW typename_T scope_optional
    84                | . OPERATOR CHILDA LRB RRB ARROW typename_T scope_optional
    85                | . OPERATOR SUB LRB RRB ARROW typename_T scope_optional
-   86 field_define: . modifier_type_T typename_T IDENT SEMI
+   86 field_define: . modifier_type_T_list typename_T IDENT SEMI
    87             | . typename_T IDENT SEMI
    96 prop_define: . PROPERTY modifier_type_T_list typename_T IDENT LCB prop_set prop_get RCB
    97            | . PROPERTY typename_T IDENT LCB prop_set prop_get RCB
+   98 modifier_type_T_list: . modifier_type_T
+   99                     | . modifier_type_T_list modifier_type_T
   100 modifier_type_T: . STATIC
   101                | . NATIVE
   102                | . ABSTRACT
@@ -16083,15 +16088,16 @@ state 399
 
     $default  reduce using rule 43 (access_member_list)
 
-    member_define       go to state 440
-    constructor_define  go to state 401
-    method_define       go to state 402
-    operator_define     go to state 403
-    field_define        go to state 404
-    prop_define         go to state 405
-    modifier_type_T     go to state 406
-    typename_T          go to state 407
-    fqcn_part           go to state 157
+    member_define         go to state 440
+    constructor_define    go to state 401
+    method_define         go to state 402
+    operator_define       go to state 403
+    field_define          go to state 404
+    prop_define           go to state 405
+    modifier_type_T_list  go to state 406
+    modifier_type_T       go to state 407
+    typename_T            go to state 408
+    fqcn_part             go to state 157
 
 
 state 400
@@ -16138,67 +16144,84 @@ state 405
 
 state 406
 
-   86 field_define: modifier_type_T . typename_T IDENT SEMI
+   86 field_define: modifier_type_T_list . typename_T IDENT SEMI
+   99 modifier_type_T_list: modifier_type_T_list . modifier_type_T
+  100 modifier_type_T: . STATIC
+  101                | . NATIVE
+  102                | . ABSTRACT
+  103                | . OVERRIDE
   118 typename_T: . fqcn_part typename_group
   119 fqcn_part: . IDENT
   120          | . fqcn_part COLO_COLO IDENT
 
-    IDENT  shift, and go to state 14
+    IDENT     shift, and go to state 14
+    ABSTRACT  shift, and go to state 393
+    OVERRIDE  shift, and go to state 394
+    STATIC    shift, and go to state 395
+    NATIVE    shift, and go to state 396
 
-    typename_T  go to state 441
-    fqcn_part   go to state 157
+    modifier_type_T  go to state 441
+    typename_T       go to state 442
+    fqcn_part        go to state 157
 
 
 state 407
 
-   87 field_define: typename_T . IDENT SEMI
+   98 modifier_type_T_list: modifier_type_T .
 
-    IDENT  shift, and go to state 442
+    $default  reduce using rule 98 (modifier_type_T_list)
 
 
 state 408
 
-   34 class_decl: CLASS parameterized_typename COLON typename_list LCB access_member_tree_opt . RCB
+   87 field_define: typename_T . IDENT SEMI
 
-    RCB  shift, and go to state 443
+    IDENT  shift, and go to state 443
 
 
 state 409
+
+   34 class_decl: CLASS parameterized_typename COLON typename_list LCB access_member_tree_opt . RCB
+
+    RCB  shift, and go to state 444
+
+
+state 410
 
   108 ident_list: ident_list COMMA IDENT .
 
     $default  reduce using rule 108 (ident_list)
 
 
-state 410
+state 411
 
    36 enum_decl: ENUM IDENT LCB ident_list COMMA RCB .
 
     $default  reduce using rule 36 (enum_decl)
 
 
-state 411
+state 412
 
   112 argument_list: QUOTE LRB parameter_list RRB ARROW typename_T scope .
 
     $default  reduce using rule 112 (argument_list)
 
 
-state 412
+state 413
 
    32 abstract_class_decl: ABSTRACT CLASS parameterized_typename COLON typename_list LCB access_member_tree_opt . RCB
 
-    RCB  shift, and go to state 444
+    RCB  shift, and go to state 445
 
 
-state 413
+state 414
 
    38 interface_decl: INTERFACE parameterized_typename COLON typename_list LCB access_member_tree_opt RCB .
 
     $default  reduce using rule 38 (interface_decl)
 
 
-state 414
+state 415
 
    96 prop_define: PROPERTY modifier_type_T_list . typename_T IDENT LCB prop_set prop_get RCB
    99 modifier_type_T_list: modifier_type_T_list . modifier_type_T
@@ -16216,16 +16239,9 @@ state 414
     STATIC    shift, and go to state 395
     NATIVE    shift, and go to state 396
 
-    modifier_type_T  go to state 445
+    modifier_type_T  go to state 441
     typename_T       go to state 446
     fqcn_part        go to state 157
-
-
-state 415
-
-   98 modifier_type_T_list: modifier_type_T .
-
-    $default  reduce using rule 98 (modifier_type_T_list)
 
 
 state 416
@@ -16273,7 +16289,7 @@ state 419
     STATIC    shift, and go to state 395
     NATIVE    shift, and go to state 396
 
-    modifier_type_T  go to state 445
+    modifier_type_T  go to state 441
 
 
 state 420
@@ -16426,37 +16442,37 @@ state 440
 
 state 441
 
-   86 field_define: modifier_type_T typename_T . IDENT SEMI
+   99 modifier_type_T_list: modifier_type_T_list modifier_type_T .
+
+    $default  reduce using rule 99 (modifier_type_T_list)
+
+
+state 442
+
+   86 field_define: modifier_type_T_list typename_T . IDENT SEMI
 
     IDENT  shift, and go to state 471
 
 
-state 442
+state 443
 
    87 field_define: typename_T IDENT . SEMI
 
     SEMI  shift, and go to state 472
 
 
-state 443
+state 444
 
    34 class_decl: CLASS parameterized_typename COLON typename_list LCB access_member_tree_opt RCB .
 
     $default  reduce using rule 34 (class_decl)
 
 
-state 444
+state 445
 
    32 abstract_class_decl: ABSTRACT CLASS parameterized_typename COLON typename_list LCB access_member_tree_opt RCB .
 
     $default  reduce using rule 32 (abstract_class_decl)
-
-
-state 445
-
-   99 modifier_type_T_list: modifier_type_T_list modifier_type_T .
-
-    $default  reduce using rule 99 (modifier_type_T_list)
 
 
 state 446
@@ -16819,7 +16835,7 @@ state 470
 
 state 471
 
-   86 field_define: modifier_type_T typename_T IDENT . SEMI
+   86 field_define: modifier_type_T_list typename_T IDENT . SEMI
 
     SEMI  shift, and go to state 500
 
@@ -17094,7 +17110,7 @@ state 499
 
 state 500
 
-   86 field_define: modifier_type_T typename_T IDENT SEMI .
+   86 field_define: modifier_type_T_list typename_T IDENT SEMI .
 
     $default  reduce using rule 86 (field_define)
 
