@@ -104,6 +104,13 @@ void bc_error_vthrow(bc_error_id id, va_list ap) {
 			fmt = "must be condition formula is bool: %s";
 			break;
 
+		case bcerror_break_at_not_loop:
+			fmt = "can use `break` only in loop statement";
+			break;
+		case bcerror_continue_at_not_loop:
+			fmt = "can use `continue` only in loop statement";
+			break;
+
 
 		case bcerror_undefined_class:
 			fmt = "undefined class: %s";

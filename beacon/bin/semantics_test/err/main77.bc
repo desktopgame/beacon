@@ -1,8 +1,8 @@
-namespace err79 {
+namespace err77 {
 	class AAA {
 		public:
 		def new() {
-			continue;
+			break;
 		}
 	}
 }

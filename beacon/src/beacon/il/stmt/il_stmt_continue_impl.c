@@ -9,6 +9,10 @@ il_stmt * il_stmt_wrap_continue() {
 }
 
 void il_stmt_continue_generate(void * empty, enviroment * env, call_context* cctx) {
+	if(cctx->control.while_start->length == 0) {
+		bc_error_throw(bcerror_continue_at_not_loop);
+		return;
+	}
 	label* lab = (label*)vector_top(cctx->control.while_start);
 	opcode_buf_add(env->buf, op_goto);
 	opcode_buf_add(env->buf, lab);

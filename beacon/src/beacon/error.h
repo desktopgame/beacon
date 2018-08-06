@@ -38,6 +38,9 @@ typedef enum bc_error_id {
 	bcerror_if_expr_type_of_not_bool,
 	bcerror_while_expr_type_of_not_bool,
 
+	bcerror_break_at_not_loop,
+	bcerror_continue_at_not_loop,
+
 	bcerror_undefined_class,
 	bcerror_undefined_variable,
 	bcerror_undefined_field,
