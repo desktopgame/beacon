@@ -1,4 +1,4 @@
-namespace run70 {
+namespace err85 {
 	class Final {
 		public:
 		final Int age;

@@ -18,6 +18,7 @@ field * field_new(string_view namev) {
 	ret->gtype = NULL;
 	ret->initial_value = NULL;
 	ret->initial_value_env = NULL;
+	ret->not_initialized_at_ctor = false;
 	return ret;
 }
 

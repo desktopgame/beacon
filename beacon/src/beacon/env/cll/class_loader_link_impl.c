@@ -106,6 +106,23 @@ static void CLBC_class_impl(class_loader * self, il_type * iltype, type * tp, na
 	CLBC_operator_overload_impl(self, iltype, tp, scope);
 	CL_ERROR(self);
 	tp->state = tp->state | type_impl;
+	//コンストラクタで初期化されていない final フィールドの確認
+	//これはコンストラクタが生成されてからでないといけない
+	class_* cls = TYPE2CLASS(tp);
+	for(int i=0; i<cls->field_list->length; i++) {
+		field* fi = vector_at(cls->field_list, i);
+		//インスタンス定数が
+		//フィールドでもコンストラクタでも初期化されない
+		if(!modifier_is_static(fi->modifier) &&
+			modifier_is_final(fi->modifier) &&
+			!fi->not_initialized_at_ctor) {
+			bc_error_throw(bcerror_not_initial_field_not_initialized_at_ctor,
+				string_pool_ref2str(type_name(tp)),
+				string_pool_ref2str(fi->namev)
+			);
+			break;
+		}
+	}
 }
 
 static void CLBC_interface_decl(class_loader * self, il_type * iltype, type * tp, namespace_ * scope) {

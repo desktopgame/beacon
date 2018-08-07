@@ -11,6 +11,7 @@
 static void assign_by_namebase(il_factor_assign_op* self, enviroment* env, call_context* cctx);
 static void assign_to_field(il_factor* receiver, il_factor* source, string_view namev, enviroment* env, call_context* cctx);
 static void assign_to_property(il_factor_assign_op* self, enviroment* env, call_context* cctx);
+static void check_final(il_factor* receiver, il_factor* source, string_view namev, enviroment* env, call_context* cctx);
 
 il_factor* il_factor_wrap_assign(il_factor_assign_op* self) {
 	il_factor* ret = il_factor_new(ilfactor_assign_op);
@@ -120,13 +121,7 @@ static void assign_to_field(il_factor* receiver, il_factor* source, string_view 
 			string_pool_ref2str(f->namev)
 		);
 	}
-	//finalなので書き込めない
-	if(modifier_is_final(f->modifier)) {
-		bc_error_throw(bcerror_assign_to_final_field,
-			string_pool_ref2str(type_name(cls->parent)),
-			string_pool_ref2str(f->namev)
-		);
-	}
+	check_final(receiver, source, namev, env, cctx);
 }
 
 static void assign_to_property(il_factor_assign_op* self, enviroment* env, call_context* cctx) {
@@ -172,5 +167,33 @@ static void assign_to_property(il_factor_assign_op* self, enviroment* env, call_
 			opcode_buf_add(env->buf, (vector_item)op_put_property);
 			opcode_buf_add(env->buf, (vector_item)prop->index);
 		}
+	}
+}
+
+static void check_final(il_factor* receiver, il_factor* source, string_view namev, enviroment* env, call_context* cctx) {
+	generic_type* gt = il_factor_eval(receiver, env, cctx);
+	class_* cls = TYPE2CLASS(gt->core_type);
+	int temp = -1;
+	field* f = class_find_field_tree(cls, namev, &temp);
+	assert(temp != -1);
+	//コンストラクタ以外の場所では finalフィールドは初期化できない
+	if(cctx->tag != call_ctor_T) {
+		//finalなので書き込めない
+		if(modifier_is_final(f->modifier)) {
+			bc_error_throw(bcerror_assign_to_final_field,
+				string_pool_ref2str(type_name(cls->parent)),
+				string_pool_ref2str(f->namev)
+			);
+		}
+	} else {
+		//コンストラクタであっても static final の場合は書き込めない
+		if(modifier_is_final(f->modifier) &&
+		   modifier_is_static(f->modifier)) {
+			bc_error_throw(bcerror_assign_to_final_field,
+				string_pool_ref2str(type_name(cls->parent)),
+				string_pool_ref2str(f->namev)
+			);
+		}
+		f->not_initialized_at_ctor = true;
 	}
 }

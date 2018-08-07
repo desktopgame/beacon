@@ -22,6 +22,7 @@ typedef struct field {
 	modifier_type modifier;
 	struct il_factor* initial_value;
 	struct enviroment* initial_value_env;
+	bool not_initialized_at_ctor;
 } field;
 
 /**
