@@ -245,6 +245,16 @@ int il_factor_binary_op_index2(il_factor* receiver, il_factor* arg, operator_typ
 	return temp;
 }
 
+generic_type* il_factor_binary_op_apply(il_factor_binary_op* self, generic_type* gtype, enviroment* env, call_context* cctx) {
+	generic_type* lgtype = il_factor_eval(self->left, env, cctx);
+	call_frame* cfr = call_context_push(cctx, frame_instance_invoke_T);
+	cfr->u.instance_invoke.receiver = lgtype;
+	generic_type* ret = generic_type_apply(gtype,cctx);
+	call_context_pop(cctx);
+	return ret;
+}
+
+//private
 static bool type_test(il_factor_binary_op* self, enviroment* env, call_context* cctx, type* t) {
 	generic_type* lgtype = il_factor_eval(self->left, env, cctx);
 	generic_type* rgtype = il_factor_eval(self->right, env, cctx);
