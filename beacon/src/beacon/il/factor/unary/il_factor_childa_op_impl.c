@@ -39,7 +39,7 @@ generic_type* il_factor_childa_op_eval(il_factor_childa_op * self, enviroment * 
 		//演算子オーバーロードもない
 		assert(self->operator_index != -1);
 		operator_overload* operator_ov = class_get_operator_overload(TYPE2CLASS(GENERIC2TYPE(gtype)), self->operator_index);
-		return operator_ov->return_gtype;
+		return il_factor_unary_op_apply(self->parent, operator_ov->return_gtype, env, cctx);
 	}
 }
 
