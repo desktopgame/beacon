@@ -152,6 +152,11 @@ void bc_error_vthrow(bc_error_id id, va_list ap) {
 			break;
 
 
+		case bcerror_thrown_not_exception_type:
+			fmt = "must be thrown object type compatible to `exception`: %s";
+			break;
+
+
 		case bcerror_undefined_class:
 			fmt = "undefined class: %s";
 			break;

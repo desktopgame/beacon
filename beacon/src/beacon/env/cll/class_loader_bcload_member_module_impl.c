@@ -514,6 +514,7 @@ void CLBC_operator_overload_decl(class_loader* self, il_type* iltype, type* tp, 
 		vector_push(tp->u.class_->operator_overload_list, opov);
 		//オペレータオーバロードの妥当性をテストする
 		if(CLBC_test_operator_overlaod(self, iltype, tp, opov)) {
+		call_context_delete(cctx);
 			break;
 		}
 		call_context_delete(cctx);

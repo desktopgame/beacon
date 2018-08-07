@@ -14,6 +14,7 @@
 #define TYPE_BOOL (namespace_bool_type())
 #define TYPE_VOID (namespace_void_type())
 #define TYPE_NULL (namespace_null_type())
+#define TYPE_EXCEPTION (namespace_exception_type())
 
 
 #define GENERIC_OBJECT ((namespace_object_type()->generic_self))
@@ -24,6 +25,7 @@
 #define GENERIC_BOOL ((namespace_bool_type()->generic_self))
 #define GENERIC_VOID ((namespace_void_type()->generic_self))
 #define GENERIC_NULL ((namespace_null_type()->generic_self))
+#define GENERIC_EXCEPTION ((namespace_exception_type()->generic_self))
 
 struct type;
 struct class_;
@@ -172,6 +174,12 @@ struct type* namespace_void_type();
  * @return
  */
 struct type* namespace_null_type();
+
+/**
+ * beacon::lang::Exception
+ * @return
+ */
+struct type* namespace_exception_type();
 
 /**
  * 指定の名前空間のすべての型で unlink を呼び出します.

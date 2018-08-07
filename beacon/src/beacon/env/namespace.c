@@ -158,6 +158,10 @@ type * namespace_null_type() {
 	return bc_null_type();
 }
 
+type* namespace_exception_type() {
+	return bc_exception_type();
+}
+
 void namespace_unlink(namespace_ * self) {
 	numeric_map_each(self->namespace_map, namespace_unlink_namespace);
 	numeric_map_each(self->type_map, namespace_unlink_type);

@@ -58,6 +58,8 @@ typedef enum bc_error_id {
 	bcerror_return_type_not_bool_not_operator,
 	bcerror_return_type_not_equal_negative_operator,
 
+	bcerror_thrown_not_exception_type,
+
 	bcerror_undefined_class,
 	bcerror_undefined_variable,
 	bcerror_undefined_field,
