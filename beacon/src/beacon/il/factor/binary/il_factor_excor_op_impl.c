@@ -37,7 +37,7 @@ generic_type* il_factor_excor_op_eval(il_factor_excor_op * self, enviroment * en
 	//演算子オーバーロードもない
 	assert(self->operator_index != -1);
 	operator_overload* operator_ov = class_get_operator_overload(TYPE2CLASS(GENERIC2TYPE(lgtype)), self->operator_index);
-	return operator_ov->return_gtype;
+	return il_factor_binary_op_apply(self->parent, operator_ov->return_gtype, env, cctx);
 }
 
 void il_factor_excor_op_generate(il_factor_excor_op* self, enviroment* env, call_context* cctx) {
