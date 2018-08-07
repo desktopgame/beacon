@@ -1,0 +1,10 @@
+namespace err87 {
+	class Final {
+		public:
+		Vector[Int] a = new Vector[String]();
+
+		def new() {
+		}
+	}
+}
+printLine("Hello");

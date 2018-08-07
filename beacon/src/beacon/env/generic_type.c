@@ -309,6 +309,10 @@ static int generic_type_distanceForm(generic_type* self, generic_type* other, fr
 	int dist = type_distance(self->core_type, other->core_type);
 	assert(self->core_type != NULL);
 	assert(other->core_type != NULL);
+	#if defined(DEBUG)
+	const char* sname = string_pool_ref2str(type_name(self->core_type));
+	const char* oname = string_pool_ref2str(type_name(other->core_type));
+	#endif
 	//List : Dict みたいな型ならもうこの時点で次へ
 	if(dist == -1) {
 		return dist;

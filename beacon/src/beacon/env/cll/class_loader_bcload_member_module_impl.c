@@ -121,6 +121,17 @@ void CLBC_fields_impl(class_loader* self, namespace_* scope, type* tp,vector* il
 		fi->initial_value_env = env;
 		il_factor_load(fi->initial_value, env, cctx);
 		il_factor_generate(fi->initial_value, env, cctx);
+		//フィールドの型と互換性がない
+		generic_type* gf = il_factor_eval(fi->initial_value, env, cctx);
+		if(generic_type_distance(fi->gtype, gf) < 0) {
+			generic_type_print(fi->gtype); text_putline();
+			generic_type_print(gf); text_putline();
+			bc_error_throw(bcerror_field_default_value_not_compatible_to_field_type,
+				string_pool_ref2str(type_name(fi->parent)),
+				string_pool_ref2str(fi->namev)
+			);
+			break;
+		}
 		//静的フィールドならついでに初期化
 		//FIXME:sg_threadをちゃんと設定すればいいんだけどとりあえずこれで
 		//静的フィールドでものすごいでかいオブジェクトを確保すると重くなるかも

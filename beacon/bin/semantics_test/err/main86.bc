@@ -1,0 +1,10 @@
+namespace err86 {
+	class Final {
+		public:
+		final Int age = "Hello";
+
+		def new() {
+		}
+	}
+}
+printLine("Hello");
