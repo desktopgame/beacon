@@ -48,6 +48,7 @@ typedef enum bc_error_id {
 	bcerror_access_to_super_at_static_method,
 
 	bcerror_assign_to_final_field,
+	bcerror_not_default_value_static_final_field,
 
 	bcerror_undefined_class,
 	bcerror_undefined_variable,

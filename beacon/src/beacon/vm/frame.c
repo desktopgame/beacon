@@ -81,7 +81,9 @@ static void remove_from_parent(frame* self) {
 
 static void frame_markStatic(field* item) {
 	//フィールドがintなどならここでマークしない
-	if(item->static_value->paint != paint_onexit) {
+	//静的定数フィールドに初期値が割り当てられていない場合
+	if(item->static_value != NULL &&
+	   item->static_value->paint != paint_onexit) {
 		object_markall(item->static_value);
 	}
 }

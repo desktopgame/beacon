@@ -123,6 +123,9 @@ void bc_error_vthrow(bc_error_id id, va_list ap) {
 		case bcerror_assign_to_final_field:
 			fmt = "can't assign to `final` attributed field: %s#%s";
 			break;
+		case bcerror_not_default_value_static_final_field:
+			fmt = "need default value: %s#%s";
+			break;
 
 
 		case bcerror_undefined_class:

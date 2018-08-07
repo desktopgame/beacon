@@ -85,6 +85,16 @@ void CLBC_fields_decl(class_loader* self, il_type* iltype, type* tp, vector* ilf
 			);
 			break;
 		}
+		//static finalなのに、
+		//初期値が存在しない
+		if(modifier_is_static(field->modifier) &&
+		   modifier_is_final(field->modifier)) {
+			bc_error_throw(bcerror_not_default_value_static_final_field,
+				string_pool_ref2str(type_name(tp)),
+				string_pool_ref2str(field->namev)
+			);
+			break;
+		}
 	}
 	call_context_delete(cctx);
 }
