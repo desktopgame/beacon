@@ -697,12 +697,12 @@ static bool CLBC_test_operator_overlaod(class_loader* self, il_type* iltype, typ
 	}
 	//二項演算子であるなら引数は1
 	if(operator_arg2(opov->type) && opov->parameter_list->length != 1) {
-		bc_error_throw(bcerror_illegal_argument_bioperator, type_name(tp), operator_tostring(opov->type));
+		bc_error_throw(bcerror_arg_count_not2_bioperator, type_name(tp), operator_tostring(opov->type));
 		return true;
 	}
 	//単項演算子であるなら引数は0
 	if(operator_arg1(opov->type) && opov->parameter_list->length != 0) {
-		bc_error_throw(bcerror_illegal_argument_uoperator, type_name(tp), operator_tostring(opov->type));
+		bc_error_throw(bcerror_arg_count_not1_uoperator, type_name(tp), operator_tostring(opov->type));
 		return true;
 	}
 	return false;

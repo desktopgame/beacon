@@ -134,6 +134,15 @@ void bc_error_vthrow(bc_error_id id, va_list ap) {
 			break;
 
 
+
+		case bcerror_arg_count_not2_bioperator:
+			fmt = "illegal of parameter count, must be binary operator argument count is one.: %s#%s";
+			break;
+		case bcerror_arg_count_not1_uoperator:
+			fmt = "illegal of parameter count, must be unary operator argument count is zero.: %s#%s";
+			break;
+
+
 		case bcerror_undefined_class:
 			fmt = "undefined class: %s";
 			break;
@@ -184,12 +193,6 @@ void bc_error_vthrow(bc_error_id id, va_list ap) {
 			break;
 		case bcerror_private_operator:
 			fmt = "must be public a access level of operator: %s";
-			break;
-		case bcerror_illegal_argument_bioperator:
-			fmt = "illegal of parameter count, must be binary operator argument count is one.: %s#%s";
-			break;
-		case bcerror_illegal_argument_uoperator:
-			fmt = "illegal of parameter count, must be unary operator argument count is zero.: %s#%s";
 			break;
 		case bcerror_invalid_property_decl:
 			fmt = "can't use abbrev expression for only one property accessor: %s#%s";

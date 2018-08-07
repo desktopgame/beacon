@@ -52,6 +52,9 @@ typedef enum bc_error_id {
 	bcerror_not_initial_field_not_initialized_at_ctor,
 	bcerror_field_default_value_not_compatible_to_field_type,
 
+	bcerror_arg_count_not2_bioperator,
+	bcerror_arg_count_not1_uoperator,
+
 	bcerror_undefined_class,
 	bcerror_undefined_variable,
 	bcerror_undefined_field,
@@ -69,8 +72,6 @@ typedef enum bc_error_id {
 	bcerror_not_implement_interface,
 	bcerror_not_implement_abstract_method,
 	bcerror_private_operator,
-	bcerror_illegal_argument_bioperator,
-	bcerror_illegal_argument_uoperator,
 	bcerror_invalid_property_decl,
 	bcerror_can_t_access_field,
 	bcerror_can_t_access_property,
