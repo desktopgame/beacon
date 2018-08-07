@@ -147,7 +147,7 @@ static void il_factor_invoke_bound_check(il_factor_invoke_bound * self, envirome
 		il_argument* ilarg = vector_at(self->args, i);
 		il_factor_load(ilarg->factor, env, cctx);
 	}
-	call_frame* cfr = call_context_push(cctx, call_self_invoke_T);
+	call_frame* cfr = call_context_push(cctx, frame_self_invoke_T);
 	cfr->u.self_invoke.args = self->args;
 	cfr->u.self_invoke.typeargs = self->type_args;
 	self->m = class_ilfind_method(TYPE2CLASS(ctype), self->namev, self->args, env, cctx, &temp);

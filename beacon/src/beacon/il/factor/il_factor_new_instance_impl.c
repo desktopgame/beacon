@@ -149,7 +149,7 @@ static void il_factor_new_instance_find(il_factor_new_instance * self, enviromen
 	//使用するコンストラクタを取得
 	class_* cls = TYPE2CLASS(ty);
 	int temp = -1;
-	call_frame* cfr = call_context_push(cctx, call_resolve_T);
+	call_frame* cfr = call_context_push(cctx, frame_resolve_T);
 	cfr->u.resolve.gtype = cls->parent->generic_self;
 	cfr->u.resolve.typeargs = self->type_args;
 	il_type_argument_resolve(self->type_args, cctx);

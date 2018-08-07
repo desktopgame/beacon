@@ -74,7 +74,7 @@ void il_factor_invoke_generate(il_factor_invoke* self, enviroment* env, call_con
 }
 
 void il_factor_invoke_load(il_factor_invoke * self, enviroment * env, call_context* cctx) {
-	call_frame* cfr = call_context_push(cctx, call_instance_invoke_T);
+	call_frame* cfr = call_context_push(cctx, frame_instance_invoke_T);
 	cfr->u.instance_invoke.args = self->args;
 	cfr->u.instance_invoke.typeargs = self->type_args;
 	cfr->u.instance_invoke.receiver = il_factor_eval(self->receiver, env, cctx);
@@ -151,7 +151,7 @@ static void resolve_default(il_factor_invoke * self, enviroment * env, call_cont
 //	virtual_type returnvType = self->m->return_vtype;
 	//内側に型変数が含まれているかもしれないので、
 	//それをここで展開する。
-	call_frame* cfr = call_context_push(cctx, call_instance_invoke_T);
+	call_frame* cfr = call_context_push(cctx, frame_instance_invoke_T);
 	cfr->u.instance_invoke.receiver = receivergType;
 	cfr->u.instance_invoke.args = self->args;
 	cfr->u.instance_invoke.typeargs = self->type_args;

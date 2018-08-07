@@ -41,7 +41,7 @@ generic_type* il_factor_shift_op_eval(il_factor_shift_op * self, enviroment * en
 	assert(self->operator_index != -1);
 	operator_overload* operator_ov = class_get_operator_overload(TYPE2CLASS(GENERIC2TYPE(lgtype)), self->operator_index);
 	//Vector[Int] Vector[T]
-	call_frame* cfr = call_context_push(cctx, call_instance_invoke_T);
+	call_frame* cfr = call_context_push(cctx, frame_instance_invoke_T);
 	cfr->u.instance_invoke.receiver = lgtype;
 	generic_type* ret = generic_type_apply(operator_ov->return_gtype,cctx);
 	call_context_pop(cctx);

@@ -91,7 +91,7 @@ bool method_override(method* superM, method* subM, call_context* cctx) {
 		generic_type* superGT = superP->gtype;
 		generic_type* subGT = subP->gtype;
 
-		call_frame* cfr = call_context_push(cctx, call_resolve_T);
+		call_frame* cfr = call_context_push(cctx, frame_resolve_T);
 		cfr->u.resolve.gtype = bl;
 		generic_type* superGT2 = generic_type_apply(superGT, cctx);
 		call_context_pop(cctx);
@@ -104,7 +104,7 @@ bool method_override(method* superM, method* subM, call_context* cctx) {
 	}
 	generic_type* superRet = superM->return_gtype;
 	generic_type* subRet = subM->return_gtype;
-	call_frame* cfr = call_context_push(cctx, call_resolve_T);
+	call_frame* cfr = call_context_push(cctx, frame_resolve_T);
 	cfr->u.resolve.gtype = bl;
 	generic_type* superRet2 = generic_type_apply(superRet, cctx);
 //	generic_type_diff(superRet, superRet2);
@@ -216,7 +216,7 @@ bool method_yield(method* self, vector* stmt_list, bool* error) {
 
 type* method_create_iterator_type(method* self,  class_loader* cll, vector* stmt_list) {
 	call_context* lCctx = call_context_new(call_ctor_T);
-	call_frame* lCfr = call_context_push(lCctx, call_resolve_T);
+	call_frame* lCfr = call_context_push(lCctx, frame_resolve_T);
 	lCfr->u.resolve.gtype = self->return_gtype;
 	string_view iterName = method_unique(self);
 	type* iterT = namespace_get_type(namespace_lang(), string_pool_intern("Iterator"));
