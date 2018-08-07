@@ -91,6 +91,13 @@ static void assign_by_namebase(il_factor_assign_op* self, enviroment* env, call_
 				string_pool_ref2str(sf->namev)
 			);
 		}
+		//finalなので書き込めない
+		if(modifier_is_final(sf->modifier)) {
+			bc_error_throw(bcerror_assign_to_final_field,
+				string_pool_ref2str(type_name(cls->parent)),
+				string_pool_ref2str(sf->namev)
+			);
+		}
 	} else {
 		assign_to_field(ilmem->fact, self->right, ilmem->namev, env, cctx);
 	}
@@ -109,6 +116,13 @@ static void assign_to_field(il_factor* receiver, il_factor* source, string_view 
 	//指定のインスタンスフィールドにアクセスできない
 	if(!class_accessible_field(call_context_class(cctx), f)) {
 		bc_error_throw(bcerror_can_t_access_field,
+			string_pool_ref2str(type_name(cls->parent)),
+			string_pool_ref2str(f->namev)
+		);
+	}
+	//finalなので書き込めない
+	if(modifier_is_final(f->modifier)) {
+		bc_error_throw(bcerror_assign_to_final_field,
 			string_pool_ref2str(type_name(cls->parent)),
 			string_pool_ref2str(f->namev)
 		);

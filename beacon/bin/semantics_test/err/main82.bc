@@ -1,0 +1,11 @@
+namespace err82 {
+	class Final {
+		public:
+		final Int age = 0;
+
+		def new() {
+		}
+	}
+}
+var f = new err82::Final();
+f.age = 20;

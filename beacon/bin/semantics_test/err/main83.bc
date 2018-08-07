@@ -1,4 +1,4 @@
-namespace run70 {
+namespace err83 {
 	class Final {
 		public:
 		static final Int age = 0;
@@ -7,4 +7,4 @@ namespace run70 {
 		}
 	}
 }
-run70::Final.age = 20;
+err83::Final.age = 20;

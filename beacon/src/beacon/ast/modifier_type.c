@@ -17,6 +17,10 @@ bool modifier_is_abstract(modifier_type type) {
 	return (type & modifier_abstract);
 }
 
+bool modifier_is_final(modifier_type type) {
+	return (type & modifier_final);
+}
+
 bool modifier_is_override(modifier_type type) {
 	return (type & modifier_override);
 }

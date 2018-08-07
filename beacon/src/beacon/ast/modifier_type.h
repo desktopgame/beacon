@@ -49,6 +49,12 @@ bool modifier_is_abstract(modifier_type type);
 bool modifier_is_override(modifier_type type);
 
 /**
+ * @param type
+ * @return
+ */
+bool modifier_is_final(modifier_type type);
+
+/**
  * 修飾子を出力します.
  * @param type
  */
