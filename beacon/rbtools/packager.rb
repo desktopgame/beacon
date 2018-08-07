@@ -24,7 +24,7 @@ Dir.chdir("..") do
 	FileUtils.cp_r('bin/samples', 'package')
 	#マクロを展開
 	dict = {
-		"$version" => "ALPHA2",
+		"$version" => "ALPHA3",
 		"$time" => Time.now.to_s
 	}
 	#読み込みで開いて新規書き込みで書き込む。
