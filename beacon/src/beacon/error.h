@@ -54,6 +54,9 @@ typedef enum bc_error_id {
 
 	bcerror_arg_count_not2_bioperator,
 	bcerror_arg_count_not1_uoperator,
+	bcerror_return_type_not_bool_compare_operator,
+	bcerror_return_type_not_bool_not_operator,
+	bcerror_return_type_not_equal_negative_operator,
 
 	bcerror_undefined_class,
 	bcerror_undefined_variable,

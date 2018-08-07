@@ -702,7 +702,35 @@ static bool CLBC_test_operator_overlaod(class_loader* self, il_type* iltype, typ
 	}
 	//単項演算子であるなら引数は0
 	if(operator_arg1(opov->type) && opov->parameter_list->length != 0) {
-		bc_error_throw(bcerror_arg_count_not1_uoperator, type_name(tp), operator_tostring(opov->type));
+		bc_error_throw(bcerror_arg_count_not1_uoperator,
+			type_name(tp),
+			operator_tostring(opov->type)
+		);
+		return true;
+	}
+	//== などの比較演算子の戻り値が bool ではない
+	if(operator_compare(opov->type) && opov->return_gtype->core_type != TYPE_BOOL) {
+		bc_error_throw(bcerror_return_type_not_bool_compare_operator,
+			string_pool_ref2str(type_name(tp)),
+			operator_tostring(opov->type)
+		);
+		return true;
+	}
+	//! の戻り値が bool ではない
+	if(opov->type == operator_not && opov->return_gtype->core_type != TYPE_BOOL) {
+		bc_error_throw(bcerror_return_type_not_bool_not_operator,
+			string_pool_ref2str(type_name(tp)),
+			operator_tostring(opov->type)
+		);
+		return true;
+	}
+	//- の戻り値がクラスと異なる
+	//(IntならInt, Vector2ならVector2)
+	if(opov->type == operator_negative && opov->return_gtype->core_type != opov->parent) {
+		bc_error_throw(bcerror_return_type_not_equal_negative_operator,
+			string_pool_ref2str(type_name(tp)),
+			operator_tostring(opov->type)
+		);
 		return true;
 	}
 	return false;

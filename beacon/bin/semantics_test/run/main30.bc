@@ -13,7 +13,7 @@ namespace test {
 		operator |(Int a) -> Int {
 			return value - a;
 		}
-		operator !() -> Int {
+		operator !() -> Bool {
 			return value > 0;
 		}
 		operator ~() -> String {

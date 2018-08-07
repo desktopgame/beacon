@@ -141,6 +141,15 @@ void bc_error_vthrow(bc_error_id id, va_list ap) {
 		case bcerror_arg_count_not1_uoperator:
 			fmt = "illegal of parameter count, must be unary operator argument count is zero.: %s#%s";
 			break;
+		case bcerror_return_type_not_bool_compare_operator:
+			fmt = "return type of `compare` operator is must be bool: %s#%s";
+			break;
+		case bcerror_return_type_not_bool_not_operator:
+			fmt = "return type of `not` operator is must be bool: %s#%s";
+			break;
+		case bcerror_return_type_not_equal_negative_operator:
+			fmt = "return type of `negative` operator is must be equal from declared type: %s#%s";
+			break;
 
 
 		case bcerror_undefined_class:

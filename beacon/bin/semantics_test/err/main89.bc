@@ -1,10 +1,10 @@
-namespace err90 {
+namespace err89 {
 	class AAA {
 		public:
 		def new() {
 		}
 
-		operator -() -> Int {
+		operator !() -> Int {
 			return 0;
 		}
 	}
