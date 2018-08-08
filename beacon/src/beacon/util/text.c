@@ -60,15 +60,6 @@ bool text_white(const char * str) {
 	return true;
 }
 
-SG_errno_t text_strncpy(char * outChar, size_t index, const char * source, size_t dataSize) {
-#if defined(_MSC_VER)
-	return strncpy_s(outChar, index, source, dataSize);
-#else
-	strncpy(outChar, source + index, dataSize);
-#endif
-	return NULL;
-}
-
 char * text_concat(const char * a, const char * b) {
 	#if defined(_MSC_VER)
 	int alen = strlen(a);

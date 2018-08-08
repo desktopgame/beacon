@@ -7,13 +7,6 @@
 #include <stdio.h>
 #include "../util/io.h"
 
-//clangでは errno_t が見つからない
-#if defined(__clang__)
-typedef int SG_errno_t;
-#else
-typedef errno_t SG_errno_t;
-#endif
-
 /**
  * 引数の文字列を複製して返します.
  * コンパイラごとの差分を吸収するために提供されます。
@@ -33,16 +26,6 @@ char* text_gets();
  * @return
  */
 bool text_white(const char* str);
-
-/**
- * 指定位置の文字を取り出します.
- * コンパイラごとの差分を吸収するために提供されます。
- * @param outChar
- * @param index 取り出す位置
- * @param source
- * @param dataSize 一文字のサイズ
- */
-SG_errno_t text_strncpy(char* outChar, size_t index, const char* source, size_t dataSize);
 
 /**
  * 二つの文字列を連結して返します.
