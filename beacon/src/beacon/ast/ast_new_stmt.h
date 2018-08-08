@@ -10,87 +10,87 @@
 
 /**
  * 実行可能な文を表す要素を作成します.
- * @param stmt
+ * @param astmt
  * @param filename
  * @param lineno
  * @return
  */
-ast* ast_malloc_stmt(ast* stmt, const char* filename, int lineno);
+ast* ast_malloc_stmt(ast* astmt, const char* filename, int lineno);
 
 /**
  * 実行可能な文を表す要素を作成します. 
- * @param stmt
- * @param stmt_list
+ * @param astmt
+ * @param astmt_list
  * @return
  */
-ast* ast_new_stmt_list(ast* stmt, ast* stmt_list);
+ast* ast_new_stmt_list(ast* astmt, ast* astmt_list);
 
 /**
  * ifを表す要素を作成します.
- * @param cond
- * @param body
+ * @param acond
+ * @param abody
  * @return
  */
-ast* ast_new_if(ast* cond, ast* body);
+ast* ast_new_if(ast* acond, ast* abody);
 
 /** 
  * elseを表す要素を作成します.
- * @param body
+ * @param abody
  * @return
  */
-ast* ast_new_else(ast* body);
+ast* ast_new_else(ast* abody);
 
 /**
  * if-elseを表す要素を作成します.
- * @param cond
- * @param trueBody
- * @param falseBody
+ * @param acond
+ * @param atrueBody
+ * @param afalseBody
  * @return
  */
-ast* ast_new_if_else(ast* cond, ast* trueBody, ast* falseBody);
+ast* ast_new_if_else(ast* acond, ast* atrueBody, ast* afalseBody);
 
 /**
  * if-elif... を表す要素を作成します.
- * @param cond
- * @param trueBody
- * @param elifList
+ * @param acond
+ * @param atrueBody
+ * @param aelifList
  * @return
  */
-ast* ast_new_if_elif_list(ast* cond, ast* trueBody, ast* elifList);
+ast* ast_new_if_elif_list(ast* acond, ast* atrueBody, ast* aelifList);
 
 /**
  * if-elif...-elseを表す要素を作成します.
- * @param cond
- * @param trueBody
- * @param elifList
- * @param elseBody
+ * @param acond
+ * @param atrueBody
+ * @param aelifList
+ * @param aelseBody
  * @param
  */
-ast* ast_new_if_elif_list_else(ast* cond, ast* trueBody, ast* elifList, ast* elseBody);
+ast* ast_new_if_elif_list_else(ast* acond, ast* atrueBody, ast* aelifList, ast* aelseBody);
 
 /**
  * elif...を表す要素を作成します.
- * @param forward
- * @param tail
+ * @param aforward
+ * @param atail
  * @return
  */
-ast* ast_new_elif_list(ast* forward, ast* tail);
+ast* ast_new_elif_list(ast* aforward, ast* atail);
 
 /**
  * elifを表す要素を作成します.
- * @param cond
- * @param body
+ * @param acond
+ * @param abody
  * @return
  */
-ast* ast_new_elif(ast* cond, ast* body);
+ast* ast_new_elif(ast* acond, ast* abody);
 
 /**
  * whileを表す要素を作成します.
- * @param cond
- * @param body
+ * @param acond
+ * @param abody
  * @return
  */
-ast* ast_new_while(ast* cond, ast* body);
+ast* ast_new_while(ast* acond, ast* abody);
 
 /** 
  * ループから抜けるステートメントを作成します.
@@ -106,10 +106,10 @@ ast* ast_new_continue();
 
 /**
  * 値を返却するステートメントを作成します.
- * @param fact
+ * @param afact
  * @return
  */
-ast* ast_new_return(ast* fact);
+ast* ast_new_return(ast* afact);
 
 /**
  * @return
@@ -118,10 +118,10 @@ ast* ast_new_return_empty();
 
 /**
  * 例外をスローするステートメントを作成します.
- * @param fact
+ * @param afact
  * @return
  */
-ast* ast_new_throw(ast* fact);
+ast* ast_new_throw(ast* afact);
 
 /**
  * 例外が発生するかもしれない処理を囲うステートメント.
@@ -149,22 +149,22 @@ ast* ast_new_catch_list(ast* acatch, ast* acatch_list);
 
 /**
 * 実引数を表す要素を作成します.
-* @param factor
+* @param afactor
 * @return
 */
-ast* ast_new_argument(ast* factor);
+ast* ast_new_argument(ast* afactor);
 
 /**
 * 実引数を表す要素を作成します.
-* @param factor
-* @param argument_list
+* @param afactor
+* @param aargument_list
 * @return
 */
 ast* ast_new_argument_list(ast* factor, ast* argument_list);
 
 /**
  * 完全クラス名(XX::YY::Foo)を表す要素を作成します.
- * @param part_list
+ * @param apart_list
  * @param class_name
  * @return
  */
@@ -186,15 +186,15 @@ ast* ast_malloc_fqcn_part(string_view namev, const char* filename, int lineno);
 
 /**
  * 完全修飾クラス名の名前空間部分(XX::YY::)の一覧を表す要素を作成します.
- * @param part
- * @param part_list
+ * @param apart
+ * @param apart_list
  * @return
  */
 ast* ast_new_fqcn_part_list(ast* part, ast* part_list);
 
 /**
  * X::Y y; を表す要素を作成します.
- * @param type
+ * @param atype
  * @param namev
  * @return
  */
@@ -202,9 +202,9 @@ ast* ast_new_variable_decl(ast* type, string_view namev);
 
 /**
  * X::Y y = new X::Y() のような初期化を表す要素を作成します.
- * @param type
+ * @param atype
  * @param namev
- * @param fact
+ * @param afact
  * @return
  */
 ast* ast_new_variable_init(ast* type, string_view namev, ast* fact);
@@ -212,7 +212,7 @@ ast* ast_new_variable_init(ast* type, string_view namev, ast* fact);
 /**
  * var y = new X::Y() のような初期化を表す要素を作成します.
  * @param name
- * @param fact
+ * @param afact
  * @return
  */
 ast* ast_new_inferenced_type_init(string_view namev, ast* fact);

@@ -1,70 +1,70 @@
 #include "ast_new_stmt.h"
 
-ast * ast_malloc_stmt(ast * stmt, const char* filename, int lineno) {
+ast * ast_malloc_stmt(ast * astmt, const char* filename, int lineno) {
 	ast* ret = ast_malloc(ast_stmt, filename, lineno);
-	ast_push(ret, stmt);
+	ast_push(ret, astmt);
 	return ret;
 }
 
-ast * ast_new_stmt_list(ast * stmt, ast * stmt_list) {
+ast * ast_new_stmt_list(ast * astmt, ast * astmt_list) {
 	ast* ret = ast_new(ast_stmt_list);
-	ast_push(ret, stmt);
-	ast_push(ret, stmt_list);
+	ast_push(ret, astmt);
+	ast_push(ret, astmt_list);
 	return ret;
 }
 
-ast * ast_new_if(ast * cond, ast * body) {
+ast * ast_new_if(ast * acond, ast * abody) {
 	ast* ret = ast_new(ast_if);
-	ast_push(ret, cond);
-	ast_push(ret, body);
+	ast_push(ret, acond);
+	ast_push(ret, abody);
 	return ret;
 }
 
-ast * ast_new_else(ast * body) {
+ast * ast_new_else(ast * abody) {
 	ast* ret = ast_new(ast_else);
-	ast_push(ret, body);
+	ast_push(ret, abody);
 	return ret;
 }
 
-ast * ast_new_if_else(ast * cond, ast * trueBody, ast * falseBody) {
+ast * ast_new_if_else(ast * acond, ast * atrueBody, ast * afalseBody) {
 	ast* ret = ast_new(ast_if_else);
-	ast_push(ret, ast_new_if(cond, trueBody));
-	ast_push(ret, ast_new_else(falseBody));
+	ast_push(ret, ast_new_if(acond, atrueBody));
+	ast_push(ret, ast_new_else(afalseBody));
 	return ret;
 }
 
-ast * ast_new_if_elif_list(ast * cond, ast * trueBody, ast * elifList) {
+ast * ast_new_if_elif_list(ast * acond, ast * atrueBody, ast * aelifList) {
 	ast* ret = ast_new(ast_if_elif_list);
-	ast_push(ret, ast_new_if(cond, trueBody));
-	ast_push(ret, elifList);
+	ast_push(ret, ast_new_if(acond, atrueBody));
+	ast_push(ret, aelifList);
 	return ret;
 }
 
-ast * ast_new_if_elif_list_else(ast * cond, ast * trueBody, ast * elifList, ast * elseBody) {
+ast * ast_new_if_elif_list_else(ast * acond, ast * atrueBody, ast * aelifList, ast * aelseBody) {
 	ast* ret = ast_new(ast_if_elif_list_else);
-	ast_push(ret, ast_new_if_elif_list(cond, trueBody, elifList));
-	ast_push(ret, ast_new_else(elseBody));
+	ast_push(ret, ast_new_if_elif_list(acond, atrueBody, aelifList));
+	ast_push(ret, ast_new_else(aelseBody));
 	return ret;
 }
 
-ast * ast_new_elif_list(ast * forward, ast * tail) {
+ast * ast_new_elif_list(ast * aforward, ast * atail) {
 	ast* ret = ast_new(ast_elif_list);
-	ast_push(ret, forward);
-	ast_push(ret, tail);
+	ast_push(ret, aforward);
+	ast_push(ret, atail);
 	return ret;
 }
 
-ast * ast_new_elif(ast * cond, ast * body) {
+ast * ast_new_elif(ast * acond, ast * abody) {
 	ast* ret = ast_new(ast_elif);
-	ast_push(ret, cond);
-	ast_push(ret, body);
+	ast_push(ret, acond);
+	ast_push(ret, abody);
 	return ret;
 }
 
-ast * ast_new_while(ast * cond, ast * body) {
+ast * ast_new_while(ast * acond, ast * abody) {
 	ast* ret = ast_new(ast_while);
-	ast_push(ret, cond);
-	ast_push(ret, body);
+	ast_push(ret, acond);
+	ast_push(ret, abody);
 	return ret;
 }
 
@@ -76,9 +76,9 @@ ast * ast_new_continue() {
 	return ast_new(ast_continue);
 }
 
-ast * ast_new_return(ast * fact) {
+ast * ast_new_return(ast * afact) {
 	ast* ret = ast_new(ast_return);
-	ast_push(ret, fact);
+	ast_push(ret, afact);
 	return ret;
 }
 
@@ -87,9 +87,9 @@ ast* ast_new_return_empty() {
 }
 
 
-ast* ast_new_throw(ast* fact) {
+ast* ast_new_throw(ast* afact) {
 	ast* ret = ast_new(ast_stmt_throw);
-	ast_push(ret, fact);
+	ast_push(ret, afact);
 	return ret;
 }
 
@@ -117,24 +117,24 @@ ast* ast_new_catch_list(ast* acatch, ast* acatch_list) {
 	return ret;
 }
 
-ast * ast_new_argument(ast * factor) {
+ast * ast_new_argument(ast * afactor) {
 	ast* ret = ast_new(ast_argument);
-	ast_push(ret, factor);
+	ast_push(ret, afactor);
 	return ret;
 }
 
-ast * ast_new_argument_list(ast * factor, ast * argument_list) {
+ast * ast_new_argument_list(ast * afactor, ast * aargument_list) {
 	ast* ret = ast_new(ast_argument_list);
-	ast_push(ret, argument_list);
-	ast_push(ret, factor);
+	ast_push(ret, aargument_list);
+	ast_push(ret, afactor);
 	return ret;
 }
 
-ast * ast_new_fqcn(ast * part_list, string_view class_namev) {
+ast * ast_new_fqcn(ast * apart_list, string_view class_namev) {
 	ast* ret = ast_new(ast_fqcn);
 	ast* a = ast_new(ast_fqcn_class_name);
 	a->u.stringv_value = class_namev;
-	ast_push(ret, part_list);
+	ast_push(ret, apart_list);
 	ast_push(ret, a);
 	return ret;
 }
@@ -145,38 +145,38 @@ ast* ast_malloc_fqcn_part(string_view namev, const char* filename, int lineno) {
 	return ret;
 }
 
-ast * ast_new_fqcn_part_list(ast * part, ast * part_list) {
+ast * ast_new_fqcn_part_list(ast * apart, ast * apart_list) {
 	ast* ret = ast_new(ast_fqcn_part_list);
-	ast_push(ret, part_list);
-	ast_push(ret, part);
+	ast_push(ret, apart_list);
+	ast_push(ret, apart);
 	return ret;
 }
 
-ast * ast_new_variable_decl(ast * type, string_view namev) {
+ast * ast_new_variable_decl(ast * atype, string_view namev) {
 	ast* ret = ast_new(ast_stmt_variable_decl);
 	ast* aname = ast_new(ast_identifier);
 	aname->u.stringv_value = namev;
-	ast_push(ret, type);
+	ast_push(ret, atype);
 	ast_push(ret, aname);
 	return ret;
 }
 
-ast * ast_new_variable_init(ast * type, string_view namev, ast * fact) {
+ast * ast_new_variable_init(ast * atype, string_view namev, ast * afact) {
 	ast* ret = ast_new(ast_stmt_variable_init);
 	ast* aname = ast_new(ast_identifier);
 	aname->u.stringv_value = namev;
-	ast_push(ret, type);
+	ast_push(ret, atype);
 	ast_push(ret, aname);
-	ast_push(ret, fact);
+	ast_push(ret, afact);
 	return ret;
 }
 
-ast * ast_new_inferenced_type_init(string_view namev, ast * fact) {
+ast * ast_new_inferenced_type_init(string_view namev, ast * afact) {
 	ast* ret = ast_new(ast_inferenced_type_init);
 	ast* aname = ast_new(ast_identifier);
 	aname->u.stringv_value = namev;
 	ast_push(ret, aname);
-	ast_push(ret, fact);
+	ast_push(ret, afact);
 	return ret;
 }
 

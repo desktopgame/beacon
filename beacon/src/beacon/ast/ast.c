@@ -41,24 +41,24 @@ ast * ast_new_namespace_path(string_view namev) {
 	return ret;
 }
 
-ast * ast_new_namespace_path_list(ast * forward, string_view namev) {
+ast * ast_new_namespace_path_list(ast * aforward, string_view namev) {
 	ast* ret = ast_new(ast_namespace_path_list);
-	ast_push(ret, forward);
+	ast_push(ret, aforward);
 	ast_push(ret, ast_new_namespace_path(namev));
 	return ret;
 }
 
-ast * ast_new_import_path(ast* str) {
+ast * ast_new_import_path(ast* astr) {
 	ast* ret = ast_new(ast_import_path);
-	ret->u.stringv_value = str->u.stringv_value;
-	str->u.stringv_value = 0;
-	MEM_FREE(str);
+	ret->u.stringv_value = astr->u.stringv_value;
+	astr->u.stringv_value = 0;
+	MEM_FREE(astr);
 	return ret;
 }
 
-ast * ast_new_import_decl(ast * import_path) {
+ast * ast_new_import_decl(ast * aimport_path) {
 	ast* ret = ast_new(ast_import_decl);
-	ast_push(ret, import_path);
+	ast_push(ret, aimport_path);
 	return ret;
 }
 
@@ -69,9 +69,9 @@ ast* ast_new_import_decl_list(ast* aimport, ast* aimport_list) {
 	return ret;
 }
 
-ast * ast_new_scope(ast * stmt_list) {
+ast * ast_new_scope(ast * astmt_list) {
 	ast* ret = ast_new(ast_scope);
-	ast_push(ret, stmt_list);
+	ast_push(ret, astmt_list);
 	return ret;
 }
 
@@ -89,26 +89,26 @@ ast * ast_new_identifier(string_view strv) {
 	return ret;
 }
 
-ast * ast_new_identifier_list(string_view strv, ast * ident_list) {
+ast * ast_new_identifier_list(string_view strv, ast * aident_list) {
 	ast* ret = ast_new(ast_identifier_list);
 	ast_push(ret, ast_new_identifier(strv));
-	ast_push(ret, ident_list);
+	ast_push(ret, aident_list);
 	return ret;
 }
 
-ast * ast_new_proc(ast * expr) {
+ast * ast_new_proc(ast * aexpr) {
 	ast* ret = ast_new(ast_proc);
-	ast_push(ret, expr);
+	ast_push(ret, aexpr);
 	return ret;
 }
 
-ast * ast_push(ast * self, ast * child) {
+ast * ast_push(ast * self, ast * achild) {
 	assert(self != NULL);
-	assert(child != NULL);
+	assert(achild != NULL);
 	if (self->vchildren == NULL) {
 		self->vchildren = vector_new();
 	}
-	vector_push(self->vchildren, child);
+	vector_push(self->vchildren, achild);
 	//行番号を補正
 	parser* p = parser_current();
 	if (p != NULL) {

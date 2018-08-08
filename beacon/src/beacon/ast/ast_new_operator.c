@@ -10,9 +10,9 @@ ast* ast_new_unary(ast_tag tag, ast* a) {
 	return ret;
 }
 
-ast* ast_new_binary(ast_tag tag, ast* left, ast* right) {
+ast* ast_new_binary(ast_tag tag, ast* aleft, ast* aright) {
 	ast* ret = ast_new(tag);
-	ast_push(ret, left);
-	ast_push(ret, right);
+	ast_push(ret, aleft);
+	ast_push(ret, aright);
 	return ret;
 }
