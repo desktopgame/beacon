@@ -1,0 +1,11 @@
+namespace err92 {
+	class AAA {
+		public:
+		def new() {
+		}
+
+		Int a;
+	}
+}
+var a = new err92::AAA();
+a.a = "String";

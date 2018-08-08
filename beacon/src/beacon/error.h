@@ -60,6 +60,10 @@ typedef enum bc_error_id {
 
 	bcerror_thrown_not_exception_type,
 
+	bcerror_assign_not_compatible_local,
+	bcerror_assign_not_compatible_field,
+	bcerror_assign_not_compatible_property,
+
 	bcerror_undefined_class,
 	bcerror_undefined_variable,
 	bcerror_undefined_field,

@@ -157,6 +157,17 @@ void bc_error_vthrow(bc_error_id id, va_list ap) {
 			break;
 
 
+		case bcerror_assign_not_compatible_local:
+			fmt = "assign expression is has not type compatible: %s";
+			break;
+		case bcerror_assign_not_compatible_field:
+			fmt = "assign expression is has not type compatible: %s#%s";
+			break;
+		case bcerror_assign_not_compatible_property:
+			fmt = "assign expression is has not type compatible: %s#%s";
+			break;
+
+
 		case bcerror_undefined_class:
 			fmt = "undefined class: %s";
 			break;

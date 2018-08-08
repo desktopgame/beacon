@@ -9,9 +9,10 @@
 #include "../../env/field.h"
 
 static void assign_by_namebase(il_factor_assign_op* self, enviroment* env, call_context* cctx);
-static void assign_to_field(il_factor* receiver, il_factor* source, string_view namev, enviroment* env, call_context* cctx);
+static void assign_to_field(il_factor_assign_op* self,il_factor* receiver, il_factor* source, string_view namev, enviroment* env, call_context* cctx);
 static void assign_to_property(il_factor_assign_op* self, enviroment* env, call_context* cctx);
 static void check_final(il_factor* receiver, il_factor* source, string_view namev, enviroment* env, call_context* cctx);
+static bool can_assign_to_field(field* f, il_factor_assign_op* self, enviroment* env, call_context* cctx);
 
 il_factor* il_factor_wrap_assign(il_factor_assign_op* self) {
 	il_factor* ret = il_factor_new(ilfactor_assign_op);
@@ -54,7 +55,7 @@ void il_factor_assign_op_generate(il_factor_assign_op* self, enviroment* env, ca
 			assign_by_namebase(self, env, cctx);
 		//インスタンスフィールドへの代入
 		} else {
-			assign_to_field(ilmem->fact, self->right, ilmem->namev, env, cctx);
+			assign_to_field(self, ilmem->fact, self->right, ilmem->namev, env, cctx);
 		}
 	} else if(self->left->type == ilfactor_property) {
 		assign_to_property(self, env, cctx);
@@ -91,6 +92,7 @@ static void assign_by_namebase(il_factor_assign_op* self, enviroment* env, call_
 				string_pool_ref2str(type_name(cls->parent)),
 				string_pool_ref2str(sf->namev)
 			);
+			return;
 		}
 		//finalなので書き込めない
 		if(modifier_is_final(sf->modifier)) {
@@ -98,13 +100,18 @@ static void assign_by_namebase(il_factor_assign_op* self, enviroment* env, call_
 				string_pool_ref2str(type_name(cls->parent)),
 				string_pool_ref2str(sf->namev)
 			);
+			return;
+		}
+		//型の互換性を検査
+		if(!can_assign_to_field(sf, self, env, cctx)) {
+			return;
 		}
 	} else {
-		assign_to_field(ilmem->fact, self->right, ilmem->namev, env, cctx);
+		assign_to_field(self, ilmem->fact, self->right, ilmem->namev, env, cctx);
 	}
 }
 
-static void assign_to_field(il_factor* receiver, il_factor* source, string_view namev, enviroment* env, call_context* cctx) {
+static void assign_to_field(il_factor_assign_op* self, il_factor* receiver, il_factor* source, string_view namev, enviroment* env, call_context* cctx) {
 	generic_type* gt = il_factor_eval(receiver, env, cctx);
 	class_* cls = TYPE2CLASS(gt->core_type);
 	int temp = -1;
@@ -114,6 +121,10 @@ static void assign_to_field(il_factor* receiver, il_factor* source, string_view 
 	il_factor_generate(source, env, cctx);
 	opcode_buf_add(env->buf, (vector_item)op_put_field);
 	opcode_buf_add(env->buf, (vector_item)temp);
+	//型の互換性を検査
+	if(!can_assign_to_field(f, self, env, cctx)) {
+		return;
+	}
 	//指定のインスタンスフィールドにアクセスできない
 	if(!class_accessible_field(call_context_class(cctx), f)) {
 		bc_error_throw(bcerror_can_t_access_field,
@@ -143,6 +154,13 @@ static void assign_to_property(il_factor_assign_op* self, enviroment* env, call_
 		);
 		return;
 	}
+	if(generic_type_distance(prop->p->gtype, il_factor_eval(self->right, env, cctx)) < 0) {
+		bc_error_throw(bcerror_assign_not_compatible_property,
+			string_pool_ref2str(type_name(prop->p->parent)),
+			string_pool_ref2str(prop->p->namev)
+		);
+		return;
+	}
 	if(prop->p->is_short) {
 		if(is_static) {
 			il_factor_generate(self->right, env, cctx);
@@ -167,6 +185,20 @@ static void assign_to_property(il_factor_assign_op* self, enviroment* env, call_
 			opcode_buf_add(env->buf, (vector_item)op_put_property);
 			opcode_buf_add(env->buf, (vector_item)prop->index);
 		}
+	}
+}
+
+static bool can_assign_to_field(field* f, il_factor_assign_op* self, enviroment* env, call_context* cctx) {
+	generic_type* gt = il_factor_eval(self->right, env, cctx);
+	int dist = generic_type_distance(f->gtype, gt);
+	if(dist >= 0) {
+		return true;
+	} else {
+		bc_error_throw(bcerror_assign_not_compatible_field,
+			string_pool_ref2str(type_name(f->parent)),
+			string_pool_ref2str(f->namev)
+		);
+		return false;
 	}
 }
 
