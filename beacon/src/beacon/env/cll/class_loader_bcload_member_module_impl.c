@@ -44,55 +44,100 @@ static void CLBC_default_operator_overload(class_loader* self, type* tp);
 static void CLBC_default_eqoperator_overload(class_loader* self, type* tp);
 static void CLBC_default_noteqoperator_overload(class_loader* self, type* tp);
 
+bool CLBC_field_decl(class_loader* self, il_type* iltype, type* tp, il_field* ilfi, namespace_* scope, call_context* cctx) {
+	field* fi = field_new(ilfi->namev);
+	fi->access = ilfi->access;
+	fi->modifier = ilfi->modifier;
+	fi->parent = tp;
+	fi->gtype = import_manager_resolve(self->import_manager, scope, ilfi->fqcn, cctx);
+	type_add_field(tp, fi);
+	//フィールドの初期値
+	fi->initial_value = ilfi->initial_value;
+	ilfi->initial_value = NULL;
+	//フィールドの修飾子に native が使用されている
+	if(modifier_is_native(fi->modifier)) {
+		bc_error_throw(bcerror_native_field,
+			string_pool_ref2str(type_name(tp)),
+			string_pool_ref2str(fi->namev)
+		);
+		return false;
+	}
+	//.. abstractが使用されている
+	if(modifier_is_abstract(fi->modifier)) {
+		bc_error_throw(bcerror_abstract_field,
+			string_pool_ref2str(type_name(tp)),
+			string_pool_ref2str(fi->namev)
+		);
+		return false;
+	}
+	//.. overrideが使用されている
+	if(modifier_is_override(fi->modifier)) {
+		bc_error_throw(bcerror_override_field,
+			string_pool_ref2str(type_name(tp)),
+			string_pool_ref2str(fi->namev)
+		);
+		return false;
+	}
+	//static finalなのに、
+	//初期値が存在しない
+	if(modifier_is_static(fi->modifier) &&
+	   modifier_is_final(fi->modifier)) {
+		bc_error_throw(bcerror_not_default_value_static_final_field,
+			string_pool_ref2str(type_name(tp)),
+			string_pool_ref2str(fi->namev)
+		);
+		return false;
+	}
+	return true;
+}
+
+bool CLBC_field_impl(class_loader* self, type* tp, field* fi, namespace_* scope, call_context* cctx) {
+	fi->static_value = object_get_null();
+	//FIXME:ILフィールドと実行時フィールドのインデックスが同じなのでとりあえず動く
+	//プロパティが追加されたタイミングで対応する
+	//バッキングフィールドが追加されることもある
+	//il_field* ilfield = ((il_field*)vector_at(ilfields, i));
+	if(fi->initial_value == NULL) {
+		return true;
+	}
+	enviroment* env = enviroment_new();
+	env->context_ref = self;
+	fi->initial_value_env = env;
+	il_factor_load(fi->initial_value, env, cctx);
+	il_factor_generate(fi->initial_value, env, cctx);
+	//フィールドの型と互換性がない
+	generic_type* gf = il_factor_eval(fi->initial_value, env, cctx);
+	if(generic_type_distance(fi->gtype, gf) < 0) {
+		generic_type_print(fi->gtype); io_println();
+		generic_type_print(gf); io_println();
+		bc_error_throw(bcerror_field_default_value_not_compatible_to_field_type,
+			string_pool_ref2str(type_name(fi->parent)),
+			string_pool_ref2str(fi->namev)
+		);
+		return false;
+	}
+	//静的フィールドならついでに初期化
+	//FIXME:sg_threadをちゃんと設定すればいいんだけどとりあえずこれで
+	//静的フィールドでものすごいでかいオブジェクトを確保すると重くなるかも
+	heap* he = heap_get();
+	he->collect_blocking++;
+	if(modifier_is_static(fi->modifier)) {
+		frame* f = frame_new();
+		vm_execute(f, env);
+		fi->static_value = vector_pop(f->value_stack);
+		frame_delete(f);
+	}
+	he->collect_blocking--;
+	return true;
+}
+
 void CLBC_fields_decl(class_loader* self, il_type* iltype, type* tp, vector* ilfields, namespace_* scope) {
 	CL_ERROR(self);
 	call_context* cctx = call_context_new(call_decl_T);
 	cctx->space = scope;
 	cctx->ty = tp;
 	for (int i = 0; i < ilfields->length; i++) {
-		vector_item e = vector_at(ilfields, i);
-		il_field* ilfield = (il_field*)e;
-		field* field = field_new(ilfield->namev);
-		field->access = ilfield->access;
-		field->modifier = ilfield->modifier;
-		field->parent = tp;
-		field->gtype = import_manager_resolve(self->import_manager, scope, ilfield->fqcn, cctx);
-		type_add_field(tp, field);
-		//フィールドの初期値
-		field->initial_value = ilfield->initial_value;
-		ilfield->initial_value = NULL;
-		//フィールドの修飾子に native が使用されている
-		if(modifier_is_native(field->modifier)) {
-			bc_error_throw(bcerror_native_field,
-				string_pool_ref2str(type_name(tp)),
-				string_pool_ref2str(field->namev)
-			);
-			break;
-		}
-		//.. abstractが使用されている
-		if(modifier_is_abstract(field->modifier)) {
-			bc_error_throw(bcerror_abstract_field,
-				string_pool_ref2str(type_name(tp)),
-				string_pool_ref2str(field->namev)
-			);
-			break;
-		}
-		//.. overrideが使用されている
-		if(modifier_is_override(field->modifier)) {
-			bc_error_throw(bcerror_override_field,
-				string_pool_ref2str(type_name(tp)),
-				string_pool_ref2str(field->namev)
-			);
-			break;
-		}
-		//static finalなのに、
-		//初期値が存在しない
-		if(modifier_is_static(field->modifier) &&
-		   modifier_is_final(field->modifier)) {
-			bc_error_throw(bcerror_not_default_value_static_final_field,
-				string_pool_ref2str(type_name(tp)),
-				string_pool_ref2str(field->namev)
-			);
+		if(!CLBC_field_decl(self, iltype, tp, vector_at(ilfields, i), scope, cctx)) {
 			break;
 		}
 	}
@@ -101,48 +146,13 @@ void CLBC_fields_decl(class_loader* self, il_type* iltype, type* tp, vector* ilf
 
 void CLBC_fields_impl(class_loader* self, namespace_* scope, type* tp,vector* ilfields, vector* sgfields) {
 	CL_ERROR(self);
-	heap* he = heap_get();
 	call_context* cctx = call_context_new(call_ctor_T);
 	cctx->space = scope;
 	cctx->ty = tp;
 	for (int i = 0; i < sgfields->length; i++) {
-		vector_item e = vector_at(sgfields, i);
-		field* fi = (field*)e;
-		fi->static_value = object_get_null();
-		//FIXME:ILフィールドと実行時フィールドのインデックスが同じなのでとりあえず動く
-		//プロパティが追加されたタイミングで対応する
-		//バッキングフィールドが追加されることもある
-		//il_field* ilfield = ((il_field*)vector_at(ilfields, i));
-		if(fi->initial_value == NULL) {
-			continue;
-		}
-		enviroment* env = enviroment_new();
-		env->context_ref = self;
-		fi->initial_value_env = env;
-		il_factor_load(fi->initial_value, env, cctx);
-		il_factor_generate(fi->initial_value, env, cctx);
-		//フィールドの型と互換性がない
-		generic_type* gf = il_factor_eval(fi->initial_value, env, cctx);
-		if(generic_type_distance(fi->gtype, gf) < 0) {
-			generic_type_print(fi->gtype); io_println();
-			generic_type_print(gf); io_println();
-			bc_error_throw(bcerror_field_default_value_not_compatible_to_field_type,
-				string_pool_ref2str(type_name(fi->parent)),
-				string_pool_ref2str(fi->namev)
-			);
+		if(!CLBC_field_impl(self, tp, vector_at(sgfields, i), scope, cctx)) {
 			break;
 		}
-		//静的フィールドならついでに初期化
-		//FIXME:sg_threadをちゃんと設定すればいいんだけどとりあえずこれで
-		//静的フィールドでものすごいでかいオブジェクトを確保すると重くなるかも
-		he->collect_blocking++;
-		if(modifier_is_static(fi->modifier)) {
-			frame* f = frame_new();
-			vm_execute(f, env);
-			fi->static_value = vector_pop(f->value_stack);
-			frame_delete(f);
-		}
-		he->collect_blocking--;
 	}
 	call_context_delete(cctx);
 }

@@ -2,9 +2,14 @@
 #define BEACON_ENV_CLL_CLASS_LOADER_BCLOAD_MEMBER_MODULE_IMPL_H
 #include "../class_loader.h"
 #include "../../il/il_type_interface.h"
+#include "../../il/il_field.h"
 #include "../../il/call_context.h"
 #include "../../env/type_interface.h"
 #include "../../env/namespace.h"
+#include "../../env/field.h"
+
+bool CLBC_field_decl(class_loader* self, il_type* iltype, type* tp, il_field* ilfi, namespace_* scope, call_context* cctx);
+bool CLBC_field_impl(class_loader* self, type* tp, field* fi, namespace_* scope, call_context* cctx);
 /**
  * フィールド宣言を読み込んでクラスに追加します.
  * @param self

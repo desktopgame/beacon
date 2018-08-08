@@ -1,2 +1,1 @@
-var age = 10;
-age = "hello";
+printLine("Hello");
