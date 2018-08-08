@@ -12,24 +12,6 @@ typedef int SG_errno_t;
 #else
 typedef errno_t SG_errno_t;
 #endif
-/**
- * text_printf を介する出力をファイルへトレースするなら true.
- * @param b
- */
-void text_set_trace(bool b);
-
-/**
- * トレース中なら true.
- * @return
- */
-bool text_is_trace();
-
-/**
- * トレース中なら、現在バッファされている文字を
- * ファイルへフラッシュします.
- * この関数は main の最後で呼び出します。
- */
-void text_flush_trace();
 
 /**
  * 改行文字を出力します

@@ -11,30 +11,10 @@
 
 //proto
 static char* text_strclone(const char* source);
-static void text_printfdbg(const char* message, va_list ap);
 static char* text_readlineImpl(FILE* fp);
 static FILE* text_fp = NULL;
 static FILE* fake_stdout = NULL;
 static FILE* real_stdout = NULL;
-static bool text_trace = false;
-static bool gTraceClosed = false;
-
-void text_set_trace(bool b) {
-	text_trace = b;
-}
-
-bool text_is_trace() {
-	return text_trace;
-}
-
-void text_flush_trace() {
-	if (!text_trace || text_fp == NULL) {
-		return;
-	}
-	fclose(text_fp);
-	text_fp = NULL;
-	gTraceClosed = true;
-}
 
 void text_putline() {
 #if defined(_WIN32)
@@ -69,10 +49,6 @@ int text_vfprintf(FILE* fp, const char* message, va_list ap) {
 
 int text_printf(const char * message, ...) {
 	va_list ap;
-
-	va_start(ap, message);
-	text_printfdbg(message, ap);
-	va_end(ap);
 
 	va_start(ap, message);
 	int res = text_vprintf(message, ap);
@@ -279,46 +255,6 @@ char* text_freadline(FILE* fp) {
 	return text_readlineImpl(fp);
 }
 
-void text_stdout_enabled(bool enabled) {
-	if(enabled) {
-		//一度無効にされているなら、
-		//前回のファイルポインタを閉じる
-		if(fake_stdout != NULL) {
-			fflush(fake_stdout);
-			fclose(fake_stdout);
-			fake_stdout = NULL;
-		}
-		//本物のstdoutが保存されているならそれに戻す
-		if(real_stdout != NULL) {
-			stdout = real_stdout;
-			real_stdout = NULL;
-		}
-		fpurge(stdout);
-	} else {
-		fpurge(stdout);
-		assert(fake_stdout == NULL);
-		assert(real_stdout == NULL);
-		errno = 0;
-		//https://stackoverflow.com/questions/2262484/calling-fdopen-bad-file-descriptor
-		//int fd = mkstemp("fake_stdout");
-		//FILE* fp = fdopen(fd, "w");
-		const char* fname = "tmp";
-		//すでに存在するなら削除
-		if(io_exists(fname)) {
-			io_delete(fname);
-		}
-		//stdoutを入れ替えれる
-		FILE* fp = fopen(fname, "w");
-		if(fp == NULL) {
-			perror("fopen  ");
-		}
-		assert(fp != NULL);
-		fake_stdout = fp;
-		real_stdout = stdout;
-		stdout = fp;
-	}
-}
-
 //private
 static char* text_strclone(const char* source) {
 	int len = strlen(source);
@@ -328,40 +264,6 @@ static char* text_strclone(const char* source) {
 	}
 	block[len] = '\0';
 	return block;
-}
-
-static void text_printfdbg(const char* message, va_list ap) {
-#if defined(__clang__)
-	return;
-#endif
-	if (!text_trace || gTraceClosed) {
-		return;
-	}
-
-#if defined(DEBUG)
-	if (text_fp == NULL) {
-		if (io_exists("printf.text")) {
-			io_delete("printf.text");
-		}
-#if defined(_MSC_VER)
-		errno_t e = fopen_s(&text_fp, "printf.text", "w");
-		assert(!e);
-#else
-		text_fp = fopen("printf.text", "w");
-		assert(text_fp != NULL);
-#endif
-	}
-	
-	char block[512];
-	#if defined(_MSC_VER)
-	int res = vsprintf_s(block, 256, message, ap);
-	#else
-	int res = vsprintf(block, message, ap);
-	#endif
-	assert(res != -1);
-	fprintf(text_fp, "%s", block);
-	fflush(text_fp);
-#endif
 }
 
 static char* text_readlineImpl(FILE* fp) {
