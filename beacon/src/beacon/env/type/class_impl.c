@@ -546,6 +546,9 @@ static void class_create_vtable_override(class_* self) {
 }
 
 static void class_create_vtable_interface(class_* self) {
+	#if defined(DEBUG)
+	const char* clname = string_pool_ref2str(type_name(self->parent));
+	#endif
 	//もしインターフェースを実装しているなら、
 	//インターフェースに対応する同じ並びのメソッドテーブルも作る
 	for (int i = 0; i < self->impl_list->length; i++) {
@@ -561,6 +564,7 @@ static void class_create_vtable_interface(class_* self) {
 			//シグネチャが同じメソッドをテーブルへ。
 			method* interVTM = vector_at(interVT->elements, j);
 			method* classVTM = class_find_impl_method(self, interVTM);
+			//インターフェイスが実装されていない
 			assert(classVTM != NULL);
 			vtable_add(newVT, classVTM);
 		}

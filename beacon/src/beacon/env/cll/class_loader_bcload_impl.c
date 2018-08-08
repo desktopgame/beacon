@@ -345,7 +345,7 @@ static void CLBC_register_class(class_loader* self, namespace_* parent, il_type*
 				cls->super_class = gtp;
 			} else if (gtp->core_type->tag == type_interface) {
 				vector_push(cls->impl_list, gtp);
-			}
+			} else assert(false);
 		//二つ目以降はインターフェースのみ
 		} else {
 			generic_type* gtp = import_manager_resolve(self->import_manager, parent, e, cctx);
