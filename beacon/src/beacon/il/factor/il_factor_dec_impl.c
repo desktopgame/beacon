@@ -17,9 +17,9 @@ il_factor_dec * il_factor_dec_new(fix_type type) {
 }
 
 void il_factor_dec_dump(il_factor_dec * self, int depth) {
-	text_putindent(depth);
-	text_printf("--");
-	text_putline();
+	io_printi(depth);
+	printf("--");
+	io_println();
 	il_factor_dump(self->fact, depth + 1);
 }
 

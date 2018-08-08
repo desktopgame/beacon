@@ -15,18 +15,18 @@ il_property_body* il_property_body_malloc(il_property_body_tag tag, const char* 
 }
 
 void il_property_body_dump(il_property_body* self, int depth) {
-	text_putindent(depth);
+	io_printi(depth);
 	access_print(self->access);
-	text_printf(" ");
+	printf(" ");
 	if(self->tag == ilproperty_set) {
-		text_printf("set");
+		printf("set");
 	} else {
-		text_printf("get");
+		printf("get");
 	}
 	if(self->is_short) {
-		text_printf(" simple");
+		printf(" simple");
 	}
-	text_putline();
+	io_println();
 	for(int i=0; i<self->statement_list->length; i++) {
 		il_stmt* e = vector_at(self->statement_list, i);
 		il_stmt_dump(e, depth + 1);

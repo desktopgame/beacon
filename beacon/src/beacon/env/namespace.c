@@ -234,15 +234,15 @@ static void namespace_dump_root(numeric_map* root, bool callSelf, int depth) {
 
 static void namespace_dump_impl(namespace_* root, int depth) {
 	namespace_put_indent(depth);
-	text_printf("%s", string_pool_ref2str(root->namev));
-	text_putline();
+	printf("%s", string_pool_ref2str(root->namev));
+	io_println();
 	namespace_dump_class(root->type_map, true, depth + 1);
 	namespace_dump_root(root->namespace_map, false, depth + 1);
 }
 
 static void namespace_put_indent(int depth) {
 	for (int i = 0; i < depth; i++) {
-		text_printf("    ");
+		printf("    ");
 	}
 }
 

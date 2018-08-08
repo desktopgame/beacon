@@ -37,9 +37,9 @@ il_stmt_catch* il_stmt_catch_new(string_view namev) {
 }
 
 void il_stmt_try_dump(il_stmt_try* self, int depth) {
-	text_putindent(depth);
-	text_printf("try");
-	text_putline();
+	io_printi(depth);
+	printf("try");
+	io_println();
 	for(int i=0; i<self->statement_list->length; i++) {
 		il_stmt* e = (il_stmt*)vector_at(self->statement_list, i);
 		il_stmt_dump(e, depth + 1);
@@ -51,11 +51,11 @@ void il_stmt_try_dump(il_stmt_try* self, int depth) {
 }
 
 void il_stmt_catch_dump(il_stmt_catch* self, int depth) {
-	text_putindent(depth);
-	text_printf("catch(");
+	io_printi(depth);
+	printf("catch(");
 	generic_cache_print(self->fqcn);
-	text_printf(" %s)", string_pool_ref2str(self->namev));
-	text_putline();
+	printf(" %s)", string_pool_ref2str(self->namev));
+	io_println();
 	for(int i=0; i<self->statement_list->length; i++) {
 		il_stmt* e = (il_stmt*)vector_at(self->statement_list, i);
 		il_stmt_dump(e, depth + 1);

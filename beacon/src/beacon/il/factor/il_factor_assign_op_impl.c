@@ -28,8 +28,8 @@ il_factor_assign_op* il_factor_assign_op_new() {
 }
 
 void il_factor_assign_op_dump(il_factor_assign_op* self, int depth) {
-	text_putindent(depth);
-	text_printfln("assign");
+	io_printi(depth);
+	io_printfln("assign");
 	il_factor_dump(self->left, depth + 1);
 	il_factor_dump(self->right, depth + 1);
 }

@@ -31,40 +31,40 @@ type* bc_console_type() {
 static void bc_console_writeLine(method* parent, frame* fr, enviroment* env) {
 	object* o = vector_at(fr->ref_stack, 1);
 	if (o->tag == object_int) {
-		text_printf("%d\n", o->u.int_);
+		printf("%d\n", o->u.int_);
 	} else if(o->tag == object_double) {
-		text_printf("%f\n", o->u.double_);
+		printf("%f\n", o->u.double_);
 	} else if (o->tag == object_string) {
-		text_printf("%s\n", bc_string_raw(o)->text);
+		printf("%s\n", bc_string_raw(o)->text);
 	} else if (o->tag == object_ref) {
 		generic_type_print(o->gtype);
-		text_printf("\n");
+		printf("\n");
 	} else if (o->tag == object_char) {
-		text_printf("%c\n", o->u.char_);
+		printf("%c\n", o->u.char_);
 	} else if (o->tag == object_bool) {
-		text_printf("%s\n", o->u.bool_ ? "true" : "false");
+		printf("%s\n", o->u.bool_ ? "true" : "false");
 	} else if(o->tag == object_null) {
-		text_printf("null\n");
+		printf("null\n");
 	}
 }
 
 static void bc_console_write(method* parent, frame* fr, enviroment* env) {
 	object* o = vector_at(fr->ref_stack, 1);
 	if (o->tag == object_int) {
-		text_printf("%d", o->u.int_);
+		printf("%d", o->u.int_);
 	}  else if (o->tag == object_double) {
-		text_printf("%f", o->u.double_);
+		printf("%f", o->u.double_);
 	} else if (o->tag == object_string) {
-		text_printf("%s", bc_string_raw(o)->text);
+		printf("%s", bc_string_raw(o)->text);
 	} else if (o->tag == object_ref) {
 		generic_type_print(o->gtype);
-		//text_printf("\n");
+		//printf("\n");
 	} else if (o->tag == object_char) {
-		text_printf("%c", o->u.char_);
+		printf("%c", o->u.char_);
 	} else if (o->tag == object_bool) {
-		text_printf("%s", o->u.bool_ ? "true" : "false");
+		printf("%s", o->u.bool_ ? "true" : "false");
 	} else if(o->tag == object_null) {
-		text_printf("null");
+		printf("null");
 	}
 }
 

@@ -124,25 +124,25 @@ static void test_parse_err_hdr(parser* p) {
 	//system("cls");
 	//put filename
 	for(int i=0; i<4; i++) {
-		text_printf(" ");
+		printf(" ");
 	}
-	text_printf("file=%s ", p->source_name);
+	printf("file=%s ", p->source_name);
 	//put line
-	text_printf("line=%d ", p->error_line_index);
+	printf("line=%d ", p->error_line_index);
 	//put column
-	text_printf("column=%d", p->error_column_index);
-	text_printf("\n");
+	printf("column=%d", p->error_column_index);
+	printf("\n");
 	//put str
 	for(int i=0; i<4; i++) {
-		text_printf(" ");
+		printf(" ");
 	}
-	text_printf("%s", p->error_message);
-	text_printf("\n");
+	printf("%s", p->error_message);
+	printf("\n");
 	//put line
 	for(int i=0; i<4; i++) {
-		text_printf(" ");
+		printf(" ");
 	}
-	text_printf("%s", p->error_line_text);
-	text_printf("\n");
+	printf("%s", p->error_line_text);
+	printf("\n");
 	fflush(stdout);
 }

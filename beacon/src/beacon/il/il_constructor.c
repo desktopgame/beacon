@@ -19,10 +19,10 @@ il_constructor * il_constructor_new() {
 }
 
 void il_constructor_dump(il_constructor * self, int depth) {
-	text_putindent(depth);
+	io_printi(depth);
 	access_print(self->access);
-	text_printf(" constructor");
-	text_putline();
+	printf(" constructor");
+	io_println();
 	if (self->chain != NULL) {
 		il_constructor_chain_dump(self->chain, depth + 1);
 	}

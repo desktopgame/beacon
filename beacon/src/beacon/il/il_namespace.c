@@ -28,28 +28,28 @@ il_namespace* il_namespace_root(il_namespace* self) {
 }
 
 void il_namespace_dump(il_namespace* self, int depth) {
-	text_putindent(depth);
-	text_printf("namespace %s", string_pool_ref2str(self->namev));
-	text_putline();
+	io_printi(depth);
+	printf("namespace %s", string_pool_ref2str(self->namev));
+	io_println();
 
-	text_putindent(depth);
-	text_printf("namespace list");
-	text_putline();
+	io_printi(depth);
+	printf("namespace list");
+	io_println();
 	for (int i = 0; i < self->namespace_list->length; i++) {
 		vector_item e = vector_at(self->namespace_list, i);
 		il_namespace* iln = (il_namespace*)e;
 		il_namespace_dump(iln, depth + 1);
 	}
 
-	text_putindent(depth);
-	text_printf("type list");
-	text_putline();
+	io_printi(depth);
+	printf("type list");
+	io_println();
 	for (int i = 0; i < self->type_list->length; i++) {
 		vector_item e = vector_at(self->type_list, i);
 		il_type* ilt = (il_type*)e;
 		il_type_dump(ilt, depth + 1);
 	}
-	text_putline();
+	io_println();
 }
 
 void il_namespace_delete(il_namespace* self) {

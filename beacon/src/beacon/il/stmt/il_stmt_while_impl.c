@@ -24,9 +24,9 @@ il_stmt_while * il_stmt_while_new() {
 }
 
 void il_stmt_while_dump(il_stmt_while * self, int depth) {
-	text_putindent(depth);
-	text_printf("while");
-	text_putline();
+	io_printi(depth);
+	printf("while");
+	io_println();
 	il_factor_dump(self->condition, depth + 1);
 	for (int i = 0; i < self->statement_list->length; i++) {
 		il_stmt* e = (il_stmt*)vector_at(self->statement_list, i);

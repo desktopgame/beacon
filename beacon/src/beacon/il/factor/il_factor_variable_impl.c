@@ -31,10 +31,10 @@ il_factor_variable * il_factor_variable_malloc(const char* filename, int lineno)
 }
 
 void il_factor_variable_dump(il_factor_variable * self, int depth) {
-	text_putindent(depth);
-	text_printf("variable ");
+	io_printi(depth);
+	printf("variable ");
 	fqcn_cache_print(self->fqcn);
-	text_putline();
+	io_println();
 }
 
 void il_factor_variable_generate(il_factor_variable * self, enviroment* env, call_context* cctx) {

@@ -21,21 +21,21 @@ void generic_cache_print(generic_cache * self) {
 	if (self->type_args->length <= 0) {
 		return;
 	}
-	text_printf("<");
+	printf("<");
 	for (int i = 0; i < self->type_args->length; i++) {
 		generic_cache* e = (generic_cache*)vector_at(self->type_args, i);
 		generic_cache_print(e);
 		if (i != self->type_args->length - 1) {
-			text_printf(", ");
+			printf(", ");
 		}
 	}
-	text_printf(">");
+	printf(">");
 }
 
 void generic_cache_dump(generic_cache * self, int depth) {
-	text_putindent(depth);
+	io_printi(depth);
 	generic_cache_print(self);
-	text_putline();
+	io_println();
 }
 
 char* generic_cache_tostr(generic_cache* self) {

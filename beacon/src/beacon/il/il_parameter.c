@@ -14,10 +14,10 @@ il_parameter * il_parameter_new(string_view namev) {
 }
 
 void il_parameter_dump(il_parameter * self, int depth) {
-	text_putindent(depth);
-	text_printf("parameter %s ", string_pool_ref2str(self->namev));
+	io_printi(depth);
+	printf("parameter %s ", string_pool_ref2str(self->namev));
 	generic_cache_print(self->fqcn);
-	text_putline();
+	io_println();
 }
 
 void il_parameter_delete(il_parameter * self) {

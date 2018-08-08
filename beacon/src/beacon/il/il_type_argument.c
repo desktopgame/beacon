@@ -17,15 +17,15 @@ void il_type_argument_print(vector* iltype_args) {
 	if(iltype_args->length == 0) {
 		return;
 	}
-	text_printf("<");
+	printf("<");
 	for(int i=0; i<iltype_args->length; i++) {
 		il_type_argument* e = (il_type_argument*)vector_at(iltype_args, i);
 		generic_cache_print(e->gcache);
 		if(i != iltype_args->length - 1) {
-			text_printf(",");
+			printf(",");
 		}
 	}
-	text_printf("<");
+	printf("<");
 }
 
 void il_type_argument_resolve(vector* iltype_args, call_context* cctx) {

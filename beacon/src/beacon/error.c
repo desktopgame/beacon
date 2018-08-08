@@ -241,8 +241,8 @@ void bc_error_vthrow(bc_error_id id, va_list ap) {
 			}
 	}
 	gGlobalError = id;
-	text_vfprintf(stderr, fmt, ap);
-	text_fprintf(stderr, "\n");
+	vfprintf(stderr, fmt, ap);
+	fprintf(stderr, "\n");
 }
 
 void bc_error_clear() {

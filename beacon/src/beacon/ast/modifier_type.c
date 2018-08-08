@@ -27,28 +27,28 @@ bool modifier_is_override(modifier_type type) {
 
 void modifier_print(modifier_type type) {
 	if (type == (modifier_static | modifier_native)) {
-		text_printf("static native");
+		printf("static native");
 		return;
 	}
 	switch (type) {
 		case modifier_none:
-			text_printf("none");
+			printf("none");
 			break;
 
 		case modifier_static:
-			text_printf("static");
+			printf("static");
 			break;
 
 		case modifier_native:
-			text_printf("native");
+			printf("native");
 			break;
 
 		case modifier_abstract:
-			text_printf("abstract");
+			printf("abstract");
 			break;
 
 		case modifier_override:
-			text_printf("override");
+			printf("override");
 			break;
 
 		default:

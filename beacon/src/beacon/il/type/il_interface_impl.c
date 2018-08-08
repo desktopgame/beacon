@@ -37,10 +37,10 @@ void il_interface_add_method(il_interface * self, il_method * method) {
 }
 
 void il_interface_dump(il_interface * self, int depth) {
-	text_putindent(depth);
-	text_printf("interface %s", string_pool_ref2str(self->namev));
+	io_printi(depth);
+	printf("interface %s", string_pool_ref2str(self->namev));
 	il_type_parameter_list_print(self->type_parameter_list);
-	text_putline();
+	io_println();
 	//継承するインターフェイスの一覧を出力
 	for (int i = 0; i < self->extends_list->length; i++) {
 		generic_cache* e = (generic_cache*)vector_at(self->extends_list, i);

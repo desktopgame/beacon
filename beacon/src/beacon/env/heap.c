@@ -69,12 +69,12 @@ void heap_delete(heap * self) {
 }
 
 void heap_dump(heap* self) {
-	text_printf("heap dump:\n");
+	printf("heap dump:\n");
 	for(int i=0; i<self->object_vec->length; i++) {
 		object* a = vector_at(self->object_vec, i);
-		text_printf("    ");
+		printf("    ");
 		generic_type_print(a->gtype);
-		text_printf("\n");
+		printf("\n");
 	}
 }
 

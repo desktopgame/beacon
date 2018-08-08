@@ -57,5 +57,5 @@ static void symbol_table_delete_entry(numeric_key key, numeric_map_item item) {
 	symbol_entry_delete(e);
 }
 static void symbol_table_dump_entry(numeric_key key, numeric_map_item item) {
-	text_printf("[%s] = %d\n", string_pool_ref2str(key), ((symbol_entry*)item)->index);
+	printf("[%s] = %d\n", string_pool_ref2str(key), ((symbol_entry*)item)->index);
 }

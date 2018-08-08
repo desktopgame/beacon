@@ -45,7 +45,7 @@ static void bc_object_nativeToString(method* parent, frame* fr, enviroment* env)
 	} else if (self->tag == object_int) {
 #define BUFF_LEN 256
 		char buff[256];
-		int res = text_sprintf(buff, BUFF_LEN, "%d", self->u.int_);
+		int res = sprintf(buff, BUFF_LEN, "%d", self->u.int_);
 		string_buffer_appends(sb, buff);
 #undef BUFF_LEN
 	}

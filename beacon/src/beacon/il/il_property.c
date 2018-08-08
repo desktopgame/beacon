@@ -13,14 +13,14 @@ il_property* il_property_malloc(string_view namev, const char* filename, int lin
 }
 
 void il_property_dump(il_property* self, int depth) {
-	text_putindent(depth);
+	io_printi(depth);
 	access_print(self->access);
-	text_printf(" ");
+	printf(" ");
 	modifier_print(self->modifier);
-	text_printf(" property ");
+	printf(" property ");
 	generic_cache_print(self->fqcn);
-	text_printf(" %s", string_pool_ref2str(self->namev));
-	text_putline();
+	printf(" %s", string_pool_ref2str(self->namev));
+	io_println();
 	if(self->set != NULL) {
 		il_property_body_dump(self->set, depth + 1);
 	}

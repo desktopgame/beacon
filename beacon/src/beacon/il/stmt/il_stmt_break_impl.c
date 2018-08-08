@@ -22,9 +22,9 @@ void il_stmt_break_load(void * empty, enviroment * env, call_context* cctx) {
 }
 
 void il_stmt_break_dump(void * empty, int depth) {
-	text_putindent(depth);
-	text_printf("break");
-	text_putline();
+	io_printi(depth);
+	printf("break");
+	io_println();
 }
 
 void il_stmt_break_delete(void * empty) {

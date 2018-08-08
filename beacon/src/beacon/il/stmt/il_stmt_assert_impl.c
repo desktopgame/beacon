@@ -22,9 +22,9 @@ il_stmt_assert* il_stmt_assert_new() {
 }
 
 void il_stmt_assert_dump(il_stmt_assert* self, int depth) {
-	text_putindent(depth);
-	text_printf("assert");
-	text_putline();
+	io_printi(depth);
+	printf("assert");
+	io_println();
 	il_factor_dump(self->condition, depth + 1);
 	il_factor_dump(self->message, depth + 1);
 }

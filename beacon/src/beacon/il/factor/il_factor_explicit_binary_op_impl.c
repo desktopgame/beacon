@@ -24,9 +24,9 @@ il_factor_explicit_binary_op* il_factor_explicit_binary_op_new(operator_type typ
 }
 
 void il_factor_explicit_binary_op_dump(il_factor_explicit_binary_op* self, int depth) {
-	text_putindent(depth);
+	io_printi(depth);
 	operator_fprintf(stdout, self->type);
-	text_putline();
+	io_println();
 	il_factor_dump(self->receiver, depth + 1);
 	il_factor_dump(self->arg, depth + 1);
 }

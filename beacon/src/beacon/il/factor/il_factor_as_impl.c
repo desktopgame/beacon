@@ -22,10 +22,10 @@ il_factor_as * il_factor_as_new() {
 }
 
 void il_factor_as_dump(il_factor_as * self, int depth) {
-	text_putindent(depth);
-	text_printf("as ");
+	io_printi(depth);
+	printf("as ");
 	generic_cache_print(self->fqcn);
-	text_putline();
+	io_println();
 	il_factor_dump(self->fact, depth + 1);
 }
 

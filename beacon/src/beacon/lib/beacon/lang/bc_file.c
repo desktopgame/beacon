@@ -42,7 +42,7 @@ static void bc_file_nativeOpen(method* parent, frame* fr, enviroment* env) {
 	object* modeObj = vector_at(fr->ref_stack, 2);
 	string_buffer* fileStr = bc_string_raw(fileObj);
 	string_buffer* modeStr = bc_string_raw(modeObj);
-	//text_printfln("%s : %s", fileStr->text, modeStr->text);
+	//io_printfln("%s : %s", fileStr->text, modeStr->text);
 
 	FILE* fp = fopen(fileStr->text, modeStr->text);
 	assert(fp != NULL);

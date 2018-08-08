@@ -221,18 +221,18 @@ int object_count() {
 
 void object_print(object * self) {
 	if (self->tag == object_int) {
-		text_printf("Int: %d", self->u.int_);
+		printf("Int: %d", self->u.int_);
 	} else if (self->tag == object_double) {
-		text_printf("Double: %d", self->u.double_);
+		printf("Double: %d", self->u.double_);
 	} else if (self->tag == object_string) {
 		string_buffer* sb = (string_buffer*)vector_at(self->native_slot_vec, 0);
-		text_printf("String: %s", sb->text);
+		printf("String: %s", sb->text);
 	} else if (self->tag == object_bool) {
-		text_printf("Bool: %s", (self == object_get_true() ? "true" : "false"));
+		printf("Bool: %s", (self == object_get_true() ? "true" : "false"));
 	} else if (self->tag == object_null) {
-		text_printf("Ref: Null");
+		printf("Ref: Null");
 	} else if (self->tag == object_ref) {
-		text_printf("Ref: ");
+		printf("Ref: ");
 		generic_type_print(self->gtype);
 	}
 }
@@ -285,7 +285,7 @@ void object_destroy(object* self) {
 		self->native_slot_vec = NULL;
 		self->u.field_vec = NULL;
 	}
-	//text_printfln("delete object %s", type_name(obj->type));
+	//io_printfln("delete object %s", type_name(obj->type));
 	object_delete(self);
 }
 

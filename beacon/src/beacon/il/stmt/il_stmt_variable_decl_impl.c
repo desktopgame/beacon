@@ -20,9 +20,9 @@ il_stmt_variable_decl * il_stmt_variable_decl_new(string_view namev) {
 }
 
 void il_stmt_variable_decl_dump(il_stmt_variable_decl * self, int depth) {
-	text_putindent(depth);
-	text_printf("variable decl %s", string_pool_ref2str(self->namev));
-	text_putline();
+	io_printi(depth);
+	printf("variable decl %s", string_pool_ref2str(self->namev));
+	io_println();
 
 	generic_cache_dump(self->fqcn, depth + 1);
 }

@@ -20,9 +20,9 @@ il_factor_char * il_factor_char_new(char c) {
 }
 
 void il_factor_char_dump(il_factor_char * self, int depth) {
-	text_putindent(depth);
-	text_printf("Char %c", self->value);
-	text_putline();
+	io_printi(depth);
+	printf("Char %c", self->value);
+	io_println();
 }
 
 void il_factor_char_generate(il_factor_char * self, enviroment * env, call_context* cctx) {

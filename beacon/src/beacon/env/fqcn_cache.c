@@ -24,32 +24,32 @@ fqcn_cache* fqcn_cache_malloc(const char* filename, int lineno) {
 }
 
 void fqcn_cache_dump(fqcn_cache * self, int depth) {
-	text_putindent(depth);
-	text_printf("type %s", string_pool_ref2str(self->namev));
-	text_putline();
+	io_printi(depth);
+	printf("type %s", string_pool_ref2str(self->namev));
+	io_println();
 	//X::C.call() のような呼び出しなら
 	if (self->scope_vec->length > 0) {
-		text_putindent(depth);
-		text_printf("scope");
-		text_putline();
+		io_printi(depth);
+		printf("scope");
+		io_println();
 		for (int i = 0; i < self->scope_vec->length; i++) {
 			string_view sv = (string_view)vector_at(self->scope_vec, i);
-			text_putindent(depth + 1);
-			text_printf("%s", string_pool_ref2str(sv));
-			text_putline();
+			io_printi(depth + 1);
+			printf("%s", string_pool_ref2str(sv));
+			io_println();
 		}
 	}
 }
 
 void fqcn_cache_print(fqcn_cache * self) {
 	if (self->scope_vec->length == 0) {
-		text_printf("%s", string_pool_ref2str(self->namev));
+		printf("%s", string_pool_ref2str(self->namev));
 	} else {
 		for (int i = 0; i < self->scope_vec->length; i++) {
-			text_printf("%s", string_pool_ref2str((string_view)vector_at(self->scope_vec, i)));
-			text_printf("::");
+			printf("%s", string_pool_ref2str((string_view)vector_at(self->scope_vec, i)));
+			printf("::");
 		}
-		text_printf("%s", string_pool_ref2str(self->namev));
+		printf("%s", string_pool_ref2str(self->namev));
 	}
 }
 

@@ -17,16 +17,16 @@ il_constructor_chain * il_constructor_chain_new() {
 }
 
 void il_constructor_chain_dump(il_constructor_chain * self, int depth) {
-	text_putindent(depth);
-	text_printf("constructor chain");
-	text_putline();
-	text_putindent(depth);
+	io_printi(depth);
+	printf("constructor chain");
+	io_println();
+	io_printi(depth);
 	if (self->type == chain_type_this) {
-		text_printf("this");
+		printf("this");
 	} else if (self->type == chain_type_super) {
-		text_printf("super");
+		printf("super");
 	}
-	text_putline();
+	io_println();
 	for (int i = 0; i < self->argument_list->length; i++) {
 		il_argument* ilarg = (il_argument*)vector_at(self->argument_list, i);
 		il_argument_dump(ilarg, depth + 1);

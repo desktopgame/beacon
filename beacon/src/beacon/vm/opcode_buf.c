@@ -44,11 +44,11 @@ int opcode_buf_nop(opcode_buf * self) {
 void opcode_buf_dump(opcode_buf * self, int depth) {
 	//opcode_buf* buf = self->u.script_method->env->buf;
 	for (int i = 0; i < self->source->length; i++) {
-		text_putindent(depth);
+		io_printi(depth);
 		i = opcode_print(self->source, i);
-		text_putline();
+		io_println();
 	}
-	text_putline();
+	io_println();
 }
 
 opcode_buf * opcode_buf_merge(opcode_buf * a, opcode_buf * b) {

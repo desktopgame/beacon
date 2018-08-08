@@ -25,9 +25,9 @@ il_stmt_variable_init * il_stmt_variable_init_new(string_view namev) {
 }
 
 void il_stmt_variable_init_dump(il_stmt_variable_init * self, int depth) {
-	text_putindent(depth);
-	text_printf("variable init %s", string_pool_ref2str(self->namev));
-	text_putline();
+	io_printi(depth);
+	printf("variable init %s", string_pool_ref2str(self->namev));
+	io_println();
 	generic_cache_dump(self->fqcn, depth + 1);
 	il_factor_dump(self->fact, depth + 1);
 }

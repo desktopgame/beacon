@@ -17,6 +17,28 @@
 //proto
 static void io_file_entry_delete(vector_item item);
 
+void io_printi(int depth) {
+	io_fprinti(stdout, depth);
+}
+
+void io_fprinti(FILE* fp, int depth) {
+	for(int i=0; i<depth; i++) {
+		fprintf(fp, "    ");
+	}
+}
+
+void io_printfln(const char* fmt, ...) {
+	va_list ap;
+	va_start(ap, fmt);
+	int ret = vprintf(fmt, ap);
+	printf("\n");
+	va_end(ap);
+}
+
+void io_println() {
+	printf("\n");
+}
+
 void io_new_file(const char * filename) {
 	assert(!io_exists(filename));
 #if defined(_MSC_VER)
@@ -58,7 +80,7 @@ bool io_exists_s(const char* filename) {
 	int tmp = errno;
 	if(!ret) {
 		perror("fopen error  ");
-		text_printf("path: %s", filename);
+		printf("path: %s", filename);
 	}
 	return ret;
 }

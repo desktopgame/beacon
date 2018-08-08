@@ -26,15 +26,15 @@ il_method * il_method_new(string_view namev) {
 }
 
 void il_method_dump(il_method * self, int depth) {
-	text_putindent(depth);
+	io_printi(depth);
 	access_print(self->access);
-	text_printf(" ");
+	printf(" ");
 	modifier_print(self->modifier);
-	text_printf(" method %s", string_pool_ref2str(self->namev));
+	printf(" method %s", string_pool_ref2str(self->namev));
 	il_type_parameter_list_print(self->type_parameter_list);
-	text_printf(" -> ");
+	printf(" -> ");
 	generic_cache_print(self->return_fqcn);
-	text_putline();
+	io_println();
 	for (int i = 0; i < self->parameter_list->length; i++) {
 		vector_item e = vector_at(self->parameter_list, i);
 		il_parameter* p = (il_parameter*)e;

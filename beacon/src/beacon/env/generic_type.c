@@ -118,45 +118,45 @@ void generic_type_print(generic_type * self) {
 	//タグを出力
 	switch(self->tag) {
 		case generic_type_tag_none:
-			text_printf("::");
+			printf("::");
 			break;
 		case generic_type_tag_class:
-			text_printf("@@");
+			printf("@@");
 			break;
 		case generic_type_tag_method:
-			text_printf("##");
+			printf("##");
 			break;
 	}
 	//T, Uなど
 	if (self->virtual_type_index != -1) {
 		//(Array)[0]
 		if(self->tag == generic_type_tag_class) {
-			text_printf("(%s)", string_pool_ref2str(type_name(self->u.type_)));
+			printf("(%s)", string_pool_ref2str(type_name(self->u.type_)));
 		//copy[0]
 		} else if(self->tag == generic_type_tag_method) {
-			text_printf("(%s)", string_pool_ref2str(self->u.method_->namev));
+			printf("(%s)", string_pool_ref2str(self->u.method_->namev));
 		}
-		text_printf("[%d]", self->virtual_type_index);
+		printf("[%d]", self->virtual_type_index);
 	//Intなど
 	} else {
-		text_printf("%s", string_pool_ref2str(type_name(self->core_type)));
+		printf("%s", string_pool_ref2str(type_name(self->core_type)));
 	}
 	if(self->is_ctor) {
-		text_printf("!!");
+		printf("!!");
 	}
 	if (self->type_args_list->length == 0) {
 		return;
 	}
 	//[...]
-	text_printf("[");
+	printf("[");
 	for (int i = 0; i < self->type_args_list->length; i++) {
 		generic_type* e = (generic_type*)vector_at(self->type_args_list, i);
 		generic_type_print(e);
 		if (i != self->type_args_list->length - 1) {
-			text_printf(",");
+			printf(",");
 		}
 	}
-	text_printf("]");
+	printf("]");
 }
 
 bool generic_type_int(generic_type* self) {
@@ -236,9 +236,9 @@ bool generic_type_compare(generic_type* self, const char* name) {
 
 void generic_type_print2(generic_type* a, generic_type* b) {
 	generic_type_print(a);
-	text_printf(" ");
+	printf(" ");
 	generic_type_print(b);
-	text_putline();
+	io_println();
 }
 
 //private

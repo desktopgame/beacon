@@ -62,7 +62,7 @@ void enviroment_op_dump(enviroment * self, int depth) {
 	line_range* lr = NULL;
 	int lrPos = -1;
 	for (int i = 0; i < buf->source->length; i++) {
-		text_putindent(depth);
+		io_printi(depth);
 		i = opcode_print(buf->source, i);
 		if (!vector_empty(self->line_rangeVec)) {
 			if (lr == NULL) {
@@ -78,11 +78,11 @@ void enviroment_op_dump(enviroment * self, int depth) {
 			}
 		}
 		if (lr != NULL) {
-			text_printf("<%d>", lr->lineno);
+			printf("<%d>", lr->lineno);
 		}
-		text_putline();
+		io_println();
 	}
-	text_putline();
+	io_println();
 }
 
 int enviroment_add_constant_int(enviroment * self, int i) {
@@ -145,8 +145,8 @@ void enviroment_delete(enviroment * self) {
 	if(self == NULL) {
 		return;
 	}
-	//text_printfln("deleted env %s", self->context_cll->filename);
-	//text_printfln("delete pool---");
+	//io_printfln("deleted env %s", self->context_cll->filename);
+	//io_printfln("delete pool---");
 	vector_delete(self->constant_pool, enviroment_constant_pool_delete);
 
 	vector_delete(self->line_rangeVec, enviroment_line_range_delete);
@@ -154,7 +154,7 @@ void enviroment_delete(enviroment * self) {
 	opcode_buf_delete(self->buf);
 	symbol_table_delete(self->sym_table);
 	MEM_FREE(self);
-	//text_printfln("---delete pool");
+	//io_printfln("---delete pool");
 }
 
 //private

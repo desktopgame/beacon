@@ -26,11 +26,11 @@ il_factor_invoke_bound* il_factor_invoke_bound_new(string_view namev) {
 }
 
 void il_factor_invoke_bound_dump(il_factor_invoke_bound* self, int depth) {
-	text_putindent(depth);
-	text_printfln("invoke bound");
+	io_printi(depth);
+	io_printfln("invoke bound");
 
-	text_putindent(depth + 1);
-	text_printfln("%s", string_pool_ref2str(self->m->namev));
+	io_printi(depth + 1);
+	io_printfln("%s", string_pool_ref2str(self->m->namev));
 
 	for(int i=0; i<self->args->length; i++) {
 		il_argument* e = (il_argument*)vector_at(self->args, i);

@@ -32,13 +32,13 @@ il_factor_invoke* il_factor_invoke_new(string_view namev) {
 }
 
 void il_factor_invoke_dump(il_factor_invoke* self, int depth) {
-	text_putindent(depth);
-	text_printfln("invoke");
+	io_printi(depth);
+	io_printfln("invoke");
 
 	il_factor_dump(self->receiver, depth + 1);
 
-	text_putindent(depth + 1);
-	text_printfln("%s", string_pool_ref2str(self->m->namev));
+	io_printi(depth + 1);
+	io_printfln("%s", string_pool_ref2str(self->m->namev));
 
 	for(int i=0; i<self->args->length; i++) {
 		il_argument* e = (il_argument*)vector_at(self->args, i);

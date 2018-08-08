@@ -27,7 +27,6 @@
 #include "../constructor.h"
 #include "class_loader_bcload_import_module_impl.h"
 #include "../../util/mem.h"
-#include "../../debug.h"
 #include <assert.h>
 //
 //sgload

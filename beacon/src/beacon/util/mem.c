@@ -101,9 +101,9 @@ void mem_free(void * block, const char * filename, int lineno) {
 void mem_dump() {
 #if defined(MEMORY_MANAGEMENT)
 	slot* iter = gHead;
-	text_printf("mem dump---\n");
+	printf("mem dump---\n");
 	while(iter != NULL) {
-		text_printf("    %p(%d) %s<%d>\n", iter->arena, iter->index, iter->filename, iter->lineno);
+		printf("    %p(%d) %s<%d>\n", iter->arena, iter->index, iter->filename, iter->lineno);
 		iter = iter->next;
 	}
 #endif

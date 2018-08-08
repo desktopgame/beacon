@@ -22,9 +22,9 @@ void il_stmt_continue_load(void * empty, enviroment * env, call_context* cctx) {
 }
 
 void il_stmt_continue_dump(void * empty, int depth) {
-	text_putindent(depth);
-	text_printf("continue");
-	text_putline();
+	io_printi(depth);
+	printf("continue");
+	io_println();
 }
 
 void il_stmt_continue_delete(void * empty) {

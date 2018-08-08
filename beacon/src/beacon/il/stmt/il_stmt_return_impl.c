@@ -21,9 +21,9 @@ il_stmt_return * il_stmt_return_new() {
 }
 
 void il_stmt_return_dump(il_stmt_return * self, int depth) {
-	text_putindent(depth);
-	text_printf("return");
-	text_putline();
+	io_printi(depth);
+	printf("return");
+	io_println();
 	il_factor_dump(self->fact, depth + 1);
 }
 

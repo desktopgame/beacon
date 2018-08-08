@@ -6,6 +6,30 @@
 #include "vector.h"
 
 /**
+ * 指定の数だけ標準出力にスペースを出力します.
+ * @param depth
+ */
+void io_printi(int depth);
+
+/**
+ * 指定の数だけスペースを出力します.
+ * @param fp
+ * @param depth
+ */
+void io_fprinti(FILE* fp, int depth);
+
+/**
+ * @param fp
+ * @param fmt
+ */
+void io_printfln(const char* fmt, ...);
+
+/**
+ * 改行文字を出力します.
+ */
+void io_println();
+
+/**
  * 新しいファイルを作成します.
  * @param filename
  * @return

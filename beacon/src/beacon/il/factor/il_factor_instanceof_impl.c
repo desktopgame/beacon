@@ -22,8 +22,8 @@ il_factor_instanceof* il_factor_instanceof_new() {
 }
 
 void il_factor_instanceof_dump(il_factor_instanceof* self, int depth) {
-	text_putindent(depth);
-	text_printfln("instanceof");
+	io_printi(depth);
+	io_printfln("instanceof");
 	il_factor_dump(self->fact, depth + 1);
 	generic_cache_dump(self->gcache, depth + 1);
 }

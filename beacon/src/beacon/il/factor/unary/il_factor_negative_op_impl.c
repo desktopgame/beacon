@@ -18,9 +18,9 @@ il_factor_negative_op* il_factor_negative_op_malloc(operator_type type, const ch
 }
 
 void il_factor_negative_op_dump(il_factor_negative_op* self, int depth) {
-	text_putindent(depth);
+	io_printi(depth);
 	operator_fprintf(stdout, self->type);
-	text_putline();
+	io_println();
 }
 
 generic_type* il_factor_negative_op_eval(il_factor_negative_op * self, enviroment * env, call_context* cctx) {

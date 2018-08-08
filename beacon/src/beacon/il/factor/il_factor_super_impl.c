@@ -18,9 +18,9 @@ il_factor_super* il_factor_super_new() {
 }
 
 void il_factor_super_dump(il_factor_super * self, int depth) {
-	text_putindent(depth);
-	text_printf("super");
-	text_putline();
+	io_printi(depth);
+	printf("super");
+	io_println();
 }
 
 void il_factor_super_generate(il_factor_super * self, enviroment * env, call_context* cctx) {

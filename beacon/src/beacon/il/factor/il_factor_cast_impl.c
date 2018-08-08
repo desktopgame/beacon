@@ -24,9 +24,9 @@ il_factor_cast * il_factor_cast_new(il_factor * fact) {
 }
 
 void il_factor_cast_dump(il_factor_cast * self, int depth) {
-	text_putindent(depth);
-	text_printf("cast");
-	text_putline();
+	io_printi(depth);
+	printf("cast");
+	io_println();
 	generic_cache_dump(self->fqcn, depth + 1);
 	il_factor_dump(self->fact, depth + 1);
 }

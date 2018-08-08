@@ -37,9 +37,9 @@ il_factor_new_instance * il_factor_new_instance_new() {
 }
 
 void il_factor_new_instance_dump(il_factor_new_instance * self, int depth) {
-	text_putindent(depth);
-	text_printf("new instance");
-	text_putline();
+	io_printi(depth);
+	printf("new instance");
+	io_println();
 	fqcn_cache_dump(self->fqcnc, depth + 1);
 	for (int i = 0; i < self->argument_list->length; i++) {
 		il_argument* ilarg = (il_argument*)vector_at(self->argument_list, i);

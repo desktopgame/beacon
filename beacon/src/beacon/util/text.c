@@ -16,88 +16,6 @@ static FILE* text_fp = NULL;
 static FILE* fake_stdout = NULL;
 static FILE* real_stdout = NULL;
 
-void text_putline() {
-#if defined(_WIN32)
-	text_printf("\n");
-#else
-	text_printf("\n");
-#endif // defined(_WIN32)
-}
-
-void text_putb(bool b) {
-	text_printf("%s", (b ? "true" : "false"));
-}
-
-void text_printr(char ch, int count) {
-	for(int i=0; i<count; i++) {
-		text_printf("%c", ch);
-	}
-}
-
-int text_fprintf(FILE* fp, const char* message, ...) {
-	va_list ap;
-	va_start(ap, message);
-	int res = text_vfprintf(fp, message, ap);
-	va_end(ap);
-	return res;
-}
-
-int text_vfprintf(FILE* fp, const char* message, va_list ap) {
-	int res = vfprintf(fp, message, ap);
-	return res;
-}
-
-int text_printf(const char * message, ...) {
-	va_list ap;
-
-	va_start(ap, message);
-	int res = text_vprintf(message, ap);
-	va_end(ap);
-	return res;
-}
-
-int text_vprintf(const char * message, va_list ap) {
-	//text_printfdbg(message, ap);
-	int res = vprintf(message, ap);
-	return res;
-}
-
-int text_sprintf(char * block, size_t blockSize, char * message, ...) {
-	va_list ap;
-	va_start(ap, message);
-	int res = text_vsprintf(block, blockSize, message, ap);
-	va_end(ap);
-	return 0;
-}
-
-int text_vsprintf(char * block, size_t blockSize, char * message, va_list ap) {
-	int res = 0;
-#if defined(_MSC_VER)
-	res = vsprintf_s(block, blockSize, message, ap);
-#else
-	res = vsprintf(block, message, ap);
-#endif
-	return res;
-}
-
-void text_printfln(const char * message, ...) {
-	va_list ap;
-	va_start(ap, message);
-	text_vprintf(message, ap);
-#if defined(_MSC_VER)
-	text_printf("\n");
-#else
-	text_printf("\r\n");
-#endif
-	va_end(ap);
-}
-
-void text_putindent(int depth) {
-	for(int i=0; i<depth; i++) {
-		text_printf("    ");
-	}
-}
-
 char * text_strdup(const char * source) {
 	if (source == NULL) {
 		return NULL;
@@ -174,7 +92,7 @@ char * text_concat(const char * a, const char * b) {
 }
 
 char * text_lineat(const char * src, int lineno) {
-	//text_printf("%s", src);
+	//printf("%s", src);
 	//return NULL;
 	if(src == NULL) {
 		return NULL;

@@ -7,9 +7,9 @@
 static generic_type* gSelf = NULL;
 
 void il_factor_null_dump(void * empty, int depth) {
-	text_putindent(depth);
-	text_printf("null");
-	text_putline();
+	io_printi(depth);
+	printf("null");
+	io_println();
 }
 
 void il_factor_null_generate(void * empty, enviroment * env, call_context* cctx) {

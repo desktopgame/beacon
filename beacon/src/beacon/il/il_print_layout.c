@@ -21,14 +21,14 @@ void il_print_layout_form(int lineno) {
 		return;
 	}
 	if (!il_print_layout_lineno(lineno)) {
-		text_printf("<%d> ", lineno);
+		printf("<%d> ", lineno);
 	} else {
 #define LEN 100
 		char buff[LEN];
-		int res = text_sprintf(buff, LEN, "<%d> ", lineno);
+		int res = sprintf(buff, LEN, "<%d> ", lineno);
 		assert(res != -1);
 		for (int i = 0; i < strlen(buff); i++) {
-			text_printf(" ");
+			printf(" ");
 		}
 #undef LEN
 	}

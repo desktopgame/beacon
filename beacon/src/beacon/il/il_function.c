@@ -20,10 +20,10 @@ il_function * il_function_new(string_view namev) {
 }
 
 void il_function_dump(il_function * self, int depth) {
-	text_putindent(depth);
-	text_printf("function %s -> ", string_pool_ref2str(self->namev));
+	io_printi(depth);
+	printf("function %s -> ", string_pool_ref2str(self->namev));
 	generic_cache_print(self->return_fqcn);
-	text_putline();
+	io_println();
 	for (int i = 0; i < self->parameter_list->length; i++) {
 		vector_item e = vector_at(self->parameter_list, i);
 		il_parameter* p = (il_parameter*)e;
@@ -34,9 +34,9 @@ void il_function_dump(il_function * self, int depth) {
 		il_stmt* s = (il_stmt*)e;
 		il_stmt_dump(s, depth + 1);
 	}
-	text_putindent(depth);
-	text_printf("function end");
-	text_putline();
+	io_printi(depth);
+	printf("function end");
+	io_println();
 }
 
 void il_function_delete(il_function * self) {

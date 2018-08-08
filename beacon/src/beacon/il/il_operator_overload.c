@@ -17,12 +17,12 @@ il_operator_overload* il_operator_overload_new(operator_type type) {
 }
 
 void il_operator_overload_dump(il_operator_overload* self, int depth) {
-	text_putindent(depth);
-	text_printf("operator-overload ");
+	io_printi(depth);
+	printf("operator-overload ");
 	operator_fprintf(stdout, self->op);
-	text_printf(" -> ");
+	printf(" -> ");
 	generic_cache_print(self->return_fqcn);
-	text_printfln("");
+	io_printfln("");
 	for(int i=0; i<self->parameter_list->length; i++) {
 		il_parameter* e = (il_parameter*)vector_at(self->parameter_list, i);
 		il_parameter_dump(e, depth + 1);

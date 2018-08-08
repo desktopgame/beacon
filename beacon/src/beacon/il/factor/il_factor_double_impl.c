@@ -20,9 +20,9 @@ il_factor_double * il_factor_double_new(double d) {
 }
 
 void il_factor_double_dump(il_factor_double * self, int depth) {
-	text_putindent(depth);
-	text_printf("Dobule %f", self->value);
-	text_putline();
+	io_printi(depth);
+	printf("Dobule %f", self->value);
+	io_println();
 }
 
 void il_factor_double_generate(il_factor_double * self, enviroment* env, call_context* cctx) {

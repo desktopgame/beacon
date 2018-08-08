@@ -5,6 +5,7 @@
 #include <stdarg.h>
 #include <stdbool.h>
 #include <stdio.h>
+#include "../util/io.h"
 
 //clangでは errno_t が見つからない
 #if defined(__clang__)
@@ -12,84 +13,6 @@ typedef int SG_errno_t;
 #else
 typedef errno_t SG_errno_t;
 #endif
-
-/**
- * 改行文字を出力します
- */
-void text_putline(void);
-
-/**
- * 真偽値型の値を出力します.
- * @param b
- */
-void text_putb(bool b);
-
-/**
- * ch を count 回出力します.s
- * @param ch
- * @param count
- */
-void text_printr(char ch, int count);
-
-/**
- * @param fp
- * @param message
- * @param ...
- */
-int text_fprintf(FILE* fp, const char* message, ...);
-/**
- * @param fp
- * @param message
- * @param ap
- */
-int text_vfprintf(FILE* fp, const char* message, va_list ap);
-
-/**
- * printfへの委譲です.
- * @param message
- * @param ...
- * @return
- */
-int text_printf(const char* message, ...);
-
-/**
- * printfへの委譲です.
- * @param message
- * @param ap
- * @return
- */
-int text_vprintf(const char* message, va_list ap);
-
-/**
- * sprintfへの委譲です.
- * @param block
- * @param blockSize
- * @param message
- * @param ...
- * @return
- */
-int text_sprintf(char* block, size_t blockSize, char* message, ...);
-/**
- * sprintfへの委譲です.
- * @param block
- * @param blockSize
- * @param message
- * @param ...
- * @return
- */
-int text_vsprintf(char* block, size_t blockSize, char* message, va_list ap);
-
-/**
- * text_printf へ委譲したあと、
- * 改行を出力します。
- */
-void text_printfln(const char* message, ...);
-
-/**
- * 指定の数だけ空白を出力します.
- * @param depth
- */
-void text_putindent(int depth);
 
 /**
  * 引数の文字列を複製して返します.

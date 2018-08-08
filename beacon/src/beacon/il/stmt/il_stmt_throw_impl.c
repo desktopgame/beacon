@@ -19,9 +19,9 @@ il_stmt_throw* il_stmt_throw_new() {
 }
 
 void il_stmt_throw_dump(il_stmt_throw* self, int depth) {
-	text_putindent(depth);
-	text_printf("throw");
-	text_putline();
+	io_printi(depth);
+	printf("throw");
+	io_println();
 	il_factor_dump(self->fact, depth + 1);
 }
 

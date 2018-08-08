@@ -28,11 +28,11 @@ il_factor_invoke_static* il_factor_invoke_static_new(string_view namev) {
 }
 
 void il_factor_invoke_static_dump(il_factor_invoke_static* self, int depth) {
-	text_putindent(depth);
-	text_printfln("invoke static");
+	io_printi(depth);
+	io_printfln("invoke static");
 
-	text_putindent(depth + 1);
-	text_printfln("%s", string_pool_ref2str(self->m->namev));
+	io_printi(depth + 1);
+	io_printfln("%s", string_pool_ref2str(self->m->namev));
 
 	for(int i=0; i<self->args->length; i++) {
 		il_argument* e = (il_argument*)vector_at(self->args, i);

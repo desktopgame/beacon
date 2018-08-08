@@ -37,8 +37,8 @@ il_factor_member_op* il_factor_member_op_new(string_view namev) {
 }
 
 void il_factor_member_op_dump(il_factor_member_op* self, int depth) {
-	text_putindent(depth);
-	text_printfln("member %s", string_pool_ref2str(self->namev));
+	io_printi(depth);
+	io_printfln("member %s", string_pool_ref2str(self->namev));
 	il_factor_dump(self->fact, depth + 1);
 	for(int i=0; i<self->type_args->length; i++) {
 		generic_cache* e = (generic_cache*)vector_at(self->type_args, i);

@@ -69,13 +69,13 @@ void il_class_add_method(il_class * self, il_method * m) {
 }
 
 void il_class_dump(il_class * self, int depth) {
-	text_putindent(depth);
+	io_printi(depth);
 	if(self->is_abstract) {
-		text_printf("abstract ");
+		printf("abstract ");
 	}
-	text_printf("class %s", string_pool_ref2str(self->namev));
+	printf("class %s", string_pool_ref2str(self->namev));
 	il_type_parameter_list_print(self->type_parameter_list);
-	text_putline();
+	io_println();
 	//ここでは親クラスとインターフェースをごちゃまぜで表示
 	for (int i = 0; i < self->extend_list->length; i++) {
 		generic_cache* e = (generic_cache*)vector_at(self->extend_list, i);
@@ -115,7 +115,7 @@ void il_class_delete(il_class * self) {
 	if (self == NULL) {
 		return;
 	}
-	//text_printf("free class %s\n", self->name);
+	//printf("free class %s\n", self->name);
 	//MEM_FREE(self->super);
 	vector_delete(self->field_list, il_class_field_delete);
 	vector_delete(self->sfield_list, il_class_field_delete);

@@ -17,14 +17,14 @@ il_field * il_field_new(string_view namev) {
 }
 
 void il_field_dump(il_field * self, int depth) {
-	text_putindent(depth);
+	io_printi(depth);
 	access_print(self->access);
-	text_printf(" ");
+	printf(" ");
 	modifier_print(self->modifier);
-	text_printf(" field ");
+	printf(" field ");
 	generic_cache_print(self->fqcn);
-	text_printf(" %s", string_pool_ref2str(self->namev));
-	text_putline();
+	printf(" %s", string_pool_ref2str(self->namev));
+	io_println();
 }
 
 void il_field_delete(il_field * self) {

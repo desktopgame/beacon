@@ -2,9 +2,9 @@
 #include "../../util/text.h"
 
 void il_stmt_yield_break_dump(il_stmt_yield_break* self, int depth) {
-	text_putindent(depth);
-	text_printf("yield break");
-	text_putline();
+	io_printi(depth);
+	printf("yield break");
+	io_println();
 }
 
 void il_stmt_yield_break_generate(il_stmt_yield_break* self, enviroment* env, call_context* cctx) {

@@ -21,15 +21,15 @@ il_enum * il_enum_new(string_view namev) {
 }
 
 void il_enum_dump(il_enum * self, int depth) {
-	text_putindent(depth);
-	text_printf("enum %s", string_pool_ref2str(self->namev));
-	text_putline();
+	io_printi(depth);
+	printf("enum %s", string_pool_ref2str(self->namev));
+	io_println();
 	for (int i = 0; i < self->item_vec->length; i++) {
 		char* str = (char*)vector_at(self->item_vec, i);
 
-		text_putindent(depth + 1);
-		text_printf("%s", str);
-		text_putline();
+		io_printi(depth + 1);
+		printf("%s", str);
+		io_println();
 	}
 }
 

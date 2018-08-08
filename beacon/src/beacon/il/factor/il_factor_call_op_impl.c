@@ -41,8 +41,8 @@ void il_factor_call_op_dump(il_factor_call_op* self, int depth) {
 	} else if(self->type == ilcall_type_invoke_static) {
 		il_factor_invoke_static_dump(self->u.invoke_static_, depth);
 	} else {
-		text_putindent(depth);
-		text_printf("call");
+		io_printi(depth);
+		printf("call");
 		il_factor_dump(self->receiver, depth + 1);
 		for(int i=0; i<self->argument_list->length; i++) {
 			il_argument* e = (il_argument*)vector_at(self->argument_list, i);

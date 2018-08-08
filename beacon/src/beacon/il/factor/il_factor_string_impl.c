@@ -21,9 +21,9 @@ il_factor_string * il_factor_string_new(string_view valuev) {
 }
 
 void il_factor_string_dump(il_factor_string * self, int depth) {
-	text_putindent(depth);
-	text_printf("String %s", string_pool_ref2str(self->valuev));
-	text_putline();
+	io_printi(depth);
+	printf("String %s", string_pool_ref2str(self->valuev));
+	io_println();
 }
 
 void il_factor_string_generate(il_factor_string * self, enviroment* env, call_context* cctx) {

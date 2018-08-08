@@ -15,8 +15,8 @@ il_stmt_defer* il_stmt_defer_new() {
 }
 
 void il_stmt_defer_dump(il_stmt_defer* self, int depth) {
-	text_putindent(depth);
-	text_printfln("defer");
+	io_printi(depth);
+	io_printfln("defer");
 	il_stmt_dump(self->stmt, depth + 1);
 }
 

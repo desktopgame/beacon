@@ -11,9 +11,9 @@ il_import* il_import_new(string_view pathv) {
 }
 
 void il_import_dump(il_import* self, int depth) {
-	text_putindent(depth);
-	text_printf("import %s", string_pool_ref2str(self->pathv));
-	text_putline();
+	io_printi(depth);
+	printf("import %s", string_pool_ref2str(self->pathv));
+	io_println();
 }
 
 void il_import_delete(il_import* self) {

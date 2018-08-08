@@ -125,7 +125,7 @@ void class_loader_ilload_impl(class_loader* self, ast* source_code) {
 			class_loader_ilload_function(self, child);
 		} else {
 			ast_print(child);
-			text_putline();
+			io_println();
 		}
 	}
 }

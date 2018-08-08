@@ -23,7 +23,7 @@ object * exception_new_simplef(frame * fr, const char * message, ...) {
 	va_start(ap, message);
 #define LEN 256
 	char block[LEN];
-	int res = text_vsprintf(block, LEN, message, ap);
+	int res = vsprintf(block, message, ap);
 	assert(res != -1);
 #undef LEN
 	va_end(ap);

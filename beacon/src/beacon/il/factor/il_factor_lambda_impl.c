@@ -30,22 +30,22 @@ il_factor_lambda* il_factor_lambda_new() {
 }
 
 void il_factor_lambda_dump(il_factor_lambda* self, int depth) {
-	text_putindent(depth);
-	text_printfln("`(");
+	io_printi(depth);
+	io_printfln("`(");
 	for(int i=0; i<self->parameter_vec->length; i++) {
 		il_parameter* e = (il_parameter*)vector_at(self->parameter_vec, i);
 		il_parameter_dump(e, depth + 1);
 	}
-	text_putindent(depth);
-	text_printfln(" ) -> ");
+	io_printi(depth);
+	io_printfln(" ) -> ");
 	generic_cache_print(self->return_gcache);
-	text_printf("{");
+	printf("{");
 	for(int i=0; i<self->statement_vec->length; i++) {
 		il_stmt* e = (il_stmt*)vector_at(self->statement_vec, i);
 		il_stmt_dump(e, depth + 1);
 	}
-	text_printf("}");
-	text_putline();
+	printf("}");
+	io_println();
 }
 
 void il_factor_lambda_generate(il_factor_lambda* self, enviroment* env, call_context* cctx) {

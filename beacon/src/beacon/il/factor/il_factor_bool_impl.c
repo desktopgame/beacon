@@ -18,9 +18,9 @@ il_factor_bool * il_factor_bool_new(bool b) {
 }
 
 void il_factor_bool_dump(il_factor_bool * self, int depth) {
-	text_putindent(depth);
-	text_putb(self->a);
-	text_putline();
+	io_printi(depth);
+	printf(self->a ? "true" : "false");
+	io_println();
 }
 
 void il_factor_bool_generate(il_factor_bool * self, enviroment * env, call_context* cctx) {
