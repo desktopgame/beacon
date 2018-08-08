@@ -46,6 +46,12 @@ void il_factor_assign_op_generate(il_factor_assign_op* self, enviroment* env, ca
 		il_factor_generate(self->right, env, cctx);
 		opcode_buf_add(env->buf, op_store);
 		opcode_buf_add(env->buf, e->index);
+		if(generic_type_distance(e->gtype, il_factor_eval(self->right, env, cctx)) < 0) {
+			bc_error_throw(bcerror_assign_not_compatible_local,
+				string_pool_ref2str(ilvar->fqcn->namev)
+			);
+			return;
+		}
 		//NOTE:constかどうかの検査
 	//foo.bar = xxx
 	} else if(self->left->type == ilfactor_member_op) {
