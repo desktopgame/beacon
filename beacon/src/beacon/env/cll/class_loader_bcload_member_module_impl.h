@@ -3,10 +3,12 @@
 #include "../class_loader.h"
 #include "../../il/il_type_interface.h"
 #include "../../il/il_field.h"
+#include "../../il/il_property.h"
 #include "../../il/call_context.h"
 #include "../../env/type_interface.h"
 #include "../../env/namespace.h"
 #include "../../env/field.h"
+#include "../../env/property.h"
 
 bool CLBC_field_decl(class_loader* self, il_type* iltype, type* tp, il_field* ilfi, namespace_* scope, call_context* cctx);
 bool CLBC_field_impl(class_loader* self, type* tp, field* fi, namespace_* scope, call_context* cctx);
@@ -19,6 +21,9 @@ bool CLBC_field_impl(class_loader* self, type* tp, field* fi, namespace_* scope,
  */
 void CLBC_fields_decl(class_loader* self, il_type* iltype, type* tp, vector* ilfields, namespace_* scope);
 void CLBC_fields_impl(class_loader* self, namespace_* scope, type* tp,vector* ilfields, vector* sgfields);
+
+bool CLBC_property_decl(class_loader* self, il_type* iltype, type* tp, il_property* ilprop, namespace_* scope, call_context* cctx);
+bool CLBC_property_impl(class_loader* self, il_type* iltype, type* tp, il_property* ilprop, property* prop, namespace_* scope, call_context* cctx);
 
 /**
  * @param self

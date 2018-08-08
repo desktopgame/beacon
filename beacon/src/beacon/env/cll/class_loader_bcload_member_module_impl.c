@@ -157,46 +157,83 @@ void CLBC_fields_impl(class_loader* self, namespace_* scope, type* tp,vector* il
 	call_context_delete(cctx);
 }
 
+bool CLBC_property_decl(class_loader* self, il_type* iltype, type* tp, il_property* ilprop, namespace_* scope, call_context* cctx) {
+	//vector_item e = vector_at(ilprops, i);
+	//il_property* ilprop = e;
+	property* prop = property_new(ilprop->namev);
+	prop->access = ilprop->access;
+	prop->modifier = ilprop->modifier;
+	prop->set->access = ilprop->set->access;
+	prop->get->access = ilprop->get->access;
+	prop->parent = tp;
+	prop->gtype = import_manager_resolve(self->import_manager, scope, ilprop->fqcn, cctx);
+	prop->is_short = ilprop->set->is_short && ilprop->get->is_short;
+	   type_add_property(tp, prop);
+	if(modifier_is_abstract(prop->modifier) ||
+	   modifier_is_override(prop->modifier) ||
+	   modifier_is_native(prop->modifier)) {
+		   bc_error_throw(bcerror_native_field, string_pool_ref2str(prop->namev));
+			call_context_delete(cctx);
+		   return false;
+	   }
+	//プロパティアクセサの方がプロパティよりも緩いアクセスになっている
+	if(access_weak(ilprop->access, ilprop->set->access) ||
+	   access_weak(ilprop->access, ilprop->get->access)) {
+		bc_error_throw(bcerror_invalid_access_level_of_property,
+			string_pool_ref2str(type_name(tp)),
+			string_pool_ref2str(ilprop->namev)
+		);
+		   return false;
+	}
+	//二つのアクセサがどちらもプロパティと異なるアクセスレベル
+	if((ilprop->access != ilprop->set->access) &&
+	    ilprop->access != ilprop->get->access) {
+		bc_error_throw(bcerror_specified_both_property_accessor,
+			string_pool_ref2str(type_name(tp)),
+			string_pool_ref2str(ilprop->namev)
+		);
+		   return false;
+	}
+	return true;
+}
+
+bool CLBC_property_impl(class_loader* self, il_type* iltype, type* tp, il_property* ilprop, property* prop, namespace_* scope, call_context* cctx) {
+	//vector_item e = vector_at(sgprops, i);
+	property* pr = prop;
+	il_property* ilpr = ilprop;
+	pr->static_value = object_get_null();
+	if(pr->is_short) { return true; }
+	property_body* set = pr->set;
+	property_body* get = pr->get;
+	vector* set_stmt_list = ilpr->set->statement_list;
+	vector* get_stmt_list = ilpr->get->statement_list;
+	set->env->context_ref = self;
+	get->env->context_ref = self;
+	//setterのオペコードを生成
+	symbol_entry* valueE = symbol_table_entry(set->env->sym_table, pr->gtype, string_pool_intern("value"));
+	if(!modifier_is_static(pr->modifier)) {
+		opcode_buf_add(set->env->buf, op_store);
+		opcode_buf_add(set->env->buf, 0);
+	}
+	opcode_buf_add(set->env->buf, op_store);
+	opcode_buf_add(set->env->buf, valueE->index);
+	CLBC_body(self, set_stmt_list, set->env, cctx, scope);
+	//getterのオペコードを生成
+	if(!modifier_is_static(pr->modifier)) {
+		opcode_buf_add(get->env->buf, op_store);
+		opcode_buf_add(get->env->buf, 0);
+	}
+	CLBC_body(self, get_stmt_list, get->env, cctx, scope);
+	return true;
+}
+
 void CLBC_properties_decl(class_loader* self, il_type* iltype, type* tp, vector* ilprops, namespace_* scope) {
 	CL_ERROR(self);
 	call_context* cctx = call_context_new(call_decl_T);
 	cctx->space = scope;
 	cctx->ty = tp;
 	for (int i = 0; i < ilprops->length; i++) {
-		vector_item e = vector_at(ilprops, i);
-		il_property* ilprop = e;
-		property* prop = property_new(ilprop->namev);
-		prop->access = ilprop->access;
-		prop->modifier = ilprop->modifier;
-		prop->set->access = ilprop->set->access;
-		prop->get->access = ilprop->get->access;
-		prop->parent = tp;
-		prop->gtype = import_manager_resolve(self->import_manager, scope, ilprop->fqcn, cctx);
-		prop->is_short = ilprop->set->is_short && ilprop->get->is_short;
-		   type_add_property(tp, prop);
-		if(modifier_is_abstract(prop->modifier) ||
-		   modifier_is_override(prop->modifier) ||
-		   modifier_is_native(prop->modifier)) {
-			   bc_error_throw(bcerror_native_field, string_pool_ref2str(prop->namev));
-				call_context_delete(cctx);
-			   return;
-		   }
-		//プロパティアクセサの方がプロパティよりも緩いアクセスになっている
-		if(access_weak(ilprop->access, ilprop->set->access) ||
-		   access_weak(ilprop->access, ilprop->get->access)) {
-			bc_error_throw(bcerror_invalid_access_level_of_property,
-				string_pool_ref2str(type_name(tp)),
-				string_pool_ref2str(ilprop->namev)
-			);
-			break;
-		}
-		//二つのアクセサがどちらもプロパティと異なるアクセスレベル
-		if((ilprop->access != ilprop->set->access) &&
-		    ilprop->access != ilprop->get->access) {
-			bc_error_throw(bcerror_specified_both_property_accessor,
-				string_pool_ref2str(type_name(tp)),
-				string_pool_ref2str(ilprop->namev)
-			);
+		if(!CLBC_property_decl(self, iltype, tp, vector_at(ilprops, i), scope, cctx)) {
 			break;
 		}
 	}
@@ -209,32 +246,9 @@ void CLBC_properties_impl(class_loader* self,  il_type* iltype, type* tp, vector
 	cctx->space = scope;
 	cctx->ty = tp;
 	for (int i = 0; i < sgprops->length; i++) {
-		vector_item e = vector_at(sgprops, i);
-		property* pr = (property*)e;
-		il_property* ilpr = (il_property*)vector_at(ilprops, i);
-		pr->static_value = object_get_null();
-		if(pr->is_short) { continue; }
-		property_body* set = pr->set;
-		property_body* get = pr->get;
-		vector* set_stmt_list = ilpr->set->statement_list;
-		vector* get_stmt_list = ilpr->get->statement_list;
-		set->env->context_ref = self;
-		get->env->context_ref = self;
-		//setterのオペコードを生成
-		symbol_entry* valueE = symbol_table_entry(set->env->sym_table, pr->gtype, string_pool_intern("value"));
-		if(!modifier_is_static(pr->modifier)) {
-			opcode_buf_add(set->env->buf, op_store);
-			opcode_buf_add(set->env->buf, 0);
+		if(!CLBC_property_impl(self, iltype, tp, vector_at(ilprops, i), vector_at(sgprops, i), scope, cctx)) {
+			break;
 		}
-		opcode_buf_add(set->env->buf, op_store);
-		opcode_buf_add(set->env->buf, valueE->index);
-		CLBC_body(self, set_stmt_list, set->env, cctx, scope);
-		//getterのオペコードを生成
-		if(!modifier_is_static(pr->modifier)) {
-			opcode_buf_add(get->env->buf, op_store);
-			opcode_buf_add(get->env->buf, 0);
-		}
-		CLBC_body(self, get_stmt_list, get->env, cctx, scope);
 	}
 	call_context_delete(cctx);
 }
