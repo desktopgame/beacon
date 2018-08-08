@@ -71,7 +71,7 @@ static void CLBC_class_decl(class_loader * self, il_type * iltype, type * tp, na
 	CLBC_ctors_decl(self, iltype, tp, scope);
 	CL_ERROR(self);
 
-	CLBC_operator_overload_decl(self, iltype, tp, scope);
+	CLBC_operator_overloads_decl(self, iltype, tp, scope);
 	CL_ERROR(self);
 
 	CL_ERROR(self);
@@ -102,7 +102,7 @@ static void CLBC_class_impl(class_loader * self, il_type * iltype, type * tp, na
 	CLBC_ctors_impl(self, iltype, tp);
 	CL_ERROR(self);
 
-	CLBC_operator_overload_impl(self, iltype, tp, scope);
+	CLBC_operator_overloads_impl(self, iltype, tp, scope);
 	CL_ERROR(self);
 	tp->state = tp->state | type_impl;
 	//コンストラクタで初期化されていない final フィールドの確認

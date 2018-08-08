@@ -552,80 +552,88 @@ void CLBC_ctors_impl(class_loader* self, il_type* iltype, type* tp) {
 //operator overload
 //
 //
-void CLBC_operator_overload_decl(class_loader* self, il_type* iltype, type* tp, namespace_* scope) {
+bool CLBC_operator_overload_decl(class_loader* self, il_type* iltype, type* tp, il_operator_overload* ilopov, namespace_* scope) {
+	//演算子オーバーロード一覧から取り出す
+	operator_overload* opov = operator_overload_new(ilopov->op);
+	opov->access = ilopov->access;
+	//call_contextの設定
+	call_context* cctx = call_context_new(call_opov_T);
+	cctx->space = scope;
+	cctx->ty = tp;
+	cctx->u.opov = opov;
+	//戻り値読み込み
+	opov->parent = tp;
+	opov->return_gtype = import_manager_resolve(self->import_manager, scope, ilopov->return_fqcn, cctx);
+	//パラメータ読み込み
+	for(int j=0; j<ilopov->parameter_list->length; j++) {
+		il_parameter* ilparam = vector_at(ilopov->parameter_list, j);
+		parameter* param = parameter_new(ilparam->namev);
+		vector_push(opov->parameter_list, param);
+	}
+	CLBC_parameter_list(self, scope, ilopov->parameter_list, opov->parameter_list, cctx);
+	vector_push(tp->u.class_->operator_overload_list, opov);
+	//オペレータオーバロードの妥当性をテストする
+	if(CLBC_test_operator_overlaod(self, iltype, tp, opov)) {
+		call_context_delete(cctx);
+		return false;
+	}
+	call_context_delete(cctx);
+	return true;
+}
+
+bool CLBC_operator_overload_impl(class_loader* self, il_type* iltype, type* tp, il_operator_overload* ilopov, operator_overload* opov, namespace_* scope) {
+	//オペコードを作成
+	//FIXME:ILメソッドと実行時メソッドのインデックスが同じなのでとりあえず動く
+	//まずは仮引数の一覧にインデックスを割り振る
+	enviroment* env = enviroment_new();
+	call_context* cctx = call_context_new(call_opov_T);
+	cctx->space = scope;
+	cctx->ty = tp;
+	cctx->u.opov = opov;
+	//ccpush_method(me);
+	env->context_ref = self;
+	for (int i = 0; i < ilopov->parameter_list->length; i++) {
+		il_parameter* ilparam = (il_parameter*)vector_at(ilopov->parameter_list, i);
+		symbol_table_entry(
+			env->sym_table,
+			import_manager_resolve(self->import_manager, scope, ilparam->fqcn, cctx),
+			ilparam->namev
+		);
+		//実引数を保存
+		//0番目は this のために開けておく
+		opcode_buf_add(env->buf, (vector_item)op_store);
+		opcode_buf_add(env->buf, (vector_item)(i + 1));
+	}
+	//0番目をthisで埋める
+	opcode_buf_add(env->buf, (vector_item)op_store);
+	opcode_buf_add(env->buf, (vector_item)0);
+	//NOTE:ここなら名前空間を設定出来る
+	CLBC_body(self, ilopov->statement_list, env, cctx, scope);
+	call_context_delete(cctx);
+	//ccpop_method();
+	opov->env = env;
+	return true;
+}
+
+void CLBC_operator_overloads_decl(class_loader* self, il_type* iltype, type* tp, namespace_* scope) {
 	CL_ERROR(self);
-	
 	vector* opov_list = iltype->u.class_->operator_overload_list;
 	for (int i = 0; i < opov_list->length; i++) {
-		//演算子オーバーロード一覧から取り出す
-		vector_item e = vector_at(opov_list, i);
-		il_operator_overload* ilopov = (il_operator_overload*)e;
-		operator_overload* opov = operator_overload_new(ilopov->op);
-		opov->access = ilopov->access;
-		//call_contextの設定
-		call_context* cctx = call_context_new(call_opov_T);
-		cctx->space = scope;
-		cctx->ty = tp;
-		cctx->u.opov = opov;
-		//戻り値読み込み
-		opov->parent = tp;
-		opov->return_gtype = import_manager_resolve(self->import_manager, scope, ilopov->return_fqcn, cctx);
-		//パラメータ読み込み
-		for(int j=0; j<ilopov->parameter_list->length; j++) {
-			il_parameter* ilparam = vector_at(ilopov->parameter_list, j);
-			parameter* param = parameter_new(ilparam->namev);
-			vector_push(opov->parameter_list, param);
-		}
-		CLBC_parameter_list(self, scope, ilopov->parameter_list, opov->parameter_list, cctx);
-		vector_push(tp->u.class_->operator_overload_list, opov);
-		//オペレータオーバロードの妥当性をテストする
-		if(CLBC_test_operator_overlaod(self, iltype, tp, opov)) {
-		call_context_delete(cctx);
+		if(!CLBC_operator_overload_decl(self, iltype, tp, vector_at(opov_list, i), scope)) {
 			break;
 		}
-		call_context_delete(cctx);
 	}
 	CLBC_default_operator_overload(self, tp);
 }
 
-void CLBC_operator_overload_impl(class_loader* self, il_type* iltype, type* tp, namespace_* scope) {
+void CLBC_operator_overloads_impl(class_loader* self, il_type* iltype, type* tp, namespace_* scope) {
 	CL_ERROR(self);
 	vector* opov_list = tp->u.class_->operator_overload_list;
 	//ここで暗黙的に作成される == != によって長さが合わなくなる
 	for (int i = 0; i < iltype->u.class_->operator_overload_list->length; i++) {
-		vector_item e = vector_at(opov_list, i);
-		operator_overload* opov = (operator_overload*)e;
-		il_operator_overload* ilopov = (il_operator_overload*)vector_at(iltype->u.class_->operator_overload_list, i);
-		//オペコードを作成
-		//FIXME:ILメソッドと実行時メソッドのインデックスが同じなのでとりあえず動く
-		//まずは仮引数の一覧にインデックスを割り振る
-		enviroment* env = enviroment_new();
-		call_context* cctx = call_context_new(call_opov_T);
-		cctx->space = scope;
-		cctx->ty = tp;
-		cctx->u.opov = opov;
-		//ccpush_method(me);
-		env->context_ref = self;
-		for (int i = 0; i < ilopov->parameter_list->length; i++) {
-			il_parameter* ilparam = (il_parameter*)vector_at(ilopov->parameter_list, i);
-			symbol_table_entry(
-				env->sym_table,
-				import_manager_resolve(self->import_manager, scope, ilparam->fqcn, cctx),
-				ilparam->namev
-			);
-			//実引数を保存
-			//0番目は this のために開けておく
-			opcode_buf_add(env->buf, (vector_item)op_store);
-			opcode_buf_add(env->buf, (vector_item)(i + 1));
+		if(!CLBC_operator_overload_impl(self, iltype, tp, vector_at(iltype->u.class_->operator_overload_list, i), vector_at(opov_list, i), scope)) {
+			break;
 		}
-		//0番目をthisで埋める
-		opcode_buf_add(env->buf, (vector_item)op_store);
-		opcode_buf_add(env->buf, (vector_item)0);
-		//NOTE:ここなら名前空間を設定出来る
-		CLBC_body(self, ilopov->statement_list, env, cctx, scope);
-		call_context_delete(cctx);
-		//ccpop_method();
-		opov->env = env;
 	}
 }
 

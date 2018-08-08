@@ -5,6 +5,7 @@
 #include "../../il/il_field.h"
 #include "../../il/il_property.h"
 #include "../../il/il_method.h"
+#include "../../il/il_operator_overload.h"
 #include "../../il/call_context.h"
 #include "../../il/il_constructor.h"
 #include "../../env/type_interface.h"
@@ -12,6 +13,7 @@
 #include "../../env/method.h"
 #include "../../env/field.h"
 #include "../../env/constructor.h"
+#include "../../env/operator_overload.h"
 #include "../../env/property.h"
 
 bool CLBC_field_decl(class_loader* self, il_type* iltype, type* tp, il_field* ilfi, namespace_* scope, call_context* cctx);
@@ -66,9 +68,11 @@ bool CLBC_ctor_impl(class_loader* self, il_type* iltype, type* tp, il_constructo
 void CLBC_ctors_decl(class_loader* self, il_type* iltype, type* tp, namespace_* scope);
 void CLBC_ctors_impl(class_loader* self, il_type* iltype, type* tp);
 
-void CLBC_operator_overload_decl(class_loader* self, il_type* iltype, type* tp, namespace_* scope);
+bool CLBC_operator_overload_decl(class_loader* self, il_type* iltype, type* tp, il_operator_overload* ilopov, namespace_* scope);
+bool CLBC_operator_overload_impl(class_loader* self, il_type* iltype, type* tp, il_operator_overload* ilopov, operator_overload* opov, namespace_* scope);
 
-void CLBC_operator_overload_impl(class_loader* self, il_type* iltype, type* tp, namespace_* scope);
+void CLBC_operator_overloads_decl(class_loader* self, il_type* iltype, type* tp, namespace_* scope);
+void CLBC_operator_overloads_impl(class_loader* self, il_type* iltype, type* tp, namespace_* scope);
 
 void CLBC_body(class_loader* self, vector* stmt_list, struct enviroment* dest, call_context* cctx, namespace_* range);
 #endif
