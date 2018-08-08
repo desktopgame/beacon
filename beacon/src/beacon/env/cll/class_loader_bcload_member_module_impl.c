@@ -253,182 +253,195 @@ void CLBC_properties_impl(class_loader* self,  il_type* iltype, type* tp, vector
 	call_context_delete(cctx);
 }
 
+bool CLBC_method_decl(class_loader* self, il_type* iltype, type* tp, il_method* ilmt, namespace_* scope) {
+	//メソッド一覧から取り出す
+	il_method* ilmethod = ilmt;
+	//メソッドから仮引数一覧を取りだす
+	vector* ilparams = ilmethod->parameter_list;
+	//実行時のメソッド情報を作成する
+	method* method = method_new(ilmethod->namev);
+	vector* parameter_list = method->parameter_list;
+	method->type = modifier_is_native(ilmethod->modifier) ? method_type_native : method_type_script;
+	method->access = ilmethod->access;
+	method->modifier = ilmethod->modifier;
+	type_parameter_list_dup(ilmethod->type_parameter_list, method->type_parameter_list);
+	call_context* cctx = call_context_new(call_method_T);
+	cctx->space = scope;
+	cctx->ty = tp;
+	cctx->u.mt = method;
+	//インターフェースなら空
+	if (tp->tag == type_interface ||
+	   modifier_is_abstract(method->modifier)) {
+		method->type = method_type_abstract;
+		method->u.script_method = NULL;
+	} else {
+		method->u.script_method = script_method_new();
+	}
+	//メソッドが抽象メソッドだが、
+	//インターフェイスでも抽象クラスでもない
+	if(modifier_is_abstract(method->modifier) &&
+	  (tp->tag == type_class &&
+	  !TYPE2CLASS(tp)->is_abstract)) {
+		bc_error_throw(bcerror_abstract_method_by, string_pool_ref2str(method->namev));
+		method_delete(method);
+		call_context_delete(cctx);
+		return false;
+	}
+	//メソッドの本文が省略されているが、
+	//ネイティブメソッドでも抽象メソッドでもない
+	if(tp->tag == type_class &&
+	   ilmethod->no_stmt &&
+		(!modifier_is_abstract(method->modifier) && !modifier_is_native(method->modifier))
+	) {
+		bc_error_throw(bcerror_empty_stmt_method, string_pool_ref2str(method->namev));
+		method_delete(method);
+		call_context_delete(cctx);
+		return false;
+	}
+	//ネイティブメソッドもしくは抽象メソッドなのに本文が書かれている
+	if(tp->tag == type_class &&
+	   !ilmethod->no_stmt &&
+		(modifier_is_abstract(method->modifier) || modifier_is_native(method->modifier))
+	) {
+		bc_error_throw(bcerror_not_empty_stmt_method, string_pool_ref2str(method->namev));
+		method_delete(method);
+		call_context_delete(cctx);
+		return false;
+	}
+	//メソッドの修飾子が static override
+	if(modifier_is_static(method->modifier) &&
+	   modifier_is_override(method->modifier)) {
+		bc_error_throw(bcerror_static_override_method,
+			string_pool_ref2str(type_name(tp)),
+			string_pool_ref2str(method->namev)
+		);
+		method_delete(method);
+		call_context_delete(cctx);
+		return false;
+	}
+	//.. abstract override
+	if(modifier_is_abstract(method->modifier) &&
+	   modifier_is_override(method->modifier)) {
+		bc_error_throw(bcerror_abstract_override_method,
+			string_pool_ref2str(type_name(tp)),
+			string_pool_ref2str(method->namev)
+		);
+		method_delete(method);
+		call_context_delete(cctx);
+		return false;
+	}
+	//.. abstract static
+	if(modifier_is_abstract(method->modifier) &&
+	   modifier_is_static(method->modifier)) {
+		bc_error_throw(bcerror_abstract_static_method,
+			string_pool_ref2str(type_name(tp)),
+			string_pool_ref2str(method->namev)
+		);
+		method_delete(method);
+		call_context_delete(cctx);
+		return false;
+	}
+	method->parent = tp;
+	method->return_gtype = import_manager_resolve(self->import_manager, scope, ilmethod->return_fqcn, cctx);
+	//ILパラメータを実行時パラメータへ変換
+	//NOTE:ここでは戻り値の型,引数の型を設定しません
+	//     class_loader_sgload_complete参照
+	for (int i = 0; i < ilparams->length; i++) {
+		vector_item e = vector_at(ilparams, i);
+		il_parameter* ilp = (il_parameter*)e;
+		parameter* param = parameter_new(ilp->namev);
+		vector_push(parameter_list, param);
+	}
+	CLBC_parameter_list(self, scope, ilmethod->parameter_list, method->parameter_list, cctx);
+	//NOTE:クラスの登録が終わったらオペコードを作成する
+	LOG("%s@%s", string_pool_ref2str(type_name(tp)), string_pool_ref2str(method->namev));
+	type_add_method(tp, method);
+	call_context_delete(cctx);
+	return true;
+}
+
+bool CLBC_method_impl(class_loader* self, namespace_* scope, il_type* iltype, type* tp, il_method* ilmt, method* mt) {
+	//	vector_item e = vector_at(sgmethods, i);
+	method* me = mt;
+	il_method* ilmethod = ilmt;
+	//ネイティブメソッドならオペコードは不要
+	if (me->type == method_type_native ||
+		me->type == method_type_abstract) {
+		return true;
+	}
+	//オペコードを作成
+	//FIXME:ILメソッドと実行時メソッドのインデックスが同じなのでとりあえず動く
+	//まずは仮引数の一覧にインデックスを割り振る
+	enviroment* env = enviroment_new();
+	env->context_ref = self;
+	call_context* cctx = call_context_new(call_method_T);
+	cctx->space = scope;
+	cctx->ty = tp;
+	cctx->u.mt = me;
+	//引数を保存
+	for (int i = 0; i < ilmethod->parameter_list->length; i++) {
+		il_parameter* ilparam = (il_parameter*)vector_at(ilmethod->parameter_list, i);
+		symbol_table_entry(
+			env->sym_table,
+			import_manager_resolve(self->import_manager, scope, ilparam->fqcn, cctx),
+			ilparam->namev
+		);
+		//実引数を保存
+		//0番目は this のために開けておく
+		opcode_buf_add(env->buf, (vector_item)op_store);
+		opcode_buf_add(env->buf, (vector_item)(i + 1));
+	}
+	//インスタンスメソッドなら
+	//0番目を this で埋める
+	if (!modifier_is_static(me->modifier)) {
+		opcode_buf_add(env->buf, (vector_item)op_store);
+		opcode_buf_add(env->buf, (vector_item)0);
+	}
+	//戻り値が iterator なら、
+	//コルーチンとして使えるようにする
+	bool yield_err = false;
+	if(method_yield(me, ilmethod->statement_list, &yield_err)) {
+		if(yield_err) {
+			abort();
+		}
+		//メソッド名からクラス名を作成して、
+		//beacon::$placeholderへ肩を格納する
+		type* iterT = method_create_iterator_type(me, self, ilmethod->statement_list);
+		opcode_buf_add(env->buf, op_this);
+		for(int i=0; i<ilmethod->parameter_list->length; i++) {
+			opcode_buf_add(env->buf, op_load);
+			opcode_buf_add(env->buf, i + 1);
+		}
+		me->u.script_method->env = env;
+		opcode_buf_add(env->buf, op_new_instance);
+		opcode_buf_add(env->buf, iterT->absolute_index);
+		opcode_buf_add(env->buf, 0);
+		opcode_buf_add(env->buf, op_return);
+		call_context_delete(cctx);
+		return true;
+	}
+	//NOTE:ここなら名前空間を設定出来る
+	CLBC_body(self, ilmethod->statement_list, env, cctx, scope);
+	me->u.script_method->env = env;
+	call_context_delete(cctx);
+	return true;
+}
+
 void CLBC_methods_decl(class_loader* self, il_type* iltype, type* tp, vector* ilmethods, namespace_* scope) {
 	CL_ERROR(self);
 	for (int i = 0; i < ilmethods->length; i++) {
-		//メソッド一覧から取り出す
-		vector_item e = vector_at(ilmethods, i);
-		il_method* ilmethod = (il_method*)e;
-		//メソッドから仮引数一覧を取りだす
-		vector* ilparams = ilmethod->parameter_list;
-		//実行時のメソッド情報を作成する
-		method* method = method_new(ilmethod->namev);
-		vector* parameter_list = method->parameter_list;
-		method->type = modifier_is_native(ilmethod->modifier) ? method_type_native : method_type_script;
-		method->access = ilmethod->access;
-		method->modifier = ilmethod->modifier;
-		type_parameter_list_dup(ilmethod->type_parameter_list, method->type_parameter_list);
-		call_context* cctx = call_context_new(call_method_T);
-		cctx->space = scope;
-		cctx->ty = tp;
-		cctx->u.mt = method;
-		//インターフェースなら空
-		if (tp->tag == type_interface ||
-		   modifier_is_abstract(method->modifier)) {
-			method->type = method_type_abstract;
-			method->u.script_method = NULL;
-		} else {
-			method->u.script_method = script_method_new();
-		}
-		//メソッドが抽象メソッドだが、
-		//インターフェイスでも抽象クラスでもない
-		if(modifier_is_abstract(method->modifier) &&
-		  (tp->tag == type_class &&
-		  !TYPE2CLASS(tp)->is_abstract)) {
-			bc_error_throw(bcerror_abstract_method_by, string_pool_ref2str(method->namev));
-			method_delete(method);
-			call_context_delete(cctx);
+		if(!CLBC_method_decl(self, iltype, tp, vector_at(ilmethods,i),scope)) {
 			break;
 		}
-		//メソッドの本文が省略されているが、
-		//ネイティブメソッドでも抽象メソッドでもない
-		if(tp->tag == type_class &&
-		   ilmethod->no_stmt &&
-			(!modifier_is_abstract(method->modifier) && !modifier_is_native(method->modifier))
-		) {
-			bc_error_throw(bcerror_empty_stmt_method, string_pool_ref2str(method->namev));
-			method_delete(method);
-			call_context_delete(cctx);
-			break;
-		}
-		//ネイティブメソッドもしくは抽象メソッドなのに本文が書かれている
-		if(tp->tag == type_class &&
-		   !ilmethod->no_stmt &&
-			(modifier_is_abstract(method->modifier) || modifier_is_native(method->modifier))
-		) {
-			bc_error_throw(bcerror_not_empty_stmt_method, string_pool_ref2str(method->namev));
-			method_delete(method);
-			call_context_delete(cctx);
-			break;
-		}
-		//メソッドの修飾子が static override
-		if(modifier_is_static(method->modifier) &&
-		   modifier_is_override(method->modifier)) {
-			bc_error_throw(bcerror_static_override_method,
-				string_pool_ref2str(type_name(tp)),
-				string_pool_ref2str(method->namev)
-			);
-			method_delete(method);
-			call_context_delete(cctx);
-			break;
-		}
-		//.. abstract override
-		if(modifier_is_abstract(method->modifier) &&
-		   modifier_is_override(method->modifier)) {
-			bc_error_throw(bcerror_abstract_override_method,
-				string_pool_ref2str(type_name(tp)),
-				string_pool_ref2str(method->namev)
-			);
-			method_delete(method);
-			call_context_delete(cctx);
-			break;
-		}
-		//.. abstract static
-		if(modifier_is_abstract(method->modifier) &&
-		   modifier_is_static(method->modifier)) {
-			bc_error_throw(bcerror_abstract_static_method,
-				string_pool_ref2str(type_name(tp)),
-				string_pool_ref2str(method->namev)
-			);
-			method_delete(method);
-			call_context_delete(cctx);
-			break;
-		}
-		method->parent = tp;
-		method->return_gtype = import_manager_resolve(self->import_manager, scope, ilmethod->return_fqcn, cctx);
-		//ILパラメータを実行時パラメータへ変換
-		//NOTE:ここでは戻り値の型,引数の型を設定しません
-		//     class_loader_sgload_complete参照
-		for (int i = 0; i < ilparams->length; i++) {
-			vector_item e = vector_at(ilparams, i);
-			il_parameter* ilp = (il_parameter*)e;
-			parameter* param = parameter_new(ilp->namev);
-			vector_push(parameter_list, param);
-		}
-		CLBC_parameter_list(self, scope, ilmethod->parameter_list, method->parameter_list, cctx);
-		//NOTE:クラスの登録が終わったらオペコードを作成する
-		LOG("%s@%s", string_pool_ref2str(type_name(tp)), string_pool_ref2str(method->namev));
-		type_add_method(tp, method);
-		call_context_delete(cctx);
 	}
 }
 
 void CLBC_methods_impl(class_loader* self, namespace_* scope, il_type* iltype, type* tp, vector* ilmethods, vector* sgmethods) {
 	CL_ERROR(self);
 	for (int i = 0; i < ilmethods->length; i++) {
-		vector_item e = vector_at(sgmethods, i);
-		method* me = (method*)e;
-		il_method* ilmethod = (il_method*)vector_at(ilmethods, i);
-		//ネイティブメソッドならオペコードは不要
-		if (me->type == method_type_native ||
-			me->type == method_type_abstract) {
-			continue;
+		if(!CLBC_method_impl(self, scope, iltype, tp, vector_at(ilmethods, i), vector_at(sgmethods, i))) {
+			break;
 		}
-		//オペコードを作成
-		//FIXME:ILメソッドと実行時メソッドのインデックスが同じなのでとりあえず動く
-		//まずは仮引数の一覧にインデックスを割り振る
-		enviroment* env = enviroment_new();
-		env->context_ref = self;
-		call_context* cctx = call_context_new(call_method_T);
-		cctx->space = scope;
-		cctx->ty = tp;
-		cctx->u.mt = me;
-		//引数を保存
-		for (int i = 0; i < ilmethod->parameter_list->length; i++) {
-			il_parameter* ilparam = (il_parameter*)vector_at(ilmethod->parameter_list, i);
-			symbol_table_entry(
-				env->sym_table,
-				import_manager_resolve(self->import_manager, scope, ilparam->fqcn, cctx),
-				ilparam->namev
-			);
-			//実引数を保存
-			//0番目は this のために開けておく
-			opcode_buf_add(env->buf, (vector_item)op_store);
-			opcode_buf_add(env->buf, (vector_item)(i + 1));
-		}
-		//インスタンスメソッドなら
-		//0番目を this で埋める
-		if (!modifier_is_static(me->modifier)) {
-			opcode_buf_add(env->buf, (vector_item)op_store);
-			opcode_buf_add(env->buf, (vector_item)0);
-		}
-		//戻り値が iterator なら、
-		//コルーチンとして使えるようにする
-		bool yield_err = false;
-		if(method_yield(me, ilmethod->statement_list, &yield_err)) {
-			if(yield_err) {
-				abort();
-			}
-			//メソッド名からクラス名を作成して、
-			//beacon::$placeholderへ肩を格納する
-			type* iterT = method_create_iterator_type(me, self, ilmethod->statement_list);
-			opcode_buf_add(env->buf, op_this);
-			for(int i=0; i<ilmethod->parameter_list->length; i++) {
-				opcode_buf_add(env->buf, op_load);
-				opcode_buf_add(env->buf, i + 1);
-			}
-			me->u.script_method->env = env;
-			opcode_buf_add(env->buf, op_new_instance);
-			opcode_buf_add(env->buf, iterT->absolute_index);
-			opcode_buf_add(env->buf, 0);
-			opcode_buf_add(env->buf, op_return);
-			call_context_delete(cctx);
-			continue;
-		}
-		//NOTE:ここなら名前空間を設定出来る
-		CLBC_body(self, ilmethod->statement_list, env, cctx, scope);
-		me->u.script_method->env = env;
-		call_context_delete(cctx);
 	}
 }
 
