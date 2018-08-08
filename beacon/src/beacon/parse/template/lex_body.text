@@ -137,6 +137,10 @@
 	return IDENT;
 }
 
+;;これがないと標準出力にゴミが表示される
+<INITIAL>[ \t] {
+}
+
 <INITIAL>\" {
 	parser_clear_buffer(parser_current());
     BEGIN STRING_LITERAL_STATE;

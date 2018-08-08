@@ -16,11 +16,9 @@ parser* parse_string(const char* source) {
 	gParser = parser_new();
 	gParser->source_name = "unknown";
 	yy_setstr(text_strdup(source));
-	text_stdout_enabled(false);
 	if (yyparse()) {
 		yy_clearstr();
 		gParser->result = parse_syntax_error_T;
-		text_stdout_enabled(true);
 		parser_print_error(gParser);
 		return gParser;
 	}
@@ -42,14 +40,11 @@ parser* parse_file(const char* filename) {
 		gParser->result = parse_open_error_T;
 		return gParser;
 	}
-	text_stdout_enabled(false);
 	if (yyparse()) {
 		gParser->result = parse_syntax_error_T;
-		text_stdout_enabled(true);
 		parser_print_error(gParser);
 		return gParser;
 	}
-	text_stdout_enabled(true);
 	return gParser;
 }
 

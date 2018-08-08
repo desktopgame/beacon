@@ -277,6 +277,9 @@ static void update_loc() {
 	return IDENT;
 }
 
+<INITIAL>[ \t] {
+}
+
 <INITIAL>\" {
 	parser_clear_buffer(parser_current());
     BEGIN STRING_LITERAL_STATE;
