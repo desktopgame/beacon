@@ -182,10 +182,4 @@ char* text_readline();
  * @return
  */
 char* text_freadline(FILE* fp);
-
-/**
- * stdoutの有効/無効を設定します.
- * @param enabled
- */
-void text_stdout_enabled(bool enabled);
 #endif // !SIGNAL_UTIL_TEXT_H
