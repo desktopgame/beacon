@@ -14,51 +14,51 @@
 
 static il_property_body* CLIL_prop_body(class_loader* self, il_type* current, ast* abody, il_property_body_tag tag, access_level level);
 
-void CLIL_member_tree(class_loader* self, il_type* current, ast* tree) {
-	if (tree->tag == ast_access_member_tree) {
-		for (int i = 0; i < tree->vchildren->length; i++) {
-			CLIL_member_tree(self, current, ast_at(tree, i));
+void CLIL_member_tree(class_loader* self, il_type* current, ast* atree) {
+	if (atree->tag == ast_access_member_tree) {
+		for (int i = 0; i < atree->vchildren->length; i++) {
+			CLIL_member_tree(self, current, ast_at(atree, i));
 		}
-	} else if (tree->tag == ast_access_member_list) {
-		ast* access = ast_first(tree);
-		ast* member_list = ast_second(tree);
-		access_level level = ast_cast_to_access(access);
-		CLIL_member_list(self, current, member_list, level);
+	} else if (atree->tag == ast_access_member_list) {
+		ast* aaccess = ast_first(atree);
+		ast* amember_list = ast_second(atree);
+		access_level level = ast_cast_to_access(aaccess);
+		CLIL_member_list(self, current, amember_list, level);
 	}
 }
 
-void CLIL_member_list(class_loader* self, il_type* current, ast* member, access_level level) {
-	if(member->tag == ast_member_decl_list) {
-		for(int i=0; i<member->vchildren->length; i++) {
-			CLIL_member_list(self, current, ast_at(member, i), level);
+void CLIL_member_list(class_loader* self, il_type* current, ast* amember, access_level level) {
+	if(amember->tag == ast_member_decl_list) {
+		for(int i=0; i<amember->vchildren->length; i++) {
+			CLIL_member_list(self, current, ast_at(amember, i), level);
 		}
-	} else if(member->tag == ast_member_decl) {
-		ast* child = ast_first(member);
-		if (child->tag == ast_field_decl) {
-			CLIL_field(self, current, child, level);
-		} else if(child->tag == ast_prop_decl) {
-			CLIL_prop(self, current, child, level);
-		} else if (child->tag == ast_method_decl) {
-			CLIL_method(self, current, child, level);
-		} else if (child->tag == ast_constructor_decl) {
-			CLIL_ctor(self, current, child, level);
-		} else if(child->tag == ast_operator_overload) {
-			CLIL_operator_overload(self, current, child, level);
+	} else if(amember->tag == ast_member_decl) {
+		ast* achild = ast_first(amember);
+		if (achild->tag == ast_field_decl) {
+			CLIL_field(self, current, achild, level);
+		} else if(achild->tag == ast_prop_decl) {
+			CLIL_prop(self, current, achild, level);
+		} else if (achild->tag == ast_method_decl) {
+			CLIL_method(self, current, achild, level);
+		} else if (achild->tag == ast_constructor_decl) {
+			CLIL_ctor(self, current, achild, level);
+		} else if(achild->tag == ast_operator_overload) {
+			CLIL_operator_overload(self, current, achild, level);
 		}
 	}
 }
 
-void CLIL_field(class_loader* self, il_type* current, ast* field, access_level level) {
+void CLIL_field(class_loader* self, il_type* current, ast* afield, access_level level) {
 	assert(current->tag == iltype_class);
-	ast* modifier = ast_first(field);
-	ast* type_name = ast_second(field);
-	ast* access_name = ast_at(field, 2);
-	ast* afact = ast_at(field, 3);
-	il_field* v = il_field_new(access_name->u.stringv_value);
-	CLIL_generic_cache(type_name, v->fqcn);
+	ast* amodifier = ast_first(afield);
+	ast* atype_name = ast_second(afield);
+	ast* aaccess_name = ast_at(afield, 2);
+	ast* afact = ast_at(afield, 3);
+	il_field* v = il_field_new(aaccess_name->u.stringv_value);
+	CLIL_generic_cache(atype_name, v->fqcn);
 	bool error;
 	v->access = level;
-	v->modifier = ast_cast_to_modifier(modifier, &error);
+	v->modifier = ast_cast_to_modifier(amodifier, &error);
 	il_type_add_field(current, v);
 	//設定されているなら初期値も
 	if(!ast_is_blank(afact)) {
@@ -96,25 +96,25 @@ void CLIL_prop(class_loader* self, il_type* current, ast* aprop, access_level le
 	}
 }
 
-void CLIL_method(class_loader* self, il_type* current, ast* method, access_level level) {
+void CLIL_method(class_loader* self, il_type* current, ast* amethod, access_level level) {
 	assert(current->tag == iltype_class || current->tag == iltype_interface);
-	ast* modifier = ast_at(method, 0);
-	ast* func_name = ast_at(method, 1);
-	ast* ageneric = ast_at(method, 2);
-	ast* param_list = ast_at(method, 3);
-	ast* func_body = ast_at(method, 4);
-	ast* ret_name = ast_at(method, 5);
-	il_method* v = il_method_new(func_name->u.stringv_value);
+	ast* amodifier = ast_at(amethod, 0);
+	ast* afunc_name = ast_at(amethod, 1);
+	ast* ageneric = ast_at(amethod, 2);
+	ast* aparam_list = ast_at(amethod, 3);
+	ast* afunc_body = ast_at(amethod, 4);
+	ast* aret_name = ast_at(amethod, 5);
+	il_method* v = il_method_new(afunc_name->u.stringv_value);
 	CLIL_type_parameter(self, ageneric, v->type_parameter_list);
-	CLIL_generic_cache(ret_name, v->return_fqcn);
+	CLIL_generic_cache(aret_name, v->return_fqcn);
 	bool error;
 	v->access = level;
-	v->modifier = ast_cast_to_modifier(modifier, &error);
-	CLIL_parameter_list(self, v->parameter_list, param_list);
-	CLIL_body(self, v->statement_list, func_body);
+	v->modifier = ast_cast_to_modifier(amodifier, &error);
+	CLIL_parameter_list(self, v->parameter_list, aparam_list);
+	CLIL_body(self, v->statement_list, afunc_body);
 	//メソッドの本文が省略されているかどうか
 	//例えばネイティブメソッドや抽象メソッドは省略されているべき
-	if(ast_is_blank(func_body)) {
+	if(ast_is_blank(afunc_body)) {
 		v->no_stmt = true;
 	}
 	il_type_add_method(current, v);
@@ -124,11 +124,11 @@ void CLIL_method(class_loader* self, il_type* current, ast* method, access_level
 	}
 }
 
-void CLIL_ctor(class_loader* self, il_type* current, ast* constructor, access_level level) {
+void CLIL_ctor(class_loader* self, il_type* current, ast* aconstructor, access_level level) {
 	assert(current->tag == iltype_class);
-	ast* aparams = ast_at(constructor, 0);
-	ast* achain = ast_at(constructor, 1);
-	ast* abody = ast_at(constructor, 2);
+	ast* aparams = ast_at(aconstructor, 0);
+	ast* achain = ast_at(aconstructor, 1);
+	ast* abody = ast_at(aconstructor, 2);
 	il_constructor_chain* ilchain = NULL;
 	if (!ast_is_blank(achain)) {
 		ast* achain_type = ast_first(achain);
@@ -145,12 +145,12 @@ void CLIL_ctor(class_loader* self, il_type* current, ast* constructor, access_le
 	vector_push(current->u.class_->constructor_list, ilcons);
 }
 
-void CLIL_operator_overload(class_loader* self, il_type* current, ast* opov, access_level level) {
-	assert(opov->tag == ast_operator_overload);
-	operator_type ot = opov->u.operator_value;
-	ast* aparam_list = ast_at(opov, 0);
-	ast* abody = ast_at(opov, 1);
-	ast* areturn = ast_at(opov, 2);
+void CLIL_operator_overload(class_loader* self, il_type* current, ast* aopov, access_level level) {
+	assert(aopov->tag == ast_operator_overload);
+	operator_type ot = aopov->u.operator_value;
+	ast* aparam_list = ast_at(aopov, 0);
+	ast* abody = ast_at(aopov, 1);
+	ast* areturn = ast_at(aopov, 2);
 	il_operator_overload* ilopov = il_operator_overload_new(ot);
 	ilopov->access = level;
 	CLIL_parameter_list(self, ilopov->parameter_list, aparam_list);

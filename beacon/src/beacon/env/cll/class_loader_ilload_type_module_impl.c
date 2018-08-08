@@ -17,22 +17,22 @@
 
 //proto
 static void CLIL_fqcn_cache_impl(ast* afqcn, fqcn_cache* fqcn, int level);
-static void CLIL_generic_cache_impl(ast* fqcn, generic_cache* dest);
+static void CLIL_generic_cache_impl(ast* afqcn, generic_cache* dest);
 static void CLIL_generic_cache_inner(ast* atype_args, generic_cache* dest);
-static void CLIL_type_parameter_rule(struct class_loader* self, struct ast* source, vector* dest);
+static void CLIL_type_parameter_rule(struct class_loader* self, struct ast* asource, vector* dest);
 static void ast_fqcn_flatten(ast* afqcn, vector* dest);
-static void CLIL_argument_listImpl(class_loader* self, vector* list, ast* source);
+static void CLIL_argument_listImpl(class_loader* self, vector* list, ast* asource);
 
 void CLIL_fqcn_cache(ast* afqcn, fqcn_cache* fqcn) {
 	CLIL_fqcn_cache_impl(afqcn, fqcn, 0);
 }
 
-void CLIL_generic_cache(ast* fqcn, generic_cache* dest) {
-	if(fqcn->tag == ast_fqcn_class_name) {
-		dest->fqcn->namev = fqcn->u.stringv_value;
+void CLIL_generic_cache(ast* afqcn, generic_cache* dest) {
+	if(afqcn->tag == ast_fqcn_class_name) {
+		dest->fqcn->namev = afqcn->u.stringv_value;
 		return;
 	}
-	CLIL_generic_cache_impl(fqcn, dest);
+	CLIL_generic_cache_impl(afqcn, dest);
 	fqcn_cache* body = dest->fqcn;
 	//FIXME: Int のような文字パースで失敗してしまうので対策
 	if (body->namev == 0 &&
@@ -41,40 +41,40 @@ void CLIL_generic_cache(ast* fqcn, generic_cache* dest) {
 	}
 }
 
-void CLIL_typename_list(class_loader * self, vector * dst, ast * typename_list) {
-	if (ast_is_blank(typename_list)) {
+void CLIL_typename_list(class_loader * self, vector * dst, ast * atypename_list) {
+	if (ast_is_blank(atypename_list)) {
 		return;
 	}
-	if (typename_list->tag == ast_typename) {
+	if (atypename_list->tag == ast_typename) {
 		generic_cache* e = generic_cache_new();
 		//[typename [fqcn]]
-		CLIL_generic_cache(typename_list, e);
+		CLIL_generic_cache(atypename_list, e);
 		vector_push(dst, e);
-	} else if(typename_list->tag == ast_typename_list) {
-		for (int i = 0; i < typename_list->vchildren->length; i++) {
-			CLIL_typename_list(self, dst, ast_at(typename_list, i));
+	} else if(atypename_list->tag == ast_typename_list) {
+		for (int i = 0; i < atypename_list->vchildren->length; i++) {
+			CLIL_typename_list(self, dst, ast_at(atypename_list, i));
 		}
 	}
 }
 
 
-void CLIL_type_parameter(class_loader* self, ast* source, vector* dest) {
-	if (ast_is_blank(source)) {
+void CLIL_type_parameter(class_loader* self, ast* asource, vector* dest) {
+	if (ast_is_blank(asource)) {
 		return;
 	}
-	if (source->tag == ast_type_parameter_list) {
-		for (int i = 0; i < source->vchildren->length; i++) {
-			CLIL_type_parameter(self, ast_at(source, i), dest);
+	if (asource->tag == ast_type_parameter_list) {
+		for (int i = 0; i < asource->vchildren->length; i++) {
+			CLIL_type_parameter(self, ast_at(asource, i), dest);
 		}
 		return;
 	}
-	assert(source->tag == ast_type_parameter ||
-		   source->tag == ast_type_in_parameter ||
-		   source->tag == ast_type_out_parameter);
-	ast* arule_list = ast_first(source);
-	il_type_parameter* iltypeparam = il_type_parameter_new(source->u.stringv_value);
-	if (source->tag == ast_type_in_parameter) iltypeparam->kind = il_type_parameter_kind_in;
-	if (source->tag == ast_type_out_parameter) iltypeparam->kind = il_type_parameter_kind_out;
+	assert(asource->tag == ast_type_parameter ||
+		   asource->tag == ast_type_in_parameter ||
+		   asource->tag == ast_type_out_parameter);
+	ast* arule_list = ast_first(asource);
+	il_type_parameter* iltypeparam = il_type_parameter_new(asource->u.stringv_value);
+	if (asource->tag == ast_type_in_parameter) iltypeparam->kind = il_type_parameter_kind_in;
+	if (asource->tag == ast_type_out_parameter) iltypeparam->kind = il_type_parameter_kind_out;
 	vector_push(dest, iltypeparam);
 	//制約があるならそれも設定
 	//制約はとりあえずなしで
@@ -97,22 +97,22 @@ void CLIL_type_argument(class_loader* self, ast* atype_args, vector* dest) {
 	} else assert(false);
 }
 
-void CLIL_parameter_list(class_loader* self, vector* list, ast* source) {
-	if (source->tag == ast_parameter_list) {
-		for (int i = 0; i < source->vchildren->length; i++) {
-			CLIL_parameter_list(self, list, ast_at(source, i));
+void CLIL_parameter_list(class_loader* self, vector* list, ast* asource) {
+	if (asource->tag == ast_parameter_list) {
+		for (int i = 0; i < asource->vchildren->length; i++) {
+			CLIL_parameter_list(self, list, ast_at(asource, i));
 		}
-	} else if (source->tag == ast_parameter) {
-		ast* type_name = ast_first(source);
-		ast* access_name = ast_second(source);
-		il_parameter* p = il_parameter_new(access_name->u.stringv_value);
-		CLIL_generic_cache(type_name, p->fqcn);
+	} else if (asource->tag == ast_parameter) {
+		ast* atype_name = ast_first(asource);
+		ast* aaccess_name = ast_second(asource);
+		il_parameter* p = il_parameter_new(aaccess_name->u.stringv_value);
+		CLIL_generic_cache(atype_name, p->fqcn);
 		vector_push(list, p);
 	}
 }
 
-void CLIL_argument_list(class_loader* self, vector* list, ast* source) {
-	CLIL_argument_listImpl(self, list, source);
+void CLIL_argument_list(class_loader* self, vector* list, ast* asource) {
+	CLIL_argument_listImpl(self, list, asource);
 	//ラムダに自分が引数列の中で何番目であるかを教える
 	for(int i=0; i<list->length; i++) {
 		il_argument* e = (il_argument*)vector_at(list, i);
@@ -138,37 +138,37 @@ static void CLIL_fqcn_cache_impl(ast* afqcn, fqcn_cache* fqcn, int level) {
 	vector_delete(v, vector_deleter_null);
 }
 
-static void CLIL_generic_cache_impl(ast* fqcn, generic_cache* dest) {
+static void CLIL_generic_cache_impl(ast* afqcn, generic_cache* dest) {
 	fqcn_cache* body = dest->fqcn;
 	//型引数を解析する
-	if (fqcn->tag == ast_typename) {
-		ast* atype_args = ast_second(fqcn);
+	if (afqcn->tag == ast_typename) {
+		ast* atype_args = ast_second(afqcn);
 		if (!ast_is_blank(atype_args)) {
 			CLIL_generic_cache_inner(atype_args, dest);
 		}
 	}
-	if (fqcn->tag == ast_typename) {
-		CLIL_generic_cache_impl(ast_first(fqcn), dest);
+	if (afqcn->tag == ast_typename) {
+		CLIL_generic_cache_impl(ast_first(afqcn), dest);
 		return;
 	}
-	if (fqcn->tag == ast_fqcn ||
-		fqcn->tag == ast_fqcn_part_list) {
-		if (fqcn->tag == ast_fqcn_part_list &&
-			fqcn->vchildren->length == 0) {
+	if (afqcn->tag == ast_fqcn ||
+		afqcn->tag == ast_fqcn_part_list) {
+		if (afqcn->tag == ast_fqcn_part_list &&
+			afqcn->vchildren->length == 0) {
 			//FIXME:もうちょっと高速に出来る
 			//FIXME:とりあえずここでタグを直してるけどast.cの時点でどうにかするべき
-			fqcn->tag = ast_fqcn_class_name;
-			body->namev = fqcn->u.stringv_value;
+			afqcn->tag = ast_fqcn_class_name;
+			body->namev = afqcn->u.stringv_value;
 			return;
 		}
-		for (int i = 0; i < fqcn->vchildren->length; i++) {
-			ast* c = ast_at(fqcn, i);
+		for (int i = 0; i < afqcn->vchildren->length; i++) {
+			ast* c = ast_at(afqcn, i);
 			CLIL_generic_cache_impl(c, dest);
 		}
 	} else {
 		//FIXME:とりあえずここでタグを直してるけどast.cの時点でどうにかするべき
-		vector_push(body->scope_vec, fqcn->u.stringv_value);
-		fqcn->tag = ast_fqcn_part;
+		vector_push(body->scope_vec, afqcn->u.stringv_value);
+		afqcn->tag = ast_fqcn_part;
 	}
 }
 
@@ -185,7 +185,7 @@ static void CLIL_generic_cache_inner(ast* atype_args, generic_cache* dest) {
 	}
 }
 
-static void CLIL_type_parameter_rule(class_loader* self, ast* source, vector* dest) {
+static void CLIL_type_parameter_rule(class_loader* self, ast* asource, vector* dest) {
 	assert(false);
 	/*
 	if (source->tag == ast_type_parameter_list) {
@@ -214,21 +214,21 @@ static void ast_fqcn_flatten(ast* afqcn, vector* dest) {
 	}
 }
 
-static void CLIL_argument_listImpl(class_loader* self, vector* list, ast* source) {
-	if (source->tag == ast_argument_list) {
-		for (int i = 0; i < source->vchildren->length; i++) {
-			CLIL_argument_listImpl(self, list, ast_at(source, i));
+static void CLIL_argument_listImpl(class_loader* self, vector* list, ast* asource) {
+	if (asource->tag == ast_argument_list) {
+		for (int i = 0; i < asource->vchildren->length; i++) {
+			CLIL_argument_listImpl(self, list, ast_at(asource, i));
 		}
-	} else if (source->tag == ast_argument) {
-		ast* primary = ast_first(source);
+	} else if (asource->tag == ast_argument) {
+		ast* aprimary = ast_first(asource);
 		il_argument* ilarg = il_argument_new();
-		ilarg->factor = CLIL_factor(self, primary);
+		ilarg->factor = CLIL_factor(self, aprimary);
 		vector_push(list, ilarg);
-	} else if(source->tag == ast_lambda) {
+	} else if(asource->tag == ast_lambda) {
 		//ラムダは実引数列にしかおけない仕様
-		ast* aparam_list = ast_first(source);
-		ast* areturn = ast_second(source);
-		ast* abody = ast_at(source, 2);
+		ast* aparam_list = ast_first(asource);
+		ast* areturn = ast_second(asource);
+		ast* abody = ast_at(asource, 2);
 		il_factor_lambda* lbd = il_factor_lambda_new();
 		CLIL_parameter_list(self, lbd->parameter_vec, aparam_list);
 		CLIL_generic_cache(areturn, lbd->return_gtype);
