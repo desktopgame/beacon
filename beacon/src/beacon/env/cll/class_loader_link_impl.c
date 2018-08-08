@@ -28,7 +28,6 @@ static void CLBC_excec_interface_decl(class_loader* self);
 static void CLBC_excec_interface_impl(class_loader* self);
 static void CLBC_excec_enum_decl(class_loader* self);
 static void CLBC_excec_enum_impl(class_loader* self);
-static void CLBC_yield(class_loader* parent, class_loader* target);
 static void CLBC_check_class(class_loader * self, il_type * iltype, type * tp, namespace_ * scope);
 static void CLBC_check_interface(class_loader * self, il_type * iltype, type * tp, namespace_ * scope);
 
@@ -252,15 +251,6 @@ static void CLBC_excec_enum_impl(class_loader* self) {
 	}
 }
 //FIXME:コピペ
-
-static void CLBC_yield(class_loader* parent, class_loader* target) {
-	CL_ERROR(parent);
-	CL_ERROR(target);
-	assert(target->source_code != NULL);
-	CLBC_import(target, target->il_code->import_list);
-//	CLBC_namespace_tree(target);
-}
-
 static void CLBC_check_class(class_loader * self, il_type * iltype, type * tp, namespace_ * scope) {
 	//実装されていないインターフェイスを確認する
 	method* outiMethod = NULL;
