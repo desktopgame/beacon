@@ -6,10 +6,12 @@
 #include "../../il/il_property.h"
 #include "../../il/il_method.h"
 #include "../../il/call_context.h"
+#include "../../il/il_constructor.h"
 #include "../../env/type_interface.h"
 #include "../../env/namespace.h"
 #include "../../env/method.h"
 #include "../../env/field.h"
+#include "../../env/constructor.h"
 #include "../../env/property.h"
 
 bool CLBC_field_decl(class_loader* self, il_type* iltype, type* tp, il_field* ilfi, namespace_* scope, call_context* cctx);
@@ -50,6 +52,10 @@ bool CLBC_method_impl(class_loader* self, namespace_* scope, il_type* iltype, ty
 void CLBC_methods_decl(class_loader* self, il_type* iltype, type* tp, vector* ilmethods, namespace_* scope);
 void CLBC_methods_impl(class_loader* self, namespace_* scope, il_type* iltype, type* tp, vector* ilmethods, vector* sgmethods);
 
+
+bool CLBC_ctor_decl(class_loader* self, il_type* iltype, type* tp, il_constructor* ilcons, namespace_* scope);
+bool CLBC_ctor_impl(class_loader* self, il_type* iltype, type* tp, il_constructor* ilcons, constructor* cons, namespace_* scope);
+
 /**
  * コンストラクタ宣言を読み込んでクラスに追加します.
  * @param self
@@ -57,9 +63,8 @@ void CLBC_methods_impl(class_loader* self, namespace_* scope, il_type* iltype, t
  * @param tp
  * @param scope
  */
-void CLBC_ctor_decl(class_loader* self, il_type* iltype, type* tp, namespace_* scope);
-
-void CLBC_ctor_impl(class_loader* self, il_type* iltype, type* tp);
+void CLBC_ctors_decl(class_loader* self, il_type* iltype, type* tp, namespace_* scope);
+void CLBC_ctors_impl(class_loader* self, il_type* iltype, type* tp);
 
 void CLBC_operator_overload_decl(class_loader* self, il_type* iltype, type* tp, namespace_* scope);
 
