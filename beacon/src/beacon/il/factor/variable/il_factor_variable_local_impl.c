@@ -6,6 +6,7 @@
 #include "../../../env/field.h"
 #include "../../../env/property.h"
 #include "../../../vm/enviroment.h"
+#include "../../../vm/generate.h"
 #include "../../../vm/symbol_entry.h"
 #include "../../il_argument.h"
 #include <string.h>
@@ -15,8 +16,6 @@ static void il_factor_variable_local_loadImpl(il_factor_variable_local * self, e
 static void il_factor_variable_local_load_field(il_factor_variable_local * self, enviroment * env, call_context* cctx);
 static void il_factor_variable_local_load_property(il_factor_variable_local * self, enviroment * env, call_context* cctx);
 static void set_gtype(il_factor_variable_local * self, generic_type* gt);
-static void il_factor_generate_field(il_factor_variable_local* self, enviroment* env, call_context* cctx);
-static void il_factor_generate_property(il_factor_variable_local* self, enviroment* env, call_context* cctx);
 
 il_factor_variable_local* il_factor_variable_local_new(string_view namev) {
 	il_factor_variable_local* ret = (il_factor_variable_local*)MEM_MALLOC(sizeof(il_factor_variable_local));
@@ -35,23 +34,16 @@ void il_factor_variable_local_generate(il_factor_variable_local* self, enviromen
 		opcode_buf_add(env->buf, (vector_item)self->u.entry_->index);
 	} else if(self->type == variable_local_field) {
 		field* f = self->u.f_with_i.fi;
-		if(modifier_is_static(f->modifier)) {
-			opcode_buf_add(env->buf, op_get_static);
-			opcode_buf_add(env->buf, f->parent->absolute_index);
-			opcode_buf_add(env->buf, self->u.f_with_i.index);
-		} else {
+		if(!modifier_is_static(f->modifier)) {
 			opcode_buf_add(env->buf, op_this);
-			opcode_buf_add(env->buf, op_get_field);
-			opcode_buf_add(env->buf, self->u.f_with_i.index);
 		}
+		generate_get_field(env->buf, f, self->u.f_with_i.index);
 	} else if(self->type == variable_local_property) {
 		property* p = self->u.p_with_i.p;
-		//FIXME:コピペ
-		if(p->is_short) {
-			il_factor_generate_field(self, env, cctx);
-		} else {
-			il_factor_generate_property(self, env, cctx);
+		if(!modifier_is_static(p->modifier)) {
+			opcode_buf_add(env->buf, op_this);
 		}
+		generate_get_property(env->buf, p, self->u.p_with_i.index);
 	}
 }
 
@@ -168,32 +160,3 @@ static void set_gtype(il_factor_variable_local * self, generic_type* gt) {
 	}
 }
 //private
-static void il_factor_generate_field(il_factor_variable_local* self, enviroment* env, call_context* cctx) {
-	assert(self->type == variable_local_property);
-	property* p = self->u.p_with_i.p;
-	field* f = p->source_ref;
-	if(modifier_is_static(f->modifier)) {
-		opcode_buf_add(env->buf, op_get_static);
-		opcode_buf_add(env->buf, f->parent->absolute_index);
-		opcode_buf_add(env->buf, class_get_field_by_property(TYPE2CLASS(p->parent), p));
-	} else {
-		opcode_buf_add(env->buf, op_this);
-		opcode_buf_add(env->buf, op_get_field);
-		opcode_buf_add(env->buf, class_get_field_by_property(TYPE2CLASS(p->parent), p));
-	}
-}
-
-static void il_factor_generate_property(il_factor_variable_local* self, enviroment* env, call_context* cctx) {
-	assert(self->type == variable_local_property);
-	property* p = self->u.p_with_i.p;
-	int i = self->u.p_with_i.index;
-	if(modifier_is_static(p->modifier)) {
-		opcode_buf_add(env->buf, op_get_static_property);
-		opcode_buf_add(env->buf, p->parent->absolute_index);
-		opcode_buf_add(env->buf, i);
-	} else {
-		opcode_buf_add(env->buf, op_this);
-		opcode_buf_add(env->buf, op_get_property);
-		opcode_buf_add(env->buf, i);
-	}
-}
