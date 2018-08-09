@@ -9,6 +9,7 @@
 #include "../../env/property.h"
 #include "../../env/import_manager.h"
 #include "../../vm/enviroment.h"
+#include "../../vm/generate.h"
 #include "../../il/il_type_argument.h"
 #include "../../il/il_factor_impl.h"
 
@@ -53,15 +54,10 @@ void il_factor_member_op_load(il_factor_member_op* self, enviroment* env, call_c
 }
 
 void il_factor_member_op_generate(il_factor_member_op* self, enviroment* env, call_context* cctx) {
-	if(modifier_is_static(self->f->modifier)) {
-		opcode_buf_add(env->buf, op_get_static);
-		opcode_buf_add(env->buf, self->f->parent->absolute_index);
-		opcode_buf_add(env->buf, self->index);
-	} else {
+	if(!modifier_is_static(self->f->modifier)) {
 		il_factor_generate(self->fact, env, cctx);
-		opcode_buf_add(env->buf, op_get_field);
-		opcode_buf_add(env->buf, self->index);
 	}
+	generate_get_field(env->buf, self->f, self->index);
 }
 
 generic_type* il_factor_member_op_eval(il_factor_member_op* self, enviroment* env, call_context* cctx) {
