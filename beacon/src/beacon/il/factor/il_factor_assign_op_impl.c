@@ -13,6 +13,8 @@ static void assign_to_field(il_factor_assign_op* self,il_factor* receiver, il_fa
 static void assign_to_property(il_factor_assign_op* self, enviroment* env, call_context* cctx);
 static void check_final(il_factor* receiver, il_factor* source, string_view namev, enviroment* env, call_context* cctx);
 static bool can_assign_to_field(field* f, il_factor_assign_op* self, enviroment* env, call_context* cctx);
+static void generate_assign_to_variable(il_factor_assign_op* self, enviroment* env, call_context* cctx);
+static void generate_assign_to_variable_local(il_factor_assign_op* self, enviroment* env, call_context* cctx);
 
 il_factor* il_factor_wrap_assign(il_factor_assign_op* self) {
 	il_factor* ret = il_factor_new(ilfactor_assign_op);
@@ -41,17 +43,7 @@ void il_factor_assign_op_load(il_factor_assign_op* self, enviroment* env, call_c
 
 void il_factor_assign_op_generate(il_factor_assign_op* self, enviroment* env, call_context* cctx) {
 	if(self->left->type == ilfactor_variable) {
-		il_factor_variable* ilvar = IL_FACT2VAR(self->left);
-		symbol_entry* e = symbol_table_entry(env->sym_table, NULL, ilvar->fqcn->namev);
-		il_factor_generate(self->right, env, cctx);
-		opcode_buf_add(env->buf, op_store);
-		opcode_buf_add(env->buf, e->index);
-		if(generic_type_distance(e->gtype, il_factor_eval(self->right, env, cctx)) < 0) {
-			bc_error_throw(bcerror_assign_not_compatible_local,
-				string_pool_ref2str(ilvar->fqcn->namev)
-			);
-			return;
-		}
+		generate_assign_to_variable(self, env, cctx);
 		//NOTE:constかどうかの検査
 	//foo.bar = xxx
 	} else if(self->left->type == ilfactor_member_op) {
@@ -233,5 +225,56 @@ static void check_final(il_factor* receiver, il_factor* source, string_view name
 			);
 		}
 		f->not_initialized_at_ctor = true;
+	}
+
+}
+
+static void generate_assign_to_variable(il_factor_assign_op* self, enviroment* env, call_context* cctx) {
+	assert(self->left->type == ilfactor_variable);
+	il_factor_variable* ilvar = IL_FACT2VAR(self->left);
+	if(ilvar->type == ilvariable_type_local) {
+		generate_assign_to_variable_local(self, env, cctx);
+	}
+}
+
+static void generate_assign_to_variable_local(il_factor_assign_op* self, enviroment* env, call_context* cctx) {
+	il_factor_variable* ilvar = IL_FACT2VAR(self->left);
+	il_factor_variable_local* illoc = ilvar->u.local_;
+	//src のような名前がローカル変数を示す場合
+	if(illoc->type == variable_local_scope) {
+		#if defined(DEBUG)
+		const char* vname = string_pool_ref2str(ilvar->fqcn->namev);
+		#endif
+		symbol_entry* e = symbol_table_entry(env->sym_table, NULL, ilvar->fqcn->namev);
+		//e==NULL の時変数がない
+		il_factor_generate(self->right, env, cctx);
+		opcode_buf_add(env->buf, op_store);
+		opcode_buf_add(env->buf, e->index);
+		if(generic_type_distance(e->gtype, il_factor_eval(self->right, env, cctx)) < 0) {
+			bc_error_throw(bcerror_assign_not_compatible_local,
+				string_pool_ref2str(ilvar->fqcn->namev)
+			);
+			return;
+		}
+	//src のような名前がフィールドを示す場合
+	} else if(illoc->type == variable_local_field) {
+		int temp = -1;
+		field* f = class_find_field_tree(call_context_class(cctx), illoc->namev, &temp);
+		assert(temp != -1);
+		opcode_buf_add(env->buf, op_this);
+		il_factor_generate(self->right, env, cctx);
+		opcode_buf_add(env->buf, op_put_field);
+		opcode_buf_add(env->buf, temp);
+		assert(!modifier_is_static(f->modifier));
+	//src のような名前がプロパティを示す場合
+	} else if(illoc->type == variable_local_property) {
+		int temp = -1;
+		property* p = class_find_property_tree(call_context_class(cctx), illoc->namev, &temp);
+		assert(temp != -1);
+		opcode_buf_add(env->buf, op_this);
+		il_factor_generate(self->right, env, cctx);
+		opcode_buf_add(env->buf, op_put_property);
+		opcode_buf_add(env->buf, temp);
+		assert(!modifier_is_static(p->modifier));
 	}
 }
