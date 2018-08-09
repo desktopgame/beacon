@@ -6,6 +6,7 @@
 #include "../../env/property.h"
 #include "../../env/property_body.h"
 #include "../../vm/symbol_entry.h"
+#include "../../vm/generate.h"
 #include "../../env/field.h"
 
 static void assign_by_namebase(il_factor_assign_op* self, enviroment* env, call_context* cctx);
@@ -81,9 +82,7 @@ static void assign_by_namebase(il_factor_assign_op* self, enviroment* env, call_
 		field* sf = class_find_sfield(cls, ilmem->namev, &temp);
 		assert(temp != -1);
 		il_factor_generate(self->right, env, cctx);
-		opcode_buf_add(env->buf, (vector_item)op_put_static);
-		opcode_buf_add(env->buf, (vector_item)cls->parent->absolute_index);
-		opcode_buf_add(env->buf, (vector_item)temp);
+		generate_put_field(env->buf, sf, temp);
 		//指定の静的フィールドにアクセスできない
 		if(!class_accessible_field(call_context_class(cctx), sf)) {
 			bc_error_throw(bcerror_can_t_access_field,
@@ -117,8 +116,7 @@ static void assign_to_field(il_factor_assign_op* self, il_factor* receiver, il_f
 	assert(temp != -1);
 	il_factor_generate(receiver, env, cctx);
 	il_factor_generate(source, env, cctx);
-	opcode_buf_add(env->buf, (vector_item)op_put_field);
-	opcode_buf_add(env->buf, (vector_item)temp);
+	generate_put_field(env->buf, f, temp);
 	//型の互換性を検査
 	if(!can_assign_to_field(f, self, env, cctx)) {
 		return;
@@ -159,31 +157,11 @@ static void assign_to_property(il_factor_assign_op* self, enviroment* env, call_
 		);
 		return;
 	}
-	if(prop->p->is_short) {
-		if(is_static) {
-			il_factor_generate(self->right, env, cctx);
-			opcode_buf_add(env->buf, (vector_item)op_put_static);
-			opcode_buf_add(env->buf, (vector_item)prop->p->parent->absolute_index);
-			opcode_buf_add(env->buf, (vector_item)class_get_field_by_property(TYPE2CLASS(prop->p->parent), prop->p));
-		} else {
-			il_factor_generate(prop->fact, env, cctx);
-			il_factor_generate(self->right, env, cctx);
-			opcode_buf_add(env->buf, (vector_item)op_put_field);
-			opcode_buf_add(env->buf, (vector_item)class_get_field_by_property(TYPE2CLASS(prop->p->parent), prop->p));
-		}
-	} else {
-		if(is_static) {
-			il_factor_generate(self->right, env, cctx);
-			opcode_buf_add(env->buf, (vector_item)op_put_static_property);
-			opcode_buf_add(env->buf, (vector_item)prop->p->parent->absolute_index);
-			opcode_buf_add(env->buf, (vector_item)prop->index);
-		} else {
-			il_factor_generate(prop->fact, env, cctx);
-			il_factor_generate(self->right, env, cctx);
-			opcode_buf_add(env->buf, (vector_item)op_put_property);
-			opcode_buf_add(env->buf, (vector_item)prop->index);
-		}
+	if(!is_static) {
+		il_factor_generate(prop->fact, env, cctx);
 	}
+	il_factor_generate(self->right, env, cctx);
+	generate_put_property(env->buf, pp, prop->index);
 }
 
 static bool can_assign_to_field(field* f, il_factor_assign_op* self, enviroment* env, call_context* cctx) {
@@ -273,15 +251,9 @@ static void generate_assign_to_variable_local(il_factor_assign_op* self, envirom
 		}
 		if(!modifier_is_static(f->modifier)) {
 			opcode_buf_add(env->buf, op_this);
-			il_factor_generate(self->right, env, cctx);
-			opcode_buf_add(env->buf, op_put_field);
-			opcode_buf_add(env->buf, temp);
-		} else {
-			il_factor_generate(self->right, env, cctx);
-			opcode_buf_add(env->buf, op_put_static);
-			opcode_buf_add(env->buf, f->parent->absolute_index);
-			opcode_buf_add(env->buf, temp);
 		}
+		il_factor_generate(self->right, env, cctx);
+		generate_put_field(env->buf, f, temp);
 		assert(!modifier_is_static(f->modifier));
 	//src のような名前がプロパティを示す場合
 	} else if(illoc->type == variable_local_property) {
@@ -300,15 +272,9 @@ static void generate_assign_to_variable_local(il_factor_assign_op* self, envirom
 		}
 		if(!modifier_is_static(p->modifier)) {
 			opcode_buf_add(env->buf, op_this);
-			il_factor_generate(self->right, env, cctx);
-			opcode_buf_add(env->buf, op_put_property);
-			opcode_buf_add(env->buf, temp);
-		} else {
-			il_factor_generate(self->right, env, cctx);
-			opcode_buf_add(env->buf, op_put_static_property);
-			opcode_buf_add(env->buf, p->parent->absolute_index);
-			opcode_buf_add(env->buf, temp);
 		}
+		il_factor_generate(self->right, env, cctx);
+		generate_put_property(env->buf, p, temp);
 		assert(!modifier_is_static(p->modifier));
 	}
 }

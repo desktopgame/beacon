@@ -9,4 +9,7 @@ void generate_get_field(opcode_buf* buf, field* fi, int index);
 
 void generate_get_property(opcode_buf* buf, property* prop, int index);
 
+void generate_put_field(opcode_buf* buf, field* fi, int index);
+
+void generate_put_property(opcode_buf* buf, property* prop, int index);
 #endif
