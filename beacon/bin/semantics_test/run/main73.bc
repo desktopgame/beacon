@@ -1,0 +1,15 @@
+namespace run73 {
+	class FieldTest {
+		public:
+		String name = "name";
+
+		def new() {
+		}
+
+		def print() -> Void {
+			name.printLine();
+		}
+	}
+}
+var v = new run73::FieldTest();
+v.print();

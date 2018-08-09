@@ -36,6 +36,7 @@ object * object_int_malloc(int i, const char* filename, int lineno) {
 
 object* object_int_get(int i) {
 	script_context* ctx = script_context_get_current();
+	script_context_cache();
 	if((i < -9) || i > 99) { return object_int_new(i); }
 	if(i < 0) { return (object*)vector_at(ctx->neg_int_vec, (-i) - 1); }
 	return (object*)vector_at(ctx->pos_int_vec, i);

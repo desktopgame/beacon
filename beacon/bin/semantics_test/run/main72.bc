@@ -1,0 +1,18 @@
+namespace run72 {
+	class StaticPropertyTest {
+		public:
+		property static Int a {
+			defset;
+			defget;
+		}
+
+		def new() {
+		}
+
+		def print() -> Void {
+			a.printLine();
+		}
+	}
+}
+var v = new run72::StaticPropertyTest();
+v.print();

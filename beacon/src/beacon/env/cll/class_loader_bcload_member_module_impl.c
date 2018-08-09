@@ -96,7 +96,7 @@ bool CLBC_field_decl(class_loader* self, il_type* iltype, type* tp, il_field* il
 }
 
 bool CLBC_field_impl(class_loader* self, type* tp, field* fi, namespace_* scope, call_context* cctx) {
-	fi->static_value = object_get_null();
+	fi->static_value = object_default(fi->gtype);
 	//FIXME:ILフィールドと実行時フィールドのインデックスが同じなのでとりあえず動く
 	//プロパティが追加されたタイミングで対応する
 	//バッキングフィールドが追加されることもある

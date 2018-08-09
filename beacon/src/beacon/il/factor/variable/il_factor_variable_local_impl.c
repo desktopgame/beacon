@@ -34,9 +34,16 @@ void il_factor_variable_local_generate(il_factor_variable_local* self, enviromen
 		opcode_buf_add(env->buf, (vector_item)op_load);
 		opcode_buf_add(env->buf, (vector_item)self->u.entry_->index);
 	} else if(self->type == variable_local_field) {
-		opcode_buf_add(env->buf, (vector_item)op_this);
-		opcode_buf_add(env->buf, (vector_item)op_get_field);
-		opcode_buf_add(env->buf, (vector_item)self->u.field_index);
+		field* f = self->u.f_with_i.fi;
+		if(modifier_is_static(f->modifier)) {
+			opcode_buf_add(env->buf, op_get_static);
+			opcode_buf_add(env->buf, f->parent->absolute_index);
+			opcode_buf_add(env->buf, self->u.f_with_i.index);
+		} else {
+			opcode_buf_add(env->buf, op_this);
+			opcode_buf_add(env->buf, op_get_field);
+			opcode_buf_add(env->buf, self->u.f_with_i.index);
+		}
 	} else if(self->type == variable_local_property) {
 		property* p = self->u.p_with_i.p;
 		//FIXME:コピペ
@@ -99,9 +106,18 @@ static void il_factor_variable_local_load_field(il_factor_variable_local * self,
 		return;
 	}
 	int temp = -1;
+	field_with_index fwi = {};
 	field* f = class_find_field_tree(TYPE2CLASS(tp), self->namev, &temp);
-	self->u.field_index = temp;
+	fwi.fi = f;
+	fwi.index = temp;
 	self->type = variable_local_field;
+	if(temp == -1) {
+		f = class_find_sfield_tree(TYPE2CLASS(tp), self->namev, &temp);
+		fwi.fi = f;
+		fwi.index = temp;
+		self->type = variable_local_field;
+	}
+	self->u.f_with_i = fwi;
 	if(temp == -1) {
 		il_factor_variable_local_load_property(self, env, cctx);
 		return;
@@ -117,6 +133,9 @@ static void il_factor_variable_local_load_property(il_factor_variable_local * se
 	int temp = -1;
 	type* tp = call_context_type(cctx);
 	property* p = class_find_property_tree(TYPE2CLASS(tp), self->namev, &temp);
+	if(temp == -1) {
+		p = class_find_sproperty_tree(TYPE2CLASS(tp), self->namev, &temp);
+	}
 	if(temp == -1) {
 		bc_error_throw(bcerror_can_t_access_property, string_pool_ref2str(type_name(tp)), string_pool_ref2str(self->namev));
 		return;

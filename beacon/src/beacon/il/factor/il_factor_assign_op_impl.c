@@ -271,10 +271,17 @@ static void generate_assign_to_variable_local(il_factor_assign_op* self, envirom
 			);
 			return;
 		}
-		opcode_buf_add(env->buf, op_this);
-		il_factor_generate(self->right, env, cctx);
-		opcode_buf_add(env->buf, op_put_field);
-		opcode_buf_add(env->buf, temp);
+		if(!modifier_is_static(f->modifier)) {
+			opcode_buf_add(env->buf, op_this);
+			il_factor_generate(self->right, env, cctx);
+			opcode_buf_add(env->buf, op_put_field);
+			opcode_buf_add(env->buf, temp);
+		} else {
+			il_factor_generate(self->right, env, cctx);
+			opcode_buf_add(env->buf, op_put_static);
+			opcode_buf_add(env->buf, f->parent->absolute_index);
+			opcode_buf_add(env->buf, temp);
+		}
 		assert(!modifier_is_static(f->modifier));
 	//src のような名前がプロパティを示す場合
 	} else if(illoc->type == variable_local_property) {
@@ -291,10 +298,17 @@ static void generate_assign_to_variable_local(il_factor_assign_op* self, envirom
 			);
 			return;
 		}
-		opcode_buf_add(env->buf, op_this);
-		il_factor_generate(self->right, env, cctx);
-		opcode_buf_add(env->buf, op_put_property);
-		opcode_buf_add(env->buf, temp);
+		if(!modifier_is_static(p->modifier)) {
+			opcode_buf_add(env->buf, op_this);
+			il_factor_generate(self->right, env, cctx);
+			opcode_buf_add(env->buf, op_put_property);
+			opcode_buf_add(env->buf, temp);
+		} else {
+			il_factor_generate(self->right, env, cctx);
+			opcode_buf_add(env->buf, op_put_static_property);
+			opcode_buf_add(env->buf, p->parent->absolute_index);
+			opcode_buf_add(env->buf, temp);
+		}
 		assert(!modifier_is_static(p->modifier));
 	}
 }

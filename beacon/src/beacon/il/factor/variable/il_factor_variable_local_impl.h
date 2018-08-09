@@ -16,6 +16,11 @@ typedef enum variable_local_type {
 	variable_local_undefined,
 } variable_local_type;
 
+typedef struct field_with_index {
+	struct field* fi;
+	int index;
+} field_with_index;
+
 typedef struct property_with_index {
 	struct property* p;
 	int index;
@@ -30,7 +35,7 @@ typedef struct il_factor_variable_local {
 	struct generic_type* gt;
 	union {
 		struct symbol_entry* entry_;
-		int field_index;
+		field_with_index f_with_i;
 		property_with_index p_with_i;
 	} u;
 	vector* type_args;
