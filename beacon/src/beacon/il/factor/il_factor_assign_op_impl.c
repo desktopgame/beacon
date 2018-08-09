@@ -261,6 +261,16 @@ static void generate_assign_to_variable_local(il_factor_assign_op* self, envirom
 		int temp = -1;
 		field* f = class_find_field_tree(call_context_class(cctx), illoc->namev, &temp);
 		assert(temp != -1);
+		//フィールドはstaticでないが
+		//現在のコンテキストはstaticなので this にアクセスできない
+		if(!modifier_is_static(f->modifier) &&
+		    call_context_is_static(cctx)) {
+			bc_error_throw(bcerror_access_to_this_at_static_method,
+				string_pool_ref2str(type_name(f->parent)),
+				string_pool_ref2str(f->namev)
+			);
+			return;
+		}
 		opcode_buf_add(env->buf, op_this);
 		il_factor_generate(self->right, env, cctx);
 		opcode_buf_add(env->buf, op_put_field);
@@ -271,6 +281,16 @@ static void generate_assign_to_variable_local(il_factor_assign_op* self, envirom
 		int temp = -1;
 		property* p = class_find_property_tree(call_context_class(cctx), illoc->namev, &temp);
 		assert(temp != -1);
+		//フィールドはstaticでないが
+		//現在のコンテキストはstaticなので this にアクセスできない
+		if(!modifier_is_static(p->modifier) &&
+		    call_context_is_static(cctx)) {
+			bc_error_throw(bcerror_access_to_this_at_static_method,
+				string_pool_ref2str(type_name(p->parent)),
+				string_pool_ref2str(p->namev)
+			);
+			return;
+		}
 		opcode_buf_add(env->buf, op_this);
 		il_factor_generate(self->right, env, cctx);
 		opcode_buf_add(env->buf, op_put_property);

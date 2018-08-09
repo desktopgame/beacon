@@ -63,5 +63,7 @@ struct type* call_context_eval_type(call_context* self, struct fqcn_cache* fqcn)
 
 vector* call_context_typeargs(call_context* self);
 
+bool call_context_is_static(call_context* self);
+
 void call_context_delete(call_context* self);
 #endif

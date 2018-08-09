@@ -94,6 +94,11 @@ vector* call_context_typeargs(call_context* self) {
 	return NULL;
 }
 
+bool call_context_is_static(call_context* self) {
+	return self->tag == call_method_T &&
+	       modifier_is_static(self->u.mt->modifier);
+}
+
 void call_context_delete(call_context* self) {
 	control_structure_free(self->control);
 	vector_delete(self->call_stack, vector_deleter_null);
