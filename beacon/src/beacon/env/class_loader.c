@@ -291,16 +291,7 @@ static void class_loader_load_toplevel_function(class_loader* self) {
 		opcode_buf_add(env->buf, (vector_item)op_store);
 		opcode_buf_add(env->buf, (vector_item)0);
 		vector_push(worldT->u.class_->method_list, m);
-		//中身をロード
-		for(int j=0; j<ilfunc->statement_list->length; j++) {
-			il_stmt* stmt = vector_at(ilfunc->statement_list, j);
-			il_stmt_load(stmt, env, cctx);
-		}
-		//生成
-		for(int j=0; j<ilfunc->statement_list->length; j++) {
-			il_stmt* stmt = vector_at(ilfunc->statement_list, j);
-			il_stmt_generate(stmt, env, cctx);
-		}
+		CLBC_corutine(self, m, env, ilfunc->parameter_list, ilfunc->statement_list, cctx, namespace_lang());
 		call_context_delete(cctx);
 	}
 }
