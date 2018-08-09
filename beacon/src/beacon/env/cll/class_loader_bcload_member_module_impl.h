@@ -74,5 +74,7 @@ bool CLBC_operator_overload_impl(class_loader* self, il_type* iltype, type* tp, 
 void CLBC_operator_overloads_decl(class_loader* self, il_type* iltype, type* tp, namespace_* scope);
 void CLBC_operator_overloads_impl(class_loader* self, il_type* iltype, type* tp, namespace_* scope);
 
+bool CLBC_corutine(class_loader* self, method* mt, enviroment* env, vector* ilparams, vector* ilstmts, call_context* cctx, namespace_* range);
+
 void CLBC_body(class_loader* self, vector* stmt_list, struct enviroment* dest, call_context* cctx, namespace_* range);
 #endif

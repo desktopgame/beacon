@@ -413,32 +413,7 @@ bool CLBC_method_impl(class_loader* self, namespace_* scope, il_type* iltype, ty
 		opcode_buf_add(env->buf, (vector_item)op_store);
 		opcode_buf_add(env->buf, (vector_item)0);
 	}
-	//戻り値が iterator なら、
-	//コルーチンとして使えるようにする
-	bool yield_err = false;
-	if(method_yield(me, ilmethod->statement_list, &yield_err)) {
-		if(yield_err) {
-			abort();
-		}
-		//メソッド名からクラス名を作成して、
-		//beacon::$placeholderへ肩を格納する
-		type* iterT = method_create_iterator_type(me, self, ilmethod->statement_list);
-		opcode_buf_add(env->buf, op_this);
-		for(int i=0; i<ilmethod->parameter_list->length; i++) {
-			opcode_buf_add(env->buf, op_load);
-			opcode_buf_add(env->buf, i + 1);
-		}
-		me->u.script_method->env = env;
-		opcode_buf_add(env->buf, op_new_instance);
-		opcode_buf_add(env->buf, iterT->absolute_index);
-		opcode_buf_add(env->buf, 0);
-		opcode_buf_add(env->buf, op_return);
-		call_context_delete(cctx);
-		return true;
-	}
-	//NOTE:ここなら名前空間を設定出来る
-	CLBC_body(self, ilmethod->statement_list, env, cctx, scope);
-	me->u.script_method->env = env;
+	CLBC_corutine(self, me, env, ilmethod->parameter_list, ilmethod->statement_list, cctx, scope);
 	call_context_delete(cctx);
 	return true;
 }
@@ -639,6 +614,36 @@ void CLBC_operator_overloads_impl(class_loader* self, il_type* iltype, type* tp,
 			break;
 		}
 	}
+}
+
+bool CLBC_corutine(class_loader* self, method* mt, enviroment* env,  vector* ilparams, vector* ilstmts, call_context* cctx, namespace_* range) {
+	//戻り値が iterator なら、
+	//コルーチンとして使えるようにする
+	bool yield_err = false;
+	if(method_yield(mt, ilstmts, &yield_err)) {
+		if(yield_err) {
+			abort();
+			return false;
+		}
+		//メソッド名からクラス名を作成して、
+		//beacon::$placeholderへ肩を格納する
+		type* iterT = method_create_iterator_type(mt, self, ilstmts);
+		opcode_buf_add(env->buf, op_this);
+		for(int i=0; i<ilparams->length; i++) {
+			opcode_buf_add(env->buf, op_load);
+			opcode_buf_add(env->buf, i + 1);
+		}
+		mt->u.script_method->env = env;
+		opcode_buf_add(env->buf, op_new_instance);
+		opcode_buf_add(env->buf, iterT->absolute_index);
+		opcode_buf_add(env->buf, 0);
+		opcode_buf_add(env->buf, op_return);
+		return true;
+	}
+	//NOTE:ここなら名前空間を設定出来る
+	CLBC_body(self, ilstmts, env, cctx, range);
+	mt->u.script_method->env = env;
+	return true;
 }
 
 void CLBC_body(class_loader* self, vector* stmt_list, enviroment* dest, call_context* cctx, namespace_* range) {
