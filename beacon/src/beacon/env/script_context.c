@@ -209,6 +209,7 @@ void script_context_cache() {
 	//すでにキャッシュされている
 	if(self->pos_int_vec->length > 0 ||
 	   self->neg_int_vec->length > 0) {
+		if(h != NULL) h->accept_blocking--;
 		   return;
 	   }
 	//正の数のキャッシュ
