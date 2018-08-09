@@ -172,6 +172,9 @@ static void il_factor_member_op_check(il_factor_call_op* self, enviroment* env, 
 		//hoge.foo()
 		} else {
 			//FIXME:kコピペ
+			#if defined(DEBUG)
+			const char* clname = string_pool_ref2str(ilvar->fqcn->namev);
+			#endif
 			namespace_* cur = call_context_namespace(cctx);
 			class_* ctype = namespace_get_class(cur, ilvar->fqcn->namev);
 			if(ctype == NULL) {

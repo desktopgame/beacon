@@ -60,7 +60,6 @@ bool eval_file(const char * filename) {
 static bool eval_top_from_cll(class_loader* cll) {
 	script_context* ctx = script_context_get_current();
 	class_loader_load(cll);
-	//opcode_buf_dump(cll->env->buf, 0);
 	//実行
 	frame* fr = frame_new();
 	sg_thread_set_frame_ref(sg_thread_current(), fr);

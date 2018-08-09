@@ -85,7 +85,8 @@ bool CLBC_field_decl(class_loader* self, il_type* iltype, type* tp, il_field* il
 	//static finalなのに、
 	//初期値が存在しない
 	if(modifier_is_static(fi->modifier) &&
-	   modifier_is_final(fi->modifier)) {
+	   modifier_is_final(fi->modifier) &&
+	   fi->initial_value == NULL) {
 		bc_error_throw(bcerror_not_default_value_static_final_field,
 			string_pool_ref2str(type_name(tp)),
 			string_pool_ref2str(fi->namev)
@@ -124,13 +125,16 @@ bool CLBC_field_impl(class_loader* self, type* tp, field* fi, namespace_* scope,
 	//FIXME:sg_threadをちゃんと設定すればいいんだけどとりあえずこれで
 	//静的フィールドでものすごいでかいオブジェクトを確保すると重くなるかも
 	heap* he = heap_get();
+	int abtmp = he->accept_blocking;
 	he->collect_blocking++;
+	he->accept_blocking = 0;
 	if(modifier_is_static(fi->modifier)) {
 		frame* f = frame_new();
 		vm_execute(f, env);
 		fi->static_value = vector_pop(f->value_stack);
 		frame_delete(f);
 	}
+	he->accept_blocking = abtmp;
 	he->collect_blocking--;
 	return true;
 }

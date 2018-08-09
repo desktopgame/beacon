@@ -238,6 +238,9 @@ static void generate_assign_to_variable_local(il_factor_assign_op* self, envirom
 	} else if(illoc->type == variable_local_field) {
 		int temp = -1;
 		field* f = class_find_field_tree(call_context_class(cctx), illoc->namev, &temp);
+		if(temp == -1) {
+			f = class_find_sfield_tree(call_context_class(cctx), illoc->namev, &temp);
+		}
 		assert(temp != -1);
 		//フィールドはstaticでないが
 		//現在のコンテキストはstaticなので this にアクセスできない
@@ -254,7 +257,7 @@ static void generate_assign_to_variable_local(il_factor_assign_op* self, envirom
 		}
 		il_factor_generate(self->right, env, cctx);
 		generate_put_field(env->buf, f, temp);
-		assert(!modifier_is_static(f->modifier));
+		//assert(!modifier_is_static(f->modifier));
 	//src のような名前がプロパティを示す場合
 	} else if(illoc->type == variable_local_property) {
 		int temp = -1;

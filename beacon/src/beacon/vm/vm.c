@@ -379,8 +379,13 @@ static void vm_run(frame * self, enviroment * env, int pos, int deferStart) {
 				vector_push(self->value_stack, object_bool_get(SPB(self) & SPB(self)));
 				break;
 			case op_blogic_and:
-				vector_push(self->value_stack, object_bool_get(SPB(self) && SPB(self)));
+			{
+				bool xa = SPB(self);
+				bool xb = SPB(self);
+				bool xx = xa && xb;
+				vector_push(self->value_stack, object_bool_get(xa && xb));
 				break;
+			}
 			case op_bexcor:
 				vector_push(self->value_stack, object_bool_get(SPB(self) ^ SPB(self)));
 				break;
@@ -812,14 +817,13 @@ static void vm_run(frame * self, enviroment * env, int pos, int deferStart) {
 				int absClassIndex = (int)enviroment_source_at(env, ++IDX);
 				int methodIndex = (int)enviroment_source_at(env, ++IDX);
 				type* cls = (type*)vector_at(ctx->type_vec, absClassIndex);
-				//method* m = (method*)vector_at(cls->vt->elements, methodIndex);
 				method* m = class_get_smethod(cls->u.class_, methodIndex);
-				//いらない
-				//	opcode code = (opcode)enviroment_source_at(env, ++i);
-				//	assert(code == op_invokestatic);
+				#if defined(DEBUG)
+				const char* clsname = string_pool_ref2str(type_name(cls));
+				const char* mname = string_pool_ref2str(m->namev);
+				#endif
 				method_execute(m, self, env);
 				break;
-				//break;
 			}
 			case op_invokevirtual:
 			{

@@ -328,13 +328,13 @@ object* object_char2obj(char c) {
 
 object* object_default(generic_type* gt) {
 	object* a = object_get_null();
-	if (gt == TYPE_INT->generic_self) {
+	if (gt->core_type == TYPE_INT) {
 		a = object_int_get(0);
-	} else if (gt == TYPE_DOUBLE->generic_self) {
+	} else if (gt->core_type == TYPE_DOUBLE) {
 		a = object_double_new(0.0);
-	} else if (gt == TYPE_BOOL->generic_self) {
+	} else if (gt->core_type == TYPE_BOOL) {
 		a = object_bool_get(false);
-	} else if (gt == TYPE_CHAR->generic_self) {
+	} else if (gt->core_type == TYPE_CHAR) {
 		a = object_char_new('\0');
 	}
 	return a;

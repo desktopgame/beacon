@@ -54,6 +54,7 @@ void il_factor_invoke_bound_generate(il_factor_invoke_bound* self, enviroment* e
 	}
 	if(modifier_is_static(self->m->modifier)) {
 		opcode_buf_add(env->buf, (vector_item)op_invokestatic);
+		opcode_buf_add(env->buf, (vector_item)self->m->parent->absolute_index);
 		opcode_buf_add(env->buf,(vector_item) self->index);
 	} else {
 		opcode_buf_add(env->buf,(vector_item) op_this);

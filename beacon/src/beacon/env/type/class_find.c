@@ -347,7 +347,7 @@ method * class_ilfind_smethod(class_ * self, string_view namev, vector * args, e
 	class_create_vtable(self);
 	int temp = 0;
 	method* ret = meta_ilfind_method(self->smethod_list, namev, args, env, cctx, &temp);
-	temp += (class_count_smethodall(self) - self->smethod_list->length);
+//	temp += (class_count_smethodall(self) - self->smethod_list->length);
 	(*outIndex) = temp;
 	return ret;
 }
@@ -357,7 +357,7 @@ method* class_gfind_smethod(class_* self, string_view namev, vector* gargs, int*
 	class_create_vtable(self);
 	int temp = 0;
 	method* ret = meta_gfind_method(self->smethod_list, namev, gargs, &temp);
-	temp += (class_count_smethodall(self) - self->smethod_list->length);
+//	temp += (class_count_smethodall(self) - self->smethod_list->length);
 	(*outIndex) = temp;
 	return ret;
 }
@@ -376,6 +376,7 @@ method * class_get_method(object * o, int index) {
 
 method * class_get_smethod(class_* self, int index) {
 	assert(index >= 0);
+	/*
 	//class_* self = o->classz;
 	int all = class_count_smethodall(self);
 	if (index >= (all - self->smethod_list->length) &&
@@ -383,6 +384,8 @@ method * class_get_smethod(class_* self, int index) {
 		return vector_at(self->smethod_list, self->smethod_list->length - (all - index));
 	}
 	return class_get_smethod(self->super_class->core_type->u.class_, index);
+	//*/
+	return vector_at(self->smethod_list, index);
 }
 
 method * class_get_impl_method(class_ * self, type * interType, int interMIndex) {

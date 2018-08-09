@@ -17,7 +17,12 @@ script_method * script_method_new() {
 }
 
 void script_method_execute(script_method * self, method* parent, frame * fr, enviroment* env) {
+	#if defined(DEBUG)
+	const char* name = string_pool_ref2str(parent->namev);
+	//printf("[%s]\n", name);
+	#endif
 	frame* sub = frame_sub(fr);
+	//enviroment_op_dump(self->env, sub->level);
 	sub->receiver = parent->parent;
 	if (!modifier_is_static(parent->modifier)) {
 		vector_push(sub->value_stack, vector_pop(fr->value_stack));

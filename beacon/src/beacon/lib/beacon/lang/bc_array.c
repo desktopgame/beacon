@@ -70,11 +70,13 @@ static void bc_array_nativeInit(method* parent, frame* fr, enviroment* env) {
 	object* self = vector_at(fr->ref_stack, 0);
 	object* lengthObj = vector_at(self->u.field_vec, temp);
 	assert(lengthObj != NULL);
+	generic_type* targ = vector_at(self->gtype->type_args_list, 0);
 	//配列の長さだけ確保
 	int len = lengthObj->u.int_;
 	assert(len >= 0);
 	for (int i = 0; i < len; i++) {
-		vector_push(self->native_slot_vec, object_get_null());
+		object* oe = object_default(targ);
+		vector_push(self->native_slot_vec, oe);
 	}
 }
 
