@@ -272,6 +272,8 @@ static void class_loader_load_toplevel_function(class_loader* self) {
 		m->parent = worldT;
 		//戻り値を指定
 		m->return_gtype = import_manager_resolve(self->import_manager, loc, ilfunc->return_fqcn, cctx);
+	//	generic_type_print(m->return_gtype);
+	//	io_println();
 		//引数を指定
 		for(int j=0; j<ilfunc->parameter_list->length; j++) {
 			il_parameter* ilparam = vector_at(ilfunc->parameter_list, j);

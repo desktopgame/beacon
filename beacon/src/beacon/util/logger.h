@@ -10,12 +10,12 @@ typedef enum log_level {
 	log_fetal_T,
 } log_level;
 
-#if defined(DEBUG)
-#define LOG(fmt, ...) (logger_log(log_debug_T, __FILE__, __LINE__, fmt, __VA_ARGS__))
+//#if defined(DEBUG)
+//#define LOG(fmt, ...) (logger_log(log_debug_T, __FILE__, __LINE__, fmt, __VA_ARGS__))
 
-#else
+//#else
 #define LOG(fmt, ...) (void)(0)
-#endif
+//#endif
 
 void logger_init();
 

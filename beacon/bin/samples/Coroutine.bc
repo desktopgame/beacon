@@ -1,20 +1,11 @@
-namespace samples {
-	class Coroutine : Iterable[Int] {
-		public:
-		def new() {
-		}
-
-		def iterate() -> Iterator[Int] {
-			var offset = 0;
-			while(offset < 10) {
-				yield return offset;
-				offset += 1;
-			}
-		}
+def seq(Int len) -> Iterator[Int] {
+	var start = 0;
+	while(start < len) {
+		yield return start;
+		start += 1;
 	}
 }
-var coro = new samples::Coroutine();
-var iter = coro.iterate();
+var iter = seq(10);
 while(iter.moveNext()) {
-	printLine(iter.current());
+	iter.current().printLine();
 }

@@ -140,7 +140,7 @@ static void class_loader_ilload_function(class_loader * self, ast * asource) {
 	il_function* ilfunc = il_function_new(afunc_name->u.stringv_value);
 	CLIL_parameter_list(self, ilfunc->parameter_list, aparam_list);
 	CLIL_body(self, ilfunc->statement_list, afunc_body);
-	CLIL_generic_cache(ast_first(aret_name), ilfunc->return_fqcn);
+	CLIL_generic_cache(aret_name, ilfunc->return_fqcn);
 	vector_push(self->il_code->function_list, ilfunc);
 }
 
