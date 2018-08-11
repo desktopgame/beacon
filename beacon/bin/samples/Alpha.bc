@@ -1,0 +1,9 @@
+var cA = 'a'.toInt();
+var cZ = 'z'.toInt();
+
+var cB = 'b'.toInt();
+var cC = 'c'.toInt();
+var cAT = '@'.toInt();
+assert (cB >= cA && cB < cZ);
+assert (cC >= cA && cC < cZ);
+assert (cAT < cA || cAT > cZ);

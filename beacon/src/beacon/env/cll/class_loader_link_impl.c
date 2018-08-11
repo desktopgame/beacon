@@ -6,6 +6,7 @@
 #include "../../il/il_type_impl.h"
 #include "../../error.h"
 #include "../../env/constructor.h"
+#include "../../env/object.h"
 #include "../../env/property.h"
 #include "../../util/text.h"
 #include "class_loader_bcload_member_module_impl.h"
@@ -164,6 +165,10 @@ static void CLBC_enum_decl(class_loader * self, il_type * iltype, type * tp, nam
 static void CLBC_enum_impl(class_loader * self, il_type * iltype, type * tp, namespace_ * scope) {
 	if((tp->state & type_impl) > 0) {
 		return;
+	}
+	for(int i=0; i<tp->u.class_->field_list->length; i++) {
+		field* f = vector_at(tp->u.class_->field_list, i);
+		f->static_value = object_int_get(i);
 	}
 	tp->state = tp->state | type_impl;
 }

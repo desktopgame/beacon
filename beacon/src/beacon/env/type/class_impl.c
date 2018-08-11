@@ -219,6 +219,9 @@ int class_distance(class_ * super, class_ * sub) {
 
 void class_create_vtable(class_ * self) {
 	//TEST(!strcmp(self->name, "Int"));
+	#if defined(DEBUG)
+	const char* str = string_pool_ref2str(self->namev);
+	#endif
 	assert(self != NULL);
 	//初期化済み
 	if (self->vt != NULL) {
@@ -617,7 +620,7 @@ static void class_create_vtable_interface(class_* self) {
 			//例えば抽象クラスがインターフェイスを実装していない場合
 			//空っぽの実装を持たせる
 			if(self->is_abstract && classVTM == NULL) {
-				classVTM = method_clone(interVTM);
+				classVTM = interVTM;
 			}
 			vtable_add(newVT, classVTM);
 		}

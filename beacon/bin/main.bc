@@ -20,11 +20,76 @@ namespace calc {
 			return offset < source.length();
 		}
 
+		def ungetc() -> Void {
+			offset -= 1;
+		}
+
 		def getc() -> Char {
 			var ret = source.charAt(offset);
 			offset += 1;
 			return ret;
 		}
+	}
+	enum TokenId {
+		Value,
+		Add,
+		Sub,
+		Mul,
+		Div,
+		Mod,
+		LBrace,
+		RBrace
+	}
+	class Token {
+		public:
+		def new(Int id, String source) {
+			this.id = id;
+			this.source = source;
+		}
+
+		private:
+		Int id;
+		String source;
+	}
+	class Tokenizer {
+		public:
+		def new(String source) {
+			this.scanner = new Scanner(source);
+		}
+
+		def lex() -> Vector[Token] {
+			scanner.offset = 0;
+			var ret = new Vector[Token]();
+			while(scanner.ready()) {
+				var c = scanner.getc();
+				if(c.isDigit()) {
+					var buf = new StringBuilder();
+					while(c.isDigit()) {
+						buf << c;
+						c = scanner.getc();
+					}
+					scanner.ungetc();
+					ret << new Token(TokenId.Value, buf.toString());
+				} elif (c == '+') {
+					ret << new Token(TokenId.Add, "+");
+				} elif (c == '-') {
+					ret << new Token(TokenId.Sub, "-");
+				} elif (c == '*') {
+					ret << new Token(TokenId.Mul, "*");
+				} elif (c == '/') {
+					ret << new Token(TokenId.Div, "/");
+				} elif (c == '%') {
+					ret << new Token(TokenId.Div, "%");
+				} elif (c == '(') {
+					ret << new Token(TokenId.LBrace, "(");
+				} elif (c == ')') {
+					ret << new Token(TokenId.RBrace, ")");
+				}
+			}
+		}
+
+		private:
+		Scanner scanner;
 	}
 	//Node
 	interface Node {
@@ -51,7 +116,6 @@ namespace calc {
 			this.right = right;
 		}
 
-		private:
 		property Node left {
 			private defset;
 			defget;
@@ -67,7 +131,6 @@ namespace calc {
 			this.a = a;
 		}
 
-		protected:
 		property Node a {
 			private defset;
 			defget;
@@ -77,6 +140,55 @@ namespace calc {
 	class AdditiveOperator : BinaryOperatorNode {
 		public:
 		def new(Node left, Node right) : super(left, right) {
+		}
+
+		def eval() -> Int {
+			return left.eval() + right.eval();
+		}
+	}
+	class SubtractOperator : BinaryOperatorNode {
+		public:
+		def new(Node left, Node right) : super(left, right) {
+		}
+
+		def eval() -> Int {
+			return left.eval() - right.eval();
+		}
+	}
+	class MultiplyOperator : BinaryOperatorNode {
+		public:
+		def new(Node left, Node right) : super(left, right) {
+		}
+
+		def eval() -> Int {
+			return left.eval() * right.eval();
+		}
+	}
+	class DivideOperator : BinaryOperatorNode {
+		public:
+		def new(Node left, Node right) : super(left, right) {
+		}
+
+		def eval() -> Int {
+			return left.eval() / right.eval();
+		}
+	}
+	class ModOperator : BinaryOperatorNode {
+		public:
+		def new(Node left, Node right) : super(left, right) {
+		}
+
+		def eval() -> Int {
+			return left.eval() % right.eval();
+		}
+	}
+	class NegativeOperator : UnaryOperatorNode {
+		public:
+		def new(Node a) : super(a) {
+		}
+
+		def eval() -> Int {
+			return -(a.eval());
 		}
 	}
 }

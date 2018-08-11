@@ -34,6 +34,7 @@ void il_stmt_return_generate(il_stmt_return * self, enviroment * env, call_conte
 
 void il_stmt_return_load(il_stmt_return * self, enviroment * env, call_context* cctx) {
 	il_factor_load(self->fact, env, cctx);
+	BC_ERROR();
 	check_method_return(self, env, cctx);
 }
 

@@ -5,7 +5,30 @@ namespace beacon::lang {
 			this.nativeInit(ch);
 		}
 
+		def toInt() -> Int {
+			return nativeToInt();
+		}
+
+		def isAlpha() -> Bool {
+			var a = 'a';
+			var z = 'z';
+			return isIncludeSelf(a, z);
+		}
+
+		def isDigit() -> Bool {
+			var zero = '0';
+			var nine = '9';
+			return isIncludeSelf(zero, nine);
+		}
+
+		def isIncludeSelf(Char begin, Char end) -> Bool {
+			var self = toInt();
+			return (self >= begin.toInt() && self <= end.toInt());
+		}
+
 		private:
 		def native nativeInit(Char ch) -> Void;
+
+		def native nativeToInt() -> Int;
 	}
 }

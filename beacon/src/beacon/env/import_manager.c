@@ -41,6 +41,13 @@ bool import_manager_loaded(import_manager * self, int index) {
 
 generic_type* import_manager_resolve(import_manager* self, namespace_* scope, generic_cache* fqcn, call_context* cctx) {
 	type* core_type = fqcn_type(fqcn->fqcn, scope);
+	#if defined(DEBUG)
+	const char* ctname = string_pool_ref2str(type_name(core_type));
+	const char* it = string_pool_ref2str(fqcn->fqcn->namev);
+	if(fqcn->fqcn->namev == string_pool_intern("Token")) {
+		int a = 0;
+	}
+	#endif
 	//Int, Double
 	if(core_type != NULL && fqcn->type_args->length == 0) {
 		assert(core_type->generic_self != NULL);

@@ -3,8 +3,8 @@
 #include <stdarg.h>
 #include <stdio.h>
 
-#define BC_ERROR() if(bc_error_last()) { return; }
-#define BC_ERROR_RET(a) if(bc_error_last()) { return a; }
+#define BC_ERROR() if(bc_error_last()) return
+#define BC_ERROR_RET(a) if(bc_error_last()) return a
 /**
  * beaconインタプリタがソース解析中に検出したエラーを表す列挙.
  */

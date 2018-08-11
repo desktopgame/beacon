@@ -433,6 +433,7 @@ void CLBC_methods_impl(class_loader* self, namespace_* scope, il_type* iltype, t
 		if(!CLBC_method_impl(self, scope, iltype, tp, vector_at(ilmethods, i), vector_at(sgmethods, i))) {
 			break;
 		}
+		BC_ERROR();
 	}
 }
 

@@ -18,6 +18,7 @@ static void bc_int_nativeLE(method* parent, frame* fr, enviroment* env);
 static void bc_int_nativeBitOr(method* parent, frame* fr, enviroment* env);
 static void bc_int_nativeBitAnd(method* parent, frame* fr, enviroment* env);
 static void bc_int_nativeEQ(method* parent, frame* fr, enviroment* env);
+static void bc_int_nativeToChar(method* parent, frame* fr, enviroment* env);
 static type* gIntT = NULL;
 
 void bc_int_init() {
@@ -41,6 +42,7 @@ void bc_int_init() {
 	class_define_native_method(intClass, "nativeBitOr", bc_int_nativeBitOr);
 	class_define_native_method(intClass, "nativeBitAnd", bc_int_nativeBitAnd);
 	class_define_native_method(intClass, "nativeEQ", bc_int_nativeEQ);
+	class_define_native_method(intClass, "nativeToChar", bc_int_nativeToChar);
 	gIntT = intType;
 }
 
@@ -161,4 +163,9 @@ static void bc_int_nativeEQ(method* parent, frame* fr, enviroment* env) {
 	object* a = vector_at(fr->ref_stack, 1);
 	object* ret = object_bool_get(self->u.int_ == a->u.int_);
 	vector_push(fr->value_stack, ret);
+}
+
+static void bc_int_nativeToChar(method* parent, frame* fr, enviroment* env) {
+	object* self = vector_at(fr->ref_stack, 0);
+	vector_push(fr->value_stack, object_char_new(self->u.int_));
 }

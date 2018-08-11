@@ -139,6 +139,9 @@ static void il_factor_new_instance_find(il_factor_new_instance * self, enviromen
 	}
 	#if defined(DEBUG)
 	const char* namea = string_pool_ref2str(self->fqcnc->namev);
+	if(self->fqcnc->namev == string_pool_intern("Vector")) {
+		int a = 0;
+	}
 	#endif
 	//コンストラクタで生成するオブジェクトの肩を取得
 	type* ty = call_context_eval_type(cctx, self->fqcnc);

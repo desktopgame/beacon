@@ -1,0 +1,3 @@
+assert !('0'.isAlpha());
+assert ('0'.isDigit());
+assert !('@'.isDigit());

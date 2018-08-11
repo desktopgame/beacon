@@ -294,6 +294,9 @@ constructor * class_ilfind_empty_constructor(class_ * self, enviroment * env, ca
 method * class_ilfind_method(class_ * self, string_view namev, vector * args, enviroment * env, call_context* cctx, int * outIndex) {
 	(*outIndex) = -1;
 	class_create_vtable(self);
+	#if defined(DEBUG)
+	const char* str = string_pool_ref2str(self->namev);
+	#endif
 	//assert(self->vt->elements->length > 0);
 	method* ret = NULL;
 	if((ret = meta_scoped_ilfind_method(self, self->vt->elements, namev, args, env, cctx, outIndex))

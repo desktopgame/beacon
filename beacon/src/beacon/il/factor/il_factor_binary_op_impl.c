@@ -83,7 +83,9 @@ void il_factor_binary_op_load(il_factor_binary_op * self, enviroment * env, call
 	}
 	self->load = true;
 	il_factor_load(self->left, env, cctx);
+	BC_ERROR();
 	il_factor_load(self->right, env, cctx);
+	BC_ERROR();
 	//カテゴリーわけ
 	if(operator_arithmetic(self->type)) {
 		self->category = operator_carithmeric;

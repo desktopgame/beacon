@@ -166,13 +166,14 @@ static void CLBC_enum(class_loader * self, il_type * iltype, namespace_ * parent
 	if((tp->state & type_register) > 0) {
 		return;
 	}
+	type_init_generic(tp, 0);
 	//全ての列挙子を public static final フィールドとして追加
 	for (int i = 0; i < ilenum->item_vec->length; i++) {
 		string_view str = (string_view)vector_at(ilenum->item_vec, i);
 		field* f = field_new(str);
 		f->modifier = modifier_static;
 		f->access = access_public;
-		f->static_value = object_int_get(i);
+		f->static_value = NULL;
 		f->gtype = TYPE_INT->generic_self;
 		//virtual_type_nongeneric_init(&f->vtype, GENERIC_INT);
 		f->parent = tp;

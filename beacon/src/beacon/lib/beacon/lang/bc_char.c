@@ -3,6 +3,7 @@
 
 //proto
 static void bc_char_nativeInit(method* parent, frame* fr, enviroment* env);
+static void bc_char_nativeToInt(method* parent, frame* fr, enviroment* env);
 
 void bc_char_init() {
 	namespace_* lang = namespace_lang();
@@ -10,6 +11,7 @@ void bc_char_init() {
 	class_* charClass = TYPE2CLASS(charType);
 	namespace_add_type(lang, charType);
 	class_define_native_method(charClass, "nativeInit", bc_char_nativeInit);
+	class_define_native_method(charClass, "nativeToInt", bc_char_nativeToInt);
 }
 
 type* bc_char_type() {
@@ -24,4 +26,9 @@ static void bc_char_nativeInit(method* parent, frame* fr, enviroment* env) {
 
 	self->u.char_ = ch->u.char_;
 	self->tag = object_char;
+}
+
+static void bc_char_nativeToInt(method* parent, frame* fr, enviroment* env) {
+	object* self = vector_at(fr->ref_stack, 0);
+	vector_push(fr->value_stack, object_int_get((int)self->u.char_));
 }
