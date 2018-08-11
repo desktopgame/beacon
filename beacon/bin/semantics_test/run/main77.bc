@@ -1,0 +1,45 @@
+namespace run77 {
+	abstract class AbstractAction {
+		public:
+		def new() {
+		}
+
+		def abstract call() -> Void;
+	}
+	class PrintAction : AbstractAction {
+		public:
+		def new(String message) {
+			this.message = message;
+		}
+
+		def call() -> Void {
+			printLine(message);
+		}
+
+		private:
+		String message;
+	}
+	class TimesAction : AbstractAction {
+		public:
+		def new(AbstractAction proxy, Int count) {
+			this.proxy = proxy;
+			this.count = count;
+		}
+
+		def call() -> Void {
+			var offset = 0;
+			while(offset < count) {
+				proxy.call();
+				offset += 1;
+			}
+		}
+
+		private:
+		AbstractAction proxy;
+		Int count;
+	}
+}
+run77::AbstractAction a = new run77::PrintAction("SampleText");
+a.call();
+a = new run77::TimesAction(a, 10);
+a.call();

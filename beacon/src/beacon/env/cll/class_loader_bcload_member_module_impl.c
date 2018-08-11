@@ -725,6 +725,12 @@ static void CLBC_chain_auto(class_loader * self, il_type * iltype, type * tp, il
 	//連鎖を明示的に書いていないのに、
 	//親クラスにも空のコンストラクタが存在しない=エラー
 	//(この場合自動的にチェインコンストラクタを補うことが出来ないため。)
+	if(emptyTarget == NULL) {
+		bc_error_throw(bcerror_auto_chain_ctor_not_found,
+			string_pool_ref2str(type_name(tp))
+		);
+		return;
+	}
 	assert((emptyTarget != NULL));
 	//空のコンストラクタを見つけることが出来たので、
 	//自動的にそれへ連鎖するチェインをおぎなう
@@ -763,6 +769,12 @@ static void CLBC_chain_super(class_loader * self, il_type * iltype, type * tp, i
 		chainTarget = class_ilfind_constructor(classz->super_class->core_type->u.class_, chain->argument_list, env, cctx, &temp);
 		opcode_buf_add(env->buf, op_chain_super);
 		opcode_buf_add(env->buf, classz->super_class->core_type->u.class_->classIndex);
+	}
+	if(chainTarget == NULL) {
+		bc_error_throw(bcerror_explicit_chain_ctor_not_found,
+			string_pool_ref2str(type_name(tp))
+		);
+		return;
 	}
 	call_context_delete(cctx);
 	chain->c = chainTarget;

@@ -1,11 +1,87 @@
-def seq(Int len) -> Iterator[Int] {
-	var start = 0;
-	while(start < len) {
-		yield return start;
-		start += 1;
+namespace calc {
+	class Scanner {
+		public:
+		property String source {
+			private defset;
+			defget;
+		}
+
+		property Int offset {
+			defset;
+			defget;
+		}
+
+		def new(String source) {
+			this.source = source;
+			this.offset = 0;
+		}
+
+		def ready() -> Bool {
+			return offset < source.length();
+		}
+
+		def getc() -> Char {
+			var ret = source.charAt(offset);
+			offset += 1;
+			return ret;
+		}
+	}
+	//Node
+	interface Node {
+		public:
+		def eval() -> Int;
+	}
+	class ValueNode : Node {
+		public:
+		def new(Int value) {
+			this.value = value;
+		}
+
+		def eval() -> Int {
+			return value;
+		}
+
+		private:
+		Int value;
+	}
+	abstract class BinaryOperatorNode : Node {
+		public:
+		def new(Node left, Node right) {
+			this.left = left;
+			this.right = right;
+		}
+
+		private:
+		property Node left {
+			private defset;
+			defget;
+		}
+		property Node right {
+			private defset;
+			defget;
+		}
+	}
+	abstract class UnaryOperatorNode : Node {
+		public:
+		def new(Node a) {
+			this.a = a;
+		}
+
+		protected:
+		property Node a {
+			private defset;
+			defget;
+		}
+	}
+	//operator
+	class AdditiveOperator : BinaryOperatorNode {
+		public:
+		def new(Node left, Node right) : super(left, right) {
+		}
 	}
 }
-var iter = seq(10);
-while(iter.moveNext()) {
-	iter.current().printLine();
+var line = Console.readLine();
+var sc = new calc::Scanner(line);
+while(sc.ready()) {
+	sc.getc().printLine();
 }

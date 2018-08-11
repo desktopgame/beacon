@@ -184,6 +184,9 @@ static void interface_generic_type_list_delete(vector_item item) {
 
 static void interface_method_flattenImpl(interface_* self, vector* dest, int depth) {
 	//tekitou
+	#if defined(DEBUG)
+	const char* intername = string_pool_ref2str(self->namev);
+	#endif
 	assert(depth < 42);
 	for(int i=0; i<self->method_list->length; i++) {
 		method* m = vector_at(self->method_list, i);

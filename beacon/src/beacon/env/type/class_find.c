@@ -448,15 +448,15 @@ operator_overload* class_get_operator_overload(class_* self, int index) {
 	return vector_at(self->operator_overload_list, index);
 }
 
-bool class_contains_method_tree(class_* self, method* m) {
+vector* class_find_methods_tree(class_* self, method* m) {
 	assert(self != NULL);
 	assert(m != NULL);
 	class_* ptr = self;
-	bool ret = false;
+	vector* ret = vector_new();
 	do {
-		if(class_contains_method(ptr->method_list, m)) {
-			ret = true;
-			break;
+		method* tmp = NULL;
+		if(class_contains_method(ptr->method_list, m, &tmp)) {
+			vector_push(ret, tmp);
 		}
 		//親クラスへ
 		if(ptr->super_class != NULL) {
@@ -468,8 +468,9 @@ bool class_contains_method_tree(class_* self, method* m) {
 	return ret;
 }
 
-bool class_contains_method(vector* method_list, method* m) {
+bool class_contains_method(vector* method_list, method* m, method** outM) {
 	assert(!modifier_is_static(m->modifier));
+	(*outM) = NULL;
 	bool ret = false;
 	call_context* cctx = call_context_new(call_decl_T);
 	cctx->space = m->parent->location;
@@ -477,6 +478,7 @@ bool class_contains_method(vector* method_list, method* m) {
 	for(int i=0; i<method_list->length; i++) {
 		method* mE = vector_at(method_list, i);
 		if(method_override(m, mE, cctx)) {
+			(*outM) = m;
 			ret = true;
 			break;
 		}

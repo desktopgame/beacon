@@ -168,6 +168,14 @@ void bc_error_vthrow(bc_error_id id, va_list ap) {
 			break;
 
 
+		case bcerror_auto_chain_ctor_not_found:
+			fmt = "need chain constructor if not found of super class empty constructor: %s#new";
+			break;
+		case bcerror_explicit_chain_ctor_not_found:
+			fmt = "not found chain constructor: %s#new";
+			break;
+
+
 		case bcerror_undefined_class:
 			fmt = "undefined class: %s";
 			break;

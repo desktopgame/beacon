@@ -24,7 +24,8 @@
 			"stopAtEntry": false,
 			"cwd": "${workspaceFolder}/beacon/bin",
 			"environment": [],
-			"MIMode": "lldb"
+			"MIMode": "lldb",
+            "externalConsole": true,
 		},
 		{
 			"name": "(lldb) AST",

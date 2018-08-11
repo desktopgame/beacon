@@ -20,6 +20,7 @@
 #include "../../env/heap.h"
 #include "../../env/operator_overload.h"
 #include "meta_impl.h"
+#include "class_find.h"
 #include "../type_parameter.h"
 #include "../generic_type.h"
 #include "../generic_type.h"
@@ -47,6 +48,7 @@ static bool class_field_validImpl(vector* field_vec, field** out);
 static bool class_property_validImpl(vector* prop_vec, property** out);
 static void class_delete_operator_overload(vector_item item);
 static void class_delete_property(vector_item item);
+static bool methods_is_all_abstract(vector* v);
 
 type * type_wrap_class(class_ * self) {
 	type* ret = type_new();
@@ -393,6 +395,23 @@ vector* class_generic_type_list_to_class_list(vector* list) {
 	return ret;
 }
 
+vector* class_generic_type_list_to_interface_list_tree(class_* self) {
+	vector* ret = vector_new();
+	class_* ptr = self;
+	do {
+		vector* line = class_generic_type_list_to_interface_list(ptr->impl_list);
+		for(int i=0; i<line->length; i++) {
+			vector_push(ret, vector_at(line, i));
+		}
+		vector_delete(line, vector_deleter_null);
+		if(ptr->super_class == NULL) {
+			break;
+		}
+		ptr = ptr->super_class->core_type->u.class_;
+	} while(ptr != NULL);
+	return ret;
+}
+
 vector* class_generic_type_list_to_interface_list(vector* list) {
 	vector* ret = vector_new();
 	for(int i=0; i<list->length; i++) {
@@ -404,20 +423,31 @@ vector* class_generic_type_list_to_interface_list(vector* list) {
 
 bool class_interface_implement_valid(class_* cls, method** out) {
 	(*out) = NULL;
-	if(cls->impl_list->length == 0 || cls->is_abstract) {
+	bool contains = true;
+	#if defined(DEBUG)
+	const char* csupername = string_pool_ref2str(cls->namev);
+	if(cls->namev == string_pool_intern("AdditiveOperator")) {
+		int a = 0;
+	}
+	#endif
+	//全ての実装インターフェイスを取得する
+	vector* inter_list = class_generic_type_list_to_interface_list_tree(cls);
+	vector* methods = interface_method_flatten_list(inter_list);
+	if(inter_list->length == 0 || cls->is_abstract) {
+		vector_delete(inter_list, vector_deleter_null);
+		vector_delete(methods, vector_deleter_null);
 		return true;
 	}
-	bool contains = true;
-	//全ての実装インターフェイスを取得する
-	vector* inter_list = class_generic_type_list_to_interface_list(cls->impl_list);
-	vector* methods = interface_method_flatten_list(inter_list);
 	for(int i=0; i<methods->length; i++) {
 		method* m = vector_at(methods, i);
-		if(!class_contains_method_tree(cls, m)) {
+		vector* methods = class_find_methods_tree(cls, m);
+		if(methods->length == 0 || methods_is_all_abstract(methods)) {
 			(*out) = m;
 			contains = false;
+			vector_delete(methods, vector_deleter_null);
 			break;
 		}
+		vector_delete(methods, vector_deleter_null);
 	}
 	vector_delete(inter_list, vector_deleter_null);
 	vector_delete(methods, vector_deleter_null);
@@ -440,15 +470,24 @@ bool class_abstract_class_implement_valid(class_* cls, method** out) {
 	if(!csuper->is_abstract) {
 		return true;
 	}
+	#if defined(DEBUG)
+	const char* csupername = string_pool_ref2str(csuper->namev);
+	if(cls->namev == string_pool_intern("AdditiveOperator")) {
+		int a = 0;
+	}
+	#endif
 	bool ret = true;
 	for(int i=0; i<csuper->method_list->length; i++) {
 		method* me = vector_at(csuper->method_list, i);
-		if(((me->modifier & modifier_abstract) > 0) &&
-		   !class_contains_method(cls->method_list, me)) {
-			   (*out) = me;
-			   ret = false;
-			   break;
+		if(!modifier_is_abstract(me->modifier)) { continue; }
+		vector* methods = class_find_methods_tree(cls, me);
+		if(methods->length == 0 || methods_is_all_abstract(methods)) {
+		   (*out) = me;
+		   ret = false;
+		   vector_delete(methods, vector_deleter_null);
+		   break;
 		}
+		vector_delete(methods, vector_deleter_null);
 	}
 	return ret;
 }
@@ -564,8 +603,12 @@ static void class_create_vtable_interface(class_* self) {
 			//シグネチャが同じメソッドをテーブルへ。
 			method* interVTM = vector_at(interVT->elements, j);
 			method* classVTM = class_find_impl_method(self, interVTM);
-			//インターフェイスが実装されていない
-			assert(classVTM != NULL);
+			assert(self->is_abstract || classVTM != NULL);
+			//例えば抽象クラスがインターフェイスを実装していない場合
+			//空っぽの実装を持たせる
+			if(self->is_abstract && classVTM == NULL) {
+				classVTM = method_clone(interVTM);
+			}
 			vtable_add(newVT, classVTM);
 		}
 		vector_push(self->vt_vec, newVT);
@@ -674,4 +717,14 @@ static void class_delete_operator_overload(vector_item item) {
 static void class_delete_property(vector_item item) {
 	property* e = (property*)item;
 	property_delete(e);
+}
+
+static bool methods_is_all_abstract(vector* v) {
+	for(int i=0; i<v->length; i++) {
+		method* e = vector_at(v, i);
+		if(!modifier_is_abstract(e)) {
+			return false;
+		}
+	}
+	return true;
 }

@@ -76,7 +76,6 @@ static void CLBC_class_decl(class_loader * self, il_type * iltype, type * tp, na
 
 	CL_ERROR(self);
 	tp->state = tp->state | type_decl;
-	CLBC_check_class(self, iltype, tp, scope);
 }
 
 static void CLBC_class_impl(class_loader * self, il_type * iltype, type * tp, namespace_ * scope) {
@@ -105,6 +104,7 @@ static void CLBC_class_impl(class_loader * self, il_type * iltype, type * tp, na
 	CLBC_operator_overloads_impl(self, iltype, tp, scope);
 	CL_ERROR(self);
 	tp->state = tp->state | type_impl;
+	CLBC_check_class(self, iltype, tp, scope);
 	//コンストラクタで初期化されていない final フィールドの確認
 	//これはコンストラクタが生成されてからでないといけない
 	class_* cls = TYPE2CLASS(tp);
@@ -257,6 +257,7 @@ static void CLBC_check_class(class_loader * self, il_type * iltype, type * tp, n
 	if(tp->tag == type_class &&
 	  !class_interface_implement_valid(TYPE2CLASS(tp), &outiMethod)) {
 		bc_error_throw(bcerror_not_implement_interface, string_pool_ref2str(tp->u.class_->namev), string_pool_ref2str(outiMethod->namev));
+		return;
 	}
 	//実装されていない抽象メソッドを確認する
 	method* outaMethod = NULL;

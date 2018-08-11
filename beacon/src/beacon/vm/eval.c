@@ -67,6 +67,9 @@ static bool eval_top_from_cll(class_loader* cll) {
 	//エラーによって中断された場合のため、ここで戻す
 	heap* he = heap_get();
 	he->accept_blocking = 0;
+#if defined(DEBUG)
+	io_printfln("start");
+#endif
 	if(!bc_error_last()) {
 		vm_execute(fr, cll->env);
 	}

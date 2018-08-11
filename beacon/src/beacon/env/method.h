@@ -130,4 +130,11 @@ struct type* method_create_iterator_type(method* self, struct class_loader* cll,
  * @return
  */
 struct generic_type* method_diff(method* abstract, method* concrete);
+
+/**
+ * メソッドのシグネチャのみを複製した新しいメソッドを作成します.
+ * @param self
+ * @return
+ */
+method* method_clone(method* self);
 #endif // !SIGNAL_ENV_METHOD_H

@@ -64,6 +64,9 @@ typedef enum bc_error_id {
 	bcerror_assign_not_compatible_field,
 	bcerror_assign_not_compatible_property,
 
+	bcerror_auto_chain_ctor_not_found,
+	bcerror_explicit_chain_ctor_not_found,
+
 	bcerror_undefined_class,
 	bcerror_undefined_variable,
 	bcerror_undefined_field,

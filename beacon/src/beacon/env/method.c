@@ -243,6 +243,27 @@ generic_type* method_diff(method* abstract, method* concrete) {
 	return bounds;
 }
 
+method* method_clone(method* self) {
+	method* ret = method_new(self->namev);
+	ret->type = self->type;
+	ret->modifier = self->modifier;
+	ret->access = self->access;
+	ret->return_gtype = generic_type_clone(self->return_gtype);
+	for(int i=0; i<self->type_parameter_list->length; i++) {
+		type_parameter* e = vector_at(self->type_parameter_list, i);
+		type_parameter* ecpy = type_parameter_new(e->namev);
+		ecpy->kind = e->kind;
+		vector_push(ret->type_parameter_list, ecpy);
+	}
+	for(int i=0; i<self->parameter_list->length; i++) {
+		parameter* e = vector_at(self->parameter_list, i);
+		parameter* ecpy = parameter_new(e->namev);
+		ecpy->gtype = e->gtype;
+		vector_push(ret->parameter_list, ecpy);
+	}
+	return ret;
+}
+
 //private
 static void method_parameter_delete(vector_item item) {
 	parameter* e = (parameter*)item;

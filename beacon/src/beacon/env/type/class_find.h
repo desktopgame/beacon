@@ -313,12 +313,13 @@ struct operator_overload* class_find_operator_overload(class_* self, operator_ty
 struct operator_overload* class_get_operator_overload(class_* self, int index);
 
 /**
- * 指定のクラスから Object クラスまでのいずれかの階層に m が含まれるなら true.
+ * 指定のクラスから Object クラスまで階層で m と互換性のあるメソッドを検索して返します.
  * @param self
  * @param m
+ * @param outM
  * @return
  */
-bool class_contains_method_tree(class_* self, method* m);
+vector* class_find_methods_tree(class_* self, method* m);
 
 /**
  * 指定のメソッド一覧に指定のメソッドが含まれるなら true.
@@ -326,5 +327,5 @@ bool class_contains_method_tree(class_* self, method* m);
  * @param method_list
  * @param m
  */
-bool class_contains_method(vector* method_list, method* m);
+bool class_contains_method(vector* method_list, method* m, method** outM);
 #endif
