@@ -453,6 +453,9 @@ vector* class_find_methods_tree(class_* self, method* m) {
 	assert(m != NULL);
 	class_* ptr = self;
 	vector* ret = vector_new();
+	#if defined(DEBUG)
+	const char* ptrname = string_pool_ref2str(ptr->namev);
+	#endif
 	do {
 		method* tmp = NULL;
 		if(class_contains_method(ptr->method_list, m, &tmp)) {
@@ -478,7 +481,7 @@ bool class_contains_method(vector* method_list, method* m, method** outM) {
 	for(int i=0; i<method_list->length; i++) {
 		method* mE = vector_at(method_list, i);
 		if(method_override(m, mE, cctx)) {
-			(*outM) = m;
+			(*outM) = mE;
 			ret = true;
 			break;
 		}

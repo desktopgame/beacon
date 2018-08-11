@@ -472,13 +472,16 @@ bool class_abstract_class_implement_valid(class_* cls, method** out) {
 	}
 	#if defined(DEBUG)
 	const char* csupername = string_pool_ref2str(csuper->namev);
-	if(cls->namev == string_pool_intern("AdditiveOperator")) {
+	if(cls->namev == string_pool_intern("Concrete")) {
 		int a = 0;
 	}
 	#endif
 	bool ret = true;
 	for(int i=0; i<csuper->method_list->length; i++) {
 		method* me = vector_at(csuper->method_list, i);
+		#if defined(DEBUG)
+		const char* mename = string_pool_ref2str(me->namev);
+		#endif
 		if(!modifier_is_abstract(me->modifier)) { continue; }
 		vector* methods = class_find_methods_tree(cls, me);
 		if(methods->length == 0 || methods_is_all_abstract(methods)) {
@@ -603,7 +606,14 @@ static void class_create_vtable_interface(class_* self) {
 			//シグネチャが同じメソッドをテーブルへ。
 			method* interVTM = vector_at(interVT->elements, j);
 			method* classVTM = class_find_impl_method(self, interVTM);
-			assert(self->is_abstract || classVTM != NULL);
+			if(!self->is_abstract && classVTM == NULL) {
+				bc_error_throw(bcerror_not_implement_interface,
+					string_pool_ref2str(type_name(interVTM->parent)),
+					string_pool_ref2str(interVTM->namev)
+				);
+				return;
+			}
+			//assert(self->is_abstract || classVTM != NULL);
 			//例えば抽象クラスがインターフェイスを実装していない場合
 			//空っぽの実装を持たせる
 			if(self->is_abstract && classVTM == NULL) {
@@ -722,7 +732,10 @@ static void class_delete_property(vector_item item) {
 static bool methods_is_all_abstract(vector* v) {
 	for(int i=0; i<v->length; i++) {
 		method* e = vector_at(v, i);
-		if(!modifier_is_abstract(e)) {
+		#if defined(DEBUG)
+		const char* tyname = string_pool_ref2str(type_name(e->parent));
+		#endif
+		if(!modifier_is_abstract(e->modifier)) {
 			return false;
 		}
 	}
