@@ -21,6 +21,9 @@ il_factor_shift_op* il_factor_shift_op_new(operator_type type) {
 }
 
 void il_factor_shift_op_dump(il_factor_shift_op* self, int depth) {
+	io_printi(depth);
+	operator_fprintf(stdout, self->type);
+	io_println();
 }
 
 generic_type* il_factor_shift_op_eval(il_factor_shift_op * self, enviroment * env, call_context* cctx) {

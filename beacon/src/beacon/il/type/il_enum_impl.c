@@ -25,7 +25,7 @@ void il_enum_dump(il_enum * self, int depth) {
 	printf("enum %s", string_pool_ref2str(self->namev));
 	io_println();
 	for (int i = 0; i < self->item_vec->length; i++) {
-		char* str = (char*)vector_at(self->item_vec, i);
+		const char* str = string_pool_ref2str((string_view)vector_at(self->item_vec, i));
 
 		io_printi(depth + 1);
 		printf("%s", str);

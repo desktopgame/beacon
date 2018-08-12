@@ -42,6 +42,10 @@ void fqcn_cache_dump(fqcn_cache * self, int depth) {
 }
 
 void fqcn_cache_print(fqcn_cache * self) {
+	if(self == NULL) {
+		printf("NULL");
+		return;
+	}
 	if (self->scope_vec->length == 0) {
 		printf("%s", string_pool_ref2str(self->namev));
 	} else {

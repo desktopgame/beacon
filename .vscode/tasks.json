@@ -12,12 +12,37 @@
 			"command": "go run script/gen.go"
 		},
 		{
-			"label": "make",
+			"label": "make db",
 			"type": "shell",
 			"options": {
 				"cwd": "../beacon/beacon/src"
 			},
-			"command": "make"
+			"command": "make",
+			"args": [
+				"db"
+			]
+		},
+		{
+			"label": "make rb",
+			"type": "shell",
+			"options": {
+				"cwd": "../beacon/beacon/src"
+			},
+			"command": "make",
+			"args": [
+				"rb"
+			]
+		},
+		{
+			"label": "make clean",
+			"type": "shell",
+			"options": {
+				"cwd": "../beacon/beacon/src"
+			},
+			"command": "make",
+			"args": [
+				"clean"
+			]
 		},
 		{
 			"label": "test",
