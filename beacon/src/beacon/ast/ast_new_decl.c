@@ -114,17 +114,18 @@ ast * ast_new_field_decl(ast* amodifier, ast* atype_name, string_view field_name
 	return ret;
 }
 
-ast * ast_new_function_decl(string_view function_namev, ast * aparameter_list, ast * abody, ast * areturn_type) {
+ast * ast_new_function_decl(string_view function_namev, ast* atypeparams, ast * aparameter_list, ast * abody, ast * areturn_type) {
 	ast* ret = ast_new(ast_function_decl);
 	ast_push(ret, ast_new_function_name(function_namev));
+	ast_push(ret, atypeparams);
 	ast_push(ret, aparameter_list);
 	ast_push(ret, abody);
 	ast_push(ret, areturn_type);
 	return ret;
 }
 
-ast * ast_new_function_decl_empty_params(string_view function_namev, ast * abody, ast * areturn_type) {
-	return ast_new_function_decl(function_namev, ast_new_blank(), abody, areturn_type);
+ast * ast_new_function_decl_empty_params(string_view function_namev, ast* atypeparams, ast * abody, ast * areturn_type) {
+	return ast_new_function_decl(function_namev, atypeparams, ast_new_blank(), abody, areturn_type);
 }
 
 ast * ast_new_method_decl(ast* amodifier, string_view func_namev, ast* atype_parameter, ast * aparameter_list, ast* abody, ast* areturn_type) {

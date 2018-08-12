@@ -138,20 +138,22 @@ ast* ast_new_field_decl(ast* amodifier, ast* atype_name, string_view field_namev
 /**
  * 関数宣言を表す要素を作成します.
  * @param function_namev
+ * @param atypeparams
  * @parma aparameter_list
  * @param abody
  * @param areturn_type
  */
-ast* ast_new_function_decl(string_view function_namev, ast* aparameter_list, ast* abody, ast* areturn_type);
+ast* ast_new_function_decl(string_view function_namev, ast* atypeparams, ast* aparameter_list, ast* abody, ast* areturn_type);
 
 /**
  * 引数のない関数宣言を表す要素を作成します.
  * @param function_namev
+ * @param atypeparams
  * @param abody
  * @param areturn_name
  * @return
  */
-ast* ast_new_function_decl_empty_params(string_view function_namev, ast* abody, ast* areturn_type);
+ast* ast_new_function_decl_empty_params(string_view function_namev, ast* atypeparams, ast* abody, ast* areturn_type);
 
 /**
  * メソッド宣言を表す要素を作成します.

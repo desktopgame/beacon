@@ -405,13 +405,13 @@ constructor_chain_optional
 	;
 
 function_define
-	: DEF IDENT LRB parameter_list RRB ARROW typename_T scope_optional
+	: DEF IDENT type_parameter_group LRB parameter_list RRB ARROW typename_T scope_optional
 	{
-		$$ = ast_new_function_decl($2, $4, $8, $7);
+		$$ = ast_new_function_decl($2, $3, $5, $9, $8);
 	}
-	| DEF IDENT LRB RRB ARROW typename_T scope_optional
+	| DEF IDENT type_parameter_group LRB RRB ARROW typename_T scope_optional
 	{
-		$$ = ast_new_function_decl_empty_params($2, $7, $6);
+		$$ = ast_new_function_decl_empty_params($2, $3, 8, $7);
 	}
 	;
 

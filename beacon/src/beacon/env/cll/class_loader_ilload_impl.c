@@ -134,9 +134,10 @@ void class_loader_ilload_impl(class_loader* self, ast* source_code) {
 static void class_loader_ilload_function(class_loader * self, ast * asource) {
 	assert(asource->tag == ast_function_decl);
 	ast* afunc_name = ast_at(asource, 0);
-	ast* aparam_list = ast_at(asource, 1);
-	ast* afunc_body = ast_at(asource, 2);
-	ast* aret_name = ast_at(asource, 3);
+	ast* atypeparams = ast_at(asource, 1);
+	ast* aparam_list = ast_at(asource, 2);
+	ast* afunc_body = ast_at(asource, 3);
+	ast* aret_name = ast_at(asource, 4);
 	il_function* ilfunc = il_function_new(afunc_name->u.stringv_value);
 	CLIL_parameter_list(self, ilfunc->parameter_list, aparam_list);
 	CLIL_body(self, ilfunc->statement_list, afunc_body);
