@@ -18,6 +18,13 @@ namespace beacon::lang {
 			return nativeToChar();
 		}
 
+		def abs() -> Int {
+			if(this < 0) {
+				return -this;
+			}
+			return this;
+		}
+
 		operator +(Int a) -> Int {
 			return nativeAdd(a);
 		}

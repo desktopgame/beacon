@@ -38,6 +38,34 @@ namespace beacon::lang {
 			return new String(arr);
 		}
 
+		def toInt() -> Int {
+			//http://edu.clipper.co.jp/pg-2-28.html
+			//read sign
+			var signc = charArray.get(0);
+			var signi = 0;
+			if(signc == '+') {
+				signi = 1;
+			} elif(signc == '-') {
+				signi = -1;
+			}
+			//read digit
+			var index = signi.abs();
+			var n = 0;
+			while(index < charArray.length()) {
+				var c = charArray.get(index);
+				if(c.isDigit()) {
+					n = 10 * n + (c.toInt() - '0'.toInt());
+				} else {
+					break;
+				}
+				index += 1;
+			}
+			if(signi == 0) {
+				return n;
+			}
+			return n * signi;
+		}
+
 		def iterate() -> Iterator[Char] {
 			var offset = 0;
 			while(offset < this.length()) {

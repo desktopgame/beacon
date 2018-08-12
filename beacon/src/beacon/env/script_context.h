@@ -44,6 +44,7 @@ typedef struct script_context {
 	//整数のキャッシュ
 	vector* pos_int_vec;
 	vector* neg_int_vec;
+	numeric_map* n_int_map;
 	struct heap* heap;
 	struct object* oTrue;
 	struct object* oFalse;
@@ -143,6 +144,14 @@ void script_context_static_each(script_context* self, static_each act);
  * @param self
  */
 void script_context_static_clear(script_context* self);
+
+/**
+ * 指定の整数をキャッシュします.
+ * @param self
+ * @param i
+ * @return
+ */
+struct object* script_context_iintern(script_context* self, int i);
 
 /**
  * 現在のコンテキストでリテラルをキャッシュします.

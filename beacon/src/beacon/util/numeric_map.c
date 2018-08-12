@@ -25,6 +25,7 @@ numeric_map* numeric_map_put(numeric_map* self, numeric_key key, numeric_map_ite
 			nl->parent = self;
 			nl->key = key;
 			nl->item = item;
+			return nl;
 		} else {
 			return numeric_map_put(self->left, key, item);
 		}
@@ -35,6 +36,7 @@ numeric_map* numeric_map_put(numeric_map* self, numeric_key key, numeric_map_ite
 			nr->parent = self;
 			nr->key = key;
 			nr->item = item;
+			return nr;
 		} else {
 			return numeric_map_put(self->right, key, item);
 		}
