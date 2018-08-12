@@ -289,9 +289,9 @@ static void vm_run(frame * self, enviroment * env, int pos, int deferStart) {
 				object* a_ = vector_pop(self->value_stack);
 				object* b_ = vector_pop(self->value_stack);
 				vector_push(self->value_stack, NON_NULL(object_bool_get(OBJ2INT(a_) < OBJ2INT(b_))));
-			}
 				//vector_push(self->value_stack, object_bool_get(SPI(self) < SPI(self)));
 				break;
+			}
 			case op_ile:
 				vector_push(self->value_stack, NON_NULL(object_bool_get(SPI(self) <= SPI(self))));
 				break;
