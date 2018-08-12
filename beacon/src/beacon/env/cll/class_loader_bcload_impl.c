@@ -197,7 +197,7 @@ static void CLBC_enum(class_loader * self, il_type * iltype, namespace_ * parent
 		iltype,
 		tp,
 		parent,
-		cachekind_enum_decl
+		cachekind_enum_impl
 	);
 	vector_push(self->type_cache_vec, mtc);
 	tp->state = tp->state | type_register;

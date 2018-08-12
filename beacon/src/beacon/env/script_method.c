@@ -39,7 +39,7 @@ void script_method_execute(script_method * self, method* parent, frame * fr, env
 	//戻り値が Void 以外ならスタックトップの値を引き継ぐ
 	if(parent->return_gtype != TYPE_VOID->generic_self) {
 		object* o = (object*)vector_pop(sub->value_stack);
-		vector_push(fr->value_stack, o);
+		vector_push(fr->value_stack, NON_NULL(o));
 	}
 	frame_delete(sub);
 }

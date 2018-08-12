@@ -66,6 +66,7 @@ namespace calc {
 					var buf = new StringBuilder();
 					while(c.isDigit()) {
 						buf << c;
+						if(!(scanner.ready())) { break; }
 						c = scanner.getc();
 					}
 					scanner.ungetc();
@@ -193,7 +194,9 @@ namespace calc {
 	}
 }
 var line = Console.readLine();
-var sc = new calc::Scanner(line);
-while(sc.ready()) {
-	sc.getc().printLine();
+var tokenizer = new calc::Tokenizer(line);
+var tokens = tokenizer.lex();
+var iter = tokens.iterate();
+while(iter.moveNext()) {
+	iter.current().printLine();
 }

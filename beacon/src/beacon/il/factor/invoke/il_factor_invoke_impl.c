@@ -179,6 +179,9 @@ static void il_factor_invoke_check(il_factor_invoke * self, enviroment * env, ca
 	il_type_argument_resolve(self->type_args, cctx);
 
 	type* ctype = gtype->core_type;
+	#if defined(DEBUG)
+	const char* cname = string_pool_ref2str(type_name(ctype));
+	#endif
 	//ジェネリックな変数に対しても
 	//Objectクラスのメソッドは呼び出せる
 	if(ctype == NULL) {

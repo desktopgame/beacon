@@ -66,12 +66,18 @@ static void* fixed_realloc(void* block, size_t newSize);
 static slot* gHead = NULL;
 static int gCount = 0;
 static int gBreak = -1;
+static int gMallocFree = 0;
 
 void * mem_malloc(size_t size, const char * filename, int lineno) {
 #if defined(MEMORY_MANAGEMENT)
 	slot* slot = slot_new(size, filename, lineno);
 	slot_append(slot);
 	return slot_application_area(slot);
+#elif defined(FAST_DIAGNOSTIC)
+	gMallocFree++;
+	void* ret = fixed_malloc(size);
+	memset(ret, 0xCC, size);
+	return ret;
 #else
 	void* ret = fixed_malloc(size);
 	memset(ret, 0xCC, size);
@@ -82,6 +88,8 @@ void * mem_malloc(size_t size, const char * filename, int lineno) {
 void * mem_realloc(void * block, size_t newSize, const char * filename, int lineno) {
 #if defined(MEMORY_MANAGEMENT)
 	return slot_realloc(block, newSize, filename, lineno);
+#elif defined(FAST_DIAGNOSTIC)
+	return fixed_realloc(block, newSize);
 #else
 	return fixed_realloc(block, newSize);
 #endif
@@ -93,6 +101,9 @@ void mem_free(void * block, const char * filename, int lineno) {
 	}
 #if defined(MEMORY_MANAGEMENT)
 	slot_free(block, filename, lineno);
+#elif defined(FAST_DIAGNOSTIC)
+	gMallocFree--;
+	free(block);
 #else
 	free(block);
 #endif
@@ -106,6 +117,9 @@ void mem_dump() {
 		printf("    %p(%d) %s<%d>\n", iter->arena, iter->index, iter->filename, iter->lineno);
 		iter = iter->next;
 	}
+#elif defined(FAST_DIAGNOSTIC)
+	//strdup を消した場合は0以下になる
+	assert(gMallocFree <= 0);
 #endif
 }
 
@@ -129,6 +143,11 @@ int mem_fprint(FILE* fp, void* block, int len) {
 	}
 	fprintf(fp, "\n");
 	return 0;
+}
+
+void* mem_non_null(void* m) {
+	assert(m != NULL);
+	return m;
 }
 
 //private

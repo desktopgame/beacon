@@ -229,27 +229,27 @@ static void vm_run(frame * self, enviroment * env, int pos, int deferStart) {
 		switch (b) {
 			//int & int
 			case op_iadd:
-				vector_push(self->value_stack, object_int_get(SPI(self) + SPI(self)));
+				vector_push(self->value_stack, NON_NULL(object_int_get(SPI(self) + SPI(self))));
 				break;
 			case op_isub:
-				vector_push(self->value_stack, object_int_get(SPI(self) - SPI(self)));
+				vector_push(self->value_stack, NON_NULL(object_int_get(SPI(self) - SPI(self))));
 				break;
 			case op_imul:
-				vector_push(self->value_stack, object_int_get(SPI(self) * SPI(self)));
+				vector_push(self->value_stack, NON_NULL(object_int_get(SPI(self) * SPI(self))));
 				break;
 			case op_idiv:
 			{
 				int a = SPI(self);
 				int b = SPI(self);
 				assert(b != 0);
-				vector_push(self->value_stack, object_int_get(a / b));
+				vector_push(self->value_stack, NON_NULL(object_int_get(a / b)));
 				break;
 			}
 			case op_imod:
-				vector_push(self->value_stack, object_int_get(SPI(self) % SPI(self)));
+				vector_push(self->value_stack, NON_NULL(object_int_get(SPI(self) % SPI(self))));
 				break;
 			case op_ibit_or:
-				vector_push(self->value_stack, object_int_get(SPI(self) | SPI(self)));
+				vector_push(self->value_stack, NON_NULL(object_int_get(SPI(self) | SPI(self))));
 				break;
 			case op_ilogic_or:
 			{
@@ -257,11 +257,11 @@ static void vm_run(frame * self, enviroment * env, int pos, int deferStart) {
 				//おそらくマクロの展開によるもの
 				int a = SPI(self);
 				int b = SPI(self);
-				vector_push(self->value_stack, object_int_get(a || b));
+				vector_push(self->value_stack, NON_NULL(object_int_get(a || b)));
 				break;
 			}
 			case op_ibit_and:
-				vector_push(self->value_stack, object_int_get(SPI(self) & SPI(self)));
+				vector_push(self->value_stack, NON_NULL(object_int_get(SPI(self) & SPI(self))));
 				break;
 			case op_ilogic_and:
 			{
@@ -269,156 +269,156 @@ static void vm_run(frame * self, enviroment * env, int pos, int deferStart) {
 				//おそらくマクロの展開によるもの
 				int a = SPI(self);
 				int b = SPI(self);
-				vector_push(self->value_stack, object_int_get(a && b));
+				vector_push(self->value_stack, NON_NULL(object_int_get(a && b)));
 				break;
 			}
 			case op_ieq:
-				vector_push(self->value_stack, object_bool_get(SPI(self) == SPI(self)));
+				vector_push(self->value_stack, NON_NULL(object_bool_get(SPI(self) == SPI(self))));
 				break;
 			case op_inoteq:
-				vector_push(self->value_stack, object_bool_get(SPI(self) != SPI(self)));
+				vector_push(self->value_stack, NON_NULL(object_bool_get(SPI(self) != SPI(self))));
 				break;
 			case op_igt:
-				vector_push(self->value_stack, object_bool_get(SPI(self) > SPI(self)));
+				vector_push(self->value_stack, NON_NULL(object_bool_get(SPI(self) > SPI(self))));
 				break;
 			case op_ige:
-				vector_push(self->value_stack, object_bool_get(SPI(self) >= SPI(self)));
+				vector_push(self->value_stack, NON_NULL(object_bool_get(SPI(self) >= SPI(self))));
 				break;
 			case op_ilt:
 			{
 				object* a_ = vector_pop(self->value_stack);
 				object* b_ = vector_pop(self->value_stack);
-				vector_push(self->value_stack, object_bool_get(OBJ2INT(a_) < OBJ2INT(b_)));
+				vector_push(self->value_stack, NON_NULL(object_bool_get(OBJ2INT(a_) < OBJ2INT(b_))));
 			}
 				//vector_push(self->value_stack, object_bool_get(SPI(self) < SPI(self)));
 				break;
 			case op_ile:
-				vector_push(self->value_stack, object_bool_get(SPI(self) <= SPI(self)));
+				vector_push(self->value_stack, NON_NULL(object_bool_get(SPI(self) <= SPI(self))));
 				break;
 			case op_ilsh:
-				vector_push(self->value_stack, object_int_get(SPI(self) << SPI(self)));
+				vector_push(self->value_stack, NON_NULL(object_int_get(SPI(self) << SPI(self))));
 				break;
 			case op_irsh:
-				vector_push(self->value_stack, object_int_get(SPI(self) >> SPI(self)));
+				vector_push(self->value_stack, NON_NULL(object_int_get(SPI(self) >> SPI(self))));
 				break;
 			case op_iexcor:
-				vector_push(self->value_stack, object_int_get(SPI(self) ^ SPI(self)));
+				vector_push(self->value_stack, NON_NULL(object_int_get(SPI(self) ^ SPI(self))));
 				break;
 			case op_iflip:
-				vector_push(self->value_stack, object_int_get(~SPI(self)));
+				vector_push(self->value_stack, NON_NULL(object_int_get(~SPI(self))));
 				break;
 			case op_ceq:
-				vector_push(self->value_stack, object_bool_get(SPC(self) == SPC(self)));
+				vector_push(self->value_stack, NON_NULL(object_bool_get(SPC(self) == SPC(self))));
 				break;
 			case op_cnoteq:
-				vector_push(self->value_stack, object_bool_get(SPC(self) != SPC(self)));
+				vector_push(self->value_stack, NON_NULL(object_bool_get(SPC(self) != SPC(self))));
 				break;
 			case op_cgt:
-				vector_push(self->value_stack, object_bool_get(SPC(self) > SPC(self)));
+				vector_push(self->value_stack, NON_NULL(object_bool_get(SPC(self) > SPC(self))));
 				break;
 			case op_cge:
-				vector_push(self->value_stack, object_bool_get(SPC(self) >= SPC(self)));
+				vector_push(self->value_stack, NON_NULL(object_bool_get(SPC(self) >= SPC(self))));
 				break;
 			case op_clt:
-				vector_push(self->value_stack, object_bool_get(SPC(self) < SPC(self)));
+				vector_push(self->value_stack, NON_NULL(object_bool_get(SPC(self) < SPC(self))));
 				break;
 			case op_cle:
-				vector_push(self->value_stack, object_bool_get(SPC(self) <= SPC(self)));
+				vector_push(self->value_stack, NON_NULL(object_bool_get(SPC(self) <= SPC(self))));
 				break;
 				//double & double
 			case op_dadd:
-				vector_push(self->value_stack, object_double_new(SPD(self) + SPD(self)));
+				vector_push(self->value_stack, NON_NULL(object_double_new(SPD(self) + SPD(self))));
 				break;
 			case op_dsub:
-				vector_push(self->value_stack, object_double_new(SPD(self) - SPD(self)));
+				vector_push(self->value_stack, NON_NULL(object_double_new(SPD(self) - SPD(self))));
 				break;
 			case op_dmul:
-				vector_push(self->value_stack, object_double_new(SPD(self) * SPD(self)));
+				vector_push(self->value_stack, NON_NULL(object_double_new(SPD(self) * SPD(self))));
 				break;
 			case op_ddiv:
-				vector_push(self->value_stack, object_double_new(SPD(self) / SPD(self)));
+				vector_push(self->value_stack, NON_NULL(object_double_new(SPD(self) / SPD(self))));
 				break;
 			case op_dmod:
-				vector_push(self->value_stack, object_double_new((double)((int)SPD(self) % (int)SPD(self))));
+				vector_push(self->value_stack, NON_NULL(object_double_new((double)((int)SPD(self) % (int)SPD(self)))));
 				break;
 			case op_deq:
-				vector_push(self->value_stack, object_bool_get(SPD(self) == SPD(self)));
+				vector_push(self->value_stack, NON_NULL(object_bool_get(SPD(self) == SPD(self))));
 				break;
 			case op_dnoteq:
-				vector_push(self->value_stack, object_bool_get(SPD(self) != SPD(self)));
+				vector_push(self->value_stack, NON_NULL(object_bool_get(SPD(self) != SPD(self))));
 				break;
 			case op_dgt:
-				vector_push(self->value_stack, object_bool_get(SPD(self) > SPD(self)));
+				vector_push(self->value_stack, NON_NULL(object_bool_get(SPD(self) > SPD(self))));
 				break;
 			case op_dge:
-				vector_push(self->value_stack, object_bool_get(SPD(self) >= SPD(self)));
+				vector_push(self->value_stack, NON_NULL(object_bool_get(SPD(self) >= SPD(self))));
 				break;
 			case op_dlt:
-				vector_push(self->value_stack, object_bool_get(SPD(self) < SPD(self)));
+				vector_push(self->value_stack, NON_NULL(object_bool_get(SPD(self) < SPD(self))));
 				break;
 			case op_dle:
-				vector_push(self->value_stack, object_bool_get(SPD(self) <= SPD(self)));
+				vector_push(self->value_stack, NON_NULL(object_bool_get(SPD(self) <= SPD(self))));
 				break;
 			case op_ineg:
-				vector_push(self->value_stack, object_int_get(-SPI(self)));
+				vector_push(self->value_stack, NON_NULL(object_int_get(-SPI(self))));
 				break;
 			case op_dneg:
-				vector_push(self->value_stack, object_double_new(-SPD(self)));
+				vector_push(self->value_stack, NON_NULL(object_double_new(-SPD(self))));
 				break;
 			case op_bnot:
-				vector_push(self->value_stack, object_bool_get(!SPB(self)));
+				vector_push(self->value_stack, NON_NULL(object_bool_get(!SPB(self))));
 				break;
 				//TODO:短絡評価していない
 			case op_bbit_or:
-				vector_push(self->value_stack, object_bool_get(SPB(self) | SPB(self)));
+				vector_push(self->value_stack, NON_NULL(object_bool_get(SPB(self) | SPB(self))));
 				break;
 			case op_blogic_or:
-				vector_push(self->value_stack, object_bool_get(SPB(self) || SPB(self)));
+				vector_push(self->value_stack, NON_NULL(object_bool_get(SPB(self) || SPB(self))));
 				break;
 			case op_bbit_and:
-				vector_push(self->value_stack, object_bool_get(SPB(self) & SPB(self)));
+				vector_push(self->value_stack,NON_NULL( object_bool_get(SPB(self) & SPB(self))));
 				break;
 			case op_blogic_and:
 			{
 				bool xa = SPB(self);
 				bool xb = SPB(self);
 				bool xx = xa && xb;
-				vector_push(self->value_stack, object_bool_get(xa && xb));
+				vector_push(self->value_stack, NON_NULL(object_bool_get(xa && xb)));
 				break;
 			}
 			case op_bexcor:
-				vector_push(self->value_stack, object_bool_get(SPB(self) ^ SPB(self)));
+				vector_push(self->value_stack, NON_NULL(object_bool_get(SPB(self) ^ SPB(self))));
 				break;
 			case op_bflip:
-				vector_push(self->value_stack, object_bool_get(~SPB(self)));
+				vector_push(self->value_stack, NON_NULL(object_bool_get(~SPB(self))));
 				break;
 				//push const
 			case op_iconst:
 			{
 				int index = (int)enviroment_source_at(env, ++IDX);
 				object* o = (object*)enviroment_constant_int_at(env, index);
-				vector_push(self->value_stack, o);
+				vector_push(self->value_stack, NON_NULL(o));
 				break;
 			}
 			case op_dconst:
 			{
 				int index = (int)enviroment_source_at(env, ++IDX);
 				object* d = enviroment_constant_double_at(env, index);
-				vector_push(self->value_stack, d);
+				vector_push(self->value_stack, NON_NULL(d));
 				break;
 			}
 			case op_cconst:
 			{
 				int index = (int)enviroment_source_at(env, ++IDX);
 				object* c = enviroment_constant_char_at(env, index);
-				vector_push(self->value_stack, c);
+				vector_push(self->value_stack, NON_NULL(c));
 				break;
 			}
 			case op_sconst:
 			{
 				int index = (int)enviroment_source_at(env, ++IDX);
 				object* cs = enviroment_constant_string_at(env, index);
-				vector_push(self->value_stack, cs);
+				vector_push(self->value_stack, NON_NULL(cs));
 				break;
 			}
 			case op_true:
@@ -491,7 +491,7 @@ static void vm_run(frame * self, enviroment * env, int pos, int deferStart) {
 			}
 			case op_hexception:
 			{
-				vector_push(self->value_stack, self->exception);
+				vector_push(self->value_stack, NON_NULL(self->exception));
 				break;
 			}
 			case op_instanceof:
@@ -523,7 +523,7 @@ static void vm_run(frame * self, enviroment * env, int pos, int deferStart) {
 				//FIXME:???
 				object* o = object_ref_new();
 				assert(o->paint != paint_onexit);
-				vector_push(self->value_stack, o);
+				vector_push(self->value_stack, NON_NULL(o));
 				//これを this とする
 				vector_assign(self->ref_stack, 0, o);
 				break;
@@ -561,6 +561,9 @@ static void vm_run(frame * self, enviroment * env, int pos, int deferStart) {
 				type* tp = (type*)vector_at(ctx->type_vec, absClsIndex);
 				assert(tp->tag == type_class);
 				class_* cls = TYPE2CLASS(tp);
+				#if defined(DEBUG)
+				const char* clsname = string_pool_ref2str(cls->namev);
+				#endif
 				constructor* ctor = (constructor*)vector_at(cls->constructor_list, constructorIndex);
 				//新しいVMでコンストラクタを実行
 				//また、現在のVMから実引数をポップ
@@ -569,7 +572,7 @@ static void vm_run(frame * self, enviroment * env, int pos, int deferStart) {
 				for (int i = 0; i < ctor->parameter_list->length; i++) {
 					vector_item e = vector_pop(self->value_stack);
 					object* o = (object*)e;
-					vector_push(sub->value_stack, e);
+					vector_push(sub->value_stack, NON_NULL(e));
 				}
 				//コンストラクタに渡された型引数を引き継ぐ
 				int typeparams = cls->type_parameter_list->length;
@@ -585,7 +588,7 @@ static void vm_run(frame * self, enviroment * env, int pos, int deferStart) {
 				//objectがスタックのトップに残っているはず
 				vector_item returnV = vector_top(sub->value_stack);
 				object* returnO = (object*)returnV;
-				vector_push(self->value_stack, returnV);
+				vector_push(self->value_stack, NON_NULL(returnV));
 				frame_delete(sub);
 				break;
 			}
@@ -604,7 +607,7 @@ static void vm_run(frame * self, enviroment * env, int pos, int deferStart) {
 				//チェインコンストラクタに渡された実引数をプッシュ
 				for (int i = 0; i < ctor->parameter_list->length; i++) {
 					object* o = (object*)vector_pop(self->value_stack);
-					vector_push(sub->value_stack, o);
+					vector_push(sub->value_stack, NON_NULL(o));
 				}
 				//		enviroment_op_dump(ctor->env, sub->level);
 				//opcode_buf_dump(ctor->env->buf, sub->level);
@@ -614,7 +617,7 @@ static void vm_run(frame * self, enviroment * env, int pos, int deferStart) {
 				vector_item returnV = vector_top(sub->value_stack);
 				object* returnO = (object*)returnV;
 				vector_assign(self->ref_stack, 0, returnV);
-				vector_push(self->value_stack, returnV);
+				vector_push(self->value_stack, NON_NULL(returnV));
 
 				frame_delete(sub);
 				//class_alloc_fields(cls, returnO);
@@ -670,7 +673,7 @@ static void vm_run(frame * self, enviroment * env, int pos, int deferStart) {
 				int fieldIndex = (int)enviroment_source_at(env, ++IDX);
 				type* cls = (type*)vector_at(ctx->type_vec, absClsIndex);
 				field* f = class_get_sfield(cls->u.class_, fieldIndex);
-				vector_push(self->value_stack, f->static_value);
+				vector_push(self->value_stack, NON_NULL(f->static_value));
 				break;
 			}
 			case op_put_property:

@@ -166,8 +166,8 @@ static void CLBC_enum_impl(class_loader * self, il_type * iltype, type * tp, nam
 	if((tp->state & type_impl) > 0) {
 		return;
 	}
-	for(int i=0; i<tp->u.class_->field_list->length; i++) {
-		field* f = vector_at(tp->u.class_->field_list, i);
+	for(int i=0; i<tp->u.class_->sfield_list->length; i++) {
+		field* f = vector_at(tp->u.class_->sfield_list, i);
 		f->static_value = object_int_get(i);
 	}
 	tp->state = tp->state | type_impl;
