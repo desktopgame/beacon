@@ -366,24 +366,38 @@ static void vm_run(frame * self, enviroment * env, int pos, int deferStart) {
 				vector_push(self->value_stack, NON_NULL(object_double_new(-SPD(self))));
 				break;
 			case op_bnot:
-				vector_push(self->value_stack, NON_NULL(object_bool_get(!SPB(self))));
+			{
+				bool a = SPB(self);
+				vector_push(self->value_stack, NON_NULL(object_bool_get(!a)));
 				break;
+			}
 				//TODO:短絡評価していない
 			case op_bbit_or:
-				vector_push(self->value_stack, NON_NULL(object_bool_get(SPB(self) | SPB(self))));
+			{
+				bool ab = SPB(self);
+				bool bb = SPB(self);
+				vector_push(self->value_stack, NON_NULL(object_bool_get(ab | bb)));
 				break;
+			}
 			case op_blogic_or:
-				vector_push(self->value_stack, NON_NULL(object_bool_get(SPB(self) || SPB(self))));
+			{
+				bool ab = SPB(self);
+				bool bb = SPB(self);
+				vector_push(self->value_stack, NON_NULL(object_bool_get(ab || bb)));
 				break;
+			}
 			case op_bbit_and:
-				vector_push(self->value_stack,NON_NULL( object_bool_get(SPB(self) & SPB(self))));
+			{
+				bool ab = SPB(self);
+				bool bb = SPB(self);
+				vector_push(self->value_stack,NON_NULL( object_bool_get(ab & bb)));
 				break;
+			}
 			case op_blogic_and:
 			{
-				bool xa = SPB(self);
-				bool xb = SPB(self);
-				bool xx = xa && xb;
-				vector_push(self->value_stack, NON_NULL(object_bool_get(xa && xb)));
+				bool ab = SPB(self);
+				bool bb = SPB(self);
+				vector_push(self->value_stack, NON_NULL(object_bool_get(ab && bb)));
 				break;
 			}
 			case op_bexcor:
