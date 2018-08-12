@@ -114,7 +114,7 @@ object * object_get_true() {
 	script_context* ctx = script_context_get_current();
 	if (ctx->oTrue == NULL) {
 		ctx->oTrue = object_malloc(object_bool);
-		ctx->oTrue->u.bool_ = !false;
+		ctx->oTrue->u.bool_ = true;
 		ctx->oTrue->gtype = GENERIC_BOOL;
 		ctx->oTrue->vptr = TYPE2CLASS(TYPE_BOOL)->vt;
 		ctx->oTrue->paint = paint_onexit;

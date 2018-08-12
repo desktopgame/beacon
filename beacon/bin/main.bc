@@ -321,7 +321,7 @@ while(iter.moveNext()) {
 		var eAssoc = calc::CalcUtility.tokenToAssoc(e.id);
 		var ePrio = calc::CalcUtility.tokenToPriority(e.id);
 		while(stack.length() > 0) {
-			var sn = stack.pop();
+			var sn = stack.top();
 			var sAssoc = calc::CalcUtility.tokenToAssoc(sn.id);
 			var sPrio = calc::CalcUtility.tokenToPriority(sn.id);
 			if(((calc::CalcUtility.tokenIsOperator(sn.id)) &&
@@ -334,9 +334,9 @@ while(iter.moveNext()) {
 				)
 			)
 			) {
-				output << sn;
+				output << stack.pop();
 			} else {
-				output << sn;
+				//output << stack.pop();
 				break;
 			}
 		}

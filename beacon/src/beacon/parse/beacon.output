@@ -11,7 +11,6 @@ Terminals which are not used
    PRE_INC
    POST_DEC
    POST_INC
-   '<'
    REF
    FORM_TYPE
 
@@ -345,7 +344,6 @@ Terminals, with rules where they appear
 
 $end (0) 0
 '\n' (10) 3
-'<' (60)
 error (256) 3
 CHAR_LITERAL (258) 194
 STRING_LITERAL (259) 24 195
@@ -466,168 +464,168 @@ FORM_TYPE (362)
 
 Nonterminals, with rules where they appear
 
-$accept (110)
+$accept (109)
     on left: 0
-compilation_unit (111)
+compilation_unit (110)
     on left: 1 2 3, on right: 0 2
-init_decl (112)
+init_decl (111)
     on left: 4 5, on right: 1
-body_decl (113)
+body_decl (112)
     on left: 6 7 8, on right: 1 2
-namespace_decl (114)
+namespace_decl (113)
     on left: 9, on right: 7
-namespace_body (115)
+namespace_body (114)
     on left: 10, on right: 9 11
-namespace_member_decl (116)
+namespace_member_decl (115)
     on left: 11 12 13 14 15, on right: 16 17
-namespace_member_decl_list (117)
+namespace_member_decl_list (116)
     on left: 16 17, on right: 17 19
-namespace_member_decl_optional (118)
+namespace_member_decl_optional (117)
     on left: 18 19, on right: 10
-namespace_path (119)
+namespace_path (118)
     on left: 20 21, on right: 9 11 21
-import_list (120)
+import_list (119)
     on left: 22 23, on right: 5 23
-import (121)
+import (120)
     on left: 24, on right: 22 23
-parameterized_typename (122)
+parameterized_typename (121)
     on left: 25, on right: 31 32 33 34 37 38
-type_parameter_group (123)
+type_parameter_group (122)
     on left: 26 27, on right: 25 61 62 63 64
-type_parameter_list (124)
+type_parameter_list (123)
     on left: 28 29, on right: 27 29
-type_parameter (125)
+type_parameter (124)
     on left: 30, on right: 28 29
-abstract_class_decl (126)
+abstract_class_decl (125)
     on left: 31 32, on right: 12
-class_decl (127)
+class_decl (126)
     on left: 33 34, on right: 13
-enum_decl (128)
+enum_decl (127)
     on left: 35 36, on right: 15
-interface_decl (129)
+interface_decl (128)
     on left: 37 38, on right: 14
-access_member_tree_opt (130)
+access_member_tree_opt (129)
     on left: 39 40, on right: 31 32 33 34 37 38
-access_member_tree (131)
+access_member_tree (130)
     on left: 41 42, on right: 40 42
-access_member_list (132)
+access_member_list (131)
     on left: 43, on right: 41 42
-member_define_list (133)
+member_define_list (132)
     on left: 44 45, on right: 43 45
-member_define (134)
+member_define (133)
     on left: 46 47 48 49 50, on right: 44 45
-constructor_define (135)
+constructor_define (134)
     on left: 51 52, on right: 46
-constructor_chain (136)
+constructor_chain (135)
     on left: 53 54, on right: 58
-constructor_chain_type_T (137)
+constructor_chain_type_T (136)
     on left: 55 56, on right: 53 54
-constructor_chain_optional (138)
+constructor_chain_optional (137)
     on left: 57 58, on right: 51 52
-function_define (139)
+function_define (138)
     on left: 59 60, on right: 8
-method_define (140)
+method_define (139)
     on left: 61 62 63 64, on right: 47
-operator_define (141)
+operator_define (140)
     on left: 65 66 67 68 69 70 71 72 73 74 75 76 77 78 79 80 81 82
     83 84 85, on right: 48
-field_define (142)
+field_define (141)
     on left: 86 87 88 89, on right: 49
-prop_set (143)
+prop_set (142)
     on left: 90 91 92 93, on right: 98 99
-prop_get (144)
+prop_get (143)
     on left: 94 95 96 97, on right: 98 99
-prop_define (145)
+prop_define (144)
     on left: 98 99, on right: 50
-modifier_type_T_list (146)
+modifier_type_T_list (145)
     on left: 100 101, on right: 61 62 86 88 98 101
-modifier_type_T (147)
+modifier_type_T (146)
     on left: 102 103 104 105 106, on right: 100 101
-access_level_T (148)
+access_level_T (147)
     on left: 107 108 109, on right: 43 92 93 96 97
-ident_list (149)
+ident_list (148)
     on left: 110 111, on right: 35 36 111
-parameter_list (150)
+parameter_list (149)
     on left: 112 113, on right: 51 59 61 63 65 66 67 68 69 70 71 72
     73 74 75 76 77 78 79 80 81 82 113 115
-argument_list (151)
+argument_list (150)
     on left: 114 115 116, on right: 53 116 162 164
-typename_group (152)
+typename_group (151)
     on left: 117 118, on right: 121 164 165 169 170
-typename_list (153)
+typename_list (152)
     on left: 119 120, on right: 32 34 38 118 120
-typename_T (154)
+typename_T (153)
     on left: 121, on right: 59 60 61 62 63 64 65 66 67 68 69 70 71
     72 73 74 75 76 77 78 79 80 81 82 83 84 85 86 87 88 89 98 99 112
     113 115 119 120 158 159 216 217 235
-fqcn_part (155)
+fqcn_part (154)
     on left: 122 123, on right: 121 123 164 165 169
-expression (156)
+expression (155)
     on left: 124 125 126, on right: 88 89 114 116 124 127 128 129 130
     131 132 133 134 135 136 137 138 139 140 141 142 143 144 145 146
     147 148 149 150 151 152 153 154 155 156 157 158 159 160 161 170
     171 172 173 174 175 176 177 178 179 180 181 182 183 184 185 186
     187 188 189 190 191 201 217 218 219 220 221 222 225 226 229 231
     236 237 239
-expression_nobrace (157)
+expression_nobrace (156)
     on left: 127 128 129 130 131 132 133 134 135 136 137 138 139 140
     141 142 143 144 145 146 147 148 149 150 151 152 153 154 155 156
     157 158 159 160 161 162 163 164 165 166 167 168,
     on right: 126 162 163
-lhs (158)
+lhs (157)
     on left: 169 170 171 172 173 174 175 176 177 178 179 180 181 182
     183 184 185 186 187 188 189 190 191, on right: 141 142 143 144
     145 146 147 148 149 150 151 168
-primary (159)
+primary (158)
     on left: 192 193 194 195 196 197 198, on right: 125
-stmt_list (160)
+stmt_list (159)
     on left: 199 200, on right: 200 241
-stmt (161)
+stmt (160)
     on left: 201 202 203 204 205 206 207 208 209 210 211 212 213 214
     215, on right: 6 199 200 238
-variable_decl_stmt (162)
+variable_decl_stmt (161)
     on left: 216, on right: 202
-variable_init_stmt (163)
+variable_init_stmt (162)
     on left: 217, on right: 203
-inferenced_type_init_stmt (164)
+inferenced_type_init_stmt (163)
     on left: 218, on right: 204
-if_stmt (165)
+if_stmt (164)
     on left: 219 220 221 222, on right: 205
-elif_list (166)
+elif_list (165)
     on left: 223 224, on right: 221 222 224
-elif (167)
+elif (166)
     on left: 225, on right: 223 224
-while_stmt (168)
+while_stmt (167)
     on left: 226, on right: 206
-break_stmt (169)
+break_stmt (168)
     on left: 227, on right: 207
-continue_stmt (170)
+continue_stmt (169)
     on left: 228, on right: 208
-return_stmt (171)
+return_stmt (170)
     on left: 229 230, on right: 209
-throw_stmt (172)
+throw_stmt (171)
     on left: 231, on right: 210
-try_stmt (173)
+try_stmt (172)
     on left: 232, on right: 211
-catch_stmt_list (174)
+catch_stmt_list (173)
     on left: 233 234, on right: 232 234
-catch_stmt (175)
+catch_stmt (174)
     on left: 235, on right: 233 234
-assert_stmt (176)
+assert_stmt (175)
     on left: 236 237, on right: 212
-defer_stmt (177)
+defer_stmt (176)
     on left: 238, on right: 213
-yield_return_stmt (178)
+yield_return_stmt (177)
     on left: 239, on right: 214
-yield_break_stmt (179)
+yield_break_stmt (178)
     on left: 240, on right: 215
-scope (180)
+scope (179)
     on left: 241 242, on right: 91 93 95 97 115 219 220 221 222 225
     232 235 244
-scope_optional (181)
+scope_optional (180)
     on left: 243 244, on right: 51 52 59 60 61 62 63 64 65 66 67 68
     69 70 71 72 73 74 75 76 77 78 79 80 81 82 83 84 85 226
-stmt_term (182)
+stmt_term (181)
     on left: 245, on right: 201 217 218 227 228 229 230 231 236 237
     239 240
 
@@ -8523,358 +8521,8 @@ state 184
   153                   | expression . GE expression
   154                   | expression . LT expression
   155                   | expression . LE expression
-  156                   | expression . LSHIFT expression  [COMMA, COLON, LSHIFT, RSHIFT, EQUAL, NOTEQUAL, BIT_AND, LOGIC_AND, BIT_OR, LOGIC_OR, EXC_OR, LCB, LRB, RRB, SEMI]
-  156                   | expression LSHIFT expression .  [COMMA, COLON, LSHIFT, RSHIFT, EQUAL, NOTEQUAL, BIT_AND, LOGIC_AND, BIT_OR, LOGIC_OR, EXC_OR, LCB, LRB, RRB, SEMI]
-  157                   | expression . RSHIFT expression
-  158                   | expression . INSTANCEOF typename_T
-  159                   | expression . AS typename_T
-  170 lhs: expression . DOT IDENT typename_group
-  171    | expression . DOT ADD LRB expression RRB
-  172    | expression . DOT SUB LRB expression RRB
-  173    | expression . DOT MUL LRB expression RRB
-  174    | expression . DOT DIV LRB expression RRB
-  175    | expression . DOT MOD LRB expression RRB
-  176    | expression . DOT GT LRB expression RRB
-  177    | expression . DOT GE LRB expression RRB
-  178    | expression . DOT LT LRB expression RRB
-  179    | expression . DOT LE LRB expression RRB
-  180    | expression . DOT EQUAL LRB expression RRB
-  181    | expression . DOT NOTEQUAL LRB expression RRB
-  182    | expression . DOT BIT_OR LRB expression RRB
-  183    | expression . DOT BIT_AND LRB expression RRB
-  184    | expression . DOT LOGIC_OR LRB expression RRB
-  185    | expression . DOT LOGIC_AND LRB expression RRB
-  186    | expression . DOT LSHIFT LRB expression RRB
-  187    | expression . DOT RSHIFT LRB expression RRB
-  188    | expression . DOT EXC_OR LRB expression RRB
-  189    | expression . DOT NOT LRB RRB
-  190    | expression . DOT CHILDA LRB RRB
-  191    | expression . DOT SUB LRB RRB
-
-    DOT         shift, and go to state 94
-    ADD         shift, and go to state 95
-    SUB         shift, and go to state 96
-    MUL         shift, and go to state 97
-    DIV         shift, and go to state 98
-    MOD         shift, and go to state 99
-    GT          shift, and go to state 104
-    GE          shift, and go to state 105
-    LT          shift, and go to state 106
-    LE          shift, and go to state 107
-    AS          shift, and go to state 113
-    INSTANCEOF  shift, and go to state 114
-
-    $default  reduce using rule 156 (expression_nobrace)
-
-    Conflict between rule 156 and token DOT resolved as shift (LSHIFT < DOT).
-    Conflict between rule 156 and token ADD resolved as shift (LSHIFT < ADD).
-    Conflict between rule 156 and token SUB resolved as shift (LSHIFT < SUB).
-    Conflict between rule 156 and token MUL resolved as shift (LSHIFT < MUL).
-    Conflict between rule 156 and token DIV resolved as shift (LSHIFT < DIV).
-    Conflict between rule 156 and token MOD resolved as shift (LSHIFT < MOD).
-    Conflict between rule 156 and token LSHIFT resolved as reduce (%left LSHIFT).
-    Conflict between rule 156 and token RSHIFT resolved as reduce (%left RSHIFT).
-    Conflict between rule 156 and token EQUAL resolved as reduce (EQUAL < LSHIFT).
-    Conflict between rule 156 and token NOTEQUAL resolved as reduce (NOTEQUAL < LSHIFT).
-    Conflict between rule 156 and token GT resolved as shift (LSHIFT < GT).
-    Conflict between rule 156 and token GE resolved as shift (LSHIFT < GE).
-    Conflict between rule 156 and token LT resolved as shift (LSHIFT < LT).
-    Conflict between rule 156 and token LE resolved as shift (LSHIFT < LE).
-    Conflict between rule 156 and token BIT_AND resolved as reduce (BIT_AND < LSHIFT).
-    Conflict between rule 156 and token LOGIC_AND resolved as reduce (LOGIC_AND < LSHIFT).
-    Conflict between rule 156 and token BIT_OR resolved as reduce (BIT_OR < LSHIFT).
-    Conflict between rule 156 and token LOGIC_OR resolved as reduce (LOGIC_OR < LSHIFT).
-    Conflict between rule 156 and token EXC_OR resolved as reduce (EXC_OR < LSHIFT).
-    Conflict between rule 156 and token AS resolved as shift (LSHIFT < AS).
-    Conflict between rule 156 and token INSTANCEOF resolved as shift (LSHIFT < INSTANCEOF).
-
-
-state 185
-
-  129 expression_nobrace: expression . ADD expression
-  130                   | expression . SUB expression
-  131                   | expression . MUL expression
-  132                   | expression . DIV expression
-  133                   | expression . MOD expression
-  134                   | expression . BIT_OR expression
-  135                   | expression . EQUAL expression
-  136                   | expression . NOTEQUAL expression
-  137                   | expression . BIT_AND expression
-  138                   | expression . EXC_OR expression
-  139                   | expression . LOGIC_OR expression
-  140                   | expression . LOGIC_AND expression
-  152                   | expression . GT expression
-  153                   | expression . GE expression
-  154                   | expression . LT expression
-  155                   | expression . LE expression
-  156                   | expression . LSHIFT expression
-  157                   | expression . RSHIFT expression  [COMMA, COLON, LSHIFT, RSHIFT, EQUAL, NOTEQUAL, BIT_AND, LOGIC_AND, BIT_OR, LOGIC_OR, EXC_OR, LCB, LRB, RRB, SEMI]
-  157                   | expression RSHIFT expression .  [COMMA, COLON, LSHIFT, RSHIFT, EQUAL, NOTEQUAL, BIT_AND, LOGIC_AND, BIT_OR, LOGIC_OR, EXC_OR, LCB, LRB, RRB, SEMI]
-  158                   | expression . INSTANCEOF typename_T
-  159                   | expression . AS typename_T
-  170 lhs: expression . DOT IDENT typename_group
-  171    | expression . DOT ADD LRB expression RRB
-  172    | expression . DOT SUB LRB expression RRB
-  173    | expression . DOT MUL LRB expression RRB
-  174    | expression . DOT DIV LRB expression RRB
-  175    | expression . DOT MOD LRB expression RRB
-  176    | expression . DOT GT LRB expression RRB
-  177    | expression . DOT GE LRB expression RRB
-  178    | expression . DOT LT LRB expression RRB
-  179    | expression . DOT LE LRB expression RRB
-  180    | expression . DOT EQUAL LRB expression RRB
-  181    | expression . DOT NOTEQUAL LRB expression RRB
-  182    | expression . DOT BIT_OR LRB expression RRB
-  183    | expression . DOT BIT_AND LRB expression RRB
-  184    | expression . DOT LOGIC_OR LRB expression RRB
-  185    | expression . DOT LOGIC_AND LRB expression RRB
-  186    | expression . DOT LSHIFT LRB expression RRB
-  187    | expression . DOT RSHIFT LRB expression RRB
-  188    | expression . DOT EXC_OR LRB expression RRB
-  189    | expression . DOT NOT LRB RRB
-  190    | expression . DOT CHILDA LRB RRB
-  191    | expression . DOT SUB LRB RRB
-
-    DOT         shift, and go to state 94
-    ADD         shift, and go to state 95
-    SUB         shift, and go to state 96
-    MUL         shift, and go to state 97
-    DIV         shift, and go to state 98
-    MOD         shift, and go to state 99
-    GT          shift, and go to state 104
-    GE          shift, and go to state 105
-    LT          shift, and go to state 106
-    LE          shift, and go to state 107
-    AS          shift, and go to state 113
-    INSTANCEOF  shift, and go to state 114
-
-    $default  reduce using rule 157 (expression_nobrace)
-
-    Conflict between rule 157 and token DOT resolved as shift (RSHIFT < DOT).
-    Conflict between rule 157 and token ADD resolved as shift (RSHIFT < ADD).
-    Conflict between rule 157 and token SUB resolved as shift (RSHIFT < SUB).
-    Conflict between rule 157 and token MUL resolved as shift (RSHIFT < MUL).
-    Conflict between rule 157 and token DIV resolved as shift (RSHIFT < DIV).
-    Conflict between rule 157 and token MOD resolved as shift (RSHIFT < MOD).
-    Conflict between rule 157 and token LSHIFT resolved as reduce (%left LSHIFT).
-    Conflict between rule 157 and token RSHIFT resolved as reduce (%left RSHIFT).
-    Conflict between rule 157 and token EQUAL resolved as reduce (EQUAL < RSHIFT).
-    Conflict between rule 157 and token NOTEQUAL resolved as reduce (NOTEQUAL < RSHIFT).
-    Conflict between rule 157 and token GT resolved as shift (RSHIFT < GT).
-    Conflict between rule 157 and token GE resolved as shift (RSHIFT < GE).
-    Conflict between rule 157 and token LT resolved as shift (RSHIFT < LT).
-    Conflict between rule 157 and token LE resolved as shift (RSHIFT < LE).
-    Conflict between rule 157 and token BIT_AND resolved as reduce (BIT_AND < RSHIFT).
-    Conflict between rule 157 and token LOGIC_AND resolved as reduce (LOGIC_AND < RSHIFT).
-    Conflict between rule 157 and token BIT_OR resolved as reduce (BIT_OR < RSHIFT).
-    Conflict between rule 157 and token LOGIC_OR resolved as reduce (LOGIC_OR < RSHIFT).
-    Conflict between rule 157 and token EXC_OR resolved as reduce (EXC_OR < RSHIFT).
-    Conflict between rule 157 and token AS resolved as shift (RSHIFT < AS).
-    Conflict between rule 157 and token INSTANCEOF resolved as shift (RSHIFT < INSTANCEOF).
-
-
-state 186
-
-  129 expression_nobrace: expression . ADD expression
-  130                   | expression . SUB expression
-  131                   | expression . MUL expression
-  132                   | expression . DIV expression
-  133                   | expression . MOD expression
-  134                   | expression . BIT_OR expression
-  135                   | expression . EQUAL expression  [COMMA, COLON, EQUAL, NOTEQUAL, LCB, LRB, RRB, SEMI]
-  135                   | expression EQUAL expression .  [COMMA, COLON, EQUAL, NOTEQUAL, LCB, LRB, RRB, SEMI]
-  136                   | expression . NOTEQUAL expression
-  137                   | expression . BIT_AND expression
-  138                   | expression . EXC_OR expression
-  139                   | expression . LOGIC_OR expression
-  140                   | expression . LOGIC_AND expression
-  152                   | expression . GT expression
-  153                   | expression . GE expression
-  154                   | expression . LT expression
-  155                   | expression . LE expression
-  156                   | expression . LSHIFT expression
-  157                   | expression . RSHIFT expression
-  158                   | expression . INSTANCEOF typename_T
-  159                   | expression . AS typename_T
-  170 lhs: expression . DOT IDENT typename_group
-  171    | expression . DOT ADD LRB expression RRB
-  172    | expression . DOT SUB LRB expression RRB
-  173    | expression . DOT MUL LRB expression RRB
-  174    | expression . DOT DIV LRB expression RRB
-  175    | expression . DOT MOD LRB expression RRB
-  176    | expression . DOT GT LRB expression RRB
-  177    | expression . DOT GE LRB expression RRB
-  178    | expression . DOT LT LRB expression RRB
-  179    | expression . DOT LE LRB expression RRB
-  180    | expression . DOT EQUAL LRB expression RRB
-  181    | expression . DOT NOTEQUAL LRB expression RRB
-  182    | expression . DOT BIT_OR LRB expression RRB
-  183    | expression . DOT BIT_AND LRB expression RRB
-  184    | expression . DOT LOGIC_OR LRB expression RRB
-  185    | expression . DOT LOGIC_AND LRB expression RRB
-  186    | expression . DOT LSHIFT LRB expression RRB
-  187    | expression . DOT RSHIFT LRB expression RRB
-  188    | expression . DOT EXC_OR LRB expression RRB
-  189    | expression . DOT NOT LRB RRB
-  190    | expression . DOT CHILDA LRB RRB
-  191    | expression . DOT SUB LRB RRB
-
-    DOT         shift, and go to state 94
-    ADD         shift, and go to state 95
-    SUB         shift, and go to state 96
-    MUL         shift, and go to state 97
-    DIV         shift, and go to state 98
-    MOD         shift, and go to state 99
-    LSHIFT      shift, and go to state 100
-    RSHIFT      shift, and go to state 101
-    GT          shift, and go to state 104
-    GE          shift, and go to state 105
-    LT          shift, and go to state 106
-    LE          shift, and go to state 107
-    BIT_AND     shift, and go to state 108
-    LOGIC_AND   shift, and go to state 109
-    BIT_OR      shift, and go to state 110
-    LOGIC_OR    shift, and go to state 111
-    EXC_OR      shift, and go to state 112
-    AS          shift, and go to state 113
-    INSTANCEOF  shift, and go to state 114
-
-    $default  reduce using rule 135 (expression_nobrace)
-
-    Conflict between rule 135 and token DOT resolved as shift (EQUAL < DOT).
-    Conflict between rule 135 and token ADD resolved as shift (EQUAL < ADD).
-    Conflict between rule 135 and token SUB resolved as shift (EQUAL < SUB).
-    Conflict between rule 135 and token MUL resolved as shift (EQUAL < MUL).
-    Conflict between rule 135 and token DIV resolved as shift (EQUAL < DIV).
-    Conflict between rule 135 and token MOD resolved as shift (EQUAL < MOD).
-    Conflict between rule 135 and token LSHIFT resolved as shift (EQUAL < LSHIFT).
-    Conflict between rule 135 and token RSHIFT resolved as shift (EQUAL < RSHIFT).
-    Conflict between rule 135 and token EQUAL resolved as reduce (%left EQUAL).
-    Conflict between rule 135 and token NOTEQUAL resolved as reduce (%left NOTEQUAL).
-    Conflict between rule 135 and token GT resolved as shift (EQUAL < GT).
-    Conflict between rule 135 and token GE resolved as shift (EQUAL < GE).
-    Conflict between rule 135 and token LT resolved as shift (EQUAL < LT).
-    Conflict between rule 135 and token LE resolved as shift (EQUAL < LE).
-    Conflict between rule 135 and token BIT_AND resolved as shift (EQUAL < BIT_AND).
-    Conflict between rule 135 and token LOGIC_AND resolved as shift (EQUAL < LOGIC_AND).
-    Conflict between rule 135 and token BIT_OR resolved as shift (EQUAL < BIT_OR).
-    Conflict between rule 135 and token LOGIC_OR resolved as shift (EQUAL < LOGIC_OR).
-    Conflict between rule 135 and token EXC_OR resolved as shift (EQUAL < EXC_OR).
-    Conflict between rule 135 and token AS resolved as shift (EQUAL < AS).
-    Conflict between rule 135 and token INSTANCEOF resolved as shift (EQUAL < INSTANCEOF).
-
-
-state 187
-
-  129 expression_nobrace: expression . ADD expression
-  130                   | expression . SUB expression
-  131                   | expression . MUL expression
-  132                   | expression . DIV expression
-  133                   | expression . MOD expression
-  134                   | expression . BIT_OR expression
-  135                   | expression . EQUAL expression
-  136                   | expression . NOTEQUAL expression  [COMMA, COLON, EQUAL, NOTEQUAL, LCB, LRB, RRB, SEMI]
-  136                   | expression NOTEQUAL expression .  [COMMA, COLON, EQUAL, NOTEQUAL, LCB, LRB, RRB, SEMI]
-  137                   | expression . BIT_AND expression
-  138                   | expression . EXC_OR expression
-  139                   | expression . LOGIC_OR expression
-  140                   | expression . LOGIC_AND expression
-  152                   | expression . GT expression
-  153                   | expression . GE expression
-  154                   | expression . LT expression
-  155                   | expression . LE expression
-  156                   | expression . LSHIFT expression
-  157                   | expression . RSHIFT expression
-  158                   | expression . INSTANCEOF typename_T
-  159                   | expression . AS typename_T
-  170 lhs: expression . DOT IDENT typename_group
-  171    | expression . DOT ADD LRB expression RRB
-  172    | expression . DOT SUB LRB expression RRB
-  173    | expression . DOT MUL LRB expression RRB
-  174    | expression . DOT DIV LRB expression RRB
-  175    | expression . DOT MOD LRB expression RRB
-  176    | expression . DOT GT LRB expression RRB
-  177    | expression . DOT GE LRB expression RRB
-  178    | expression . DOT LT LRB expression RRB
-  179    | expression . DOT LE LRB expression RRB
-  180    | expression . DOT EQUAL LRB expression RRB
-  181    | expression . DOT NOTEQUAL LRB expression RRB
-  182    | expression . DOT BIT_OR LRB expression RRB
-  183    | expression . DOT BIT_AND LRB expression RRB
-  184    | expression . DOT LOGIC_OR LRB expression RRB
-  185    | expression . DOT LOGIC_AND LRB expression RRB
-  186    | expression . DOT LSHIFT LRB expression RRB
-  187    | expression . DOT RSHIFT LRB expression RRB
-  188    | expression . DOT EXC_OR LRB expression RRB
-  189    | expression . DOT NOT LRB RRB
-  190    | expression . DOT CHILDA LRB RRB
-  191    | expression . DOT SUB LRB RRB
-
-    DOT         shift, and go to state 94
-    ADD         shift, and go to state 95
-    SUB         shift, and go to state 96
-    MUL         shift, and go to state 97
-    DIV         shift, and go to state 98
-    MOD         shift, and go to state 99
-    LSHIFT      shift, and go to state 100
-    RSHIFT      shift, and go to state 101
-    GT          shift, and go to state 104
-    GE          shift, and go to state 105
-    LT          shift, and go to state 106
-    LE          shift, and go to state 107
-    BIT_AND     shift, and go to state 108
-    LOGIC_AND   shift, and go to state 109
-    BIT_OR      shift, and go to state 110
-    LOGIC_OR    shift, and go to state 111
-    EXC_OR      shift, and go to state 112
-    AS          shift, and go to state 113
-    INSTANCEOF  shift, and go to state 114
-
-    $default  reduce using rule 136 (expression_nobrace)
-
-    Conflict between rule 136 and token DOT resolved as shift (NOTEQUAL < DOT).
-    Conflict between rule 136 and token ADD resolved as shift (NOTEQUAL < ADD).
-    Conflict between rule 136 and token SUB resolved as shift (NOTEQUAL < SUB).
-    Conflict between rule 136 and token MUL resolved as shift (NOTEQUAL < MUL).
-    Conflict between rule 136 and token DIV resolved as shift (NOTEQUAL < DIV).
-    Conflict between rule 136 and token MOD resolved as shift (NOTEQUAL < MOD).
-    Conflict between rule 136 and token LSHIFT resolved as shift (NOTEQUAL < LSHIFT).
-    Conflict between rule 136 and token RSHIFT resolved as shift (NOTEQUAL < RSHIFT).
-    Conflict between rule 136 and token EQUAL resolved as reduce (%left EQUAL).
-    Conflict between rule 136 and token NOTEQUAL resolved as reduce (%left NOTEQUAL).
-    Conflict between rule 136 and token GT resolved as shift (NOTEQUAL < GT).
-    Conflict between rule 136 and token GE resolved as shift (NOTEQUAL < GE).
-    Conflict between rule 136 and token LT resolved as shift (NOTEQUAL < LT).
-    Conflict between rule 136 and token LE resolved as shift (NOTEQUAL < LE).
-    Conflict between rule 136 and token BIT_AND resolved as shift (NOTEQUAL < BIT_AND).
-    Conflict between rule 136 and token LOGIC_AND resolved as shift (NOTEQUAL < LOGIC_AND).
-    Conflict between rule 136 and token BIT_OR resolved as shift (NOTEQUAL < BIT_OR).
-    Conflict between rule 136 and token LOGIC_OR resolved as shift (NOTEQUAL < LOGIC_OR).
-    Conflict between rule 136 and token EXC_OR resolved as shift (NOTEQUAL < EXC_OR).
-    Conflict between rule 136 and token AS resolved as shift (NOTEQUAL < AS).
-    Conflict between rule 136 and token INSTANCEOF resolved as shift (NOTEQUAL < INSTANCEOF).
-
-
-state 188
-
-  129 expression_nobrace: expression . ADD expression
-  130                   | expression . SUB expression
-  131                   | expression . MUL expression
-  132                   | expression . DIV expression
-  133                   | expression . MOD expression
-  134                   | expression . BIT_OR expression
-  135                   | expression . EQUAL expression
-  136                   | expression . NOTEQUAL expression
-  137                   | expression . BIT_AND expression
-  138                   | expression . EXC_OR expression
-  139                   | expression . LOGIC_OR expression
-  140                   | expression . LOGIC_AND expression
-  152                   | expression . GT expression  [COMMA, COLON, LSHIFT, RSHIFT, EQUAL, NOTEQUAL, GT, GE, LT, LE, BIT_AND, LOGIC_AND, BIT_OR, LOGIC_OR, EXC_OR, LCB, LRB, RRB, SEMI, INSTANCEOF]
-  152                   | expression GT expression .  [COMMA, COLON, LSHIFT, RSHIFT, EQUAL, NOTEQUAL, GT, GE, LT, LE, BIT_AND, LOGIC_AND, BIT_OR, LOGIC_OR, EXC_OR, LCB, LRB, RRB, SEMI, INSTANCEOF]
-  153                   | expression . GE expression
-  154                   | expression . LT expression
-  155                   | expression . LE expression
-  156                   | expression . LSHIFT expression
+  156                   | expression . LSHIFT expression  [COMMA, COLON, LSHIFT, RSHIFT, EQUAL, NOTEQUAL, GT, GE, LT, LE, BIT_AND, LOGIC_AND, BIT_OR, LOGIC_OR, EXC_OR, LCB, LRB, RRB, SEMI, INSTANCEOF]
+  156                   | expression LSHIFT expression .  [COMMA, COLON, LSHIFT, RSHIFT, EQUAL, NOTEQUAL, GT, GE, LT, LE, BIT_AND, LOGIC_AND, BIT_OR, LOGIC_OR, EXC_OR, LCB, LRB, RRB, SEMI, INSTANCEOF]
   157                   | expression . RSHIFT expression
   158                   | expression . INSTANCEOF typename_T
   159                   | expression . AS typename_T
@@ -8909,6 +8557,338 @@ state 188
     MOD  shift, and go to state 99
     AS   shift, and go to state 113
 
+    $default  reduce using rule 156 (expression_nobrace)
+
+    Conflict between rule 156 and token DOT resolved as shift (LSHIFT < DOT).
+    Conflict between rule 156 and token ADD resolved as shift (LSHIFT < ADD).
+    Conflict between rule 156 and token SUB resolved as shift (LSHIFT < SUB).
+    Conflict between rule 156 and token MUL resolved as shift (LSHIFT < MUL).
+    Conflict between rule 156 and token DIV resolved as shift (LSHIFT < DIV).
+    Conflict between rule 156 and token MOD resolved as shift (LSHIFT < MOD).
+    Conflict between rule 156 and token LSHIFT resolved as reduce (%left LSHIFT).
+    Conflict between rule 156 and token RSHIFT resolved as reduce (%left RSHIFT).
+    Conflict between rule 156 and token EQUAL resolved as reduce (EQUAL < LSHIFT).
+    Conflict between rule 156 and token NOTEQUAL resolved as reduce (NOTEQUAL < LSHIFT).
+    Conflict between rule 156 and token GT resolved as reduce (GT < LSHIFT).
+    Conflict between rule 156 and token GE resolved as reduce (GE < LSHIFT).
+    Conflict between rule 156 and token LT resolved as reduce (LT < LSHIFT).
+    Conflict between rule 156 and token LE resolved as reduce (LE < LSHIFT).
+    Conflict between rule 156 and token BIT_AND resolved as reduce (BIT_AND < LSHIFT).
+    Conflict between rule 156 and token LOGIC_AND resolved as reduce (LOGIC_AND < LSHIFT).
+    Conflict between rule 156 and token BIT_OR resolved as reduce (BIT_OR < LSHIFT).
+    Conflict between rule 156 and token LOGIC_OR resolved as reduce (LOGIC_OR < LSHIFT).
+    Conflict between rule 156 and token EXC_OR resolved as reduce (EXC_OR < LSHIFT).
+    Conflict between rule 156 and token AS resolved as shift (LSHIFT < AS).
+    Conflict between rule 156 and token INSTANCEOF resolved as reduce (INSTANCEOF < LSHIFT).
+
+
+state 185
+
+  129 expression_nobrace: expression . ADD expression
+  130                   | expression . SUB expression
+  131                   | expression . MUL expression
+  132                   | expression . DIV expression
+  133                   | expression . MOD expression
+  134                   | expression . BIT_OR expression
+  135                   | expression . EQUAL expression
+  136                   | expression . NOTEQUAL expression
+  137                   | expression . BIT_AND expression
+  138                   | expression . EXC_OR expression
+  139                   | expression . LOGIC_OR expression
+  140                   | expression . LOGIC_AND expression
+  152                   | expression . GT expression
+  153                   | expression . GE expression
+  154                   | expression . LT expression
+  155                   | expression . LE expression
+  156                   | expression . LSHIFT expression
+  157                   | expression . RSHIFT expression  [COMMA, COLON, LSHIFT, RSHIFT, EQUAL, NOTEQUAL, GT, GE, LT, LE, BIT_AND, LOGIC_AND, BIT_OR, LOGIC_OR, EXC_OR, LCB, LRB, RRB, SEMI, INSTANCEOF]
+  157                   | expression RSHIFT expression .  [COMMA, COLON, LSHIFT, RSHIFT, EQUAL, NOTEQUAL, GT, GE, LT, LE, BIT_AND, LOGIC_AND, BIT_OR, LOGIC_OR, EXC_OR, LCB, LRB, RRB, SEMI, INSTANCEOF]
+  158                   | expression . INSTANCEOF typename_T
+  159                   | expression . AS typename_T
+  170 lhs: expression . DOT IDENT typename_group
+  171    | expression . DOT ADD LRB expression RRB
+  172    | expression . DOT SUB LRB expression RRB
+  173    | expression . DOT MUL LRB expression RRB
+  174    | expression . DOT DIV LRB expression RRB
+  175    | expression . DOT MOD LRB expression RRB
+  176    | expression . DOT GT LRB expression RRB
+  177    | expression . DOT GE LRB expression RRB
+  178    | expression . DOT LT LRB expression RRB
+  179    | expression . DOT LE LRB expression RRB
+  180    | expression . DOT EQUAL LRB expression RRB
+  181    | expression . DOT NOTEQUAL LRB expression RRB
+  182    | expression . DOT BIT_OR LRB expression RRB
+  183    | expression . DOT BIT_AND LRB expression RRB
+  184    | expression . DOT LOGIC_OR LRB expression RRB
+  185    | expression . DOT LOGIC_AND LRB expression RRB
+  186    | expression . DOT LSHIFT LRB expression RRB
+  187    | expression . DOT RSHIFT LRB expression RRB
+  188    | expression . DOT EXC_OR LRB expression RRB
+  189    | expression . DOT NOT LRB RRB
+  190    | expression . DOT CHILDA LRB RRB
+  191    | expression . DOT SUB LRB RRB
+
+    DOT  shift, and go to state 94
+    ADD  shift, and go to state 95
+    SUB  shift, and go to state 96
+    MUL  shift, and go to state 97
+    DIV  shift, and go to state 98
+    MOD  shift, and go to state 99
+    AS   shift, and go to state 113
+
+    $default  reduce using rule 157 (expression_nobrace)
+
+    Conflict between rule 157 and token DOT resolved as shift (RSHIFT < DOT).
+    Conflict between rule 157 and token ADD resolved as shift (RSHIFT < ADD).
+    Conflict between rule 157 and token SUB resolved as shift (RSHIFT < SUB).
+    Conflict between rule 157 and token MUL resolved as shift (RSHIFT < MUL).
+    Conflict between rule 157 and token DIV resolved as shift (RSHIFT < DIV).
+    Conflict between rule 157 and token MOD resolved as shift (RSHIFT < MOD).
+    Conflict between rule 157 and token LSHIFT resolved as reduce (%left LSHIFT).
+    Conflict between rule 157 and token RSHIFT resolved as reduce (%left RSHIFT).
+    Conflict between rule 157 and token EQUAL resolved as reduce (EQUAL < RSHIFT).
+    Conflict between rule 157 and token NOTEQUAL resolved as reduce (NOTEQUAL < RSHIFT).
+    Conflict between rule 157 and token GT resolved as reduce (GT < RSHIFT).
+    Conflict between rule 157 and token GE resolved as reduce (GE < RSHIFT).
+    Conflict between rule 157 and token LT resolved as reduce (LT < RSHIFT).
+    Conflict between rule 157 and token LE resolved as reduce (LE < RSHIFT).
+    Conflict between rule 157 and token BIT_AND resolved as reduce (BIT_AND < RSHIFT).
+    Conflict between rule 157 and token LOGIC_AND resolved as reduce (LOGIC_AND < RSHIFT).
+    Conflict between rule 157 and token BIT_OR resolved as reduce (BIT_OR < RSHIFT).
+    Conflict between rule 157 and token LOGIC_OR resolved as reduce (LOGIC_OR < RSHIFT).
+    Conflict between rule 157 and token EXC_OR resolved as reduce (EXC_OR < RSHIFT).
+    Conflict between rule 157 and token AS resolved as shift (RSHIFT < AS).
+    Conflict between rule 157 and token INSTANCEOF resolved as reduce (INSTANCEOF < RSHIFT).
+
+
+state 186
+
+  129 expression_nobrace: expression . ADD expression
+  130                   | expression . SUB expression
+  131                   | expression . MUL expression
+  132                   | expression . DIV expression
+  133                   | expression . MOD expression
+  134                   | expression . BIT_OR expression
+  135                   | expression . EQUAL expression  [COMMA, COLON, EQUAL, NOTEQUAL, BIT_AND, LOGIC_AND, BIT_OR, LOGIC_OR, EXC_OR, LCB, LRB, RRB, SEMI]
+  135                   | expression EQUAL expression .  [COMMA, COLON, EQUAL, NOTEQUAL, BIT_AND, LOGIC_AND, BIT_OR, LOGIC_OR, EXC_OR, LCB, LRB, RRB, SEMI]
+  136                   | expression . NOTEQUAL expression
+  137                   | expression . BIT_AND expression
+  138                   | expression . EXC_OR expression
+  139                   | expression . LOGIC_OR expression
+  140                   | expression . LOGIC_AND expression
+  152                   | expression . GT expression
+  153                   | expression . GE expression
+  154                   | expression . LT expression
+  155                   | expression . LE expression
+  156                   | expression . LSHIFT expression
+  157                   | expression . RSHIFT expression
+  158                   | expression . INSTANCEOF typename_T
+  159                   | expression . AS typename_T
+  170 lhs: expression . DOT IDENT typename_group
+  171    | expression . DOT ADD LRB expression RRB
+  172    | expression . DOT SUB LRB expression RRB
+  173    | expression . DOT MUL LRB expression RRB
+  174    | expression . DOT DIV LRB expression RRB
+  175    | expression . DOT MOD LRB expression RRB
+  176    | expression . DOT GT LRB expression RRB
+  177    | expression . DOT GE LRB expression RRB
+  178    | expression . DOT LT LRB expression RRB
+  179    | expression . DOT LE LRB expression RRB
+  180    | expression . DOT EQUAL LRB expression RRB
+  181    | expression . DOT NOTEQUAL LRB expression RRB
+  182    | expression . DOT BIT_OR LRB expression RRB
+  183    | expression . DOT BIT_AND LRB expression RRB
+  184    | expression . DOT LOGIC_OR LRB expression RRB
+  185    | expression . DOT LOGIC_AND LRB expression RRB
+  186    | expression . DOT LSHIFT LRB expression RRB
+  187    | expression . DOT RSHIFT LRB expression RRB
+  188    | expression . DOT EXC_OR LRB expression RRB
+  189    | expression . DOT NOT LRB RRB
+  190    | expression . DOT CHILDA LRB RRB
+  191    | expression . DOT SUB LRB RRB
+
+    DOT         shift, and go to state 94
+    ADD         shift, and go to state 95
+    SUB         shift, and go to state 96
+    MUL         shift, and go to state 97
+    DIV         shift, and go to state 98
+    MOD         shift, and go to state 99
+    LSHIFT      shift, and go to state 100
+    RSHIFT      shift, and go to state 101
+    GT          shift, and go to state 104
+    GE          shift, and go to state 105
+    LT          shift, and go to state 106
+    LE          shift, and go to state 107
+    AS          shift, and go to state 113
+    INSTANCEOF  shift, and go to state 114
+
+    $default  reduce using rule 135 (expression_nobrace)
+
+    Conflict between rule 135 and token DOT resolved as shift (EQUAL < DOT).
+    Conflict between rule 135 and token ADD resolved as shift (EQUAL < ADD).
+    Conflict between rule 135 and token SUB resolved as shift (EQUAL < SUB).
+    Conflict between rule 135 and token MUL resolved as shift (EQUAL < MUL).
+    Conflict between rule 135 and token DIV resolved as shift (EQUAL < DIV).
+    Conflict between rule 135 and token MOD resolved as shift (EQUAL < MOD).
+    Conflict between rule 135 and token LSHIFT resolved as shift (EQUAL < LSHIFT).
+    Conflict between rule 135 and token RSHIFT resolved as shift (EQUAL < RSHIFT).
+    Conflict between rule 135 and token EQUAL resolved as reduce (%left EQUAL).
+    Conflict between rule 135 and token NOTEQUAL resolved as reduce (%left NOTEQUAL).
+    Conflict between rule 135 and token GT resolved as shift (EQUAL < GT).
+    Conflict between rule 135 and token GE resolved as shift (EQUAL < GE).
+    Conflict between rule 135 and token LT resolved as shift (EQUAL < LT).
+    Conflict between rule 135 and token LE resolved as shift (EQUAL < LE).
+    Conflict between rule 135 and token BIT_AND resolved as reduce (BIT_AND < EQUAL).
+    Conflict between rule 135 and token LOGIC_AND resolved as reduce (LOGIC_AND < EQUAL).
+    Conflict between rule 135 and token BIT_OR resolved as reduce (BIT_OR < EQUAL).
+    Conflict between rule 135 and token LOGIC_OR resolved as reduce (LOGIC_OR < EQUAL).
+    Conflict between rule 135 and token EXC_OR resolved as reduce (EXC_OR < EQUAL).
+    Conflict between rule 135 and token AS resolved as shift (EQUAL < AS).
+    Conflict between rule 135 and token INSTANCEOF resolved as shift (EQUAL < INSTANCEOF).
+
+
+state 187
+
+  129 expression_nobrace: expression . ADD expression
+  130                   | expression . SUB expression
+  131                   | expression . MUL expression
+  132                   | expression . DIV expression
+  133                   | expression . MOD expression
+  134                   | expression . BIT_OR expression
+  135                   | expression . EQUAL expression
+  136                   | expression . NOTEQUAL expression  [COMMA, COLON, EQUAL, NOTEQUAL, BIT_AND, LOGIC_AND, BIT_OR, LOGIC_OR, EXC_OR, LCB, LRB, RRB, SEMI]
+  136                   | expression NOTEQUAL expression .  [COMMA, COLON, EQUAL, NOTEQUAL, BIT_AND, LOGIC_AND, BIT_OR, LOGIC_OR, EXC_OR, LCB, LRB, RRB, SEMI]
+  137                   | expression . BIT_AND expression
+  138                   | expression . EXC_OR expression
+  139                   | expression . LOGIC_OR expression
+  140                   | expression . LOGIC_AND expression
+  152                   | expression . GT expression
+  153                   | expression . GE expression
+  154                   | expression . LT expression
+  155                   | expression . LE expression
+  156                   | expression . LSHIFT expression
+  157                   | expression . RSHIFT expression
+  158                   | expression . INSTANCEOF typename_T
+  159                   | expression . AS typename_T
+  170 lhs: expression . DOT IDENT typename_group
+  171    | expression . DOT ADD LRB expression RRB
+  172    | expression . DOT SUB LRB expression RRB
+  173    | expression . DOT MUL LRB expression RRB
+  174    | expression . DOT DIV LRB expression RRB
+  175    | expression . DOT MOD LRB expression RRB
+  176    | expression . DOT GT LRB expression RRB
+  177    | expression . DOT GE LRB expression RRB
+  178    | expression . DOT LT LRB expression RRB
+  179    | expression . DOT LE LRB expression RRB
+  180    | expression . DOT EQUAL LRB expression RRB
+  181    | expression . DOT NOTEQUAL LRB expression RRB
+  182    | expression . DOT BIT_OR LRB expression RRB
+  183    | expression . DOT BIT_AND LRB expression RRB
+  184    | expression . DOT LOGIC_OR LRB expression RRB
+  185    | expression . DOT LOGIC_AND LRB expression RRB
+  186    | expression . DOT LSHIFT LRB expression RRB
+  187    | expression . DOT RSHIFT LRB expression RRB
+  188    | expression . DOT EXC_OR LRB expression RRB
+  189    | expression . DOT NOT LRB RRB
+  190    | expression . DOT CHILDA LRB RRB
+  191    | expression . DOT SUB LRB RRB
+
+    DOT         shift, and go to state 94
+    ADD         shift, and go to state 95
+    SUB         shift, and go to state 96
+    MUL         shift, and go to state 97
+    DIV         shift, and go to state 98
+    MOD         shift, and go to state 99
+    LSHIFT      shift, and go to state 100
+    RSHIFT      shift, and go to state 101
+    GT          shift, and go to state 104
+    GE          shift, and go to state 105
+    LT          shift, and go to state 106
+    LE          shift, and go to state 107
+    AS          shift, and go to state 113
+    INSTANCEOF  shift, and go to state 114
+
+    $default  reduce using rule 136 (expression_nobrace)
+
+    Conflict between rule 136 and token DOT resolved as shift (NOTEQUAL < DOT).
+    Conflict between rule 136 and token ADD resolved as shift (NOTEQUAL < ADD).
+    Conflict between rule 136 and token SUB resolved as shift (NOTEQUAL < SUB).
+    Conflict between rule 136 and token MUL resolved as shift (NOTEQUAL < MUL).
+    Conflict between rule 136 and token DIV resolved as shift (NOTEQUAL < DIV).
+    Conflict between rule 136 and token MOD resolved as shift (NOTEQUAL < MOD).
+    Conflict between rule 136 and token LSHIFT resolved as shift (NOTEQUAL < LSHIFT).
+    Conflict between rule 136 and token RSHIFT resolved as shift (NOTEQUAL < RSHIFT).
+    Conflict between rule 136 and token EQUAL resolved as reduce (%left EQUAL).
+    Conflict between rule 136 and token NOTEQUAL resolved as reduce (%left NOTEQUAL).
+    Conflict between rule 136 and token GT resolved as shift (NOTEQUAL < GT).
+    Conflict between rule 136 and token GE resolved as shift (NOTEQUAL < GE).
+    Conflict between rule 136 and token LT resolved as shift (NOTEQUAL < LT).
+    Conflict between rule 136 and token LE resolved as shift (NOTEQUAL < LE).
+    Conflict between rule 136 and token BIT_AND resolved as reduce (BIT_AND < NOTEQUAL).
+    Conflict between rule 136 and token LOGIC_AND resolved as reduce (LOGIC_AND < NOTEQUAL).
+    Conflict between rule 136 and token BIT_OR resolved as reduce (BIT_OR < NOTEQUAL).
+    Conflict between rule 136 and token LOGIC_OR resolved as reduce (LOGIC_OR < NOTEQUAL).
+    Conflict between rule 136 and token EXC_OR resolved as reduce (EXC_OR < NOTEQUAL).
+    Conflict between rule 136 and token AS resolved as shift (NOTEQUAL < AS).
+    Conflict between rule 136 and token INSTANCEOF resolved as shift (NOTEQUAL < INSTANCEOF).
+
+
+state 188
+
+  129 expression_nobrace: expression . ADD expression
+  130                   | expression . SUB expression
+  131                   | expression . MUL expression
+  132                   | expression . DIV expression
+  133                   | expression . MOD expression
+  134                   | expression . BIT_OR expression
+  135                   | expression . EQUAL expression
+  136                   | expression . NOTEQUAL expression
+  137                   | expression . BIT_AND expression
+  138                   | expression . EXC_OR expression
+  139                   | expression . LOGIC_OR expression
+  140                   | expression . LOGIC_AND expression
+  152                   | expression . GT expression  [COMMA, COLON, EQUAL, NOTEQUAL, GT, GE, LT, LE, BIT_AND, LOGIC_AND, BIT_OR, LOGIC_OR, EXC_OR, LCB, LRB, RRB, SEMI, INSTANCEOF]
+  152                   | expression GT expression .  [COMMA, COLON, EQUAL, NOTEQUAL, GT, GE, LT, LE, BIT_AND, LOGIC_AND, BIT_OR, LOGIC_OR, EXC_OR, LCB, LRB, RRB, SEMI, INSTANCEOF]
+  153                   | expression . GE expression
+  154                   | expression . LT expression
+  155                   | expression . LE expression
+  156                   | expression . LSHIFT expression
+  157                   | expression . RSHIFT expression
+  158                   | expression . INSTANCEOF typename_T
+  159                   | expression . AS typename_T
+  170 lhs: expression . DOT IDENT typename_group
+  171    | expression . DOT ADD LRB expression RRB
+  172    | expression . DOT SUB LRB expression RRB
+  173    | expression . DOT MUL LRB expression RRB
+  174    | expression . DOT DIV LRB expression RRB
+  175    | expression . DOT MOD LRB expression RRB
+  176    | expression . DOT GT LRB expression RRB
+  177    | expression . DOT GE LRB expression RRB
+  178    | expression . DOT LT LRB expression RRB
+  179    | expression . DOT LE LRB expression RRB
+  180    | expression . DOT EQUAL LRB expression RRB
+  181    | expression . DOT NOTEQUAL LRB expression RRB
+  182    | expression . DOT BIT_OR LRB expression RRB
+  183    | expression . DOT BIT_AND LRB expression RRB
+  184    | expression . DOT LOGIC_OR LRB expression RRB
+  185    | expression . DOT LOGIC_AND LRB expression RRB
+  186    | expression . DOT LSHIFT LRB expression RRB
+  187    | expression . DOT RSHIFT LRB expression RRB
+  188    | expression . DOT EXC_OR LRB expression RRB
+  189    | expression . DOT NOT LRB RRB
+  190    | expression . DOT CHILDA LRB RRB
+  191    | expression . DOT SUB LRB RRB
+
+    DOT     shift, and go to state 94
+    ADD     shift, and go to state 95
+    SUB     shift, and go to state 96
+    MUL     shift, and go to state 97
+    DIV     shift, and go to state 98
+    MOD     shift, and go to state 99
+    LSHIFT  shift, and go to state 100
+    RSHIFT  shift, and go to state 101
+    AS      shift, and go to state 113
+
     $default  reduce using rule 152 (expression_nobrace)
 
     Conflict between rule 152 and token DOT resolved as shift (GT < DOT).
@@ -8917,8 +8897,8 @@ state 188
     Conflict between rule 152 and token MUL resolved as shift (GT < MUL).
     Conflict between rule 152 and token DIV resolved as shift (GT < DIV).
     Conflict between rule 152 and token MOD resolved as shift (GT < MOD).
-    Conflict between rule 152 and token LSHIFT resolved as reduce (LSHIFT < GT).
-    Conflict between rule 152 and token RSHIFT resolved as reduce (RSHIFT < GT).
+    Conflict between rule 152 and token LSHIFT resolved as shift (GT < LSHIFT).
+    Conflict between rule 152 and token RSHIFT resolved as shift (GT < RSHIFT).
     Conflict between rule 152 and token EQUAL resolved as reduce (EQUAL < GT).
     Conflict between rule 152 and token NOTEQUAL resolved as reduce (NOTEQUAL < GT).
     Conflict between rule 152 and token GT resolved as reduce (%left GT).
@@ -8949,8 +8929,8 @@ state 189
   139                   | expression . LOGIC_OR expression
   140                   | expression . LOGIC_AND expression
   152                   | expression . GT expression
-  153                   | expression . GE expression  [COMMA, COLON, LSHIFT, RSHIFT, EQUAL, NOTEQUAL, GT, GE, LT, LE, BIT_AND, LOGIC_AND, BIT_OR, LOGIC_OR, EXC_OR, LCB, LRB, RRB, SEMI, INSTANCEOF]
-  153                   | expression GE expression .  [COMMA, COLON, LSHIFT, RSHIFT, EQUAL, NOTEQUAL, GT, GE, LT, LE, BIT_AND, LOGIC_AND, BIT_OR, LOGIC_OR, EXC_OR, LCB, LRB, RRB, SEMI, INSTANCEOF]
+  153                   | expression . GE expression  [COMMA, COLON, EQUAL, NOTEQUAL, GT, GE, LT, LE, BIT_AND, LOGIC_AND, BIT_OR, LOGIC_OR, EXC_OR, LCB, LRB, RRB, SEMI, INSTANCEOF]
+  153                   | expression GE expression .  [COMMA, COLON, EQUAL, NOTEQUAL, GT, GE, LT, LE, BIT_AND, LOGIC_AND, BIT_OR, LOGIC_OR, EXC_OR, LCB, LRB, RRB, SEMI, INSTANCEOF]
   154                   | expression . LT expression
   155                   | expression . LE expression
   156                   | expression . LSHIFT expression
@@ -8980,13 +8960,15 @@ state 189
   190    | expression . DOT CHILDA LRB RRB
   191    | expression . DOT SUB LRB RRB
 
-    DOT  shift, and go to state 94
-    ADD  shift, and go to state 95
-    SUB  shift, and go to state 96
-    MUL  shift, and go to state 97
-    DIV  shift, and go to state 98
-    MOD  shift, and go to state 99
-    AS   shift, and go to state 113
+    DOT     shift, and go to state 94
+    ADD     shift, and go to state 95
+    SUB     shift, and go to state 96
+    MUL     shift, and go to state 97
+    DIV     shift, and go to state 98
+    MOD     shift, and go to state 99
+    LSHIFT  shift, and go to state 100
+    RSHIFT  shift, and go to state 101
+    AS      shift, and go to state 113
 
     $default  reduce using rule 153 (expression_nobrace)
 
@@ -8996,8 +8978,8 @@ state 189
     Conflict between rule 153 and token MUL resolved as shift (GE < MUL).
     Conflict between rule 153 and token DIV resolved as shift (GE < DIV).
     Conflict between rule 153 and token MOD resolved as shift (GE < MOD).
-    Conflict between rule 153 and token LSHIFT resolved as reduce (LSHIFT < GE).
-    Conflict between rule 153 and token RSHIFT resolved as reduce (RSHIFT < GE).
+    Conflict between rule 153 and token LSHIFT resolved as shift (GE < LSHIFT).
+    Conflict between rule 153 and token RSHIFT resolved as shift (GE < RSHIFT).
     Conflict between rule 153 and token EQUAL resolved as reduce (EQUAL < GE).
     Conflict between rule 153 and token NOTEQUAL resolved as reduce (NOTEQUAL < GE).
     Conflict between rule 153 and token GT resolved as reduce (%left GT).
@@ -9029,8 +9011,8 @@ state 190
   140                   | expression . LOGIC_AND expression
   152                   | expression . GT expression
   153                   | expression . GE expression
-  154                   | expression . LT expression  [COMMA, COLON, LSHIFT, RSHIFT, EQUAL, NOTEQUAL, GT, GE, LT, LE, BIT_AND, LOGIC_AND, BIT_OR, LOGIC_OR, EXC_OR, LCB, LRB, RRB, SEMI, INSTANCEOF]
-  154                   | expression LT expression .  [COMMA, COLON, LSHIFT, RSHIFT, EQUAL, NOTEQUAL, GT, GE, LT, LE, BIT_AND, LOGIC_AND, BIT_OR, LOGIC_OR, EXC_OR, LCB, LRB, RRB, SEMI, INSTANCEOF]
+  154                   | expression . LT expression  [COMMA, COLON, EQUAL, NOTEQUAL, GT, GE, LT, LE, BIT_AND, LOGIC_AND, BIT_OR, LOGIC_OR, EXC_OR, LCB, LRB, RRB, SEMI, INSTANCEOF]
+  154                   | expression LT expression .  [COMMA, COLON, EQUAL, NOTEQUAL, GT, GE, LT, LE, BIT_AND, LOGIC_AND, BIT_OR, LOGIC_OR, EXC_OR, LCB, LRB, RRB, SEMI, INSTANCEOF]
   155                   | expression . LE expression
   156                   | expression . LSHIFT expression
   157                   | expression . RSHIFT expression
@@ -9059,13 +9041,15 @@ state 190
   190    | expression . DOT CHILDA LRB RRB
   191    | expression . DOT SUB LRB RRB
 
-    DOT  shift, and go to state 94
-    ADD  shift, and go to state 95
-    SUB  shift, and go to state 96
-    MUL  shift, and go to state 97
-    DIV  shift, and go to state 98
-    MOD  shift, and go to state 99
-    AS   shift, and go to state 113
+    DOT     shift, and go to state 94
+    ADD     shift, and go to state 95
+    SUB     shift, and go to state 96
+    MUL     shift, and go to state 97
+    DIV     shift, and go to state 98
+    MOD     shift, and go to state 99
+    LSHIFT  shift, and go to state 100
+    RSHIFT  shift, and go to state 101
+    AS      shift, and go to state 113
 
     $default  reduce using rule 154 (expression_nobrace)
 
@@ -9075,8 +9059,8 @@ state 190
     Conflict between rule 154 and token MUL resolved as shift (LT < MUL).
     Conflict between rule 154 and token DIV resolved as shift (LT < DIV).
     Conflict between rule 154 and token MOD resolved as shift (LT < MOD).
-    Conflict between rule 154 and token LSHIFT resolved as reduce (LSHIFT < LT).
-    Conflict between rule 154 and token RSHIFT resolved as reduce (RSHIFT < LT).
+    Conflict between rule 154 and token LSHIFT resolved as shift (LT < LSHIFT).
+    Conflict between rule 154 and token RSHIFT resolved as shift (LT < RSHIFT).
     Conflict between rule 154 and token EQUAL resolved as reduce (EQUAL < LT).
     Conflict between rule 154 and token NOTEQUAL resolved as reduce (NOTEQUAL < LT).
     Conflict between rule 154 and token GT resolved as reduce (%left GT).
@@ -9109,8 +9093,8 @@ state 191
   152                   | expression . GT expression
   153                   | expression . GE expression
   154                   | expression . LT expression
-  155                   | expression . LE expression  [COMMA, COLON, LSHIFT, RSHIFT, EQUAL, NOTEQUAL, GT, GE, LT, LE, BIT_AND, LOGIC_AND, BIT_OR, LOGIC_OR, EXC_OR, LCB, LRB, RRB, SEMI, INSTANCEOF]
-  155                   | expression LE expression .  [COMMA, COLON, LSHIFT, RSHIFT, EQUAL, NOTEQUAL, GT, GE, LT, LE, BIT_AND, LOGIC_AND, BIT_OR, LOGIC_OR, EXC_OR, LCB, LRB, RRB, SEMI, INSTANCEOF]
+  155                   | expression . LE expression  [COMMA, COLON, EQUAL, NOTEQUAL, GT, GE, LT, LE, BIT_AND, LOGIC_AND, BIT_OR, LOGIC_OR, EXC_OR, LCB, LRB, RRB, SEMI, INSTANCEOF]
+  155                   | expression LE expression .  [COMMA, COLON, EQUAL, NOTEQUAL, GT, GE, LT, LE, BIT_AND, LOGIC_AND, BIT_OR, LOGIC_OR, EXC_OR, LCB, LRB, RRB, SEMI, INSTANCEOF]
   156                   | expression . LSHIFT expression
   157                   | expression . RSHIFT expression
   158                   | expression . INSTANCEOF typename_T
@@ -9138,13 +9122,15 @@ state 191
   190    | expression . DOT CHILDA LRB RRB
   191    | expression . DOT SUB LRB RRB
 
-    DOT  shift, and go to state 94
-    ADD  shift, and go to state 95
-    SUB  shift, and go to state 96
-    MUL  shift, and go to state 97
-    DIV  shift, and go to state 98
-    MOD  shift, and go to state 99
-    AS   shift, and go to state 113
+    DOT     shift, and go to state 94
+    ADD     shift, and go to state 95
+    SUB     shift, and go to state 96
+    MUL     shift, and go to state 97
+    DIV     shift, and go to state 98
+    MOD     shift, and go to state 99
+    LSHIFT  shift, and go to state 100
+    RSHIFT  shift, and go to state 101
+    AS      shift, and go to state 113
 
     $default  reduce using rule 155 (expression_nobrace)
 
@@ -9154,8 +9140,8 @@ state 191
     Conflict between rule 155 and token MUL resolved as shift (LE < MUL).
     Conflict between rule 155 and token DIV resolved as shift (LE < DIV).
     Conflict between rule 155 and token MOD resolved as shift (LE < MOD).
-    Conflict between rule 155 and token LSHIFT resolved as reduce (LSHIFT < LE).
-    Conflict between rule 155 and token RSHIFT resolved as reduce (RSHIFT < LE).
+    Conflict between rule 155 and token LSHIFT resolved as shift (LE < LSHIFT).
+    Conflict between rule 155 and token RSHIFT resolved as shift (LE < RSHIFT).
     Conflict between rule 155 and token EQUAL resolved as reduce (EQUAL < LE).
     Conflict between rule 155 and token NOTEQUAL resolved as reduce (NOTEQUAL < LE).
     Conflict between rule 155 and token GT resolved as reduce (%left GT).
@@ -9181,8 +9167,8 @@ state 192
   134                   | expression . BIT_OR expression
   135                   | expression . EQUAL expression
   136                   | expression . NOTEQUAL expression
-  137                   | expression . BIT_AND expression  [COMMA, COLON, EQUAL, NOTEQUAL, BIT_AND, LOGIC_AND, LOGIC_OR, LCB, LRB, RRB, SEMI]
-  137                   | expression BIT_AND expression .  [COMMA, COLON, EQUAL, NOTEQUAL, BIT_AND, LOGIC_AND, LOGIC_OR, LCB, LRB, RRB, SEMI]
+  137                   | expression . BIT_AND expression  [COMMA, COLON, BIT_AND, LOGIC_AND, BIT_OR, LOGIC_OR, EXC_OR, LCB, LRB, RRB, SEMI]
+  137                   | expression BIT_AND expression .  [COMMA, COLON, BIT_AND, LOGIC_AND, BIT_OR, LOGIC_OR, EXC_OR, LCB, LRB, RRB, SEMI]
   138                   | expression . EXC_OR expression
   139                   | expression . LOGIC_OR expression
   140                   | expression . LOGIC_AND expression
@@ -9225,12 +9211,12 @@ state 192
     MOD         shift, and go to state 99
     LSHIFT      shift, and go to state 100
     RSHIFT      shift, and go to state 101
+    EQUAL       shift, and go to state 102
+    NOTEQUAL    shift, and go to state 103
     GT          shift, and go to state 104
     GE          shift, and go to state 105
     LT          shift, and go to state 106
     LE          shift, and go to state 107
-    BIT_OR      shift, and go to state 110
-    EXC_OR      shift, and go to state 112
     AS          shift, and go to state 113
     INSTANCEOF  shift, and go to state 114
 
@@ -9244,17 +9230,17 @@ state 192
     Conflict between rule 137 and token MOD resolved as shift (BIT_AND < MOD).
     Conflict between rule 137 and token LSHIFT resolved as shift (BIT_AND < LSHIFT).
     Conflict between rule 137 and token RSHIFT resolved as shift (BIT_AND < RSHIFT).
-    Conflict between rule 137 and token EQUAL resolved as reduce (EQUAL < BIT_AND).
-    Conflict between rule 137 and token NOTEQUAL resolved as reduce (NOTEQUAL < BIT_AND).
+    Conflict between rule 137 and token EQUAL resolved as shift (BIT_AND < EQUAL).
+    Conflict between rule 137 and token NOTEQUAL resolved as shift (BIT_AND < NOTEQUAL).
     Conflict between rule 137 and token GT resolved as shift (BIT_AND < GT).
     Conflict between rule 137 and token GE resolved as shift (BIT_AND < GE).
     Conflict between rule 137 and token LT resolved as shift (BIT_AND < LT).
     Conflict between rule 137 and token LE resolved as shift (BIT_AND < LE).
     Conflict between rule 137 and token BIT_AND resolved as reduce (%left BIT_AND).
     Conflict between rule 137 and token LOGIC_AND resolved as reduce (LOGIC_AND < BIT_AND).
-    Conflict between rule 137 and token BIT_OR resolved as shift (BIT_AND < BIT_OR).
+    Conflict between rule 137 and token BIT_OR resolved as reduce (BIT_OR < BIT_AND).
     Conflict between rule 137 and token LOGIC_OR resolved as reduce (LOGIC_OR < BIT_AND).
-    Conflict between rule 137 and token EXC_OR resolved as shift (BIT_AND < EXC_OR).
+    Conflict between rule 137 and token EXC_OR resolved as reduce (EXC_OR < BIT_AND).
     Conflict between rule 137 and token AS resolved as shift (BIT_AND < AS).
     Conflict between rule 137 and token INSTANCEOF resolved as shift (BIT_AND < INSTANCEOF).
 
@@ -9272,8 +9258,8 @@ state 193
   137                   | expression . BIT_AND expression
   138                   | expression . EXC_OR expression
   139                   | expression . LOGIC_OR expression
-  140                   | expression . LOGIC_AND expression  [COMMA, COLON, EQUAL, NOTEQUAL, LOGIC_AND, LOGIC_OR, LCB, LRB, RRB, SEMI]
-  140                   | expression LOGIC_AND expression .  [COMMA, COLON, EQUAL, NOTEQUAL, LOGIC_AND, LOGIC_OR, LCB, LRB, RRB, SEMI]
+  140                   | expression . LOGIC_AND expression  [COMMA, COLON, LOGIC_AND, LOGIC_OR, LCB, LRB, RRB, SEMI]
+  140                   | expression LOGIC_AND expression .  [COMMA, COLON, LOGIC_AND, LOGIC_OR, LCB, LRB, RRB, SEMI]
   152                   | expression . GT expression
   153                   | expression . GE expression
   154                   | expression . LT expression
@@ -9313,6 +9299,8 @@ state 193
     MOD         shift, and go to state 99
     LSHIFT      shift, and go to state 100
     RSHIFT      shift, and go to state 101
+    EQUAL       shift, and go to state 102
+    NOTEQUAL    shift, and go to state 103
     GT          shift, and go to state 104
     GE          shift, and go to state 105
     LT          shift, and go to state 106
@@ -9333,8 +9321,8 @@ state 193
     Conflict between rule 140 and token MOD resolved as shift (LOGIC_AND < MOD).
     Conflict between rule 140 and token LSHIFT resolved as shift (LOGIC_AND < LSHIFT).
     Conflict between rule 140 and token RSHIFT resolved as shift (LOGIC_AND < RSHIFT).
-    Conflict between rule 140 and token EQUAL resolved as reduce (EQUAL < LOGIC_AND).
-    Conflict between rule 140 and token NOTEQUAL resolved as reduce (NOTEQUAL < LOGIC_AND).
+    Conflict between rule 140 and token EQUAL resolved as shift (LOGIC_AND < EQUAL).
+    Conflict between rule 140 and token NOTEQUAL resolved as shift (LOGIC_AND < NOTEQUAL).
     Conflict between rule 140 and token GT resolved as shift (LOGIC_AND < GT).
     Conflict between rule 140 and token GE resolved as shift (LOGIC_AND < GE).
     Conflict between rule 140 and token LT resolved as shift (LOGIC_AND < LT).
@@ -9355,8 +9343,8 @@ state 194
   131                   | expression . MUL expression
   132                   | expression . DIV expression
   133                   | expression . MOD expression
-  134                   | expression . BIT_OR expression  [COMMA, COLON, EQUAL, NOTEQUAL, BIT_AND, LOGIC_AND, BIT_OR, LOGIC_OR, LCB, LRB, RRB, SEMI]
-  134                   | expression BIT_OR expression .  [COMMA, COLON, EQUAL, NOTEQUAL, BIT_AND, LOGIC_AND, BIT_OR, LOGIC_OR, LCB, LRB, RRB, SEMI]
+  134                   | expression . BIT_OR expression  [COMMA, COLON, LOGIC_AND, BIT_OR, LOGIC_OR, LCB, LRB, RRB, SEMI]
+  134                   | expression BIT_OR expression .  [COMMA, COLON, LOGIC_AND, BIT_OR, LOGIC_OR, LCB, LRB, RRB, SEMI]
   135                   | expression . EQUAL expression
   136                   | expression . NOTEQUAL expression
   137                   | expression . BIT_AND expression
@@ -9402,10 +9390,13 @@ state 194
     MOD         shift, and go to state 99
     LSHIFT      shift, and go to state 100
     RSHIFT      shift, and go to state 101
+    EQUAL       shift, and go to state 102
+    NOTEQUAL    shift, and go to state 103
     GT          shift, and go to state 104
     GE          shift, and go to state 105
     LT          shift, and go to state 106
     LE          shift, and go to state 107
+    BIT_AND     shift, and go to state 108
     EXC_OR      shift, and go to state 112
     AS          shift, and go to state 113
     INSTANCEOF  shift, and go to state 114
@@ -9420,13 +9411,13 @@ state 194
     Conflict between rule 134 and token MOD resolved as shift (BIT_OR < MOD).
     Conflict between rule 134 and token LSHIFT resolved as shift (BIT_OR < LSHIFT).
     Conflict between rule 134 and token RSHIFT resolved as shift (BIT_OR < RSHIFT).
-    Conflict between rule 134 and token EQUAL resolved as reduce (EQUAL < BIT_OR).
-    Conflict between rule 134 and token NOTEQUAL resolved as reduce (NOTEQUAL < BIT_OR).
+    Conflict between rule 134 and token EQUAL resolved as shift (BIT_OR < EQUAL).
+    Conflict between rule 134 and token NOTEQUAL resolved as shift (BIT_OR < NOTEQUAL).
     Conflict between rule 134 and token GT resolved as shift (BIT_OR < GT).
     Conflict between rule 134 and token GE resolved as shift (BIT_OR < GE).
     Conflict between rule 134 and token LT resolved as shift (BIT_OR < LT).
     Conflict between rule 134 and token LE resolved as shift (BIT_OR < LE).
-    Conflict between rule 134 and token BIT_AND resolved as reduce (BIT_AND < BIT_OR).
+    Conflict between rule 134 and token BIT_AND resolved as shift (BIT_OR < BIT_AND).
     Conflict between rule 134 and token LOGIC_AND resolved as reduce (LOGIC_AND < BIT_OR).
     Conflict between rule 134 and token BIT_OR resolved as reduce (%left BIT_OR).
     Conflict between rule 134 and token LOGIC_OR resolved as reduce (LOGIC_OR < BIT_OR).
@@ -9447,8 +9438,8 @@ state 195
   136                   | expression . NOTEQUAL expression
   137                   | expression . BIT_AND expression
   138                   | expression . EXC_OR expression
-  139                   | expression . LOGIC_OR expression  [COMMA, COLON, EQUAL, NOTEQUAL, LOGIC_OR, LCB, LRB, RRB, SEMI]
-  139                   | expression LOGIC_OR expression .  [COMMA, COLON, EQUAL, NOTEQUAL, LOGIC_OR, LCB, LRB, RRB, SEMI]
+  139                   | expression . LOGIC_OR expression  [COMMA, COLON, LOGIC_OR, LCB, LRB, RRB, SEMI]
+  139                   | expression LOGIC_OR expression .  [COMMA, COLON, LOGIC_OR, LCB, LRB, RRB, SEMI]
   140                   | expression . LOGIC_AND expression
   152                   | expression . GT expression
   153                   | expression . GE expression
@@ -9489,6 +9480,8 @@ state 195
     MOD         shift, and go to state 99
     LSHIFT      shift, and go to state 100
     RSHIFT      shift, and go to state 101
+    EQUAL       shift, and go to state 102
+    NOTEQUAL    shift, and go to state 103
     GT          shift, and go to state 104
     GE          shift, and go to state 105
     LT          shift, and go to state 106
@@ -9510,8 +9503,8 @@ state 195
     Conflict between rule 139 and token MOD resolved as shift (LOGIC_OR < MOD).
     Conflict between rule 139 and token LSHIFT resolved as shift (LOGIC_OR < LSHIFT).
     Conflict between rule 139 and token RSHIFT resolved as shift (LOGIC_OR < RSHIFT).
-    Conflict between rule 139 and token EQUAL resolved as reduce (EQUAL < LOGIC_OR).
-    Conflict between rule 139 and token NOTEQUAL resolved as reduce (NOTEQUAL < LOGIC_OR).
+    Conflict between rule 139 and token EQUAL resolved as shift (LOGIC_OR < EQUAL).
+    Conflict between rule 139 and token NOTEQUAL resolved as shift (LOGIC_OR < NOTEQUAL).
     Conflict between rule 139 and token GT resolved as shift (LOGIC_OR < GT).
     Conflict between rule 139 and token GE resolved as shift (LOGIC_OR < GE).
     Conflict between rule 139 and token LT resolved as shift (LOGIC_OR < LT).
@@ -9536,8 +9529,8 @@ state 196
   135                   | expression . EQUAL expression
   136                   | expression . NOTEQUAL expression
   137                   | expression . BIT_AND expression
-  138                   | expression . EXC_OR expression  [COMMA, COLON, EQUAL, NOTEQUAL, BIT_AND, LOGIC_AND, BIT_OR, LOGIC_OR, EXC_OR, LCB, LRB, RRB, SEMI]
-  138                   | expression EXC_OR expression .  [COMMA, COLON, EQUAL, NOTEQUAL, BIT_AND, LOGIC_AND, BIT_OR, LOGIC_OR, EXC_OR, LCB, LRB, RRB, SEMI]
+  138                   | expression . EXC_OR expression  [COMMA, COLON, LOGIC_AND, BIT_OR, LOGIC_OR, EXC_OR, LCB, LRB, RRB, SEMI]
+  138                   | expression EXC_OR expression .  [COMMA, COLON, LOGIC_AND, BIT_OR, LOGIC_OR, EXC_OR, LCB, LRB, RRB, SEMI]
   139                   | expression . LOGIC_OR expression
   140                   | expression . LOGIC_AND expression
   152                   | expression . GT expression
@@ -9579,10 +9572,13 @@ state 196
     MOD         shift, and go to state 99
     LSHIFT      shift, and go to state 100
     RSHIFT      shift, and go to state 101
+    EQUAL       shift, and go to state 102
+    NOTEQUAL    shift, and go to state 103
     GT          shift, and go to state 104
     GE          shift, and go to state 105
     LT          shift, and go to state 106
     LE          shift, and go to state 107
+    BIT_AND     shift, and go to state 108
     AS          shift, and go to state 113
     INSTANCEOF  shift, and go to state 114
 
@@ -9596,13 +9592,13 @@ state 196
     Conflict between rule 138 and token MOD resolved as shift (EXC_OR < MOD).
     Conflict between rule 138 and token LSHIFT resolved as shift (EXC_OR < LSHIFT).
     Conflict between rule 138 and token RSHIFT resolved as shift (EXC_OR < RSHIFT).
-    Conflict between rule 138 and token EQUAL resolved as reduce (EQUAL < EXC_OR).
-    Conflict between rule 138 and token NOTEQUAL resolved as reduce (NOTEQUAL < EXC_OR).
+    Conflict between rule 138 and token EQUAL resolved as shift (EXC_OR < EQUAL).
+    Conflict between rule 138 and token NOTEQUAL resolved as shift (EXC_OR < NOTEQUAL).
     Conflict between rule 138 and token GT resolved as shift (EXC_OR < GT).
     Conflict between rule 138 and token GE resolved as shift (EXC_OR < GE).
     Conflict between rule 138 and token LT resolved as shift (EXC_OR < LT).
     Conflict between rule 138 and token LE resolved as shift (EXC_OR < LE).
-    Conflict between rule 138 and token BIT_AND resolved as reduce (BIT_AND < EXC_OR).
+    Conflict between rule 138 and token BIT_AND resolved as shift (EXC_OR < BIT_AND).
     Conflict between rule 138 and token LOGIC_AND resolved as reduce (LOGIC_AND < EXC_OR).
     Conflict between rule 138 and token BIT_OR resolved as reduce (BIT_OR < EXC_OR).
     Conflict between rule 138 and token LOGIC_OR resolved as reduce (LOGIC_OR < EXC_OR).
