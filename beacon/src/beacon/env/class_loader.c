@@ -10,6 +10,7 @@
 #include "../vm/opcode_buf.h"
 #include "lazy_resolve.h"
 #include "../env/native_method_ref.h"
+#include "../env/type_parameter.h"
 #include "../il/il_argument.h"
 #include "../util/vector.h"
 #include "script_context.h"
@@ -257,6 +258,7 @@ static void class_loader_load_toplevel_function(class_loader* self) {
 	for(int i=0; i<funcs->length; i++) {
 		il_function* ilfunc = vector_at(funcs, i);
 		method* m = method_new(ilfunc->namev);
+		type_parameter_list_dup(ilfunc->type_parameter_vec, m->type_parameter_list);
 		script_method* sm = script_method_new();
 		enviroment* env = enviroment_new();
 		//call_contextの設定

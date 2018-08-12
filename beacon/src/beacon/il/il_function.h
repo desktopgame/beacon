@@ -10,6 +10,7 @@ struct generic_cache;
  */
 typedef struct il_function {
 	string_view namev;
+	vector* type_parameter_vec;
 	vector* parameter_list;
 	vector* statement_list;
 	//il_type* return_type;

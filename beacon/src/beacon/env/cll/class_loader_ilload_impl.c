@@ -139,6 +139,7 @@ static void class_loader_ilload_function(class_loader * self, ast * asource) {
 	ast* afunc_body = ast_at(asource, 3);
 	ast* aret_name = ast_at(asource, 4);
 	il_function* ilfunc = il_function_new(afunc_name->u.stringv_value);
+	CLIL_type_parameter(self, atypeparams, ilfunc->type_parameter_vec);
 	CLIL_parameter_list(self, ilfunc->parameter_list, aparam_list);
 	CLIL_body(self, ilfunc->statement_list, afunc_body);
 	CLIL_generic_cache(aret_name, ilfunc->return_fqcn);

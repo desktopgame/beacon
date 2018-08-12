@@ -79,13 +79,20 @@ generic_type* il_factor_invoke_bound_eval(il_factor_invoke_bound * self, envirom
 	if(bc_error_last()) {
 		return NULL;
 	}
+
+	call_frame* cfr = call_context_push(cctx, frame_self_invoke_T);
+	cfr->u.self_invoke.args = self->args;
+	cfr->u.self_invoke.typeargs = self->type_args;
+
 	if(self->m->return_gtype->tag != generic_type_tag_none) {
 		resolve_non_default(self, env, cctx);
 		assert(self->resolved != NULL);
+		call_context_pop(cctx);
 		return self->resolved;
 	} else {
 		resolve_default(self, env, cctx);
 		assert(self->resolved != NULL);
+		call_context_pop(cctx);
 		return self->resolved;
 	}
 	assert(self->resolved != NULL);
@@ -132,7 +139,6 @@ static void resolve_default(il_factor_invoke_bound * self, enviroment * env, cal
 		return;
 	}
 	generic_type* rgtp = self->m->return_gtype;
-//	virtual_type returnvType = self->m->return_vtype;
 	self->resolved = generic_type_apply(rgtp, cctx);
 }
 
