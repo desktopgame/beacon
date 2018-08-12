@@ -404,7 +404,7 @@ vector* class_generic_type_list_to_interface_list_tree(class_* self) {
 	do {
 		vector* line = class_generic_type_list_to_interface_list(ptr->impl_list);
 		for(int i=0; i<line->length; i++) {
-			vector_push(ret, vector_at(line, i));
+			vector_push(ret, NON_NULL(vector_at(line, i)));
 		}
 		vector_delete(line, vector_deleter_null);
 		if(ptr->super_class == NULL) {
@@ -418,8 +418,8 @@ vector* class_generic_type_list_to_interface_list_tree(class_* self) {
 vector* class_generic_type_list_to_interface_list(vector* list) {
 	vector* ret = vector_new();
 	for(int i=0; i<list->length; i++) {
-		generic_type* gE = (generic_type*)vector_at(list, i);
-		vector_push(ret, TYPE2INTERFACE(gE->core_type));
+		generic_type* gE = NON_NULL((generic_type*)vector_at(list, i));
+		vector_push(ret, NON_NULL(TYPE2INTERFACE(gE->core_type)));
 	}
 	return ret;
 }
@@ -594,11 +594,12 @@ static void class_create_vtable_interface(class_* self) {
 	#if defined(DEBUG)
 	const char* clname = string_pool_ref2str(type_name(self->parent));
 	#endif
+	vector* tbl = class_generic_type_list_to_interface_list_tree(self);
 	//もしインターフェースを実装しているなら、
 	//インターフェースに対応する同じ並びのメソッドテーブルも作る
-	for (int i = 0; i < self->impl_list->length; i++) {
-		generic_type* gtp = (generic_type*)vector_at(self->impl_list, i);
-		interface_* inter = (interface_*)gtp->core_type->u.interface_;
+	for (int i = 0; i < tbl->length; i++) {
+		//generic_type* gtp = (generic_type*)vector_at(tbl, i);
+		interface_* inter = (interface_*)vector_at(tbl, i);
 		vtable* interVT = inter->vt;
 		vtable* newVT = vtable_new();
 		assert(interVT != NULL);
@@ -614,6 +615,7 @@ static void class_create_vtable_interface(class_* self) {
 					string_pool_ref2str(type_name(interVTM->parent)),
 					string_pool_ref2str(interVTM->namev)
 				);
+				vector_delete(tbl, vector_deleter_null);
 				return;
 			}
 			//assert(self->is_abstract || classVTM != NULL);
@@ -626,6 +628,7 @@ static void class_create_vtable_interface(class_* self) {
 		}
 		vector_push(self->vt_vec, newVT);
 	}
+	vector_delete(tbl, vector_deleter_null);
 }
 
 static void class_impl_delete(vector_item item) {

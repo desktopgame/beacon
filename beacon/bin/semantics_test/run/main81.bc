@@ -304,7 +304,7 @@ namespace calc {
 }
 var output = new Vector[calc::Token]();
 var stack = new Vector[calc::Token]();
-var line = Console.readLine();
+var line = "10 + 3 * 2"; //テストの時に毎回入力するの面倒なので
 var tokenizer = new calc::Tokenizer(line);
 var tokens = tokenizer.lex();
 var iter = tokens.iterate();

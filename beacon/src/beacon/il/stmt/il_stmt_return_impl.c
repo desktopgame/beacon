@@ -57,7 +57,9 @@ static void check_method_return(il_stmt_return * self, enviroment * env, call_co
 		return;
 	}
 	//戻り値の型に互換性がない
-	if(generic_type_distance(m->return_gtype, il_factor_eval(self->fact, env, cctx)) < 0) {
+	generic_type* retT =il_factor_eval(self->fact, env, cctx);
+	if(retT->core_type != TYPE_NULL &&
+	   generic_type_distance(m->return_gtype, retT) < 0) {
 		bc_error_throw(bcerror_return_value_type_is_not_compatible_not_void_method,
 			string_pool_ref2str(type_name(m->parent)),
 			string_pool_ref2str(m->namev)

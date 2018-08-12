@@ -178,7 +178,7 @@ void generic_type_generate(generic_type* self, enviroment* env) {
 		if(self->tag == generic_type_tag_class) {
 			opcode_buf_add(env->buf, op_generic_instance_type);
 			opcode_buf_add(env->buf, self->virtual_type_index);
-			assert(self->virtual_type_index != -1);
+			//assert(self->virtual_type_index != -1);
 		} else {
 			opcode_buf_add(env->buf, op_generic_static_type);
 			opcode_buf_add(env->buf, self->virtual_type_index);

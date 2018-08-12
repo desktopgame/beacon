@@ -392,12 +392,16 @@ method * class_get_smethod(class_* self, int index) {
 }
 
 method * class_get_impl_method(class_ * self, type * interType, int interMIndex) {
+	#if defined(DEBUG)
+	const char* str = string_pool_ref2str(self->namev);
+	#endif
 	assert(self->vt_vec->length > 0);
+	vector* tbl = class_generic_type_list_to_interface_list_tree(self);
 	//指定のインターフェイスが
 	//このクラスにおいて何番目かを調べる
 	int declIndex = -1;
-	for (int i = 0; i < self->impl_list->length; i++) {
-		generic_type* e = vector_at(self->impl_list, i);
+	for (int i = 0; i < tbl->length; i++) {
+		generic_type* e = vector_at(tbl, i);
 		interface_* inter = e->core_type->u.interface_;
 		if (inter == interType->u.interface_) {
 			declIndex = i;
@@ -406,6 +410,7 @@ method * class_get_impl_method(class_ * self, type * interType, int interMIndex)
 	}
 	//仮想関数テーブルの一覧から引く
 	assert(declIndex != -1);
+	vector_delete(tbl, vector_deleter_null);
 	vtable* vtAt = vector_at(self->vt_vec, declIndex);
 	return vector_at(vtAt->elements, interMIndex);
 }

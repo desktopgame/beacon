@@ -35,6 +35,13 @@ namespace beacon::lang {
 			return ret;
 		}
 
+		def top() -> T {
+			if(length == 0) {
+				throw new Exception("not added any objects");
+			}
+			return proxy.get(length - 1);
+		}
+
 		def set(Int index, T a) -> Void {
 			this.checkRange(index);
 			this.proxy.set(index, a);

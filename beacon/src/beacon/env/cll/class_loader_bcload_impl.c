@@ -351,6 +351,9 @@ static void CLBC_register_class(class_loader* self, namespace_* parent, il_type*
 		} else {
 			generic_type* gtp = import_manager_resolve(self->import_manager, parent, e, cctx);
 			type* E = GENERIC2TYPE(gtp);
+			#if defined(DEBUG)
+			const char* Estr = string_pool_ref2str(type_name(E));
+			#endif
 			vector_push(cls->impl_list, gtp);
 			if(E->tag != type_interface) {
 				bc_error_throw(bcerror_class_first, string_pool_ref2str(type_name(tp)));
