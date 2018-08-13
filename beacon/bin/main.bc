@@ -1,38 +1,5 @@
-namespace except {
-	class AException : Exception {
-		public:
-		def new() {
-		}
-	}
-	class BException : Exception {
-		public:
-		def new() {
-		}
-	}
-	class CException : Exception {
-		public:
-		def new() {
-		}
-	}
-
-	class Root {
-		public:
-		def static panic() -> Void {
-			throw new CException();
-		}
+namespace beacon {
+	namespace 000 {
+		
 	}
 }
-var num = -1;
-try {
-	except::Root.panic();
-} catch(except::AException ae) {
-	num = 0;
-	printLine("AException");
-} catch(except::BException be) {
-	num = 1;
-	printLine("BException");
-} catch(except::CException ce) {
-	num = 2;
-	printLine("CException");
-}
-assert(num == 2);

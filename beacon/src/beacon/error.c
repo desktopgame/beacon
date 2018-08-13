@@ -3,8 +3,9 @@
 #include "util/string_pool.h"
 
 static bc_error_id gGlobalError = bcerror_none;
-static string_view gErrorMessageV = ZERO_VIEW;
+static string_view gErrorFile = ZERO_VIEW;
 static int gErrorLineNo = -1;
+static int gErrorColumn = -1;
 
 void bc_error_throw(bc_error_id id, ...) {
 	va_list ap;
@@ -23,7 +24,7 @@ void bc_error_vthrow(bc_error_id id, va_list ap) {
 			fmt = "%s";
 			break;
 		case bcerror_parse:
-			fmt = "parser failed --- %s";
+			fmt = "%s";
 			break;
 		case bcerror_require_not_found:
 			fmt = "not found of required file: %s";
@@ -259,23 +260,33 @@ void bc_error_vthrow(bc_error_id id, va_list ap) {
 	gGlobalError = id;
 	vfprintf(stderr, fmt, ap);
 	fprintf(stderr, "\n");
+	fprintf(stderr, "file=%s line=%d column=%d\n",
+		string_pool_ref2str(gErrorFile),
+		gErrorLineNo,
+		gErrorColumn
+	);
 }
 
 void bc_error_clear() {
 	gGlobalError = bcerror_none;
-	gErrorMessageV = ZERO_VIEW;
+	gErrorFile = ZERO_VIEW;
 	gErrorLineNo = -1;
+	gErrorColumn = -1;
 }
 
 void bc_error_file(const char* filename) {
 	if(filename == NULL) {
 		filename = "NULL";
 	}
-	gErrorMessageV = string_pool_intern(filename);
+	gErrorFile = string_pool_intern(filename);
 }
 
 void bc_error_line(int lineno) {
 	gErrorLineNo = lineno;
+}
+
+void bc_error_column(int column) {
+	gErrorColumn = column;
 }
 
 bc_error_id bc_error_last() {

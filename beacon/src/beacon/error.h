@@ -128,6 +128,12 @@ void bc_error_file(const char* filename);
 void bc_error_line(int lineno);
 
 /**
+ * エラーが発生した列を記録します.
+ * @param column
+ */
+void bc_error_column(int column);
+
+/**
  * 現在発生中のエラーを返します.
  * @return
  */

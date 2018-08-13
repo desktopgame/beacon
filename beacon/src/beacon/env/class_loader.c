@@ -302,7 +302,7 @@ static void class_loader_load_toplevel_function(class_loader* self) {
 
 static bool check_parser_error(parser* p) {
 	if(p->result == parse_syntax_error_T) {
-		bc_error_throw(bcerror_parse, p->source_name);
+		bc_error_throw(bcerror_parse, p->error_message);
 		parser_destroy(p);
 		return true;
 	} else if(p->result == parse_open_error_T) {

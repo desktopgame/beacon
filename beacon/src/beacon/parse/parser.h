@@ -93,8 +93,8 @@ ast* parser_reduce_buffer(parser* self);
 ast* parser_release_ast(parser* self);
 
 /**
- * エラー情報を出力します.
+ * エラー発生位置を設定します.
  * @param p
  */
-void parser_print_error(parser* p);
+void parser_relocation_error(parser* p);
 #endif // !SIGNAL_PARSE_PARSER_H

@@ -4,6 +4,7 @@
 #include "../util/string_pool.h"
 #include "../ast/ast.h"
 #include "../ast/ast_new_literal.h"
+#include "../error.h"
 #include <assert.h>
 static parser* parser_new();
 static parser* gParser;
@@ -19,7 +20,7 @@ parser* parse_string(const char* source) {
 	if (yyparse()) {
 		yy_clearstr();
 		gParser->result = parse_syntax_error_T;
-		parser_print_error(gParser);
+		parser_relocation_error(gParser);
 		return gParser;
 	}
 	yy_clearstr();
@@ -42,7 +43,7 @@ parser* parse_file(const char* filename) {
 	}
 	if (yyparse()) {
 		gParser->result = parse_syntax_error_T;
-		parser_print_error(gParser);
+		parser_relocation_error(gParser);
 		return gParser;
 	}
 	return gParser;
@@ -91,17 +92,10 @@ ast* parser_release_ast(parser* self) {
 	return ret;
 }
 
-void parser_print_error(parser* p) {
-	fprintf(stderr, "file=%s ", p->source_name);
-	fprintf(stderr, "line=%d ", p->error_line_index);
-	fprintf(stderr, "column=%d", p->error_column_index);
-	fprintf(stderr, "\n");
-
-	fprintf(stderr, "%s", p->error_message);
-	fprintf(stderr, "\n");
-
-	fprintf(stderr, "%s", p->error_line_text);
-	fprintf(stderr, "\n");
+void parser_relocation_error(parser* p) {
+	bc_error_file(p->source_name);
+	bc_error_line(p->error_line_index);
+	bc_error_column(p->error_column_index);
 }
 
 //private

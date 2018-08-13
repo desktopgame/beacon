@@ -34,6 +34,7 @@ static void CLBC_check_interface(class_loader * self, il_type * iltype, type * t
 
 void class_loader_link(class_loader* self, link_type type) {
 	CL_ERROR(self);
+	bc_error_file(self->filename);
 	if(type == link_decl) {
 		CLBC_excec_class_decl(self);
 		CL_ERROR(self);
