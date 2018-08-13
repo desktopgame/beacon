@@ -67,12 +67,17 @@ typedef enum bc_error_id {
 	bcerror_auto_chain_ctor_not_found,
 	bcerror_explicit_chain_ctor_not_found,
 
-	bcerror_undefined_class,
-	bcerror_undefined_variable,
-	bcerror_undefined_field,
-	bcerror_undefined_method,
-	bcerror_undefined_ctor,
-	bcerror_undefined_operator,
+	bcerror_new_instance_undefined_class,
+	bcerror_ref_undefined_local_variable,
+
+	bcerror_invoke_bound_undefined_method,
+	bcerror_invoke_instance_undefined_method,
+	bcerror_invoke_static_undefined_method,
+
+	bcerror_new_instance_undefined_ctor,
+
+	bcerror_undefined_compare_operator,
+
 	bcerror_construct_abstract_type,
 	bcerror_can_t_resolve_lambda,
 	bcerror_not_functional_interface,

@@ -193,7 +193,10 @@ static void il_factor_invoke_check(il_factor_invoke * self, enviroment * env, ca
 	//self->m = class_find_method(TYPE2CLASS(ctype), self->name, self->args, env, cache, &temp);
 	self->index = temp;
 	if(temp == -1) {
-		bc_error_throw(bcerror_undefined_method, string_pool_ref2str(self->namev));
+		bc_error_throw(bcerror_invoke_instance_undefined_method,
+			string_pool_ref2str(type_name(ctype)),
+			string_pool_ref2str(self->namev)
+		);
 		return;
 	}
 }

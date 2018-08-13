@@ -146,7 +146,9 @@ static void il_factor_new_instance_find(il_factor_new_instance * self, enviromen
 	//コンストラクタで生成するオブジェクトの肩を取得
 	type* ty = call_context_eval_type(cctx, self->fqcnc);
 	if(ty == NULL) {
-		bc_error_throw(bcerror_undefined_class, string_pool_ref2str(self->fqcnc->namev));
+		bc_error_throw(bcerror_new_instance_undefined_class,
+			string_pool_ref2str(self->fqcnc->namev)
+		);
 		return;
 	}
 	//使用するコンストラクタを取得
@@ -160,7 +162,9 @@ static void il_factor_new_instance_find(il_factor_new_instance * self, enviromen
 	self->constructor_index = temp;
 	call_context_pop(cctx);
 	if(temp == -1) {
-		bc_error_throw(bcerror_undefined_ctor, string_pool_ref2str(cls->namev));
+		bc_error_throw(bcerror_new_instance_undefined_class,
+			string_pool_ref2str(cls->namev)
+		);
 	}
 }
 

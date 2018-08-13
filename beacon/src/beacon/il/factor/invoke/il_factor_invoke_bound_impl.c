@@ -164,7 +164,9 @@ static void il_factor_invoke_bound_check(il_factor_invoke_bound * self, envirome
 	self->index = temp;
 	call_context_pop(cctx);
 	if(temp == -1) {
-		bc_error_throw(bcerror_undefined_method, string_pool_ref2str(self->namev));
+		bc_error_throw(bcerror_invoke_bound_undefined_method,
+			string_pool_ref2str(self->namev)
+		);
 	}
 }
 static void il_factor_invoke_bound_args_delete(vector_item item) {

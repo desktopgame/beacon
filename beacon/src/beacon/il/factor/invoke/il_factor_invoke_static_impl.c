@@ -144,7 +144,10 @@ static void il_factor_invoke_static_check(il_factor_invoke_static * self, enviro
 	self->index = temp;
 	//メソッドが見つからない
 	if(temp == -1 || self->m == NULL) {
-		bc_error_throw(bcerror_undefined_method, string_pool_ref2str(self->namev));
+		bc_error_throw(bcerror_invoke_static_undefined_method,
+			string_pool_ref2str(cls->namev),
+			string_pool_ref2str(self->namev)
+		);
 	}
 	call_context_pop(cctx);
 }

@@ -176,24 +176,32 @@ void bc_error_vthrow(bc_error_id id, va_list ap) {
 			break;
 
 
-		case bcerror_undefined_class:
+		case bcerror_new_instance_undefined_class:
 			fmt = "undefined class: %s";
 			break;
-		case bcerror_undefined_variable:
+		case bcerror_ref_undefined_local_variable:
 			fmt = "undefined variable: %s";
 			break;
-		case bcerror_undefined_method:
-			fmt = "undefined method: %s";
+
+
+		case bcerror_invoke_bound_undefined_method:
+			fmt = "undefined method: %s#%s";
 			break;
-		case bcerror_undefined_field:
-			fmt = "undefined field: %s";
+		case bcerror_invoke_instance_undefined_method:
+			fmt = "undefined method: %s#%s";
 			break;
-		case bcerror_undefined_ctor:
+		case bcerror_invoke_static_undefined_method:
+			fmt = "undefined method: %s#%s";
+			break;
+
+		case bcerror_new_instance_undefined_ctor:
 			fmt = "undefined ctor: %s";
 			break;
-		case bcerror_undefined_operator:
+
+		case bcerror_undefined_compare_operator:
 			fmt = "undefined operator: %s";
 			break;
+
 		case bcerror_construct_abstract_type:
 			fmt = "can't construct a abstract type by new operator: %s";
 			break;
