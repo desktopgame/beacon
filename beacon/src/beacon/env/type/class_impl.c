@@ -611,6 +611,7 @@ static void class_create_vtable_interface(class_* self) {
 			method* interVTM = vector_at(interVT->elements, j);
 			method* classVTM = class_find_impl_method(self, interVTM);
 			if(!self->is_abstract && classVTM == NULL) {
+				vector_push(self->vt_vec, newVT);
 				bc_error_throw(bcerror_not_implement_interface,
 					string_pool_ref2str(type_name(interVTM->parent)),
 					string_pool_ref2str(interVTM->namev)

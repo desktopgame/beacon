@@ -3,8 +3,15 @@
 #define BEACON_IL_IL_FACTOR_AS_H
 #include "../il_factor_interface.h"
 #include "../../env/generic_cache.h"
+#include "../../env/generic_type.h"
 
 #define IL_FACT2AS(factor) (il_factor_cast_as(factor))
+
+typedef enum cast_mode {
+	cast_down_T,
+	cast_up_T,
+	cast_unknown_T,
+} cast_mode;
 
 /**
  * as演算子を表す構造体.
@@ -12,6 +19,8 @@
 typedef struct il_factor_as {
 	il_factor* fact;
 	generic_cache* fqcn;
+	generic_type* gtype;
+	cast_mode mode;
 } il_factor_as;
 
 struct enviroment;

@@ -292,6 +292,16 @@ int opcode_fprint(FILE* fp, vector* source, int index) {
 			fprintf(fp,"swap");
 			break;
 		}
+		case op_down_as:
+		{
+			fprintf(fp,"down as");
+			break;
+		}
+		case op_up_as:
+		{
+			fprintf(fp,"up as");
+			break;
+		}
 		//invoke
 		case op_chain_this:
 		{

@@ -18,6 +18,8 @@ il_factor_as * il_factor_as_new() {
 	il_factor_as* ret = (il_factor_as*)MEM_MALLOC(sizeof(il_factor_as));
 	ret->fact = NULL;
 	ret->fqcn = generic_cache_new();
+	ret->gtype = NULL;
+	ret->mode = cast_unknown_T;
 	return ret;
 }
 
@@ -31,14 +33,52 @@ void il_factor_as_dump(il_factor_as * self, int depth) {
 
 void il_factor_as_generate(il_factor_as * self, enviroment * env, call_context* cctx) {
 	il_factor_generate(self->fact, env, cctx);
+	opcode_buf_add(env->buf, op_generic_add);
+	generic_type_generate(self->gtype, env);
+	if(self->mode == cast_down_T) {
+		opcode_buf_add(env->buf, op_down_as);
+	} else {
+		opcode_buf_add(env->buf, op_up_as);
+	}
 }
 
 void il_factor_as_load(il_factor_as * self, enviroment * env, call_context* cctx) {
+	if(self->gtype != NULL) {
+		return;
+	}
 	il_factor_load(self->fact, env, cctx);
+	self->gtype = import_manager_resolve(NULL, call_context_namespace(cctx), self->fqcn, cctx);
+	generic_type* a = il_factor_eval(self->fact, env, cctx);
+	//キャスト元がインターフェイスなら常にダウンキャスト
+	if(self->gtype->core_type != NULL && GENERIC2TYPE(self->gtype)->tag == type_interface) {
+		self->mode = cast_down_T;
+		return;
+	}
+	//キャスト先がインターフェイスなら常にアップキャスト
+	if(a->core_type != NULL && GENERIC2TYPE(a)->tag == type_interface) {
+		self->mode = cast_down_T;
+		return;
+	}
+	int downTo = generic_type_distance(self->gtype, a);
+	int upTo = generic_type_distance(a, self->gtype);
+	//ダウンキャスト
+	if(downTo >= 0) {
+		self->mode = cast_down_T;
+	//アップキャスト
+	} else if(upTo >= 0) {
+		self->mode = cast_up_T;
+	//それ以外
+	} else {
+		bc_error_throw(bcerror_cast_not_compatible,
+			string_pool_ref2str(type_name(a->core_type)),
+			string_pool_ref2str(type_name(self->gtype->core_type))
+		);
+	}
 }
 
 generic_type* il_factor_as_eval(il_factor_as * self, enviroment * env, call_context* cctx) {
-	return import_manager_resolve(NULL, NULL, self->fqcn, cctx);
+	il_factor_as_load(self, env, cctx);
+	return self->gtype;
 }
 
 void il_factor_as_delete(il_factor_as * self) {

@@ -78,6 +78,8 @@ typedef enum bc_error_id {
 
 	bcerror_undefined_compare_operator,
 
+	bcerror_cast_not_compatible,
+
 	bcerror_construct_abstract_type,
 	bcerror_can_t_resolve_lambda,
 	bcerror_not_functional_interface,

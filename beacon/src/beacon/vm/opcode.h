@@ -102,6 +102,8 @@ typedef enum opcode {
 	op_dec,
 	op_copy,
 	op_swap,
+	op_down_as,
+	op_up_as,
 
 	op_chain_this,
 	op_chain_super,

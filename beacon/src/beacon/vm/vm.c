@@ -825,6 +825,26 @@ static void vm_run(frame * self, enviroment * env, int pos, int deferStart) {
 				vector_push(self->value_stack, second);
 				break;
 			}
+			case op_down_as:
+			{
+				object* o = vector_pop(self->value_stack);
+				generic_type* a = vector_pop(self->type_args_vec);
+				if(generic_type_distance(o->gtype, a) < 0) {
+					vector_push(self->value_stack, object_get_null());
+				} else {
+					o->gtype = a;
+					vector_push(self->value_stack, o);
+				}
+				break;
+			}
+			case op_up_as:
+			{
+				object* o = vector_pop(self->value_stack);
+				generic_type* a = vector_pop(self->type_args_vec);
+				o->gtype = a;
+				vector_push(self->value_stack, o);
+				break;
+			}
 			//invoke
 			case op_invokeinterface:
 			{

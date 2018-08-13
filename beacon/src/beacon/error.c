@@ -203,6 +203,10 @@ void bc_error_vthrow(bc_error_id id, va_list ap) {
 			fmt = "undefined operator: %s";
 			break;
 
+		case bcerror_cast_not_compatible:
+			fmt = "not compatible types: %s as %s";
+			break;
+
 		case bcerror_construct_abstract_type:
 			fmt = "can't construct a abstract type by new operator: %s";
 			break;
