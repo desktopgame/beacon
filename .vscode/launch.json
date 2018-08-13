@@ -16,7 +16,7 @@
 			"MIMode": "lldb"
 		},
 		{
-			"name": "(lldb) Run",
+			"name": "(lldb) Run(External)",
 			"type": "cppdbg",
 			"request": "launch",
 			"program": "${workspaceFolder}/beacon/bin/a.out",
@@ -26,6 +26,17 @@
 			"environment": [],
 			"MIMode": "lldb",
             "externalConsole": true,
+		},
+		{
+			"name": "(lldb) Run(Builtin)",
+			"type": "cppdbg",
+			"request": "launch",
+			"program": "${workspaceFolder}/beacon/bin/a.out",
+			"args": ["--run", "main.bc"],
+			"stopAtEntry": false,
+			"cwd": "${workspaceFolder}/beacon/bin",
+			"environment": [],
+			"MIMode": "lldb",
 		},
 		{
 			"name": "(lldb) AST",

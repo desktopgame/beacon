@@ -42,7 +42,7 @@ static void bc_exception_nativeInit(method* parent, frame* fr, enviroment* env) 
 		//実行中のインストラクションの行番号を取得
 		line_range* lr = line_range_find(temp->context_ref->line_rangeVec, temp->pc);
 		int lineno = lr == NULL ? -1 : lr->lineno;
-		assert(lineno != -1);
+		//assert(lineno != -1);
 		//直前の表示と同じ
 		if(lfilename != NULL &&
 		   !strcmp(temp->context_ref->context_ref->filename, lfilename) &&
@@ -51,7 +51,7 @@ static void bc_exception_nativeInit(method* parent, frame* fr, enviroment* env) 
 			continue;
 		}
 		//スタックトレースを作成
-		assert(lineno >= 0);
+		//assert(lineno >= 0);
 		vector* args = vector_new();
 		vector_push(args, object_string_new(temp->context_ref->context_ref->filename));
 		vector_push(args, object_int_new(lineno));
