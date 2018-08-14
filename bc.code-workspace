@@ -107,7 +107,8 @@
 			"ostream": "c",
 			"streambuf": "c",
 			"il_type_interface.h": "c",
-			"call_context.h": "c"
+			"call_context.h": "c",
+			"generate.h": "c"
 		},
 		"ruby.lint": {
 			"reek": true,

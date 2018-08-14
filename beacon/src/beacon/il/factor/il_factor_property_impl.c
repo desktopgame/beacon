@@ -1,4 +1,4 @@
-#include "il_factor_property.h"
+#include "il_factor_property_impl.h"
 #include "../../util/mem.h"
 #include "../../vm/enviroment.h"
 #include "../../vm/generate.h"
