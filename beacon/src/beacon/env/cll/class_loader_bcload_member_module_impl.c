@@ -805,6 +805,22 @@ static bool CLBC_test_operator_overlaod(class_loader* self, il_type* iltype, typ
 		);
 		return true;
 	}
+	//配列参照演算子であるあんら引数は1
+	if(opov->type == operator_subscript_get && opov->parameter_list->length != 1) {
+		bc_error_throw(bcerror_arg_count_not1_subscript_get_op,
+			type_name(tp),
+			operator_tostring(opov->type)
+		);
+		return true;
+	}
+	//配列書き込み演算子であるあんら引数は2
+	if(opov->type == operator_subscript_set && opov->parameter_list->length != 2) {
+		bc_error_throw(bcerror_arg_count_not2_subscript_set_op,
+			type_name(tp),
+			operator_tostring(opov->type)
+		);
+		return true;
+	}
 	//== などの比較演算子の戻り値が bool ではない
 	if(operator_compare(opov->type) && opov->return_gtype->core_type != TYPE_BOOL) {
 		bc_error_throw(bcerror_return_type_not_bool_compare_operator,

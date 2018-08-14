@@ -15,8 +15,6 @@ typedef enum operator_category {
 	operator_cnegative,
 	operator_cnot,
 	operator_cexcor,
-	operator_subscript_set,
-	operator_subscript_get,
 } operator_category;
 
 /**
@@ -49,6 +47,9 @@ typedef enum operator_type {
 	operator_childa,
 	operator_negative,
 	operator_not,
+
+	operator_subscript_set,
+	operator_subscript_get,
 } operator_type;
 /**
  * オペレータを文字列として出力します.

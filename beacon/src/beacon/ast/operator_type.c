@@ -33,6 +33,9 @@ char* operator_tostring(operator_type self) {
 		case operator_not: return "!";
 		case operator_negative: return "-";
 		case operator_childa: return "~";
+
+		case operator_subscript_get: return "[]";
+		case operator_subscript_set: return "[]=";
 	}
 }
 

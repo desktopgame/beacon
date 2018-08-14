@@ -23,6 +23,7 @@ static il_factor_dec* CLIL_dec(class_loader* self, ast* source);
 static il_factor_call_op* CLIL_call_op(class_loader* self, ast* source);
 static il_factor_member_op* CLIL_member_op(class_loader* self, ast* source);
 static il_factor_instanceof* CLIL_instanceof(class_loader* self, ast* source);
+static il_factor_subscript* CLIL_subscript(class_loader* self, ast* source);
 
 il_factor* CLIL_factor(class_loader* self, ast* source) {
 	il_factor* ret = CLIL_factorImpl(self, source);
@@ -157,6 +158,8 @@ static il_factor* CLIL_factorImpl(class_loader* self, ast* source) {
 		return il_factor_wrap_call_op(CLIL_call_op(self, source));
 	} else if(source->tag == ast_field_access) {
 		return il_factor_wrap_member_op(CLIL_member_op(self, source));
+	} else if(source->tag == ast_subscript_access) {
+		return il_factor_wrap_subscript(CLIL_subscript(self, source));
 	}
 	il_factor* fact = il_factor_new(ilfactor_unary_op);
 	return fact;
@@ -309,5 +312,14 @@ static il_factor_instanceof* CLIL_instanceof(class_loader* self, ast* source) {
 	il_factor_instanceof* ret = il_factor_instanceof_new();
 	ret->fact = CLIL_factor(self, afact);
 	CLIL_generic_cache(atype, ret->gcache);
+	return ret;
+}
+
+static il_factor_subscript* CLIL_subscript(class_loader* self, ast* source) {
+	il_factor_subscript* ret = il_factor_subscript_new();
+	ast* afact = ast_first(source);
+	ast* apos = ast_second(source);
+	ret->receiver = CLIL_factor(self, afact);
+	ret->pos = CLIL_factor(self, apos);
 	return ret;
 }
