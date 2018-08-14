@@ -167,9 +167,13 @@ func execp(name string, args ...string) {
 	}
 	fmt.Println()
 	//実行する
-	out, err := exec.Command(name, args...).Output()
+	cmd := exec.Command(name, args...)
+	var errbuf bytes.Buffer
+	cmd.Stderr = &errbuf
+	out, err := cmd.Output()
 	if err != nil {
 		fmt.Println("    error")
+		fmt.Println(errbuf.String())
 	}
 	fmt.Println(string(out))
 	fmt.Println()
