@@ -1,6 +1,0 @@
-%option yylineno
-%option yy_scan_string
-%option yy_scan_buffer
-%option yy_scan_bytes
-%start ML_COMMENT L_COMMENT STRING_LITERAL_STATE
-%%

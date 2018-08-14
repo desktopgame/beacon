@@ -2,7 +2,6 @@ package main
 
 import (
 	"bytes"
-	"flag"
 	"fmt"
 	"io/ioutil"
 	"os/exec"
@@ -180,18 +179,9 @@ func execp(name string, args ...string) {
 }
 
 //global
-var (
-	isTest = flag.Bool("test", false, "test flag")
-)
-
 func main() {
-	//実行時引数を解析する
-	flag.Parse()
-	//args := flag.Args()
-	//fmt.Println(args)
-
-	make("lex.makeconfig", "beacon.l", *isTest)
-	make("yy.makeconfig", "beacon.y", *isTest)
+	//	make("lex.makeconfig", "beacon.l", *isTest)
+	//	make("yy.makeconfig", "beacon.y", *isTest)
 	execp("flex", "beacon.l")
 	execp("bison", "-d", "beacon.y", "-r", "all")
 	insert("beacon.tab.h",
