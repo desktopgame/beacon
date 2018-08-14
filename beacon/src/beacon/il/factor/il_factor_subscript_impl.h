@@ -2,9 +2,13 @@
 #define BEACON_IL_FACTOR_SUBSCRIPT_H
 #include "../il_factor_interface.h"
 
+struct operator_overload;
+
 typedef struct il_factor_subscript {
 	il_factor* receiver;
 	il_factor* pos;
+	int operator_index;
+	struct operator_overload* opov;
 } il_factor_subscript;
 
 il_factor* il_factor_wrap_subscript(il_factor_subscript* self);

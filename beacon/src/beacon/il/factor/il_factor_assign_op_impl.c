@@ -12,6 +12,7 @@
 static void assign_by_namebase(il_factor_assign_op* self, enviroment* env, call_context* cctx);
 static void assign_to_field(il_factor_assign_op* self,il_factor* receiver, il_factor* source, string_view namev, enviroment* env, call_context* cctx);
 static void assign_to_property(il_factor_assign_op* self, enviroment* env, call_context* cctx);
+static void assign_to_array(il_factor_assign_op* self, enviroment* env, call_context* cctx);
 static void check_final(il_factor* receiver, il_factor* source, string_view namev, enviroment* env, call_context* cctx);
 static bool can_assign_to_field(field* f, il_factor_assign_op* self, enviroment* env, call_context* cctx);
 static void generate_assign_to_variable(il_factor_assign_op* self, enviroment* env, call_context* cctx);
@@ -58,6 +59,8 @@ void il_factor_assign_op_generate(il_factor_assign_op* self, enviroment* env, ca
 		}
 	} else if(self->left->type == ilfactor_property) {
 		assign_to_property(self, env, cctx);
+	} else if(self->left->type == ilfactor_subscript) {
+		assign_to_array(self, env, cctx);
 	}
 }
 
@@ -162,6 +165,14 @@ static void assign_to_property(il_factor_assign_op* self, enviroment* env, call_
 	}
 	il_factor_generate(self->right, env, cctx);
 	generate_put_property(env->buf, pp, prop->index);
+}
+
+static void assign_to_array(il_factor_assign_op* self, enviroment* env, call_context* cctx) {
+	il_factor_subscript* subs = self->left->u.subscript;
+	il_factor_generate(subs->receiver, env, cctx);
+	il_factor_generate(subs->pos, env, cctx);
+	opcode_buf_add(env->buf, op_invokeoperator);
+	opcode_buf_add(env->buf, subs->operator_index);
 }
 
 static bool can_assign_to_field(field* f, il_factor_assign_op* self, enviroment* env, call_context* cctx) {
