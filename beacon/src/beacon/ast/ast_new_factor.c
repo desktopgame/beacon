@@ -136,3 +136,10 @@ ast* ast_new_lambda(ast* aparameter_list, ast* areturn, ast* abody) {
 	ast_push(ret, abody);
 	return ret;
 }
+
+ast* ast_new_subscript_access(ast* afact, ast* aindex) {
+	ast* ret = ast_new(ast_subscript_access);
+	ast_push(ret, afact);
+	ast_push(ret, aindex);
+	return ret;
+}

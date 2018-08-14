@@ -557,6 +557,16 @@ operator_define
 	{
 		$$ = ast_new_operator_overload(operator_negative, ast_new_blank(), $7, $6);
 	}
+	//[]
+	| OPERATOR SUBSCRIPT_GET LRB parameter_list RRB ARROW typename_T scope_optional
+	{
+		$$ = ast_new_operator_overload(operator_subscript_get, $4, $8, $7);
+	}
+	//[]=
+	| OPERATOR SUBSCRIPT_SET LRB parameter_list RRB ARROW typename_T scope_optional
+	{
+		$$ = ast_new_operator_overload(operator_subscript_set, $4, $8, $7);
+	}
 	;
 ;;
 ;;}}}

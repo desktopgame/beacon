@@ -299,6 +299,7 @@ void ast_print(ast* self) {
 		case ast_else: p("else");
 		case ast_return: p("return");
 		case ast_cast: p("cast");
+		case ast_subscript_access: p("[]");
 		case ast_blank:
 			printf("blank");
 			break;

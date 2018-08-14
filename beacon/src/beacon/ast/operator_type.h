@@ -14,7 +14,9 @@ typedef enum operator_category {
 	operator_cchilda,
 	operator_cnegative,
 	operator_cnot,
-	operator_cexcor
+	operator_cexcor,
+	operator_subscript_set,
+	operator_subscript_get,
 } operator_category;
 
 /**

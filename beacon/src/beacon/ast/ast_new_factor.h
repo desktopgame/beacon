@@ -161,4 +161,11 @@ ast* ast_new_explicit_uoperator(ast* afact, operator_type type);
  * @return
  */
 ast* ast_new_lambda(ast* aparameter_list, ast* areturn, ast* abody);
+
+/**
+ * @param afact
+ * @param aindex
+ * @return
+ */
+ast* ast_new_subscript_access(ast* afact, ast* aindex);
 #endif // !SIGNAL_AST_AST_NEW_FACTOR_H

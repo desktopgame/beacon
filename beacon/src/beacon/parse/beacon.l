@@ -203,6 +203,8 @@ static void update_loc() {
 <INITIAL>")"				{ return (RRB); }
 <INITIAL>"["				{ return (LSB); }
 <INITIAL>"]"				{ return (RSB); }
+<INITIAL>"[]"				{ return (SUBSCRIPT_GET); }
+<INITIAL>"[]="				{ return (SUBSCRIPT_SET); }
 <INITIAL>"<:"				{ return (BOUNDS_EXTENDS); }
 <INITIAL>":>"				{ return (BOUNDS_SUPER); }
 

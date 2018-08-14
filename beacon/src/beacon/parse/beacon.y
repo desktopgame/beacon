@@ -52,7 +52,7 @@
 		DEF ARROW NAMESPACE RETURN YIELD
 		IF ELIF ELSE WHILE BREAK CONTINUE TRY CATCH THROW
 		ASSERT_T DEFER INSTANCEOF OPERATOR
-		BOUNDS_EXTENDS BOUNDS_SUPER
+		BOUNDS_EXTENDS BOUNDS_SUPER SUBSCRIPT_SET SUBSCRIPT_GET
 %type <ast_value> compilation_unit 
 					init_decl
 					body_decl
@@ -135,7 +135,7 @@
 %left LSHIFT RSHIFT
 %left ADD SUB
 %left MUL DIV MOD
-%left DOT FUNCCALL POST_INC POST_DEC
+%left DOT FUNCCALL POST_INC POST_DEC ARRAY_SUBSCRIPT
 %right CHILDA NOT NEGATIVE POSITIVE NEW REF
 %right AS
 %token FORM_TYPE
@@ -526,6 +526,16 @@ operator_define
 	{
 		$$ = ast_new_operator_overload(operator_negative, ast_new_blank(), $7, $6);
 	}
+	//[]
+	| OPERATOR SUBSCRIPT_GET LRB parameter_list RRB ARROW typename_T scope_optional
+	{
+		$$ = ast_new_operator_overload(operator_subscript_get, $4, $8, $7);
+	}
+	//[]=
+	| OPERATOR SUBSCRIPT_SET LRB parameter_list RRB ARROW typename_T scope_optional
+	{
+		$$ = ast_new_operator_overload(operator_subscript_set, $4, $8, $7);
+	}
 	;
 
 field_define
@@ -907,6 +917,10 @@ lhs
 	| expression DOT IDENT typename_group
 	{
 		$$ = ast_new_field_access($1, $3, $4);
+	}
+	| expression LSB expression RSB %prec ARRAY_SUBSCRIPT
+	{
+		$$ = ast_new_subscript_access($1, $3);
 	}
 	| expression DOT ADD LRB expression RRB
 	{

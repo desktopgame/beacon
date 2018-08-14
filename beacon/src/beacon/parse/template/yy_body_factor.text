@@ -183,6 +183,10 @@ lhs
 	{
 		$$ = ast_new_field_access($1, $3, $4);
 	}
+	| __SELF LSB __SELF RSB %prec ARRAY_SUBSCRIPT
+	{
+		$$ = ast_new_subscript_access($1, $3);
+	}
 	;;+-*/%
 	| __SELF DOT ADD LRB __SELF RRB
 	{
