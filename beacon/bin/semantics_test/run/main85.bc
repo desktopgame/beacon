@@ -1,0 +1,6 @@
+def cast[T](Object a) -> T {
+	return a as T;
+}
+var ival = 30;
+var i = cast[Int](ival);
+printLine(i);

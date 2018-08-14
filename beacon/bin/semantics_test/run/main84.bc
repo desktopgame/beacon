@@ -1,0 +1,14 @@
+namespace test {
+	class Lab {
+		public:
+		def new() {
+		}
+
+		def call() -> Void {
+			printLine("Hello");
+		}
+	}
+}
+Object o = new test::Lab();
+test::Lab lab = o as test::Lab;
+lab.call();
