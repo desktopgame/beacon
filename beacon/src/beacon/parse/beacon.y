@@ -183,7 +183,7 @@ namespace_decl
 namespace_body
 	: LCB namespace_member_decl_optional RCB
 	{
-		$$ = $2
+		$$ = $2;
 	}
 	;
 
@@ -201,7 +201,7 @@ namespace_member_decl
 namespace_member_decl_list
 	: namespace_member_decl
 	{
-		$$ = $1
+		$$ = $1;
 	}
 	| namespace_member_decl_list namespace_member_decl
 	{
@@ -663,7 +663,7 @@ parameter_list
 	}
 	| parameter_list COMMA typename_T IDENT
 	{
-		$$ = ast_new_parameter_list($3, $4, $1)
+		$$ = ast_new_parameter_list($3, $4, $1);
 	}
 	;
 
