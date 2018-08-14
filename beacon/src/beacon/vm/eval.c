@@ -18,9 +18,11 @@ static bool eval_top_from_cll(class_loader* cll);
 
 bool eval_ast(const char* filename) {
 	parser* p = parse_file(filename);
-	//結果を表示
+	ast_print_tree(p->root);
 	if(p->result != parse_complete_T) {
-		ast_print_tree(p->root);
+		printf("error: %s\n", p->error_message);
+	} else {
+		printf("sucess!\n");
 	}
 	//パーサーを破棄
 	bool ret = p->result != parse_complete_T;
