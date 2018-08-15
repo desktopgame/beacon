@@ -12,6 +12,17 @@
 			"command": "go run script/gen.go"
 		},
 		{
+			"label": "conf",
+			"type": "shell",
+			"options": {
+				"cwd": "../beacon/beacon/rbtools"
+			},
+			"command": "ruby",
+			"args": [
+				"cmakemake.rb"
+			]
+		},
+		{
 			"label": "make db",
 			"type": "shell",
 			"options": {
