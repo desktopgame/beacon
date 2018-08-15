@@ -2,10 +2,10 @@ require 'pathname'
 
 def configure_root(path, file_list, dir_list, fp)
 	fp.puts "cmake_minimum_required(VERSION 2.8)"
-	fp.puts "project(MyProject CXX)"
-	fp.puts "set(CMAKE_CXX_FLAGS \"\")"
-	fp.puts "set(CMAKE_CXX_FLAGS_DEBUG \"-g -O0 -DDEBUG -MMD -Wall\")"
-	fp.puts "set(CMAKE_CXX_FLAGS_RELEASE \"-g -O2 -MMD -w\")"
+	fp.puts "project(MyProject C)"
+	#fp.puts "set(CMAKE_CXX_FLAGS \"\")"
+	#fp.puts "set(CMAKE_CXX_FLAGS_DEBUG \"-g -O0 -DDEBUG -MMD -Wall\")"
+	#fp.puts "set(CMAKE_CXX_FLAGS_RELEASE \"-g -O2 -MMD -w\")"
 	#fp.puts set(CMAKE_CXX_FLAGS_RELWITHDEBINFO "-g3 -Og -pg")
 	#fp.puts set(CMAKE_CXX_FLAGS_MINSIZEREL "-Os -s -DNDEBUG -march=native")
 end
