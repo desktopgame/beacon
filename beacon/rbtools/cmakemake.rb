@@ -1,5 +1,10 @@
 require 'pathname'
 
+def path_is_source_dir(path)
+	children = Dir.children(path)
+	return (children.find{|item| item.end_with?(".c")} != nil)
+end
+
 def configure_root(path, file_list, dir_list, fp)
 	fp.puts "cmake_minimum_required(VERSION 2.8)"
 	fp.puts "project(MyProject C)"
@@ -21,7 +26,9 @@ def configure_file(path, file_list, dir_list, depth)
 			file.puts(sprintf("add_executable(%s %s)", objname, objname + ".c"))
 		end
 		dir_list.each do |e|
-			file.puts(sprintf("add_subdirectory(%s)", e))
+			if path_is_source_dir(e) then
+				file.puts(sprintf("add_subdirectory(%s)", e))
+			end
 		end
 	end
 end
@@ -31,6 +38,9 @@ def configure_recursive(path, depth=0)
 	file_list = []
 	dir_list = []
 	p path
+	if !path_is_source_dir(path) && depth > 0 then
+		return
+	end
 	children.each do |file|
 		file = File::expand_path(file, path)
 		#存在しない
