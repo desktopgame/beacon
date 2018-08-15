@@ -247,6 +247,8 @@ static void il_factor_invoke_bound_generate_subscript(il_factor_invoke_bound* se
 	} else if(subs.tag == subscript_property_T) {
 		opcode_buf_add(env->buf, op_this);
 		generate_get_property(env->buf, subs.u.prop, subs.index);
+	} else {
+		assert(false);
 	}
 	opcode_buf_add(env->buf, op_invokeoperator);
 	opcode_buf_add(env->buf, self->index);

@@ -60,6 +60,9 @@ void il_factor_invoke_generate(il_factor_invoke* self, enviroment* env, call_con
 }
 
 void il_factor_invoke_load(il_factor_invoke * self, enviroment * env, call_context* cctx) {
+	if(self->index != -1) {
+		return;
+	}
 	call_frame* cfr = call_context_push(cctx, frame_instance_invoke_T);
 	cfr->u.instance_invoke.args = self->args;
 	cfr->u.instance_invoke.typeargs = self->type_args;

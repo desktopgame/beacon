@@ -14,6 +14,7 @@
 static void il_factor_call_op_check(il_factor_call_op* self, enviroment* env, call_context* cctx);
 static void il_factor_invoke_bound_check(il_factor_call_op* self, enviroment* env);
 static void il_factor_member_op_check(il_factor_call_op* self, enviroment* env, call_context* cctx);
+static void il_factor_subscript_check(il_factor_call_op* self, enviroment* env, call_context* cctx);
 
 static void il_factor_call_op_argument_delete(vector_item item);
 static void il_factor_call_op_type_argument_delete(vector_item item);
@@ -133,6 +134,9 @@ static void il_factor_call_op_check(il_factor_call_op* self, enviroment* env, ca
 	//hoge().hoge() Namespace::Class.foo() の場合
 	} else if(receiver->type == ilfactor_member_op) {
 		il_factor_member_op_check(self, env, cctx);
+	//a()() の場合
+	} else if(receiver->type == ilfactor_call_op) {
+		il_factor_subscript_check(self, env, cctx);
 	}
 	assert(self->type != ilcall_type_undefined);
 }
@@ -217,6 +221,27 @@ static void il_factor_member_op_check(il_factor_call_op* self, enviroment* env, 
 		self->u.invoke_ = iv;
 		self->argument_list = NULL;
 	}
+}
+
+static void il_factor_subscript_check(il_factor_call_op* self, enviroment* env, call_context* cctx) {
+	il_factor* receiver = self->receiver;
+	il_factor_call_op* call_left = IL_FACT2CALL(receiver);
+	il_factor_invoke* iv = il_factor_invoke_new(ZERO_VIEW);
+	generic_type* receiver_gtype = il_factor_eval(receiver, env, cctx);
+	class_* receiver_cl = TYPE2CLASS(GENERIC2TYPE(receiver_gtype));
+	int temp;
+	iv->u.opov = class_argfind_operator_overload(receiver_cl, operator_subscript_get, self->argument_list, env, cctx, &temp);
+	iv->index = temp;
+	assert(temp != -1);
+	//入れ替える
+	iv->args = self->argument_list;
+	iv->type_args = vector_new();
+	iv->receiver = receiver;
+	iv->tag = instance_invoke_subscript_T;
+	self->receiver = NULL;
+	self->argument_list = NULL;
+	self->type = ilcall_type_invoke;
+	self->u.invoke_ = iv;
 }
 
 static void il_factor_call_op_argument_delete(vector_item item) {

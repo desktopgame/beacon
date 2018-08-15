@@ -67,6 +67,8 @@ void il_factor_assign_op_generate(il_factor_assign_op* self, enviroment* env, ca
 		assign_to_array(self, env, cctx);
 	} else if(self->left->type == ilfactor_call_op) {
 		assign_by_call(self, env, cctx);
+	} else {
+		assert(false);
 	}
 }
 
@@ -194,16 +196,23 @@ static void assign_by_call(il_factor_assign_op* self, enviroment* env, call_cont
 		assign_by_invoke(call->u.invoke_, self->right, env, cctx);
 	} else if(call->type == ilcall_type_invoke_bound) {
 		assign_by_invoke_bound(call->u.invoke_bound_, self->right, env, cctx);
+	} else {
+		assert(false);
 	}
 }
 
 static void assign_by_invoke(il_factor_invoke* lhs, il_factor* rhs, enviroment* env, call_context* cctx) {
 	int temp = -1;
 	il_factor_invoke_find_set(lhs, rhs, env, cctx, &temp);
+	for(int i=0; i<lhs->args->length; i++) {
+		il_argument* arg = vector_at(lhs->args, i);
+		il_factor_generate(arg->factor, env, cctx);
+	}
 	il_factor_generate(rhs, env, cctx);
 	il_factor_generate(lhs->receiver, env, cctx);
 	opcode_buf_add(env->buf, op_invokeoperator);
 	opcode_buf_add(env->buf, temp);
+	opcode_buf_add(env->buf, op_nop);
 }
 
 static void assign_by_invoke_bound(il_factor_invoke_bound* lhs, il_factor* rhs, enviroment* env, call_context* cctx) {
