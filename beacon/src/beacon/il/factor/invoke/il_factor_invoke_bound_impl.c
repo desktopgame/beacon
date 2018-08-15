@@ -1,6 +1,8 @@
 #include "il_factor_invoke_bound_impl.h"
 #include "../../../util/mem.h"
 #include "../../../util/text.h"
+#include "../../../env/field.h"
+#include "../../../env/property.h"
 #include "../../../env/operator_overload.h"
 #include "../../../env/generic_type.h"
 #include "../../../env/type_interface.h"
@@ -17,7 +19,8 @@ static void il_factor_invoke_bound_check(il_factor_invoke_bound * self, envirome
 static void il_factor_invoke_bound_args_delete(vector_item item);
 static void il_factor_invoke_bound_generate_method(il_factor_invoke_bound* self, enviroment* env, call_context* cctx);
 static void il_factor_invoke_bound_generate_subscript(il_factor_invoke_bound* self, enviroment* env, call_context* cctx);
-static generic_type* il_factor_invoke_bound_return_gtype(il_factor_invoke_bound* self);
+static generic_type* il_factor_invoke_bound_return_gtype(il_factor_invoke_bound* self, call_context* cctx);
+static generic_type* il_factor_invoke_bound_evalImpl(il_factor_invoke_bound * self, enviroment * env, call_context* cctx);
 
 il_factor_invoke_bound* il_factor_invoke_bound_new(string_view namev) {
 	il_factor_invoke_bound* ret = (il_factor_invoke_bound*)MEM_MALLOC(sizeof(il_factor_invoke_bound));
@@ -57,30 +60,9 @@ void il_factor_invoke_bound_load(il_factor_invoke_bound * self, enviroment * env
 }
 
 generic_type* il_factor_invoke_bound_eval(il_factor_invoke_bound * self, enviroment * env, call_context* cctx) {
-	type* tp = NULL;
-	//メソッドが見つからない
-	il_factor_invoke_bound_check(self, env, cctx);
-	if(bc_error_last()) {
-		return NULL;
-	}
-
-	call_frame* cfr = call_context_push(cctx, frame_self_invoke_T);
-	cfr->u.self_invoke.args = self->args;
-	cfr->u.self_invoke.typeargs = self->type_args;
-
-	if(il_factor_invoke_bound_return_gtype(self)->tag != generic_type_tag_none) {
-		resolve_non_default(self, env, cctx);
-		assert(self->resolved != NULL);
-		call_context_pop(cctx);
-		return self->resolved;
-	} else {
-		resolve_default(self, env, cctx);
-		assert(self->resolved != NULL);
-		call_context_pop(cctx);
-		return self->resolved;
-	}
-	assert(self->resolved != NULL);
-	return self->resolved;
+	generic_type* ret = il_factor_invoke_bound_evalImpl(self, env, cctx);
+	assert(ret != NULL);
+	return ret;
 }
 
 char* il_factor_invoke_bound_tostr(il_factor_invoke_bound* self, enviroment* env) {
@@ -115,7 +97,7 @@ static void resolve_non_default(il_factor_invoke_bound * self, enviroment * env,
 		return;
 	}
 	type* tp = NULL;
-	generic_type* rgtp  = il_factor_invoke_bound_return_gtype(self);
+	generic_type* rgtp  = il_factor_invoke_bound_return_gtype(self, cctx);
 	if(rgtp->tag == generic_type_tag_class) {
 		self->resolved = generic_type_new(NULL);
 		self->resolved->tag = generic_type_tag_class;
@@ -132,7 +114,7 @@ static void resolve_default(il_factor_invoke_bound * self, enviroment * env, cal
 	if(self->resolved != NULL) {
 		return;
 	}
-	generic_type* rgtp = il_factor_invoke_bound_return_gtype(self);
+	generic_type* rgtp = il_factor_invoke_bound_return_gtype(self, cctx);
 	self->resolved = generic_type_apply(rgtp, cctx);
 }
 
@@ -165,11 +147,27 @@ static void il_factor_invoke_bound_check(il_factor_invoke_bound * self, envirome
 	//添字アクセスとして解決する
 	generic_type* receiver_gtype = NULL;
 	symbol_entry* local = symbol_table_entry(env->sym_table, NULL, self->namev);
-	if(local != NULL) {
+	if(receiver_gtype == NULL && local != NULL) {
 		receiver_gtype = local->gtype;
 		self->u.subscript.tag = subscript_local_T;
 		self->u.subscript.u.local = local;
 		self->u.subscript.index = local->index;
+	}
+	//フィールドとして解決する
+	field* fi = class_find_field(call_context_class(cctx), self->namev, &temp);
+	if(receiver_gtype == NULL && fi != NULL) {
+		receiver_gtype = fi->gtype;
+		self->u.subscript.tag = subscript_field_T;
+		self->u.subscript.u.fi = fi;
+		self->u.subscript.index = temp;
+	}
+	//プロパティとして解決する
+	property* prop = class_find_property(call_context_class(cctx), self->namev, &temp);
+	if(receiver_gtype == NULL && prop != NULL) {
+		receiver_gtype = prop->gtype;
+		self->u.subscript.tag = subscript_property_T;
+		self->u.subscript.u.prop = prop;
+		self->u.subscript.index = temp;
 	}
 	self->tag = bound_invoke_subscript_T;
 	self->u.subscript.opov = class_argfind_operator_overload(TYPE2CLASS(GENERIC2TYPE(receiver_gtype)), operator_subscript_get, self->args, env, cctx, &temp);
@@ -254,7 +252,43 @@ static void il_factor_invoke_bound_generate_subscript(il_factor_invoke_bound* se
 	opcode_buf_add(env->buf, self->index);
 }
 
-static generic_type* il_factor_invoke_bound_return_gtype(il_factor_invoke_bound* self) {
+static generic_type* il_factor_invoke_bound_return_gtype(il_factor_invoke_bound* self, call_context* cctx) {
 	assert(self->tag != bound_invoke_undefined_T);
-	return self->tag == bound_invoke_method_T ? self->u.m->return_gtype : self->u.subscript.opov->return_gtype;
+	return generic_type_apply(self->tag == bound_invoke_method_T ?
+			self->u.m->return_gtype :
+			self->u.subscript.opov->return_gtype, cctx);
+}
+
+static generic_type* il_factor_invoke_bound_evalImpl(il_factor_invoke_bound * self, enviroment * env, call_context* cctx) {
+	type* tp = NULL;
+	//メソッドが見つからない
+	il_factor_invoke_bound_check(self, env, cctx);
+	if(bc_error_last()) {
+		return NULL;
+	}
+	call_frame* cfr = NULL;
+	if(self->tag == bound_invoke_method_T) {
+		cfr = call_context_push(cctx, frame_self_invoke_T);
+		cfr->u.self_invoke.args = self->args;
+		cfr->u.self_invoke.typeargs = self->type_args;
+	} else {
+		cfr = call_context_push(cctx, frame_instance_invoke_T);
+		cfr->u.instance_invoke.receiver = generic_type_apply(subscript_descriptor_receiver(&self->u.subscript), cctx);
+		cfr->u.instance_invoke.args = self->args;
+		cfr->u.instance_invoke.typeargs = self->type_args;
+	}
+
+	if(il_factor_invoke_bound_return_gtype(self, cctx)->tag != generic_type_tag_none) {
+		resolve_non_default(self, env, cctx);
+		assert(self->resolved != NULL);
+		call_context_pop(cctx);
+		return self->resolved;
+	} else {
+		resolve_default(self, env, cctx);
+		assert(self->resolved != NULL);
+		call_context_pop(cctx);
+		return self->resolved;
+	}
+	assert(self->resolved != NULL);
+	return self->resolved;
 }

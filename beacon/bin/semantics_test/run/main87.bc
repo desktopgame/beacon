@@ -1,0 +1,37 @@
+namespace run87 {
+	class ArrayInt {
+		public:
+		Array[Int] data;
+
+		def new(Int len) {
+			this.data = new Array[Int](len);
+		}
+
+		def put(Int index, Int val) -> Void {
+			data(index) = val;
+		}
+
+		def get(Int index) -> Int {
+			return data(index);
+		}
+
+		def iterate() -> Iterator[Int] {
+			return data.iterate();
+		}
+
+		operator [](Int index) -> Int {
+			return data(index);
+		}
+
+		operator []=(Int index, Int val) -> Void {
+			data(index) = val;
+		}
+	}
+}
+var a = new run87::ArrayInt(3);
+a.put(0, 1);
+a(1) = 2;
+var iter = a.iterate();
+while(iter.moveNext()) {
+	iter.current().printLine();
+}

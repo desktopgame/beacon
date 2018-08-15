@@ -1,8 +1,42 @@
-var arr = new Array[Int](4);
-arr(0) = 10;
-arr(1) = 20;
-var iter = arr.iterate();
-while(iter.moveNext()) {
-	iter.current().printLine();
+namespace data {
+	class Line[T] {
+		public:
+		Array[T] data;
+
+		def new(Int len) {
+			this.data = new Array[T](len);
+		}
+
+		operator [](Int index) -> T {
+			return data(index);
+		}
+
+		operator []=(Int index, T value) -> Void {
+			data(index) = value;
+		}
+	}
+	class Grid[T] {
+		public:
+		Array[Line[T]] lines;
+
+		def new(Int len) {
+			this.lines = new Array[Line[T]](len);
+		}
+
+		operator [](Int index) -> Line[T] {
+			return lines(index);
+		}
+
+		operator []=(Int index, Line[T] val) -> Void {
+			lines(index) = val;
+		}
+	}
 }
-printLine(arr(0));
+var grid = new data::Grid[Int](5);
+grid(0) = new data::Line[Int](3);
+grid(1) = new data::Line[Int](2);
+grid(2) = new data::Line[Int](9);
+grid(3) = new data::Line[Int](6);
+grid(4) = new data::Line[Int](1);
+grid(0)(0) = 10;
+printLine("Hell");
