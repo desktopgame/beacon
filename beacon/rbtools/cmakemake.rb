@@ -8,6 +8,7 @@ end
 def configure_root(path, file_list, dir_list, fp)
 	fp.puts "cmake_minimum_required(VERSION 2.8)"
 	fp.puts "project(MyProject C)"
+	fp.puts "set(CMAKE_C_COMPILER \"/usr/bin/clang\" CACHE string \"clang compiler\" FORCE)"
 	#fp.puts "set(CMAKE_CXX_FLAGS \"\")"
 	#fp.puts "set(CMAKE_CXX_FLAGS_DEBUG \"-g -O0 -DDEBUG -MMD -Wall\")"
 	#fp.puts "set(CMAKE_CXX_FLAGS_RELEASE \"-g -O2 -MMD -w\")"
