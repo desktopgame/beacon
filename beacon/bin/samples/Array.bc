@@ -1,0 +1,9 @@
+var arr = new Array[Int](3);
+arr(0) = 5;
+arr(1) = 10;
+arr(2) = 25;
+
+var iter = arr.iterate();
+while(iter.moveNext()) {
+	iter.current().printLine();
+}
