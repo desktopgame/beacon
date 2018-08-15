@@ -867,61 +867,7 @@ expression_nobrace
 	{
 		$$ = ast_new_binary(ast_rshift, $1, $3);
 	}
-	| expression INSTANCEOF typename_T
-	{
-		$$ = ast_new_instanceof($1, $3);
-	}
-	| expression AS typename_T
-	{
-		$$ = ast_new_as($1, $3);
-	}
-	| CHILDA expression
-	{
-		$$ = ast_new_unary(ast_childa, $2);
-	}
-	| NOT expression
-	{
-		$$ = ast_new_unary(ast_not, $2);
-	}
-	| expression_nobrace LRB argument_list RRB %prec FUNCCALL
-	{
-		$$ = ast_new_op_call($1, $3);
-	}
-	| expression_nobrace LRB RRB %prec FUNCCALL
-	{
-		$$ = ast_new_op_call($1, ast_new_blank());
-	}
-	| NEW fqcn_part typename_group LRB argument_list RRB
-	{
-		$$ = ast_new_new_instance($2, $3, $5);
-	}
-	| NEW fqcn_part typename_group LRB RRB
-	{
-		$$ = ast_new_new_instance($2, $3, ast_new_blank());
-	}
-	| THIS_TOK
-	{
-		$$ = ast_new_this();
-	}
-	| SUPER_TOK
-	{
-		$$ = ast_new_super();
-	}
-	| lhs
-	;
-lhs
-	: fqcn_part typename_group
-	{
-		$$ = ast_new_variable($1, $2);
-	}
-	| expression DOT IDENT typename_group
-	{
-		$$ = ast_new_field_access($1, $3, $4);
-	}
-	| expression LSB expression RSB %prec ARRAY_SUBSCRIPT
-	{
-		$$ = ast_new_subscript_access($1, $3);
-	}
+
 	| expression DOT ADD LRB expression RRB
 	{
 		$$ = ast_new_explicit_bioperator($1, operator_add, $5);
@@ -1005,6 +951,57 @@ lhs
 	| expression DOT SUB LRB RRB
 	{
 		$$ = ast_new_explicit_uoperator($1, operator_negative);
+	}
+	| expression INSTANCEOF typename_T
+	{
+		$$ = ast_new_instanceof($1, $3);
+	}
+	| expression AS typename_T
+	{
+		$$ = ast_new_as($1, $3);
+	}
+	| CHILDA expression
+	{
+		$$ = ast_new_unary(ast_childa, $2);
+	}
+	| NOT expression
+	{
+		$$ = ast_new_unary(ast_not, $2);
+	}
+	| NEW fqcn_part typename_group LRB argument_list RRB
+	{
+		$$ = ast_new_new_instance($2, $3, $5);
+	}
+	| NEW fqcn_part typename_group LRB RRB
+	{
+		$$ = ast_new_new_instance($2, $3, ast_new_blank());
+	}
+	| THIS_TOK
+	{
+		$$ = ast_new_this();
+	}
+	| SUPER_TOK
+	{
+		$$ = ast_new_super();
+	}
+	| lhs
+	;
+lhs
+	: fqcn_part typename_group
+	{
+		$$ = ast_new_variable($1, $2);
+	}
+	| expression DOT IDENT typename_group
+	{
+		$$ = ast_new_field_access($1, $3, $4);
+	}
+	| expression_nobrace LRB argument_list RRB %prec FUNCCALL
+	{
+		$$ = ast_new_op_call($1, $3);
+	}
+	| expression_nobrace LRB RRB %prec FUNCCALL
+	{
+		$$ = ast_new_op_call($1, ast_new_blank());
 	}
 	;
 primary

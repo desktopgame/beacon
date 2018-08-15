@@ -7,12 +7,16 @@
 #include "../../env/property_body.h"
 #include "../../vm/symbol_entry.h"
 #include "../../vm/generate.h"
+#include "../../il/il_argument.h"
 #include "../../env/field.h"
 
 static void assign_by_namebase(il_factor_assign_op* self, enviroment* env, call_context* cctx);
 static void assign_to_field(il_factor_assign_op* self,il_factor* receiver, il_factor* source, string_view namev, enviroment* env, call_context* cctx);
 static void assign_to_property(il_factor_assign_op* self, enviroment* env, call_context* cctx);
 static void assign_to_array(il_factor_assign_op* self, enviroment* env, call_context* cctx);
+static void assign_by_call(il_factor_assign_op* self, enviroment* env, call_context* cctx);
+static void assign_by_invoke(il_factor_invoke* lhs, il_factor* rhs, enviroment* env, call_context* cctx);
+static void assign_by_invoke_bound(il_factor_invoke_bound* lhs, il_factor* rhs, enviroment* env, call_context* cctx);
 static void check_final(il_factor* receiver, il_factor* source, string_view namev, enviroment* env, call_context* cctx);
 static bool can_assign_to_field(field* f, il_factor_assign_op* self, enviroment* env, call_context* cctx);
 static void generate_assign_to_variable(il_factor_assign_op* self, enviroment* env, call_context* cctx);
@@ -61,6 +65,8 @@ void il_factor_assign_op_generate(il_factor_assign_op* self, enviroment* env, ca
 		assign_to_property(self, env, cctx);
 	} else if(self->left->type == ilfactor_subscript) {
 		assign_to_array(self, env, cctx);
+	} else if(self->left->type == ilfactor_call_op) {
+		assign_by_call(self, env, cctx);
 	}
 }
 
@@ -173,6 +179,56 @@ static void assign_to_array(il_factor_assign_op* self, enviroment* env, call_con
 	il_factor_generate(subs->pos, env, cctx);
 	opcode_buf_add(env->buf, op_invokeoperator);
 	opcode_buf_add(env->buf, subs->operator_index);
+}
+
+static void assign_by_call(il_factor_assign_op* self, enviroment* env, call_context* cctx) {
+	il_factor_call_op* call = IL_FACT2CALL(self->left);
+	if(call->type == ilcall_type_invoke_static) {
+		bc_error_throw(
+			bcerror_lhs_is_not_subscript,
+			string_pool_ref2str(call->u.invoke_static_->namev)
+		);
+		return;
+	}
+	if(call->type == ilcall_type_invoke) {
+		assign_by_invoke(call->u.invoke_, self->right, env, cctx);
+	} else if(call->type == ilcall_type_invoke_bound) {
+		assign_by_invoke_bound(call->u.invoke_bound_, self->right, env, cctx);
+	}
+}
+
+static void assign_by_invoke(il_factor_invoke* lhs, il_factor* rhs, enviroment* env, call_context* cctx) {
+	int temp = -1;
+	il_factor_invoke_find_set(lhs, rhs, env, cctx, &temp);
+	il_factor_generate(rhs, env, cctx);
+	il_factor_generate(lhs->receiver, env, cctx);
+	opcode_buf_add(env->buf, op_invokeoperator);
+	opcode_buf_add(env->buf, temp);
+}
+
+static void assign_by_invoke_bound(il_factor_invoke_bound* lhs, il_factor* rhs, enviroment* env, call_context* cctx) {
+	int temp = -1;
+	il_factor_invoke_bound_find_set(lhs, rhs, env, cctx, &temp);
+	assert(lhs->args->length == 1);
+	for(int i=0; i<lhs->args->length; i++) {
+		il_argument* arg = vector_at(lhs->args, i);
+		il_factor_generate(arg->factor, env, cctx);
+	}
+	il_factor_generate(rhs, env, cctx);
+	//il_factor_generate(lhs->receiver, env, cctx);
+	subscript_descriptor subs = lhs->u.subscript;
+	if(subs.tag == subscript_local_T) {
+		opcode_buf_add(env->buf, op_load);
+		opcode_buf_add(env->buf, subs.index);
+	} else if(subs.tag == subscript_field_T) {
+		opcode_buf_add(env->buf, op_this);
+		generate_get_field(env->buf, subs.u.fi, subs.index);
+	} else if(subs.tag == subscript_property_T) {
+		opcode_buf_add(env->buf, op_this);
+		generate_get_property(env->buf, subs.u.prop, subs.index);
+	}
+	opcode_buf_add(env->buf, op_invokeoperator);
+	opcode_buf_add(env->buf, temp);
 }
 
 static bool can_assign_to_field(field* f, il_factor_assign_op* self, enviroment* env, call_context* cctx) {

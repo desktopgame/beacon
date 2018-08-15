@@ -119,6 +119,9 @@ char* il_factor_unary_op_tostr(il_factor_unary_op* self, enviroment* env) {
 }
 
 void il_factor_unary_op_delete(il_factor_unary_op * self) {
+	if(self == NULL) {
+		return;
+	}
 	il_factor_delete(self->a);
 	switch(self->type) {
 		case operator_not:
@@ -160,7 +163,7 @@ int il_factor_unary_op_index2(il_factor* receiver, operator_type otype, envirome
 	}
 	class_* lclass = TYPE2CLASS(GENERIC2TYPE(gtype));
 	int temp = 0;
-	class_find_operator_overload(lclass, otype, args, env, &temp);
+	class_gfind_operator_overload(lclass, otype, args, env, &temp);
 	vector_delete(args, vector_deleter_null);
 	return temp;
 }

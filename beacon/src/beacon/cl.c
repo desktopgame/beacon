@@ -21,9 +21,7 @@ int cl_bug(int argc, char* argv[]) {
 }
 
 int cl_ast(const char* filename) {
-	script_context_open();
 	int ret = eval_ast(filename);
-	script_context_close();
 	return ret;
 }
 

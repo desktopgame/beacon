@@ -1,9 +1,11 @@
 #include "il_factor_invoke_bound_impl.h"
 #include "../../../util/mem.h"
 #include "../../../util/text.h"
+#include "../../../env/operator_overload.h"
 #include "../../../env/generic_type.h"
 #include "../../../env/type_interface.h"
 #include "../../../env/type/class_impl.h"
+#include "../../../vm/symbol_entry.h"
 #include "../../../vm/enviroment.h"
 #include "../../il_argument.h"
 #include "../../il_type_argument.h"
@@ -13,15 +15,18 @@ static void resolve_non_default(il_factor_invoke_bound * self, enviroment * env,
 static void resolve_default(il_factor_invoke_bound * self, enviroment * env, call_context* cctx);
 static void il_factor_invoke_bound_check(il_factor_invoke_bound * self, enviroment * env, call_context* cctx);
 static void il_factor_invoke_bound_args_delete(vector_item item);
+static void il_factor_invoke_bound_generate_method(il_factor_invoke_bound* self, enviroment* env, call_context* cctx);
+static void il_factor_invoke_bound_generate_subscript(il_factor_invoke_bound* self, enviroment* env, call_context* cctx);
+static generic_type* il_factor_invoke_bound_return_gtype(il_factor_invoke_bound* self);
 
 il_factor_invoke_bound* il_factor_invoke_bound_new(string_view namev) {
 	il_factor_invoke_bound* ret = (il_factor_invoke_bound*)MEM_MALLOC(sizeof(il_factor_invoke_bound));
 	ret->namev = namev;
 	ret->args = NULL;
 	ret->type_args = NULL;
-	ret->m = NULL;
 	ret->index = -1;
 	ret->resolved = NULL;
+	ret->tag = bound_invoke_undefined_T;
 	return ret;
 }
 
@@ -30,7 +35,11 @@ void il_factor_invoke_bound_dump(il_factor_invoke_bound* self, int depth) {
 	io_printfln("invoke bound");
 
 	io_printi(depth + 1);
-	io_printfln("%s", string_pool_ref2str(self->m->namev));
+	if(self->tag == bound_invoke_method_T) {
+		io_printfln("%s", string_pool_ref2str(self->u.m->namev));
+	} else {
+		io_printfln("[]");
+	}
 
 	for(int i=0; i<self->args->length; i++) {
 		il_argument* e = (il_argument*)vector_at(self->args, i);
@@ -39,33 +48,8 @@ void il_factor_invoke_bound_dump(il_factor_invoke_bound* self, int depth) {
 }
 
 void il_factor_invoke_bound_generate(il_factor_invoke_bound* self, enviroment* env, call_context* cctx) {
-	for(int i=0; i<self->type_args->length; i++) {
-		il_type_argument* e = (il_type_argument*)vector_at(self->type_args, i);
-		assert(e->gtype != NULL);
-		opcode_buf_add(env->buf, op_generic_add);
-		generic_type_generate(e->gtype, env);
-	}
-	for(int i=0; i<self->args->length; i++) {
-		il_argument* e = (il_argument*)vector_at(self->args, i);
-		il_factor_generate(e->factor, env, cctx);
-		if(bc_error_last()) {
-			return;
-		}
-	}
-	if(modifier_is_static(self->m->modifier)) {
-		opcode_buf_add(env->buf, (vector_item)op_invokestatic);
-		opcode_buf_add(env->buf, (vector_item)self->m->parent->absolute_index);
-		opcode_buf_add(env->buf,(vector_item) self->index);
-	} else {
-		opcode_buf_add(env->buf,(vector_item) op_this);
-		if(self->m->access == access_private) {
-			opcode_buf_add(env->buf, (vector_item)op_invokespecial);
-			opcode_buf_add(env->buf, (vector_item)self->index);
-		} else {
-			opcode_buf_add(env->buf, (vector_item)op_invokevirtual);
-			opcode_buf_add(env->buf, (vector_item)self->index);
-		}
-	}
+	il_factor_invoke_bound_generate_method(self, env, cctx);
+	il_factor_invoke_bound_generate_subscript(self, env, cctx);
 }
 
 void il_factor_invoke_bound_load(il_factor_invoke_bound * self, enviroment * env, call_context* cctx) {
@@ -84,7 +68,7 @@ generic_type* il_factor_invoke_bound_eval(il_factor_invoke_bound * self, envirom
 	cfr->u.self_invoke.args = self->args;
 	cfr->u.self_invoke.typeargs = self->type_args;
 
-	if(self->m->return_gtype->tag != generic_type_tag_none) {
+	if(il_factor_invoke_bound_return_gtype(self)->tag != generic_type_tag_none) {
 		resolve_non_default(self, env, cctx);
 		assert(self->resolved != NULL);
 		call_context_pop(cctx);
@@ -113,6 +97,17 @@ void il_factor_invoke_bound_delete(il_factor_invoke_bound* self) {
 	//generic_type_delete(self->resolved);
 	MEM_FREE(self);
 }
+
+operator_overload* il_factor_invoke_bound_find_set(il_factor_invoke_bound* self, il_factor* value, struct enviroment* env, call_context* cctx, int* outIndex) {
+	assert(self->tag == bound_invoke_subscript_T);
+	vector* args = vector_new();
+	vector_push(args, ((il_argument*)vector_at(self->args, 0))->factor);
+	vector_push(args, value);
+	operator_overload* opov = class_ilfind_operator_overload(TYPE2CLASS(self->u.subscript.opov->parent), operator_subscript_set, args, env, cctx, outIndex);
+	vector_delete(args, vector_deleter_null);
+	return opov;
+}
+
 //private
 //FIXME:il_factor_invokeからのコピペ
 static void resolve_non_default(il_factor_invoke_bound * self, enviroment * env, call_context* cctx) {
@@ -120,8 +115,7 @@ static void resolve_non_default(il_factor_invoke_bound * self, enviroment * env,
 		return;
 	}
 	type* tp = NULL;
-//	generic_type* receivergType = tp->generic_self;
-	generic_type* rgtp  = self->m->return_gtype;
+	generic_type* rgtp  = il_factor_invoke_bound_return_gtype(self);
 	if(rgtp->tag == generic_type_tag_class) {
 		self->resolved = generic_type_new(NULL);
 		self->resolved->tag = generic_type_tag_class;
@@ -138,7 +132,7 @@ static void resolve_default(il_factor_invoke_bound * self, enviroment * env, cal
 	if(self->resolved != NULL) {
 		return;
 	}
-	generic_type* rgtp = self->m->return_gtype;
+	generic_type* rgtp = il_factor_invoke_bound_return_gtype(self);
 	self->resolved = generic_type_apply(rgtp, cctx);
 }
 
@@ -155,21 +149,112 @@ static void il_factor_invoke_bound_check(il_factor_invoke_bound * self, envirome
 		il_factor_load(ilarg->factor, env, cctx);
 	}
 	#if defined(DEBUG)
+	const char* nstr = string_pool_ref2str(self->namev);
 	const char* str = string_pool_ref2str(type_name(ctype));
 	#endif
 	call_frame* cfr = call_context_push(cctx, frame_self_invoke_T);
 	cfr->u.self_invoke.args = self->args;
 	cfr->u.self_invoke.typeargs = self->type_args;
-	self->m = class_ilfind_method(TYPE2CLASS(ctype), self->namev, self->args, env, cctx, &temp);
+	self->tag = bound_invoke_method_T;
+	self->u.m = class_ilfind_method(TYPE2CLASS(ctype), self->namev, self->args, env, cctx, &temp);
 	self->index = temp;
-	call_context_pop(cctx);
+	if(self->index != -1) {
+		call_context_pop(cctx);
+		return;
+	}
+	//添字アクセスとして解決する
+	generic_type* receiver_gtype = NULL;
+	symbol_entry* local = symbol_table_entry(env->sym_table, NULL, self->namev);
+	if(local != NULL) {
+		receiver_gtype = local->gtype;
+		self->u.subscript.tag = subscript_local_T;
+		self->u.subscript.u.local = local;
+		self->u.subscript.index = local->index;
+	}
+	self->tag = bound_invoke_subscript_T;
+	self->u.subscript.opov = class_argfind_operator_overload(TYPE2CLASS(GENERIC2TYPE(receiver_gtype)), operator_subscript_get, self->args, env, cctx, &temp);
+	self->index = temp;
 	if(temp == -1) {
 		bc_error_throw(bcerror_invoke_bound_undefined_method,
 			string_pool_ref2str(self->namev)
 		);
 	}
+	call_context_pop(cctx);
 }
+
 static void il_factor_invoke_bound_args_delete(vector_item item) {
 	il_argument* e = (il_argument*)item;
 	il_argument_delete(e);
+}
+
+static void il_factor_invoke_bound_generate_method(il_factor_invoke_bound* self, enviroment* env, call_context* cctx) {
+	assert(self->tag != bound_invoke_undefined_T);
+	if(self->tag != bound_invoke_method_T) {
+		return;
+	}
+	for(int i=0; i<self->type_args->length; i++) {
+		il_type_argument* e = (il_type_argument*)vector_at(self->type_args, i);
+		assert(e->gtype != NULL);
+		opcode_buf_add(env->buf, op_generic_add);
+		generic_type_generate(e->gtype, env);
+	}
+	for(int i=0; i<self->args->length; i++) {
+		il_argument* e = (il_argument*)vector_at(self->args, i);
+		il_factor_generate(e->factor, env, cctx);
+		if(bc_error_last()) {
+			return;
+		}
+	}
+	if(modifier_is_static(self->u.m->modifier)) {
+		opcode_buf_add(env->buf, (vector_item)op_invokestatic);
+		opcode_buf_add(env->buf, (vector_item)self->u.m->parent->absolute_index);
+		opcode_buf_add(env->buf,(vector_item) self->index);
+	} else {
+		opcode_buf_add(env->buf,(vector_item) op_this);
+		if(self->u.m->access == access_private) {
+			opcode_buf_add(env->buf, (vector_item)op_invokespecial);
+			opcode_buf_add(env->buf, (vector_item)self->index);
+		} else {
+			opcode_buf_add(env->buf, (vector_item)op_invokevirtual);
+			opcode_buf_add(env->buf, (vector_item)self->index);
+		}
+	}
+}
+
+static void il_factor_invoke_bound_generate_subscript(il_factor_invoke_bound* self, enviroment* env, call_context* cctx) {
+	assert(self->tag != bound_invoke_undefined_T);
+	if(self->tag != bound_invoke_subscript_T) {
+		return;
+	}
+	for(int i=0; i<self->type_args->length; i++) {
+		il_type_argument* e = (il_type_argument*)vector_at(self->type_args, i);
+		assert(e->gtype != NULL);
+		opcode_buf_add(env->buf, op_generic_add);
+		generic_type_generate(e->gtype, env);
+	}
+	for(int i=0; i<self->args->length; i++) {
+		il_argument* e = (il_argument*)vector_at(self->args, i);
+		il_factor_generate(e->factor, env, cctx);
+		if(bc_error_last()) {
+			return;
+		}
+	}
+	subscript_descriptor subs = self->u.subscript;
+	if(subs.tag == subscript_local_T) {
+		opcode_buf_add(env->buf, op_load);
+		opcode_buf_add(env->buf, subs.index);
+	} else if(subs.tag == subscript_field_T) {
+		opcode_buf_add(env->buf, op_this);
+		generate_get_field(env->buf, subs.u.fi, subs.index);
+	} else if(subs.tag == subscript_property_T) {
+		opcode_buf_add(env->buf, op_this);
+		generate_get_property(env->buf, subs.u.prop, subs.index);
+	}
+	opcode_buf_add(env->buf, op_invokeoperator);
+	opcode_buf_add(env->buf, self->index);
+}
+
+static generic_type* il_factor_invoke_bound_return_gtype(il_factor_invoke_bound* self) {
+	assert(self->tag != bound_invoke_undefined_T);
+	return self->tag == bound_invoke_method_T ? self->u.m->return_gtype : self->u.subscript.opov->return_gtype;
 }

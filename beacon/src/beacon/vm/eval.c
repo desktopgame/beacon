@@ -20,7 +20,7 @@ bool eval_ast(const char* filename) {
 	parser* p = parse_file(filename);
 	ast_print_tree(p->root);
 	if(p->result != parse_complete_T) {
-		printf("error: %s\n", p->error_message);
+		printf("error: %s<%d>\n    %s\n", p->source_name, p->lineno, p->error_message);
 	} else {
 		printf("sucess!\n");
 	}

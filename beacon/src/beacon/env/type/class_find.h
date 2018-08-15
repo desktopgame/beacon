@@ -303,7 +303,11 @@ struct method* class_get_impl_method(class_* self, type* interType, int interMIn
  * @param outIndex
  * @return
  */
-struct operator_overload* class_find_operator_overload(class_* self, operator_type type, vector* args, enviroment* env, int* outIndex);
+struct operator_overload* class_gfind_operator_overload(class_* self, operator_type type, vector* args, enviroment* env, int* outIndex);
+
+struct operator_overload* class_ilfind_operator_overload(class_* self, operator_type type, vector* args, enviroment* env, call_context* cctx, int* outIndex);
+
+struct operator_overload* class_argfind_operator_overload(class_* self, operator_type type, vector* args, enviroment* env, call_context* cctx, int* outIndex);
 
 /**
  * @param self

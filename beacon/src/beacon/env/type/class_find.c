@@ -7,6 +7,8 @@
 #include "../property_body.h"
 #include "../parameter.h"
 #include "../generic_type.h"
+#include "../../il/il_argument.h"
+#include "../../il/il_factor_impl.h"
 #include "../../util/vector.h"
 
 static bool class_contains_fieldImpl(vector* fields, field* f);
@@ -418,7 +420,7 @@ method * class_get_impl_method(class_ * self, type * interType, int interMIndex)
 
 
 
-operator_overload* class_find_operator_overload(class_* self, operator_type type, vector* args, enviroment* env, int* outIndex) {
+operator_overload* class_gfind_operator_overload(class_* self, operator_type type, vector* args, enviroment* env, int* outIndex) {
 	(*outIndex) = -1;
 	operator_overload* ret = NULL;
 	for(int i=0; i<self->operator_overload_list->length; i++) {
@@ -449,6 +451,32 @@ operator_overload* class_find_operator_overload(class_* self, operator_type type
 			ret = operator_ov;
 		}
 	}
+	return ret;
+}
+
+operator_overload* class_ilfind_operator_overload(class_* self, operator_type type, vector* args, enviroment* env, call_context* cctx, int* outIndex) {
+	vector* gargs =vector_new();
+	for(int i=0; i<args->length; i++) {
+		il_factor* ilfact = (il_factor*)vector_at(args,i);
+		generic_type* g = il_factor_eval(ilfact, env, cctx);
+		vector_push(gargs, g);
+	}
+	operator_overload* ret = class_gfind_operator_overload(self, type, gargs, env, outIndex);
+	vector_delete(gargs, vector_deleter_null);
+	return ret;
+}
+
+operator_overload* class_argfind_operator_overload(class_* self, operator_type type, vector* args, enviroment* env, call_context* cctx, int* outIndex) {
+	vector* gargs =vector_new();
+	for(int i=0; i<args->length; i++) {
+		//il_factor* ilfact = (il_factor*)vector_at(args,i);
+		il_argument* ilarg = (il_argument*)vector_at(args, i);
+		il_factor* ilfact = ilarg->factor;
+		generic_type* g = il_factor_eval(ilfact, env, cctx);
+		vector_push(gargs, g);
+	}
+	operator_overload* ret = class_gfind_operator_overload(self, type, gargs, env, outIndex);
+	vector_delete(gargs, vector_deleter_null);
 	return ret;
 }
 

@@ -24,6 +24,7 @@ parser* parse_string(const char* source) {
 		return gParser;
 	}
 	yy_clearstr();
+	gParser->result = parse_complete_T;
 	return gParser;
 }
 
@@ -46,6 +47,7 @@ parser* parse_file(const char* filename) {
 		parser_relocation_error(gParser);
 		return gParser;
 	}
+	gParser->result = parse_complete_T;
 	return gParser;
 }
 

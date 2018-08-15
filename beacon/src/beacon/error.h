@@ -51,6 +51,7 @@ typedef enum bc_error_id {
 	bcerror_not_default_value_static_final_field,
 	bcerror_not_initial_field_not_initialized_at_ctor,
 	bcerror_field_default_value_not_compatible_to_field_type,
+	bcerror_lhs_is_not_subscript,
 
 	bcerror_arg_count_not2_bioperator,
 	bcerror_arg_count_not1_uoperator,

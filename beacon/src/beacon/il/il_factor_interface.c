@@ -359,6 +359,7 @@ generic_type* il_factor_eval(il_factor * self, enviroment * env, call_context* c
 			ret = il_factor_subscript_eval(self->u.subscript, env, cctx);
 			break;
 		default:
+			assert(false);
 			break;
 	}
 	//assert(ret != NULL);

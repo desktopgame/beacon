@@ -242,7 +242,7 @@ int il_factor_binary_op_index2(il_factor* receiver, il_factor* arg, operator_typ
 	assert(lctype->tag == type_class);
 	class_* lclass = TYPE2CLASS(lctype);
 	int temp = 0;
-	class_find_operator_overload(lclass, otype, args, env, &temp);
+	class_gfind_operator_overload(lclass, otype, args, env, &temp);
 	vector_delete(args, vector_deleter_null);
 	return temp;
 }

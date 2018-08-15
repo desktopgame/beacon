@@ -133,6 +133,9 @@ void bc_error_vthrow(bc_error_id id, va_list ap) {
 		case bcerror_field_default_value_not_compatible_to_field_type:
 			fmt = "field initializer result type is not compatible to field type: %s#%s";
 			break;
+		case bcerror_lhs_is_not_subscript:
+			fmt = "lhs is not subscript: %s";
+			break;
 
 
 

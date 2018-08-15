@@ -2,18 +2,31 @@
 #define BEACON_IL_IL_FACTOR_INVOKE_BOUND_H
 #include "../../il_factor_interface.h"
 #include "../../../util/string_pool.h"
+#include "subscript_descriptor.h"
+
 struct enviroment;
 struct generic_type;
+struct operator_overload;
 struct method;
 //binded? bound?
+
+typedef enum bound_invoke_T {
+	bound_invoke_method_T,
+	bound_invoke_subscript_T,
+	bound_invoke_undefined_T
+} bound_invoke_T;
 
 typedef struct il_factor_invoke_bound {
 	string_view namev;
 	vector* type_args;
 	vector* args;
-	struct method* m;
+	union {
+		struct method* m;
+		subscript_descriptor subscript;
+	} u;
 	int index;
 	struct generic_type* resolved;
+	bound_invoke_T tag;
 } il_factor_invoke_bound;
 
 il_factor_invoke_bound* il_factor_invoke_bound_new(string_view namev);
@@ -29,4 +42,6 @@ struct generic_type* il_factor_invoke_bound_eval(il_factor_invoke_bound * self, 
 char* il_factor_invoke_bound_tostr(il_factor_invoke_bound* self, struct enviroment* env);
 
 void il_factor_invoke_bound_delete(il_factor_invoke_bound* self);
+
+struct operator_overload* il_factor_invoke_bound_find_set(il_factor_invoke_bound* self, il_factor* value, struct enviroment* env, call_context* cctx, int* outIndex);
 #endif
