@@ -1,6 +1,7 @@
 #include "error.h"
 #include "util/text.h"
 #include "util/string_pool.h"
+#include "util/system.h"
 
 static bc_error_id gGlobalError = bcerror_none;
 static string_view gErrorFile = ZERO_VIEW;
@@ -278,6 +279,9 @@ void bc_error_vthrow(bc_error_id id, va_list ap) {
 		gErrorLineNo,
 		gErrorColumn
 	);
+	#if !defined(DEBUG)
+	system_abort();
+	#endif
 }
 
 void bc_error_clear() {

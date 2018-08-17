@@ -1,0 +1,22 @@
+/**
+ * created by rbtools/rnative.rb
+ * time: 2018-08-17
+ */
+namespace beacon::unsafe {
+	class System {
+		public:
+		def static exit(Int param0) -> Void {
+			nativeExit(param0);
+		}
+
+		def static abort() -> Void {
+			nativeAbort();
+		}
+
+		private:
+		def native static nativeExit(Int param0) -> Void;
+
+		def native static nativeAbort() -> Void;
+
+	}
+}

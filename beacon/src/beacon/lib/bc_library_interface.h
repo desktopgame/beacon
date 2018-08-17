@@ -13,5 +13,6 @@
 #include "beacon/lang/bc_array.h"
 #include "beacon/lang/bc_null.h"
 #include "beacon/lang/bc_exception.h"
-#include "beacon/lang/bc_file.h"
+#include "beacon/lang/unsafe/bc_file.h"
+#include "beacon/lang/unsafe/bc_system.h"
 #endif // !SIGNAL_LIB_bc_LIBRARY_INTERFACE_H

@@ -1,0 +1,12 @@
+namespace
+beacon::unsafe
+typename
+System
+method_name_start
+exit
+abort
+method_name_end
+method_param_start
+Int,Void
+Void
+method_param_end

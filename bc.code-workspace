@@ -110,7 +110,11 @@
 			"call_context.h": "c",
 			"generate.h": "c",
 			"class_impl.h": "c",
-			"eval.h": "c"
+			"eval.h": "c",
+			"namespace.h": "c",
+			"string_buffer.h": "c",
+			"bc_exception.h": "c",
+			"bc_file.h": "c"
 		},
 		"ruby.lint": {
 			"reek": true,

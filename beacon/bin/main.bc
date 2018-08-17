@@ -1,60 +1,9 @@
-namespace data {
-	class Line[T] {
-		public:
-		Array[T] data;
+require "beacon/unsafe/System"
+printLine("Foo");
+printLine("Foo");
+printLine("Foo");
 
-		def new(Int len) {
-			this.data = new Array[T](len);
-		}
 
-		def iterate() -> Iterator[T] {
-			return data.iterate();
-		}
-
-		operator [](Int index) -> T {
-			return data(index);
-		}
-
-		operator []=(Int index, T value) -> Void {
-			data(index) = value;
-		}
-	}
-	class Grid[T] {
-		public:
-		Array[Line[T]] lines;
-
-		def new(Int len) {
-			this.lines = new Array[Line[T]](len);
-		}
-
-		def iterate() -> Iterator[Line[T]] {
-			return lines.iterate();
-		}
-
-		operator [](Int index) -> Line[T] {
-			return lines(index);
-		}
-
-		operator []=(Int index, Line[T] val) -> Void {
-			lines(index) = val;
-		}
-	}
-}
-var grid = new data::Grid[Int](2);
-grid(0) = new data::Line[Int](2);
-grid(1) = new data::Line[Int](2);
-grid(0)(0) = 10; grid(0)(1) = 20;
-grid(1)(0) = 0; grid(1)(1) = 1;
-
-var rowIter = grid.iterate();
-while(rowIter.moveNext()) {
-	var colIter = rowIter.current().iterate();
-	while(colIter.moveNext()) {
-		colIter.current().print();
-		" ".print();
-	}
-	printLine("");
-}
-
-printLine(grid(0)(1));
-printLine("tukareta");
+beacon::unsafe::System.abort();
+printLine("Foo");
+printLine("Foo");

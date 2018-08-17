@@ -1,10 +1,10 @@
 #include "bc_file.h"
-#include "../../../env/namespace.h"
-#include "../../../env/type_impl.h"
-#include "../../../util/string_buffer.h"
-#include "../../../util/text.h"
-#include "../../bc_library_impl.h"
-#include "bc_string.h"
+#include "../../../../env/namespace.h"
+#include "../../../../env/type_impl.h"
+#include "../../../../util/string_buffer.h"
+#include "../../../../util/text.h"
+#include "../../../bc_library_impl.h"
+#include "../bc_string.h"
 #include <assert.h>
 
 static void bc_file_nativeOpen(method* parent, frame* fr, enviroment* env);
