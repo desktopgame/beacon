@@ -91,8 +91,8 @@ ast * ast_new_identifier(string_view strv) {
 
 ast * ast_new_identifier_list(string_view strv, ast * aident_list) {
 	ast* ret = ast_new(ast_identifier_list);
-	ast_push(ret, ast_new_identifier(strv));
 	ast_push(ret, aident_list);
+	ast_push(ret, ast_new_identifier(strv));
 	return ret;
 }
 

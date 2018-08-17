@@ -1,0 +1,75 @@
+namespace beacon::unsafe {
+	enum LocaleCategory {
+		All,
+		Collate,
+		CType,
+		Monetary,
+		Numeric,
+		Time
+	}
+	class Locale {
+		private:
+		static Locale instance = null;
+		def new() {}
+
+		public:
+		property String decimalPoint { private defset; defget; }
+		property String thousandsSep { private defset; defget; }
+		property String intCurrSymbol { private defset; defget; }
+		property String currencySymbol { private defset; defget; }
+		property String monDecimalPoint { private defset; defget; }
+		property String monThousandsSep { private defset; defget; }
+		property String positiveSign { private defset; defget; }
+		property String negativeSign { private defset; defget; }
+		property Int intFracDigits { private defset; defget; }
+		property Int fracDigits { private defset; defget; }
+
+		def static setLocale(Int category, String locale) -> Void {
+			nativeSetLocale(category, locale);
+			Locale.instance = null;
+		}
+
+		def static getLocale() -> Locale {
+			if (Locale.instance == null) {
+				Locale.instance = newLocale();
+			}
+			return Locale.instance;
+		}
+
+		private:
+		def static newLocale() -> Locale {
+			var locale = new Locale();
+			locale.decimalPoint = Locale.nativeGetDecimalPoint();
+			locale.thousandsSep = Locale.nativeGetThousandsSep();
+			locale.intCurrSymbol = Locale.nativeGetIntCurrSymbol();
+			locale.monDecimalPoint = Locale.nativeGetMonDecimalPoint();
+			locale.positiveSign = Locale.nativeGetPositiveSign();
+			locale.negativeSign = Locale.nativeGetNegativeSign();
+			locale.intFracDigits = Locale.nativeGetIntFracDigits();
+			locale.fracDigits = Locale.nativeGetFracDigits();
+			return locale;
+		}
+
+		def static native nativeSetLocale(Int category, String locale) -> Void;
+
+		def static native nativeGetDecimalPoint() -> String;
+
+		def static native nativeGetThousandsSep() -> String;
+
+		def static native nativeGetIntCurrSymbol() -> String;
+
+		def static native nativeGetCurrencySymbol() -> String;
+
+		def static native nativeGetMonDecimalPoint() -> String;
+
+		def static native nativeGetMonThousandsSep() -> String;
+
+		def static native nativeGetPositiveSign() -> String;
+
+		def static native nativeGetNegativeSign() -> String;
+
+		def static native nativeGetIntFracDigits() -> Int;
+
+		def static native nativeGetFracDigits() -> Int;
+	}
+}

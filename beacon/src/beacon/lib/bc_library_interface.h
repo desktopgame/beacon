@@ -15,4 +15,5 @@
 #include "beacon/lang/bc_exception.h"
 #include "beacon/lang/unsafe/bc_file.h"
 #include "beacon/lang/unsafe/bc_system.h"
+#include "beacon/lang/unsafe/bc_locale.h"
 #endif // !SIGNAL_LIB_bc_LIBRARY_INTERFACE_H

@@ -111,6 +111,10 @@ int type_distance(type * super, type * sub) {
 	if (super == sub) {
 		return 0;
 	}
+	//nullはあらゆる型のサブクラス
+	if(sub == TYPE_NULL) {
+		return 1;
+	}
 	if (super->tag == type_class &&
 		sub->tag == type_class) {
 		int dist = class_distance(super->u.class_, sub->u.class_);

@@ -317,6 +317,9 @@ static int generic_type_distanceForm(generic_type* self, generic_type* other, fr
 	if(dist == -1) {
 		return dist;
 	}
+	if(other->core_type == TYPE_NULL) {
+		return 1;
+	}
 	//otherからselfまで辿る
 	class_* baseline = self->core_type->u.class_;
 	class_* ptr = other->core_type->u.class_;
