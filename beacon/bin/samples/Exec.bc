@@ -1,0 +1,3 @@
+require "beacon/unsafe/System"
+
+beacon::unsafe::System.exec("echo ./a.out --run samples/Exec.bc");
