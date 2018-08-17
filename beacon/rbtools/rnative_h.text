@@ -1,0 +1,9 @@
+#ifndef BEACON_LIB_BEACON_BEACON_UNSAFE_BC_SYSTEM_H
+#define BEACON_LIB_BEACON_BEACON_UNSAFE_BC_SYSTEM_H
+struct type;
+
+void system_init();
+
+struct type* system_type();
+
+#endif
