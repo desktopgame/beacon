@@ -345,7 +345,7 @@ object* object_default(generic_type* gt) {
 
 const char* object_name(object* self) {
 	const char* name = "NULL";
-	if(self->gtype->core_type != NULL) {
+	if(self->gtype != NULL && self->gtype->core_type != NULL) {
 		name = string_pool_ref2str(type_full_name(self->gtype->core_type));
 	}
 	return name;

@@ -36,6 +36,10 @@ namespace beacon::lang {
 			return this;
 		}
 
+		def clear() -> Void {
+			this.chars = new Vector[Char]();
+		}
+
 		def toString() -> String {
 			return new String(chars.toArray());
 		}

@@ -24,6 +24,24 @@ namespace beacon::lang {
 			return this.charArray.length();
 		}
 
+		def split(Char c) -> Vector[String] {
+			var offs = 0;
+			var buff = new StringBuilder();
+			var vec = new Vector[String]();
+			while(offs < length()) {
+				var ce = charAt(offs);
+				if(ce == c) {
+					vec << buff.toString();
+					buff.clear();
+				} else {
+					buff << ce;
+				}
+				offs += 1;
+			}
+			vec << buff.toString();
+			return vec;
+		}
+
 		def concat(String other) -> String {
 			var arr = new Array[Char](this.length() + other.length());
 			var offs = 0;
