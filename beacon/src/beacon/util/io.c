@@ -140,6 +140,18 @@ void io_write_text(const char * filename, const char * text) {
 	fclose(fp);
 }
 
+void io_current_path(char* block, int len) {
+	memset(block, '\0', len);
+	getcwd(block, len);
+	for(int i=0; i<len; i++) {
+		char c = block[i];
+		if(c == '\0') {
+			block[i] = '/';
+			break;
+		}
+	}
+}
+
 char * io_absolute_path(const char * target) {
 #if defined(_WIN32)
 	char full[_MAX_PATH];
@@ -149,18 +161,19 @@ char * io_absolute_path(const char * target) {
 	return NULL;
 #else
 	char full[256] = {0};
-	memset(full, '\0', 256);
-	getcwd(full, 256);
-	for(int i=0; i<256; i++) {
-		char c = full[i];
-		if(c == '\0') {
-			full[i] = '/';
-			break;
-		}
-	}
-	char* a = text_concat(full, target);
-	return a;
+	io_current_path(full, 256);
+	return text_concat(full, target);
 #endif
+}
+
+char* io_resolve_script_path(const char* target) {
+	string_buffer* sb = string_buffer_new();
+	char full[256] = {0};
+	io_current_path(full, 256);
+	string_buffer_appends(sb, full);
+	string_buffer_appends(sb, "script-lib/");
+	string_buffer_appends(sb, target);
+	return string_buffer_release(sb);
 }
 
 vector* io_list_files(const char* dirname) {

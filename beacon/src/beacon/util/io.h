@@ -74,12 +74,27 @@ char* io_read_text(const char* filename);
 void io_write_text(const char* filename, const char* text);
 
 /**
+ * 現在のパスを取得します.
+ * 末尾は / で終わります。
+ * @param block
+ * @param len
+ */
+void io_current_path(char* block, int len);
+
+/**
  * 実行時ディレクトリを基準として、
  * targetに表される位置を絶対パスに変換します.
  * @param target
  * @return 呼び出し側で開放してください.
  */
 char* io_absolute_path(const char* target);
+
+/**
+ * 指定のファイルをスクリプトパスで解決してフルパスへ変換します.
+ * @param target
+ * @return
+ */
+char* io_resolve_script_path(const char* target);
 
 /**
  * dirnameの直下のファイル名一覧を返します.

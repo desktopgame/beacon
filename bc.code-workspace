@@ -109,7 +109,8 @@
 			"il_type_interface.h": "c",
 			"call_context.h": "c",
 			"generate.h": "c",
-			"class_impl.h": "c"
+			"class_impl.h": "c",
+			"eval.h": "c"
 		},
 		"ruby.lint": {
 			"reek": true,

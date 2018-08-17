@@ -278,7 +278,7 @@ static script_context* script_context_malloc(void) {
 	ret->oTrue = NULL;
 	ret->oFalse = NULL;
 	ret->oNull = NULL;
-	ret->include_vec = io_list_files("beacon/lang");
+	ret->include_vec = io_list_files("script-lib/beacon/lang");
 	ret->pos_int_vec = vector_new();
 	ret->neg_int_vec = vector_new();
 	ret->n_int_map = numeric_map_new();

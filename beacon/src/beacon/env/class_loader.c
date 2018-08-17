@@ -86,7 +86,7 @@ void class_loader_load(class_loader * self) {
 }
 
 void class_loader_special(class_loader* self, char* relativePath) {
-	char* fullP = io_absolute_path(relativePath);
+	char* fullP = io_resolve_script_path(relativePath);
 	script_context* ctx = script_context_get_current();
 	heap* he = heap_get();
 	class_loader* cll = tree_map_get(ctx->class_loader_map, fullP);
