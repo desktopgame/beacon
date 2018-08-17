@@ -125,11 +125,16 @@ File.open("rnative_c.text", "w") do |file|
 	end
 end
 File.open("rnative_bc.text", "w") do |file|
+
+	file.puts "/**"
+	file.puts " * created by rbtools/rnative.rb"
+	file.puts sprintf(" * time: %s", Date.today.to_s)
+	file.puts " */"
 	file.puts(sprintf("namespace %s {", namespace))
 	file.puts(sprintf("\tclass %s {", typename))
 	file.puts("\t\tpublic:")
 	method_name_list.each_with_index do|name,i|
-		file.print(sprintf("\t\tdef %s(", name))
+		file.print(sprintf("\t\tdef static %s(", name))
 		params = method_param_list[i]
 		args = []
 		params.each_with_index do|param, j|
@@ -173,7 +178,7 @@ File.open("rnative_bc.text", "w") do |file|
 	#ネイティブメソッド実装
 	file.puts("\t\tprivate:")
 	method_name_list.each_with_index do|name, i|
-		file.print(sprintf("\t\tdef native native%s(", name.capitalize))
+		file.print(sprintf("\t\tdef native static native%s(", name.capitalize))
 		params = method_param_list[i]
 		params.each_with_index do|param, j|
 			break if params.size == 1
