@@ -8,11 +8,13 @@
 #define OBJ2DOUBLE(a) (object_obj2double(a))
 #define OBJ2BOOL(a) (object_obj2bool(a))
 #define OBJ2CHAR(a) (object_obj2char(a))
+#define OBJ2LONG(a) (object_obj2long(a))
 
 #define INT2OBJ(a) (object_int2obj(a))
 #define DOUBLE2OBJ(a) (object_double2obj(a))
 #define BOOL2OBJ(a) (object_bool2obj(a))
 #define CHAR2OBJ(a) (object_char2obj(a))
+#define LONG2OBJ(a) (object_long2obj(a))
 
 struct generic_type;
 struct vtable;
@@ -37,6 +39,7 @@ typedef enum object_paint {
  */
 typedef enum object_tag {
 	object_int,
+	object_long, //bc_timeでだけ使ってる
 	object_double,
 	object_char,
 	object_string,
@@ -64,6 +67,7 @@ typedef struct object {
 	union {
 		int int_;
 		double double_;
+		long long_;
 		char char_;
 //		char* string_;
 		bool bool_;
@@ -93,6 +97,14 @@ object* object_int_get(int i);
  */
 #define object_double_new(d) (object_double_malloc(d, __FILE__, __LINE__))
 object* object_double_malloc(double d, const char* filename, int lineno);
+
+/**
+ * long型の値を作成します.
+ * @param l
+ * @return
+ */
+#define object_long_new(l) (object_long_malloc(l, __FILE__, __LINE__))
+object* object_long_malloc(long l, const char* filename, int lineno);
 
 /**
  * 文字型のオブジェクトを作成します.
@@ -239,6 +251,13 @@ bool object_obj2bool(object* self);
 char object_obj2char(object* self);
 
 /**
+ * beaconからCの long へ変換します.
+ * @param self
+ * @return
+ */
+long object_obj2long(object* self);
+
+/**
  * Cからbeaconの Int へ変換します.
  * @param i
  * @return
@@ -265,6 +284,13 @@ object* object_bool2obj(bool b);
  * @return
  */
 object* object_char2obj(char c);
+
+/**
+ * Cからbeacon
+ * @param l
+ * @return
+ */
+object* object_long2obj(long l);
 
 /**
  * 指定の型のデフォルト値を返します.

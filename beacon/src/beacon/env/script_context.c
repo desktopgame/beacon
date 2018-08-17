@@ -150,6 +150,7 @@ void script_context_bootstrap(script_context* self) {
 	bc_file_init();
 	bc_system_init();
 	bc_locale_init();
+	bc_time_init();
 	//ブートストラップクラスローダー
 	self->bootstrap_class_loader = class_loader_new("bootstrap", content_lib);
 	class_loader_special(self->bootstrap_class_loader, "beacon/lang/Object.bc");

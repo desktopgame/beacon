@@ -53,6 +53,14 @@ object * object_double_malloc(double d, const char* filename, int lineno) {
 	return ret;
 }
 
+object* object_long_malloc(long l, const char* filename, int lineno) {
+	object* ret = object_mallocImpl(object_long, filename, lineno);
+	ret->u.long_ = l;
+	ret->gtype = GENERIC_OBJECT;
+	ret->vptr = type_vtable(TYPE_OBJECT);
+	return ret;
+}
+
 object * object_char_malloc(char c, const char* filename, int lineno) {
 	object* ret = object_mallocImpl(object_char, filename, lineno);
 	ret->u.char_ = c;
@@ -313,6 +321,11 @@ char object_obj2char(object* self) {
 	return self->u.char_;
 }
 
+long object_obj2long(object* self) {
+	assert(self->tag == object_long);
+	return self->u.long_;
+}
+
 object* object_int2obj(int i) {
 	return object_int_new(i);
 }
@@ -327,6 +340,10 @@ object* object_bool2obj(bool b) {
 
 object* object_char2obj(char c) {
 	return object_char_new(c);
+}
+
+object* object_long2obj(long l) {
+	return object_long_new(l);
 }
 
 object* object_default(generic_type* gt) {

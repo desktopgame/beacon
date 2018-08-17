@@ -1,0 +1,61 @@
+namespace beacon::unsafe {
+	class Time {
+		public:
+		property Int second {
+			defset; defget;
+		}
+		property Int minute {
+			defset; defget;
+		}
+		property Int hour {
+			defset; defget;
+		}
+		property Int day {
+			defset; defget;
+		}
+		property Int month {
+			defset; defget;
+		}
+		property Int year {
+			defset; defget;
+		}
+		property Int dayOfWeek {
+			defset; defget;
+		}
+		property Int dayOfYear {
+			defset; defget;
+		}
+
+		def new() {
+			this.rawTime = nativeRawTime();
+		}
+
+		def static now() -> Time {
+			var time = new Time();
+			time.second = nativeGetSecond(time.rawTime);
+			time.minute = nativeGetMinute(time.rawTime);
+			time.hour = nativeGetHour(time.rawTime);
+			time.day = nativeGetDay(time.rawTime);
+			time.year = nativeGetYear(time.rawTime);
+			time.dayOfWeek = nativeGetDayOfWeek(time.rawTime);
+			time.dayOfYear = nativeGetDayOfYear(time.rawTime);
+			return time;
+		}
+
+		def toString() -> String {
+			return nativeToString();
+		}
+
+		private:
+		Object rawTime;
+		def static native nativeRawTime() -> Object;
+		def native nativeToString() -> String;
+		def static native nativeGetSecond(Object rawTime) -> Int;
+		def static native nativeGetMinute(Object rawTime) -> Int;
+		def static native nativeGetHour(Object rawTime) -> Int;
+		def static native nativeGetDay(Object rawTime) -> Int;
+		def static native nativeGetYear(Object rawTime) -> Int;
+		def static native nativeGetDayOfWeek(Object rawTime) -> Int;
+		def static native nativeGetDayOfYear(Object rawTime) -> Int;
+	}
+}

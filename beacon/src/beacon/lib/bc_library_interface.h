@@ -16,4 +16,5 @@
 #include "beacon/lang/unsafe/bc_file.h"
 #include "beacon/lang/unsafe/bc_system.h"
 #include "beacon/lang/unsafe/bc_locale.h"
+#include "beacon/lang/unsafe/bc_time.h"
 #endif // !SIGNAL_LIB_bc_LIBRARY_INTERFACE_H
