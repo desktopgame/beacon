@@ -130,6 +130,7 @@ static void il_factor_invoke_bound_check(il_factor_invoke_bound * self, envirome
 		il_argument* ilarg = vector_at(self->args, i);
 		il_factor_load(ilarg->factor, env, cctx);
 	}
+	BC_ERROR();
 	#if defined(DEBUG)
 	const char* nstr = string_pool_ref2str(self->namev);
 	const char* str = string_pool_ref2str(type_name(ctype));
@@ -140,6 +141,7 @@ static void il_factor_invoke_bound_check(il_factor_invoke_bound * self, envirome
 	self->tag = bound_invoke_method_T;
 	self->u.m = class_ilfind_method(TYPE2CLASS(ctype), self->namev, self->args, env, cctx, &temp);
 	self->index = temp;
+	BC_ERROR();
 	if(self->index != -1) {
 		call_context_pop(cctx);
 		return;
