@@ -5,8 +5,10 @@ System
 method_name_start
 exit
 abort
+exec
 method_name_end
 method_param_start
 Int,Void
 Void
+String,Void
 method_param_end

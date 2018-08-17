@@ -13,10 +13,16 @@ namespace beacon::unsafe {
 			nativeAbort();
 		}
 
+		def static exec(String param0) -> Int {
+			return nativeExec(param0);
+		}
+
 		private:
 		def native static nativeExit(Int param0) -> Void;
 
 		def native static nativeAbort() -> Void;
+
+		def native static nativeExec(String param0) -> Int;
 
 	}
 }
