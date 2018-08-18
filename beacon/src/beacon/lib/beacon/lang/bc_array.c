@@ -12,7 +12,6 @@ static void bc_array_nativeInit(method* parent, frame* fr, enviroment* env);
 static void bc_array_nativeSet(method* parent, frame* fr, enviroment* env);
 static void bc_array_nativeGet(method* parent, frame* fr, enviroment* env);
 static void bc_array_nativeCopy(method* parent, frame* fr, enviroment* env);
-static type* gArrayT = NULL;
 
 void bc_array_init() {
 	namespace_* lang = namespace_lang();
@@ -23,14 +22,11 @@ void bc_array_init() {
 	class_define_native_method(arrayClass, "nativeSet", bc_array_nativeSet);
 	class_define_native_method(arrayClass, "nativeGet", bc_array_nativeGet);
 	class_define_native_method(arrayClass, "nativeCopy", bc_array_nativeCopy);
-	gArrayT = arrayType;
 }
 
 type * bc_array_type() {
-	if(gArrayT != NULL) return gArrayT;
 	namespace_* lang = namespace_lang();
-	gArrayT = namespace_get_type(lang, string_pool_intern("Array"));
-	return gArrayT;
+	return namespace_get_type(lang, string_pool_intern("Array"));
 }
 
 object * bc_array_new(struct generic_type* gtype, int length, frame * fr) {

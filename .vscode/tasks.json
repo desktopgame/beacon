@@ -67,6 +67,17 @@
 			]
 		},
 		{
+			"label": "copy to nb",
+			"type": "shell",
+			"options": {
+				"cwd": "../beacon/beacon/rbtools"
+			},
+			"command": "ruby",
+			"args": [
+				"rcopytonb.rb"
+			]
+		},
+		{
 			"label": "ast",
 			"type": "shell",
 			"options": {

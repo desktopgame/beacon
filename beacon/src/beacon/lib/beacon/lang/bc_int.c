@@ -19,7 +19,6 @@ static void bc_int_nativeBitOr(method* parent, frame* fr, enviroment* env);
 static void bc_int_nativeBitAnd(method* parent, frame* fr, enviroment* env);
 static void bc_int_nativeEQ(method* parent, frame* fr, enviroment* env);
 static void bc_int_nativeToChar(method* parent, frame* fr, enviroment* env);
-static type* gIntT = NULL;
 
 void bc_int_init() {
 	namespace_* lang =  namespace_lang();
@@ -43,14 +42,11 @@ void bc_int_init() {
 	class_define_native_method(intClass, "nativeBitAnd", bc_int_nativeBitAnd);
 	class_define_native_method(intClass, "nativeEQ", bc_int_nativeEQ);
 	class_define_native_method(intClass, "nativeToChar", bc_int_nativeToChar);
-	gIntT = intType;
 }
 
 type* bc_int_type() {
-	if(gIntT != NULL) return gIntT;
 	namespace_* lang = namespace_lang();
-	gIntT = namespace_get_type(lang, string_pool_intern("Int"));
-	return gIntT;
+	return namespace_get_type(lang, string_pool_intern("Int"));
 }
 //private
 static void bc_int_nativeInit(method* parent, frame* fr, enviroment* env) {

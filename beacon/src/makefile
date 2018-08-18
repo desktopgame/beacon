@@ -2,11 +2,11 @@
 #http://nantonaku-shiawase.hatenablog.com/entry/20110905/1321356759
 
 COMPILER  = clang
-CXXDEBUG	= -g -O0 -DDEBUG -MMD -Wall
-CXXRELEASE	= -g -O2 -MMD -w
+CXXDEBUG	= -g -shared -O0 -DDEBUG -MMD -Wall
+CXXRELEASE	= -g -shared -O2 -MMD -w
 LDFLAGS = -L/usr/local/lib -L/opt/local/lib
 LIBS      = 
-INCLUDE   = -I/usr/include -I/opt/local/include
+INCLUDE   = -I/usr/include -I/opt/local/include -I/Library/Java/JavaVirtualMachines/jdk1.8.0_151.jdk/Contents/Home/include -I/Library/Java/JavaVirtualMachines/jdk1.8.0_151.jdk/Contents/Home/include/darwin
 TARGETS   = a.out
 TARGETDIR = ../bin
 SRCROOT   = .
