@@ -23,14 +23,6 @@ JNIEXPORT jobject JNICALL Java_jp_koya_jbeacon_BCScriptContext_nativeOpen
 JNIEXPORT void JNICALL Java_jp_koya_jbeacon_BCScriptContext_nativeClose
   (JNIEnv *, jclass);
 
-/*
- * Class:     jp_koya_jbeacon_BCScriptContext
- * Method:    nativeGetRootNamespace
- * Signature: (Ljava/lang/String;)Ljp/koya/jbeacon/BCNamespace;
- */
-JNIEXPORT jobject JNICALL Java_jp_koya_jbeacon_BCScriptContext_nativeGetRootNamespace
-  (JNIEnv *, jobject, jstring);
-
 #ifdef __cplusplus
 }
 #endif
