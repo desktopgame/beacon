@@ -62,6 +62,15 @@ class_loader* class_loader_new(const char* filename, content_type type);
 void class_loader_load(class_loader* self);
 
 /**
+ * ASTの解析をスキップして代わりに引数のASTを解析します.
+ * このASTはクラスローダによって破棄されます。
+ * これを使用する場合 filename は入力元を表すデバッグ表現にするべきです。
+ * @param self
+ * @param a
+ */
+void class_loader_load_pass_ast(class_loader* self, ast* a);
+
+/**
  * 実行時ディレクトリからの相対パスでファイルを仮読み込みします.
  * beacon/langの読み込みのための使用されます。
  * @param self

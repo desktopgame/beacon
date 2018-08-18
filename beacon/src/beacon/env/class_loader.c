@@ -78,9 +78,22 @@ class_loader* class_loader_new(const char* filename, content_type type) {
 }
 
 void class_loader_load(class_loader * self) {
+	//ASTを読み込む
+	parser* p = parse_file(self->filename);
+	//解析に失敗した場合
+	if (check_parser_error(p)) {
+		return;
+	}
+	ast* a = parser_release_ast(p);
+	parser_destroy(p);
+	class_loader_load_pass_ast(self, a);
+}
+
+void class_loader_load_pass_ast(class_loader* self, ast* a) {
 	bc_error_clear();
 	heap* hee = heap_get();
 	hee->accept_blocking++;
+	self->source_code = a;
 	class_loader_load_impl(self);
 	hee->accept_blocking--;
 }
@@ -116,14 +129,6 @@ void class_loader_delete(class_loader * self) {
 //private
 static void class_loader_load_impl(class_loader* self) {
 	assert(self != NULL);
-	//ASTを読み込む
-	parser* p = parse_file(self->filename);
-	//解析に失敗した場合
-	if (check_parser_error(p)) {
-		return;
-	}
-	self->source_code = parser_release_ast(p);
-	parser_destroy(p);
 	//AST -> IL へ
 	class_loader_ilload_impl(self, self->source_code);
 	if (bc_error_last()) { return; }
