@@ -35,3 +35,5 @@ history
 		- フィールドアクセスで this を省略できるように
 	BETA
 		- 配列への添字によるアクセスを実装
+		- Locale/Time/System追加
+		- JNIのためのインターフェイスを最低限実装
