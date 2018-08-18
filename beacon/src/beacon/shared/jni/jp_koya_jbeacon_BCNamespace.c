@@ -1,12 +1,12 @@
-#include "jp_koya_jbeacon_Namespace.h"
+#include "jp_koya_jbeacon_BCNamespace.h"
 #include "../../env/namespace.h"
 
-JNIEXPORT jobject JNICALL Java_jp_koya_jbeacon_Namespace_nativeGetNamespace(JNIEnv * env, jobject self, jstring name) {
+JNIEXPORT jobject JNICALL Java_jp_koya_jbeacon_BCNamespace_nativeGetNamespace(JNIEnv * env, jobject self, jstring name) {
 	const char* name_c = (*env)->GetStringUTFChars(env, name, 0);
 	//jp.koya.jbeacon.Namespace
-	jclass namespace_cls = (*env)->FindClass(env, "jp/koya/jbeacon/Namespace");
+	jclass namespace_cls = (*env)->FindClass(env, "jp/koya/jbeacon/BCNamespace");
 	if(namespace_cls == NULL) {
-		(*env)->FatalError(env, "not found class: jp/koya/jbeacon/Namespace");
+		(*env)->FatalError(env, "not found class: jp/koya/jbeacon/BCNamespace");
 		return NULL;
 	}
 	//Namespace#cptr

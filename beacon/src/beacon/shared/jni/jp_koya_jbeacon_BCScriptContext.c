@@ -1,13 +1,13 @@
-#include "jp_koya_jbeacon_ScriptContext.h"
+#include "jp_koya_jbeacon_BCScriptContext.h"
 #include "../../env/script_context.h"
 #include "../../env/namespace.h"
 
-JNIEXPORT jobject JNICALL Java_jp_koya_jbeacon_ScriptContext_nativeOpen(JNIEnv * env, jclass cls) {
+JNIEXPORT jobject JNICALL Java_jp_koya_jbeacon_BCScriptContext_nativeOpen(JNIEnv * env, jclass cls) {
 	script_context* sctx = script_context_open();
-	//jp.koya.jbeacon.ScriptContextクラスを取得
-	jclass scontext_cls = (*env)->FindClass(env, "jp/koya/jbeacon/ScriptContext");
+	//jp.koya.jbeacon.BCScriptContextクラスを取得
+	jclass scontext_cls = (*env)->FindClass(env, "jp/koya/jbeacon/BCScriptContext");
 	if(scontext_cls == NULL) {
-		(*env)->FatalError(env, "not found class: jp/koya/jbeacon/ScriptContext");
+		(*env)->FatalError(env, "not found class: jp/koya/jbeacon/BCScriptContext");
 		return NULL;
 	}
 	//コンストラクタを検索
@@ -22,20 +22,20 @@ JNIEXPORT jobject JNICALL Java_jp_koya_jbeacon_ScriptContext_nativeOpen(JNIEnv *
 	return (*env)->NewObject(env, scontext_cls, scontext_ctor_id, pointer);
 }
 
-JNIEXPORT void JNICALL Java_jp_koya_jbeacon_ScriptContext_nativeClose(JNIEnv * env, jclass cls) {
+JNIEXPORT void JNICALL Java_jp_koya_jbeacon_BCScriptContext_nativeClose(JNIEnv * env, jclass cls) {
 	script_context_close();
 }
 
-JNIEXPORT jobject JNICALL Java_jp_koya_jbeacon_ScriptContext_nativeGetRootNamespace(JNIEnv * env, jobject self, jstring name) {
+JNIEXPORT jobject JNICALL Java_jp_koya_jbeacon_BCScriptContext_nativeGetRootNamespace(JNIEnv * env, jobject self, jstring name) {
 	const char* name_c = (*env)->GetStringUTFChars(env, name, 0);
 	namespace_* ns = namespace_get_at_root(string_pool_intern(name_c));
 	if(ns == NULL) {
 		return NULL;
 	}
 	//jp.koya.jbeacon.Namespace
-	jclass namespace_cls = (*env)->FindClass(env, "jp/koya/jbeacon/Namespace");
+	jclass namespace_cls = (*env)->FindClass(env, "jp/koya/jbeacon/BCNamespace");
 	if(namespace_cls == NULL) {
-		(*env)->FatalError(env, "not found class: jp/koya/jbeacon/Namespace");
+		(*env)->FatalError(env, "not found class: jp/koya/jbeacon/BCNamespace");
 		return NULL;
 	}
 	//コンストラクタを検索
