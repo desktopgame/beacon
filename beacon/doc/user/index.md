@@ -4,3 +4,4 @@
 * [class](./class.md)
 * [interface](./interface.md)
 * [operator](./operator.md)
+* [coroutine](./coroutine.md)
