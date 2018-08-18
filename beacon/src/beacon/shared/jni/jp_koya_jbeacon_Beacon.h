@@ -17,14 +17,6 @@ JNIEXPORT void JNICALL Java_jp_koya_jbeacon_Beacon_nativeInit
 
 /*
  * Class:     jp_koya_jbeacon_Beacon
- * Method:    nativeExecute
- * Signature: (Ljava/lang/String;)V
- */
-JNIEXPORT void JNICALL Java_jp_koya_jbeacon_Beacon_nativeExecute
-  (JNIEnv *, jclass, jstring);
-
-/*
- * Class:     jp_koya_jbeacon_Beacon
  * Method:    nativeDestroy
  * Signature: ()V
  */
