@@ -30,8 +30,8 @@ static script_context* gScriptContext = NULL;
 script_context* script_context_open() {
 	if(gScriptContextVec == NULL) {
 		gScriptContextVec = vector_new();
+		sg_thread_launch();
 	}
-	sg_thread_launch();
 	script_context* sctx = script_context_malloc();
 	gScriptContext = sctx;
 	vector_push(gScriptContextVec, sctx);
