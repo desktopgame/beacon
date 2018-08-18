@@ -78,6 +78,17 @@
 			]
 		},
 		{
+			"label": "javah nb",
+			"type": "shell",
+			"options": {
+				"cwd": "../beacon/beacon/rbtools"
+			},
+			"command": "ruby",
+			"args": [
+				"rjavah.rb"
+			]
+		},
+		{
 			"label": "ast",
 			"type": "shell",
 			"options": {
