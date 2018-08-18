@@ -3,3 +3,4 @@
 * [namespace](./namespace.md)
 * [class](./class.md)
 * [interface](./interface.md)
+* [operator](./operator.md)
