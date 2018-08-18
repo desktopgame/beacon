@@ -55,8 +55,9 @@ typedef struct script_context {
  * スクリプトコンテキストを登録するためのスクリプトコンテキストを作成します.
  * このとき現在のコンテキストは上書きされます。
  * 既に作成されている場合は何もしません。
+ * @return
  */
-void script_context_open();
+script_context* script_context_open();
 
 /**
  * 現在のスクリプトコンテキストを返します.

@@ -27,7 +27,7 @@ static void script_context_mcache_delete(numeric_key key, numeric_map_item item)
 static vector* gScriptContextVec = NULL;
 static script_context* gScriptContext = NULL;
 
-void script_context_open() {
+script_context* script_context_open() {
 	if(gScriptContextVec == NULL) {
 		gScriptContextVec = vector_new();
 	}
@@ -36,6 +36,7 @@ void script_context_open() {
 	gScriptContext = sctx;
 	vector_push(gScriptContextVec, sctx);
 	script_context_bootstrap(sctx);
+	return sctx;
 }
 
 script_context * script_context_get_current() {
