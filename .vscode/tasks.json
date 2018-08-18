@@ -89,6 +89,17 @@
 			]
 		},
 		{
+			"label": "javap nb",
+			"type": "shell",
+			"options": {
+				"cwd": "../beacon/beacon/rbtools"
+			},
+			"command": "ruby",
+			"args": [
+				"rjavap.rb"
+			]
+		},
+		{
 			"label": "ast",
 			"type": "shell",
 			"options": {
