@@ -6,6 +6,7 @@
 #include "../util/vector.h"
 #include "../util/numeric_map.h"
 #include <stdint.h>
+struct script_context;
 #define TYPE_OBJECT (namespace_object_type())
 #define TYPE_INT (namespace_int_type())
 #define TYPE_DOUBLE (namespace_double_type())
@@ -54,6 +55,14 @@ namespace_* namespace_create_at_root(string_view namev);
  * @return
  */
 namespace_* namespace_get_at_root(string_view namev);
+
+/**
+ * コンテキストを指定してトップレベルの名前空間を返します.
+ * @param sctx
+ * @param namev
+ * @return
+ */
+namespace_* namespace_get_at_croot(struct script_context* sctx, string_view namev);
 
 /**
  * 指定の名前空間に新しい名前空間を定義します.

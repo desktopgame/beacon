@@ -40,10 +40,14 @@ namespace_ * namespace_create_at_root(string_view namev) {
 
 namespace_ * namespace_get_at_root(string_view namev) {
 	script_context* ctx = script_context_get_current();
-	if (ctx->namespace_nmap == NULL) {
+	return namespace_get_at_croot(ctx, namev);
+}
+
+namespace_* namespace_get_at_croot(script_context* sctx, string_view namev) {
+	if (sctx->namespace_nmap == NULL) {
 		return NULL;
 	}
-	return (namespace_*)numeric_map_get(ctx->namespace_nmap, namev);
+	return (namespace_*)numeric_map_get(sctx->namespace_nmap, namev);
 }
 
 namespace_ * namespace_add_namespace(namespace_ * self, string_view namev) {
