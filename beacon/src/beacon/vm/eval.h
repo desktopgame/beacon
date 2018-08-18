@@ -32,4 +32,10 @@ bool eval_op(const char* filename);
  */
 bool eval_file(const char* filename);
 
+/**
+ * 指定のソースコードを現在のコンテキストで実行します.
+ * @param source
+ * @return
+ */
+bool eval_string(const char* source);
 #endif // !SIGNAL_VM_EVAL_H

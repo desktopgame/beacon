@@ -13,7 +13,7 @@
 #include <string.h>
 
 //proto
-static bool eval_top_from_cll(class_loader* cll);
+static bool eval_top_from_cll(class_loader* cll, ast* aOpt);
 
 
 bool eval_ast(const char* filename) {
@@ -55,13 +55,30 @@ bool eval_op(const char* filename) {
 
 bool eval_file(const char * filename) {
 	class_loader* cll = class_loader_new(filename, content_entry_point);
-	return eval_top_from_cll(cll);
+	return eval_top_from_cll(cll, NULL);
+}
+
+bool eval_string(const char* source) {
+	parser* p = parse_string(source);
+	if (p->result != parse_complete_T) {
+		bc_error_throw(bcerror_parse, p->error_message);
+		parser_destroy(p);
+		return false;
+	}
+	class_loader* cll = class_loader_new("", content_entry_point);
+	ast* a = parser_release_ast(p);
+	parser_destroy(p);
+	return eval_top_from_cll(cll, a);
 }
 
 //private
-static bool eval_top_from_cll(class_loader* cll) {
+static bool eval_top_from_cll(class_loader* cll, ast* aOpt) {
 	script_context* ctx = script_context_get_current();
-	class_loader_load(cll);
+	if(aOpt == NULL) {
+		class_loader_load(cll);
+	} else {
+		class_loader_load_pass_ast(cll, aOpt);
+	}
 	//実行
 	frame* fr = frame_new();
 	sg_thread_set_frame_ref(sg_thread_current(script_context_get_current()), fr);
