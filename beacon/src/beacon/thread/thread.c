@@ -22,11 +22,11 @@ sg_thread * sg_thread_new() {
 	return ret;
 }
 
-sg_thread * sg_thread_current() {
-	script_context* ctx = script_context_get_current();
-	assert(ctx != NULL);
+sg_thread * sg_thread_current(script_context* sctx) {
+	//script_context* ctx = script_context_get_current();
+	assert(sctx != NULL);
 	//TODO:今は仮実装なのでちゃんと現在のスレッドを返すようにする
-	return (sg_thread*)vector_at(ctx->thread_vec, 0);
+	return (sg_thread*)vector_at(sctx->thread_vec, 0);
 }
 
 void sg_thread_clear(sg_thread* self) {

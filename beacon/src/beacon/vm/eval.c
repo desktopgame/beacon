@@ -64,7 +64,7 @@ static bool eval_top_from_cll(class_loader* cll) {
 	class_loader_load(cll);
 	//実行
 	frame* fr = frame_new();
-	sg_thread_set_frame_ref(sg_thread_current(), fr);
+	sg_thread_set_frame_ref(sg_thread_current(script_context_get_current()), fr);
 	fpurge(stdout);
 	//エラーによって中断された場合のため、ここで戻す
 	heap* he = heap_get();
@@ -81,7 +81,7 @@ static bool eval_top_from_cll(class_loader* cll) {
 	vm_catch(fr);
 	heap_gc(heap_get(), gc_full);
 	frame_delete(fr);
-	sg_thread_release_frame_ref(sg_thread_current());
+	sg_thread_release_frame_ref(sg_thread_current(script_context_get_current()));
 
 	bool ret = bc_error_last();
 	class_loader_delete(cll);

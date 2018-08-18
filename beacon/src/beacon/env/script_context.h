@@ -49,8 +49,6 @@ typedef struct script_context {
 	struct object* oTrue;
 	struct object* oFalse;
 	struct object* oNull;
-	struct script_context* prev;
-	struct script_context* next;
 } script_context;
 
 /**
@@ -61,43 +59,11 @@ typedef struct script_context {
 void script_context_open();
 
 /**
- * 新しいコンテキストを作成して返します.
- * @return
- */
-script_context* script_context_add();
-
-/**
- * 指定の要素を連結リストから外して開放します.
- * @param self
- * @return
- */
-script_context* script_context_remove(script_context* self);
-
-/**
- * 末尾のコンテキストを返します.
- * @return
- */
-script_context* script_context_back();
-
-/**
- * 現在のスクリプトコンテキストに設定します.
- * この呼び出しは同期される必要があります。
- * @param self
- */
-void script_context_set_current(script_context* self);
-
-/**
  * 現在のスクリプトコンテキストを返します.
  * この呼び出しは同期される必要があります。
  * @return
  */
 script_context* script_context_get_current();
-
-/**
- * 任意のコンテキストを開放します.
- * @param self
- */
-void script_context_delete(script_context* self);
 
 /**
  * スクリプトコンテキストを登録するためのスクリプトコンテキストと、
@@ -110,19 +76,6 @@ void script_context_close();
  * @param self
  */
 void script_context_bootstrap(script_context* self);
-
-/**
- * 新しいスクリプトコンテキストを開始したとき、
- * ブートストラップクラスローダを起動するなら true.
- * デフォルトで true です。
- * @param b
- */
-void script_context_set_bootstrap(bool b);
-
-/**
- * @return
- */
-bool script_context_get_bootstrap();
 
 /**
  * 全ての静的フィールドを訪問します.

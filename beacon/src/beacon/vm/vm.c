@@ -89,7 +89,7 @@ void vm_native_throw(frame * self, object * exc) {
 	self->exception = exc;
 
 	vm_throw(self, exc);
-	sg_thread* th = sg_thread_current();
+	sg_thread* th = sg_thread_current(script_context_get_current());
 	//空ならプログラムを終了
 	if (vector_empty(th->trace_stack)) {
 		vm_terminate(self);
@@ -124,7 +124,7 @@ void vm_catch(frame * self) {
 }
 
 bool vm_validate(frame* self, int source_len, int* pcDest) {
-	sg_thread* th = sg_thread_current();
+	sg_thread* th = sg_thread_current(script_context_get_current());
 	vm_trace* trace = (vm_trace*)vector_top(th->trace_stack);
 	self->validate = true;
 	//汚染
@@ -472,7 +472,7 @@ static void vm_run(frame * self, enviroment * env, int pos, int deferStart) {
 				//例外は呼び出し全てへ伝播
 				object* e = (object*)vector_pop(self->value_stack);
 				vm_throw(self, e);
-				sg_thread* th = sg_thread_current();
+				sg_thread* th = sg_thread_current(script_context_get_current());
 				//空ならプログラムを終了
 				if (vector_empty(th->trace_stack)) {
 					vm_terminate(self);
@@ -484,7 +484,7 @@ static void vm_run(frame * self, enviroment * env, int pos, int deferStart) {
 			}
 			case op_try_enter:
 			{
-				sg_thread* th = sg_thread_current();
+				sg_thread* th = sg_thread_current(script_context_get_current());
 				vm_trace* trace = vm_trace_new(self);
 				trace->pc = IDX; //goto
 				vector_push(th->trace_stack, trace);
@@ -497,14 +497,14 @@ static void vm_run(frame * self, enviroment * env, int pos, int deferStart) {
 			}
 			case op_try_exit:
 			{
-				sg_thread* th = sg_thread_current();
+				sg_thread* th = sg_thread_current(script_context_get_current());
 				vm_trace* trace = (vm_trace*)vector_pop(th->trace_stack);
 				vm_trace_delete(trace);
 				break;
 			}
 			case op_try_clear:
 			{
-				sg_thread* th = sg_thread_current();
+				sg_thread* th = sg_thread_current(script_context_get_current());
 				vm_catch(self);
 				vm_trace* trace = (vm_trace*)vector_pop(th->trace_stack);
 				vm_trace_delete(trace);

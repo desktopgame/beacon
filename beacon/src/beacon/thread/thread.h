@@ -3,7 +3,7 @@
 #define BEACON_THREAD_THREAD_H
 //#include "../util/stack.h"
 #include "../util/vector.h"
-
+struct script_context;
 struct frame;
 /**
  * 並列実行のための構造体です.
@@ -27,9 +27,10 @@ sg_thread* sg_thread_new();
 
 /**
  * 現在のスレッドを返します.
+ * @param sctx
  * @return
  */
-sg_thread* sg_thread_current();
+sg_thread* sg_thread_current(struct script_context* sctx);
 
 /**
  * スレッドに記録された全てのトレースを解放します.

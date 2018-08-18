@@ -14,9 +14,6 @@
 #include "../thread/thread.h"
 #include "../util/text.h"
 //proto
-static script_context* script_context_new();
-static script_context* script_context_check_init(void);
-static void script_context_launch(script_context* self);
 static script_context* script_context_malloc(void);
 static void script_context_free(script_context* self);
 static void script_context_class_loader_delete(const char* name, tree_item item);
@@ -27,109 +24,41 @@ static void script_context_static_clearImpl(field* item);
 static void script_context_cache_delete(vector_item item);
 static void script_context_mcache_delete(numeric_key key, numeric_map_item item);
 
+static vector* gScriptContextVec = NULL;
 static script_context* gScriptContext = NULL;
-static script_context* gScriptContextCurrent = NULL;
-static bool gScriptBootstrap = true;
 
 void script_context_open() {
+	if(gScriptContextVec == NULL) {
+		gScriptContextVec = vector_new();
+	}
 	sg_thread_launch();
-	script_context_check_init();
-}
-
-script_context * script_context_add() {
-	script_context* ret = script_context_new();
-	script_context* ptr = gScriptContext;
-	while (ptr->next != NULL) {
-		ptr = ptr->next;
-	}
-	ptr->next = ret;
-	ret->prev = ptr;
-	return ret;
-}
-
-script_context * script_context_remove(script_context * self) {
-	script_context* next = NULL;
-	if (self->prev != NULL) {
-		next = self->prev;
-	} else if (self->next != NULL) {
-		next = self->next;
-	}
-	if (self->prev != NULL) self->prev->next = self->next;
-	if (self->next != NULL)  self->next->prev = self->prev;
-	script_context_free(self);
-	script_context_set_current(next);
-	return next;
-}
-
-script_context * script_context_back() {
-	script_context* g = script_context_check_init();
-	if (g->next == NULL) {
-		return g;
-	}
-	script_context* pointee = g;
-	while (1) {
-		if (pointee->next == NULL) {
-			break;
-		}
-		pointee = pointee->next;
-	}
-	return pointee;
-}
-
-void script_context_set_current(script_context * self) {
-	gScriptContextCurrent = self;
+	script_context* sctx = script_context_malloc();
+	gScriptContext = sctx;
+	vector_push(gScriptContextVec, sctx);
+	script_context_bootstrap(sctx);
 }
 
 script_context * script_context_get_current() {
-	return gScriptContextCurrent;
-}
-
-void script_context_delete(script_context * self) {
-	assert(self != NULL);
-	assert(self != gScriptContext);
-	//前の要素がある
-	if (self->prev != NULL) {
-		//次の要素がある
-		if (self->next != NULL) {
-			self->prev->next = self->next;
-		} else {
-			self->prev->next = NULL;
-		}
-	}
-	//次の要素がある
-	if (self->next != NULL) {
-		//前の要素がある
-		if (self->prev != NULL) {
-			self->next->prev = self->prev;
-		} else {
-			self->next->prev = NULL;
-		}
-	}
-	script_context_free(self);
+	return gScriptContext;
 }
 
 void script_context_close() {
-	script_context* pointee = gScriptContext;
-	while (1) {
-		if (!pointee) {
-			break;
-		}
-		script_context* temp = pointee;
-		pointee = pointee->next;
-		script_context_free(temp);
-		//free(temp);
-	}
+	script_context* sctx = (script_context*)vector_pop(gScriptContextVec);
+	script_context_free(sctx);
 	gScriptContext = NULL;
-	gScriptContextCurrent = NULL;
-	sg_thread_destroy();
+	if(gScriptContextVec->length == 0) {
+		sg_thread_destroy();
+		vector_delete(gScriptContextVec, vector_deleter_null);
+		gScriptContextVec = NULL;
+	} else {
+		gScriptContext = (script_context*)vector_top(gScriptContextVec);
+	}
 }
 
 void script_context_bootstrap(script_context* self) {
 	//一時的に現在のコンテキストを無効にして、
 	//引数のコンテキストを設定する
 	//FIXME:スタック?
-	script_context* selected = script_context_get_current();
-	script_context_set_current(self);
 	self->heap->accept_blocking++;
 	//プリロード
 	namespace_* beacon = namespace_create_at_root(string_pool_intern("beacon"));
@@ -173,15 +102,6 @@ void script_context_bootstrap(script_context* self) {
 	class_loader_special(self->bootstrap_class_loader, "beacon/lang/World.bc");
 	//退避していたコンテキストを復帰
 	self->heap->accept_blocking--;
-	script_context_set_current(selected);
-}
-
-void script_context_set_bootstrap(bool b) {
-	gScriptBootstrap = b;
-}
-
-bool script_context_get_bootstrap() {
-	return gScriptBootstrap;
 }
 
 void script_context_static_each(script_context* self, static_each act) {
@@ -245,36 +165,12 @@ void script_context_cache() {
 }
 
 //private
-static script_context* script_context_new() {
-	script_context* ret = script_context_malloc();
-	script_context_launch(ret);
-	return ret;
-}
-
-static script_context* script_context_check_init(void) {
-	if (gScriptContext == NULL) {
-		gScriptContext = script_context_malloc();
-		gScriptContextCurrent = gScriptContext;
-		script_context_launch(gScriptContext);
-	}
-	return gScriptContext;
-}
-
-static void script_context_launch(script_context* self) {
-	if(!gScriptBootstrap) {
-		return;
-	}
-	script_context_bootstrap(self);
-}
-
 static script_context* script_context_malloc(void) {
 	script_context* ret = (script_context*)MEM_MALLOC(sizeof(script_context));
 	ret->namespace_nmap = numeric_map_new();
 	ret->class_loader_map = tree_map_new();
 	ret->heap = heap_new();
 	ret->type_vec = vector_new();
-	ret->prev = NULL;
-	ret->next = NULL;
 	ret->thread_vec = vector_new();
 	ret->bootstrap_class_loader = NULL;
 	ret->all_generic_vec = vector_new();
@@ -291,9 +187,9 @@ static script_context* script_context_malloc(void) {
 
 static void script_context_free(script_context* self) {
 	int aa = object_count();
-	assert(heap_get()->collect_blocking == 0);
+	assert(self->heap->collect_blocking == 0);
 	//全ての例外フラグをクリア
-	frame* thv = sg_thread_get_frame_ref(sg_thread_current());
+	frame* thv = sg_thread_get_frame_ref(sg_thread_current(self));
 	vm_catch(thv);
 	class_loader_delete(self->bootstrap_class_loader);
 	if(self->oNull != NULL) {
