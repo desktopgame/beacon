@@ -186,11 +186,6 @@ object* object_copy(object * self) {
 	return self;
 }
 
-object * object_copy_s(object * self) {
-	assert(self->tag != object_ref);
-	return object_copy(self);
-}
-
 void object_paintall(object* self, object_paint paint) {
 	//field#static_valueは
 	//実際に修飾子が static でないときは NULL

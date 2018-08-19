@@ -175,13 +175,6 @@ void object_dec(object* self);
  * @return
  */
 object* object_copy(object* self);
-/**
- * このオブジェクトを複製します.
- * int/double/char/boolでのみ使用可能です。
- * @param self
- * @return
- */
-object* object_copy_s(object* self);
 
 /**
  * このオブジェクトと
