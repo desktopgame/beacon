@@ -1,4 +1,23 @@
-require "beacon/unsafe/Time"
+require "beacon/lang/Object"
+require "beacon/lang/Array"
+require "beacon/lang/Int"
+require "beacon/lang/Double"
+require "beacon/lang/Char"
+require "beacon/lang/String"
+require "beacon/lang/Bool"
+require "beacon/lang/Null"
+require "beacon/lang/Void"
+require "beacon/lang/Console"
+require "beacon/lang/Vector"
 
-var t = beacon::unsafe::Time.now();
-t.toString().printLine();
+require "beacon/lang/Exception"
+require "beacon/lang/StackTraceElement"
+require "beacon/lang/Tuple"
+
+var text = "Hello";
+var offs = 0;
+while(offs < text.length()) {
+	var ch = text.charAt(offs);
+	Console.writeLine(ch);
+	offs += 1;
+}

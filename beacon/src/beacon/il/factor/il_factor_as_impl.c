@@ -33,7 +33,6 @@ void il_factor_as_dump(il_factor_as * self, int depth) {
 
 void il_factor_as_generate(il_factor_as * self, enviroment * env, call_context* cctx) {
 	il_factor_generate(self->fact, env, cctx);
-	/*
 	opcode_buf_add(env->buf, op_generic_add);
 	generic_type_generate(self->gtype, env);
 	if(self->mode == cast_down_T) {
@@ -41,7 +40,6 @@ void il_factor_as_generate(il_factor_as * self, enviroment * env, call_context* 
 	} else {
 		opcode_buf_add(env->buf, op_up_as);
 	}
-	*/
 }
 
 void il_factor_as_load(il_factor_as * self, enviroment * env, call_context* cctx) {

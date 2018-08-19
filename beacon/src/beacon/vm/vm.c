@@ -572,6 +572,7 @@ static void vm_run(frame * self, enviroment * env, int pos, int deferStart) {
 				//フィールドの割り当て
 				class_alloc_fields(cls, obj, self);
 				assert(obj->gtype != NULL);
+				printf("alloc: "); generic_type_print(obj->gtype); io_println();
 				break;
 			}
 			case op_new_instance:
@@ -829,6 +830,10 @@ static void vm_run(frame * self, enviroment * env, int pos, int deferStart) {
 			{
 				object* o = vector_pop(self->value_stack);
 				generic_type* a = vector_pop(self->type_args_vec);
+				a = generic_type_rapply(a, NULL, self);
+				generic_type_print(o->gtype); io_println();
+				generic_type_print(a); io_println();
+				printf("---"); io_println();
 				if(generic_type_distance(o->gtype, a) < 0) {
 					vector_push(self->value_stack, object_get_null());
 				} else {
@@ -841,6 +846,7 @@ static void vm_run(frame * self, enviroment * env, int pos, int deferStart) {
 			{
 				object* o = vector_pop(self->value_stack);
 				generic_type* a = vector_pop(self->type_args_vec);
+				a = generic_type_rapply(a, NULL, self);
 				o->gtype = a;
 				vector_push(self->value_stack, o);
 				break;
@@ -853,6 +859,7 @@ static void vm_run(frame * self, enviroment * env, int pos, int deferStart) {
 				type* tp = vector_at(ctx->type_vec, absClassIndex);
 				object* o = (object*)vector_top(self->value_stack);
 				method* m = class_get_impl_method(o->gtype->core_type->u.class_, tp, methodIndex);
+				call_context* cctx = sg_thread_context();
 				method_execute(m, self, env);
 				break;
 			}

@@ -10,6 +10,7 @@
 #include "object.h"
 #include "../env/class_loader.h"
 #include "../util/mem.h"
+#include "../thread/thread.h"
 #include "../il/call_context.h"
 #include "../il/il_stmt_impl.h"
 #include "../vm/vm.h"
@@ -26,6 +27,8 @@ static void method_count(il_stmt* s, int* yeild_ret, int* ret);
 static constructor* create_delegate_ctor(method* self, type* ty, class_loader* cll,int op_len);
 static method* create_has_next(method* self, type* ty,class_loader* cll, vector* stmt_list, int* out_op_len);
 static method* create_next(method* self, type* ty,class_loader* cll, generic_type* a, vector* stmt_list, int* out_op_len);
+static vector* method_vm_args(method* self, frame* fr, frame* a);
+static vector* method_vm_typeargs(method* self, frame* fr, frame* a);
 
 method* method_malloc(string_view namev, const char* filename, int lineno) {
 	method* ret = (method*)mem_malloc(sizeof(method), filename, lineno);
@@ -51,27 +54,30 @@ void method_execute(method* self, frame * fr, enviroment* env) {
 		script_method_execute(self->u.script_method, self, fr, env);
 	} else if (self->type == method_type_native) {
 		frame* a = frame_sub(fr);
+		call_frame* cfr = NULL;
+		vector* aArgs = NULL;
+		vector* aTArgs = NULL;
 		//レシーバも
 		if(!modifier_is_static(self->modifier)) {
-			vector_assign(a->ref_stack, 0, vector_pop(fr->value_stack));
-		}
-		//引数を引き継ぐ
-		int len = self->parameter_list->length;
-		for(int i=0; i<len; i++) {
-			object* ARG = vector_pop(fr->value_stack);
-			assert(ARG != NULL);
-			vector_assign(a->ref_stack, (len - i), ARG);
-		}
-		//メソッドに渡された型引数を引き継ぐ
-		int typeparams = self->type_parameter_list->length;
-		for(int i=0; i<typeparams; i++) {
-			vector_assign(a->type_args_vec, (typeparams - i) - 1, vector_pop(fr->type_args_vec));
+			object* receiver_obj = vector_pop(fr->value_stack);
+			vector_assign(a->ref_stack, 0, receiver_obj);
+			cfr = call_context_push(sg_thread_context(), frame_instance_invoke_T);
+			cfr->u.instance_invoke.receiver = receiver_obj->gtype;
+			aArgs = cfr->u.instance_invoke.args = method_vm_args(self, fr, a);
+			aTArgs = cfr->u.instance_invoke.typeargs = method_vm_typeargs(self, fr, a);
+		} else {
+			cfr = call_context_push(sg_thread_context(), frame_static_invoke_T);
+			aArgs = cfr->u.static_invoke.args = method_vm_args(self, fr, a);
+			aTArgs = cfr->u.static_invoke.typeargs = method_vm_typeargs(self, fr, a);
 		}
 		native_method_execute(self->u.native_method, self, a, env);
 		//戻り値を残す
 		if(self->return_gtype != TYPE_VOID->generic_self) {
 			vector_push(fr->value_stack, vector_pop(a->value_stack));
 		}
+		vector_delete(aArgs, vector_deleter_null);
+		vector_delete(aTArgs, vector_deleter_null);
+		call_context_pop(sg_thread_context());
 		frame_delete(a);
 	}
 }
@@ -469,4 +475,29 @@ static method* create_next(method* self, type* ty, class_loader* cll,generic_typ
 	call_context_delete(cctx);
 	//enviroment_op_dump(envSmt, 0);
 	return mt;
+}
+
+static vector* method_vm_args(method* self, frame* fr, frame* a) {
+	vector* args = vector_new();
+	//引数を引き継ぐ
+	int len = self->parameter_list->length;
+	for(int i=0; i<len; i++) {
+		object* ARG = vector_pop(fr->value_stack);
+		assert(ARG != NULL);
+		vector_assign(a->ref_stack, (len - i), ARG);
+		vector_assign(args, (len - i), ARG->gtype);
+	}
+	return args;
+}
+
+static vector* method_vm_typeargs(method* self, frame* fr, frame* a) {
+	//メソッドに渡された型引数を引き継ぐ
+	vector* typeargs = vector_new();
+	int typeparams = self->type_parameter_list->length;
+	for(int i=0; i<typeparams; i++) {
+		vector_item e = vector_pop(fr->type_args_vec);
+		vector_assign(a->type_args_vec, (typeparams - i) - 1, e);
+		vector_assign(typeargs, (typeparams - i) - 1, e);
+	}
+	return typeargs;
 }

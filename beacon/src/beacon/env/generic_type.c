@@ -361,6 +361,7 @@ static generic_type* generic_type_receiver_at(call_context* cctx, frame* fr, int
 		return instanced;
 	} else {
 		object* a = vector_at(fr->ref_stack, 0);
+		printf("receiver at: "); generic_type_print(a->gtype); io_println();
 		return vector_at(a->gtype->type_args_list, index);
 	}
 	return NULL;

@@ -114,7 +114,9 @@
 			"namespace.h": "c",
 			"string_buffer.h": "c",
 			"bc_exception.h": "c",
-			"bc_file.h": "c"
+			"bc_file.h": "c",
+			"class_loader.h": "c",
+			"bc_array.h": "c"
 		},
 		"ruby.lint": {
 			"reek": true,
