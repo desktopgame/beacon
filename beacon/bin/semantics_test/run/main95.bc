@@ -1,0 +1,8 @@
+def newVecOne[T](T a) -> Vector[T] {
+	return new Vector[T]() << a;
+}
+
+var viter = newVecOne[Int](0).iterate();
+while(viter.moveNext()) {
+	viter.current().printLine();
+}
