@@ -3,6 +3,7 @@
 #include "../../../util/text.h"
 #include "../../../env/generic_type.h"
 #include "../../../env/type_impl.h"
+#include "../../il_type_argument.h"
 #include "../../../env/field.h"
 #include "../../../env/property.h"
 #include "../../../vm/enviroment.h"
@@ -12,6 +13,7 @@
 #include <string.h>
 #include <stdio.h>
 
+static void il_factor_variable_local_delete_typeargs(vector_item item);
 static void il_factor_variable_local_loadImpl(il_factor_variable_local * self, enviroment * env, call_context* cctx);
 static void il_factor_variable_local_load_field(il_factor_variable_local * self, enviroment * env, call_context* cctx);
 static void il_factor_variable_local_load_property(il_factor_variable_local * self, enviroment * env, call_context* cctx);
@@ -65,11 +67,16 @@ char* il_factor_variable_local_tostr(il_factor_variable_local * self, enviroment
 }
 
 void il_factor_variable_local_delete(il_factor_variable_local* self) {
-	vector_delete(self->type_args, vector_deleter_null);
+	vector_delete(self->type_args, il_factor_variable_local_delete_typeargs);
 //	generic_type_delete(self->gt);
 	MEM_FREE(self);
 }
 //private
+static void il_factor_variable_local_delete_typeargs(vector_item item) {
+	il_type_argument* e = (il_type_argument*)item;
+	il_type_argument_delete(e);
+}
+
 static void il_factor_variable_local_loadImpl(il_factor_variable_local * self, enviroment * env, call_context* cctx) {
 	//NOTE:変数宣言の後にその変数を使用する場合、
 	//factorはload時点でシンボルエントリーを取得しようとするが、

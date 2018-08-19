@@ -13,6 +13,7 @@
 #include "../../il_type_argument.h"
 
 //proto
+static void il_factor_invoke_bound_delete_typeargs(vector_item item);
 static void resolve_non_default(il_factor_invoke_bound * self, enviroment * env, call_context* cctx);
 static void resolve_default(il_factor_invoke_bound * self, enviroment * env, call_context* cctx);
 static void il_factor_invoke_bound_check(il_factor_invoke_bound * self, enviroment * env, call_context* cctx);
@@ -75,7 +76,7 @@ char* il_factor_invoke_bound_tostr(il_factor_invoke_bound* self, enviroment* env
 
 void il_factor_invoke_bound_delete(il_factor_invoke_bound* self) {
 	vector_delete(self->args, il_factor_invoke_bound_args_delete);
-	vector_delete(self->type_args, vector_deleter_null);
+	vector_delete(self->type_args, il_factor_invoke_bound_delete_typeargs);
 	//generic_type_delete(self->resolved);
 	MEM_FREE(self);
 }
@@ -92,6 +93,11 @@ operator_overload* il_factor_invoke_bound_find_set(il_factor_invoke_bound* self,
 
 //private
 //FIXME:il_factor_invokeからのコピペ
+static void il_factor_invoke_bound_delete_typeargs(vector_item item) {
+	il_type_argument* e = (il_type_argument*)item;
+	il_type_argument_delete(e);
+}
+
 static void resolve_non_default(il_factor_invoke_bound * self, enviroment * env, call_context* cctx) {
 	if(self->resolved != NULL) {
 		return;

@@ -43,7 +43,8 @@ typedef struct call_context {
 #define call_context_new(tag) (call_context_malloc(tag, __FILE__, __LINE__))
 call_context* call_context_malloc(call_context_tag tag, const char* filename, int lineno);
 
-call_frame* call_context_push(call_context* self, call_frame_tag tag);
+#define call_context_push(self, tag) (call_context_pushImpl(self, tag, __FILE__, __LINE__))
+call_frame* call_context_pushImpl(call_context* self, call_frame_tag tag, const char* filename, int lineno);
 
 call_frame* call_context_top(call_context* self);
 

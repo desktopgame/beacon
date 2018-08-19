@@ -611,6 +611,7 @@ static void vm_run(frame * self, enviroment * env, int pos, int deferStart) {
 				//enviroment_op_dump(ctor->env, sub->level);
 				//opcode_buf_dump(ctor->env->buf, sub->level);
 				vm_execute(sub, ctor->env);
+				call_context_pop(sg_thread_context());
 				vector_delete(cfr->u.static_invoke.args, vector_deleter_null);
 				vector_delete(cfr->u.static_invoke.typeargs, vector_deleter_null);
 				//コンストラクタを実行した場合、
@@ -847,9 +848,6 @@ static void vm_run(frame * self, enviroment * env, int pos, int deferStart) {
 				object* o = vector_pop(self->value_stack);
 				generic_type* a = vector_pop(self->type_args_vec);
 				a = generic_type_apply(a, sg_thread_context());
-				generic_type_print(o->gtype); io_println();
-				generic_type_print(a); io_println();
-				io_printfln("=-=");
 				if(a->core_type->tag == type_interface) {
 					interface_* inter = TYPE2INTERFACE(GENERIC2TYPE(a));
 					vector* impl_list = class_generic_type_list_to_interface_list_tree(TYPE2CLASS(GENERIC2TYPE(o->gtype)));
