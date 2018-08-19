@@ -1,0 +1,5 @@
+def newVecOne[T](T a) -> Vector[T] {
+	return new Vector[T]() << a;
+}
+0.toString().printLine();
+newVecOne[Int](0).get(0).toString().printLine();
