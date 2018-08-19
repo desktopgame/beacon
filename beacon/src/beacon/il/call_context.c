@@ -9,7 +9,11 @@
 
 call_context* call_context_malloc(call_context_tag tag, const char* filename, int lineno) {
 	call_context* ret = mem_malloc(sizeof(call_context), filename, lineno);
+#if defined(_MSC_VER)
+	control_structure cs = { 0 };
+#else
 	control_structure cs = {};
+#endif
 	ret->call_stack = vector_malloc(filename, lineno);
 	ret->space = NULL;
 	ret->ty = NULL;

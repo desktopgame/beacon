@@ -8,6 +8,10 @@
 #include <time.h>
 #include <assert.h>
 
+#if defined(_MSC_VER)
+#pragma warning(disable:4996)
+#endif
+
 static void bc_time_nativeGetRawTime(method* parent, frame* fr, enviroment* env);
 static void bc_time_nativeToString(method* parent, frame* fr, enviroment* env);
 static void bc_time_nativeGetSecond(method* parent, frame* fr, enviroment* env);

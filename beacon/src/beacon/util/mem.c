@@ -172,7 +172,11 @@ static slot* slot_new(size_t size, const char* filename, int lineno) {
 }
 
 static void* slot_application_area(slot* self) {
+#if defined(_MSC_VER)
+	return ((unsigned char*)self->arena) + BORDER_SIZE;
+#else
 	return self->arena + BORDER_SIZE;
+#endif
 }
 
 static slot* slot_find(void* arena) {

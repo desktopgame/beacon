@@ -6,6 +6,9 @@
 #include "../../../bc_library_impl.h"
 #include "../bc_string.h"
 #include <assert.h>
+#if defined(_MSC_VER)
+#pragma warning(disable:4996)
+#endif
 
 static void bc_file_nativeOpen(method* parent, frame* fr, enviroment* env);
 static void bc_file_nativePut(method* parent, frame* fr, enviroment* env);

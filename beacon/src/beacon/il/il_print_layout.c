@@ -2,6 +2,10 @@
 #include "../util/text.h"
 #include <assert.h>
 
+#if defined(_MSC_VER)
+#pragma warning(disable:4996)
+#endif
+
 static int gLineNo = -1;
 static bool gHideLineNo = false;
 

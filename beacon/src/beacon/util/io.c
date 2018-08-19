@@ -3,7 +3,13 @@
 #include <string.h>
 #include <stdlib.h>
 #include <errno.h>
+
+#if defined(_MSC_VER)
+#include <Windows.h>
+#else
 #include <dirent.h>
+#endif
+
 #include <sys/stat.h>
 #include "text.h"
 #include "file_entry.h"
@@ -177,6 +183,9 @@ char* io_resolve_script_path(const char* target) {
 }
 
 vector* io_list_files(const char* dirname) {
+#if defined(_MSC_VER)
+	return NULL;
+#else
 	vector* ret = vector_new();
 	DIR *dir = opendir(dirname);
 	struct dirent *dp;
@@ -194,6 +203,7 @@ vector* io_list_files(const char* dirname) {
 	closedir(dir);
 	qsort(ret->memory, ret->length, sizeof(void*), io_list_files_sort);
 	return ret;
+#endif
 }
 
 int io_list_files_sort(const void* a, const void* b) {

@@ -17,6 +17,7 @@
 //for C4996
 #ifdef _MSC_VER
 #pragma warning(disable:4996)
+#define YY_NO_UNISTD_H
 #endif
 
 static char* yaccSourceBuffer;

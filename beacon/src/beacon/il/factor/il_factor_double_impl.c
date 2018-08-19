@@ -6,6 +6,9 @@
 #include "../../env/namespace.h"
 #include "../../env/type_impl.h"
 #include "../../util/mem.h"
+#if defined(_MSC_VER)
+#pragma warning(disable:4996)
+#endif
 
 il_factor * il_factor_wrap_double(il_factor_double * self) {
 	il_factor* ret = il_factor_new(ilfactor_double);

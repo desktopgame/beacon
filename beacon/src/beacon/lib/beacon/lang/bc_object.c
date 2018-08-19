@@ -5,6 +5,10 @@
 #include "../../../util/text.h"
 #include <stdio.h>
 
+#if defined(_MSC_VER)
+#pragma warning(disable:4996)
+#endif
+
 //proto
 static void bc_object_nativeToString(method* parent, frame* fr, enviroment* env);
 static void bc_object_nativeReferenceEquals(method* parent, frame* fr, enviroment* env);

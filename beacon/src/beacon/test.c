@@ -24,6 +24,10 @@
 #include "error.h"
 #include <assert.h>
 
+#if defined(_MSC_VER)
+#pragma warning(disable:4996)
+#endif
+
 //proto
 static void test_cll(void);
 static void test_parse_err_hdr(parser* p);
@@ -46,6 +50,8 @@ bool test_now() {
 
 //semantics
 static void test_semanticsImpl(const char* dirname, bool require, char** outFileName, bool* outFail) {
+#if defined(_MSC_VER)
+#else
 	//stdoutを入れ替える
 	char* filename = NULL;
 	FILE* out = tmpfile();
@@ -91,6 +97,7 @@ static void test_semanticsImpl(const char* dirname, bool require, char** outFile
 	stdout = STDOUT;
 	fclose(out);
 	fflush(stdout);
+#endif
 }
 
 static int test_semantics() {

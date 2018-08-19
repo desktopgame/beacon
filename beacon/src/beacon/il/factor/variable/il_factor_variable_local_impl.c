@@ -98,7 +98,11 @@ static void il_factor_variable_local_load_field(il_factor_variable_local * self,
 		return;
 	}
 	int temp = -1;
+#if defined(_MSC_VER)
+	field_with_index fwi;
+#else
 	field_with_index fwi = {};
+#endif
 	field* f = class_find_field_tree(TYPE2CLASS(tp), self->namev, &temp);
 	fwi.fi = f;
 	fwi.index = temp;
@@ -132,7 +136,11 @@ static void il_factor_variable_local_load_property(il_factor_variable_local * se
 		bc_error_throw(bcerror_can_t_access_property, string_pool_ref2str(type_name(tp)), string_pool_ref2str(self->namev));
 		return;
 	}
+#if defined(_MSC_VER)
+	property_with_index pwi;
+#else
 	property_with_index pwi = {};
+#endif
 	pwi.p = p;
 	pwi.index = temp;
 	self->type = variable_local_property;

@@ -52,7 +52,7 @@ void il_factor_shift_op_generate(il_factor_shift_op* self, enviroment* env, call
 		il_factor_generate(self->parent->right, env, cctx);
 		il_factor_generate(self->parent->left, env, cctx);
 		if(il_factor_binary_op_int_int(self->parent, env, cctx)) {
-			opcode_buf_add(env->buf, operator_to_iopcode(self->type));
+			opcode_buf_add(env->buf, (vector_item)operator_to_iopcode(self->type));
 		} else {
 			assert(false);
 		}

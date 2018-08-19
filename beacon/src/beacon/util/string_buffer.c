@@ -4,7 +4,9 @@
 #include <stdio.h>
 #include <assert.h>
 #include <string.h>
-
+#if defined(_MSC_VER)
+#pragma warning(disable:4996)
+#endif
 //proto
 string_buffer* string_buffer_malloc(const char* filename, int lineno) {
 	string_buffer* ret = mem_malloc(sizeof(string_buffer), filename, lineno);
@@ -35,11 +37,7 @@ void string_buffer_vappendf(string_buffer * self, const char * fmt, va_list ap) 
 #define BUFF_LEN (256)
 	char block[BUFF_LEN];
 	memset(block, '\0', BUFF_LEN);
-	#if defined(_MSC_VER)
-	int res = vsprintf_s(block, BUFF_LEN, message, ap);
-	#else
 	int res = vsprintf(block, fmt, ap);
-	#endif
 	assert(res != -1);
 	int len = strlen(block);
 	for (int i = 0; i < len; i++) {

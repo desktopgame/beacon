@@ -6,6 +6,10 @@
 #include "../ast/ast_new_literal.h"
 #include "../error.h"
 #include <assert.h>
+#if defined(_MSC_VER)
+#pragma warning(disable:4996)
+#endif
+
 static parser* parser_new();
 static parser* gParser;
 
