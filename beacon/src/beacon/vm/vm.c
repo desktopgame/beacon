@@ -572,7 +572,6 @@ static void vm_run(frame * self, enviroment * env, int pos, int deferStart) {
 				//フィールドの割り当て
 				class_alloc_fields(cls, obj, self);
 				assert(obj->gtype != NULL);
-				printf("alloc: "); generic_type_print(obj->gtype); io_println();
 				break;
 			}
 			case op_new_instance:
@@ -591,21 +590,29 @@ static void vm_run(frame * self, enviroment * env, int pos, int deferStart) {
 				//また、現在のVMから実引数をポップ
 				frame* sub = frame_sub(self);
 				sub->receiver = tp;
+				call_frame* cfr = call_context_push(sg_thread_context(), frame_static_invoke_T);
+				cfr->u.static_invoke.args = vector_new();
+				cfr->u.static_invoke.typeargs = vector_new();
 				for (int i = 0; i < ctor->parameter_list->length; i++) {
 					vector_item e = vector_pop(self->value_stack);
 					object* o = (object*)e;
 					vector_push(sub->value_stack, NON_NULL(e));
+					vector_assign(cfr->u.static_invoke.args, (ctor->parameter_list->length - i), o->gtype);
 				}
 				//コンストラクタに渡された型引数を引き継ぐ
 				int typeparams = cls->type_parameter_list->length;
 				for(int i=0; i<typeparams; i++) {
-					vector_assign(sub->type_args_vec, (typeparams - i) - 1, vector_pop(self->type_args_vec));
+					vector_item e = vector_pop(self->type_args_vec);
+					vector_assign(sub->type_args_vec, (typeparams - i) - 1, e);
+					vector_assign(cfr->u.static_invoke.typeargs, (cls->type_parameter_list->length - i), e);
 				}
 				//io_printi(self->level);
 				//io_printfln("[ %s#new ]", type_name(ctor->parent));
 				//enviroment_op_dump(ctor->env, sub->level);
 				//opcode_buf_dump(ctor->env->buf, sub->level);
 				vm_execute(sub, ctor->env);
+				vector_delete(cfr->u.static_invoke.args, vector_deleter_null);
+				vector_delete(cfr->u.static_invoke.typeargs, vector_deleter_null);
 				//コンストラクタを実行した場合、
 				//objectがスタックのトップに残っているはず
 				vector_item returnV = vector_top(sub->value_stack);
@@ -626,14 +633,23 @@ static void vm_run(frame * self, enviroment * env, int pos, int deferStart) {
 				//コンストラクタを実行するためのVMを作成
 				frame* sub = frame_sub(self);
 				sub->receiver = tp;
+				call_frame* cfr = call_context_push(sg_thread_context(), frame_static_invoke_T);
+				cfr->u.static_invoke.args = vector_new();
+				cfr->u.static_invoke.typeargs = vector_new();
 				//チェインコンストラクタに渡された実引数をプッシュ
 				for (int i = 0; i < ctor->parameter_list->length; i++) {
 					object* o = (object*)vector_pop(self->value_stack);
 					vector_push(sub->value_stack, NON_NULL(o));
+					vector_assign(cfr->u.static_invoke.args, (ctor->parameter_list->length - i), o->gtype);
+				}
+				for(int i=0; i<self->type_args_vec->length; i++) {
+					vector_push(cfr->u.static_invoke.typeargs, self->type_args_vec);
 				}
 				//		enviroment_op_dump(ctor->env, sub->level);
 				//opcode_buf_dump(ctor->env->buf, sub->level);
 				vm_execute(sub, ctor->env);
+				vector_delete(cfr->u.static_invoke.args, vector_deleter_null);
+				vector_delete(cfr->u.static_invoke.typeargs, vector_deleter_null);
 				//コンストラクタを実行した場合、
 				//objectがスタックのトップに残っているはず
 				vector_item returnV = vector_top(sub->value_stack);
@@ -830,14 +846,29 @@ static void vm_run(frame * self, enviroment * env, int pos, int deferStart) {
 			{
 				object* o = vector_pop(self->value_stack);
 				generic_type* a = vector_pop(self->type_args_vec);
-				a = generic_type_rapply(a, NULL, self);
+				a = generic_type_apply(a, sg_thread_context());
 				generic_type_print(o->gtype); io_println();
 				generic_type_print(a); io_println();
-				printf("---"); io_println();
+				io_printfln("=-=");
+				if(a->core_type->tag == type_interface) {
+					interface_* inter = TYPE2INTERFACE(GENERIC2TYPE(a));
+					vector* impl_list = class_generic_type_list_to_interface_list_tree(TYPE2CLASS(GENERIC2TYPE(o->gtype)));
+					vector* inter_list = class_generic_type_list_to_interface_list(impl_list);
+					int iter = vector_find(inter_list, inter);
+					vector_delete(impl_list, vector_deleter_null);
+					vector_delete(inter_list, vector_deleter_null);
+					if(iter == -1) {
+						vector_push(self->value_stack, object_get_null());
+					} else {
+						vector_push(self->value_stack, o);
+					}
+					break;
+				}
 				if(generic_type_distance(o->gtype, a) < 0) {
 					vector_push(self->value_stack, object_get_null());
 				} else {
-					o->gtype = a;
+					//o = object_clone(o);
+					//o->gtype = a;
 					vector_push(self->value_stack, o);
 				}
 				break;
@@ -846,9 +877,23 @@ static void vm_run(frame * self, enviroment * env, int pos, int deferStart) {
 			{
 				object* o = vector_pop(self->value_stack);
 				generic_type* a = vector_pop(self->type_args_vec);
-				a = generic_type_rapply(a, NULL, self);
-				o->gtype = a;
-				vector_push(self->value_stack, o);
+				a = generic_type_apply(a, sg_thread_context());
+				assert(a->core_type != NULL);
+				if(a->core_type->tag == type_class) {
+					vector_push(self->value_stack, o);
+				} else if(a->core_type->tag == type_interface) {
+					interface_* inter = TYPE2INTERFACE(GENERIC2TYPE(a));
+					vector* impl_list = class_generic_type_list_to_interface_list_tree(TYPE2CLASS(GENERIC2TYPE(o->gtype)));
+					vector* inter_list = class_generic_type_list_to_interface_list(impl_list);
+					int iter = vector_find(inter_list, inter);
+					vector_delete(impl_list, vector_deleter_null);
+					vector_delete(inter_list, vector_deleter_null);
+					if(iter == -1) {
+						vector_push(self->value_stack, object_get_null());
+					} else {
+						vector_push(self->value_stack, o);
+					}
+				}
 				break;
 			}
 			//invoke

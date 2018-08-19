@@ -21,6 +21,7 @@
 #include "../../env/operator_overload.h"
 #include "../../env/type/meta_impl.h"
 #include "../../env/cll/class_loader_link_impl.h"
+#include "../../thread/thread.h"
 #include "../../vm/symbol_entry.h"
 #include "../../util/text.h"
 #include "../../util/logger.h"
@@ -130,8 +131,10 @@ bool CLBC_field_impl(class_loader* self, type* tp, field* fi, namespace_* scope,
 	he->accept_blocking = 0;
 	if(modifier_is_static(fi->modifier)) {
 		frame* f = frame_new();
+		sg_thread_set_frame_ref(sg_thread_main(), f);
 		vm_execute(f, env);
 		fi->static_value = vector_pop(f->value_stack);
+		sg_thread_release_frame_ref(sg_thread_main());
 		frame_delete(f);
 	}
 	he->accept_blocking = abtmp;

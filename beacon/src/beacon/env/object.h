@@ -177,6 +177,13 @@ void object_dec(object* self);
 object* object_copy(object* self);
 
 /**
+ * 参照としてオブジェクトを複製します.
+ * @param self
+ * @return
+ */
+object* object_clone(object* self);
+
+/**
  * このオブジェクトと
  * このオブジェクトから参照可能なオブジェクトを全てマークします.
  * @param self

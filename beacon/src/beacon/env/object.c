@@ -186,6 +186,34 @@ object* object_copy(object * self) {
 	return self;
 }
 
+object* object_clone(object* self) {
+	if(self->tag != object_array &&
+	   self->tag != object_ref &&
+	   self->tag != object_string) {
+		   return object_copy(self);
+	}
+	object* ret = NULL;
+	if(self->tag == object_ref) {
+		ret = object_ref_new();
+		ret->gtype = self->gtype;
+		ret->vptr = self->vptr;
+		ret->u.field_vec = self->u.field_vec;
+	} else if(self->tag == object_array) {
+		ret = object_ref_new();
+		ret->gtype = self->gtype;
+		ret->vptr = self->vptr;
+		ret->native_slot_vec = self->native_slot_vec;
+		ret->u.field_vec = self->u.field_vec;
+	} else if(self->tag == object_string) {
+		ret = object_ref_new();
+		ret->gtype = self->gtype;
+		ret->vptr = self->vptr;
+		ret->native_slot_vec = self->native_slot_vec;
+		ret->u.field_vec = self->u.field_vec;
+	}
+	return ret;
+}
+
 void object_paintall(object* self, object_paint paint) {
 	//field#static_valueは
 	//実際に修飾子が static でないときは NULL

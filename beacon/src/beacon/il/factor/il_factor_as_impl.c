@@ -49,14 +49,19 @@ void il_factor_as_load(il_factor_as * self, enviroment * env, call_context* cctx
 	il_factor_load(self->fact, env, cctx);
 	self->gtype = import_manager_resolve(NULL, call_context_namespace(cctx), self->fqcn, cctx);
 	generic_type* a = il_factor_eval(self->fact, env, cctx);
-	//キャスト元がインターフェイスなら常にダウンキャスト
+	//キャスト元がインターフェイスなら常にアップキャスト
 	if(self->gtype->core_type != NULL && GENERIC2TYPE(self->gtype)->tag == type_interface) {
-		self->mode = cast_down_T;
+		self->mode = cast_up_T;
 		return;
 	}
 	//キャスト先がインターフェイスなら常にアップキャスト
 	if(a->core_type != NULL && GENERIC2TYPE(a)->tag == type_interface) {
 		self->mode = cast_down_T;
+		return;
+	}
+	//キャスト先がオブジェクトなら常にアップキャスト
+	if(self->gtype->core_type != NULL && self->gtype->core_type == TYPE_OBJECT) {
+		self->mode = cast_up_T;
 		return;
 	}
 	int downTo = generic_type_distance(self->gtype, a);
