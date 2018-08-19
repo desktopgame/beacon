@@ -20,6 +20,10 @@
 #include "constructor.h"
 #include <assert.h>
 
+#if defined(_MSC_VER)
+#pragma warning(disable:4996)
+#endif
+
 //proto
 static void method_parameter_delete(vector_item item);
 static void method_type_parameter_delete(vector_item item);

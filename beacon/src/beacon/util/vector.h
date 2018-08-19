@@ -33,7 +33,7 @@ typedef struct vector {
  *	vector_push(v, 30);
  *	int item = 0;
  *	VFOREACH(index, int, item, v) {
- *		printf("hello %d %d ¥n", index, item);
+ *		printf("hello %d %d \n", index, item);
  *	}
  * </code>
  * @param type

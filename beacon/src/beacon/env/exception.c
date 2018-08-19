@@ -5,6 +5,9 @@
 #include <assert.h>
 #include "../util/text.h"
 #include "../vm/frame.h"
+#if defined(_MSC_VER)
+#pragma warning(disable:4996)
+#endif
 
 //proto
 static class_* exception_class();

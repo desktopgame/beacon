@@ -151,6 +151,11 @@ void io_current_path(char* block, int len) {
 	getcwd(block, len);
 	for(int i=0; i<len; i++) {
 		char c = block[i];
+#if defined(_WIN32)
+		if (c == '\\') {
+			block[i] = '/';
+		}
+#endif
 		if(c == '\0') {
 			block[i] = '/';
 			break;
@@ -162,7 +167,15 @@ char * io_absolute_path(const char * target) {
 #if defined(_WIN32)
 	char full[_MAX_PATH];
 	if (_fullpath(full, target, _MAX_PATH) != NULL) {
-		return text_strdup(full);
+		char* ret = text_strdup(full);
+		char* iter = ret;
+		while ((*iter) != '\0') {
+			if ((*iter) == '\\') {
+				(*iter) = '/';
+			}
+			iter++;
+		}
+		return ret;
 	}
 	return NULL;
 #else
@@ -184,7 +197,31 @@ char* io_resolve_script_path(const char* target) {
 
 vector* io_list_files(const char* dirname) {
 #if defined(_MSC_VER)
-	return NULL;
+	//ワイルドカード指定ですべてのファイルを取得する
+	string_buffer* buf = string_buffer_new();
+	string_buffer_appends(buf, dirname);
+	string_buffer_appends(buf, "/*.*");
+	char* pattern = string_buffer_release(buf);
+	vector* v = vector_new();
+	WIN32_FIND_DATA ffd;
+	HANDLE h = FindFirstFile(pattern, &ffd);
+	MEM_FREE(pattern);
+	//取得できなかったので終了
+	if (h == INVALID_HANDLE_VALUE) {
+		return v;
+	}
+	do {
+		if ((ffd.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY)) {
+			continue;
+		}
+		file_entry* e = MEM_MALLOC(sizeof(file_entry));
+		e->filename = io_join_path(dirname, ffd.cFileName);
+		e->is_file = true;
+		vector_push(v, e);
+	} while (FindNextFile(h, &ffd));
+	FindClose(h);
+	qsort(v->memory, v->length, sizeof(void*), io_list_files_sort);
+	return v;
 #else
 	vector* ret = vector_new();
 	DIR *dir = opendir(dirname);

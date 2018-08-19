@@ -1,5 +1,6 @@
 
 #if defined(_MSC_VER)
+#include "util/getopt.h"
 #else
 #include <unistd.h>
 #include <getopt.h>
@@ -16,11 +17,7 @@
 #include "util/logger.h"
 
 
-#if defined(_MSC_VER)
-int main_cl(int argc, char* argv[]) {
-	return 0;
-}
-#else
+
 /**
  * コマンドライン文字列を解析します.
  * @param argc
@@ -75,7 +72,6 @@ int main_cl(int argc, char *argv[]) {
 	}
 	return ret;
 }
-#endif
 
 int main(int argc, char *argv[]) {
 	string_pool_init();

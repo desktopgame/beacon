@@ -82,7 +82,9 @@ static bool eval_top_from_cll(class_loader* cll, ast* aOpt) {
 	//実行
 	frame* fr = frame_new();
 	sg_thread_set_frame_ref(sg_thread_current(script_context_get_current()), fr);
+#if !defined(_MSC_VER)
 	fpurge(stdout);
+#endif
 	//エラーによって中断された場合のため、ここで戻す
 	heap* he = heap_get();
 	he->accept_blocking = 0;
