@@ -13,7 +13,7 @@ namespace beacon::lang {
 		}
 
 		def charAt(Int index) -> Char {
-			return this.charArray.get(index) as Char;
+			return this.charArray.get(index);
 		}
 
 		def substr(Int offs, Int len) -> String {

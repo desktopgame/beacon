@@ -81,8 +81,9 @@ object * object_string_malloc(const char * s, const char* filename, int lineno) 
 	//arr->tag = object_array;
 	type* arrType = bc_array_type();
 	type* strType = namespace_get_type(namespace_lang(), string_pool_intern("String"));
-	arr->gtype = generic_type_ref(arrType);
+	arr->gtype = generic_type_new(arrType);
 	arr->vptr = type_vtable(arrType);
+	generic_type_addargs(arr->gtype, GENERIC_CHAR);
 	//ボックス化
 	const char* itr = s;
 	string_buffer* sb = string_buffer_new();
