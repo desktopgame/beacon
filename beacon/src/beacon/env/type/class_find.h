@@ -339,4 +339,11 @@ bool class_contains_method(vector* method_list, method* m, method** outM);
  * @return
  */
 vector* class_generic_interface_list(class_* self);
+
+/**
+ * @param self
+ * @parma tinter
+ * @return
+ */
+struct generic_type* class_find_interface_type(class_* self, type* tinter);
 #endif

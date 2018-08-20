@@ -538,6 +538,22 @@ vector* class_generic_interface_list(class_* self) {
 	return ret;
 }
 
+generic_type* class_find_interface_type(class_* self, type* tinter) {
+	assert(tinter->tag == type_interface);
+	//実装インターフェイス一覧から同じのを探す
+	generic_type* ret = NULL;
+	vector* generic_impl_list = class_generic_interface_list(self);
+	for(int i=0; i<generic_impl_list->length; i++) {
+		generic_type* e = vector_at(generic_impl_list, i);
+		if(e->core_type == tinter) {
+			ret = e;
+			break;
+		}
+	}
+	vector_delete(generic_impl_list, vector_deleter_null);
+	return ret;
+}
+
 //private
 static bool class_contains_fieldImpl(vector* fields, field* f) {
 	for(int i=0; i<fields->length; i++) {
