@@ -85,6 +85,7 @@ typedef enum bc_error_id {
 
 	bcerror_undefined_type_static_invoke,
 	bcerror_undefined_name_bound_invoke,
+	bcerror_undefined_property,
 
 	bcerror_construct_abstract_type,
 	bcerror_can_t_resolve_lambda,

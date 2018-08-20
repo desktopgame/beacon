@@ -1,4 +1,4 @@
-var text = Console.readLine();
+var text = "60";
 var ival =text.toInt();
 if(ival > 100) {
 	Console.writeLine("ival > 100");

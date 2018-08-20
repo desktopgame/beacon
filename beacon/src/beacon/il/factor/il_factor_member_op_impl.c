@@ -173,13 +173,16 @@ static void il_factor_member_op_check_prop(il_factor_member_op* self, enviroment
 	self->parent->type = ilfactor_property;
 	self->parent->u.prop = factp;
 	//プロパティの可視性を確認
-	if(!class_accessible_property(call_context_class(cctx), p)) {
+	if(temp == -1) {
+		bc_error_throw(bcerror_undefined_property, string_pool_ref2str(type_name(ctype)), string_pool_ref2str(self->namev));
+		il_factor_delete(factp->fact);
+		factp->fact = NULL;
+	} else if(!class_accessible_property(call_context_class(cctx), p)) {
 		bc_error_throw(bcerror_can_t_access_property, string_pool_ref2str(type_name(ctype)), string_pool_ref2str(p->namev));
 		il_factor_delete(factp->fact);
 		factp->fact = NULL;
 	}
 	il_factor_member_op_delete(self);
-	assert(temp != -1);
 	(*swap) = true;
 }
 

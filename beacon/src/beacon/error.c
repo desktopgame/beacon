@@ -193,6 +193,9 @@ void bc_error_vthrow(bc_error_id id, va_list ap) {
 		case bcerror_ref_undefined_local_variable:
 			fmt = "undefined variable: %s";
 			break;
+		case bcerror_undefined_property:
+			fmt = "undefined property: %s#%s";
+			break;
 
 
 		case bcerror_invoke_bound_undefined_method:
