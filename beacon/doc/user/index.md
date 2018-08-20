@@ -1,5 +1,6 @@
 # 目次
 * [require](./require.md)
+* [toplevel](./toplevel.md)
 * [namespace](./namespace.md)
 * [class](./class.md)
 * [interface](./interface.md)
@@ -9,3 +10,6 @@
 * [defer](./defer.md)
 * [generic](./generic.md)
 * [as](./as.md)
+* [if](./if.md)
+* [while](./while.md)
+* [var](./var.md)

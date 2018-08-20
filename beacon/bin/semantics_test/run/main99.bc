@@ -1,0 +1,5 @@
+var offset = 0;
+while(offset < 10) {
+	offset.printLine();
+	offset += 1;
+}
