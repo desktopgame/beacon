@@ -8,7 +8,6 @@ defer_context* defer_context_new() {
 }
 
 void defer_context_delete(defer_context* self) {
-	//label_delete(self->offset);
 	vector_delete(self->variable_vec, vector_deleter_null);
 	MEM_FREE(self);
 }
