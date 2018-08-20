@@ -11,7 +11,5 @@ symbol_entry * symbol_entry_new() {
 }
 
 void symbol_entry_delete(symbol_entry * self) {
-//	MEM_FREE(self->name);
-//	generic_type_delete(self->gtype);
 	MEM_FREE(self);
 }
