@@ -332,4 +332,11 @@ vector* class_find_methods_tree(class_* self, method* m);
  * @param m
  */
 bool class_contains_method(vector* method_list, method* m, method** outM);
+
+/**
+ * 実装された全てのジェネリックインターフェイスを返します.
+ * @param self
+ * @return
+ */
+vector* class_generic_interface_list(class_* self);
 #endif

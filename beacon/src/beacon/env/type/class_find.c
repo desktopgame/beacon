@@ -525,6 +525,19 @@ bool class_contains_method(vector* method_list, method* m, method** outM) {
 	call_context_delete(cctx);
 	return ret;
 }
+
+vector* class_generic_interface_list(class_* self) {
+	vector* ret = vector_new();
+	for(int i=0; i<self->impl_list->length; i++) {
+		generic_type* ginter = vector_at(self->impl_list, i);
+		vector* inner = interface_generic_interface_tree(TYPE2INTERFACE(GENERIC2TYPE(ginter)));
+		vector_merge(ret, inner);
+		vector_push(ret, ginter);
+		vector_delete(inner, vector_deleter_null);
+	}
+	return ret;
+}
+
 //private
 static bool class_contains_fieldImpl(vector* fields, field* f) {
 	for(int i=0; i<fields->length; i++) {

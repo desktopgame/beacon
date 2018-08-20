@@ -154,4 +154,11 @@ bool interface_type_type_parameter_valid(interface_* inter, string_view* out_nam
  * @return
  */
 bool interface_method_type_parameter_valid(interface_* inter, struct method** out_method, string_view* out_name);
+
+/**
+ * このインターフェイスを除く継承された全てのインターフェイスを返します.
+ * @param self
+ * @return
+ */
+vector* interface_generic_interface_tree(interface_* self);
 #endif // !SIGNAL_ENV_TYPE_IINTERFACE_H
