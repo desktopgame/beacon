@@ -5,3 +5,7 @@
 * [interface](./interface.md)
 * [operator](./operator.md)
 * [coroutine](./coroutine.md)
+* [try-catch](./try-catch.md)
+* [defer](./defer.md)
+* [generic](./generic.md)
+* [as](./as.md)
