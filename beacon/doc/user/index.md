@@ -3,6 +3,7 @@
 * [toplevel](./toplevel.md)
 * [namespace](./namespace.md)
 * [class](./class.md)
+* [enum](./enum.md)
 * [interface](./interface.md)
 * [operator](./operator.md)
 * [coroutine](./coroutine.md)
