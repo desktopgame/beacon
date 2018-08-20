@@ -57,9 +57,6 @@ void script_context_close() {
 }
 
 void script_context_bootstrap(script_context* self) {
-	//一時的に現在のコンテキストを無効にして、
-	//引数のコンテキストを設定する
-	//FIXME:スタック?
 	self->heap->accept_blocking++;
 	//プリロード
 	namespace_* beacon = namespace_create_at_root(string_pool_intern("beacon"));

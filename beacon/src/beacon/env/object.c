@@ -298,19 +298,9 @@ void object_destroy(object* self) {
 		return;
 	}
 	type* tp = self->gtype->core_type;
-	//char* name = type_name(tp);
 	assert(self->paint == paint_onexit);
-	//*
-	//enviromentが削除される時点では、
-	//すでにスレッドとVMの関連付けが解除されていて、
-	//GCを実行することができないので自分で開放する。
-	//FIXME:この方法だと、
-	//定数がフィールドに定数を含む場合に二重開放される
-	if (self->tag == object_ref) {
-		vector_delete(self->u.field_vec, object_delete_self);
-		self->u.field_vec = NULL;
-	}
-	if (self->tag == object_string) {
+	if (self->tag == object_ref ||
+	   self->tag == object_string) {
 		vector_delete(self->u.field_vec, object_delete_self);
 		self->u.field_vec = NULL;
 	}

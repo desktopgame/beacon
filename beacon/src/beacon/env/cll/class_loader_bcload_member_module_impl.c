@@ -98,13 +98,10 @@ bool CLBC_field_decl(class_loader* self, il_type* iltype, type* tp, il_field* il
 
 bool CLBC_field_impl(class_loader* self, type* tp, field* fi, namespace_* scope, call_context* cctx) {
 	fi->static_value = object_default(fi->gtype);
-	//FIXME:ILフィールドと実行時フィールドのインデックスが同じなのでとりあえず動く
-	//プロパティが追加されたタイミングで対応する
-	//バッキングフィールドが追加されることもある
-	//il_field* ilfield = ((il_field*)vector_at(ilfields, i));
 	if(fi->initial_value == NULL) {
 		return true;
 	}
+	//フィールドの初期値を設定する
 	enviroment* env = enviroment_new();
 	env->context_ref = self;
 	fi->initial_value_env = env;
@@ -122,7 +119,6 @@ bool CLBC_field_impl(class_loader* self, type* tp, field* fi, namespace_* scope,
 		return false;
 	}
 	//静的フィールドならついでに初期化
-	//FIXME:sg_threadをちゃんと設定すればいいんだけどとりあえずこれで
 	//静的フィールドでものすごいでかいオブジェクトを確保すると重くなるかも
 	heap* he = heap_get();
 	int abtmp = he->accept_blocking;

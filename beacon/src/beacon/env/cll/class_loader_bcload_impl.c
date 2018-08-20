@@ -205,12 +205,9 @@ static void CLBC_enum(class_loader * self, il_type * iltype, namespace_ * parent
 
 static void CLBC_class(class_loader* self, il_type* iltype, namespace_* parent) {
 	CL_ERROR(self);
-	//*
 	//既に登録されていたら二重に登録しないように
 	//例えば、ネイティブメソッドを登録するために一時的にクラスが登録されている場合がある
 	assert(iltype->tag == iltype_class);
-	//FIXME:あとで親関数から渡すようにする
-	//すでに宣言されているならそれを取得
 	type* tp = CLBC_get_or_load_class(self, parent, iltype);
 	CL_ERROR(self);
 	class_* cls = TYPE2CLASS(tp);

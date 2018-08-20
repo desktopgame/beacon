@@ -76,8 +76,6 @@ class_ * class_new(string_view namev) {
 	ret->native_method_ref_nmap = numeric_map_new();
 	ret->vt_vec = vector_new();
 	ret->type_parameter_list = vector_new();
-	//FIXME:ここで持つ必要はない
-	//ret->absoluteIndex = -1;
 	ret->vt = NULL;
 	ret->is_abstract = false;
 	ret->operator_overload_list = vector_new();
