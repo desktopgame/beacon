@@ -41,9 +41,14 @@ generic_type* il_factor_shift_op_eval(il_factor_shift_op * self, enviroment * en
 	   GENERIC2TYPE(rgtype) == cint) {
 		return TYPE2GENERIC(cdouble);
 	}
-	assert(self->operator_index != -1);
+	if(self->operator_index == -1) {
+		bc_error_throw(
+			bcerror_undefined_shift_operator,
+			operator_tostring(self->type)
+		);
+		return NULL;
+	}
 	operator_overload* operator_ov = class_get_operator_overload(TYPE2CLASS(GENERIC2TYPE(lgtype)), self->operator_index);
-	//Vector[Int] Vector[T]
 	return il_factor_binary_op_apply(self->parent, operator_ov->return_gtype, env, cctx);
 }
 

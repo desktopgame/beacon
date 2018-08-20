@@ -1,0 +1,2 @@
+var b = true;
+var c = b << 0;

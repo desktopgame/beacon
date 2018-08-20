@@ -1,2 +1,2 @@
 var S = "hello";
-var u = S ^ 0;
+var u = S | 0;
