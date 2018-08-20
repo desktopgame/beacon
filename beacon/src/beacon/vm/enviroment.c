@@ -15,7 +15,7 @@
 #include "../env/generic_type.h"
 
 //proto
-static void enviroment_constant_pool_delete(vector_item item);
+static void enviroment_constant_pool_vec_delete(vector_item item);
 static void enviroment_line_range_delete(vector_item item);
 static void enviroment_add_constant(enviroment* self, object* o);
 static void enviroment_object_delete_self(vector_item item);
@@ -24,28 +24,28 @@ static void enviroment_object_delete(object* obj);
 enviroment * enviroment_new() {
 	enviroment* ret = (enviroment*)MEM_MALLOC(sizeof(enviroment));
 	ret->buf = opcode_buf_new();
-	ret->constant_pool = vector_new();
+	ret->constant_pool_vec = vector_new();
 	ret->sym_table = symbol_table_new();
 	//ret->class_ = NULL;
 	ret->context_ref = NULL;
-	ret->line_rangeVec = vector_new();
+	ret->line_range_vec = vector_new();
 	return ret;
 }
 
 void enviroment_add_range(enviroment* self, int lineno) {
 	assert(lineno >= 0);
 	//空なので追加
-	if (vector_empty(self->line_rangeVec)) {
+	if (vector_empty(self->line_range_vec)) {
 		line_range* lr = line_range_new();
 		lr->start_offset = 0;
 		lr->end_offset = 0;
 		lr->lineno = lineno;
-		vector_push(self->line_rangeVec, lr);
+		vector_push(self->line_range_vec, lr);
 		return;
 	}
 	//空ではないなら、
 	//最後についかしたレンジを伸ばすか新たに追加する
-	line_range* lrt = (line_range*)vector_top(self->line_rangeVec);
+	line_range* lrt = (line_range*)vector_top(self->line_range_vec);
 	if (lrt->lineno == lineno) {
 		lrt->end_offset = self->buf->source->length;
 	} else {
@@ -53,7 +53,7 @@ void enviroment_add_range(enviroment* self, int lineno) {
 		lr->start_offset = self->buf->source->length;
 		lr->end_offset = self->buf->source->length;
 		lr->lineno = lineno;
-		vector_push(self->line_rangeVec, lr);
+		vector_push(self->line_range_vec, lr);
 	}
 }
 
@@ -64,15 +64,15 @@ void enviroment_op_dump(enviroment * self, int depth) {
 	for (int i = 0; i < buf->source->length; i++) {
 		io_printi(depth);
 		i = opcode_print(buf->source, i);
-		if (!vector_empty(self->line_rangeVec)) {
+		if (!vector_empty(self->line_range_vec)) {
 			if (lr == NULL) {
-				lr = vector_at(self->line_rangeVec, 0);
+				lr = vector_at(self->line_range_vec, 0);
 				lrPos = 0;
 			} else {
 				if (i > lr->end_offset) {
 					lrPos++;
-					if (lrPos < self->line_rangeVec->length) {
-						lr = vector_at(self->line_rangeVec, lrPos);
+					if (lrPos < self->line_range_vec->length) {
+						lr = vector_at(self->line_range_vec, lrPos);
 					}
 				}
 			}
@@ -86,25 +86,25 @@ void enviroment_op_dump(enviroment * self, int depth) {
 }
 
 int enviroment_add_constant_int(enviroment * self, int i) {
-	int len = self->constant_pool->length;
+	int len = self->constant_pool_vec->length;
 	enviroment_add_constant(self, object_int_new(i));
 	return len;
 }
 
 int enviroment_add_constant_double(enviroment * self, double d) {
-	int len = self->constant_pool->length;
+	int len = self->constant_pool_vec->length;
 	enviroment_add_constant(self, object_double_new(d));
 	return len;
 }
 
 int enviroment_add_constant_char(enviroment * self, char c) {
-	int len = self->constant_pool->length;
+	int len = self->constant_pool_vec->length;
 	enviroment_add_constant(self, object_char_new(c));
 	return len;
 }
 
 int enviroment_add_constant_string(enviroment * self, string_view sv) {
-	int len = self->constant_pool->length;
+	int len = self->constant_pool_vec->length;
 	enviroment_add_constant(self, object_string_new(string_pool_ref2str(sv)));
 	return len;
 }
@@ -114,7 +114,7 @@ vector_item enviroment_source_at(enviroment * self, int index) {
 }
 
 object* enviroment_constant_at(enviroment * self, int index) {
-	return (object*)vector_at(self->constant_pool, index);
+	return (object*)vector_at(self->constant_pool_vec, index);
 }
 
 object* enviroment_constant_int_at(enviroment * self, int index) {
@@ -147,9 +147,9 @@ void enviroment_delete(enviroment * self) {
 	}
 	//io_printfln("deleted env %s", self->context_cll->filename);
 	//io_printfln("delete pool---");
-	vector_delete(self->constant_pool, enviroment_constant_pool_delete);
+	vector_delete(self->constant_pool_vec, enviroment_constant_pool_vec_delete);
 
-	vector_delete(self->line_rangeVec, enviroment_line_range_delete);
+	vector_delete(self->line_range_vec, enviroment_line_range_delete);
 	
 	opcode_buf_delete(self->buf);
 	symbol_table_delete(self->sym_table);
@@ -158,7 +158,7 @@ void enviroment_delete(enviroment * self) {
 }
 
 //private
-static void enviroment_constant_pool_delete(vector_item item) {
+static void enviroment_constant_pool_vec_delete(vector_item item) {
 	//StringやArrayはここで中身を削除する必要がある
 	enviroment_object_delete((object*)item);
 	//object_delete((object*)item);
@@ -170,7 +170,7 @@ static void enviroment_line_range_delete(vector_item item) {
 }
 
 static void enviroment_add_constant(enviroment* self, object* o) {
-	vector_push(self->constant_pool, o);
+	vector_push(self->constant_pool_vec, o);
 	assert(o->paint == paint_onexit);
 }
 

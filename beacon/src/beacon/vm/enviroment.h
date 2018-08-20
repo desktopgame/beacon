@@ -20,8 +20,8 @@ typedef struct enviroment {
 	struct class_loader* context_ref;
 	opcode_buf* buf;
 	symbol_table* sym_table;
-	vector* constant_pool;
-	vector* line_rangeVec;
+	vector* constant_pool_vec;
+	vector* line_range_vec;
 } enviroment;
 
 /**

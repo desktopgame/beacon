@@ -166,7 +166,7 @@ void vm_terminate(frame * self) {
 }
 
 void vm_uncaught(frame * self, enviroment* env, int pc) {
-	line_range* lr = line_range_find(env->line_rangeVec, pc);
+	line_range* lr = line_range_find(env->line_range_vec, pc);
 	int line = -1;
 	if (lr != NULL) {
 		line = lr->lineno;
