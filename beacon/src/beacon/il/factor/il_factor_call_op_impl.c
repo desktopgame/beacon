@@ -12,6 +12,7 @@
 
 //proto
 static void il_factor_call_op_check(il_factor_call_op* self, enviroment* env, call_context* cctx);
+static void il_factor_member_op_instance(il_factor_call_op* self, il_factor_member_op* ilmem, enviroment* env, call_context* cctx);
 static void il_factor_invoke_bound_check(il_factor_call_op* self, enviroment* env);
 static void il_factor_member_op_check(il_factor_call_op* self, enviroment* env, call_context* cctx);
 static void il_factor_subscript_check(il_factor_call_op* self, enviroment* env, call_context* cctx);
@@ -197,30 +198,25 @@ static void il_factor_member_op_check(il_factor_call_op* self, enviroment* env, 
 				ilmem->type_args = NULL;
 				ilvar->fqcn = NULL;
 			} else {
-				il_factor_invoke* iv = il_factor_invoke_new(ilmem->namev);
-				//入れ替える
-				iv->args = self->argument_list;
-				iv->receiver = ilmem->fact;
-				iv->type_args = ilvar->type_args;
-				ilmem->fact = NULL;
-				ilvar->type_args = NULL;
-				self->argument_list = NULL;
-				self->type = ilcall_type_invoke;
-				self->u.invoke_ = iv;
+				il_factor_member_op_instance(self, ilmem, env, cctx);
 			}
 		}
 	} else {
-		//入れ替える
-		il_factor_invoke* iv = il_factor_invoke_new(ilmem->namev);
-		iv->args = self->argument_list;
-		iv->receiver = ilmem->fact;
-		iv->type_args = ilmem->type_args;
-		ilmem->fact = NULL;
-		ilmem->type_args = NULL;
-		self->type = ilcall_type_invoke;
-		self->u.invoke_ = iv;
-		self->argument_list = NULL;
+		il_factor_member_op_instance(self, ilmem, env, cctx);
 	}
+}
+
+static void il_factor_member_op_instance(il_factor_call_op* self, il_factor_member_op* ilmem, enviroment* env, call_context* cctx) {
+	//入れ替える
+	il_factor_invoke* iv = il_factor_invoke_new(ilmem->namev);
+	iv->args = self->argument_list;
+	iv->receiver = ilmem->fact;
+	iv->type_args = ilmem->type_args;
+	ilmem->fact = NULL;
+	ilmem->type_args = NULL;
+	self->type = ilcall_type_invoke;
+	self->u.invoke_ = iv;
+	self->argument_list = NULL;
 }
 
 static void il_factor_subscript_check(il_factor_call_op* self, enviroment* env, call_context* cctx) {
