@@ -217,6 +217,10 @@ void bc_error_vthrow(bc_error_id id, va_list ap) {
 			fmt = "not compatible types: %s as %s";
 			break;
 
+		case bcerror_undefined_type_static_invoke:
+			fmt = "static method not found: %s#%s";
+			break;
+
 		case bcerror_construct_abstract_type:
 			fmt = "can't construct a abstract type by new operator: %s";
 			break;

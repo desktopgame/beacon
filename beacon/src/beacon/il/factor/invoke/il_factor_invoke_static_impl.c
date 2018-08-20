@@ -124,7 +124,15 @@ static void resolve_default(il_factor_invoke_static * self, enviroment * env, ca
 }
 
 static void il_factor_invoke_static_check(il_factor_invoke_static * self, enviroment * env, call_context* cctx) {
-	class_* cls = TYPE2CLASS(call_context_eval_type(cctx, self->fqcn));
+	type* ty =call_context_eval_type(cctx, self->fqcn);
+	if(ty == NULL) {
+		bc_error_throw(bcerror_undefined_type_static_invoke,
+			string_pool_ref2str(self->fqcn->namev),
+			string_pool_ref2str(self->namev)
+		);
+		return;
+	}
+	class_* cls = TYPE2CLASS(ty);
 	#if defined(DEBUG)
 	const char* classname = string_pool_ref2str(cls->namev);
 	const char* methodname = string_pool_ref2str(self->namev);
