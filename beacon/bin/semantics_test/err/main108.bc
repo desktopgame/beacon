@@ -1,0 +1,1 @@
+var strbuf = printLine("hello");

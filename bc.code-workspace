@@ -118,7 +118,8 @@
 			"class_loader.h": "c",
 			"bc_array.h": "c",
 			"unistd.h": "c",
-			"class_find.h": "c"
+			"class_find.h": "c",
+			"il_argument.h": "c"
 		},
 		"ruby.lint": {
 			"reek": true,

@@ -1,2 +1,1 @@
-var strbuf = new StringBuilder();
-strbuf << 10;
+Void v = "";

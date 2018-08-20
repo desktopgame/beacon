@@ -45,6 +45,13 @@ void il_factor_assign_op_dump(il_factor_assign_op* self, int depth) {
 void il_factor_assign_op_load(il_factor_assign_op* self, enviroment* env, call_context* cctx) {
 	il_factor_load(self->left, env, cctx);
 	il_factor_load(self->right, env, cctx);
+	//voidは代入できない
+	generic_type* gret = il_factor_eval(self->right, env, cctx);
+	if(gret->core_type != NULL &&
+	   gret->core_type == TYPE_VOID) {
+		   bc_error_throw(bcerror_void_assign);
+		return;
+	}
 }
 
 void il_factor_assign_op_generate(il_factor_assign_op* self, enviroment* env, call_context* cctx) {

@@ -37,6 +37,12 @@ void il_stmt_variable_init_generate(il_stmt_variable_init * self, enviroment * e
 	//宣言型と代入型が異なる場合
 	generic_type* ga = il_factor_eval(self->fact, env, cctx);
 	generic_type* gb = import_manager_resolve(NULL, NULL, self->fqcn, cctx);
+	//voidは代入できない
+	if(ga->core_type != NULL &&
+	   ga->core_type == TYPE_VOID) {
+		   bc_error_throw(bcerror_void_assign);
+		return;
+	}
 	opcode_buf_add(env->buf, op_store);
 	opcode_buf_add(env->buf, self->sym->index);
 }
