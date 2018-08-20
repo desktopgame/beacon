@@ -68,10 +68,10 @@ void il_factor_as_load(il_factor_as * self, enviroment * env, call_context* cctx
 	int upTo = generic_type_distance(a, self->gtype);
 	//ダウンキャスト
 	if(downTo >= 0) {
-		self->mode = cast_down_T;
+		self->mode = cast_up_T;
 	//アップキャスト
 	} else if(upTo >= 0) {
-		self->mode = cast_up_T;
+		self->mode = cast_down_T;
 	//それ以外
 	} else {
 		bc_error_throw(bcerror_cast_not_compatible,
