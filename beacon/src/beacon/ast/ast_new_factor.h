@@ -38,34 +38,6 @@ ast* ast_new_as(ast* afact, ast* atypename);
 ast* ast_new_cast(ast* atypename, ast* afact);
 
 /**
- * 前置きインクリメントを表す要素を作成します.
- * @param a
- * @return
- */
-ast* ast_new_pre_inc(ast* a);
-
-/**
- * 前置きデクリメントを表す要素を作成します.
- * @param a
- * @return
- */
-ast* ast_new_pre_dec(ast* a);
-
-/**
- * 後置きインクリメントを表す要素を作成します.
- * @param a
- * @return
- */
-ast* ast_new_post_inc(ast* a);
-
-/**
- * 後置きデクリメントを表す要素を作成します.
- * @param a
- * @return
- */
-ast* ast_new_post_dec(ast* a);
-
-/**
  * 名前参照を表す要素を作成します.
  * 名前参照には identifier だけで構成される変数参照と、
  * 名前空間とクラス名を連結した 静的フィールド参照が存在します。

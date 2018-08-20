@@ -163,12 +163,6 @@ void ast_print(ast* self) {
 		case ast_ge: p(">=");
 		case ast_lt: p("<");
 		case ast_le: p("<=");
-		case ast_pre_inc:
-		case ast_post_inc:
-			p("++");
-		case ast_pre_dec:
-		case ast_post_dec:
-			p("--");
 		case ast_lambda: p("lambda");
 		case ast_op_call: p("call");
 		case ast_stmt_variable_decl: p("variable-decl");

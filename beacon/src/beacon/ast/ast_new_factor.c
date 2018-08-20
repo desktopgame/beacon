@@ -30,29 +30,6 @@ ast * ast_new_cast(ast * atypename, ast * afact) {
 	return ret;
 }
 
-ast * ast_new_pre_inc(ast * a) {
-	ast* ret = ast_new(ast_pre_inc);
-	ast_push(ret, a);
-	return ret;
-}
-
-ast * ast_new_pre_dec(ast * a) {
-	ast* ret = ast_new(ast_pre_dec);
-	ast_push(ret, a);
-	return ret;
-}
-
-ast * ast_new_post_inc(ast * a) {
-	ast* ret = ast_new(ast_post_inc);
-	ast_push(ret, a);
-	return ret;
-}
-
-ast * ast_new_post_dec(ast * a) {
-	ast* ret = ast_new(ast_post_dec);
-	ast_push(ret, a);
-	return ret;
-}
 
 ast* ast_new_name_reference(ast* atypename) {
 	ast* ret = ast_new(ast_name_reference);

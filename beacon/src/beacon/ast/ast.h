@@ -57,11 +57,6 @@ typedef enum ast_tag {
 	ast_not,
 	ast_pos,
 	ast_neg,
-	//++ --
-	ast_pre_inc,
-	ast_pre_dec,
-	ast_post_inc,
-	ast_post_dec,
 	//() (...)
 	ast_op_call,
 	//int double
