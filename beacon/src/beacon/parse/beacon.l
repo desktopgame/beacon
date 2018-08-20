@@ -182,9 +182,6 @@ static void update_loc() {
 <INITIAL>"defer"			{ return (DEFER); }
 
 
-<INITIAL>"++"				{ return (INC); }
-<INITIAL>"--"				{ return (DEC); }
-
 <INITIAL>"<|"				{ return (LGEN); }
 <INITIAL>"|>"				{ return (RGEN); }
 

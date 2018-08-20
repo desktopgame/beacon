@@ -149,17 +149,13 @@ extern int yydebug;
     BOUNDS_SUPER = 352,
     SUBSCRIPT_SET = 353,
     SUBSCRIPT_GET = 354,
-    PRE_INC = 355,
-    PRE_DEC = 356,
-    QUOTE = 357,
-    FUNCCALL = 358,
-    POST_INC = 359,
-    POST_DEC = 360,
-    ARRAY_SUBSCRIPT = 361,
-    NEGATIVE = 362,
-    POSITIVE = 363,
-    REF = 364,
-    FORM_TYPE = 365
+    QUOTE = 355,
+    FUNCCALL = 356,
+    ARRAY_SUBSCRIPT = 357,
+    NEGATIVE = 358,
+    POSITIVE = 359,
+    REF = 360,
+    FORM_TYPE = 361
   };
 #endif
 
@@ -177,7 +173,7 @@ union YYSTYPE
 	constructor_chain_type chain_type_value;
 	access_level access_level_value;
 
-#line 174 "beacon.tab.h" /* yacc.c:1916  */
+#line 170 "beacon.tab.h" /* yacc.c:1916  */
 };
 
 typedef union YYSTYPE YYSTYPE;
