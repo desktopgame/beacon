@@ -142,7 +142,7 @@ generic_type* il_factor_binary_op_eval(il_factor_binary_op * self, enviroment * 
 			ret = il_factor_excor_op_eval(self->u.excor_op, env, cctx);
 			break;
 	}
-	assert(ret != NULL);
+//	assert(ret != NULL);
 	return ret;
 }
 

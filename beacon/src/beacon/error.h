@@ -80,6 +80,7 @@ typedef enum bc_error_id {
 	bcerror_new_instance_undefined_ctor,
 
 	bcerror_undefined_compare_operator,
+	bcerrpr_undefined_arithmetic_operator,
 
 	bcerror_cast_not_compatible,
 

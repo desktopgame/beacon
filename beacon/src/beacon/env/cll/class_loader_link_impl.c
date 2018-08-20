@@ -256,7 +256,7 @@ static void CLBC_excec_enum_impl(class_loader* self) {
 		CLBC_enum_impl(e->context, e->iltype, e->tp, e->scope);
 	}
 }
-//FIXME:コピペ
+
 static void CLBC_check_class(class_loader * self, il_type * iltype, type * tp, namespace_ * scope) {
 	//実装されていないインターフェイスを確認する
 	method* outiMethod = NULL;

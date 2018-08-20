@@ -213,6 +213,7 @@ void bc_error_vthrow(bc_error_id id, va_list ap) {
 			break;
 
 		case bcerror_undefined_compare_operator:
+		case bcerrpr_undefined_arithmetic_operator:
 			fmt = "undefined operator: %s";
 			break;
 
