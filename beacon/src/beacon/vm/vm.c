@@ -76,7 +76,7 @@ void vm_resume(frame * self, enviroment * env, int pos) {
 		defer_context* defctx = (defer_context*)vector_pop(self->defer_vec);
 		label* offset = defctx->offset;
 		vector* save = self->ref_stack;
-		self->ref_stack = defctx->bind;
+		self->ref_stack = defctx->variable_vec;
 		vm_run(self, env, offset->cursor, offset->cursor);
 		self->ref_stack = save;
 		defer_context_delete(defctx);
@@ -1158,7 +1158,7 @@ static void vm_run(frame * self, enviroment * env, int pos, int deferStart) {
 				vector* bind = vector_clone(self->ref_stack);
 				defer_context* defctx = defer_context_new();
 				defctx->offset = offset;
-				defctx->bind = bind;
+				defctx->variable_vec = bind;
 				vector_push(self->defer_vec, defctx);
 				break;
 			}

@@ -113,7 +113,7 @@ static void frame_mark_defer(frame* self) {
 	}
 	for(int i=0; i<self->defer_vec->length; i++) {
 		defer_context* defctx = vector_at(self->defer_vec, i);
-		vector* bind = defctx->bind;
+		vector* bind = defctx->variable_vec;
 		for(int j=0; j<bind->length; j++) {
 			object* e = vector_at(bind, j);
 			object_markall(e);

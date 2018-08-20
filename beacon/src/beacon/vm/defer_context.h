@@ -8,7 +8,7 @@
  */
 typedef struct defer_context {
 	label* offset;
-	vector* bind;
+	vector* variable_vec;
 } defer_context;
 
 /**
