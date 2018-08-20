@@ -9,8 +9,4 @@ def b() -> Void {
 def c() -> Void {
 	throw new Exception();
 }
-try {
-	a();
-} catch(Exception e) {
-	e.print();
-}
+a();

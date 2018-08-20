@@ -47,6 +47,8 @@ void sg_thread_set_frame_ref(sg_thread * self, frame * frameRef) {
 	//TODO:ここで同期をとる
 	assert(frameRef != NULL);
 	assert(self->cctx == NULL);
+	self->vm_crush_by_exception = false;
+	self->vm_dump = false;
 	self->frameRef = frameRef;
 	self->cctx = call_context_new(call_top_T);
 }

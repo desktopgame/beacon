@@ -157,6 +157,7 @@ bool vm_validate(frame* self, int source_len, int* pcDest) {
 }
 
 void vm_terminate(frame * self) {
+	sg_thread_main()->vm_crush_by_exception = true;
 	frame* temp = self;
 	do {
 		temp->terminate = true;
@@ -223,6 +224,9 @@ static void vm_run(frame * self, enviroment * env, int pos, int deferStart) {
 			if (!vm_validate(self, source_len, &IDX)) {
 				break;
 			}
+		}
+		if(self->terminate) {
+			break;
 		}
 		self->pc = IDX;
 		opcode b = (opcode)enviroment_source_at(env, IDX);
@@ -1201,8 +1205,10 @@ static void vm_run(frame * self, enviroment * env, int pos, int deferStart) {
 			self->native_throw_pos = -1;
 		}
 		//キャッチされなかった例外によって終了する
-		if (self->terminate) {
+		sg_thread* thr = sg_thread_main();
+		if (self->terminate && !thr->vm_dump) {
 			vm_uncaught(self, env, IDX);
+			thr->vm_dump = true;
 			break;
 		}
 	}

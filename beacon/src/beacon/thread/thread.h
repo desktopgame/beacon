@@ -2,6 +2,7 @@
 #ifndef BEACON_THREAD_THREAD_H
 #define BEACON_THREAD_THREAD_H
 //#include "../util/stack.h"
+#include <stdbool.h>
 #include "../util/vector.h"
 struct script_context;
 struct frame;
@@ -12,6 +13,8 @@ struct call_context;
  */
 typedef struct sg_thread {
 	vector* trace_stack;
+	bool vm_crush_by_exception;
+	bool vm_dump;
 	struct frame* frameRef;
 	struct call_context* cctx;
 } sg_thread;
