@@ -10,9 +10,9 @@ yield_context* yield_context_malloc(const char* filename, int lineno) {
 	ret->yield_count = -1;
 	ret->yield_offset = -1;
 	ret->len = -1;
-	ret->stockObject = NULL;
-	ret->sourceObject = NULL;
-	ret->parameter_v = NULL;
+	ret->stock_obj = NULL;
+	ret->stock_obj = NULL;
+	ret->source_obj = NULL;
 	ret->cached = false;
 	return ret;
 }

@@ -976,9 +976,9 @@ static void vm_run(frame * self, enviroment * env, int pos, int deferStart) {
 				yctx->len = op_len;
 				yctx->parameter_v = vector_new();
 				//iterate(int, int) の int, int を受け取る
-				yctx->sourceObject = vector_at(self->ref_stack, 1);
+				yctx->source_obj = vector_at(self->ref_stack, 1);
 				#if defined(DEBUG)
-				const char* yname = object_name(yctx->sourceObject);
+				const char* yname = object_name(yctx->source_obj);
 				#endif
 				for(int i=2; i<param_len + 1; i++) {
 					object* a = vector_at(self->ref_stack, i);
@@ -1004,7 +1004,7 @@ static void vm_run(frame * self, enviroment * env, int pos, int deferStart) {
 					self->value_stack = yctx->vm_value_stack;
 				}
 				assert(ret != NULL);
-				yctx->stockObject = ret;
+				yctx->stock_obj = ret;
 				//最初に実行された yield return に時点でコピーする
 				if(yctx->vm_ref_stack == NULL) {
 					yctx->backup_ref_stack = vector_clone(self->ref_stack);
@@ -1052,7 +1052,7 @@ static void vm_run(frame * self, enviroment * env, int pos, int deferStart) {
 				object* o = self->coroutine;
 				assert(o->is_coroutine);
 				yield_context* yctx = (yield_context*)vector_at(o->native_slot_vec, 0);
-				vector_push(self->value_stack, yctx->stockObject);
+				vector_push(self->value_stack, yctx->stock_obj);
 				break;
 			}
 			case op_coro_swap_self:
@@ -1067,12 +1067,12 @@ static void vm_run(frame * self, enviroment * env, int pos, int deferStart) {
 				}
 				#if defined(DEBUG)
 				const char* oname = object_name(o);
-				const char* yname = object_name(yctx->sourceObject);
+				const char* yname = object_name(yctx->source_obj);
 				#endif
 				//[0] = Array
 				//[1] = ArrayIterator
-				vector_assign(self->ref_stack, 0, yctx->sourceObject);
-				assert(yctx->sourceObject != NULL);
+				vector_assign(self->ref_stack, 0, yctx->source_obj);
+				assert(yctx->source_obj != NULL);
 				for(int i=0; i<yctx->parameter_v->length; i++) {
 					object* e = vector_at(yctx->parameter_v, i);
 					assert(e != NULL);
