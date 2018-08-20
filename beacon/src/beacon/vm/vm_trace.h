@@ -8,8 +8,8 @@ struct frame;
  */
 typedef struct vm_trace {
 	struct frame* fr;
-	int32_t pc;
-	int32_t jump_level;
+	int pc;
+	int jump_level;
 } vm_trace;
 
 /**
