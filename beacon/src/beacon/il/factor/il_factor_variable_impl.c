@@ -14,6 +14,7 @@
 
 //proto
 static void il_factor_variable_check(il_factor_variable* self, enviroment* env, call_context* cctx);
+static void il_factor_variable_check_static(il_factor_variable* self, enviroment* env, call_context* cctx);
 static void il_factor_delete_typeargs(vector_item item);
 
 il_factor * il_factor_wrap_variable(il_factor_variable * self) {
@@ -102,15 +103,7 @@ static void il_factor_variable_check(il_factor_variable* self, enviroment* env, 
 		}
 		//現在の名前空間から参照できるクラスがある場合
 		if(ctype != NULL) {
-			//FIXME:すぐ下のところからコピペ
-			il_factor_variable_static* st = il_factor_variable_static_new();
-			self->type = ilvariable_type_static;
-			//値を入れ替え
-			st->fqcn = self->fqcn;
-			st->type_args = self->type_args;
-			self->fqcn = NULL;
-			self->type_args = NULL;
-			self->u.static_ = st;
+			il_factor_variable_check_static(self, env, cctx);
 		//ただのローカル変数の場合
 		} else {
 			il_factor_variable_local* lc = il_factor_variable_local_new(self->fqcn->namev);
@@ -122,16 +115,19 @@ static void il_factor_variable_check(il_factor_variable* self, enviroment* env, 
 		}
 	//Namespace::Hoge Namespace::Foo のような文字列の場合.
 	} else if(self->fqcn->scope_vec->length > 0) {
-		//class_* cls = TYPE2CLASS((type*)vector_top(ilctx->type_vec));
-		il_factor_variable_static* st = il_factor_variable_static_new();
-		self->type = ilvariable_type_static;
-		//値を入れ替え
-		st->fqcn = self->fqcn;
-		st->type_args = self->type_args;
-		self->fqcn = NULL;
-		self->type_args = NULL;
-		self->u.static_ = st;
+		il_factor_variable_check_static(self, env, cctx);
 	}
+}
+
+static void il_factor_variable_check_static(il_factor_variable* self, enviroment* env, call_context* cctx) {
+	il_factor_variable_static* st = il_factor_variable_static_new();
+	self->type = ilvariable_type_static;
+	//値を入れ替え
+	st->fqcn = self->fqcn;
+	st->type_args = self->type_args;
+	self->fqcn = NULL;
+	self->type_args = NULL;
+	self->u.static_ = st;
 }
 
 static void il_factor_delete_typeargs(vector_item item) {
