@@ -8,9 +8,9 @@
  * オペコードのどこからどこまでが何行目なのかを表す構造体.
  */
 typedef struct line_range {
-	uint32_t start_offset;
-	uint32_t end_offset;
-	uint32_t lineno;
+	int start_offset;
+	int end_offset;
+	int lineno;
 } line_range;
 /**
  * 新しい範囲を作成します.
