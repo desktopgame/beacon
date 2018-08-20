@@ -34,12 +34,13 @@ typedef unsigned char muchar_t;
 		//#define FREE_FREEZE (1)
 
 		#define NON_NULL(m) (mem_non_null(m))
-	#else
-		#define NON_NULL(m) (m)
+
 		#define MEM_MALLOC(size) (mem_malloc(size, __FILE__, __LINE__))
 		#define MEM_FREE(size) (mem_free(size, __FILE__, __LINE__))
 		#define MEM_REALLOC(block, size) (mem_realloc(block, size, __FILE__, __LINE__))
 		#define MEM_MARK(block, size) (mem_mark(block, size, __FILE__, __LINE__))
+	#else
+		#define NON_NULL(m) (m)
 	#endif
 #endif
 /**
