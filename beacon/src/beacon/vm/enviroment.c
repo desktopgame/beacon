@@ -26,7 +26,6 @@ enviroment * enviroment_new() {
 	ret->buf = opcode_buf_new();
 	ret->constant_pool_vec = vector_new();
 	ret->sym_table = symbol_table_new();
-	//ret->class_ = NULL;
 	ret->context_ref = NULL;
 	ret->line_range_vec = vector_new();
 	return ret;
@@ -145,23 +144,17 @@ void enviroment_delete(enviroment * self) {
 	if(self == NULL) {
 		return;
 	}
-	//io_printfln("deleted env %s", self->context_cll->filename);
-	//io_printfln("delete pool---");
 	vector_delete(self->constant_pool_vec, enviroment_constant_pool_vec_delete);
-
 	vector_delete(self->line_range_vec, enviroment_line_range_delete);
-	
 	opcode_buf_delete(self->buf);
 	symbol_table_delete(self->sym_table);
 	MEM_FREE(self);
-	//io_printfln("---delete pool");
 }
 
 //private
 static void enviroment_constant_pool_vec_delete(vector_item item) {
 	//StringやArrayはここで中身を削除する必要がある
 	enviroment_object_delete((object*)item);
-	//object_delete((object*)item);
 }
 
 static void enviroment_line_range_delete(vector_item item) {
