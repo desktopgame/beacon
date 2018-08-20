@@ -163,7 +163,7 @@ int il_factor_unary_op_index2(il_factor* receiver, operator_type otype, envirome
 	}
 	class_* lclass = TYPE2CLASS(GENERIC2TYPE(gtype));
 	int temp = 0;
-	class_gfind_operator_overload(lclass, otype, args, env, &temp);
+	class_gfind_operator_overload(lclass, otype, args, env, cctx, &temp);
 	vector_delete(args, vector_deleter_null);
 	return temp;
 }

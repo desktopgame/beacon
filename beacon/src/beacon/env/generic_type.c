@@ -16,8 +16,9 @@
 
 //proto
 static generic_type* generic_type_applyImpl(generic_type* self, call_context* cctx, frame* fr);
-static int generic_type_distanceImpl(generic_type* self, generic_type* other, frame* fr);
-static int generic_type_distanceForm(generic_type* self, generic_type* other, frame* fr);
+static int generic_type_distanceImpl(generic_type* self, generic_type* other, frame* fr, call_context* cctx);
+static int generic_type_distanceForm(generic_type* self, generic_type* other, frame* fr, call_context* cctx);
+static vector* generic_type_apply_by_hierarchy(generic_type* impl_baseline, generic_type* impl);
 static generic_type* generic_type_typeargs_at(call_context* cctx, frame* fr, int index);
 static generic_type* generic_type_receiver_at(call_context* cctx, frame* fr, int index);
 static void generic_type_delete_self(vector_item item);
@@ -105,12 +106,12 @@ void generic_type_addargs(generic_type* self, generic_type* a) {
 	vector_push(self->type_args_list, a);
 }
 
-int generic_type_distance(generic_type * self, generic_type * other) {
-	return generic_type_distanceImpl(self, other, NULL);
+int generic_type_distance(generic_type * self, generic_type * other, call_context* cctx) {
+	return generic_type_distanceImpl(self, other, NULL, cctx);
 }
 
 int generic_type_rdistance(generic_type* self, generic_type* other, frame* fr) {
-	return generic_type_distanceImpl(self, other, fr);
+	return generic_type_distanceImpl(self, other, fr, NULL);
 }
 
 void generic_type_print(generic_type * self) {
@@ -269,9 +270,9 @@ static generic_type* generic_type_applyImpl(generic_type* self, call_context* cc
 	return ret;
 }
 
-static int generic_type_distanceImpl(generic_type* self, generic_type* other, frame* fr) {
+static int generic_type_distanceImpl(generic_type* self, generic_type* other, frame* fr, call_context* cctx) {
 	if(fr != NULL) {
-		return generic_type_distanceForm(self, other, fr);
+		return generic_type_distanceForm(self, other, fr, cctx);
 	}
 	//要求されている型は T
 	if(self->core_type == NULL) {
@@ -299,11 +300,11 @@ static int generic_type_distanceImpl(generic_type* self, generic_type* other, fr
 		}
 	//どちらも具体的な型
 	} else {
-		return generic_type_distanceForm(self, other, fr);
+		return generic_type_distanceForm(self, other, fr, cctx);
 	}
 }
 
-static int generic_type_distanceForm(generic_type* self, generic_type* other, frame* fr) {
+static int generic_type_distanceForm(generic_type* self, generic_type* other, frame* fr, call_context* cctx) {
 	assert(self->core_type != NULL);
 	assert(other->core_type != NULL);
 	int dist = type_distance(self->core_type, other->core_type);
@@ -320,26 +321,81 @@ static int generic_type_distanceForm(generic_type* self, generic_type* other, fr
 	if(other->core_type == TYPE_NULL) {
 		return 1;
 	}
-	//otherからselfまで辿る
-	class_* baseline = self->core_type->u.class_;
-	class_* ptr = other->core_type->u.class_;
-	generic_type* target = other;
-	while(baseline != ptr) {
-		target = ptr->super_class;
-		ptr = ptr->super_class->core_type->u.class_;
-	}
-	assert(target != NULL);
-	assert(self->type_args_list->length == target->type_args_list->length);
-	for(int i=0; i<self->type_args_list->length; i++) {
-		generic_type* a = vector_at(self->type_args_list, i);
-		generic_type* b = vector_at(target->type_args_list, i);
-		int calc = generic_type_distanceImpl(a, b, fr);
-		if(calc == -1 || calc > 0) {
-			dist = -1;
-			break;
+	if (self->core_type->tag == type_class) {
+		//otherからselfまで辿る
+		class_* baseline = self->core_type->u.class_;
+		class_* ptr = other->core_type->u.class_;
+		generic_type* target = other;
+		while (baseline != ptr) {
+			target = ptr->super_class;
+			ptr = ptr->super_class->core_type->u.class_;
+		}
+		assert(target != NULL);
+		assert(self->type_args_list->length == target->type_args_list->length);
+		for (int i = 0; i<self->type_args_list->length; i++) {
+			generic_type* a = vector_at(self->type_args_list, i);
+			generic_type* b = vector_at(target->type_args_list, i);
+			int calc = generic_type_distanceImpl(a, b, fr, cctx);
+			if (calc == -1 || calc > 0) {
+				dist = -1;
+				break;
+			}
+		}
+		return dist;
+	} else if (self->core_type->tag == type_interface) {
+		if (other->core_type->tag == type_class) {
+			//クラスからインターフェイスを探す
+			generic_type* impl_baseline = NULL;
+			generic_type* impl = class_find_interface_type(TYPE2CLASS(GENERIC2TYPE(other)), (GENERIC2TYPE(self)), &impl_baseline);
+			if (impl_baseline == NULL) {
+				impl_baseline = other;
+			}
+			vector* gargs = generic_type_apply_by_hierarchy(impl_baseline, impl);
+			for (int i = 0; i<self->type_args_list->length; i++) {
+				generic_type* a = vector_at(self->type_args_list, i);
+				generic_type* b = vector_at(gargs, i);
+				int calc = generic_type_distanceImpl(a, b, fr, cctx);
+				if (calc == -1 || calc > 0) {
+					dist = -1;
+					break;
+				}
+			}
+			vector_delete(gargs, vector_deleter_null);
+			return dist;
+		} else if (other->core_type->tag == type_interface) {
+			generic_type* impl = interface_find_interface(TYPE2INTERFACE(GENERIC2TYPE(other)), (GENERIC2TYPE(self)));
+			if (impl == NULL) {
+				impl = other;
+			}
+			for (int i = 0; i<self->type_args_list->length; i++) {
+				generic_type* a = vector_at(self->type_args_list, i);
+				generic_type* b = vector_at(impl->type_args_list, i);
+				int calc = generic_type_distanceImpl(a, b, fr, cctx);
+				if (calc == -1 || calc > 0) {
+					dist = -1;
+					break;
+				}
+			}
+			//generic_type_print(self); io_println();
+			//generic_type_print(other); io_println();
+			//io_printfln("---");
+			return dist;
 		}
 	}
 	return dist;
+}
+
+static vector* generic_type_apply_by_hierarchy(generic_type* impl_baseline, generic_type* impl) {
+	assert(impl_baseline->core_type != NULL);
+	vector* gargs = vector_new();
+	for (int i = 0; i < impl->type_args_list->length; i++) {
+		generic_type* e = vector_at(impl->type_args_list, i);
+		if (e->core_type == NULL) {
+			e = vector_at(impl_baseline->type_args_list, e->virtual_type_index);
+		}
+		vector_push(gargs, e);
+	}
+	return gargs;
 }
 
 static generic_type* generic_type_typeargs_at(call_context* cctx, frame* fr, int index) {

@@ -171,6 +171,20 @@ vector* interface_generic_interface_tree(interface_* self) {
 	return interface_generic_interface_treeImpl(self);
 }
 
+generic_type* interface_find_interface(interface_* self, type* tinter) {
+	assert(tinter->tag == type_interface);
+	if (self == TYPE2INTERFACE(tinter)) {
+		return NULL;
+	}
+	for (int i = 0; i < self->impl_list->length; i++) {
+		generic_type* e = vector_at(self->impl_list, i);
+		if (e->core_type == tinter) {
+			return e;
+		}
+	}
+	return NULL;
+}
+
 //private
 vector* interface_generic_interface_treeImpl(interface_* self) {
 	vector* ret = vector_new();

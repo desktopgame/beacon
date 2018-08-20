@@ -115,6 +115,20 @@ int type_distance(type * super, type * sub) {
 	if(sub == TYPE_NULL) {
 		return 1;
 	}
+	if (super->tag == type_interface &&
+		sub->tag == type_class) {
+		bool found = false;
+		vector* gimpl_list = class_generic_interface_list(TYPE2CLASS(sub));
+		for (int i = 0; i < gimpl_list->length; i++) {
+			generic_type* e = (generic_type*)vector_at(gimpl_list, i);
+			if (e->core_type == super) {
+				found = true;
+				break;
+			}
+		}
+		vector_delete(gimpl_list, vector_deleter_null);
+		return found ? 0 : -1;
+	}
 	if (super->tag == type_class &&
 		sub->tag == type_class) {
 		int dist = class_distance(super->u.class_, sub->u.class_);

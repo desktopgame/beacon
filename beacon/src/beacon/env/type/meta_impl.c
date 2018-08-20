@@ -6,6 +6,7 @@
 #include "../type_parameter.h"
 #include "../type_interface.h"
 #include "../namespace.h"
+#include "../../thread/thread.h"
 #include "class_impl.h"
 #include "../constructor.h"
 #include "../object.h"
@@ -37,7 +38,7 @@ int meta_ilcalc_score(vector* params, vector* ilargs, enviroment* env, call_cont
 				a,
 			//	generic_type_apply(argType, ilctx),
 			//	param->gtype,
-				argType
+				argType, cctx
 			//	ilctx
 			);
 		}
@@ -75,7 +76,8 @@ int meta_gcalc_score(vector* params, vector* gargs) {
 				a,
 			//	generic_type_apply(argType, ilctx),
 			//	param->gtype,
-				argType
+				argType,
+				sg_thread_context()
 			//	ilctx
 			);
 		}

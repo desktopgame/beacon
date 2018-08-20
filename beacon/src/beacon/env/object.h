@@ -67,7 +67,11 @@ typedef struct object {
 	union {
 		int int_;
 		double double_;
+#if defined(_MSC_VER)
+		__int64 long_;
+#else
 		long long_;
+#endif
 		char char_;
 //		char* string_;
 		bool bool_;

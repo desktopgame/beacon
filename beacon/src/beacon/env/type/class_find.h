@@ -300,10 +300,11 @@ struct method* class_get_impl_method(class_* self, type* interType, int interMIn
  * @param type
  * @param args
  * @param env
+ * @param cctx
  * @param outIndex
  * @return
  */
-struct operator_overload* class_gfind_operator_overload(class_* self, operator_type type, vector* args, enviroment* env, int* outIndex);
+struct operator_overload* class_gfind_operator_overload(class_* self, operator_type type, vector* args, enviroment* env, call_context* cctx, int* outIndex);
 
 struct operator_overload* class_ilfind_operator_overload(class_* self, operator_type type, vector* args, enviroment* env, call_context* cctx, int* outIndex);
 
@@ -345,5 +346,5 @@ vector* class_generic_interface_list(class_* self);
  * @parma tinter
  * @return
  */
-struct generic_type* class_find_interface_type(class_* self, type* tinter);
+struct generic_type* class_find_interface_type(class_* self, type* tinter, struct generic_type** out_baseline);
 #endif

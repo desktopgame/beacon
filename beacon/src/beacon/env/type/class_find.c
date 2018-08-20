@@ -420,7 +420,7 @@ method * class_get_impl_method(class_ * self, type * interType, int interMIndex)
 
 
 
-operator_overload* class_gfind_operator_overload(class_* self, operator_type type, vector* args, enviroment* env, int* outIndex) {
+operator_overload* class_gfind_operator_overload(class_* self, operator_type type, vector* args, enviroment* env, call_context* cctx, int* outIndex) {
 	(*outIndex) = -1;
 	operator_overload* ret = NULL;
 	for(int i=0; i<self->operator_overload_list->length; i++) {
@@ -435,7 +435,7 @@ operator_overload* class_gfind_operator_overload(class_* self, operator_type typ
 		for(int j=0; j<params->length; j++) {
 			parameter* param = vector_at(params, j);
 			generic_type* arg = vector_at(args, j);
-			int dist = generic_type_distance(param->gtype, arg);
+			int dist = generic_type_distance(param->gtype, arg, cctx);
 			if(dist == -1) {
 				nomatch = true;
 				break;
@@ -461,7 +461,7 @@ operator_overload* class_ilfind_operator_overload(class_* self, operator_type ty
 		generic_type* g = il_factor_eval(ilfact, env, cctx);
 		vector_push(gargs, g);
 	}
-	operator_overload* ret = class_gfind_operator_overload(self, type, gargs, env, outIndex);
+	operator_overload* ret = class_gfind_operator_overload(self, type, gargs, env, cctx, outIndex);
 	vector_delete(gargs, vector_deleter_null);
 	return ret;
 }
@@ -475,7 +475,7 @@ operator_overload* class_argfind_operator_overload(class_* self, operator_type t
 		generic_type* g = il_factor_eval(ilfact, env, cctx);
 		vector_push(gargs, g);
 	}
-	operator_overload* ret = class_gfind_operator_overload(self, type, gargs, env, outIndex);
+	operator_overload* ret = class_gfind_operator_overload(self, type, gargs, env, cctx, outIndex);
 	vector_delete(gargs, vector_deleter_null);
 	return ret;
 }
@@ -538,19 +538,36 @@ vector* class_generic_interface_list(class_* self) {
 	return ret;
 }
 
-generic_type* class_find_interface_type(class_* self, type* tinter) {
+generic_type* class_find_interface_type(class_* self, type* tinter, generic_type** out_baseline) {
 	assert(tinter->tag == type_interface);
+	(*out_baseline) = NULL;
 	//実装インターフェイス一覧から同じのを探す
 	generic_type* ret = NULL;
-	vector* generic_impl_list = class_generic_interface_list(self);
-	for(int i=0; i<generic_impl_list->length; i++) {
-		generic_type* e = vector_at(generic_impl_list, i);
-		if(e->core_type == tinter) {
-			ret = e;
+	generic_type* out = NULL;
+	class_* ptr = self;
+	do {
+		if (ptr->super_class == NULL) {
 			break;
 		}
-	}
-	vector_delete(generic_impl_list, vector_deleter_null);
+		bool found = false;
+		//vector* gimpl_list = class_generic_interface_list(ptr);
+		vector* gimpl_list = ptr->impl_list;
+		for (int i = 0; i < gimpl_list->length; i++) {
+			generic_type* gimpl = vector_at(gimpl_list, i);
+			if (gimpl->core_type == tinter) {
+				found = true;
+				ret = gimpl;
+				break;
+			}
+		}
+		//vector_delete(gimpl_list, vector_deleter_null);
+		if (found) {
+			(*out_baseline) = out;
+			break;
+		}
+		out = ptr->super_class;
+		ptr = TYPE2CLASS(GENERIC2TYPE(ptr->super_class));
+	} while (ptr != NULL);
 	return ret;
 }
 

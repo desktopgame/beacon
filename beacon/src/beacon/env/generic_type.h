@@ -103,11 +103,12 @@ void generic_type_addargs(generic_type* self, generic_type* a);
  * メソッドを解決する時、もっともマッチするオーバーロードを見つけるために使用されます。
  * @param self
  * @param other
+ * @param cctx
  * @return 同じなら 0
  *         異なる継承階層なら -1
  *         サブタイプなら階層の数
  */
-int generic_type_distance(generic_type* self, generic_type* other);
+int generic_type_distance(generic_type* self, generic_type* other, struct call_context* cctx);
 /**
  * a と b の距離を返します.
  * メソッドを解決する時、もっともマッチするオーバーロードを見つけるために使用されます。

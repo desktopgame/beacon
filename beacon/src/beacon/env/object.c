@@ -83,6 +83,7 @@ object * object_string_malloc(const char * s, const char* filename, int lineno) 
 	type* strType = namespace_get_type(namespace_lang(), string_pool_intern("String"));
 	arr->gtype = generic_type_new(arrType);
 	arr->vptr = type_vtable(arrType);
+	arr->tag = object_array;
 	generic_type_addargs(arr->gtype, GENERIC_CHAR);
 	//ボックス化
 	const char* itr = s;
@@ -286,7 +287,8 @@ void object_delete(object * self) {
 		string_buffer_delete(sb);
 	}
 	if (self->tag == object_string ||
-		self->tag == object_ref) {
+		self->tag == object_ref ||
+		self->tag == object_array) {
 		vector_delete(self->u.field_vec, vector_deleter_null);
 	}
 	vector_delete(self->native_slot_vec, vector_deleter_null);
@@ -300,12 +302,13 @@ void object_destroy(object* self) {
 	type* tp = self->gtype->core_type;
 	assert(self->paint == paint_onexit);
 	if (self->tag == object_ref ||
-	   self->tag == object_string) {
+	   self->tag == object_string ||
+		self->tag == object_array) {
 		vector_delete(self->u.field_vec, object_delete_self);
 		self->u.field_vec = NULL;
 	}
 	//String#charArray
-	if (self->gtype->core_type == bc_array_type()) {
+	if (self->tag == object_array) {
 		vector_delete(self->u.field_vec, object_delete_self);
 		vector_delete(self->native_slot_vec, object_delete_self);
 		self->native_slot_vec = NULL;
@@ -390,7 +393,13 @@ static object* object_mallocImpl(object_tag type, const char* filename, int line
 	ret->paint = paint_unmarked;
 	ret->tag = type;
 	ret->vptr = NULL;
-	ret->native_slot_vec = vector_malloc(filename, lineno);
+	if (type == object_string ||
+		type == object_array ||
+		type == object_ref) {
+		ret->native_slot_vec = vector_malloc(filename, lineno);
+	} else {
+		ret->native_slot_vec = NULL;
+	}
 	heap_add(heap_get(), ret);
 	gObjectCount++;
 	return ret;

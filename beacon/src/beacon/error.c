@@ -302,9 +302,15 @@ void bc_error_vthrow(bc_error_id id, va_list ap) {
 		gErrorLineNo,
 		gErrorColumn
 	);
+#if defined(_MSC_VER)
+	#if defined(_DEBUG)
+	//system_abort();
+	#endif
+#else
 	#if !defined(DEBUG)
 	system_abort();
 	#endif
+#endif
 }
 
 void bc_error_clear() {

@@ -64,8 +64,8 @@ void il_factor_as_load(il_factor_as * self, enviroment * env, call_context* cctx
 		self->mode = cast_up_T;
 		return;
 	}
-	int downTo = generic_type_distance(self->gtype, a);
-	int upTo = generic_type_distance(a, self->gtype);
+	int downTo = generic_type_distance(self->gtype, a, cctx);
+	int upTo = generic_type_distance(a, self->gtype, cctx);
 	//ダウンキャスト
 	if(downTo >= 0) {
 		self->mode = cast_up_T;

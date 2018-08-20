@@ -108,7 +108,7 @@ bool method_override(method* superM, method* subM, call_context* cctx) {
 //		assert(!generic_type_equals(superGT, superGT2));
 
 //		generic_type_diff(superGT, superGT2);
-		if(generic_type_distance(superGT2, subGT) != 0) {
+		if(generic_type_distance(superGT2, subGT, cctx) != 0) {
 			return false;
 		}
 	}
@@ -119,7 +119,7 @@ bool method_override(method* superM, method* subM, call_context* cctx) {
 	generic_type* superRet2 = generic_type_apply(superRet, cctx);
 //	generic_type_diff(superRet, superRet2);
 //	assert(!generic_type_equals(superRet, superRet2));
-	int ret =generic_type_distance(superRet2, subRet);
+	int ret =generic_type_distance(superRet2, subRet, cctx);
 	call_context_pop(cctx);
 	return ret != -1;
 }

@@ -161,4 +161,12 @@ bool interface_method_type_parameter_valid(interface_* inter, struct method** ou
  * @return
  */
 vector* interface_generic_interface_tree(interface_* self);
+
+/**
+ * @param self
+ * @param tiner
+ * @param out_baseline
+ * @return
+ */
+struct generic_type* interface_find_interface(interface_* self, type* tinter);
 #endif // !SIGNAL_ENV_TYPE_IINTERFACE_H
