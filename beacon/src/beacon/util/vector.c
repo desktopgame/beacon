@@ -184,4 +184,11 @@ void vector_each(vector* self, vector_action a) {
 		a(vector_at(self, i));
 	}
 }
+
+void vector_merge(vector* src, vector* dst) {
+	for(int i=0; i<src->length; i++) {
+		vector_item e = vector_at(src, i);
+		vector_push(dst, e);
+	}
+}
 #undef SLOT_SIZE

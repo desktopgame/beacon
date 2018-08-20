@@ -216,4 +216,10 @@ void vector_copy(vector* src, vector* dst);
  * @param a
  */
 void vector_each(vector* self, vector_action a);
+
+/**
+ * @param src
+ * @param dst
+ */
+void vector_merge(vector* src, vector* dst);
 #endif // !SIGNAL_UTIL_VECTOR_H
