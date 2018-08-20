@@ -27,7 +27,6 @@
 int main_cl(int argc, char *argv[]) {
 	struct option longopts[] = {
 		{ "test", no_argument, NULL, 't' },
-		{ "bug", required_argument, NULL, 'b' },
 		{ "ast", required_argument, NULL, 'a' },
 		{ "il", required_argument, NULL, 'i' },
 		{ "run", required_argument, NULL, 'r' },
@@ -36,41 +35,35 @@ int main_cl(int argc, char *argv[]) {
 	};
 	extern char *optarg;
 	extern int optind, opterr;
-	int ret = -1;
 	int opt = 0;
 	int longindex = 0;
-	while ((opt = getopt_long(argc, argv, "tb:a:i:r:o:", longopts, &longindex)) != -1) {
+	while ((opt = getopt_long(argc, argv, "ta:i:r:o:", longopts, &longindex)) != -1) {
 		switch(opt) {
 			case 't':
 				printf(":t :test\n");
-				ret = cl_test(argc, argv);
-				break;
-			case 'b':
-				printf(":b :bug\n");
-				ret = cl_bug(argc, argv);
+				cl_test(argc, argv);
 				break;
 			case 'a':
 				printf(":a :ast\n");
-				ret = cl_ast(optarg);
+				cl_ast(optarg);
 				break;
 			case 'i':
 				printf(":i :il\n");
-				ret = cl_il(optarg);
+				cl_il(optarg);
 				break;
 			case 'r':
 				printf(":r :run\n");
-				ret = cl_run(optarg);
+				cl_run(optarg);
 				break;
 			case 'o':
 				printf(":o :op\n");
-				ret = cl_op(optarg);
+				cl_op(optarg);
 				break;
 			default:
-				printf("error! :%c :%c\n", opt, optopt);
+				printf("error! :%c :%c", opt, optopt);
 				break;
 		}
 	}
-	return ret;
 }
 
 int main(int argc, char *argv[]) {
