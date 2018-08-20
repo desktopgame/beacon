@@ -27,6 +27,6 @@ void yield_context_clear_backup(yield_context* self) {
 void yield_context_delete(yield_context* self) {
 	vector_delete(self->backup_ref_stack, vector_deleter_null);
 	vector_delete(self->backup_value_stack, vector_deleter_null);
-	vector_delete(self->parameter_v, vector_deleter_null);
+	vector_delete(self->parameter_vec, vector_deleter_null);
 	MEM_FREE(self);
 }

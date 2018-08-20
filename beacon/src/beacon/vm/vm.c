@@ -974,7 +974,7 @@ static void vm_run(frame * self, enviroment * env, int pos, int deferStart) {
 				yctx->yield_offset = 0;
 				yctx->yield_count = 0;
 				yctx->len = op_len;
-				yctx->parameter_v = vector_new();
+				yctx->parameter_vec = vector_new();
 				//iterate(int, int) の int, int を受け取る
 				yctx->source_obj = vector_at(self->ref_stack, 1);
 				#if defined(DEBUG)
@@ -983,7 +983,7 @@ static void vm_run(frame * self, enviroment * env, int pos, int deferStart) {
 				for(int i=2; i<param_len + 1; i++) {
 					object* a = vector_at(self->ref_stack, i);
 					assert(a != NULL);
-					vector_push(yctx->parameter_v, a);
+					vector_push(yctx->parameter_vec, a);
 				}
 				//暗黙的に生成されるイテレータ実装クラスのコンストラクタは、
 				//必ず最後に iterate() を定義したクラスのオブジェクトを受け取る。
@@ -1073,8 +1073,8 @@ static void vm_run(frame * self, enviroment * env, int pos, int deferStart) {
 				//[1] = ArrayIterator
 				vector_assign(self->ref_stack, 0, yctx->source_obj);
 				assert(yctx->source_obj != NULL);
-				for(int i=0; i<yctx->parameter_v->length; i++) {
-					object* e = vector_at(yctx->parameter_v, i);
+				for(int i=0; i<yctx->parameter_vec->length; i++) {
+					object* e = vector_at(yctx->parameter_vec, i);
 					assert(e != NULL);
 					vector_assign(self->ref_stack, i + 1, e);
 				}

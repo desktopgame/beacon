@@ -420,7 +420,7 @@ static void object_mark_coroutine(object* self) {
 	object_markall(yctx->stock_obj);
 	object_markall(yctx->source_obj);
 	//コルーチンに渡された引数
-	for(int i=0; i<yctx->parameter_v->length; i++) {
-		object_markall(vector_at(yctx->parameter_v, i));
+	for(int i=0; i<yctx->parameter_vec->length; i++) {
+		object_markall(vector_at(yctx->parameter_vec, i));
 	}
 }

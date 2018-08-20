@@ -8,7 +8,7 @@ typedef struct yield_context {
 	vector* backup_value_stack;
 	vector* vm_ref_stack;
 	vector* vm_value_stack;
-	vector* parameter_v;
+	vector* parameter_vec;
 	struct object* source_obj;
 	struct object* stock_obj;
 	bool cached;
