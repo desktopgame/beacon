@@ -59,7 +59,10 @@ void il_factor_shift_op_generate(il_factor_shift_op* self, enviroment* env, call
 		if(il_factor_binary_op_int_int(self->parent, env, cctx)) {
 			opcode_buf_add(env->buf, (vector_item)operator_to_iopcode(self->type));
 		} else {
-			assert(false);
+			bc_error_throw(
+				bcerror_undefined_shift_operator,
+				operator_tostring(self->type)
+			);
 		}
 	} else {
 		il_factor_generate(self->parent->right, env, cctx);
