@@ -52,7 +52,6 @@ typedef struct class_ {
 	vector* vt_vec;
 	//vector* static_fieldval_vec;
 	vtable* vt;
-	int classIndex;
 	bool is_abstract;
 } class_;
 #include "class_find.h"

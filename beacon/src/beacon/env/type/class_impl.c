@@ -77,7 +77,6 @@ class_ * class_new(string_view namev) {
 	ret->vt_vec = vector_new();
 	ret->type_parameter_list = vector_new();
 	//FIXME:ここで持つ必要はない
-	ret->classIndex = -1;
 	//ret->absoluteIndex = -1;
 	ret->vt = NULL;
 	ret->is_abstract = false;

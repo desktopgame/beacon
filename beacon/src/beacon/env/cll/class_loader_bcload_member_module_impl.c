@@ -742,7 +742,7 @@ static void CLBC_chain_auto(class_loader * self, il_type * iltype, type * tp, il
 	ilcons->chain = ch_empty;
 	//親クラスへ連鎖
 	opcode_buf_add(env->buf, (vector_item)op_chain_super);
-	opcode_buf_add(env->buf, (vector_item)classz->super_class->core_type->u.class_->classIndex);
+	opcode_buf_add(env->buf, (vector_item)classz->super_class->core_type->absolute_index);
 	opcode_buf_add(env->buf, (vector_item)emptyTemp);
 	//このクラスのフィールドを確保
 	opcode_buf_add(env->buf, (vector_item)op_alloc_field);
@@ -769,7 +769,7 @@ static void CLBC_chain_super(class_loader * self, il_type * iltype, type * tp, i
 	} else if (chain->type == chain_type_super) {
 		chainTarget = class_ilfind_constructor(classz->super_class->core_type->u.class_, chain->argument_list, env, cctx, &temp);
 		opcode_buf_add(env->buf, op_chain_super);
-		opcode_buf_add(env->buf, classz->super_class->core_type->u.class_->classIndex);
+		opcode_buf_add(env->buf, classz->super_class->core_type->absolute_index);
 	}
 	if(chainTarget == NULL) {
 		bc_error_throw(bcerror_explicit_chain_ctor_not_found,

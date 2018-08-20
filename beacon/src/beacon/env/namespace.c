@@ -69,9 +69,6 @@ struct type* namespace_add_type(namespace_* self, type* type) {
 	type->location = self;
 	numeric_map_put(self->type_map, type_name(type), type);
 	type->absolute_index = ctx->type_vec->length;
-	if (type->tag == type_class) {
-		type->u.class_->classIndex = type->absolute_index;
-	}
 	vector_push(ctx->type_vec, type);
 	return type;
 }
