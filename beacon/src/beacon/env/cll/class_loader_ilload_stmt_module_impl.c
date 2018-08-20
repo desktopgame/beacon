@@ -32,6 +32,9 @@ il_stmt* CLIL_stmt(class_loader* self, ast* source) {
 }
 
 void CLIL_body(class_loader* self, vector* list, ast* source) {
+	if(source == NULL) {
+		return;
+	}
 	if (source->tag == ast_stmt_list || source->tag == ast_scope) {
 		for (int i = 0; i < source->vchildren->length; i++) {
 			CLIL_body(self, list, ast_at(source, i));

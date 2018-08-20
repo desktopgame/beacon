@@ -411,7 +411,7 @@ function_define
 	}
 	| DEF IDENT type_parameter_group LRB RRB ARROW typename_T scope_optional
 	{
-		$$ = ast_new_function_decl_empty_params($2, $3, 8, $7);
+		$$ = ast_new_function_decl_empty_params($2, $3, $8, $7);
 	}
 	;
 

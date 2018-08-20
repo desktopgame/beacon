@@ -2616,7 +2616,7 @@ yyreduce:
   case 61:
 #line 413 "beacon.y" /* yacc.c:1663  */
     {
-		(yyval.ast_value) = ast_new_function_decl_empty_params((yyvsp[-6].stringv_value), (yyvsp[-5].ast_value), 8, (yyvsp[-1].ast_value));
+		(yyval.ast_value) = ast_new_function_decl_empty_params((yyvsp[-6].stringv_value), (yyvsp[-5].ast_value), (yyvsp[0].ast_value), (yyvsp[-1].ast_value));
 	}
 #line 2622 "beacon.tab.c" /* yacc.c:1663  */
     break;

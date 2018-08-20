@@ -255,11 +255,18 @@ static void class_loader_load_toplevel(class_loader* self) {
 }
 
 static void class_loader_load_toplevel_function(class_loader* self) {
-	if(self->level != 0) {
+	if(self->level != 0 || self->type != content_entry_point) {
 		return;
 	}
 	vector* funcs = self->il_code->function_list;
 	type* worldT = namespace_get_type(namespace_lang(), string_pool_intern("World"));
+	//前回の実行で作成されたメソッドを解放
+	vector* methods = TYPE2CLASS(worldT)->method_list;
+	if(methods->length > 0) {
+		vector_delete(methods, method_delete);
+		TYPE2CLASS(worldT)->method_list = vector_new();
+	}
+	//メソッドの宣言のみロード
 	for(int i=0; i<funcs->length; i++) {
 		il_function* ilfunc = vector_at(funcs, i);
 		method* m = method_new(ilfunc->namev);
@@ -300,7 +307,19 @@ static void class_loader_load_toplevel_function(class_loader* self) {
 		opcode_buf_add(env->buf, (vector_item)op_store);
 		opcode_buf_add(env->buf, (vector_item)0);
 		vector_push(worldT->u.class_->method_list, m);
-		CLBC_corutine(self, m, env, ilfunc->parameter_list, ilfunc->statement_list, cctx, namespace_lang());
+		//CLBC_corutine(self, m, env, ilfunc->parameter_list, ilfunc->statement_list, cctx, namespace_lang());
+		call_context_delete(cctx);
+	}
+	//実装のロード
+	for(int i=0; i<funcs->length; i++) {
+		il_function* ilfunc = vector_at(funcs, i);
+		method* m = vector_at(TYPE2CLASS(worldT)->method_list, i);
+		script_method* sm = m->u.script_method;
+		call_context* cctx = call_context_new(call_method_T);
+		cctx->space = namespace_lang();
+		cctx->ty = worldT;
+		cctx->u.mt = m;
+		CLBC_corutine(self, m, sm->env, ilfunc->parameter_list, ilfunc->statement_list, cctx, namespace_lang());
 		call_context_delete(cctx);
 	}
 }
