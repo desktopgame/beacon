@@ -221,6 +221,10 @@ void bc_error_vthrow(bc_error_id id, va_list ap) {
 			fmt = "static method not found: %s#%s";
 			break;
 
+		case bcerror_undefined_name_bound_invoke:
+			fmt = "instance method not found: %s#%s";
+			break;
+
 		case bcerror_construct_abstract_type:
 			fmt = "can't construct a abstract type by new operator: %s";
 			break;

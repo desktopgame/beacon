@@ -177,11 +177,19 @@ static void il_factor_invoke_bound_check(il_factor_invoke_bound * self, envirome
 		self->u.subscript.u.prop = prop;
 		self->u.subscript.index = temp;
 	}
-	self->tag = bound_invoke_subscript_T;
-	self->u.subscript.opov = class_argfind_operator_overload(TYPE2CLASS(GENERIC2TYPE(receiver_gtype)), operator_subscript_get, self->args, env, cctx, &temp);
-	self->index = temp;
-	if(temp == -1) {
+	if(receiver_gtype != NULL) {
+		self->tag = bound_invoke_subscript_T;
+		self->u.subscript.opov = class_argfind_operator_overload(TYPE2CLASS(GENERIC2TYPE(receiver_gtype)), operator_subscript_get, self->args, env, cctx, &temp);
+		self->index = temp;
+		if(temp == -1) {
+			bc_error_throw(bcerror_invoke_bound_undefined_method,
+				string_pool_ref2str(self->namev)
+			);
+		}
+	}
+	if(self->index == -1) {
 		bc_error_throw(bcerror_invoke_bound_undefined_method,
+			string_pool_ref2str(type_name(ctype)),
 			string_pool_ref2str(self->namev)
 		);
 	}
