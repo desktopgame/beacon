@@ -65,12 +65,6 @@ void il_factor_dump(il_factor * self, int depth) {
 		case ilfactor_as:
 			il_factor_as_dump(self->u.as_, depth);
 			break;
-		case ilfactor_inc:
-			il_factor_inc_dump(self->u.inc_, depth);
-			break;
-		case ilfactor_dec:
-			il_factor_dec_dump(self->u.dec_, depth);
-			break;
 		case ilfactor_call_op:
 			il_factor_call_op_dump(self->u.call_, depth);
 			break;
@@ -149,12 +143,6 @@ void il_factor_generate(il_factor * self, enviroment* env, call_context* cctx) {
 			break;
 		case ilfactor_as:
 			il_factor_as_generate(self->u.as_, env, cctx);
-			break;
-		case ilfactor_inc:
-			il_factor_inc_generate(self->u.inc_, env, cctx);
-			break;
-		case ilfactor_dec:
-			il_factor_dec_generate(self->u.dec_, env, cctx);
 			break;
 		case ilfactor_call_op:
 			il_factor_call_op_generate(self->u.call_, env, cctx);
@@ -240,12 +228,6 @@ void il_factor_load(il_factor * self, enviroment * env, call_context* cctx) {
 		case ilfactor_as:
 			il_factor_as_load(self->u.as_, env, cctx);
 			break;
-		case ilfactor_inc:
-			il_factor_inc_load(self->u.inc_, env, cctx);
-			break;
-		case ilfactor_dec:
-			il_factor_dec_load(self->u.dec_, env, cctx);
-			break;
 		case ilfactor_call_op:
 			il_factor_call_op_load(self->u.call_, env, cctx);
 			break;
@@ -328,12 +310,6 @@ generic_type* il_factor_eval(il_factor * self, enviroment * env, call_context* c
 		case ilfactor_as:
 			ret = il_factor_as_eval(self->u.as_, env, cctx);
 			break;
-		case ilfactor_inc:
-			ret = il_factor_inc_eval(self->u.inc_, env, cctx);
-			break;
-		case ilfactor_dec:
-			ret = il_factor_dec_eval(self->u.dec_, env, cctx);
-			break;
 		case ilfactor_call_op:
 			ret = il_factor_call_op_eval(self->u.call_, env, cctx);
 			break;
@@ -401,10 +377,6 @@ char* il_factor_tostr(il_factor* self, enviroment* env) {
 			return il_factor_null_tostr(self->u.null_, env);
 		case ilfactor_as:
 			return il_factor_as_tostr(self->u.as_, env);
-		case ilfactor_inc:
-			return il_factor_inc_tostr(self->u.inc_, env);
-		case ilfactor_dec:
-			return il_factor_dec_tostr(self->u.dec_, env);
 		case ilfactor_call_op:
 			return il_factor_call_op_to_str(self->u.call_, env);
 		case ilfactor_member_op:
@@ -511,12 +483,6 @@ void il_factor_delete(il_factor * self) {
 			break;
 		case ilfactor_as:
 			il_factor_as_delete(self->u.as_);
-			break;
-		case ilfactor_inc:
-			il_factor_inc_delete(self->u.inc_);
-			break;
-		case ilfactor_dec:
-			il_factor_dec_delete(self->u.dec_);
 			break;
 		case ilfactor_call_op:
 			il_factor_call_op_delete(self->u.call_);

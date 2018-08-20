@@ -20,8 +20,6 @@
 #include "factor/il_factor_bool_impl.h"
 #include "factor/il_factor_null_impl.h"
 #include "factor/il_factor_as_impl.h"
-#include "factor/il_factor_inc_impl.h"
-#include "factor/il_factor_dec_impl.h"
 #include "factor/il_factor_call_op_impl.h"
 #include "factor/il_factor_member_op_impl.h"
 #include "factor/il_factor_instanceof_impl.h"

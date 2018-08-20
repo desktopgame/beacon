@@ -18,8 +18,6 @@ static il_factor_assign_op* CLIL_assign_arithmetic(class_loader* self, ast* sour
 static il_factor_variable* CLIL_variable(class_loader* self, ast* source);
 static il_factor_new_instance* CLIL_new_instance(class_loader* self, ast* source);
 static il_factor_as* CLIL_as(class_loader* self, ast* source);
-static il_factor_inc* CLIL_inc(class_loader* self, ast* source);
-static il_factor_dec* CLIL_dec(class_loader* self, ast* source);
 static il_factor_call_op* CLIL_call_op(class_loader* self, ast* source);
 static il_factor_member_op* CLIL_member_op(class_loader* self, ast* source);
 static il_factor_instanceof* CLIL_instanceof(class_loader* self, ast* source);
@@ -148,12 +146,6 @@ static il_factor* CLIL_factorImpl(class_loader* self, ast* source) {
 		return ret;
 	} else if (source->tag == ast_as) {
 		return il_factor_wrap_as(CLIL_as(self, source));
-	} else if (source->tag == ast_pre_inc ||
-			   source->tag == ast_post_inc) {
-		return il_factor_wrap_inc(CLIL_inc(self, source));
-	} else if (source->tag == ast_pre_dec ||
-			   source->tag == ast_post_dec) {
-		return il_factor_wrap_dec(CLIL_dec(self, source));
 	} else if(source->tag == ast_op_call) {
 		return il_factor_wrap_call_op(CLIL_call_op(self, source));
 	} else if(source->tag == ast_field_access) {
@@ -259,28 +251,6 @@ static il_factor_as* CLIL_as(class_loader* self, ast* source) {
 	il_factor_as* ret = il_factor_as_new();
 	ret->fact = CLIL_factor(self, ast_first(source));
 	CLIL_generic_cache(ast_second(source), ret->fqcn);
-	return ret;
-}
-
-static il_factor_inc * CLIL_inc(class_loader * self, ast * source) {
-	assert(source->tag == ast_pre_inc ||
-		   source->tag == ast_post_inc);
-	fix_type type = (source->tag == ast_pre_inc) ? fixtype_pre : fixtype_post;
-	il_factor_inc* ret = il_factor_inc_new(type);
-	ast* afact = ast_first(source);
-	ret->fact = CLIL_factor(self, afact);
-	ret->type = type;
-	return ret;
-}
-
-static il_factor_dec * CLIL_dec(class_loader * self, ast * source) {
-	assert(source->tag == ast_pre_dec ||
-		   source->tag == ast_post_dec);
-	fix_type type = (source->tag == ast_pre_dec) ? fixtype_pre : fixtype_post;
-	il_factor_dec* ret = il_factor_dec_new(type);
-	ast* afact = ast_first(source);
-	ret->fact = CLIL_factor(self, afact);
-	ret->type = type;
 	return ret;
 }
 

@@ -31,8 +31,6 @@ typedef enum il_factor_type {
 	ilfactor_bool,
 	ilfactor_null,
 	ilfactor_as,
-	ilfactor_inc,
-	ilfactor_dec,
 	ilfactor_call_op,
 	ilfactor_member_op,
 	ilfactor_instanceof,
