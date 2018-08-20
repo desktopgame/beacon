@@ -80,23 +80,12 @@ bool io_exists(const char * filename) {
 #endif
 }
 
-bool io_exists_s(const char* filename) {
-	errno = 0;
-	bool ret = io_exists(filename);
-	int tmp = errno;
-	if(!ret) {
-		perror("fopen error  ");
-		printf("path: %s", filename);
-	}
-	return ret;
-}
-
 bool io_delete(const char * filename) {
 	return remove(filename);
 }
 
 char * io_read_text(const char * filename) {
-	assert(io_exists_s(filename));
+	assert(io_exists(filename));
 	string_buffer* buff = string_buffer_new();
 #if defined(_MSC_VER)
 	FILE* fp;

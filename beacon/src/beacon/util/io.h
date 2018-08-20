@@ -44,14 +44,6 @@ void io_new_file(const char* filename);
 bool io_exists(const char* filename);
 
 /**
- * ファイルが存在するかどうかを返します.
- * また、存在しなかった場合(fopenに失敗した場合)その原因を出力します。
- * @param filename
- * @return
- */
-bool io_exists_s(const char* filename);
-
-/**
  * 指定のファイルを削除します.
  * @param filename
  * @return
