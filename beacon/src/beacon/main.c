@@ -37,33 +37,35 @@ int main_cl(int argc, char *argv[]) {
 	extern int optind, opterr;
 	int opt = 0;
 	int longindex = 0;
+	int ret = 0;
 	while ((opt = getopt_long(argc, argv, "ta:i:r:o:", longopts, &longindex)) != -1) {
 		switch(opt) {
 			case 't':
 				printf(":t :test\n");
-				cl_test(argc, argv);
+				ret = cl_test(argc, argv);
 				break;
 			case 'a':
 				printf(":a :ast\n");
-				cl_ast(optarg);
+				ret = cl_ast(optarg);
 				break;
 			case 'i':
 				printf(":i :il\n");
-				cl_il(optarg);
+				ret = cl_il(optarg);
 				break;
 			case 'r':
 				printf(":r :run\n");
-				cl_run(optarg);
+				ret = cl_run(optarg);
 				break;
 			case 'o':
 				printf(":o :op\n");
-				cl_op(optarg);
+				ret = cl_op(optarg);
 				break;
 			default:
 				printf("error! :%c :%c", opt, optopt);
 				break;
 		}
 	}
+	return ret;
 }
 
 int main(int argc, char *argv[]) {
