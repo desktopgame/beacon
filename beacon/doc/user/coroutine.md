@@ -61,3 +61,21 @@ def iterate() -> Iterator[T] {
 	}
 }
 ````
+
+中断する例
+````
+def seq(Int len) -> Iterator[Int] {
+	var start = 0;
+	while(start < len) {
+		if(start > 5) {
+			yield break;
+		}
+		yield return start;
+		start += 1;
+	}
+}
+var iter = seq(10);
+while(iter.moveNext()) {
+	iter.current().printLine();
+}
+````
