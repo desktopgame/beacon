@@ -69,29 +69,37 @@ static int gBreak = -1;
 static int gMallocFree = 0;
 
 void * mem_malloc(size_t size, const char * filename, int lineno) {
-#if defined(MEMORY_MANAGEMENT)
-	slot* slot = slot_new(size, filename, lineno);
-	slot_append(slot);
-	return slot_application_area(slot);
-#elif defined(FAST_DIAGNOSTIC)
-	gMallocFree++;
-	void* ret = fixed_malloc(size);
-	memset(ret, 0xCC, size);
-	return ret;
+#if defined(_MSC_VER)
+	return malloc(size);
 #else
-	void* ret = fixed_malloc(size);
-	memset(ret, 0xCC, size);
-	return ret;
+	#if defined(MEMORY_MANAGEMENT)
+		slot* slot = slot_new(size, filename, lineno);
+		slot_append(slot);
+		return slot_application_area(slot);
+	#elif defined(FAST_DIAGNOSTIC)
+		gMallocFree++;
+		void* ret = fixed_malloc(size);
+		memset(ret, 0xCC, size);
+		return ret;
+	#else
+		void* ret = fixed_malloc(size);
+		memset(ret, 0xCC, size);
+		return ret;
+	#endif
 #endif
 }
 
 void * mem_realloc(void * block, size_t newSize, const char * filename, int lineno) {
-#if defined(MEMORY_MANAGEMENT)
-	return slot_realloc(block, newSize, filename, lineno);
-#elif defined(FAST_DIAGNOSTIC)
-	return fixed_realloc(block, newSize);
+#if defined(_MSC_VER)
+	return realloc(block, newSize);
 #else
-	return fixed_realloc(block, newSize);
+	#if defined(MEMORY_MANAGEMENT)
+		return slot_realloc(block, newSize, filename, lineno);
+	#elif defined(FAST_DIAGNOSTIC)
+		return fixed_realloc(block, newSize);
+	#else
+		return fixed_realloc(block, newSize);
+	#endif
 #endif
 }
 

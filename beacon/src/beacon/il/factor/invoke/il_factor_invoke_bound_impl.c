@@ -307,6 +307,7 @@ static generic_type* il_factor_invoke_bound_evalImpl(il_factor_invoke_bound * se
 		call_context_pop(cctx);
 		return self->resolved;
 	}
+	call_context_pop(cctx);
 	assert(self->resolved != NULL);
 	return self->resolved;
 }

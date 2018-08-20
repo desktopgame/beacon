@@ -51,6 +51,37 @@ bool test_now() {
 //semantics
 static void test_semanticsImpl(const char* dirname, bool require, char** outFileName, bool* outFail) {
 #if defined(_MSC_VER)
+	//stdoutを入れ替える
+	char* filename = NULL;
+	bool fail = false;
+	//全てのテストファイルを訪問する
+	vector* files = io_list_files(dirname);
+	for (int i = 0; i<files->length; i++) {
+		//.bc以外は無視する
+		file_entry* e = (file_entry*)vector_at(files, i);
+		if (!io_extension(e->filename, "bc")) {
+			continue;
+		}
+		//これから実行するファイルを記録
+		bc_error_clear();
+		filename = e->filename;
+		//標準出力を入れ替えて実行
+		fprintf(stdout, "[%s]\n", e->filename);
+		bool result = eval_file(e->filename);
+		//期待していた結果でないなら終了
+		if (result != require) {
+			fail = true;
+			break;
+		}
+		//ここで静的領域を解放しないと、
+		//enviromentの削除後も静的フィールドが定数を掴んだまま
+		script_context_static_clear(script_context_get_current());
+	}
+	(*outFileName) = text_strdup(filename);
+	(*outFail) = fail;
+	io_list_files_delete(files);
+	//元に戻す
+	fflush(stdout);
 #else
 	//stdoutを入れ替える
 	char* filename = NULL;

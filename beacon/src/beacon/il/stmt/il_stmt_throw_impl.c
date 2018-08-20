@@ -33,7 +33,7 @@ void il_stmt_throw_generate(il_stmt_throw* self, enviroment* env, call_context* 
 void il_stmt_throw_load(il_stmt_throw* self, enviroment* env, call_context* cctx) {
 	il_factor_load(self->fact, env, cctx);
 	generic_type* tgt = il_factor_eval(self->fact, env, cctx);
-	if(generic_type_distance(GENERIC_EXCEPTION, tgt) < 0) {
+	if(generic_type_distance(GENERIC_EXCEPTION, tgt, cctx) < 0) {
 		if(tgt->core_type != NULL) {
 			bc_error_throw(
 				bcerror_thrown_not_exception_type,

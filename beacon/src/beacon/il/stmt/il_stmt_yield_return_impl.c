@@ -51,7 +51,7 @@ static void check_method_yield_return(il_stmt_yield_return * self, enviroment * 
 	method* m = call_context_method(cctx);
 	generic_type* arg = vector_at(m->return_gtype->type_args_list, 0);
 	//戻り値の型に互換性がない
-	if(generic_type_distance(arg, il_factor_eval(self->fact, env, cctx)) < 0) {
+	if(generic_type_distance(arg, il_factor_eval(self->fact, env, cctx), cctx) < 0) {
 		bc_error_throw(bcerror_yield_return_value_type_is_not_compatible,
 			string_pool_ref2str(type_name(m->parent)),
 			string_pool_ref2str(m->namev)

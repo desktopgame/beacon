@@ -44,6 +44,12 @@ void il_stmt_variable_init_generate(il_stmt_variable_init * self, enviroment * e
 		   bc_error_throw(bcerror_void_assign);
 		return;
 	}
+	int dist = generic_type_distance(gb, ga, cctx);
+	if (dist < 0) {
+		bc_error_throw(bcerror_assign_not_compatible_local,
+			string_pool_ref2str(self->namev)
+		);
+	}
 	opcode_buf_add(env->buf, op_store);
 	opcode_buf_add(env->buf, self->sym->index);
 }

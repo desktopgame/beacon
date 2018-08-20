@@ -53,9 +53,10 @@ static void bc_object_nativeToString(method* parent, frame* fr, enviroment* env)
 		string_buffer_appends(sb, buff);
 #undef BUFF_LEN
 	}
-	object* ret = object_string_new(sb->text);
-	MEM_FREE(sb);
+	char* str = string_buffer_release(sb);
+	object* ret = object_string_new(str);
 	vector_push(fr->value_stack, ret);
+	MEM_FREE(str);
 }
 
 static void bc_object_nativeReferenceEquals(method* parent, frame* fr, enviroment* env) {

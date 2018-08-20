@@ -1,6 +1,7 @@
 
 #if defined(_MSC_VER)
 #include "util/getopt.h"
+#include <crtdbg.h> 
 #else
 #include <unistd.h>
 #include <getopt.h>
@@ -67,6 +68,10 @@ int main_cl(int argc, char *argv[]) {
 }
 
 int main(int argc, char *argv[]) {
+#if defined(_MSC_VER) && defined(_DEBUG)
+	_CrtSetDbgFlag(_CRTDBG_ALLOC_MEM_DF | _CRTDBG_LEAK_CHECK_DF);
+	//_CrtSetBreakAlloc(36295);
+#endif
 	string_pool_init();
 	il_print_layout_hide(true);
 	//mem_break(16066);
@@ -77,5 +82,8 @@ int main(int argc, char *argv[]) {
 	string_pool_destroy();
 	mem_dump();
 	mem_destroy();
+#if defined(_MSC_VER) && defined(_DEBUG)
+	_CrtDumpMemoryLeaks();
+#endif
 	return ret;
 }

@@ -15,7 +15,7 @@ static void il_stmt_catch_stmt_delete(void* item);
 static void il_stmt_try_catch_delete(void* item);
 
 il_stmt* il_stmt_wrap_try(il_stmt_try* self) {
-	il_stmt* ret = (il_stmt*)MEM_MALLOC(sizeof(il_stmt_try));
+	il_stmt* ret = (il_stmt*)MEM_MALLOC(sizeof(il_stmt));
 	ret->type = ilstmt_try;
 	ret->u.try_ = self;
 	return ret;

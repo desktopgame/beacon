@@ -6,37 +6,42 @@
 #include <stdio.h>
 
 typedef unsigned char muchar_t;
-
-#if defined(DEBUG)
-/**
- * メモリリーク・オーバーランなどを検出するならこのマクロをオンにします.
- */
-//#define MEMORY_MANAGEMENT (1)
-
-/**
- * 簡易的なメモリ検査のみを実行します.
- */
-#define FAST_DIAGNOSTIC (1)
-
-#if defined(MEMORY_MANAGEMENT) && defined(FAST_DIAGNOSTIC)
-"error"
-#endif
-
-/**
- * 既に解放された領域へのアクセスを検出するならこのマクロをオンにします.
- */
-//#define FREE_FREEZE (1)
-
-#define NON_NULL(m) (mem_non_null(m))
-
+#if defined(_MSC_VER)
+	#define NON_NULL(m) (m)
+	#define MEM_MALLOC(size) (malloc(size))
+	#define MEM_FREE(size) (free(size))
+	#define MEM_REALLOC(block, size) (realloc(block, size, __FILE__, __LINE__))
+	#define MEM_MARK(block, size) ((void)0)
 #else
-#define NON_NULL(m) (m)
-#endif
+	#if defined(DEBUG)
+		/**
+		 * メモリリーク・オーバーランなどを検出するならこのマクロをオンにします.
+		 */
+		//#define MEMORY_MANAGEMENT (1)
 
-#define MEM_MALLOC(size) (mem_malloc(size, __FILE__, __LINE__))
-#define MEM_FREE(size) (mem_free(size, __FILE__, __LINE__))
-#define MEM_REALLOC(block, size) (mem_realloc(block, size, __FILE__, __LINE__))
-#define MEM_MARK(block, size) (mem_mark(block, size, __FILE__, __LINE__))
+		/**
+		 * 簡易的なメモリ検査のみを実行します.
+		 */
+		#define FAST_DIAGNOSTIC (1)
+
+		#if defined(MEMORY_MANAGEMENT) && defined(FAST_DIAGNOSTIC)
+		"error"
+		#endif
+
+		/**
+		 * 既に解放された領域へのアクセスを検出するならこのマクロをオンにします.
+		 */
+		//#define FREE_FREEZE (1)
+
+		#define NON_NULL(m) (mem_non_null(m))
+	#else
+		#define NON_NULL(m) (m)
+		#define MEM_MALLOC(size) (mem_malloc(size, __FILE__, __LINE__))
+		#define MEM_FREE(size) (mem_free(size, __FILE__, __LINE__))
+		#define MEM_REALLOC(block, size) (mem_realloc(block, size, __FILE__, __LINE__))
+		#define MEM_MARK(block, size) (mem_mark(block, size, __FILE__, __LINE__))
+	#endif
+#endif
 /**
  * malloc のラッパーです.
  * 通常はこちらではなくマクロ版を使用します。

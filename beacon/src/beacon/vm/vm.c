@@ -527,7 +527,7 @@ static void vm_run(frame * self, enviroment * env, int pos, int deferStart) {
 				//io_printfln("");
 				//generic_type_print(v->gtype);
 				//io_printfln("");
-				int dist = generic_type_distance(gtype, v->gtype);
+				int dist = generic_type_distance(gtype, v->gtype, sg_thread_context());
 				object* b = object_bool_get(dist >= 0);
 				vector_push(self->value_stack, b);
 				break;
@@ -615,9 +615,9 @@ static void vm_run(frame * self, enviroment * env, int pos, int deferStart) {
 				//enviroment_op_dump(ctor->env, sub->level);
 				//opcode_buf_dump(ctor->env->buf, sub->level);
 				vm_execute(sub, ctor->env);
-				call_context_pop(sg_thread_context());
 				vector_delete(cfr->u.static_invoke.args, vector_deleter_null);
 				vector_delete(cfr->u.static_invoke.typeargs, vector_deleter_null);
+				call_context_pop(sg_thread_context());
 				//コンストラクタを実行した場合、
 				//objectがスタックのトップに残っているはず
 				vector_item returnV = vector_top(sub->value_stack);
@@ -655,6 +655,7 @@ static void vm_run(frame * self, enviroment * env, int pos, int deferStart) {
 				vm_execute(sub, ctor->env);
 				vector_delete(cfr->u.static_invoke.args, vector_deleter_null);
 				vector_delete(cfr->u.static_invoke.typeargs, vector_deleter_null);
+				call_context_pop(sg_thread_context());
 				//コンストラクタを実行した場合、
 				//objectがスタックのトップに残っているはず
 				vector_item returnV = vector_top(sub->value_stack);
@@ -866,7 +867,7 @@ static void vm_run(frame * self, enviroment * env, int pos, int deferStart) {
 					}
 					break;
 				}
-				if(generic_type_distance(o->gtype, a) < 0) {
+				if(generic_type_distance(o->gtype, a, sg_thread_context()) < 0) {
 					vector_push(self->value_stack, object_get_null());
 				} else {
 					//o = object_clone(o);
