@@ -47,6 +47,7 @@ void il_factor_assign_op_load(il_factor_assign_op* self, enviroment* env, call_c
 	il_factor_load(self->right, env, cctx);
 	//voidは代入できない
 	generic_type* gret = il_factor_eval(self->right, env, cctx);
+	BC_ERROR();
 	if(gret->core_type != NULL &&
 	   gret->core_type == TYPE_VOID) {
 		   bc_error_throw(bcerror_void_assign);

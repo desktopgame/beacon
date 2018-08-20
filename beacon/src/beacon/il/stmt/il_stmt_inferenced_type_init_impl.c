@@ -38,9 +38,7 @@ void il_stmt_inferenced_type_init_load(il_stmt_inferenced_type_init * self, envi
 	//代入するオブジェクトを計算
 	il_factor_load(self->fact, env, cctx);
 	generic_type* gtp = il_factor_eval(self->fact, env, cctx);
-	if(bc_error_last()) {
-		return;
-	}
+	BC_ERROR();
 	//voidは代入できない
 	if(gtp->core_type != NULL &&
 	   gtp->core_type == TYPE_VOID) {

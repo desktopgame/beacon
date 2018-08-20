@@ -224,6 +224,9 @@ void bc_error_vthrow(bc_error_id id, va_list ap) {
 		case bcerror_void_assign:
 			fmt = "can't assign. type is void.";
 			break;
+		case bcerror_void_decl:
+			fmt = "can't decl. type is void.";
+			break;
 
 		case bcerror_cast_not_compatible:
 			fmt = "not compatible types: %s as %s";

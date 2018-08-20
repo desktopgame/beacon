@@ -2,6 +2,8 @@
 #include "../../util/mem.h"
 #include "../../util/text.h"
 #include "../../vm/enviroment.h"
+#include "../../vm/symbol_entry.h"
+#include "../../env/generic_type.h"
 #include "../../env/namespace.h"
 #include "../../env/class_loader.h"
 #include "../../env/import_manager.h"
@@ -37,11 +39,15 @@ void il_stmt_variable_decl_load(il_stmt_variable_decl * self, struct enviroment*
 			string_pool_ref2str(self->namev)
 		);
 	}
-	symbol_table_entry(
+	symbol_entry* e = symbol_table_entry(
 		env->sym_table,
 		import_manager_resolve(NULL, NULL, self->fqcn, cctx),
 		self->namev
 	);
+	if(e->gtype->core_type != NULL &&
+	   e->gtype->core_type == TYPE_VOID) {
+		   bc_error_throw(bcerror_void_decl);
+	}
 }
 
 void il_stmt_variable_decl_delete(il_stmt_variable_decl * self) {

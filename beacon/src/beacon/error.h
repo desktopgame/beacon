@@ -87,6 +87,7 @@ typedef enum bc_error_id {
 	bcerror_undefined_excor_operator,
 
 	bcerror_void_assign,
+	bcerror_void_decl,
 
 	bcerror_cast_not_compatible,
 
