@@ -14,3 +14,5 @@
 * [if](./if.md)
 * [while](./while.md)
 * [var](./var.md)
+* [this](./this.md)
+* [super](./super.md)
