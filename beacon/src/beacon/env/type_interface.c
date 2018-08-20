@@ -305,3 +305,17 @@ generic_type* type_instanced(type* self, generic_type* targ) {
 	generic_type_addargs(gt, generic_type_clone(targ));
 	return gt;
 }
+
+class_* type_as_class(type* self) {
+	if(self == NULL || self->tag != type_class) {
+		return NULL;
+	}
+	return self->u.class_;
+}
+
+interface_* type_as_interface(type* self) {
+	if(self == NULL || self->tag != type_interface) {
+		return NULL;
+	}
+	return self->u.interface_;
+}

@@ -238,4 +238,19 @@ bool type_is_abstract(type* self);
  * @return
  */
 struct generic_type* type_instanced(type* self, struct generic_type* targ);
+
+/**
+ * 可能なら self を class へ変換します.
+ * 失敗したなら NULL
+ * @param self
+ * @return
+ */
+struct class_* type_as_class(type* self);
+/**
+ * 可能なら self を interface へ変換します.
+ * 失敗したなら NULL
+ * @param self
+ * @return
+ */
+struct interface_* type_as_interface(type* self);
 #endif // !SIGNAL_ENV_TYPE_INTERFACE_H

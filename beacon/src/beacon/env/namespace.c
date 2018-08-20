@@ -84,31 +84,11 @@ type * namespace_get_type(namespace_ * self, string_view namev) {
 }
 
 class_ * namespace_get_class(namespace_ * self, string_view namev) {
-	//FIXME:コピペ(namespace_get_interface)
-	type* ret = namespace_get_type(self, namev);
-	if (ret != NULL && 
-		ret->tag != type_class) {
-		assert(false);
-		return NULL;
-	}
-	if (ret == NULL) {
-		return NULL;
-	}
-	return ret->u.class_;
+	return type_as_class(namespace_get_type(self, namev));
 }
 
 interface_ * namespace_get_interface(namespace_ * self, string_view namev) {
-	//FIXME:コピペ(namespace_get_class)
-	type* ret = namespace_get_type(self, namev);
-	if (ret != NULL &&
-		ret->tag != type_interface) {
-		assert(false);
-		return NULL;
-	}
-	if (ret == NULL) {
-		return NULL;
-	}
-	return ret->u.interface_;
+	return type_as_interface(namespace_get_type(self, namev));
 }
 
 namespace_ * namespace_beacon() {

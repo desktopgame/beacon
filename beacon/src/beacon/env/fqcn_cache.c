@@ -84,21 +84,11 @@ type * fqcn_type(fqcn_cache * self, namespace_ * current) {
 }
 
 interface_ * fqcn_interface(fqcn_cache * self, namespace_ * current) {
-	//FIXME:コピペ(fqcn_class)
-	type* tp = fqcn_type(self, current);
-	if (tp == NULL || tp->tag != type_interface) {
-		return NULL;
-	}
-	return tp->u.interface_;
+	return type_as_interface(fqcn_type(self, current));
 }
 
 class_ * fqcn_class(fqcn_cache * self, namespace_ * current) {
-	//FIXME:コピペ(fqcn_interface)
-	type* tp = fqcn_type(self, current);
-	if (tp == NULL || tp->tag != type_class) {
-		return NULL;
-	}
-	return tp->u.class_;
+	return type_as_class(fqcn_type(self, current));
 }
 
 char* fqcn_cache_tostr(fqcn_cache* self) {
