@@ -204,7 +204,7 @@ void vm_uncaught(frame * self, enviroment* env, int pc) {
 		fprintf(stderr, "    @%d: %s\n", OBJ2INT(lineIndexObj), bc_string_raw(fileNameObj)->text);
 	}
 	vm_catch(frame_root(self));
-	heap_gc(heap_get(), gc_full);
+	heap_gc(heap_get());
 }
 
 

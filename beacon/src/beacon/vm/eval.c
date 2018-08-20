@@ -98,7 +98,7 @@ static bool eval_top_from_cll(class_loader* cll, ast* aOpt) {
 		bc_error_throw(bcerror_generic, "unexpected terminate");
 	}
 	vm_catch(fr);
-	heap_gc(heap_get(), gc_full);
+	heap_gc(heap_get());
 	frame_delete(fr);
 	sg_thread_release_frame_ref(sg_thread_current(script_context_get_current()));
 

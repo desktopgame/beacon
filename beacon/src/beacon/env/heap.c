@@ -18,7 +18,6 @@ static void gc_delete(vector_item item);
 
 heap * heap_new() {
 	heap* ret = (heap*)MEM_MALLOC(sizeof(heap));
-	ret->threshold = 16;
 	ret->object_vec = vector_new();
 	ret->accept_blocking = 0;
 	ret->collect_blocking = 0;
@@ -43,17 +42,13 @@ void heap_add(heap * self, object * obj) {
 	vector_push(self->object_vec, obj);
 }
 
-void heap_gc(heap * self, gc_mode mode) {
+void heap_gc(heap * self) {
 	if(self->collect_blocking > 0) {
 		return;
-	}
-	if(mode == gc_mini && self->object_vec->length < self->threshold) {
-	//	return;
 	}
 	gc_clear(self);
 	gc_mark(self);
 	gc_sweep(self);
-	self->threshold = self->object_vec->length + self->threshold;
 }
 
 void heap_ignore(heap* self, object* o) {

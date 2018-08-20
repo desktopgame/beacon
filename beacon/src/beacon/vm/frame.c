@@ -53,7 +53,7 @@ void frame_delete(frame * self) {
 	remove_from_parent(self);
 	vector_clear(self->value_stack);
 	vector_clear(self->ref_stack);
-	heap_gc(heap_get(), self->level == 0 ? gc_full : gc_mini);
+	heap_gc(heap_get());
 	vector_delete(self->value_stack, vector_deleter_null);
 	vector_delete(self->ref_stack, vector_deleter_null);
 	vector_delete(self->children_vec, vector_deleter_null);
