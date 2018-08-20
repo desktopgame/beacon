@@ -25,7 +25,6 @@ frame * frame_new() {
 	ret->exception = NULL;
 	ret->children_vec = vector_new();
 	ret->defer_at = 0;
-	//ret->defer_vec = vector_new();
 	ret->defer_vec = NULL;
 	ret->type_args_vec = vector_new();
 	ret->receiver = NULL;
@@ -55,9 +54,6 @@ void frame_delete(frame * self) {
 	vector_clear(self->value_stack);
 	vector_clear(self->ref_stack);
 	heap_gc(heap_get(), self->level == 0 ? gc_full : gc_mini);
-	//これは使い回せないので、
-	//VMを起動する前に毎回確保して、毎回捨てる
-	//vector_delete(self->defer_vec, vector_deleter_null);
 	vector_delete(self->value_stack, vector_deleter_null);
 	vector_delete(self->ref_stack, vector_deleter_null);
 	vector_delete(self->children_vec, vector_deleter_null);
@@ -71,7 +67,6 @@ frame* frame_root(frame* self) {
 }
 
 //private
-
 static void remove_from_parent(frame* self) {
 	if (self->parent != NULL) {
 		int idx = vector_find(self->parent->children_vec, self);
