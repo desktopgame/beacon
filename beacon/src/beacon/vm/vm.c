@@ -96,7 +96,7 @@ void vm_native_throw(frame * self, object * exc) {
 	//どこかでキャッチしようとしている
 	} else {
 		int temp = 0;
-		vm_validate(self, self->context_ref->buf->source->length, &temp);
+		vm_validate(self, self->context_ref->buf->source_vec->length, &temp);
 		self->native_throw_pos = temp;
 	}
 }
@@ -213,7 +213,7 @@ void vm_uncaught(frame * self, enviroment* env, int pc) {
 static void vm_run(frame * self, enviroment * env, int pos, int deferStart) {
 	assert(env != NULL);
 	script_context* ctx = script_context_get_current();
-	int source_len = env->buf->source->length;
+	int source_len = env->buf->source_vec->length;
 	self->context_ref = env;
 	heap* he = heap_get();
 	for (int IDX = pos; IDX < source_len; IDX++) {

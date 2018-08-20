@@ -11,21 +11,21 @@ static void opcode_buf_copy(opcode_buf* src, opcode_buf* dst);
 
 opcode_buf * opcode_buf_new() {
 	opcode_buf* ret = (opcode_buf*)MEM_MALLOC(sizeof(opcode_buf));
-	ret->labels = vector_new();
-	ret->source = vector_new();
+	ret->label_vec = vector_new();
+	ret->source_vec = vector_new();
 	ret->lazy_tbl = vector_new();
 	return ret;
 }
 
 int opcode_buf_add(opcode_buf * self, vector_item item) {
-	int len = self->source->length;
-	vector_push(self->source, item);
+	int len = self->source_vec->length;
+	vector_push(self->source_vec, item);
 	return len;
 }
 
 label * opcode_buf_label(opcode_buf * self, int index) {
 	label* ret = label_new(index);
-	vector_push(self->labels, ret);
+	vector_push(self->label_vec, ret);
 	return ret;
 }
 
@@ -36,16 +36,15 @@ lazy_int* opcode_buf_lazy(opcode_buf* self, int val) {
 }
 
 int opcode_buf_nop(opcode_buf * self) {
-	int len = self->source->length;
+	int len = self->source_vec->length;
 	opcode_buf_add(self, op_nop);
 	return len;
 }
 
 void opcode_buf_dump(opcode_buf * self, int depth) {
-	//opcode_buf* buf = self->u.script_method->env->buf;
-	for (int i = 0; i < self->source->length; i++) {
+	for (int i = 0; i < self->source_vec->length; i++) {
 		io_printi(depth);
-		i = opcode_print(self->source, i);
+		i = opcode_print(self->source_vec, i);
 		io_println();
 	}
 	io_println();
@@ -62,8 +61,8 @@ void opcode_buf_delete(opcode_buf * self) {
 	if (self == NULL) {
 		return;
 	}
-	vector_delete(self->source, vector_deleter_null);
-	vector_delete(self->labels, opcode_buf_delete_label);
+	vector_delete(self->source_vec, vector_deleter_null);
+	vector_delete(self->label_vec, opcode_buf_delete_label);
 	vector_delete(self->lazy_tbl, opcode_buf_delete_lazy_int);
 	MEM_FREE(self);
 }
@@ -81,16 +80,16 @@ static void opcode_buf_delete_lazy_int(vector_item item) {
 }
 
 static void opcode_buf_copy(opcode_buf* src, opcode_buf* dst) {
-	for (int i = 0; i < src->source->length; i++) {
-		vector_item e = vector_at(src->source, i);
+	for (int i = 0; i < src->source_vec->length; i++) {
+		vector_item e = vector_at(src->source_vec, i);
 		if (e == op_goto ||
 			e == op_goto_if_false ||
 			e == op_goto_if_true) {
 
 			opcode_buf_add(dst, e);
-			label* lb = (label*)vector_at(src->source, ++i);
+			label* lb = (label*)vector_at(src->source_vec, ++i);
 			opcode_buf_add(dst, e);
-			vector_push(dst->labels, lb);
+			vector_push(dst->label_vec, lb);
 		} else {
 			opcode_buf_add(dst, e);
 		}

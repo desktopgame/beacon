@@ -9,8 +9,8 @@
  * オペコードの一覧を表す構造体.
  */
 typedef struct opcode_buf {
-	vector* source;
-	vector* labels;
+	vector* source_vec;
+	vector* label_vec;
 	vector* lazy_tbl;
 } opcode_buf;
 

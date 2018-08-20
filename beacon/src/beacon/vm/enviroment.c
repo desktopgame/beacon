@@ -46,11 +46,11 @@ void enviroment_add_range(enviroment* self, int lineno) {
 	//最後についかしたレンジを伸ばすか新たに追加する
 	line_range* lrt = (line_range*)vector_top(self->line_range_vec);
 	if (lrt->lineno == lineno) {
-		lrt->end_offset = self->buf->source->length;
+		lrt->end_offset = self->buf->source_vec->length;
 	} else {
 		line_range* lr = line_range_new();
-		lr->start_offset = self->buf->source->length;
-		lr->end_offset = self->buf->source->length;
+		lr->start_offset = self->buf->source_vec->length;
+		lr->end_offset = self->buf->source_vec->length;
 		lr->lineno = lineno;
 		vector_push(self->line_range_vec, lr);
 	}
@@ -60,9 +60,9 @@ void enviroment_op_dump(enviroment * self, int depth) {
 	opcode_buf* buf = self->buf;
 	line_range* lr = NULL;
 	int lrPos = -1;
-	for (int i = 0; i < buf->source->length; i++) {
+	for (int i = 0; i < buf->source_vec->length; i++) {
 		io_printi(depth);
-		i = opcode_print(buf->source, i);
+		i = opcode_print(buf->source_vec, i);
 		if (!vector_empty(self->line_range_vec)) {
 			if (lr == NULL) {
 				lr = vector_at(self->line_range_vec, 0);
@@ -109,7 +109,7 @@ int enviroment_add_constant_string(enviroment * self, string_view sv) {
 }
 
 vector_item enviroment_source_at(enviroment * self, int index) {
-	return vector_at(self->buf->source, index);
+	return vector_at(self->buf->source_vec, index);
 }
 
 object* enviroment_constant_at(enviroment * self, int index) {

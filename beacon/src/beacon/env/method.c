@@ -442,7 +442,7 @@ static method* create_has_next(method* self, type* ty, class_loader* cll, vector
 	if(type_name(self->parent) == string_pool_intern("Base")) {
 	//	enviroment_op_dump(envSmt, 0);
 	}
-	(*out_op_len) = envSmt->buf->source->length;
+	(*out_op_len) = envSmt->buf->source_vec->length;
 	call_context_delete(cctx);
 	smt->env = envSmt;
 	mt->u.script_method = smt;
