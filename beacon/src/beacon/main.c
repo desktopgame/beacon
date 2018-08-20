@@ -14,8 +14,6 @@
 #include "env/script_context.h"
 #include "util/string_pool.h"
 #include "util/mem.h"
-#include "util/logger.h"
-
 
 
 /**
@@ -70,7 +68,6 @@ int main_cl(int argc, char *argv[]) {
 
 int main(int argc, char *argv[]) {
 	string_pool_init();
-	logger_init();
 	il_print_layout_hide(true);
 	//mem_break(16066);
 	//コマンドライン引数を解析して実行
@@ -78,7 +75,6 @@ int main(int argc, char *argv[]) {
 	//設定を元に戻す
 	//string_pool_dump(stdout);
 	string_pool_destroy();
-	logger_destroy();
 	mem_dump();
 	mem_destroy();
 	return ret;

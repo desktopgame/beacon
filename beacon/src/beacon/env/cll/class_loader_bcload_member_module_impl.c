@@ -24,7 +24,6 @@
 #include "../../thread/thread.h"
 #include "../../vm/symbol_entry.h"
 #include "../../util/text.h"
-#include "../../util/logger.h"
 #include "../lazy_resolve.h"
 #include "../resolve/default_eqoperator_resolve.h"
 #include "../resolve/default_noteqoperator_resolve.h"
@@ -372,8 +371,6 @@ bool CLBC_method_decl(class_loader* self, il_type* iltype, type* tp, il_method* 
 		vector_push(parameter_list, param);
 	}
 	CLBC_parameter_list(self, scope, ilmethod->parameter_list, method->parameter_list, cctx);
-	//NOTE:クラスの登録が終わったらオペコードを作成する
-	LOG("%s@%s", string_pool_ref2str(type_name(tp)), string_pool_ref2str(method->namev));
 	type_add_method(tp, method);
 	call_context_delete(cctx);
 	return true;
