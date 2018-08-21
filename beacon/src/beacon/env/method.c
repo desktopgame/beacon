@@ -164,9 +164,9 @@ string_view method_mangle(method* self) {
 		if(gt->core_type == NULL) {
 			//ジェネリックの場合は methodname_c0 のように
 			//何番目の型変数であるかを入れる
-			if(gt->tag == generic_type_tag_class) {
+			if(gt->tag == generic_type_tag_class_T) {
 				string_buffer_append(ret, 'c');
-			} else if(gt->tag == generic_type_tag_method) {
+			} else if(gt->tag == generic_type_tag_method_T) {
 				string_buffer_append(ret, 'm');
 			} else {
 				assert(false);

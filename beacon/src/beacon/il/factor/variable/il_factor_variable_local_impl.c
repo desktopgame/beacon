@@ -162,15 +162,15 @@ static void il_factor_variable_local_load_property(il_factor_variable_local * se
 static void set_gtype(il_factor_variable_local * self, generic_type* gt) {
 	//generic_type* gt = f->gtype;
 	//virtual_type vt = f->vtype;
-	if(gt->tag == generic_type_tag_none) {
+	if(gt->tag == generic_type_tag_none_T) {
 		self->gt = gt;
-	} else if(gt->tag == generic_type_tag_class) {
+	} else if(gt->tag == generic_type_tag_class_T) {
 		self->gt = generic_type_new(NULL);
-		self->gt->tag = generic_type_tag_class;
+		self->gt->tag = generic_type_tag_class_T;
 		self->gt->virtual_type_index = gt->virtual_type_index;
-	} else if(gt->tag == generic_type_tag_method) {
+	} else if(gt->tag == generic_type_tag_method_T) {
 		self->gt = generic_type_new(NULL);
-		self->gt->tag = generic_type_tag_method;
+		self->gt->tag = generic_type_tag_method_T;
 		self->gt->virtual_type_index = gt->virtual_type_index;
 	}
 }

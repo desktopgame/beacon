@@ -73,7 +73,7 @@ generic_type* il_factor_member_op_eval(il_factor_member_op* self, enviroment* en
 	}
 //	XSTREQ(self->name, "charArray");
 	assert(self->fact != NULL);
-	if(self->f->gtype->tag == generic_type_tag_none) {
+	if(self->f->gtype->tag == generic_type_tag_none_T) {
 		generic_type* a = self->f->gtype;
 		return a;
 	}

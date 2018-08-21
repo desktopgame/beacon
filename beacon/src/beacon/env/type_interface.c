@@ -28,7 +28,7 @@ generic_type* type_init_generic(type* self, int counts) {
 		self->generic_self = generic_type_new(self);
 		for (int i = 0; i < counts; i++) {
 			generic_type* arg = generic_type_new(NULL);
-			arg->tag = generic_type_tag_class;
+			arg->tag = generic_type_tag_class_T;
 			arg->virtual_type_index = i;
 			arg->u.type_ = self;
 			generic_type_addargs(self->generic_self, arg);

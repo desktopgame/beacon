@@ -80,7 +80,7 @@ generic_type* il_factor_invoke_eval(il_factor_invoke * self, enviroment * env, c
 	generic_type* rgtp = il_factor_invoke_return_gtype(self);
 	generic_type* ret = NULL;
 	//型変数をそのまま返す場合
-	if(rgtp->tag != generic_type_tag_none) {
+	if(rgtp->tag != generic_type_tag_none_T) {
 		resolve_non_default(self, env, cctx);
 		ret = self->resolved;
 	//型変数ではない型を返す
@@ -127,17 +127,17 @@ static void resolve_non_default(il_factor_invoke * self, enviroment * env, call_
 	}
 	generic_type* receivergType = il_factor_eval(self->receiver, env, cctx);
 	generic_type* rgtp = il_factor_invoke_return_gtype(self);
-	if(rgtp->tag == generic_type_tag_class) {
+	if(rgtp->tag == generic_type_tag_class_T) {
 		//レシーバの実体化された型の中で、
 		//メソッドの戻り値 'T' が表す位置に対応する実際の型を取り出す。
 		generic_type* instanced_type = (generic_type*)vector_at(receivergType->type_args_list, rgtp->virtual_type_index);
 		self->resolved = generic_type_clone(instanced_type);
-		self->resolved->tag = generic_type_tag_class;
-	} else if(rgtp->tag == generic_type_tag_method) {
+		self->resolved->tag = generic_type_tag_class_T;
+	} else if(rgtp->tag == generic_type_tag_method_T) {
 		//メソッドに渡された型引数を参照する
 		generic_type* instanced_type = (generic_type*)vector_at(self->type_args, rgtp->virtual_type_index);
 		self->resolved = generic_type_clone(instanced_type);
-		self->resolved->tag = generic_type_tag_class;
+		self->resolved->tag = generic_type_tag_class_T;
 	}
 }
 

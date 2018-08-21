@@ -70,7 +70,7 @@ generic_type* il_factor_invoke_static_eval(il_factor_invoke_static * self, envir
 		return NULL;
 	}
 	generic_type* rgtp = self->m->return_gtype;
-	if(rgtp->tag != generic_type_tag_none) {
+	if(rgtp->tag != generic_type_tag_none_T) {
 		resolve_non_default(self, env, cctx);
 		return self->resolved;
 	} else {
@@ -107,7 +107,7 @@ static void resolve_non_default(il_factor_invoke_static * self, enviroment * env
 	generic_type* rgtp = self->m->return_gtype;
 	generic_type* instanced_type = (generic_type*)vector_at(self->type_args, rgtp->virtual_type_index);
 	self->resolved = generic_type_new(instanced_type->core_type);
-	self->resolved->tag = generic_type_tag_method;
+	self->resolved->tag = generic_type_tag_method_T;
 	self->resolved->virtual_type_index = rgtp->virtual_type_index;
 }
 

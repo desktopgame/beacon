@@ -104,15 +104,15 @@ static void resolve_non_default(il_factor_invoke_bound * self, enviroment * env,
 	}
 	type* tp = NULL;
 	generic_type* rgtp  = il_factor_invoke_bound_return_gtype(self, cctx);
-	if(rgtp->tag == generic_type_tag_class) {
+	if(rgtp->tag == generic_type_tag_class_T) {
 		self->resolved = generic_type_new(NULL);
-		self->resolved->tag = generic_type_tag_class;
+		self->resolved->tag = generic_type_tag_class_T;
 		self->resolved->virtual_type_index = rgtp->virtual_type_index;
-	} else if(rgtp->tag == generic_type_tag_method) {
+	} else if(rgtp->tag == generic_type_tag_method_T) {
 		//メソッドに渡された型引数を参照する
 		generic_type* instanced_type = (generic_type*)vector_at(self->type_args, rgtp->virtual_type_index);
 		self->resolved = generic_type_new(instanced_type->core_type);
-		self->resolved->tag = generic_type_tag_class;
+		self->resolved->tag = generic_type_tag_class_T;
 	}
 }
 
@@ -296,7 +296,7 @@ static generic_type* il_factor_invoke_bound_evalImpl(il_factor_invoke_bound * se
 		cfr->u.instance_invoke.typeargs = self->type_args;
 	}
 
-	if(il_factor_invoke_bound_return_gtype(self, cctx)->tag != generic_type_tag_none) {
+	if(il_factor_invoke_bound_return_gtype(self, cctx)->tag != generic_type_tag_none_T) {
 		resolve_non_default(self, env, cctx);
 		assert(self->resolved != NULL);
 		call_context_pop(cctx);
