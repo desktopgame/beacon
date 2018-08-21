@@ -221,7 +221,6 @@ static void update_loc() {
 
 <INITIAL>"namespace"		{ return (NAMESPACE); }
 <INITIAL>"abstract"			{ return (ABSTRACT); }
-<INITIAL>"override"			{ return (OVERRIDE); }
 <INITIAL>"class"			{ return (CLASS); }
 <INITIAL>"enum"				{ return (ENUM); }
 <INITIAL>"interface"		{ return (INTERFACE); }

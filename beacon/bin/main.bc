@@ -1,27 +1,12 @@
-namespace samples {
-	class Super {
-		public:
-		def new() {
-		}
-
-		def call() -> Void {
-			printLine("Super");
-		}
-	}
-	class Sub : Super {
-		public:
-		def new() {
-		}
-
-		def call() -> Void {
-			printLine("Sub");
-		}
-
-		def superCall() -> Void {
-			super.call();
-		}
+def tak(Int x, Int y, Int z) -> Int {
+	if x <= y {
+		return y;
+	} else {
+		return tak(
+			tak(x-1, y, z),
+        	tak(y-1, z, x),
+        	tak(z-1, x, y)
+		);
 	}
 }
-var sub = new samples::Sub();
-sub.call();
-sub.superCall();
+printLine(tak(12, 6, 0));
