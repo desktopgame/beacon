@@ -107,23 +107,6 @@ static void CLBC_class_impl(class_loader * self, il_type * iltype, type * tp, na
 	CL_ERROR(self);
 	tp->state = tp->state | type_impl;
 	CLBC_check_class(self, iltype, tp, scope);
-	//コンストラクタで初期化されていない final フィールドの確認
-	//これはコンストラクタが生成されてからでないといけない
-	class_* cls = TYPE2CLASS(tp);
-	for(int i=0; i<cls->field_list->length; i++) {
-		field* fi = vector_at(cls->field_list, i);
-		//インスタンス定数が
-		//フィールドでもコンストラクタでも初期化されない
-		if(!modifier_is_static(fi->modifier) &&
-			modifier_is_final(fi->modifier) &&
-			!fi->not_initialized_at_ctor) {
-			bc_error_throw(bcerror_not_initial_field_not_initialized_at_ctor_T,
-				string_pool_ref2str(type_name(tp)),
-				string_pool_ref2str(fi->namev)
-			);
-			break;
-		}
-	}
 }
 
 static void CLBC_interface_decl(class_loader * self, il_type * iltype, type * tp, namespace_ * scope) {
@@ -282,8 +265,15 @@ static void CLBC_check_class(class_loader * self, il_type * iltype, type * tp, n
 	//実装されていないインターフェイスを確認する
 	method* outiMethod = NULL;
 	if(tp->tag == type_class_T &&
-	  !class_interface_implement_valid(TYPE2CLASS(tp), &outiMethod)) {
+	  !class_interface_method_implement_valid(TYPE2CLASS(tp), &outiMethod)) {
 		bc_error_throw(bcerror_not_implement_interface_T, string_pool_ref2str(tp->u.class_->namev), string_pool_ref2str(outiMethod->namev));
+		return;
+	}
+	//実装されていないプロパティを確認する
+	property* outiProperty = NULL;
+	if(tp->tag == type_class_T &&
+	  !class_interface_property_implement_valid(TYPE2CLASS(tp), &outiProperty)) {
+		bc_error_throw(bcerror_not_implement_abstract_method_T, string_pool_ref2str(tp->u.class_->namev), string_pool_ref2str(outiProperty->namev));
 		return;
 	}
 	//実装されていない抽象メソッドを確認する
@@ -291,6 +281,7 @@ static void CLBC_check_class(class_loader * self, il_type * iltype, type * tp, n
 	if(tp->tag == type_class_T &&
 	   !class_abstract_class_implement_valid(TYPE2CLASS(tp), &outaMethod)) {
 		bc_error_throw(bcerror_not_implement_abstract_method_T, string_pool_ref2str(tp->u.class_->namev), string_pool_ref2str(outaMethod->namev));
+		return;
 	   }
 	//重複するプロパティを確認する
 	property* outProp = NULL;
@@ -308,6 +299,7 @@ static void CLBC_check_class(class_loader * self, il_type * iltype, type * tp, n
 			string_pool_ref2str(tp->u.class_->namev),
 			string_pool_ref2str(outField->namev)
 		);
+		return;
 	}
 	//メソッドの重複するパラメータ名を検出する
 	method* out_overwrap_m = NULL;
@@ -318,6 +310,7 @@ static void CLBC_check_class(class_loader * self, il_type * iltype, type * tp, n
 			string_pool_ref2str(out_overwrap_m->namev),
 			string_pool_ref2str(out_overwrap_mname)
 		);
+		return;
 	}
 	//コンストラクタの重複するパラメータ名を検出する
 	constructor* out_overwrap_c = NULL;
@@ -328,6 +321,7 @@ static void CLBC_check_class(class_loader * self, il_type * iltype, type * tp, n
 			"new",
 			string_pool_ref2str(out_overwrap_cname)
 		);
+		return;
 	}
 	//クラスの重複する型パラメータ名を検出する
 	string_view out_overwrap_tpname;
@@ -336,6 +330,7 @@ static void CLBC_check_class(class_loader * self, il_type * iltype, type * tp, n
 			string_pool_ref2str(type_name(tp)),
 			string_pool_ref2str(out_overwrap_tpname)
 		);
+		return;
 	}
 	//メソッドの重複する型パラメータ名を検出する
 	method* out_overwrap_tpm = NULL;
@@ -346,6 +341,24 @@ static void CLBC_check_class(class_loader * self, il_type * iltype, type * tp, n
 			string_pool_ref2str(out_overwrap_tpm->namev),
 			string_pool_ref2str(out_overwrap_tpmname)
 		);
+		return;
+	}
+	//コンストラクタで初期化されていない final フィールドの確認
+	//これはコンストラクタが生成されてからでないといけない
+	class_* cls = TYPE2CLASS(tp);
+	for(int i=0; i<cls->field_list->length; i++) {
+		field* fi = vector_at(cls->field_list, i);
+		//インスタンス定数が
+		//フィールドでもコンストラクタでも初期化されない
+		if(!modifier_is_static(fi->modifier) &&
+			modifier_is_final(fi->modifier) &&
+			!fi->not_initialized_at_ctor) {
+			bc_error_throw(bcerror_not_initial_field_not_initialized_at_ctor_T,
+				string_pool_ref2str(type_name(tp)),
+				string_pool_ref2str(fi->namev)
+			);
+			return;
+		}
 	}
 }
 

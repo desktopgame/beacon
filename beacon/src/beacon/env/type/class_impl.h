@@ -267,7 +267,15 @@ vector* class_generic_type_list_to_interface_list(vector* list);
  * @param out
  * @return
  */
-bool class_interface_implement_valid(class_* cls, method** out);
+bool class_interface_method_implement_valid(class_* cls, method** out);
+/**
+ * クラスが全てのプロパティを正しく実装しているなら true.
+ * インターフェイスを一つも持っていないなら 常にtrue です。
+ * @param cls
+ * @param out
+ * @return
+ */
+bool class_interface_property_implement_valid(class_* cls, struct property** out);
 
 /**
  * クラスが親の抽象メソッドを正しく実装しているなら true.

@@ -421,7 +421,7 @@ vector* class_generic_type_list_to_interface_list(vector* list) {
 	return ret;
 }
 
-bool class_interface_implement_valid(class_* cls, method** out) {
+bool class_interface_method_implement_valid(class_* cls, method** out) {
 	(*out) = NULL;
 	bool contains = true;
 	#if defined(DEBUG)
@@ -452,6 +452,42 @@ bool class_interface_implement_valid(class_* cls, method** out) {
 	vector_delete(inter_list, vector_deleter_null);
 	vector_delete(methods, vector_deleter_null);
 	return contains;
+}
+
+bool class_interface_property_implement_valid(class_* cls, property** out) {
+	(*out) = NULL;
+	//全ての実装インターフェイスを取得する
+	vector* gimpl_list = class_generic_interface_list(cls);
+	if(gimpl_list->length == 0 || cls->is_abstract) {
+		vector_delete(gimpl_list, vector_deleter_null);
+		return true;
+	}
+	//全てのインターフェイスに
+	for(int i=0;i<gimpl_list->length; i++) {
+		generic_type* e = vector_at(gimpl_list, i);
+		interface_* inter = TYPE2INTERFACE(GENERIC2TYPE(e));
+		bool valid = true;
+		for(int j=0; j<inter->prop_list->length; j++) {
+			int temp = 0;
+			property* decl = vector_at(inter->prop_list, j);
+			property* impl = class_find_property(cls, decl->namev, &temp);
+			if(temp == -1) {
+				(*out) = decl;
+				return false;
+			} else {
+				if(generic_type_distance(decl->gtype, impl->gtype, NULL) != 0) {
+					(*out) = decl;
+					return false;
+				}
+				if(decl->set->access != impl->set->access ||
+				   decl->get->access != impl->get->access) {
+					(*out) = decl;
+					return false;
+				}
+			}
+		}
+	}
+	return true;
 }
 
 bool class_abstract_class_implement_valid(class_* cls, method** out) {

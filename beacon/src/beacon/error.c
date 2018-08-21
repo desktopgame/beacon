@@ -281,10 +281,10 @@ void bc_error_vthrow(bc_error_id id, va_list ap) {
 			fmt = "abstract method should be defined on the abstract class: %s";
 			break;
 		case bcerror_not_implement_interface_T:
-			fmt = "invalid implement: %s @%s";
+			fmt = "must be implement: %s @%s";
 			break;
 		case bcerror_not_implement_abstract_method_T:
-			fmt = "invalid implement: %s @%s";
+			fmt = "must be implement: %s @%s";
 			break;
 		case bcerror_private_operator_T:
 			fmt = "must be public a access level of operator: %s";

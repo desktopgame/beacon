@@ -1,4 +1,4 @@
-namespace err120 {
+namespace err118 {
 	interface AInterface {
 		public:
 		property Int name {
@@ -7,11 +7,7 @@ namespace err120 {
 		}
 	}
 	class AClass : AInterface {
-		public:
-		property Int name {
-			private defset;
-			defget;
-		}
+		
 	}
 }
 printLine("sample");
