@@ -1,4 +1,4 @@
-namespace run123 {
+namespace run122 {
 	class Person {
 		public:
 		def new() {
@@ -7,6 +7,5 @@ namespace run123 {
 		String name;
 	}
 }
-run123::Person p = new run123::Person();
-p = null;
+run122::Person p = new run122::Person();
 p.name.printLine();

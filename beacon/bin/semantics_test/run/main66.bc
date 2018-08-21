@@ -8,7 +8,7 @@ namespace run66 {
 		}
 
 		def static print() -> Void {
-			AAA.name.printLine();
+			Console.writeLine(AAA.name);
 			AAA.age.printLine();
 		}
 	}

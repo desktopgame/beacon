@@ -4,7 +4,7 @@ namespace run123 {
 		def new() {
 		}
 
-		String name;
+		property String name { defset; defget; }
 	}
 }
 run123::Person p = new run123::Person();

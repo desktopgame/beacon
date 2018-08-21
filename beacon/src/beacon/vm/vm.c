@@ -26,6 +26,7 @@
 #include "line_range.h"
 #include "defer_context.h"
 #include "../env/heap.h"
+#include "../env/exception.h"
 #include "../env/generic_type.h"
 #include "yield_context.h"
 //proto
@@ -45,6 +46,7 @@ static void remove_from_parent(frame* self);
 static void frame_markStatic(field* item);
 static void frame_markallImpl(frame* self);
 static void vm_delete_defctx(vector_item e);
+static bool throw_npe(frame* self, object* o);
 
 //Stack Top
 #define STI(a) stack_topi(a)
@@ -686,6 +688,9 @@ static void vm_run(frame * self, enviroment * env, int pos, int deferStart) {
 			{
 				object* assignValue = (object*)vector_pop(self->value_stack);
 				object* assignTarget = (object*)vector_pop(self->value_stack);
+				if(throw_npe(self, assignTarget)) {
+					break;
+				}
 				assert(assignTarget->tag == object_ref_T);
 				int fieldIndex = (int)enviroment_source_at(env, ++IDX);
 				vector_assign(assignTarget->u.field_vec, fieldIndex, assignValue);
@@ -695,6 +700,9 @@ static void vm_run(frame * self, enviroment * env, int pos, int deferStart) {
 			case op_get_field:
 			{
 				object* sourceObject = (object*)vector_pop(self->value_stack);
+				if(throw_npe(self, sourceObject)) {
+					break;
+				}
 				//assert(sourceObject->tag == object_ref_T);
 				//int absClsIndex = (int)enviroment_source_at(env, ++i);
 				int fieldIndex = (int)enviroment_source_at(env, ++IDX);
@@ -728,6 +736,9 @@ static void vm_run(frame * self, enviroment * env, int pos, int deferStart) {
 			{
 				object* assignValue = (object*)vector_pop(self->value_stack);
 				object* assignTarget = (object*)vector_pop(self->value_stack);
+				if(throw_npe(self, assignTarget)) {
+					break;
+				}
 				assert(assignTarget->tag == object_ref_T);
 				int propIndex = (int)enviroment_source_at(env, ++IDX);
 				property* pro = class_get_property(TYPE2CLASS(GENERIC2TYPE(assignTarget->gtype)), propIndex);
@@ -743,6 +754,9 @@ static void vm_run(frame * self, enviroment * env, int pos, int deferStart) {
 			case op_get_property:
 			{
 				object* sourceObject = (object*)vector_pop(self->value_stack);
+				if(throw_npe(self, sourceObject)) {
+					break;
+				}
 				int propIndex = (int)enviroment_source_at(env, ++IDX);
 				property* pro = class_get_property(TYPE2CLASS(GENERIC2TYPE(sourceObject->gtype)), propIndex);
 				//プロパティを実行
@@ -910,6 +924,9 @@ static void vm_run(frame * self, enviroment * env, int pos, int deferStart) {
 				int methodIndex = (int)enviroment_source_at(env, ++IDX);
 				type* tp = vector_at(ctx->type_vec, absClassIndex);
 				object* o = (object*)vector_top(self->value_stack);
+				if(throw_npe(self, o)) {
+					break;
+				}
 				method* m = class_get_impl_method(o->gtype->core_type->u.class_, tp, methodIndex);
 				call_context* cctx = sg_thread_context();
 				method_execute(m, self, env);
@@ -932,6 +949,9 @@ static void vm_run(frame * self, enviroment * env, int pos, int deferStart) {
 			{
 				int index = (int)enviroment_source_at(env, ++IDX);
 				object* o = (object*)vector_top(self->value_stack);
+				if(throw_npe(self, o)) {
+					break;
+				}
 				method* m = class_get_method(o, index);
 				method_execute(m, self, env);
 				break;
@@ -942,6 +962,9 @@ static void vm_run(frame * self, enviroment * env, int pos, int deferStart) {
 				//オブジェクトから直接型を取り出してしまうと具象すぎる
 				int index = (int)enviroment_source_at(env, ++IDX);
 				object* o = (object*)vector_top(self->value_stack);
+				if(throw_npe(self, o)) {
+					break;
+				}
 				class_* cl = TYPE2CLASS(o->gtype->core_type);
 				if(self->receiver != NULL) {
 					cl = TYPE2CLASS(self->receiver);
@@ -1283,4 +1306,12 @@ static bool stack_popb(frame* self) {
 static void vm_delete_defctx(vector_item e) {
 	defer_context* defctx = (defer_context*)e;
 	defer_context_delete(defctx);
+}
+
+static bool throw_npe(frame* self, object* o) {
+	if(o->tag == object_null_T) {
+		vm_native_throw(self, exception_new_simplef(self, "NullPointerException"));
+		return true;
+	}
+	return false;
 }
