@@ -1,0 +1,7 @@
+namespace err113 {
+	interface AInterface {
+		public:
+		Int a;
+	}
+}
+printLine("sample");

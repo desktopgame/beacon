@@ -49,11 +49,20 @@ void CLIL_member_list(class_loader* self, il_type* current, ast* amember, access
 }
 
 void CLIL_field(class_loader* self, il_type* current, ast* afield, access_level level) {
-	assert(current->tag == iltype_class_T);
+	//assert(current->tag == iltype_class_T);
 	ast* amodifier = ast_first(afield);
 	ast* atype_name = ast_second(afield);
 	ast* aaccess_name = ast_at(afield, 2);
 	ast* afact = ast_at(afield, 3);
+	//インターフェイスはフィールドを持てない
+	if(current->tag == iltype_interface_T) {
+		bc_error_throw(
+			bcerror_interface_has_field_T,
+			string_pool_ref2str(current->u.interface_->namev),
+			string_pool_ref2str(aaccess_name->u.stringv_value)
+		);
+		return;
+	}
 	il_field* v = il_field_new(aaccess_name->u.stringv_value);
 	CLIL_generic_cache(atype_name, v->fqcn);
 	bool error;
@@ -125,11 +134,19 @@ void CLIL_method(class_loader* self, il_type* current, ast* amethod, access_leve
 }
 
 void CLIL_ctor(class_loader* self, il_type* current, ast* aconstructor, access_level level) {
-	assert(current->tag == iltype_class_T);
+	//assert(current->tag == iltype_class_T);
 	ast* aparams = ast_at(aconstructor, 0);
 	ast* achain = ast_at(aconstructor, 1);
 	ast* abody = ast_at(aconstructor, 2);
 	il_constructor_chain* ilchain = NULL;
+	//インターフェイスはコンストラクタを持てない
+	if(current->tag == iltype_interface_T) {
+		bc_error_throw(
+			bcerror_interface_has_ctor_T,
+			string_pool_ref2str(current->u.interface_->namev)
+		);
+		return;
+	}
 	if (!ast_is_blank(achain)) {
 		ast* achain_type = ast_first(achain);
 		ast* aargs = ast_second(achain);
@@ -146,11 +163,20 @@ void CLIL_ctor(class_loader* self, il_type* current, ast* aconstructor, access_l
 }
 
 void CLIL_operator_overload(class_loader* self, il_type* current, ast* aopov, access_level level) {
-	assert(aopov->tag == ast_operator_overload_T);
+	//assert(aopov->tag == ast_operator_overload_T);
 	operator_type ot = aopov->u.operator_value;
 	ast* aparam_list = ast_at(aopov, 0);
 	ast* abody = ast_at(aopov, 1);
 	ast* areturn = ast_at(aopov, 2);
+	//インターフェイスはコンストラクタを持てない
+	if(current->tag == iltype_interface_T) {
+		bc_error_throw(
+			bcerror_interface_has_opov_T,
+			string_pool_ref2str(current->u.interface_->namev),
+			operator_tostring(ot)
+		);
+		return;
+	}
 	il_operator_overload* ilopov = il_operator_overload_new(ot);
 	ilopov->access = level;
 	CLIL_parameter_list(self, ilopov->parameter_list, aparam_list);

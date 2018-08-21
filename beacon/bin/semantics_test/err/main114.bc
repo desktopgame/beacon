@@ -1,8 +1,7 @@
-namespace err115 {
+namespace err114 {
 	interface AInterface {
 		public:
-		operator +(Int a) -> Int {
-			return 0;
+		def new() {
 		}
 	}
 }

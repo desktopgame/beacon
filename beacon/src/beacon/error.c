@@ -201,6 +201,16 @@ void bc_error_vthrow(bc_error_id id, va_list ap) {
 			fmt = "can't assign to invoke: %s";
 			break;
 
+		case bcerror_interface_has_field_T:
+			fmt = "interface can't has not field: %s#%s";
+			break;
+		case bcerror_interface_has_ctor_T:
+			fmt = "interface can't has not constructor: %s#new";
+			break;
+		case bcerror_interface_has_opov_T:
+			fmt = "interface can't has not operator: %s#%s";
+			break;
+
 		case bcerror_invoke_bound_undefined_method_T:
 			fmt = "undefined method: %s#%s";
 			break;
