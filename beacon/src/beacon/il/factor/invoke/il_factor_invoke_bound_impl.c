@@ -225,7 +225,7 @@ static void il_factor_invoke_bound_generate_method(il_factor_invoke_bound* self,
 		opcode_buf_add(env->buf,(vector_item) self->index);
 	} else {
 		opcode_buf_add(env->buf,(vector_item) op_this);
-		if(self->u.m->access == access_private) {
+		if(self->u.m->access == access_private_T) {
 			opcode_buf_add(env->buf, (vector_item)op_invokespecial);
 			opcode_buf_add(env->buf, (vector_item)self->index);
 		} else {

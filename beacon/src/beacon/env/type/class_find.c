@@ -101,10 +101,10 @@ bool class_contains_sfield(class_* self, field* f) {
 
 bool class_accessible_field(class_* self, field* f) {
 	assert(f != NULL);
-	if(f->access == access_public) {
+	if(f->access == access_public_T) {
 		return true;
 	}
-	if(f->access == access_private) {
+	if(f->access == access_private_T) {
 		return self == TYPE2CLASS(f->parent);
 	}
 	type* ty = self->parent;
@@ -135,10 +135,10 @@ bool class_contains_sproperty(class_* self, property* p) {
 
 bool class_accessible_property(class_* self, property* p) {
 	assert(p != NULL);
-	if(p->access == access_public) {
+	if(p->access == access_public_T) {
 		return true;
 	}
-	if(p->access == access_private) {
+	if(p->access == access_private_T) {
 		return self == TYPE2CLASS(p->parent);
 	}
 	type* ty = self->parent;
@@ -159,10 +159,10 @@ bool class_accessible_property(class_* self, property* p) {
 
 bool class_accessible_property_accessor(class_* self, property_body* pb) {
 	assert(pb != NULL);
-	if(pb->access == access_public) {
+	if(pb->access == access_public_T) {
 		return true;
 	}
-	if(pb->access == access_private) {
+	if(pb->access == access_private_T) {
 		return self == TYPE2CLASS(pb->parent->parent);
 	}
 	type* ty = self->parent;

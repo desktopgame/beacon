@@ -11,7 +11,7 @@
 field * field_new(string_view namev) {
 	field* ret = (field*)MEM_MALLOC(sizeof(field));
 	ret->namev = namev;
-	ret->access = access_public;
+	ret->access = access_public_T;
 	ret->modifier = modifier_none;
 	ret->parent = NULL;
 	ret->static_value = NULL;

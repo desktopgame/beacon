@@ -157,7 +157,7 @@ void class_add_property(class_* self, property* p) {
 	#endif
 	if(p->is_short) {
 		field* f = field_new(string_pool_concat("$propery.", p->namev));
-		f->access = access_private;
+		f->access = access_private_T;
 		f->gtype = p->gtype;
 		f->modifier = p->modifier;
 		f->parent = self->parent;
@@ -561,7 +561,7 @@ bool class_method_type_parameter_valid(class_* self, method** out_method, string
 static void class_create_vtable_top(class_* self) {
 	for (int i = 0; i < self->method_list->length; i++) {
 		method* m = (method*)vector_at(self->method_list, i);
-		if(m->access != access_private &&
+		if(m->access != access_private_T &&
 		   !modifier_is_static(m->modifier)) {
 			vtable_add(self->vt, m);
 		}
@@ -579,7 +579,7 @@ static void class_create_vtable_override(class_* self) {
 	vtable_copy(self->super_class->core_type->u.class_->vt, self->vt);
 	for (int i = 0; i < self->method_list->length; i++) {
 		method* m = (method*)vector_at(self->method_list, i);
-		if(m->access != access_private &&
+		if(m->access != access_private_T &&
 		   !modifier_is_static(m->modifier)) {
 			vtable_replace(self->vt, m, cctx);
 		}

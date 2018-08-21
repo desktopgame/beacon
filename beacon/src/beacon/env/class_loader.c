@@ -281,7 +281,7 @@ static void class_loader_load_toplevel_function(class_loader* self) {
 		namespace_* loc = call_context_namespace(cctx);
 		env->context_ref = self;
 		sm->env = env;
-		m->access = access_private;
+		m->access = access_private_T;
 		m->u.script_method = sm;
 		m->parent = worldT;
 		//戻り値を指定

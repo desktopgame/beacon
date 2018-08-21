@@ -643,15 +643,15 @@ modifier_type_T
 access_level_T
 	: PUBLIC
 	{
-		$$ = access_public;
+		$$ = access_public_T;
 	}
 	| PRIVATE
 	{
-		$$ = access_private;
+		$$ = access_private_T;
 	}
 	| PROTECTED
 	{
-		$$ = access_protected;
+		$$ = access_protected_T;
 	}
 	;
 

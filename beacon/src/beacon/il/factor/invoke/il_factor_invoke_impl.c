@@ -247,7 +247,7 @@ static void il_factor_invoke_generate_method(il_factor_invoke* self, enviroment*
 		opcode_buf_add(env->buf, (vector_item)self->index);
 	} else {
 		assert(!modifier_is_static(self->u.m->modifier));
-		if(self->u.m->access == access_private) {
+		if(self->u.m->access == access_private_T) {
 			opcode_buf_add(env->buf, (vector_item)op_invokespecial);
 			opcode_buf_add(env->buf, (vector_item)self->index);
 		} else {

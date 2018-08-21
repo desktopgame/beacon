@@ -6,9 +6,9 @@
  * アクセスレベルを定義する列挙型.
  */
 typedef enum access_level {
-	access_public = 0,
-	access_protected,
-	access_private,
+	access_public_T = 0,
+	access_protected_T,
+	access_private_T,
 } access_level;
 
 /**

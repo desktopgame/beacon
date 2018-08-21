@@ -784,7 +784,7 @@ static void CLBC_chain_super(class_loader * self, il_type * iltype, type * tp, i
 
 static bool CLBC_test_operator_overlaod(class_loader* self, il_type* iltype, type* tp, operator_overload* opov) {
 	//アクセスレベルを確認する
-	if(opov->access != access_public) {
+	if(opov->access != access_public_T) {
 		bc_error_throw(bcerror_private_operator, type_name(tp));
 		return true;
 	}
@@ -865,7 +865,7 @@ static void CLBC_default_eqoperator_overload(class_loader* self, type* tp) {
 	//これによって == を自動実装する
 	int methodPos = 0;
 	operator_overload* opov_eq = operator_overload_new(operator_eq);
-	opov_eq->access = access_public;
+	opov_eq->access = access_public_T;
 	//戻り値読み込み
 	opov_eq->parent = tp;
 	opov_eq->return_gtype = TYPE_BOOL->generic_self;
@@ -916,7 +916,7 @@ static void CLBC_default_noteqoperator_overload(class_loader* self, type* tp) {
 	//これによって != を自動実装する
 	int methodPos = 0;
 	operator_overload* opov_noteq = operator_overload_new(operator_noteq);
-	opov_noteq->access = access_public;
+	opov_noteq->access = access_public_T;
 	//戻り値読み込み
 	opov_noteq->parent = tp;
 	opov_noteq->return_gtype = TYPE_BOOL->generic_self;

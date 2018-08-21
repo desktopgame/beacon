@@ -172,7 +172,7 @@ static void CLBC_enum(class_loader * self, il_type * iltype, namespace_ * parent
 		string_view str = (string_view)vector_at(ilenum->item_vec, i);
 		field* f = field_new(str);
 		f->modifier = modifier_static;
-		f->access = access_public;
+		f->access = access_public_T;
 		f->static_value = NULL;
 		f->gtype = TYPE_INT->generic_self;
 		//virtual_type_nongeneric_init(&f->vtype, GENERIC_INT);

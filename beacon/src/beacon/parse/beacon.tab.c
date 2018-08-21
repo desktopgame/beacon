@@ -2995,7 +2995,7 @@ yyreduce:
   case 110:
 #line 645 "beacon.y" /* yacc.c:1663  */
     {
-		(yyval.access_level_value) = access_public;
+		(yyval.access_level_value) = access_public_T;
 	}
 #line 3001 "beacon.tab.c" /* yacc.c:1663  */
     break;
@@ -3003,7 +3003,7 @@ yyreduce:
   case 111:
 #line 649 "beacon.y" /* yacc.c:1663  */
     {
-		(yyval.access_level_value) = access_private;
+		(yyval.access_level_value) = access_private_T;
 	}
 #line 3009 "beacon.tab.c" /* yacc.c:1663  */
     break;
@@ -3011,7 +3011,7 @@ yyreduce:
   case 112:
 #line 653 "beacon.y" /* yacc.c:1663  */
     {
-		(yyval.access_level_value) = access_protected;
+		(yyval.access_level_value) = access_protected_T;
 	}
 #line 3017 "beacon.tab.c" /* yacc.c:1663  */
     break;

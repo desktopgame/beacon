@@ -17,7 +17,7 @@ constructor * constructor_new() {
 	ret->parent = NULL;
 	ret->env = NULL;
 	ret->parameter_list = vector_new();
-	ret->access = access_public;
+	ret->access = access_public_T;
 	return ret;
 }
 

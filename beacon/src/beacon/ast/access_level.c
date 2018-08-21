@@ -3,15 +3,15 @@
 
 void access_print(access_level level) {
 	switch (level) {
-		case access_public:
+		case access_public_T:
 			printf("public");
 			break;
 
-		case access_private:
+		case access_private_T:
 			printf("private");
 			break;
 
-		case access_protected:
+		case access_protected_T:
 			printf("protected");
 			break;
 

@@ -308,13 +308,13 @@ bool meta_method_access_valid(method* m, call_context* cctx) {
 	class_* context = call_context_class(cctx);
 	//privateメソッドなのに現在のコンテキストではない
 	if(context != NULL &&
-		m->access == access_private &&
+		m->access == access_private_T &&
 		TYPE2CLASS(m->parent) != context) {
 		return false;
 	}
 	//protectedメソッドなのにそのサブクラスではない
 	if(context != NULL &&
-		m->access == access_protected &&
+		m->access == access_protected_T &&
 		class_distance(TYPE2CLASS(m->parent), context) < 0) {
 		return false;
 	}
@@ -325,13 +325,13 @@ bool meta_ctor_access_valid(constructor* ctor, call_context* cctx) {
 	class_* context = call_context_class(cctx);
 	//privateメソッドなのに現在のコンテキストではない
 	if(context != NULL &&
-		ctor->access == access_private &&
+		ctor->access == access_private_T &&
 		TYPE2CLASS(ctor->parent) != context) {
 		return false;
 	}
 	//protectedメソッドなのにそのサブクラスではない
 	if(context != NULL &&
-		ctor->access == access_protected &&
+		ctor->access == access_protected_T &&
 		class_distance(TYPE2CLASS(ctor->parent), context) < 0) {
 		return false;
 	}
