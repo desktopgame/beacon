@@ -22,7 +22,7 @@ typedef enum il_factor_type {
 	ilfactor_string_T,
 	ilfactor_unary_op_T,
 	ilfactor_binary_op_T,
-	ilfactor_as_Tsign_op_T,
+	ilfactor_assign_T,
 	ilfactor_variable_T,
 	ilfactor_this_T,
 	ilfactor_super_T,

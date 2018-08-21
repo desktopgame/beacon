@@ -41,7 +41,7 @@ void il_factor_dump(il_factor * self, int depth) {
 		case ilfactor_binary_op_T:
 			il_factor_binary_op_dump(self->u.binary_, depth);
 			break;
-		case ilfactor_as_Tsign_op_T:
+		case ilfactor_assign_T:
 			il_factor_assign_op_dump(self->u.assign_, depth);
 			break;
 		case ilfactor_this_T:
@@ -120,7 +120,7 @@ void il_factor_generate(il_factor * self, enviroment* env, call_context* cctx) {
 		case ilfactor_binary_op_T:
 			il_factor_binary_op_generate(self->u.binary_, env, cctx);
 			break;
-		case ilfactor_as_Tsign_op_T:
+		case ilfactor_assign_T:
 			il_factor_assign_op_generate(self->u.assign_, env, cctx);
 			break;
 		case ilfactor_this_T:
@@ -204,7 +204,7 @@ void il_factor_load(il_factor * self, enviroment * env, call_context* cctx) {
 		case ilfactor_binary_op_T:
 			il_factor_binary_op_load(self->u.binary_, env, cctx);
 			break;
-		case ilfactor_as_Tsign_op_T:
+		case ilfactor_assign_T:
 			il_factor_assign_op_load(self->u.assign_, env, cctx);
 			break;
 		case ilfactor_this_T:
@@ -286,7 +286,7 @@ generic_type* il_factor_eval(il_factor * self, enviroment * env, call_context* c
 		case ilfactor_binary_op_T:
 			ret = il_factor_binary_op_eval(self->u.binary_, env, cctx);
 			break;
-		case ilfactor_as_Tsign_op_T:
+		case ilfactor_assign_T:
 			ret = il_factor_assign_op_eval(self->u.assign_, env, cctx);
 			break;
 		case ilfactor_this_T:
@@ -361,7 +361,7 @@ char* il_factor_tostr(il_factor* self, enviroment* env) {
 			return il_factor_unary_op_tostr(self->u.unary_, env);
 		case ilfactor_binary_op_T:
 			return il_factor_binary_op_tostr(self->u.binary_, env);
-		case ilfactor_as_Tsign_op_T:
+		case ilfactor_assign_T:
 			return NULL;
 		case ilfactor_this_T:
 			return il_factor_this_tostr(self->u.this_, env);
@@ -461,7 +461,7 @@ void il_factor_delete(il_factor * self) {
 		case ilfactor_binary_op_T:
 			il_factor_binary_op_delete(self->u.binary_);
 			break;
-		case ilfactor_as_Tsign_op_T:
+		case ilfactor_assign_T:
 			il_factor_assign_op_delete(self->u.assign_);
 			break;
 		case ilfactor_this_T:

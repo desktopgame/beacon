@@ -23,7 +23,7 @@ static void generate_assign_to_variable(il_factor_assign_op* self, enviroment* e
 static void generate_assign_to_variable_local(il_factor_assign_op* self, enviroment* env, call_context* cctx);
 
 il_factor* il_factor_wrap_assign(il_factor_assign_op* self) {
-	il_factor* ret = il_factor_new(ilfactor_as_Tsign_op_T);
+	il_factor* ret = il_factor_new(ilfactor_assign_T);
 	ret->u.assign_ = self;
 	return ret;
 }
