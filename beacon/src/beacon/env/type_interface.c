@@ -290,7 +290,7 @@ generic_type* type_baseline(type* abstract, type* concrete) {
 	return NULL;
 }
 
-interface_* type_interface_T_valid(type* self) {
+interface_* type_interface_valid(type* self) {
 	vector* impl_list = type_implement_list(self);
 	for(int i=0; i<impl_list->length; i++) {
 		generic_type* gE = vector_at(impl_list, i);
