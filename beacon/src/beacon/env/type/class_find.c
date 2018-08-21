@@ -539,6 +539,43 @@ vector* class_generic_interface_list(class_* self) {
 	return ret;
 }
 
+vector* class_generic_interface_tree(class_* self) {
+	class_* ptr = self;
+	vector* ret = vector_new();
+	do {
+		vector* v = class_generic_interface_list(ptr);
+		vector_merge(v, ret);
+		vector_delete(v, vector_deleter_null);
+		if(ptr->super_class == NULL) {
+			break;
+		}
+		ptr = TYPE2CLASS(GENERIC2TYPE(ptr->super_class));
+	} while(ptr != NULL);
+	return ret;
+}
+
+vector* class_interface_list(class_* self) {
+	vector* ret = vector_new();
+	vector* c = class_generic_interface_list(self);
+	for(int i=0; i<c->length; i++) {
+		generic_type* gt = vector_at(c, i);
+		vector_push(ret, TYPE2INTERFACE(GENERIC2TYPE(gt)));
+	}
+	vector_delete(c, vector_deleter_null);
+	return ret;
+}
+
+vector* class_interface_tree(class_* self) {
+	vector* ret = vector_new();
+	vector* c = class_generic_interface_tree(self);
+	for(int i=0; i<c->length; i++) {
+		generic_type* gt = vector_at(c, i);
+		vector_push(ret, TYPE2INTERFACE(GENERIC2TYPE(gt)));
+	}
+	vector_delete(c, vector_deleter_null);
+	return ret;
+}
+
 generic_type* class_find_interface_type(class_* self, type* tinter, generic_type** out_baseline) {
 	assert(tinter->tag == type_interface_T);
 	(*out_baseline) = NULL;

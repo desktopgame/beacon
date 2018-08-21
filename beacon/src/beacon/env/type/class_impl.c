@@ -411,41 +411,6 @@ void class_delete(class_ * self) {
 	MEM_FREE(self);
 }
 
-vector* class_generic_type_list_to_class_list(vector* list) {
-	vector* ret = vector_new();
-	for(int i=0; i<list->length; i++) {
-		generic_type* gE = (generic_type*)vector_at(list, i);
-		vector_push(ret, TYPE2CLASS(gE->core_type));
-	}
-	return ret;
-}
-
-vector* class_generic_type_list_to_interface_list_tree(class_* self) {
-	vector* ret = vector_new();
-	class_* ptr = self;
-	do {
-		vector* line = class_generic_type_list_to_interface_list(ptr->impl_list);
-		for(int i=0; i<line->length; i++) {
-			vector_push(ret, NON_NULL(vector_at(line, i)));
-		}
-		vector_delete(line, vector_deleter_null);
-		if(ptr->super_class == NULL) {
-			break;
-		}
-		ptr = ptr->super_class->core_type->u.class_;
-	} while(ptr != NULL);
-	return ret;
-}
-
-vector* class_generic_type_list_to_interface_list(vector* list) {
-	vector* ret = vector_new();
-	for(int i=0; i<list->length; i++) {
-		generic_type* gE = NON_NULL((generic_type*)vector_at(list, i));
-		vector_push(ret, NON_NULL(TYPE2INTERFACE(gE->core_type)));
-	}
-	return ret;
-}
-
 //private
 static void class_create_vtable_top(class_* self) {
 	for (int i = 0; i < self->method_list->length; i++) {

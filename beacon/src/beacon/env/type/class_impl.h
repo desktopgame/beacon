@@ -246,26 +246,4 @@ void class_unlink(class_* self);
  * @param self
  */
 void class_delete(class_* self);
-
-/**
- * ジェネリックタイプの一覧をクラスの一覧に変換します.
- * @param list
- * @return
- */
-vector* class_generic_type_list_to_class_list(vector* list);
-
-/**
- * クラスを Object まで遡り、全てのインターフェイスを返します.
- * @param self
- * @return
- */
-vector* class_generic_type_list_to_interface_list_tree(class_* self);
-
-/**
- * ジェネリックタイプの一覧をインターフェイスの一覧に変換します.
- * @param list
- * @return
- */
-vector* class_generic_type_list_to_interface_list(vector* list);
-
 #endif // !SIGNAL_ENV_CLASS_H
