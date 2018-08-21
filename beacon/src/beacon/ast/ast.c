@@ -10,7 +10,7 @@
 static void ast_print_indent(int depth);
 static void ast_print_tree_impl(ast* self, int depth);
 static void ast_delete_impl(ast* self);
-static modifier_type ast_cast_T_to_modifierImpl(ast * self, bool* error);
+static modifier_type ast_cast_to_modifierImpl(ast * self, bool* error);
 static void ast_delete_self(vector_item item);
 
 void ast_compile_entry(ast * self) {
@@ -312,7 +312,7 @@ void ast_print(ast* self) {
 		case ast_inferenced_type_init_T: p("var init");
 		case ast_stmt_throw_T: p("throw");
 		case ast_stmt_try_T: p("try");
-		case ast_stmt_catch_T_list: p("catch list");
+		case ast_stmt_catch_list_T: p("catch list");
 		case ast_stmt_catch_T: p("catch");
 		case ast_yield_return_T: p("yield return");
 		case ast_yield_break_T: p("yield break");
@@ -379,28 +379,28 @@ bool ast_is_stmt(ast* self) {
 		case ast_stmt_assert_T:
 		case ast_stmt_try_T:
 		case ast_stmt_catch_T:
-		case ast_stmt_catch_T_list:
+		case ast_stmt_catch_list_T:
 		case ast_stmt_defer_T:
 			return true;
 	}
 	return false;
 }
 
-access_level ast_cast_T_to_access(ast * self) {
+access_level ast_cast_to_access(ast * self) {
 	assert(ast_is_access(self));
 	return self->u.access_value;
 }
 
-modifier_type ast_cast_T_to_modifier(ast * self, bool* error) {
+modifier_type ast_cast_to_modifier(ast * self, bool* error) {
 	(*error) = false;
 	if(self->tag == ast_mod_Tifier_list) {
-		return ast_cast_T_to_modifierImpl(self, error);
+		return ast_cast_to_modifierImpl(self, error);
 	}
 	assert(ast_is_modifier(self));
 	return self->u.modifier_value;
 }
 
-constructor_chain_type ast_cast_T_to_chain_type(ast * self) {
+constructor_chain_type ast_cast_to_chain_type(ast * self) {
 	switch (self->tag) {
 		case ast_constructor_chain_this_T:
 			return chain_type_this_T;
@@ -437,7 +437,7 @@ static void ast_delete_impl(ast* self) {
 	MEM_FREE(self);
 }
 
-static modifier_type ast_cast_T_to_modifierImpl(ast * self, bool* error) {
+static modifier_type ast_cast_to_modifierImpl(ast * self, bool* error) {
 	int ret = -1;
 	for(int i=0; i<self->vchildren->length; i++) {
 		if((*error)) {
@@ -445,10 +445,10 @@ static modifier_type ast_cast_T_to_modifierImpl(ast * self, bool* error) {
 		}
 		//フラグを合体させる
 		if(ret == -1) {
-			ret = ast_cast_T_to_modifier(ast_at(self, i), error);
+			ret = ast_cast_to_modifier(ast_at(self, i), error);
 		} else {
 			//追加の属性がすでに含まれているかどうか
-			modifier_type add = ast_cast_T_to_modifier(ast_at(self, i), error);
+			modifier_type add = ast_cast_to_modifier(ast_at(self, i), error);
 			if((ret & add) > 0) {
 				(*error) = true;
 			}

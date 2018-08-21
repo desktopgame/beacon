@@ -98,7 +98,7 @@ typedef enum ast_tag {
 	ast_import_path_T,
 
 	ast_class_decl_unit_T,
-	//ast_class_decl_T_list,
+	//ast_class_decl_list,
 	ast_abstract_class_decl_T,
 	ast_class_decl_T,
 	ast_enum_decl_T,
@@ -169,7 +169,7 @@ typedef enum ast_tag {
 
 	ast_stmt_try_T,
 	ast_stmt_catch_T,
-	ast_stmt_catch_T_list,
+	ast_stmt_catch_list_T,
 	ast_stmt_throw_T,
 
 	ast_stmt_assert_T,
@@ -401,7 +401,7 @@ bool ast_is_stmt(ast* self);
  * @param self
  * @return
  */
-access_level ast_cast_T_to_access(ast* self);
+access_level ast_cast_to_access(ast* self);
 
 /**
  * 指定の要素が修飾子を表す要素なら列挙型に変換します.
@@ -409,12 +409,12 @@ access_level ast_cast_T_to_access(ast* self);
  * @param error
  * @return
  */
-modifier_type ast_cast_T_to_modifier(ast* self, bool* error);
+modifier_type ast_cast_to_modifier(ast* self, bool* error);
 
 /**
  * 指定の要素が連鎖を表す要素なら列挙型に変換します.
  * @param self
  * @return
  */
-constructor_chain_type ast_cast_T_to_chain_type(ast* self);
+constructor_chain_type ast_cast_to_chain_type(ast* self);
 #endif // !SIGNAL_AST_AST_H

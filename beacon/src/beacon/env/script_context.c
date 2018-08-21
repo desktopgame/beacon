@@ -128,7 +128,7 @@ object* script_context_iintern(script_context* self, int i) {
 	numeric_map* cell = numeric_map_cell(self->n_int_map, i);
 	he->accept_blocking++;
 	if(cell == NULL) {
-		object* obj = object_int_T_new(i);
+		object* obj = object_int_new(i);
 		obj->paint = paint_onexit_T;
 		cell = numeric_map_put(self->n_int_map, i, obj);
 	}
@@ -149,13 +149,13 @@ void script_context_cache() {
 	   }
 	//正の数のキャッシュ
 	for(int i=0; i<100; i++) {
-		object* a = object_int_T_new(i);
+		object* a = object_int_new(i);
 		vector_push(self->pos_int_vec, a);
 		a->paint = paint_onexit_T;
 	}
 	//負の数のキャッシュ
 	for(int i=1; i<10; i++) {
-		object* a = object_int_T_new(-i);
+		object* a = object_int_new(-i);
 		vector_push(self->neg_int_vec, a);
 		a->paint = paint_onexit_T;
 	}

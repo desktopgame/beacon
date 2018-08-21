@@ -28,7 +28,7 @@ type* bc_string_type() {
 static void bc_string_nativeInit(method* parent, frame* fr, enviroment* env) {
 	object* self = vector_at(fr->ref_stack, 0);
 	//プログラムの中で ダブルクォート("HelloWorld") によって
-	//文字列が作成された場合には object_string_T_new() 
+	//文字列が作成された場合には object_string_new() 
 	//によって生成されます。
 	//こちらの場合では object#nativeSlotVec に C形式の文字列を格納します。
 	//これはコンストラクタによって String が作成された場合には

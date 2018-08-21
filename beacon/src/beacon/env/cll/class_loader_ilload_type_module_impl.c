@@ -20,7 +20,7 @@ static void CLIL_fqcn_cache_impl(ast* afqcn, fqcn_cache* fqcn, int level);
 static void CLIL_generic_cache_impl(ast* afqcn, generic_cache* dest);
 static void CLIL_generic_cache_inner(ast* atype_args, generic_cache* dest);
 static void CLIL_type_parameter_rule(struct class_loader* self, struct ast* asource, vector* dest);
-static void ast_fqcn_T_flatten(ast* afqcn, vector* dest);
+static void ast_fqcn_flatten(ast* afqcn, vector* dest);
 static void CLIL_argument_listImpl(class_loader* self, vector* list, ast* asource);
 
 void CLIL_fqcn_cache(ast* afqcn, fqcn_cache* fqcn) {
@@ -126,7 +126,7 @@ void CLIL_argument_list(class_loader* self, vector* list, ast* asource) {
 //private
 static void CLIL_fqcn_cache_impl(ast* afqcn, fqcn_cache* fqcn, int level) {
 	vector* v = vector_new();
-	ast_fqcn_T_flatten(afqcn, v);
+	ast_fqcn_flatten(afqcn, v);
 	for(int i=0; i<v->length; i++) {
 		string_view S = (string_view)vector_at(v, i);
 		if(i < v->length - 1) {
@@ -204,12 +204,12 @@ static void CLIL_type_parameter_rule(class_loader* self, ast* asource, vector* d
 	*/
 }
 
-static void ast_fqcn_T_flatten(ast* afqcn, vector* dest) {
+static void ast_fqcn_flatten(ast* afqcn, vector* dest) {
 	if(afqcn->tag == ast_fqcn_part_T) {
 		vector_push(dest, afqcn->u.stringv_value);
 	} else {
 		for(int i=0; i<afqcn->vchildren->length; i++) {
-			ast_fqcn_T_flatten(ast_at(afqcn, i), dest);
+			ast_fqcn_flatten(ast_at(afqcn, i), dest);
 		}
 	}
 }

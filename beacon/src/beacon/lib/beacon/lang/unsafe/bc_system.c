@@ -44,5 +44,5 @@ static void bc_system_nativeExec(method* parent, frame* fr, enviroment* env) {
 	object* cmd = vector_at(fr->ref_stack, 1);
 	const char* str = bc_string_raw(cmd)->text;
 	int ret = system(str);
-	vector_push(fr->value_stack, object_int_T_get(ret));
+	vector_push(fr->value_stack, object_int_get(ret));
 }

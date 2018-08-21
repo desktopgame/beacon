@@ -53,8 +53,8 @@ static void bc_exception_nativeInit(method* parent, frame* fr, enviroment* env) 
 		//スタックトレースを作成
 		//assert(lineno >= 0);
 		vector* args = vector_new();
-		vector_push(args, object_string_T_new(temp->context_ref->context_ref->filename));
-		vector_push(args, object_int_T_new(lineno));
+		vector_push(args, object_string_new(temp->context_ref->context_ref->filename));
+		vector_push(args, object_int_new(lineno));
 		object* trace = class_new_instance(
 			stackTraceElementClass,
 			//ilctx,

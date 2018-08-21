@@ -70,12 +70,12 @@ static void bc_console_write(method* parent, frame* fr, enviroment* env) {
 
 static void bc_console_read(method* parent, frame* fr, enviroment* env) {
 	char c = getchar();
-	object* o = object_char_T_new(c);
+	object* o = object_char_new(c);
 	vector_push(fr->value_stack, o);
 }
 
 static void bc_console_readLine(method* parent, frame* fr, enviroment* env) {
 	char* s = text_gets();
-	object* o = object_string_T_new(s);
+	object* o = object_string_new(s);
 	vector_push(fr->value_stack, o);
 }

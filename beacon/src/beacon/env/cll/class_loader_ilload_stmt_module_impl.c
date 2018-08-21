@@ -276,7 +276,7 @@ static void CLIL_catch_list(class_loader* self, vector* dest, ast* asource) {
 		CLIL_body(self, ilcatch->statement_list, abody);
 		vector_push(dest, ilcatch);
 
-	} else if(asource->tag == ast_stmt_catch_T_list) {
+	} else if(asource->tag == ast_stmt_catch_list_T) {
 		for(int i=0; i<asource->vchildren->length; i++) {
 			CLIL_catch_list(self, dest, ast_at(asource, i));
 		}

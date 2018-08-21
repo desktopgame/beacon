@@ -111,7 +111,7 @@ ast* ast_new_catch(ast* stypename, string_view snamev, ast* abody) {
 }
 
 ast* ast_new_catch_list(ast* acatch, ast* acatch_list) {
-	ast* ret = ast_new(ast_stmt_catch_T_list);
+	ast* ret = ast_new(ast_stmt_catch_list_T);
 	ast_push(ret, acatch);
 	ast_push(ret, acatch_list);
 	return ret;

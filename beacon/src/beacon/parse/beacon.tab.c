@@ -636,7 +636,7 @@ static const char *const yytname[] =
   "constructor_chain", "constructor_chain_type_T",
   "constructor_chain_optional", "function_define", "method_define",
   "operator_define", "field_define", "prop_set", "prop_get", "prop_define",
-  "modifier_type_T_list", "modifier_type_T", "access_level_T",
+  "modifier_type_list", "modifier_type_T", "access_level_T",
   "ident_list", "parameter_list", "argument_list", "typename_group",
   "typename_list", "typename_T", "fqcn_part", "expression",
   "expression_nobrace", "lhs", "primary", "stmt_list", "stmt",

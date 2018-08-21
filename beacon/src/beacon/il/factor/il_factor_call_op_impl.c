@@ -120,7 +120,7 @@ void il_factor_call_op_delete(il_factor_call_op* self) {
 	MEM_FREE(self);
 }
 
-il_factor_call_op* il_factor_cast_call_T_op(il_factor* fact) {
+il_factor_call_op* il_factor_cast_call_op(il_factor* fact) {
 	assert(fact->type == ilfactor_call_op_T);
 	return fact->u.call_;
 }

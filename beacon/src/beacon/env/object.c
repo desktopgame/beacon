@@ -26,7 +26,7 @@ static void object_mark_coroutine(object* self);
 static int gObjectCount = 0;
 
 
-object * object_int_T_malloc(int i, const char* filename, int lineno) {
+object * object_int_malloc(int i, const char* filename, int lineno) {
 	object* ret = object_mallocImpl(object_int_T, filename, lineno);
 	ret->u.int_ = i;
 	ret->gtype = GENERIC_INT;
@@ -34,18 +34,18 @@ object * object_int_T_malloc(int i, const char* filename, int lineno) {
 	return ret;
 }
 
-object* object_int_T_get(int i) {
+object* object_int_get(int i) {
 	script_context* ctx = script_context_get_current();
 	script_context_cache();
 	if((i < -9) || i > 99) {
 		return script_context_iintern(ctx, i);
-		//return object_int_T_new(i);
+		//return object_int_new(i);
 	}
 	if(i < 0) { return (object*)vector_at(ctx->neg_int_vec, (-i) - 1); }
 	return (object*)vector_at(ctx->pos_int_vec, i);
 }
 
-object * object_double_T_malloc(double d, const char* filename, int lineno) {
+object * object_double_malloc(double d, const char* filename, int lineno) {
 	object* ret = object_mallocImpl(object_double_T, filename, lineno);
 	ret->u.double_ = d;
 	ret->gtype = GENERIC_DOUBLE;
@@ -53,7 +53,7 @@ object * object_double_T_malloc(double d, const char* filename, int lineno) {
 	return ret;
 }
 
-object* object_long_T_malloc(long l, const char* filename, int lineno) {
+object* object_long_malloc(long l, const char* filename, int lineno) {
 	object* ret = object_mallocImpl(object_long_T, filename, lineno);
 	ret->u.long_ = l;
 	ret->gtype = GENERIC_OBJECT;
@@ -61,7 +61,7 @@ object* object_long_T_malloc(long l, const char* filename, int lineno) {
 	return ret;
 }
 
-object * object_char_T_malloc(char c, const char* filename, int lineno) {
+object * object_char_malloc(char c, const char* filename, int lineno) {
 	object* ret = object_mallocImpl(object_char_T, filename, lineno);
 	ret->u.char_ = c;
 	ret->gtype = GENERIC_CHAR;
@@ -69,7 +69,7 @@ object * object_char_T_malloc(char c, const char* filename, int lineno) {
 	return ret;
 }
 
-object * object_string_T_malloc(const char * s, const char* filename, int lineno) {
+object * object_string_malloc(const char * s, const char* filename, int lineno) {
 	object* ret = object_mallocImpl(object_string_T, filename, lineno);
 	//ret->u.string_ = s;
 	ret->u.field_vec = vector_new();
@@ -77,7 +77,7 @@ object * object_string_T_malloc(const char * s, const char* filename, int lineno
 	ret->vptr = type_vtable(TYPE_STRING);
 
 	//配列を生成
-	object* arr = object_ref_T_malloc(filename, lineno);
+	object* arr = object_ref_malloc(filename, lineno);
 	//arr->tag = object_array_T;
 	type* arrType = bc_array_type();
 	type* strType = namespace_get_type(namespace_lang(), string_pool_intern("String"));
@@ -90,7 +90,7 @@ object * object_string_T_malloc(const char * s, const char* filename, int lineno
 	string_buffer* sb = string_buffer_new();
 	while ((*itr) != '\0') {
 		char e = (*itr);
-		vector_push(arr->native_slot_vec, object_char_T_malloc(e, filename, lineno));
+		vector_push(arr->native_slot_vec, object_char_malloc(e, filename, lineno));
 		itr++;
 		string_buffer_append(sb, e);
 	}
@@ -104,19 +104,19 @@ object * object_string_T_malloc(const char * s, const char* filename, int lineno
 	//Array#lengthを埋める
 	temp = 0;
 	class_find_field(arrType->u.class_, string_pool_intern("length"), &temp);
-	vector_assign(arr->u.field_vec, temp, object_int_T_new(sb->length));
+	vector_assign(arr->u.field_vec, temp, object_int_new(sb->length));
 	//C形式の文字列でも保存
 	vector_assign(ret->native_slot_vec, 0, sb);
 	return ret;
 }
 
-object * object_ref_T_malloc(const char* filename, int lineno) {
+object * object_ref_malloc(const char* filename, int lineno) {
 	object* ret= object_mallocImpl(object_ref_T, filename, lineno);
 	ret->u.field_vec = vector_malloc(filename, lineno);
 	return ret;
 }
 
-object * object_bool_T_get(bool b) {
+object * object_bool_get(bool b) {
 	return (b ? object_get_true() : object_get_false());
 }
 
@@ -174,11 +174,11 @@ object* object_copy(object * self) {
 	/*
 	object* ret = NULL;
 	if (self->tag == object_int_T) {
-		ret = object_int_T_new(self->u.int_);
+		ret = object_int_new(self->u.int_);
 	} else if (self->tag == object_double_T) {
-		ret = object_double_T_new(self->u.double_);
+		ret = object_double_new(self->u.double_);
 	} else if (self->tag == object_char_T) {
-		ret = object_char_T_new(self->u.char_);
+		ret = object_char_new(self->u.char_);
 	} else {
 		ret = self;
 	}
@@ -195,18 +195,18 @@ object* object_clone(object* self) {
 	}
 	object* ret = NULL;
 	if(self->tag == object_ref_T) {
-		ret = object_ref_T_new();
+		ret = object_ref_new();
 		ret->gtype = self->gtype;
 		ret->vptr = self->vptr;
 		ret->u.field_vec = self->u.field_vec;
 	} else if(self->tag == object_array_T) {
-		ret = object_ref_T_new();
+		ret = object_ref_new();
 		ret->gtype = self->gtype;
 		ret->vptr = self->vptr;
 		ret->native_slot_vec = self->native_slot_vec;
 		ret->u.field_vec = self->u.field_vec;
 	} else if(self->tag == object_string_T) {
-		ret = object_ref_T_new();
+		ret = object_ref_new();
 		ret->gtype = self->gtype;
 		ret->vptr = self->vptr;
 		ret->native_slot_vec = self->native_slot_vec;
@@ -343,36 +343,36 @@ long object_obj2long(object* self) {
 	return self->u.long_;
 }
 
-object* object_int_T2obj(int i) {
-	return object_int_T_new(i);
+object* object_int2obj(int i) {
+	return object_int_new(i);
 }
 
-object* object_double_T2obj(double d) {
-	return object_double_T_new(d);
+object* object_double2obj(double d) {
+	return object_double_new(d);
 }
 
-object* object_bool_T2obj(bool b) {
-	return object_bool_T_get(b);
+object* object_bool2obj(bool b) {
+	return object_bool_get(b);
 }
 
-object* object_char_T2obj(char c) {
-	return object_char_T_new(c);
+object* object_char2obj(char c) {
+	return object_char_new(c);
 }
 
-object* object_long_T2obj(long l) {
-	return object_long_T_new(l);
+object* object_long2obj(long l) {
+	return object_long_new(l);
 }
 
 object* object_default(generic_type* gt) {
 	object* a = object_get_null();
 	if (gt->core_type == TYPE_INT) {
-		a = object_int_T_get(0);
+		a = object_int_get(0);
 	} else if (gt->core_type == TYPE_DOUBLE) {
-		a = object_double_T_new(0.0);
+		a = object_double_new(0.0);
 	} else if (gt->core_type == TYPE_BOOL) {
-		a = object_bool_T_get(false);
+		a = object_bool_get(false);
 	} else if (gt->core_type == TYPE_CHAR) {
-		a = object_char_T_new('\0');
+		a = object_char_new('\0');
 	}
 	return a;
 }

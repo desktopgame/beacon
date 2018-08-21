@@ -10,11 +10,11 @@
 #define OBJ2CHAR(a) (object_obj2char(a))
 #define OBJ2LONG(a) (object_obj2long(a))
 
-#define INT2OBJ(a) (object_int_T2obj(a))
-#define DOUBLE2OBJ(a) (object_double_T2obj(a))
-#define BOOL2OBJ(a) (object_bool_T2obj(a))
-#define CHAR2OBJ(a) (object_char_T2obj(a))
-#define LONG2OBJ(a) (object_long_T2obj(a))
+#define INT2OBJ(a) (object_int2obj(a))
+#define DOUBLE2OBJ(a) (object_double2obj(a))
+#define BOOL2OBJ(a) (object_bool2obj(a))
+#define CHAR2OBJ(a) (object_char2obj(a))
+#define LONG2OBJ(a) (object_long2obj(a))
 
 struct generic_type;
 struct vtable;
@@ -84,61 +84,61 @@ typedef struct object {
  * @param i
  * @return
  */
-#define object_int_T_new(i) (object_int_T_malloc(i, __FILE__, __LINE__))
-object* object_int_T_malloc(int i, const char* filename, int lineno);
+#define object_int_new(i) (object_int_malloc(i, __FILE__, __LINE__))
+object* object_int_malloc(int i, const char* filename, int lineno);
 
 /**
  * 可能ならキャッシュを返します.
  * @param i
  * @return
  */
-object* object_int_T_get(int i);
+object* object_int_get(int i);
 
 /**
  * 浮動小数型のオブジェクトを作成します.
  * @param d
  * @return
  */
-#define object_double_T_new(d) (object_double_T_malloc(d, __FILE__, __LINE__))
-object* object_double_T_malloc(double d, const char* filename, int lineno);
+#define object_double_new(d) (object_double_malloc(d, __FILE__, __LINE__))
+object* object_double_malloc(double d, const char* filename, int lineno);
 
 /**
  * long型の値を作成します.
  * @param l
  * @return
  */
-#define object_long_T_new(l) (object_long_T_malloc(l, __FILE__, __LINE__))
-object* object_long_T_malloc(long l, const char* filename, int lineno);
+#define object_long_new(l) (object_long_malloc(l, __FILE__, __LINE__))
+object* object_long_malloc(long l, const char* filename, int lineno);
 
 /**
  * 文字型のオブジェクトを作成します.
  * @param c
  * @return
  */
-#define object_char_T_new(c) (object_char_T_malloc(c, __FILE__, __LINE__))
-object* object_char_T_malloc(char c, const char* filename, int lineno);
+#define object_char_new(c) (object_char_malloc(c, __FILE__, __LINE__))
+object* object_char_malloc(char c, const char* filename, int lineno);
 
 /**
  * 文字列型のオブジェクトを作成します.
  * @param s
  * @return
  */
-#define object_string_T_new(s) (object_string_T_malloc(s, __FILE__, __LINE__))
-object* object_string_T_malloc(const char* s, const char* filename, int lineno);
+#define object_string_new(s) (object_string_malloc(s, __FILE__, __LINE__))
+object* object_string_malloc(const char* s, const char* filename, int lineno);
 
 /**
  * 参照型のオブジェクトを作成します.
  * @return
  */
-#define object_ref_T_new() (object_ref_T_malloc(__FILE__, __LINE__))
-object* object_ref_T_malloc(const char* filename, int lineno);
+#define object_ref_new() (object_ref_malloc(__FILE__, __LINE__))
+object* object_ref_malloc(const char* filename, int lineno);
 
 /**
  * 真偽値型の値を参照します.
  * @param b
  * @return
  */
-object* object_bool_T_get(bool b);
+object* object_bool_get(bool b);
 
 /**
  * trueを参照します.
@@ -266,35 +266,35 @@ long object_obj2long(object* self);
  * @param i
  * @return
  */
-object* object_int_T2obj(int i);
+object* object_int2obj(int i);
 
 /**
  * Cからbeaconの Double へ変換します.
  * @param d
  * @return
  */
-object* object_double_T2obj(double d);
+object* object_double2obj(double d);
 
 /**
  * Cからbeaconの bool へ変換します.
  * @param b
  * @return
  */
-object* object_bool_T2obj(bool b);
+object* object_bool2obj(bool b);
 
 /**
  * Cからbeaconの char へ変換します.
  * @param c
  * @return
  */
-object* object_char_T2obj(char c);
+object* object_char2obj(char c);
 
 /**
  * Cからbeacon
  * @param l
  * @return
  */
-object* object_long_T2obj(long l);
+object* object_long2obj(long l);
 
 /**
  * 指定の型のデフォルト値を返します.

@@ -86,25 +86,25 @@ void enviroment_op_dump(enviroment * self, int depth) {
 
 int enviroment_add_constant_int(enviroment * self, int i) {
 	int len = self->constant_pool_vec->length;
-	enviroment_add_constant(self, object_int_T_new(i));
+	enviroment_add_constant(self, object_int_new(i));
 	return len;
 }
 
 int enviroment_add_constant_double(enviroment * self, double d) {
 	int len = self->constant_pool_vec->length;
-	enviroment_add_constant(self, object_double_T_new(d));
+	enviroment_add_constant(self, object_double_new(d));
 	return len;
 }
 
 int enviroment_add_constant_char(enviroment * self, char c) {
 	int len = self->constant_pool_vec->length;
-	enviroment_add_constant(self, object_char_T_new(c));
+	enviroment_add_constant(self, object_char_new(c));
 	return len;
 }
 
 int enviroment_add_constant_string(enviroment * self, string_view sv) {
 	int len = self->constant_pool_vec->length;
-	enviroment_add_constant(self, object_string_T_new(string_pool_ref2str(sv)));
+	enviroment_add_constant(self, object_string_new(string_pool_ref2str(sv)));
 	return len;
 }
 
