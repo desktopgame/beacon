@@ -119,7 +119,9 @@
 			"bc_array.h": "c",
 			"unistd.h": "c",
 			"class_find.h": "c",
-			"il_argument.h": "c"
+			"il_argument.h": "c",
+			"property_body.h": "c",
+			"operator_vt.h": "c"
 		},
 		"ruby.lint": {
 			"reek": true,

@@ -77,6 +77,7 @@ class_ * class_new(string_view namev) {
 	ret->vt_vec = vector_new();
 	ret->type_parameter_list = vector_new();
 	ret->vt = NULL;
+	ret->ovt = NULL;
 	ret->is_abstract = false;
 	ret->operator_overload_list = vector_new();
 	return ret;
@@ -237,6 +238,32 @@ void class_create_vtable(class_ * self) {
 	assert(self->vt->elements->length != 0);
 }
 
+void class_create_operator_vt(class_* self) {
+	if(self->ovt != NULL) {
+		return;
+	}
+	if(self->super_class != NULL) {
+		class_create_operator_vt(TYPE2CLASS(GENERIC2TYPE(self->super_class)));
+	}
+	self->ovt = operator_vt_new();
+	if(self->super_class == NULL) {
+		for(int i=0; i<self->operator_overload_list->length; i++) {
+			operator_overload* opov = vector_at(self->operator_overload_list, i);
+			vector_push(self->ovt->vec, opov);
+		}
+	} else {
+		operator_vt* super_vt = TYPE2CLASS(GENERIC2TYPE(self->super_class))->ovt;
+		for(int i=0; i<super_vt->vec->length; i++) {
+			operator_overload* opov = vector_at(super_vt->vec, i);
+			vector_push(self->ovt->vec, opov);
+		}
+		for(int i=0; i<self->operator_overload_list->length; i++) {
+			operator_overload* opov = vector_at(self->operator_overload_list, i);
+			operator_vt_replace(self->ovt, opov);
+		}
+	}
+}
+
 int class_count_fieldall(class_ * self) {
 	class_* pt = self;
 	int sum = 0;
@@ -375,6 +402,7 @@ void class_unlink(class_ * self) {
 	vector_delete(self->prop_list, class_delete_property);
 	vector_delete(self->sprop_list, class_delete_property);
 	vtable_delete(self->vt);
+	operator_vt_delete(self->ovt);
 	vector_delete(self->vt_vec, class_vtable_vec_delete);
 }
 

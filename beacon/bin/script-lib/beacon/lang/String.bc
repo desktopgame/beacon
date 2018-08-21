@@ -91,6 +91,27 @@ namespace beacon::lang {
 				offset += 1;
 			}
 		}
+
+		operator ==(String a) -> Bool {
+			var alen = a.length();
+			if(length() != alen) {
+				return false;
+			}
+			var offset = 0;
+			while(offset < alen) {
+				var ac = a.charAt(offset);
+				var bc = charAt(offset);
+				if(ac != bc) {
+					return false;
+				}
+				offset += 1;
+			}
+			return true;
+		}
+
+		operator !=(String a) -> Bool {
+			return !(this == a);
+		}
 		private:
 		def native nativeInit() -> Void;
 	}

@@ -299,7 +299,7 @@ operator_overload* meta_gfind_operator_default_eq(vector* opov_vec, int* outInde
 operator_overload* meta_gfind_operator_default_noteq(vector* opov_vec, int* outIndex) {
 	vector* gargs = vector_new();
 	vector_push(gargs, TYPE_OBJECT->generic_self);
-	operator_overload* ret = meta_gfind_operator(opov_vec, operator_not_Teq_T, gargs, outIndex);
+	operator_overload* ret = meta_gfind_operator(opov_vec, operator_not_eq_T, gargs, outIndex);
 	vector_delete(gargs, vector_deleter_null);
 	return ret;
 }

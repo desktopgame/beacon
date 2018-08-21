@@ -11,6 +11,7 @@
 #include "../../il/call_context.h"
 #include "../../util/numeric_map.h"
 #include "../../util/string_pool.h"
+#include "../operator_vt.h"
 //#include "../access_domain.h"
 #include <stdint.h>
 #include <stdbool.h>
@@ -52,6 +53,7 @@ typedef struct class_ {
 	vector* vt_vec;
 	//vector* static_fieldval_vec;
 	vtable* vt;
+	operator_vt* ovt;
 	bool is_abstract;
 } class_;
 #include "class_find.h"
@@ -167,6 +169,11 @@ int class_distance(class_* super, class_* sub);
  * @param self
  */
 void class_create_vtable(class_* self);
+/**
+ * このクラスの operator_Vt を、現在のメソッド一覧に基づいて作成します.
+ * @param self
+ */
+void class_create_operator_vt(class_* self);
 
 /**
  * このクラスとその親全てに定義されたフィールドの合計を返します.

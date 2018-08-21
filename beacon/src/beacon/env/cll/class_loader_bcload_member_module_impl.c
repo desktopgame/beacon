@@ -599,7 +599,7 @@ void CLBC_operator_overloads_decl(class_loader* self, il_type* iltype, type* tp,
 			break;
 		}
 	}
-	CLBC_default_operator_overload(self, tp);
+	//CLBC_default_operator_overload(self, tp);
 }
 
 void CLBC_operator_overloads_impl(class_loader* self, il_type* iltype, type* tp, namespace_* scope) {
@@ -846,8 +846,8 @@ static bool CLBC_test_operator_overlaod(class_loader* self, il_type* iltype, typ
 }
 
 static void CLBC_default_operator_overload(class_loader* self, type* tp) {
-	CLBC_default_eqoperator_overload(self, tp);
-	CLBC_default_noteqoperator_overload(self, tp);
+//	CLBC_default_eqoperator_overload(self, tp);
+//	CLBC_default_noteqoperator_overload(self, tp);
 }
 
 static void CLBC_default_eqoperator_overload(class_loader* self, type* tp) {
@@ -892,10 +892,10 @@ static void CLBC_default_eqoperator_overload(class_loader* self, type* tp) {
 	//equalsが見つからないのであとで解決する
 	opcode_buf_add(env->buf, (vector_item)op_invokevirtual_lazy);
 	lazy_int* li = opcode_buf_lazy(env->buf, -1);
-	lazy_resolve* resolve = lazy_resolve_new(resolve_default_eqoperator_T);
-	resolve->u.def_eqoperator->lazyi_ref = li;
-	resolve->u.def_eqoperator->type_ref = tp;
-	vector_push(self->lazy_resolve_vec, resolve);
+//	lazy_resolve* resolve = lazy_resolve_new(resolve_default_eqoperator_T);
+//	resolve->u.def_eqoperator->lazyi_ref = li;
+//	resolve->u.def_eqoperator->type_ref = tp;
+//	vector_push(self->lazy_resolve_vec, resolve);
 	opcode_buf_add(env->buf, (vector_item)li);
 	opcode_buf_add(env->buf, (vector_item)op_return);
 	opov_eq->env = env;
@@ -915,7 +915,7 @@ static void CLBC_default_noteqoperator_overload(class_loader* self, type* tp) {
 	//equals(Object a)を検索する
 	//これによって != を自動実装する
 	int methodPos = 0;
-	operator_overload* opov_noteq = operator_overload_new(operator_not_Teq_T);
+	operator_overload* opov_noteq = operator_overload_new(operator_not_eq_T);
 	opov_noteq->access = access_public_T;
 	//戻り値読み込み
 	opov_noteq->parent = tp;

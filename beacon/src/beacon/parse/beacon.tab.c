@@ -2736,7 +2736,7 @@ yyreduce:
   case 76:
 #line 480 "beacon.y" /* yacc.c:1663  */
     {
-		(yyval.ast_value) = ast_new_operator_overload(operator_not_Teq_T, (yyvsp[-4].ast_value), (yyvsp[0].ast_value), (yyvsp[-1].ast_value));
+		(yyval.ast_value) = ast_new_operator_overload(operator_not_eq_T, (yyvsp[-4].ast_value), (yyvsp[0].ast_value), (yyvsp[-1].ast_value));
 	}
 #line 2742 "beacon.tab.c" /* yacc.c:1663  */
     break;
@@ -3464,7 +3464,7 @@ yyreduce:
   case 169:
 #line 904 "beacon.y" /* yacc.c:1663  */
     {
-		(yyval.ast_value) = ast_new_explicit_bioperator((yyvsp[-5].ast_value), operator_not_Teq_T, (yyvsp[-1].ast_value));
+		(yyval.ast_value) = ast_new_explicit_bioperator((yyvsp[-5].ast_value), operator_not_eq_T, (yyvsp[-1].ast_value));
 	}
 #line 3470 "beacon.tab.c" /* yacc.c:1663  */
     break;

@@ -34,6 +34,14 @@ namespace beacon::lang {
 			return Object.nativeReferenceEquals(a, b);
 		}
 
+		operator ==(Object a) -> Bool {
+			return Object.referenceEquals(this, a);
+		}
+
+		operator !=(Object a) -> Bool {
+			return !(Object.referenceEquals(this, a));
+		}
+
 		private:
 		def native nativeToString() -> String;
 

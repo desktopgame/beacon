@@ -1,0 +1,26 @@
+namespace run104 {
+	class OpOv {
+		public:
+		def new() {
+		}
+
+		operator +(String a) -> String {
+			printLine("A");
+			return "A";
+		}
+	}
+	class OpOv2 : OpOv {
+		public:
+		def new() {
+		}
+
+		operator +(String a) -> String {
+			printLine("B");
+			return "B";
+		}
+	}
+}
+run104::OpOv a = new run104::OpOv();
+run104::OpOv2 b = new run104::OpOv2();
+assert (a + "") == "A";
+assert (b + "") == "B";

@@ -77,7 +77,7 @@ static il_factor* CLIL_factorImpl(class_loader* self, ast* source) {
 	} else if (source->tag == ast_equal_T) {
 		return il_factor_wrap_binary(CLIL_binary(self, source, operator_eq_T));
 	} else if (source->tag == ast_not_Tequal_T) {
-		return il_factor_wrap_binary(CLIL_binary(self, source, operator_not_Teq_T));
+		return il_factor_wrap_binary(CLIL_binary(self, source, operator_not_eq_T));
 	} else if (source->tag == ast_gt_T) {
 		return il_factor_wrap_binary(CLIL_binary(self, source, operator_gt_T));
 	} else if (source->tag == ast_ge_T) {

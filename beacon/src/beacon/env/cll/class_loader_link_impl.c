@@ -88,6 +88,7 @@ static void CLBC_class_impl(class_loader * self, il_type * iltype, type * tp, na
 	const char* tyname = string_pool_ref2str(type_name(tp));
 	#endif
 	class_create_vtable(tp->u.class_);
+	class_create_operator_vt(tp->u.class_);
 	CL_ERROR(self);
 	CLBC_fields_impl(self, scope, tp, iltype->u.class_->field_list, (TYPE2CLASS(tp))->field_list);
 	CLBC_fields_impl(self, scope, tp, iltype->u.class_->sfield_list, (TYPE2CLASS(tp))->sfield_list);

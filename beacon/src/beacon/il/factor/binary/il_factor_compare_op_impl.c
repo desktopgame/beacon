@@ -81,7 +81,7 @@ static opcode operator_to_iopcode(operator_type type) {
 		case operator_lt_T: return op_ilt;
 		case operator_le_T: return op_ile;
 		case operator_eq_T: return op_ieq;
-		case operator_not_Teq_T: return op_inoteq;
+		case operator_not_eq_T: return op_inoteq;
 	}
 	assert(false);
 }
@@ -93,7 +93,7 @@ static opcode operator_to_dopcode(operator_type type) {
 		case operator_lt_T: return op_dlt;
 		case operator_le_T: return op_dle;
 		case operator_eq_T: return op_deq;
-		case operator_not_Teq_T: return op_dnoteq;
+		case operator_not_eq_T: return op_dnoteq;
 	}
 	assert(false);
 }
@@ -104,7 +104,7 @@ static opcode operator_to_copcode(operator_type type) {
 		case operator_lt_T: return op_clt;
 		case operator_le_T: return op_cle;
 		case operator_eq_T: return op_ceq;
-		case operator_not_Teq_T: return op_cnoteq;
+		case operator_not_eq_T: return op_cnoteq;
 	}
 	assert(false);
 }

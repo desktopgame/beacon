@@ -423,8 +423,9 @@ method * class_get_impl_method(class_ * self, type * interType, int interMIndex)
 operator_overload* class_gfind_operator_overload(class_* self, operator_type type, vector* args, enviroment* env, call_context* cctx, int* outIndex) {
 	(*outIndex) = -1;
 	operator_overload* ret = NULL;
-	for(int i=0; i<self->operator_overload_list->length; i++) {
-		operator_overload* operator_ov = vector_at(self->operator_overload_list, i);
+	class_create_operator_vt(self);
+	for(int i=0; i<self->ovt->vec->length; i++) {
+		operator_overload* operator_ov = vector_at(self->ovt->vec, i);
 		if(operator_ov->type != type) {
 			continue;
 		}
@@ -481,7 +482,7 @@ operator_overload* class_argfind_operator_overload(class_* self, operator_type t
 }
 
 operator_overload* class_get_operator_overload(class_* self, int index) {
-	return vector_at(self->operator_overload_list, index);
+	return vector_at(self->ovt->vec, index);
 }
 
 vector* class_find_methods_tree(class_* self, method* m) {

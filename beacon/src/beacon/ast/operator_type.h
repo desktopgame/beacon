@@ -34,7 +34,7 @@ typedef enum operator_type {
 	operator_logic_and_T,
 
 	operator_eq_T,
-	operator_not_Teq_T,
+	operator_not_eq_T,
 
 	operator_gt_T,
 	operator_ge_T,

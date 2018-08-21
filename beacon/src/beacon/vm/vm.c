@@ -978,7 +978,11 @@ static void vm_run(frame * self, enviroment * env, int pos, int deferStart) {
 				int index = (int)enviroment_source_at(env, ++IDX);
 				object* o = (object*)vector_top(self->value_stack);
 				class_* cl = TYPE2CLASS(o->gtype->core_type);
-				operator_overload* operator_ov = (operator_overload*)vector_at(cl->operator_overload_list, index);
+				#if defined(DEBUG)
+				char* clname = string_pool_ref2str(cl->namev);
+				#endif
+				class_create_operator_vt(cl);
+				operator_overload* operator_ov = (operator_overload*)vector_at(cl->ovt->vec, index);
 				operator_overload_execute(operator_ov, self, env);
 				break;
 			}

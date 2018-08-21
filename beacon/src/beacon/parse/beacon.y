@@ -478,7 +478,7 @@ operator_define
 	}
 	| OPERATOR NOTEQUAL LRB parameter_list RRB ARROW typename_T scope_optional
 	{
-		$$ = ast_new_operator_overload(operator_not_Teq_T, $4, $8, $7);
+		$$ = ast_new_operator_overload(operator_not_eq_T, $4, $8, $7);
 	}
 	//| &
 	| OPERATOR BIT_OR LRB parameter_list RRB ARROW typename_T scope_optional
@@ -902,7 +902,7 @@ expression_nobrace
 	}
 	| expression DOT NOTEQUAL LRB expression RRB
 	{
-		$$ = ast_new_explicit_bioperator($1, operator_not_Teq_T, $5);
+		$$ = ast_new_explicit_bioperator($1, operator_not_eq_T, $5);
 	}
 	| expression DOT BIT_OR LRB expression RRB
 	{
