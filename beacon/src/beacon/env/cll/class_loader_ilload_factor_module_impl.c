@@ -89,15 +89,15 @@ static il_factor* CLIL_factorImpl(class_loader* self, ast* source) {
 		//operator(= += -= *= /= %=)
 	} else if (source->tag == ast_as_Tsign_T) {
 		return il_factor_wrap_assign(CLIL_assign(self, source));
-	} else if (source->tag == ast_add_T_assign) {
+	} else if (source->tag == ast_add_assign_T) {
 		return il_factor_wrap_assign(CLIL_assign_arithmetic(self, source, operator_add));
-	} else if (source->tag == ast_sub_T_assign) {
+	} else if (source->tag == ast_sub_assign_T) {
 		return il_factor_wrap_assign(CLIL_assign_arithmetic(self, source, operator_sub));
-	} else if (source->tag == ast_mul_T_assign) {
+	} else if (source->tag == ast_mul_assign_T) {
 		return il_factor_wrap_assign(CLIL_assign_arithmetic(self, source, operator_mul));
-	} else if (source->tag == ast_div_T_assign) {
+	} else if (source->tag == ast_div_assign_T) {
 		return il_factor_wrap_assign(CLIL_assign_arithmetic(self, source, operator_div));
-	} else if (source->tag == ast_mod_T_assign) {
+	} else if (source->tag == ast_mod_assign_T) {
 		return il_factor_wrap_assign(CLIL_assign_arithmetic(self, source, operator_mod));
 	//instanceof
 	} else if(source->tag == ast_instanceof_T) {
@@ -108,9 +108,9 @@ static il_factor* CLIL_factorImpl(class_loader* self, ast* source) {
 	} else if(source->tag == ast_and_assign_T) {
 		return il_factor_wrap_assign(CLIL_assign_arithmetic(self, source, operator_bit_and));
 	//<<= >>=
-	} else if(source->tag == ast_lshift_T_assign) {
+	} else if(source->tag == ast_lshift_assign_T) {
 		return il_factor_wrap_assign(CLIL_assign_arithmetic(self, source, operator_lshift));
-	} else if(source->tag == ast_rshift_T_assign) {
+	} else if(source->tag == ast_rshift_assign_T) {
 		return il_factor_wrap_assign(CLIL_assign_arithmetic(self, source, operator_rshift));
 	//!-
 	} else if (source->tag == ast_not_T) {

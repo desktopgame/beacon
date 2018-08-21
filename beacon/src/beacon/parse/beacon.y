@@ -805,23 +805,23 @@ expression_nobrace
 	}
 	| lhs ADD_ASSIGN expression
 	{
-		$$ = ast_new_binary(ast_add_T_assign, $1, $3);
+		$$ = ast_new_binary(ast_add_assign_T, $1, $3);
 	}
 	| lhs SUB_ASSIGN expression
 	{
-		$$ = ast_new_binary(ast_sub_T_assign, $1, $3);
+		$$ = ast_new_binary(ast_sub_assign_T, $1, $3);
 	}
 	| lhs MUL_ASSIGN expression
 	{
-		$$ = ast_new_binary(ast_mul_T_assign, $1, $3);
+		$$ = ast_new_binary(ast_mul_assign_T, $1, $3);
 	}
 	| lhs DIV_ASSIGN expression
 	{
-		$$ = ast_new_binary(ast_div_T_assign, $1, $3);
+		$$ = ast_new_binary(ast_div_assign_T, $1, $3);
 	}
 	| lhs MOD_ASSIGN expression
 	{
-		$$ = ast_new_binary(ast_mod_T_assign, $1, $3);
+		$$ = ast_new_binary(ast_mod_assign_T, $1, $3);
 	}
 	| lhs AND_ASSIGN expression
 	{
@@ -833,15 +833,15 @@ expression_nobrace
 	}
 	| lhs EXC_OR_ASSIGN expression
 	{
-		$$ = ast_new_binary(ast_exc_or_T_assign, $1, $3);
+		$$ = ast_new_binary(ast_exc_or_assign_T, $1, $3);
 	}
 	| lhs LSHIFT_ASSIGN expression
 	{
-		$$ = ast_new_binary(ast_lshift_T_assign, $1, $3);
+		$$ = ast_new_binary(ast_lshift_assign_T, $1, $3);
 	}
 	| lhs RSHIFT_ASSIGN expression
 	{
-		$$ = ast_new_binary(ast_rshift_T_assign, $1, $3);
+		$$ = ast_new_binary(ast_rshift_assign_T, $1, $3);
 	}
 	| expression GT expression
 	{

@@ -112,7 +112,7 @@ void class_loader_ilload_impl(class_loader* self, ast* source_code) {
 	for (int i = 0; i < source_code->vchildren->length; i++) {
 		ast* child = ast_at(self->source_code, i);
 		//import a
-		if (child->tag == ast_import_decl_T || child->tag == ast_import_decl_T_list) {
+		if (child->tag == ast_import_decl_T || child->tag == ast_import_decl_list_T) {
 			class_loader_ilload_import_list(self, child);
 		//namespace Foo { ... }
 		} else if (child->tag == ast_namespace_decl_T) {
@@ -147,7 +147,7 @@ static void class_loader_ilload_function(class_loader * self, ast * asource) {
 }
 
 static void class_loader_ilload_import_list(class_loader* self, ast* asource) {
-	if(asource->tag == ast_import_decl_T_list) {
+	if(asource->tag == ast_import_decl_list_T) {
 		for(int i=0; i<asource->vchildren->length; i++) {
 			class_loader_ilload_import_list(self, ast_at(asource, i));
 		}
@@ -177,9 +177,9 @@ static void class_loader_ilload_namespace(class_loader* self, vector* parent, as
 
 static void class_loader_ilload_namespace_path_recursive(class_loader* self, ast* anamespace_path, ast* anamespace_body) {
 	assert(anamespace_path->tag == ast_namespace_path_T ||
-		   anamespace_path->tag == ast_namespace_path_T_list);
+		   anamespace_path->tag == ast_namespace_path_list_T);
 	if (anamespace_path->tag == ast_namespace_path_T) {
-	} else if (anamespace_path->tag == ast_namespace_path_T_list) {
+	} else if (anamespace_path->tag == ast_namespace_path_list_T) {
 		for (int i = 0; i < anamespace_path->vchildren->length; i++) {
 			class_loader_ilload_namespace_path_recursive(self, ast_at(anamespace_path, i), anamespace_body);
 		}
@@ -188,11 +188,11 @@ static void class_loader_ilload_namespace_path_recursive(class_loader* self, ast
 
 static il_namespace* class_loader_ilload_ast_to_namespace(ast* a) {
 	assert(a->tag == ast_namespace_path_T ||
-	       a->tag == ast_namespace_path_T_list);
+	       a->tag == ast_namespace_path_list_T);
 	if(a->tag == ast_namespace_path_T) {
 		il_namespace* ret = il_namespace_new(a->u.stringv_value);
 		return ret;
-	} else if(a->tag == ast_namespace_path_T_list) {
+	} else if(a->tag == ast_namespace_path_list_T) {
 		ast* al = ast_first(a);
 		ast* ar = ast_second(a);
 		il_namespace* parent = class_loader_ilload_ast_to_namespace(al);
@@ -225,7 +225,7 @@ static void class_loader_ilload_namespace_body(class_loader* self, il_namespace*
 	} else if(anamespace_body->tag == ast_enum_decl_T) {
 		class_loader_ilload_enum(self, current, anamespace_body);
 		//namespace xxx { any yyy { ...
-	} else if (anamespace_body->tag == ast_namespace_member_decl_T_list) {
+	} else if (anamespace_body->tag == ast_namespace_member_decl_list_T) {
 		for (int i = 0; i < anamespace_body->vchildren->length; i++) {
 			ast* amember = ast_at(anamespace_body, i);
 			class_loader_ilload_namespace_body(self, current, parent, amember);
@@ -292,7 +292,7 @@ static void class_loader_ilload_enum(class_loader * self, il_namespace * current
 }
 
 static void class_loader_ilload_identifier_list(class_loader * self, vector * list, ast * asource) {
-	if (asource->tag == ast_identifier_T_list) {
+	if (asource->tag == ast_identifier_list_T) {
 		for (int i = 0; i < asource->vchildren->length; i++) {
 			class_loader_ilload_identifier_list(self, list, ast_at(asource, i));
 		}

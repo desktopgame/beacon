@@ -734,7 +734,7 @@ static void CLBC_chain_auto(class_loader * self, il_type * iltype, type * tp, il
 	il_constructor_chain* ch_empty = il_constructor_chain_new();
 	ch_empty->c = emptyTarget;
 	ch_empty->constructor_index = emptyTemp;
-	ch_empty->type = ast_constructor_chain_T_super;
+	ch_empty->type = ast_constructor_chain_super_T;
 	ilcons->chain = ch_empty;
 	//親クラスへ連鎖
 	opcode_buf_add(env->buf, (vector_item)op_chain_super);

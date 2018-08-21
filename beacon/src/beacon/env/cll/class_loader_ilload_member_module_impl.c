@@ -28,7 +28,7 @@ void CLIL_member_tree(class_loader* self, il_type* current, ast* atree) {
 }
 
 void CLIL_member_list(class_loader* self, il_type* current, ast* amember, access_level level) {
-	if(amember->tag == ast_member_decl_T_list) {
+	if(amember->tag == ast_member_decl_list_T) {
 		for(int i=0; i<amember->vchildren->length; i++) {
 			CLIL_member_list(self, current, ast_at(amember, i), level);
 		}

@@ -42,7 +42,7 @@ ast * ast_new_namespace_path(string_view namev) {
 }
 
 ast * ast_new_namespace_path_list(ast * aforward, string_view namev) {
-	ast* ret = ast_new(ast_namespace_path_T_list);
+	ast* ret = ast_new(ast_namespace_path_list_T);
 	ast_push(ret, aforward);
 	ast_push(ret, ast_new_namespace_path(namev));
 	return ret;
@@ -63,7 +63,7 @@ ast * ast_new_import_decl(ast * aimport_path) {
 }
 
 ast* ast_new_import_decl_list(ast* aimport, ast* aimport_list) {
-	ast* ret = ast_new(ast_import_decl_T_list);
+	ast* ret = ast_new(ast_import_decl_list_T);
 	ast_push(ret, aimport);
 	ast_push(ret, aimport_list);
 	return ret;
@@ -90,7 +90,7 @@ ast * ast_new_identifier(string_view strv) {
 }
 
 ast * ast_new_identifier_list(string_view strv, ast * aident_list) {
-	ast* ret = ast_new(ast_identifier_T_list);
+	ast* ret = ast_new(ast_identifier_list_T);
 	ast_push(ret, aident_list);
 	ast_push(ret, ast_new_identifier(strv));
 	return ret;
@@ -152,11 +152,11 @@ void ast_print(ast* self) {
 		case ast_bit_and_T: p("&");
 		case ast_logic_and_T: p("&&");
 		case ast_as_Tsign_T: p("=");
-		case ast_add_T_assign: p("+=");
-		case ast_sub_T_assign: p("-=");
-		case ast_mul_T_assign: p("*=");
-		case ast_div_T_assign: p("/=");
-		case ast_mod_T_assign: p("%%=");
+		case ast_add_assign_T: p("+=");
+		case ast_sub_assign_T: p("-=");
+		case ast_mul_assign_T: p("*=");
+		case ast_div_assign_T: p("/=");
+		case ast_mod_assign_T: p("%%=");
 		case ast_equal_T: p("==");
 		case ast_not_Tequal_T: p("!=");
 		case ast_gt_T: p(">");
@@ -165,8 +165,8 @@ void ast_print(ast* self) {
 		case ast_le_T: p("<=");
 		case ast_lambda_T: p("lambda");
 		case ast_op_call_T: p("call");
-		case ast_stmt_T_variable_decl: p("variable-decl");
-		case ast_stmt_T_variable_init: p("variable-init");
+		case ast_stmt_variable_decl_T: p("variable-decl");
+		case ast_stmt_variable_init_T: p("variable-init");
 		case ast_typename_T:
 			printf("typename");
 			break;
@@ -190,16 +190,16 @@ void ast_print(ast* self) {
 		case ast_namespace_decl_T:
 			printf("namespace decl");
 			break;
-		case ast_namespace_member_decl_T_list:
+		case ast_namespace_member_decl_list_T:
 			printf("namepsace member decl");
 			break;
 		case ast_namespace_path_T:
 			printf("namespace_path(%s)", string_pool_ref2str(self->u.stringv_value));
 			break;
-		case ast_namespace_path_T_list:
+		case ast_namespace_path_list_T:
 			printf("namespace_path list");
 			break;
-		case ast_class_decl_T_unit_T:
+		case ast_class_decl_unit_T_T:
 			printf("class decl_unit");
 			break;
 		case ast_variable_T:
@@ -210,17 +210,17 @@ void ast_print(ast* self) {
 		}
 		case ast_static_invoke_T: p("static invoke");
 		case ast_fqcn_T: p("fqcn");
-		case ast_fqcn_T_part_list: p("fqcn part-list");
-		case ast_fqcn_T_part: 
+		case ast_fqcn_part_T_list: p("fqcn part-list");
+		case ast_fqcn_part_T: 
 			printf("fqcn part %s", string_pool_ref2str(self->u.stringv_value));
 			break;
-		case ast_fqcn_T_class_name: 
+		case ast_fqcn_class_name_T: 
 			printf("fqcn class-name %s", string_pool_ref2str(self->u.stringv_value));
 			break;
 		case ast_invoke_T: p("invoke");
 		case ast_call_T: p("call");
 		case ast_proc_T: p("process");
-		case ast_argument_T_list: p("argument-list");
+		case ast_argument_list_T: p("argument-list");
 		case ast_argument_T: p("argument");
 		case ast_new_instance_T: p("new-instance");
 		case ast_import_decl_T: p("import");
@@ -245,15 +245,15 @@ void ast_print(ast* self) {
 		case ast_mod_Tifier: p("modifier");
 		case ast_constructor_decl_T: p("constructor");
 		case ast_constructor_chain_T: p("constructor chain");
-		case ast_constructor_chain_T_this: p("this");
-		case ast_constructor_chain_T_super: p("super");
+		case ast_constructor_chain_this_T: p("this");
+		case ast_constructor_chain_super_T: p("super");
 		case ast_member_decl_T: p("member_decl");
-		case ast_member_decl_T_list: p("member_decl_list");
+		case ast_member_decl_list_T: p("member_decl_list");
 		case ast_field_decl_T: p("field decl");
 		case ast_field_type_name_T:
 			printf("type_name(%s)", string_pool_ref2str(self->u.stringv_value));
 			break;
-		case ast_field_access_T_name:
+		case ast_field_access_name_T:
 			printf("access_name(%s)", string_pool_ref2str(self->u.stringv_value));
 			break;
 		case ast_prop_decl_T:
@@ -269,12 +269,12 @@ void ast_print(ast* self) {
 		case ast_method_name_T:
 			printf("method_name(%s)", string_pool_ref2str(self->u.stringv_value));
 			break;
-		case ast_parameter_T_list: p("parameter-list");
+		case ast_parameter_list_T: p("parameter-list");
 		case ast_parameter_T: p("parameter");
-		case ast_parameter_T_type_name:
+		case ast_parameter_type_name_T:
 			printf("parameter_type_name(%s)", string_pool_ref2str(self->u.stringv_value));
 			break;
-		case ast_parameter_T_access_name:
+		case ast_parameter_access_name_T:
 			printf("parameter_access_name(%s)", string_pool_ref2str(self->u.stringv_value));
 			break;
 		case ast_method_return_name_T:
@@ -284,11 +284,11 @@ void ast_print(ast* self) {
 		case ast_static_field_access_T: p("static-field-access");
 		case ast_scope_T: p("scope");
 		case ast_stmt_T: p("stmt");
-		case ast_stmt_T_list: p("stmt list");
+		case ast_stmt_list_T: p("stmt list");
 		case ast_if_T: p("if");
-		case ast_if_T_else: p("if else");
-		case ast_if_T_elif_list: p("if elif_list");
-		case ast_if_T_elif_list_else: p("if elif_list else");
+		case ast_if_else_T: p("if else");
+		case ast_if_elif_list_T: p("if elif_list");
+		case ast_if_elif_list_T_else: p("if elif_list else");
 		case ast_elif_T: p("elif");
 		case ast_else_T: p("else");
 		case ast_return_T: p("return");
@@ -308,12 +308,12 @@ void ast_print(ast* self) {
 		case ast_enum_decl_T:
 			printf("enum(%s)", string_pool_ref2str(self->u.stringv_value));
 			break;
-		case ast_identifier_T_list: p("ident list");
+		case ast_identifier_list_T: p("ident list");
 		case ast_inferenced_type_init_T: p("var init");
-		case ast_stmt_T_throw: p("throw");
-		case ast_stmt_T_try: p("try");
-		case ast_stmt_T_catch_list: p("catch list");
-		case ast_stmt_T_catch: p("catch");
+		case ast_stmt_throw_T: p("throw");
+		case ast_stmt_try_T: p("try");
+		case ast_stmt_catch_T_list: p("catch list");
+		case ast_stmt_catch_T: p("catch");
 		case ast_yield_return_T: p("yield return");
 		case ast_yield_break_T: p("yield break");
 		case ast_null_T: p("null");
@@ -330,10 +330,10 @@ void ast_print(ast* self) {
 		case ast_parameter_Tized_typename:
 			printf("typename(%s)", string_pool_ref2str(self->u.stringv_value));
 			break;
-		case ast_type_parameter_T_list: p("type parameter list");
-		case ast_type_parameter_T_rule_list: p("type parameter rule list");
-		case ast_stmt_T_assert: p("assert");
-		case ast_typename_T_list: p("typename list");
+		case ast_type_parameter_list_T: p("type parameter list");
+		case ast_type_parameter_rule_list_T: p("type parameter rule list");
+		case ast_stmt_assert_T: p("assert");
+		case ast_typename_list_T: p("typename list");
 		default: 
 			p("not implemented");
 	}
@@ -363,24 +363,24 @@ bool ast_is_modifier(ast * self) {
 bool ast_is_stmt(ast* self) {
 	switch(self->tag) {
 		case ast_stmt_T:
-		case ast_stmt_T_list:
-		case ast_stmt_T_variable_decl:
-		case ast_stmt_T_variable_init:
+		case ast_stmt_list_T:
+		case ast_stmt_variable_decl_T:
+		case ast_stmt_variable_init_T:
 		case ast_inferenced_type_init_T:
 		case ast_if_T:
-		case ast_if_T_elif_list:
-		case ast_if_T_elif_list_else:
+		case ast_if_elif_list_T:
+		case ast_if_elif_list_T_else:
 		case ast_elif_T:
 		case ast_else_T:
 		case ast_while_T:
 		case ast_continue_T:
 		case ast_break_T:
 		case ast_proc_T:
-		case ast_stmt_T_assert:
-		case ast_stmt_T_try:
-		case ast_stmt_T_catch:
-		case ast_stmt_T_catch_list:
-		case ast_stmt_T_defer:
+		case ast_stmt_assert_T:
+		case ast_stmt_try_T:
+		case ast_stmt_catch_T:
+		case ast_stmt_catch_T_list:
+		case ast_stmt_defer_T:
 			return true;
 	}
 	return false;
@@ -402,9 +402,9 @@ modifier_type ast_cast_T_to_modifier(ast * self, bool* error) {
 
 constructor_chain_type ast_cast_T_to_chain_type(ast * self) {
 	switch (self->tag) {
-		case ast_constructor_chain_T_this:
+		case ast_constructor_chain_this_T:
 			return chain_type_this;
-		case ast_constructor_chain_T_super:
+		case ast_constructor_chain_super_T:
 			return chain_type_super;
 		default:
 			break;

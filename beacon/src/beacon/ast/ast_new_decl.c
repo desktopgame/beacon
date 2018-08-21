@@ -23,7 +23,7 @@ ast * ast_new_namespace_namespace_decl(ast * anamespace_path, ast * abody) {
 }
 
 ast * ast_new_namespace_member_decl_list(ast * aforward, ast * alist) {
-	ast* ret = ast_new(ast_namespace_member_decl_T_list);
+	ast* ret = ast_new(ast_namespace_member_decl_list_T);
 	ast_push(ret, aforward);
 	ast_push(ret, alist);
 	return ret;
@@ -99,7 +99,7 @@ ast * ast_new_member_decl(ast * amem) {
 }
 
 ast * ast_new_member_decl_list(ast* amember_list, ast* amember) {
-	ast* ret = ast_new(ast_member_decl_T_list);
+	ast* ret = ast_new(ast_member_decl_list_T);
 	ast_push(ret, amember_list);
 	ast_push(ret, amember);
 	return ret;
@@ -154,9 +154,9 @@ ast * ast_new_constructor_decl(ast * aparameter_list, ast * aconstructor_chain, 
 ast * ast_new_constructor_chain(constructor_chain_type chain_type, ast * aargument_list) {
 	ast* ret = ast_new(ast_constructor_chain_T);
 	if (chain_type == chain_type_this) {
-		ast_push(ret, ast_new(ast_constructor_chain_T_this));
+		ast_push(ret, ast_new(ast_constructor_chain_this_T));
 	} else {
-		ast_push(ret, ast_new(ast_constructor_chain_T_super));
+		ast_push(ret, ast_new(ast_constructor_chain_super_T));
 	}
 	ast_push(ret, aargument_list);
 	return ret;
@@ -170,14 +170,14 @@ ast * ast_new_parameter(ast* atypename, string_view parameter_access_namev) {
 }
 
 ast * ast_new_parameter_list(ast* atypename, string_view parameter_access_namev, ast * aparameter_list) {
-	ast* ret = ast_new(ast_parameter_T_list);
+	ast* ret = ast_new(ast_parameter_list_T);
 	ast_push(ret, aparameter_list);
 	ast_push(ret, ast_new_parameter(atypename, parameter_access_namev));
 	return ret;
 }
 
 ast * ast_new_typename_list(ast * atypename, ast * atypename_list) {
-	ast* ret = ast_new(ast_typename_T_list);
+	ast* ret = ast_new(ast_typename_list_T);
 	ast_push(ret, atypename_list);
 	ast_push(ret, atypename);
 	return ret;
@@ -212,7 +212,7 @@ ast * ast_new_type_out_parameter(string_view namev, ast* arule_list) {
 }
 
 ast * ast_new_type_parameter_list(ast* aparam, ast * alist) {
-	ast* ret = ast_new(ast_type_parameter_T_list);
+	ast* ret = ast_new(ast_type_parameter_list_T);
 	ast_push(ret, alist);
 	ast_push(ret, aparam);
 	return ret;
@@ -226,7 +226,7 @@ ast * ast_new_parameterized_typename(string_view namev, ast * aparams) {
 }
 
 ast * ast_new_type_parameter_rule_list(ast * arule_list) {
-	ast* ret = ast_new(ast_type_parameter_T_rule_list);
+	ast* ret = ast_new(ast_type_parameter_rule_list_T);
 	ast_push(ret, arule_list);
 	return ret;
 }
@@ -272,7 +272,7 @@ static ast* ast_new_field_type_name(string_view type_namev) {
 }
 
 static ast* ast_new_field_access_name(string_view field_namev) {
-	ast* ret = ast_new(ast_field_access_T_name);
+	ast* ret = ast_new(ast_field_access_name_T);
 	ret->u.stringv_value = field_namev;
 	return ret;
 }
@@ -296,13 +296,13 @@ static ast* ast_new_method_return_name(string_view return_type_namev) {
 }
 
 static ast* ast_new_parameter_type_name(string_view type_namev) {
-	ast* ret = ast_new(ast_parameter_T_type_name);
+	ast* ret = ast_new(ast_parameter_type_name_T);
 	ret->u.stringv_value = type_namev;
 	return ret;
 }
 
 static ast* ast_new_parameter_access_name(string_view parameter_namev) {
-	ast* ret = ast_new(ast_parameter_T_access_name);
+	ast* ret = ast_new(ast_parameter_access_name_T);
 	ret->u.stringv_value = parameter_namev;
 	return ret;
 }

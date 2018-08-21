@@ -28,7 +28,7 @@ void CLIL_fqcn_cache(ast* afqcn, fqcn_cache* fqcn) {
 }
 
 void CLIL_generic_cache(ast* afqcn, generic_cache* dest) {
-	if(afqcn->tag == ast_fqcn_T_class_name) {
+	if(afqcn->tag == ast_fqcn_class_name_T) {
 		dest->fqcn->namev = afqcn->u.stringv_value;
 		return;
 	}
@@ -50,7 +50,7 @@ void CLIL_typename_list(class_loader * self, vector * dst, ast * atypename_list)
 		//[typename [fqcn]]
 		CLIL_generic_cache(atypename_list, e);
 		vector_push(dst, e);
-	} else if(atypename_list->tag == ast_typename_T_list) {
+	} else if(atypename_list->tag == ast_typename_list_T) {
 		for (int i = 0; i < atypename_list->vchildren->length; i++) {
 			CLIL_typename_list(self, dst, ast_at(atypename_list, i));
 		}
@@ -62,7 +62,7 @@ void CLIL_type_parameter(class_loader* self, ast* asource, vector* dest) {
 	if (ast_is_blank(asource)) {
 		return;
 	}
-	if (asource->tag == ast_type_parameter_T_list) {
+	if (asource->tag == ast_type_parameter_list_T) {
 		for (int i = 0; i < asource->vchildren->length; i++) {
 			CLIL_type_parameter(self, ast_at(asource, i), dest);
 		}
@@ -85,7 +85,7 @@ void CLIL_type_argument(class_loader* self, ast* atype_args, vector* dest) {
 	if(ast_is_blank(atype_args)) {
 		return;
 	}
-	if(atype_args->tag == ast_typename_T_list) {
+	if(atype_args->tag == ast_typename_list_T) {
 		for(int i=0; i<atype_args->vchildren->length; i++) {
 			ast* e = ast_at(atype_args, i);
 			CLIL_type_argument(self, e, dest);
@@ -98,7 +98,7 @@ void CLIL_type_argument(class_loader* self, ast* atype_args, vector* dest) {
 }
 
 void CLIL_parameter_list(class_loader* self, vector* list, ast* asource) {
-	if (asource->tag == ast_parameter_T_list) {
+	if (asource->tag == ast_parameter_list_T) {
 		for (int i = 0; i < asource->vchildren->length; i++) {
 			CLIL_parameter_list(self, list, ast_at(asource, i));
 		}
@@ -152,12 +152,12 @@ static void CLIL_generic_cache_impl(ast* afqcn, generic_cache* dest) {
 		return;
 	}
 	if (afqcn->tag == ast_fqcn_T ||
-		afqcn->tag == ast_fqcn_T_part_list) {
-		if (afqcn->tag == ast_fqcn_T_part_list &&
+		afqcn->tag == ast_fqcn_part_T_list) {
+		if (afqcn->tag == ast_fqcn_part_T_list &&
 			afqcn->vchildren->length == 0) {
 			//FIXME:もうちょっと高速に出来る
 			//FIXME:とりあえずここでタグを直してるけどast.cの時点でどうにかするべき
-			afqcn->tag = ast_fqcn_T_class_name;
+			afqcn->tag = ast_fqcn_class_name_T;
 			body->namev = afqcn->u.stringv_value;
 			return;
 		}
@@ -168,12 +168,12 @@ static void CLIL_generic_cache_impl(ast* afqcn, generic_cache* dest) {
 	} else {
 		//FIXME:とりあえずここでタグを直してるけどast.cの時点でどうにかするべき
 		vector_push(body->scope_vec, afqcn->u.stringv_value);
-		afqcn->tag = ast_fqcn_T_part;
+		afqcn->tag = ast_fqcn_part_T;
 	}
 }
 
 static void CLIL_generic_cache_inner(ast* atype_args, generic_cache* dest) {
-	if (atype_args->tag == ast_typename_T_list) {
+	if (atype_args->tag == ast_typename_list_T) {
 		for (int i = 0; i < atype_args->vchildren->length; i++) {
 			ast* e = ast_at(atype_args, i);
 			CLIL_generic_cache_inner(e, dest);
@@ -188,7 +188,7 @@ static void CLIL_generic_cache_inner(ast* atype_args, generic_cache* dest) {
 static void CLIL_type_parameter_rule(class_loader* self, ast* asource, vector* dest) {
 	assert(false);
 	/*
-	if (source->tag == ast_type_parameter_T_list) {
+	if (source->tag == ast_type_parameter_list_T) {
 		for (int i = 0; i < source->child_count; i++) {
 			CLIL_type_parameter_rule(self, ast_at(source, i), dest);
 		}
@@ -205,7 +205,7 @@ static void CLIL_type_parameter_rule(class_loader* self, ast* asource, vector* d
 }
 
 static void ast_fqcn_T_flatten(ast* afqcn, vector* dest) {
-	if(afqcn->tag == ast_fqcn_T_part) {
+	if(afqcn->tag == ast_fqcn_part_T) {
 		vector_push(dest, afqcn->u.stringv_value);
 	} else {
 		for(int i=0; i<afqcn->vchildren->length; i++) {
@@ -215,7 +215,7 @@ static void ast_fqcn_T_flatten(ast* afqcn, vector* dest) {
 }
 
 static void CLIL_argument_listImpl(class_loader* self, vector* list, ast* asource) {
-	if (asource->tag == ast_argument_T_list) {
+	if (asource->tag == ast_argument_list_T) {
 		for (int i = 0; i < asource->vchildren->length; i++) {
 			CLIL_argument_listImpl(self, list, ast_at(asource, i));
 		}

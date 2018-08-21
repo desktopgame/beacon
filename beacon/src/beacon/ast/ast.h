@@ -33,16 +33,16 @@ typedef enum ast_tag {
 	ast_childa_T,
 	//= += -= *= /= %=
 	ast_as_Tsign_T,
-	ast_add_T_assign,
-	ast_sub_T_assign,
-	ast_mul_T_assign,
-	ast_div_T_assign,
-	ast_mod_T_assign,
+	ast_add_assign_T,
+	ast_sub_assign_T,
+	ast_mul_assign_T,
+	ast_div_assign_T,
+	ast_mod_assign_T,
 	ast_or_assign_T,
 	ast_and_assign_T,
-	ast_exc_or_T_assign,
-	ast_lshift_T_assign,
-	ast_rshift_T_assign,
+	ast_exc_or_assign_T,
+	ast_lshift_assign_T,
+	ast_rshift_assign_T,
 	//== !=
 	ast_equal_T,
 	ast_not_Tequal_T,
@@ -71,7 +71,7 @@ typedef enum ast_tag {
 	ast_invoke_T,
 	ast_sub_Tscript_access,
 	ast_return_T,
-	ast_return_T_empty,
+	ast_return_empty_T,
 	ast_this_T,
 	ast_super_T,
 	ast_new_instance_T,
@@ -81,7 +81,7 @@ typedef enum ast_tag {
 	ast_static_field_access_T,
 
 	ast_identifier_T,
-	ast_identifier_T_list,
+	ast_identifier_list_T,
 	//ast_typename_T,
 
 	//ast_variable_T_decl,
@@ -89,15 +89,15 @@ typedef enum ast_tag {
 	ast_namespace_decl_T,
 	ast_namespace_body_T,
 	ast_namespace_member_decl_T,
-	ast_namespace_member_decl_T_list,
+	ast_namespace_member_decl_list_T,
 	ast_namespace_path_T,
-	ast_namespace_path_T_list,
+	ast_namespace_path_list_T,
 
 	ast_import_decl_T,
-	ast_import_decl_T_list,
+	ast_import_decl_list_T,
 	ast_import_path_T,
 
-	ast_class_decl_T_unit_T,
+	ast_class_decl_unit_T_T,
 	//ast_class_decl_T_list,
 	ast_abstract_class_decl_T,
 	ast_class_decl_T,
@@ -110,13 +110,13 @@ typedef enum ast_tag {
 	ast_access_member_tree_T,
 
 	ast_member_decl_T,
-	ast_member_decl_T_list,
+	ast_member_decl_list_T,
 
 	ast_operator_overload_T,
 
 	ast_field_decl_T,
 	ast_field_type_name_T,
-	ast_field_access_T_name,
+	ast_field_access_name_T,
 
 	ast_prop_set_T,
 	ast_prop_get_T,
@@ -135,8 +135,8 @@ typedef enum ast_tag {
 
 	ast_constructor_decl_T,
 	ast_constructor_chain_T,
-	ast_constructor_chain_T_this,
-	ast_constructor_chain_T_super,
+	ast_constructor_chain_this_T,
+	ast_constructor_chain_super_T,
 	ast_explicit_bioperator_T,
 	ast_explicit_uoperator_T,
 
@@ -159,50 +159,50 @@ typedef enum ast_tag {
 	//を特別にプロセスと呼称します。
 	//
 	ast_proc_T,
-	ast_stmt_T_list,
+	ast_stmt_list_T,
 	ast_name_reference_T,
 	ast_typename_T,
-	ast_typename_T_list,
-	ast_stmt_T_variable_decl,
-	ast_stmt_T_variable_init,
-	ast_stmt_T_defer,
+	ast_typename_list_T,
+	ast_stmt_variable_decl_T,
+	ast_stmt_variable_init_T,
+	ast_stmt_defer_T,
 
-	ast_stmt_T_try,
-	ast_stmt_T_catch,
-	ast_stmt_T_catch_list,
-	ast_stmt_T_throw,
+	ast_stmt_try_T,
+	ast_stmt_catch_T,
+	ast_stmt_catch_T_list,
+	ast_stmt_throw_T,
 
-	ast_stmt_T_assert,
+	ast_stmt_assert_T,
 
 	ast_parameter_T,
-	ast_parameter_T_type_name,
-	ast_parameter_T_access_name,
-	ast_parameter_T_list,
+	ast_parameter_type_name_T,
+	ast_parameter_access_name_T,
+	ast_parameter_list_T,
 
 	ast_argument_T,
-	ast_argument_T_list,
+	ast_argument_list_T,
 
 	ast_fqcn_T,
-	ast_fqcn_T_class_name,
-	ast_fqcn_T_part,
-	ast_fqcn_T_part_list,
+	ast_fqcn_class_name_T,
+	ast_fqcn_part_T,
+	ast_fqcn_part_T_list,
 
 	ast_parameter_Tized_typename,
 	ast_type_parameter_T,
 	ast_type_in_parameter_T,
 	ast_type_out_parameter_T,
-	ast_type_parameter_T_list,
+	ast_type_parameter_list_T,
 
-	ast_type_parameter_T_rule_list,
+	ast_type_parameter_rule_list_T,
 
 	ast_static_invoke_T,
 	//stmt
 	ast_if_T,
 	ast_else_T,
-	ast_if_T_else,
-	ast_if_T_elif_list,
-	ast_if_T_elif_list_else,
-	ast_elif_T_list_T,
+	ast_if_else_T,
+	ast_if_elif_list_T,
+	ast_if_elif_list_T_else,
+	ast_elif_list_T_T,
 	ast_elif_T,
 } ast_tag;
 
