@@ -403,13 +403,13 @@ modifier_type ast_cast_T_to_modifier(ast * self, bool* error) {
 constructor_chain_type ast_cast_T_to_chain_type(ast * self) {
 	switch (self->tag) {
 		case ast_constructor_chain_this_T:
-			return chain_type_this;
+			return chain_type_this_T;
 		case ast_constructor_chain_super_T:
-			return chain_type_super;
+			return chain_type_super_T;
 		default:
 			break;
 	}
-	return chain_type_super;
+	return chain_type_super_T;
 }
 
 //private

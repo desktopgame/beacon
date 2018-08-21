@@ -758,11 +758,11 @@ static void CLBC_chain_super(class_loader * self, il_type * iltype, type * tp, i
 	//連鎖先のコンストラクタを検索する
 	constructor* chainTarget = NULL;
 	int temp = 0;
-	if (chain->type == chain_type_this) {
+	if (chain->type == chain_type_this_T) {
 		chainTarget = class_ilfind_constructor(classz, chain->argument_list, env, cctx, &temp);
 		opcode_buf_add(env->buf, (vector_item)op_chain_this);
 		opcode_buf_add(env->buf, (vector_item)(tp->absolute_index));
-	} else if (chain->type == chain_type_super) {
+	} else if (chain->type == chain_type_super_T) {
 		chainTarget = class_ilfind_constructor(classz->super_class->core_type->u.class_, chain->argument_list, env, cctx, &temp);
 		opcode_buf_add(env->buf, op_chain_super);
 		opcode_buf_add(env->buf, classz->super_class->core_type->absolute_index);

@@ -9,7 +9,7 @@ static void il_constructor_argument_delete(vector_item item);
 
 il_constructor_chain * il_constructor_chain_new() {
 	il_constructor_chain* ret = (il_constructor_chain*)MEM_MALLOC(sizeof(il_constructor_chain));
-	ret->type = chain_type_this;
+	ret->type = chain_type_this_T;
 	ret->argument_list = vector_new();
 	ret->c = NULL;
 	ret->constructor_index = -1;
@@ -21,9 +21,9 @@ void il_constructor_chain_dump(il_constructor_chain * self, int depth) {
 	printf("constructor chain");
 	io_println();
 	io_printi(depth);
-	if (self->type == chain_type_this) {
+	if (self->type == chain_type_this_T) {
 		printf("this");
-	} else if (self->type == chain_type_super) {
+	} else if (self->type == chain_type_super_T) {
 		printf("super");
 	}
 	io_println();

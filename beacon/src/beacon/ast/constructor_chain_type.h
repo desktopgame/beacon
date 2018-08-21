@@ -5,7 +5,7 @@
  * コンストラクタの連鎖方法.
  */
 typedef enum constructor_chain_type {
-	chain_type_this,
-	chain_type_super,
+	chain_type_this_T,
+	chain_type_super_T,
 } constructor_chain_type;
 #endif // !SIGNAL_AST_CONSTRUCTOR_CHAIN_TYPE_H

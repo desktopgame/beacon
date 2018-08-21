@@ -2571,7 +2571,7 @@ yyreduce:
   case 56:
 #line 390 "beacon.y" /* yacc.c:1663  */
     {
-		(yyval.chain_type_value) = chain_type_super;
+		(yyval.chain_type_value) = chain_type_super_T;
 	}
 #line 2577 "beacon.tab.c" /* yacc.c:1663  */
     break;
@@ -2579,7 +2579,7 @@ yyreduce:
   case 57:
 #line 394 "beacon.y" /* yacc.c:1663  */
     {
-		(yyval.chain_type_value) = chain_type_this;
+		(yyval.chain_type_value) = chain_type_this_T;
 	}
 #line 2585 "beacon.tab.c" /* yacc.c:1663  */
     break;

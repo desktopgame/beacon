@@ -388,11 +388,11 @@ constructor_chain
 constructor_chain_type_T
 	: SUPER_TOK
 	{
-		$$ = chain_type_super;
+		$$ = chain_type_super_T;
 	}
 	| THIS_TOK
 	{
-		$$ = chain_type_this;
+		$$ = chain_type_this_T;
 	}
 	;
 
