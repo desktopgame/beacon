@@ -22,7 +22,9 @@ end
 Dir.glob(File.expand_path('./../src/**/*')) do | filename |
 	if(!filename.end_with?(".h") &&
 	   !filename.end_with?(".c") &&
-	   !filename.end_with?(".text")) then
+	   !filename.end_with?(".text")&&
+	   !filename.end_with?(".l")&&
+	   !filename.end_with?(".y")) then
 	   next
 	end
 	str = nil
