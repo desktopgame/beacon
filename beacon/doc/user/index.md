@@ -5,6 +5,7 @@
 * [class](./class.md)
 * [enum](./enum.md)
 * [interface](./interface.md)
+* [property](./property.md)
 * [operator](./operator.md)
 * [coroutine](./coroutine.md)
 * [try-catch](./try-catch.md)

@@ -62,10 +62,12 @@ string_view string_pool_str2ref(const char* str) {
 }
 
 const char* string_pool_ref2str(string_view ref) {
+	if(ref == NULL_VIEW) {
+		return NULL;
+	}
 	if(ref == ZERO_VIEW) {
 		return "";
 	}
-	assert(ref != 0);
 	const char* str = (const char*)vector_at(gVec, ref - HEADER);
 	return str;
 }

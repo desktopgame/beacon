@@ -110,6 +110,7 @@ static void il_factor_member_op_check(il_factor_member_op* self, enviroment* env
 	//レシーバの型を取得
 	il_factor* fact = self->fact;
 	generic_type* gtype = il_factor_eval(fact, env, cctx);
+	BC_ERROR();
 	//レシーバの型が特定できない場合は
 	//変数名を型として静的フィールドで解決する
 	if(gtype == NULL) {
