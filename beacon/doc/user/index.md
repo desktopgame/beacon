@@ -17,3 +17,4 @@
 * [var](./var.md)
 * [this](./this.md)
 * [super](./super.md)
+* [assert](./assert.md)
