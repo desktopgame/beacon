@@ -38,6 +38,7 @@ void il_stmt_variable_init_generate(il_stmt_variable_init * self, enviroment * e
 	generic_type* ga = il_factor_eval(self->fact, env, cctx);
 	generic_type* gb = import_manager_resolve(NULL, NULL, self->fqcn, cctx);
 	//voidは代入できない
+	assert(gb != NULL);
 	BC_ERROR();
 	if((ga->core_type != NULL && ga->core_type == TYPE_VOID) ||
 	   (gb->core_type != NULL && gb->core_type == TYPE_VOID)) {
@@ -61,12 +62,21 @@ void il_stmt_variable_init_load(il_stmt_variable_init * self, enviroment * env, 
 			string_pool_ref2str(self->namev)
 		);
 	}
+	generic_type* gt = import_manager_resolve(NULL, NULL, self->fqcn, cctx);
+	if(gt == NULL) {
+		bc_error_throw(
+			bcerror_undefined_type_decl_T,
+			string_pool_ref2str(self->fqcn->fqcn->namev)
+		);
+		return;
+	}
 	symbol_entry* e = symbol_table_entry(
 		env->sym_table,
-		import_manager_resolve(NULL, NULL, self->fqcn, cctx),
+		gt,
 		self->namev
 	);
 	self->sym = e;
+	assert(e->gtype != NULL);
 }
 
 void il_stmt_variable_init_delete(il_stmt_variable_init * self) {

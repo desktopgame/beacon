@@ -1,4 +1,4 @@
-namespace err126 {
+namespace err125 {
 	class Fuga {
 		public:
 		def new() {
@@ -9,5 +9,5 @@ namespace err126 {
 		}
 	}
 }
-err126::Fuga fuga = new Fuga();
+Fuga fuga = new err125::Fuga();
 fuga.p();

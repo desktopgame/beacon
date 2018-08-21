@@ -248,6 +248,10 @@ void bc_error_vthrow(bc_error_id id, va_list ap) {
 			fmt = "not compatible types: %s as %s";
 			break;
 
+		case bcerror_undefined_type_decl_T:
+			fmt = "undefined type: %s";
+			break;
+
 		case bcerror_undefined_type_static_invoke_T:
 			fmt = "static method not found: %s#%s";
 			break;

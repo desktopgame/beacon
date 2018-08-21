@@ -91,6 +91,7 @@ typedef enum bc_error_id {
 
 	bcerror_cast_not_compatible_T,
 
+	bcerror_undefined_type_decl_T,
 	bcerror_undefined_type_static_invoke_T,
 	bcerror_undefined_name_bound_invoke_T,
 	bcerror_undefined_property_T,

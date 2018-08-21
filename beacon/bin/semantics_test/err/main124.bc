@@ -1,5 +1,5 @@
-namespace err126 {
-	class Fuga {
+namespace err124 {
+	class Fuga[T] {
 		public:
 		def new() {
 		}
@@ -9,5 +9,5 @@ namespace err126 {
 		}
 	}
 }
-err126::Fuga fuga = new Fuga();
+Fuga[Int] fuga = new err124::Fuga[Int]();
 fuga.p();

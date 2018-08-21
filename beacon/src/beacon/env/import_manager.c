@@ -68,6 +68,9 @@ generic_type* import_manager_resolve(import_manager* self, namespace_* scope, ge
 	}
 	assert(core_type == NULL);
 	assert(fqcn->fqcn->scope_vec->length == 0);
+	if(fqcn->type_args->length > 0) {
+		return NULL;
+	}
 	generic_type* parameterized = generic_type_new(NULL);
 	//T, Eなど
 	method* mt = call_context_method(cctx);
@@ -82,7 +85,11 @@ generic_type* import_manager_resolve(import_manager* self, namespace_* scope, ge
 		parameterized->virtual_type_index = type_for_generic_index(ty, fqcn->fqcn->namev);
 		parameterized->u.type_ = ty;
 	}
-	assert(fqcn->type_args->length == 0);
+	//現在の名前空間でクラス名を解決できなかったし、
+	//現在のコンテキストで型変数として解決することもできなかった
+	if(parameterized->virtual_type_index == -1) {
+		return NULL;
+	}
 	return parameterized;
 }
 
