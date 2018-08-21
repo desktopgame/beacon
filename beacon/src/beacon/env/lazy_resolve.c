@@ -8,10 +8,10 @@ lazy_resolve* lazy_resolve_new(lazy_resolve_tag tag) {
 	ret->tag = tag;
 	ret->active = true;
 	switch(ret->tag) {
-		case resolve_default_eqoperator:
+		case resolve_default_eqoperator_T:
 			ret->u.def_eqoperator = default_eqoperator_resolve_new();
 			break;
-		case resolve_default_noteqoperator:
+		case resolve_default_noteqoperator_T:
 			ret->u.def_noteqoperator = default_noteqoperator_resolve_new();
 			break;
 	}
@@ -20,10 +20,10 @@ lazy_resolve* lazy_resolve_new(lazy_resolve_tag tag) {
 
 void lazy_resolve_apply(lazy_resolve* self) {
 	switch(self->tag) {
-		case resolve_default_eqoperator:
+		case resolve_default_eqoperator_T:
 			default_eqoperator_resolve_apply(self->u.def_eqoperator);
 			break;
-		case resolve_default_noteqoperator:
+		case resolve_default_noteqoperator_T:
 			default_noteqoperator_resolve_apply(self->u.def_noteqoperator);
 			break;
 	}
@@ -31,10 +31,10 @@ void lazy_resolve_apply(lazy_resolve* self) {
 
 void lazy_resolve_delete(lazy_resolve* self) {
 	switch(self->tag) {
-		case resolve_default_eqoperator:
+		case resolve_default_eqoperator_T:
 			default_eqoperator_resolve_delete(self->u.def_eqoperator);
 			break;
-		case resolve_default_noteqoperator:
+		case resolve_default_noteqoperator_T:
 			default_noteqoperator_resolve_delete(self->u.def_noteqoperator);
 			break;
 	}

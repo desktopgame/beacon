@@ -8,8 +8,8 @@ struct default_noteqoperator_resolve;
  * 何を遅延解決するかを表すタグ.
  */
 typedef enum lazy_resolve_tag {
-	resolve_default_eqoperator,
-	resolve_default_noteqoperator,
+	resolve_default_eqoperator_T,
+	resolve_default_noteqoperator_T,
 } lazy_resolve_tag;
 
 /**

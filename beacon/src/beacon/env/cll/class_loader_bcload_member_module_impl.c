@@ -892,7 +892,7 @@ static void CLBC_default_eqoperator_overload(class_loader* self, type* tp) {
 	//equalsが見つからないのであとで解決する
 	opcode_buf_add(env->buf, (vector_item)op_invokevirtual_lazy);
 	lazy_int* li = opcode_buf_lazy(env->buf, -1);
-	lazy_resolve* resolve = lazy_resolve_new(resolve_default_eqoperator);
+	lazy_resolve* resolve = lazy_resolve_new(resolve_default_eqoperator_T);
 	resolve->u.def_eqoperator->lazyi_ref = li;
 	resolve->u.def_eqoperator->type_ref = tp;
 	vector_push(self->lazy_resolve_vec, resolve);
@@ -943,7 +943,7 @@ static void CLBC_default_noteqoperator_overload(class_loader* self, type* tp) {
 	//equalsが見つからないのであとで解決する
 	opcode_buf_add(env->buf, (vector_item)op_invokevirtual_lazy);
 	lazy_int* li = opcode_buf_lazy(env->buf, -1);
-	lazy_resolve* resolve = lazy_resolve_new(resolve_default_noteqoperator);
+	lazy_resolve* resolve = lazy_resolve_new(resolve_default_noteqoperator_T);
 	resolve->u.def_noteqoperator->lazyi_ref = li;
 	resolve->u.def_noteqoperator->type_ref = tp;
 	vector_push(self->lazy_resolve_vec, resolve);
