@@ -12,7 +12,7 @@ field * field_new(string_view namev) {
 	field* ret = (field*)MEM_MALLOC(sizeof(field));
 	ret->namev = namev;
 	ret->access = access_public_T;
-	ret->modifier = modifier_none;
+	ret->modifier = modifier_none_T;
 	ret->parent = NULL;
 	ret->static_value = NULL;
 	ret->gtype = NULL;

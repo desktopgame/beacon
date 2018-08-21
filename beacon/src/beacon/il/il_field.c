@@ -10,7 +10,7 @@ il_field * il_field_new(string_view namev) {
 	il_field* ret = (il_field*)MEM_MALLOC(sizeof(il_field));
 	ret->fqcn = generic_cache_new();
 	ret->access = access_public_T;
-	ret->modifier = modifier_none;
+	ret->modifier = modifier_none_T;
 	ret->namev = namev;
 	ret->initial_value = NULL;
 	return ret;

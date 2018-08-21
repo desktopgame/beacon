@@ -426,11 +426,11 @@ method_define
 	}
 	| DEF IDENT type_parameter_group LRB parameter_list RRB ARROW typename_T scope_optional
 	{
-		$$ = ast_new_method_decl(ast_new_modifier(modifier_none), $2, $3, $5, $9, $8);
+		$$ = ast_new_method_decl(ast_new_modifier(modifier_none_T), $2, $3, $5, $9, $8);
 	}
 	| DEF IDENT type_parameter_group LRB RRB ARROW typename_T scope_optional
 	{
-		$$ = ast_new_method_decl_empty_params(ast_new_modifier(modifier_none), $2, $3, $8, $7);
+		$$ = ast_new_method_decl_empty_params(ast_new_modifier(modifier_none_T), $2, $3, $8, $7);
 	}
 	;
 
@@ -545,7 +545,7 @@ field_define
 	}
 	| typename_T IDENT SEMI
 	{
-		$$ = ast_new_field_decl(ast_new_modifier(modifier_none), $1, $2, ast_new_blank());
+		$$ = ast_new_field_decl(ast_new_modifier(modifier_none_T), $1, $2, ast_new_blank());
 	}
 	| modifier_type_T_list typename_T IDENT ASSIGN expression SEMI
 	{
@@ -553,7 +553,7 @@ field_define
 	}
 	| typename_T IDENT ASSIGN expression SEMI
 	{
-		$$ = ast_new_field_decl(ast_new_modifier(modifier_none), $1, $2, $4);
+		$$ = ast_new_field_decl(ast_new_modifier(modifier_none_T), $1, $2, $4);
 	}
 	;
 
@@ -602,7 +602,7 @@ prop_define
 	}
 	| PROPERTY typename_T IDENT LCB prop_set prop_get RCB
 	{
-		$$ = ast_new_prop_decl(ast_new_modifier(modifier_none), $2, $3, $5, $6);
+		$$ = ast_new_prop_decl(ast_new_modifier(modifier_none_T), $2, $3, $5, $6);
 	}
 	;
 
@@ -620,23 +620,23 @@ modifier_type_T_list
 modifier_type_T
 	: STATIC
 	{
-		$$ = ast_new_modifier(modifier_static);
+		$$ = ast_new_modifier(modifier_static_T);
 	}
 	| NATIVE
 	{
-		$$ = ast_new_modifier(modifier_native);
+		$$ = ast_new_modifier(modifier_native_T);
 	}
 	| ABSTRACT
 	{
-		$$ = ast_new_modifier(modifier_abstract);
+		$$ = ast_new_modifier(modifier_abstract_T);
 	}
 	| OVERRIDE
 	{
-		$$ = ast_new_modifier(modifier_override);
+		$$ = ast_new_modifier(modifier_override_T);
 	}
 	| FINAL
 	{
-		$$ = ast_new_modifier(modifier_final);
+		$$ = ast_new_modifier(modifier_final_T);
 	}
 	;
 

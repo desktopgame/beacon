@@ -40,7 +40,7 @@ method* method_malloc(string_view namev, const char* filename, int lineno) {
 	ret->parameter_list = vector_malloc(filename, lineno);
 	ret->type = method_type_script;
 	ret->access = access_public_T;
-	ret->modifier = modifier_none;
+	ret->modifier = modifier_none_T;
 	ret->parent = NULL;
 	ret->type_parameter_list = vector_malloc(filename, lineno);
 	ret->return_gtype = NULL;
@@ -402,7 +402,7 @@ static constructor* create_delegate_ctor(method* self, type* ty, class_loader* c
 static method* create_has_next(method* self, type* ty, class_loader* cll, vector* stmt_list, int* out_op_len) {
 	method* mt = method_new(string_pool_intern("moveNext"));
 	mt->return_gtype = GENERIC_BOOL;
-	mt->modifier = modifier_none;
+	mt->modifier = modifier_none_T;
 	mt->access = access_public_T;
 	mt->type = method_type_script;
 	script_method* smt = script_method_new();
@@ -453,7 +453,7 @@ static method* create_has_next(method* self, type* ty, class_loader* cll, vector
 static method* create_next(method* self, type* ty, class_loader* cll,generic_type* a, vector* stmt_list, int* out_op_len) {
 	method* mt = method_new(string_pool_intern("current"));
 	mt->return_gtype = a;
-	mt->modifier = modifier_none;
+	mt->modifier = modifier_none_T;
 	mt->access = access_public_T;
 	mt->type = method_type_script;
 	script_method* smt = script_method_new();

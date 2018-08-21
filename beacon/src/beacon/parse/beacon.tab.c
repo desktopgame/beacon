@@ -2627,7 +2627,7 @@ yyreduce:
   case 64:
 #line 428 "beacon.y" /* yacc.c:1663  */
     {
-		(yyval.ast_value) = ast_new_method_decl(ast_new_modifier(modifier_none), (yyvsp[-7].stringv_value), (yyvsp[-6].ast_value), (yyvsp[-4].ast_value), (yyvsp[0].ast_value), (yyvsp[-1].ast_value));
+		(yyval.ast_value) = ast_new_method_decl(ast_new_modifier(modifier_none_T), (yyvsp[-7].stringv_value), (yyvsp[-6].ast_value), (yyvsp[-4].ast_value), (yyvsp[0].ast_value), (yyvsp[-1].ast_value));
 	}
 #line 2633 "beacon.tab.c" /* yacc.c:1663  */
     break;
@@ -2635,7 +2635,7 @@ yyreduce:
   case 65:
 #line 432 "beacon.y" /* yacc.c:1663  */
     {
-		(yyval.ast_value) = ast_new_method_decl_empty_params(ast_new_modifier(modifier_none), (yyvsp[-6].stringv_value), (yyvsp[-5].ast_value), (yyvsp[0].ast_value), (yyvsp[-1].ast_value));
+		(yyval.ast_value) = ast_new_method_decl_empty_params(ast_new_modifier(modifier_none_T), (yyvsp[-6].stringv_value), (yyvsp[-5].ast_value), (yyvsp[0].ast_value), (yyvsp[-1].ast_value));
 	}
 #line 2641 "beacon.tab.c" /* yacc.c:1663  */
     break;
@@ -2835,7 +2835,7 @@ yyreduce:
   case 90:
 #line 547 "beacon.y" /* yacc.c:1663  */
     {
-		(yyval.ast_value) = ast_new_field_decl(ast_new_modifier(modifier_none), (yyvsp[-2].ast_value), (yyvsp[-1].stringv_value), ast_new_blank());
+		(yyval.ast_value) = ast_new_field_decl(ast_new_modifier(modifier_none_T), (yyvsp[-2].ast_value), (yyvsp[-1].stringv_value), ast_new_blank());
 	}
 #line 2841 "beacon.tab.c" /* yacc.c:1663  */
     break;
@@ -2851,7 +2851,7 @@ yyreduce:
   case 92:
 #line 555 "beacon.y" /* yacc.c:1663  */
     {
-		(yyval.ast_value) = ast_new_field_decl(ast_new_modifier(modifier_none), (yyvsp[-4].ast_value), (yyvsp[-3].stringv_value), (yyvsp[-1].ast_value));
+		(yyval.ast_value) = ast_new_field_decl(ast_new_modifier(modifier_none_T), (yyvsp[-4].ast_value), (yyvsp[-3].stringv_value), (yyvsp[-1].ast_value));
 	}
 #line 2857 "beacon.tab.c" /* yacc.c:1663  */
     break;
@@ -2931,7 +2931,7 @@ yyreduce:
   case 102:
 #line 604 "beacon.y" /* yacc.c:1663  */
     {
-		(yyval.ast_value) = ast_new_prop_decl(ast_new_modifier(modifier_none), (yyvsp[-5].ast_value), (yyvsp[-4].stringv_value), (yyvsp[-2].ast_value), (yyvsp[-1].ast_value));
+		(yyval.ast_value) = ast_new_prop_decl(ast_new_modifier(modifier_none_T), (yyvsp[-5].ast_value), (yyvsp[-4].stringv_value), (yyvsp[-2].ast_value), (yyvsp[-1].ast_value));
 	}
 #line 2937 "beacon.tab.c" /* yacc.c:1663  */
     break;
@@ -2955,7 +2955,7 @@ yyreduce:
   case 105:
 #line 622 "beacon.y" /* yacc.c:1663  */
     {
-		(yyval.ast_value) = ast_new_modifier(modifier_static);
+		(yyval.ast_value) = ast_new_modifier(modifier_static_T);
 	}
 #line 2961 "beacon.tab.c" /* yacc.c:1663  */
     break;
@@ -2963,7 +2963,7 @@ yyreduce:
   case 106:
 #line 626 "beacon.y" /* yacc.c:1663  */
     {
-		(yyval.ast_value) = ast_new_modifier(modifier_native);
+		(yyval.ast_value) = ast_new_modifier(modifier_native_T);
 	}
 #line 2969 "beacon.tab.c" /* yacc.c:1663  */
     break;
@@ -2971,7 +2971,7 @@ yyreduce:
   case 107:
 #line 630 "beacon.y" /* yacc.c:1663  */
     {
-		(yyval.ast_value) = ast_new_modifier(modifier_abstract);
+		(yyval.ast_value) = ast_new_modifier(modifier_abstract_T);
 	}
 #line 2977 "beacon.tab.c" /* yacc.c:1663  */
     break;
@@ -2979,7 +2979,7 @@ yyreduce:
   case 108:
 #line 634 "beacon.y" /* yacc.c:1663  */
     {
-		(yyval.ast_value) = ast_new_modifier(modifier_override);
+		(yyval.ast_value) = ast_new_modifier(modifier_override_T);
 	}
 #line 2985 "beacon.tab.c" /* yacc.c:1663  */
     break;
@@ -2987,7 +2987,7 @@ yyreduce:
   case 109:
 #line 638 "beacon.y" /* yacc.c:1663  */
     {
-		(yyval.ast_value) = ast_new_modifier(modifier_final);
+		(yyval.ast_value) = ast_new_modifier(modifier_final_T);
 	}
 #line 2993 "beacon.tab.c" /* yacc.c:1663  */
     break;

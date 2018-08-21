@@ -79,7 +79,7 @@ void CLIL_prop(class_loader* self, il_type* current, ast* aprop, access_level le
 	il_property* ret = il_property_new(propname);
 	CLIL_generic_cache(atypename, ret->fqcn);
 	if(ast_is_blank(amod)) {
-		ret->modifier = modifier_none;
+		ret->modifier = modifier_none_T;
 	} else {
 		bool err = false;
 		ret->modifier = ast_cast_T_to_modifier(amod, &err);
