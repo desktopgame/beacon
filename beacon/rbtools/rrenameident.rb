@@ -14,8 +14,8 @@ File.open("rrenameident_in.text", "r") do |file|
 		if pair.length != 2 then
 			raise "syntax error!"
 		end
-		from_list << pair[0]
-		to_list << pair[1]
+		from_list << pair[0].lstrip.rstrip
+		to_list << pair[1].lstrip.rstrip
 	end
 end
 
