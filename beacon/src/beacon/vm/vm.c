@@ -873,10 +873,8 @@ static void vm_run(frame * self, enviroment * env, int pos, int deferStart) {
 				a = generic_type_apply(a, sg_thread_context());
 				if(a->core_type->tag == type_interface_T) {
 					interface_* inter = TYPE2INTERFACE(GENERIC2TYPE(a));
-					vector* impl_list = class_generic_type_list_to_interface_list_tree(TYPE2CLASS(GENERIC2TYPE(o->gtype)));
-					vector* inter_list = class_generic_type_list_to_interface_list(impl_list);
+					vector* inter_list = class_interface_tree(TYPE2CLASS(GENERIC2TYPE(o->gtype)));
 					int iter = vector_find(inter_list, inter);
-					vector_delete(impl_list, vector_deleter_null);
 					vector_delete(inter_list, vector_deleter_null);
 					if(iter == -1) {
 						vector_push(self->value_stack, object_get_null());
@@ -904,10 +902,8 @@ static void vm_run(frame * self, enviroment * env, int pos, int deferStart) {
 					vector_push(self->value_stack, o);
 				} else if(a->core_type->tag == type_interface_T) {
 					interface_* inter = TYPE2INTERFACE(GENERIC2TYPE(a));
-					vector* impl_list = class_generic_type_list_to_interface_list_tree(TYPE2CLASS(GENERIC2TYPE(o->gtype)));
-					vector* inter_list = class_generic_type_list_to_interface_list(impl_list);
+					vector* inter_list = class_interface_tree(TYPE2CLASS(GENERIC2TYPE(o->gtype)));
 					int iter = vector_find(inter_list, inter);
-					vector_delete(impl_list, vector_deleter_null);
 					vector_delete(inter_list, vector_deleter_null);
 					if(iter == -1) {
 						vector_push(self->value_stack, object_get_null());

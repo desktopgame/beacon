@@ -445,7 +445,7 @@ static void class_create_vtable_interface(class_* self) {
 	#if defined(DEBUG)
 	const char* clname = string_pool_ref2str(type_name(self->parent));
 	#endif
-	vector* tbl = class_generic_type_list_to_interface_list_tree(self);
+	vector* tbl = class_interface_tree(self);
 	//もしインターフェースを実装しているなら、
 	//インターフェースに対応する同じ並びのメソッドテーブルも作る
 	for (int i = 0; i < tbl->length; i++) {

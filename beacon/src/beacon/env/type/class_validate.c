@@ -19,7 +19,7 @@ bool class_interface_method_implement_valid(class_* cls, method** out) {
 	}
 	#endif
 	//全ての実装インターフェイスを取得する
-	vector* inter_list = class_generic_type_list_to_interface_list_tree(cls);
+	vector* inter_list = class_interface_tree(cls);
 	vector* methods = interface_method_flatten_list(inter_list);
 	if(inter_list->length == 0 || cls->is_abstract) {
 		vector_delete(inter_list, vector_deleter_null);

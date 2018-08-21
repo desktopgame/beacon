@@ -398,7 +398,7 @@ method * class_get_impl_method(class_ * self, type * interType, int interMIndex)
 	const char* str = string_pool_ref2str(self->namev);
 	#endif
 	assert(self->vt_vec->length > 0);
-	vector* tbl = class_generic_type_list_to_interface_list_tree(self);
+	vector* tbl = class_generic_interface_tree(self);
 	//指定のインターフェイスが
 	//このクラスにおいて何番目かを調べる
 	int declIndex = -1;
