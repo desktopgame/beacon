@@ -100,6 +100,8 @@ typedef enum bc_error_id {
 	bcerror_interface_has_ctor_T,
 	bcerror_interface_has_opov_T,
 
+	bcerror_interface_has_private_member_T,
+
 	bcerror_construct_abstract_type_T,
 	bcerror_can_t_resolve_lambda_T,
 	bcerror_not_functional_interface_T,

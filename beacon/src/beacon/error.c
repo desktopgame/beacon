@@ -210,6 +210,9 @@ void bc_error_vthrow(bc_error_id id, va_list ap) {
 		case bcerror_interface_has_opov_T:
 			fmt = "interface can't has not operator: %s#%s";
 			break;
+		case bcerror_interface_has_private_member_T:
+			fmt = "interface can't has not private member: %s#%s";
+			break;
 
 		case bcerror_invoke_bound_undefined_method_T:
 			fmt = "undefined method: %s#%s";

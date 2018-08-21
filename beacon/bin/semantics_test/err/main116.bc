@@ -1,0 +1,7 @@
+namespace err116 {
+	interface AInterface {
+		private:
+		def foo() -> Void;
+	}
+}
+printLine("sample");

@@ -134,6 +134,27 @@ static void CLBC_interface_decl(class_loader * self, il_type * iltype, type * tp
 	CL_ERROR(self);
 	CLBC_methods_decl(self, iltype, tp, iltype->u.interface_->method_list, scope);
 	CLBC_properties_decl(self, iltype, tp, iltype->u.interface_->prop_list, scope);
+	//privateなメンバーは定義できない
+	for(int i=0; i<tp->u.interface_->method_list->length; i++) {
+		method* e = vector_at(tp->u.interface_->method_list, i);
+		if(e->access == access_private_T) {
+			bc_error_throw(
+				bcerror_interface_has_private_member_T,
+				string_pool_ref2str(type_name(tp)),
+				string_pool_ref2str(e->namev)
+			);
+		}
+	}
+	for(int i=0; i<tp->u.interface_->prop_list->length; i++) {
+		property* e = vector_at(tp->u.interface_->prop_list, i);
+		if(e->access == access_private_T) {
+			bc_error_throw(
+				bcerror_interface_has_private_member_T,
+				string_pool_ref2str(type_name(tp)),
+				string_pool_ref2str(e->namev)
+			);
+		}
+	}
 	CL_ERROR(self);
 	interface_create_vtable(tp->u.interface_);
 	tp->state = tp->state | type_decl;
