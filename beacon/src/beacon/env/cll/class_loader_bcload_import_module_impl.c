@@ -50,7 +50,7 @@ void CLBC_new_load(class_loader * self, char * fullPath) {
 class_loader* CLBC_import_new(class_loader* self, char* full_path) {
 	CL_ERROR_RET(self, self);
 	script_context* ctx = script_context_get_current();
-	class_loader* cll = class_loader_new(full_path, content_lib);
+	class_loader* cll = class_loader_new(full_path, content_lib_T);
 	cll->parent = self;
 	import_info* info = import_manager_import(self->import_manager, cll);
 	info->consume = false;

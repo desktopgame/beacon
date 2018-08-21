@@ -31,7 +31,7 @@ bool eval_ast(const char* filename) {
 }
 
 bool eval_il(const char* filename) {
-	class_loader* cl = class_loader_new(filename, content_entry_point);
+	class_loader* cl = class_loader_new(filename, content_entry_point_T);
 	class_loader_load(cl);
 
 	if(!bc_error_last()) {
@@ -43,7 +43,7 @@ bool eval_il(const char* filename) {
 }
 
 bool eval_op(const char* filename) {
-	class_loader* cl = class_loader_new(filename, content_entry_point);
+	class_loader* cl = class_loader_new(filename, content_entry_point_T);
 	class_loader_load(cl);
 
 	if(!bc_error_last()) {
@@ -54,7 +54,7 @@ bool eval_op(const char* filename) {
 }
 
 bool eval_file(const char * filename) {
-	class_loader* cll = class_loader_new(filename, content_entry_point);
+	class_loader* cll = class_loader_new(filename, content_entry_point_T);
 	return eval_top_from_cll(cll, NULL);
 }
 
@@ -65,7 +65,7 @@ bool eval_string(const char* source) {
 		parser_destroy(p);
 		return false;
 	}
-	class_loader* cll = class_loader_new("", content_entry_point);
+	class_loader* cll = class_loader_new("", content_entry_point_T);
 	ast* a = parser_release_ast(p);
 	parser_destroy(p);
 	return eval_top_from_cll(cll, a);

@@ -210,12 +210,12 @@ static class_loader* class_loader_load_specialImpl(class_loader* self, class_loa
 	//IL -> SG へ
 	class_loader_bcload_special(cll);
 	if (bc_error_last()) { return cll; }
-	assert(cll->type == content_lib);
+	assert(cll->type == content_lib_T);
 	return cll;
 }
 
 static void class_loader_load_linkall(class_loader* self) {
-	if(self->type != content_entry_point) {
+	if(self->type != content_entry_point_T) {
 		return;
 	}
 	class_loader_link_recursive(self, link_decl);
@@ -225,7 +225,7 @@ static void class_loader_load_linkall(class_loader* self) {
 
 static void class_loader_load_toplevel(class_loader* self) {
 	//トップレベルのステートメントを読み込む
-	if(self->type != content_entry_point) {
+	if(self->type != content_entry_point_T) {
 		return;
 	}
 	//var $world = new beacon::lang::World();
@@ -255,7 +255,7 @@ static void class_loader_load_toplevel(class_loader* self) {
 }
 
 static void class_loader_load_toplevel_function(class_loader* self) {
-	if(self->level != 0 || self->type != content_entry_point) {
+	if(self->level != 0 || self->type != content_entry_point_T) {
 		return;
 	}
 	vector* funcs = self->il_code->function_list;
