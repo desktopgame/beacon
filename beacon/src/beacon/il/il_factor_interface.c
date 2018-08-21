@@ -53,9 +53,6 @@ void il_factor_dump(il_factor * self, int depth) {
 		case ilfactor_new_instance_T:
 			il_factor_new_instance_dump(self->u.new_instance_, depth);
 			break;
-		case ilfactor_cast_T:
-			il_factor_cast_dump(self->u.cast_, depth);
-			break;
 		case ilfactor_bool_T:
 			il_factor_bool_dump(self->u.bool_, depth);
 			break;
@@ -128,9 +125,6 @@ void il_factor_generate(il_factor * self, enviroment* env, call_context* cctx) {
 			break;
 		case ilfactor_new_instance_T:
 			il_factor_new_instance_generate(self->u.new_instance_, env, cctx);
-			break;
-		case ilfactor_cast_T:
-			il_factor_cast_ge_Tnerate(self->u.cast_, env, cctx);
 			break;
 		case ilfactor_bool_T:
 			il_factor_bool_generate(self->u.bool_, env, cctx);
@@ -210,9 +204,6 @@ void il_factor_load(il_factor * self, enviroment * env, call_context* cctx) {
 		case ilfactor_new_instance_T:
 			il_factor_new_instance_load(self->u.new_instance_, env, cctx);
 			break;
-		case ilfactor_cast_T:
-			il_factor_cast_load(self->u.cast_, env, cctx);
-			break;
 		case ilfactor_bool_T:
 			//il_factor_bool_load(self->u.bool_, depth);
 			break;
@@ -289,9 +280,6 @@ generic_type* il_factor_eval(il_factor * self, enviroment * env, call_context* c
 		case ilfactor_new_instance_T:
 			ret = il_factor_new_instance_eval(self->u.new_instance_, env, cctx);
 			break;
-		case ilfactor_cast_T:
-			ret = il_factor_cast_eval(self->u.cast_, env, cctx);
-			break;
 		case ilfactor_bool_T:
 			ret = il_factor_bool_eval(self->u.bool_,env, cctx);
 			break;
@@ -357,8 +345,6 @@ char* il_factor_tostr(il_factor* self, enviroment* env) {
 			return il_factor_super_tostr(self->u.super_, env);
 		case ilfactor_new_instance_T:
 			return il_factor_new_instance_tostr(self->u.new_instance_, env);
-		case ilfactor_cast_T:
-			return il_factor_cast_tostr(self->u.cast_, env);
 		case ilfactor_bool_T:
 			return il_factor_bool_tostr(self->u.bool_, env);
 		case ilfactor_null_T:
@@ -458,9 +444,6 @@ void il_factor_delete(il_factor * self) {
 			break;
 		case ilfactor_new_instance_T:
 			il_factor_new_instance_delete(self->u.new_instance_);
-			break;
-		case ilfactor_cast_T:
-			il_factor_cast_delete(self->u.cast_);
 			break;
 		case ilfactor_bool_T:
 			il_factor_bool_delete(self->u.bool_);

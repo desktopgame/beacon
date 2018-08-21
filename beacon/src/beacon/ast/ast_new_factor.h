@@ -30,14 +30,6 @@ ast* ast_new_null();
 ast* ast_new_as(ast* afact, ast* atypename);
 
 /**
- * キャストを表す要素を作成します.
- * @param atypename
- * @param afact
- * @return
- */
-ast* ast_new_cast(ast* atypename, ast* afact);
-
-/**
  * 名前参照を表す要素を作成します.
  * 名前参照には identifier だけで構成される変数参照と、
  * 名前空間とクラス名を連結した 静的フィールド参照が存在します。

@@ -27,7 +27,6 @@ typedef enum il_factor_type {
 	ilfactor_this_T,
 	ilfactor_super_T,
 	ilfactor_new_instance_T,
-	ilfactor_cast_T,
 	ilfactor_bool_T,
 	ilfactor_null_T,
 	ilfactor_as_T,
@@ -60,7 +59,6 @@ struct il_factor_assign_op;
 struct il_factor_this;
 struct il_factor_super;
 struct il_factor_new_instance;
-struct il_factor_cast;
 struct il_factor_bool;
 struct il_factor_null;
 struct il_factor_as;

@@ -23,13 +23,6 @@ ast * ast_new_as(ast * afact, ast * atypename) {
 	return ret;
 }
 
-ast * ast_new_cast(ast * atypename, ast * afact) {
-	ast* ret = ast_new(ast_cast_T);
-	ast_push(ret, atypename);
-	ast_push(ret, afact);
-	return ret;
-}
-
 
 ast* ast_new_name_reference(ast* atypename) {
 	ast* ret = ast_new(ast_name_reference_T);

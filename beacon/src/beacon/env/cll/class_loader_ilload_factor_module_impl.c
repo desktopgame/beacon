@@ -8,7 +8,6 @@
 static il_factor* CLIL_factorImpl(class_loader* self, ast* source);
 static il_factor_bool* CLIL_true(class_loader* self, ast* source);
 static il_factor_bool* CLIL_false(class_loader* self, ast* source);
-static il_factor_cast* CLIL_cast(class_loader* self, ast* source);
 static il_factor_unary_op* CLIL_unary(class_loader* self, ast* source, operator_type type);
 static il_factor_binary_op* CLIL_binary(class_loader* self, ast* source, operator_type type);
 static il_factor_explicit_unary_op* CLIL_explicit_unary(class_loader* self, ast* source, operator_type type);
@@ -134,8 +133,6 @@ static il_factor* CLIL_factorImpl(class_loader* self, ast* source) {
 		return ret;
 	} else if (source->tag == ast_new_instance_T) {
 		return il_factor_wrap_new_instance(CLIL_new_instance(self, source));
-	} else if (source->tag == ast_cast_T) {
-		return il_factor_wrap_cast(CLIL_cast(self, source));
 	} else if (source->tag == ast_true_T) {
 		return il_factor_wrap_bool(CLIL_true(self, source));
 	} else if (source->tag == ast_false_T) {
@@ -163,14 +160,6 @@ static il_factor_bool * CLIL_true(class_loader * self, ast * source) {
 
 static il_factor_bool * CLIL_false(class_loader * self, ast * source) {
 	return il_factor_bool_new(false);
-}
-
-static il_factor_cast * CLIL_cast(class_loader * self, ast * source) {
-	ast* atypename = ast_first(source);
-	ast* afact = ast_second(source);
-	il_factor_cast* ret = il_factor_cast_new(CLIL_factor(self, afact));
-	CLIL_generic_cache(ast_first(atypename), ret->fqcn);
-	return ret;
 }
 
 static il_factor_unary_op* CLIL_unary(class_loader* self, ast* source, operator_type type) {
