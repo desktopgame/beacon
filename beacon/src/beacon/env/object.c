@@ -260,7 +260,7 @@ void object_print(object * self) {
 	if (self->tag == object_int_T) {
 		printf("Int: %d", self->u.int_);
 	} else if (self->tag == object_double_T) {
-		printf("Double: %d", self->u.double_);
+		printf("Double: %lf", self->u.double_);
 	} else if (self->tag == object_string_T) {
 		string_buffer* sb = (string_buffer*)vector_at(self->native_slot_vec, 0);
 		printf("String: %s", sb->text);
