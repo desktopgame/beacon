@@ -251,7 +251,7 @@ class_* type_cast_class(type* self) {
 	return self->u.class_;
 }
 
-interface_* type_cast_int_Terface(type* self) {
+interface_* type_cast_interface(type* self) {
 	assert(self->tag == type_interface_T);
 	return self->u.interface_;
 }
