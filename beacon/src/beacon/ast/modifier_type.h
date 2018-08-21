@@ -15,12 +15,6 @@ typedef enum modifier_type {
 } modifier_type;
 
 /**
- * static | native を返します.
- * @return
- */
-modifier_type modifier_static_T_native();
-
-/**
  * 指定の修飾子が static を含むなら true.
  * @param type
  * @return

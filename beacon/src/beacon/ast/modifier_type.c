@@ -1,10 +1,6 @@
 #include "modifier_type.h"
 #include <stdio.h>
 
-modifier_type modifier_static_T_native() {
-	return modifier_static_T | modifier_native_T;
-}
-
 bool modifier_is_static(modifier_type type) {
 	return (type & modifier_static_T);
 }
