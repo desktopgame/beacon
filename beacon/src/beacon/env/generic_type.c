@@ -321,7 +321,7 @@ static int generic_type_distanceForm(generic_type* self, generic_type* other, fr
 	if(other->core_type == TYPE_NULL) {
 		return 1;
 	}
-	if (self->core_type->tag == type_class) {
+	if (self->core_type->tag == type_class_T) {
 		//otherからselfまで辿る
 		class_* baseline = self->core_type->u.class_;
 		class_* ptr = other->core_type->u.class_;
@@ -342,8 +342,8 @@ static int generic_type_distanceForm(generic_type* self, generic_type* other, fr
 			}
 		}
 		return dist;
-	} else if (self->core_type->tag == type_interface) {
-		if (other->core_type->tag == type_class) {
+	} else if (self->core_type->tag == type_interface_T) {
+		if (other->core_type->tag == type_class_T) {
 			//クラスからインターフェイスを探す
 			generic_type* impl_baseline = NULL;
 			generic_type* impl = class_find_interface_type(TYPE2CLASS(GENERIC2TYPE(other)), (GENERIC2TYPE(self)), &impl_baseline);
@@ -362,7 +362,7 @@ static int generic_type_distanceForm(generic_type* self, generic_type* other, fr
 			}
 			vector_delete(gargs, vector_deleter_null);
 			return dist;
-		} else if (other->core_type->tag == type_interface) {
+		} else if (other->core_type->tag == type_interface_T) {
 			generic_type* impl = interface_find_interface(TYPE2INTERFACE(GENERIC2TYPE(other)), (GENERIC2TYPE(self)));
 			if (impl == NULL) {
 				impl = other;

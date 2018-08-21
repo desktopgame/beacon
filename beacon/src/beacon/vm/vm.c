@@ -584,7 +584,7 @@ static void vm_run(frame * self, enviroment * env, int pos, int deferStart) {
 				int absClsIndex = (int)enviroment_source_at(env, ++IDX);
 				int constructorIndex = (int)enviroment_source_at(env, ++IDX);
 				type* tp = (type*)vector_at(ctx->type_vec, absClsIndex);
-				assert(tp->tag == type_class);
+				assert(tp->tag == type_class_T);
 				class_* cls = TYPE2CLASS(tp);
 				#if defined(DEBUG)
 				const char* clsname = string_pool_ref2str(cls->namev);
@@ -632,7 +632,7 @@ static void vm_run(frame * self, enviroment * env, int pos, int deferStart) {
 				int absClsIndex = (int)enviroment_source_at(env, ++IDX);
 				int ctorIndex = (int)enviroment_source_at(env, ++IDX);
 				type* tp = (type*)vector_at(ctx->type_vec, absClsIndex);
-				assert(tp->tag == type_class);
+				assert(tp->tag == type_class_T);
 				class_* cls = tp->u.class_;
 				constructor* ctor = (constructor*)vector_at(cls->constructor_list, ctorIndex);
 				//コンストラクタを実行するためのVMを作成
@@ -853,7 +853,7 @@ static void vm_run(frame * self, enviroment * env, int pos, int deferStart) {
 				object* o = vector_pop(self->value_stack);
 				generic_type* a = vector_pop(self->type_args_vec);
 				a = generic_type_apply(a, sg_thread_context());
-				if(a->core_type->tag == type_interface) {
+				if(a->core_type->tag == type_interface_T) {
 					interface_* inter = TYPE2INTERFACE(GENERIC2TYPE(a));
 					vector* impl_list = class_generic_type_list_to_interface_list_tree(TYPE2CLASS(GENERIC2TYPE(o->gtype)));
 					vector* inter_list = class_generic_type_list_to_interface_list(impl_list);
@@ -882,9 +882,9 @@ static void vm_run(frame * self, enviroment * env, int pos, int deferStart) {
 				generic_type* a = vector_pop(self->type_args_vec);
 				a = generic_type_apply(a, sg_thread_context());
 				assert(a->core_type != NULL);
-				if(a->core_type->tag == type_class) {
+				if(a->core_type->tag == type_class_T) {
 					vector_push(self->value_stack, o);
-				} else if(a->core_type->tag == type_interface) {
+				} else if(a->core_type->tag == type_interface_T) {
 					interface_* inter = TYPE2INTERFACE(GENERIC2TYPE(a));
 					vector* impl_list = class_generic_type_list_to_interface_list_tree(TYPE2CLASS(GENERIC2TYPE(o->gtype)));
 					vector* inter_list = class_generic_type_list_to_interface_list(impl_list);

@@ -155,8 +155,8 @@ static void CLBC_enum_decl(class_loader * self, il_type * iltype, type * tp, nam
 	}
 	//重複するフィールドを確認する
 	field* outField = NULL;
-	if((tp->tag == type_enum ||
-	   tp->tag == type_class) &&
+	if((tp->tag == type_enum_T ||
+	   tp->tag == type_class_T) &&
 	   !class_field_valid(tp->u.class_, &outField)) {
 		bc_error_throw(bcerror_overwrap_field_name, string_pool_ref2str(tp->u.class_->namev), string_pool_ref2str(outField->namev));
 	}
@@ -260,14 +260,14 @@ static void CLBC_excec_enum_impl(class_loader* self) {
 static void CLBC_check_class(class_loader * self, il_type * iltype, type * tp, namespace_ * scope) {
 	//実装されていないインターフェイスを確認する
 	method* outiMethod = NULL;
-	if(tp->tag == type_class &&
+	if(tp->tag == type_class_T &&
 	  !class_interface_implement_valid(TYPE2CLASS(tp), &outiMethod)) {
 		bc_error_throw(bcerror_not_implement_interface, string_pool_ref2str(tp->u.class_->namev), string_pool_ref2str(outiMethod->namev));
 		return;
 	}
 	//実装されていない抽象メソッドを確認する
 	method* outaMethod = NULL;
-	if(tp->tag == type_class &&
+	if(tp->tag == type_class_T &&
 	   !class_abstract_class_implement_valid(TYPE2CLASS(tp), &outaMethod)) {
 		bc_error_throw(bcerror_not_implement_abstract_method, string_pool_ref2str(tp->u.class_->namev), string_pool_ref2str(outaMethod->namev));
 	   }

@@ -52,7 +52,7 @@ static bool methods_is_all_abstract(vector* v);
 
 type * type_wrap_class(class_ * self) {
 	type* ret = type_new();
-	ret->tag = type_class;
+	ret->tag = type_class_T;
 	ret->u.class_ = self;
 	self->parent = ret;
 	return ret;
@@ -83,7 +83,7 @@ class_ * class_new(string_view namev) {
 }
 
 class_* class_new_proxy(generic_type* gt, string_view namev) {
-	assert(gt->core_type->tag == type_interface);
+	assert(gt->core_type->tag == type_interface_T);
 	class_* ret = class_new(namev);
 	ret->super_class = GENERIC_OBJECT;
 	vector_push(ret->impl_list, gt);

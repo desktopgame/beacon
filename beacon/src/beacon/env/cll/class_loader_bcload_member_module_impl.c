@@ -284,7 +284,7 @@ bool CLBC_method_decl(class_loader* self, il_type* iltype, type* tp, il_method* 
 	cctx->ty = tp;
 	cctx->u.mt = method;
 	//インターフェースなら空
-	if (tp->tag == type_interface ||
+	if (tp->tag == type_interface_T ||
 	   modifier_is_abstract(method->modifier)) {
 		method->type = method_type_abstract;
 		method->u.script_method = NULL;
@@ -294,7 +294,7 @@ bool CLBC_method_decl(class_loader* self, il_type* iltype, type* tp, il_method* 
 	//メソッドが抽象メソッドだが、
 	//インターフェイスでも抽象クラスでもない
 	if(modifier_is_abstract(method->modifier) &&
-	  (tp->tag == type_class &&
+	  (tp->tag == type_class_T &&
 	  !TYPE2CLASS(tp)->is_abstract)) {
 		bc_error_throw(bcerror_abstract_method_by, string_pool_ref2str(method->namev));
 		method_delete(method);
@@ -303,7 +303,7 @@ bool CLBC_method_decl(class_loader* self, il_type* iltype, type* tp, il_method* 
 	}
 	//メソッドの本文が省略されているが、
 	//ネイティブメソッドでも抽象メソッドでもない
-	if(tp->tag == type_class &&
+	if(tp->tag == type_class_T &&
 	   ilmethod->no_stmt &&
 		(!modifier_is_abstract(method->modifier) && !modifier_is_native(method->modifier))
 	) {
@@ -313,7 +313,7 @@ bool CLBC_method_decl(class_loader* self, il_type* iltype, type* tp, il_method* 
 		return false;
 	}
 	//ネイティブメソッドもしくは抽象メソッドなのに本文が書かれている
-	if(tp->tag == type_class &&
+	if(tp->tag == type_class_T &&
 	   !ilmethod->no_stmt &&
 		(modifier_is_abstract(method->modifier) || modifier_is_native(method->modifier))
 	) {
@@ -508,7 +508,7 @@ void CLBC_ctors_decl(class_loader* self, il_type* iltype, type* tp, namespace_* 
 
 void CLBC_ctors_impl(class_loader* self, il_type* iltype, type* tp) {
 	CL_ERROR(self);
-	assert(tp->tag == type_class);
+	assert(tp->tag == type_class_T);
 	class_* classz = tp->u.class_;
 	namespace_* scope = classz->location;
 	vector* constructors = classz->constructor_list;
@@ -851,7 +851,7 @@ static void CLBC_default_operator_overload(class_loader* self, type* tp) {
 }
 
 static void CLBC_default_eqoperator_overload(class_loader* self, type* tp) {
-	if(tp->tag != type_class) {
+	if(tp->tag != type_class_T) {
 		return;
 	}
 	//==(Object a)を検索する
@@ -902,7 +902,7 @@ static void CLBC_default_eqoperator_overload(class_loader* self, type* tp) {
 }
 
 static void CLBC_default_noteqoperator_overload(class_loader* self, type* tp) {
-	if(tp->tag != type_class) {
+	if(tp->tag != type_class_T) {
 		return;
 	}
 	//!=(Object a)を検索する

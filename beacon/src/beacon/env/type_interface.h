@@ -12,9 +12,9 @@
  * 型の種類を表すタグ.
  */
 typedef enum type_tag {
-	type_class,
-	type_interface,
-	type_enum
+	type_class_T,
+	type_interface_T,
+	type_enum_T
 } type_tag;
 
 struct namespace_;

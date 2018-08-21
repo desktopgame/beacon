@@ -339,9 +339,9 @@ static void CLBC_register_class(class_loader* self, namespace_* parent, il_type*
 		if (i == 0) {
 			generic_type* gtp = import_manager_resolve(self->import_manager, parent, e, cctx);
 			assert(gtp != NULL);
-			if (gtp->core_type->tag == type_class) {
+			if (gtp->core_type->tag == type_class_T) {
 				cls->super_class = gtp;
-			} else if (gtp->core_type->tag == type_interface) {
+			} else if (gtp->core_type->tag == type_interface_T) {
 				vector_push(cls->impl_list, gtp);
 			} else assert(false);
 		//二つ目以降はインターフェースのみ
@@ -352,7 +352,7 @@ static void CLBC_register_class(class_loader* self, namespace_* parent, il_type*
 			const char* Estr = string_pool_ref2str(type_name(E));
 			#endif
 			vector_push(cls->impl_list, gtp);
-			if(E->tag != type_interface) {
+			if(E->tag != type_interface_T) {
 				bc_error_throw(bcerror_class_first, string_pool_ref2str(type_name(tp)));
 				namespace_add_type(parent, tp);
 				call_context_delete(cctx);
@@ -400,7 +400,7 @@ static void CLBC_register_interface(class_loader* self, namespace_* parent, il_t
 		//インターフェースはインターフェースのみ継承
 		generic_type* gtp = import_manager_resolve(self->import_manager, parent, e, cctx);
 		type* E = GENERIC2TYPE(gtp);
-		if(E->tag != type_interface) {
+		if(E->tag != type_interface_T) {
 			bc_error_throw(bcerror_interface_only, string_pool_ref2str(type_name(tp)));
 			namespace_add_type(parent, tp);
 			call_context_delete(cctx);

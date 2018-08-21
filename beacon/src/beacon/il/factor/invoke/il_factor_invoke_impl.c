@@ -241,7 +241,7 @@ static void il_factor_invoke_generate_method(il_factor_invoke* self, enviroment*
 		il_factor_generate(e->factor, env, cctx);
 	}
 	il_factor_generate(self->receiver, env, cctx);
-	if(self->u.m->parent->tag == type_interface) {
+	if(self->u.m->parent->tag == type_interface_T) {
 		opcode_buf_add(env->buf, (vector_item)op_invokeinterface);
 		opcode_buf_add(env->buf, (vector_item)self->u.m->parent->absolute_index);
 		opcode_buf_add(env->buf, (vector_item)self->index);

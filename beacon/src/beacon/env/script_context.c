@@ -106,7 +106,7 @@ void script_context_static_each(script_context* self, static_each act) {
 	script_context* ctx = self;
 	for (int i = 0; i < ctx->type_vec->length; i++) {
 		type* e = (type*)vector_at(ctx->type_vec, i);
-		if (e->tag != type_class) {
+		if (e->tag != type_class_T) {
 			continue;
 		}
 		class_* cls = e->u.class_;

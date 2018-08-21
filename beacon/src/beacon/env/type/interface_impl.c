@@ -20,7 +20,7 @@ static void interface_delete_property(vector_item item);
 
 type * type_wrap_interface(interface_ * self) {
 	type* ret = type_new();
-	ret->tag = type_interface;
+	ret->tag = type_interface_T;
 	ret->u.interface_ = self;
 	self->parent = ret;
 	return ret;
@@ -172,7 +172,7 @@ vector* interface_generic_interface_tree(interface_* self) {
 }
 
 generic_type* interface_find_interface(interface_* self, type* tinter) {
-	assert(tinter->tag == type_interface);
+	assert(tinter->tag == type_interface_T);
 	if (self == TYPE2INTERFACE(tinter)) {
 		return NULL;
 	}

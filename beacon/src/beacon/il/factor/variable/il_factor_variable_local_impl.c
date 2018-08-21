@@ -100,7 +100,7 @@ static void il_factor_variable_local_load_field(il_factor_variable_local * self,
 	//NOTE:トップレベルではここが空なので、
 	//定義されていない変数とみなせる？
 	type* tp = call_context_type(cctx);
-	if(tp->tag == type_interface/* この条件は構文規則からして満たさないはず */) {
+	if(tp->tag == type_interface_T/* この条件は構文規則からして満たさないはず */) {
 		bc_error_throw(bcerror_ref_undefined_local_variable, string_pool_ref2str(self->namev));
 		return;
 	}

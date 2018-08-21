@@ -539,7 +539,7 @@ vector* class_generic_interface_list(class_* self) {
 }
 
 generic_type* class_find_interface_type(class_* self, type* tinter, generic_type** out_baseline) {
-	assert(tinter->tag == type_interface);
+	assert(tinter->tag == type_interface_T);
 	(*out_baseline) = NULL;
 	//実装インターフェイス一覧から同じのを探す
 	generic_type* ret = NULL;

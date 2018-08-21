@@ -117,7 +117,7 @@ static void il_factor_member_op_check(il_factor_member_op* self, enviroment* env
 	}
 	//レシーバのインスタンスフィールドを検索
 	type* ctype = gtype->core_type;
-	assert(ctype->tag == type_class);
+	assert(ctype->tag == type_class_T);
 	int temp = -1;
 	self->f = class_find_field_tree(TYPE2CLASS(ctype), self->namev, &temp);
 	self->index = temp;
@@ -148,7 +148,7 @@ static void il_factor_member_op_check_static(il_factor_member_op* self, envirome
 	//Name.call
 	//の call をフィールドとして解決する
 	type* ccT = receiver_type->core_type;
-	assert(ccT->tag == type_class);
+	assert(ccT->tag == type_class_T);
 	int temp = -1;
 	self->f = class_find_sfield_tree(TYPE2CLASS(ccT), self->namev, &temp);
 	self->index = temp;

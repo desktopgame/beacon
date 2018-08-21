@@ -58,7 +58,7 @@ generic_type* import_manager_resolve(import_manager* self, namespace_* scope, ge
 		//Array, Dictionary などはっきりした型が見つかった
 		//が、型引数があるのでそれを解決する
 		generic_type* normalGType = generic_type_new(core_type);
-		assert(core_type->tag != type_enum);
+		assert(core_type->tag != type_enum_T);
 		for (int i = 0; i < fqcn->type_args->length; i++) {
 			generic_cache* e = (generic_cache*)vector_at(fqcn->type_args, i);
 			generic_type* child = import_manager_resolve(self, scope, e, cctx);
