@@ -106,14 +106,6 @@ ast* ast_new_explicit_uoperator(ast* afact, operator_type type) {
 	return ret;
 }
 
-ast* ast_new_lambda(ast* aparameter_list, ast* areturn, ast* abody) {
-	ast* ret = ast_new(ast_lambda_T);
-	ast_push(ret, aparameter_list);
-	ast_push(ret, areturn);
-	ast_push(ret, abody);
-	return ret;
-}
-
 ast* ast_new_subscript_access(ast* afact, ast* aindex) {
 	ast* ret = ast_new(ast_sub_Tscript_access);
 	ast_push(ret, afact);

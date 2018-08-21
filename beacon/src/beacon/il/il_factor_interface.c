@@ -80,9 +80,6 @@ void il_factor_dump(il_factor * self, int depth) {
 		case ilfactor_explicit_binary_op_T:
 			il_factor_explicit_binary_op_dump(self->u.exp_binary_op, depth);
 			break;
-		case ilfactor_lambda_T:
-			il_factor_lambda_dump(self->u.lambda_, depth);
-			break;
 		case ilfactor_property_T:
 			il_factor_property_dump(self->u.prop, depth);
 			break;
@@ -158,9 +155,6 @@ void il_factor_generate(il_factor * self, enviroment* env, call_context* cctx) {
 			break;
 		case ilfactor_explicit_binary_op_T:
 			il_factor_explicit_binary_op_generate(self->u.exp_binary_op, env, cctx);
-			break;
-		case ilfactor_lambda_T:
-			il_factor_lambda_generate(self->u.lambda_, env, cctx);
 			break;
 		case ilfactor_property_T:
 			il_factor_property_generate(self->u.prop, env, cctx);
@@ -243,9 +237,6 @@ void il_factor_load(il_factor * self, enviroment * env, call_context* cctx) {
 		case ilfactor_explicit_binary_op_T:
 			il_factor_explicit_binary_op_load(self->u.exp_binary_op, env, cctx);
 			break;
-		case ilfactor_lambda_T:
-			il_factor_lambda_load(self->u.lambda_, env, cctx);
-			break;
 		case ilfactor_property_T:
 			il_factor_property_load(self->u.prop, env, cctx);
 			break;
@@ -325,9 +316,6 @@ generic_type* il_factor_eval(il_factor * self, enviroment * env, call_context* c
 		case ilfactor_explicit_binary_op_T:
 			ret = il_factor_explicit_binary_op_eval(self->u.exp_binary_op, env, cctx);
 			break;
-		case ilfactor_lambda_T:
-			ret = il_factor_lambda_eval(self->u.lambda_, env, cctx);
-			break;
 		case ilfactor_property_T:
 			ret = il_factor_property_eval(self->u.prop, env, cctx);
 			break;
@@ -388,8 +376,6 @@ char* il_factor_tostr(il_factor* self, enviroment* env) {
 			return NULL;
 		case ilfactor_explicit_binary_op_T:
 			return NULL;
-		case ilfactor_lambda_T:
-			return il_factor_lambda_tostr(self->u.lambda_, env);
 		case ilfactor_property_T:
 			return il_factor_property_tostr(self->u.prop, env);
 		case ilfactor_subscript_T:
@@ -498,9 +484,6 @@ void il_factor_delete(il_factor * self) {
 			break;
 		case ilfactor_explicit_binary_op_T:
 			il_factor_explicit_binary_op_delete(self->u.exp_binary_op);
-			break;
-		case ilfactor_lambda_T:
-			il_factor_lambda_delete(self->u.lambda_);
 			break;
 		case ilfactor_property_T:
 			il_factor_property_delete(self->u.prop);

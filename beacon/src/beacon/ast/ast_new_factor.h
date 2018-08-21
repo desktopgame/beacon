@@ -126,15 +126,6 @@ ast* ast_new_explicit_bioperator(ast* afact, operator_type type, ast* aarg);
 ast* ast_new_explicit_uoperator(ast* afact, operator_type type);
 
 /**
- * ラムダを表す要素を作成します.
- * @param aparameter_list
- * @param areturn
- * @param abody
- * @return
- */
-ast* ast_new_lambda(ast* aparameter_list, ast* areturn, ast* abody);
-
-/**
  * @param afact
  * @param aindex
  * @return

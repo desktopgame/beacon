@@ -36,7 +36,6 @@ typedef enum il_factor_type {
 	ilfactor_instanceof_T,
 	ilfactor_explicit_binary_op_T,
 	ilfactor_explicit_unary_op_T,
-	ilfactor_lambda_T,
 	ilfactor_property_T,
 	ilfactor_subscript_T
 } il_factor_type;
@@ -72,7 +71,6 @@ struct il_factor_member_op;
 struct il_factor_instanceof;
 struct il_factor_explicit_binary_op;
 struct il_factor_explicit_unary_op;
-struct il_factor_lambda;
 struct il_factor_property;
 struct il_factor_subscript;
 
@@ -105,7 +103,6 @@ typedef struct il_factor {
 		struct il_factor_instanceof* instanceof_;
 		struct il_factor_explicit_binary_op* exp_binary_op;
 		struct il_factor_explicit_unary_op* exp_unary_op;
-		struct il_factor_lambda* lambda_;
 		struct il_factor_property* prop;
 		struct il_factor_subscript* subscript;
 	} u;

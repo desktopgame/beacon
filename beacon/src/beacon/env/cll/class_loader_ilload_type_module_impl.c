@@ -113,15 +113,6 @@ void CLIL_parameter_list(class_loader* self, vector* list, ast* asource) {
 
 void CLIL_argument_list(class_loader* self, vector* list, ast* asource) {
 	CLIL_argument_listImpl(self, list, asource);
-	//ラムダに自分が引数列の中で何番目であるかを教える
-	for(int i=0; i<list->length; i++) {
-		il_argument* e = (il_argument*)vector_at(list, i);
-		il_factor* f = e->factor;
-		if(f->type == ilfactor_lambda_T) {
-			il_factor_lambda* lambda = f->u.lambda_;
-			lambda->offset = i;
-		}
-	}
 }
 //private
 static void CLIL_fqcn_cache_impl(ast* afqcn, fqcn_cache* fqcn, int level) {
@@ -223,19 +214,6 @@ static void CLIL_argument_listImpl(class_loader* self, vector* list, ast* asourc
 		ast* aprimary = ast_first(asource);
 		il_argument* ilarg = il_argument_new();
 		ilarg->factor = CLIL_factor(self, aprimary);
-		vector_push(list, ilarg);
-	} else if(asource->tag == ast_lambda_T) {
-		//ラムダは実引数列にしかおけない仕様
-		ast* aparam_list = ast_first(asource);
-		ast* areturn = ast_second(asource);
-		ast* abody = ast_at(asource, 2);
-		il_factor_lambda* lbd = il_factor_lambda_new();
-		CLIL_parameter_list(self, lbd->parameter_vec, aparam_list);
-		CLIL_generic_cache(areturn, lbd->return_gtype);
-		CLIL_body(self,lbd->statement_vec, abody);
-		//ラムダを実引数でラップする
-		il_argument* ilarg = il_argument_new();
-		ilarg->factor = il_factor_wrap_lambda(lbd);
 		vector_push(list, ilarg);
 	}
 }
