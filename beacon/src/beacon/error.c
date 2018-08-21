@@ -197,6 +197,9 @@ void bc_error_vthrow(bc_error_id id, va_list ap) {
 			fmt = "undefined property: %s#%s";
 			break;
 
+		case bcerror_assign_to_invoke_T:
+			fmt = "can't assign to invoke: %s";
+			break;
 
 		case bcerror_invoke_bound_undefined_method_T:
 			fmt = "undefined method: %s#%s";

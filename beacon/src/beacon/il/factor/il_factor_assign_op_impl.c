@@ -211,6 +211,12 @@ static void assign_by_call(il_factor_assign_op* self, enviroment* env, call_cont
 
 static void assign_by_invoke(il_factor_invoke* lhs, il_factor* rhs, enviroment* env, call_context* cctx) {
 	int temp = -1;
+	if(lhs->tag != instance_invoke_subscript_T) {
+		bc_error_throw(bcerror_assign_to_invoke_T,
+			string_pool_ref2str(lhs->namev)
+		);
+		return;
+	}
 	il_factor_invoke_find_set(lhs, rhs, env, cctx, &temp);
 	for(int i=0; i<lhs->args->length; i++) {
 		il_argument* arg = vector_at(lhs->args, i);
