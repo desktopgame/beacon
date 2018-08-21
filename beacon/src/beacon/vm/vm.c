@@ -674,7 +674,11 @@ static void vm_run(frame * self, enviroment * env, int pos, int deferStart) {
 			}
 			case op_super:
 			{
-				vector_push(self->value_stack, vector_at(self->ref_stack, 0));
+				object* a = vector_at(self->ref_stack, 0);
+				object* super = object_clone(a);
+				super->gtype = TYPE2CLASS(GENERIC2TYPE(a->gtype))->super_class;
+				super->vptr = TYPE2CLASS(GENERIC2TYPE(TYPE2CLASS(GENERIC2TYPE(a->gtype))->super_class))->vt;
+				vector_push(self->value_stack, super);
 				break;
 			}
 			//store,load

@@ -55,15 +55,12 @@ typedef enum object_tag {
  */
 typedef struct object {
 	struct generic_type* gtype;
-	//-初期化時
-	//-宣言時と互換性のある
-	//異なる型が代入されたとき
-	//この vptr を入れ替える
 	struct vtable* vptr;
 	object_paint paint;
 	object_tag tag;
 	vector* native_slot_vec;
 	bool is_coroutine;
+	bool is_clone;
 	union {
 		int int_;
 		double double_;

@@ -194,24 +194,16 @@ object* object_clone(object* self) {
 		   return object_copy(self);
 	}
 	object* ret = NULL;
-	if(self->tag == object_ref_T) {
+	if(self->tag == object_ref_T ||
+	   self->tag == object_array_T ||
+	   self->tag == object_string_T) {
 		ret = object_ref_new();
 		ret->gtype = self->gtype;
 		ret->vptr = self->vptr;
-		ret->u.field_vec = self->u.field_vec;
-	} else if(self->tag == object_array_T) {
-		ret = object_ref_new();
-		ret->gtype = self->gtype;
-		ret->vptr = self->vptr;
-		ret->native_slot_vec = self->native_slot_vec;
-		ret->u.field_vec = self->u.field_vec;
-	} else if(self->tag == object_string_T) {
-		ret = object_ref_new();
-		ret->gtype = self->gtype;
-		ret->vptr = self->vptr;
-		ret->native_slot_vec = self->native_slot_vec;
+		ret->native_slot_vec  = self->native_slot_vec;
 		ret->u.field_vec = self->u.field_vec;
 	}
+	ret->is_clone = true;
 	return ret;
 }
 
@@ -276,6 +268,10 @@ void object_print(object * self) {
 
 void object_delete(object * self) {
 	gObjectCount--;
+	if(self->is_clone) {
+		MEM_FREE(self);
+		return;
+	}
 	if(self->is_coroutine) {
 		yield_context* yctx = vector_at(self->native_slot_vec, 0);
 		vector_remove(self->native_slot_vec, 0);
@@ -393,6 +389,7 @@ static object* object_mallocImpl(object_tag type, const char* filename, int line
 	ret->paint = paint_unmarked_T;
 	ret->tag = type;
 	ret->vptr = NULL;
+	ret->is_clone = false;
 	if (type == object_string_T ||
 		type == object_array_T ||
 		type == object_ref_T) {
