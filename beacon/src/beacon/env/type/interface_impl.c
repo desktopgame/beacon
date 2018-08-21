@@ -11,7 +11,7 @@
 #include "../type_parameter.h"
 #include <stdio.h>
 //proto
-vector* interface_generic_interface_treeImpl(interface_* self);
+vector* interface_get_generic_interface_treeImpl(interface_* self);
 static void interface_delete_method(vector_item item);
 static void interface_type_parameter_delete(vector_item item);
 static void interface_generic_type_list_delete(vector_item item);
@@ -142,8 +142,8 @@ method* interface_get_function(interface_* self) {
 }
 
 
-vector* interface_generic_interface_tree(interface_* self) {
-	return interface_generic_interface_treeImpl(self);
+vector* interface_get_generic_interface_tree(interface_* self) {
+	return interface_get_generic_interface_treeImpl(self);
 }
 
 generic_type* interface_find_interface(interface_* self, type* tinter) {
@@ -161,12 +161,12 @@ generic_type* interface_find_interface(interface_* self, type* tinter) {
 }
 
 //private
-vector* interface_generic_interface_treeImpl(interface_* self) {
+vector* interface_get_generic_interface_treeImpl(interface_* self) {
 	vector* ret = vector_new();
 	for(int i=0; i<self->impl_list->length; i++) {
 		generic_type* ginter = vector_at(self->impl_list, i);
 		vector_push(ret, ginter);
-		vector* inner = interface_generic_interface_treeImpl(TYPE2INTERFACE(GENERIC2TYPE(ginter)));
+		vector* inner = interface_get_generic_interface_treeImpl(TYPE2INTERFACE(GENERIC2TYPE(ginter)));
 		vector_merge(ret, inner);
 		vector_delete(inner, vector_deleter_null);
 	}

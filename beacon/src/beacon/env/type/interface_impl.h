@@ -137,7 +137,7 @@ struct method* interface_get_function(interface_* self);
  * @param self
  * @return
  */
-vector* interface_generic_interface_tree(interface_* self);
+vector* interface_get_generic_interface_tree(interface_* self);
 
 /**
  * @param self
