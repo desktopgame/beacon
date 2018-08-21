@@ -66,14 +66,14 @@ static void bc_file_nativeGet(method* parent, frame* fr, enviroment* env) {
 	FILE* fp = vector_at(self->native_slot_vec, 0);
 	assert(fp != NULL);
 	char ret = fgetc(fp);
-	vector_push(fr->value_stack, object_char_new(ret));
+	vector_push(fr->value_stack, object_char_T_new(ret));
 }
 
 static void bc_file_nativeAvailable(method* parent, frame* fr, enviroment* env) {
 	object* self = vector_at(fr->ref_stack, 0);
 	FILE* fp = vector_at(self->native_slot_vec, 0);
 	assert(fp != NULL);
-	vector_push(fr->value_stack, object_bool_get(!feof(fp)));
+	vector_push(fr->value_stack, object_bool_T_get(!feof(fp)));
 }
 
 static void bc_file_nativeGetStdIn(method* parent, frame* fr, enviroment* env) {
@@ -99,8 +99,8 @@ static void bc_file_nativeClose(method* parent, frame* fr, enviroment* env) {
 }
 
 static object* file_new(FILE* fp, bool std) {
-	object* file = object_ref_new();
-	assert(file->paint != paint_onexit);
+	object* file = object_ref_T_new();
+	assert(file->paint != paint_onexit_T);
 	type* fileType = bc_file_type();
 	file->gtype = fileType->generic_self;
 	file->vptr = TYPE2CLASS(fileType)->vt;

@@ -86,7 +86,7 @@ operator_overload* il_factor_invoke_bound_find_set(il_factor_invoke_bound* self,
 	vector* args = vector_new();
 	vector_push(args, ((il_argument*)vector_at(self->args, 0))->factor);
 	vector_push(args, value);
-	operator_overload* opov = class_ilfind_operator_overload(TYPE2CLASS(self->u.subscript.opov->parent), operator_subscript_set, args, env, cctx, outIndex);
+	operator_overload* opov = class_ilfind_operator_overload(TYPE2CLASS(self->u.subscript.opov->parent), operator_sub_script_set_T, args, env, cctx, outIndex);
 	vector_delete(args, vector_deleter_null);
 	return opov;
 }
@@ -179,16 +179,16 @@ static void il_factor_invoke_bound_check(il_factor_invoke_bound * self, envirome
 	}
 	if(receiver_gtype != NULL) {
 		self->tag = bound_invoke_subscript_T;
-		self->u.subscript.opov = class_argfind_operator_overload(TYPE2CLASS(GENERIC2TYPE(receiver_gtype)), operator_subscript_get, self->args, env, cctx, &temp);
+		self->u.subscript.opov = class_argfind_operator_overload(TYPE2CLASS(GENERIC2TYPE(receiver_gtype)), operator_sub_script_get_T, self->args, env, cctx, &temp);
 		self->index = temp;
 		if(temp == -1) {
-			bc_error_throw(bcerror_invoke_bound_undefined_method,
+			bc_error_throw(bcerror_invoke_bound_undefined_method_T,
 				string_pool_ref2str(self->namev)
 			);
 		}
 	}
 	if(self->index == -1) {
-		bc_error_throw(bcerror_invoke_bound_undefined_method,
+		bc_error_throw(bcerror_invoke_bound_undefined_method_T,
 			string_pool_ref2str(type_name(ctype)),
 			string_pool_ref2str(self->namev)
 		);

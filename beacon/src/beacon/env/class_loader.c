@@ -66,7 +66,7 @@ class_loader* class_loader_new(const char* filename, content_type type) {
 	ret->il_code = NULL;
 	ret->parent = NULL;
 	ret->type = type;
-	ret->link = link_none;
+	ret->link = link_none_T;
 	ret->import_manager = import_manager_new();
 	ret->env = enviroment_new();
 	ret->level = 0;
@@ -218,8 +218,8 @@ static void class_loader_load_linkall(class_loader* self) {
 	if(self->type != content_entry_point_T) {
 		return;
 	}
-	class_loader_link_recursive(self, link_decl);
-	class_loader_link_recursive(self, link_impl);
+	class_loader_link_recursive(self, link_decl_T);
+	class_loader_link_recursive(self, link_impl_T);
 	class_loader_lazy_resolve_all(self);
 }
 
@@ -326,11 +326,11 @@ static void class_loader_load_toplevel_function(class_loader* self) {
 
 static bool check_parser_error(parser* p) {
 	if(p->result == parse_syntax_error_T) {
-		bc_error_throw(bcerror_parse, p->error_message);
+		bc_error_throw(bcerror_parse_T, p->error_message);
 		parser_destroy(p);
 		return true;
 	} else if(p->result == parse_open_error_T) {
-		bc_error_throw(bcerror_require_not_found, p->source_name);
+		bc_error_throw(bcerror_require_not_found_T, p->source_name);
 		parser_destroy(p);
 		return true;
 	}

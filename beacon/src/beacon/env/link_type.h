@@ -4,8 +4,8 @@
  * クラスローダーの現在のリンク状態.
  */
 typedef enum link_type {
-	link_decl,
-	link_impl,
-	link_none,
+	link_decl_T,
+	link_impl_T,
+	link_none_T,
 } link_type;
 #endif

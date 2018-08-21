@@ -10,9 +10,9 @@ struct il_type_parameter;
  * 型変数の種類を表す列挙.
  */
 typedef enum type_parameter_kind {
-	type_parameter_kind_default,
-	type_parameter_kind_in,
-	type_parameter_kind_out,
+	type_parameter_kind_default_T,
+	type_parameter_kind_in_T,
+	type_parameter_kind_out_T,
 } type_parameter_kind;
 
 /**

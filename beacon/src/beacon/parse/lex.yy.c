@@ -744,10 +744,10 @@ static int my_yyinput(char *buf, int max_size) {
 	int result;
 	parser* p = parser_current();
 	switch (p->input_type) {
-		case yinput_file:
+		case yinput_file_T:
 			result = file_input(buf, max_size);
 			break;
-		case yinput_string:
+		case yinput_string_T:
 			result = string_input(buf, max_size);
 			break;
 		default:
@@ -1210,7 +1210,7 @@ YY_RULE_SETUP
 case 31:
 YY_RULE_SETUP
 #line 181 "beacon.l"
-{ return (ASSERT_T); }
+{ return (ASSER_T); }
 	YY_BREAK
 case 32:
 YY_RULE_SETUP

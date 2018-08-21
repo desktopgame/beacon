@@ -199,7 +199,7 @@ void ast_print(ast* self) {
 		case ast_namespace_path_list_T:
 			printf("namespace_path list");
 			break;
-		case ast_class_decl_unit_T_T:
+		case ast_class_decl_unit_T:
 			printf("class decl_unit");
 			break;
 		case ast_variable_T:
@@ -210,7 +210,7 @@ void ast_print(ast* self) {
 		}
 		case ast_static_invoke_T: p("static invoke");
 		case ast_fqcn_T: p("fqcn");
-		case ast_fqcn_part_T_list: p("fqcn part-list");
+		case ast_fqcn_part_list_T: p("fqcn part-list");
 		case ast_fqcn_part_T: 
 			printf("fqcn part %s", string_pool_ref2str(self->u.stringv_value));
 			break;
@@ -288,7 +288,7 @@ void ast_print(ast* self) {
 		case ast_if_T: p("if");
 		case ast_if_else_T: p("if else");
 		case ast_if_elif_list_T: p("if elif_list");
-		case ast_if_elif_list_T_else: p("if elif_list else");
+		case ast_if_elif_list_else_T: p("if elif_list else");
 		case ast_elif_T: p("elif");
 		case ast_else_T: p("else");
 		case ast_return_T: p("return");
@@ -369,7 +369,7 @@ bool ast_is_stmt(ast* self) {
 		case ast_inferenced_type_init_T:
 		case ast_if_T:
 		case ast_if_elif_list_T:
-		case ast_if_elif_list_T_else:
+		case ast_if_elif_list_else_T:
 		case ast_elif_T:
 		case ast_else_T:
 		case ast_while_T:

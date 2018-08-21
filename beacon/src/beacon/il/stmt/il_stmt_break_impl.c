@@ -4,13 +4,13 @@
 #include <stdio.h>
 
 il_stmt * il_stmt_wrap_break() {
-	il_stmt* ret = il_stmt_new(ilstmt_break);
+	il_stmt* ret = il_stmt_new(ilstmt_break_T);
 	return ret;
 }
 
 void il_stmt_break_generate(void * empty, enviroment * env, call_context* cctx) {
 	if(cctx->control.while_start->length == 0) {
-		bc_error_throw(bcerror_break_at_not_loop);
+		bc_error_throw(bcerror_break_at_not_loop_T);
 		return;
 	}
 	label* lab = (label*)vector_top(cctx->control.while_end);

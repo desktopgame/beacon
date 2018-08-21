@@ -106,7 +106,7 @@ type* class_new_preload(string_view namev) {
 }
 
 void class_alloc_fields(class_ * self, object * o, frame* fr) {
-	assert(o->tag == object_ref);
+	assert(o->tag == object_ref_T);
 	heap* he = heap_get();
 	for (int i = 0; i < self->field_list->length; i++) {
 		field* f = (field*)vector_at(self->field_list, i);
@@ -609,7 +609,7 @@ static void class_create_vtable_interface(class_* self) {
 			method* classVTM = class_find_impl_method(self, interVTM);
 			if(!self->is_abstract && classVTM == NULL) {
 				vector_push(self->vt_vec, newVT);
-				bc_error_throw(bcerror_not_implement_interface,
+				bc_error_throw(bcerror_not_implement_interface_T,
 					string_pool_ref2str(type_name(interVTM->parent)),
 					string_pool_ref2str(interVTM->namev)
 				);

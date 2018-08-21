@@ -11,7 +11,7 @@
 #include "../../env/generic_cache.h"
 
 il_factor * il_factor_wrap_cast(il_factor_cast * self) {
-	il_factor* ret = il_factor_new(ilfactor_cast);
+	il_factor* ret = il_factor_new(ilfactor_cast_T);
 	ret->u.cast_ = self;
 	return ret;
 }
@@ -62,6 +62,6 @@ void il_factor_cast_delete(il_factor_cast * self) {
 }
 
 il_factor_cast* il_factor_cast_cast_T(il_factor* fact) {
-	assert(fact->type == ilfactor_cast);
+	assert(fact->type == ilfactor_cast_T);
 	return fact->u.cast_;
 }

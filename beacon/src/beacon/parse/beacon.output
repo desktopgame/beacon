@@ -321,8 +321,8 @@ Grammar
 
   237 catch_stmt: CATCH LRB typename_T IDENT RRB scope
 
-  238 assert_stmt: ASSERT_T expression COLON expression stmt_term
-  239            | ASSERT_T expression stmt_term
+  238 assert_stmt: ASSER_T expression COLON expression stmt_term
+  239            | ASSER_T expression stmt_term
 
   240 defer_stmt: DEFER stmt
 
@@ -442,7 +442,7 @@ CONTINUE (343) 230
 TRY (344) 234
 CATCH (345) 237
 THROW (346) 233
-ASSERT_T (347) 238 239
+ASSER_T (347) 238 239
 DEFER (348) 240
 INSTANCEOF (349) 181
 OPERATOR (350) 65 66 67 68 69 70 71 72 73 74 75 76 77 78 79 80 81 82
@@ -634,7 +634,7 @@ State 0
     1 compilation_unit: . init_decl body_decl
     2                 | . compilation_unit body_decl
     3                 | . error '\n'
-    4 init_decl: . %empty  [CHAR_LITERAL, STRING_LITERAL, INT, DOUBLE, IDENT, ADD, SUB, NOT, CHILDA, LRB, VAR, THIS_TOK, SUPER_TOK, TRUE_TOK, FALSE_TOK, NULL_TOK, NEW, DEF, NAMESPACE, RETURN, YIELD, IF, WHILE, BREAK, CONTINUE, TRY, THROW, ASSERT_T, DEFER]
+    4 init_decl: . %empty  [CHAR_LITERAL, STRING_LITERAL, INT, DOUBLE, IDENT, ADD, SUB, NOT, CHILDA, LRB, VAR, THIS_TOK, SUPER_TOK, TRUE_TOK, FALSE_TOK, NULL_TOK, NEW, DEF, NAMESPACE, RETURN, YIELD, IF, WHILE, BREAK, CONTINUE, TRY, THROW, ASSER_T, DEFER]
     5          | . import_list
    22 import_list: . import
    23            | . import_list import
@@ -670,7 +670,7 @@ State 0
     CONTINUE        reduce using rule 4 (init_decl)
     TRY             reduce using rule 4 (init_decl)
     THROW           reduce using rule 4 (init_decl)
-    ASSERT_T        reduce using rule 4 (init_decl)
+    ASSER_T         reduce using rule 4 (init_decl)
     DEFER           reduce using rule 4 (init_decl)
 
     compilation_unit  go to state 3
@@ -810,8 +810,8 @@ State 3
   232            | . RETURN stmt_term
   233 throw_stmt: . THROW expression stmt_term
   234 try_stmt: . TRY scope catch_stmt_list
-  238 assert_stmt: . ASSERT_T expression COLON expression stmt_term
-  239            | . ASSERT_T expression stmt_term
+  238 assert_stmt: . ASSER_T expression COLON expression stmt_term
+  239            | . ASSER_T expression stmt_term
   240 defer_stmt: . DEFER stmt
   241 yield_return_stmt: . YIELD RETURN expression stmt_term
   242 yield_break_stmt: . YIELD BREAK stmt_term
@@ -844,7 +844,7 @@ State 3
     CONTINUE        shift, and go to state 34
     TRY             shift, and go to state 35
     THROW           shift, and go to state 36
-    ASSERT_T        shift, and go to state 37
+    ASSER_T         shift, and go to state 37
     DEFER           shift, and go to state 38
 
     body_decl                  go to state 39
@@ -989,8 +989,8 @@ State 4
   232            | . RETURN stmt_term
   233 throw_stmt: . THROW expression stmt_term
   234 try_stmt: . TRY scope catch_stmt_list
-  238 assert_stmt: . ASSERT_T expression COLON expression stmt_term
-  239            | . ASSERT_T expression stmt_term
+  238 assert_stmt: . ASSER_T expression COLON expression stmt_term
+  239            | . ASSER_T expression stmt_term
   240 defer_stmt: . DEFER stmt
   241 yield_return_stmt: . YIELD RETURN expression stmt_term
   242 yield_break_stmt: . YIELD BREAK stmt_term
@@ -1022,7 +1022,7 @@ State 4
     CONTINUE        shift, and go to state 34
     TRY             shift, and go to state 35
     THROW           shift, and go to state 36
-    ASSERT_T        shift, and go to state 37
+    ASSER_T         shift, and go to state 37
     DEFER           shift, and go to state 38
 
     body_decl                  go to state 63
@@ -1053,7 +1053,7 @@ State 4
 
 State 5
 
-    5 init_decl: import_list .  [CHAR_LITERAL, STRING_LITERAL, INT, DOUBLE, IDENT, ADD, SUB, NOT, CHILDA, LRB, VAR, THIS_TOK, SUPER_TOK, TRUE_TOK, FALSE_TOK, NULL_TOK, NEW, DEF, NAMESPACE, RETURN, YIELD, IF, WHILE, BREAK, CONTINUE, TRY, THROW, ASSERT_T, DEFER]
+    5 init_decl: import_list .  [CHAR_LITERAL, STRING_LITERAL, INT, DOUBLE, IDENT, ADD, SUB, NOT, CHILDA, LRB, VAR, THIS_TOK, SUPER_TOK, TRUE_TOK, FALSE_TOK, NULL_TOK, NEW, DEF, NAMESPACE, RETURN, YIELD, IF, WHILE, BREAK, CONTINUE, TRY, THROW, ASSER_T, DEFER]
    23 import_list: import_list . import
    24 import: . IMPORT STRING_LITERAL
 
@@ -2271,8 +2271,8 @@ State 37
   198        | . TRUE_TOK
   199        | . FALSE_TOK
   200        | . NULL_TOK
-  238 assert_stmt: ASSERT_T . expression COLON expression stmt_term
-  239            | ASSERT_T . expression stmt_term
+  238 assert_stmt: ASSER_T . expression COLON expression stmt_term
+  239            | ASSER_T . expression stmt_term
 
     CHAR_LITERAL    shift, and go to state 10
     STRING_LITERAL  shift, and go to state 11
@@ -2407,8 +2407,8 @@ State 38
   232            | . RETURN stmt_term
   233 throw_stmt: . THROW expression stmt_term
   234 try_stmt: . TRY scope catch_stmt_list
-  238 assert_stmt: . ASSERT_T expression COLON expression stmt_term
-  239            | . ASSERT_T expression stmt_term
+  238 assert_stmt: . ASSER_T expression COLON expression stmt_term
+  239            | . ASSER_T expression stmt_term
   240 defer_stmt: . DEFER stmt
   240           | DEFER . stmt
   241 yield_return_stmt: . YIELD RETURN expression stmt_term
@@ -2439,7 +2439,7 @@ State 38
     CONTINUE        shift, and go to state 34
     TRY             shift, and go to state 35
     THROW           shift, and go to state 36
-    ASSERT_T        shift, and go to state 37
+    ASSER_T         shift, and go to state 37
     DEFER           shift, and go to state 38
 
     typename_T                 go to state 42
@@ -3666,8 +3666,8 @@ State 85
   232            | . RETURN stmt_term
   233 throw_stmt: . THROW expression stmt_term
   234 try_stmt: . TRY scope catch_stmt_list
-  238 assert_stmt: . ASSERT_T expression COLON expression stmt_term
-  239            | . ASSERT_T expression stmt_term
+  238 assert_stmt: . ASSER_T expression COLON expression stmt_term
+  239            | . ASSER_T expression stmt_term
   240 defer_stmt: . DEFER stmt
   241 yield_return_stmt: . YIELD RETURN expression stmt_term
   242 yield_break_stmt: . YIELD BREAK stmt_term
@@ -3700,7 +3700,7 @@ State 85
     CONTINUE        shift, and go to state 34
     TRY             shift, and go to state 35
     THROW           shift, and go to state 36
-    ASSERT_T        shift, and go to state 37
+    ASSER_T         shift, and go to state 37
     DEFER           shift, and go to state 38
 
     typename_T                 go to state 42
@@ -3857,8 +3857,8 @@ State 88
   181                   | expression . INSTANCEOF typename_T
   182                   | expression . AS typename_T
   191 lhs: expression . DOT IDENT typename_group
-  238 assert_stmt: ASSERT_T expression . COLON expression stmt_term
-  239            | ASSERT_T expression . stmt_term
+  238 assert_stmt: ASSER_T expression . COLON expression stmt_term
+  239            | ASSER_T expression . stmt_term
   247 stmt_term: . SEMI
 
     DOT         shift, and go to state 94
@@ -7463,7 +7463,7 @@ State 139
 
 State 140
 
-  221 if_stmt: IF expression scope .  [$end, CHAR_LITERAL, STRING_LITERAL, INT, DOUBLE, IDENT, ADD, SUB, NOT, CHILDA, RCB, LRB, VAR, THIS_TOK, SUPER_TOK, TRUE_TOK, FALSE_TOK, NULL_TOK, NEW, DEF, NAMESPACE, RETURN, YIELD, IF, WHILE, BREAK, CONTINUE, TRY, THROW, ASSERT_T, DEFER]
+  221 if_stmt: IF expression scope .  [$end, CHAR_LITERAL, STRING_LITERAL, INT, DOUBLE, IDENT, ADD, SUB, NOT, CHILDA, RCB, LRB, VAR, THIS_TOK, SUPER_TOK, TRUE_TOK, FALSE_TOK, NULL_TOK, NEW, DEF, NAMESPACE, RETURN, YIELD, IF, WHILE, BREAK, CONTINUE, TRY, THROW, ASSER_T, DEFER]
   222        | IF expression scope . ELSE scope
   223        | IF expression scope . elif_list
   224        | IF expression scope . elif_list ELSE scope
@@ -7618,8 +7618,8 @@ State 145
   232            | . RETURN stmt_term
   233 throw_stmt: . THROW expression stmt_term
   234 try_stmt: . TRY scope catch_stmt_list
-  238 assert_stmt: . ASSERT_T expression COLON expression stmt_term
-  239            | . ASSERT_T expression stmt_term
+  238 assert_stmt: . ASSER_T expression COLON expression stmt_term
+  239            | . ASSER_T expression stmt_term
   240 defer_stmt: . DEFER stmt
   241 yield_return_stmt: . YIELD RETURN expression stmt_term
   242 yield_break_stmt: . YIELD BREAK stmt_term
@@ -7651,7 +7651,7 @@ State 145
     CONTINUE        shift, and go to state 34
     TRY             shift, and go to state 35
     THROW           shift, and go to state 36
-    ASSERT_T        shift, and go to state 37
+    ASSER_T         shift, and go to state 37
     DEFER           shift, and go to state 38
 
     typename_T                 go to state 42
@@ -7693,7 +7693,7 @@ State 147
 
 State 148
 
-  234 try_stmt: TRY scope catch_stmt_list .  [$end, CHAR_LITERAL, STRING_LITERAL, INT, DOUBLE, IDENT, ADD, SUB, NOT, CHILDA, RCB, LRB, VAR, THIS_TOK, SUPER_TOK, TRUE_TOK, FALSE_TOK, NULL_TOK, NEW, DEF, NAMESPACE, RETURN, YIELD, IF, WHILE, BREAK, CONTINUE, TRY, THROW, ASSERT_T, DEFER]
+  234 try_stmt: TRY scope catch_stmt_list .  [$end, CHAR_LITERAL, STRING_LITERAL, INT, DOUBLE, IDENT, ADD, SUB, NOT, CHILDA, RCB, LRB, VAR, THIS_TOK, SUPER_TOK, TRUE_TOK, FALSE_TOK, NULL_TOK, NEW, DEF, NAMESPACE, RETURN, YIELD, IF, WHILE, BREAK, CONTINUE, TRY, THROW, ASSER_T, DEFER]
   236 catch_stmt_list: catch_stmt_list . catch_stmt
   237 catch_stmt: . CATCH LRB typename_T IDENT RRB scope
 
@@ -7797,7 +7797,7 @@ State 151
   198        | . TRUE_TOK
   199        | . FALSE_TOK
   200        | . NULL_TOK
-  238 assert_stmt: ASSERT_T expression COLON . expression stmt_term
+  238 assert_stmt: ASSER_T expression COLON . expression stmt_term
 
     CHAR_LITERAL    shift, and go to state 10
     STRING_LITERAL  shift, and go to state 11
@@ -7825,7 +7825,7 @@ State 151
 
 State 152
 
-  239 assert_stmt: ASSERT_T expression stmt_term .
+  239 assert_stmt: ASSER_T expression stmt_term .
 
     $default  reduce using rule 239 (assert_stmt)
 
@@ -11227,7 +11227,7 @@ State 236
 
 State 237
 
-  223 if_stmt: IF expression scope elif_list .  [$end, CHAR_LITERAL, STRING_LITERAL, INT, DOUBLE, IDENT, ADD, SUB, NOT, CHILDA, RCB, LRB, VAR, THIS_TOK, SUPER_TOK, TRUE_TOK, FALSE_TOK, NULL_TOK, NEW, DEF, NAMESPACE, RETURN, YIELD, IF, WHILE, BREAK, CONTINUE, TRY, THROW, ASSERT_T, DEFER]
+  223 if_stmt: IF expression scope elif_list .  [$end, CHAR_LITERAL, STRING_LITERAL, INT, DOUBLE, IDENT, ADD, SUB, NOT, CHILDA, RCB, LRB, VAR, THIS_TOK, SUPER_TOK, TRUE_TOK, FALSE_TOK, NULL_TOK, NEW, DEF, NAMESPACE, RETURN, YIELD, IF, WHILE, BREAK, CONTINUE, TRY, THROW, ASSER_T, DEFER]
   224        | IF expression scope elif_list . ELSE scope
   226 elif_list: elif_list . elif
   227 elif: . ELIF expression scope
@@ -11325,7 +11325,7 @@ State 243
   181                   | expression . INSTANCEOF typename_T
   182                   | expression . AS typename_T
   191 lhs: expression . DOT IDENT typename_group
-  238 assert_stmt: ASSERT_T expression COLON expression . stmt_term
+  238 assert_stmt: ASSER_T expression COLON expression . stmt_term
   247 stmt_term: . SEMI
 
     DOT         shift, and go to state 94
@@ -13742,7 +13742,7 @@ State 292
 
 State 293
 
-  238 assert_stmt: ASSERT_T expression COLON expression stmt_term .
+  238 assert_stmt: ASSER_T expression COLON expression stmt_term .
 
     $default  reduce using rule 238 (assert_stmt)
 

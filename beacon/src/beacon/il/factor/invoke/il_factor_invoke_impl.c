@@ -116,7 +116,7 @@ operator_overload* il_factor_invoke_find_set(il_factor_invoke* self, il_factor* 
 	vector* args = vector_new();
 	vector_push(args, ((il_argument*)vector_at(self->args, 0))->factor);
 	vector_push(args, value);
-	operator_overload* opov = class_ilfind_operator_overload(TYPE2CLASS(self->u.opov->parent), operator_subscript_set, args, env, cctx, outIndex);
+	operator_overload* opov = class_ilfind_operator_overload(TYPE2CLASS(self->u.opov->parent), operator_sub_script_set_T, args, env, cctx, outIndex);
 	vector_delete(args, vector_deleter_null);
 	return opov;
 }
@@ -164,9 +164,9 @@ static void il_factor_invoke_check(il_factor_invoke * self, enviroment * env, ca
 	if(bc_error_last()) {
 		return;
 	}
-	if(self->receiver->type == ilfactor_variable) {
+	if(self->receiver->type == ilfactor_variable_T) {
 		il_factor_variable* ilvar = IL_FACT2VAR(self->receiver);
-		assert(ilvar->type != ilvariable_type_static);
+		assert(ilvar->type != ilvariable_type_static_T);
 	}
 	//レシーバの型を評価
 	generic_type* gtype = il_factor_eval(self->receiver, env, cctx);
@@ -197,17 +197,17 @@ static void il_factor_invoke_check(il_factor_invoke * self, enviroment * env, ca
 	if(self->args->length != 1) {
 		//hoge(1) = 0;
 		//の形式なら引数は一つのはず
-		bc_error_throw(bcerror_invoke_instance_undefined_method,
+		bc_error_throw(bcerror_invoke_instance_undefined_method_T,
 			string_pool_ref2str(type_name(ctype)),
 			string_pool_ref2str(self->namev)
 		);
 		return;
 	}
 	self->tag = instance_invoke_subscript_T;
-	self->u.opov = class_argfind_operator_overload(TYPE2CLASS(ctype), operator_subscript_get, self->args, env, cctx, &temp);
+	self->u.opov = class_argfind_operator_overload(TYPE2CLASS(ctype), operator_sub_script_get_T, self->args, env, cctx, &temp);
 	self->index = temp;
 	if(temp == -1) {
-		bc_error_throw(bcerror_invoke_instance_undefined_method,
+		bc_error_throw(bcerror_invoke_instance_undefined_method_T,
 			string_pool_ref2str(type_name(ctype)),
 			string_pool_ref2str(self->namev)
 		);

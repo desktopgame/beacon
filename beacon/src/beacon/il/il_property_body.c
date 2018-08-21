@@ -18,7 +18,7 @@ void il_property_body_dump(il_property_body* self, int depth) {
 	io_printi(depth);
 	access_print(self->access);
 	printf(" ");
-	if(self->tag == ilproperty_set) {
+	if(self->tag == ilproperty_set_T) {
 		printf("set");
 	} else {
 		printf("get");

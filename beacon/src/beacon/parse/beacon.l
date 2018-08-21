@@ -102,10 +102,10 @@ static int my_yyinput(char *buf, int max_size) {
 	int result;
 	parser* p = parser_current();
 	switch (p->input_type) {
-		case yinput_file:
+		case yinput_file_T:
 			result = file_input(buf, max_size);
 			break;
-		case yinput_string:
+		case yinput_string_T:
 			result = string_input(buf, max_size);
 			break;
 		default:
@@ -178,7 +178,7 @@ static void update_loc() {
 
 <INITIAL>"=="				{ return (EQUAL); }
 <INITIAL>"!="				{ return (NOTEQUAL); }
-<INITIAL>"assert"			{ return (ASSERT_T); }
+<INITIAL>"assert"			{ return (ASSER_T); }
 <INITIAL>"defer"			{ return (DEFER); }
 
 

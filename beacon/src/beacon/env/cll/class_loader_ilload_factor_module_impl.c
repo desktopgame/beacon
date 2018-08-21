@@ -45,90 +45,90 @@ static il_factor* CLIL_factorImpl(class_loader* self, ast* source) {
 		return il_factor_wrap_variable(CLIL_variable(self, source));
 		//operator(+ - * / %)
 	} else if (source->tag == ast_add_T) {
-		return il_factor_wrap_binary(CLIL_binary(self, source, operator_add));
+		return il_factor_wrap_binary(CLIL_binary(self, source, operator_add_T));
 	} else if (source->tag == ast_sub_T) {
-		return il_factor_wrap_binary(CLIL_binary(self, source, operator_sub));
+		return il_factor_wrap_binary(CLIL_binary(self, source, operator_sub_T));
 	} else if (source->tag == ast_mul_T) {
-		return il_factor_wrap_binary(CLIL_binary(self, source, operator_mul));
+		return il_factor_wrap_binary(CLIL_binary(self, source, operator_mul_T));
 	} else if (source->tag == ast_div_T) {
-		return il_factor_wrap_binary(CLIL_binary(self, source, operator_div));
+		return il_factor_wrap_binary(CLIL_binary(self, source, operator_div_T));
 	} else if (source->tag == ast_mod_T) {
-		return il_factor_wrap_binary(CLIL_binary(self, source, operator_mod));
+		return il_factor_wrap_binary(CLIL_binary(self, source, operator_mod_T));
 		//operator(| || & &&)
 	} else if (source->tag == ast_bit_or_T) {
-		return il_factor_wrap_binary(CLIL_binary(self, source, operator_bit_or));
+		return il_factor_wrap_binary(CLIL_binary(self, source, operator_bit_or_T));
 	} else if (source->tag == ast_logic_or_T) {
-		return il_factor_wrap_binary(CLIL_binary(self, source, operator_logic_or));
+		return il_factor_wrap_binary(CLIL_binary(self, source, operator_logic_or_T));
 	} else if (source->tag == ast_bit_and_T) {
-		return il_factor_wrap_binary(CLIL_binary(self, source, operator_bit_and));
+		return il_factor_wrap_binary(CLIL_binary(self, source, operator_bit_and_T));
 	} else if (source->tag == ast_logic_and_T) {
-		return il_factor_wrap_binary(CLIL_binary(self, source, operator_logic_and));
+		return il_factor_wrap_binary(CLIL_binary(self, source, operator_logic_and_T));
 	//^
 	} else if(source->tag == ast_exc_or_T) {
-		return il_factor_wrap_binary(CLIL_binary(self, source, operator_excor));
+		return il_factor_wrap_binary(CLIL_binary(self, source, operator_excor_T));
 	} else if(source->tag == ast_childa_T) {
-		return il_factor_wrap_unary(CLIL_unary(self, source, operator_childa));
+		return il_factor_wrap_unary(CLIL_unary(self, source, operator_childa_T));
 	//<< >>
 	} else if(source->tag == ast_lshift_T) {
-		return il_factor_wrap_binary(CLIL_binary(self, source, operator_lshift));
+		return il_factor_wrap_binary(CLIL_binary(self, source, operator_lshift_T));
 	} else if(source->tag == ast_rshift_T) {
-		return il_factor_wrap_binary(CLIL_binary(self, source, operator_rshift));
+		return il_factor_wrap_binary(CLIL_binary(self, source, operator_rshift_T));
 	//operator(== != > >= < <=)
 	} else if (source->tag == ast_equal_T) {
-		return il_factor_wrap_binary(CLIL_binary(self, source, operator_eq));
+		return il_factor_wrap_binary(CLIL_binary(self, source, operator_eq_T));
 	} else if (source->tag == ast_not_Tequal_T) {
-		return il_factor_wrap_binary(CLIL_binary(self, source, operator_noteq));
+		return il_factor_wrap_binary(CLIL_binary(self, source, operator_not_Teq_T));
 	} else if (source->tag == ast_gt_T) {
-		return il_factor_wrap_binary(CLIL_binary(self, source, operator_gt));
+		return il_factor_wrap_binary(CLIL_binary(self, source, operator_gt_T));
 	} else if (source->tag == ast_ge_T) {
-		return il_factor_wrap_binary(CLIL_binary(self, source, operator_ge));
+		return il_factor_wrap_binary(CLIL_binary(self, source, operator_ge_T));
 	} else if (source->tag == ast_lt_T) {
-		return il_factor_wrap_binary(CLIL_binary(self, source, operator_lt));
+		return il_factor_wrap_binary(CLIL_binary(self, source, operator_lt_T));
 	} else if (source->tag == ast_le_T) {
-		return il_factor_wrap_binary(CLIL_binary(self, source, operator_le));
+		return il_factor_wrap_binary(CLIL_binary(self, source, operator_le_T));
 		//operator(= += -= *= /= %=)
 	} else if (source->tag == ast_as_Tsign_T) {
 		return il_factor_wrap_assign(CLIL_assign(self, source));
 	} else if (source->tag == ast_add_assign_T) {
-		return il_factor_wrap_assign(CLIL_assign_arithmetic(self, source, operator_add));
+		return il_factor_wrap_assign(CLIL_assign_arithmetic(self, source, operator_add_T));
 	} else if (source->tag == ast_sub_assign_T) {
-		return il_factor_wrap_assign(CLIL_assign_arithmetic(self, source, operator_sub));
+		return il_factor_wrap_assign(CLIL_assign_arithmetic(self, source, operator_sub_T));
 	} else if (source->tag == ast_mul_assign_T) {
-		return il_factor_wrap_assign(CLIL_assign_arithmetic(self, source, operator_mul));
+		return il_factor_wrap_assign(CLIL_assign_arithmetic(self, source, operator_mul_T));
 	} else if (source->tag == ast_div_assign_T) {
-		return il_factor_wrap_assign(CLIL_assign_arithmetic(self, source, operator_div));
+		return il_factor_wrap_assign(CLIL_assign_arithmetic(self, source, operator_div_T));
 	} else if (source->tag == ast_mod_assign_T) {
-		return il_factor_wrap_assign(CLIL_assign_arithmetic(self, source, operator_mod));
+		return il_factor_wrap_assign(CLIL_assign_arithmetic(self, source, operator_mod_T));
 	//instanceof
 	} else if(source->tag == ast_instanceof_T) {
 		return il_factor_wrap_instanceof(CLIL_instanceof(self, source));
 	//|= &=
 	} else if(source->tag == ast_or_assign_T) {
-		return il_factor_wrap_assign(CLIL_assign_arithmetic(self, source, operator_bit_or));
+		return il_factor_wrap_assign(CLIL_assign_arithmetic(self, source, operator_bit_or_T));
 	} else if(source->tag == ast_and_assign_T) {
-		return il_factor_wrap_assign(CLIL_assign_arithmetic(self, source, operator_bit_and));
+		return il_factor_wrap_assign(CLIL_assign_arithmetic(self, source, operator_bit_and_T));
 	//<<= >>=
 	} else if(source->tag == ast_lshift_assign_T) {
-		return il_factor_wrap_assign(CLIL_assign_arithmetic(self, source, operator_lshift));
+		return il_factor_wrap_assign(CLIL_assign_arithmetic(self, source, operator_lshift_T));
 	} else if(source->tag == ast_rshift_assign_T) {
-		return il_factor_wrap_assign(CLIL_assign_arithmetic(self, source, operator_rshift));
+		return il_factor_wrap_assign(CLIL_assign_arithmetic(self, source, operator_rshift_T));
 	//!-
 	} else if (source->tag == ast_not_T) {
-		return il_factor_wrap_unary(CLIL_unary(self, source, operator_not));
+		return il_factor_wrap_unary(CLIL_unary(self, source, operator_not_T));
 	} else if (source->tag == ast_neg_T) {
-		return il_factor_wrap_unary(CLIL_unary(self, source, operator_negative));
+		return il_factor_wrap_unary(CLIL_unary(self, source, operator_negative_T));
 	} else if(source->tag == ast_explicit_uoperator_T) {
 		return il_factor_wrap_explicit_unary_op(CLIL_explicit_unary(self, source, source->u.operator_value));
 	} else if(source->tag == ast_explicit_bioperator_T) {
 		return il_factor_wrap_explicit_binary_op(CLIL_explicit_binary(self, source, source->u.operator_value));
 		//this super
 	} else if (source->tag == ast_this_T) {
-		il_factor* ret = il_factor_new(ilfactor_this);
+		il_factor* ret = il_factor_new(ilfactor_this_T);
 		il_factor_this* th = il_factor_this_new();
 		ret->u.this_ = th;
 		return ret;
 	} else if (source->tag == ast_super_T) {
-		il_factor* ret = il_factor_new(ilfactor_super);
+		il_factor* ret = il_factor_new(ilfactor_super_T);
 		il_factor_super* sp = il_factor_super_new();
 		ret->u.super_ = sp;
 		return ret;
@@ -141,7 +141,7 @@ static il_factor* CLIL_factorImpl(class_loader* self, ast* source) {
 	} else if (source->tag == ast_false_T) {
 		return il_factor_wrap_bool(CLIL_false(self, source));
 	} else if (source->tag == ast_null_T) {
-		il_factor* ret = il_factor_new(ilfactor_null);
+		il_factor* ret = il_factor_new(ilfactor_null_T);
 		ret->u.null_ = NULL;
 		return ret;
 	} else if (source->tag == ast_as_T) {
@@ -153,7 +153,7 @@ static il_factor* CLIL_factorImpl(class_loader* self, ast* source) {
 	} else if(source->tag == ast_sub_Tscript_access) {
 		return il_factor_wrap_subscript(CLIL_subscript(self, source));
 	}
-	il_factor* fact = il_factor_new(ilfactor_unary_op);
+	il_factor* fact = il_factor_new(ilfactor_unary_op_T);
 	return fact;
 }
 

@@ -8,7 +8,7 @@
 #include "../il_factor_impl.h"
 
 il_factor* il_factor_wrap_explicit_unary_op(il_factor_explicit_unary_op* self) {
-	il_factor* ret = il_factor_new(ilfactor_explicit_unary_op);
+	il_factor* ret = il_factor_new(ilfactor_explicit_unary_op_T);
 	ret->u.exp_unary_op = self;
 	return ret;
 }

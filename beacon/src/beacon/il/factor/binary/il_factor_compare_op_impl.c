@@ -45,7 +45,7 @@ void il_factor_compare_op_generate(il_factor_compare_op* self, enviroment* env, 
 		} else if(il_factor_binary_op_char_char(self->parent, env, cctx)) {
 			opcode_buf_add(env->buf, (vector_item)operator_to_copcode(self->type));
 		} else {
-			bc_error_throw(bcerror_undefined_compare_operator,
+			bc_error_throw(bcerror_undefined_compare_operator_T,
 				operator_tostring(self->type)
 			);
 //			assert(false);
@@ -76,35 +76,35 @@ char* il_factor_compare_op_tostr(il_factor_compare_op* self, enviroment* env) {
 //static
 static opcode operator_to_iopcode(operator_type type) {
 	switch(type) {
-		case operator_gt: return op_igt;
-		case operator_ge: return op_ige;
-		case operator_lt: return op_ilt;
-		case operator_le: return op_ile;
-		case operator_eq: return op_ieq;
-		case operator_noteq: return op_inoteq;
+		case operator_gt_T: return op_igt;
+		case operator_ge_T: return op_ige;
+		case operator_lt_T: return op_ilt;
+		case operator_le_T: return op_ile;
+		case operator_eq_T: return op_ieq;
+		case operator_not_Teq_T: return op_inoteq;
 	}
 	assert(false);
 }
 
 static opcode operator_to_dopcode(operator_type type) {
 	switch(type) {
-		case operator_gt: return op_dgt;
-		case operator_ge: return op_dge;
-		case operator_lt: return op_dlt;
-		case operator_le: return op_dle;
-		case operator_eq: return op_deq;
-		case operator_noteq: return op_dnoteq;
+		case operator_gt_T: return op_dgt;
+		case operator_ge_T: return op_dge;
+		case operator_lt_T: return op_dlt;
+		case operator_le_T: return op_dle;
+		case operator_eq_T: return op_deq;
+		case operator_not_Teq_T: return op_dnoteq;
 	}
 	assert(false);
 }
 static opcode operator_to_copcode(operator_type type) {
 	switch(type) {
-		case operator_gt: return op_cgt;
-		case operator_ge: return op_cge;
-		case operator_lt: return op_clt;
-		case operator_le: return op_cle;
-		case operator_eq: return op_ceq;
-		case operator_noteq: return op_cnoteq;
+		case operator_gt_T: return op_cgt;
+		case operator_ge_T: return op_cge;
+		case operator_lt_T: return op_clt;
+		case operator_le_T: return op_cle;
+		case operator_eq_T: return op_ceq;
+		case operator_not_Teq_T: return op_cnoteq;
 	}
 	assert(false);
 }

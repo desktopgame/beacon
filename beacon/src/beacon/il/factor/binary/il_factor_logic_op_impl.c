@@ -37,7 +37,7 @@ generic_type* il_factor_logic_op_eval(il_factor_logic_op* self, enviroment* env,
 		//演算子オーバーロードもない
 		if(self->operator_index == -1) {
 			bc_error_throw(
-				bcerror_undefined_logic_operator,
+				bcerror_undefined_logic_operator_T,
 				operator_tostring(self->type)
 			);
 			return NULL;
@@ -83,20 +83,20 @@ char* il_factor_logic_op_tostr(il_factor_logic_op* self, enviroment* env) {
 //static
 static opcode operator_to_iopcode(operator_type type) {
 	switch(type) {
-		case operator_bit_or: return op_ibit_or;
-		case operator_bit_and: return op_ibit_and;
-		case operator_logic_or: return op_ilogic_or;
-		case operator_logic_and: return op_ilogic_and;
+		case operator_bit_or_T: return op_ibit_or;
+		case operator_bit_and_T: return op_ibit_and;
+		case operator_logic_or_T: return op_ilogic_or;
+		case operator_logic_and_T: return op_ilogic_and;
 	}
 	assert(false);
 }
 
 static opcode operator_to_bopcode(operator_type type) {
 	switch(type) {
-		case operator_bit_or: return op_bbit_or;
-		case operator_bit_and: return op_bbit_and;
-		case operator_logic_or: return op_blogic_or;
-		case operator_logic_and: return op_blogic_and;
+		case operator_bit_or_T: return op_bbit_or;
+		case operator_bit_and_T: return op_bbit_and;
+		case operator_logic_or_T: return op_blogic_or;
+		case operator_logic_and_T: return op_blogic_and;
 	}
 	assert(false);
 }

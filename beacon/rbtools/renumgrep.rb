@@ -99,3 +99,8 @@ File.open("renumgrep_unused.text", "w") do |file|
 		end
 	end
 end
+File.open("renumgrep_all.text", "w") do |file|
+	enum_list.each do |item|
+		file.puts item
+	end
+end

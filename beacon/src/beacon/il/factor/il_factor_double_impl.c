@@ -11,7 +11,7 @@
 #endif
 
 il_factor * il_factor_wrap_double(il_factor_double * self) {
-	il_factor* ret = il_factor_new(ilfactor_double);
+	il_factor* ret = il_factor_new(ilfactor_double_T);
 	ret->u.double_ = self;
 	return ret;
 }
@@ -55,6 +55,6 @@ void il_factor_double_delete(il_factor_double * self) {
 }
 
 il_factor_double* il_factor_cast_double_T(il_factor* fact) {
-	assert(fact->type == ilfactor_double);
+	assert(fact->type == ilfactor_double_T);
 	return fact->u.double_;
 }

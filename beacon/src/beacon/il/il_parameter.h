@@ -9,8 +9,8 @@
  */
 typedef enum il_parameter_type {
 	il_param_type_default,
-	il_param_type_ref,
-	il_param_type_out,
+	il_param_type_ref_T,
+	il_param_type_out_T,
 } il_parameter_type;
 /**
  * メソッド/関数の引数を表す要素.

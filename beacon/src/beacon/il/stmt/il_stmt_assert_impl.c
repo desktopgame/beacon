@@ -7,7 +7,7 @@
 #include <assert.h>
 
 il_stmt* il_stmt_wrap_assert(il_stmt_assert* self) {
-	il_stmt* ret = il_stmt_new(ilstmt_assert);
+	il_stmt* ret = il_stmt_new(ilstmt_assert_T);
 	ret->u.bcassert_ = self;
 	self->parent = ret;
 	return ret;

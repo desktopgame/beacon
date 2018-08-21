@@ -141,7 +141,7 @@ extern int yydebug;
     TRY = 344,
     CATCH = 345,
     THROW = 346,
-    ASSERT_T = 347,
+    ASSER_T = 347,
     DEFER = 348,
     INSTANCEOF = 349,
     OPERATOR = 350,

@@ -14,10 +14,10 @@ struct generic_type;
  * 関数呼び出し演算子の種類を表す列挙型.
  */
 typedef enum ilcall_type {
-	ilcall_type_invoke,
-	ilcall_type_invoke_static,
-	ilcall_type_invoke_bound,
-	ilcall_type_undefined,
+	ilcall_type_invoke_T,
+	ilcall_type_invoke_static_T,
+	ilcall_type_invoke_bound_T,
+	ilcall_type_undefined_T,
 } ilcall_type;
 
 /**

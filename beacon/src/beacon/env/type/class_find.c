@@ -372,7 +372,7 @@ method * class_get_method(object * o, int index) {
 	#if defined(DEBUG)
 	const char* name = object_name(o);
 	#endif
-	if(o->tag == object_null) {
+	if(o->tag == object_null_T) {
 		o->vptr = TYPE2CLASS(TYPE_OBJECT)->vt;
 	}
 	vtable* vx = (o->vptr);

@@ -21,35 +21,35 @@ typedef enum operator_category {
  * 演算子の種類を表す列挙.
  */
 typedef enum operator_type {
-	operator_add,
-	operator_sub,
-	operator_mul,
-	operator_div,
-	operator_mod,
+	operator_add_T,
+	operator_sub_T,
+	operator_mul_T,
+	operator_div_T,
+	operator_mod_T,
 
-	operator_bit_or,
-	operator_bit_and,
+	operator_bit_or_T,
+	operator_bit_and_T,
 
-	operator_logic_or,
-	operator_logic_and,
+	operator_logic_or_T,
+	operator_logic_and_T,
 
-	operator_eq,
-	operator_noteq,
+	operator_eq_T,
+	operator_not_Teq_T,
 
-	operator_gt,
-	operator_ge,
-	operator_lt,
-	operator_le,
-	operator_lshift,
-	operator_rshift,
-	operator_excor,
+	operator_gt_T,
+	operator_ge_T,
+	operator_lt_T,
+	operator_le_T,
+	operator_lshift_T,
+	operator_rshift_T,
+	operator_excor_T,
 
-	operator_childa,
-	operator_negative,
-	operator_not,
+	operator_childa_T,
+	operator_negative_T,
+	operator_not_T,
 
-	operator_subscript_set,
-	operator_subscript_get,
+	operator_sub_script_set_T,
+	operator_sub_script_get_T,
 } operator_type;
 /**
  * オペレータを文字列として出力します.

@@ -9,7 +9,7 @@
 static void check_method_return(il_stmt_return * self, enviroment * env, call_context* cctx);
 
 il_stmt * il_stmt_wrap_return(il_stmt_return * self) {
-	il_stmt* ret = il_stmt_new(ilstmt_return);
+	il_stmt* ret = il_stmt_new(ilstmt_return_T);
 	ret->u.return_ = self;
 	return ret;
 }
@@ -50,7 +50,7 @@ static void check_method_return(il_stmt_return * self, enviroment * env, call_co
 	method* m = call_context_method(cctx);
 	//戻り値が Void なのに値を返している
 	if(m->return_gtype->core_type == TYPE_VOID) {
-		bc_error_throw(bcerror_return_value_void_method,
+		bc_error_throw(bcerror_return_value_void_method_T,
 			string_pool_ref2str(type_name(m->parent)),
 			string_pool_ref2str(m->namev)
 		);
@@ -60,7 +60,7 @@ static void check_method_return(il_stmt_return * self, enviroment * env, call_co
 	generic_type* retT =il_factor_eval(self->fact, env, cctx);
 	if(retT->core_type != TYPE_NULL &&
 	   generic_type_distance(m->return_gtype, retT, cctx) < 0) {
-		bc_error_throw(bcerror_return_value_type_is_not_compatible_not_void_method,
+		bc_error_throw(bcerror_return_value_type_is_not_compatible_not_void_method_T,
 			string_pool_ref2str(type_name(m->parent)),
 			string_pool_ref2str(m->namev)
 		);

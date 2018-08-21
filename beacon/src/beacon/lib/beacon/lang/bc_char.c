@@ -25,10 +25,10 @@ static void bc_char_nativeInit(method* parent, frame* fr, enviroment* env) {
 	object* ch = vector_at(fr->ref_stack, 1);
 
 	self->u.char_ = ch->u.char_;
-	self->tag = object_char;
+	self->tag = object_char_T;
 }
 
 static void bc_char_nativeToInt(method* parent, frame* fr, enviroment* env) {
 	object* self = vector_at(fr->ref_stack, 0);
-	vector_push(fr->value_stack, object_int_get((int)self->u.char_));
+	vector_push(fr->value_stack, object_int_T_get((int)self->u.char_));
 }

@@ -86,25 +86,25 @@ void enviroment_op_dump(enviroment * self, int depth) {
 
 int enviroment_add_constant_int(enviroment * self, int i) {
 	int len = self->constant_pool_vec->length;
-	enviroment_add_constant(self, object_int_new(i));
+	enviroment_add_constant(self, object_int_T_new(i));
 	return len;
 }
 
 int enviroment_add_constant_double(enviroment * self, double d) {
 	int len = self->constant_pool_vec->length;
-	enviroment_add_constant(self, object_double_new(d));
+	enviroment_add_constant(self, object_double_T_new(d));
 	return len;
 }
 
 int enviroment_add_constant_char(enviroment * self, char c) {
 	int len = self->constant_pool_vec->length;
-	enviroment_add_constant(self, object_char_new(c));
+	enviroment_add_constant(self, object_char_T_new(c));
 	return len;
 }
 
 int enviroment_add_constant_string(enviroment * self, string_view sv) {
 	int len = self->constant_pool_vec->length;
-	enviroment_add_constant(self, object_string_new(string_pool_ref2str(sv)));
+	enviroment_add_constant(self, object_string_T_new(string_pool_ref2str(sv)));
 	return len;
 }
 
@@ -118,25 +118,25 @@ object* enviroment_constant_at(enviroment * self, int index) {
 
 object* enviroment_constant_int_at(enviroment * self, int index) {
 	object* e = enviroment_constant_at(self, index);
-	assert(e->tag == object_int);
+	assert(e->tag == object_int_T);
 	return e;
 }
 
 object* enviroment_constant_double_at(enviroment * self, int index) {
 	object* e = enviroment_constant_at(self, index);
-	assert(e->tag == object_double);
+	assert(e->tag == object_double_T);
 	return e;
 }
 
 object* enviroment_constant_char_at(enviroment * self, int index) {
 	object* e = enviroment_constant_at(self, index);
-	assert(e->tag == object_char);
+	assert(e->tag == object_char_T);
 	return e;
 }
 
 object* enviroment_constant_string_at(enviroment * self, int index) {
 	object* e = enviroment_constant_at(self, index);
-	assert(e->tag == object_string);
+	assert(e->tag == object_string_T);
 	return e;
 }
 
@@ -164,7 +164,7 @@ static void enviroment_line_range_delete(vector_item item) {
 
 static void enviroment_add_constant(enviroment* self, object* o) {
 	vector_push(self->constant_pool_vec, o);
-	assert(o->paint == paint_onexit);
+	assert(o->paint == paint_onexit_T);
 }
 
 static void enviroment_object_delete_self(vector_item item) {

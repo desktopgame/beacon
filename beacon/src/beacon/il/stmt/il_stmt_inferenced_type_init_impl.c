@@ -8,7 +8,7 @@
 #include <string.h>
 
 il_stmt * il_stmt_wrap_inferenced_type_init(il_stmt_inferenced_type_init * self) {
-	il_stmt* ret = il_stmt_new(ilstmt_inferenced_type_init);
+	il_stmt* ret = il_stmt_new(ilstmt_inferenced_type_init_T);
 	ret->u.inferenced_type_init = self;
 	return ret;
 }
@@ -42,12 +42,12 @@ void il_stmt_inferenced_type_init_load(il_stmt_inferenced_type_init * self, envi
 	//voidは代入できない
 	if(gtp->core_type != NULL &&
 	   gtp->core_type == TYPE_VOID) {
-		   bc_error_throw(bcerror_void_assign);
+		   bc_error_throw(bcerror_void_assign_T);
 		return;
 	}
 	//変数を登録
 	if(symbol_table_contains(env->sym_table, self->namev)) {
-		bc_error_throw(bcerror_overwrap_variable_name,
+		bc_error_throw(bcerror_overwrap_variable_name_T,
 			string_pool_ref2str(self->namev)
 		);
 	}

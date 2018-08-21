@@ -49,7 +49,7 @@ void CLIL_member_list(class_loader* self, il_type* current, ast* amember, access
 }
 
 void CLIL_field(class_loader* self, il_type* current, ast* afield, access_level level) {
-	assert(current->tag == iltype_class);
+	assert(current->tag == iltype_class_T);
 	ast* amodifier = ast_first(afield);
 	ast* atype_name = ast_second(afield);
 	ast* aaccess_name = ast_at(afield, 2);
@@ -66,7 +66,7 @@ void CLIL_field(class_loader* self, il_type* current, ast* afield, access_level 
 	}
 	//重複する修飾子を検出
 	if(error) {
-		bc_error_throw(bcerror_overwrap_modifier, string_pool_ref2str(v->namev));
+		bc_error_throw(bcerror_overwrap_modifier_T, string_pool_ref2str(v->namev));
 	}
 }
 
@@ -84,20 +84,20 @@ void CLIL_prop(class_loader* self, il_type* current, ast* aprop, access_level le
 		bool err = false;
 		ret->modifier = ast_cast_T_to_modifier(amod, &err);
 		if(err) {
-			bc_error_throw(bcerror_overwrap_modifier, string_pool_ref2str(ret->namev));
+			bc_error_throw(bcerror_overwrap_modifier_T, string_pool_ref2str(ret->namev));
 		}
 	}
 	ret->access = level;
-	ret->set = CLIL_prop_body(self, current, aset, ilproperty_set, level);
-	ret->get = CLIL_prop_body(self, current, aget, ilproperty_get, level);
+	ret->set = CLIL_prop_body(self, current, aset, ilproperty_set_T, level);
+	ret->get = CLIL_prop_body(self, current, aget, ilproperty_get_T, level);
 	il_type_add_property(current, ret);
 	if(ret->set->is_short != ret->get->is_short) {
-		bc_error_throw(bcerror_invalid_property_decl, string_pool_ref2str(current->u.class_->namev), string_pool_ref2str(propname));
+		bc_error_throw(bcerror_invalid_property_decl_T, string_pool_ref2str(current->u.class_->namev), string_pool_ref2str(propname));
 	}
 }
 
 void CLIL_method(class_loader* self, il_type* current, ast* amethod, access_level level) {
-	assert(current->tag == iltype_class || current->tag == iltype_interface);
+	assert(current->tag == iltype_class_T || current->tag == iltype_interface_T);
 	ast* amodifier = ast_at(amethod, 0);
 	ast* afunc_name = ast_at(amethod, 1);
 	ast* ageneric = ast_at(amethod, 2);
@@ -120,12 +120,12 @@ void CLIL_method(class_loader* self, il_type* current, ast* amethod, access_leve
 	il_type_add_method(current, v);
 	//重複する修飾子を検出
 	if(error) {
-		bc_error_throw(bcerror_overwrap_modifier, string_pool_ref2str(v->namev));
+		bc_error_throw(bcerror_overwrap_modifier_T, string_pool_ref2str(v->namev));
 	}
 }
 
 void CLIL_ctor(class_loader* self, il_type* current, ast* aconstructor, access_level level) {
-	assert(current->tag == iltype_class);
+	assert(current->tag == iltype_class_T);
 	ast* aparams = ast_at(aconstructor, 0);
 	ast* achain = ast_at(aconstructor, 1);
 	ast* abody = ast_at(aconstructor, 2);

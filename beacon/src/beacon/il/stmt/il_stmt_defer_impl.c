@@ -3,7 +3,7 @@
 #include "../../util/text.h"
 
 il_stmt* il_stmt_wrap_defer(il_stmt_defer* self) {
-	il_stmt* ret = il_stmt_new(ilstmt_defer);
+	il_stmt* ret = il_stmt_new(ilstmt_defer_T);
 	ret->u.defer_ = self;
 	return ret;
 }

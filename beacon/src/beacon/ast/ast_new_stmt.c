@@ -41,14 +41,14 @@ ast * ast_new_if_elif_list(ast * acond, ast * atrueBody, ast * aelifList) {
 }
 
 ast * ast_new_if_elif_list_else(ast * acond, ast * atrueBody, ast * aelifList, ast * aelseBody) {
-	ast* ret = ast_new(ast_if_elif_list_T_else);
+	ast* ret = ast_new(ast_if_elif_list_else_T);
 	ast_push(ret, ast_new_if_elif_list(acond, atrueBody, aelifList));
 	ast_push(ret, ast_new_else(aelseBody));
 	return ret;
 }
 
 ast * ast_new_elif_list(ast * aforward, ast * atail) {
-	ast* ret = ast_new(ast_elif_list_T_T);
+	ast* ret = ast_new(ast_elif_list_T);
 	ast_push(ret, aforward);
 	ast_push(ret, atail);
 	return ret;
@@ -146,7 +146,7 @@ ast* ast_malloc_fqcn_part(string_view namev, const char* filename, int lineno) {
 }
 
 ast * ast_new_fqcn_part_list(ast * apart, ast * apart_list) {
-	ast* ret = ast_new(ast_fqcn_part_T_list);
+	ast* ret = ast_new(ast_fqcn_part_list_T);
 	ast_push(ret, apart_list);
 	ast_push(ret, apart);
 	return ret;

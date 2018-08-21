@@ -21,7 +21,7 @@
 static bool type_test(il_factor_binary_op* self, enviroment* env, call_context* cctx, type* t);
 
 il_factor * il_factor_wrap_binary(il_factor_binary_op * self) {
-	il_factor* ret = il_factor_new(ilfactor_binary_op);
+	il_factor* ret = il_factor_new(ilfactor_binary_op_T);
 	ret->u.binary_ = self;
 	return ret;
 }
@@ -111,7 +111,7 @@ void il_factor_binary_op_load(il_factor_binary_op * self, enviroment * env, call
 		shift->parent = self;
 		self->u.shift_op = shift;
 		il_factor_shift_op_load(shift, env, cctx);
-	} else if(self->type == operator_excor) {
+	} else if(self->type == operator_excor_T) {
 		self->category = operator_cexcor_T;
 		il_factor_excor_op* excor = il_factor_excor_op_new(self->type);
 		excor->parent = self;

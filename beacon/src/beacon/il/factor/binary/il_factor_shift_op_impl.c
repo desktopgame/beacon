@@ -43,7 +43,7 @@ generic_type* il_factor_shift_op_eval(il_factor_shift_op * self, enviroment * en
 	}
 	if(self->operator_index == -1) {
 		bc_error_throw(
-			bcerror_undefined_shift_operator,
+			bcerror_undefined_shift_operator_T,
 			operator_tostring(self->type)
 		);
 		return NULL;
@@ -60,7 +60,7 @@ void il_factor_shift_op_generate(il_factor_shift_op* self, enviroment* env, call
 			opcode_buf_add(env->buf, (vector_item)operator_to_iopcode(self->type));
 		} else {
 			bc_error_throw(
-				bcerror_undefined_shift_operator,
+				bcerror_undefined_shift_operator_T,
 				operator_tostring(self->type)
 			);
 		}
@@ -88,8 +88,8 @@ char* il_factor_shift_op_tostr(il_factor_shift_op* self, enviroment* env) {
 //static
 static opcode operator_to_iopcode(operator_type type) {
 	switch(type) {
-		case operator_lshift: return op_ilsh;
-		case operator_rshift: return op_irsh;
+		case operator_lshift_T: return op_ilsh;
+		case operator_rshift_T: return op_irsh;
 	}
 	assert(false);
 }

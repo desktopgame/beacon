@@ -61,7 +61,7 @@ bool eval_file(const char * filename) {
 bool eval_string(const char* source) {
 	parser* p = parse_string(source);
 	if (p->result != parse_complete_T) {
-		bc_error_throw(bcerror_parse, p->error_message);
+		bc_error_throw(bcerror_parse_T, p->error_message);
 		parser_destroy(p);
 		return false;
 	}
@@ -95,7 +95,7 @@ static bool eval_top_from_cll(class_loader* cll, ast* aOpt) {
 		vm_execute(fr, cll->env);
 	}
 	if(fr->terminate) {
-		bc_error_throw(bcerror_generic, "unexpected terminate");
+		bc_error_throw(bcerror_generic_T, "unexpected terminate");
 	}
 	vm_catch(fr);
 	heap_gc(heap_get());

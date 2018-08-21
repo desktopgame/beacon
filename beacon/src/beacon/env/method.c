@@ -38,7 +38,7 @@ method* method_malloc(string_view namev, const char* filename, int lineno) {
 	method* ret = (method*)mem_malloc(sizeof(method), filename, lineno);
 	ret->namev = namev;
 	ret->parameter_list = vector_malloc(filename, lineno);
-	ret->type = method_type_script;
+	ret->type = method_type_script_T;
 	ret->access = access_public_T;
 	ret->modifier = modifier_none_T;
 	ret->parent = NULL;
@@ -54,9 +54,9 @@ void method_execute(method* self, frame * fr, enviroment* env) {
 		int a = 0;
 	}
 	#endif
-	if (self->type == method_type_script) {
+	if (self->type == method_type_script_T) {
 		script_method_execute(self->u.script_method, self, fr, env);
-	} else if (self->type == method_type_native) {
+	} else if (self->type == method_type_native_T) {
 		frame* a = frame_sub(fr);
 		call_frame* cfr = NULL;
 		vector* aArgs = NULL;
@@ -139,9 +139,9 @@ int method_for_generic_index(method * self, string_view namev) {
 void method_delete(method * self) {
 	vector_delete(self->type_parameter_list, method_type_parameter_delete);
 	vector_delete(self->parameter_list, method_parameter_delete);
-	if (self->type == method_type_script) {
+	if (self->type == method_type_script_T) {
 		script_method_delete(self->u.script_method);
-	} else if (self->type == method_type_native) {
+	} else if (self->type == method_type_native_T) {
 		native_method_delete(self->u.native_method);
 	}
 	MEM_FREE(self);
@@ -203,7 +203,7 @@ bool method_coroutine(method* self) {
 
 bool method_yield(method* self, vector* stmt_list, bool* error) {
 	(*error) = false;
-	if(self->type != method_type_script || !method_coroutine(self)) {
+	if(self->type != method_type_script_T || !method_coroutine(self)) {
 		return false;
 	}
 	int yield_ret = 0;
@@ -287,7 +287,7 @@ static void method_type_parameter_delete(vector_item item) {
 
 static void method_count(il_stmt* s, int* yield_ret, int* ret) {
 	switch (s->type) {
-		case ilstmt_if:
+		case ilstmt_if_T:
 		{
 			//if() { ... }
 			il_stmt_if* sif = s->u.if_;
@@ -307,14 +307,14 @@ static void method_count(il_stmt* s, int* yield_ret, int* ret) {
 			}
 			break;
 		}
-		case ilstmt_proc:
-		case ilstmt_variable_decl:
-		case ilstmt_variable_init:
+		case ilstmt_proc_T:
+		case ilstmt_variable_decl_T:
+		case ilstmt_variable_init_T:
 			break;
-		case ilstmt_return:
+		case ilstmt_return_T:
 			(*ret)++;
 			break;
-		case ilstmt_while:
+		case ilstmt_while_T:
 		{
 			il_stmt_while* whi = s->u.while_;
 			for(int i=0; i<whi->statement_list->length; i++) {
@@ -323,11 +323,11 @@ static void method_count(il_stmt* s, int* yield_ret, int* ret) {
 			}
 			break;
 		}
-		case ilstmt_break:
-		case ilstmt_continue:
-		case ilstmt_inferenced_type_init:
+		case ilstmt_break_T:
+		case ilstmt_continue_T:
+		case ilstmt_inferenced_type_init_T:
 			break;
-		case ilstmt_try:
+		case ilstmt_try_T:
 		{
 			il_stmt_try* tr = s->u.try_;
 			for(int i=0; i<tr->statement_list->length; i++) {
@@ -344,14 +344,14 @@ static void method_count(il_stmt* s, int* yield_ret, int* ret) {
 			}
 			break;
 		}
-		case ilstmt_throw:
-		case ilstmt_assert:
-		case ilstmt_defer:
+		case ilstmt_throw_T:
+		case ilstmt_assert_T:
+		case ilstmt_defer_T:
 			break;
-		case ilstmt_yield_return:
+		case ilstmt_yield_return_T:
 			(*yield_ret)++;
 			break;
-		case ilstmt_yield_break:
+		case ilstmt_yield_break_T:
 		default:
 			//ERROR("ステートメントをダンプ出来ませんでした。");
 			break;
@@ -404,7 +404,7 @@ static method* create_has_next(method* self, type* ty, class_loader* cll, vector
 	mt->return_gtype = GENERIC_BOOL;
 	mt->modifier = modifier_none_T;
 	mt->access = access_public_T;
-	mt->type = method_type_script;
+	mt->type = method_type_script_T;
 	script_method* smt = script_method_new();
 	enviroment* envSmt = enviroment_new();
 	call_context* cctx = call_context_new(call_method_T);
@@ -455,7 +455,7 @@ static method* create_next(method* self, type* ty, class_loader* cll,generic_typ
 	mt->return_gtype = a;
 	mt->modifier = modifier_none_T;
 	mt->access = access_public_T;
-	mt->type = method_type_script;
+	mt->type = method_type_script_T;
 	script_method* smt = script_method_new();
 	enviroment* envSmt = enviroment_new();
 	call_context* cctx = call_context_new(call_method_T);

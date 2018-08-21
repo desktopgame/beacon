@@ -19,7 +19,7 @@ parser* parse_string(const char* source) {
 	extern void yy_clearstr();
 	extern int yyparse(void);
 	gParser = parser_new();
-	gParser->input_type = yinput_string;
+	gParser->input_type = yinput_string_T;
 	gParser->source_name = NULL;
 	yy_setstr(text_strdup(source));
 	if (yyparse()) {
@@ -41,7 +41,7 @@ parser* parse_file(const char* filename) {
 	yy_setstr(NULL);
 	yyin = fopen(filename, "r");
 	gParser = parser_new();
-	gParser->input_type = yinput_file;
+	gParser->input_type = yinput_file_T;
 	gParser->source_name = text_strdup(filename);
 	//対象のファイルを開けなかった
 	if(!yyin) {
@@ -115,8 +115,8 @@ static parser* parser_new() {
 	ret->error_line_text = NULL;
 	ret->error_line_index = -1;
 	ret->error_column_index = -1;
-	ret->input_type = yinput_file;
-	ret->result = parse_await;
+	ret->input_type = yinput_file_T;
+	ret->result = parse_await_T;
 	ret->lineno = 0;
 	ret->literal_buffer = NULL;
 	ret->lineno_vec = vector_new();

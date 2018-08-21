@@ -20,7 +20,7 @@ static void il_factor_new_instance_find(il_factor_new_instance * self, enviromen
 static void il_Factor_new_instace_delete_arg(vector_item item);
 
 il_factor * il_factor_wrap_new_instance(il_factor_new_instance * self) {
-	il_factor* ret = il_factor_new(ilfactor_new_instance);
+	il_factor* ret = il_factor_new(ilfactor_new_instance_T);
 	ret->u.new_instance_ = self;
 	return ret;
 }
@@ -76,7 +76,7 @@ void il_factor_new_instance_load(il_factor_new_instance * self, enviroment * env
 	}
 	//抽象クラスはインスタンス化できない
 	if(type_is_abstract(self->c->parent)) {
-		bc_error_throw(bcerror_construct_abstract_type, string_pool_ref2str(type_name(self->c->parent)));
+		bc_error_throw(bcerror_construct_abstract_type_T, string_pool_ref2str(type_name(self->c->parent)));
 	}
 }
 
@@ -123,7 +123,7 @@ void il_factor_new_instance_delete(il_factor_new_instance * self) {
 }
 
 il_factor_new_instance* il_factor_cast_new_instance_T(il_factor* fact) {
-	assert(fact->type == ilfactor_new_instance);
+	assert(fact->type == ilfactor_new_instance_T);
 	return fact->u.new_instance_;
 }
 
@@ -146,7 +146,7 @@ static void il_factor_new_instance_find(il_factor_new_instance * self, enviromen
 	//コンストラクタで生成するオブジェクトの肩を取得
 	type* ty = call_context_eval_type(cctx, self->fqcnc);
 	if(ty == NULL) {
-		bc_error_throw(bcerror_new_instance_undefined_class,
+		bc_error_throw(bcerror_new_instance_undefined_class_T,
 			string_pool_ref2str(self->fqcnc->namev)
 		);
 		return;
@@ -162,7 +162,7 @@ static void il_factor_new_instance_find(il_factor_new_instance * self, enviromen
 	self->constructor_index = temp;
 	call_context_pop(cctx);
 	if(temp == -1) {
-		bc_error_throw(bcerror_new_instance_undefined_class,
+		bc_error_throw(bcerror_new_instance_undefined_class_T,
 			string_pool_ref2str(cls->namev)
 		);
 	}

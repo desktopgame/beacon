@@ -49,7 +49,7 @@ static void check_context(il_factor_this * self, enviroment * env, call_context*
 	}
 	method* met = call_context_method(cctx);
 	if(modifier_is_static(met->modifier)) {
-		bc_error_throw(bcerror_access_to_this_at_static_method,
+		bc_error_throw(bcerror_access_to_this_at_static_method_T,
 			string_pool_ref2str(type_name(met->parent)),
 			string_pool_ref2str(met->namev)
 		);

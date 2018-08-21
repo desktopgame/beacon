@@ -35,13 +35,13 @@ static void CLBC_check_interface(class_loader * self, il_type * iltype, type * t
 void class_loader_link(class_loader* self, link_type type) {
 	CL_ERROR(self);
 	bc_error_file(self->filename);
-	if(type == link_decl) {
+	if(type == link_decl_T) {
 		CLBC_excec_class_decl(self);
 		CL_ERROR(self);
 		CLBC_excec_interface_decl(self);
 		CL_ERROR(self);
 		CLBC_excec_enum_decl(self);
-	} else if(type == link_impl) {
+	} else if(type == link_impl_T) {
 		CLBC_excec_class_impl(self);
 		CL_ERROR(self);
 		CLBC_excec_interface_impl(self);
@@ -117,7 +117,7 @@ static void CLBC_class_impl(class_loader * self, il_type * iltype, type * tp, na
 		if(!modifier_is_static(fi->modifier) &&
 			modifier_is_final(fi->modifier) &&
 			!fi->not_initialized_at_ctor) {
-			bc_error_throw(bcerror_not_initial_field_not_initialized_at_ctor,
+			bc_error_throw(bcerror_not_initial_field_not_initialized_at_ctor_T,
 				string_pool_ref2str(type_name(tp)),
 				string_pool_ref2str(fi->namev)
 			);
@@ -158,7 +158,7 @@ static void CLBC_enum_decl(class_loader * self, il_type * iltype, type * tp, nam
 	if((tp->tag == type_enum_T ||
 	   tp->tag == type_class_T) &&
 	   !class_field_valid(tp->u.class_, &outField)) {
-		bc_error_throw(bcerror_overwrap_field_name, string_pool_ref2str(tp->u.class_->namev), string_pool_ref2str(outField->namev));
+		bc_error_throw(bcerror_overwrap_field_name_T, string_pool_ref2str(tp->u.class_->namev), string_pool_ref2str(outField->namev));
 	}
 	tp->state = tp->state | type_decl;
 }
@@ -169,7 +169,7 @@ static void CLBC_enum_impl(class_loader * self, il_type * iltype, type * tp, nam
 	}
 	for(int i=0; i<tp->u.class_->sfield_list->length; i++) {
 		field* f = vector_at(tp->u.class_->sfield_list, i);
-		f->static_value = object_int_get(i);
+		f->static_value = object_int_T_get(i);
 	}
 	tp->state = tp->state | type_impl;
 }
@@ -179,7 +179,7 @@ static void CLBC_excec_class_decl(class_loader* self) {
 	int count = 0;
 	for (int i = 0; i < self->type_cache_vec->length; i++) {
 		type_cache* e = (type_cache*)vector_at(self->type_cache_vec, i);
-		if (e->kind != cachekind_class_decl || e->consume) {
+		if (e->kind != cachekind_class_decl_T || e->consume) {
 			continue;
 		}
 		count++;
@@ -192,7 +192,7 @@ static void CLBC_excec_class_impl(class_loader* self) {
 	int count = 0;
 	for (int i = 0; i < self->type_cache_vec->length; i++) {
 		type_cache* e = (type_cache*)vector_at(self->type_cache_vec, i);
-		if (e->kind != cachekind_class_impl || e->consume) {
+		if (e->kind != cachekind_class_impl_T || e->consume) {
 			continue;
 		}
 		count++;
@@ -206,7 +206,7 @@ static void CLBC_excec_interface_decl(class_loader* self) {
 	int count = 0;
 	for (int i = 0; i < self->type_cache_vec->length; i++) {
 		type_cache* e = (type_cache*)vector_at(self->type_cache_vec, i);
-		if (e->kind != cachekind_interface_decl || e->consume) {
+		if (e->kind != cachekind_interface_decl_T || e->consume) {
 			continue;
 		}
 		count++;
@@ -220,7 +220,7 @@ static void CLBC_excec_interface_impl(class_loader* self) {
 	int count = 0;
 	for (int i = 0; i < self->type_cache_vec->length; i++) {
 		type_cache* e = (type_cache*)vector_at(self->type_cache_vec, i);
-		if (e->kind != cachekind_interface_impl || e->consume) {
+		if (e->kind != cachekind_interface_impl_T || e->consume) {
 			continue;
 		}
 		count++;
@@ -234,7 +234,7 @@ static void CLBC_excec_enum_decl(class_loader* self) {
 	int count = 0;
 	for (int i = 0; i < self->type_cache_vec->length; i++) {
 		type_cache* e = (type_cache*)vector_at(self->type_cache_vec, i);
-		if (e->kind != cachekind_enum_decl || e->consume) {
+		if (e->kind != cachekind_enum_decl_T || e->consume) {
 			continue;
 		}
 		count++;
@@ -248,7 +248,7 @@ static void CLBC_excec_enum_impl(class_loader* self) {
 	int count = 0;
 	for (int i = 0; i < self->type_cache_vec->length; i++) {
 		type_cache* e = (type_cache*)vector_at(self->type_cache_vec, i);
-		if (e->kind != cachekind_enum_impl || e->consume) {
+		if (e->kind != cachekind_enum_impl_T || e->consume) {
 			continue;
 		}
 		count++;
@@ -262,19 +262,19 @@ static void CLBC_check_class(class_loader * self, il_type * iltype, type * tp, n
 	method* outiMethod = NULL;
 	if(tp->tag == type_class_T &&
 	  !class_interface_implement_valid(TYPE2CLASS(tp), &outiMethod)) {
-		bc_error_throw(bcerror_not_implement_interface, string_pool_ref2str(tp->u.class_->namev), string_pool_ref2str(outiMethod->namev));
+		bc_error_throw(bcerror_not_implement_interface_T, string_pool_ref2str(tp->u.class_->namev), string_pool_ref2str(outiMethod->namev));
 		return;
 	}
 	//実装されていない抽象メソッドを確認する
 	method* outaMethod = NULL;
 	if(tp->tag == type_class_T &&
 	   !class_abstract_class_implement_valid(TYPE2CLASS(tp), &outaMethod)) {
-		bc_error_throw(bcerror_not_implement_abstract_method, string_pool_ref2str(tp->u.class_->namev), string_pool_ref2str(outaMethod->namev));
+		bc_error_throw(bcerror_not_implement_abstract_method_T, string_pool_ref2str(tp->u.class_->namev), string_pool_ref2str(outaMethod->namev));
 	   }
 	//重複するプロパティを確認する
 	property* outProp = NULL;
 	if(!class_property_valid(tp->u.class_, &outProp)) {
-		bc_error_throw(bcerror_overwrap_property_name,
+		bc_error_throw(bcerror_overwrap_property_name_T,
 			string_pool_ref2str(tp->u.class_->namev),
 			string_pool_ref2str(outProp->namev)
 		);
@@ -283,7 +283,7 @@ static void CLBC_check_class(class_loader * self, il_type * iltype, type * tp, n
 	//重複するフィールドを確認する
 	field* outField = NULL;
 	if(!class_field_valid(tp->u.class_, &outField)) {
-		bc_error_throw(bcerror_overwrap_field_name,
+		bc_error_throw(bcerror_overwrap_field_name_T,
 			string_pool_ref2str(tp->u.class_->namev),
 			string_pool_ref2str(outField->namev)
 		);
@@ -292,7 +292,7 @@ static void CLBC_check_class(class_loader * self, il_type * iltype, type * tp, n
 	method* out_overwrap_m = NULL;
 	string_view out_overwrap_mname;
 	if(!class_method_parameter_valid(tp->u.class_, &out_overwrap_m, &out_overwrap_mname)) {
-		bc_error_throw(bcerror_overwrap_parameter_name,
+		bc_error_throw(bcerror_overwrap_parameter_name_T,
 			string_pool_ref2str(type_name(tp)),
 			string_pool_ref2str(out_overwrap_m->namev),
 			string_pool_ref2str(out_overwrap_mname)
@@ -302,7 +302,7 @@ static void CLBC_check_class(class_loader * self, il_type * iltype, type * tp, n
 	constructor* out_overwrap_c = NULL;
 	string_view out_overwrap_cname;
 	if(!class_ctor_parameter_valid(tp->u.class_, &out_overwrap_c, &out_overwrap_cname)) {
-		bc_error_throw(bcerror_overwrap_parameter_name,
+		bc_error_throw(bcerror_overwrap_parameter_name_T,
 			string_pool_ref2str(type_name(tp)),
 			"new",
 			string_pool_ref2str(out_overwrap_cname)
@@ -311,7 +311,7 @@ static void CLBC_check_class(class_loader * self, il_type * iltype, type * tp, n
 	//クラスの重複する型パラメータ名を検出する
 	string_view out_overwrap_tpname;
 	if(!class_type_type_parameter_valid(tp->u.class_, &out_overwrap_tpname)) {
-		bc_error_throw(bcerror_overwrap_type_type_parameter_name,
+		bc_error_throw(bcerror_overwrap_type_type_parameter_name_T,
 			string_pool_ref2str(type_name(tp)),
 			string_pool_ref2str(out_overwrap_tpname)
 		);
@@ -320,7 +320,7 @@ static void CLBC_check_class(class_loader * self, il_type * iltype, type * tp, n
 	method* out_overwrap_tpm = NULL;
 	string_view out_overwrap_tpmname;
 	if(!class_method_type_parameter_valid(tp->u.class_, &out_overwrap_tpm, &out_overwrap_tpmname)) {
-		bc_error_throw(bcerror_overwrap_method_type_parameter_name,
+		bc_error_throw(bcerror_overwrap_method_type_parameter_name_T,
 			string_pool_ref2str(type_name(tp)),
 			string_pool_ref2str(out_overwrap_tpm->namev),
 			string_pool_ref2str(out_overwrap_tpmname)
@@ -333,7 +333,7 @@ static void CLBC_check_interface(class_loader * self, il_type * iltype, type * t
 	method* out_overwrap_m = NULL;
 	string_view out_overwrap_name;
 	if(!interface_method_parameter_valid(tp->u.interface_, &out_overwrap_m, &out_overwrap_name)) {
-		bc_error_throw(bcerror_overwrap_parameter_name,
+		bc_error_throw(bcerror_overwrap_parameter_name_T,
 			string_pool_ref2str(type_name(tp)),
 			string_pool_ref2str(out_overwrap_m->namev),
 			string_pool_ref2str(out_overwrap_name)
@@ -342,7 +342,7 @@ static void CLBC_check_interface(class_loader * self, il_type * iltype, type * t
 	//インターフェイスの重複する型パラメータ名を検出する
 	string_view out_overwrap_tpname;
 	if(!interface_type_type_parameter_valid(tp->u.interface_, &out_overwrap_tpname)) {
-		bc_error_throw(bcerror_overwrap_type_type_parameter_name,
+		bc_error_throw(bcerror_overwrap_type_type_parameter_name_T,
 			string_pool_ref2str(type_name(tp)),
 			string_pool_ref2str(out_overwrap_tpname)
 		);
@@ -351,7 +351,7 @@ static void CLBC_check_interface(class_loader * self, il_type * iltype, type * t
 	method* out_overwrap_tpm = NULL;
 	string_view out_overwrap_tpmname;
 	if(!interface_method_type_parameter_valid(tp->u.interface_, &out_overwrap_tpm, &out_overwrap_tpmname)) {
-		bc_error_throw(bcerror_overwrap_method_type_parameter_name,
+		bc_error_throw(bcerror_overwrap_method_type_parameter_name_T,
 			string_pool_ref2str(type_name(tp)),
 			string_pool_ref2str(out_overwrap_tpm->namev),
 			string_pool_ref2str(out_overwrap_tpmname)

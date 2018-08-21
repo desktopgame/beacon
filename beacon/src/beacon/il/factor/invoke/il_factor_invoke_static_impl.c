@@ -126,7 +126,7 @@ static void resolve_default(il_factor_invoke_static * self, enviroment * env, ca
 static void il_factor_invoke_static_check(il_factor_invoke_static * self, enviroment * env, call_context* cctx) {
 	type* ty =call_context_eval_type(cctx, self->fqcn);
 	if(ty == NULL) {
-		bc_error_throw(bcerror_undefined_type_static_invoke,
+		bc_error_throw(bcerror_undefined_type_static_invoke_T,
 			string_pool_ref2str(self->fqcn->namev),
 			string_pool_ref2str(self->namev)
 		);
@@ -152,7 +152,7 @@ static void il_factor_invoke_static_check(il_factor_invoke_static * self, enviro
 	self->index = temp;
 	//メソッドが見つからない
 	if(temp == -1 || self->m == NULL) {
-		bc_error_throw(bcerror_invoke_static_undefined_method,
+		bc_error_throw(bcerror_invoke_static_undefined_method_T,
 			string_pool_ref2str(cls->namev),
 			string_pool_ref2str(self->namev)
 		);

@@ -11,21 +11,21 @@ static void type_parameter_rule_list_delete(vector_item item);
 type_parameter * type_parameter_new(string_view namev) {
 	type_parameter* ret = (type_parameter*)MEM_MALLOC(sizeof(type_parameter));
 	ret->namev = namev;
-	ret->kind = type_parameter_kind_default;
+	ret->kind = type_parameter_kind_default_T;
 	return ret;
 }
 
 type_parameter * type_parameter_dup(il_type_parameter * src) {
 	type_parameter* ret = type_parameter_new(src->namev);
 	switch (src->kind) {
-		case il_type_parameter_kind_default:
-			ret->kind = type_parameter_kind_default;
+		case il_type_parameter_kind_default_T:
+			ret->kind = type_parameter_kind_default_T;
 			break;
-		case il_type_parameter_kind_in:
-			ret->kind = type_parameter_kind_in;
+		case il_type_parameter_kind_in_T:
+			ret->kind = type_parameter_kind_in_T;
 			break;
-		case il_type_parameter_kind_out:
-			ret->kind = type_parameter_kind_out;
+		case il_type_parameter_kind_out_T:
+			ret->kind = type_parameter_kind_out_T;
 			break;
 		default:
 			break;
@@ -59,9 +59,9 @@ void type_parameter_print(vector* v) {
 	printf("<");
 	for (int i = 0; i < v->length; i++) {
 		type_parameter* e = (type_parameter*)vector_at(v, i);
-		if (e->kind == type_parameter_kind_in) {
+		if (e->kind == type_parameter_kind_in_T) {
 			printf("in ");
-		} else if (e->kind == type_parameter_kind_out) {
+		} else if (e->kind == type_parameter_kind_out_T) {
 			printf("out ");
 		}
 		printf("%s", string_pool_ref2str(e->namev));

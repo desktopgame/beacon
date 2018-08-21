@@ -8,7 +8,7 @@ static void il_enum_name_delete(il_enum* self);
 
 il_type * il_type_wrap_enum(il_enum * self) {
 	il_type* ret = il_type_new();
-	ret->tag = iltype_enum;
+	ret->tag = iltype_enum_T;
 	ret->u.enum_ = self;
 	return ret;
 }

@@ -6,7 +6,7 @@
 #include "../../env/type_impl.h"
 
 il_factor * il_factor_wrap_bool(il_factor_bool * self) {
-	il_factor* ret = il_factor_new(ilfactor_bool);
+	il_factor* ret = il_factor_new(ilfactor_bool_T);
 	ret->u.bool_ = self;
 	return ret;
 }
@@ -44,6 +44,6 @@ void il_factor_bool_delete(il_factor_bool * self) {
 }
 
 il_factor_bool* il_factor_cast_bool(il_factor* fact) {
-	assert(fact->type == ilfactor_bool);
+	assert(fact->type == ilfactor_bool_T);
 	return fact->u.bool_;
 }

@@ -60,7 +60,7 @@ bool CLBC_field_decl(class_loader* self, il_type* iltype, type* tp, il_field* il
 	ilfi->initial_value = NULL;
 	//フィールドの修飾子に native が使用されている
 	if(modifier_is_native(fi->modifier)) {
-		bc_error_throw(bcerror_native_field,
+		bc_error_throw(bcerror_native_field_T,
 			string_pool_ref2str(type_name(tp)),
 			string_pool_ref2str(fi->namev)
 		);
@@ -68,7 +68,7 @@ bool CLBC_field_decl(class_loader* self, il_type* iltype, type* tp, il_field* il
 	}
 	//.. abstractが使用されている
 	if(modifier_is_abstract(fi->modifier)) {
-		bc_error_throw(bcerror_abstract_field,
+		bc_error_throw(bcerror_abstract_field_T,
 			string_pool_ref2str(type_name(tp)),
 			string_pool_ref2str(fi->namev)
 		);
@@ -76,7 +76,7 @@ bool CLBC_field_decl(class_loader* self, il_type* iltype, type* tp, il_field* il
 	}
 	//.. overrideが使用されている
 	if(modifier_is_override(fi->modifier)) {
-		bc_error_throw(bcerror_override_field,
+		bc_error_throw(bcerror_override_field_T,
 			string_pool_ref2str(type_name(tp)),
 			string_pool_ref2str(fi->namev)
 		);
@@ -87,7 +87,7 @@ bool CLBC_field_decl(class_loader* self, il_type* iltype, type* tp, il_field* il
 	if(modifier_is_static(fi->modifier) &&
 	   modifier_is_final(fi->modifier) &&
 	   fi->initial_value == NULL) {
-		bc_error_throw(bcerror_not_default_value_static_final_field,
+		bc_error_throw(bcerror_not_default_value_static_final_field_T,
 			string_pool_ref2str(type_name(tp)),
 			string_pool_ref2str(fi->namev)
 		);
@@ -112,7 +112,7 @@ bool CLBC_field_impl(class_loader* self, type* tp, field* fi, namespace_* scope,
 	if(generic_type_distance(fi->gtype, gf, cctx) < 0) {
 		generic_type_print(fi->gtype); io_println();
 		generic_type_print(gf); io_println();
-		bc_error_throw(bcerror_field_default_value_not_compatible_to_field_type,
+		bc_error_throw(bcerror_field_default_value_not_compatible_to_field_type_T,
 			string_pool_ref2str(type_name(fi->parent)),
 			string_pool_ref2str(fi->namev)
 		);
@@ -182,14 +182,14 @@ bool CLBC_property_decl(class_loader* self, il_type* iltype, type* tp, il_proper
 	if(modifier_is_abstract(prop->modifier) ||
 	   modifier_is_override(prop->modifier) ||
 	   modifier_is_native(prop->modifier)) {
-		   bc_error_throw(bcerror_native_field, string_pool_ref2str(prop->namev));
+		   bc_error_throw(bcerror_native_field_T, string_pool_ref2str(prop->namev));
 			call_context_delete(cctx);
 		   return false;
 	   }
 	//プロパティアクセサの方がプロパティよりも緩いアクセスになっている
 	if(access_weak(ilprop->access, ilprop->set->access) ||
 	   access_weak(ilprop->access, ilprop->get->access)) {
-		bc_error_throw(bcerror_invalid_access_level_of_property,
+		bc_error_throw(bcerror_invalid_access_level_of_property_T,
 			string_pool_ref2str(type_name(tp)),
 			string_pool_ref2str(ilprop->namev)
 		);
@@ -198,7 +198,7 @@ bool CLBC_property_decl(class_loader* self, il_type* iltype, type* tp, il_proper
 	//二つのアクセサがどちらもプロパティと異なるアクセスレベル
 	if((ilprop->access != ilprop->set->access) &&
 	    ilprop->access != ilprop->get->access) {
-		bc_error_throw(bcerror_specified_both_property_accessor,
+		bc_error_throw(bcerror_specified_both_property_accessor_T,
 			string_pool_ref2str(type_name(tp)),
 			string_pool_ref2str(ilprop->namev)
 		);
@@ -275,7 +275,7 @@ bool CLBC_method_decl(class_loader* self, il_type* iltype, type* tp, il_method* 
 	//実行時のメソッド情報を作成する
 	method* method = method_new(ilmethod->namev);
 	vector* parameter_list = method->parameter_list;
-	method->type = modifier_is_native(ilmethod->modifier) ? method_type_native : method_type_script;
+	method->type = modifier_is_native(ilmethod->modifier) ? method_type_native_T : method_type_script_T;
 	method->access = ilmethod->access;
 	method->modifier = ilmethod->modifier;
 	type_parameter_list_dup(ilmethod->type_parameter_list, method->type_parameter_list);
@@ -286,7 +286,7 @@ bool CLBC_method_decl(class_loader* self, il_type* iltype, type* tp, il_method* 
 	//インターフェースなら空
 	if (tp->tag == type_interface_T ||
 	   modifier_is_abstract(method->modifier)) {
-		method->type = method_type_abstract;
+		method->type = method_type_abstract_T;
 		method->u.script_method = NULL;
 	} else {
 		method->u.script_method = script_method_new();
@@ -296,7 +296,7 @@ bool CLBC_method_decl(class_loader* self, il_type* iltype, type* tp, il_method* 
 	if(modifier_is_abstract(method->modifier) &&
 	  (tp->tag == type_class_T &&
 	  !TYPE2CLASS(tp)->is_abstract)) {
-		bc_error_throw(bcerror_abstract_method_by, string_pool_ref2str(method->namev));
+		bc_error_throw(bcerror_abstract_method_by_T, string_pool_ref2str(method->namev));
 		method_delete(method);
 		call_context_delete(cctx);
 		return false;
@@ -307,7 +307,7 @@ bool CLBC_method_decl(class_loader* self, il_type* iltype, type* tp, il_method* 
 	   ilmethod->no_stmt &&
 		(!modifier_is_abstract(method->modifier) && !modifier_is_native(method->modifier))
 	) {
-		bc_error_throw(bcerror_empty_stmt_method, string_pool_ref2str(method->namev));
+		bc_error_throw(bcerror_empty_stmt_method_T, string_pool_ref2str(method->namev));
 		method_delete(method);
 		call_context_delete(cctx);
 		return false;
@@ -317,7 +317,7 @@ bool CLBC_method_decl(class_loader* self, il_type* iltype, type* tp, il_method* 
 	   !ilmethod->no_stmt &&
 		(modifier_is_abstract(method->modifier) || modifier_is_native(method->modifier))
 	) {
-		bc_error_throw(bcerror_not_empty_stmt_method, string_pool_ref2str(method->namev));
+		bc_error_throw(bcerror_not_empty_stmt_method_T, string_pool_ref2str(method->namev));
 		method_delete(method);
 		call_context_delete(cctx);
 		return false;
@@ -325,7 +325,7 @@ bool CLBC_method_decl(class_loader* self, il_type* iltype, type* tp, il_method* 
 	//メソッドの修飾子が static override
 	if(modifier_is_static(method->modifier) &&
 	   modifier_is_override(method->modifier)) {
-		bc_error_throw(bcerror_static_override_method,
+		bc_error_throw(bcerror_static_override_method_T,
 			string_pool_ref2str(type_name(tp)),
 			string_pool_ref2str(method->namev)
 		);
@@ -336,7 +336,7 @@ bool CLBC_method_decl(class_loader* self, il_type* iltype, type* tp, il_method* 
 	//.. abstract override
 	if(modifier_is_abstract(method->modifier) &&
 	   modifier_is_override(method->modifier)) {
-		bc_error_throw(bcerror_abstract_override_method,
+		bc_error_throw(bcerror_abstract_override_method_T,
 			string_pool_ref2str(type_name(tp)),
 			string_pool_ref2str(method->namev)
 		);
@@ -347,7 +347,7 @@ bool CLBC_method_decl(class_loader* self, il_type* iltype, type* tp, il_method* 
 	//.. abstract static
 	if(modifier_is_abstract(method->modifier) &&
 	   modifier_is_static(method->modifier)) {
-		bc_error_throw(bcerror_abstract_static_method,
+		bc_error_throw(bcerror_abstract_static_method_T,
 			string_pool_ref2str(type_name(tp)),
 			string_pool_ref2str(method->namev)
 		);
@@ -377,8 +377,8 @@ bool CLBC_method_impl(class_loader* self, namespace_* scope, il_type* iltype, ty
 	method* me = mt;
 	il_method* ilmethod = ilmt;
 	//ネイティブメソッドならオペコードは不要
-	if (me->type == method_type_native ||
-		me->type == method_type_abstract) {
+	if (me->type == method_type_native_T ||
+		me->type == method_type_abstract_T) {
 		return true;
 	}
 	//オペコードを作成
@@ -512,7 +512,7 @@ void CLBC_ctors_impl(class_loader* self, il_type* iltype, type* tp) {
 	class_* classz = tp->u.class_;
 	namespace_* scope = classz->location;
 	vector* constructors = classz->constructor_list;
-	if (iltype->tag != iltype_class) {
+	if (iltype->tag != iltype_class_T) {
 		return;
 	}
 	//既に登録されたが、
@@ -723,7 +723,7 @@ static void CLBC_chain_auto(class_loader * self, il_type * iltype, type * tp, il
 	//親クラスにも空のコンストラクタが存在しない=エラー
 	//(この場合自動的にチェインコンストラクタを補うことが出来ないため。)
 	if(emptyTarget == NULL) {
-		bc_error_throw(bcerror_auto_chain_ctor_not_found,
+		bc_error_throw(bcerror_auto_chain_ctor_not_found_T,
 			string_pool_ref2str(type_name(tp))
 		);
 		return;
@@ -768,7 +768,7 @@ static void CLBC_chain_super(class_loader * self, il_type * iltype, type * tp, i
 		opcode_buf_add(env->buf, classz->super_class->core_type->absolute_index);
 	}
 	if(chainTarget == NULL) {
-		bc_error_throw(bcerror_explicit_chain_ctor_not_found,
+		bc_error_throw(bcerror_explicit_chain_ctor_not_found_T,
 			string_pool_ref2str(type_name(tp))
 		);
 		return;
@@ -785,33 +785,33 @@ static void CLBC_chain_super(class_loader * self, il_type * iltype, type * tp, i
 static bool CLBC_test_operator_overlaod(class_loader* self, il_type* iltype, type* tp, operator_overload* opov) {
 	//アクセスレベルを確認する
 	if(opov->access != access_public_T) {
-		bc_error_throw(bcerror_private_operator, type_name(tp));
+		bc_error_throw(bcerror_private_operator_T, type_name(tp));
 		return true;
 	}
 	//二項演算子であるなら引数は1
 	if(operator_arg2(opov->type) && opov->parameter_list->length != 1) {
-		bc_error_throw(bcerror_arg_count_not2_bioperator, type_name(tp), operator_tostring(opov->type));
+		bc_error_throw(bcerror_arg_count_not2_bioperator_T, type_name(tp), operator_tostring(opov->type));
 		return true;
 	}
 	//単項演算子であるなら引数は0
 	if(operator_arg1(opov->type) && opov->parameter_list->length != 0) {
-		bc_error_throw(bcerror_arg_count_not1_uoperator,
+		bc_error_throw(bcerror_arg_count_not1_uoperator_T,
 			type_name(tp),
 			operator_tostring(opov->type)
 		);
 		return true;
 	}
 	//配列参照演算子であるあんら引数は1
-	if(opov->type == operator_subscript_get && opov->parameter_list->length != 1) {
-		bc_error_throw(bcerror_arg_count_not1_subscript_get_op,
+	if(opov->type == operator_sub_script_get_T && opov->parameter_list->length != 1) {
+		bc_error_throw(bcerror_arg_count_not1_subscript_get_op_T,
 			type_name(tp),
 			operator_tostring(opov->type)
 		);
 		return true;
 	}
 	//配列書き込み演算子であるあんら引数は2
-	if(opov->type == operator_subscript_set && opov->parameter_list->length != 2) {
-		bc_error_throw(bcerror_arg_count_not2_subscript_set_op,
+	if(opov->type == operator_sub_script_set_T && opov->parameter_list->length != 2) {
+		bc_error_throw(bcerror_arg_count_not2_subscript_set_op_T,
 			type_name(tp),
 			operator_tostring(opov->type)
 		);
@@ -819,15 +819,15 @@ static bool CLBC_test_operator_overlaod(class_loader* self, il_type* iltype, typ
 	}
 	//== などの比較演算子の戻り値が bool ではない
 	if(operator_compare(opov->type) && opov->return_gtype->core_type != TYPE_BOOL) {
-		bc_error_throw(bcerror_return_type_not_bool_compare_operator,
+		bc_error_throw(bcerror_return_type_not_bool_compare_operator_T,
 			string_pool_ref2str(type_name(tp)),
 			operator_tostring(opov->type)
 		);
 		return true;
 	}
 	//! の戻り値が bool ではない
-	if(opov->type == operator_not && opov->return_gtype->core_type != TYPE_BOOL) {
-		bc_error_throw(bcerror_return_type_not_bool_not_operator,
+	if(opov->type == operator_not_T && opov->return_gtype->core_type != TYPE_BOOL) {
+		bc_error_throw(bcerror_return_type_not_bool_not_operator_T,
 			string_pool_ref2str(type_name(tp)),
 			operator_tostring(opov->type)
 		);
@@ -835,8 +835,8 @@ static bool CLBC_test_operator_overlaod(class_loader* self, il_type* iltype, typ
 	}
 	//- の戻り値がクラスと異なる
 	//(IntならInt, Vector2ならVector2)
-	if(opov->type == operator_negative && opov->return_gtype->core_type != opov->parent) {
-		bc_error_throw(bcerror_return_type_not_equal_negative_operator,
+	if(opov->type == operator_negative_T && opov->return_gtype->core_type != opov->parent) {
+		bc_error_throw(bcerror_return_type_not_equal_negative_operator_T,
 			string_pool_ref2str(type_name(tp)),
 			operator_tostring(opov->type)
 		);
@@ -864,7 +864,7 @@ static void CLBC_default_eqoperator_overload(class_loader* self, type* tp) {
 	//equals(Object a)を検索する
 	//これによって == を自動実装する
 	int methodPos = 0;
-	operator_overload* opov_eq = operator_overload_new(operator_eq);
+	operator_overload* opov_eq = operator_overload_new(operator_eq_T);
 	opov_eq->access = access_public_T;
 	//戻り値読み込み
 	opov_eq->parent = tp;
@@ -915,7 +915,7 @@ static void CLBC_default_noteqoperator_overload(class_loader* self, type* tp) {
 	//equals(Object a)を検索する
 	//これによって != を自動実装する
 	int methodPos = 0;
-	operator_overload* opov_noteq = operator_overload_new(operator_noteq);
+	operator_overload* opov_noteq = operator_overload_new(operator_not_Teq_T);
 	opov_noteq->access = access_public_T;
 	//戻り値読み込み
 	opov_noteq->parent = tp;

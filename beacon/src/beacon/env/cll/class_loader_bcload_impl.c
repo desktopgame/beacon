@@ -145,11 +145,11 @@ static void CLBC_type_list(class_loader* self, vector* iltype_list, namespace_* 
 	for (int i = 0; i < iltype_list->length; i++) {
 		vector_item e = vector_at(iltype_list, i);
 		il_type* ilt = (il_type*)e;
-		if (ilt->tag == iltype_class) {
+		if (ilt->tag == iltype_class_T) {
 			CLBC_class(self, ilt, parent);
-		} else if (ilt->tag == iltype_interface) {
+		} else if (ilt->tag == iltype_interface_T) {
 			CLBC_interface(self, ilt, parent);
-		} else if (ilt->tag == iltype_enum) {
+		} else if (ilt->tag == iltype_enum_T) {
 			CLBC_enum(self, ilt, parent);
 		}
 		CL_ERROR(self);
@@ -158,7 +158,7 @@ static void CLBC_type_list(class_loader* self, vector* iltype_list, namespace_* 
 
 static void CLBC_enum(class_loader * self, il_type * iltype, namespace_ * parent) {
 	CL_ERROR(self);
-	assert(iltype->tag == iltype_enum);
+	assert(iltype->tag == iltype_enum_T);
 	il_enum* ilenum = iltype->u.enum_;
 	type* tp = CLBC_get_or_load_enum(parent, iltype);
 	CL_ERROR(self);
@@ -177,7 +177,7 @@ static void CLBC_enum(class_loader * self, il_type * iltype, namespace_ * parent
 		f->gtype = TYPE_INT->generic_self;
 		//virtual_type_nongeneric_init(&f->vtype, GENERIC_INT);
 		f->parent = tp;
-		//f->static_value->paint = paint_marked;
+		//f->static_value->paint = paint_marked_T;
 		class_add_field(cls, f);
 	}
 	//宣言のロードを予約
@@ -187,7 +187,7 @@ static void CLBC_enum(class_loader * self, il_type * iltype, namespace_ * parent
 		iltype,
 		tp,
 		parent,
-		cachekind_enum_decl
+		cachekind_enum_decl_T
 	);
 	vector_push(self->type_cache_vec, tc);
 	//実装のロードを予約
@@ -197,7 +197,7 @@ static void CLBC_enum(class_loader * self, il_type * iltype, namespace_ * parent
 		iltype,
 		tp,
 		parent,
-		cachekind_enum_impl
+		cachekind_enum_impl_T
 	);
 	vector_push(self->type_cache_vec, mtc);
 	tp->state = tp->state | type_register;
@@ -207,7 +207,7 @@ static void CLBC_class(class_loader* self, il_type* iltype, namespace_* parent) 
 	CL_ERROR(self);
 	//既に登録されていたら二重に登録しないように
 	//例えば、ネイティブメソッドを登録するために一時的にクラスが登録されている場合がある
-	assert(iltype->tag == iltype_class);
+	assert(iltype->tag == iltype_class_T);
 	type* tp = CLBC_get_or_load_class(self, parent, iltype);
 	CL_ERROR(self);
 	class_* cls = TYPE2CLASS(tp);
@@ -225,7 +225,7 @@ static void CLBC_class(class_loader* self, il_type* iltype, namespace_* parent) 
 		iltype,
 		tp,
 		parent,
-		cachekind_class_decl
+		cachekind_class_decl_T
 	);
 	vector_push(self->type_cache_vec, tc);
 	//実装のロードを予約
@@ -235,7 +235,7 @@ static void CLBC_class(class_loader* self, il_type* iltype, namespace_* parent) 
 		iltype,
 		tp,
 		parent,
-		cachekind_class_impl
+		cachekind_class_impl_T
 	);
 	vector_push(self->type_cache_vec, mtc);
 	tp->state = tp->state | type_register;
@@ -243,7 +243,7 @@ static void CLBC_class(class_loader* self, il_type* iltype, namespace_* parent) 
 
 static void CLBC_interface(class_loader * self, il_type * iltype, namespace_ * parent) {
 	CL_ERROR(self);
-	assert(iltype->tag == iltype_interface);
+	assert(iltype->tag == iltype_interface_T);
 	//NOTE:後で親関数から渡すようにする
 	type* tp = CLBC_get_or_load_interface(self, parent, iltype);
 	CL_ERROR(self);
@@ -259,7 +259,7 @@ static void CLBC_interface(class_loader * self, il_type * iltype, namespace_ * p
 		iltype,
 		tp,
 		parent,
-		cachekind_interface_decl
+		cachekind_interface_decl_T
 	);
 	vector_push(self->type_cache_vec, tc);
 	//実装のロードを予約
@@ -269,7 +269,7 @@ static void CLBC_interface(class_loader * self, il_type * iltype, namespace_ * p
 		iltype,
 		tp,
 		parent,
-		cachekind_interface_impl
+		cachekind_interface_impl_T
 	);
 	vector_push(self->type_cache_vec, mtc);
 	tp->state = tp->state | type_register;
@@ -353,7 +353,7 @@ static void CLBC_register_class(class_loader* self, namespace_* parent, il_type*
 			#endif
 			vector_push(cls->impl_list, gtp);
 			if(E->tag != type_interface_T) {
-				bc_error_throw(bcerror_class_first, string_pool_ref2str(type_name(tp)));
+				bc_error_throw(bcerror_class_first_T, string_pool_ref2str(type_name(tp)));
 				namespace_add_type(parent, tp);
 				call_context_delete(cctx);
 				return;
@@ -366,7 +366,7 @@ static void CLBC_register_class(class_loader* self, namespace_* parent, il_type*
 	//重複するインターフェイスを検出
 	interface_* inter = NULL;
 	if((inter = type_interface_valid(tp))) {
-		bc_error_throw(bcerror_multi_eqinterface, string_pool_ref2str(inter->namev));
+		bc_error_throw(bcerror_multi_eqinterface_T, string_pool_ref2str(inter->namev));
 	}
 }
 
@@ -401,7 +401,7 @@ static void CLBC_register_interface(class_loader* self, namespace_* parent, il_t
 		generic_type* gtp = import_manager_resolve(self->import_manager, parent, e, cctx);
 		type* E = GENERIC2TYPE(gtp);
 		if(E->tag != type_interface_T) {
-			bc_error_throw(bcerror_interface_only, string_pool_ref2str(type_name(tp)));
+			bc_error_throw(bcerror_interface_only_T, string_pool_ref2str(type_name(tp)));
 			namespace_add_type(parent, tp);
 			call_context_delete(cctx);
 			return;
@@ -417,6 +417,6 @@ static void CLBC_register_interface(class_loader* self, namespace_* parent, il_t
 	//重複するインターフェイスを検出
 	interface_* ovinter = NULL;
 	if((ovinter = type_interface_valid(tp))) {
-		bc_error_throw(bcerror_multi_eqinterface, string_pool_ref2str(ovinter->namev));
+		bc_error_throw(bcerror_multi_eqinterface_T, string_pool_ref2str(ovinter->namev));
 	}
 }

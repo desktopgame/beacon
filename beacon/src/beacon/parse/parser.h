@@ -12,7 +12,7 @@
  * 解析の結果を表す構造体.
  */
 typedef enum parse_result {
-	parse_await = -1,
+	parse_await_T = -1,
 	parse_complete_T = 0,
 	parse_open_error_T,
 	parse_syntax_error_T

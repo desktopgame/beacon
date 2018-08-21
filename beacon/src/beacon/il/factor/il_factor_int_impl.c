@@ -10,7 +10,7 @@
 #pragma warning(disable:4996)
 #endif
 il_factor * il_factor_wrap_int(il_factor_int * self) {
-	il_factor* ret = il_factor_new(ilfactor_int);
+	il_factor* ret = il_factor_new(ilfactor_int_T);
 	ret->u.int_ = self;
 	return ret;
 }
@@ -57,6 +57,6 @@ void il_factor_int_delete(il_factor_int * self) {
 }
 
 il_factor_int* il_factor_cast_int_T(il_factor* fact) {
-	assert(fact->type == ilfactor_int);
+	assert(fact->type == ilfactor_int_T);
 	return fact->u.int_;
 }

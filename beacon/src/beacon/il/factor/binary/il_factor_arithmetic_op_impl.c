@@ -43,7 +43,7 @@ generic_type* il_factor_arithmetic_op_eval(il_factor_arithmetic_op * self, envir
 	//プリミティブ型同士でないのに
 	//演算子オーバーロードもない
 	if(self->operator_index == -1) {
-		bc_error_throw(bcerror_undefined_compare_operator,
+		bc_error_throw(bcerror_undefined_compare_operator_T,
 			operator_tostring(self->type)
 		);
 		return NULL;
@@ -89,22 +89,22 @@ char* il_factor_arithmetic_op_tostr(il_factor_arithmetic_op* self, enviroment* e
 //static
 static opcode operator_to_iopcode(operator_type type) {
 	switch(type) {
-		case operator_add: return op_iadd;
-		case operator_sub: return op_isub;
-		case operator_mul: return op_imul;
-		case operator_div: return op_idiv;
-		case operator_mod: return op_imod;
+		case operator_add_T: return op_iadd;
+		case operator_sub_T: return op_isub;
+		case operator_mul_T: return op_imul;
+		case operator_div_T: return op_idiv;
+		case operator_mod_T: return op_imod;
 	}
 	assert(false);
 }
 
 static opcode operator_to_dopcode(operator_type type) {
 	switch(type) {
-		case operator_add: return op_dadd;
-		case operator_sub: return op_dsub;
-		case operator_mul: return op_dmul;
-		case operator_div: return op_ddiv;
-		case operator_mod: return op_dmod;
+		case operator_add_T: return op_dadd;
+		case operator_sub_T: return op_dsub;
+		case operator_mul_T: return op_dmul;
+		case operator_div_T: return op_ddiv;
+		case operator_mod_T: return op_dmod;
 	}
 	assert(false);
 }

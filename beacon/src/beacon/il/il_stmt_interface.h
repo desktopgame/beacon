@@ -9,22 +9,22 @@
  * 文の種類を表す列挙型.
  */
 typedef enum il_stmt_type {
-	ilstmt_proc,
-	ilstmt_if,
-	ilstmt_while,
-	ilstmt_variable_decl,
-	ilstmt_variable_init,
-	ilstmt_return,
-	ilstmt_return_empty,
-	ilstmt_break,
-	ilstmt_continue,
-	ilstmt_inferenced_type_init,
-	ilstmt_try,
-	ilstmt_throw,
-	ilstmt_assert,
-	ilstmt_defer,
-	ilstmt_yield_return,
-	ilstmt_yield_break,
+	ilstmt_proc_T,
+	ilstmt_if_T,
+	ilstmt_while_T,
+	ilstmt_variable_decl_T,
+	ilstmt_variable_init_T,
+	ilstmt_return_T,
+	ilstmt_return_empty_T,
+	ilstmt_break_T,
+	ilstmt_continue_T,
+	ilstmt_inferenced_type_init_T,
+	ilstmt_try_T,
+	ilstmt_throw_T,
+	ilstmt_assert_T,
+	ilstmt_defer_T,
+	ilstmt_yield_return_T,
+	ilstmt_yield_break_T,
 } il_stmt_type;
 
 //詳細は il_stmt_impl.h を参照してください。

@@ -11,8 +11,8 @@
 static void check_method_yield_return(il_stmt_yield_return * self, enviroment * env, call_context* cctx);
 
 il_stmt* il_stmt_wrap_yield_return(il_stmt_yield_return* self) {
-	il_stmt* ret = il_stmt_new(ilstmt_yield_return);
-	ret->type = ilstmt_yield_return;
+	il_stmt* ret = il_stmt_new(ilstmt_yield_return_T);
+	ret->type = ilstmt_yield_return_T;
 	ret->u.yield_return = self;
 	return ret;
 }
@@ -52,7 +52,7 @@ static void check_method_yield_return(il_stmt_yield_return * self, enviroment * 
 	generic_type* arg = vector_at(m->return_gtype->type_args_list, 0);
 	//戻り値の型に互換性がない
 	if(generic_type_distance(arg, il_factor_eval(self->fact, env, cctx), cctx) < 0) {
-		bc_error_throw(bcerror_yield_return_value_type_is_not_compatible,
+		bc_error_throw(bcerror_yield_return_value_type_is_not_compatible_T,
 			string_pool_ref2str(type_name(m->parent)),
 			string_pool_ref2str(m->namev)
 		);

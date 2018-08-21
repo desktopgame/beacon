@@ -5,7 +5,7 @@
 #include "../../env/operator_overload.h"
 
 il_factor* il_factor_wrap_subscript(il_factor_subscript* self) {
-	il_factor* ret = il_factor_new(ilfactor_subscript);
+	il_factor* ret = il_factor_new(ilfactor_subscript_T);
 	ret->u.subscript = self;
 	return ret;
 }
@@ -44,7 +44,7 @@ void il_factor_subscript_load(il_factor_subscript* self, enviroment* env, call_c
 	vector* args = vector_new();
 	vector_push(args, arg_gtype);
 	int temp = -1;
-	self->opov = class_gfind_operator_overload(TYPE2CLASS(GENERIC2TYPE(receiver_gtype)), operator_subscript_get, args, env, cctx, &temp);
+	self->opov = class_gfind_operator_overload(TYPE2CLASS(GENERIC2TYPE(receiver_gtype)), operator_sub_script_get_T, args, env, cctx, &temp);
 	self->operator_index = temp;
 	vector_delete(args, vector_deleter_null);
 }

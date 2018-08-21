@@ -35,7 +35,7 @@ heap* heap_get();
 /**
  * ヒープにオブジェクトを追加します.
  * obj#blockingがtrueなら、
- * 追加せずに obj#paint を paint_onexit へ変更します。
+ * 追加せずに obj#paint を paint_onexit_T へ変更します。
  * @param self
  * @param obj
  */

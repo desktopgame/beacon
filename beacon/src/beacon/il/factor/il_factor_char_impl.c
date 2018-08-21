@@ -8,7 +8,7 @@
 #include "../../util/mem.h"
 
 il_factor * il_factor_wrap_char(il_factor_char * self) {
-	il_factor* ret = il_factor_new(ilfactor_char);
+	il_factor* ret = il_factor_new(ilfactor_char_T);
 	ret->u.char_ = self;
 	return ret;
 }
@@ -51,6 +51,6 @@ void il_factor_char_delete(il_factor_char * self) {
 }
 
 il_factor_char* il_factor_cast_char_T(il_factor* fact) {
-	assert(fact->type == ilfactor_char);
+	assert(fact->type == ilfactor_char_T);
 	return fact->u.char_;
 }

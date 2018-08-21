@@ -6,46 +6,46 @@ void operator_fprintf(FILE* fp, operator_type self) {
 
 char* operator_tostring(operator_type self) {
 	switch(self) {
-		case operator_add: return "+";
-		case operator_sub: return "-";
-		case operator_mul: return "*";
-		case operator_div: return "/";
-		case operator_mod: return "%%";
+		case operator_add_T: return "+";
+		case operator_sub_T: return "-";
+		case operator_mul_T: return "*";
+		case operator_div_T: return "/";
+		case operator_mod_T: return "%%";
 
-		case operator_bit_or: return "|";
-		case operator_bit_and: return "&";
+		case operator_bit_or_T: return "|";
+		case operator_bit_and_T: return "&";
 
-		case operator_logic_or: return "||";
-		case operator_logic_and: return "&&";
+		case operator_logic_or_T: return "||";
+		case operator_logic_and_T: return "&&";
 
-		case operator_eq: return "==";
-		case operator_noteq: return "!=";
+		case operator_eq_T: return "==";
+		case operator_not_Teq_T: return "!=";
 
-		case operator_gt: return ">";
-		case operator_ge: return ">=";
-		case operator_lt: return "<";
-		case operator_le: return "<=";
+		case operator_gt_T: return ">";
+		case operator_ge_T: return ">=";
+		case operator_lt_T: return "<";
+		case operator_le_T: return "<=";
 
-		case operator_lshift: return "<<";
-		case operator_rshift: return ">>";
-		case operator_excor: return "^";
+		case operator_lshift_T: return "<<";
+		case operator_rshift_T: return ">>";
+		case operator_excor_T: return "^";
 
-		case operator_not: return "!";
-		case operator_negative: return "-";
-		case operator_childa: return "~";
+		case operator_not_T: return "!";
+		case operator_negative_T: return "-";
+		case operator_childa_T: return "~";
 
-		case operator_subscript_get: return "[]";
-		case operator_subscript_set: return "[]=";
+		case operator_sub_script_get_T: return "[]";
+		case operator_sub_script_set_T: return "[]=";
 	}
 }
 
 bool operator_arithmetic(operator_type self) {
 	switch(self) {
-		case operator_add:
-		case operator_sub:
-		case operator_mul:
-		case operator_div:
-		case operator_mod:
+		case operator_add_T:
+		case operator_sub_T:
+		case operator_mul_T:
+		case operator_div_T:
+		case operator_mod_T:
 			return true;
 	}
 	return false;
@@ -53,8 +53,8 @@ bool operator_arithmetic(operator_type self) {
 
 bool operator_bit(operator_type self) {
 	switch(self) {
-		case operator_bit_or:
-		case operator_bit_and:
+		case operator_bit_or_T:
+		case operator_bit_and_T:
 			return true;
 	}
 	return false;
@@ -62,8 +62,8 @@ bool operator_bit(operator_type self) {
 
 bool operator_logic(operator_type self) {
 	switch(self) {
-		case operator_logic_or:
-		case operator_logic_and:
+		case operator_logic_or_T:
+		case operator_logic_and_T:
 			return true;
 	}
 	return false;
@@ -71,12 +71,12 @@ bool operator_logic(operator_type self) {
 
 bool operator_compare(operator_type self) {
 	switch(self) {
-		case operator_eq:
-		case operator_noteq:
-		case operator_gt:
-		case operator_ge:
-		case operator_lt:
-		case operator_le:
+		case operator_eq_T:
+		case operator_not_Teq_T:
+		case operator_gt_T:
+		case operator_ge_T:
+		case operator_lt_T:
+		case operator_le_T:
 			return true;
 	}
 	return false;
@@ -84,8 +84,8 @@ bool operator_compare(operator_type self) {
 
 bool operator_shift(operator_type self) {
 	switch(self) {
-		case operator_lshift:
-		case operator_rshift:
+		case operator_lshift_T:
+		case operator_rshift_T:
 			return true;
 	}
 	return false;
@@ -93,11 +93,11 @@ bool operator_shift(operator_type self) {
 
 bool operator_arg2(operator_type self) {
 	switch(self) {
-		case operator_add:
-		case operator_sub:
-		case operator_mul:
-		case operator_div:
-		case operator_mod:
+		case operator_add_T:
+		case operator_sub_T:
+		case operator_mul_T:
+		case operator_div_T:
+		case operator_mod_T:
 			return true;
 	}
 	return false;

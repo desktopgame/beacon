@@ -22,7 +22,7 @@ static void set_gtype(il_factor_variable_local * self, generic_type* gt);
 il_factor_variable_local* il_factor_variable_local_new(string_view namev) {
 	il_factor_variable_local* ret = (il_factor_variable_local*)MEM_MALLOC(sizeof(il_factor_variable_local));
 	ret->namev = namev;
-	ret->type = variable_local_undefined;
+	ret->type = variable_local_undefined_T;
 	ret->type_args = NULL;
 	ret->gt = NULL;
 	return ret;
@@ -30,17 +30,17 @@ il_factor_variable_local* il_factor_variable_local_new(string_view namev) {
 
 void il_factor_variable_local_generate(il_factor_variable_local* self, enviroment* env, call_context* cctx) {
 	il_factor_variable_local_load(self, env, cctx);
-	assert(self->type != variable_local_undefined);
-	if(self->type == variable_local_scope) {
+	assert(self->type != variable_local_undefined_T);
+	if(self->type == variable_local_scope_T) {
 		opcode_buf_add(env->buf, (vector_item)op_load);
 		opcode_buf_add(env->buf, (vector_item)self->u.entry_->index);
-	} else if(self->type == variable_local_field) {
+	} else if(self->type == variable_local_field_T) {
 		field* f = self->u.f_with_i.fi;
 		if(!modifier_is_static(f->modifier)) {
 			opcode_buf_add(env->buf, op_this);
 		}
 		generate_get_field(env->buf, f, self->u.f_with_i.index);
-	} else if(self->type == variable_local_property) {
+	} else if(self->type == variable_local_property_T) {
 		property* p = self->u.p_with_i.p;
 		if(!modifier_is_static(p->modifier)) {
 			opcode_buf_add(env->buf, op_this);
@@ -50,7 +50,7 @@ void il_factor_variable_local_generate(il_factor_variable_local* self, enviromen
 }
 
 void il_factor_variable_local_load(il_factor_variable_local * self, enviroment * env, call_context* cctx) {
-	if(self->type != variable_local_undefined) {
+	if(self->type != variable_local_undefined_T) {
 		return;
 	}
 	il_factor_variable_local_loadImpl(self, env, cctx);
@@ -58,7 +58,7 @@ void il_factor_variable_local_load(il_factor_variable_local * self, enviroment *
 
 generic_type* il_factor_variable_local_eval(il_factor_variable_local * self, enviroment * env, call_context* cctx) {
 	il_factor_variable_local_load(self, env, cctx);
-	assert(self->type != variable_local_undefined);
+	assert(self->type != variable_local_undefined_T);
 	return self->gt;
 }
 
@@ -82,7 +82,7 @@ static void il_factor_variable_local_loadImpl(il_factor_variable_local * self, e
 	//factorはload時点でシンボルエントリーを取得しようとするが、
 	//stmtはgenerate時点でシンボルテーブルへ書き込むので、
 	//NULLになることがある。
-	self->type = variable_local_scope;
+	self->type = variable_local_scope_T;
 	symbol_entry* ent = symbol_table_entry(env->sym_table, NULL, self->namev);
 	//ローカル変数として解決出来なかったので、
 	//フィールドとして解決する
@@ -96,12 +96,12 @@ static void il_factor_variable_local_loadImpl(il_factor_variable_local * self, e
 
 static void il_factor_variable_local_load_field(il_factor_variable_local * self, enviroment * env, call_context* cctx) {
 	//対応するフィールドを検索
-	self->type = variable_local_field;
+	self->type = variable_local_field_T;
 	//NOTE:トップレベルではここが空なので、
 	//定義されていない変数とみなせる？
 	type* tp = call_context_type(cctx);
 	if(tp->tag == type_interface_T/* この条件は構文規則からして満たさないはず */) {
-		bc_error_throw(bcerror_ref_undefined_local_variable, string_pool_ref2str(self->namev));
+		bc_error_throw(bcerror_ref_undefined_local_variable_T, string_pool_ref2str(self->namev));
 		return;
 	}
 	int temp = -1;
@@ -113,12 +113,12 @@ static void il_factor_variable_local_load_field(il_factor_variable_local * self,
 	field* f = class_find_field_tree(TYPE2CLASS(tp), self->namev, &temp);
 	fwi.fi = f;
 	fwi.index = temp;
-	self->type = variable_local_field;
+	self->type = variable_local_field_T;
 	if(temp == -1) {
 		f = class_find_sfield_tree(TYPE2CLASS(tp), self->namev, &temp);
 		fwi.fi = f;
 		fwi.index = temp;
-		self->type = variable_local_field;
+		self->type = variable_local_field_T;
 	}
 	self->u.f_with_i = fwi;
 	if(temp == -1) {
@@ -126,7 +126,7 @@ static void il_factor_variable_local_load_field(il_factor_variable_local * self,
 		return;
 	//フィールドが見つかったなら可視性を確認する
 	} else if(!class_accessible_field(call_context_class(cctx), f)) {
-		bc_error_throw(bcerror_can_t_access_field, string_pool_ref2str(call_context_class(cctx)->namev), string_pool_ref2str(f->namev));
+		bc_error_throw(bcerror_can_t_access_field_T, string_pool_ref2str(call_context_class(cctx)->namev), string_pool_ref2str(f->namev));
 		return;
 	}
 	set_gtype(self, f->gtype);
@@ -140,7 +140,7 @@ static void il_factor_variable_local_load_property(il_factor_variable_local * se
 		p = class_find_sproperty_tree(TYPE2CLASS(tp), self->namev, &temp);
 	}
 	if(temp == -1) {
-		bc_error_throw(bcerror_can_t_access_property, string_pool_ref2str(type_name(tp)), string_pool_ref2str(self->namev));
+		bc_error_throw(bcerror_can_t_access_property_T, string_pool_ref2str(type_name(tp)), string_pool_ref2str(self->namev));
 		return;
 	}
 #if defined(_MSC_VER)
@@ -150,11 +150,11 @@ static void il_factor_variable_local_load_property(il_factor_variable_local * se
 #endif
 	pwi.p = p;
 	pwi.index = temp;
-	self->type = variable_local_property;
+	self->type = variable_local_property_T;
 	self->u.p_with_i = pwi;
 	//プロパティにアクセスできない
 	if(!class_accessible_property(TYPE2CLASS(tp), p)) {
-		bc_error_throw(bcerror_can_t_access_property, string_pool_ref2str(type_name(tp)), string_pool_ref2str(p->namev));
+		bc_error_throw(bcerror_can_t_access_property_T, string_pool_ref2str(type_name(tp)), string_pool_ref2str(p->namev));
 	}
 	set_gtype(self, p->gtype);
 }

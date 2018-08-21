@@ -30,52 +30,52 @@ type* bc_console_type() {
 //private
 static void bc_console_writeLine(method* parent, frame* fr, enviroment* env) {
 	object* o = vector_at(fr->ref_stack, 1);
-	if (o->tag == object_int) {
+	if (o->tag == object_int_T) {
 		printf("%d\n", o->u.int_);
-	} else if(o->tag == object_double) {
+	} else if(o->tag == object_double_T) {
 		printf("%f\n", o->u.double_);
-	} else if (o->tag == object_string) {
+	} else if (o->tag == object_string_T) {
 		printf("%s\n", bc_string_raw(o)->text);
-	} else if (o->tag == object_ref) {
+	} else if (o->tag == object_ref_T) {
 		generic_type_print(o->gtype);
 		printf("\n");
-	} else if (o->tag == object_char) {
+	} else if (o->tag == object_char_T) {
 		printf("%c\n", o->u.char_);
-	} else if (o->tag == object_bool) {
+	} else if (o->tag == object_bool_T) {
 		printf("%s\n", o->u.bool_ ? "true" : "false");
-	} else if(o->tag == object_null) {
+	} else if(o->tag == object_null_T) {
 		printf("null\n");
 	}
 }
 
 static void bc_console_write(method* parent, frame* fr, enviroment* env) {
 	object* o = vector_at(fr->ref_stack, 1);
-	if (o->tag == object_int) {
+	if (o->tag == object_int_T) {
 		printf("%d", o->u.int_);
-	}  else if (o->tag == object_double) {
+	}  else if (o->tag == object_double_T) {
 		printf("%f", o->u.double_);
-	} else if (o->tag == object_string) {
+	} else if (o->tag == object_string_T) {
 		printf("%s", bc_string_raw(o)->text);
-	} else if (o->tag == object_ref) {
+	} else if (o->tag == object_ref_T) {
 		generic_type_print(o->gtype);
 		//printf("\n");
-	} else if (o->tag == object_char) {
+	} else if (o->tag == object_char_T) {
 		printf("%c", o->u.char_);
-	} else if (o->tag == object_bool) {
+	} else if (o->tag == object_bool_T) {
 		printf("%s", o->u.bool_ ? "true" : "false");
-	} else if(o->tag == object_null) {
+	} else if(o->tag == object_null_T) {
 		printf("null");
 	}
 }
 
 static void bc_console_read(method* parent, frame* fr, enviroment* env) {
 	char c = getchar();
-	object* o = object_char_new(c);
+	object* o = object_char_T_new(c);
 	vector_push(fr->value_stack, o);
 }
 
 static void bc_console_readLine(method* parent, frame* fr, enviroment* env) {
 	char* s = text_gets();
-	object* o = object_string_new(s);
+	object* o = object_string_T_new(s);
 	vector_push(fr->value_stack, o);
 }

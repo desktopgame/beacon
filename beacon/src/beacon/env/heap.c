@@ -32,11 +32,11 @@ heap * heap_get() {
 
 void heap_add(heap * self, object * obj) {
 	if(self == NULL) {
-		obj->paint = paint_onexit;
+		obj->paint = paint_onexit_T;
 		return;
 	}
 	if (self->accept_blocking > 0) {
-		obj->paint = paint_onexit;
+		obj->paint = paint_onexit_T;
 		return;
 	}
 	vector_push(self->object_vec, obj);
@@ -82,8 +82,8 @@ static void heap_delete_object(vector_item item) {
 static void gc_clear(heap* self) {
 	for (int i = 0; i < self->object_vec->length; i++) {
 		object* e = (object*)vector_at(self->object_vec, i);
-		if (e->paint == paint_marked) {
-			e->paint = paint_unmarked;
+		if (e->paint == paint_marked_T) {
+			e->paint = paint_unmarked_T;
 		}
 	}
 }
@@ -97,9 +97,9 @@ static void gc_mark(heap* self) {
 	frame_markall(top);
 
 	//true/false/nullは常にマーク
-	object_get_true()->paint = paint_marked;
-	object_get_false()->paint = paint_marked;
-	object_get_null()->paint = paint_marked;
+	object_get_true()->paint = paint_marked_T;
+	object_get_false()->paint = paint_marked_T;
+	object_get_null()->paint = paint_marked_T;
 }
 
 static void gc_sweep(heap* self) {
@@ -108,7 +108,7 @@ static void gc_sweep(heap* self) {
 	vector* garabage = vector_new();
 	for (int i = 0; i < self->object_vec->length; i++) {
 		object* e = (object*)vector_at(self->object_vec, i);
-		if (e->paint == paint_unmarked) {
+		if (e->paint == paint_unmarked_T) {
 			vector_push(garabage, e);
 			sweep++;
 		} else {

@@ -97,7 +97,7 @@ typedef enum ast_tag {
 	ast_import_decl_list_T,
 	ast_import_path_T,
 
-	ast_class_decl_unit_T_T,
+	ast_class_decl_unit_T,
 	//ast_class_decl_T_list,
 	ast_abstract_class_decl_T,
 	ast_class_decl_T,
@@ -185,7 +185,7 @@ typedef enum ast_tag {
 	ast_fqcn_T,
 	ast_fqcn_class_name_T,
 	ast_fqcn_part_T,
-	ast_fqcn_part_T_list,
+	ast_fqcn_part_list_T,
 
 	ast_parameter_Tized_typename,
 	ast_type_parameter_T,
@@ -201,8 +201,8 @@ typedef enum ast_tag {
 	ast_else_T,
 	ast_if_else_T,
 	ast_if_elif_list_T,
-	ast_if_elif_list_T_else,
-	ast_elif_list_T_T,
+	ast_if_elif_list_else_T,
+	ast_elif_list_T,
 	ast_elif_T,
 } ast_tag;
 

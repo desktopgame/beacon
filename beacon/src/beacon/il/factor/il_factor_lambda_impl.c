@@ -13,7 +13,7 @@ static void il_factor_lambda_param_delete(vector_item item);
 static void il_factor_lambda_stmt_delete(vector_item item);
 
 il_factor* il_factor_wrap_lambda(il_factor_lambda* self) {
-	il_factor* ret = il_factor_new(ilfactor_lambda);
+	il_factor* ret = il_factor_new(ilfactor_lambda_T);
 	ret->u.lambda_ = self;
 	return ret;
 }

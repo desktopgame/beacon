@@ -78,7 +78,7 @@ static void frame_markStatic(field* item) {
 	//フィールドがintなどならここでマークしない
 	//静的定数フィールドに初期値が割り当てられていない場合
 	if(item->static_value != NULL &&
-	   item->static_value->paint != paint_onexit) {
+	   item->static_value->paint != paint_onexit_T) {
 		object_markall(item->static_value);
 	}
 }

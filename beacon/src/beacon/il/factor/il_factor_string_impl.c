@@ -9,7 +9,7 @@
 #include "../../util/mem.h"
 
 il_factor * il_factor_wrap_string(il_factor_string * self) {
-	il_factor* ret = il_factor_new(ilfactor_string);
+	il_factor* ret = il_factor_new(ilfactor_string_T);
 	ret->u.string_ = self;
 	return ret;
 }
@@ -49,6 +49,6 @@ void il_factor_string_delete(il_factor_string * self) {
 }
 
 il_factor_string* il_factor_cast_string_T(il_factor* fact) {
-	assert(fact->type == ilfactor_string);
+	assert(fact->type == ilfactor_string_T);
 	return fact->u.string_;
 }

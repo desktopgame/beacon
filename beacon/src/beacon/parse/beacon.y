@@ -51,7 +51,7 @@
 		ABSTRACT OVERRIDE INTERFACE CLASS ENUM PUBLIC PRIVATE PROTECTED STATIC NATIVE NEW
 		DEF ARROW NAMESPACE RETURN YIELD
 		IF ELIF ELSE WHILE BREAK CONTINUE TRY CATCH THROW
-		ASSERT_T DEFER INSTANCEOF OPERATOR
+		ASSER_T DEFER INSTANCEOF OPERATOR
 		BOUNDS_EXTENDS BOUNDS_SUPER SUBSCRIPT_SET SUBSCRIPT_GET
 %type <ast_value> compilation_unit 
 					init_decl
@@ -437,104 +437,104 @@ method_define
 operator_define
 	: OPERATOR ADD LRB parameter_list RRB ARROW typename_T scope_optional
 	{
-		$$ = ast_new_operator_overload(operator_add, $4, $8, $7);
+		$$ = ast_new_operator_overload(operator_add_T, $4, $8, $7);
 	}
 	| OPERATOR SUB LRB parameter_list RRB ARROW typename_T scope_optional
 	{
-		$$ = ast_new_operator_overload(operator_sub, $4, $8, $7);
+		$$ = ast_new_operator_overload(operator_sub_T, $4, $8, $7);
 	}
 	| OPERATOR MUL LRB parameter_list RRB ARROW typename_T scope_optional
 	{
-		$$ = ast_new_operator_overload(operator_mul, $4, $8, $7);
+		$$ = ast_new_operator_overload(operator_mul_T, $4, $8, $7);
 	}
 	| OPERATOR DIV LRB parameter_list RRB ARROW typename_T scope_optional
 	{
-		$$ = ast_new_operator_overload(operator_div, $4, $8, $7);
+		$$ = ast_new_operator_overload(operator_div_T, $4, $8, $7);
 	}
 	| OPERATOR MOD LRB parameter_list RRB ARROW typename_T scope_optional
 	{
-		$$ = ast_new_operator_overload(operator_mod, $4, $8, $7);
+		$$ = ast_new_operator_overload(operator_mod_T, $4, $8, $7);
 	}
 	| OPERATOR GT LRB parameter_list RRB ARROW typename_T scope_optional
 	{
-		$$ = ast_new_operator_overload(operator_gt, $4, $8, $7);
+		$$ = ast_new_operator_overload(operator_gt_T, $4, $8, $7);
 	}
 	| OPERATOR GE LRB parameter_list RRB ARROW typename_T scope_optional
 	{
-		$$ = ast_new_operator_overload(operator_ge, $4, $8, $7);
+		$$ = ast_new_operator_overload(operator_ge_T, $4, $8, $7);
 	}
 	| OPERATOR LT LRB parameter_list RRB ARROW typename_T scope_optional
 	{
-		$$ = ast_new_operator_overload(operator_lt, $4, $8, $7);
+		$$ = ast_new_operator_overload(operator_lt_T, $4, $8, $7);
 	}
 	| OPERATOR LE LRB parameter_list RRB ARROW typename_T scope_optional
 	{
-		$$ = ast_new_operator_overload(operator_le, $4, $8, $7);
+		$$ = ast_new_operator_overload(operator_le_T, $4, $8, $7);
 	}
 	//== !=
 	| OPERATOR EQUAL LRB parameter_list RRB ARROW typename_T scope_optional
 	{
-		$$ = ast_new_operator_overload(operator_eq, $4, $8, $7);
+		$$ = ast_new_operator_overload(operator_eq_T, $4, $8, $7);
 	}
 	| OPERATOR NOTEQUAL LRB parameter_list RRB ARROW typename_T scope_optional
 	{
-		$$ = ast_new_operator_overload(operator_noteq, $4, $8, $7);
+		$$ = ast_new_operator_overload(operator_not_Teq_T, $4, $8, $7);
 	}
 	//| &
 	| OPERATOR BIT_OR LRB parameter_list RRB ARROW typename_T scope_optional
 	{
-		$$ = ast_new_operator_overload(operator_bit_or, $4, $8, $7);
+		$$ = ast_new_operator_overload(operator_bit_or_T, $4, $8, $7);
 	}
 	| OPERATOR BIT_AND LRB parameter_list RRB ARROW typename_T scope_optional
 	{
-		$$ = ast_new_operator_overload(operator_bit_and, $4, $8, $7);
+		$$ = ast_new_operator_overload(operator_bit_and_T, $4, $8, $7);
 	}
 	//|| &&
 	| OPERATOR LOGIC_OR LRB parameter_list RRB ARROW typename_T scope_optional
 	{
-		$$ = ast_new_operator_overload(operator_logic_or, $4, $8, $7);
+		$$ = ast_new_operator_overload(operator_logic_or_T, $4, $8, $7);
 	}
 	| OPERATOR LOGIC_AND LRB parameter_list RRB ARROW typename_T scope_optional
 	{
-		$$ = ast_new_operator_overload(operator_logic_and, $4, $8, $7);
+		$$ = ast_new_operator_overload(operator_logic_and_T, $4, $8, $7);
 	}
 	//<< >>
 	| OPERATOR LSHIFT LRB parameter_list RRB ARROW typename_T scope_optional
 	{
-		$$ = ast_new_operator_overload(operator_lshift, $4, $8, $7);
+		$$ = ast_new_operator_overload(operator_lshift_T, $4, $8, $7);
 	}
 	| OPERATOR RSHIFT LRB parameter_list RRB ARROW typename_T scope_optional
 	{
-		$$ = ast_new_operator_overload(operator_rshift, $4, $8, $7);
+		$$ = ast_new_operator_overload(operator_rshift_T, $4, $8, $7);
 	}
 	//^
 	| OPERATOR EXC_OR LRB parameter_list RRB ARROW typename_T scope_optional
 	{
-		$$ = ast_new_operator_overload(operator_excor, $4, $8, $7);
+		$$ = ast_new_operator_overload(operator_excor_T, $4, $8, $7);
 	}
 	//!
 	| OPERATOR NOT LRB RRB ARROW typename_T scope_optional
 	{
-		$$ = ast_new_operator_overload(operator_not, ast_new_blank(), $7, $6);
+		$$ = ast_new_operator_overload(operator_not_T, ast_new_blank(), $7, $6);
 	}
 	//~
 	| OPERATOR CHILDA LRB RRB ARROW typename_T scope_optional
 	{
-		$$ = ast_new_operator_overload(operator_childa, ast_new_blank(), $7, $6);
+		$$ = ast_new_operator_overload(operator_childa_T, ast_new_blank(), $7, $6);
 	}
 	| OPERATOR SUB LRB RRB ARROW typename_T scope_optional
 	{
-		$$ = ast_new_operator_overload(operator_negative, ast_new_blank(), $7, $6);
+		$$ = ast_new_operator_overload(operator_negative_T, ast_new_blank(), $7, $6);
 	}
 	//[]
 	| OPERATOR SUBSCRIPT_GET LRB parameter_list RRB ARROW typename_T scope_optional
 	{
-		$$ = ast_new_operator_overload(operator_subscript_get, $4, $8, $7);
+		$$ = ast_new_operator_overload(operator_sub_script_get_T, $4, $8, $7);
 	}
 	//[]=
 	| OPERATOR SUBSCRIPT_SET LRB parameter_list RRB ARROW typename_T scope_optional
 	{
-		$$ = ast_new_operator_overload(operator_subscript_set, $4, $8, $7);
+		$$ = ast_new_operator_overload(operator_sub_script_set_T, $4, $8, $7);
 	}
 	;
 
@@ -870,87 +870,87 @@ expression_nobrace
 
 	| expression DOT ADD LRB expression RRB
 	{
-		$$ = ast_new_explicit_bioperator($1, operator_add, $5);
+		$$ = ast_new_explicit_bioperator($1, operator_add_T, $5);
 	}
 	| expression DOT SUB LRB expression RRB
 	{
-		$$ = ast_new_explicit_bioperator($1, operator_sub, $5);
+		$$ = ast_new_explicit_bioperator($1, operator_sub_T, $5);
 	}
 	| expression DOT MUL LRB expression RRB
 	{
-		$$ = ast_new_explicit_bioperator($1, operator_mul, $5);
+		$$ = ast_new_explicit_bioperator($1, operator_mul_T, $5);
 	}
 	| expression DOT DIV LRB expression RRB
 	{
-		$$ = ast_new_explicit_bioperator($1, operator_div, $5);
+		$$ = ast_new_explicit_bioperator($1, operator_div_T, $5);
 	}
 	| expression DOT MOD LRB expression RRB
 	{
-		$$ = ast_new_explicit_bioperator($1, operator_mod, $5);
+		$$ = ast_new_explicit_bioperator($1, operator_mod_T, $5);
 	}
 	| expression DOT GT LRB expression RRB
 	{
-		$$ = ast_new_explicit_bioperator($1, operator_gt, $5);
+		$$ = ast_new_explicit_bioperator($1, operator_gt_T, $5);
 	}
 	| expression DOT GE LRB expression RRB
 	{
-		$$ = ast_new_explicit_bioperator($1, operator_ge, $5);
+		$$ = ast_new_explicit_bioperator($1, operator_ge_T, $5);
 	}
 	| expression DOT LT LRB expression RRB
 	{
-		$$ = ast_new_explicit_bioperator($1, operator_lt, $5);
+		$$ = ast_new_explicit_bioperator($1, operator_lt_T, $5);
 	}
 	| expression DOT LE LRB expression RRB
 	{
-		$$ = ast_new_explicit_bioperator($1, operator_le, $5);
+		$$ = ast_new_explicit_bioperator($1, operator_le_T, $5);
 	}
 	| expression DOT EQUAL LRB expression RRB
 	{
-		$$ = ast_new_explicit_bioperator($1, operator_eq, $5);
+		$$ = ast_new_explicit_bioperator($1, operator_eq_T, $5);
 	}
 	| expression DOT NOTEQUAL LRB expression RRB
 	{
-		$$ = ast_new_explicit_bioperator($1, operator_noteq, $5);
+		$$ = ast_new_explicit_bioperator($1, operator_not_Teq_T, $5);
 	}
 	| expression DOT BIT_OR LRB expression RRB
 	{
-		$$ = ast_new_explicit_bioperator($1, operator_bit_or, $5);
+		$$ = ast_new_explicit_bioperator($1, operator_bit_or_T, $5);
 	}
 	| expression DOT BIT_AND LRB expression RRB
 	{
-		$$ = ast_new_explicit_bioperator($1, operator_bit_and, $5);
+		$$ = ast_new_explicit_bioperator($1, operator_bit_and_T, $5);
 	}
 	| expression DOT LOGIC_OR LRB expression RRB
 	{
-		$$ = ast_new_explicit_bioperator($1, operator_logic_or, $5);
+		$$ = ast_new_explicit_bioperator($1, operator_logic_or_T, $5);
 	}
 	| expression DOT LOGIC_AND LRB expression RRB
 	{
-		$$ = ast_new_explicit_bioperator($1, operator_logic_and, $5);
+		$$ = ast_new_explicit_bioperator($1, operator_logic_and_T, $5);
 	}
 	| expression DOT LSHIFT LRB expression RRB
 	{
-		$$ = ast_new_explicit_bioperator($1, operator_lshift, $5);
+		$$ = ast_new_explicit_bioperator($1, operator_lshift_T, $5);
 	}
 	| expression DOT RSHIFT LRB expression RRB
 	{
-		$$ = ast_new_explicit_bioperator($1, operator_rshift, $5);
+		$$ = ast_new_explicit_bioperator($1, operator_rshift_T, $5);
 	}
 	| expression DOT EXC_OR LRB expression RRB
 	{
-		$$ = ast_new_explicit_bioperator($1, operator_excor, $5);
+		$$ = ast_new_explicit_bioperator($1, operator_excor_T, $5);
 	}
 	| expression DOT NOT LRB RRB
 	{
-		$$ = ast_new_explicit_uoperator($1, operator_not);
+		$$ = ast_new_explicit_uoperator($1, operator_not_T);
 	}
 	| expression DOT CHILDA LRB RRB
 	{
-		$$ = ast_new_explicit_uoperator($1, operator_childa);
+		$$ = ast_new_explicit_uoperator($1, operator_childa_T);
 	}
 	| expression DOT SUB LRB RRB
 	{
-		$$ = ast_new_explicit_uoperator($1, operator_negative);
+		$$ = ast_new_explicit_uoperator($1, operator_negative_T);
 	}
 	| expression INSTANCEOF typename_T
 	{
@@ -1161,11 +1161,11 @@ catch_stmt
 	}
 	;
 assert_stmt
-	: ASSERT_T expression COLON expression stmt_term
+	: ASSER_T expression COLON expression stmt_term
 	{
 		$$ = ast_new_assert($2, $4);
 	}
-	| ASSERT_T expression stmt_term
+	| ASSER_T expression stmt_term
 	{
 		$$ = ast_new_assert($2, ast_new_blank());
 	}

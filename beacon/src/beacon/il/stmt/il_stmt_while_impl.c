@@ -11,7 +11,7 @@ static void il_stmt_while_stmt_delete(vector_item item);
 static void check_condition_type(il_factor* fact, enviroment* env, call_context* cctx);
 
 il_stmt * il_stmt_wrap_while(il_stmt_while * self) {
-	il_stmt* ret = il_stmt_new(ilstmt_while);
+	il_stmt* ret = il_stmt_new(ilstmt_while_T);
 	ret->u.while_ = self;
 	return ret;
 }
@@ -83,7 +83,7 @@ static void check_condition_type(il_factor* fact, enviroment* env, call_context*
 	generic_type* cond_T = il_factor_eval(fact, env, cctx);
 	if(cond_T->core_type != TYPE_BOOL) {
 		char* condstr = il_factor_tostr(fact, env);
-		bc_error_throw(bcerror_if_expr_type_of_not_bool,
+		bc_error_throw(bcerror_if_expr_type_of_not_bool_T,
 			condstr
 		);
 		MEM_FREE(condstr);

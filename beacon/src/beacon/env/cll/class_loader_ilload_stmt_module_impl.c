@@ -96,7 +96,7 @@ static il_stmt* CLIL_bodyImpl(class_loader* self, ast* asource) {
 			il_stmt_if* ilif = CLIL_if_else(self, asource);
 			return il_stmt_wrap_if(ilif);
 		}
-		case ast_if_elif_list_T_else:
+		case ast_if_elif_list_else_T:
 		{
 			il_stmt_if* ilif = CLIL_if_elif_list_else(self, asource);
 			return il_stmt_wrap_if(ilif);
@@ -121,7 +121,7 @@ static il_stmt* CLIL_bodyImpl(class_loader* self, ast* asource) {
 		}
 		case ast_return_empty_T:
 		{
-			il_stmt* ret = il_stmt_new(ilstmt_return_empty);
+			il_stmt* ret = il_stmt_new(ilstmt_return_empty_T);
 			ret->u.return_empty = NULL;
 			return ret;
 		}
@@ -151,7 +151,7 @@ static il_stmt* CLIL_bodyImpl(class_loader* self, ast* asource) {
 		}
 		case ast_yield_break_T:
 		{
-			il_stmt* ret = il_stmt_new(ilstmt_yield_break);
+			il_stmt* ret = il_stmt_new(ilstmt_yield_break_T);
 			ret->u.yield_break = NULL;
 			return ret;
 		}
@@ -234,7 +234,7 @@ static il_stmt_while * CLIL_while(class_loader * self, ast * asource) {
 }
 
 static void CLIL_elif_list(class_loader* self, vector* list, ast* asource) {
-	if (asource->tag == ast_elif_list_T_T) {
+	if (asource->tag == ast_elif_list_T) {
 		for (int i = 0; i < asource->vchildren->length; i++) {
 			CLIL_elif_list(self, list, ast_at(asource, i));
 		}

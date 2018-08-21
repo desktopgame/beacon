@@ -9,7 +9,7 @@
 #include <assert.h>
 
 il_factor* il_factor_wrap_explicit_binary_op(il_factor_explicit_binary_op* self) {
-	il_factor* ret = il_factor_new(ilfactor_explicit_binary_op);
+	il_factor* ret = il_factor_new(ilfactor_explicit_binary_op_T);
 	ret->u.exp_binary_op = self;
 	return ret;
 }

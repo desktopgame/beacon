@@ -73,8 +73,8 @@ void CLIL_type_parameter(class_loader* self, ast* asource, vector* dest) {
 		   asource->tag == ast_type_out_parameter_T);
 	ast* arule_list = ast_first(asource);
 	il_type_parameter* iltypeparam = il_type_parameter_new(asource->u.stringv_value);
-	if (asource->tag == ast_type_in_parameter_T) iltypeparam->kind = il_type_parameter_kind_in;
-	if (asource->tag == ast_type_out_parameter_T) iltypeparam->kind = il_type_parameter_kind_out;
+	if (asource->tag == ast_type_in_parameter_T) iltypeparam->kind = il_type_parameter_kind_in_T;
+	if (asource->tag == ast_type_out_parameter_T) iltypeparam->kind = il_type_parameter_kind_out_T;
 	vector_push(dest, iltypeparam);
 	//制約があるならそれも設定
 	//制約はとりあえずなしで
@@ -117,7 +117,7 @@ void CLIL_argument_list(class_loader* self, vector* list, ast* asource) {
 	for(int i=0; i<list->length; i++) {
 		il_argument* e = (il_argument*)vector_at(list, i);
 		il_factor* f = e->factor;
-		if(f->type == ilfactor_lambda) {
+		if(f->type == ilfactor_lambda_T) {
 			il_factor_lambda* lambda = f->u.lambda_;
 			lambda->offset = i;
 		}
@@ -152,8 +152,8 @@ static void CLIL_generic_cache_impl(ast* afqcn, generic_cache* dest) {
 		return;
 	}
 	if (afqcn->tag == ast_fqcn_T ||
-		afqcn->tag == ast_fqcn_part_T_list) {
-		if (afqcn->tag == ast_fqcn_part_T_list &&
+		afqcn->tag == ast_fqcn_part_list_T) {
+		if (afqcn->tag == ast_fqcn_part_list_T &&
 			afqcn->vchildren->length == 0) {
 			//FIXME:もうちょっと高速に出来る
 			//FIXME:とりあえずここでタグを直してるけどast.cの時点でどうにかするべき

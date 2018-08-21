@@ -12,7 +12,7 @@
 #include "unary/il_factor_not_op_impl.h"
 
 il_factor * il_factor_wrap_unary(il_factor_unary_op * self) {
-	il_factor* ret = il_factor_new(ilfactor_unary_op);
+	il_factor* ret = il_factor_new(ilfactor_unary_op_T);
 	ret->u.unary_ = self;
 	return ret;
 }
@@ -21,21 +21,21 @@ il_factor_unary_op * il_factor_unary_op_new(operator_type type) {
 	il_factor_unary_op* ret = (il_factor_unary_op*)MEM_MALLOC(sizeof(il_factor_unary_op));
 	ret->type = type;
 	ret->a = NULL;
-	if(type == operator_not) ret->u.not_op = NULL;
-	if(type == operator_childa) ret->u.childa_op= NULL;
-	if(type == operator_negative) ret->u.negative_op = NULL;
+	if(type == operator_not_T) ret->u.not_op = NULL;
+	if(type == operator_childa_T) ret->u.childa_op= NULL;
+	if(type == operator_negative_T) ret->u.negative_op = NULL;
 	return ret;
 }
 
 void il_factor_unary_op_dump(il_factor_unary_op * self, int depth) {
 	switch(self->type) {
-		case operator_not:
+		case operator_not_T:
 			il_factor_not_op_dump(self->u.not_op, depth);
 			break;
-		case operator_childa:
+		case operator_childa_T:
 			il_factor_childa_op_dump(self->u.childa_op, depth);
 			break;
-		case operator_negative:
+		case operator_negative_T:
 			il_factor_negative_op_dump(self->u.negative_op, depth);
 			break;
 	}
@@ -44,37 +44,37 @@ void il_factor_unary_op_dump(il_factor_unary_op * self, int depth) {
 
 void il_factor_unary_op_generate(il_factor_unary_op * self, enviroment* env, call_context* cctx) {
 	switch(self->type) {
-		case operator_not:
+		case operator_not_T:
 			il_factor_not_op_generate(self->u.not_op, env, cctx);
 			break;
-		case operator_childa:
+		case operator_childa_T:
 			il_factor_childa_op_generate(self->u.childa_op, env, cctx);
 			break;
-		case operator_negative:
+		case operator_negative_T:
 			il_factor_negative_op_generate(self->u.negative_op, env, cctx);
 			break;
 	}
 }
 
 void il_factor_unary_op_load(il_factor_unary_op * self, enviroment * env, call_context* cctx) {
-	if(self->type == operator_not && self->u.not_op != NULL) return;
-	if(self->type == operator_childa && self->u.childa_op != NULL) return;
-	if(self->type == operator_negative && self->u.negative_op != NULL) return;
+	if(self->type == operator_not_T && self->u.not_op != NULL) return;
+	if(self->type == operator_childa_T && self->u.childa_op != NULL) return;
+	if(self->type == operator_negative_T && self->u.negative_op != NULL) return;
 	il_factor_load(self->a, env, cctx);
 	//カテゴリーわけ
-	if(self->type == operator_not) {
+	if(self->type == operator_not_T) {
 		self->category = operator_cnot_T;
 		il_factor_not_op* not = il_factor_not_op_new(self->type);
 		not->parent = self;
 		self->u.not_op = not;
 		il_factor_not_op_load(not, env, cctx);
-	} else if(self->type == operator_negative) {
-		self->category = operator_negative;
+	} else if(self->type == operator_negative_T) {
+		self->category = operator_negative_T;
 		il_factor_negative_op* neg = il_factor_negative_op_new(self->type);
 		neg->parent = self;
 		self->u.negative_op = neg;
 		il_factor_negative_op_load(neg, env, cctx);
-	} else if(self->type == operator_childa) {
+	} else if(self->type == operator_childa_T) {
 		self->category = operator_cchilda_T;
 		il_factor_childa_op* childa = il_factor_childa_op_new(self->type);
 		childa->parent = self;
@@ -89,13 +89,13 @@ generic_type* il_factor_unary_op_eval(il_factor_unary_op * self, enviroment * en
 	il_factor_unary_op_load(self, env, cctx);
 	generic_type* ret = NULL;
 	switch(self->type) {
-		case operator_not:
+		case operator_not_T:
 			ret = il_factor_not_op_eval(self->u.not_op, env, cctx);
 			break;
-		case operator_childa:
+		case operator_childa_T:
 			ret = il_factor_childa_op_eval(self->u.childa_op, env, cctx);
 			break;
-		case operator_negative:
+		case operator_negative_T:
 			ret = il_factor_negative_op_eval(self->u.negative_op, env, cctx);
 			break;
 	}
@@ -105,13 +105,13 @@ generic_type* il_factor_unary_op_eval(il_factor_unary_op * self, enviroment * en
 char* il_factor_unary_op_tostr(il_factor_unary_op* self, enviroment* env) {
 	char* ret = NULL;
 	switch(self->type) {
-		case operator_not:
+		case operator_not_T:
 			ret = il_factor_not_op_tostr(self->u.not_op, env);
 			break;
-		case operator_childa:
+		case operator_childa_T:
 			ret = il_factor_childa_op_tostr(self->u.childa_op, env);
 			break;
-		case operator_negative:
+		case operator_negative_T:
 			ret = il_factor_negative_op_tostr(self->u.negative_op, env);
 			break;
 	}
@@ -124,13 +124,13 @@ void il_factor_unary_op_delete(il_factor_unary_op * self) {
 	}
 	il_factor_delete(self->a);
 	switch(self->type) {
-		case operator_not:
+		case operator_not_T:
 			il_factor_not_op_delete(self->u.not_op);
 			break;
-		case operator_childa:
+		case operator_childa_T:
 			il_factor_childa_op_delete(self->u.childa_op);
 			break;
-		case operator_negative:
+		case operator_negative_T:
 			il_factor_negative_op_delete(self->u.negative_op);
 			break;
 	}
@@ -147,7 +147,7 @@ char* il_factor_unary_op_tostr_simple(il_factor_unary_op* self, enviroment* env)
 }
 
 il_factor_unary_op* il_factor_cast_unary_op(il_factor* fact) {
-	assert(fact->type == ilfactor_unary_op);
+	assert(fact->type == ilfactor_unary_op_T);
 	return fact->u.unary_;
 }
 
