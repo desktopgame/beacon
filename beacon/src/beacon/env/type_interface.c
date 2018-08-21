@@ -118,7 +118,7 @@ int type_distance(type * super, type * sub) {
 	if (super->tag == type_interface_T &&
 		sub->tag == type_class_T) {
 		bool found = false;
-		vector* gimpl_list = class_generic_interface_list(TYPE2CLASS(sub));
+		vector* gimpl_list = class_get_generic_interface_list(TYPE2CLASS(sub));
 		for (int i = 0; i < gimpl_list->length; i++) {
 			generic_type* e = (generic_type*)vector_at(gimpl_list, i);
 			if (e->core_type == super) {

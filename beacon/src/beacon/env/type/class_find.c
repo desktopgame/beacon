@@ -398,7 +398,7 @@ method * class_get_impl_method(class_ * self, type * interType, int interMIndex)
 	const char* str = string_pool_ref2str(self->namev);
 	#endif
 	assert(self->vt_vec->length > 0);
-	vector* tbl = class_generic_interface_tree(self);
+	vector* tbl = class_get_generic_interface_tree(self);
 	//指定のインターフェイスが
 	//このクラスにおいて何番目かを調べる
 	int declIndex = -1;
@@ -527,7 +527,7 @@ bool class_contains_method(vector* method_list, method* m, method** outM) {
 	return ret;
 }
 
-vector* class_generic_interface_list(class_* self) {
+vector* class_get_generic_interface_list(class_* self) {
 	vector* ret = vector_new();
 	for(int i=0; i<self->impl_list->length; i++) {
 		generic_type* ginter = vector_at(self->impl_list, i);
@@ -539,11 +539,11 @@ vector* class_generic_interface_list(class_* self) {
 	return ret;
 }
 
-vector* class_generic_interface_tree(class_* self) {
+vector* class_get_generic_interface_tree(class_* self) {
 	class_* ptr = self;
 	vector* ret = vector_new();
 	do {
-		vector* v = class_generic_interface_list(ptr);
+		vector* v = class_get_generic_interface_list(ptr);
 		vector_merge(v, ret);
 		vector_delete(v, vector_deleter_null);
 		if(ptr->super_class == NULL) {
@@ -554,9 +554,9 @@ vector* class_generic_interface_tree(class_* self) {
 	return ret;
 }
 
-vector* class_interface_list(class_* self) {
+vector* class_get_interface_list(class_* self) {
 	vector* ret = vector_new();
-	vector* c = class_generic_interface_list(self);
+	vector* c = class_get_generic_interface_list(self);
 	for(int i=0; i<c->length; i++) {
 		generic_type* gt = vector_at(c, i);
 		vector_push(ret, TYPE2INTERFACE(GENERIC2TYPE(gt)));
@@ -565,9 +565,9 @@ vector* class_interface_list(class_* self) {
 	return ret;
 }
 
-vector* class_interface_tree(class_* self) {
+vector* class_get_interface_tree(class_* self) {
 	vector* ret = vector_new();
-	vector* c = class_generic_interface_tree(self);
+	vector* c = class_get_generic_interface_tree(self);
 	for(int i=0; i<c->length; i++) {
 		generic_type* gt = vector_at(c, i);
 		vector_push(ret, TYPE2INTERFACE(GENERIC2TYPE(gt)));
@@ -588,7 +588,7 @@ generic_type* class_find_interface_type(class_* self, type* tinter, generic_type
 			break;
 		}
 		bool found = false;
-		//vector* gimpl_list = class_generic_interface_list(ptr);
+		//vector* gimpl_list = class_get_generic_interface_list(ptr);
 		vector* gimpl_list = ptr->impl_list;
 		for (int i = 0; i < gimpl_list->length; i++) {
 			generic_type* gimpl = vector_at(gimpl_list, i);

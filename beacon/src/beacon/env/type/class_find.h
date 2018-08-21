@@ -339,28 +339,28 @@ bool class_contains_method(vector* method_list, method* m, method** outM);
  * @param self
  * @return
  */
-vector* class_generic_interface_list(class_* self);
+vector* class_get_generic_interface_list(class_* self);
 
 /**
- * 実装された全てのジェネリックインターフェイスを返します.
+ * 実装/継承された全てのジェネリックインターフェイスを返します.
  * @param self
  * @return
  */
-vector* class_generic_interface_tree(class_* self);
-
-/**
- * 実装された全てのインターフェイスを返します.
- * @param self
- * @return
- */
-vector* class_interface_list(class_* self);
+vector* class_get_generic_interface_tree(class_* self);
 
 /**
  * 実装された全てのインターフェイスを返します.
  * @param self
  * @return
  */
-vector* class_interface_tree(class_* self);
+vector* class_get_interface_list(class_* self);
+
+/**
+ * 実装/継承された全てのインターフェイスを返します.
+ * @param self
+ * @return
+ */
+vector* class_get_interface_tree(class_* self);
 
 /**
  * @param self
