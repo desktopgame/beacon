@@ -41,7 +41,7 @@ void il_stmt_variable_decl_load(il_stmt_variable_decl * self, struct enviroment*
 	}
 	symbol_entry* e = symbol_table_entry(
 		env->sym_table,
-		import_manager_resolve(NULL, NULL, self->fqcn, cctx),
+		import_manager_resolve(NULL, self->fqcn, cctx),
 		self->namev
 	);
 	if(e->gtype->core_type != NULL &&

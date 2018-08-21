@@ -47,7 +47,7 @@ void il_factor_as_load(il_factor_as * self, enviroment * env, call_context* cctx
 		return;
 	}
 	il_factor_load(self->fact, env, cctx);
-	self->gtype = import_manager_resolve(NULL, call_context_namespace(cctx), self->fqcn, cctx);
+	self->gtype = import_manager_resolve(call_context_namespace(cctx), self->fqcn, cctx);
 	generic_type* a = il_factor_eval(self->fact, env, cctx);
 	//キャスト元がインターフェイスなら常にアップキャスト
 	if(self->gtype->core_type != NULL && GENERIC2TYPE(self->gtype)->tag == type_interface_T) {

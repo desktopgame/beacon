@@ -96,7 +96,7 @@ generic_type* il_factor_new_instance_eval(il_factor_new_instance * self, envirom
 		generic_type* a = generic_type_new(self->c->parent);
 		for (int i = 0; i < self->type_args->length; i++) {
 			il_type_argument* e = (il_type_argument*)vector_at(self->type_args, i);
-			generic_type* arg = import_manager_resolve(NULL, call_context_namespace(cctx), e->gcache, cctx);
+			generic_type* arg = import_manager_resolve(call_context_namespace(cctx), e->gcache, cctx);
 			generic_type_addargs(a, arg);
 		}
 		self->instance_type = a;

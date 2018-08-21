@@ -39,7 +39,7 @@ bool import_manager_loaded(import_manager * self, int index) {
 	return info->consume;
 }
 
-generic_type* import_manager_resolve(import_manager* self, namespace_* scope, generic_cache* fqcn, call_context* cctx) {
+generic_type* import_manager_resolve(namespace_* scope, generic_cache* fqcn, call_context* cctx) {
 	type* core_type = fqcn_type(fqcn->fqcn, scope);
 	#if defined(DEBUG)
 	const char* ctname = string_pool_ref2str(type_name(core_type));
@@ -61,7 +61,7 @@ generic_type* import_manager_resolve(import_manager* self, namespace_* scope, ge
 		assert(core_type->tag != type_enum_T);
 		for (int i = 0; i < fqcn->type_args->length; i++) {
 			generic_cache* e = (generic_cache*)vector_at(fqcn->type_args, i);
-			generic_type* child = import_manager_resolve(self, scope, e, cctx);
+			generic_type* child = import_manager_resolve(scope, e, cctx);
 			generic_type_addargs(normalGType, child);
 		}
 		return normalGType;
@@ -93,7 +93,7 @@ generic_type* import_manager_resolve(import_manager* self, namespace_* scope, ge
 	return parameterized;
 }
 
-generic_type* import_manager_resolvef(import_manager* self, namespace_* scope, fqcn_cache* fqcn, call_context* cctx) {
+generic_type* import_manager_resolvef(namespace_* scope, fqcn_cache* fqcn, call_context* cctx) {
 	type* core_type = fqcn_type(fqcn, scope);
 	//Int
 	//Foo::MyClass

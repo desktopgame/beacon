@@ -36,7 +36,7 @@ void il_stmt_variable_init_generate(il_stmt_variable_init * self, enviroment * e
 	il_factor_generate(self->fact, env, cctx);
 	//宣言型と代入型が異なる場合
 	generic_type* ga = il_factor_eval(self->fact, env, cctx);
-	generic_type* gb = import_manager_resolve(NULL, NULL, self->fqcn, cctx);
+	generic_type* gb = import_manager_resolve(NULL, self->fqcn, cctx);
 	//voidは代入できない
 	assert(gb != NULL);
 	BC_ERROR();
@@ -62,7 +62,7 @@ void il_stmt_variable_init_load(il_stmt_variable_init * self, enviroment * env, 
 			string_pool_ref2str(self->namev)
 		);
 	}
-	generic_type* gt = import_manager_resolve(NULL, NULL, self->fqcn, cctx);
+	generic_type* gt = import_manager_resolve(NULL, self->fqcn, cctx);
 	if(gt == NULL) {
 		bc_error_throw(
 			bcerror_undefined_type_decl_T,
