@@ -141,31 +141,6 @@ method* interface_get_function(interface_* self) {
 	return ret;
 }
 
-bool interface_method_parameter_valid(interface_* inter, method** out_method, string_view* out_name) {
-	for(int i=0; i<inter->method_list->length; i++) {
-		method* m = (method*)vector_at(inter->method_list, i);
-		if(parameter_is_overwrapped_name(m->parameter_list, out_name)) {
-			(*out_method) = m;
-			return false;
-		}
-	}
-	return true;
-}
-
-bool interface_type_type_parameter_valid(interface_* inter, string_view* out_name) {
-	return !type_parameter_is_overwrapped_name(inter->type_parameter_list, out_name);
-}
-
-bool interface_method_type_parameter_valid(interface_* inter, method** out_method, string_view* out_name) {
-	for(int i=0; i<inter->method_list->length; i++) {
-		method* m = (method*)vector_at(inter->method_list, i);
-		if(parameter_is_overwrapped_name(m->type_parameter_list, out_name)) {
-			(*out_method) = m;
-			return false;
-		}
-	}
-	return true;
-}
 
 vector* interface_generic_interface_tree(interface_* self) {
 	return interface_generic_interface_treeImpl(self);
