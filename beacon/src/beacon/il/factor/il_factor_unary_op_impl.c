@@ -63,7 +63,7 @@ void il_factor_unary_op_load(il_factor_unary_op * self, enviroment * env, call_c
 	il_factor_load(self->a, env, cctx);
 	//カテゴリーわけ
 	if(self->type == operator_not) {
-		self->category = operator_cnot;
+		self->category = operator_cnot_T;
 		il_factor_not_op* not = il_factor_not_op_new(self->type);
 		not->parent = self;
 		self->u.not_op = not;
@@ -75,7 +75,7 @@ void il_factor_unary_op_load(il_factor_unary_op * self, enviroment * env, call_c
 		self->u.negative_op = neg;
 		il_factor_negative_op_load(neg, env, cctx);
 	} else if(self->type == operator_childa) {
-		self->category = operator_cchilda;
+		self->category = operator_cchilda_T;
 		il_factor_childa_op* childa = il_factor_childa_op_new(self->type);
 		childa->parent = self;
 		self->u.childa_op = childa;

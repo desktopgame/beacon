@@ -37,19 +37,19 @@ il_factor_binary_op * il_factor_binary_op_new(operator_type type) {
 
 void il_factor_binary_op_dump(il_factor_binary_op * self, int depth) {
 	switch(self->category) {
-		case operator_carithmeric:
+		case operator_carithmeric_T:
 			il_factor_arithmetic_op_dump(self->u.arithmetic_op, depth);
 			break;
-		case operator_ccompare:
+		case operator_ccompare_T:
 			il_factor_compare_op_dump(self->u.compare_op, depth);
 			break;
-		case operator_clogic:
+		case operator_clogic_T:
 			il_factor_logic_op_dump(self->u.logic_op, depth);
 			break;
-		case operator_cshift:
+		case operator_cshift_T:
 			il_factor_shift_op_dump(self->u.shift_op, depth);
 			break;
-		case operator_cexcor:
+		case operator_cexcor_T:
 			il_factor_excor_op_dump(self->u.excor_op, depth);
 			break;
 	}
@@ -59,19 +59,19 @@ void il_factor_binary_op_dump(il_factor_binary_op * self, int depth) {
 
 void il_factor_binary_op_generate(il_factor_binary_op * self, enviroment* env, call_context* cctx) {
 	switch(self->category) {
-		case operator_carithmeric:
+		case operator_carithmeric_T:
 			il_factor_arithmetic_op_generate(self->u.arithmetic_op, env, cctx);
 			break;
-		case operator_ccompare:
+		case operator_ccompare_T:
 			il_factor_compare_op_generate(self->u.compare_op, env, cctx);
 			break;
-		case operator_clogic:
+		case operator_clogic_T:
 			il_factor_logic_op_generate(self->u.logic_op, env, cctx);
 			break;
-		case operator_cshift:
+		case operator_cshift_T:
 			il_factor_shift_op_generate(self->u.shift_op, env, cctx);
 			break;
-		case operator_cexcor:
+		case operator_cexcor_T:
 			il_factor_excor_op_generate(self->u.excor_op, env, cctx);
 			break;
 	}
@@ -88,31 +88,31 @@ void il_factor_binary_op_load(il_factor_binary_op * self, enviroment * env, call
 	BC_ERROR();
 	//カテゴリーわけ
 	if(operator_arithmetic(self->type)) {
-		self->category = operator_carithmeric;
+		self->category = operator_carithmeric_T;
 		il_factor_arithmetic_op* arith = il_factor_arithmetic_op_new(self->type);
 		arith->parent = self;
 		self->u.arithmetic_op = arith;
 		il_factor_arithmetic_op_load(arith, env, cctx);
 	} else if(operator_compare(self->type)) {
-		self->category = operator_ccompare;
+		self->category = operator_ccompare_T;
 		il_factor_compare_op* comp = il_factor_compare_op_new(self->type);
 		comp->parent = self;
 		self->u.compare_op = comp;
 		il_factor_compare_op_load(comp, env, cctx);
 	} else if(operator_bit(self->type) || operator_logic(self->type)) {
-		self->category = operator_clogic;
+		self->category = operator_clogic_T;
 		il_factor_logic_op* logic = il_factor_logic_op_new(self->type);
 		logic->parent = self;
 		self->u.logic_op = logic;
 		il_factor_logic_op_load(logic, env, cctx);
 	} else if(operator_shift(self->type)) {
-		self->category = operator_cshift;
+		self->category = operator_cshift_T;
 		il_factor_shift_op* shift = il_factor_shift_op_new(self->type);
 		shift->parent = self;
 		self->u.shift_op = shift;
 		il_factor_shift_op_load(shift, env, cctx);
 	} else if(self->type == operator_excor) {
-		self->category = operator_cexcor;
+		self->category = operator_cexcor_T;
 		il_factor_excor_op* excor = il_factor_excor_op_new(self->type);
 		excor->parent = self;
 		self->u.excor_op = excor;
@@ -126,19 +126,19 @@ generic_type* il_factor_binary_op_eval(il_factor_binary_op * self, enviroment * 
 	il_factor_binary_op_load(self, env, cctx);
 	generic_type* ret = NULL;
 	switch(self->category) {
-		case operator_carithmeric:
+		case operator_carithmeric_T:
 			ret = il_factor_arithmetic_op_eval(self->u.arithmetic_op, env, cctx);
 			break;
-		case operator_ccompare:
+		case operator_ccompare_T:
 			ret = il_factor_compare_op_eval(self->u.compare_op, env, cctx);
 			break;
-		case operator_clogic:
+		case operator_clogic_T:
 			ret = il_factor_logic_op_eval(self->u.logic_op, env, cctx);
 			break;
-		case operator_cshift:
+		case operator_cshift_T:
 			ret = il_factor_shift_op_eval(self->u.shift_op, env, cctx);
 			break;
-		case operator_cexcor:
+		case operator_cexcor_T:
 			ret = il_factor_excor_op_eval(self->u.excor_op, env, cctx);
 			break;
 	}
@@ -149,19 +149,19 @@ generic_type* il_factor_binary_op_eval(il_factor_binary_op * self, enviroment * 
 char* il_factor_binary_op_tostr(il_factor_binary_op* self, enviroment* env) {
 	char* ret = NULL;
 	switch(self->category) {
-		case operator_carithmeric:
+		case operator_carithmeric_T:
 			ret = il_factor_arithmetic_op_tostr(self->u.arithmetic_op, env);
 			break;
-		case operator_clogic:
+		case operator_clogic_T:
 			ret = il_factor_logic_op_tostr(self->u.logic_op, env);
 			break;
-		case operator_ccompare:
+		case operator_ccompare_T:
 			ret = il_factor_compare_op_tostr(self->u.compare_op, env);
 			break;
-		case operator_cshift:
+		case operator_cshift_T:
 			ret = il_factor_shift_op_tostr(self->u.shift_op, env);
 			break;
-		case operator_cexcor:
+		case operator_cexcor_T:
 			ret = il_factor_excor_op_tostr(self->u.excor_op, env);
 			break;
 	}
@@ -171,19 +171,19 @@ char* il_factor_binary_op_tostr(il_factor_binary_op* self, enviroment* env) {
 
 void il_factor_binary_op_delete(il_factor_binary_op * self) {
 	switch(self->category) {
-		case operator_carithmeric:
+		case operator_carithmeric_T:
 			il_factor_arithmetic_op_delete(self->u.arithmetic_op);
 			break;
-		case operator_clogic:
+		case operator_clogic_T:
 			il_factor_logic_op_delete(self->u.logic_op);
 			break;
-		case operator_ccompare:
+		case operator_ccompare_T:
 			il_factor_compare_op_delete(self->u.compare_op);
 			break;
-		case operator_cshift:
+		case operator_cshift_T:
 			il_factor_shift_op_delete(self->u.shift_op);
 			break;
-		case operator_cexcor:
+		case operator_cexcor_T:
 			il_factor_excor_op_delete(self->u.excor_op);
 			break;
 	}

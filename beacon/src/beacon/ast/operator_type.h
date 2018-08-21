@@ -7,14 +7,14 @@
  * 演算子のカテゴリを表す列挙.
  */
 typedef enum operator_category {
-	operator_carithmeric,
-	operator_clogic,
-	operator_ccompare,
-	operator_cshift,
-	operator_cchilda,
-	operator_cnegative,
-	operator_cnot,
-	operator_cexcor,
+	operator_carithmeric_T,
+	operator_clogic_T,
+	operator_ccompare_T,
+	operator_cshift_T,
+	operator_cchilda_T,
+	operator_cnegative_T,
+	operator_cnot_T,
+	operator_cexcor_T,
 } operator_category;
 
 /**
