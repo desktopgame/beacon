@@ -35,7 +35,7 @@ void CLIL_body(class_loader* self, vector* list, ast* source) {
 	if(source == NULL) {
 		return;
 	}
-	if (source->tag == ast_stmt_list || source->tag == ast_scope) {
+	if (source->tag == ast_stmt_T_list || source->tag == ast_scope_T) {
 		for (int i = 0; i < source->vchildren->length; i++) {
 			CLIL_body(self, list, ast_at(source, i));
 		}
@@ -53,11 +53,11 @@ void CLIL_body(class_loader* self, vector* list, ast* source) {
 //private
 static il_stmt* CLIL_bodyImpl(class_loader* self, ast* asource) {
 	switch (asource->tag) {
-		case ast_stmt:
+		case ast_stmt_T:
 		{
 			return CLIL_bodyImpl(self, ast_first(asource));
 		}
-		case ast_proc:
+		case ast_proc_T:
 		{
 			ast* afact = ast_first(asource);
 			il_factor* ilfact = CLIL_factor(self, afact);
@@ -66,90 +66,90 @@ static il_stmt* CLIL_bodyImpl(class_loader* self, ast* asource) {
 			assert(ilfact != NULL);
 			return il_stmt_wrap_proc(ilproc);
 		}
-		case ast_stmt_variable_decl:
+		case ast_stmt_T_variable_decl:
 		{
 			il_stmt_variable_decl* ilvardecl = CLIL_variable_decl(self, asource);
 			return il_stmt_wrap_variable_decl(ilvardecl);
 		}
-		case ast_stmt_variable_init:
+		case ast_stmt_T_variable_init:
 		{
 			il_stmt_variable_init* ilvarinit = CLIL_variable_init(self, asource);
 			return il_stmt_wrap_variable_init(ilvarinit);
 		}
-		case ast_inferenced_type_init:
+		case ast_inferenced_type_init_T:
 		{
 			il_stmt_inferenced_type_init* ilinfer = CLIL_inferenced_type_init(self, asource);
 			return il_stmt_wrap_inferenced_type_init(ilinfer);
 		}
-		case ast_if:
+		case ast_if_T:
 		{
 			il_stmt_if* ilif = CLIL_if(self, asource);
 			return il_stmt_wrap_if(ilif);
 		}
-		case ast_if_elif_list:
+		case ast_if_T_elif_list:
 		{
 			il_stmt_if* ilif = CLIL_if_elif_list(self, asource);
 			return il_stmt_wrap_if(ilif);
 		}
-		case ast_if_else:
+		case ast_if_T_else:
 		{
 			il_stmt_if* ilif = CLIL_if_else(self, asource);
 			return il_stmt_wrap_if(ilif);
 		}
-		case ast_if_elif_list_else:
+		case ast_if_T_elif_list_else:
 		{
 			il_stmt_if* ilif = CLIL_if_elif_list_else(self, asource);
 			return il_stmt_wrap_if(ilif);
 		}
-		case ast_while:
+		case ast_while_T:
 		{
 			il_stmt_while* ilwh = CLIL_while(self, asource);
 			return il_stmt_wrap_while(ilwh);
 		}
-		case ast_break:
+		case ast_break_T:
 		{
 			return il_stmt_wrap_break();
 		}
-		case ast_continue:
+		case ast_continue_T:
 		{
 			return il_stmt_wrap_continue();
 		}
-		case ast_return:
+		case ast_return_T:
 		{
 			il_stmt_return* ilret = CLIL_return(self, asource);
 			return il_stmt_wrap_return(ilret);
 		}
-		case ast_return_empty:
+		case ast_return_T_empty:
 		{
 			il_stmt* ret = il_stmt_new(ilstmt_return_empty);
 			ret->u.return_empty = NULL;
 			return ret;
 		}
-		case ast_stmt_try:
+		case ast_stmt_T_try:
 		{
 			il_stmt_try* iltry = CLIL_try(self, asource);
 			return il_stmt_wrap_try(iltry);
 		}
-		case ast_stmt_throw:
+		case ast_stmt_T_throw:
 		{
 			il_stmt_throw* ilthrow = CLIL_throw(self, asource);
 			return il_stmt_wrap_throw(ilthrow);
 		}
-		case ast_stmt_assert:
+		case ast_stmt_T_assert:
 		{
 			il_stmt_assert* ilas = CLIL_assert(self, asource);
 			return il_stmt_wrap_assert(ilas);
 		}
-		case ast_stmt_defer:
+		case ast_stmt_T_defer:
 		{
 			il_stmt_defer* ildef = CLIL_defer(self, asource);
 			return il_stmt_wrap_defer(ildef);
 		}
-		case ast_yield_return:
+		case ast_yield_return_T:
 		{
 			return il_stmt_wrap_yield_return(CLIL_yield_return(self, asource));
 		}
-		case ast_yield_break:
+		case ast_yield_break_T:
 		{
 			il_stmt* ret = il_stmt_new(ilstmt_yield_break);
 			ret->u.yield_break = NULL;
@@ -189,7 +189,7 @@ static il_stmt_variable_init* CLIL_variable_init(class_loader* self, ast* asourc
 }
 
 static il_stmt_if* CLIL_if(class_loader* self, ast* asource) {
-	assert(asource->tag == ast_if);
+	assert(asource->tag == ast_if_T);
 	il_stmt_if* ret = il_stmt_if_new();
 	ast* acond = ast_first(asource);
 	ast* abody = ast_second(asource);
@@ -234,11 +234,11 @@ static il_stmt_while * CLIL_while(class_loader * self, ast * asource) {
 }
 
 static void CLIL_elif_list(class_loader* self, vector* list, ast* asource) {
-	if (asource->tag == ast_elif_list) {
+	if (asource->tag == ast_elif_T_list_T) {
 		for (int i = 0; i < asource->vchildren->length; i++) {
 			CLIL_elif_list(self, list, ast_at(asource, i));
 		}
-	} else if (asource->tag == ast_elif) {
+	} else if (asource->tag == ast_elif_T) {
 		ast* acond = ast_first(asource);
 		ast* abody = ast_second(asource);
 		il_stmt_elif* ilelif = il_stmt_elif_new();
@@ -249,7 +249,7 @@ static void CLIL_elif_list(class_loader* self, vector* list, ast* asource) {
 }
 
 static il_stmt_return* CLIL_return(class_loader* self, ast* asource) {
-	assert(asource->tag == ast_return);
+	assert(asource->tag == ast_return_T);
 	ast* afact = ast_first(asource);
 	il_factor* ilfact = CLIL_factor(self, afact);
 	il_stmt_return* ret = il_stmt_return_new();
@@ -267,7 +267,7 @@ static il_stmt_try* CLIL_try(class_loader* self, ast* asource) {
 }
 
 static void CLIL_catch_list(class_loader* self, vector* dest, ast* asource) {
-	if(asource->tag == ast_stmt_catch) {
+	if(asource->tag == ast_stmt_T_catch) {
 		ast* atypename = ast_first(asource);
 		ast* aname = ast_second(asource);
 		ast* abody = ast_at(asource, 2);
@@ -276,7 +276,7 @@ static void CLIL_catch_list(class_loader* self, vector* dest, ast* asource) {
 		CLIL_body(self, ilcatch->statement_list, abody);
 		vector_push(dest, ilcatch);
 
-	} else if(asource->tag == ast_stmt_catch_list) {
+	} else if(asource->tag == ast_stmt_T_catch_list) {
 		for(int i=0; i<asource->vchildren->length; i++) {
 			CLIL_catch_list(self, dest, ast_at(asource, i));
 		}
@@ -303,7 +303,7 @@ static il_stmt_assert* CLIL_assert(class_loader* self, ast* asource) {
 }
 
 static il_stmt_defer* CLIL_defer(class_loader* self, ast* asource) {
-	assert(asource->tag == ast_stmt_defer);
+	assert(asource->tag == ast_stmt_T_defer);
 	ast* astmt = ast_first(asource);
 	il_stmt_defer* ret = il_stmt_defer_new();
 	ret->stmt = CLIL_stmt(self, astmt);

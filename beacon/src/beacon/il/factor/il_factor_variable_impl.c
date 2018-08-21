@@ -140,7 +140,7 @@ static void il_factor_delete_typeargs(vector_item item) {
 	il_type_argument_delete(e);
 }
 
-il_factor_variable* il_factor_cast_variable(il_factor* fact) {
+il_factor_variable* il_factor_cast_variable_T(il_factor* fact) {
 	assert(fact->type == ilfactor_variable);
 	return fact->u.variable_;
 }

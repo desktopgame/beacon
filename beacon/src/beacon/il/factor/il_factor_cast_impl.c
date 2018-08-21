@@ -31,7 +31,7 @@ void il_factor_cast_dump(il_factor_cast * self, int depth) {
 	il_factor_dump(self->fact, depth + 1);
 }
 
-void il_factor_cast_generate(il_factor_cast * self, enviroment * env, call_context* cctx) {
+void il_factor_cast_ge_Tnerate(il_factor_cast * self, enviroment * env, call_context* cctx) {
 	il_factor_generate(self->fact, env, cctx);
 }
 
@@ -61,7 +61,7 @@ void il_factor_cast_delete(il_factor_cast * self) {
 	MEM_FREE(self);
 }
 
-il_factor_cast* il_factor_cast_cast(il_factor* fact) {
+il_factor_cast* il_factor_cast_cast_T(il_factor* fact) {
 	assert(fact->type == ilfactor_cast);
 	return fact->u.cast_;
 }

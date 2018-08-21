@@ -54,7 +54,7 @@ void il_factor_double_delete(il_factor_double * self) {
 	MEM_FREE(self);
 }
 
-il_factor_double* il_factor_cast_double(il_factor* fact) {
+il_factor_double* il_factor_cast_double_T(il_factor* fact) {
 	assert(fact->type == ilfactor_double);
 	return fact->u.double_;
 }

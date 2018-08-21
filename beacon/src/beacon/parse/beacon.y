@@ -745,127 +745,127 @@ expression
 expression_nobrace
 	: ADD expression %prec POSITIVE
 	{
-		$$ = ast_new_unary(ast_pos, $2);
+		$$ = ast_new_unary(ast_pos_T, $2);
 	}
 	| SUB expression %prec NEGATIVE
 	{
-		$$ = ast_new_unary(ast_neg, $2);
+		$$ = ast_new_unary(ast_neg_T, $2);
 	}
 	| expression ADD expression
 	{
-		$$ = ast_new_binary(ast_add, $1, $3);
+		$$ = ast_new_binary(ast_add_T, $1, $3);
 	}
 	| expression SUB expression
 	{
-		$$ = ast_new_binary(ast_sub, $1, $3);
+		$$ = ast_new_binary(ast_sub_T, $1, $3);
 	}
 	| expression MUL expression
 	{
-		$$ = ast_new_binary(ast_mul, $1, $3);
+		$$ = ast_new_binary(ast_mul_T, $1, $3);
 	}
 	| expression DIV expression
 	{
-		$$ = ast_new_binary(ast_div, $1, $3);
+		$$ = ast_new_binary(ast_div_T, $1, $3);
 	}
 	| expression MOD expression
 	{
-		$$ = ast_new_binary(ast_mod, $1, $3);
+		$$ = ast_new_binary(ast_mod_T, $1, $3);
 	}
 	| expression BIT_OR expression
 	{
-		$$ = ast_new_binary(ast_bit_or, $1, $3);
+		$$ = ast_new_binary(ast_bit_or_T, $1, $3);
 	}
 	| expression EQUAL expression
 	{
-		$$ = ast_new_binary(ast_equal, $1, $3);
+		$$ = ast_new_binary(ast_equal_T, $1, $3);
 	}
 	| expression NOTEQUAL expression
 	{
-		$$ = ast_new_binary(ast_notequal, $1, $3);
+		$$ = ast_new_binary(ast_not_Tequal_T, $1, $3);
 	}
 	| expression BIT_AND expression
 	{
-		$$ = ast_new_binary(ast_bit_and, $1, $3);
+		$$ = ast_new_binary(ast_bit_and_T, $1, $3);
 	}
 	| expression EXC_OR expression
 	{
-		$$ = ast_new_binary(ast_exc_or, $1, $3);
+		$$ = ast_new_binary(ast_exc_or_T, $1, $3);
 	}
 	| expression LOGIC_OR expression
 	{
-		$$ = ast_new_binary(ast_logic_or, $1, $3);
+		$$ = ast_new_binary(ast_logic_or_T, $1, $3);
 	}
 	| expression LOGIC_AND expression
 	{
-		$$ = ast_new_binary(ast_logic_and, $1, $3);
+		$$ = ast_new_binary(ast_logic_and_T, $1, $3);
 	}
 	| lhs ASSIGN expression
 	{
-		$$ = ast_new_binary(ast_assign, $1, $3);
+		$$ = ast_new_binary(ast_as_Tsign_T, $1, $3);
 	}
 	| lhs ADD_ASSIGN expression
 	{
-		$$ = ast_new_binary(ast_add_assign, $1, $3);
+		$$ = ast_new_binary(ast_add_T_assign, $1, $3);
 	}
 	| lhs SUB_ASSIGN expression
 	{
-		$$ = ast_new_binary(ast_sub_assign, $1, $3);
+		$$ = ast_new_binary(ast_sub_T_assign, $1, $3);
 	}
 	| lhs MUL_ASSIGN expression
 	{
-		$$ = ast_new_binary(ast_mul_assign, $1, $3);
+		$$ = ast_new_binary(ast_mul_T_assign, $1, $3);
 	}
 	| lhs DIV_ASSIGN expression
 	{
-		$$ = ast_new_binary(ast_div_assign, $1, $3);
+		$$ = ast_new_binary(ast_div_T_assign, $1, $3);
 	}
 	| lhs MOD_ASSIGN expression
 	{
-		$$ = ast_new_binary(ast_mod_assign, $1, $3);
+		$$ = ast_new_binary(ast_mod_T_assign, $1, $3);
 	}
 	| lhs AND_ASSIGN expression
 	{
-		$$ = ast_new_binary(ast_and_assign, $1, $3);
+		$$ = ast_new_binary(ast_and_assign_T, $1, $3);
 	}
 	| lhs OR_ASSIGN expression
 	{
-		$$ = ast_new_binary(ast_or_assign, $1, $3);
+		$$ = ast_new_binary(ast_or_assign_T, $1, $3);
 	}
 	| lhs EXC_OR_ASSIGN expression
 	{
-		$$ = ast_new_binary(ast_exc_or_assign, $1, $3);
+		$$ = ast_new_binary(ast_exc_or_T_assign, $1, $3);
 	}
 	| lhs LSHIFT_ASSIGN expression
 	{
-		$$ = ast_new_binary(ast_lshift_assign, $1, $3);
+		$$ = ast_new_binary(ast_lshift_T_assign, $1, $3);
 	}
 	| lhs RSHIFT_ASSIGN expression
 	{
-		$$ = ast_new_binary(ast_rshift_assign, $1, $3);
+		$$ = ast_new_binary(ast_rshift_T_assign, $1, $3);
 	}
 	| expression GT expression
 	{
-		$$ = ast_new_binary(ast_gt, $1, $3);
+		$$ = ast_new_binary(ast_gt_T, $1, $3);
 	}
 	| expression GE expression
 	{
-		$$ = ast_new_binary(ast_ge, $1, $3);
+		$$ = ast_new_binary(ast_ge_T, $1, $3);
 	}
 	| expression LT expression
 	{
-		$$ = ast_new_binary(ast_lt, $1, $3);
+		$$ = ast_new_binary(ast_lt_T, $1, $3);
 	}
 	| expression LE expression
 	{
-		$$ = ast_new_binary(ast_le, $1, $3);
+		$$ = ast_new_binary(ast_le_T, $1, $3);
 	}
 	| expression LSHIFT expression
 	{
-		$$ = ast_new_binary(ast_lshift, $1, $3);
+		$$ = ast_new_binary(ast_lshift_T, $1, $3);
 	}
 	| expression RSHIFT expression
 	{
-		$$ = ast_new_binary(ast_rshift, $1, $3);
+		$$ = ast_new_binary(ast_rshift_T, $1, $3);
 	}
 
 	| expression DOT ADD LRB expression RRB
@@ -954,7 +954,7 @@ expression_nobrace
 	}
 	| expression INSTANCEOF typename_T
 	{
-		$$ = ast_new_instanceof($1, $3);
+		$$ = ast_new_instance_Tof($1, $3);
 	}
 	| expression AS typename_T
 	{
@@ -962,11 +962,11 @@ expression_nobrace
 	}
 	| CHILDA expression
 	{
-		$$ = ast_new_unary(ast_childa, $2);
+		$$ = ast_new_unary(ast_childa_T, $2);
 	}
 	| NOT expression
 	{
-		$$ = ast_new_unary(ast_not, $2);
+		$$ = ast_new_unary(ast_not_T, $2);
 	}
 	| NEW fqcn_part typename_group LRB argument_list RRB
 	{

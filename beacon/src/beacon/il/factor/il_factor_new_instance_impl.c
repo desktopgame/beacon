@@ -122,7 +122,7 @@ void il_factor_new_instance_delete(il_factor_new_instance * self) {
 	MEM_FREE(self);
 }
 
-il_factor_new_instance* il_factor_cast_new_instance(il_factor* fact) {
+il_factor_new_instance* il_factor_cast_new_instance_T(il_factor* fact) {
 	assert(fact->type == ilfactor_new_instance);
 	return fact->u.new_instance_;
 }

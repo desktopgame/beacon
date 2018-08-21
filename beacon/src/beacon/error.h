@@ -89,7 +89,7 @@ typedef enum bc_error_id {
 	bcerror_void_assign,
 	bcerror_void_decl,
 
-	bcerror_cast_not_compatible,
+	bcerror_cast_not_T_compatible,
 
 	bcerror_undefined_type_static_invoke,
 	bcerror_undefined_name_bound_invoke,

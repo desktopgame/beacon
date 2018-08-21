@@ -74,7 +74,7 @@ void il_factor_as_load(il_factor_as * self, enviroment * env, call_context* cctx
 		self->mode = cast_down_T;
 	//それ以外
 	} else {
-		bc_error_throw(bcerror_cast_not_compatible,
+		bc_error_throw(bcerror_cast_not_T_compatible,
 			string_pool_ref2str(type_name(a->core_type)),
 			string_pool_ref2str(type_name(self->gtype->core_type))
 		);
@@ -102,7 +102,7 @@ char* il_factor_as_tostr(il_factor_as* self, enviroment* env) {
 	return string_buffer_release(sb);
 }
 
-il_factor_as* il_factor_cast_as(il_factor* fact) {
+il_factor_as* il_factor_cast_as_T(il_factor* fact) {
 	assert(fact->type == ilfactor_as);
 	return fact->u.as_;
 }

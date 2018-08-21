@@ -7,7 +7,7 @@
 #include "../il/call_context.h"
 
 #define TYPE2CLASS(type) (type_cast_class(type))
-#define TYPE2INTERFACE(type) (type_cast_interface(type))
+#define TYPE2INTERFACE(type) (type_cast_int_Terface(type))
 /**
  * 型の種類を表すタグ.
  */
@@ -206,7 +206,7 @@ int type_type_parameter_len(type* self);
 void type_delete(type* self);
 
 struct class_* type_cast_class(type* self);
-struct interface_* type_cast_interface(type* self);
+struct interface_* type_cast_int_Terface(type* self);
 
 /**
  * abstractにはクラス/インターフェイスを渡します.

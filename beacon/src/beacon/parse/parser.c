@@ -120,6 +120,6 @@ static parser* parser_new() {
 	ret->lineno = 0;
 	ret->literal_buffer = NULL;
 	ret->lineno_vec = vector_new();
-	ret->root = ast_new(ast_root);
+	ret->root = ast_new(ast_root_T);
 	return ret;
 }

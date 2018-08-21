@@ -4,7 +4,7 @@
 #include "../il_factor_interface.h"
 #include <stdint.h>
 //struct opcode_buf;
-#define IL_FACT2INT(fact) (il_factor_cast_int(fact))
+#define IL_FACT2INT(fact) (il_factor_cast_int_T(fact))
 /**
  * 整数リテラルを表す要素.
  */
@@ -30,5 +30,5 @@ char* il_factor_int_tostr(il_factor_int* self, struct enviroment* env);
 
 void il_factor_int_delete(il_factor_int* self);
 
-il_factor_int* il_factor_cast_int(il_factor* fact);
+il_factor_int* il_factor_cast_int_T(il_factor* fact);
 #endif // !SIGNAL_IL_IL_FACTOR_INT_H

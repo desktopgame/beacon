@@ -2,7 +2,7 @@
 #ifndef BEACON_IL_IL_FACTOR_DOUBLE_H
 #define BEACON_IL_IL_FACTOR_DOUBLE_H
 #include "../il_factor_interface.h"
-#define IL_FACT2DOUBLE(fact) (il_factor_cast_double(fact))
+#define IL_FACT2DOUBLE(fact) (il_factor_cast_double_T(fact))
 //struct opcode_buf;
 /**
  * 浮動小数リテラルを表す要素.
@@ -27,5 +27,5 @@ char* il_factor_double_tostr(il_factor_double* self, struct enviroment* env);
 
 void il_factor_double_delete(il_factor_double* self);
 
-il_factor_double* il_factor_cast_double(il_factor* fact);
+il_factor_double* il_factor_cast_double_T(il_factor* fact);
 #endif // !SIGNAL_IL_IL_FACTOR_DOUBLE_H

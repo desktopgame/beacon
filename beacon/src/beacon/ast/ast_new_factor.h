@@ -106,7 +106,7 @@ ast* ast_new_new_instance(ast* afqcn, ast* atype_args, ast* argument_list);
  * @param atype
  * @return
  */
-ast* ast_new_instanceof(ast* afact, ast* atype);
+ast* ast_new_instance_Tof(ast* afact, ast* atype);
 
 /**
  * 明示的な二項演算の呼び出しを表す要素を作成します.

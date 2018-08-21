@@ -5,7 +5,7 @@
 #include "../../env/fqcn_cache.h"
 #include "../../env/generic_cache.h"
 #include "../il_factor_interface.h"
-#define IL_FACT2NEW(fact) (il_factor_cast_new_instance(fact))
+#define IL_FACT2NEW(fact) (il_factor_cast_new_instance_T(fact))
 struct enviroment;
 struct type;
 struct constructor;
@@ -38,5 +38,5 @@ char* il_factor_new_instance_tostr(il_factor_new_instance* self, struct envirome
 
 void il_factor_new_instance_delete(il_factor_new_instance* self);
 
-il_factor_new_instance* il_factor_cast_new_instance(il_factor* fact);
+il_factor_new_instance* il_factor_cast_new_instance_T(il_factor* fact);
 #endif // !SIGNAL_IL_IL_FACTOR_NEW_INSTANCE_H

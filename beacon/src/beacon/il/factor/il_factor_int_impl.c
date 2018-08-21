@@ -56,7 +56,7 @@ void il_factor_int_delete(il_factor_int * self) {
 	MEM_FREE(self);
 }
 
-il_factor_int* il_factor_cast_int(il_factor* fact) {
+il_factor_int* il_factor_cast_int_T(il_factor* fact) {
 	assert(fact->type == ilfactor_int);
 	return fact->u.int_;
 }

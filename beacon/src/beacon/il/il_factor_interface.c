@@ -133,7 +133,7 @@ void il_factor_generate(il_factor * self, enviroment* env, call_context* cctx) {
 			il_factor_new_instance_generate(self->u.new_instance_, env, cctx);
 			break;
 		case ilfactor_cast:
-			il_factor_cast_generate(self->u.cast_, env, cctx);
+			il_factor_cast_ge_Tnerate(self->u.cast_, env, cctx);
 			break;
 		case ilfactor_bool:
 			il_factor_bool_generate(self->u.bool_, env, cctx);

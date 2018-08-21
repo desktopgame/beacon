@@ -50,7 +50,7 @@ void il_factor_char_delete(il_factor_char * self) {
 	MEM_FREE(self);
 }
 
-il_factor_char* il_factor_cast_char(il_factor* fact) {
+il_factor_char* il_factor_cast_char_T(il_factor* fact) {
 	assert(fact->type == ilfactor_char);
 	return fact->u.char_;
 }

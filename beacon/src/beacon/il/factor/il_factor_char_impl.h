@@ -2,7 +2,7 @@
 #ifndef BEACON_IL_IL_FACTOR_CHAR_H
 #define BEACON_IL_IL_FACTOR_CHAR_H
 #include "../il_factor_interface.h"
-#define IL_FACT2CHAR(fact) (il_factor_cast_char(fact))
+#define IL_FACT2CHAR(fact) (il_factor_cast_char_T(fact))
 //struct opcode_buf;
 /**
  * 文字を表す要素.
@@ -27,5 +27,5 @@ char* il_factor_char_tostr(il_factor_char* self, struct enviroment* env);
 
 void il_factor_char_delete(il_factor_char* self);
 
-il_factor_char* il_factor_cast_char(il_factor* fact);
+il_factor_char* il_factor_cast_char_T(il_factor* fact);
 #endif // !SIGNAL_IL_IL_FACTOR_CHAR_H

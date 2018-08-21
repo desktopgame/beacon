@@ -228,7 +228,7 @@ void bc_error_vthrow(bc_error_id id, va_list ap) {
 			fmt = "can't decl. type is void.";
 			break;
 
-		case bcerror_cast_not_compatible:
+		case bcerror_cast_not_T_compatible:
 			fmt = "not compatible types: %s as %s";
 			break;
 
