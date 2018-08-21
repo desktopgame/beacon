@@ -8,7 +8,6 @@
 #include "../vm/vm.h"
 #include "../vm/opcode.h"
 #include "../vm/opcode_buf.h"
-#include "lazy_resolve.h"
 #include "../env/native_method_ref.h"
 #include "../env/type_parameter.h"
 #include "../il/il_argument.h"
@@ -50,10 +49,6 @@
 static void class_loader_load_impl(class_loader* self);
 static void class_loader_link_recursive(class_loader* self, link_type type);
 static void class_loader_cache_delete(vector_item item);
-static void class_loader_lazy_resolve_delete(vector_item item);
-static void class_loader_lazy_resolve(class_loader* self);
-static void class_loader_lazy_resolve_all(class_loader* self);
-static void class_loader_lazy_resolve_at(const char* name, tree_item item);
 static class_loader* class_loader_load_specialImpl(class_loader* self, class_loader* cll, char* full_path);
 static void class_loader_load_toplevel(class_loader* self);
 static void class_loader_load_linkall(class_loader* self);
@@ -71,7 +66,6 @@ class_loader* class_loader_new(const char* filename, content_type type) {
 	ret->env = enviroment_new();
 	ret->level = 0;
 	ret->type_cache_vec = vector_new();
-	ret->lazy_resolve_vec = vector_new();
 	ret->filename = text_strdup(filename);
 	ret->env->context_ref = ret;
 	return ret;
@@ -118,7 +112,6 @@ void class_loader_delete(class_loader * self) {
 	ast_delete(self->source_code);
 	il_top_level_delete(self->il_code);
 	vector_delete(self->type_cache_vec, class_loader_cache_delete);
-	vector_delete(self->lazy_resolve_vec, class_loader_lazy_resolve_delete);
 	import_manager_delete(self->import_manager);
 	enviroment_delete(self->env);
 	MEM_FREE(self->filename);
@@ -165,35 +158,6 @@ static void class_loader_cache_delete(vector_item item) {
 	type_cache_delete(e);
 }
 
-static void class_loader_lazy_resolve_delete(vector_item item) {
-	lazy_resolve* e = (lazy_resolve*)item;
-	lazy_resolve_delete(e);
-}
-
-static void class_loader_lazy_resolve(class_loader* self) {
-	for(int i=0; i<self->lazy_resolve_vec->length; i++) {
-		lazy_resolve* lr = (lazy_resolve*)vector_at(self->lazy_resolve_vec, i);
-		if(!lr->active) {
-			continue;
-		}
-		lazy_resolve_apply(lr);
-		lr->active = false;
-	}
-}
-
-static void class_loader_lazy_resolve_all(class_loader* self) {
-	if(bc_error_last()) {
-		return;
-	}
-	script_context* sc = script_context_get_current();
-	tree_map_each(sc->class_loader_map, class_loader_lazy_resolve_at);
-}
-
-static void class_loader_lazy_resolve_at(const char* name, tree_item item) {
-	class_loader* cl = (class_loader*)item;
-	class_loader_lazy_resolve(cl);
-}
-
 static class_loader* class_loader_load_specialImpl(class_loader* self, class_loader* cll, char* full_path) {
 	cll = CLBC_import_new(self, full_path);
 	//parser
@@ -220,7 +184,6 @@ static void class_loader_load_linkall(class_loader* self) {
 	}
 	class_loader_link_recursive(self, link_decl_T);
 	class_loader_link_recursive(self, link_impl_T);
-	class_loader_lazy_resolve_all(self);
 }
 
 static void class_loader_load_toplevel(class_loader* self) {

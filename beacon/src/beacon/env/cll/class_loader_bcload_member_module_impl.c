@@ -24,9 +24,6 @@
 #include "../../thread/thread.h"
 #include "../../vm/symbol_entry.h"
 #include "../../util/text.h"
-#include "../lazy_resolve.h"
-#include "../resolve/default_eqoperator_resolve.h"
-#include "../resolve/default_noteqoperator_resolve.h"
 #include "class_loader_ilload_stmt_module_impl.h"
 #include <assert.h>
 #include <string.h>
@@ -40,9 +37,6 @@ static void CLBC_chain_root(class_loader* self, il_type* iltype, type* tp, il_co
 static void CLBC_chain_auto(class_loader* self, il_type* iltype, type* tp, il_constructor* ilcons, il_constructor_chain* ilchain, enviroment* env);
 static void CLBC_chain_super(class_loader* self, il_type* iltype, type* tp, il_constructor* ilcons, il_constructor_chain* ilchain, enviroment* env);
 static bool CLBC_test_operator_overlaod(class_loader* self, il_type* iltype, type* tp, operator_overload* opov);
-static void CLBC_default_operator_overload(class_loader* self, type* tp);
-static void CLBC_default_eqoperator_overload(class_loader* self, type* tp);
-static void CLBC_default_noteqoperator_overload(class_loader* self, type* tp);
 
 //
 //field
@@ -843,112 +837,4 @@ static bool CLBC_test_operator_overlaod(class_loader* self, il_type* iltype, typ
 		return true;
 	}
 	return false;
-}
-
-static void CLBC_default_operator_overload(class_loader* self, type* tp) {
-//	CLBC_default_eqoperator_overload(self, tp);
-//	CLBC_default_noteqoperator_overload(self, tp);
-}
-
-static void CLBC_default_eqoperator_overload(class_loader* self, type* tp) {
-	if(tp->tag != type_class_T) {
-		return;
-	}
-	//==(Object a)を検索する
-	int outIndex = 0;
-	operator_overload* opov_defeq = meta_gfind_operator_default_eq(TYPE2CLASS(tp)->operator_overload_list, &outIndex);
-	if(opov_defeq != NULL) {
-		//すでに存在するので何もしない
-		return;
-	}
-	//equals(Object a)を検索する
-	//これによって == を自動実装する
-	int methodPos = 0;
-	operator_overload* opov_eq = operator_overload_new(operator_eq_T);
-	opov_eq->access = access_public_T;
-	//戻り値読み込み
-	opov_eq->parent = tp;
-	opov_eq->return_gtype = TYPE_BOOL->generic_self;
-	vector_push(TYPE2CLASS(tp)->operator_overload_list, opov_eq);
-	//引数作成
-	parameter* paramOBJ = parameter_new(string_pool_intern("a"));
-	paramOBJ->gtype = TYPE_OBJECT->generic_self;
-	vector_push(opov_eq->parameter_list, paramOBJ);
-	//オペコード作成
-	enviroment* env = enviroment_new();
-	env->context_ref = self;
-	//引数を読み取る
-	symbol_table_entry(env->sym_table, paramOBJ->gtype, paramOBJ->namev);
-	opcode_buf_add(env->buf, (vector_item)op_store);
-	opcode_buf_add(env->buf, (vector_item)1);
-	//thisを参照できるように
-	opcode_buf_add(env->buf, (vector_item)op_store);
-	opcode_buf_add(env->buf, (vector_item)0);
-	//equalsメソッドを呼び出す
-	opcode_buf_add(env->buf, (vector_item)op_load);
-	opcode_buf_add(env->buf, (vector_item)1);
-	opcode_buf_add(env->buf, (vector_item)op_load);
-	opcode_buf_add(env->buf, (vector_item)0);
-	//equalsが見つからないのであとで解決する
-	opcode_buf_add(env->buf, (vector_item)op_invokevirtual_lazy);
-	lazy_int* li = opcode_buf_lazy(env->buf, -1);
-//	lazy_resolve* resolve = lazy_resolve_new(resolve_default_eqoperator_T);
-//	resolve->u.def_eqoperator->lazyi_ref = li;
-//	resolve->u.def_eqoperator->type_ref = tp;
-//	vector_push(self->lazy_resolve_vec, resolve);
-	opcode_buf_add(env->buf, (vector_item)li);
-	opcode_buf_add(env->buf, (vector_item)op_return);
-	opov_eq->env = env;
-}
-
-static void CLBC_default_noteqoperator_overload(class_loader* self, type* tp) {
-	if(tp->tag != type_class_T) {
-		return;
-	}
-	//!=(Object a)を検索する
-	int outIndex = 0;
-	operator_overload* opov_defnoteq = meta_gfind_operator_default_noteq(TYPE2CLASS(tp)->operator_overload_list, &outIndex);
-	if(opov_defnoteq != NULL) {
-		//すでに存在するので何もしない
-		return;
-	}
-	//equals(Object a)を検索する
-	//これによって != を自動実装する
-	int methodPos = 0;
-	operator_overload* opov_noteq = operator_overload_new(operator_not_eq_T);
-	opov_noteq->access = access_public_T;
-	//戻り値読み込み
-	opov_noteq->parent = tp;
-	opov_noteq->return_gtype = TYPE_BOOL->generic_self;
-	vector_push(TYPE2CLASS(tp)->operator_overload_list, opov_noteq);
-	//引数作成
-	parameter* paramOBJ = parameter_new(string_pool_intern("a"));
-	paramOBJ->gtype = TYPE_OBJECT->generic_self;
-	vector_push(opov_noteq->parameter_list, paramOBJ);
-	//オペコード作成
-	enviroment* env = enviroment_new();
-	env->context_ref = self;
-	//引数を読み取る
-	symbol_table_entry(env->sym_table, paramOBJ->gtype, paramOBJ->namev);
-	opcode_buf_add(env->buf, (vector_item)op_store);
-	opcode_buf_add(env->buf, (vector_item)1);
-	//thisを参照できるように
-	opcode_buf_add(env->buf, (vector_item)op_store);
-	opcode_buf_add(env->buf, (vector_item)0);
-	//equalsメソッドを呼び出す
-	opcode_buf_add(env->buf, (vector_item)op_load);
-	opcode_buf_add(env->buf, (vector_item)1);
-	opcode_buf_add(env->buf, (vector_item)op_load);
-	opcode_buf_add(env->buf, (vector_item)0);
-	//equalsが見つからないのであとで解決する
-	opcode_buf_add(env->buf, (vector_item)op_invokevirtual_lazy);
-	lazy_int* li = opcode_buf_lazy(env->buf, -1);
-	lazy_resolve* resolve = lazy_resolve_new(resolve_default_noteqoperator_T);
-	resolve->u.def_noteqoperator->lazyi_ref = li;
-	resolve->u.def_noteqoperator->type_ref = tp;
-	vector_push(self->lazy_resolve_vec, resolve);
-	opcode_buf_add(env->buf, (vector_item)li);
-	opcode_buf_add(env->buf, (vector_item)op_bnot);
-	opcode_buf_add(env->buf, (vector_item)op_return);
-	opov_noteq->env = env;
 }
