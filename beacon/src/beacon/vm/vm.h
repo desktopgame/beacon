@@ -73,5 +73,10 @@ void vm_terminate(frame* self);
  */
 void vm_uncaught(frame* self, enviroment* env, int pc);
 
-
+/**
+ * VMがキャッチされなかった例外によって終了した時、
+ * そのメッセージを返します.
+ * @return
+ */
+string_view vm_error_message();
 #endif // !SIGNAL_VM_VM_H

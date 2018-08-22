@@ -4,6 +4,7 @@
 #include "../../ast/ast_new_literal.h"
 #include "../../vm/eval.h"
 #include "../../vm/frame.h"
+#include "../../vm/vm.h"
 #include "../../vm/symbol_entry.h"
 #include "../../env/heap.h"
 #include "../../env/script_context.h"
@@ -226,8 +227,13 @@ static void bc_write_symbol(JNIEnv* env, numeric_map* nmap, frame* fr, jobject t
 
 static void bc_eval_release(JNIEnv* env, class_loader* cll, frame* fr) {
 	if(bc_error_last()) {
+		string_buffer* sbuf = string_buffer_new();
+		string_buffer_appends(sbuf, "\n");
+		string_buffer_appends(sbuf, string_pool_ref2str(vm_error_message()));
+		char* mes = string_buffer_release(sbuf);
 		jclass bc_runtime_exc_cls = (*env)->FindClass(env, "jp/koya/jbeacon/BCRuntimeException");
-		(*env)->ThrowNew(env, bc_runtime_exc_cls, string_pool_ref2str(bc_error_message()));
+		(*env)->ThrowNew(env, bc_runtime_exc_cls, mes);
+		MEM_FREE(mes);
 	}
 	vm_catch(fr);
 	heap_gc(heap_get());

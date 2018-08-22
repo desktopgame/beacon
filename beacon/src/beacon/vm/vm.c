@@ -48,6 +48,7 @@ static void frame_markallImpl(frame* self);
 static void vm_delete_defctx(vector_item e);
 static bool throw_npe(frame* self, object* o);
 static char* create_error_message(frame * self, enviroment* env, int pc);
+static string_view gVMError = ZERO_VIEW;
 
 //Stack Top
 #define STI(a) stack_topi(a)
@@ -170,12 +171,19 @@ void vm_terminate(frame * self) {
 
 void vm_uncaught(frame * self, enviroment* env, int pc) {
 	char* message = create_error_message(self, env, pc);
-	fprintf(stderr, "%s", message);
+	script_context* sctx = script_context_get_current();
+	if(sctx->print_error) {
+		fprintf(stderr, "%s", message);
+	}
+	gVMError = string_pool_intern(message);
 	MEM_FREE(message);
 	vm_catch(frame_root(self));
 	heap_gc(heap_get());
 }
 
+string_view vm_error_message() {
+	return gVMError;
+}
 
 
 //private
