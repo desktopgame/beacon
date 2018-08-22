@@ -221,7 +221,8 @@ void object_paintall(object* self, object_paint paint) {
 	}
 	//フィールドを全てマーク
 	if (self->tag == object_string_T ||
-		self->tag == object_ref_T) {
+		self->tag == object_ref_T ||
+		self->tag == object_array_T) {
 		for (int i = 0; i < self->u.field_vec->length; i++) {
 			object* e = (object*)vector_at(self->u.field_vec, i);
 			object_paintall(e, paint);
@@ -229,8 +230,7 @@ void object_paintall(object* self, object_paint paint) {
 	}
 	//配列型ならスロットも全てマーク
 	type* arrayType = bc_array_type();
-	if (self->tag == object_ref_T &&
-		self->gtype->core_type == arrayType) {
+	if (self->gtype->core_type == arrayType) {
 		for (int i = 0; i < self->native_slot_vec->length; i++) {
 			object* e = (object*)vector_at(self->native_slot_vec, i);
 			object_paintall(e, paint);

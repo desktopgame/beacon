@@ -112,6 +112,11 @@ namespace beacon::lang {
 		operator !=(String a) -> Bool {
 			return !(this == a);
 		}
+
+		operator +(Object a) -> String {
+			var str = a.toString();
+			return this.concat(str);
+		}
 		private:
 		def native nativeInit() -> Void;
 	}
