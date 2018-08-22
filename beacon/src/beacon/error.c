@@ -26,6 +26,7 @@ void bc_error_vthrow(bc_error_id id, va_list ap) {
 	if(sctx->print_error) {
 		fprintf(stderr, "%s", fmt);
 	}
+	MEM_FREE(fmt);
 #if defined(_MSC_VER)
 	#if defined(_DEBUG)
 	//system_abort();

@@ -17,12 +17,12 @@ typedef unsigned char muchar_t;
 		/**
 		 * メモリリーク・オーバーランなどを検出するならこのマクロをオンにします.
 		 */
-		//#define MEMORY_MANAGEMENT (1)
+		#define MEMORY_MANAGEMENT (1)
 
 		/**
 		 * 簡易的なメモリ検査のみを実行します.
 		 */
-		#define FAST_DIAGNOSTIC (1)
+		//#define FAST_DIAGNOSTIC (1)
 
 		#if defined(MEMORY_MANAGEMENT) && defined(FAST_DIAGNOSTIC)
 		"error"

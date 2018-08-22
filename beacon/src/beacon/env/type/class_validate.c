@@ -61,20 +61,24 @@ bool class_interface_property_implement_valid(class_* cls, property** out) {
 			property* impl = class_find_property(cls, decl->namev, &temp);
 			if(temp == -1) {
 				(*out) = decl;
+				vector_delete(gimpl_list, vector_deleter_null);
 				return false;
 			} else {
 				if(generic_type_distance(decl->gtype, impl->gtype, NULL) != 0) {
 					(*out) = decl;
+					vector_delete(gimpl_list, vector_deleter_null);
 					return false;
 				}
 				if(decl->set->access != impl->set->access ||
 				   decl->get->access != impl->get->access) {
 					(*out) = decl;
+					vector_delete(gimpl_list, vector_deleter_null);
 					return false;
 				}
 			}
 		}
 	}
+	vector_delete(gimpl_list, vector_deleter_null);
 	return true;
 }
 
