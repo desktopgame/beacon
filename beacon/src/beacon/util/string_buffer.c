@@ -85,6 +85,30 @@ void string_buffer_shrink(string_buffer * self) {
 	self->capacity = self->length;
 }
 
+string_buffer* string_buffer_indent(string_buffer* self, int lineIndex, int len) {
+	string_buffer* buf = string_buffer_new();
+	int linec = 0;
+	int pos = 0;
+	for(int i=0; i<self->length; i++) {
+		char c = self->text[i];
+		if(pos == 0 &&
+			((linec >= lineIndex && linec < (lineIndex + len)) ||
+			(lineIndex == -1 && len == -1))
+		) {
+			string_buffer_appends(buf, "    ");
+		}
+		if(c == '\n') {
+			linec++;
+			pos = 0;
+			string_buffer_append(buf, '\n');
+		} else {
+			string_buffer_append(buf, c);
+			pos++;
+		}
+	}
+	return buf;
+}
+
 void string_buffer_delete(string_buffer * self) {
 	MEM_FREE(self->text);
 	MEM_FREE(self);

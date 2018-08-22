@@ -78,6 +78,14 @@ void string_buffer_reserve(string_buffer* self);
 void string_buffer_shrink(string_buffer* self);
 
 /**
+ * @param self
+ * @param lineIndex
+ * @param len
+ * @return
+ */
+string_buffer* string_buffer_indent(string_buffer* self, int lineIndex, int len);
+
+/**
  * バッファーと中身を開放します.
  * @param self
  */
