@@ -23,6 +23,8 @@ JNIEXPORT jobject JNICALL Java_jp_koya_jbeacon_BCEval_nativeFile(JNIEnv * env, j
 	class_loader_load(cll);
 	if(bc_error_last()) {
 		class_loader_delete(cll);
+		jclass bc_compile_exc_cls = (*env)->FindClass(env, "jp/koya/jbeacon/BCCompileException");
+		(*env)->ThrowNew(env, bc_compile_exc_cls, "compile error");
 		return NULL;
 	}
 	//jp.koya.jbeacon.SymbolTableを検索する
@@ -56,6 +58,8 @@ JNIEXPORT jobject JNICALL Java_jp_koya_jbeacon_BCEval_nativeString(JNIEnv * env,
 	if (p->result != parse_complete_T) {
 		bc_error_throw(bcerror_parse_T, p->error_message);
 		parser_destroy(p);
+		jclass bc_compile_exc_cls = (*env)->FindClass(env, "jp/koya/jbeacon/BCCompileException");
+		(*env)->ThrowNew(env, bc_compile_exc_cls, "compile error");
 		return NULL;
 	}
 	ast* a = parser_release_ast(p);
