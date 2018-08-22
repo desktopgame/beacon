@@ -40,6 +40,7 @@ script_context* script_context_open() {
 }
 
 script_context * script_context_get_current() {
+	assert(gScriptContext != NULL);
 	return gScriptContext;
 }
 

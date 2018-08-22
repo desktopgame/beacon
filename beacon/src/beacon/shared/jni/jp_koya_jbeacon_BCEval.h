@@ -10,17 +10,17 @@ extern "C" {
 /*
  * Class:     jp_koya_jbeacon_BCEval
  * Method:    nativeFile
- * Signature: (Ljava/lang/String;)V
+ * Signature: (Ljava/lang/String;)Ljp/koya/jbeacon/SymbolTable;
  */
-JNIEXPORT void JNICALL Java_jp_koya_jbeacon_BCEval_nativeFile
+JNIEXPORT jobject JNICALL Java_jp_koya_jbeacon_BCEval_nativeFile
   (JNIEnv *, jclass, jstring);
 
 /*
  * Class:     jp_koya_jbeacon_BCEval
  * Method:    nativeString
- * Signature: (Ljava/lang/String;)V
+ * Signature: (Ljava/lang/String;)Ljp/koya/jbeacon/SymbolTable;
  */
-JNIEXPORT void JNICALL Java_jp_koya_jbeacon_BCEval_nativeString
+JNIEXPORT jobject JNICALL Java_jp_koya_jbeacon_BCEval_nativeString
   (JNIEnv *, jclass, jstring);
 
 #ifdef __cplusplus

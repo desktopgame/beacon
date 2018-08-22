@@ -121,7 +121,10 @@
 			"class_find.h": "c",
 			"il_argument.h": "c",
 			"property_body.h": "c",
-			"operator_vt.h": "c"
+			"operator_vt.h": "c",
+			"bc_string.h": "c",
+			"parser.h": "c",
+			"error.h": "c"
 		},
 		"ruby.lint": {
 			"reek": true,

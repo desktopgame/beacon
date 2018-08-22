@@ -28,7 +28,8 @@ sg_thread * sg_thread_current(script_context* sctx) {
 	//script_context* ctx = script_context_get_current();
 	assert(sctx != NULL);
 	//TODO:今は仮実装なのでちゃんと現在のスレッドを返すようにする
-	return (sg_thread*)vector_at(sctx->thread_vec, 0);
+	sg_thread* ret = (sg_thread*)vector_at(sctx->thread_vec, 0);
+	return ret;
 }
 
 void sg_thread_clear(sg_thread* self) {
