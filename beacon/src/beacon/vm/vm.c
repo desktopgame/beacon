@@ -47,6 +47,7 @@ static void frame_markStatic(field* item);
 static void frame_markallImpl(frame* self);
 static void vm_delete_defctx(vector_item e);
 static bool throw_npe(frame* self, object* o);
+static char* create_error_message(frame * self, enviroment* env, int pc);
 
 //Stack Top
 #define STI(a) stack_topi(a)
@@ -168,43 +169,9 @@ void vm_terminate(frame * self) {
 }
 
 void vm_uncaught(frame * self, enviroment* env, int pc) {
-	line_range* lr = line_range_find(env->line_range_vec, pc);
-	int line = -1;
-	if (lr != NULL) {
-		line = lr->lineno;
-	}
-	//例外のメッセージを取得
-	type* exceptionT = namespace_get_type(namespace_lang(), string_pool_intern("Exception"));
-	int temp = -1;
-	class_find_field(exceptionT->u.class_, string_pool_intern("message"), &temp);
-	object* ex = self->exception;
-	object* msg = vector_at(ex->u.field_vec, temp);
-	string_buffer* cstr = vector_at(msg->native_slot_vec, 0);
-
-	fprintf(stderr, "file: %s <%d>", env->context_ref->filename, line);
-	fprintf(stderr, "\n");
-	fprintf(stderr, "%s", cstr->text);
-	fprintf(stderr, "\n");
-	//スタックトレースの表示
-	type* stackTraceElementT = namespace_get_type(namespace_lang(), string_pool_intern("StackTraceElement"));
-	//Exception#stackTraceを取得
-	temp = -1;
-	class_find_field(exceptionT->u.class_, string_pool_intern("stackTrace"), &temp);
-	object* stackTraceObj = vector_at(ex->u.field_vec, temp);
-	//assert(stackTraceObj->tag == object_array_T);
-	//StackTraceElement#fileName
-	//StackTraceElement#lineIndex を取得
-	int fileNameptr = -1;
-	int lineIndexptr = -1;
-	class_find_field(stackTraceElementT->u.class_, string_pool_intern("fileName"), &fileNameptr);
-	class_find_field(stackTraceElementT->u.class_, string_pool_intern("lineIndex"), &lineIndexptr);
-	int stackLen = bc_array_length(stackTraceObj);
-	for(int i=0; i<stackLen; i++) {
-		object* e = bc_array_get(stackTraceObj, i);
-		object* fileNameObj = vector_at(e->u.field_vec, fileNameptr);
-		object* lineIndexObj = vector_at(e->u.field_vec, lineIndexptr);
-		fprintf(stderr, "    @%d: %s\n", OBJ2INT(lineIndexObj), bc_string_raw(fileNameObj)->text);
-	}
+	char* message = create_error_message(self, env, pc);
+	fprintf(stderr, "%s", message);
+	MEM_FREE(message);
 	vm_catch(frame_root(self));
 	heap_gc(heap_get());
 }
@@ -1314,4 +1281,48 @@ static bool throw_npe(frame* self, object* o) {
 		return true;
 	}
 	return false;
+}
+
+static char* create_error_message(frame * self, enviroment* env, int pc) {
+	string_buffer* sbuf = string_buffer_new();
+	line_range* lr = line_range_find(env->line_range_vec, pc);
+	int line = -1;
+	if (lr != NULL) {
+		line = lr->lineno;
+	}
+	//例外のメッセージを取得
+	type* exceptionT = namespace_get_type(namespace_lang(), string_pool_intern("Exception"));
+	int temp = -1;
+	class_find_field(exceptionT->u.class_, string_pool_intern("message"), &temp);
+	object* ex = self->exception;
+	object* msg = vector_at(ex->u.field_vec, temp);
+	string_buffer* cstr = vector_at(msg->native_slot_vec, 0);
+
+	char block[256] = {0};
+	sprintf(block, "file: %s <%d>", env->context_ref->filename, line);
+	string_buffer_appends(sbuf, block);
+	string_buffer_append(sbuf, '\n');
+	string_buffer_appends(sbuf, cstr->text);
+	string_buffer_append(sbuf, '\n');
+	//スタックトレースの表示
+	type* stackTraceElementT = namespace_get_type(namespace_lang(), string_pool_intern("StackTraceElement"));
+	//Exception#stackTraceを取得
+	temp = -1;
+	class_find_field(exceptionT->u.class_, string_pool_intern("stackTrace"), &temp);
+	object* stackTraceObj = vector_at(ex->u.field_vec, temp);
+	//StackTraceElement#fileName
+	//StackTraceElement#lineIndex を取得
+	int fileNameptr = -1;
+	int lineIndexptr = -1;
+	class_find_field(stackTraceElementT->u.class_, string_pool_intern("fileName"), &fileNameptr);
+	class_find_field(stackTraceElementT->u.class_, string_pool_intern("lineIndex"), &lineIndexptr);
+	int stackLen = bc_array_length(stackTraceObj);
+	for(int i=0; i<stackLen; i++) {
+		object* e = bc_array_get(stackTraceObj, i);
+		object* fileNameObj = vector_at(e->u.field_vec, fileNameptr);
+		object* lineIndexObj = vector_at(e->u.field_vec, lineIndexptr);
+		sprintf(block, "    @%d: %s\n", OBJ2INT(lineIndexObj), bc_string_raw(fileNameObj)->text);
+		string_buffer_appends(sbuf, block);
+	}
+	return string_buffer_release(sbuf);
 }
