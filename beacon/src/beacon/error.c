@@ -1,7 +1,9 @@
 #include "error.h"
+#include "util/mem.h"
 #include "util/text.h"
 #include "util/string_pool.h"
 #include "util/system.h"
+#include "util/string_buffer.h"
 
 static bc_error_id gGlobalError = bcerror_none_T;
 static string_view gErrorFile = ZERO_VIEW;
@@ -16,6 +18,30 @@ void bc_error_throw(bc_error_id id, ...) {
 }
 
 void bc_error_vthrow(bc_error_id id, va_list ap) {
+	gGlobalError = id;
+	char* fmt = bc_error_vformat(id, ap);
+	fprintf(stderr, "%s", fmt);
+#if defined(_MSC_VER)
+	#if defined(_DEBUG)
+	//system_abort();
+	#endif
+#else
+	#if !defined(DEBUG)
+	system_abort();
+	#endif
+#endif
+}
+
+char* bc_error_format(bc_error_id id, ...) {
+	va_list ap;
+	va_start(ap, id);
+	char* ret = bc_error_vformat(id, ap);
+	va_end(ap);
+	MEM_FREE(ret);
+	return ret;
+}
+
+char* bc_error_vformat(bc_error_id id, va_list ap) {
 	char* fmt = NULL;
 	//bool aa = cc_test(ccstate_toplevel);
 	switch(id) {
@@ -310,27 +336,23 @@ void bc_error_vthrow(bc_error_id id, va_list ap) {
 			break;
 		default:
 			{
-				fprintf(stderr, "if shown this message, it compiler bug\n");
-				return;
+				return text_strdup("if shown this message, it compiler bug\n");
 			}
 	}
-	gGlobalError = id;
-	vfprintf(stderr, fmt, ap);
-	fprintf(stderr, "\n");
-	fprintf(stderr, "file=%s line=%d column=%d\n",
+	string_buffer* sbuf = string_buffer_new();
+	//メインメッセージを出力
+	char block[256] = {0};
+	vsprintf(block, fmt, ap);
+	string_buffer_appends(sbuf, block);
+	string_buffer_append(sbuf, '\n');
+	//行番号など出力
+	sprintf(block, "file=%s line=%d column=%d\n",
 		string_pool_ref2str(gErrorFile),
 		gErrorLineNo,
 		gErrorColumn
 	);
-#if defined(_MSC_VER)
-	#if defined(_DEBUG)
-	//system_abort();
-	#endif
-#else
-	#if !defined(DEBUG)
-	system_abort();
-	#endif
-#endif
+	string_buffer_appends(sbuf, block);
+	return string_buffer_release(sbuf);
 }
 
 void bc_error_clear() {

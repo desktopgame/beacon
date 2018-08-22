@@ -136,6 +136,23 @@ void bc_error_throw(bc_error_id id, ...);
 void bc_error_vthrow(bc_error_id id, va_list ap);
 
 /**
+ * エラーから文字列を作成します.
+ * @param block
+ * @param id
+ * @param ...
+ * @return
+ */
+char* bc_error_format(bc_error_id id, ...);
+/**
+ * エラーから文字列を作成します.
+ * @param block
+ * @param id
+ * @param ap
+ * @return
+ */
+char* bc_error_vformat(bc_error_id id, va_list ap);
+
+/**
  * エラーフラグをクリアします.
  */
 void bc_error_clear();
