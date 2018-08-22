@@ -25,6 +25,7 @@ typedef enum il_stmt_type {
 	ilstmt_defer_T,
 	ilstmt_yield_return_T,
 	ilstmt_yield_break_T,
+	ilstmt_inject_jni_T,
 } il_stmt_type;
 
 //詳細は il_stmt_impl.h を参照してください。
@@ -42,6 +43,7 @@ struct il_stmt_assert;
 struct il_stmt_defer;
 struct il_stmt_yield_return;
 typedef void* il_stmt_yield_break;
+struct il_stmt_inject_jni;
 
 /**
  * 文を表す要素です.
@@ -64,6 +66,7 @@ typedef struct il_stmt {
 		struct il_stmt_defer* defer_;
 		struct il_stmt_yield_return* yield_return;
 		il_stmt_yield_break yield_break;
+		struct il_stmt_inject_jni* inject_jni;
 	} u;
 } il_stmt;
 

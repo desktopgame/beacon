@@ -379,6 +379,7 @@ bool ast_is_stmt(ast* self) {
 		case ast_stmt_catch_T:
 		case ast_stmt_catch_list_T:
 		case ast_stmt_defer_T:
+		case ast_inject_jni_value_T:
 			return true;
 	}
 	return false;

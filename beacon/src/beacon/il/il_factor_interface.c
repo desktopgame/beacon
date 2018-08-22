@@ -167,7 +167,6 @@ void il_factor_load(il_factor * self, enviroment * env, call_context* cctx) {
 	if(bc_error_last()) {
 		return;
 	}
-	assert(self->lineno >= 0);
 	bc_error_file(env->context_ref->filename);
 	bc_error_line(self->lineno);
 	switch (self->type) {

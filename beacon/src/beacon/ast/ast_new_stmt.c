@@ -202,3 +202,12 @@ ast* ast_new_yield_return(ast* afact) {
 ast* ast_new_yield_break() {
 	return ast_new(ast_yield_break_T);
 }
+
+ast* ast_new_inject(string_view namev, ast* avalue) {
+	ast* ret = ast_new(ast_inject_jni_value_T);
+	ret->u.stringv_value = namev;
+	ast_push(ret, avalue);
+	ret->lineno = 0;
+	avalue->lineno = 0;
+	return ret;
+}

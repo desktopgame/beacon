@@ -64,6 +64,9 @@ void il_stmt_dump(il_stmt * self, int depth) {
 		case ilstmt_yield_break_T:
 			il_stmt_yield_break_dump(self->u.yield_break, depth);
 			break;
+		case ilstmt_inject_jni_T:
+			il_stmt_inject_jni_dump(self->u.inject_jni, depth);
+			break;
 		default:
 			//ERROR("ステートメントをダンプ出来ませんでした。");
 			break;
@@ -125,6 +128,9 @@ void il_stmt_generate(il_stmt * self, struct enviroment* env, call_context* cctx
 		case ilstmt_yield_break_T:
 			il_stmt_yield_break_generate(self->u.yield_break, env, cctx);
 			break;
+		case ilstmt_inject_jni_T:
+			il_stmt_inject_jni_generate(self->u.inject_jni, env, cctx);
+			break;
 		default:
 			//ERROR("ステートメントを開放出来ませんでした。");
 			break;
@@ -136,7 +142,6 @@ void il_stmt_load(il_stmt * self, enviroment* env, call_context* cctx) {
 	if(bc_error_last()) {
 		return;
 	}
-	assert(self->lineno >= 0);
 	bc_error_file(env->context_ref->filename);
 	bc_error_line(self->lineno);
 	switch (self->type) {
@@ -187,6 +192,9 @@ void il_stmt_load(il_stmt * self, enviroment* env, call_context* cctx) {
 			break;
 		case ilstmt_yield_break_T:
 			il_stmt_yield_break_load(self->u.yield_break, env, cctx);
+			break;
+		case ilstmt_inject_jni_T:
+			il_stmt_inject_jni_load(self->u.inject_jni, env, cctx);
 			break;
 		default:
 			//ERROR("ステートメントを開放出来ませんでした。");
@@ -240,6 +248,9 @@ void il_stmt_delete(il_stmt * self) {
 			break;
 		case ilstmt_yield_break_T:
 			//il_stmt_yield_break_delete(self->u.yield_break);
+			break;
+		case ilstmt_inject_jni_T:
+			il_stmt_inject_jni_delete(self->u.inject_jni);
 			break;
 		default:
 			//ERROR("ステートメントを開放出来ませんでした。");

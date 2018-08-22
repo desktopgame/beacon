@@ -15,6 +15,7 @@
 typedef enum ast_tag {
 	ast_root_T,
 	ast_blank_T,
+	ast_inject_jni_value_T,
 	//+ - * / %
 	ast_add_T,
 	ast_sub_T,

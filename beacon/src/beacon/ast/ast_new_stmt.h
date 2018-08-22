@@ -244,4 +244,12 @@ ast* ast_new_yield_return(ast* afact);
  * @return
  */
 ast* ast_new_yield_break();
+
+/**
+ * Javaから beacon が実行される時、事前に定義されたテーブルを注入するためのノード.
+ * @param namev 変数名
+ * @param avalue 値
+ * @return
+ */
+ast* ast_new_inject(string_view namev, ast* avalue);
 #endif // !SIGNAL_AST_AST_NEW_STMT_H

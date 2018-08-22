@@ -155,6 +155,14 @@ static il_stmt* CLIL_bodyImpl(class_loader* self, ast* asource) {
 			ret->u.yield_break = NULL;
 			return ret;
 		}
+		case ast_inject_jni_value_T:
+		{
+			il_stmt_inject_jni* jni = il_stmt_inject_jni_new(asource->u.stringv_value);
+			ast* afact = ast_first(asource);
+			jni->fact = CLIL_factor(self, afact);
+			jni->fact->lineno = 0;
+			return il_stmt_wrap_inject_jni(jni);
+		}
 		default:
 			break;
 	}
