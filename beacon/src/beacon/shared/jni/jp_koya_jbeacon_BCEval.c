@@ -21,7 +21,7 @@ static jobject bc_eval_string(JNIEnv * env, jclass cls, jstring str, jobject tab
 static frame* bc_eval_allocate(class_loader* cll);
 static void bc_read_symbol(JNIEnv* env, jobject table, ast* a);
 static void bc_write_symbol(JNIEnv* env, numeric_map* nmap, frame* fr, jobject target);
-static void bc_eval_release(class_loader* cll, frame* fr);
+static void bc_eval_release(JNIEnv* env, class_loader* cll, frame* fr);
 static void printClassInfo(JNIEnv* env, jobject object);
 
 JNIEXPORT jobject JNICALL Java_jp_koya_jbeacon_BCEval_nativeFile(JNIEnv * env, jclass cls, jstring str, jobject table) {
@@ -44,7 +44,7 @@ static jobject bc_eval_string(JNIEnv * env, jclass cls, jstring str, jobject tab
 		bc_error_throw(bcerror_parse_T, p->error_message);
 		parser_destroy(p);
 		jclass bc_compile_exc_cls = (*env)->FindClass(env, "jp/koya/jbeacon/BCCompileException");
-		(*env)->ThrowNew(env, bc_compile_exc_cls, "compile error");
+		(*env)->ThrowNew(env, bc_compile_exc_cls, "syntax error");
 		return NULL;
 	}
 	ast* a = parser_release_ast(p);
@@ -54,6 +54,8 @@ static jobject bc_eval_string(JNIEnv * env, jclass cls, jstring str, jobject tab
 	class_loader_load_pass_ast(cll, a);
 	if(bc_error_last()) {
 		class_loader_delete(cll);
+		jclass bc_compile_exc_cls = (*env)->FindClass(env, "jp/koya/jbeacon/BCCompileException");
+		(*env)->ThrowNew(env, bc_compile_exc_cls, "semantics error");
 		return NULL;
 	}
 	//jp.koya.jbeacon.SymbolTableを検索する
@@ -74,7 +76,7 @@ static jobject bc_eval_string(JNIEnv * env, jclass cls, jstring str, jobject tab
 	frame* fr =  bc_eval_allocate(cll);
 	bc_write_symbol(env, cll->env->sym_table->map->left, fr, symbol_table_obj);
 	bc_write_symbol(env, cll->env->sym_table->map->right, fr, symbol_table_obj);
-	bc_eval_release(cll, fr);
+	bc_eval_release(env, cll, fr);
 	//https://stackoverflow.com/questions/23085044/jni-system-out-and-printf-behaviour
 	fflush(stdout);
 	return symbol_table_obj;
@@ -117,7 +119,6 @@ static void bc_read_symbol(JNIEnv* env, jobject table, ast* a) {
 		(*env)->FatalError(env, "not found method: get");
 		return;
 	}
-	printClassInfo(env, table);
 	jobjectArray keys_array = (jobjectArray)((*env)->CallObjectMethod(env, table, symbol_table_keys_id));
 	if(keys_array == NULL) {
 		(*env)->FatalError(env, "null pointer: getKeys");
@@ -223,7 +224,11 @@ static void bc_write_symbol(JNIEnv* env, numeric_map* nmap, frame* fr, jobject t
 	}
 }
 
-static void bc_eval_release(class_loader* cll, frame* fr) {
+static void bc_eval_release(JNIEnv* env, class_loader* cll, frame* fr) {
+	if(bc_error_last()) {
+		jclass bc_runtime_exc_cls = (*env)->FindClass(env, "jp/koya/jbeacon/BCRuntimeException");
+		(*env)->ThrowNew(env, bc_runtime_exc_cls, "runtime error");
+	}
 	vm_catch(fr);
 	heap_gc(heap_get());
 	frame_delete(fr);
@@ -233,6 +238,7 @@ static void bc_eval_release(class_loader* cll, frame* fr) {
 	class_loader_delete(cll);
 }
 
+//https://stackoverflow.com/questions/12719766/can-i-know-the-name-of-the-class-that-calls-a-jni-c-method
 static void printClassInfo(JNIEnv* env, jobject obj) {
 	jclass cls = (*env)->GetObjectClass(env, obj);
 	if (cls == NULL) {
