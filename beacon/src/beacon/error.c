@@ -1,12 +1,13 @@
 #include "error.h"
+#include "env/script_context.h"
 #include "util/mem.h"
 #include "util/text.h"
-#include "util/string_pool.h"
 #include "util/system.h"
 #include "util/string_buffer.h"
 
 static bc_error_id gGlobalError = bcerror_none_T;
 static string_view gErrorFile = ZERO_VIEW;
+static string_view gLastMessage = ZERO_VIEW;
 static int gErrorLineNo = -1;
 static int gErrorColumn = -1;
 
@@ -18,9 +19,13 @@ void bc_error_throw(bc_error_id id, ...) {
 }
 
 void bc_error_vthrow(bc_error_id id, va_list ap) {
-	gGlobalError = id;
 	char* fmt = bc_error_vformat(id, ap);
-	fprintf(stderr, "%s", fmt);
+	gGlobalError = id;
+	gLastMessage = string_pool_intern(fmt);
+	script_context* sctx = script_context_get_current();
+	if(sctx->print_error) {
+		fprintf(stderr, "%s", fmt);
+	}
 #if defined(_MSC_VER)
 	#if defined(_DEBUG)
 	//system_abort();
@@ -360,6 +365,7 @@ void bc_error_clear() {
 	gErrorFile = ZERO_VIEW;
 	gErrorLineNo = -1;
 	gErrorColumn = -1;
+	gLastMessage = ZERO_VIEW;
 }
 
 void bc_error_file(const char* filename) {
@@ -375,6 +381,10 @@ void bc_error_line(int lineno) {
 
 void bc_error_column(int column) {
 	gErrorColumn = column;
+}
+
+string_view bc_error_message() {
+	return gLastMessage;
 }
 
 bc_error_id bc_error_last() {

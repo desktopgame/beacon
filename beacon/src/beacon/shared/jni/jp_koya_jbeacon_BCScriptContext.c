@@ -5,6 +5,9 @@
 
 JNIEXPORT jobject JNICALL Java_jp_koya_jbeacon_BCScriptContext_nativeOpen(JNIEnv * env, jclass cls) {
 	script_context* sctx = script_context_open();
+	//エラーメッセージはスタックトレースに含めるので、
+	//出力しない
+	sctx->print_error = false;
 	//jp.koya.jbeacon.BCScriptContextクラスを取得
 	jclass scontext_cls = (*env)->FindClass(env, "jp/koya/jbeacon/BCScriptContext");
 	if(scontext_cls == NULL) {

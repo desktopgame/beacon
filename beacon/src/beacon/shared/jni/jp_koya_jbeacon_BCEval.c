@@ -44,7 +44,7 @@ static jobject bc_eval_string(JNIEnv * env, jclass cls, jstring str, jobject tab
 		bc_error_throw(bcerror_parse_T, p->error_message);
 		parser_destroy(p);
 		jclass bc_compile_exc_cls = (*env)->FindClass(env, "jp/koya/jbeacon/BCCompileException");
-		(*env)->ThrowNew(env, bc_compile_exc_cls, "syntax error");
+		(*env)->ThrowNew(env, bc_compile_exc_cls, string_pool_ref2str(bc_error_message()));
 		return NULL;
 	}
 	ast* a = parser_release_ast(p);
@@ -55,7 +55,7 @@ static jobject bc_eval_string(JNIEnv * env, jclass cls, jstring str, jobject tab
 	if(bc_error_last()) {
 		class_loader_delete(cll);
 		jclass bc_compile_exc_cls = (*env)->FindClass(env, "jp/koya/jbeacon/BCCompileException");
-		(*env)->ThrowNew(env, bc_compile_exc_cls, "semantics error");
+		(*env)->ThrowNew(env, bc_compile_exc_cls, string_pool_ref2str(bc_error_message()));
 		return NULL;
 	}
 	//jp.koya.jbeacon.SymbolTableを検索する
@@ -227,7 +227,7 @@ static void bc_write_symbol(JNIEnv* env, numeric_map* nmap, frame* fr, jobject t
 static void bc_eval_release(JNIEnv* env, class_loader* cll, frame* fr) {
 	if(bc_error_last()) {
 		jclass bc_runtime_exc_cls = (*env)->FindClass(env, "jp/koya/jbeacon/BCRuntimeException");
-		(*env)->ThrowNew(env, bc_runtime_exc_cls, "runtime error");
+		(*env)->ThrowNew(env, bc_runtime_exc_cls, string_pool_ref2str(bc_error_message()));
 	}
 	vm_catch(fr);
 	heap_gc(heap_get());

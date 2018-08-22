@@ -2,6 +2,7 @@
 #define BEACON_ERROR_H
 #include <stdarg.h>
 #include <stdio.h>
+#include "util/string_pool.h"
 
 #define BC_ERROR() if(bc_error_last()) return
 #define BC_ERROR_RET(a) if(bc_error_last()) return a
@@ -174,6 +175,12 @@ void bc_error_line(int lineno);
  * @param column
  */
 void bc_error_column(int column);
+
+/**
+ * 最後に発生したエラーメッセージを返します.
+ * @return
+ */
+string_view bc_error_message();
 
 /**
  * 現在発生中のエラーを返します.
