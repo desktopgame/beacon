@@ -24,6 +24,7 @@ static void bc_read_symbol(JNIEnv* env, jobject table, ast* a);
 static void bc_write_symbol(JNIEnv* env, numeric_map* nmap, frame* fr, jobject target);
 static void bc_eval_release(JNIEnv* env, class_loader* cll, frame* fr);
 static void printClassInfo(JNIEnv* env, jobject object);
+static jdouble jobject2jdouble(JNIEnv* env, jobject obj);
 
 JNIEXPORT jobject JNICALL Java_jp_koya_jbeacon_BCEval_nativeFile(JNIEnv * env, jclass cls, jstring str, jobject table) {
 	const char* str_c = (*env)->GetStringUTFChars(env, str, 0);
@@ -150,7 +151,7 @@ static void bc_read_symbol(JNIEnv* env, jobject table, ast* a) {
 		if((*env)->IsInstanceOf(env, valueE, integer_cls)) {
 			astmt = ast_new_inject(keyv, ast_new_int((jint)valueE));
 		} else if((*env)->IsInstanceOf(env, valueE, double_cls)) {
-			//astmt = ast_new_inject(keyv, ast_new_double((jdouble)valueE));
+			astmt = ast_new_inject(keyv, ast_new_double(jobject2jdouble(env, valueE)));
 		} else if((*env)->IsInstanceOf(env, valueE, char_cls)) {
 			astmt = ast_new_inject(keyv, ast_new_char((jint)valueE));
 		} else if((*env)->IsInstanceOf(env, valueE, string_cls)) {
@@ -197,7 +198,7 @@ static void bc_write_symbol(JNIEnv* env, numeric_map* nmap, frame* fr, jobject t
 			(*env)->FatalError(env, "not found method: put");
 			return;
 		}
-		//(*env)->CallVoidMethod(env, target, symbol_table_put_id, keyj, ((jobject)OBJ2DOUBLE(bcobj)));
+		(*env)->CallVoidMethod(env, target, symbol_table_put_id, keyj, ((jdouble)OBJ2DOUBLE(bcobj)));
 	} else if(GENERIC2TYPE(bcobj->gtype) == TYPE_CHAR) {
 		//#putを検索する
 		jmethodID symbol_table_put_id = (*env)->GetMethodID(env, symbol_table_cls, "putChar", "(Ljava/lang/String;C)V");
@@ -271,4 +272,20 @@ static void printClassInfo(JNIEnv* env, jobject obj) {
 
 	// Release the memory pinned char array
 	(*env)->ReleaseStringUTFChars(env, strObj, str);
+}
+
+//https://stackoverflow.com/questions/29255023/jni-trouble-converting-java-double-to-jdouble
+static jdouble jobject2jdouble(JNIEnv* env, jobject obj) {
+	//Doubleクラスを検索
+	jclass double_cl = (*env)->FindClass(env, "java/lang/Double");
+	if(double_cl == NULL) {
+		(*env)->FatalError(env, "not found class: java/lang/Double");
+		return 0;
+	}
+    jmethodID double_value_id = (*env)->GetMethodID(env,double_cl, "doubleValue", "()D" );
+	if(double_value_id == NULL) {
+		(*env)->FatalError(env, "not found method: doubleValue");
+		return 0;
+	}
+	return (*env)->CallDoubleMethod(env, obj, double_value_id);
 }
