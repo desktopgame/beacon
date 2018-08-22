@@ -20,7 +20,7 @@
 
 static jobject bc_eval_string(JNIEnv * env, jclass cls, jstring str, jobject table, const char* filename, const char* source);
 static frame* bc_eval_allocate(class_loader* cll);
-static void bc_read_symbol(JNIEnv* env, jobject table, ast* a);
+static bool bc_read_symbol(JNIEnv* env, jobject table, ast* a);
 static void bc_write_symbol(JNIEnv* env, numeric_map* nmap, frame* fr, jobject target);
 static void bc_eval_release(JNIEnv* env, class_loader* cll, frame* fr);
 static void printClassInfo(JNIEnv* env, jobject object);
@@ -51,7 +51,12 @@ static jobject bc_eval_string(JNIEnv * env, jclass cls, jstring str, jobject tab
 	}
 	ast* a = parser_release_ast(p);
 	parser_destroy(p);
-	bc_read_symbol(env, table, a);
+	//javaから beacon へインジェクションしようとしたが、
+	//参照型をインジェクションしようとした場合
+	if(!bc_read_symbol(env, table, a)) {
+		ast_delete(a);
+		return NULL;
+	}
 	class_loader* cll = class_loader_new(filename, content_entry_point_T);
 	class_loader_load_pass_ast(cll, a);
 	if(bc_error_last()) {
@@ -99,33 +104,34 @@ static frame* bc_eval_allocate(class_loader* cll) {
 	return fr;
 }
 
-static void bc_read_symbol(JNIEnv* env, jobject table, ast* a) {
+static bool bc_read_symbol(JNIEnv* env, jobject table, ast* a) {
 	if(table == NULL) {
-		return;
+		return true;
 	}
 	//jp.koya.jbeacon.SymbolTableを検索する
 	jclass symbol_table_cls = (*env)->FindClass(env, "jp/koya/jbeacon/SymbolTable");
 	if(symbol_table_cls == NULL) {
 		(*env)->FatalError(env, "not found class: jp/koya/jbeacon/SymbolTable");
-		return;
+		return false;
 	}
 	//#keys を検索する
 	jmethodID symbol_table_keys_id = (*env)->GetMethodID(env, symbol_table_cls, "getKeys", "()[Ljava/lang/String;");
 	if(symbol_table_keys_id == NULL) {
 		(*env)->FatalError(env, "not found method: getKeys");
-		return;
+		return false;
 	}
 	//#get を検索する
 	jmethodID symbol_table_get_id = (*env)->GetMethodID(env, symbol_table_cls, "get", "(Ljava/lang/String;)Ljava/lang/Object;");
 	if(symbol_table_get_id == NULL) {
 		(*env)->FatalError(env, "not found method: get");
-		return;
+		return false;
 	}
 	jobjectArray keys_array = (jobjectArray)((*env)->CallObjectMethod(env, table, symbol_table_keys_id));
 	if(keys_array == NULL) {
 		(*env)->FatalError(env, "null pointer: getKeys");
-		return;
+		return false;
 	}
+	//プリミティブ型をロード
 	jclass integer_cls = (*env)->FindClass(env, "java/lang/Integer");
 	jclass double_cls = (*env)->FindClass(env, "java/lang/Double");
 	jclass char_cls = (*env)->FindClass(env, "java/lang/Character");
@@ -135,8 +141,9 @@ static void bc_read_symbol(JNIEnv* env, jobject table, ast* a) {
 	   char_cls == NULL ||
 	   string_cls == NULL) {
 		(*env)->FatalError(env, "not found class: Integer/Double/Char/String");
-		return;
+		return false;
 	}
+	//Javaのデータを beacon のデータへ変換
 	int len = (*env)->GetArrayLength(env, keys_array);
 	for(int i=0; i<len; i++) {
 		jstring keyE = (jstring)((*env)->GetObjectArrayElement(env, keys_array, i));
@@ -145,7 +152,7 @@ static void bc_read_symbol(JNIEnv* env, jobject table, ast* a) {
 		string_view keyv = string_pool_intern(keystr);
 		if(valueE == NULL) {
 			(*env)->FatalError(env, "null pointer: get");
-			return;
+			return false;
 		}
 		ast* astmt = NULL;
 		if((*env)->IsInstanceOf(env, valueE, integer_cls)) {
@@ -160,10 +167,16 @@ static void bc_read_symbol(JNIEnv* env, jobject table, ast* a) {
 			string_view valuev = string_pool_intern(valuestr);
 			astmt = ast_new_inject(keyv, ast_new_string(valuev));
 			(*env)->ReleaseStringUTFChars(env, valuej, valuestr);
+		//それ以外はまだ未対応
+		} else {
+			jclass bc_not_supported_exc_cls = (*env)->FindClass(env, "jp/koya/jbeacon/BCNotSupportedException");
+			(*env)->ThrowNew(env, bc_not_supported_exc_cls, "not supported inject of reference type");
+			return false;
 		}
 		(*env)->ReleaseStringUTFChars(env, keyE, keystr);
 		vector_insert(a->vchildren, 0, astmt);
 	}
+	return true;
 }
 
 static void bc_write_symbol(JNIEnv* env, numeric_map* nmap, frame* fr, jobject target) {
@@ -179,6 +192,17 @@ static void bc_write_symbol(JNIEnv* env, numeric_map* nmap, frame* fr, jobject t
 	jclass symbol_table_cls = (*env)->FindClass(env, "jp/koya/jbeacon/SymbolTable");
 	if(symbol_table_cls == NULL) {
 		(*env)->FatalError(env, "not found class: jp/koya/jbeacon/SymbolTable");
+		return;
+	}
+	//jp.koya.jbeacon.BCObjectを検索する
+	jclass bcobject_cls = (*env)->FindClass(env, "jp/koya/jbeacon/BCObject");
+	if(bcobject_cls == NULL) {
+		(*env)->FatalError(env, "not found class: jp/koya/jbeacon/BCObjec");
+		return;
+	}
+	jmethodID bcobject_ctor_id = (*env)->GetMethodID(env, bcobject_cls, "<init>", "()V");
+	if(bcobject_ctor_id == NULL) {
+		(*env)->FatalError(env, "not found method: <init>");
 		return;
 	}
 	//beaconのオブジェクトをjavaのオブジェクトへ
@@ -216,6 +240,16 @@ static void bc_write_symbol(JNIEnv* env, numeric_map* nmap, frame* fr, jobject t
 		}
 		jstring str = (*env)->NewStringUTF(env, bc_string_raw(bcobj)->text);
 		(*env)->CallVoidMethod(env, target, symbol_table_put_id, keyj, str);
+	//それ以外の型はとりあえず BCObject へ変換する
+	} else {
+		//#putを検索する
+		jmethodID symbol_table_put_id = (*env)->GetMethodID(env, symbol_table_cls, "put", "(Ljava/lang/String;Ljava/lang/Object;)V");
+		if(symbol_table_put_id == NULL) {
+			(*env)->FatalError(env, "not found method: put");
+			return;
+		}
+		jobject other = (*env)->NewObject(env, bcobject_cls, bcobject_ctor_id);
+		(*env)->CallVoidMethod(env, target, symbol_table_put_id, keyj, other);
 	}
 	//次の要素へ
 	if(nmap->left != NULL) {
