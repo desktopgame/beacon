@@ -392,12 +392,134 @@ assert(Expr, Message)
 - `double_literal`
 - `char_literal`
 - `string_literal`
+- `bool_literal`
 - `variable`
 - `field_access`
+- `indexer_access`
+- `new_instance`
 - `binary operator`
 - `unary operator`
 - `assign operator`
 - `call`
 - `invoke`
+- `static_invoke`
 - `this`
 - `super`
+
+# int_literal
+int_literalは整数リテラルによって表されるファクターです。  
+````
+0
+````
+
+# double_literal
+double_literalは浮動小数リテラルによって表されるファクターです。
+````
+0.5
+````
+
+# char_literal
+double_literalは文字リテラルによって表されるファクターです。
+````
+'a'
+````
+
+# string_literal
+string_literalは文字列リテラルによって表されるファクターです。
+````
+"aaaa"
+````
+
+# bool_literal
+bool_literalはtrue/falseによって表されるファクターです。
+````
+true
+false
+````
+
+# variable
+variableは識別子によって表されるファクターです。  
+ローカル変数/メソッド実引数として解決できなかった場合、  
+フィールド/プロパティとして解決します。
+````
+name
+````
+
+# field_access
+field_accessはフィールドへのアクセスによって表されるファクターです。  
+フィールドとして解決できなかった場合、  
+プロパティとして解決します。
+````
+//instance field
+hoge.name
+
+//class field
+namespace_name::Hoge.name
+````
+
+# indexer_access
+indexer_accessは添字アクセス演算子によって表されるファクターです。
+````
+//0番目を参照する
+arr(0)
+
+//代入
+arr(0) = 0;
+````
+
+# new_instance
+new_instanceはクラスの生成によって表されるファクターです。
+````
+new Class();
+new namespace::Class();
+new Class[Int]();
+new namespace::Class[Int]();
+````
+
+# binary operator
+binary operatorは二項演算によって表されるファクターです。  
+演算子と二つの引数をとります。  
+短絡評価は未実装です。
+````
+10 + 10
+````
+
+# unary operator
+binary operatorは単項演算によって表されるファクターです。  
+演算子と引数をとります。
+````
+-10
+````
+
+# call
+callはthisに対するメソッド呼び出しです。  
+this.method() の省略形です。
+````
+method();
+````
+
+# invoke
+invokeはレシーバに対するメソッド呼び出しです。  
+````
+a.method();
+````
+
+# static_invoke
+static_invokeはクラスに対するメソッド呼び出しです。
+````
+namespace::Class.method();
+````
+
+# this
+thisは現在のオブジェクトを参照します。  
+静的メソッドでは使用できません。
+````
+this
+````
+
+# super
+superは現在のオブジェクトを親クラス型で参照します。  
+静的メソッドでは使用できません。
+````
+super
+````
