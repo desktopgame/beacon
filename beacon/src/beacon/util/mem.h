@@ -4,7 +4,9 @@
 #include <stdlib.h>
 #include <stdbool.h>
 #include <stdio.h>
+#if defined(_MSC_VER)
 #include <crtdbg.h>
+#endif
 
 typedef unsigned char muchar_t;
 #if defined(_MSC_VER)
