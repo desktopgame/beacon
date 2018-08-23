@@ -55,6 +55,9 @@ namespace mynamespace {
 	class Class[...] : ... {
 		...
 	}
+	abstract class Class[...] : ... {
+		...
+	}
 	interface Interface[...] : ... {
 		...
 	}
@@ -65,7 +68,7 @@ namespace mynamespace {
 ````
 
 # 型宣言
-型宣言は[`クラス宣言` | `インターフェイス宣言` | `列挙宣言`]のいずれかです。
+型宣言は[`クラス宣言` | `抽象クラス宣言` | `インターフェイス宣言` | `列挙宣言`]のいずれかです。
 
 # クラス宣言
 クラス宣言には`メンバー宣言ツリー`を任意の数配置できます。
@@ -75,10 +78,23 @@ class ClassName[TypeParameterList] : ExtendClassOpt, ImplementsList {
 }
 ````
 
+# 抽象クラス宣言
+クラス宣言には`メンバー宣言ツリー`を任意の数配置できます。  
+- 抽象メソッドを定義できます。
+- このクラスは `new` によって生成できません。
+- 継承したクラスは全ての抽象メソッドを実装する必要があります。
+````
+abstract class ClassName[TypeParameterList] : ExtendClassOpt, ImplementsList {
+	MemberTree
+}
+````
+
 # インターフェイス宣言
 インターフェイス宣言には[`メソッド` | `プロパティ`]を任意の数配置できます。  
 構文規則ではコンストラクタやフィールドも配置可能ですが、  
 コンパイル時点でエラーとして報告されます。
+  
+これを実装するクラスは定義された全てのメソッド/プロパティを実装する必要があります。
 ````
 interface InterfaceName[TypeParameterList] : ImplementsList {
 	MemberTree
@@ -87,7 +103,8 @@ interface InterfaceName[TypeParameterList] : ImplementsList {
 
 # 列挙宣言
 列挙宣言には`識別子`を任意の数だけ配置できます。  
-実際にはクラスと静的整数フィールドに変換されます。
+実際にはクラスと静的整数フィールドに変換されます。  
+これは 0 から開始します。
 ````
 enum EnumName {
 	IdentifierList
@@ -405,6 +422,7 @@ assert(Expr, Message)
 - `static_invoke`
 - `this`
 - `super`
+- `null`
 
 # int_literal
 int_literalは整数リテラルによって表されるファクターです。  
@@ -522,4 +540,11 @@ superは現在のオブジェクトを親クラス型で参照します。
 静的メソッドでは使用できません。
 ````
 super
+````
+
+# null
+nullは何もないことを指す参照です。  
+あらゆるデータ型の変数に参照できます。
+````
+null
 ````

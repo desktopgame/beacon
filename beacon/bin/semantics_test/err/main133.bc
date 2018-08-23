@@ -1,0 +1,10 @@
+namespace err133 {
+	class Foo {
+		public:
+		def new() {
+		}
+
+		def abstract call() -> Void;
+	}
+}
+printLine();
