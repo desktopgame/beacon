@@ -1,4 +1,4 @@
-namespace run109 {
+namespace err131 {
 	abstract class AbstractClass {
 		public:
 		def new() {
@@ -10,9 +10,6 @@ namespace run109 {
 		public:
 		def new() {
 		}
-
-		def call() -> Void {
-		}
 	}
 }
-var abs = new run109::ImplClass();
+var abs = new err131::ImplClass();

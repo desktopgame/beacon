@@ -1,0 +1,8 @@
+namespace err130 {
+	abstract class AbstractClass {
+		public:
+		def new() {
+		}
+	}
+}
+var abs = new err130::AbstractClass();
