@@ -283,6 +283,7 @@ public:
 - `infereneced_init`
 - `continue`
 - `break`
+- 'return'
 - `yield return`
 - `yield break`
 - `assert`
@@ -387,6 +388,16 @@ while(offset < 10) {
 	}
 	printLine(offset)
 }
+````
+
+# return
+returnは処理を終了するステートメントです。  
+- 値を返すものと返さないものがあります。
+- Voidを戻り値とするメソッドから戻り値を伴う`return`はエラーになります。
+- Voidを戻り値としないメソッドから戻り値を伴わない`return`はエラーになります。
+````
+return;
+return Expr;
 ````
 
 # yield return
