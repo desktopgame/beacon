@@ -25,13 +25,15 @@ void il_factor_property_generate(il_factor_property* self, enviroment* env, call
 void il_factor_property_load(il_factor_property* self, enviroment* env, call_context* cctx) {
 	generic_type* receiver = il_factor_eval(self->fact, env, cctx);
 	type* receiverT = GENERIC2TYPE(receiver);
-	if(self->p->is_short) {
-		int temp = -1;
-		class_find_property_tree(TYPE2CLASS(receiverT), self->p->namev, &temp);
-		assert(temp != -1);
-		self->index = temp;
-	} else {
-		self->index = -1;
+	int temp = -1;
+	class_find_property_tree(TYPE2CLASS(receiverT), self->p->namev, &temp);
+	self->index = temp;
+	if(temp == -1) {
+		bc_error_throw(
+			bcerror_undefined_property_T,
+			string_pool_ref2str(type_name(receiverT)),
+			string_pool_ref2str(self->namev)
+		);
 	}
 }
 

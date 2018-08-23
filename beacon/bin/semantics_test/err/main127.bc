@@ -1,0 +1,24 @@
+namespace samples {
+	class Person {
+		public:
+		property Int age {
+			defset {
+				if(value < 0) {
+					throw new Exception("value ist must be positive");
+				}
+				this.mAge = value;
+			}
+			defget { return mAge; }
+		}
+
+		def new(Int age) {
+			this.age = age;
+		}
+
+		private:
+		Int mAge;
+	}
+}
+var p = new samples::Person(10);
+p.age.printLine();
+p.age = -1;
