@@ -423,6 +423,7 @@ assert(Expr, Message)
 - `this`
 - `super`
 - `null`
+- `as`
 
 # int_literal
 int_literalは整数リテラルによって表されるファクターです。  
@@ -547,4 +548,11 @@ nullは何もないことを指す参照です。
 あらゆるデータ型の変数に代入できます。
 ````
 null
+````
+
+# as
+as はあるオブジェクトを別の型へ変換するファクターです。  
+変換に失敗した場合には null が返されます。
+````
+factor as MyClass
 ````
