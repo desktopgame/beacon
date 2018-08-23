@@ -14,17 +14,33 @@ beacon --run main.bc
 # コマンド引数
 beaconはコマンドによって起動します。
 
-## --r --run
+## -r --run
 指定のファイルを実行します。
+````
+-r main.bc
+--run main.bc
+````
 
-## --a --ast
+## -a --ast
 指定のファイルを解析してASTとして出力します。
+````
+-a main.bc
+--ast main.bc
+````
 
-## --il --il
+## -i --il
 指定のファイルを解析してILとして出力します。
+````
+-i main.bc
+--il main.bc
+````
 
-## --o --op
+## -o --op
 指定のファイル解析してオペコードとして出力します。
+````
+-o main.bc
+--op main.bc
+````
 
 # ファイル
 beaconスクリプトは `.bc` で作成します。  
