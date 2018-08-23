@@ -17,29 +17,29 @@ beaconはコマンドによって起動します。
 ## -r --run
 指定のファイルを実行します。
 ````
--r main.bc
---run main.bc
+./beacon -r main.bc
+./beacon --run main.bc
 ````
 
 ## -a --ast
 指定のファイルを解析してASTとして出力します。
 ````
--a main.bc
---ast main.bc
+./beacon -a main.bc
+./beacon --ast main.bc
 ````
 
 ## -i --il
 指定のファイルを解析してILとして出力します。
 ````
--i main.bc
---il main.bc
+./beacon -i main.bc
+./beacon --il main.bc
 ````
 
 ## -o --op
 指定のファイル解析してオペコードとして出力します。
 ````
--o main.bc
---op main.bc
+./beacon -o main.bc
+./beacon --op main.bc
 ````
 
 # ファイル
