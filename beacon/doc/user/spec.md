@@ -1,0 +1,403 @@
+# beacon言語仕様
+beaconの言語仕様に関するファイルです。  
+
+# beaconを構成するファイル
+## ライブラリ
+beacon と同じディレクトリにある `script-lib` がライブラリとして参照されます。
+
+## エントリポイント
+コマンドによって指定します。
+````
+beacon --run main.bc
+````
+
+# コマンド引数
+beaconはコマンドによって起動します。
+
+## --r --run
+指定のファイルを実行します。
+
+## --a --ast
+指定のファイルを解析してASTとして出力します。
+
+## --il --il
+指定のファイルを解析してILとして出力します。
+
+## --o --op
+指定のファイル解析してオペコードとして出力します。
+
+# ファイル
+beaconスクリプトは `.bc` で作成します。  
+その中に`トップレベル`を記述します。
+
+# トップレベル
+トップレベルには[`require` | `名前空間宣言` | `ステートメント`]を任意の数だけ配置できます。
+````
+require "hoge"
+namespace mynamespace {
+	...
+}
+printLine("HelloWorld");
+````
+
+# require
+requireは beacon と同じディレクトリの`script-lib`を基準として相対パスでファイルを読み込みます。
+````
+require "beacon/unsafe/File"
+````
+
+# 名前空間宣言
+名前空間宣言には[`名前空間宣言` | `型宣言`]を任意の数だけ配置できます。
+````
+namespace mynamespace {
+	namespace subnamespace {
+	}
+	class Class[...] : ... {
+		...
+	}
+	interface Interface[...] : ... {
+		...
+	}
+	enum Enum {
+		...
+	}
+}
+````
+
+# 型宣言
+型宣言は[`クラス宣言` | `インターフェイス宣言` | `列挙宣言`]のいずれかです。
+
+# クラス宣言
+クラス宣言には`メンバー宣言ツリー`を任意の数配置できます。
+````
+class ClassName[TypeParameterList] : ExtendClassOpt, ImplementsList {
+	MemberTree
+}
+````
+
+# インターフェイス宣言
+インターフェイス宣言には[`メソッド` | `プロパティ`]を任意の数配置できます。  
+構文規則ではコンストラクタやフィールドも配置可能ですが、  
+コンパイル時点でエラーとして報告されます。
+````
+interface InterfaceName[TypeParameterList] : ImplementsList {
+	MemberTree
+}
+````
+
+# 列挙宣言
+列挙宣言には`識別子`を任意の数だけ配置できます。  
+実際にはクラスと静的整数フィールドに変換されます。
+````
+enum EnumName {
+	IdentifierList
+}
+````
+
+# メンバー宣言ツリー
+メンバー宣言ツリーは { `アクセスレベル`と`メンバー宣言`のペア } のリストです。  
+C++のものと概ね同じ書式をとります。
+````
+public ClassName {
+	AccessLevel:
+		MemberList
+	AccessLevel:
+		MemberList
+}
+````
+
+# アクセスレベル
+アクセスレベルはメンバー宣言の可視性を定義するキーワードです。  
+[`public` | `private` | `protected`] のいずれかを使用できます。
+
+# メンバー宣言
+メンバー宣言は[`フィールド` | `プロパティ` | `コンストラクタ` | `メソッド` | `オペレーター`]のいずれかです。
+
+# フィールド
+フィールドはクラスに属性を定義します。  
+初期値を省略する書式と初期値を指定する書式があります。  
+省略された場合には型に応じてデフォルト値が設定されます。  
+- Int = 0
+- Double = 0.0
+- Char = ¥0
+- Bool = false
+- そのほか = null
+````
+public:
+	ModifierList FieldType FieldName;
+	ModifierList FieldType FieldName = Expr;
+````
+
+# プロパティ
+プロパティはクラスに属性を定義します。  
+本文を省略した場合にはフィールドと同じ挙動です。
+片方のみ本文を省略することは出来ません。  
+省略しない場合、`defset`では`value`で代入される値を参照出来ます。
+````
+public:
+	property PropertyType PropertyName {
+		AccessLevel defset;
+		AccessLevel defget;
+	}
+
+	property PropertyType PropertyName {
+		AccessLevel defset {
+			StatementList
+		}
+		AccessLevel defget {
+			StatementList
+		}
+	}
+````
+
+# コンストラクタ
+コンストラクタはクラスの生成方法を定義します。  
+  
+親クラスが空のコンストラクタを持っていない場合には、  
+明示的に親クラスのコンストラクタを選択する必要があります。
+
+````
+public:
+	def new(ParameterList) {
+	}
+
+	def new(ParameterList) : this(ArgumentList) {
+	}
+
+	def new(ParameterList) : super(ArgumentList) {
+	}
+````
+
+# メソッド
+メソッドはクラスに振る舞いを定義します。  
+- 本文を省略する場合としない場合があります。  
+- ネイティブメソッド、抽象メソッドの場合は省略しなければいけません。
+- Voidを戻り値とするメソッドで`値を持つreturn`は使用できません。
+- Voidを戻り値としないメソッドで`値を持たないreturn`は使用できません。
+````
+public:
+	ModifierList MethodName (ParameterList) -> ReturnType ;
+	ModifierList MethodName (ParameterList) -> ReturnType {
+		StatementList
+	}
+````
+
+# オペレータ
+オペレータはクラスに対して特定の演算子を利用できるようにします。  
+- 必ず public である必要があります。
+- 二項演算子であれば1個の引数をとります。
+- 単項演算子であれば0個の引数をとります。
+````
+public:
+	operator +(Object a) -> Object {
+		StatementList
+	}
+````
+
+# 修飾子
+修飾子はメンバーに対して指定できるヒントです。  
+[`static` | `native` | `final` | `abstract`] のいずれかです。
+
+# static
+staticは[`フィールド` | `プロパティ` | `メソッド`]に使用出来ます。  
+static で修飾されたメンバーはクラス名でアクセスできます。
+````
+Console.writeLine("hello");
+````
+
+# native
+nativeはメソッドにのみ使用できます。  
+nativeで修飾されたメソッドは事前に登録されたCの関数ポインタへ移譲されます。
+
+# final
+finalは[`フィールド` | `プロパティ`]に使用できます。  
+- finalで修飾された場合、再代入することは出来ません。
+- コンストラクタで初期化するか、初期値を指定する必要があります。
+
+# abstract
+abstractはメソッドにのみ使用できます。  
+必ずサブクラスで実装される必要があります。
+````
+public:
+	def abstract call() -> Void;
+````
+
+# ステートメント
+ステートメントは以下のいずれかです。
+- `if`
+- `while`
+- `try`
+- `throw`
+- `defer`
+- `variable_decl`
+- `variable_init`
+- `infereneced_init`
+- `continue`
+- `break`
+- `yield return`
+- `yield break`
+- `assert`
+- `factor ;`
+
+# if
+ifは条件によって処理を分岐するステートメントです。
+````
+if Expr {
+	StatementList
+}
+
+if Expr {
+	StatementList
+} elif Expr {
+	StatementList
+}
+
+if Expr {
+	StatementList
+} else {
+	StatementList
+}
+````
+
+# while
+whileは条件を満たす限り処理を実行するステートメントです。
+````
+while Expr {
+	StatementList
+}
+````
+
+
+# try
+tryは内側のステートメントで`例外`が発生した時、  
+キャッチ節に実行をジャンプさせるステートメントです。
+````
+try {
+	StatementList
+} catch(TypeName Identifier) {
+	StatementList
+}
+````
+
+# throw
+throwはメソッドを例外によって中断させるステートメントです。  
+最寄りのキャッチ節までジャンプします。  
+例外オブジェクトは捕捉されるかVMが終了されるまでGCから保護されます。
+````
+throw Expr;
+````
+
+# defer
+deferはメソッドの最後で実行される処理を記述するステートメントです。  
+例外が発生した場合でも必ず実行されます。  
+deferを通った時点でのシンボルテーブルを記録し、GCから保護します。
+````
+defer Statement
+````
+
+# variable_decl
+variable_declは変数を初期化せずに宣言だけするステートメントです。
+````
+TypeName Identifier;
+````
+
+# variable_init
+variable_initは変数の宣言と初期化を同時に行うステートメントです。
+````
+TypeName Identifier = Expr;
+````
+
+# infereneced_init
+infereneced_initは右辺から型を決定して初期化を行うステートメントです。
+````
+var str = "String";
+var ival = 0;
+````
+
+# continue
+continueはwhileの中でのみ使用可能なステートメントです。  
+実行を中断してループの先頭に戻ります。
+````
+var offset = 0;
+while(offset < 10) {
+	if offset == 5 {
+		continue;
+	}
+	printLine(offset)
+}
+````
+
+# break
+breakはwhileの中でのみ使用可能なステートメントです。  
+実行を中断してループを抜けます。
+````
+var offset = 0;
+while(offset < 10) {
+	if offset == 5 {
+		break;
+	}
+	printLine(offset)
+}
+````
+
+# yield return
+yield returnは`コルーチン`の中でのみ使用可能です。  
+処理を中断して値を返します。
+````
+def seq(Int len) -> Iterator[Int] {
+	var start = 0;
+	while(start < len) {
+		yield return start;
+		start += 1;
+	}
+}
+var iter = seq(10);
+while(iter.moveNext()) {
+	iter.current().printLine();
+}
+````
+
+# yield break
+yield break`コルーチン`の中でのみ使用可能です。  
+処理を中断して値を返します。
+````
+def seq2(Int len) -> Iterator[Int] {
+	var start = 0;
+	while(start < len) {
+		if(start > 5) {
+			yield break;
+		}
+		yield return start;
+		start += 1;
+	}
+}
+var iter = seq2(10);
+while(iter.moveNext()) {
+	iter.current().printLine();
+}
+````
+
+# assert
+assert は条件を満たさないときに例外をスローするステートメントです。  
+メッセージを省略する版と省略しない版があります。  
+省略した場合は条件式を文字列化して使用します。
+````
+assert(Expr);
+assert(Expr, Message)
+````
+
+# ファクター
+ファクターは以下のいずれかです。
+- `int_literal`
+- `double_literal`
+- `char_literal`
+- `string_literal`
+- `variable`
+- `field_access`
+- `binary operator`
+- `unary operator`
+- `assign operator`
+- `call`
+- `invoke`
+- `this`
+- `super`
