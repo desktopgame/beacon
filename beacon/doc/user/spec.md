@@ -199,6 +199,22 @@ public:
 	}
 ````
 
+# コルーチン
+メソッドの中でも`Iterator`を返すインスタンスメソッドはコルーチンとして記述できます。
+````
+def seq(Int len) -> Iterator[Int] {
+	var start = 0;
+	while(start < len) {
+		yield return start;
+		start += 1;
+	}
+}
+var iter = seq(10);
+while(iter.moveNext()) {
+	iter.current().printLine();
+}
+````
+
 # オペレータ
 オペレータはクラスに対して特定の演算子を利用できるようにします。  
 - 必ず public である必要があります。
