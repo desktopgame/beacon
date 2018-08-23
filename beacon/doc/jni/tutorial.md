@@ -9,7 +9,7 @@ java側の実装は jbeacon に置いてあります。
 ## 使い方
 - **jbeacon** をダウンロードする
 - 使いたいjavaプログラムから jbeacon.jar へパスを通す
-- 使いたいjavaプログラムと同じディレクトリに **beacon.so** を置く
+- 使いたいjavaプログラムと同じディレクトリに **beacon.so/beacon.dll** を置く
 
 ## サンプル
 ````
