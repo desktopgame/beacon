@@ -7,7 +7,7 @@
 #include "../../il/call_context.h"
 #include "../../util/vector.h"
 #include "../../util/string_pool.h"
-#include "interface_valid.h"
+#include "interface_validate.h"
 struct method;
 struct property;
 struct enviroment;

@@ -4,14 +4,23 @@
 #include <stdlib.h>
 #include <stdbool.h>
 #include <stdio.h>
+#include <crtdbg.h>
 
 typedef unsigned char muchar_t;
 #if defined(_MSC_VER)
-	#define NON_NULL(m) (m)
-	#define MEM_MALLOC(size) (malloc(size))
-	#define MEM_FREE(size) (free(size))
-	#define MEM_REALLOC(block, size) (realloc(block, size, __FILE__, __LINE__))
-	#define MEM_MARK(block, size) ((void)0)
+	#if defined(_DEBUG)
+		#define NON_NULL(m) (m)
+		#define MEM_MALLOC(size) (_malloc_dbg(size,_NORMAL_BLOCK,__FILE__,__LINE__))
+		#define MEM_FREE(size) (_free_dbg(size, _NORMAL_BLOCK))
+		#define MEM_REALLOC(block, size) (_realloc_dbg(block, size, _NORMAL_BLOCK, __FILE__, __LINE__))
+		#define MEM_MARK(block, size) ((void)0)
+	#else
+		#define NON_NULL(m) (m)
+		#define MEM_MALLOC(size) (malloc(size))
+		#define MEM_FREE(size) (free(size))
+		#define MEM_REALLOC(block, size) (realloc(block, size))
+		#define MEM_MARK(block, size) ((void)0)
+	#endif
 #else
 	#if defined(DEBUG)
 		/**
@@ -41,6 +50,10 @@ typedef unsigned char muchar_t;
 		#define MEM_MARK(block, size) (mem_mark(block, size, __FILE__, __LINE__))
 	#else
 		#define NON_NULL(m) (m)
+		#define MEM_MALLOC(size) (malloc(size))
+		#define MEM_FREE(size) (free(size))
+		#define MEM_REALLOC(block, size) (realloc(block, size))
+		#define MEM_MARK(block, size) ((void)0)
 	#endif
 #endif
 /**

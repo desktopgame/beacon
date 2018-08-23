@@ -19,7 +19,7 @@ void sg_thread_launch() {
 sg_thread * sg_thread_new() {
 	sg_thread* ret = (sg_thread*)MEM_MALLOC(sizeof(sg_thread));
 	ret->trace_stack = vector_new();
-	ret->frameRef = NULL;
+	ret->frame_ref = NULL;
 	ret->cctx = NULL;
 	return ret;
 }
@@ -44,24 +44,24 @@ void sg_thread_delete(sg_thread * self) {
 	MEM_FREE(self);
 }
 
-void sg_thread_set_frame_ref(sg_thread * self, frame * frameRef) {
+void sg_thread_set_frame_ref(sg_thread * self, frame * frame_ref) {
 	//TODO:ここで同期をとる
-	assert(frameRef != NULL);
+	assert(frame_ref != NULL);
 	assert(self->cctx == NULL);
 	self->vm_crush_by_exception = false;
 	self->vm_dump = false;
-	self->frameRef = frameRef;
+	self->frame_ref = frame_ref;
 	self->cctx = call_context_new(call_top_T);
 }
 
 frame * sg_thread_get_frame_ref(sg_thread * self) {
 	//TODO:ここで同期をとる
-	return self->frameRef;
+	return self->frame_ref;
 }
 
 void sg_thread_release_frame_ref(sg_thread * self) {
 	assert(self->cctx != NULL);
-	self->frameRef = NULL;
+	self->frame_ref = NULL;
 	call_context_delete(self->cctx);
 	self->cctx = NULL;
 }

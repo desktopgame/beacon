@@ -140,7 +140,7 @@ method* meta_scoped_ilfind_method(class_* context, vector* method_vec, string_vi
 		}
 		//名前か引数の個数が違うので無視
 		if (m->namev != namev ||
-			m->parameter_list->length != ilargs->length
+			m->parameters->length != ilargs->length
 			) {
 			continue;
 		}
@@ -150,7 +150,7 @@ method* meta_scoped_ilfind_method(class_* context, vector* method_vec, string_vi
 			(*outIndex) = i;
 			return m;
 		}
-		int score = meta_ilcalc_score(m->parameter_list, ilargs, env, cctx);
+		int score = meta_ilcalc_score(m->parameters, ilargs, env, cctx);
 		if(score == -1) {
 			continue;
 		}
@@ -174,7 +174,7 @@ method* meta_scoped_gfind_method(class_* context, vector* method_vec, string_vie
 		method* m = (method*)ve;
 		//名前か引数の個数が違うので無視
 		if (m->namev != namev ||
-			m->parameter_list->length != gargs->length
+			m->parameters->length != gargs->length
 			) {
 			continue;
 		}
@@ -184,7 +184,7 @@ method* meta_scoped_gfind_method(class_* context, vector* method_vec, string_vie
 			(*outIndex) = i;
 			return m;
 		}
-		int score = meta_gcalc_score(m->parameter_list, gargs);
+		int score = meta_gcalc_score(m->parameters, gargs);
 		if(score == -1) {
 			continue;
 		}
@@ -285,22 +285,6 @@ operator_overload* meta_gfind_operator(vector* opov_vec, operator_type type, vec
 			ret = opov;
 		}
 	}
-	return ret;
-}
-
-operator_overload* meta_gfind_operator_default_eq(vector* opov_vec, int* outIndex) {
-	vector* gargs = vector_new();
-	vector_push(gargs, TYPE_OBJECT->generic_self);
-	operator_overload* ret = meta_gfind_operator(opov_vec, operator_eq_T, gargs, outIndex);
-	vector_delete(gargs, vector_deleter_null);
-	return ret;
-}
-
-operator_overload* meta_gfind_operator_default_noteq(vector* opov_vec, int* outIndex) {
-	vector* gargs = vector_new();
-	vector_push(gargs, TYPE_OBJECT->generic_self);
-	operator_overload* ret = meta_gfind_operator(opov_vec, operator_not_eq_T, gargs, outIndex);
-	vector_delete(gargs, vector_deleter_null);
 	return ret;
 }
 

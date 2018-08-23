@@ -387,7 +387,6 @@ void class_unlink(class_ * self) {
 	}
 	//XSTREQ(self->name, "Object");
 	//generic_type_delete(self->super_class);
-	//printf("unlink %s\n", self->name);
 	numeric_map_delete(self->native_method_ref_nmap, class_native_method_ref_delete);
 	vector_delete(self->impl_list, class_impl_delete);
 	vector_delete(self->field_list, class_field_delete);
@@ -404,6 +403,7 @@ void class_unlink(class_ * self) {
 }
 
 void class_delete(class_ * self) {
+//	printf("unlink %s\n", string_pool_ref2str(self->namev));
 //	assert(self->ref_count == 0);
 //	MEM_FREE(self->name);
 	//printf("delete %s\n", self->name);
@@ -427,7 +427,7 @@ static void class_create_vtable_override(class_* self) {
 	const char* clname = string_pool_ref2str(self->namev);
 	#endif
 	call_context* cctx = call_context_new(call_decl_T);
-	cctx->space = self->parent->location;
+	cctx->scope = self->parent->location;
 	cctx->ty = self->super_class->core_type;
 	class_create_vtable(self->super_class->core_type->u.class_);
 	vtable_copy(self->super_class->core_type->u.class_->vt, self->vt);
@@ -442,7 +442,7 @@ static void class_create_vtable_override(class_* self) {
 }
 
 static void class_create_vtable_interface(class_* self) {
-	#if defined(DEBUG)
+	#if defined(DEBUG) || defined(_DEBUG)
 	const char* clname = string_pool_ref2str(type_name(self->parent));
 	#endif
 	vector* tbl = class_get_interface_tree(self);
@@ -510,7 +510,7 @@ static void class_native_method_ref_delete(numeric_key key, numeric_map_item ite
 
 static method* class_find_impl_method(class_* self, method* virtualMethod) {
 	call_context* cctx = call_context_new(call_decl_T);
-	cctx->space = self->parent->location;
+	cctx->scope = self->parent->location;
 	cctx->ty = self->parent;
 	method* ret = NULL;
 	vtable* clVT = self->vt;

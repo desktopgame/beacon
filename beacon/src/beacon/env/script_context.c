@@ -173,9 +173,9 @@ static script_context* script_context_malloc(void) {
 	ret->thread_vec = vector_new();
 	ret->bootstrap_class_loader = NULL;
 	ret->all_generic_vec = vector_new();
-	ret->oTrue = NULL;
-	ret->oFalse = NULL;
-	ret->oNull = NULL;
+	ret->true_obj = NULL;
+	ret->false_obj = NULL;
+	ret->null_obj = NULL;
 #if defined(_MSC_VER)
 	char* path = io_absolute_path("script-lib/beacon/lang");
 	ret->include_vec = io_list_files(path);
@@ -198,16 +198,16 @@ static void script_context_free(script_context* self) {
 	frame* thv = sg_thread_get_frame_ref(sg_thread_current(self));
 	vm_catch(thv);
 	class_loader_delete(self->bootstrap_class_loader);
-	if(self->oNull != NULL) {
-		heap_ignore(self->heap, self->oNull);
-		self->oNull->paint = paint_onexit_T;
-		object_destroy(self->oNull);
+	if(self->null_obj != NULL) {
+		heap_ignore(self->heap, self->null_obj);
+		self->null_obj->paint = paint_onexit_T;
+		object_destroy(self->null_obj);
 	}
 	heap_delete(self->heap);
 	vector_delete(self->neg_int_vec, script_context_cache_delete);
 	vector_delete(self->pos_int_vec, script_context_cache_delete);
 	numeric_map_delete(self->n_int_map, script_context_mcache_delete);
-	//object_delete(self->oNull);
+	//object_delete(self->null_obj);
 	generic_type_collect();
 	vector_delete(self->all_generic_vec, vector_deleter_null);
 	int x = object_count();

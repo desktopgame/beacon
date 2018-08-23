@@ -513,7 +513,7 @@ bool class_contains_method(vector* method_list, method* m, method** outM) {
 	(*outM) = NULL;
 	bool ret = false;
 	call_context* cctx = call_context_new(call_decl_T);
-	cctx->space = m->parent->location;
+	cctx->scope = m->parent->location;
 	cctx->ty = m->parent;
 	for(int i=0; i<method_list->length; i++) {
 		method* mE = vector_at(method_list, i);

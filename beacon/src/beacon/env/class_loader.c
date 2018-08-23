@@ -233,12 +233,12 @@ static void class_loader_load_toplevel_function(class_loader* self) {
 	for(int i=0; i<funcs->length; i++) {
 		il_function* ilfunc = vector_at(funcs, i);
 		method* m = method_new(ilfunc->namev);
-		type_parameter_list_dup(ilfunc->type_parameter_vec, m->type_parameter_list);
+		type_parameter_list_dup(ilfunc->type_parameter_vec, m->type_parameters);
 		script_method* sm = script_method_new();
 		enviroment* env = enviroment_new();
 		//call_contextの設定
 		call_context* cctx = call_context_new(call_method_T);
-		cctx->space = namespace_lang();
+		cctx->scope = namespace_lang();
 		cctx->ty = worldT;
 		cctx->u.mt = m;
 		namespace_* loc = call_context_namespace(cctx);
@@ -255,7 +255,7 @@ static void class_loader_load_toplevel_function(class_loader* self) {
 		for(int j=0; j<ilfunc->parameter_list->length; j++) {
 			il_parameter* ilparam = vector_at(ilfunc->parameter_list, j);
 			parameter* param = parameter_new(ilparam->namev);
-			vector_push(m->parameter_list, param);
+			vector_push(m->parameters, param);
 			param->gtype = import_manager_resolve(loc, ilparam->fqcn, cctx);
 			symbol_table_entry(
 				env->sym_table,
@@ -279,7 +279,7 @@ static void class_loader_load_toplevel_function(class_loader* self) {
 		method* m = vector_at(TYPE2CLASS(worldT)->method_list, i);
 		script_method* sm = m->u.script_method;
 		call_context* cctx = call_context_new(call_method_T);
-		cctx->space = namespace_lang();
+		cctx->scope = namespace_lang();
 		cctx->ty = worldT;
 		cctx->u.mt = m;
 		CLBC_corutine(self, m, sm->env, ilfunc->parameter_list, ilfunc->statement_list, cctx, namespace_lang());

@@ -72,6 +72,12 @@ typedef struct type {
  */
 type* type_new();
 
+/**
+ * このタイプ自体を表すジェネリック型を初期化します.
+ * @param self
+ * @param count 型変数の個数
+ * @return
+ */
 struct generic_type* type_init_generic(type* self, int counts);
 
 /**
@@ -197,15 +203,23 @@ vector* type_implement_list(type* self);
  */
 struct generic_type* type_type_parameter_at(type* self, int index);
 
-int type_type_parameter_len(type* self);
-
 /**
  * 型を開放します.
  * @param self
  */
 void type_delete(type* self);
 
+/**
+ * このタイプをクラスにキャストします.
+ * @param self
+ * @return
+ */
 struct class_* type_cast_class(type* self);
+/**
+ * このタイプをインターフェイスにキャストします.
+ * @param self
+ * @return
+ */
 struct interface_* type_cast_interface(type* self);
 
 /**
@@ -230,14 +244,6 @@ struct interface_* type_interface_valid(type* self);
  * @return
  */
 bool type_is_abstract(type* self);
-
-/**
- * targ を型実引数として generic_type を生成します.
- * @param self
- * @param targ
- * @return
- */
-struct generic_type* type_instanced(type* self, struct generic_type* targ);
 
 /**
  * 可能なら self を class へ変換します.

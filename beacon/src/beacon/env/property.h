@@ -15,7 +15,6 @@ typedef struct property {
 	struct type* parent;
 	struct field* source_ref;
 	struct generic_type* gtype;
-	struct object* static_value;
 	access_level access;
 	property_body* set;
 	property_body* get;

@@ -128,27 +128,6 @@ int generic_type_rdistance(generic_type* self, generic_type* other, struct frame
 void generic_type_print(generic_type* self);
 
 /**
- * self が int 型なら true.
- * @param self
- * @return
- */
-bool generic_type_int(generic_type* self);
-
-/**
- * self が double 型なら true.
- * @param self
- * @return
- */
-bool generic_type_double(generic_type* self);
-
-/**
- * self が bool 型なら true.
- * @param self
- * @return
- */
-bool generic_type_bool(generic_type* self);
-
-/**
  * ジェネリックタイプをオペコードとして出力します.
  * @param self
  * @param env
@@ -179,24 +158,4 @@ generic_type* generic_type_rapply(generic_type* self, struct call_context* cctx,
  * @return
  */
 struct type* generic_type_to_type(generic_type* self);
-
-/**
- * @param a
- * @param b
- * @return
- */
-bool generic_type_equals(generic_type* a, generic_type* b);
-
-/**
- * @param self
- * @param name
- * @return
- */
-bool generic_type_compare(generic_type* self, const char* name);
-
-/**
- * @param a
- * @param b
- */
-void generic_type_print2(generic_type* a, generic_type* b);
 #endif // !SIGNAL_ENV_GENERIC_TYPE_H

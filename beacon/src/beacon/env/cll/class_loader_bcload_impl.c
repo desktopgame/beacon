@@ -331,7 +331,7 @@ static void CLBC_register_class(class_loader* self, namespace_* parent, il_type*
 	type_init_generic(tp, iltype->u.class_->type_parameter_list->length);
 	type_parameter_list_dup(iltype->u.class_->type_parameter_list, cls->type_parameter_list);
 	call_context* cctx = call_context_new(call_decl_T);
-	cctx->space = parent;
+	cctx->scope = parent;
 	cctx->ty = tp;
 	for (int i = 0; i < iltype->u.class_->extend_list->length; i++) {
 		generic_cache* e = (generic_cache*)vector_at(iltype->u.class_->extend_list, i);
@@ -393,7 +393,7 @@ static void CLBC_register_interface(class_loader* self, namespace_* parent, il_t
 	type_init_generic(tp, iltype->u.interface_->type_parameter_list->length);
 	type_parameter_list_dup(iltype->u.interface_->type_parameter_list, inter->type_parameter_list);
 	call_context* cctx = call_context_new(call_decl_T);
-	cctx->space = parent;
+	cctx->scope = parent;
 	cctx->ty = tp;
 	for (int i = 0; i < iltype->u.interface_->extends_list->length; i++) {
 		generic_cache* e = (generic_cache*)vector_at(iltype->u.interface_->extends_list, i);

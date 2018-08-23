@@ -5,6 +5,9 @@
 #include "util/system.h"
 #include "util/string_buffer.h"
 
+#if defined(_MSC_VER)
+#pragma warning(disable:4996)
+#endif
 static bc_error_id gGlobalError = bcerror_none_T;
 static string_view gErrorFile = ZERO_VIEW;
 static string_view gLastMessage = ZERO_VIEW;

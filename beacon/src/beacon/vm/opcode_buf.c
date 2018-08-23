@@ -6,14 +6,12 @@
 
 //proto
 static void opcode_buf_delete_label(vector_item item);
-static void opcode_buf_delete_lazy_int(vector_item item);
 static void opcode_buf_copy(opcode_buf* src, opcode_buf* dst);
 
 opcode_buf * opcode_buf_new() {
 	opcode_buf* ret = (opcode_buf*)MEM_MALLOC(sizeof(opcode_buf));
 	ret->label_vec = vector_new();
 	ret->source_vec = vector_new();
-	ret->lazy_tbl = vector_new();
 	return ret;
 }
 
@@ -26,12 +24,6 @@ int opcode_buf_add(opcode_buf * self, vector_item item) {
 label * opcode_buf_label(opcode_buf * self, int index) {
 	label* ret = label_new(index);
 	vector_push(self->label_vec, ret);
-	return ret;
-}
-
-lazy_int* opcode_buf_lazy(opcode_buf* self, int val) {
-	lazy_int* ret = lazy_int_new(val);
-	vector_push(self->lazy_tbl, ret);
 	return ret;
 }
 
@@ -63,7 +55,6 @@ void opcode_buf_delete(opcode_buf * self) {
 	}
 	vector_delete(self->source_vec, vector_deleter_null);
 	vector_delete(self->label_vec, opcode_buf_delete_label);
-	vector_delete(self->lazy_tbl, opcode_buf_delete_lazy_int);
 	MEM_FREE(self);
 }
 
@@ -72,11 +63,6 @@ void opcode_buf_delete(opcode_buf * self) {
 static void opcode_buf_delete_label(vector_item item) {
 	label* l = (label*)item;
 	label_delete(l);
-}
-
-static void opcode_buf_delete_lazy_int(vector_item item) {
-	lazy_int* l = (lazy_int*)item;
-	lazy_int_delete(l);
 }
 
 static void opcode_buf_copy(opcode_buf* src, opcode_buf* dst) {

@@ -15,7 +15,7 @@ typedef struct sg_thread {
 	vector* trace_stack;
 	bool vm_crush_by_exception;
 	bool vm_dump;
-	struct frame* frameRef;
+	struct frame* frame_ref;
 	struct call_context* cctx;
 } sg_thread;
 
@@ -55,9 +55,9 @@ void sg_thread_delete(sg_thread* self);
  * スレッドからVMを参照できる必要があるので用意されています。
  * ここから参照されるVMはガベージコレクションの対象になります。
  * @param self
- * @param frameRef 呼び出し側で開放してください.
+ * @param frame_ref 呼び出し側で開放してください.
  */
-void sg_thread_set_frame_ref(sg_thread* self, struct frame* frameRef);
+void sg_thread_set_frame_ref(sg_thread* self, struct frame* frame_ref);
 
 /**
  * このスレッドが "実行中のVMのルート" を返します.

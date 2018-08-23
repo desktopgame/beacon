@@ -225,17 +225,6 @@ generic_type * type_type_parameter_at(type * self, int index) {
 	return NULL;
 }
 
-int type_type_parameter_len(type* self) {
-	int res = -1;
-	if(self->tag == type_class_T) {
-		res = self->u.class_->type_parameter_list->length;
-	} else if(self->tag == type_interface_T) {
-		res = self->u.interface_->type_parameter_list->length;
-	}
-	assert(res < 2);
-	return res;
-}
-
 void type_delete(type * self) {
 	if (self->tag == type_class_T) {
 		class_delete(self->u.class_);
@@ -312,12 +301,6 @@ bool type_is_abstract(type* self) {
 		return TYPE2CLASS(self)->is_abstract;
 	}
 	return self->tag == type_interface_T;
-}
-
-generic_type* type_instanced(type* self, generic_type* targ) {
-	generic_type* gt = generic_type_new(self);
-	generic_type_addargs(gt, generic_type_clone(targ));
-	return gt;
 }
 
 class_* type_as_class(type* self) {

@@ -18,19 +18,8 @@ struct field;
 typedef void(*static_each)(struct field* item);
 
 /**
- * 唯一のスクリプトコンテキストを表すIDです.
- */
-typedef unsigned long script_cid;
-
-/**
- * スクリプトコンテキストは、
- * signal言語を構成するあらゆる要素のトップレベルです。
- * 名前空間やスレッドはどこからでもアクセス可能であるべきなので
- * グローバル空間に置きたいですが、
- * 例えばデバッグなどの用途のために複数のスクリプトを実行する必要がある場合に、
- * それらを共用するのは問題になる場合があります。
- * この言語の実装では、script_contextのみを唯一のグローバル変数として、
- * 付随するすべては script_context(あるいはそのフィールド)のフィールドとして持たせます。
+ * beacon言語のあらゆるオブジェクトのトップレベル.
+ * ホスト言語から異なる環境のスクリプトを実行するためにこの方法を使用します。
  */
 typedef struct script_context {
 	numeric_map* namespace_nmap;
@@ -47,9 +36,9 @@ typedef struct script_context {
 	numeric_map* n_int_map;
 	bool print_error;
 	struct heap* heap;
-	struct object* oTrue;
-	struct object* oFalse;
-	struct object* oNull;
+	struct object* true_obj;
+	struct object* false_obj;
+	struct object* null_obj;
 } script_context;
 
 /**

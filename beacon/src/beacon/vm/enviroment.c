@@ -153,7 +153,6 @@ void enviroment_delete(enviroment * self) {
 
 //private
 static void enviroment_constant_pool_vec_delete(vector_item item) {
-	//StringやArrayはここで中身を削除する必要がある
 	enviroment_object_delete((object*)item);
 }
 

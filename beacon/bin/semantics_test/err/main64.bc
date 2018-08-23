@@ -1,7 +1,0 @@
-namespace err64 {
-	class Base {
-		public:
-		override Int v;
-	}
-}
-printLine("Hello");

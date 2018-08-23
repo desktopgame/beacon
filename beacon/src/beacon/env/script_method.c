@@ -38,13 +38,13 @@ void script_method_execute(script_method * self, method* parent, frame * fr, env
 		cfr->u.static_invoke.args = aArgs;
 		cfr->u.static_invoke.typeargs = aTArgs;
 	}
-	for (int i = 0; i < parent->parameter_list->length; i++) {
+	for (int i = 0; i < parent->parameters->length; i++) {
 		object* arg = object_copy(vector_pop(fr->value_stack));
 		vector_push(sub->value_stack, arg);
-		vector_assign(aArgs, (parent->parameter_list->length - i), arg);
+		vector_assign(aArgs, (parent->parameters->length - i), arg);
 	}
 	//メソッドに渡された型引数を引き継ぐ
-	int typeparams = parent->type_parameter_list->length;
+	int typeparams = parent->type_parameters->length;
 	for(int i=0; i<typeparams; i++) {
 		vector_item e = vector_pop(fr->type_args_vec);
 		vector_assign(sub->type_args_vec, (typeparams - i) - 1, e);

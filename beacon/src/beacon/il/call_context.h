@@ -31,7 +31,7 @@ typedef struct call_context {
 	vector* call_stack;
 	control_structure control;
 	call_context_tag tag;
-	struct namespace_* space;
+	struct namespace_* scope;
 	struct type* ty;
 	union {
 		struct method* mt;

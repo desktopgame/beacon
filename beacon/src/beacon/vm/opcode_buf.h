@@ -4,14 +4,12 @@
 #include "../util/vector.h"
 #include "label.h"
 #include "opcode.h"
-#include "lazy_int.h"
 /**
  * オペコードの一覧を表す構造体.
  */
 typedef struct opcode_buf {
 	vector* source_vec;
 	vector* label_vec;
-	vector* lazy_tbl;
 } opcode_buf;
 
 /**
@@ -34,14 +32,6 @@ int opcode_buf_add(opcode_buf* self, vector_item item);
  * @return
  */
 label* opcode_buf_label(opcode_buf * self, int index);
-
-/**
- * このバッファーの開放時に開放される遅延オペランドを作成します.
- * @param self
- * @param val
- * @return
- */
-lazy_int* opcode_buf_lazy(opcode_buf* self, int val);
 
 /**
  * nop を追加してその位置を返します.

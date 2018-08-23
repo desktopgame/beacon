@@ -145,21 +145,6 @@ constructor* meta_scoped_rfind_ctor(struct class_* context, vector* ctor_vec, ve
 operator_overload* meta_gfind_operator(vector* opov_vec, operator_type type, vector* gargs, int* outIndex);
 
 /**
- * @param opov_vec
- * @param gargs
- * @param outIndex
- * @return
- */
-operator_overload* meta_gfind_operator_default_eq(vector* opov_vec, int* outIndex);
-
-/**
- * @param opov_vec
- * @param outIndex
- * @return
- */
-operator_overload* meta_gfind_operator_default_noteq(vector* opov_vec, int* outIndex);
-
-/**
  * 指定のメソッドが現在のコンテキストで有効なら true.
  * @param m
  * @param cctx

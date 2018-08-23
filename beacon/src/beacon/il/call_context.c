@@ -15,7 +15,7 @@ call_context* call_context_malloc(call_context_tag tag, const char* filename, in
 	control_structure cs = {};
 #endif
 	ret->call_stack = vector_malloc(filename, lineno);
-	ret->space = NULL;
+	ret->scope = NULL;
 	ret->ty = NULL;
 	ret->tag = tag;
 	ret->control = cs;
@@ -40,8 +40,8 @@ void call_context_pop(call_context* self) {
 }
 
 namespace_* call_context_namespace(call_context* self) {
-	if(self->space != NULL) {
-		return self->space;
+	if(self->scope != NULL) {
+		return self->scope;
 	}
 	return namespace_lang();
 }
@@ -77,7 +77,7 @@ generic_type* call_context_receiver(call_context* self) {
 }
 
 type* call_context_eval_type(call_context* self, fqcn_cache* fqcn) {
-	type* tp = fqcn_type(fqcn, self->space);
+	type* tp = fqcn_type(fqcn, self->scope);
 	if(tp == NULL) {
 		tp = fqcn_type(fqcn, namespace_lang());
 	}

@@ -160,18 +160,6 @@ void generic_type_print(generic_type * self) {
 	printf("]");
 }
 
-bool generic_type_int(generic_type* self) {
-	return self->core_type == TYPE_INT;
-}
-
-bool generic_type_double(generic_type* self) {
-	return self->core_type == TYPE_DOUBLE;
-}
-
-bool generic_type_bool(generic_type* self) {
-	return self->core_type == TYPE_BOOL;
-}
-
 void generic_type_generate(generic_type* self, enviroment* env) {
 	opcode_buf_add(env->buf, op_generic_enter);
 	opcode_buf_add(env->buf, self->type_args_list->length);
@@ -206,40 +194,6 @@ generic_type* generic_type_rapply(generic_type* self, call_context* cctx, frame*
 
 struct type* generic_type_to_type(generic_type* self) {
 	return self->core_type;
-}
-
-bool generic_type_equals(generic_type* a, generic_type* b) {
-	if(a == b) {
-		return true;
-	}
-	if(a->core_type != b->core_type) {
-		return false;
-	}
-	if(a->virtual_type_index != b->virtual_type_index) {
-		return false;
-	}
-	for(int i=0; i<a->type_args_list->length; i++) {
-		generic_type* ag = vector_at(a->type_args_list, i);
-		generic_type* bg = vector_at(b->type_args_list, i);
-		if(!generic_type_equals(ag, bg)) {
-			return false;
-		}
-	}
-	return true;
-}
-
-bool generic_type_compare(generic_type* self, const char* name) {
-	if(self->core_type == NULL) {
-		return false;
-	}
-	return type_name(self->core_type) == string_pool_intern(name);
-}
-
-void generic_type_print2(generic_type* a, generic_type* b) {
-	generic_type_print(a);
-	printf(" ");
-	generic_type_print(b);
-	io_println();
 }
 
 //private

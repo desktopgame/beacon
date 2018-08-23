@@ -37,12 +37,12 @@ static vector* method_vm_typeargs(method* self, frame* fr, frame* a);
 method* method_malloc(string_view namev, const char* filename, int lineno) {
 	method* ret = (method*)mem_malloc(sizeof(method), filename, lineno);
 	ret->namev = namev;
-	ret->parameter_list = vector_malloc(filename, lineno);
+	ret->parameters = vector_malloc(filename, lineno);
 	ret->type = method_type_script_T;
 	ret->access = access_public_T;
 	ret->modifier = modifier_none_T;
 	ret->parent = NULL;
-	ret->type_parameter_list = vector_malloc(filename, lineno);
+	ret->type_parameters = vector_malloc(filename, lineno);
 	ret->return_gtype = NULL;
 	return ret;
 }
@@ -89,15 +89,15 @@ void method_execute(method* self, frame * fr, enviroment* env) {
 bool method_override(method* superM, method* subM, call_context* cctx) {
 	//名前が違うか引数の数が違う
 	if (superM->namev != subM->namev ||
-		superM->parameter_list->length != subM->parameter_list->length) {
+		superM->parameters->length != subM->parameters->length) {
 		return false;
 	}
 	generic_type* bl = type_baseline(superM->parent, subM->parent);
 	assert(bl != NULL);
 	//全ての引数を比較
-	for (int i = 0; i < superM->parameter_list->length; i++) {
-		parameter* superP = ((parameter*)vector_at(superM->parameter_list, i));
-		parameter* subP = ((parameter*)vector_at(subM->parameter_list, i));
+	for (int i = 0; i < superM->parameters->length; i++) {
+		parameter* superP = ((parameter*)vector_at(superM->parameters, i));
+		parameter* subP = ((parameter*)vector_at(subM->parameters, i));
 		generic_type* superGT = superP->gtype;
 		generic_type* subGT = subP->gtype;
 
@@ -126,8 +126,8 @@ bool method_override(method* superM, method* subM, call_context* cctx) {
 
 int method_for_generic_index(method * self, string_view namev) {
 	int ret = -1;
-	for (int i = 0; i < self->type_parameter_list->length; i++) {
-		type_parameter* e = (type_parameter*)vector_at(self->type_parameter_list, i);
+	for (int i = 0; i < self->type_parameters->length; i++) {
+		type_parameter* e = (type_parameter*)vector_at(self->type_parameters, i);
 		if (e->namev == namev) {
 			ret = i;
 			break;
@@ -137,8 +137,8 @@ int method_for_generic_index(method * self, string_view namev) {
 }
 
 void method_delete(method * self) {
-	vector_delete(self->type_parameter_list, method_type_parameter_delete);
-	vector_delete(self->parameter_list, method_parameter_delete);
+	vector_delete(self->type_parameters, method_type_parameter_delete);
+	vector_delete(self->parameters, method_parameter_delete);
 	if (self->type == method_type_script_T) {
 		script_method_delete(self->u.script_method);
 	} else if (self->type == method_type_native_T) {
@@ -151,14 +151,14 @@ string_view method_mangle(method* self) {
 	string_buffer* ret = string_buffer_new();
 	string_buffer_appends(ret, string_pool_ref2str(self->namev));
 	//引数が一つもないので終了
-	if(self->parameter_list->length == 0) {
+	if(self->parameters->length == 0) {
 		char* raw = string_buffer_release(ret);
 		string_view sv = string_pool_intern(raw);
 		MEM_FREE(raw);
 		return sv;
 	}
-	for(int i=0; i<self->parameter_list->length; i++) {
-		parameter* e = (parameter*)vector_at(self->parameter_list, i);
+	for(int i=0; i<self->parameters->length; i++) {
+		parameter* e = (parameter*)vector_at(self->parameters, i);
 		generic_type* gt = e->gtype;
 		string_buffer_append(ret, '_');
 		if(gt->core_type == NULL) {
@@ -259,17 +259,17 @@ method* method_clone(method* self) {
 	ret->modifier = self->modifier;
 	ret->access = self->access;
 	ret->return_gtype = generic_type_clone(self->return_gtype);
-	for(int i=0; i<self->type_parameter_list->length; i++) {
-		type_parameter* e = vector_at(self->type_parameter_list, i);
+	for(int i=0; i<self->type_parameters->length; i++) {
+		type_parameter* e = vector_at(self->type_parameters, i);
 		type_parameter* ecpy = type_parameter_new(e->namev);
 		ecpy->kind = e->kind;
-		vector_push(ret->type_parameter_list, ecpy);
+		vector_push(ret->type_parameters, ecpy);
 	}
-	for(int i=0; i<self->parameter_list->length; i++) {
-		parameter* e = vector_at(self->parameter_list, i);
+	for(int i=0; i<self->parameters->length; i++) {
+		parameter* e = vector_at(self->parameters, i);
 		parameter* ecpy = parameter_new(e->namev);
 		ecpy->gtype = e->gtype;
-		vector_push(ret->parameter_list, ecpy);
+		vector_push(ret->parameters, ecpy);
 	}
 	return ret;
 }
@@ -367,8 +367,8 @@ static constructor* create_delegate_ctor(method* self, type* ty, class_loader* c
 	vector_push(iterCons->parameter_list, coroOwnerParam);
 	envIterCons->context_ref = cll;
 	//コルーチンに渡された引数を引き継ぐパラメータ追加
-	for(int i=0; i<self->parameter_list->length; i++) {
-		parameter* methP = (parameter*)vector_at(self->parameter_list, i);
+	for(int i=0; i<self->parameters->length; i++) {
+		parameter* methP = (parameter*)vector_at(self->parameters, i);
 		parameter* consP = parameter_new(methP->namev);
 		consP->gtype = methP->gtype;
 		vector_push(iterCons->parameter_list, consP);
@@ -408,14 +408,14 @@ static method* create_has_next(method* self, type* ty, class_loader* cll, vector
 	script_method* smt = script_method_new();
 	enviroment* envSmt = enviroment_new();
 	call_context* cctx = call_context_new(call_method_T);
-	cctx->space = self->parent->location;
+	cctx->scope = self->parent->location;
 	cctx->ty = self->parent;
 	cctx->u.mt = self;
 	envSmt->context_ref = cll;
 
 	//iterate(int,int)のint,intを受け取る
-	for(int i=0; i<self->parameter_list->length; i++) {
-		parameter* e = vector_at(self->parameter_list, i);
+	for(int i=0; i<self->parameters->length; i++) {
+		parameter* e = vector_at(self->parameters, i);
 		symbol_table_entry(
 			envSmt->sym_table,
 			e->gtype,
@@ -459,7 +459,7 @@ static method* create_next(method* self, type* ty, class_loader* cll,generic_typ
 	script_method* smt = script_method_new();
 	enviroment* envSmt = enviroment_new();
 	call_context* cctx = call_context_new(call_method_T);
-	cctx->space = self->parent->location;
+	cctx->scope = self->parent->location;
 	cctx->ty = self->parent;
 	cctx->u.mt = mt;
 
@@ -469,7 +469,7 @@ static method* create_next(method* self, type* ty, class_loader* cll,generic_typ
 	opcode_buf_add(envSmt->buf, (vector_item)op_coro_current);
 
 	envSmt->context_ref = cll;
-	cctx->space = self->parent->location;
+	cctx->scope = self->parent->location;
 	cctx->ty = self->parent;
 	cctx->u.mt = self;
 	
@@ -484,7 +484,7 @@ static method* create_next(method* self, type* ty, class_loader* cll,generic_typ
 static vector* method_vm_args(method* self, frame* fr, frame* a) {
 	vector* args = vector_new();
 	//引数を引き継ぐ
-	int len = self->parameter_list->length;
+	int len = self->parameters->length;
 	for(int i=0; i<len; i++) {
 		object* ARG = vector_pop(fr->value_stack);
 		assert(ARG != NULL);
@@ -497,7 +497,7 @@ static vector* method_vm_args(method* self, frame* fr, frame* a) {
 static vector* method_vm_typeargs(method* self, frame* fr, frame* a) {
 	//メソッドに渡された型引数を引き継ぐ
 	vector* typeargs = vector_new();
-	int typeparams = self->type_parameter_list->length;
+	int typeparams = self->type_parameters->length;
 	for(int i=0; i<typeparams; i++) {
 		vector_item e = vector_pop(fr->type_args_vec);
 		vector_assign(a->type_args_vec, (typeparams - i) - 1, e);

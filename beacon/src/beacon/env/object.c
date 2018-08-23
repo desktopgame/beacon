@@ -122,36 +122,36 @@ object * object_bool_get(bool b) {
 
 object * object_get_true() {
 	script_context* ctx = script_context_get_current();
-	if (ctx->oTrue == NULL) {
-		ctx->oTrue = object_malloc(object_bool_T);
-		ctx->oTrue->u.bool_ = true;
-		ctx->oTrue->gtype = GENERIC_BOOL;
-		ctx->oTrue->vptr = TYPE2CLASS(TYPE_BOOL)->vt;
-		ctx->oTrue->paint = paint_onexit_T;
+	if (ctx->true_obj == NULL) {
+		ctx->true_obj = object_malloc(object_bool_T);
+		ctx->true_obj->u.bool_ = true;
+		ctx->true_obj->gtype = GENERIC_BOOL;
+		ctx->true_obj->vptr = TYPE2CLASS(TYPE_BOOL)->vt;
+		ctx->true_obj->paint = paint_onexit_T;
 	}
-	return ctx->oTrue;
+	return ctx->true_obj;
 }
 
 object * object_get_false() {
 	script_context* ctx = script_context_get_current();
-	if (ctx->oFalse == NULL) {
-		ctx->oFalse = object_malloc(object_bool_T);
-		ctx->oFalse->u.bool_ = false;
-		ctx->oFalse->gtype = GENERIC_BOOL;
-		ctx->oFalse->vptr = TYPE2CLASS(TYPE_BOOL)->vt;
-		ctx->oFalse->paint = paint_onexit_T;
+	if (ctx->false_obj == NULL) {
+		ctx->false_obj = object_malloc(object_bool_T);
+		ctx->false_obj->u.bool_ = false;
+		ctx->false_obj->gtype = GENERIC_BOOL;
+		ctx->false_obj->vptr = TYPE2CLASS(TYPE_BOOL)->vt;
+		ctx->false_obj->paint = paint_onexit_T;
 	}
-	return ctx->oFalse;
+	return ctx->false_obj;
 }
 
 object * object_get_null() {
 	script_context* ctx = script_context_get_current();
-	if (ctx->oNull == NULL) {
-		ctx->oNull = object_malloc(object_null_T);
-		ctx->oNull->gtype = generic_type_new(TYPE_NULL);
-		ctx->oNull->paint = paint_onexit_T;
+	if (ctx->null_obj == NULL) {
+		ctx->null_obj = object_malloc(object_null_T);
+		ctx->null_obj->gtype = generic_type_new(TYPE_NULL);
+		ctx->null_obj->paint = paint_onexit_T;
 	}
-	return ctx->oNull;
+	return ctx->null_obj;
 }
 
 void object_inc(object * self) {
@@ -197,7 +197,8 @@ object* object_clone(object* self) {
 	if(self->tag == object_ref_T ||
 	   self->tag == object_array_T ||
 	   self->tag == object_string_T) {
-		ret = object_ref_new();
+		ret = object_mallocImpl(object_int_T, __FILE__, __LINE__);
+		ret->tag = self->tag;
 		ret->gtype = self->gtype;
 		ret->vptr = self->vptr;
 		ret->native_slot_vec  = self->native_slot_vec;

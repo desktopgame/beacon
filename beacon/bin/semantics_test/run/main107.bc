@@ -1,0 +1,3 @@
+var strbuf = new StringBuilder();
+var ref = strbuf;
+assert (strbuf == ref);

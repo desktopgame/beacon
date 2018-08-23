@@ -33,8 +33,8 @@ typedef struct method {
 	//struct class_* decleared_type;
 	struct type* parent;
 	struct generic_type* return_gtype;
-	vector* parameter_list;
-	vector* type_parameter_list;
+	vector* parameters;
+	vector* type_parameters;
 	access_level access;
 	modifier_type modifier;
 	union {

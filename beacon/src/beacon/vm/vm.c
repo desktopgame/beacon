@@ -29,6 +29,9 @@
 #include "../env/exception.h"
 #include "../env/generic_type.h"
 #include "yield_context.h"
+#if defined(_MSC_VER)
+#pragma warning(disable:4996)
+#endif
 //proto
 static void vm_run(frame * self, enviroment * env, int pos, int deferStart);
 static int stack_topi(frame* self);
@@ -44,7 +47,6 @@ static char* stack_pops(frame* self);
 static bool stack_popb(frame* self);
 static void remove_from_parent(frame* self);
 static void frame_markStatic(field* item);
-static void frame_markallImpl(frame* self);
 static void vm_delete_defctx(vector_item e);
 static bool throw_npe(frame* self, object* o);
 static char* create_error_message(frame * self, enviroment* env, int pc);
@@ -117,10 +119,10 @@ void vm_catch(frame * self) {
 	if (self == NULL) {
 		return;
 	}
-	for (int i = 0; i < self->children_vec->length; i++) {
-		frame* e = (frame*)vector_at(self->children_vec, i);
-		vm_catch(e);
+	if (self->parent != NULL) {
+		vm_catch(self->parent);
 	}
+	self->validate = false;
 	if(self->exception != NULL) {
 		self->exception->paint = paint_unmarked_T;
 		self->exception = NULL;
@@ -955,14 +957,6 @@ static void vm_run(frame * self, enviroment * env, int pos, int deferStart) {
 				class_create_operator_vt(cl);
 				operator_overload* operator_ov = (operator_overload*)vector_at(cl->ovt->vec, index);
 				operator_overload_execute(operator_ov, self, env);
-				break;
-			}
-			case op_invokevirtual_lazy:
-			{
-				lazy_int* index = (lazy_int*)enviroment_source_at(env, ++IDX);
-				object* o = (object*)vector_top(self->value_stack);
-				method* m = class_get_method(o, index->value);
-				method_execute(m, self, env);
 				break;
 			}
 			case op_coro_init:

@@ -30,7 +30,7 @@ void vm_resume(frame* self, enviroment* env, int pos);
 void vm_native_throw(frame* self, struct object* exc);
 
 /**
- * selfを起点としてたどれるVM全てに例外を伝播します.
+ * selfより上の全てのフレームに例外を伝播します.
  * @param self
  * @param exc
  */

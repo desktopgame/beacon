@@ -84,7 +84,7 @@ static void CLBC_class_impl(class_loader * self, il_type * iltype, type * tp, na
 	if((tp->state & type_impl) > 0) {
 		return;
 	}
-	#if defined(DEBUG)
+	#if defined(DEBUG) || defined(_DEBUG)
 	const char* tyname = string_pool_ref2str(type_name(tp));
 	#endif
 	class_create_vtable(tp->u.class_);
