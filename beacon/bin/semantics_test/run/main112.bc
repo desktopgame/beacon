@@ -1,0 +1,35 @@
+namespace run112 {
+	class Super {
+		public:
+		def new() {
+		}
+
+		def call() -> Void {
+			printLine("Super");
+		}
+	}
+	class SubA : Super {
+		public:
+		def new() {
+		}
+
+		def call() -> Void {
+			printLine("SubA");
+		}
+	}
+	class SubB : Super {
+		public:
+		def new() {
+		}
+
+		def call() -> Void {
+			printLine("SubB");
+		}
+	}
+}
+var s = new run112::Super();
+var sa = new run112::SubA();
+var sb = new run112::SubB();
+s.call();
+sa.call();
+sb.call();

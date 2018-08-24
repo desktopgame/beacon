@@ -1,0 +1,18 @@
+namespace run113 {
+	class OvlTest {
+		public:
+		def new() {
+		}
+
+		def p(Int i) -> Void {
+			printLine("IntValue : " + i);
+		}
+
+		def p(String s) -> Void {
+			printLine("StringValue :" + s);
+		}
+	}
+}
+var ovl = new run113::OvlTest();
+ovl.p(10);
+ovl.p("String");

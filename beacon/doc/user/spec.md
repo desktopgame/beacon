@@ -703,3 +703,93 @@ factor as MyClass
 (&)
 (=)
 ````
+
+# 変数の型
+beaconは`静的型付け`と呼ばれる方法でプログラムを解釈します。  
+例えば最初に整数として宣言された変数やフィールド/プロパティには整数しか代入できません。
+````
+Int num = 0;
+num = "String";
+````
+
+# 可視性
+オブジェクト指向の特徴の一つである`隠蔽`のため、  
+可視性を導入しています。
+````
+namespace access {
+	class AccessTest {
+		private:
+		Int a;
+
+		public:
+		def new() {
+			this. a = 0;
+		}
+	}
+}
+var a = new access::AccessTest();
+a.a = 0;
+````
+
+# オーバーライド
+仮想関数テーブルを使用して、サブクラス型のメソッドが呼ばれるようになっています。
+````
+namespace ovr {
+	class Super {
+		public:
+		def new() {
+		}
+
+		def call() -> Void {
+			printLine("Super");
+		}
+	}
+	class SubA : Super {
+		public:
+		def new() {
+		}
+
+		def call() -> Void {
+			printLine("SubA");
+		}
+	}
+	class SubB : Super {
+		public:
+		def new() {
+		}
+
+		def call() -> Void {
+			printLine("SubB");
+		}
+	}
+}
+var s = new ovr::Super();
+var sa = new ovr::SubA();
+var sb = new ovr::SubB();
+s.call();
+sa.call();
+sb.call();
+````
+
+# オーバーロード
+変数に型があることを利用して、名前は同じで型の違う複数のメソッドを定義できます。
+````
+namespace ovl {
+	class OvlTest {
+		public:
+		def new() {
+		}
+
+		def p(Int i) -> Void {
+			printLine("IntValue : " + i);
+		}
+
+		def p(String s) -> Void {
+			printLine("StringValue :" + s);
+		}
+	}
+}
+var ovl = new ovl::OvlTest();
+ovl.p(10);
+ovl.p("String");
+````

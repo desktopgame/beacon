@@ -1,0 +1,13 @@
+namespace err136 {
+	class AccessTest {
+		private:
+		Int a;
+
+		public:
+		def new() {
+			this. a = 0;
+		}
+	}
+}
+var a = new err136::AccessTest();
+a.a = 0;
