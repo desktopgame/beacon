@@ -162,7 +162,7 @@ static void il_factor_new_instance_find(il_factor_new_instance * self, enviromen
 	self->constructor_index = temp;
 	call_context_pop(cctx);
 	if(temp == -1) {
-		bc_error_throw(bcerror_new_instance_undefined_class_T,
+		bc_error_throw(bcerror_new_instance_undefined_ctor_T,
 			string_pool_ref2str(cls->namev)
 		);
 	}
