@@ -11,11 +11,11 @@ namespace data {
 			return data.iterate();
 		}
 
-		operator [](Int index) -> T {
+		operator (&)(Int index) -> T {
 			return data(index);
 		}
 
-		operator []=(Int index, T value) -> Void {
+		operator (=)(Int index, T value) -> Void {
 			data(index) = value;
 		}
 	}
@@ -31,11 +31,11 @@ namespace data {
 			return lines.iterate();
 		}
 
-		operator [](Int index) -> Line[T] {
+		operator (&)(Int index) -> Line[T] {
 			return lines(index);
 		}
 
-		operator []=(Int index, Line[T] val) -> Void {
+		operator (=)(Int index, Line[T] val) -> Void {
 			lines(index) = val;
 		}
 	}

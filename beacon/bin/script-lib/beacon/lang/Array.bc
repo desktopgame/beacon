@@ -69,11 +69,11 @@ namespace beacon::lang {
 			}
 		}
 
-		operator [](Int index) -> T {
+		operator (&)(Int index) -> T {
 			return get(index);
 		}
 
-		operator []=(Int index, T value) -> Void {
+		operator (=)(Int index, T value) -> Void {
 			set(index, value);
 		}
 

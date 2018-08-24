@@ -19,11 +19,11 @@ namespace run87 {
 			return data.iterate();
 		}
 
-		operator [](Int index) -> Int {
+		operator (&)(Int index) -> Int {
 			return data(index);
 		}
 
-		operator []=(Int index, Int val) -> Void {
+		operator (=)(Int index, Int val) -> Void {
 			data(index) = val;
 		}
 	}
