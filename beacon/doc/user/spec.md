@@ -826,3 +826,20 @@ poly::Flyable f = bird;
 w.walk();
 f.fly();
 ````
+
+# ジェネリック
+まだ型変数の制約はサポートされていません。  
+また、型推論も実装されていないので型変数は全て記述する必要があります。
+````
+def printVec[T](Vector[T] v) -> Void {
+	var iter = v.iterate();
+	while(iter.moveNext()) {
+		printLine(iter.current());
+	}
+}
+
+var ivec = new Vector[Int]() << 5 << 10 << 20;
+var svec = new Vector[String]() << "Go" << "Ju" << "Niju";
+printVec[Int](ivec);
+printVec[String](svec);
+````
