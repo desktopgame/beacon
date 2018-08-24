@@ -793,3 +793,36 @@ var ovl = new ovl::OvlTest();
 ovl.p(10);
 ovl.p("String");
 ````
+
+# インターフェイス
+多重継承をサポートしない代わりに、インターフェイスによる多重実装をサポートします。
+````
+namespace poly {
+	interface Walkable {
+		public:
+		def walk() -> Void;
+	}
+	interface Flyable {
+		public:
+		def fly() -> Void;
+	}
+	class Bird : Walkable, Flyable {
+		public:
+		def new() {
+		}
+
+		def walk() -> Void {
+			printLine("walk");
+		}
+
+		def fly() -> Void {
+			printLine("fly");
+		}
+	}
+}
+var bird = new poly::Bird();
+poly::Walkable w = bird;
+poly::Flyable f = bird;
+w.walk();
+f.fly();
+````
