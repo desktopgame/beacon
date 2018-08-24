@@ -763,9 +763,9 @@ namespace ovr {
 		}
 	}
 }
-var s = new ovr::Super();
-var sa = new ovr::SubA();
-var sb = new ovr::SubB();
+ovr::Super s = new ovr::Super();
+ovr::Super sa = new ovr::SubA();
+ovr::Super sb = new ovr::SubB();
 s.call();
 sa.call();
 sb.call();

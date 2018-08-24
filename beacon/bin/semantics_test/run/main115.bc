@@ -1,0 +1,35 @@
+namespace ovr {
+	class Super {
+		public:
+		def new() {
+		}
+
+		def call() -> Void {
+			printLine("Super");
+		}
+	}
+	class SubA : Super {
+		public:
+		def new() {
+		}
+
+		def call() -> Void {
+			printLine("SubA");
+		}
+	}
+	class SubB : Super {
+		public:
+		def new() {
+		}
+
+		def call() -> Void {
+			printLine("SubB");
+		}
+	}
+}
+ovr::Super s = new ovr::Super();
+ovr::Super sa = new ovr::SubA();
+ovr::Super sb = new ovr::SubB();
+s.call();
+sa.call();
+sb.call();
