@@ -419,7 +419,7 @@ while(iter.moveNext()) {
 
 # yield break
 yield break`コルーチン`の中でのみ使用可能です。  
-処理を中断して値を返します。
+処理を終了します。
 ````
 def seq2(Int len) -> Iterator[Int] {
 	var start = 0;
