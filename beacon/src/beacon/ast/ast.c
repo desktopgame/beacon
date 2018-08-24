@@ -324,7 +324,7 @@ void ast_print(ast* self) {
 		case ast_type_out_parameter_T:
 			printf("type out parameter(%s)", string_pool_ref2str(self->u.stringv_value));
 			break;
-		case ast_parameter_Tized_typename:
+		case ast_parameterized_typename:
 			printf("typename(%s)", string_pool_ref2str(self->u.stringv_value));
 			break;
 		case ast_type_parameter_list_T: p("type parameter list");

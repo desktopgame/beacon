@@ -186,7 +186,7 @@ typedef enum ast_tag {
 	ast_fqcn_part_T,
 	ast_fqcn_part_list_T,
 
-	ast_parameter_Tized_typename,
+	ast_parameterized_typename,
 	ast_type_parameter_T,
 	ast_type_in_parameter_T,
 	ast_type_out_parameter_T,
