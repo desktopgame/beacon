@@ -1,0 +1,14 @@
+namespace run111 {
+	class Final {
+		public:
+		property final Int a {
+			defset;
+			defget;
+		}
+		def new() {
+			this.a = 0;
+		}
+	}
+}
+var d = new run111::Final();
+//d.a = 10;

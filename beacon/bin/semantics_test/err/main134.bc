@@ -1,0 +1,14 @@
+namespace err134 {
+	class Final {
+		public:
+		property final Int a {
+			defset;
+			defget;
+		}
+		def new() {
+			this.a = 0;
+		}
+	}
+}
+var d = new err134::Final();
+d.a = 10;

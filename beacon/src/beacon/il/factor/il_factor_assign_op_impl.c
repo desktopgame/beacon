@@ -154,6 +154,7 @@ static void assign_to_property(il_factor_assign_op* self, enviroment* env, call_
 	il_factor_property* prop = self->left->u.prop;
 	property* pp = prop->p;
 	bool is_static = modifier_is_static(prop->p->modifier);
+	BC_ERROR();
 	//プロパティへアクセスできない
 	if(!class_accessible_property(call_context_class(cctx), pp)) {
 		bc_error_throw(bcerror_can_t_access_field_T,
@@ -176,6 +177,11 @@ static void assign_to_property(il_factor_assign_op* self, enviroment* env, call_
 		);
 		return;
 	}
+	//省略記法なら初期化されてるかチェック
+	if(pp->is_short && !modifier_is_static(pp->modifier)) {
+		check_final(prop->fact, self->right, prop->p->source_ref->namev, env, cctx);
+	}
+	BC_ERROR();
 	if(!is_static) {
 		il_factor_generate(prop->fact, env, cctx);
 	}
