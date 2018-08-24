@@ -101,7 +101,7 @@ typedef enum ast_tag {
 	ast_abstract_class_decl_T,
 	ast_class_decl_T,
 	ast_enum_decl_T,
-	ast_int_Terface_decl,
+	ast_interface_decl,
 	ast_class_super_T,
 
 	ast_access_level_T,

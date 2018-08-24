@@ -219,7 +219,7 @@ static void class_loader_ilload_namespace_body(class_loader* self, il_namespace*
 	} else if (anamespace_body->tag == ast_class_decl_T) {
 		class_loader_ilload_class(self, current, anamespace_body);
 		//namespace xxx { interface yyy { ...
-	} else if (anamespace_body->tag == ast_int_Terface_decl) {
+	} else if (anamespace_body->tag == ast_interface_decl) {
 		class_loader_ilload_interface(self, current, anamespace_body);
 		//namespace xxx { enum yyy { ...
 	} else if(anamespace_body->tag == ast_enum_decl_T) {

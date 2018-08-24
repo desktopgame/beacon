@@ -38,7 +38,7 @@ ast * ast_new_class_decl(ast* aclass_name, ast* aextend_list, ast* amember_list)
 }
 
 ast * ast_new_interface_decl(ast* ainterface_name, ast* asuper_interface_list, ast * amember_list) {
-	ast* ret = ast_new(ast_int_Terface_decl);
+	ast* ret = ast_new(ast_interface_decl);
 	ast_push(ret, ainterface_name);
 	ast_push(ret, asuper_interface_list);
 	ast_push(ret, amember_list);

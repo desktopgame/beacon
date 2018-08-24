@@ -203,8 +203,7 @@ void ast_print(ast* self) {
 			break;
 		case ast_variable_T:
 		{
-			ast* a = ast_first(self);
-			printf("variable %s", string_pool_ref2str(a->u.stringv_value));
+			printf("variable");
 			break;
 		}
 		case ast_static_invoke_T: p("static invoke");
@@ -232,11 +231,11 @@ void ast_print(ast* self) {
 		case ast_class_decl_T:
 			printf("class");
 			break;
-		case ast_int_Terface_decl:
-			printf("interface(%s)", string_pool_ref2str(self->u.stringv_value));
+		case ast_interface_decl:
+			printf("interface");
 			break;
 		case ast_class_super_T:
-			printf("super_class(%s)", string_pool_ref2str(self->u.stringv_value));
+			printf("super_class");
 			break;
 		case ast_access_member_tree_T: p("access member_tree");
 		case ast_access_member_list_T: p("access member_list");
