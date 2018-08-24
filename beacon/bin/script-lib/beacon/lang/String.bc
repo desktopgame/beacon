@@ -109,6 +109,10 @@ namespace beacon::lang {
 			return true;
 		}
 
+		def toString() -> String {
+			return this;
+		}
+
 		operator !=(String a) -> Bool {
 			return !(this == a);
 		}
