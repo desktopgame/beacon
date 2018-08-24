@@ -69,7 +69,7 @@ typedef enum ast_tag {
 	ast_inferenced_type_init_T,
 	ast_call_T,
 	ast_invoke_T,
-	ast_sub_Tscript_access,
+	ast_subscript_access,
 	ast_return_T,
 	ast_return_empty_T,
 	ast_this_T,

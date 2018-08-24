@@ -290,7 +290,7 @@ void ast_print(ast* self) {
 		case ast_elif_T: p("elif");
 		case ast_else_T: p("else");
 		case ast_return_T: p("return");
-		case ast_sub_Tscript_access: p("[]");
+		case ast_subscript_access: p("[]");
 		case ast_blank_T:
 			printf("blank");
 			break;

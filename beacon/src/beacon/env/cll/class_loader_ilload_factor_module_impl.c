@@ -147,7 +147,7 @@ static il_factor* CLIL_factorImpl(class_loader* self, ast* source) {
 		return il_factor_wrap_call_op(CLIL_call_op(self, source));
 	} else if(source->tag == ast_field_access_T) {
 		return il_factor_wrap_member_op(CLIL_member_op(self, source));
-	} else if(source->tag == ast_sub_Tscript_access) {
+	} else if(source->tag == ast_subscript_access) {
 		return il_factor_wrap_subscript(CLIL_subscript(self, source));
 	}
 	il_factor* fact = il_factor_new(ilfactor_unary_op_T);
