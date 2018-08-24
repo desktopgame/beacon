@@ -30,7 +30,6 @@
 
 //proto
 static void test_cll(void);
-static void test_parse_err_hdr(parser* p);
 static void test_semanticsImpl(const char* dirname, bool require, char** outFileName, bool* outFail);
 static int test_semantics();
 static void test_bison_grammerImpl(const char* dirname, bool require);
@@ -155,32 +154,4 @@ static int test_semantics() {
 	}
 	fprintf(stdout, "\n");
 	return runRL || errRL ? 1 : 0;
-}
-
-//FIXME:parser.cからのコピペ
-static void test_parse_err_hdr(parser* p) {
-	//system("cls");
-	//put filename
-	for(int i=0; i<4; i++) {
-		printf(" ");
-	}
-	printf("file=%s ", p->source_name);
-	//put line
-	printf("line=%d ", p->error_line_index);
-	//put column
-	printf("column=%d", p->error_column_index);
-	printf("\n");
-	//put str
-	for(int i=0; i<4; i++) {
-		printf(" ");
-	}
-	printf("%s", p->error_message);
-	printf("\n");
-	//put line
-	for(int i=0; i<4; i++) {
-		printf(" ");
-	}
-	printf("%s", p->error_line_text);
-	printf("\n");
-	fflush(stdout);
 }
