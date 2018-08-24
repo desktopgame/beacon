@@ -290,7 +290,7 @@ void ast_print(ast* self) {
 		case ast_elif_T: p("elif");
 		case ast_else_T: p("else");
 		case ast_return_T: p("return");
-		case ast_subscript_access: p("[]");
+		case ast_subscript_access_T: p("[]");
 		case ast_blank_T:
 			printf("blank");
 			break;
@@ -324,7 +324,7 @@ void ast_print(ast* self) {
 		case ast_type_out_parameter_T:
 			printf("type out parameter(%s)", string_pool_ref2str(self->u.stringv_value));
 			break;
-		case ast_parameterized_typename:
+		case ast_parameterized_typename_T:
 			printf("typename(%s)", string_pool_ref2str(self->u.stringv_value));
 			break;
 		case ast_type_parameter_list_T: p("type parameter list");

@@ -69,7 +69,7 @@ typedef enum ast_tag {
 	ast_inferenced_type_init_T,
 	ast_call_T,
 	ast_invoke_T,
-	ast_subscript_access,
+	ast_subscript_access_T,
 	ast_return_T,
 	ast_return_empty_T,
 	ast_this_T,
@@ -186,7 +186,7 @@ typedef enum ast_tag {
 	ast_fqcn_part_T,
 	ast_fqcn_part_list_T,
 
-	ast_parameterized_typename,
+	ast_parameterized_typename_T,
 	ast_type_parameter_T,
 	ast_type_in_parameter_T,
 	ast_type_out_parameter_T,

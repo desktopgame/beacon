@@ -100,7 +100,7 @@ ast* ast_new_explicit_uoperator(ast* afact, operator_type type) {
 }
 
 ast* ast_new_subscript_access(ast* afact, ast* aindex) {
-	ast* ret = ast_new(ast_subscript_access);
+	ast* ret = ast_new(ast_subscript_access_T);
 	ast_push(ret, afact);
 	ast_push(ret, aindex);
 	return ret;

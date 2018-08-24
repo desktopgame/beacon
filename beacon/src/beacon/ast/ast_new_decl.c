@@ -219,7 +219,7 @@ ast * ast_new_type_parameter_list(ast* aparam, ast * alist) {
 }
 
 ast * ast_new_parameterized_typename(string_view namev, ast * aparams) {
-	ast* ret = ast_new(ast_parameterized_typename);
+	ast* ret = ast_new(ast_parameterized_typename_T);
 	ret->u.stringv_value = namev;
 	ast_push(ret, aparams);
 	return ret;
