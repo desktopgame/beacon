@@ -7,11 +7,11 @@
 
 #define IL_FACT2AS(factor) (il_factor_cast_as_T(factor))
 
-typedef enum cast_mode_T {
+typedef enum cast_mode {
 	cast_down_T,
 	cast_up_T,
 	cast_unknown_T,
-} cast_mode_T;
+} cast_mode;
 
 /**
  * as演算子を表す構造体.
@@ -20,7 +20,7 @@ typedef struct il_factor_as {
 	il_factor* fact;
 	generic_cache* fqcn;
 	generic_type* gtype;
-	cast_mode_T mode;
+	cast_mode mode;
 } il_factor_as;
 
 struct enviroment;
