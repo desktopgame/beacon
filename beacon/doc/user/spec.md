@@ -174,12 +174,12 @@ public:
 省略しない場合、`defset`では`value`で代入される値を参照出来ます。
 ````
 public:
-	property PropertyType PropertyName {
+	property PropertyType ModifierList PropertyName {
 		AccessLevel defset;
 		AccessLevel defget;
 	}
 
-	property PropertyType PropertyName {
+	property PropertyType ModifierList PropertyName {
 		AccessLevel defset {
 			StatementList
 		}
