@@ -17,11 +17,12 @@ Dir.chdir("../package") do
 end
 #各種ファイルを移動
 Dir.chdir("..") do
-	FileUtils.cp("bin/a.out","package/beacon.out")
+	FileUtils.cp("bin/a.out","package/beacon")
 	FileUtils.cp("bin/readme.md","package/readme.md")
 	FileUtils.cp("bin/version.text","package/version.text")
-	FileUtils.cp_r('bin/beacon', 'package')
+	FileUtils.cp_r('bin/script-lib', 'package')
 	FileUtils.cp_r('bin/samples', 'package')
+	FileUtils.cp_r('doc', 'package')
 	#マクロを展開
 	dict = {
 		"$version" => "BETA",
