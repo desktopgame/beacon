@@ -34,7 +34,9 @@ void operator_overload_execute(operator_overload* self, frame* fr, enviroment* e
 	}
 	vm_execute(sub, self->env);
 	//戻り値が Void 以外ならスタックトップの値を引き継ぐ
-	if(self->return_gtype != TYPE_VOID->generic_self) {
+	//例外によって終了した場合には戻り値がない
+	if(self->return_gtype != TYPE_VOID->generic_self &&
+	   sub->value_stack->length > 0) {
 		object* o = (object*)vector_pop(sub->value_stack);
 		vector_push(fr->value_stack, o);
 	}

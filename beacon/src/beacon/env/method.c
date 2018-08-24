@@ -76,7 +76,9 @@ void method_execute(method* self, frame * fr, enviroment* env) {
 		}
 		native_method_execute(self->u.native_method, self, a, env);
 		//戻り値を残す
-		if(self->return_gtype != TYPE_VOID->generic_self) {
+		//例外によって終了した場合には戻り値がない
+		if(self->return_gtype != TYPE_VOID->generic_self &&
+	  		 a->value_stack->length > 0) {
 			vector_push(fr->value_stack, vector_pop(a->value_stack));
 		}
 		vector_delete(aArgs, vector_deleter_null);
