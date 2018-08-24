@@ -35,7 +35,6 @@ void il_factor_instanceof_load(il_factor_instanceof* self, enviroment* env, call
 void il_factor_instanceof_generate(il_factor_instanceof* self, enviroment* env, call_context* cctx) {
 	generic_type* gtype = import_manager_resolve(NULL, self->gcache, cctx);
 	type* type = gtype->core_type;
-	assert(type != NULL);
 	il_factor_generate(self->fact, env, cctx);
 	opcode_buf_add(env->buf, op_generic_add);
 	generic_type_generate(gtype, env);

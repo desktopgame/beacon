@@ -1,0 +1,18 @@
+def typeCheck[T](T value) -> Void {
+	if(value is Int) {
+		printLine("value is Int");
+	} elif(value is String) {
+		printLine("value is String");
+	} elif(value is Vector[Int]) {
+		printLine("value is Vector[Int]");
+	} elif(value is Vector[String]) {
+		printLine("value is Vector[String]");
+	} elif(value is T) {
+		printLine("value is T");
+	}
+}
+typeCheck[Int](0);
+typeCheck[String]("");
+typeCheck[Vector[Int]](new Vector[Int]());
+typeCheck[Vector[String]](new Vector[String]());
+typeCheck[Char]('a');

@@ -474,6 +474,7 @@ assert(Expr, Message)
 - `super`
 - `null`
 - `as`
+- `is`
 
 # int_literal
 int_literalは整数リテラルによって表されるファクターです。  
@@ -626,6 +627,34 @@ as はあるオブジェクトを別の型へ変換するファクターです�
 変換に失敗した場合には null が返されます。
 ````
 factor as MyClass
+````
+
+# is
+is はオブジェクトの型を判別してBool型で返すファクターです。
+````
+value is Int
+````
+beaconの実装では実行時もオブジェクトが自分のジェネリック型を知っているので、  
+以下のようなコードも合法です。
+````
+def typeCheck[T](T value) -> Void {
+	if(value is Int) {
+		printLine("value is Int");
+	} elif(value is String) {
+		printLine("value is String");
+	} elif(value is Vector[Int]) {
+		printLine("value is Vector[Int]");
+	} elif(value is Vector[String]) {
+		printLine("value is Vector[String]");
+	} elif(value is T) {
+		printLine("value is T");
+	}
+}
+typeCheck[Int](0);
+typeCheck[String]("");
+typeCheck[Vector[Int]](new Vector[Int]());
+typeCheck[Vector[String]](new Vector[String]());
+typeCheck[Char]('a');
 ````
 
 # 使用できる演算子の一覧
