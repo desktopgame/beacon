@@ -460,6 +460,7 @@ assert(Expr, Message)
 - `binary operator`
 - `unary operator`
 - `assign operator`
+- `explicit operator`
 - `call`
 - `invoke`
 - `static_invoke`
@@ -551,6 +552,28 @@ binary operatorは単項演算によって表されるファクターです。
 演算子と引数をとります。
 ````
 -10
+````
+
+# assign operator
+assign operatorは代入によって表されるファクターです。  
+左辺は変数/プロパティ/インデクサーのいずれかである必要があります。
+````
+variable = 10;
+variable.field = 10;
+array(0) = 5;
+
+variable += 10;
+variable.field += 10;
+array(0) += 5;
+````
+
+# explicit operator
+explicit operatorは明示的な演算子の呼び出しです。  
+Intなどのプリミティブなデータ型においても演算子オーバーロードは用意されていますが、  
+通常の二項演算ではこれを呼び出すことが出来ません。  
+しかし、明示的な呼び出しでは必ず演算子オーバーロードが呼び出されます。
+````
+10.+(5);
 ````
 
 # call
