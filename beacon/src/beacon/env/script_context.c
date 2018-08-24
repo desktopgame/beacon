@@ -187,6 +187,7 @@ static script_context* script_context_malloc(void) {
 	ret->neg_int_vec = vector_new();
 	ret->n_int_map = numeric_map_new();
 	ret->print_error = true;
+	ret->abort_on_error = true;
 	vector_push(ret->thread_vec, sg_thread_main());
 	return ret;
 }

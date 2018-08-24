@@ -13,6 +13,7 @@ static string_view gErrorFile = ZERO_VIEW;
 static string_view gLastMessage = ZERO_VIEW;
 static int gErrorLineNo = -1;
 static int gErrorColumn = -1;
+static void check_abort(script_context* sctx);
 
 void bc_error_throw(bc_error_id id, ...) {
 	va_list ap;
@@ -31,12 +32,12 @@ void bc_error_vthrow(bc_error_id id, va_list ap) {
 	}
 	MEM_FREE(fmt);
 #if defined(_MSC_VER)
-	#if defined(_DEBUG)
-	//system_abort();
+	#if !defined(_DEBUG)
+		check_abort(sctx);
 	#endif
 #else
 	#if !defined(DEBUG)
-	system_abort();
+		check_abort(sctx);
 	#endif
 #endif
 }
@@ -393,4 +394,10 @@ string_view bc_error_message() {
 
 bc_error_id bc_error_last() {
 	return gGlobalError;
+}
+//private
+static void check_abort(script_context* sctx) {
+	if(sctx->abort_on_error) {
+		system_abort();
+	}
 }

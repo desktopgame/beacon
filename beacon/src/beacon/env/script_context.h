@@ -35,6 +35,7 @@ typedef struct script_context {
 	vector* neg_int_vec;
 	numeric_map* n_int_map;
 	bool print_error;
+	bool abort_on_error;
 	struct heap* heap;
 	struct object* true_obj;
 	struct object* false_obj;
