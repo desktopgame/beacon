@@ -174,7 +174,6 @@ static bool bc_read_symbol(JNIEnv* env, jobject table, ast* a) {
 			const char *valuestr = (*env)->GetStringUTFChars(env, valuej, JNI_FALSE);
 			string_view valuev = string_pool_intern(valuestr);
 			astmt = ast_new_inject(keyv, ast_new_string(valuev));
-			(*env)->ReleaseStringUTFChars(env, valuej, valuestr);
 		//それ以外はまだ未対応
 		} else {
 			jclass bc_not_supported_exc_cls = (*env)->FindClass(env, "jp/koya/jbeacon/BCNotSupportedException");
