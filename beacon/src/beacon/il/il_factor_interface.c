@@ -92,6 +92,8 @@ void il_factor_generate(il_factor * self, enviroment* env, call_context* cctx) {
 	if(bc_error_last()) {
 		return;
 	}
+	bc_error_file(env->context_ref->filename);
+	bc_error_line(self->lineno);
 	switch (self->type) {
 		case ilfactor_int_T:
 			il_factor_int_generate(self->u.int_, env, cctx);

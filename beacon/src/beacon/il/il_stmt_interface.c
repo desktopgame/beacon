@@ -77,6 +77,8 @@ void il_stmt_generate(il_stmt * self, struct enviroment* env, call_context* cctx
 	if(bc_error_last()) {
 		return;
 	}
+	bc_error_file(env->context_ref->filename);
+	bc_error_line(self->lineno);
 	switch (self->type) {
 		case ilstmt_if_T:
 			il_stmt_if_generate(self->u.if_, env, cctx);
