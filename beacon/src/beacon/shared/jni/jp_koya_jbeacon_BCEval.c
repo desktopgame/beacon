@@ -24,6 +24,8 @@ static bool bc_read_symbol(JNIEnv* env, jobject table, ast* a);
 static void bc_write_symbol(JNIEnv* env, numeric_map* nmap, frame* fr, jobject target);
 static void bc_eval_release(JNIEnv* env, class_loader* cll, frame* fr);
 static void printClassInfo(JNIEnv* env, jobject object);
+static jint jobject2jint(JNIEnv* env, jobject obj);
+static jchar jobject2jchar(JNIEnv* env, jobject obj);
 static jdouble jobject2jdouble(JNIEnv* env, jobject obj);
 
 JNIEXPORT jobject JNICALL Java_jp_koya_jbeacon_BCEval_nativeFile(JNIEnv * env, jclass cls, jstring str, jobject table) {
@@ -155,13 +157,13 @@ static bool bc_read_symbol(JNIEnv* env, jobject table, ast* a) {
 			return false;
 		}
 		ast* astmt = NULL;
-		if((*env)->IsInstanceOf(env, valueE, integer_cls)) {
-			astmt = ast_new_inject(keyv, ast_new_int((jint)valueE));
-		} else if((*env)->IsInstanceOf(env, valueE, double_cls)) {
+		if((*env)->IsInstanceOf(env, valueE, integer_cls) == JNI_TRUE) {
+			astmt = ast_new_inject(keyv, ast_new_int(jobject2jint(env, valueE)));
+		} else if((*env)->IsInstanceOf(env, valueE, double_cls) == JNI_TRUE) {
 			astmt = ast_new_inject(keyv, ast_new_double(jobject2jdouble(env, valueE)));
-		} else if((*env)->IsInstanceOf(env, valueE, char_cls)) {
-			astmt = ast_new_inject(keyv, ast_new_char((jint)valueE));
-		} else if((*env)->IsInstanceOf(env, valueE, string_cls)) {
+		} else if((*env)->IsInstanceOf(env, valueE, char_cls) == JNI_TRUE) {
+			astmt = ast_new_inject(keyv, ast_new_char(jobject2jchar(env, valueE)));
+		} else if((*env)->IsInstanceOf(env, valueE, string_cls) == JNI_TRUE) {
 			jstring valuej = (jstring)valueE;
 			const char *valuestr = (*env)->GetStringUTFChars(env, valuej, JNI_FALSE);
 			string_view valuev = string_pool_intern(valuestr);
@@ -225,7 +227,7 @@ static void bc_write_symbol(JNIEnv* env, numeric_map* nmap, frame* fr, jobject t
 		(*env)->CallVoidMethod(env, target, symbol_table_put_id, keyj, ((jdouble)OBJ2DOUBLE(bcobj)));
 	} else if(GENERIC2TYPE(bcobj->gtype) == TYPE_CHAR) {
 		//#putを検索する
-		jmethodID symbol_table_put_id = (*env)->GetMethodID(env, symbol_table_cls, "putChar", "(Ljava/lang/String;C)V");
+		jmethodID symbol_table_put_id = (*env)->GetMethodID(env, symbol_table_cls, "putCharacter", "(Ljava/lang/String;C)V");
 		if(symbol_table_put_id == NULL) {
 			(*env)->FatalError(env, "not found method: put");
 			return;
@@ -309,6 +311,36 @@ static void printClassInfo(JNIEnv* env, jobject obj) {
 }
 
 //https://stackoverflow.com/questions/29255023/jni-trouble-converting-java-double-to-jdouble
+static jint jobject2jint(JNIEnv* env, jobject obj) {
+	//Integerクラスを検索
+	jclass integer_cl = (*env)->FindClass(env, "java/lang/Integer");
+	if(integer_cl == NULL) {
+		(*env)->FatalError(env, "not found class: java/lang/Integer");
+		return 0;
+	}
+    jmethodID int_value_id = (*env)->GetMethodID(env,integer_cl, "intValue", "()I" );
+	if(int_value_id == NULL) {
+		(*env)->FatalError(env, "not found method: intValue");
+		return 0;
+	}
+	return (*env)->CallIntMethod(env, obj, int_value_id);
+}
+
+static jchar jobject2jchar(JNIEnv* env, jobject obj) {
+	//Characterクラスを検索
+	jclass character_cl = (*env)->FindClass(env, "java/lang/Character");
+	if(character_cl == NULL) {
+		(*env)->FatalError(env, "not found class: java/lang/Character");
+		return 0;
+	}
+    jmethodID char_value_id = (*env)->GetMethodID(env,character_cl, "charValue", "()C" );
+	if(char_value_id == NULL) {
+		(*env)->FatalError(env, "not found method: charValue");
+		return 0;
+	}
+	return (*env)->CallCharMethod(env, obj, char_value_id);
+}
+
 static jdouble jobject2jdouble(JNIEnv* env, jobject obj) {
 	//Doubleクラスを検索
 	jclass double_cl = (*env)->FindClass(env, "java/lang/Double");
