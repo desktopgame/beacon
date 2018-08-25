@@ -180,7 +180,6 @@ static bool bc_read_symbol(JNIEnv* env, jobject table, ast* a) {
 			(*env)->ThrowNew(env, bc_not_supported_exc_cls, "not supported inject of reference type");
 			return false;
 		}
-		(*env)->ReleaseStringUTFChars(env, keyE, keystr);
 		vector_insert(a->vchildren, 0, astmt);
 	}
 	return true;
