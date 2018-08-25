@@ -16,6 +16,7 @@ struct symbol_entry;
 typedef struct symbol_table {
 	numeric_map* map;
 	int count;
+	int scope_depth;
 } symbol_table;
 
 /**

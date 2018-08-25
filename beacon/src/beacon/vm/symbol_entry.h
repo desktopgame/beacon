@@ -9,6 +9,7 @@ struct generic_type;
  */
 typedef struct symbol_entry {
 	int index;
+	int scope_depth;
 	struct generic_type* gtype;
 } symbol_entry;
 

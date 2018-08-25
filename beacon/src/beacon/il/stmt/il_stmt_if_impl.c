@@ -88,6 +88,7 @@ void il_stmt_if_dump(il_stmt_if * self, int depth) {
 
 void il_stmt_if_generate(il_stmt_if * self, enviroment* env, call_context* cctx) {
 	//if(...)
+	env->sym_table->scope_depth++;
 	il_factor_generate(self->condition, env, cctx);
 	label* l1 = opcode_buf_label(env->buf, -1);
 	label* tail = opcode_buf_label(env->buf, -1);
@@ -130,9 +131,11 @@ void il_stmt_if_generate(il_stmt_if * self, enviroment* env, call_context* cctx)
 		}
 		tail->cursor = opcode_buf_nop(env->buf);
 	}
+	env->sym_table->scope_depth--;
 }
 
 void il_stmt_if_load(il_stmt_if * self, struct enviroment* env, call_context* cctx) {
+	env->sym_table->scope_depth++;
 	il_factor_load(self->condition, env, cctx);
 	for(int i=0; i<self->body->length; i++) {
 		il_stmt* e = (il_stmt*)vector_at(self->body, i);
@@ -162,6 +165,7 @@ void il_stmt_if_load(il_stmt_if * self, struct enviroment* env, call_context* cc
 		check_condition_type(elif->condition, env, cctx);
 		BC_ERROR();
 	}
+	env->sym_table->scope_depth--;
 }
 
 void il_stmt_if_delete(il_stmt_if * self) {

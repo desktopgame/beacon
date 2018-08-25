@@ -7,6 +7,7 @@ symbol_entry * symbol_entry_new() {
 	symbol_entry* ret = (symbol_entry*)MEM_MALLOC(sizeof(symbol_entry));
 	ret->index = 0;
 	ret->gtype = NULL;
+	ret->scope_depth = 0;
 	return ret;
 }
 

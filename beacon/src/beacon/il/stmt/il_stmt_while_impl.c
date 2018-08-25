@@ -35,6 +35,7 @@ void il_stmt_while_dump(il_stmt_while * self, int depth) {
 }
 
 void il_stmt_while_generate(il_stmt_while * self, enviroment * env, call_context* cctx) {
+	env->sym_table->scope_depth++;
 	int prev = opcode_buf_nop(env->buf);
 	label* prevLab = opcode_buf_label(env->buf, prev);
 	label* nextLab = opcode_buf_label(env->buf, -1);
@@ -56,6 +57,7 @@ void il_stmt_while_generate(il_stmt_while * self, enviroment * env, call_context
 	vector_pop(cctx->control.while_end);
 	int next = opcode_buf_nop(env->buf);
 	nextLab->cursor = next;
+	env->sym_table->scope_depth--;
 }
 
 void il_stmt_while_delete(il_stmt_while * self) {
@@ -65,12 +67,14 @@ void il_stmt_while_delete(il_stmt_while * self) {
 }
 
 void il_stmt_while_load(il_stmt_while* self, struct enviroment* env, call_context* cctx) {
+	env->sym_table->scope_depth++;
 	il_factor_load(self->condition, env, cctx);
 	for(int i=0; i<self->statement_list->length; i++) {
 		il_stmt* e = (il_stmt*)vector_at(self->statement_list, i);
 		il_stmt_load(e, env, cctx);
 	}
 	check_condition_type(self->condition, env, cctx);
+	env->sym_table->scope_depth--;
 }
 
 //private

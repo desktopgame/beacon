@@ -17,6 +17,7 @@ symbol_table * symbol_table_new() {
 	symbol_table* ret = (symbol_table*)MEM_MALLOC(sizeof(symbol_table));
 	ret->count = 1;
 	ret->map = numeric_map_new();
+	ret->scope_depth = 0;
 	return ret;
 }
 
@@ -33,6 +34,7 @@ symbol_entry* symbol_table_entry(symbol_table* self, generic_type* gtp, string_v
 	symbol_entry* e = symbol_entry_new();
 	e->index = self->count;
 	e->gtype = gtp;
+	e->scope_depth = self->scope_depth;
 	numeric_map_put(self->map, namev, e);
 	self->count++;
 	return e;

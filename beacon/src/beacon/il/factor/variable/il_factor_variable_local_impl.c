@@ -32,6 +32,14 @@ void il_factor_variable_local_generate(il_factor_variable_local* self, enviromen
 	il_factor_variable_local_load(self, env, cctx);
 	assert(self->type != variable_local_undefined_T);
 	if(self->type == variable_local_scope_T) {
+		//より深くネストされたブロックで定義された変数
+		if(self->u.entry_->scope_depth > env->sym_table->scope_depth) {
+			bc_error_throw(
+				bcerror_ref_undefined_local_variable_T,
+				string_pool_ref2str(self->namev)
+			);
+			return;
+		}
 		opcode_buf_add(env->buf, (vector_item)op_load);
 		opcode_buf_add(env->buf, (vector_item)self->u.entry_->index);
 	} else if(self->type == variable_local_field_T) {
