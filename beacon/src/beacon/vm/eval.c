@@ -17,6 +17,11 @@ static bool eval_top_from_cll(class_loader* cll, ast* aOpt);
 
 
 bool eval_ast(const char* filename) {
+	if (!io_exists(filename)) {
+		fprintf(stderr, "file is not found: %s", filename);
+		abort();
+		return false;
+	}
 	parser* p = parse_file(filename);
 	ast_print_tree(p->root);
 	if(p->result != parse_complete_T) {

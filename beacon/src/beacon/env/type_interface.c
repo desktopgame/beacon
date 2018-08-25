@@ -280,7 +280,13 @@ generic_type* type_baseline(type* abstract, type* concrete) {
 }
 
 interface_* type_interface_valid(type* self) {
+#if defined(_MSC_VER)
+	//コンパイラが初期化されていないローカル変数として認識してしまうのでその対策
+	vector* impl_list = NULL;
+	impl_list = type_implement_list(self);
+#else
 	vector* impl_list = type_implement_list(self);
+#endif
 	for(int i=0; i<impl_list->length; i++) {
 		generic_type* gE = vector_at(impl_list, i);
 		interface_* iE = TYPE2INTERFACE(GENERIC2TYPE(gE));

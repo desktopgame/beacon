@@ -10,11 +10,11 @@ struct operator_overload;
 struct method;
 //binded? bound?
 
-typedef enum bound_invoke_T {
+typedef enum bound_invoke {
 	bound_invoke_method_T,
 	bound_invoke_subscript_T,
 	bound_invoke_undefined_T
-} bound_invoke_T;
+} bound_invoke;
 
 typedef struct il_factor_invoke_bound {
 	string_view namev;
@@ -26,7 +26,7 @@ typedef struct il_factor_invoke_bound {
 	} u;
 	int index;
 	struct generic_type* resolved;
-	bound_invoke_T tag;
+	bound_invoke tag;
 } il_factor_invoke_bound;
 
 il_factor_invoke_bound* il_factor_invoke_bound_new(string_view namev);

@@ -8,11 +8,11 @@ struct generic_type;
 struct operator_overload;
 struct method;
 
-typedef enum instance_invoke_T {
+typedef enum instance_invoke {
 	instance_invoke_method_T,
 	instance_invoke_subscript_T,
 	instance_invoke_undefined_T
-} instance_invoke_T;
+} instance_invoke;
 
 typedef struct il_factor_invoke {
 	il_factor* receiver;
@@ -25,7 +25,7 @@ typedef struct il_factor_invoke {
 		struct operator_overload* opov;
 	} u;
 	struct generic_type* resolved;
-	instance_invoke_T tag;
+	instance_invoke tag;
 } il_factor_invoke;
 
 il_factor_invoke* il_factor_invoke_new(string_view namev);
