@@ -48,7 +48,11 @@ static void bc_file_nativeOpen(method* parent, frame* fr, enviroment* env) {
 	//io_printfln("%s : %s", fileStr->text, modeStr->text);
 
 	FILE* fp = fopen(fileStr->text, modeStr->text);
-	assert(fp != NULL);
+	if(fp == NULL) {
+		//ひらけなかった
+		vector_push(fr->value_stack, object_get_null());
+		return;
+	}
 	object* file = file_new(fp, false);
 	vector_push(fr->value_stack, file);
 }
