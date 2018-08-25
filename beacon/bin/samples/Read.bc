@@ -1,5 +1,8 @@
 require "beacon/unsafe/File"
 var f = beacon::unsafe::File.open("File.text", "r");
+if(f == null) {
+	return;
+}
 defer f.close();
 Console.writeLine(f.gets());
 Console.writeLine(f.gets());
