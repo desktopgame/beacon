@@ -1,6 +1,7 @@
 #include "jp_koya_jbeacon_BCEval.h"
 #include "../../ast/ast.h"
 #include "../../ast/ast_new_stmt.h"
+#include "../../ast/ast_new_factor.h"
 #include "../../ast/ast_new_literal.h"
 #include "../../vm/eval.h"
 #include "../../vm/frame.h"
@@ -26,6 +27,7 @@ static void bc_eval_release(JNIEnv* env, class_loader* cll, frame* fr);
 static void printClassInfo(JNIEnv* env, jobject object);
 static jint jobject2jint(JNIEnv* env, jobject obj);
 static jchar jobject2jchar(JNIEnv* env, jobject obj);
+static jboolean jobject2jboolean(JNIEnv* env, jobject obj);
 static jdouble jobject2jdouble(JNIEnv* env, jobject obj);
 
 JNIEXPORT jobject JNICALL Java_jp_koya_jbeacon_BCEval_nativeFile(JNIEnv * env, jclass cls, jstring str, jobject table) {
@@ -138,11 +140,13 @@ static bool bc_read_symbol(JNIEnv* env, jobject table, ast* a) {
 	jclass double_cls = (*env)->FindClass(env, "java/lang/Double");
 	jclass char_cls = (*env)->FindClass(env, "java/lang/Character");
 	jclass string_cls = (*env)->FindClass(env, "java/lang/String");
+	jclass bool_cls = (*env)->FindClass(env, "java/lang/Boolean");
 	if(integer_cls == NULL ||
 	   double_cls == NULL ||
 	   char_cls == NULL ||
-	   string_cls == NULL) {
-		(*env)->FatalError(env, "not found class: Integer/Double/Char/String");
+	   string_cls == NULL ||
+	   bool_cls == NULL) {
+		(*env)->FatalError(env, "not found class: Integer/Double/Char/String/Boolean");
 		return false;
 	}
 	//Javaのデータを beacon のデータへ変換
@@ -163,6 +167,8 @@ static bool bc_read_symbol(JNIEnv* env, jobject table, ast* a) {
 			astmt = ast_new_inject(keyv, ast_new_double(jobject2jdouble(env, valueE)));
 		} else if((*env)->IsInstanceOf(env, valueE, char_cls) == JNI_TRUE) {
 			astmt = ast_new_inject(keyv, ast_new_char(jobject2jchar(env, valueE)));
+		} else if((*env)->IsInstanceOf(env, valueE, bool_cls) == JNI_TRUE) {
+			astmt = ast_new_inject(keyv, ast_new_bool(jobject2jboolean(env, valueE)));
 		} else if((*env)->IsInstanceOf(env, valueE, string_cls) == JNI_TRUE) {
 			jstring valuej = (jstring)valueE;
 			const char *valuestr = (*env)->GetStringUTFChars(env, valuej, JNI_FALSE);
@@ -233,6 +239,14 @@ static void bc_write_symbol(JNIEnv* env, numeric_map* nmap, frame* fr, jobject t
 			return;
 		}
 		(*env)->CallVoidMethod(env, target, symbol_table_put_id, keyj, ((jchar)OBJ2CHAR(bcobj)));
+	} else if(GENERIC2TYPE(bcobj->gtype) == TYPE_BOOL) {
+		//#putを検索する
+		jmethodID symbol_table_put_id = (*env)->GetMethodID(env, symbol_table_cls, "putBoolean", "(Ljava/lang/String;Z)V");
+		if(symbol_table_put_id == NULL) {
+			(*env)->FatalError(env, "not found method: put");
+			return;
+		}
+		(*env)->CallVoidMethod(env, target, symbol_table_put_id, keyj, ((jboolean)OBJ2BOOL(bcobj)));
 	} else if(GENERIC2TYPE(bcobj->gtype) == TYPE_STRING) {
 		//#putを検索する
 		jmethodID symbol_table_put_id = (*env)->GetMethodID(env, symbol_table_cls, "putString", "(Ljava/lang/String;Ljava/lang/String;)V");
@@ -339,6 +353,21 @@ static jchar jobject2jchar(JNIEnv* env, jobject obj) {
 		return 0;
 	}
 	return (*env)->CallCharMethod(env, obj, char_value_id);
+}
+
+static jboolean jobject2jboolean(JNIEnv* env, jobject obj) {
+	//Booleanクラスを検索
+	jclass boolean_cl = (*env)->FindClass(env, "java/lang/Boolean");
+	if(boolean_cl == NULL) {
+		(*env)->FatalError(env, "not found class: java/lang/Boolean");
+		return 0;
+	}
+    jmethodID boolean_value_id = (*env)->GetMethodID(env,boolean_cl, "booleanValue", "()Z" );
+	if(boolean_value_id == NULL) {
+		(*env)->FatalError(env, "not found method: booleanValue");
+		return 0;
+	}
+	return (*env)->CallBooleanMethod(env, obj, boolean_value_id);
 }
 
 static jdouble jobject2jdouble(JNIEnv* env, jobject obj) {

@@ -4,6 +4,12 @@
 #include "ast.h"
 
 /**
+ * @param b
+ * @return
+ */
+ast* ast_new_bool(bool b);
+
+/**
  * trueを表す要素を作成します.
  * @return
  */

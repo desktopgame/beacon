@@ -124,7 +124,8 @@
 			"operator_vt.h": "c",
 			"bc_string.h": "c",
 			"parser.h": "c",
-			"error.h": "c"
+			"error.h": "c",
+			"ast_new_literal.h": "c"
 		},
 		"ruby.lint": {
 			"reek": true,

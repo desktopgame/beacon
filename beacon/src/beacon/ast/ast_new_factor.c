@@ -4,6 +4,10 @@
 #include <assert.h>
 #include "../util/text.h"
 
+ast* ast_new_bool(bool b) {
+	return b ? ast_new_true() : ast_new_false();
+}
+
 ast * ast_new_true() {
 	return ast_new(ast_true_T);
 }
