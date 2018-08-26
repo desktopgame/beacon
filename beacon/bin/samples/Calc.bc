@@ -73,7 +73,7 @@ namespace calc {
 					var buf = new StringBuilder();
 					while(c.isDigit()) {
 						buf << c;
-						if(!(scanner.ready())) { break; }
+						if(!scanner.ready()) { break; }
 						c = scanner.getc();
 					}
 					if((scanner.ready())) {

@@ -149,11 +149,11 @@ extern int yydebug;
     SUBSCRIPT_SET = 352,
     SUBSCRIPT_GET = 353,
     QUOTE = 354,
-    FUNCCALL = 355,
-    ARRAY_SUBSCRIPT = 356,
-    NEGATIVE = 357,
-    POSITIVE = 358,
-    REF = 359,
+    NEGATIVE = 355,
+    POSITIVE = 356,
+    REF = 357,
+    FUNCCALL = 358,
+    ARRAY_SUBSCRIPT = 359,
     FORM_TYPE = 360
   };
 #endif

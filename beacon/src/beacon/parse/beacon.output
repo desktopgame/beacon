@@ -8,8 +8,8 @@ Terminals unused in grammar
    BOUNDS_EXTENDS
    BOUNDS_SUPER
    QUOTE
-   ARRAY_SUBSCRIPT
    REF
+   ARRAY_SUBSCRIPT
    FORM_TYPE
 
 
@@ -450,11 +450,11 @@ BOUNDS_SUPER (351)
 SUBSCRIPT_SET (352) 87
 SUBSCRIPT_GET (353) 86
 QUOTE (354)
-FUNCCALL (355)
-ARRAY_SUBSCRIPT (356)
-NEGATIVE (357)
-POSITIVE (358)
-REF (359)
+NEGATIVE (355)
+POSITIVE (356)
+REF (357)
+FUNCCALL (358)
+ARRAY_SUBSCRIPT (359)
 FORM_TYPE (360)
 
 
@@ -2766,7 +2766,7 @@ State 65
 
 State 66
 
-  127 expression_nobrace: ADD expression .  [DOT, COMMA, COLON, ADD, SUB, MUL, DIV, MOD, LSHIFT, RSHIFT, EQUAL, NOTEQUAL, GT, GE, LT, LE, BIT_AND, LOGIC_AND, BIT_OR, LOGIC_OR, EXC_OR, LCB, LRB, RRB, SEMI, INSTANCEOF]
+  127 expression_nobrace: ADD expression .  [COMMA, COLON, ADD, SUB, MUL, DIV, MOD, LSHIFT, RSHIFT, EQUAL, NOTEQUAL, GT, GE, LT, LE, BIT_AND, LOGIC_AND, BIT_OR, LOGIC_OR, EXC_OR, LCB, LRB, RRB, SEMI, INSTANCEOF]
   129                   | expression . ADD expression
   130                   | expression . SUB expression
   131                   | expression . MUL expression
@@ -2810,11 +2810,12 @@ State 66
   180                   | expression . AS typename_T
   189 lhs: expression . DOT IDENT typename_group
 
-    AS  shift, and go to state 113
+    DOT  shift, and go to state 94
+    AS   shift, and go to state 113
 
     $default  reduce using rule 127 (expression_nobrace)
 
-    Conflict between rule 127 and token DOT resolved as reduce (DOT < POSITIVE).
+    Conflict between rule 127 and token DOT resolved as shift (POSITIVE < DOT).
     Conflict between rule 127 and token ADD resolved as reduce (ADD < POSITIVE).
     Conflict between rule 127 and token SUB resolved as reduce (SUB < POSITIVE).
     Conflict between rule 127 and token MUL resolved as reduce (MUL < POSITIVE).
@@ -2839,7 +2840,7 @@ State 66
 
 State 67
 
-  128 expression_nobrace: SUB expression .  [DOT, COMMA, COLON, ADD, SUB, MUL, DIV, MOD, LSHIFT, RSHIFT, EQUAL, NOTEQUAL, GT, GE, LT, LE, BIT_AND, LOGIC_AND, BIT_OR, LOGIC_OR, EXC_OR, LCB, LRB, RRB, SEMI, INSTANCEOF]
+  128 expression_nobrace: SUB expression .  [COMMA, COLON, ADD, SUB, MUL, DIV, MOD, LSHIFT, RSHIFT, EQUAL, NOTEQUAL, GT, GE, LT, LE, BIT_AND, LOGIC_AND, BIT_OR, LOGIC_OR, EXC_OR, LCB, LRB, RRB, SEMI, INSTANCEOF]
   129                   | expression . ADD expression
   130                   | expression . SUB expression
   131                   | expression . MUL expression
@@ -2883,11 +2884,12 @@ State 67
   180                   | expression . AS typename_T
   189 lhs: expression . DOT IDENT typename_group
 
-    AS  shift, and go to state 113
+    DOT  shift, and go to state 94
+    AS   shift, and go to state 113
 
     $default  reduce using rule 128 (expression_nobrace)
 
-    Conflict between rule 128 and token DOT resolved as reduce (DOT < NEGATIVE).
+    Conflict between rule 128 and token DOT resolved as shift (NEGATIVE < DOT).
     Conflict between rule 128 and token ADD resolved as reduce (ADD < NEGATIVE).
     Conflict between rule 128 and token SUB resolved as reduce (SUB < NEGATIVE).
     Conflict between rule 128 and token MUL resolved as reduce (MUL < NEGATIVE).
@@ -2953,14 +2955,15 @@ State 68
   178                   | expression . DOT SUB LRB RRB
   179                   | expression . INSTANCEOF typename_T
   180                   | expression . AS typename_T
-  182                   | NOT expression .  [DOT, COMMA, COLON, ADD, SUB, MUL, DIV, MOD, LSHIFT, RSHIFT, EQUAL, NOTEQUAL, GT, GE, LT, LE, BIT_AND, LOGIC_AND, BIT_OR, LOGIC_OR, EXC_OR, LCB, LRB, RRB, SEMI, INSTANCEOF]
+  182                   | NOT expression .  [COMMA, COLON, ADD, SUB, MUL, DIV, MOD, LSHIFT, RSHIFT, EQUAL, NOTEQUAL, GT, GE, LT, LE, BIT_AND, LOGIC_AND, BIT_OR, LOGIC_OR, EXC_OR, LCB, LRB, RRB, SEMI, INSTANCEOF]
   189 lhs: expression . DOT IDENT typename_group
 
-    AS  shift, and go to state 113
+    DOT  shift, and go to state 94
+    AS   shift, and go to state 113
 
     $default  reduce using rule 182 (expression_nobrace)
 
-    Conflict between rule 182 and token DOT resolved as reduce (DOT < NOT).
+    Conflict between rule 182 and token DOT resolved as shift (NOT < DOT).
     Conflict between rule 182 and token ADD resolved as reduce (ADD < NOT).
     Conflict between rule 182 and token SUB resolved as reduce (SUB < NOT).
     Conflict between rule 182 and token MUL resolved as reduce (MUL < NOT).
@@ -3026,14 +3029,15 @@ State 69
   178                   | expression . DOT SUB LRB RRB
   179                   | expression . INSTANCEOF typename_T
   180                   | expression . AS typename_T
-  181                   | CHILDA expression .  [DOT, COMMA, COLON, ADD, SUB, MUL, DIV, MOD, LSHIFT, RSHIFT, EQUAL, NOTEQUAL, GT, GE, LT, LE, BIT_AND, LOGIC_AND, BIT_OR, LOGIC_OR, EXC_OR, LCB, LRB, RRB, SEMI, INSTANCEOF]
+  181                   | CHILDA expression .  [COMMA, COLON, ADD, SUB, MUL, DIV, MOD, LSHIFT, RSHIFT, EQUAL, NOTEQUAL, GT, GE, LT, LE, BIT_AND, LOGIC_AND, BIT_OR, LOGIC_OR, EXC_OR, LCB, LRB, RRB, SEMI, INSTANCEOF]
   189 lhs: expression . DOT IDENT typename_group
 
-    AS  shift, and go to state 113
+    DOT  shift, and go to state 94
+    AS   shift, and go to state 113
 
     $default  reduce using rule 181 (expression_nobrace)
 
-    Conflict between rule 181 and token DOT resolved as reduce (DOT < CHILDA).
+    Conflict between rule 181 and token DOT resolved as shift (CHILDA < DOT).
     Conflict between rule 181 and token ADD resolved as reduce (ADD < CHILDA).
     Conflict between rule 181 and token SUB resolved as reduce (SUB < CHILDA).
     Conflict between rule 181 and token MUL resolved as reduce (MUL < CHILDA).
