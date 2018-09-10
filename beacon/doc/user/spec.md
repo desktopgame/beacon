@@ -8,6 +8,10 @@ beacon と同じディレクトリにある `script-lib` がライブラリと�
 ## エントリポイント
 コマンドによって指定します。
 ````
+//mac
+./beacon --run main.bc
+
+//win
 beacon --run main.bc
 ````
 
@@ -17,29 +21,49 @@ beaconはコマンドによって起動します。
 ## -r --run
 指定のファイルを実行します。
 ````
+//mac
 ./beacon -r main.bc
 ./beacon --run main.bc
+
+//win
+beacon -r main.bc
+beacon --run main.bc
 ````
 
 ## -a --ast
 指定のファイルを解析してASTとして出力します。
 ````
+//mac
 ./beacon -a main.bc
 ./beacon --ast main.bc
+
+//win
+beacon -a main.bc
+beacon --ast main.bc
 ````
 
 ## -i --il
 指定のファイルを解析してILとして出力します。
 ````
+//mac
 ./beacon -i main.bc
 ./beacon --il main.bc
+
+//win
+beacon -i main.bc
+beacon --il main.bc
 ````
 
 ## -o --op
 指定のファイル解析してオペコードとして出力します。
 ````
+//mac
 ./beacon -o main.bc
 ./beacon --op main.bc
+
+//win
+beacon -o main.bc
+beacon --op main.bc
 ````
 
 # ファイル
@@ -379,7 +403,7 @@ while(offset < 10) {
 	if offset == 5 {
 		continue;
 	}
-	printLine(offset)
+	printLine(offset);
 }
 ````
 
@@ -392,7 +416,7 @@ while(offset < 10) {
 	if offset == 5 {
 		break;
 	}
-	printLine(offset)
+	printLine(offset);
 }
 ````
 
@@ -449,7 +473,7 @@ assert は条件を満たさないときに例外をスローするステート�
 省略した場合は条件式を文字列化して使用します。
 ````
 assert(Expr);
-assert(Expr, Message)
+assert(Expr, Message);
 ````
 
 # ファクター
