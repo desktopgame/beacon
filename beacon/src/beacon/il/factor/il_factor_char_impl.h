@@ -2,7 +2,7 @@
 #ifndef BEACON_IL_IL_FACTOR_CHAR_H
 #define BEACON_IL_IL_FACTOR_CHAR_H
 #include "../il_factor_interface.h"
-#define IL_FACT2CHAR(fact) (il_factor_cast_char_T(fact))
+
 //struct opcode_buf;
 /**
  * 文字を表す要素.

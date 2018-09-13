@@ -61,7 +61,7 @@ void il_factor_assign_op_generate(il_factor_assign_op* self, enviroment* env, ca
 		//NOTE:constかどうかの検査
 	//foo.bar = xxx
 	} else if(self->left->type == ilfactor_member_op_T) {
-		il_factor_member_op* ilmem = IL_FACT2MEM(self->left);
+		il_factor_member_op* ilmem = self->left->u.member_;
 		il_factor* ilsrc = ilmem->fact;
 		if(ilsrc->type == ilfactor_variable_T) {
 			assign_by_namebase(self, env, cctx);
@@ -91,9 +91,9 @@ void il_factor_assign_op_delete(il_factor_assign_op* self) {
 }
 //private
 static void assign_by_namebase(il_factor_assign_op* self, enviroment* env, call_context* cctx) {
-	il_factor_member_op* ilmem = IL_FACT2MEM(self->left);
+	il_factor_member_op* ilmem = self->left->u.member_;
 	il_factor* ilsrc = ilmem->fact;
-	il_factor_variable* ilvar = IL_FACT2VAR(ilsrc);
+	il_factor_variable* ilvar = ilsrc->u.variable_;
 	//staticなフィールドへの代入
 	if(ilvar->type == ilvariable_type_static_T) {
 		class_* cls = TYPE2CLASS(call_context_eval_type(cctx, ilvar->u.static_->fqcn));
@@ -198,7 +198,7 @@ static void assign_to_array(il_factor_assign_op* self, enviroment* env, call_con
 }
 
 static void assign_by_call(il_factor_assign_op* self, enviroment* env, call_context* cctx) {
-	il_factor_call_op* call = IL_FACT2CALL(self->left);
+	il_factor_call_op* call = self->left->u.call_;
 	if(call->type == ilcall_type_invoke_static_T) {
 		bc_error_throw(
 			bcerror_lhs_is_not_subscript_T,
@@ -305,14 +305,14 @@ static void check_final(il_factor* receiver, il_factor* source, string_view name
 
 static void generate_assign_to_variable(il_factor_assign_op* self, enviroment* env, call_context* cctx) {
 	assert(self->left->type == ilfactor_variable_T);
-	il_factor_variable* ilvar = IL_FACT2VAR(self->left);
+	il_factor_variable* ilvar = self->left->u.variable_;
 	if(ilvar->type == ilvariable_type_local_T) {
 		generate_assign_to_variable_local(self, env, cctx);
 	}
 }
 
 static void generate_assign_to_variable_local(il_factor_assign_op* self, enviroment* env, call_context* cctx) {
-	il_factor_variable* ilvar = IL_FACT2VAR(self->left);
+	il_factor_variable* ilvar = self->left->u.variable_;
 	il_factor_variable_local* illoc = ilvar->u.local_;
 	//src のような名前がローカル変数を示す場合
 	if(illoc->type == variable_local_scope_T) {

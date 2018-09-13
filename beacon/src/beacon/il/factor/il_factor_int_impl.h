@@ -4,7 +4,7 @@
 #include "../il_factor_interface.h"
 #include <stdint.h>
 //struct opcode_buf;
-#define IL_FACT2INT(fact) (il_factor_cast_int_T(fact))
+
 /**
  * 整数リテラルを表す要素.
  */

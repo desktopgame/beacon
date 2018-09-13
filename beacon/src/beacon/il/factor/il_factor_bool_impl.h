@@ -4,8 +4,6 @@
 #include <stdbool.h>
 #include "../il_factor_interface.h"
 
-#define IL_FACT2BOOL(fact) (il_factor_cast_bool(fact))
-
 struct enviroment;
 struct type;
 /**

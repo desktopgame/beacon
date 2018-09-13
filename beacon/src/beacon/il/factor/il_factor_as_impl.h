@@ -5,8 +5,6 @@
 #include "../../env/generic_cache.h"
 #include "../../env/generic_type.h"
 
-#define IL_FACT2AS(factor) (il_factor_cast_as_T(factor))
-
 typedef enum cast_mode {
 	cast_down_T,
 	cast_up_T,

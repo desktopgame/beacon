@@ -146,7 +146,7 @@ static void il_factor_call_op_check(il_factor_call_op* self, enviroment* env, ca
 
 static void il_factor_invoke_bound_check(il_factor_call_op* self, enviroment* env) {
 	il_factor* receiver = self->receiver;
-	il_factor_variable* ilvar = IL_FACT2VAR(receiver);
+	il_factor_variable* ilvar = receiver->u.variable_;
 	il_factor_invoke_bound* bnd = il_factor_invoke_bound_new(ilvar->fqcn->namev);
 	assert(ilvar->fqcn->scope_vec->length == 0);
 	//入れ替え
@@ -160,7 +160,7 @@ static void il_factor_invoke_bound_check(il_factor_call_op* self, enviroment* en
 
 static void il_factor_member_op_check(il_factor_call_op* self, enviroment* env, call_context* cctx) {
 	il_factor* receiver = self->receiver;
-	il_factor_member_op* ilmem = IL_FACT2MEM(receiver);
+	il_factor_member_op* ilmem = receiver->u.member_;
 	//hoge.foo
 	if(ilmem->fact->type == ilfactor_variable_T) {
 		il_factor_member_op_check_namebase(self, ilmem, env, cctx);
@@ -170,7 +170,7 @@ static void il_factor_member_op_check(il_factor_call_op* self, enviroment* env, 
 }
 
 static void il_factor_member_op_check_namebase(il_factor_call_op* self, il_factor_member_op* ilmem, enviroment* env, call_context* cctx) {
-	il_factor_variable* ilvar = IL_FACT2VAR(ilmem->fact);
+	il_factor_variable* ilvar = ilmem->fact->u.variable_;
 	//Namespace::Class.foo()
 	if(ilvar->fqcn->scope_vec->length > 0) {
 		il_factor_member_op_check_static(self, ilmem, ilvar, env, cctx);
@@ -220,7 +220,7 @@ static void il_factor_member_op_check_static(il_factor_call_op* self, il_factor_
 
 static void il_factor_subscript_check(il_factor_call_op* self, enviroment* env, call_context* cctx) {
 	il_factor* receiver = self->receiver;
-	il_factor_call_op* call_left = IL_FACT2CALL(receiver);
+	il_factor_call_op* call_left = receiver->u.call_;
 	il_factor_invoke* iv = il_factor_invoke_new(ZERO_VIEW);
 	generic_type* receiver_gtype = il_factor_eval(receiver, env, cctx);
 	class_* receiver_cl = TYPE2CLASS(GENERIC2TYPE(receiver_gtype));

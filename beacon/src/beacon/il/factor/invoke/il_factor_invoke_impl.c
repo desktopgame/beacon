@@ -165,7 +165,7 @@ static void il_factor_invoke_check(il_factor_invoke * self, enviroment * env, ca
 		return;
 	}
 	if(self->receiver->type == ilfactor_variable_T) {
-		il_factor_variable* ilvar = IL_FACT2VAR(self->receiver);
+		il_factor_variable* ilvar = self->receiver->u.variable_;
 		assert(ilvar->type != ilvariable_type_static_T);
 	}
 	//レシーバの型を評価

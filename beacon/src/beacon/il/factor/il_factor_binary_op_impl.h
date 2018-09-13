@@ -5,8 +5,6 @@
 #include "../../ast/operator_type.h"
 #include <stdbool.h>
 
-#define IL_FACT2BIN(fact) (il_factor_cast_binary_op(fact))
-
 struct il_factor_arithmetic_op;
 struct il_factor_logic_op;
 struct il_factor_compare_op;

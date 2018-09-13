@@ -138,7 +138,7 @@ static void il_factor_member_op_check(il_factor_member_op* self, enviroment* env
 
 static void il_factor_member_op_check_static(il_factor_member_op* self, enviroment* env, call_context* cctx, generic_type* receiver_type, bool* swap) {
 	il_factor* fact = self->fact;
-	il_factor_variable* ilvar = IL_FACT2VAR(fact);
+	il_factor_variable* ilvar = fact->u.variable_;
 	#if defined(DEBUG)
 	const char* ilvarname = string_pool_ref2str(ilvar->u.static_->fqcn->namev);
 	#endif

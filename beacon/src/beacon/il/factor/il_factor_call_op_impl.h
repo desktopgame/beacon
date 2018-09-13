@@ -6,7 +6,6 @@
 #include "invoke/il_factor_invoke_static_impl.h"
 #include "invoke/il_factor_invoke_bound_impl.h"
 
-#define IL_FACT2CALL(fact) (il_factor_cast_call_op(fact))
 
 struct enviroment;
 struct generic_type;

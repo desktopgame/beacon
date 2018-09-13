@@ -8,7 +8,7 @@
 #include "variable/il_factor_variable_local_impl.h"
 #include "variable/il_factor_variable_static_impl.h"
 #include <stdbool.h>
-#define IL_FACT2VAR(fact) (il_factor_cast_variable_T(fact))
+
 //struct opcode_buf;
 struct generic_type;
 struct field;

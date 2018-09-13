@@ -3,7 +3,7 @@
 #define BEACON_IL_IL_FACTOR_STRING_H
 #include "../il_factor_interface.h"
 #include "../../util/string_pool.h"
-#define IL_FACT2STR(fact) (il_factor_cast_string_T(fact))
+
 //struct opcode_buf;
 /**
  * 文字列を表す要素.

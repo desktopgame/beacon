@@ -5,7 +5,7 @@
 #include "../../env/fqcn_cache.h"
 #include "../../env/generic_cache.h"
 #include "../il_factor_interface.h"
-#define IL_FACT2NEW(fact) (il_factor_cast_new_instance_T(fact))
+
 struct enviroment;
 struct type;
 struct constructor;

@@ -4,7 +4,7 @@
 #include "../il_factor_interface.h"
 #include "../../env/generic_type.h"
 #include "../../ast/operator_type.h"
-#define IL_FACT2U(fact) (il_factor_cast_unary_op(fact))
+
 //struct opcode_buf;
 struct il_factor_childa_op;
 struct il_factor_negative_op;
