@@ -37,5 +37,4 @@ char* il_factor_member_op_tostr(il_factor_member_op* self, struct enviroment* en
 
 void il_factor_member_op_delete(il_factor_member_op* self);
 
-il_factor_member_op* il_factor_cast_member_op(il_factor* fact);
 #endif

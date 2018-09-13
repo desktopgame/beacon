@@ -122,11 +122,6 @@ void il_factor_new_instance_delete(il_factor_new_instance * self) {
 	MEM_FREE(self);
 }
 
-il_factor_new_instance* il_factor_cast_new_instance_T(il_factor* fact) {
-	assert(fact->type == ilfactor_new_instance_T);
-	return fact->u.new_instance_;
-}
-
 //private
 static void il_factor_new_instance_delete_typearg(vector_item item) {
 	il_type_argument* e = (il_type_argument*)item;

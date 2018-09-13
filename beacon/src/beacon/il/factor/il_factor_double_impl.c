@@ -53,8 +53,3 @@ char* il_factor_double_tostr(il_factor_double* self, enviroment* env) {
 void il_factor_double_delete(il_factor_double * self) {
 	MEM_FREE(self);
 }
-
-il_factor_double* il_factor_cast_double_T(il_factor* fact) {
-	assert(fact->type == ilfactor_double_T);
-	return fact->u.double_;
-}

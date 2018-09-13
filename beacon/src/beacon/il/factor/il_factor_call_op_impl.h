@@ -51,5 +51,4 @@ void il_factor_call_op_generate(il_factor_call_op* self, struct enviroment* env,
 
 void il_factor_call_op_delete(il_factor_call_op* self);
 
-il_factor_call_op* il_factor_cast_call_op(il_factor* fact);
 #endif

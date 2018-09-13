@@ -27,5 +27,4 @@ char* il_factor_bool_tostr(il_factor_bool* self, struct enviroment* env);
 
 void il_factor_bool_delete(il_factor_bool* self);
 
-il_factor_bool* il_factor_cast_bool(il_factor* fact);
 #endif // !SIGNAL_IL_IL_FACTOR_BOOL_H

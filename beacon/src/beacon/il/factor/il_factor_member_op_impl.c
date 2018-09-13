@@ -96,11 +96,6 @@ void il_factor_member_op_delete(il_factor_member_op* self) {
 	vector_delete(self->type_args, il_factor_member_op_typearg_delete);
 	MEM_FREE(self);
 }
-
-il_factor_member_op* il_factor_cast_member_op(il_factor* fact) {
-	assert(fact->type == ilfactor_member_op_T);
-	return fact->u.member_;
-}
 //private
 static void il_factor_member_op_check(il_factor_member_op* self, enviroment* env, call_context* cctx, bool* swap) {
 	(*swap) = false;

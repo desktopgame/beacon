@@ -27,5 +27,4 @@ char* il_factor_double_tostr(il_factor_double* self, struct enviroment* env);
 
 void il_factor_double_delete(il_factor_double* self);
 
-il_factor_double* il_factor_cast_double_T(il_factor* fact);
 #endif // !SIGNAL_IL_IL_FACTOR_DOUBLE_H

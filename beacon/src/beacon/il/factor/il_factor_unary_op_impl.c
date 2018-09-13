@@ -146,11 +146,6 @@ char* il_factor_unary_op_tostr_simple(il_factor_unary_op* self, enviroment* env)
 	return string_buffer_release(sb);
 }
 
-il_factor_unary_op* il_factor_cast_unary_op(il_factor* fact) {
-	assert(fact->type == ilfactor_unary_op_T);
-	return fact->u.unary_;
-}
-
 int il_factor_unary_op_index(il_factor_unary_op* self, enviroment* env, call_context* cctx) {
 	return il_factor_unary_op_index2(self->a, self->type, env, cctx);
 }

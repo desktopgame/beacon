@@ -42,8 +42,3 @@ char* il_factor_bool_tostr(il_factor_bool* self, enviroment* env) {
 void il_factor_bool_delete(il_factor_bool * self) {
 	MEM_FREE(self);
 }
-
-il_factor_bool* il_factor_cast_bool(il_factor* fact) {
-	assert(fact->type == ilfactor_bool_T);
-	return fact->u.bool_;
-}

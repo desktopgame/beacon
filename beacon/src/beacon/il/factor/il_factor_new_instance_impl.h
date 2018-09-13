@@ -38,5 +38,4 @@ char* il_factor_new_instance_tostr(il_factor_new_instance* self, struct envirome
 
 void il_factor_new_instance_delete(il_factor_new_instance* self);
 
-il_factor_new_instance* il_factor_cast_new_instance_T(il_factor* fact);
 #endif // !SIGNAL_IL_IL_FACTOR_NEW_INSTANCE_H

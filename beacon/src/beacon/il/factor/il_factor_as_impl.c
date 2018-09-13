@@ -101,8 +101,3 @@ char* il_factor_as_tostr(il_factor_as* self, enviroment* env) {
 	MEM_FREE(to);
 	return string_buffer_release(sb);
 }
-
-il_factor_as* il_factor_cast_as_T(il_factor* fact) {
-	assert(fact->type == ilfactor_as_T);
-	return fact->u.as_;
-}

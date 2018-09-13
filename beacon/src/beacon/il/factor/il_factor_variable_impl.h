@@ -57,5 +57,4 @@ char* il_factor_variable_tostr(il_factor_variable* self, struct enviroment* env)
 
 void il_factor_variable_delete(il_factor_variable* self);
 
-il_factor_variable* il_factor_cast_variable_T(il_factor* fact);
 #endif // !SIGNAL_IL_IL_FACTOR_VARIABLE_H

@@ -40,6 +40,4 @@ generic_type* il_factor_as_eval(il_factor_as* self, struct enviroment* env, call
 void il_factor_as_delete(il_factor_as* self);
 
 char* il_factor_as_tostr(il_factor_as* self, enviroment* env);
-
-il_factor_as* il_factor_cast_as_T(il_factor* fact);
 #endif // !SIGNAL_IL_IL_FACTOR_AS_H

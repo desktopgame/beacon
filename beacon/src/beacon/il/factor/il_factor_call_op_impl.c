@@ -120,11 +120,6 @@ void il_factor_call_op_delete(il_factor_call_op* self) {
 	MEM_FREE(self);
 }
 
-il_factor_call_op* il_factor_cast_call_op(il_factor* fact) {
-	assert(fact->type == ilfactor_call_op_T);
-	return fact->u.call_;
-}
-
 //private
 static void il_factor_call_op_check(il_factor_call_op* self, enviroment* env, call_context* cctx) {
 	if(self->type != ilcall_type_undefined_T) {

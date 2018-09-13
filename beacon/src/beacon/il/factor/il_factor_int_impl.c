@@ -55,8 +55,3 @@ char* il_factor_int_tostr(il_factor_int* self, enviroment* env) {
 void il_factor_int_delete(il_factor_int * self) {
 	MEM_FREE(self);
 }
-
-il_factor_int* il_factor_cast_int_T(il_factor* fact) {
-	assert(fact->type == ilfactor_int_T);
-	return fact->u.int_;
-}

@@ -28,5 +28,4 @@ char* il_factor_string_tostr(il_factor_string* self, struct enviroment* env);
 
 void il_factor_string_delete(il_factor_string* self);
 
-il_factor_string* il_factor_cast_string_T(il_factor* fact);
 #endif // !SIGNAL_IL_IL_FACTOR_STRING_H
