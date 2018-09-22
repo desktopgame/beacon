@@ -1,8 +1,0 @@
-namespace beacon {
-	class Test {
-		public:
-		def invoke(Int a, Double a) -> Int {
-
-		}
-	}
-}

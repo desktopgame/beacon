@@ -1,7 +1,0 @@
-namespace beacon {
-	class Test {
-		public:
-		Namespace::Class cls;
-		Namespace::Class::Field fld;
-	}
-}

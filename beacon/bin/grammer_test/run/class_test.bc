@@ -1,7 +1,0 @@
-namespace beacon {
-	namespace lang {
-		class Foo {
-
-		}
-	}
-}
