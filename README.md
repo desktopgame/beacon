@@ -3,8 +3,8 @@ beacon(ビーコン)は静的型付けのプログラミング言語です
 
 | ブランチ  | ステータス |カバレッジ|
 |:---:|:---:|:---:|
-|develop |[![Build Status](https://travis-ci.org/desktopgame/beacon.svg?branch=develop)](https://travis-ci.org/desktopgame/beacon) |準備中|
-|master |[![Build Status](https://travis-ci.org/desktopgame/beacon.svg?branch=master)](https://travis-ci.org/desktopgame/beacon) |準備中|
+|develop |[![Build Status](https://travis-ci.org/desktopgame/beacon.svg?branch=develop)](https://travis-ci.org/desktopgame/beacon) |[![Coverage Status](https://coveralls.io/repos/github/desktopgame/beacon/badge.svg?branch=develop)](https://coveralls.io/github/desktopgame/beacon?branch=develop)|
+|master |[![Build Status](https://travis-ci.org/desktopgame/beacon.svg?branch=master)](https://travis-ci.org/desktopgame/beacon) |[![Coverage Status](https://coveralls.io/repos/github/desktopgame/beacon/badge.svg?branch=master)](https://coveralls.io/github/desktopgame/beacon?branch=master)|
 
 
 # ファイル
