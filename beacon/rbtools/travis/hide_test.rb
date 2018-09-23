@@ -6,6 +6,7 @@ skip_list = ["run/main92"]
 Dir.glob("beacon/bin/semantics_test/*") do |file|
     next if !file.end_with?(".bc")
     path = File.expand_path(file, "beacon/bin/semantics_test")
+    p path
     #指定のファイルがスキップ一覧に入ってるかどうか
     skip = false
     skip_list.each do |e|
