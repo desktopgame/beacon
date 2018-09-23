@@ -1,6 +1,7 @@
 require "open3"
 require "fileutils"
 require "date"
+#引数として jenkins のワークスペースが必要です。
 if(ARGV.length == 0) then
     raise "few arguments"
 end

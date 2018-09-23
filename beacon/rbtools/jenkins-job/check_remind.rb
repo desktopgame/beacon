@@ -2,6 +2,7 @@ require "open3"
 require "fileutils"
 require "date"
 #todo, TODO, fixme, FIXME を調べ上げて報告するスクリプト
+#引数として jenkins のワークスペースが必要です。
 
 class Token
 	attr_accessor :filename, :text, :line, :column
