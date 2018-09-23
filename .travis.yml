@@ -2,4 +2,4 @@ language: c
 compiler:
   - clang
 script:
-    make db && cd ./beacon/bin && ./a.out --test
+    cd ./beacon/src && make db && cd ../bin && ./a.out --test
