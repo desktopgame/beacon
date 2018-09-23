@@ -41,7 +41,7 @@ all : $(TARGETS)
 
 # 依存ファイルを元に実行ファイルを作る
 $(TARGETS): $(OBJECTS) $(LIBS)
-	$(COMPILER) -o $(TARGETDIR)/$@ $^ $(LDFLAGS)
+	$(COMPILER) -coverage  -o $(TARGETDIR)/$@ $^ $(LDFLAGS)
 
 # 中間バイナリのディレクトリを掘りながら.cppを中間ファイル.oに
 $(OBJROOT)/%.o: $(SRCROOT)/%.c
