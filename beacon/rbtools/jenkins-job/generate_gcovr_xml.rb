@@ -13,7 +13,7 @@ Dir.chdir(src) do
 	p e
 	p s
 end
-Dir.chdir(bin)
+Dir.chdir(bin) do
 	o, e, s = Open3.capture3("./a.out --test")
 	p o
 	p e
