@@ -1,0 +1,5 @@
+language: c
+compiler:
+  - clang
+script:
+    make db && cd ./beacon/bin && ./a.out --test
