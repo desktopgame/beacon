@@ -2,4 +2,4 @@ language: c
 compiler:
   - clang
 script:
-    cd ./beacon/src && make db && cd ../bin && ./a.out --test
+    ruby beacon/rbtools/travis/hide_jni.rb && cd ./beacon/src && make db && cd ../bin && ./a.out --test
