@@ -6,15 +6,20 @@ if(ARGV.length == 0) then
 end
 workspace = ARGV[0]
 src = workspace + "/beacon/src"
+bin = workspace + "/beacon/bin"
 Dir.chdir(src) do
 	o, e, s = Open3.capture3("make db")
 	p o
 	p e
 	p s
-	o, e, s = Open3.capture3(workspace + "/beacon/bin/a.out --test")
+end
+Dir.chdir(bin)
+	o, e, s = Open3.capture3("./a.out --test")
 	p o
 	p e
 	p s
+end
+Dir.chdir(src) do
     o, e, s = Open3.capture3("gcovr --xml --output=gcovr.xml ../obj")
 	p o
 	p e
