@@ -2,7 +2,7 @@
 #http://nantonaku-shiawase.hatenablog.com/entry/20110905/1321356759
 
 COMPILER  = clang
-CXXDEBUG	= -g -shared -O0 -DDEBUG -MMD -Wall
+CXXDEBUG	= -coverage -g -shared -O0 -DDEBUG -MMD -Wall
 CXXRELEASE	= -g -shared -O2 -MMD -w
 LDFLAGS = -L/usr/local/lib -L/opt/local/lib
 LIBS      = 
