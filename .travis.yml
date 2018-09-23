@@ -9,7 +9,4 @@ jobs:
     -
       script: ruby beacon/rbtools/travis/hide_jni.rb && ruby beacon/rbtools/travis/hide_test.rb && cd ./beacon/src && make db && cd ../bin && ./a.out --test
 after_success:
- - coveralls -r ./beacon/src --gcov ./beacon/gcov -n -t $COVERALLS_REPO_TOKEN
-env:
-  global:
-    secure: kSJ0WrTlmJiI1yJaxJiNOKqwPLeHL9UiuW4E98u40sjEFtN9lgsnLqy+4ouCNqUGnqHuP4rODQhixgp9NDN+AK7U6UxNqzW924m9xzzzJkda5F5pWA54q6WF8fy+hiPe9jCGUktf3Y6hcwNVRMRm0+Mdbi/u3dWc/BKDKoe7DUwF9m20J8bKc1FZL4tgnvheLlzhVOSja0Cj6FapZhGG5pw/+bTTSp80+Z2P27aNJhmaYfq8kXQC1sCp57+1VnlYvyP66mZviRb/PkmDN2VlSbySTGTqZZgguZoGS4hB1JW7BmZdEUe7ApmD4S7h2EUqFZWNg7nr/+QrcvunvQ+ddR3QZeXQoWsrG0+lsRIfhTX/YVtmxFL3kfYhnANNwiKcJ3DHo95CYyjfBbmZ63mzauyFCxkDaqdvxV2QQawPfFHtDfAgQxx3Q2f28boFkAmqlYDtys/JwX4FHq645Pi9L8NybmQrpWgSLr2bPhkVpL2aLfsWJYQaJHTD7UiR1UEoYQT/vSTPcyJvtXLKE8N3TF+kgycECuIxPOkihm5U5FVOVA+s/d3iHnD2ThyVAJ79siwv8H8/VIr6y69qbLaf+o+FVffBQYhzwbr+N92gxwe7VXfMp+oLEOAeF88bTSinJiOlqrlFIaHl+JmEoV2S2OnVmp8a6ggy+WzHSNYwvJ4=
+ - coveralls -r ./beacon/src --gcov ./beacon/gcov -n -t b18Ijbj9CaZ9fphsPAvLfwILaW5uH9Xpt
