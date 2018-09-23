@@ -2,7 +2,7 @@
 #http://nantonaku-shiawase.hatenablog.com/entry/20110905/1321356759
 
 COMPILER  = clang
-CXXDEBUG	= --coverage -g -shared -O0 -DDEBUG -MMD -Wall
+CXXDEBUG	= -coverage -g -shared -O0 -DDEBUG -MMD -Wall
 CXXRELEASE	= -g -shared -O2 -MMD -w
 LDFLAGS = -L/usr/local/lib -L/opt/local/lib
 LIBS      = 
@@ -41,7 +41,7 @@ all : $(TARGETS)
 
 # 依存ファイルを元に実行ファイルを作る
 $(TARGETS): $(OBJECTS) $(LIBS)
-	$(COMPILER) --coverage -lgcov  -o $(TARGETDIR)/$@ $^ $(LDFLAGS)
+	$(COMPILER) -coverage -o $(TARGETDIR)/$@ $^ $(LDFLAGS)
 
 # 中間バイナリのディレクトリを掘りながら.cppを中間ファイル.oに
 $(OBJROOT)/%.o: $(SRCROOT)/%.c
