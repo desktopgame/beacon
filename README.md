@@ -1,5 +1,5 @@
 # beacon
-beacon(ビーコン)は静的型付けのプログラミング言語です  
+beacon(ビーコン)は静的型付けのプログラミング言語です
 | ブランチ  | ステータス |カバレッジ|
 |:---:|:---:|:--:|
 |develop |[![Build Status](https://travis-ci.org/desktopgame/beacon.svg?branch=develop)](https://travis-ci.org/desktopgame/beacon) |準備中|
