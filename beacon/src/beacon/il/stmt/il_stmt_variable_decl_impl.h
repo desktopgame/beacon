@@ -29,13 +29,6 @@ il_stmt_variable_decl* il_stmt_variable_decl_new(string_view namev);
 /**
  * 型宣言を表す要素を出力します.
  * @param self
- * @param depth
- */
-void il_stmt_variable_decl_dump(il_stmt_variable_decl* self, int depth);
-
-/**
- * 型宣言を表す要素を出力します.
- * @param self
  * @param env
  * @param cctx
  */

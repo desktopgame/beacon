@@ -17,12 +17,6 @@ il_factor_bool * il_factor_bool_new(bool b) {
 	return ret;
 }
 
-void il_factor_bool_dump(il_factor_bool * self, int depth) {
-	io_printi(depth);
-	printf(self->a ? "true" : "false");
-	io_println();
-}
-
 void il_factor_bool_generate(il_factor_bool * self, enviroment * env, call_context* cctx) {
 	if (self->a) {
 		opcode_buf_add(env->buf, op_true);

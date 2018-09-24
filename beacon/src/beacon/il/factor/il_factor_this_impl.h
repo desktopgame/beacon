@@ -14,8 +14,6 @@ typedef struct il_factor_this {
 
 il_factor_this* il_factor_this_new();
 
-void il_factor_this_dump(il_factor_this* self, int depth);
-
 void il_factor_this_generate(il_factor_this* self, struct enviroment* env, call_context* cctx);
 
 void il_factor_this_load(il_factor_this* self, struct enviroment* env, call_context* cctx);

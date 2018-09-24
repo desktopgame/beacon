@@ -110,13 +110,6 @@ typedef struct il_factor {
 il_factor* il_factor_malloc(il_factor_type type, const char* filename, int lineno);
 
 /**
- * 計算可能な要素を出力します.
- * @param self
- * @param depth
- */
-void il_factor_dump(il_factor* self, int depth);
-
-/**
  * オペコードを生成します.
  * この関数は ILパニック を発生させることがあります。
  * @param self

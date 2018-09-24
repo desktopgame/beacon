@@ -25,28 +25,6 @@ il_method * il_method_new(string_view namev) {
 	return ret;
 }
 
-void il_method_dump(il_method * self, int depth) {
-	io_printi(depth);
-	access_print(self->access);
-	printf(" ");
-	modifier_print(self->modifier);
-	printf(" method %s", string_pool_ref2str(self->namev));
-	il_type_parameter_list_print(self->type_parameter_list);
-	printf(" -> ");
-	generic_cache_print(self->return_fqcn);
-	io_println();
-	for (int i = 0; i < self->parameter_list->length; i++) {
-		vector_item e = vector_at(self->parameter_list, i);
-		il_parameter* p = (il_parameter*)e;
-		il_parameter_dump(p, depth + 1);
-	}
-	for (int i = 0; i < self->statement_list->length; i++) {
-		vector_item e = vector_at(self->statement_list, i);
-		il_stmt* s = (il_stmt*)e;
-		il_stmt_dump(s, depth + 1);
-	}
-}
-
 void il_method_delete(il_method * self) {
 	if (self == NULL) {
 		return;

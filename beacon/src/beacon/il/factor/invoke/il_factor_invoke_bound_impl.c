@@ -34,23 +34,6 @@ il_factor_invoke_bound* il_factor_invoke_bound_new(string_view namev) {
 	return ret;
 }
 
-void il_factor_invoke_bound_dump(il_factor_invoke_bound* self, int depth) {
-	io_printi(depth);
-	io_printfln("invoke bound");
-
-	io_printi(depth + 1);
-	if(self->tag == bound_invoke_method_T) {
-		io_printfln("%s", string_pool_ref2str(self->u.m->namev));
-	} else {
-		io_printfln("[]");
-	}
-
-	for(int i=0; i<self->args->length; i++) {
-		il_argument* e = (il_argument*)vector_at(self->args, i);
-		il_factor_dump(e->factor, depth + 2);
-	}
-}
-
 void il_factor_invoke_bound_generate(il_factor_invoke_bound* self, enviroment* env, call_context* cctx) {
 	il_factor_invoke_bound_generate_method(self, env, cctx);
 	il_factor_invoke_bound_generate_subscript(self, env, cctx);

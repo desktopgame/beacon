@@ -21,12 +21,6 @@ il_factor_arithmetic_op* il_factor_arithmetic_op_new(operator_type type) {
 	return ret;
 }
 
-void il_factor_arithmetic_op_dump(il_factor_arithmetic_op* self, int depth) {
-	io_printi(depth);
-	operator_fprintf(stdout, self->type);
-	io_println();
-}
-
 generic_type* il_factor_arithmetic_op_eval(il_factor_arithmetic_op * self, enviroment * env, call_context* cctx) {
 	generic_type* lgtype = il_factor_eval(self->parent->left, env, cctx);
 	generic_type* rgtype = il_factor_eval(self->parent->right, env, cctx);

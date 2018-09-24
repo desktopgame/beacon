@@ -23,17 +23,6 @@ il_stmt_while * il_stmt_while_new() {
 	return ret;
 }
 
-void il_stmt_while_dump(il_stmt_while * self, int depth) {
-	io_printi(depth);
-	printf("while");
-	io_println();
-	il_factor_dump(self->condition, depth + 1);
-	for (int i = 0; i < self->statement_list->length; i++) {
-		il_stmt* e = (il_stmt*)vector_at(self->statement_list, i);
-		il_stmt_dump(e, depth + 1);
-	}
-}
-
 void il_stmt_while_generate(il_stmt_while * self, enviroment * env, call_context* cctx) {
 	env->sym_table->scope_depth++;
 	int prev = opcode_buf_nop(env->buf);

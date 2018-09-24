@@ -25,13 +25,6 @@ il_stmt* il_stmt_wrap_return(il_stmt_return* self);
 il_stmt_return* il_stmt_return_new();
 
 /**
- *  式を返却する文を出力します.
- * @param self
- * @param depth
- */
-void il_stmt_return_dump(il_stmt_return* self, int depth);
-
-/**
  * 式を返却する文を生成します.
  * @param self
  * @param env

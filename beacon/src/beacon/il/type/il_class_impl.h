@@ -63,13 +63,6 @@ void il_class_add_property(il_class* self, struct il_property* prop);
 void il_class_add_method(il_class* self, struct il_method* m);
 
 /**
- * クラスとそのメンバーの一覧を出力します.
- * @param self
- * @param depth
- */
-void il_class_dump(il_class* self, int depth);
-
-/**
  * クラスと含まれるメンバー宣言の一覧を解放します.
  * @param self
  */

@@ -19,13 +19,6 @@ il_factor_subscript* il_factor_subscript_malloc(const char* filename, int lineno
 	return ret;
 }
 
-void il_factor_subscript_dump(il_factor_subscript* self, int depth) {
-	io_printi(depth);
-	io_printfln("[]");
-	il_factor_dump(self->receiver, depth + 1);
-	il_factor_dump(self->pos, depth + 1);
-}
-
 void il_factor_subscript_generate(il_factor_subscript* self, enviroment* env, call_context* cctx) {
 	il_factor_generate(self->pos, env, cctx);
 	il_factor_generate(self->receiver, env, cctx);

@@ -29,8 +29,6 @@ il_factor* il_factor_wrap_as(il_factor_as* self);
 
 il_factor_as* il_factor_as_new();
 
-void il_factor_as_dump(il_factor_as* self, int depth);
-
 void il_factor_as_generate(il_factor_as* self, struct enviroment* env, call_context* cctx);
 
 void il_factor_as_load(il_factor_as* self, struct enviroment* env, call_context* cctx);

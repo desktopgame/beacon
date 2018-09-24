@@ -22,12 +22,6 @@ il_factor_int * il_factor_int_malloc(int32_t i, const char* filename, int lineno
 	return ret;
 }
 
-void il_factor_int_dump(il_factor_int * self, int depth) {
-	io_printi(depth);
-	printf("Int %d", self->value);
-	io_println();
-}
-
 void il_factor_int_generate(il_factor_int * self, enviroment* env, call_context* cctx) {
 	assert(self->count == 0);
 	int index = enviroment_add_constant_int(env, self->value);

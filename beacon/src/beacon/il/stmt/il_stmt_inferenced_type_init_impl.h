@@ -31,13 +31,6 @@ il_stmt* il_stmt_wrap_inferenced_type_init(il_stmt_inferenced_type_init* self);
 il_stmt_inferenced_type_init* il_stmt_inferenced_type_init_new(string_view namev);
 
 /**
- * 推論された型の初期化を表す要素を出力します.
- * @param self
- * @param depth
- */
-void il_stmt_inferenced_type_init_dump(il_stmt_inferenced_type_init* self, int depth);
-
-/**
  * 推論された型の初期化を表す要素を生成します.
  * @param self
  * @param env

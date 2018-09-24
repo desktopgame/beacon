@@ -18,13 +18,6 @@ typedef struct il_top_level {
 il_top_level* il_top_level_new();
 
 /**
- * 全ての要素をダンプします.
- * @param depth
- * @param self
- */
-void il_top_level_dump(il_top_level* self, int depth);
-
-/**
  * この要素と付随する全てを解放します.
  * @param self
  */

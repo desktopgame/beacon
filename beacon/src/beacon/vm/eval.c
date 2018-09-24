@@ -41,6 +41,10 @@ bool eval_ast(const char* filename) {
 }
 
 bool eval_il(const char* filename) {
+	fprintf(stderr, "this command is deleted\n");
+	abort();
+	return false;
+	/*
 	class_loader* cl = class_loader_new(filename, content_entry_point_T);
 	class_loader_load(cl);
 
@@ -50,6 +54,7 @@ bool eval_il(const char* filename) {
 	}
 	class_loader_delete(cl);
 	return true;
+	//*/
 }
 
 bool eval_op(const char* filename) {

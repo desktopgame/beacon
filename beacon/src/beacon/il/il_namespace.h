@@ -29,13 +29,6 @@ il_namespace* il_namespace_new(string_view namev);
 il_namespace* il_namespace_root(il_namespace* self);
 
 /**
- * この名前空間とその子要素を出力します.
- * @param self
- * @param depth
- */
-void il_namespace_dump(il_namespace* self, int depth);
-
-/**
  * 名前空間を表す要素を解放します.
  * @param self
  */

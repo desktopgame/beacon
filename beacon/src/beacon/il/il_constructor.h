@@ -27,13 +27,6 @@ typedef struct il_constructor {
 il_constructor* il_constructor_new();
 
 /**
- * コンストラクタを表す要素を出力します.
- * @param self
- * @param depth;
- */
-void il_constructor_dump(il_constructor* self, int depth);
-
-/**
  * コンストラクタを表す要素を開放します.
  * @param self
  */

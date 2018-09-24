@@ -23,14 +23,6 @@ il_factor_explicit_binary_op* il_factor_explicit_binary_op_new(operator_type typ
 	return ret;
 }
 
-void il_factor_explicit_binary_op_dump(il_factor_explicit_binary_op* self, int depth) {
-	io_printi(depth);
-	operator_fprintf(stdout, self->type);
-	io_println();
-	il_factor_dump(self->receiver, depth + 1);
-	il_factor_dump(self->arg, depth + 1);
-}
-
 void il_factor_explicit_binary_op_generate(il_factor_explicit_binary_op* self, enviroment* env, call_context* cctx) {
 	il_factor_generate(self->arg, env, cctx);
 	il_factor_generate(self->receiver, env, cctx);

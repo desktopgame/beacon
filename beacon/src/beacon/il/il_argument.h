@@ -17,13 +17,6 @@ typedef struct il_argument {
 il_argument* il_argument_new();
 
 /**
- * 実引数を表す要素を出力します.
- * @param self
- * @param depth
- */
-void il_argument_dump(il_argument* self, int depth);
-
-/**
  * 実引数を表す要素を開放します.
  * @param self
  */

@@ -21,13 +21,6 @@ il_factor_explicit_unary_op* il_factor_explicit_unary_op_new(operator_type type)
 	return ret;
 }
 
-void il_factor_explicit_unary_op_dump(il_factor_explicit_unary_op* self, int depth) {
-	io_printi(depth);
-	operator_fprintf(stdout, self->type);
-	io_println();
-	il_factor_dump(self->receiver, depth + 1);
-}
-
 void il_factor_explicit_unary_op_generate(il_factor_explicit_unary_op* self, enviroment* env, call_context* cctx) {
 	il_factor_generate(self->receiver, env, cctx);
 	opcode_buf_add(env->buf, op_invokeoperator);

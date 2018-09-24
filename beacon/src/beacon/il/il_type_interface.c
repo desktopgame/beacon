@@ -60,16 +60,6 @@ void il_type_add_method(il_type * self, il_method * method) {
 	}
 }
 
-void il_type_dump(il_type * self, int depth) {
-	if (self->tag == iltype_class_T) {
-		il_class_dump(self->u.class_, depth);
-	} else if (self->tag == iltype_interface_T) {
-		il_interface_dump(self->u.interface_, depth);
-	} else if (self->tag == iltype_enum_T) {
-		il_enum_dump(self->u.enum_, depth);
-	}
-}
-
 void il_type_delete(il_type * self) {
 	if (self->tag == iltype_class_T) {
 		il_class_delete(self->u.class_);

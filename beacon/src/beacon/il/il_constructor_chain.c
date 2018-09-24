@@ -16,23 +16,6 @@ il_constructor_chain * il_constructor_chain_new() {
 	return ret;
 }
 
-void il_constructor_chain_dump(il_constructor_chain * self, int depth) {
-	io_printi(depth);
-	printf("constructor chain");
-	io_println();
-	io_printi(depth);
-	if (self->type == chain_type_this_T) {
-		printf("this");
-	} else if (self->type == chain_type_super_T) {
-		printf("super");
-	}
-	io_println();
-	for (int i = 0; i < self->argument_list->length; i++) {
-		il_argument* ilarg = (il_argument*)vector_at(self->argument_list, i);
-		il_argument_dump(ilarg, depth + 1);
-	}
-}
-
 void il_constructor_chain_delete(il_constructor_chain * self) {
 	if (self == NULL) {
 		return;

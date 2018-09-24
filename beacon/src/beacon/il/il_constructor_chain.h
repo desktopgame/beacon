@@ -20,13 +20,6 @@ typedef struct il_constructor_chain {
 il_constructor_chain* il_constructor_chain_new();
 
 /**
- * コンストラクタの連鎖を表す要素を出力します.
- * @param self
- * @param depth
- */
-void il_constructor_chain_dump(il_constructor_chain* self, int depth);
-
-/**
  * コンストラクタの連鎖を表す要素を開放します.
  * @param self
  */

@@ -15,8 +15,6 @@ typedef struct il_factor_negative_op {
 #define il_factor_negative_op_new(type) (il_factor_negative_op_malloc(type, __FILE__, __LINE__))
 il_factor_negative_op* il_factor_negative_op_malloc(operator_type type, const char* filename, int lineno);
 
-void il_factor_negative_op_dump(il_factor_negative_op* self, int depth);
-
 struct generic_type* il_factor_negative_op_eval(il_factor_negative_op * self, struct enviroment * env, call_context* cctx);
 
 void il_factor_negative_op_generate(il_factor_negative_op* self, struct enviroment* env, call_context* cctx);

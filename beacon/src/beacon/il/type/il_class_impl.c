@@ -68,49 +68,6 @@ void il_class_add_method(il_class * self, il_method * m) {
 	}
 }
 
-void il_class_dump(il_class * self, int depth) {
-	io_printi(depth);
-	if(self->is_abstract) {
-		printf("abstract ");
-	}
-	printf("class %s", string_pool_ref2str(self->namev));
-	il_type_parameter_list_print(self->type_parameter_list);
-	io_println();
-	//ここでは親クラスとインターフェースをごちゃまぜで表示
-	for (int i = 0; i < self->extend_list->length; i++) {
-		generic_cache* e = (generic_cache*)vector_at(self->extend_list, i);
-		generic_cache_dump(e, depth + 1);
-	}
-	for (int i = 0; i < self->field_list->length; i++) {
-		vector_item e = vector_at(self->field_list, i);
-		il_field* ilf = (il_field*)e;
-		il_field_dump(ilf, depth + 1);
-	}
-	for (int i = 0; i < self->method_list->length; i++) {
-		vector_item e = vector_at(self->method_list, i);
-		il_method* ilm = (il_method*)e;
-		il_method_dump(ilm, depth + 1);
-	}
-	for (int i = 0; i < self->constructor_list->length; i++) {
-		vector_item e = vector_at(self->constructor_list, i);
-		il_constructor* ilcons = (il_constructor*)e;
-		il_constructor_dump(ilcons, depth + 1);
-	}
-	for(int i=0; i<self->operator_overload_list->length; i++) {
-		vector_item e = vector_at(self->operator_overload_list, i);
-		il_operator_overload* ilopov = (il_operator_overload*)e;
-		il_operator_overload_dump(ilopov, depth + 1);
-	}
-	for(int i=0; i<self->prop_list->length; i++) {
-		il_property* e = vector_at(self->prop_list, i);
-		il_property_dump(e, depth + 1);
-	}
-	for(int i=0; i<self->sprop_list->length; i++) {
-		il_property* e = vector_at(self->sprop_list, i);
-		il_property_dump(e, depth + 1);
-	}
-}
-
 void il_class_delete(il_class * self) {
 	if (self == NULL) {
 		return;

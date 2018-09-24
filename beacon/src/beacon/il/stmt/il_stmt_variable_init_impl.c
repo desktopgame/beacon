@@ -24,14 +24,6 @@ il_stmt_variable_init * il_stmt_variable_init_new(string_view namev) {
 	return ret;
 }
 
-void il_stmt_variable_init_dump(il_stmt_variable_init * self, int depth) {
-	io_printi(depth);
-	printf("variable init %s", string_pool_ref2str(self->namev));
-	io_println();
-	generic_cache_dump(self->fqcn, depth + 1);
-	il_factor_dump(self->fact, depth + 1);
-}
-
 void il_stmt_variable_init_generate(il_stmt_variable_init * self, enviroment * env, call_context* cctx) {
 	il_factor_generate(self->fact, env, cctx);
 	//宣言型と代入型が異なる場合

@@ -19,13 +19,6 @@ il_stmt_inject_jni* il_stmt_inject_jni_new(string_view namev) {
 	return ret;
 }
 
-void il_stmt_inject_jni_dump(il_stmt_inject_jni* self, int depth) {
-	io_printi(depth);
-	printf("inject jni");
-	io_println();
-	il_factor_dump(self->fact, depth + 1);
-}
-
 void il_stmt_inject_jni_generate(il_stmt_inject_jni* self, enviroment* env, call_context* cctx) {
 	il_factor_generate(self->fact, env, cctx);
 	opcode_buf_add(env->buf, op_store);

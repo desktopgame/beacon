@@ -20,12 +20,6 @@ il_factor_string * il_factor_string_new(string_view valuev) {
 	return ret;
 }
 
-void il_factor_string_dump(il_factor_string * self, int depth) {
-	io_printi(depth);
-	printf("String %s", string_pool_ref2str(self->valuev));
-	io_println();
-}
-
 void il_factor_string_generate(il_factor_string * self, enviroment* env, call_context* cctx) {
 	int index = enviroment_add_constant_string(env, self->valuev);
 	opcode_buf_add(env->buf, (vector_item)op_sconst);

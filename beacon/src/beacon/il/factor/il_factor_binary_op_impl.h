@@ -33,8 +33,6 @@ il_factor* il_factor_wrap_binary(il_factor_binary_op* self);
 
 il_factor_binary_op* il_factor_binary_op_new(operator_type type);
 
-void il_factor_binary_op_dump(il_factor_binary_op* self, int depth);
-
 void il_factor_binary_op_generate(il_factor_binary_op* self, struct enviroment* env, call_context* cctx);
 
 void il_factor_binary_op_load(il_factor_binary_op* self, struct enviroment* env, call_context* cctx);

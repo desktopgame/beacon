@@ -18,8 +18,6 @@ il_factor* il_factor_wrap_int(il_factor_int* self);
 #define il_factor_int_new(i) (il_factor_int_malloc(i, __FILE__, __LINE__))
 il_factor_int* il_factor_int_malloc(int32_t i, const char* filename, int lineno);
 
-void il_factor_int_dump(il_factor_int* self, int depth);
-
 void il_factor_int_generate(il_factor_int* self, struct enviroment* env, call_context* cctx);
 
 void il_factor_int_load(il_factor_int* self, struct enviroment* env, call_context* cctx);

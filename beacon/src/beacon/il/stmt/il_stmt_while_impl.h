@@ -16,8 +16,6 @@ il_stmt* il_stmt_wrap_while(il_stmt_while* self);
 
 il_stmt_while* il_stmt_while_new();
 
-void il_stmt_while_dump(il_stmt_while* self, int depth);
-
 void il_stmt_while_generate(il_stmt_while* self, struct enviroment* env, call_context* cctx);
 
 void il_stmt_while_load(il_stmt_while* self, struct enviroment* env, call_context* cctx);

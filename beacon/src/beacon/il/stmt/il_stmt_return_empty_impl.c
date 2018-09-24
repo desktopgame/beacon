@@ -9,9 +9,6 @@
 
 static void check_method_return(il_stmt_return_empty self, enviroment * env, call_context* cctx);
 
-void il_stmt_return_empty_dump(il_stmt_return_empty self, int depth) {
-}
-
 void il_stmt_return_empty_generate(il_stmt_return_empty self, enviroment* env, call_context* cctx) {
 	opcode_buf_add(env->buf, op_return);
 }

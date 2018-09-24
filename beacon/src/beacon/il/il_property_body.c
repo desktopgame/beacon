@@ -14,25 +14,6 @@ il_property_body* il_property_body_malloc(il_property_body_tag tag, const char* 
 	return ret;
 }
 
-void il_property_body_dump(il_property_body* self, int depth) {
-	io_printi(depth);
-	access_print(self->access);
-	printf(" ");
-	if(self->tag == ilproperty_set_T) {
-		printf("set");
-	} else {
-		printf("get");
-	}
-	if(self->is_short) {
-		printf(" simple");
-	}
-	io_println();
-	for(int i=0; i<self->statement_list->length; i++) {
-		il_stmt* e = vector_at(self->statement_list, i);
-		il_stmt_dump(e, depth + 1);
-	}
-}
-
 void il_property_body_delete(il_property_body* self) {
 	vector_delete(self->statement_list, il_property_body_stmt_delete);
 	MEM_FREE(self);

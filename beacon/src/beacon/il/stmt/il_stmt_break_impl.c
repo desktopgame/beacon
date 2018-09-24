@@ -21,11 +21,5 @@ void il_stmt_break_generate(void * empty, enviroment * env, call_context* cctx) 
 void il_stmt_break_load(void * empty, enviroment * env, call_context* cctx) {
 }
 
-void il_stmt_break_dump(void * empty, int depth) {
-	io_printi(depth);
-	printf("break");
-	io_println();
-}
-
 void il_stmt_break_delete(void * empty) {
 }

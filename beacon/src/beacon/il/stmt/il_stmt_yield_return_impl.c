@@ -23,13 +23,6 @@ il_stmt_yield_return* il_stmt_yield_return_malloc(const char* filename, int line
 	return ret;
 }
 
-void il_stmt_yield_return_dump(il_stmt_yield_return* self, int depth) {
-	io_printi(depth);
-	printf("yield return");
-	io_println();
-	il_factor_dump(self->fact, depth + 1);
-}
-
 void il_stmt_yield_return_generate(il_stmt_yield_return* self, enviroment* env, call_context* cctx) {
 	il_factor_generate(self->fact, env, cctx);
 	opcode_buf_add(env->buf, op_coro_next);

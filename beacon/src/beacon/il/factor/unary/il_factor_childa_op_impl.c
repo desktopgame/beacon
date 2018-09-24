@@ -17,12 +17,6 @@ il_factor_childa_op* il_factor_childa_op_new(operator_type type) {
 	return ret;
 }
 
-void il_factor_childa_op_dump(il_factor_childa_op* self, int depth) {
-	io_printi(depth);
-	operator_fprintf(stdout, self->type);
-	io_println();
-}
-
 generic_type* il_factor_childa_op_eval(il_factor_childa_op * self, enviroment * env, call_context* cctx) {
 	generic_type* gtype = il_factor_eval(self->parent->a, env, cctx);
 	if(self->operator_index == -1) {

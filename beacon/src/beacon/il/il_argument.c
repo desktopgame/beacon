@@ -13,13 +13,6 @@ il_argument * il_argument_new() {
 	return ret;
 }
 
-void il_argument_dump(il_argument * self, int depth) {
-	io_printi(depth);
-	printf("argument");
-	io_println();
-	il_factor_dump(self->factor, depth + 1);
-}
-
 void il_argument_delete(il_argument * self) {
 	il_factor_delete(self->factor);
 	MEM_FREE(self);

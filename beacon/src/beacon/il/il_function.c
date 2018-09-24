@@ -22,27 +22,6 @@ il_function * il_function_new(string_view namev) {
 	return ret;
 }
 
-void il_function_dump(il_function * self, int depth) {
-	io_printi(depth);
-	printf("function %s -> ", string_pool_ref2str(self->namev));
-	generic_cache_print(self->return_fqcn);
-	io_println();
-	il_type_parameter_list_print(self->type_parameter_vec);
-	for (int i = 0; i < self->parameter_list->length; i++) {
-		vector_item e = vector_at(self->parameter_list, i);
-		il_parameter* p = (il_parameter*)e;
-		il_parameter_dump(p, depth + 1);
-	}
-	for (int i = 0; i < self->statement_list->length; i++) {
-		vector_item e = vector_at(self->statement_list, i);
-		il_stmt* s = (il_stmt*)e;
-		il_stmt_dump(s, depth + 1);
-	}
-	io_printi(depth);
-	printf("function end");
-	io_println();
-}
-
 void il_function_delete(il_function * self) {
 	vector_delete(self->type_parameter_vec, il_function_type_parameter_delete);
 	vector_delete(self->parameter_list, il_function_parameter_delete);

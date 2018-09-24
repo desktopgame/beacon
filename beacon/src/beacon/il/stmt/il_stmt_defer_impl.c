@@ -14,12 +14,6 @@ il_stmt_defer* il_stmt_defer_new() {
 	return ret;
 }
 
-void il_stmt_defer_dump(il_stmt_defer* self, int depth) {
-	io_printi(depth);
-	io_printfln("defer");
-	il_stmt_dump(self->stmt, depth + 1);
-}
-
 void il_stmt_defer_load(il_stmt_defer* self, enviroment* env, call_context* cctx) {
 	il_stmt_load(self->stmt, env, cctx);
 }

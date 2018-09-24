@@ -17,12 +17,6 @@ il_factor_super* il_factor_super_new() {
 	return ret;
 }
 
-void il_factor_super_dump(il_factor_super * self, int depth) {
-	io_printi(depth);
-	printf("super");
-	io_println();
-}
-
 void il_factor_super_generate(il_factor_super * self, enviroment * env, call_context* cctx) {
 	opcode_buf_add(env->buf, op_super);
 }

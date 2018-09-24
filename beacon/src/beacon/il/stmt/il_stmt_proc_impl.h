@@ -24,13 +24,6 @@ il_stmt* il_stmt_wrap_proc(il_stmt_proc* self);
 il_stmt_proc* il_stmt_proc_new();
 
 /**
- * 式のみで構成される文を表す要素を出力します.
- * @param self
- * @param depth
- */
-void il_stmt_proc_dump(il_stmt_proc* self, int depth);
-
-/**
  * 式のみで構成される文を生成します.
  * @param self
  * @param env

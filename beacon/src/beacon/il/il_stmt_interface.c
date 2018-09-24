@@ -13,66 +13,6 @@ il_stmt* il_stmt_malloc(il_stmt_type type, const char* filename, int lineno) {
 	return ret;
 }
 
-void il_stmt_dump(il_stmt * self, int depth) {
-	il_print_layout_form(self->lineno);
-	switch (self->type) {
-		case ilstmt_if_T:
-			il_stmt_if_dump(self->u.if_, depth);
-			break;
-		case ilstmt_proc_T:
-			il_stmt_proc_dump(self->u.proc_, depth);
-			break;
-		case ilstmt_variable_decl_T:
-			il_stmt_variable_decl_dump(self->u.variable_decl, depth);
-			break;
-		case ilstmt_variable_init_T:
-			il_stmt_variable_init_dump(self->u.variable_init, depth);
-			break;
-		case ilstmt_return_T:
-			il_stmt_return_dump(self->u.return_, depth);
-			break;
-		case ilstmt_return_empty_T:
-			il_stmt_return_empty_dump(NULL, depth);
-			break;
-		case ilstmt_while_T:
-			il_stmt_while_dump(self->u.while_, depth);
-			break;
-		case ilstmt_break_T:
-			il_stmt_break_dump(NULL, depth);
-			break;
-		case ilstmt_continue_T:
-			il_stmt_continue_dump(NULL, depth);
-			break;
-		case ilstmt_inferenced_type_init_T:
-			il_stmt_inferenced_type_init_dump(self->u.inferenced_type_init, depth);
-			break;
-		case ilstmt_try_T:
-			il_stmt_try_dump(self->u.try_, depth);
-			break;
-		case ilstmt_throw_T:
-			il_stmt_throw_dump(self->u.throw_, depth);
-			break;
-		case ilstmt_assert_T:
-			il_stmt_assert_dump(self->u.bcassert_, depth);
-			break;
-		case ilstmt_defer_T:
-			il_stmt_defer_dump(self->u.defer_, depth);
-			break;
-		case ilstmt_yield_return_T:
-			il_stmt_yield_return_dump(self->u.yield_return, depth);
-			break;
-		case ilstmt_yield_break_T:
-			il_stmt_yield_break_dump(self->u.yield_break, depth);
-			break;
-		case ilstmt_inject_jni_T:
-			il_stmt_inject_jni_dump(self->u.inject_jni, depth);
-			break;
-		default:
-			//ERROR("ステートメントをダンプ出来ませんでした。");
-			break;
-	}
-}
-
 void il_stmt_generate(il_stmt * self, struct enviroment* env, call_context* cctx) {
 	if(bc_error_last()) {
 		return;

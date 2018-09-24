@@ -22,30 +22,6 @@ il_top_level* il_top_level_new() {
 	return ret;
 }
 
-void il_top_level_dump(il_top_level* self, int depth) {
-	printf("top_level");
-	io_println();
-	for (int i = 0; i < self->import_list->length; i++) {
-		vector_item e = vector_at(self->import_list, i);
-		il_import* ili = (il_import*)e;
-		il_import_dump(ili, depth + 1);
-	}
-	for (int i = 0; i < self->namespace_list->length; i++) {
-		vector_item e = vector_at(self->namespace_list, i);
-		il_namespace* iln = (il_namespace*)e;
-		il_namespace_dump(iln, depth + 1);
-	}
-	for (int i = 0; i < self->function_list->length; i++) {
-		il_function* ilfunc = (il_function*)vector_at(self->function_list, i);
-		il_function_dump(ilfunc, depth);
-	}
-	for (int i = 0; i < self->statement_list->length; i++) {
-		vector_item e = vector_at(self->statement_list, i);
-		il_stmt* ils = (il_stmt*)e;
-		il_stmt_dump(ils, depth + 1);
-	}
-}
-
 void il_top_level_delete(il_top_level* self) {
 	if(self == NULL) {
 		return;

@@ -32,13 +32,6 @@ il_factor_variable * il_factor_variable_malloc(const char* filename, int lineno)
 	return ret;
 }
 
-void il_factor_variable_dump(il_factor_variable * self, int depth) {
-	io_printi(depth);
-	printf("variable ");
-	fqcn_cache_print(self->fqcn);
-	io_println();
-}
-
 void il_factor_variable_generate(il_factor_variable * self, enviroment* env, call_context* cctx) {
 	il_factor_variable_check(self, env, cctx);
 	if(self->type == ilvariable_type_local_T) {

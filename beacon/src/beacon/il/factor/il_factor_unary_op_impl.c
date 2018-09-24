@@ -27,21 +27,6 @@ il_factor_unary_op * il_factor_unary_op_new(operator_type type) {
 	return ret;
 }
 
-void il_factor_unary_op_dump(il_factor_unary_op * self, int depth) {
-	switch(self->type) {
-		case operator_not_T:
-			il_factor_not_op_dump(self->u.not_op, depth);
-			break;
-		case operator_childa_T:
-			il_factor_childa_op_dump(self->u.childa_op, depth);
-			break;
-		case operator_negative_T:
-			il_factor_negative_op_dump(self->u.negative_op, depth);
-			break;
-	}
-	il_factor_dump(self->a, depth + 1);
-}
-
 void il_factor_unary_op_generate(il_factor_unary_op * self, enviroment* env, call_context* cctx) {
 	switch(self->type) {
 		case operator_not_T:

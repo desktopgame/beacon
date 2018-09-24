@@ -25,13 +25,6 @@ typedef struct il_function {
 il_function* il_function_new(string_view namev);
 
 /**
- * 関数をダンプします.
- * @param self
- * @param depth
- */
-void il_function_dump(il_function* self, int depth);
-
-/**
  * 関数を解放します.
  * @param self
  */

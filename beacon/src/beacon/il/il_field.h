@@ -26,13 +26,6 @@ typedef struct il_field {
 il_field* il_field_new(string_view namev);
 
 /**
- * フィールドを出力します.
- * @param self
- * @param depth
- */
-void il_field_dump(il_field* self, int depth);
-
-/**
  * フィールドを開放します.
  * @param self
  */

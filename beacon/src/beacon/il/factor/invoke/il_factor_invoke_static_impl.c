@@ -27,19 +27,6 @@ il_factor_invoke_static* il_factor_invoke_static_new(string_view namev) {
 	return ret;
 }
 
-void il_factor_invoke_static_dump(il_factor_invoke_static* self, int depth) {
-	io_printi(depth);
-	io_printfln("invoke static");
-
-	io_printi(depth + 1);
-	io_printfln("%s", string_pool_ref2str(self->m->namev));
-
-	for(int i=0; i<self->args->length; i++) {
-		il_argument* e = (il_argument*)vector_at(self->args, i);
-		il_factor_dump(e->factor, depth + 2);
-	}
-}
-
 void il_factor_invoke_static_generate(il_factor_invoke_static* self, enviroment* env, call_context* cctx) {
 	for(int i=0; i<self->type_args->length; i++) {
 		il_type_argument* e = (il_type_argument*)vector_at(self->type_args, i);

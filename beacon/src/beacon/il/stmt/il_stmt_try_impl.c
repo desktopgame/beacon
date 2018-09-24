@@ -36,32 +36,6 @@ il_stmt_catch* il_stmt_catch_new(string_view namev) {
 	return ret;
 }
 
-void il_stmt_try_dump(il_stmt_try* self, int depth) {
-	io_printi(depth);
-	printf("try");
-	io_println();
-	for(int i=0; i<self->statement_list->length; i++) {
-		il_stmt* e = (il_stmt*)vector_at(self->statement_list, i);
-		il_stmt_dump(e, depth + 1);
-	}
-	for(int i=0; i<self->catch_list->length; i++) {
-		il_stmt_catch* e = (il_stmt_catch*)vector_at(self->catch_list, i);
-		il_stmt_catch_dump(e, depth + 1);
-	}
-}
-
-void il_stmt_catch_dump(il_stmt_catch* self, int depth) {
-	io_printi(depth);
-	printf("catch(");
-	generic_cache_print(self->fqcn);
-	printf(" %s)", string_pool_ref2str(self->namev));
-	io_println();
-	for(int i=0; i<self->statement_list->length; i++) {
-		il_stmt* e = (il_stmt*)vector_at(self->statement_list, i);
-		il_stmt_dump(e, depth + 1);
-	}
-}
-
 void il_stmt_try_generate(il_stmt_try* self, enviroment* env, call_context* cctx) {
 	label* try_end = opcode_buf_label(env->buf, -1);
 	label* catch_start = opcode_buf_label(env->buf, -1);

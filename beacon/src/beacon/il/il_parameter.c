@@ -13,13 +13,6 @@ il_parameter * il_parameter_new(string_view namev) {
 	return ret;
 }
 
-void il_parameter_dump(il_parameter * self, int depth) {
-	io_printi(depth);
-	printf("parameter %s ", string_pool_ref2str(self->namev));
-	generic_cache_print(self->fqcn);
-	io_println();
-}
-
 void il_parameter_delete(il_parameter * self) {
 	if (self == NULL) {
 		return;

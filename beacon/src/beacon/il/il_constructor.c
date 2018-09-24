@@ -18,26 +18,6 @@ il_constructor * il_constructor_new() {
 	return ret;
 }
 
-void il_constructor_dump(il_constructor * self, int depth) {
-	io_printi(depth);
-	access_print(self->access);
-	printf(" constructor");
-	io_println();
-	if (self->chain != NULL) {
-		il_constructor_chain_dump(self->chain, depth + 1);
-	}
-	for (int i = 0; i < self->parameter_list->length; i++) {
-		vector_item e = vector_at(self->parameter_list, i);
-		il_parameter* p = (il_parameter*)e;
-		il_parameter_dump(p, depth + 1);
-	}
-	for (int i = 0; i < self->statement_list->length; i++) {
-		vector_item e = vector_at(self->statement_list, i);
-		il_stmt* s = (il_stmt*)e;
-		il_stmt_dump(s, depth + 1);
-	}
-}
-
 void il_constructor_delete(il_constructor * self) {
 	il_constructor_chain_delete(self->chain);
 	vector_delete(self->parameter_list, il_constructor_parameter_delete);

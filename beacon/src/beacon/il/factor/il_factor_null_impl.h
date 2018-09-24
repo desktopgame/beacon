@@ -5,7 +5,6 @@
 
 struct enviroment;
 struct type;
-void il_factor_null_dump(void* empty, int depth);
 
 void il_factor_null_generate(void* empty, struct enviroment* env, call_context* cctx);
 

@@ -16,23 +16,6 @@ il_operator_overload* il_operator_overload_new(operator_type type) {
 	return ret;
 }
 
-void il_operator_overload_dump(il_operator_overload* self, int depth) {
-	io_printi(depth);
-	printf("operator-overload ");
-	operator_fprintf(stdout, self->op);
-	printf(" -> ");
-	generic_cache_print(self->return_fqcn);
-	io_printfln("");
-	for(int i=0; i<self->parameter_list->length; i++) {
-		il_parameter* e = (il_parameter*)vector_at(self->parameter_list, i);
-		il_parameter_dump(e, depth + 1);
-	}
-	for(int i=0; i<self->statement_list->length; i++) {
-		il_stmt* e = (il_stmt*)vector_at(self->statement_list, i);
-		il_stmt_dump(e, depth + 1);
-	}
-}
-
 void il_operator_overload_delete(il_operator_overload* self) {
 	vector_delete(self->parameter_list, il_operator_overload_delete_parameter);
 	vector_delete(self->statement_list, il_operator_overload_delete_stmt);

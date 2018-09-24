@@ -69,13 +69,6 @@ il_stmt_else* il_stmt_else_new();
 void il_stmt_elif_list_push(vector* self, il_stmt_elif* child);
 
 /**
- * if とその子要素を出力します.
- * @param self
- * @param depth
- */
-void il_stmt_if_dump(il_stmt_if* self, int depth);
-
-/**
  * if とその子要素を生成します.
  * @param self
  * @param env

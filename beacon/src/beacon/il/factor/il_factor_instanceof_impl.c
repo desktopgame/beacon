@@ -21,13 +21,6 @@ il_factor_instanceof* il_factor_instanceof_new() {
 	return ret;
 }
 
-void il_factor_instanceof_dump(il_factor_instanceof* self, int depth) {
-	io_printi(depth);
-	io_printfln("instanceof");
-	il_factor_dump(self->fact, depth + 1);
-	generic_cache_dump(self->gcache, depth + 1);
-}
-
 void il_factor_instanceof_load(il_factor_instanceof* self, enviroment* env, call_context* cctx) {
 	il_factor_load(self->fact, env, cctx);
 }

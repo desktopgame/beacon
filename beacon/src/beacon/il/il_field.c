@@ -16,17 +16,6 @@ il_field * il_field_new(string_view namev) {
 	return ret;
 }
 
-void il_field_dump(il_field * self, int depth) {
-	io_printi(depth);
-	access_print(self->access);
-	printf(" ");
-	modifier_print(self->modifier);
-	printf(" field ");
-	generic_cache_print(self->fqcn);
-	printf(" %s", string_pool_ref2str(self->namev));
-	io_println();
-}
-
 void il_field_delete(il_field * self) {
 	if (self == NULL) {
 		return;

@@ -21,11 +21,5 @@ void il_stmt_continue_generate(void * empty, enviroment * env, call_context* cct
 void il_stmt_continue_load(void * empty, enviroment * env, call_context* cctx) {
 }
 
-void il_stmt_continue_dump(void * empty, int depth) {
-	io_printi(depth);
-	printf("continue");
-	io_println();
-}
-
 void il_stmt_continue_delete(void * empty) {
 }

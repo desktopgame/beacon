@@ -33,14 +33,6 @@ il_stmt_variable_init* il_stmt_variable_init_new(string_view namev);
 
 /**
  * 変数の初期化を表す要素を出力します.
- * @param self
- * @param depth
- * @return
- */
-void il_stmt_variable_init_dump(il_stmt_variable_init* self, int depth);
-
-/**
- * 変数の初期化を表す要素を出力します.
  * @param depth
  * @param env
  * @param ccctx

@@ -48,44 +48,6 @@ void il_stmt_elif_list_push(vector * self, il_stmt_elif * child) {
 	vector_push(self, child);
 }
 
-void il_stmt_if_dump(il_stmt_if * self, int depth) {
-	io_printi(depth);
-	printf("if");
-	io_println();
-	il_factor_dump(self->condition, depth + 1);
-	//ステートメントの一覧をダンプ
-	for (int i = 0; i < self->body->length; i++) {
-		vector_item e = vector_at(self->body, i);
-		il_stmt* s = (il_stmt*)e;
-		il_stmt_dump(s, depth + 1);
-	}
-	//エルスイフの一覧をダンプ
-	for (int i = 0; i < self->elif_list->length; i++) {
-		vector_item e = vector_at(self->elif_list, i);
-		il_stmt_elif* elif = (il_stmt_elif*)e;
-		io_printi(depth);
-		printf("elif");
-		io_println();
-		il_factor_dump(elif->condition, depth + 1);
-		for (int i = 0; i < elif->body->length; i++) {
-			vector_item e = vector_at(elif->body, i);
-			il_stmt* s = (il_stmt*)e;
-			il_stmt_dump(s, depth + 1);
-		}
-	}
-	
-	io_printi(depth + 1);
-	printf("else");
-	io_println();
-	//ステートメントの一覧をダンプ
-	for (int i = 0; i < self->else_body->body->length; i++) {
-		vector_item e = vector_at(self->else_body->body, i);
-		il_stmt* s = (il_stmt*)e;
-		il_stmt_dump(s, depth + 1);
-	}
-	io_println();
-}
-
 void il_stmt_if_generate(il_stmt_if * self, enviroment* env, call_context* cctx) {
 	//if(...)
 	env->sym_table->scope_depth++;

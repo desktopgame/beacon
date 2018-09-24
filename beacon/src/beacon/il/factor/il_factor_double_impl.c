@@ -22,12 +22,6 @@ il_factor_double * il_factor_double_new(double d) {
 	return ret;
 }
 
-void il_factor_double_dump(il_factor_double * self, int depth) {
-	io_printi(depth);
-	printf("Dobule %f", self->value);
-	io_println();
-}
-
 void il_factor_double_generate(il_factor_double * self, enviroment* env, call_context* cctx) {
 	int index = enviroment_add_constant_double(env, self->value);
 	opcode_buf_add(env->buf, op_dconst);

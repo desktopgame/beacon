@@ -35,13 +35,6 @@ il_factor_assign_op* il_factor_assign_op_new() {
 	return ret;
 }
 
-void il_factor_assign_op_dump(il_factor_assign_op* self, int depth) {
-	io_printi(depth);
-	io_printfln("assign");
-	il_factor_dump(self->left, depth + 1);
-	il_factor_dump(self->right, depth + 1);
-}
-
 void il_factor_assign_op_load(il_factor_assign_op* self, enviroment* env, call_context* cctx) {
 	il_factor_load(self->left, env, cctx);
 	il_factor_load(self->right, env, cctx);

@@ -15,8 +15,6 @@ il_stmt* il_stmt_wrap_inject_jni(il_stmt_inject_jni* self);
 
 il_stmt_inject_jni* il_stmt_inject_jni_new(string_view namev);
 
-void il_stmt_inject_jni_dump(il_stmt_inject_jni* self, int depth);
-
 void il_stmt_inject_jni_generate(il_stmt_inject_jni* self, enviroment* env, call_context* cctx);
 
 void il_stmt_inject_jni_load(il_stmt_inject_jni * self, enviroment* env, call_context* cctx);

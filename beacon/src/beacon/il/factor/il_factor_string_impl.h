@@ -16,8 +16,6 @@ il_factor* il_factor_wrap_string(il_factor_string* self);
 
 il_factor_string* il_factor_string_new(string_view valuev);
 
-void il_factor_string_dump(il_factor_string* self, int depth);
-
 void il_factor_string_generate(il_factor_string* self, struct enviroment* env, call_context* cctx);
 
 void il_factor_string_load(il_factor_string* self, struct enviroment* env, call_context* cctx);

@@ -17,8 +17,6 @@ il_factor* il_factor_wrap_bool(il_factor_bool* self);
 
 il_factor_bool* il_factor_bool_new(bool b);
 
-void il_factor_bool_dump(il_factor_bool* self, int depth);
-
 void il_factor_bool_generate(il_factor_bool* self, struct enviroment* env, call_context* cctx);
 
 generic_type* il_factor_bool_eval(il_factor_bool* self, struct enviroment* env, call_context* cctx);

@@ -23,14 +23,6 @@ il_factor_as * il_factor_as_new() {
 	return ret;
 }
 
-void il_factor_as_dump(il_factor_as * self, int depth) {
-	io_printi(depth);
-	printf("as ");
-	generic_cache_print(self->fqcn);
-	io_println();
-	il_factor_dump(self->fact, depth + 1);
-}
-
 void il_factor_as_generate(il_factor_as * self, enviroment * env, call_context* cctx) {
 	il_factor_generate(self->fact, env, cctx);
 	opcode_buf_add(env->buf, op_generic_add);

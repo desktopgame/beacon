@@ -20,13 +20,6 @@ il_stmt_inferenced_type_init * il_stmt_inferenced_type_init_new(string_view name
 	return ret;
 }
 
-void il_stmt_inferenced_type_init_dump(il_stmt_inferenced_type_init * self, int depth) {
-	io_printi(depth);
-	printf("var init %s", string_pool_ref2str(self->namev));
-	io_println();
-	il_factor_dump(self->fact, depth + 1);
-}
-
 void il_stmt_inferenced_type_init_generate(il_stmt_inferenced_type_init * self, enviroment * env, call_context* cctx) {
 	//右辺の方で宣言する
 	il_factor_generate(self->fact, env, cctx);

@@ -74,13 +74,6 @@ typedef struct il_stmt {
 il_stmt* il_stmt_malloc(il_stmt_type type, const char* filename, int lineno);
 
 /**
- * 文を出力します.
- * @param self
- * @param depth
- */
-void il_stmt_dump(il_stmt* self, int depth);
-
-/**
  * 文を生成します.
  * @param self
  * @param env

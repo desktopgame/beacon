@@ -21,14 +21,6 @@ il_stmt_variable_decl * il_stmt_variable_decl_new(string_view namev) {
 	return ret;
 }
 
-void il_stmt_variable_decl_dump(il_stmt_variable_decl * self, int depth) {
-	io_printi(depth);
-	printf("variable decl %s", string_pool_ref2str(self->namev));
-	io_println();
-
-	generic_cache_dump(self->fqcn, depth + 1);
-}
-
 void il_stmt_variable_decl_generate(il_stmt_variable_decl * self, enviroment * env, call_context* cctx) {
 
 }

@@ -15,8 +15,6 @@ il_factor* il_factor_wrap_double(il_factor_double* self);
 
 il_factor_double* il_factor_double_new(double d);
 
-void il_factor_double_dump(il_factor_double* self, int depth);
-
 void il_factor_double_generate(il_factor_double* self, struct enviroment* env, call_context* cctx);
 
 void il_factor_double_load(il_factor_double* self, struct enviroment* env, call_context* cctx);

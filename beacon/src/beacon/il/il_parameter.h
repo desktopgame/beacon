@@ -28,13 +28,6 @@ typedef struct il_parameter {
 il_parameter* il_parameter_new(string_view namev);
 
 /**
- * パラメータを出力します.
- * @param self
- * @param depth
- */
-void il_parameter_dump(il_parameter* self, int depth);
-
-/**
  * パラメータを開放します.
  * @param self
  */

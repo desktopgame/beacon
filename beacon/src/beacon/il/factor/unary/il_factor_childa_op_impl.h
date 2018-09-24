@@ -14,8 +14,6 @@ typedef struct il_factor_childa_op {
 
 il_factor_childa_op* il_factor_childa_op_new(operator_type type);
 
-void il_factor_childa_op_dump(il_factor_childa_op* self, int depth);
-
 struct generic_type* il_factor_childa_op_eval(il_factor_childa_op * self, struct enviroment * env, call_context* cctx);
 
 void il_factor_childa_op_generate(il_factor_childa_op* self, struct enviroment* env, call_context* cctx);

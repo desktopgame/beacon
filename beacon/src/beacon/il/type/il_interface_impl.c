@@ -36,28 +36,6 @@ void il_interface_add_method(il_interface * self, il_method * method) {
 	vector_push(self->method_list, method);
 }
 
-void il_interface_dump(il_interface * self, int depth) {
-	io_printi(depth);
-	printf("interface %s", string_pool_ref2str(self->namev));
-	il_type_parameter_list_print(self->type_parameter_list);
-	io_println();
-	//継承するインターフェイスの一覧を出力
-	for (int i = 0; i < self->extends_list->length; i++) {
-		generic_cache* e = (generic_cache*)vector_at(self->extends_list, i);
-		generic_cache_dump(e, depth + 1);
-	}
-
-	for (int i = 0; i < self->method_list->length; i++) {
-		vector_item e = vector_at(self->method_list, i);
-		il_method* ilm = (il_method*)e;
-		il_method_dump(ilm, depth + 1);
-	}
-	for(int i=0; i<self->prop_list->length; i++) {
-		il_property* e = vector_at(self->prop_list, i);
-		il_property_dump(e, depth + 1);
-	}
-}
-
 void il_interface_delete(il_interface * self) {
 	vector_delete(self->extends_list, il_interface_fqcn_delete);
 	vector_delete(self->method_list, il_interface_method_delete);

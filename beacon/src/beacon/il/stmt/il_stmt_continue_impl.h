@@ -9,7 +9,5 @@ void il_stmt_continue_generate(void* empty, struct enviroment* env, call_context
 
 void il_stmt_continue_load(void* empty, struct enviroment* env, call_context* cctx);
 
-void il_stmt_continue_dump(void* empty, int depth);
-
 void il_stmt_continue_delete(void* empty);
 #endif // !SIGNAL_IL_IL_STMT_CONTINUE_H

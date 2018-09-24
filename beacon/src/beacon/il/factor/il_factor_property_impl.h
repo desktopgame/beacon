@@ -24,7 +24,5 @@ struct generic_type* il_factor_property_eval(il_factor_property* self, enviromen
 
 char* il_factor_property_tostr(il_factor_property* self, struct enviroment* env);
 
-void il_factor_property_dump(il_factor_property* self, int depth);
-
 void il_factor_property_delete(il_factor_property* self);
 #endif

@@ -15,8 +15,6 @@ il_factor* il_factor_wrap_char(il_factor_char* self);
 
 il_factor_char* il_factor_char_new(char c);
 
-void il_factor_char_dump(il_factor_char* self, int depth);
-
 void il_factor_char_generate(il_factor_char* self, struct enviroment* env, call_context* cctx);
 
 void il_factor_char_load(il_factor_char* self, struct enviroment* env, call_context* cctx);

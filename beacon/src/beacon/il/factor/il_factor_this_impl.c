@@ -17,12 +17,6 @@ il_factor_this* il_factor_this_new() {
 	return ret;
 }
 
-void il_factor_this_dump(il_factor_this * self, int depth) {
-	io_printi(depth);
-	printf("this");
-	io_println();
-}
-
 void il_factor_this_generate(il_factor_this * self, enviroment * env, call_context* cctx) {
 	opcode_buf_add(env->buf, op_this);
 }

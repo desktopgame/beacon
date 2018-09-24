@@ -37,24 +37,6 @@ il_factor_call_op* il_factor_call_op_new() {
 	return ret;
 }
 
-void il_factor_call_op_dump(il_factor_call_op* self, int depth) {
-	if(self->type == ilcall_type_invoke_T) {
-		il_factor_invoke_dump(self->u.invoke_, depth);
-	} else if(self->type == ilcall_type_invoke_bound_T) {
-		il_factor_invoke_bound_dump(self->u.invoke_bound_, depth);
-	} else if(self->type == ilcall_type_invoke_static_T) {
-		il_factor_invoke_static_dump(self->u.invoke_static_, depth);
-	} else {
-		io_printi(depth);
-		printf("call");
-		il_factor_dump(self->receiver, depth + 1);
-		for(int i=0; i<self->argument_list->length; i++) {
-			il_argument* e = (il_argument*)vector_at(self->argument_list, i);
-			il_argument_dump(e, depth + 1);
-		}
-	}
-}
-
 void il_factor_call_op_load(il_factor_call_op* self, enviroment* env, call_context* cctx) {
 	//argumentlistはサブクラスに渡しちゃってる
 	//il_factor_load(self->receiver, env, ilctx, eh);

@@ -35,28 +35,6 @@ il_factor_binary_op * il_factor_binary_op_new(operator_type type) {
 	return ret;
 }
 
-void il_factor_binary_op_dump(il_factor_binary_op * self, int depth) {
-	switch(self->category) {
-		case operator_carithmeric_T:
-			il_factor_arithmetic_op_dump(self->u.arithmetic_op, depth);
-			break;
-		case operator_ccompare_T:
-			il_factor_compare_op_dump(self->u.compare_op, depth);
-			break;
-		case operator_clogic_T:
-			il_factor_logic_op_dump(self->u.logic_op, depth);
-			break;
-		case operator_cshift_T:
-			il_factor_shift_op_dump(self->u.shift_op, depth);
-			break;
-		case operator_cexcor_T:
-			il_factor_excor_op_dump(self->u.excor_op, depth);
-			break;
-	}
-	il_factor_dump(self->left, depth + 1);
-	il_factor_dump(self->right, depth + 1);
-}
-
 void il_factor_binary_op_generate(il_factor_binary_op * self, enviroment* env, call_context* cctx) {
 	switch(self->category) {
 		case operator_carithmeric_T:

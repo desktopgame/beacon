@@ -80,13 +80,6 @@ void il_type_add_property(il_type* self, struct il_property* prop);
 void il_type_add_method(il_type* self, struct il_method* method);
 
 /**
- * 型を出力します.
- * @param self
- * @param depth
- */
-void il_type_dump(il_type* self, int depth);
-
-/**
  * 型を開放します.
  * @param self
  */

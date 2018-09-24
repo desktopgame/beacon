@@ -14,8 +14,6 @@ il_factor* il_factor_wrap_instanceof(il_factor_instanceof* self);
 
 il_factor_instanceof* il_factor_instanceof_new();
 
-void il_factor_instanceof_dump(il_factor_instanceof* self, int depth);
-
 void il_factor_instanceof_load(il_factor_instanceof* self, enviroment* env, call_context* cctx);
 
 void il_factor_instanceof_generate(il_factor_instanceof* self, enviroment* env, call_context* cctx);

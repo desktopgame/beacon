@@ -51,10 +51,6 @@ char* il_factor_property_tostr(il_factor_property* self, enviroment* env) {
 	return string_buffer_release(sb);
 }
 
-void il_factor_property_dump(il_factor_property* self, int depth) {
-
-}
-
 void il_factor_property_delete(il_factor_property* self) {
 	il_factor_delete(self->fact);
 	MEM_FREE(self);

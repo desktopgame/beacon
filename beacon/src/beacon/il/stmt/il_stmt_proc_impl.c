@@ -15,10 +15,6 @@ il_stmt_proc * il_stmt_proc_new() {
 	return ret;
 }
 
-void il_stmt_proc_dump(il_stmt_proc * self, int depth) {
-	il_factor_dump(self->factor, depth);
-}
-
 void il_stmt_proc_generate(il_stmt_proc * self, enviroment * env, call_context* cctx) {
 	il_factor_generate(self->factor, env, cctx);
 }

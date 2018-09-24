@@ -36,17 +36,6 @@ il_factor_new_instance * il_factor_new_instance_new() {
 	return ret;
 }
 
-void il_factor_new_instance_dump(il_factor_new_instance * self, int depth) {
-	io_printi(depth);
-	printf("new instance");
-	io_println();
-	fqcn_cache_dump(self->fqcnc, depth + 1);
-	for (int i = 0; i < self->argument_list->length; i++) {
-		il_argument* ilarg = (il_argument*)vector_at(self->argument_list, i);
-		il_argument_dump(ilarg, depth + 1);
-	}
-}
-
 void il_factor_new_instance_generate(il_factor_new_instance * self, enviroment * env, call_context* cctx) {
 	il_factor_new_instance_find(self, env, cctx);
 	for(int i=0; i<self->type_args->length; i++) {

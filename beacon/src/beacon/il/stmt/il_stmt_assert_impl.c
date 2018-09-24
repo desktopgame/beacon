@@ -21,14 +21,6 @@ il_stmt_assert* il_stmt_assert_new() {
 	return ret;
 }
 
-void il_stmt_assert_dump(il_stmt_assert* self, int depth) {
-	io_printi(depth);
-	printf("assert");
-	io_println();
-	il_factor_dump(self->condition, depth + 1);
-	il_factor_dump(self->message, depth + 1);
-}
-
 void il_stmt_assert_generate(il_stmt_assert* self, enviroment* env, call_context* cctx) {
 	//https://code.i-harness.com/ja/q/2a1650
 	label* gt = opcode_buf_label(env->buf, 0);

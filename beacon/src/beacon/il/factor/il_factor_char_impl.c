@@ -19,12 +19,6 @@ il_factor_char * il_factor_char_new(char c) {
 	return ret;
 }
 
-void il_factor_char_dump(il_factor_char * self, int depth) {
-	io_printi(depth);
-	printf("Char %c", self->value);
-	io_println();
-}
-
 void il_factor_char_generate(il_factor_char * self, enviroment * env, call_context* cctx) {
 	int index = enviroment_add_constant_char(env, self->value);
 	opcode_buf_add(env->buf, op_cconst);

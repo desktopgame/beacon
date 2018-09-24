@@ -29,13 +29,6 @@ typedef struct il_method {
 il_method* il_method_new(string_view namev);
 
 /**
- * メソッドを出力します.
- * @param self
- * @param depth
- */
-void il_method_dump(il_method* self, int depth);
-
-/**
  * メソッドを開放します.
  * @param self
  */

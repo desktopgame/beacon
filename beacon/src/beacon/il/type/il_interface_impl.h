@@ -45,13 +45,6 @@ void il_interface_add_property(il_interface* self, struct il_property* prop);
 void il_interface_add_method(il_interface* self, struct il_method* method);
 
 /**
- * インターフェースを出力します.
- * @param self
- * @param depth
- */
-void il_interface_dump(il_interface* self, int depth);
-
-/**
  * インターフェースを開放します.
  * @param self
  */

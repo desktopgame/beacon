@@ -21,12 +21,6 @@ il_factor_compare_op* il_factor_compare_op_new(operator_type type) {
 	return ret;
 }
 
-void il_factor_compare_op_dump(il_factor_compare_op* self, int depth) {
-	io_printi(depth);
-	operator_fprintf(stdout, self->type);
-	io_println();
-}
-
 generic_type* il_factor_compare_op_eval(il_factor_compare_op * self, enviroment * env, call_context* cctx) {
 	generic_type* ret = TYPE2GENERIC(TYPE_BOOL);
 	assert(ret != NULL);

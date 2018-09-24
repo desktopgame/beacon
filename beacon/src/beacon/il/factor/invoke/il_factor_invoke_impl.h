@@ -30,8 +30,6 @@ typedef struct il_factor_invoke {
 
 il_factor_invoke* il_factor_invoke_new(string_view namev);
 
-void il_factor_invoke_dump(il_factor_invoke* self, int depth);
-
 void il_factor_invoke_generate(il_factor_invoke* self, struct enviroment* env, call_context* cctx);
 
 void il_factor_invoke_load(il_factor_invoke * self, struct enviroment * env, call_context* cctx);
