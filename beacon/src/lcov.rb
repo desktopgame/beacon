@@ -30,4 +30,3 @@ Dir.glob("**/*") do |file|
 end
 page = sprintf("chrome %s", "file://" + File.expand_path("./lcov/index.html"))
 p page
-system page

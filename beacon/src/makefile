@@ -30,6 +30,7 @@ rb : all
 #Coverage
 .PHONY: cov
 cov :
+	make clean
 	make db
 	ruby lcov.rb
 
