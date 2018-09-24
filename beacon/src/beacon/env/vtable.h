@@ -48,15 +48,6 @@ void vtable_add(vtable* self, struct method* m);
 void vtable_replace(vtable* self, struct method* m, struct call_context* cctx);
 
 /**
- * この仮想関数テーブルを指定のインターフェイス型の関数へキャストします.
- * @param self
- * @param castTo
- * @param cctx
- * @return
- */
-vtable* vtable_lookup(vtable* self, vtable* castTo, struct call_context* cctx);
-
-/**
  * vtableを開放します.
  * @param self
  */
