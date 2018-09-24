@@ -27,6 +27,12 @@ db : all
 rb : CXXFLAGS += $(CXXRELEASE)
 rb : all
 
+#Coverage
+.PHONY: cov
+cov :
+	make db
+	ruby lcov.rb
+
 #Clean
 .PHONY: clean
 clean:
