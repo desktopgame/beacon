@@ -183,8 +183,8 @@ static void interface_type_parameter_delete(vector_item item) {
 }
 
 static void interface_generic_type_list_delete(vector_item item) {
-	generic_type* e = (generic_type*)item;
-	generic_type_delete(e);
+	//generic_type* e = (generic_type*)item;
+	//generic_type_delete(e);
 }
 
 static void interface_method_flattenImpl(interface_* self, vector* dest, int depth) {
