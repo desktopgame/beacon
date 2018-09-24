@@ -98,10 +98,6 @@ typedef enum opcode {
 	//op_glookup,
 	op_store,
 	op_load,
-	op_inc,
-	op_dec,
-	op_copy,
-	op_swap,
 	op_down_as,
 	op_up_as,
 

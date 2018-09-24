@@ -271,26 +271,6 @@ int opcode_fprint(FILE* fp, vector* source, int index) {
 			fprintf(fp,"load %d", a);
 			break;
 		}
-		case op_inc:
-		{
-			fprintf(fp,"inc");
-			break;
-		}
-		case op_dec:
-		{
-			fprintf(fp,"inc");
-			break;
-		}
-		case op_copy:
-		{
-			fprintf(fp,"copy");
-			break;
-		}
-		case op_swap:
-		{
-			fprintf(fp,"swap");
-			break;
-		}
 		case op_down_as:
 		{
 			fprintf(fp,"down as");
