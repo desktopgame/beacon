@@ -8,6 +8,7 @@ before_install:
   - sudo pip freeze
   - sudo pip install --upgrade pip
   - sudo pip install --user cpp-coveralls
+  - sudo apt-get install gcov=5.0
   - sudo pip freeze
 jobs:
   include:
