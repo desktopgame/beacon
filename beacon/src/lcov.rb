@@ -1,6 +1,16 @@
 require "open3"
 require "fileutils"
 require "date"
+#makeを実行する
+o, e, s = Open3.capture3("make db")
+p e
+p
+#テストを実行する
+Dir.chdir("../bin") do
+    o, e, s = Open3.capture3("./a.out --test")
+    o.lines {|line| p "    " + line}
+end
+#.gcda .gcno をコピー
 FileUtils.cp_r("../obj/beacon", ".")
 #lcov.info生成
 o, e, s = Open3.capture3("lcov -c -d . -o lcov.info")
@@ -17,3 +27,6 @@ Dir.glob("**/*") do |file|
              !file.end_with?(".d"))
     File.delete(file)
 end
+page = sprintf("chrome %s", "file://" + File.expand_path("./lcov/index.html"))
+p page
+system page
