@@ -12,17 +12,6 @@
 			"command": "go run script/gen.go"
 		},
 		{
-			"label": "conf",
-			"type": "shell",
-			"options": {
-				"cwd": "../beacon/beacon/rbtools"
-			},
-			"command": "ruby",
-			"args": [
-				"cmakemake.rb"
-			]
-		},
-		{
 			"label": "make db",
 			"type": "shell",
 			"options": {
@@ -45,6 +34,17 @@
 			]
 		},
 		{
+			"label": "make cov",
+			"type": "shell",
+			"options": {
+				"cwd": "../beacon/beacon/src"
+			},
+			"command": "make",
+			"args": [
+				"cov"
+			]
+		},
+		{
 			"label": "make clean",
 			"type": "shell",
 			"options": {
@@ -64,39 +64,6 @@
 			"command": "./a.out",
 			"args": [
 				"--test"
-			]
-		},
-		{
-			"label": "copy to nb",
-			"type": "shell",
-			"options": {
-				"cwd": "../beacon/beacon/rbtools"
-			},
-			"command": "ruby",
-			"args": [
-				"rcopytonb.rb"
-			]
-		},
-		{
-			"label": "javah nb",
-			"type": "shell",
-			"options": {
-				"cwd": "../beacon/beacon/rbtools"
-			},
-			"command": "ruby",
-			"args": [
-				"rjavah.rb"
-			]
-		},
-		{
-			"label": "javap nb",
-			"type": "shell",
-			"options": {
-				"cwd": "../beacon/beacon/rbtools"
-			},
-			"command": "ruby",
-			"args": [
-				"rjavap.rb"
 			]
 		},
 		{
