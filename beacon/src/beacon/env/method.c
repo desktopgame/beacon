@@ -248,34 +248,6 @@ type* method_create_iterator_type(method* self,  class_loader* cll, vector* stmt
 	return iterImplT;
 }
 
-generic_type* method_diff(method* abstract, method* concrete) {
-	type* abstractT = abstract->parent;
-	type* implT = concrete->parent;
-	generic_type* bounds = type_baseline(abstractT, implT);
-	return bounds;
-}
-
-method* method_clone(method* self) {
-	method* ret = method_new(self->namev);
-	ret->type = self->type;
-	ret->modifier = self->modifier;
-	ret->access = self->access;
-	ret->return_gtype = generic_type_clone(self->return_gtype);
-	for(int i=0; i<self->type_parameters->length; i++) {
-		type_parameter* e = vector_at(self->type_parameters, i);
-		type_parameter* ecpy = type_parameter_new(e->namev);
-		ecpy->kind = e->kind;
-		vector_push(ret->type_parameters, ecpy);
-	}
-	for(int i=0; i<self->parameters->length; i++) {
-		parameter* e = vector_at(self->parameters, i);
-		parameter* ecpy = parameter_new(e->namev);
-		ecpy->gtype = e->gtype;
-		vector_push(ret->parameters, ecpy);
-	}
-	return ret;
-}
-
 //private
 static void method_parameter_delete(vector_item item) {
 	parameter* e = (parameter*)item;
