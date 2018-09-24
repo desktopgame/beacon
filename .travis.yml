@@ -5,6 +5,7 @@ notifications:
   slack:
     secure: l1V62joD90cOBX0esT4C/wrY6OtFxJ9zGJA2gd9AEpzs+GDHpoSKEitKx0O9+A9+kExp9SX8yn4TdMihoVyAI4qagdeOhP7z+vL9nZOh04hy834aD3CIA/mxe8f6XhcG2S+/pyM1lNdJk97RIHtYTpMEPT7aGlLeCh/T0z+t6o1afyb0sdiAg6HqWTUlYLdMHxCRdLIBGTbZvkfCfaANV4CCp3LLHhDM5CYgidgxH8RHw9maWeUisPho9fQlTa85Eh4U51cbpybZgljba4DWmt7spBAALHR53I4qozgX/Pg1+nkJPAMKS1h8nX/Kz8un2p7McdS0mtXJIugCL6H5rEfaWNMAr9cocEIHBgEzg7/W6KJ8JZiTnlrisWZWhGqLRWGUEVFLzcK36E1w5uNdciQs/dEDGdEdLEyD11phjYWGABtZ3MkxJbNdEEfMs/6XIodSKg+TPJZT+64cAPiLB2tCn/mp3FIKnvcM0nuyVnXQfimLC2SsCJ0Q94Ys0CmgN5FbEPrMqZv8iSfhwV3T0ScMPABMRA0jeyuWXeDCHut6194RgvEH22SNQEbEFWtmr9XIIeQbQ7gh6YdDl9MrrjzWn8ZNba0RplVcq5j/Lalch+jBTFvOQETakj6r2kkpbSz09wHquFdXYb/JeCXqQdvEUXequVyq1uzkgbUjKxs=
 before_install:
+  - pip install --upgrade pip
   - pip install --user cpp-coveralls
   - pip install codecov
 jobs:
