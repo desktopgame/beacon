@@ -47,6 +47,7 @@ Dir.glob("./**/*") do |file|
     to = File.expand_path("../gcov/" + file)
     File.delete(to) if File.exist?(to)
     File.rename(from, to)
+    p to
 end
 # そのまま出力をファイルへ
 raw_output = "../gcov/00raw_data.text"
