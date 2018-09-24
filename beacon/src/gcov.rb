@@ -72,4 +72,7 @@ File.open(score_output, "w") do |fp|
         fp.puts(fix_num(score.slice(15, 10)))
     end
 end
+error_list.each do |e|
+    p e
+end
 p "finished gcov"
