@@ -12,6 +12,7 @@ Dir.chdir("../bin") do
 end
 #.gcda .gcno をコピー
 FileUtils.cp_r("../obj/beacon", ".")
+File.delete("lcov.info") if File.exists?("lcov.info")
 #lcov.info生成
 o, e, s = Open3.capture3("lcov -c -d . -o lcov.info")
 p e
