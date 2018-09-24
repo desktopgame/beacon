@@ -25,6 +25,8 @@ def fix_num(str)
     fix_num(str.slice(0, str.length - 1))
 end
 
+p "start gcov"
+
 output_list = []
 error_list = []
 current = File.expand_path("./")
@@ -73,3 +75,4 @@ end
 error_list.each do |e|
     p e
 end
+p "finished gcov"
