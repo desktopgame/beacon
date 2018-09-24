@@ -233,7 +233,8 @@ static void namespace_dump_class(numeric_map* root, bool isRoot, int depth) {
 	}
 	if (!isRoot) {
 		type* e = ((type*)root->item);
-		type_dump(e, depth);
+		//type_dump(e, depth);
+		assert(false);
 	}
 	namespace_dump_class(root->left, false, depth);
 	namespace_dump_class(root->right, false, depth);
