@@ -14,4 +14,4 @@ jobs:
     -
       script: ruby beacon/rbtools/travis/hide_jni.rb && ruby beacon/rbtools/travis/hide_test.rb && cd ./beacon/src && make db && cd ../bin && ./a.out --test
 after_success:
-  - cd ../../ && cd beacon/src && ruby gcov.rb && coveralls -b . --gcov gcov-5z --gcov-options '\-lp'
+  - cd ../../ && cd beacon/src && ruby gcov.rb && coveralls -b . --gcov gcov-5 --gcov-options '\-lp'
