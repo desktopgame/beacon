@@ -13,7 +13,7 @@ void il_stmt_return_empty_dump(il_stmt_return_empty self, int depth) {
 }
 
 void il_stmt_return_empty_generate(il_stmt_return_empty self, enviroment* env, call_context* cctx) {
-	opcode_buf_add(env->buf, op_return_void);
+	opcode_buf_add(env->buf, op_return);
 }
 
 void il_stmt_return_empty_load(il_stmt_return_empty self, enviroment* env, call_context* cctx) {
