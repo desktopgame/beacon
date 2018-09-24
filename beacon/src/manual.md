@@ -1,11 +1,20 @@
 # manual
-gcov の使用に関するマニュアルです。
+このプロジェクトで用意しているスクリプト/タスクについてのマニュアル
 
-## 手順
-- make を実行する
-- --test引数で実行する
-- srcを現在のディレクトリとして `ruby gcov.rb` する
+## makefile
+### make db
+デバッグ情報付きのビルド。  
+カバレッジのための情報も一緒に出力される。
 
-## 結果
-- obj に `.gcda` と `.gcno` が出力される
-- gcov に `.c.gcov` が出力される
+### make rb
+リリース用ビルド。
+
+### make cov
+`make db` -> `テストの実行` -> `ruby lcov.rb` をまとめて実行する。  
+src/lcovにはカバレッジの結果がhtmlで出力される。
+
+### make clean
+objフォルダを綺麗にする。
+
+## task(vscode)
+上述した makefile の機能には vscode の task 機能からもアクセスできます。
