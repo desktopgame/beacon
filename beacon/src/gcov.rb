@@ -30,6 +30,8 @@ p "start gcov"
 output_list = []
 error_list = []
 current = File.expand_path("./")
+dest = "./"
+
 Dir.glob("./**/*") do |file|
     next if !file.end_with?(".c")
     path = File.expand_path(file)
@@ -43,16 +45,18 @@ Dir.glob("./**/*") do |file|
     output_list << o
     error_list << e if e.length > 0
 end
+=begin
 Dir.glob("./**/*") do |file|
     next if !file.end_with?(".gcov")
     from = File.expand_path(file)
-    to = File.expand_path("../gcov/" + file)
+    to = File.expand_path(dest + file)
     File.delete(to) if File.exist?(to)
     File.rename(from, to)
     p to
 end
+=end
 # そのまま出力をファイルへ
-raw_output = "../gcov/00raw_data.text"
+raw_output = dest + "00raw_data.text"
 File.delete(raw_output) if File.exist?(raw_output)
 File.open(raw_output, "w") do |fp|
     output_list.each do |e|
@@ -60,7 +64,7 @@ File.open(raw_output, "w") do |fp|
     end
 end
 # 整形済みの出力をファイルへ
-score_output = "../gcov/00score_data.text"
+score_output = dest + "00score_data.text"
 File.delete(score_output) if File.exist?(score_output)
 File.open(score_output, "w") do |fp|
     output_list.each do |e|
