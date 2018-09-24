@@ -8,11 +8,10 @@ before_install:
   - sudo pip freeze
   - sudo pip install --upgrade pip
   - sudo pip install --user cpp-coveralls
-  - sudo apt-get -qq install clang-4.8
   - sudo pip freeze
 jobs:
   include:
     -
       script: ruby beacon/rbtools/travis/hide_jni.rb && ruby beacon/rbtools/travis/hide_test.rb && cd ./beacon/src && make db && cd ../bin && ./a.out --test
 after_success:
-  - cd ../../ && cd beacon/src && ruby gcov.rb && coveralls -b . --gcov gcov --gcov-options '\-lp'
+  - cd ../../ && cd beacon/src && ruby gcov.rb && coveralls -b . --gcov gcov-5z --gcov-options '\-lp'
