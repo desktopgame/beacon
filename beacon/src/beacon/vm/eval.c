@@ -17,6 +17,10 @@ static bool eval_top_from_cll(class_loader* cll, ast* aOpt);
 
 
 bool eval_ast(const char* filename) {
+	fprintf(stderr, "this command is deleted\n");
+	abort();
+	return false;
+	/*
 	if (!io_exists(filename)) {
 		fprintf(stderr, "file is not found: %s", filename);
 		abort();
@@ -33,6 +37,7 @@ bool eval_ast(const char* filename) {
 	bool ret = p->result != parse_complete_T;
 	parser_destroy(p);
 	return ret;
+	//*/
 }
 
 bool eval_il(const char* filename) {

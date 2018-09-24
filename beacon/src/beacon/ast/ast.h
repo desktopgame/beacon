@@ -350,18 +350,6 @@ ast* ast_first(ast* self);
 ast* ast_second(ast* self);
 
 /**
- * ツリー形式で全てのタグを出力します.
- * @param self
- */
-void ast_print_tree(ast* self);
-
-/**
- * 指定のタグを出力します.
- * @param self
- */
-void ast_print(ast* self);
-
-/**
  * 指定の AST とその子要素を全て開放します.
  * @param self
  */

@@ -124,8 +124,8 @@ void class_loader_ilload_impl(class_loader* self, ast* source_code) {
 		} else if(child->tag == ast_function_decl_T) {
 			class_loader_ilload_function(self, child);
 		} else {
-			ast_print(child);
-			io_println();
+			fprintf(stderr, "ast is not collected\n");
+			abort();
 		}
 	}
 }
