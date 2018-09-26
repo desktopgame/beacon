@@ -282,7 +282,11 @@ bool CLBC_method_decl(class_loader* self, il_type* iltype, type* tp, il_method* 
 		method->type = method_type_abstract_T;
 		method->u.script_method = NULL;
 	} else {
-		method->u.script_method = script_method_new();
+		if(modifier_is_native(method->modifier)) {
+			method->u.native_method = native_method_new();
+		} else {
+			method->u.script_method = script_method_new();
+		}
 	}
 	//メソッドが抽象メソッドだが、
 	//インターフェイスでも抽象クラスでもない
