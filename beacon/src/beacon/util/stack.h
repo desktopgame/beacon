@@ -3,10 +3,6 @@
 #define BEACON_UTIL_STACK_H
 #include <stdbool.h>
 
-#ifdef __cplusplus
-extern "C" {
-#endif
-
 /**
  * スタックに格納出来るデータの型.
  */
@@ -79,7 +75,4 @@ void stack_deleter_free(stack_item item);
  * @param item
  */
 void stack_deleter_null(stack_item item);
-#ifdef __cplusplus
-};
-#endif
 #endif // !SIGNAL_UTIL_STACK_H
