@@ -30,9 +30,9 @@ void CLBC_import(class_loader* self, vector* ilimports) {
 	//全てのクラスローダーはデフォルトで beacon/lang をロードする
 	script_context* ctx = script_context_get_current();
 	for(int i=0; i<ctx->include_vec->length; i++) {
-		file_entry* fe = vector_at(ctx->include_vec, i);
-		if(fe->is_file && io_extension(fe->filename, "bc")) {
-			char* p = io_absolute_path(fe->filename);
+		FileEntry* entry = vector_at(ctx->include_vec, i);
+		if(entry->is_file && io_extension(entry->filename, "bc")) {
+			char* p = io_absolute_path(entry->filename);
 			CLBC_new_load(self, p);
 			MEM_FREE(p);
 		}

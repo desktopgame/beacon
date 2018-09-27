@@ -5,28 +5,28 @@
  * ファイルを表す構造体.
  * フルパスを表します。
  */
-typedef struct file_entry {
+typedef struct FileEntry_t {
 	char* filename;
 	bool is_file;
-} file_entry;
+} FileEntry;
 
 /**
  * 文字列を複製して新しいエントリを作成します.
  * @param filename
  * @return
  */
-file_entry* file_entry_dup(const char* filename);
+FileEntry* NewFileEntry(const char* filename);
 
 /**
  * 文字列を参照して新しいエントリを作成します.
- * @param filename file_entry_delete によって解放されます。
+ * @param filename DeleteFileEntry によって解放されます。
  * @return
  */
-file_entry* file_entry_ref(char* filename);
+FileEntry* RefFileEntry(char* filename);
 
 /**
  * エントリを解放します.
  * @param self
  */
-void file_entry_delete(file_entry* self);
+void DeleteFileEntry(FileEntry* self);
 #endif

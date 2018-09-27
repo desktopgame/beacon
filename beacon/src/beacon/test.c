@@ -92,7 +92,7 @@ static void test_semanticsImpl(const char* dirname, bool require, char** outFile
 	vector* files = io_list_files(dirname);
 	for(int i=0; i<files->length; i++) {
 		//.bc以外は無視する
-		file_entry* e = (file_entry*)vector_at(files, i);
+		FileEntry* e = (FileEntry*)vector_at(files, i);
 		if(!io_extension(e->filename, "bc")) {
 			continue;
 		}

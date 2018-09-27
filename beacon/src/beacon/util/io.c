@@ -21,7 +21,7 @@
 #endif
 
 //proto
-static void io_file_entry_delete(vector_item item);
+static void FileEntryDeleter(vector_item item);
 
 void io_printi(int depth) {
 	io_fprinti(stdout, depth);
@@ -219,11 +219,11 @@ vector* io_list_files(const char* dirname) {
 
 	for (dp = readdir(dir); dp != NULL; dp = readdir(dir)) {
 		if (dp->d_name[0] != '.') {
-			char* fullp = io_join_path(dirname, dp->d_name);
-			file_entry* ent = file_entry_ref(fullp);
-			stat(fullp, &fi);
-			ent->is_file = !S_ISDIR(fi.st_mode);
-			vector_push(ret, ent);
+			char* path = io_join_path(dirname, dp->d_name);
+			FileEntry* entry = RefFileEntry(path);
+			stat(path, &fi);
+			entry->is_file = !S_ISDIR(fi.st_mode);
+			vector_push(ret, entry);
 		}
 	}
 	closedir(dir);
@@ -233,13 +233,13 @@ vector* io_list_files(const char* dirname) {
 }
 
 int io_list_files_sort(const void* a, const void* b) {
-	file_entry* aF = *(file_entry**)a;
-	file_entry* bF = *(file_entry**)b;
+	FileEntry* aF = *(FileEntry**)a;
+	FileEntry* bF = *(FileEntry**)b;
 	return strcmp(aF->filename, bF->filename);
 }
 
 void io_list_files_delete(vector* files) {
-	vector_delete(files, io_file_entry_delete);
+	vector_delete(files, FileEntryDeleter);
 }
 
 bool io_extension(const char* filename, const char* ext) {
@@ -273,7 +273,7 @@ char* io_join_path(const char* a, const char* b) {
 }
 
 //private
-static void io_file_entry_delete(vector_item item) {
-	file_entry* e = (file_entry*)item;
-	file_entry_delete(e);
+static void FileEntryDeleter(vector_item item) {
+	FileEntry* e = (FileEntry*)item;
+	DeleteFileEntry(e);
 }
