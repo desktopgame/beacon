@@ -33,8 +33,8 @@ sg_thread * sg_thread_current(script_context* sctx) {
 }
 
 void sg_thread_clear(sg_thread* self) {
-	while (!stack_empty(self->trace_stack)) {
-		vm_trace* trace = (vm_trace*)stack_pop(self->trace_stack);
+	while (!IsEmptyStack(self->trace_stack)) {
+		vm_trace* trace = (vm_trace*)PopStack(self->trace_stack);
 		vm_trace_delete(trace);
 	}
 }

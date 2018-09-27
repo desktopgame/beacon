@@ -3,15 +3,15 @@
 #include <stdlib.h>
 #include "../util/mem.h"
 
-stack * stack_new() {
-	stack* st = (stack*)MEM_MALLOC(sizeof(stack));
-	st->item = NULL;
-	st->prev = NULL;
-	st->next = NULL;
-	return st;
+Stack* NewStack() {
+	Stack* ret = (Stack*)MEM_MALLOC(sizeof(Stack));
+	ret->item = NULL;
+	ret->prev = NULL;
+	ret->next = NULL;
+	return ret;
 }
 
-void stack_push(stack * self, stack_item item) {
+void PushStack(Stack* self, StackItem item) {
 	assert(self != NULL);
 	assert(item != NULL);
 	if (self->item == NULL) {
@@ -19,59 +19,59 @@ void stack_push(stack * self, stack_item item) {
 		return;
 	}
 	if (self->next == NULL) {
-		stack* nextElement = stack_new();
-		self->next = nextElement;
-		nextElement->prev = self;
-		nextElement->item = item;
+		Stack* next_elem = NewStack();
+		self->next = next_elem;
+		next_elem->prev = self;
+		next_elem->item = item;
 	} else {
-		stack_push(self->next, item);
+		PushStack(self->next, item);
 	}
 }
 
-stack_item stack_top(stack * self) {
+StackItem TopStack(Stack* self) {
 	assert(self != NULL);
 	if (self->next == NULL) {
 		return self->item;
 	} else {
-		return stack_top(self->next);
+		return TopStack(self->next);
 	}
 }
 
-stack_item stack_pop(stack * self) {
+StackItem PopStack(Stack* self) {
 	assert(self != NULL);
 	if (self->next == NULL) {
 		if (self->prev == NULL) {
-			stack_item ret = self->item;
+			StackItem ret = self->item;
 			self->item = NULL;
 			return ret;
 		} else {
-			stack* prevElement = self->prev;
-			prevElement->next = NULL;
+			Stack* prev_elem = self->prev;
+			prev_elem->next = NULL;
 			self->prev = NULL;
-			stack_item ret = self->item;
+			StackItem ret = self->item;
 			MEM_FREE(self);
 			return ret;
 		}
 	} else {
-		return stack_pop(self->next);
+		return PopStack(self->next);
 	}
 }
 
-bool stack_empty(stack * self) {
+bool IsEmptyStack(Stack * self) {
 	assert(self != NULL);
 	return (self->item == NULL);
 }
 
-void stack_delete(stack * self, stack_element_deleter deleter) {
+void DeleteStack(Stack* self, StackElementDeleter deleter) {
 	assert(self != NULL);
-	stack* pointee = self;
+	Stack* pointee = self;
 	while (1) {
-		stack* next = pointee->next;
+		Stack* next = pointee->next;
 		pointee->next = NULL;
 		if (next) {
 			next->prev = NULL;
 		}
-		stack_item item = pointee->item;
+		StackItem item = pointee->item;
 		pointee->item = NULL;
 		if (item) {
 			deleter(item);
@@ -84,9 +84,9 @@ void stack_delete(stack * self, stack_element_deleter deleter) {
 	}
 }
 
-void stack_deleter_free(stack_item item) {
+void StackDeleterByFree(StackItem item) {
 	MEM_FREE(item);
 }
 
-void stack_deleter_null(stack_item item) {
+void StackDeleterOfNull(StackItem item) {
 }
