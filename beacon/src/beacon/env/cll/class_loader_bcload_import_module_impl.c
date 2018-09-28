@@ -31,8 +31,8 @@ void CLBC_import(class_loader* self, vector* ilimports) {
 	script_context* ctx = script_context_get_current();
 	for(int i=0; i<ctx->include_vec->length; i++) {
 		FileEntry* entry = vector_at(ctx->include_vec, i);
-		if(entry->is_file && io_extension(entry->filename, "bc")) {
-			char* p = io_absolute_path(entry->filename);
+		if(entry->is_file && IsMatchExtension(entry->filename, "bc")) {
+			char* p = GetAbsolutePath(entry->filename);
 			CLBC_new_load(self, p);
 			MEM_FREE(p);
 		}
@@ -68,7 +68,7 @@ static void CLBC_import_internal(class_loader* self, vector* ilimports, int i) {
 	vector_item e = vector_at(ilimports, i);
 	il_import* import = (il_import*)e;
 	char* withExt = text_concat(string_pool_ref2str(import->pathv), ".bc");
-	char* fullPath = io_resolve_script_path(withExt);
+	char* fullPath = ResolveScriptPath(withExt);
 	CLBC_new_load(self, fullPath);
 	MEM_FREE(withExt);
 	MEM_FREE(fullPath);

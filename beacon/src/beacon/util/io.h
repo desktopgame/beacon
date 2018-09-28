@@ -9,53 +9,53 @@
  * 指定の数だけ標準出力にスペースを出力します.
  * @param depth
  */
-void io_printi(int depth);
+void Printi(int depth);
 
 /**
  * 指定の数だけスペースを出力します.
  * @param fp
  * @param depth
  */
-void io_fprinti(FILE* fp, int depth);
+void Fprinti(FILE* fp, int depth);
 
 /**
  * @param fp
  * @param fmt
  */
-void io_printfln(const char* fmt, ...);
+void Printfln(const char* fmt, ...);
 
 /**
  * 改行文字を出力します.
  */
-void io_println();
+void Println();
 
 /**
  * 新しいファイルを作成します.
  * @param filename
  * @return
  */
-void io_new_file(const char* filename);
+void NewFile(const char* filename);
 
 /**
  * 指定のファイルが既に存在するなら true.
  * @param filename
  * @return
  */
-bool io_exists(const char* filename);
+bool ExistsFile(const char* filename);
 
 /**
  * 指定のファイルを削除します.
  * @param filename
  * @return
  */
-bool io_delete(const char* filename);
+bool DeleteFile(const char* filename);
 
 /**
  * 指定のファイルを読み込んで返します.
  * @param filename
  * @return 呼び出し側で開放してください.
  */
-char* io_read_text(const char* filename);
+char* ReadText(const char* filename);
 
 /**
  * 指定のファイルのテキストを上書きします.
@@ -63,7 +63,7 @@ char* io_read_text(const char* filename);
  * @param text
  * @return
  */
-void io_write_text(const char* filename, const char* text);
+void WriteText(const char* filename, const char* text);
 
 /**
  * 現在のパスを取得します.
@@ -71,7 +71,7 @@ void io_write_text(const char* filename, const char* text);
  * @param block
  * @param len
  */
-void io_current_path(char* block, int len);
+void GetCurrentPath(char* block, int len);
 
 /**
  * 実行時ディレクトリを基準として、
@@ -79,21 +79,21 @@ void io_current_path(char* block, int len);
  * @param target
  * @return 呼び出し側で開放してください.
  */
-char* io_absolute_path(const char* target);
+char* GetAbsolutePath(const char* target);
 
 /**
  * 指定のファイルをスクリプトパスで解決してフルパスへ変換します.
  * @param target
  * @return
  */
-char* io_resolve_script_path(const char* target);
+char* ResolveScriptPath(const char* target);
 
 /**
  * dirnameの直下のファイル名一覧を返します.
  * @param dirname
  * @return
  */
-vector* io_list_files(const char* dirname);
+vector* GetFiles(const char* dirname);
 
 /**
  * ファイル一覧をソートするための比較関数.
@@ -101,13 +101,13 @@ vector* io_list_files(const char* dirname);
  * @param b
  * @return
  */
-int io_list_files_sort(const void* a, const void* b);
+int SortFiles(const void* a, const void* b);
 
 /**
  * io_list_files によって確保された vector を解放します.s
  * @param files
  */
-void io_list_files_delete(vector* files);
+void DeleteFiles(vector* files);
 
 /**
  * filename の拡張子が ext なら true.
@@ -115,7 +115,7 @@ void io_list_files_delete(vector* files);
  * @param ext ドットを含まない
  * @return
  */
-bool io_extension(const char* filename, const char* ext);
+bool IsMatchExtension(const char* filename, const char* ext);
 
 /**
  * a と b をパス区切り文字で連結して返します.
@@ -123,5 +123,5 @@ bool io_extension(const char* filename, const char* ext);
  * @param b
  * @return
  */
-char* io_join_path(const char* a, const char* b);
+char* ConcatPath(const char* a, const char* b);
 #endif // !SIGNAL_UTIL_IO_H

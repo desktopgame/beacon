@@ -32,7 +32,7 @@ static jdouble jobject2jdouble(JNIEnv* env, jobject obj);
 
 JNIEXPORT jobject JNICALL Java_jp_koya_jbeacon_BCEval_nativeFile(JNIEnv * env, jclass cls, jstring str, jobject table) {
 	const char* str_c = (*env)->GetStringUTFChars(env, str, 0);
-	const char* source = io_read_text(str_c);
+	const char* source = ReadText(str_c);
 	jobject ret = bc_eval_string(env, cls, str, table, str_c, source);
 	MEM_FREE(source);
 	return ret;

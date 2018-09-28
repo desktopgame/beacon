@@ -311,7 +311,7 @@ void object_destroy(object* self) {
 		self->native_slot_vec = NULL;
 		self->u.field_vec = NULL;
 	}
-	//io_printfln("delete object %s", type_name(obj->type));
+	//Printfln("delete object %s", type_name(obj->type));
 	object_delete(self);
 }
 

@@ -177,11 +177,11 @@ static script_context* script_context_malloc(void) {
 	ret->false_obj = NULL;
 	ret->null_obj = NULL;
 #if defined(_MSC_VER)
-	char* path = io_absolute_path("script-lib/beacon/lang");
-	ret->include_vec = io_list_files(path);
+	char* path = GetAbsolutePath("script-lib/beacon/lang");
+	ret->include_vec = GetFiles(path);
 	MEM_FREE(path);
 #else
-	ret->include_vec = io_list_files("script-lib/beacon/lang");
+	ret->include_vec = GetFiles("script-lib/beacon/lang");
 #endif
 	ret->pos_int_vec = vector_new();
 	ret->neg_int_vec = vector_new();
@@ -224,7 +224,7 @@ static void script_context_free(script_context* self) {
 
 	int a = object_count();
 	numeric_map_delete(self->namespace_nmap, script_context_namespace_delete);
-	io_list_files_delete(self->include_vec);
+	DeleteFiles(self->include_vec);
 	MEM_FREE(self);
 }
 

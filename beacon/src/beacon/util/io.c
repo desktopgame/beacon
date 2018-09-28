@@ -23,17 +23,17 @@
 //proto
 static void FileEntryDeleter(vector_item item);
 
-void io_printi(int depth) {
-	io_fprinti(stdout, depth);
+void Printi(int depth) {
+	Fprinti(stdout, depth);
 }
 
-void io_fprinti(FILE* fp, int depth) {
+void Fprinti(FILE* fp, int depth) {
 	for(int i=0; i<depth; i++) {
 		fprintf(fp, "    ");
 	}
 }
 
-void io_printfln(const char* fmt, ...) {
+void Printfln(const char* fmt, ...) {
 	va_list ap;
 	va_start(ap, fmt);
 	int ret = vprintf(fmt, ap);
@@ -41,12 +41,12 @@ void io_printfln(const char* fmt, ...) {
 	va_end(ap);
 }
 
-void io_println() {
+void Println() {
 	printf("\n");
 }
 
-void io_new_file(const char * filename) {
-	assert(!io_exists(filename));
+void NewFile(const char * filename) {
+	assert(!ExistsFile(filename));
 #if defined(_MSC_VER)
 	FILE* fp;
 	errno_t err = fopen_s(&fp, filename, "a");
@@ -62,7 +62,7 @@ void io_new_file(const char * filename) {
 #endif
 }
 
-bool io_exists(const char * filename) {
+bool ExistsFile(const char * filename) {
 #if defined(_MSC_VER)
 	FILE* fp;
 	errno_t err = fopen_s(&fp, filename, "r");
@@ -80,12 +80,12 @@ bool io_exists(const char * filename) {
 #endif
 }
 
-bool io_delete(const char * filename) {
+bool DeleteFile(const char * filename) {
 	return remove(filename);
 }
 
-char * io_read_text(const char * filename) {
-	assert(io_exists(filename));
+char * ReadText(const char * filename) {
+	assert(ExistsFile(filename));
 	string_buffer* buff = string_buffer_new();
 #if defined(_MSC_VER)
 	FILE* fp;
@@ -112,8 +112,8 @@ char * io_read_text(const char * filename) {
 	return ret;
 }
 
-void io_write_text(const char * filename, const char * text) {
-	assert(io_exists(filename));
+void WriteText(const char * filename, const char * text) {
+	assert(ExistsFile(filename));
 #if defined(_MSC_VER)
 	FILE* fp;
 	errno_t err = fopen_s(&fp, filename, "w");
@@ -135,7 +135,7 @@ void io_write_text(const char * filename, const char * text) {
 	fclose(fp);
 }
 
-void io_current_path(char* block, int len) {
+void GetCurrentPath(char* block, int len) {
 	memset(block, '\0', len);
 	getcwd(block, len);
 	for(int i=0; i<len; i++) {
@@ -152,7 +152,7 @@ void io_current_path(char* block, int len) {
 	}
 }
 
-char * io_absolute_path(const char * target) {
+char * GetAbsolutePath(const char * target) {
 #if defined(_WIN32)
 	char full[_MAX_PATH];
 	if (_fullpath(full, target, _MAX_PATH) != NULL) {
@@ -169,22 +169,22 @@ char * io_absolute_path(const char * target) {
 	return NULL;
 #else
 	char full[256] = {0};
-	io_current_path(full, 256);
+	GetCurrentPath(full, 256);
 	return text_concat(full, target);
 #endif
 }
 
-char* io_resolve_script_path(const char* target) {
+char* ResolveScriptPath(const char* target) {
 	string_buffer* sb = string_buffer_new();
 	char full[256] = {0};
-	io_current_path(full, 256);
+	GetCurrentPath(full, 256);
 	string_buffer_appends(sb, full);
 	string_buffer_appends(sb, "script-lib/");
 	string_buffer_appends(sb, target);
 	return string_buffer_release(sb);
 }
 
-vector* io_list_files(const char* dirname) {
+vector* GetFiles(const char* dirname) {
 #if defined(_MSC_VER)
 	//ワイルドカード指定ですべてのファイルを取得する
 	string_buffer* buf = string_buffer_new();
@@ -204,12 +204,12 @@ vector* io_list_files(const char* dirname) {
 			continue;
 		}
 		file_entry* e = MEM_MALLOC(sizeof(file_entry));
-		e->filename = io_join_path(dirname, ffd.cFileName);
+		e->filename = ConcatPath(dirname, ffd.cFileName);
 		e->is_file = true;
 		vector_push(v, e);
 	} while (FindNextFile(h, &ffd));
 	FindClose(h);
-	qsort(v->memory, v->length, sizeof(void*), io_list_files_sort);
+	qsort(v->memory, v->length, sizeof(void*), GetFiles_sort);
 	return v;
 #else
 	vector* ret = vector_new();
@@ -219,7 +219,7 @@ vector* io_list_files(const char* dirname) {
 
 	for (dp = readdir(dir); dp != NULL; dp = readdir(dir)) {
 		if (dp->d_name[0] != '.') {
-			char* path = io_join_path(dirname, dp->d_name);
+			char* path = ConcatPath(dirname, dp->d_name);
 			FileEntry* entry = RefFileEntry(path);
 			stat(path, &fi);
 			entry->is_file = !S_ISDIR(fi.st_mode);
@@ -227,22 +227,22 @@ vector* io_list_files(const char* dirname) {
 		}
 	}
 	closedir(dir);
-	qsort(ret->memory, ret->length, sizeof(void*), io_list_files_sort);
+	qsort(ret->memory, ret->length, sizeof(void*), SortFiles);
 	return ret;
 #endif
 }
 
-int io_list_files_sort(const void* a, const void* b) {
+int SortFiles(const void* a, const void* b) {
 	FileEntry* aF = *(FileEntry**)a;
 	FileEntry* bF = *(FileEntry**)b;
 	return strcmp(aF->filename, bF->filename);
 }
 
-void io_list_files_delete(vector* files) {
+void DeleteFiles(vector* files) {
 	vector_delete(files, FileEntryDeleter);
 }
 
-bool io_extension(const char* filename, const char* ext) {
+bool IsMatchExtension(const char* filename, const char* ext) {
 	int fn_len = strlen(filename);
 	int ext_len = strlen(ext);
 	int mat_len = 0;
@@ -264,7 +264,7 @@ bool io_extension(const char* filename, const char* ext) {
 	return mat_len == ext_len;
 }
 
-char* io_join_path(const char* a, const char* b) {
+char* ConcatPath(const char* a, const char* b) {
 	string_buffer* buf = string_buffer_new();
 	string_buffer_appends(buf, a);
 	string_buffer_append(buf, '/');

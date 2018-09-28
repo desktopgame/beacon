@@ -104,8 +104,8 @@ bool CLBC_field_impl(class_loader* self, type* tp, field* fi, namespace_* scope,
 	//フィールドの型と互換性がない
 	generic_type* gf = il_factor_eval(fi->initial_value, env, cctx);
 	if(generic_type_distance(fi->gtype, gf, cctx) < 0) {
-		generic_type_print(fi->gtype); io_println();
-		generic_type_print(gf); io_println();
+		generic_type_print(fi->gtype); Println();
+		generic_type_print(gf); Println();
 		bc_error_throw(bcerror_field_default_value_not_compatible_to_field_type_T,
 			string_pool_ref2str(type_name(fi->parent)),
 			string_pool_ref2str(fi->namev)

@@ -33,9 +33,9 @@ void generic_cache_print(generic_cache * self) {
 }
 
 void generic_cache_dump(generic_cache * self, int depth) {
-	io_printi(depth);
+	Printi(depth);
 	generic_cache_print(self);
-	io_println();
+	Println();
 }
 
 char* generic_cache_tostr(generic_cache* self) {

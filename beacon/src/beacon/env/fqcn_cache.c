@@ -24,19 +24,19 @@ fqcn_cache* fqcn_cache_malloc(const char* filename, int lineno) {
 }
 
 void fqcn_cache_dump(fqcn_cache * self, int depth) {
-	io_printi(depth);
+	Printi(depth);
 	printf("type %s", string_pool_ref2str(self->namev));
-	io_println();
+	Println();
 	//X::C.call() のような呼び出しなら
 	if (self->scope_vec->length > 0) {
-		io_printi(depth);
+		Printi(depth);
 		printf("scope");
-		io_println();
+		Println();
 		for (int i = 0; i < self->scope_vec->length; i++) {
 			string_view sv = (string_view)vector_at(self->scope_vec, i);
-			io_printi(depth + 1);
+			Printi(depth + 1);
 			printf("%s", string_pool_ref2str(sv));
-			io_println();
+			Println();
 		}
 	}
 }

@@ -35,11 +35,11 @@ int opcode_buf_nop(opcode_buf * self) {
 
 void opcode_buf_dump(opcode_buf * self, int depth) {
 	for (int i = 0; i < self->source_vec->length; i++) {
-		io_printi(depth);
+		Printi(depth);
 		i = opcode_print(self->source_vec, i);
-		io_println();
+		Println();
 	}
-	io_println();
+	Println();
 }
 
 opcode_buf * opcode_buf_merge(opcode_buf * a, opcode_buf * b) {

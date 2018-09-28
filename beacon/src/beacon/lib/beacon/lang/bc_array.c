@@ -90,7 +90,7 @@ static void bc_array_nativeGet(method* parent, frame* fr, enviroment* env) {
 //	object* a = vector_at(vm->ref_stack, 2);
 	assert(idx->tag == object_int_T);
 	object* ret = (object*)vector_at(self->native_slot_vec, idx->u.int_);
-	//io_printfln("array get %d", idx->u.int_);
+	//Printfln("array get %d", idx->u.int_);
 	vector_push(fr->value_stack, ret);
 }
 

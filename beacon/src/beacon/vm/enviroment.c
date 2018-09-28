@@ -61,7 +61,7 @@ void enviroment_op_dump(enviroment * self, int depth) {
 	line_range* lr = NULL;
 	int lrPos = -1;
 	for (int i = 0; i < buf->source_vec->length; i++) {
-		io_printi(depth);
+		Printi(depth);
 		i = opcode_print(buf->source_vec, i);
 		if (!vector_empty(self->line_range_vec)) {
 			if (lr == NULL) {
@@ -79,9 +79,9 @@ void enviroment_op_dump(enviroment * self, int depth) {
 		if (lr != NULL) {
 			printf("<%d>", lr->lineno);
 		}
-		io_println();
+		Println();
 	}
-	io_println();
+	Println();
 }
 
 int enviroment_add_constant_int(enviroment * self, int i) {

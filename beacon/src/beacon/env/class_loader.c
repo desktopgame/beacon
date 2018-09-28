@@ -93,7 +93,7 @@ void class_loader_load_pass_ast(class_loader* self, ast* a) {
 }
 
 void class_loader_special(class_loader* self, char* relativePath) {
-	char* fullP = io_resolve_script_path(relativePath);
+	char* fullP = ResolveScriptPath(relativePath);
 	script_context* ctx = script_context_get_current();
 	heap* he = heap_get();
 	class_loader* cll = tree_map_get(ctx->class_loader_map, fullP);
@@ -250,7 +250,7 @@ static void class_loader_load_toplevel_function(class_loader* self) {
 		//戻り値を指定
 		m->return_gtype = import_manager_resolve(loc, ilfunc->return_fqcn, cctx);
 	//	generic_type_print(m->return_gtype);
-	//	io_println();
+	//	Println();
 		//引数を指定
 		for(int j=0; j<ilfunc->parameter_list->length; j++) {
 			il_parameter* ilparam = vector_at(ilfunc->parameter_list, j);

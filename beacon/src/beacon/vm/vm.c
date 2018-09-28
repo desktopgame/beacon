@@ -498,9 +498,9 @@ static void vm_run(frame * self, enviroment * env, int pos, int deferStart) {
 				generic_type* gtype = (generic_type*)vector_pop(self->type_args_vec);
 				object* v = (object*)vector_pop(self->value_stack);
 				//generic_type_print(gtype);
-				//io_printfln("");
+				//Printfln("");
 				//generic_type_print(v->gtype);
-				//io_printfln("");
+				//Printfln("");
 				int dist = generic_type_distance(gtype, v->gtype, sg_thread_context());
 				object* b = object_bool_get(dist >= 0);
 				vector_push(self->value_stack, b);
@@ -584,8 +584,8 @@ static void vm_run(frame * self, enviroment * env, int pos, int deferStart) {
 					vector_assign(sub->type_args_vec, (typeparams - i) - 1, e);
 					vector_assign(cfr->u.static_invoke.typeargs, (cls->type_parameter_list->length - i), e);
 				}
-				//io_printi(self->level);
-				//io_printfln("[ %s#new ]", type_name(ctor->parent));
+				//Printi(self->level);
+				//Printfln("[ %s#new ]", type_name(ctor->parent));
 				//enviroment_op_dump(ctor->env, sub->level);
 				//opcode_buf_dump(ctor->env->buf, sub->level);
 				vm_execute(sub, ctor->env);

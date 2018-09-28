@@ -54,11 +54,11 @@ static void test_semanticsImpl(const char* dirname, bool require, char** outFile
 	char* filename = NULL;
 	bool fail = false;
 	//全てのテストファイルを訪問する
-	vector* files = io_list_files(dirname);
+	vector* files = GetFiles(dirname);
 	for (int i = 0; i<files->length; i++) {
 		//.bc以外は無視する
 		file_entry* e = (file_entry*)vector_at(files, i);
-		if (!io_extension(e->filename, "bc")) {
+		if (!IsMatchExtension(e->filename, "bc")) {
 			continue;
 		}
 		//これから実行するファイルを記録
@@ -78,7 +78,7 @@ static void test_semanticsImpl(const char* dirname, bool require, char** outFile
 	}
 	(*outFileName) = text_strdup(filename);
 	(*outFail) = fail;
-	io_list_files_delete(files);
+	DeleteFiles(files);
 	//元に戻す
 	fflush(stdout);
 #else
@@ -89,11 +89,11 @@ static void test_semanticsImpl(const char* dirname, bool require, char** outFile
 	stdout = out;
 	bool fail = false;
 	//全てのテストファイルを訪問する
-	vector* files = io_list_files(dirname);
+	vector* files = GetFiles(dirname);
 	for(int i=0; i<files->length; i++) {
 		//.bc以外は無視する
 		FileEntry* e = (FileEntry*)vector_at(files, i);
-		if(!io_extension(e->filename, "bc")) {
+		if(!IsMatchExtension(e->filename, "bc")) {
 			continue;
 		}
 		//これから実行するファイルを記録
@@ -122,7 +122,7 @@ static void test_semanticsImpl(const char* dirname, bool require, char** outFile
 	}
 	(*outFileName) = text_strdup(filename);
 	(*outFail) = fail;
-	io_list_files_delete(files);
+	DeleteFiles(files);
 	//元に戻す
 	stdout = STDOUT;
 	fclose(out);

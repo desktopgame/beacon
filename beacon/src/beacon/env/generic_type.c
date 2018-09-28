@@ -342,9 +342,9 @@ static int generic_type_distance_interface(int dist, generic_type* self, generic
 				break;
 			}
 		}
-		//generic_type_print(self); io_println();
-		//generic_type_print(other); io_println();
-		//io_printfln("---");
+		//generic_type_print(self); Println();
+		//generic_type_print(other); Println();
+		//Printfln("---");
 		return dist;
 	}
 	return dist;
@@ -382,7 +382,7 @@ static generic_type* generic_type_receiver_at(call_context* cctx, frame* fr, int
 		return instanced;
 	} else {
 		object* a = vector_at(fr->ref_stack, 0);
-		printf("receiver at: "); generic_type_print(a->gtype); io_println();
+		printf("receiver at: "); generic_type_print(a->gtype); Println();
 		return vector_at(a->gtype->type_args_list, index);
 	}
 	return NULL;

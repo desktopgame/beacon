@@ -21,7 +21,7 @@ bool eval_ast(const char* filename) {
 	abort();
 	return false;
 	/*
-	if (!io_exists(filename)) {
+	if (!ExistsFile(filename)) {
 		fprintf(stderr, "file is not found: %s", filename);
 		abort();
 		return false;
@@ -101,7 +101,7 @@ static bool eval_top_from_cll(class_loader* cll, ast* aOpt) {
 	heap* he = heap_get();
 	he->accept_blocking = 0;
 #if defined(DEBUG)
-	io_printfln("start");
+	Printfln("start");
 #endif
 	if(!bc_error_last()) {
 		vm_execute(fr, cll->env);
