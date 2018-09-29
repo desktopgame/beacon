@@ -278,6 +278,14 @@ commands = {
         else
             apply(decl_files + impl_files, functions, functions_edits.last)
         end
+    end,
+    "help" => lambda do
+        commands.each_pair do |key, val|
+            puts "    -" + key
+        end
+    end,
+    "abort" => lambda do
+        abort
     end
 }
 while(true)
