@@ -1239,7 +1239,7 @@ static bool throw_npe(frame* self, object* o) {
 
 static char* create_error_message(frame * self, enviroment* env, int pc) {
 	string_buffer* sbuf = NewBuffer();
-	line_range* lr = line_range_find(env->line_range_vec, pc);
+	line_range* lr = FindLineRange(env->line_range_vec, pc);
 	int line = -1;
 	if (lr != NULL) {
 		line = lr->lineno;

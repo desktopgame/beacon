@@ -16,7 +16,7 @@
 
 //proto
 static void enviroment_constant_pool_vec_delete(VectorItem item);
-static void enviroment_line_range_delete(VectorItem item);
+static void enviroment_DeleteLineRange(VectorItem item);
 static void enviroment_add_constant(enviroment* self, object* o);
 static void enviroment_object_delete_self(VectorItem item);
 static void enviroment_object_delete(object* obj);
@@ -35,7 +35,7 @@ void enviroment_add_range(enviroment* self, int lineno) {
 	assert(lineno >= 0);
 	//空なので追加
 	if (IsEmptyVector(self->line_range_vec)) {
-		line_range* lr = line_range_new();
+		line_range* lr = NewLineRange();
 		lr->start_offset = 0;
 		lr->end_offset = 0;
 		lr->lineno = lineno;
@@ -48,7 +48,7 @@ void enviroment_add_range(enviroment* self, int lineno) {
 	if (lrt->lineno == lineno) {
 		lrt->end_offset = self->buf->source_vec->length;
 	} else {
-		line_range* lr = line_range_new();
+		line_range* lr = NewLineRange();
 		lr->start_offset = self->buf->source_vec->length;
 		lr->end_offset = self->buf->source_vec->length;
 		lr->lineno = lineno;
@@ -145,7 +145,7 @@ void enviroment_delete(enviroment * self) {
 		return;
 	}
 	DeleteVector(self->constant_pool_vec, enviroment_constant_pool_vec_delete);
-	DeleteVector(self->line_range_vec, enviroment_line_range_delete);
+	DeleteVector(self->line_range_vec, enviroment_DeleteLineRange);
 	opcode_buf_delete(self->buf);
 	symbol_table_delete(self->sym_table);
 	MEM_FREE(self);
@@ -156,9 +156,9 @@ static void enviroment_constant_pool_vec_delete(VectorItem item) {
 	enviroment_object_delete((object*)item);
 }
 
-static void enviroment_line_range_delete(VectorItem item) {
+static void enviroment_DeleteLineRange(VectorItem item) {
 	line_range* e = (line_range*)item;
-	line_range_delete(e);
+	DeleteLineRange(e);
 }
 
 static void enviroment_add_constant(enviroment* self, object* o) {
