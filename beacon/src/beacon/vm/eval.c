@@ -16,7 +16,7 @@
 static bool eval_top_from_cll(class_loader* cll, ast* aOpt);
 
 
-bool eval_ast(const char* filename) {
+bool EvalAST(const char* filename) {
 	fprintf(stderr, "this command is deleted\n");
 	abort();
 	return false;
@@ -40,7 +40,7 @@ bool eval_ast(const char* filename) {
 	//*/
 }
 
-bool eval_il(const char* filename) {
+bool EvalIL(const char* filename) {
 	fprintf(stderr, "this command is deleted\n");
 	abort();
 	return false;
@@ -57,7 +57,7 @@ bool eval_il(const char* filename) {
 	//*/
 }
 
-bool eval_op(const char* filename) {
+bool EvalOp(const char* filename) {
 	class_loader* cl = class_loader_new(filename, CONTENT_ENTRY_POINT_T);
 	class_loader_load(cl);
 
@@ -68,12 +68,12 @@ bool eval_op(const char* filename) {
 	return true;
 }
 
-bool eval_file(const char * filename) {
+bool EvalFile(const char * filename) {
 	class_loader* cll = class_loader_new(filename, CONTENT_ENTRY_POINT_T);
 	return eval_top_from_cll(cll, NULL);
 }
 
-bool eval_string(const char* source) {
+bool EvalString(const char* source) {
 	parser* p = ParseString(source);
 	if (p->result != PARSE_COMPLETE_T) {
 		bc_error_throw(BCERROR_PARSE_T, p->error_message);

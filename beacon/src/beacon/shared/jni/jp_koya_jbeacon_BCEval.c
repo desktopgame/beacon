@@ -19,7 +19,7 @@
 #include "../../lib/beacon/lang/bc_string.h"
 #include "../../error.h"
 
-static jobject bc_eval_string(JNIEnv * env, jclass cls, jstring str, jobject table, const char* filename, const char* source);
+static jobject bc_EvalString(JNIEnv * env, jclass cls, jstring str, jobject table, const char* filename, const char* source);
 static frame* bc_eval_allocate(class_loader* cll);
 static bool bc_read_symbol(JNIEnv* env, jobject table, ast* a);
 static void bc_write_symbol(JNIEnv* env, NumericMap* nmap, frame* fr, jobject target);
@@ -33,17 +33,17 @@ static jdouble jobject2jdouble(JNIEnv* env, jobject obj);
 JNIEXPORT jobject JNICALL Java_jp_koya_jbeacon_BCEval_nativeFile(JNIEnv * env, jclass cls, jstring str, jobject table) {
 	const char* str_c = (*env)->GetStringUTFChars(env, str, 0);
 	const char* source = ReadText(str_c);
-	jobject ret = bc_eval_string(env, cls, str, table, str_c, source);
+	jobject ret = bc_EvalString(env, cls, str, table, str_c, source);
 	MEM_FREE(source);
 	return ret;
 }
 
 JNIEXPORT jobject JNICALL Java_jp_koya_jbeacon_BCEval_nativeString(JNIEnv * env, jclass cls, jstring str, jobject table) {
 	const char* str_c = (*env)->GetStringUTFChars(env, str, 0);
-	return bc_eval_string(env, cls, str, table, "string", str_c);
+	return bc_EvalString(env, cls, str, table, "string", str_c);
 }
 //private
-static jobject bc_eval_string(JNIEnv * env, jclass cls, jstring str, jobject table, const char* filename, const char* source) {
+static jobject bc_EvalString(JNIEnv * env, jclass cls, jstring str, jobject table, const char* filename, const char* source) {
 	//文字列を解析
 	parser* p = ParseString(source);
 	if (p->result != PARSE_COMPLETE_T) {

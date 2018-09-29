@@ -25,27 +25,27 @@ int cl_bug(int argc, char* argv[]) {
 }
 
 int cl_ast(const char* filename) {
-	int ret = eval_ast(filename);
+	int ret = EvalAST(filename);
 	return ret;
 }
 
 int cl_il(const char* filename){
 	script_context_open();
-	int ret = eval_il(filename);
+	int ret = EvalIL(filename);
 	script_context_close();
 	return ret;
 }
 
 int cl_op(const char* filename) {
 	script_context_open();
-	int ret = eval_op(filename);
+	int ret = EvalOp(filename);
 	script_context_close();
 	return ret;
 }
 
 int cl_run(const char* filename) {
 	script_context_open();
-	int ret = eval_file(filename);
+	int ret = EvalFile(filename);
 	script_context_close();
 	return ret;
 }
