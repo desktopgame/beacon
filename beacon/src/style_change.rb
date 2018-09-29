@@ -178,9 +178,13 @@ decl_files = []
 impl_files = []
 functions = []
 functions_edits = []
+puts ARGV.length
 Dir.glob("**/*") do |file|
-    decl_files << file if file.end_with?(".h")
-    impl_files << file if file.end_with?(".c")
+    if(ARGV.length == 0 ||
+      (ARGV.length > 0 && ARGV.detect(){|e| file.include?(e)})) then
+        decl_files << file if file.end_with?(".h")
+        impl_files << file if file.end_with?(".c")
+    end
 end
 decl_files.each do |file|
     File.open(file, "r") do |fp|
@@ -244,7 +248,7 @@ functions_edits << functions
 commands = {
     "select" => lambda do
         printf "input selector: "
-        selector = gets.lstrip.rstrip
+        selector = STDIN.gets.lstrip.rstrip
         functions_edits.last.select{|e| e.name.include?(selector)}.each{|e| puts e}
     end,
     "all" => lambda do
@@ -252,9 +256,9 @@ commands = {
     end,
     "update" => lambda do
         printf "input selector: "
-        selector = gets.lstrip.rstrip
+        selector = STDIN.gets.lstrip.rstrip
         printf "input changed: "
-        changed = gets.lstrip.rstrip
+        changed = STDIN.gets.lstrip.rstrip
         edited = functions_edits.last.map{|e| e.clone }
         edited.select{|e| e.name.include?(selector)}.each {|e| e.name = e.name.gsub(selector, changed)}
         functions_edits.last.select{|e| e.name.include?(selector)}.each{|e| puts e.name + " => " + e.name.gsub(selector, changed)}
@@ -296,7 +300,7 @@ commands = {
     end
 }
 while(true)
-    input = gets.lstrip.rstrip
+    input = STDIN.gets.lstrip.rstrip
     if(input == "quit" || input == "exit") then
         puts "bye."
         break
