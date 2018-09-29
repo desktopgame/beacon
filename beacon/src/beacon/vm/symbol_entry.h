@@ -17,11 +17,11 @@ typedef struct symbol_entry {
  * エントリを作成します.
  * @return
  */
-symbol_entry* symbol_entry_new();
+symbol_entry* NewSymbolEntry();
 
 /**
  * エントリを開放します.
  * @param self
  */
-void symbol_entry_delete(symbol_entry* self);
+void DeleteSymbolEntry(symbol_entry* self);
 #endif // !SIGNAL_VM_SYMBOL_ENTRY_H

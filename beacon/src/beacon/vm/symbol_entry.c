@@ -3,7 +3,7 @@
 #include "../util/text.h"
 #include "../env/type_interface.h"
 #include "../env/generic_type.h"
-symbol_entry * symbol_entry_new() {
+symbol_entry * NewSymbolEntry() {
 	symbol_entry* ret = (symbol_entry*)MEM_MALLOC(sizeof(symbol_entry));
 	ret->index = 0;
 	ret->gtype = NULL;
@@ -11,6 +11,6 @@ symbol_entry * symbol_entry_new() {
 	return ret;
 }
 
-void symbol_entry_delete(symbol_entry * self) {
+void DeleteSymbolEntry(symbol_entry * self) {
 	MEM_FREE(self);
 }

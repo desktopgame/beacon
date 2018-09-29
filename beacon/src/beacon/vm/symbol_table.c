@@ -31,7 +31,7 @@ symbol_entry* symbol_table_entry(symbol_table* self, generic_type* gtp, string_v
 		return NULL;
 	}
 	int ret = self->count;
-	symbol_entry* e = symbol_entry_new();
+	symbol_entry* e = NewSymbolEntry();
 	e->index = self->count;
 	e->gtype = gtp;
 	e->scope_depth = self->scope_depth;
@@ -56,7 +56,7 @@ void symbol_table_delete(symbol_table * self) {
 //private
 static void symbol_table_delete_entry(NumericMapKey key, NumericMapItem item) {
 	symbol_entry* e = (symbol_entry*)item;
-	symbol_entry_delete(e);
+	DeleteSymbolEntry(e);
 }
 static void symbol_table_dump_entry(NumericMapKey key, NumericMapItem item) {
 	printf("[%s] = %d\n", Ref2Str(key), ((symbol_entry*)item)->index);
