@@ -29,7 +29,7 @@ void il_factor_property_load(il_factor_property* self, enviroment* env, call_con
 	class_find_property_tree(TYPE2CLASS(receiverT), self->p->namev, &temp);
 	self->index = temp;
 	if(temp == -1) {
-		bc_error_throw(
+		ThrowBCError(
 			BCERROR_UNDEFINED_PROPERTY_T,
 			Ref2Str(type_name(receiverT)),
 			Ref2Str(self->namev)

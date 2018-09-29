@@ -39,7 +39,7 @@ void il_factor_compare_op_generate(il_factor_compare_op* self, enviroment* env, 
 		} else if(il_factor_binary_op_char_char(self->parent, env, cctx)) {
 			AddOpcodeBuf(env->buf, (VectorItem)operator_to_copcode(self->type));
 		} else {
-			bc_error_throw(BCERROR_UNDEFINED_COMPARE_OPERATOR_T,
+			ThrowBCError(BCERROR_UNDEFINED_COMPARE_OPERATOR_T,
 				operator_tostring(self->type)
 			);
 //			assert(false);

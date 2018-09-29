@@ -48,7 +48,7 @@ bool EvalIL(const char* filename) {
 	class_loader* cl = class_loader_new(filename, CONTENT_ENTRY_POINT_T);
 	class_loader_load(cl);
 
-	if(!bc_error_last()) {
+	if(!GetLastBCError()) {
 		il_top_level* il = cl->il_code;
 		il_top_level_dump(il, 0);
 	}
@@ -61,7 +61,7 @@ bool EvalOp(const char* filename) {
 	class_loader* cl = class_loader_new(filename, CONTENT_ENTRY_POINT_T);
 	class_loader_load(cl);
 
-	if(!bc_error_last()) {
+	if(!GetLastBCError()) {
 		DumpEnviromentOp(cl->env, 0);
 	}
 	class_loader_delete(cl);
@@ -76,7 +76,7 @@ bool EvalFile(const char * filename) {
 bool EvalString(const char* source) {
 	parser* p = ParseString(source);
 	if (p->result != PARSE_COMPLETE_T) {
-		bc_error_throw(BCERROR_PARSE_T, p->error_message);
+		ThrowBCError(BCERROR_PARSE_T, p->error_message);
 		DestroyParser(p);
 		return false;
 	}
@@ -103,18 +103,18 @@ static bool eval_top_from_cll(class_loader* cll, ast* aOpt) {
 #if defined(DEBUG)
 	Printfln("start");
 #endif
-	if(!bc_error_last()) {
+	if(!GetLastBCError()) {
 		vm_execute(fr, cll->env);
 	}
 	if(fr->terminate) {
-		bc_error_throw(BCERROR_GENERIC_T, "unexpected terminate");
+		ThrowBCError(BCERROR_GENERIC_T, "unexpected terminate");
 	}
 	vm_catch(fr);
 	heap_gc(heap_get());
 	DeleteFrame(fr);
 	sg_thread_release_frame_ref(sg_thread_current(script_context_get_current()));
 
-	bool ret = bc_error_last();
+	bool ret = GetLastBCError();
 	class_loader_delete(cll);
 	return ret;
 }

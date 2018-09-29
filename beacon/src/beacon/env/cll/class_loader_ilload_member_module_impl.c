@@ -56,7 +56,7 @@ void CLIL_field(class_loader* self, il_type* current, ast* afield, access_level 
 	ast* afact = AtAST(afield, 3);
 	//インターフェイスはフィールドを持てない
 	if(current->tag == ilTYPE_INTERFACE_T) {
-		bc_error_throw(
+		ThrowBCError(
 			BCERROR_INTERFACE_HAS_FIELD_T,
 			Ref2Str(current->u.interface_->namev),
 			Ref2Str(aaccess_name->u.stringv_value)
@@ -75,7 +75,7 @@ void CLIL_field(class_loader* self, il_type* current, ast* afield, access_level 
 	}
 	//重複する修飾子を検出
 	if(error) {
-		bc_error_throw(BCERROR_OVERWRAP_MODIFIER_T, Ref2Str(v->namev));
+		ThrowBCError(BCERROR_OVERWRAP_MODIFIER_T, Ref2Str(v->namev));
 	}
 }
 
@@ -93,7 +93,7 @@ void CLIL_prop(class_loader* self, il_type* current, ast* aprop, access_level le
 		bool err = false;
 		ret->modifier = ASTCastToModifier(amod, &err);
 		if(err) {
-			bc_error_throw(BCERROR_OVERWRAP_MODIFIER_T, Ref2Str(ret->namev));
+			ThrowBCError(BCERROR_OVERWRAP_MODIFIER_T, Ref2Str(ret->namev));
 		}
 	}
 	ret->access = level;
@@ -101,7 +101,7 @@ void CLIL_prop(class_loader* self, il_type* current, ast* aprop, access_level le
 	ret->get = CLIL_prop_body(self, current, aget, ilPROPERTY_GET_T, level);
 	il_type_add_property(current, ret);
 	if(ret->set->is_short != ret->get->is_short) {
-		bc_error_throw(BCERROR_INVALID_PROPERTY_DECL_T, Ref2Str(current->u.class_->namev), Ref2Str(propname));
+		ThrowBCError(BCERROR_INVALID_PROPERTY_DECL_T, Ref2Str(current->u.class_->namev), Ref2Str(propname));
 	}
 }
 
@@ -129,7 +129,7 @@ void CLIL_method(class_loader* self, il_type* current, ast* amethod, access_leve
 	il_type_add_method(current, v);
 	//重複する修飾子を検出
 	if(error) {
-		bc_error_throw(BCERROR_OVERWRAP_MODIFIER_T, Ref2Str(v->namev));
+		ThrowBCError(BCERROR_OVERWRAP_MODIFIER_T, Ref2Str(v->namev));
 	}
 }
 
@@ -141,7 +141,7 @@ void CLIL_ctor(class_loader* self, il_type* current, ast* aconstructor, access_l
 	il_constructor_chain* ilchain = NULL;
 	//インターフェイスはコンストラクタを持てない
 	if(current->tag == ilTYPE_INTERFACE_T) {
-		bc_error_throw(
+		ThrowBCError(
 			BCERROR_INTERFACE_HAS_CTOR_T,
 			Ref2Str(current->u.interface_->namev)
 		);
@@ -170,7 +170,7 @@ void CLIL_operator_overload(class_loader* self, il_type* current, ast* aopov, ac
 	ast* areturn = AtAST(aopov, 2);
 	//インターフェイスはコンストラクタを持てない
 	if(current->tag == ilTYPE_INTERFACE_T) {
-		bc_error_throw(
+		ThrowBCError(
 			BCERROR_INTERFACE_HAS_OPOV_T,
 			Ref2Str(current->u.interface_->namev),
 			operator_tostring(ot)

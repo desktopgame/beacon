@@ -101,9 +101,9 @@ ast* ReleaseParserAST(parser* self) {
 }
 
 void RelocationParserError(parser* p) {
-	bc_error_file(p->source_name);
-	bc_error_line(p->error_line_index);
-	bc_error_column(p->error_column_index);
+	SetBCErrorFile(p->source_name);
+	SetBCErrorLine(p->error_line_index);
+	SetBCErrorColumn(p->error_column_index);
 }
 
 //private

@@ -36,7 +36,7 @@ generic_type* il_factor_shift_op_eval(il_factor_shift_op * self, enviroment * en
 		return TYPE2GENERIC(cdouble);
 	}
 	if(self->operator_index == -1) {
-		bc_error_throw(
+		ThrowBCError(
 			BCERROR_UNDEFINED_SHIFT_OPERATOR_T,
 			operator_tostring(self->type)
 		);
@@ -53,7 +53,7 @@ void il_factor_shift_op_generate(il_factor_shift_op* self, enviroment* env, call
 		if(il_factor_binary_op_int_int(self->parent, env, cctx)) {
 			AddOpcodeBuf(env->buf, (VectorItem)operator_to_iopcode(self->type));
 		} else {
-			bc_error_throw(
+			ThrowBCError(
 				BCERROR_UNDEFINED_SHIFT_OPERATOR_T,
 				operator_tostring(self->type)
 			);

@@ -28,7 +28,7 @@ void il_stmt_throw_load(il_stmt_throw* self, enviroment* env, call_context* cctx
 	generic_type* tgt = il_factor_eval(self->fact, env, cctx);
 	if(generic_type_distance(GENERIC_EXCEPTION, tgt, cctx) < 0) {
 		if(tgt->core_type != NULL) {
-			bc_error_throw(
+			ThrowBCError(
 				BCERROR_THROWN_NOT_EXCEPTION_TYPE_T,
 				Ref2Str(type_name(tgt->core_type))
 			);

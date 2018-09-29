@@ -62,7 +62,7 @@ static void test_semanticsImpl(const char* dirname, bool require, char** outFile
 			continue;
 		}
 		//これから実行するファイルを記録
-		bc_error_clear();
+		ClearBCError();
 		filename = e->filename;
 		//標準出力を入れ替えて実行
 		fprintf(stdout, "[%s]\n", e->filename);
@@ -97,7 +97,7 @@ static void test_semanticsImpl(const char* dirname, bool require, char** outFile
 			continue;
 		}
 		//これから実行するファイルを記録
-		bc_error_clear();
+		ClearBCError();
 		filename = e->filename;
 		//標準出力を入れ替えて実行
 		fprintf(STDOUT, "[%s]\n", e->filename);

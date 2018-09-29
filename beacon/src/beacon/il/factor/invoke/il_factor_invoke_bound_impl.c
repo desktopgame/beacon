@@ -165,13 +165,13 @@ static void il_factor_invoke_bound_check(il_factor_invoke_bound * self, envirome
 		self->u.subscript.opov = class_argfind_operator_overload(TYPE2CLASS(GENERIC2TYPE(receiver_gtype)), OPERATOR_SUB_SCRIPT_GET_T, self->args, env, cctx, &temp);
 		self->index = temp;
 		if(temp == -1) {
-			bc_error_throw(BCERROR_INVOKE_BOUND_UNDEFINED_METHOD_T,
+			ThrowBCError(BCERROR_INVOKE_BOUND_UNDEFINED_METHOD_T,
 				Ref2Str(self->namev)
 			);
 		}
 	}
 	if(self->index == -1) {
-		bc_error_throw(BCERROR_INVOKE_BOUND_UNDEFINED_METHOD_T,
+		ThrowBCError(BCERROR_INVOKE_BOUND_UNDEFINED_METHOD_T,
 			Ref2Str(type_name(ctype)),
 			Ref2Str(self->namev)
 		);
@@ -198,7 +198,7 @@ static void il_factor_invoke_bound_generate_method(il_factor_invoke_bound* self,
 	for(int i=0; i<self->args->length; i++) {
 		il_argument* e = (il_argument*)AtVector(self->args, i);
 		il_factor_generate(e->factor, env, cctx);
-		if(bc_error_last()) {
+		if(GetLastBCError()) {
 			return;
 		}
 	}
@@ -232,7 +232,7 @@ static void il_factor_invoke_bound_generate_subscript(il_factor_invoke_bound* se
 	for(int i=0; i<self->args->length; i++) {
 		il_argument* e = (il_argument*)AtVector(self->args, i);
 		il_factor_generate(e->factor, env, cctx);
-		if(bc_error_last()) {
+		if(GetLastBCError()) {
 			return;
 		}
 	}
@@ -264,7 +264,7 @@ static generic_type* il_factor_invoke_bound_evalImpl(il_factor_invoke_bound * se
 	type* tp = NULL;
 	//メソッドが見つからない
 	il_factor_invoke_bound_check(self, env, cctx);
-	if(bc_error_last()) {
+	if(GetLastBCError()) {
 		return NULL;
 	}
 	call_frame* cfr = NULL;

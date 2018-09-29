@@ -37,7 +37,7 @@ generic_type* il_factor_arithmetic_op_eval(il_factor_arithmetic_op * self, envir
 	//プリミティブ型同士でないのに
 	//演算子オーバーロードもない
 	if(self->operator_index == -1) {
-		bc_error_throw(BCERROR_UNDEFINED_COMPARE_OPERATOR_T,
+		ThrowBCError(BCERROR_UNDEFINED_COMPARE_OPERATOR_T,
 			operator_tostring(self->type)
 		);
 		return NULL;

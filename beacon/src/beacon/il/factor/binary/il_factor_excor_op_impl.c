@@ -30,7 +30,7 @@ generic_type* il_factor_excor_op_eval(il_factor_excor_op * self, enviroment * en
 	//プリミティブ型同士でないのに
 	//演算子オーバーロードもない
 	if(self->operator_index == -1) {
-		bc_error_throw(BCERROR_UNDEFINED_EXCOR_OPERATOR_T,
+		ThrowBCError(BCERROR_UNDEFINED_EXCOR_OPERATOR_T,
 			operator_tostring(self->type)
 		);
 		return NULL;

@@ -55,7 +55,7 @@ void il_factor_invoke_load(il_factor_invoke * self, enviroment * env, call_conte
 
 generic_type* il_factor_invoke_eval(il_factor_invoke * self, enviroment * env, call_context* cctx) {
 	il_factor_invoke_check(self, env, cctx);
-	if(bc_error_last()) {
+	if(GetLastBCError()) {
 		return NULL;
 	}
 	generic_type* rgtp = il_factor_invoke_return_gtype(self);
@@ -142,7 +142,7 @@ static void resolve_default(il_factor_invoke * self, enviroment * env, call_cont
 static void il_factor_invoke_check(il_factor_invoke * self, enviroment * env, call_context* cctx) {
 	//レシーバの読み込み
 	il_factor_load(self->receiver, env, cctx);
-	if(bc_error_last()) {
+	if(GetLastBCError()) {
 		return;
 	}
 	if(self->receiver->type == ILFACTOR_VARIABLE_T) {
@@ -151,7 +151,7 @@ static void il_factor_invoke_check(il_factor_invoke * self, enviroment * env, ca
 	}
 	//レシーバの型を評価
 	generic_type* gtype = il_factor_eval(self->receiver, env, cctx);
-	if(bc_error_last()) {
+	if(GetLastBCError()) {
 		return;
 	}
 	il_type_argument_resolve(self->type_args, cctx);
@@ -178,7 +178,7 @@ static void il_factor_invoke_check(il_factor_invoke * self, enviroment * env, ca
 	if(self->args->length != 1) {
 		//hoge(1) = 0;
 		//の形式なら引数は一つのはず
-		bc_error_throw(BCERROR_INVOKE_INSTANCE_UNDEFINED_METHOD_T,
+		ThrowBCError(BCERROR_INVOKE_INSTANCE_UNDEFINED_METHOD_T,
 			Ref2Str(type_name(ctype)),
 			Ref2Str(self->namev)
 		);
@@ -188,7 +188,7 @@ static void il_factor_invoke_check(il_factor_invoke * self, enviroment * env, ca
 	self->u.opov = class_argfind_operator_overload(TYPE2CLASS(ctype), OPERATOR_SUB_SCRIPT_GET_T, self->args, env, cctx, &temp);
 	self->index = temp;
 	if(temp == -1) {
-		bc_error_throw(BCERROR_INVOKE_INSTANCE_UNDEFINED_METHOD_T,
+		ThrowBCError(BCERROR_INVOKE_INSTANCE_UNDEFINED_METHOD_T,
 			Ref2Str(type_name(ctype)),
 			Ref2Str(self->namev)
 		);

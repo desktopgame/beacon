@@ -43,7 +43,7 @@ static void check_method_return(il_stmt_return * self, enviroment * env, call_co
 	method* m = call_context_method(cctx);
 	//戻り値が Void なのに値を返している
 	if(m->return_gtype->core_type == TYPE_VOID) {
-		bc_error_throw(BCERROR_RETURN_VALUE_VOID_METHOD_T,
+		ThrowBCError(BCERROR_RETURN_VALUE_VOID_METHOD_T,
 			Ref2Str(type_name(m->parent)),
 			Ref2Str(m->namev)
 		);
@@ -53,7 +53,7 @@ static void check_method_return(il_stmt_return * self, enviroment * env, call_co
 	generic_type* retT =il_factor_eval(self->fact, env, cctx);
 	if(retT->core_type != TYPE_NULL &&
 	   generic_type_distance(m->return_gtype, retT, cctx) < 0) {
-		bc_error_throw(BCERROR_RETURN_VALUE_TYPE_IS_NOT_COMPATIBLE_NOT_VOID_METHOD_T,
+		ThrowBCError(BCERROR_RETURN_VALUE_TYPE_IS_NOT_COMPATIBLE_NOT_VOID_METHOD_T,
 			Ref2Str(type_name(m->parent)),
 			Ref2Str(m->namev)
 		);

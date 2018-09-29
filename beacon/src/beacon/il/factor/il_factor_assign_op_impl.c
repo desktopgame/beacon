@@ -43,7 +43,7 @@ void il_factor_assign_OP_LOAD(il_factor_assign_op* self, enviroment* env, call_c
 	BC_ERROR();
 	if(gret->core_type != NULL &&
 	   gret->core_type == TYPE_VOID) {
-		   bc_error_throw(BCERROR_VOID_ASSIGN_T);
+		   ThrowBCError(BCERROR_VOID_ASSIGN_T);
 		return;
 	}
 }
@@ -97,7 +97,7 @@ static void assign_by_namebase(il_factor_assign_op* self, enviroment* env, call_
 		GeneratePutField(env->buf, sf, temp);
 		//指定の静的フィールドにアクセスできない
 		if(!class_accessible_field(call_context_class(cctx), sf)) {
-			bc_error_throw(BCERROR_CAN_T_ACCESS_FIELD_T,
+			ThrowBCError(BCERROR_CAN_T_ACCESS_FIELD_T,
 				Ref2Str(type_name(cls->parent)),
 				Ref2Str(sf->namev)
 			);
@@ -105,7 +105,7 @@ static void assign_by_namebase(il_factor_assign_op* self, enviroment* env, call_
 		}
 		//finalなので書き込めない
 		if(IsFinalModifier(sf->modifier)) {
-			bc_error_throw(BCERROR_ASSIGN_TO_FINAL_FIELD_T,
+			ThrowBCError(BCERROR_ASSIGN_TO_FINAL_FIELD_T,
 				Ref2Str(type_name(cls->parent)),
 				Ref2Str(sf->namev)
 			);
@@ -135,7 +135,7 @@ static void assign_to_field(il_factor_assign_op* self, il_factor* receiver, il_f
 	}
 	//指定のインスタンスフィールドにアクセスできない
 	if(!class_accessible_field(call_context_class(cctx), f)) {
-		bc_error_throw(BCERROR_CAN_T_ACCESS_FIELD_T,
+		ThrowBCError(BCERROR_CAN_T_ACCESS_FIELD_T,
 			Ref2Str(type_name(cls->parent)),
 			Ref2Str(f->namev)
 		);
@@ -150,21 +150,21 @@ static void assign_to_property(il_factor_assign_op* self, enviroment* env, call_
 	BC_ERROR();
 	//プロパティへアクセスできない
 	if(!class_accessible_property(call_context_class(cctx), pp)) {
-		bc_error_throw(BCERROR_CAN_T_ACCESS_FIELD_T,
+		ThrowBCError(BCERROR_CAN_T_ACCESS_FIELD_T,
 			Ref2Str(type_name(pp->parent)),
 			Ref2Str(pp->namev)
 		);
 		return;
 	}
 	if(!class_accessible_property_accessor(call_context_class(cctx), pp->set)) {
-		bc_error_throw(BCERROR_CAN_T_ACCESS_FIELD_T,
+		ThrowBCError(BCERROR_CAN_T_ACCESS_FIELD_T,
 			Ref2Str(type_name(pp->parent)),
 			Ref2Str(pp->namev)
 		);
 		return;
 	}
 	if(generic_type_distance(prop->p->gtype, il_factor_eval(self->right, env, cctx), cctx) < 0) {
-		bc_error_throw(BCERROR_ASSIGN_NOT_COMPATIBLE_PROPERTY_T,
+		ThrowBCError(BCERROR_ASSIGN_NOT_COMPATIBLE_PROPERTY_T,
 			Ref2Str(type_name(prop->p->parent)),
 			Ref2Str(prop->p->namev)
 		);
@@ -193,7 +193,7 @@ static void assign_to_array(il_factor_assign_op* self, enviroment* env, call_con
 static void assign_by_call(il_factor_assign_op* self, enviroment* env, call_context* cctx) {
 	il_factor_call_op* call = self->left->u.call_;
 	if(call->type == ILCALL_TYPE_INVOKE_STATIC_T) {
-		bc_error_throw(
+		ThrowBCError(
 			BCERROR_LHS_IS_NOT_SUBSCRIPT_T,
 			Ref2Str(call->u.invoke_static_->namev)
 		);
@@ -211,7 +211,7 @@ static void assign_by_call(il_factor_assign_op* self, enviroment* env, call_cont
 static void assign_by_invoke(il_factor_invoke* lhs, il_factor* rhs, enviroment* env, call_context* cctx) {
 	int temp = -1;
 	if(lhs->tag != INSTANCE_INVOKE_SUBSCRIPT_T) {
-		bc_error_throw(BCERROR_ASSIGN_TO_INVOKE_T,
+		ThrowBCError(BCERROR_ASSIGN_TO_INVOKE_T,
 			Ref2Str(lhs->namev)
 		);
 		return;
@@ -259,7 +259,7 @@ static bool can_assign_to_field(field* f, il_factor_assign_op* self, enviroment*
 	if(dist >= 0) {
 		return true;
 	} else {
-		bc_error_throw(BCERROR_ASSIGN_NOT_COMPATIBLE_FIELD_T,
+		ThrowBCError(BCERROR_ASSIGN_NOT_COMPATIBLE_FIELD_T,
 			Ref2Str(type_name(f->parent)),
 			Ref2Str(f->namev)
 		);
@@ -277,7 +277,7 @@ static void check_final(il_factor* receiver, il_factor* source, string_view name
 	if(cctx->tag != CALL_CTOR_T) {
 		//finalなので書き込めない
 		if(IsFinalModifier(f->modifier)) {
-			bc_error_throw(BCERROR_ASSIGN_TO_FINAL_FIELD_T,
+			ThrowBCError(BCERROR_ASSIGN_TO_FINAL_FIELD_T,
 				Ref2Str(type_name(cls->parent)),
 				Ref2Str(f->namev)
 			);
@@ -286,7 +286,7 @@ static void check_final(il_factor* receiver, il_factor* source, string_view name
 		//コンストラクタであっても static final の場合は書き込めない
 		if(IsFinalModifier(f->modifier) &&
 		   IsStaticModifier(f->modifier)) {
-			bc_error_throw(BCERROR_ASSIGN_TO_FINAL_FIELD_T,
+			ThrowBCError(BCERROR_ASSIGN_TO_FINAL_FIELD_T,
 				Ref2Str(type_name(cls->parent)),
 				Ref2Str(f->namev)
 			);
@@ -318,7 +318,7 @@ static void generate_assign_to_variable_local(il_factor_assign_op* self, envirom
 		AddOpcodeBuf(env->buf, OP_STORE);
 		AddOpcodeBuf(env->buf, e->index);
 		if(generic_type_distance(e->gtype, il_factor_eval(self->right, env, cctx), cctx) < 0) {
-			bc_error_throw(BCERROR_ASSIGN_NOT_COMPATIBLE_LOCAL_T,
+			ThrowBCError(BCERROR_ASSIGN_NOT_COMPATIBLE_LOCAL_T,
 				Ref2Str(ilvar->fqcn->namev)
 			);
 			return;
@@ -335,7 +335,7 @@ static void generate_assign_to_variable_local(il_factor_assign_op* self, envirom
 		//現在のコンテキストはstaticなので this にアクセスできない
 		if(!IsStaticModifier(f->modifier) &&
 		    call_context_is_static(cctx)) {
-			bc_error_throw(BCERROR_ACCESS_TO_THIS_AT_STATIC_METHOD_T,
+			ThrowBCError(BCERROR_ACCESS_TO_THIS_AT_STATIC_METHOD_T,
 				Ref2Str(type_name(f->parent)),
 				Ref2Str(f->namev)
 			);
@@ -356,7 +356,7 @@ static void generate_assign_to_variable_local(il_factor_assign_op* self, envirom
 		//現在のコンテキストはstaticなので this にアクセスできない
 		if(!IsStaticModifier(p->modifier) &&
 		    call_context_is_static(cctx)) {
-			bc_error_throw(BCERROR_ACCESS_TO_THIS_AT_STATIC_METHOD_T,
+			ThrowBCError(BCERROR_ACCESS_TO_THIS_AT_STATIC_METHOD_T,
 				Ref2Str(type_name(p->parent)),
 				Ref2Str(p->namev)
 			);

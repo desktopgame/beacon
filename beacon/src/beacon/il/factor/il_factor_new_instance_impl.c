@@ -48,7 +48,7 @@ void il_factor_new_instance_generate(il_factor_new_instance * self, enviroment *
 	for (int i = 0; i < self->argument_list->length; i++) {
 		il_argument* ilarg = (il_argument*)AtVector(self->argument_list, i);
 		il_factor_generate(ilarg->factor, env, cctx);
-		if(bc_error_last()) {
+		if(GetLastBCError()) {
 			return;
 		}
 	}
@@ -60,18 +60,18 @@ void il_factor_new_instance_generate(il_factor_new_instance * self, enviroment *
 
 void il_factor_new_instance_load(il_factor_new_instance * self, enviroment * env, call_context* cctx) {
 	il_factor_new_instance_find(self, env, cctx);
-	if(bc_error_last()) {
+	if(GetLastBCError()) {
 		return;
 	}
 	//抽象クラスはインスタンス化できない
 	if(type_is_abstract(self->c->parent)) {
-		bc_error_throw(BCERROR_CONSTRUCT_ABSTRACT_TYPE_T, Ref2Str(type_name(self->c->parent)));
+		ThrowBCError(BCERROR_CONSTRUCT_ABSTRACT_TYPE_T, Ref2Str(type_name(self->c->parent)));
 	}
 }
 
 generic_type* il_factor_new_instance_eval(il_factor_new_instance * self, enviroment * env, call_context* cctx) {
 	il_factor_new_instance_find(self, env, cctx);
-	if(bc_error_last()) {
+	if(GetLastBCError()) {
 		return NULL;
 	}
 	//型引数がないのでそのまま
@@ -130,7 +130,7 @@ static void il_factor_new_instance_find(il_factor_new_instance * self, enviromen
 	//コンストラクタで生成するオブジェクトの肩を取得
 	type* ty = call_context_eval_type(cctx, self->fqcnc);
 	if(ty == NULL) {
-		bc_error_throw(BCERROR_NEW_INSTANCE_UNDEFINED_CLASS_T,
+		ThrowBCError(BCERROR_NEW_INSTANCE_UNDEFINED_CLASS_T,
 			Ref2Str(self->fqcnc->namev)
 		);
 		return;
@@ -146,7 +146,7 @@ static void il_factor_new_instance_find(il_factor_new_instance * self, enviromen
 	self->constructor_index = temp;
 	call_context_pop(cctx);
 	if(temp == -1) {
-		bc_error_throw(BCERROR_NEW_INSTANCE_UNDEFINED_CTOR_T,
+		ThrowBCError(BCERROR_NEW_INSTANCE_UNDEFINED_CTOR_T,
 			Ref2Str(cls->namev)
 		);
 	}

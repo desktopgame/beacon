@@ -168,7 +168,7 @@ static void check_condition_type(il_factor* fact, enviroment* env, call_context*
 	generic_type* cond_T = il_factor_eval(fact, env, cctx);
 	if(cond_T->core_type != TYPE_BOOL) {
 		char* condstr = il_factor_tostr(fact, env);
-		bc_error_throw(BCERROR_IF_EXPR_TYPE_OF_NOT_BOOL_T,
+		ThrowBCError(BCERROR_IF_EXPR_TYPE_OF_NOT_BOOL_T,
 			condstr
 		);
 		MEM_FREE(condstr);

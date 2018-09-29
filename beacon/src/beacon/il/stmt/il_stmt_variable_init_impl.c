@@ -34,12 +34,12 @@ void il_stmt_variable_init_generate(il_stmt_variable_init * self, enviroment * e
 	BC_ERROR();
 	if((ga->core_type != NULL && ga->core_type == TYPE_VOID) ||
 	   (gb->core_type != NULL && gb->core_type == TYPE_VOID)) {
-		   bc_error_throw(BCERROR_VOID_ASSIGN_T);
+		   ThrowBCError(BCERROR_VOID_ASSIGN_T);
 		return;
 	}
 	int dist = generic_type_distance(gb, ga, cctx);
 	if (dist < 0) {
-		bc_error_throw(BCERROR_ASSIGN_NOT_COMPATIBLE_LOCAL_T,
+		ThrowBCError(BCERROR_ASSIGN_NOT_COMPATIBLE_LOCAL_T,
 			Ref2Str(self->namev)
 		);
 	}
@@ -50,13 +50,13 @@ void il_stmt_variable_init_generate(il_stmt_variable_init * self, enviroment * e
 void il_stmt_variable_init_load(il_stmt_variable_init * self, enviroment * env, call_context* cctx) {
 	il_factor_load(self->fact, env, cctx);
 	if(IsContainsSymbol(env->sym_table, self->namev)) {
-		bc_error_throw(BCERROR_OVERWRAP_VARIABLE_NAME_T,
+		ThrowBCError(BCERROR_OVERWRAP_VARIABLE_NAME_T,
 			Ref2Str(self->namev)
 		);
 	}
 	generic_type* gt = import_manager_resolve(NULL, self->fqcn, cctx);
 	if(gt == NULL) {
-		bc_error_throw(
+		ThrowBCError(
 			BCERROR_UNDEFINED_TYPE_DECL_T,
 			Ref2Str(self->fqcn->fqcn->namev)
 		);

@@ -27,7 +27,7 @@ void il_stmt_variable_decl_generate(il_stmt_variable_decl * self, enviroment * e
 
 void il_stmt_variable_decl_load(il_stmt_variable_decl * self, struct enviroment* env, call_context* cctx) {
 	if(IsContainsSymbol(env->sym_table, self->namev)) {
-		bc_error_throw(BCERROR_OVERWRAP_VARIABLE_NAME_T,
+		ThrowBCError(BCERROR_OVERWRAP_VARIABLE_NAME_T,
 			Ref2Str(self->namev)
 		);
 	}
@@ -38,7 +38,7 @@ void il_stmt_variable_decl_load(il_stmt_variable_decl * self, struct enviroment*
 	);
 	if(e->gtype->core_type != NULL &&
 	   e->gtype->core_type == TYPE_VOID) {
-		   bc_error_throw(BCERROR_VOID_DECL_T);
+		   ThrowBCError(BCERROR_VOID_DECL_T);
 	}
 }
 

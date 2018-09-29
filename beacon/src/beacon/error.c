@@ -15,15 +15,15 @@ static int gErrorLineNo = -1;
 static int gErrorColumn = -1;
 static void check_abort(script_context* sctx);
 
-void bc_error_throw(bc_error_id id, ...) {
+void ThrowBCError(bc_error_id id, ...) {
 	va_list ap;
 	va_start(ap, id);
-	bc_error_vthrow(id, ap);
+	VthrowBCError(id, ap);
 	va_end(ap);
 }
 
-void bc_error_vthrow(bc_error_id id, va_list ap) {
-	char* fmt = bc_error_vformat(id, ap);
+void VthrowBCError(bc_error_id id, va_list ap) {
+	char* fmt = VformatBCError(id, ap);
 	gGlobalError = id;
 	gLastMessage = InternString(fmt);
 	script_context* sctx = script_context_get_current();
@@ -42,16 +42,16 @@ void bc_error_vthrow(bc_error_id id, va_list ap) {
 #endif
 }
 
-char* bc_error_format(bc_error_id id, ...) {
+char* FormatBCError(bc_error_id id, ...) {
 	va_list ap;
 	va_start(ap, id);
-	char* ret = bc_error_vformat(id, ap);
+	char* ret = VformatBCError(id, ap);
 	va_end(ap);
 	MEM_FREE(ret);
 	return ret;
 }
 
-char* bc_error_vformat(bc_error_id id, va_list ap) {
+char* VformatBCError(bc_error_id id, va_list ap) {
 	char* fmt = NULL;
 	//bool aa = cc_test(ccstate_toplevel);
 	switch(id) {
@@ -365,7 +365,7 @@ char* bc_error_vformat(bc_error_id id, va_list ap) {
 	return ReleaseBuffer(sbuf);
 }
 
-void bc_error_clear() {
+void ClearBCError() {
 	gGlobalError = BCERROR_NONE_T;
 	gErrorFile = ZERO_VIEW;
 	gErrorLineNo = -1;
@@ -373,26 +373,26 @@ void bc_error_clear() {
 	gLastMessage = ZERO_VIEW;
 }
 
-void bc_error_file(const char* filename) {
+void SetBCErrorFile(const char* filename) {
 	if(filename == NULL) {
 		filename = "NULL";
 	}
 	gErrorFile = InternString(filename);
 }
 
-void bc_error_line(int lineno) {
+void SetBCErrorLine(int lineno) {
 	gErrorLineNo = lineno;
 }
 
-void bc_error_column(int column) {
+void SetBCErrorColumn(int column) {
 	gErrorColumn = column;
 }
 
-string_view bc_error_message() {
+string_view GetBCErrorMessage() {
 	return gLastMessage;
 }
 
-bc_error_id bc_error_last() {
+bc_error_id GetLastBCError() {
 	return gGlobalError;
 }
 //private

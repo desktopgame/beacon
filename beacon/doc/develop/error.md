@@ -4,7 +4,7 @@ beaconがコンパイルをどのようにエラーを処理するかについ�
 # エラーの報告
 `error.h`にて定義されます。
 ````
-void bc_error_throw(bc_error_id id, ...);
+void ThrowBCError(bc_error_id id, ...);
 void bc_error_vthrow(bc_error_id id, va_list ap);
 ````
 

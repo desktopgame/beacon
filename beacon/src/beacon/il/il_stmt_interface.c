@@ -14,11 +14,11 @@ il_stmt* il_stmt_malloc(il_stmt_type type, const char* filename, int lineno) {
 }
 
 void il_stmt_generate(il_stmt * self, struct enviroment* env, call_context* cctx) {
-	if(bc_error_last()) {
+	if(GetLastBCError()) {
 		return;
 	}
-	bc_error_file(env->context_ref->filename);
-	bc_error_line(self->lineno);
+	SetBCErrorFile(env->context_ref->filename);
+	SetBCErrorLine(self->lineno);
 	switch (self->type) {
 		case ILSTMT_IF_T:
 			il_stmt_if_generate(self->u.if_, env, cctx);
@@ -81,11 +81,11 @@ void il_stmt_generate(il_stmt * self, struct enviroment* env, call_context* cctx
 }
 
 void il_stmt_load(il_stmt * self, enviroment* env, call_context* cctx) {
-	if(bc_error_last()) {
+	if(GetLastBCError()) {
 		return;
 	}
-	bc_error_file(env->context_ref->filename);
-	bc_error_line(self->lineno);
+	SetBCErrorFile(env->context_ref->filename);
+	SetBCErrorLine(self->lineno);
 	switch (self->type) {
 		case ILSTMT_IF_T:
 			il_stmt_if_load(self->u.if_, env, cctx);

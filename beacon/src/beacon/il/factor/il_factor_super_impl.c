@@ -45,7 +45,7 @@ static void check_context(il_factor_super * self, enviroment * env, call_context
 	}
 	method* met = call_context_method(cctx);
 	if(IsStaticModifier(met->modifier)) {
-		bc_error_throw(BCERROR_ACCESS_TO_SUPER_AT_STATIC_METHOD_T,
+		ThrowBCError(BCERROR_ACCESS_TO_SUPER_AT_STATIC_METHOD_T,
 			Ref2Str(type_name(met->parent)),
 			Ref2Str(met->namev)
 		);

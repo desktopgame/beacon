@@ -35,12 +35,12 @@ void il_stmt_inferenced_type_init_load(il_stmt_inferenced_type_init * self, envi
 	//voidは代入できない
 	if(gtp->core_type != NULL &&
 	   gtp->core_type == TYPE_VOID) {
-		   bc_error_throw(BCERROR_VOID_ASSIGN_T);
+		   ThrowBCError(BCERROR_VOID_ASSIGN_T);
 		return;
 	}
 	//変数を登録
 	if(IsContainsSymbol(env->sym_table, self->namev)) {
-		bc_error_throw(BCERROR_OVERWRAP_VARIABLE_NAME_T,
+		ThrowBCError(BCERROR_OVERWRAP_VARIABLE_NAME_T,
 			Ref2Str(self->namev)
 		);
 	}

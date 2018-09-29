@@ -28,7 +28,7 @@ int meta_ilcalc_score(Vector* params, Vector* ilargs, enviroment* env, call_cont
 		//実引数が NULL なら常に許容する
 		int dist = 0;
 		generic_type* argType = il_factor_eval(arg->factor, env, cctx);
-		if(bc_error_last()) {
+		if(GetLastBCError()) {
 			return -1;
 		}
 		if (argType->core_type != TYPE_NULL) {
@@ -67,7 +67,7 @@ int meta_gcalc_score(Vector* params, Vector* gargs) {
 		//実引数が NULL なら常に許容する
 		int dist = 0;
 		generic_type* argType = (generic_type*)varg;
-		if(bc_error_last()) {
+		if(GetLastBCError()) {
 			return -1;
 		}
 		if (argType->core_type != TYPE_NULL) {

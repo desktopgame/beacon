@@ -116,7 +116,7 @@ static void il_factor_member_op_check(il_factor_member_op* self, enviroment* env
 		#endif
 		//フィールドの可視性を確認
 		if(!class_accessible_field(call_context_class(cctx), self->f)) {
-			bc_error_throw(BCERROR_CAN_T_ACCESS_FIELD_T, Ref2Str(type_name(ctype)), Ref2Str(self->f->namev));
+			ThrowBCError(BCERROR_CAN_T_ACCESS_FIELD_T, Ref2Str(type_name(ctype)), Ref2Str(self->f->namev));
 		}
 	}
 }
@@ -160,11 +160,11 @@ static void il_factor_member_op_check_prop(il_factor_member_op* self, enviroment
 	self->parent->u.prop = factp;
 	//プロパティの可視性を確認
 	if(temp == -1) {
-		bc_error_throw(BCERROR_UNDEFINED_PROPERTY_T, Ref2Str(type_name(ctype)), Ref2Str(self->namev));
+		ThrowBCError(BCERROR_UNDEFINED_PROPERTY_T, Ref2Str(type_name(ctype)), Ref2Str(self->namev));
 		il_factor_delete(factp->fact);
 		factp->fact = NULL;
 	} else if(!class_accessible_property(call_context_class(cctx), p)) {
-		bc_error_throw(BCERROR_CAN_T_ACCESS_PROPERTY_T, Ref2Str(type_name(ctype)), Ref2Str(p->namev));
+		ThrowBCError(BCERROR_CAN_T_ACCESS_PROPERTY_T, Ref2Str(type_name(ctype)), Ref2Str(p->namev));
 		il_factor_delete(factp->fact);
 		factp->fact = NULL;
 	}
@@ -186,7 +186,7 @@ static void il_factor_member_op_check_static_prop(il_factor_member_op* self, env
 	self->parent->u.prop = factp;
 	//プロパティの可視性を確認
 	if(!class_accessible_property(call_context_class(cctx), p)) {
-		bc_error_throw(BCERROR_CAN_T_ACCESS_PROPERTY_T, Ref2Str(type_name(ctype)), Ref2Str(p->namev));
+		ThrowBCError(BCERROR_CAN_T_ACCESS_PROPERTY_T, Ref2Str(type_name(ctype)), Ref2Str(p->namev));
 		il_factor_delete(factp->fact);
 		factp->fact = NULL;
 	}

@@ -47,10 +47,10 @@ static jobject bc_EvalString(JNIEnv * env, jclass cls, jstring str, jobject tabl
 	//文字列を解析
 	parser* p = ParseString(source);
 	if (p->result != PARSE_COMPLETE_T) {
-		bc_error_throw(BCERROR_PARSE_T, p->error_message);
+		ThrowBCError(BCERROR_PARSE_T, p->error_message);
 		DestroyParser(p);
 		jclass bc_compile_exc_cls = (*env)->FindClass(env, "jp/koya/jbeacon/BCCompileException");
-		(*env)->ThrowNew(env, bc_compile_exc_cls, Ref2Str(bc_error_message()));
+		(*env)->ThrowNew(env, bc_compile_exc_cls, Ref2Str(GetBCErrorMessage()));
 		return NULL;
 	}
 	ast* a = ReleaseParserAST(p);
@@ -63,10 +63,10 @@ static jobject bc_EvalString(JNIEnv * env, jclass cls, jstring str, jobject tabl
 	}
 	class_loader* cll = class_loader_new(filename, CONTENT_ENTRY_POINT_T);
 	class_loader_load_pass_ast(cll, a);
-	if(bc_error_last()) {
+	if(GetLastBCError()) {
 		class_loader_delete(cll);
 		jclass bc_compile_exc_cls = (*env)->FindClass(env, "jp/koya/jbeacon/BCCompileException");
-		(*env)->ThrowNew(env, bc_compile_exc_cls, Ref2Str(bc_error_message()));
+		(*env)->ThrowNew(env, bc_compile_exc_cls, Ref2Str(GetBCErrorMessage()));
 		return NULL;
 	}
 	//jp.koya.jbeacon.SymbolTableを検索する
@@ -99,11 +99,11 @@ static frame* bc_eval_allocate(class_loader* cll) {
 	sg_thread_set_frame_ref(sg_thread_current(script_context_get_current()), fr);
 	heap* he = heap_get();
 	he->accept_blocking = 0;
-	if(!bc_error_last()) {
+	if(!GetLastBCError()) {
 		vm_execute(fr, cll->env);
 	}
 	if(fr->terminate) {
-		bc_error_throw(BCERROR_GENERIC_T, "unexpected terminate");
+		ThrowBCError(BCERROR_GENERIC_T, "unexpected terminate");
 	}
 	return fr;
 }
@@ -275,7 +275,7 @@ static void bc_write_symbol(JNIEnv* env, NumericMap* nmap, frame* fr, jobject ta
 }
 
 static void bc_eval_release(JNIEnv* env, class_loader* cll, frame* fr) {
-	if(bc_error_last()) {
+	if(GetLastBCError()) {
 		string_buffer* sbuf = NewBuffer();
 		AppendsBuffer(sbuf, "\n");
 		AppendsBuffer(sbuf, Ref2Str(vm_error_message()));
@@ -289,7 +289,7 @@ static void bc_eval_release(JNIEnv* env, class_loader* cll, frame* fr) {
 	DeleteFrame(fr);
 	sg_thread_release_frame_ref(sg_thread_current(script_context_get_current()));
 
-	bc_error_last();
+	GetLastBCError();
 	class_loader_delete(cll);
 }
 

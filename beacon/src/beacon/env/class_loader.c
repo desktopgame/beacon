@@ -84,7 +84,7 @@ void class_loader_load(class_loader * self) {
 }
 
 void class_loader_load_pass_ast(class_loader* self, ast* a) {
-	bc_error_clear();
+	ClearBCError();
 	heap* hee = heap_get();
 	hee->accept_blocking++;
 	self->source_code = a;
@@ -124,10 +124,10 @@ static void class_loader_load_impl(class_loader* self) {
 	assert(self != NULL);
 	//AST -> IL へ
 	class_loader_ilload_impl(self, self->source_code);
-	if (bc_error_last()) { return; }
+	if (GetLastBCError()) { return; }
 	//IL -> SG へ
 	class_loader_bcload_impl(self);
-	if (bc_error_last()) { return; }
+	if (GetLastBCError()) { return; }
 	//他のクラスローダーとリンク
 	class_loader_load_linkall(self);
 	class_loader_load_toplevel_function(self);
@@ -138,7 +138,7 @@ static void class_loader_link_recursive(class_loader* self, link_type type) {
 	if (self->link == type) {
 		return;
 	}
-	if(bc_error_last()) {
+	if(GetLastBCError()) {
 		return;
 	}
 	self->link = type;
@@ -170,10 +170,10 @@ static class_loader* class_loader_load_specialImpl(class_loader* self, class_loa
 	DestroyParser(p);
 	//AST -> IL へ
 	class_loader_ilload_impl(cll, cll->source_code);
-	if (bc_error_last()) { return cll; }
+	if (GetLastBCError()) { return cll; }
 	//IL -> SG へ
 	class_loader_bcload_special(cll);
-	if (bc_error_last()) { return cll; }
+	if (GetLastBCError()) { return cll; }
 	assert(cll->type == CONTENT_LIB_T);
 	return cll;
 }
@@ -289,11 +289,11 @@ static void class_loader_load_toplevel_function(class_loader* self) {
 
 static bool check_parser_error(parser* p) {
 	if(p->result == PARSE_SYNTAX_ERROR_T) {
-		bc_error_throw(BCERROR_PARSE_T, p->error_message);
+		ThrowBCError(BCERROR_PARSE_T, p->error_message);
 		DestroyParser(p);
 		return true;
 	} else if(p->result == PARSE_OPEN_ERROR_T) {
-		bc_error_throw(BCERROR_REQUIRE_NOT_FOUND_T, p->source_name);
+		ThrowBCError(BCERROR_REQUIRE_NOT_FOUND_T, p->source_name);
 		DestroyParser(p);
 		return true;
 	}

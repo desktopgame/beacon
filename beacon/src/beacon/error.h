@@ -4,8 +4,8 @@
 #include <stdio.h>
 #include "util/string_pool.h"
 
-#define BC_ERROR() if(bc_error_last()) return
-#define BC_ERROR_RET(a) if(bc_error_last()) return a
+#define BC_ERROR() if(GetLastBCError()) return
+#define BC_ERROR_RET(a) if(GetLastBCError()) return a
 /**
  * beaconインタプリタがソース解析中に検出したエラーを表す列挙.
  */
@@ -127,14 +127,14 @@ typedef enum bc_error_id {
  * @param id
  * @param ...
  */
-void bc_error_throw(bc_error_id id, ...);
+void ThrowBCError(bc_error_id id, ...);
 
 /**
  * 指定のIDでエラーを発生させます.
  * @param id
  * @param ap
  */
-void bc_error_vthrow(bc_error_id id, va_list ap);
+void VthrowBCError(bc_error_id id, va_list ap);
 
 /**
  * エラーから文字列を作成します.
@@ -143,7 +143,7 @@ void bc_error_vthrow(bc_error_id id, va_list ap);
  * @param ...
  * @return
  */
-char* bc_error_format(bc_error_id id, ...);
+char* FormatBCError(bc_error_id id, ...);
 /**
  * エラーから文字列を作成します.
  * @param block
@@ -151,40 +151,40 @@ char* bc_error_format(bc_error_id id, ...);
  * @param ap
  * @return
  */
-char* bc_error_vformat(bc_error_id id, va_list ap);
+char* VformatBCError(bc_error_id id, va_list ap);
 
 /**
  * エラーフラグをクリアします.
  */
-void bc_error_clear();
+void ClearBCError();
 
 /**
  * エラーが発生したファイルを記録します.
  * @param filename
  */
-void bc_error_file(const char* filename);
+void SetBCErrorFile(const char* filename);
 
 /**
  * エラーが発生した行を記録します.
  * @param lineno
  */
-void bc_error_line(int lineno);
+void SetBCErrorLine(int lineno);
 
 /**
  * エラーが発生した列を記録します.
  * @param column
  */
-void bc_error_column(int column);
+void SetBCErrorColumn(int column);
 
 /**
  * 最後に発生したエラーメッセージを返します.
  * @return
  */
-string_view bc_error_message();
+string_view GetBCErrorMessage();
 
 /**
  * 現在発生中のエラーを返します.
  * @return
  */
-bc_error_id bc_error_last();
+bc_error_id GetLastBCError();
 #endif

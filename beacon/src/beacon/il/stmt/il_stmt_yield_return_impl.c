@@ -45,7 +45,7 @@ static void check_method_yield_return(il_stmt_yield_return * self, enviroment * 
 	generic_type* arg = AtVector(m->return_gtype->type_args_list, 0);
 	//戻り値の型に互換性がない
 	if(generic_type_distance(arg, il_factor_eval(self->fact, env, cctx), cctx) < 0) {
-		bc_error_throw(BCERROR_YIELD_RETURN_VALUE_TYPE_IS_NOT_COMPATIBLE_T,
+		ThrowBCError(BCERROR_YIELD_RETURN_VALUE_TYPE_IS_NOT_COMPATIBLE_T,
 			Ref2Str(type_name(m->parent)),
 			Ref2Str(m->namev)
 		);

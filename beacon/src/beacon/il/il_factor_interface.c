@@ -18,11 +18,11 @@ il_factor* il_factor_malloc(il_factor_type type, const char* filename, int linen
 }
 
 void il_factor_generate(il_factor * self, enviroment* env, call_context* cctx) {
-	if(bc_error_last()) {
+	if(GetLastBCError()) {
 		return;
 	}
-	bc_error_file(env->context_ref->filename);
-	bc_error_line(self->lineno);
+	SetBCErrorFile(env->context_ref->filename);
+	SetBCErrorLine(self->lineno);
 	switch (self->type) {
 		case ILFACTOR_INT_T:
 			il_factor_int_generate(self->u.int_, env, cctx);
@@ -95,11 +95,11 @@ void il_factor_generate(il_factor * self, enviroment* env, call_context* cctx) {
 }
 
 void il_factor_load(il_factor * self, enviroment * env, call_context* cctx) {
-	if(bc_error_last()) {
+	if(GetLastBCError()) {
 		return;
 	}
-	bc_error_file(env->context_ref->filename);
-	bc_error_line(self->lineno);
+	SetBCErrorFile(env->context_ref->filename);
+	SetBCErrorLine(self->lineno);
 	switch (self->type) {
 		case ILFACTOR_INT_T:
 			il_factor_int_load(self->u.int_, env, cctx);
@@ -170,11 +170,11 @@ void il_factor_load(il_factor * self, enviroment * env, call_context* cctx) {
 }
 
 generic_type* il_factor_eval(il_factor * self, enviroment * env, call_context* cctx) {
-	if(bc_error_last()) {
+	if(GetLastBCError()) {
 		return NULL;
 	}
-	bc_error_file(env->context_ref->filename);
-	bc_error_line(self->lineno);
+	SetBCErrorFile(env->context_ref->filename);
+	SetBCErrorLine(self->lineno);
 	generic_type* ret = NULL;
 	switch (self->type) {
 		case ILFACTOR_INT_T:
@@ -249,7 +249,7 @@ generic_type* il_factor_eval(il_factor * self, enviroment * env, call_context* c
 }
 
 char* il_factor_tostr(il_factor* self, enviroment* env) {
-	if(bc_error_last()) {
+	if(GetLastBCError()) {
 		return NULL;
 	}
 	switch (self->type) {

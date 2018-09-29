@@ -66,7 +66,7 @@ void il_factor_as_load(il_factor_as * self, enviroment * env, call_context* cctx
 		self->mode = CAST_DOWN_T;
 	//それ以外
 	} else {
-		bc_error_throw(BCERROR_CAST_NOT_COMPATIBLE_T,
+		ThrowBCError(BCERROR_CAST_NOT_COMPATIBLE_T,
 			Ref2Str(type_name(a->core_type)),
 			Ref2Str(type_name(self->gtype->core_type))
 		);

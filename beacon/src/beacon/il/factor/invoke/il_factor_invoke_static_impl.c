@@ -37,7 +37,7 @@ void il_factor_invoke_static_generate(il_factor_invoke_static* self, enviroment*
 	for(int i=0; i<self->args->length; i++) {
 		il_argument* e = (il_argument*)AtVector(self->args, i);
 		il_factor_generate(e->factor, env, cctx);
-		if(bc_error_last()) {
+		if(GetLastBCError()) {
 			return;
 		}
 	}
@@ -53,7 +53,7 @@ void il_factor_invoke_static_load(il_factor_invoke_static * self, enviroment * e
 generic_type* il_factor_invoke_static_eval(il_factor_invoke_static * self, enviroment * env, call_context* cctx) {
 	il_factor_invoke_static_check(self, env, cctx);
 	//メソッドを解決できなかった場合
-	if(bc_error_last()) {
+	if(GetLastBCError()) {
 		return NULL;
 	}
 	generic_type* rgtp = self->m->return_gtype;
@@ -113,7 +113,7 @@ static void resolve_default(il_factor_invoke_static * self, enviroment * env, ca
 static void il_factor_invoke_static_check(il_factor_invoke_static * self, enviroment * env, call_context* cctx) {
 	type* ty =call_context_eval_type(cctx, self->fqcn);
 	if(ty == NULL) {
-		bc_error_throw(BCERROR_UNDEFINED_TYPE_STATIC_INVOKE_T,
+		ThrowBCError(BCERROR_UNDEFINED_TYPE_STATIC_INVOKE_T,
 			Ref2Str(self->fqcn->namev),
 			Ref2Str(self->namev)
 		);
@@ -139,7 +139,7 @@ static void il_factor_invoke_static_check(il_factor_invoke_static * self, enviro
 	self->index = temp;
 	//メソッドが見つからない
 	if(temp == -1 || self->m == NULL) {
-		bc_error_throw(BCERROR_INVOKE_STATIC_UNDEFINED_METHOD_T,
+		ThrowBCError(BCERROR_INVOKE_STATIC_UNDEFINED_METHOD_T,
 			Ref2Str(cls->namev),
 			Ref2Str(self->namev)
 		);

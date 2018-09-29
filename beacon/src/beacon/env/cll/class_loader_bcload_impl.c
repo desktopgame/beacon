@@ -353,7 +353,7 @@ static void CLBC_register_class(class_loader* self, namespace_* parent, il_type*
 			#endif
 			PushVector(cls->impl_list, gtp);
 			if(E->tag != TYPE_INTERFACE_T) {
-				bc_error_throw(BCERROR_CLASS_FIRST_T, Ref2Str(type_name(tp)));
+				ThrowBCError(BCERROR_CLASS_FIRST_T, Ref2Str(type_name(tp)));
 				namespace_add_type(parent, tp);
 				call_context_delete(cctx);
 				return;
@@ -366,7 +366,7 @@ static void CLBC_register_class(class_loader* self, namespace_* parent, il_type*
 	//重複するインターフェイスを検出
 	interface_* inter = NULL;
 	if((inter = type_interface_valid(tp))) {
-		bc_error_throw(BCERROR_MULTI_EQINTERFACE_T, Ref2Str(inter->namev));
+		ThrowBCError(BCERROR_MULTI_EQINTERFACE_T, Ref2Str(inter->namev));
 	}
 }
 
@@ -401,7 +401,7 @@ static void CLBC_register_interface(class_loader* self, namespace_* parent, il_t
 		generic_type* gtp = import_manager_resolve(parent, e, cctx);
 		type* E = GENERIC2TYPE(gtp);
 		if(E->tag != TYPE_INTERFACE_T) {
-			bc_error_throw(BCERROR_INTERFACE_ONLY_T, Ref2Str(type_name(tp)));
+			ThrowBCError(BCERROR_INTERFACE_ONLY_T, Ref2Str(type_name(tp)));
 			namespace_add_type(parent, tp);
 			call_context_delete(cctx);
 			return;
@@ -417,6 +417,6 @@ static void CLBC_register_interface(class_loader* self, namespace_* parent, il_t
 	//重複するインターフェイスを検出
 	interface_* ovinter = NULL;
 	if((ovinter = type_interface_valid(tp))) {
-		bc_error_throw(BCERROR_MULTI_EQINTERFACE_T, Ref2Str(ovinter->namev));
+		ThrowBCError(BCERROR_MULTI_EQINTERFACE_T, Ref2Str(ovinter->namev));
 	}
 }

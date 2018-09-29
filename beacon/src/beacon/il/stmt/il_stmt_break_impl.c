@@ -10,7 +10,7 @@ il_stmt * il_stmt_wrap_break() {
 
 void il_stmt_break_generate(void * empty, enviroment * env, call_context* cctx) {
 	if(cctx->control.while_start->length == 0) {
-		bc_error_throw(BCERROR_BREAK_AT_NOT_LOOP_T);
+		ThrowBCError(BCERROR_BREAK_AT_NOT_LOOP_T);
 		return;
 	}
 	label* lab = (label*)TopVector(cctx->control.while_end);

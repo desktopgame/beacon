@@ -24,7 +24,7 @@ generic_type* il_factor_not_op_eval(il_factor_not_op * self, enviroment * env, c
 void il_factor_not_op_generate(il_factor_not_op* self, enviroment* env, call_context* cctx) {
 	if(self->operator_index == -1) {
 		il_factor_generate(self->parent->a, env, cctx);
-		if(bc_error_last()) {
+		if(GetLastBCError()) {
 			return;
 		}
 		generic_type* gt = il_factor_eval(self->parent->a, env, cctx);
