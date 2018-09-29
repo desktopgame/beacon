@@ -36,7 +36,7 @@ int AddNOPOpcodeBuf(opcode_buf * self) {
 void DumpOpcodeBuf(opcode_buf * self, int depth) {
 	for (int i = 0; i < self->source_vec->length; i++) {
 		Printi(depth);
-		i = opcode_print(self->source_vec, i);
+		i = PrintOpcode(self->source_vec, i);
 		Println();
 	}
 	Println();

@@ -62,7 +62,7 @@ void DumpEnviromentOp(enviroment * self, int depth) {
 	int lrPos = -1;
 	for (int i = 0; i < buf->source_vec->length; i++) {
 		Printi(depth);
-		i = opcode_print(buf->source_vec, i);
+		i = PrintOpcode(buf->source_vec, i);
 		if (!IsEmptyVector(self->line_range_vec)) {
 			if (lr == NULL) {
 				lr = AtVector(self->line_range_vec, 0);

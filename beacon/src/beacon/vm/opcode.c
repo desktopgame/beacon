@@ -3,11 +3,11 @@
 #include <stdio.h>
 #include "../util/text.h"
 
-int opcode_print(Vector* source, int index) {
-	return opcode_fprint(stdout, source, index);
+int PrintOpcode(Vector* source, int index) {
+	return FprintOpcode(stdout, source, index);
 }
 
-int opcode_fprint(FILE* fp, Vector* source, int index) {
+int FprintOpcode(FILE* fp, Vector* source, int index) {
 	VectorItem e = AtVector(source, index);
 	opcode code = (opcode)e;
 	fprintf(fp,"%d: ", index);

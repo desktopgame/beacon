@@ -141,7 +141,7 @@ typedef enum opcode {
  * @param source
  * @param index
  */
-int opcode_print(Vector* source, int index);
+int PrintOpcode(Vector* source, int index);
 
 /**
  * オペコードを出力します.
@@ -149,5 +149,5 @@ int opcode_print(Vector* source, int index);
  * @param source
  * @param index
  */
-int opcode_fprint(FILE* fp, Vector* source, int index);
+int FprintOpcode(FILE* fp, Vector* source, int index);
 #endif // !SIGNAL_VM_OPCODE_H
