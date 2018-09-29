@@ -242,10 +242,10 @@ static void il_factor_invoke_bound_generate_subscript(il_factor_invoke_bound* se
 		AddOpcodeBuf(env->buf, subs.index);
 	} else if(subs.tag == SUBSCRIPT_FIELD_T) {
 		AddOpcodeBuf(env->buf, OP_THIS);
-		generate_get_field(env->buf, subs.u.fi, subs.index);
+		GenerateGetField(env->buf, subs.u.fi, subs.index);
 	} else if(subs.tag == SUBSCRIPT_PROPERTY_T) {
 		AddOpcodeBuf(env->buf, OP_THIS);
-		generate_get_property(env->buf, subs.u.prop, subs.index);
+		GenerateGetProperty(env->buf, subs.u.prop, subs.index);
 	} else {
 		assert(false);
 	}

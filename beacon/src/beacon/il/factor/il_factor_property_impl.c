@@ -19,7 +19,7 @@ il_factor_property* il_factor_property_malloc(const char* filename, int lineno) 
 
 void il_factor_property_generate(il_factor_property* self, enviroment* env, call_context* cctx) {
 	il_factor_generate(self->fact, env, cctx);
-	generate_get_property(env->buf, self->p, self->index);
+	GenerateGetProperty(env->buf, self->p, self->index);
 }
 
 void il_factor_property_load(il_factor_property* self, enviroment* env, call_context* cctx) {

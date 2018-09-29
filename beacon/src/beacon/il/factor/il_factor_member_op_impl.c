@@ -47,7 +47,7 @@ void il_factor_member_op_generate(il_factor_member_op* self, enviroment* env, ca
 	if(!IsStaticModifier(self->f->modifier)) {
 		il_factor_generate(self->fact, env, cctx);
 	}
-	generate_get_field(env->buf, self->f, self->index);
+	GenerateGetField(env->buf, self->f, self->index);
 }
 
 generic_type* il_factor_member_op_eval(il_factor_member_op* self, enviroment* env, call_context* cctx) {

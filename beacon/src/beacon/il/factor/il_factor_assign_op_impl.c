@@ -94,7 +94,7 @@ static void assign_by_namebase(il_factor_assign_op* self, enviroment* env, call_
 		field* sf = class_find_sfield(cls, ilmem->namev, &temp);
 		assert(temp != -1);
 		il_factor_generate(self->right, env, cctx);
-		generate_put_field(env->buf, sf, temp);
+		GeneratePutField(env->buf, sf, temp);
 		//指定の静的フィールドにアクセスできない
 		if(!class_accessible_field(call_context_class(cctx), sf)) {
 			bc_error_throw(BCERROR_CAN_T_ACCESS_FIELD_T,
@@ -128,7 +128,7 @@ static void assign_to_field(il_factor_assign_op* self, il_factor* receiver, il_f
 	assert(temp != -1);
 	il_factor_generate(receiver, env, cctx);
 	il_factor_generate(source, env, cctx);
-	generate_put_field(env->buf, f, temp);
+	GeneratePutField(env->buf, f, temp);
 	//型の互換性を検査
 	if(!can_assign_to_field(f, self, env, cctx)) {
 		return;
@@ -179,7 +179,7 @@ static void assign_to_property(il_factor_assign_op* self, enviroment* env, call_
 		il_factor_generate(prop->fact, env, cctx);
 	}
 	il_factor_generate(self->right, env, cctx);
-	generate_put_property(env->buf, pp, prop->index);
+	GeneratePutProperty(env->buf, pp, prop->index);
 }
 
 static void assign_to_array(il_factor_assign_op* self, enviroment* env, call_context* cctx) {
@@ -244,10 +244,10 @@ static void assign_by_invoke_bound(il_factor_invoke_bound* lhs, il_factor* rhs, 
 		AddOpcodeBuf(env->buf, subs.index);
 	} else if(subs.tag == SUBSCRIPT_FIELD_T) {
 		AddOpcodeBuf(env->buf, OP_THIS);
-		generate_get_field(env->buf, subs.u.fi, subs.index);
+		GenerateGetField(env->buf, subs.u.fi, subs.index);
 	} else if(subs.tag == SUBSCRIPT_PROPERTY_T) {
 		AddOpcodeBuf(env->buf, OP_THIS);
-		generate_get_property(env->buf, subs.u.prop, subs.index);
+		GenerateGetProperty(env->buf, subs.u.prop, subs.index);
 	}
 	AddOpcodeBuf(env->buf, OP_INVOKEOPERATOR);
 	AddOpcodeBuf(env->buf, temp);
@@ -345,7 +345,7 @@ static void generate_assign_to_variable_local(il_factor_assign_op* self, envirom
 			AddOpcodeBuf(env->buf, OP_THIS);
 		}
 		il_factor_generate(self->right, env, cctx);
-		generate_put_field(env->buf, f, temp);
+		GeneratePutField(env->buf, f, temp);
 		//assert(!IsStaticModifier(f->modifier));
 	//src のような名前がプロパティを示す場合
 	} else if(illoc->type == VARIABLE_LOCAL_PROPERTY_T) {
@@ -366,7 +366,7 @@ static void generate_assign_to_variable_local(il_factor_assign_op* self, envirom
 			AddOpcodeBuf(env->buf, OP_THIS);
 		}
 		il_factor_generate(self->right, env, cctx);
-		generate_put_property(env->buf, p, temp);
+		GeneratePutProperty(env->buf, p, temp);
 		assert(!IsStaticModifier(p->modifier));
 	}
 }

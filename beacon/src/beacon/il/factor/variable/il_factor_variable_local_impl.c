@@ -47,13 +47,13 @@ void il_factor_variable_local_generate(il_factor_variable_local* self, enviromen
 		if(!IsStaticModifier(f->modifier)) {
 			AddOpcodeBuf(env->buf, OP_THIS);
 		}
-		generate_get_field(env->buf, f, self->u.f_with_i.index);
+		GenerateGetField(env->buf, f, self->u.f_with_i.index);
 	} else if(self->type == VARIABLE_LOCAL_PROPERTY_T) {
 		property* p = self->u.p_with_i.p;
 		if(!IsStaticModifier(p->modifier)) {
 			AddOpcodeBuf(env->buf, OP_THIS);
 		}
-		generate_get_property(env->buf, p, self->u.p_with_i.index);
+		GenerateGetProperty(env->buf, p, self->u.p_with_i.index);
 	}
 }
 
