@@ -14,10 +14,10 @@ static class_* exception_class();
 
 object * exception_new_simple(frame* fr, const char* message) {
 	class_* excClass = exception_class();
-	vector* args = vector_new();
-	vector_push(args, object_string_new(message));
+	Vector* args = NewVector();
+	PushVector(args, object_string_new(message));
 	object* e = class_new_instance(excClass, fr, args, NULL);
-	vector_delete(args, vector_deleter_null);
+	DeleteVector(args, VectorDeleterOfNull);
 	return e;
 }
 

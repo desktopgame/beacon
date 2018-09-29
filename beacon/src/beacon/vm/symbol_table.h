@@ -14,7 +14,7 @@ struct symbol_entry;
  * オペコードの中では、添え字で変数アクセスを行います。
  */
 typedef struct symbol_table {
-	numeric_map* map;
+	NumericMap* map;
 	int count;
 	int scope_depth;
 } symbol_table;

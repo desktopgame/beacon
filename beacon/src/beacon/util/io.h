@@ -93,7 +93,7 @@ char* ResolveScriptPath(const char* target);
  * @param dirname
  * @return
  */
-vector* GetFiles(const char* dirname);
+Vector* GetFiles(const char* dirname);
 
 /**
  * ファイル一覧をソートするための比較関数.
@@ -107,7 +107,7 @@ int SortFiles(const void* a, const void* b);
  * io_list_files によって確保された vector を解放します.s
  * @param files
  */
-void DeleteFiles(vector* files);
+void DeleteFiles(Vector* files);
 
 /**
  * filename の拡張子が ext なら true.

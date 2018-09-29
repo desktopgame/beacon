@@ -10,19 +10,19 @@
 #include "../env/generic_type.h"
 
 //proto
-static void symbol_table_delete_entry(numeric_key key, numeric_map_item item);
-static void symbol_table_dump_entry(numeric_key key, numeric_map_item item);
+static void symbol_table_delete_entry(NumericMapKey key, NumericMapItem item);
+static void symbol_table_dump_entry(NumericMapKey key, NumericMapItem item);
 
 symbol_table * symbol_table_new() {
 	symbol_table* ret = (symbol_table*)MEM_MALLOC(sizeof(symbol_table));
 	ret->count = 1;
-	ret->map = numeric_map_new();
+	ret->map = NewNumericMap();
 	ret->scope_depth = 0;
 	return ret;
 }
 
 symbol_entry* symbol_table_entry(symbol_table* self, generic_type* gtp, string_view namev) {
-	numeric_map* data = numeric_map_cell(self->map, namev);
+	NumericMap* data = GetNumericMapCell(self->map, namev);
 	if (data) {
 		return ((symbol_entry*)data->item);
 	}
@@ -35,29 +35,29 @@ symbol_entry* symbol_table_entry(symbol_table* self, generic_type* gtp, string_v
 	e->index = self->count;
 	e->gtype = gtp;
 	e->scope_depth = self->scope_depth;
-	numeric_map_put(self->map, namev, e);
+	PutNumericMap(self->map, namev, e);
 	self->count++;
 	return e;
 }
 
 bool symbol_table_contains(symbol_table* self, string_view namev) {
-	return numeric_map_cell(self->map, namev) != NULL;
+	return GetNumericMapCell(self->map, namev) != NULL;
 }
 
 void symbol_table_dump(symbol_table* self) {
-	numeric_map_each(self->map, symbol_table_dump_entry);
+	EachNumericMap(self->map, symbol_table_dump_entry);
 }
 
 void symbol_table_delete(symbol_table * self) {
-	numeric_map_delete(self->map, symbol_table_delete_entry);
+	DeleteNumericMap(self->map, symbol_table_delete_entry);
 	MEM_FREE(self);
 }
 
 //private
-static void symbol_table_delete_entry(numeric_key key, numeric_map_item item) {
+static void symbol_table_delete_entry(NumericMapKey key, NumericMapItem item) {
 	symbol_entry* e = (symbol_entry*)item;
 	symbol_entry_delete(e);
 }
-static void symbol_table_dump_entry(numeric_key key, numeric_map_item item) {
+static void symbol_table_dump_entry(NumericMapKey key, NumericMapItem item) {
 	printf("[%s] = %d\n", string_pool_ref2str(key), ((symbol_entry*)item)->index);
 }

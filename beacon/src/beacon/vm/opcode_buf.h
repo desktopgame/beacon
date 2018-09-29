@@ -8,8 +8,8 @@
  * オペコードの一覧を表す構造体.
  */
 typedef struct opcode_buf {
-	vector* source_vec;
-	vector* label_vec;
+	Vector* source_vec;
+	Vector* label_vec;
 } opcode_buf;
 
 /**
@@ -24,7 +24,7 @@ opcode_buf* opcode_buf_new();
  * @param item
  * @return
  */
-int opcode_buf_add(opcode_buf* self, vector_item item);
+int opcode_buf_add(opcode_buf* self, VectorItem item);
 
 /**
  * このバッファーの開放時に開放されるラベルを作成します.

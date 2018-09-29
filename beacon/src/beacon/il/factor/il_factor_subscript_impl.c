@@ -34,12 +34,12 @@ void il_factor_subscript_load(il_factor_subscript* self, enviroment* env, call_c
 	il_factor_load(self->pos, env, cctx);
 	generic_type* receiver_gtype = il_factor_eval(self->receiver, env, cctx);
 	generic_type* arg_gtype = il_factor_eval(self->pos, env, cctx);
-	vector* args = vector_new();
-	vector_push(args, arg_gtype);
+	Vector* args = NewVector();
+	PushVector(args, arg_gtype);
 	int temp = -1;
 	self->opov = class_gfind_operator_overload(TYPE2CLASS(GENERIC2TYPE(receiver_gtype)), operator_sub_script_get_T, args, env, cctx, &temp);
 	self->operator_index = temp;
-	vector_delete(args, vector_deleter_null);
+	DeleteVector(args, VectorDeleterOfNull);
 }
 
 generic_type* il_factor_subscript_eval(il_factor_subscript* self, enviroment* env, call_context* cctx) {

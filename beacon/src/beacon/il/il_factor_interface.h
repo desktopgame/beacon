@@ -150,13 +150,13 @@ char* il_factor_tostr(il_factor* self, enviroment* env);
  * @param sb
  * @param args
  */
-void il_factor_args_tostr(string_buffer* sb, vector* args, struct enviroment* env);
+void il_factor_args_tostr(string_buffer* sb, Vector* args, struct enviroment* env);
 
 /**
  * @param sb
  * @param type_args
  */
-void il_factor_type_args_tostr(string_buffer* sb, vector* type_args, struct enviroment* env);
+void il_factor_type_args_tostr(string_buffer* sb, Vector* type_args, struct enviroment* env);
 
 /**
  * 計算可能な要素を開放します.

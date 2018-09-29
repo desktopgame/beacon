@@ -48,7 +48,7 @@
 //proto
 static void class_loader_load_impl(class_loader* self);
 static void class_loader_link_recursive(class_loader* self, link_type type);
-static void class_loader_cache_delete(vector_item item);
+static void class_loader_cache_delete(VectorItem item);
 static class_loader* class_loader_load_specialImpl(class_loader* self, class_loader* cll, char* full_path);
 static void class_loader_load_toplevel(class_loader* self);
 static void class_loader_load_linkall(class_loader* self);
@@ -65,7 +65,7 @@ class_loader* class_loader_new(const char* filename, content_type type) {
 	ret->import_manager = import_manager_new();
 	ret->env = enviroment_new();
 	ret->level = 0;
-	ret->type_cache_vec = vector_new();
+	ret->type_cache_vec = NewVector();
 	ret->filename = text_strdup(filename);
 	ret->env->context_ref = ret;
 	return ret;
@@ -111,7 +111,7 @@ void class_loader_delete(class_loader * self) {
 	}
 	ast_delete(self->source_code);
 	il_top_level_delete(self->il_code);
-	vector_delete(self->type_cache_vec, class_loader_cache_delete);
+	DeleteVector(self->type_cache_vec, class_loader_cache_delete);
 	import_manager_delete(self->import_manager);
 	enviroment_delete(self->env);
 	MEM_FREE(self->filename);
@@ -144,7 +144,7 @@ static void class_loader_link_recursive(class_loader* self, link_type type) {
 	self->link = type;
 	import_manager* importMgr = self->import_manager;
 	for (int i = 0; i < importMgr->info_vec->length; i++) {
-		import_info* info = (import_info*)vector_at(importMgr->info_vec, i);
+		import_info* info = (import_info*)AtVector(importMgr->info_vec, i);
 		if (info->consume) {
 			continue;
 		}
@@ -153,7 +153,7 @@ static void class_loader_link_recursive(class_loader* self, link_type type) {
 	class_loader_link(self, type);
 }
 
-static void class_loader_cache_delete(vector_item item) {
+static void class_loader_cache_delete(VectorItem item) {
 	type_cache* e = (type_cache*)item;
 	type_cache_delete(e);
 }
@@ -221,17 +221,17 @@ static void class_loader_load_toplevel_function(class_loader* self) {
 	if(self->level != 0 || self->type != content_entry_point_T) {
 		return;
 	}
-	vector* funcs = self->il_code->function_list;
+	Vector* funcs = self->il_code->function_list;
 	type* worldT = namespace_get_type(namespace_lang(), string_pool_intern("World"));
 	//前回の実行で作成されたメソッドを解放
-	vector* methods = TYPE2CLASS(worldT)->method_list;
+	Vector* methods = TYPE2CLASS(worldT)->method_list;
 	if(methods->length > 0) {
-		vector_delete(methods, method_delete);
-		TYPE2CLASS(worldT)->method_list = vector_new();
+		DeleteVector(methods, method_delete);
+		TYPE2CLASS(worldT)->method_list = NewVector();
 	}
 	//メソッドの宣言のみロード
 	for(int i=0; i<funcs->length; i++) {
-		il_function* ilfunc = vector_at(funcs, i);
+		il_function* ilfunc = AtVector(funcs, i);
 		method* m = method_new(ilfunc->namev);
 		type_parameter_list_dup(ilfunc->type_parameter_vec, m->type_parameters);
 		script_method* sm = script_method_new();
@@ -253,9 +253,9 @@ static void class_loader_load_toplevel_function(class_loader* self) {
 	//	Println();
 		//引数を指定
 		for(int j=0; j<ilfunc->parameter_list->length; j++) {
-			il_parameter* ilparam = vector_at(ilfunc->parameter_list, j);
+			il_parameter* ilparam = AtVector(ilfunc->parameter_list, j);
 			parameter* param = parameter_new(ilparam->namev);
-			vector_push(m->parameters, param);
+			PushVector(m->parameters, param);
 			param->gtype = import_manager_resolve(loc, ilparam->fqcn, cctx);
 			symbol_table_entry(
 				env->sym_table,
@@ -267,16 +267,16 @@ static void class_loader_load_toplevel_function(class_loader* self) {
 			opcode_buf_add(env->buf, op_store);
 			opcode_buf_add(env->buf, (j + 1));
 		}
-		opcode_buf_add(env->buf, (vector_item)op_store);
-		opcode_buf_add(env->buf, (vector_item)0);
-		vector_push(worldT->u.class_->method_list, m);
+		opcode_buf_add(env->buf, (VectorItem)op_store);
+		opcode_buf_add(env->buf, (VectorItem)0);
+		PushVector(worldT->u.class_->method_list, m);
 		//CLBC_corutine(self, m, env, ilfunc->parameter_list, ilfunc->statement_list, cctx, namespace_lang());
 		call_context_delete(cctx);
 	}
 	//実装のロード
 	for(int i=0; i<funcs->length; i++) {
-		il_function* ilfunc = vector_at(funcs, i);
-		method* m = vector_at(TYPE2CLASS(worldT)->method_list, i);
+		il_function* ilfunc = AtVector(funcs, i);
+		method* m = AtVector(TYPE2CLASS(worldT)->method_list, i);
 		script_method* sm = m->u.script_method;
 		call_context* cctx = call_context_new(call_method_T);
 		cctx->scope = namespace_lang();

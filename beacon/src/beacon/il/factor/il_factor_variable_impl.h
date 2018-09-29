@@ -31,7 +31,7 @@ typedef enum il_variable_type {
  */
 typedef struct il_factor_variable {
 	fqcn_cache* fqcn;
-	vector* type_args;
+	Vector* type_args;
 	int index;
 	il_variable_type type;
 	union {

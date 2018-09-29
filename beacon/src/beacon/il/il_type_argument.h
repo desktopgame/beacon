@@ -23,14 +23,14 @@ il_type_argument* il_type_argument_new();
  * 全ての型実引数を出力します.
  * @param iltype_args
  */
-void il_type_argument_print(vector* iltype_args);
+void il_type_argument_print(Vector* iltype_args);
 
 /**
  * @param iltype_args
  * @param cctx
  * @return
  */
-void il_type_argument_resolve(vector* iltype_args, struct call_context* cctx);
+void il_type_argument_resolve(Vector* iltype_args, struct call_context* cctx);
 
 /**
  * 型実引数を解放します.

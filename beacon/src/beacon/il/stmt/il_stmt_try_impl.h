@@ -8,14 +8,14 @@
 struct enviroment;
 
 typedef struct il_stmt_try {
-	vector* statement_list;
-	vector* catch_list;
+	Vector* statement_list;
+	Vector* catch_list;
 } il_stmt_try;
 
 typedef struct il_stmt_catch {
 	generic_cache* fqcn;
 	string_view namev;
-	vector* statement_list;
+	Vector* statement_list;
 } il_stmt_catch;
 
 il_stmt* il_stmt_wrap_try(il_stmt_try* self);

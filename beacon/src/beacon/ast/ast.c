@@ -9,7 +9,7 @@
 //proto
 static void ast_delete_impl(ast* self);
 static modifier_type ast_cast_to_modifierImpl(ast * self, bool* error);
-static void ast_delete_self(vector_item item);
+static void ast_delete_self(VectorItem item);
 
 void ast_compile_entry(ast * self) {
 	parser* p = parser_current();
@@ -26,7 +26,7 @@ ast * ast_malloc(ast_tag tag, const char* filename, int lineno) {
 	if (p != NULL) {
 		ret->lineno = p->lineno;
 		assert(p->lineno >= 0);
-		vector_push(p->lineno_vec, p->lineno);
+		PushVector(p->lineno_vec, p->lineno);
 	} else {
 		ret->lineno = -1;
 	}
@@ -104,14 +104,14 @@ ast * ast_push(ast * self, ast * achild) {
 	assert(self != NULL);
 	assert(achild != NULL);
 	if (self->vchildren == NULL) {
-		self->vchildren = vector_new();
+		self->vchildren = NewVector();
 	}
-	vector_push(self->vchildren, achild);
+	PushVector(self->vchildren, achild);
 	//行番号を補正
 	parser* p = parser_current();
 	if (p != NULL) {
-		if (!vector_empty(p->lineno_vec)) {
-			int lineno = (int)vector_pop(p->lineno_vec);
+		if (!IsEmptyVector(p->lineno_vec)) {
+			int lineno = (int)PopVector(p->lineno_vec);
 			assert(lineno >= 0);
 			self->lineno = lineno;
 		}
@@ -121,7 +121,7 @@ ast * ast_push(ast * self, ast * achild) {
 
 ast* ast_at(ast * self, int index) {
 	assert(self != NULL);
-	return (ast*)vector_at(self->vchildren, index);
+	return (ast*)AtVector(self->vchildren, index);
 }
 
 ast * ast_first(ast * self) {
@@ -208,7 +208,7 @@ constructor_chain_type ast_cast_to_chain_type(ast * self) {
 //private
 static void ast_delete_impl(ast* self) {
 	ast_tag tag =self->tag;
-	vector_delete(self->vchildren, ast_delete_self);
+	DeleteVector(self->vchildren, ast_delete_self);
 	self->vchildren = NULL;
 	MEM_FREE(self);
 }
@@ -235,7 +235,7 @@ static modifier_type ast_cast_to_modifierImpl(ast * self, bool* error) {
 	return mt;
 }
 
-static void ast_delete_self(vector_item item) {
+static void ast_delete_self(VectorItem item) {
 	ast* e = (ast*)item;
 	ast_delete(e);
 }

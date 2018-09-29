@@ -15,12 +15,12 @@ void parameter_delete(parameter * self) {
 	MEM_FREE(self);
 }
 
-bool parameter_is_overwrapped_name(vector* parameters, string_view* namev) {
+bool parameter_is_overwrapped_name(Vector* parameters, string_view* namev) {
 	for(int i=0; i<parameters->length; i++) {
-		parameter* e = (parameter*)vector_at(parameters, i);
+		parameter* e = (parameter*)AtVector(parameters, i);
 		for(int j=0; j<parameters->length; j++) {
 			if(i == j) { continue; }
-			parameter* e2 = (parameter*)vector_at(parameters, j);
+			parameter* e2 = (parameter*)AtVector(parameters, j);
 			if(e->namev == e2->namev) {
 				(*namev) = e->namev;
 				return true;

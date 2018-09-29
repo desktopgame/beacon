@@ -10,10 +10,10 @@ struct il_method;
  */
 typedef struct il_interface {
 	string_view namev;
-	vector* method_list;
-	vector* extends_list;
-	vector* type_parameter_list;
-	vector* prop_list;
+	Vector* method_list;
+	Vector* extends_list;
+	Vector* type_parameter_list;
+	Vector* prop_list;
 } il_interface;
 
 /**

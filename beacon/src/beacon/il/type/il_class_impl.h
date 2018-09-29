@@ -13,17 +13,17 @@ struct il_method;
 typedef struct il_class {
 	string_view namev;
 //	fqcn_cache* super;
-//	vector* implement_list;
-	vector* extend_list;
-	vector* field_list;
-	vector* sfield_list;
-	vector* method_list;
-	vector* smethod_list;
-	vector* constructor_list;
-	vector* type_parameter_list;
-	vector* operator_overload_list;
-	vector* prop_list;
-	vector* sprop_list;
+//	Vector* implement_list;
+	Vector* extend_list;
+	Vector* field_list;
+	Vector* sfield_list;
+	Vector* method_list;
+	Vector* smethod_list;
+	Vector* constructor_list;
+	Vector* type_parameter_list;
+	Vector* operator_overload_list;
+	Vector* prop_list;
+	Vector* sprop_list;
 	bool is_abstract;
 } il_class;
 

@@ -14,7 +14,7 @@ typedef struct operator_overload {
 	struct type* parent;
 	struct generic_type* return_gtype;
 	operator_type type;
-	vector* parameter_list;
+	Vector* parameter_list;
 	struct enviroment* env;
 	access_level access;
 } operator_overload;

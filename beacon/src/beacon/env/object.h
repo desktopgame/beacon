@@ -58,7 +58,7 @@ typedef struct object {
 	struct vtable* vptr;
 	object_paint paint;
 	object_tag tag;
-	vector* native_slot_vec;
+	Vector* native_slot_vec;
 	bool is_coroutine;
 	bool is_clone;
 	union {
@@ -72,7 +72,7 @@ typedef struct object {
 		char char_;
 //		char* string_;
 		bool bool_;
-		vector* field_vec;
+		Vector* field_vec;
 	} u;
 } object;
 

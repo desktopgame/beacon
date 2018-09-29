@@ -8,6 +8,6 @@ defer_context* defer_context_new() {
 }
 
 void defer_context_delete(defer_context* self) {
-	vector_delete(self->variable_vec, vector_deleter_null);
+	DeleteVector(self->variable_vec, VectorDeleterOfNull);
 	MEM_FREE(self);
 }

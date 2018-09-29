@@ -32,7 +32,7 @@ typedef enum generic_type_tag {
  */
 typedef struct generic_type {
 	struct type* core_type;
-	vector* type_args_list;
+	Vector* type_args_list;
 	//このジェネリックタイプの紐づけたられたコンテナ
 	union {
 		struct type* type_;

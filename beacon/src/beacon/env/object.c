@@ -16,7 +16,7 @@
 
 //proto
 static object* object_mallocImpl(object_tag type, const char* filename, int lineno);
-static void object_delete_self(vector_item item);
+static void object_delete_self(VectorItem item);
 static void object_mark_coroutine(object* self);
 #define object_malloc(type) (object_mallocImpl(type, __FILE__, __LINE__))
 //static object* object_malloc(object_tag type);
@@ -41,8 +41,8 @@ object* object_int_get(int i) {
 		return script_context_iintern(ctx, i);
 		//return object_int_new(i);
 	}
-	if(i < 0) { return (object*)vector_at(ctx->neg_int_vec, (-i) - 1); }
-	return (object*)vector_at(ctx->pos_int_vec, i);
+	if(i < 0) { return (object*)AtVector(ctx->neg_int_vec, (-i) - 1); }
+	return (object*)AtVector(ctx->pos_int_vec, i);
 }
 
 object * object_double_malloc(double d, const char* filename, int lineno) {
@@ -72,7 +72,7 @@ object * object_char_malloc(char c, const char* filename, int lineno) {
 object * object_string_malloc(const char * s, const char* filename, int lineno) {
 	object* ret = object_mallocImpl(object_string_T, filename, lineno);
 	//ret->u.string_ = s;
-	ret->u.field_vec = vector_new();
+	ret->u.field_vec = NewVector();
 	ret->gtype = GENERIC_STRING;
 	ret->vptr = type_vtable(TYPE_STRING);
 
@@ -90,7 +90,7 @@ object * object_string_malloc(const char * s, const char* filename, int lineno) 
 	string_buffer* sb = string_buffer_new();
 	while ((*itr) != '\0') {
 		char e = (*itr);
-		vector_push(arr->native_slot_vec, object_char_malloc(e, filename, lineno));
+		PushVector(arr->native_slot_vec, object_char_malloc(e, filename, lineno));
 		itr++;
 		string_buffer_append(sb, e);
 	}
@@ -98,21 +98,21 @@ object * object_string_malloc(const char * s, const char* filename, int lineno) 
 	//String#charArrayを埋める
 	int temp = 0;
 	class_find_field(strType->u.class_, string_pool_intern("charArray"), &temp);
-	vector_assign(ret->u.field_vec, temp, arr);
-	vector_item* test = vector_at(ret->u.field_vec, temp);
+	AssignVector(ret->u.field_vec, temp, arr);
+	VectorItem* test = AtVector(ret->u.field_vec, temp);
 	assert(test != NULL);
 	//Array#lengthを埋める
 	temp = 0;
 	class_find_field(arrType->u.class_, string_pool_intern("length"), &temp);
-	vector_assign(arr->u.field_vec, temp, object_int_new(sb->length));
+	AssignVector(arr->u.field_vec, temp, object_int_new(sb->length));
 	//C形式の文字列でも保存
-	vector_assign(ret->native_slot_vec, 0, sb);
+	AssignVector(ret->native_slot_vec, 0, sb);
 	return ret;
 }
 
 object * object_ref_malloc(const char* filename, int lineno) {
 	object* ret= object_mallocImpl(object_ref_T, filename, lineno);
-	ret->u.field_vec = vector_malloc(filename, lineno);
+	ret->u.field_vec = MallocVector(filename, lineno);
 	return ret;
 }
 
@@ -225,7 +225,7 @@ void object_paintall(object* self, object_paint paint) {
 		self->tag == object_ref_T ||
 		self->tag == object_array_T) {
 		for (int i = 0; i < self->u.field_vec->length; i++) {
-			object* e = (object*)vector_at(self->u.field_vec, i);
+			object* e = (object*)AtVector(self->u.field_vec, i);
 			object_paintall(e, paint);
 		}
 	}
@@ -233,7 +233,7 @@ void object_paintall(object* self, object_paint paint) {
 	type* arrayType = bc_array_type();
 	if (self->gtype->core_type == arrayType) {
 		for (int i = 0; i < self->native_slot_vec->length; i++) {
-			object* e = (object*)vector_at(self->native_slot_vec, i);
+			object* e = (object*)AtVector(self->native_slot_vec, i);
 			object_paintall(e, paint);
 		}
 	}
@@ -255,7 +255,7 @@ void object_print(object * self) {
 	} else if (self->tag == object_double_T) {
 		printf("Double: %lf", self->u.double_);
 	} else if (self->tag == object_string_T) {
-		string_buffer* sb = (string_buffer*)vector_at(self->native_slot_vec, 0);
+		string_buffer* sb = (string_buffer*)AtVector(self->native_slot_vec, 0);
 		printf("String: %s", sb->text);
 	} else if (self->tag == object_bool_T) {
 		printf("Bool: %s", (self == object_get_true() ? "true" : "false"));
@@ -274,21 +274,21 @@ void object_delete(object * self) {
 		return;
 	}
 	if(self->is_coroutine) {
-		yield_context* yctx = vector_at(self->native_slot_vec, 0);
-		vector_remove(self->native_slot_vec, 0);
+		yield_context* yctx = AtVector(self->native_slot_vec, 0);
+		RemoveVector(self->native_slot_vec, 0);
 		yield_context_delete(yctx);
 	}
 	if (self->tag == object_string_T) {
-		string_buffer* sb = vector_at(self->native_slot_vec, 0);
-		vector_remove(self->native_slot_vec, 0);
+		string_buffer* sb = AtVector(self->native_slot_vec, 0);
+		RemoveVector(self->native_slot_vec, 0);
 		string_buffer_delete(sb);
 	}
 	if (self->tag == object_string_T ||
 		self->tag == object_ref_T ||
 		self->tag == object_array_T) {
-		vector_delete(self->u.field_vec, vector_deleter_null);
+		DeleteVector(self->u.field_vec, VectorDeleterOfNull);
 	}
-	vector_delete(self->native_slot_vec, vector_deleter_null);
+	DeleteVector(self->native_slot_vec, VectorDeleterOfNull);
 	MEM_FREE(self);
 }
 
@@ -301,13 +301,13 @@ void object_destroy(object* self) {
 	if (self->tag == object_ref_T ||
 	   self->tag == object_string_T ||
 		self->tag == object_array_T) {
-		vector_delete(self->u.field_vec, object_delete_self);
+		DeleteVector(self->u.field_vec, object_delete_self);
 		self->u.field_vec = NULL;
 	}
 	//String#charArray
 	if (self->tag == object_array_T) {
-		vector_delete(self->u.field_vec, object_delete_self);
-		vector_delete(self->native_slot_vec, object_delete_self);
+		DeleteVector(self->u.field_vec, object_delete_self);
+		DeleteVector(self->native_slot_vec, object_delete_self);
 		self->native_slot_vec = NULL;
 		self->u.field_vec = NULL;
 	}
@@ -394,7 +394,7 @@ static object* object_mallocImpl(object_tag type, const char* filename, int line
 	if (type == object_string_T ||
 		type == object_array_T ||
 		type == object_ref_T) {
-		ret->native_slot_vec = vector_malloc(filename, lineno);
+		ret->native_slot_vec = MallocVector(filename, lineno);
 	} else {
 		ret->native_slot_vec = NULL;
 	}
@@ -403,7 +403,7 @@ static object* object_mallocImpl(object_tag type, const char* filename, int line
 	return ret;
 }
 
-static void object_delete_self(vector_item item) {
+static void object_delete_self(VectorItem item) {
 	object* e = (object*)item;
 	object_destroy(e);
 }
@@ -413,11 +413,11 @@ static void object_mark_coroutine(object* self) {
 		return;
 	}
 	//コルーチンの現在の値
-	yield_context* yctx = vector_at(self->native_slot_vec, 0);
+	yield_context* yctx = AtVector(self->native_slot_vec, 0);
 	object_markall(yctx->stock_obj);
 	object_markall(yctx->source_obj);
 	//コルーチンに渡された引数
 	for(int i=0; i<yctx->parameter_vec->length; i++) {
-		object_markall(vector_at(yctx->parameter_vec, i));
+		object_markall(AtVector(yctx->parameter_vec, i));
 	}
 }

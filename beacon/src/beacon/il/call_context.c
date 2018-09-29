@@ -14,7 +14,7 @@ call_context* call_context_malloc(call_context_tag tag, const char* filename, in
 #else
 	control_structure cs = {};
 #endif
-	ret->call_stack = vector_malloc(filename, lineno);
+	ret->call_stack = MallocVector(filename, lineno);
 	ret->scope = NULL;
 	ret->ty = NULL;
 	ret->tag = tag;
@@ -25,16 +25,16 @@ call_context* call_context_malloc(call_context_tag tag, const char* filename, in
 
 call_frame* call_context_pushImpl(call_context* self, call_frame_tag tag, const char* filename, int lineno) {
 	call_frame* fr = call_frame_malloc(tag, filename, lineno);
-	vector_push(self->call_stack, fr);
+	PushVector(self->call_stack, fr);
 	return fr;
 }
 
 call_frame* call_context_top(call_context* self) {
-	return vector_top(self->call_stack);
+	return TopVector(self->call_stack);
 }
 
 void call_context_pop(call_context* self) {
-	call_frame* fr = vector_pop(self->call_stack);
+	call_frame* fr = PopVector(self->call_stack);
 	call_frame_delete(fr);
 }
 
@@ -64,7 +64,7 @@ class_* call_context_class(call_context* self) {
 }
 
 generic_type* call_context_receiver(call_context* self) {
-	call_frame* cfr = vector_top(self->call_stack);
+	call_frame* cfr = TopVector(self->call_stack);
 	if(cfr->tag == frame_instance_invoke_T) {
 		return cfr->u.instance_invoke.receiver;
 	} else if(cfr->tag == frame_self_invoke_T) {
@@ -83,8 +83,8 @@ type* call_context_eval_type(call_context* self, fqcn_cache* fqcn) {
 	return tp;
 }
 
-vector* call_context_typeargs(call_context* self) {
-	call_frame* cfr = vector_top(self->call_stack);
+Vector* call_context_typeargs(call_context* self) {
+	call_frame* cfr = TopVector(self->call_stack);
 	if(cfr->tag == frame_instance_invoke_T) {
 		return cfr->u.instance_invoke.typeargs;
 	} else if(cfr->tag == frame_static_invoke_T) {
@@ -104,6 +104,6 @@ bool call_context_is_static(call_context* self) {
 
 void call_context_delete(call_context* self) {
 	control_structure_free(self->control);
-	vector_delete(self->call_stack, vector_deleter_null);
+	DeleteVector(self->call_stack, VectorDeleterOfNull);
 	MEM_FREE(self);
 }

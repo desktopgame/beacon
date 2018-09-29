@@ -5,12 +5,12 @@
 #include <stdio.h>
 
 //proto
-static void il_constructor_argument_delete(vector_item item);
+static void il_constructor_argument_delete(VectorItem item);
 
 il_constructor_chain * il_constructor_chain_new() {
 	il_constructor_chain* ret = (il_constructor_chain*)MEM_MALLOC(sizeof(il_constructor_chain));
 	ret->type = chain_type_this_T;
-	ret->argument_list = vector_new();
+	ret->argument_list = NewVector();
 	ret->c = NULL;
 	ret->constructor_index = -1;
 	return ret;
@@ -20,11 +20,11 @@ void il_constructor_chain_delete(il_constructor_chain * self) {
 	if (self == NULL) {
 		return;
 	}
-	vector_delete(self->argument_list, il_constructor_argument_delete);
+	DeleteVector(self->argument_list, il_constructor_argument_delete);
 	MEM_FREE(self);
 }
 //private
-static void il_constructor_argument_delete(vector_item item) {
+static void il_constructor_argument_delete(VectorItem item) {
 	il_argument* e = (il_argument*)item;
 	il_argument_delete(e);
 }

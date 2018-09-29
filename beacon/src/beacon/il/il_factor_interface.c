@@ -301,12 +301,12 @@ char* il_factor_tostr(il_factor* self, enviroment* env) {
 	}
 }
 
-void il_factor_args_tostr(string_buffer* sb, vector* args, enviroment* env) {
+void il_factor_args_tostr(string_buffer* sb, Vector* args, enviroment* env) {
 	if(args->length > 0) {
 		string_buffer_append(sb, '(');
 	}
 	for(int i=0; i<args->length; i++) {
-		il_argument* e = (il_argument*)vector_at(args, i);
+		il_argument* e = (il_argument*)AtVector(args, i);
 		char* str = il_factor_tostr(e->factor, env);
 		string_buffer_appends(sb, str);
 		if(i != (args->length)) {
@@ -319,12 +319,12 @@ void il_factor_args_tostr(string_buffer* sb, vector* args, enviroment* env) {
 	}
 }
 
-void il_factor_type_args_tostr(string_buffer* sb, vector* type_args, enviroment* env) {
+void il_factor_type_args_tostr(string_buffer* sb, Vector* type_args, enviroment* env) {
 	if(type_args->length > 0) {
 		string_buffer_appends(sb, "<|");
 	}
 	for(int i=0; i<type_args->length; i++) {
-		il_type_argument* e = (il_type_argument*)vector_at(type_args, i);
+		il_type_argument* e = (il_type_argument*)AtVector(type_args, i);
 		char* str = generic_cache_tostr(e->gcache);
 		string_buffer_appends(sb, str);
 		if(i != (type_args->length - 1)) {

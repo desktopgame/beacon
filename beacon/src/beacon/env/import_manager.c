@@ -16,18 +16,18 @@
 #include "type_impl.h"
 
 //proto
-static void import_manager_delete_import_info(vector_item item);
+static void import_manager_delete_import_info(VectorItem item);
 
 import_manager * import_manager_new() {
 	import_manager* ret = (import_manager*)MEM_MALLOC(sizeof(import_manager));
-	ret->info_vec = vector_new();
+	ret->info_vec = NewVector();
 	return ret;
 }
 
 import_info* import_manager_import(import_manager * self, class_loader * target) {
 	import_info* info = import_info_new();
 	info->context = target;
-	vector_push(self->info_vec, info);
+	PushVector(self->info_vec, info);
 	return info;
 }
 
@@ -35,7 +35,7 @@ bool import_manager_loaded(import_manager * self, int index) {
 	if (index >= self->info_vec->length) {
 		return false;
 	}
-	import_info* info = (import_info*)vector_at(self->info_vec, index);
+	import_info* info = (import_info*)AtVector(self->info_vec, index);
 	return info->consume;
 }
 
@@ -60,7 +60,7 @@ generic_type* import_manager_resolve(namespace_* scope, generic_cache* fqcn, cal
 		generic_type* normalGType = generic_type_new(core_type);
 		assert(core_type->tag != type_enum_T);
 		for (int i = 0; i < fqcn->type_args->length; i++) {
-			generic_cache* e = (generic_cache*)vector_at(fqcn->type_args, i);
+			generic_cache* e = (generic_cache*)AtVector(fqcn->type_args, i);
 			generic_type* child = import_manager_resolve(scope, e, cctx);
 			generic_type_addargs(normalGType, child);
 		}
@@ -136,11 +136,11 @@ generic_type* import_manager_resolvef(namespace_* scope, fqcn_cache* fqcn, call_
 }
 
 void import_manager_delete(import_manager * self) {
-	vector_delete(self->info_vec, import_manager_delete_import_info);
+	DeleteVector(self->info_vec, import_manager_delete_import_info);
 	MEM_FREE(self);
 }
 //private
-static void import_manager_delete_import_info(vector_item item) {
+static void import_manager_delete_import_info(VectorItem item) {
 	import_info* e = (import_info*)item;
 	import_info_delete(e);
 }

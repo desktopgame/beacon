@@ -10,36 +10,36 @@
 #include "generic_type.h"
 
 //proto
-static void constructor_parameter_delete(vector_item item);
+static void constructor_parameter_delete(VectorItem item);
 
 constructor * constructor_new() {
 	constructor* ret = (constructor*)MEM_MALLOC(sizeof(constructor));
 	ret->parent = NULL;
 	ret->env = NULL;
-	ret->parameter_list = vector_new();
+	ret->parameter_list = NewVector();
 	ret->access = access_public_T;
 	return ret;
 }
 
-object * constructor_new_instance(constructor * self, vector * args, frame * parent) {
+object * constructor_new_instance(constructor * self, Vector * args, frame * parent) {
 	frame* sub = frame_sub(parent);
 	for (int i = 0; i < args->length; i++) {
-		vector_push(sub->value_stack, vector_at(args, i));
+		PushVector(sub->value_stack, AtVector(args, i));
 	}
 	vm_execute(sub, self->env);
-	object* ret = vector_pop(sub->value_stack);
+	object* ret = PopVector(sub->value_stack);
 	frame_delete(sub);
 	return ret;
 }
 
 void constructor_delete(constructor * self) {
 	enviroment_delete(self->env);
-	vector_delete(self->parameter_list, constructor_parameter_delete);
+	DeleteVector(self->parameter_list, constructor_parameter_delete);
 	MEM_FREE(self);
 }
 
 //private
-static void constructor_parameter_delete(vector_item item) {
+static void constructor_parameter_delete(VectorItem item) {
 	parameter* e = (parameter*)item;
 	parameter_delete(e);
 }

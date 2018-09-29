@@ -7,8 +7,8 @@
 #include "../ast/access_level.h"
 typedef struct il_operator_overload {
 	operator_type op;
-	vector* parameter_list;
-	vector* statement_list;
+	Vector* parameter_list;
+	Vector* statement_list;
 	generic_cache* return_fqcn;
 	access_level access;
 } il_operator_overload;

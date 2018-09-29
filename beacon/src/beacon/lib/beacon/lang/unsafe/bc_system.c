@@ -31,7 +31,7 @@ type* bc_system_type() {
 
 //private
 static void bc_system_nativeExit(method* parent, frame* fr, enviroment* env) {
-	object* returnCodeObj = vector_at(fr->ref_stack, 1);
+	object* returnCodeObj = AtVector(fr->ref_stack, 1);
 	int returnCode = OBJ2INT(returnCodeObj);
 	exit(returnCode);
 }
@@ -41,8 +41,8 @@ static void bc_system_nativeAbort(method* parent, frame* fr, enviroment* env) {
 }
 
 static void bc_system_nativeExec(method* parent, frame* fr, enviroment* env) {
-	object* cmd = vector_at(fr->ref_stack, 1);
+	object* cmd = AtVector(fr->ref_stack, 1);
 	const char* str = bc_string_raw(cmd)->text;
 	int ret = system(str);
-	vector_push(fr->value_stack, object_int_get(ret));
+	PushVector(fr->value_stack, object_int_get(ret));
 }

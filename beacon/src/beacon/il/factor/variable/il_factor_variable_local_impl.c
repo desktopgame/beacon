@@ -13,7 +13,7 @@
 #include <string.h>
 #include <stdio.h>
 
-static void il_factor_variable_local_delete_typeargs(vector_item item);
+static void il_factor_variable_local_delete_typeargs(VectorItem item);
 static void il_factor_variable_local_loadImpl(il_factor_variable_local * self, enviroment * env, call_context* cctx);
 static void il_factor_variable_local_load_field(il_factor_variable_local * self, enviroment * env, call_context* cctx);
 static void il_factor_variable_local_load_property(il_factor_variable_local * self, enviroment * env, call_context* cctx);
@@ -40,8 +40,8 @@ void il_factor_variable_local_generate(il_factor_variable_local* self, enviromen
 			);
 			return;
 		}
-		opcode_buf_add(env->buf, (vector_item)op_load);
-		opcode_buf_add(env->buf, (vector_item)self->u.entry_->index);
+		opcode_buf_add(env->buf, (VectorItem)op_load);
+		opcode_buf_add(env->buf, (VectorItem)self->u.entry_->index);
 	} else if(self->type == variable_local_field_T) {
 		field* f = self->u.f_with_i.fi;
 		if(!modifier_is_static(f->modifier)) {
@@ -75,12 +75,12 @@ char* il_factor_variable_local_tostr(il_factor_variable_local * self, enviroment
 }
 
 void il_factor_variable_local_delete(il_factor_variable_local* self) {
-	vector_delete(self->type_args, il_factor_variable_local_delete_typeargs);
+	DeleteVector(self->type_args, il_factor_variable_local_delete_typeargs);
 //	generic_type_delete(self->gt);
 	MEM_FREE(self);
 }
 //private
-static void il_factor_variable_local_delete_typeargs(vector_item item) {
+static void il_factor_variable_local_delete_typeargs(VectorItem item) {
 	il_type_argument* e = (il_type_argument*)item;
 	il_type_argument_delete(e);
 }

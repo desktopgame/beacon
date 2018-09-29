@@ -207,21 +207,21 @@ int il_factor_binary_op_index(il_factor_binary_op* self, enviroment* env, call_c
 }
 
 int il_factor_binary_op_index2(il_factor* receiver, il_factor* arg, operator_type otype, enviroment* env, call_context* cctx) {
-	vector* args = vector_new();
+	Vector* args = NewVector();
 	generic_type* lgtype = il_factor_eval(receiver, env, cctx);
 	generic_type* rgtype = il_factor_eval(arg, env, cctx);
 	
 	if(lgtype->virtual_type_index != -1) {
 		assert(false);
 	}
-	//vector_push(args, lgtype);
-	vector_push(args, rgtype);
+	//PushVector(args, lgtype);
+	PushVector(args, rgtype);
 	type* lctype = GENERIC2TYPE(lgtype);
 	assert(lctype->tag == type_class_T);
 	class_* lclass = TYPE2CLASS(lctype);
 	int temp = 0;
 	class_gfind_operator_overload(lclass, otype, args, env, cctx, &temp);
-	vector_delete(args, vector_deleter_null);
+	DeleteVector(args, VectorDeleterOfNull);
 	return temp;
 }
 

@@ -11,13 +11,13 @@
 #include "../../il/il_factor_impl.h"
 #include "../../util/vector.h"
 
-static bool class_contains_fieldImpl(vector* fields, field* f);
-static bool class_contains_propertyImpl(vector* props, property* p);
+static bool class_contains_fieldImpl(Vector* fields, field* f);
+static bool class_contains_propertyImpl(Vector* props, property* p);
 
 field * class_find_field(class_* self, string_view namev, int* outIndex) {
 	(*outIndex) = -1;
 	for (int i = 0; i < self->field_list->length; i++) {
-		vector_item e = vector_at(self->field_list, i);
+		VectorItem e = AtVector(self->field_list, i);
 		field* f = (field*)e;
 		if (namev == f->namev) {
 			(*outIndex) = (class_count_fieldall(self) - self->field_list->length) + i;
@@ -46,7 +46,7 @@ field * class_find_field_tree(class_ * self, string_view namev, int * outIndex) 
 field * class_find_sfield(class_ * self, string_view namev, int * outIndex) {
 	(*outIndex) = -1;
 	for (int i = 0; i < self->sfield_list->length; i++) {
-		vector_item e = vector_at(self->sfield_list, i);
+		VectorItem e = AtVector(self->sfield_list, i);
 		field* f = (field*)e;
 		if (namev == f->namev) {
 			(*outIndex) = (class_count_sfieldall(self) - self->sfield_list->length) + i;
@@ -76,7 +76,7 @@ field * class_get_field(class_ * self, int index) {
 	int all = class_count_fieldall(self);
 	if (index >= (all - self->field_list->length) &&
 		index < all) {
-		return vector_at(self->field_list, self->field_list->length - (all - index));
+		return AtVector(self->field_list, self->field_list->length - (all - index));
 	}
 	return class_get_field(self->super_class->core_type->u.class_, index);
 }
@@ -86,7 +86,7 @@ field * class_get_sfield(class_ * self, int index) {
 	int all = class_count_sfieldall(self);
 	if (index >= (all - self->sfield_list->length) &&
 		index < all) {
-		return vector_at(self->sfield_list, self->sfield_list->length - (all - index));
+		return AtVector(self->sfield_list, self->sfield_list->length - (all - index));
 	}
 	return class_get_sfield(self->super_class->core_type->u.class_, index);
 }
@@ -197,7 +197,7 @@ property* class_get_property(class_* self, int index) {
 	int all = class_count_propertyall(self);
 	if (index >= (all - self->prop_list->length) &&
 		index < all) {
-		return vector_at(self->prop_list, self->prop_list->length - (all - index));
+		return AtVector(self->prop_list, self->prop_list->length - (all - index));
 	}
 	return class_get_property(self->super_class->core_type->u.class_, index);
 }
@@ -207,7 +207,7 @@ property* class_get_sproperty(class_* self, int index) {
 	int all = class_count_spropertyall(self);
 	if (index >= (all - self->sprop_list->length) &&
 		index < all) {
-		return vector_at(self->sprop_list, self->sprop_list->length - (all - index));
+		return AtVector(self->sprop_list, self->sprop_list->length - (all - index));
 	}
 	return class_get_property(self->super_class->core_type->u.class_, index);
 }
@@ -215,7 +215,7 @@ property* class_get_sproperty(class_* self, int index) {
 property* class_find_property(class_* self, string_view namev, int* outIndex) {
 	(*outIndex) = -1;
 	for (int i = 0; i < self->prop_list->length; i++) {
-		vector_item e = vector_at(self->prop_list, i);
+		VectorItem e = AtVector(self->prop_list, i);
 		property* p = (property*)e;
 		if (namev == p->namev) {
 			(*outIndex) = (class_count_propertyall(self) - self->prop_list->length) + i;
@@ -244,7 +244,7 @@ property* class_find_property_tree(class_* self, string_view namev, int* outInde
 property* class_find_sproperty(class_* self, string_view namev, int* outIndex) {
 	(*outIndex) = -1;
 	for (int i = 0; i < self->sprop_list->length; i++) {
-		vector_item e = vector_at(self->sprop_list, i);
+		VectorItem e = AtVector(self->sprop_list, i);
 		property* p = (property*)e;
 		if (namev == p->namev) {
 			(*outIndex) = (class_count_spropertyall(self) - self->sprop_list->length) + i;
@@ -272,12 +272,12 @@ property* class_find_sproperty_tree(class_* self, string_view namev, int* outInd
 
 
 
-constructor * class_rfind_constructor(class_ * self, vector * args, vector* typeargs, frame* fr, int* outIndex) {
+constructor * class_rfind_constructor(class_ * self, Vector * args, Vector* typeargs, frame* fr, int* outIndex) {
 	return meta_scoped_rfind_ctor(self, self->constructor_list, args, typeargs, fr, outIndex);
 }
 
-constructor * class_ilfind_constructor(class_ * self, vector * args, enviroment * env, call_context* cctx, int* outIndex) {
-	//	vector* v = meta_find_constructors(self, args, env, ilctx);
+constructor * class_ilfind_constructor(class_ * self, Vector * args, enviroment * env, call_context* cctx, int* outIndex) {
+	//	Vector* v = meta_find_constructors(self, args, env, ilctx);
 	//	(*outIndex) = -1;
 	//	return class_find_constructor_impl(v, args, env, ilctx, outIndex);
 	constructor* ctor = meta_scoped_ilfind_ctor(self, self->constructor_list, args, env, cctx, outIndex);
@@ -285,15 +285,15 @@ constructor * class_ilfind_constructor(class_ * self, vector * args, enviroment 
 }
 
 constructor * class_ilfind_empty_constructor(class_ * self, enviroment * env, call_context* cctx, int * outIndex) {
-	vector* emptyArgs = vector_new();
+	Vector* emptyArgs = NewVector();
 	constructor* ret = class_ilfind_constructor(self, emptyArgs, env, cctx, outIndex);
-	vector_delete(emptyArgs, vector_deleter_null);
+	DeleteVector(emptyArgs, VectorDeleterOfNull);
 	return ret;
 }
 
 
 
-method * class_ilfind_method(class_ * self, string_view namev, vector * args, enviroment * env, call_context* cctx, int * outIndex) {
+method * class_ilfind_method(class_ * self, string_view namev, Vector * args, enviroment * env, call_context* cctx, int * outIndex) {
 	(*outIndex) = -1;
 	class_create_vtable(self);
 	#if defined(DEBUG)
@@ -316,7 +316,7 @@ method * class_ilfind_method(class_ * self, string_view namev, vector * args, en
 	return NULL;
 }
 
-method* class_gfind_method(class_* self, string_view namev, vector* gargs, int* outIndex) {
+method* class_gfind_method(class_* self, string_view namev, Vector* gargs, int* outIndex) {
 	(*outIndex) = -1;
 	class_create_vtable(self);
 	//assert(self->vt->elements->length > 0);
@@ -337,14 +337,14 @@ method* class_gfind_method(class_* self, string_view namev, vector* gargs, int* 
 }
 
 method* class_gfind_eqmethod(class_* self, int* outIndex) {
-	vector* gargs = vector_new();
-	vector_push(gargs, TYPE_OBJECT->generic_self);
+	Vector* gargs = NewVector();
+	PushVector(gargs, TYPE_OBJECT->generic_self);
 	method* ret = class_gfind_method(self, string_pool_intern("equals"), gargs, outIndex);
-	vector_delete(gargs, vector_deleter_null);
+	DeleteVector(gargs, VectorDeleterOfNull);
 	return ret;
 }
 
-method * class_ilfind_smethod(class_ * self, string_view namev, vector * args, enviroment * env, call_context* cctx, int * outIndex) {
+method * class_ilfind_smethod(class_ * self, string_view namev, Vector * args, enviroment * env, call_context* cctx, int * outIndex) {
 	#if defined(DEBUG)
 	const char* str = string_pool_ref2str(namev);
 	#endif
@@ -357,7 +357,7 @@ method * class_ilfind_smethod(class_ * self, string_view namev, vector * args, e
 	return ret;
 }
 
-method* class_gfind_smethod(class_* self, string_view namev, vector* gargs, int* outIndex) {
+method* class_gfind_smethod(class_* self, string_view namev, Vector* gargs, int* outIndex) {
 	(*outIndex) = -1;
 	class_create_vtable(self);
 	int temp = 0;
@@ -376,7 +376,7 @@ method * class_get_method(object * o, int index) {
 		o->vptr = TYPE2CLASS(TYPE_OBJECT)->vt;
 	}
 	vtable* vx = (o->vptr);
-	return (method*)vector_at(vx->elements, index);
+	return (method*)AtVector(vx->elements, index);
 }
 
 method * class_get_smethod(class_* self, int index) {
@@ -386,11 +386,11 @@ method * class_get_smethod(class_* self, int index) {
 	int all = class_count_smethodall(self);
 	if (index >= (all - self->smethod_list->length) &&
 		index < all) {
-		return vector_at(self->smethod_list, self->smethod_list->length - (all - index));
+		return AtVector(self->smethod_list, self->smethod_list->length - (all - index));
 	}
 	return class_get_smethod(self->super_class->core_type->u.class_, index);
 	//*/
-	return vector_at(self->smethod_list, index);
+	return AtVector(self->smethod_list, index);
 }
 
 method * class_get_impl_method(class_ * self, type * interType, int interMIndex) {
@@ -398,12 +398,12 @@ method * class_get_impl_method(class_ * self, type * interType, int interMIndex)
 	const char* str = string_pool_ref2str(self->namev);
 	#endif
 	assert(self->vt_vec->length > 0);
-	vector* tbl = class_get_generic_interface_tree(self);
+	Vector* tbl = class_get_generic_interface_tree(self);
 	//指定のインターフェイスが
 	//このクラスにおいて何番目かを調べる
 	int declIndex = -1;
 	for (int i = 0; i < tbl->length; i++) {
-		generic_type* e = vector_at(tbl, i);
+		generic_type* e = AtVector(tbl, i);
 		interface_* inter = e->core_type->u.interface_;
 		if (inter == interType->u.interface_) {
 			declIndex = i;
@@ -412,30 +412,30 @@ method * class_get_impl_method(class_ * self, type * interType, int interMIndex)
 	}
 	//仮想関数テーブルの一覧から引く
 	assert(declIndex != -1);
-	vector_delete(tbl, vector_deleter_null);
-	vtable* vtAt = vector_at(self->vt_vec, declIndex);
-	return vector_at(vtAt->elements, interMIndex);
+	DeleteVector(tbl, VectorDeleterOfNull);
+	vtable* vtAt = AtVector(self->vt_vec, declIndex);
+	return AtVector(vtAt->elements, interMIndex);
 }
 
 
 
 
-operator_overload* class_gfind_operator_overload(class_* self, operator_type type, vector* args, enviroment* env, call_context* cctx, int* outIndex) {
+operator_overload* class_gfind_operator_overload(class_* self, operator_type type, Vector* args, enviroment* env, call_context* cctx, int* outIndex) {
 	(*outIndex) = -1;
 	operator_overload* ret = NULL;
 	class_create_operator_vt(self);
 	for(int i=0; i<self->ovt->vec->length; i++) {
-		operator_overload* operator_ov = vector_at(self->ovt->vec, i);
+		operator_overload* operator_ov = AtVector(self->ovt->vec, i);
 		if(operator_ov->type != type) {
 			continue;
 		}
 		bool nomatch = false;
 		int score = 1024;
 		int sum = 0;
-		vector* params = operator_ov->parameter_list;
+		Vector* params = operator_ov->parameter_list;
 		for(int j=0; j<params->length; j++) {
-			parameter* param = vector_at(params, j);
-			generic_type* arg = vector_at(args, j);
+			parameter* param = AtVector(params, j);
+			generic_type* arg = AtVector(args, j);
 			int dist = generic_type_distance(param->gtype, arg, cctx);
 			if(dist == -1) {
 				nomatch = true;
@@ -455,48 +455,48 @@ operator_overload* class_gfind_operator_overload(class_* self, operator_type typ
 	return ret;
 }
 
-operator_overload* class_ilfind_operator_overload(class_* self, operator_type type, vector* args, enviroment* env, call_context* cctx, int* outIndex) {
-	vector* gargs =vector_new();
+operator_overload* class_ilfind_operator_overload(class_* self, operator_type type, Vector* args, enviroment* env, call_context* cctx, int* outIndex) {
+	Vector* gargs =NewVector();
 	for(int i=0; i<args->length; i++) {
-		il_factor* ilfact = (il_factor*)vector_at(args,i);
+		il_factor* ilfact = (il_factor*)AtVector(args,i);
 		generic_type* g = il_factor_eval(ilfact, env, cctx);
-		vector_push(gargs, g);
+		PushVector(gargs, g);
 	}
 	operator_overload* ret = class_gfind_operator_overload(self, type, gargs, env, cctx, outIndex);
-	vector_delete(gargs, vector_deleter_null);
+	DeleteVector(gargs, VectorDeleterOfNull);
 	return ret;
 }
 
-operator_overload* class_argfind_operator_overload(class_* self, operator_type type, vector* args, enviroment* env, call_context* cctx, int* outIndex) {
-	vector* gargs =vector_new();
+operator_overload* class_argfind_operator_overload(class_* self, operator_type type, Vector* args, enviroment* env, call_context* cctx, int* outIndex) {
+	Vector* gargs =NewVector();
 	for(int i=0; i<args->length; i++) {
-		//il_factor* ilfact = (il_factor*)vector_at(args,i);
-		il_argument* ilarg = (il_argument*)vector_at(args, i);
+		//il_factor* ilfact = (il_factor*)AtVector(args,i);
+		il_argument* ilarg = (il_argument*)AtVector(args, i);
 		il_factor* ilfact = ilarg->factor;
 		generic_type* g = il_factor_eval(ilfact, env, cctx);
-		vector_push(gargs, g);
+		PushVector(gargs, g);
 	}
 	operator_overload* ret = class_gfind_operator_overload(self, type, gargs, env, cctx, outIndex);
-	vector_delete(gargs, vector_deleter_null);
+	DeleteVector(gargs, VectorDeleterOfNull);
 	return ret;
 }
 
 operator_overload* class_get_operator_overload(class_* self, int index) {
-	return vector_at(self->ovt->vec, index);
+	return AtVector(self->ovt->vec, index);
 }
 
-vector* class_find_methods_tree(class_* self, method* m) {
+Vector* class_find_methods_tree(class_* self, method* m) {
 	assert(self != NULL);
 	assert(m != NULL);
 	class_* ptr = self;
-	vector* ret = vector_new();
+	Vector* ret = NewVector();
 	#if defined(DEBUG)
 	const char* ptrname = string_pool_ref2str(ptr->namev);
 	#endif
 	do {
 		method* tmp = NULL;
 		if(class_contains_method(ptr->method_list, m, &tmp)) {
-			vector_push(ret, tmp);
+			PushVector(ret, tmp);
 		}
 		//親クラスへ
 		if(ptr->super_class != NULL) {
@@ -508,7 +508,7 @@ vector* class_find_methods_tree(class_* self, method* m) {
 	return ret;
 }
 
-bool class_contains_method(vector* method_list, method* m, method** outM) {
+bool class_contains_method(Vector* method_list, method* m, method** outM) {
 	assert(!modifier_is_static(m->modifier));
 	(*outM) = NULL;
 	bool ret = false;
@@ -516,7 +516,7 @@ bool class_contains_method(vector* method_list, method* m, method** outM) {
 	cctx->scope = m->parent->location;
 	cctx->ty = m->parent;
 	for(int i=0; i<method_list->length; i++) {
-		method* mE = vector_at(method_list, i);
+		method* mE = AtVector(method_list, i);
 		if(method_override(m, mE, cctx)) {
 			(*outM) = mE;
 			ret = true;
@@ -527,25 +527,25 @@ bool class_contains_method(vector* method_list, method* m, method** outM) {
 	return ret;
 }
 
-vector* class_get_generic_interface_list(class_* self) {
-	vector* ret = vector_new();
+Vector* class_get_generic_interface_list(class_* self) {
+	Vector* ret = NewVector();
 	for(int i=0; i<self->impl_list->length; i++) {
-		generic_type* ginter = vector_at(self->impl_list, i);
-		vector* inner = interface_get_generic_interface_tree(TYPE2INTERFACE(GENERIC2TYPE(ginter)));
-		vector_merge(ret, inner);
-		vector_push(ret, ginter);
-		vector_delete(inner, vector_deleter_null);
+		generic_type* ginter = AtVector(self->impl_list, i);
+		Vector* inner = interface_get_generic_interface_tree(TYPE2INTERFACE(GENERIC2TYPE(ginter)));
+		MergeVector(ret, inner);
+		PushVector(ret, ginter);
+		DeleteVector(inner, VectorDeleterOfNull);
 	}
 	return ret;
 }
 
-vector* class_get_generic_interface_tree(class_* self) {
+Vector* class_get_generic_interface_tree(class_* self) {
 	class_* ptr = self;
-	vector* ret = vector_new();
+	Vector* ret = NewVector();
 	do {
-		vector* v = class_get_generic_interface_list(ptr);
-		vector_merge(v, ret);
-		vector_delete(v, vector_deleter_null);
+		Vector* v = class_get_generic_interface_list(ptr);
+		MergeVector(v, ret);
+		DeleteVector(v, VectorDeleterOfNull);
 		if(ptr->super_class == NULL) {
 			break;
 		}
@@ -554,25 +554,25 @@ vector* class_get_generic_interface_tree(class_* self) {
 	return ret;
 }
 
-vector* class_get_interface_list(class_* self) {
-	vector* ret = vector_new();
-	vector* c = class_get_generic_interface_list(self);
+Vector* class_get_interface_list(class_* self) {
+	Vector* ret = NewVector();
+	Vector* c = class_get_generic_interface_list(self);
 	for(int i=0; i<c->length; i++) {
-		generic_type* gt = vector_at(c, i);
-		vector_push(ret, TYPE2INTERFACE(GENERIC2TYPE(gt)));
+		generic_type* gt = AtVector(c, i);
+		PushVector(ret, TYPE2INTERFACE(GENERIC2TYPE(gt)));
 	}
-	vector_delete(c, vector_deleter_null);
+	DeleteVector(c, VectorDeleterOfNull);
 	return ret;
 }
 
-vector* class_get_interface_tree(class_* self) {
-	vector* ret = vector_new();
-	vector* c = class_get_generic_interface_tree(self);
+Vector* class_get_interface_tree(class_* self) {
+	Vector* ret = NewVector();
+	Vector* c = class_get_generic_interface_tree(self);
 	for(int i=0; i<c->length; i++) {
-		generic_type* gt = vector_at(c, i);
-		vector_push(ret, TYPE2INTERFACE(GENERIC2TYPE(gt)));
+		generic_type* gt = AtVector(c, i);
+		PushVector(ret, TYPE2INTERFACE(GENERIC2TYPE(gt)));
 	}
-	vector_delete(c, vector_deleter_null);
+	DeleteVector(c, VectorDeleterOfNull);
 	return ret;
 }
 
@@ -588,17 +588,17 @@ generic_type* class_find_interface_type(class_* self, type* tinter, generic_type
 			break;
 		}
 		bool found = false;
-		//vector* gimpl_list = class_get_generic_interface_list(ptr);
-		vector* gimpl_list = ptr->impl_list;
+		//Vector* gimpl_list = class_get_generic_interface_list(ptr);
+		Vector* gimpl_list = ptr->impl_list;
 		for (int i = 0; i < gimpl_list->length; i++) {
-			generic_type* gimpl = vector_at(gimpl_list, i);
+			generic_type* gimpl = AtVector(gimpl_list, i);
 			if (gimpl->core_type == tinter) {
 				found = true;
 				ret = gimpl;
 				break;
 			}
 		}
-		//vector_delete(gimpl_list, vector_deleter_null);
+		//DeleteVector(gimpl_list, VectorDeleterOfNull);
 		if (found) {
 			(*out_baseline) = out;
 			break;
@@ -610,9 +610,9 @@ generic_type* class_find_interface_type(class_* self, type* tinter, generic_type
 }
 
 //private
-static bool class_contains_fieldImpl(vector* fields, field* f) {
+static bool class_contains_fieldImpl(Vector* fields, field* f) {
 	for(int i=0; i<fields->length; i++) {
-		field* e = (field*)vector_at(fields, i);
+		field* e = (field*)AtVector(fields, i);
 		if(e == f) {
 			return true;
 		}
@@ -620,9 +620,9 @@ static bool class_contains_fieldImpl(vector* fields, field* f) {
 	return false;
 }
 
-static bool class_contains_propertyImpl(vector* props, property* p) {
+static bool class_contains_propertyImpl(Vector* props, property* p) {
 	for(int i=0; i<props->length; i++) {
-		property* e = (property*)vector_at(props, i);
+		property* e = (property*)AtVector(props, i);
 		if(e == p) {
 			return true;
 		}

@@ -22,18 +22,18 @@ typedef void(*static_each)(struct field* item);
  * ホスト言語から異なる環境のスクリプトを実行するためにこの方法を使用します。
  */
 typedef struct script_context {
-	numeric_map* namespace_nmap;
+	NumericMap* namespace_nmap;
 	tree_map* class_loader_map;
-	vector* thread_vec;
-	vector* include_vec;
+	Vector* thread_vec;
+	Vector* include_vec;
 	struct class_loader* bootstrap_class_loader;
 	//通し番号でクラスを参照するためのベクター
-	vector* type_vec;
-	vector* all_generic_vec;
+	Vector* type_vec;
+	Vector* all_generic_vec;
 	//整数のキャッシュ
-	vector* pos_int_vec;
-	vector* neg_int_vec;
-	numeric_map* n_int_map;
+	Vector* pos_int_vec;
+	Vector* neg_int_vec;
+	NumericMap* n_int_map;
 	bool print_error;
 	bool abort_on_error;
 	struct heap* heap;

@@ -16,8 +16,8 @@ typedef enum instance_invoke {
 
 typedef struct il_factor_invoke {
 	il_factor* receiver;
-	vector* args;
-	vector* type_args;
+	Vector* args;
+	Vector* type_args;
 	string_view namev;
 	int index;
 	union {

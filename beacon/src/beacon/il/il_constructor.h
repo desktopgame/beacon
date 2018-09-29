@@ -11,8 +11,8 @@ struct il_constructor_chain;
  */
 typedef struct il_constructor {
 	//char* name;
-	vector* parameter_list;
-	vector* statement_list;
+	Vector* parameter_list;
+	Vector* statement_list;
 	struct il_constructor_chain* chain;
 	//il_type* return_type;
 	//fqcn_cache* return_fqcn;

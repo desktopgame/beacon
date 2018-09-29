@@ -9,7 +9,7 @@ struct constructor;
  */
 typedef struct il_constructor_chain {
 	constructor_chain_type type;
-	vector* argument_list;
+	Vector* argument_list;
 	struct constructor* c;
 	int constructor_index;
 } il_constructor_chain;

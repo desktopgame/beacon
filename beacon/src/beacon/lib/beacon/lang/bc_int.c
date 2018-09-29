@@ -50,118 +50,118 @@ type* bc_int_type() {
 }
 //private
 static void bc_int_nativeInit(method* parent, frame* fr, enviroment* env) {
-	object* self = vector_at(fr->ref_stack, 0);
-	object* i = vector_at(fr->ref_stack, 1);
+	object* self = AtVector(fr->ref_stack, 0);
+	object* i = AtVector(fr->ref_stack, 1);
 
 	self->u.int_ = i->u.int_;
 	self->tag = object_int_T;
 }
 
 static void bc_int_nativeEquals(method* parent, frame* fr, enviroment* env) {
-	object* self = vector_at(fr->ref_stack, 0);
-	object* i = vector_at(fr->ref_stack, 1);
-	vector_push(fr->value_stack, BOOL2OBJ(OBJ2INT(self) == OBJ2INT(i)));
+	object* self = AtVector(fr->ref_stack, 0);
+	object* i = AtVector(fr->ref_stack, 1);
+	PushVector(fr->value_stack, BOOL2OBJ(OBJ2INT(self) == OBJ2INT(i)));
 }
 
 static void bc_int_nativeAdd(method* parent, frame* fr, enviroment* env) {
-	object* self = vector_at(fr->ref_stack, 0);
-	object* a = vector_at(fr->ref_stack, 1);
+	object* self = AtVector(fr->ref_stack, 0);
+	object* a = AtVector(fr->ref_stack, 1);
 	object* ret = object_int_new(self->u.int_ + a->u.int_);
-	vector_push(fr->value_stack, ret);
+	PushVector(fr->value_stack, ret);
 }
 
 static void bc_int_nativeSub(method* parent, frame* fr, enviroment* env) {
-	object* self = vector_at(fr->ref_stack, 0);
-	object* a = vector_at(fr->ref_stack, 1);
+	object* self = AtVector(fr->ref_stack, 0);
+	object* a = AtVector(fr->ref_stack, 1);
 	object* ret = object_int_new(self->u.int_ - a->u.int_);
-	vector_push(fr->value_stack, ret);
+	PushVector(fr->value_stack, ret);
 }
 
 static void bc_int_nativeMul(method* parent, frame* fr, enviroment* env) {
-	object* self = vector_at(fr->ref_stack, 0);
-	object* a = vector_at(fr->ref_stack, 1);
+	object* self = AtVector(fr->ref_stack, 0);
+	object* a = AtVector(fr->ref_stack, 1);
 	object* ret = object_int_new(self->u.int_ * a->u.int_);
-	vector_push(fr->value_stack, ret);
+	PushVector(fr->value_stack, ret);
 }
 
 static void bc_int_nativeDiv(method* parent, frame* fr, enviroment* env) {
-	object* self = vector_at(fr->ref_stack, 0);
-	object* a = vector_at(fr->ref_stack, 1);
+	object* self = AtVector(fr->ref_stack, 0);
+	object* a = AtVector(fr->ref_stack, 1);
 	object* ret = object_int_new(self->u.int_ / a->u.int_);
-	vector_push(fr->value_stack, ret);
+	PushVector(fr->value_stack, ret);
 }
 
 static void bc_int_nativeMod(method* parent, frame* fr, enviroment* env) {
-	object* self = vector_at(fr->ref_stack, 0);
-	object* a = vector_at(fr->ref_stack, 1);
+	object* self = AtVector(fr->ref_stack, 0);
+	object* a = AtVector(fr->ref_stack, 1);
 	object* ret = object_int_new(self->u.int_ % a->u.int_);
-	vector_push(fr->value_stack, ret);
+	PushVector(fr->value_stack, ret);
 }
 
 static void bc_int_nativeLShift(method* parent, frame* fr, enviroment* env) {
-	object* self = vector_at(fr->ref_stack, 0);
-	object* a = vector_at(fr->ref_stack, 1);
+	object* self = AtVector(fr->ref_stack, 0);
+	object* a = AtVector(fr->ref_stack, 1);
 	object* ret = object_int_new(self->u.int_ << a->u.int_);
-	vector_push(fr->value_stack, ret);
+	PushVector(fr->value_stack, ret);
 }
 
 static void bc_int_nativeRShift(method* parent, frame* fr, enviroment* env) {
-	object* self = vector_at(fr->ref_stack, 0);
-	object* a = vector_at(fr->ref_stack, 1);
+	object* self = AtVector(fr->ref_stack, 0);
+	object* a = AtVector(fr->ref_stack, 1);
 	object* ret = object_int_new(self->u.int_ >> a->u.int_);
-	vector_push(fr->value_stack, ret);
+	PushVector(fr->value_stack, ret);
 }
 
 static void bc_int_nativeGT(method* parent, frame* fr, enviroment* env) {
-	object* self = vector_at(fr->ref_stack, 0);
-	object* a = vector_at(fr->ref_stack, 1);
+	object* self = AtVector(fr->ref_stack, 0);
+	object* a = AtVector(fr->ref_stack, 1);
 	object* ret = object_bool_get(self->u.int_ > a->u.int_);
-	vector_push(fr->value_stack, ret);
+	PushVector(fr->value_stack, ret);
 }
 
 static void bc_int_nativeGE(method* parent, frame* fr, enviroment* env) {
-	object* self = vector_at(fr->ref_stack, 0);
-	object* a = vector_at(fr->ref_stack, 1);
+	object* self = AtVector(fr->ref_stack, 0);
+	object* a = AtVector(fr->ref_stack, 1);
 	object* ret = object_bool_get(self->u.int_ >= a->u.int_);
-	vector_push(fr->value_stack, ret);
+	PushVector(fr->value_stack, ret);
 }
 
 static void bc_int_nativeLT(method* parent, frame* fr, enviroment* env) {
-	object* self = vector_at(fr->ref_stack, 0);
-	object* a = vector_at(fr->ref_stack, 1);
+	object* self = AtVector(fr->ref_stack, 0);
+	object* a = AtVector(fr->ref_stack, 1);
 	object* ret = object_bool_get(self->u.int_ < a->u.int_);
-	vector_push(fr->value_stack, ret);
+	PushVector(fr->value_stack, ret);
 }
 
 static void bc_int_nativeLE(method* parent, frame* fr, enviroment* env) {
-	object* self = vector_at(fr->ref_stack, 0);
-	object* a = vector_at(fr->ref_stack, 1);
+	object* self = AtVector(fr->ref_stack, 0);
+	object* a = AtVector(fr->ref_stack, 1);
 	object* ret = object_bool_get(self->u.int_ <= a->u.int_);
-	vector_push(fr->value_stack, ret);
+	PushVector(fr->value_stack, ret);
 }
 
 static void bc_int_nativeBitOr(method* parent, frame* fr, enviroment* env) {
-	object* self = vector_at(fr->ref_stack, 0);
-	object* a = vector_at(fr->ref_stack, 1);
+	object* self = AtVector(fr->ref_stack, 0);
+	object* a = AtVector(fr->ref_stack, 1);
 	object* ret = object_int_new(self->u.int_ | a->u.int_);
-	vector_push(fr->value_stack, ret);
+	PushVector(fr->value_stack, ret);
 }
 
 static void bc_int_nativeBitAnd(method* parent, frame* fr, enviroment* env) {
-	object* self = vector_at(fr->ref_stack, 0);
-	object* a = vector_at(fr->ref_stack, 1);
+	object* self = AtVector(fr->ref_stack, 0);
+	object* a = AtVector(fr->ref_stack, 1);
 	object* ret = object_int_new(self->u.int_ & a->u.int_);
-	vector_push(fr->value_stack, ret);
+	PushVector(fr->value_stack, ret);
 }
 
 static void bc_int_nativeEQ(method* parent, frame* fr, enviroment* env) {
-	object* self = vector_at(fr->ref_stack, 0);
-	object* a = vector_at(fr->ref_stack, 1);
+	object* self = AtVector(fr->ref_stack, 0);
+	object* a = AtVector(fr->ref_stack, 1);
 	object* ret = object_bool_get(self->u.int_ == a->u.int_);
-	vector_push(fr->value_stack, ret);
+	PushVector(fr->value_stack, ret);
 }
 
 static void bc_int_nativeToChar(method* parent, frame* fr, enviroment* env) {
-	object* self = vector_at(fr->ref_stack, 0);
-	vector_push(fr->value_stack, object_char_new(self->u.int_));
+	object* self = AtVector(fr->ref_stack, 0);
+	PushVector(fr->value_stack, object_char_new(self->u.int_));
 }

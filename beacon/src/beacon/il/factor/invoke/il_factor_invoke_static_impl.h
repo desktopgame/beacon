@@ -10,8 +10,8 @@ struct method;
 typedef struct il_factor_invoke_static {
 	string_view namev;
 	fqcn_cache* fqcn;
-	vector* args;
-	vector* type_args;
+	Vector* args;
+	Vector* type_args;
 	struct method* m;
 	int index;
 	struct generic_type* resolved;

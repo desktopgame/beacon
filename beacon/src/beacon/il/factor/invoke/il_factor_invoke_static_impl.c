@@ -12,8 +12,8 @@
 static void resolve_non_default(il_factor_invoke_static * self, enviroment * env, call_context* cctx);
 static void resolve_default(il_factor_invoke_static * self, enviroment * env, call_context* cctx);
 static void il_factor_invoke_static_check(il_factor_invoke_static * self, enviroment * env, call_context* cctx);
-static void il_factor_invoke_static_args_delete(vector_item item);
-static void il_factor_invoke_static_typeargs_delete(vector_item item);
+static void il_factor_invoke_static_args_delete(VectorItem item);
+static void il_factor_invoke_static_typeargs_delete(VectorItem item);
 
 il_factor_invoke_static* il_factor_invoke_static_new(string_view namev) {
 	il_factor_invoke_static* ret = (il_factor_invoke_static*)MEM_MALLOC(sizeof(il_factor_invoke_static));
@@ -29,21 +29,21 @@ il_factor_invoke_static* il_factor_invoke_static_new(string_view namev) {
 
 void il_factor_invoke_static_generate(il_factor_invoke_static* self, enviroment* env, call_context* cctx) {
 	for(int i=0; i<self->type_args->length; i++) {
-		il_type_argument* e = (il_type_argument*)vector_at(self->type_args, i);
+		il_type_argument* e = (il_type_argument*)AtVector(self->type_args, i);
 		assert(e->gtype != NULL);
 		opcode_buf_add(env->buf, op_generic_add);
 		generic_type_generate(e->gtype, env);
 	}
 	for(int i=0; i<self->args->length; i++) {
-		il_argument* e = (il_argument*)vector_at(self->args, i);
+		il_argument* e = (il_argument*)AtVector(self->args, i);
 		il_factor_generate(e->factor, env, cctx);
 		if(bc_error_last()) {
 			return;
 		}
 	}
-	opcode_buf_add(env->buf, (vector_item)op_invokestatic);
-	opcode_buf_add(env->buf, (vector_item)self->m->parent->absolute_index);
-	opcode_buf_add(env->buf, (vector_item)self->index);
+	opcode_buf_add(env->buf, (VectorItem)op_invokestatic);
+	opcode_buf_add(env->buf, (VectorItem)self->m->parent->absolute_index);
+	opcode_buf_add(env->buf, (VectorItem)self->index);
 }
 
 void il_factor_invoke_static_load(il_factor_invoke_static * self, enviroment * env, call_context* cctx) {
@@ -80,8 +80,8 @@ char* il_factor_invoke_static_tostr(il_factor_invoke_static* self, enviroment* e
 }
 
 void il_factor_invoke_static_delete(il_factor_invoke_static* self) {
-	vector_delete(self->args, il_factor_invoke_static_args_delete);
-	vector_delete(self->type_args, il_factor_invoke_static_typeargs_delete);
+	DeleteVector(self->args, il_factor_invoke_static_args_delete);
+	DeleteVector(self->type_args, il_factor_invoke_static_typeargs_delete);
 	fqcn_cache_delete(self->fqcn);
 	MEM_FREE(self);
 }
@@ -92,7 +92,7 @@ static void resolve_non_default(il_factor_invoke_static * self, enviroment * env
 		return;
 	}
 	generic_type* rgtp = self->m->return_gtype;
-	generic_type* instanced_type = (generic_type*)vector_at(self->type_args, rgtp->virtual_type_index);
+	generic_type* instanced_type = (generic_type*)AtVector(self->type_args, rgtp->virtual_type_index);
 	self->resolved = generic_type_new(instanced_type->core_type);
 	self->resolved->tag = generic_type_tag_method_T;
 	self->resolved->virtual_type_index = rgtp->virtual_type_index;
@@ -129,7 +129,7 @@ static void il_factor_invoke_static_check(il_factor_invoke_static * self, enviro
 	//環境を設定
 	//メソッドを検索
 	for(int i=0; i<self->args->length; i++) {
-		il_argument* ilarg = vector_at(self->args, i);
+		il_argument* ilarg = AtVector(self->args, i);
 		il_factor_load(ilarg->factor, env, cctx);
 	}
 	call_frame* cfr = call_context_push(cctx, frame_static_invoke_T);
@@ -147,12 +147,12 @@ static void il_factor_invoke_static_check(il_factor_invoke_static * self, enviro
 	call_context_pop(cctx);
 }
 
-static void il_factor_invoke_static_args_delete(vector_item item) {
+static void il_factor_invoke_static_args_delete(VectorItem item) {
 	il_argument* e = (il_argument*)item;
 	il_argument_delete(e);
 }
 
-static void il_factor_invoke_static_typeargs_delete(vector_item item) {
+static void il_factor_invoke_static_typeargs_delete(VectorItem item) {
 	il_type_argument* e = (il_type_argument*)item;
 	il_type_argument_delete(e);
 }

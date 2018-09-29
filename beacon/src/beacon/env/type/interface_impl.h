@@ -19,12 +19,12 @@ struct type;
 typedef struct interface_ {
 	struct type* parent;
 	string_view namev;
-	vector* impl_list;
-	vector* prop_list;
-	vector* method_list;
+	Vector* impl_list;
+	Vector* prop_list;
+	Vector* method_list;
 	namespace_* location;
 	vtable* vt;
-	vector* type_parameter_list;
+	Vector* type_parameter_list;
 } interface_;
 
 /**
@@ -65,7 +65,7 @@ void interface_add_property(interface_* self, struct property* p);
  * @param outIndex
  * @return
  */
-struct method* interface_ilfind_method(interface_* self, string_view namev, vector * args, struct enviroment * env, call_context* cctx, int * outIndex);
+struct method* interface_ilfind_method(interface_* self, string_view namev, Vector * args, struct enviroment * env, call_context* cctx, int * outIndex);
 
 /**
  * インターフェイスからメソッドを検索します.
@@ -75,14 +75,14 @@ struct method* interface_ilfind_method(interface_* self, string_view namev, vect
  * @param outIndex
  * @return
  */
-struct method* interface_gfind_method(interface_* self, string_view namev, vector* gargs, int* outIndex);
+struct method* interface_gfind_method(interface_* self, string_view namev, Vector* gargs, int* outIndex);
 
 /**
  * 全てのインターフェイスに定義されたメソッドをフラットにして返します.
  * @param inter_list
  * @return
  */
-vector* interface_method_flatten_list(vector* inter_list);
+Vector* interface_method_flatten_list(Vector* inter_list);
 
 /**
  * あるインターフェイスとそれ自体が実装しているインターフェイスの一覧の
@@ -90,7 +90,7 @@ vector* interface_method_flatten_list(vector* inter_list);
  * @param self
  * @return 呼び出し側で開放してください
  */
-vector* interface_method_flatten(interface_* self);
+Vector* interface_method_flatten(interface_* self);
 
 /**
  * メソッドの一覧から vtable を作成します.
@@ -137,7 +137,7 @@ struct method* interface_get_function(interface_* self);
  * @param self
  * @return
  */
-vector* interface_get_generic_interface_tree(interface_* self);
+Vector* interface_get_generic_interface_tree(interface_* self);
 
 /**
  * @param self

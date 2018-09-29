@@ -218,7 +218,7 @@ static void assign_by_invoke(il_factor_invoke* lhs, il_factor* rhs, enviroment* 
 	}
 	il_factor_invoke_find_set(lhs, rhs, env, cctx, &temp);
 	for(int i=0; i<lhs->args->length; i++) {
-		il_argument* arg = vector_at(lhs->args, i);
+		il_argument* arg = AtVector(lhs->args, i);
 		il_factor_generate(arg->factor, env, cctx);
 	}
 	il_factor_generate(rhs, env, cctx);
@@ -233,7 +233,7 @@ static void assign_by_invoke_bound(il_factor_invoke_bound* lhs, il_factor* rhs, 
 	il_factor_invoke_bound_find_set(lhs, rhs, env, cctx, &temp);
 	assert(lhs->args->length == 1);
 	for(int i=0; i<lhs->args->length; i++) {
-		il_argument* arg = vector_at(lhs->args, i);
+		il_argument* arg = AtVector(lhs->args, i);
 		il_factor_generate(arg->factor, env, cctx);
 	}
 	il_factor_generate(rhs, env, cctx);

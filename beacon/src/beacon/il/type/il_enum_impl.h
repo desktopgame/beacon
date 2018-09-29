@@ -7,7 +7,7 @@
 
 typedef struct il_enum {
 	string_view namev;
-	vector* item_vec;
+	Vector* item_vec;
 } il_enum;
 
 il_type* il_type_wrap_enum(il_enum* self);

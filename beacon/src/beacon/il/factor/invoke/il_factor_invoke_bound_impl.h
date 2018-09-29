@@ -18,8 +18,8 @@ typedef enum bound_invoke {
 
 typedef struct il_factor_invoke_bound {
 	string_view namev;
-	vector* type_args;
-	vector* args;
+	Vector* type_args;
+	Vector* args;
 	union {
 		struct method* m;
 		subscript_descriptor subscript;

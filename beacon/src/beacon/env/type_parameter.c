@@ -6,7 +6,7 @@
 #include <assert.h>
 
 //proto
-static void type_parameter_rule_list_delete(vector_item item);
+static void type_parameter_rule_list_delete(VectorItem item);
 
 type_parameter * type_parameter_new(string_view namev) {
 	type_parameter* ret = (type_parameter*)MEM_MALLOC(sizeof(type_parameter));
@@ -34,7 +34,7 @@ type_parameter * type_parameter_dup(il_type_parameter * src) {
 	return ret;
 }
 
-void type_parameter_list_dup(vector* ilSource, vector* sgDest) {
+void type_parameter_list_dup(Vector* ilSource, Vector* sgDest) {
 	assert(ilSource != NULL);
 	//これはILレベルの<K, V>の並びを
 	//SGレベルの<K, V> へ変換します。
@@ -44,21 +44,21 @@ void type_parameter_list_dup(vector* ilSource, vector* sgDest) {
 	//あとからルール一覧を対応づける必要があります。
 	//type_parameter_dupからルールの複製を削除したのもそのためです。
 	for (int i = 0; i < ilSource->length; i++) {
-		il_type_parameter* e = (il_type_parameter*)vector_at(ilSource, i);
+		il_type_parameter* e = (il_type_parameter*)AtVector(ilSource, i);
 		type_parameter* newTP = type_parameter_dup(e);
-		vector_push(sgDest, newTP);
+		PushVector(sgDest, newTP);
 		//type_parameter_rule_list_dup(e->rule_vec, newTP->rule_vec, cache);
 	}
 }
 
-void type_parameter_print(vector* v) {
+void type_parameter_print(Vector* v) {
 	//FIXME:il_type_parameterからのコピペ
 	if (v->length <= 0) {
 		return;
 	}
 	printf("<");
 	for (int i = 0; i < v->length; i++) {
-		type_parameter* e = (type_parameter*)vector_at(v, i);
+		type_parameter* e = (type_parameter*)AtVector(v, i);
 		if (e->kind == type_parameter_kind_in_T) {
 			printf("in ");
 		} else if (e->kind == type_parameter_kind_out_T) {
@@ -76,15 +76,15 @@ void type_parameter_delete(type_parameter * self) {
 	MEM_FREE(self);
 }
 
-bool type_parameter_is_overwrapped_name(vector* tparameters, string_view* namev) {
+bool type_parameter_is_overwrapped_name(Vector* tparameters, string_view* namev) {
 	if(tparameters->length <= 1) {
 		return false;
 	}
 	for(int i=0; i<tparameters->length; i++) {
-		type_parameter* e = (type_parameter*)vector_at(tparameters, i);
+		type_parameter* e = (type_parameter*)AtVector(tparameters, i);
 		for(int j=0; j<tparameters->length; j++) {
 			if(i == j) { continue; }
-			type_parameter* e2 = (type_parameter*)vector_at(tparameters, j);
+			type_parameter* e2 = (type_parameter*)AtVector(tparameters, j);
 			if(e->namev == e2->namev) {
 				(*namev) = e->namev;
 				return true;
@@ -95,7 +95,7 @@ bool type_parameter_is_overwrapped_name(vector* tparameters, string_view* namev)
 }
 
 //private
-static void type_parameter_rule_list_delete(vector_item item) {
+static void type_parameter_rule_list_delete(VectorItem item) {
 //	type_parameter_rule* e = (type_parameter_rule*)item;
 //	type_parameter_rule_delete(e);
 }

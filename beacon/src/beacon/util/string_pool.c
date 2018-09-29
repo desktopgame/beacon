@@ -7,7 +7,7 @@
 #include <assert.h>
 
 static tree_map* gMap = NULL;
-static vector* gVec = NULL;
+static Vector* gVec = NULL;
 
 #define HEADER (2)
 
@@ -15,7 +15,7 @@ void string_pool_init() {
 	assert(gMap == NULL);
 	assert(gVec == NULL);
 	gMap = tree_map_new();
-	gVec = vector_new();
+	gVec = NewVector();
 }
 
 string_view string_pool_intern(const char* str) {
@@ -24,7 +24,7 @@ string_view string_pool_intern(const char* str) {
 	tree_map* cell = tree_map_cell(gMap, str);
 	if(cell == NULL) {
 		cell = tree_map_put(gMap, str, (void*)(gVec->length + HEADER));
-		vector_push(gVec, cell->key);
+		PushVector(gVec, cell->key);
 	}
 	if(cell == gMap) {
 		return ZERO_VIEW;
@@ -68,7 +68,7 @@ const char* string_pool_ref2str(string_view ref) {
 	if(ref == ZERO_VIEW) {
 		return "";
 	}
-	const char* str = (const char*)vector_at(gVec, ref - HEADER);
+	const char* str = (const char*)AtVector(gVec, ref - HEADER);
 	return str;
 }
 
@@ -77,14 +77,14 @@ void string_pool_dump(FILE* fp) {
 	assert(gVec != NULL);
 	fprintf(fp, "string pool---\n");
 	for(int i=0; i<gVec->length; i++) {
-		char* e = (char*)vector_at(gVec, i);
+		char* e = (char*)AtVector(gVec, i);
 		fprintf(fp, "    [%d] = %s\n", i, e);
 	}
 }
 
 void string_pool_destroy() {
 	tree_map_delete(gMap, tree_map_deleter_null);
-	vector_delete(gVec, vector_deleter_null);
+	DeleteVector(gVec, VectorDeleterOfNull);
 	gMap = NULL;
 	gVec = NULL;
 }

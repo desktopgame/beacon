@@ -48,7 +48,7 @@ char* text_lineat(const char* src, int lineno);
  * @param v 呼び出し側で開放してください.
  * @return 呼び出し側で開放してください.
  */
-char* text_sum(vector* v, char* join);
+char* text_sum(Vector* v, char* join);
 
 /**
  * ソースにテキストが含まれるなら true.

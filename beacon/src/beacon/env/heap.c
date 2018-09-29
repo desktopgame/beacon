@@ -9,16 +9,16 @@
 #include "../vm/vm.h"
 
 //proto
-static void heap_delete_object(vector_item item);
+static void heap_delete_object(VectorItem item);
 static void gc_clear(heap* self);
 static void gc_mark(heap* self);
 static void gc_sweep(heap* self);
-static void gc_delete(vector_item item);
+static void gc_delete(VectorItem item);
 
 
 heap * heap_new() {
 	heap* ret = (heap*)MEM_MALLOC(sizeof(heap));
-	ret->object_vec = vector_new();
+	ret->object_vec = NewVector();
 	ret->accept_blocking = 0;
 	ret->collect_blocking = 0;
 	return ret;
@@ -39,7 +39,7 @@ void heap_add(heap * self, object * obj) {
 		obj->paint = paint_onexit_T;
 		return;
 	}
-	vector_push(self->object_vec, obj);
+	PushVector(self->object_vec, obj);
 }
 
 void heap_gc(heap * self) {
@@ -52,21 +52,21 @@ void heap_gc(heap * self) {
 }
 
 void heap_ignore(heap* self, object* o) {
-	int i = vector_find(self->object_vec, o);
+	int i = FindVector(self->object_vec, o);
 	if(i >= 0) {
-		vector_remove(self->object_vec, i);
+		RemoveVector(self->object_vec, i);
 	}
 }
 
 void heap_delete(heap * self) {
-	vector_delete(self->object_vec,heap_delete_object);
+	DeleteVector(self->object_vec,heap_delete_object);
 	MEM_FREE(self);
 }
 
 void heap_dump(heap* self) {
 	printf("heap dump:\n");
 	for(int i=0; i<self->object_vec->length; i++) {
-		object* a = vector_at(self->object_vec, i);
+		object* a = AtVector(self->object_vec, i);
 		printf("    ");
 		generic_type_print(a->gtype);
 		printf("\n");
@@ -74,14 +74,14 @@ void heap_dump(heap* self) {
 }
 
 //private
-static void heap_delete_object(vector_item item) {
+static void heap_delete_object(VectorItem item) {
 	object* e = (object*)item;
 	object_delete(e);
 }
 
 static void gc_clear(heap* self) {
 	for (int i = 0; i < self->object_vec->length; i++) {
-		object* e = (object*)vector_at(self->object_vec, i);
+		object* e = (object*)AtVector(self->object_vec, i);
 		if (e->paint == paint_marked_T) {
 			e->paint = paint_unmarked_T;
 		}
@@ -104,23 +104,23 @@ static void gc_mark(heap* self) {
 
 static void gc_sweep(heap* self) {
 	int sweep = 0;
-	vector* recycle = vector_new();
-	vector* garabage = vector_new();
+	Vector* recycle = NewVector();
+	Vector* garabage = NewVector();
 	for (int i = 0; i < self->object_vec->length; i++) {
-		object* e = (object*)vector_at(self->object_vec, i);
+		object* e = (object*)AtVector(self->object_vec, i);
 		if (e->paint == paint_unmarked_T) {
-			vector_push(garabage, e);
+			PushVector(garabage, e);
 			sweep++;
 		} else {
-			vector_push(recycle, e);
+			PushVector(recycle, e);
 		}
 	}
-	vector_delete(self->object_vec, vector_deleter_null);
-	vector_delete(garabage, gc_delete);
+	DeleteVector(self->object_vec, VectorDeleterOfNull);
+	DeleteVector(garabage, gc_delete);
 	self->object_vec = recycle;
 }
 
-static void gc_delete(vector_item item) {
+static void gc_delete(VectorItem item) {
 	object* e = (object*)item;
 	object_delete(e);
 }

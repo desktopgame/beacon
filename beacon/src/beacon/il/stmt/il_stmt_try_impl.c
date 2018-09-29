@@ -23,8 +23,8 @@ il_stmt* il_stmt_wrap_try(il_stmt_try* self) {
 
 il_stmt_try* il_stmt_try_new() {
 	il_stmt_try* ret = (il_stmt_try*)MEM_MALLOC(sizeof(il_stmt_try));
-	ret->statement_list = vector_new();
-	ret->catch_list = vector_new();
+	ret->statement_list = NewVector();
+	ret->catch_list = NewVector();
 	return ret;
 }
 
@@ -32,7 +32,7 @@ il_stmt_catch* il_stmt_catch_new(string_view namev) {
 	il_stmt_catch* ret = (il_stmt_catch*)MEM_MALLOC(sizeof(il_stmt_catch));
 	ret->namev = namev;
 	ret->fqcn = generic_cache_new();
-	ret->statement_list = vector_new();
+	ret->statement_list = NewVector();
 	return ret;
 }
 
@@ -47,7 +47,7 @@ void il_stmt_try_generate(il_stmt_try* self, enviroment* env, call_context* cctx
 	//例外が発生するかもしれない
 	//ステートメントの一覧
 	for (int i = 0; i < self->statement_list->length; i++) {
-		il_stmt* e = (il_stmt*)vector_at(self->statement_list, i);
+		il_stmt* e = (il_stmt*)AtVector(self->statement_list, i);
 		il_stmt_generate(e, env, cctx);
 	}
 	opcode_buf_add(env->buf, op_try_exit);
@@ -60,7 +60,7 @@ void il_stmt_try_generate(il_stmt_try* self, enviroment* env, call_context* cctx
 	label* nextCause = NULL;
 	for (int i = 0; i < self->catch_list->length; i++) {
 		//例外を指定の名前でアクセス出来るように
-		il_stmt_catch* ilcatch = (il_stmt_catch*)vector_at(self->catch_list, i);
+		il_stmt_catch* ilcatch = (il_stmt_catch*)AtVector(self->catch_list, i);
 		generic_type* exgType = import_manager_resolve(NULL, ilcatch->fqcn, cctx);
 		int exIndex = symbol_table_entry(env->sym_table, exgType, ilcatch->namev)->index;
 		//直前のケースのジャンプ先をここに
@@ -83,7 +83,7 @@ void il_stmt_try_generate(il_stmt_try* self, enviroment* env, call_context* cctx
 		opcode_buf_add(env->buf, exIndex);
 		//catchの内側のステートメントを生成
 		for (int j = 0; j < ilcatch->statement_list->length; j++) {
-			il_stmt* e = (il_stmt*)vector_at(ilcatch->statement_list, j);
+			il_stmt* e = (il_stmt*)AtVector(ilcatch->statement_list, j);
 			il_stmt_generate(e, env, cctx);
 		}
 		//catchされたので、
@@ -107,11 +107,11 @@ void il_stmt_catch_generate(il_stmt_catch* self, enviroment* env, call_context* 
 
 void il_stmt_try_load(il_stmt_try* self, enviroment* env, call_context* cctx) {
 	for(int i=0; i<self->statement_list->length; i++) {
-		il_stmt* e = (il_stmt*)vector_at(self->statement_list, i);
+		il_stmt* e = (il_stmt*)AtVector(self->statement_list, i);
 		il_stmt_load(e, env, cctx);
 	}
 	for(int i=0; i<self->catch_list->length; i++) {
-		il_stmt_catch* e = (il_stmt_catch*)vector_at(self->catch_list, i);
+		il_stmt_catch* e = (il_stmt_catch*)AtVector(self->catch_list, i);
 		il_stmt_catch_load(e, env, cctx);
 	}
 }
@@ -120,20 +120,20 @@ void il_stmt_catch_load(il_stmt_catch* self, enviroment* env, call_context* cctx
 	generic_type* exgType = import_manager_resolve(NULL, self->fqcn, cctx);
 	symbol_table_entry(env->sym_table, exgType, self->namev);
 	for(int i=0; i<self->statement_list->length; i++) {
-		il_stmt* e = (il_stmt*)vector_at(self->statement_list, i);
+		il_stmt* e = (il_stmt*)AtVector(self->statement_list, i);
 		il_stmt_load(e, env, cctx);
 	}
 }
 
 void il_stmt_catch_delete(il_stmt_catch* self) {
 	generic_cache_delete(self->fqcn);
-	vector_delete(self->statement_list, il_stmt_catch_stmt_delete);
+	DeleteVector(self->statement_list, il_stmt_catch_stmt_delete);
 	MEM_FREE(self);
 }
 
 void il_stmt_try_delete(il_stmt_try* self) {
-	vector_delete(self->statement_list, il_stmt_catch_stmt_delete);
-	vector_delete(self->catch_list, il_stmt_try_catch_delete);
+	DeleteVector(self->statement_list, il_stmt_catch_stmt_delete);
+	DeleteVector(self->catch_list, il_stmt_try_catch_delete);
 	MEM_FREE(self);
 }
 //private

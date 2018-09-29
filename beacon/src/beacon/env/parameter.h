@@ -31,5 +31,5 @@ void parameter_delete(parameter* self);
  * @param namev
  * @return
  */
-bool parameter_is_overwrapped_name(vector* parameters, string_view* namev);
+bool parameter_is_overwrapped_name(Vector* parameters, string_view* namev);
 #endif // !SIGNAL_ENV_PARAMETER_H

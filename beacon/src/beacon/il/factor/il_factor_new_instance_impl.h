@@ -13,9 +13,9 @@ struct constructor;
  * コンストラクタの呼び出しを表す要素.
  */
 typedef struct il_factor_new_instance {
-	vector* argument_list;
+	Vector* argument_list;
 	fqcn_cache* fqcnc;
-	vector* type_args;
+	Vector* type_args;
 //	generic_cache* fqcn;
 	generic_type* instance_type;
 	struct constructor* c;

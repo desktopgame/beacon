@@ -18,15 +18,15 @@ yield_context* yield_context_malloc(const char* filename, int lineno) {
 }
 
 void yield_context_clear_backup(yield_context* self) {
-	vector_delete(self->backup_ref_stack, vector_deleter_null);
-	vector_delete(self->backup_value_stack, vector_deleter_null);
+	DeleteVector(self->backup_ref_stack, VectorDeleterOfNull);
+	DeleteVector(self->backup_value_stack, VectorDeleterOfNull);
 	self->backup_ref_stack = NULL;
 	self->backup_value_stack = NULL;
 }
 
 void yield_context_delete(yield_context* self) {
-	vector_delete(self->backup_ref_stack, vector_deleter_null);
-	vector_delete(self->backup_value_stack, vector_deleter_null);
-	vector_delete(self->parameter_vec, vector_deleter_null);
+	DeleteVector(self->backup_ref_stack, VectorDeleterOfNull);
+	DeleteVector(self->backup_value_stack, VectorDeleterOfNull);
+	DeleteVector(self->parameter_vec, VectorDeleterOfNull);
 	MEM_FREE(self);
 }

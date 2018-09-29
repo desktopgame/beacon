@@ -4,11 +4,11 @@
 struct object;
 
 typedef struct yield_context {
-	vector* backup_ref_stack;
-	vector* backup_value_stack;
-	vector* vm_ref_stack;
-	vector* vm_value_stack;
-	vector* parameter_vec;
+	Vector* backup_ref_stack;
+	Vector* backup_value_stack;
+	Vector* vm_ref_stack;
+	Vector* vm_value_stack;
+	Vector* parameter_vec;
 	struct object* source_obj;
 	struct object* stock_obj;
 	bool cached;

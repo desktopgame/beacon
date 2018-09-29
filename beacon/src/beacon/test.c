@@ -54,10 +54,10 @@ static void test_semanticsImpl(const char* dirname, bool require, char** outFile
 	char* filename = NULL;
 	bool fail = false;
 	//全てのテストファイルを訪問する
-	vector* files = GetFiles(dirname);
+	Vector* files = GetFiles(dirname);
 	for (int i = 0; i<files->length; i++) {
 		//.bc以外は無視する
-		file_entry* e = (file_entry*)vector_at(files, i);
+		file_entry* e = (file_entry*)AtVector(files, i);
 		if (!IsMatchExtension(e->filename, "bc")) {
 			continue;
 		}
@@ -89,10 +89,10 @@ static void test_semanticsImpl(const char* dirname, bool require, char** outFile
 	stdout = out;
 	bool fail = false;
 	//全てのテストファイルを訪問する
-	vector* files = GetFiles(dirname);
+	Vector* files = GetFiles(dirname);
 	for(int i=0; i<files->length; i++) {
 		//.bc以外は無視する
-		FileEntry* e = (FileEntry*)vector_at(files, i);
+		FileEntry* e = (FileEntry*)AtVector(files, i);
 		if(!IsMatchExtension(e->filename, "bc")) {
 			continue;
 		}

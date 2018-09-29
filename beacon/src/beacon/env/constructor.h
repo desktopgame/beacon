@@ -14,7 +14,7 @@ struct frame;
 typedef struct constructor {
 	struct type* parent;
 	struct enviroment* env;
-	vector* parameter_list;
+	Vector* parameter_list;
 	access_level access;
 } constructor;
 
@@ -31,7 +31,7 @@ constructor* constructor_new();
  * @param parent
  * @return
  */
-struct object* constructor_new_instance(constructor* self, vector* args, struct frame* parent);
+struct object* constructor_new_instance(constructor* self, Vector* args, struct frame* parent);
 
 /**
  * コンストラクタを開放します.

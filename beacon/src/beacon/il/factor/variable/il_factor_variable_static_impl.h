@@ -7,7 +7,7 @@ struct generic_type;
 
 typedef struct il_factor_variable_static {
 	fqcn_cache* fqcn;
-	vector* type_args;
+	Vector* type_args;
 } il_factor_variable_static;
 
 il_factor_variable_static* il_factor_variable_static_new();

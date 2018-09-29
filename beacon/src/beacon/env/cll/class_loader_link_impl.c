@@ -120,7 +120,7 @@ static void CLBC_interface_decl(class_loader * self, il_type * iltype, type * tp
 	CLBC_properties_decl(self, iltype, tp, iltype->u.interface_->prop_list, scope);
 	//privateなメンバーは定義できない
 	for(int i=0; i<tp->u.interface_->method_list->length; i++) {
-		method* e = vector_at(tp->u.interface_->method_list, i);
+		method* e = AtVector(tp->u.interface_->method_list, i);
 		if(e->access == access_private_T) {
 			bc_error_throw(
 				bcerror_interface_has_private_member_T,
@@ -130,7 +130,7 @@ static void CLBC_interface_decl(class_loader * self, il_type * iltype, type * tp
 		}
 	}
 	for(int i=0; i<tp->u.interface_->prop_list->length; i++) {
-		property* e = vector_at(tp->u.interface_->prop_list, i);
+		property* e = AtVector(tp->u.interface_->prop_list, i);
 		if(e->access == access_private_T) {
 			bc_error_throw(
 				bcerror_interface_has_private_member_T,
@@ -173,7 +173,7 @@ static void CLBC_enum_impl(class_loader * self, il_type * iltype, type * tp, nam
 		return;
 	}
 	for(int i=0; i<tp->u.class_->sfield_list->length; i++) {
-		field* f = vector_at(tp->u.class_->sfield_list, i);
+		field* f = AtVector(tp->u.class_->sfield_list, i);
 		f->static_value = object_int_get(i);
 	}
 	tp->state = tp->state | type_impl;
@@ -183,7 +183,7 @@ static void CLBC_excec_class_decl(class_loader* self) {
 	CL_ERROR(self);
 	int count = 0;
 	for (int i = 0; i < self->type_cache_vec->length; i++) {
-		type_cache* e = (type_cache*)vector_at(self->type_cache_vec, i);
+		type_cache* e = (type_cache*)AtVector(self->type_cache_vec, i);
 		if (e->kind != cachekind_class_decl_T || e->consume) {
 			continue;
 		}
@@ -196,7 +196,7 @@ static void CLBC_excec_class_decl(class_loader* self) {
 static void CLBC_excec_class_impl(class_loader* self) {
 	int count = 0;
 	for (int i = 0; i < self->type_cache_vec->length; i++) {
-		type_cache* e = (type_cache*)vector_at(self->type_cache_vec, i);
+		type_cache* e = (type_cache*)AtVector(self->type_cache_vec, i);
 		if (e->kind != cachekind_class_impl_T || e->consume) {
 			continue;
 		}
@@ -210,7 +210,7 @@ static void CLBC_excec_interface_decl(class_loader* self) {
 	CL_ERROR(self);
 	int count = 0;
 	for (int i = 0; i < self->type_cache_vec->length; i++) {
-		type_cache* e = (type_cache*)vector_at(self->type_cache_vec, i);
+		type_cache* e = (type_cache*)AtVector(self->type_cache_vec, i);
 		if (e->kind != cachekind_interface_decl_T || e->consume) {
 			continue;
 		}
@@ -224,7 +224,7 @@ static void CLBC_excec_interface_impl(class_loader* self) {
 	CL_ERROR(self);
 	int count = 0;
 	for (int i = 0; i < self->type_cache_vec->length; i++) {
-		type_cache* e = (type_cache*)vector_at(self->type_cache_vec, i);
+		type_cache* e = (type_cache*)AtVector(self->type_cache_vec, i);
 		if (e->kind != cachekind_interface_impl_T || e->consume) {
 			continue;
 		}
@@ -238,7 +238,7 @@ static void CLBC_excec_enum_decl(class_loader* self) {
 	CL_ERROR(self);
 	int count = 0;
 	for (int i = 0; i < self->type_cache_vec->length; i++) {
-		type_cache* e = (type_cache*)vector_at(self->type_cache_vec, i);
+		type_cache* e = (type_cache*)AtVector(self->type_cache_vec, i);
 		if (e->kind != cachekind_enum_decl_T || e->consume) {
 			continue;
 		}
@@ -252,7 +252,7 @@ static void CLBC_excec_enum_impl(class_loader* self) {
 	CL_ERROR(self);
 	int count = 0;
 	for (int i = 0; i < self->type_cache_vec->length; i++) {
-		type_cache* e = (type_cache*)vector_at(self->type_cache_vec, i);
+		type_cache* e = (type_cache*)AtVector(self->type_cache_vec, i);
 		if (e->kind != cachekind_enum_impl_T || e->consume) {
 			continue;
 		}
@@ -348,7 +348,7 @@ static void CLBC_check_class(class_loader * self, il_type * iltype, type * tp, n
 	//これはコンストラクタが生成されてからでないといけない
 	class_* cls = TYPE2CLASS(tp);
 	for(int i=0; i<cls->field_list->length; i++) {
-		field* fi = vector_at(cls->field_list, i);
+		field* fi = AtVector(cls->field_list, i);
 		//インスタンス定数が
 		//フィールドでもコンストラクタでも初期化されない
 		if(!modifier_is_static(fi->modifier) &&

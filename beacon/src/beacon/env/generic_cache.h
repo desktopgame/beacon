@@ -15,7 +15,7 @@ struct namespace_;
  */
 typedef struct generic_cache {
 	fqcn_cache* fqcn;
-	vector* type_args;
+	Vector* type_args;
 } generic_cache;
 
 /**

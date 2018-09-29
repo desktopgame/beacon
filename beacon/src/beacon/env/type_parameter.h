@@ -4,7 +4,6 @@
 #include "../util/string_pool.h"
 #include "../util/vector.h"
 #include <stdbool.h>
-struct vector;
 struct il_type_parameter;
 /**
  * 型変数の種類を表す列挙.
@@ -21,7 +20,7 @@ typedef enum type_parameter_kind {
 typedef struct type_parameter {
 	string_view namev;
 	type_parameter_kind kind;
-//	struct vector* rule_vec;
+//	struct Vector* rule_vec;
 } type_parameter;
 /**
  * 新しい型変数を生成します.
@@ -42,13 +41,13 @@ type_parameter* type_parameter_dup(struct il_type_parameter* src);
  * @param ilSource
  * @param sgDest
  */
-void type_parameter_list_dup(struct vector* ilSource, struct vector* sgDest);
+void type_parameter_list_dup(Vector* ilSource, Vector* sgDest);
 
 /**
  * 型変数の一覧を出力します.
  * @param v
  */
-void type_parameter_print(struct vector* v);
+void type_parameter_print(Vector* v);
 
 /**
  * 型変数を解放します.
@@ -62,5 +61,5 @@ void type_parameter_delete(type_parameter* self);
  * @param namev
  * @return
  */
-bool type_parameter_is_overwrapped_name(vector* tparameters, string_view* namev);
+bool type_parameter_is_overwrapped_name(Vector* tparameters, string_view* namev);
 #endif // !SIGNAL_ENV_TYPE_PARAMETER_H

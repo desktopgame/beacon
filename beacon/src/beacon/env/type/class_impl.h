@@ -35,24 +35,24 @@ typedef struct class_ {
 	string_view namev;
 	namespace_* location;
 	struct generic_type* super_class;
-	vector* impl_list;
-	vector* field_list;
-	vector* sfield_list;
-	vector* prop_list;
-	vector* sprop_list;
-	vector* method_list;
-	vector* smethod_list;
-	vector* constructor_list;
-	vector* operator_overload_list;
+	Vector* impl_list;
+	Vector* field_list;
+	Vector* sfield_list;
+	Vector* prop_list;
+	Vector* sprop_list;
+	Vector* method_list;
+	Vector* smethod_list;
+	Vector* constructor_list;
+	Vector* operator_overload_list;
 	//class_type type;
 	uint32_t ref_count;
-	numeric_map* native_method_ref_nmap;
-	vector* type_parameter_list;
+	NumericMap* native_method_ref_nmap;
+	Vector* type_parameter_list;
 	//インターフェースに対応した
 	//実装メソッドのテーブルのベクター
 	//http://d.hatena.ne.jp/tetz42/20120205/1328449750
-	vector* vt_vec;
-	//vector* static_fieldval_vec;
+	Vector* vt_vec;
+	//Vector* static_fieldval_vec;
 	vtable* vt;
 	operator_vt* ovt;
 	bool is_abstract;
@@ -226,7 +226,7 @@ int class_count_smethodall(class_* self);
  * @param type_args
  * @return
  */
-struct object* class_new_instance(class_* self, frame* fr, vector* args, vector* type_args);
+struct object* class_new_instance(class_* self, frame* fr, Vector* args, Vector* type_args);
 
 /**
  * 全てのメンバーがこのクラスを参照できるようにします.

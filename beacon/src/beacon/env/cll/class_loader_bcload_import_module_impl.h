@@ -7,7 +7,7 @@
  * @param self
  * @param ilimports
  */
-void CLBC_import(class_loader* self, vector* ilimports);
+void CLBC_import(class_loader* self, Vector* ilimports);
 /**
  * selfを親として fullPath のファイルを読み込みます.
  * @param self

@@ -8,8 +8,8 @@
 #include <stdio.h>
 
 //proto
-static void il_stmt_elif_list_delete_impl(vector_item item);
-static void il_stmt_if_delete_stmt(vector_item item);
+static void il_stmt_elif_list_delete_impl(VectorItem item);
+static void il_stmt_if_delete_stmt(VectorItem item);
 static void check_condition_type(il_factor* fact, enviroment* env, call_context* cctx);
 
 il_stmt * il_stmt_wrap_if(il_stmt_if * self) {
@@ -21,31 +21,31 @@ il_stmt * il_stmt_wrap_if(il_stmt_if * self) {
 il_stmt_if * il_stmt_if_new() {
 	il_stmt_if* ret = (il_stmt_if*)MEM_MALLOC(sizeof(il_stmt_if));
 	ret->condition = NULL;
-	ret->elif_list = vector_new();
+	ret->elif_list = NewVector();
 	ret->else_body = il_stmt_else_new();
-	ret->body = vector_new();
+	ret->body = NewVector();
 	return ret;
 }
 
 il_stmt_elif * il_stmt_elif_new() {
 	il_stmt_elif* ret = (il_stmt_elif*)MEM_MALLOC(sizeof(il_stmt_elif));
 	ret->condition = NULL;
-	ret->body = vector_new();
+	ret->body = NewVector();
 	return ret;
 }
 
-vector * il_stmt_elif_list_new() {
-	return vector_new();
+Vector * il_stmt_elif_list_new() {
+	return NewVector();
 }
 
 il_stmt_else * il_stmt_else_new() {
 	il_stmt_else* ret = (il_stmt_else*)MEM_MALLOC(sizeof(il_stmt_else));
-	ret->body = vector_new();
+	ret->body = NewVector();
 	return ret;
 }
 
-void il_stmt_elif_list_push(vector * self, il_stmt_elif * child) {
-	vector_push(self, child);
+void il_stmt_elif_list_push(Vector * self, il_stmt_elif * child) {
+	PushVector(self, child);
 }
 
 void il_stmt_if_generate(il_stmt_if * self, enviroment* env, call_context* cctx) {
@@ -58,7 +58,7 @@ void il_stmt_if_generate(il_stmt_if * self, enviroment* env, call_context* cctx)
 	opcode_buf_add(env->buf, op_goto_if_false);
 	opcode_buf_add(env->buf, l1);
 	for (int i = 0; i < self->body->length; i++) {
-		il_stmt* stmt = (il_stmt*)vector_at(self->body, i);
+		il_stmt* stmt = (il_stmt*)AtVector(self->body, i);
 		il_stmt_generate(stmt, env, cctx);
 	}
 	//条件が満たされて実行されたら最後までジャンプ
@@ -67,14 +67,14 @@ void il_stmt_if_generate(il_stmt_if * self, enviroment* env, call_context* cctx)
 	l1->cursor = opcode_buf_nop(env->buf);
 	// elif(...)
 	for (int i = 0; i < self->elif_list->length; i++) {
-		il_stmt_elif* elif = (il_stmt_elif*)vector_at(self->elif_list, i);
+		il_stmt_elif* elif = (il_stmt_elif*)AtVector(self->elif_list, i);
 		il_factor_generate(elif->condition, env, cctx);
 		label* l2 = opcode_buf_label(env->buf, -1);
 		// { ... }
 		opcode_buf_add(env->buf, op_goto_if_false);
 		opcode_buf_add(env->buf, l2);
 		for (int j = 0; j < elif->body->length; j++) {
-			il_stmt* stmt = (il_stmt*)vector_at(elif->body, j);
+			il_stmt* stmt = (il_stmt*)AtVector(elif->body, j);
 			il_stmt_generate(stmt, env, cctx);
 		}
 		//条件が満たされて実行されたら最後までジャンプ
@@ -88,7 +88,7 @@ void il_stmt_if_generate(il_stmt_if * self, enviroment* env, call_context* cctx)
 		tail->cursor = opcode_buf_nop(env->buf);
 	} else {
 		for (int i = 0; i < self->else_body->body->length; i++) {
-			il_stmt* stmt = (il_stmt*)vector_at(self->else_body->body, i);
+			il_stmt* stmt = (il_stmt*)AtVector(self->else_body->body, i);
 			il_stmt_generate(stmt, env, cctx);
 		}
 		tail->cursor = opcode_buf_nop(env->buf);
@@ -100,22 +100,22 @@ void il_stmt_if_load(il_stmt_if * self, struct enviroment* env, call_context* cc
 	env->sym_table->scope_depth++;
 	il_factor_load(self->condition, env, cctx);
 	for(int i=0; i<self->body->length; i++) {
-		il_stmt* e = (il_stmt*)vector_at(self->body, i);
+		il_stmt* e = (il_stmt*)AtVector(self->body, i);
 		il_stmt_load(e, env, cctx);
 		BC_ERROR();
 	}
 	for(int i=0; i<self->elif_list->length; i++) {
-		il_stmt_elif* e = (il_stmt_elif*)vector_at(self->elif_list, i);
+		il_stmt_elif* e = (il_stmt_elif*)AtVector(self->elif_list, i);
 		il_factor_load(e->condition, env, cctx);
 		for(int j=0; j<e->body->length; j++) {
-			il_stmt* st = (il_stmt*)vector_at(e->body, j);
+			il_stmt* st = (il_stmt*)AtVector(e->body, j);
 			il_stmt_load(st, env, cctx);
 			BC_ERROR();
 		}
 		BC_ERROR();
 	}
 	for(int i=0; i<self->else_body->body->length; i++) {
-		il_stmt* e = (il_stmt*)vector_at(self->else_body->body, i);
+		il_stmt* e = (il_stmt*)AtVector(self->else_body->body, i);
 		il_stmt_load(e, env, cctx);
 		BC_ERROR();
 	}
@@ -123,7 +123,7 @@ void il_stmt_if_load(il_stmt_if * self, struct enviroment* env, call_context* cc
 	BC_ERROR();
 	check_condition_type(self->condition, env, cctx);
 	for(int i=0; i<self->elif_list->length; i++) {
-		il_stmt_elif* elif = vector_at(self->elif_list, i);
+		il_stmt_elif* elif = AtVector(self->elif_list, i);
 		check_condition_type(elif->condition, env, cctx);
 		BC_ERROR();
 	}
@@ -131,35 +131,35 @@ void il_stmt_if_load(il_stmt_if * self, struct enviroment* env, call_context* cc
 }
 
 void il_stmt_if_delete(il_stmt_if * self) {
-	vector_delete(self->elif_list, il_stmt_elif_list_delete_impl);
+	DeleteVector(self->elif_list, il_stmt_elif_list_delete_impl);
 	il_stmt_else_delete(self->else_body);
-	vector_delete(self->body, il_stmt_if_delete_stmt);
+	DeleteVector(self->body, il_stmt_if_delete_stmt);
 	il_factor_delete(self->condition);
 	MEM_FREE(self);
 }
 
 void il_stmt_elif_delete(il_stmt_elif * self) {
 	il_factor_delete(self->condition);
-	vector_delete(self->body, il_stmt_if_delete_stmt);
+	DeleteVector(self->body, il_stmt_if_delete_stmt);
 	MEM_FREE(self);
 }
 
-void il_stmt_elif_list_delete(vector * self) {
-	vector_delete(self, il_stmt_elif_list_delete_impl);
+void il_stmt_elif_list_delete(Vector * self) {
+	DeleteVector(self, il_stmt_elif_list_delete_impl);
 }
 
 void il_stmt_else_delete(il_stmt_else * self) {
-	vector_delete(self->body, il_stmt_if_delete_stmt);
+	DeleteVector(self->body, il_stmt_if_delete_stmt);
 	MEM_FREE(self);
 }
 
 //private
-static void il_stmt_elif_list_delete_impl(vector_item item) {
+static void il_stmt_elif_list_delete_impl(VectorItem item) {
 	il_stmt_elif* el = (il_stmt_elif*)item;
 	il_stmt_elif_delete(el);
 }
 
-static void il_stmt_if_delete_stmt(vector_item item) {
+static void il_stmt_if_delete_stmt(VectorItem item) {
 	il_stmt* e = (il_stmt*)item;
 	il_stmt_delete(e);
 }

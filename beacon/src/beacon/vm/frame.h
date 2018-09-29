@@ -10,15 +10,15 @@ struct type;
  */
 typedef struct frame {
 	//演算子や引数を記憶しておくためのスタックです
-	vector* value_stack;
+	Vector* value_stack;
 
 	//ローカル変数や引数を記憶しておくためのスタックです
 	//0番目は this であることが保証されます。
 	//その次には実引数が順番に並びます。
-	vector* ref_stack;
+	Vector* ref_stack;
 
 	//コンストラクタやメソッドの型引数を記憶するベクタ
-	vector* type_args_vec;
+	Vector* type_args_vec;
 
 	//このVMの子要素です。
 	//VMを分ける必要があるのは主に例外のためです。
@@ -28,7 +28,7 @@ typedef struct frame {
 	//つまりメインファイルとなります。
 	//子要素を記憶しておく必要があるのは、
 	//ガベージコレクションのためです。
-	vector* children_vec;
+	Vector* children_vec;
 
 	//親VMです.
 	//コンストラクタ/メソッドが終了した場合、
@@ -71,7 +71,7 @@ typedef struct frame {
 	int native_throw_pos;
 
 	//deferによる強制実行を記録するベクタ
-	vector* defer_vec;
+	Vector* defer_vec;
 
 	//現在実行している強制実行
 	int defer_at;

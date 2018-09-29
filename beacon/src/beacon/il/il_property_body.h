@@ -13,7 +13,7 @@ typedef enum il_property_body_tag {
 
 typedef struct il_property_body {
 	access_level access;
-	vector* statement_list;
+	Vector* statement_list;
 	il_property_body_tag tag;
 	bool is_short;
 } il_property_body;

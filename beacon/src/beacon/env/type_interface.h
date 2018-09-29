@@ -125,7 +125,7 @@ void type_add_method(type* self, struct method* m);
  * @param outIndex
  * @return
  */
-struct method* type_ilfind_method(type* self, string_view namev, vector* args, struct enviroment* env, call_context* cctx, int* outIndex);
+struct method* type_ilfind_method(type* self, string_view namev, Vector* args, struct enviroment* env, call_context* cctx, int* outIndex);
 
 /**
  * この型から静的メソッドを検索します.
@@ -137,7 +137,7 @@ struct method* type_ilfind_method(type* self, string_view namev, vector* args, s
  * @param outIndex
  * @return
  */
-struct method* type_ilfind_smethod(type* self, string_view namev, vector* args, struct enviroment* env, call_context* cctx, int* outIndex);
+struct method* type_ilfind_smethod(type* self, string_view namev, Vector* args, struct enviroment* env, call_context* cctx, int* outIndex);
 
 /**
  * 仮想関数の一覧を返します.
@@ -185,14 +185,14 @@ struct generic_type* type_find_impl(type* self, type* a);
  * @param self
  * @return
  */
-vector* type_parameter_list(type* self);
+Vector* type_parameter_list(type* self);
 
 /**
  * この型の実装インターフェイスの一覧を返します.
  * @param self
  * @return
  */
-vector* type_implement_list(type* self);
+Vector* type_implement_list(type* self);
 
 /**
  * この型がクラス/インターフェイスを表すとき、

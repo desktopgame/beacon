@@ -20,8 +20,8 @@ typedef struct enviroment {
 	struct class_loader* context_ref;
 	opcode_buf* buf;
 	symbol_table* sym_table;
-	vector* constant_pool_vec;
-	vector* line_range_vec;
+	Vector* constant_pool_vec;
+	Vector* line_range_vec;
 } enviroment;
 
 /**
@@ -79,7 +79,7 @@ int enviroment_add_constant_string(enviroment* self, string_view sv);
  * @param index
  * @return
  */
-vector_item enviroment_source_at(enviroment* self, int index);
+VectorItem enviroment_source_at(enviroment* self, int index);
 
 /**
  * 指定位置の定数を返します.

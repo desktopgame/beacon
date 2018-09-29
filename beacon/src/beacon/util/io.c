@@ -21,7 +21,7 @@
 #endif
 
 //proto
-static void FileEntryDeleter(vector_item item);
+static void FileEntryDeleter(VectorItem item);
 
 void Printi(int depth) {
 	Fprinti(stdout, depth);
@@ -184,14 +184,14 @@ char* ResolveScriptPath(const char* target) {
 	return string_buffer_release(sb);
 }
 
-vector* GetFiles(const char* dirname) {
+Vector* GetFiles(const char* dirname) {
 #if defined(_MSC_VER)
 	//ワイルドカード指定ですべてのファイルを取得する
 	string_buffer* buf = string_buffer_new();
 	string_buffer_appends(buf, dirname);
 	string_buffer_appends(buf, "/*.*");
 	char* pattern = string_buffer_release(buf);
-	vector* v = vector_new();
+	Vector* v = NewVector();
 	WIN32_FIND_DATA ffd;
 	HANDLE h = FindFirstFile(pattern, &ffd);
 	MEM_FREE(pattern);
@@ -206,13 +206,13 @@ vector* GetFiles(const char* dirname) {
 		file_entry* e = MEM_MALLOC(sizeof(file_entry));
 		e->filename = ConcatPath(dirname, ffd.cFileName);
 		e->is_file = true;
-		vector_push(v, e);
+		PushVector(v, e);
 	} while (FindNextFile(h, &ffd));
 	FindClose(h);
 	qsort(v->memory, v->length, sizeof(void*), GetFiles_sort);
 	return v;
 #else
-	vector* ret = vector_new();
+	Vector* ret = NewVector();
 	DIR *dir = opendir(dirname);
 	struct dirent *dp;
 	struct stat fi;
@@ -223,7 +223,7 @@ vector* GetFiles(const char* dirname) {
 			FileEntry* entry = RefFileEntry(path);
 			stat(path, &fi);
 			entry->is_file = !S_ISDIR(fi.st_mode);
-			vector_push(ret, entry);
+			PushVector(ret, entry);
 		}
 	}
 	closedir(dir);
@@ -238,8 +238,8 @@ int SortFiles(const void* a, const void* b) {
 	return strcmp(aF->filename, bF->filename);
 }
 
-void DeleteFiles(vector* files) {
-	vector_delete(files, FileEntryDeleter);
+void DeleteFiles(Vector* files) {
+	DeleteVector(files, FileEntryDeleter);
 }
 
 bool IsMatchExtension(const char* filename, const char* ext) {
@@ -273,7 +273,7 @@ char* ConcatPath(const char* a, const char* b) {
 }
 
 //private
-static void FileEntryDeleter(vector_item item) {
+static void FileEntryDeleter(VectorItem item) {
 	FileEntry* e = (FileEntry*)item;
 	DeleteFileEntry(e);
 }

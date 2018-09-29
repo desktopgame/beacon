@@ -1,6 +1,7 @@
 #ifndef BEACON_TYPE_FIND_H
 #define BEACON_TYPE_FIND_H
 #include "../../util/string_pool.h"
+#include "../../util/vector.h"
 #include "class_impl.h"
 /**
  * 指定の名前を持つフィールドを返します.
@@ -187,7 +188,7 @@ struct property* class_find_sproperty_tree(class_* self, string_view namev, int*
  * @param outIndex
  * @return 無ければ空
  */
-struct constructor* class_rfind_constructor(class_* self, vector* args, vector* typeargs, frame* fr, int* outIndex);
+struct constructor* class_rfind_constructor(class_* self, Vector* args, Vector* typeargs, frame* fr, int* outIndex);
 
 /**
  * もっとも一致するコンストラクタを返します.
@@ -198,7 +199,7 @@ struct constructor* class_rfind_constructor(class_* self, vector* args, vector* 
  * @param outIndex
  * @return 無ければ空
  */
-struct constructor* class_ilfind_constructor(class_* self, vector* args, enviroment* env, call_context* cctx, int* outIndex);
+struct constructor* class_ilfind_constructor(class_* self, Vector* args, enviroment* env, call_context* cctx, int* outIndex);
 
 /**
  * 引数が一つもないコンストラクタを検索して返します.
@@ -220,7 +221,7 @@ struct constructor* class_ilfind_empty_constructor(class_* self, enviroment* env
  * @param outIndex メソッドへのインデックス
  * @return
  */
-struct method* class_ilfind_method(class_* self, string_view namev, vector* args, enviroment* env, call_context* cctx, int* outIndex);
+struct method* class_ilfind_method(class_* self, string_view namev, Vector* args, enviroment* env, call_context* cctx, int* outIndex);
 
 /**
  * もっとも一致するメソッドを返します.
@@ -230,7 +231,7 @@ struct method* class_ilfind_method(class_* self, string_view namev, vector* args
  * @param outIndex
  * @return
  */
-struct method* class_gfind_method(class_* self, string_view namev, vector* gargs, int* outIndex);
+struct method* class_gfind_method(class_* self, string_view namev, Vector* gargs, int* outIndex);
 
 /**
  * equalsメソッドを検索します.
@@ -250,7 +251,7 @@ struct method* class_gfind_eqmethod(class_* self, int* outIndex);
  * @param outIndex メソッドへのインデックス
  * @return
  */
-struct method* class_ilfind_smethod(class_* self, string_view namev, vector* args, enviroment* env, call_context* cctx, int* outIndex);
+struct method* class_ilfind_smethod(class_* self, string_view namev, Vector* args, enviroment* env, call_context* cctx, int* outIndex);
 
 /**
  * もっとも一致する静的メソッドを返します.
@@ -260,7 +261,7 @@ struct method* class_ilfind_smethod(class_* self, string_view namev, vector* arg
  * @param outIndex
  * @return
  */
-struct method* class_gfind_smethod(class_* self, string_view namev, vector* gargs, int* outIndex);
+struct method* class_gfind_smethod(class_* self, string_view namev, Vector* gargs, int* outIndex);
 
 /**
  * 指定位置のメソッドを返します.
@@ -304,11 +305,11 @@ struct method* class_get_impl_method(class_* self, type* interType, int interMIn
  * @param outIndex
  * @return
  */
-struct operator_overload* class_gfind_operator_overload(class_* self, operator_type type, vector* args, enviroment* env, call_context* cctx, int* outIndex);
+struct operator_overload* class_gfind_operator_overload(class_* self, operator_type type, Vector* args, enviroment* env, call_context* cctx, int* outIndex);
 
-struct operator_overload* class_ilfind_operator_overload(class_* self, operator_type type, vector* args, enviroment* env, call_context* cctx, int* outIndex);
+struct operator_overload* class_ilfind_operator_overload(class_* self, operator_type type, Vector* args, enviroment* env, call_context* cctx, int* outIndex);
 
-struct operator_overload* class_argfind_operator_overload(class_* self, operator_type type, vector* args, enviroment* env, call_context* cctx, int* outIndex);
+struct operator_overload* class_argfind_operator_overload(class_* self, operator_type type, Vector* args, enviroment* env, call_context* cctx, int* outIndex);
 
 /**
  * @param self
@@ -324,7 +325,7 @@ struct operator_overload* class_get_operator_overload(class_* self, int index);
  * @param outM
  * @return
  */
-vector* class_find_methods_tree(class_* self, method* m);
+Vector* class_find_methods_tree(class_* self, method* m);
 
 /**
  * 指定のメソッド一覧に指定のメソッドが含まれるなら true.
@@ -332,35 +333,35 @@ vector* class_find_methods_tree(class_* self, method* m);
  * @param method_list
  * @param m
  */
-bool class_contains_method(vector* method_list, method* m, method** outM);
+bool class_contains_method(Vector* method_list, method* m, method** outM);
 
 /**
  * 実装された全てのジェネリックインターフェイスを返します.
  * @param self
  * @return
  */
-vector* class_get_generic_interface_list(class_* self);
+Vector* class_get_generic_interface_list(class_* self);
 
 /**
  * 実装/継承された全てのジェネリックインターフェイスを返します.
  * @param self
  * @return
  */
-vector* class_get_generic_interface_tree(class_* self);
+Vector* class_get_generic_interface_tree(class_* self);
 
 /**
  * 実装された全てのインターフェイスを返します.
  * @param self
  * @return
  */
-vector* class_get_interface_list(class_* self);
+Vector* class_get_interface_list(class_* self);
 
 /**
  * 実装/継承された全てのインターフェイスを返します.
  * @param self
  * @return
  */
-vector* class_get_interface_tree(class_* self);
+Vector* class_get_interface_tree(class_* self);
 
 /**
  * @param self

@@ -16,7 +16,7 @@ struct call_context;
  * あるファイルが参照しているファイルの一覧を管理します.
  */
 typedef struct import_manager {
-	vector* info_vec;
+	Vector* info_vec;
 } import_manager;
 
 /**

@@ -66,7 +66,7 @@ void parser_destroy(parser* self) {
 	if (gParser->root) {
 		ast_delete(gParser->root);
 	}
-	vector_delete(gParser->lineno_vec, vector_deleter_null);
+	DeleteVector(gParser->lineno_vec, VectorDeleterOfNull);
 	MEM_FREE(gParser->literal_buffer);
 	MEM_FREE(gParser->source_name);
 	MEM_FREE(gParser);
@@ -119,7 +119,7 @@ static parser* parser_new() {
 	ret->result = parse_await_T;
 	ret->lineno = 0;
 	ret->literal_buffer = NULL;
-	ret->lineno_vec = vector_new();
+	ret->lineno_vec = NewVector();
 	ret->root = ast_new(ast_root_T);
 	return ret;
 }

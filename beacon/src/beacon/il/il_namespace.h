@@ -10,8 +10,8 @@
 typedef struct il_namespace {
 	string_view namev;
 	struct il_namespace* parent;
-	vector* namespace_list;
-	vector* type_list;
+	Vector* namespace_list;
+	Vector* type_list;
 } il_namespace;
 
 /**

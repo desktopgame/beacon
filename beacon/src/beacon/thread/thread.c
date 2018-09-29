@@ -7,7 +7,7 @@
 #include <assert.h>
 
 //proto
-static void sg_thread_trace_delete(vector_item item);
+static void sg_thread_trace_delete(VectorItem item);
 
 static volatile sg_thread* g_sg_main_thread = NULL;
 
@@ -18,7 +18,7 @@ void sg_thread_launch() {
 
 sg_thread * sg_thread_new() {
 	sg_thread* ret = (sg_thread*)MEM_MALLOC(sizeof(sg_thread));
-	ret->trace_stack = vector_new();
+	ret->trace_stack = NewVector();
 	ret->frame_ref = NULL;
 	ret->cctx = NULL;
 	return ret;
@@ -28,7 +28,7 @@ sg_thread * sg_thread_current(script_context* sctx) {
 	//script_context* ctx = script_context_get_current();
 	assert(sctx != NULL);
 	//TODO:今は仮実装なのでちゃんと現在のスレッドを返すようにする
-	sg_thread* ret = (sg_thread*)vector_at(sctx->thread_vec, 0);
+	sg_thread* ret = (sg_thread*)AtVector(sctx->thread_vec, 0);
 	return ret;
 }
 
@@ -40,7 +40,7 @@ void sg_thread_clear(sg_thread* self) {
 }
 
 void sg_thread_delete(sg_thread * self) {
-	vector_delete(self->trace_stack, sg_thread_trace_delete);
+	DeleteVector(self->trace_stack, sg_thread_trace_delete);
 	MEM_FREE(self);
 }
 
@@ -79,7 +79,7 @@ void sg_thread_destroy() {
 	g_sg_main_thread = NULL;
 }
 //private
-static void sg_thread_trace_delete(vector_item item) {
+static void sg_thread_trace_delete(VectorItem item) {
 	vm_trace* e = (vm_trace*)item;
 	vm_trace_delete(e);
 }

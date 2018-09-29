@@ -16,23 +16,23 @@ typedef enum call_frame_tag {
 
 typedef struct call_resolve {
 	struct generic_type* gtype;
-	vector* typeargs;
+	Vector* typeargs;
 } call_resolve;
 
 typedef struct call_self_invoke {
-	vector* args;
-	vector* typeargs;
+	Vector* args;
+	Vector* typeargs;
 } call_self_invoke;
 
 typedef struct call_static_invoke {
-	vector* args;
-	vector* typeargs;
+	Vector* args;
+	Vector* typeargs;
 } call_static_invoke;
 
 typedef struct call_instance_invoke {
 	struct generic_type* receiver;
-	vector* args;
-	vector* typeargs;
+	Vector* args;
+	Vector* typeargs;
 } call_instance_invoke;
 
 typedef struct call_frame {

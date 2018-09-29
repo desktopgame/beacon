@@ -33,8 +33,8 @@ typedef struct method {
 	//struct class_* decleared_type;
 	struct type* parent;
 	struct generic_type* return_gtype;
-	vector* parameters;
-	vector* type_parameters;
+	Vector* parameters;
+	Vector* type_parameters;
 	access_level access;
 	modifier_type modifier;
 	union {
@@ -112,7 +112,7 @@ bool method_coroutine(method* self);
  * @param error
  * @return
  */
-bool method_yield(method* self, vector* stmt_list, bool* error);
+bool method_yield(method* self, Vector* stmt_list, bool* error);
 
 /**
  * このメソッドのためのユニークなイテレータ型を作成します.
@@ -122,6 +122,6 @@ bool method_yield(method* self, vector* stmt_list, bool* error);
  * @param stmt_list
  * @return
  */
-struct type* method_create_iterator_type(method* self, struct class_loader* cll, vector* stmt_list);
+struct type* method_create_iterator_type(method* self, struct class_loader* cll, Vector* stmt_list);
 
 #endif // !SIGNAL_ENV_METHOD_H

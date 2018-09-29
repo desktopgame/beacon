@@ -42,14 +42,14 @@ il_type* il_type_new();
  * @param self
  * @return
  */
-vector* il_type_method_vec(il_type* self);
+Vector* il_type_method_vec(il_type* self);
 
 /**
  * 静的メソッドの一覧を返します.
  * @param self
  * @return
  */
-vector* il_type_smethod_vec(il_type* self);
+Vector* il_type_smethod_vec(il_type* self);
 
 /**
  * コンストラクタを追加します.
@@ -90,5 +90,5 @@ void il_type_delete(il_type* self);
  * @param self
  * @return
  */
-vector* il_type_type_parameter_list(il_type* self);
+Vector* il_type_type_parameter_list(il_type* self);
 #endif // !SIGNAL_IL_IL_TYPE_INTERFACE_H

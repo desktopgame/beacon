@@ -38,7 +38,7 @@ typedef struct il_factor_variable_local {
 		field_with_index f_with_i;
 		property_with_index p_with_i;
 	} u;
-	vector* type_args;
+	Vector* type_args;
 } il_factor_variable_local;
 
 il_factor_variable_local* il_factor_variable_local_new(string_view namev);

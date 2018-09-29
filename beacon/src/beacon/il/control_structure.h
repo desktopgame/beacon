@@ -3,8 +3,8 @@
 #include "../util/vector.h"
 
 typedef struct control_structure {
-	vector* while_start;
-	vector* while_end;
+	Vector* while_start;
+	Vector* while_end;
 } control_structure;
 
 void control_structure_alloc(control_structure* self);

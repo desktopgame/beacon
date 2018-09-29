@@ -18,7 +18,7 @@ static void il_factor_member_op_check(il_factor_member_op* self, enviroment* env
 static void il_factor_member_op_check_static(il_factor_member_op* self, enviroment* env, call_context* cctx, generic_type* receiver_type, bool* swap);
 static void il_factor_member_op_check_prop(il_factor_member_op* self, enviroment* env, call_context* cctx, generic_type* receiver_type,bool* swap);
 static void il_factor_member_op_check_static_prop(il_factor_member_op* self, enviroment* env, call_context* cctx, generic_type* receiver_type,bool* swap);
-static void il_factor_member_op_typearg_delete(vector_item item);
+static void il_factor_member_op_typearg_delete(VectorItem item);
 
 il_factor* il_factor_wrap_member_op(il_factor_member_op* self) {
 	il_factor* ret = il_factor_new(ilfactor_member_op_T);
@@ -30,7 +30,7 @@ il_factor* il_factor_wrap_member_op(il_factor_member_op* self) {
 il_factor_member_op* il_factor_member_op_new(string_view namev) {
 	il_factor_member_op* ret = (il_factor_member_op*)MEM_MALLOC(sizeof(il_factor_member_op));
 	ret->fact = NULL;
-	ret->type_args = vector_new();
+	ret->type_args = NewVector();
 	ret->namev = namev;
 	ret->index = -1;
 	ret->parent = NULL;
@@ -68,7 +68,7 @@ generic_type* il_factor_member_op_eval(il_factor_member_op* self, enviroment* en
 		return a;
 	}
 	generic_type* a = il_factor_eval(self->fact, env, cctx);
-	return vector_at(a->type_args_list, self->f->gtype->virtual_type_index);
+	return AtVector(a->type_args_list, self->f->gtype->virtual_type_index);
 }
 
 char* il_factor_member_op_tostr(il_factor_member_op* self, enviroment* env) {
@@ -83,7 +83,7 @@ char* il_factor_member_op_tostr(il_factor_member_op* self, enviroment* env) {
 
 void il_factor_member_op_delete(il_factor_member_op* self) {
 	il_factor_delete(self->fact);
-	vector_delete(self->type_args, il_factor_member_op_typearg_delete);
+	DeleteVector(self->type_args, il_factor_member_op_typearg_delete);
 	MEM_FREE(self);
 }
 //private
@@ -197,7 +197,7 @@ static void il_factor_member_op_check_static_prop(il_factor_member_op* self, env
 }
 
 
-static void il_factor_member_op_typearg_delete(vector_item item) {
+static void il_factor_member_op_typearg_delete(VectorItem item) {
 //	generic_cache* e = (generic_cache*)item;
 //	generic_cache_delete(e);
 	il_type_argument* e = (il_type_argument*)item;

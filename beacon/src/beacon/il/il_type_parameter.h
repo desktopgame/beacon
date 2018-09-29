@@ -19,7 +19,7 @@ typedef enum il_type_parameter_kind {
 typedef struct il_type_parameter {
 	il_type_parameter_kind kind;
 	string_view namev;
-//	vector* rule_vec;
+//	Vector* rule_vec;
 } il_type_parameter;
 
 /**
@@ -33,7 +33,7 @@ il_type_parameter* il_type_parameter_new(string_view namev);
  * 型引数の一覧を出力します.
  * @param v<il_>
  */
-void il_type_parameter_list_print(vector* v);
+void il_type_parameter_list_print(Vector* v);
 
 /**
  * 型引数を解放します.

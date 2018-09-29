@@ -9,9 +9,9 @@ line_range * line_range_new() {
 	return ret;
 }
 
-line_range * line_range_find(vector * line_rangeVec, int pc) {
+line_range * line_range_find(Vector * line_rangeVec, int pc) {
 	for (int i = 0; i < line_rangeVec->length; i++) {
-		line_range* lr = (line_range*)vector_at(line_rangeVec, i);
+		line_range* lr = (line_range*)AtVector(line_rangeVec, i);
 		if (i >= lr->start_offset && i <= lr->end_offset) {
 			return lr;
 		}

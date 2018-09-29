@@ -9,7 +9,7 @@ struct enviroment;
 
 typedef struct il_stmt_while {
 	il_factor* condition;
-	vector* statement_list;
+	Vector* statement_list;
 } il_stmt_while;
 
 il_stmt* il_stmt_wrap_while(il_stmt_while* self);

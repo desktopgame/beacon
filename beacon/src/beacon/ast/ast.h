@@ -221,7 +221,7 @@ typedef struct ast {
 	ast_tag tag;
 	//uint32_t child_count;
 	uint32_t lineno;
-	vector* vchildren;
+	Vector* vchildren;
 	//list* children;
 } ast;
 

@@ -159,7 +159,7 @@ void CLIL_ctor(class_loader* self, il_type* current, ast* aconstructor, access_l
 	ilcons->chain = ilchain;
 	CLIL_parameter_list(self, ilcons->parameter_list, aparams);
 	CLIL_body(self, ilcons->statement_list, abody);
-	vector_push(current->u.class_->constructor_list, ilcons);
+	PushVector(current->u.class_->constructor_list, ilcons);
 }
 
 void CLIL_operator_overload(class_loader* self, il_type* current, ast* aopov, access_level level) {
@@ -182,7 +182,7 @@ void CLIL_operator_overload(class_loader* self, il_type* current, ast* aopov, ac
 	CLIL_parameter_list(self, ilopov->parameter_list, aparam_list);
 	CLIL_body(self, ilopov->statement_list, abody);
 	CLIL_generic_cache(areturn, ilopov->return_fqcn);
-	vector_push(current->u.class_->operator_overload_list, ilopov);
+	PushVector(current->u.class_->operator_overload_list, ilopov);
 }
 //private
 static il_property_body* CLIL_prop_body(class_loader* self, il_type* current, ast* abody, il_property_body_tag tag, access_level level) {

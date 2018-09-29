@@ -12,7 +12,7 @@ struct call_context;
 typedef struct vtable {
 	//恐らくアップキャストのときに必要
 	struct vtable* parent;
-	vector* elements;
+	Vector* elements;
 } vtable;
 
 /**

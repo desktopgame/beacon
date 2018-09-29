@@ -136,7 +136,7 @@ int il_factor_unary_op_index(il_factor_unary_op* self, enviroment* env, call_con
 }
 
 int il_factor_unary_op_index2(il_factor* receiver, operator_type otype, enviroment* env, call_context* cctx) {
-	vector* args = vector_new();
+	Vector* args = NewVector();
 	generic_type* gtype = il_factor_eval(receiver, env, cctx);
 	if(gtype->virtual_type_index != -1) {
 		assert(false);
@@ -144,7 +144,7 @@ int il_factor_unary_op_index2(il_factor* receiver, operator_type otype, envirome
 	class_* lclass = TYPE2CLASS(GENERIC2TYPE(gtype));
 	int temp = 0;
 	class_gfind_operator_overload(lclass, otype, args, env, cctx, &temp);
-	vector_delete(args, vector_deleter_null);
+	DeleteVector(args, VectorDeleterOfNull);
 	return temp;
 }
 

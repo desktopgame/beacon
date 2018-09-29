@@ -16,7 +16,7 @@ typedef struct il_factor_member_op {
 	il_factor* parent;
 	il_factor* fact;
 	string_view namev;
-	vector* type_args;
+	Vector* type_args;
 	int index;
 	struct field* f;
 } il_factor_member_op;

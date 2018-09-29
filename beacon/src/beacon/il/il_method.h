@@ -12,13 +12,13 @@
  */
 typedef struct il_method {
 	string_view namev;
-	vector* parameter_list;
-	vector* statement_list;
+	Vector* parameter_list;
+	Vector* statement_list;
 	//il_type* return_type;
 	generic_cache* return_fqcn;
 	access_level access;
 	modifier_type modifier;
-	vector* type_parameter_list;
+	Vector* type_parameter_list;
 	bool no_stmt;
 } il_method;
 /**

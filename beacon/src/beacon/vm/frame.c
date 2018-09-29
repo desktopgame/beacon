@@ -11,22 +11,22 @@ static void remove_from_parent(frame* self);
 static void frame_markStatic(field* item);
 static void frame_markRecursive(frame* self);
 static void frame_mark_defer(frame* self);
-static void frame_delete_defctx(vector_item e);
+static void frame_delete_defctx(VectorItem e);
 
 frame * frame_new() {
 	frame* ret = (frame*)MEM_MALLOC(sizeof(frame));
-	ret->value_stack = vector_new();
-	ret->ref_stack = vector_new();
+	ret->value_stack = NewVector();
+	ret->ref_stack = NewVector();
 	ret->parent = NULL;
 	ret->level = 0;
 	ret->terminate = false;
 	ret->validate = false;
 	ret->native_throw_pos = -1;
 	ret->exception = NULL;
-	ret->children_vec = vector_new();
+	ret->children_vec = NewVector();
 	ret->defer_at = 0;
 	ret->defer_vec = NULL;
-	ret->type_args_vec = vector_new();
+	ret->type_args_vec = NewVector();
 	ret->receiver = NULL;
 	ret->coroutine = NULL;
 	return ret;
@@ -37,7 +37,7 @@ frame * frame_sub(frame * parent) {
 	ret->parent = parent;
 	ret->level = parent->level + 1;
 	ret->context_ref = parent->context_ref;
-	vector_push(parent->children_vec, ret);
+	PushVector(parent->children_vec, ret);
 	return ret;
 }
 
@@ -51,14 +51,14 @@ void frame_markall(frame * self) {
 
 void frame_delete(frame * self) {
 	remove_from_parent(self);
-	vector_clear(self->value_stack);
-	vector_clear(self->ref_stack);
+	ClearVector(self->value_stack);
+	ClearVector(self->ref_stack);
 	heap_gc(heap_get());
-	vector_delete(self->value_stack, vector_deleter_null);
-	vector_delete(self->ref_stack, vector_deleter_null);
-	vector_delete(self->children_vec, vector_deleter_null);
-	vector_delete(self->type_args_vec, vector_deleter_null);
-	vector_delete(self->defer_vec, frame_delete_defctx);
+	DeleteVector(self->value_stack, VectorDeleterOfNull);
+	DeleteVector(self->ref_stack, VectorDeleterOfNull);
+	DeleteVector(self->children_vec, VectorDeleterOfNull);
+	DeleteVector(self->type_args_vec, VectorDeleterOfNull);
+	DeleteVector(self->defer_vec, frame_delete_defctx);
 	MEM_FREE(self);
 }
 
@@ -69,8 +69,8 @@ frame* frame_root(frame* self) {
 //private
 static void remove_from_parent(frame* self) {
 	if (self->parent != NULL) {
-		int idx = vector_find(self->parent->children_vec, self);
-		vector_remove(self->parent->children_vec, idx);
+		int idx = FindVector(self->parent->children_vec, self);
+		RemoveVector(self->parent->children_vec, idx);
 	}
 }
 
@@ -85,15 +85,15 @@ static void frame_markStatic(field* item) {
 
 static void frame_markRecursive(frame* self) {
 	for (int i = 0; i < self->children_vec->length; i++) {
-		frame* e = (frame*)vector_at(self->children_vec, i);
+		frame* e = (frame*)AtVector(self->children_vec, i);
 		frame_markRecursive(e);
 	}
 	for (int i = 0; i < self->value_stack->length; i++) {
-		object* e = (object*)vector_at(self->value_stack, i);
+		object* e = (object*)AtVector(self->value_stack, i);
 		object_markall(e);
 	}
 	for (int i = 0; i < self->ref_stack->length; i++) {
-		object* e = (object*)vector_at(self->ref_stack, i);
+		object* e = (object*)AtVector(self->ref_stack, i);
 		object_markall(e);
 	}
 	//deferのために一時的に保存された領域
@@ -107,15 +107,15 @@ static void frame_mark_defer(frame* self) {
 		return;
 	}
 	for(int i=0; i<self->defer_vec->length; i++) {
-		defer_context* defctx = vector_at(self->defer_vec, i);
-		vector* bind = defctx->variable_vec;
+		defer_context* defctx = AtVector(self->defer_vec, i);
+		Vector* bind = defctx->variable_vec;
 		for(int j=0; j<bind->length; j++) {
-			object* e = vector_at(bind, j);
+			object* e = AtVector(bind, j);
 			object_markall(e);
 		}
 	}
 }
-static void frame_delete_defctx(vector_item e) {
+static void frame_delete_defctx(VectorItem e) {
 	defer_context* defctx = (defer_context*)e;
 	defer_context_delete(defctx);
 }

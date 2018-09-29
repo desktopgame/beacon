@@ -23,7 +23,7 @@ typedef struct class_loader {
 	import_manager* import_manager;
 	content_type type;
 	link_type link;
-	vector* type_cache_vec;
+	Vector* type_cache_vec;
 
 	struct class_loader* parent;
 	int level;

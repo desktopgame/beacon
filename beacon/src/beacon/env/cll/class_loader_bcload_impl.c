@@ -43,7 +43,7 @@ static void CLBC_namespace_tree(class_loader* self);
  * @param ilnamespace_list
  * @param parent
  */
-static void CLBC_namespace_list(class_loader* self, vector* ilnamespace_list, namespace_* parent);
+static void CLBC_namespace_list(class_loader* self, Vector* ilnamespace_list, namespace_* parent);
 
 /**
  * 名前空間と含まれるエントリの一覧を読み込みます.
@@ -59,7 +59,7 @@ static void CLBC_namespace(class_loader* self, il_namespace* ilnamespace, namesp
  * @param iltype_list
  * @param parent
  */
-static void CLBC_type_list(class_loader* self, vector* iltype_list, namespace_* parent);
+static void CLBC_type_list(class_loader* self, Vector* iltype_list, namespace_* parent);
 
 /**
  * 列挙宣言を読み込んで名前空間に登録します.
@@ -117,11 +117,11 @@ static void CLBC_namespace_tree(class_loader* self) {
 	CLBC_namespace_list(self, self->il_code->namespace_list, NULL);
 }
 
-static void CLBC_namespace_list(class_loader* self, vector* ilnamespace_list, namespace_* parent) {
+static void CLBC_namespace_list(class_loader* self, Vector* ilnamespace_list, namespace_* parent) {
 	//self->link = classlink_resume;
 	CL_ERROR(self);
 	for (int i = 0; i < ilnamespace_list->length; i++) {
-		vector_item e = vector_at(ilnamespace_list, i);
+		VectorItem e = AtVector(ilnamespace_list, i);
 		il_namespace* iln = (il_namespace*)e;
 		CLBC_namespace(self, iln, parent);
 		CL_ERROR(self);
@@ -140,10 +140,10 @@ static void CLBC_namespace(class_loader* self, il_namespace* ilnamespace, namesp
 	CLBC_type_list(self, ilnamespace->type_list, current);
 }
 
-static void CLBC_type_list(class_loader* self, vector* iltype_list, namespace_* parent) {
+static void CLBC_type_list(class_loader* self, Vector* iltype_list, namespace_* parent) {
 	CL_ERROR(self);
 	for (int i = 0; i < iltype_list->length; i++) {
-		vector_item e = vector_at(iltype_list, i);
+		VectorItem e = AtVector(iltype_list, i);
 		il_type* ilt = (il_type*)e;
 		if (ilt->tag == iltype_class_T) {
 			CLBC_class(self, ilt, parent);
@@ -169,7 +169,7 @@ static void CLBC_enum(class_loader * self, il_type * iltype, namespace_ * parent
 	type_init_generic(tp, 0);
 	//全ての列挙子を public static final フィールドとして追加
 	for (int i = 0; i < ilenum->item_vec->length; i++) {
-		string_view str = (string_view)vector_at(ilenum->item_vec, i);
+		string_view str = (string_view)AtVector(ilenum->item_vec, i);
 		field* f = field_new(str);
 		f->modifier = modifier_static_T;
 		f->access = access_public_T;
@@ -189,7 +189,7 @@ static void CLBC_enum(class_loader * self, il_type * iltype, namespace_ * parent
 		parent,
 		cachekind_enum_decl_T
 	);
-	vector_push(self->type_cache_vec, tc);
+	PushVector(self->type_cache_vec, tc);
 	//実装のロードを予約
 	type_cache* mtc = type_cache_init(
 		type_cache_new(),
@@ -199,7 +199,7 @@ static void CLBC_enum(class_loader * self, il_type * iltype, namespace_ * parent
 		parent,
 		cachekind_enum_impl_T
 	);
-	vector_push(self->type_cache_vec, mtc);
+	PushVector(self->type_cache_vec, mtc);
 	tp->state = tp->state | type_register;
 }
 
@@ -227,7 +227,7 @@ static void CLBC_class(class_loader* self, il_type* iltype, namespace_* parent) 
 		parent,
 		cachekind_class_decl_T
 	);
-	vector_push(self->type_cache_vec, tc);
+	PushVector(self->type_cache_vec, tc);
 	//実装のロードを予約
 	type_cache* mtc = type_cache_init(
 		type_cache_new(),
@@ -237,7 +237,7 @@ static void CLBC_class(class_loader* self, il_type* iltype, namespace_* parent) 
 		parent,
 		cachekind_class_impl_T
 	);
-	vector_push(self->type_cache_vec, mtc);
+	PushVector(self->type_cache_vec, mtc);
 	tp->state = tp->state | type_register;
 }
 
@@ -261,7 +261,7 @@ static void CLBC_interface(class_loader * self, il_type * iltype, namespace_ * p
 		parent,
 		cachekind_interface_decl_T
 	);
-	vector_push(self->type_cache_vec, tc);
+	PushVector(self->type_cache_vec, tc);
 	//実装のロードを予約
 	type_cache* mtc = type_cache_init(
 		type_cache_new(),
@@ -271,7 +271,7 @@ static void CLBC_interface(class_loader * self, il_type * iltype, namespace_ * p
 		parent,
 		cachekind_interface_impl_T
 	);
-	vector_push(self->type_cache_vec, mtc);
+	PushVector(self->type_cache_vec, mtc);
 	tp->state = tp->state | type_register;
 }
 
@@ -334,7 +334,7 @@ static void CLBC_register_class(class_loader* self, namespace_* parent, il_type*
 	cctx->scope = parent;
 	cctx->ty = tp;
 	for (int i = 0; i < iltype->u.class_->extend_list->length; i++) {
-		generic_cache* e = (generic_cache*)vector_at(iltype->u.class_->extend_list, i);
+		generic_cache* e = (generic_cache*)AtVector(iltype->u.class_->extend_list, i);
 		//最初の一つはクラスでもインターフェースでもよい
 		if (i == 0) {
 			generic_type* gtp = import_manager_resolve(parent, e, cctx);
@@ -342,7 +342,7 @@ static void CLBC_register_class(class_loader* self, namespace_* parent, il_type*
 			if (gtp->core_type->tag == type_class_T) {
 				cls->super_class = gtp;
 			} else if (gtp->core_type->tag == type_interface_T) {
-				vector_push(cls->impl_list, gtp);
+				PushVector(cls->impl_list, gtp);
 			} else assert(false);
 		//二つ目以降はインターフェースのみ
 		} else {
@@ -351,7 +351,7 @@ static void CLBC_register_class(class_loader* self, namespace_* parent, il_type*
 			#if defined(DEBUG)
 			const char* Estr = string_pool_ref2str(type_name(E));
 			#endif
-			vector_push(cls->impl_list, gtp);
+			PushVector(cls->impl_list, gtp);
 			if(E->tag != type_interface_T) {
 				bc_error_throw(bcerror_class_first_T, string_pool_ref2str(type_name(tp)));
 				namespace_add_type(parent, tp);
@@ -396,7 +396,7 @@ static void CLBC_register_interface(class_loader* self, namespace_* parent, il_t
 	cctx->scope = parent;
 	cctx->ty = tp;
 	for (int i = 0; i < iltype->u.interface_->extends_list->length; i++) {
-		generic_cache* e = (generic_cache*)vector_at(iltype->u.interface_->extends_list, i);
+		generic_cache* e = (generic_cache*)AtVector(iltype->u.interface_->extends_list, i);
 		//インターフェースはインターフェースのみ継承
 		generic_type* gtp = import_manager_resolve(parent, e, cctx);
 		type* E = GENERIC2TYPE(gtp);
@@ -407,7 +407,7 @@ static void CLBC_register_interface(class_loader* self, namespace_* parent, il_t
 			return;
 		//インターフェイスの時のみ追加
 		} else {
-			vector_push(inter->impl_list, gtp);
+			PushVector(inter->impl_list, gtp);
 		}
 	}
 	//場所を設定

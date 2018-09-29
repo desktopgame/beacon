@@ -15,9 +15,9 @@
 #include <assert.h>
 
 //proto
-static void il_factor_new_instance_delete_typearg(vector_item item);
+static void il_factor_new_instance_delete_typearg(VectorItem item);
 static void il_factor_new_instance_find(il_factor_new_instance * self, enviroment * env, call_context* cctx);
-static void il_Factor_new_instace_delete_arg(vector_item item);
+static void il_Factor_new_instace_delete_arg(VectorItem item);
 
 il_factor * il_factor_wrap_new_instance(il_factor_new_instance * self) {
 	il_factor* ret = il_factor_new(ilfactor_new_instance_T);
@@ -28,8 +28,8 @@ il_factor * il_factor_wrap_new_instance(il_factor_new_instance * self) {
 il_factor_new_instance * il_factor_new_instance_new() {
 	il_factor_new_instance* ret = (il_factor_new_instance*)MEM_MALLOC(sizeof(il_factor_new_instance));
 	ret->fqcnc = fqcn_cache_new();
-	ret->type_args = vector_new();
-	ret->argument_list = vector_new();
+	ret->type_args = NewVector();
+	ret->argument_list = NewVector();
 	ret->c = NULL;
 	ret->constructor_index = -1;
 	ret->instance_type = NULL;
@@ -39,14 +39,14 @@ il_factor_new_instance * il_factor_new_instance_new() {
 void il_factor_new_instance_generate(il_factor_new_instance * self, enviroment * env, call_context* cctx) {
 	il_factor_new_instance_find(self, env, cctx);
 	for(int i=0; i<self->type_args->length; i++) {
-		il_type_argument* e = (il_type_argument*)vector_at(self->type_args, i);
+		il_type_argument* e = (il_type_argument*)AtVector(self->type_args, i);
 		assert(e->gtype != NULL);
 		opcode_buf_add(env->buf, op_generic_add);
 		generic_type_generate(e->gtype, env);
 	}
 	//実引数を全てスタックへ
 	for (int i = 0; i < self->argument_list->length; i++) {
-		il_argument* ilarg = (il_argument*)vector_at(self->argument_list, i);
+		il_argument* ilarg = (il_argument*)AtVector(self->argument_list, i);
 		il_factor_generate(ilarg->factor, env, cctx);
 		if(bc_error_last()) {
 			return;
@@ -84,7 +84,7 @@ generic_type* il_factor_new_instance_eval(il_factor_new_instance * self, envirom
 		namespace_* scope = NULL;
 		generic_type* a = generic_type_new(self->c->parent);
 		for (int i = 0; i < self->type_args->length; i++) {
-			il_type_argument* e = (il_type_argument*)vector_at(self->type_args, i);
+			il_type_argument* e = (il_type_argument*)AtVector(self->type_args, i);
 			generic_type* arg = import_manager_resolve(call_context_namespace(cctx), e->gcache, cctx);
 			generic_type_addargs(a, arg);
 		}
@@ -105,14 +105,14 @@ char* il_factor_new_instance_tostr(il_factor_new_instance* self, enviroment* env
 }
 
 void il_factor_new_instance_delete(il_factor_new_instance * self) {
-	vector_delete(self->argument_list, il_Factor_new_instace_delete_arg);
-	vector_delete(self->type_args, il_factor_new_instance_delete_typearg);
+	DeleteVector(self->argument_list, il_Factor_new_instace_delete_arg);
+	DeleteVector(self->type_args, il_factor_new_instance_delete_typearg);
 	fqcn_cache_delete(self->fqcnc);
 	MEM_FREE(self);
 }
 
 //private
-static void il_factor_new_instance_delete_typearg(vector_item item) {
+static void il_factor_new_instance_delete_typearg(VectorItem item) {
 	il_type_argument* e = (il_type_argument*)item;
 	il_type_argument_delete(e);
 }
@@ -152,7 +152,7 @@ static void il_factor_new_instance_find(il_factor_new_instance * self, enviromen
 	}
 }
 
-static void il_Factor_new_instace_delete_arg(vector_item item) {
+static void il_Factor_new_instace_delete_arg(VectorItem item) {
 	il_argument* e = (il_argument*)item;
 	il_argument_delete(e);
 }

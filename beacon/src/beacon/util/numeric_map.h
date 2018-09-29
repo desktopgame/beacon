@@ -1,34 +1,34 @@
 #ifndef BEACON_UTIL_NUMERIC_MAP_H
 #define BEACON_UTIL_NUMERIC_MAP_H
-typedef int numeric_key;
-typedef void* numeric_map_item;
+typedef int NumericMapKey;
+typedef void* NumericMapItem;
 /**
  * 整数をキーとして二分探索を行うマップ.
  */
-typedef struct numeric_map {
-	numeric_key key;
-	numeric_map_item item;
-	struct numeric_map* parent;
-	struct numeric_map* left;
-	struct numeric_map* right;
-} numeric_map;
+typedef struct NumericMap_t {
+	NumericMapKey key;
+	NumericMapItem item;
+	struct NumericMap_t* parent;
+	struct NumericMap_t* left;
+	struct NumericMap_t* right;
+} NumericMap;
 /**
  * ツリーのアクション関数です.
  * @param item
  */
-typedef void(*numeric_tree_action)(numeric_key name, numeric_map_item item);
+typedef void(*NumericMapAction)(NumericMapKey name, NumericMapItem item);
 
 /**
  * ツリーのデリータ関数です.
  * @param item
  */
-typedef void(*numeric_tree_element_deleter)(numeric_key name, numeric_map_item item);
+typedef void(*NumericMapDeleter)(NumericMapKey name, NumericMapItem item);
 
 /**
  * 新しいヌメリックマップを作成します.
  * @return
  */
-numeric_map* numeric_map_new();
+NumericMap* NewNumericMap();
 
 /**
  * 指定のキーと値を紐付けます.
@@ -37,14 +37,14 @@ numeric_map* numeric_map_new();
  * @param item
  * @return
  */
-numeric_map* numeric_map_put(numeric_map* self, numeric_key key, numeric_map_item item);
+NumericMap* PutNumericMap(NumericMap* self, NumericMapKey key, NumericMapItem item);
 
 /**
  * 指定のキーに紐づけられたセルを返します.
  * @param self
  * @param key
  */
-numeric_map* numeric_map_cell(numeric_map* self, numeric_key key);
+NumericMap* GetNumericMapCell(NumericMap* self, NumericMapKey key);
 
 /**
  * 指定のキーに紐づけられた値を返します.
@@ -52,7 +52,7 @@ numeric_map* numeric_map_cell(numeric_map* self, numeric_key key);
  * @param key
  * @return
  */
-numeric_map_item numeric_map_get(numeric_map* self, numeric_key key);
+NumericMapItem GetNumericMapValue(NumericMap* self, NumericMapKey key);
 
 /**
  * 指定のキーと比較します.
@@ -60,33 +60,33 @@ numeric_map_item numeric_map_get(numeric_map* self, numeric_key key);
  * @param key
  * @return
  */
-int numeric_map_compare(numeric_map* self, numeric_key key);
+int CompareNumericMap(NumericMap* self, NumericMapKey key);
 
 /**
  * マップの全ての要素を訪問します.
  * @param self
  * @param a
  */
-void numeric_map_each(numeric_map* self, numeric_tree_action a);
+void EachNumericMap(NumericMap* self, NumericMapAction a);
 
 /**
  * マップを解放します.
  * @param self
  * @param deleter
  */
-void numeric_map_delete(numeric_map* self, numeric_tree_element_deleter deleter);
+void DeleteNumericMap(NumericMap* self, NumericMapDeleter deleter);
 
 /**
  * 何も行わないデリータ.
  * @param name
  * @param item
  */
-void numeric_map_deleter_null(numeric_key name, numeric_map_item item);
+void NumericMapDeleterOfNull(NumericMapKey name, NumericMapItem item);
 
 /**
  * free によって解放するデリータ.
  * @param name
  * @param item
  */
-void numeric_map_deleter_free(numeric_key name, numeric_map_item item);
+void NumericMapDeleterByFree(NumericMapKey name, NumericMapItem item);
 #endif

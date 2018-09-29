@@ -18,7 +18,7 @@ fqcn_cache * fqcn_cache_new() {
 
 fqcn_cache* fqcn_cache_malloc(const char* filename, int lineno) {
 	fqcn_cache* ret = (fqcn_cache*)mem_malloc(sizeof(fqcn_cache), filename, lineno);
-	ret->scope_vec = vector_malloc(filename, lineno);
+	ret->scope_vec = MallocVector(filename, lineno);
 	ret->namev = 0;
 	return ret;
 }
@@ -33,7 +33,7 @@ void fqcn_cache_dump(fqcn_cache * self, int depth) {
 		printf("scope");
 		Println();
 		for (int i = 0; i < self->scope_vec->length; i++) {
-			string_view sv = (string_view)vector_at(self->scope_vec, i);
+			string_view sv = (string_view)AtVector(self->scope_vec, i);
 			Printi(depth + 1);
 			printf("%s", string_pool_ref2str(sv));
 			Println();
@@ -50,7 +50,7 @@ void fqcn_cache_print(fqcn_cache * self) {
 		printf("%s", string_pool_ref2str(self->namev));
 	} else {
 		for (int i = 0; i < self->scope_vec->length; i++) {
-			printf("%s", string_pool_ref2str((string_view)vector_at(self->scope_vec, i)));
+			printf("%s", string_pool_ref2str((string_view)AtVector(self->scope_vec, i)));
 			printf("::");
 		}
 		printf("%s", string_pool_ref2str(self->namev));
@@ -63,7 +63,7 @@ namespace_ * fqcn_scope(fqcn_cache * self, namespace_* current) {
 	}
 	namespace_* top = NULL;
 	for (int i = 0; i < self->scope_vec->length; i++) {
-		string_view ev = (string_view)vector_at(self->scope_vec, i);
+		string_view ev = (string_view)AtVector(self->scope_vec, i);
 		if (top == NULL) {
 			top = namespace_get_at_root(ev);
 		} else {
@@ -94,7 +94,7 @@ class_ * fqcn_class(fqcn_cache * self, namespace_ * current) {
 char* fqcn_cache_tostr(fqcn_cache* self) {
 	string_buffer* sb = string_buffer_new();
 	for(int i=0; i<self->scope_vec->length; i++) {
-		string_view ev = (string_view)vector_at(self->scope_vec, i);
+		string_view ev = (string_view)AtVector(self->scope_vec, i);
 		string_buffer_appends(sb, string_pool_ref2str(ev));
 		if(i == (self->scope_vec->length - 1)) {
 			break;
@@ -109,7 +109,7 @@ void fqcn_cache_delete(fqcn_cache * self) {
 	if(self == NULL) {
 		return;
 	}
-	vector_delete(self->scope_vec, vector_deleter_null);
+	DeleteVector(self->scope_vec, VectorDeleterOfNull);
 	MEM_FREE(self);
 }
 
@@ -121,8 +121,8 @@ bool fqcn_cache_equals(fqcn_cache* a, fqcn_cache* b) {
 		return true;
 	}
 	for(int i=0; i<a->scope_vec->length; i++) {
-		string_view as = (string_view)vector_at(a->scope_vec, i);
-		string_view bs = (string_view)vector_at(b->scope_vec, i);
+		string_view as = (string_view)AtVector(a->scope_vec, i);
+		string_view bs = (string_view)AtVector(b->scope_vec, i);
 		if(as != bs) {
 			return false;
 		}

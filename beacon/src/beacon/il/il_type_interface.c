@@ -13,7 +13,7 @@ il_type * il_type_new() {
 	return ret;
 }
 
-vector * il_type_method_vec(il_type * self) {
+Vector * il_type_method_vec(il_type * self) {
 	if (self->tag == iltype_class_T) {
 		return self->u.class_->method_list;
 	} else if (self->tag == iltype_interface_T) {
@@ -22,7 +22,7 @@ vector * il_type_method_vec(il_type * self) {
 	return NULL;
 }
 
-vector * il_type_smethod_vec(il_type * self) {
+Vector * il_type_smethod_vec(il_type * self) {
 	if (self->tag == iltype_class_T) {
 		return self->u.class_->smethod_list;
 	} else if (self->tag == iltype_interface_T) {
@@ -71,6 +71,6 @@ void il_type_delete(il_type * self) {
 	MEM_FREE(self);
 }
 
-vector* il_type_type_parameter_list(il_type* self) {
+Vector* il_type_type_parameter_list(il_type* self) {
 	return self->tag == iltype_interface_T ? self->u.interface_->type_parameter_list : self->u.class_->type_parameter_list;
 }

@@ -29,7 +29,7 @@ type* bc_object_type() {
 
 //private
 static void bc_object_nativeToString(method* parent, frame* fr, enviroment* env) {
-	object* self = (object*)vector_at(fr->ref_stack, 0);
+	object* self = (object*)AtVector(fr->ref_stack, 0);
 	string_buffer* sb = string_buffer_new();
 	//参照型
 	if (self->tag == object_ref_T) {
@@ -55,12 +55,12 @@ static void bc_object_nativeToString(method* parent, frame* fr, enviroment* env)
 	}
 	char* str = string_buffer_release(sb);
 	object* ret = object_string_new(str);
-	vector_push(fr->value_stack, ret);
+	PushVector(fr->value_stack, ret);
 	MEM_FREE(str);
 }
 
 static void bc_object_nativeReferenceEquals(method* parent, frame* fr, enviroment* env) {
-	object* a = (object*)vector_at(fr->ref_stack, 1);
-	object* b = (object*)vector_at(fr->ref_stack, 2);
-	vector_push(fr->value_stack, object_bool_get(a == b));
+	object* a = (object*)AtVector(fr->ref_stack, 1);
+	object* b = (object*)AtVector(fr->ref_stack, 2);
+	PushVector(fr->value_stack, object_bool_get(a == b));
 }

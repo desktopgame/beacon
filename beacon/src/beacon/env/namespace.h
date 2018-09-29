@@ -37,8 +37,8 @@ struct interface_;
 typedef struct namespace_ {
 	string_view namev;
 	struct namespace_* parent;
-	numeric_map* namespace_map;
-	numeric_map* type_map;
+	NumericMap* namespace_map;
+	NumericMap* type_map;
 	uint32_t ref_count;
 } namespace_;
 

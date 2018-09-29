@@ -3,7 +3,7 @@
 #include "../util/text.h"
 
 //proto
-static void il_type_parameter_rule_list_delete(vector_item item);
+static void il_type_parameter_rule_list_delete(VectorItem item);
 
 il_type_parameter * il_type_parameter_new(string_view namev) {
 	il_type_parameter* ret = (il_type_parameter*)MEM_MALLOC(sizeof(il_type_parameter));
@@ -12,13 +12,13 @@ il_type_parameter * il_type_parameter_new(string_view namev) {
 	return ret;
 }
 
-void il_type_parameter_list_print(vector * v) {
+void il_type_parameter_list_print(Vector * v) {
 	if (v->length <= 0) {
 		return;
 	}
 	printf("<");
 	for (int i = 0; i < v->length; i++) {
-		il_type_parameter* e = (il_type_parameter*)vector_at(v, i);
+		il_type_parameter* e = (il_type_parameter*)AtVector(v, i);
 		if (e->kind == il_type_parameter_kind_in_T) {
 			printf("in ");
 		} else if (e->kind == il_type_parameter_kind_out_T) {
@@ -36,5 +36,5 @@ void il_type_parameter_delete(il_type_parameter * self) {
 	MEM_FREE(self);
 }
 //private
-static void il_type_parameter_rule_list_delete(vector_item item) {
+static void il_type_parameter_rule_list_delete(VectorItem item) {
 }

@@ -24,11 +24,11 @@ void script_method_execute(script_method * self, method* parent, frame * fr, env
 	frame* sub = frame_sub(fr);
 	call_frame* cfr = NULL;
 	sub->receiver = parent->parent;
-	vector* aArgs = vector_new();
-	vector* aTArgs = vector_new();
+	Vector* aArgs = NewVector();
+	Vector* aTArgs = NewVector();
 	if (!modifier_is_static(parent->modifier)) {
-		object* receiver_obj = vector_pop(fr->value_stack);
-		vector_push(sub->value_stack, receiver_obj);
+		object* receiver_obj = PopVector(fr->value_stack);
+		PushVector(sub->value_stack, receiver_obj);
 		cfr = call_context_push(sg_thread_context(), frame_instance_invoke_T);
 		cfr->u.instance_invoke.receiver = receiver_obj->gtype;
 		cfr->u.instance_invoke.args = aArgs;
@@ -39,27 +39,27 @@ void script_method_execute(script_method * self, method* parent, frame * fr, env
 		cfr->u.static_invoke.typeargs = aTArgs;
 	}
 	for (int i = 0; i < parent->parameters->length; i++) {
-		object* arg = object_copy(vector_pop(fr->value_stack));
-		vector_push(sub->value_stack, arg);
-		vector_assign(aArgs, (parent->parameters->length - i), arg);
+		object* arg = object_copy(PopVector(fr->value_stack));
+		PushVector(sub->value_stack, arg);
+		AssignVector(aArgs, (parent->parameters->length - i), arg);
 	}
 	//メソッドに渡された型引数を引き継ぐ
 	int typeparams = parent->type_parameters->length;
 	for(int i=0; i<typeparams; i++) {
-		vector_item e = vector_pop(fr->type_args_vec);
-		vector_assign(sub->type_args_vec, (typeparams - i) - 1, e);
-		vector_assign(aTArgs, (typeparams - i) - 1, e);
+		VectorItem e = PopVector(fr->type_args_vec);
+		AssignVector(sub->type_args_vec, (typeparams - i) - 1, e);
+		AssignVector(aTArgs, (typeparams - i) - 1, e);
 	}
 	vm_execute(sub, self->env);
 	//戻り値が Void 以外ならスタックトップの値を引き継ぐ
 	//例外によって終了した場合には戻り値がない
 	if(parent->return_gtype != TYPE_VOID->generic_self &&
 	   sub->value_stack->length > 0) {
-		object* o = (object*)vector_pop(sub->value_stack);
-		vector_push(fr->value_stack, NON_NULL(o));
+		object* o = (object*)PopVector(sub->value_stack);
+		PushVector(fr->value_stack, NON_NULL(o));
 	}
-	vector_delete(aArgs, vector_deleter_null);
-	vector_delete(aTArgs, vector_deleter_null);
+	DeleteVector(aArgs, VectorDeleterOfNull);
+	DeleteVector(aTArgs, VectorDeleterOfNull);
 	call_context_pop(sg_thread_context());
 	frame_delete(sub);
 }

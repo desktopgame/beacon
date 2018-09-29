@@ -19,8 +19,8 @@ static void il_factor_invoke_bound_check(il_factor_call_op* self, enviroment* en
 static void il_factor_member_op_check(il_factor_call_op* self, enviroment* env, call_context* cctx);
 static void il_factor_subscript_check(il_factor_call_op* self, enviroment* env, call_context* cctx);
 
-static void il_factor_call_op_argument_delete(vector_item item);
-static void il_factor_call_op_type_argument_delete(vector_item item);
+static void il_factor_call_op_argument_delete(VectorItem item);
+static void il_factor_call_op_type_argument_delete(VectorItem item);
 
 il_factor* il_factor_wrap_call_op(il_factor_call_op* self) {
 	il_factor* ret = il_factor_new(ilfactor_call_op_T);
@@ -32,7 +32,7 @@ il_factor* il_factor_wrap_call_op(il_factor_call_op* self) {
 il_factor_call_op* il_factor_call_op_new() {
 	il_factor_call_op* ret = (il_factor_call_op*)MEM_MALLOC(sizeof(il_factor_call_op));
 	ret->receiver = NULL;
-	ret->argument_list = vector_new();
+	ret->argument_list = NewVector();
 	ret->type = ilcall_type_undefined_T;
 	return ret;
 }
@@ -98,7 +98,7 @@ void il_factor_call_op_delete(il_factor_call_op* self) {
 	} else if(self->type == ilcall_type_invoke_bound_T) {
 		il_factor_invoke_bound_delete(self->u.invoke_bound_);
 	}
-	vector_delete(self->argument_list, il_factor_call_op_argument_delete);
+	DeleteVector(self->argument_list, il_factor_call_op_argument_delete);
 	MEM_FREE(self);
 }
 
@@ -207,7 +207,7 @@ static void il_factor_subscript_check(il_factor_call_op* self, enviroment* env, 
 	assert(temp != -1);
 	//入れ替える
 	iv->args = self->argument_list;
-	iv->type_args = vector_new();
+	iv->type_args = NewVector();
 	iv->receiver = receiver;
 	iv->tag = instance_invoke_subscript_T;
 	self->receiver = NULL;
@@ -216,12 +216,12 @@ static void il_factor_subscript_check(il_factor_call_op* self, enviroment* env, 
 	self->u.invoke_ = iv;
 }
 
-static void il_factor_call_op_argument_delete(vector_item item) {
+static void il_factor_call_op_argument_delete(VectorItem item) {
 	il_argument* e = (il_argument*)item;
 	il_argument_delete(e);
 }
 
-static void il_factor_call_op_type_argument_delete(vector_item item) {
+static void il_factor_call_op_type_argument_delete(VectorItem item) {
 	il_type_argument* e = (il_type_argument*)item;
 	il_type_argument_delete(e);
 }

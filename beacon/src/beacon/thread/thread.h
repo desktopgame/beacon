@@ -12,7 +12,7 @@ struct call_context;
  * 現在の呼び出し位置を表すトレースのスタックを含みます。
  */
 typedef struct sg_thread {
-	vector* trace_stack;
+	Vector* trace_stack;
 	bool vm_crush_by_exception;
 	bool vm_dump;
 	struct frame* frame_ref;

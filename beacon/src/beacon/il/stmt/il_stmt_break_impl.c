@@ -13,7 +13,7 @@ void il_stmt_break_generate(void * empty, enviroment * env, call_context* cctx) 
 		bc_error_throw(bcerror_break_at_not_loop_T);
 		return;
 	}
-	label* lab = (label*)vector_top(cctx->control.while_end);
+	label* lab = (label*)TopVector(cctx->control.while_end);
 	opcode_buf_add(env->buf, op_goto);
 	opcode_buf_add(env->buf, lab);
 }

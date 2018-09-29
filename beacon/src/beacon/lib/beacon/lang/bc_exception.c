@@ -29,13 +29,13 @@ static void bc_exception_nativeInit(method* parent, frame* fr, enviroment* env) 
 	namespace_* lang = namespace_lang();
 	class_* stackTraceElementClass = namespace_get_class(lang, string_pool_intern("StackTraceElement"));
 	class_* exceptionClass = namespace_get_class(lang, string_pool_intern("Exception"));
-	object* self= (object*)vector_at(fr->ref_stack, 0);
+	object* self= (object*)AtVector(fr->ref_stack, 0);
 	//FXIME:???
 	heap* h = heap_get();
 	h->collect_blocking++;
 	//スタックトレースを作成する
 	frame* temp = fr;
-	vector* stackTraceElementVec = vector_new();
+	Vector* stackTraceElementVec = NewVector();
 	char* lfilename = NULL;
 	int llineno = -1;
 	do {
@@ -52,9 +52,9 @@ static void bc_exception_nativeInit(method* parent, frame* fr, enviroment* env) 
 		}
 		//スタックトレースを作成
 		//assert(lineno >= 0);
-		vector* args = vector_new();
-		vector_push(args, object_string_new(temp->context_ref->context_ref->filename));
-		vector_push(args, object_int_new(lineno));
+		Vector* args = NewVector();
+		PushVector(args, object_string_new(temp->context_ref->context_ref->filename));
+		PushVector(args, object_int_new(lineno));
 		object* trace = class_new_instance(
 			stackTraceElementClass,
 			//ilctx,
@@ -62,8 +62,8 @@ static void bc_exception_nativeInit(method* parent, frame* fr, enviroment* env) 
 			args,
 			NULL
 		);
-		vector_delete(args, vector_deleter_null);
-		vector_push(stackTraceElementVec, trace);
+		DeleteVector(args, VectorDeleterOfNull);
+		PushVector(stackTraceElementVec, trace);
 		temp = temp->parent;
 		//今回の表示情報を記録
 		if(temp != NULL) {
@@ -74,12 +74,12 @@ static void bc_exception_nativeInit(method* parent, frame* fr, enviroment* env) 
 	//配列へ
 	object* arr = bc_array_new(stackTraceElementClass->parent->generic_self, stackTraceElementVec->length, fr);
 	for (int i = 0; i < stackTraceElementVec->length; i++) {
-		bc_array_set(arr, i, vector_at(stackTraceElementVec, i));
+		bc_array_set(arr, i, AtVector(stackTraceElementVec, i));
 	}
 	//Exception#stackTraceをここで初期化する
 	int tempi = 0;
 	field* stackTraceF = class_find_field(exceptionClass, string_pool_intern("stackTrace"), &tempi);
-	vector_assign(self->u.field_vec, tempi, arr);
-	vector_delete(stackTraceElementVec, vector_deleter_null);
+	AssignVector(self->u.field_vec, tempi, arr);
+	DeleteVector(stackTraceElementVec, VectorDeleterOfNull);
 	h->collect_blocking--;
 }

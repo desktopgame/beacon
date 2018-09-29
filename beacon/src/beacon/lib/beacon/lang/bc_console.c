@@ -29,7 +29,7 @@ type* bc_console_type() {
 
 //private
 static void bc_console_writeLine(method* parent, frame* fr, enviroment* env) {
-	object* o = vector_at(fr->ref_stack, 1);
+	object* o = AtVector(fr->ref_stack, 1);
 	if (o->tag == object_int_T) {
 		printf("%d\n", o->u.int_);
 	} else if(o->tag == object_double_T) {
@@ -49,7 +49,7 @@ static void bc_console_writeLine(method* parent, frame* fr, enviroment* env) {
 }
 
 static void bc_console_write(method* parent, frame* fr, enviroment* env) {
-	object* o = vector_at(fr->ref_stack, 1);
+	object* o = AtVector(fr->ref_stack, 1);
 	if (o->tag == object_int_T) {
 		printf("%d", o->u.int_);
 	}  else if (o->tag == object_double_T) {
@@ -71,11 +71,11 @@ static void bc_console_write(method* parent, frame* fr, enviroment* env) {
 static void bc_console_read(method* parent, frame* fr, enviroment* env) {
 	char c = getchar();
 	object* o = object_char_new(c);
-	vector_push(fr->value_stack, o);
+	PushVector(fr->value_stack, o);
 }
 
 static void bc_console_readLine(method* parent, frame* fr, enviroment* env) {
 	char* s = text_gets();
 	object* o = object_string_new(s);
-	vector_push(fr->value_stack, o);
+	PushVector(fr->value_stack, o);
 }

@@ -9,14 +9,14 @@
  */
 typedef struct il_stmt_elif {
 	il_factor* condition;
-	vector* body;
+	Vector* body;
 } il_stmt_elif;
 
 /**
  * } else { ... } を表す要素.
  */
 typedef struct il_stmt_else {
-	vector* body;
+	Vector* body;
 } il_stmt_else;
 
 /**
@@ -27,8 +27,8 @@ typedef struct il_stmt_else {
  */
 typedef struct il_stmt_if {
 	il_factor* condition;
-	vector* body;
-	vector* elif_list;
+	Vector* body;
+	Vector* elif_list;
 	il_stmt_else* else_body;
 } il_stmt_if;
 
@@ -55,7 +55,7 @@ il_stmt_elif* il_stmt_elif_new();
  * elif の一覧を表す要素を作成します.
  * @return
  */
-vector* il_stmt_elif_list_new();
+Vector* il_stmt_elif_list_new();
 
 /**
  * else を表す要素を作成します.
@@ -66,7 +66,7 @@ il_stmt_else* il_stmt_else_new();
 /**
  * elif を一覧に加えます.
  */
-void il_stmt_elif_list_push(vector* self, il_stmt_elif* child);
+void il_stmt_elif_list_push(Vector* self, il_stmt_elif* child);
 
 /**
  * if とその子要素を生成します.
@@ -100,7 +100,7 @@ void il_stmt_elif_delete(il_stmt_elif* self);
  * elifの一覧 を表す要素を開放します.
  * @param self
  */
-void il_stmt_elif_list_delete(vector* self);
+void il_stmt_elif_list_delete(Vector* self);
 
 /**
  * else を表す要素を開放します.

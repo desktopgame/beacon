@@ -12,7 +12,7 @@
 #include <assert.h>
 
 //proto
-static void CLBC_import_internal(class_loader* self, vector* ilimports, int i);
+static void CLBC_import_internal(class_loader* self, Vector* ilimports, int i);
 
 
 static void CLBC_new_load_internal(class_loader * self, char * full_path);
@@ -20,7 +20,7 @@ static void CLBC_new_load_internal(class_loader * self, char * full_path);
 static void CLBC_import_already(class_loader* self, class_loader* cll);
 //static class_loader* CLBC_import_new(class_loader* self, char* fullPath);
 
-void CLBC_import(class_loader* self, vector* ilimports) {
+void CLBC_import(class_loader* self, Vector* ilimports) {
 	CL_ERROR(self);
 	for (int i = self->import_manager->info_vec->length; i < ilimports->length; i++) {
 		CLBC_import_internal(self, ilimports, i);
@@ -30,7 +30,7 @@ void CLBC_import(class_loader* self, vector* ilimports) {
 	//全てのクラスローダーはデフォルトで beacon/lang をロードする
 	script_context* ctx = script_context_get_current();
 	for(int i=0; i<ctx->include_vec->length; i++) {
-		FileEntry* entry = vector_at(ctx->include_vec, i);
+		FileEntry* entry = AtVector(ctx->include_vec, i);
 		if(entry->is_file && IsMatchExtension(entry->filename, "bc")) {
 			char* p = GetAbsolutePath(entry->filename);
 			CLBC_new_load(self, p);
@@ -59,13 +59,13 @@ class_loader* CLBC_import_new(class_loader* self, char* full_path) {
 }
 
 //private
-static void CLBC_import_internal(class_loader* self, vector* ilimports, int i) {
+static void CLBC_import_internal(class_loader* self, Vector* ilimports, int i) {
 	CL_ERROR(self);
 	if (i >= ilimports->length ||
 	    import_manager_loaded(self->import_manager, i)) {
 		return;
 	}
-	vector_item e = vector_at(ilimports, i);
+	VectorItem e = AtVector(ilimports, i);
 	il_import* import = (il_import*)e;
 	char* withExt = text_concat(string_pool_ref2str(import->pathv), ".bc");
 	char* fullPath = ResolveScriptPath(withExt);

@@ -6,10 +6,10 @@
  * 中間言語ILのトップレベル要素です.
  */
 typedef struct il_top_level {
-	vector* import_list;
-	vector* namespace_list;
-	vector* statement_list;
-	vector* function_list;
+	Vector* import_list;
+	Vector* namespace_list;
+	Vector* statement_list;
+	Vector* function_list;
 } il_top_level;
 /**
  * トップレベルの要素を作成します.

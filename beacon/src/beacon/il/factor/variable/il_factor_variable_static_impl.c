@@ -4,7 +4,7 @@
 #include "../../../vm/enviroment.h"
 #include "../../il_type_argument.h"
 
-static void il_factor_static_delete_typeargs(vector_item item);
+static void il_factor_static_delete_typeargs(VectorItem item);
 
 il_factor_variable_static* il_factor_variable_static_new() {
 	il_factor_variable_static* ret = (il_factor_variable_static*)MEM_MALLOC(sizeof(il_factor_variable_static));
@@ -31,11 +31,11 @@ char* il_factor_variable_static_tostr(il_factor_variable_static * self, envirome
 
 void il_factor_variable_static_delete(il_factor_variable_static* self) {
 	fqcn_cache_delete(self->fqcn);
-	vector_delete(self->type_args, il_factor_static_delete_typeargs);
+	DeleteVector(self->type_args, il_factor_static_delete_typeargs);
 	MEM_FREE(self);
 }
 //private
-static void il_factor_static_delete_typeargs(vector_item item) {
+static void il_factor_static_delete_typeargs(VectorItem item) {
 	il_type_argument* e = (il_type_argument*)item;
 	il_type_argument_delete(e);
 }

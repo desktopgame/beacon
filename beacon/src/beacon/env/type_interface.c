@@ -82,7 +82,7 @@ void type_add_method(type* self, method * m) {
 	}
 }
 
-method * type_ilfind_method(type * self, string_view namev, vector * args, enviroment * env, call_context* cctx, int * outIndex) {
+method * type_ilfind_method(type * self, string_view namev, Vector * args, enviroment * env, call_context* cctx, int * outIndex) {
 	assert(self != NULL);
 	if (self->tag == type_class_T) {
 		return class_ilfind_method(self->u.class_, namev, args, env, cctx, outIndex);
@@ -92,7 +92,7 @@ method * type_ilfind_method(type * self, string_view namev, vector * args, envir
 	return NULL;
 }
 
-method* type_ilfind_smethod(type* self, string_view namev, vector* args, struct enviroment* env, call_context* cctx, int* outIndex) {
+method* type_ilfind_smethod(type* self, string_view namev, Vector* args, struct enviroment* env, call_context* cctx, int* outIndex) {
 	assert(self->tag == type_class_T);
 	return class_ilfind_smethod(self->u.class_, namev, args, env, cctx, outIndex);
 }
@@ -118,15 +118,15 @@ int type_distance(type * super, type * sub) {
 	if (super->tag == type_interface_T &&
 		sub->tag == type_class_T) {
 		bool found = false;
-		vector* gimpl_list = class_get_generic_interface_list(TYPE2CLASS(sub));
+		Vector* gimpl_list = class_get_generic_interface_list(TYPE2CLASS(sub));
 		for (int i = 0; i < gimpl_list->length; i++) {
-			generic_type* e = (generic_type*)vector_at(gimpl_list, i);
+			generic_type* e = (generic_type*)AtVector(gimpl_list, i);
 			if (e->core_type == super) {
 				found = true;
 				break;
 			}
 		}
-		vector_delete(gimpl_list, vector_deleter_null);
+		DeleteVector(gimpl_list, VectorDeleterOfNull);
 		return found ? 0 : -1;
 	}
 	if (super->tag == type_class_T &&
@@ -147,13 +147,13 @@ void type_unlink(type * self) {
 
 int type_for_generic_index(type * self, string_view namev) {
 	assert(self->tag != type_enum_T);
-	vector* v = NULL;
+	Vector* v = NULL;
 	if (self->tag == type_class_T) v = self->u.class_->type_parameter_list;
 	if (self->tag == type_interface_T) v = self->u.interface_->type_parameter_list;
 	//全ての型変数と比べる
 	int ret = -1;
 	for (int i = 0; i < v->length; i++) {
-		type_parameter* e = (type_parameter*)vector_at(v, i);
+		type_parameter* e = (type_parameter*)AtVector(v, i);
 		if (e->namev == namev) {
 			ret = i;
 			break;
@@ -177,7 +177,7 @@ generic_type * type_find_impl(type * self, type * a) {
 			}
 			if (a->tag == type_interface_T) {
 				for (int i = 0; i < ptr->impl_list->length; i++) {
-					generic_type* inter = (generic_type*)vector_at(ptr->impl_list, i);
+					generic_type* inter = (generic_type*)AtVector(ptr->impl_list, i);
 					if (inter->core_type == a) {
 						return inter;
 					}
@@ -188,7 +188,7 @@ generic_type * type_find_impl(type * self, type * a) {
 	} else if (self->tag == type_interface_T) {
 		interface_* inter = self->u.interface_;
 		for (int i = 0; i < inter->impl_list->length; i++) {
-			generic_type* e = (generic_type*)vector_at(inter->impl_list, i);
+			generic_type* e = (generic_type*)AtVector(inter->impl_list, i);
 			if (e->core_type == a) {
 				return e;
 			}
@@ -197,7 +197,7 @@ generic_type * type_find_impl(type * self, type * a) {
 	return NULL;
 }
 
-vector* type_parameter_list(type* self) {
+Vector* type_parameter_list(type* self) {
 	assert(self != NULL);
 	if(self->tag == type_class_T) {
 		return self->u.class_->type_parameter_list;
@@ -206,7 +206,7 @@ vector* type_parameter_list(type* self) {
 	}
 }
 
-vector* type_implement_list(type* self) {
+Vector* type_implement_list(type* self) {
 	assert(self != NULL);
 	if(self->tag == type_class_T) {
 		return self->u.class_->impl_list;
@@ -218,9 +218,9 @@ vector* type_implement_list(type* self) {
 generic_type * type_type_parameter_at(type * self, int index) {
 	assert(self->tag != type_enum_T);
 	if (self->tag == type_class_T) {
-		return (generic_type*)vector_at(self->u.class_->type_parameter_list, index);
+		return (generic_type*)AtVector(self->u.class_->type_parameter_list, index);
 	} else if (self->tag == type_interface_T) {
-		return (generic_type*)vector_at(self->u.interface_->type_parameter_list, index);
+		return (generic_type*)AtVector(self->u.interface_->type_parameter_list, index);
 	}
 	return NULL;
 }
@@ -262,7 +262,7 @@ generic_type* type_baseline(type* abstract, type* concrete) {
 		}
 		if(abstract->tag == type_interface_T) {
 			for(int i=0; i<cls->impl_list->length; i++) {
-				generic_type* gE = (generic_type*)vector_at(cls->impl_list, i);
+				generic_type* gE = (generic_type*)AtVector(cls->impl_list, i);
 				generic_type* impl = interface_contains(gE, abstract->u.interface_);
 				if(impl) {
 					return impl;
@@ -282,17 +282,17 @@ generic_type* type_baseline(type* abstract, type* concrete) {
 interface_* type_interface_valid(type* self) {
 #if defined(_MSC_VER)
 	//コンパイラが初期化されていないローカル変数として認識してしまうのでその対策
-	vector* impl_list = NULL;
+	Vector* impl_list = NULL;
 	impl_list = type_implement_list(self);
 #else
-	vector* impl_list = type_implement_list(self);
+	Vector* impl_list = type_implement_list(self);
 #endif
 	for(int i=0; i<impl_list->length; i++) {
-		generic_type* gE = vector_at(impl_list, i);
+		generic_type* gE = AtVector(impl_list, i);
 		interface_* iE = TYPE2INTERFACE(GENERIC2TYPE(gE));
 		for(int j=0; j<impl_list->length; j++) {
 			if(i == j) { continue; }
-			generic_type* gE2 = vector_at(impl_list, j);
+			generic_type* gE2 = AtVector(impl_list, j);
 			interface_* iE2 = TYPE2INTERFACE(GENERIC2TYPE(gE2));
 			if(iE == iE2) {
 				return iE2;

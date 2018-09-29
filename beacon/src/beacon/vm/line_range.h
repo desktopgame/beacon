@@ -24,7 +24,7 @@ line_range* line_range_new();
  * @param pc
  * @return 見つからなければ NULL
  */
-line_range* line_range_find(vector* line_rangeVec, int pc);
+line_range* line_range_find(Vector* line_rangeVec, int pc);
 
 void line_range_delete(line_range* self);
 #endif // !SIGNAL_VM_LINE_RANGE_H

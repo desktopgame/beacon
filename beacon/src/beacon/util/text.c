@@ -112,15 +112,15 @@ char * text_lineat(const char * src, int lineno) {
 	return ret;
 }
 
-char* text_sum(vector * v, char * join) {
+char* text_sum(Vector * v, char * join) {
 	if (v == NULL || v->length == 0) {
 		return NULL;
 	}
 	//FIXME:もうちょっと無駄をなくせるはず
-	char* head = text_strdup((char*)vector_at(v, 0));
+	char* head = text_strdup((char*)AtVector(v, 0));
 	int ptr = strlen(head);
 	for (int i = 1; i < v->length; i++) {
-		char* e = (char*)vector_at(v, i);
+		char* e = (char*)AtVector(v, i);
 		if (i <= (v->length - 1) && 
 			join != NULL) {
 			char* conn = text_concat(head, join);

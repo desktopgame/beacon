@@ -14,26 +14,26 @@
 //proto
 static namespace_* namespace_malloc(string_view namev);
 
-static void namespace_unlink_namespace(numeric_key key, numeric_map_item item);
-static void namespace_delete_namespace(numeric_key key, numeric_map_item item);
+static void namespace_unlink_namespace(NumericMapKey key, NumericMapItem item);
+static void namespace_delete_namespace(NumericMapKey key, NumericMapItem item);
 
-static void namespace_unlink_type(numeric_key key, numeric_map_item item);
-static void namespace_delete_type(numeric_key key, numeric_map_item item);
+static void namespace_unlink_type(NumericMapKey key, NumericMapItem item);
+static void namespace_delete_type(NumericMapKey key, NumericMapItem item);
 
-static void namespace_dump_root(numeric_map* root, bool callSelf, int depth);
+static void namespace_dump_root(NumericMap* root, bool callSelf, int depth);
 static void namespace_dump_impl(namespace_* root, int depth);
 static void namespace_put_indent(int depth);
-static void namespace_dump_class(numeric_map* root, bool isRoot, int depth);
+static void namespace_dump_class(NumericMap* root, bool isRoot, int depth);
 
 namespace_ * namespace_create_at_root(string_view namev) {
 	script_context* ctx = script_context_get_current();
 	if (ctx->namespace_nmap == NULL) {
-		ctx->namespace_nmap = numeric_map_new();
+		ctx->namespace_nmap = NewNumericMap();
 	}
-	tree_item item = numeric_map_get(ctx->namespace_nmap, namev);
+	tree_item item = GetNumericMapValue(ctx->namespace_nmap, namev);
 	if (item == NULL) {
 		namespace_* newNamespace = namespace_malloc(namev);
-		numeric_map_put(ctx->namespace_nmap, namev, newNamespace);
+		PutNumericMap(ctx->namespace_nmap, namev, newNamespace);
 		return newNamespace;
 	} else return (namespace_*)item;
 }
@@ -47,7 +47,7 @@ namespace_* namespace_get_at_croot(script_context* sctx, string_view namev) {
 	if (sctx->namespace_nmap == NULL) {
 		return NULL;
 	}
-	return (namespace_*)numeric_map_get(sctx->namespace_nmap, namev);
+	return (namespace_*)GetNumericMapValue(sctx->namespace_nmap, namev);
 }
 
 namespace_ * namespace_add_namespace(namespace_ * self, string_view namev) {
@@ -57,8 +57,8 @@ namespace_ * namespace_add_namespace(namespace_ * self, string_view namev) {
 		namespace_* newNamespace = namespace_malloc(namev);
 		newNamespace->parent = self;
 		child = newNamespace;
-		numeric_map_put(self->namespace_map, namev, child);
-		//vector_push(self->namespace_vec, child);
+		PutNumericMap(self->namespace_map, namev, child);
+		//PushVector(self->namespace_vec, child);
 		self->ref_count++;
 	}
 	return child;
@@ -67,20 +67,20 @@ namespace_ * namespace_add_namespace(namespace_ * self, string_view namev) {
 struct type* namespace_add_type(namespace_* self, type* type) {
 	script_context* ctx = script_context_get_current();
 	type->location = self;
-	numeric_map_put(self->type_map, type_name(type), type);
+	PutNumericMap(self->type_map, type_name(type), type);
 	type->absolute_index = ctx->type_vec->length;
-	vector_push(ctx->type_vec, type);
+	PushVector(ctx->type_vec, type);
 	return type;
 }
 
 namespace_ * namespace_get_namespace(namespace_ * self, string_view namev) {
 	assert(self != NULL);
-	return numeric_map_get(self->namespace_map, namev);
+	return GetNumericMapValue(self->namespace_map, namev);
 }
 
 type * namespace_get_type(namespace_ * self, string_view namev) {
 	assert(self != NULL);
-	return numeric_map_get(self->type_map, namev);
+	return GetNumericMapValue(self->type_map, namev);
 }
 
 class_ * namespace_get_class(namespace_ * self, string_view namev) {
@@ -144,8 +144,8 @@ type* namespace_exception_type() {
 }
 
 void namespace_unlink(namespace_ * self) {
-	numeric_map_each(self->namespace_map, namespace_unlink_namespace);
-	numeric_map_each(self->type_map, namespace_unlink_type);
+	EachNumericMap(self->namespace_map, namespace_unlink_namespace);
+	EachNumericMap(self->type_map, namespace_unlink_type);
 }
 
 string_view namespace_tostr(namespace_* self) {
@@ -162,43 +162,43 @@ string_view namespace_tostr(namespace_* self) {
 }
 
 void namespace_delete(namespace_ * self) {
-	numeric_map_delete(self->namespace_map, namespace_delete_namespace);
-	numeric_map_delete(self->type_map, namespace_delete_type);
+	DeleteNumericMap(self->namespace_map, namespace_delete_namespace);
+	DeleteNumericMap(self->type_map, namespace_delete_type);
 	MEM_FREE(self);
 }
 
 //private
 static namespace_* namespace_malloc(string_view namev) {
 	namespace_* ret = (namespace_*)MEM_MALLOC(sizeof(namespace_));
-	ret->namespace_map = numeric_map_new();
-	ret->type_map = numeric_map_new();
+	ret->namespace_map = NewNumericMap();
+	ret->type_map = NewNumericMap();
 	ret->parent = NULL;
 	ret->namev = namev;
 	ret->ref_count = 0;
 	return ret;
 }
 
-static void namespace_unlink_namespace(numeric_key key, numeric_map_item item) {
+static void namespace_unlink_namespace(NumericMapKey key, NumericMapItem item) {
 	namespace_* e = (namespace_*)item;
 	namespace_unlink(e);
 }
 
-static void namespace_delete_namespace(numeric_key key, numeric_map_item item) {
+static void namespace_delete_namespace(NumericMapKey key, NumericMapItem item) {
 	namespace_* e = (namespace_*)item;
 	namespace_delete(e);
 }
 
-static void namespace_unlink_type(numeric_key key, numeric_map_item item) {
+static void namespace_unlink_type(NumericMapKey key, NumericMapItem item) {
 	type* e = (type*)item;
 	type_unlink(e);
 }
 
-static void namespace_delete_type(numeric_key key, numeric_map_item item) {
+static void namespace_delete_type(NumericMapKey key, NumericMapItem item) {
 	type* e = (type*)item;
 	type_delete(e);
 }
 
-static void namespace_dump_root(numeric_map* root, bool callSelf, int depth) {
+static void namespace_dump_root(NumericMap* root, bool callSelf, int depth) {
 	if (root == NULL) {
 		return;
 	}
@@ -227,7 +227,7 @@ static void namespace_put_indent(int depth) {
 	}
 }
 
-static void namespace_dump_class(numeric_map* root, bool isRoot, int depth) {
+static void namespace_dump_class(NumericMap* root, bool isRoot, int depth) {
 	if (!isRoot && (root == NULL || root->item == NULL)) {
 		return;
 	}

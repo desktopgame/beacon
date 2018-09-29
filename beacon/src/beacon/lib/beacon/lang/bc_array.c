@@ -32,23 +32,23 @@ type * bc_array_type() {
 object * bc_array_new(struct generic_type* gtype, int length, frame * fr) {
 	type* arrayType = bc_array_type();
 
-	vector* args = vector_new();
-	vector* type_args = vector_new();
-	vector_push(args, object_int_new(length));
-	vector_push(type_args, gtype);
+	Vector* args = NewVector();
+	Vector* type_args = NewVector();
+	PushVector(args, object_int_new(length));
+	PushVector(type_args, gtype);
 	object* ret = class_new_instance(arrayType->u.class_, fr, args,type_args);
-	vector_delete(args, vector_deleter_null);
-	vector_delete(type_args, vector_deleter_null);
+	DeleteVector(args, VectorDeleterOfNull);
+	DeleteVector(type_args, VectorDeleterOfNull);
 
 	return ret;
 }
 
 void bc_array_set(object * arr, int index, object * o) {
-	vector_assign(arr->native_slot_vec, index, o);
+	AssignVector(arr->native_slot_vec, index, o);
 }
 
 object * bc_array_get(object * arr, int index) {
-	return (object*)vector_at(arr->native_slot_vec, index);
+	return (object*)AtVector(arr->native_slot_vec, index);
 }
 
 int bc_array_length(object* arr) {
@@ -63,43 +63,43 @@ static void bc_array_nativeInit(method* parent, frame* fr, enviroment* env) {
 	field* lengthField = class_find_field(tp->u.class_, string_pool_intern("length"), &temp);
 	assert(lengthField != NULL && temp != -1);
 	//対応する位置のオブジェクトを取り出す
-	object* self = vector_at(fr->ref_stack, 0);
-	object* lengthObj = vector_at(self->u.field_vec, temp);
+	object* self = AtVector(fr->ref_stack, 0);
+	object* lengthObj = AtVector(self->u.field_vec, temp);
 	assert(lengthObj != NULL);
-	generic_type* targ = vector_at(self->gtype->type_args_list, 0);
+	generic_type* targ = AtVector(self->gtype->type_args_list, 0);
 	//配列の長さだけ確保
 	int len = lengthObj->u.int_;
 	assert(len >= 0);
 	for (int i = 0; i < len; i++) {
 		object* oe = object_default(targ);
-		vector_push(self->native_slot_vec, oe);
+		PushVector(self->native_slot_vec, oe);
 	}
 }
 
 static void bc_array_nativeSet(method* parent, frame* fr, enviroment* env) {
-	object* self = vector_at(fr->ref_stack, 0);
-	object* idx = vector_at(fr->ref_stack, 1);
-	object* val = vector_at(fr->ref_stack, 2);
+	object* self = AtVector(fr->ref_stack, 0);
+	object* idx = AtVector(fr->ref_stack, 1);
+	object* val = AtVector(fr->ref_stack, 2);
 	assert(idx->tag == object_int_T);
-	vector_assign(self->native_slot_vec, idx->u.int_, val);
+	AssignVector(self->native_slot_vec, idx->u.int_, val);
 }
 
 static void bc_array_nativeGet(method* parent, frame* fr, enviroment* env) {
-	object* self = vector_at(fr->ref_stack, 0);
-	object* idx = vector_at(fr->ref_stack, 1);
-//	object* a = vector_at(vm->ref_stack, 2);
+	object* self = AtVector(fr->ref_stack, 0);
+	object* idx = AtVector(fr->ref_stack, 1);
+//	object* a = AtVector(vm->ref_stack, 2);
 	assert(idx->tag == object_int_T);
-	object* ret = (object*)vector_at(self->native_slot_vec, idx->u.int_);
+	object* ret = (object*)AtVector(self->native_slot_vec, idx->u.int_);
 	//Printfln("array get %d", idx->u.int_);
-	vector_push(fr->value_stack, ret);
+	PushVector(fr->value_stack, ret);
 }
 
 static void bc_array_nativeCopy(method* parent, frame* fr, enviroment* env) {
-	object* src = vector_at(fr->ref_stack, 1);
-	object* srcOffset = vector_at(fr->ref_stack, 2);
-	object* dst = vector_at(fr->ref_stack, 3);
-	object* dstOffset = vector_at(fr->ref_stack, 4);
-	object* length = vector_at(fr->ref_stack, 5);
+	object* src = AtVector(fr->ref_stack, 1);
+	object* srcOffset = AtVector(fr->ref_stack, 2);
+	object* dst = AtVector(fr->ref_stack, 3);
+	object* dstOffset = AtVector(fr->ref_stack, 4);
+	object* length = AtVector(fr->ref_stack, 5);
 	int srcLen = src->native_slot_vec->length;
 	int dstLen = dst->native_slot_vec->length;
 	int cpyLen = length->u.int_;
@@ -119,7 +119,7 @@ static void bc_array_nativeCopy(method* parent, frame* fr, enviroment* env) {
 			 i < (srcOffset->u.int_ + length->u.int_);
 			 i++) {
 		int a = (i - srcOffset->u.int_) + dstOffset->u.int_;
-		vector_item e = vector_at(src->native_slot_vec, i);
-		vector_assign(dst->native_slot_vec, a, e);
+		VectorItem e = AtVector(src->native_slot_vec, i);
+		AssignVector(dst->native_slot_vec, a, e);
 	}
 }

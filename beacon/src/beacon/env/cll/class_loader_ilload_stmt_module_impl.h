@@ -7,5 +7,5 @@ struct il_stmt;
 
 struct il_stmt* CLIL_stmt(struct class_loader* self, struct ast* source);
 
-void CLIL_body(struct class_loader* self, vector* list, struct ast* source);
+void CLIL_body(struct class_loader* self, Vector* list, struct ast* source);
 #endif

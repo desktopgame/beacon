@@ -14,15 +14,15 @@
 #include "../../util/text.h"
 #include <string.h>
 
-int meta_ilcalc_score(vector* params, vector* ilargs, enviroment* env, call_context* cctx) {
+int meta_ilcalc_score(Vector* params, Vector* ilargs, enviroment* env, call_context* cctx) {
 	assert(params->length == ilargs->length);
 	int score = 0;
 	bool illegal = false;
 	//assert(ilctx->type_args_vec->length != 0);
-	//vector* type_args = vector_top(ilctx->type_args_vec);
+	//Vector* type_args = TopVector(ilctx->type_args_vec);
 	for (int i = 0; i < params->length; i++) {
-		vector_item varg = vector_at(ilargs, i);
-		vector_item vparam = vector_at(params, i);
+		VectorItem varg = AtVector(ilargs, i);
+		VectorItem vparam = AtVector(params, i);
 		il_argument* arg = (il_argument*)varg;
 		parameter* param = (parameter*)vparam;
 		//実引数が NULL なら常に許容する
@@ -52,16 +52,16 @@ int meta_ilcalc_score(vector* params, vector* ilargs, enviroment* env, call_cont
 	return score;
 }
 
-int meta_gcalc_score(vector* params, vector* gargs) {
+int meta_gcalc_score(Vector* params, Vector* gargs) {
 	assert(params->length == gargs->length);
 	//meta_ilcalc_scoreからのコピペ
 	int score = 0;
 	bool illegal = false;
 	//assert(ilctx->type_args_vec->length != 0);
-	//vector* type_args = vector_top(ilctx->type_args_vec);
+	//Vector* type_args = TopVector(ilctx->type_args_vec);
 	for (int i = 0; i < params->length; i++) {
-		vector_item varg = vector_at(gargs, i);
-		vector_item vparam = vector_at(params, i);
+		VectorItem varg = AtVector(gargs, i);
+		VectorItem vparam = AtVector(params, i);
 		//il_argument* arg = (il_argument*)varg;
 		parameter* param = (parameter*)vparam;
 		//実引数が NULL なら常に許容する
@@ -91,13 +91,13 @@ int meta_gcalc_score(vector* params, vector* gargs) {
 	return score;
 }
 
-int meta_rcalc_score(vector* params, vector* args, vector* typeargs, frame* fr) {
+int meta_rcalc_score(Vector* params, Vector* args, Vector* typeargs, frame* fr) {
 	assert(params->length == args->length);
 	int score = 0;
 	bool illegal = false;
 	for (int i = 0; i < params->length; i++) {
-		vector_item varg = vector_at(args, i);
-		vector_item vparam = vector_at(params, i);
+		VectorItem varg = AtVector(args, i);
+		VectorItem vparam = AtVector(params, i);
 		object* arg = (object*)varg;
 		parameter* param = (parameter*)vparam;
 		//実引数が NULL なら常に許容する
@@ -118,22 +118,22 @@ int meta_rcalc_score(vector* params, vector* args, vector* typeargs, frame* fr) 
 	return score;
 }
 
-method * meta_ilfind_method(vector * method_vec, string_view namev, vector * ilargs, enviroment * env, call_context* cctx, int * outIndex) {
+method * meta_ilfind_method(Vector * method_vec, string_view namev, Vector * ilargs, enviroment * env, call_context* cctx, int * outIndex) {
 	return meta_scoped_ilfind_method(NULL, method_vec, namev, ilargs, env, cctx, outIndex);
 }
 
-method* meta_gfind_method(vector* method_vec, string_view namev, vector * gargs, int* outIndex) {
+method* meta_gfind_method(Vector* method_vec, string_view namev, Vector * gargs, int* outIndex) {
 	return meta_scoped_gfind_method(NULL, method_vec, namev, gargs, outIndex);
 }
 
-method* meta_scoped_ilfind_method(class_* context, vector* method_vec, string_view namev, vector * ilargs, enviroment * env, call_context* cctx, int * outIndex) {
+method* meta_scoped_ilfind_method(class_* context, Vector* method_vec, string_view namev, Vector * ilargs, enviroment * env, call_context* cctx, int * outIndex) {
 	(*outIndex) = -1;
 	//class_create_vtable(self);
 	method* ret = NULL;
 	int min = 1024;
 	//全てのメソッドへ
 	for (int i = 0; i < method_vec->length; i++) {
-		vector_item ve = vector_at(method_vec, i);
+		VectorItem ve = AtVector(method_vec, i);
 		method* m = (method*)ve;
 		if(!meta_method_access_valid(m, cctx)) {
 			continue;
@@ -163,14 +163,14 @@ method* meta_scoped_ilfind_method(class_* context, vector* method_vec, string_vi
 	return ret;
 }
 
-method* meta_scoped_gfind_method(class_* context, vector* method_vec, string_view namev, vector * gargs, int * outIndex) {
+method* meta_scoped_gfind_method(class_* context, Vector* method_vec, string_view namev, Vector * gargs, int * outIndex) {
 	(*outIndex) = -1;
 	//class_create_vtable(self);
 	method* ret = NULL;
 	int min = 1024;
 	//全てのメソッドへ
 	for (int i = 0; i < method_vec->length; i++) {
-		vector_item ve = vector_at(method_vec, i);
+		VectorItem ve = AtVector(method_vec, i);
 		method* m = (method*)ve;
 		//名前か引数の個数が違うので無視
 		if (m->namev != namev ||
@@ -197,20 +197,20 @@ method* meta_scoped_gfind_method(class_* context, vector* method_vec, string_vie
 	return ret;
 }
 
-constructor* meta_ilfind_ctor(vector* ctor_vec, vector* ilargs, enviroment* env, call_context* cctx, int* outIndex) {
+constructor* meta_ilfind_ctor(Vector* ctor_vec, Vector* ilargs, enviroment* env, call_context* cctx, int* outIndex) {
 	return meta_scoped_ilfind_ctor(NULL, ctor_vec, ilargs, env, cctx, outIndex);
 }
 
-constructor* meta_rfind_ctor(vector* ctor_vec, vector* args, vector* typeargs, frame* fr, int* outIndex) {
+constructor* meta_rfind_ctor(Vector* ctor_vec, Vector* args, Vector* typeargs, frame* fr, int* outIndex) {
 	return meta_scoped_rfind_ctor(NULL, ctor_vec, args, typeargs, fr, outIndex);
 }
 
-constructor* meta_scoped_ilfind_ctor(class_* context, vector* ctor_vec, vector* ilargs, enviroment* env, call_context* cctx, int* outIndex) {
+constructor* meta_scoped_ilfind_ctor(class_* context, Vector* ctor_vec, Vector* ilargs, enviroment* env, call_context* cctx, int* outIndex) {
 	//見つかった中からもっとも一致するコンストラクタを選択する
 	int min = 1024;
 	constructor* ret = NULL;
 	for (int i = 0; i < ctor_vec->length; i++) {
-		vector_item ve = vector_at(ctor_vec, i);
+		VectorItem ve = AtVector(ctor_vec, i);
 		constructor* ctor = (constructor*)ve;
 		if(!meta_ctor_access_valid(ctor, cctx)) {
 			continue;
@@ -239,12 +239,12 @@ constructor* meta_scoped_ilfind_ctor(class_* context, vector* ctor_vec, vector* 
 	return ret;
 }
 
-constructor* meta_scoped_rfind_ctor(class_* context, vector* ctor_vec, vector* gargs, vector* typeargs, frame* fr, int* outIndex) {
+constructor* meta_scoped_rfind_ctor(class_* context, Vector* ctor_vec, Vector* gargs, Vector* typeargs, frame* fr, int* outIndex) {
 	//見つかった中からもっとも一致するコンストラクタを選択する
 	int min = 1024;
 	constructor* ret = NULL;
 	for (int i = 0; i < ctor_vec->length; i++) {
-		vector_item ve = vector_at(ctor_vec, i);
+		VectorItem ve = AtVector(ctor_vec, i);
 		constructor* ctor = (constructor*)ve;
 		class_* cls = TYPE2CLASS(ctor->parent);
 		//引数の個数が違うので無視
@@ -261,12 +261,12 @@ constructor* meta_scoped_rfind_ctor(class_* context, vector* ctor_vec, vector* g
 	return ret;
 }
 
-operator_overload* meta_gfind_operator(vector* opov_vec, operator_type type, vector* gargs, int* outIndex) {
+operator_overload* meta_gfind_operator(Vector* opov_vec, operator_type type, Vector* gargs, int* outIndex) {
 	(*outIndex) = -1;
 	int min = 1024;
 	operator_overload* ret = NULL;
 	for(int i=0; i<opov_vec->length; i++) {
-		operator_overload* opov = vector_at(opov_vec, i);
+		operator_overload* opov = AtVector(opov_vec, i);
 		//オペレータの種類が違うので無視
 		if(opov->type != type) {
 			continue;

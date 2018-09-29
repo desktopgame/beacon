@@ -13,11 +13,11 @@
 #include "../../il_type_argument.h"
 
 //proto
-static void il_factor_invoke_bound_delete_typeargs(vector_item item);
+static void il_factor_invoke_bound_delete_typeargs(VectorItem item);
 static void resolve_non_default(il_factor_invoke_bound * self, enviroment * env, call_context* cctx);
 static void resolve_default(il_factor_invoke_bound * self, enviroment * env, call_context* cctx);
 static void il_factor_invoke_bound_check(il_factor_invoke_bound * self, enviroment * env, call_context* cctx);
-static void il_factor_invoke_bound_args_delete(vector_item item);
+static void il_factor_invoke_bound_args_delete(VectorItem item);
 static void il_factor_invoke_bound_generate_method(il_factor_invoke_bound* self, enviroment* env, call_context* cctx);
 static void il_factor_invoke_bound_generate_subscript(il_factor_invoke_bound* self, enviroment* env, call_context* cctx);
 static generic_type* il_factor_invoke_bound_return_gtype(il_factor_invoke_bound* self, call_context* cctx);
@@ -58,25 +58,25 @@ char* il_factor_invoke_bound_tostr(il_factor_invoke_bound* self, enviroment* env
 }
 
 void il_factor_invoke_bound_delete(il_factor_invoke_bound* self) {
-	vector_delete(self->args, il_factor_invoke_bound_args_delete);
-	vector_delete(self->type_args, il_factor_invoke_bound_delete_typeargs);
+	DeleteVector(self->args, il_factor_invoke_bound_args_delete);
+	DeleteVector(self->type_args, il_factor_invoke_bound_delete_typeargs);
 	//generic_type_delete(self->resolved);
 	MEM_FREE(self);
 }
 
 operator_overload* il_factor_invoke_bound_find_set(il_factor_invoke_bound* self, il_factor* value, struct enviroment* env, call_context* cctx, int* outIndex) {
 	assert(self->tag == bound_invoke_subscript_T);
-	vector* args = vector_new();
-	vector_push(args, ((il_argument*)vector_at(self->args, 0))->factor);
-	vector_push(args, value);
+	Vector* args = NewVector();
+	PushVector(args, ((il_argument*)AtVector(self->args, 0))->factor);
+	PushVector(args, value);
 	operator_overload* opov = class_ilfind_operator_overload(TYPE2CLASS(self->u.subscript.opov->parent), operator_sub_script_set_T, args, env, cctx, outIndex);
-	vector_delete(args, vector_deleter_null);
+	DeleteVector(args, VectorDeleterOfNull);
 	return opov;
 }
 
 //private
 //FIXME:il_factor_invokeからのコピペ
-static void il_factor_invoke_bound_delete_typeargs(vector_item item) {
+static void il_factor_invoke_bound_delete_typeargs(VectorItem item) {
 	il_type_argument* e = (il_type_argument*)item;
 	il_type_argument_delete(e);
 }
@@ -93,7 +93,7 @@ static void resolve_non_default(il_factor_invoke_bound * self, enviroment * env,
 		self->resolved->virtual_type_index = rgtp->virtual_type_index;
 	} else if(rgtp->tag == generic_type_tag_method_T) {
 		//メソッドに渡された型引数を参照する
-		generic_type* instanced_type = (generic_type*)vector_at(self->type_args, rgtp->virtual_type_index);
+		generic_type* instanced_type = (generic_type*)AtVector(self->type_args, rgtp->virtual_type_index);
 		self->resolved = generic_type_new(instanced_type->core_type);
 		self->resolved->tag = generic_type_tag_class_T;
 	}
@@ -116,7 +116,7 @@ static void il_factor_invoke_bound_check(il_factor_invoke_bound * self, envirome
 	int temp = -1;
 	il_type_argument_resolve(self->type_args, cctx);
 	for(int i=0; i<self->args->length; i++) {
-		il_argument* ilarg = vector_at(self->args, i);
+		il_argument* ilarg = AtVector(self->args, i);
 		il_factor_load(ilarg->factor, env, cctx);
 	}
 	BC_ERROR();
@@ -179,7 +179,7 @@ static void il_factor_invoke_bound_check(il_factor_invoke_bound * self, envirome
 	call_context_pop(cctx);
 }
 
-static void il_factor_invoke_bound_args_delete(vector_item item) {
+static void il_factor_invoke_bound_args_delete(VectorItem item) {
 	il_argument* e = (il_argument*)item;
 	il_argument_delete(e);
 }
@@ -190,30 +190,30 @@ static void il_factor_invoke_bound_generate_method(il_factor_invoke_bound* self,
 		return;
 	}
 	for(int i=0; i<self->type_args->length; i++) {
-		il_type_argument* e = (il_type_argument*)vector_at(self->type_args, i);
+		il_type_argument* e = (il_type_argument*)AtVector(self->type_args, i);
 		assert(e->gtype != NULL);
 		opcode_buf_add(env->buf, op_generic_add);
 		generic_type_generate(e->gtype, env);
 	}
 	for(int i=0; i<self->args->length; i++) {
-		il_argument* e = (il_argument*)vector_at(self->args, i);
+		il_argument* e = (il_argument*)AtVector(self->args, i);
 		il_factor_generate(e->factor, env, cctx);
 		if(bc_error_last()) {
 			return;
 		}
 	}
 	if(modifier_is_static(self->u.m->modifier)) {
-		opcode_buf_add(env->buf, (vector_item)op_invokestatic);
-		opcode_buf_add(env->buf, (vector_item)self->u.m->parent->absolute_index);
-		opcode_buf_add(env->buf,(vector_item) self->index);
+		opcode_buf_add(env->buf, (VectorItem)op_invokestatic);
+		opcode_buf_add(env->buf, (VectorItem)self->u.m->parent->absolute_index);
+		opcode_buf_add(env->buf,(VectorItem) self->index);
 	} else {
-		opcode_buf_add(env->buf,(vector_item) op_this);
+		opcode_buf_add(env->buf,(VectorItem) op_this);
 		if(self->u.m->access == access_private_T) {
-			opcode_buf_add(env->buf, (vector_item)op_invokespecial);
-			opcode_buf_add(env->buf, (vector_item)self->index);
+			opcode_buf_add(env->buf, (VectorItem)op_invokespecial);
+			opcode_buf_add(env->buf, (VectorItem)self->index);
 		} else {
-			opcode_buf_add(env->buf, (vector_item)op_invokevirtual);
-			opcode_buf_add(env->buf, (vector_item)self->index);
+			opcode_buf_add(env->buf, (VectorItem)op_invokevirtual);
+			opcode_buf_add(env->buf, (VectorItem)self->index);
 		}
 	}
 }
@@ -224,13 +224,13 @@ static void il_factor_invoke_bound_generate_subscript(il_factor_invoke_bound* se
 		return;
 	}
 	for(int i=0; i<self->type_args->length; i++) {
-		il_type_argument* e = (il_type_argument*)vector_at(self->type_args, i);
+		il_type_argument* e = (il_type_argument*)AtVector(self->type_args, i);
 		assert(e->gtype != NULL);
 		opcode_buf_add(env->buf, op_generic_add);
 		generic_type_generate(e->gtype, env);
 	}
 	for(int i=0; i<self->args->length; i++) {
-		il_argument* e = (il_argument*)vector_at(self->args, i);
+		il_argument* e = (il_argument*)AtVector(self->args, i);
 		il_factor_generate(e->factor, env, cctx);
 		if(bc_error_last()) {
 			return;

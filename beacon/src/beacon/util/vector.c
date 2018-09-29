@@ -4,55 +4,55 @@
 
 #define SLOT_SIZE sizeof(void*)
 
-vector* vector_malloc(const char* filename, int lineno) {
-	vector* ret = (vector*)mem_malloc(sizeof(vector), filename, lineno);
+Vector* MallocVector(const char* filename, int lineno) {
+	Vector* ret = (Vector*)mem_malloc(sizeof(Vector), filename, lineno);
 	ret->length = 0;
 	ret->capacity = 16;
-	ret->memory = (vector_item*)mem_malloc(SLOT_SIZE * 16, filename, lineno);
+	ret->memory = (VectorItem*)mem_malloc(SLOT_SIZE * 16, filename, lineno);
 	return ret;
 }
 
-void vector_push(vector * self, vector_item item) {
+void PushVector(Vector * self, VectorItem item) {
 	assert(self != NULL);
 	if (self->length >= self->capacity) {
-		vector_reserve(self);
+		ReserveVector(self);
 	}
 	self->memory[self->length] = item;
 	self->length++;
 }
 
-vector* vector_append(vector* self, vector_item item) {
+Vector* AppendVector(Vector* self, VectorItem item) {
 	if(self == NULL) {
-		self = vector_new();
+		self = NewVector();
 	}
-	vector_push(self, item);
+	PushVector(self, item);
 	return self;
 }
 
-vector_item vector_top(vector * self) {
+VectorItem TopVector(Vector * self) {
 	assert(self != NULL);
 	assert(self->length > 0);
 	return *(self->memory + (self->length - 1));
 }
 
-vector_item vector_pop(vector * self) {
+VectorItem PopVector(Vector * self) {
 	assert(self != NULL);
 	assert(self->length > 0);
-	vector_item ret = self->memory[self->length - 1];
+	VectorItem ret = self->memory[self->length - 1];
 	//二重に開放しないように
 	self->memory[self->length - 1] = NULL;
 	self->length--;
 	return ret;
 }
 
-void vector_insert(vector * self, int index, vector_item item) {
+void InsertVector(Vector * self, int index, VectorItem item) {
 	assert(index >= 0 && index < (self->length + 1));
 	if (self->capacity < (self->length + 1)) {
-		vector_reserve(self);
+		ReserveVector(self);
 	}
-	vector_item t = self->memory[index];
+	VectorItem t = self->memory[index];
 	for (int i = index; i < self->length; i++) {
-		vector_item b = self->memory[i + 1];
+		VectorItem b = self->memory[i + 1];
 		self->memory[i + 1] = t;
 		t = b;
 	}
@@ -60,9 +60,9 @@ void vector_insert(vector * self, int index, vector_item item) {
 	self->length++;
 }
 
-vector_item vector_remove(vector * self, int index) {
+VectorItem RemoveVector(Vector * self, int index) {
 	assert(index >= 0 && index < self->length);
-	vector_item ret = self->memory[index];
+	VectorItem ret = self->memory[index];
 	for (int i = index + 1; i < self->length; i++) {
 		self->memory[i - 1] = self->memory[i];
 	}
@@ -70,60 +70,60 @@ vector_item vector_remove(vector * self, int index) {
 	return ret;
 }
 
-void vector_pack(vector* self) {
+void PackVector(Vector* self) {
 	assert(self != NULL);
 	self->memory = MEM_REALLOC(self->memory, SLOT_SIZE * self->length);
 	self->capacity = self->length;
 }
 
-int vector_reserve(vector * self) {
+int ReserveVector(Vector * self) {
 	assert(self->capacity > 0);
 	int newCapacitySize = self->capacity + (self->capacity / 2);
-	vector_item* temp = MEM_REALLOC(self->memory, SLOT_SIZE * newCapacitySize);
+	VectorItem* temp = MEM_REALLOC(self->memory, SLOT_SIZE * newCapacitySize);
 	assert(temp != NULL);
 	self->memory = temp;
 	self->capacity = newCapacitySize;
 	return newCapacitySize;
 }
 
-void vector_assign(vector * self, int index, vector_item item) {
+void AssignVector(Vector * self, int index, VectorItem item) {
 	assert(index >= 0);
 	//伸ばす必要がない
 	if (index < self->length) {
 		self->memory[index] = item;
 	} else {
 		while (self->length <= index) {
-			vector_push(self, NULL);
+			PushVector(self, NULL);
 		}
-		vector_assign(self, index, item);
+		AssignVector(self, index, item);
 	}
 }
 
-vector_item vector_at(vector * self, int index) {
+VectorItem AtVector(Vector * self, int index) {
 	assert(index >= 0 && index < self->length);
 	return self->memory[index];
 }
 
-vector* vector_sub(vector* self, int offset, int len) {
+Vector* SubVector(Vector* self, int offset, int len) {
 	assert(offset >= 0);
 	if(len == 0) {
-		return vector_new();
+		return NewVector();
 	}
-	vector* v = vector_new();
+	Vector* v = NewVector();
 	for(int i=offset; i<offset+len; i++) {
-		vector_push(v, vector_at(self, i));
+		PushVector(v, AtVector(self, i));
 	}
 	return v;
 }
 
-bool vector_empty(vector * self) {
+bool IsEmptyVector(Vector * self) {
 	return self->length == 0;
 }
 
-int vector_find(vector * self, vector_item item) {
+int FindVector(Vector * self, VectorItem item) {
 	int pos = -1;
 	for (int i = 0; i < self->length; i++) {
-		vector_item e = vector_at(self, i);
+		VectorItem e = AtVector(self, i);
 		if (e == item) {
 			pos = i;
 			break;
@@ -132,23 +132,23 @@ int vector_find(vector * self, vector_item item) {
 	return pos;
 }
 
-bool vector_contains(vector * self, vector_item item) {
-	return vector_find(self, item);
+bool IsContainsVector(Vector * self, VectorItem item) {
+	return FindVector(self, item);
 }
 
-void vector_clear(vector * self) {
+void ClearVector(Vector * self) {
 	while (self->length > 0) {
-		vector_pop(self);
+		PopVector(self);
 	}
 }
 
-void vector_delete(vector * self, vector_element_deleter deleter) {
+void DeleteVector(Vector * self, VectorElementDeleter deleter) {
 	if (self == NULL) {
 		return;
 	}
 	//vector_pack(self);
 	for (int i = 0; i < self->length; i++) {
-		vector_item e = self->memory[i];
+		VectorItem e = self->memory[i];
 		self->memory[i] = NULL;
 		deleter(e);
 	}
@@ -157,38 +157,38 @@ void vector_delete(vector * self, vector_element_deleter deleter) {
 	MEM_FREE(self);
 }
 
-void vector_deleter_free(vector_item item) {
+void VectorDeleterByFree(VectorItem item) {
 	MEM_FREE(item);
 }
 
-void vector_deleter_null(vector_item item) {
+void VectorDeleterOfNull(VectorItem item) {
 }
 
-vector* vector_clone(vector* source) {
-	vector* ret = vector_new();
+Vector* CloneVector(Vector* source) {
+	Vector* ret = NewVector();
 	for(int i=0; i<source->length; i++) {
-		vector_push(ret, vector_at(source, i));
+		PushVector(ret, AtVector(source, i));
 	}
 	return ret;
 }
 
-void vector_copy(vector* src, vector* dst) {
+void CopyVector(Vector* src, Vector* dst) {
 	assert(dst->length == 0);
 	for(int i=0; i<src->length; i++) {
-		vector_push(dst, vector_at(src, i));
+		PushVector(dst, AtVector(src, i));
 	}
 }
 
-void vector_each(vector* self, vector_action a) {
+void EachVector(Vector* self, VectorAction a) {
 	for(int i=0; i<self->length; i++) {
-		a(vector_at(self, i));
+		a(AtVector(self, i));
 	}
 }
 
-void vector_merge(vector* src, vector* dst) {
+void MergeVector(Vector* src, Vector* dst) {
 	for(int i=0; i<src->length; i++) {
-		vector_item e = vector_at(src, i);
-		vector_push(dst, e);
+		VectorItem e = AtVector(src, i);
+		PushVector(dst, e);
 	}
 }
 #undef SLOT_SIZE

@@ -25,8 +25,8 @@ typedef enum ilcall_type {
 typedef struct il_factor_call_op {
 	il_factor* parent;
 	il_factor* receiver;
-	//vector* type_argument_list;
-	vector* argument_list;
+	//Vector* type_argument_list;
+	Vector* argument_list;
 	ilcall_type type;
 	union {
 		il_factor_invoke* invoke_;

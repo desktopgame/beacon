@@ -28,7 +28,7 @@ typedef enum call_context_tag {
 } call_context_tag;
 
 typedef struct call_context {
-	vector* call_stack;
+	Vector* call_stack;
 	control_structure control;
 	call_context_tag tag;
 	struct namespace_* scope;
@@ -62,7 +62,7 @@ struct generic_type* call_context_receiver(call_context* self);
 
 struct type* call_context_eval_type(call_context* self, struct fqcn_cache* fqcn);
 
-vector* call_context_typeargs(call_context* self);
+Vector* call_context_typeargs(call_context* self);
 
 bool call_context_is_static(call_context* self);
 

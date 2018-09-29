@@ -22,7 +22,7 @@
 static jobject bc_eval_string(JNIEnv * env, jclass cls, jstring str, jobject table, const char* filename, const char* source);
 static frame* bc_eval_allocate(class_loader* cll);
 static bool bc_read_symbol(JNIEnv* env, jobject table, ast* a);
-static void bc_write_symbol(JNIEnv* env, numeric_map* nmap, frame* fr, jobject target);
+static void bc_write_symbol(JNIEnv* env, NumericMap* nmap, frame* fr, jobject target);
 static void bc_eval_release(JNIEnv* env, class_loader* cll, frame* fr);
 static void printClassInfo(JNIEnv* env, jobject object);
 static jint jobject2jint(JNIEnv* env, jobject obj);
@@ -180,20 +180,20 @@ static bool bc_read_symbol(JNIEnv* env, jobject table, ast* a) {
 			(*env)->ThrowNew(env, bc_not_supported_exc_cls, "not supported inject of reference type");
 			return false;
 		}
-		vector_insert(a->vchildren, 0, astmt);
+		InsertVector(a->vchildren, 0, astmt);
 	}
 	return true;
 }
 
-static void bc_write_symbol(JNIEnv* env, numeric_map* nmap, frame* fr, jobject target) {
+static void bc_write_symbol(JNIEnv* env, NumericMap* nmap, frame* fr, jobject target) {
 	if(nmap == NULL) {
 		return;
 	}
-	numeric_key key = nmap->key;
-	numeric_map_item val = nmap->item;
+	NumericMapKey key = nmap->key;
+	NumericMapItem val = nmap->item;
 	const char* name = string_pool_ref2str(key);
 	symbol_entry* se = (symbol_entry*)val;
-	object* bcobj = vector_at(fr->ref_stack, se->index);
+	object* bcobj = AtVector(fr->ref_stack, se->index);
 	//jp.koya.jbeacon.SymbolTableを検索する
 	jclass symbol_table_cls = (*env)->FindClass(env, "jp/koya/jbeacon/SymbolTable");
 	if(symbol_table_cls == NULL) {
