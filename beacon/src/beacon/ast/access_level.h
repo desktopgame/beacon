@@ -15,9 +15,9 @@ typedef enum access_level {
  * アクセスレベルを出力します.
  * @param level
  */
-void access_print(access_level level);
+void PrintAccess(access_level level);
 
-bool access_secure(access_level self, access_level other);
+bool IsSecureAccess(access_level self, access_level other);
 
-bool access_weak(access_level self, access_level other);
+bool IsWeakAccess(access_level self, access_level other);
 #endif // !SIGNAL_AST_ACCESS_LEVEL_H
