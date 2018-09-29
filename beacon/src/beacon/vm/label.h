@@ -15,18 +15,18 @@ typedef struct label {
  * @param cursor
  * @return
  */
-label* label_new(int cursor);
+label* NewLabel(int cursor);
 
 /**
  * ラベルを複製します.
  * @param src
  * @return
  */
-label* label_clone(label* src);
+label* CloneLabel(label* src);
 
 /**
  * ラベルを開放します.
  * @param self
  */
-void label_delete(label* self);
+void DeleteLabel(label* self);
 #endif // !SIGNAL_VM_LABEL_H
