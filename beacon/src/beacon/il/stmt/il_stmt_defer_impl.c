@@ -19,16 +19,16 @@ void il_stmt_defer_load(il_stmt_defer* self, enviroment* env, call_context* cctx
 }
 
 void il_stmt_defer_generate(il_stmt_defer* self, enviroment* env, call_context* cctx) {
-	label* lb = opcode_buf_label(env->buf, 0);
-	label* lb2 = opcode_buf_label(env->buf, 0);
-	opcode_buf_add(env->buf, OP_DEFER_REGISTER);
-	opcode_buf_add(env->buf, lb2);
-	opcode_buf_add(env->buf, OP_GOTO);
-	opcode_buf_add(env->buf, lb);
-	lb2->cursor = opcode_buf_add(env->buf, OP_DEFER_ENTER);
+	label* lb = AddLabelOpcodeBuf(env->buf, 0);
+	label* lb2 = AddLabelOpcodeBuf(env->buf, 0);
+	AddOpcodeBuf(env->buf, OP_DEFER_REGISTER);
+	AddOpcodeBuf(env->buf, lb2);
+	AddOpcodeBuf(env->buf, OP_GOTO);
+	AddOpcodeBuf(env->buf, lb);
+	lb2->cursor = AddOpcodeBuf(env->buf, OP_DEFER_ENTER);
 	il_stmt_generate(self->stmt, env, cctx);
-	opcode_buf_add(env->buf, OP_DEFER_EXIT);
-	lb->cursor = opcode_buf_nop(env->buf);
+	AddOpcodeBuf(env->buf, OP_DEFER_EXIT);
+	lb->cursor = AddNOPOpcodeBuf(env->buf);
 }
 
 void il_stmt_defer_delete(il_stmt_defer* self) {

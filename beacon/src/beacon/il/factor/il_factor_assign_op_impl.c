@@ -186,8 +186,8 @@ static void assign_to_array(il_factor_assign_op* self, enviroment* env, call_con
 	il_factor_subscript* subs = self->left->u.subscript;
 	il_factor_generate(subs->receiver, env, cctx);
 	il_factor_generate(subs->pos, env, cctx);
-	opcode_buf_add(env->buf, OP_INVOKEOPERATOR);
-	opcode_buf_add(env->buf, subs->operator_index);
+	AddOpcodeBuf(env->buf, OP_INVOKEOPERATOR);
+	AddOpcodeBuf(env->buf, subs->operator_index);
 }
 
 static void assign_by_call(il_factor_assign_op* self, enviroment* env, call_context* cctx) {
@@ -223,9 +223,9 @@ static void assign_by_invoke(il_factor_invoke* lhs, il_factor* rhs, enviroment* 
 	}
 	il_factor_generate(rhs, env, cctx);
 	il_factor_generate(lhs->receiver, env, cctx);
-	opcode_buf_add(env->buf, OP_INVOKEOPERATOR);
-	opcode_buf_add(env->buf, temp);
-	opcode_buf_add(env->buf, OP_NOP);
+	AddOpcodeBuf(env->buf, OP_INVOKEOPERATOR);
+	AddOpcodeBuf(env->buf, temp);
+	AddOpcodeBuf(env->buf, OP_NOP);
 }
 
 static void assign_by_invoke_bound(il_factor_invoke_bound* lhs, il_factor* rhs, enviroment* env, call_context* cctx) {
@@ -240,17 +240,17 @@ static void assign_by_invoke_bound(il_factor_invoke_bound* lhs, il_factor* rhs, 
 	//il_factor_generate(lhs->receiver, env, cctx);
 	subscript_descriptor subs = lhs->u.subscript;
 	if(subs.tag == SUBSCRIPT_LOCAL_T) {
-		opcode_buf_add(env->buf, OP_LOAD);
-		opcode_buf_add(env->buf, subs.index);
+		AddOpcodeBuf(env->buf, OP_LOAD);
+		AddOpcodeBuf(env->buf, subs.index);
 	} else if(subs.tag == SUBSCRIPT_FIELD_T) {
-		opcode_buf_add(env->buf, OP_THIS);
+		AddOpcodeBuf(env->buf, OP_THIS);
 		generate_get_field(env->buf, subs.u.fi, subs.index);
 	} else if(subs.tag == SUBSCRIPT_PROPERTY_T) {
-		opcode_buf_add(env->buf, OP_THIS);
+		AddOpcodeBuf(env->buf, OP_THIS);
 		generate_get_property(env->buf, subs.u.prop, subs.index);
 	}
-	opcode_buf_add(env->buf, OP_INVOKEOPERATOR);
-	opcode_buf_add(env->buf, temp);
+	AddOpcodeBuf(env->buf, OP_INVOKEOPERATOR);
+	AddOpcodeBuf(env->buf, temp);
 }
 
 static bool can_assign_to_field(field* f, il_factor_assign_op* self, enviroment* env, call_context* cctx) {
@@ -315,8 +315,8 @@ static void generate_assign_to_variable_local(il_factor_assign_op* self, envirom
 		symbol_entry* e = symbol_table_entry(env->sym_table, NULL, ilvar->fqcn->namev);
 		//e==NULL の時変数がない
 		il_factor_generate(self->right, env, cctx);
-		opcode_buf_add(env->buf, OP_STORE);
-		opcode_buf_add(env->buf, e->index);
+		AddOpcodeBuf(env->buf, OP_STORE);
+		AddOpcodeBuf(env->buf, e->index);
 		if(generic_type_distance(e->gtype, il_factor_eval(self->right, env, cctx), cctx) < 0) {
 			bc_error_throw(BCERROR_ASSIGN_NOT_COMPATIBLE_LOCAL_T,
 				Ref2Str(ilvar->fqcn->namev)
@@ -342,7 +342,7 @@ static void generate_assign_to_variable_local(il_factor_assign_op* self, envirom
 			return;
 		}
 		if(!IsStaticModifier(f->modifier)) {
-			opcode_buf_add(env->buf, OP_THIS);
+			AddOpcodeBuf(env->buf, OP_THIS);
 		}
 		il_factor_generate(self->right, env, cctx);
 		generate_put_field(env->buf, f, temp);
@@ -363,7 +363,7 @@ static void generate_assign_to_variable_local(il_factor_assign_op* self, envirom
 			return;
 		}
 		if(!IsStaticModifier(p->modifier)) {
-			opcode_buf_add(env->buf, OP_THIS);
+			AddOpcodeBuf(env->buf, OP_THIS);
 		}
 		il_factor_generate(self->right, env, cctx);
 		generate_put_property(env->buf, p, temp);

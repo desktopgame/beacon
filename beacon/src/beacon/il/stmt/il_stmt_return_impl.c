@@ -22,7 +22,7 @@ il_stmt_return * il_stmt_return_new() {
 
 void il_stmt_return_generate(il_stmt_return * self, enviroment * env, call_context* cctx) {
 	il_factor_generate(self->fact, env, cctx);
-	opcode_buf_add(env->buf, OP_RETURN);
+	AddOpcodeBuf(env->buf, OP_RETURN);
 }
 
 void il_stmt_return_load(il_stmt_return * self, enviroment * env, call_context* cctx) {

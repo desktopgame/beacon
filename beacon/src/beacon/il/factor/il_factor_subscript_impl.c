@@ -22,8 +22,8 @@ il_factor_subscript* il_factor_subscript_malloc(const char* filename, int lineno
 void il_factor_subscript_generate(il_factor_subscript* self, enviroment* env, call_context* cctx) {
 	il_factor_generate(self->pos, env, cctx);
 	il_factor_generate(self->receiver, env, cctx);
-	opcode_buf_add(env->buf, OP_INVOKEOPERATOR);
-	opcode_buf_add(env->buf, self->operator_index);
+	AddOpcodeBuf(env->buf, OP_INVOKEOPERATOR);
+	AddOpcodeBuf(env->buf, self->operator_index);
 }
 
 void il_factor_subscript_load(il_factor_subscript* self, enviroment* env, call_context* cctx) {

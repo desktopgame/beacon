@@ -41,7 +41,7 @@ void il_factor_new_instance_generate(il_factor_new_instance * self, enviroment *
 	for(int i=0; i<self->type_args->length; i++) {
 		il_type_argument* e = (il_type_argument*)AtVector(self->type_args, i);
 		assert(e->gtype != NULL);
-		opcode_buf_add(env->buf, OP_GENERIC_ADD);
+		AddOpcodeBuf(env->buf, OP_GENERIC_ADD);
 		generic_type_generate(e->gtype, env);
 	}
 	//実引数を全てスタックへ
@@ -53,9 +53,9 @@ void il_factor_new_instance_generate(il_factor_new_instance * self, enviroment *
 		}
 	}
 	//クラスとコンストラクタのインデックスをプッシュ
-	opcode_buf_add(env->buf, OP_NEW_INSTANCE);
-	opcode_buf_add(env->buf, self->c->parent->absolute_index);
-	opcode_buf_add(env->buf, self->constructor_index);
+	AddOpcodeBuf(env->buf, OP_NEW_INSTANCE);
+	AddOpcodeBuf(env->buf, self->c->parent->absolute_index);
+	AddOpcodeBuf(env->buf, self->constructor_index);
 }
 
 void il_factor_new_instance_load(il_factor_new_instance * self, enviroment * env, call_context* cctx) {

@@ -29,9 +29,9 @@ void il_factor_instanceof_generate(il_factor_instanceof* self, enviroment* env, 
 	generic_type* gtype = import_manager_resolve(NULL, self->gcache, cctx);
 	type* type = gtype->core_type;
 	il_factor_generate(self->fact, env, cctx);
-	opcode_buf_add(env->buf, OP_GENERIC_ADD);
+	AddOpcodeBuf(env->buf, OP_GENERIC_ADD);
 	generic_type_generate(gtype, env);
-	opcode_buf_add(env->buf, OP_INSTANCEOF);
+	AddOpcodeBuf(env->buf, OP_INSTANCEOF);
 }
 
 generic_type* il_factor_instanceof_eval(il_factor_instanceof* self, enviroment* env, call_context* cctx) {

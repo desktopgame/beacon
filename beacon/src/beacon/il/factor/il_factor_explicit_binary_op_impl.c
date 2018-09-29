@@ -26,8 +26,8 @@ il_factor_explicit_binary_op* il_factor_explicit_binary_op_new(operator_type typ
 void il_factor_explicit_binary_op_generate(il_factor_explicit_binary_op* self, enviroment* env, call_context* cctx) {
 	il_factor_generate(self->arg, env, cctx);
 	il_factor_generate(self->receiver, env, cctx);
-	opcode_buf_add(env->buf, OP_INVOKEOPERATOR);
-	opcode_buf_add(env->buf, self->index);
+	AddOpcodeBuf(env->buf, OP_INVOKEOPERATOR);
+	AddOpcodeBuf(env->buf, self->index);
 }
 
 void il_factor_explicit_binary_OP_LOAD(il_factor_explicit_binary_op* self, enviroment* env, call_context* cctx) {

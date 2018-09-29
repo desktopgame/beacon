@@ -19,9 +19,9 @@ il_factor_bool * il_factor_bool_new(bool b) {
 
 void il_factor_bool_generate(il_factor_bool * self, enviroment * env, call_context* cctx) {
 	if (self->a) {
-		opcode_buf_add(env->buf, OP_TRUE);
+		AddOpcodeBuf(env->buf, OP_TRUE);
 	} else {
-		opcode_buf_add(env->buf, OP_FALSE);
+		AddOpcodeBuf(env->buf, OP_FALSE);
 	}
 }
 

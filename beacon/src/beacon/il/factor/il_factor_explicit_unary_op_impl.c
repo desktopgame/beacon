@@ -23,8 +23,8 @@ il_factor_explicit_unary_op* il_factor_explicit_unary_op_new(operator_type type)
 
 void il_factor_explicit_unary_op_generate(il_factor_explicit_unary_op* self, enviroment* env, call_context* cctx) {
 	il_factor_generate(self->receiver, env, cctx);
-	opcode_buf_add(env->buf, OP_INVOKEOPERATOR);
-	opcode_buf_add(env->buf, self->index);
+	AddOpcodeBuf(env->buf, OP_INVOKEOPERATOR);
+	AddOpcodeBuf(env->buf, self->index);
 }
 
 void il_factor_explicit_unary_OP_LOAD(il_factor_explicit_unary_op* self, enviroment* env, call_context* cctx) {

@@ -14,8 +14,8 @@ void il_stmt_break_generate(void * empty, enviroment * env, call_context* cctx) 
 		return;
 	}
 	label* lab = (label*)TopVector(cctx->control.while_end);
-	opcode_buf_add(env->buf, OP_GOTO);
-	opcode_buf_add(env->buf, lab);
+	AddOpcodeBuf(env->buf, OP_GOTO);
+	AddOpcodeBuf(env->buf, lab);
 }
 
 void il_stmt_break_load(void * empty, enviroment * env, call_context* cctx) {

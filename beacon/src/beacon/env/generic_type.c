@@ -163,26 +163,26 @@ void generic_type_print(generic_type * self) {
 }
 
 void generic_type_generate(generic_type* self, enviroment* env) {
-	opcode_buf_add(env->buf, OP_GENERIC_ENTER);
-	opcode_buf_add(env->buf, self->type_args_list->length);
+	AddOpcodeBuf(env->buf, OP_GENERIC_ENTER);
+	AddOpcodeBuf(env->buf, self->type_args_list->length);
 	if(self->core_type == NULL) {
 		if(self->tag == GENERIC_TYPE_TAG_CLASS_T) {
-			opcode_buf_add(env->buf, OP_GENERIC_INSTANCE_TYPE);
-			opcode_buf_add(env->buf, self->virtual_type_index);
+			AddOpcodeBuf(env->buf, OP_GENERIC_INSTANCE_TYPE);
+			AddOpcodeBuf(env->buf, self->virtual_type_index);
 			//assert(self->virtual_type_index != -1);
 		} else {
-			opcode_buf_add(env->buf, OP_GENERIC_STATIC_TYPE);
-			opcode_buf_add(env->buf, self->virtual_type_index);
+			AddOpcodeBuf(env->buf, OP_GENERIC_STATIC_TYPE);
+			AddOpcodeBuf(env->buf, self->virtual_type_index);
 		}
 	} else {
-		opcode_buf_add(env->buf, OP_GENERIC_UNIQUE_TYPE);
-		opcode_buf_add(env->buf, self->core_type->absolute_index);
+		AddOpcodeBuf(env->buf, OP_GENERIC_UNIQUE_TYPE);
+		AddOpcodeBuf(env->buf, self->core_type->absolute_index);
 	}
 	for(int i=0; i<self->type_args_list->length; i++) {
 		generic_type* e = (generic_type*)AtVector(self->type_args_list, i);
 		generic_type_generate(e, env);
 	}
-	opcode_buf_add(env->buf, OP_GENERIC_EXIT);
+	AddOpcodeBuf(env->buf, OP_GENERIC_EXIT);
 }
 
 //Hash<String,List<Int>>

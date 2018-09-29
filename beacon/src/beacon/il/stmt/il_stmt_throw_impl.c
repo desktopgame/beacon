@@ -20,7 +20,7 @@ il_stmt_throw* il_stmt_throw_new() {
 
 void il_stmt_throw_generate(il_stmt_throw* self, enviroment* env, call_context* cctx) {
 	il_factor_generate(self->fact, env, cctx);
-	opcode_buf_add(env->buf, OP_THROW);
+	AddOpcodeBuf(env->buf, OP_THROW);
 }
 
 void il_stmt_throw_load(il_stmt_throw* self, enviroment* env, call_context* cctx) {

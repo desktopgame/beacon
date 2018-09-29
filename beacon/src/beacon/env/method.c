@@ -356,19 +356,19 @@ static constructor* create_delegate_ctor(method* self, type* ty, class_loader* c
 		);
 		//実引数を保存
 		//0番目は this のために開けておく
-		opcode_buf_add(envIterCons->buf, (VectorItem)OP_STORE);
-		opcode_buf_add(envIterCons->buf, (VectorItem)(i + 1));
+		AddOpcodeBuf(envIterCons->buf, (VectorItem)OP_STORE);
+		AddOpcodeBuf(envIterCons->buf, (VectorItem)(i + 1));
 	}
 	//親クラスへ連鎖
-	opcode_buf_add(envIterCons->buf, (VectorItem)OP_CHAIN_SUPER);
-	opcode_buf_add(envIterCons->buf, (VectorItem)0);
-	opcode_buf_add(envIterCons->buf, (VectorItem)0);
+	AddOpcodeBuf(envIterCons->buf, (VectorItem)OP_CHAIN_SUPER);
+	AddOpcodeBuf(envIterCons->buf, (VectorItem)0);
+	AddOpcodeBuf(envIterCons->buf, (VectorItem)0);
 	//このクラスのフィールドを確保
-	opcode_buf_add(envIterCons->buf, (VectorItem)OP_ALLOC_FIELD);
-	opcode_buf_add(envIterCons->buf, (VectorItem)ty->absolute_index);
-	opcode_buf_add(envIterCons->buf, OP_CORO_INIT);
-	opcode_buf_add(envIterCons->buf, iterCons->parameter_list->length);
-	opcode_buf_add(envIterCons->buf, op_len);
+	AddOpcodeBuf(envIterCons->buf, (VectorItem)OP_ALLOC_FIELD);
+	AddOpcodeBuf(envIterCons->buf, (VectorItem)ty->absolute_index);
+	AddOpcodeBuf(envIterCons->buf, OP_CORO_INIT);
+	AddOpcodeBuf(envIterCons->buf, iterCons->parameter_list->length);
+	AddOpcodeBuf(envIterCons->buf, op_len);
 	iterCons->env = envIterCons;
 	return iterCons;
 }
@@ -397,13 +397,13 @@ static method* create_has_next(method* self, type* ty, class_loader* cll, Vector
 		);
 		//実引数を保存
 		//0番目は this のために開けておく
-		//opcode_buf_add(envSmt->buf, (VectorItem)OP_STORE);
-		//opcode_buf_add(envSmt->buf, (VectorItem)(i + 1));
+		//AddOpcodeBuf(envSmt->buf, (VectorItem)OP_STORE);
+		//AddOpcodeBuf(envSmt->buf, (VectorItem)(i + 1));
 	}
-	opcode_buf_add(envSmt->buf, (VectorItem)OP_STORE);
-	opcode_buf_add(envSmt->buf, (VectorItem)0);
-	opcode_buf_add(envSmt->buf, (VectorItem)OP_CORO_SWAP_SELF);
-	opcode_buf_add(envSmt->buf, (VectorItem)OP_CORO_RESUME);
+	AddOpcodeBuf(envSmt->buf, (VectorItem)OP_STORE);
+	AddOpcodeBuf(envSmt->buf, (VectorItem)0);
+	AddOpcodeBuf(envSmt->buf, (VectorItem)OP_CORO_SWAP_SELF);
+	AddOpcodeBuf(envSmt->buf, (VectorItem)OP_CORO_RESUME);
 	for(int i=0; i<stmt_list->length; i++) {
 		il_stmt* e = (il_stmt*)AtVector(stmt_list, i);
 		il_stmt_load(e, envSmt, cctx);
@@ -412,7 +412,7 @@ static method* create_has_next(method* self, type* ty, class_loader* cll, Vector
 		il_stmt* e = (il_stmt*)AtVector(stmt_list, i);
 		il_stmt_generate(e, envSmt, cctx);
 	}
-	opcode_buf_add(envSmt->buf, OP_CORO_EXIT);
+	AddOpcodeBuf(envSmt->buf, OP_CORO_EXIT);
 	if(type_name(self->parent) == InternString("Base")) {
 	//	enviroment_op_dump(envSmt, 0);
 	}
@@ -437,10 +437,10 @@ static method* create_next(method* self, type* ty, class_loader* cll,generic_typ
 	cctx->ty = self->parent;
 	cctx->u.mt = mt;
 
-	opcode_buf_add(envSmt->buf, (VectorItem)OP_STORE);
-	opcode_buf_add(envSmt->buf, (VectorItem)0);
-	opcode_buf_add(envSmt->buf, (VectorItem)OP_CORO_SWAP_SELF);
-	opcode_buf_add(envSmt->buf, (VectorItem)OP_CORO_CURRENT);
+	AddOpcodeBuf(envSmt->buf, (VectorItem)OP_STORE);
+	AddOpcodeBuf(envSmt->buf, (VectorItem)0);
+	AddOpcodeBuf(envSmt->buf, (VectorItem)OP_CORO_SWAP_SELF);
+	AddOpcodeBuf(envSmt->buf, (VectorItem)OP_CORO_CURRENT);
 
 	envSmt->context_ref = cll;
 	cctx->scope = self->parent->location;

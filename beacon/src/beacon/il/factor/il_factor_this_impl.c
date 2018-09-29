@@ -18,7 +18,7 @@ il_factor_this* il_factor_this_new() {
 }
 
 void il_factor_this_generate(il_factor_this * self, enviroment * env, call_context* cctx) {
-	opcode_buf_add(env->buf, OP_THIS);
+	AddOpcodeBuf(env->buf, OP_THIS);
 }
 
 void il_factor_this_load(il_factor_this * self, enviroment * env, call_context* cctx) {

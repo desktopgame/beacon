@@ -587,7 +587,7 @@ static void vm_run(frame * self, enviroment * env, int pos, int deferStart) {
 				//Printi(self->level);
 				//Printfln("[ %s#new ]", type_name(ctor->parent));
 				//enviroment_op_dump(ctor->env, sub->level);
-				//opcode_buf_dump(ctor->env->buf, sub->level);
+				//DumpOpcodeBuf(ctor->env->buf, sub->level);
 				vm_execute(sub, ctor->env);
 				DeleteVector(cfr->u.static_invoke.args, VectorDeleterOfNull);
 				DeleteVector(cfr->u.static_invoke.typeargs, VectorDeleterOfNull);
@@ -625,7 +625,7 @@ static void vm_run(frame * self, enviroment * env, int pos, int deferStart) {
 					PushVector(cfr->u.static_invoke.typeargs, self->type_args_vec);
 				}
 				//		enviroment_op_dump(ctor->env, sub->level);
-				//opcode_buf_dump(ctor->env->buf, sub->level);
+				//DumpOpcodeBuf(ctor->env->buf, sub->level);
 				vm_execute(sub, ctor->env);
 				DeleteVector(cfr->u.static_invoke.args, VectorDeleterOfNull);
 				DeleteVector(cfr->u.static_invoke.typeargs, VectorDeleterOfNull);

@@ -10,7 +10,7 @@
 static void check_method_return(il_stmt_return_empty self, enviroment * env, call_context* cctx);
 
 void il_stmt_return_empty_generate(il_stmt_return_empty self, enviroment* env, call_context* cctx) {
-	opcode_buf_add(env->buf, OP_RETURN);
+	AddOpcodeBuf(env->buf, OP_RETURN);
 }
 
 void il_stmt_return_empty_load(il_stmt_return_empty self, enviroment* env, call_context* cctx) {

@@ -52,46 +52,46 @@ void il_stmt_if_generate(il_stmt_if * self, enviroment* env, call_context* cctx)
 	//if(...)
 	env->sym_table->scope_depth++;
 	il_factor_generate(self->condition, env, cctx);
-	label* l1 = opcode_buf_label(env->buf, -1);
-	label* tail = opcode_buf_label(env->buf, -1);
+	label* l1 = AddLabelOpcodeBuf(env->buf, -1);
+	label* tail = AddLabelOpcodeBuf(env->buf, -1);
 	// { ... }
-	opcode_buf_add(env->buf, OP_GOTO_if_false);
-	opcode_buf_add(env->buf, l1);
+	AddOpcodeBuf(env->buf, OP_GOTO_if_false);
+	AddOpcodeBuf(env->buf, l1);
 	for (int i = 0; i < self->body->length; i++) {
 		il_stmt* stmt = (il_stmt*)AtVector(self->body, i);
 		il_stmt_generate(stmt, env, cctx);
 	}
 	//条件が満たされて実行されたら最後までジャンプ
-	opcode_buf_add(env->buf, OP_GOTO);
-	opcode_buf_add(env->buf, tail);
-	l1->cursor = opcode_buf_nop(env->buf);
+	AddOpcodeBuf(env->buf, OP_GOTO);
+	AddOpcodeBuf(env->buf, tail);
+	l1->cursor = AddNOPOpcodeBuf(env->buf);
 	// elif(...)
 	for (int i = 0; i < self->elif_list->length; i++) {
 		il_stmt_elif* elif = (il_stmt_elif*)AtVector(self->elif_list, i);
 		il_factor_generate(elif->condition, env, cctx);
-		label* l2 = opcode_buf_label(env->buf, -1);
+		label* l2 = AddLabelOpcodeBuf(env->buf, -1);
 		// { ... }
-		opcode_buf_add(env->buf, OP_GOTO_if_false);
-		opcode_buf_add(env->buf, l2);
+		AddOpcodeBuf(env->buf, OP_GOTO_if_false);
+		AddOpcodeBuf(env->buf, l2);
 		for (int j = 0; j < elif->body->length; j++) {
 			il_stmt* stmt = (il_stmt*)AtVector(elif->body, j);
 			il_stmt_generate(stmt, env, cctx);
 		}
 		//条件が満たされて実行されたら最後までジャンプ
-		opcode_buf_add(env->buf, OP_GOTO);
-		opcode_buf_add(env->buf, tail);
-		l2->cursor = opcode_buf_nop(env->buf);
+		AddOpcodeBuf(env->buf, OP_GOTO);
+		AddOpcodeBuf(env->buf, tail);
+		l2->cursor = AddNOPOpcodeBuf(env->buf);
 	}
 	// else { ... }
 	if (self->else_body == NULL ||
 		self->else_body->body->length == 0) {
-		tail->cursor = opcode_buf_nop(env->buf);
+		tail->cursor = AddNOPOpcodeBuf(env->buf);
 	} else {
 		for (int i = 0; i < self->else_body->body->length; i++) {
 			il_stmt* stmt = (il_stmt*)AtVector(self->else_body->body, i);
 			il_stmt_generate(stmt, env, cctx);
 		}
-		tail->cursor = opcode_buf_nop(env->buf);
+		tail->cursor = AddNOPOpcodeBuf(env->buf);
 	}
 	env->sym_table->scope_depth--;
 }

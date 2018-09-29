@@ -7,7 +7,7 @@
 static generic_type* gSelf = NULL;
 
 void il_factor_null_generate(void * empty, enviroment * env, call_context* cctx) {
-	opcode_buf_add(env->buf, OP_NULL);
+	AddOpcodeBuf(env->buf, OP_NULL);
 }
 
 void il_factor_null_load(void * empty, enviroment * env, call_context* cctx) {

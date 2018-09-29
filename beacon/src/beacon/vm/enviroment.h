@@ -39,7 +39,7 @@ void enviroment_add_range(enviroment* self, int lineno);
 
 /**
  * この enviroment に含まれるオペコードの一覧をダンプします.
- * opcode_buf_dump との違いは、行番号を出力できる点です。
+ * DumpOpcodeBuf との違いは、行番号を出力できる点です。
  * @param self
  * @param depth
  */

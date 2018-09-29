@@ -214,7 +214,7 @@ static void il_factor_invoke_generate_method(il_factor_invoke* self, enviroment*
 	for(int i=0; i<self->type_args->length; i++) {
 		il_type_argument* e = (il_type_argument*)AtVector(self->type_args, i);
 		assert(e->gtype != NULL);
-		opcode_buf_add(env->buf, OP_GENERIC_ADD);
+		AddOpcodeBuf(env->buf, OP_GENERIC_ADD);
 		generic_type_generate(e->gtype, env);
 	}
 	for(int i=0; i<self->args->length; i++) {
@@ -223,17 +223,17 @@ static void il_factor_invoke_generate_method(il_factor_invoke* self, enviroment*
 	}
 	il_factor_generate(self->receiver, env, cctx);
 	if(self->u.m->parent->tag == TYPE_INTERFACE_T) {
-		opcode_buf_add(env->buf, (VectorItem)OP_INVOKEINTERFACE);
-		opcode_buf_add(env->buf, (VectorItem)self->u.m->parent->absolute_index);
-		opcode_buf_add(env->buf, (VectorItem)self->index);
+		AddOpcodeBuf(env->buf, (VectorItem)OP_INVOKEINTERFACE);
+		AddOpcodeBuf(env->buf, (VectorItem)self->u.m->parent->absolute_index);
+		AddOpcodeBuf(env->buf, (VectorItem)self->index);
 	} else {
 		assert(!IsStaticModifier(self->u.m->modifier));
 		if(self->u.m->access == ACCESS_PRIVATE_T) {
-			opcode_buf_add(env->buf, (VectorItem)OP_INVOKESPECIAL);
-			opcode_buf_add(env->buf, (VectorItem)self->index);
+			AddOpcodeBuf(env->buf, (VectorItem)OP_INVOKESPECIAL);
+			AddOpcodeBuf(env->buf, (VectorItem)self->index);
 		} else {
-			opcode_buf_add(env->buf, (VectorItem)OP_INVOKEVIRTUAL);
-			opcode_buf_add(env->buf, (VectorItem)self->index);
+			AddOpcodeBuf(env->buf, (VectorItem)OP_INVOKEVIRTUAL);
+			AddOpcodeBuf(env->buf, (VectorItem)self->index);
 		}
 	}
 }
@@ -246,7 +246,7 @@ static void il_factor_invoke_generate_subscript(il_factor_invoke* self, envirome
 	for(int i=0; i<self->type_args->length; i++) {
 		il_type_argument* e = (il_type_argument*)AtVector(self->type_args, i);
 		assert(e->gtype != NULL);
-		opcode_buf_add(env->buf, OP_GENERIC_ADD);
+		AddOpcodeBuf(env->buf, OP_GENERIC_ADD);
 		generic_type_generate(e->gtype, env);
 	}
 	for(int i=0; i<self->args->length; i++) {
@@ -254,6 +254,6 @@ static void il_factor_invoke_generate_subscript(il_factor_invoke* self, envirome
 		il_factor_generate(e->factor, env, cctx);
 	}
 	il_factor_generate(self->receiver, env, cctx);
-	opcode_buf_add(env->buf, OP_INVOKEOPERATOR);
-	opcode_buf_add(env->buf, self->index);
+	AddOpcodeBuf(env->buf, OP_INVOKEOPERATOR);
+	AddOpcodeBuf(env->buf, self->index);
 }

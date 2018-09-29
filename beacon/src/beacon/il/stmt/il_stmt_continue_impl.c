@@ -14,8 +14,8 @@ void il_stmt_continue_generate(void * empty, enviroment * env, call_context* cct
 		return;
 	}
 	label* lab = (label*)TopVector(cctx->control.while_start);
-	opcode_buf_add(env->buf, OP_GOTO);
-	opcode_buf_add(env->buf, lab);
+	AddOpcodeBuf(env->buf, OP_GOTO);
+	AddOpcodeBuf(env->buf, lab);
 }
 
 void il_stmt_continue_load(void * empty, enviroment * env, call_context* cctx) {

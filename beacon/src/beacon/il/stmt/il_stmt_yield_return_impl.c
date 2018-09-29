@@ -25,7 +25,7 @@ il_stmt_yield_return* il_stmt_yield_return_malloc(const char* filename, int line
 
 void il_stmt_yield_return_generate(il_stmt_yield_return* self, enviroment* env, call_context* cctx) {
 	il_factor_generate(self->fact, env, cctx);
-	opcode_buf_add(env->buf, OP_CORO_NEXT);
+	AddOpcodeBuf(env->buf, OP_CORO_NEXT);
 }
 
 void il_stmt_yield_return_load(il_stmt_yield_return * self, enviroment* env, call_context* cctx) {

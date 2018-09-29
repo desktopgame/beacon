@@ -43,8 +43,8 @@ void il_stmt_variable_init_generate(il_stmt_variable_init * self, enviroment * e
 			Ref2Str(self->namev)
 		);
 	}
-	opcode_buf_add(env->buf, OP_STORE);
-	opcode_buf_add(env->buf, self->sym->index);
+	AddOpcodeBuf(env->buf, OP_STORE);
+	AddOpcodeBuf(env->buf, self->sym->index);
 }
 
 void il_stmt_variable_init_load(il_stmt_variable_init * self, enviroment * env, call_context* cctx) {

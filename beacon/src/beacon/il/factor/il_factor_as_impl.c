@@ -25,12 +25,12 @@ il_factor_as * il_factor_as_new() {
 
 void il_factor_as_generate(il_factor_as * self, enviroment * env, call_context* cctx) {
 	il_factor_generate(self->fact, env, cctx);
-	opcode_buf_add(env->buf, OP_GENERIC_ADD);
+	AddOpcodeBuf(env->buf, OP_GENERIC_ADD);
 	generic_type_generate(self->gtype, env);
 	if(self->mode == CAST_DOWN_T) {
-		opcode_buf_add(env->buf, OP_DOWN_AS);
+		AddOpcodeBuf(env->buf, OP_DOWN_AS);
 	} else {
-		opcode_buf_add(env->buf, OP_UP_AS);
+		AddOpcodeBuf(env->buf, OP_UP_AS);
 	}
 }
 

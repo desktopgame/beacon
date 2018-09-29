@@ -24,8 +24,8 @@ il_factor_double * il_factor_double_new(double d) {
 
 void il_factor_double_generate(il_factor_double * self, enviroment* env, call_context* cctx) {
 	int index = enviroment_add_constant_double(env, self->value);
-	opcode_buf_add(env->buf, OP_DCONST);
-	opcode_buf_add(env->buf, index);
+	AddOpcodeBuf(env->buf, OP_DCONST);
+	AddOpcodeBuf(env->buf, index);
 }
 
 void il_factor_double_load(il_factor_double * self, enviroment * env, call_context* cctx) {

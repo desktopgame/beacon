@@ -21,8 +21,8 @@ il_stmt_inject_jni* il_stmt_inject_jni_new(string_view namev) {
 
 void il_stmt_inject_jni_generate(il_stmt_inject_jni* self, enviroment* env, call_context* cctx) {
 	il_factor_generate(self->fact, env, cctx);
-	opcode_buf_add(env->buf, OP_STORE);
-	opcode_buf_add(env->buf, self->se->index);
+	AddOpcodeBuf(env->buf, OP_STORE);
+	AddOpcodeBuf(env->buf, self->se->index);
 }
 
 void il_stmt_inject_jni_load(il_stmt_inject_jni * self, enviroment* env, call_context* cctx) {

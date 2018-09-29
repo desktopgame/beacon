@@ -25,26 +25,26 @@ il_stmt_while * il_stmt_while_new() {
 
 void il_stmt_while_generate(il_stmt_while * self, enviroment * env, call_context* cctx) {
 	env->sym_table->scope_depth++;
-	int prev = opcode_buf_nop(env->buf);
-	label* prevLab = opcode_buf_label(env->buf, prev);
-	label* nextLab = opcode_buf_label(env->buf, -1);
+	int prev = AddNOPOpcodeBuf(env->buf);
+	label* prevLab = AddLabelOpcodeBuf(env->buf, prev);
+	label* nextLab = AddLabelOpcodeBuf(env->buf, -1);
 	PushVector(cctx->control.while_start, prevLab);
 	PushVector(cctx->control.while_end, nextLab);
 	//条件を満たさないなら nextLab へ
 	il_factor_generate(self->condition, env, cctx);
-	opcode_buf_add(env->buf, OP_GOTO_if_false);
-	opcode_buf_add(env->buf, nextLab);
+	AddOpcodeBuf(env->buf, OP_GOTO_if_false);
+	AddOpcodeBuf(env->buf, nextLab);
 	//全てのステートメントを実行
 	for (int i = 0; i < self->statement_list->length; i++) {
 		il_stmt* e = (il_stmt*)AtVector(self->statement_list, i);
 		il_stmt_generate(e, env, cctx);
 	}
 	//prevLab へ行って再判定
-	opcode_buf_add(env->buf, OP_GOTO);
-	opcode_buf_add(env->buf, prevLab);
+	AddOpcodeBuf(env->buf, OP_GOTO);
+	AddOpcodeBuf(env->buf, prevLab);
 	PopVector(cctx->control.while_start);
 	PopVector(cctx->control.while_end);
-	int next = opcode_buf_nop(env->buf);
+	int next = AddNOPOpcodeBuf(env->buf);
 	nextLab->cursor = next;
 	env->sym_table->scope_depth--;
 }

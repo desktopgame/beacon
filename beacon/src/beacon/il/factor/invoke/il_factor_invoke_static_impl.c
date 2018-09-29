@@ -31,7 +31,7 @@ void il_factor_invoke_static_generate(il_factor_invoke_static* self, enviroment*
 	for(int i=0; i<self->type_args->length; i++) {
 		il_type_argument* e = (il_type_argument*)AtVector(self->type_args, i);
 		assert(e->gtype != NULL);
-		opcode_buf_add(env->buf, OP_GENERIC_ADD);
+		AddOpcodeBuf(env->buf, OP_GENERIC_ADD);
 		generic_type_generate(e->gtype, env);
 	}
 	for(int i=0; i<self->args->length; i++) {
@@ -41,9 +41,9 @@ void il_factor_invoke_static_generate(il_factor_invoke_static* self, enviroment*
 			return;
 		}
 	}
-	opcode_buf_add(env->buf, (VectorItem)OP_INVOKESTATIC);
-	opcode_buf_add(env->buf, (VectorItem)self->m->parent->absolute_index);
-	opcode_buf_add(env->buf, (VectorItem)self->index);
+	AddOpcodeBuf(env->buf, (VectorItem)OP_INVOKESTATIC);
+	AddOpcodeBuf(env->buf, (VectorItem)self->m->parent->absolute_index);
+	AddOpcodeBuf(env->buf, (VectorItem)self->index);
 }
 
 void il_factor_invoke_static_load(il_factor_invoke_static * self, enviroment * env, call_context* cctx) {

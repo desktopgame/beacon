@@ -18,7 +18,7 @@ il_factor_super* il_factor_super_new() {
 }
 
 void il_factor_super_generate(il_factor_super * self, enviroment * env, call_context* cctx) {
-	opcode_buf_add(env->buf, OP_SUPER);
+	AddOpcodeBuf(env->buf, OP_SUPER);
 }
 
 void il_factor_super_load(il_factor_super * self, enviroment * env, call_context* cctx) {

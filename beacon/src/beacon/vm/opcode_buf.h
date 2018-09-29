@@ -16,7 +16,7 @@ typedef struct opcode_buf {
  * オペコードの一覧を作成します.
  * @return
  */
-opcode_buf* opcode_buf_new();
+opcode_buf* NewOpcodeBuf();
 
 /**
  * self->source に item を追加します.
@@ -24,28 +24,28 @@ opcode_buf* opcode_buf_new();
  * @param item
  * @return
  */
-int opcode_buf_add(opcode_buf* self, VectorItem item);
+int AddOpcodeBuf(opcode_buf* self, VectorItem item);
 
 /**
  * このバッファーの開放時に開放されるラベルを作成します.
  * @param index
  * @return
  */
-label* opcode_buf_label(opcode_buf * self, int index);
+label* AddLabelOpcodeBuf(opcode_buf * self, int index);
 
 /**
  * nop を追加してその位置を返します.
  * @param self
  * @return
  */
-int opcode_buf_nop(opcode_buf* self);
+int AddNOPOpcodeBuf(opcode_buf* self);
 
 /**
  * オペコードの一覧を出力します.
  * @param self
  * @param depth
  */
-void opcode_buf_dump(opcode_buf* self, int depth);
+void DumpOpcodeBuf(opcode_buf* self, int depth);
 
 /**
  * a の 末尾に b を統合した新しい opcode_buf を作成します.
@@ -53,11 +53,11 @@ void opcode_buf_dump(opcode_buf* self, int depth);
  * @param b
  * @return
  */
-opcode_buf* opcode_buf_merge(opcode_buf* a, opcode_buf* b);
+opcode_buf* MergeOpcodeBuf(opcode_buf* a, opcode_buf* b);
 
 /**
  * オペコードの一覧を開放します.
  * @param self
  */
-void opcode_buf_delete(opcode_buf* self);
+void DeleteOpcodeBuf(opcode_buf* self);
 #endif // !SIGNAL_VM_OPCODE_BUF_H

@@ -192,7 +192,7 @@ static void il_factor_invoke_bound_generate_method(il_factor_invoke_bound* self,
 	for(int i=0; i<self->type_args->length; i++) {
 		il_type_argument* e = (il_type_argument*)AtVector(self->type_args, i);
 		assert(e->gtype != NULL);
-		opcode_buf_add(env->buf, OP_GENERIC_ADD);
+		AddOpcodeBuf(env->buf, OP_GENERIC_ADD);
 		generic_type_generate(e->gtype, env);
 	}
 	for(int i=0; i<self->args->length; i++) {
@@ -203,17 +203,17 @@ static void il_factor_invoke_bound_generate_method(il_factor_invoke_bound* self,
 		}
 	}
 	if(IsStaticModifier(self->u.m->modifier)) {
-		opcode_buf_add(env->buf, (VectorItem)OP_INVOKESTATIC);
-		opcode_buf_add(env->buf, (VectorItem)self->u.m->parent->absolute_index);
-		opcode_buf_add(env->buf,(VectorItem) self->index);
+		AddOpcodeBuf(env->buf, (VectorItem)OP_INVOKESTATIC);
+		AddOpcodeBuf(env->buf, (VectorItem)self->u.m->parent->absolute_index);
+		AddOpcodeBuf(env->buf,(VectorItem) self->index);
 	} else {
-		opcode_buf_add(env->buf,(VectorItem) OP_THIS);
+		AddOpcodeBuf(env->buf,(VectorItem) OP_THIS);
 		if(self->u.m->access == ACCESS_PRIVATE_T) {
-			opcode_buf_add(env->buf, (VectorItem)OP_INVOKESPECIAL);
-			opcode_buf_add(env->buf, (VectorItem)self->index);
+			AddOpcodeBuf(env->buf, (VectorItem)OP_INVOKESPECIAL);
+			AddOpcodeBuf(env->buf, (VectorItem)self->index);
 		} else {
-			opcode_buf_add(env->buf, (VectorItem)OP_INVOKEVIRTUAL);
-			opcode_buf_add(env->buf, (VectorItem)self->index);
+			AddOpcodeBuf(env->buf, (VectorItem)OP_INVOKEVIRTUAL);
+			AddOpcodeBuf(env->buf, (VectorItem)self->index);
 		}
 	}
 }
@@ -226,7 +226,7 @@ static void il_factor_invoke_bound_generate_subscript(il_factor_invoke_bound* se
 	for(int i=0; i<self->type_args->length; i++) {
 		il_type_argument* e = (il_type_argument*)AtVector(self->type_args, i);
 		assert(e->gtype != NULL);
-		opcode_buf_add(env->buf, OP_GENERIC_ADD);
+		AddOpcodeBuf(env->buf, OP_GENERIC_ADD);
 		generic_type_generate(e->gtype, env);
 	}
 	for(int i=0; i<self->args->length; i++) {
@@ -238,19 +238,19 @@ static void il_factor_invoke_bound_generate_subscript(il_factor_invoke_bound* se
 	}
 	subscript_descriptor subs = self->u.subscript;
 	if(subs.tag == SUBSCRIPT_LOCAL_T) {
-		opcode_buf_add(env->buf, OP_LOAD);
-		opcode_buf_add(env->buf, subs.index);
+		AddOpcodeBuf(env->buf, OP_LOAD);
+		AddOpcodeBuf(env->buf, subs.index);
 	} else if(subs.tag == SUBSCRIPT_FIELD_T) {
-		opcode_buf_add(env->buf, OP_THIS);
+		AddOpcodeBuf(env->buf, OP_THIS);
 		generate_get_field(env->buf, subs.u.fi, subs.index);
 	} else if(subs.tag == SUBSCRIPT_PROPERTY_T) {
-		opcode_buf_add(env->buf, OP_THIS);
+		AddOpcodeBuf(env->buf, OP_THIS);
 		generate_get_property(env->buf, subs.u.prop, subs.index);
 	} else {
 		assert(false);
 	}
-	opcode_buf_add(env->buf, OP_INVOKEOPERATOR);
-	opcode_buf_add(env->buf, self->index);
+	AddOpcodeBuf(env->buf, OP_INVOKEOPERATOR);
+	AddOpcodeBuf(env->buf, self->index);
 }
 
 static generic_type* il_factor_invoke_bound_return_gtype(il_factor_invoke_bound* self, call_context* cctx) {

@@ -42,16 +42,16 @@ void il_factor_childa_op_generate(il_factor_childa_op* self, enviroment* env, ca
 		il_factor_generate(self->parent->a, env, cctx);
 		generic_type* gtype = il_factor_eval(self->parent->a, env, cctx);
 		if(GENERIC2TYPE(gtype) == TYPE_INT) {
-			opcode_buf_add(env->buf, OP_IFLIP);
+			AddOpcodeBuf(env->buf, OP_IFLIP);
 		} else if(GENERIC2TYPE(gtype) == TYPE_BOOL) {
-			opcode_buf_add(env->buf, OP_BFLIP);
+			AddOpcodeBuf(env->buf, OP_BFLIP);
 		} else {
 			assert(false);
 		}
 	} else {
 		il_factor_generate(self->parent->a, env, cctx);
-		opcode_buf_add(env->buf, OP_INVOKEOPERATOR);
-		opcode_buf_add(env->buf, self->operator_index);
+		AddOpcodeBuf(env->buf, OP_INVOKEOPERATOR);
+		AddOpcodeBuf(env->buf, self->operator_index);
 	}
 }
 

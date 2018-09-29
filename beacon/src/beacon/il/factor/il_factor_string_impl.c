@@ -22,8 +22,8 @@ il_factor_string * il_factor_string_new(string_view valuev) {
 
 void il_factor_string_generate(il_factor_string * self, enviroment* env, call_context* cctx) {
 	int index = enviroment_add_constant_string(env, self->valuev);
-	opcode_buf_add(env->buf, (VectorItem)OP_SCONST);
-	opcode_buf_add(env->buf, (VectorItem)index);
+	AddOpcodeBuf(env->buf, (VectorItem)OP_SCONST);
+	AddOpcodeBuf(env->buf, (VectorItem)index);
 }
 
 void il_factor_string_load(il_factor_string * self, enviroment * env, call_context* cctx) {

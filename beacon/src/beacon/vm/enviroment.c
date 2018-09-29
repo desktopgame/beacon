@@ -23,7 +23,7 @@ static void enviroment_object_delete(object* obj);
 
 enviroment * enviroment_new() {
 	enviroment* ret = (enviroment*)MEM_MALLOC(sizeof(enviroment));
-	ret->buf = opcode_buf_new();
+	ret->buf = NewOpcodeBuf();
 	ret->constant_pool_vec = NewVector();
 	ret->sym_table = symbol_table_new();
 	ret->context_ref = NULL;
@@ -146,7 +146,7 @@ void enviroment_delete(enviroment * self) {
 	}
 	DeleteVector(self->constant_pool_vec, enviroment_constant_pool_vec_delete);
 	DeleteVector(self->line_range_vec, enviroment_DeleteLineRange);
-	opcode_buf_delete(self->buf);
+	DeleteOpcodeBuf(self->buf);
 	symbol_table_delete(self->sym_table);
 	MEM_FREE(self);
 }

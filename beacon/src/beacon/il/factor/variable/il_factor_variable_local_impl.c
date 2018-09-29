@@ -40,18 +40,18 @@ void il_factor_variable_local_generate(il_factor_variable_local* self, enviromen
 			);
 			return;
 		}
-		opcode_buf_add(env->buf, (VectorItem)OP_LOAD);
-		opcode_buf_add(env->buf, (VectorItem)self->u.entry_->index);
+		AddOpcodeBuf(env->buf, (VectorItem)OP_LOAD);
+		AddOpcodeBuf(env->buf, (VectorItem)self->u.entry_->index);
 	} else if(self->type == VARIABLE_LOCAL_FIELD_T) {
 		field* f = self->u.f_with_i.fi;
 		if(!IsStaticModifier(f->modifier)) {
-			opcode_buf_add(env->buf, OP_THIS);
+			AddOpcodeBuf(env->buf, OP_THIS);
 		}
 		generate_get_field(env->buf, f, self->u.f_with_i.index);
 	} else if(self->type == VARIABLE_LOCAL_PROPERTY_T) {
 		property* p = self->u.p_with_i.p;
 		if(!IsStaticModifier(p->modifier)) {
-			opcode_buf_add(env->buf, OP_THIS);
+			AddOpcodeBuf(env->buf, OP_THIS);
 		}
 		generate_get_property(env->buf, p, self->u.p_with_i.index);
 	}

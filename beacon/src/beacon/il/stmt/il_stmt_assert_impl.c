@@ -23,17 +23,17 @@ il_stmt_assert* il_stmt_assert_new() {
 
 void il_stmt_assert_generate(il_stmt_assert* self, enviroment* env, call_context* cctx) {
 	//https://code.i-harness.com/ja/q/2a1650
-	label* gt = opcode_buf_label(env->buf, 0);
+	label* gt = AddLabelOpcodeBuf(env->buf, 0);
 	il_factor_generate(self->condition, env, cctx);
-	opcode_buf_add(env->buf, OP_GOTO_if_true);
-	opcode_buf_add(env->buf, gt);
+	AddOpcodeBuf(env->buf, OP_GOTO_if_true);
+	AddOpcodeBuf(env->buf, gt);
 
 	il_factor_generate(self->message, env, cctx);
-	opcode_buf_add(env->buf, OP_NEW_INSTANCE);
-	opcode_buf_add(env->buf, namespace_get_type(namespace_lang(), InternString("Exception"))->absolute_index);
-	opcode_buf_add(env->buf, 0);
-	opcode_buf_add(env->buf, OP_THROW);
-	gt->cursor = opcode_buf_nop(env->buf);
+	AddOpcodeBuf(env->buf, OP_NEW_INSTANCE);
+	AddOpcodeBuf(env->buf, namespace_get_type(namespace_lang(), InternString("Exception"))->absolute_index);
+	AddOpcodeBuf(env->buf, 0);
+	AddOpcodeBuf(env->buf, OP_THROW);
+	gt->cursor = AddNOPOpcodeBuf(env->buf);
 }
 
 void il_stmt_assert_load(il_stmt_assert* self, enviroment* env, call_context* cctx) {

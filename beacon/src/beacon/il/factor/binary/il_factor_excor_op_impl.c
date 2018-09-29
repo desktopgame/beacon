@@ -45,17 +45,17 @@ void il_factor_excor_op_generate(il_factor_excor_op* self, enviroment* env, call
 		il_factor_generate(self->parent->right, env, cctx);
 		il_factor_generate(self->parent->left, env, cctx);
 		if(il_factor_binary_op_int_int(self->parent, env, cctx)) {
-			opcode_buf_add(env->buf, OP_IEXCOR);
+			AddOpcodeBuf(env->buf, OP_IEXCOR);
 		} else if(il_factor_binary_op_bool_bool(self->parent, env, cctx)) {
-			opcode_buf_add(env->buf, OP_BEXCOR);
+			AddOpcodeBuf(env->buf, OP_BEXCOR);
 		} else {
 			assert(false);
 		}
 	} else {
 		il_factor_generate(self->parent->right, env, cctx);
 		il_factor_generate(self->parent->left, env, cctx);
-		opcode_buf_add(env->buf, OP_INVOKEOPERATOR);
-		opcode_buf_add(env->buf, self->operator_index);
+		AddOpcodeBuf(env->buf, OP_INVOKEOPERATOR);
+		AddOpcodeBuf(env->buf, self->operator_index);
 	}
 }
 

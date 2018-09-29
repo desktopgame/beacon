@@ -206,10 +206,10 @@ static void class_loader_load_toplevel(class_loader* self) {
 	il_stmt_load(body, self->env, cctx);
 	il_stmt_generate(body, self->env, cctx);
 	//$worldをthisにする
-	opcode_buf_add(self->env->buf, OP_LOAD);
-	opcode_buf_add(self->env->buf, 1);
-	opcode_buf_add(self->env->buf, OP_STORE);
-	opcode_buf_add(self->env->buf, 0);
+	AddOpcodeBuf(self->env->buf, OP_LOAD);
+	AddOpcodeBuf(self->env->buf, 1);
+	AddOpcodeBuf(self->env->buf, OP_STORE);
+	AddOpcodeBuf(self->env->buf, 0);
 	//以下読み込み
 	CLBC_body(self, self->il_code->statement_list, self->env, cctx, NULL);
 	il_stmt_delete(body);
@@ -264,11 +264,11 @@ static void class_loader_load_toplevel_function(class_loader* self) {
 			);
 			//実引数を保存
 			//0番目は this のために開けておく
-			opcode_buf_add(env->buf, OP_STORE);
-			opcode_buf_add(env->buf, (j + 1));
+			AddOpcodeBuf(env->buf, OP_STORE);
+			AddOpcodeBuf(env->buf, (j + 1));
 		}
-		opcode_buf_add(env->buf, (VectorItem)OP_STORE);
-		opcode_buf_add(env->buf, (VectorItem)0);
+		AddOpcodeBuf(env->buf, (VectorItem)OP_STORE);
+		AddOpcodeBuf(env->buf, (VectorItem)0);
 		PushVector(worldT->u.class_->method_list, m);
 		//CLBC_corutine(self, m, env, ilfunc->parameter_list, ilfunc->statement_list, cctx, namespace_lang());
 		call_context_delete(cctx);

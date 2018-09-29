@@ -33,11 +33,11 @@ void il_factor_compare_op_generate(il_factor_compare_op* self, enviroment* env, 
 		il_factor_generate(self->parent->right, env, cctx);
 		il_factor_generate(self->parent->left, env, cctx);
 		if(il_factor_binary_op_int_int(self->parent, env, cctx)) {
-			opcode_buf_add(env->buf, (VectorItem)operator_to_iopcode(self->type));
+			AddOpcodeBuf(env->buf, (VectorItem)operator_to_iopcode(self->type));
 		} else if(il_factor_binary_op_double_double(self->parent, env, cctx)) {
-			opcode_buf_add(env->buf, (VectorItem)operator_to_dopcode(self->type));
+			AddOpcodeBuf(env->buf, (VectorItem)operator_to_dopcode(self->type));
 		} else if(il_factor_binary_op_char_char(self->parent, env, cctx)) {
-			opcode_buf_add(env->buf, (VectorItem)operator_to_copcode(self->type));
+			AddOpcodeBuf(env->buf, (VectorItem)operator_to_copcode(self->type));
 		} else {
 			bc_error_throw(BCERROR_UNDEFINED_COMPARE_OPERATOR_T,
 				operator_tostring(self->type)
@@ -47,8 +47,8 @@ void il_factor_compare_op_generate(il_factor_compare_op* self, enviroment* env, 
 	} else {
 		il_factor_generate(self->parent->right, env, cctx);
 		il_factor_generate(self->parent->left, env, cctx);
-		opcode_buf_add(env->buf, OP_INVOKEOPERATOR);
-		opcode_buf_add(env->buf, self->operator_index);
+		AddOpcodeBuf(env->buf, OP_INVOKEOPERATOR);
+		AddOpcodeBuf(env->buf, self->operator_index);
 	}
 }
 

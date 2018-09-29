@@ -5,12 +5,12 @@
 
 void generate_get_field(opcode_buf* buf, field* fi, int index) {
 	if(IsStaticModifier(fi->modifier)) {
-		opcode_buf_add(buf, OP_GET_STATIC);
-		opcode_buf_add(buf, fi->parent->absolute_index);
-		opcode_buf_add(buf, index);
+		AddOpcodeBuf(buf, OP_GET_STATIC);
+		AddOpcodeBuf(buf, fi->parent->absolute_index);
+		AddOpcodeBuf(buf, index);
 	} else {
-		opcode_buf_add(buf, OP_GET_FIELD);
-		opcode_buf_add(buf, index);
+		AddOpcodeBuf(buf, OP_GET_FIELD);
+		AddOpcodeBuf(buf, index);
 	}
 }
 
@@ -19,24 +19,24 @@ void generate_get_property(opcode_buf* buf, property* prop, int index) {
 		generate_get_field(buf, prop->source_ref, class_get_field_by_property(prop->parent->u.class_, prop));
 	} else {
 		if(IsStaticModifier(prop->modifier)) {
-			opcode_buf_add(buf, OP_GET_STATIC_property);
-			opcode_buf_add(buf, prop->parent->absolute_index);
-			opcode_buf_add(buf, index);
+			AddOpcodeBuf(buf, OP_GET_STATIC_property);
+			AddOpcodeBuf(buf, prop->parent->absolute_index);
+			AddOpcodeBuf(buf, index);
 		} else {
-			opcode_buf_add(buf, OP_GET_PROPERTY);
-			opcode_buf_add(buf, index);
+			AddOpcodeBuf(buf, OP_GET_PROPERTY);
+			AddOpcodeBuf(buf, index);
 		}
 	}
 }
 
 void generate_put_field(opcode_buf* buf, field* fi, int index) {
 	if(IsStaticModifier(fi->modifier)) {
-		opcode_buf_add(buf, OP_PUT_STATIC);
-		opcode_buf_add(buf, fi->parent->absolute_index);
-		opcode_buf_add(buf, index);
+		AddOpcodeBuf(buf, OP_PUT_STATIC);
+		AddOpcodeBuf(buf, fi->parent->absolute_index);
+		AddOpcodeBuf(buf, index);
 	} else {
-		opcode_buf_add(buf, OP_PUT_FIELD);
-		opcode_buf_add(buf, index);
+		AddOpcodeBuf(buf, OP_PUT_FIELD);
+		AddOpcodeBuf(buf, index);
 	}
 }
 
@@ -45,12 +45,12 @@ void generate_put_property(opcode_buf* buf, property* prop, int index) {
 		generate_put_field(buf, prop->source_ref, class_get_field_by_property(prop->parent->u.class_, prop));
 	} else {
 		if(IsStaticModifier(prop->modifier)) {
-			opcode_buf_add(buf, OP_PUT_STATIC_property);
-			opcode_buf_add(buf, prop->parent->absolute_index);
-			opcode_buf_add(buf, index);
+			AddOpcodeBuf(buf, OP_PUT_STATIC_property);
+			AddOpcodeBuf(buf, prop->parent->absolute_index);
+			AddOpcodeBuf(buf, index);
 		} else {
-			opcode_buf_add(buf, OP_PUT_PROPERTY);
-			opcode_buf_add(buf, index);
+			AddOpcodeBuf(buf, OP_PUT_PROPERTY);
+			AddOpcodeBuf(buf, index);
 		}
 	}
 }

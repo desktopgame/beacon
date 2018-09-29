@@ -215,16 +215,16 @@ bool CLBC_property_impl(class_loader* self, il_type* iltype, type* tp, il_proper
 	//setterのオペコードを生成
 	symbol_entry* valueE = symbol_table_entry(set->env->sym_table, pr->gtype, InternString("value"));
 	if(!IsStaticModifier(pr->modifier)) {
-		opcode_buf_add(set->env->buf, OP_STORE);
-		opcode_buf_add(set->env->buf, 0);
+		AddOpcodeBuf(set->env->buf, OP_STORE);
+		AddOpcodeBuf(set->env->buf, 0);
 	}
-	opcode_buf_add(set->env->buf, OP_STORE);
-	opcode_buf_add(set->env->buf, valueE->index);
+	AddOpcodeBuf(set->env->buf, OP_STORE);
+	AddOpcodeBuf(set->env->buf, valueE->index);
 	CLBC_body(self, set_stmt_list, set->env, cctx, scope);
 	//getterのオペコードを生成
 	if(!IsStaticModifier(pr->modifier)) {
-		opcode_buf_add(get->env->buf, OP_STORE);
-		opcode_buf_add(get->env->buf, 0);
+		AddOpcodeBuf(get->env->buf, OP_STORE);
+		AddOpcodeBuf(get->env->buf, 0);
 	}
 	CLBC_body(self, get_stmt_list, get->env, cctx, scope);
 	return true;
@@ -397,14 +397,14 @@ bool CLBC_method_impl(class_loader* self, namespace_* scope, il_type* iltype, ty
 		);
 		//実引数を保存
 		//0番目は this のために開けておく
-		opcode_buf_add(env->buf, (VectorItem)OP_STORE);
-		opcode_buf_add(env->buf, (VectorItem)(i + 1));
+		AddOpcodeBuf(env->buf, (VectorItem)OP_STORE);
+		AddOpcodeBuf(env->buf, (VectorItem)(i + 1));
 	}
 	//インスタンスメソッドなら
 	//0番目を this で埋める
 	if (!IsStaticModifier(me->modifier)) {
-		opcode_buf_add(env->buf, (VectorItem)OP_STORE);
-		opcode_buf_add(env->buf, (VectorItem)0);
+		AddOpcodeBuf(env->buf, (VectorItem)OP_STORE);
+		AddOpcodeBuf(env->buf, (VectorItem)0);
 	}
 	CLBC_corutine(self, me, env, ilmethod->parameter_list, ilmethod->statement_list, cctx, scope);
 	call_context_delete(cctx);
@@ -481,8 +481,8 @@ bool CLBC_ctor_impl(class_loader* self, il_type* iltype, type* tp, il_constructo
 		);
 		//実引数を保存
 		//0番目は this のために開けておく
-		opcode_buf_add(env->buf, OP_STORE);
-		opcode_buf_add(env->buf, (i + 1));
+		AddOpcodeBuf(env->buf, OP_STORE);
+		AddOpcodeBuf(env->buf, (i + 1));
 	}
 	CLBC_chain(self, iltype, tp, ilcons, ilcons->chain, env);
 	//NOTE:ここなら名前空間を設定出来る
@@ -574,12 +574,12 @@ bool CLBC_operator_overload_impl(class_loader* self, il_type* iltype, type* tp, 
 		);
 		//実引数を保存
 		//0番目は this のために開けておく
-		opcode_buf_add(env->buf, (VectorItem)OP_STORE);
-		opcode_buf_add(env->buf, (VectorItem)(i + 1));
+		AddOpcodeBuf(env->buf, (VectorItem)OP_STORE);
+		AddOpcodeBuf(env->buf, (VectorItem)(i + 1));
 	}
 	//0番目をthisで埋める
-	opcode_buf_add(env->buf, (VectorItem)OP_STORE);
-	opcode_buf_add(env->buf, (VectorItem)0);
+	AddOpcodeBuf(env->buf, (VectorItem)OP_STORE);
+	AddOpcodeBuf(env->buf, (VectorItem)0);
 	//NOTE:ここなら名前空間を設定出来る
 	CLBC_body(self, ilopov->statement_list, env, cctx, scope);
 	call_context_delete(cctx);
@@ -622,16 +622,16 @@ bool CLBC_corutine(class_loader* self, method* mt, enviroment* env,  Vector* ilp
 		//メソッド名からクラス名を作成して、
 		//beacon::$placeholderへ肩を格納する
 		type* iterT = method_create_iterator_type(mt, self, ilstmts);
-		opcode_buf_add(env->buf, OP_THIS);
+		AddOpcodeBuf(env->buf, OP_THIS);
 		for(int i=0; i<ilparams->length; i++) {
-			opcode_buf_add(env->buf, OP_LOAD);
-			opcode_buf_add(env->buf, i + 1);
+			AddOpcodeBuf(env->buf, OP_LOAD);
+			AddOpcodeBuf(env->buf, i + 1);
 		}
 		mt->u.script_method->env = env;
-		opcode_buf_add(env->buf, OP_NEW_INSTANCE);
-		opcode_buf_add(env->buf, iterT->absolute_index);
-		opcode_buf_add(env->buf, 0);
-		opcode_buf_add(env->buf, OP_RETURN);
+		AddOpcodeBuf(env->buf, OP_NEW_INSTANCE);
+		AddOpcodeBuf(env->buf, iterT->absolute_index);
+		AddOpcodeBuf(env->buf, 0);
+		AddOpcodeBuf(env->buf, OP_RETURN);
 		return true;
 	}
 	//NOTE:ここなら名前空間を設定出来る
@@ -703,9 +703,9 @@ static void CLBC_chain(class_loader* self, il_type* iltype, type* tp, il_constru
 }
 
 static void CLBC_chain_root(class_loader * self, il_type * iltype, type * tp, il_constructor * ilcons, il_constructor_chain * ilchain, enviroment * env) {
-	opcode_buf_add(env->buf, (VectorItem)OP_NEW_OBJECT);
-	opcode_buf_add(env->buf, (VectorItem)OP_ALLOC_FIELD);
-	opcode_buf_add(env->buf, (VectorItem)tp->absolute_index);
+	AddOpcodeBuf(env->buf, (VectorItem)OP_NEW_OBJECT);
+	AddOpcodeBuf(env->buf, (VectorItem)OP_ALLOC_FIELD);
+	AddOpcodeBuf(env->buf, (VectorItem)tp->absolute_index);
 }
 
 static void CLBC_chain_auto(class_loader * self, il_type * iltype, type * tp, il_constructor * ilcons, il_constructor_chain * ilchain, enviroment * env) {
@@ -733,12 +733,12 @@ static void CLBC_chain_auto(class_loader * self, il_type * iltype, type * tp, il
 	ch_empty->type = AST_CONSTRUCTOR_CHAIN_SUPER_T;
 	ilcons->chain = ch_empty;
 	//親クラスへ連鎖
-	opcode_buf_add(env->buf, (VectorItem)OP_CHAIN_SUPER);
-	opcode_buf_add(env->buf, (VectorItem)classz->super_class->core_type->absolute_index);
-	opcode_buf_add(env->buf, (VectorItem)emptyTemp);
+	AddOpcodeBuf(env->buf, (VectorItem)OP_CHAIN_SUPER);
+	AddOpcodeBuf(env->buf, (VectorItem)classz->super_class->core_type->absolute_index);
+	AddOpcodeBuf(env->buf, (VectorItem)emptyTemp);
 	//このクラスのフィールドを確保
-	opcode_buf_add(env->buf, (VectorItem)OP_ALLOC_FIELD);
-	opcode_buf_add(env->buf, (VectorItem)tp->absolute_index);
+	AddOpcodeBuf(env->buf, (VectorItem)OP_ALLOC_FIELD);
+	AddOpcodeBuf(env->buf, (VectorItem)tp->absolute_index);
 }
 
 static void CLBC_chain_super(class_loader * self, il_type * iltype, type * tp, il_constructor * ilcons, il_constructor_chain * ilchain, enviroment * env) {
@@ -756,12 +756,12 @@ static void CLBC_chain_super(class_loader * self, il_type * iltype, type * tp, i
 	int temp = 0;
 	if (chain->type == CHAIN_TYPE_THIS_T) {
 		chainTarget = class_ilfind_constructor(classz, chain->argument_list, env, cctx, &temp);
-		opcode_buf_add(env->buf, (VectorItem)OP_CHAIN_THIS);
-		opcode_buf_add(env->buf, (VectorItem)(tp->absolute_index));
+		AddOpcodeBuf(env->buf, (VectorItem)OP_CHAIN_THIS);
+		AddOpcodeBuf(env->buf, (VectorItem)(tp->absolute_index));
 	} else if (chain->type == CHAIN_TYPE_SUPER_T) {
 		chainTarget = class_ilfind_constructor(classz->super_class->core_type->u.class_, chain->argument_list, env, cctx, &temp);
-		opcode_buf_add(env->buf, OP_CHAIN_SUPER);
-		opcode_buf_add(env->buf, classz->super_class->core_type->absolute_index);
+		AddOpcodeBuf(env->buf, OP_CHAIN_SUPER);
+		AddOpcodeBuf(env->buf, classz->super_class->core_type->absolute_index);
 	}
 	if(chainTarget == NULL) {
 		bc_error_throw(BCERROR_EXPLICIT_CHAIN_CTOR_NOT_FOUND_T,
@@ -772,10 +772,10 @@ static void CLBC_chain_super(class_loader * self, il_type * iltype, type * tp, i
 	call_context_delete(cctx);
 	chain->c = chainTarget;
 	chain->constructor_index = temp;
-	opcode_buf_add(env->buf, (VectorItem)temp);
+	AddOpcodeBuf(env->buf, (VectorItem)temp);
 	//親クラスへのチェインなら即座にフィールドを確保
-	opcode_buf_add(env->buf, (VectorItem)OP_ALLOC_FIELD);
-	opcode_buf_add(env->buf, (VectorItem)tp->absolute_index);
+	AddOpcodeBuf(env->buf, (VectorItem)OP_ALLOC_FIELD);
+	AddOpcodeBuf(env->buf, (VectorItem)tp->absolute_index);
 }
 
 static bool CLBC_test_operator_overlaod(class_loader* self, il_type* iltype, type* tp, operator_overload* opov) {

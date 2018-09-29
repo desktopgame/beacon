@@ -29,14 +29,14 @@ void il_factor_not_op_generate(il_factor_not_op* self, enviroment* env, call_con
 		}
 		generic_type* gt = il_factor_eval(self->parent->a, env, cctx);
 		if(GENERIC2TYPE(gt) == TYPE_BOOL) {
-			opcode_buf_add(env->buf, OP_BNOT);
+			AddOpcodeBuf(env->buf, OP_BNOT);
 		} else {
 			assert(false);
 		}
 	} else {
 		il_factor_generate(self->parent->a, env, cctx);
-		opcode_buf_add(env->buf, OP_INVOKEOPERATOR);
-		opcode_buf_add(env->buf, self->operator_index);
+		AddOpcodeBuf(env->buf, OP_INVOKEOPERATOR);
+		AddOpcodeBuf(env->buf, self->operator_index);
 	}
 }
 
