@@ -235,12 +235,12 @@ void type_delete(type * self) {
 	MEM_FREE(self);
 }
 
-class_* type_cast_class(type* self) {
+class_* CastClassType(type* self) {
 	assert(self->tag == type_class_T);
 	return self->u.class_;
 }
 
-interface_* type_cast_interface(type* self) {
+interface_* CastInterfaceType(type* self) {
 	assert(self->tag == type_interface_T);
 	return self->u.interface_;
 }

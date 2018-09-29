@@ -7,25 +7,25 @@
  * @param b
  * @return
  */
-ast* ast_new_bool(bool b);
+ast* NewASTBool(bool b);
 
 /**
  * trueを表す要素を作成します.
  * @return
  */
-ast* ast_new_true();
+ast* NewASTTrue();
 
 /**
  * falseを表す要素を作成します.
  * @return
  */
-ast* ast_new_false();
+ast* NewASTFalse();
 
 /**
  * nullを表す要素を作成します.
  * @return
  */
-ast* ast_new_null();
+ast* NewASTNull();
 
 /**
  * ... as Int を表す要素を作成します.
@@ -33,7 +33,7 @@ ast* ast_new_null();
  * @param atypename
  * @return
  */
-ast* ast_new_as(ast* afact, ast* atypename);
+ast* NewASTAs(ast* afact, ast* atypename);
 
 /**
  * 名前参照を表す要素を作成します.
@@ -42,7 +42,7 @@ ast* ast_new_as(ast* afact, ast* atypename);
  * @param atypename
  * @return
  */
-ast* ast_new_name_reference(ast* atypename);
+ast* NewASTNameReference(ast* atypename);
 
 /**
  * 変数を表す要素を作成します.
@@ -50,7 +50,7 @@ ast* ast_new_name_reference(ast* atypename);
  * @param atype_args
  * @return
  */
-ast* ast_new_variable(ast* a, ast* atype_args);
+ast* NewASTVariable(ast* a, ast* atype_args);
 
 /**
  * 変数を表す要素を作成します.
@@ -58,7 +58,7 @@ ast* ast_new_variable(ast* a, ast* atype_args);
  * @param atype_args
  * @return
  */
-ast* ast_new_variable_fromstr(string_view strv, ast* atype_args);
+ast* NewASTVariable_fromstr(string_view strv, ast* atype_args);
 
 /**
  * 関数呼び出し演算子を表す要素を作成します.
@@ -66,19 +66,19 @@ ast* ast_new_variable_fromstr(string_view strv, ast* atype_args);
  * @param aargs
  * @return
  */
-ast* ast_new_op_call(ast* areceiver, ast* aargs);
+ast* NewASTOpCall(ast* areceiver, ast* aargs);
 
 /**
  * thisを表す因子を作成します.
  * @return
  */
-ast* ast_new_this();
+ast* NewASTThis();
 
 /**
  * superを表す因子を作成します.
  * @return
  */
-ast* ast_new_super();
+ast* NewASTSuper();
 
 /**
  * hoge.foo を表す因子を作成します.
@@ -87,7 +87,7 @@ ast* ast_new_super();
  * @param atype_args
  * @return
  */
-ast* ast_new_field_access(ast* afact, string_view namev, ast* atype_args);
+ast* NewASTFieldAccess(ast* afact, string_view namev, ast* atype_args);
 
 /**
  * new X::Y(...) を表す因子を作成します.
@@ -96,7 +96,7 @@ ast* ast_new_field_access(ast* afact, string_view namev, ast* atype_args);
  * @parma argument_list
  * @return
  */
-ast* ast_new_new_instance(ast* afqcn, ast* atype_args, ast* argument_list);
+ast* NewASTNewInstance(ast* afqcn, ast* atype_args, ast* argument_list);
 
 /**
  * a instanceof b を表す要素を作成します.
@@ -104,7 +104,7 @@ ast* ast_new_new_instance(ast* afqcn, ast* atype_args, ast* argument_list);
  * @param atype
  * @return
  */
-ast* ast_new_instance_Tof(ast* afact, ast* atype);
+ast* NewASTInstanceTof(ast* afact, ast* atype);
 
 /**
  * 明示的な二項演算の呼び出しを表す要素を作成します.
@@ -113,7 +113,7 @@ ast* ast_new_instance_Tof(ast* afact, ast* atype);
  * @param aarg
  * @return
  */
-ast* ast_new_explicit_bioperator(ast* afact, operator_type type, ast* aarg);
+ast* NewASTExplicitBiOperator(ast* afact, operator_type type, ast* aarg);
 
 /**
  * 明示的な単項演算の呼び出しを表す要素を作成します.
@@ -121,12 +121,12 @@ ast* ast_new_explicit_bioperator(ast* afact, operator_type type, ast* aarg);
  * @param type
  * @return
  */
-ast* ast_new_explicit_uoperator(ast* afact, operator_type type);
+ast* NewASTExplicitUOperator(ast* afact, operator_type type);
 
 /**
  * @param afact
  * @param aindex
  * @return
  */
-ast* ast_new_subscript_access(ast* afact, ast* aindex);
+ast* NewASTSubscriptAccess(ast* afact, ast* aindex);
 #endif // !SIGNAL_AST_AST_NEW_FACTOR_H

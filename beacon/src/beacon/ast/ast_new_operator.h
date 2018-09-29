@@ -11,7 +11,7 @@
  * @param a
  * @return
  */
-ast* ast_new_unary(ast_tag tag, ast* a);
+ast* NewASTUnary(ast_tag tag, ast* a);
 
 /**
  * 二項演算子を表す要素を作成します.
@@ -20,5 +20,5 @@ ast* ast_new_unary(ast_tag tag, ast* a);
  * @param aright
  * @return
  */
-ast* ast_new_binary(ast_tag tag, ast* aleft, ast* aright);
+ast* NewASTBinary(ast_tag tag, ast* aleft, ast* aright);
 #endif // !SIGNAL_AST_AST_NEW_OPERATOR_H

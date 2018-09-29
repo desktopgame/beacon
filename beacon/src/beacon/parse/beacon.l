@@ -46,8 +46,8 @@ int yyerror(char * err_str) {
 	p->result = parse_syntax_error_T;
 	p->error_line_index = yylloc.last_line;
 	p->error_column_index = yylloc.last_column;
-	p->error_message = text_strdup(err_str);
-	p->error_line_text  = text_lineat(yaccSourceBuffer, yylloc.last_line);
+	p->error_message = Strdup(err_str);
+	p->error_line_text  = GetLineAt(yaccSourceBuffer, yylloc.last_line);
 	return 1;
 }
 
@@ -254,7 +254,7 @@ static void update_loc() {
 <INITIAL>"->"				{ return (ARROW); }
 
 <INITIAL>"0" {
-	yylval.ast_value = ast_new_int(0);
+	yylval.ast_value = NewASTInt(0);
 	return INT;
 }
 
@@ -263,17 +263,17 @@ static void update_loc() {
 }
 
 <INITIAL>[1-9][0-9]* {
-	yylval.ast_value = ast_new_int(atoi(yytext));
+	yylval.ast_value = NewASTInt(atoi(yytext));
 	return INT;
 }
 
 <INITIAL>[0-9]+\.[0-9]+ {
-	yylval.ast_value = ast_new_double(atof(yytext));
+	yylval.ast_value = NewASTDouble(atof(yytext));
 	return DOUBLE;
 }
 
 <INITIAL>[A-Za-z_][A-Za-z_0-9]* {
-	yylval.stringv_value = string_pool_intern(yytext);
+	yylval.stringv_value = InternString(yytext);
 	return IDENT;
 }
 
@@ -302,23 +302,23 @@ static void update_loc() {
 }
 <L_COMMENT>.   ;
 <INITIAL>\'\\r\' {
-	yylval.ast_value = ast_new_char('\r');
+	yylval.ast_value = NewASTChar('\r');
 	return CHAR_LITERAL;
 }
 <INITIAL>\'\\n\' {
-	yylval.ast_value = ast_new_char('\n');
+	yylval.ast_value = NewASTChar('\n');
 	return CHAR_LITERAL;
 }
 <INITIAL>\'\\t\' {
-	yylval.ast_value = ast_new_char('\t');
+	yylval.ast_value = NewASTChar('\t');
 	return CHAR_LITERAL;
 }
 <INITIAL>\'\\b\' {
-	yylval.ast_value = ast_new_char('\b');
+	yylval.ast_value = NewASTChar('\b');
 	return CHAR_LITERAL;
 }
 <INITIAL>\'.\' {
-	yylval.ast_value = ast_new_char(yytext[1]);
+	yylval.ast_value = NewASTChar(yytext[1]);
 	return CHAR_LITERAL;
 }
 <STRING_LITERAL_STATE>\" {

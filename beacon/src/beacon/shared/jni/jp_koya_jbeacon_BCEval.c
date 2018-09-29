@@ -58,7 +58,7 @@ static jobject bc_eval_string(JNIEnv * env, jclass cls, jstring str, jobject tab
 	//javaから beacon へインジェクションしようとしたが、
 	//参照型をインジェクションしようとした場合
 	if(!bc_read_symbol(env, table, a)) {
-		ast_delete(a);
+		DeleteAST(a);
 		return NULL;
 	}
 	class_loader* cll = class_loader_new(filename, content_entry_point_T);
@@ -162,18 +162,18 @@ static bool bc_read_symbol(JNIEnv* env, jobject table, ast* a) {
 		}
 		ast* astmt = NULL;
 		if((*env)->IsInstanceOf(env, valueE, integer_cls) == JNI_TRUE) {
-			astmt = ast_new_inject(keyv, ast_new_int(jobject2jint(env, valueE)));
+			astmt = NewASTInject(keyv, NewASTInt(jobject2jint(env, valueE)));
 		} else if((*env)->IsInstanceOf(env, valueE, double_cls) == JNI_TRUE) {
-			astmt = ast_new_inject(keyv, ast_new_double(jobject2jdouble(env, valueE)));
+			astmt = NewASTInject(keyv, NewASTDouble(jobject2jdouble(env, valueE)));
 		} else if((*env)->IsInstanceOf(env, valueE, char_cls) == JNI_TRUE) {
-			astmt = ast_new_inject(keyv, ast_new_char(jobject2jchar(env, valueE)));
+			astmt = NewASTInject(keyv, NewASTChar(jobject2jchar(env, valueE)));
 		} else if((*env)->IsInstanceOf(env, valueE, bool_cls) == JNI_TRUE) {
-			astmt = ast_new_inject(keyv, ast_new_bool(jobject2jboolean(env, valueE)));
+			astmt = NewASTInject(keyv, NewASTBool(jobject2jboolean(env, valueE)));
 		} else if((*env)->IsInstanceOf(env, valueE, string_cls) == JNI_TRUE) {
 			jstring valuej = (jstring)valueE;
 			const char *valuestr = (*env)->GetStringUTFChars(env, valuej, JNI_FALSE);
 			string_view valuev = InternString(valuestr);
-			astmt = ast_new_inject(keyv, ast_new_string(valuev));
+			astmt = NewASTInject(keyv, NewASTString(valuev));
 		//それ以外はまだ未対応
 		} else {
 			jclass bc_not_supported_exc_cls = (*env)->FindClass(env, "jp/koya/jbeacon/BCNotSupportedException");

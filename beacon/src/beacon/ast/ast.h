@@ -229,12 +229,12 @@ typedef struct ast {
  * 現在のコンパイラに AST を追加します.
  * @param self
  */
-void ast_compile_entry(ast* self);
+void CompileEntryAST(ast* self);
 
 /**
  * 指定のタグで子要素を持たない AST を作成します.
  */
-#define ast_new(tag) (ast_malloc(tag, __FILE__, __LINE__))
+#define ast_new(tag) (MallocAST(tag, __FILE__, __LINE__))
 
 /**
  * 指定のタグで子要素を持たない AST を作成します.
@@ -242,14 +242,14 @@ void ast_compile_entry(ast* self);
  * @param filename
  * @param lineno
  */
-ast* ast_malloc(ast_tag tag, const char* filename, int lineno);
+ast* MallocAST(ast_tag tag, const char* filename, int lineno);
 
 /**
  * 名前空間の一節(. ~~~ .)を表す要素を作成します.
  * @param namev
  * @return
  */
-ast* ast_new_namespace_path(string_view namev);
+ast* NewASTNamespacePath(string_view namev);
 
 /**
  * 二つの名前空間を連結します.
@@ -257,21 +257,21 @@ ast* ast_new_namespace_path(string_view namev);
  * @param namev
  * @return
  */
-ast* ast_new_namespace_path_list(ast* aforward, string_view namev);
+ast* NewASTNamespacePathList(ast* aforward, string_view namev);
 
 /**
  * インポート先のファイルを表す要素を作成します.
  * @param astr
  * @return
  */
-ast* ast_new_import_path(ast* astr);
+ast* NewASTImportPath(ast* astr);
 
 /**
  * インポート宣言を表す要素を作成します.
  * @param aimport_path
  * @return
  */
-ast* ast_new_import_decl(ast* aimport_path);
+ast* NewASTImportDecl(ast* aimport_path);
 
 /**
  * インポートの一覧を表す要素を作成します.
@@ -279,32 +279,32 @@ ast* ast_new_import_decl(ast* aimport_path);
  * @param aimport_list
  * @return
  */
-ast* ast_new_import_decl_list(ast* aimport, ast* aimport_list);
+ast* NewASTImportDeclList(ast* aimport, ast* aimport_list);
 
 /**
  * スコープ({ ... }) を表す要素を作成します.
  * @param astmt_list
  * @return
  */
-ast* ast_new_scope(ast* astmt_list);
+ast* NewASTScope(ast* astmt_list);
 
 /**
  * 空のスコープを表す要素を作成します.
  * @return
  */
-ast* ast_new_scope_empty();
+ast* NewASTScopeEmpty();
 
 /**
  * 空の要素を作成します.
  */
-ast* ast_new_blank();
+ast* NewASTBlank();
 
 /**
  * 識別子を表す要素を作成します.
  * @param strv
  * @return
  */
-ast* ast_new_identifier(string_view strv);
+ast* NewASTIdentifier(string_view strv);
 
 /**
  * 識別子のリストを表す要素を作成します.
@@ -312,83 +312,83 @@ ast* ast_new_identifier(string_view strv);
  * @param aident_list
  * @return
  */
-ast* ast_new_identifier_list(string_view strv, ast* aident_list);
+ast* NewASTIdentifierList(string_view strv, ast* aident_list);
 
 /**
  * 計算可能な要素だけで構成される文を作成します.
  * @param aexpr
  * @return
  */
-ast* ast_new_proc(ast* aexpr);
+ast* NewASTProc(ast* aexpr);
 
 /**
  * self に child を子要素として追加します.
  * @param self
  * @param achild
  */
-ast* ast_push(ast* self, ast* achild);
+ast* PushAST(ast* self, ast* achild);
 
 /** 
  * 指定位置の子要素を返します.
  * @param self
  * @param index
  */
-ast* ast_at(ast* self, int index);
+ast* AtAST(ast* self, int index);
 
 /**
  * 最初の子要素を返します.
  * @param self
  * @return
  */
-ast* ast_first(ast* self);
+ast* FirstAST(ast* self);
 
 /**
  * 二番目の子要素を返します.
  * @param self
  * @return
  */
-ast* ast_second(ast* self);
+ast* SecondAST(ast* self);
 
 /**
  * 指定の AST とその子要素を全て開放します.
  * @param self
  */
-void ast_delete(ast* self);
+void DeleteAST(ast* self);
 
 /**
  * 指定の要素が空なら true.
  * @param self
  * @return
  */
-bool ast_is_blank(ast* self);
+bool IsBlankAST(ast* self);
 
 /**
  * 指定の要素がアクセスレベルなら true.
  * @param self
  * @return
  */
-bool ast_is_access(ast* self);
+bool IsAccessAST(ast* self);
 
 /**
  * 指定の要素が修飾子なら true.
  * @param self
  * @return
  */
-bool ast_is_modifier(ast* self);
+bool IsModifierAST(ast* self);
 
 /**
  * 指定の要素がステートメントなら true.
  * @param self
  * @return
  */
-bool ast_is_stmt(ast* self);
+bool IsStmtAST(ast* self);
 
 /**
  * 指定の要素がアクセスレベルを表す要素なら列挙型に変換します.
  * @param self
  * @return
  */
-access_level ast_cast_to_access(ast* self);
+access_level ASTCastToAccess(ast* self);
 
 /**
  * 指定の要素が修飾子を表す要素なら列挙型に変換します.
@@ -396,12 +396,12 @@ access_level ast_cast_to_access(ast* self);
  * @param error
  * @return
  */
-modifier_type ast_cast_to_modifier(ast* self, bool* error);
+modifier_type ASTCastToModifier(ast* self, bool* error);
 
 /**
  * 指定の要素が連鎖を表す要素なら列挙型に変換します.
  * @param self
  * @return
  */
-constructor_chain_type ast_cast_to_chain_type(ast* self);
+constructor_chain_type ASTCastToChainType(ast* self);
 #endif // !SIGNAL_AST_AST_H

@@ -13,7 +13,7 @@
  * @param abody
  * @return
  */
-ast* ast_new_namespace_decl(ast* anamespace_path, ast* abody);
+ast* NewASTNamespaceDecl(ast* anamespace_path, ast* abody);
 
 /**
  * 名前空間の内側に定義された名前空間を表す要素を作成します.
@@ -21,7 +21,7 @@ ast* ast_new_namespace_decl(ast* anamespace_path, ast* abody);
  * @param abody
  * @return
  */
-ast* ast_new_namespace_namespace_decl(ast* anamespace_path, ast* abody);
+ast* NewASTNamespaceNamespaceDecl(ast* anamespace_path, ast* abody);
 
 /**
  * 名前空間の内側に含めることが出来る定義の一覧を作成します.
@@ -29,7 +29,7 @@ ast* ast_new_namespace_namespace_decl(ast* anamespace_path, ast* abody);
  * @param alist
  * @return
  */
-ast* ast_new_namespace_member_decl_list(ast* aforward, ast* alist);
+ast* NewASTNamespaceMemberDeclList(ast* aforward, ast* alist);
 
 /**
  * 抽象クラス宣言を表す要素を作成します.
@@ -37,7 +37,7 @@ ast* ast_new_namespace_member_decl_list(ast* aforward, ast* alist);
  * @param aextend_list
  * @param amember_list
  */
-ast* ast_new_abstract_class_decl(ast* aclass_name, ast* aextend_list, ast* amember_list);
+ast* NewASTAbstractClassDecl(ast* aclass_name, ast* aextend_list, ast* amember_list);
 
 /**
  * クラス宣言を表す要素を作成します.
@@ -46,7 +46,7 @@ ast* ast_new_abstract_class_decl(ast* aclass_name, ast* aextend_list, ast* amemb
  * @param amember_list
  * @return
  */
-ast* ast_new_class_decl(ast* aclass_name, ast* aextend_list, ast* amember_list);
+ast* NewASTClassDecl(ast* aclass_name, ast* aextend_list, ast* amember_list);
 
 /**
  * インターフェース宣言を表す要素を作成します.
@@ -55,7 +55,7 @@ ast* ast_new_class_decl(ast* aclass_name, ast* aextend_list, ast* amember_list);
  * @param amember_list
  * @return
  */
-ast* ast_new_interface_decl(ast* ainterface_name, ast* asuper_interface_list, ast* amember_list);
+ast* NewASTInterface_decl(ast* ainterface_name, ast* asuper_interface_list, ast* amember_list);
 
 /**
  * 列挙宣言を表す要素を作成します.
@@ -63,14 +63,14 @@ ast* ast_new_interface_decl(ast* ainterface_name, ast* asuper_interface_list, as
  * @param aident_list
  * @return
  */
-ast* ast_new_enum_decl(string_view enum_namev, ast* aident_list);
+ast* NewASTEnumDecl(string_view enum_namev, ast* aident_list);
 
 /**
  * スーパークラスを表す要素を作成します.
  * @param fqcn
  * @return
  */
-ast* ast_new_superclass(ast* afqcn);
+ast* NewASTSuperclass(ast* afqcn);
 
 /**
  * "アクセス修飾子とメンバー一覧のセット" のリストを返します.
@@ -78,7 +78,7 @@ ast* ast_new_superclass(ast* afqcn);
  * @param amember_list
  * @return
  */
-ast* ast_new_access_member_tree(ast* member_tree, ast* member_list);
+ast* NewASTAccess_member_tree(ast* member_tree, ast* member_list);
 
 /**
  * アクセス修飾子とメンバーの一覧をセットにして返します.
@@ -86,14 +86,14 @@ ast* ast_new_access_member_tree(ast* member_tree, ast* member_list);
  * @param amember_list
  * @return
  */
-ast* ast_new_access_member_list(access_level level, ast* amember_list);
+ast* NewASTAccessMemberList(access_level level, ast* amember_list);
 
 /**
  * アクセスレベルを表す要素を作成します.
  * @param level
  * @return
  */
-ast* ast_new_access(access_level level);
+ast* NewASTAccess(access_level level);
 
 /**
  * 修飾子の一覧を表す要素を作成します.
@@ -101,21 +101,21 @@ ast* ast_new_access(access_level level);
  * @param amod_list
  * @return
  */
-ast* ast_new_modifier_list(ast* amod, ast* amod_list);
+ast* NewASTModifierList(ast* amod, ast* amod_list);
 
 /**
  * 修飾子を表す要素を作成します.
  * @param type
  * @return
  */
-ast* ast_new_modifier(modifier_type type);
+ast* NewASTModifier(modifier_type type);
 
 /**
  * メンバーを表す要素を作成します.
  * @param mem
  * @return
  */
-ast* ast_new_member_decl(ast* amem);
+ast* NewASTMemberDecl(ast* amem);
 
 /**
  * メンバーを表す要素を作成します.
@@ -123,7 +123,7 @@ ast* ast_new_member_decl(ast* amem);
  * @param amember
  * @param
  */
-ast* ast_new_member_decl_list(ast* amember_list, ast* amember);
+ast* NewASTMemberDeclList(ast* amember_list, ast* amember);
 
 /**
  * フィールド宣言を表す要素を作成します.
@@ -133,7 +133,7 @@ ast* ast_new_member_decl_list(ast* amember_list, ast* amember);
  * @param afact
  * @return
  */
-ast* ast_new_field_decl(ast* amodifier, ast* atype_name, string_view field_namev, ast* afact);
+ast* NewASTFieldDecl(ast* amodifier, ast* atype_name, string_view field_namev, ast* afact);
 
 /**
  * 関数宣言を表す要素を作成します.
@@ -143,7 +143,7 @@ ast* ast_new_field_decl(ast* amodifier, ast* atype_name, string_view field_namev
  * @param abody
  * @param areturn_type
  */
-ast* ast_new_function_decl(string_view function_namev, ast* atypeparams, ast* aparameter_list, ast* abody, ast* areturn_type);
+ast* NewASTFunctionDecl(string_view function_namev, ast* atypeparams, ast* aparameter_list, ast* abody, ast* areturn_type);
 
 /**
  * 引数のない関数宣言を表す要素を作成します.
@@ -153,7 +153,7 @@ ast* ast_new_function_decl(string_view function_namev, ast* atypeparams, ast* ap
  * @param areturn_name
  * @return
  */
-ast* ast_new_function_decl_empty_params(string_view function_namev, ast* atypeparams, ast* abody, ast* areturn_type);
+ast* NewASTFunctionDeclEmptyParams(string_view function_namev, ast* atypeparams, ast* abody, ast* areturn_type);
 
 /**
  * メソッド宣言を表す要素を作成します.
@@ -165,7 +165,7 @@ ast* ast_new_function_decl_empty_params(string_view function_namev, ast* atypepa
  * @param areturn_type_name
  * @return
  */
-ast* ast_new_method_decl(ast* amodifier, string_view func_namev, ast* atype_parameter, ast* aparameter_list, ast* abody, ast* areturn_type);
+ast* NewASTMethodDecl(ast* amodifier, string_view func_namev, ast* atype_parameter, ast* aparameter_list, ast* abody, ast* areturn_type);
 
 /**
  * 引数のないメソッド宣言を表す要素を作成します.
@@ -176,7 +176,7 @@ ast* ast_new_method_decl(ast* amodifier, string_view func_namev, ast* atype_para
  * @param areturn_type_name
  * @return
  */
-ast* ast_new_method_decl_empty_params(ast* amodifier, string_view func_namev, ast* atype_parameter, ast* abody, ast* areturn_type);
+ast* NewASTMethodDeclEmptyParams(ast* amodifier, string_view func_namev, ast* atype_parameter, ast* abody, ast* areturn_type);
 
 /**
  * コンストラクタ宣言を表す要素を作成します.
@@ -185,7 +185,7 @@ ast* ast_new_method_decl_empty_params(ast* amodifier, string_view func_namev, as
  * @param abody
  * @return
  */
-ast* ast_new_constructor_decl(ast* aparameter_list, ast* aconstructor_chain, ast* abody);
+ast* NewASTConstructorDecl(ast* aparameter_list, ast* aconstructor_chain, ast* abody);
 
 /**
  * コンストラクタの連鎖を表す要素を作成します.
@@ -193,7 +193,7 @@ ast* ast_new_constructor_decl(ast* aparameter_list, ast* aconstructor_chain, ast
  * @param aargument_list
  * @return
  */
-ast* ast_new_constructor_chain(constructor_chain_type chain_type, ast* aargument_list);
+ast* NewASTConstructorChain(constructor_chain_type chain_type, ast* aargument_list);
 
 /**
  * 仮引数を表す要素を作成します.
@@ -201,7 +201,7 @@ ast* ast_new_constructor_chain(constructor_chain_type chain_type, ast* aargument
  * @param parameter_access_namev
  * @return
  */
-ast* ast_new_parameter(ast* atypename, string_view parameter_access_namev);
+ast* NewASTParameter(ast* atypename, string_view parameter_access_namev);
 
 /**
  * 仮引数を表す要素を作成します.
@@ -210,7 +210,7 @@ ast* ast_new_parameter(ast* atypename, string_view parameter_access_namev);
  * @param aparameter_list
  * @return
  */
-ast* ast_new_parameter_list(ast* atypename, string_view parameter_access_namev, ast* aparameter_list);
+ast* NewASTParameterList(ast* atypename, string_view parameter_access_namev, ast* aparameter_list);
 
 /**
  * クラスが実装するインターフェイスの一覧として使用される、
@@ -219,7 +219,7 @@ ast* ast_new_parameter_list(ast* atypename, string_view parameter_access_namev, 
  * @param atypename_list
  * @return
  */
-ast* ast_new_typename_list(ast* atypename, ast* atypename_list);
+ast* NewASTTypenameList(ast* atypename, ast* atypename_list);
 
 /**
  * X::Y::C や C を型名でラップします.
@@ -227,7 +227,7 @@ ast* ast_new_typename_list(ast* atypename, ast* atypename_list);
  * @param atype_args
  * @return
  */
-ast* ast_new_typename(ast* fqcn, ast* atype_args);
+ast* NewASTTypename(ast* fqcn, ast* atype_args);
 
 /**
  * T や K V などの要素を作成します.
@@ -235,9 +235,9 @@ ast* ast_new_typename(ast* fqcn, ast* atype_args);
  * @param arule_list
  * @return
  */
-ast* ast_new_type_parameter(string_view namev, ast* arule_list);
-ast* ast_new_type_in_parameter(string_view namev, ast* arule_list);
-ast* ast_new_type_out_parameter(string_view namev, ast* arule_list);
+ast* NewASTTypeParameter(string_view namev, ast* arule_list);
+ast* NewASTTypeInParameter(string_view namev, ast* arule_list);
+ast* NewASTTypeOutParameter(string_view namev, ast* arule_list);
 
 /** 
  * T や K V の要素のリストを作成します.
@@ -245,7 +245,7 @@ ast* ast_new_type_out_parameter(string_view namev, ast* arule_list);
  * @param alist
  * @return
  */
-ast* ast_new_type_parameter_list(ast* aparam, ast* alist);
+ast* NewASTTypeParameterList(ast* aparam, ast* alist);
 
 /**
  * Name<T> や Name<K, V> のような要素を作成します.
@@ -253,14 +253,14 @@ ast* ast_new_type_parameter_list(ast* aparam, ast* alist);
  * @param aparams
  * @return
  */
-ast * ast_new_parameterized_typename(string_view namev, ast* aparams);
+ast * NewASTParameterized_typename(string_view namev, ast* aparams);
 
 /**
  * 型制約の一覧を表す要素を作成します.
  * @param arule_list
  * @return
  */
-ast* ast_new_type_parameter_rule_list(ast* arule_list);
+ast* NewASTTypeParameterRuleList(ast* arule_list);
 
 /**
  * 演算子オーバーロードを表す要素を作成します.
@@ -269,7 +269,7 @@ ast* ast_new_type_parameter_rule_list(ast* arule_list);
  * @param abody
  * @param areturn
  */
-ast* ast_new_operator_overload(operator_type type, ast* aparam_list, ast* abody, ast* areturn);
+ast* NewASTOperatorOverload(operator_type type, ast* aparam_list, ast* abody, ast* areturn);
 
 /**
  * プロパティの set部分 を表す要素を作成します.
@@ -277,7 +277,7 @@ ast* ast_new_operator_overload(operator_type type, ast* aparam_list, ast* abody,
  * @param abody
  * @areturn
  */
-ast* ast_new_prop_set(ast* aacess, ast* abody);
+ast* NewASTPropSet(ast* aacess, ast* abody);
 
 /**
  * プロパティの get部分 を表す要素を作成します.
@@ -285,7 +285,7 @@ ast* ast_new_prop_set(ast* aacess, ast* abody);
  * @param abody
  * @return
  */
-ast* ast_new_prop_get(ast* aacess, ast* abody);
+ast* NewASTPropGet(ast* aacess, ast* abody);
 
 /**
  * プロパティ宣言を作成します.
@@ -295,5 +295,5 @@ ast* ast_new_prop_get(ast* aacess, ast* abody);
  * @param aset
  * @param aget
  */
-ast* ast_new_prop_decl(ast* amodifier, ast* atypename, string_view namev, ast* aset, ast* aget);
+ast* NewASTPropDecl(ast* amodifier, ast* atypename, string_view namev, ast* aset, ast* aget);
 #endif // !SIGNAL_AST_AST_NEW_DECL_H

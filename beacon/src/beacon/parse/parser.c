@@ -64,7 +64,7 @@ parser* parser_current() {
 void parser_destroy(parser* self) {
 	assert(gParser != NULL);
 	if (gParser->root) {
-		ast_delete(gParser->root);
+		DeleteAST(gParser->root);
 	}
 	DeleteVector(gParser->lineno_vec, VectorDeleterOfNull);
 	MEM_FREE(gParser->literal_buffer);
@@ -87,9 +87,9 @@ void parser_append_buffer(parser* self, char ch) {
 ast* parser_reduce_buffer(parser* self) {
 	//""のような空文字の場合
 	if (self->literal_buffer == NULL) {
-		return ast_new_string(InternString(""));
+		return NewASTString(InternString(""));
 	}
-	ast* ret = ast_new_string(InternString2(self->literal_buffer));
+	ast* ret = NewASTString(InternString2(self->literal_buffer));
 	self->literal_buffer = NULL;
 	return ret;
 }

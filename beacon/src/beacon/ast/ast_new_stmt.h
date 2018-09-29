@@ -6,7 +6,7 @@
 /**
  * 実行可能な文を表す要素を作成します.
  */
-#define ast_new_stmt(stmt) (ast_malloc_stmt(stmt, __FILE__, __LINE__))
+#define ast_new_stmt(stmt) (MallocAST_stmt(stmt, __FILE__, __LINE__))
 
 /**
  * 実行可能な文を表す要素を作成します.
@@ -15,7 +15,7 @@
  * @param lineno
  * @return
  */
-ast* ast_malloc_stmt(ast* astmt, const char* filename, int lineno);
+ast* MallocAST_stmt(ast* astmt, const char* filename, int lineno);
 
 /**
  * 実行可能な文を表す要素を作成します. 
@@ -23,7 +23,7 @@ ast* ast_malloc_stmt(ast* astmt, const char* filename, int lineno);
  * @param astmt_list
  * @return
  */
-ast* ast_new_stmt_list(ast* astmt, ast* astmt_list);
+ast* NewASTStmtList(ast* astmt, ast* astmt_list);
 
 /**
  * ifを表す要素を作成します.
@@ -31,14 +31,14 @@ ast* ast_new_stmt_list(ast* astmt, ast* astmt_list);
  * @param abody
  * @return
  */
-ast* ast_new_if(ast* acond, ast* abody);
+ast* NewASTIf(ast* acond, ast* abody);
 
 /** 
  * elseを表す要素を作成します.
  * @param abody
  * @return
  */
-ast* ast_new_else(ast* abody);
+ast* NewASTElse(ast* abody);
 
 /**
  * if-elseを表す要素を作成します.
@@ -47,7 +47,7 @@ ast* ast_new_else(ast* abody);
  * @param afalseBody
  * @return
  */
-ast* ast_new_if_else(ast* acond, ast* atrueBody, ast* afalseBody);
+ast* NewASTIf_else(ast* acond, ast* atrueBody, ast* afalseBody);
 
 /**
  * if-elif... を表す要素を作成します.
@@ -56,7 +56,7 @@ ast* ast_new_if_else(ast* acond, ast* atrueBody, ast* afalseBody);
  * @param aelifList
  * @return
  */
-ast* ast_new_if_elif_list(ast* acond, ast* atrueBody, ast* aelifList);
+ast* NewASTIfElifList(ast* acond, ast* atrueBody, ast* aelifList);
 
 /**
  * if-elif...-elseを表す要素を作成します.
@@ -66,7 +66,7 @@ ast* ast_new_if_elif_list(ast* acond, ast* atrueBody, ast* aelifList);
  * @param aelseBody
  * @param
  */
-ast* ast_new_if_elif_list_else(ast* acond, ast* atrueBody, ast* aelifList, ast* aelseBody);
+ast* NewASTIfElifList_else(ast* acond, ast* atrueBody, ast* aelifList, ast* aelseBody);
 
 /**
  * elif...を表す要素を作成します.
@@ -74,7 +74,7 @@ ast* ast_new_if_elif_list_else(ast* acond, ast* atrueBody, ast* aelifList, ast* 
  * @param atail
  * @return
  */
-ast* ast_new_elif_list(ast* aforward, ast* atail);
+ast* NewASTElifList(ast* aforward, ast* atail);
 
 /**
  * elifを表す要素を作成します.
@@ -82,7 +82,7 @@ ast* ast_new_elif_list(ast* aforward, ast* atail);
  * @param abody
  * @return
  */
-ast* ast_new_elif(ast* acond, ast* abody);
+ast* NewASTElif(ast* acond, ast* abody);
 
 /**
  * whileを表す要素を作成します.
@@ -90,45 +90,45 @@ ast* ast_new_elif(ast* acond, ast* abody);
  * @param abody
  * @return
  */
-ast* ast_new_while(ast* acond, ast* abody);
+ast* NewASTWhile(ast* acond, ast* abody);
 
 /** 
  * ループから抜けるステートメントを作成します.
  * @return
  */
-ast* ast_new_break();
+ast* NewASTBreak();
 
 /**
  * 次のループまでスキップするステートメントを作成します.
  * @return
  */
-ast* ast_new_continue();
+ast* NewASTContinue();
 
 /**
  * 値を返却するステートメントを作成します.
  * @param afact
  * @return
  */
-ast* ast_new_return(ast* afact);
+ast* NewASTReturn(ast* afact);
 
 /**
  * @return
  */
-ast* ast_new_return_empty();
+ast* NewASTReturnEmpty();
 
 /**
  * 例外をスローするステートメントを作成します.
  * @param afact
  * @return
  */
-ast* ast_new_throw(ast* afact);
+ast* NewASTThrow(ast* afact);
 
 /**
  * 例外が発生するかもしれない処理を囲うステートメント.
  * @param abody
  * @param acatch_list
  */
-ast* ast_new_try(ast* abody, ast* acatch_list);
+ast* NewASTTry(ast* abody, ast* acatch_list);
 
 /**
  * 例外を捕捉するステートメントを作成します.
@@ -137,7 +137,7 @@ ast* ast_new_try(ast* abody, ast* acatch_list);
  * @param abody
  * @return
  */
-ast* ast_new_catch(ast* stypename, string_view snamev, ast* abody);
+ast* NewASTCatch(ast* stypename, string_view snamev, ast* abody);
 
 /**
  * キャッチ節の一覧を作成します.
@@ -145,14 +145,14 @@ ast* ast_new_catch(ast* stypename, string_view snamev, ast* abody);
  * @param acatch_list
  * @return
  */
-ast* ast_new_catch_list(ast* acatch, ast* acatch_list);
+ast* NewASTCatchList(ast* acatch, ast* acatch_list);
 
 /**
 * 実引数を表す要素を作成します.
 * @param afactor
 * @return
 */
-ast* ast_new_argument(ast* afactor);
+ast* NewASTArgument(ast* afactor);
 
 /**
 * 実引数を表す要素を作成します.
@@ -160,7 +160,7 @@ ast* ast_new_argument(ast* afactor);
 * @param aargument_list
 * @return
 */
-ast* ast_new_argument_list(ast* factor, ast* argument_list);
+ast* NewASTArgumentList(ast* factor, ast* argument_list);
 
 /**
  * 完全クラス名(XX::YY::Foo)を表す要素を作成します.
@@ -168,12 +168,12 @@ ast* ast_new_argument_list(ast* factor, ast* argument_list);
  * @param class_name
  * @return
  */
-ast* ast_new_fqcn(ast* part_list, string_view class_namev);
+ast* NewASTFQCN(ast* part_list, string_view class_namev);
 
 /**
  * 完全修飾クラス名の 1節 を表す要素を作成します.
  */
-#define ast_new_fqcn_part(name) (ast_malloc_fqcn_part(name, __FILE__, __LINE__))
+#define NewASTFQCN_part(name) (MallocAST_fqcn_part(name, __FILE__, __LINE__))
 
 /**
  * 完全修飾クラス名の 1節 を表す要素を作成します.
@@ -182,7 +182,7 @@ ast* ast_new_fqcn(ast* part_list, string_view class_namev);
  * @param lineno
  * @return
  */
-ast* ast_malloc_fqcn_part(string_view namev, const char* filename, int lineno);
+ast* MallocAST_fqcn_part(string_view namev, const char* filename, int lineno);
 
 /**
  * 完全修飾クラス名の名前空間部分(XX::YY::)の一覧を表す要素を作成します.
@@ -190,7 +190,7 @@ ast* ast_malloc_fqcn_part(string_view namev, const char* filename, int lineno);
  * @param apart_list
  * @return
  */
-ast* ast_new_fqcn_part_list(ast* part, ast* part_list);
+ast* NewASTFQCNPartList(ast* part, ast* part_list);
 
 /**
  * X::Y y; を表す要素を作成します.
@@ -198,7 +198,7 @@ ast* ast_new_fqcn_part_list(ast* part, ast* part_list);
  * @param namev
  * @return
  */
-ast* ast_new_variable_decl(ast* type, string_view namev);
+ast* NewASTVariable_decl(ast* type, string_view namev);
 
 /**
  * X::Y y = new X::Y() のような初期化を表す要素を作成します.
@@ -207,7 +207,7 @@ ast* ast_new_variable_decl(ast* type, string_view namev);
  * @param afact
  * @return
  */
-ast* ast_new_variable_init(ast* type, string_view namev, ast* fact);
+ast* NewASTVariable_init(ast* type, string_view namev, ast* fact);
 
 /**
  * var y = new X::Y() のような初期化を表す要素を作成します.
@@ -215,7 +215,7 @@ ast* ast_new_variable_init(ast* type, string_view namev, ast* fact);
  * @param afact
  * @return
  */
-ast* ast_new_inferenced_type_init(string_view namev, ast* fact);
+ast* NewASTInferencedTypeInit(string_view namev, ast* fact);
 
 /**
  * assert 条件 を表す要素を作成します.
@@ -223,27 +223,27 @@ ast* ast_new_inferenced_type_init(string_view namev, ast* fact);
  * @param amsg
  * @return
  */
-ast* ast_new_assert(ast* afact, ast* amsg);
+ast* NewASTAssert(ast* afact, ast* amsg);
 
 /**
  * 強制実行を表す要素を作成します.
  * @param astmt
  * @return
  */
-ast* ast_new_defer(ast* astmt);
+ast* NewASTDefer(ast* astmt);
 
 /**
  * コルーチンの区切りを表す要素を作成します.
  * @param afact
  * @return
  */
-ast* ast_new_yield_return(ast* afact);
+ast* NewASTYieldReturn(ast* afact);
 
 /**
  * コルーチンの終了を表す要素を作成します.
  * @return
  */
-ast* ast_new_yield_break();
+ast* NewASTYieldBreak();
 
 /**
  * Javaから beacon が実行される時、事前に定義されたテーブルを注入するためのノード.
@@ -251,5 +251,5 @@ ast* ast_new_yield_break();
  * @param avalue 値
  * @return
  */
-ast* ast_new_inject(string_view namev, ast* avalue);
+ast* NewASTInject(string_view namev, ast* avalue);
 #endif // !SIGNAL_AST_AST_NEW_STMT_H

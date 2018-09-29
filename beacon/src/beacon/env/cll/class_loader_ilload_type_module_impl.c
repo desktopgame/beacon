@@ -42,7 +42,7 @@ void CLIL_generic_cache(ast* afqcn, generic_cache* dest) {
 }
 
 void CLIL_typename_list(class_loader * self, Vector * dst, ast * atypename_list) {
-	if (ast_is_blank(atypename_list)) {
+	if (IsBlankAST(atypename_list)) {
 		return;
 	}
 	if (atypename_list->tag == ast_typename_T) {
@@ -52,42 +52,42 @@ void CLIL_typename_list(class_loader * self, Vector * dst, ast * atypename_list)
 		PushVector(dst, e);
 	} else if(atypename_list->tag == ast_typename_list_T) {
 		for (int i = 0; i < atypename_list->vchildren->length; i++) {
-			CLIL_typename_list(self, dst, ast_at(atypename_list, i));
+			CLIL_typename_list(self, dst, AtAST(atypename_list, i));
 		}
 	}
 }
 
 
 void CLIL_type_parameter(class_loader* self, ast* asource, Vector* dest) {
-	if (ast_is_blank(asource)) {
+	if (IsBlankAST(asource)) {
 		return;
 	}
 	if (asource->tag == ast_type_parameter_list_T) {
 		for (int i = 0; i < asource->vchildren->length; i++) {
-			CLIL_type_parameter(self, ast_at(asource, i), dest);
+			CLIL_type_parameter(self, AtAST(asource, i), dest);
 		}
 		return;
 	}
 	assert(asource->tag == ast_type_parameter_T ||
 		   asource->tag == ast_type_in_parameter_T ||
 		   asource->tag == ast_type_out_parameter_T);
-	ast* arule_list = ast_first(asource);
+	ast* arule_list = FirstAST(asource);
 	il_type_parameter* iltypeparam = il_type_parameter_new(asource->u.stringv_value);
 	if (asource->tag == ast_type_in_parameter_T) iltypeparam->kind = il_type_parameter_kind_in_T;
 	if (asource->tag == ast_type_out_parameter_T) iltypeparam->kind = il_type_parameter_kind_out_T;
 	PushVector(dest, iltypeparam);
 	//制約があるならそれも設定
 	//制約はとりあえずなしで
-	assert(ast_is_blank(arule_list));
+	assert(IsBlankAST(arule_list));
 }
 
 void CLIL_type_argument(class_loader* self, ast* atype_args, Vector* dest) {
-	if(ast_is_blank(atype_args)) {
+	if(IsBlankAST(atype_args)) {
 		return;
 	}
 	if(atype_args->tag == ast_typename_list_T) {
 		for(int i=0; i<atype_args->vchildren->length; i++) {
-			ast* e = ast_at(atype_args, i);
+			ast* e = AtAST(atype_args, i);
 			CLIL_type_argument(self, e, dest);
 		}
 	} else if(atype_args->tag == ast_typename_T) {
@@ -100,11 +100,11 @@ void CLIL_type_argument(class_loader* self, ast* atype_args, Vector* dest) {
 void CLIL_parameter_list(class_loader* self, Vector* list, ast* asource) {
 	if (asource->tag == ast_parameter_list_T) {
 		for (int i = 0; i < asource->vchildren->length; i++) {
-			CLIL_parameter_list(self, list, ast_at(asource, i));
+			CLIL_parameter_list(self, list, AtAST(asource, i));
 		}
 	} else if (asource->tag == ast_parameter_T) {
-		ast* atype_name = ast_first(asource);
-		ast* aaccess_name = ast_second(asource);
+		ast* atype_name = FirstAST(asource);
+		ast* aaccess_name = SecondAST(asource);
 		il_parameter* p = il_parameter_new(aaccess_name->u.stringv_value);
 		CLIL_generic_cache(atype_name, p->fqcn);
 		PushVector(list, p);
@@ -133,13 +133,13 @@ static void CLIL_generic_cache_impl(ast* afqcn, generic_cache* dest) {
 	fqcn_cache* body = dest->fqcn;
 	//型引数を解析する
 	if (afqcn->tag == ast_typename_T) {
-		ast* atype_args = ast_second(afqcn);
-		if (!ast_is_blank(atype_args)) {
+		ast* atype_args = SecondAST(afqcn);
+		if (!IsBlankAST(atype_args)) {
 			CLIL_generic_cache_inner(atype_args, dest);
 		}
 	}
 	if (afqcn->tag == ast_typename_T) {
-		CLIL_generic_cache_impl(ast_first(afqcn), dest);
+		CLIL_generic_cache_impl(FirstAST(afqcn), dest);
 		return;
 	}
 	if (afqcn->tag == ast_fqcn_T ||
@@ -153,7 +153,7 @@ static void CLIL_generic_cache_impl(ast* afqcn, generic_cache* dest) {
 			return;
 		}
 		for (int i = 0; i < afqcn->vchildren->length; i++) {
-			ast* c = ast_at(afqcn, i);
+			ast* c = AtAST(afqcn, i);
 			CLIL_generic_cache_impl(c, dest);
 		}
 	} else {
@@ -166,7 +166,7 @@ static void CLIL_generic_cache_impl(ast* afqcn, generic_cache* dest) {
 static void CLIL_generic_cache_inner(ast* atype_args, generic_cache* dest) {
 	if (atype_args->tag == ast_typename_list_T) {
 		for (int i = 0; i < atype_args->vchildren->length; i++) {
-			ast* e = ast_at(atype_args, i);
+			ast* e = AtAST(atype_args, i);
 			CLIL_generic_cache_inner(e, dest);
 		}
 	} else {
@@ -181,7 +181,7 @@ static void CLIL_type_parameter_rule(class_loader* self, ast* asource, Vector* d
 	/*
 	if (source->tag == ast_type_parameter_list_T) {
 		for (int i = 0; i < source->child_count; i++) {
-			CLIL_type_parameter_rule(self, ast_at(source, i), dest);
+			CLIL_type_parameter_rule(self, AtAST(source, i), dest);
 		}
 	} else {
 		if (source->tag == ast_typename_T) {
@@ -200,7 +200,7 @@ static void ast_fqcn_flatten(ast* afqcn, Vector* dest) {
 		PushVector(dest, afqcn->u.stringv_value);
 	} else {
 		for(int i=0; i<afqcn->vchildren->length; i++) {
-			ast_fqcn_flatten(ast_at(afqcn, i), dest);
+			ast_fqcn_flatten(AtAST(afqcn, i), dest);
 		}
 	}
 }
@@ -208,10 +208,10 @@ static void ast_fqcn_flatten(ast* afqcn, Vector* dest) {
 static void CLIL_argument_listImpl(class_loader* self, Vector* list, ast* asource) {
 	if (asource->tag == ast_argument_list_T) {
 		for (int i = 0; i < asource->vchildren->length; i++) {
-			CLIL_argument_listImpl(self, list, ast_at(asource, i));
+			CLIL_argument_listImpl(self, list, AtAST(asource, i));
 		}
 	} else if (asource->tag == ast_argument_T) {
-		ast* aprimary = ast_first(asource);
+		ast* aprimary = FirstAST(asource);
 		il_argument* ilarg = il_argument_new();
 		ilarg->factor = CLIL_factor(self, aprimary);
 		PushVector(list, ilarg);

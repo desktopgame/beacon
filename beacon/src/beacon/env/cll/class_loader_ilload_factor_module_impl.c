@@ -164,15 +164,15 @@ static il_factor_bool * CLIL_false(class_loader * self, ast * source) {
 
 static il_factor_unary_op* CLIL_unary(class_loader* self, ast* source, operator_type type) {
 	il_factor_unary_op* ret = il_factor_unary_op_new(type);
-	ast* a = ast_first(source);
+	ast* a = FirstAST(source);
 	ret->a = CLIL_factor(self, a);
 	return ret;
 }
 
 static il_factor_binary_op* CLIL_binary(class_loader* self, ast* source, operator_type type) {
 	il_factor_binary_op* ret = il_factor_binary_op_new(type);
-	ast* aleft = ast_first(source);
-	ast* aright = ast_second(source);
+	ast* aleft = FirstAST(source);
+	ast* aright = SecondAST(source);
 	ret->left = CLIL_factor(self, aleft);
 	ret->right = CLIL_factor(self, aright);
 	return ret;
@@ -180,21 +180,21 @@ static il_factor_binary_op* CLIL_binary(class_loader* self, ast* source, operato
 
 static il_factor_explicit_unary_op* CLIL_explicit_unary(class_loader* self, ast* source, operator_type type) {
 	il_factor_explicit_unary_op* ret = il_factor_explicit_unary_op_new(type);
-	ret->receiver = CLIL_factor(self, ast_first(source));
+	ret->receiver = CLIL_factor(self, FirstAST(source));
 	return ret;
 }
 
 static il_factor_explicit_binary_op* CLIL_explicit_binary(class_loader* self, ast* source, operator_type type) {
 	il_factor_explicit_binary_op* ret = il_factor_explicit_binary_op_new(type);
-	ret->receiver = CLIL_factor(self, ast_first(source));
-	ret->arg = CLIL_factor(self, ast_second(source));
+	ret->receiver = CLIL_factor(self, FirstAST(source));
+	ret->arg = CLIL_factor(self, SecondAST(source));
 	return ret;
 }
 
 static il_factor_assign_op* CLIL_assign(class_loader* self, ast* source) {
 	il_factor_assign_op* ret = il_factor_assign_op_new();
-	ast* aleft = ast_first(source);
-	ast* aright = ast_second(source);
+	ast* aleft = FirstAST(source);
+	ast* aright = SecondAST(source);
 	ret->left = CLIL_factor(self, aleft);
 	ret->right = CLIL_factor(self, aright);
 	return ret;
@@ -204,8 +204,8 @@ static il_factor_assign_op* CLIL_assign_arithmetic(class_loader* self, ast* sour
 	//a += b
 	il_factor_assign_op* ret = il_factor_assign_op_new();
 	il_factor_binary_op* bin = il_factor_binary_op_new(type);
-	ast* aleft = ast_first(source);
-	ast* aright = ast_second(source);
+	ast* aleft = FirstAST(source);
+	ast* aright = SecondAST(source);
 	bin->left = CLIL_factor(self, aleft);
 	bin->right = CLIL_factor(self, aright);
 	ret->left = CLIL_factor(self, aleft);
@@ -215,8 +215,8 @@ static il_factor_assign_op* CLIL_assign_arithmetic(class_loader* self, ast* sour
 }
 
 static il_factor_variable* CLIL_variable(class_loader* self, ast* source) {
-	ast* afqcn = ast_first(source);
-	ast* atype_args = ast_second(source);
+	ast* afqcn = FirstAST(source);
+	ast* atype_args = SecondAST(source);
 
 	il_factor_variable* ilvar = il_factor_variable_new();
 	CLIL_fqcn_cache(afqcn, ilvar->fqcn);
@@ -226,9 +226,9 @@ static il_factor_variable* CLIL_variable(class_loader* self, ast* source) {
 
 static il_factor_new_instance* CLIL_new_instance(class_loader* self, ast* source) {
 	assert(source->tag == ast_new_instance_T);
-	ast* afqcn = ast_first(source);
-	ast* atype_args = ast_second(source);
-	ast* aargs = ast_at(source, 2);
+	ast* afqcn = FirstAST(source);
+	ast* atype_args = SecondAST(source);
+	ast* aargs = AtAST(source, 2);
 	il_factor_new_instance* ret = il_factor_new_instance_new();
 	CLIL_fqcn_cache(afqcn, ret->fqcnc);
 	CLIL_type_argument(self, atype_args, ret->type_args);
@@ -238,16 +238,16 @@ static il_factor_new_instance* CLIL_new_instance(class_loader* self, ast* source
 
 static il_factor_as* CLIL_as(class_loader* self, ast* source) {
 	il_factor_as* ret = il_factor_as_new();
-	ret->fact = CLIL_factor(self, ast_first(source));
-	CLIL_generic_cache(ast_second(source), ret->fqcn);
+	ret->fact = CLIL_factor(self, FirstAST(source));
+	CLIL_generic_cache(SecondAST(source), ret->fqcn);
 	return ret;
 }
 
 static il_factor_call_op* CLIL_call_op(class_loader* self, ast* source) {
 	assert(source->tag == ast_op_call_T);
 	il_factor_call_op* ret = il_factor_call_op_new();
-	ast* afact = ast_first(source);
-	ast* aargs = ast_second(source);
+	ast* afact = FirstAST(source);
+	ast* aargs = SecondAST(source);
 	ret->receiver = CLIL_factor(self, afact);
 	CLIL_argument_list(self, ret->argument_list, aargs);
 	return ret;
@@ -255,9 +255,9 @@ static il_factor_call_op* CLIL_call_op(class_loader* self, ast* source) {
 
 static il_factor_member_op* CLIL_member_op(class_loader* self, ast* source) {
 	assert(source->tag == ast_field_access_T);
-	ast* afact = ast_first(source);
-	ast* aname = ast_second(source);
-	ast* atype_args = ast_at(source, 2);
+	ast* afact = FirstAST(source);
+	ast* aname = SecondAST(source);
+	ast* atype_args = AtAST(source, 2);
 	il_factor_member_op* ret = il_factor_member_op_new(aname->u.stringv_value);
 	ret->fact = CLIL_factor(self, afact);
 	CLIL_type_argument(self, atype_args, ret->type_args);
@@ -266,8 +266,8 @@ static il_factor_member_op* CLIL_member_op(class_loader* self, ast* source) {
 
 static il_factor_instanceof* CLIL_instanceof(class_loader* self, ast* source) {
 	assert(source->tag == ast_instanceof_T);
-	ast* afact = ast_first(source);
-	ast* atype = ast_second(source);
+	ast* afact = FirstAST(source);
+	ast* atype = SecondAST(source);
 	il_factor_instanceof* ret = il_factor_instanceof_new();
 	ret->fact = CLIL_factor(self, afact);
 	CLIL_generic_cache(atype, ret->gcache);
@@ -276,8 +276,8 @@ static il_factor_instanceof* CLIL_instanceof(class_loader* self, ast* source) {
 
 static il_factor_subscript* CLIL_subscript(class_loader* self, ast* source) {
 	il_factor_subscript* ret = il_factor_subscript_new();
-	ast* afact = ast_first(source);
-	ast* apos = ast_second(source);
+	ast* afact = FirstAST(source);
+	ast* apos = SecondAST(source);
 	ret->receiver = CLIL_factor(self, afact);
 	ret->pos = CLIL_factor(self, apos);
 	return ret;

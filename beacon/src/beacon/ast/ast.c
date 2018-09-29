@@ -7,16 +7,16 @@
 #include "../env/fqcn_cache.h"
 #include "../util/mem.h"
 //proto
-static void ast_delete_impl(ast* self);
-static modifier_type ast_cast_to_modifierImpl(ast * self, bool* error);
-static void ast_delete_self(VectorItem item);
+static void DeleteAST_impl(ast* self);
+static modifier_type ASTCastToModifierImpl(ast * self, bool* error);
+static void DeleteAST_self(VectorItem item);
 
-void ast_compile_entry(ast * self) {
+void CompileEntryAST(ast * self) {
 	parser* p = parser_current();
-	ast_push(p->root, self);
+	PushAST(p->root, self);
 }
 
-ast * ast_malloc(ast_tag tag, const char* filename, int lineno) {
+ast * MallocAST(ast_tag tag, const char* filename, int lineno) {
 	ast* ret = (ast*)mem_malloc(sizeof(ast), filename, lineno);
 	assert(ret != NULL);
 	ret->tag = tag;
@@ -33,20 +33,20 @@ ast * ast_malloc(ast_tag tag, const char* filename, int lineno) {
 	return ret;
 }
 
-ast * ast_new_namespace_path(string_view namev) {
+ast * NewASTNamespacePath(string_view namev) {
 	ast* ret = ast_new(ast_namespace_path_T);
 	ret->u.stringv_value = namev;
 	return ret;
 }
 
-ast * ast_new_namespace_path_list(ast * aforward, string_view namev) {
+ast * NewASTNamespacePathList(ast * aforward, string_view namev) {
 	ast* ret = ast_new(ast_namespace_path_list_T);
-	ast_push(ret, aforward);
-	ast_push(ret, ast_new_namespace_path(namev));
+	PushAST(ret, aforward);
+	PushAST(ret, NewASTNamespacePath(namev));
 	return ret;
 }
 
-ast * ast_new_import_path(ast* astr) {
+ast * NewASTImportPath(ast* astr) {
 	ast* ret = ast_new(ast_import_path_T);
 	ret->u.stringv_value = astr->u.stringv_value;
 	astr->u.stringv_value = 0;
@@ -54,53 +54,53 @@ ast * ast_new_import_path(ast* astr) {
 	return ret;
 }
 
-ast * ast_new_import_decl(ast * aimport_path) {
+ast * NewASTImportDecl(ast * aimport_path) {
 	ast* ret = ast_new(ast_import_decl_T);
-	ast_push(ret, aimport_path);
+	PushAST(ret, aimport_path);
 	return ret;
 }
 
-ast* ast_new_import_decl_list(ast* aimport, ast* aimport_list) {
+ast* NewASTImportDeclList(ast* aimport, ast* aimport_list) {
 	ast* ret = ast_new(ast_import_decl_list_T);
-	ast_push(ret, aimport);
-	ast_push(ret, aimport_list);
+	PushAST(ret, aimport);
+	PushAST(ret, aimport_list);
 	return ret;
 }
 
-ast * ast_new_scope(ast * astmt_list) {
+ast * NewASTScope(ast * astmt_list) {
 	ast* ret = ast_new(ast_scope_T);
-	ast_push(ret, astmt_list);
+	PushAST(ret, astmt_list);
 	return ret;
 }
 
-ast * ast_new_scope_empty() {
-	return ast_new_scope(ast_new_blank());
+ast * NewASTScopeEmpty() {
+	return NewASTScope(NewASTBlank());
 }
 
-ast * ast_new_blank() {
+ast * NewASTBlank() {
 	return ast_new(ast_blank_T);
 }
 
-ast * ast_new_identifier(string_view strv) {
+ast * NewASTIdentifier(string_view strv) {
 	ast* ret = ast_new(ast_identifier_T);
 	ret->u.stringv_value = strv;
 	return ret;
 }
 
-ast * ast_new_identifier_list(string_view strv, ast * aident_list) {
+ast * NewASTIdentifierList(string_view strv, ast * aident_list) {
 	ast* ret = ast_new(ast_identifier_list_T);
-	ast_push(ret, aident_list);
-	ast_push(ret, ast_new_identifier(strv));
+	PushAST(ret, aident_list);
+	PushAST(ret, NewASTIdentifier(strv));
 	return ret;
 }
 
-ast * ast_new_proc(ast * aexpr) {
+ast * NewASTProc(ast * aexpr) {
 	ast* ret = ast_new(ast_proc_T);
-	ast_push(ret, aexpr);
+	PushAST(ret, aexpr);
 	return ret;
 }
 
-ast * ast_push(ast * self, ast * achild) {
+ast * PushAST(ast * self, ast * achild) {
 	assert(self != NULL);
 	assert(achild != NULL);
 	if (self->vchildren == NULL) {
@@ -119,39 +119,39 @@ ast * ast_push(ast * self, ast * achild) {
 	return self;
 }
 
-ast* ast_at(ast * self, int index) {
+ast* AtAST(ast * self, int index) {
 	assert(self != NULL);
 	return (ast*)AtVector(self->vchildren, index);
 }
 
-ast * ast_first(ast * self) {
-	return ast_at(self, 0);
+ast * FirstAST(ast * self) {
+	return AtAST(self, 0);
 }
 
-ast * ast_second(ast * self) {
-	return ast_at(self, 1);
+ast * SecondAST(ast * self) {
+	return AtAST(self, 1);
 }
 
-void ast_delete(ast * self) {
+void DeleteAST(ast * self) {
 	if (self == NULL) {
 		return;
 	}
-	ast_delete_impl(self);
+	DeleteAST_impl(self);
 }
 
-bool ast_is_blank(ast * self) {
+bool IsBlankAST(ast * self) {
 	return self == NULL || self->tag == ast_blank_T;
 }
 
-bool ast_is_access(ast * self) {
+bool IsAccessAST(ast * self) {
 	return self->tag == ast_access_level_T;
 }
 
-bool ast_is_modifier(ast * self) {
+bool IsModifierAST(ast * self) {
 	return self->tag == ast_mod_Tifier;
 }
 
-bool ast_is_stmt(ast* self) {
+bool IsStmtAST(ast* self) {
 	switch(self->tag) {
 		case ast_stmt_T:
 		case ast_stmt_list_T:
@@ -179,21 +179,21 @@ bool ast_is_stmt(ast* self) {
 	return false;
 }
 
-access_level ast_cast_to_access(ast * self) {
-	assert(ast_is_access(self));
+access_level ASTCastToAccess(ast * self) {
+	assert(IsAccessAST(self));
 	return self->u.access_value;
 }
 
-modifier_type ast_cast_to_modifier(ast * self, bool* error) {
+modifier_type ASTCastToModifier(ast * self, bool* error) {
 	(*error) = false;
 	if(self->tag == ast_mod_Tifier_list) {
-		return ast_cast_to_modifierImpl(self, error);
+		return ASTCastToModifierImpl(self, error);
 	}
-	assert(ast_is_modifier(self));
+	assert(IsModifierAST(self));
 	return self->u.modifier_value;
 }
 
-constructor_chain_type ast_cast_to_chain_type(ast * self) {
+constructor_chain_type ASTCastToChainType(ast * self) {
 	switch (self->tag) {
 		case ast_constructor_chain_this_T:
 			return chain_type_this_T;
@@ -206,14 +206,14 @@ constructor_chain_type ast_cast_to_chain_type(ast * self) {
 }
 
 //private
-static void ast_delete_impl(ast* self) {
+static void DeleteAST_impl(ast* self) {
 	ast_tag tag =self->tag;
-	DeleteVector(self->vchildren, ast_delete_self);
+	DeleteVector(self->vchildren, DeleteAST_self);
 	self->vchildren = NULL;
 	MEM_FREE(self);
 }
 
-static modifier_type ast_cast_to_modifierImpl(ast * self, bool* error) {
+static modifier_type ASTCastToModifierImpl(ast * self, bool* error) {
 	int ret = -1;
 	for(int i=0; i<self->vchildren->length; i++) {
 		if((*error)) {
@@ -221,10 +221,10 @@ static modifier_type ast_cast_to_modifierImpl(ast * self, bool* error) {
 		}
 		//フラグを合体させる
 		if(ret == -1) {
-			ret = ast_cast_to_modifier(ast_at(self, i), error);
+			ret = ASTCastToModifier(AtAST(self, i), error);
 		} else {
 			//追加の属性がすでに含まれているかどうか
-			modifier_type add = ast_cast_to_modifier(ast_at(self, i), error);
+			modifier_type add = ASTCastToModifier(AtAST(self, i), error);
 			if((ret & add) > 0) {
 				(*error) = true;
 			}
@@ -235,7 +235,7 @@ static modifier_type ast_cast_to_modifierImpl(ast * self, bool* error) {
 	return mt;
 }
 
-static void ast_delete_self(VectorItem item) {
+static void DeleteAST_self(VectorItem item) {
 	ast* e = (ast*)item;
-	ast_delete(e);
+	DeleteAST(e);
 }

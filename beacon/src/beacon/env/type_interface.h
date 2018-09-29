@@ -6,8 +6,8 @@
 #include "../util/string_pool.h"
 #include "../il/call_context.h"
 
-#define TYPE2CLASS(type) (type_cast_class(type))
-#define TYPE2INTERFACE(type) (type_cast_interface(type))
+#define TYPE2CLASS(type) (CastClassType(type))
+#define TYPE2INTERFACE(type) (CastInterfaceType(type))
 /**
  * 型の種類を表すタグ.
  */
@@ -214,13 +214,13 @@ void type_delete(type* self);
  * @param self
  * @return
  */
-struct class_* type_cast_class(type* self);
+struct class_* CastClassType(type* self);
 /**
  * このタイプをインターフェイスにキャストします.
  * @param self
  * @return
  */
-struct interface_* type_cast_interface(type* self);
+struct interface_* CastInterfaceType(type* self);
 
 /**
  * abstractにはクラス/インターフェイスを渡します.

@@ -109,7 +109,7 @@ void class_loader_delete(class_loader * self) {
 	if(self == NULL) {
 		return;
 	}
-	ast_delete(self->source_code);
+	DeleteAST(self->source_code);
 	il_top_level_delete(self->il_code);
 	DeleteVector(self->type_cache_vec, class_loader_cache_delete);
 	import_manager_delete(self->import_manager);
