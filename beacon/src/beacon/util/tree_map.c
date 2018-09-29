@@ -7,9 +7,9 @@
 #include <assert.h>
 
 //proto
-static void tree_map_eachImpl(tree_map* self, tree_action act);
+static void EachTreeMapImpl(tree_map* self, tree_action act);
 
-tree_map * tree_map_new() {
+tree_map * NewTreeMap() {
 	tree_map* ret = (tree_map*)MEM_MALLOC(sizeof(tree_map));
 	ret->key = "\0";
 	ret->item = NULL;
@@ -19,54 +19,54 @@ tree_map * tree_map_new() {
 	return ret;
 }
 
-tree_map* tree_map_put(tree_map* self, tree_key key, tree_item item) {
+tree_map* PutTreeMap(tree_map* self, tree_key key, tree_item item) {
 	assert(strcmp(key, "\0"));
 	//リテラルによってキーが指定される場合は、
 	//プログラムによって明示的にそれを削除する必要はありませんが、
 	//この関数からは引数のキー文字列が、
 	//リテラルによって与えられたものなのか
 	//動的に確保されたものなのか判別がつかないので、
-	//とりあえず複製し、tree_map_deleteのときに一緒に削除します。
-	int comp = tree_map_compare(self, key);
+	//とりあえず複製し、DeleteTreeMapのときに一緒に削除します。
+	int comp = CompareTreeMap(self, key);
 	if (comp == 0) {
 		self->item = item;
 		return self;
 	} else if (comp < 0) {
 		if (self->left == NULL) {
-			self->left = tree_map_new();
+			self->left = NewTreeMap();
 			self->left->key = text_strdup(key);
 			self->left->parent = self;
 		} else {
-			return tree_map_put(self->left, key, item);
+			return PutTreeMap(self->left, key, item);
 		}
 		self->left->item = item;
 		return self->left;
 	} else if (comp > 0) {
 		if (self->right == NULL) {
-			self->right = tree_map_new();
+			self->right = NewTreeMap();
 			self->right->key = text_strdup(key);
 			self->right->parent = self;
 		} else {
-			return tree_map_put(self->right, key, item);
+			return PutTreeMap(self->right, key, item);
 		}
 		self->right->item = item;
 		return self->right;
 	}
 }
 
-tree_item tree_map_get(tree_map * self, tree_key key) {
-	tree_map* ret = tree_map_cell(self, key);
+tree_item GetTreeMapValue(tree_map * self, tree_key key) {
+	tree_map* ret = GetTreeMapCell(self, key);
 	if (ret == NULL) {
 		return NULL;
 	}
 	return ret->item;
 }
 
-tree_map * tree_map_cell(tree_map * self, tree_key key) {
+tree_map * GetTreeMapCell(tree_map * self, tree_key key) {
 	if (self == NULL) {
 		return NULL;
 	}
-	int comp = tree_map_compare(self, key);
+	int comp = CompareTreeMap(self, key);
 	if (comp == 0) {
 		return self;
 	} else if (comp < 0) {
@@ -74,37 +74,37 @@ tree_map * tree_map_cell(tree_map * self, tree_key key) {
 		if (self->left == NULL) {
 			return NULL;
 		}
-		return tree_map_cell(self->left, key);
+		return GetTreeMapCell(self->left, key);
 	} else if (comp > 0) {
 		//指定のキーが存在しない
 		if (self->right == NULL) {
 			return NULL;
 		}
-		return tree_map_cell(self->right, key);
+		return GetTreeMapCell(self->right, key);
 	}
 	return NULL;
 }
 
-int tree_map_compare(tree_map * self, tree_key key) {
+int CompareTreeMap(tree_map * self, tree_key key) {
 	return strcmp(self->key, key);
 }
 
-void tree_map_each(tree_map * self, tree_action act) {
+void EachTreeMap(tree_map * self, tree_action act) {
 	assert(self != NULL);
-	tree_map_eachImpl(self, act);
+	EachTreeMapImpl(self, act);
 }
 
-void tree_map_delete(tree_map * self, tree_element_deleter deleter) {
+void DeleteTreeMap(tree_map * self, tree_element_deleter deleter) {
 	if(self == NULL) {
 		return;
 	}
 	//先に子要素を開放する
 	if (self->left != NULL) {
-		tree_map_delete(self->left, deleter);
+		DeleteTreeMap(self->left, deleter);
 		self->left = NULL;
 	}
 	if (self->right != NULL) {
-		tree_map_delete(self->right, deleter);
+		DeleteTreeMap(self->right, deleter);
 		self->right = NULL;
 	}
 	//printf("delete %s\n", self->key);
@@ -115,17 +115,17 @@ void tree_map_delete(tree_map * self, tree_element_deleter deleter) {
 	MEM_FREE(self);
 }
 
-void tree_map_deleter_free(const char* key, tree_item item) {
+void DeleteTreeMapr_free(const char* key, tree_item item) {
 	MEM_FREE(item);
 }
 
-void tree_map_deleter_null(const char* key, tree_item item) {
+void DeleteTreeMapr_null(const char* key, tree_item item) {
 }
 
 //private
-static void tree_map_eachImpl(tree_map* self, tree_action act) {
+static void EachTreeMapImpl(tree_map* self, tree_action act) {
 	if (self->left != NULL) {
-		tree_map_eachImpl(self->left, act);
+		EachTreeMapImpl(self->left, act);
 	}
 	//同じならそれはルート要素
 	if (strcmp(self->key, "\0")) {
@@ -133,6 +133,6 @@ static void tree_map_eachImpl(tree_map* self, tree_action act) {
 	}
 
 	if (self->right != NULL) {
-		tree_map_eachImpl(self->right, act);
+		EachTreeMapImpl(self->right, act);
 	}
 }

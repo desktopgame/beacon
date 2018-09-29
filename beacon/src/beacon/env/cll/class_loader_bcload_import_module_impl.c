@@ -54,7 +54,7 @@ class_loader* CLBC_import_new(class_loader* self, char* full_path) {
 	cll->parent = self;
 	import_info* info = import_manager_import(self->import_manager, cll);
 	info->consume = false;
-	tree_map_put(ctx->class_loader_map, full_path, cll);
+	PutTreeMap(ctx->class_loader_map, full_path, cll);
 	return cll;
 }
 
@@ -79,7 +79,7 @@ static void CLBC_new_load_internal(class_loader * self, char * full_path) {
 	script_context* ctx = script_context_get_current();
 	//そのファイルパスに対応した
 	//クラスローダが既に存在するなら無視
-	class_loader* cll = tree_map_get(ctx->class_loader_map, full_path);
+	class_loader* cll = GetTreeMapValue(ctx->class_loader_map, full_path);
 	if (cll != NULL) {
 		CLBC_import_already(self, cll);
 		return;

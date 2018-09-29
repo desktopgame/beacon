@@ -14,16 +14,16 @@ static Vector* gVec = NULL;
 void string_pool_init() {
 	assert(gMap == NULL);
 	assert(gVec == NULL);
-	gMap = tree_map_new();
+	gMap = NewTreeMap();
 	gVec = NewVector();
 }
 
 string_view string_pool_intern(const char* str) {
 	assert(gMap != NULL);
 	assert(gVec != NULL);
-	tree_map* cell = tree_map_cell(gMap, str);
+	tree_map* cell = GetTreeMapCell(gMap, str);
 	if(cell == NULL) {
-		cell = tree_map_put(gMap, str, (void*)(gVec->length + HEADER));
+		cell = PutTreeMap(gMap, str, (void*)(gVec->length + HEADER));
 		PushVector(gVec, cell->key);
 	}
 	if(cell == gMap) {
@@ -54,7 +54,7 @@ string_view string_pool_concat(const char* head, string_view foot) {
 }
 
 string_view string_pool_str2ref(const char* str) {
-	tree_map* cell = tree_map_cell(gMap, str);
+	tree_map* cell = GetTreeMapCell(gMap, str);
 	if(cell == gMap) {
 		return ZERO_VIEW;
 	}
@@ -83,7 +83,7 @@ void string_pool_dump(FILE* fp) {
 }
 
 void string_pool_destroy() {
-	tree_map_delete(gMap, tree_map_deleter_null);
+	DeleteTreeMap(gMap, DeleteTreeMapr_null);
 	DeleteVector(gVec, VectorDeleterOfNull);
 	gMap = NULL;
 	gVec = NULL;

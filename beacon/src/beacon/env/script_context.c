@@ -167,7 +167,7 @@ void script_context_cache() {
 static script_context* script_context_malloc(void) {
 	script_context* ret = (script_context*)MEM_MALLOC(sizeof(script_context));
 	ret->namespace_nmap = NewNumericMap();
-	ret->class_loader_map = tree_map_new();
+	ret->class_loader_map = NewTreeMap();
 	ret->heap = heap_new();
 	ret->type_vec = NewVector();
 	ret->thread_vec = NewVector();
@@ -215,7 +215,7 @@ static void script_context_free(script_context* self) {
 
 	DeleteVector(self->type_vec, VectorDeleterOfNull);
 	DeleteVector(self->thread_vec, VectorDeleterOfNull);
-	tree_map_delete(self->class_loader_map, script_context_class_loader_delete);
+	DeleteTreeMap(self->class_loader_map, script_context_class_loader_delete);
 	//ブートストラップクラスローダを意図的に起動していないなら、
 	//ここはまだNULL
 	if(self->namespace_nmap != NULL) {
