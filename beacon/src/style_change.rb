@@ -286,6 +286,13 @@ commands = {
     end,
     "abort" => lambda do
         abort
+    end,
+    "dump" => lambda do
+        File.open("style_dump.text", "w") do |fp|
+            functions_edits.last.each do |e|
+                fp.puts e
+            end
+        end
     end
 }
 while(true)
