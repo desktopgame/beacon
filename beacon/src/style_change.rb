@@ -178,7 +178,6 @@ decl_files = []
 impl_files = []
 functions = []
 functions_edits = []
-puts ARGV.length
 Dir.glob("**/*") do |file|
     if(ARGV.length == 0 ||
       (ARGV.length > 0 && ARGV.detect(){|e| file.include?(e)})) then
