@@ -38,51 +38,51 @@ typedef struct parser {
 
 /**
  * 文字列を入力として構文解析を実行します.
- * 必ず parser_destroy で解放する必要があります。
+ * 必ず DestroyParser で解放する必要があります。
  * @param source
  * @return
  */
-parser* parse_string(const char* source);
+parser* ParseString(const char* source);
 
 /**
  * ファイルを入力として構文解析を実行します.
- * 必ず parser_destroy で解放する必要があります。
+ * 必ず DestroyParser で解放する必要があります。
  * @param source
  * @return
  */
-parser* parse_file(const char* filename);
+parser* ParseFile(const char* filename);
 
 /**
  * 現在のパーサーを返します.
  * @return
  */
-parser* parser_current();
+parser* GetCurrentParser();
 
 /**
  * エラー情報とASTを解放します.
  * @param self
  */
-void parser_destroy(parser* self);
+void DestroyParser(parser* self);
 
 /**
  * 文字列バッファーをクリアします.
  * @param self
  */
-void parser_clear_buffer(parser* self);
+void ClearParserBuffer(parser* self);
 
 /**
  * 文字列バッファーに一文字加算します.
  * @param self
  * @return
  */
-void parser_append_buffer(parser* self, char ch);
+void AppendParserBuffer(parser* self, char ch);
 
 /**
  * 文字列バッファーをリテラルノードへ還元します.
  * @param self
  * @return
  */
-ast* parser_reduce_buffer(parser* self);
+ast* ReduceParserBuffer(parser* self);
 
 /**
  * パーサーからASTを取り上げて解放させないようにします.
@@ -90,11 +90,11 @@ ast* parser_reduce_buffer(parser* self);
  * @param self
  * @return
  */
-ast* parser_release_ast(parser* self);
+ast* ReleaseParserAST(parser* self);
 
 /**
  * エラー発生位置を設定します.
  * @param p
  */
-void parser_relocation_error(parser* p);
+void RelocationParserError(parser* p);
 #endif // !SIGNAL_PARSE_PARSER_H

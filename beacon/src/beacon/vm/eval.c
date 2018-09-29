@@ -26,7 +26,7 @@ bool eval_ast(const char* filename) {
 		abort();
 		return false;
 	}
-	parser* p = parse_file(filename);
+	parser* p = ParseFile(filename);
 	ast_print_tree(p->root);
 	if(p->result != parse_complete_T) {
 		printf("error: %s<%d>\n    %s\n", p->source_name, p->lineno, p->error_message);
@@ -35,7 +35,7 @@ bool eval_ast(const char* filename) {
 	}
 	//パーサーを破棄
 	bool ret = p->result != parse_complete_T;
-	parser_destroy(p);
+	DestroyParser(p);
 	return ret;
 	//*/
 }
@@ -74,15 +74,15 @@ bool eval_file(const char * filename) {
 }
 
 bool eval_string(const char* source) {
-	parser* p = parse_string(source);
+	parser* p = ParseString(source);
 	if (p->result != parse_complete_T) {
 		bc_error_throw(bcerror_parse_T, p->error_message);
-		parser_destroy(p);
+		DestroyParser(p);
 		return false;
 	}
 	class_loader* cll = class_loader_new("", content_entry_point_T);
-	ast* a = parser_release_ast(p);
-	parser_destroy(p);
+	ast* a = ReleaseParserAST(p);
+	DestroyParser(p);
 	return eval_top_from_cll(cll, a);
 }
 

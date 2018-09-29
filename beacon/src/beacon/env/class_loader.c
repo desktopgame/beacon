@@ -73,13 +73,13 @@ class_loader* class_loader_new(const char* filename, content_type type) {
 
 void class_loader_load(class_loader * self) {
 	//ASTを読み込む
-	parser* p = parse_file(self->filename);
+	parser* p = ParseFile(self->filename);
 	//解析に失敗した場合
 	if (check_parser_error(p)) {
 		return;
 	}
-	ast* a = parser_release_ast(p);
-	parser_destroy(p);
+	ast* a = ReleaseParserAST(p);
+	DestroyParser(p);
 	class_loader_load_pass_ast(self, a);
 }
 
@@ -161,13 +161,13 @@ static void class_loader_cache_delete(VectorItem item) {
 static class_loader* class_loader_load_specialImpl(class_loader* self, class_loader* cll, char* full_path) {
 	cll = CLBC_import_new(self, full_path);
 	//parser
-	parser* p = parse_file(full_path);
+	parser* p = ParseFile(full_path);
 	if(check_parser_error(p)) {
 		return cll;
 	}
 	//ASTをclassloaderへ
-	cll->source_code = parser_release_ast(p);
-	parser_destroy(p);
+	cll->source_code = ReleaseParserAST(p);
+	DestroyParser(p);
 	//AST -> IL へ
 	class_loader_ilload_impl(cll, cll->source_code);
 	if (bc_error_last()) { return cll; }
@@ -290,11 +290,11 @@ static void class_loader_load_toplevel_function(class_loader* self) {
 static bool check_parser_error(parser* p) {
 	if(p->result == parse_syntax_error_T) {
 		bc_error_throw(bcerror_parse_T, p->error_message);
-		parser_destroy(p);
+		DestroyParser(p);
 		return true;
 	} else if(p->result == parse_open_error_T) {
 		bc_error_throw(bcerror_require_not_found_T, p->source_name);
-		parser_destroy(p);
+		DestroyParser(p);
 		return true;
 	}
 	return false;

@@ -13,7 +13,7 @@
 static parser* parser_new();
 static parser* gParser;
 
-parser* parse_string(const char* source) {
+parser* ParseString(const char* source) {
 	assert(gParser == NULL);
 	extern void yy_setstr(char *source);
 	extern void yy_clearstr();
@@ -25,7 +25,7 @@ parser* parse_string(const char* source) {
 	if (yyparse()) {
 		yy_clearstr();
 		gParser->result = parse_syntax_error_T;
-		parser_relocation_error(gParser);
+		RelocationParserError(gParser);
 		return gParser;
 	}
 	yy_clearstr();
@@ -33,7 +33,7 @@ parser* parse_string(const char* source) {
 	return gParser;
 }
 
-parser* parse_file(const char* filename) {
+parser* ParseFile(const char* filename) {
 	assert(gParser == NULL);
 	extern void yy_setstr(char *source);
 	extern int yyparse(void);
@@ -50,18 +50,18 @@ parser* parse_file(const char* filename) {
 	}
 	if (yyparse()) {
 		gParser->result = parse_syntax_error_T;
-		parser_relocation_error(gParser);
+		RelocationParserError(gParser);
 		return gParser;
 	}
 	gParser->result = parse_complete_T;
 	return gParser;
 }
 
-parser* parser_current() {
+parser* GetCurrentParser() {
 	return gParser;
 }
 
-void parser_destroy(parser* self) {
+void DestroyParser(parser* self) {
 	assert(gParser != NULL);
 	if (gParser->root) {
 		DeleteAST(gParser->root);
@@ -73,18 +73,18 @@ void parser_destroy(parser* self) {
 	gParser =  NULL;
 }
 
-void parser_clear_buffer(parser* self) {
+void ClearParserBuffer(parser* self) {
 	self->literal_buffer = NULL;
 }
 
-void parser_append_buffer(parser* self, char ch) {
+void AppendParserBuffer(parser* self, char ch) {
 	if (self->literal_buffer == NULL) {
 		self->literal_buffer = NewBuffer();
 	}
 	AppendBuffer(self->literal_buffer, ch);
 }
 
-ast* parser_reduce_buffer(parser* self) {
+ast* ReduceParserBuffer(parser* self) {
 	//""のような空文字の場合
 	if (self->literal_buffer == NULL) {
 		return NewASTString(InternString(""));
@@ -94,13 +94,13 @@ ast* parser_reduce_buffer(parser* self) {
 	return ret;
 }
 
-ast* parser_release_ast(parser* self) {
+ast* ReleaseParserAST(parser* self) {
 	ast* ret = self->root;
 	self->root = NULL;
 	return ret;
 }
 
-void parser_relocation_error(parser* p) {
+void RelocationParserError(parser* p) {
 	bc_error_file(p->source_name);
 	bc_error_line(p->error_line_index);
 	bc_error_column(p->error_column_index);

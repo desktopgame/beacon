@@ -45,16 +45,16 @@ JNIEXPORT jobject JNICALL Java_jp_koya_jbeacon_BCEval_nativeString(JNIEnv * env,
 //private
 static jobject bc_eval_string(JNIEnv * env, jclass cls, jstring str, jobject table, const char* filename, const char* source) {
 	//文字列を解析
-	parser* p = parse_string(source);
+	parser* p = ParseString(source);
 	if (p->result != parse_complete_T) {
 		bc_error_throw(bcerror_parse_T, p->error_message);
-		parser_destroy(p);
+		DestroyParser(p);
 		jclass bc_compile_exc_cls = (*env)->FindClass(env, "jp/koya/jbeacon/BCCompileException");
 		(*env)->ThrowNew(env, bc_compile_exc_cls, Ref2Str(bc_error_message()));
 		return NULL;
 	}
-	ast* a = parser_release_ast(p);
-	parser_destroy(p);
+	ast* a = ReleaseParserAST(p);
+	DestroyParser(p);
 	//javaから beacon へインジェクションしようとしたが、
 	//参照型をインジェクションしようとした場合
 	if(!bc_read_symbol(env, table, a)) {
