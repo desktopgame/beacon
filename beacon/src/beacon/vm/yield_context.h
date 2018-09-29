@@ -17,10 +17,10 @@ typedef struct yield_context {
 	int len;
 } yield_context;
 
-#define yield_context_new() (yield_context_malloc(__FILE__, __LINE__))
-yield_context* yield_context_malloc(const char* filename, int lineno);
+#define NewYieldContext() (MallocYieldContext(__FILE__, __LINE__))
+yield_context* MallocYieldContext(const char* filename, int lineno);
 
-void yield_context_clear_backup(yield_context* self);
+void ClearBackupYieldContext(yield_context* self);
 
-void yield_context_delete(yield_context* self);
+void DeleteYieldContext(yield_context* self);
 #endif

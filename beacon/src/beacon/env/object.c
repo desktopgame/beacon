@@ -276,7 +276,7 @@ void object_delete(object * self) {
 	if(self->is_coroutine) {
 		yield_context* yctx = AtVector(self->native_slot_vec, 0);
 		RemoveVector(self->native_slot_vec, 0);
-		yield_context_delete(yctx);
+		DeleteYieldContext(yctx);
 	}
 	if (self->tag == OBJECT_STRING_T) {
 		string_buffer* sb = AtVector(self->native_slot_vec, 0);

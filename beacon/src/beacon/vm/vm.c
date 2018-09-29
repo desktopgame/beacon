@@ -924,7 +924,7 @@ static void vm_run(frame * self, enviroment * env, int pos, int deferStart) {
 				}
 				int param_len = (int)enviroment_source_at(env, ++IDX);
 				int op_len = (int)enviroment_source_at(env, ++IDX);
-				yield_context* yctx = yield_context_new();
+				yield_context* yctx = NewYieldContext();
 				yctx->yield_offset = 0;
 				yctx->yield_count = 0;
 				yctx->len = op_len;
