@@ -119,12 +119,12 @@ bool CLBC_field_impl(class_loader* self, type* tp, field* fi, namespace_* scope,
 	he->collect_blocking++;
 	he->accept_blocking = 0;
 	if(IsStaticModifier(fi->modifier)) {
-		frame* f = frame_new();
+		frame* f = NewFrame();
 		sg_thread_set_frame_ref(sg_thread_main(), f);
 		vm_execute(f, env);
 		fi->static_value = PopVector(f->value_stack);
 		sg_thread_release_frame_ref(sg_thread_main());
-		frame_delete(f);
+		DeleteFrame(f);
 	}
 	he->accept_blocking = abtmp;
 	he->collect_blocking--;

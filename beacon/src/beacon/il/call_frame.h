@@ -45,8 +45,8 @@ typedef struct call_frame {
 	} u;
 } call_frame;
 
-#define call_frame_new(tag) (call_frame_malloc(tag, __FILE__, __LINE__))
+#define call_NewFrame(tag) (call_frame_malloc(tag, __FILE__, __LINE__))
 call_frame* call_frame_malloc(call_frame_tag tag, const char* filename, int lineno);
 
-void call_frame_delete(call_frame* self);
+void call_DeleteFrame(call_frame* self);
 #endif

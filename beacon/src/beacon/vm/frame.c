@@ -11,9 +11,9 @@ static void remove_from_parent(frame* self);
 static void frame_markStatic(field* item);
 static void frame_markRecursive(frame* self);
 static void frame_mark_defer(frame* self);
-static void frame_delete_defctx(VectorItem e);
+static void DeleteFrame_defctx(VectorItem e);
 
-frame * frame_new() {
+frame * NewFrame() {
 	frame* ret = (frame*)MEM_MALLOC(sizeof(frame));
 	ret->value_stack = NewVector();
 	ret->ref_stack = NewVector();
@@ -32,8 +32,8 @@ frame * frame_new() {
 	return ret;
 }
 
-frame * frame_sub(frame * parent) {
-	frame* ret = frame_new();
+frame * SubFrame(frame * parent) {
+	frame* ret = NewFrame();
 	ret->parent = parent;
 	ret->level = parent->level + 1;
 	ret->context_ref = parent->context_ref;
@@ -41,7 +41,7 @@ frame * frame_sub(frame * parent) {
 	return ret;
 }
 
-void frame_markall(frame * self) {
+void MarkAllFrame(frame * self) {
 	//全ての静的フィールドをマークする
 	script_context* ctx = script_context_get_current();
 	script_context_static_each(ctx, frame_markStatic);
@@ -49,7 +49,7 @@ void frame_markall(frame * self) {
 	frame_markRecursive(self);
 }
 
-void frame_delete(frame * self) {
+void DeleteFrame(frame * self) {
 	remove_from_parent(self);
 	ClearVector(self->value_stack);
 	ClearVector(self->ref_stack);
@@ -58,12 +58,12 @@ void frame_delete(frame * self) {
 	DeleteVector(self->ref_stack, VectorDeleterOfNull);
 	DeleteVector(self->children_vec, VectorDeleterOfNull);
 	DeleteVector(self->type_args_vec, VectorDeleterOfNull);
-	DeleteVector(self->defer_vec, frame_delete_defctx);
+	DeleteVector(self->defer_vec, DeleteFrame_defctx);
 	MEM_FREE(self);
 }
 
-frame* frame_root(frame* self) {
-	return self->parent != NULL ? frame_root(self->parent) : self->parent;
+frame* GetRootFrame(frame* self) {
+	return self->parent != NULL ? GetRootFrame(self->parent) : self->parent;
 }
 
 //private
@@ -115,7 +115,7 @@ static void frame_mark_defer(frame* self) {
 		}
 	}
 }
-static void frame_delete_defctx(VectorItem e) {
+static void DeleteFrame_defctx(VectorItem e) {
 	defer_context* defctx = (defer_context*)e;
 	defer_context_delete(defctx);
 }

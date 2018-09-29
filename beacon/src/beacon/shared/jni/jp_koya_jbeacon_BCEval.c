@@ -95,7 +95,7 @@ static jobject bc_eval_string(JNIEnv * env, jclass cls, jstring str, jobject tab
 
 static frame* bc_eval_allocate(class_loader* cll) {
 	script_context* ctx = script_context_get_current();
-	frame* fr = frame_new();
+	frame* fr = NewFrame();
 	sg_thread_set_frame_ref(sg_thread_current(script_context_get_current()), fr);
 	heap* he = heap_get();
 	he->accept_blocking = 0;
@@ -286,7 +286,7 @@ static void bc_eval_release(JNIEnv* env, class_loader* cll, frame* fr) {
 	}
 	vm_catch(fr);
 	heap_gc(heap_get());
-	frame_delete(fr);
+	DeleteFrame(fr);
 	sg_thread_release_frame_ref(sg_thread_current(script_context_get_current()));
 
 	bc_error_last();

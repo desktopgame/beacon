@@ -21,7 +21,7 @@ void script_method_execute(script_method * self, method* parent, frame * fr, env
 #if defined(DEBUG)
 	const char* name = Ref2Str(parent->namev);
 #endif
-	frame* sub = frame_sub(fr);
+	frame* sub = SubFrame(fr);
 	call_frame* cfr = NULL;
 	sub->receiver = parent->parent;
 	Vector* aArgs = NewVector();
@@ -61,7 +61,7 @@ void script_method_execute(script_method * self, method* parent, frame * fr, env
 	DeleteVector(aArgs, VectorDeleterOfNull);
 	DeleteVector(aTArgs, VectorDeleterOfNull);
 	call_context_pop(sg_thread_context());
-	frame_delete(sub);
+	DeleteFrame(sub);
 }
 
 void script_method_delete(script_method * self) {

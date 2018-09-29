@@ -57,7 +57,7 @@ void method_execute(method* self, frame * fr, enviroment* env) {
 	if (self->type == METHOD_TYPE_SCRIPT_T) {
 		script_method_execute(self->u.script_method, self, fr, env);
 	} else if (self->type == METHOD_TYPE_NATIVE_T) {
-		frame* a = frame_sub(fr);
+		frame* a = SubFrame(fr);
 		call_frame* cfr = NULL;
 		Vector* aArgs = NULL;
 		Vector* aTArgs = NULL;
@@ -84,7 +84,7 @@ void method_execute(method* self, frame * fr, enviroment* env) {
 		DeleteVector(aArgs, VectorDeleterOfNull);
 		DeleteVector(aTArgs, VectorDeleterOfNull);
 		call_context_pop(sg_thread_context());
-		frame_delete(a);
+		DeleteFrame(a);
 	}
 }
 

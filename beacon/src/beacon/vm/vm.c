@@ -179,7 +179,7 @@ void vm_uncaught(frame * self, enviroment* env, int pc) {
 	}
 	gVMError = InternString(message);
 	MEM_FREE(message);
-	vm_catch(frame_root(self));
+	vm_catch(GetRootFrame(self));
 	heap_gc(heap_get());
 }
 
@@ -566,7 +566,7 @@ static void vm_run(frame * self, enviroment * env, int pos, int deferStart) {
 				constructor* ctor = (constructor*)AtVector(cls->constructor_list, constructorIndex);
 				//新しいVMでコンストラクタを実行
 				//また、現在のVMから実引数をポップ
-				frame* sub = frame_sub(self);
+				frame* sub = SubFrame(self);
 				sub->receiver = tp;
 				call_frame* cfr = call_context_push(sg_thread_context(), FRAME_STATIC_INVOKE_T);
 				cfr->u.static_invoke.args = NewVector();
@@ -597,7 +597,7 @@ static void vm_run(frame * self, enviroment * env, int pos, int deferStart) {
 				VectorItem returnV = TopVector(sub->value_stack);
 				object* returnO = (object*)returnV;
 				PushVector(self->value_stack, NON_NULL(returnV));
-				frame_delete(sub);
+				DeleteFrame(sub);
 				break;
 			}
 			case OP_CHAIN_THIS:
@@ -610,7 +610,7 @@ static void vm_run(frame * self, enviroment * env, int pos, int deferStart) {
 				class_* cls = tp->u.class_;
 				constructor* ctor = (constructor*)AtVector(cls->constructor_list, ctorIndex);
 				//コンストラクタを実行するためのVMを作成
-				frame* sub = frame_sub(self);
+				frame* sub = SubFrame(self);
 				sub->receiver = tp;
 				call_frame* cfr = call_context_push(sg_thread_context(), FRAME_STATIC_INVOKE_T);
 				cfr->u.static_invoke.args = NewVector();
@@ -637,7 +637,7 @@ static void vm_run(frame * self, enviroment * env, int pos, int deferStart) {
 				AssignVector(self->ref_stack, 0, returnV);
 				PushVector(self->value_stack, NON_NULL(returnV));
 
-				frame_delete(sub);
+				DeleteFrame(sub);
 				//class_alloc_fields(cls, returnO);
 				break;
 			}
@@ -715,12 +715,12 @@ static void vm_run(frame * self, enviroment * env, int pos, int deferStart) {
 				int propIndex = (int)enviroment_source_at(env, ++IDX);
 				property* pro = class_get_property(TYPE2CLASS(GENERIC2TYPE(assignTarget->gtype)), propIndex);
 				//プロパティを実行
-				frame* sub = frame_sub(self);
+				frame* sub = SubFrame(self);
 				sub->receiver = pro->parent;
 				PushVector(sub->value_stack, assignValue);
 				PushVector(sub->value_stack, assignTarget);
 				vm_execute(sub, pro->set->env);
-				frame_delete(sub);
+				DeleteFrame(sub);
 				break;
 			}
 			case OP_GET_PROPERTY:
@@ -732,7 +732,7 @@ static void vm_run(frame * self, enviroment * env, int pos, int deferStart) {
 				int propIndex = (int)enviroment_source_at(env, ++IDX);
 				property* pro = class_get_property(TYPE2CLASS(GENERIC2TYPE(sourceObject->gtype)), propIndex);
 				//プロパティを実行
-				frame* sub = frame_sub(self);
+				frame* sub = SubFrame(self);
 				sub->receiver = pro->parent;
 				PushVector(sub->value_stack, sourceObject);
 				vm_execute(sub, pro->get->env);
@@ -741,7 +741,7 @@ static void vm_run(frame * self, enviroment * env, int pos, int deferStart) {
 				object* returnO = (object*)returnV;
 				AssignVector(self->ref_stack, 0, returnV);
 				PushVector(self->value_stack, returnV);
-				frame_delete(sub);
+				DeleteFrame(sub);
 				break;
 			}
 			case OP_PUT_STATIC_property:
@@ -753,11 +753,11 @@ static void vm_run(frame * self, enviroment * env, int pos, int deferStart) {
 				class_* cls = tp->u.class_;
 				property * p = class_get_sproperty(cls, propIndex);
 				//プロパティを実行
-				frame* sub = frame_sub(self);
+				frame* sub = SubFrame(self);
 				sub->receiver = NULL;
 				PushVector(sub->value_stack, sv);
 				vm_execute(sub, p->set->env);
-				frame_delete(sub);
+				DeleteFrame(sub);
 				break;
 			}
 			case OP_GET_STATIC_property:
@@ -769,7 +769,7 @@ static void vm_run(frame * self, enviroment * env, int pos, int deferStart) {
 				class_* cls = tp->u.class_;
 				property * p = class_get_sproperty(cls, propIndex);
 				//プロパティを実行
-				frame* sub = frame_sub(self);
+				frame* sub = SubFrame(self);
 				sub->receiver = NULL;
 				vm_execute(sub, p->get->env);
 				//戻り値をスタックに残す
@@ -777,7 +777,7 @@ static void vm_run(frame * self, enviroment * env, int pos, int deferStart) {
 				object* returnO = (object*)returnV;
 				AssignVector(self->ref_stack, 0, returnV);
 				PushVector(self->value_stack, returnV);
-				frame_delete(sub);
+				DeleteFrame(sub);
 				break;
 			}
 			case OP_STORE:

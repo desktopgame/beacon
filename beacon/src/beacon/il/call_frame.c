@@ -7,6 +7,6 @@ call_frame* call_frame_malloc(call_frame_tag tag, const char* filename, int line
 	return ret;
 }
 
-void call_frame_delete(call_frame* self) {
+void call_DeleteFrame(call_frame* self) {
 	MEM_FREE(self);
 }

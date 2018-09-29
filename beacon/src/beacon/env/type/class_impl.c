@@ -115,7 +115,7 @@ void class_alloc_fields(class_ * self, object * o, frame* fr) {
 		}
 		he->collect_blocking++;
 		if(f->initial_value != NULL) {
-			frame* sub = frame_sub(fr);
+			frame* sub = SubFrame(fr);
 			for(int i=0; i<fr->type_args_vec->length; i++) {
 				PushVector(sub->type_args_vec, AtVector(fr->type_args_vec, i));
 			}
@@ -123,7 +123,7 @@ void class_alloc_fields(class_ * self, object * o, frame* fr) {
 			CopyVector(fr->ref_stack, sub->ref_stack);
 			vm_execute(sub, f->initial_value_env);
 			a = PopVector(sub->value_stack);
-			frame_delete(sub);
+			DeleteFrame(sub);
 		}
 		PushVector(o->u.field_vec, a);
 		he->collect_blocking--;
@@ -345,7 +345,7 @@ object * class_new_instance(class_* self, frame* fr, Vector* args, Vector* type_
 	constructor* ctor = class_rfind_constructor(self, args, NULL, fr, &temp);
 	assert(temp != -1);
 	//コンストラクタを実行
-	frame* sub = frame_sub(fr);
+	frame* sub = SubFrame(fr);
 	heap* h = heap_get();
 	if(args != NULL) {
 		for (int i = args->length-1; i>=0; i--) {
@@ -361,7 +361,7 @@ object * class_new_instance(class_* self, frame* fr, Vector* args, Vector* type_
 	vm_execute(sub, ctor->env);
 	object* inst = PopVector(sub->value_stack);
 	h->collect_blocking++;
-	frame_delete(sub);
+	DeleteFrame(sub);
 	h->collect_blocking--;
 	return inst;
 }

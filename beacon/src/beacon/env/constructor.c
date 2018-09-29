@@ -22,13 +22,13 @@ constructor * constructor_new() {
 }
 
 object * constructor_new_instance(constructor * self, Vector * args, frame * parent) {
-	frame* sub = frame_sub(parent);
+	frame* sub = SubFrame(parent);
 	for (int i = 0; i < args->length; i++) {
 		PushVector(sub->value_stack, AtVector(args, i));
 	}
 	vm_execute(sub, self->env);
 	object* ret = PopVector(sub->value_stack);
-	frame_delete(sub);
+	DeleteFrame(sub);
 	return ret;
 }
 

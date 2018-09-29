@@ -94,7 +94,7 @@ static void gc_mark(heap* self) {
 	sg_thread* th = sg_thread_current(script_context_get_current());
 	frame* top = sg_thread_get_frame_ref(th);
 	assert(top != NULL);
-	frame_markall(top);
+	MarkAllFrame(top);
 
 	//true/false/nullは常にマーク
 	object_get_true()->paint = PAINT_MARKED_T;

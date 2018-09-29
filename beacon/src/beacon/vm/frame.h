@@ -105,31 +105,31 @@ typedef struct frame {
  * 新しいフレームを作成します.
  * @return
  */
-frame* frame_new();
+frame* NewFrame();
 
 /**
  * 親を指定してフレームを作成します.
  * @param parent
  * @return
  */
-frame* frame_sub(frame* parent);
+frame* SubFrame(frame* parent);
 
 /**
  * このVMの変数を全てマークします.
  * @param self
  */
-void frame_markall(frame* self);
+void MarkAllFrame(frame* self);
 
 /**
  * 仮想マシンを開放します.
  * @param self
  */
-void frame_delete(frame* self);
+void DeleteFrame(frame* self);
 
 /**
  * フレームのルートを返します.
  * @param self
  * @return
  */
-frame* frame_root(frame* self);
+frame* GetRootFrame(frame* self);
 #endif

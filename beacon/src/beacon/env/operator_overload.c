@@ -26,7 +26,7 @@ operator_overload* operator_overload_new(operator_type type) {
 }
 
 void operator_overload_execute(operator_overload* self, frame* fr, enviroment* env) {
-	frame* sub = frame_sub(fr);
+	frame* sub = SubFrame(fr);
 	sub->receiver = fr->receiver;
 	PushVector(sub->value_stack, PopVector(fr->value_stack));
 	for (int i = 0; i < self->parameter_list->length; i++) {
@@ -40,7 +40,7 @@ void operator_overload_execute(operator_overload* self, frame* fr, enviroment* e
 		object* o = (object*)PopVector(sub->value_stack);
 		PushVector(fr->value_stack, o);
 	}
-	frame_delete(sub);
+	DeleteFrame(sub);
 }
 
 void operator_overload_delete(operator_overload* self) {

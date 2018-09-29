@@ -35,7 +35,7 @@ call_frame* call_context_top(call_context* self) {
 
 void call_context_pop(call_context* self) {
 	call_frame* fr = PopVector(self->call_stack);
-	call_frame_delete(fr);
+	call_DeleteFrame(fr);
 }
 
 namespace_* call_context_namespace(call_context* self) {
