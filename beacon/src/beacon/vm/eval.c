@@ -62,7 +62,7 @@ bool EvalOp(const char* filename) {
 	class_loader_load(cl);
 
 	if(!bc_error_last()) {
-		enviroment_op_dump(cl->env, 0);
+		DumpEnviromentOp(cl->env, 0);
 	}
 	class_loader_delete(cl);
 	return true;

@@ -65,6 +65,6 @@ void script_method_execute(script_method * self, method* parent, frame * fr, env
 }
 
 void script_method_delete(script_method * self) {
-	enviroment_delete(self->env);
+	DeleteEnviroment(self->env);
 	MEM_FREE(self);
 }

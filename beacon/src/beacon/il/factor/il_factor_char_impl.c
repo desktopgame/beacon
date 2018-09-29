@@ -20,7 +20,7 @@ il_factor_char * il_factor_char_new(char c) {
 }
 
 void il_factor_char_generate(il_factor_char * self, enviroment * env, call_context* cctx) {
-	int index = enviroment_add_constant_char(env, self->value);
+	int index = AddCCharEnviroment(env, self->value);
 	AddOpcodeBuf(env->buf, OP_CCONST);
 	AddOpcodeBuf(env->buf, index);
 }

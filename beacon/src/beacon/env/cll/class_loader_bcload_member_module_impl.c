@@ -96,7 +96,7 @@ bool CLBC_field_impl(class_loader* self, type* tp, field* fi, namespace_* scope,
 		return true;
 	}
 	//フィールドの初期値を設定する
-	enviroment* env = enviroment_new();
+	enviroment* env = NewEnviroment();
 	env->context_ref = self;
 	fi->initial_value_env = env;
 	il_factor_load(fi->initial_value, env, cctx);
@@ -381,7 +381,7 @@ bool CLBC_method_impl(class_loader* self, namespace_* scope, il_type* iltype, ty
 	//オペコードを作成
 	//FIXME:ILメソッドと実行時メソッドのインデックスが同じなのでとりあえず動く
 	//まずは仮引数の一覧にインデックスを割り振る
-	enviroment* env = enviroment_new();
+	enviroment* env = NewEnviroment();
 	env->context_ref = self;
 	call_context* cctx = call_context_new(CALL_METHOD_T);
 	cctx->scope = scope;
@@ -466,7 +466,7 @@ bool CLBC_ctor_impl(class_loader* self, il_type* iltype, type* tp, il_constructo
 	//仮引数に型を設定する
 	//class_loader_sgload_params(self, scope, ilcons->parameter_list, cons->parameter_list);
 	//まずは仮引数の一覧にインデックスを割り振る
-	enviroment* env = enviroment_new();
+	enviroment* env = NewEnviroment();
 	env->context_ref = self;
 	call_context* cctx = call_context_new(CALL_CTOR_T);
 	cctx->scope = scope;
@@ -558,7 +558,7 @@ bool CLBC_operator_overload_impl(class_loader* self, il_type* iltype, type* tp, 
 	//オペコードを作成
 	//FIXME:ILメソッドと実行時メソッドのインデックスが同じなのでとりあえず動く
 	//まずは仮引数の一覧にインデックスを割り振る
-	enviroment* env = enviroment_new();
+	enviroment* env = NewEnviroment();
 	call_context* cctx = call_context_new(CALL_OPOV_T);
 	cctx->scope = scope;
 	cctx->ty = tp;

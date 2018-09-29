@@ -91,7 +91,7 @@ void il_factor_generate(il_factor * self, enviroment* env, call_context* cctx) {
 			break;
 	}
 	assert(self->lineno >= 0);
-	enviroment_add_range(env, self->lineno);
+	AddRangeEnviroment(env, self->lineno);
 }
 
 void il_factor_load(il_factor * self, enviroment * env, call_context* cctx) {

@@ -21,7 +21,7 @@ static void enviroment_add_constant(enviroment* self, object* o);
 static void enviroment_object_delete_self(VectorItem item);
 static void enviroment_object_delete(object* obj);
 
-enviroment * enviroment_new() {
+enviroment * NewEnviroment() {
 	enviroment* ret = (enviroment*)MEM_MALLOC(sizeof(enviroment));
 	ret->buf = NewOpcodeBuf();
 	ret->constant_pool_vec = NewVector();
@@ -31,7 +31,7 @@ enviroment * enviroment_new() {
 	return ret;
 }
 
-void enviroment_add_range(enviroment* self, int lineno) {
+void AddRangeEnviroment(enviroment* self, int lineno) {
 	assert(lineno >= 0);
 	//空なので追加
 	if (IsEmptyVector(self->line_range_vec)) {
@@ -56,7 +56,7 @@ void enviroment_add_range(enviroment* self, int lineno) {
 	}
 }
 
-void enviroment_op_dump(enviroment * self, int depth) {
+void DumpEnviromentOp(enviroment * self, int depth) {
 	opcode_buf* buf = self->buf;
 	line_range* lr = NULL;
 	int lrPos = -1;
@@ -84,63 +84,63 @@ void enviroment_op_dump(enviroment * self, int depth) {
 	Println();
 }
 
-int enviroment_add_constant_int(enviroment * self, int i) {
+int AddCIntEnviroment(enviroment * self, int i) {
 	int len = self->constant_pool_vec->length;
 	enviroment_add_constant(self, object_int_new(i));
 	return len;
 }
 
-int enviroment_add_constant_double(enviroment * self, double d) {
+int AddCDoubleEnviroment(enviroment * self, double d) {
 	int len = self->constant_pool_vec->length;
 	enviroment_add_constant(self, object_double_new(d));
 	return len;
 }
 
-int enviroment_add_constant_char(enviroment * self, char c) {
+int AddCCharEnviroment(enviroment * self, char c) {
 	int len = self->constant_pool_vec->length;
 	enviroment_add_constant(self, object_char_new(c));
 	return len;
 }
 
-int enviroment_add_constant_string(enviroment * self, string_view sv) {
+int AddCStringEnviroment(enviroment * self, string_view sv) {
 	int len = self->constant_pool_vec->length;
 	enviroment_add_constant(self, object_string_new(Ref2Str(sv)));
 	return len;
 }
 
-VectorItem enviroment_source_at(enviroment * self, int index) {
+VectorItem GetEnviromentSourceAt(enviroment * self, int index) {
 	return AtVector(self->buf->source_vec, index);
 }
 
-object* enviroment_constant_at(enviroment * self, int index) {
+object* GetEnviromentConstantAt(enviroment * self, int index) {
 	return (object*)AtVector(self->constant_pool_vec, index);
 }
 
-object* enviroment_constant_int_at(enviroment * self, int index) {
-	object* e = enviroment_constant_at(self, index);
+object* GetEnviromentCIntAt(enviroment * self, int index) {
+	object* e = GetEnviromentConstantAt(self, index);
 	assert(e->tag == OBJECT_INT_T);
 	return e;
 }
 
-object* enviroment_constant_double_at(enviroment * self, int index) {
-	object* e = enviroment_constant_at(self, index);
+object* GetEnviromentCDoubleAt(enviroment * self, int index) {
+	object* e = GetEnviromentConstantAt(self, index);
 	assert(e->tag == OBJECT_DOUBLE_T);
 	return e;
 }
 
-object* enviroment_constant_char_at(enviroment * self, int index) {
-	object* e = enviroment_constant_at(self, index);
+object* GetEnviromentCCharAt(enviroment * self, int index) {
+	object* e = GetEnviromentConstantAt(self, index);
 	assert(e->tag == OBJECT_CHAR_T);
 	return e;
 }
 
-object* enviroment_constant_string_at(enviroment * self, int index) {
-	object* e = enviroment_constant_at(self, index);
+object* GetEnviromentCStringAt(enviroment * self, int index) {
+	object* e = GetEnviromentConstantAt(self, index);
 	assert(e->tag == OBJECT_STRING_T);
 	return e;
 }
 
-void enviroment_delete(enviroment * self) {
+void DeleteEnviroment(enviroment * self) {
 	if(self == NULL) {
 		return;
 	}

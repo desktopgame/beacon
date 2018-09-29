@@ -24,7 +24,7 @@ il_factor_int * il_factor_int_malloc(int32_t i, const char* filename, int lineno
 
 void il_factor_int_generate(il_factor_int * self, enviroment* env, call_context* cctx) {
 	assert(self->count == 0);
-	int index = enviroment_add_constant_int(env, self->value);
+	int index = AddCIntEnviroment(env, self->value);
 	AddOpcodeBuf(env->buf, OP_ICONST);
 	AddOpcodeBuf(env->buf, index);
 	self->count++;

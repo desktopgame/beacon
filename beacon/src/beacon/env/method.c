@@ -335,7 +335,7 @@ static void method_count(il_stmt* s, int* yield_ret, int* ret) {
 static constructor* create_delegate_ctor(method* self, type* ty, class_loader* cll,int op_len) {
 	//イテレータのコンストラクタを作成
 	constructor* iterCons = constructor_new();
-	enviroment* envIterCons = enviroment_new();
+	enviroment* envIterCons = NewEnviroment();
 	//コルーチンを生成したオブジェクトを受け取るパラメータ追加
 	parameter* coroOwnerParam = parameter_new(InternString("owner"));
 	PushVector(iterCons->parameter_list, coroOwnerParam);
@@ -380,7 +380,7 @@ static method* create_has_next(method* self, type* ty, class_loader* cll, Vector
 	mt->access = ACCESS_PUBLIC_T;
 	mt->type = METHOD_TYPE_SCRIPT_T;
 	script_method* smt = script_method_new();
-	enviroment* envSmt = enviroment_new();
+	enviroment* envSmt = NewEnviroment();
 	call_context* cctx = call_context_new(CALL_METHOD_T);
 	cctx->scope = self->parent->location;
 	cctx->ty = self->parent;
@@ -414,7 +414,7 @@ static method* create_has_next(method* self, type* ty, class_loader* cll, Vector
 	}
 	AddOpcodeBuf(envSmt->buf, OP_CORO_EXIT);
 	if(type_name(self->parent) == InternString("Base")) {
-	//	enviroment_op_dump(envSmt, 0);
+	//	DumpEnviromentOp(envSmt, 0);
 	}
 	(*out_op_len) = envSmt->buf->source_vec->length;
 	call_context_delete(cctx);
@@ -431,7 +431,7 @@ static method* create_next(method* self, type* ty, class_loader* cll,generic_typ
 	mt->access = ACCESS_PUBLIC_T;
 	mt->type = METHOD_TYPE_SCRIPT_T;
 	script_method* smt = script_method_new();
-	enviroment* envSmt = enviroment_new();
+	enviroment* envSmt = NewEnviroment();
 	call_context* cctx = call_context_new(CALL_METHOD_T);
 	cctx->scope = self->parent->location;
 	cctx->ty = self->parent;
@@ -451,7 +451,7 @@ static method* create_next(method* self, type* ty, class_loader* cll,generic_typ
 	mt->u.script_method = smt;
 	mt->parent = ty;
 	call_context_delete(cctx);
-	//enviroment_op_dump(envSmt, 0);
+	//DumpEnviromentOp(envSmt, 0);
 	return mt;
 }
 

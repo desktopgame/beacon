@@ -63,7 +63,7 @@ class_loader* class_loader_new(const char* filename, content_type type) {
 	ret->type = type;
 	ret->link = LINK_NONE_T;
 	ret->import_manager = import_manager_new();
-	ret->env = enviroment_new();
+	ret->env = NewEnviroment();
 	ret->level = 0;
 	ret->type_cache_vec = NewVector();
 	ret->filename = Strdup(filename);
@@ -113,7 +113,7 @@ void class_loader_delete(class_loader * self) {
 	il_top_level_delete(self->il_code);
 	DeleteVector(self->type_cache_vec, class_loader_cache_delete);
 	import_manager_delete(self->import_manager);
-	enviroment_delete(self->env);
+	DeleteEnviroment(self->env);
 	MEM_FREE(self->filename);
 	MEM_FREE(self);
 }
@@ -235,7 +235,7 @@ static void class_loader_load_toplevel_function(class_loader* self) {
 		method* m = method_new(ilfunc->namev);
 		type_parameter_list_dup(ilfunc->type_parameter_vec, m->type_parameters);
 		script_method* sm = script_method_new();
-		enviroment* env = enviroment_new();
+		enviroment* env = NewEnviroment();
 		//call_contextの設定
 		call_context* cctx = call_context_new(CALL_METHOD_T);
 		cctx->scope = namespace_lang();

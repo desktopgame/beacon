@@ -33,7 +33,7 @@ object * constructor_new_instance(constructor * self, Vector * args, frame * par
 }
 
 void constructor_delete(constructor * self) {
-	enviroment_delete(self->env);
+	DeleteEnviroment(self->env);
 	DeleteVector(self->parameter_list, constructor_parameter_delete);
 	MEM_FREE(self);
 }

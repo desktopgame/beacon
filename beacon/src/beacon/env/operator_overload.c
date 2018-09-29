@@ -44,7 +44,7 @@ void operator_overload_execute(operator_overload* self, frame* fr, enviroment* e
 }
 
 void operator_overload_delete(operator_overload* self) {
-	enviroment_delete(self->env);
+	DeleteEnviroment(self->env);
 	DeleteVector(self->parameter_list, operator_overload_delete_param);
 	MEM_FREE(self);
 }

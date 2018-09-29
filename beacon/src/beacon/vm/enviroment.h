@@ -28,14 +28,14 @@ typedef struct enviroment {
  * 環境を生成します.
  * @return
  */
-enviroment* enviroment_new();
+enviroment* NewEnviroment();
 
 /**
  * 指定の行番号を開始します.
  * @param self
  * @param lineno
  */
-void enviroment_add_range(enviroment* self, int lineno);
+void AddRangeEnviroment(enviroment* self, int lineno);
 
 /**
  * この enviroment に含まれるオペコードの一覧をダンプします.
@@ -43,35 +43,35 @@ void enviroment_add_range(enviroment* self, int lineno);
  * @param self
  * @param depth
  */
-void enviroment_op_dump(enviroment* self, int depth);
+void DumpEnviromentOp(enviroment* self, int depth);
 
 /**
  * 定数プールに整数を追加して、その位置を返します.
  * @param i
  * @return
  */
-int enviroment_add_constant_int(enviroment* self, int i);
+int AddCIntEnviroment(enviroment* self, int i);
 
 /**
  * 定数プールに浮動小数を追加して、その位置を返します.
  * @param d
  * @return
  */
-int enviroment_add_constant_double(enviroment* self, double d);
+int AddCDoubleEnviroment(enviroment* self, double d);
 
 /**
  * 定数プールに文字を追加して、その位置を返します.
  * @param c
  * @return
  */
-int enviroment_add_constant_char(enviroment* self, char c);
+int AddCCharEnviroment(enviroment* self, char c);
 
 /**
  * 定数プールに文字列を追加して、その位置を返します.
  * @param sv
  * @return
  */
-int enviroment_add_constant_string(enviroment* self, string_view sv);
+int AddCStringEnviroment(enviroment* self, string_view sv);
 
 /**
  * 指定位置のオペコード/オペランドを返します.
@@ -79,7 +79,7 @@ int enviroment_add_constant_string(enviroment* self, string_view sv);
  * @param index
  * @return
  */
-VectorItem enviroment_source_at(enviroment* self, int index);
+VectorItem GetEnviromentSourceAt(enviroment* self, int index);
 
 /**
  * 指定位置の定数を返します.
@@ -87,7 +87,7 @@ VectorItem enviroment_source_at(enviroment* self, int index);
  * @param index
  * @return
  */
-struct object* enviroment_constant_at(enviroment* self, int index);
+struct object* GetEnviromentConstantAt(enviroment* self, int index);
 
 /**
  * 指定位置の整数型の定数を返します.
@@ -95,7 +95,7 @@ struct object* enviroment_constant_at(enviroment* self, int index);
  * @param index
  * @return
  */
-struct object* enviroment_constant_int_at(enviroment* self, int index);
+struct object* GetEnviromentCIntAt(enviroment* self, int index);
 
 /**
  * 指定位置の浮動小数型の定数を返します.
@@ -103,7 +103,7 @@ struct object* enviroment_constant_int_at(enviroment* self, int index);
  * @param index
  * @return
  */
-struct object* enviroment_constant_double_at(enviroment* self, int index);
+struct object* GetEnviromentCDoubleAt(enviroment* self, int index);
 
 /**
  * 指定位置の文字型の定数を返します.
@@ -111,7 +111,7 @@ struct object* enviroment_constant_double_at(enviroment* self, int index);
  * @param index
  * @return
  */
-struct object* enviroment_constant_char_at(enviroment* self, int index);
+struct object* GetEnviromentCCharAt(enviroment* self, int index);
 
 /**
  * 指定位置の文字列型の定数を返します.
@@ -119,11 +119,11 @@ struct object* enviroment_constant_char_at(enviroment* self, int index);
  * @param index
  * @return
  */
-struct object* enviroment_constant_string_at(enviroment* self, int index);
+struct object* GetEnviromentCStringAt(enviroment* self, int index);
 
 /**
  * 環境を開放します.
  * @return
  */
-void enviroment_delete(enviroment* self);
+void DeleteEnviroment(enviroment* self);
 #endif // !SIGNAL_VM_ENVIROMENT_H
