@@ -183,6 +183,8 @@ Dir.glob("**/*") do |file|
       (ARGV.length > 0 && ARGV.detect(){|e| file.include?(e)})) then
         decl_files << file if file.end_with?(".h")
         impl_files << file if file.end_with?(".c")
+        impl_files << file if file.end_with?(".l")
+        impl_files << file if file.end_with?(".y")
     end
 end
 decl_files.each do |file|
@@ -257,6 +259,9 @@ decl_files.each do |file|
     end
 end
 puts "style change loop ---"
+functions.sort! do |a, b|
+    a.name.length <=> b.name.length
+end
 functions_edits << functions
 commands = {
     "select" => lambda do
