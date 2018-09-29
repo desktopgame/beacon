@@ -6,7 +6,7 @@
 #include "../env/property.h"
 
 /**
- * ƒtƒB[ƒ‹ƒh‚ğæ“¾‚·‚éƒR[ƒh‚ğ¶¬‚µ‚Ü‚·.
+ * ãƒ•ã‚£ãƒ¼ãƒ«ãƒ‰ã‚’å–å¾—ã™ã‚‹ã‚ªãƒšã‚³ãƒ¼ãƒ‰ã‚’ç”Ÿæˆã—ã¾ã™.
  * @param buf
  * @param fi
  * @param index
@@ -14,7 +14,7 @@
 void generate_get_field(opcode_buf* buf, field* fi, int index);
 
 /**
- * ƒvƒƒpƒeƒB‚ğæ“¾‚·‚éƒR[ƒh‚ğ¶¬‚µ‚Ü‚·.
+ * ãƒ—ãƒ­ãƒ‘ãƒ†ã‚£ã‚’å–å¾—ã™ã‚‹ã‚ªãƒšã‚³ãƒ¼ãƒ‰ã‚’ç”Ÿæˆã—ã¾ã™.
  * @param buf
  * @param prop
  * @param index
@@ -22,14 +22,14 @@ void generate_get_field(opcode_buf* buf, field* fi, int index);
 void generate_get_property(opcode_buf* buf, property* prop, int index);
 
 /**
- * ƒtƒB[ƒ‹ƒh‚É‘ã“ü‚·‚éƒR[ƒh‚ğ¶¬‚µ‚Ü‚·.
+ * ãƒ•ã‚£ãƒ¼ãƒ«ãƒ‰ã«ä»£å…¥ã™ã‚‹ã‚ªãƒšã‚³ãƒ¼ãƒ‰ã‚’ç”Ÿæˆã—ã¾ã™.
  * @param buf
  * @param fi
  * @param index
  */
 void generate_put_field(opcode_buf* buf, field* fi, int index);
 /**
- * ƒvƒƒpƒeƒB‚É‘ã“ü‚·‚éƒR[ƒh‚ğ¶¬‚µ‚Ü‚·.
+ * ãƒ—ãƒ­ãƒ‘ãƒ†ã‚£ã«ä»£å…¥ã™ã‚‹ã‚ªãƒšã‚³ãƒ¼ãƒ‰ã‚’ç”Ÿæˆã—ã¾ã™.
  * @param buf
  * @param fi
  * @param index
