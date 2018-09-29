@@ -117,5 +117,5 @@ static void frame_mark_defer(frame* self) {
 }
 static void DeleteFrame_defctx(VectorItem e) {
 	defer_context* defctx = (defer_context*)e;
-	defer_context_delete(defctx);
+	DeleteDeferContext(defctx);
 }

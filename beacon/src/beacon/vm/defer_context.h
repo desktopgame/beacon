@@ -15,11 +15,11 @@ typedef struct defer_context {
  * 新しい defer_context を作成します.
  * @return
  */
-defer_context* defer_context_new();
+defer_context* NewDeferContext();
 
 /**
  * defer_context を解放します.
  * @param self
  */
-void defer_context_delete(defer_context* self);
+void DeleteDeferContext(defer_context* self);
 #endif
