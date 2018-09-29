@@ -186,6 +186,7 @@ Dir.glob("**/*") do |file|
     end
 end
 decl_files.each do |file|
+    puts "started " + file
     File.open(file, "r") do |fp|
         src = fp.read()
         src = src.gsub("\[\]", "")
@@ -216,15 +217,26 @@ decl_files.each do |file|
             end
             #引数名をとる
             reader = lparen
+            crash = false
             while(true)
                 #int
                 param_type, line = get_typename(line)
                 reader = param_type
                 word << param_type
+                #引数並びが改行されている場合
+                if(param_type.empty?) then
+                    crash = true
+                    break
+                end
                 #count
                 param_name, line = get_next_word(line, reader)
                 reader = param_name
                 word << " " + param_name
+                #引数並びが改行されている場合
+                if(param_name.empty?) then
+                    crash = true
+                    break
+                end
                 #パラメータ追加
                 param = Parameter.new(param_type, param_name)
                 func.parameters << param
@@ -240,7 +252,7 @@ decl_files.each do |file|
                     word << comma + " "
                 end
             end
-            functions << func
+            functions << func if !crash
         end
     end
 end
