@@ -304,6 +304,32 @@ commands = {
     "abort" => lambda do
         abort
     end,
+    "auto" => lambda do
+        edited = []
+        printf "input selector: "
+        selector = STDIN.gets.lstrip.rstrip
+        term = false
+        functions_edits.last.each_with_index do |e, i|
+            if term || !e.name.include?(selector) then
+                edited << e.clone
+                next
+            end
+            printf("%s => ", e.name)
+            new_name = STDIN.gets.lstrip.rstrip
+            #新しい名前を入力する
+            clone = e.clone
+            edited << clone
+            if new_name == ":skip" || new_name.empty? then
+                next
+            elsif new_name == ":break" then
+                term = true
+                next
+            else
+                clone.name = new_name
+            end
+        end
+        functions_edits << edited
+    end,
     "dump" => lambda do
         File.open("style_dump.text", "w") do |fp|
             functions_edits.last.each do |e|
