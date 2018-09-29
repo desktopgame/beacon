@@ -50,7 +50,7 @@ void script_method_execute(script_method * self, method* parent, frame * fr, env
 		AssignVector(sub->type_args_vec, (typeparams - i) - 1, e);
 		AssignVector(aTArgs, (typeparams - i) - 1, e);
 	}
-	vm_execute(sub, self->env);
+	ExecuteVM(sub, self->env);
 	//戻り値が Void 以外ならスタックトップの値を引き継ぐ
 	//例外によって終了した場合には戻り値がない
 	if(parent->return_gtype != TYPE_VOID->generic_self &&

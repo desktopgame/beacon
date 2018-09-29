@@ -208,6 +208,7 @@ def rename(name)
     #ast,fqcnは例外的に全て大文字
     buf.gsub!("Ast", "AST")
     buf.gsub!("Fqcn", "FQCN")
+    buf.gsub!("Vm", "VM")
     #newが含まれる場合にも例外
     if(buf.start_with?("New") && buf.include?("AST")) then
         pos = buf.index("AST")

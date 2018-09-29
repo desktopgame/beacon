@@ -104,12 +104,12 @@ static bool eval_top_from_cll(class_loader* cll, ast* aOpt) {
 	Printfln("start");
 #endif
 	if(!GetLastBCError()) {
-		vm_execute(fr, cll->env);
+		ExecuteVM(fr, cll->env);
 	}
 	if(fr->terminate) {
 		ThrowBCError(BCERROR_GENERIC_T, "unexpected terminate");
 	}
-	vm_catch(fr);
+	CatchVM(fr);
 	heap_gc(heap_get());
 	DeleteFrame(fr);
 	sg_thread_release_frame_ref(sg_thread_current(script_context_get_current()));

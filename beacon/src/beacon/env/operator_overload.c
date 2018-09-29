@@ -32,7 +32,7 @@ void operator_overload_execute(operator_overload* self, frame* fr, enviroment* e
 	for (int i = 0; i < self->parameter_list->length; i++) {
 		PushVector(sub->value_stack, object_copy(PopVector(fr->value_stack)));
 	}
-	vm_execute(sub, self->env);
+	ExecuteVM(sub, self->env);
 	//戻り値が Void 以外ならスタックトップの値を引き継ぐ
 	//例外によって終了した場合には戻り値がない
 	if(self->return_gtype != TYPE_VOID->generic_self &&

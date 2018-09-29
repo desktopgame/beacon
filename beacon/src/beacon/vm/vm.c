@@ -71,11 +71,11 @@ static string_view gVMError = ZERO_VIEW;
 
 
 
-void vm_execute(frame* self, enviroment* env) {
-	vm_resume(self, env, 0);
+void ExecuteVM(frame* self, enviroment* env) {
+	ResumeVM(self, env, 0);
 }
 
-void vm_resume(frame * self, enviroment * env, int pos) {
+void ResumeVM(frame * self, enviroment * env, int pos) {
 	self->defer_vec = NewVector();
 	vm_run(self, env, pos, -1);
 	while(self->defer_vec->length > 0) {
@@ -91,23 +91,23 @@ void vm_resume(frame * self, enviroment * env, int pos) {
 	self->defer_vec = NULL;
 }
 
-void vm_native_throw(frame * self, object * exc) {
+void NativeThrowVM(frame * self, object * exc) {
 	self->exception = exc;
 
-	vm_throw(self, exc);
+	ThrowVM(self, exc);
 	sg_thread* th = sg_thread_current(script_context_get_current());
 	//空ならプログラムを終了
 	if (IsEmptyVector(th->trace_stack)) {
-		vm_terminate(self);
+		TerminateVM(self);
 	//どこかでキャッチしようとしている
 	} else {
 		int temp = 0;
-		vm_validate(self, self->context_ref->buf->source_vec->length, &temp);
+		ValidateVM(self, self->context_ref->buf->source_vec->length, &temp);
 		self->native_throw_pos = temp;
 	}
 }
 
-void vm_throw(frame * self, object * exc) {
+void ThrowVM(frame * self, object * exc) {
 	frame* temp = self;
 	do {
 		temp->exception = exc;
@@ -115,12 +115,12 @@ void vm_throw(frame * self, object * exc) {
 	} while (temp != NULL);
 }
 
-void vm_catch(frame * self) {
+void CatchVM(frame * self) {
 	if (self == NULL) {
 		return;
 	}
 	if (self->parent != NULL) {
-		vm_catch(self->parent);
+		CatchVM(self->parent);
 	}
 	self->validate = false;
 	if(self->exception != NULL) {
@@ -129,7 +129,7 @@ void vm_catch(frame * self) {
 	}
 }
 
-bool vm_validate(frame* self, int source_len, int* pcDest) {
+bool ValidateVM(frame* self, int source_len, int* pcDest) {
 	sg_thread* th = sg_thread_current(script_context_get_current());
 	vm_trace* trace = (vm_trace*)TopVector(th->trace_stack);
 	self->validate = true;
@@ -162,7 +162,7 @@ bool vm_validate(frame* self, int source_len, int* pcDest) {
 	}
 }
 
-void vm_terminate(frame * self) {
+void TerminateVM(frame * self) {
 	sg_thread_main()->vm_crush_by_exception = true;
 	frame* temp = self;
 	do {
@@ -171,7 +171,7 @@ void vm_terminate(frame * self) {
 	} while (temp != NULL);
 }
 
-void vm_uncaught(frame * self, enviroment* env, int pc) {
+void UncaughtVM(frame * self, enviroment* env, int pc) {
 	char* message = create_error_message(self, env, pc);
 	script_context* sctx = script_context_get_current();
 	if(sctx->print_error) {
@@ -179,11 +179,11 @@ void vm_uncaught(frame * self, enviroment* env, int pc) {
 	}
 	gVMError = InternString(message);
 	MEM_FREE(message);
-	vm_catch(GetRootFrame(self));
+	CatchVM(GetRootFrame(self));
 	heap_gc(heap_get());
 }
 
-string_view vm_error_message() {
+string_view GetVMErrorMessage() {
 	return gVMError;
 }
 
@@ -200,7 +200,7 @@ static void vm_run(frame * self, enviroment * env, int pos, int deferStart) {
 		//それを子要素自身で処理できなかった場合には、
 		//自分で処理を試みます。
 		if (self->validate) {
-			if (!vm_validate(self, source_len, &IDX)) {
+			if (!ValidateVM(self, source_len, &IDX)) {
 				break;
 			}
 		}
@@ -449,14 +449,14 @@ static void vm_run(frame * self, enviroment * env, int pos, int deferStart) {
 			{
 				//例外は呼び出し全てへ伝播
 				object* e = (object*)PopVector(self->value_stack);
-				vm_throw(self, e);
+				ThrowVM(self, e);
 				sg_thread* th = sg_thread_current(script_context_get_current());
 				//空ならプログラムを終了
 				if (IsEmptyVector(th->trace_stack)) {
-					vm_terminate(self);
+					TerminateVM(self);
 					//どこかでキャッチしようとしている
 				} else {
-					vm_validate(self, source_len, &IDX);
+					ValidateVM(self, source_len, &IDX);
 				}
 				break;
 			}
@@ -483,7 +483,7 @@ static void vm_run(frame * self, enviroment * env, int pos, int deferStart) {
 			case OP_TRY_CLEAR:
 			{
 				sg_thread* th = sg_thread_current(script_context_get_current());
-				vm_catch(self);
+				CatchVM(self);
 				vm_trace* trace = (vm_trace*)PopVector(th->trace_stack);
 				DeleteVMTrace(trace);
 				break;
@@ -588,7 +588,7 @@ static void vm_run(frame * self, enviroment * env, int pos, int deferStart) {
 				//Printfln("[ %s#new ]", type_name(ctor->parent));
 				//DumpEnviromentOp(ctor->env, sub->level);
 				//DumpOpcodeBuf(ctor->env->buf, sub->level);
-				vm_execute(sub, ctor->env);
+				ExecuteVM(sub, ctor->env);
 				DeleteVector(cfr->u.static_invoke.args, VectorDeleterOfNull);
 				DeleteVector(cfr->u.static_invoke.typeargs, VectorDeleterOfNull);
 				call_context_pop(sg_thread_context());
@@ -626,7 +626,7 @@ static void vm_run(frame * self, enviroment * env, int pos, int deferStart) {
 				}
 				//		DumpEnviromentOp(ctor->env, sub->level);
 				//DumpOpcodeBuf(ctor->env->buf, sub->level);
-				vm_execute(sub, ctor->env);
+				ExecuteVM(sub, ctor->env);
 				DeleteVector(cfr->u.static_invoke.args, VectorDeleterOfNull);
 				DeleteVector(cfr->u.static_invoke.typeargs, VectorDeleterOfNull);
 				call_context_pop(sg_thread_context());
@@ -719,7 +719,7 @@ static void vm_run(frame * self, enviroment * env, int pos, int deferStart) {
 				sub->receiver = pro->parent;
 				PushVector(sub->value_stack, assignValue);
 				PushVector(sub->value_stack, assignTarget);
-				vm_execute(sub, pro->set->env);
+				ExecuteVM(sub, pro->set->env);
 				DeleteFrame(sub);
 				break;
 			}
@@ -735,7 +735,7 @@ static void vm_run(frame * self, enviroment * env, int pos, int deferStart) {
 				frame* sub = SubFrame(self);
 				sub->receiver = pro->parent;
 				PushVector(sub->value_stack, sourceObject);
-				vm_execute(sub, pro->get->env);
+				ExecuteVM(sub, pro->get->env);
 				//戻り値をスタックに残す
 				VectorItem returnV = TopVector(sub->value_stack);
 				object* returnO = (object*)returnV;
@@ -756,7 +756,7 @@ static void vm_run(frame * self, enviroment * env, int pos, int deferStart) {
 				frame* sub = SubFrame(self);
 				sub->receiver = NULL;
 				PushVector(sub->value_stack, sv);
-				vm_execute(sub, p->set->env);
+				ExecuteVM(sub, p->set->env);
 				DeleteFrame(sub);
 				break;
 			}
@@ -771,7 +771,7 @@ static void vm_run(frame * self, enviroment * env, int pos, int deferStart) {
 				//プロパティを実行
 				frame* sub = SubFrame(self);
 				sub->receiver = NULL;
-				vm_execute(sub, p->get->env);
+				ExecuteVM(sub, p->get->env);
 				//戻り値をスタックに残す
 				VectorItem returnV = TopVector(sub->value_stack);
 				object* returnO = (object*)returnV;
@@ -1161,7 +1161,7 @@ static void vm_run(frame * self, enviroment * env, int pos, int deferStart) {
 		//キャッチされなかった例外によって終了する
 		sg_thread* thr = sg_thread_main();
 		if (self->terminate && !thr->vm_dump) {
-			vm_uncaught(self, env, IDX);
+			UncaughtVM(self, env, IDX);
 			thr->vm_dump = true;
 			break;
 		}
@@ -1231,7 +1231,7 @@ static bool stack_popb(frame* self) {
 
 static bool throw_npe(frame* self, object* o) {
 	if(o->tag == OBJECT_NULL_T) {
-		vm_native_throw(self, exception_new_simplef(self, "NullPointerException"));
+		NativeThrowVM(self, exception_new_simplef(self, "NullPointerException"));
 		return true;
 	}
 	return false;

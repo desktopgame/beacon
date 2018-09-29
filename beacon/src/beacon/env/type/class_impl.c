@@ -121,7 +121,7 @@ void class_alloc_fields(class_ * self, object * o, frame* fr) {
 			}
 			sub->receiver = self->parent;
 			CopyVector(fr->ref_stack, sub->ref_stack);
-			vm_execute(sub, f->initial_value_env);
+			ExecuteVM(sub, f->initial_value_env);
 			a = PopVector(sub->value_stack);
 			DeleteFrame(sub);
 		}
@@ -358,7 +358,7 @@ object * class_new_instance(class_* self, frame* fr, Vector* args, Vector* type_
 			PushVector(sub->type_args_vec, AtVector(type_args, i));
 		}
 	}
-	vm_execute(sub, ctor->env);
+	ExecuteVM(sub, ctor->env);
 	object* inst = PopVector(sub->value_stack);
 	h->collect_blocking++;
 	DeleteFrame(sub);

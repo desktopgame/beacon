@@ -100,7 +100,7 @@ static frame* bc_eval_allocate(class_loader* cll) {
 	heap* he = heap_get();
 	he->accept_blocking = 0;
 	if(!GetLastBCError()) {
-		vm_execute(fr, cll->env);
+		ExecuteVM(fr, cll->env);
 	}
 	if(fr->terminate) {
 		ThrowBCError(BCERROR_GENERIC_T, "unexpected terminate");
@@ -278,13 +278,13 @@ static void bc_eval_release(JNIEnv* env, class_loader* cll, frame* fr) {
 	if(GetLastBCError()) {
 		string_buffer* sbuf = NewBuffer();
 		AppendsBuffer(sbuf, "\n");
-		AppendsBuffer(sbuf, Ref2Str(vm_error_message()));
+		AppendsBuffer(sbuf, Ref2Str(GetVMErrorMessage()));
 		char* mes = ReleaseBuffer(sbuf);
 		jclass bc_runtime_exc_cls = (*env)->FindClass(env, "jp/koya/jbeacon/BCRuntimeException");
 		(*env)->ThrowNew(env, bc_runtime_exc_cls, mes);
 		MEM_FREE(mes);
 	}
-	vm_catch(fr);
+	CatchVM(fr);
 	heap_gc(heap_get());
 	DeleteFrame(fr);
 	sg_thread_release_frame_ref(sg_thread_current(script_context_get_current()));

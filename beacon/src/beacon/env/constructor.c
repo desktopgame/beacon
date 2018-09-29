@@ -26,7 +26,7 @@ object * constructor_new_instance(constructor * self, Vector * args, frame * par
 	for (int i = 0; i < args->length; i++) {
 		PushVector(sub->value_stack, AtVector(args, i));
 	}
-	vm_execute(sub, self->env);
+	ExecuteVM(sub, self->env);
 	object* ret = PopVector(sub->value_stack);
 	DeleteFrame(sub);
 	return ret;

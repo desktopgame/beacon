@@ -197,7 +197,7 @@ static void script_context_free(script_context* self) {
 	assert(self->heap->collect_blocking == 0);
 	//全ての例外フラグをクリア
 	frame* thv = sg_thread_get_frame_ref(sg_thread_current(self));
-	vm_catch(thv);
+	CatchVM(thv);
 	class_loader_delete(self->bootstrap_class_loader);
 	if(self->null_obj != NULL) {
 		heap_ignore(self->heap, self->null_obj);
