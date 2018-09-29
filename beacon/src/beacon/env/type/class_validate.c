@@ -112,7 +112,7 @@ bool class_abstract_class_implement_valid(class_* cls, method** out) {
 		#if defined(DEBUG)
 		const char* mename = Ref2Str(me->namev);
 		#endif
-		if(!modifier_is_abstract(me->modifier)) { continue; }
+		if(!IsAbstractModifier(me->modifier)) { continue; }
 		Vector* methods = class_find_methods_tree(cls, me);
 		if(methods->length == 0 || methods_is_all_abstract(methods)) {
 		   (*out) = me;
@@ -230,7 +230,7 @@ static bool methods_is_all_abstract(Vector* v) {
 		#if defined(DEBUG)
 		const char* tyname = Ref2Str(type_name(e->parent));
 		#endif
-		if(!modifier_is_abstract(e->modifier)) {
+		if(!IsAbstractModifier(e->modifier)) {
 			return false;
 		}
 	}

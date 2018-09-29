@@ -99,7 +99,7 @@ Vector* call_context_typeargs(call_context* self) {
 
 bool call_context_is_static(call_context* self) {
 	return self->tag == call_method_T &&
-	       modifier_is_static(self->u.mt->modifier);
+	       IsStaticModifier(self->u.mt->modifier);
 }
 
 void call_context_delete(call_context* self) {

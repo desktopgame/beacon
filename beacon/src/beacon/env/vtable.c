@@ -18,14 +18,14 @@ void vtable_copy(vtable * src, vtable * dst) {
 }
 
 void vtable_add(vtable * self, method * m) {
-	if (modifier_is_static(m->modifier)) {
+	if (IsStaticModifier(m->modifier)) {
 		return;
 	}
 	PushVector(self->elements, m);
 }
 
 void vtable_replace(vtable * self, method * m, call_context* cctx) {
-	if (modifier_is_static(m->modifier)) {
+	if (IsStaticModifier(m->modifier)) {
 		return;
 	}
 	#if defined(DEBUG)

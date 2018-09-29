@@ -202,7 +202,7 @@ static void il_factor_invoke_bound_generate_method(il_factor_invoke_bound* self,
 			return;
 		}
 	}
-	if(modifier_is_static(self->u.m->modifier)) {
+	if(IsStaticModifier(self->u.m->modifier)) {
 		opcode_buf_add(env->buf, (VectorItem)op_invokestatic);
 		opcode_buf_add(env->buf, (VectorItem)self->u.m->parent->absolute_index);
 		opcode_buf_add(env->buf,(VectorItem) self->index);

@@ -45,7 +45,7 @@ il_class* il_class_new(string_view namev) {
 }
 
 void il_class_add_field(il_class * self, il_field * f) {
-	if (modifier_is_static(f->modifier)) {
+	if (IsStaticModifier(f->modifier)) {
 		PushVector(self->sfield_list, f);
 	} else {
 		PushVector(self->field_list, f);
@@ -53,7 +53,7 @@ void il_class_add_field(il_class * self, il_field * f) {
 }
 
 void il_class_add_property(il_class* self, il_property* prop) {
-	if(modifier_is_static(prop->modifier)) {
+	if(IsStaticModifier(prop->modifier)) {
 		PushVector(self->sprop_list, prop);
 	} else {
 		PushVector(self->prop_list, prop);
@@ -61,7 +61,7 @@ void il_class_add_property(il_class* self, il_property* prop) {
 }
 
 void il_class_add_method(il_class * self, il_method * m) {
-	if (modifier_is_static(m->modifier)) {
+	if (IsStaticModifier(m->modifier)) {
 		PushVector(self->smethod_list, m);
 	} else {
 		PushVector(self->method_list, m);

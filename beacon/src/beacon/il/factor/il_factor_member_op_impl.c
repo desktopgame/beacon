@@ -44,7 +44,7 @@ void il_factor_member_op_load(il_factor_member_op* self, enviroment* env, call_c
 }
 
 void il_factor_member_op_generate(il_factor_member_op* self, enviroment* env, call_context* cctx) {
-	if(!modifier_is_static(self->f->modifier)) {
+	if(!IsStaticModifier(self->f->modifier)) {
 		il_factor_generate(self->fact, env, cctx);
 	}
 	generate_get_field(env->buf, self->f, self->index);

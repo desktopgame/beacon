@@ -62,7 +62,7 @@ void method_execute(method* self, frame * fr, enviroment* env) {
 		Vector* aArgs = NULL;
 		Vector* aTArgs = NULL;
 		//レシーバも
-		if(!modifier_is_static(self->modifier)) {
+		if(!IsStaticModifier(self->modifier)) {
 			object* receiver_obj = PopVector(fr->value_stack);
 			AssignVector(a->ref_stack, 0, receiver_obj);
 			cfr = call_context_push(sg_thread_context(), frame_instance_invoke_T);

@@ -113,7 +113,7 @@ void script_context_static_each(script_context* self, static_each act) {
 		class_* cls = e->u.class_;
 		for (int j = 0; j < cls->sfield_list->length; j++) {
 			field* f = (field*)AtVector(cls->sfield_list, j);
-			if(modifier_is_static(f->modifier)) {
+			if(IsStaticModifier(f->modifier)) {
 				act(f);
 			}
 		}

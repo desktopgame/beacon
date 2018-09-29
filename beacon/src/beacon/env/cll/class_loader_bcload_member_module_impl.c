@@ -53,7 +53,7 @@ bool CLBC_field_decl(class_loader* self, il_type* iltype, type* tp, il_field* il
 	fi->initial_value = ilfi->initial_value;
 	ilfi->initial_value = NULL;
 	//フィールドの修飾子に native が使用されている
-	if(modifier_is_native(fi->modifier)) {
+	if(IsNativeModifier(fi->modifier)) {
 		bc_error_throw(bcerror_native_field_T,
 			Ref2Str(type_name(tp)),
 			Ref2Str(fi->namev)
@@ -61,7 +61,7 @@ bool CLBC_field_decl(class_loader* self, il_type* iltype, type* tp, il_field* il
 		return false;
 	}
 	//.. abstractが使用されている
-	if(modifier_is_abstract(fi->modifier)) {
+	if(IsAbstractModifier(fi->modifier)) {
 		bc_error_throw(bcerror_abstract_field_T,
 			Ref2Str(type_name(tp)),
 			Ref2Str(fi->namev)
@@ -69,7 +69,7 @@ bool CLBC_field_decl(class_loader* self, il_type* iltype, type* tp, il_field* il
 		return false;
 	}
 	//.. overrideが使用されている
-	if(modifier_is_override(fi->modifier)) {
+	if(IsOverrideModifier(fi->modifier)) {
 		bc_error_throw(bcerror_override_field_T,
 			Ref2Str(type_name(tp)),
 			Ref2Str(fi->namev)
@@ -78,8 +78,8 @@ bool CLBC_field_decl(class_loader* self, il_type* iltype, type* tp, il_field* il
 	}
 	//static finalなのに、
 	//初期値が存在しない
-	if(modifier_is_static(fi->modifier) &&
-	   modifier_is_final(fi->modifier) &&
+	if(IsStaticModifier(fi->modifier) &&
+	   IsFinalModifier(fi->modifier) &&
 	   fi->initial_value == NULL) {
 		bc_error_throw(bcerror_not_default_value_static_final_field_T,
 			Ref2Str(type_name(tp)),
@@ -118,7 +118,7 @@ bool CLBC_field_impl(class_loader* self, type* tp, field* fi, namespace_* scope,
 	int abtmp = he->accept_blocking;
 	he->collect_blocking++;
 	he->accept_blocking = 0;
-	if(modifier_is_static(fi->modifier)) {
+	if(IsStaticModifier(fi->modifier)) {
 		frame* f = frame_new();
 		sg_thread_set_frame_ref(sg_thread_main(), f);
 		vm_execute(f, env);
@@ -173,9 +173,9 @@ bool CLBC_property_decl(class_loader* self, il_type* iltype, type* tp, il_proper
 	prop->gtype = import_manager_resolve(scope, ilprop->fqcn, cctx);
 	prop->is_short = ilprop->set->is_short && ilprop->get->is_short;
 	   type_add_property(tp, prop);
-	if(modifier_is_abstract(prop->modifier) ||
-	   modifier_is_override(prop->modifier) ||
-	   modifier_is_native(prop->modifier)) {
+	if(IsAbstractModifier(prop->modifier) ||
+	   IsOverrideModifier(prop->modifier) ||
+	   IsNativeModifier(prop->modifier)) {
 		   bc_error_throw(bcerror_native_field_T, Ref2Str(prop->namev));
 			call_context_delete(cctx);
 		   return false;
@@ -214,7 +214,7 @@ bool CLBC_property_impl(class_loader* self, il_type* iltype, type* tp, il_proper
 	get->env->context_ref = self;
 	//setterのオペコードを生成
 	symbol_entry* valueE = symbol_table_entry(set->env->sym_table, pr->gtype, InternString("value"));
-	if(!modifier_is_static(pr->modifier)) {
+	if(!IsStaticModifier(pr->modifier)) {
 		opcode_buf_add(set->env->buf, op_store);
 		opcode_buf_add(set->env->buf, 0);
 	}
@@ -222,7 +222,7 @@ bool CLBC_property_impl(class_loader* self, il_type* iltype, type* tp, il_proper
 	opcode_buf_add(set->env->buf, valueE->index);
 	CLBC_body(self, set_stmt_list, set->env, cctx, scope);
 	//getterのオペコードを生成
-	if(!modifier_is_static(pr->modifier)) {
+	if(!IsStaticModifier(pr->modifier)) {
 		opcode_buf_add(get->env->buf, op_store);
 		opcode_buf_add(get->env->buf, 0);
 	}
@@ -268,7 +268,7 @@ bool CLBC_method_decl(class_loader* self, il_type* iltype, type* tp, il_method* 
 	//実行時のメソッド情報を作成する
 	method* method = method_new(ilmethod->namev);
 	Vector* parameter_list = method->parameters;
-	method->type = modifier_is_native(ilmethod->modifier) ? method_type_native_T : method_type_script_T;
+	method->type = IsNativeModifier(ilmethod->modifier) ? method_type_native_T : method_type_script_T;
 	method->access = ilmethod->access;
 	method->modifier = ilmethod->modifier;
 	type_parameter_list_dup(ilmethod->type_parameter_list, method->type_parameters);
@@ -278,11 +278,11 @@ bool CLBC_method_decl(class_loader* self, il_type* iltype, type* tp, il_method* 
 	cctx->u.mt = method;
 	//インターフェースなら空
 	if (tp->tag == type_interface_T ||
-	   modifier_is_abstract(method->modifier)) {
+	   IsAbstractModifier(method->modifier)) {
 		method->type = method_type_abstract_T;
 		method->u.script_method = NULL;
 	} else {
-		if(modifier_is_native(method->modifier)) {
+		if(IsNativeModifier(method->modifier)) {
 			method->u.native_method = native_method_new();
 		} else {
 			method->u.script_method = script_method_new();
@@ -290,7 +290,7 @@ bool CLBC_method_decl(class_loader* self, il_type* iltype, type* tp, il_method* 
 	}
 	//メソッドが抽象メソッドだが、
 	//インターフェイスでも抽象クラスでもない
-	if(modifier_is_abstract(method->modifier) &&
+	if(IsAbstractModifier(method->modifier) &&
 	  (tp->tag == type_class_T &&
 	  !TYPE2CLASS(tp)->is_abstract)) {
 		bc_error_throw(bcerror_abstract_method_by_T, Ref2Str(method->namev));
@@ -302,7 +302,7 @@ bool CLBC_method_decl(class_loader* self, il_type* iltype, type* tp, il_method* 
 	//ネイティブメソッドでも抽象メソッドでもない
 	if(tp->tag == type_class_T &&
 	   ilmethod->no_stmt &&
-		(!modifier_is_abstract(method->modifier) && !modifier_is_native(method->modifier))
+		(!IsAbstractModifier(method->modifier) && !IsNativeModifier(method->modifier))
 	) {
 		bc_error_throw(bcerror_empty_stmt_method_T, Ref2Str(method->namev));
 		method_delete(method);
@@ -312,7 +312,7 @@ bool CLBC_method_decl(class_loader* self, il_type* iltype, type* tp, il_method* 
 	//ネイティブメソッドもしくは抽象メソッドなのに本文が書かれている
 	if(tp->tag == type_class_T &&
 	   !ilmethod->no_stmt &&
-		(modifier_is_abstract(method->modifier) || modifier_is_native(method->modifier))
+		(IsAbstractModifier(method->modifier) || IsNativeModifier(method->modifier))
 	) {
 		bc_error_throw(bcerror_not_empty_stmt_method_T, Ref2Str(method->namev));
 		method_delete(method);
@@ -320,8 +320,8 @@ bool CLBC_method_decl(class_loader* self, il_type* iltype, type* tp, il_method* 
 		return false;
 	}
 	//メソッドの修飾子が static override
-	if(modifier_is_static(method->modifier) &&
-	   modifier_is_override(method->modifier)) {
+	if(IsStaticModifier(method->modifier) &&
+	   IsOverrideModifier(method->modifier)) {
 		bc_error_throw(bcerror_static_override_method_T,
 			Ref2Str(type_name(tp)),
 			Ref2Str(method->namev)
@@ -331,8 +331,8 @@ bool CLBC_method_decl(class_loader* self, il_type* iltype, type* tp, il_method* 
 		return false;
 	}
 	//.. abstract override
-	if(modifier_is_abstract(method->modifier) &&
-	   modifier_is_override(method->modifier)) {
+	if(IsAbstractModifier(method->modifier) &&
+	   IsOverrideModifier(method->modifier)) {
 		bc_error_throw(bcerror_abstract_override_method_T,
 			Ref2Str(type_name(tp)),
 			Ref2Str(method->namev)
@@ -342,8 +342,8 @@ bool CLBC_method_decl(class_loader* self, il_type* iltype, type* tp, il_method* 
 		return false;
 	}
 	//.. abstract static
-	if(modifier_is_abstract(method->modifier) &&
-	   modifier_is_static(method->modifier)) {
+	if(IsAbstractModifier(method->modifier) &&
+	   IsStaticModifier(method->modifier)) {
 		bc_error_throw(bcerror_abstract_static_method_T,
 			Ref2Str(type_name(tp)),
 			Ref2Str(method->namev)
@@ -402,7 +402,7 @@ bool CLBC_method_impl(class_loader* self, namespace_* scope, il_type* iltype, ty
 	}
 	//インスタンスメソッドなら
 	//0番目を this で埋める
-	if (!modifier_is_static(me->modifier)) {
+	if (!IsStaticModifier(me->modifier)) {
 		opcode_buf_add(env->buf, (VectorItem)op_store);
 		opcode_buf_add(env->buf, (VectorItem)0);
 	}

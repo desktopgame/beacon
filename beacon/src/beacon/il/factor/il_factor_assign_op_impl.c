@@ -104,7 +104,7 @@ static void assign_by_namebase(il_factor_assign_op* self, enviroment* env, call_
 			return;
 		}
 		//finalなので書き込めない
-		if(modifier_is_final(sf->modifier)) {
+		if(IsFinalModifier(sf->modifier)) {
 			bc_error_throw(bcerror_assign_to_final_field_T,
 				Ref2Str(type_name(cls->parent)),
 				Ref2Str(sf->namev)
@@ -146,7 +146,7 @@ static void assign_to_field(il_factor_assign_op* self, il_factor* receiver, il_f
 static void assign_to_property(il_factor_assign_op* self, enviroment* env, call_context* cctx) {
 	il_factor_property* prop = self->left->u.prop;
 	property* pp = prop->p;
-	bool is_static = modifier_is_static(prop->p->modifier);
+	bool is_static = IsStaticModifier(prop->p->modifier);
 	BC_ERROR();
 	//プロパティへアクセスできない
 	if(!class_accessible_property(call_context_class(cctx), pp)) {
@@ -171,7 +171,7 @@ static void assign_to_property(il_factor_assign_op* self, enviroment* env, call_
 		return;
 	}
 	//省略記法なら初期化されてるかチェック
-	if(pp->is_short && !modifier_is_static(pp->modifier)) {
+	if(pp->is_short && !IsStaticModifier(pp->modifier)) {
 		check_final(prop->fact, self->right, prop->p->source_ref->namev, env, cctx);
 	}
 	BC_ERROR();
@@ -276,7 +276,7 @@ static void check_final(il_factor* receiver, il_factor* source, string_view name
 	//コンストラクタ以外の場所では finalフィールドは初期化できない
 	if(cctx->tag != call_ctor_T) {
 		//finalなので書き込めない
-		if(modifier_is_final(f->modifier)) {
+		if(IsFinalModifier(f->modifier)) {
 			bc_error_throw(bcerror_assign_to_final_field_T,
 				Ref2Str(type_name(cls->parent)),
 				Ref2Str(f->namev)
@@ -284,8 +284,8 @@ static void check_final(il_factor* receiver, il_factor* source, string_view name
 		}
 	} else {
 		//コンストラクタであっても static final の場合は書き込めない
-		if(modifier_is_final(f->modifier) &&
-		   modifier_is_static(f->modifier)) {
+		if(IsFinalModifier(f->modifier) &&
+		   IsStaticModifier(f->modifier)) {
 			bc_error_throw(bcerror_assign_to_final_field_T,
 				Ref2Str(type_name(cls->parent)),
 				Ref2Str(f->namev)
@@ -333,7 +333,7 @@ static void generate_assign_to_variable_local(il_factor_assign_op* self, envirom
 		assert(temp != -1);
 		//フィールドはstaticでないが
 		//現在のコンテキストはstaticなので this にアクセスできない
-		if(!modifier_is_static(f->modifier) &&
+		if(!IsStaticModifier(f->modifier) &&
 		    call_context_is_static(cctx)) {
 			bc_error_throw(bcerror_access_to_this_at_static_method_T,
 				Ref2Str(type_name(f->parent)),
@@ -341,12 +341,12 @@ static void generate_assign_to_variable_local(il_factor_assign_op* self, envirom
 			);
 			return;
 		}
-		if(!modifier_is_static(f->modifier)) {
+		if(!IsStaticModifier(f->modifier)) {
 			opcode_buf_add(env->buf, op_this);
 		}
 		il_factor_generate(self->right, env, cctx);
 		generate_put_field(env->buf, f, temp);
-		//assert(!modifier_is_static(f->modifier));
+		//assert(!IsStaticModifier(f->modifier));
 	//src のような名前がプロパティを示す場合
 	} else if(illoc->type == variable_local_property_T) {
 		int temp = -1;
@@ -354,7 +354,7 @@ static void generate_assign_to_variable_local(il_factor_assign_op* self, envirom
 		assert(temp != -1);
 		//フィールドはstaticでないが
 		//現在のコンテキストはstaticなので this にアクセスできない
-		if(!modifier_is_static(p->modifier) &&
+		if(!IsStaticModifier(p->modifier) &&
 		    call_context_is_static(cctx)) {
 			bc_error_throw(bcerror_access_to_this_at_static_method_T,
 				Ref2Str(type_name(p->parent)),
@@ -362,11 +362,11 @@ static void generate_assign_to_variable_local(il_factor_assign_op* self, envirom
 			);
 			return;
 		}
-		if(!modifier_is_static(p->modifier)) {
+		if(!IsStaticModifier(p->modifier)) {
 			opcode_buf_add(env->buf, op_this);
 		}
 		il_factor_generate(self->right, env, cctx);
 		generate_put_property(env->buf, p, temp);
-		assert(!modifier_is_static(p->modifier));
+		assert(!IsStaticModifier(p->modifier));
 	}
 }

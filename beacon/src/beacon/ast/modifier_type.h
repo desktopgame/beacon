@@ -19,38 +19,38 @@ typedef enum modifier_type {
  * @param type
  * @return
  */
-bool modifier_is_static(modifier_type type);
+bool IsStaticModifier(modifier_type type);
 
 /**
  * 指定の修飾子が native を含むなら true.
  * @param type
  * @return
  */
-bool modifier_is_native(modifier_type type);
+bool IsNativeModifier(modifier_type type);
 
 /**
  * 指定の修飾子が abstract を含むなら true.
  * @param type
  * @return
  */
-bool modifier_is_abstract(modifier_type type);
+bool IsAbstractModifier(modifier_type type);
 
 /**
  * 指定の修飾子が override を含むなら true.
  * @param type
  * @return
  */
-bool modifier_is_override(modifier_type type);
+bool IsOverrideModifier(modifier_type type);
 
 /**
  * @param type
  * @return
  */
-bool modifier_is_final(modifier_type type);
+bool IsFinalModifier(modifier_type type);
 
 /**
  * 修飾子を出力します.
  * @param type
  */
-void modifier_print(modifier_type type);
+void PrintModifier(modifier_type type);
 #endif // !SIGNAL_AST_MODIFIER_TYPE_H

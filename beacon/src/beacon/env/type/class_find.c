@@ -184,7 +184,7 @@ bool class_accessible_property_accessor(class_* self, property_body* pb) {
 int class_get_field_by_property(class_* self, property* p) {
 	int temp = -1;
 	assert(p->source_ref != NULL);
-	if(modifier_is_static(p->modifier)) {
+	if(IsStaticModifier(p->modifier)) {
 		class_find_sfield(self, p->source_ref->namev, &temp);
 	} else {
 		class_find_field(self, p->source_ref->namev, &temp);
@@ -509,7 +509,7 @@ Vector* class_find_methods_tree(class_* self, method* m) {
 }
 
 bool class_contains_method(Vector* method_list, method* m, method** outM) {
-	assert(!modifier_is_static(m->modifier));
+	assert(!IsStaticModifier(m->modifier));
 	(*outM) = NULL;
 	bool ret = false;
 	call_context* cctx = call_context_new(call_decl_T);

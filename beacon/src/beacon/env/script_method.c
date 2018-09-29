@@ -26,7 +26,7 @@ void script_method_execute(script_method * self, method* parent, frame * fr, env
 	sub->receiver = parent->parent;
 	Vector* aArgs = NewVector();
 	Vector* aTArgs = NewVector();
-	if (!modifier_is_static(parent->modifier)) {
+	if (!IsStaticModifier(parent->modifier)) {
 		object* receiver_obj = PopVector(fr->value_stack);
 		PushVector(sub->value_stack, receiver_obj);
 		cfr = call_context_push(sg_thread_context(), frame_instance_invoke_T);
