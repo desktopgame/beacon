@@ -189,7 +189,9 @@ decl_files.each do |file|
     File.open(file, "r") do |fp|
         src = fp.read()
         src = src.gsub("\[\]", "")
+        src = src.gsub(/\/\*[\s\S]*?\*\//m, "")
         src.lines do |line|
+            next if line.empty?
             func = Function.new
             #戻り値の型を得る
             return_type, line = get_typename(line)
@@ -210,7 +212,7 @@ decl_files.each do |file|
             word << rparen
             if(rparen.length > 0) then
                 functions << func
-                break
+                next
             end
             #引数名をとる
             reader = lparen
