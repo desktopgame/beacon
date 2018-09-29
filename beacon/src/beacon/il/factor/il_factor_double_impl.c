@@ -4,14 +4,14 @@
 #include "../../util/text.h"
 #include "../../vm/enviroment.h"
 #include "../../env/namespace.h"
-#include "../../env/type_impl.h"
+#include "../../env/TYPE_IMPL.h"
 #include "../../util/mem.h"
 #if defined(_MSC_VER)
 #pragma warning(disable:4996)
 #endif
 
 il_factor * il_factor_wrap_double(il_factor_double * self) {
-	il_factor* ret = il_factor_new(ilfactor_double_T);
+	il_factor* ret = il_factor_new(ILFACTOR_DOUBLE_T);
 	ret->u.double_ = self;
 	return ret;
 }
@@ -24,7 +24,7 @@ il_factor_double * il_factor_double_new(double d) {
 
 void il_factor_double_generate(il_factor_double * self, enviroment* env, call_context* cctx) {
 	int index = enviroment_add_constant_double(env, self->value);
-	opcode_buf_add(env->buf, op_dconst);
+	opcode_buf_add(env->buf, OP_DCONST);
 	opcode_buf_add(env->buf, index);
 }
 

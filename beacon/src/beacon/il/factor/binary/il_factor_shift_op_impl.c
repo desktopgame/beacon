@@ -6,7 +6,7 @@
 #include "../../../vm/enviroment.h"
 #include "../../il_factor_impl.h"
 #include "../../../env/namespace.h"
-#include "../../../env/type_impl.h"
+#include "../../../env/TYPE_IMPL.h"
 #include "../../../env/operator_overload.h"
 
 static opcode operator_to_iopcode(operator_type type);
@@ -37,7 +37,7 @@ generic_type* il_factor_shift_op_eval(il_factor_shift_op * self, enviroment * en
 	}
 	if(self->operator_index == -1) {
 		bc_error_throw(
-			bcerror_undefined_shift_operator_T,
+			BCERROR_UNDEFINED_SHIFT_OPERATOR_T,
 			operator_tostring(self->type)
 		);
 		return NULL;
@@ -54,19 +54,19 @@ void il_factor_shift_op_generate(il_factor_shift_op* self, enviroment* env, call
 			opcode_buf_add(env->buf, (VectorItem)operator_to_iopcode(self->type));
 		} else {
 			bc_error_throw(
-				bcerror_undefined_shift_operator_T,
+				BCERROR_UNDEFINED_SHIFT_OPERATOR_T,
 				operator_tostring(self->type)
 			);
 		}
 	} else {
 		il_factor_generate(self->parent->right, env, cctx);
 		il_factor_generate(self->parent->left, env, cctx);
-		opcode_buf_add(env->buf, op_invokeoperator);
+		opcode_buf_add(env->buf, OP_INVOKEOPERATOR);
 		opcode_buf_add(env->buf, self->operator_index);
 	}
 }
 
-void il_factor_shift_op_load(il_factor_shift_op* self, enviroment* env, call_context* cctx) {
+void il_factor_shift_OP_LOAD(il_factor_shift_op* self, enviroment* env, call_context* cctx) {
 	if(!il_factor_binary_op_int_int(self->parent, env, cctx)) {
 		self->operator_index = il_factor_binary_op_index(self->parent, env, cctx);
 	}
@@ -82,8 +82,8 @@ char* il_factor_shift_op_tostr(il_factor_shift_op* self, enviroment* env) {
 //static
 static opcode operator_to_iopcode(operator_type type) {
 	switch(type) {
-		case operator_lshift_T: return op_ilsh;
-		case operator_rshift_T: return op_irsh;
+		case OPERATOR_LSHIFT_T: return OP_ILSH;
+		case OPERATOR_RSHIFT_T: return OP_IRSH;
 	}
 	assert(false);
 }

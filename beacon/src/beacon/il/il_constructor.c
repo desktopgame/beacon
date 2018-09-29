@@ -11,7 +11,7 @@ static void il_constructor_stmt_delete(VectorItem item);
 
 il_constructor * il_constructor_new() {
 	il_constructor* ret = (il_constructor*)MEM_MALLOC(sizeof(il_constructor));
-	ret->access = access_public_T;
+	ret->access = ACCESS_PUBLIC_T;
 	ret->parameter_list = NewVector();
 	ret->statement_list = NewVector();
 	ret->chain = NULL;

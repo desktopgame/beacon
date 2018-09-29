@@ -9,7 +9,7 @@
 #include <assert.h>
 
 il_factor * il_factor_wrap_as(il_factor_as * self) {
-	il_factor* ret = il_factor_new(ilfactor_as_T);
+	il_factor* ret = il_factor_new(ILFACTOR_AS_T);
 	ret->u.as_ = self;
 	return ret;
 }
@@ -19,18 +19,18 @@ il_factor_as * il_factor_as_new() {
 	ret->fact = NULL;
 	ret->fqcn = generic_cache_new();
 	ret->gtype = NULL;
-	ret->mode = cast_unknown_T;
+	ret->mode = CAST_UNKNOWN_T;
 	return ret;
 }
 
 void il_factor_as_generate(il_factor_as * self, enviroment * env, call_context* cctx) {
 	il_factor_generate(self->fact, env, cctx);
-	opcode_buf_add(env->buf, op_generic_add);
+	opcode_buf_add(env->buf, OP_GENERIC_ADD);
 	generic_type_generate(self->gtype, env);
-	if(self->mode == cast_down_T) {
-		opcode_buf_add(env->buf, op_down_as);
+	if(self->mode == CAST_DOWN_T) {
+		opcode_buf_add(env->buf, OP_DOWN_AS);
 	} else {
-		opcode_buf_add(env->buf, op_up_as);
+		opcode_buf_add(env->buf, OP_UP_AS);
 	}
 }
 
@@ -42,31 +42,31 @@ void il_factor_as_load(il_factor_as * self, enviroment * env, call_context* cctx
 	self->gtype = import_manager_resolve(call_context_namespace(cctx), self->fqcn, cctx);
 	generic_type* a = il_factor_eval(self->fact, env, cctx);
 	//キャスト元がインターフェイスなら常にアップキャスト
-	if(self->gtype->core_type != NULL && GENERIC2TYPE(self->gtype)->tag == type_interface_T) {
-		self->mode = cast_up_T;
+	if(self->gtype->core_type != NULL && GENERIC2TYPE(self->gtype)->tag == TYPE_INTERFACE_T) {
+		self->mode = CAST_UP_T;
 		return;
 	}
 	//キャスト先がインターフェイスなら常にアップキャスト
-	if(a->core_type != NULL && GENERIC2TYPE(a)->tag == type_interface_T) {
-		self->mode = cast_down_T;
+	if(a->core_type != NULL && GENERIC2TYPE(a)->tag == TYPE_INTERFACE_T) {
+		self->mode = CAST_DOWN_T;
 		return;
 	}
 	//キャスト先がオブジェクトなら常にアップキャスト
 	if(self->gtype->core_type != NULL && self->gtype->core_type == TYPE_OBJECT) {
-		self->mode = cast_up_T;
+		self->mode = CAST_UP_T;
 		return;
 	}
 	int downTo = generic_type_distance(self->gtype, a, cctx);
 	int upTo = generic_type_distance(a, self->gtype, cctx);
 	//ダウンキャスト
 	if(downTo >= 0) {
-		self->mode = cast_up_T;
+		self->mode = CAST_UP_T;
 	//アップキャスト
 	} else if(upTo >= 0) {
-		self->mode = cast_down_T;
+		self->mode = CAST_DOWN_T;
 	//それ以外
 	} else {
-		bc_error_throw(bcerror_cast_not_compatible_T,
+		bc_error_throw(BCERROR_CAST_NOT_COMPATIBLE_T,
 			Ref2Str(type_name(a->core_type)),
 			Ref2Str(type_name(self->gtype->core_type))
 		);

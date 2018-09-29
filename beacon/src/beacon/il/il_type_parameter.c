@@ -7,7 +7,7 @@ static void il_type_parameter_rule_list_delete(VectorItem item);
 
 il_type_parameter * il_type_parameter_new(string_view namev) {
 	il_type_parameter* ret = (il_type_parameter*)MEM_MALLOC(sizeof(il_type_parameter));
-	ret->kind = il_type_parameter_kind_default_T;
+	ret->kind = il_TYPE_PARAMETER_KIND_DEFAULT_T;
 	ret->namev = namev;
 	return ret;
 }
@@ -19,9 +19,9 @@ void il_type_parameter_list_print(Vector * v) {
 	printf("<");
 	for (int i = 0; i < v->length; i++) {
 		il_type_parameter* e = (il_type_parameter*)AtVector(v, i);
-		if (e->kind == il_type_parameter_kind_in_T) {
+		if (e->kind == il_TYPE_PARAMETER_KIND_IN_T) {
 			printf("in ");
-		} else if (e->kind == il_type_parameter_kind_out_T) {
+		} else if (e->kind == il_TYPE_PARAMETER_KIND_OUT_T) {
 			printf("out ");
 		}
 		printf("%s", Ref2Str(e->namev));

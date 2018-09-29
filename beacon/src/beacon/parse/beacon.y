@@ -388,11 +388,11 @@ constructor_chain
 constructor_chain_type_T
 	: SUPER_TOK
 	{
-		$$ = chain_type_super_T;
+		$$ = CHAIN_TYPE_SUPER_T;
 	}
 	| THIS_TOK
 	{
-		$$ = chain_type_this_T;
+		$$ = CHAIN_TYPE_THIS_T;
 	}
 	;
 
@@ -426,115 +426,115 @@ method_define
 	}
 	| DEF IDENT type_parameter_group LRB parameter_list RRB ARROW typename_T scope_optional
 	{
-		$$ = NewASTMethodDecl(NewASTModifier(modifier_none_T), $2, $3, $5, $9, $8);
+		$$ = NewASTMethodDecl(NewASTModifier(MODIFIER_NONE_T), $2, $3, $5, $9, $8);
 	}
 	| DEF IDENT type_parameter_group LRB RRB ARROW typename_T scope_optional
 	{
-		$$ = NewASTMethodDeclEmptyParams(NewASTModifier(modifier_none_T), $2, $3, $8, $7);
+		$$ = NewASTMethodDeclEmptyParams(NewASTModifier(MODIFIER_NONE_T), $2, $3, $8, $7);
 	}
 	;
 
 operator_define
 	: OPERATOR ADD LRB parameter_list RRB ARROW typename_T scope_optional
 	{
-		$$ = NewASTOperatorOverload(operator_add_T, $4, $8, $7);
+		$$ = NewASTOperatorOverload(OPERATOR_ADD_T, $4, $8, $7);
 	}
 	| OPERATOR SUB LRB parameter_list RRB ARROW typename_T scope_optional
 	{
-		$$ = NewASTOperatorOverload(operator_sub_T, $4, $8, $7);
+		$$ = NewASTOperatorOverload(OPERATOR_SUB_T, $4, $8, $7);
 	}
 	| OPERATOR MUL LRB parameter_list RRB ARROW typename_T scope_optional
 	{
-		$$ = NewASTOperatorOverload(operator_mul_T, $4, $8, $7);
+		$$ = NewASTOperatorOverload(OPERATOR_MUL_T, $4, $8, $7);
 	}
 	| OPERATOR DIV LRB parameter_list RRB ARROW typename_T scope_optional
 	{
-		$$ = NewASTOperatorOverload(operator_div_T, $4, $8, $7);
+		$$ = NewASTOperatorOverload(OPERATOR_DIV_T, $4, $8, $7);
 	}
 	| OPERATOR MOD LRB parameter_list RRB ARROW typename_T scope_optional
 	{
-		$$ = NewASTOperatorOverload(operator_mod_T, $4, $8, $7);
+		$$ = NewASTOperatorOverload(OPERATOR_MOD_T, $4, $8, $7);
 	}
 	| OPERATOR GT LRB parameter_list RRB ARROW typename_T scope_optional
 	{
-		$$ = NewASTOperatorOverload(operator_gt_T, $4, $8, $7);
+		$$ = NewASTOperatorOverload(OPERATOR_GT_T, $4, $8, $7);
 	}
 	| OPERATOR GE LRB parameter_list RRB ARROW typename_T scope_optional
 	{
-		$$ = NewASTOperatorOverload(operator_ge_T, $4, $8, $7);
+		$$ = NewASTOperatorOverload(OPERATOR_GE_T, $4, $8, $7);
 	}
 	| OPERATOR LT LRB parameter_list RRB ARROW typename_T scope_optional
 	{
-		$$ = NewASTOperatorOverload(operator_lt_T, $4, $8, $7);
+		$$ = NewASTOperatorOverload(OPERATOR_LT_T, $4, $8, $7);
 	}
 	| OPERATOR LE LRB parameter_list RRB ARROW typename_T scope_optional
 	{
-		$$ = NewASTOperatorOverload(operator_le_T, $4, $8, $7);
+		$$ = NewASTOperatorOverload(OPERATOR_LE_T, $4, $8, $7);
 	}
 	//== !=
 	| OPERATOR EQUAL LRB parameter_list RRB ARROW typename_T scope_optional
 	{
-		$$ = NewASTOperatorOverload(operator_eq_T, $4, $8, $7);
+		$$ = NewASTOperatorOverload(OPERATOR_EQ_T, $4, $8, $7);
 	}
 	| OPERATOR NOTEQUAL LRB parameter_list RRB ARROW typename_T scope_optional
 	{
-		$$ = NewASTOperatorOverload(operator_not_eq_T, $4, $8, $7);
+		$$ = NewASTOperatorOverload(OPERATOR_NOT_EQ_T, $4, $8, $7);
 	}
 	//| &
 	| OPERATOR BIT_OR LRB parameter_list RRB ARROW typename_T scope_optional
 	{
-		$$ = NewASTOperatorOverload(operator_bit_or_T, $4, $8, $7);
+		$$ = NewASTOperatorOverload(OPERATOR_BIT_OR_T, $4, $8, $7);
 	}
 	| OPERATOR BIT_AND LRB parameter_list RRB ARROW typename_T scope_optional
 	{
-		$$ = NewASTOperatorOverload(operator_bit_and_T, $4, $8, $7);
+		$$ = NewASTOperatorOverload(OPERATOR_BIT_AND_T, $4, $8, $7);
 	}
 	//|| &&
 	| OPERATOR LOGIC_OR LRB parameter_list RRB ARROW typename_T scope_optional
 	{
-		$$ = NewASTOperatorOverload(operator_logic_or_T, $4, $8, $7);
+		$$ = NewASTOperatorOverload(OPERATOR_LOGIC_OR_T, $4, $8, $7);
 	}
 	| OPERATOR LOGIC_AND LRB parameter_list RRB ARROW typename_T scope_optional
 	{
-		$$ = NewASTOperatorOverload(operator_logic_and_T, $4, $8, $7);
+		$$ = NewASTOperatorOverload(OPERATOR_LOGIC_AND_T, $4, $8, $7);
 	}
 	//<< >>
 	| OPERATOR LSHIFT LRB parameter_list RRB ARROW typename_T scope_optional
 	{
-		$$ = NewASTOperatorOverload(operator_lshift_T, $4, $8, $7);
+		$$ = NewASTOperatorOverload(OPERATOR_LSHIFT_T, $4, $8, $7);
 	}
 	| OPERATOR RSHIFT LRB parameter_list RRB ARROW typename_T scope_optional
 	{
-		$$ = NewASTOperatorOverload(operator_rshift_T, $4, $8, $7);
+		$$ = NewASTOperatorOverload(OPERATOR_RSHIFT_T, $4, $8, $7);
 	}
 	//^
 	| OPERATOR EXC_OR LRB parameter_list RRB ARROW typename_T scope_optional
 	{
-		$$ = NewASTOperatorOverload(operator_excor_T, $4, $8, $7);
+		$$ = NewASTOperatorOverload(OPERATOR_EXCOR_T, $4, $8, $7);
 	}
 	//!
 	| OPERATOR NOT LRB RRB ARROW typename_T scope_optional
 	{
-		$$ = NewASTOperatorOverload(operator_not_T, NewASTBlank(), $7, $6);
+		$$ = NewASTOperatorOverload(OPERATOR_NOT_T, NewASTBlank(), $7, $6);
 	}
 	//~
 	| OPERATOR CHILDA LRB RRB ARROW typename_T scope_optional
 	{
-		$$ = NewASTOperatorOverload(operator_childa_T, NewASTBlank(), $7, $6);
+		$$ = NewASTOperatorOverload(OPERATOR_CHILDA_T, NewASTBlank(), $7, $6);
 	}
 	| OPERATOR SUB LRB RRB ARROW typename_T scope_optional
 	{
-		$$ = NewASTOperatorOverload(operator_negative_T, NewASTBlank(), $7, $6);
+		$$ = NewASTOperatorOverload(OPERATOR_NEGATIVE_T, NewASTBlank(), $7, $6);
 	}
 	//[]
 	| OPERATOR SUBSCRIPT_GET LRB parameter_list RRB ARROW typename_T scope_optional
 	{
-		$$ = NewASTOperatorOverload(operator_sub_script_get_T, $4, $8, $7);
+		$$ = NewASTOperatorOverload(OPERATOR_SUB_SCRIPT_GET_T, $4, $8, $7);
 	}
 	//[]=
 	| OPERATOR SUBSCRIPT_SET LRB parameter_list RRB ARROW typename_T scope_optional
 	{
-		$$ = NewASTOperatorOverload(operator_sub_script_set_T, $4, $8, $7);
+		$$ = NewASTOperatorOverload(OPERATOR_SUB_SCRIPT_SET_T, $4, $8, $7);
 	}
 	;
 
@@ -545,7 +545,7 @@ field_define
 	}
 	| typename_T IDENT SEMI
 	{
-		$$ = NewASTFieldDecl(NewASTModifier(modifier_none_T), $1, $2, NewASTBlank());
+		$$ = NewASTFieldDecl(NewASTModifier(MODIFIER_NONE_T), $1, $2, NewASTBlank());
 	}
 	| modifier_type_T_list typename_T IDENT ASSIGN expression SEMI
 	{
@@ -553,7 +553,7 @@ field_define
 	}
 	| typename_T IDENT ASSIGN expression SEMI
 	{
-		$$ = NewASTFieldDecl(NewASTModifier(modifier_none_T), $1, $2, $4);
+		$$ = NewASTFieldDecl(NewASTModifier(MODIFIER_NONE_T), $1, $2, $4);
 	}
 	;
 
@@ -602,7 +602,7 @@ prop_define
 	}
 	| PROPERTY typename_T IDENT LCB prop_set prop_get RCB
 	{
-		$$ = NewASTPropDecl(NewASTModifier(modifier_none_T), $2, $3, $5, $6);
+		$$ = NewASTPropDecl(NewASTModifier(MODIFIER_NONE_T), $2, $3, $5, $6);
 	}
 	;
 
@@ -620,34 +620,34 @@ modifier_type_T_list
 modifier_type_T
 	: STATIC
 	{
-		$$ = NewASTModifier(modifier_static_T);
+		$$ = NewASTModifier(MODIFIER_STATIC_T);
 	}
 	| NATIVE
 	{
-		$$ = NewASTModifier(modifier_native_T);
+		$$ = NewASTModifier(MODIFIER_NATIVE_T);
 	}
 	| ABSTRACT
 	{
-		$$ = NewASTModifier(modifier_abstract_T);
+		$$ = NewASTModifier(MODIFIER_ABSTRACT_T);
 	}
 	| FINAL
 	{
-		$$ = NewASTModifier(modifier_final_T);
+		$$ = NewASTModifier(MODIFIER_FINAL_T);
 	}
 	;
 
 access_level_T
 	: PUBLIC
 	{
-		$$ = access_public_T;
+		$$ = ACCESS_PUBLIC_T;
 	}
 	| PRIVATE
 	{
-		$$ = access_private_T;
+		$$ = ACCESS_PRIVATE_T;
 	}
 	| PROTECTED
 	{
-		$$ = access_protected_T;
+		$$ = ACCESS_PROTECTED_T;
 	}
 	;
 
@@ -737,212 +737,212 @@ expression
 expression_nobrace
 	: ADD expression %prec POSITIVE
 	{
-		$$ = NewASTUnary(ast_pos_T, $2);
+		$$ = NewASTUnary(AST_POS_T, $2);
 	}
 	| SUB expression %prec NEGATIVE
 	{
-		$$ = NewASTUnary(ast_neg_T, $2);
+		$$ = NewASTUnary(AST_NEG_T, $2);
 	}
 	| expression ADD expression
 	{
-		$$ = NewASTBinary(ast_add_T, $1, $3);
+		$$ = NewASTBinary(AST_ADD_T, $1, $3);
 	}
 	| expression SUB expression
 	{
-		$$ = NewASTBinary(ast_sub_T, $1, $3);
+		$$ = NewASTBinary(AST_SUB_T, $1, $3);
 	}
 	| expression MUL expression
 	{
-		$$ = NewASTBinary(ast_mul_T, $1, $3);
+		$$ = NewASTBinary(AST_MUL_T, $1, $3);
 	}
 	| expression DIV expression
 	{
-		$$ = NewASTBinary(ast_div_T, $1, $3);
+		$$ = NewASTBinary(AST_DIV_T, $1, $3);
 	}
 	| expression MOD expression
 	{
-		$$ = NewASTBinary(ast_mod_T, $1, $3);
+		$$ = NewASTBinary(AST_MOD_T, $1, $3);
 	}
 	| expression BIT_OR expression
 	{
-		$$ = NewASTBinary(ast_bit_or_T, $1, $3);
+		$$ = NewASTBinary(AST_BIT_OR_T, $1, $3);
 	}
 	| expression EQUAL expression
 	{
-		$$ = NewASTBinary(ast_equal_T, $1, $3);
+		$$ = NewASTBinary(AST_EQUAL_T, $1, $3);
 	}
 	| expression NOTEQUAL expression
 	{
-		$$ = NewASTBinary(ast_not_Tequal_T, $1, $3);
+		$$ = NewASTBinary(AST_NOT_TEQUAL_T, $1, $3);
 	}
 	| expression BIT_AND expression
 	{
-		$$ = NewASTBinary(ast_bit_and_T, $1, $3);
+		$$ = NewASTBinary(AST_BIT_AND_T, $1, $3);
 	}
 	| expression EXC_OR expression
 	{
-		$$ = NewASTBinary(ast_exc_or_T, $1, $3);
+		$$ = NewASTBinary(AST_EXC_OR_T, $1, $3);
 	}
 	| expression LOGIC_OR expression
 	{
-		$$ = NewASTBinary(ast_logic_or_T, $1, $3);
+		$$ = NewASTBinary(AST_LOGIC_OR_T, $1, $3);
 	}
 	| expression LOGIC_AND expression
 	{
-		$$ = NewASTBinary(ast_logic_and_T, $1, $3);
+		$$ = NewASTBinary(AST_LOGIC_AND_T, $1, $3);
 	}
 	| lhs ASSIGN expression
 	{
-		$$ = NewASTBinary(ast_as_Tsign_T, $1, $3);
+		$$ = NewASTBinary(AST_AS_TSIGN_T, $1, $3);
 	}
 	| lhs ADD_ASSIGN expression
 	{
-		$$ = NewASTBinary(ast_add_assign_T, $1, $3);
+		$$ = NewASTBinary(AST_ADD_ASSIGN_T, $1, $3);
 	}
 	| lhs SUB_ASSIGN expression
 	{
-		$$ = NewASTBinary(ast_sub_assign_T, $1, $3);
+		$$ = NewASTBinary(AST_SUB_ASSIGN_T, $1, $3);
 	}
 	| lhs MUL_ASSIGN expression
 	{
-		$$ = NewASTBinary(ast_mul_assign_T, $1, $3);
+		$$ = NewASTBinary(AST_MUL_ASSIGN_T, $1, $3);
 	}
 	| lhs DIV_ASSIGN expression
 	{
-		$$ = NewASTBinary(ast_div_assign_T, $1, $3);
+		$$ = NewASTBinary(AST_DIV_ASSIGN_T, $1, $3);
 	}
 	| lhs MOD_ASSIGN expression
 	{
-		$$ = NewASTBinary(ast_mod_assign_T, $1, $3);
+		$$ = NewASTBinary(AST_MOD_ASSIGN_T, $1, $3);
 	}
 	| lhs AND_ASSIGN expression
 	{
-		$$ = NewASTBinary(ast_and_assign_T, $1, $3);
+		$$ = NewASTBinary(AST_AND_ASSIGN_T, $1, $3);
 	}
 	| lhs OR_ASSIGN expression
 	{
-		$$ = NewASTBinary(ast_or_assign_T, $1, $3);
+		$$ = NewASTBinary(AST_OR_ASSIGN_T, $1, $3);
 	}
 	| lhs EXC_OR_ASSIGN expression
 	{
-		$$ = NewASTBinary(ast_exc_or_assign_T, $1, $3);
+		$$ = NewASTBinary(AST_EXC_OR_ASSIGN_T, $1, $3);
 	}
 	| lhs LSHIFT_ASSIGN expression
 	{
-		$$ = NewASTBinary(ast_lshift_assign_T, $1, $3);
+		$$ = NewASTBinary(AST_LSHIFT_ASSIGN_T, $1, $3);
 	}
 	| lhs RSHIFT_ASSIGN expression
 	{
-		$$ = NewASTBinary(ast_rshift_assign_T, $1, $3);
+		$$ = NewASTBinary(AST_RSHIFT_ASSIGN_T, $1, $3);
 	}
 	| expression GT expression
 	{
-		$$ = NewASTBinary(ast_gt_T, $1, $3);
+		$$ = NewASTBinary(AST_GT_T, $1, $3);
 	}
 	| expression GE expression
 	{
-		$$ = NewASTBinary(ast_ge_T, $1, $3);
+		$$ = NewASTBinary(AST_GE_T, $1, $3);
 	}
 	| expression LT expression
 	{
-		$$ = NewASTBinary(ast_lt_T, $1, $3);
+		$$ = NewASTBinary(AST_LT_T, $1, $3);
 	}
 	| expression LE expression
 	{
-		$$ = NewASTBinary(ast_le_T, $1, $3);
+		$$ = NewASTBinary(AST_LE_T, $1, $3);
 	}
 	| expression LSHIFT expression
 	{
-		$$ = NewASTBinary(ast_lshift_T, $1, $3);
+		$$ = NewASTBinary(AST_LSHIFT_T, $1, $3);
 	}
 	| expression RSHIFT expression
 	{
-		$$ = NewASTBinary(ast_rshift_T, $1, $3);
+		$$ = NewASTBinary(AST_RSHIFT_T, $1, $3);
 	}
 
 	| expression DOT ADD LRB expression RRB
 	{
-		$$ = NewASTExplicitBiOperator($1, operator_add_T, $5);
+		$$ = NewASTExplicitBiOperator($1, OPERATOR_ADD_T, $5);
 	}
 	| expression DOT SUB LRB expression RRB
 	{
-		$$ = NewASTExplicitBiOperator($1, operator_sub_T, $5);
+		$$ = NewASTExplicitBiOperator($1, OPERATOR_SUB_T, $5);
 	}
 	| expression DOT MUL LRB expression RRB
 	{
-		$$ = NewASTExplicitBiOperator($1, operator_mul_T, $5);
+		$$ = NewASTExplicitBiOperator($1, OPERATOR_MUL_T, $5);
 	}
 	| expression DOT DIV LRB expression RRB
 	{
-		$$ = NewASTExplicitBiOperator($1, operator_div_T, $5);
+		$$ = NewASTExplicitBiOperator($1, OPERATOR_DIV_T, $5);
 	}
 	| expression DOT MOD LRB expression RRB
 	{
-		$$ = NewASTExplicitBiOperator($1, operator_mod_T, $5);
+		$$ = NewASTExplicitBiOperator($1, OPERATOR_MOD_T, $5);
 	}
 	| expression DOT GT LRB expression RRB
 	{
-		$$ = NewASTExplicitBiOperator($1, operator_gt_T, $5);
+		$$ = NewASTExplicitBiOperator($1, OPERATOR_GT_T, $5);
 	}
 	| expression DOT GE LRB expression RRB
 	{
-		$$ = NewASTExplicitBiOperator($1, operator_ge_T, $5);
+		$$ = NewASTExplicitBiOperator($1, OPERATOR_GE_T, $5);
 	}
 	| expression DOT LT LRB expression RRB
 	{
-		$$ = NewASTExplicitBiOperator($1, operator_lt_T, $5);
+		$$ = NewASTExplicitBiOperator($1, OPERATOR_LT_T, $5);
 	}
 	| expression DOT LE LRB expression RRB
 	{
-		$$ = NewASTExplicitBiOperator($1, operator_le_T, $5);
+		$$ = NewASTExplicitBiOperator($1, OPERATOR_LE_T, $5);
 	}
 	| expression DOT EQUAL LRB expression RRB
 	{
-		$$ = NewASTExplicitBiOperator($1, operator_eq_T, $5);
+		$$ = NewASTExplicitBiOperator($1, OPERATOR_EQ_T, $5);
 	}
 	| expression DOT NOTEQUAL LRB expression RRB
 	{
-		$$ = NewASTExplicitBiOperator($1, operator_not_eq_T, $5);
+		$$ = NewASTExplicitBiOperator($1, OPERATOR_NOT_EQ_T, $5);
 	}
 	| expression DOT BIT_OR LRB expression RRB
 	{
-		$$ = NewASTExplicitBiOperator($1, operator_bit_or_T, $5);
+		$$ = NewASTExplicitBiOperator($1, OPERATOR_BIT_OR_T, $5);
 	}
 	| expression DOT BIT_AND LRB expression RRB
 	{
-		$$ = NewASTExplicitBiOperator($1, operator_bit_and_T, $5);
+		$$ = NewASTExplicitBiOperator($1, OPERATOR_BIT_AND_T, $5);
 	}
 	| expression DOT LOGIC_OR LRB expression RRB
 	{
-		$$ = NewASTExplicitBiOperator($1, operator_logic_or_T, $5);
+		$$ = NewASTExplicitBiOperator($1, OPERATOR_LOGIC_OR_T, $5);
 	}
 	| expression DOT LOGIC_AND LRB expression RRB
 	{
-		$$ = NewASTExplicitBiOperator($1, operator_logic_and_T, $5);
+		$$ = NewASTExplicitBiOperator($1, OPERATOR_LOGIC_AND_T, $5);
 	}
 	| expression DOT LSHIFT LRB expression RRB
 	{
-		$$ = NewASTExplicitBiOperator($1, operator_lshift_T, $5);
+		$$ = NewASTExplicitBiOperator($1, OPERATOR_LSHIFT_T, $5);
 	}
 	| expression DOT RSHIFT LRB expression RRB
 	{
-		$$ = NewASTExplicitBiOperator($1, operator_rshift_T, $5);
+		$$ = NewASTExplicitBiOperator($1, OPERATOR_RSHIFT_T, $5);
 	}
 	| expression DOT EXC_OR LRB expression RRB
 	{
-		$$ = NewASTExplicitBiOperator($1, operator_excor_T, $5);
+		$$ = NewASTExplicitBiOperator($1, OPERATOR_EXCOR_T, $5);
 	}
 	| expression DOT NOT LRB RRB
 	{
-		$$ = NewASTExplicitUOperator($1, operator_not_T);
+		$$ = NewASTExplicitUOperator($1, OPERATOR_NOT_T);
 	}
 	| expression DOT CHILDA LRB RRB
 	{
-		$$ = NewASTExplicitUOperator($1, operator_childa_T);
+		$$ = NewASTExplicitUOperator($1, OPERATOR_CHILDA_T);
 	}
 	| expression DOT SUB LRB RRB
 	{
-		$$ = NewASTExplicitUOperator($1, operator_negative_T);
+		$$ = NewASTExplicitUOperator($1, OPERATOR_NEGATIVE_T);
 	}
 	| expression INSTANCEOF typename_T
 	{
@@ -954,11 +954,11 @@ expression_nobrace
 	}
 	| CHILDA expression
 	{
-		$$ = NewASTUnary(ast_childa_T, $2);
+		$$ = NewASTUnary(AST_CHILDA_T, $2);
 	}
 	| NOT expression
 	{
-		$$ = NewASTUnary(ast_not_T, $2);
+		$$ = NewASTUnary(AST_NOT_T, $2);
 	}
 	| NEW fqcn_part typename_group LRB argument_list RRB
 	{

@@ -6,7 +6,7 @@
 #include "../../../vm/enviroment.h"
 #include "../../il_factor_impl.h"
 #include "../../../env/namespace.h"
-#include "../../../env/type_impl.h"
+#include "../../../env/TYPE_IMPL.h"
 #include "../../../env/type_interface.h"
 
 static opcode operator_to_iopcode(operator_type type);
@@ -39,7 +39,7 @@ void il_factor_compare_op_generate(il_factor_compare_op* self, enviroment* env, 
 		} else if(il_factor_binary_op_char_char(self->parent, env, cctx)) {
 			opcode_buf_add(env->buf, (VectorItem)operator_to_copcode(self->type));
 		} else {
-			bc_error_throw(bcerror_undefined_compare_operator_T,
+			bc_error_throw(BCERROR_UNDEFINED_COMPARE_OPERATOR_T,
 				operator_tostring(self->type)
 			);
 //			assert(false);
@@ -47,12 +47,12 @@ void il_factor_compare_op_generate(il_factor_compare_op* self, enviroment* env, 
 	} else {
 		il_factor_generate(self->parent->right, env, cctx);
 		il_factor_generate(self->parent->left, env, cctx);
-		opcode_buf_add(env->buf, op_invokeoperator);
+		opcode_buf_add(env->buf, OP_INVOKEOPERATOR);
 		opcode_buf_add(env->buf, self->operator_index);
 	}
 }
 
-void il_factor_compare_op_load(il_factor_compare_op* self, enviroment* env, call_context* cctx) {
+void il_factor_compare_OP_LOAD(il_factor_compare_op* self, enviroment* env, call_context* cctx) {
 	if(!il_factor_binary_op_int_int(self->parent, env, cctx) &&
 	   !il_factor_binary_op_double_double(self->parent, env, cctx) &&
 	   !il_factor_binary_op_char_char(self->parent, env, cctx)) {
@@ -70,35 +70,35 @@ char* il_factor_compare_op_tostr(il_factor_compare_op* self, enviroment* env) {
 //static
 static opcode operator_to_iopcode(operator_type type) {
 	switch(type) {
-		case operator_gt_T: return op_igt;
-		case operator_ge_T: return op_ige;
-		case operator_lt_T: return op_ilt;
-		case operator_le_T: return op_ile;
-		case operator_eq_T: return op_ieq;
-		case operator_not_eq_T: return op_inoteq;
+		case OPERATOR_GT_T: return OP_IGT;
+		case OPERATOR_GE_T: return OP_IGE;
+		case OPERATOR_LT_T: return OP_ILT;
+		case OPERATOR_LE_T: return OP_ILE;
+		case OPERATOR_EQ_T: return OP_IEQ;
+		case OPERATOR_NOT_EQ_T: return OP_INOTEQ;
 	}
 	assert(false);
 }
 
 static opcode operator_to_dopcode(operator_type type) {
 	switch(type) {
-		case operator_gt_T: return op_dgt;
-		case operator_ge_T: return op_dge;
-		case operator_lt_T: return op_dlt;
-		case operator_le_T: return op_dle;
-		case operator_eq_T: return op_deq;
-		case operator_not_eq_T: return op_dnoteq;
+		case OPERATOR_GT_T: return OP_DGT;
+		case OPERATOR_GE_T: return OP_DGE;
+		case OPERATOR_LT_T: return OP_DLT;
+		case OPERATOR_LE_T: return OP_DLE;
+		case OPERATOR_EQ_T: return OP_DEQ;
+		case OPERATOR_NOT_EQ_T: return OP_DNOTEQ;
 	}
 	assert(false);
 }
 static opcode operator_to_copcode(operator_type type) {
 	switch(type) {
-		case operator_gt_T: return op_cgt;
-		case operator_ge_T: return op_cge;
-		case operator_lt_T: return op_clt;
-		case operator_le_T: return op_cle;
-		case operator_eq_T: return op_ceq;
-		case operator_not_eq_T: return op_cnoteq;
+		case OPERATOR_GT_T: return OP_CGT;
+		case OPERATOR_GE_T: return OP_CGE;
+		case OPERATOR_LT_T: return OP_CLT;
+		case OPERATOR_LE_T: return OP_CLE;
+		case OPERATOR_EQ_T: return OP_CEQ;
+		case OPERATOR_NOT_EQ_T: return OP_CNOTEQ;
 	}
 	assert(false);
 }

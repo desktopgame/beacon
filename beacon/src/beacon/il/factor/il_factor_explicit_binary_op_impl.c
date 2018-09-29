@@ -2,14 +2,14 @@
 #include "../../util/mem.h"
 #include "../../util/text.h"
 #include "../../env/generic_type.h"
-#include "../../env/type_impl.h"
+#include "../../env/TYPE_IMPL.h"
 #include "../../env/operator_overload.h"
 #include "../../vm/enviroment.h"
 #include "../il_factor_impl.h"
 #include <assert.h>
 
 il_factor* il_factor_wrap_explicit_binary_op(il_factor_explicit_binary_op* self) {
-	il_factor* ret = il_factor_new(ilfactor_explicit_binary_op_T);
+	il_factor* ret = il_factor_new(ILFACTOR_EXPLICIT_BINARY_OP_T);
 	ret->u.exp_binary_op = self;
 	return ret;
 }
@@ -26,11 +26,11 @@ il_factor_explicit_binary_op* il_factor_explicit_binary_op_new(operator_type typ
 void il_factor_explicit_binary_op_generate(il_factor_explicit_binary_op* self, enviroment* env, call_context* cctx) {
 	il_factor_generate(self->arg, env, cctx);
 	il_factor_generate(self->receiver, env, cctx);
-	opcode_buf_add(env->buf, op_invokeoperator);
+	opcode_buf_add(env->buf, OP_INVOKEOPERATOR);
 	opcode_buf_add(env->buf, self->index);
 }
 
-void il_factor_explicit_binary_op_load(il_factor_explicit_binary_op* self, enviroment* env, call_context* cctx) {
+void il_factor_explicit_binary_OP_LOAD(il_factor_explicit_binary_op* self, enviroment* env, call_context* cctx) {
 	il_factor_load(self->receiver, env, cctx);
 	il_factor_load(self->arg, env, cctx);
 	self->index = il_factor_binary_op_index2(self->receiver, self->arg, self->type, env, cctx);

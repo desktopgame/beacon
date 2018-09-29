@@ -19,7 +19,7 @@ struct generic_type* il_factor_negative_op_eval(il_factor_negative_op * self, st
 
 void il_factor_negative_op_generate(il_factor_negative_op* self, struct enviroment* env, call_context* cctx);
 
-void il_factor_negative_op_load(il_factor_negative_op* self, struct enviroment* env, call_context* cctx);
+void il_factor_negative_OP_LOAD(il_factor_negative_op* self, struct enviroment* env, call_context* cctx);
 
 void il_factor_negative_op_delete(il_factor_negative_op* self);
 

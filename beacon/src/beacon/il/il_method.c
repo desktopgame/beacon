@@ -17,8 +17,8 @@ il_method * il_method_new(string_view namev) {
 	ret->namev = namev;
 	ret->parameter_list = NewVector();
 	ret->return_fqcn = generic_cache_new();
-	ret->access = access_public_T;
-	ret->modifier = modifier_none_T;
+	ret->access = ACCESS_PUBLIC_T;
+	ret->modifier = MODIFIER_NONE_T;
 	ret->statement_list = NewVector();
 	ret->type_parameter_list = NewVector();
 	ret->no_stmt = false;

@@ -10,10 +10,10 @@ struct field;
 struct property;
 
 typedef enum variable_local_type {
-	variable_local_scope_T,
-	variable_local_field_T,
-	variable_local_property_T,
-	variable_local_undefined_T,
+	VARIABLE_LOCAL_SCOPE_T,
+	VARIABLE_LOCAL_FIELD_T,
+	VARIABLE_LOCAL_PROPERTY_T,
+	VARIABLE_LOCAL_UNDEFINED_T,
 } variable_local_type;
 
 typedef struct field_with_index {

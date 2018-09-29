@@ -24,67 +24,67 @@ void il_factor_generate(il_factor * self, enviroment* env, call_context* cctx) {
 	bc_error_file(env->context_ref->filename);
 	bc_error_line(self->lineno);
 	switch (self->type) {
-		case ilfactor_int_T:
+		case ILFACTOR_INT_T:
 			il_factor_int_generate(self->u.int_, env, cctx);
 			break;
-		case ilfactor_double_T:
+		case ILFACTOR_DOUBLE_T:
 			il_factor_double_generate(self->u.double_, env, cctx);
 			break;
-		case ilfactor_char_T:
+		case ILFACTOR_CHAR_T:
 			il_factor_char_generate(self->u.char_, env, cctx);
 			break;
-		case ilfactor_string_T:
+		case ILFACTOR_STRING_T:
 			il_factor_string_generate(self->u.string_, env, cctx);
 			break;
-		case ilfactor_variable_T:
+		case ILFACTOR_VARIABLE_T:
 			il_factor_variable_generate(self->u.variable_, env, cctx);
 			break;
-		case ilfactor_unary_op_T:
+		case ILFACTOR_UNARY_OP_T:
 			il_factor_unary_op_generate(self->u.unary_, env, cctx);
 			break;
-		case ilfactor_binary_op_T:
+		case ILFACTOR_BINARY_OP_T:
 			il_factor_binary_op_generate(self->u.binary_, env, cctx);
 			break;
-		case ilfactor_assign_T:
+		case ILFACTOR_ASSIGN_T:
 			il_factor_assign_op_generate(self->u.assign_, env, cctx);
 			break;
-		case ilfactor_this_T:
+		case ILFACTOR_THIS_T:
 			il_factor_this_generate(self->u.this_, env, cctx);
 			break;
-		case ilfactor_super_T:
+		case ILFACTOR_SUPER_T:
 			il_factor_super_generate(self->u.super_, env, cctx);
 			break;
-		case ilfactor_new_instance_T:
+		case ILFACTOR_NEW_INSTANCE_T:
 			il_factor_new_instance_generate(self->u.new_instance_, env, cctx);
 			break;
-		case ilfactor_bool_T:
+		case ILFACTOR_BOOL_T:
 			il_factor_bool_generate(self->u.bool_, env, cctx);
 			break;
-		case ilfactor_null_T:
+		case ILFACTOR_NULL_T:
 			il_factor_null_generate(NULL, env, cctx);
 			break;
-		case ilfactor_as_T:
+		case ILFACTOR_AS_T:
 			il_factor_as_generate(self->u.as_, env, cctx);
 			break;
-		case ilfactor_call_op_T:
+		case ILFACTOR_CALL_OP_T:
 			il_factor_call_op_generate(self->u.call_, env, cctx);
 			break;
-		case ilfactor_member_op_T:
+		case ILFACTOR_MEMBER_OP_T:
 			il_factor_member_op_generate(self->u.member_, env, cctx);
 			break;
-		case ilfactor_instanceof_T:
+		case ILFACTOR_INSTANCEOF_T:
 			il_factor_instanceof_generate(self->u.instanceof_, env, cctx);
 			break;
-		case ilfactor_explicit_unary_op_T:
+		case ILFACTOR_EXPLICIT_UNARY_OP_T:
 			il_factor_explicit_unary_op_generate(self->u.exp_unary_op, env, cctx);
 			break;
-		case ilfactor_explicit_binary_op_T:
+		case ILFACTOR_EXPLICIT_BINARY_OP_T:
 			il_factor_explicit_binary_op_generate(self->u.exp_binary_op, env, cctx);
 			break;
-		case ilfactor_property_T:
+		case ILFACTOR_PROPERTY_T:
 			il_factor_property_generate(self->u.prop, env, cctx);
 			break;
-		case ilfactor_subscript_T:
+		case ILFACTOR_SUBSCRIPT_T:
 			il_factor_subscript_generate(self->u.subscript, env, cctx);
 			break;
 		default:
@@ -101,67 +101,67 @@ void il_factor_load(il_factor * self, enviroment * env, call_context* cctx) {
 	bc_error_file(env->context_ref->filename);
 	bc_error_line(self->lineno);
 	switch (self->type) {
-		case ilfactor_int_T:
+		case ILFACTOR_INT_T:
 			il_factor_int_load(self->u.int_, env, cctx);
 			break;
-		case ilfactor_double_T:
+		case ILFACTOR_DOUBLE_T:
 			il_factor_double_load(self->u.double_, env, cctx);
 			break;
-		case ilfactor_char_T:
+		case ILFACTOR_CHAR_T:
 			il_factor_char_load(self->u.char_, env, cctx);
 			break;
-		case ilfactor_string_T:
+		case ILFACTOR_STRING_T:
 			il_factor_string_load(self->u.string_, env, cctx);
 			break;
-		case ilfactor_variable_T:
+		case ILFACTOR_VARIABLE_T:
 			il_factor_variable_load(self->u.variable_, env, cctx);
 			break;
-		case ilfactor_unary_op_T:
-			il_factor_unary_op_load(self->u.unary_, env, cctx);
+		case ILFACTOR_UNARY_OP_T:
+			il_factor_unary_OP_LOAD(self->u.unary_, env, cctx);
 			break;
-		case ilfactor_binary_op_T:
-			il_factor_binary_op_load(self->u.binary_, env, cctx);
+		case ILFACTOR_BINARY_OP_T:
+			il_factor_binary_OP_LOAD(self->u.binary_, env, cctx);
 			break;
-		case ilfactor_assign_T:
-			il_factor_assign_op_load(self->u.assign_, env, cctx);
+		case ILFACTOR_ASSIGN_T:
+			il_factor_assign_OP_LOAD(self->u.assign_, env, cctx);
 			break;
-		case ilfactor_this_T:
+		case ILFACTOR_THIS_T:
 			il_factor_this_load(self->u.this_, env, cctx);
 			break;
-		case ilfactor_super_T:
+		case ILFACTOR_SUPER_T:
 			il_factor_super_load(self->u.super_, env, cctx);
 			break;
-		case ilfactor_new_instance_T:
+		case ILFACTOR_NEW_INSTANCE_T:
 			il_factor_new_instance_load(self->u.new_instance_, env, cctx);
 			break;
-		case ilfactor_bool_T:
+		case ILFACTOR_BOOL_T:
 			//il_factor_bool_load(self->u.bool_, depth);
 			break;
-		case ilfactor_null_T:
+		case ILFACTOR_NULL_T:
 			il_factor_null_load(NULL, env, cctx);
 			break;
-		case ilfactor_as_T:
+		case ILFACTOR_AS_T:
 			il_factor_as_load(self->u.as_, env, cctx);
 			break;
-		case ilfactor_call_op_T:
-			il_factor_call_op_load(self->u.call_, env, cctx);
+		case ILFACTOR_CALL_OP_T:
+			il_factor_call_OP_LOAD(self->u.call_, env, cctx);
 			break;
-		case ilfactor_member_op_T:
-			il_factor_member_op_load(self->u.member_, env, cctx);
+		case ILFACTOR_MEMBER_OP_T:
+			il_factor_member_OP_LOAD(self->u.member_, env, cctx);
 			break;
-		case ilfactor_instanceof_T:
+		case ILFACTOR_INSTANCEOF_T:
 			il_factor_instanceof_load(self->u.instanceof_, env, cctx);
 			break;
-		case ilfactor_explicit_unary_op_T:
-			il_factor_explicit_unary_op_load(self->u.exp_unary_op, env, cctx);
+		case ILFACTOR_EXPLICIT_UNARY_OP_T:
+			il_factor_explicit_unary_OP_LOAD(self->u.exp_unary_op, env, cctx);
 			break;
-		case ilfactor_explicit_binary_op_T:
-			il_factor_explicit_binary_op_load(self->u.exp_binary_op, env, cctx);
+		case ILFACTOR_EXPLICIT_BINARY_OP_T:
+			il_factor_explicit_binary_OP_LOAD(self->u.exp_binary_op, env, cctx);
 			break;
-		case ilfactor_property_T:
+		case ILFACTOR_PROPERTY_T:
 			il_factor_property_load(self->u.prop, env, cctx);
 			break;
-		case ilfactor_subscript_T:
+		case ILFACTOR_SUBSCRIPT_T:
 			il_factor_subscript_load(self->u.subscript, env, cctx);
 			break;
 		default:
@@ -177,67 +177,67 @@ generic_type* il_factor_eval(il_factor * self, enviroment * env, call_context* c
 	bc_error_line(self->lineno);
 	generic_type* ret = NULL;
 	switch (self->type) {
-		case ilfactor_int_T:
+		case ILFACTOR_INT_T:
 			ret = il_factor_int_eval(self->u.int_, env, cctx);
 			break;
-		case ilfactor_double_T:
+		case ILFACTOR_DOUBLE_T:
 			ret = il_factor_double_eval(self->u.double_, env, cctx);
 			break;
-		case ilfactor_char_T:
+		case ILFACTOR_CHAR_T:
 			ret = il_factor_char_eval(self->u.char_, env, cctx);
 			break;
-		case ilfactor_string_T:
+		case ILFACTOR_STRING_T:
 			ret = il_factor_string_eval(self->u.string_, env, cctx);
 			break;
-		case ilfactor_variable_T:
+		case ILFACTOR_VARIABLE_T:
 			ret = il_factor_variable_eval(self->u.variable_, env, cctx);
 			break;
-		case ilfactor_unary_op_T:
+		case ILFACTOR_UNARY_OP_T:
 			ret = il_factor_unary_op_eval(self->u.unary_, env, cctx);
 			break;
-		case ilfactor_binary_op_T:
+		case ILFACTOR_BINARY_OP_T:
 			ret = il_factor_binary_op_eval(self->u.binary_, env, cctx);
 			break;
-		case ilfactor_assign_T:
+		case ILFACTOR_ASSIGN_T:
 			ret = il_factor_assign_op_eval(self->u.assign_, env, cctx);
 			break;
-		case ilfactor_this_T:
+		case ILFACTOR_THIS_T:
 			ret = il_factor_this_eval(self->u.this_, env, cctx);
 			break;
-		case ilfactor_super_T:
+		case ILFACTOR_SUPER_T:
 			ret = il_factor_super_eval(self->u.super_, env, cctx);
 			break;
-		case ilfactor_new_instance_T:
+		case ILFACTOR_NEW_INSTANCE_T:
 			ret = il_factor_new_instance_eval(self->u.new_instance_, env, cctx);
 			break;
-		case ilfactor_bool_T:
+		case ILFACTOR_BOOL_T:
 			ret = il_factor_bool_eval(self->u.bool_,env, cctx);
 			break;
-		case ilfactor_null_T:
+		case ILFACTOR_NULL_T:
 			ret = il_factor_null_eval(NULL, env, cctx);
 			break;
-		case ilfactor_as_T:
+		case ILFACTOR_AS_T:
 			ret = il_factor_as_eval(self->u.as_, env, cctx);
 			break;
-		case ilfactor_call_op_T:
+		case ILFACTOR_CALL_OP_T:
 			ret = il_factor_call_op_eval(self->u.call_, env, cctx);
 			break;
-		case ilfactor_member_op_T:
+		case ILFACTOR_MEMBER_OP_T:
 			ret = il_factor_member_op_eval(self->u.member_, env, cctx);
 			break;
-		case ilfactor_instanceof_T:
+		case ILFACTOR_INSTANCEOF_T:
 			ret = il_factor_instanceof_eval(self->u.instanceof_, env, cctx);
 			break;
-		case ilfactor_explicit_unary_op_T:
+		case ILFACTOR_EXPLICIT_UNARY_OP_T:
 			ret = il_factor_explicit_unary_op_eval(self->u.exp_unary_op, env, cctx);
 			break;
-		case ilfactor_explicit_binary_op_T:
+		case ILFACTOR_EXPLICIT_BINARY_OP_T:
 			ret = il_factor_explicit_binary_op_eval(self->u.exp_binary_op, env, cctx);
 			break;
-		case ilfactor_property_T:
+		case ILFACTOR_PROPERTY_T:
 			ret = il_factor_property_eval(self->u.prop, env, cctx);
 			break;
-		case ilfactor_subscript_T:
+		case ILFACTOR_SUBSCRIPT_T:
 			ret = il_factor_subscript_eval(self->u.subscript, env, cctx);
 			break;
 		default:
@@ -253,48 +253,48 @@ char* il_factor_tostr(il_factor* self, enviroment* env) {
 		return NULL;
 	}
 	switch (self->type) {
-		case ilfactor_int_T:
+		case ILFACTOR_INT_T:
 			return il_factor_int_tostr(self->u.int_, env);
-		case ilfactor_double_T:
+		case ILFACTOR_DOUBLE_T:
 			return il_factor_double_tostr(self->u.double_, env);
-		case ilfactor_char_T:
+		case ILFACTOR_CHAR_T:
 			return il_factor_char_tostr(self->u.char_, env);
-		case ilfactor_string_T:
+		case ILFACTOR_STRING_T:
 			return il_factor_string_tostr(self->u.string_, env);
-		case ilfactor_variable_T:
+		case ILFACTOR_VARIABLE_T:
 			return il_factor_variable_tostr(self->u.variable_, env);
-		case ilfactor_unary_op_T:
+		case ILFACTOR_UNARY_OP_T:
 			return il_factor_unary_op_tostr(self->u.unary_, env);
-		case ilfactor_binary_op_T:
+		case ILFACTOR_BINARY_OP_T:
 			return il_factor_binary_op_tostr(self->u.binary_, env);
-		case ilfactor_assign_T:
+		case ILFACTOR_ASSIGN_T:
 			return NULL;
-		case ilfactor_this_T:
+		case ILFACTOR_THIS_T:
 			return il_factor_this_tostr(self->u.this_, env);
-		case ilfactor_super_T:
+		case ILFACTOR_SUPER_T:
 			return il_factor_super_tostr(self->u.super_, env);
-		case ilfactor_new_instance_T:
+		case ILFACTOR_NEW_INSTANCE_T:
 			return il_factor_new_instance_tostr(self->u.new_instance_, env);
-		case ilfactor_bool_T:
+		case ILFACTOR_BOOL_T:
 			return il_factor_bool_tostr(self->u.bool_, env);
-		case ilfactor_null_T:
+		case ILFACTOR_NULL_T:
 			return il_factor_null_tostr(self->u.null_, env);
-		case ilfactor_as_T:
+		case ILFACTOR_AS_T:
 			return il_factor_as_tostr(self->u.as_, env);
-		case ilfactor_call_op_T:
+		case ILFACTOR_CALL_OP_T:
 			return il_factor_call_op_to_str(self->u.call_, env);
-		case ilfactor_member_op_T:
+		case ILFACTOR_MEMBER_OP_T:
 			return il_factor_member_op_tostr(self->u.member_, env);
-		case ilfactor_instanceof_T:
+		case ILFACTOR_INSTANCEOF_T:
 			return il_factor_instanceof_tostr(self->u.instanceof_, env);
 		//あとで
-		case ilfactor_explicit_unary_op_T:
+		case ILFACTOR_EXPLICIT_UNARY_OP_T:
 			return NULL;
-		case ilfactor_explicit_binary_op_T:
+		case ILFACTOR_EXPLICIT_BINARY_OP_T:
 			return NULL;
-		case ilfactor_property_T:
+		case ILFACTOR_PROPERTY_T:
 			return il_factor_property_tostr(self->u.prop, env);
-		case ilfactor_subscript_T:
+		case ILFACTOR_SUBSCRIPT_T:
 			return il_factor_subscript_tostr(self->u.subscript, env);
 		default:
 			break;
@@ -342,66 +342,66 @@ void il_factor_delete(il_factor * self) {
 		return;
 	}
 	switch (self->type) {
-		case ilfactor_int_T:
+		case ILFACTOR_INT_T:
 			il_factor_int_delete(self->u.int_);
 			break;
-		case ilfactor_double_T:
+		case ILFACTOR_DOUBLE_T:
 			il_factor_double_delete(self->u.double_);
 			break;
-		case ilfactor_char_T:
+		case ILFACTOR_CHAR_T:
 			il_factor_char_delete(self->u.char_);
 			break;
-		case ilfactor_string_T:
+		case ILFACTOR_STRING_T:
 			il_factor_string_delete(self->u.string_);
 			break;
-		case ilfactor_variable_T:
+		case ILFACTOR_VARIABLE_T:
 			il_factor_variable_delete(self->u.variable_);
 			break;
-		case ilfactor_unary_op_T:
+		case ILFACTOR_UNARY_OP_T:
 			il_factor_unary_op_delete(self->u.unary_);
 			break;
-		case ilfactor_binary_op_T:
+		case ILFACTOR_BINARY_OP_T:
 			il_factor_binary_op_delete(self->u.binary_);
 			break;
-		case ilfactor_assign_T:
+		case ILFACTOR_ASSIGN_T:
 			il_factor_assign_op_delete(self->u.assign_);
 			break;
-		case ilfactor_this_T:
+		case ILFACTOR_THIS_T:
 			il_factor_this_delete(self->u.this_);
 			break;
-		case ilfactor_super_T:
+		case ILFACTOR_SUPER_T:
 			il_factor_super_delete(self->u.super_);
 			break;
-		case ilfactor_new_instance_T:
+		case ILFACTOR_NEW_INSTANCE_T:
 			il_factor_new_instance_delete(self->u.new_instance_);
 			break;
-		case ilfactor_bool_T:
+		case ILFACTOR_BOOL_T:
 			il_factor_bool_delete(self->u.bool_);
 			break;
-		case ilfactor_null_T:
+		case ILFACTOR_NULL_T:
 			break;
-		case ilfactor_as_T:
+		case ILFACTOR_AS_T:
 			il_factor_as_delete(self->u.as_);
 			break;
-		case ilfactor_call_op_T:
+		case ILFACTOR_CALL_OP_T:
 			il_factor_call_op_delete(self->u.call_);
 			break;
-		case ilfactor_member_op_T:
+		case ILFACTOR_MEMBER_OP_T:
 			il_factor_member_op_delete(self->u.member_);
 			break;
-		case ilfactor_instanceof_T:
+		case ILFACTOR_INSTANCEOF_T:
 			il_factor_instanceof_delete(self->u.instanceof_);
 			break;
-		case ilfactor_explicit_unary_op_T:
+		case ILFACTOR_EXPLICIT_UNARY_OP_T:
 			il_factor_explicit_unary_op_delete(self->u.exp_unary_op);
 			break;
-		case ilfactor_explicit_binary_op_T:
+		case ILFACTOR_EXPLICIT_BINARY_OP_T:
 			il_factor_explicit_binary_op_delete(self->u.exp_binary_op);
 			break;
-		case ilfactor_property_T:
+		case ILFACTOR_PROPERTY_T:
 			il_factor_property_delete(self->u.prop);
 			break;
-		case ilfactor_subscript_T:
+		case ILFACTOR_SUBSCRIPT_T:
 			il_factor_subscript_delete(self->u.subscript);
 			break;
 		default:

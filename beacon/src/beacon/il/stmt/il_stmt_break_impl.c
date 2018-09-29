@@ -4,17 +4,17 @@
 #include <stdio.h>
 
 il_stmt * il_stmt_wrap_break() {
-	il_stmt* ret = il_stmt_new(ilstmt_break_T);
+	il_stmt* ret = il_stmt_new(ILSTMT_BREAK_T);
 	return ret;
 }
 
 void il_stmt_break_generate(void * empty, enviroment * env, call_context* cctx) {
 	if(cctx->control.while_start->length == 0) {
-		bc_error_throw(bcerror_break_at_not_loop_T);
+		bc_error_throw(BCERROR_BREAK_AT_NOT_LOOP_T);
 		return;
 	}
 	label* lab = (label*)TopVector(cctx->control.while_end);
-	opcode_buf_add(env->buf, op_goto);
+	opcode_buf_add(env->buf, OP_GOTO);
 	opcode_buf_add(env->buf, lab);
 }
 

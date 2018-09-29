@@ -8,9 +8,9 @@
  * 型引数の属性を表す列挙型.
  */
 typedef enum il_type_parameter_kind {
-	il_type_parameter_kind_default_T,
-	il_type_parameter_kind_in_T,
-	il_type_parameter_kind_out_T,
+	il_TYPE_PARAMETER_KIND_DEFAULT_T,
+	il_TYPE_PARAMETER_KIND_IN_T,
+	il_TYPE_PARAMETER_KIND_OUT_T,
 } il_type_parameter_kind;
 
 /**

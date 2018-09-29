@@ -42,7 +42,7 @@ static void bc_double_nativeInit(method* parent, frame* fr, enviroment* env) {
 	object* d = AtVector(fr->ref_stack, 1);
 
 	self->u.double_ = d->u.double_;
-	self->tag = object_double_T;
+	self->tag = OBJECT_DOUBLE_T;
 }
 
 static void bc_double_nativeEquals(method* parent, frame* fr, enviroment* env) {

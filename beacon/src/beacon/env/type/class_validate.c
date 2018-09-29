@@ -1,5 +1,5 @@
 #include "class_validate.h"
-#include "../type_impl.h"
+#include "../TYPE_IMPL.h"
 #include "../generic_type.h"
 #include "../property.h"
 #include "../constructor.h"

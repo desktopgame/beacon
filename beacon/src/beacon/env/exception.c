@@ -1,7 +1,7 @@
 #include "exception.h"
 #include "object.h"
 #include "namespace.h"
-#include "type_impl.h"
+#include "TYPE_IMPL.h"
 #include <assert.h>
 #include "../util/text.h"
 #include "../vm/frame.h"

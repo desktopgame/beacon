@@ -21,7 +21,7 @@ static void il_factor_member_op_check_static_prop(il_factor_member_op* self, env
 static void il_factor_member_op_typearg_delete(VectorItem item);
 
 il_factor* il_factor_wrap_member_op(il_factor_member_op* self) {
-	il_factor* ret = il_factor_new(ilfactor_member_op_T);
+	il_factor* ret = il_factor_new(ILFACTOR_MEMBER_OP_T);
 	ret->u.member_ = self;
 	self->parent = ret;
 	return ret;
@@ -37,7 +37,7 @@ il_factor_member_op* il_factor_member_op_new(string_view namev) {
 	return ret;
 }
 
-void il_factor_member_op_load(il_factor_member_op* self, enviroment* env, call_context* cctx) {
+void il_factor_member_OP_LOAD(il_factor_member_op* self, enviroment* env, call_context* cctx) {
 	bool swap;
 	il_factor_load(self->fact, env, cctx);
 	il_factor_member_op_check(self, env, cctx, &swap);
@@ -63,7 +63,7 @@ generic_type* il_factor_member_op_eval(il_factor_member_op* self, enviroment* en
 	}
 //	XSTREQ(self->name, "charArray");
 	assert(self->fact != NULL);
-	if(self->f->gtype->tag == generic_type_tag_none_T) {
+	if(self->f->gtype->tag == GENERIC_TYPE_TAG_NONE_T) {
 		generic_type* a = self->f->gtype;
 		return a;
 	}
@@ -103,7 +103,7 @@ static void il_factor_member_op_check(il_factor_member_op* self, enviroment* env
 	}
 	//レシーバのインスタンスフィールドを検索
 	type* ctype = gtype->core_type;
-	assert(ctype->tag == type_class_T);
+	assert(ctype->tag == TYPE_CLASS_T);
 	int temp = -1;
 	self->f = class_find_field_tree(TYPE2CLASS(ctype), self->namev, &temp);
 	self->index = temp;
@@ -116,7 +116,7 @@ static void il_factor_member_op_check(il_factor_member_op* self, enviroment* env
 		#endif
 		//フィールドの可視性を確認
 		if(!class_accessible_field(call_context_class(cctx), self->f)) {
-			bc_error_throw(bcerror_can_t_access_field_T, Ref2Str(type_name(ctype)), Ref2Str(self->f->namev));
+			bc_error_throw(BCERROR_CAN_T_ACCESS_FIELD_T, Ref2Str(type_name(ctype)), Ref2Str(self->f->namev));
 		}
 	}
 }
@@ -134,7 +134,7 @@ static void il_factor_member_op_check_static(il_factor_member_op* self, envirome
 	//Name.call
 	//の call をフィールドとして解決する
 	type* ccT = receiver_type->core_type;
-	assert(ccT->tag == type_class_T);
+	assert(ccT->tag == TYPE_CLASS_T);
 	int temp = -1;
 	self->f = class_find_sfield_tree(TYPE2CLASS(ccT), self->namev, &temp);
 	self->index = temp;
@@ -156,15 +156,15 @@ static void il_factor_member_op_check_prop(il_factor_member_op* self, enviroment
 	factp->p = p;
 	factp->index = temp;
 	self->fact = NULL;
-	self->parent->type = ilfactor_property_T;
+	self->parent->type = ILFACTOR_PROPERTY_T;
 	self->parent->u.prop = factp;
 	//プロパティの可視性を確認
 	if(temp == -1) {
-		bc_error_throw(bcerror_undefined_property_T, Ref2Str(type_name(ctype)), Ref2Str(self->namev));
+		bc_error_throw(BCERROR_UNDEFINED_PROPERTY_T, Ref2Str(type_name(ctype)), Ref2Str(self->namev));
 		il_factor_delete(factp->fact);
 		factp->fact = NULL;
 	} else if(!class_accessible_property(call_context_class(cctx), p)) {
-		bc_error_throw(bcerror_can_t_access_property_T, Ref2Str(type_name(ctype)), Ref2Str(p->namev));
+		bc_error_throw(BCERROR_CAN_T_ACCESS_PROPERTY_T, Ref2Str(type_name(ctype)), Ref2Str(p->namev));
 		il_factor_delete(factp->fact);
 		factp->fact = NULL;
 	}
@@ -182,11 +182,11 @@ static void il_factor_member_op_check_static_prop(il_factor_member_op* self, env
 	factp->p = p;
 	factp->index = temp;
 	self->fact = NULL;
-	self->parent->type = ilfactor_property_T;
+	self->parent->type = ILFACTOR_PROPERTY_T;
 	self->parent->u.prop = factp;
 	//プロパティの可視性を確認
 	if(!class_accessible_property(call_context_class(cctx), p)) {
-		bc_error_throw(bcerror_can_t_access_property_T, Ref2Str(type_name(ctype)), Ref2Str(p->namev));
+		bc_error_throw(BCERROR_CAN_T_ACCESS_PROPERTY_T, Ref2Str(type_name(ctype)), Ref2Str(p->namev));
 		il_factor_delete(factp->fact);
 		factp->fact = NULL;
 	}

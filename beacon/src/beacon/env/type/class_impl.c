@@ -15,7 +15,7 @@
 #include "../property.h"
 #include "../method.h"
 #include "../constructor.h"
-#include "../type_impl.h"
+#include "../TYPE_IMPL.h"
 #include "../../env/vtable.h"
 #include "../../env/heap.h"
 #include "../../env/operator_overload.h"
@@ -49,7 +49,7 @@ static void class_delete_property(VectorItem item);
 
 type * type_wrap_class(class_ * self) {
 	type* ret = type_new();
-	ret->tag = type_class_T;
+	ret->tag = TYPE_CLASS_T;
 	ret->u.class_ = self;
 	self->parent = ret;
 	return ret;
@@ -81,7 +81,7 @@ class_ * class_new(string_view namev) {
 }
 
 class_* class_new_proxy(generic_type* gt, string_view namev) {
-	assert(gt->core_type->tag == type_interface_T);
+	assert(gt->core_type->tag == TYPE_INTERFACE_T);
 	class_* ret = class_new(namev);
 	ret->super_class = GENERIC_OBJECT;
 	PushVector(ret->impl_list, gt);
@@ -91,7 +91,7 @@ class_* class_new_proxy(generic_type* gt, string_view namev) {
 type* class_new_preload(string_view namev) {
 	class_* cl = class_new(namev);
 	type* tp = type_wrap_class(cl);
-	tp->state = type_pending;
+	tp->state = TYPE_PENDING;
 	if (TYPE_OBJECT == NULL) {
 		return tp;
 	}
@@ -104,7 +104,7 @@ type* class_new_preload(string_view namev) {
 }
 
 void class_alloc_fields(class_ * self, object * o, frame* fr) {
-	assert(o->tag == object_ref_T);
+	assert(o->tag == OBJECT_REF_T);
 	heap* he = heap_get();
 	for (int i = 0; i < self->field_list->length; i++) {
 		field* f = (field*)AtVector(self->field_list, i);
@@ -155,7 +155,7 @@ void class_add_property(class_* self, property* p) {
 	#endif
 	if(p->is_short) {
 		field* f = field_new(ConcatIntern("$propery.", p->namev));
-		f->access = access_private_T;
+		f->access = ACCESS_PRIVATE_T;
 		f->gtype = p->gtype;
 		f->modifier = p->modifier;
 		f->parent = self->parent;
@@ -415,7 +415,7 @@ void class_delete(class_ * self) {
 static void class_create_vtable_top(class_* self) {
 	for (int i = 0; i < self->method_list->length; i++) {
 		method* m = (method*)AtVector(self->method_list, i);
-		if(m->access != access_private_T &&
+		if(m->access != ACCESS_PRIVATE_T &&
 		   !IsStaticModifier(m->modifier)) {
 			vtable_add(self->vt, m);
 		}
@@ -426,14 +426,14 @@ static void class_create_vtable_override(class_* self) {
 	#if defined(DEBUG)
 	const char* clname = Ref2Str(self->namev);
 	#endif
-	call_context* cctx = call_context_new(call_decl_T);
+	call_context* cctx = call_context_new(CALL_DECL_T);
 	cctx->scope = self->parent->location;
 	cctx->ty = self->super_class->core_type;
 	class_create_vtable(self->super_class->core_type->u.class_);
 	vtable_copy(self->super_class->core_type->u.class_->vt, self->vt);
 	for (int i = 0; i < self->method_list->length; i++) {
 		method* m = (method*)AtVector(self->method_list, i);
-		if(m->access != access_private_T &&
+		if(m->access != ACCESS_PRIVATE_T &&
 		   !IsStaticModifier(m->modifier)) {
 			vtable_replace(self->vt, m, cctx);
 		}
@@ -463,7 +463,7 @@ static void class_create_vtable_interface(class_* self) {
 			method* classVTM = class_find_impl_method(self, interVTM);
 			if(!self->is_abstract && classVTM == NULL) {
 				PushVector(self->vt_vec, newVT);
-				bc_error_throw(bcerror_not_implement_interface_T,
+				bc_error_throw(BCERROR_NOT_IMPLEMENT_INTERFACE_T,
 					Ref2Str(type_name(interVTM->parent)),
 					Ref2Str(interVTM->namev)
 				);
@@ -509,7 +509,7 @@ static void class_native_method_ref_delete(NumericMapKey key, NumericMapItem ite
 }
 
 static method* class_find_impl_method(class_* self, method* virtualMethod) {
-	call_context* cctx = call_context_new(call_decl_T);
+	call_context* cctx = call_context_new(CALL_DECL_T);
 	cctx->scope = self->parent->location;
 	cctx->ty = self->parent;
 	method* ret = NULL;

@@ -5,7 +5,7 @@
 #include "../../util/text.h"
 #include "../../vm/enviroment.h"
 #include "../../env/type_interface.h"
-#include "../../env/type_impl.h"
+#include "../../env/TYPE_IMPL.h"
 #include "../../env/field.h"
 #include "../../util/mem.h"
 #include "../../vm/symbol_entry.h"
@@ -19,7 +19,7 @@ static void il_factor_variable_check_static(il_factor_variable* self, enviroment
 static void il_factor_delete_typeargs(VectorItem item);
 
 il_factor * il_factor_wrap_variable(il_factor_variable * self) {
-	il_factor* ret = il_factor_new(ilfactor_variable_T);
+	il_factor* ret = il_factor_new(ILFACTOR_VARIABLE_T);
 	ret->u.variable_ = self;
 	return ret;
 }
@@ -28,24 +28,24 @@ il_factor_variable * il_factor_variable_malloc(const char* filename, int lineno)
 	il_factor_variable* ret = (il_factor_variable*)mem_malloc(sizeof(il_factor_variable), filename, lineno);
 	ret->fqcn = fqcn_cache_malloc(filename, lineno);
 	ret->type_args = MallocVector(filename, lineno);
-	ret->type = ilvariable_type_undefined_T;
+	ret->type = ILVARIABLE_TYPE_UNDEFINED_T;
 	return ret;
 }
 
 void il_factor_variable_generate(il_factor_variable * self, enviroment* env, call_context* cctx) {
 	il_factor_variable_check(self, env, cctx);
-	if(self->type == ilvariable_type_local_T) {
+	if(self->type == ILVARIABLE_TYPE_LOCAL_T) {
 		il_factor_variable_local_generate(self->u.local_, env, cctx);
-	} else if(self->type == ilvariable_type_static_T) {
+	} else if(self->type == ILVARIABLE_TYPE_STATIC_T) {
 		il_factor_variable_static_generate(self->u.static_, env, cctx);
 	}
 }
 
 void il_factor_variable_load(il_factor_variable * self, enviroment * env, call_context* cctx) {
 	il_factor_variable_check(self, env, cctx);
-	if(self->type == ilvariable_type_local_T) {
+	if(self->type == ILVARIABLE_TYPE_LOCAL_T) {
 		il_factor_variable_local_load(self->u.local_, env, cctx);
-	} else if(self->type == ilvariable_type_static_T) {
+	} else if(self->type == ILVARIABLE_TYPE_STATIC_T) {
 		il_factor_variable_static_load(self->u.static_, env, cctx);
 	}
 }
@@ -53,18 +53,18 @@ void il_factor_variable_load(il_factor_variable * self, enviroment * env, call_c
 generic_type* il_factor_variable_eval(il_factor_variable * self, enviroment * env, call_context* cctx) {
 	il_factor_variable_check(self, env, cctx);
 	generic_type* ret = NULL;
-	if(self->type == ilvariable_type_local_T) {
+	if(self->type == ILVARIABLE_TYPE_LOCAL_T) {
 		ret = il_factor_variable_local_eval(self->u.local_, env, cctx);
-	} else if(self->type == ilvariable_type_static_T) {
+	} else if(self->type == ILVARIABLE_TYPE_STATIC_T) {
 		ret = il_factor_variable_static_eval(self->u.static_, env, cctx);
 	}
 	return ret;
 }
 
 char* il_factor_variable_tostr(il_factor_variable* self, enviroment* env) {
-	if(self->type == ilvariable_type_local_T) {
+	if(self->type == ILVARIABLE_TYPE_LOCAL_T) {
 		return il_factor_variable_local_tostr(self->u.local_, env);
-	} else if(self->type == ilvariable_type_static_T) {
+	} else if(self->type == ILVARIABLE_TYPE_STATIC_T) {
 		return il_factor_variable_static_tostr(self->u.static_, env);
 	}
 	return NULL;
@@ -72,9 +72,9 @@ char* il_factor_variable_tostr(il_factor_variable* self, enviroment* env) {
 
 void il_factor_variable_delete(il_factor_variable * self) {
 	//MEM_FREE(self->name);
-	if(self->type == ilvariable_type_local_T) {
+	if(self->type == ILVARIABLE_TYPE_LOCAL_T) {
 		il_factor_variable_local_delete(self->u.local_);
-	} else if(self->type == ilvariable_type_static_T) {
+	} else if(self->type == ILVARIABLE_TYPE_STATIC_T) {
 		il_factor_variable_static_delete(self->u.static_);
 	}
 	fqcn_cache_delete(self->fqcn);
@@ -84,7 +84,7 @@ void il_factor_variable_delete(il_factor_variable * self) {
 
 //private
 static void il_factor_variable_check(il_factor_variable* self, enviroment* env, call_context* cctx) {
-	if(self->type != ilvariable_type_undefined_T) {
+	if(self->type != ILVARIABLE_TYPE_UNDEFINED_T) {
 		return;
 	}
 	assert(self->fqcn != NULL);
@@ -109,7 +109,7 @@ static void il_factor_variable_check_instance(il_factor_variable* self, envirome
 	//ただのローカル変数の場合
 	} else {
 		il_factor_variable_local* lc = il_factor_variable_local_new(self->fqcn->namev);
-		self->type = ilvariable_type_local_T;
+		self->type = ILVARIABLE_TYPE_LOCAL_T;
 		//値を入れ替え
 		lc->type_args = self->type_args;
 		self->type_args = NULL;
@@ -119,7 +119,7 @@ static void il_factor_variable_check_instance(il_factor_variable* self, envirome
 
 static void il_factor_variable_check_static(il_factor_variable* self, enviroment* env, call_context* cctx) {
 	il_factor_variable_static* st = il_factor_variable_static_new();
-	self->type = ilvariable_type_static_T;
+	self->type = ILVARIABLE_TYPE_STATIC_T;
 	//値を入れ替え
 	st->fqcn = self->fqcn;
 	st->type_args = self->type_args;

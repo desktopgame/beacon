@@ -4,7 +4,7 @@
 #include "../../vm/generate.h"
 #include "../../env/generic_type.h"
 #include "../../env/field.h"
-#include "../../env/type_impl.h"
+#include "../../env/TYPE_IMPL.h"
 #include <assert.h>
 
 
@@ -30,7 +30,7 @@ void il_factor_property_load(il_factor_property* self, enviroment* env, call_con
 	self->index = temp;
 	if(temp == -1) {
 		bc_error_throw(
-			bcerror_undefined_property_T,
+			BCERROR_UNDEFINED_PROPERTY_T,
 			Ref2Str(type_name(receiverT)),
 			Ref2Str(self->namev)
 		);

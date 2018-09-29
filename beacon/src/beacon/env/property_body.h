@@ -5,8 +5,8 @@ struct enviroment;
 struct property;
 
 typedef enum property_body_tag {
-	property_set_T,
-	property_get_T
+	PROPERTY_SET_T,
+	PROPERTY_GET_T
 } property_body_tag;
 
 typedef struct property_body {

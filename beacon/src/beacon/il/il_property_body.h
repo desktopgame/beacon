@@ -7,8 +7,8 @@
 struct generic_cache;
 
 typedef enum il_property_body_tag {
-	ilproperty_set_T,
-	ilproperty_get_T,
+	ilPROPERTY_SET_T,
+	ilPROPERTY_GET_T,
 } il_property_body_tag;
 
 typedef struct il_property_body {

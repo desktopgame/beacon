@@ -3,7 +3,7 @@
 #include "../../util/text.h"
 
 il_stmt* il_stmt_wrap_defer(il_stmt_defer* self) {
-	il_stmt* ret = il_stmt_new(ilstmt_defer_T);
+	il_stmt* ret = il_stmt_new(ILSTMT_DEFER_T);
 	ret->u.defer_ = self;
 	return ret;
 }
@@ -21,13 +21,13 @@ void il_stmt_defer_load(il_stmt_defer* self, enviroment* env, call_context* cctx
 void il_stmt_defer_generate(il_stmt_defer* self, enviroment* env, call_context* cctx) {
 	label* lb = opcode_buf_label(env->buf, 0);
 	label* lb2 = opcode_buf_label(env->buf, 0);
-	opcode_buf_add(env->buf, op_defer_register);
+	opcode_buf_add(env->buf, OP_DEFER_REGISTER);
 	opcode_buf_add(env->buf, lb2);
-	opcode_buf_add(env->buf, op_goto);
+	opcode_buf_add(env->buf, OP_GOTO);
 	opcode_buf_add(env->buf, lb);
-	lb2->cursor = opcode_buf_add(env->buf, op_defer_enter);
+	lb2->cursor = opcode_buf_add(env->buf, OP_DEFER_ENTER);
 	il_stmt_generate(self->stmt, env, cctx);
-	opcode_buf_add(env->buf, op_defer_exit);
+	opcode_buf_add(env->buf, OP_DEFER_EXIT);
 	lb->cursor = opcode_buf_nop(env->buf);
 }
 

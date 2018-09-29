@@ -682,7 +682,7 @@ int yywrap(void) {
 
 int yyerror(char * err_str) {
 	parser* p = GetCurrentParser();
-	p->result = parse_syntax_error_T;
+	p->result = PARSE_SYNTAX_ERROR_T;
 	p->error_line_index = yylloc.last_line;
 	p->error_column_index = yylloc.last_column;
 	p->error_message = Strdup(err_str);
@@ -741,10 +741,10 @@ static int my_yyinput(char *buf, int max_size) {
 	int result;
 	parser* p = GetCurrentParser();
 	switch (p->input_type) {
-		case yinput_file_T:
+		case YINPUT_FILE_T:
 			result = file_input(buf, max_size);
 			break;
-		case yinput_string_T:
+		case YINPUT_STRING_T:
 			result = string_input(buf, max_size);
 			break;
 		default:

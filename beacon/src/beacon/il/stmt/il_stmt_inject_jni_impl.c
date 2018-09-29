@@ -4,7 +4,7 @@
 #include "../../vm/symbol_entry.h"
 
 il_stmt* il_stmt_wrap_inject_jni(il_stmt_inject_jni* self) {
-	il_stmt* ret = il_stmt_new(ilstmt_inject_jni_T);
+	il_stmt* ret = il_stmt_new(ILSTMT_INJECT_JNI_T);
 	ret->u.inject_jni = self;
 	//JNIに関しては後からソースの先頭に付け加えられるので必ず0
 	ret->lineno = 0;
@@ -21,7 +21,7 @@ il_stmt_inject_jni* il_stmt_inject_jni_new(string_view namev) {
 
 void il_stmt_inject_jni_generate(il_stmt_inject_jni* self, enviroment* env, call_context* cctx) {
 	il_factor_generate(self->fact, env, cctx);
-	opcode_buf_add(env->buf, op_store);
+	opcode_buf_add(env->buf, OP_STORE);
 	opcode_buf_add(env->buf, self->se->index);
 }
 

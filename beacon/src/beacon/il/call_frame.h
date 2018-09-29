@@ -8,10 +8,10 @@ struct operator_overload;
 struct generic_type;
 
 typedef enum call_frame_tag {
-	frame_resolve_T,
-	frame_self_invoke_T,
-	frame_static_invoke_T,
-	frame_instance_invoke_T,
+	FRAME_RESOLVE_T,
+	FRAME_SELF_INVOKE_T,
+	FRAME_STATIC_INVOKE_T,
+	FRAME_INSTANCE_INVOKE_T,
 } call_frame_tag;
 
 typedef struct call_resolve {

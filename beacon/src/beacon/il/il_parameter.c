@@ -8,7 +8,7 @@
 il_parameter * il_parameter_new(string_view namev) {
 	il_parameter* ret = (il_parameter*)MEM_MALLOC(sizeof(il_parameter));
 	ret->namev = namev;
-	ret->param_type = il_param_type_default;
+	ret->param_type = IL_PARAM_TYPE_DEFAULT;
 	ret->fqcn = generic_cache_new();
 	return ret;
 }

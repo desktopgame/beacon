@@ -1,5 +1,5 @@
 #include "class_loader_ilload_member_module_impl.h"
-#include "../../il/il_type_impl.h"
+#include "../../il/il_TYPE_IMPL.h"
 #include "../../il/il_field.h"
 #include "../../il/il_method.h"
 #include "../../il/il_constructor.h"
@@ -15,11 +15,11 @@
 static il_property_body* CLIL_prop_body(class_loader* self, il_type* current, ast* abody, il_property_body_tag tag, access_level level);
 
 void CLIL_member_tree(class_loader* self, il_type* current, ast* atree) {
-	if (atree->tag == ast_access_member_tree_T) {
+	if (atree->tag == AST_ACCESS_MEMBER_TREE_T) {
 		for (int i = 0; i < atree->vchildren->length; i++) {
 			CLIL_member_tree(self, current, AtAST(atree, i));
 		}
-	} else if (atree->tag == ast_access_member_list_T) {
+	} else if (atree->tag == AST_ACCESS_MEMBER_LIST_T) {
 		ast* aaccess = FirstAST(atree);
 		ast* amember_list = SecondAST(atree);
 		access_level level = ASTCastToAccess(aaccess);
@@ -28,36 +28,36 @@ void CLIL_member_tree(class_loader* self, il_type* current, ast* atree) {
 }
 
 void CLIL_member_list(class_loader* self, il_type* current, ast* amember, access_level level) {
-	if(amember->tag == ast_member_decl_list_T) {
+	if(amember->tag == AST_MEMBER_DECL_LIST_T) {
 		for(int i=0; i<amember->vchildren->length; i++) {
 			CLIL_member_list(self, current, AtAST(amember, i), level);
 		}
-	} else if(amember->tag == ast_member_decl_T) {
+	} else if(amember->tag == AST_MEMBER_DECL_T) {
 		ast* achild = FirstAST(amember);
-		if (achild->tag == ast_field_decl_T) {
+		if (achild->tag == AST_FIELD_DECL_T) {
 			CLIL_field(self, current, achild, level);
-		} else if(achild->tag == ast_prop_decl_T) {
+		} else if(achild->tag == AST_PROP_DECL_T) {
 			CLIL_prop(self, current, achild, level);
-		} else if (achild->tag == ast_method_decl_T) {
+		} else if (achild->tag == AST_METHOD_DECL_T) {
 			CLIL_method(self, current, achild, level);
-		} else if (achild->tag == ast_constructor_decl_T) {
+		} else if (achild->tag == AST_CONSTRUCTOR_DECL_T) {
 			CLIL_ctor(self, current, achild, level);
-		} else if(achild->tag == ast_operator_overload_T) {
+		} else if(achild->tag == AST_OPERATOR_OVERLOAD_T) {
 			CLIL_operator_overload(self, current, achild, level);
 		}
 	}
 }
 
 void CLIL_field(class_loader* self, il_type* current, ast* afield, access_level level) {
-	//assert(current->tag == iltype_class_T);
+	//assert(current->tag == ilTYPE_CLASS_T);
 	ast* amodifier = FirstAST(afield);
 	ast* atype_name = SecondAST(afield);
 	ast* aaccess_name = AtAST(afield, 2);
 	ast* afact = AtAST(afield, 3);
 	//インターフェイスはフィールドを持てない
-	if(current->tag == iltype_interface_T) {
+	if(current->tag == ilTYPE_INTERFACE_T) {
 		bc_error_throw(
-			bcerror_interface_has_field_T,
+			BCERROR_INTERFACE_HAS_FIELD_T,
 			Ref2Str(current->u.interface_->namev),
 			Ref2Str(aaccess_name->u.stringv_value)
 		);
@@ -75,7 +75,7 @@ void CLIL_field(class_loader* self, il_type* current, ast* afield, access_level 
 	}
 	//重複する修飾子を検出
 	if(error) {
-		bc_error_throw(bcerror_overwrap_modifier_T, Ref2Str(v->namev));
+		bc_error_throw(BCERROR_OVERWRAP_MODIFIER_T, Ref2Str(v->namev));
 	}
 }
 
@@ -88,25 +88,25 @@ void CLIL_prop(class_loader* self, il_type* current, ast* aprop, access_level le
 	il_property* ret = il_property_new(propname);
 	CLIL_generic_cache(atypename, ret->fqcn);
 	if(IsBlankAST(amod)) {
-		ret->modifier = modifier_none_T;
+		ret->modifier = MODIFIER_NONE_T;
 	} else {
 		bool err = false;
 		ret->modifier = ASTCastToModifier(amod, &err);
 		if(err) {
-			bc_error_throw(bcerror_overwrap_modifier_T, Ref2Str(ret->namev));
+			bc_error_throw(BCERROR_OVERWRAP_MODIFIER_T, Ref2Str(ret->namev));
 		}
 	}
 	ret->access = level;
-	ret->set = CLIL_prop_body(self, current, aset, ilproperty_set_T, level);
-	ret->get = CLIL_prop_body(self, current, aget, ilproperty_get_T, level);
+	ret->set = CLIL_prop_body(self, current, aset, ilPROPERTY_SET_T, level);
+	ret->get = CLIL_prop_body(self, current, aget, ilPROPERTY_GET_T, level);
 	il_type_add_property(current, ret);
 	if(ret->set->is_short != ret->get->is_short) {
-		bc_error_throw(bcerror_invalid_property_decl_T, Ref2Str(current->u.class_->namev), Ref2Str(propname));
+		bc_error_throw(BCERROR_INVALID_PROPERTY_DECL_T, Ref2Str(current->u.class_->namev), Ref2Str(propname));
 	}
 }
 
 void CLIL_method(class_loader* self, il_type* current, ast* amethod, access_level level) {
-	assert(current->tag == iltype_class_T || current->tag == iltype_interface_T);
+	assert(current->tag == ilTYPE_CLASS_T || current->tag == ilTYPE_INTERFACE_T);
 	ast* amodifier = AtAST(amethod, 0);
 	ast* afunc_name = AtAST(amethod, 1);
 	ast* ageneric = AtAST(amethod, 2);
@@ -129,20 +129,20 @@ void CLIL_method(class_loader* self, il_type* current, ast* amethod, access_leve
 	il_type_add_method(current, v);
 	//重複する修飾子を検出
 	if(error) {
-		bc_error_throw(bcerror_overwrap_modifier_T, Ref2Str(v->namev));
+		bc_error_throw(BCERROR_OVERWRAP_MODIFIER_T, Ref2Str(v->namev));
 	}
 }
 
 void CLIL_ctor(class_loader* self, il_type* current, ast* aconstructor, access_level level) {
-	//assert(current->tag == iltype_class_T);
+	//assert(current->tag == ilTYPE_CLASS_T);
 	ast* aparams = AtAST(aconstructor, 0);
 	ast* achain = AtAST(aconstructor, 1);
 	ast* abody = AtAST(aconstructor, 2);
 	il_constructor_chain* ilchain = NULL;
 	//インターフェイスはコンストラクタを持てない
-	if(current->tag == iltype_interface_T) {
+	if(current->tag == ilTYPE_INTERFACE_T) {
 		bc_error_throw(
-			bcerror_interface_has_ctor_T,
+			BCERROR_INTERFACE_HAS_CTOR_T,
 			Ref2Str(current->u.interface_->namev)
 		);
 		return;
@@ -163,15 +163,15 @@ void CLIL_ctor(class_loader* self, il_type* current, ast* aconstructor, access_l
 }
 
 void CLIL_operator_overload(class_loader* self, il_type* current, ast* aopov, access_level level) {
-	//assert(aopov->tag == ast_operator_overload_T);
+	//assert(aopov->tag == AST_OPERATOR_OVERLOAD_T);
 	operator_type ot = aopov->u.operator_value;
 	ast* aparam_list = AtAST(aopov, 0);
 	ast* abody = AtAST(aopov, 1);
 	ast* areturn = AtAST(aopov, 2);
 	//インターフェイスはコンストラクタを持てない
-	if(current->tag == iltype_interface_T) {
+	if(current->tag == ilTYPE_INTERFACE_T) {
 		bc_error_throw(
-			bcerror_interface_has_opov_T,
+			BCERROR_INTERFACE_HAS_OPOV_T,
 			Ref2Str(current->u.interface_->namev),
 			operator_tostring(ot)
 		);
@@ -187,7 +187,7 @@ void CLIL_operator_overload(class_loader* self, il_type* current, ast* aopov, ac
 //private
 static il_property_body* CLIL_prop_body(class_loader* self, il_type* current, ast* abody, il_property_body_tag tag, access_level level) {
 	il_property_body* ret = il_property_body_new(tag);
-	assert(abody->tag == ast_prop_set_T || abody->tag == ast_prop_get_T);
+	assert(abody->tag == AST_PROP_SET_T || abody->tag == AST_PROP_GET_T);
 	ast* aacess = FirstAST(abody);
 	ast* astmt_list = SecondAST(abody);
 	ret->access = level;

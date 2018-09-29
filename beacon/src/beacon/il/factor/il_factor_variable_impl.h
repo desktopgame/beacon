@@ -21,9 +21,9 @@ struct field;
  * </code>
  */
 typedef enum il_variable_type {
-	ilvariable_type_local_T,
-	ilvariable_type_static_T,
-	ilvariable_type_undefined_T
+	ILVARIABLE_TYPE_LOCAL_T,
+	ILVARIABLE_TYPE_STATIC_T,
+	ILVARIABLE_TYPE_UNDEFINED_T
 } il_variable_type;
 
 /**

@@ -28,7 +28,7 @@ void CLIL_fqcn_cache(ast* afqcn, fqcn_cache* fqcn) {
 }
 
 void CLIL_generic_cache(ast* afqcn, generic_cache* dest) {
-	if(afqcn->tag == ast_fqcn_class_name_T) {
+	if(afqcn->tag == AST_FQCN_CLASS_NAME_T) {
 		dest->fqcn->namev = afqcn->u.stringv_value;
 		return;
 	}
@@ -45,12 +45,12 @@ void CLIL_typename_list(class_loader * self, Vector * dst, ast * atypename_list)
 	if (IsBlankAST(atypename_list)) {
 		return;
 	}
-	if (atypename_list->tag == ast_typename_T) {
+	if (atypename_list->tag == AST_TYPENAME_T) {
 		generic_cache* e = generic_cache_new();
 		//[typename [fqcn]]
 		CLIL_generic_cache(atypename_list, e);
 		PushVector(dst, e);
-	} else if(atypename_list->tag == ast_typename_list_T) {
+	} else if(atypename_list->tag == AST_TYPENAME_LIST_T) {
 		for (int i = 0; i < atypename_list->vchildren->length; i++) {
 			CLIL_typename_list(self, dst, AtAST(atypename_list, i));
 		}
@@ -62,19 +62,19 @@ void CLIL_type_parameter(class_loader* self, ast* asource, Vector* dest) {
 	if (IsBlankAST(asource)) {
 		return;
 	}
-	if (asource->tag == ast_type_parameter_list_T) {
+	if (asource->tag == AST_TYPE_PARAMETER_LIST_T) {
 		for (int i = 0; i < asource->vchildren->length; i++) {
 			CLIL_type_parameter(self, AtAST(asource, i), dest);
 		}
 		return;
 	}
-	assert(asource->tag == ast_type_parameter_T ||
-		   asource->tag == ast_type_in_parameter_T ||
-		   asource->tag == ast_type_out_parameter_T);
+	assert(asource->tag == AST_TYPE_PARAMETER_T ||
+		   asource->tag == AST_TYPE_IN_PARAMETER_T ||
+		   asource->tag == AST_TYPE_OUT_PARAMETER_T);
 	ast* arule_list = FirstAST(asource);
 	il_type_parameter* iltypeparam = il_type_parameter_new(asource->u.stringv_value);
-	if (asource->tag == ast_type_in_parameter_T) iltypeparam->kind = il_type_parameter_kind_in_T;
-	if (asource->tag == ast_type_out_parameter_T) iltypeparam->kind = il_type_parameter_kind_out_T;
+	if (asource->tag == AST_TYPE_IN_PARAMETER_T) iltypeparam->kind = il_TYPE_PARAMETER_KIND_IN_T;
+	if (asource->tag == AST_TYPE_OUT_PARAMETER_T) iltypeparam->kind = il_TYPE_PARAMETER_KIND_OUT_T;
 	PushVector(dest, iltypeparam);
 	//制約があるならそれも設定
 	//制約はとりあえずなしで
@@ -85,12 +85,12 @@ void CLIL_type_argument(class_loader* self, ast* atype_args, Vector* dest) {
 	if(IsBlankAST(atype_args)) {
 		return;
 	}
-	if(atype_args->tag == ast_typename_list_T) {
+	if(atype_args->tag == AST_TYPENAME_LIST_T) {
 		for(int i=0; i<atype_args->vchildren->length; i++) {
 			ast* e = AtAST(atype_args, i);
 			CLIL_type_argument(self, e, dest);
 		}
-	} else if(atype_args->tag == ast_typename_T) {
+	} else if(atype_args->tag == AST_TYPENAME_T) {
 		il_type_argument* iltype_arg = il_type_argument_new();
 		PushVector(dest, iltype_arg);
 		CLIL_generic_cache(atype_args, iltype_arg->gcache);
@@ -98,11 +98,11 @@ void CLIL_type_argument(class_loader* self, ast* atype_args, Vector* dest) {
 }
 
 void CLIL_parameter_list(class_loader* self, Vector* list, ast* asource) {
-	if (asource->tag == ast_parameter_list_T) {
+	if (asource->tag == AST_PARAMETER_LIST_T) {
 		for (int i = 0; i < asource->vchildren->length; i++) {
 			CLIL_parameter_list(self, list, AtAST(asource, i));
 		}
-	} else if (asource->tag == ast_parameter_T) {
+	} else if (asource->tag == AST_PARAMETER_T) {
 		ast* atype_name = FirstAST(asource);
 		ast* aaccess_name = SecondAST(asource);
 		il_parameter* p = il_parameter_new(aaccess_name->u.stringv_value);
@@ -132,23 +132,23 @@ static void CLIL_fqcn_cache_impl(ast* afqcn, fqcn_cache* fqcn, int level) {
 static void CLIL_generic_cache_impl(ast* afqcn, generic_cache* dest) {
 	fqcn_cache* body = dest->fqcn;
 	//型引数を解析する
-	if (afqcn->tag == ast_typename_T) {
+	if (afqcn->tag == AST_TYPENAME_T) {
 		ast* atype_args = SecondAST(afqcn);
 		if (!IsBlankAST(atype_args)) {
 			CLIL_generic_cache_inner(atype_args, dest);
 		}
 	}
-	if (afqcn->tag == ast_typename_T) {
+	if (afqcn->tag == AST_TYPENAME_T) {
 		CLIL_generic_cache_impl(FirstAST(afqcn), dest);
 		return;
 	}
-	if (afqcn->tag == ast_fqcn_T ||
-		afqcn->tag == ast_fqcn_part_list_T) {
-		if (afqcn->tag == ast_fqcn_part_list_T &&
+	if (afqcn->tag == AST_FQCN_T ||
+		afqcn->tag == AST_FQCN_PART_LIST_T) {
+		if (afqcn->tag == AST_FQCN_PART_LIST_T &&
 			afqcn->vchildren->length == 0) {
 			//FIXME:もうちょっと高速に出来る
 			//FIXME:とりあえずここでタグを直してるけどast.cの時点でどうにかするべき
-			afqcn->tag = ast_fqcn_class_name_T;
+			afqcn->tag = AST_FQCN_CLASS_NAME_T;
 			body->namev = afqcn->u.stringv_value;
 			return;
 		}
@@ -159,12 +159,12 @@ static void CLIL_generic_cache_impl(ast* afqcn, generic_cache* dest) {
 	} else {
 		//FIXME:とりあえずここでタグを直してるけどast.cの時点でどうにかするべき
 		PushVector(body->scope_vec, afqcn->u.stringv_value);
-		afqcn->tag = ast_fqcn_part_T;
+		afqcn->tag = AST_FQCN_PART_T;
 	}
 }
 
 static void CLIL_generic_cache_inner(ast* atype_args, generic_cache* dest) {
-	if (atype_args->tag == ast_typename_list_T) {
+	if (atype_args->tag == AST_TYPENAME_LIST_T) {
 		for (int i = 0; i < atype_args->vchildren->length; i++) {
 			ast* e = AtAST(atype_args, i);
 			CLIL_generic_cache_inner(e, dest);
@@ -179,12 +179,12 @@ static void CLIL_generic_cache_inner(ast* atype_args, generic_cache* dest) {
 static void CLIL_type_parameter_rule(class_loader* self, ast* asource, Vector* dest) {
 	assert(false);
 	/*
-	if (source->tag == ast_type_parameter_list_T) {
+	if (source->tag == AST_TYPE_PARAMETER_LIST_T) {
 		for (int i = 0; i < source->child_count; i++) {
 			CLIL_type_parameter_rule(self, AtAST(source, i), dest);
 		}
 	} else {
-		if (source->tag == ast_typename_T) {
+		if (source->tag == AST_TYPENAME_T) {
 			il_type_parameter_rule* rule = il_type_parameter_rule_new();
 			rule->tag = il_type_parameter_rule_polymorphic;
 			rule->u.fqcn_ = generic_cache_new();
@@ -196,7 +196,7 @@ static void CLIL_type_parameter_rule(class_loader* self, ast* asource, Vector* d
 }
 
 static void ast_fqcn_flatten(ast* afqcn, Vector* dest) {
-	if(afqcn->tag == ast_fqcn_part_T) {
+	if(afqcn->tag == AST_FQCN_PART_T) {
 		PushVector(dest, afqcn->u.stringv_value);
 	} else {
 		for(int i=0; i<afqcn->vchildren->length; i++) {
@@ -206,11 +206,11 @@ static void ast_fqcn_flatten(ast* afqcn, Vector* dest) {
 }
 
 static void CLIL_argument_listImpl(class_loader* self, Vector* list, ast* asource) {
-	if (asource->tag == ast_argument_list_T) {
+	if (asource->tag == AST_ARGUMENT_LIST_T) {
 		for (int i = 0; i < asource->vchildren->length; i++) {
 			CLIL_argument_listImpl(self, list, AtAST(asource, i));
 		}
-	} else if (asource->tag == ast_argument_T) {
+	} else if (asource->tag == AST_ARGUMENT_T) {
 		ast* aprimary = FirstAST(asource);
 		il_argument* ilarg = il_argument_new();
 		ilarg->factor = CLIL_factor(self, aprimary);

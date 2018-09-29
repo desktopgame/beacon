@@ -5,7 +5,7 @@
 #include "../../util/text.h"
 #include "../../util/mem.h"
 #include "../../env/type_interface.h"
-#include "../../env/type_impl.h"
+#include "../../env/TYPE_IMPL.h"
 #include "../call_context.h"
 #include "../../error.h"
 
@@ -18,7 +18,7 @@ il_factor_super* il_factor_super_new() {
 }
 
 void il_factor_super_generate(il_factor_super * self, enviroment * env, call_context* cctx) {
-	opcode_buf_add(env->buf, op_super);
+	opcode_buf_add(env->buf, OP_SUPER);
 }
 
 void il_factor_super_load(il_factor_super * self, enviroment * env, call_context* cctx) {
@@ -40,12 +40,12 @@ void il_factor_super_delete(il_factor_super * self) {
 
 //private
 static void check_context(il_factor_super * self, enviroment * env, call_context* cctx) {
-	if(cctx->tag != call_method_T) {
+	if(cctx->tag != CALL_METHOD_T) {
 		return;
 	}
 	method* met = call_context_method(cctx);
 	if(IsStaticModifier(met->modifier)) {
-		bc_error_throw(bcerror_access_to_super_at_static_method_T,
+		bc_error_throw(BCERROR_ACCESS_TO_SUPER_AT_STATIC_METHOD_T,
 			Ref2Str(type_name(met->parent)),
 			Ref2Str(met->namev)
 		);

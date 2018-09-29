@@ -29,7 +29,7 @@ label * opcode_buf_label(opcode_buf * self, int index) {
 
 int opcode_buf_nop(opcode_buf * self) {
 	int len = self->source_vec->length;
-	opcode_buf_add(self, op_nop);
+	opcode_buf_add(self, OP_NOP);
 	return len;
 }
 
@@ -68,9 +68,9 @@ static void opcode_buf_delete_label(VectorItem item) {
 static void opcode_buf_copy(opcode_buf* src, opcode_buf* dst) {
 	for (int i = 0; i < src->source_vec->length; i++) {
 		VectorItem e = AtVector(src->source_vec, i);
-		if (e == op_goto ||
-			e == op_goto_if_false ||
-			e == op_goto_if_true) {
+		if (e == OP_GOTO ||
+			e == OP_GOTO_if_false ||
+			e == OP_GOTO_if_true) {
 
 			opcode_buf_add(dst, e);
 			label* lb = (label*)AtVector(src->source_vec, ++i);

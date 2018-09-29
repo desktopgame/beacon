@@ -9,7 +9,7 @@
 #include "../../env/import_manager.h"
 
 il_stmt * il_stmt_wrap_variable_decl(il_stmt_variable_decl * self) {
-	il_stmt* ret = il_stmt_new(ilstmt_variable_decl_T);
+	il_stmt* ret = il_stmt_new(ILSTMT_VARIABLE_DECL_T);
 	ret->u.variable_decl = self;
 	return ret;
 }
@@ -27,7 +27,7 @@ void il_stmt_variable_decl_generate(il_stmt_variable_decl * self, enviroment * e
 
 void il_stmt_variable_decl_load(il_stmt_variable_decl * self, struct enviroment* env, call_context* cctx) {
 	if(symbol_table_contains(env->sym_table, self->namev)) {
-		bc_error_throw(bcerror_overwrap_variable_name_T,
+		bc_error_throw(BCERROR_OVERWRAP_VARIABLE_NAME_T,
 			Ref2Str(self->namev)
 		);
 	}
@@ -38,7 +38,7 @@ void il_stmt_variable_decl_load(il_stmt_variable_decl * self, struct enviroment*
 	);
 	if(e->gtype->core_type != NULL &&
 	   e->gtype->core_type == TYPE_VOID) {
-		   bc_error_throw(bcerror_void_decl_T);
+		   bc_error_throw(BCERROR_VOID_DECL_T);
 	}
 }
 

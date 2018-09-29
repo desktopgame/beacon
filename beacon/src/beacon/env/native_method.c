@@ -2,7 +2,7 @@
 #include <stdlib.h>
 #include "method.h"
 #include "type_interface.h"
-#include "type_impl.h"
+#include "TYPE_IMPL.h"
 #include "object.h"
 #include "../vm/vm.h"
 #include "../util/mem.h"

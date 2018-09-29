@@ -11,9 +11,9 @@ struct method;
 //binded? bound?
 
 typedef enum bound_invoke {
-	bound_invoke_method_T,
-	bound_invoke_subscript_T,
-	bound_invoke_undefined_T
+	BOUND_INVOKE_METHOD_T,
+	BOUND_INVOKE_SUBSCRIPT_T,
+	BOUND_INVOKE_UNDEFINED_T
 } bound_invoke;
 
 typedef struct il_factor_invoke_bound {

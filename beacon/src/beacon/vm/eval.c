@@ -28,13 +28,13 @@ bool eval_ast(const char* filename) {
 	}
 	parser* p = ParseFile(filename);
 	ast_print_tree(p->root);
-	if(p->result != parse_complete_T) {
+	if(p->result != PARSE_COMPLETE_T) {
 		printf("error: %s<%d>\n    %s\n", p->source_name, p->lineno, p->error_message);
 	} else {
 		printf("sucess!\n");
 	}
 	//パーサーを破棄
-	bool ret = p->result != parse_complete_T;
+	bool ret = p->result != PARSE_COMPLETE_T;
 	DestroyParser(p);
 	return ret;
 	//*/
@@ -45,7 +45,7 @@ bool eval_il(const char* filename) {
 	abort();
 	return false;
 	/*
-	class_loader* cl = class_loader_new(filename, content_entry_point_T);
+	class_loader* cl = class_loader_new(filename, CONTENT_ENTRY_POINT_T);
 	class_loader_load(cl);
 
 	if(!bc_error_last()) {
@@ -58,7 +58,7 @@ bool eval_il(const char* filename) {
 }
 
 bool eval_op(const char* filename) {
-	class_loader* cl = class_loader_new(filename, content_entry_point_T);
+	class_loader* cl = class_loader_new(filename, CONTENT_ENTRY_POINT_T);
 	class_loader_load(cl);
 
 	if(!bc_error_last()) {
@@ -69,18 +69,18 @@ bool eval_op(const char* filename) {
 }
 
 bool eval_file(const char * filename) {
-	class_loader* cll = class_loader_new(filename, content_entry_point_T);
+	class_loader* cll = class_loader_new(filename, CONTENT_ENTRY_POINT_T);
 	return eval_top_from_cll(cll, NULL);
 }
 
 bool eval_string(const char* source) {
 	parser* p = ParseString(source);
-	if (p->result != parse_complete_T) {
-		bc_error_throw(bcerror_parse_T, p->error_message);
+	if (p->result != PARSE_COMPLETE_T) {
+		bc_error_throw(BCERROR_PARSE_T, p->error_message);
 		DestroyParser(p);
 		return false;
 	}
-	class_loader* cll = class_loader_new("", content_entry_point_T);
+	class_loader* cll = class_loader_new("", CONTENT_ENTRY_POINT_T);
 	ast* a = ReleaseParserAST(p);
 	DestroyParser(p);
 	return eval_top_from_cll(cll, a);
@@ -107,7 +107,7 @@ static bool eval_top_from_cll(class_loader* cll, ast* aOpt) {
 		vm_execute(fr, cll->env);
 	}
 	if(fr->terminate) {
-		bc_error_throw(bcerror_generic_T, "unexpected terminate");
+		bc_error_throw(BCERROR_GENERIC_T, "unexpected terminate");
 	}
 	vm_catch(fr);
 	heap_gc(heap_get());

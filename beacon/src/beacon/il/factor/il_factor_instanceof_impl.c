@@ -9,7 +9,7 @@
 #include "../../util/text.h"
 
 il_factor* il_factor_wrap_instanceof(il_factor_instanceof* self) {
-	il_factor* ret = il_factor_new(ilfactor_instanceof_T);
+	il_factor* ret = il_factor_new(ILFACTOR_INSTANCEOF_T);
 	ret->u.instanceof_ = self;
 	return ret;
 }
@@ -29,9 +29,9 @@ void il_factor_instanceof_generate(il_factor_instanceof* self, enviroment* env, 
 	generic_type* gtype = import_manager_resolve(NULL, self->gcache, cctx);
 	type* type = gtype->core_type;
 	il_factor_generate(self->fact, env, cctx);
-	opcode_buf_add(env->buf, op_generic_add);
+	opcode_buf_add(env->buf, OP_GENERIC_ADD);
 	generic_type_generate(gtype, env);
-	opcode_buf_add(env->buf, op_instanceof);
+	opcode_buf_add(env->buf, OP_INSTANCEOF);
 }
 
 generic_type* il_factor_instanceof_eval(il_factor_instanceof* self, enviroment* env, call_context* cctx) {

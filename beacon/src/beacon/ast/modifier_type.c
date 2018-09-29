@@ -2,48 +2,48 @@
 #include <stdio.h>
 
 bool IsStaticModifier(modifier_type type) {
-	return (type & modifier_static_T);
+	return (type & MODIFIER_STATIC_T);
 }
 
 bool IsNativeModifier(modifier_type type) {
-	return (type & modifier_native_T);
+	return (type & MODIFIER_NATIVE_T);
 }
 
 bool IsAbstractModifier(modifier_type type) {
-	return (type & modifier_abstract_T);
+	return (type & MODIFIER_ABSTRACT_T);
 }
 
 bool IsFinalModifier(modifier_type type) {
-	return (type & modifier_final_T);
+	return (type & MODIFIER_FINAL_T);
 }
 
 bool IsOverrideModifier(modifier_type type) {
-	return (type & modifier_override_T);
+	return (type & MODIFIER_OVERRIDE_T);
 }
 
 void PrintModifier(modifier_type type) {
-	if (type == (modifier_static_T | modifier_native_T)) {
+	if (type == (MODIFIER_STATIC_T | MODIFIER_NATIVE_T)) {
 		printf("static native");
 		return;
 	}
 	switch (type) {
-		case modifier_none_T:
+		case MODIFIER_NONE_T:
 			printf("none");
 			break;
 
-		case modifier_static_T:
+		case MODIFIER_STATIC_T:
 			printf("static");
 			break;
 
-		case modifier_native_T:
+		case MODIFIER_NATIVE_T:
 			printf("native");
 			break;
 
-		case modifier_abstract_T:
+		case MODIFIER_ABSTRACT_T:
 			printf("abstract");
 			break;
 
-		case modifier_override_T:
+		case MODIFIER_OVERRIDE_T:
 			printf("override");
 			break;
 

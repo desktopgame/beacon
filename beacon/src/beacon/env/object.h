@@ -23,12 +23,12 @@ struct vtable;
  * インクリメンタルGCのためのフラグです。
  */
 typedef enum object_paint {
-	paint_unmarked_T,
-	paint_marked_T,
+	PAINT_UNMARKED_T,
+	PAINT_MARKED_T,
 	//コンテキストが終了するまで
 	//GCの対象にならない
 	//ソースコード中に直接記述されたリテラルのためのフラグ。
-	paint_onexit_T,
+	PAINT_ONEXIT_T,
 //	paint_white,
 //	paint_black,
 //	paint_gray
@@ -38,15 +38,15 @@ typedef enum object_paint {
  * オブジェクトの種類を表す列挙.
  */
 typedef enum object_tag {
-	object_int_T,
-	object_long_T, //bc_timeでだけ使ってる
-	object_double_T,
-	object_char_T,
-	object_string_T,
-	object_bool_T,
-	object_ref_T,
-	object_array_T,
-	object_null_T,
+	OBJECT_INT_T,
+	OBJECT_LONG_T, //bc_timeでだけ使ってる
+	OBJECT_DOUBLE_T,
+	OBJECT_CHAR_T,
+	OBJECT_STRING_T,
+	OBJECT_BOOL_T,
+	OBJECT_REF_T,
+	OBJECT_ARRAY_T,
+	OBJECT_NULL_T,
 } object_tag;
 
 /**

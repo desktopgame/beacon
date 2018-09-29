@@ -5,7 +5,7 @@
 #include "../../../vm/enviroment.h"
 #include "../../../env/namespace.h"
 #include "../../il_factor_impl.h"
-#include "../../../env/type_impl.h"
+#include "../../../env/TYPE_IMPL.h"
 #include "../../../env/operator_overload.h"
 #include "../il_factor_unary_op_impl.h"
 
@@ -26,20 +26,20 @@ void il_factor_negative_op_generate(il_factor_negative_op* self, enviroment* env
 	if(self->operator_index == -1) {
 		il_factor_generate(self->parent->a, env, cctx);
 		if(GENERIC2TYPE(gt) == TYPE_INT) {
-			opcode_buf_add(env->buf, op_ineg);
+			opcode_buf_add(env->buf, OP_INEG);
 		} else if(GENERIC2TYPE(gt) == TYPE_DOUBLE) {
-			opcode_buf_add(env->buf, op_dneg);
+			opcode_buf_add(env->buf, OP_DNEG);
 		} else {
 			assert(false);
 		}
 	} else {
 		il_factor_generate(self->parent->a, env, cctx);
-		opcode_buf_add(env->buf, op_invokeoperator);
+		opcode_buf_add(env->buf, OP_INVOKEOPERATOR);
 		opcode_buf_add(env->buf, self->operator_index);
 	}
 }
 
-void il_factor_negative_op_load(il_factor_negative_op* self, enviroment* env, call_context* cctx) {
+void il_factor_negative_OP_LOAD(il_factor_negative_op* self, enviroment* env, call_context* cctx) {
 	generic_type* gt = il_factor_eval(self->parent->a, env, cctx);
 	if(GENERIC2TYPE(gt) != TYPE_INT &&
 	   GENERIC2TYPE(gt) != TYPE_DOUBLE) {

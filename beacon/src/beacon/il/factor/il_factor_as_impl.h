@@ -6,9 +6,9 @@
 #include "../../env/generic_type.h"
 
 typedef enum cast_mode {
-	cast_down_T,
-	cast_up_T,
-	cast_unknown_T,
+	CAST_DOWN_T,
+	CAST_UP_T,
+	CAST_UNKNOWN_T,
 } cast_mode;
 
 /**

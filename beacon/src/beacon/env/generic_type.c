@@ -1,6 +1,6 @@
 #include "generic_type.h"
 #include "type_interface.h"
-#include "type_impl.h"
+#include "TYPE_IMPL.h"
 #include "script_context.h"
 #include "type_parameter.h"
 #include "constructor.h"
@@ -45,7 +45,7 @@ generic_type* generic_type_malloc(struct type* core_type, const char* filename, 
 	ret->core_type = core_type;
 	ret->type_args_list = NewVector();
 	ret->virtual_type_index = -1;
-	ret->tag = generic_type_tag_none_T;
+	ret->tag = GENERIC_TYPE_TAG_NONE_T;
 	ret->is_ctor = false;
 	//現在のスクリプトコンテキストに登録
 	script_context* ctx = script_context_get_current();
@@ -61,9 +61,9 @@ generic_type* generic_type_clone(generic_type* self) {
 	}
 	a->tag = self->tag;
 	a->virtual_type_index = self->virtual_type_index;
-	if(a->tag == generic_type_tag_class_T) {
+	if(a->tag == GENERIC_TYPE_TAG_CLASS_T) {
 		a->u.type_ = self->u.type_;
-	} else if(a->tag == generic_type_tag_method_T) {
+	} else if(a->tag == GENERIC_TYPE_TAG_METHOD_T) {
 		a->u.method_ = self->u.method_;
 	}
 	return a;
@@ -120,23 +120,23 @@ void generic_type_print(generic_type * self) {
 	assert(self != NULL);
 	//タグを出力
 	switch(self->tag) {
-		case generic_type_tag_none_T:
+		case GENERIC_TYPE_TAG_NONE_T:
 			printf("::");
 			break;
-		case generic_type_tag_class_T:
+		case GENERIC_TYPE_TAG_CLASS_T:
 			printf("@@");
 			break;
-		case generic_type_tag_method_T:
+		case GENERIC_TYPE_TAG_METHOD_T:
 			printf("##");
 			break;
 	}
 	//T, Uなど
 	if (self->virtual_type_index != -1) {
 		//(Array)[0]
-		if(self->tag == generic_type_tag_class_T) {
+		if(self->tag == GENERIC_TYPE_TAG_CLASS_T) {
 			printf("(%s)", Ref2Str(type_name(self->u.type_)));
 		//copy[0]
-		} else if(self->tag == generic_type_tag_method_T) {
+		} else if(self->tag == GENERIC_TYPE_TAG_METHOD_T) {
 			printf("(%s)", Ref2Str(self->u.method_->namev));
 		}
 		printf("[%d]", self->virtual_type_index);
@@ -163,26 +163,26 @@ void generic_type_print(generic_type * self) {
 }
 
 void generic_type_generate(generic_type* self, enviroment* env) {
-	opcode_buf_add(env->buf, op_generic_enter);
+	opcode_buf_add(env->buf, OP_GENERIC_ENTER);
 	opcode_buf_add(env->buf, self->type_args_list->length);
 	if(self->core_type == NULL) {
-		if(self->tag == generic_type_tag_class_T) {
-			opcode_buf_add(env->buf, op_generic_instance_type);
+		if(self->tag == GENERIC_TYPE_TAG_CLASS_T) {
+			opcode_buf_add(env->buf, OP_GENERIC_INSTANCE_TYPE);
 			opcode_buf_add(env->buf, self->virtual_type_index);
 			//assert(self->virtual_type_index != -1);
 		} else {
-			opcode_buf_add(env->buf, op_generic_static_type);
+			opcode_buf_add(env->buf, OP_GENERIC_STATIC_TYPE);
 			opcode_buf_add(env->buf, self->virtual_type_index);
 		}
 	} else {
-		opcode_buf_add(env->buf, op_generic_unique_type);
+		opcode_buf_add(env->buf, OP_GENERIC_UNIQUE_TYPE);
 		opcode_buf_add(env->buf, self->core_type->absolute_index);
 	}
 	for(int i=0; i<self->type_args_list->length; i++) {
 		generic_type* e = (generic_type*)AtVector(self->type_args_list, i);
 		generic_type_generate(e, env);
 	}
-	opcode_buf_add(env->buf, op_generic_exit);
+	opcode_buf_add(env->buf, OP_GENERIC_EXIT);
 }
 
 //Hash<String,List<Int>>
@@ -205,13 +205,13 @@ static generic_type* generic_type_applyImpl(generic_type* self, call_context* cc
 	generic_type* ret = NULL;
 	if(self->virtual_type_index != -1) {
 		count++;
-		if(self->tag == generic_type_tag_class_T) {
+		if(self->tag == GENERIC_TYPE_TAG_CLASS_T) {
 			if(self->is_ctor) {
 				ret = generic_type_clone(generic_type_typeargs_at(cctx, fr, self->virtual_type_index));
 			} else {
 				ret = generic_type_clone(generic_type_receiver_at(cctx, fr, self->virtual_type_index));
 			}
-		} else if(self->tag == generic_type_tag_method_T) {
+		} else if(self->tag == GENERIC_TYPE_TAG_METHOD_T) {
 			ret = generic_type_clone(generic_type_typeargs_at(cctx, fr, self->virtual_type_index));
 		}
 	} else {
@@ -277,9 +277,9 @@ static int generic_type_distance_nogeneric(generic_type* self, generic_type* oth
 	if(other->core_type == TYPE_NULL) {
 		return 1;
 	}
-	if (self->core_type->tag == type_class_T) {
+	if (self->core_type->tag == TYPE_CLASS_T) {
 		return generic_type_distance_class(dist, self, other, fr, cctx);
-	} else if (self->core_type->tag == type_interface_T) {
+	} else if (self->core_type->tag == TYPE_INTERFACE_T) {
 		return generic_type_distance_interface(dist, self, other, fr, cctx);
 	}
 	return dist;
@@ -309,7 +309,7 @@ static int generic_type_distance_class(int dist, generic_type* self, generic_typ
 }
 
 static int generic_type_distance_interface(int dist, generic_type* self, generic_type* other, frame* fr, call_context* cctx) {
-	if (other->core_type->tag == type_class_T) {
+	if (other->core_type->tag == TYPE_CLASS_T) {
 		//クラスからインターフェイスを探す
 		generic_type* impl_baseline = NULL;
 		generic_type* impl = class_find_interface_type(TYPE2CLASS(GENERIC2TYPE(other)), (GENERIC2TYPE(self)), &impl_baseline);
@@ -328,7 +328,7 @@ static int generic_type_distance_interface(int dist, generic_type* self, generic
 		}
 		DeleteVector(gargs, VectorDeleterOfNull);
 		return dist;
-	} else if (other->core_type->tag == type_interface_T) {
+	} else if (other->core_type->tag == TYPE_INTERFACE_T) {
 		generic_type* impl = interface_find_interface(TYPE2INTERFACE(GENERIC2TYPE(other)), (GENERIC2TYPE(self)));
 		if (impl == NULL) {
 			impl = other;
@@ -393,10 +393,10 @@ static generic_type* generic_type_get(generic_type* a) {
 	if(a->virtual_type_index == -1) {
 		return a;
 	}
-	if(a->tag == generic_type_tag_class_T) {
+	if(a->tag == GENERIC_TYPE_TAG_CLASS_T) {
 		generic_type* receiver = ccat_receiver(a->virtual_type_index);
 		a = receiver;
-	} else if(a->tag == generic_type_tag_method_T) {
+	} else if(a->tag == GENERIC_TYPE_TAG_METHOD_T) {
 		generic_type* at = AtVector(cctop_type_args(), a->virtual_type_index);
 		a = at;
 	}

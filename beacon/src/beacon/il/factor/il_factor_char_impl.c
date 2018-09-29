@@ -4,11 +4,11 @@
 #include "../../util/text.h"
 #include "../../vm/enviroment.h"
 #include "../../env/namespace.h"
-#include "../../env/type_impl.h"
+#include "../../env/TYPE_IMPL.h"
 #include "../../util/mem.h"
 
 il_factor * il_factor_wrap_char(il_factor_char * self) {
-	il_factor* ret = il_factor_new(ilfactor_char_T);
+	il_factor* ret = il_factor_new(ILFACTOR_CHAR_T);
 	ret->u.char_ = self;
 	return ret;
 }
@@ -21,7 +21,7 @@ il_factor_char * il_factor_char_new(char c) {
 
 void il_factor_char_generate(il_factor_char * self, enviroment * env, call_context* cctx) {
 	int index = enviroment_add_constant_char(env, self->value);
-	opcode_buf_add(env->buf, op_cconst);
+	opcode_buf_add(env->buf, OP_CCONST);
 	opcode_buf_add(env->buf, index);
 }
 

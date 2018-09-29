@@ -13,10 +13,10 @@ struct generic_type;
  * 関数呼び出し演算子の種類を表す列挙型.
  */
 typedef enum ilcall_type {
-	ilcall_type_invoke_T,
-	ilcall_type_invoke_static_T,
-	ilcall_type_invoke_bound_T,
-	ilcall_type_undefined_T,
+	ILCALL_TYPE_INVOKE_T,
+	ILCALL_TYPE_INVOKE_STATIC_T,
+	ILCALL_TYPE_INVOKE_BOUND_T,
+	ILCALL_TYPE_UNDEFINED_T,
 } ilcall_type;
 
 /**
@@ -39,7 +39,7 @@ il_factor* il_factor_wrap_call_op(il_factor_call_op* self);
 
 il_factor_call_op* il_factor_call_op_new();
 
-void il_factor_call_op_load(il_factor_call_op* self, struct enviroment* env, call_context* cctx);
+void il_factor_call_OP_LOAD(il_factor_call_op* self, struct enviroment* env, call_context* cctx);
 
 struct generic_type* il_factor_call_op_eval(il_factor_call_op* self, struct enviroment* env, call_context* cctx);
 

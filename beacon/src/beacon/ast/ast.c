@@ -34,20 +34,20 @@ ast * MallocAST(ast_tag tag, const char* filename, int lineno) {
 }
 
 ast * NewASTNamespacePath(string_view namev) {
-	ast* ret = ast_new(ast_namespace_path_T);
+	ast* ret = ast_new(AST_NAMESPACE_PATH_T);
 	ret->u.stringv_value = namev;
 	return ret;
 }
 
 ast * NewASTNamespacePathList(ast * aforward, string_view namev) {
-	ast* ret = ast_new(ast_namespace_path_list_T);
+	ast* ret = ast_new(AST_NAMESPACE_PATH_LIST_T);
 	PushAST(ret, aforward);
 	PushAST(ret, NewASTNamespacePath(namev));
 	return ret;
 }
 
 ast * NewASTImportPath(ast* astr) {
-	ast* ret = ast_new(ast_import_path_T);
+	ast* ret = ast_new(AST_IMPORT_PATH_T);
 	ret->u.stringv_value = astr->u.stringv_value;
 	astr->u.stringv_value = 0;
 	MEM_FREE(astr);
@@ -55,20 +55,20 @@ ast * NewASTImportPath(ast* astr) {
 }
 
 ast * NewASTImportDecl(ast * aimport_path) {
-	ast* ret = ast_new(ast_import_decl_T);
+	ast* ret = ast_new(AST_IMPORT_DECL_T);
 	PushAST(ret, aimport_path);
 	return ret;
 }
 
 ast* NewASTImportDeclList(ast* aimport, ast* aimport_list) {
-	ast* ret = ast_new(ast_import_decl_list_T);
+	ast* ret = ast_new(AST_IMPORT_DECL_LIST_T);
 	PushAST(ret, aimport);
 	PushAST(ret, aimport_list);
 	return ret;
 }
 
 ast * NewASTScope(ast * astmt_list) {
-	ast* ret = ast_new(ast_scope_T);
+	ast* ret = ast_new(AST_SCOPE_T);
 	PushAST(ret, astmt_list);
 	return ret;
 }
@@ -78,24 +78,24 @@ ast * NewASTScopeEmpty() {
 }
 
 ast * NewASTBlank() {
-	return ast_new(ast_blank_T);
+	return ast_new(AST_BLANK_T);
 }
 
 ast * NewASTIdentifier(string_view strv) {
-	ast* ret = ast_new(ast_identifier_T);
+	ast* ret = ast_new(AST_IDENTIFIER_T);
 	ret->u.stringv_value = strv;
 	return ret;
 }
 
 ast * NewASTIdentifierList(string_view strv, ast * aident_list) {
-	ast* ret = ast_new(ast_identifier_list_T);
+	ast* ret = ast_new(AST_IDENTIFIER_LIST_T);
 	PushAST(ret, aident_list);
 	PushAST(ret, NewASTIdentifier(strv));
 	return ret;
 }
 
 ast * NewASTProc(ast * aexpr) {
-	ast* ret = ast_new(ast_proc_T);
+	ast* ret = ast_new(AST_PROC_T);
 	PushAST(ret, aexpr);
 	return ret;
 }
@@ -140,40 +140,40 @@ void DeleteAST(ast * self) {
 }
 
 bool IsBlankAST(ast * self) {
-	return self == NULL || self->tag == ast_blank_T;
+	return self == NULL || self->tag == AST_BLANK_T;
 }
 
 bool IsAccessAST(ast * self) {
-	return self->tag == ast_access_level_T;
+	return self->tag == AST_ACCESS_LEVEL_T;
 }
 
 bool IsModifierAST(ast * self) {
-	return self->tag == ast_mod_Tifier;
+	return self->tag == AST_MOD_Tifier;
 }
 
 bool IsStmtAST(ast* self) {
 	switch(self->tag) {
-		case ast_stmt_T:
-		case ast_stmt_list_T:
-		case ast_stmt_variable_decl_T:
-		case ast_stmt_variable_init_T:
-		case ast_inferenced_type_init_T:
-		case ast_if_T:
-		case ast_if_else_T:
-		case ast_if_elif_list_T:
-		case ast_if_elif_list_else_T:
-		case ast_elif_T:
-		case ast_else_T:
-		case ast_while_T:
-		case ast_continue_T:
-		case ast_break_T:
-		case ast_proc_T:
-		case ast_stmt_assert_T:
-		case ast_stmt_try_T:
-		case ast_stmt_catch_T:
-		case ast_stmt_catch_list_T:
-		case ast_stmt_defer_T:
-		case ast_inject_jni_value_T:
+		case AST_STMT_T:
+		case AST_STMT_LIST_T:
+		case AST_STMT_VARIABLE_DECL_T:
+		case AST_STMT_VARIABLE_INIT_T:
+		case AST_INFERENCED_TYPE_INIT_T:
+		case AST_IF_T:
+		case AST_IF_ELSE_T:
+		case AST_IF_ELIF_LIST_T:
+		case AST_IF_ELIF_LIST_ELSE_T:
+		case AST_ELIF_T:
+		case AST_ELSE_T:
+		case AST_WHILE_T:
+		case AST_CONTINUE_T:
+		case AST_BREAK_T:
+		case AST_PROC_T:
+		case AST_STMT_ASSERT_T:
+		case AST_STMT_TRY_T:
+		case AST_STMT_CATCH_T:
+		case AST_STMT_CATCH_LIST_T:
+		case AST_STMT_DEFER_T:
+		case AST_INJECT_JNI_VALUE_T:
 			return true;
 	}
 	return false;
@@ -186,7 +186,7 @@ access_level ASTCastToAccess(ast * self) {
 
 modifier_type ASTCastToModifier(ast * self, bool* error) {
 	(*error) = false;
-	if(self->tag == ast_mod_Tifier_list) {
+	if(self->tag == AST_MOD_Tifier_list) {
 		return ASTCastToModifierImpl(self, error);
 	}
 	assert(IsModifierAST(self));
@@ -195,14 +195,14 @@ modifier_type ASTCastToModifier(ast * self, bool* error) {
 
 constructor_chain_type ASTCastToChainType(ast * self) {
 	switch (self->tag) {
-		case ast_constructor_chain_this_T:
-			return chain_type_this_T;
-		case ast_constructor_chain_super_T:
-			return chain_type_super_T;
+		case AST_CONSTRUCTOR_CHAIN_THIS_T:
+			return CHAIN_TYPE_THIS_T;
+		case AST_CONSTRUCTOR_CHAIN_SUPER_T:
+			return CHAIN_TYPE_SUPER_T;
 		default:
 			break;
 	}
-	return chain_type_super_T;
+	return CHAIN_TYPE_SUPER_T;
 }
 
 //private

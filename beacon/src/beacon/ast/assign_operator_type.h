@@ -5,11 +5,11 @@
  * 代入演算子の種類.
  */
 typedef enum assign_operator_type {
-	assign_otype_def_T,
-	assign_otype_add_T,
-	assign_otype_sub_T,
-	assign_otype_mul_T,
-	assign_otype_div_T,
-	assign_otype_mod_T,
+	ASSIGN_OTYPE_DEF_T,
+	ASSIGN_OTYPE_ADD_T,
+	ASSIGN_OTYPE_SUB_T,
+	ASSIGN_OTYPE_MUL_T,
+	ASSIGN_OTYPE_DIV_T,
+	ASSIGN_OTYPE_MOD_T,
 } assign_operator_type;
 #endif // !SIGNAL_AST_ASSIGN_OPERATOR_TYPE_H

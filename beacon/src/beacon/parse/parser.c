@@ -19,17 +19,17 @@ parser* ParseString(const char* source) {
 	extern void yy_clearstr();
 	extern int yyparse(void);
 	gParser = parser_new();
-	gParser->input_type = yinput_string_T;
+	gParser->input_type = YINPUT_STRING_T;
 	gParser->source_name = NULL;
 	yy_setstr(Strdup(source));
 	if (yyparse()) {
 		yy_clearstr();
-		gParser->result = parse_syntax_error_T;
+		gParser->result = PARSE_SYNTAX_ERROR_T;
 		RelocationParserError(gParser);
 		return gParser;
 	}
 	yy_clearstr();
-	gParser->result = parse_complete_T;
+	gParser->result = PARSE_COMPLETE_T;
 	return gParser;
 }
 
@@ -41,19 +41,19 @@ parser* ParseFile(const char* filename) {
 	yy_setstr(NULL);
 	yyin = fopen(filename, "r");
 	gParser = parser_new();
-	gParser->input_type = yinput_file_T;
+	gParser->input_type = YINPUT_FILE_T;
 	gParser->source_name = Strdup(filename);
 	//対象のファイルを開けなかった
 	if(!yyin) {
-		gParser->result = parse_open_error_T;
+		gParser->result = PARSE_OPEN_ERROR_T;
 		return gParser;
 	}
 	if (yyparse()) {
-		gParser->result = parse_syntax_error_T;
+		gParser->result = PARSE_SYNTAX_ERROR_T;
 		RelocationParserError(gParser);
 		return gParser;
 	}
-	gParser->result = parse_complete_T;
+	gParser->result = PARSE_COMPLETE_T;
 	return gParser;
 }
 
@@ -115,11 +115,11 @@ static parser* parser_new() {
 	ret->error_line_text = NULL;
 	ret->error_line_index = -1;
 	ret->error_column_index = -1;
-	ret->input_type = yinput_file_T;
-	ret->result = parse_await_T;
+	ret->input_type = YINPUT_FILE_T;
+	ret->result = PARSE_AWAIT_T;
 	ret->lineno = 0;
 	ret->literal_buffer = NULL;
 	ret->lineno_vec = NewVector();
-	ret->root = ast_new(ast_root_T);
+	ret->root = ast_new(AST_ROOT_T);
 	return ret;
 }

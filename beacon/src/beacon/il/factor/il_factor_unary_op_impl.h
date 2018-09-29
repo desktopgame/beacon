@@ -30,7 +30,7 @@ il_factor_unary_op* il_factor_unary_op_new(operator_type type);
 
 void il_factor_unary_op_generate(il_factor_unary_op* self, struct enviroment* env, call_context* cctx);
 
-void il_factor_unary_op_load(il_factor_unary_op* self, struct enviroment* env, call_context* cctx);
+void il_factor_unary_OP_LOAD(il_factor_unary_op* self, struct enviroment* env, call_context* cctx);
 
 generic_type* il_factor_unary_op_eval(il_factor_unary_op* self, struct enviroment* env, call_context* cctx);
 

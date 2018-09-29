@@ -25,7 +25,7 @@ il_factor* il_factor_wrap_member_op(il_factor_member_op* self);
 
 il_factor_member_op* il_factor_member_op_new(string_view namev);
 
-void il_factor_member_op_load(il_factor_member_op* self, struct enviroment* env, call_context* cctx);
+void il_factor_member_OP_LOAD(il_factor_member_op* self, struct enviroment* env, call_context* cctx);
 
 void il_factor_member_op_generate(il_factor_member_op* self, struct enviroment* env, call_context* cctx);
 

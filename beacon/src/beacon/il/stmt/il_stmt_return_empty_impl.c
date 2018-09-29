@@ -10,7 +10,7 @@
 static void check_method_return(il_stmt_return_empty self, enviroment * env, call_context* cctx);
 
 void il_stmt_return_empty_generate(il_stmt_return_empty self, enviroment* env, call_context* cctx) {
-	opcode_buf_add(env->buf, op_return);
+	opcode_buf_add(env->buf, OP_RETURN);
 }
 
 void il_stmt_return_empty_load(il_stmt_return_empty self, enviroment* env, call_context* cctx) {
@@ -18,13 +18,13 @@ void il_stmt_return_empty_load(il_stmt_return_empty self, enviroment* env, call_
 }
 //private
 static void check_method_return(il_stmt_return_empty self, enviroment * env, call_context* cctx) {
-	if(cctx->tag != call_method_T) {
+	if(cctx->tag != CALL_METHOD_T) {
 		return;
 	}
 	method* m = call_context_method(cctx);
 	//戻り値が Void ではないのに値を返さない
 	if(m->return_gtype->core_type != TYPE_VOID) {
-		bc_error_throw(bcerror_not_return_value_not_void_method_T,
+		bc_error_throw(BCERROR_NOT_RETURN_VALUE_NOT_VOID_METHOD_T,
 			Ref2Str(type_name(m->parent)),
 			Ref2Str(m->namev)
 		);

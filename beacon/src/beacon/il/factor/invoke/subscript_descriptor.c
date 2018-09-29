@@ -5,11 +5,11 @@
 #include "../../../vm/symbol_entry.h"
 
 generic_type* subscript_descriptor_receiver(const subscript_descriptor* desc) {
-	if(desc->tag == subscript_local_T) {
+	if(desc->tag == SUBSCRIPT_LOCAL_T) {
 		return desc->u.local->gtype;
-	} else if(desc->tag == subscript_field_T) {
+	} else if(desc->tag == SUBSCRIPT_FIELD_T) {
 		return desc->u.fi->gtype;
-	} else if(desc->tag == subscript_property_T) {
+	} else if(desc->tag == SUBSCRIPT_PROPERTY_T) {
 		return desc->u.prop->gtype;
 	}
 	return NULL;

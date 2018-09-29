@@ -20,11 +20,11 @@ struct call_context;
  * それ自体が型変数の場合、何の型変数を指しているかを示す列挙型です.
  */
 typedef enum generic_type_tag {
-	generic_type_tag_none_T,
+	GENERIC_TYPE_TAG_NONE_T,
 	//クラスの型変数
-	generic_type_tag_class_T,
+	GENERIC_TYPE_TAG_CLASS_T,
 	//メソッドの型変数
-	generic_type_tag_method_T,
+	GENERIC_TYPE_TAG_METHOD_T,
 } generic_type_tag;
 
 /**

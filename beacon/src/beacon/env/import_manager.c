@@ -13,7 +13,7 @@
 #include <assert.h>
 #include"generic_cache.h"
 #include "generic_type.h"
-#include "type_impl.h"
+#include "TYPE_IMPL.h"
 
 //proto
 static void import_manager_delete_import_info(VectorItem item);
@@ -58,7 +58,7 @@ generic_type* import_manager_resolve(namespace_* scope, generic_cache* fqcn, cal
 		//Array, Dictionary などはっきりした型が見つかった
 		//が、型引数があるのでそれを解決する
 		generic_type* normalGType = generic_type_new(core_type);
-		assert(core_type->tag != type_enum_T);
+		assert(core_type->tag != TYPE_ENUM_T);
 		for (int i = 0; i < fqcn->type_args->length; i++) {
 			generic_cache* e = (generic_cache*)AtVector(fqcn->type_args, i);
 			generic_type* child = import_manager_resolve(scope, e, cctx);
@@ -75,13 +75,13 @@ generic_type* import_manager_resolve(namespace_* scope, generic_cache* fqcn, cal
 	//T, Eなど
 	method* mt = call_context_method(cctx);
 	if(parameterized->virtual_type_index == -1 && mt != NULL) {
-		parameterized->tag = generic_type_tag_method_T;
+		parameterized->tag = GENERIC_TYPE_TAG_METHOD_T;
 		parameterized->virtual_type_index = method_for_generic_index(mt, fqcn->fqcn->namev);
 		parameterized->u.method_ = mt;
 	}
 	type* ty = call_context_type(cctx);
 	if(parameterized->virtual_type_index == -1 &&  ty != NULL) {
-		parameterized->tag = generic_type_tag_class_T;
+		parameterized->tag = GENERIC_TYPE_TAG_CLASS_T;
 		parameterized->virtual_type_index = type_for_generic_index(ty, fqcn->fqcn->namev);
 		parameterized->u.type_ = ty;
 	}
@@ -116,7 +116,7 @@ generic_type* import_manager_resolvef(namespace_* scope, fqcn_cache* fqcn, call_
 		const char* methodname = Ref2Str(mt->namev);
 		#endif
 		int index = method_for_generic_index(mt, fqcn->namev);
-		parameterized->tag = generic_type_tag_method_T;
+		parameterized->tag = GENERIC_TYPE_TAG_METHOD_T;
 		parameterized->virtual_type_index = index;
 		parameterized->u.method_ = mt;
 	}
@@ -127,7 +127,7 @@ generic_type* import_manager_resolvef(namespace_* scope, fqcn_cache* fqcn, call_
 		const char* typename_ = Ref2Str(type_name(ty));
 		#endif
 		int index = type_for_generic_index(ty, fqcn->namev);
-		parameterized->tag = generic_type_tag_class_T;
+		parameterized->tag = GENERIC_TYPE_TAG_CLASS_T;
 		parameterized->virtual_type_index = index;
 		parameterized->u.type_ = ty;
 	}

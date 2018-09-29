@@ -8,9 +8,9 @@
  * パラメータの種類を表す列挙型.
  */
 typedef enum il_parameter_type {
-	il_param_type_default,
-	il_param_type_ref_T,
-	il_param_type_out_T,
+	IL_PARAM_TYPE_DEFAULT,
+	IL_PARAM_TYPE_REF_T,
+	IL_PARAM_TYPE_OUT_T,
 } il_parameter_type;
 /**
  * メソッド/関数の引数を表す要素.

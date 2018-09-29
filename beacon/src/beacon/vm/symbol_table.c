@@ -2,7 +2,7 @@
 #include "../util/mem.h"
 #include "symbol_entry.h"
 #include "../env/type_interface.h"
-#include "../env/type_impl.h"
+#include "../env/TYPE_IMPL.h"
 //#include "../env/generic_type.h"
 #include <assert.h>
 #include <string.h>

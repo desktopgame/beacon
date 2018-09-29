@@ -4,7 +4,7 @@
 #include <stdbool.h>
 #include <assert.h>
 #include "type_interface.h"
-#include "type_impl.h"
+#include "TYPE_IMPL.h"
 #include "script_context.h"
 #include "../lib/bc_library_interface.h"
 #include "../util/text.h"

@@ -7,7 +7,7 @@
 #include <assert.h>
 
 il_stmt* il_stmt_wrap_assert(il_stmt_assert* self) {
-	il_stmt* ret = il_stmt_new(ilstmt_assert_T);
+	il_stmt* ret = il_stmt_new(ILSTMT_ASSERT_T);
 	ret->u.bcassert_ = self;
 	self->parent = ret;
 	return ret;
@@ -25,14 +25,14 @@ void il_stmt_assert_generate(il_stmt_assert* self, enviroment* env, call_context
 	//https://code.i-harness.com/ja/q/2a1650
 	label* gt = opcode_buf_label(env->buf, 0);
 	il_factor_generate(self->condition, env, cctx);
-	opcode_buf_add(env->buf, op_goto_if_true);
+	opcode_buf_add(env->buf, OP_GOTO_if_true);
 	opcode_buf_add(env->buf, gt);
 
 	il_factor_generate(self->message, env, cctx);
-	opcode_buf_add(env->buf, op_new_instance);
+	opcode_buf_add(env->buf, OP_NEW_INSTANCE);
 	opcode_buf_add(env->buf, namespace_get_type(namespace_lang(), InternString("Exception"))->absolute_index);
 	opcode_buf_add(env->buf, 0);
-	opcode_buf_add(env->buf, op_throw);
+	opcode_buf_add(env->buf, OP_THROW);
 	gt->cursor = opcode_buf_nop(env->buf);
 }
 

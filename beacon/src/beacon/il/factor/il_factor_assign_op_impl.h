@@ -11,7 +11,7 @@ il_factor* il_factor_wrap_assign(il_factor_assign_op* self);
 
 il_factor_assign_op* il_factor_assign_op_new();
 
-void il_factor_assign_op_load(il_factor_assign_op* self, enviroment* env, call_context* cctx);
+void il_factor_assign_OP_LOAD(il_factor_assign_op* self, enviroment* env, call_context* cctx);
 
 void il_factor_assign_op_generate(il_factor_assign_op* self, enviroment* env, call_context* cctx);
 

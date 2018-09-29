@@ -19,9 +19,9 @@ struct class_loader;
  * メソッドの種類を表す列挙.
  */
 typedef enum method_type {
-	method_type_script_T,
-	method_type_native_T,
-	method_type_abstract_T,
+	METHOD_TYPE_SCRIPT_T,
+	METHOD_TYPE_NATIVE_T,
+	METHOD_TYPE_ABSTRACT_T,
 } method_type;
 
 /**

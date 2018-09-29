@@ -51,7 +51,7 @@ void sg_thread_set_frame_ref(sg_thread * self, frame * frame_ref) {
 	self->vm_crush_by_exception = false;
 	self->vm_dump = false;
 	self->frame_ref = frame_ref;
-	self->cctx = call_context_new(call_top_T);
+	self->cctx = call_context_new(CALL_TOP_T);
 }
 
 frame * sg_thread_get_frame_ref(sg_thread * self) {

@@ -3,10 +3,10 @@
 #include "../../util/text.h"
 #include "../../env/type_interface.h"
 #include "../../env/namespace.h"
-#include "../../env/type_impl.h"
+#include "../../env/TYPE_IMPL.h"
 
 il_factor * il_factor_wrap_bool(il_factor_bool * self) {
-	il_factor* ret = il_factor_new(ilfactor_bool_T);
+	il_factor* ret = il_factor_new(ILFACTOR_BOOL_T);
 	ret->u.bool_ = self;
 	return ret;
 }
@@ -19,9 +19,9 @@ il_factor_bool * il_factor_bool_new(bool b) {
 
 void il_factor_bool_generate(il_factor_bool * self, enviroment * env, call_context* cctx) {
 	if (self->a) {
-		opcode_buf_add(env->buf, op_true);
+		opcode_buf_add(env->buf, OP_TRUE);
 	} else {
-		opcode_buf_add(env->buf, op_false);
+		opcode_buf_add(env->buf, OP_FALSE);
 	}
 }
 

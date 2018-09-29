@@ -6,9 +6,9 @@
  * 型の種類を判別する列挙.
  */
 typedef enum il_type_tag {
-	iltype_class_T,
-	iltype_interface_T,
-	iltype_enum_T,
+	ilTYPE_CLASS_T,
+	ilTYPE_INTERFACE_T,
+	ilTYPE_ENUM_T,
 } il_type_tag;
 
 struct il_class;

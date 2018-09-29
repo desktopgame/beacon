@@ -14,7 +14,7 @@
 #include "../il/call_context.h"
 #include "../il/il_stmt_impl.h"
 #include "../vm/vm.h"
-#include "type_impl.h"
+#include "TYPE_IMPL.h"
 #include "type_parameter.h"
 #include "generic_type.h"
 #include "constructor.h"
@@ -38,9 +38,9 @@ method* method_malloc(string_view namev, const char* filename, int lineno) {
 	method* ret = (method*)mem_malloc(sizeof(method), filename, lineno);
 	ret->namev = namev;
 	ret->parameters = MallocVector(filename, lineno);
-	ret->type = method_type_script_T;
-	ret->access = access_public_T;
-	ret->modifier = modifier_none_T;
+	ret->type = METHOD_TYPE_SCRIPT_T;
+	ret->access = ACCESS_PUBLIC_T;
+	ret->modifier = MODIFIER_NONE_T;
 	ret->parent = NULL;
 	ret->type_parameters = MallocVector(filename, lineno);
 	ret->return_gtype = NULL;
@@ -54,9 +54,9 @@ void method_execute(method* self, frame * fr, enviroment* env) {
 		int a = 0;
 	}
 	#endif
-	if (self->type == method_type_script_T) {
+	if (self->type == METHOD_TYPE_SCRIPT_T) {
 		script_method_execute(self->u.script_method, self, fr, env);
-	} else if (self->type == method_type_native_T) {
+	} else if (self->type == METHOD_TYPE_NATIVE_T) {
 		frame* a = frame_sub(fr);
 		call_frame* cfr = NULL;
 		Vector* aArgs = NULL;
@@ -65,12 +65,12 @@ void method_execute(method* self, frame * fr, enviroment* env) {
 		if(!IsStaticModifier(self->modifier)) {
 			object* receiver_obj = PopVector(fr->value_stack);
 			AssignVector(a->ref_stack, 0, receiver_obj);
-			cfr = call_context_push(sg_thread_context(), frame_instance_invoke_T);
+			cfr = call_context_push(sg_thread_context(), FRAME_INSTANCE_INVOKE_T);
 			cfr->u.instance_invoke.receiver = receiver_obj->gtype;
 			aArgs = cfr->u.instance_invoke.args = method_vm_args(self, fr, a);
 			aTArgs = cfr->u.instance_invoke.typeargs = method_vm_typeargs(self, fr, a);
 		} else {
-			cfr = call_context_push(sg_thread_context(), frame_static_invoke_T);
+			cfr = call_context_push(sg_thread_context(), FRAME_STATIC_INVOKE_T);
 			aArgs = cfr->u.static_invoke.args = method_vm_args(self, fr, a);
 			aTArgs = cfr->u.static_invoke.typeargs = method_vm_typeargs(self, fr, a);
 		}
@@ -103,7 +103,7 @@ bool method_override(method* superM, method* subM, call_context* cctx) {
 		generic_type* superGT = superP->gtype;
 		generic_type* subGT = subP->gtype;
 
-		call_frame* cfr = call_context_push(cctx, frame_resolve_T);
+		call_frame* cfr = call_context_push(cctx, FRAME_RESOLVE_T);
 		cfr->u.resolve.gtype = bl;
 		generic_type* superGT2 = generic_type_apply(superGT, cctx);
 		call_context_pop(cctx);
@@ -116,7 +116,7 @@ bool method_override(method* superM, method* subM, call_context* cctx) {
 	}
 	generic_type* superRet = superM->return_gtype;
 	generic_type* subRet = subM->return_gtype;
-	call_frame* cfr = call_context_push(cctx, frame_resolve_T);
+	call_frame* cfr = call_context_push(cctx, FRAME_RESOLVE_T);
 	cfr->u.resolve.gtype = bl;
 	generic_type* superRet2 = generic_type_apply(superRet, cctx);
 //	generic_type_diff(superRet, superRet2);
@@ -141,9 +141,9 @@ int method_for_generic_index(method * self, string_view namev) {
 void method_delete(method * self) {
 	DeleteVector(self->type_parameters, method_type_parameter_delete);
 	DeleteVector(self->parameters, method_parameter_delete);
-	if (self->type == method_type_script_T) {
+	if (self->type == METHOD_TYPE_SCRIPT_T) {
 		script_method_delete(self->u.script_method);
-	} else if (self->type == method_type_native_T) {
+	} else if (self->type == METHOD_TYPE_NATIVE_T) {
 		native_method_delete(self->u.native_method);
 	}
 	MEM_FREE(self);
@@ -166,9 +166,9 @@ string_view method_mangle(method* self) {
 		if(gt->core_type == NULL) {
 			//ジェネリックの場合は methodname_c0 のように
 			//何番目の型変数であるかを入れる
-			if(gt->tag == generic_type_tag_class_T) {
+			if(gt->tag == GENERIC_TYPE_TAG_CLASS_T) {
 				AppendBuffer(ret, 'c');
-			} else if(gt->tag == generic_type_tag_method_T) {
+			} else if(gt->tag == GENERIC_TYPE_TAG_METHOD_T) {
 				AppendBuffer(ret, 'm');
 			} else {
 				assert(false);
@@ -205,7 +205,7 @@ bool method_coroutine(method* self) {
 
 bool method_yield(method* self, Vector* stmt_list, bool* error) {
 	(*error) = false;
-	if(self->type != method_type_script_T || !method_coroutine(self)) {
+	if(self->type != METHOD_TYPE_SCRIPT_T || !method_coroutine(self)) {
 		return false;
 	}
 	int yield_ret = 0;
@@ -227,8 +227,8 @@ bool method_yield(method* self, Vector* stmt_list, bool* error) {
 }
 
 type* method_create_iterator_type(method* self,  class_loader* cll, Vector* stmt_list) {
-	call_context* lCctx = call_context_new(call_ctor_T);
-	call_frame* lCfr = call_context_push(lCctx, frame_resolve_T);
+	call_context* lCctx = call_context_new(CALL_CTOR_T);
+	call_frame* lCfr = call_context_push(lCctx, FRAME_RESOLVE_T);
 	lCfr->u.resolve.gtype = self->return_gtype;
 	string_view iterName = method_unique(self);
 	type* iterT = namespace_get_type(namespace_lang(), InternString("Iterator"));
@@ -261,7 +261,7 @@ static void method_type_parameter_delete(VectorItem item) {
 
 static void method_count(il_stmt* s, int* yield_ret, int* ret) {
 	switch (s->type) {
-		case ilstmt_if_T:
+		case ILSTMT_IF_T:
 		{
 			//if() { ... }
 			il_stmt_if* sif = s->u.if_;
@@ -281,14 +281,14 @@ static void method_count(il_stmt* s, int* yield_ret, int* ret) {
 			}
 			break;
 		}
-		case ilstmt_proc_T:
-		case ilstmt_variable_decl_T:
-		case ilstmt_variable_init_T:
+		case ILSTMT_PROC_T:
+		case ILSTMT_VARIABLE_DECL_T:
+		case ILSTMT_VARIABLE_INIT_T:
 			break;
-		case ilstmt_return_T:
+		case ILSTMT_RETURN_T:
 			(*ret)++;
 			break;
-		case ilstmt_while_T:
+		case ILSTMT_WHILE_T:
 		{
 			il_stmt_while* whi = s->u.while_;
 			for(int i=0; i<whi->statement_list->length; i++) {
@@ -297,11 +297,11 @@ static void method_count(il_stmt* s, int* yield_ret, int* ret) {
 			}
 			break;
 		}
-		case ilstmt_break_T:
-		case ilstmt_continue_T:
-		case ilstmt_inferenced_type_init_T:
+		case ILSTMT_BREAK_T:
+		case ILSTMT_CONTINUE_T:
+		case ILSTMT_INFERENCED_TYPE_INIT_T:
 			break;
-		case ilstmt_try_T:
+		case ILSTMT_TRY_T:
 		{
 			il_stmt_try* tr = s->u.try_;
 			for(int i=0; i<tr->statement_list->length; i++) {
@@ -318,14 +318,14 @@ static void method_count(il_stmt* s, int* yield_ret, int* ret) {
 			}
 			break;
 		}
-		case ilstmt_throw_T:
-		case ilstmt_assert_T:
-		case ilstmt_defer_T:
+		case ILSTMT_THROW_T:
+		case ILSTMT_ASSERT_T:
+		case ILSTMT_DEFER_T:
 			break;
-		case ilstmt_yield_return_T:
+		case ILSTMT_YIELD_RETURN_T:
 			(*yield_ret)++;
 			break;
-		case ilstmt_yield_break_T:
+		case ILSTMT_YIELD_BREAK_T:
 		default:
 			//ERROR("ステートメントをダンプ出来ませんでした。");
 			break;
@@ -356,17 +356,17 @@ static constructor* create_delegate_ctor(method* self, type* ty, class_loader* c
 		);
 		//実引数を保存
 		//0番目は this のために開けておく
-		opcode_buf_add(envIterCons->buf, (VectorItem)op_store);
+		opcode_buf_add(envIterCons->buf, (VectorItem)OP_STORE);
 		opcode_buf_add(envIterCons->buf, (VectorItem)(i + 1));
 	}
 	//親クラスへ連鎖
-	opcode_buf_add(envIterCons->buf, (VectorItem)op_chain_super);
+	opcode_buf_add(envIterCons->buf, (VectorItem)OP_CHAIN_SUPER);
 	opcode_buf_add(envIterCons->buf, (VectorItem)0);
 	opcode_buf_add(envIterCons->buf, (VectorItem)0);
 	//このクラスのフィールドを確保
-	opcode_buf_add(envIterCons->buf, (VectorItem)op_alloc_field);
+	opcode_buf_add(envIterCons->buf, (VectorItem)OP_ALLOC_FIELD);
 	opcode_buf_add(envIterCons->buf, (VectorItem)ty->absolute_index);
-	opcode_buf_add(envIterCons->buf, op_coro_init);
+	opcode_buf_add(envIterCons->buf, OP_CORO_INIT);
 	opcode_buf_add(envIterCons->buf, iterCons->parameter_list->length);
 	opcode_buf_add(envIterCons->buf, op_len);
 	iterCons->env = envIterCons;
@@ -376,12 +376,12 @@ static constructor* create_delegate_ctor(method* self, type* ty, class_loader* c
 static method* create_has_next(method* self, type* ty, class_loader* cll, Vector* stmt_list, int* out_op_len) {
 	method* mt = method_new(InternString("moveNext"));
 	mt->return_gtype = GENERIC_BOOL;
-	mt->modifier = modifier_none_T;
-	mt->access = access_public_T;
-	mt->type = method_type_script_T;
+	mt->modifier = MODIFIER_NONE_T;
+	mt->access = ACCESS_PUBLIC_T;
+	mt->type = METHOD_TYPE_SCRIPT_T;
 	script_method* smt = script_method_new();
 	enviroment* envSmt = enviroment_new();
-	call_context* cctx = call_context_new(call_method_T);
+	call_context* cctx = call_context_new(CALL_METHOD_T);
 	cctx->scope = self->parent->location;
 	cctx->ty = self->parent;
 	cctx->u.mt = self;
@@ -397,13 +397,13 @@ static method* create_has_next(method* self, type* ty, class_loader* cll, Vector
 		);
 		//実引数を保存
 		//0番目は this のために開けておく
-		//opcode_buf_add(envSmt->buf, (VectorItem)op_store);
+		//opcode_buf_add(envSmt->buf, (VectorItem)OP_STORE);
 		//opcode_buf_add(envSmt->buf, (VectorItem)(i + 1));
 	}
-	opcode_buf_add(envSmt->buf, (VectorItem)op_store);
+	opcode_buf_add(envSmt->buf, (VectorItem)OP_STORE);
 	opcode_buf_add(envSmt->buf, (VectorItem)0);
-	opcode_buf_add(envSmt->buf, (VectorItem)op_coro_swap_self);
-	opcode_buf_add(envSmt->buf, (VectorItem)op_coro_resume);
+	opcode_buf_add(envSmt->buf, (VectorItem)OP_CORO_SWAP_SELF);
+	opcode_buf_add(envSmt->buf, (VectorItem)OP_CORO_RESUME);
 	for(int i=0; i<stmt_list->length; i++) {
 		il_stmt* e = (il_stmt*)AtVector(stmt_list, i);
 		il_stmt_load(e, envSmt, cctx);
@@ -412,7 +412,7 @@ static method* create_has_next(method* self, type* ty, class_loader* cll, Vector
 		il_stmt* e = (il_stmt*)AtVector(stmt_list, i);
 		il_stmt_generate(e, envSmt, cctx);
 	}
-	opcode_buf_add(envSmt->buf, op_coro_exit);
+	opcode_buf_add(envSmt->buf, OP_CORO_EXIT);
 	if(type_name(self->parent) == InternString("Base")) {
 	//	enviroment_op_dump(envSmt, 0);
 	}
@@ -427,20 +427,20 @@ static method* create_has_next(method* self, type* ty, class_loader* cll, Vector
 static method* create_next(method* self, type* ty, class_loader* cll,generic_type* a, Vector* stmt_list, int* out_op_len) {
 	method* mt = method_new(InternString("current"));
 	mt->return_gtype = a;
-	mt->modifier = modifier_none_T;
-	mt->access = access_public_T;
-	mt->type = method_type_script_T;
+	mt->modifier = MODIFIER_NONE_T;
+	mt->access = ACCESS_PUBLIC_T;
+	mt->type = METHOD_TYPE_SCRIPT_T;
 	script_method* smt = script_method_new();
 	enviroment* envSmt = enviroment_new();
-	call_context* cctx = call_context_new(call_method_T);
+	call_context* cctx = call_context_new(CALL_METHOD_T);
 	cctx->scope = self->parent->location;
 	cctx->ty = self->parent;
 	cctx->u.mt = mt;
 
-	opcode_buf_add(envSmt->buf, (VectorItem)op_store);
+	opcode_buf_add(envSmt->buf, (VectorItem)OP_STORE);
 	opcode_buf_add(envSmt->buf, (VectorItem)0);
-	opcode_buf_add(envSmt->buf, (VectorItem)op_coro_swap_self);
-	opcode_buf_add(envSmt->buf, (VectorItem)op_coro_current);
+	opcode_buf_add(envSmt->buf, (VectorItem)OP_CORO_SWAP_SELF);
+	opcode_buf_add(envSmt->buf, (VectorItem)OP_CORO_CURRENT);
 
 	envSmt->context_ref = cll;
 	cctx->scope = self->parent->location;

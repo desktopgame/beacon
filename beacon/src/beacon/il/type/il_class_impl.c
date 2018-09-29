@@ -22,7 +22,7 @@ static void il_class_prop_delete(VectorItem item );
 
 il_type * il_type_wrap_class(il_class * self) {
 	il_type* ret = il_type_new();
-	ret->tag = iltype_class_T;
+	ret->tag = ilTYPE_CLASS_T;
 	ret->u.class_ = self;
 	return ret;
 }

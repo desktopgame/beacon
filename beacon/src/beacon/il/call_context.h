@@ -14,17 +14,17 @@ struct fqcn_cache;
 
 typedef enum call_context_tag {
 	//プログラムのトップレベル
-	call_top_T,
+	CALL_TOP_T,
 	//メソッド
-	call_method_T,
+	CALL_METHOD_T,
 	//コンストラクタ
-	call_ctor_T,
+	CALL_CTOR_T,
 	//演算子オーバーロード
-	call_opov_T,
+	CALL_OPOV_T,
 	//コンストラクタの連鎖
-	call_ctor_args_T,
+	CALL_CTOR_ARGS_T,
 
-	call_decl_T
+	CALL_DECL_T
 } call_context_tag;
 
 typedef struct call_context {

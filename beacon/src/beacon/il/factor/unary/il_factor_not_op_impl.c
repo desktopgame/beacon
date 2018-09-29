@@ -5,7 +5,7 @@
 #include "../../../vm/enviroment.h"
 #include "../../../env/namespace.h"
 #include "../../il_factor_impl.h"
-#include "../../../env/type_impl.h"
+#include "../../../env/TYPE_IMPL.h"
 #include "../../../env/operator_overload.h"
 #include "../il_factor_unary_op_impl.h"
 
@@ -29,18 +29,18 @@ void il_factor_not_op_generate(il_factor_not_op* self, enviroment* env, call_con
 		}
 		generic_type* gt = il_factor_eval(self->parent->a, env, cctx);
 		if(GENERIC2TYPE(gt) == TYPE_BOOL) {
-			opcode_buf_add(env->buf, op_bnot);
+			opcode_buf_add(env->buf, OP_BNOT);
 		} else {
 			assert(false);
 		}
 	} else {
 		il_factor_generate(self->parent->a, env, cctx);
-		opcode_buf_add(env->buf, op_invokeoperator);
+		opcode_buf_add(env->buf, OP_INVOKEOPERATOR);
 		opcode_buf_add(env->buf, self->operator_index);
 	}
 }
 
-void il_factor_not_op_load(il_factor_not_op* self, enviroment* env, call_context* cctx) {
+void il_factor_not_OP_LOAD(il_factor_not_op* self, enviroment* env, call_context* cctx) {
 	 il_factor_load(self->parent->a, env, cctx);
 	generic_type* gt = il_factor_eval(self->parent->a, env, cctx);
 	if(GENERIC2TYPE(gt) != TYPE_BOOL) {

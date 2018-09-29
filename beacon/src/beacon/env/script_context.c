@@ -80,7 +80,7 @@ void script_context_bootstrap(script_context* self) {
 	bc_locale_init();
 	bc_time_init();
 	//ブートストラップクラスローダー
-	self->bootstrap_class_loader = class_loader_new("bootstrap", content_lib_T);
+	self->bootstrap_class_loader = class_loader_new("bootstrap", CONTENT_LIB_T);
 	class_loader_special(self->bootstrap_class_loader, "beacon/lang/Object.bc");
 
 	class_loader_special(self->bootstrap_class_loader, "beacon/lang/Int.bc");
@@ -107,7 +107,7 @@ void script_context_static_each(script_context* self, static_each act) {
 	script_context* ctx = self;
 	for (int i = 0; i < ctx->type_vec->length; i++) {
 		type* e = (type*)AtVector(ctx->type_vec, i);
-		if (e->tag != type_class_T) {
+		if (e->tag != TYPE_CLASS_T) {
 			continue;
 		}
 		class_* cls = e->u.class_;
@@ -130,7 +130,7 @@ object* script_context_iintern(script_context* self, int i) {
 	he->accept_blocking++;
 	if(cell == NULL) {
 		object* obj = object_int_new(i);
-		obj->paint = paint_onexit_T;
+		obj->paint = PAINT_ONEXIT_T;
 		cell = PutNumericMap(self->n_int_map, i, obj);
 	}
 	he->accept_blocking--;
@@ -152,13 +152,13 @@ void script_context_cache() {
 	for(int i=0; i<100; i++) {
 		object* a = object_int_new(i);
 		PushVector(self->pos_int_vec, a);
-		a->paint = paint_onexit_T;
+		a->paint = PAINT_ONEXIT_T;
 	}
 	//負の数のキャッシュ
 	for(int i=1; i<10; i++) {
 		object* a = object_int_new(-i);
 		PushVector(self->neg_int_vec, a);
-		a->paint = paint_onexit_T;
+		a->paint = PAINT_ONEXIT_T;
 	}
 	if(h != NULL) h->accept_blocking--;
 }
@@ -201,7 +201,7 @@ static void script_context_free(script_context* self) {
 	class_loader_delete(self->bootstrap_class_loader);
 	if(self->null_obj != NULL) {
 		heap_ignore(self->heap, self->null_obj);
-		self->null_obj->paint = paint_onexit_T;
+		self->null_obj->paint = PAINT_ONEXIT_T;
 		object_destroy(self->null_obj);
 	}
 	heap_delete(self->heap);

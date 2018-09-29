@@ -31,7 +31,7 @@ void il_factor_invoke_static_generate(il_factor_invoke_static* self, enviroment*
 	for(int i=0; i<self->type_args->length; i++) {
 		il_type_argument* e = (il_type_argument*)AtVector(self->type_args, i);
 		assert(e->gtype != NULL);
-		opcode_buf_add(env->buf, op_generic_add);
+		opcode_buf_add(env->buf, OP_GENERIC_ADD);
 		generic_type_generate(e->gtype, env);
 	}
 	for(int i=0; i<self->args->length; i++) {
@@ -41,7 +41,7 @@ void il_factor_invoke_static_generate(il_factor_invoke_static* self, enviroment*
 			return;
 		}
 	}
-	opcode_buf_add(env->buf, (VectorItem)op_invokestatic);
+	opcode_buf_add(env->buf, (VectorItem)OP_INVOKESTATIC);
 	opcode_buf_add(env->buf, (VectorItem)self->m->parent->absolute_index);
 	opcode_buf_add(env->buf, (VectorItem)self->index);
 }
@@ -57,7 +57,7 @@ generic_type* il_factor_invoke_static_eval(il_factor_invoke_static * self, envir
 		return NULL;
 	}
 	generic_type* rgtp = self->m->return_gtype;
-	if(rgtp->tag != generic_type_tag_none_T) {
+	if(rgtp->tag != GENERIC_TYPE_TAG_NONE_T) {
 		resolve_non_default(self, env, cctx);
 		return self->resolved;
 	} else {
@@ -94,7 +94,7 @@ static void resolve_non_default(il_factor_invoke_static * self, enviroment * env
 	generic_type* rgtp = self->m->return_gtype;
 	generic_type* instanced_type = (generic_type*)AtVector(self->type_args, rgtp->virtual_type_index);
 	self->resolved = generic_type_new(instanced_type->core_type);
-	self->resolved->tag = generic_type_tag_method_T;
+	self->resolved->tag = GENERIC_TYPE_TAG_METHOD_T;
 	self->resolved->virtual_type_index = rgtp->virtual_type_index;
 }
 
@@ -102,7 +102,7 @@ static void resolve_default(il_factor_invoke_static * self, enviroment * env, ca
 	if(self->resolved != NULL) {
 		return;
 	}
-	call_frame* cfr = call_context_push(cctx, frame_static_invoke_T);
+	call_frame* cfr = call_context_push(cctx, FRAME_STATIC_INVOKE_T);
 	cfr->u.static_invoke.args = self->args;
 	cfr->u.static_invoke.typeargs = self->type_args;
 	generic_type* rgtp = self->m->return_gtype;
@@ -113,7 +113,7 @@ static void resolve_default(il_factor_invoke_static * self, enviroment * env, ca
 static void il_factor_invoke_static_check(il_factor_invoke_static * self, enviroment * env, call_context* cctx) {
 	type* ty =call_context_eval_type(cctx, self->fqcn);
 	if(ty == NULL) {
-		bc_error_throw(bcerror_undefined_type_static_invoke_T,
+		bc_error_throw(BCERROR_UNDEFINED_TYPE_STATIC_INVOKE_T,
 			Ref2Str(self->fqcn->namev),
 			Ref2Str(self->namev)
 		);
@@ -132,14 +132,14 @@ static void il_factor_invoke_static_check(il_factor_invoke_static * self, enviro
 		il_argument* ilarg = AtVector(self->args, i);
 		il_factor_load(ilarg->factor, env, cctx);
 	}
-	call_frame* cfr = call_context_push(cctx, frame_static_invoke_T);
+	call_frame* cfr = call_context_push(cctx, FRAME_STATIC_INVOKE_T);
 	cfr->u.static_invoke.args = self->args;
 	cfr->u.static_invoke.typeargs = self->type_args;
 	self->m = class_ilfind_smethod(cls, self->namev, self->args, env, cctx, &temp);
 	self->index = temp;
 	//メソッドが見つからない
 	if(temp == -1 || self->m == NULL) {
-		bc_error_throw(bcerror_invoke_static_undefined_method_T,
+		bc_error_throw(BCERROR_INVOKE_STATIC_UNDEFINED_METHOD_T,
 			Ref2Str(cls->namev),
 			Ref2Str(self->namev)
 		);

@@ -1,7 +1,7 @@
 #include "enviroment.h"
 #include "../env/class_loader.h"
 #include "../env/type_interface.h"
-#include "../env/type_impl.h"
+#include "../env/TYPE_IMPL.h"
 #include "../env/object.h"
 #include "../env/fqcn_cache.h"
 #include "../lib/beacon/lang/bc_array.h"
@@ -118,25 +118,25 @@ object* enviroment_constant_at(enviroment * self, int index) {
 
 object* enviroment_constant_int_at(enviroment * self, int index) {
 	object* e = enviroment_constant_at(self, index);
-	assert(e->tag == object_int_T);
+	assert(e->tag == OBJECT_INT_T);
 	return e;
 }
 
 object* enviroment_constant_double_at(enviroment * self, int index) {
 	object* e = enviroment_constant_at(self, index);
-	assert(e->tag == object_double_T);
+	assert(e->tag == OBJECT_DOUBLE_T);
 	return e;
 }
 
 object* enviroment_constant_char_at(enviroment * self, int index) {
 	object* e = enviroment_constant_at(self, index);
-	assert(e->tag == object_char_T);
+	assert(e->tag == OBJECT_CHAR_T);
 	return e;
 }
 
 object* enviroment_constant_string_at(enviroment * self, int index) {
 	object* e = enviroment_constant_at(self, index);
-	assert(e->tag == object_string_T);
+	assert(e->tag == OBJECT_STRING_T);
 	return e;
 }
 
@@ -163,7 +163,7 @@ static void enviroment_line_range_delete(VectorItem item) {
 
 static void enviroment_add_constant(enviroment* self, object* o) {
 	PushVector(self->constant_pool_vec, o);
-	assert(o->paint == paint_onexit_T);
+	assert(o->paint == PAINT_ONEXIT_T);
 }
 
 static void enviroment_object_delete_self(VectorItem item) {

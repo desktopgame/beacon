@@ -4,13 +4,13 @@
 #include "../../util/text.h"
 #include "../../vm/enviroment.h"
 #include "../../env/namespace.h"
-#include "../../env/type_impl.h"
+#include "../../env/TYPE_IMPL.h"
 #include "../../util/mem.h"
 #if defined(_MSC_VER)
 #pragma warning(disable:4996)
 #endif
 il_factor * il_factor_wrap_int(il_factor_int * self) {
-	il_factor* ret = il_factor_new(ilfactor_int_T);
+	il_factor* ret = il_factor_new(ILFACTOR_INT_T);
 	ret->u.int_ = self;
 	return ret;
 }
@@ -25,7 +25,7 @@ il_factor_int * il_factor_int_malloc(int32_t i, const char* filename, int lineno
 void il_factor_int_generate(il_factor_int * self, enviroment* env, call_context* cctx) {
 	assert(self->count == 0);
 	int index = enviroment_add_constant_int(env, self->value);
-	opcode_buf_add(env->buf, op_iconst);
+	opcode_buf_add(env->buf, OP_ICONST);
 	opcode_buf_add(env->buf, index);
 	self->count++;
 }

@@ -7,49 +7,49 @@
  * 演算子のカテゴリを表す列挙.
  */
 typedef enum operator_category {
-	operator_carithmeric_T,
-	operator_clogic_T,
-	operator_ccompare_T,
-	operator_cshift_T,
-	operator_cchilda_T,
-	operator_cnegative_T,
-	operator_cnot_T,
-	operator_cexcor_T,
+	OPERATOR_CARITHMERIC_T,
+	OPERATOR_CLOGIC_T,
+	OPERATOR_CCOMPARE_T,
+	OPERATOR_CSHIFT_T,
+	OPERATOR_CCHILDA_T,
+	OPERATOR_CNEGATIVE_T,
+	OPERATOR_CNOT_T,
+	OPERATOR_CEXCOR_T,
 } operator_category;
 
 /**
  * 演算子の種類を表す列挙.
  */
 typedef enum operator_type {
-	operator_add_T,
-	operator_sub_T,
-	operator_mul_T,
-	operator_div_T,
-	operator_mod_T,
+	OPERATOR_ADD_T,
+	OPERATOR_SUB_T,
+	OPERATOR_MUL_T,
+	OPERATOR_DIV_T,
+	OPERATOR_MOD_T,
 
-	operator_bit_or_T,
-	operator_bit_and_T,
+	OPERATOR_BIT_OR_T,
+	OPERATOR_BIT_AND_T,
 
-	operator_logic_or_T,
-	operator_logic_and_T,
+	OPERATOR_LOGIC_OR_T,
+	OPERATOR_LOGIC_AND_T,
 
-	operator_eq_T,
-	operator_not_eq_T,
+	OPERATOR_EQ_T,
+	OPERATOR_NOT_EQ_T,
 
-	operator_gt_T,
-	operator_ge_T,
-	operator_lt_T,
-	operator_le_T,
-	operator_lshift_T,
-	operator_rshift_T,
-	operator_excor_T,
+	OPERATOR_GT_T,
+	OPERATOR_GE_T,
+	OPERATOR_LT_T,
+	OPERATOR_LE_T,
+	OPERATOR_LSHIFT_T,
+	OPERATOR_RSHIFT_T,
+	OPERATOR_EXCOR_T,
 
-	operator_childa_T,
-	operator_negative_T,
-	operator_not_T,
+	OPERATOR_CHILDA_T,
+	OPERATOR_NEGATIVE_T,
+	OPERATOR_NOT_T,
 
-	operator_sub_script_set_T,
-	operator_sub_script_get_T,
+	OPERATOR_SUB_SCRIPT_SET_T,
+	OPERATOR_SUB_SCRIPT_GET_T,
 } operator_type;
 /**
  * オペレータを文字列として出力します.

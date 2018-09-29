@@ -52,7 +52,7 @@ object * bc_array_get(object * arr, int index) {
 }
 
 int bc_array_length(object* arr) {
-	//assert(arr->tag == object_array_T);
+	//assert(arr->tag == OBJECT_ARRAY_T);
 	return arr->native_slot_vec->length;
 }
 //private
@@ -80,7 +80,7 @@ static void bc_array_nativeSet(method* parent, frame* fr, enviroment* env) {
 	object* self = AtVector(fr->ref_stack, 0);
 	object* idx = AtVector(fr->ref_stack, 1);
 	object* val = AtVector(fr->ref_stack, 2);
-	assert(idx->tag == object_int_T);
+	assert(idx->tag == OBJECT_INT_T);
 	AssignVector(self->native_slot_vec, idx->u.int_, val);
 }
 
@@ -88,7 +88,7 @@ static void bc_array_nativeGet(method* parent, frame* fr, enviroment* env) {
 	object* self = AtVector(fr->ref_stack, 0);
 	object* idx = AtVector(fr->ref_stack, 1);
 //	object* a = AtVector(vm->ref_stack, 2);
-	assert(idx->tag == object_int_T);
+	assert(idx->tag == OBJECT_INT_T);
 	object* ret = (object*)AtVector(self->native_slot_vec, idx->u.int_);
 	//Printfln("array get %d", idx->u.int_);
 	PushVector(fr->value_stack, ret);

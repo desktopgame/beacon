@@ -5,7 +5,7 @@
  * クラスローダーによって読み込まれるコンテンツの種類を表す列挙型.
  */
 typedef enum content_type {
-	content_entry_point_T,
-	content_lib_T
+	CONTENT_ENTRY_POINT_T,
+	CONTENT_LIB_T
 } content_type;
 #endif // !SIGNAL_ENV_CONTEN_TYPE_H

@@ -17,14 +17,14 @@
 #include "../util/io.h"
 #include "../parse/parser.h"
 #include "namespace.h"
-#include "type_impl.h"
+#include "TYPE_IMPL.h"
 #include "field.h"
 #include "method.h"
 #include "parameter.h"
 #include "constructor.h"
 #include "../il/il_constructor.h"
 #include "../il/il_constructor_chain.h"
-#include "../il/il_type_impl.h"
+#include "../il/il_TYPE_IMPL.h"
 #include "../il/il_field.h"
 #include "../il/il_method.h"
 #include "../il/il_stmt_impl.h"
@@ -61,7 +61,7 @@ class_loader* class_loader_new(const char* filename, content_type type) {
 	ret->il_code = NULL;
 	ret->parent = NULL;
 	ret->type = type;
-	ret->link = link_none_T;
+	ret->link = LINK_NONE_T;
 	ret->import_manager = import_manager_new();
 	ret->env = enviroment_new();
 	ret->level = 0;
@@ -174,21 +174,21 @@ static class_loader* class_loader_load_specialImpl(class_loader* self, class_loa
 	//IL -> SG へ
 	class_loader_bcload_special(cll);
 	if (bc_error_last()) { return cll; }
-	assert(cll->type == content_lib_T);
+	assert(cll->type == CONTENT_LIB_T);
 	return cll;
 }
 
 static void class_loader_load_linkall(class_loader* self) {
-	if(self->type != content_entry_point_T) {
+	if(self->type != CONTENT_ENTRY_POINT_T) {
 		return;
 	}
-	class_loader_link_recursive(self, link_decl_T);
-	class_loader_link_recursive(self, link_impl_T);
+	class_loader_link_recursive(self, LINK_DECL_T);
+	class_loader_link_recursive(self, LINK_IMPL_T);
 }
 
 static void class_loader_load_toplevel(class_loader* self) {
 	//トップレベルのステートメントを読み込む
-	if(self->type != content_entry_point_T) {
+	if(self->type != CONTENT_ENTRY_POINT_T) {
 		return;
 	}
 	//var $world = new beacon::lang::World();
@@ -201,14 +201,14 @@ static void class_loader_load_toplevel(class_loader* self) {
 	body->lineno = 0;
 	createWorldStmt->fact->lineno = 0;
 	//worldをselfにする
-	call_context* cctx = call_context_new(call_top_T);
+	call_context* cctx = call_context_new(CALL_TOP_T);
 	cctx->ty = namespace_get_type(namespace_lang(), InternString("World"));
 	il_stmt_load(body, self->env, cctx);
 	il_stmt_generate(body, self->env, cctx);
 	//$worldをthisにする
-	opcode_buf_add(self->env->buf, op_load);
+	opcode_buf_add(self->env->buf, OP_LOAD);
 	opcode_buf_add(self->env->buf, 1);
-	opcode_buf_add(self->env->buf, op_store);
+	opcode_buf_add(self->env->buf, OP_STORE);
 	opcode_buf_add(self->env->buf, 0);
 	//以下読み込み
 	CLBC_body(self, self->il_code->statement_list, self->env, cctx, NULL);
@@ -218,7 +218,7 @@ static void class_loader_load_toplevel(class_loader* self) {
 }
 
 static void class_loader_load_toplevel_function(class_loader* self) {
-	if(self->level != 0 || self->type != content_entry_point_T) {
+	if(self->level != 0 || self->type != CONTENT_ENTRY_POINT_T) {
 		return;
 	}
 	Vector* funcs = self->il_code->function_list;
@@ -237,14 +237,14 @@ static void class_loader_load_toplevel_function(class_loader* self) {
 		script_method* sm = script_method_new();
 		enviroment* env = enviroment_new();
 		//call_contextの設定
-		call_context* cctx = call_context_new(call_method_T);
+		call_context* cctx = call_context_new(CALL_METHOD_T);
 		cctx->scope = namespace_lang();
 		cctx->ty = worldT;
 		cctx->u.mt = m;
 		namespace_* loc = call_context_namespace(cctx);
 		env->context_ref = self;
 		sm->env = env;
-		m->access = access_private_T;
+		m->access = ACCESS_PRIVATE_T;
 		m->u.script_method = sm;
 		m->parent = worldT;
 		//戻り値を指定
@@ -264,10 +264,10 @@ static void class_loader_load_toplevel_function(class_loader* self) {
 			);
 			//実引数を保存
 			//0番目は this のために開けておく
-			opcode_buf_add(env->buf, op_store);
+			opcode_buf_add(env->buf, OP_STORE);
 			opcode_buf_add(env->buf, (j + 1));
 		}
-		opcode_buf_add(env->buf, (VectorItem)op_store);
+		opcode_buf_add(env->buf, (VectorItem)OP_STORE);
 		opcode_buf_add(env->buf, (VectorItem)0);
 		PushVector(worldT->u.class_->method_list, m);
 		//CLBC_corutine(self, m, env, ilfunc->parameter_list, ilfunc->statement_list, cctx, namespace_lang());
@@ -278,7 +278,7 @@ static void class_loader_load_toplevel_function(class_loader* self) {
 		il_function* ilfunc = AtVector(funcs, i);
 		method* m = AtVector(TYPE2CLASS(worldT)->method_list, i);
 		script_method* sm = m->u.script_method;
-		call_context* cctx = call_context_new(call_method_T);
+		call_context* cctx = call_context_new(CALL_METHOD_T);
 		cctx->scope = namespace_lang();
 		cctx->ty = worldT;
 		cctx->u.mt = m;
@@ -288,12 +288,12 @@ static void class_loader_load_toplevel_function(class_loader* self) {
 }
 
 static bool check_parser_error(parser* p) {
-	if(p->result == parse_syntax_error_T) {
-		bc_error_throw(bcerror_parse_T, p->error_message);
+	if(p->result == PARSE_SYNTAX_ERROR_T) {
+		bc_error_throw(BCERROR_PARSE_T, p->error_message);
 		DestroyParser(p);
 		return true;
-	} else if(p->result == parse_open_error_T) {
-		bc_error_throw(bcerror_require_not_found_T, p->source_name);
+	} else if(p->result == PARSE_OPEN_ERROR_T) {
+		bc_error_throw(BCERROR_REQUIRE_NOT_FOUND_T, p->source_name);
 		DestroyParser(p);
 		return true;
 	}

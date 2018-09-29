@@ -16,27 +16,27 @@
  * 計算可能な要素の種類.
  */
 typedef enum il_factor_type {
-	ilfactor_int_T,
-	ilfactor_double_T,
-	ilfactor_char_T,
-	ilfactor_string_T,
-	ilfactor_unary_op_T,
-	ilfactor_binary_op_T,
-	ilfactor_assign_T,
-	ilfactor_variable_T,
-	ilfactor_this_T,
-	ilfactor_super_T,
-	ilfactor_new_instance_T,
-	ilfactor_bool_T,
-	ilfactor_null_T,
-	ilfactor_as_T,
-	ilfactor_call_op_T,
-	ilfactor_member_op_T,
-	ilfactor_instanceof_T,
-	ilfactor_explicit_binary_op_T,
-	ilfactor_explicit_unary_op_T,
-	ilfactor_property_T,
-	ilfactor_subscript_T
+	ILFACTOR_INT_T,
+	ILFACTOR_DOUBLE_T,
+	ILFACTOR_CHAR_T,
+	ILFACTOR_STRING_T,
+	ILFACTOR_UNARY_OP_T,
+	ILFACTOR_BINARY_OP_T,
+	ILFACTOR_ASSIGN_T,
+	ILFACTOR_VARIABLE_T,
+	ILFACTOR_THIS_T,
+	ILFACTOR_SUPER_T,
+	ILFACTOR_NEW_INSTANCE_T,
+	ILFACTOR_BOOL_T,
+	ILFACTOR_NULL_T,
+	ILFACTOR_AS_T,
+	ILFACTOR_CALL_OP_T,
+	ILFACTOR_MEMBER_OP_T,
+	ILFACTOR_INSTANCEOF_T,
+	ILFACTOR_EXPLICIT_BINARY_OP_T,
+	ILFACTOR_EXPLICIT_UNARY_OP_T,
+	ILFACTOR_PROPERTY_T,
+	ILFACTOR_SUBSCRIPT_T
 } il_factor_type;
 
 //ファクターとして扱える要素自身が内側にファクターを含む(再帰)

@@ -5,7 +5,7 @@
 #include "../../util/text.h"
 #include "il_factor_variable_impl.h"
 #include "../il_factor_impl.h"
-#include "../../env/type_impl.h"
+#include "../../env/TYPE_IMPL.h"
 #include "../../env/field.h"
 #include "../../env/namespace.h"
 #include "../../vm/enviroment.h"
@@ -21,7 +21,7 @@
 static bool type_test(il_factor_binary_op* self, enviroment* env, call_context* cctx, type* t);
 
 il_factor * il_factor_wrap_binary(il_factor_binary_op * self) {
-	il_factor* ret = il_factor_new(ilfactor_binary_op_T);
+	il_factor* ret = il_factor_new(ILFACTOR_BINARY_OP_T);
 	ret->u.binary_ = self;
 	return ret;
 }
@@ -37,25 +37,25 @@ il_factor_binary_op * il_factor_binary_op_new(operator_type type) {
 
 void il_factor_binary_op_generate(il_factor_binary_op * self, enviroment* env, call_context* cctx) {
 	switch(self->category) {
-		case operator_carithmeric_T:
+		case OPERATOR_CARITHMERIC_T:
 			il_factor_arithmetic_op_generate(self->u.arithmetic_op, env, cctx);
 			break;
-		case operator_ccompare_T:
+		case OPERATOR_CCOMPARE_T:
 			il_factor_compare_op_generate(self->u.compare_op, env, cctx);
 			break;
-		case operator_clogic_T:
+		case OPERATOR_CLOGIC_T:
 			il_factor_logic_op_generate(self->u.logic_op, env, cctx);
 			break;
-		case operator_cshift_T:
+		case OPERATOR_CSHIFT_T:
 			il_factor_shift_op_generate(self->u.shift_op, env, cctx);
 			break;
-		case operator_cexcor_T:
+		case OPERATOR_CEXCOR_T:
 			il_factor_excor_op_generate(self->u.excor_op, env, cctx);
 			break;
 	}
 }
 
-void il_factor_binary_op_load(il_factor_binary_op * self, enviroment * env, call_context* cctx) {
+void il_factor_binary_OP_LOAD(il_factor_binary_op * self, enviroment * env, call_context* cctx) {
 	if(self->load) {
 		return;
 	}
@@ -66,57 +66,57 @@ void il_factor_binary_op_load(il_factor_binary_op * self, enviroment * env, call
 	BC_ERROR();
 	//カテゴリーわけ
 	if(operator_arithmetic(self->type)) {
-		self->category = operator_carithmeric_T;
+		self->category = OPERATOR_CARITHMERIC_T;
 		il_factor_arithmetic_op* arith = il_factor_arithmetic_op_new(self->type);
 		arith->parent = self;
 		self->u.arithmetic_op = arith;
-		il_factor_arithmetic_op_load(arith, env, cctx);
+		il_factor_arithmetic_OP_LOAD(arith, env, cctx);
 	} else if(operator_compare(self->type)) {
-		self->category = operator_ccompare_T;
+		self->category = OPERATOR_CCOMPARE_T;
 		il_factor_compare_op* comp = il_factor_compare_op_new(self->type);
 		comp->parent = self;
 		self->u.compare_op = comp;
-		il_factor_compare_op_load(comp, env, cctx);
+		il_factor_compare_OP_LOAD(comp, env, cctx);
 	} else if(operator_bit(self->type) || operator_logic(self->type)) {
-		self->category = operator_clogic_T;
+		self->category = OPERATOR_CLOGIC_T;
 		il_factor_logic_op* logic = il_factor_logic_op_new(self->type);
 		logic->parent = self;
 		self->u.logic_op = logic;
-		il_factor_logic_op_load(logic, env, cctx);
+		il_factor_logic_OP_LOAD(logic, env, cctx);
 	} else if(operator_shift(self->type)) {
-		self->category = operator_cshift_T;
+		self->category = OPERATOR_CSHIFT_T;
 		il_factor_shift_op* shift = il_factor_shift_op_new(self->type);
 		shift->parent = self;
 		self->u.shift_op = shift;
-		il_factor_shift_op_load(shift, env, cctx);
-	} else if(self->type == operator_excor_T) {
-		self->category = operator_cexcor_T;
+		il_factor_shift_OP_LOAD(shift, env, cctx);
+	} else if(self->type == OPERATOR_EXCOR_T) {
+		self->category = OPERATOR_CEXCOR_T;
 		il_factor_excor_op* excor = il_factor_excor_op_new(self->type);
 		excor->parent = self;
 		self->u.excor_op = excor;
-		il_factor_excor_op_load(excor, env, cctx);
+		il_factor_excor_OP_LOAD(excor, env, cctx);
 	} else {
 		assert(false);
 	}
 }
 
 generic_type* il_factor_binary_op_eval(il_factor_binary_op * self, enviroment * env, call_context* cctx) {
-	il_factor_binary_op_load(self, env, cctx);
+	il_factor_binary_OP_LOAD(self, env, cctx);
 	generic_type* ret = NULL;
 	switch(self->category) {
-		case operator_carithmeric_T:
+		case OPERATOR_CARITHMERIC_T:
 			ret = il_factor_arithmetic_op_eval(self->u.arithmetic_op, env, cctx);
 			break;
-		case operator_ccompare_T:
+		case OPERATOR_CCOMPARE_T:
 			ret = il_factor_compare_op_eval(self->u.compare_op, env, cctx);
 			break;
-		case operator_clogic_T:
+		case OPERATOR_CLOGIC_T:
 			ret = il_factor_logic_op_eval(self->u.logic_op, env, cctx);
 			break;
-		case operator_cshift_T:
+		case OPERATOR_CSHIFT_T:
 			ret = il_factor_shift_op_eval(self->u.shift_op, env, cctx);
 			break;
-		case operator_cexcor_T:
+		case OPERATOR_CEXCOR_T:
 			ret = il_factor_excor_op_eval(self->u.excor_op, env, cctx);
 			break;
 	}
@@ -127,19 +127,19 @@ generic_type* il_factor_binary_op_eval(il_factor_binary_op * self, enviroment * 
 char* il_factor_binary_op_tostr(il_factor_binary_op* self, enviroment* env) {
 	char* ret = NULL;
 	switch(self->category) {
-		case operator_carithmeric_T:
+		case OPERATOR_CARITHMERIC_T:
 			ret = il_factor_arithmetic_op_tostr(self->u.arithmetic_op, env);
 			break;
-		case operator_clogic_T:
+		case OPERATOR_CLOGIC_T:
 			ret = il_factor_logic_op_tostr(self->u.logic_op, env);
 			break;
-		case operator_ccompare_T:
+		case OPERATOR_CCOMPARE_T:
 			ret = il_factor_compare_op_tostr(self->u.compare_op, env);
 			break;
-		case operator_cshift_T:
+		case OPERATOR_CSHIFT_T:
 			ret = il_factor_shift_op_tostr(self->u.shift_op, env);
 			break;
-		case operator_cexcor_T:
+		case OPERATOR_CEXCOR_T:
 			ret = il_factor_excor_op_tostr(self->u.excor_op, env);
 			break;
 	}
@@ -149,19 +149,19 @@ char* il_factor_binary_op_tostr(il_factor_binary_op* self, enviroment* env) {
 
 void il_factor_binary_op_delete(il_factor_binary_op * self) {
 	switch(self->category) {
-		case operator_carithmeric_T:
+		case OPERATOR_CARITHMERIC_T:
 			il_factor_arithmetic_op_delete(self->u.arithmetic_op);
 			break;
-		case operator_clogic_T:
+		case OPERATOR_CLOGIC_T:
 			il_factor_logic_op_delete(self->u.logic_op);
 			break;
-		case operator_ccompare_T:
+		case OPERATOR_CCOMPARE_T:
 			il_factor_compare_op_delete(self->u.compare_op);
 			break;
-		case operator_cshift_T:
+		case OPERATOR_CSHIFT_T:
 			il_factor_shift_op_delete(self->u.shift_op);
 			break;
-		case operator_cexcor_T:
+		case OPERATOR_CEXCOR_T:
 			il_factor_excor_op_delete(self->u.excor_op);
 			break;
 	}
@@ -217,7 +217,7 @@ int il_factor_binary_op_index2(il_factor* receiver, il_factor* arg, operator_typ
 	//PushVector(args, lgtype);
 	PushVector(args, rgtype);
 	type* lctype = GENERIC2TYPE(lgtype);
-	assert(lctype->tag == type_class_T);
+	assert(lctype->tag == TYPE_CLASS_T);
 	class_* lclass = TYPE2CLASS(lctype);
 	int temp = 0;
 	class_gfind_operator_overload(lclass, otype, args, env, cctx, &temp);
@@ -227,7 +227,7 @@ int il_factor_binary_op_index2(il_factor* receiver, il_factor* arg, operator_typ
 
 generic_type* il_factor_binary_op_apply(il_factor_binary_op* self, generic_type* gtype, enviroment* env, call_context* cctx) {
 	generic_type* lgtype = il_factor_eval(self->left, env, cctx);
-	call_frame* cfr = call_context_push(cctx, frame_instance_invoke_T);
+	call_frame* cfr = call_context_push(cctx, FRAME_INSTANCE_INVOKE_T);
 	cfr->u.instance_invoke.receiver = lgtype;
 	generic_type* ret = generic_type_apply(gtype,cctx);
 	call_context_pop(cctx);

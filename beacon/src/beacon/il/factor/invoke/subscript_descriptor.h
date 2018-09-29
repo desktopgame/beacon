@@ -7,10 +7,10 @@ struct field;
 struct property;
 
 typedef enum subscript_tag {
-	subscript_local_T,
-	subscript_field_T,
-	subscript_property_T,
-	subscript_undefined_T
+	SUBSCRIPT_LOCAL_T,
+	SUBSCRIPT_FIELD_T,
+	SUBSCRIPT_PROPERTY_T,
+	SUBSCRIPT_UNDEFINED_T
 } subscript_tag;
 
 typedef struct subscript_descriptor {

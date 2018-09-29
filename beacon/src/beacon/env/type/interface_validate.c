@@ -1,5 +1,5 @@
 #include "interface_validate.h"
-#include "../type_impl.h"
+#include "../TYPE_IMPL.h"
 #include "../parameter.h"
 #include "../type_parameter.h"
 

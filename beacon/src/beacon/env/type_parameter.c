@@ -11,21 +11,21 @@ static void type_parameter_rule_list_delete(VectorItem item);
 type_parameter * type_parameter_new(string_view namev) {
 	type_parameter* ret = (type_parameter*)MEM_MALLOC(sizeof(type_parameter));
 	ret->namev = namev;
-	ret->kind = type_parameter_kind_default_T;
+	ret->kind = TYPE_PARAMETER_KIND_DEFAULT_T;
 	return ret;
 }
 
 type_parameter * type_parameter_dup(il_type_parameter * src) {
 	type_parameter* ret = type_parameter_new(src->namev);
 	switch (src->kind) {
-		case il_type_parameter_kind_default_T:
-			ret->kind = type_parameter_kind_default_T;
+		case il_TYPE_PARAMETER_KIND_DEFAULT_T:
+			ret->kind = TYPE_PARAMETER_KIND_DEFAULT_T;
 			break;
-		case il_type_parameter_kind_in_T:
-			ret->kind = type_parameter_kind_in_T;
+		case il_TYPE_PARAMETER_KIND_IN_T:
+			ret->kind = TYPE_PARAMETER_KIND_IN_T;
 			break;
-		case il_type_parameter_kind_out_T:
-			ret->kind = type_parameter_kind_out_T;
+		case il_TYPE_PARAMETER_KIND_OUT_T:
+			ret->kind = TYPE_PARAMETER_KIND_OUT_T;
 			break;
 		default:
 			break;
@@ -59,9 +59,9 @@ void type_parameter_print(Vector* v) {
 	printf("<");
 	for (int i = 0; i < v->length; i++) {
 		type_parameter* e = (type_parameter*)AtVector(v, i);
-		if (e->kind == type_parameter_kind_in_T) {
+		if (e->kind == TYPE_PARAMETER_KIND_IN_T) {
 			printf("in ");
-		} else if (e->kind == type_parameter_kind_out_T) {
+		} else if (e->kind == TYPE_PARAMETER_KIND_OUT_T) {
 			printf("out ");
 		}
 		printf("%s", Ref2Str(e->namev));

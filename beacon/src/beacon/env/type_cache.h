@@ -11,14 +11,14 @@ struct class_loader;
  * 何を読み込むためのキャッシュかを表す列挙型.
  */
 typedef enum cache_kind {
-	cachekind_class_decl_T,
-	cachekind_class_impl_T,
+	CACHEKIND_CLASS_DECL_T,
+	CACHEKIND_CLASS_IMPL_T,
 
-	cachekind_interface_decl_T,
-	cachekind_interface_impl_T,
+	CACHEKIND_INTERFACE_DECL_T,
+	CACHEKIND_INTERFACE_IMPL_T,
 
-	cachekind_enum_decl_T,
-	cachekind_enum_impl_T,
+	CACHEKIND_ENUM_DECL_T,
+	CACHEKIND_ENUM_IMPL_T,
 } cache_kind;
 
 /**

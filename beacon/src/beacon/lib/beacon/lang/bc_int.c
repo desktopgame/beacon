@@ -54,7 +54,7 @@ static void bc_int_nativeInit(method* parent, frame* fr, enviroment* env) {
 	object* i = AtVector(fr->ref_stack, 1);
 
 	self->u.int_ = i->u.int_;
-	self->tag = object_int_T;
+	self->tag = OBJECT_INT_T;
 }
 
 static void bc_int_nativeEquals(method* parent, frame* fr, enviroment* env) {

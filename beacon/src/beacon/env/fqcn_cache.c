@@ -4,12 +4,12 @@
 #include "../util/text.h"
 #include "namespace.h"
 #include "type_interface.h"
-#include "type_impl.h"
+#include "TYPE_IMPL.h"
 #include <assert.h>
 #include <string.h>
 
 //proto
-static type * fqcn_type_impl(fqcn_cache * self, namespace_* current);
+static type * fqcn_TYPE_IMPL(fqcn_cache * self, namespace_* current);
 
 /*
 fqcn_cache * fqcn_cache_new() {
@@ -74,11 +74,11 @@ namespace_ * fqcn_scope(fqcn_cache * self, namespace_* current) {
 }
 
 type * fqcn_type(fqcn_cache * self, namespace_ * current) {
-	type* ret = fqcn_type_impl(self, current);
+	type* ret = fqcn_TYPE_IMPL(self, current);
 	//Console(X::Yを含まない)のような指定なら
 	//signal::lang空間も探索する
 	if (ret == NULL && self->scope_vec->length == 0) {
-		ret = fqcn_type_impl(self, namespace_lang());
+		ret = fqcn_TYPE_IMPL(self, namespace_lang());
 	}
 	return ret;
 }
@@ -130,7 +130,7 @@ bool fqcn_cache_equals(fqcn_cache* a, fqcn_cache* b) {
 	return true;
 }
 //private
-static type * fqcn_type_impl(fqcn_cache * self, namespace_* current) {
+static type * fqcn_TYPE_IMPL(fqcn_cache * self, namespace_* current) {
 	//Y形式
 	if (self->scope_vec->length == 0) {
 		string_view namev = self->namev;

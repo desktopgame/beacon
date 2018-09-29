@@ -11,7 +11,7 @@
 
 il_stmt * il_stmt_wrap_variable_init(il_stmt_variable_init * self) {
 	il_stmt* ret = (il_stmt*)MEM_MALLOC(sizeof(il_stmt_variable_init));
-	ret->type = ilstmt_variable_init_T;
+	ret->type = ILSTMT_VARIABLE_INIT_T;
 	ret->u.variable_init = self;
 	return ret;
 }
@@ -34,30 +34,30 @@ void il_stmt_variable_init_generate(il_stmt_variable_init * self, enviroment * e
 	BC_ERROR();
 	if((ga->core_type != NULL && ga->core_type == TYPE_VOID) ||
 	   (gb->core_type != NULL && gb->core_type == TYPE_VOID)) {
-		   bc_error_throw(bcerror_void_assign_T);
+		   bc_error_throw(BCERROR_VOID_ASSIGN_T);
 		return;
 	}
 	int dist = generic_type_distance(gb, ga, cctx);
 	if (dist < 0) {
-		bc_error_throw(bcerror_assign_not_compatible_local_T,
+		bc_error_throw(BCERROR_ASSIGN_NOT_COMPATIBLE_LOCAL_T,
 			Ref2Str(self->namev)
 		);
 	}
-	opcode_buf_add(env->buf, op_store);
+	opcode_buf_add(env->buf, OP_STORE);
 	opcode_buf_add(env->buf, self->sym->index);
 }
 
 void il_stmt_variable_init_load(il_stmt_variable_init * self, enviroment * env, call_context* cctx) {
 	il_factor_load(self->fact, env, cctx);
 	if(symbol_table_contains(env->sym_table, self->namev)) {
-		bc_error_throw(bcerror_overwrap_variable_name_T,
+		bc_error_throw(BCERROR_OVERWRAP_VARIABLE_NAME_T,
 			Ref2Str(self->namev)
 		);
 	}
 	generic_type* gt = import_manager_resolve(NULL, self->fqcn, cctx);
 	if(gt == NULL) {
 		bc_error_throw(
-			bcerror_undefined_type_decl_T,
+			BCERROR_UNDEFINED_TYPE_DECL_T,
 			Ref2Str(self->fqcn->fqcn->namev)
 		);
 		return;

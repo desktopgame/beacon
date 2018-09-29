@@ -4,7 +4,7 @@
 #include "../../util/mem.h"
 
 il_stmt * il_stmt_wrap_proc(il_stmt_proc * self) {
-	il_stmt* ret = il_stmt_new(ilstmt_proc_T);
+	il_stmt* ret = il_stmt_new(ILSTMT_PROC_T);
 	ret->u.proc_ = self;
 	return ret;
 }

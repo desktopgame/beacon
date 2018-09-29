@@ -6,46 +6,46 @@ void operator_fprintf(FILE* fp, operator_type self) {
 
 char* operator_tostring(operator_type self) {
 	switch(self) {
-		case operator_add_T: return "+";
-		case operator_sub_T: return "-";
-		case operator_mul_T: return "*";
-		case operator_div_T: return "/";
-		case operator_mod_T: return "%%";
+		case OPERATOR_ADD_T: return "+";
+		case OPERATOR_SUB_T: return "-";
+		case OPERATOR_MUL_T: return "*";
+		case OPERATOR_DIV_T: return "/";
+		case OPERATOR_MOD_T: return "%%";
 
-		case operator_bit_or_T: return "|";
-		case operator_bit_and_T: return "&";
+		case OPERATOR_BIT_OR_T: return "|";
+		case OPERATOR_BIT_AND_T: return "&";
 
-		case operator_logic_or_T: return "||";
-		case operator_logic_and_T: return "&&";
+		case OPERATOR_LOGIC_OR_T: return "||";
+		case OPERATOR_LOGIC_AND_T: return "&&";
 
-		case operator_eq_T: return "==";
-		case operator_not_eq_T: return "!=";
+		case OPERATOR_EQ_T: return "==";
+		case OPERATOR_NOT_EQ_T: return "!=";
 
-		case operator_gt_T: return ">";
-		case operator_ge_T: return ">=";
-		case operator_lt_T: return "<";
-		case operator_le_T: return "<=";
+		case OPERATOR_GT_T: return ">";
+		case OPERATOR_GE_T: return ">=";
+		case OPERATOR_LT_T: return "<";
+		case OPERATOR_LE_T: return "<=";
 
-		case operator_lshift_T: return "<<";
-		case operator_rshift_T: return ">>";
-		case operator_excor_T: return "^";
+		case OPERATOR_LSHIFT_T: return "<<";
+		case OPERATOR_RSHIFT_T: return ">>";
+		case OPERATOR_EXCOR_T: return "^";
 
-		case operator_not_T: return "!";
-		case operator_negative_T: return "-";
-		case operator_childa_T: return "~";
+		case OPERATOR_NOT_T: return "!";
+		case OPERATOR_NEGATIVE_T: return "-";
+		case OPERATOR_CHILDA_T: return "~";
 
-		case operator_sub_script_get_T: return "[]";
-		case operator_sub_script_set_T: return "[]=";
+		case OPERATOR_SUB_SCRIPT_GET_T: return "[]";
+		case OPERATOR_SUB_SCRIPT_SET_T: return "[]=";
 	}
 }
 
 bool operator_arithmetic(operator_type self) {
 	switch(self) {
-		case operator_add_T:
-		case operator_sub_T:
-		case operator_mul_T:
-		case operator_div_T:
-		case operator_mod_T:
+		case OPERATOR_ADD_T:
+		case OPERATOR_SUB_T:
+		case OPERATOR_MUL_T:
+		case OPERATOR_DIV_T:
+		case OPERATOR_MOD_T:
 			return true;
 	}
 	return false;
@@ -53,8 +53,8 @@ bool operator_arithmetic(operator_type self) {
 
 bool operator_bit(operator_type self) {
 	switch(self) {
-		case operator_bit_or_T:
-		case operator_bit_and_T:
+		case OPERATOR_BIT_OR_T:
+		case OPERATOR_BIT_AND_T:
 			return true;
 	}
 	return false;
@@ -62,8 +62,8 @@ bool operator_bit(operator_type self) {
 
 bool operator_logic(operator_type self) {
 	switch(self) {
-		case operator_logic_or_T:
-		case operator_logic_and_T:
+		case OPERATOR_LOGIC_OR_T:
+		case OPERATOR_LOGIC_AND_T:
 			return true;
 	}
 	return false;
@@ -71,12 +71,12 @@ bool operator_logic(operator_type self) {
 
 bool operator_compare(operator_type self) {
 	switch(self) {
-		case operator_eq_T:
-		case operator_not_eq_T:
-		case operator_gt_T:
-		case operator_ge_T:
-		case operator_lt_T:
-		case operator_le_T:
+		case OPERATOR_EQ_T:
+		case OPERATOR_NOT_EQ_T:
+		case OPERATOR_GT_T:
+		case OPERATOR_GE_T:
+		case OPERATOR_LT_T:
+		case OPERATOR_LE_T:
 			return true;
 	}
 	return false;
@@ -84,8 +84,8 @@ bool operator_compare(operator_type self) {
 
 bool operator_shift(operator_type self) {
 	switch(self) {
-		case operator_lshift_T:
-		case operator_rshift_T:
+		case OPERATOR_LSHIFT_T:
+		case OPERATOR_RSHIFT_T:
 			return true;
 	}
 	return false;
@@ -93,20 +93,20 @@ bool operator_shift(operator_type self) {
 
 bool operator_arg2(operator_type self) {
 	switch(self) {
-		case operator_add_T:
-		case operator_sub_T:
-		case operator_mul_T:
-		case operator_div_T:
-		case operator_mod_T:
-		case operator_bit_or_T:
-		case operator_bit_and_T:
-		case operator_logic_or_T:
-		case operator_logic_and_T:
-		case operator_lshift_T:
-		case operator_rshift_T:
-		case operator_eq_T:
-		case operator_not_eq_T:
-		case operator_sub_script_get_T:
+		case OPERATOR_ADD_T:
+		case OPERATOR_SUB_T:
+		case OPERATOR_MUL_T:
+		case OPERATOR_DIV_T:
+		case OPERATOR_MOD_T:
+		case OPERATOR_BIT_OR_T:
+		case OPERATOR_BIT_AND_T:
+		case OPERATOR_LOGIC_OR_T:
+		case OPERATOR_LOGIC_AND_T:
+		case OPERATOR_LSHIFT_T:
+		case OPERATOR_RSHIFT_T:
+		case OPERATOR_EQ_T:
+		case OPERATOR_NOT_EQ_T:
+		case OPERATOR_SUB_SCRIPT_GET_T:
 			return true;
 	}
 	return false;

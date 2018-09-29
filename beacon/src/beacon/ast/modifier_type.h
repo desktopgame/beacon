@@ -6,12 +6,12 @@
  * アクセス修飾子を表す列挙型.
  */
 typedef enum modifier_type {
-	modifier_none_T		= (1 << 0),
-	modifier_static_T		= (1 << 1),
-	modifier_native_T		= (1 << 2),
-	modifier_abstract_T	= (1 << 3),
-	modifier_override_T	= (1 << 4),
-	modifier_final_T		= (1 << 5)
+	MODIFIER_NONE_T		= (1 << 0),
+	MODIFIER_STATIC_T		= (1 << 1),
+	MODIFIER_NATIVE_T		= (1 << 2),
+	MODIFIER_ABSTRACT_T	= (1 << 3),
+	MODIFIER_OVERRIDE_T	= (1 << 4),
+	MODIFIER_FINAL_T		= (1 << 5)
 } modifier_type;
 
 /**

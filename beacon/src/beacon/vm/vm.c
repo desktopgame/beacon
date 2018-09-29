@@ -7,11 +7,11 @@
 #include "vm_trace.h"
 #include "../env/class_loader.h"
 #include "../env/type_interface.h"
-#include "../env/type_impl.h"
+#include "../env/TYPE_IMPL.h"
 #include "../env/field.h"
 #include "../env/method.h"
 #include "../env/object.h"
-#include "../env/type_impl.h"
+#include "../env/TYPE_IMPL.h"
 #include "../env/constructor.h"
 #include "../env/script_context.h"
 #include "../env/operator_overload.h"
@@ -124,7 +124,7 @@ void vm_catch(frame * self) {
 	}
 	self->validate = false;
 	if(self->exception != NULL) {
-		self->exception->paint = paint_unmarked_T;
+		self->exception->paint = PAINT_UNMARKED_T;
 		self->exception = NULL;
 	}
 }
@@ -211,16 +211,16 @@ static void vm_run(frame * self, enviroment * env, int pos, int deferStart) {
 		opcode b = (opcode)enviroment_source_at(env, IDX);
 		switch (b) {
 			//int & int
-			case op_iadd:
+			case OP_IADD:
 				PushVector(self->value_stack, NON_NULL(object_int_get(SPI(self) + SPI(self))));
 				break;
-			case op_isub:
+			case OP_ISUB:
 				PushVector(self->value_stack, NON_NULL(object_int_get(SPI(self) - SPI(self))));
 				break;
-			case op_imul:
+			case OP_IMUL:
 				PushVector(self->value_stack, NON_NULL(object_int_get(SPI(self) * SPI(self))));
 				break;
-			case op_idiv:
+			case OP_IDIV:
 			{
 				int a = SPI(self);
 				int b = SPI(self);
@@ -228,31 +228,31 @@ static void vm_run(frame * self, enviroment * env, int pos, int deferStart) {
 				PushVector(self->value_stack, NON_NULL(object_int_get(a / b)));
 				break;
 			}
-			case op_imod:
+			case OP_IMOD:
 				PushVector(self->value_stack, NON_NULL(object_int_get(SPI(self) % SPI(self))));
 				break;
-			case op_ibit_or:
+			case OP_IBIT_OR:
 			{
 				int a = SPI(self);
 				int b = SPI(self);
 				PushVector(self->value_stack, NON_NULL(object_int_get(a | b)));
 				break;
 			}
-			case op_ilogic_or:
+			case OP_ILOGIC_OR:
 			{
 				int a = SPI(self);
 				int b = SPI(self);
 				PushVector(self->value_stack, NON_NULL(object_int_get(a || b)));
 				break;
 			}
-			case op_ibit_and:
+			case OP_IBIT_AND:
 			{
 				int a = SPI(self);
 				int b = SPI(self);
 				PushVector(self->value_stack, NON_NULL(object_int_get(a & b)));
 				break;
 			}
-			case op_ilogic_and:
+			case OP_ILOGIC_AND:
 			{
 				//SPI(self) をそのまま埋めると正常に動作しない
 				//おそらくマクロの展開によるもの
@@ -262,19 +262,19 @@ static void vm_run(frame * self, enviroment * env, int pos, int deferStart) {
 				PushVector(self->value_stack, NON_NULL(object_int_get(a && b)));
 				break;
 			}
-			case op_ieq:
+			case OP_IEQ:
 				PushVector(self->value_stack, NON_NULL(object_bool_get(SPI(self) == SPI(self))));
 				break;
-			case op_inoteq:
+			case OP_INOTEQ:
 				PushVector(self->value_stack, NON_NULL(object_bool_get(SPI(self) != SPI(self))));
 				break;
-			case op_igt:
+			case OP_IGT:
 				PushVector(self->value_stack, NON_NULL(object_bool_get(SPI(self) > SPI(self))));
 				break;
-			case op_ige:
+			case OP_IGE:
 				PushVector(self->value_stack, NON_NULL(object_bool_get(SPI(self) >= SPI(self))));
 				break;
-			case op_ilt:
+			case OP_ILT:
 			{
 				object* a_ = PopVector(self->value_stack);
 				object* b_ = PopVector(self->value_stack);
@@ -282,170 +282,170 @@ static void vm_run(frame * self, enviroment * env, int pos, int deferStart) {
 				//PushVector(self->value_stack, object_bool_get(SPI(self) < SPI(self)));
 				break;
 			}
-			case op_ile:
+			case OP_ILE:
 				PushVector(self->value_stack, NON_NULL(object_bool_get(SPI(self) <= SPI(self))));
 				break;
-			case op_ilsh:
+			case OP_ILSH:
 				PushVector(self->value_stack, NON_NULL(object_int_get(SPI(self) << SPI(self))));
 				break;
-			case op_irsh:
+			case OP_IRSH:
 				PushVector(self->value_stack, NON_NULL(object_int_get(SPI(self) >> SPI(self))));
 				break;
-			case op_iexcor:
+			case OP_IEXCOR:
 				PushVector(self->value_stack, NON_NULL(object_int_get(SPI(self) ^ SPI(self))));
 				break;
-			case op_iflip:
+			case OP_IFLIP:
 				PushVector(self->value_stack, NON_NULL(object_int_get(~SPI(self))));
 				break;
-			case op_ceq:
+			case OP_CEQ:
 				PushVector(self->value_stack, NON_NULL(object_bool_get(SPC(self) == SPC(self))));
 				break;
-			case op_cnoteq:
+			case OP_CNOTEQ:
 				PushVector(self->value_stack, NON_NULL(object_bool_get(SPC(self) != SPC(self))));
 				break;
-			case op_cgt:
+			case OP_CGT:
 				PushVector(self->value_stack, NON_NULL(object_bool_get(SPC(self) > SPC(self))));
 				break;
-			case op_cge:
+			case OP_CGE:
 				PushVector(self->value_stack, NON_NULL(object_bool_get(SPC(self) >= SPC(self))));
 				break;
-			case op_clt:
+			case OP_CLT:
 				PushVector(self->value_stack, NON_NULL(object_bool_get(SPC(self) < SPC(self))));
 				break;
-			case op_cle:
+			case OP_CLE:
 				PushVector(self->value_stack, NON_NULL(object_bool_get(SPC(self) <= SPC(self))));
 				break;
 				//double & double
-			case op_dadd:
+			case OP_DADD:
 				PushVector(self->value_stack, NON_NULL(object_double_new(SPD(self) + SPD(self))));
 				break;
-			case op_dsub:
+			case OP_DSUB:
 				PushVector(self->value_stack, NON_NULL(object_double_new(SPD(self) - SPD(self))));
 				break;
-			case op_dmul:
+			case OP_DMUL:
 				PushVector(self->value_stack, NON_NULL(object_double_new(SPD(self) * SPD(self))));
 				break;
-			case op_ddiv:
+			case OP_DDIV:
 				PushVector(self->value_stack, NON_NULL(object_double_new(SPD(self) / SPD(self))));
 				break;
-			case op_dmod:
+			case OP_DMOD:
 				PushVector(self->value_stack, NON_NULL(object_double_new((double)((int)SPD(self) % (int)SPD(self)))));
 				break;
-			case op_deq:
+			case OP_DEQ:
 				PushVector(self->value_stack, NON_NULL(object_bool_get(SPD(self) == SPD(self))));
 				break;
-			case op_dnoteq:
+			case OP_DNOTEQ:
 				PushVector(self->value_stack, NON_NULL(object_bool_get(SPD(self) != SPD(self))));
 				break;
-			case op_dgt:
+			case OP_DGT:
 				PushVector(self->value_stack, NON_NULL(object_bool_get(SPD(self) > SPD(self))));
 				break;
-			case op_dge:
+			case OP_DGE:
 				PushVector(self->value_stack, NON_NULL(object_bool_get(SPD(self) >= SPD(self))));
 				break;
-			case op_dlt:
+			case OP_DLT:
 				PushVector(self->value_stack, NON_NULL(object_bool_get(SPD(self) < SPD(self))));
 				break;
-			case op_dle:
+			case OP_DLE:
 				PushVector(self->value_stack, NON_NULL(object_bool_get(SPD(self) <= SPD(self))));
 				break;
-			case op_ineg:
+			case OP_INEG:
 				PushVector(self->value_stack, NON_NULL(object_int_get(-SPI(self))));
 				break;
-			case op_dneg:
+			case OP_DNEG:
 				PushVector(self->value_stack, NON_NULL(object_double_new(-SPD(self))));
 				break;
-			case op_bnot:
+			case OP_BNOT:
 			{
 				bool a = SPB(self);
 				PushVector(self->value_stack, NON_NULL(object_bool_get(!a)));
 				break;
 			}
 				//TODO:短絡評価していない
-			case op_bbit_or:
+			case OP_BBIT_OR:
 			{
 				bool ab = SPB(self);
 				bool bb = SPB(self);
 				PushVector(self->value_stack, NON_NULL(object_bool_get(ab | bb)));
 				break;
 			}
-			case op_blogic_or:
+			case OP_BLOGIC_OR:
 			{
 				bool ab = SPB(self);
 				bool bb = SPB(self);
 				PushVector(self->value_stack, NON_NULL(object_bool_get(ab || bb)));
 				break;
 			}
-			case op_bbit_and:
+			case OP_BBIT_AND:
 			{
 				bool ab = SPB(self);
 				bool bb = SPB(self);
 				PushVector(self->value_stack,NON_NULL( object_bool_get(ab & bb)));
 				break;
 			}
-			case op_blogic_and:
+			case OP_BLOGIC_AND:
 			{
 				bool ab = SPB(self);
 				bool bb = SPB(self);
 				PushVector(self->value_stack, NON_NULL(object_bool_get(ab && bb)));
 				break;
 			}
-			case op_bexcor:
+			case OP_BEXCOR:
 				PushVector(self->value_stack, NON_NULL(object_bool_get(SPB(self) ^ SPB(self))));
 				break;
-			case op_bflip:
+			case OP_BFLIP:
 				PushVector(self->value_stack, NON_NULL(object_bool_get(~SPB(self))));
 				break;
 				//push const
-			case op_iconst:
+			case OP_ICONST:
 			{
 				int index = (int)enviroment_source_at(env, ++IDX);
 				object* o = (object*)enviroment_constant_int_at(env, index);
 				PushVector(self->value_stack, NON_NULL(o));
 				break;
 			}
-			case op_dconst:
+			case OP_DCONST:
 			{
 				int index = (int)enviroment_source_at(env, ++IDX);
 				object* d = enviroment_constant_double_at(env, index);
 				PushVector(self->value_stack, NON_NULL(d));
 				break;
 			}
-			case op_cconst:
+			case OP_CCONST:
 			{
 				int index = (int)enviroment_source_at(env, ++IDX);
 				object* c = enviroment_constant_char_at(env, index);
 				PushVector(self->value_stack, NON_NULL(c));
 				break;
 			}
-			case op_sconst:
+			case OP_SCONST:
 			{
 				int index = (int)enviroment_source_at(env, ++IDX);
 				object* cs = enviroment_constant_string_at(env, index);
 				PushVector(self->value_stack, NON_NULL(cs));
 				break;
 			}
-			case op_true:
+			case OP_TRUE:
 			{
 				PushVector(self->value_stack, object_get_true());
 				break;
 			}
-			case op_false:
+			case OP_FALSE:
 			{
 				PushVector(self->value_stack, object_get_false());
 				break;
 			}
-			case op_null:
+			case OP_NULL:
 			{
 				PushVector(self->value_stack, object_get_null());
 				break;
 			}
-			case op_return:
+			case OP_RETURN:
 			{
 				IDX = source_len;
 				break;
 			}
-			case op_throw:
+			case OP_THROW:
 			{
 				//例外は呼び出し全てへ伝播
 				object* e = (object*)PopVector(self->value_stack);
@@ -460,7 +460,7 @@ static void vm_run(frame * self, enviroment * env, int pos, int deferStart) {
 				}
 				break;
 			}
-			case op_try_enter:
+			case OP_TRY_ENTER:
 			{
 				sg_thread* th = sg_thread_current(script_context_get_current());
 				vm_trace* trace = vm_trace_new(self);
@@ -473,14 +473,14 @@ static void vm_run(frame * self, enviroment * env, int pos, int deferStart) {
 				//これ以降は通常のステートメント...
 				break;
 			}
-			case op_try_exit:
+			case OP_TRY_EXIT:
 			{
 				sg_thread* th = sg_thread_current(script_context_get_current());
 				vm_trace* trace = (vm_trace*)PopVector(th->trace_stack);
 				vm_trace_delete(trace);
 				break;
 			}
-			case op_try_clear:
+			case OP_TRY_CLEAR:
 			{
 				sg_thread* th = sg_thread_current(script_context_get_current());
 				vm_catch(self);
@@ -488,12 +488,12 @@ static void vm_run(frame * self, enviroment * env, int pos, int deferStart) {
 				vm_trace_delete(trace);
 				break;
 			}
-			case op_hexception:
+			case OP_HEXCEPTION:
 			{
 				PushVector(self->value_stack, NON_NULL(self->exception));
 				break;
 			}
-			case op_instanceof:
+			case OP_INSTANCEOF:
 			{
 				generic_type* gtype = (generic_type*)PopVector(self->type_args_vec);
 				object* v = (object*)PopVector(self->value_stack);
@@ -506,28 +506,28 @@ static void vm_run(frame * self, enviroment * env, int pos, int deferStart) {
 				PushVector(self->value_stack, b);
 				break;
 			}
-			case op_dup:
+			case OP_DUP:
 				PushVector(self->value_stack, TopVector(self->value_stack));
 				break;
-			case op_pop:
+			case OP_POP:
 				PopVector(self->value_stack);
 				break;
-			case op_nop:
+			case OP_NOP:
 				/* no operation */
 				break;
-			case op_new_object:
+			case OP_NEW_OBJECT:
 			{
 				//コンストラクタをさかのぼり、
 				//トップレベルまで到達するとこの処理によって生成が行われます。
 				//FIXME:???
 				object* o = object_ref_new();
-				assert(o->paint != paint_onexit_T);
+				assert(o->paint != PAINT_ONEXIT_T);
 				PushVector(self->value_stack, NON_NULL(o));
 				//これを this とする
 				AssignVector(self->ref_stack, 0, o);
 				break;
 			}
-			case op_alloc_field:
+			case OP_ALLOC_FIELD:
 			{
 				int absClsIndex = (int)enviroment_source_at(env, ++IDX);
 				type* tp = (type*)AtVector(ctx->type_vec, absClsIndex);
@@ -552,13 +552,13 @@ static void vm_run(frame * self, enviroment * env, int pos, int deferStart) {
 				assert(obj->gtype != NULL);
 				break;
 			}
-			case op_new_instance:
+			case OP_NEW_INSTANCE:
 			{
 				//生成するクラスとコンストラクタを特定
 				int absClsIndex = (int)enviroment_source_at(env, ++IDX);
 				int constructorIndex = (int)enviroment_source_at(env, ++IDX);
 				type* tp = (type*)AtVector(ctx->type_vec, absClsIndex);
-				assert(tp->tag == type_class_T);
+				assert(tp->tag == TYPE_CLASS_T);
 				class_* cls = TYPE2CLASS(tp);
 				#if defined(DEBUG)
 				const char* clsname = Ref2Str(cls->namev);
@@ -568,7 +568,7 @@ static void vm_run(frame * self, enviroment * env, int pos, int deferStart) {
 				//また、現在のVMから実引数をポップ
 				frame* sub = frame_sub(self);
 				sub->receiver = tp;
-				call_frame* cfr = call_context_push(sg_thread_context(), frame_static_invoke_T);
+				call_frame* cfr = call_context_push(sg_thread_context(), FRAME_STATIC_INVOKE_T);
 				cfr->u.static_invoke.args = NewVector();
 				cfr->u.static_invoke.typeargs = NewVector();
 				for (int i = 0; i < ctor->parameter_list->length; i++) {
@@ -600,19 +600,19 @@ static void vm_run(frame * self, enviroment * env, int pos, int deferStart) {
 				frame_delete(sub);
 				break;
 			}
-			case op_chain_this:
-			case op_chain_super:
+			case OP_CHAIN_THIS:
+			case OP_CHAIN_SUPER:
 			{
 				int absClsIndex = (int)enviroment_source_at(env, ++IDX);
 				int ctorIndex = (int)enviroment_source_at(env, ++IDX);
 				type* tp = (type*)AtVector(ctx->type_vec, absClsIndex);
-				assert(tp->tag == type_class_T);
+				assert(tp->tag == TYPE_CLASS_T);
 				class_* cls = tp->u.class_;
 				constructor* ctor = (constructor*)AtVector(cls->constructor_list, ctorIndex);
 				//コンストラクタを実行するためのVMを作成
 				frame* sub = frame_sub(self);
 				sub->receiver = tp;
-				call_frame* cfr = call_context_push(sg_thread_context(), frame_static_invoke_T);
+				call_frame* cfr = call_context_push(sg_thread_context(), FRAME_STATIC_INVOKE_T);
 				cfr->u.static_invoke.args = NewVector();
 				cfr->u.static_invoke.typeargs = NewVector();
 				//チェインコンストラクタに渡された実引数をプッシュ
@@ -641,12 +641,12 @@ static void vm_run(frame * self, enviroment * env, int pos, int deferStart) {
 				//class_alloc_fields(cls, returnO);
 				break;
 			}
-			case op_this:
+			case OP_THIS:
 			{
 				PushVector(self->value_stack, AtVector(self->ref_stack, 0));
 				break;
 			}
-			case op_super:
+			case OP_SUPER:
 			{
 				object* a = AtVector(self->ref_stack, 0);
 				object* super = object_clone(a);
@@ -656,26 +656,26 @@ static void vm_run(frame * self, enviroment * env, int pos, int deferStart) {
 				break;
 			}
 			//store,load
-			case op_put_field:
+			case OP_PUT_FIELD:
 			{
 				object* assignValue = (object*)PopVector(self->value_stack);
 				object* assignTarget = (object*)PopVector(self->value_stack);
 				if(throw_npe(self, assignTarget)) {
 					break;
 				}
-				assert(assignTarget->tag == object_ref_T);
+				assert(assignTarget->tag == OBJECT_REF_T);
 				int fieldIndex = (int)enviroment_source_at(env, ++IDX);
 				AssignVector(assignTarget->u.field_vec, fieldIndex, assignValue);
 				break;
 			}
 
-			case op_get_field:
+			case OP_GET_FIELD:
 			{
 				object* sourceObject = (object*)PopVector(self->value_stack);
 				if(throw_npe(self, sourceObject)) {
 					break;
 				}
-				//assert(sourceObject->tag == object_ref_T);
+				//assert(sourceObject->tag == OBJECT_REF_T);
 				//int absClsIndex = (int)enviroment_source_at(env, ++i);
 				int fieldIndex = (int)enviroment_source_at(env, ++IDX);
 				object* val = (object*)AtVector(sourceObject->u.field_vec, fieldIndex);
@@ -683,7 +683,7 @@ static void vm_run(frame * self, enviroment * env, int pos, int deferStart) {
 				break;
 			}
 
-			case op_put_static:
+			case OP_PUT_STATIC:
 			{
 				int absClsIndex = (int)enviroment_source_at(env, ++IDX);
 				int fieldIndex = (int)enviroment_source_at(env, ++IDX);
@@ -695,7 +695,7 @@ static void vm_run(frame * self, enviroment * env, int pos, int deferStart) {
 				break;
 			}
 
-			case op_get_static:
+			case OP_GET_STATIC:
 			{
 				int absClsIndex = (int)enviroment_source_at(env, ++IDX);
 				int fieldIndex = (int)enviroment_source_at(env, ++IDX);
@@ -704,14 +704,14 @@ static void vm_run(frame * self, enviroment * env, int pos, int deferStart) {
 				PushVector(self->value_stack, NON_NULL(f->static_value));
 				break;
 			}
-			case op_put_property:
+			case OP_PUT_PROPERTY:
 			{
 				object* assignValue = (object*)PopVector(self->value_stack);
 				object* assignTarget = (object*)PopVector(self->value_stack);
 				if(throw_npe(self, assignTarget)) {
 					break;
 				}
-				assert(assignTarget->tag == object_ref_T);
+				assert(assignTarget->tag == OBJECT_REF_T);
 				int propIndex = (int)enviroment_source_at(env, ++IDX);
 				property* pro = class_get_property(TYPE2CLASS(GENERIC2TYPE(assignTarget->gtype)), propIndex);
 				//プロパティを実行
@@ -723,7 +723,7 @@ static void vm_run(frame * self, enviroment * env, int pos, int deferStart) {
 				frame_delete(sub);
 				break;
 			}
-			case op_get_property:
+			case OP_GET_PROPERTY:
 			{
 				object* sourceObject = (object*)PopVector(self->value_stack);
 				if(throw_npe(self, sourceObject)) {
@@ -744,7 +744,7 @@ static void vm_run(frame * self, enviroment * env, int pos, int deferStart) {
 				frame_delete(sub);
 				break;
 			}
-			case op_put_static_property:
+			case OP_PUT_STATIC_property:
 			{
 				object* sv = (object*)PopVector(self->value_stack);
 				int absClsIndex = (int)enviroment_source_at(env, ++IDX);
@@ -760,7 +760,7 @@ static void vm_run(frame * self, enviroment * env, int pos, int deferStart) {
 				frame_delete(sub);
 				break;
 			}
-			case op_get_static_property:
+			case OP_GET_STATIC_property:
 			{
 				object* sv = (object*)PopVector(self->value_stack);
 				int absClsIndex = (int)enviroment_source_at(env, ++IDX);
@@ -780,7 +780,7 @@ static void vm_run(frame * self, enviroment * env, int pos, int deferStart) {
 				frame_delete(sub);
 				break;
 			}
-			case op_store:
+			case OP_STORE:
 			{
 				int index = (int)enviroment_source_at(env, ++IDX);
 				VectorItem e = PopVector(self->value_stack);
@@ -790,7 +790,7 @@ static void vm_run(frame * self, enviroment * env, int pos, int deferStart) {
 				//INFO("store");
 				break;
 			}
-			case op_load:
+			case OP_LOAD:
 			{
 				int index = (int)enviroment_source_at(env, ++IDX);
 				VectorItem e = AtVector(self->ref_stack, index);
@@ -800,12 +800,12 @@ static void vm_run(frame * self, enviroment * env, int pos, int deferStart) {
 				//INFO("load");
 				break;
 			}
-			case op_down_as:
+			case OP_DOWN_AS:
 			{
 				object* o = PopVector(self->value_stack);
 				generic_type* a = PopVector(self->type_args_vec);
 				a = generic_type_apply(a, sg_thread_context());
-				if(a->core_type->tag == type_interface_T) {
+				if(a->core_type->tag == TYPE_INTERFACE_T) {
 					interface_* inter = TYPE2INTERFACE(GENERIC2TYPE(a));
 					Vector* inter_list = class_get_interface_tree(TYPE2CLASS(GENERIC2TYPE(o->gtype)));
 					int iter = FindVector(inter_list, inter);
@@ -826,15 +826,15 @@ static void vm_run(frame * self, enviroment * env, int pos, int deferStart) {
 				}
 				break;
 			}
-			case op_up_as:
+			case OP_UP_AS:
 			{
 				object* o = PopVector(self->value_stack);
 				generic_type* a = PopVector(self->type_args_vec);
 				a = generic_type_apply(a, sg_thread_context());
 				assert(a->core_type != NULL);
-				if(a->core_type->tag == type_class_T) {
+				if(a->core_type->tag == TYPE_CLASS_T) {
 					PushVector(self->value_stack, o);
-				} else if(a->core_type->tag == type_interface_T) {
+				} else if(a->core_type->tag == TYPE_INTERFACE_T) {
 					interface_* inter = TYPE2INTERFACE(GENERIC2TYPE(a));
 					Vector* inter_list = class_get_interface_tree(TYPE2CLASS(GENERIC2TYPE(o->gtype)));
 					int iter = FindVector(inter_list, inter);
@@ -848,7 +848,7 @@ static void vm_run(frame * self, enviroment * env, int pos, int deferStart) {
 				break;
 			}
 			//invoke
-			case op_invokeinterface:
+			case OP_INVOKEINTERFACE:
 			{
 				int absClassIndex = (int)enviroment_source_at(env, ++IDX);
 				int methodIndex = (int)enviroment_source_at(env, ++IDX);
@@ -862,7 +862,7 @@ static void vm_run(frame * self, enviroment * env, int pos, int deferStart) {
 				method_execute(m, self, env);
 				break;
 			}
-			case op_invokestatic:
+			case OP_INVOKESTATIC:
 			{
 				int absClassIndex = (int)enviroment_source_at(env, ++IDX);
 				int methodIndex = (int)enviroment_source_at(env, ++IDX);
@@ -875,7 +875,7 @@ static void vm_run(frame * self, enviroment * env, int pos, int deferStart) {
 				method_execute(m, self, env);
 				break;
 			}
-			case op_invokevirtual:
+			case OP_INVOKEVIRTUAL:
 			{
 				int index = (int)enviroment_source_at(env, ++IDX);
 				object* o = (object*)TopVector(self->value_stack);
@@ -886,7 +886,7 @@ static void vm_run(frame * self, enviroment * env, int pos, int deferStart) {
 				method_execute(m, self, env);
 				break;
 			}
-			case op_invokespecial:
+			case OP_INVOKESPECIAL:
 			{
 				//privateメソッドには常にレシーバがいないはず
 				//オブジェクトから直接型を取り出してしまうと具象すぎる
@@ -903,7 +903,7 @@ static void vm_run(frame * self, enviroment * env, int pos, int deferStart) {
 				method_execute(m, self, env);
 				break;
 			}
-			case op_invokeoperator:
+			case OP_INVOKEOPERATOR:
 			{
 				int index = (int)enviroment_source_at(env, ++IDX);
 				object* o = (object*)TopVector(self->value_stack);
@@ -916,7 +916,7 @@ static void vm_run(frame * self, enviroment * env, int pos, int deferStart) {
 				operator_overload_execute(operator_ov, self, env);
 				break;
 			}
-			case op_coro_init:
+			case OP_CORO_INIT:
 			{
 				object* o = (object*)AtVector(self->ref_stack, 0);
 				if(o->native_slot_vec == NULL) {
@@ -945,7 +945,7 @@ static void vm_run(frame * self, enviroment * env, int pos, int deferStart) {
 				o->is_coroutine = true;
 				break;
 			}
-			case op_coro_next:
+			case OP_CORO_NEXT:
 			{
 				object* o = self->coroutine;
 				object* ret = (object*)PopVector(self->value_stack);
@@ -972,7 +972,7 @@ static void vm_run(frame * self, enviroment * env, int pos, int deferStart) {
 				PushVector(self->value_stack, hasNext);
 				break;
 			}
-			case op_coro_exit:
+			case OP_CORO_EXIT:
 			{
 				object* o = self->coroutine;
 				assert(o->is_coroutine);
@@ -986,7 +986,7 @@ static void vm_run(frame * self, enviroment * env, int pos, int deferStart) {
 				PushVector(self->value_stack, object_get_false());
 				break;
 			}
-			case op_coro_resume:
+			case OP_CORO_RESUME:
 			{
 				object* o = self->coroutine;
 				assert(o->is_coroutine);
@@ -1001,7 +1001,7 @@ static void vm_run(frame * self, enviroment * env, int pos, int deferStart) {
 				}
 				break;
 			}
-			case op_coro_current:
+			case OP_CORO_CURRENT:
 			{
 				object* o = self->coroutine;
 				assert(o->is_coroutine);
@@ -1009,7 +1009,7 @@ static void vm_run(frame * self, enviroment * env, int pos, int deferStart) {
 				PushVector(self->value_stack, yctx->stock_obj);
 				break;
 			}
-			case op_coro_swap_self:
+			case OP_CORO_SWAP_SELF:
 			{
 				assert(self->coroutine == NULL);
 				object* o = (object*)AtVector(self->ref_stack, 0);
@@ -1036,7 +1036,7 @@ static void vm_run(frame * self, enviroment * env, int pos, int deferStart) {
 				yctx->cached = true;
 				break;
 			}
-			case op_generic_add:
+			case OP_GENERIC_ADD:
 			{
 				//TODO:ここで親フレームを遡るように
 				//ジェネリックタイプを作成する
@@ -1047,12 +1047,12 @@ static void vm_run(frame * self, enviroment * env, int pos, int deferStart) {
 				generic_type* ret = NULL;
 				while(1) {
 					int code = (int)enviroment_source_at(env, ++IDX);
-					if(code == op_generic_enter) {
+					if(code == OP_GENERIC_ENTER) {
 						int count = (int)enviroment_source_at(env, ++IDX);
 						depth++;
 						PushVector(counts, count);
 						//PushVector(stack, generic_type_new(NULL));
-					} else if(code == op_generic_exit) {
+					} else if(code == OP_GENERIC_EXIT) {
 						depth--;
 						int count = (int)PopVector(counts);
 						generic_type* head = AtVector(stack, 0);
@@ -1064,18 +1064,18 @@ static void vm_run(frame * self, enviroment * env, int pos, int deferStart) {
 							ret = head;
 							break;
 						}
-					} else if(code == op_generic_unique_type ||
-					          code == op_generic_instance_type ||
-							  code == op_generic_static_type) {
+					} else if(code == OP_GENERIC_UNIQUE_TYPE ||
+					          code == OP_GENERIC_INSTANCE_TYPE ||
+							  code == OP_GENERIC_STATIC_TYPE) {
 						assert(depth > 0);
 						int arg = (int)enviroment_source_at(env, ++IDX);
 						generic_type* a = NULL;
-						if(code == op_generic_unique_type) {
+						if(code == OP_GENERIC_UNIQUE_TYPE) {
 							a = generic_type_new((type*)AtVector(ctx->type_vec, arg));
-						} else if(code == op_generic_instance_type) {
+						} else if(code == OP_GENERIC_INSTANCE_TYPE) {
 							object* receiver = (object*)AtVector(self->ref_stack, 0);
 							a = (generic_type*)AtVector(receiver->gtype->type_args_list, arg);
-						} else if(code == op_generic_static_type) {
+						} else if(code == OP_GENERIC_STATIC_TYPE) {
 							a = (generic_type*)AtVector(self->type_args_vec, arg);
 						}
 						PushVector(stack, a);
@@ -1087,26 +1087,26 @@ static void vm_run(frame * self, enviroment * env, int pos, int deferStart) {
 				DeleteVector(counts, VectorDeleterOfNull);
 				break;
 			}
-			case op_generic_enter:
-			case op_generic_unique_type:
-			case op_generic_instance_type:
-			case op_generic_static_type:
-			case op_generic_exit:
+			case OP_GENERIC_ENTER:
+			case OP_GENERIC_UNIQUE_TYPE:
+			case OP_GENERIC_INSTANCE_TYPE:
+			case OP_GENERIC_STATIC_TYPE:
+			case OP_GENERIC_EXIT:
 				assert(false);
 				break;
 			//defer
-			case op_defer_enter:
+			case OP_DEFER_ENTER:
 			{
 				break;
 			}
-			case op_defer_exit:
+			case OP_DEFER_EXIT:
 			{
 				if(pos == deferStart) {
 					IDX = source_len;
 				}
 				break;
 			}
-			case op_defer_register:
+			case OP_DEFER_REGISTER:
 			{
 				label* offset = (label*)enviroment_source_at(env, ++IDX);
 				Vector* bind = CloneVector(self->ref_stack);
@@ -1116,20 +1116,20 @@ static void vm_run(frame * self, enviroment * env, int pos, int deferStart) {
 				PushVector(self->defer_vec, defctx);
 				break;
 			}
-			case op_breakpoint:
+			case OP_BREAKPOINT:
 			{
 				break;
 			}
 
 			//goto
-			case op_goto:
+			case OP_GOTO:
 			{
 				label* l = (label*)enviroment_source_at(env, ++IDX);
 				IDX = l->cursor;
 				break;
 			}
 
-			case op_goto_if_true:
+			case OP_GOTO_if_true:
 			{
 				bool v = SPB(self);
 				label* l = (label*)enviroment_source_at(env, ++IDX);
@@ -1139,7 +1139,7 @@ static void vm_run(frame * self, enviroment * env, int pos, int deferStart) {
 				break;
 			}
 
-			case op_goto_if_false:
+			case OP_GOTO_if_false:
 			{
 				bool v = SPB(self);
 				label* l = (label*)enviroment_source_at(env, ++IDX);
@@ -1170,67 +1170,67 @@ static void vm_run(frame * self, enviroment * env, int pos, int deferStart) {
 
 static int stack_topi(frame* self) {
 	object* ret = (object*)TopVector(self->value_stack);
-	assert(ret->tag == object_int_T);
+	assert(ret->tag == OBJECT_INT_T);
 	return ret->u.int_;
 }
 
 static double stack_topd(frame* self) {
 	object* ret = (object*)TopVector(self->value_stack);
-	assert(ret->tag == object_double_T);
+	assert(ret->tag == OBJECT_DOUBLE_T);
 	return ret->u.double_;
 }
 
 static char stack_topc(frame* self) {
 	object* ret = (object*)TopVector(self->value_stack);
-	assert(ret->tag == object_char_T);
+	assert(ret->tag == OBJECT_CHAR_T);
 	return ret->u.char_;
 }
 
 static char* stack_tops(frame* self) {
 	object* ret = (object*)TopVector(self->value_stack);
-	assert(ret->tag == object_string_T);
+	assert(ret->tag == OBJECT_STRING_T);
 	return bc_string_raw(ret)->text;
 }
 
 static bool stack_topb(frame* self) {
 	object* ret = (object*)TopVector(self->value_stack);
-	assert(ret->tag == object_bool_T);
+	assert(ret->tag == OBJECT_BOOL_T);
 	return ret->u.bool_;
 }
 
 
 static int stack_popi(frame* self) {
 	object* ret = (object*)PopVector(self->value_stack);
-	assert(ret->tag == object_int_T);
+	assert(ret->tag == OBJECT_INT_T);
 	return ret->u.int_;
 }
 
 static double stack_popd(frame* self) {
 	object* ret = (object*)PopVector(self->value_stack);
-	assert(ret->tag == object_double_T);
+	assert(ret->tag == OBJECT_DOUBLE_T);
 	return ret->u.double_;
 }
 
 static char stack_popc(frame* self) {
 	object* ret = (object*)PopVector(self->value_stack);
-	assert(ret->tag == object_char_T);
+	assert(ret->tag == OBJECT_CHAR_T);
 	return ret->u.char_;
 }
 
 static char* stack_pops(frame* self) {
 	object* ret = (object*)PopVector(self->value_stack);
-	assert(ret->tag == object_string_T);
+	assert(ret->tag == OBJECT_STRING_T);
 	return bc_string_raw(ret)->text;
 }
 
 static bool stack_popb(frame* self) {
 	object* ret = (object*)PopVector(self->value_stack);
-	assert(ret->tag == object_bool_T);
+	assert(ret->tag == OBJECT_BOOL_T);
 	return ret->u.bool_;
 }
 
 static bool throw_npe(frame* self, object* o) {
-	if(o->tag == object_null_T) {
+	if(o->tag == OBJECT_NULL_T) {
 		vm_native_throw(self, exception_new_simplef(self, "NullPointerException"));
 		return true;
 	}

@@ -2,7 +2,7 @@
 #include "../util/mem.h"
 #include "../util/text.h"
 #include "../util/string_buffer.h"
-#include "type_impl.h"
+#include "TYPE_IMPL.h"
 #include "generic_type.h"
 #include <assert.h>
 

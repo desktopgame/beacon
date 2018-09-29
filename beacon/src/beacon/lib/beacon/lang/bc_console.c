@@ -30,40 +30,40 @@ type* bc_console_type() {
 //private
 static void bc_console_writeLine(method* parent, frame* fr, enviroment* env) {
 	object* o = AtVector(fr->ref_stack, 1);
-	if (o->tag == object_int_T) {
+	if (o->tag == OBJECT_INT_T) {
 		printf("%d\n", o->u.int_);
-	} else if(o->tag == object_double_T) {
+	} else if(o->tag == OBJECT_DOUBLE_T) {
 		printf("%f\n", o->u.double_);
-	} else if (o->tag == object_string_T) {
+	} else if (o->tag == OBJECT_STRING_T) {
 		printf("%s\n", bc_string_raw(o)->text);
-	} else if (o->tag == object_ref_T) {
+	} else if (o->tag == OBJECT_REF_T) {
 		generic_type_print(o->gtype);
 		printf("\n");
-	} else if (o->tag == object_char_T) {
+	} else if (o->tag == OBJECT_CHAR_T) {
 		printf("%c\n", o->u.char_);
-	} else if (o->tag == object_bool_T) {
+	} else if (o->tag == OBJECT_BOOL_T) {
 		printf("%s\n", o->u.bool_ ? "true" : "false");
-	} else if(o->tag == object_null_T) {
+	} else if(o->tag == OBJECT_NULL_T) {
 		printf("null\n");
 	}
 }
 
 static void bc_console_write(method* parent, frame* fr, enviroment* env) {
 	object* o = AtVector(fr->ref_stack, 1);
-	if (o->tag == object_int_T) {
+	if (o->tag == OBJECT_INT_T) {
 		printf("%d", o->u.int_);
-	}  else if (o->tag == object_double_T) {
+	}  else if (o->tag == OBJECT_DOUBLE_T) {
 		printf("%f", o->u.double_);
-	} else if (o->tag == object_string_T) {
+	} else if (o->tag == OBJECT_STRING_T) {
 		printf("%s", bc_string_raw(o)->text);
-	} else if (o->tag == object_ref_T) {
+	} else if (o->tag == OBJECT_REF_T) {
 		generic_type_print(o->gtype);
 		//printf("\n");
-	} else if (o->tag == object_char_T) {
+	} else if (o->tag == OBJECT_CHAR_T) {
 		printf("%c", o->u.char_);
-	} else if (o->tag == object_bool_T) {
+	} else if (o->tag == OBJECT_BOOL_T) {
 		printf("%s", o->u.bool_ ? "true" : "false");
-	} else if(o->tag == object_null_T) {
+	} else if(o->tag == OBJECT_NULL_T) {
 		printf("null");
 	}
 }

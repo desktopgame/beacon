@@ -9,9 +9,9 @@ struct operator_overload;
 struct method;
 
 typedef enum instance_invoke {
-	instance_invoke_method_T,
-	instance_invoke_subscript_T,
-	instance_invoke_undefined_T
+	INSTANCE_INVOKE_METHOD_T,
+	INSTANCE_INVOKE_SUBSCRIPT_T,
+	INSTANCE_INVOKE_UNDEFINED_T
 } instance_invoke;
 
 typedef struct il_factor_invoke {

@@ -1,6 +1,6 @@
 #include "bc_file.h"
 #include "../../../../env/namespace.h"
-#include "../../../../env/type_impl.h"
+#include "../../../../env/TYPE_IMPL.h"
 #include "../../../../util/string_buffer.h"
 #include "../../../../util/text.h"
 #include "../../../bc_library_impl.h"
@@ -104,7 +104,7 @@ static void bc_file_nativeClose(method* parent, frame* fr, enviroment* env) {
 
 static object* file_new(FILE* fp, bool std) {
 	object* file = object_ref_new();
-	assert(file->paint != paint_onexit_T);
+	assert(file->paint != PAINT_ONEXIT_T);
 	type* fileType = bc_file_type();
 	file->gtype = fileType->generic_self;
 	file->vptr = TYPE2CLASS(fileType)->vt;

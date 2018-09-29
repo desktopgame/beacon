@@ -11,7 +11,7 @@ static void il_stmt_while_stmt_delete(VectorItem item);
 static void check_condition_type(il_factor* fact, enviroment* env, call_context* cctx);
 
 il_stmt * il_stmt_wrap_while(il_stmt_while * self) {
-	il_stmt* ret = il_stmt_new(ilstmt_while_T);
+	il_stmt* ret = il_stmt_new(ILSTMT_WHILE_T);
 	ret->u.while_ = self;
 	return ret;
 }
@@ -32,7 +32,7 @@ void il_stmt_while_generate(il_stmt_while * self, enviroment * env, call_context
 	PushVector(cctx->control.while_end, nextLab);
 	//条件を満たさないなら nextLab へ
 	il_factor_generate(self->condition, env, cctx);
-	opcode_buf_add(env->buf, op_goto_if_false);
+	opcode_buf_add(env->buf, OP_GOTO_if_false);
 	opcode_buf_add(env->buf, nextLab);
 	//全てのステートメントを実行
 	for (int i = 0; i < self->statement_list->length; i++) {
@@ -40,7 +40,7 @@ void il_stmt_while_generate(il_stmt_while * self, enviroment * env, call_context
 		il_stmt_generate(e, env, cctx);
 	}
 	//prevLab へ行って再判定
-	opcode_buf_add(env->buf, op_goto);
+	opcode_buf_add(env->buf, OP_GOTO);
 	opcode_buf_add(env->buf, prevLab);
 	PopVector(cctx->control.while_start);
 	PopVector(cctx->control.while_end);
@@ -76,7 +76,7 @@ static void check_condition_type(il_factor* fact, enviroment* env, call_context*
 	generic_type* cond_T = il_factor_eval(fact, env, cctx);
 	if(cond_T->core_type != TYPE_BOOL) {
 		char* condstr = il_factor_tostr(fact, env);
-		bc_error_throw(bcerror_if_expr_type_of_not_bool_T,
+		bc_error_throw(BCERROR_IF_EXPR_TYPE_OF_NOT_BOOL_T,
 			condstr
 		);
 		MEM_FREE(condstr);

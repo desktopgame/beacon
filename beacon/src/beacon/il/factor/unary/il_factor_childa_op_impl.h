@@ -18,7 +18,7 @@ struct generic_type* il_factor_childa_op_eval(il_factor_childa_op * self, struct
 
 void il_factor_childa_op_generate(il_factor_childa_op* self, struct enviroment* env, call_context* cctx);
 
-void il_factor_childa_op_load(il_factor_childa_op* self, struct enviroment* env, call_context* cctx);
+void il_factor_childa_OP_LOAD(il_factor_childa_op* self, struct enviroment* env, call_context* cctx);
 
 void il_factor_childa_op_delete(il_factor_childa_op* self);
 

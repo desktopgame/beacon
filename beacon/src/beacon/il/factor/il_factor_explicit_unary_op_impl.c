@@ -1,14 +1,14 @@
 #include "il_factor_explicit_unary_op_impl.h"
 #include "../../util/mem.h"
 #include "../../util/text.h"
-#include "../../env/type_impl.h"
+#include "../../env/TYPE_IMPL.h"
 #include "../../env/operator_overload.h"
 #include "../../env/generic_type.h"
 #include "../../vm/enviroment.h"
 #include "../il_factor_impl.h"
 
 il_factor* il_factor_wrap_explicit_unary_op(il_factor_explicit_unary_op* self) {
-	il_factor* ret = il_factor_new(ilfactor_explicit_unary_op_T);
+	il_factor* ret = il_factor_new(ILFACTOR_EXPLICIT_UNARY_OP_T);
 	ret->u.exp_unary_op = self;
 	return ret;
 }
@@ -23,11 +23,11 @@ il_factor_explicit_unary_op* il_factor_explicit_unary_op_new(operator_type type)
 
 void il_factor_explicit_unary_op_generate(il_factor_explicit_unary_op* self, enviroment* env, call_context* cctx) {
 	il_factor_generate(self->receiver, env, cctx);
-	opcode_buf_add(env->buf, op_invokeoperator);
+	opcode_buf_add(env->buf, OP_INVOKEOPERATOR);
 	opcode_buf_add(env->buf, self->index);
 }
 
-void il_factor_explicit_unary_op_load(il_factor_explicit_unary_op* self, enviroment* env, call_context* cctx) {
+void il_factor_explicit_unary_OP_LOAD(il_factor_explicit_unary_op* self, enviroment* env, call_context* cctx) {
 	il_factor_load(self->receiver, env, cctx);
 	self->index = il_factor_unary_op_index2(self->receiver, self->type, env, cctx);
 	assert(self->index != -1);

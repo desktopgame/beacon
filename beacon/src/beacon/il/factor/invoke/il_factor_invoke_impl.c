@@ -29,7 +29,7 @@ il_factor_invoke* il_factor_invoke_new(string_view namev) {
 	ret->receiver = NULL;
 	ret->type_args = NULL;
 	ret->index = -1;
-	ret->tag = instance_invoke_undefined_T;
+	ret->tag = INSTANCE_INVOKE_UNDEFINED_T;
 	ret->namev = namev;
 	ret->resolved = NULL;
 	return ret;
@@ -44,7 +44,7 @@ void il_factor_invoke_load(il_factor_invoke * self, enviroment * env, call_conte
 	if(self->index != -1) {
 		return;
 	}
-	call_frame* cfr = call_context_push(cctx, frame_instance_invoke_T);
+	call_frame* cfr = call_context_push(cctx, FRAME_INSTANCE_INVOKE_T);
 	cfr->u.instance_invoke.args = self->args;
 	cfr->u.instance_invoke.typeargs = self->type_args;
 	cfr->u.instance_invoke.receiver = il_factor_eval(self->receiver, env, cctx);
@@ -61,7 +61,7 @@ generic_type* il_factor_invoke_eval(il_factor_invoke * self, enviroment * env, c
 	generic_type* rgtp = il_factor_invoke_return_gtype(self);
 	generic_type* ret = NULL;
 	//型変数をそのまま返す場合
-	if(rgtp->tag != generic_type_tag_none_T) {
+	if(rgtp->tag != GENERIC_TYPE_TAG_NONE_T) {
 		resolve_non_default(self, env, cctx);
 		ret = self->resolved;
 	//型変数ではない型を返す
@@ -93,11 +93,11 @@ void il_factor_invoke_delete(il_factor_invoke* self) {
 }
 
 operator_overload* il_factor_invoke_find_set(il_factor_invoke* self, il_factor* value, enviroment* env, call_context* cctx, int* outIndex) {
-	assert(self->tag == instance_invoke_subscript_T);
+	assert(self->tag == INSTANCE_INVOKE_SUBSCRIPT_T);
 	Vector* args = NewVector();
 	PushVector(args, ((il_argument*)AtVector(self->args, 0))->factor);
 	PushVector(args, value);
-	operator_overload* opov = class_ilfind_operator_overload(TYPE2CLASS(self->u.opov->parent), operator_sub_script_set_T, args, env, cctx, outIndex);
+	operator_overload* opov = class_ilfind_operator_overload(TYPE2CLASS(self->u.opov->parent), OPERATOR_SUB_SCRIPT_SET_T, args, env, cctx, outIndex);
 	DeleteVector(args, VectorDeleterOfNull);
 	return opov;
 }
@@ -108,17 +108,17 @@ static void resolve_non_default(il_factor_invoke * self, enviroment * env, call_
 	}
 	generic_type* receivergType = il_factor_eval(self->receiver, env, cctx);
 	generic_type* rgtp = il_factor_invoke_return_gtype(self);
-	if(rgtp->tag == generic_type_tag_class_T) {
+	if(rgtp->tag == GENERIC_TYPE_TAG_CLASS_T) {
 		//レシーバの実体化された型の中で、
 		//メソッドの戻り値 'T' が表す位置に対応する実際の型を取り出す。
 		generic_type* instanced_type = (generic_type*)AtVector(receivergType->type_args_list, rgtp->virtual_type_index);
 		self->resolved = generic_type_clone(instanced_type);
-		self->resolved->tag = generic_type_tag_class_T;
-	} else if(rgtp->tag == generic_type_tag_method_T) {
+		self->resolved->tag = GENERIC_TYPE_TAG_CLASS_T;
+	} else if(rgtp->tag == GENERIC_TYPE_TAG_METHOD_T) {
 		//メソッドに渡された型引数を参照する
 		generic_type* instanced_type = (generic_type*)AtVector(self->type_args, rgtp->virtual_type_index);
 		self->resolved = generic_type_clone(instanced_type);
-		self->resolved->tag = generic_type_tag_class_T;
+		self->resolved->tag = GENERIC_TYPE_TAG_CLASS_T;
 	}
 }
 
@@ -131,7 +131,7 @@ static void resolve_default(il_factor_invoke * self, enviroment * env, call_cont
 //	virtual_type returnvType = self->m->return_vtype;
 	//内側に型変数が含まれているかもしれないので、
 	//それをここで展開する。
-	call_frame* cfr = call_context_push(cctx, frame_instance_invoke_T);
+	call_frame* cfr = call_context_push(cctx, FRAME_INSTANCE_INVOKE_T);
 	cfr->u.instance_invoke.receiver = receivergType;
 	cfr->u.instance_invoke.args = self->args;
 	cfr->u.instance_invoke.typeargs = self->type_args;
@@ -145,9 +145,9 @@ static void il_factor_invoke_check(il_factor_invoke * self, enviroment * env, ca
 	if(bc_error_last()) {
 		return;
 	}
-	if(self->receiver->type == ilfactor_variable_T) {
+	if(self->receiver->type == ILFACTOR_VARIABLE_T) {
 		il_factor_variable* ilvar = self->receiver->u.variable_;
-		assert(ilvar->type != ilvariable_type_static_T);
+		assert(ilvar->type != ILVARIABLE_TYPE_STATIC_T);
 	}
 	//レシーバの型を評価
 	generic_type* gtype = il_factor_eval(self->receiver, env, cctx);
@@ -167,7 +167,7 @@ static void il_factor_invoke_check(il_factor_invoke * self, enviroment * env, ca
 	//メソッドを検索
 	assert(ctype != NULL);
 	int temp = -1;
-	self->tag = instance_invoke_method_T;
+	self->tag = INSTANCE_INVOKE_METHOD_T;
 	self->u.m = type_ilfind_method(ctype, self->namev, self->args, env, cctx, &temp);
 	self->index = temp;
 	if(temp != -1) {
@@ -178,17 +178,17 @@ static void il_factor_invoke_check(il_factor_invoke * self, enviroment * env, ca
 	if(self->args->length != 1) {
 		//hoge(1) = 0;
 		//の形式なら引数は一つのはず
-		bc_error_throw(bcerror_invoke_instance_undefined_method_T,
+		bc_error_throw(BCERROR_INVOKE_INSTANCE_UNDEFINED_METHOD_T,
 			Ref2Str(type_name(ctype)),
 			Ref2Str(self->namev)
 		);
 		return;
 	}
-	self->tag = instance_invoke_subscript_T;
-	self->u.opov = class_argfind_operator_overload(TYPE2CLASS(ctype), operator_sub_script_get_T, self->args, env, cctx, &temp);
+	self->tag = INSTANCE_INVOKE_SUBSCRIPT_T;
+	self->u.opov = class_argfind_operator_overload(TYPE2CLASS(ctype), OPERATOR_SUB_SCRIPT_GET_T, self->args, env, cctx, &temp);
 	self->index = temp;
 	if(temp == -1) {
-		bc_error_throw(bcerror_invoke_instance_undefined_method_T,
+		bc_error_throw(BCERROR_INVOKE_INSTANCE_UNDEFINED_METHOD_T,
 			Ref2Str(type_name(ctype)),
 			Ref2Str(self->namev)
 		);
@@ -202,19 +202,19 @@ static void il_factor_invoke_args_delete(VectorItem item) {
 }
 
 static generic_type* il_factor_invoke_return_gtype(il_factor_invoke* self) {
-	assert(self->tag != instance_invoke_undefined_T);
-	return self->tag == instance_invoke_method_T ? self->u.m->return_gtype : self->u.opov->return_gtype;
+	assert(self->tag != INSTANCE_INVOKE_UNDEFINED_T);
+	return self->tag == INSTANCE_INVOKE_METHOD_T ? self->u.m->return_gtype : self->u.opov->return_gtype;
 }
 
 static void il_factor_invoke_generate_method(il_factor_invoke* self, enviroment* env, call_context* cctx) {
-	assert(self->tag != instance_invoke_undefined_T);
-	if(self->tag != instance_invoke_method_T) {
+	assert(self->tag != INSTANCE_INVOKE_UNDEFINED_T);
+	if(self->tag != INSTANCE_INVOKE_METHOD_T) {
 		return;
 	}
 	for(int i=0; i<self->type_args->length; i++) {
 		il_type_argument* e = (il_type_argument*)AtVector(self->type_args, i);
 		assert(e->gtype != NULL);
-		opcode_buf_add(env->buf, op_generic_add);
+		opcode_buf_add(env->buf, OP_GENERIC_ADD);
 		generic_type_generate(e->gtype, env);
 	}
 	for(int i=0; i<self->args->length; i++) {
@@ -222,31 +222,31 @@ static void il_factor_invoke_generate_method(il_factor_invoke* self, enviroment*
 		il_factor_generate(e->factor, env, cctx);
 	}
 	il_factor_generate(self->receiver, env, cctx);
-	if(self->u.m->parent->tag == type_interface_T) {
-		opcode_buf_add(env->buf, (VectorItem)op_invokeinterface);
+	if(self->u.m->parent->tag == TYPE_INTERFACE_T) {
+		opcode_buf_add(env->buf, (VectorItem)OP_INVOKEINTERFACE);
 		opcode_buf_add(env->buf, (VectorItem)self->u.m->parent->absolute_index);
 		opcode_buf_add(env->buf, (VectorItem)self->index);
 	} else {
 		assert(!IsStaticModifier(self->u.m->modifier));
-		if(self->u.m->access == access_private_T) {
-			opcode_buf_add(env->buf, (VectorItem)op_invokespecial);
+		if(self->u.m->access == ACCESS_PRIVATE_T) {
+			opcode_buf_add(env->buf, (VectorItem)OP_INVOKESPECIAL);
 			opcode_buf_add(env->buf, (VectorItem)self->index);
 		} else {
-			opcode_buf_add(env->buf, (VectorItem)op_invokevirtual);
+			opcode_buf_add(env->buf, (VectorItem)OP_INVOKEVIRTUAL);
 			opcode_buf_add(env->buf, (VectorItem)self->index);
 		}
 	}
 }
 
 static void il_factor_invoke_generate_subscript(il_factor_invoke* self, enviroment* env, call_context* cctx) {
-	assert(self->tag != instance_invoke_undefined_T);
-	if(self->tag != instance_invoke_subscript_T) {
+	assert(self->tag != INSTANCE_INVOKE_UNDEFINED_T);
+	if(self->tag != INSTANCE_INVOKE_SUBSCRIPT_T) {
 		return;
 	}
 	for(int i=0; i<self->type_args->length; i++) {
 		il_type_argument* e = (il_type_argument*)AtVector(self->type_args, i);
 		assert(e->gtype != NULL);
-		opcode_buf_add(env->buf, op_generic_add);
+		opcode_buf_add(env->buf, OP_GENERIC_ADD);
 		generic_type_generate(e->gtype, env);
 	}
 	for(int i=0; i<self->args->length; i++) {
@@ -254,6 +254,6 @@ static void il_factor_invoke_generate_subscript(il_factor_invoke* self, envirome
 		il_factor_generate(e->factor, env, cctx);
 	}
 	il_factor_generate(self->receiver, env, cctx);
-	opcode_buf_add(env->buf, op_invokeoperator);
+	opcode_buf_add(env->buf, OP_INVOKEOPERATOR);
 	opcode_buf_add(env->buf, self->index);
 }

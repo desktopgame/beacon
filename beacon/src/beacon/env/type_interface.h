@@ -12,9 +12,9 @@
  * 型の種類を表すタグ.
  */
 typedef enum type_tag {
-	type_class_T,
-	type_interface_T,
-	type_enum_T
+	TYPE_CLASS_T,
+	TYPE_INTERFACE_T,
+	TYPE_ENUM_T
 } type_tag;
 
 struct namespace_;
@@ -31,24 +31,24 @@ typedef enum type_state {
 	/**
 	 * 生成直後.
 	 */
-	type_none = 1 << 0,
+	TYPE_NONE = 1 << 0,
 	/**
 	 * 言語仕様のためにプリロードされるクラス.
 	 * 後で正式に読み込まれるまで "保留" 状態とします。
 	 */
-	type_pending = 1 << 1,
+	TYPE_PENDING = 1 << 1,
 	/**
 	 * 型宣言を発見し、名前空間へ登録されたことを示します.
 	 */
-	type_register = 1 << 2,
+	TYPE_REGISTER = 1 << 2,
 	/**
 	 * ある型のメンバ宣言を読み込んだことを示します.
 	 */
-	type_decl = 1 << 3,
+	TYPE_DECL = 1 << 3,
 	/**
 	 * ある型のメンバ実装を読み込んだことを示します.
 	 */
-	type_impl = 1 << 4
+	TYPE_IMPL = 1 << 4
 } type_state;
 
 /**
@@ -192,7 +192,7 @@ Vector* type_parameter_list(type* self);
  * @param self
  * @return
  */
-Vector* type_implement_list(type* self);
+Vector* TYPE_IMPLement_list(type* self);
 
 /**
  * この型がクラス/インターフェイスを表すとき、

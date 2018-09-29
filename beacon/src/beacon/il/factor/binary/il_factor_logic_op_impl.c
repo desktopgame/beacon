@@ -7,7 +7,7 @@
 #include "../../../vm/enviroment.h"
 #include "../../il_factor_impl.h"
 #include "../../../env/namespace.h"
-#include "../../../env/type_impl.h"
+#include "../../../env/TYPE_IMPL.h"
 
 static opcode operator_to_iopcode(operator_type type);
 static opcode operator_to_bopcode(operator_type type);
@@ -31,7 +31,7 @@ generic_type* il_factor_logic_op_eval(il_factor_logic_op* self, enviroment* env,
 		//演算子オーバーロードもない
 		if(self->operator_index == -1) {
 			bc_error_throw(
-				bcerror_undefined_logic_operator_T,
+				BCERROR_UNDEFINED_LOGIC_OPERATOR_T,
 				operator_tostring(self->type)
 			);
 			return NULL;
@@ -55,12 +55,12 @@ void il_factor_logic_op_generate(il_factor_logic_op* self, enviroment* env, call
 	} else {
 		il_factor_generate(self->parent->right, env, cctx);
 		il_factor_generate(self->parent->left, env, cctx);
-		opcode_buf_add(env->buf, op_invokeoperator);
+		opcode_buf_add(env->buf, OP_INVOKEOPERATOR);
 		opcode_buf_add(env->buf, self->operator_index);
 	}
 }
 
-void il_factor_logic_op_load(il_factor_logic_op* self, enviroment* env, call_context* cctx) {
+void il_factor_logic_OP_LOAD(il_factor_logic_op* self, enviroment* env, call_context* cctx) {
 	if(!il_factor_binary_op_int_int(self->parent, env, cctx) &&
 	   !il_factor_binary_op_bool_bool(self->parent, env, cctx)) {
 	self->operator_index = il_factor_binary_op_index(self->parent, env, cctx);
@@ -77,20 +77,20 @@ char* il_factor_logic_op_tostr(il_factor_logic_op* self, enviroment* env) {
 //static
 static opcode operator_to_iopcode(operator_type type) {
 	switch(type) {
-		case operator_bit_or_T: return op_ibit_or;
-		case operator_bit_and_T: return op_ibit_and;
-		case operator_logic_or_T: return op_ilogic_or;
-		case operator_logic_and_T: return op_ilogic_and;
+		case OPERATOR_BIT_OR_T: return OP_IBIT_OR;
+		case OPERATOR_BIT_AND_T: return OP_IBIT_AND;
+		case OPERATOR_LOGIC_OR_T: return OP_ILOGIC_OR;
+		case OPERATOR_LOGIC_AND_T: return OP_ILOGIC_AND;
 	}
 	assert(false);
 }
 
 static opcode operator_to_bopcode(operator_type type) {
 	switch(type) {
-		case operator_bit_or_T: return op_bbit_or;
-		case operator_bit_and_T: return op_bbit_and;
-		case operator_logic_or_T: return op_blogic_or;
-		case operator_logic_and_T: return op_blogic_and;
+		case OPERATOR_BIT_OR_T: return OP_BBIT_OR;
+		case OPERATOR_BIT_AND_T: return OP_BBIT_AND;
+		case OPERATOR_LOGIC_OR_T: return OP_BLOGIC_OR;
+		case OPERATOR_LOGIC_AND_T: return OP_BLOGIC_AND;
 	}
 	assert(false);
 }

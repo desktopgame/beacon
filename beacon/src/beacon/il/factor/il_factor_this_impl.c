@@ -18,7 +18,7 @@ il_factor_this* il_factor_this_new() {
 }
 
 void il_factor_this_generate(il_factor_this * self, enviroment * env, call_context* cctx) {
-	opcode_buf_add(env->buf, op_this);
+	opcode_buf_add(env->buf, OP_THIS);
 }
 
 void il_factor_this_load(il_factor_this * self, enviroment * env, call_context* cctx) {
@@ -38,12 +38,12 @@ void il_factor_this_delete(il_factor_this * self) {
 }
 //private
 static void check_context(il_factor_this * self, enviroment * env, call_context* cctx) {
-	if(cctx->tag != call_method_T) {
+	if(cctx->tag != CALL_METHOD_T) {
 		return;
 	}
 	method* met = call_context_method(cctx);
 	if(IsStaticModifier(met->modifier)) {
-		bc_error_throw(bcerror_access_to_this_at_static_method_T,
+		bc_error_throw(BCERROR_ACCESS_TO_THIS_AT_STATIC_METHOD_T,
 			Ref2Str(type_name(met->parent)),
 			Ref2Str(met->namev)
 		);

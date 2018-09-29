@@ -13,7 +13,7 @@ static void il_stmt_if_delete_stmt(VectorItem item);
 static void check_condition_type(il_factor* fact, enviroment* env, call_context* cctx);
 
 il_stmt * il_stmt_wrap_if(il_stmt_if * self) {
-	il_stmt* ret = il_stmt_new(ilstmt_if_T);
+	il_stmt* ret = il_stmt_new(ILSTMT_IF_T);
 	ret->u.if_ = self;
 	return ret;
 }
@@ -55,14 +55,14 @@ void il_stmt_if_generate(il_stmt_if * self, enviroment* env, call_context* cctx)
 	label* l1 = opcode_buf_label(env->buf, -1);
 	label* tail = opcode_buf_label(env->buf, -1);
 	// { ... }
-	opcode_buf_add(env->buf, op_goto_if_false);
+	opcode_buf_add(env->buf, OP_GOTO_if_false);
 	opcode_buf_add(env->buf, l1);
 	for (int i = 0; i < self->body->length; i++) {
 		il_stmt* stmt = (il_stmt*)AtVector(self->body, i);
 		il_stmt_generate(stmt, env, cctx);
 	}
 	//条件が満たされて実行されたら最後までジャンプ
-	opcode_buf_add(env->buf, op_goto);
+	opcode_buf_add(env->buf, OP_GOTO);
 	opcode_buf_add(env->buf, tail);
 	l1->cursor = opcode_buf_nop(env->buf);
 	// elif(...)
@@ -71,14 +71,14 @@ void il_stmt_if_generate(il_stmt_if * self, enviroment* env, call_context* cctx)
 		il_factor_generate(elif->condition, env, cctx);
 		label* l2 = opcode_buf_label(env->buf, -1);
 		// { ... }
-		opcode_buf_add(env->buf, op_goto_if_false);
+		opcode_buf_add(env->buf, OP_GOTO_if_false);
 		opcode_buf_add(env->buf, l2);
 		for (int j = 0; j < elif->body->length; j++) {
 			il_stmt* stmt = (il_stmt*)AtVector(elif->body, j);
 			il_stmt_generate(stmt, env, cctx);
 		}
 		//条件が満たされて実行されたら最後までジャンプ
-		opcode_buf_add(env->buf, op_goto);
+		opcode_buf_add(env->buf, OP_GOTO);
 		opcode_buf_add(env->buf, tail);
 		l2->cursor = opcode_buf_nop(env->buf);
 	}
@@ -168,7 +168,7 @@ static void check_condition_type(il_factor* fact, enviroment* env, call_context*
 	generic_type* cond_T = il_factor_eval(fact, env, cctx);
 	if(cond_T->core_type != TYPE_BOOL) {
 		char* condstr = il_factor_tostr(fact, env);
-		bc_error_throw(bcerror_if_expr_type_of_not_bool_T,
+		bc_error_throw(BCERROR_IF_EXPR_TYPE_OF_NOT_BOOL_T,
 			condstr
 		);
 		MEM_FREE(condstr);

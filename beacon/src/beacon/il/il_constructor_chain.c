@@ -9,7 +9,7 @@ static void il_constructor_argument_delete(VectorItem item);
 
 il_constructor_chain * il_constructor_chain_new() {
 	il_constructor_chain* ret = (il_constructor_chain*)MEM_MALLOC(sizeof(il_constructor_chain));
-	ret->type = chain_type_this_T;
+	ret->type = CHAIN_TYPE_THIS_T;
 	ret->argument_list = NewVector();
 	ret->c = NULL;
 	ret->constructor_index = -1;

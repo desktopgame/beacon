@@ -50,7 +50,7 @@ void CLBC_new_load(class_loader * self, char * fullPath) {
 class_loader* CLBC_import_new(class_loader* self, char* full_path) {
 	CL_ERROR_RET(self, self);
 	script_context* ctx = script_context_get_current();
-	class_loader* cll = class_loader_new(full_path, content_lib_T);
+	class_loader* cll = class_loader_new(full_path, CONTENT_LIB_T);
 	cll->parent = self;
 	import_info* info = import_manager_import(self->import_manager, cll);
 	info->consume = false;
@@ -89,7 +89,7 @@ static void CLBC_new_load_internal(class_loader * self, char * full_path) {
 	}
 	//そのローダーが破損しているなら
 	if (bc_error_last()) {
-		bc_error_throw(bcerror_chain_T, cll->filename);
+		bc_error_throw(BCERROR_CHAIN_T, cll->filename);
 	}
 	//パースをキャンセル
 	if (bc_error_last()) {
@@ -107,7 +107,7 @@ static void CLBC_import_already(class_loader* self, class_loader* cll) {
 	assert(cll->il_code != NULL);
 	//そのローダーが破損しているなら
 	if (bc_error_last()) {
-		bc_error_throw(bcerror_chain_T, cll->filename);
+		bc_error_throw(BCERROR_CHAIN_T, cll->filename);
 		return;
 	}
 }

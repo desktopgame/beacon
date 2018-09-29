@@ -5,11 +5,11 @@
 #include "../../util/text.h"
 #include "../../vm/enviroment.h"
 #include "../../env/type_interface.h"
-#include "../../env/type_impl.h"
+#include "../../env/TYPE_IMPL.h"
 #include "../../util/mem.h"
 
 il_factor * il_factor_wrap_string(il_factor_string * self) {
-	il_factor* ret = il_factor_new(ilfactor_string_T);
+	il_factor* ret = il_factor_new(ILFACTOR_STRING_T);
 	ret->u.string_ = self;
 	return ret;
 }
@@ -22,7 +22,7 @@ il_factor_string * il_factor_string_new(string_view valuev) {
 
 void il_factor_string_generate(il_factor_string * self, enviroment* env, call_context* cctx) {
 	int index = enviroment_add_constant_string(env, self->valuev);
-	opcode_buf_add(env->buf, (VectorItem)op_sconst);
+	opcode_buf_add(env->buf, (VectorItem)OP_SCONST);
 	opcode_buf_add(env->buf, (VectorItem)index);
 }
 

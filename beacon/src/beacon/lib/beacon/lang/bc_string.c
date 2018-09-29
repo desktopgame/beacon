@@ -15,7 +15,7 @@ void bc_string_init() {
 
 string_buffer * bc_string_raw(object* self) {
 	VectorItem e = AtVector(self->native_slot_vec, 0);
-	assert(self->tag == object_string_T);
+	assert(self->tag == OBJECT_STRING_T);
 	return (string_buffer*)e;
 }
 
@@ -42,9 +42,9 @@ static void bc_string_nativeInit(method* parent, frame* fr, enviroment* env) {
 	string_buffer* sb = NewBuffer();
 	for (int i = 0; i < charArr->native_slot_vec->length; i++) {
 		object* e = (object*)AtVector(charArr->native_slot_vec, i);
-		assert(e->tag == object_char_T);
+		assert(e->tag == OBJECT_CHAR_T);
 		AppendBuffer(sb, e->u.char_);
 	}
 	AssignVector(self->native_slot_vec, 0, sb);
-	self->tag = object_string_T;
+	self->tag = OBJECT_STRING_T;
 }

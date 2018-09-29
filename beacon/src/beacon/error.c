@@ -8,7 +8,7 @@
 #if defined(_MSC_VER)
 #pragma warning(disable:4996)
 #endif
-static bc_error_id gGlobalError = bcerror_none_T;
+static bc_error_id gGlobalError = BCERROR_NONE_T;
 static string_view gErrorFile = ZERO_VIEW;
 static string_view gLastMessage = ZERO_VIEW;
 static int gErrorLineNo = -1;
@@ -55,293 +55,293 @@ char* bc_error_vformat(bc_error_id id, va_list ap) {
 	char* fmt = NULL;
 	//bool aa = cc_test(ccstate_toplevel);
 	switch(id) {
-		case bcerror_none_T:
+		case BCERROR_NONE_T:
 			break;
-		case bcerror_generic_T:
+		case BCERROR_GENERIC_T:
 			fmt = "%s";
 			break;
-		case bcerror_parse_T:
+		case BCERROR_PARSE_T:
 			fmt = "%s";
 			break;
-		case bcerror_require_not_found_T:
+		case BCERROR_REQUIRE_NOT_FOUND_T:
 			fmt = "not found of required file: %s";
 			break;
-		case bcerror_overwrap_parameter_name_T:
+		case BCERROR_OVERWRAP_PARAMETER_NAME_T:
 			fmt = "overwrap of parameter name: %s#%s(%s)";
 			break;
-		case bcerror_overwrap_type_type_parameter_name_T:
+		case BCERROR_OVERWRAP_TYPE_TYPE_PARAMETER_NAME_T:
 			fmt = "overwrap of type parameter name: %s[%s]";
 			break;
-		case bcerror_overwrap_method_type_parameter_name_T:
+		case BCERROR_OVERWRAP_METHOD_TYPE_PARAMETER_NAME_T:
 			fmt = "overwrap of type parameter name: %s#%s[%s]";
 			break;
-		case bcerror_overwrap_variable_name_T:
+		case BCERROR_OVERWRAP_VARIABLE_NAME_T:
 			fmt = "overwrap of variable name: %s";
 			break;
-		case bcerror_overwrap_modifier_T:
+		case BCERROR_OVERWRAP_MODIFIER_T:
 			fmt = "overwrap of modifier: %s";
 			break;
-		case bcerror_overwrap_field_name_T:
+		case BCERROR_OVERWRAP_FIELD_NAME_T:
 			fmt = "overwrap of field name: %s @%s";
 			break;
-		case bcerror_overwrap_property_name_T:
+		case BCERROR_OVERWRAP_PROPERTY_NAME_T:
 			fmt = "overwrap of property name: %s @%s";
 			break;
 
 
-		case bcerror_native_field_T:
+		case BCERROR_NATIVE_FIELD_T:
 			fmt = "`native` modifier is can't use for field: %s#%s";
 			break;
-		case bcerror_abstract_field_T:
+		case BCERROR_ABSTRACT_FIELD_T:
 			fmt = "`abstract` modifier is can't use for field: %s#%s";
 			break;
-		case bcerror_override_field_T:
+		case BCERROR_OVERRIDE_FIELD_T:
 			fmt = "`override` modifier is can't use for field: %s#%s";
 			break;
 
 
-		case bcerror_static_override_method_T:
+		case BCERROR_STATIC_OVERRIDE_METHOD_T:
 			fmt = "`static` and `override` modifier is can't use with: %s#%s";
 			break;
-		case bcerror_abstract_override_method_T:
+		case BCERROR_ABSTRACT_OVERRIDE_METHOD_T:
 			fmt = "`abstract` and `override` modifier is can't use with: %s#%s";
 			break;
-		case bcerror_abstract_static_method_T:
+		case BCERROR_ABSTRACT_STATIC_METHOD_T:
 			fmt = "`abstract` and `static` modifier is can't use with: %s#%s";
 			break;
 
 
-		case bcerror_empty_stmt_method_T:
+		case BCERROR_EMPTY_STMT_METHOD_T:
 			fmt = "must be not empty statement if modifier of method is native or abstract: %s";
 			break;
-		case bcerror_not_empty_stmt_method_T:
+		case BCERROR_NOT_EMPTY_STMT_METHOD_T:
 			fmt = "must be empty statement if modifier of method is native or abstract: %s";
 			break;
 
 
-		case bcerror_return_value_void_method_T:
+		case BCERROR_RETURN_VALUE_VOID_METHOD_T:
 			fmt = "must be not return a value if return type of Void: %s#%s";
 			break;
-		case bcerror_not_return_value_not_void_method_T:
+		case BCERROR_NOT_RETURN_VALUE_NOT_VOID_METHOD_T:
 			fmt = "must be return a value if return type of not Void: %s#%s";
 			break;
-		case bcerror_return_value_type_is_not_compatible_not_void_method_T:
+		case BCERROR_RETURN_VALUE_TYPE_IS_NOT_COMPATIBLE_NOT_VOID_METHOD_T:
 			fmt = "return value is must be compatible to method return type: %s#%s";
 			break;
 
 
-		case bcerror_yield_return_value_type_is_not_compatible_T:
+		case BCERROR_YIELD_RETURN_VALUE_TYPE_IS_NOT_COMPATIBLE_T:
 			fmt = "yield return value is must be compatible to method return type: %s#%s";
 			break;
 
 
-		case bcerror_if_expr_type_of_not_bool_T:
+		case BCERROR_IF_EXPR_TYPE_OF_NOT_BOOL_T:
 			fmt = "must be condition formula is bool: %s";
 			break;
-		case bcerror_while_expr_type_of_not_bool_T:
+		case BCERROR_WHILE_EXPR_TYPE_OF_NOT_BOOL_T:
 			fmt = "must be condition formula is bool: %s";
 			break;
 
-		case bcerror_break_at_not_loop_T:
+		case BCERROR_BREAK_AT_NOT_LOOP_T:
 			fmt = "can use `break` only in loop statement";
 			break;
-		case bcerror_continue_at_not_loop_T:
+		case BCERROR_CONTINUE_AT_NOT_LOOP_T:
 			fmt = "can use `continue` only in loop statement";
 			break;
 
 
-		case bcerror_access_to_this_at_static_method_T:
+		case BCERROR_ACCESS_TO_THIS_AT_STATIC_METHOD_T:
 			fmt = "access to `this` at static method: %s#%s";
 			break;
-		case bcerror_access_to_super_at_static_method_T:
+		case BCERROR_ACCESS_TO_SUPER_AT_STATIC_METHOD_T:
 			fmt = "access to `super` at static method: %s#%s";
 			break;
 
 
-		case bcerror_assign_to_final_field_T:
+		case BCERROR_ASSIGN_TO_FINAL_FIELD_T:
 			fmt = "can't assign to `final` attributed field: %s#%s";
 			break;
-		case bcerror_not_default_value_static_final_field_T:
+		case BCERROR_NOT_DEFAULT_VALUE_STATIC_FINAL_FIELD_T:
 			fmt = "need default value: %s#%s";
 			break;
-		case bcerror_not_initial_field_not_initialized_at_ctor_T:
+		case BCERROR_NOT_INITIAL_FIELD_NOT_INITIALIZED_AT_CTOR_T:
 			fmt = "must be initialize a `final` attributed field: %s#%s";
 			break;
-		case bcerror_field_default_value_not_compatible_to_field_type_T:
+		case BCERROR_FIELD_DEFAULT_VALUE_NOT_COMPATIBLE_TO_FIELD_TYPE_T:
 			fmt = "field initializer result type is not compatible to field type: %s#%s";
 			break;
-		case bcerror_lhs_is_not_subscript_T:
+		case BCERROR_LHS_IS_NOT_SUBSCRIPT_T:
 			fmt = "lhs is not subscript: %s";
 			break;
 
 
 
-		case bcerror_arg_count_not2_bioperator_T:
+		case BCERROR_ARG_COUNT_NOT2_BIOPERATOR_T:
 			fmt = "illegal of parameter count, must be binary operator argument count is one.: %s#%s";
 			break;
-		case bcerror_arg_count_not1_uoperator_T:
+		case BCERROR_ARG_COUNT_NOT1_UOPERATOR_T:
 			fmt = "illegal of parameter count, must be unary operator argument count is zero.: %s#%s";
 			break;
-		case bcerror_arg_count_not2_subscript_set_op_T:
+		case BCERROR_ARG_COUNT_NOT2_SUBSCRIPT_SET_OP_T:
 			fmt = "set";
 			break;
-		case bcerror_arg_count_not1_subscript_get_op_T:
+		case BCERROR_ARG_COUNT_NOT1_SUBSCRIPT_GET_OP_T:
 			fmt = "get";
 			break;
-		case bcerror_return_type_not_bool_compare_operator_T:
+		case BCERROR_RETURN_TYPE_NOT_BOOL_COMPARE_OPERATOR_T:
 			fmt = "return type of `compare` operator is must be bool: %s#%s";
 			break;
-		case bcerror_return_type_not_bool_not_operator_T:
+		case BCERROR_RETURN_TYPE_NOT_BOOL_NOT_OPERATOR_T:
 			fmt = "return type of `not` operator is must be bool: %s#%s";
 			break;
-		case bcerror_return_type_not_equal_negative_operator_T:
+		case BCERROR_RETURN_TYPE_NOT_EQUAL_NEGATIVE_OPERATOR_T:
 			fmt = "return type of `negative` operator is must be equal from declared type: %s#%s";
 			break;
 
 
-		case bcerror_thrown_not_exception_type_T:
+		case BCERROR_THROWN_NOT_EXCEPTION_TYPE_T:
 			fmt = "must be thrown object type compatible to `exception`: %s";
 			break;
 
 
-		case bcerror_assign_not_compatible_local_T:
+		case BCERROR_ASSIGN_NOT_COMPATIBLE_LOCAL_T:
 			fmt = "assign expression is has not type compatible: %s";
 			break;
-		case bcerror_assign_not_compatible_field_T:
+		case BCERROR_ASSIGN_NOT_COMPATIBLE_FIELD_T:
 			fmt = "assign expression is has not type compatible: %s#%s";
 			break;
-		case bcerror_assign_not_compatible_property_T:
+		case BCERROR_ASSIGN_NOT_COMPATIBLE_PROPERTY_T:
 			fmt = "assign expression is has not type compatible: %s#%s";
 			break;
 
 
-		case bcerror_auto_chain_ctor_not_found_T:
+		case BCERROR_AUTO_CHAIN_CTOR_NOT_FOUND_T:
 			fmt = "need chain constructor if not found of super class empty constructor: %s#new";
 			break;
-		case bcerror_explicit_chain_ctor_not_found_T:
+		case BCERROR_EXPLICIT_CHAIN_CTOR_NOT_FOUND_T:
 			fmt = "not found chain constructor: %s#new";
 			break;
 
 
-		case bcerror_new_instance_undefined_class_T:
+		case BCERROR_NEW_INSTANCE_UNDEFINED_CLASS_T:
 			fmt = "undefined class: %s";
 			break;
-		case bcerror_ref_undefined_local_variable_T:
+		case BCERROR_REF_UNDEFINED_LOCAL_VARIABLE_T:
 			fmt = "undefined variable: %s";
 			break;
-		case bcerror_undefined_property_T:
+		case BCERROR_UNDEFINED_PROPERTY_T:
 			fmt = "undefined property: %s#%s";
 			break;
 
-		case bcerror_assign_to_invoke_T:
+		case BCERROR_ASSIGN_TO_INVOKE_T:
 			fmt = "can't assign to invoke: %s";
 			break;
 
-		case bcerror_interface_has_field_T:
+		case BCERROR_INTERFACE_HAS_FIELD_T:
 			fmt = "interface can't has not field: %s#%s";
 			break;
-		case bcerror_interface_has_ctor_T:
+		case BCERROR_INTERFACE_HAS_CTOR_T:
 			fmt = "interface can't has not constructor: %s#new";
 			break;
-		case bcerror_interface_has_opov_T:
+		case BCERROR_INTERFACE_HAS_OPOV_T:
 			fmt = "interface can't has not operator: %s#%s";
 			break;
-		case bcerror_interface_has_private_member_T:
+		case BCERROR_INTERFACE_HAS_PRIVATE_MEMBER_T:
 			fmt = "interface can't has not private member: %s#%s";
 			break;
 
-		case bcerror_invoke_bound_undefined_method_T:
+		case BCERROR_INVOKE_BOUND_UNDEFINED_METHOD_T:
 			fmt = "undefined method: %s#%s";
 			break;
-		case bcerror_invoke_instance_undefined_method_T:
+		case BCERROR_INVOKE_INSTANCE_UNDEFINED_METHOD_T:
 			fmt = "undefined method: %s#%s";
 			break;
-		case bcerror_invoke_static_undefined_method_T:
+		case BCERROR_INVOKE_STATIC_UNDEFINED_METHOD_T:
 			fmt = "undefined method: %s#%s";
 			break;
 
-		case bcerror_new_instance_undefined_ctor_T:
+		case BCERROR_NEW_INSTANCE_UNDEFINED_CTOR_T:
 			fmt = "undefined ctor: %s";
 			break;
 
-		case bcerror_undefined_compare_operator_T:
-		case bcerror_undefined_arithmetic_operator_T:
-		case bcerror_undefined_shift_operator_T:
-		case bcerror_undefined_bit_operator_T:
-		case bcerror_undefined_logic_operator_T:
-		case bcerror_undefined_excor_operator_T:
+		case BCERROR_UNDEFINED_COMPARE_OPERATOR_T:
+		case BCERROR_UNDEFINED_ARITHMETIC_OPERATOR_T:
+		case BCERROR_UNDEFINED_SHIFT_OPERATOR_T:
+		case BCERROR_UNDEFINED_BIT_OPERATOR_T:
+		case BCERROR_UNDEFINED_LOGIC_OPERATOR_T:
+		case BCERROR_UNDEFINED_EXCOR_OPERATOR_T:
 			fmt = "undefined operator: %s";
 			break;
 
-		case bcerror_void_assign_T:
+		case BCERROR_VOID_ASSIGN_T:
 			fmt = "can't assign. type is void.";
 			break;
-		case bcerror_void_decl_T:
+		case BCERROR_VOID_DECL_T:
 			fmt = "can't decl. type is void.";
 			break;
 
-		case bcerror_cast_not_compatible_T:
+		case BCERROR_CAST_NOT_COMPATIBLE_T:
 			fmt = "not compatible types: %s as %s";
 			break;
 
-		case bcerror_undefined_type_decl_T:
+		case BCERROR_UNDEFINED_TYPE_DECL_T:
 			fmt = "undefined type: %s";
 			break;
 
-		case bcerror_undefined_type_static_invoke_T:
+		case BCERROR_UNDEFINED_TYPE_STATIC_INVOKE_T:
 			fmt = "static method not found: %s#%s";
 			break;
 
-		case bcerror_undefined_name_bound_invoke_T:
+		case BCERROR_UNDEFINED_NAME_BOUND_INVOKE_T:
 			fmt = "instance method not found: %s#%s";
 			break;
 
-		case bcerror_construct_abstract_type_T:
+		case BCERROR_CONSTRUCT_ABSTRACT_TYPE_T:
 			fmt = "can't construct a abstract type by new operator: %s";
 			break;
-		case bcerror_can_t_resolve_lambda_T:
+		case BCERROR_CAN_T_RESOLVE_LAMBDA_T:
 			fmt = "can't resolve lambda interface type: %s@%s";
 			break;
-		case bcerror_not_functional_interface_T:
+		case BCERROR_NOT_FUNCTIONAL_INTERFACE_T:
 			fmt = "not functional interface: %s";
 			break;
-		case bcerror_class_first_T:
+		case BCERROR_CLASS_FIRST_T:
 			fmt = "must be class first: %s";
 			break;
-		case bcerror_multi_eqinterface_T:
+		case BCERROR_MULTI_EQINTERFACE_T:
 			fmt = "should'nt implement equal interface a multiple: %s";
 			break;
-		case bcerror_interface_only_T:
+		case BCERROR_INTERFACE_ONLY_T:
 			fmt = "must be interface only: %s";
 			break;
-		case bcerror_chain_T:
+		case BCERROR_CHAIN_T:
 			fmt = "error %s";
 			break;
-		case bcerror_abstract_method_by_T:
+		case BCERROR_ABSTRACT_METHOD_BY_T:
 			fmt = "abstract method should be defined on the abstract class: %s";
 			break;
-		case bcerror_not_implement_interface_T:
+		case BCERROR_NOT_IMPLEMENT_INTERFACE_T:
 			fmt = "must be implement: %s @%s";
 			break;
-		case bcerror_not_implement_abstract_method_T:
+		case BCERROR_NOT_IMPLEMENT_ABSTRACT_METHOD_T:
 			fmt = "must be implement: %s @%s";
 			break;
-		case bcerror_private_operator_T:
+		case BCERROR_PRIVATE_OPERATOR_T:
 			fmt = "must be public a access level of operator: %s";
 			break;
-		case bcerror_invalid_property_decl_T:
+		case BCERROR_INVALID_PROPERTY_DECL_T:
 			fmt = "can't use abbrev expression for only one property accessor: %s#%s";
 			break;
-		case bcerror_can_t_access_field_T:
+		case BCERROR_CAN_T_ACCESS_FIELD_T:
 			fmt = "can't access field: %s#%s";
 			break;
-		case bcerror_can_t_access_property_T:
+		case BCERROR_CAN_T_ACCESS_PROPERTY_T:
 			fmt = "can't access property: %s#%s";
 			break;
-		case bcerror_invalid_access_level_of_property_T:
+		case BCERROR_INVALID_ACCESS_LEVEL_OF_PROPERTY_T:
 			fmt = "access level of property accessor must be secure level more than property: %s#%s";
 			break;
-		case bcerror_specified_both_property_accessor_T:
+		case BCERROR_SPECIFIED_BOTH_PROPERTY_ACCESSOR_T:
 			fmt = "specified both access level of property accessor: %s#%s";
 			break;
 		default:
@@ -366,7 +366,7 @@ char* bc_error_vformat(bc_error_id id, va_list ap) {
 }
 
 void bc_error_clear() {
-	gGlobalError = bcerror_none_T;
+	gGlobalError = BCERROR_NONE_T;
 	gErrorFile = ZERO_VIEW;
 	gErrorLineNo = -1;
 	gErrorColumn = -1;

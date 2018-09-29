@@ -4,17 +4,17 @@
 #include <stdio.h>
 
 il_stmt * il_stmt_wrap_continue() {
-	il_stmt* ret = il_stmt_new(ilstmt_continue_T);
+	il_stmt* ret = il_stmt_new(ILSTMT_CONTINUE_T);
 	return ret;
 }
 
 void il_stmt_continue_generate(void * empty, enviroment * env, call_context* cctx) {
 	if(cctx->control.while_start->length == 0) {
-		bc_error_throw(bcerror_continue_at_not_loop_T);
+		bc_error_throw(BCERROR_CONTINUE_AT_NOT_LOOP_T);
 		return;
 	}
 	label* lab = (label*)TopVector(cctx->control.while_start);
-	opcode_buf_add(env->buf, op_goto);
+	opcode_buf_add(env->buf, OP_GOTO);
 	opcode_buf_add(env->buf, lab);
 }
 

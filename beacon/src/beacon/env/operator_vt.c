@@ -1,6 +1,6 @@
 #include "operator_vt.h"
 #include "../util/mem.h"
-#include "../env/type_impl.h"
+#include "../env/TYPE_IMPL.h"
 #include "../env/operator_overload.h"
 #include "../env/parameter.h"
 #include "../env/generic_type.h"

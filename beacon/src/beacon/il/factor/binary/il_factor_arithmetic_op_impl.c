@@ -7,7 +7,7 @@
 #include "../../../vm/enviroment.h"
 #include "../../il_factor_impl.h"
 #include "../../../env/namespace.h"
-#include "../../../env/type_impl.h"
+#include "../../../env/TYPE_IMPL.h"
 #include <assert.h>
 
 static opcode operator_to_iopcode(operator_type type);
@@ -37,7 +37,7 @@ generic_type* il_factor_arithmetic_op_eval(il_factor_arithmetic_op * self, envir
 	//プリミティブ型同士でないのに
 	//演算子オーバーロードもない
 	if(self->operator_index == -1) {
-		bc_error_throw(bcerror_undefined_compare_operator_T,
+		bc_error_throw(BCERROR_UNDEFINED_COMPARE_OPERATOR_T,
 			operator_tostring(self->type)
 		);
 		return NULL;
@@ -61,12 +61,12 @@ void il_factor_arithmetic_op_generate(il_factor_arithmetic_op* self, enviroment*
 	} else {
 		il_factor_generate(self->parent->right, env, cctx);
 		il_factor_generate(self->parent->left, env, cctx);
-		opcode_buf_add(env->buf, op_invokeoperator);
+		opcode_buf_add(env->buf, OP_INVOKEOPERATOR);
 		opcode_buf_add(env->buf, self->operator_index);
 	}
 }
 
-void il_factor_arithmetic_op_load(il_factor_arithmetic_op* self, enviroment* env, call_context* cctx) {
+void il_factor_arithmetic_OP_LOAD(il_factor_arithmetic_op* self, enviroment* env, call_context* cctx) {
 	if(!il_factor_binary_op_int_int(self->parent, env, cctx) &&
 	   !il_factor_binary_op_double_double(self->parent, env, cctx)) {
 		self->operator_index = il_factor_binary_op_index(self->parent, env, cctx);
@@ -83,22 +83,22 @@ char* il_factor_arithmetic_op_tostr(il_factor_arithmetic_op* self, enviroment* e
 //static
 static opcode operator_to_iopcode(operator_type type) {
 	switch(type) {
-		case operator_add_T: return op_iadd;
-		case operator_sub_T: return op_isub;
-		case operator_mul_T: return op_imul;
-		case operator_div_T: return op_idiv;
-		case operator_mod_T: return op_imod;
+		case OPERATOR_ADD_T: return OP_IADD;
+		case OPERATOR_SUB_T: return OP_ISUB;
+		case OPERATOR_MUL_T: return OP_IMUL;
+		case OPERATOR_DIV_T: return OP_IDIV;
+		case OPERATOR_MOD_T: return OP_IMOD;
 	}
 	assert(false);
 }
 
 static opcode operator_to_dopcode(operator_type type) {
 	switch(type) {
-		case operator_add_T: return op_dadd;
-		case operator_sub_T: return op_dsub;
-		case operator_mul_T: return op_dmul;
-		case operator_div_T: return op_ddiv;
-		case operator_mod_T: return op_dmod;
+		case OPERATOR_ADD_T: return OP_DADD;
+		case OPERATOR_SUB_T: return OP_DSUB;
+		case OPERATOR_MUL_T: return OP_DMUL;
+		case OPERATOR_DIV_T: return OP_DDIV;
+		case OPERATOR_MOD_T: return OP_DMOD;
 	}
 	assert(false);
 }

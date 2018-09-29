@@ -13,486 +13,486 @@ int opcode_fprint(FILE* fp, Vector* source, int index) {
 	fprintf(fp,"%d: ", index);
 	switch (code) {
 		//int & int
-		case op_iadd:
+		case OP_IADD:
 			fprintf(fp,"iadd");
 			break;
-		case op_isub:
+		case OP_ISUB:
 			fprintf(fp,"isub");
 			break;
-		case op_imul:
+		case OP_IMUL:
 			fprintf(fp,"imul");
 			break;
-		case op_idiv:
+		case OP_IDIV:
 			fprintf(fp,"idiv");
 			break;
-		case op_imod:
+		case OP_IMOD:
 			fprintf(fp,"imod");
 			break;
-		case op_ibit_or:
+		case OP_IBIT_OR:
 			fprintf(fp,"ibit or");
 			break;
-		case op_ilogic_or:
+		case OP_ILOGIC_OR:
 			fprintf(fp,"ilogic or");
 			break;
-		case op_ibit_and:
+		case OP_IBIT_AND:
 			fprintf(fp,"ibit and");
 			break;
-		case op_ilogic_and:
+		case OP_ILOGIC_AND:
 			fprintf(fp,"ilogic and");
 			break;
-		case op_ieq:
+		case OP_IEQ:
 			fprintf(fp,"ieq");
 			break;
-		case op_inoteq:
+		case OP_INOTEQ:
 			fprintf(fp,"inoteq");
 			break;
-		case op_igt:
+		case OP_IGT:
 			fprintf(fp,"igt");
 			break;
-		case op_ige:
+		case OP_IGE:
 			fprintf(fp,"ige");
 			break;
-		case op_ilt:
+		case OP_ILT:
 			fprintf(fp,"ilt");
 			break;
-		case op_ile:
+		case OP_ILE:
 			fprintf(fp,"ile");
 			break;
-		case op_ilsh:
+		case OP_ILSH:
 			fprintf(fp,"ilsh");
 			break;
-		case op_irsh:
+		case OP_IRSH:
 			fprintf(fp,"irsh");
 			break;
-		case op_iexcor:
+		case OP_IEXCOR:
 			fprintf(fp,"iexcor");
 			break;
-		case op_iflip:
+		case OP_IFLIP:
 			fprintf(fp, "iflip");
 			break;
-		case op_ceq:
+		case OP_CEQ:
 			fprintf(fp, "ceq");
 			break;
-		case op_cnoteq:
+		case OP_CNOTEQ:
 			fprintf(fp, "cnoteq");
 			break;
-		case op_cgt:
+		case OP_CGT:
 			fprintf(fp, "cgt");
 			break;
-		case op_cge:
+		case OP_CGE:
 			fprintf(fp, "cge");
 			break;
-		case op_clt:
+		case OP_CLT:
 			fprintf(fp, "clt");
 			break;
-		case op_cle:
+		case OP_CLE:
 			fprintf(fp, "cle");
 			break;
 		//double & double
-		case op_dadd:
+		case OP_DADD:
 			fprintf(fp,"dadd");
 			break;
-		case op_dsub:
+		case OP_DSUB:
 			fprintf(fp,"dsub");
 			break;
-		case op_dmul:
+		case OP_DMUL:
 			fprintf(fp,"mul");
 			break;
-		case op_ddiv:
+		case OP_DDIV:
 			fprintf(fp,"ddiv");
 			break;
-		case op_dmod:
+		case OP_DMOD:
 			fprintf(fp,"dmod");
 			break;
-		case op_deq:
+		case OP_DEQ:
 			fprintf(fp,"deq");
 			break;
-		case op_dnoteq:
+		case OP_DNOTEQ:
 			fprintf(fp,"dnoteq");
 			break;
-		case op_dgt:
+		case OP_DGT:
 			fprintf(fp,"dgt");
 			break;
-		case op_dge:
+		case OP_DGE:
 			fprintf(fp,"dge");
 			break;
-		case op_dlt:
+		case OP_DLT:
 			fprintf(fp,"dlt");
 			break;
-		case op_dle:
+		case OP_DLE:
 			fprintf(fp,"dle");
 			break;
-		case op_ineg:
+		case OP_INEG:
 			fprintf(fp,"ineg");
 			break;
-		case op_dneg:
+		case OP_DNEG:
 			fprintf(fp,"dneg");
 			break;
-		case op_bnot:
+		case OP_BNOT:
 			fprintf(fp,"bnot");
 			break;
-		case op_bbit_or:
+		case OP_BBIT_OR:
 			fprintf(fp,"bbit_or");
 			break;
-		case op_blogic_or:
+		case OP_BLOGIC_OR:
 			fprintf(fp,"blogic_or");
 			break;
-		case op_bbit_and:
+		case OP_BBIT_AND:
 			fprintf(fp,"bbit_and");
 			break;
-		case op_blogic_and:
+		case OP_BLOGIC_AND:
 			fprintf(fp,"blogic_and");
 			break;
-		case op_bexcor:
+		case OP_BEXCOR:
 			fprintf(fp, "bexcor");
 			break;
-		case op_bflip:
+		case OP_BFLIP:
 			fprintf(fp, "bflip");
 			break;
 		//push const
-		case op_iconst:
+		case OP_ICONST:
 		{
 			int a = AtVector(source, ++index);
 			fprintf(fp,"push iconst(%d)", a);
 			break;
 		}
-		case op_dconst:
+		case OP_DCONST:
 		{
 			int a = AtVector(source, ++index);
 			fprintf(fp,"push dconst(%d)", a);
 			break;
 		}
-		case op_cconst:
+		case OP_CCONST:
 		{
 			int a = AtVector(source, ++index);
 			fprintf(fp,"push cconst(%d)", a);
 			break;
 		}
-		case op_sconst:
+		case OP_SCONST:
 		{
 			int a = AtVector(source, ++index);
 			fprintf(fp,"push sconst(%d)", a);
 			break;
 		}
-		case op_true:
+		case OP_TRUE:
 		{
 			fprintf(fp,"true");
 			break;
 		}
-		case op_false:
+		case OP_FALSE:
 		{
 			fprintf(fp,"false");
 			break;
 		}
-		case op_null:
+		case OP_NULL:
 		{
 			fprintf(fp,"null");
 			break;
 		}
-		case op_dup:
+		case OP_DUP:
 		{
 			fprintf(fp,"dup");
 			break;
 		}
-		case op_pop:
+		case OP_POP:
 		{
 			fprintf(fp,"pop");
 			break;
 		}
-		case op_nop:
+		case OP_NOP:
 		{
 			fprintf(fp,"nop");
 			break;
 		}
 		//store,load
-		case op_put_field:
+		case OP_PUT_FIELD:
 		{
 			int a = (int)AtVector(source, ++index);
 			fprintf(fp,"put field(%d)", a);
 			break;
 		}
-		case op_get_field:
+		case OP_GET_FIELD:
 		{
 			//int a = (int)AtVector(source, ++index);
 			int b = (int)AtVector(source, ++index);
 			fprintf(fp,"get field(%d)", b);
 			break;
 		}
-		case op_put_static:
+		case OP_PUT_STATIC:
 		{
 			int a = (int)AtVector(source, ++index);
 			int b = (int)AtVector(source, ++index);
 			fprintf(fp,"put static(%d %d)", a, b);
 			break;
 		}
-		case op_get_static:
+		case OP_GET_STATIC:
 		{
 			int a = (int)AtVector(source, ++index);
 			int b = (int)AtVector(source, ++index);
 			fprintf(fp,"get static(%d %d)", a, b);
 			break;
 		}
-		case op_put_property:
+		case OP_PUT_PROPERTY:
 		{
 			int a = (int)AtVector(source, ++index);
 			fprintf(fp,"put property(%d)", a);
 			break;
 		}
-		case op_get_property:
+		case OP_GET_PROPERTY:
 		{
 			//int a = (int)AtVector(source, ++index);
 			int b = (int)AtVector(source, ++index);
 			fprintf(fp,"get property(%d)", b);
 			break;
 		}
-		case op_put_static_property:
+		case OP_PUT_STATIC_property:
 		{
 			int a = (int)AtVector(source, ++index);
 			int b = (int)AtVector(source, ++index);
 			fprintf(fp,"put static_property(%d %d)", a, b);
 			break;
 		}
-		case op_get_static_property:
+		case OP_GET_STATIC_property:
 		{
 			int a = (int)AtVector(source, ++index);
 			int b = (int)AtVector(source, ++index);
 			fprintf(fp,"get static_property(%d %d)", a, b);
 			break;
 		}
-		case op_store:
+		case OP_STORE:
 		{
 			int a = (int)AtVector(source, ++index);
 			fprintf(fp,"store %d", a);
 			break;
 		}
-		case op_load:
+		case OP_LOAD:
 		{
 			int a = (int)AtVector(source, ++index);
 			fprintf(fp,"load %d", a);
 			break;
 		}
-		case op_down_as:
+		case OP_DOWN_AS:
 		{
 			fprintf(fp,"down as");
 			break;
 		}
-		case op_up_as:
+		case OP_UP_AS:
 		{
 			fprintf(fp,"up as");
 			break;
 		}
 		//invoke
-		case op_chain_this:
+		case OP_CHAIN_THIS:
 		{
 			int a = (int)AtVector(source, ++index);
 			int b = (int)AtVector(source, ++index);
 			fprintf(fp,"chain this(%d %d)", a, b);
 			break;
 		}
-		case op_chain_super:
+		case OP_CHAIN_SUPER:
 		{
 			int a = (int)AtVector(source, ++index);
 			int b = (int)AtVector(source, ++index);
 			fprintf(fp,"chain super(%d %d)", a, b);
 			break;
 		}
-		case op_new_object:
+		case OP_NEW_OBJECT:
 		{
 			fprintf(fp,"new object");
 			break;
 		}
-		case op_alloc_field:
+		case OP_ALLOC_FIELD:
 		{
 			int a = (int)AtVector(source, ++index);
 			fprintf(fp,"alloc field(%d)", a);
 			break;
 		}
-		case op_new_instance:
+		case OP_NEW_INSTANCE:
 		{
 			int a = (int)AtVector(source, ++index);
 			int b = (int)AtVector(source, ++index);
 			fprintf(fp,"new instance(%d %d)", a, b);
 			break;
 		}
-		case op_this:
+		case OP_THIS:
 		{
 			fprintf(fp,"this");
 			break;
 		}
-		case op_super:
+		case OP_SUPER:
 		{
 			fprintf(fp,"super");
 			break;
 		}
-		case op_invokevirtual:
+		case OP_INVOKEVIRTUAL:
 		{
 			int a = (int)AtVector(source, ++index);
 			fprintf(fp,"invoke virtual(%d)", a);
 			break;
 		}
-		case op_invokestatic:
+		case OP_INVOKESTATIC:
 		{
 			int a = (int)AtVector(source, ++index);
 			int b = (int)AtVector(source, ++index);
 			fprintf(fp,"invoke static(%d %d)", a, b);
 			break;
 		}
-		case op_invokespecial:
+		case OP_INVOKESPECIAL:
 		{
 			int a = (int)AtVector(source, ++index);
 			fprintf(fp,"invoke special(%d)", a);
 			break;
 		}
-		case op_invokeinterface:
+		case OP_INVOKEINTERFACE:
 		{
 			int a = (int)AtVector(source, ++index);
 			int b = (int)AtVector(source, ++index);
 			fprintf(fp,"invoke interface(%d %d)", a, b);
 			break;
 		}
-		case op_invokeoperator:
+		case OP_INVOKEOPERATOR:
 		{
 			int a = (int)AtVector(source, ++index);
 			fprintf(fp,"invoke operator(%d)", a);
 			break;
 		}
 
-		case op_coro_init:
+		case OP_CORO_INIT:
 		{
 			int a = (int)AtVector(source, ++index);
 			printf("coro init(%d)", a);
 			break;
 		}
-		case op_coro_next:
+		case OP_CORO_NEXT:
 		{
 			printf("coro next");
 			break;
 		}
-		case op_coro_exit:
+		case OP_CORO_EXIT:
 		{
 			printf("coro exit");
 			break;
 		}
-		case op_coro_resume:
+		case OP_CORO_RESUME:
 		{
 			printf("coro resume");
 			break;
 		}
-		case op_coro_current:
+		case OP_CORO_CURRENT:
 		{
 			printf("core current");
 			break;
 		}
-		case op_coro_swap_self:
+		case OP_CORO_SWAP_SELF:
 		{
 			printf("core swap");
 			break;
 		}
-		case op_generic_add:
+		case OP_GENERIC_ADD:
 		{
 			fprintf(fp, "generic add");
 			break;
 		}
-		case op_generic_enter:
+		case OP_GENERIC_ENTER:
 		{
 			int a = (int)AtVector(source, ++index);
 			fprintf(fp, "generic enter(%d)", a);
 			break;
 		}
-		case op_generic_unique_type:
+		case OP_GENERIC_UNIQUE_TYPE:
 		{
 			int a = (int)AtVector(source, ++index);
 			fprintf(fp, "generic unique_type(%d)", a);
 			break;
 		}
-		case op_generic_instance_type:
+		case OP_GENERIC_INSTANCE_TYPE:
 		{
 			int a = (int)AtVector(source, ++index);
 			fprintf(fp, "generic instance_type(%d)", a);
 			break;
 		}
-		case op_generic_static_type:
+		case OP_GENERIC_STATIC_TYPE:
 		{
 			int a = (int)AtVector(source, ++index);
 			fprintf(fp, "generic static_type(%d)", a);
 			break;
 		}
-		case op_generic_exit:
+		case OP_GENERIC_EXIT:
 		{
 			fprintf(fp, "generic exit");
 			break;
 		}
-		case op_return:
+		case OP_RETURN:
 		{
 			fprintf(fp,"return");
 			break;
 		}
-		case op_throw:
+		case OP_THROW:
 		{
 			fprintf(fp,"throw");
 			//int a = (int)AtVector(source, ++index);
 			break;
 		}
-		case op_try_enter:
+		case OP_TRY_ENTER:
 		{
 			fprintf(fp,"try enter");
 			break;
 		}
-		case op_try_exit:
+		case OP_TRY_EXIT:
 		{
 			fprintf(fp,"try exit");
 			break;
 		}
-		case op_try_clear:
+		case OP_TRY_CLEAR:
 		{
 			fprintf(fp,"try clear");
 			break;
 		}
-		case op_defer_enter:
+		case OP_DEFER_ENTER:
 		{
 			fprintf(fp, "defer enter");
 			break;
 		}
-		case op_defer_register:
+		case OP_DEFER_REGISTER:
 		{
 			label* l = (label*)AtVector(source, ++index);
 			fprintf(fp, "defer enter(%d)", l->cursor);
 			break;
 		}
-		case op_defer_exit:
+		case OP_DEFER_EXIT:
 		{
 			fprintf(fp, "defer exit");
 			break;
 		}
-		case op_hexception:
+		case OP_HEXCEPTION:
 		{
 			fprintf(fp,"hexception");
 			break;
 		}
-		case op_instanceof:
+		case OP_INSTANCEOF:
 		{
 			fprintf(fp,"instanceof");
 			break;
 		}
-		case op_breakpoint:
+		case OP_BREAKPOINT:
 		{
 			fprintf(fp,"breakpoint");
 			break;
 		}
 		//goto
-		case op_goto:
+		case OP_GOTO:
 		{
 			label* l = (label*)AtVector(source, ++index);
 			fprintf(fp,"goto(%d)", l->cursor);
 			break;
 		}
-		case op_goto_if_true:
+		case OP_GOTO_if_true:
 		{
 			label* l = (label*)AtVector(source, ++index);
 			fprintf(fp,"goto if true(%d)", l->cursor);
 			break;
 		}
-		case op_goto_if_false:
+		case OP_GOTO_if_false:
 		{
 			label* l = (label*)AtVector(source, ++index);
 			fprintf(fp,"goto if false(%d)", l->cursor);

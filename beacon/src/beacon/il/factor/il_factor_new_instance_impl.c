@@ -7,7 +7,7 @@
 #include "../../util/text.h"
 #include "../../env/constructor.h"
 #include "../../env/type_interface.h"
-#include "../../env/type_impl.h"
+#include "../../env/TYPE_IMPL.h"
 #include "../../env/class_loader.h"
 #include "../../env/import_manager.h"
 #include <stdio.h>
@@ -20,7 +20,7 @@ static void il_factor_new_instance_find(il_factor_new_instance * self, enviromen
 static void il_Factor_new_instace_delete_arg(VectorItem item);
 
 il_factor * il_factor_wrap_new_instance(il_factor_new_instance * self) {
-	il_factor* ret = il_factor_new(ilfactor_new_instance_T);
+	il_factor* ret = il_factor_new(ILFACTOR_NEW_INSTANCE_T);
 	ret->u.new_instance_ = self;
 	return ret;
 }
@@ -41,7 +41,7 @@ void il_factor_new_instance_generate(il_factor_new_instance * self, enviroment *
 	for(int i=0; i<self->type_args->length; i++) {
 		il_type_argument* e = (il_type_argument*)AtVector(self->type_args, i);
 		assert(e->gtype != NULL);
-		opcode_buf_add(env->buf, op_generic_add);
+		opcode_buf_add(env->buf, OP_GENERIC_ADD);
 		generic_type_generate(e->gtype, env);
 	}
 	//実引数を全てスタックへ
@@ -53,7 +53,7 @@ void il_factor_new_instance_generate(il_factor_new_instance * self, enviroment *
 		}
 	}
 	//クラスとコンストラクタのインデックスをプッシュ
-	opcode_buf_add(env->buf, op_new_instance);
+	opcode_buf_add(env->buf, OP_NEW_INSTANCE);
 	opcode_buf_add(env->buf, self->c->parent->absolute_index);
 	opcode_buf_add(env->buf, self->constructor_index);
 }
@@ -65,7 +65,7 @@ void il_factor_new_instance_load(il_factor_new_instance * self, enviroment * env
 	}
 	//抽象クラスはインスタンス化できない
 	if(type_is_abstract(self->c->parent)) {
-		bc_error_throw(bcerror_construct_abstract_type_T, Ref2Str(type_name(self->c->parent)));
+		bc_error_throw(BCERROR_CONSTRUCT_ABSTRACT_TYPE_T, Ref2Str(type_name(self->c->parent)));
 	}
 }
 
@@ -130,7 +130,7 @@ static void il_factor_new_instance_find(il_factor_new_instance * self, enviromen
 	//コンストラクタで生成するオブジェクトの肩を取得
 	type* ty = call_context_eval_type(cctx, self->fqcnc);
 	if(ty == NULL) {
-		bc_error_throw(bcerror_new_instance_undefined_class_T,
+		bc_error_throw(BCERROR_NEW_INSTANCE_UNDEFINED_CLASS_T,
 			Ref2Str(self->fqcnc->namev)
 		);
 		return;
@@ -138,7 +138,7 @@ static void il_factor_new_instance_find(il_factor_new_instance * self, enviromen
 	//使用するコンストラクタを取得
 	class_* cls = TYPE2CLASS(ty);
 	int temp = -1;
-	call_frame* cfr = call_context_push(cctx, frame_resolve_T);
+	call_frame* cfr = call_context_push(cctx, FRAME_RESOLVE_T);
 	cfr->u.resolve.gtype = cls->parent->generic_self;
 	cfr->u.resolve.typeargs = self->type_args;
 	il_type_argument_resolve(self->type_args, cctx);
@@ -146,7 +146,7 @@ static void il_factor_new_instance_find(il_factor_new_instance * self, enviromen
 	self->constructor_index = temp;
 	call_context_pop(cctx);
 	if(temp == -1) {
-		bc_error_throw(bcerror_new_instance_undefined_ctor_T,
+		bc_error_throw(BCERROR_NEW_INSTANCE_UNDEFINED_CTOR_T,
 			Ref2Str(cls->namev)
 		);
 	}

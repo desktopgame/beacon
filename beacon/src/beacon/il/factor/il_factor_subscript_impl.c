@@ -1,11 +1,11 @@
 #include "il_factor_subscript_impl.h"
 #include "../../util/mem.h"
 #include "../../util/io.h"
-#include "../../env/type_impl.h"
+#include "../../env/TYPE_IMPL.h"
 #include "../../env/operator_overload.h"
 
 il_factor* il_factor_wrap_subscript(il_factor_subscript* self) {
-	il_factor* ret = il_factor_new(ilfactor_subscript_T);
+	il_factor* ret = il_factor_new(ILFACTOR_SUBSCRIPT_T);
 	ret->u.subscript = self;
 	return ret;
 }
@@ -22,7 +22,7 @@ il_factor_subscript* il_factor_subscript_malloc(const char* filename, int lineno
 void il_factor_subscript_generate(il_factor_subscript* self, enviroment* env, call_context* cctx) {
 	il_factor_generate(self->pos, env, cctx);
 	il_factor_generate(self->receiver, env, cctx);
-	opcode_buf_add(env->buf, op_invokeoperator);
+	opcode_buf_add(env->buf, OP_INVOKEOPERATOR);
 	opcode_buf_add(env->buf, self->operator_index);
 }
 
@@ -37,7 +37,7 @@ void il_factor_subscript_load(il_factor_subscript* self, enviroment* env, call_c
 	Vector* args = NewVector();
 	PushVector(args, arg_gtype);
 	int temp = -1;
-	self->opov = class_gfind_operator_overload(TYPE2CLASS(GENERIC2TYPE(receiver_gtype)), operator_sub_script_get_T, args, env, cctx, &temp);
+	self->opov = class_gfind_operator_overload(TYPE2CLASS(GENERIC2TYPE(receiver_gtype)), OPERATOR_SUB_SCRIPT_GET_T, args, env, cctx, &temp);
 	self->operator_index = temp;
 	DeleteVector(args, VectorDeleterOfNull);
 }

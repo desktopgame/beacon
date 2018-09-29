@@ -8,7 +8,7 @@
 #include <string.h>
 
 il_stmt * il_stmt_wrap_inferenced_type_init(il_stmt_inferenced_type_init * self) {
-	il_stmt* ret = il_stmt_new(ilstmt_inferenced_type_init_T);
+	il_stmt* ret = il_stmt_new(ILSTMT_INFERENCED_TYPE_INIT_T);
 	ret->u.inferenced_type_init = self;
 	return ret;
 }
@@ -23,7 +23,7 @@ il_stmt_inferenced_type_init * il_stmt_inferenced_type_init_new(string_view name
 void il_stmt_inferenced_type_init_generate(il_stmt_inferenced_type_init * self, enviroment * env, call_context* cctx) {
 	//右辺の方で宣言する
 	il_factor_generate(self->fact, env, cctx);
-	opcode_buf_add(env->buf, op_store);
+	opcode_buf_add(env->buf, OP_STORE);
 	opcode_buf_add(env->buf, self->sym->index);
 }
 
@@ -35,12 +35,12 @@ void il_stmt_inferenced_type_init_load(il_stmt_inferenced_type_init * self, envi
 	//voidは代入できない
 	if(gtp->core_type != NULL &&
 	   gtp->core_type == TYPE_VOID) {
-		   bc_error_throw(bcerror_void_assign_T);
+		   bc_error_throw(BCERROR_VOID_ASSIGN_T);
 		return;
 	}
 	//変数を登録
 	if(symbol_table_contains(env->sym_table, self->namev)) {
-		bc_error_throw(bcerror_overwrap_variable_name_T,
+		bc_error_throw(BCERROR_OVERWRAP_VARIABLE_NAME_T,
 			Ref2Str(self->namev)
 		);
 	}

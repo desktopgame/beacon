@@ -101,10 +101,10 @@ bool class_contains_sfield(class_* self, field* f) {
 
 bool class_accessible_field(class_* self, field* f) {
 	assert(f != NULL);
-	if(f->access == access_public_T) {
+	if(f->access == ACCESS_PUBLIC_T) {
 		return true;
 	}
-	if(f->access == access_private_T) {
+	if(f->access == ACCESS_PRIVATE_T) {
 		return self == TYPE2CLASS(f->parent);
 	}
 	type* ty = self->parent;
@@ -135,10 +135,10 @@ bool class_contains_sproperty(class_* self, property* p) {
 
 bool class_accessible_property(class_* self, property* p) {
 	assert(p != NULL);
-	if(p->access == access_public_T) {
+	if(p->access == ACCESS_PUBLIC_T) {
 		return true;
 	}
-	if(p->access == access_private_T) {
+	if(p->access == ACCESS_PRIVATE_T) {
 		return self == TYPE2CLASS(p->parent);
 	}
 	type* ty = self->parent;
@@ -159,10 +159,10 @@ bool class_accessible_property(class_* self, property* p) {
 
 bool class_accessible_property_accessor(class_* self, property_body* pb) {
 	assert(pb != NULL);
-	if(pb->access == access_public_T) {
+	if(pb->access == ACCESS_PUBLIC_T) {
 		return true;
 	}
-	if(pb->access == access_private_T) {
+	if(pb->access == ACCESS_PRIVATE_T) {
 		return self == TYPE2CLASS(pb->parent->parent);
 	}
 	type* ty = self->parent;
@@ -372,7 +372,7 @@ method * class_get_method(object * o, int index) {
 	#if defined(DEBUG)
 	const char* name = object_name(o);
 	#endif
-	if(o->tag == object_null_T) {
+	if(o->tag == OBJECT_NULL_T) {
 		o->vptr = TYPE2CLASS(TYPE_OBJECT)->vt;
 	}
 	vtable* vx = (o->vptr);
@@ -512,7 +512,7 @@ bool class_contains_method(Vector* method_list, method* m, method** outM) {
 	assert(!IsStaticModifier(m->modifier));
 	(*outM) = NULL;
 	bool ret = false;
-	call_context* cctx = call_context_new(call_decl_T);
+	call_context* cctx = call_context_new(CALL_DECL_T);
 	cctx->scope = m->parent->location;
 	cctx->ty = m->parent;
 	for(int i=0; i<method_list->length; i++) {
@@ -577,7 +577,7 @@ Vector* class_get_interface_tree(class_* self) {
 }
 
 generic_type* class_find_interface_type(class_* self, type* tinter, generic_type** out_baseline) {
-	assert(tinter->tag == type_interface_T);
+	assert(tinter->tag == TYPE_INTERFACE_T);
 	(*out_baseline) = NULL;
 	//実装インターフェイス一覧から同じのを探す
 	generic_type* ret = NULL;

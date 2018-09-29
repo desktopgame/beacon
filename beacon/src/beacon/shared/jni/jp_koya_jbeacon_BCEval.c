@@ -46,8 +46,8 @@ JNIEXPORT jobject JNICALL Java_jp_koya_jbeacon_BCEval_nativeString(JNIEnv * env,
 static jobject bc_eval_string(JNIEnv * env, jclass cls, jstring str, jobject table, const char* filename, const char* source) {
 	//文字列を解析
 	parser* p = ParseString(source);
-	if (p->result != parse_complete_T) {
-		bc_error_throw(bcerror_parse_T, p->error_message);
+	if (p->result != PARSE_COMPLETE_T) {
+		bc_error_throw(BCERROR_PARSE_T, p->error_message);
 		DestroyParser(p);
 		jclass bc_compile_exc_cls = (*env)->FindClass(env, "jp/koya/jbeacon/BCCompileException");
 		(*env)->ThrowNew(env, bc_compile_exc_cls, Ref2Str(bc_error_message()));
@@ -61,7 +61,7 @@ static jobject bc_eval_string(JNIEnv * env, jclass cls, jstring str, jobject tab
 		DeleteAST(a);
 		return NULL;
 	}
-	class_loader* cll = class_loader_new(filename, content_entry_point_T);
+	class_loader* cll = class_loader_new(filename, CONTENT_ENTRY_POINT_T);
 	class_loader_load_pass_ast(cll, a);
 	if(bc_error_last()) {
 		class_loader_delete(cll);
@@ -103,7 +103,7 @@ static frame* bc_eval_allocate(class_loader* cll) {
 		vm_execute(fr, cll->env);
 	}
 	if(fr->terminate) {
-		bc_error_throw(bcerror_generic_T, "unexpected terminate");
+		bc_error_throw(BCERROR_GENERIC_T, "unexpected terminate");
 	}
 	return fr;
 }

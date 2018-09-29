@@ -3,7 +3,7 @@
 #include "../env/namespace.h"
 #include "../env/method.h"
 #include "../env/type_interface.h"
-#include "../env/type_impl.h"
+#include "../env/TYPE_IMPL.h"
 #include "../env/generic_type.h"
 #include "../env/fqcn_cache.h"
 
@@ -46,14 +46,14 @@ namespace_* call_context_namespace(call_context* self) {
 }
 
 method* call_context_method(call_context* self) {
-	if(self->tag != call_method_T) {
+	if(self->tag != CALL_METHOD_T) {
 		return NULL;
 	}
 	return self->u.mt;
 }
 
 type* call_context_type(call_context* self) {
-	if(self->tag == call_top_T) {
+	if(self->tag == CALL_TOP_T) {
 		return namespace_get_type(namespace_lang(), InternString("World"));
 	}
 	return self->ty;
@@ -65,11 +65,11 @@ class_* call_context_class(call_context* self) {
 
 generic_type* call_context_receiver(call_context* self) {
 	call_frame* cfr = TopVector(self->call_stack);
-	if(cfr->tag == frame_instance_invoke_T) {
+	if(cfr->tag == FRAME_INSTANCE_INVOKE_T) {
 		return cfr->u.instance_invoke.receiver;
-	} else if(cfr->tag == frame_self_invoke_T) {
+	} else if(cfr->tag == FRAME_SELF_INVOKE_T) {
 		return self->ty->generic_self;
-	} else if(cfr->tag == frame_resolve_T) {
+	} else if(cfr->tag == FRAME_RESOLVE_T) {
 		return cfr->u.resolve.gtype;
 	}
 	return NULL;
@@ -85,20 +85,20 @@ type* call_context_eval_type(call_context* self, fqcn_cache* fqcn) {
 
 Vector* call_context_typeargs(call_context* self) {
 	call_frame* cfr = TopVector(self->call_stack);
-	if(cfr->tag == frame_instance_invoke_T) {
+	if(cfr->tag == FRAME_INSTANCE_INVOKE_T) {
 		return cfr->u.instance_invoke.typeargs;
-	} else if(cfr->tag == frame_static_invoke_T) {
+	} else if(cfr->tag == FRAME_STATIC_INVOKE_T) {
 		return cfr->u.static_invoke.typeargs;
-	} else if(cfr->tag == frame_self_invoke_T) {
+	} else if(cfr->tag == FRAME_SELF_INVOKE_T) {
 		return cfr->u.self_invoke.typeargs;
-	} else if(cfr->tag == frame_resolve_T) {
+	} else if(cfr->tag == FRAME_RESOLVE_T) {
 		return cfr->u.resolve.typeargs;
 	}
 	return NULL;
 }
 
 bool call_context_is_static(call_context* self) {
-	return self->tag == call_method_T &&
+	return self->tag == CALL_METHOD_T &&
 	       IsStaticModifier(self->u.mt->modifier);
 }
 
