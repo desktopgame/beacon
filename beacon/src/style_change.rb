@@ -167,7 +167,7 @@ def apply(files, origin, update)
                 next if !src.include?(e.name)
                 o = e
                 u = update[i]
-                src = src.gsub(o, u)
+                src = src.gsub(o.name, u.name)
             end
         end
         File.open(file, "w") {|fp| fp.write(src) }
@@ -273,7 +273,11 @@ commands = {
         end
     end,
     "apply" => lambda do
-        apply(decl_files + impl_files, functions, functions_edits.last)
+        if functions_edits.length > 1 then
+            puts "do not committed"
+        else
+            apply(decl_files + impl_files, functions, functions_edits.last)
+        end
     end
 }
 while(true)
