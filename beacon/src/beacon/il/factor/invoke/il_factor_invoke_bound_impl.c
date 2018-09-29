@@ -137,7 +137,7 @@ static void il_factor_invoke_bound_check(il_factor_invoke_bound * self, envirome
 	}
 	//添字アクセスとして解決する
 	generic_type* receiver_gtype = NULL;
-	symbol_entry* local = symbol_table_entry(env->sym_table, NULL, self->namev);
+	symbol_entry* local = EntrySymbolTable(env->sym_table, NULL, self->namev);
 	if(receiver_gtype == NULL && local != NULL) {
 		receiver_gtype = local->gtype;
 		self->u.subscript.tag = SUBSCRIPT_LOCAL_T;

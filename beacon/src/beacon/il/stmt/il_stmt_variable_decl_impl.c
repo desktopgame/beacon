@@ -26,12 +26,12 @@ void il_stmt_variable_decl_generate(il_stmt_variable_decl * self, enviroment * e
 }
 
 void il_stmt_variable_decl_load(il_stmt_variable_decl * self, struct enviroment* env, call_context* cctx) {
-	if(symbol_table_contains(env->sym_table, self->namev)) {
+	if(IsContainsSymbol(env->sym_table, self->namev)) {
 		bc_error_throw(BCERROR_OVERWRAP_VARIABLE_NAME_T,
 			Ref2Str(self->namev)
 		);
 	}
-	symbol_entry* e = symbol_table_entry(
+	symbol_entry* e = EntrySymbolTable(
 		env->sym_table,
 		import_manager_resolve(NULL, self->fqcn, cctx),
 		self->namev

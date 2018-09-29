@@ -23,7 +23,7 @@ typedef struct symbol_table {
  * シンボルテーブルを作成します.
  * @return
  */
-symbol_table* symbol_table_new();
+symbol_table* NewSymbolTable();
 
 /**
  * 指定の名前に対応するインデックスを返します.
@@ -33,7 +33,7 @@ symbol_table* symbol_table_new();
  * @param namev
  * @return nameに対応するエントリが存在せず、clsがNULLならNULL
  */
-struct symbol_entry* symbol_table_entry(symbol_table* self, struct generic_type* gtp, string_view namev);
+struct symbol_entry* EntrySymbolTable(symbol_table* self, struct generic_type* gtp, string_view namev);
 
 /**
  * 既に指定の名前が含まれるなら true.
@@ -41,17 +41,17 @@ struct symbol_entry* symbol_table_entry(symbol_table* self, struct generic_type*
  * @param namev
  * @return
  */
-bool symbol_table_contains(symbol_table* self, string_view namev);
+bool IsContainsSymbol(symbol_table* self, string_view namev);
 
 /**
  * シンボルテーブルをダンプします.
  * @param self
  */
-void symbol_table_dump(symbol_table* self);
+void DumpSymbolTable(symbol_table* self);
 
 /**
  * シンボルテーブルを開放します.
  * @param self
  */
-void symbol_table_delete(symbol_table* self);
+void DeleteSymbolTable(symbol_table* self);
 #endif // !SIGNAL_VM_SYMBOL_TABLE_H

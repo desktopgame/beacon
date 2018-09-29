@@ -312,7 +312,7 @@ static void generate_assign_to_variable_local(il_factor_assign_op* self, envirom
 		#if defined(DEBUG)
 		const char* vname = Ref2Str(ilvar->fqcn->namev);
 		#endif
-		symbol_entry* e = symbol_table_entry(env->sym_table, NULL, ilvar->fqcn->namev);
+		symbol_entry* e = EntrySymbolTable(env->sym_table, NULL, ilvar->fqcn->namev);
 		//e==NULL の時変数がない
 		il_factor_generate(self->right, env, cctx);
 		AddOpcodeBuf(env->buf, OP_STORE);

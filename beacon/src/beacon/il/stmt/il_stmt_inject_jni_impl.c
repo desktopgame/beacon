@@ -32,7 +32,7 @@ void il_stmt_inject_jni_load(il_stmt_inject_jni * self, enviroment* env, call_co
 	self->fact->lineno = 0;
 	il_factor_load(self->fact, env, cctx);
 	generic_type* gtype = il_factor_eval(self->fact, env, cctx);
-	self->se = symbol_table_entry(env->sym_table, gtype, self->namev);
+	self->se = EntrySymbolTable(env->sym_table, gtype, self->namev);
 }
 
 void il_stmt_inject_jni_delete(il_stmt_inject_jni* self) {

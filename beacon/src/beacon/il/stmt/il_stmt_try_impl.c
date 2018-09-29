@@ -62,7 +62,7 @@ void il_stmt_try_generate(il_stmt_try* self, enviroment* env, call_context* cctx
 		//例外を指定の名前でアクセス出来るように
 		il_stmt_catch* ilcatch = (il_stmt_catch*)AtVector(self->catch_list, i);
 		generic_type* exgType = import_manager_resolve(NULL, ilcatch->fqcn, cctx);
-		int exIndex = symbol_table_entry(env->sym_table, exgType, ilcatch->namev)->index;
+		int exIndex = EntrySymbolTable(env->sym_table, exgType, ilcatch->namev)->index;
 		//直前のケースのジャンプ先をここに
 		if (nextCause != NULL) {
 			int head = AddNOPOpcodeBuf(env->buf);
@@ -118,7 +118,7 @@ void il_stmt_try_load(il_stmt_try* self, enviroment* env, call_context* cctx) {
 
 void il_stmt_catch_load(il_stmt_catch* self, enviroment* env, call_context* cctx) {
 	generic_type* exgType = import_manager_resolve(NULL, self->fqcn, cctx);
-	symbol_table_entry(env->sym_table, exgType, self->namev);
+	EntrySymbolTable(env->sym_table, exgType, self->namev);
 	for(int i=0; i<self->statement_list->length; i++) {
 		il_stmt* e = (il_stmt*)AtVector(self->statement_list, i);
 		il_stmt_load(e, env, cctx);

@@ -257,7 +257,7 @@ static void class_loader_load_toplevel_function(class_loader* self) {
 			parameter* param = parameter_new(ilparam->namev);
 			PushVector(m->parameters, param);
 			param->gtype = import_manager_resolve(loc, ilparam->fqcn, cctx);
-			symbol_table_entry(
+			EntrySymbolTable(
 				env->sym_table,
 				import_manager_resolve(loc, ilparam->fqcn, cctx),
 				ilparam->namev

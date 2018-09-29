@@ -213,7 +213,7 @@ bool CLBC_property_impl(class_loader* self, il_type* iltype, type* tp, il_proper
 	set->env->context_ref = self;
 	get->env->context_ref = self;
 	//setterのオペコードを生成
-	symbol_entry* valueE = symbol_table_entry(set->env->sym_table, pr->gtype, InternString("value"));
+	symbol_entry* valueE = EntrySymbolTable(set->env->sym_table, pr->gtype, InternString("value"));
 	if(!IsStaticModifier(pr->modifier)) {
 		AddOpcodeBuf(set->env->buf, OP_STORE);
 		AddOpcodeBuf(set->env->buf, 0);
@@ -390,7 +390,7 @@ bool CLBC_method_impl(class_loader* self, namespace_* scope, il_type* iltype, ty
 	//引数を保存
 	for (int i = 0; i < ilmethod->parameter_list->length; i++) {
 		il_parameter* ilparam = (il_parameter*)AtVector(ilmethod->parameter_list, i);
-		symbol_table_entry(
+		EntrySymbolTable(
 			env->sym_table,
 			import_manager_resolve(scope, ilparam->fqcn, cctx),
 			ilparam->namev
@@ -474,7 +474,7 @@ bool CLBC_ctor_impl(class_loader* self, il_type* iltype, type* tp, il_constructo
 	cctx->u.ctor = cons;
 	for (int i = 0; i < cons->parameter_list->length; i++) {
 		il_parameter* ilparam = (il_parameter*)AtVector(ilcons->parameter_list, i);
-		symbol_table_entry(
+		EntrySymbolTable(
 			env->sym_table,
 			import_manager_resolve(scope, ilparam->fqcn, cctx),
 			ilparam->namev
@@ -567,7 +567,7 @@ bool CLBC_operator_overload_impl(class_loader* self, il_type* iltype, type* tp, 
 	env->context_ref = self;
 	for (int i = 0; i < ilopov->parameter_list->length; i++) {
 		il_parameter* ilparam = (il_parameter*)AtVector(ilopov->parameter_list, i);
-		symbol_table_entry(
+		EntrySymbolTable(
 			env->sym_table,
 			import_manager_resolve(scope, ilparam->fqcn, cctx),
 			ilparam->namev

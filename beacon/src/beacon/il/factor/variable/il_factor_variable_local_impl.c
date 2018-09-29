@@ -91,7 +91,7 @@ static void il_factor_variable_local_loadImpl(il_factor_variable_local * self, e
 	//stmtはgenerate時点でシンボルテーブルへ書き込むので、
 	//NULLになることがある。
 	self->type = VARIABLE_LOCAL_SCOPE_T;
-	symbol_entry* ent = symbol_table_entry(env->sym_table, NULL, self->namev);
+	symbol_entry* ent = EntrySymbolTable(env->sym_table, NULL, self->namev);
 	//ローカル変数として解決出来なかったので、
 	//フィールドとして解決する
 	if(ent == NULL) {

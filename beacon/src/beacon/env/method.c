@@ -349,7 +349,7 @@ static constructor* create_delegate_ctor(method* self, type* ty, class_loader* c
 	}
 	for (int i = 0; i < iterCons->parameter_list->length; i++) {
 		parameter* e = (parameter*)AtVector(iterCons->parameter_list, i);
-		symbol_table_entry(
+		EntrySymbolTable(
 			envIterCons->sym_table,
 			e->gtype,
 			e->namev
@@ -390,7 +390,7 @@ static method* create_has_next(method* self, type* ty, class_loader* cll, Vector
 	//iterate(int,int)のint,intを受け取る
 	for(int i=0; i<self->parameters->length; i++) {
 		parameter* e = AtVector(self->parameters, i);
-		symbol_table_entry(
+		EntrySymbolTable(
 			envSmt->sym_table,
 			e->gtype,
 			e->namev

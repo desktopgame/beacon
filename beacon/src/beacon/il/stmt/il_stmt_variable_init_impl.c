@@ -49,7 +49,7 @@ void il_stmt_variable_init_generate(il_stmt_variable_init * self, enviroment * e
 
 void il_stmt_variable_init_load(il_stmt_variable_init * self, enviroment * env, call_context* cctx) {
 	il_factor_load(self->fact, env, cctx);
-	if(symbol_table_contains(env->sym_table, self->namev)) {
+	if(IsContainsSymbol(env->sym_table, self->namev)) {
 		bc_error_throw(BCERROR_OVERWRAP_VARIABLE_NAME_T,
 			Ref2Str(self->namev)
 		);
@@ -62,7 +62,7 @@ void il_stmt_variable_init_load(il_stmt_variable_init * self, enviroment * env, 
 		);
 		return;
 	}
-	symbol_entry* e = symbol_table_entry(
+	symbol_entry* e = EntrySymbolTable(
 		env->sym_table,
 		gt,
 		self->namev
