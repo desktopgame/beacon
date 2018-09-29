@@ -36,7 +36,7 @@ void il_factor_variable_local_generate(il_factor_variable_local* self, enviromen
 		if(self->u.entry_->scope_depth > env->sym_table->scope_depth) {
 			bc_error_throw(
 				bcerror_ref_undefined_local_variable_T,
-				string_pool_ref2str(self->namev)
+				Ref2Str(self->namev)
 			);
 			return;
 		}
@@ -71,7 +71,7 @@ generic_type* il_factor_variable_local_eval(il_factor_variable_local * self, env
 }
 
 char* il_factor_variable_local_tostr(il_factor_variable_local * self, enviroment * env) {
-	return text_strdup(string_pool_ref2str(self->namev));
+	return text_strdup(Ref2Str(self->namev));
 }
 
 void il_factor_variable_local_delete(il_factor_variable_local* self) {
@@ -109,7 +109,7 @@ static void il_factor_variable_local_load_field(il_factor_variable_local * self,
 	//定義されていない変数とみなせる？
 	type* tp = call_context_type(cctx);
 	if(tp->tag == type_interface_T/* この条件は構文規則からして満たさないはず */) {
-		bc_error_throw(bcerror_ref_undefined_local_variable_T, string_pool_ref2str(self->namev));
+		bc_error_throw(bcerror_ref_undefined_local_variable_T, Ref2Str(self->namev));
 		return;
 	}
 	int temp = -1;
@@ -134,7 +134,7 @@ static void il_factor_variable_local_load_field(il_factor_variable_local * self,
 		return;
 	//フィールドが見つかったなら可視性を確認する
 	} else if(!class_accessible_field(call_context_class(cctx), f)) {
-		bc_error_throw(bcerror_can_t_access_field_T, string_pool_ref2str(call_context_class(cctx)->namev), string_pool_ref2str(f->namev));
+		bc_error_throw(bcerror_can_t_access_field_T, Ref2Str(call_context_class(cctx)->namev), Ref2Str(f->namev));
 		return;
 	}
 	set_gtype(self, f->gtype);
@@ -148,7 +148,7 @@ static void il_factor_variable_local_load_property(il_factor_variable_local * se
 		p = class_find_sproperty_tree(TYPE2CLASS(tp), self->namev, &temp);
 	}
 	if(temp == -1) {
-		bc_error_throw(bcerror_can_t_access_property_T, string_pool_ref2str(type_name(tp)), string_pool_ref2str(self->namev));
+		bc_error_throw(bcerror_can_t_access_property_T, Ref2Str(type_name(tp)), Ref2Str(self->namev));
 		return;
 	}
 #if defined(_MSC_VER)
@@ -162,7 +162,7 @@ static void il_factor_variable_local_load_property(il_factor_variable_local * se
 	self->u.p_with_i = pwi;
 	//プロパティにアクセスできない
 	if(!class_accessible_property(TYPE2CLASS(tp), p)) {
-		bc_error_throw(bcerror_can_t_access_property_T, string_pool_ref2str(type_name(tp)), string_pool_ref2str(p->namev));
+		bc_error_throw(bcerror_can_t_access_property_T, Ref2Str(type_name(tp)), Ref2Str(p->namev));
 	}
 	set_gtype(self, p->gtype);
 }

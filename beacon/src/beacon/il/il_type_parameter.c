@@ -24,7 +24,7 @@ void il_type_parameter_list_print(Vector * v) {
 		} else if (e->kind == il_type_parameter_kind_out_T) {
 			printf("out ");
 		}
-		printf("%s", string_pool_ref2str(e->namev));
+		printf("%s", Ref2Str(e->namev));
 		if (i != v->length - 1) {
 			printf(", ");
 		}

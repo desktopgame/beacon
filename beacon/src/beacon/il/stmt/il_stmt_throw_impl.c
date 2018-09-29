@@ -30,7 +30,7 @@ void il_stmt_throw_load(il_stmt_throw* self, enviroment* env, call_context* cctx
 		if(tgt->core_type != NULL) {
 			bc_error_throw(
 				bcerror_thrown_not_exception_type_T,
-				string_pool_ref2str(type_name(tgt->core_type))
+				Ref2Str(type_name(tgt->core_type))
 			);
 		}
 	}

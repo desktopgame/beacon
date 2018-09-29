@@ -56,7 +56,7 @@ static void CLBC_class_decl(class_loader * self, il_type * iltype, type * tp, na
 		return;
 	}
 	#if defined(DEBUG)
-	const char* name = string_pool_ref2str(type_name(tp));
+	const char* name = Ref2Str(type_name(tp));
 	#endif
 	CL_ERROR(self);
 	CLBC_fields_decl(self, iltype, tp, iltype->u.class_->field_list, scope);
@@ -85,7 +85,7 @@ static void CLBC_class_impl(class_loader * self, il_type * iltype, type * tp, na
 		return;
 	}
 	#if defined(DEBUG) || defined(_DEBUG)
-	const char* tyname = string_pool_ref2str(type_name(tp));
+	const char* tyname = Ref2Str(type_name(tp));
 	#endif
 	class_create_vtable(tp->u.class_);
 	class_create_operator_vt(tp->u.class_);
@@ -124,8 +124,8 @@ static void CLBC_interface_decl(class_loader * self, il_type * iltype, type * tp
 		if(e->access == access_private_T) {
 			bc_error_throw(
 				bcerror_interface_has_private_member_T,
-				string_pool_ref2str(type_name(tp)),
-				string_pool_ref2str(e->namev)
+				Ref2Str(type_name(tp)),
+				Ref2Str(e->namev)
 			);
 		}
 	}
@@ -134,8 +134,8 @@ static void CLBC_interface_decl(class_loader * self, il_type * iltype, type * tp
 		if(e->access == access_private_T) {
 			bc_error_throw(
 				bcerror_interface_has_private_member_T,
-				string_pool_ref2str(type_name(tp)),
-				string_pool_ref2str(e->namev)
+				Ref2Str(type_name(tp)),
+				Ref2Str(e->namev)
 			);
 		}
 	}
@@ -163,7 +163,7 @@ static void CLBC_enum_decl(class_loader * self, il_type * iltype, type * tp, nam
 	if((tp->tag == type_enum_T ||
 	   tp->tag == type_class_T) &&
 	   !class_field_valid(tp->u.class_, &outField)) {
-		bc_error_throw(bcerror_overwrap_field_name_T, string_pool_ref2str(tp->u.class_->namev), string_pool_ref2str(outField->namev));
+		bc_error_throw(bcerror_overwrap_field_name_T, Ref2Str(tp->u.class_->namev), Ref2Str(outField->namev));
 	}
 	tp->state = tp->state | type_decl;
 }
@@ -267,29 +267,29 @@ static void CLBC_check_class(class_loader * self, il_type * iltype, type * tp, n
 	method* outiMethod = NULL;
 	if(tp->tag == type_class_T &&
 	  !class_interface_method_implement_valid(TYPE2CLASS(tp), &outiMethod)) {
-		bc_error_throw(bcerror_not_implement_interface_T, string_pool_ref2str(tp->u.class_->namev), string_pool_ref2str(outiMethod->namev));
+		bc_error_throw(bcerror_not_implement_interface_T, Ref2Str(tp->u.class_->namev), Ref2Str(outiMethod->namev));
 		return;
 	}
 	//実装されていないプロパティを確認する
 	property* outiProperty = NULL;
 	if(tp->tag == type_class_T &&
 	  !class_interface_property_implement_valid(TYPE2CLASS(tp), &outiProperty)) {
-		bc_error_throw(bcerror_not_implement_abstract_method_T, string_pool_ref2str(tp->u.class_->namev), string_pool_ref2str(outiProperty->namev));
+		bc_error_throw(bcerror_not_implement_abstract_method_T, Ref2Str(tp->u.class_->namev), Ref2Str(outiProperty->namev));
 		return;
 	}
 	//実装されていない抽象メソッドを確認する
 	method* outaMethod = NULL;
 	if(tp->tag == type_class_T &&
 	   !class_abstract_class_implement_valid(TYPE2CLASS(tp), &outaMethod)) {
-		bc_error_throw(bcerror_not_implement_abstract_method_T, string_pool_ref2str(tp->u.class_->namev), string_pool_ref2str(outaMethod->namev));
+		bc_error_throw(bcerror_not_implement_abstract_method_T, Ref2Str(tp->u.class_->namev), Ref2Str(outaMethod->namev));
 		return;
 	   }
 	//重複するプロパティを確認する
 	property* outProp = NULL;
 	if(!class_property_valid(tp->u.class_, &outProp)) {
 		bc_error_throw(bcerror_overwrap_property_name_T,
-			string_pool_ref2str(tp->u.class_->namev),
-			string_pool_ref2str(outProp->namev)
+			Ref2Str(tp->u.class_->namev),
+			Ref2Str(outProp->namev)
 		);
 		return;
 	}
@@ -297,8 +297,8 @@ static void CLBC_check_class(class_loader * self, il_type * iltype, type * tp, n
 	field* outField = NULL;
 	if(!class_field_valid(tp->u.class_, &outField)) {
 		bc_error_throw(bcerror_overwrap_field_name_T,
-			string_pool_ref2str(tp->u.class_->namev),
-			string_pool_ref2str(outField->namev)
+			Ref2Str(tp->u.class_->namev),
+			Ref2Str(outField->namev)
 		);
 		return;
 	}
@@ -307,9 +307,9 @@ static void CLBC_check_class(class_loader * self, il_type * iltype, type * tp, n
 	string_view out_overwrap_mname;
 	if(!class_method_parameter_valid(tp->u.class_, &out_overwrap_m, &out_overwrap_mname)) {
 		bc_error_throw(bcerror_overwrap_parameter_name_T,
-			string_pool_ref2str(type_name(tp)),
-			string_pool_ref2str(out_overwrap_m->namev),
-			string_pool_ref2str(out_overwrap_mname)
+			Ref2Str(type_name(tp)),
+			Ref2Str(out_overwrap_m->namev),
+			Ref2Str(out_overwrap_mname)
 		);
 		return;
 	}
@@ -318,9 +318,9 @@ static void CLBC_check_class(class_loader * self, il_type * iltype, type * tp, n
 	string_view out_overwrap_cname;
 	if(!class_ctor_parameter_valid(tp->u.class_, &out_overwrap_c, &out_overwrap_cname)) {
 		bc_error_throw(bcerror_overwrap_parameter_name_T,
-			string_pool_ref2str(type_name(tp)),
+			Ref2Str(type_name(tp)),
 			"new",
-			string_pool_ref2str(out_overwrap_cname)
+			Ref2Str(out_overwrap_cname)
 		);
 		return;
 	}
@@ -328,8 +328,8 @@ static void CLBC_check_class(class_loader * self, il_type * iltype, type * tp, n
 	string_view out_overwrap_tpname;
 	if(!class_type_type_parameter_valid(tp->u.class_, &out_overwrap_tpname)) {
 		bc_error_throw(bcerror_overwrap_type_type_parameter_name_T,
-			string_pool_ref2str(type_name(tp)),
-			string_pool_ref2str(out_overwrap_tpname)
+			Ref2Str(type_name(tp)),
+			Ref2Str(out_overwrap_tpname)
 		);
 		return;
 	}
@@ -338,9 +338,9 @@ static void CLBC_check_class(class_loader * self, il_type * iltype, type * tp, n
 	string_view out_overwrap_tpmname;
 	if(!class_method_type_parameter_valid(tp->u.class_, &out_overwrap_tpm, &out_overwrap_tpmname)) {
 		bc_error_throw(bcerror_overwrap_method_type_parameter_name_T,
-			string_pool_ref2str(type_name(tp)),
-			string_pool_ref2str(out_overwrap_tpm->namev),
-			string_pool_ref2str(out_overwrap_tpmname)
+			Ref2Str(type_name(tp)),
+			Ref2Str(out_overwrap_tpm->namev),
+			Ref2Str(out_overwrap_tpmname)
 		);
 		return;
 	}
@@ -355,8 +355,8 @@ static void CLBC_check_class(class_loader * self, il_type * iltype, type * tp, n
 			modifier_is_final(fi->modifier) &&
 			!fi->not_initialized_at_ctor) {
 			bc_error_throw(bcerror_not_initial_field_not_initialized_at_ctor_T,
-				string_pool_ref2str(type_name(tp)),
-				string_pool_ref2str(fi->namev)
+				Ref2Str(type_name(tp)),
+				Ref2Str(fi->namev)
 			);
 			return;
 		}
@@ -369,17 +369,17 @@ static void CLBC_check_interface(class_loader * self, il_type * iltype, type * t
 	string_view out_overwrap_name;
 	if(!interface_method_parameter_valid(tp->u.interface_, &out_overwrap_m, &out_overwrap_name)) {
 		bc_error_throw(bcerror_overwrap_parameter_name_T,
-			string_pool_ref2str(type_name(tp)),
-			string_pool_ref2str(out_overwrap_m->namev),
-			string_pool_ref2str(out_overwrap_name)
+			Ref2Str(type_name(tp)),
+			Ref2Str(out_overwrap_m->namev),
+			Ref2Str(out_overwrap_name)
 		);
 	}
 	//インターフェイスの重複する型パラメータ名を検出する
 	string_view out_overwrap_tpname;
 	if(!interface_type_type_parameter_valid(tp->u.interface_, &out_overwrap_tpname)) {
 		bc_error_throw(bcerror_overwrap_type_type_parameter_name_T,
-			string_pool_ref2str(type_name(tp)),
-			string_pool_ref2str(out_overwrap_tpname)
+			Ref2Str(type_name(tp)),
+			Ref2Str(out_overwrap_tpname)
 		);
 	}
 	//メソッドの重複する型パラメータ名を検出する
@@ -387,9 +387,9 @@ static void CLBC_check_interface(class_loader * self, il_type * iltype, type * t
 	string_view out_overwrap_tpmname;
 	if(!interface_method_type_parameter_valid(tp->u.interface_, &out_overwrap_tpm, &out_overwrap_tpmname)) {
 		bc_error_throw(bcerror_overwrap_method_type_parameter_name_T,
-			string_pool_ref2str(type_name(tp)),
-			string_pool_ref2str(out_overwrap_tpm->namev),
-			string_pool_ref2str(out_overwrap_tpmname)
+			Ref2Str(type_name(tp)),
+			Ref2Str(out_overwrap_tpm->namev),
+			Ref2Str(out_overwrap_tpmname)
 		);
 	}
 }

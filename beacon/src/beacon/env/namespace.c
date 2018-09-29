@@ -92,19 +92,19 @@ interface_ * namespace_get_interface(namespace_ * self, string_view namev) {
 }
 
 namespace_ * namespace_beacon() {
-	return namespace_get_at_root(string_pool_intern("beacon"));
+	return namespace_get_at_root(InternString("beacon"));
 }
 
 namespace_ * namespace_lang() {
-	return namespace_get_namespace(namespace_beacon(), string_pool_intern("lang"));
+	return namespace_get_namespace(namespace_beacon(), InternString("lang"));
 }
 
 namespace_* namespace_unsafe() {
-	return namespace_get_namespace(namespace_beacon(), string_pool_intern("unsafe"));
+	return namespace_get_namespace(namespace_beacon(), InternString("unsafe"));
 }
 
 namespace_* namespace_placeholder() {
-	return namespace_get_at_root(string_pool_intern("$placeholder"));
+	return namespace_get_at_root(InternString("$placeholder"));
 }
 
 type * namespace_object_type() {
@@ -152,10 +152,10 @@ string_view namespace_tostr(namespace_* self) {
 	if(self->parent == NULL) {
 		return self->namev;
 	}
-	return string_pool_concat(
-		string_pool_ref2str(string_pool_concat(
-			string_pool_ref2str(namespace_tostr(self->parent)),
-			string_pool_intern("::")
+	return ConcatIntern(
+		Ref2Str(ConcatIntern(
+			Ref2Str(namespace_tostr(self->parent)),
+			InternString("::")
 		)),
 		self->namev
 	);
@@ -215,7 +215,7 @@ static void namespace_dump_root(NumericMap* root, bool callSelf, int depth) {
 
 static void namespace_dump_impl(namespace_* root, int depth) {
 	namespace_put_indent(depth);
-	printf("%s", string_pool_ref2str(root->namev));
+	printf("%s", Ref2Str(root->namev));
 	Println();
 	namespace_dump_class(root->type_map, true, depth + 1);
 	namespace_dump_root(root->namespace_map, false, depth + 1);

@@ -190,7 +190,7 @@ static void interface_generic_type_list_delete(VectorItem item) {
 static void interface_method_flattenImpl(interface_* self, Vector* dest, int depth) {
 	//tekitou
 	#if defined(DEBUG)
-	const char* intername = string_pool_ref2str(self->namev);
+	const char* intername = Ref2Str(self->namev);
 	#endif
 	assert(depth < 42);
 	for(int i=0; i<self->method_list->length; i++) {

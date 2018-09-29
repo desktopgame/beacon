@@ -42,9 +42,9 @@ bool import_manager_loaded(import_manager * self, int index) {
 generic_type* import_manager_resolve(namespace_* scope, generic_cache* fqcn, call_context* cctx) {
 	type* core_type = fqcn_type(fqcn->fqcn, scope);
 	#if defined(DEBUG)
-	const char* ctname = string_pool_ref2str(type_name(core_type));
-	const char* it = string_pool_ref2str(fqcn->fqcn->namev);
-	if(fqcn->fqcn->namev == string_pool_intern("Token")) {
+	const char* ctname = Ref2Str(type_name(core_type));
+	const char* it = Ref2Str(fqcn->fqcn->namev);
+	if(fqcn->fqcn->namev == InternString("Token")) {
 		int a = 0;
 	}
 	#endif
@@ -113,7 +113,7 @@ generic_type* import_manager_resolvef(namespace_* scope, fqcn_cache* fqcn, call_
 	method* mt = call_context_method(cctx);
 	if(parameterized->virtual_type_index == -1 && mt != NULL) {
 		#if defined(DEBUG)
-		const char* methodname = string_pool_ref2str(mt->namev);
+		const char* methodname = Ref2Str(mt->namev);
 		#endif
 		int index = method_for_generic_index(mt, fqcn->namev);
 		parameterized->tag = generic_type_tag_method_T;
@@ -124,7 +124,7 @@ generic_type* import_manager_resolvef(namespace_* scope, fqcn_cache* fqcn, call_
 	type* ty = call_context_type(cctx);
 	if(parameterized->virtual_type_index == -1 && ty != NULL) {
 		#if defined(DEBUG)
-		const char* typename_ = string_pool_ref2str(type_name(ty));
+		const char* typename_ = Ref2Str(type_name(ty));
 		#endif
 		int index = type_for_generic_index(ty, fqcn->namev);
 		parameterized->tag = generic_type_tag_class_T;

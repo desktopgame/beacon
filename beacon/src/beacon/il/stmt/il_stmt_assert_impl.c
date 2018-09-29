@@ -30,7 +30,7 @@ void il_stmt_assert_generate(il_stmt_assert* self, enviroment* env, call_context
 
 	il_factor_generate(self->message, env, cctx);
 	opcode_buf_add(env->buf, op_new_instance);
-	opcode_buf_add(env->buf, namespace_get_type(namespace_lang(), string_pool_intern("Exception"))->absolute_index);
+	opcode_buf_add(env->buf, namespace_get_type(namespace_lang(), InternString("Exception"))->absolute_index);
 	opcode_buf_add(env->buf, 0);
 	opcode_buf_add(env->buf, op_throw);
 	gt->cursor = opcode_buf_nop(env->buf);
@@ -40,7 +40,7 @@ void il_stmt_assert_load(il_stmt_assert* self, enviroment* env, call_context* cc
 	il_factor_load(self->condition, env, cctx);
 	if(self->message == NULL) {
 		char* str = il_factor_tostr(self->condition, env);
-		il_factor_string* ilstr = il_factor_string_new(string_pool_intern(str));
+		il_factor_string* ilstr = il_factor_string_new(InternString(str));
 		self->message = il_factor_wrap_string(ilstr);
 		assert(ilstr->valuev != 0);
 		MEM_FREE(str);

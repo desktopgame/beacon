@@ -78,14 +78,14 @@ int main(int argc, char *argv[]) {
 	);
 	//_CrtSetBreakAlloc(36862);
 #endif
-	string_pool_init();
+	InitStringPool();
 	il_print_layout_hide(true);
 	//mem_break(16066);
 	//コマンドライン引数を解析して実行
 	int ret = main_cl(argc, argv);
 	//設定を元に戻す
-	//string_pool_dump(stdout);
-	string_pool_destroy();
+	//DumpStringPool(stdout);
+	DestroyStringPool();
 	mem_dump();
 	mem_destroy();
 #if defined(_MSC_VER) && defined(_DEBUG)

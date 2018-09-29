@@ -177,7 +177,7 @@ void vm_uncaught(frame * self, enviroment* env, int pc) {
 	if(sctx->print_error) {
 		fprintf(stderr, "%s", message);
 	}
-	gVMError = string_pool_intern(message);
+	gVMError = InternString(message);
 	MEM_FREE(message);
 	vm_catch(frame_root(self));
 	heap_gc(heap_get());
@@ -561,7 +561,7 @@ static void vm_run(frame * self, enviroment * env, int pos, int deferStart) {
 				assert(tp->tag == type_class_T);
 				class_* cls = TYPE2CLASS(tp);
 				#if defined(DEBUG)
-				const char* clsname = string_pool_ref2str(cls->namev);
+				const char* clsname = Ref2Str(cls->namev);
 				#endif
 				constructor* ctor = (constructor*)AtVector(cls->constructor_list, constructorIndex);
 				//新しいVMでコンストラクタを実行
@@ -869,8 +869,8 @@ static void vm_run(frame * self, enviroment * env, int pos, int deferStart) {
 				type* cls = (type*)AtVector(ctx->type_vec, absClassIndex);
 				method* m = class_get_smethod(cls->u.class_, methodIndex);
 				#if defined(DEBUG)
-				const char* clsname = string_pool_ref2str(type_name(cls));
-				const char* mname = string_pool_ref2str(m->namev);
+				const char* clsname = Ref2Str(type_name(cls));
+				const char* mname = Ref2Str(m->namev);
 				#endif
 				method_execute(m, self, env);
 				break;
@@ -909,7 +909,7 @@ static void vm_run(frame * self, enviroment * env, int pos, int deferStart) {
 				object* o = (object*)TopVector(self->value_stack);
 				class_* cl = TYPE2CLASS(o->gtype->core_type);
 				#if defined(DEBUG)
-				char* clname = string_pool_ref2str(cl->namev);
+				char* clname = Ref2Str(cl->namev);
 				#endif
 				class_create_operator_vt(cl);
 				operator_overload* operator_ov = (operator_overload*)AtVector(cl->ovt->vec, index);
@@ -1245,9 +1245,9 @@ static char* create_error_message(frame * self, enviroment* env, int pc) {
 		line = lr->lineno;
 	}
 	//例外のメッセージを取得
-	type* exceptionT = namespace_get_type(namespace_lang(), string_pool_intern("Exception"));
+	type* exceptionT = namespace_get_type(namespace_lang(), InternString("Exception"));
 	int temp = -1;
-	class_find_field(exceptionT->u.class_, string_pool_intern("message"), &temp);
+	class_find_field(exceptionT->u.class_, InternString("message"), &temp);
 	object* ex = self->exception;
 	object* msg = AtVector(ex->u.field_vec, temp);
 	string_buffer* cstr = AtVector(msg->native_slot_vec, 0);
@@ -1259,17 +1259,17 @@ static char* create_error_message(frame * self, enviroment* env, int pc) {
 	string_buffer_appends(sbuf, cstr->text);
 	string_buffer_append(sbuf, '\n');
 	//スタックトレースの表示
-	type* stackTraceElementT = namespace_get_type(namespace_lang(), string_pool_intern("StackTraceElement"));
+	type* stackTraceElementT = namespace_get_type(namespace_lang(), InternString("StackTraceElement"));
 	//Exception#stackTraceを取得
 	temp = -1;
-	class_find_field(exceptionT->u.class_, string_pool_intern("stackTrace"), &temp);
+	class_find_field(exceptionT->u.class_, InternString("stackTrace"), &temp);
 	object* stackTraceObj = AtVector(ex->u.field_vec, temp);
 	//StackTraceElement#fileName
 	//StackTraceElement#lineIndex を取得
 	int fileNameptr = -1;
 	int lineIndexptr = -1;
-	class_find_field(stackTraceElementT->u.class_, string_pool_intern("fileName"), &fileNameptr);
-	class_find_field(stackTraceElementT->u.class_, string_pool_intern("lineIndex"), &lineIndexptr);
+	class_find_field(stackTraceElementT->u.class_, InternString("fileName"), &fileNameptr);
+	class_find_field(stackTraceElementT->u.class_, InternString("lineIndex"), &lineIndexptr);
 	int stackLen = bc_array_length(stackTraceObj);
 	for(int i=0; i<stackLen; i++) {
 		object* e = bc_array_get(stackTraceObj, i);

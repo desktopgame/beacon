@@ -4,11 +4,11 @@
 
 void bc_null_init() {
 	namespace_* lang = namespace_lang();
-	type* nullType = class_new_preload(string_pool_intern("Null"));
+	type* nullType = class_new_preload(InternString("Null"));
 	namespace_add_type(lang, nullType);
 }
 
 type* bc_null_type() {
 	namespace_* lang = namespace_lang();
-	return namespace_get_type(lang, string_pool_intern("Null"));
+	return namespace_get_type(lang, InternString("Null"));
 }

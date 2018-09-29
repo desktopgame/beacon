@@ -46,8 +46,8 @@ static void check_method_yield_return(il_stmt_yield_return * self, enviroment * 
 	//戻り値の型に互換性がない
 	if(generic_type_distance(arg, il_factor_eval(self->fact, env, cctx), cctx) < 0) {
 		bc_error_throw(bcerror_yield_return_value_type_is_not_compatible_T,
-			string_pool_ref2str(type_name(m->parent)),
-			string_pool_ref2str(m->namev)
+			Ref2Str(type_name(m->parent)),
+			Ref2Str(m->namev)
 		);
 	}
 }

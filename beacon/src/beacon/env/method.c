@@ -49,8 +49,8 @@ method* method_malloc(string_view namev, const char* filename, int lineno) {
 
 void method_execute(method* self, frame * fr, enviroment* env) {
 	#if defined(DEBUG)
-	const char* namestr = string_pool_ref2str(self->namev);
-	if(self->namev == string_pool_intern("writeLine")) {
+	const char* namestr = Ref2Str(self->namev);
+	if(self->namev == InternString("writeLine")) {
 		int a = 0;
 	}
 	#endif
@@ -151,11 +151,11 @@ void method_delete(method * self) {
 
 string_view method_mangle(method* self) {
 	string_buffer* ret = string_buffer_new();
-	string_buffer_appends(ret, string_pool_ref2str(self->namev));
+	string_buffer_appends(ret, Ref2Str(self->namev));
 	//引数が一つもないので終了
 	if(self->parameters->length == 0) {
 		char* raw = string_buffer_release(ret);
-		string_view sv = string_pool_intern(raw);
+		string_view sv = InternString(raw);
 		MEM_FREE(raw);
 		return sv;
 	}
@@ -179,27 +179,27 @@ string_view method_mangle(method* self) {
 			sprintf(buff, "%d", gt->virtual_type_index);
 			string_buffer_appends(ret, buff);
 		} else {
-			string_buffer_appends(ret, string_pool_ref2str(type_full_name(gt->core_type)));
+			string_buffer_appends(ret, Ref2Str(type_full_name(gt->core_type)));
 		}
 	}
 	char* raw = string_buffer_release(ret);
-	string_view sv = string_pool_intern(raw);
+	string_view sv = InternString(raw);
 	MEM_FREE(raw);
 	return sv;
 }
 
 string_view method_unique(method* self) {
 	string_buffer* ret = string_buffer_new();
-	string_buffer_appends(ret, string_pool_ref2str(type_full_name(self->parent)));
-	string_buffer_appends(ret, string_pool_ref2str(method_mangle(self)));
+	string_buffer_appends(ret, Ref2Str(type_full_name(self->parent)));
+	string_buffer_appends(ret, Ref2Str(method_mangle(self)));
 	char* raw = string_buffer_release(ret);
-	string_view sv = string_pool_intern(raw);
+	string_view sv = InternString(raw);
 	MEM_FREE(raw);
 	return sv;
 }
 
 bool method_coroutine(method* self) {
-	type* iteratorT = namespace_get_type(namespace_lang(), string_pool_intern("Iterator"));
+	type* iteratorT = namespace_get_type(namespace_lang(), InternString("Iterator"));
 	return (iteratorT && self->return_gtype->core_type == iteratorT);
 }
 
@@ -231,7 +231,7 @@ type* method_create_iterator_type(method* self,  class_loader* cll, Vector* stmt
 	call_frame* lCfr = call_context_push(lCctx, frame_resolve_T);
 	lCfr->u.resolve.gtype = self->return_gtype;
 	string_view iterName = method_unique(self);
-	type* iterT = namespace_get_type(namespace_lang(), string_pool_intern("Iterator"));
+	type* iterT = namespace_get_type(namespace_lang(), InternString("Iterator"));
 	//イテレータの実装クラスを登録
 	generic_type* iterImplGT = generic_type_apply(self->return_gtype, lCctx);
 	class_* iterImplC = class_new_proxy(iterImplGT, iterName);
@@ -337,7 +337,7 @@ static constructor* create_delegate_ctor(method* self, type* ty, class_loader* c
 	constructor* iterCons = constructor_new();
 	enviroment* envIterCons = enviroment_new();
 	//コルーチンを生成したオブジェクトを受け取るパラメータ追加
-	parameter* coroOwnerParam = parameter_new(string_pool_intern("owner"));
+	parameter* coroOwnerParam = parameter_new(InternString("owner"));
 	PushVector(iterCons->parameter_list, coroOwnerParam);
 	envIterCons->context_ref = cll;
 	//コルーチンに渡された引数を引き継ぐパラメータ追加
@@ -374,7 +374,7 @@ static constructor* create_delegate_ctor(method* self, type* ty, class_loader* c
 }
 
 static method* create_has_next(method* self, type* ty, class_loader* cll, Vector* stmt_list, int* out_op_len) {
-	method* mt = method_new(string_pool_intern("moveNext"));
+	method* mt = method_new(InternString("moveNext"));
 	mt->return_gtype = GENERIC_BOOL;
 	mt->modifier = modifier_none_T;
 	mt->access = access_public_T;
@@ -413,7 +413,7 @@ static method* create_has_next(method* self, type* ty, class_loader* cll, Vector
 		il_stmt_generate(e, envSmt, cctx);
 	}
 	opcode_buf_add(envSmt->buf, op_coro_exit);
-	if(type_name(self->parent) == string_pool_intern("Base")) {
+	if(type_name(self->parent) == InternString("Base")) {
 	//	enviroment_op_dump(envSmt, 0);
 	}
 	(*out_op_len) = envSmt->buf->source_vec->length;
@@ -425,7 +425,7 @@ static method* create_has_next(method* self, type* ty, class_loader* cll, Vector
 }
 
 static method* create_next(method* self, type* ty, class_loader* cll,generic_type* a, Vector* stmt_list, int* out_op_len) {
-	method* mt = method_new(string_pool_intern("current"));
+	method* mt = method_new(InternString("current"));
 	mt->return_gtype = a;
 	mt->modifier = modifier_none_T;
 	mt->access = access_public_T;

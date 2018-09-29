@@ -22,7 +22,7 @@ static void bc_locale_nativeGetFracDigits(method* parent, frame* fr, enviroment*
 
 void bc_locale_init() {
 	namespace_* unsafe = namespace_unsafe();
-	type* localeType = class_new_preload(string_pool_intern("Locale"));
+	type* localeType = class_new_preload(InternString("Locale"));
 	class_* localeClass = TYPE2CLASS(localeType);
 	namespace_add_type(unsafe, localeType);
 	class_define_native_method(localeClass, "nativeSetLocale", bc_locale_nativeSetLocale);
@@ -40,7 +40,7 @@ void bc_locale_init() {
 
 type* bc_locale_type() {
 	namespace_* unsafe = namespace_unsafe();
-	return namespace_get_type(unsafe, string_pool_intern("Locale"));
+	return namespace_get_type(unsafe, InternString("Locale"));
 }
 //private
 static void bc_locale_nativeSetLocale(method* parent, frame* fr, enviroment* env) {

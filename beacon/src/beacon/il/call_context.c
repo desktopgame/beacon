@@ -54,7 +54,7 @@ method* call_context_method(call_context* self) {
 
 type* call_context_type(call_context* self) {
 	if(self->tag == call_top_T) {
-		return namespace_get_type(namespace_lang(), string_pool_intern("World"));
+		return namespace_get_type(namespace_lang(), InternString("World"));
 	}
 	return self->ty;
 }

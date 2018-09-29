@@ -72,7 +72,7 @@ char* il_factor_invoke_static_tostr(il_factor_invoke_static* self, enviroment* e
 	char* name = fqcn_cache_tostr(self->fqcn);
 	string_buffer_appends(sb, name);
 	string_buffer_append(sb, '.');
-	string_buffer_appends(sb, string_pool_ref2str(self->namev));
+	string_buffer_appends(sb, Ref2Str(self->namev));
 	il_factor_type_args_tostr(sb, self->type_args, env);
 	il_factor_args_tostr(sb, self->args, env);
 	MEM_FREE(name);
@@ -114,15 +114,15 @@ static void il_factor_invoke_static_check(il_factor_invoke_static * self, enviro
 	type* ty =call_context_eval_type(cctx, self->fqcn);
 	if(ty == NULL) {
 		bc_error_throw(bcerror_undefined_type_static_invoke_T,
-			string_pool_ref2str(self->fqcn->namev),
-			string_pool_ref2str(self->namev)
+			Ref2Str(self->fqcn->namev),
+			Ref2Str(self->namev)
 		);
 		return;
 	}
 	class_* cls = TYPE2CLASS(ty);
 	#if defined(DEBUG)
-	const char* classname = string_pool_ref2str(cls->namev);
-	const char* methodname = string_pool_ref2str(self->namev);
+	const char* classname = Ref2Str(cls->namev);
+	const char* methodname = Ref2Str(self->namev);
 	#endif
 	int temp = -1;
 	il_type_argument_resolve(self->type_args, cctx);
@@ -140,8 +140,8 @@ static void il_factor_invoke_static_check(il_factor_invoke_static * self, enviro
 	//メソッドが見つからない
 	if(temp == -1 || self->m == NULL) {
 		bc_error_throw(bcerror_invoke_static_undefined_method_T,
-			string_pool_ref2str(cls->namev),
-			string_pool_ref2str(self->namev)
+			Ref2Str(cls->namev),
+			Ref2Str(self->namev)
 		);
 	}
 	call_context_pop(cctx);

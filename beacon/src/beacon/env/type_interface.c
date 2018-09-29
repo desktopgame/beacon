@@ -39,7 +39,7 @@ generic_type* type_init_generic(type* self, int counts) {
 
 string_view type_name(type * self) {
 	if(self == NULL) {
-		return string_pool_intern("NULL");
+		return InternString("NULL");
 	}
 	if (self->tag == type_class_T) {
 		return self->u.class_->namev;
@@ -51,13 +51,13 @@ string_view type_name(type * self) {
 
 string_view type_full_name(type* self) {
 	if(self == NULL) {
-		return string_pool_intern("NULL");
+		return InternString("NULL");
 	}
 	string_view namespace_str = namespace_tostr(self->location);
 	string_view self_str = type_name(self);
-	return string_pool_concat(
-		string_pool_ref2str(namespace_str),
-		string_pool_concat(".", self_str)
+	return ConcatIntern(
+		Ref2Str(namespace_str),
+		ConcatIntern(".", self_str)
 	);
 }
 
@@ -250,8 +250,8 @@ generic_type* type_baseline(type* abstract, type* concrete) {
 		return abstract->generic_self;
 	}
 	#if defined(DEBUG)
-	const char* abstractname = string_pool_ref2str(type_name(abstract));
-	const char* concretename = string_pool_ref2str(type_name(concrete));
+	const char* abstractname = Ref2Str(type_name(abstract));
+	const char* concretename = Ref2Str(type_name(concrete));
 	#endif
 	type* ptr = concrete;
 	do {

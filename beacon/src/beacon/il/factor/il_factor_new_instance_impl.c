@@ -65,7 +65,7 @@ void il_factor_new_instance_load(il_factor_new_instance * self, enviroment * env
 	}
 	//抽象クラスはインスタンス化できない
 	if(type_is_abstract(self->c->parent)) {
-		bc_error_throw(bcerror_construct_abstract_type_T, string_pool_ref2str(type_name(self->c->parent)));
+		bc_error_throw(bcerror_construct_abstract_type_T, Ref2Str(type_name(self->c->parent)));
 	}
 }
 
@@ -122,8 +122,8 @@ static void il_factor_new_instance_find(il_factor_new_instance * self, enviromen
 		return;
 	}
 	#if defined(DEBUG)
-	const char* namea = string_pool_ref2str(self->fqcnc->namev);
-	if(self->fqcnc->namev == string_pool_intern("Vector")) {
+	const char* namea = Ref2Str(self->fqcnc->namev);
+	if(self->fqcnc->namev == InternString("Vector")) {
 		int a = 0;
 	}
 	#endif
@@ -131,7 +131,7 @@ static void il_factor_new_instance_find(il_factor_new_instance * self, enviromen
 	type* ty = call_context_eval_type(cctx, self->fqcnc);
 	if(ty == NULL) {
 		bc_error_throw(bcerror_new_instance_undefined_class_T,
-			string_pool_ref2str(self->fqcnc->namev)
+			Ref2Str(self->fqcnc->namev)
 		);
 		return;
 	}
@@ -147,7 +147,7 @@ static void il_factor_new_instance_find(il_factor_new_instance * self, enviromen
 	call_context_pop(cctx);
 	if(temp == -1) {
 		bc_error_throw(bcerror_new_instance_undefined_ctor_T,
-			string_pool_ref2str(cls->namev)
+			Ref2Str(cls->namev)
 		);
 	}
 }

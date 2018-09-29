@@ -50,7 +50,7 @@ static jobject bc_eval_string(JNIEnv * env, jclass cls, jstring str, jobject tab
 		bc_error_throw(bcerror_parse_T, p->error_message);
 		parser_destroy(p);
 		jclass bc_compile_exc_cls = (*env)->FindClass(env, "jp/koya/jbeacon/BCCompileException");
-		(*env)->ThrowNew(env, bc_compile_exc_cls, string_pool_ref2str(bc_error_message()));
+		(*env)->ThrowNew(env, bc_compile_exc_cls, Ref2Str(bc_error_message()));
 		return NULL;
 	}
 	ast* a = parser_release_ast(p);
@@ -66,7 +66,7 @@ static jobject bc_eval_string(JNIEnv * env, jclass cls, jstring str, jobject tab
 	if(bc_error_last()) {
 		class_loader_delete(cll);
 		jclass bc_compile_exc_cls = (*env)->FindClass(env, "jp/koya/jbeacon/BCCompileException");
-		(*env)->ThrowNew(env, bc_compile_exc_cls, string_pool_ref2str(bc_error_message()));
+		(*env)->ThrowNew(env, bc_compile_exc_cls, Ref2Str(bc_error_message()));
 		return NULL;
 	}
 	//jp.koya.jbeacon.SymbolTableを検索する
@@ -155,7 +155,7 @@ static bool bc_read_symbol(JNIEnv* env, jobject table, ast* a) {
 		jstring keyE = (jstring)((*env)->GetObjectArrayElement(env, keys_array, i));
 		jobject valueE = (*env)->CallObjectMethod(env, table, symbol_table_get_id, keyE);
 		const char *keystr = (*env)->GetStringUTFChars(env, keyE, JNI_FALSE);
-		string_view keyv = string_pool_intern(keystr);
+		string_view keyv = InternString(keystr);
 		if(valueE == NULL) {
 			(*env)->FatalError(env, "null pointer: get");
 			return false;
@@ -172,7 +172,7 @@ static bool bc_read_symbol(JNIEnv* env, jobject table, ast* a) {
 		} else if((*env)->IsInstanceOf(env, valueE, string_cls) == JNI_TRUE) {
 			jstring valuej = (jstring)valueE;
 			const char *valuestr = (*env)->GetStringUTFChars(env, valuej, JNI_FALSE);
-			string_view valuev = string_pool_intern(valuestr);
+			string_view valuev = InternString(valuestr);
 			astmt = ast_new_inject(keyv, ast_new_string(valuev));
 		//それ以外はまだ未対応
 		} else {
@@ -191,7 +191,7 @@ static void bc_write_symbol(JNIEnv* env, NumericMap* nmap, frame* fr, jobject ta
 	}
 	NumericMapKey key = nmap->key;
 	NumericMapItem val = nmap->item;
-	const char* name = string_pool_ref2str(key);
+	const char* name = Ref2Str(key);
 	symbol_entry* se = (symbol_entry*)val;
 	object* bcobj = AtVector(fr->ref_stack, se->index);
 	//jp.koya.jbeacon.SymbolTableを検索する
@@ -278,7 +278,7 @@ static void bc_eval_release(JNIEnv* env, class_loader* cll, frame* fr) {
 	if(bc_error_last()) {
 		string_buffer* sbuf = string_buffer_new();
 		string_buffer_appends(sbuf, "\n");
-		string_buffer_appends(sbuf, string_pool_ref2str(vm_error_message()));
+		string_buffer_appends(sbuf, Ref2Str(vm_error_message()));
 		char* mes = string_buffer_release(sbuf);
 		jclass bc_runtime_exc_cls = (*env)->FindClass(env, "jp/koya/jbeacon/BCRuntimeException");
 		(*env)->ThrowNew(env, bc_runtime_exc_cls, mes);

@@ -134,15 +134,15 @@ void generic_type_print(generic_type * self) {
 	if (self->virtual_type_index != -1) {
 		//(Array)[0]
 		if(self->tag == generic_type_tag_class_T) {
-			printf("(%s)", string_pool_ref2str(type_name(self->u.type_)));
+			printf("(%s)", Ref2Str(type_name(self->u.type_)));
 		//copy[0]
 		} else if(self->tag == generic_type_tag_method_T) {
-			printf("(%s)", string_pool_ref2str(self->u.method_->namev));
+			printf("(%s)", Ref2Str(self->u.method_->namev));
 		}
 		printf("[%d]", self->virtual_type_index);
 	//Intなど
 	} else {
-		printf("%s", string_pool_ref2str(type_name(self->core_type)));
+		printf("%s", Ref2Str(type_name(self->core_type)));
 	}
 	if(self->is_ctor) {
 		printf("!!");
@@ -267,8 +267,8 @@ static int generic_type_distance_nogeneric(generic_type* self, generic_type* oth
 	assert(self->core_type != NULL);
 	assert(other->core_type != NULL);
 	#if defined(DEBUG)
-	const char* sname = string_pool_ref2str(type_name(self->core_type));
-	const char* oname = string_pool_ref2str(type_name(other->core_type));
+	const char* sname = Ref2Str(type_name(self->core_type));
+	const char* oname = Ref2Str(type_name(other->core_type));
 	#endif
 	//List : Dict みたいな型ならもうこの時点で次へ
 	if(dist == -1) {

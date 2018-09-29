@@ -87,9 +87,9 @@ void parser_append_buffer(parser* self, char ch) {
 ast* parser_reduce_buffer(parser* self) {
 	//""のような空文字の場合
 	if (self->literal_buffer == NULL) {
-		return ast_new_string(string_pool_intern(""));
+		return ast_new_string(InternString(""));
 	}
-	ast* ret = ast_new_string(string_pool_intern2(self->literal_buffer));
+	ast* ret = ast_new_string(InternString2(self->literal_buffer));
 	self->literal_buffer = NULL;
 	return ret;
 }

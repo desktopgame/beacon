@@ -14,7 +14,7 @@ static void bc_exception_nativeInit(method* parent, frame* fr, enviroment* env);
 
 void bc_exception_init() {
 	namespace_* lang = namespace_lang();
-	type* exceptionType = class_new_preload(string_pool_intern("Exception"));
+	type* exceptionType = class_new_preload(InternString("Exception"));
 	class_* exceptionClass = TYPE2CLASS(exceptionType);
 	namespace_add_type(lang, exceptionType);
 	class_define_native_method(exceptionClass, "nativeInit", bc_exception_nativeInit);
@@ -22,13 +22,13 @@ void bc_exception_init() {
 
 type* bc_exception_type() {
 	namespace_* lang = namespace_lang();
-	return namespace_get_type(lang, string_pool_intern("Exception"));
+	return namespace_get_type(lang, InternString("Exception"));
 }
 //private
 static void bc_exception_nativeInit(method* parent, frame* fr, enviroment* env) {
 	namespace_* lang = namespace_lang();
-	class_* stackTraceElementClass = namespace_get_class(lang, string_pool_intern("StackTraceElement"));
-	class_* exceptionClass = namespace_get_class(lang, string_pool_intern("Exception"));
+	class_* stackTraceElementClass = namespace_get_class(lang, InternString("StackTraceElement"));
+	class_* exceptionClass = namespace_get_class(lang, InternString("Exception"));
 	object* self= (object*)AtVector(fr->ref_stack, 0);
 	//FXIME:???
 	heap* h = heap_get();
@@ -78,7 +78,7 @@ static void bc_exception_nativeInit(method* parent, frame* fr, enviroment* env) 
 	}
 	//Exception#stackTraceをここで初期化する
 	int tempi = 0;
-	field* stackTraceF = class_find_field(exceptionClass, string_pool_intern("stackTrace"), &tempi);
+	field* stackTraceF = class_find_field(exceptionClass, InternString("stackTrace"), &tempi);
 	AssignVector(self->u.field_vec, tempi, arr);
 	DeleteVector(stackTraceElementVec, VectorDeleterOfNull);
 	h->collect_blocking--;

@@ -16,7 +16,7 @@ static void bc_system_nativeExec(method* parent, frame* fr, enviroment* env);
 
 void bc_system_init() {
 	namespace_* unsafe = namespace_unsafe();
-	type* systemType = class_new_preload(string_pool_intern("System"));
+	type* systemType = class_new_preload(InternString("System"));
 	class_* systemClass = TYPE2CLASS(systemType);
 	namespace_add_type(unsafe, systemType);
 	class_define_native_method(systemClass, "nativeExit", bc_system_nativeExit);
@@ -26,7 +26,7 @@ void bc_system_init() {
 
 type* bc_system_type() {
 	namespace_* unsafe = namespace_unsafe();
-	return namespace_get_type(unsafe, string_pool_intern("System"));
+	return namespace_get_type(unsafe, InternString("System"));
 }
 
 //private

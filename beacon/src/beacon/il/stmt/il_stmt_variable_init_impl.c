@@ -40,7 +40,7 @@ void il_stmt_variable_init_generate(il_stmt_variable_init * self, enviroment * e
 	int dist = generic_type_distance(gb, ga, cctx);
 	if (dist < 0) {
 		bc_error_throw(bcerror_assign_not_compatible_local_T,
-			string_pool_ref2str(self->namev)
+			Ref2Str(self->namev)
 		);
 	}
 	opcode_buf_add(env->buf, op_store);
@@ -51,14 +51,14 @@ void il_stmt_variable_init_load(il_stmt_variable_init * self, enviroment * env, 
 	il_factor_load(self->fact, env, cctx);
 	if(symbol_table_contains(env->sym_table, self->namev)) {
 		bc_error_throw(bcerror_overwrap_variable_name_T,
-			string_pool_ref2str(self->namev)
+			Ref2Str(self->namev)
 		);
 	}
 	generic_type* gt = import_manager_resolve(NULL, self->fqcn, cctx);
 	if(gt == NULL) {
 		bc_error_throw(
 			bcerror_undefined_type_decl_T,
-			string_pool_ref2str(self->fqcn->fqcn->namev)
+			Ref2Str(self->fqcn->fqcn->namev)
 		);
 		return;
 	}

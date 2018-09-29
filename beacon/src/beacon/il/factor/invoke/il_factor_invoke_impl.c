@@ -77,7 +77,7 @@ char* il_factor_invoke_tostr(il_factor_invoke* self, enviroment* env) {
 	char* invstr = il_factor_tostr(self->receiver, env);
 	string_buffer_appends(sb, invstr);
 	string_buffer_append(sb, '.');
-	string_buffer_appends(sb, string_pool_ref2str(self->namev));
+	string_buffer_appends(sb, Ref2Str(self->namev));
 	il_factor_type_args_tostr(sb, self->type_args, env);
 	il_factor_args_tostr(sb, self->type_args, env);
 	MEM_FREE(invstr);
@@ -157,7 +157,7 @@ static void il_factor_invoke_check(il_factor_invoke * self, enviroment * env, ca
 	il_type_argument_resolve(self->type_args, cctx);
 	type* ctype = gtype->core_type;
 	#if defined(DEBUG)
-	const char* cname = string_pool_ref2str(type_name(ctype));
+	const char* cname = Ref2Str(type_name(ctype));
 	#endif
 	//ジェネリックな変数に対しても
 	//Objectクラスのメソッドは呼び出せる
@@ -179,8 +179,8 @@ static void il_factor_invoke_check(il_factor_invoke * self, enviroment * env, ca
 		//hoge(1) = 0;
 		//の形式なら引数は一つのはず
 		bc_error_throw(bcerror_invoke_instance_undefined_method_T,
-			string_pool_ref2str(type_name(ctype)),
-			string_pool_ref2str(self->namev)
+			Ref2Str(type_name(ctype)),
+			Ref2Str(self->namev)
 		);
 		return;
 	}
@@ -189,8 +189,8 @@ static void il_factor_invoke_check(il_factor_invoke * self, enviroment * env, ca
 	self->index = temp;
 	if(temp == -1) {
 		bc_error_throw(bcerror_invoke_instance_undefined_method_T,
-			string_pool_ref2str(type_name(ctype)),
-			string_pool_ref2str(self->namev)
+			Ref2Str(type_name(ctype)),
+			Ref2Str(self->namev)
 		);
 		return;
 	}

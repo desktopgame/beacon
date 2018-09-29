@@ -51,7 +51,7 @@ generic_type* il_factor_invoke_bound_eval(il_factor_invoke_bound * self, envirom
 
 char* il_factor_invoke_bound_tostr(il_factor_invoke_bound* self, enviroment* env) {
 	string_buffer* sb = string_buffer_new();
-	string_buffer_appends(sb, string_pool_ref2str(self->namev));
+	string_buffer_appends(sb, Ref2Str(self->namev));
 	il_factor_type_args_tostr(sb, self->type_args, env);
 	il_factor_args_tostr(sb, self->type_args, env);
 	return string_buffer_release(sb);
@@ -121,8 +121,8 @@ static void il_factor_invoke_bound_check(il_factor_invoke_bound * self, envirome
 	}
 	BC_ERROR();
 	#if defined(DEBUG)
-	const char* nstr = string_pool_ref2str(self->namev);
-	const char* str = string_pool_ref2str(type_name(ctype));
+	const char* nstr = Ref2Str(self->namev);
+	const char* str = Ref2Str(type_name(ctype));
 	#endif
 	call_frame* cfr = call_context_push(cctx, frame_self_invoke_T);
 	cfr->u.self_invoke.args = self->args;
@@ -166,14 +166,14 @@ static void il_factor_invoke_bound_check(il_factor_invoke_bound * self, envirome
 		self->index = temp;
 		if(temp == -1) {
 			bc_error_throw(bcerror_invoke_bound_undefined_method_T,
-				string_pool_ref2str(self->namev)
+				Ref2Str(self->namev)
 			);
 		}
 	}
 	if(self->index == -1) {
 		bc_error_throw(bcerror_invoke_bound_undefined_method_T,
-			string_pool_ref2str(type_name(ctype)),
-			string_pool_ref2str(self->namev)
+			Ref2Str(type_name(ctype)),
+			Ref2Str(self->namev)
 		);
 	}
 	call_context_pop(cctx);

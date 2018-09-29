@@ -58,8 +58,8 @@ void CLIL_field(class_loader* self, il_type* current, ast* afield, access_level 
 	if(current->tag == iltype_interface_T) {
 		bc_error_throw(
 			bcerror_interface_has_field_T,
-			string_pool_ref2str(current->u.interface_->namev),
-			string_pool_ref2str(aaccess_name->u.stringv_value)
+			Ref2Str(current->u.interface_->namev),
+			Ref2Str(aaccess_name->u.stringv_value)
 		);
 		return;
 	}
@@ -75,7 +75,7 @@ void CLIL_field(class_loader* self, il_type* current, ast* afield, access_level 
 	}
 	//重複する修飾子を検出
 	if(error) {
-		bc_error_throw(bcerror_overwrap_modifier_T, string_pool_ref2str(v->namev));
+		bc_error_throw(bcerror_overwrap_modifier_T, Ref2Str(v->namev));
 	}
 }
 
@@ -93,7 +93,7 @@ void CLIL_prop(class_loader* self, il_type* current, ast* aprop, access_level le
 		bool err = false;
 		ret->modifier = ast_cast_to_modifier(amod, &err);
 		if(err) {
-			bc_error_throw(bcerror_overwrap_modifier_T, string_pool_ref2str(ret->namev));
+			bc_error_throw(bcerror_overwrap_modifier_T, Ref2Str(ret->namev));
 		}
 	}
 	ret->access = level;
@@ -101,7 +101,7 @@ void CLIL_prop(class_loader* self, il_type* current, ast* aprop, access_level le
 	ret->get = CLIL_prop_body(self, current, aget, ilproperty_get_T, level);
 	il_type_add_property(current, ret);
 	if(ret->set->is_short != ret->get->is_short) {
-		bc_error_throw(bcerror_invalid_property_decl_T, string_pool_ref2str(current->u.class_->namev), string_pool_ref2str(propname));
+		bc_error_throw(bcerror_invalid_property_decl_T, Ref2Str(current->u.class_->namev), Ref2Str(propname));
 	}
 }
 
@@ -129,7 +129,7 @@ void CLIL_method(class_loader* self, il_type* current, ast* amethod, access_leve
 	il_type_add_method(current, v);
 	//重複する修飾子を検出
 	if(error) {
-		bc_error_throw(bcerror_overwrap_modifier_T, string_pool_ref2str(v->namev));
+		bc_error_throw(bcerror_overwrap_modifier_T, Ref2Str(v->namev));
 	}
 }
 
@@ -143,7 +143,7 @@ void CLIL_ctor(class_loader* self, il_type* current, ast* aconstructor, access_l
 	if(current->tag == iltype_interface_T) {
 		bc_error_throw(
 			bcerror_interface_has_ctor_T,
-			string_pool_ref2str(current->u.interface_->namev)
+			Ref2Str(current->u.interface_->namev)
 		);
 		return;
 	}
@@ -172,7 +172,7 @@ void CLIL_operator_overload(class_loader* self, il_type* current, ast* aopov, ac
 	if(current->tag == iltype_interface_T) {
 		bc_error_throw(
 			bcerror_interface_has_opov_T,
-			string_pool_ref2str(current->u.interface_->namev),
+			Ref2Str(current->u.interface_->namev),
 			operator_tostring(ot)
 		);
 		return;

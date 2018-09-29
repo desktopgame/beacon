@@ -60,10 +60,10 @@ void script_context_close() {
 void script_context_bootstrap(script_context* self) {
 	self->heap->accept_blocking++;
 	//プリロード
-	namespace_* beacon = namespace_create_at_root(string_pool_intern("beacon"));
-	namespace_* lang = namespace_add_namespace(beacon, string_pool_intern("lang"));
-	namespace_* unsafe = namespace_add_namespace(beacon, string_pool_intern("unsafe"));
-	namespace_* placeholder = namespace_create_at_root(string_pool_intern("$placeholder"));
+	namespace_* beacon = namespace_create_at_root(InternString("beacon"));
+	namespace_* lang = namespace_add_namespace(beacon, InternString("lang"));
+	namespace_* unsafe = namespace_add_namespace(beacon, InternString("unsafe"));
+	namespace_* placeholder = namespace_create_at_root(InternString("$placeholder"));
 	bc_object_init();
 	bc_array_init();
 	bc_exception_init();

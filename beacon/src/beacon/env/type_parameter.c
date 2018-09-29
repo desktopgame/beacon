@@ -64,7 +64,7 @@ void type_parameter_print(Vector* v) {
 		} else if (e->kind == type_parameter_kind_out_T) {
 			printf("out ");
 		}
-		printf("%s", string_pool_ref2str(e->namev));
+		printf("%s", Ref2Str(e->namev));
 		if (i != v->length - 1) {
 			printf(", ");
 		}

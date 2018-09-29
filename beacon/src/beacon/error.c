@@ -25,7 +25,7 @@ void bc_error_throw(bc_error_id id, ...) {
 void bc_error_vthrow(bc_error_id id, va_list ap) {
 	char* fmt = bc_error_vformat(id, ap);
 	gGlobalError = id;
-	gLastMessage = string_pool_intern(fmt);
+	gLastMessage = InternString(fmt);
 	script_context* sctx = script_context_get_current();
 	if(sctx->print_error) {
 		fprintf(stderr, "%s", fmt);
@@ -357,7 +357,7 @@ char* bc_error_vformat(bc_error_id id, va_list ap) {
 	string_buffer_append(sbuf, '\n');
 	//行番号など出力
 	sprintf(block, "file=%s line=%d column=%d\n",
-		string_pool_ref2str(gErrorFile),
+		Ref2Str(gErrorFile),
 		gErrorLineNo,
 		gErrorColumn
 	);
@@ -377,7 +377,7 @@ void bc_error_file(const char* filename) {
 	if(filename == NULL) {
 		filename = "NULL";
 	}
-	gErrorFile = string_pool_intern(filename);
+	gErrorFile = InternString(filename);
 }
 
 void bc_error_line(int lineno) {

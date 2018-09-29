@@ -15,7 +15,7 @@ static void bc_array_nativeCopy(method* parent, frame* fr, enviroment* env);
 
 void bc_array_init() {
 	namespace_* lang = namespace_lang();
-	type* arrayType = class_new_preload(string_pool_intern("Array"));
+	type* arrayType = class_new_preload(InternString("Array"));
 	class_* arrayClass = TYPE2CLASS(arrayType);
 	namespace_add_type(lang, arrayType);
 	class_define_native_method(arrayClass, "nativeInit", bc_array_nativeInit);
@@ -26,7 +26,7 @@ void bc_array_init() {
 
 type * bc_array_type() {
 	namespace_* lang = namespace_lang();
-	return namespace_get_type(lang, string_pool_intern("Array"));
+	return namespace_get_type(lang, InternString("Array"));
 }
 
 object * bc_array_new(struct generic_type* gtype, int length, frame * fr) {
@@ -60,7 +60,7 @@ static void bc_array_nativeInit(method* parent, frame* fr, enviroment* env) {
 	type* tp = parent->parent;
 	//Array#lengthを取り出す
 	int temp = 0;
-	field* lengthField = class_find_field(tp->u.class_, string_pool_intern("length"), &temp);
+	field* lengthField = class_find_field(tp->u.class_, InternString("length"), &temp);
 	assert(lengthField != NULL && temp != -1);
 	//対応する位置のオブジェクトを取り出す
 	object* self = AtVector(fr->ref_stack, 0);

@@ -15,8 +15,8 @@ bool class_interface_method_implement_valid(class_* cls, method** out) {
 	(*out) = NULL;
 	bool contains = true;
 	#if defined(DEBUG)
-	const char* csupername = string_pool_ref2str(cls->namev);
-	if(cls->namev == string_pool_intern("AdditiveOperator")) {
+	const char* csupername = Ref2Str(cls->namev);
+	if(cls->namev == InternString("AdditiveOperator")) {
 		int a = 0;
 	}
 	#endif
@@ -101,8 +101,8 @@ bool class_abstract_class_implement_valid(class_* cls, method** out) {
 		return true;
 	}
 	#if defined(DEBUG)
-	const char* csupername = string_pool_ref2str(csuper->namev);
-	if(cls->namev == string_pool_intern("Concrete")) {
+	const char* csupername = Ref2Str(csuper->namev);
+	if(cls->namev == InternString("Concrete")) {
 		int a = 0;
 	}
 	#endif
@@ -110,7 +110,7 @@ bool class_abstract_class_implement_valid(class_* cls, method** out) {
 	for(int i=0; i<csuper->method_list->length; i++) {
 		method* me = AtVector(csuper->method_list, i);
 		#if defined(DEBUG)
-		const char* mename = string_pool_ref2str(me->namev);
+		const char* mename = Ref2Str(me->namev);
 		#endif
 		if(!modifier_is_abstract(me->modifier)) { continue; }
 		Vector* methods = class_find_methods_tree(cls, me);
@@ -228,7 +228,7 @@ static bool methods_is_all_abstract(Vector* v) {
 	for(int i=0; i<v->length; i++) {
 		method* e = AtVector(v, i);
 		#if defined(DEBUG)
-		const char* tyname = string_pool_ref2str(type_name(e->parent));
+		const char* tyname = Ref2Str(type_name(e->parent));
 		#endif
 		if(!modifier_is_abstract(e->modifier)) {
 			return false;

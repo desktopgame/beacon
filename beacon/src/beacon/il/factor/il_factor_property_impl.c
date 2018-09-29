@@ -31,8 +31,8 @@ void il_factor_property_load(il_factor_property* self, enviroment* env, call_con
 	if(temp == -1) {
 		bc_error_throw(
 			bcerror_undefined_property_T,
-			string_pool_ref2str(type_name(receiverT)),
-			string_pool_ref2str(self->namev)
+			Ref2Str(type_name(receiverT)),
+			Ref2Str(self->namev)
 		);
 	}
 }
@@ -46,7 +46,7 @@ char* il_factor_property_tostr(il_factor_property* self, enviroment* env) {
 	char* name = il_factor_tostr(self->fact, env);
 	string_buffer_appends(sb, name);
 	string_buffer_append(sb, '.');
-	string_buffer_appends(sb, string_pool_ref2str(self->namev));
+	string_buffer_appends(sb, Ref2Str(self->namev));
 	MEM_FREE(name);
 	return string_buffer_release(sb);
 }

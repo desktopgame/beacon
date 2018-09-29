@@ -1540,7 +1540,7 @@ case 95:
 YY_RULE_SETUP
 #line 275 "beacon.l"
 {
-	yylval.stringv_value = string_pool_intern(yytext);
+	yylval.stringv_value = InternString(yytext);
 	return IDENT;
 }
 	YY_BREAK

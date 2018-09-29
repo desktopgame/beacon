@@ -297,7 +297,7 @@ method * class_ilfind_method(class_ * self, string_view namev, Vector * args, en
 	(*outIndex) = -1;
 	class_create_vtable(self);
 	#if defined(DEBUG)
-	const char* str = string_pool_ref2str(self->namev);
+	const char* str = Ref2Str(self->namev);
 	#endif
 	//assert(self->vt->elements->length > 0);
 	method* ret = NULL;
@@ -339,14 +339,14 @@ method* class_gfind_method(class_* self, string_view namev, Vector* gargs, int* 
 method* class_gfind_eqmethod(class_* self, int* outIndex) {
 	Vector* gargs = NewVector();
 	PushVector(gargs, TYPE_OBJECT->generic_self);
-	method* ret = class_gfind_method(self, string_pool_intern("equals"), gargs, outIndex);
+	method* ret = class_gfind_method(self, InternString("equals"), gargs, outIndex);
 	DeleteVector(gargs, VectorDeleterOfNull);
 	return ret;
 }
 
 method * class_ilfind_smethod(class_ * self, string_view namev, Vector * args, enviroment * env, call_context* cctx, int * outIndex) {
 	#if defined(DEBUG)
-	const char* str = string_pool_ref2str(namev);
+	const char* str = Ref2Str(namev);
 	#endif
 	(*outIndex) = -1;
 	class_create_vtable(self);
@@ -395,7 +395,7 @@ method * class_get_smethod(class_* self, int index) {
 
 method * class_get_impl_method(class_ * self, type * interType, int interMIndex) {
 	#if defined(DEBUG)
-	const char* str = string_pool_ref2str(self->namev);
+	const char* str = Ref2Str(self->namev);
 	#endif
 	assert(self->vt_vec->length > 0);
 	Vector* tbl = class_get_generic_interface_tree(self);
@@ -491,7 +491,7 @@ Vector* class_find_methods_tree(class_* self, method* m) {
 	class_* ptr = self;
 	Vector* ret = NewVector();
 	#if defined(DEBUG)
-	const char* ptrname = string_pool_ref2str(ptr->namev);
+	const char* ptrname = Ref2Str(ptr->namev);
 	#endif
 	do {
 		method* tmp = NULL;

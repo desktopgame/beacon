@@ -151,10 +151,10 @@ void class_add_property(class_* self, property* p) {
 	//プロパティが単純な省略形として記述されているなら、
 	//それはフィールドと同じなのでフィールドも定義する
 	#if defined(DEBUG)
-	const char* name = string_pool_ref2str(p->namev);
+	const char* name = Ref2Str(p->namev);
 	#endif
 	if(p->is_short) {
-		field* f = field_new(string_pool_concat("$propery.", p->namev));
+		field* f = field_new(ConcatIntern("$propery.", p->namev));
 		f->access = access_private_T;
 		f->gtype = p->gtype;
 		f->modifier = p->modifier;
@@ -179,7 +179,7 @@ void class_add_constructor(class_ * self, constructor * c) {
 }
 
 void class_define_native_method(class_* self, const char* name, native_impl impl) {
-	class_define_native_method_by_ref(self, string_pool_intern(name), impl);
+	class_define_native_method_by_ref(self, InternString(name), impl);
 }
 
 void class_define_native_method_by_ref(class_ * self, string_view namev, native_impl impl) {
@@ -215,7 +215,7 @@ int class_distance(class_ * super, class_ * sub) {
 void class_create_vtable(class_ * self) {
 	//TEST(!strcmp(self->name, "Int"));
 	#if defined(DEBUG)
-	const char* str = string_pool_ref2str(self->namev);
+	const char* str = Ref2Str(self->namev);
 	#endif
 	assert(self != NULL);
 	//初期化済み
@@ -403,7 +403,7 @@ void class_unlink(class_ * self) {
 }
 
 void class_delete(class_ * self) {
-//	printf("unlink %s\n", string_pool_ref2str(self->namev));
+//	printf("unlink %s\n", Ref2Str(self->namev));
 //	assert(self->ref_count == 0);
 //	MEM_FREE(self->name);
 	//printf("delete %s\n", self->name);
@@ -424,7 +424,7 @@ static void class_create_vtable_top(class_* self) {
 
 static void class_create_vtable_override(class_* self) {
 	#if defined(DEBUG)
-	const char* clname = string_pool_ref2str(self->namev);
+	const char* clname = Ref2Str(self->namev);
 	#endif
 	call_context* cctx = call_context_new(call_decl_T);
 	cctx->scope = self->parent->location;
@@ -443,7 +443,7 @@ static void class_create_vtable_override(class_* self) {
 
 static void class_create_vtable_interface(class_* self) {
 	#if defined(DEBUG) || defined(_DEBUG)
-	const char* clname = string_pool_ref2str(type_name(self->parent));
+	const char* clname = Ref2Str(type_name(self->parent));
 	#endif
 	Vector* tbl = class_get_interface_tree(self);
 	//もしインターフェースを実装しているなら、
@@ -464,8 +464,8 @@ static void class_create_vtable_interface(class_* self) {
 			if(!self->is_abstract && classVTM == NULL) {
 				PushVector(self->vt_vec, newVT);
 				bc_error_throw(bcerror_not_implement_interface_T,
-					string_pool_ref2str(type_name(interVTM->parent)),
-					string_pool_ref2str(interVTM->namev)
+					Ref2Str(type_name(interVTM->parent)),
+					Ref2Str(interVTM->namev)
 				);
 				DeleteVector(tbl, VectorDeleterOfNull);
 				return;

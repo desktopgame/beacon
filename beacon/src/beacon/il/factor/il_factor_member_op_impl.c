@@ -76,7 +76,7 @@ char* il_factor_member_op_tostr(il_factor_member_op* self, enviroment* env) {
 	char* name = il_factor_tostr(self->fact, env);
 	string_buffer_appends(sb, name);
 	string_buffer_append(sb, '.');
-	string_buffer_appends(sb, string_pool_ref2str(self->namev));
+	string_buffer_appends(sb, Ref2Str(self->namev));
 	MEM_FREE(name);
 	return string_buffer_release(sb);
 }
@@ -112,11 +112,11 @@ static void il_factor_member_op_check(il_factor_member_op* self, enviroment* env
 		il_factor_member_op_check_prop(self, env, cctx, gtype, swap);
 	} else {
 		#if defined(DEBUG)
-		const char* clname = string_pool_ref2str(call_context_class(cctx)->namev);
+		const char* clname = Ref2Str(call_context_class(cctx)->namev);
 		#endif
 		//フィールドの可視性を確認
 		if(!class_accessible_field(call_context_class(cctx), self->f)) {
-			bc_error_throw(bcerror_can_t_access_field_T, string_pool_ref2str(type_name(ctype)), string_pool_ref2str(self->f->namev));
+			bc_error_throw(bcerror_can_t_access_field_T, Ref2Str(type_name(ctype)), Ref2Str(self->f->namev));
 		}
 	}
 }
@@ -125,7 +125,7 @@ static void il_factor_member_op_check_static(il_factor_member_op* self, envirome
 	il_factor* fact = self->fact;
 	il_factor_variable* ilvar = fact->u.variable_;
 	#if defined(DEBUG)
-	const char* ilvarname = string_pool_ref2str(ilvar->u.static_->fqcn->namev);
+	const char* ilvarname = Ref2Str(ilvar->u.static_->fqcn->namev);
 	#endif
 	//Name.call
 	//の Name を型名として解決する
@@ -146,7 +146,7 @@ static void il_factor_member_op_check_static(il_factor_member_op* self, envirome
 static void il_factor_member_op_check_prop(il_factor_member_op* self, enviroment* env, call_context* cctx, generic_type* receiver_type,bool* swap) {
 	int temp = -1;
 	#if defined(DEBUG)
-	const char* name = string_pool_ref2str(self->namev);
+	const char* name = Ref2Str(self->namev);
 	#endif
 	type* ctype = receiver_type->core_type;
 	property* p = class_find_property_tree(TYPE2CLASS(ctype), self->namev, &temp);
@@ -160,11 +160,11 @@ static void il_factor_member_op_check_prop(il_factor_member_op* self, enviroment
 	self->parent->u.prop = factp;
 	//プロパティの可視性を確認
 	if(temp == -1) {
-		bc_error_throw(bcerror_undefined_property_T, string_pool_ref2str(type_name(ctype)), string_pool_ref2str(self->namev));
+		bc_error_throw(bcerror_undefined_property_T, Ref2Str(type_name(ctype)), Ref2Str(self->namev));
 		il_factor_delete(factp->fact);
 		factp->fact = NULL;
 	} else if(!class_accessible_property(call_context_class(cctx), p)) {
-		bc_error_throw(bcerror_can_t_access_property_T, string_pool_ref2str(type_name(ctype)), string_pool_ref2str(p->namev));
+		bc_error_throw(bcerror_can_t_access_property_T, Ref2Str(type_name(ctype)), Ref2Str(p->namev));
 		il_factor_delete(factp->fact);
 		factp->fact = NULL;
 	}
@@ -186,7 +186,7 @@ static void il_factor_member_op_check_static_prop(il_factor_member_op* self, env
 	self->parent->u.prop = factp;
 	//プロパティの可視性を確認
 	if(!class_accessible_property(call_context_class(cctx), p)) {
-		bc_error_throw(bcerror_can_t_access_property_T, string_pool_ref2str(type_name(ctype)), string_pool_ref2str(p->namev));
+		bc_error_throw(bcerror_can_t_access_property_T, Ref2Str(type_name(ctype)), Ref2Str(p->namev));
 		il_factor_delete(factp->fact);
 		factp->fact = NULL;
 	}

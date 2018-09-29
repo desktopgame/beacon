@@ -24,7 +24,7 @@ static void bc_time_nativeGetDayOfYear(method* parent, frame* fr, enviroment* en
 
 void bc_time_init() {
 	namespace_* unsafe = namespace_unsafe();
-	type* timeType = class_new_preload(string_pool_intern("Time"));
+	type* timeType = class_new_preload(InternString("Time"));
 	class_* timeClass = TYPE2CLASS(timeType);
 	namespace_add_type(unsafe, timeType);
 	class_define_native_method(timeClass, "nativeRawTime", bc_time_nativeGetRawTime);
@@ -40,7 +40,7 @@ void bc_time_init() {
 
 type* bc_time_type() {
 	namespace_* unsafe = namespace_unsafe();
-	return namespace_get_type(unsafe, string_pool_intern("Time"));
+	return namespace_get_type(unsafe, InternString("Time"));
 }
 //private
 static void bc_time_nativeGetRawTime(method* parent, frame* fr, enviroment* env) {
@@ -53,7 +53,7 @@ static void bc_time_nativeGetRawTime(method* parent, frame* fr, enviroment* env)
 static void bc_time_nativeToString(method* parent, frame* fr, enviroment* env) {
 	object* self = AtVector(fr->ref_stack, 0);
 	int temp;
-	class_find_field(TYPE2CLASS(bc_time_type()), string_pool_intern("rawTime"), &temp);
+	class_find_field(TYPE2CLASS(bc_time_type()), InternString("rawTime"), &temp);
 	object* rawTime = (object*)AtVector(self->u.field_vec, temp);
 	PushVector(fr->value_stack, object_string_new(ctime(&(rawTime->u.long_))));
 }

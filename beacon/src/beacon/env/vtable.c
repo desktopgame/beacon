@@ -29,7 +29,7 @@ void vtable_replace(vtable * self, method * m, call_context* cctx) {
 		return;
 	}
 	#if defined(DEBUG)
-	const char* methodname = string_pool_ref2str(m->namev);
+	const char* methodname = Ref2Str(m->namev);
 	#endif
 	for (int i = 0; i < self->elements->length; i++) {
 		method* e = (method*)AtVector(self->elements, i);

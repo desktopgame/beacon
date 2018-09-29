@@ -25,7 +25,7 @@ fqcn_cache* fqcn_cache_malloc(const char* filename, int lineno) {
 
 void fqcn_cache_dump(fqcn_cache * self, int depth) {
 	Printi(depth);
-	printf("type %s", string_pool_ref2str(self->namev));
+	printf("type %s", Ref2Str(self->namev));
 	Println();
 	//X::C.call() のような呼び出しなら
 	if (self->scope_vec->length > 0) {
@@ -35,7 +35,7 @@ void fqcn_cache_dump(fqcn_cache * self, int depth) {
 		for (int i = 0; i < self->scope_vec->length; i++) {
 			string_view sv = (string_view)AtVector(self->scope_vec, i);
 			Printi(depth + 1);
-			printf("%s", string_pool_ref2str(sv));
+			printf("%s", Ref2Str(sv));
 			Println();
 		}
 	}
@@ -47,13 +47,13 @@ void fqcn_cache_print(fqcn_cache * self) {
 		return;
 	}
 	if (self->scope_vec->length == 0) {
-		printf("%s", string_pool_ref2str(self->namev));
+		printf("%s", Ref2Str(self->namev));
 	} else {
 		for (int i = 0; i < self->scope_vec->length; i++) {
-			printf("%s", string_pool_ref2str((string_view)AtVector(self->scope_vec, i)));
+			printf("%s", Ref2Str((string_view)AtVector(self->scope_vec, i)));
 			printf("::");
 		}
-		printf("%s", string_pool_ref2str(self->namev));
+		printf("%s", Ref2Str(self->namev));
 	}
 }
 
@@ -95,13 +95,13 @@ char* fqcn_cache_tostr(fqcn_cache* self) {
 	string_buffer* sb = string_buffer_new();
 	for(int i=0; i<self->scope_vec->length; i++) {
 		string_view ev = (string_view)AtVector(self->scope_vec, i);
-		string_buffer_appends(sb, string_pool_ref2str(ev));
+		string_buffer_appends(sb, Ref2Str(ev));
 		if(i == (self->scope_vec->length - 1)) {
 			break;
 		}
 		string_buffer_appends(sb, "::");
 	}
-	string_buffer_appends(sb, string_pool_ref2str(self->namev));
+	string_buffer_appends(sb, Ref2Str(self->namev));
 	return string_buffer_release(sb);
 }
 
@@ -135,19 +135,19 @@ static type * fqcn_type_impl(fqcn_cache * self, namespace_* current) {
 	if (self->scope_vec->length == 0) {
 		string_view namev = self->namev;
 		//プリミティブ型はどこからでも参照できる
-		if (namev == string_pool_intern("Object")) {
+		if (namev == InternString("Object")) {
 			return TYPE_OBJECT;
-		} else if (namev == string_pool_intern("Int")) {
+		} else if (namev == InternString("Int")) {
 			return TYPE_INT;
-		} else if (namev == string_pool_intern("Double")) {
+		} else if (namev == InternString("Double")) {
 			return TYPE_DOUBLE;
-		} else if (namev == string_pool_intern("Char")) {
+		} else if (namev == InternString("Char")) {
 			return TYPE_CHAR;
-		} else if (namev == string_pool_intern("String")) {
+		} else if (namev == InternString("String")) {
 			return TYPE_STRING;
-		} else if (namev == string_pool_intern("Bool")) {
+		} else if (namev == InternString("Bool")) {
 			return TYPE_BOOL;
-		} else if (namev == string_pool_intern("Void")) {
+		} else if (namev == InternString("Void")) {
 			return TYPE_VOID;
 		}
 		if (current == NULL) {

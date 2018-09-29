@@ -192,9 +192,9 @@ static void class_loader_load_toplevel(class_loader* self) {
 		return;
 	}
 	//var $world = new beacon::lang::World();
-	il_stmt_inferenced_type_init* createWorldStmt = il_stmt_inferenced_type_init_new(string_pool_intern("$world"));
+	il_stmt_inferenced_type_init* createWorldStmt = il_stmt_inferenced_type_init_new(InternString("$world"));
 	il_factor_new_instance* newWorldInstance = il_factor_new_instance_new();
-	newWorldInstance->fqcnc->namev = string_pool_intern("World");
+	newWorldInstance->fqcnc->namev = InternString("World");
 	createWorldStmt->fact = il_factor_wrap_new_instance(newWorldInstance);
 	il_stmt* body = il_stmt_wrap_inferenced_type_init(createWorldStmt);
 	//これをやらないと -1 のまま
@@ -202,7 +202,7 @@ static void class_loader_load_toplevel(class_loader* self) {
 	createWorldStmt->fact->lineno = 0;
 	//worldをselfにする
 	call_context* cctx = call_context_new(call_top_T);
-	cctx->ty = namespace_get_type(namespace_lang(), string_pool_intern("World"));
+	cctx->ty = namespace_get_type(namespace_lang(), InternString("World"));
 	il_stmt_load(body, self->env, cctx);
 	il_stmt_generate(body, self->env, cctx);
 	//$worldをthisにする
@@ -222,7 +222,7 @@ static void class_loader_load_toplevel_function(class_loader* self) {
 		return;
 	}
 	Vector* funcs = self->il_code->function_list;
-	type* worldT = namespace_get_type(namespace_lang(), string_pool_intern("World"));
+	type* worldT = namespace_get_type(namespace_lang(), InternString("World"));
 	//前回の実行で作成されたメソッドを解放
 	Vector* methods = TYPE2CLASS(worldT)->method_list;
 	if(methods->length > 0) {

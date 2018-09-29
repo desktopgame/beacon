@@ -41,7 +41,7 @@ void il_stmt_inferenced_type_init_load(il_stmt_inferenced_type_init * self, envi
 	//変数を登録
 	if(symbol_table_contains(env->sym_table, self->namev)) {
 		bc_error_throw(bcerror_overwrap_variable_name_T,
-			string_pool_ref2str(self->namev)
+			Ref2Str(self->namev)
 		);
 	}
 	symbol_entry* e = symbol_table_entry(

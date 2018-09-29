@@ -80,7 +80,7 @@ object * object_string_malloc(const char * s, const char* filename, int lineno) 
 	object* arr = object_ref_malloc(filename, lineno);
 	//arr->tag = object_array_T;
 	type* arrType = bc_array_type();
-	type* strType = namespace_get_type(namespace_lang(), string_pool_intern("String"));
+	type* strType = namespace_get_type(namespace_lang(), InternString("String"));
 	arr->gtype = generic_type_new(arrType);
 	arr->vptr = type_vtable(arrType);
 	arr->tag = object_array_T;
@@ -97,13 +97,13 @@ object * object_string_malloc(const char * s, const char* filename, int lineno) 
 	string_buffer_shrink(sb);
 	//String#charArrayを埋める
 	int temp = 0;
-	class_find_field(strType->u.class_, string_pool_intern("charArray"), &temp);
+	class_find_field(strType->u.class_, InternString("charArray"), &temp);
 	AssignVector(ret->u.field_vec, temp, arr);
 	VectorItem* test = AtVector(ret->u.field_vec, temp);
 	assert(test != NULL);
 	//Array#lengthを埋める
 	temp = 0;
-	class_find_field(arrType->u.class_, string_pool_intern("length"), &temp);
+	class_find_field(arrType->u.class_, InternString("length"), &temp);
 	AssignVector(arr->u.field_vec, temp, object_int_new(sb->length));
 	//C形式の文字列でも保存
 	AssignVector(ret->native_slot_vec, 0, sb);
@@ -377,7 +377,7 @@ object* object_default(generic_type* gt) {
 const char* object_name(object* self) {
 	const char* name = "NULL";
 	if(self->gtype != NULL && self->gtype->core_type != NULL) {
-		name = string_pool_ref2str(type_full_name(self->gtype->core_type));
+		name = Ref2Str(type_full_name(self->gtype->core_type));
 	}
 	return name;
 }

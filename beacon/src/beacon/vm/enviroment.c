@@ -104,7 +104,7 @@ int enviroment_add_constant_char(enviroment * self, char c) {
 
 int enviroment_add_constant_string(enviroment * self, string_view sv) {
 	int len = self->constant_pool_vec->length;
-	enviroment_add_constant(self, object_string_new(string_pool_ref2str(sv)));
+	enviroment_add_constant(self, object_string_new(Ref2Str(sv)));
 	return len;
 }
 

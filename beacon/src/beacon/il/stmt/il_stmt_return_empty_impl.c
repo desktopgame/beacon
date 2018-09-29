@@ -25,8 +25,8 @@ static void check_method_return(il_stmt_return_empty self, enviroment * env, cal
 	//戻り値が Void ではないのに値を返さない
 	if(m->return_gtype->core_type != TYPE_VOID) {
 		bc_error_throw(bcerror_not_return_value_not_void_method_T,
-			string_pool_ref2str(type_name(m->parent)),
-			string_pool_ref2str(m->namev)
+			Ref2Str(type_name(m->parent)),
+			Ref2Str(m->namev)
 		);
 		return;
 	}

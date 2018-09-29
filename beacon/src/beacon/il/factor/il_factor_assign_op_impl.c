@@ -98,16 +98,16 @@ static void assign_by_namebase(il_factor_assign_op* self, enviroment* env, call_
 		//指定の静的フィールドにアクセスできない
 		if(!class_accessible_field(call_context_class(cctx), sf)) {
 			bc_error_throw(bcerror_can_t_access_field_T,
-				string_pool_ref2str(type_name(cls->parent)),
-				string_pool_ref2str(sf->namev)
+				Ref2Str(type_name(cls->parent)),
+				Ref2Str(sf->namev)
 			);
 			return;
 		}
 		//finalなので書き込めない
 		if(modifier_is_final(sf->modifier)) {
 			bc_error_throw(bcerror_assign_to_final_field_T,
-				string_pool_ref2str(type_name(cls->parent)),
-				string_pool_ref2str(sf->namev)
+				Ref2Str(type_name(cls->parent)),
+				Ref2Str(sf->namev)
 			);
 			return;
 		}
@@ -136,8 +136,8 @@ static void assign_to_field(il_factor_assign_op* self, il_factor* receiver, il_f
 	//指定のインスタンスフィールドにアクセスできない
 	if(!class_accessible_field(call_context_class(cctx), f)) {
 		bc_error_throw(bcerror_can_t_access_field_T,
-			string_pool_ref2str(type_name(cls->parent)),
-			string_pool_ref2str(f->namev)
+			Ref2Str(type_name(cls->parent)),
+			Ref2Str(f->namev)
 		);
 	}
 	check_final(receiver, source, namev, env, cctx);
@@ -151,22 +151,22 @@ static void assign_to_property(il_factor_assign_op* self, enviroment* env, call_
 	//プロパティへアクセスできない
 	if(!class_accessible_property(call_context_class(cctx), pp)) {
 		bc_error_throw(bcerror_can_t_access_field_T,
-			string_pool_ref2str(type_name(pp->parent)),
-			string_pool_ref2str(pp->namev)
+			Ref2Str(type_name(pp->parent)),
+			Ref2Str(pp->namev)
 		);
 		return;
 	}
 	if(!class_accessible_property_accessor(call_context_class(cctx), pp->set)) {
 		bc_error_throw(bcerror_can_t_access_field_T,
-			string_pool_ref2str(type_name(pp->parent)),
-			string_pool_ref2str(pp->namev)
+			Ref2Str(type_name(pp->parent)),
+			Ref2Str(pp->namev)
 		);
 		return;
 	}
 	if(generic_type_distance(prop->p->gtype, il_factor_eval(self->right, env, cctx), cctx) < 0) {
 		bc_error_throw(bcerror_assign_not_compatible_property_T,
-			string_pool_ref2str(type_name(prop->p->parent)),
-			string_pool_ref2str(prop->p->namev)
+			Ref2Str(type_name(prop->p->parent)),
+			Ref2Str(prop->p->namev)
 		);
 		return;
 	}
@@ -195,7 +195,7 @@ static void assign_by_call(il_factor_assign_op* self, enviroment* env, call_cont
 	if(call->type == ilcall_type_invoke_static_T) {
 		bc_error_throw(
 			bcerror_lhs_is_not_subscript_T,
-			string_pool_ref2str(call->u.invoke_static_->namev)
+			Ref2Str(call->u.invoke_static_->namev)
 		);
 		return;
 	}
@@ -212,7 +212,7 @@ static void assign_by_invoke(il_factor_invoke* lhs, il_factor* rhs, enviroment* 
 	int temp = -1;
 	if(lhs->tag != instance_invoke_subscript_T) {
 		bc_error_throw(bcerror_assign_to_invoke_T,
-			string_pool_ref2str(lhs->namev)
+			Ref2Str(lhs->namev)
 		);
 		return;
 	}
@@ -260,8 +260,8 @@ static bool can_assign_to_field(field* f, il_factor_assign_op* self, enviroment*
 		return true;
 	} else {
 		bc_error_throw(bcerror_assign_not_compatible_field_T,
-			string_pool_ref2str(type_name(f->parent)),
-			string_pool_ref2str(f->namev)
+			Ref2Str(type_name(f->parent)),
+			Ref2Str(f->namev)
 		);
 		return false;
 	}
@@ -278,8 +278,8 @@ static void check_final(il_factor* receiver, il_factor* source, string_view name
 		//finalなので書き込めない
 		if(modifier_is_final(f->modifier)) {
 			bc_error_throw(bcerror_assign_to_final_field_T,
-				string_pool_ref2str(type_name(cls->parent)),
-				string_pool_ref2str(f->namev)
+				Ref2Str(type_name(cls->parent)),
+				Ref2Str(f->namev)
 			);
 		}
 	} else {
@@ -287,8 +287,8 @@ static void check_final(il_factor* receiver, il_factor* source, string_view name
 		if(modifier_is_final(f->modifier) &&
 		   modifier_is_static(f->modifier)) {
 			bc_error_throw(bcerror_assign_to_final_field_T,
-				string_pool_ref2str(type_name(cls->parent)),
-				string_pool_ref2str(f->namev)
+				Ref2Str(type_name(cls->parent)),
+				Ref2Str(f->namev)
 			);
 		}
 		f->not_initialized_at_ctor = true;
@@ -310,7 +310,7 @@ static void generate_assign_to_variable_local(il_factor_assign_op* self, envirom
 	//src のような名前がローカル変数を示す場合
 	if(illoc->type == variable_local_scope_T) {
 		#if defined(DEBUG)
-		const char* vname = string_pool_ref2str(ilvar->fqcn->namev);
+		const char* vname = Ref2Str(ilvar->fqcn->namev);
 		#endif
 		symbol_entry* e = symbol_table_entry(env->sym_table, NULL, ilvar->fqcn->namev);
 		//e==NULL の時変数がない
@@ -319,7 +319,7 @@ static void generate_assign_to_variable_local(il_factor_assign_op* self, envirom
 		opcode_buf_add(env->buf, e->index);
 		if(generic_type_distance(e->gtype, il_factor_eval(self->right, env, cctx), cctx) < 0) {
 			bc_error_throw(bcerror_assign_not_compatible_local_T,
-				string_pool_ref2str(ilvar->fqcn->namev)
+				Ref2Str(ilvar->fqcn->namev)
 			);
 			return;
 		}
@@ -336,8 +336,8 @@ static void generate_assign_to_variable_local(il_factor_assign_op* self, envirom
 		if(!modifier_is_static(f->modifier) &&
 		    call_context_is_static(cctx)) {
 			bc_error_throw(bcerror_access_to_this_at_static_method_T,
-				string_pool_ref2str(type_name(f->parent)),
-				string_pool_ref2str(f->namev)
+				Ref2Str(type_name(f->parent)),
+				Ref2Str(f->namev)
 			);
 			return;
 		}
@@ -357,8 +357,8 @@ static void generate_assign_to_variable_local(il_factor_assign_op* self, envirom
 		if(!modifier_is_static(p->modifier) &&
 		    call_context_is_static(cctx)) {
 			bc_error_throw(bcerror_access_to_this_at_static_method_T,
-				string_pool_ref2str(type_name(p->parent)),
-				string_pool_ref2str(p->namev)
+				Ref2Str(type_name(p->parent)),
+				Ref2Str(p->namev)
 			);
 			return;
 		}

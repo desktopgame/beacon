@@ -11,14 +11,14 @@ static Vector* gVec = NULL;
 
 #define HEADER (2)
 
-void string_pool_init() {
+void InitStringPool() {
 	assert(gMap == NULL);
 	assert(gVec == NULL);
 	gMap = NewTreeMap();
 	gVec = NewVector();
 }
 
-string_view string_pool_intern(const char* str) {
+string_view InternString(const char* str) {
 	assert(gMap != NULL);
 	assert(gVec != NULL);
 	tree_map* cell = GetTreeMapCell(gMap, str);
@@ -33,27 +33,27 @@ string_view string_pool_intern(const char* str) {
 	return (string_view)cell->item;
 }
 
-string_view string_pool_intern2(string_buffer* buffer) {
+string_view InternString2(string_buffer* buffer) {
 	char* raw = string_buffer_release(buffer);
-	string_view sv = string_pool_intern(raw);
+	string_view sv = InternString(raw);
 	MEM_FREE(raw);
 	assert(sv != 0);
 	return sv;
 }
 
-string_view string_pool_concat(const char* head, string_view foot) {
+string_view ConcatIntern(const char* head, string_view foot) {
 	//連結する
-	const char* footstr = string_pool_ref2str(foot);
+	const char* footstr = Ref2Str(foot);
 	string_buffer* buf = string_buffer_new();
 	string_buffer_appends(buf, head);
 	string_buffer_appends(buf, footstr);
 	char* retstr = string_buffer_release(buf);
-	string_view ret = string_pool_intern(retstr);
+	string_view ret = InternString(retstr);
 	MEM_FREE(retstr);
 	return ret;
 }
 
-string_view string_pool_str2ref(const char* str) {
+string_view Str2Ref(const char* str) {
 	tree_map* cell = GetTreeMapCell(gMap, str);
 	if(cell == gMap) {
 		return ZERO_VIEW;
@@ -61,7 +61,7 @@ string_view string_pool_str2ref(const char* str) {
 	return (string_view)cell->item;
 }
 
-const char* string_pool_ref2str(string_view ref) {
+const char* Ref2Str(string_view ref) {
 	if(ref == NULL_VIEW) {
 		return NULL;
 	}
@@ -72,7 +72,7 @@ const char* string_pool_ref2str(string_view ref) {
 	return str;
 }
 
-void string_pool_dump(FILE* fp) {
+void DumpStringPool(FILE* fp) {
 	assert(gMap != NULL);
 	assert(gVec != NULL);
 	fprintf(fp, "string pool---\n");
@@ -82,7 +82,7 @@ void string_pool_dump(FILE* fp) {
 	}
 }
 
-void string_pool_destroy() {
+void DestroyStringPool() {
 	DeleteTreeMap(gMap, DeleteTreeMapr_null);
 	DeleteVector(gVec, VectorDeleterOfNull);
 	gMap = NULL;

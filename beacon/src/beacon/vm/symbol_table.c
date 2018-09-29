@@ -59,5 +59,5 @@ static void symbol_table_delete_entry(NumericMapKey key, NumericMapItem item) {
 	symbol_entry_delete(e);
 }
 static void symbol_table_dump_entry(NumericMapKey key, NumericMapItem item) {
-	printf("[%s] = %d\n", string_pool_ref2str(key), ((symbol_entry*)item)->index);
+	printf("[%s] = %d\n", Ref2Str(key), ((symbol_entry*)item)->index);
 }

@@ -19,7 +19,7 @@ script_method * script_method_new() {
 
 void script_method_execute(script_method * self, method* parent, frame * fr, enviroment* env) {
 #if defined(DEBUG)
-	const char* name = string_pool_ref2str(parent->namev);
+	const char* name = Ref2Str(parent->namev);
 #endif
 	frame* sub = frame_sub(fr);
 	call_frame* cfr = NULL;

@@ -16,7 +16,7 @@ static void bc_double_nativeEQ(method* parent, frame* fr, enviroment* env);
 
 void bc_double_init() {
 	namespace_* lang = namespace_lang();
-	type* doubleType = class_new_preload(string_pool_intern("Double"));
+	type* doubleType = class_new_preload(InternString("Double"));
 	class_* doubleClass = TYPE2CLASS(doubleType);
 	namespace_add_type(lang, doubleType);
 	class_define_native_method(doubleClass, "nativeInit", bc_double_nativeInit);
@@ -34,7 +34,7 @@ void bc_double_init() {
 
 type* bc_double_type() {
 	namespace_* lang = namespace_lang();
-	return namespace_get_type(lang, string_pool_intern("Double"));
+	return namespace_get_type(lang, InternString("Double"));
 }
 //private
 static void bc_double_nativeInit(method* parent, frame* fr, enviroment* env) {
