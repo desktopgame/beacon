@@ -174,6 +174,51 @@ def apply(files, origin, update)
     end
 end
 
+def find_word(name)
+    count = 0
+    name.chars.each_with_index do |c,i|
+        if(c =~ /[A-Z]/) then
+            count += 1
+            if(count == 2) then
+                return i
+            end
+        end
+    end
+end
+
+def rename(name)
+    buf = ""
+    cut = true
+    name.chars.each do |c|
+        if cut then
+            c = c.upcase
+            cut = false
+        end
+        if c == "_" then
+            cut = true
+            next
+        end
+        buf << c
+    end
+    #動詞が先に来るように
+    pos = find_word(buf)
+    action = buf.slice(pos, buf.length - pos)
+    type = buf.slice(0, pos)
+    buf = action + type
+    #ast,fqcnは例外的に全て大文字
+    buf.gsub!("Ast", "AST")
+    buf.gsub!("Fqcn", "FQCN")
+    #newが含まれる場合にも例外
+    if(buf.start_with?("New") && buf.include?("AST")) then
+        pos = buf.index("AST")
+        ast_type = buf.slice(3, pos - 3)
+        first = buf.slice(0, 3)
+        rest = buf.slice(pos, buf.length - pos)
+        buf = first + rest + ast_type
+    end
+    buf
+end
+
 decl_files = []
 impl_files = []
 functions = []
@@ -319,7 +364,8 @@ commands = {
                 edited << e.clone
                 next
             end
-            printf("%s => ", e.name)
+            auto_name = rename(e.name)
+            printf("%s => ($%s)", e.name, auto_name)
             new_name = STDIN.gets.lstrip.rstrip
             #新しい名前を入力する
             clone = e.clone
@@ -329,6 +375,8 @@ commands = {
             elsif new_name == ":break" then
                 term = true
                 next
+            elsif new_name == "$" then
+                clone.name = auto_name
             else
                 clone.name = new_name
             end
