@@ -31,14 +31,14 @@ char * text_strdup(const char * source) {
 }
 
 char * text_gets() {
-	string_buffer* sb = string_buffer_new();
+	string_buffer* sb = NewBuffer();
 	while (true) {
 		char c = getchar();
 		if (c == '\n') {
-			string_buffer_shrink(sb);
+			ShrinkBuffer(sb);
 			break;
 		} else {
-			string_buffer_append(sb, c);
+			AppendBuffer(sb, c);
 		}
 	}
 	char* ret = sb->text;
@@ -74,10 +74,10 @@ char * text_concat(const char * a, const char * b) {
 	block[alen + blen] = '\0';
 	return block;
 	#else
-	string_buffer* buff = string_buffer_new();
-	string_buffer_appends(buff, a);
-	string_buffer_appends(buff, b);
-	char* ret = string_buffer_release(buff);
+	string_buffer* buff = NewBuffer();
+	AppendsBuffer(buff, a);
+	AppendsBuffer(buff, b);
+	char* ret = ReleaseBuffer(buff);
 	return ret;
 	#endif
 }
@@ -90,7 +90,7 @@ char * text_lineat(const char * src, int lineno) {
 	}
 	int len = strlen(src);
 	int curLine = 0;
-	string_buffer* buf = string_buffer_new();
+	string_buffer* buf = NewBuffer();
 	char* PTR = NULL;
 	for (int i = 0; i < len; i++) {
 		char c = src[i];
@@ -102,11 +102,11 @@ char * text_lineat(const char * src, int lineno) {
 			curLine++;
 		} else {
 			if (lineno == 0 || lineno == curLine) {
-				string_buffer_append(buf, c);
+				AppendBuffer(buf, c);
 			}
 		}
 	}
-	string_buffer_shrink(buf);
+	ShrinkBuffer(buf);
 	char* ret = buf->text;
 	MEM_FREE(buf);
 	return ret;
@@ -176,13 +176,13 @@ static char* text_strclone(const char* source) {
 }
 
 static char* text_readlineImpl(FILE* fp) {
-	string_buffer* sb = string_buffer_new();
+	string_buffer* sb = NewBuffer();
 	while(1) {
 		char ch = getc(fp);
 		if(ch == '\0' || ch == '\n' || feof(fp)) {
 			break;
 		}
-		string_buffer_append(sb, ch);
+		AppendBuffer(sb, ch);
 	}
-	return string_buffer_release(sb);
+	return ReleaseBuffer(sb);
 }

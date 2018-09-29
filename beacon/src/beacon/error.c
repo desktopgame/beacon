@@ -349,20 +349,20 @@ char* bc_error_vformat(bc_error_id id, va_list ap) {
 				return text_strdup("if shown this message, it compiler bug\n");
 			}
 	}
-	string_buffer* sbuf = string_buffer_new();
+	string_buffer* sbuf = NewBuffer();
 	//メインメッセージを出力
 	char block[256] = {0};
 	vsprintf(block, fmt, ap);
-	string_buffer_appends(sbuf, block);
-	string_buffer_append(sbuf, '\n');
+	AppendsBuffer(sbuf, block);
+	AppendBuffer(sbuf, '\n');
 	//行番号など出力
 	sprintf(block, "file=%s line=%d column=%d\n",
 		Ref2Str(gErrorFile),
 		gErrorLineNo,
 		gErrorColumn
 	);
-	string_buffer_appends(sbuf, block);
-	return string_buffer_release(sbuf);
+	AppendsBuffer(sbuf, block);
+	return ReleaseBuffer(sbuf);
 }
 
 void bc_error_clear() {

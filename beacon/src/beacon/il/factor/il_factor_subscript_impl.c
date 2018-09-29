@@ -47,16 +47,16 @@ generic_type* il_factor_subscript_eval(il_factor_subscript* self, enviroment* en
 }
 
 char* il_factor_subscript_tostr(il_factor_subscript* self, enviroment* env) {
-	string_buffer* buf = string_buffer_new();
+	string_buffer* buf = NewBuffer();
 	char* src = il_factor_tostr(self->receiver, env);
 	char* pos = il_factor_tostr(self->pos, env);
-	string_buffer_appends(buf, src);
-	string_buffer_append(buf, '[');
-	string_buffer_appends(buf, pos);
-	string_buffer_append(buf, ']');
+	AppendsBuffer(buf, src);
+	AppendBuffer(buf, '[');
+	AppendsBuffer(buf, pos);
+	AppendBuffer(buf, ']');
 	MEM_FREE(src);
 	MEM_FREE(pos);
-	return string_buffer_release(buf);
+	return ReleaseBuffer(buf);
 }
 
 void il_factor_subscript_delete(il_factor_subscript* self) {

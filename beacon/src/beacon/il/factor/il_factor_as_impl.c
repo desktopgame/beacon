@@ -85,11 +85,11 @@ void il_factor_as_delete(il_factor_as * self) {
 }
 
 char* il_factor_as_tostr(il_factor_as* self, enviroment* env) {
-	string_buffer* sb = string_buffer_new();
+	string_buffer* sb = NewBuffer();
 	char* factstr = il_factor_tostr(self->fact, env);
 	char* to = generic_cache_tostr(self->fqcn);
-	string_buffer_appendf(sb, "%s as %s", factstr, to);
+	AppendfBuffer(sb, "%s as %s", factstr, to);
 	MEM_FREE(factstr);
 	MEM_FREE(to);
-	return string_buffer_release(sb);
+	return ReleaseBuffer(sb);
 }

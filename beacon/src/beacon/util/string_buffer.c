@@ -8,7 +8,7 @@
 #pragma warning(disable:4996)
 #endif
 //proto
-string_buffer* string_buffer_malloc(const char* filename, int lineno) {
+string_buffer* MallocBuffer(const char* filename, int lineno) {
 	string_buffer* ret = mem_malloc(sizeof(string_buffer), filename, lineno);
 	ret->length = 0;
 	ret->capacity = 16;
@@ -17,23 +17,23 @@ string_buffer* string_buffer_malloc(const char* filename, int lineno) {
 	return ret;
 }
 
-void string_buffer_append(string_buffer * self, char c) {
+void AppendBuffer(string_buffer * self, char c) {
 	if (self->length >= self->capacity) {
-		string_buffer_reserve(self);
+		ReserveBuffer(self);
 	}
 	self->text[self->length] = c;
 	self->length++;
 }
 
-void string_buffer_appendf(string_buffer * self, const char * fmt, ...) {
+void AppendfBuffer(string_buffer * self, const char * fmt, ...) {
 	va_list ap;
 	va_start(ap, fmt);
 
-	string_buffer_vappendf(self, fmt, ap);
+	VappendfBuffer(self, fmt, ap);
 	va_end(ap);
 }
 
-void string_buffer_vappendf(string_buffer * self, const char * fmt, va_list ap) {
+void VappendfBuffer(string_buffer * self, const char * fmt, va_list ap) {
 #define BUFF_LEN (256)
 	char block[BUFF_LEN];
 	memset(block, '\0', BUFF_LEN);
@@ -43,29 +43,29 @@ void string_buffer_vappendf(string_buffer * self, const char * fmt, va_list ap) 
 	for (int i = 0; i < len; i++) {
 		char c = block[i];
 		if (c == '\0') { break; }
-		string_buffer_append(self, c);
+		AppendBuffer(self, c);
 	}
 
 #undef BUFF_LEN
 }
 
-void string_buffer_appends(string_buffer * self, const char * s) {
+void AppendsBuffer(string_buffer * self, const char * s) {
 	for (int i = 0; ; i++) {
 		char c = s[i];
 		if (c == '\0') break;
-		string_buffer_append(self, c);
+		AppendBuffer(self, c);
 	}
 }
 
-char* string_buffer_release(string_buffer* self) {
-	string_buffer_shrink(self);
+char* ReleaseBuffer(string_buffer* self) {
+	ShrinkBuffer(self);
 	char* ret = self->text;
 	self->text = NULL;
 	MEM_FREE(self);
 	return ret;
 }
 
-void string_buffer_reserve(string_buffer* self) {
+void ReserveBuffer(string_buffer* self) {
 	int newSize = self->capacity + (self->capacity / 2);
 	char* temp = (char*)MEM_REALLOC(self->text, newSize);
 	assert(temp != NULL);
@@ -74,7 +74,7 @@ void string_buffer_reserve(string_buffer* self) {
 	self->capacity = newSize;
 }
 
-void string_buffer_shrink(string_buffer * self) {
+void ShrinkBuffer(string_buffer * self) {
 	if (self->length == 0) {
 		return;
 	}
@@ -85,8 +85,8 @@ void string_buffer_shrink(string_buffer * self) {
 	self->capacity = self->length;
 }
 
-string_buffer* string_buffer_indent(string_buffer* self, int lineIndex, int len) {
-	string_buffer* buf = string_buffer_new();
+string_buffer* IndentBuffer(string_buffer* self, int lineIndex, int len) {
+	string_buffer* buf = NewBuffer();
 	int linec = 0;
 	int pos = 0;
 	for(int i=0; i<self->length; i++) {
@@ -95,21 +95,21 @@ string_buffer* string_buffer_indent(string_buffer* self, int lineIndex, int len)
 			((linec >= lineIndex && linec < (lineIndex + len)) ||
 			(lineIndex == -1 && len == -1))
 		) {
-			string_buffer_appends(buf, "    ");
+			AppendsBuffer(buf, "    ");
 		}
 		if(c == '\n') {
 			linec++;
 			pos = 0;
-			string_buffer_append(buf, '\n');
+			AppendBuffer(buf, '\n');
 		} else {
-			string_buffer_append(buf, c);
+			AppendBuffer(buf, c);
 			pos++;
 		}
 	}
 	return buf;
 }
 
-void string_buffer_delete(string_buffer * self) {
+void DeleteBuffer(string_buffer * self) {
 	MEM_FREE(self->text);
 	MEM_FREE(self);
 }

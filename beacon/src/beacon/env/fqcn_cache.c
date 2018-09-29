@@ -92,17 +92,17 @@ class_ * fqcn_class(fqcn_cache * self, namespace_ * current) {
 }
 
 char* fqcn_cache_tostr(fqcn_cache* self) {
-	string_buffer* sb = string_buffer_new();
+	string_buffer* sb = NewBuffer();
 	for(int i=0; i<self->scope_vec->length; i++) {
 		string_view ev = (string_view)AtVector(self->scope_vec, i);
-		string_buffer_appends(sb, Ref2Str(ev));
+		AppendsBuffer(sb, Ref2Str(ev));
 		if(i == (self->scope_vec->length - 1)) {
 			break;
 		}
-		string_buffer_appends(sb, "::");
+		AppendsBuffer(sb, "::");
 	}
-	string_buffer_appends(sb, Ref2Str(self->namev));
-	return string_buffer_release(sb);
+	AppendsBuffer(sb, Ref2Str(self->namev));
+	return ReleaseBuffer(sb);
 }
 
 void fqcn_cache_delete(fqcn_cache * self) {

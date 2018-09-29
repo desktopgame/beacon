@@ -73,15 +73,15 @@ generic_type* il_factor_invoke_eval(il_factor_invoke * self, enviroment * env, c
 }
 
 char* il_factor_invoke_tostr(il_factor_invoke* self, enviroment* env) {
-	string_buffer* sb = string_buffer_new();
+	string_buffer* sb = NewBuffer();
 	char* invstr = il_factor_tostr(self->receiver, env);
-	string_buffer_appends(sb, invstr);
-	string_buffer_append(sb, '.');
-	string_buffer_appends(sb, Ref2Str(self->namev));
+	AppendsBuffer(sb, invstr);
+	AppendBuffer(sb, '.');
+	AppendsBuffer(sb, Ref2Str(self->namev));
 	il_factor_type_args_tostr(sb, self->type_args, env);
 	il_factor_args_tostr(sb, self->type_args, env);
 	MEM_FREE(invstr);
-	return string_buffer_release(sb);
+	return ReleaseBuffer(sb);
 }
 
 void il_factor_invoke_delete(il_factor_invoke* self) {

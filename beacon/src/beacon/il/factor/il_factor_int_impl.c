@@ -38,12 +38,12 @@ generic_type* il_factor_int_eval(il_factor_int * self, enviroment * env, call_co
 }
 
 char* il_factor_int_tostr(il_factor_int* self, enviroment* env) {
-	string_buffer* sb = string_buffer_new();
+	string_buffer* sb = NewBuffer();
 	char block[32];
 	int res = sprintf(block, "%d", self->value);
 	assert(res >= 0);
-	string_buffer_appends(sb, block);
-	return string_buffer_release(sb);
+	AppendsBuffer(sb, block);
+	return ReleaseBuffer(sb);
 }
 
 void il_factor_int_delete(il_factor_int * self) {

@@ -42,13 +42,13 @@ generic_type* il_factor_property_eval(il_factor_property* self, enviroment* env,
 }
 
 char* il_factor_property_tostr(il_factor_property* self, enviroment* env) {
-	string_buffer* sb = string_buffer_new();
+	string_buffer* sb = NewBuffer();
 	char* name = il_factor_tostr(self->fact, env);
-	string_buffer_appends(sb, name);
-	string_buffer_append(sb, '.');
-	string_buffer_appends(sb, Ref2Str(self->namev));
+	AppendsBuffer(sb, name);
+	AppendBuffer(sb, '.');
+	AppendsBuffer(sb, Ref2Str(self->namev));
 	MEM_FREE(name);
-	return string_buffer_release(sb);
+	return ReleaseBuffer(sb);
 }
 
 void il_factor_property_delete(il_factor_property* self) {

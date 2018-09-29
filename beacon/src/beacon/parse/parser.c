@@ -79,9 +79,9 @@ void parser_clear_buffer(parser* self) {
 
 void parser_append_buffer(parser* self, char ch) {
 	if (self->literal_buffer == NULL) {
-		self->literal_buffer = string_buffer_new();
+		self->literal_buffer = NewBuffer();
 	}
-	string_buffer_append(self->literal_buffer, ch);
+	AppendBuffer(self->literal_buffer, ch);
 }
 
 ast* parser_reduce_buffer(parser* self) {

@@ -94,14 +94,14 @@ generic_type* il_factor_new_instance_eval(il_factor_new_instance * self, envirom
 }
 
 char* il_factor_new_instance_tostr(il_factor_new_instance* self, enviroment* env) {
-	string_buffer* sb = string_buffer_new();
-	string_buffer_appends(sb, "new ");
+	string_buffer* sb = NewBuffer();
+	AppendsBuffer(sb, "new ");
 	char* type = fqcn_cache_tostr(self->fqcnc);
-	string_buffer_appends(sb, type);
+	AppendsBuffer(sb, type);
 	il_factor_type_args_tostr(sb, self->type_args, env);
 	il_factor_args_tostr(sb, self->argument_list, env);
 	MEM_FREE(type);
-	return string_buffer_release(sb);
+	return ReleaseBuffer(sb);
 }
 
 void il_factor_new_instance_delete(il_factor_new_instance * self) {

@@ -39,11 +39,11 @@ static void bc_string_nativeInit(method* parent, frame* fr, enviroment* env) {
 	class_find_field(TYPE_STRING->u.class_, InternString("charArray"), &temp);
 	object* charArr = AtVector(self->u.field_vec, temp);
 	//これを char* へ変換
-	string_buffer* sb = string_buffer_new();
+	string_buffer* sb = NewBuffer();
 	for (int i = 0; i < charArr->native_slot_vec->length; i++) {
 		object* e = (object*)AtVector(charArr->native_slot_vec, i);
 		assert(e->tag == object_char_T);
-		string_buffer_append(sb, e->u.char_);
+		AppendBuffer(sb, e->u.char_);
 	}
 	AssignVector(self->native_slot_vec, 0, sb);
 	self->tag = object_string_T;

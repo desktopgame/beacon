@@ -34,7 +34,7 @@ string_view InternString(const char* str) {
 }
 
 string_view InternString2(string_buffer* buffer) {
-	char* raw = string_buffer_release(buffer);
+	char* raw = ReleaseBuffer(buffer);
 	string_view sv = InternString(raw);
 	MEM_FREE(raw);
 	assert(sv != 0);
@@ -44,10 +44,10 @@ string_view InternString2(string_buffer* buffer) {
 string_view ConcatIntern(const char* head, string_view foot) {
 	//連結する
 	const char* footstr = Ref2Str(foot);
-	string_buffer* buf = string_buffer_new();
-	string_buffer_appends(buf, head);
-	string_buffer_appends(buf, footstr);
-	char* retstr = string_buffer_release(buf);
+	string_buffer* buf = NewBuffer();
+	AppendsBuffer(buf, head);
+	AppendsBuffer(buf, footstr);
+	char* retstr = ReleaseBuffer(buf);
 	string_view ret = InternString(retstr);
 	MEM_FREE(retstr);
 	return ret;

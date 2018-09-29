@@ -39,30 +39,30 @@ void generic_cache_dump(generic_cache * self, int depth) {
 }
 
 char* generic_cache_tostr(generic_cache* self) {
-	string_buffer* sb = string_buffer_new();
+	string_buffer* sb = NewBuffer();
 	//Namespace::Class
 	char* name = fqcn_cache_tostr(self->fqcn);
-	string_buffer_appends(sb, name);
+	AppendsBuffer(sb, name);
 	//Namespace::Class<|
 	if(self->type_args->length > 0) {
-		string_buffer_appends(sb, "<|");
+		AppendsBuffer(sb, "<|");
 	}
 	//Namespace::Class<|...
 	for(int i=0; i<self->type_args->length; i++) {
 		generic_cache* e = (generic_cache*)AtVector(self->type_args, i);
 		char* type = generic_cache_tostr(e);
-		string_buffer_appends(sb, type);
+		AppendsBuffer(sb, type);
 		if(i != (self->type_args->length - 1)) {
-			string_buffer_appends(sb, ", ");
+			AppendsBuffer(sb, ", ");
 		}
 		MEM_FREE(type);
 	}
 	//Namespace::Class<|...|>
 	if(self->type_args->length > 0) {
-		string_buffer_appends(sb, "|>");
+		AppendsBuffer(sb, "|>");
 	}
 	MEM_FREE(name);
-	return string_buffer_release(sb);
+	return ReleaseBuffer(sb);
 }
 
 void generic_cache_delete(generic_cache * self) {

@@ -1238,7 +1238,7 @@ static bool throw_npe(frame* self, object* o) {
 }
 
 static char* create_error_message(frame * self, enviroment* env, int pc) {
-	string_buffer* sbuf = string_buffer_new();
+	string_buffer* sbuf = NewBuffer();
 	line_range* lr = line_range_find(env->line_range_vec, pc);
 	int line = -1;
 	if (lr != NULL) {
@@ -1254,10 +1254,10 @@ static char* create_error_message(frame * self, enviroment* env, int pc) {
 
 	char block[256] = {0};
 	sprintf(block, "file: %s <%d>", env->context_ref->filename, line);
-	string_buffer_appends(sbuf, block);
-	string_buffer_append(sbuf, '\n');
-	string_buffer_appends(sbuf, cstr->text);
-	string_buffer_append(sbuf, '\n');
+	AppendsBuffer(sbuf, block);
+	AppendBuffer(sbuf, '\n');
+	AppendsBuffer(sbuf, cstr->text);
+	AppendBuffer(sbuf, '\n');
 	//スタックトレースの表示
 	type* stackTraceElementT = namespace_get_type(namespace_lang(), InternString("StackTraceElement"));
 	//Exception#stackTraceを取得
@@ -1276,7 +1276,7 @@ static char* create_error_message(frame * self, enviroment* env, int pc) {
 		object* fileNameObj = AtVector(e->u.field_vec, fileNameptr);
 		object* lineIndexObj = AtVector(e->u.field_vec, lineIndexptr);
 		sprintf(block, "    @%d: %s\n", OBJ2INT(lineIndexObj), bc_string_raw(fileNameObj)->text);
-		string_buffer_appends(sbuf, block);
+		AppendsBuffer(sbuf, block);
 	}
-	return string_buffer_release(sbuf);
+	return ReleaseBuffer(sbuf);
 }

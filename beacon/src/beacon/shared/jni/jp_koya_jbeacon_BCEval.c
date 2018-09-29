@@ -276,10 +276,10 @@ static void bc_write_symbol(JNIEnv* env, NumericMap* nmap, frame* fr, jobject ta
 
 static void bc_eval_release(JNIEnv* env, class_loader* cll, frame* fr) {
 	if(bc_error_last()) {
-		string_buffer* sbuf = string_buffer_new();
-		string_buffer_appends(sbuf, "\n");
-		string_buffer_appends(sbuf, Ref2Str(vm_error_message()));
-		char* mes = string_buffer_release(sbuf);
+		string_buffer* sbuf = NewBuffer();
+		AppendsBuffer(sbuf, "\n");
+		AppendsBuffer(sbuf, Ref2Str(vm_error_message()));
+		char* mes = ReleaseBuffer(sbuf);
 		jclass bc_runtime_exc_cls = (*env)->FindClass(env, "jp/koya/jbeacon/BCRuntimeException");
 		(*env)->ThrowNew(env, bc_runtime_exc_cls, mes);
 		MEM_FREE(mes);

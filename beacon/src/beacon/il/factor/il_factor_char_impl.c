@@ -33,11 +33,11 @@ generic_type* il_factor_char_eval(il_factor_char * self, enviroment * env, call_
 }
 
 char* il_factor_char_tostr(il_factor_char* self, enviroment* env) {
-	string_buffer* sb = string_buffer_new();
-	string_buffer_append(sb, '\'');
-	string_buffer_append(sb, self->value);
-	string_buffer_append(sb, '\'');
-	return string_buffer_release(sb);
+	string_buffer* sb = NewBuffer();
+	AppendBuffer(sb, '\'');
+	AppendBuffer(sb, self->value);
+	AppendBuffer(sb, '\'');
+	return ReleaseBuffer(sb);
 }
 
 void il_factor_char_delete(il_factor_char * self) {

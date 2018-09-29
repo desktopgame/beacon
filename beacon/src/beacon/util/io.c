@@ -86,7 +86,7 @@ bool DeleteFile(const char * filename) {
 
 char * ReadText(const char * filename) {
 	assert(ExistsFile(filename));
-	string_buffer* buff = string_buffer_new();
+	string_buffer* buff = NewBuffer();
 #if defined(_MSC_VER)
 	FILE* fp;
 	errno_t err = fopen_s(&fp, filename, "r");
@@ -105,9 +105,9 @@ char * ReadText(const char * filename) {
 		if (c == EOF) {
 			break;
 		}
-		string_buffer_append(buff, c);
+		AppendBuffer(buff, c);
 	}
-	char* ret = string_buffer_release(buff);
+	char* ret = ReleaseBuffer(buff);
 	fclose(fp);
 	return ret;
 }
@@ -175,22 +175,22 @@ char * GetAbsolutePath(const char * target) {
 }
 
 char* ResolveScriptPath(const char* target) {
-	string_buffer* sb = string_buffer_new();
+	string_buffer* sb = NewBuffer();
 	char full[256] = {0};
 	GetCurrentPath(full, 256);
-	string_buffer_appends(sb, full);
-	string_buffer_appends(sb, "script-lib/");
-	string_buffer_appends(sb, target);
-	return string_buffer_release(sb);
+	AppendsBuffer(sb, full);
+	AppendsBuffer(sb, "script-lib/");
+	AppendsBuffer(sb, target);
+	return ReleaseBuffer(sb);
 }
 
 Vector* GetFiles(const char* dirname) {
 #if defined(_MSC_VER)
 	//ワイルドカード指定ですべてのファイルを取得する
-	string_buffer* buf = string_buffer_new();
-	string_buffer_appends(buf, dirname);
-	string_buffer_appends(buf, "/*.*");
-	char* pattern = string_buffer_release(buf);
+	string_buffer* buf = NewBuffer();
+	AppendsBuffer(buf, dirname);
+	AppendsBuffer(buf, "/*.*");
+	char* pattern = ReleaseBuffer(buf);
 	Vector* v = NewVector();
 	WIN32_FIND_DATA ffd;
 	HANDLE h = FindFirstFile(pattern, &ffd);
@@ -265,11 +265,11 @@ bool IsMatchExtension(const char* filename, const char* ext) {
 }
 
 char* ConcatPath(const char* a, const char* b) {
-	string_buffer* buf = string_buffer_new();
-	string_buffer_appends(buf, a);
-	string_buffer_append(buf, '/');
-	string_buffer_appends(buf, b);
-	return string_buffer_release(buf);
+	string_buffer* buf = NewBuffer();
+	AppendsBuffer(buf, a);
+	AppendBuffer(buf, '/');
+	AppendsBuffer(buf, b);
+	return ReleaseBuffer(buf);
 }
 
 //private

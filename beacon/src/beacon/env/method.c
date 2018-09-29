@@ -150,11 +150,11 @@ void method_delete(method * self) {
 }
 
 string_view method_mangle(method* self) {
-	string_buffer* ret = string_buffer_new();
-	string_buffer_appends(ret, Ref2Str(self->namev));
+	string_buffer* ret = NewBuffer();
+	AppendsBuffer(ret, Ref2Str(self->namev));
 	//引数が一つもないので終了
 	if(self->parameters->length == 0) {
-		char* raw = string_buffer_release(ret);
+		char* raw = ReleaseBuffer(ret);
 		string_view sv = InternString(raw);
 		MEM_FREE(raw);
 		return sv;
@@ -162,14 +162,14 @@ string_view method_mangle(method* self) {
 	for(int i=0; i<self->parameters->length; i++) {
 		parameter* e = (parameter*)AtVector(self->parameters, i);
 		generic_type* gt = e->gtype;
-		string_buffer_append(ret, '_');
+		AppendBuffer(ret, '_');
 		if(gt->core_type == NULL) {
 			//ジェネリックの場合は methodname_c0 のように
 			//何番目の型変数であるかを入れる
 			if(gt->tag == generic_type_tag_class_T) {
-				string_buffer_append(ret, 'c');
+				AppendBuffer(ret, 'c');
 			} else if(gt->tag == generic_type_tag_method_T) {
-				string_buffer_append(ret, 'm');
+				AppendBuffer(ret, 'm');
 			} else {
 				assert(false);
 			}
@@ -177,22 +177,22 @@ string_view method_mangle(method* self) {
 			char buff[256];
 			memset(buff, '\0', 256);
 			sprintf(buff, "%d", gt->virtual_type_index);
-			string_buffer_appends(ret, buff);
+			AppendsBuffer(ret, buff);
 		} else {
-			string_buffer_appends(ret, Ref2Str(type_full_name(gt->core_type)));
+			AppendsBuffer(ret, Ref2Str(type_full_name(gt->core_type)));
 		}
 	}
-	char* raw = string_buffer_release(ret);
+	char* raw = ReleaseBuffer(ret);
 	string_view sv = InternString(raw);
 	MEM_FREE(raw);
 	return sv;
 }
 
 string_view method_unique(method* self) {
-	string_buffer* ret = string_buffer_new();
-	string_buffer_appends(ret, Ref2Str(type_full_name(self->parent)));
-	string_buffer_appends(ret, Ref2Str(method_mangle(self)));
-	char* raw = string_buffer_release(ret);
+	string_buffer* ret = NewBuffer();
+	AppendsBuffer(ret, Ref2Str(type_full_name(self->parent)));
+	AppendsBuffer(ret, Ref2Str(method_mangle(self)));
+	char* raw = ReleaseBuffer(ret);
 	string_view sv = InternString(raw);
 	MEM_FREE(raw);
 	return sv;

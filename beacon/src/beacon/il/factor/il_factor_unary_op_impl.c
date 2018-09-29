@@ -123,12 +123,12 @@ void il_factor_unary_op_delete(il_factor_unary_op * self) {
 }
 
 char* il_factor_unary_op_tostr_simple(il_factor_unary_op* self, enviroment* env) {
-	string_buffer* sb = string_buffer_new();
+	string_buffer* sb = NewBuffer();
 	char* a = il_factor_tostr(self->a, env);
-	string_buffer_appendf(sb, "%s", operator_tostring(self->type));
-	string_buffer_appends(sb, a);
+	AppendfBuffer(sb, "%s", operator_tostring(self->type));
+	AppendsBuffer(sb, a);
 	MEM_FREE(a);
-	return string_buffer_release(sb);
+	return ReleaseBuffer(sb);
 }
 
 int il_factor_unary_op_index(il_factor_unary_op* self, enviroment* env, call_context* cctx) {

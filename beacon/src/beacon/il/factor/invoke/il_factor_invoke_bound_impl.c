@@ -50,11 +50,11 @@ generic_type* il_factor_invoke_bound_eval(il_factor_invoke_bound * self, envirom
 }
 
 char* il_factor_invoke_bound_tostr(il_factor_invoke_bound* self, enviroment* env) {
-	string_buffer* sb = string_buffer_new();
-	string_buffer_appends(sb, Ref2Str(self->namev));
+	string_buffer* sb = NewBuffer();
+	AppendsBuffer(sb, Ref2Str(self->namev));
 	il_factor_type_args_tostr(sb, self->type_args, env);
 	il_factor_args_tostr(sb, self->type_args, env);
-	return string_buffer_release(sb);
+	return ReleaseBuffer(sb);
 }
 
 void il_factor_invoke_bound_delete(il_factor_invoke_bound* self) {

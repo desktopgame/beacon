@@ -87,14 +87,14 @@ object * object_string_malloc(const char * s, const char* filename, int lineno) 
 	generic_type_addargs(arr->gtype, GENERIC_CHAR);
 	//ボックス化
 	const char* itr = s;
-	string_buffer* sb = string_buffer_new();
+	string_buffer* sb = NewBuffer();
 	while ((*itr) != '\0') {
 		char e = (*itr);
 		PushVector(arr->native_slot_vec, object_char_malloc(e, filename, lineno));
 		itr++;
-		string_buffer_append(sb, e);
+		AppendBuffer(sb, e);
 	}
-	string_buffer_shrink(sb);
+	ShrinkBuffer(sb);
 	//String#charArrayを埋める
 	int temp = 0;
 	class_find_field(strType->u.class_, InternString("charArray"), &temp);
@@ -281,7 +281,7 @@ void object_delete(object * self) {
 	if (self->tag == object_string_T) {
 		string_buffer* sb = AtVector(self->native_slot_vec, 0);
 		RemoveVector(self->native_slot_vec, 0);
-		string_buffer_delete(sb);
+		DeleteBuffer(sb);
 	}
 	if (self->tag == object_string_T ||
 		self->tag == object_ref_T ||
