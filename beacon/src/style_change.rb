@@ -257,7 +257,7 @@ commands = {
         changed = gets.lstrip.rstrip
         edited = functions_edits.last.map{|e| e.clone }
         edited.select{|e| e.name.include?(selector)}.each {|e| e.name = e.name.gsub(selector, changed)}
-        diff(functions_edits.last, edited).each{|e| puts e.name + " => " + e.name.gsub(selector, changed)}
+        functions_edits.last.select{|e| e.name.include?(selector)}.each{|e| puts e.name + " => " + e.name.gsub(selector, changed)}
         functions_edits << edited
     end,
     "commit" => lambda do
