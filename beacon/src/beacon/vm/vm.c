@@ -463,7 +463,7 @@ static void vm_run(frame * self, enviroment * env, int pos, int deferStart) {
 			case OP_TRY_ENTER:
 			{
 				sg_thread* th = sg_thread_current(script_context_get_current());
-				vm_trace* trace = vm_trace_new(self);
+				vm_trace* trace = NewVMTrace(self);
 				trace->pc = IDX; //goto
 				PushVector(th->trace_stack, trace);
 				//goto
@@ -477,7 +477,7 @@ static void vm_run(frame * self, enviroment * env, int pos, int deferStart) {
 			{
 				sg_thread* th = sg_thread_current(script_context_get_current());
 				vm_trace* trace = (vm_trace*)PopVector(th->trace_stack);
-				vm_trace_delete(trace);
+				DeleteVMTrace(trace);
 				break;
 			}
 			case OP_TRY_CLEAR:
@@ -485,7 +485,7 @@ static void vm_run(frame * self, enviroment * env, int pos, int deferStart) {
 				sg_thread* th = sg_thread_current(script_context_get_current());
 				vm_catch(self);
 				vm_trace* trace = (vm_trace*)PopVector(th->trace_stack);
-				vm_trace_delete(trace);
+				DeleteVMTrace(trace);
 				break;
 			}
 			case OP_HEXCEPTION:

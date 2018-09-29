@@ -17,11 +17,11 @@ typedef struct vm_trace {
  * @param v
  * @return
  */
-vm_trace* vm_trace_new(struct frame* v);
+vm_trace* NewVMTrace(struct frame* v);
 
 /**
  * トレースを解放します.
  * @param self
  */
-void vm_trace_delete(vm_trace* self);
+void DeleteVMTrace(vm_trace* self);
 #endif // !SIGNAL_VM_TRACE_H
