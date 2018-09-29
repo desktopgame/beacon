@@ -21,5 +21,5 @@ generic_type* il_factor_null_eval(void * empty, enviroment * env, call_context* 
 }
 
 char* il_factor_null_tostr(void* empty, enviroment* env) {
-	return text_strdup("null");
+	return Strdup("null");
 }

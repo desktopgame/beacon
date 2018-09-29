@@ -31,7 +31,7 @@ generic_type* il_factor_super_eval(il_factor_super * self, enviroment * env, cal
 }
 
 char* il_factor_super_tostr(il_factor_super* self, enviroment* env) {
-	return text_strdup("super");
+	return Strdup("super");
 }
 
 void il_factor_super_delete(il_factor_super * self) {

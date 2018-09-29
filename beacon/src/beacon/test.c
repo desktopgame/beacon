@@ -76,7 +76,7 @@ static void test_semanticsImpl(const char* dirname, bool require, char** outFile
 		//enviromentの削除後も静的フィールドが定数を掴んだまま
 		script_context_static_clear(script_context_get_current());
 	}
-	(*outFileName) = text_strdup(filename);
+	(*outFileName) = Strdup(filename);
 	(*outFail) = fail;
 	DeleteFiles(files);
 	//元に戻す
@@ -104,7 +104,7 @@ static void test_semanticsImpl(const char* dirname, bool require, char** outFile
 		bool result = eval_file(e->filename);
 		rewind(out);
 		while(!feof(out)) {
-			char* line = text_freadline(out);
+			char* line = FreadLine(out);
 			fprintf(STDOUT, "    %s\n", line);
 			MEM_FREE(line);
 		}
@@ -120,7 +120,7 @@ static void test_semanticsImpl(const char* dirname, bool require, char** outFile
 		//enviromentの削除後も静的フィールドが定数を掴んだまま
 		script_context_static_clear(script_context_get_current());
 	}
-	(*outFileName) = text_strdup(filename);
+	(*outFileName) = Strdup(filename);
 	(*outFail) = fail;
 	DeleteFiles(files);
 	//元に戻す

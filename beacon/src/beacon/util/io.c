@@ -156,7 +156,7 @@ char * GetAbsolutePath(const char * target) {
 #if defined(_WIN32)
 	char full[_MAX_PATH];
 	if (_fullpath(full, target, _MAX_PATH) != NULL) {
-		char* ret = text_strdup(full);
+		char* ret = Strdup(full);
 		char* iter = ret;
 		while ((*iter) != '\0') {
 			if ((*iter) == '\\') {
@@ -170,7 +170,7 @@ char * GetAbsolutePath(const char * target) {
 #else
 	char full[256] = {0};
 	GetCurrentPath(full, 256);
-	return text_concat(full, target);
+	return ConcatString(full, target);
 #endif
 }
 

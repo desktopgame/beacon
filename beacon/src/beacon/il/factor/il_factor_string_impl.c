@@ -35,7 +35,7 @@ generic_type* il_factor_string_eval(il_factor_string * self, enviroment * env, c
 }
 
 char* il_factor_string_tostr(il_factor_string* self, enviroment* env) {
-	return text_strdup(Ref2Str(self->valuev));
+	return Strdup(Ref2Str(self->valuev));
 }
 
 void il_factor_string_delete(il_factor_string * self) {

@@ -685,8 +685,8 @@ int yyerror(char * err_str) {
 	p->result = parse_syntax_error_T;
 	p->error_line_index = yylloc.last_line;
 	p->error_column_index = yylloc.last_column;
-	p->error_message = text_strdup(err_str);
-	p->error_line_text  = text_lineat(yaccSourceBuffer, yylloc.last_line);
+	p->error_message = Strdup(err_str);
+	p->error_line_text  = GetLineAt(yaccSourceBuffer, yylloc.last_line);
 	return 1;
 }
 

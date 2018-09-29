@@ -66,7 +66,7 @@ class_loader* class_loader_new(const char* filename, content_type type) {
 	ret->env = enviroment_new();
 	ret->level = 0;
 	ret->type_cache_vec = NewVector();
-	ret->filename = text_strdup(filename);
+	ret->filename = Strdup(filename);
 	ret->env->context_ref = ret;
 	return ret;
 }

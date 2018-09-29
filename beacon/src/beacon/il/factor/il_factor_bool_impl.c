@@ -30,7 +30,7 @@ generic_type* il_factor_bool_eval(il_factor_bool * self, enviroment * env, call_
 }
 
 char* il_factor_bool_tostr(il_factor_bool* self, enviroment* env) {
-	return text_strdup(self->a ? "true" : "false");
+	return Strdup(self->a ? "true" : "false");
 }
 
 void il_factor_bool_delete(il_factor_bool * self) {

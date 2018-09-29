@@ -12,20 +12,14 @@
  * コンパイラごとの差分を吸収するために提供されます。
  * @param source
  */
-char* text_strdup(const char* source);
-
-/**
- * 1行読み込んで返します.
- * @return 呼び出し側で開放してください.
- */
-char* text_gets();
+char* Strdup(const char* source);
 
 /**
  * strが空白文字だけで構成されるなら true.
  * @param str
  * @return
  */
-bool text_white(const char* str);
+bool IsBlankText(const char* str);
 
 /**
  * 二つの文字列を連結して返します.
@@ -33,7 +27,7 @@ bool text_white(const char* str);
  * @param b 呼び出し側で開放してください.
  * @return 呼び出し側で開放してください.
  */
-char* text_concat(const char* a, const char* b);
+char* ConcatString(const char* a, const char* b);
 
 /**
  * 指定の位置の行を取り出します.
@@ -41,14 +35,14 @@ char* text_concat(const char* a, const char* b);
  * @param lineno
  * @return 呼び出し側で開放してください。
  */
-char* text_lineat(const char* src, int lineno);
+char* GetLineAt(const char* src, int lineno);
 
 /**
  * v の中の文字列を全て連結します.
  * @param v 呼び出し側で開放してください.
  * @return 呼び出し側で開放してください.
  */
-char* text_sum(Vector* v, char* join);
+char* JoinString(Vector* v, char* join);
 
 /**
  * ソースにテキストが含まれるなら true.
@@ -56,18 +50,18 @@ char* text_sum(Vector* v, char* join);
  * @param text
  * @return
  */
-bool text_contains(const char* source, const char* text);
+bool IsIncluded(const char* source, const char* text);
 
 /**
  * 標準入力から一行読み込んで返します.
  * @return
  */
-char* text_readline();
+char* ReadLine();
 
 /**
  * 指定のファイルから一行読み込みます.
  * @param fp
  * @return
  */
-char* text_freadline(FILE* fp);
+char* FreadLine(FILE* fp);
 #endif // !SIGNAL_UTIL_TEXT_H

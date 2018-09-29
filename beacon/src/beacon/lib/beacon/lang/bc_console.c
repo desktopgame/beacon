@@ -75,7 +75,7 @@ static void bc_console_read(method* parent, frame* fr, enviroment* env) {
 }
 
 static void bc_console_readLine(method* parent, frame* fr, enviroment* env) {
-	char* s = text_gets();
+	char* s = ReadLine();
 	object* o = object_string_new(s);
 	PushVector(fr->value_stack, o);
 }

@@ -71,7 +71,7 @@ generic_type* il_factor_variable_local_eval(il_factor_variable_local * self, env
 }
 
 char* il_factor_variable_local_tostr(il_factor_variable_local * self, enviroment * env) {
-	return text_strdup(Ref2Str(self->namev));
+	return Strdup(Ref2Str(self->namev));
 }
 
 void il_factor_variable_local_delete(il_factor_variable_local* self) {
