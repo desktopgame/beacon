@@ -209,6 +209,7 @@ def rename(name)
     buf.gsub!("Ast", "AST")
     buf.gsub!("Fqcn", "FQCN")
     buf.gsub!("Vm", "VM")
+    buf.gsub!("Il", "IL")
     #newが含まれる場合にも例外
     if(buf.start_with?("New") && buf.include?("AST")) then
         pos = buf.index("AST")
@@ -216,6 +217,13 @@ def rename(name)
         first = buf.slice(0, 3)
         rest = buf.slice(pos, buf.length - pos)
         buf = first + rest + ast_type
+    elsif(buf.include?("New") && buf.include?("IL")) then
+        pos = buf.index("IL")
+        pos2 = buf.index("New")
+        ast_type = buf.slice(pos2, pos - pos2)
+        first = buf.slice(0, pos2)
+        rest = buf.slice(pos, buf.length - pos)
+        buf = ast_type + rest + first
     end
     buf
 end
