@@ -21,7 +21,7 @@ il_stmt_assert* NewILAssert() {
 	return ret;
 }
 
-void il_stmt_assert_generate(il_stmt_assert* self, enviroment* env, call_context* cctx) {
+void GenerateILAssert(il_stmt_assert* self, enviroment* env, call_context* cctx) {
 	//https://code.i-harness.com/ja/q/2a1650
 	label* gt = AddLabelOpcodeBuf(env->buf, 0);
 	GenerateILFactor(self->condition, env, cctx);

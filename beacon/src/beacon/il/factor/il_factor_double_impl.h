@@ -23,6 +23,6 @@ generic_type* EvalILDouble(il_factor_double* self, struct enviroment* env, call_
 
 char* ILDoubleToString(il_factor_double* self, struct enviroment* env);
 
-void il_factor_double_delete(il_factor_double* self);
+void DeleteILDouble(il_factor_double* self);
 
 #endif // !SIGNAL_IL_IL_FACTOR_DOUBLE_H

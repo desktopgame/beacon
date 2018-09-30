@@ -12,13 +12,13 @@ typedef struct il_factor_excor_op {
 	int operator_index;
 } il_factor_excor_op;
 
-il_factor_excor_op* il_factor_excor_op_new(operator_type type);
+il_factor_excor_op* NewILExcorOp(operator_type type);
 
-struct generic_type* il_factor_excor_op_eval(il_factor_excor_op * self, struct enviroment * env, call_context* cctx);
+struct generic_type* EvalILExcorOp(il_factor_excor_op * self, struct enviroment * env, call_context* cctx);
 
 void il_factor_excor_op_generate(il_factor_excor_op* self, struct enviroment* env, call_context* cctx);
 
-void il_factor_excor_OP_LOAD(il_factor_excor_op* self, struct enviroment* env, call_context* cctx);
+void LoadILExcorOp(il_factor_excor_op* self, struct enviroment* env, call_context* cctx);
 
 void il_factor_excor_op_delete(il_factor_excor_op* self);
 

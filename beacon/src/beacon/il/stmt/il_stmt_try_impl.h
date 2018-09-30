@@ -26,7 +26,7 @@ il_stmt_catch* NewILCatch(string_view namev);
 
 void GenerateILTry(il_stmt_try* self, struct enviroment* env, call_context* cctx);
 
-void il_stmt_catch_generate(il_stmt_catch* self, struct enviroment* env, call_context* cctx);
+void GenerateILCatch(il_stmt_catch* self, struct enviroment* env, call_context* cctx);
 
 void LoadILTry(il_stmt_try* self, struct enviroment* env, call_context* cctx);
 

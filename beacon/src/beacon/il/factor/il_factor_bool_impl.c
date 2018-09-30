@@ -17,7 +17,7 @@ il_factor_bool * NewILBool(bool b) {
 	return ret;
 }
 
-void il_factor_bool_generate(il_factor_bool * self, enviroment * env, call_context* cctx) {
+void GenerateILBool(il_factor_bool * self, enviroment * env, call_context* cctx) {
 	if (self->a) {
 		AddOpcodeBuf(env->buf, OP_TRUE);
 	} else {

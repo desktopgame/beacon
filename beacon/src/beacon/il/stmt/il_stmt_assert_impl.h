@@ -15,7 +15,7 @@ il_stmt* WrapILAssert(il_stmt_assert* self);
 
 il_stmt_assert* NewILAssert();
 
-void il_stmt_assert_generate(il_stmt_assert* self, struct enviroment* env, call_context* cctx);
+void GenerateILAssert(il_stmt_assert* self, struct enviroment* env, call_context* cctx);
 
 void LoadILAssert(il_stmt_assert* self, struct enviroment* env, call_context* cctx);
 

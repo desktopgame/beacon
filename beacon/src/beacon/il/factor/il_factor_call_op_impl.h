@@ -35,11 +35,11 @@ typedef struct il_factor_call_op {
 	} u;
 } il_factor_call_op;
 
-il_factor* il_factor_wrap_call_op(il_factor_call_op* self);
+il_factor* WrapCallOp(il_factor_call_op* self);
 
 il_factor_call_op* NewILCallOp();
 
-void il_factor_call_OP_LOAD(il_factor_call_op* self, struct enviroment* env, call_context* cctx);
+void LoadCallOp(il_factor_call_op* self, struct enviroment* env, call_context* cctx);
 
 struct generic_type* EvalILCallOp(il_factor_call_op* self, struct enviroment* env, call_context* cctx);
 

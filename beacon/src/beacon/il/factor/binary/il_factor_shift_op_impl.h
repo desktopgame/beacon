@@ -11,7 +11,7 @@ typedef struct il_factor_shift_op {
 	int operator_index;
 } il_factor_shift_op;
 
-il_factor_shift_op* il_factor_shift_op_new(operator_type type);
+il_factor_shift_op* NewILShiftOp(operator_type type);
 
 struct generic_type* il_factor_shift_op_eval(il_factor_shift_op * self, struct enviroment * env, call_context* cctx);
 

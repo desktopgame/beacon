@@ -9,5 +9,5 @@ void il_stmt_continue_generate(void* empty, struct enviroment* env, call_context
 
 void LoadILContinue(void* empty, struct enviroment* env, call_context* cctx);
 
-void il_stmt_continue_delete(void* empty);
+void DeleteILContinue(void* empty);
 #endif // !SIGNAL_IL_IL_STMT_CONTINUE_H

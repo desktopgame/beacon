@@ -8,7 +8,7 @@
 #include "../../../env/TYPE_IMPL.h"
 #include "../../../env/operator_overload.h"
 
-il_factor_excor_op* il_factor_excor_op_new(operator_type type) {
+il_factor_excor_op* NewILExcorOp(operator_type type) {
 	il_factor_excor_op* ret = (il_factor_excor_op*)MEM_MALLOC(sizeof(il_factor_excor_op));
 	ret->type = type;
 	ret->parent = NULL;
@@ -16,7 +16,7 @@ il_factor_excor_op* il_factor_excor_op_new(operator_type type) {
 	return ret;
 }
 
-generic_type* il_factor_excor_op_eval(il_factor_excor_op * self, enviroment * env, call_context* cctx) {
+generic_type* EvalILExcorOp(il_factor_excor_op * self, enviroment * env, call_context* cctx) {
 	generic_type* lgtype = EvalILFactor(self->parent->left, env, cctx);
 	generic_type* rgtype = EvalILFactor(self->parent->right, env, cctx);
 	assert(lgtype != NULL);
@@ -59,7 +59,7 @@ void il_factor_excor_op_generate(il_factor_excor_op* self, enviroment* env, call
 	}
 }
 
-void il_factor_excor_OP_LOAD(il_factor_excor_op* self, enviroment* env, call_context* cctx) {
+void LoadILExcorOp(il_factor_excor_op* self, enviroment* env, call_context* cctx) {
 	if(!il_factor_binary_op_int_int(self->parent, env, cctx) &&
 	   !il_factor_binary_op_bool_bool(self->parent, env, cctx)) {
 	self->operator_index = il_factor_binary_op_index(self->parent, env, cctx);

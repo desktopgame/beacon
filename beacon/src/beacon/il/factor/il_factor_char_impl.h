@@ -15,7 +15,7 @@ il_factor* WrapILChar(il_factor_char* self);
 
 il_factor_char* NewILChar(char c);
 
-void il_factor_char_generate(il_factor_char* self, struct enviroment* env, call_context* cctx);
+void GenerateILChar(il_factor_char* self, struct enviroment* env, call_context* cctx);
 
 void LoadILChar(il_factor_char* self, struct enviroment* env, call_context* cctx);
 

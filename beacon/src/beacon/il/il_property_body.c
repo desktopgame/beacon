@@ -6,7 +6,7 @@
 
 static void il_property_body_stmt_delete(VectorItem item);
 
-il_property_body* il_property_body_malloc(il_property_body_tag tag, const char* filename, int lineno) {
+il_property_body* MallocILPropertyBody(il_property_body_tag tag, const char* filename, int lineno) {
 	il_property_body* ret = mem_malloc(sizeof(il_property_body), filename, lineno);
 	ret->statement_list = NewVector();
 	ret->tag = tag;

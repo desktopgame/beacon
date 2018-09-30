@@ -34,7 +34,7 @@ char* ILSuperToString(il_factor_super* self, enviroment* env) {
 	return Strdup("super");
 }
 
-void il_factor_super_delete(il_factor_super * self) {
+void DeleteILSuper(il_factor_super * self) {
 	MEM_FREE(self);
 }
 

@@ -157,7 +157,7 @@ static il_stmt* CLIL_bodyImpl(class_loader* self, ast* asource) {
 		}
 		case AST_INJECT_JNI_VALUE_T:
 		{
-			il_stmt_inject_jni* jni = il_stmt_inject_jni_new(asource->u.stringv_value);
+			il_stmt_inject_jni* jni = NewILInjectJNI(asource->u.stringv_value);
 			ast* afact = FirstAST(asource);
 			jni->fact = CLIL_factor(self, afact);
 			jni->fact->lineno = 0;

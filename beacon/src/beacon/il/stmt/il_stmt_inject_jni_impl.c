@@ -11,7 +11,7 @@ il_stmt* il_stmt_wrap_inject_jni(il_stmt_inject_jni* self) {
 	return ret;
 }
 
-il_stmt_inject_jni* il_stmt_inject_jni_new(string_view namev) {
+il_stmt_inject_jni* NewILInjectJNI(string_view namev) {
 	il_stmt_inject_jni* ret = (il_stmt_inject_jni*)MEM_MALLOC(sizeof(il_stmt_inject_jni));
 	ret->namev = namev;
 	ret->fact = NULL;

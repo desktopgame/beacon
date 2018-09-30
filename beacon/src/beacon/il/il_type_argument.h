@@ -23,7 +23,7 @@ il_type_argument* NewILTypeArgument();
  * 全ての型実引数を出力します.
  * @param iltype_args
  */
-void il_type_argument_print(Vector* iltype_args);
+void PrintILTypeArgument(Vector* iltype_args);
 
 /**
  * @param iltype_args

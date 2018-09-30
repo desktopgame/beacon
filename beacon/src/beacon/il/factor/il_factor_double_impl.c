@@ -44,6 +44,6 @@ char* ILDoubleToString(il_factor_double* self, enviroment* env) {
 	return ReleaseBuffer(sb);
 }
 
-void il_factor_double_delete(il_factor_double * self) {
+void DeleteILDouble(il_factor_double * self) {
 	MEM_FREE(self);
 }

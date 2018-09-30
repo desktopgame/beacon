@@ -56,7 +56,7 @@ void AddMethodILType(il_type * self, il_method * method) {
 	if (self->tag == ilTYPE_CLASS_T) {
 		AddMethodILClass(self->u.class_, method);
 	} else if (self->tag == ilTYPE_INTERFACE_T) {
-		il_interface_add_method(self->u.interface_, method);
+		AddMethodILInterface(self->u.interface_, method);
 	}
 }
 

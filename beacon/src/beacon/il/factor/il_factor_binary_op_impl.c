@@ -79,22 +79,22 @@ void il_factor_binary_OP_LOAD(il_factor_binary_op * self, enviroment * env, call
 		il_factor_compare_OP_LOAD(comp, env, cctx);
 	} else if(operator_bit(self->type) || operator_logic(self->type)) {
 		self->category = OPERATOR_CLOGIC_T;
-		il_factor_logic_op* logic = il_factor_logic_op_new(self->type);
+		il_factor_logic_op* logic = NewILLogicOp(self->type);
 		logic->parent = self;
 		self->u.logic_op = logic;
 		il_factor_logic_OP_LOAD(logic, env, cctx);
 	} else if(operator_shift(self->type)) {
 		self->category = OPERATOR_CSHIFT_T;
-		il_factor_shift_op* shift = il_factor_shift_op_new(self->type);
+		il_factor_shift_op* shift = NewILShiftOp(self->type);
 		shift->parent = self;
 		self->u.shift_op = shift;
 		il_factor_shift_OP_LOAD(shift, env, cctx);
 	} else if(self->type == OPERATOR_EXCOR_T) {
 		self->category = OPERATOR_CEXCOR_T;
-		il_factor_excor_op* excor = il_factor_excor_op_new(self->type);
+		il_factor_excor_op* excor = NewILExcorOp(self->type);
 		excor->parent = self;
 		self->u.excor_op = excor;
-		il_factor_excor_OP_LOAD(excor, env, cctx);
+		LoadILExcorOp(excor, env, cctx);
 	} else {
 		assert(false);
 	}
@@ -117,7 +117,7 @@ generic_type* il_factor_binary_op_eval(il_factor_binary_op * self, enviroment * 
 			ret = il_factor_shift_op_eval(self->u.shift_op, env, cctx);
 			break;
 		case OPERATOR_CEXCOR_T:
-			ret = il_factor_excor_op_eval(self->u.excor_op, env, cctx);
+			ret = EvalILExcorOp(self->u.excor_op, env, cctx);
 			break;
 	}
 //	assert(ret != NULL);

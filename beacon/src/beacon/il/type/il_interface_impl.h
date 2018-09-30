@@ -42,7 +42,7 @@ void il_interface_add_property(il_interface* self, struct il_property* prop);
  * @param self
  * @param method
  */
-void il_interface_add_method(il_interface* self, struct il_method* method);
+void AddMethodILInterface(il_interface* self, struct il_method* method);
 
 /**
  * インターフェースを開放します.

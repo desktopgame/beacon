@@ -19,7 +19,7 @@ il_factor_char * NewILChar(char c) {
 	return ret;
 }
 
-void il_factor_char_generate(il_factor_char * self, enviroment * env, call_context* cctx) {
+void GenerateILChar(il_factor_char * self, enviroment * env, call_context* cctx) {
 	int index = AddCCharEnviroment(env, self->value);
 	AddOpcodeBuf(env->buf, OP_CCONST);
 	AddOpcodeBuf(env->buf, index);

@@ -22,7 +22,7 @@ static void il_factor_subscript_check(il_factor_call_op* self, enviroment* env, 
 static void il_factor_call_op_argument_delete(VectorItem item);
 static void il_factor_call_op_type_argument_delete(VectorItem item);
 
-il_factor* il_factor_wrap_call_op(il_factor_call_op* self) {
+il_factor* WrapCallOp(il_factor_call_op* self) {
 	il_factor* ret = il_factor_new(ILFACTOR_CALL_OP_T);
 	ret->u.call_ = self;
 	self->parent = ret;
@@ -37,7 +37,7 @@ il_factor_call_op* NewILCallOp() {
 	return ret;
 }
 
-void il_factor_call_OP_LOAD(il_factor_call_op* self, enviroment* env, call_context* cctx) {
+void LoadCallOp(il_factor_call_op* self, enviroment* env, call_context* cctx) {
 	//argumentlistはサブクラスに渡しちゃってる
 	//LoadILFactor(self->receiver, env, ilctx, eh);
 	il_factor_call_op_check(self, env, cctx);
@@ -67,7 +67,7 @@ generic_type* EvalILCallOp(il_factor_call_op* self, enviroment* env, call_contex
 }
 
 char* il_factor_call_op_to_str(il_factor_call_op* self, enviroment* env) {
-//	il_factor_call_OP_LOAD(self, env);
+//	LoadCallOp(self, env);
 	if(self->type == ILCALL_TYPE_INVOKE_T) {
 		return ILInvokeToString(self->u.invoke_, env);
 	} else if(self->type == ILCALL_TYPE_INVOKE_BOUND_T) {
@@ -79,7 +79,7 @@ char* il_factor_call_op_to_str(il_factor_call_op* self, enviroment* env) {
 }
 
 void il_factor_call_op_generate(il_factor_call_op* self, enviroment* env, call_context* cctx) {
-	il_factor_call_OP_LOAD(self, env, cctx);
+	LoadCallOp(self, env, cctx);
 	if(self->type == ILCALL_TYPE_INVOKE_T) {
 		return il_factor_invoke_generate(self->u.invoke_, env, cctx);
 	} else if(self->type == ILCALL_TYPE_INVOKE_STATIC_T) {

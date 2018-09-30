@@ -59,7 +59,7 @@ void GenerateILStmt(il_stmt * self, struct enviroment* env, call_context* cctx) 
 			GenerateILThrow(self->u.throw_, env, cctx);
 			break;
 		case ILSTMT_ASSERT_T:
-			il_stmt_assert_generate(self->u.bcassert_, env, cctx);
+			GenerateILAssert(self->u.bcassert_, env, cctx);
 			break;
 		case ILSTMT_DEFER_T:
 			GenerateILDefer(self->u.defer_, env, cctx);
@@ -168,7 +168,7 @@ void DeleteILStmt(il_stmt * self) {
 			DeleteILBreak(NULL);
 			break;
 		case ILSTMT_CONTINUE_T:
-			il_stmt_continue_delete(NULL);
+			DeleteILContinue(NULL);
 			break;
 		case ILSTMT_INFERENCED_TYPE_INIT_T:
 			il_stmt_inferenced_type_init_delete(self->u.inferenced_type_init);

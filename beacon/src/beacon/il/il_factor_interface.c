@@ -31,7 +31,7 @@ void GenerateILFactor(il_factor * self, enviroment* env, call_context* cctx) {
 			il_factor_double_generate(self->u.double_, env, cctx);
 			break;
 		case ILFACTOR_CHAR_T:
-			il_factor_char_generate(self->u.char_, env, cctx);
+			GenerateILChar(self->u.char_, env, cctx);
 			break;
 		case ILFACTOR_STRING_T:
 			il_factor_string_generate(self->u.string_, env, cctx);
@@ -58,7 +58,7 @@ void GenerateILFactor(il_factor * self, enviroment* env, call_context* cctx) {
 			il_factor_new_instance_generate(self->u.new_instance_, env, cctx);
 			break;
 		case ILFACTOR_BOOL_T:
-			il_factor_bool_generate(self->u.bool_, env, cctx);
+			GenerateILBool(self->u.bool_, env, cctx);
 			break;
 		case ILFACTOR_NULL_T:
 			il_factor_null_generate(NULL, env, cctx);
@@ -144,7 +144,7 @@ void LoadILFactor(il_factor * self, enviroment * env, call_context* cctx) {
 			LoadILAs(self->u.as_, env, cctx);
 			break;
 		case ILFACTOR_CALL_OP_T:
-			il_factor_call_OP_LOAD(self->u.call_, env, cctx);
+			LoadCallOp(self->u.call_, env, cctx);
 			break;
 		case ILFACTOR_MEMBER_OP_T:
 			il_factor_member_OP_LOAD(self->u.member_, env, cctx);
@@ -159,7 +159,7 @@ void LoadILFactor(il_factor * self, enviroment * env, call_context* cctx) {
 			il_factor_explicit_binary_OP_LOAD(self->u.exp_binary_op, env, cctx);
 			break;
 		case ILFACTOR_PROPERTY_T:
-			il_factor_property_load(self->u.prop, env, cctx);
+			LoadILProperty(self->u.prop, env, cctx);
 			break;
 		case ILFACTOR_SUBSCRIPT_T:
 			il_factor_subscript_load(self->u.subscript, env, cctx);
@@ -260,7 +260,7 @@ char* ILFactorToString(il_factor* self, enviroment* env) {
 		case ILFACTOR_CHAR_T:
 			return ILCharToString(self->u.char_, env);
 		case ILFACTOR_STRING_T:
-			return il_factor_string_tostr(self->u.string_, env);
+			return ILStringToString(self->u.string_, env);
 		case ILFACTOR_VARIABLE_T:
 			return il_factor_variable_tostr(self->u.variable_, env);
 		case ILFACTOR_UNARY_OP_T:
@@ -346,7 +346,7 @@ void DeleteILFactor(il_factor * self) {
 			DeleteILInt(self->u.int_);
 			break;
 		case ILFACTOR_DOUBLE_T:
-			il_factor_double_delete(self->u.double_);
+			DeleteILDouble(self->u.double_);
 			break;
 		case ILFACTOR_CHAR_T:
 			DeleteILChar(self->u.char_);
@@ -370,7 +370,7 @@ void DeleteILFactor(il_factor * self) {
 			DeleteILThis(self->u.this_);
 			break;
 		case ILFACTOR_SUPER_T:
-			il_factor_super_delete(self->u.super_);
+			DeleteILSuper(self->u.super_);
 			break;
 		case ILFACTOR_NEW_INSTANCE_T:
 			il_factor_new_instance_delete(self->u.new_instance_);

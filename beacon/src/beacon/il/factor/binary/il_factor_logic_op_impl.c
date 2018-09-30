@@ -12,7 +12,7 @@
 static opcode operator_to_iopcode(operator_type type);
 static opcode operator_to_bopcode(operator_type type);
 
-il_factor_logic_op* il_factor_logic_op_new(operator_type type) {
+il_factor_logic_op* NewILLogicOp(operator_type type) {
 	il_factor_logic_op* ret = (il_factor_logic_op*)MEM_MALLOC(sizeof(il_factor_logic_op));
 	ret->type = type;
 	ret->parent = NULL;

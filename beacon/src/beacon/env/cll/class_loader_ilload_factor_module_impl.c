@@ -144,7 +144,7 @@ static il_factor* CLIL_factorImpl(class_loader* self, ast* source) {
 	} else if (source->tag == AST_AS_T) {
 		return WrapILAs(CLIL_as(self, source));
 	} else if(source->tag == AST_OP_CALL_T) {
-		return il_factor_wrap_call_op(CLIL_call_op(self, source));
+		return WrapCallOp(CLIL_call_op(self, source));
 	} else if(source->tag == AST_FIELD_ACCESS_T) {
 		return il_factor_wrap_member_op(CLIL_member_op(self, source));
 	} else if(source->tag == AST_SUBSCRIPT_ACCESS_T) {
@@ -163,7 +163,7 @@ static il_factor_bool * CLIL_false(class_loader * self, ast * source) {
 }
 
 static il_factor_unary_op* CLIL_unary(class_loader* self, ast* source, operator_type type) {
-	il_factor_unary_op* ret = il_factor_unary_op_new(type);
+	il_factor_unary_op* ret = NewILUnaryOp(type);
 	ast* a = FirstAST(source);
 	ret->a = CLIL_factor(self, a);
 	return ret;

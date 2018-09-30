@@ -12,7 +12,7 @@
 static opcode operator_to_iopcode(operator_type type);
 static opcode operator_to_dopcode(operator_type type);
 
-il_factor_shift_op* il_factor_shift_op_new(operator_type type) {
+il_factor_shift_op* NewILShiftOp(operator_type type) {
 	il_factor_shift_op* ret = (il_factor_shift_op*)MEM_MALLOC(sizeof(il_factor_shift_op));
 	ret->parent = NULL;
 	ret->type = type;

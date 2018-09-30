@@ -17,7 +17,7 @@ il_factor * WrapILUnary(il_factor_unary_op * self) {
 	return ret;
 }
 
-il_factor_unary_op * il_factor_unary_op_new(operator_type type) {
+il_factor_unary_op * NewILUnaryOp(operator_type type) {
 	il_factor_unary_op* ret = (il_factor_unary_op*)MEM_MALLOC(sizeof(il_factor_unary_op));
 	ret->type = type;
 	ret->a = NULL;
@@ -61,7 +61,7 @@ void il_factor_unary_OP_LOAD(il_factor_unary_op * self, enviroment * env, call_c
 		il_factor_negative_OP_LOAD(neg, env, cctx);
 	} else if(self->type == OPERATOR_CHILDA_T) {
 		self->category = OPERATOR_CCHILDA_T;
-		il_factor_childa_op* childa = il_factor_childa_op_new(self->type);
+		il_factor_childa_op* childa = NewILChildaOp(self->type);
 		childa->parent = self;
 		self->u.childa_op = childa;
 		il_factor_childa_OP_LOAD(childa, env, cctx);
@@ -91,7 +91,7 @@ char* il_factor_unary_op_tostr(il_factor_unary_op* self, enviroment* env) {
 	char* ret = NULL;
 	switch(self->type) {
 		case OPERATOR_NOT_T:
-			ret = il_factor_not_op_tostr(self->u.not_op, env);
+			ret = ILNotOpToString(self->u.not_op, env);
 			break;
 		case OPERATOR_CHILDA_T:
 			ret = il_factor_childa_op_tostr(self->u.childa_op, env);
@@ -110,7 +110,7 @@ void il_factor_unary_op_delete(il_factor_unary_op * self) {
 	DeleteILFactor(self->a);
 	switch(self->type) {
 		case OPERATOR_NOT_T:
-			il_factor_not_op_delete(self->u.not_op);
+			DeleteILNotOp(self->u.not_op);
 			break;
 		case OPERATOR_CHILDA_T:
 			il_factor_childa_op_delete(self->u.childa_op);

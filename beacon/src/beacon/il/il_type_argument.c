@@ -13,7 +13,7 @@ il_type_argument* NewILTypeArgument() {
 	return ret;
 }
 
-void il_type_argument_print(Vector* iltype_args) {
+void PrintILTypeArgument(Vector* iltype_args) {
 	if(iltype_args->length == 0) {
 		return;
 	}

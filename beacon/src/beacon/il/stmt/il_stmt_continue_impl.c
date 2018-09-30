@@ -21,5 +21,5 @@ void il_stmt_continue_generate(void * empty, enviroment * env, call_context* cct
 void LoadILContinue(void * empty, enviroment * env, call_context* cctx) {
 }
 
-void il_stmt_continue_delete(void * empty) {
+void DeleteILContinue(void * empty) {
 }

@@ -24,5 +24,5 @@ generic_type* EvalILSuper(il_factor_super* self, struct enviroment* env, call_co
 
 char* ILSuperToString(il_factor_super* self, struct enviroment* env);
 
-void il_factor_super_delete(il_factor_super* self);
+void DeleteILSuper(il_factor_super* self);
 #endif // !SIGNAL_IL_IL_FACTOR_SUPER_H

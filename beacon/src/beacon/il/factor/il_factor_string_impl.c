@@ -34,7 +34,7 @@ generic_type* EvalILString(il_factor_string * self, enviroment * env, call_conte
 	return GENERIC_STRING;
 }
 
-char* il_factor_string_tostr(il_factor_string* self, enviroment* env) {
+char* ILStringToString(il_factor_string* self, enviroment* env) {
 	return Strdup(Ref2Str(self->valuev));
 }
 

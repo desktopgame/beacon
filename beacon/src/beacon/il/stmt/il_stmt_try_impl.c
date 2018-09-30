@@ -101,7 +101,7 @@ void GenerateILTry(il_stmt_try* self, enviroment* env, call_context* cctx) {
 	try_end->cursor = AddNOPOpcodeBuf(env->buf);
 }
 
-void il_stmt_catch_generate(il_stmt_catch* self, enviroment* env, call_context* cctx) {
+void GenerateILCatch(il_stmt_catch* self, enviroment* env, call_context* cctx) {
 
 }
 

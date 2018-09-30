@@ -22,7 +22,7 @@ void LoadILString(il_factor_string* self, struct enviroment* env, call_context* 
 
 generic_type* EvalILString(il_factor_string* self, struct enviroment* env, call_context* cctx);
 
-char* il_factor_string_tostr(il_factor_string* self, struct enviroment* env);
+char* ILStringToString(il_factor_string* self, struct enviroment* env);
 
 void il_factor_string_delete(il_factor_string* self);
 

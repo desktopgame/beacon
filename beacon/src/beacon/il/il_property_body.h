@@ -18,8 +18,8 @@ typedef struct il_property_body {
 	bool is_short;
 } il_property_body;
 
-#define il_property_body_new(tag) (il_property_body_malloc(tag, __FILE__, __LINE__))
-il_property_body* il_property_body_malloc(il_property_body_tag tag, const char* filename, int lineno);
+#define il_property_body_new(tag) (MallocILPropertyBody(tag, __FILE__, __LINE__))
+il_property_body* MallocILPropertyBody(il_property_body_tag tag, const char* filename, int lineno);
 
 void il_property_body_delete(il_property_body* self);
 #endif

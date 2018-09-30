@@ -48,10 +48,10 @@ void LoadILNotOp(il_factor_not_op* self, enviroment* env, call_context* cctx) {
 	}
 }
 
-void il_factor_not_op_delete(il_factor_not_op* self) {
+void DeleteILNotOp(il_factor_not_op* self) {
 	MEM_FREE(self);
 }
 
-char* il_factor_not_op_tostr(il_factor_not_op* self, enviroment* env) {
+char* ILNotOpToString(il_factor_not_op* self, enviroment* env) {
 	return il_factor_unary_op_tostr_simple(self->parent, env);
 }

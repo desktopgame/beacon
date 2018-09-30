@@ -32,7 +32,7 @@ void il_interface_add_property(il_interface* self, il_property* prop) {
 	PushVector(self->prop_list, prop);
 }
 
-void il_interface_add_method(il_interface * self, il_method * method) {
+void AddMethodILInterface(il_interface * self, il_method * method) {
 	PushVector(self->method_list, method);
 }
 

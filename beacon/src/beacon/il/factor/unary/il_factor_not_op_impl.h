@@ -20,7 +20,7 @@ void il_factor_not_op_generate(il_factor_not_op* self, struct enviroment* env, c
 
 void LoadILNotOp(il_factor_not_op* self, struct enviroment* env, call_context* cctx);
 
-void il_factor_not_op_delete(il_factor_not_op* self);
+void DeleteILNotOp(il_factor_not_op* self);
 
-char* il_factor_not_op_tostr(il_factor_not_op* self, struct enviroment* env);
+char* ILNotOpToString(il_factor_not_op* self, struct enviroment* env);
 #endif

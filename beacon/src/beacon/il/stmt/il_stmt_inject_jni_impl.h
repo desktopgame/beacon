@@ -13,7 +13,7 @@ typedef struct il_stmt_inject_jni {
 
 il_stmt* il_stmt_wrap_inject_jni(il_stmt_inject_jni* self);
 
-il_stmt_inject_jni* il_stmt_inject_jni_new(string_view namev);
+il_stmt_inject_jni* NewILInjectJNI(string_view namev);
 
 void il_stmt_inject_jni_generate(il_stmt_inject_jni* self, enviroment* env, call_context* cctx);
 

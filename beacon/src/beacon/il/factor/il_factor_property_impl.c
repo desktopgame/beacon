@@ -22,7 +22,7 @@ void il_factor_property_generate(il_factor_property* self, enviroment* env, call
 	GenerateGetProperty(env->buf, self->p, self->index);
 }
 
-void il_factor_property_load(il_factor_property* self, enviroment* env, call_context* cctx) {
+void LoadILProperty(il_factor_property* self, enviroment* env, call_context* cctx) {
 	generic_type* receiver = EvalILFactor(self->fact, env, cctx);
 	type* receiverT = GENERIC2TYPE(receiver);
 	int temp = -1;
