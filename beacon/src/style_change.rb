@@ -186,7 +186,27 @@ def find_word(name)
     end
 end
 
+def rename_special(name, key)
+    name = name.downcase
+    action_pos = name.rindex("_")
+    action = name.slice(action_pos + 1, name.length - action_pos).capitalize
+    type = name.slice(0, action_pos)
+    words = type.split("_").delete_if{|e| e == key}
+    new_name = action + words.map{|e| if e == "il" then "IL" else e.capitalize end }.join
+    new_name = new_name.gsub("Instanceof", "InstanceOf")
+    if(new_name.start_with?("Tostr")) then
+        new_name = new_name.slice("Tostr".length, new_name.length - "Tostr".length)
+        new_name << "ToString"
+    end
+    return new_name
+end
+
 def rename(name)
+    if name.include?("il_factor")
+        return rename_special(name, "factor")
+    elsif name.include?("il_stmt")
+        return rename_special(name, "stmt")
+    end
     buf = ""
     cut = true
     name.chars.each do |c|
