@@ -7,7 +7,7 @@ typedef struct il_factor_assign_op {
 	il_factor* right;
 } il_factor_assign_op;
 
-il_factor* il_factor_wrap_assign(il_factor_assign_op* self);
+il_factor* WrapILAssign(il_factor_assign_op* self);
 
 il_factor_assign_op* il_factor_assign_op_new();
 

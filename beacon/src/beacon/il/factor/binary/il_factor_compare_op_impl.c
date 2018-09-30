@@ -30,8 +30,8 @@ generic_type* il_factor_compare_op_eval(il_factor_compare_op * self, enviroment 
 void il_factor_compare_op_generate(il_factor_compare_op* self, enviroment* env, call_context* cctx) {
 	//演算子オーバーロードが見つからない
 	if(self->operator_index == -1) {
-		il_factor_generate(self->parent->right, env, cctx);
-		il_factor_generate(self->parent->left, env, cctx);
+		GenerateILFactor(self->parent->right, env, cctx);
+		GenerateILFactor(self->parent->left, env, cctx);
 		if(il_factor_binary_op_int_int(self->parent, env, cctx)) {
 			AddOpcodeBuf(env->buf, (VectorItem)operator_to_iopcode(self->type));
 		} else if(il_factor_binary_op_double_double(self->parent, env, cctx)) {
@@ -45,8 +45,8 @@ void il_factor_compare_op_generate(il_factor_compare_op* self, enviroment* env, 
 //			assert(false);
 		}
 	} else {
-		il_factor_generate(self->parent->right, env, cctx);
-		il_factor_generate(self->parent->left, env, cctx);
+		GenerateILFactor(self->parent->right, env, cctx);
+		GenerateILFactor(self->parent->left, env, cctx);
 		AddOpcodeBuf(env->buf, OP_INVOKEOPERATOR);
 		AddOpcodeBuf(env->buf, self->operator_index);
 	}

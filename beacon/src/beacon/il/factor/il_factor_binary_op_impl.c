@@ -60,9 +60,9 @@ void il_factor_binary_OP_LOAD(il_factor_binary_op * self, enviroment * env, call
 		return;
 	}
 	self->load = true;
-	il_factor_load(self->left, env, cctx);
+	LoadILFactor(self->left, env, cctx);
 	BC_ERROR();
-	il_factor_load(self->right, env, cctx);
+	LoadILFactor(self->right, env, cctx);
 	BC_ERROR();
 	//カテゴリーわけ
 	if(operator_arithmetic(self->type)) {
@@ -165,15 +165,15 @@ void il_factor_binary_op_delete(il_factor_binary_op * self) {
 			il_factor_excor_op_delete(self->u.excor_op);
 			break;
 	}
-	il_factor_delete(self->left);
-	il_factor_delete(self->right);
+	DeleteILFactor(self->left);
+	DeleteILFactor(self->right);
 	MEM_FREE(self);
 }
 
 char* il_factor_binary_op_tostr_simple(il_factor_binary_op* self, enviroment* env) {
 	string_buffer* sb = NewBuffer();
-	char* a = il_factor_tostr(self->left, env);
-	char* b = il_factor_tostr(self->right, env);
+	char* a = ILFactorToString(self->left, env);
+	char* b = ILFactorToString(self->right, env);
 	AppendsBuffer(sb, a);
 	AppendfBuffer(sb, " %s ", operator_tostring(self->type));
 	AppendsBuffer(sb, b);
@@ -208,8 +208,8 @@ int il_factor_binary_op_index(il_factor_binary_op* self, enviroment* env, call_c
 
 int il_factor_binary_op_index2(il_factor* receiver, il_factor* arg, operator_type otype, enviroment* env, call_context* cctx) {
 	Vector* args = NewVector();
-	generic_type* lgtype = il_factor_eval(receiver, env, cctx);
-	generic_type* rgtype = il_factor_eval(arg, env, cctx);
+	generic_type* lgtype = EvalILFactor(receiver, env, cctx);
+	generic_type* rgtype = EvalILFactor(arg, env, cctx);
 	
 	if(lgtype->virtual_type_index != -1) {
 		assert(false);
@@ -226,7 +226,7 @@ int il_factor_binary_op_index2(il_factor* receiver, il_factor* arg, operator_typ
 }
 
 generic_type* il_factor_binary_op_apply(il_factor_binary_op* self, generic_type* gtype, enviroment* env, call_context* cctx) {
-	generic_type* lgtype = il_factor_eval(self->left, env, cctx);
+	generic_type* lgtype = EvalILFactor(self->left, env, cctx);
 	call_frame* cfr = PushCallContext(cctx, FRAME_INSTANCE_INVOKE_T);
 	cfr->u.instance_invoke.receiver = lgtype;
 	generic_type* ret = generic_type_apply(gtype,cctx);
@@ -236,8 +236,8 @@ generic_type* il_factor_binary_op_apply(il_factor_binary_op* self, generic_type*
 
 //private
 static bool type_test(il_factor_binary_op* self, enviroment* env, call_context* cctx, type* t) {
-	generic_type* lgtype = il_factor_eval(self->left, env, cctx);
-	generic_type* rgtype = il_factor_eval(self->right, env, cctx);
+	generic_type* lgtype = EvalILFactor(self->left, env, cctx);
+	generic_type* rgtype = EvalILFactor(self->right, env, cctx);
 	return GENERIC2TYPE(lgtype) == t &&
 	       GENERIC2TYPE(rgtype) == t;
 }

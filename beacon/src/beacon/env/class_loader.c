@@ -110,7 +110,7 @@ void class_loader_delete(class_loader * self) {
 		return;
 	}
 	DeleteAST(self->source_code);
-	il_top_level_delete(self->il_code);
+	DeleteILToplevel(self->il_code);
 	DeleteVector(self->type_cache_vec, class_loader_cache_delete);
 	import_manager_delete(self->import_manager);
 	DeleteEnviroment(self->env);
@@ -203,8 +203,8 @@ static void class_loader_load_toplevel(class_loader* self) {
 	//worldをselfにする
 	call_context* cctx = NewCallContext(CALL_TOP_T);
 	cctx->ty = namespace_get_type(namespace_lang(), InternString("World"));
-	il_stmt_load(body, self->env, cctx);
-	il_stmt_generate(body, self->env, cctx);
+	LoadILStmt(body, self->env, cctx);
+	GenerateILStmt(body, self->env, cctx);
 	//$worldをthisにする
 	AddOpcodeBuf(self->env->buf, OP_LOAD);
 	AddOpcodeBuf(self->env->buf, 1);
@@ -212,7 +212,7 @@ static void class_loader_load_toplevel(class_loader* self) {
 	AddOpcodeBuf(self->env->buf, 0);
 	//以下読み込み
 	CLBC_body(self, self->il_code->statement_list, self->env, cctx, NULL);
-	il_stmt_delete(body);
+	DeleteILStmt(body);
 	DeleteCallContext(cctx);
 	script_context_cache();
 }

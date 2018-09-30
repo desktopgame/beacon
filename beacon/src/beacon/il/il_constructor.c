@@ -9,7 +9,7 @@
 static void il_constructor_parameter_delete(VectorItem item);
 static void il_constructor_stmt_delete(VectorItem item);
 
-il_constructor * il_constructor_new() {
+il_constructor * NewILConstructor() {
 	il_constructor* ret = (il_constructor*)MEM_MALLOC(sizeof(il_constructor));
 	ret->access = ACCESS_PUBLIC_T;
 	ret->parameter_list = NewVector();
@@ -27,10 +27,10 @@ void il_constructor_delete(il_constructor * self) {
 //private
 static void il_constructor_parameter_delete(VectorItem item) {
 	il_parameter* e = (il_parameter*)item;
-	il_parameter_delete(e);
+	DeleteILParameter(e);
 }
 
 static void il_constructor_stmt_delete(VectorItem item) {
 	il_stmt* e = (il_stmt*)item;
-	il_stmt_delete(e);
+	DeleteILStmt(e);
 }

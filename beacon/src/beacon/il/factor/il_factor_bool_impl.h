@@ -13,15 +13,15 @@ typedef struct il_factor_bool {
 	bool a;
 } il_factor_bool;
 
-il_factor* il_factor_wrap_bool(il_factor_bool* self);
+il_factor* WrapILBool(il_factor_bool* self);
 
-il_factor_bool* il_factor_bool_new(bool b);
+il_factor_bool* NewILBool(bool b);
 
 void il_factor_bool_generate(il_factor_bool* self, struct enviroment* env, call_context* cctx);
 
-generic_type* il_factor_bool_eval(il_factor_bool* self, struct enviroment* env, call_context* cctx);
+generic_type* EvalILBool(il_factor_bool* self, struct enviroment* env, call_context* cctx);
 
-char* il_factor_bool_tostr(il_factor_bool* self, struct enviroment* env);
+char* ILBoolToString(il_factor_bool* self, struct enviroment* env);
 
 void il_factor_bool_delete(il_factor_bool* self);
 

@@ -39,7 +39,7 @@ il_factor_call_op* il_factor_call_op_new() {
 
 void il_factor_call_OP_LOAD(il_factor_call_op* self, enviroment* env, call_context* cctx) {
 	//argumentlistはサブクラスに渡しちゃってる
-	//il_factor_load(self->receiver, env, ilctx, eh);
+	//LoadILFactor(self->receiver, env, ilctx, eh);
 	il_factor_call_op_check(self, env, cctx);
 	if(self->type == ILCALL_TYPE_INVOKE_T) {
 		il_factor_invoke_load(self->u.invoke_, env, cctx);
@@ -90,7 +90,7 @@ void il_factor_call_op_generate(il_factor_call_op* self, enviroment* env, call_c
 }
 
 void il_factor_call_op_delete(il_factor_call_op* self) {
-	il_factor_delete(self->receiver);
+	DeleteILFactor(self->receiver);
 	if(self->type == ILCALL_TYPE_INVOKE_T) {
 		il_factor_invoke_delete(self->u.invoke_);
 	} else if(self->type == ILCALL_TYPE_INVOKE_STATIC_T) {
@@ -171,7 +171,7 @@ static void il_factor_member_op_check_namebase(il_factor_call_op* self, il_facto
 
 static void il_factor_member_op_check_instance(il_factor_call_op* self, il_factor_member_op* ilmem, enviroment* env, call_context* cctx) {
 	//入れ替える
-	il_factor_invoke* iv = il_factor_invoke_new(ilmem->namev);
+	il_factor_invoke* iv = NewILInvoke(ilmem->namev);
 	iv->args = self->argument_list;
 	iv->receiver = ilmem->fact;
 	iv->type_args = ilmem->type_args;
@@ -198,8 +198,8 @@ static void il_factor_member_op_check_static(il_factor_call_op* self, il_factor_
 static void il_factor_subscript_check(il_factor_call_op* self, enviroment* env, call_context* cctx) {
 	il_factor* receiver = self->receiver;
 	il_factor_call_op* call_left = receiver->u.call_;
-	il_factor_invoke* iv = il_factor_invoke_new(ZERO_VIEW);
-	generic_type* receiver_gtype = il_factor_eval(receiver, env, cctx);
+	il_factor_invoke* iv = NewILInvoke(ZERO_VIEW);
+	generic_type* receiver_gtype = EvalILFactor(receiver, env, cctx);
 	class_* receiver_cl = TYPE2CLASS(GENERIC2TYPE(receiver_gtype));
 	int temp;
 	iv->u.opov = class_argfind_operator_overload(receiver_cl, OPERATOR_SUB_SCRIPT_GET_T, self->argument_list, env, cctx, &temp);
@@ -218,7 +218,7 @@ static void il_factor_subscript_check(il_factor_call_op* self, enviroment* env, 
 
 static void il_factor_call_op_argument_delete(VectorItem item) {
 	il_argument* e = (il_argument*)item;
-	il_argument_delete(e);
+	DeleteILArgument(e);
 }
 
 static void il_factor_call_op_type_argument_delete(VectorItem item) {

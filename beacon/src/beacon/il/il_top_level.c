@@ -13,7 +13,7 @@ static void il_top_level_namespace_delete(VectorItem item);
 static void il_top_level_function_delete(VectorItem item);
 static void il_top_level_stmt_delete(VectorItem item);
 
-il_top_level* il_top_level_new() {
+il_top_level* NewILToplevel() {
 	il_top_level* ret = (il_top_level*)MEM_MALLOC(sizeof(il_top_level));
 	ret->import_list = NewVector();
 	ret->namespace_list = NewVector();
@@ -22,7 +22,7 @@ il_top_level* il_top_level_new() {
 	return ret;
 }
 
-void il_top_level_delete(il_top_level* self) {
+void DeleteILToplevel(il_top_level* self) {
 	if(self == NULL) {
 		return;
 	}
@@ -36,20 +36,20 @@ void il_top_level_delete(il_top_level* self) {
 //private
 static void il_top_level_import_delete(VectorItem item) {
 	il_import* e = (il_import*)item;
-	il_import_delete(e);
+	DeleteILImport(e);
 }
 
 static void il_top_level_namespace_delete(VectorItem item) {
 	il_namespace* e = (il_namespace*)item;
-	il_namespace_delete(e);
+	DeleteILNamespace(e);
 }
 
 static void il_top_level_function_delete(VectorItem item) {
 	il_function* e = (il_function*)item;
-	il_function_delete(e);
+	DeleteILFunction(e);
 }
 
 static void il_top_level_stmt_delete(VectorItem item) {
 	il_stmt* e = (il_stmt*)item;
-	il_stmt_delete(e);
+	DeleteILStmt(e);
 }

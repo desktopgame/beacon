@@ -14,13 +14,13 @@ typedef struct il_factor_super {
 	generic_type* resolved;
 } il_factor_super;
 
-il_factor_super* il_factor_super_new();
+il_factor_super* NewILSuper();
 
 void il_factor_super_generate(il_factor_super* self, struct enviroment* env, call_context* cctx);
 
-void il_factor_super_load(il_factor_super* self, struct enviroment* env, call_context* cctx);
+void LoadILSuper(il_factor_super* self, struct enviroment* env, call_context* cctx);
 
-generic_type* il_factor_super_eval(il_factor_super* self, struct enviroment* env, call_context* cctx);
+generic_type* EvalILSuper(il_factor_super* self, struct enviroment* env, call_context* cctx);
 
 char* il_factor_super_tostr(il_factor_super* self, struct enviroment* env);
 

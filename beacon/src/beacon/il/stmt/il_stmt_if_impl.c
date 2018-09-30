@@ -9,25 +9,25 @@
 
 //proto
 static void il_stmt_elif_list_delete_impl(VectorItem item);
-static void il_stmt_if_delete_stmt(VectorItem item);
+static void DeleteILIf_stmt(VectorItem item);
 static void check_condition_type(il_factor* fact, enviroment* env, call_context* cctx);
 
-il_stmt * il_stmt_wrap_if(il_stmt_if * self) {
+il_stmt * WrapILIf(il_stmt_if * self) {
 	il_stmt* ret = il_stmt_new(ILSTMT_IF_T);
 	ret->u.if_ = self;
 	return ret;
 }
 
-il_stmt_if * il_stmt_if_new() {
+il_stmt_if * NewILIf() {
 	il_stmt_if* ret = (il_stmt_if*)MEM_MALLOC(sizeof(il_stmt_if));
 	ret->condition = NULL;
 	ret->elif_list = NewVector();
-	ret->else_body = il_stmt_else_new();
+	ret->else_body = NewILElse();
 	ret->body = NewVector();
 	return ret;
 }
 
-il_stmt_elif * il_stmt_elif_new() {
+il_stmt_elif * NewILElif() {
 	il_stmt_elif* ret = (il_stmt_elif*)MEM_MALLOC(sizeof(il_stmt_elif));
 	ret->condition = NULL;
 	ret->body = NewVector();
@@ -38,7 +38,7 @@ Vector * il_stmt_elif_list_new() {
 	return NewVector();
 }
 
-il_stmt_else * il_stmt_else_new() {
+il_stmt_else * NewILElse() {
 	il_stmt_else* ret = (il_stmt_else*)MEM_MALLOC(sizeof(il_stmt_else));
 	ret->body = NewVector();
 	return ret;
@@ -48,10 +48,10 @@ void il_stmt_elif_list_push(Vector * self, il_stmt_elif * child) {
 	PushVector(self, child);
 }
 
-void il_stmt_if_generate(il_stmt_if * self, enviroment* env, call_context* cctx) {
+void GenerateILIf(il_stmt_if * self, enviroment* env, call_context* cctx) {
 	//if(...)
 	env->sym_table->scope_depth++;
-	il_factor_generate(self->condition, env, cctx);
+	GenerateILFactor(self->condition, env, cctx);
 	label* l1 = AddLabelOpcodeBuf(env->buf, -1);
 	label* tail = AddLabelOpcodeBuf(env->buf, -1);
 	// { ... }
@@ -59,7 +59,7 @@ void il_stmt_if_generate(il_stmt_if * self, enviroment* env, call_context* cctx)
 	AddOpcodeBuf(env->buf, l1);
 	for (int i = 0; i < self->body->length; i++) {
 		il_stmt* stmt = (il_stmt*)AtVector(self->body, i);
-		il_stmt_generate(stmt, env, cctx);
+		GenerateILStmt(stmt, env, cctx);
 	}
 	//条件が満たされて実行されたら最後までジャンプ
 	AddOpcodeBuf(env->buf, OP_GOTO);
@@ -68,14 +68,14 @@ void il_stmt_if_generate(il_stmt_if * self, enviroment* env, call_context* cctx)
 	// elif(...)
 	for (int i = 0; i < self->elif_list->length; i++) {
 		il_stmt_elif* elif = (il_stmt_elif*)AtVector(self->elif_list, i);
-		il_factor_generate(elif->condition, env, cctx);
+		GenerateILFactor(elif->condition, env, cctx);
 		label* l2 = AddLabelOpcodeBuf(env->buf, -1);
 		// { ... }
 		AddOpcodeBuf(env->buf, OP_GOTO_if_false);
 		AddOpcodeBuf(env->buf, l2);
 		for (int j = 0; j < elif->body->length; j++) {
 			il_stmt* stmt = (il_stmt*)AtVector(elif->body, j);
-			il_stmt_generate(stmt, env, cctx);
+			GenerateILStmt(stmt, env, cctx);
 		}
 		//条件が満たされて実行されたら最後までジャンプ
 		AddOpcodeBuf(env->buf, OP_GOTO);
@@ -89,34 +89,34 @@ void il_stmt_if_generate(il_stmt_if * self, enviroment* env, call_context* cctx)
 	} else {
 		for (int i = 0; i < self->else_body->body->length; i++) {
 			il_stmt* stmt = (il_stmt*)AtVector(self->else_body->body, i);
-			il_stmt_generate(stmt, env, cctx);
+			GenerateILStmt(stmt, env, cctx);
 		}
 		tail->cursor = AddNOPOpcodeBuf(env->buf);
 	}
 	env->sym_table->scope_depth--;
 }
 
-void il_stmt_if_load(il_stmt_if * self, struct enviroment* env, call_context* cctx) {
+void LoadILIf(il_stmt_if * self, struct enviroment* env, call_context* cctx) {
 	env->sym_table->scope_depth++;
-	il_factor_load(self->condition, env, cctx);
+	LoadILFactor(self->condition, env, cctx);
 	for(int i=0; i<self->body->length; i++) {
 		il_stmt* e = (il_stmt*)AtVector(self->body, i);
-		il_stmt_load(e, env, cctx);
+		LoadILStmt(e, env, cctx);
 		BC_ERROR();
 	}
 	for(int i=0; i<self->elif_list->length; i++) {
 		il_stmt_elif* e = (il_stmt_elif*)AtVector(self->elif_list, i);
-		il_factor_load(e->condition, env, cctx);
+		LoadILFactor(e->condition, env, cctx);
 		for(int j=0; j<e->body->length; j++) {
 			il_stmt* st = (il_stmt*)AtVector(e->body, j);
-			il_stmt_load(st, env, cctx);
+			LoadILStmt(st, env, cctx);
 			BC_ERROR();
 		}
 		BC_ERROR();
 	}
 	for(int i=0; i<self->else_body->body->length; i++) {
 		il_stmt* e = (il_stmt*)AtVector(self->else_body->body, i);
-		il_stmt_load(e, env, cctx);
+		LoadILStmt(e, env, cctx);
 		BC_ERROR();
 	}
 	//条件が bool を返さない
@@ -130,17 +130,17 @@ void il_stmt_if_load(il_stmt_if * self, struct enviroment* env, call_context* cc
 	env->sym_table->scope_depth--;
 }
 
-void il_stmt_if_delete(il_stmt_if * self) {
+void DeleteILIf(il_stmt_if * self) {
 	DeleteVector(self->elif_list, il_stmt_elif_list_delete_impl);
-	il_stmt_else_delete(self->else_body);
-	DeleteVector(self->body, il_stmt_if_delete_stmt);
-	il_factor_delete(self->condition);
+	DeleteILElse(self->else_body);
+	DeleteVector(self->body, DeleteILIf_stmt);
+	DeleteILFactor(self->condition);
 	MEM_FREE(self);
 }
 
-void il_stmt_elif_delete(il_stmt_elif * self) {
-	il_factor_delete(self->condition);
-	DeleteVector(self->body, il_stmt_if_delete_stmt);
+void DeleteILElif(il_stmt_elif * self) {
+	DeleteILFactor(self->condition);
+	DeleteVector(self->body, DeleteILIf_stmt);
 	MEM_FREE(self);
 }
 
@@ -148,26 +148,26 @@ void il_stmt_elif_list_delete(Vector * self) {
 	DeleteVector(self, il_stmt_elif_list_delete_impl);
 }
 
-void il_stmt_else_delete(il_stmt_else * self) {
-	DeleteVector(self->body, il_stmt_if_delete_stmt);
+void DeleteILElse(il_stmt_else * self) {
+	DeleteVector(self->body, DeleteILIf_stmt);
 	MEM_FREE(self);
 }
 
 //private
 static void il_stmt_elif_list_delete_impl(VectorItem item) {
 	il_stmt_elif* el = (il_stmt_elif*)item;
-	il_stmt_elif_delete(el);
+	DeleteILElif(el);
 }
 
-static void il_stmt_if_delete_stmt(VectorItem item) {
+static void DeleteILIf_stmt(VectorItem item) {
 	il_stmt* e = (il_stmt*)item;
-	il_stmt_delete(e);
+	DeleteILStmt(e);
 }
 
 static void check_condition_type(il_factor* fact, enviroment* env, call_context* cctx) {
-	generic_type* cond_T = il_factor_eval(fact, env, cctx);
+	generic_type* cond_T = EvalILFactor(fact, env, cctx);
 	if(cond_T->core_type != TYPE_BOOL) {
-		char* condstr = il_factor_tostr(fact, env);
+		char* condstr = ILFactorToString(fact, env);
 		ThrowBCError(BCERROR_IF_EXPR_TYPE_OF_NOT_BOOL_T,
 			condstr
 		);

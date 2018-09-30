@@ -13,19 +13,19 @@ typedef struct il_factor_int {
 	int count;
 } il_factor_int;
 
-il_factor* il_factor_wrap_int(il_factor_int* self);
+il_factor* WrapILInt(il_factor_int* self);
 
-#define il_factor_int_new(i) (il_factor_int_malloc(i, __FILE__, __LINE__))
-il_factor_int* il_factor_int_malloc(int32_t i, const char* filename, int lineno);
+#define il_factor_int_new(i) (MallocILInt(i, __FILE__, __LINE__))
+il_factor_int* MallocILInt(int32_t i, const char* filename, int lineno);
 
 void il_factor_int_generate(il_factor_int* self, struct enviroment* env, call_context* cctx);
 
-void il_factor_int_load(il_factor_int* self, struct enviroment* env, call_context* cctx);
+void LoadILInt(il_factor_int* self, struct enviroment* env, call_context* cctx);
 
-generic_type* il_factor_int_eval(il_factor_int* self, struct enviroment* env, call_context* cctx);
+generic_type* EvalILInt(il_factor_int* self, struct enviroment* env, call_context* cctx);
 
-char* il_factor_int_tostr(il_factor_int* self, struct enviroment* env);
+char* ILIntToString(il_factor_int* self, struct enviroment* env);
 
-void il_factor_int_delete(il_factor_int* self);
+void DeleteILInt(il_factor_int* self);
 
 #endif // !SIGNAL_IL_IL_FACTOR_INT_H

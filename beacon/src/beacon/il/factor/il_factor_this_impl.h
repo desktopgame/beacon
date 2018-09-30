@@ -12,15 +12,15 @@ typedef struct il_factor_this {
 	generic_type* resolved;
 } il_factor_this;
 
-il_factor_this* il_factor_this_new();
+il_factor_this* NewILThis();
 
 void il_factor_this_generate(il_factor_this* self, struct enviroment* env, call_context* cctx);
 
-void il_factor_this_load(il_factor_this* self, struct enviroment* env, call_context* cctx);
+void LoadILThis(il_factor_this* self, struct enviroment* env, call_context* cctx);
 
-generic_type* il_factor_this_eval(il_factor_this* self, struct enviroment* env, call_context* cctx);
+generic_type* EvalILThis(il_factor_this* self, struct enviroment* env, call_context* cctx);
 
-char* il_factor_this_tostr(il_factor_this* self, struct enviroment* env);
+char* ILThisToString(il_factor_this* self, struct enviroment* env);
 
 void il_factor_this_delete(il_factor_this* self);
 #endif // !SIGNAL_IL_IL_FACTOR_THIS_H

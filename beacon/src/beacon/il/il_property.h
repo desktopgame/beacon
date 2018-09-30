@@ -15,8 +15,8 @@ typedef struct il_property {
 	il_property_body* get;
 } il_property;
 
-#define il_property_new(namev) (il_property_malloc(namev, __FILE__, __LINE__))
-il_property* il_property_malloc(string_view namev, const char* filename, int lineno);
+#define il_property_new(namev) (MallocILProperty(namev, __FILE__, __LINE__))
+il_property* MallocILProperty(string_view namev, const char* filename, int lineno);
 
-void il_property_delete(il_property* self);
+void DeleteILProperty(il_property* self);
 #endif

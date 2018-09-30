@@ -459,7 +459,7 @@ operator_overload* class_ilfind_operator_overload(class_* self, operator_type ty
 	Vector* gargs =NewVector();
 	for(int i=0; i<args->length; i++) {
 		il_factor* ilfact = (il_factor*)AtVector(args,i);
-		generic_type* g = il_factor_eval(ilfact, env, cctx);
+		generic_type* g = EvalILFactor(ilfact, env, cctx);
 		PushVector(gargs, g);
 	}
 	operator_overload* ret = class_gfind_operator_overload(self, type, gargs, env, cctx, outIndex);
@@ -473,7 +473,7 @@ operator_overload* class_argfind_operator_overload(class_* self, operator_type t
 		//il_factor* ilfact = (il_factor*)AtVector(args,i);
 		il_argument* ilarg = (il_argument*)AtVector(args, i);
 		il_factor* ilfact = ilarg->factor;
-		generic_type* g = il_factor_eval(ilfact, env, cctx);
+		generic_type* g = EvalILFactor(ilfact, env, cctx);
 		PushVector(gargs, g);
 	}
 	operator_overload* ret = class_gfind_operator_overload(self, type, gargs, env, cctx, outIndex);

@@ -14,7 +14,7 @@ typedef struct il_factor_string {
 
 il_factor* il_factor_wrap_string(il_factor_string* self);
 
-il_factor_string* il_factor_string_new(string_view valuev);
+il_factor_string* NewILString(string_view valuev);
 
 void il_factor_string_generate(il_factor_string* self, struct enviroment* env, call_context* cctx);
 

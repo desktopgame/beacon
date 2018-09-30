@@ -24,7 +24,7 @@ typedef struct il_constructor {
  * コンストラクタを表す要素を作成します.
  * @return
  */
-il_constructor* il_constructor_new();
+il_constructor* NewILConstructor();
 
 /**
  * コンストラクタを表す要素を開放します.

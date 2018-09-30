@@ -24,27 +24,27 @@ il_factor_explicit_binary_op* il_factor_explicit_binary_op_new(operator_type typ
 }
 
 void il_factor_explicit_binary_op_generate(il_factor_explicit_binary_op* self, enviroment* env, call_context* cctx) {
-	il_factor_generate(self->arg, env, cctx);
-	il_factor_generate(self->receiver, env, cctx);
+	GenerateILFactor(self->arg, env, cctx);
+	GenerateILFactor(self->receiver, env, cctx);
 	AddOpcodeBuf(env->buf, OP_INVOKEOPERATOR);
 	AddOpcodeBuf(env->buf, self->index);
 }
 
 void il_factor_explicit_binary_OP_LOAD(il_factor_explicit_binary_op* self, enviroment* env, call_context* cctx) {
-	il_factor_load(self->receiver, env, cctx);
-	il_factor_load(self->arg, env, cctx);
+	LoadILFactor(self->receiver, env, cctx);
+	LoadILFactor(self->arg, env, cctx);
 	self->index = il_factor_binary_op_index2(self->receiver, self->arg, self->type, env, cctx);
 	assert(self->index != -1);
 }
 
 generic_type* il_factor_explicit_binary_op_eval(il_factor_explicit_binary_op* self, enviroment* env, call_context* cctx) {
-	generic_type* gt = il_factor_eval(self->receiver, env, cctx);
+	generic_type* gt = EvalILFactor(self->receiver, env, cctx);
 	operator_overload* operator_ov = class_get_operator_overload(TYPE2CLASS(GENERIC2TYPE(gt)), self->index);
 	return operator_ov->return_gtype;
 }
 
 void il_factor_explicit_binary_op_delete(il_factor_explicit_binary_op* self) {
-	il_factor_delete(self->receiver);
-	il_factor_delete(self->arg);
+	DeleteILFactor(self->receiver);
+	DeleteILFactor(self->arg);
 	MEM_FREE(self);
 }

@@ -7,13 +7,13 @@
 #include "il_method.h"
 #include <assert.h>
 
-il_type * il_type_new() {
+il_type * NewILType() {
 	il_type* ret = (il_type*)MEM_MALLOC(sizeof(il_type));
 	ret->tag = ilTYPE_CLASS_T;
 	return ret;
 }
 
-Vector * il_type_method_vec(il_type * self) {
+Vector * GetMethodsILType(il_type * self) {
 	if (self->tag == ilTYPE_CLASS_T) {
 		return self->u.class_->method_list;
 	} else if (self->tag == ilTYPE_INTERFACE_T) {
@@ -22,7 +22,7 @@ Vector * il_type_method_vec(il_type * self) {
 	return NULL;
 }
 
-Vector * il_type_smethod_vec(il_type * self) {
+Vector * GetSMethodsILType(il_type * self) {
 	if (self->tag == ilTYPE_CLASS_T) {
 		return self->u.class_->smethod_list;
 	} else if (self->tag == ilTYPE_INTERFACE_T) {
@@ -37,14 +37,14 @@ void il_type_add_constructor(il_type * self, il_constructor * ctor) {
 	}
 }
 
-void il_type_add_field(il_type * self, il_field * field) {
+void AddFieldILType(il_type * self, il_field * field) {
 	assert(self->tag == ilTYPE_CLASS_T);
 	if (self->tag == ilTYPE_CLASS_T) {
-		il_class_add_field(self->u.class_, field);
+		AddFieldILClass(self->u.class_, field);
 	}
 }
 
-void il_type_add_property(il_type* self, il_property* prop) {
+void AddPropertyILType(il_type* self, il_property* prop) {
 	if (self->tag == ilTYPE_CLASS_T) {
 		il_class_add_property(self->u.class_, prop);
 	} else if(self->tag == ilTYPE_INTERFACE_T) {
@@ -52,21 +52,21 @@ void il_type_add_property(il_type* self, il_property* prop) {
 	}
 }
 
-void il_type_add_method(il_type * self, il_method * method) {
+void AddMethodILType(il_type * self, il_method * method) {
 	if (self->tag == ilTYPE_CLASS_T) {
-		il_class_add_method(self->u.class_, method);
+		AddMethodILClass(self->u.class_, method);
 	} else if (self->tag == ilTYPE_INTERFACE_T) {
 		il_interface_add_method(self->u.interface_, method);
 	}
 }
 
-void il_type_delete(il_type * self) {
+void DeleteILType(il_type * self) {
 	if (self->tag == ilTYPE_CLASS_T) {
-		il_class_delete(self->u.class_);
+		DeleteILClass(self->u.class_);
 	} else if (self->tag == ilTYPE_INTERFACE_T) {
-		il_interface_delete(self->u.interface_);
+		DeleteILInterface(self->u.interface_);
 	} else if(self->tag == ilTYPE_ENUM_T) {
-		il_enum_delete(self->u.enum_);
+		DeleteILEnum(self->u.enum_);
 	}
 	MEM_FREE(self);
 }

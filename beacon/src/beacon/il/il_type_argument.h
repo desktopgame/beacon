@@ -17,7 +17,7 @@ typedef struct il_type_argument {
  * 新しい型実引数を作成します.
  * @return
  */
-il_type_argument* il_type_argument_new();
+il_type_argument* NewILTypeArgument();
 
 /**
  * 全ての型実引数を出力します.

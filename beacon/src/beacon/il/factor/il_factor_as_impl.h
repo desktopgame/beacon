@@ -25,17 +25,17 @@ struct enviroment;
 struct type;
 struct field;
 
-il_factor* il_factor_wrap_as(il_factor_as* self);
+il_factor* WrapILAs(il_factor_as* self);
 
-il_factor_as* il_factor_as_new();
+il_factor_as* NewILAs();
 
 void il_factor_as_generate(il_factor_as* self, struct enviroment* env, call_context* cctx);
 
-void il_factor_as_load(il_factor_as* self, struct enviroment* env, call_context* cctx);
+void LoadILAs(il_factor_as* self, struct enviroment* env, call_context* cctx);
 
-generic_type* il_factor_as_eval(il_factor_as* self, struct enviroment* env, call_context* cctx);
+generic_type* EvalILAs(il_factor_as* self, struct enviroment* env, call_context* cctx);
 
-void il_factor_as_delete(il_factor_as* self);
+void DeleteILAs(il_factor_as* self);
 
-char* il_factor_as_tostr(il_factor_as* self, enviroment* env);
+char* ILAsToString(il_factor_as* self, enviroment* env);
 #endif // !SIGNAL_IL_IL_FACTOR_AS_H

@@ -20,8 +20,8 @@ il_factor_subscript* il_factor_subscript_malloc(const char* filename, int lineno
 }
 
 void il_factor_subscript_generate(il_factor_subscript* self, enviroment* env, call_context* cctx) {
-	il_factor_generate(self->pos, env, cctx);
-	il_factor_generate(self->receiver, env, cctx);
+	GenerateILFactor(self->pos, env, cctx);
+	GenerateILFactor(self->receiver, env, cctx);
 	AddOpcodeBuf(env->buf, OP_INVOKEOPERATOR);
 	AddOpcodeBuf(env->buf, self->operator_index);
 }
@@ -30,10 +30,10 @@ void il_factor_subscript_load(il_factor_subscript* self, enviroment* env, call_c
 	if(self->operator_index != -1) {
 		return;
 	}
-	il_factor_load(self->receiver, env, cctx);
-	il_factor_load(self->pos, env, cctx);
-	generic_type* receiver_gtype = il_factor_eval(self->receiver, env, cctx);
-	generic_type* arg_gtype = il_factor_eval(self->pos, env, cctx);
+	LoadILFactor(self->receiver, env, cctx);
+	LoadILFactor(self->pos, env, cctx);
+	generic_type* receiver_gtype = EvalILFactor(self->receiver, env, cctx);
+	generic_type* arg_gtype = EvalILFactor(self->pos, env, cctx);
 	Vector* args = NewVector();
 	PushVector(args, arg_gtype);
 	int temp = -1;
@@ -48,8 +48,8 @@ generic_type* il_factor_subscript_eval(il_factor_subscript* self, enviroment* en
 
 char* il_factor_subscript_tostr(il_factor_subscript* self, enviroment* env) {
 	string_buffer* buf = NewBuffer();
-	char* src = il_factor_tostr(self->receiver, env);
-	char* pos = il_factor_tostr(self->pos, env);
+	char* src = ILFactorToString(self->receiver, env);
+	char* pos = ILFactorToString(self->pos, env);
 	AppendsBuffer(buf, src);
 	AppendBuffer(buf, '[');
 	AppendsBuffer(buf, pos);
@@ -60,7 +60,7 @@ char* il_factor_subscript_tostr(il_factor_subscript* self, enviroment* env) {
 }
 
 void il_factor_subscript_delete(il_factor_subscript* self) {
-	il_factor_delete(self->receiver);
-	il_factor_delete(self->pos);
+	DeleteILFactor(self->receiver);
+	DeleteILFactor(self->pos);
 	MEM_FREE(self);
 }

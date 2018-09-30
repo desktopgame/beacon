@@ -21,8 +21,8 @@ il_factor_shift_op* il_factor_shift_op_new(operator_type type) {
 }
 
 generic_type* il_factor_shift_op_eval(il_factor_shift_op * self, enviroment * env, call_context* cctx) {
-	generic_type* lgtype = il_factor_eval(self->parent->left, env, cctx);
-	generic_type* rgtype = il_factor_eval(self->parent->right, env, cctx);
+	generic_type* lgtype = EvalILFactor(self->parent->left, env, cctx);
+	generic_type* rgtype = EvalILFactor(self->parent->right, env, cctx);
 	assert(lgtype != NULL);
 	assert(rgtype != NULL);
 	type* cint = TYPE_INT;
@@ -48,8 +48,8 @@ generic_type* il_factor_shift_op_eval(il_factor_shift_op * self, enviroment * en
 
 void il_factor_shift_op_generate(il_factor_shift_op* self, enviroment* env, call_context* cctx) {
 	if(self->operator_index == -1) {
-		il_factor_generate(self->parent->right, env, cctx);
-		il_factor_generate(self->parent->left, env, cctx);
+		GenerateILFactor(self->parent->right, env, cctx);
+		GenerateILFactor(self->parent->left, env, cctx);
 		if(il_factor_binary_op_int_int(self->parent, env, cctx)) {
 			AddOpcodeBuf(env->buf, (VectorItem)operator_to_iopcode(self->type));
 		} else {
@@ -59,8 +59,8 @@ void il_factor_shift_op_generate(il_factor_shift_op* self, enviroment* env, call
 			);
 		}
 	} else {
-		il_factor_generate(self->parent->right, env, cctx);
-		il_factor_generate(self->parent->left, env, cctx);
+		GenerateILFactor(self->parent->right, env, cctx);
+		GenerateILFactor(self->parent->left, env, cctx);
 		AddOpcodeBuf(env->buf, OP_INVOKEOPERATOR);
 		AddOpcodeBuf(env->buf, self->operator_index);
 	}

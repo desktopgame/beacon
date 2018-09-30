@@ -3,7 +3,7 @@
 #include "../../util/text.h"
 #include <stdio.h>
 
-il_stmt * il_stmt_wrap_break() {
+il_stmt * WrapILBreak() {
 	il_stmt* ret = il_stmt_new(ILSTMT_BREAK_T);
 	return ret;
 }
@@ -18,8 +18,8 @@ void il_stmt_break_generate(void * empty, enviroment * env, call_context* cctx) 
 	AddOpcodeBuf(env->buf, lab);
 }
 
-void il_stmt_break_load(void * empty, enviroment * env, call_context* cctx) {
+void LoadILBreak(void * empty, enviroment * env, call_context* cctx) {
 }
 
-void il_stmt_break_delete(void * empty) {
+void DeleteILBreak(void * empty) {
 }

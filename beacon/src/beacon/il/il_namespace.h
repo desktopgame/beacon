@@ -19,18 +19,18 @@ typedef struct il_namespace {
  * @param namev
  * @return
  */
-il_namespace* il_namespace_new(string_view namev);
+il_namespace* NewILNamespace(string_view namev);
 
 /**
  * 最も上の要素を返します.
  * @param self
  * @return
  */
-il_namespace* il_namespace_root(il_namespace* self);
+il_namespace* GetRootILNamespace(il_namespace* self);
 
 /**
  * 名前空間を表す要素を解放します.
  * @param self
  */
-void il_namespace_delete(il_namespace* self);
+void DeleteILNamespace(il_namespace* self);
 #endif // !SIGNAL_IL_IL_NAMESPACE_H

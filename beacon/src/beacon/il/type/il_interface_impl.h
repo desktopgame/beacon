@@ -28,7 +28,7 @@ il_type* il_type_wrap_interface(il_interface* self);
  * @param namev
  * @return
  */
-il_interface* il_interface_new(string_view namev);
+il_interface* NewILInterface(string_view namev);
 
 /**
  * プロパティを追加します.
@@ -48,5 +48,5 @@ void il_interface_add_method(il_interface* self, struct il_method* method);
  * インターフェースを開放します.
  * @param self
  */
-void il_interface_delete(il_interface* self);
+void DeleteILInterface(il_interface* self);
 #endif // !SIGNAL_IL_IL_INTERFACE_H

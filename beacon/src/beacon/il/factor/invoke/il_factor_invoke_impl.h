@@ -28,7 +28,7 @@ typedef struct il_factor_invoke {
 	instance_invoke tag;
 } il_factor_invoke;
 
-il_factor_invoke* il_factor_invoke_new(string_view namev);
+il_factor_invoke* NewILInvoke(string_view namev);
 
 void il_factor_invoke_generate(il_factor_invoke* self, struct enviroment* env, call_context* cctx);
 

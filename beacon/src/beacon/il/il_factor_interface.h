@@ -106,8 +106,8 @@ typedef struct il_factor {
 	} u;
 } il_factor;
 
-#define il_factor_new(type) (il_factor_malloc(type, __FILE__, __LINE__))
-il_factor* il_factor_malloc(il_factor_type type, const char* filename, int lineno);
+#define il_factor_new(type) (MallocILFactor(type, __FILE__, __LINE__))
+il_factor* MallocILFactor(il_factor_type type, const char* filename, int lineno);
 
 /**
  * オペコードを生成します.
@@ -116,7 +116,7 @@ il_factor* il_factor_malloc(il_factor_type type, const char* filename, int linen
  * @param env
  * @param cctx
  */
-void il_factor_generate(il_factor* self, enviroment* env, call_context* cctx);
+void GenerateILFactor(il_factor* self, enviroment* env, call_context* cctx);
 
 /**
  * 因子を読み込みます.
@@ -125,7 +125,7 @@ void il_factor_generate(il_factor* self, enviroment* env, call_context* cctx);
  * @param env
  * @param cctx
  */
-void il_factor_load(il_factor* self, enviroment* env, call_context* cctx);
+void LoadILFactor(il_factor* self, enviroment* env, call_context* cctx);
 
 /**
  * この因子が表す型を返します.
@@ -135,7 +135,7 @@ void il_factor_load(il_factor* self, enviroment* env, call_context* cctx);
  * @param cctx
  * @return
  */
-generic_type* il_factor_eval(il_factor* self, enviroment* env, call_context* cctx);
+generic_type* EvalILFactor(il_factor* self, enviroment* env, call_context* cctx);
 
 /**
  * ファクターの文字列表現を返します.
@@ -144,13 +144,13 @@ generic_type* il_factor_eval(il_factor* self, enviroment* env, call_context* cct
  * @param ilctx
  * @return
  */
-char* il_factor_tostr(il_factor* self, enviroment* env);
+char* ILFactorToString(il_factor* self, enviroment* env);
 
 /**
  * @param sb
  * @param args
  */
-void il_factor_args_tostr(string_buffer* sb, Vector* args, struct enviroment* env);
+void ILArgsToString(string_buffer* sb, Vector* args, struct enviroment* env);
 
 /**
  * @param sb
@@ -162,5 +162,5 @@ void il_factor_type_args_tostr(string_buffer* sb, Vector* type_args, struct envi
  * 計算可能な要素を開放します.
  * @param self
  */
-void il_factor_delete(il_factor* self);
+void DeleteILFactor(il_factor* self);
 #endif // !SIGNAL_IL_IL_FACTOR_INTERFACE_H

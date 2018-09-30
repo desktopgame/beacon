@@ -6,13 +6,13 @@ typedef struct il_stmt_defer {
 	il_stmt* stmt;
 } il_stmt_defer;
 
-il_stmt* il_stmt_wrap_defer(il_stmt_defer* self);
+il_stmt* WrapILDefer(il_stmt_defer* self);
 
-il_stmt_defer* il_stmt_defer_new();
+il_stmt_defer* NewILDefer();
 
-void il_stmt_defer_load(il_stmt_defer* self, enviroment* env, call_context* cctx);
+void LoadILDefer(il_stmt_defer* self, enviroment* env, call_context* cctx);
 
 void il_stmt_defer_generate(il_stmt_defer* self, enviroment* env, call_context* cctx);
 
-void il_stmt_defer_delete(il_stmt_defer* self);
+void DeleteILDefer(il_stmt_defer* self);
 #endif

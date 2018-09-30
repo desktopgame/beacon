@@ -26,11 +26,11 @@ typedef struct il_method {
  * @param name
  * @return
  */
-il_method* il_method_new(string_view namev);
+il_method* NewILMethod(string_view namev);
 
 /**
  * メソッドを開放します.
  * @param self
  */
-void il_method_delete(il_method* self);
+void DeleteILMethod(il_method* self);
 #endif // !SIGNAL_IL_IL_METHOD_H

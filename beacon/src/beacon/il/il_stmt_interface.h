@@ -70,8 +70,8 @@ typedef struct il_stmt {
 	} u;
 } il_stmt;
 
-#define il_stmt_new(type) (il_stmt_malloc(type, __FILE__, __LINE__))
-il_stmt* il_stmt_malloc(il_stmt_type type, const char* filename, int lineno);
+#define il_stmt_new(type) (MallocILStmt(type, __FILE__, __LINE__))
+il_stmt* MallocILStmt(il_stmt_type type, const char* filename, int lineno);
 
 /**
  * 文を生成します.
@@ -79,7 +79,7 @@ il_stmt* il_stmt_malloc(il_stmt_type type, const char* filename, int lineno);
  * @param env
  * @param cctx
  */
-void il_stmt_generate(il_stmt* self, enviroment* env, call_context* cctx);
+void GenerateILStmt(il_stmt* self, enviroment* env, call_context* cctx);
 
 /**
  * ステートメントを読み込んでエラーがあれば記録します.
@@ -87,11 +87,11 @@ void il_stmt_generate(il_stmt* self, enviroment* env, call_context* cctx);
  * @param env
  * @param cctx
  */
-void il_stmt_load(il_stmt * self, enviroment* env, call_context* cctx);
+void LoadILStmt(il_stmt * self, enviroment* env, call_context* cctx);
 
 /**
  * 文を開放します.
  * @param self
  */
-void il_stmt_delete(il_stmt* self);
+void DeleteILStmt(il_stmt* self);
 #endif // !SIGNAL_IL_IL_STMT_INTERFACE_H

@@ -12,7 +12,7 @@ static void il_method_parameter_delete(VectorItem item);
 static void il_method_stmt_delete(VectorItem item);
 static void il_method_type_parameter_delete(VectorItem item);
 
-il_method * il_method_new(string_view namev) {
+il_method * NewILMethod(string_view namev) {
 	il_method* ret = (il_method*)MEM_MALLOC(sizeof(il_method));
 	ret->namev = namev;
 	ret->parameter_list = NewVector();
@@ -25,7 +25,7 @@ il_method * il_method_new(string_view namev) {
 	return ret;
 }
 
-void il_method_delete(il_method * self) {
+void DeleteILMethod(il_method * self) {
 	if (self == NULL) {
 		return;
 	}
@@ -39,12 +39,12 @@ void il_method_delete(il_method * self) {
 //private
 static void il_method_parameter_delete(VectorItem item) {
 	il_parameter* e = (il_parameter*)item;
-	il_parameter_delete(e);
+	DeleteILParameter(e);
 }
 
 static void il_method_stmt_delete(VectorItem item) {
 	il_stmt* e = (il_stmt*)item;
-	il_stmt_delete(e);
+	DeleteILStmt(e);
 }
 
 static void il_method_type_parameter_delete(VectorItem item) {

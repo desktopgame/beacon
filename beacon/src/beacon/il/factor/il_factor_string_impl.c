@@ -14,7 +14,7 @@ il_factor * il_factor_wrap_string(il_factor_string * self) {
 	return ret;
 }
 
-il_factor_string * il_factor_string_new(string_view valuev) {
+il_factor_string * NewILString(string_view valuev) {
 	il_factor_string* ret = (il_factor_string*)MEM_MALLOC(sizeof(il_factor_string));
 	ret->valuev = valuev;
 	return ret;

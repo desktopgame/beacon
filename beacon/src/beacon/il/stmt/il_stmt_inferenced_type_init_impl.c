@@ -22,15 +22,15 @@ il_stmt_inferenced_type_init * il_stmt_inferenced_type_init_new(string_view name
 
 void il_stmt_inferenced_type_init_generate(il_stmt_inferenced_type_init * self, enviroment * env, call_context* cctx) {
 	//右辺の方で宣言する
-	il_factor_generate(self->fact, env, cctx);
+	GenerateILFactor(self->fact, env, cctx);
 	AddOpcodeBuf(env->buf, OP_STORE);
 	AddOpcodeBuf(env->buf, self->sym->index);
 }
 
 void il_stmt_inferenced_type_init_load(il_stmt_inferenced_type_init * self, enviroment * env, call_context* cctx) {
 	//代入するオブジェクトを計算
-	il_factor_load(self->fact, env, cctx);
-	generic_type* gtp = il_factor_eval(self->fact, env, cctx);
+	LoadILFactor(self->fact, env, cctx);
+	generic_type* gtp = EvalILFactor(self->fact, env, cctx);
 	BC_ERROR();
 	//voidは代入できない
 	if(gtp->core_type != NULL &&
@@ -53,6 +53,6 @@ void il_stmt_inferenced_type_init_load(il_stmt_inferenced_type_init * self, envi
 }
 
 void il_stmt_inferenced_type_init_delete(il_stmt_inferenced_type_init * self) {
-	il_factor_delete(self->fact);
+	DeleteILFactor(self->fact);
 	MEM_FREE(self);
 }

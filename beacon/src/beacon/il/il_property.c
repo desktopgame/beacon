@@ -3,7 +3,7 @@
 #include "../env/generic_cache.h"
 #include "../util/text.h"
 
-il_property* il_property_malloc(string_view namev, const char* filename, int lineno) {
+il_property* MallocILProperty(string_view namev, const char* filename, int lineno) {
 	il_property* ret = mem_malloc(sizeof(il_property), filename, lineno);
 	ret->namev = namev;
 	ret->fqcn = generic_cache_new();
@@ -12,7 +12,7 @@ il_property* il_property_malloc(string_view namev, const char* filename, int lin
 	return ret;
 }
 
-void il_property_delete(il_property* self) {
+void DeleteILProperty(il_property* self) {
 	generic_cache_delete(self->fqcn);
 	il_property_body_delete(self->set);
 	il_property_body_delete(self->get);

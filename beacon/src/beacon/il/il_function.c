@@ -12,7 +12,7 @@ static void il_function_type_parameter_delete(VectorItem item);
 static void il_function_parameter_delete(VectorItem item);
 static void il_function_stmt_delete(VectorItem item);
 
-il_function * il_function_new(string_view namev) {
+il_function * NewILFunction(string_view namev) {
 	il_function* ret = (il_function*)MEM_MALLOC(sizeof(il_function));
 	ret->namev = namev;
 	ret->type_parameter_vec = NewVector();
@@ -22,7 +22,7 @@ il_function * il_function_new(string_view namev) {
 	return ret;
 }
 
-void il_function_delete(il_function * self) {
+void DeleteILFunction(il_function * self) {
 	DeleteVector(self->type_parameter_vec, il_function_type_parameter_delete);
 	DeleteVector(self->parameter_list, il_function_parameter_delete);
 	DeleteVector(self->statement_list, il_function_stmt_delete);
@@ -38,10 +38,10 @@ static void il_function_type_parameter_delete(VectorItem item) {
 
 static void il_function_parameter_delete(VectorItem item) {
 	il_parameter* e = (il_parameter*)item;
-	il_parameter_delete(e);
+	DeleteILParameter(e);
 }
 
 static void il_function_stmt_delete(VectorItem item) {
 	il_stmt* e = (il_stmt*)item;
-	il_stmt_delete(e);
+	DeleteILStmt(e);
 }

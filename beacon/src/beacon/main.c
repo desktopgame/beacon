@@ -79,7 +79,7 @@ int main(int argc, char *argv[]) {
 	//_CrtSetBreakAlloc(36862);
 #endif
 	InitStringPool();
-	il_print_layout_hide(true);
+	HideILPrintLayout(true);
 	//mem_break(16066);
 	//コマンドライン引数を解析して実行
 	int ret = main_cl(argc, argv);

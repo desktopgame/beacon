@@ -18,12 +18,12 @@ il_factor_property* il_factor_property_malloc(const char* filename, int lineno) 
 }
 
 void il_factor_property_generate(il_factor_property* self, enviroment* env, call_context* cctx) {
-	il_factor_generate(self->fact, env, cctx);
+	GenerateILFactor(self->fact, env, cctx);
 	GenerateGetProperty(env->buf, self->p, self->index);
 }
 
 void il_factor_property_load(il_factor_property* self, enviroment* env, call_context* cctx) {
-	generic_type* receiver = il_factor_eval(self->fact, env, cctx);
+	generic_type* receiver = EvalILFactor(self->fact, env, cctx);
 	type* receiverT = GENERIC2TYPE(receiver);
 	int temp = -1;
 	class_find_property_tree(TYPE2CLASS(receiverT), self->p->namev, &temp);
@@ -43,7 +43,7 @@ generic_type* il_factor_property_eval(il_factor_property* self, enviroment* env,
 
 char* il_factor_property_tostr(il_factor_property* self, enviroment* env) {
 	string_buffer* sb = NewBuffer();
-	char* name = il_factor_tostr(self->fact, env);
+	char* name = ILFactorToString(self->fact, env);
 	AppendsBuffer(sb, name);
 	AppendBuffer(sb, '.');
 	AppendsBuffer(sb, Ref2Str(self->namev));
@@ -52,6 +52,6 @@ char* il_factor_property_tostr(il_factor_property* self, enviroment* env) {
 }
 
 void il_factor_property_delete(il_factor_property* self) {
-	il_factor_delete(self->fact);
+	DeleteILFactor(self->fact);
 	MEM_FREE(self);
 }

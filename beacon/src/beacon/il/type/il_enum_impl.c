@@ -6,21 +6,21 @@
 //proto
 static void il_enum_name_delete(il_enum* self);
 
-il_type * il_type_wrap_enum(il_enum * self) {
-	il_type* ret = il_type_new();
+il_type * WrapILEnum(il_enum * self) {
+	il_type* ret = NewILType();
 	ret->tag = ilTYPE_ENUM_T;
 	ret->u.enum_ = self;
 	return ret;
 }
 
-il_enum * il_enum_new(string_view namev) {
+il_enum * NewILEnum(string_view namev) {
 	il_enum* ret = (il_enum*)MEM_MALLOC(sizeof(il_enum));
 	ret->namev = namev;
 	ret->item_vec = NewVector();
 	return ret;
 }
 
-void il_enum_delete(il_enum * self) {
+void DeleteILEnum(il_enum * self) {
 	DeleteVector(self->item_vec, il_enum_name_delete);
 	MEM_FREE(self);
 }

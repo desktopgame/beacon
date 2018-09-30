@@ -26,7 +26,7 @@ void field_delete(field * self) {
 	if (self == NULL) {
 		return;
 	}
-	il_factor_delete(self->initial_value);
+	DeleteILFactor(self->initial_value);
 	DeleteEnviroment(self->initial_value_env);
 	MEM_FREE(self);
 }

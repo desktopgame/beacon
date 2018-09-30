@@ -18,13 +18,13 @@ il_factor_negative_op* il_factor_negative_op_malloc(operator_type type, const ch
 }
 
 generic_type* il_factor_negative_op_eval(il_factor_negative_op * self, enviroment * env, call_context* cctx) {
-	return il_factor_eval(self->parent->a, env, cctx);
+	return EvalILFactor(self->parent->a, env, cctx);
 }
 
 void il_factor_negative_op_generate(il_factor_negative_op* self, enviroment* env, call_context* cctx) {
-	generic_type* gt = il_factor_eval(self->parent->a, env, cctx);
+	generic_type* gt = EvalILFactor(self->parent->a, env, cctx);
 	if(self->operator_index == -1) {
-		il_factor_generate(self->parent->a, env, cctx);
+		GenerateILFactor(self->parent->a, env, cctx);
 		if(GENERIC2TYPE(gt) == TYPE_INT) {
 			AddOpcodeBuf(env->buf, OP_INEG);
 		} else if(GENERIC2TYPE(gt) == TYPE_DOUBLE) {
@@ -33,14 +33,14 @@ void il_factor_negative_op_generate(il_factor_negative_op* self, enviroment* env
 			assert(false);
 		}
 	} else {
-		il_factor_generate(self->parent->a, env, cctx);
+		GenerateILFactor(self->parent->a, env, cctx);
 		AddOpcodeBuf(env->buf, OP_INVOKEOPERATOR);
 		AddOpcodeBuf(env->buf, self->operator_index);
 	}
 }
 
 void il_factor_negative_OP_LOAD(il_factor_negative_op* self, enviroment* env, call_context* cctx) {
-	generic_type* gt = il_factor_eval(self->parent->a, env, cctx);
+	generic_type* gt = EvalILFactor(self->parent->a, env, cctx);
 	if(GENERIC2TYPE(gt) != TYPE_INT &&
 	   GENERIC2TYPE(gt) != TYPE_DOUBLE) {
 		self->operator_index = il_factor_unary_op_index(self->parent, env, cctx);

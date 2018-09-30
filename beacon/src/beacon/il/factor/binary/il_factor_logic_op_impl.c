@@ -26,7 +26,7 @@ generic_type* il_factor_logic_op_eval(il_factor_logic_op* self, enviroment* env,
 	} else if(il_factor_binary_op_bool_bool(self->parent, env, cctx)) {
 		return TYPE2GENERIC(TYPE_BOOL);
 	} else {
-		generic_type* lgtype = il_factor_eval(self->parent->left, env, cctx);
+		generic_type* lgtype = EvalILFactor(self->parent->left, env, cctx);
 		//プリミティブ型同士でないのに
 		//演算子オーバーロードもない
 		if(self->operator_index == -1) {
@@ -43,8 +43,8 @@ generic_type* il_factor_logic_op_eval(il_factor_logic_op* self, enviroment* env,
 
 void il_factor_logic_op_generate(il_factor_logic_op* self, enviroment* env, call_context* cctx) {
 	if(self->operator_index == -1) {
-		il_factor_generate(self->parent->right, env, cctx);
-		il_factor_generate(self->parent->left, env, cctx);
+		GenerateILFactor(self->parent->right, env, cctx);
+		GenerateILFactor(self->parent->left, env, cctx);
 		if(il_factor_binary_op_int_int(self->parent, env, cctx)) {
 			AddOpcodeBuf(env->buf, (VectorItem)operator_to_iopcode(self->type));
 		} else if(il_factor_binary_op_bool_bool(self->parent, env, cctx)) {
@@ -53,8 +53,8 @@ void il_factor_logic_op_generate(il_factor_logic_op* self, enviroment* env, call
 			assert(false);
 		}
 	} else {
-		il_factor_generate(self->parent->right, env, cctx);
-		il_factor_generate(self->parent->left, env, cctx);
+		GenerateILFactor(self->parent->right, env, cctx);
+		GenerateILFactor(self->parent->left, env, cctx);
 		AddOpcodeBuf(env->buf, OP_INVOKEOPERATOR);
 		AddOpcodeBuf(env->buf, self->operator_index);
 	}

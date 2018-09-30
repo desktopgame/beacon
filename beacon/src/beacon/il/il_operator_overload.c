@@ -25,10 +25,10 @@ void il_operator_overload_delete(il_operator_overload* self) {
 //private
 static void il_operator_overload_delete_parameter(VectorItem item) {
 	il_parameter* e = (il_parameter*)item;
-	il_parameter_delete(e);
+	DeleteILParameter(e);
 }
 
 static void il_operator_overload_delete_stmt(VectorItem item) {
 	il_stmt* e = (il_stmt*)item;
-	il_stmt_delete(e);
+	DeleteILStmt(e);
 }

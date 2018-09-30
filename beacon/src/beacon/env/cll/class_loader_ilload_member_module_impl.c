@@ -63,12 +63,12 @@ void CLIL_field(class_loader* self, il_type* current, ast* afield, access_level 
 		);
 		return;
 	}
-	il_field* v = il_field_new(aaccess_name->u.stringv_value);
+	il_field* v = NewILField(aaccess_name->u.stringv_value);
 	CLIL_generic_cache(atype_name, v->fqcn);
 	bool error;
 	v->access = level;
 	v->modifier = ASTCastToModifier(amodifier, &error);
-	il_type_add_field(current, v);
+	AddFieldILType(current, v);
 	//設定されているなら初期値も
 	if(!IsBlankAST(afact)) {
 		v->initial_value = CLIL_factor(self, afact);
@@ -99,7 +99,7 @@ void CLIL_prop(class_loader* self, il_type* current, ast* aprop, access_level le
 	ret->access = level;
 	ret->set = CLIL_prop_body(self, current, aset, ilPROPERTY_SET_T, level);
 	ret->get = CLIL_prop_body(self, current, aget, ilPROPERTY_GET_T, level);
-	il_type_add_property(current, ret);
+	AddPropertyILType(current, ret);
 	if(ret->set->is_short != ret->get->is_short) {
 		ThrowBCError(BCERROR_INVALID_PROPERTY_DECL_T, Ref2Str(current->u.class_->namev), Ref2Str(propname));
 	}
@@ -113,7 +113,7 @@ void CLIL_method(class_loader* self, il_type* current, ast* amethod, access_leve
 	ast* aparam_list = AtAST(amethod, 3);
 	ast* afunc_body = AtAST(amethod, 4);
 	ast* aret_name = AtAST(amethod, 5);
-	il_method* v = il_method_new(afunc_name->u.stringv_value);
+	il_method* v = NewILMethod(afunc_name->u.stringv_value);
 	CLIL_type_parameter(self, ageneric, v->type_parameter_list);
 	CLIL_generic_cache(aret_name, v->return_fqcn);
 	bool error;
@@ -126,7 +126,7 @@ void CLIL_method(class_loader* self, il_type* current, ast* amethod, access_leve
 	if(IsBlankAST(afunc_body)) {
 		v->no_stmt = true;
 	}
-	il_type_add_method(current, v);
+	AddMethodILType(current, v);
 	//重複する修飾子を検出
 	if(error) {
 		ThrowBCError(BCERROR_OVERWRAP_MODIFIER_T, Ref2Str(v->namev));
@@ -154,7 +154,7 @@ void CLIL_ctor(class_loader* self, il_type* current, ast* aconstructor, access_l
 		ilchain->type = ASTCastToChainType(achain_type);
 		CLIL_argument_list(self, ilchain->argument_list, aargs);
 	}
-	il_constructor* ilcons = il_constructor_new();
+	il_constructor* ilcons = NewILConstructor();
 	ilcons->access = level;
 	ilcons->chain = ilchain;
 	CLIL_parameter_list(self, ilcons->parameter_list, aparams);

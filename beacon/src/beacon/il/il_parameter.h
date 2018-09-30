@@ -25,11 +25,11 @@ typedef struct il_parameter {
  * @param name
  * @return
  */
-il_parameter* il_parameter_new(string_view namev);
+il_parameter* NewILParameter(string_view namev);
 
 /**
  * パラメータを開放します.
  * @param self
  */
-void il_parameter_delete(il_parameter* self);
+void DeleteILParameter(il_parameter* self);
 #endif // !SIGNAL_IL_IL_PARAMETER_H

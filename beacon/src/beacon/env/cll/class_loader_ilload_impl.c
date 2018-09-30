@@ -108,7 +108,7 @@ static void class_loader_ilload_identifier_list(class_loader* self, Vector* list
 
 void class_loader_ilload_impl(class_loader* self, ast* source_code) {
 	assert(self->il_code == NULL);
-	self->il_code = il_top_level_new();
+	self->il_code = NewILToplevel();
 	for (int i = 0; i < source_code->vchildren->length; i++) {
 		ast* child = AtAST(self->source_code, i);
 		//import a
@@ -138,7 +138,7 @@ static void class_loader_ilload_function(class_loader * self, ast * asource) {
 	ast* aparam_list = AtAST(asource, 2);
 	ast* afunc_body = AtAST(asource, 3);
 	ast* aret_name = AtAST(asource, 4);
-	il_function* ilfunc = il_function_new(afunc_name->u.stringv_value);
+	il_function* ilfunc = NewILFunction(afunc_name->u.stringv_value);
 	CLIL_type_parameter(self, atypeparams, ilfunc->type_parameter_vec);
 	CLIL_parameter_list(self, ilfunc->parameter_list, aparam_list);
 	CLIL_body(self, ilfunc->statement_list, afunc_body);
@@ -160,7 +160,7 @@ static void class_loader_ilload_import_list(class_loader* self, ast* asource) {
 static void class_loader_ilload_import(class_loader* self, ast* aimport_decl) {
 	assert(aimport_decl->tag == AST_IMPORT_DECL_T);
 	ast* apath = FirstAST(aimport_decl);
-	il_import* ret = il_import_new(apath->u.stringv_value);
+	il_import* ret = NewILImport(apath->u.stringv_value);
 	PushVector(self->il_code->import_list, ret);
 }
 
@@ -169,7 +169,7 @@ static void class_loader_ilload_namespace(class_loader* self, Vector* parent, as
 	ast* anamespace_path = FirstAST(anamespace_decl);
 	ast* anamespace_body = SecondAST(anamespace_decl);
 	il_namespace* iln = class_loader_ilload_ast_to_namespace(anamespace_path);
-	il_namespace* top = il_namespace_root(iln);
+	il_namespace* top = GetRootILNamespace(iln);
 	PushVector(parent, top);
 	class_loader_ilload_namespace_path_recursive(self, anamespace_path, anamespace_body);
 	class_loader_ilload_namespace_body(self, iln, iln->namespace_list, anamespace_body);
@@ -190,7 +190,7 @@ static il_namespace* class_loader_ilload_ast_to_namespace(ast* a) {
 	assert(a->tag == AST_NAMESPACE_PATH_T ||
 	       a->tag == AST_NAMESPACE_PATH_LIST_T);
 	if(a->tag == AST_NAMESPACE_PATH_T) {
-		il_namespace* ret = il_namespace_new(a->u.stringv_value);
+		il_namespace* ret = NewILNamespace(a->u.stringv_value);
 		return ret;
 	} else if(a->tag == AST_NAMESPACE_PATH_LIST_T) {
 		ast* al = FirstAST(a);
@@ -249,8 +249,8 @@ static il_class* class_loader_ilload_classImpl(class_loader* self, il_namespace*
 	ast* atypename = FirstAST(aclass_decl);
 	ast* aextend_list = SecondAST(aclass_decl);
 	ast* amember_tree = AtAST(aclass_decl, 2);
-	il_class* ilclassz = il_class_new(atypename->u.stringv_value);
-	il_type* iltype = il_type_wrap_class(ilclassz);
+	il_class* ilclassz = NewILClass(atypename->u.stringv_value);
+	il_type* iltype = WrapILClass(ilclassz);
 	//class Foo<A, B>
 	CLIL_type_parameter(self, FirstAST(atypename), ilclassz->type_parameter_list);
 	//class Foo : X, Y 
@@ -269,7 +269,7 @@ static void class_loader_ilload_interface(class_loader* self, il_namespace* curr
 	ast* atypename = FirstAST(ainterface_decl);
 	ast* aextends_list = SecondAST(ainterface_decl);
 	ast* amember_tree = AtAST(ainterface_decl, 2);
-	il_interface* ilinter = il_interface_new(atypename->u.stringv_value);
+	il_interface* ilinter = NewILInterface(atypename->u.stringv_value);
 	il_type* iltype = il_type_wrap_interface(ilinter);
 	//interface Foo<A, B>
 	CLIL_type_parameter(self, FirstAST(atypename), ilinter->type_parameter_list);
@@ -286,9 +286,9 @@ static void class_loader_ilload_interface(class_loader* self, il_namespace* curr
 static void class_loader_ilload_enum(class_loader * self, il_namespace * current, ast * aenum_decl) {
 	assert(aenum_decl->tag == AST_ENUM_DECL_T);
 	ast* aname_list = FirstAST(aenum_decl);
-	il_enum* ilenum = il_enum_new(aenum_decl->u.stringv_value);
+	il_enum* ilenum = NewILEnum(aenum_decl->u.stringv_value);
 	class_loader_ilload_identifier_list(self, ilenum->item_vec, aname_list);
-	PushVector(current->type_list, il_type_wrap_enum(ilenum));
+	PushVector(current->type_list, WrapILEnum(ilenum));
 }
 
 static void class_loader_ilload_identifier_list(class_loader * self, Vector * list, ast * asource) {

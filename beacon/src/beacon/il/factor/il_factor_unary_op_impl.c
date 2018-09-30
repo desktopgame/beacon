@@ -11,7 +11,7 @@
 #include "unary/il_factor_negative_op_impl.h"
 #include "unary/il_factor_not_op_impl.h"
 
-il_factor * il_factor_wrap_unary(il_factor_unary_op * self) {
+il_factor * WrapILUnary(il_factor_unary_op * self) {
 	il_factor* ret = il_factor_new(ILFACTOR_UNARY_OP_T);
 	ret->u.unary_ = self;
 	return ret;
@@ -45,11 +45,11 @@ void il_factor_unary_OP_LOAD(il_factor_unary_op * self, enviroment * env, call_c
 	if(self->type == OPERATOR_NOT_T && self->u.not_op != NULL) return;
 	if(self->type == OPERATOR_CHILDA_T && self->u.childa_op != NULL) return;
 	if(self->type == OPERATOR_NEGATIVE_T && self->u.negative_op != NULL) return;
-	il_factor_load(self->a, env, cctx);
+	LoadILFactor(self->a, env, cctx);
 	//カテゴリーわけ
 	if(self->type == OPERATOR_NOT_T) {
 		self->category = OPERATOR_CNOT_T;
-		il_factor_not_op* not = il_factor_not_op_new(self->type);
+		il_factor_not_op* not = NewILNotOp(self->type);
 		not->parent = self;
 		self->u.not_op = not;
 		il_factor_not_OP_LOAD(not, env, cctx);
@@ -107,7 +107,7 @@ void il_factor_unary_op_delete(il_factor_unary_op * self) {
 	if(self == NULL) {
 		return;
 	}
-	il_factor_delete(self->a);
+	DeleteILFactor(self->a);
 	switch(self->type) {
 		case OPERATOR_NOT_T:
 			il_factor_not_op_delete(self->u.not_op);
@@ -124,7 +124,7 @@ void il_factor_unary_op_delete(il_factor_unary_op * self) {
 
 char* il_factor_unary_op_tostr_simple(il_factor_unary_op* self, enviroment* env) {
 	string_buffer* sb = NewBuffer();
-	char* a = il_factor_tostr(self->a, env);
+	char* a = ILFactorToString(self->a, env);
 	AppendfBuffer(sb, "%s", operator_tostring(self->type));
 	AppendsBuffer(sb, a);
 	MEM_FREE(a);
@@ -137,7 +137,7 @@ int il_factor_unary_op_index(il_factor_unary_op* self, enviroment* env, call_con
 
 int il_factor_unary_op_index2(il_factor* receiver, operator_type otype, enviroment* env, call_context* cctx) {
 	Vector* args = NewVector();
-	generic_type* gtype = il_factor_eval(receiver, env, cctx);
+	generic_type* gtype = EvalILFactor(receiver, env, cctx);
 	if(gtype->virtual_type_index != -1) {
 		assert(false);
 	}
@@ -149,7 +149,7 @@ int il_factor_unary_op_index2(il_factor* receiver, operator_type otype, envirome
 }
 
 generic_type* il_factor_unary_op_apply(il_factor_unary_op* self, generic_type* gtype, enviroment* env, call_context* cctx) {
-	generic_type* lgtype = il_factor_eval(self->a, env, cctx);
+	generic_type* lgtype = EvalILFactor(self->a, env, cctx);
 	call_frame* cfr = PushCallContext(cctx, FRAME_INSTANCE_INVOKE_T);
 	cfr->u.instance_invoke.receiver = lgtype;
 	generic_type* ret = generic_type_apply(gtype,cctx);

@@ -53,7 +53,7 @@ char* il_factor_invoke_bound_tostr(il_factor_invoke_bound* self, enviroment* env
 	string_buffer* sb = NewBuffer();
 	AppendsBuffer(sb, Ref2Str(self->namev));
 	il_factor_type_args_tostr(sb, self->type_args, env);
-	il_factor_args_tostr(sb, self->type_args, env);
+	ILArgsToString(sb, self->type_args, env);
 	return ReleaseBuffer(sb);
 }
 
@@ -117,7 +117,7 @@ static void il_factor_invoke_bound_check(il_factor_invoke_bound * self, envirome
 	il_type_argument_resolve(self->type_args, cctx);
 	for(int i=0; i<self->args->length; i++) {
 		il_argument* ilarg = AtVector(self->args, i);
-		il_factor_load(ilarg->factor, env, cctx);
+		LoadILFactor(ilarg->factor, env, cctx);
 	}
 	BC_ERROR();
 	#if defined(DEBUG)
@@ -181,7 +181,7 @@ static void il_factor_invoke_bound_check(il_factor_invoke_bound * self, envirome
 
 static void il_factor_invoke_bound_args_delete(VectorItem item) {
 	il_argument* e = (il_argument*)item;
-	il_argument_delete(e);
+	DeleteILArgument(e);
 }
 
 static void il_factor_invoke_bound_generate_method(il_factor_invoke_bound* self, enviroment* env, call_context* cctx) {
@@ -197,7 +197,7 @@ static void il_factor_invoke_bound_generate_method(il_factor_invoke_bound* self,
 	}
 	for(int i=0; i<self->args->length; i++) {
 		il_argument* e = (il_argument*)AtVector(self->args, i);
-		il_factor_generate(e->factor, env, cctx);
+		GenerateILFactor(e->factor, env, cctx);
 		if(GetLastBCError()) {
 			return;
 		}
@@ -231,7 +231,7 @@ static void il_factor_invoke_bound_generate_subscript(il_factor_invoke_bound* se
 	}
 	for(int i=0; i<self->args->length; i++) {
 		il_argument* e = (il_argument*)AtVector(self->args, i);
-		il_factor_generate(e->factor, env, cctx);
+		GenerateILFactor(e->factor, env, cctx);
 		if(GetLastBCError()) {
 			return;
 		}

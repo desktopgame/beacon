@@ -10,9 +10,9 @@ typedef struct il_enum {
 	Vector* item_vec;
 } il_enum;
 
-il_type* il_type_wrap_enum(il_enum* self);
+il_type* WrapILEnum(il_enum* self);
 
-il_enum* il_enum_new(string_view namev);
+il_enum* NewILEnum(string_view namev);
 
-void il_enum_delete(il_enum* self);
+void DeleteILEnum(il_enum* self);
 #endif // !SIGNAL_IL_IL_ENUM_H

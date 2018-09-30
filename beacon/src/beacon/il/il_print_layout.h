@@ -14,11 +14,11 @@ bool il_print_layout_lineno(int lineno);
  * 必要に応じて行番号を表示します.
  * @param lineno
  */
-void il_print_layout_form(int lineno);
+void FormatILPrintLayout(int lineno);
 
 /**
  * 行番号を表示しないならtrue.
  * @param is_hide
  */
-void il_print_layout_hide(bool is_hide);
+void HideILPrintLayout(bool is_hide);
 #endif // !SIGNAL_IL_PRINT_LAYOUT_H

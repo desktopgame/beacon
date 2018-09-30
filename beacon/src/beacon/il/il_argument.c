@@ -5,7 +5,7 @@
 #include "../util/text.h"
 #include "../util/mem.h"
 
-il_argument * il_argument_new() {
+il_argument * NewILArgument() {
 	void* block = MEM_MALLOC(sizeof(il_argument));
 	assert(block != NULL);
 	il_argument* ret = (il_argument*)block;
@@ -13,7 +13,7 @@ il_argument * il_argument_new() {
 	return ret;
 }
 
-void il_argument_delete(il_argument * self) {
-	il_factor_delete(self->factor);
+void DeleteILArgument(il_argument * self) {
+	DeleteILFactor(self->factor);
 	MEM_FREE(self);
 }

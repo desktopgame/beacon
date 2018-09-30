@@ -18,21 +18,21 @@ typedef struct il_stmt_catch {
 	Vector* statement_list;
 } il_stmt_catch;
 
-il_stmt* il_stmt_wrap_try(il_stmt_try* self);
+il_stmt* WrapILTry(il_stmt_try* self);
 
-il_stmt_try* il_stmt_try_new();
+il_stmt_try* NewILTry();
 
-il_stmt_catch* il_stmt_catch_new(string_view namev);
+il_stmt_catch* NewILCatch(string_view namev);
 
-void il_stmt_try_generate(il_stmt_try* self, struct enviroment* env, call_context* cctx);
+void GenerateILTry(il_stmt_try* self, struct enviroment* env, call_context* cctx);
 
 void il_stmt_catch_generate(il_stmt_catch* self, struct enviroment* env, call_context* cctx);
 
-void il_stmt_try_load(il_stmt_try* self, struct enviroment* env, call_context* cctx);
+void LoadILTry(il_stmt_try* self, struct enviroment* env, call_context* cctx);
 
-void il_stmt_catch_load(il_stmt_catch* self, struct enviroment* env, call_context* cctx);
+void LoadILCatch(il_stmt_catch* self, struct enviroment* env, call_context* cctx);
 
-void il_stmt_catch_delete(il_stmt_catch* self);
+void DeleteILCatch(il_stmt_catch* self);
 
-void il_stmt_try_delete(il_stmt_try* self);
+void DeleteILTry(il_stmt_try* self);
 #endif

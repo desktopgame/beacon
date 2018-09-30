@@ -9,7 +9,7 @@
 #include "../../../env/operator_overload.h"
 #include "../il_factor_unary_op_impl.h"
 
-il_factor_not_op* il_factor_not_op_new(operator_type type) {
+il_factor_not_op* NewILNotOp(operator_type type) {
 	il_factor_not_op* ret = (il_factor_not_op*)MEM_MALLOC(sizeof(il_factor_not_op));
 	ret->parent = NULL;
 	ret->type = type;
@@ -23,26 +23,26 @@ generic_type* il_factor_not_op_eval(il_factor_not_op * self, enviroment * env, c
 
 void il_factor_not_op_generate(il_factor_not_op* self, enviroment* env, call_context* cctx) {
 	if(self->operator_index == -1) {
-		il_factor_generate(self->parent->a, env, cctx);
+		GenerateILFactor(self->parent->a, env, cctx);
 		if(GetLastBCError()) {
 			return;
 		}
-		generic_type* gt = il_factor_eval(self->parent->a, env, cctx);
+		generic_type* gt = EvalILFactor(self->parent->a, env, cctx);
 		if(GENERIC2TYPE(gt) == TYPE_BOOL) {
 			AddOpcodeBuf(env->buf, OP_BNOT);
 		} else {
 			assert(false);
 		}
 	} else {
-		il_factor_generate(self->parent->a, env, cctx);
+		GenerateILFactor(self->parent->a, env, cctx);
 		AddOpcodeBuf(env->buf, OP_INVOKEOPERATOR);
 		AddOpcodeBuf(env->buf, self->operator_index);
 	}
 }
 
 void il_factor_not_OP_LOAD(il_factor_not_op* self, enviroment* env, call_context* cctx) {
-	 il_factor_load(self->parent->a, env, cctx);
-	generic_type* gt = il_factor_eval(self->parent->a, env, cctx);
+	 LoadILFactor(self->parent->a, env, cctx);
+	generic_type* gt = EvalILFactor(self->parent->a, env, cctx);
 	if(GENERIC2TYPE(gt) != TYPE_BOOL) {
 		self->operator_index = il_factor_unary_op_index(self->parent, env, cctx);
 	}

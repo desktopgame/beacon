@@ -11,7 +11,7 @@
 
 static void check_context(il_factor_this * self, enviroment * env, call_context* cctx);
 
-il_factor_this* il_factor_this_new() {
+il_factor_this* NewILThis() {
 	il_factor_this* ret = (il_factor_this*)MEM_MALLOC(sizeof(il_factor_this));
 	ret->resolved = NULL;
 	return ret;
@@ -21,15 +21,15 @@ void il_factor_this_generate(il_factor_this * self, enviroment * env, call_conte
 	AddOpcodeBuf(env->buf, OP_THIS);
 }
 
-void il_factor_this_load(il_factor_this * self, enviroment * env, call_context* cctx) {
+void LoadILThis(il_factor_this * self, enviroment * env, call_context* cctx) {
 	check_context(self, env, cctx);
 }
 
-generic_type* il_factor_this_eval(il_factor_this * self, enviroment * env, call_context* cctx) {
+generic_type* EvalILThis(il_factor_this * self, enviroment * env, call_context* cctx) {
 	return GetTypeCContext(cctx)->generic_self;
 }
 
-char* il_factor_this_tostr(il_factor_this* self, enviroment* env) {
+char* ILThisToString(il_factor_this* self, enviroment* env) {
 	return Strdup("this");
 }
 

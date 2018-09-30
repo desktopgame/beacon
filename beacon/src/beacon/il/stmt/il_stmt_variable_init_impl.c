@@ -25,9 +25,9 @@ il_stmt_variable_init * il_stmt_variable_init_new(string_view namev) {
 }
 
 void il_stmt_variable_init_generate(il_stmt_variable_init * self, enviroment * env, call_context* cctx) {
-	il_factor_generate(self->fact, env, cctx);
+	GenerateILFactor(self->fact, env, cctx);
 	//宣言型と代入型が異なる場合
-	generic_type* ga = il_factor_eval(self->fact, env, cctx);
+	generic_type* ga = EvalILFactor(self->fact, env, cctx);
 	generic_type* gb = import_manager_resolve(NULL, self->fqcn, cctx);
 	//voidは代入できない
 	assert(gb != NULL);
@@ -48,7 +48,7 @@ void il_stmt_variable_init_generate(il_stmt_variable_init * self, enviroment * e
 }
 
 void il_stmt_variable_init_load(il_stmt_variable_init * self, enviroment * env, call_context* cctx) {
-	il_factor_load(self->fact, env, cctx);
+	LoadILFactor(self->fact, env, cctx);
 	if(IsContainsSymbol(env->sym_table, self->namev)) {
 		ThrowBCError(BCERROR_OVERWRAP_VARIABLE_NAME_T,
 			Ref2Str(self->namev)
@@ -72,7 +72,7 @@ void il_stmt_variable_init_load(il_stmt_variable_init * self, enviroment * env, 
 }
 
 void il_stmt_variable_init_delete(il_stmt_variable_init * self) {
-	il_factor_delete(self->fact);
+	DeleteILFactor(self->fact);
 	generic_cache_delete(self->fqcn);
 	MEM_FREE(self);
 }

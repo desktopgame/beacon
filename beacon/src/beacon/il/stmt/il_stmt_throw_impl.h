@@ -9,13 +9,13 @@ typedef struct il_stmt_throw {
 	il_factor* fact;
 } il_stmt_throw;
 
-il_stmt* il_stmt_wrap_throw(il_stmt_throw* self);
+il_stmt* WrapILThrow(il_stmt_throw* self);
 
-il_stmt_throw* il_stmt_throw_new();
+il_stmt_throw* NewILThrow();
 
 void il_stmt_throw_generate(il_stmt_throw* self, struct enviroment* env, call_context* cctx);
 
-void il_stmt_throw_load(il_stmt_throw* self, struct enviroment* env, call_context* cctx);
+void LoadILThrow(il_stmt_throw* self, struct enviroment* env, call_context* cctx);
 
-void il_stmt_throw_delete(il_stmt_throw* self);
+void DeleteILThrow(il_stmt_throw* self);
 #endif

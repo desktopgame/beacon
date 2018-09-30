@@ -24,7 +24,7 @@ il_stmt_yield_return* il_stmt_yield_return_malloc(const char* filename, int line
 }
 
 void il_stmt_yield_return_generate(il_stmt_yield_return* self, enviroment* env, call_context* cctx) {
-	il_factor_generate(self->fact, env, cctx);
+	GenerateILFactor(self->fact, env, cctx);
 	AddOpcodeBuf(env->buf, OP_CORO_NEXT);
 }
 
@@ -33,7 +33,7 @@ void il_stmt_yield_return_load(il_stmt_yield_return * self, enviroment* env, cal
 }
 
 void il_stmt_yield_return_delete(il_stmt_yield_return* self) {
-	il_factor_delete(self->fact);
+	DeleteILFactor(self->fact);
 	MEM_FREE(self);
 }
 //private
@@ -44,7 +44,7 @@ static void check_method_yield_return(il_stmt_yield_return * self, enviroment * 
 	method* m = GetMethodCContext(cctx);
 	generic_type* arg = AtVector(m->return_gtype->type_args_list, 0);
 	//戻り値の型に互換性がない
-	if(generic_type_distance(arg, il_factor_eval(self->fact, env, cctx), cctx) < 0) {
+	if(generic_type_distance(arg, EvalILFactor(self->fact, env, cctx), cctx) < 0) {
 		ThrowBCError(BCERROR_YIELD_RETURN_VALUE_TYPE_IS_NOT_COMPATIBLE_T,
 			Ref2Str(type_name(m->parent)),
 			Ref2Str(m->namev)

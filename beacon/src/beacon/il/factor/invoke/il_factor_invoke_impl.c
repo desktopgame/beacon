@@ -23,7 +23,7 @@ static generic_type* il_factor_invoke_return_gtype(il_factor_invoke* self);
 static void il_factor_invoke_generate_method(il_factor_invoke* self, enviroment* env, call_context* cctx);
 static void il_factor_invoke_generate_subscript(il_factor_invoke* self, enviroment* env, call_context* cctx);
 
-il_factor_invoke* il_factor_invoke_new(string_view namev) {
+il_factor_invoke* NewILInvoke(string_view namev) {
 	il_factor_invoke* ret = (il_factor_invoke*)MEM_MALLOC(sizeof(il_factor_invoke));
 	ret->args = NULL;
 	ret->receiver = NULL;
@@ -47,8 +47,8 @@ void il_factor_invoke_load(il_factor_invoke * self, enviroment * env, call_conte
 	call_frame* cfr = PushCallContext(cctx, FRAME_INSTANCE_INVOKE_T);
 	cfr->u.instance_invoke.args = self->args;
 	cfr->u.instance_invoke.typeargs = self->type_args;
-	cfr->u.instance_invoke.receiver = il_factor_eval(self->receiver, env, cctx);
-	il_factor_load(self->receiver, env, cctx);
+	cfr->u.instance_invoke.receiver = EvalILFactor(self->receiver, env, cctx);
+	LoadILFactor(self->receiver, env, cctx);
 	il_factor_invoke_check(self, env, cctx);
 	PopCallContext(cctx);
 }
@@ -74,12 +74,12 @@ generic_type* il_factor_invoke_eval(il_factor_invoke * self, enviroment * env, c
 
 char* il_factor_invoke_tostr(il_factor_invoke* self, enviroment* env) {
 	string_buffer* sb = NewBuffer();
-	char* invstr = il_factor_tostr(self->receiver, env);
+	char* invstr = ILFactorToString(self->receiver, env);
 	AppendsBuffer(sb, invstr);
 	AppendBuffer(sb, '.');
 	AppendsBuffer(sb, Ref2Str(self->namev));
 	il_factor_type_args_tostr(sb, self->type_args, env);
-	il_factor_args_tostr(sb, self->type_args, env);
+	ILArgsToString(sb, self->type_args, env);
 	MEM_FREE(invstr);
 	return ReleaseBuffer(sb);
 }
@@ -87,7 +87,7 @@ char* il_factor_invoke_tostr(il_factor_invoke* self, enviroment* env) {
 void il_factor_invoke_delete(il_factor_invoke* self) {
 	DeleteVector(self->args, il_factor_invoke_args_delete);
 	DeleteVector(self->type_args, VectorDeleterOfNull);
-	il_factor_delete(self->receiver);
+	DeleteILFactor(self->receiver);
 	//generic_type_delete(self->resolved);
 	MEM_FREE(self);
 }
@@ -106,7 +106,7 @@ static void resolve_non_default(il_factor_invoke * self, enviroment * env, call_
 	if(self->resolved != NULL) {
 		return;
 	}
-	generic_type* receivergType = il_factor_eval(self->receiver, env, cctx);
+	generic_type* receivergType = EvalILFactor(self->receiver, env, cctx);
 	generic_type* rgtp = il_factor_invoke_return_gtype(self);
 	if(rgtp->tag == GENERIC_TYPE_TAG_CLASS_T) {
 		//レシーバの実体化された型の中で、
@@ -126,7 +126,7 @@ static void resolve_default(il_factor_invoke * self, enviroment * env, call_cont
 	if(self->resolved != NULL) {
 		return;
 	}
-	generic_type* receivergType = il_factor_eval(self->receiver, env, cctx);
+	generic_type* receivergType = EvalILFactor(self->receiver, env, cctx);
 	generic_type* rgtp = il_factor_invoke_return_gtype(self);
 //	virtual_type returnvType = self->m->return_vtype;
 	//内側に型変数が含まれているかもしれないので、
@@ -141,7 +141,7 @@ static void resolve_default(il_factor_invoke * self, enviroment * env, call_cont
 
 static void il_factor_invoke_check(il_factor_invoke * self, enviroment * env, call_context* cctx) {
 	//レシーバの読み込み
-	il_factor_load(self->receiver, env, cctx);
+	LoadILFactor(self->receiver, env, cctx);
 	if(GetLastBCError()) {
 		return;
 	}
@@ -150,7 +150,7 @@ static void il_factor_invoke_check(il_factor_invoke * self, enviroment * env, ca
 		assert(ilvar->type != ILVARIABLE_TYPE_STATIC_T);
 	}
 	//レシーバの型を評価
-	generic_type* gtype = il_factor_eval(self->receiver, env, cctx);
+	generic_type* gtype = EvalILFactor(self->receiver, env, cctx);
 	if(GetLastBCError()) {
 		return;
 	}
@@ -198,7 +198,7 @@ static void il_factor_invoke_check(il_factor_invoke * self, enviroment * env, ca
 
 static void il_factor_invoke_args_delete(VectorItem item) {
 	il_argument* e = (il_argument*)item;
-	il_argument_delete(e);
+	DeleteILArgument(e);
 }
 
 static generic_type* il_factor_invoke_return_gtype(il_factor_invoke* self) {
@@ -219,9 +219,9 @@ static void il_factor_invoke_generate_method(il_factor_invoke* self, enviroment*
 	}
 	for(int i=0; i<self->args->length; i++) {
 		il_argument* e = (il_argument*)AtVector(self->args, i);
-		il_factor_generate(e->factor, env, cctx);
+		GenerateILFactor(e->factor, env, cctx);
 	}
-	il_factor_generate(self->receiver, env, cctx);
+	GenerateILFactor(self->receiver, env, cctx);
 	if(self->u.m->parent->tag == TYPE_INTERFACE_T) {
 		AddOpcodeBuf(env->buf, (VectorItem)OP_INVOKEINTERFACE);
 		AddOpcodeBuf(env->buf, (VectorItem)self->u.m->parent->absolute_index);
@@ -251,9 +251,9 @@ static void il_factor_invoke_generate_subscript(il_factor_invoke* self, envirome
 	}
 	for(int i=0; i<self->args->length; i++) {
 		il_argument* e = (il_argument*)AtVector(self->args, i);
-		il_factor_generate(e->factor, env, cctx);
+		GenerateILFactor(e->factor, env, cctx);
 	}
-	il_factor_generate(self->receiver, env, cctx);
+	GenerateILFactor(self->receiver, env, cctx);
 	AddOpcodeBuf(env->buf, OP_INVOKEOPERATOR);
 	AddOpcodeBuf(env->buf, self->index);
 }

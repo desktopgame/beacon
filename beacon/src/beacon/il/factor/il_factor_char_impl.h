@@ -11,17 +11,17 @@ typedef struct il_factor_char {
 	char value;
 } il_factor_char;
 
-il_factor* il_factor_wrap_char(il_factor_char* self);
+il_factor* WrapILChar(il_factor_char* self);
 
-il_factor_char* il_factor_char_new(char c);
+il_factor_char* NewILChar(char c);
 
 void il_factor_char_generate(il_factor_char* self, struct enviroment* env, call_context* cctx);
 
-void il_factor_char_load(il_factor_char* self, struct enviroment* env, call_context* cctx);
+void LoadILChar(il_factor_char* self, struct enviroment* env, call_context* cctx);
 
-generic_type* il_factor_char_eval(il_factor_char* self, struct enviroment* env, call_context* cctx);
+generic_type* EvalILChar(il_factor_char* self, struct enviroment* env, call_context* cctx);
 
-char* il_factor_char_tostr(il_factor_char* self, struct enviroment* env);
+char* ILCharToString(il_factor_char* self, struct enviroment* env);
 
 void il_factor_char_delete(il_factor_char* self);
 

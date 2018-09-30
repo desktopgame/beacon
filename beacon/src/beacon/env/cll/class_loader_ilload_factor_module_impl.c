@@ -33,13 +33,13 @@ il_factor* CLIL_factor(class_loader* self, ast* source) {
 //private
 static il_factor* CLIL_factorImpl(class_loader* self, ast* source) {
 	if (source->tag == AST_INT_T) {
-		return il_factor_wrap_int(il_factor_int_new(source->u.int_value));
+		return WrapILInt(il_factor_int_new(source->u.int_value));
 	} else if (source->tag == AST_DOUBLE_T) {
-		return il_factor_wrap_double(il_factor_double_new(source->u.double_value));
+		return il_factor_wrap_double(NewILDouble(source->u.double_value));
 	} else if (source->tag == AST_CHAR_T) {
-		return il_factor_wrap_char(il_factor_char_new(source->u.char_value));
+		return WrapILChar(NewILChar(source->u.char_value));
 	} else if (source->tag == AST_STRING_T) {
-		return il_factor_wrap_string(il_factor_string_new(source->u.stringv_value));
+		return il_factor_wrap_string(NewILString(source->u.stringv_value));
 	} else if (source->tag == AST_VARIABLE_T) {
 		return il_factor_wrap_variable(CLIL_variable(self, source));
 		//operator(+ - * / %)
@@ -66,7 +66,7 @@ static il_factor* CLIL_factorImpl(class_loader* self, ast* source) {
 	} else if(source->tag == AST_EXC_OR_T) {
 		return il_factor_wrap_binary(CLIL_binary(self, source, OPERATOR_EXCOR_T));
 	} else if(source->tag == AST_CHILDA_T) {
-		return il_factor_wrap_unary(CLIL_unary(self, source, OPERATOR_CHILDA_T));
+		return WrapILUnary(CLIL_unary(self, source, OPERATOR_CHILDA_T));
 	//<< >>
 	} else if(source->tag == AST_LSHIFT_T) {
 		return il_factor_wrap_binary(CLIL_binary(self, source, OPERATOR_LSHIFT_T));
@@ -87,35 +87,35 @@ static il_factor* CLIL_factorImpl(class_loader* self, ast* source) {
 		return il_factor_wrap_binary(CLIL_binary(self, source, OPERATOR_LE_T));
 		//operator(= += -= *= /= %=)
 	} else if (source->tag == AST_AS_TSIGN_T) {
-		return il_factor_wrap_assign(CLIL_assign(self, source));
+		return WrapILAssign(CLIL_assign(self, source));
 	} else if (source->tag == AST_ADD_ASSIGN_T) {
-		return il_factor_wrap_assign(CLIL_assign_arithmetic(self, source, OPERATOR_ADD_T));
+		return WrapILAssign(CLIL_assign_arithmetic(self, source, OPERATOR_ADD_T));
 	} else if (source->tag == AST_SUB_ASSIGN_T) {
-		return il_factor_wrap_assign(CLIL_assign_arithmetic(self, source, OPERATOR_SUB_T));
+		return WrapILAssign(CLIL_assign_arithmetic(self, source, OPERATOR_SUB_T));
 	} else if (source->tag == AST_MUL_ASSIGN_T) {
-		return il_factor_wrap_assign(CLIL_assign_arithmetic(self, source, OPERATOR_MUL_T));
+		return WrapILAssign(CLIL_assign_arithmetic(self, source, OPERATOR_MUL_T));
 	} else if (source->tag == AST_DIV_ASSIGN_T) {
-		return il_factor_wrap_assign(CLIL_assign_arithmetic(self, source, OPERATOR_DIV_T));
+		return WrapILAssign(CLIL_assign_arithmetic(self, source, OPERATOR_DIV_T));
 	} else if (source->tag == AST_MOD_ASSIGN_T) {
-		return il_factor_wrap_assign(CLIL_assign_arithmetic(self, source, OPERATOR_MOD_T));
+		return WrapILAssign(CLIL_assign_arithmetic(self, source, OPERATOR_MOD_T));
 	//instanceof
 	} else if(source->tag == AST_INSTANCEOF_T) {
 		return il_factor_wrap_instanceof(CLIL_instanceof(self, source));
 	//|= &=
 	} else if(source->tag == AST_OR_ASSIGN_T) {
-		return il_factor_wrap_assign(CLIL_assign_arithmetic(self, source, OPERATOR_BIT_OR_T));
+		return WrapILAssign(CLIL_assign_arithmetic(self, source, OPERATOR_BIT_OR_T));
 	} else if(source->tag == AST_AND_ASSIGN_T) {
-		return il_factor_wrap_assign(CLIL_assign_arithmetic(self, source, OPERATOR_BIT_AND_T));
+		return WrapILAssign(CLIL_assign_arithmetic(self, source, OPERATOR_BIT_AND_T));
 	//<<= >>=
 	} else if(source->tag == AST_LSHIFT_ASSIGN_T) {
-		return il_factor_wrap_assign(CLIL_assign_arithmetic(self, source, OPERATOR_LSHIFT_T));
+		return WrapILAssign(CLIL_assign_arithmetic(self, source, OPERATOR_LSHIFT_T));
 	} else if(source->tag == AST_RSHIFT_ASSIGN_T) {
-		return il_factor_wrap_assign(CLIL_assign_arithmetic(self, source, OPERATOR_RSHIFT_T));
+		return WrapILAssign(CLIL_assign_arithmetic(self, source, OPERATOR_RSHIFT_T));
 	//!-
 	} else if (source->tag == AST_NOT_T) {
-		return il_factor_wrap_unary(CLIL_unary(self, source, OPERATOR_NOT_T));
+		return WrapILUnary(CLIL_unary(self, source, OPERATOR_NOT_T));
 	} else if (source->tag == AST_NEG_T) {
-		return il_factor_wrap_unary(CLIL_unary(self, source, OPERATOR_NEGATIVE_T));
+		return WrapILUnary(CLIL_unary(self, source, OPERATOR_NEGATIVE_T));
 	} else if(source->tag == AST_EXPLICIT_UOPERATOR_T) {
 		return il_factor_wrap_explicit_unary_op(CLIL_explicit_unary(self, source, source->u.operator_value));
 	} else if(source->tag == AST_EXPLICIT_BIOPERATOR_T) {
@@ -123,26 +123,26 @@ static il_factor* CLIL_factorImpl(class_loader* self, ast* source) {
 		//this super
 	} else if (source->tag == AST_THIS_T) {
 		il_factor* ret = il_factor_new(ILFACTOR_THIS_T);
-		il_factor_this* th = il_factor_this_new();
+		il_factor_this* th = NewILThis();
 		ret->u.this_ = th;
 		return ret;
 	} else if (source->tag == AST_SUPER_T) {
 		il_factor* ret = il_factor_new(ILFACTOR_SUPER_T);
-		il_factor_super* sp = il_factor_super_new();
+		il_factor_super* sp = NewILSuper();
 		ret->u.super_ = sp;
 		return ret;
 	} else if (source->tag == AST_NEW_INSTANCE_T) {
 		return il_factor_wrap_new_instance(CLIL_new_instance(self, source));
 	} else if (source->tag == AST_TRUE_T) {
-		return il_factor_wrap_bool(CLIL_true(self, source));
+		return WrapILBool(CLIL_true(self, source));
 	} else if (source->tag == AST_FALSE_T) {
-		return il_factor_wrap_bool(CLIL_false(self, source));
+		return WrapILBool(CLIL_false(self, source));
 	} else if (source->tag == AST_NULL_T) {
 		il_factor* ret = il_factor_new(ILFACTOR_NULL_T);
 		ret->u.null_ = NULL;
 		return ret;
 	} else if (source->tag == AST_AS_T) {
-		return il_factor_wrap_as(CLIL_as(self, source));
+		return WrapILAs(CLIL_as(self, source));
 	} else if(source->tag == AST_OP_CALL_T) {
 		return il_factor_wrap_call_op(CLIL_call_op(self, source));
 	} else if(source->tag == AST_FIELD_ACCESS_T) {
@@ -155,11 +155,11 @@ static il_factor* CLIL_factorImpl(class_loader* self, ast* source) {
 }
 
 static il_factor_bool * CLIL_true(class_loader * self, ast * source) {
-	return il_factor_bool_new(true);
+	return NewILBool(true);
 }
 
 static il_factor_bool * CLIL_false(class_loader * self, ast * source) {
-	return il_factor_bool_new(false);
+	return NewILBool(false);
 }
 
 static il_factor_unary_op* CLIL_unary(class_loader* self, ast* source, operator_type type) {
@@ -237,7 +237,7 @@ static il_factor_new_instance* CLIL_new_instance(class_loader* self, ast* source
 }
 
 static il_factor_as* CLIL_as(class_loader* self, ast* source) {
-	il_factor_as* ret = il_factor_as_new();
+	il_factor_as* ret = NewILAs();
 	ret->fact = CLIL_factor(self, FirstAST(source));
 	CLIL_generic_cache(SecondAST(source), ret->fqcn);
 	return ret;

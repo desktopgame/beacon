@@ -10,14 +10,14 @@
 #include <stdio.h>
 #include <assert.h>
 
-il_factor* il_factor_malloc(il_factor_type type, const char* filename, int lineno) {
+il_factor* MallocILFactor(il_factor_type type, const char* filename, int lineno) {
 	il_factor* ret = mem_malloc(sizeof(il_factor), filename, lineno);
 	ret->type = type;
 	ret->lineno = -1;
 	return ret;
 }
 
-void il_factor_generate(il_factor * self, enviroment* env, call_context* cctx) {
+void GenerateILFactor(il_factor * self, enviroment* env, call_context* cctx) {
 	if(GetLastBCError()) {
 		return;
 	}
@@ -94,7 +94,7 @@ void il_factor_generate(il_factor * self, enviroment* env, call_context* cctx) {
 	AddRangeEnviroment(env, self->lineno);
 }
 
-void il_factor_load(il_factor * self, enviroment * env, call_context* cctx) {
+void LoadILFactor(il_factor * self, enviroment * env, call_context* cctx) {
 	if(GetLastBCError()) {
 		return;
 	}
@@ -102,13 +102,13 @@ void il_factor_load(il_factor * self, enviroment * env, call_context* cctx) {
 	SetBCErrorLine(self->lineno);
 	switch (self->type) {
 		case ILFACTOR_INT_T:
-			il_factor_int_load(self->u.int_, env, cctx);
+			LoadILInt(self->u.int_, env, cctx);
 			break;
 		case ILFACTOR_DOUBLE_T:
 			il_factor_double_load(self->u.double_, env, cctx);
 			break;
 		case ILFACTOR_CHAR_T:
-			il_factor_char_load(self->u.char_, env, cctx);
+			LoadILChar(self->u.char_, env, cctx);
 			break;
 		case ILFACTOR_STRING_T:
 			il_factor_string_load(self->u.string_, env, cctx);
@@ -126,10 +126,10 @@ void il_factor_load(il_factor * self, enviroment * env, call_context* cctx) {
 			il_factor_assign_OP_LOAD(self->u.assign_, env, cctx);
 			break;
 		case ILFACTOR_THIS_T:
-			il_factor_this_load(self->u.this_, env, cctx);
+			LoadILThis(self->u.this_, env, cctx);
 			break;
 		case ILFACTOR_SUPER_T:
-			il_factor_super_load(self->u.super_, env, cctx);
+			LoadILSuper(self->u.super_, env, cctx);
 			break;
 		case ILFACTOR_NEW_INSTANCE_T:
 			il_factor_new_instance_load(self->u.new_instance_, env, cctx);
@@ -138,10 +138,10 @@ void il_factor_load(il_factor * self, enviroment * env, call_context* cctx) {
 			//il_factor_bool_load(self->u.bool_, depth);
 			break;
 		case ILFACTOR_NULL_T:
-			il_factor_null_load(NULL, env, cctx);
+			LoadILNull(NULL, env, cctx);
 			break;
 		case ILFACTOR_AS_T:
-			il_factor_as_load(self->u.as_, env, cctx);
+			LoadILAs(self->u.as_, env, cctx);
 			break;
 		case ILFACTOR_CALL_OP_T:
 			il_factor_call_OP_LOAD(self->u.call_, env, cctx);
@@ -169,7 +169,7 @@ void il_factor_load(il_factor * self, enviroment * env, call_context* cctx) {
 	}
 }
 
-generic_type* il_factor_eval(il_factor * self, enviroment * env, call_context* cctx) {
+generic_type* EvalILFactor(il_factor * self, enviroment * env, call_context* cctx) {
 	if(GetLastBCError()) {
 		return NULL;
 	}
@@ -178,13 +178,13 @@ generic_type* il_factor_eval(il_factor * self, enviroment * env, call_context* c
 	generic_type* ret = NULL;
 	switch (self->type) {
 		case ILFACTOR_INT_T:
-			ret = il_factor_int_eval(self->u.int_, env, cctx);
+			ret = EvalILInt(self->u.int_, env, cctx);
 			break;
 		case ILFACTOR_DOUBLE_T:
 			ret = il_factor_double_eval(self->u.double_, env, cctx);
 			break;
 		case ILFACTOR_CHAR_T:
-			ret = il_factor_char_eval(self->u.char_, env, cctx);
+			ret = EvalILChar(self->u.char_, env, cctx);
 			break;
 		case ILFACTOR_STRING_T:
 			ret = il_factor_string_eval(self->u.string_, env, cctx);
@@ -202,22 +202,22 @@ generic_type* il_factor_eval(il_factor * self, enviroment * env, call_context* c
 			ret = il_factor_assign_op_eval(self->u.assign_, env, cctx);
 			break;
 		case ILFACTOR_THIS_T:
-			ret = il_factor_this_eval(self->u.this_, env, cctx);
+			ret = EvalILThis(self->u.this_, env, cctx);
 			break;
 		case ILFACTOR_SUPER_T:
-			ret = il_factor_super_eval(self->u.super_, env, cctx);
+			ret = EvalILSuper(self->u.super_, env, cctx);
 			break;
 		case ILFACTOR_NEW_INSTANCE_T:
 			ret = il_factor_new_instance_eval(self->u.new_instance_, env, cctx);
 			break;
 		case ILFACTOR_BOOL_T:
-			ret = il_factor_bool_eval(self->u.bool_,env, cctx);
+			ret = EvalILBool(self->u.bool_,env, cctx);
 			break;
 		case ILFACTOR_NULL_T:
-			ret = il_factor_null_eval(NULL, env, cctx);
+			ret = EvalILNull(NULL, env, cctx);
 			break;
 		case ILFACTOR_AS_T:
-			ret = il_factor_as_eval(self->u.as_, env, cctx);
+			ret = EvalILAs(self->u.as_, env, cctx);
 			break;
 		case ILFACTOR_CALL_OP_T:
 			ret = il_factor_call_op_eval(self->u.call_, env, cctx);
@@ -248,17 +248,17 @@ generic_type* il_factor_eval(il_factor * self, enviroment * env, call_context* c
 	return ret;
 }
 
-char* il_factor_tostr(il_factor* self, enviroment* env) {
+char* ILFactorToString(il_factor* self, enviroment* env) {
 	if(GetLastBCError()) {
 		return NULL;
 	}
 	switch (self->type) {
 		case ILFACTOR_INT_T:
-			return il_factor_int_tostr(self->u.int_, env);
+			return ILIntToString(self->u.int_, env);
 		case ILFACTOR_DOUBLE_T:
 			return il_factor_double_tostr(self->u.double_, env);
 		case ILFACTOR_CHAR_T:
-			return il_factor_char_tostr(self->u.char_, env);
+			return ILCharToString(self->u.char_, env);
 		case ILFACTOR_STRING_T:
 			return il_factor_string_tostr(self->u.string_, env);
 		case ILFACTOR_VARIABLE_T:
@@ -270,17 +270,17 @@ char* il_factor_tostr(il_factor* self, enviroment* env) {
 		case ILFACTOR_ASSIGN_T:
 			return NULL;
 		case ILFACTOR_THIS_T:
-			return il_factor_this_tostr(self->u.this_, env);
+			return ILThisToString(self->u.this_, env);
 		case ILFACTOR_SUPER_T:
 			return il_factor_super_tostr(self->u.super_, env);
 		case ILFACTOR_NEW_INSTANCE_T:
 			return il_factor_new_instance_tostr(self->u.new_instance_, env);
 		case ILFACTOR_BOOL_T:
-			return il_factor_bool_tostr(self->u.bool_, env);
+			return ILBoolToString(self->u.bool_, env);
 		case ILFACTOR_NULL_T:
-			return il_factor_null_tostr(self->u.null_, env);
+			return ILNullToString(self->u.null_, env);
 		case ILFACTOR_AS_T:
-			return il_factor_as_tostr(self->u.as_, env);
+			return ILAsToString(self->u.as_, env);
 		case ILFACTOR_CALL_OP_T:
 			return il_factor_call_op_to_str(self->u.call_, env);
 		case ILFACTOR_MEMBER_OP_T:
@@ -301,13 +301,13 @@ char* il_factor_tostr(il_factor* self, enviroment* env) {
 	}
 }
 
-void il_factor_args_tostr(string_buffer* sb, Vector* args, enviroment* env) {
+void ILArgsToString(string_buffer* sb, Vector* args, enviroment* env) {
 	if(args->length > 0) {
 		AppendBuffer(sb, '(');
 	}
 	for(int i=0; i<args->length; i++) {
 		il_argument* e = (il_argument*)AtVector(args, i);
-		char* str = il_factor_tostr(e->factor, env);
+		char* str = ILFactorToString(e->factor, env);
 		AppendsBuffer(sb, str);
 		if(i != (args->length)) {
 			AppendsBuffer(sb, ", ");
@@ -337,13 +337,13 @@ void il_factor_type_args_tostr(string_buffer* sb, Vector* type_args, enviroment*
 	}
 }
 
-void il_factor_delete(il_factor * self) {
+void DeleteILFactor(il_factor * self) {
 	if (self == NULL) {
 		return;
 	}
 	switch (self->type) {
 		case ILFACTOR_INT_T:
-			il_factor_int_delete(self->u.int_);
+			DeleteILInt(self->u.int_);
 			break;
 		case ILFACTOR_DOUBLE_T:
 			il_factor_double_delete(self->u.double_);
@@ -381,7 +381,7 @@ void il_factor_delete(il_factor * self) {
 		case ILFACTOR_NULL_T:
 			break;
 		case ILFACTOR_AS_T:
-			il_factor_as_delete(self->u.as_);
+			DeleteILAs(self->u.as_);
 			break;
 		case ILFACTOR_CALL_OP_T:
 			il_factor_call_op_delete(self->u.call_);

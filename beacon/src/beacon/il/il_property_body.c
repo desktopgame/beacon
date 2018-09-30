@@ -21,5 +21,5 @@ void il_property_body_delete(il_property_body* self) {
 //private
 static void il_property_body_stmt_delete(VectorItem item) {
 	il_stmt* e = (il_stmt*)item;
-	il_stmt_delete(e);
+	DeleteILStmt(e);
 }

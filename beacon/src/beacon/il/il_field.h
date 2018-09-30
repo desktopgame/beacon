@@ -23,11 +23,11 @@ typedef struct il_field {
  * @param namev
  * @return
  */
-il_field* il_field_new(string_view namev);
+il_field* NewILField(string_view namev);
 
 /**
  * フィールドを開放します.
  * @param self
  */
-void il_field_delete(il_field* self);
+void DeleteILField(il_field* self);
 #endif // !SIGNAL_IL_IL_FIELD_H

@@ -91,7 +91,7 @@ void CLIL_type_argument(class_loader* self, ast* atype_args, Vector* dest) {
 			CLIL_type_argument(self, e, dest);
 		}
 	} else if(atype_args->tag == AST_TYPENAME_T) {
-		il_type_argument* iltype_arg = il_type_argument_new();
+		il_type_argument* iltype_arg = NewILTypeArgument();
 		PushVector(dest, iltype_arg);
 		CLIL_generic_cache(atype_args, iltype_arg->gcache);
 	} else assert(false);
@@ -105,7 +105,7 @@ void CLIL_parameter_list(class_loader* self, Vector* list, ast* asource) {
 	} else if (asource->tag == AST_PARAMETER_T) {
 		ast* atype_name = FirstAST(asource);
 		ast* aaccess_name = SecondAST(asource);
-		il_parameter* p = il_parameter_new(aaccess_name->u.stringv_value);
+		il_parameter* p = NewILParameter(aaccess_name->u.stringv_value);
 		CLIL_generic_cache(atype_name, p->fqcn);
 		PushVector(list, p);
 	}
@@ -212,7 +212,7 @@ static void CLIL_argument_listImpl(class_loader* self, Vector* list, ast* asourc
 		}
 	} else if (asource->tag == AST_ARGUMENT_T) {
 		ast* aprimary = FirstAST(asource);
-		il_argument* ilarg = il_argument_new();
+		il_argument* ilarg = NewILArgument();
 		ilarg->factor = CLIL_factor(self, aprimary);
 		PushVector(list, ilarg);
 	}

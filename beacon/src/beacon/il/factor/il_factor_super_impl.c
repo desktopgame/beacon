@@ -11,7 +11,7 @@
 
 static void check_context(il_factor_super * self, enviroment * env, call_context* cctx);
 
-il_factor_super* il_factor_super_new() {
+il_factor_super* NewILSuper() {
 	il_factor_super* ret = (il_factor_super*)MEM_MALLOC(sizeof(il_factor_super));
 	ret->resolved = NULL;
 	return ret;
@@ -21,11 +21,11 @@ void il_factor_super_generate(il_factor_super * self, enviroment * env, call_con
 	AddOpcodeBuf(env->buf, OP_SUPER);
 }
 
-void il_factor_super_load(il_factor_super * self, enviroment * env, call_context* cctx) {
+void LoadILSuper(il_factor_super * self, enviroment * env, call_context* cctx) {
 	check_context(self, env, cctx);
 }
 
-generic_type* il_factor_super_eval(il_factor_super * self, enviroment * env, call_context* cctx) {
+generic_type* EvalILSuper(il_factor_super * self, enviroment * env, call_context* cctx) {
 	type* t = GetTypeCContext(cctx);
 	return t->u.class_->super_class;
 }

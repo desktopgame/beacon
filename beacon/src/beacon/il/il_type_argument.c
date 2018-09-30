@@ -6,7 +6,7 @@
 #include "../env/import_manager.h"
 #include "../il/call_context.h"
 
-il_type_argument* il_type_argument_new() {
+il_type_argument* NewILTypeArgument() {
 	il_type_argument* ret = (il_type_argument*)MEM_MALLOC(sizeof(il_type_argument));
 	ret->gcache = generic_cache_new();
 	ret->gtype = NULL;

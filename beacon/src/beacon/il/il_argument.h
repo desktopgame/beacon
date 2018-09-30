@@ -14,11 +14,11 @@ typedef struct il_argument {
  * 実引数を表す要素を作成します.
  * @return
  */
-il_argument* il_argument_new();
+il_argument* NewILArgument();
 
 /**
  * 実引数を表す要素を開放します.
  * @param self
  */
-void il_argument_delete(il_argument* self);
+void DeleteILArgument(il_argument* self);
 #endif // !SIGNAL_IL_IL_ARGUMENT_H

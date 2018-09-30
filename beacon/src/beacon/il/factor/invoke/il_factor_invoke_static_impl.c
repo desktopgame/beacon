@@ -36,7 +36,7 @@ void il_factor_invoke_static_generate(il_factor_invoke_static* self, enviroment*
 	}
 	for(int i=0; i<self->args->length; i++) {
 		il_argument* e = (il_argument*)AtVector(self->args, i);
-		il_factor_generate(e->factor, env, cctx);
+		GenerateILFactor(e->factor, env, cctx);
 		if(GetLastBCError()) {
 			return;
 		}
@@ -74,7 +74,7 @@ char* il_factor_invoke_static_tostr(il_factor_invoke_static* self, enviroment* e
 	AppendBuffer(sb, '.');
 	AppendsBuffer(sb, Ref2Str(self->namev));
 	il_factor_type_args_tostr(sb, self->type_args, env);
-	il_factor_args_tostr(sb, self->args, env);
+	ILArgsToString(sb, self->args, env);
 	MEM_FREE(name);
 	return ReleaseBuffer(sb);
 }
@@ -130,7 +130,7 @@ static void il_factor_invoke_static_check(il_factor_invoke_static * self, enviro
 	//メソッドを検索
 	for(int i=0; i<self->args->length; i++) {
 		il_argument* ilarg = AtVector(self->args, i);
-		il_factor_load(ilarg->factor, env, cctx);
+		LoadILFactor(ilarg->factor, env, cctx);
 	}
 	call_frame* cfr = PushCallContext(cctx, FRAME_STATIC_INVOKE_T);
 	cfr->u.static_invoke.args = self->args;
@@ -149,7 +149,7 @@ static void il_factor_invoke_static_check(il_factor_invoke_static * self, enviro
 
 static void il_factor_invoke_static_args_delete(VectorItem item) {
 	il_argument* e = (il_argument*)item;
-	il_argument_delete(e);
+	DeleteILArgument(e);
 }
 
 static void il_factor_invoke_static_typeargs_delete(VectorItem item) {

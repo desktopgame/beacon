@@ -35,21 +35,21 @@ typedef struct il_type {
  * 型を作成します.
  * @return
  */
-il_type* il_type_new();
+il_type* NewILType();
 
 /**
  * メソッドの一覧を返します.
  * @param self
  * @return
  */
-Vector* il_type_method_vec(il_type* self);
+Vector* GetMethodsILType(il_type* self);
 
 /**
  * 静的メソッドの一覧を返します.
  * @param self
  * @return
  */
-Vector* il_type_smethod_vec(il_type* self);
+Vector* GetSMethodsILType(il_type* self);
 
 /**
  * コンストラクタを追加します.
@@ -63,27 +63,27 @@ void il_type_add_constructor(il_type* self, struct il_constructor* ctor);
  * @param self
  * @param field
  */
-void il_type_add_field(il_type* self, struct il_field* field);
+void AddFieldILType(il_type* self, struct il_field* field);
 
 /**
  * プロパティを追加します.
  * @param self
  * @param prop
  */
-void il_type_add_property(il_type* self, struct il_property* prop);
+void AddPropertyILType(il_type* self, struct il_property* prop);
 
 /**
  * メソッドを追加します.
  * @param self
  * @param field
  */
-void il_type_add_method(il_type* self, struct il_method* method);
+void AddMethodILType(il_type* self, struct il_method* method);
 
 /**
  * 型を開放します.
  * @param self
  */
-void il_type_delete(il_type* self);
+void DeleteILType(il_type* self);
 
 /**
  * 型変数の一覧を返します.

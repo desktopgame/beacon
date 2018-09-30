@@ -47,7 +47,7 @@ void il_factor_new_instance_generate(il_factor_new_instance * self, enviroment *
 	//実引数を全てスタックへ
 	for (int i = 0; i < self->argument_list->length; i++) {
 		il_argument* ilarg = (il_argument*)AtVector(self->argument_list, i);
-		il_factor_generate(ilarg->factor, env, cctx);
+		GenerateILFactor(ilarg->factor, env, cctx);
 		if(GetLastBCError()) {
 			return;
 		}
@@ -99,7 +99,7 @@ char* il_factor_new_instance_tostr(il_factor_new_instance* self, enviroment* env
 	char* type = fqcn_cache_tostr(self->fqcnc);
 	AppendsBuffer(sb, type);
 	il_factor_type_args_tostr(sb, self->type_args, env);
-	il_factor_args_tostr(sb, self->argument_list, env);
+	ILArgsToString(sb, self->argument_list, env);
 	MEM_FREE(type);
 	return ReleaseBuffer(sb);
 }
@@ -154,5 +154,5 @@ static void il_factor_new_instance_find(il_factor_new_instance * self, enviromen
 
 static void il_Factor_new_instace_delete_arg(VectorItem item) {
 	il_argument* e = (il_argument*)item;
-	il_argument_delete(e);
+	DeleteILArgument(e);
 }

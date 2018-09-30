@@ -14,11 +14,11 @@ typedef struct il_import {
  * @param pathv
  * @return
  */
-il_import* il_import_new(string_view pathv);
+il_import* NewILImport(string_view pathv);
 
 /**
  * このインポート宣言と包含された文字列を解放します.
  * @param self
  */
-void il_import_delete(il_import* self);
+void DeleteILImport(il_import* self);
 #endif // !SIGNAL_IL_IL_IMPORT_H

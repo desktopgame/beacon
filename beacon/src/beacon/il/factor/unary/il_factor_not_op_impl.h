@@ -12,7 +12,7 @@ typedef struct il_factor_not_op {
 	int operator_index;
 } il_factor_not_op;
 
-il_factor_not_op* il_factor_not_op_new(operator_type type);
+il_factor_not_op* NewILNotOp(operator_type type);
 
 struct generic_type* il_factor_not_op_eval(il_factor_not_op * self, struct enviroment * env, call_context* cctx);
 

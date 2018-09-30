@@ -32,21 +32,21 @@ typedef struct il_class {
  * @param self
  * @return
  */
-il_type* il_type_wrap_class(il_class* self);
+il_type* WrapILClass(il_class* self);
 
 /**
  * クラスを表す要素を作成します.
  * @param namev
  * @return
  */
-il_class* il_class_new(string_view namev);
+il_class* NewILClass(string_view namev);
 
 /**
  * フィールドを追加します.
  * @param self
  * @param f
  */
-void il_class_add_field(il_class* self, struct il_field* f);
+void AddFieldILClass(il_class* self, struct il_field* f);
 
 /**
  * プロパティを追加します.
@@ -60,11 +60,11 @@ void il_class_add_property(il_class* self, struct il_property* prop);
  * @param self
  * @param m
  */
-void il_class_add_method(il_class* self, struct il_method* m);
+void AddMethodILClass(il_class* self, struct il_method* m);
 
 /**
  * クラスと含まれるメンバー宣言の一覧を解放します.
  * @param self
  */
-void il_class_delete(il_class* self);
+void DeleteILClass(il_class* self);
 #endif // !SIGNAL_IL_IL_CLASS_H

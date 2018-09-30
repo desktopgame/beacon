@@ -12,13 +12,13 @@ typedef struct il_stmt_while {
 	Vector* statement_list;
 } il_stmt_while;
 
-il_stmt* il_stmt_wrap_while(il_stmt_while* self);
+il_stmt* WrapILWhile(il_stmt_while* self);
 
-il_stmt_while* il_stmt_while_new();
+il_stmt_while* NewILWhile();
 
 void il_stmt_while_generate(il_stmt_while* self, struct enviroment* env, call_context* cctx);
 
-void il_stmt_while_load(il_stmt_while* self, struct enviroment* env, call_context* cctx);
+void LoadILWhile(il_stmt_while* self, struct enviroment* env, call_context* cctx);
 
-void il_stmt_while_delete(il_stmt_while* self);
+void DeleteILWhile(il_stmt_while* self);
 #endif // !SIGNAL_IL_IL_STMT_WHILE_H

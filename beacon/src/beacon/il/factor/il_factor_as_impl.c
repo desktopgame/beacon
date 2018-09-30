@@ -8,13 +8,13 @@
 #include <stdio.h>
 #include <assert.h>
 
-il_factor * il_factor_wrap_as(il_factor_as * self) {
+il_factor * WrapILAs(il_factor_as * self) {
 	il_factor* ret = il_factor_new(ILFACTOR_AS_T);
 	ret->u.as_ = self;
 	return ret;
 }
 
-il_factor_as * il_factor_as_new() {
+il_factor_as * NewILAs() {
 	il_factor_as* ret = (il_factor_as*)MEM_MALLOC(sizeof(il_factor_as));
 	ret->fact = NULL;
 	ret->fqcn = generic_cache_new();
@@ -24,7 +24,7 @@ il_factor_as * il_factor_as_new() {
 }
 
 void il_factor_as_generate(il_factor_as * self, enviroment * env, call_context* cctx) {
-	il_factor_generate(self->fact, env, cctx);
+	GenerateILFactor(self->fact, env, cctx);
 	AddOpcodeBuf(env->buf, OP_GENERIC_ADD);
 	generic_type_generate(self->gtype, env);
 	if(self->mode == CAST_DOWN_T) {
@@ -34,13 +34,13 @@ void il_factor_as_generate(il_factor_as * self, enviroment * env, call_context* 
 	}
 }
 
-void il_factor_as_load(il_factor_as * self, enviroment * env, call_context* cctx) {
+void LoadILAs(il_factor_as * self, enviroment * env, call_context* cctx) {
 	if(self->gtype != NULL) {
 		return;
 	}
-	il_factor_load(self->fact, env, cctx);
+	LoadILFactor(self->fact, env, cctx);
 	self->gtype = import_manager_resolve(GetNamespaceCContext(cctx), self->fqcn, cctx);
-	generic_type* a = il_factor_eval(self->fact, env, cctx);
+	generic_type* a = EvalILFactor(self->fact, env, cctx);
 	//キャスト元がインターフェイスなら常にアップキャスト
 	if(self->gtype->core_type != NULL && GENERIC2TYPE(self->gtype)->tag == TYPE_INTERFACE_T) {
 		self->mode = CAST_UP_T;
@@ -73,20 +73,20 @@ void il_factor_as_load(il_factor_as * self, enviroment * env, call_context* cctx
 	}
 }
 
-generic_type* il_factor_as_eval(il_factor_as * self, enviroment * env, call_context* cctx) {
-	il_factor_as_load(self, env, cctx);
+generic_type* EvalILAs(il_factor_as * self, enviroment * env, call_context* cctx) {
+	LoadILAs(self, env, cctx);
 	return self->gtype;
 }
 
-void il_factor_as_delete(il_factor_as * self) {
+void DeleteILAs(il_factor_as * self) {
 	generic_cache_delete(self->fqcn);
-	il_factor_delete(self->fact);
+	DeleteILFactor(self->fact);
 	MEM_FREE(self);
 }
 
-char* il_factor_as_tostr(il_factor_as* self, enviroment* env) {
+char* ILAsToString(il_factor_as* self, enviroment* env) {
 	string_buffer* sb = NewBuffer();
-	char* factstr = il_factor_tostr(self->fact, env);
+	char* factstr = ILFactorToString(self->fact, env);
 	char* to = generic_cache_tostr(self->fqcn);
 	AppendfBuffer(sb, "%s as %s", factstr, to);
 	MEM_FREE(factstr);

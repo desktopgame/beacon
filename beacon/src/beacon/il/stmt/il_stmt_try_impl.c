@@ -14,21 +14,21 @@
 static void il_stmt_catch_stmt_delete(void* item);
 static void il_stmt_try_catch_delete(void* item);
 
-il_stmt* il_stmt_wrap_try(il_stmt_try* self) {
+il_stmt* WrapILTry(il_stmt_try* self) {
 	il_stmt* ret = (il_stmt*)MEM_MALLOC(sizeof(il_stmt));
 	ret->type = ILSTMT_TRY_T;
 	ret->u.try_ = self;
 	return ret;
 }
 
-il_stmt_try* il_stmt_try_new() {
+il_stmt_try* NewILTry() {
 	il_stmt_try* ret = (il_stmt_try*)MEM_MALLOC(sizeof(il_stmt_try));
 	ret->statement_list = NewVector();
 	ret->catch_list = NewVector();
 	return ret;
 }
 
-il_stmt_catch* il_stmt_catch_new(string_view namev) {
+il_stmt_catch* NewILCatch(string_view namev) {
 	il_stmt_catch* ret = (il_stmt_catch*)MEM_MALLOC(sizeof(il_stmt_catch));
 	ret->namev = namev;
 	ret->fqcn = generic_cache_new();
@@ -36,7 +36,7 @@ il_stmt_catch* il_stmt_catch_new(string_view namev) {
 	return ret;
 }
 
-void il_stmt_try_generate(il_stmt_try* self, enviroment* env, call_context* cctx) {
+void GenerateILTry(il_stmt_try* self, enviroment* env, call_context* cctx) {
 	label* try_end = AddLabelOpcodeBuf(env->buf, -1);
 	label* catch_start = AddLabelOpcodeBuf(env->buf, -1);
 	AddOpcodeBuf(env->buf, OP_TRY_ENTER);
@@ -48,7 +48,7 @@ void il_stmt_try_generate(il_stmt_try* self, enviroment* env, call_context* cctx
 	//ステートメントの一覧
 	for (int i = 0; i < self->statement_list->length; i++) {
 		il_stmt* e = (il_stmt*)AtVector(self->statement_list, i);
-		il_stmt_generate(e, env, cctx);
+		GenerateILStmt(e, env, cctx);
 	}
 	AddOpcodeBuf(env->buf, OP_TRY_EXIT);
 	//例外が発生しなかったならcatchをスキップ
@@ -84,7 +84,7 @@ void il_stmt_try_generate(il_stmt_try* self, enviroment* env, call_context* cctx
 		//catchの内側のステートメントを生成
 		for (int j = 0; j < ilcatch->statement_list->length; j++) {
 			il_stmt* e = (il_stmt*)AtVector(ilcatch->statement_list, j);
-			il_stmt_generate(e, env, cctx);
+			GenerateILStmt(e, env, cctx);
 		}
 		//catchされたので、
 		//例外フラグをクリアする
@@ -105,33 +105,33 @@ void il_stmt_catch_generate(il_stmt_catch* self, enviroment* env, call_context* 
 
 }
 
-void il_stmt_try_load(il_stmt_try* self, enviroment* env, call_context* cctx) {
+void LoadILTry(il_stmt_try* self, enviroment* env, call_context* cctx) {
 	for(int i=0; i<self->statement_list->length; i++) {
 		il_stmt* e = (il_stmt*)AtVector(self->statement_list, i);
-		il_stmt_load(e, env, cctx);
+		LoadILStmt(e, env, cctx);
 	}
 	for(int i=0; i<self->catch_list->length; i++) {
 		il_stmt_catch* e = (il_stmt_catch*)AtVector(self->catch_list, i);
-		il_stmt_catch_load(e, env, cctx);
+		LoadILCatch(e, env, cctx);
 	}
 }
 
-void il_stmt_catch_load(il_stmt_catch* self, enviroment* env, call_context* cctx) {
+void LoadILCatch(il_stmt_catch* self, enviroment* env, call_context* cctx) {
 	generic_type* exgType = import_manager_resolve(NULL, self->fqcn, cctx);
 	EntrySymbolTable(env->sym_table, exgType, self->namev);
 	for(int i=0; i<self->statement_list->length; i++) {
 		il_stmt* e = (il_stmt*)AtVector(self->statement_list, i);
-		il_stmt_load(e, env, cctx);
+		LoadILStmt(e, env, cctx);
 	}
 }
 
-void il_stmt_catch_delete(il_stmt_catch* self) {
+void DeleteILCatch(il_stmt_catch* self) {
 	generic_cache_delete(self->fqcn);
 	DeleteVector(self->statement_list, il_stmt_catch_stmt_delete);
 	MEM_FREE(self);
 }
 
-void il_stmt_try_delete(il_stmt_try* self) {
+void DeleteILTry(il_stmt_try* self) {
 	DeleteVector(self->statement_list, il_stmt_catch_stmt_delete);
 	DeleteVector(self->catch_list, il_stmt_try_catch_delete);
 	MEM_FREE(self);
@@ -139,10 +139,10 @@ void il_stmt_try_delete(il_stmt_try* self) {
 //private
 static void il_stmt_catch_stmt_delete(void* item) {
 	il_stmt* e = (il_stmt*)item;
-	il_stmt_delete(e);
+	DeleteILStmt(e);
 }
 
 static void il_stmt_try_catch_delete(void* item) {
 	il_stmt_catch* e = (il_stmt_catch*)item;
-	il_stmt_catch_delete(e);
+	DeleteILCatch(e);
 }

@@ -10,16 +10,16 @@ void il_factor_null_generate(void * empty, enviroment * env, call_context* cctx)
 	AddOpcodeBuf(env->buf, OP_NULL);
 }
 
-void il_factor_null_load(void * empty, enviroment * env, call_context* cctx) {
+void LoadILNull(void * empty, enviroment * env, call_context* cctx) {
 }
 
-generic_type* il_factor_null_eval(void * empty, enviroment * env, call_context* cctx) {
+generic_type* EvalILNull(void * empty, enviroment * env, call_context* cctx) {
 	if(gSelf == NULL) {
 		gSelf =  generic_type_new(TYPE_NULL);
 	}
 	return gSelf;
 }
 
-char* il_factor_null_tostr(void* empty, enviroment* env) {
+char* ILNullToString(void* empty, enviroment* env) {
 	return Strdup("null");
 }

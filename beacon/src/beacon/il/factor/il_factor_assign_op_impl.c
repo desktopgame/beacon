@@ -22,7 +22,7 @@ static bool can_assign_to_field(field* f, il_factor_assign_op* self, enviroment*
 static void generate_assign_to_variable(il_factor_assign_op* self, enviroment* env, call_context* cctx);
 static void generate_assign_to_variable_local(il_factor_assign_op* self, enviroment* env, call_context* cctx);
 
-il_factor* il_factor_wrap_assign(il_factor_assign_op* self) {
+il_factor* WrapILAssign(il_factor_assign_op* self) {
 	il_factor* ret = il_factor_new(ILFACTOR_ASSIGN_T);
 	ret->u.assign_ = self;
 	return ret;
@@ -36,10 +36,10 @@ il_factor_assign_op* il_factor_assign_op_new() {
 }
 
 void il_factor_assign_OP_LOAD(il_factor_assign_op* self, enviroment* env, call_context* cctx) {
-	il_factor_load(self->left, env, cctx);
-	il_factor_load(self->right, env, cctx);
+	LoadILFactor(self->left, env, cctx);
+	LoadILFactor(self->right, env, cctx);
 	//voidは代入できない
-	generic_type* gret = il_factor_eval(self->right, env, cctx);
+	generic_type* gret = EvalILFactor(self->right, env, cctx);
 	BC_ERROR();
 	if(gret->core_type != NULL &&
 	   gret->core_type == TYPE_VOID) {
@@ -74,12 +74,12 @@ void il_factor_assign_op_generate(il_factor_assign_op* self, enviroment* env, ca
 }
 
 generic_type* il_factor_assign_op_eval(il_factor_assign_op* self, enviroment* env, call_context* cctx) {
-	return il_factor_eval(self->right, env, cctx);
+	return EvalILFactor(self->right, env, cctx);
 }
 
 void il_factor_assign_op_delete(il_factor_assign_op* self) {
-	il_factor_delete(self->left);
-	il_factor_delete(self->right);
+	DeleteILFactor(self->left);
+	DeleteILFactor(self->right);
 	MEM_FREE(self);
 }
 //private
@@ -93,7 +93,7 @@ static void assign_by_namebase(il_factor_assign_op* self, enviroment* env, call_
 		int temp = -1;
 		field* sf = class_find_sfield(cls, ilmem->namev, &temp);
 		assert(temp != -1);
-		il_factor_generate(self->right, env, cctx);
+		GenerateILFactor(self->right, env, cctx);
 		GeneratePutField(env->buf, sf, temp);
 		//指定の静的フィールドにアクセスできない
 		if(!class_accessible_field(GetClassCContext(cctx), sf)) {
@@ -121,13 +121,13 @@ static void assign_by_namebase(il_factor_assign_op* self, enviroment* env, call_
 }
 
 static void assign_to_field(il_factor_assign_op* self, il_factor* receiver, il_factor* source, string_view namev, enviroment* env, call_context* cctx) {
-	generic_type* gt = il_factor_eval(receiver, env, cctx);
+	generic_type* gt = EvalILFactor(receiver, env, cctx);
 	class_* cls = TYPE2CLASS(gt->core_type);
 	int temp = -1;
 	field* f = class_find_field_tree(cls, namev, &temp);
 	assert(temp != -1);
-	il_factor_generate(receiver, env, cctx);
-	il_factor_generate(source, env, cctx);
+	GenerateILFactor(receiver, env, cctx);
+	GenerateILFactor(source, env, cctx);
 	GeneratePutField(env->buf, f, temp);
 	//型の互換性を検査
 	if(!can_assign_to_field(f, self, env, cctx)) {
@@ -163,7 +163,7 @@ static void assign_to_property(il_factor_assign_op* self, enviroment* env, call_
 		);
 		return;
 	}
-	if(generic_type_distance(prop->p->gtype, il_factor_eval(self->right, env, cctx), cctx) < 0) {
+	if(generic_type_distance(prop->p->gtype, EvalILFactor(self->right, env, cctx), cctx) < 0) {
 		ThrowBCError(BCERROR_ASSIGN_NOT_COMPATIBLE_PROPERTY_T,
 			Ref2Str(type_name(prop->p->parent)),
 			Ref2Str(prop->p->namev)
@@ -176,16 +176,16 @@ static void assign_to_property(il_factor_assign_op* self, enviroment* env, call_
 	}
 	BC_ERROR();
 	if(!is_static) {
-		il_factor_generate(prop->fact, env, cctx);
+		GenerateILFactor(prop->fact, env, cctx);
 	}
-	il_factor_generate(self->right, env, cctx);
+	GenerateILFactor(self->right, env, cctx);
 	GeneratePutProperty(env->buf, pp, prop->index);
 }
 
 static void assign_to_array(il_factor_assign_op* self, enviroment* env, call_context* cctx) {
 	il_factor_subscript* subs = self->left->u.subscript;
-	il_factor_generate(subs->receiver, env, cctx);
-	il_factor_generate(subs->pos, env, cctx);
+	GenerateILFactor(subs->receiver, env, cctx);
+	GenerateILFactor(subs->pos, env, cctx);
 	AddOpcodeBuf(env->buf, OP_INVOKEOPERATOR);
 	AddOpcodeBuf(env->buf, subs->operator_index);
 }
@@ -219,10 +219,10 @@ static void assign_by_invoke(il_factor_invoke* lhs, il_factor* rhs, enviroment* 
 	il_factor_invoke_find_set(lhs, rhs, env, cctx, &temp);
 	for(int i=0; i<lhs->args->length; i++) {
 		il_argument* arg = AtVector(lhs->args, i);
-		il_factor_generate(arg->factor, env, cctx);
+		GenerateILFactor(arg->factor, env, cctx);
 	}
-	il_factor_generate(rhs, env, cctx);
-	il_factor_generate(lhs->receiver, env, cctx);
+	GenerateILFactor(rhs, env, cctx);
+	GenerateILFactor(lhs->receiver, env, cctx);
 	AddOpcodeBuf(env->buf, OP_INVOKEOPERATOR);
 	AddOpcodeBuf(env->buf, temp);
 	AddOpcodeBuf(env->buf, OP_NOP);
@@ -234,10 +234,10 @@ static void assign_by_invoke_bound(il_factor_invoke_bound* lhs, il_factor* rhs, 
 	assert(lhs->args->length == 1);
 	for(int i=0; i<lhs->args->length; i++) {
 		il_argument* arg = AtVector(lhs->args, i);
-		il_factor_generate(arg->factor, env, cctx);
+		GenerateILFactor(arg->factor, env, cctx);
 	}
-	il_factor_generate(rhs, env, cctx);
-	//il_factor_generate(lhs->receiver, env, cctx);
+	GenerateILFactor(rhs, env, cctx);
+	//GenerateILFactor(lhs->receiver, env, cctx);
 	subscript_descriptor subs = lhs->u.subscript;
 	if(subs.tag == SUBSCRIPT_LOCAL_T) {
 		AddOpcodeBuf(env->buf, OP_LOAD);
@@ -254,7 +254,7 @@ static void assign_by_invoke_bound(il_factor_invoke_bound* lhs, il_factor* rhs, 
 }
 
 static bool can_assign_to_field(field* f, il_factor_assign_op* self, enviroment* env, call_context* cctx) {
-	generic_type* gt = il_factor_eval(self->right, env, cctx);
+	generic_type* gt = EvalILFactor(self->right, env, cctx);
 	int dist = generic_type_distance(f->gtype, gt, cctx);
 	if(dist >= 0) {
 		return true;
@@ -268,7 +268,7 @@ static bool can_assign_to_field(field* f, il_factor_assign_op* self, enviroment*
 }
 
 static void check_final(il_factor* receiver, il_factor* source, string_view namev, enviroment* env, call_context* cctx) {
-	generic_type* gt = il_factor_eval(receiver, env, cctx);
+	generic_type* gt = EvalILFactor(receiver, env, cctx);
 	class_* cls = TYPE2CLASS(gt->core_type);
 	int temp = -1;
 	field* f = class_find_field_tree(cls, namev, &temp);
@@ -314,10 +314,10 @@ static void generate_assign_to_variable_local(il_factor_assign_op* self, envirom
 		#endif
 		symbol_entry* e = EntrySymbolTable(env->sym_table, NULL, ilvar->fqcn->namev);
 		//e==NULL の時変数がない
-		il_factor_generate(self->right, env, cctx);
+		GenerateILFactor(self->right, env, cctx);
 		AddOpcodeBuf(env->buf, OP_STORE);
 		AddOpcodeBuf(env->buf, e->index);
-		if(generic_type_distance(e->gtype, il_factor_eval(self->right, env, cctx), cctx) < 0) {
+		if(generic_type_distance(e->gtype, EvalILFactor(self->right, env, cctx), cctx) < 0) {
 			ThrowBCError(BCERROR_ASSIGN_NOT_COMPATIBLE_LOCAL_T,
 				Ref2Str(ilvar->fqcn->namev)
 			);
@@ -344,7 +344,7 @@ static void generate_assign_to_variable_local(il_factor_assign_op* self, envirom
 		if(!IsStaticModifier(f->modifier)) {
 			AddOpcodeBuf(env->buf, OP_THIS);
 		}
-		il_factor_generate(self->right, env, cctx);
+		GenerateILFactor(self->right, env, cctx);
 		GeneratePutField(env->buf, f, temp);
 		//assert(!IsStaticModifier(f->modifier));
 	//src のような名前がプロパティを示す場合
@@ -365,7 +365,7 @@ static void generate_assign_to_variable_local(il_factor_assign_op* self, envirom
 		if(!IsStaticModifier(p->modifier)) {
 			AddOpcodeBuf(env->buf, OP_THIS);
 		}
-		il_factor_generate(self->right, env, cctx);
+		GenerateILFactor(self->right, env, cctx);
 		GeneratePutProperty(env->buf, p, temp);
 		assert(!IsStaticModifier(p->modifier));
 	}

@@ -13,7 +13,7 @@ typedef struct il_factor_double {
 
 il_factor* il_factor_wrap_double(il_factor_double* self);
 
-il_factor_double* il_factor_double_new(double d);
+il_factor_double* NewILDouble(double d);
 
 void il_factor_double_generate(il_factor_double* self, struct enviroment* env, call_context* cctx);
 

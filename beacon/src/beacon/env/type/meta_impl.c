@@ -27,7 +27,7 @@ int meta_ilcalc_score(Vector* params, Vector* ilargs, enviroment* env, call_cont
 		parameter* param = (parameter*)vparam;
 		//実引数が NULL なら常に許容する
 		int dist = 0;
-		generic_type* argType = il_factor_eval(arg->factor, env, cctx);
+		generic_type* argType = EvalILFactor(arg->factor, env, cctx);
 		if(GetLastBCError()) {
 			return -1;
 		}
@@ -102,7 +102,7 @@ int meta_rcalc_score(Vector* params, Vector* args, Vector* typeargs, frame* fr) 
 		parameter* param = (parameter*)vparam;
 		//実引数が NULL なら常に許容する
 		int dist = 0;
-		//generic_type* argType = il_factor_eval(arg->factor, env, ilctx);
+		//generic_type* argType = EvalILFactor(arg->factor, env, ilctx);
 		generic_type* argType = arg->gtype;
 		if (argType->core_type != TYPE_NULL) {
 			generic_type* a = generic_type_rapply(param->gtype, NULL,fr);

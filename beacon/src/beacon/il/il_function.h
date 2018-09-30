@@ -22,11 +22,11 @@ typedef struct il_function {
  * @param namev
  * @return
  */
-il_function* il_function_new(string_view namev);
+il_function* NewILFunction(string_view namev);
 
 /**
  * 関数を解放します.
  * @param self
  */
-void il_function_delete(il_function* self);
+void DeleteILFunction(il_function* self);
 #endif // !SIGNAL_IL_IL_FUNCTION_H

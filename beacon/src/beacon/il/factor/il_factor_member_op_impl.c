@@ -39,13 +39,13 @@ il_factor_member_op* il_factor_member_op_new(string_view namev) {
 
 void il_factor_member_OP_LOAD(il_factor_member_op* self, enviroment* env, call_context* cctx) {
 	bool swap;
-	il_factor_load(self->fact, env, cctx);
+	LoadILFactor(self->fact, env, cctx);
 	il_factor_member_op_check(self, env, cctx, &swap);
 }
 
 void il_factor_member_op_generate(il_factor_member_op* self, enviroment* env, call_context* cctx) {
 	if(!IsStaticModifier(self->f->modifier)) {
-		il_factor_generate(self->fact, env, cctx);
+		GenerateILFactor(self->fact, env, cctx);
 	}
 	GenerateGetField(env->buf, self->f, self->index);
 }
@@ -59,7 +59,7 @@ generic_type* il_factor_member_op_eval(il_factor_member_op* self, enviroment* en
 	il_factor* parent = self->parent;
 	il_factor_member_op_check(self, env, cctx, &swap);
 	if(swap) {
-		return il_factor_eval(parent, env, cctx);
+		return EvalILFactor(parent, env, cctx);
 	}
 //	XSTREQ(self->name, "charArray");
 	assert(self->fact != NULL);
@@ -67,13 +67,13 @@ generic_type* il_factor_member_op_eval(il_factor_member_op* self, enviroment* en
 		generic_type* a = self->f->gtype;
 		return a;
 	}
-	generic_type* a = il_factor_eval(self->fact, env, cctx);
+	generic_type* a = EvalILFactor(self->fact, env, cctx);
 	return AtVector(a->type_args_list, self->f->gtype->virtual_type_index);
 }
 
 char* il_factor_member_op_tostr(il_factor_member_op* self, enviroment* env) {
 	string_buffer* sb = NewBuffer();
-	char* name = il_factor_tostr(self->fact, env);
+	char* name = ILFactorToString(self->fact, env);
 	AppendsBuffer(sb, name);
 	AppendBuffer(sb, '.');
 	AppendsBuffer(sb, Ref2Str(self->namev));
@@ -82,7 +82,7 @@ char* il_factor_member_op_tostr(il_factor_member_op* self, enviroment* env) {
 }
 
 void il_factor_member_op_delete(il_factor_member_op* self) {
-	il_factor_delete(self->fact);
+	DeleteILFactor(self->fact);
 	DeleteVector(self->type_args, il_factor_member_op_typearg_delete);
 	MEM_FREE(self);
 }
@@ -94,7 +94,7 @@ static void il_factor_member_op_check(il_factor_member_op* self, enviroment* env
 	}
 	//レシーバの型を取得
 	il_factor* fact = self->fact;
-	generic_type* gtype = il_factor_eval(fact, env, cctx);
+	generic_type* gtype = EvalILFactor(fact, env, cctx);
 	BC_ERROR();
 	//レシーバの型が特定できない場合は
 	//変数名を型として静的フィールドで解決する
@@ -161,11 +161,11 @@ static void il_factor_member_op_check_prop(il_factor_member_op* self, enviroment
 	//プロパティの可視性を確認
 	if(temp == -1) {
 		ThrowBCError(BCERROR_UNDEFINED_PROPERTY_T, Ref2Str(type_name(ctype)), Ref2Str(self->namev));
-		il_factor_delete(factp->fact);
+		DeleteILFactor(factp->fact);
 		factp->fact = NULL;
 	} else if(!class_accessible_property(GetClassCContext(cctx), p)) {
 		ThrowBCError(BCERROR_CAN_T_ACCESS_PROPERTY_T, Ref2Str(type_name(ctype)), Ref2Str(p->namev));
-		il_factor_delete(factp->fact);
+		DeleteILFactor(factp->fact);
 		factp->fact = NULL;
 	}
 	il_factor_member_op_delete(self);
@@ -187,7 +187,7 @@ static void il_factor_member_op_check_static_prop(il_factor_member_op* self, env
 	//プロパティの可視性を確認
 	if(!class_accessible_property(GetClassCContext(cctx), p)) {
 		ThrowBCError(BCERROR_CAN_T_ACCESS_PROPERTY_T, Ref2Str(type_name(ctype)), Ref2Str(p->namev));
-		il_factor_delete(factp->fact);
+		DeleteILFactor(factp->fact);
 		factp->fact = NULL;
 	}
 	il_factor_member_op_delete(self);

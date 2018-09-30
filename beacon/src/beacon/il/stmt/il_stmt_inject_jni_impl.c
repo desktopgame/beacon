@@ -20,7 +20,7 @@ il_stmt_inject_jni* il_stmt_inject_jni_new(string_view namev) {
 }
 
 void il_stmt_inject_jni_generate(il_stmt_inject_jni* self, enviroment* env, call_context* cctx) {
-	il_factor_generate(self->fact, env, cctx);
+	GenerateILFactor(self->fact, env, cctx);
 	AddOpcodeBuf(env->buf, OP_STORE);
 	AddOpcodeBuf(env->buf, self->se->index);
 }
@@ -30,12 +30,12 @@ void il_stmt_inject_jni_load(il_stmt_inject_jni * self, enviroment* env, call_co
 		return;
 	}
 	self->fact->lineno = 0;
-	il_factor_load(self->fact, env, cctx);
-	generic_type* gtype = il_factor_eval(self->fact, env, cctx);
+	LoadILFactor(self->fact, env, cctx);
+	generic_type* gtype = EvalILFactor(self->fact, env, cctx);
 	self->se = EntrySymbolTable(env->sym_table, gtype, self->namev);
 }
 
 void il_stmt_inject_jni_delete(il_stmt_inject_jni* self) {
-	il_factor_delete(self->fact);
+	DeleteILFactor(self->fact);
 	MEM_FREE(self);
 }

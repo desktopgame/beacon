@@ -99,10 +99,10 @@ bool CLBC_field_impl(class_loader* self, type* tp, field* fi, namespace_* scope,
 	enviroment* env = NewEnviroment();
 	env->context_ref = self;
 	fi->initial_value_env = env;
-	il_factor_load(fi->initial_value, env, cctx);
-	il_factor_generate(fi->initial_value, env, cctx);
+	LoadILFactor(fi->initial_value, env, cctx);
+	GenerateILFactor(fi->initial_value, env, cctx);
 	//フィールドの型と互換性がない
-	generic_type* gf = il_factor_eval(fi->initial_value, env, cctx);
+	generic_type* gf = EvalILFactor(fi->initial_value, env, cctx);
 	if(generic_type_distance(fi->gtype, gf, cctx) < 0) {
 		generic_type_print(fi->gtype); Println();
 		generic_type_print(gf); Println();
@@ -649,7 +649,7 @@ void CLBC_body(class_loader* self, Vector* stmt_list, enviroment* dest, call_con
 		}
 		VectorItem e = AtVector(stmt_list, i);
 		il_stmt* s = (il_stmt*)e;
-		il_stmt_load(s, dest, cctx);
+		LoadILStmt(s, dest, cctx);
 	}
 	//オペコードを生成
 	for (int i = 0; i < stmt_list->length; i++) {
@@ -658,7 +658,7 @@ void CLBC_body(class_loader* self, Vector* stmt_list, enviroment* dest, call_con
 		}
 		VectorItem e = AtVector(stmt_list, i);
 		il_stmt* s = (il_stmt*)e;
-		il_stmt_generate(s, dest, cctx);
+		GenerateILStmt(s, dest, cctx);
 	}
 }
 
@@ -749,7 +749,7 @@ static void CLBC_chain_super(class_loader * self, il_type * iltype, type * tp, i
 	il_constructor_chain* chain = ilcons->chain;
 	for (int i = 0; i < chain->argument_list->length; i++) {
 		il_argument* ilarg = (il_argument*)AtVector(chain->argument_list, i);
-		il_factor_generate(ilarg->factor, env, cctx);
+		GenerateILFactor(ilarg->factor, env, cctx);
 	}
 	//連鎖先のコンストラクタを検索する
 	constructor* chainTarget = NULL;

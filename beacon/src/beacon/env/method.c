@@ -406,11 +406,11 @@ static method* create_has_next(method* self, type* ty, class_loader* cll, Vector
 	AddOpcodeBuf(envSmt->buf, (VectorItem)OP_CORO_RESUME);
 	for(int i=0; i<stmt_list->length; i++) {
 		il_stmt* e = (il_stmt*)AtVector(stmt_list, i);
-		il_stmt_load(e, envSmt, cctx);
+		LoadILStmt(e, envSmt, cctx);
 	}
 	for(int i=0; i<stmt_list->length; i++) {
 		il_stmt* e = (il_stmt*)AtVector(stmt_list, i);
-		il_stmt_generate(e, envSmt, cctx);
+		GenerateILStmt(e, envSmt, cctx);
 	}
 	AddOpcodeBuf(envSmt->buf, OP_CORO_EXIT);
 	if(type_name(self->parent) == InternString("Base")) {

@@ -16,7 +16,7 @@ il_factor * il_factor_wrap_double(il_factor_double * self) {
 	return ret;
 }
 
-il_factor_double * il_factor_double_new(double d) {
+il_factor_double * NewILDouble(double d) {
 	il_factor_double* ret = (il_factor_double*)MEM_MALLOC(sizeof(il_factor_double));
 	ret->value = d;
 	return ret;

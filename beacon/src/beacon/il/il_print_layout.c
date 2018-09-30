@@ -20,7 +20,7 @@ bool il_print_layout_lineno(int lineno) {
 	return false;
 }
 
-void il_print_layout_form(int lineno) {
+void FormatILPrintLayout(int lineno) {
 	if (gHideLineNo) {
 		return;
 	}
@@ -38,6 +38,6 @@ void il_print_layout_form(int lineno) {
 	}
 }
 
-void il_print_layout_hide(bool is_hide) {
+void HideILPrintLayout(bool is_hide) {
 	gHideLineNo = is_hide;
 }

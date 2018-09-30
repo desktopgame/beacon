@@ -18,9 +18,9 @@ il_factor_childa_op* il_factor_childa_op_new(operator_type type) {
 }
 
 generic_type* il_factor_childa_op_eval(il_factor_childa_op * self, enviroment * env, call_context* cctx) {
-	generic_type* gtype = il_factor_eval(self->parent->a, env, cctx);
+	generic_type* gtype = EvalILFactor(self->parent->a, env, cctx);
 	if(self->operator_index == -1) {
-		//il_factor_generate(self->parent->a, env);
+		//GenerateILFactor(self->parent->a, env);
 		if(GENERIC2TYPE(gtype) == TYPE_INT) {
 			return TYPE2GENERIC(TYPE_INT);
 		} else if(GENERIC2TYPE(gtype) == TYPE_BOOL) {
@@ -39,8 +39,8 @@ generic_type* il_factor_childa_op_eval(il_factor_childa_op * self, enviroment * 
 
 void il_factor_childa_op_generate(il_factor_childa_op* self, enviroment* env, call_context* cctx) {
 	if(self->operator_index == -1) {
-		il_factor_generate(self->parent->a, env, cctx);
-		generic_type* gtype = il_factor_eval(self->parent->a, env, cctx);
+		GenerateILFactor(self->parent->a, env, cctx);
+		generic_type* gtype = EvalILFactor(self->parent->a, env, cctx);
 		if(GENERIC2TYPE(gtype) == TYPE_INT) {
 			AddOpcodeBuf(env->buf, OP_IFLIP);
 		} else if(GENERIC2TYPE(gtype) == TYPE_BOOL) {
@@ -49,14 +49,14 @@ void il_factor_childa_op_generate(il_factor_childa_op* self, enviroment* env, ca
 			assert(false);
 		}
 	} else {
-		il_factor_generate(self->parent->a, env, cctx);
+		GenerateILFactor(self->parent->a, env, cctx);
 		AddOpcodeBuf(env->buf, OP_INVOKEOPERATOR);
 		AddOpcodeBuf(env->buf, self->operator_index);
 	}
 }
 
 void il_factor_childa_OP_LOAD(il_factor_childa_op* self, enviroment* env, call_context* cctx) {
-	generic_type* gtype = il_factor_eval(self->parent->a, env, cctx);
+	generic_type* gtype = EvalILFactor(self->parent->a, env, cctx);
 	if(GENERIC2TYPE(gtype) != TYPE_INT &&
 	   GENERIC2TYPE(gtype) != TYPE_BOOL) {
 		self->operator_index = il_factor_unary_op_index(self->parent, env, cctx);

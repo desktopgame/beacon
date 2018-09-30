@@ -16,13 +16,13 @@ typedef struct il_stmt_return {
  * @param self
  * @return
  */
-il_stmt* il_stmt_wrap_return(il_stmt_return* self);
+il_stmt* WrapILReturn(il_stmt_return* self);
 
 /**
  * 式を返却する文を作成します.
  * @return
  */
-il_stmt_return* il_stmt_return_new();
+il_stmt_return* NewILReturn();
 
 /**
  * 式を返却する文を生成します.
@@ -38,7 +38,7 @@ void il_stmt_return_generate(il_stmt_return* self, struct enviroment* env, call_
  * @param env
  * @param cctx
  */
-void il_stmt_return_load(il_stmt_return* self, struct enviroment* env, call_context* cctx);
+void LoadILReturn(il_stmt_return* self, struct enviroment* env, call_context* cctx);
 
 /**
  * 式を返却する文を開放します.
