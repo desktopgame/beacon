@@ -15,7 +15,7 @@ il_factor* WrapILDouble(il_factor_double* self);
 
 il_factor_double* NewILDouble(double d);
 
-void il_factor_double_generate(il_factor_double* self, struct enviroment* env, call_context* cctx);
+void GenerateILDouble(il_factor_double* self, struct enviroment* env, call_context* cctx);
 
 void LoadILDouble(il_factor_double* self, struct enviroment* env, call_context* cctx);
 

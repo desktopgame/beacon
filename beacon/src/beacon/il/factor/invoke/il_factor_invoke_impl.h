@@ -30,7 +30,7 @@ typedef struct il_factor_invoke {
 
 il_factor_invoke* NewILInvoke(string_view namev);
 
-void il_factor_invoke_generate(il_factor_invoke* self, struct enviroment* env, call_context* cctx);
+void GenerateILInvoke(il_factor_invoke* self, struct enviroment* env, call_context* cctx);
 
 void LoadILInvoke(il_factor_invoke * self, struct enviroment * env, call_context* cctx);
 
@@ -40,5 +40,5 @@ char* ILInvokeToString(il_factor_invoke* self, struct enviroment* env);
 
 void DeleteILInvoke(il_factor_invoke* self);
 
-struct operator_overload* il_factor_invoke_find_set(il_factor_invoke* self, il_factor* value, struct enviroment* env, call_context* cctx, int* outIndex);
+struct operator_overload* FindSetILInvoke(il_factor_invoke* self, il_factor* value, struct enviroment* env, call_context* cctx, int* outIndex);
 #endif

@@ -28,13 +28,13 @@ void GenerateILFactor(il_factor * self, enviroment* env, call_context* cctx) {
 			GenerateILInt(self->u.int_, env, cctx);
 			break;
 		case ILFACTOR_DOUBLE_T:
-			il_factor_double_generate(self->u.double_, env, cctx);
+			GenerateILDouble(self->u.double_, env, cctx);
 			break;
 		case ILFACTOR_CHAR_T:
 			GenerateILChar(self->u.char_, env, cctx);
 			break;
 		case ILFACTOR_STRING_T:
-			il_factor_string_generate(self->u.string_, env, cctx);
+			GenerateILString(self->u.string_, env, cctx);
 			break;
 		case ILFACTOR_VARIABLE_T:
 			il_factor_variable_generate(self->u.variable_, env, cctx);
@@ -266,7 +266,7 @@ char* ILFactorToString(il_factor* self, enviroment* env) {
 		case ILFACTOR_UNARY_OP_T:
 			return ILUnaryOpToString(self->u.unary_, env);
 		case ILFACTOR_BINARY_OP_T:
-			return il_factor_binary_op_tostr(self->u.binary_, env);
+			return ILBinaryOpToString(self->u.binary_, env);
 		case ILFACTOR_ASSIGN_T:
 			return NULL;
 		case ILFACTOR_THIS_T:
@@ -355,7 +355,7 @@ void DeleteILFactor(il_factor * self) {
 			DeleteILString(self->u.string_);
 			break;
 		case ILFACTOR_VARIABLE_T:
-			il_factor_variable_delete(self->u.variable_);
+			DeleteILVariable(self->u.variable_);
 			break;
 		case ILFACTOR_UNARY_OP_T:
 			DeleteILUnaryOp(self->u.unary_);
@@ -399,7 +399,7 @@ void DeleteILFactor(il_factor * self) {
 			il_factor_explicit_binary_op_delete(self->u.exp_binary_op);
 			break;
 		case ILFACTOR_PROPERTY_T:
-			il_factor_property_delete(self->u.prop);
+			DeleteILPropertyAccess(self->u.prop);
 			break;
 		case ILFACTOR_SUBSCRIPT_T:
 			il_factor_subscript_delete(self->u.subscript);

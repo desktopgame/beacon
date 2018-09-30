@@ -22,7 +22,7 @@ il_factor_double * NewILDouble(double d) {
 	return ret;
 }
 
-void il_factor_double_generate(il_factor_double * self, enviroment* env, call_context* cctx) {
+void GenerateILDouble(il_factor_double * self, enviroment* env, call_context* cctx) {
 	int index = AddCDoubleEnviroment(env, self->value);
 	AddOpcodeBuf(env->buf, OP_DCONST);
 	AddOpcodeBuf(env->buf, index);

@@ -35,7 +35,7 @@ void LoadILInjectJNI(il_stmt_inject_jni * self, enviroment* env, call_context* c
 	self->se = EntrySymbolTable(env->sym_table, gtype, self->namev);
 }
 
-void il_stmt_inject_jni_delete(il_stmt_inject_jni* self) {
+void DeleteILInjectJni(il_stmt_inject_jni* self) {
 	DeleteILFactor(self->fact);
 	MEM_FREE(self);
 }

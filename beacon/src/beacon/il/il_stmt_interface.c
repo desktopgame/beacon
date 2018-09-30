@@ -47,7 +47,7 @@ void GenerateILStmt(il_stmt * self, struct enviroment* env, call_context* cctx) 
 			GenerateILBreak(NULL, env, cctx);
 			break;
 		case ILSTMT_CONTINUE_T:
-			il_stmt_continue_generate(NULL, env, cctx);
+			GenerateILContinue(NULL, env, cctx);
 			break;
 		case ILSTMT_INFERENCED_TYPE_INIT_T:
 			il_stmt_inferenced_type_init_generate(self->u.inferenced_type_init, env, cctx);
@@ -103,7 +103,7 @@ void LoadILStmt(il_stmt * self, enviroment* env, call_context* cctx) {
 			LoadILReturn(self->u.return_, env, cctx);
 			break;
 		case ILSTMT_RETURN_EMPTY_T:
-			il_stmt_return_empty_load(NULL, env, cctx);
+			LoadILReturnEmpty(NULL, env, cctx);
 			break;
 		case ILSTMT_WHILE_T:
 			LoadILWhile(self->u.while_, env, cctx);
@@ -130,7 +130,7 @@ void LoadILStmt(il_stmt * self, enviroment* env, call_context* cctx) {
 			LoadILDefer(self->u.defer_, env, cctx);
 			break;
 		case ILSTMT_YIELD_RETURN_T:
-			il_stmt_yield_return_load(self->u.yield_return, env, cctx);
+			LoadILYieldReturn(self->u.yield_return, env, cctx);
 			break;
 		case ILSTMT_YIELD_BREAK_T:
 			LoadILYieldBreak(self->u.yield_break, env, cctx);
@@ -192,7 +192,7 @@ void DeleteILStmt(il_stmt * self) {
 			//il_stmt_yield_break_delete(self->u.yield_break);
 			break;
 		case ILSTMT_INJECT_JNI_T:
-			il_stmt_inject_jni_delete(self->u.inject_jni);
+			DeleteILInjectJni(self->u.inject_jni);
 			break;
 		default:
 			//ERROR("ステートメントを開放出来ませんでした。");

@@ -76,7 +76,7 @@ void LoadILBinaryOp(il_factor_binary_op * self, enviroment * env, call_context* 
 		il_factor_compare_op* comp = NewILCompareOp(self->type);
 		comp->parent = self;
 		self->u.compare_op = comp;
-		il_factor_compare_OP_LOAD(comp, env, cctx);
+		LoadILCompareOp(comp, env, cctx);
 	} else if(operator_bit(self->type) || operator_logic(self->type)) {
 		self->category = OPERATOR_CLOGIC_T;
 		il_factor_logic_op* logic = NewILLogicOp(self->type);
@@ -124,7 +124,7 @@ generic_type* EvalILBinaryOp(il_factor_binary_op * self, enviroment * env, call_
 	return ret;
 }
 
-char* il_factor_binary_op_tostr(il_factor_binary_op* self, enviroment* env) {
+char* ILBinaryOpToString(il_factor_binary_op* self, enviroment* env) {
 	char* ret = NULL;
 	switch(self->category) {
 		case OPERATOR_CARITHMERIC_T:
@@ -153,7 +153,7 @@ void il_factor_binary_op_delete(il_factor_binary_op * self) {
 			il_factor_arithmetic_op_delete(self->u.arithmetic_op);
 			break;
 		case OPERATOR_CLOGIC_T:
-			il_factor_logic_op_delete(self->u.logic_op);
+			DeleteILLogicOp(self->u.logic_op);
 			break;
 		case OPERATOR_CCOMPARE_T:
 			il_factor_compare_op_delete(self->u.compare_op);
@@ -162,7 +162,7 @@ void il_factor_binary_op_delete(il_factor_binary_op * self) {
 			il_factor_shift_op_delete(self->u.shift_op);
 			break;
 		case OPERATOR_CEXCOR_T:
-			il_factor_excor_op_delete(self->u.excor_op);
+			DeleteILExcorOp(self->u.excor_op);
 			break;
 	}
 	DeleteILFactor(self->left);
@@ -170,7 +170,7 @@ void il_factor_binary_op_delete(il_factor_binary_op * self) {
 	MEM_FREE(self);
 }
 
-char* il_factor_binary_op_tostr_simple(il_factor_binary_op* self, enviroment* env) {
+char* ILBinaryOpToString_simple(il_factor_binary_op* self, enviroment* env) {
 	string_buffer* sb = NewBuffer();
 	char* a = ILFactorToString(self->left, env);
 	char* b = ILFactorToString(self->right, env);
@@ -225,7 +225,7 @@ int il_factor_binary_op_index2(il_factor* receiver, il_factor* arg, operator_typ
 	return temp;
 }
 
-generic_type* il_factor_binary_op_apply(il_factor_binary_op* self, generic_type* gtype, enviroment* env, call_context* cctx) {
+generic_type* ApplyILBinaryOp(il_factor_binary_op* self, generic_type* gtype, enviroment* env, call_context* cctx) {
 	generic_type* lgtype = EvalILFactor(self->left, env, cctx);
 	call_frame* cfr = PushCallContext(cctx, FRAME_INSTANCE_INVOKE_T);
 	cfr->u.instance_invoke.receiver = lgtype;

@@ -19,5 +19,5 @@ void il_stmt_inject_jni_generate(il_stmt_inject_jni* self, enviroment* env, call
 
 void LoadILInjectJNI(il_stmt_inject_jni * self, enviroment* env, call_context* cctx);
 
-void il_stmt_inject_jni_delete(il_stmt_inject_jni* self);
+void DeleteILInjectJni(il_stmt_inject_jni* self);
 #endif

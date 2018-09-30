@@ -20,7 +20,7 @@ void il_factor_logic_op_generate(il_factor_logic_op* self, struct enviroment* en
 
 void LoadILLogicOp(il_factor_logic_op* self, struct enviroment* env, call_context* cctx);
 
-void il_factor_logic_op_delete(il_factor_logic_op* self);
+void DeleteILLogicOp(il_factor_logic_op* self);
 
 char* ILLogicOpToString(il_factor_logic_op* self, struct enviroment* env);
 #endif

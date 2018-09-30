@@ -67,6 +67,6 @@ void il_factor_childa_op_delete(il_factor_childa_op* self) {
 	MEM_FREE(self);
 }
 
-char* il_factor_childa_op_tostr(il_factor_childa_op* self, enviroment* env) {
+char* ILChildaOpToString(il_factor_childa_op* self, enviroment* env) {
 	return ILUnaryOpToString_simple(self->parent, env);
 }

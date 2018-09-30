@@ -37,7 +37,7 @@ generic_type* EvalILLogicOp(il_factor_logic_op* self, enviroment* env, call_cont
 			return NULL;
 		}
 		operator_overload* operator_ov = class_get_operator_overload(TYPE2CLASS(GENERIC2TYPE(lgtype)), self->operator_index);
-		return il_factor_binary_op_apply(self->parent, operator_ov->return_gtype, env, cctx);
+		return ApplyILBinaryOp(self->parent, operator_ov->return_gtype, env, cctx);
 	}
 }
 
@@ -67,12 +67,12 @@ void LoadILLogicOp(il_factor_logic_op* self, enviroment* env, call_context* cctx
 	}
 }
 
-void il_factor_logic_op_delete(il_factor_logic_op* self) {
+void DeleteILLogicOp(il_factor_logic_op* self) {
 	MEM_FREE(self);
 }
 
 char* ILLogicOpToString(il_factor_logic_op* self, enviroment* env) {
-	return il_factor_binary_op_tostr_simple(self->parent, env);
+	return ILBinaryOpToString_simple(self->parent, env);
 }
 //static
 static opcode operator_to_iopcode(operator_type type) {

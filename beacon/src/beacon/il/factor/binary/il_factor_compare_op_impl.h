@@ -17,7 +17,7 @@ struct generic_type* EvalILCompareOp(il_factor_compare_op * self, struct envirom
 
 void il_factor_compare_op_generate(il_factor_compare_op* self, struct enviroment* env, call_context* cctx);
 
-void il_factor_compare_OP_LOAD(il_factor_compare_op* self, struct enviroment* env, call_context* cctx);
+void LoadILCompareOp(il_factor_compare_op* self, struct enviroment* env, call_context* cctx);
 
 void il_factor_compare_op_delete(il_factor_compare_op* self);
 

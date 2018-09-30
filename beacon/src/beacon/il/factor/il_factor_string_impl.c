@@ -20,7 +20,7 @@ il_factor_string * NewILString(string_view valuev) {
 	return ret;
 }
 
-void il_factor_string_generate(il_factor_string * self, enviroment* env, call_context* cctx) {
+void GenerateILString(il_factor_string * self, enviroment* env, call_context* cctx) {
 	int index = AddCStringEnviroment(env, self->valuev);
 	AddOpcodeBuf(env->buf, (VectorItem)OP_SCONST);
 	AddOpcodeBuf(env->buf, (VectorItem)index);

@@ -24,7 +24,7 @@ il_factor * WrapILVariable(il_factor_variable * self) {
 	return ret;
 }
 
-il_factor_variable * il_factor_variable_malloc(const char* filename, int lineno) {
+il_factor_variable * MallocILVariable(const char* filename, int lineno) {
 	il_factor_variable* ret = (il_factor_variable*)mem_malloc(sizeof(il_factor_variable), filename, lineno);
 	ret->fqcn = fqcn_cache_malloc(filename, lineno);
 	ret->type_args = MallocVector(filename, lineno);
@@ -70,7 +70,7 @@ char* ILVariableToString(il_factor_variable* self, enviroment* env) {
 	return NULL;
 }
 
-void il_factor_variable_delete(il_factor_variable * self) {
+void DeleteILVariable(il_factor_variable * self) {
 	//MEM_FREE(self->name);
 	if(self->type == ILVARIABLE_TYPE_LOCAL_T) {
 		il_factor_variable_local_delete(self->u.local_);

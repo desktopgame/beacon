@@ -29,7 +29,7 @@ il_stmt* il_stmt_wrap_variable_init(il_stmt_variable_init* self);
  * @param namev
  * @return
  */
-il_stmt_variable_init* il_stmt_variable_init_new(string_view namev);
+il_stmt_variable_init* NewILVariableInit(string_view namev);
 
 /**
  * 変数の初期化を表す要素を出力します.

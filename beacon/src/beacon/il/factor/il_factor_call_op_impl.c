@@ -81,7 +81,7 @@ char* ILCallOpToString(il_factor_call_op* self, enviroment* env) {
 void il_factor_call_op_generate(il_factor_call_op* self, enviroment* env, call_context* cctx) {
 	LoadCallOp(self, env, cctx);
 	if(self->type == ILCALL_TYPE_INVOKE_T) {
-		return il_factor_invoke_generate(self->u.invoke_, env, cctx);
+		return GenerateILInvoke(self->u.invoke_, env, cctx);
 	} else if(self->type == ILCALL_TYPE_INVOKE_STATIC_T) {
 		return il_factor_invoke_static_generate(self->u.invoke_static_, env, cctx);
 	} else if(self->type == ILCALL_TYPE_INVOKE_BOUND_T) {

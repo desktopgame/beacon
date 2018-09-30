@@ -43,7 +43,7 @@ generic_type* il_factor_arithmetic_op_eval(il_factor_arithmetic_op * self, envir
 		return NULL;
 	}
 	operator_overload* operator_ov = class_get_operator_overload(TYPE2CLASS(GENERIC2TYPE(lgtype)), self->operator_index);
-	return il_factor_binary_op_apply(self->parent, operator_ov->return_gtype, env, cctx);
+	return ApplyILBinaryOp(self->parent, operator_ov->return_gtype, env, cctx);
 }
 
 void il_factor_arithmetic_op_generate(il_factor_arithmetic_op* self, enviroment* env, call_context* cctx) {
@@ -78,7 +78,7 @@ void il_factor_arithmetic_op_delete(il_factor_arithmetic_op* self) {
 }
 
 char* il_factor_arithmetic_op_tostr(il_factor_arithmetic_op* self, enviroment* env) {
-	return il_factor_binary_op_tostr_simple(self->parent, env);
+	return ILBinaryOpToString_simple(self->parent, env);
 }
 //static
 static opcode operator_to_iopcode(operator_type type) {

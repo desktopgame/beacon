@@ -21,7 +21,7 @@ generic_type* EvalILNotOp(il_factor_not_op * self, enviroment * env, call_contex
 	return TYPE2GENERIC(TYPE_BOOL);
 }
 
-void il_factor_not_op_generate(il_factor_not_op* self, enviroment* env, call_context* cctx) {
+void GenerateILNotOp(il_factor_not_op* self, enviroment* env, call_context* cctx) {
 	if(self->operator_index == -1) {
 		GenerateILFactor(self->parent->a, env, cctx);
 		if(GetLastBCError()) {

@@ -10,7 +10,7 @@
 
 static void check_method_yield_return(il_stmt_yield_return * self, enviroment * env, call_context* cctx);
 
-il_stmt* il_stmt_wrap_yield_return(il_stmt_yield_return* self) {
+il_stmt* WrapILYieldReturn(il_stmt_yield_return* self) {
 	il_stmt* ret = il_stmt_new(ILSTMT_YIELD_RETURN_T);
 	ret->type = ILSTMT_YIELD_RETURN_T;
 	ret->u.yield_return = self;
@@ -28,7 +28,7 @@ void il_stmt_yield_return_generate(il_stmt_yield_return* self, enviroment* env, 
 	AddOpcodeBuf(env->buf, OP_CORO_NEXT);
 }
 
-void il_stmt_yield_return_load(il_stmt_yield_return * self, enviroment* env, call_context* cctx) {
+void LoadILYieldReturn(il_stmt_yield_return * self, enviroment* env, call_context* cctx) {
 	check_method_yield_return(self, env, cctx);
 }
 

@@ -52,7 +52,7 @@ void il_factor_compare_op_generate(il_factor_compare_op* self, enviroment* env, 
 	}
 }
 
-void il_factor_compare_OP_LOAD(il_factor_compare_op* self, enviroment* env, call_context* cctx) {
+void LoadILCompareOp(il_factor_compare_op* self, enviroment* env, call_context* cctx) {
 	if(!il_factor_binary_op_int_int(self->parent, env, cctx) &&
 	   !il_factor_binary_op_double_double(self->parent, env, cctx) &&
 	   !il_factor_binary_op_char_char(self->parent, env, cctx)) {
@@ -65,7 +65,7 @@ void il_factor_compare_op_delete(il_factor_compare_op* self) {
 }
 
 char* il_factor_compare_op_tostr(il_factor_compare_op* self, enviroment* env) {
-	return il_factor_binary_op_tostr_simple(self->parent, env);
+	return ILBinaryOpToString_simple(self->parent, env);
 }
 //static
 static opcode operator_to_iopcode(operator_type type) {

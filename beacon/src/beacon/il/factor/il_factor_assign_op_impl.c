@@ -216,7 +216,7 @@ static void assign_by_invoke(il_factor_invoke* lhs, il_factor* rhs, enviroment* 
 		);
 		return;
 	}
-	il_factor_invoke_find_set(lhs, rhs, env, cctx, &temp);
+	FindSetILInvoke(lhs, rhs, env, cctx, &temp);
 	for(int i=0; i<lhs->args->length; i++) {
 		il_argument* arg = AtVector(lhs->args, i);
 		GenerateILFactor(arg->factor, env, cctx);

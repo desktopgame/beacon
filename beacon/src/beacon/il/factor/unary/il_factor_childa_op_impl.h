@@ -22,5 +22,5 @@ void LoadILChildaOp(il_factor_childa_op* self, struct enviroment* env, call_cont
 
 void il_factor_childa_op_delete(il_factor_childa_op* self);
 
-char* il_factor_childa_op_tostr(il_factor_childa_op* self, struct enviroment* env);
+char* ILChildaOpToString(il_factor_childa_op* self, struct enviroment* env);
 #endif

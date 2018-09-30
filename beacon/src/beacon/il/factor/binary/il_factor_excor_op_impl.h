@@ -20,7 +20,7 @@ void il_factor_excor_op_generate(il_factor_excor_op* self, struct enviroment* en
 
 void LoadILExcorOp(il_factor_excor_op* self, struct enviroment* env, call_context* cctx);
 
-void il_factor_excor_op_delete(il_factor_excor_op* self);
+void DeleteILExcorOp(il_factor_excor_op* self);
 
 char* ILExcorOpToString(il_factor_excor_op* self, struct enviroment* env);
 #endif

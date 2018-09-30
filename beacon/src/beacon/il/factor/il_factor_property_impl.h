@@ -13,8 +13,8 @@ typedef struct il_factor_property {
 	property* p;
 } il_factor_property;
 
-#define il_factor_property_new() (il_factor_property_malloc(__FILE__, __LINE__))
-il_factor_property* il_factor_property_malloc(const char* filename, int lineno);
+#define il_factor_property_new() (MallocILPropertyAccess(__FILE__, __LINE__))
+il_factor_property* MallocILPropertyAccess(const char* filename, int lineno);
 
 void il_factor_property_generate(il_factor_property* self, struct enviroment* env, call_context* cctx);
 
@@ -24,5 +24,5 @@ struct generic_type* EvalILProperty(il_factor_property* self, enviroment* env, c
 
 char* ILPropertyToString(il_factor_property* self, struct enviroment* env);
 
-void il_factor_property_delete(il_factor_property* self);
+void DeleteILPropertyAccess(il_factor_property* self);
 #endif

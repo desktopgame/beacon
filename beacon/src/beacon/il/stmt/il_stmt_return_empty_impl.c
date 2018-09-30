@@ -13,7 +13,7 @@ void il_stmt_return_empty_generate(il_stmt_return_empty self, enviroment* env, c
 	AddOpcodeBuf(env->buf, OP_RETURN);
 }
 
-void il_stmt_return_empty_load(il_stmt_return_empty self, enviroment* env, call_context* cctx) {
+void LoadILReturnEmpty(il_stmt_return_empty self, enviroment* env, call_context* cctx) {
 	check_method_return(self, env, cctx);
 }
 //private

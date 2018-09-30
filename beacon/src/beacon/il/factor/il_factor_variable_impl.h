@@ -42,8 +42,8 @@ typedef struct il_factor_variable {
 
 il_factor* WrapILVariable(il_factor_variable* self);
 
-#define il_factor_variable_new() (il_factor_variable_malloc(__FILE__, __LINE__))
-il_factor_variable* il_factor_variable_malloc(const char* filename, int lineno);
+#define il_factor_variable_new() (MallocILVariable(__FILE__, __LINE__))
+il_factor_variable* MallocILVariable(const char* filename, int lineno);
 
 void il_factor_variable_generate(il_factor_variable* self, struct enviroment* env, call_context* cctx);
 
@@ -53,6 +53,6 @@ generic_type* EvalILVariable(il_factor_variable* self, struct enviroment* env, c
 
 char* ILVariableToString(il_factor_variable* self, struct enviroment* env);
 
-void il_factor_variable_delete(il_factor_variable* self);
+void DeleteILVariable(il_factor_variable* self);
 
 #endif // !SIGNAL_IL_IL_FACTOR_VARIABLE_H

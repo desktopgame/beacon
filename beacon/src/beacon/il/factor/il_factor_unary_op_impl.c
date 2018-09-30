@@ -30,7 +30,7 @@ il_factor_unary_op * NewILUnaryOp(operator_type type) {
 void il_factor_unary_op_generate(il_factor_unary_op * self, enviroment* env, call_context* cctx) {
 	switch(self->type) {
 		case OPERATOR_NOT_T:
-			il_factor_not_op_generate(self->u.not_op, env, cctx);
+			GenerateILNotOp(self->u.not_op, env, cctx);
 			break;
 		case OPERATOR_CHILDA_T:
 			il_factor_childa_op_generate(self->u.childa_op, env, cctx);
@@ -94,7 +94,7 @@ char* ILUnaryOpToString(il_factor_unary_op* self, enviroment* env) {
 			ret = ILNotOpToString(self->u.not_op, env);
 			break;
 		case OPERATOR_CHILDA_T:
-			ret = il_factor_childa_op_tostr(self->u.childa_op, env);
+			ret = ILChildaOpToString(self->u.childa_op, env);
 			break;
 		case OPERATOR_NEGATIVE_T:
 			ret = il_factor_negative_op_tostr(self->u.negative_op, env);

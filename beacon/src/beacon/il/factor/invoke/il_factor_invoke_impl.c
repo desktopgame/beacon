@@ -20,8 +20,8 @@ static void resolve_default(il_factor_invoke * self, enviroment * env, call_cont
 static void il_factor_invoke_args_delete(VectorItem item);
 static void il_factor_invoke_check(il_factor_invoke * self, enviroment * env, call_context* cctx);
 static generic_type* il_factor_invoke_return_gtype(il_factor_invoke* self);
-static void il_factor_invoke_generate_method(il_factor_invoke* self, enviroment* env, call_context* cctx);
-static void il_factor_invoke_generate_subscript(il_factor_invoke* self, enviroment* env, call_context* cctx);
+static void GenerateILInvoke_method(il_factor_invoke* self, enviroment* env, call_context* cctx);
+static void GenerateILInvoke_subscript(il_factor_invoke* self, enviroment* env, call_context* cctx);
 
 il_factor_invoke* NewILInvoke(string_view namev) {
 	il_factor_invoke* ret = (il_factor_invoke*)MEM_MALLOC(sizeof(il_factor_invoke));
@@ -35,9 +35,9 @@ il_factor_invoke* NewILInvoke(string_view namev) {
 	return ret;
 }
 
-void il_factor_invoke_generate(il_factor_invoke* self, enviroment* env, call_context* cctx) {
-	il_factor_invoke_generate_method(self, env, cctx);
-	il_factor_invoke_generate_subscript(self, env, cctx);
+void GenerateILInvoke(il_factor_invoke* self, enviroment* env, call_context* cctx) {
+	GenerateILInvoke_method(self, env, cctx);
+	GenerateILInvoke_subscript(self, env, cctx);
 }
 
 void LoadILInvoke(il_factor_invoke * self, enviroment * env, call_context* cctx) {
@@ -92,7 +92,7 @@ void DeleteILInvoke(il_factor_invoke* self) {
 	MEM_FREE(self);
 }
 
-operator_overload* il_factor_invoke_find_set(il_factor_invoke* self, il_factor* value, enviroment* env, call_context* cctx, int* outIndex) {
+operator_overload* FindSetILInvoke(il_factor_invoke* self, il_factor* value, enviroment* env, call_context* cctx, int* outIndex) {
 	assert(self->tag == INSTANCE_INVOKE_SUBSCRIPT_T);
 	Vector* args = NewVector();
 	PushVector(args, ((il_argument*)AtVector(self->args, 0))->factor);
@@ -206,7 +206,7 @@ static generic_type* il_factor_invoke_return_gtype(il_factor_invoke* self) {
 	return self->tag == INSTANCE_INVOKE_METHOD_T ? self->u.m->return_gtype : self->u.opov->return_gtype;
 }
 
-static void il_factor_invoke_generate_method(il_factor_invoke* self, enviroment* env, call_context* cctx) {
+static void GenerateILInvoke_method(il_factor_invoke* self, enviroment* env, call_context* cctx) {
 	assert(self->tag != INSTANCE_INVOKE_UNDEFINED_T);
 	if(self->tag != INSTANCE_INVOKE_METHOD_T) {
 		return;
@@ -238,7 +238,7 @@ static void il_factor_invoke_generate_method(il_factor_invoke* self, enviroment*
 	}
 }
 
-static void il_factor_invoke_generate_subscript(il_factor_invoke* self, enviroment* env, call_context* cctx) {
+static void GenerateILInvoke_subscript(il_factor_invoke* self, enviroment* env, call_context* cctx) {
 	assert(self->tag != INSTANCE_INVOKE_UNDEFINED_T);
 	if(self->tag != INSTANCE_INVOKE_SUBSCRIPT_T) {
 		return;

@@ -16,7 +16,7 @@ il_factor_not_op* NewILNotOp(operator_type type);
 
 struct generic_type* EvalILNotOp(il_factor_not_op * self, struct enviroment * env, call_context* cctx);
 
-void il_factor_not_op_generate(il_factor_not_op* self, struct enviroment* env, call_context* cctx);
+void GenerateILNotOp(il_factor_not_op* self, struct enviroment* env, call_context* cctx);
 
 void LoadILNotOp(il_factor_not_op* self, struct enviroment* env, call_context* cctx);
 

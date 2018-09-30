@@ -5,7 +5,7 @@
 
 il_stmt* WrapILContinue();
 
-void il_stmt_continue_generate(void* empty, struct enviroment* env, call_context* cctx);
+void GenerateILContinue(void* empty, struct enviroment* env, call_context* cctx);
 
 void LoadILContinue(void* empty, struct enviroment* env, call_context* cctx);
 

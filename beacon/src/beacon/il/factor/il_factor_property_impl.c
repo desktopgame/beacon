@@ -8,7 +8,7 @@
 #include <assert.h>
 
 
-il_factor_property* il_factor_property_malloc(const char* filename, int lineno) {
+il_factor_property* MallocILPropertyAccess(const char* filename, int lineno) {
 	il_factor_property* ret = mem_malloc(sizeof(il_factor_property), filename, lineno);
 	ret->fact = NULL;
 	ret->index = -1;
@@ -51,7 +51,7 @@ char* ILPropertyToString(il_factor_property* self, enviroment* env) {
 	return ReleaseBuffer(sb);
 }
 
-void il_factor_property_delete(il_factor_property* self) {
+void DeleteILPropertyAccess(il_factor_property* self) {
 	DeleteILFactor(self->fact);
 	MEM_FREE(self);
 }

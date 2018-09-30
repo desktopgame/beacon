@@ -16,5 +16,5 @@ void il_stmt_return_empty_generate(il_stmt_return_empty self, struct enviroment*
  * @param env
  * @param cctx
  */
-void il_stmt_return_empty_load(il_stmt_return_empty self, struct enviroment* env, call_context* cctx);
+void LoadILReturnEmpty(il_stmt_return_empty self, struct enviroment* env, call_context* cctx);
 #endif

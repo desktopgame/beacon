@@ -8,7 +8,7 @@ il_stmt * WrapILContinue() {
 	return ret;
 }
 
-void il_stmt_continue_generate(void * empty, enviroment * env, call_context* cctx) {
+void GenerateILContinue(void * empty, enviroment * env, call_context* cctx) {
 	if(cctx->control.while_start->length == 0) {
 		ThrowBCError(BCERROR_CONTINUE_AT_NOT_LOOP_T);
 		return;

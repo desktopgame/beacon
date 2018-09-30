@@ -147,7 +147,7 @@ static il_stmt* CLIL_bodyImpl(class_loader* self, ast* asource) {
 		}
 		case AST_YIELD_RETURN_T:
 		{
-			return il_stmt_wrap_yield_return(CLIL_yield_return(self, asource));
+			return WrapILYieldReturn(CLIL_yield_return(self, asource));
 		}
 		case AST_YIELD_BREAK_T:
 		{
@@ -190,7 +190,7 @@ static il_stmt_variable_init* CLIL_variable_init(class_loader* self, ast* asourc
 	ast* afqcn = FirstAST(asource);
 	ast* aident = SecondAST(asource);
 	ast* afact = AtAST(asource, 2);
-	il_stmt_variable_init* ret = il_stmt_variable_init_new(aident->u.stringv_value);
+	il_stmt_variable_init* ret = NewILVariableInit(aident->u.stringv_value);
 	CLIL_generic_cache(afqcn, ret->fqcn);
 	ret->fact = CLIL_factor(self, afact);
 	return ret;
