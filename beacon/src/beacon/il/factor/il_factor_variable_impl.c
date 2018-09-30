@@ -18,7 +18,7 @@ static void il_factor_variable_check_instance(il_factor_variable* self, envirome
 static void il_factor_variable_check_static(il_factor_variable* self, enviroment* env, call_context* cctx);
 static void DeleteILFactor_typeargs(VectorItem item);
 
-il_factor * il_factor_wrap_variable(il_factor_variable * self) {
+il_factor * WrapILVariable(il_factor_variable * self) {
 	il_factor* ret = il_factor_new(ILFACTOR_VARIABLE_T);
 	ret->u.variable_ = self;
 	return ret;
@@ -41,7 +41,7 @@ void il_factor_variable_generate(il_factor_variable * self, enviroment* env, cal
 	}
 }
 
-void il_factor_variable_load(il_factor_variable * self, enviroment * env, call_context* cctx) {
+void LoadILVariable(il_factor_variable * self, enviroment * env, call_context* cctx) {
 	il_factor_variable_check(self, env, cctx);
 	if(self->type == ILVARIABLE_TYPE_LOCAL_T) {
 		il_factor_variable_local_load(self->u.local_, env, cctx);
@@ -130,5 +130,5 @@ static void il_factor_variable_check_static(il_factor_variable* self, enviroment
 
 static void DeleteILFactor_typeargs(VectorItem item) {
 	il_type_argument* e = (il_type_argument*)item;
-	il_type_argument_delete(e);
+	DeleteILTypeArgument(e);
 }

@@ -82,13 +82,13 @@ void il_factor_binary_OP_LOAD(il_factor_binary_op * self, enviroment * env, call
 		il_factor_logic_op* logic = NewILLogicOp(self->type);
 		logic->parent = self;
 		self->u.logic_op = logic;
-		il_factor_logic_OP_LOAD(logic, env, cctx);
+		LoadILLogicOp(logic, env, cctx);
 	} else if(operator_shift(self->type)) {
 		self->category = OPERATOR_CSHIFT_T;
 		il_factor_shift_op* shift = NewILShiftOp(self->type);
 		shift->parent = self;
 		self->u.shift_op = shift;
-		il_factor_shift_OP_LOAD(shift, env, cctx);
+		LoadILShiftOp(shift, env, cctx);
 	} else if(self->type == OPERATOR_EXCOR_T) {
 		self->category = OPERATOR_CEXCOR_T;
 		il_factor_excor_op* excor = NewILExcorOp(self->type);
@@ -111,7 +111,7 @@ generic_type* il_factor_binary_op_eval(il_factor_binary_op * self, enviroment * 
 			ret = il_factor_compare_op_eval(self->u.compare_op, env, cctx);
 			break;
 		case OPERATOR_CLOGIC_T:
-			ret = il_factor_logic_op_eval(self->u.logic_op, env, cctx);
+			ret = EvalILLogicOp(self->u.logic_op, env, cctx);
 			break;
 		case OPERATOR_CSHIFT_T:
 			ret = il_factor_shift_op_eval(self->u.shift_op, env, cctx);

@@ -161,7 +161,7 @@ static il_stmt* CLIL_bodyImpl(class_loader* self, ast* asource) {
 			ast* afact = FirstAST(asource);
 			jni->fact = CLIL_factor(self, afact);
 			jni->fact->lineno = 0;
-			return il_stmt_wrap_inject_jni(jni);
+			return WrapILInjectJNI(jni);
 		}
 		default:
 			break;

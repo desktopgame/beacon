@@ -6,7 +6,7 @@
 
 static generic_type* gSelf = NULL;
 
-void il_factor_null_generate(void * empty, enviroment * env, call_context* cctx) {
+void GenerateILNull(void * empty, enviroment * env, call_context* cctx) {
 	AddOpcodeBuf(env->buf, OP_NULL);
 }
 

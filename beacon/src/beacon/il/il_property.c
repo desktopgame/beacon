@@ -14,7 +14,7 @@ il_property* MallocILProperty(string_view namev, const char* filename, int linen
 
 void DeleteILProperty(il_property* self) {
 	generic_cache_delete(self->fqcn);
-	il_property_body_delete(self->set);
-	il_property_body_delete(self->get);
+	DeleteILPropertyBody(self->set);
+	DeleteILPropertyBody(self->get);
 	MEM_FREE(self);
 }

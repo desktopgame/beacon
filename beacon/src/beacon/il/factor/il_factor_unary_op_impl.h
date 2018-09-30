@@ -30,9 +30,9 @@ il_factor_unary_op* NewILUnaryOp(operator_type type);
 
 void il_factor_unary_op_generate(il_factor_unary_op* self, struct enviroment* env, call_context* cctx);
 
-void il_factor_unary_OP_LOAD(il_factor_unary_op* self, struct enviroment* env, call_context* cctx);
+void LoadILUnaryOp(il_factor_unary_op* self, struct enviroment* env, call_context* cctx);
 
-generic_type* il_factor_unary_op_eval(il_factor_unary_op* self, struct enviroment* env, call_context* cctx);
+generic_type* EvalILUnaryOp(il_factor_unary_op* self, struct enviroment* env, call_context* cctx);
 
 char* il_factor_unary_op_tostr(il_factor_unary_op* self, struct enviroment* env);
 

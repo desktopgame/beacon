@@ -40,14 +40,14 @@ typedef struct il_factor_variable {
 	} u;
 } il_factor_variable;
 
-il_factor* il_factor_wrap_variable(il_factor_variable* self);
+il_factor* WrapILVariable(il_factor_variable* self);
 
 #define il_factor_variable_new() (il_factor_variable_malloc(__FILE__, __LINE__))
 il_factor_variable* il_factor_variable_malloc(const char* filename, int lineno);
 
 void il_factor_variable_generate(il_factor_variable* self, struct enviroment* env, call_context* cctx);
 
-void il_factor_variable_load(il_factor_variable* self, struct enviroment* env, call_context* cctx);
+void LoadILVariable(il_factor_variable* self, struct enviroment* env, call_context* cctx);
 
 generic_type* il_factor_variable_eval(il_factor_variable* self, struct enviroment* env, call_context* cctx);
 

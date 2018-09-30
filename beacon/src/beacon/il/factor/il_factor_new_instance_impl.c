@@ -114,7 +114,7 @@ void il_factor_new_instance_delete(il_factor_new_instance * self) {
 //private
 static void il_factor_new_instance_delete_typearg(VectorItem item) {
 	il_type_argument* e = (il_type_argument*)item;
-	il_type_argument_delete(e);
+	DeleteILTypeArgument(e);
 }
 
 static void il_factor_new_instance_find(il_factor_new_instance * self, enviroment * env, call_context* cctx) {

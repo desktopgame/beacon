@@ -36,5 +36,5 @@ void il_type_argument_resolve(Vector* iltype_args, struct call_context* cctx);
  * 型実引数を解放します.
  * @param self
  */
-void il_type_argument_delete(il_type_argument* self);
+void DeleteILTypeArgument(il_type_argument* self);
 #endif

@@ -20,7 +20,7 @@ il_factor_logic_op* NewILLogicOp(operator_type type) {
 	return ret;
 }
 
-generic_type* il_factor_logic_op_eval(il_factor_logic_op* self, enviroment* env, call_context* cctx) {
+generic_type* EvalILLogicOp(il_factor_logic_op* self, enviroment* env, call_context* cctx) {
 	if(il_factor_binary_op_int_int(self->parent, env, cctx)) {
 		return TYPE2GENERIC(TYPE_INT);
 	} else if(il_factor_binary_op_bool_bool(self->parent, env, cctx)) {
@@ -60,7 +60,7 @@ void il_factor_logic_op_generate(il_factor_logic_op* self, enviroment* env, call
 	}
 }
 
-void il_factor_logic_OP_LOAD(il_factor_logic_op* self, enviroment* env, call_context* cctx) {
+void LoadILLogicOp(il_factor_logic_op* self, enviroment* env, call_context* cctx) {
 	if(!il_factor_binary_op_int_int(self->parent, env, cctx) &&
 	   !il_factor_binary_op_bool_bool(self->parent, env, cctx)) {
 	self->operator_index = il_factor_binary_op_index(self->parent, env, cctx);

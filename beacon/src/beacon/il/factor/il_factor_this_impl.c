@@ -17,7 +17,7 @@ il_factor_this* NewILThis() {
 	return ret;
 }
 
-void il_factor_this_generate(il_factor_this * self, enviroment * env, call_context* cctx) {
+void GenerateILThis(il_factor_this * self, enviroment * env, call_context* cctx) {
 	AddOpcodeBuf(env->buf, OP_THIS);
 }
 

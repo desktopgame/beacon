@@ -41,7 +41,7 @@ void il_factor_unary_op_generate(il_factor_unary_op * self, enviroment* env, cal
 	}
 }
 
-void il_factor_unary_OP_LOAD(il_factor_unary_op * self, enviroment * env, call_context* cctx) {
+void LoadILUnaryOp(il_factor_unary_op * self, enviroment * env, call_context* cctx) {
 	if(self->type == OPERATOR_NOT_T && self->u.not_op != NULL) return;
 	if(self->type == OPERATOR_CHILDA_T && self->u.childa_op != NULL) return;
 	if(self->type == OPERATOR_NEGATIVE_T && self->u.negative_op != NULL) return;
@@ -70,8 +70,8 @@ void il_factor_unary_OP_LOAD(il_factor_unary_op * self, enviroment * env, call_c
 	}
 }
 
-generic_type* il_factor_unary_op_eval(il_factor_unary_op * self, enviroment * env, call_context* cctx) {
-	il_factor_unary_OP_LOAD(self, env, cctx);
+generic_type* EvalILUnaryOp(il_factor_unary_op * self, enviroment * env, call_context* cctx) {
+	LoadILUnaryOp(self, env, cctx);
 	generic_type* ret = NULL;
 	switch(self->type) {
 		case OPERATOR_NOT_T:

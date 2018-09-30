@@ -27,7 +27,7 @@ il_factor* il_factor_wrap_member_op(il_factor_member_op* self) {
 	return ret;
 }
 
-il_factor_member_op* il_factor_member_op_new(string_view namev) {
+il_factor_member_op* NewILMemberOp(string_view namev) {
 	il_factor_member_op* ret = (il_factor_member_op*)MEM_MALLOC(sizeof(il_factor_member_op));
 	ret->fact = NULL;
 	ret->type_args = NewVector();
@@ -201,5 +201,5 @@ static void il_factor_member_op_typearg_delete(VectorItem item) {
 //	generic_cache* e = (generic_cache*)item;
 //	generic_cache_delete(e);
 	il_type_argument* e = (il_type_argument*)item;
-	il_type_argument_delete(e);
+	DeleteILTypeArgument(e);
 }

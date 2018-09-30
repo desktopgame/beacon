@@ -28,7 +28,7 @@ il_factor* WrapILAssign(il_factor_assign_op* self) {
 	return ret;
 }
 
-il_factor_assign_op* il_factor_assign_op_new() {
+il_factor_assign_op* NewILAssignOp() {
 	il_factor_assign_op* ret = (il_factor_assign_op*)MEM_MALLOC(sizeof(il_factor_assign_op));
 	ret->left = NULL;
 	ret->right = NULL;

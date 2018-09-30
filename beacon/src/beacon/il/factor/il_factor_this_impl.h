@@ -14,7 +14,7 @@ typedef struct il_factor_this {
 
 il_factor_this* NewILThis();
 
-void il_factor_this_generate(il_factor_this* self, struct enviroment* env, call_context* cctx);
+void GenerateILThis(il_factor_this* self, struct enviroment* env, call_context* cctx);
 
 void LoadILThis(il_factor_this* self, struct enviroment* env, call_context* cctx);
 

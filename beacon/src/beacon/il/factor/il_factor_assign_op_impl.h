@@ -9,7 +9,7 @@ typedef struct il_factor_assign_op {
 
 il_factor* WrapILAssign(il_factor_assign_op* self);
 
-il_factor_assign_op* il_factor_assign_op_new();
+il_factor_assign_op* NewILAssignOp();
 
 void il_factor_assign_OP_LOAD(il_factor_assign_op* self, enviroment* env, call_context* cctx);
 

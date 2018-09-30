@@ -37,5 +37,5 @@ void il_factor_variable_static_delete(il_factor_variable_static* self) {
 //private
 static void il_factor_static_delete_typeargs(VectorItem item) {
 	il_type_argument* e = (il_type_argument*)item;
-	il_type_argument_delete(e);
+	DeleteILTypeArgument(e);
 }

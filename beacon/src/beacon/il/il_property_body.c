@@ -14,7 +14,7 @@ il_property_body* MallocILPropertyBody(il_property_body_tag tag, const char* fil
 	return ret;
 }
 
-void il_property_body_delete(il_property_body* self) {
+void DeleteILPropertyBody(il_property_body* self) {
 	DeleteVector(self->statement_list, il_property_body_stmt_delete);
 	MEM_FREE(self);
 }

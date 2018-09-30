@@ -78,7 +78,7 @@ operator_overload* il_factor_invoke_bound_find_set(il_factor_invoke_bound* self,
 //FIXME:il_factor_invokeからのコピペ
 static void il_factor_invoke_bound_delete_typeargs(VectorItem item) {
 	il_type_argument* e = (il_type_argument*)item;
-	il_type_argument_delete(e);
+	DeleteILTypeArgument(e);
 }
 
 static void resolve_non_default(il_factor_invoke_bound * self, enviroment * env, call_context* cctx) {

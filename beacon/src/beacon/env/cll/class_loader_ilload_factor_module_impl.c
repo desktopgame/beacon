@@ -41,7 +41,7 @@ static il_factor* CLIL_factorImpl(class_loader* self, ast* source) {
 	} else if (source->tag == AST_STRING_T) {
 		return WrapILString(NewILString(source->u.stringv_value));
 	} else if (source->tag == AST_VARIABLE_T) {
-		return il_factor_wrap_variable(CLIL_variable(self, source));
+		return WrapILVariable(CLIL_variable(self, source));
 		//operator(+ - * / %)
 	} else if (source->tag == AST_ADD_T) {
 		return WrapILBinary(CLIL_binary(self, source, OPERATOR_ADD_T));
@@ -192,7 +192,7 @@ static il_factor_explicit_binary_op* CLIL_explicit_binary(class_loader* self, as
 }
 
 static il_factor_assign_op* CLIL_assign(class_loader* self, ast* source) {
-	il_factor_assign_op* ret = il_factor_assign_op_new();
+	il_factor_assign_op* ret = NewILAssignOp();
 	ast* aleft = FirstAST(source);
 	ast* aright = SecondAST(source);
 	ret->left = CLIL_factor(self, aleft);
@@ -202,7 +202,7 @@ static il_factor_assign_op* CLIL_assign(class_loader* self, ast* source) {
 
 static il_factor_assign_op* CLIL_assign_arithmetic(class_loader* self, ast* source, operator_type type) {
 	//a += b
-	il_factor_assign_op* ret = il_factor_assign_op_new();
+	il_factor_assign_op* ret = NewILAssignOp();
 	il_factor_binary_op* bin = il_factor_binary_op_new(type);
 	ast* aleft = FirstAST(source);
 	ast* aright = SecondAST(source);
@@ -258,7 +258,7 @@ static il_factor_member_op* CLIL_member_op(class_loader* self, ast* source) {
 	ast* afact = FirstAST(source);
 	ast* aname = SecondAST(source);
 	ast* atype_args = AtAST(source, 2);
-	il_factor_member_op* ret = il_factor_member_op_new(aname->u.stringv_value);
+	il_factor_member_op* ret = NewILMemberOp(aname->u.stringv_value);
 	ret->fact = CLIL_factor(self, afact);
 	CLIL_type_argument(self, atype_args, ret->type_args);
 	return ret;

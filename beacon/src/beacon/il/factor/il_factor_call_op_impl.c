@@ -92,7 +92,7 @@ void il_factor_call_op_generate(il_factor_call_op* self, enviroment* env, call_c
 void il_factor_call_op_delete(il_factor_call_op* self) {
 	DeleteILFactor(self->receiver);
 	if(self->type == ILCALL_TYPE_INVOKE_T) {
-		il_factor_invoke_delete(self->u.invoke_);
+		DeleteILInvoke(self->u.invoke_);
 	} else if(self->type == ILCALL_TYPE_INVOKE_STATIC_T) {
 		il_factor_invoke_static_delete(self->u.invoke_static_);
 	} else if(self->type == ILCALL_TYPE_INVOKE_BOUND_T) {
@@ -223,5 +223,5 @@ static void il_factor_call_op_argument_delete(VectorItem item) {
 
 static void il_factor_call_op_type_argument_delete(VectorItem item) {
 	il_type_argument* e = (il_type_argument*)item;
-	il_type_argument_delete(e);
+	DeleteILTypeArgument(e);
 }

@@ -39,7 +39,7 @@ void il_type_argument_resolve(Vector* iltype_args, call_context* cctx) {
 	}
 }
 
-void il_type_argument_delete(il_type_argument* self) {
+void DeleteILTypeArgument(il_type_argument* self) {
 	generic_cache_delete(self->gcache);
 	MEM_FREE(self);
 }

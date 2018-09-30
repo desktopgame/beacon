@@ -154,5 +154,5 @@ static void il_factor_invoke_static_args_delete(VectorItem item) {
 
 static void il_factor_invoke_static_typeargs_delete(VectorItem item) {
 	il_type_argument* e = (il_type_argument*)item;
-	il_type_argument_delete(e);
+	DeleteILTypeArgument(e);
 }

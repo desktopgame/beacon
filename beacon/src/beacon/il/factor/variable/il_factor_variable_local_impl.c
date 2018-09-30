@@ -82,7 +82,7 @@ void il_factor_variable_local_delete(il_factor_variable_local* self) {
 //private
 static void il_factor_variable_local_delete_typeargs(VectorItem item) {
 	il_type_argument* e = (il_type_argument*)item;
-	il_type_argument_delete(e);
+	DeleteILTypeArgument(e);
 }
 
 static void il_factor_variable_local_loadImpl(il_factor_variable_local * self, enviroment * env, call_context* cctx) {

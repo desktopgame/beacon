@@ -49,7 +49,7 @@ void GenerateILFactor(il_factor * self, enviroment* env, call_context* cctx) {
 			il_factor_assign_op_generate(self->u.assign_, env, cctx);
 			break;
 		case ILFACTOR_THIS_T:
-			il_factor_this_generate(self->u.this_, env, cctx);
+			GenerateILThis(self->u.this_, env, cctx);
 			break;
 		case ILFACTOR_SUPER_T:
 			il_factor_super_generate(self->u.super_, env, cctx);
@@ -61,7 +61,7 @@ void GenerateILFactor(il_factor * self, enviroment* env, call_context* cctx) {
 			GenerateILBool(self->u.bool_, env, cctx);
 			break;
 		case ILFACTOR_NULL_T:
-			il_factor_null_generate(NULL, env, cctx);
+			GenerateILNull(NULL, env, cctx);
 			break;
 		case ILFACTOR_AS_T:
 			GenerateILAs(self->u.as_, env, cctx);
@@ -114,10 +114,10 @@ void LoadILFactor(il_factor * self, enviroment * env, call_context* cctx) {
 			LoadILString(self->u.string_, env, cctx);
 			break;
 		case ILFACTOR_VARIABLE_T:
-			il_factor_variable_load(self->u.variable_, env, cctx);
+			LoadILVariable(self->u.variable_, env, cctx);
 			break;
 		case ILFACTOR_UNARY_OP_T:
-			il_factor_unary_OP_LOAD(self->u.unary_, env, cctx);
+			LoadILUnaryOp(self->u.unary_, env, cctx);
 			break;
 		case ILFACTOR_BINARY_OP_T:
 			il_factor_binary_OP_LOAD(self->u.binary_, env, cctx);
@@ -193,7 +193,7 @@ generic_type* EvalILFactor(il_factor * self, enviroment * env, call_context* cct
 			ret = il_factor_variable_eval(self->u.variable_, env, cctx);
 			break;
 		case ILFACTOR_UNARY_OP_T:
-			ret = il_factor_unary_op_eval(self->u.unary_, env, cctx);
+			ret = EvalILUnaryOp(self->u.unary_, env, cctx);
 			break;
 		case ILFACTOR_BINARY_OP_T:
 			ret = il_factor_binary_op_eval(self->u.binary_, env, cctx);

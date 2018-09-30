@@ -136,7 +136,7 @@ void LoadILStmt(il_stmt * self, enviroment* env, call_context* cctx) {
 			il_stmt_yield_break_load(self->u.yield_break, env, cctx);
 			break;
 		case ILSTMT_INJECT_JNI_T:
-			il_stmt_inject_jni_load(self->u.inject_jni, env, cctx);
+			LoadILInjectJNI(self->u.inject_jni, env, cctx);
 			break;
 		default:
 			//ERROR("ステートメントを開放出来ませんでした。");

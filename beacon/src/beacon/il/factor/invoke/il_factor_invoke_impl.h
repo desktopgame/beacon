@@ -38,7 +38,7 @@ struct generic_type* EvalILInvoke(il_factor_invoke * self, struct enviroment * e
 
 char* ILInvokeToString(il_factor_invoke* self, struct enviroment* env);
 
-void il_factor_invoke_delete(il_factor_invoke* self);
+void DeleteILInvoke(il_factor_invoke* self);
 
 struct operator_overload* il_factor_invoke_find_set(il_factor_invoke* self, il_factor* value, struct enviroment* env, call_context* cctx, int* outIndex);
 #endif

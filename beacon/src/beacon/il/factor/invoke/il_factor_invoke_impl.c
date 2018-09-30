@@ -84,7 +84,7 @@ char* ILInvokeToString(il_factor_invoke* self, enviroment* env) {
 	return ReleaseBuffer(sb);
 }
 
-void il_factor_invoke_delete(il_factor_invoke* self) {
+void DeleteILInvoke(il_factor_invoke* self) {
 	DeleteVector(self->args, il_factor_invoke_args_delete);
 	DeleteVector(self->type_args, VectorDeleterOfNull);
 	DeleteILFactor(self->receiver);

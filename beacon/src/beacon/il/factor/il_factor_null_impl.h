@@ -6,7 +6,7 @@
 struct enviroment;
 struct type;
 
-void il_factor_null_generate(void* empty, struct enviroment* env, call_context* cctx);
+void GenerateILNull(void* empty, struct enviroment* env, call_context* cctx);
 
 void LoadILNull(void* empty, struct enviroment* env, call_context* cctx);
 
