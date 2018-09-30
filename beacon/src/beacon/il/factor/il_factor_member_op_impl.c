@@ -20,7 +20,7 @@ static void il_factor_member_op_check_prop(il_factor_member_op* self, enviroment
 static void il_factor_member_op_check_static_prop(il_factor_member_op* self, enviroment* env, call_context* cctx, generic_type* receiver_type,bool* swap);
 static void il_factor_member_op_typearg_delete(VectorItem item);
 
-il_factor* il_factor_wrap_member_op(il_factor_member_op* self) {
+il_factor* WrapILMemberOp(il_factor_member_op* self) {
 	il_factor* ret = il_factor_new(ILFACTOR_MEMBER_OP_T);
 	ret->u.member_ = self;
 	self->parent = ret;

@@ -52,7 +52,7 @@ void GenerateILFactor(il_factor * self, enviroment* env, call_context* cctx) {
 			GenerateILThis(self->u.this_, env, cctx);
 			break;
 		case ILFACTOR_SUPER_T:
-			il_factor_super_generate(self->u.super_, env, cctx);
+			GenerateILSuper(self->u.super_, env, cctx);
 			break;
 		case ILFACTOR_NEW_INSTANCE_T:
 			il_factor_new_instance_generate(self->u.new_instance_, env, cctx);
@@ -123,7 +123,7 @@ void LoadILFactor(il_factor * self, enviroment * env, call_context* cctx) {
 			il_factor_binary_OP_LOAD(self->u.binary_, env, cctx);
 			break;
 		case ILFACTOR_ASSIGN_T:
-			il_factor_assign_OP_LOAD(self->u.assign_, env, cctx);
+			LoadILAssignOp(self->u.assign_, env, cctx);
 			break;
 		case ILFACTOR_THIS_T:
 			LoadILThis(self->u.this_, env, cctx);
@@ -190,7 +190,7 @@ generic_type* EvalILFactor(il_factor * self, enviroment * env, call_context* cct
 			ret = EvalILString(self->u.string_, env, cctx);
 			break;
 		case ILFACTOR_VARIABLE_T:
-			ret = il_factor_variable_eval(self->u.variable_, env, cctx);
+			ret = EvalILVariable(self->u.variable_, env, cctx);
 			break;
 		case ILFACTOR_UNARY_OP_T:
 			ret = EvalILUnaryOp(self->u.unary_, env, cctx);
@@ -199,7 +199,7 @@ generic_type* EvalILFactor(il_factor * self, enviroment * env, call_context* cct
 			ret = il_factor_binary_op_eval(self->u.binary_, env, cctx);
 			break;
 		case ILFACTOR_ASSIGN_T:
-			ret = il_factor_assign_op_eval(self->u.assign_, env, cctx);
+			ret = EvalILAssignOp(self->u.assign_, env, cctx);
 			break;
 		case ILFACTOR_THIS_T:
 			ret = EvalILThis(self->u.this_, env, cctx);
@@ -235,7 +235,7 @@ generic_type* EvalILFactor(il_factor * self, enviroment * env, call_context* cct
 			ret = il_factor_explicit_binary_op_eval(self->u.exp_binary_op, env, cctx);
 			break;
 		case ILFACTOR_PROPERTY_T:
-			ret = il_factor_property_eval(self->u.prop, env, cctx);
+			ret = EvalILProperty(self->u.prop, env, cctx);
 			break;
 		case ILFACTOR_SUBSCRIPT_T:
 			ret = il_factor_subscript_eval(self->u.subscript, env, cctx);
@@ -262,9 +262,9 @@ char* ILFactorToString(il_factor* self, enviroment* env) {
 		case ILFACTOR_STRING_T:
 			return ILStringToString(self->u.string_, env);
 		case ILFACTOR_VARIABLE_T:
-			return il_factor_variable_tostr(self->u.variable_, env);
+			return ILVariableToString(self->u.variable_, env);
 		case ILFACTOR_UNARY_OP_T:
-			return il_factor_unary_op_tostr(self->u.unary_, env);
+			return ILUnaryOpToString(self->u.unary_, env);
 		case ILFACTOR_BINARY_OP_T:
 			return il_factor_binary_op_tostr(self->u.binary_, env);
 		case ILFACTOR_ASSIGN_T:
@@ -293,7 +293,7 @@ char* ILFactorToString(il_factor* self, enviroment* env) {
 		case ILFACTOR_EXPLICIT_BINARY_OP_T:
 			return NULL;
 		case ILFACTOR_PROPERTY_T:
-			return il_factor_property_tostr(self->u.prop, env);
+			return ILPropertyToString(self->u.prop, env);
 		case ILFACTOR_SUBSCRIPT_T:
 			return il_factor_subscript_tostr(self->u.subscript, env);
 		default:
@@ -352,7 +352,7 @@ void DeleteILFactor(il_factor * self) {
 			DeleteILChar(self->u.char_);
 			break;
 		case ILFACTOR_STRING_T:
-			il_factor_string_delete(self->u.string_);
+			DeleteILString(self->u.string_);
 			break;
 		case ILFACTOR_VARIABLE_T:
 			il_factor_variable_delete(self->u.variable_);

@@ -35,7 +35,7 @@ il_factor_assign_op* NewILAssignOp() {
 	return ret;
 }
 
-void il_factor_assign_OP_LOAD(il_factor_assign_op* self, enviroment* env, call_context* cctx) {
+void LoadILAssignOp(il_factor_assign_op* self, enviroment* env, call_context* cctx) {
 	LoadILFactor(self->left, env, cctx);
 	LoadILFactor(self->right, env, cctx);
 	//voidは代入できない
@@ -73,7 +73,7 @@ void il_factor_assign_op_generate(il_factor_assign_op* self, enviroment* env, ca
 	}
 }
 
-generic_type* il_factor_assign_op_eval(il_factor_assign_op* self, enviroment* env, call_context* cctx) {
+generic_type* EvalILAssignOp(il_factor_assign_op* self, enviroment* env, call_context* cctx) {
 	return EvalILFactor(self->right, env, cctx);
 }
 

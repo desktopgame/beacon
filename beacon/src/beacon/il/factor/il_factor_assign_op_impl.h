@@ -11,11 +11,11 @@ il_factor* WrapILAssign(il_factor_assign_op* self);
 
 il_factor_assign_op* NewILAssignOp();
 
-void il_factor_assign_OP_LOAD(il_factor_assign_op* self, enviroment* env, call_context* cctx);
+void LoadILAssignOp(il_factor_assign_op* self, enviroment* env, call_context* cctx);
 
 void il_factor_assign_op_generate(il_factor_assign_op* self, enviroment* env, call_context* cctx);
 
-struct generic_type* il_factor_assign_op_eval(il_factor_assign_op* self, enviroment* env, call_context* cctx);
+struct generic_type* EvalILAssignOp(il_factor_assign_op* self, enviroment* env, call_context* cctx);
 
 void il_factor_assign_op_delete(il_factor_assign_op* self);
 #endif

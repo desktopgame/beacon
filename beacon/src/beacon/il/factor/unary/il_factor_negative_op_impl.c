@@ -52,5 +52,5 @@ void il_factor_negative_op_delete(il_factor_negative_op* self) {
 }
 
 char* il_factor_negative_op_tostr(il_factor_negative_op* self, enviroment* env) {
-	return il_factor_unary_op_tostr_simple(self->parent, env);
+	return ILUnaryOpToString_simple(self->parent, env);
 }

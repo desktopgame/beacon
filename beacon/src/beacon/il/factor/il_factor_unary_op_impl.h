@@ -34,11 +34,11 @@ void LoadILUnaryOp(il_factor_unary_op* self, struct enviroment* env, call_contex
 
 generic_type* EvalILUnaryOp(il_factor_unary_op* self, struct enviroment* env, call_context* cctx);
 
-char* il_factor_unary_op_tostr(il_factor_unary_op* self, struct enviroment* env);
+char* ILUnaryOpToString(il_factor_unary_op* self, struct enviroment* env);
 
 void il_factor_unary_op_delete(il_factor_unary_op* self);
 
-char* il_factor_unary_op_tostr_simple(il_factor_unary_op* self, struct enviroment* env);
+char* ILUnaryOpToString_simple(il_factor_unary_op* self, struct enviroment* env);
 
 int il_factor_unary_op_index(il_factor_unary_op* self, struct enviroment* env, call_context* cctx);
 

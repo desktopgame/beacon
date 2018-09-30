@@ -26,7 +26,7 @@ il_factor * WrapILBinary(il_factor_binary_op * self) {
 	return ret;
 }
 
-il_factor_binary_op * il_factor_binary_op_new(operator_type type) {
+il_factor_binary_op * NewILBinaryOp(operator_type type) {
 	il_factor_binary_op* ret = (il_factor_binary_op*)MEM_MALLOC(sizeof(il_factor_binary_op));
 	ret->type = type;
 	ret->left = NULL;
@@ -114,7 +114,7 @@ generic_type* il_factor_binary_op_eval(il_factor_binary_op * self, enviroment * 
 			ret = EvalILLogicOp(self->u.logic_op, env, cctx);
 			break;
 		case OPERATOR_CSHIFT_T:
-			ret = il_factor_shift_op_eval(self->u.shift_op, env, cctx);
+			ret = EvalILShiftOp(self->u.shift_op, env, cctx);
 			break;
 		case OPERATOR_CEXCOR_T:
 			ret = EvalILExcorOp(self->u.excor_op, env, cctx);
@@ -131,7 +131,7 @@ char* il_factor_binary_op_tostr(il_factor_binary_op* self, enviroment* env) {
 			ret = il_factor_arithmetic_op_tostr(self->u.arithmetic_op, env);
 			break;
 		case OPERATOR_CLOGIC_T:
-			ret = il_factor_logic_op_tostr(self->u.logic_op, env);
+			ret = ILLogicOpToString(self->u.logic_op, env);
 			break;
 		case OPERATOR_CCOMPARE_T:
 			ret = il_factor_compare_op_tostr(self->u.compare_op, env);

@@ -33,7 +33,7 @@ void DeleteILFunction(il_function * self) {
 //private
 static void il_function_type_parameter_delete(VectorItem item) {
 	il_type_parameter* e = (il_type_parameter*)item;
-	il_type_parameter_delete(e);
+	DeleteILTypeParameter(e);
 }
 
 static void il_function_parameter_delete(VectorItem item) {

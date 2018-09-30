@@ -53,5 +53,5 @@ void DeleteILNotOp(il_factor_not_op* self) {
 }
 
 char* ILNotOpToString(il_factor_not_op* self, enviroment* env) {
-	return il_factor_unary_op_tostr_simple(self->parent, env);
+	return ILUnaryOpToString_simple(self->parent, env);
 }

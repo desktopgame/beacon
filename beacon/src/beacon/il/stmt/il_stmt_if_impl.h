@@ -100,7 +100,7 @@ void DeleteILElif(il_stmt_elif* self);
  * elifの一覧 を表す要素を開放します.
  * @param self
  */
-void il_stmt_elif_list_delete(Vector* self);
+void DeleteILElifList(Vector* self);
 
 /**
  * else を表す要素を開放します.

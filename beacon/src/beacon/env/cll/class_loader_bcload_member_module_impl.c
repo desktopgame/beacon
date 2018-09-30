@@ -727,7 +727,7 @@ static void CLBC_chain_auto(class_loader * self, il_type * iltype, type * tp, il
 	assert((emptyTarget != NULL));
 	//空のコンストラクタを見つけることが出来たので、
 	//自動的にそれへ連鎖するチェインをおぎなう
-	il_constructor_chain* ch_empty = il_constructor_chain_new();
+	il_constructor_chain* ch_empty = NewILConstructorChain();
 	ch_empty->c = emptyTarget;
 	ch_empty->constructor_index = emptyTemp;
 	ch_empty->type = AST_CONSTRUCTOR_CHAIN_SUPER_T;

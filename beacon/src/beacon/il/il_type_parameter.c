@@ -32,7 +32,7 @@ void il_type_parameter_list_print(Vector * v) {
 	printf(">");
 }
 
-void il_type_parameter_delete(il_type_parameter * self) {
+void DeleteILTypeParameter(il_type_parameter * self) {
 	MEM_FREE(self);
 }
 //private

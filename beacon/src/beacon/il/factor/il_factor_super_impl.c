@@ -17,7 +17,7 @@ il_factor_super* NewILSuper() {
 	return ret;
 }
 
-void il_factor_super_generate(il_factor_super * self, enviroment * env, call_context* cctx) {
+void GenerateILSuper(il_factor_super * self, enviroment * env, call_context* cctx) {
 	AddOpcodeBuf(env->buf, OP_SUPER);
 }
 

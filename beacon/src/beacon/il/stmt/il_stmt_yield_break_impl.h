@@ -5,5 +5,5 @@
 
 void il_stmt_yield_break_generate(il_stmt_yield_break* self, enviroment* env, call_context* cctx);
 
-void il_stmt_yield_break_load(il_stmt_yield_break * self, enviroment* env, call_context* cctx);
+void LoadILYieldBreak(il_stmt_yield_break * self, enviroment* env, call_context* cctx);
 #endif

@@ -20,7 +20,7 @@ il_stmt_return * NewILReturn() {
 	return ret;
 }
 
-void il_stmt_return_generate(il_stmt_return * self, enviroment * env, call_context* cctx) {
+void GenerateILReturn(il_stmt_return * self, enviroment * env, call_context* cctx) {
 	GenerateILFactor(self->fact, env, cctx);
 	AddOpcodeBuf(env->buf, OP_RETURN);
 }

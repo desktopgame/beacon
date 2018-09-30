@@ -30,7 +30,7 @@ il_stmt_return* NewILReturn();
  * @param env
  * @param cctx
  */
-void il_stmt_return_generate(il_stmt_return* self, struct enviroment* env, call_context* cctx);
+void GenerateILReturn(il_stmt_return* self, struct enviroment* env, call_context* cctx);
 
 /**
  * 式を返却する文を読み込みます.

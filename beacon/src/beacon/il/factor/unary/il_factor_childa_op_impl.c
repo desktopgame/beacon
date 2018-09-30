@@ -17,7 +17,7 @@ il_factor_childa_op* NewILChildaOp(operator_type type) {
 	return ret;
 }
 
-generic_type* il_factor_childa_op_eval(il_factor_childa_op * self, enviroment * env, call_context* cctx) {
+generic_type* EvalILChildaOp(il_factor_childa_op * self, enviroment * env, call_context* cctx) {
 	generic_type* gtype = EvalILFactor(self->parent->a, env, cctx);
 	if(self->operator_index == -1) {
 		//GenerateILFactor(self->parent->a, env);
@@ -55,7 +55,7 @@ void il_factor_childa_op_generate(il_factor_childa_op* self, enviroment* env, ca
 	}
 }
 
-void il_factor_childa_OP_LOAD(il_factor_childa_op* self, enviroment* env, call_context* cctx) {
+void LoadILChildaOp(il_factor_childa_op* self, enviroment* env, call_context* cctx) {
 	generic_type* gtype = EvalILFactor(self->parent->a, env, cctx);
 	if(GENERIC2TYPE(gtype) != TYPE_INT &&
 	   GENERIC2TYPE(gtype) != TYPE_BOOL) {
@@ -68,5 +68,5 @@ void il_factor_childa_op_delete(il_factor_childa_op* self) {
 }
 
 char* il_factor_childa_op_tostr(il_factor_childa_op* self, enviroment* env) {
-	return il_factor_unary_op_tostr_simple(self->parent, env);
+	return ILUnaryOpToString_simple(self->parent, env);
 }

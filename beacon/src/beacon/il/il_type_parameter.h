@@ -39,5 +39,5 @@ void il_type_parameter_list_print(Vector* v);
  * 型引数を解放します.
  * @param self
  */
-void il_type_parameter_delete(il_type_parameter* self);
+void DeleteILTypeParameter(il_type_parameter* self);
 #endif // !SIGNAL_IL_IL_TYPE_PARAMETER_H

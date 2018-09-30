@@ -22,5 +22,5 @@ void LoadILLogicOp(il_factor_logic_op* self, struct enviroment* env, call_contex
 
 void il_factor_logic_op_delete(il_factor_logic_op* self);
 
-char* il_factor_logic_op_tostr(il_factor_logic_op* self, struct enviroment* env);
+char* ILLogicOpToString(il_factor_logic_op* self, struct enviroment* env);
 #endif

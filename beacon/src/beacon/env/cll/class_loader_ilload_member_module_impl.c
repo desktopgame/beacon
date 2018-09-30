@@ -150,7 +150,7 @@ void CLIL_ctor(class_loader* self, il_type* current, ast* aconstructor, access_l
 	if (!IsBlankAST(achain)) {
 		ast* achain_type = FirstAST(achain);
 		ast* aargs = SecondAST(achain);
-		ilchain = il_constructor_chain_new();
+		ilchain = NewILConstructorChain();
 		ilchain->type = ASTCastToChainType(achain_type);
 		CLIL_argument_list(self, ilchain->argument_list, aargs);
 	}
@@ -177,7 +177,7 @@ void CLIL_operator_overload(class_loader* self, il_type* current, ast* aopov, ac
 		);
 		return;
 	}
-	il_operator_overload* ilopov = il_operator_overload_new(ot);
+	il_operator_overload* ilopov = NewILOperatorOverload(ot);
 	ilopov->access = level;
 	CLIL_parameter_list(self, ilopov->parameter_list, aparam_list);
 	CLIL_body(self, ilopov->statement_list, abody);

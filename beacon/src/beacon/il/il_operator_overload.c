@@ -7,7 +7,7 @@
 static void il_operator_overload_delete_parameter(VectorItem item);
 static void il_operator_overload_delete_stmt(VectorItem item);
 
-il_operator_overload* il_operator_overload_new(operator_type type) {
+il_operator_overload* NewILOperatorOverload(operator_type type) {
 	il_operator_overload* ret = (il_operator_overload*)MEM_MALLOC(sizeof(il_operator_overload));
 	ret->op = type;
 	ret->parameter_list = NewVector();

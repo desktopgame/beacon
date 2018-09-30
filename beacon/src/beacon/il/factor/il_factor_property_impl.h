@@ -20,9 +20,9 @@ void il_factor_property_generate(il_factor_property* self, struct enviroment* en
 
 void LoadILProperty(il_factor_property* self, struct enviroment* env, call_context* cctx);
 
-struct generic_type* il_factor_property_eval(il_factor_property* self, enviroment* env, call_context* cctx);
+struct generic_type* EvalILProperty(il_factor_property* self, enviroment* env, call_context* cctx);
 
-char* il_factor_property_tostr(il_factor_property* self, struct enviroment* env);
+char* ILPropertyToString(il_factor_property* self, struct enviroment* env);
 
 void il_factor_property_delete(il_factor_property* self);
 #endif

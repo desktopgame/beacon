@@ -37,11 +37,11 @@ void LoadILProperty(il_factor_property* self, enviroment* env, call_context* cct
 	}
 }
 
-generic_type* il_factor_property_eval(il_factor_property* self, enviroment* env, call_context* cctx) {
+generic_type* EvalILProperty(il_factor_property* self, enviroment* env, call_context* cctx) {
 	return self->p->gtype;
 }
 
-char* il_factor_property_tostr(il_factor_property* self, enviroment* env) {
+char* ILPropertyToString(il_factor_property* self, enviroment* env) {
 	string_buffer* sb = NewBuffer();
 	char* name = ILFactorToString(self->fact, env);
 	AppendsBuffer(sb, name);

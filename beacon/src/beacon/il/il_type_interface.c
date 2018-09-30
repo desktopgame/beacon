@@ -31,7 +31,7 @@ Vector * GetSMethodsILType(il_type * self) {
 	return NULL;
 }
 
-void il_type_add_constructor(il_type * self, il_constructor * ctor) {
+void AddConstructorILType(il_type * self, il_constructor * ctor) {
 	assert(self->tag == ilTYPE_CLASS_T);
 	if (self->tag == ilTYPE_CLASS_T) {
 	}

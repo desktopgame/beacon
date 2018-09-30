@@ -64,7 +64,7 @@ void LoadILUnaryOp(il_factor_unary_op * self, enviroment * env, call_context* cc
 		il_factor_childa_op* childa = NewILChildaOp(self->type);
 		childa->parent = self;
 		self->u.childa_op = childa;
-		il_factor_childa_OP_LOAD(childa, env, cctx);
+		LoadILChildaOp(childa, env, cctx);
 	} else {
 		assert(false);
 	}
@@ -78,7 +78,7 @@ generic_type* EvalILUnaryOp(il_factor_unary_op * self, enviroment * env, call_co
 			ret = EvalILNotOp(self->u.not_op, env, cctx);
 			break;
 		case OPERATOR_CHILDA_T:
-			ret = il_factor_childa_op_eval(self->u.childa_op, env, cctx);
+			ret = EvalILChildaOp(self->u.childa_op, env, cctx);
 			break;
 		case OPERATOR_NEGATIVE_T:
 			ret = il_factor_negative_op_eval(self->u.negative_op, env, cctx);
@@ -87,7 +87,7 @@ generic_type* EvalILUnaryOp(il_factor_unary_op * self, enviroment * env, call_co
 	return ret;
 }
 
-char* il_factor_unary_op_tostr(il_factor_unary_op* self, enviroment* env) {
+char* ILUnaryOpToString(il_factor_unary_op* self, enviroment* env) {
 	char* ret = NULL;
 	switch(self->type) {
 		case OPERATOR_NOT_T:
@@ -122,7 +122,7 @@ void il_factor_unary_op_delete(il_factor_unary_op * self) {
 	MEM_FREE(self);
 }
 
-char* il_factor_unary_op_tostr_simple(il_factor_unary_op* self, enviroment* env) {
+char* ILUnaryOpToString_simple(il_factor_unary_op* self, enviroment* env) {
 	string_buffer* sb = NewBuffer();
 	char* a = ILFactorToString(self->a, env);
 	AppendfBuffer(sb, "%s", operator_tostring(self->type));

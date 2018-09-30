@@ -56,7 +56,7 @@ Vector* GetSMethodsILType(il_type* self);
  * @param self
  * @param ctor
  */
-void il_type_add_constructor(il_type* self, struct il_constructor* ctor);
+void AddConstructorILType(il_type* self, struct il_constructor* ctor);
 
 /**
  * フィールドを追加します.

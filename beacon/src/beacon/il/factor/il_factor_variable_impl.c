@@ -50,7 +50,7 @@ void LoadILVariable(il_factor_variable * self, enviroment * env, call_context* c
 	}
 }
 
-generic_type* il_factor_variable_eval(il_factor_variable * self, enviroment * env, call_context* cctx) {
+generic_type* EvalILVariable(il_factor_variable * self, enviroment * env, call_context* cctx) {
 	il_factor_variable_check(self, env, cctx);
 	generic_type* ret = NULL;
 	if(self->type == ILVARIABLE_TYPE_LOCAL_T) {
@@ -61,7 +61,7 @@ generic_type* il_factor_variable_eval(il_factor_variable * self, enviroment * en
 	return ret;
 }
 
-char* il_factor_variable_tostr(il_factor_variable* self, enviroment* env) {
+char* ILVariableToString(il_factor_variable* self, enviroment* env) {
 	if(self->type == ILVARIABLE_TYPE_LOCAL_T) {
 		return il_factor_variable_local_tostr(self->u.local_, env);
 	} else if(self->type == ILVARIABLE_TYPE_STATIC_T) {

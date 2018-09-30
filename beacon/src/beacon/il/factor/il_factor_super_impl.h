@@ -16,7 +16,7 @@ typedef struct il_factor_super {
 
 il_factor_super* NewILSuper();
 
-void il_factor_super_generate(il_factor_super* self, struct enviroment* env, call_context* cctx);
+void GenerateILSuper(il_factor_super* self, struct enviroment* env, call_context* cctx);
 
 void LoadILSuper(il_factor_super* self, struct enviroment* env, call_context* cctx);
 

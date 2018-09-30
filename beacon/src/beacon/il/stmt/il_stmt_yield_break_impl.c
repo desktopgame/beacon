@@ -5,5 +5,5 @@ void il_stmt_yield_break_generate(il_stmt_yield_break* self, enviroment* env, ca
 	AddOpcodeBuf(env->buf, OP_CORO_EXIT);
 }
 
-void il_stmt_yield_break_load(il_stmt_yield_break * self, enviroment* env, call_context* cctx) {
+void LoadILYieldBreak(il_stmt_yield_break * self, enviroment* env, call_context* cctx) {
 }

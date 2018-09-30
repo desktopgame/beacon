@@ -21,7 +21,7 @@ typedef struct il_factor_member_op {
 	struct field* f;
 } il_factor_member_op;
 
-il_factor* il_factor_wrap_member_op(il_factor_member_op* self);
+il_factor* WrapILMemberOp(il_factor_member_op* self);
 
 il_factor_member_op* NewILMemberOp(string_view namev);
 

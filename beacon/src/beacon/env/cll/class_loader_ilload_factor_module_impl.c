@@ -146,7 +146,7 @@ static il_factor* CLIL_factorImpl(class_loader* self, ast* source) {
 	} else if(source->tag == AST_OP_CALL_T) {
 		return WrapCallOp(CLIL_call_op(self, source));
 	} else if(source->tag == AST_FIELD_ACCESS_T) {
-		return il_factor_wrap_member_op(CLIL_member_op(self, source));
+		return WrapILMemberOp(CLIL_member_op(self, source));
 	} else if(source->tag == AST_SUBSCRIPT_ACCESS_T) {
 		return il_factor_wrap_subscript(CLIL_subscript(self, source));
 	}
@@ -170,7 +170,7 @@ static il_factor_unary_op* CLIL_unary(class_loader* self, ast* source, operator_
 }
 
 static il_factor_binary_op* CLIL_binary(class_loader* self, ast* source, operator_type type) {
-	il_factor_binary_op* ret = il_factor_binary_op_new(type);
+	il_factor_binary_op* ret = NewILBinaryOp(type);
 	ast* aleft = FirstAST(source);
 	ast* aright = SecondAST(source);
 	ret->left = CLIL_factor(self, aleft);
@@ -203,7 +203,7 @@ static il_factor_assign_op* CLIL_assign(class_loader* self, ast* source) {
 static il_factor_assign_op* CLIL_assign_arithmetic(class_loader* self, ast* source, operator_type type) {
 	//a += b
 	il_factor_assign_op* ret = NewILAssignOp();
-	il_factor_binary_op* bin = il_factor_binary_op_new(type);
+	il_factor_binary_op* bin = NewILBinaryOp(type);
 	ast* aleft = FirstAST(source);
 	ast* aright = SecondAST(source);
 	bin->left = CLIL_factor(self, aleft);

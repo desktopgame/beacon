@@ -8,7 +8,7 @@
 #include <stdio.h>
 
 //proto
-static void il_stmt_elif_list_delete_impl(VectorItem item);
+static void DeleteILElifList_impl(VectorItem item);
 static void DeleteILIf_stmt(VectorItem item);
 static void check_condition_type(il_factor* fact, enviroment* env, call_context* cctx);
 
@@ -131,7 +131,7 @@ void LoadILIf(il_stmt_if * self, struct enviroment* env, call_context* cctx) {
 }
 
 void DeleteILIf(il_stmt_if * self) {
-	DeleteVector(self->elif_list, il_stmt_elif_list_delete_impl);
+	DeleteVector(self->elif_list, DeleteILElifList_impl);
 	DeleteILElse(self->else_body);
 	DeleteVector(self->body, DeleteILIf_stmt);
 	DeleteILFactor(self->condition);
@@ -144,8 +144,8 @@ void DeleteILElif(il_stmt_elif * self) {
 	MEM_FREE(self);
 }
 
-void il_stmt_elif_list_delete(Vector * self) {
-	DeleteVector(self, il_stmt_elif_list_delete_impl);
+void DeleteILElifList(Vector * self) {
+	DeleteVector(self, DeleteILElifList_impl);
 }
 
 void DeleteILElse(il_stmt_else * self) {
@@ -154,7 +154,7 @@ void DeleteILElse(il_stmt_else * self) {
 }
 
 //private
-static void il_stmt_elif_list_delete_impl(VectorItem item) {
+static void DeleteILElifList_impl(VectorItem item) {
 	il_stmt_elif* el = (il_stmt_elif*)item;
 	DeleteILElif(el);
 }

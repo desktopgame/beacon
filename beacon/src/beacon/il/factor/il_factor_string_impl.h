@@ -24,6 +24,6 @@ generic_type* EvalILString(il_factor_string* self, struct enviroment* env, call_
 
 char* ILStringToString(il_factor_string* self, struct enviroment* env);
 
-void il_factor_string_delete(il_factor_string* self);
+void DeleteILString(il_factor_string* self);
 
 #endif // !SIGNAL_IL_IL_FACTOR_STRING_H

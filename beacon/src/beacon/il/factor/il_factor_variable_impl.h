@@ -49,9 +49,9 @@ void il_factor_variable_generate(il_factor_variable* self, struct enviroment* en
 
 void LoadILVariable(il_factor_variable* self, struct enviroment* env, call_context* cctx);
 
-generic_type* il_factor_variable_eval(il_factor_variable* self, struct enviroment* env, call_context* cctx);
+generic_type* EvalILVariable(il_factor_variable* self, struct enviroment* env, call_context* cctx);
 
-char* il_factor_variable_tostr(il_factor_variable* self, struct enviroment* env);
+char* ILVariableToString(il_factor_variable* self, struct enviroment* env);
 
 void il_factor_variable_delete(il_factor_variable* self);
 

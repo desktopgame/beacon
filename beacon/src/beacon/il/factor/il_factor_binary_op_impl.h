@@ -31,7 +31,7 @@ typedef struct il_factor_binary_op {
 
 il_factor* WrapILBinary(il_factor_binary_op* self);
 
-il_factor_binary_op* il_factor_binary_op_new(operator_type type);
+il_factor_binary_op* NewILBinaryOp(operator_type type);
 
 void il_factor_binary_op_generate(il_factor_binary_op* self, struct enviroment* env, call_context* cctx);
 

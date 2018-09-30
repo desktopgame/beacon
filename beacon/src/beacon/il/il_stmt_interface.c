@@ -35,7 +35,7 @@ void GenerateILStmt(il_stmt * self, struct enviroment* env, call_context* cctx) 
 			il_stmt_variable_init_generate(self->u.variable_init, env, cctx);
 			break;
 		case ILSTMT_RETURN_T:
-			il_stmt_return_generate(self->u.return_, env, cctx);
+			GenerateILReturn(self->u.return_, env, cctx);
 			break;
 		case ILSTMT_RETURN_EMPTY_T:
 			il_stmt_return_empty_generate(NULL, env, cctx);
@@ -133,7 +133,7 @@ void LoadILStmt(il_stmt * self, enviroment* env, call_context* cctx) {
 			il_stmt_yield_return_load(self->u.yield_return, env, cctx);
 			break;
 		case ILSTMT_YIELD_BREAK_T:
-			il_stmt_yield_break_load(self->u.yield_break, env, cctx);
+			LoadILYieldBreak(self->u.yield_break, env, cctx);
 			break;
 		case ILSTMT_INJECT_JNI_T:
 			LoadILInjectJNI(self->u.inject_jni, env, cctx);

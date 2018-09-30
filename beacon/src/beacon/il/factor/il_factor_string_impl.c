@@ -38,6 +38,6 @@ char* ILStringToString(il_factor_string* self, enviroment* env) {
 	return Strdup(Ref2Str(self->valuev));
 }
 
-void il_factor_string_delete(il_factor_string * self) {
+void DeleteILString(il_factor_string * self) {
 	MEM_FREE(self);
 }

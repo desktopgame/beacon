@@ -49,5 +49,5 @@ static void il_method_stmt_delete(VectorItem item) {
 
 static void il_method_type_parameter_delete(VectorItem item) {
 	il_type_parameter* e = (il_type_parameter*)item;
-	il_type_parameter_delete(e);
+	DeleteILTypeParameter(e);
 }
