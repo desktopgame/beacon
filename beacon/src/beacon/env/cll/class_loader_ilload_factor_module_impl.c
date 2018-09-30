@@ -268,7 +268,7 @@ static il_factor_instanceof* CLIL_instanceof(class_loader* self, ast* source) {
 	assert(source->tag == AST_INSTANCEOF_T);
 	ast* afact = FirstAST(source);
 	ast* atype = SecondAST(source);
-	il_factor_instanceof* ret = il_factor_instanceof_new();
+	il_factor_instanceof* ret = NewILInstanceOf();
 	ret->fact = CLIL_factor(self, afact);
 	CLIL_generic_cache(atype, ret->gcache);
 	return ret;

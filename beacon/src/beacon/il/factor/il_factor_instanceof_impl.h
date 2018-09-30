@@ -12,7 +12,7 @@ typedef struct il_factor_instanceof {
 
 il_factor* il_factor_wrap_instanceof(il_factor_instanceof* self);
 
-il_factor_instanceof* il_factor_instanceof_new();
+il_factor_instanceof* NewILInstanceOf();
 
 void il_factor_instanceof_load(il_factor_instanceof* self, enviroment* env, call_context* cctx);
 

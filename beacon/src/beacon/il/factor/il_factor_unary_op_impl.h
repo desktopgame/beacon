@@ -36,7 +36,7 @@ generic_type* EvalILUnaryOp(il_factor_unary_op* self, struct enviroment* env, ca
 
 char* ILUnaryOpToString(il_factor_unary_op* self, struct enviroment* env);
 
-void il_factor_unary_op_delete(il_factor_unary_op* self);
+void DeleteILUnaryOp(il_factor_unary_op* self);
 
 char* ILUnaryOpToString_simple(il_factor_unary_op* self, struct enviroment* env);
 

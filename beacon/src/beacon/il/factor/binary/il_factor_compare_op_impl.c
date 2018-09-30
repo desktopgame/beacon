@@ -13,7 +13,7 @@ static opcode operator_to_iopcode(operator_type type);
 static opcode operator_to_dopcode(operator_type type);
 static opcode operator_to_copcode(operator_type type);
 
-il_factor_compare_op* il_factor_compare_op_new(operator_type type) {
+il_factor_compare_op* NewILCompareOp(operator_type type) {
 	il_factor_compare_op* ret = (il_factor_compare_op*)MEM_MALLOC(sizeof(il_factor_compare_op));
 	ret->type = type;
 	ret->parent = NULL;
@@ -21,7 +21,7 @@ il_factor_compare_op* il_factor_compare_op_new(operator_type type) {
 	return ret;
 }
 
-generic_type* il_factor_compare_op_eval(il_factor_compare_op * self, enviroment * env, call_context* cctx) {
+generic_type* EvalILCompareOp(il_factor_compare_op * self, enviroment * env, call_context* cctx) {
 	generic_type* ret = TYPE2GENERIC(TYPE_BOOL);
 	assert(ret != NULL);
 	return ret;

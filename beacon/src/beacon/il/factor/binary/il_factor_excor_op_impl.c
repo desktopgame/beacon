@@ -70,6 +70,6 @@ void il_factor_excor_op_delete(il_factor_excor_op* self) {
 	MEM_FREE(self);
 }
 
-char* il_factor_excor_op_tostr(il_factor_excor_op* self, enviroment* env) {
+char* ILExcorOpToString(il_factor_excor_op* self, enviroment* env) {
 	return il_factor_binary_op_tostr_simple(self->parent, env);
 }

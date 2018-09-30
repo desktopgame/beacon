@@ -22,7 +22,7 @@ void LoadILSubscript(il_factor_subscript* self, enviroment* env, call_context* c
 
 generic_type* EvalILSubscript(il_factor_subscript* self, enviroment* env, call_context* cctx);
 
-char* il_factor_subscript_tostr(il_factor_subscript* self, enviroment* env);
+char* ILSubscriptToString(il_factor_subscript* self, enviroment* env);
 
 void il_factor_subscript_delete(il_factor_subscript* self);
 #endif

@@ -73,7 +73,7 @@ void LoadILBinaryOp(il_factor_binary_op * self, enviroment * env, call_context* 
 		il_factor_arithmetic_OP_LOAD(arith, env, cctx);
 	} else if(operator_compare(self->type)) {
 		self->category = OPERATOR_CCOMPARE_T;
-		il_factor_compare_op* comp = il_factor_compare_op_new(self->type);
+		il_factor_compare_op* comp = NewILCompareOp(self->type);
 		comp->parent = self;
 		self->u.compare_op = comp;
 		il_factor_compare_OP_LOAD(comp, env, cctx);
@@ -108,7 +108,7 @@ generic_type* EvalILBinaryOp(il_factor_binary_op * self, enviroment * env, call_
 			ret = il_factor_arithmetic_op_eval(self->u.arithmetic_op, env, cctx);
 			break;
 		case OPERATOR_CCOMPARE_T:
-			ret = il_factor_compare_op_eval(self->u.compare_op, env, cctx);
+			ret = EvalILCompareOp(self->u.compare_op, env, cctx);
 			break;
 		case OPERATOR_CLOGIC_T:
 			ret = EvalILLogicOp(self->u.logic_op, env, cctx);
@@ -137,10 +137,10 @@ char* il_factor_binary_op_tostr(il_factor_binary_op* self, enviroment* env) {
 			ret = il_factor_compare_op_tostr(self->u.compare_op, env);
 			break;
 		case OPERATOR_CSHIFT_T:
-			ret = il_factor_shift_op_tostr(self->u.shift_op, env);
+			ret = ILShiftOpToString(self->u.shift_op, env);
 			break;
 		case OPERATOR_CEXCOR_T:
-			ret = il_factor_excor_op_tostr(self->u.excor_op, env);
+			ret = ILExcorOpToString(self->u.excor_op, env);
 			break;
 	}
 	assert(ret != NULL);

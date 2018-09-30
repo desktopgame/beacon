@@ -156,7 +156,7 @@ void ILArgsToString(string_buffer* sb, Vector* args, struct enviroment* env);
  * @param sb
  * @param type_args
  */
-void il_factor_type_args_tostr(string_buffer* sb, Vector* type_args, struct enviroment* env);
+void ILTypeArgsToString(string_buffer* sb, Vector* type_args, struct enviroment* env);
 
 /**
  * 計算可能な要素を開放します.

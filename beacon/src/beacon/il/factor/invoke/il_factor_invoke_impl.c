@@ -78,7 +78,7 @@ char* ILInvokeToString(il_factor_invoke* self, enviroment* env) {
 	AppendsBuffer(sb, invstr);
 	AppendBuffer(sb, '.');
 	AppendsBuffer(sb, Ref2Str(self->namev));
-	il_factor_type_args_tostr(sb, self->type_args, env);
+	ILTypeArgsToString(sb, self->type_args, env);
 	ILArgsToString(sb, self->type_args, env);
 	MEM_FREE(invstr);
 	return ReleaseBuffer(sb);

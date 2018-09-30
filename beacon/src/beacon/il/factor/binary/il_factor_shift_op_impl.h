@@ -21,5 +21,5 @@ void LoadILShiftOp(il_factor_shift_op* self, struct enviroment* env, call_contex
 
 void il_factor_shift_op_delete(il_factor_shift_op* self);
 
-char* il_factor_shift_op_tostr(il_factor_shift_op* self, struct enviroment* env);
+char* ILShiftOpToString(il_factor_shift_op* self, struct enviroment* env);
 #endif

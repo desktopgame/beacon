@@ -22,5 +22,5 @@ void LoadILExcorOp(il_factor_excor_op* self, struct enviroment* env, call_contex
 
 void il_factor_excor_op_delete(il_factor_excor_op* self);
 
-char* il_factor_excor_op_tostr(il_factor_excor_op* self, struct enviroment* env);
+char* ILExcorOpToString(il_factor_excor_op* self, struct enviroment* env);
 #endif

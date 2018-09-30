@@ -103,7 +103,7 @@ char* ILUnaryOpToString(il_factor_unary_op* self, enviroment* env) {
 	return ret;
 }
 
-void il_factor_unary_op_delete(il_factor_unary_op * self) {
+void DeleteILUnaryOp(il_factor_unary_op * self) {
 	if(self == NULL) {
 		return;
 	}

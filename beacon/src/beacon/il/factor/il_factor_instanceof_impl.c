@@ -14,7 +14,7 @@ il_factor* il_factor_wrap_instanceof(il_factor_instanceof* self) {
 	return ret;
 }
 
-il_factor_instanceof* il_factor_instanceof_new() {
+il_factor_instanceof* NewILInstanceOf() {
 	il_factor_instanceof* ret = (il_factor_instanceof*)MEM_MALLOC(sizeof(il_factor_instanceof));
 	ret->fact = NULL;
 	ret->gcache = generic_cache_new();

@@ -25,11 +25,11 @@ il_factor* WrapILMemberOp(il_factor_member_op* self);
 
 il_factor_member_op* NewILMemberOp(string_view namev);
 
-void il_factor_member_OP_LOAD(il_factor_member_op* self, struct enviroment* env, call_context* cctx);
+void LoadILMemberOp(il_factor_member_op* self, struct enviroment* env, call_context* cctx);
 
 void il_factor_member_op_generate(il_factor_member_op* self, struct enviroment* env, call_context* cctx);
 
-generic_type* il_factor_member_op_eval(il_factor_member_op* self, struct enviroment* env, call_context* cctx);
+generic_type* EvalILMemberOp(il_factor_member_op* self, struct enviroment* env, call_context* cctx);
 
 char* il_factor_member_op_tostr(il_factor_member_op* self, struct enviroment* env);
 

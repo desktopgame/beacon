@@ -46,7 +46,7 @@ generic_type* EvalILSubscript(il_factor_subscript* self, enviroment* env, call_c
 	return generic_type_apply(self->opov->return_gtype, cctx);
 }
 
-char* il_factor_subscript_tostr(il_factor_subscript* self, enviroment* env) {
+char* ILSubscriptToString(il_factor_subscript* self, enviroment* env) {
 	string_buffer* buf = NewBuffer();
 	char* src = ILFactorToString(self->receiver, env);
 	char* pos = ILFactorToString(self->pos, env);

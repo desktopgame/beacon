@@ -147,7 +147,7 @@ void LoadILFactor(il_factor * self, enviroment * env, call_context* cctx) {
 			LoadCallOp(self->u.call_, env, cctx);
 			break;
 		case ILFACTOR_MEMBER_OP_T:
-			il_factor_member_OP_LOAD(self->u.member_, env, cctx);
+			LoadILMemberOp(self->u.member_, env, cctx);
 			break;
 		case ILFACTOR_INSTANCEOF_T:
 			il_factor_instanceof_load(self->u.instanceof_, env, cctx);
@@ -223,7 +223,7 @@ generic_type* EvalILFactor(il_factor * self, enviroment * env, call_context* cct
 			ret = EvalILCallOp(self->u.call_, env, cctx);
 			break;
 		case ILFACTOR_MEMBER_OP_T:
-			ret = il_factor_member_op_eval(self->u.member_, env, cctx);
+			ret = EvalILMemberOp(self->u.member_, env, cctx);
 			break;
 		case ILFACTOR_INSTANCEOF_T:
 			ret = il_factor_instanceof_eval(self->u.instanceof_, env, cctx);
@@ -295,7 +295,7 @@ char* ILFactorToString(il_factor* self, enviroment* env) {
 		case ILFACTOR_PROPERTY_T:
 			return ILPropertyToString(self->u.prop, env);
 		case ILFACTOR_SUBSCRIPT_T:
-			return il_factor_subscript_tostr(self->u.subscript, env);
+			return ILSubscriptToString(self->u.subscript, env);
 		default:
 			break;
 	}
@@ -319,7 +319,7 @@ void ILArgsToString(string_buffer* sb, Vector* args, enviroment* env) {
 	}
 }
 
-void il_factor_type_args_tostr(string_buffer* sb, Vector* type_args, enviroment* env) {
+void ILTypeArgsToString(string_buffer* sb, Vector* type_args, enviroment* env) {
 	if(type_args->length > 0) {
 		AppendsBuffer(sb, "<|");
 	}
@@ -358,7 +358,7 @@ void DeleteILFactor(il_factor * self) {
 			il_factor_variable_delete(self->u.variable_);
 			break;
 		case ILFACTOR_UNARY_OP_T:
-			il_factor_unary_op_delete(self->u.unary_);
+			DeleteILUnaryOp(self->u.unary_);
 			break;
 		case ILFACTOR_BINARY_OP_T:
 			il_factor_binary_op_delete(self->u.binary_);

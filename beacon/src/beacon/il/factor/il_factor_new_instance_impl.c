@@ -98,7 +98,7 @@ char* il_factor_new_instance_tostr(il_factor_new_instance* self, enviroment* env
 	AppendsBuffer(sb, "new ");
 	char* type = fqcn_cache_tostr(self->fqcnc);
 	AppendsBuffer(sb, type);
-	il_factor_type_args_tostr(sb, self->type_args, env);
+	ILTypeArgsToString(sb, self->type_args, env);
 	ILArgsToString(sb, self->argument_list, env);
 	MEM_FREE(type);
 	return ReleaseBuffer(sb);

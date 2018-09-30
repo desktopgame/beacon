@@ -52,7 +52,7 @@ generic_type* il_factor_invoke_bound_eval(il_factor_invoke_bound * self, envirom
 char* il_factor_invoke_bound_tostr(il_factor_invoke_bound* self, enviroment* env) {
 	string_buffer* sb = NewBuffer();
 	AppendsBuffer(sb, Ref2Str(self->namev));
-	il_factor_type_args_tostr(sb, self->type_args, env);
+	ILTypeArgsToString(sb, self->type_args, env);
 	ILArgsToString(sb, self->type_args, env);
 	return ReleaseBuffer(sb);
 }

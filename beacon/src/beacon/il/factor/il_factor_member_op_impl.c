@@ -37,7 +37,7 @@ il_factor_member_op* NewILMemberOp(string_view namev) {
 	return ret;
 }
 
-void il_factor_member_OP_LOAD(il_factor_member_op* self, enviroment* env, call_context* cctx) {
+void LoadILMemberOp(il_factor_member_op* self, enviroment* env, call_context* cctx) {
 	bool swap;
 	LoadILFactor(self->fact, env, cctx);
 	il_factor_member_op_check(self, env, cctx, &swap);
@@ -50,7 +50,7 @@ void il_factor_member_op_generate(il_factor_member_op* self, enviroment* env, ca
 	GenerateGetField(env->buf, self->f, self->index);
 }
 
-generic_type* il_factor_member_op_eval(il_factor_member_op* self, enviroment* env, call_context* cctx) {
+generic_type* EvalILMemberOp(il_factor_member_op* self, enviroment* env, call_context* cctx) {
 	//il_factor_member_op_checkは、
 	//フィールドアクセスとプロパティアクセスを区別して、
 	//プロパティなら木構造を入れ替える
