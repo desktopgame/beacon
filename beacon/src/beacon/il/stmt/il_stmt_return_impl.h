@@ -44,5 +44,5 @@ void LoadILReturn(il_stmt_return* self, struct enviroment* env, call_context* cc
  * 式を返却する文を開放します.
  * @param self
  */
-void il_stmt_return_delete(il_stmt_return* self);
+void DeleteILReturn(il_stmt_return* self);
 #endif // !SIGNAL_IL_IL_STMT_RETURN_H

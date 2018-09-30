@@ -22,7 +22,7 @@ il_factor_int * MallocILInt(int32_t i, const char* filename, int lineno) {
 	return ret;
 }
 
-void il_factor_int_generate(il_factor_int * self, enviroment* env, call_context* cctx) {
+void GenerateILInt(il_factor_int * self, enviroment* env, call_context* cctx) {
 	assert(self->count == 0);
 	int index = AddCIntEnviroment(env, self->value);
 	AddOpcodeBuf(env->buf, OP_ICONST);

@@ -18,7 +18,7 @@ il_factor* WrapILInt(il_factor_int* self);
 #define il_factor_int_new(i) (MallocILInt(i, __FILE__, __LINE__))
 il_factor_int* MallocILInt(int32_t i, const char* filename, int lineno);
 
-void il_factor_int_generate(il_factor_int* self, struct enviroment* env, call_context* cctx);
+void GenerateILInt(il_factor_int* self, struct enviroment* env, call_context* cctx);
 
 void LoadILInt(il_factor_int* self, struct enviroment* env, call_context* cctx);
 

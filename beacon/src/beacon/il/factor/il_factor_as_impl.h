@@ -29,7 +29,7 @@ il_factor* WrapILAs(il_factor_as* self);
 
 il_factor_as* NewILAs();
 
-void il_factor_as_generate(il_factor_as* self, struct enviroment* env, call_context* cctx);
+void GenerateILAs(il_factor_as* self, struct enviroment* env, call_context* cctx);
 
 void LoadILAs(il_factor_as* self, struct enviroment* env, call_context* cctx);
 

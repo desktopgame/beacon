@@ -40,6 +40,6 @@ char* ILCharToString(il_factor_char* self, enviroment* env) {
 	return ReleaseBuffer(sb);
 }
 
-void il_factor_char_delete(il_factor_char * self) {
+void DeleteILChar(il_factor_char * self) {
 	MEM_FREE(self);
 }

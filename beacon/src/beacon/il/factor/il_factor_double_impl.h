@@ -11,17 +11,17 @@ typedef struct il_factor_double {
 	double value;
 } il_factor_double;
 
-il_factor* il_factor_wrap_double(il_factor_double* self);
+il_factor* WrapILDouble(il_factor_double* self);
 
 il_factor_double* NewILDouble(double d);
 
 void il_factor_double_generate(il_factor_double* self, struct enviroment* env, call_context* cctx);
 
-void il_factor_double_load(il_factor_double* self, struct enviroment* env, call_context* cctx);
+void LoadILDouble(il_factor_double* self, struct enviroment* env, call_context* cctx);
 
-generic_type* il_factor_double_eval(il_factor_double* self, struct enviroment* env, call_context* cctx);
+generic_type* EvalILDouble(il_factor_double* self, struct enviroment* env, call_context* cctx);
 
-char* il_factor_double_tostr(il_factor_double* self, struct enviroment* env);
+char* ILDoubleToString(il_factor_double* self, struct enviroment* env);
 
 void il_factor_double_delete(il_factor_double* self);
 

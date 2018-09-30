@@ -33,6 +33,6 @@ char* ILBoolToString(il_factor_bool* self, enviroment* env) {
 	return Strdup(self->a ? "true" : "false");
 }
 
-void il_factor_bool_delete(il_factor_bool * self) {
+void DeleteILBool(il_factor_bool * self) {
 	MEM_FREE(self);
 }

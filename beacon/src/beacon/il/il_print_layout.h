@@ -8,7 +8,7 @@
  * @param lineno
  * @return
  */
-bool il_print_layout_lineno(int lineno);
+bool IsLineOfAlreadyILPrint(int lineno);
 
 /**
  * 必要に応じて行番号を表示します.

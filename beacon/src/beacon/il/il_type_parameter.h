@@ -27,7 +27,7 @@ typedef struct il_type_parameter {
  * @param name
  * @return
  */
-il_type_parameter* il_type_parameter_new(string_view namev);
+il_type_parameter* NewILTypeParameter(string_view namev);
 
 /**
  * 型引数の一覧を出力します.

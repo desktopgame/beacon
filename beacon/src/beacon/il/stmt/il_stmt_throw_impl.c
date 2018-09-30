@@ -18,7 +18,7 @@ il_stmt_throw* NewILThrow() {
 	return ret;
 }
 
-void il_stmt_throw_generate(il_stmt_throw* self, enviroment* env, call_context* cctx) {
+void GenerateILThrow(il_stmt_throw* self, enviroment* env, call_context* cctx) {
 	GenerateILFactor(self->fact, env, cctx);
 	AddOpcodeBuf(env->buf, OP_THROW);
 }

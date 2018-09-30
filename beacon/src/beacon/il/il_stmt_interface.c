@@ -25,7 +25,7 @@ void GenerateILStmt(il_stmt * self, struct enviroment* env, call_context* cctx) 
 			//DeleteILIf(self->u.if_);
 			break;
 		case ILSTMT_PROC_T:
-			il_stmt_proc_generate(self->u.proc_, env, cctx);
+			GenerateILProc(self->u.proc_, env, cctx);
 			//DeleteILProc(self->u.proc_);
 			break;
 		case ILSTMT_VARIABLE_DECL_T:
@@ -41,10 +41,10 @@ void GenerateILStmt(il_stmt * self, struct enviroment* env, call_context* cctx) 
 			il_stmt_return_empty_generate(NULL, env, cctx);
 			break;
 		case ILSTMT_WHILE_T:
-			il_stmt_while_generate(self->u.while_, env, cctx);
+			GenerateILWhile(self->u.while_, env, cctx);
 			break;
 		case ILSTMT_BREAK_T:
-			il_stmt_break_generate(NULL, env, cctx);
+			GenerateILBreak(NULL, env, cctx);
 			break;
 		case ILSTMT_CONTINUE_T:
 			il_stmt_continue_generate(NULL, env, cctx);
@@ -56,13 +56,13 @@ void GenerateILStmt(il_stmt * self, struct enviroment* env, call_context* cctx) 
 			GenerateILTry(self->u.try_, env, cctx);
 			break;
 		case ILSTMT_THROW_T:
-			il_stmt_throw_generate(self->u.throw_, env, cctx);
+			GenerateILThrow(self->u.throw_, env, cctx);
 			break;
 		case ILSTMT_ASSERT_T:
 			il_stmt_assert_generate(self->u.bcassert_, env, cctx);
 			break;
 		case ILSTMT_DEFER_T:
-			il_stmt_defer_generate(self->u.defer_, env, cctx);
+			GenerateILDefer(self->u.defer_, env, cctx);
 			break;
 		case ILSTMT_YIELD_RETURN_T:
 			il_stmt_yield_return_generate(self->u.yield_return, env, cctx);
@@ -112,7 +112,7 @@ void LoadILStmt(il_stmt * self, enviroment* env, call_context* cctx) {
 			LoadILBreak(NULL, env, cctx);
 			break;
 		case ILSTMT_CONTINUE_T:
-			il_stmt_continue_load(NULL, env, cctx);
+			LoadILContinue(NULL, env, cctx);
 			break;
 		case ILSTMT_INFERENCED_TYPE_INIT_T:
 			il_stmt_inferenced_type_init_load(self->u.inferenced_type_init, env, cctx);
@@ -159,7 +159,7 @@ void DeleteILStmt(il_stmt * self) {
 			il_stmt_variable_init_delete(self->u.variable_init);
 			break;
 		case ILSTMT_RETURN_T:
-			il_stmt_return_delete(self->u.return_);
+			DeleteILReturn(self->u.return_);
 			break;
 		case ILSTMT_WHILE_T:
 			DeleteILWhile(self->u.while_);
@@ -180,7 +180,7 @@ void DeleteILStmt(il_stmt * self) {
 			DeleteILThrow(self->u.throw_);
 			break;
 		case ILSTMT_ASSERT_T:
-			il_stmt_assert_delete(self->u.bcassert_);
+			DeleteILAssert(self->u.bcassert_);
 			break;
 		case ILSTMT_DEFER_T:
 			DeleteILDefer(self->u.defer_);

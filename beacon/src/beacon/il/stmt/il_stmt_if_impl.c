@@ -34,7 +34,7 @@ il_stmt_elif * NewILElif() {
 	return ret;
 }
 
-Vector * il_stmt_elif_list_new() {
+Vector * NewILElifList() {
 	return NewVector();
 }
 
@@ -44,7 +44,7 @@ il_stmt_else * NewILElse() {
 	return ret;
 }
 
-void il_stmt_elif_list_push(Vector * self, il_stmt_elif * child) {
+void PushILElifList(Vector * self, il_stmt_elif * child) {
 	PushVector(self, child);
 }
 

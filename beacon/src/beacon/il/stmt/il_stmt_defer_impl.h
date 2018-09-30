@@ -12,7 +12,7 @@ il_stmt_defer* NewILDefer();
 
 void LoadILDefer(il_stmt_defer* self, enviroment* env, call_context* cctx);
 
-void il_stmt_defer_generate(il_stmt_defer* self, enviroment* env, call_context* cctx);
+void GenerateILDefer(il_stmt_defer* self, enviroment* env, call_context* cctx);
 
 void DeleteILDefer(il_stmt_defer* self);
 #endif

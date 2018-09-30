@@ -29,7 +29,7 @@ typedef struct il_factor_binary_op {
 	} u;
 } il_factor_binary_op;
 
-il_factor* il_factor_wrap_binary(il_factor_binary_op* self);
+il_factor* WrapILBinary(il_factor_binary_op* self);
 
 il_factor_binary_op* il_factor_binary_op_new(operator_type type);
 

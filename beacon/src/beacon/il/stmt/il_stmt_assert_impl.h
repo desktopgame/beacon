@@ -19,5 +19,5 @@ void il_stmt_assert_generate(il_stmt_assert* self, struct enviroment* env, call_
 
 void LoadILAssert(il_stmt_assert* self, struct enviroment* env, call_context* cctx);
 
-void il_stmt_assert_delete(il_stmt_assert* self);
+void DeleteILAssert(il_stmt_assert* self);
 #endif

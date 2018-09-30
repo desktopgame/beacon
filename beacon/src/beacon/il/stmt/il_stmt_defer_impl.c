@@ -18,7 +18,7 @@ void LoadILDefer(il_stmt_defer* self, enviroment* env, call_context* cctx) {
 	LoadILStmt(self->stmt, env, cctx);
 }
 
-void il_stmt_defer_generate(il_stmt_defer* self, enviroment* env, call_context* cctx) {
+void GenerateILDefer(il_stmt_defer* self, enviroment* env, call_context* cctx) {
 	label* lb = AddLabelOpcodeBuf(env->buf, 0);
 	label* lb2 = AddLabelOpcodeBuf(env->buf, 0);
 	AddOpcodeBuf(env->buf, OP_DEFER_REGISTER);

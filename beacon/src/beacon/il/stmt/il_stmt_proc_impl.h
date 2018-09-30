@@ -29,7 +29,7 @@ il_stmt_proc* NewILProc();
  * @param env
  * @param cctx
  */
-void il_stmt_proc_generate(il_stmt_proc* self, struct enviroment* env, call_context* cctx);
+void GenerateILProc(il_stmt_proc* self, struct enviroment* env, call_context* cctx);
 
 /**
  * 式のみで構成される文を読み込みます.

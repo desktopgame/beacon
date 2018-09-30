@@ -112,7 +112,7 @@ static il_stmt* CLIL_bodyImpl(class_loader* self, ast* asource) {
 		}
 		case AST_CONTINUE_T:
 		{
-			return il_stmt_wrap_continue();
+			return WrapILContinue();
 		}
 		case AST_RETURN_T:
 		{
@@ -252,7 +252,7 @@ static void CLIL_elif_list(class_loader* self, Vector* list, ast* asource) {
 		il_stmt_elif* ilelif = NewILElif();
 		ilelif->condition = CLIL_factor(self, acond);
 		CLIL_body(self, ilelif->body, abody);
-		il_stmt_elif_list_push(list, ilelif);
+		PushILElifList(list, ilelif);
 	}
 }
 

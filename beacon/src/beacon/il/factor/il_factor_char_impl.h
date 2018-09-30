@@ -23,6 +23,6 @@ generic_type* EvalILChar(il_factor_char* self, struct enviroment* env, call_cont
 
 char* ILCharToString(il_factor_char* self, struct enviroment* env);
 
-void il_factor_char_delete(il_factor_char* self);
+void DeleteILChar(il_factor_char* self);
 
 #endif // !SIGNAL_IL_IL_FACTOR_CHAR_H

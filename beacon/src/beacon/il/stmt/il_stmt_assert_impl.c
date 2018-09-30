@@ -41,7 +41,7 @@ void LoadILAssert(il_stmt_assert* self, enviroment* env, call_context* cctx) {
 	if(self->message == NULL) {
 		char* str = ILFactorToString(self->condition, env);
 		il_factor_string* ilstr = NewILString(InternString(str));
-		self->message = il_factor_wrap_string(ilstr);
+		self->message = WrapILString(ilstr);
 		assert(ilstr->valuev != 0);
 		MEM_FREE(str);
 		self->message->lineno = self->parent->lineno;
@@ -49,7 +49,7 @@ void LoadILAssert(il_stmt_assert* self, enviroment* env, call_context* cctx) {
 	LoadILFactor(self->message, env, cctx);
 }
 
-void il_stmt_assert_delete(il_stmt_assert* self) {
+void DeleteILAssert(il_stmt_assert* self) {
 	DeleteILFactor(self->condition);
 	DeleteILFactor(self->message);
 	MEM_FREE(self);

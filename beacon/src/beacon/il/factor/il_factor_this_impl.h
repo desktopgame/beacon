@@ -22,5 +22,5 @@ generic_type* EvalILThis(il_factor_this* self, struct enviroment* env, call_cont
 
 char* ILThisToString(il_factor_this* self, struct enviroment* env);
 
-void il_factor_this_delete(il_factor_this* self);
+void DeleteILThis(il_factor_this* self);
 #endif // !SIGNAL_IL_IL_FACTOR_THIS_H

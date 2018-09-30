@@ -22,7 +22,7 @@ void LoadILSuper(il_factor_super* self, struct enviroment* env, call_context* cc
 
 generic_type* EvalILSuper(il_factor_super* self, struct enviroment* env, call_context* cctx);
 
-char* il_factor_super_tostr(il_factor_super* self, struct enviroment* env);
+char* ILSuperToString(il_factor_super* self, struct enviroment* env);
 
 void il_factor_super_delete(il_factor_super* self);
 #endif // !SIGNAL_IL_IL_FACTOR_SUPER_H

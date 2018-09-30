@@ -33,7 +33,7 @@ char* ILThisToString(il_factor_this* self, enviroment* env) {
 	return Strdup("this");
 }
 
-void il_factor_this_delete(il_factor_this * self) {
+void DeleteILThis(il_factor_this * self) {
 	MEM_FREE(self);
 }
 //private

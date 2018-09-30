@@ -13,7 +13,7 @@ il_stmt* WrapILThrow(il_stmt_throw* self);
 
 il_stmt_throw* NewILThrow();
 
-void il_stmt_throw_generate(il_stmt_throw* self, struct enviroment* env, call_context* cctx);
+void GenerateILThrow(il_stmt_throw* self, struct enviroment* env, call_context* cctx);
 
 void LoadILThrow(il_stmt_throw* self, struct enviroment* env, call_context* cctx);
 

@@ -12,15 +12,15 @@ typedef struct il_factor_string {
 	string_view valuev;
 } il_factor_string;
 
-il_factor* il_factor_wrap_string(il_factor_string* self);
+il_factor* WrapILString(il_factor_string* self);
 
 il_factor_string* NewILString(string_view valuev);
 
 void il_factor_string_generate(il_factor_string* self, struct enviroment* env, call_context* cctx);
 
-void il_factor_string_load(il_factor_string* self, struct enviroment* env, call_context* cctx);
+void LoadILString(il_factor_string* self, struct enviroment* env, call_context* cctx);
 
-generic_type* il_factor_string_eval(il_factor_string* self, struct enviroment* env, call_context* cctx);
+generic_type* EvalILString(il_factor_string* self, struct enviroment* env, call_context* cctx);
 
 char* il_factor_string_tostr(il_factor_string* self, struct enviroment* env);
 

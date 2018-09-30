@@ -55,7 +55,7 @@ il_stmt_elif* NewILElif();
  * elif の一覧を表す要素を作成します.
  * @return
  */
-Vector* il_stmt_elif_list_new();
+Vector* NewILElifList();
 
 /**
  * else を表す要素を作成します.
@@ -66,7 +66,7 @@ il_stmt_else* NewILElse();
 /**
  * elif を一覧に加えます.
  */
-void il_stmt_elif_list_push(Vector* self, il_stmt_elif* child);
+void PushILElifList(Vector* self, il_stmt_elif* child);
 
 /**
  * if とその子要素を生成します.

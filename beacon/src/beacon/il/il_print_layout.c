@@ -9,7 +9,7 @@
 static int gLineNo = -1;
 static bool gHideLineNo = false;
 
-bool il_print_layout_lineno(int lineno) {
+bool IsLineOfAlreadyILPrint(int lineno) {
 	if (gHideLineNo) {
 		return true;
 	}
@@ -24,7 +24,7 @@ void FormatILPrintLayout(int lineno) {
 	if (gHideLineNo) {
 		return;
 	}
-	if (!il_print_layout_lineno(lineno)) {
+	if (!IsLineOfAlreadyILPrint(lineno)) {
 		printf("<%d> ", lineno);
 	} else {
 #define LEN 100

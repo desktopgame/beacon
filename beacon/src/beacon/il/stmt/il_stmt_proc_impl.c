@@ -15,7 +15,7 @@ il_stmt_proc * NewILProc() {
 	return ret;
 }
 
-void il_stmt_proc_generate(il_stmt_proc * self, enviroment * env, call_context* cctx) {
+void GenerateILProc(il_stmt_proc * self, enviroment * env, call_context* cctx) {
 	GenerateILFactor(self->factor, env, cctx);
 }
 

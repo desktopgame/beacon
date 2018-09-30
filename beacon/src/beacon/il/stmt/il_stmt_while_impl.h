@@ -16,7 +16,7 @@ il_stmt* WrapILWhile(il_stmt_while* self);
 
 il_stmt_while* NewILWhile();
 
-void il_stmt_while_generate(il_stmt_while* self, struct enviroment* env, call_context* cctx);
+void GenerateILWhile(il_stmt_while* self, struct enviroment* env, call_context* cctx);
 
 void LoadILWhile(il_stmt_while* self, struct enviroment* env, call_context* cctx);
 

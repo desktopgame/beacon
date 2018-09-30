@@ -23,6 +23,6 @@ generic_type* EvalILBool(il_factor_bool* self, struct enviroment* env, call_cont
 
 char* ILBoolToString(il_factor_bool* self, struct enviroment* env);
 
-void il_factor_bool_delete(il_factor_bool* self);
+void DeleteILBool(il_factor_bool* self);
 
 #endif // !SIGNAL_IL_IL_FACTOR_BOOL_H

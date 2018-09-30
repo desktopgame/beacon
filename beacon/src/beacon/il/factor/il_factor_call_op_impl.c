@@ -29,7 +29,7 @@ il_factor* il_factor_wrap_call_op(il_factor_call_op* self) {
 	return ret;
 }
 
-il_factor_call_op* il_factor_call_op_new() {
+il_factor_call_op* NewILCallOp() {
 	il_factor_call_op* ret = (il_factor_call_op*)MEM_MALLOC(sizeof(il_factor_call_op));
 	ret->receiver = NULL;
 	ret->argument_list = NewVector();
@@ -42,7 +42,7 @@ void il_factor_call_OP_LOAD(il_factor_call_op* self, enviroment* env, call_conte
 	//LoadILFactor(self->receiver, env, ilctx, eh);
 	il_factor_call_op_check(self, env, cctx);
 	if(self->type == ILCALL_TYPE_INVOKE_T) {
-		il_factor_invoke_load(self->u.invoke_, env, cctx);
+		LoadILInvoke(self->u.invoke_, env, cctx);
 	} else if(self->type == ILCALL_TYPE_INVOKE_STATIC_T) {
 		il_factor_invoke_static_load(self->u.invoke_static_, env, cctx);
 	} else if(self->type == ILCALL_TYPE_INVOKE_BOUND_T) {
@@ -50,11 +50,11 @@ void il_factor_call_OP_LOAD(il_factor_call_op* self, enviroment* env, call_conte
 	}
 }
 
-generic_type* il_factor_call_op_eval(il_factor_call_op* self, enviroment* env, call_context* cctx) {
+generic_type* EvalILCallOp(il_factor_call_op* self, enviroment* env, call_context* cctx) {
 	il_factor_call_op_check(self, env, cctx);
 	generic_type* ret = NULL;
 	if(self->type == ILCALL_TYPE_INVOKE_T) {
-		ret = il_factor_invoke_eval(self->u.invoke_, env, cctx);
+		ret = EvalILInvoke(self->u.invoke_, env, cctx);
 	} else if(self->type == ILCALL_TYPE_INVOKE_STATIC_T) {
 		ret =  il_factor_invoke_static_eval(self->u.invoke_static_, env, cctx);
 	} else if(self->type == ILCALL_TYPE_INVOKE_BOUND_T) {
@@ -69,7 +69,7 @@ generic_type* il_factor_call_op_eval(il_factor_call_op* self, enviroment* env, c
 char* il_factor_call_op_to_str(il_factor_call_op* self, enviroment* env) {
 //	il_factor_call_OP_LOAD(self, env);
 	if(self->type == ILCALL_TYPE_INVOKE_T) {
-		return il_factor_invoke_tostr(self->u.invoke_, env);
+		return ILInvokeToString(self->u.invoke_, env);
 	} else if(self->type == ILCALL_TYPE_INVOKE_BOUND_T) {
 		return il_factor_invoke_bound_tostr(self->u.invoke_bound_, env);
 	} else if(self->type == ILCALL_TYPE_INVOKE_STATIC_T) {

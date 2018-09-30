@@ -52,7 +52,7 @@ void il_factor_unary_OP_LOAD(il_factor_unary_op * self, enviroment * env, call_c
 		il_factor_not_op* not = NewILNotOp(self->type);
 		not->parent = self;
 		self->u.not_op = not;
-		il_factor_not_OP_LOAD(not, env, cctx);
+		LoadILNotOp(not, env, cctx);
 	} else if(self->type == OPERATOR_NEGATIVE_T) {
 		self->category = OPERATOR_NEGATIVE_T;
 		il_factor_negative_op* neg = il_factor_negative_op_new(self->type);
@@ -75,7 +75,7 @@ generic_type* il_factor_unary_op_eval(il_factor_unary_op * self, enviroment * en
 	generic_type* ret = NULL;
 	switch(self->type) {
 		case OPERATOR_NOT_T:
-			ret = il_factor_not_op_eval(self->u.not_op, env, cctx);
+			ret = EvalILNotOp(self->u.not_op, env, cctx);
 			break;
 		case OPERATOR_CHILDA_T:
 			ret = il_factor_childa_op_eval(self->u.childa_op, env, cctx);

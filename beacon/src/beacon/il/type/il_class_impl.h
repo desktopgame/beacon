@@ -53,7 +53,7 @@ void AddFieldILClass(il_class* self, struct il_field* f);
  * @param self
  * @param prop
  */
-void il_class_add_property(il_class* self, struct il_property* prop);
+void AddPropertyILClass(il_class* self, struct il_property* prop);
 
 /**
  * メソッドを追加します.

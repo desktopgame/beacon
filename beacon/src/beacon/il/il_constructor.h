@@ -30,5 +30,5 @@ il_constructor* NewILConstructor();
  * コンストラクタを表す要素を開放します.
  * @param self
  */
-void il_constructor_delete(il_constructor* self);
+void DeleteILConstructor(il_constructor* self);
 #endif // !SIGNAL_IL_IL_CONSTRUCTOR_H

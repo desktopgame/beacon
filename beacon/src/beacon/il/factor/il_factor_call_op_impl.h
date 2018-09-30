@@ -37,11 +37,11 @@ typedef struct il_factor_call_op {
 
 il_factor* il_factor_wrap_call_op(il_factor_call_op* self);
 
-il_factor_call_op* il_factor_call_op_new();
+il_factor_call_op* NewILCallOp();
 
 void il_factor_call_OP_LOAD(il_factor_call_op* self, struct enviroment* env, call_context* cctx);
 
-struct generic_type* il_factor_call_op_eval(il_factor_call_op* self, struct enviroment* env, call_context* cctx);
+struct generic_type* EvalILCallOp(il_factor_call_op* self, struct enviroment* env, call_context* cctx);
 
 char* il_factor_call_op_to_str(il_factor_call_op* self, struct enviroment* env);
 

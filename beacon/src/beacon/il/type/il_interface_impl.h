@@ -21,7 +21,7 @@ typedef struct il_interface {
  * @param self
  * @return
  */
-il_type* il_type_wrap_interface(il_interface* self);
+il_type* WrapILInterface(il_interface* self);
 
 /**
  * インターフェースを作成します.

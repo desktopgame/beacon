@@ -5,7 +5,7 @@
 //proto
 static void il_type_parameter_rule_list_delete(VectorItem item);
 
-il_type_parameter * il_type_parameter_new(string_view namev) {
+il_type_parameter * NewILTypeParameter(string_view namev) {
 	il_type_parameter* ret = (il_type_parameter*)MEM_MALLOC(sizeof(il_type_parameter));
 	ret->kind = il_TYPE_PARAMETER_KIND_DEFAULT_T;
 	ret->namev = namev;

@@ -30,7 +30,7 @@ generic_type* EvalILSuper(il_factor_super * self, enviroment * env, call_context
 	return t->u.class_->super_class;
 }
 
-char* il_factor_super_tostr(il_factor_super* self, enviroment* env) {
+char* ILSuperToString(il_factor_super* self, enviroment* env) {
 	return Strdup("super");
 }
 

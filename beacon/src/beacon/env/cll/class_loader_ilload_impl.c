@@ -270,7 +270,7 @@ static void class_loader_ilload_interface(class_loader* self, il_namespace* curr
 	ast* aextends_list = SecondAST(ainterface_decl);
 	ast* amember_tree = AtAST(ainterface_decl, 2);
 	il_interface* ilinter = NewILInterface(atypename->u.stringv_value);
-	il_type* iltype = il_type_wrap_interface(ilinter);
+	il_type* iltype = WrapILInterface(ilinter);
 	//interface Foo<A, B>
 	CLIL_type_parameter(self, FirstAST(atypename), ilinter->type_parameter_list);
 	//interface Foo : XXX, YYY, CCC

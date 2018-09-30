@@ -32,11 +32,11 @@ il_factor_invoke* NewILInvoke(string_view namev);
 
 void il_factor_invoke_generate(il_factor_invoke* self, struct enviroment* env, call_context* cctx);
 
-void il_factor_invoke_load(il_factor_invoke * self, struct enviroment * env, call_context* cctx);
+void LoadILInvoke(il_factor_invoke * self, struct enviroment * env, call_context* cctx);
 
-struct generic_type* il_factor_invoke_eval(il_factor_invoke * self, struct enviroment * env, call_context* cctx);
+struct generic_type* EvalILInvoke(il_factor_invoke * self, struct enviroment * env, call_context* cctx);
 
-char* il_factor_invoke_tostr(il_factor_invoke* self, struct enviroment* env);
+char* ILInvokeToString(il_factor_invoke* self, struct enviroment* env);
 
 void il_factor_invoke_delete(il_factor_invoke* self);
 

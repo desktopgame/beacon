@@ -23,7 +23,7 @@ il_factor_as * NewILAs() {
 	return ret;
 }
 
-void il_factor_as_generate(il_factor_as * self, enviroment * env, call_context* cctx) {
+void GenerateILAs(il_factor_as * self, enviroment * env, call_context* cctx) {
 	GenerateILFactor(self->fact, env, cctx);
 	AddOpcodeBuf(env->buf, OP_GENERIC_ADD);
 	generic_type_generate(self->gtype, env);

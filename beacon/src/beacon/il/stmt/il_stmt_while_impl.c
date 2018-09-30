@@ -23,7 +23,7 @@ il_stmt_while * NewILWhile() {
 	return ret;
 }
 
-void il_stmt_while_generate(il_stmt_while * self, enviroment * env, call_context* cctx) {
+void GenerateILWhile(il_stmt_while * self, enviroment * env, call_context* cctx) {
 	env->sym_table->scope_depth++;
 	int prev = AddNOPOpcodeBuf(env->buf);
 	label* prevLab = AddLabelOpcodeBuf(env->buf, prev);

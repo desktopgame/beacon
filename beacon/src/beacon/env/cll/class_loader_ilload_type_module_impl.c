@@ -72,7 +72,7 @@ void CLIL_type_parameter(class_loader* self, ast* asource, Vector* dest) {
 		   asource->tag == AST_TYPE_IN_PARAMETER_T ||
 		   asource->tag == AST_TYPE_OUT_PARAMETER_T);
 	ast* arule_list = FirstAST(asource);
-	il_type_parameter* iltypeparam = il_type_parameter_new(asource->u.stringv_value);
+	il_type_parameter* iltypeparam = NewILTypeParameter(asource->u.stringv_value);
 	if (asource->tag == AST_TYPE_IN_PARAMETER_T) iltypeparam->kind = il_TYPE_PARAMETER_KIND_IN_T;
 	if (asource->tag == AST_TYPE_OUT_PARAMETER_T) iltypeparam->kind = il_TYPE_PARAMETER_KIND_OUT_T;
 	PushVector(dest, iltypeparam);

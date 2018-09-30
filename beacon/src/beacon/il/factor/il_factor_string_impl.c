@@ -8,7 +8,7 @@
 #include "../../env/TYPE_IMPL.h"
 #include "../../util/mem.h"
 
-il_factor * il_factor_wrap_string(il_factor_string * self) {
+il_factor * WrapILString(il_factor_string * self) {
 	il_factor* ret = il_factor_new(ILFACTOR_STRING_T);
 	ret->u.string_ = self;
 	return ret;
@@ -26,10 +26,10 @@ void il_factor_string_generate(il_factor_string * self, enviroment* env, call_co
 	AddOpcodeBuf(env->buf, (VectorItem)index);
 }
 
-void il_factor_string_load(il_factor_string * self, enviroment * env, call_context* cctx) {
+void LoadILString(il_factor_string * self, enviroment * env, call_context* cctx) {
 }
 
-generic_type* il_factor_string_eval(il_factor_string * self, enviroment * env, call_context* cctx) {
+generic_type* EvalILString(il_factor_string * self, enviroment * env, call_context* cctx) {
 //	assert(TYPE_STRING->generic_self->core_type != NULL);
 	return GENERIC_STRING;
 }

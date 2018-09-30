@@ -40,7 +40,7 @@ void il_factor_invoke_generate(il_factor_invoke* self, enviroment* env, call_con
 	il_factor_invoke_generate_subscript(self, env, cctx);
 }
 
-void il_factor_invoke_load(il_factor_invoke * self, enviroment * env, call_context* cctx) {
+void LoadILInvoke(il_factor_invoke * self, enviroment * env, call_context* cctx) {
 	if(self->index != -1) {
 		return;
 	}
@@ -53,7 +53,7 @@ void il_factor_invoke_load(il_factor_invoke * self, enviroment * env, call_conte
 	PopCallContext(cctx);
 }
 
-generic_type* il_factor_invoke_eval(il_factor_invoke * self, enviroment * env, call_context* cctx) {
+generic_type* EvalILInvoke(il_factor_invoke * self, enviroment * env, call_context* cctx) {
 	il_factor_invoke_check(self, env, cctx);
 	if(GetLastBCError()) {
 		return NULL;
@@ -72,7 +72,7 @@ generic_type* il_factor_invoke_eval(il_factor_invoke * self, enviroment * env, c
 	return ret;
 }
 
-char* il_factor_invoke_tostr(il_factor_invoke* self, enviroment* env) {
+char* ILInvokeToString(il_factor_invoke* self, enviroment* env) {
 	string_buffer* sb = NewBuffer();
 	char* invstr = ILFactorToString(self->receiver, env);
 	AppendsBuffer(sb, invstr);

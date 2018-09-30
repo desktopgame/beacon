@@ -31,7 +31,7 @@ void LoadILReturn(il_stmt_return * self, enviroment * env, call_context* cctx) {
 	check_method_return(self, env, cctx);
 }
 
-void il_stmt_return_delete(il_stmt_return * self) {
+void DeleteILReturn(il_stmt_return * self) {
 	DeleteILFactor(self->fact);
 	MEM_FREE(self);
 }

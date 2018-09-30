@@ -18,7 +18,7 @@ il_constructor * NewILConstructor() {
 	return ret;
 }
 
-void il_constructor_delete(il_constructor * self) {
+void DeleteILConstructor(il_constructor * self) {
 	il_constructor_chain_delete(self->chain);
 	DeleteVector(self->parameter_list, il_constructor_parameter_delete);
 	DeleteVector(self->statement_list, il_constructor_stmt_delete);

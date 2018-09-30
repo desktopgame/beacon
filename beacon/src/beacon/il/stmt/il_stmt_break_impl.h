@@ -7,7 +7,7 @@ struct enviroment;
 
 il_stmt* WrapILBreak();
 
-void il_stmt_break_generate(void* empty, struct enviroment* env, call_context* cctx);
+void GenerateILBreak(void* empty, struct enviroment* env, call_context* cctx);
 
 void LoadILBreak(void* empty, struct enviroment* env, call_context* cctx);
 
