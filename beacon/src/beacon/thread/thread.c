@@ -51,7 +51,7 @@ void sg_thread_set_frame_ref(sg_thread * self, frame * frame_ref) {
 	self->vm_crush_by_exception = false;
 	self->vm_dump = false;
 	self->frame_ref = frame_ref;
-	self->cctx = call_context_new(CALL_TOP_T);
+	self->cctx = NewCallContext(CALL_TOP_T);
 }
 
 frame * sg_thread_get_frame_ref(sg_thread * self) {
@@ -62,7 +62,7 @@ frame * sg_thread_get_frame_ref(sg_thread * self) {
 void sg_thread_release_frame_ref(sg_thread * self) {
 	assert(self->cctx != NULL);
 	self->frame_ref = NULL;
-	call_context_delete(self->cctx);
+	DeleteCallContext(self->cctx);
 	self->cctx = NULL;
 }
 

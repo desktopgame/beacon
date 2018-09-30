@@ -365,7 +365,7 @@ static Vector* generic_type_apply_by_hierarchy(generic_type* impl_baseline, gene
 
 static generic_type* generic_type_typeargs_at(call_context* cctx, frame* fr, int index) {
 	if(fr == NULL) {
-		Vector* type_args = call_context_typeargs(cctx);
+		Vector* type_args = GetTypeArgsCContext(cctx);
 		il_type_argument* a = AtVector(type_args, index);
 		return a->gtype;
 	} else {
@@ -377,7 +377,7 @@ static generic_type* generic_type_typeargs_at(call_context* cctx, frame* fr, int
 
 static generic_type* generic_type_receiver_at(call_context* cctx, frame* fr, int index) {
 	if(fr == NULL) {
-		generic_type* tp = call_context_receiver(cctx);
+		generic_type* tp = GetReceiverCContext(cctx);
 		generic_type* instanced = AtVector(tp->type_args_list, index);
 		return instanced;
 	} else {

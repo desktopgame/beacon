@@ -65,12 +65,12 @@ void method_execute(method* self, frame * fr, enviroment* env) {
 		if(!IsStaticModifier(self->modifier)) {
 			object* receiver_obj = PopVector(fr->value_stack);
 			AssignVector(a->ref_stack, 0, receiver_obj);
-			cfr = call_context_push(sg_thread_context(), FRAME_INSTANCE_INVOKE_T);
+			cfr = PushCallContext(sg_thread_context(), FRAME_INSTANCE_INVOKE_T);
 			cfr->u.instance_invoke.receiver = receiver_obj->gtype;
 			aArgs = cfr->u.instance_invoke.args = method_vm_args(self, fr, a);
 			aTArgs = cfr->u.instance_invoke.typeargs = method_vm_typeargs(self, fr, a);
 		} else {
-			cfr = call_context_push(sg_thread_context(), FRAME_STATIC_INVOKE_T);
+			cfr = PushCallContext(sg_thread_context(), FRAME_STATIC_INVOKE_T);
 			aArgs = cfr->u.static_invoke.args = method_vm_args(self, fr, a);
 			aTArgs = cfr->u.static_invoke.typeargs = method_vm_typeargs(self, fr, a);
 		}
@@ -83,7 +83,7 @@ void method_execute(method* self, frame * fr, enviroment* env) {
 		}
 		DeleteVector(aArgs, VectorDeleterOfNull);
 		DeleteVector(aTArgs, VectorDeleterOfNull);
-		call_context_pop(sg_thread_context());
+		PopCallContext(sg_thread_context());
 		DeleteFrame(a);
 	}
 }
@@ -103,10 +103,10 @@ bool method_override(method* superM, method* subM, call_context* cctx) {
 		generic_type* superGT = superP->gtype;
 		generic_type* subGT = subP->gtype;
 
-		call_frame* cfr = call_context_push(cctx, FRAME_RESOLVE_T);
+		call_frame* cfr = PushCallContext(cctx, FRAME_RESOLVE_T);
 		cfr->u.resolve.gtype = bl;
 		generic_type* superGT2 = generic_type_apply(superGT, cctx);
-		call_context_pop(cctx);
+		PopCallContext(cctx);
 //		assert(!generic_type_equals(superGT, superGT2));
 
 //		generic_type_diff(superGT, superGT2);
@@ -116,13 +116,13 @@ bool method_override(method* superM, method* subM, call_context* cctx) {
 	}
 	generic_type* superRet = superM->return_gtype;
 	generic_type* subRet = subM->return_gtype;
-	call_frame* cfr = call_context_push(cctx, FRAME_RESOLVE_T);
+	call_frame* cfr = PushCallContext(cctx, FRAME_RESOLVE_T);
 	cfr->u.resolve.gtype = bl;
 	generic_type* superRet2 = generic_type_apply(superRet, cctx);
 //	generic_type_diff(superRet, superRet2);
 //	assert(!generic_type_equals(superRet, superRet2));
 	int ret =generic_type_distance(superRet2, subRet, cctx);
-	call_context_pop(cctx);
+	PopCallContext(cctx);
 	return ret != -1;
 }
 
@@ -227,8 +227,8 @@ bool method_yield(method* self, Vector* stmt_list, bool* error) {
 }
 
 type* method_create_iterator_type(method* self,  class_loader* cll, Vector* stmt_list) {
-	call_context* lCctx = call_context_new(CALL_CTOR_T);
-	call_frame* lCfr = call_context_push(lCctx, FRAME_RESOLVE_T);
+	call_context* lCctx = NewCallContext(CALL_CTOR_T);
+	call_frame* lCfr = PushCallContext(lCctx, FRAME_RESOLVE_T);
 	lCfr->u.resolve.gtype = self->return_gtype;
 	string_view iterName = method_unique(self);
 	type* iterT = namespace_get_type(namespace_lang(), InternString("Iterator"));
@@ -243,8 +243,8 @@ type* method_create_iterator_type(method* self,  class_loader* cll, Vector* stmt
 	class_add_method(iterImplC, create_has_next(self,  iterImplT, cll, stmt_list, &op_len));
 	class_add_method(iterImplC, create_next(self, iterImplT, cll, AtVector(self->return_gtype->type_args_list, 0), stmt_list, &op_len));
 	class_add_constructor(iterImplC, create_delegate_ctor(self, iterImplT, cll, op_len));
-	call_context_pop(lCctx);
-	call_context_delete(lCctx);
+	PopCallContext(lCctx);
+	DeleteCallContext(lCctx);
 	return iterImplT;
 }
 
@@ -381,7 +381,7 @@ static method* create_has_next(method* self, type* ty, class_loader* cll, Vector
 	mt->type = METHOD_TYPE_SCRIPT_T;
 	script_method* smt = script_method_new();
 	enviroment* envSmt = NewEnviroment();
-	call_context* cctx = call_context_new(CALL_METHOD_T);
+	call_context* cctx = NewCallContext(CALL_METHOD_T);
 	cctx->scope = self->parent->location;
 	cctx->ty = self->parent;
 	cctx->u.mt = self;
@@ -417,7 +417,7 @@ static method* create_has_next(method* self, type* ty, class_loader* cll, Vector
 	//	DumpEnviromentOp(envSmt, 0);
 	}
 	(*out_op_len) = envSmt->buf->source_vec->length;
-	call_context_delete(cctx);
+	DeleteCallContext(cctx);
 	smt->env = envSmt;
 	mt->u.script_method = smt;
 	mt->parent = ty;
@@ -432,7 +432,7 @@ static method* create_next(method* self, type* ty, class_loader* cll,generic_typ
 	mt->type = METHOD_TYPE_SCRIPT_T;
 	script_method* smt = script_method_new();
 	enviroment* envSmt = NewEnviroment();
-	call_context* cctx = call_context_new(CALL_METHOD_T);
+	call_context* cctx = NewCallContext(CALL_METHOD_T);
 	cctx->scope = self->parent->location;
 	cctx->ty = self->parent;
 	cctx->u.mt = mt;
@@ -450,7 +450,7 @@ static method* create_next(method* self, type* ty, class_loader* cll,generic_typ
 	smt->env = envSmt;
 	mt->u.script_method = smt;
 	mt->parent = ty;
-	call_context_delete(cctx);
+	DeleteCallContext(cctx);
 	//DumpEnviromentOp(envSmt, 0);
 	return mt;
 }

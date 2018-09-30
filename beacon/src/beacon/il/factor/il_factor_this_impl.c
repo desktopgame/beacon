@@ -26,7 +26,7 @@ void il_factor_this_load(il_factor_this * self, enviroment * env, call_context* 
 }
 
 generic_type* il_factor_this_eval(il_factor_this * self, enviroment * env, call_context* cctx) {
-	return call_context_type(cctx)->generic_self;
+	return GetTypeCContext(cctx)->generic_self;
 }
 
 char* il_factor_this_tostr(il_factor_this* self, enviroment* env) {
@@ -41,7 +41,7 @@ static void check_context(il_factor_this * self, enviroment * env, call_context*
 	if(cctx->tag != CALL_METHOD_T) {
 		return;
 	}
-	method* met = call_context_method(cctx);
+	method* met = GetMethodCContext(cctx);
 	if(IsStaticModifier(met->modifier)) {
 		ThrowBCError(BCERROR_ACCESS_TO_THIS_AT_STATIC_METHOD_T,
 			Ref2Str(type_name(met->parent)),

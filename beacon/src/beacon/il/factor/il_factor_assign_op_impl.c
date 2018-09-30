@@ -89,14 +89,14 @@ static void assign_by_namebase(il_factor_assign_op* self, enviroment* env, call_
 	il_factor_variable* ilvar = ilsrc->u.variable_;
 	//staticなフィールドへの代入
 	if(ilvar->type == ILVARIABLE_TYPE_STATIC_T) {
-		class_* cls = TYPE2CLASS(call_context_eval_type(cctx, ilvar->u.static_->fqcn));
+		class_* cls = TYPE2CLASS(GetEvalTypeCContext(cctx, ilvar->u.static_->fqcn));
 		int temp = -1;
 		field* sf = class_find_sfield(cls, ilmem->namev, &temp);
 		assert(temp != -1);
 		il_factor_generate(self->right, env, cctx);
 		GeneratePutField(env->buf, sf, temp);
 		//指定の静的フィールドにアクセスできない
-		if(!class_accessible_field(call_context_class(cctx), sf)) {
+		if(!class_accessible_field(GetClassCContext(cctx), sf)) {
 			ThrowBCError(BCERROR_CAN_T_ACCESS_FIELD_T,
 				Ref2Str(type_name(cls->parent)),
 				Ref2Str(sf->namev)
@@ -134,7 +134,7 @@ static void assign_to_field(il_factor_assign_op* self, il_factor* receiver, il_f
 		return;
 	}
 	//指定のインスタンスフィールドにアクセスできない
-	if(!class_accessible_field(call_context_class(cctx), f)) {
+	if(!class_accessible_field(GetClassCContext(cctx), f)) {
 		ThrowBCError(BCERROR_CAN_T_ACCESS_FIELD_T,
 			Ref2Str(type_name(cls->parent)),
 			Ref2Str(f->namev)
@@ -149,14 +149,14 @@ static void assign_to_property(il_factor_assign_op* self, enviroment* env, call_
 	bool is_static = IsStaticModifier(prop->p->modifier);
 	BC_ERROR();
 	//プロパティへアクセスできない
-	if(!class_accessible_property(call_context_class(cctx), pp)) {
+	if(!class_accessible_property(GetClassCContext(cctx), pp)) {
 		ThrowBCError(BCERROR_CAN_T_ACCESS_FIELD_T,
 			Ref2Str(type_name(pp->parent)),
 			Ref2Str(pp->namev)
 		);
 		return;
 	}
-	if(!class_accessible_property_accessor(call_context_class(cctx), pp->set)) {
+	if(!class_accessible_property_accessor(GetClassCContext(cctx), pp->set)) {
 		ThrowBCError(BCERROR_CAN_T_ACCESS_FIELD_T,
 			Ref2Str(type_name(pp->parent)),
 			Ref2Str(pp->namev)
@@ -326,15 +326,15 @@ static void generate_assign_to_variable_local(il_factor_assign_op* self, envirom
 	//src のような名前がフィールドを示す場合
 	} else if(illoc->type == VARIABLE_LOCAL_FIELD_T) {
 		int temp = -1;
-		field* f = class_find_field_tree(call_context_class(cctx), illoc->namev, &temp);
+		field* f = class_find_field_tree(GetClassCContext(cctx), illoc->namev, &temp);
 		if(temp == -1) {
-			f = class_find_sfield_tree(call_context_class(cctx), illoc->namev, &temp);
+			f = class_find_sfield_tree(GetClassCContext(cctx), illoc->namev, &temp);
 		}
 		assert(temp != -1);
 		//フィールドはstaticでないが
 		//現在のコンテキストはstaticなので this にアクセスできない
 		if(!IsStaticModifier(f->modifier) &&
-		    call_context_is_static(cctx)) {
+		    IsStaticCContext(cctx)) {
 			ThrowBCError(BCERROR_ACCESS_TO_THIS_AT_STATIC_METHOD_T,
 				Ref2Str(type_name(f->parent)),
 				Ref2Str(f->namev)
@@ -350,12 +350,12 @@ static void generate_assign_to_variable_local(il_factor_assign_op* self, envirom
 	//src のような名前がプロパティを示す場合
 	} else if(illoc->type == VARIABLE_LOCAL_PROPERTY_T) {
 		int temp = -1;
-		property* p = class_find_property_tree(call_context_class(cctx), illoc->namev, &temp);
+		property* p = class_find_property_tree(GetClassCContext(cctx), illoc->namev, &temp);
 		assert(temp != -1);
 		//フィールドはstaticでないが
 		//現在のコンテキストはstaticなので this にアクセスできない
 		if(!IsStaticModifier(p->modifier) &&
-		    call_context_is_static(cctx)) {
+		    IsStaticCContext(cctx)) {
 			ThrowBCError(BCERROR_ACCESS_TO_THIS_AT_STATIC_METHOD_T,
 				Ref2Str(type_name(p->parent)),
 				Ref2Str(p->namev)

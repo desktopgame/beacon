@@ -112,7 +112,7 @@ static void il_factor_invoke_bound_check(il_factor_invoke_bound * self, envirome
 		return;
 	}
 	//対応するメソッドを検索
-	type* ctype = call_context_type(cctx);
+	type* ctype = GetTypeCContext(cctx);
 	int temp = -1;
 	il_type_argument_resolve(self->type_args, cctx);
 	for(int i=0; i<self->args->length; i++) {
@@ -124,7 +124,7 @@ static void il_factor_invoke_bound_check(il_factor_invoke_bound * self, envirome
 	const char* nstr = Ref2Str(self->namev);
 	const char* str = Ref2Str(type_name(ctype));
 	#endif
-	call_frame* cfr = call_context_push(cctx, FRAME_SELF_INVOKE_T);
+	call_frame* cfr = PushCallContext(cctx, FRAME_SELF_INVOKE_T);
 	cfr->u.self_invoke.args = self->args;
 	cfr->u.self_invoke.typeargs = self->type_args;
 	self->tag = BOUND_INVOKE_METHOD_T;
@@ -132,7 +132,7 @@ static void il_factor_invoke_bound_check(il_factor_invoke_bound * self, envirome
 	self->index = temp;
 	BC_ERROR();
 	if(self->index != -1) {
-		call_context_pop(cctx);
+		PopCallContext(cctx);
 		return;
 	}
 	//添字アクセスとして解決する
@@ -145,7 +145,7 @@ static void il_factor_invoke_bound_check(il_factor_invoke_bound * self, envirome
 		self->u.subscript.index = local->index;
 	}
 	//フィールドとして解決する
-	field* fi = class_find_field(call_context_class(cctx), self->namev, &temp);
+	field* fi = class_find_field(GetClassCContext(cctx), self->namev, &temp);
 	if(receiver_gtype == NULL && fi != NULL) {
 		receiver_gtype = fi->gtype;
 		self->u.subscript.tag = SUBSCRIPT_FIELD_T;
@@ -153,7 +153,7 @@ static void il_factor_invoke_bound_check(il_factor_invoke_bound * self, envirome
 		self->u.subscript.index = temp;
 	}
 	//プロパティとして解決する
-	property* prop = class_find_property(call_context_class(cctx), self->namev, &temp);
+	property* prop = class_find_property(GetClassCContext(cctx), self->namev, &temp);
 	if(receiver_gtype == NULL && prop != NULL) {
 		receiver_gtype = prop->gtype;
 		self->u.subscript.tag = SUBSCRIPT_PROPERTY_T;
@@ -176,7 +176,7 @@ static void il_factor_invoke_bound_check(il_factor_invoke_bound * self, envirome
 			Ref2Str(self->namev)
 		);
 	}
-	call_context_pop(cctx);
+	PopCallContext(cctx);
 }
 
 static void il_factor_invoke_bound_args_delete(VectorItem item) {
@@ -269,11 +269,11 @@ static generic_type* il_factor_invoke_bound_evalImpl(il_factor_invoke_bound * se
 	}
 	call_frame* cfr = NULL;
 	if(self->tag == BOUND_INVOKE_METHOD_T) {
-		cfr = call_context_push(cctx, FRAME_SELF_INVOKE_T);
+		cfr = PushCallContext(cctx, FRAME_SELF_INVOKE_T);
 		cfr->u.self_invoke.args = self->args;
 		cfr->u.self_invoke.typeargs = self->type_args;
 	} else {
-		cfr = call_context_push(cctx, FRAME_INSTANCE_INVOKE_T);
+		cfr = PushCallContext(cctx, FRAME_INSTANCE_INVOKE_T);
 		cfr->u.instance_invoke.receiver = generic_type_apply(subscript_descriptor_receiver(&self->u.subscript), cctx);
 		cfr->u.instance_invoke.args = self->args;
 		cfr->u.instance_invoke.typeargs = self->type_args;
@@ -282,15 +282,15 @@ static generic_type* il_factor_invoke_bound_evalImpl(il_factor_invoke_bound * se
 	if(il_factor_invoke_bound_return_gtype(self, cctx)->tag != GENERIC_TYPE_TAG_NONE_T) {
 		resolve_non_default(self, env, cctx);
 		assert(self->resolved != NULL);
-		call_context_pop(cctx);
+		PopCallContext(cctx);
 		return self->resolved;
 	} else {
 		resolve_default(self, env, cctx);
 		assert(self->resolved != NULL);
-		call_context_pop(cctx);
+		PopCallContext(cctx);
 		return self->resolved;
 	}
-	call_context_pop(cctx);
+	PopCallContext(cctx);
 	assert(self->resolved != NULL);
 	return self->resolved;
 }

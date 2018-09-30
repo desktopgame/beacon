@@ -201,7 +201,7 @@ static void class_loader_load_toplevel(class_loader* self) {
 	body->lineno = 0;
 	createWorldStmt->fact->lineno = 0;
 	//worldをselfにする
-	call_context* cctx = call_context_new(CALL_TOP_T);
+	call_context* cctx = NewCallContext(CALL_TOP_T);
 	cctx->ty = namespace_get_type(namespace_lang(), InternString("World"));
 	il_stmt_load(body, self->env, cctx);
 	il_stmt_generate(body, self->env, cctx);
@@ -213,7 +213,7 @@ static void class_loader_load_toplevel(class_loader* self) {
 	//以下読み込み
 	CLBC_body(self, self->il_code->statement_list, self->env, cctx, NULL);
 	il_stmt_delete(body);
-	call_context_delete(cctx);
+	DeleteCallContext(cctx);
 	script_context_cache();
 }
 
@@ -237,11 +237,11 @@ static void class_loader_load_toplevel_function(class_loader* self) {
 		script_method* sm = script_method_new();
 		enviroment* env = NewEnviroment();
 		//call_contextの設定
-		call_context* cctx = call_context_new(CALL_METHOD_T);
+		call_context* cctx = NewCallContext(CALL_METHOD_T);
 		cctx->scope = namespace_lang();
 		cctx->ty = worldT;
 		cctx->u.mt = m;
-		namespace_* loc = call_context_namespace(cctx);
+		namespace_* loc = GetNamespaceCContext(cctx);
 		env->context_ref = self;
 		sm->env = env;
 		m->access = ACCESS_PRIVATE_T;
@@ -271,19 +271,19 @@ static void class_loader_load_toplevel_function(class_loader* self) {
 		AddOpcodeBuf(env->buf, (VectorItem)0);
 		PushVector(worldT->u.class_->method_list, m);
 		//CLBC_corutine(self, m, env, ilfunc->parameter_list, ilfunc->statement_list, cctx, namespace_lang());
-		call_context_delete(cctx);
+		DeleteCallContext(cctx);
 	}
 	//実装のロード
 	for(int i=0; i<funcs->length; i++) {
 		il_function* ilfunc = AtVector(funcs, i);
 		method* m = AtVector(TYPE2CLASS(worldT)->method_list, i);
 		script_method* sm = m->u.script_method;
-		call_context* cctx = call_context_new(CALL_METHOD_T);
+		call_context* cctx = NewCallContext(CALL_METHOD_T);
 		cctx->scope = namespace_lang();
 		cctx->ty = worldT;
 		cctx->u.mt = m;
 		CLBC_corutine(self, m, sm->env, ilfunc->parameter_list, ilfunc->statement_list, cctx, namespace_lang());
-		call_context_delete(cctx);
+		DeleteCallContext(cctx);
 	}
 }
 

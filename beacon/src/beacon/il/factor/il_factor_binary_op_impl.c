@@ -227,10 +227,10 @@ int il_factor_binary_op_index2(il_factor* receiver, il_factor* arg, operator_typ
 
 generic_type* il_factor_binary_op_apply(il_factor_binary_op* self, generic_type* gtype, enviroment* env, call_context* cctx) {
 	generic_type* lgtype = il_factor_eval(self->left, env, cctx);
-	call_frame* cfr = call_context_push(cctx, FRAME_INSTANCE_INVOKE_T);
+	call_frame* cfr = PushCallContext(cctx, FRAME_INSTANCE_INVOKE_T);
 	cfr->u.instance_invoke.receiver = lgtype;
 	generic_type* ret = generic_type_apply(gtype,cctx);
-	call_context_pop(cctx);
+	PopCallContext(cctx);
 	return ret;
 }
 

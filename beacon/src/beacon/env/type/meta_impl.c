@@ -289,7 +289,7 @@ operator_overload* meta_gfind_operator(Vector* opov_vec, operator_type type, Vec
 }
 
 bool meta_method_access_valid(method* m, call_context* cctx) {
-	class_* context = call_context_class(cctx);
+	class_* context = GetClassCContext(cctx);
 	//privateメソッドなのに現在のコンテキストではない
 	if(context != NULL &&
 		m->access == ACCESS_PRIVATE_T &&
@@ -306,7 +306,7 @@ bool meta_method_access_valid(method* m, call_context* cctx) {
 }
 
 bool meta_ctor_access_valid(constructor* ctor, call_context* cctx) {
-	class_* context = call_context_class(cctx);
+	class_* context = GetClassCContext(cctx);
 	//privateメソッドなのに現在のコンテキストではない
 	if(context != NULL &&
 		ctor->access == ACCESS_PRIVATE_T &&

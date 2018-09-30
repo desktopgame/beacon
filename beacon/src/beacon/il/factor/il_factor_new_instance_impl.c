@@ -85,7 +85,7 @@ generic_type* il_factor_new_instance_eval(il_factor_new_instance * self, envirom
 		generic_type* a = generic_type_new(self->c->parent);
 		for (int i = 0; i < self->type_args->length; i++) {
 			il_type_argument* e = (il_type_argument*)AtVector(self->type_args, i);
-			generic_type* arg = import_manager_resolve(call_context_namespace(cctx), e->gcache, cctx);
+			generic_type* arg = import_manager_resolve(GetNamespaceCContext(cctx), e->gcache, cctx);
 			generic_type_addargs(a, arg);
 		}
 		self->instance_type = a;
@@ -128,7 +128,7 @@ static void il_factor_new_instance_find(il_factor_new_instance * self, enviromen
 	}
 	#endif
 	//コンストラクタで生成するオブジェクトの肩を取得
-	type* ty = call_context_eval_type(cctx, self->fqcnc);
+	type* ty = GetEvalTypeCContext(cctx, self->fqcnc);
 	if(ty == NULL) {
 		ThrowBCError(BCERROR_NEW_INSTANCE_UNDEFINED_CLASS_T,
 			Ref2Str(self->fqcnc->namev)
@@ -138,13 +138,13 @@ static void il_factor_new_instance_find(il_factor_new_instance * self, enviromen
 	//使用するコンストラクタを取得
 	class_* cls = TYPE2CLASS(ty);
 	int temp = -1;
-	call_frame* cfr = call_context_push(cctx, FRAME_RESOLVE_T);
+	call_frame* cfr = PushCallContext(cctx, FRAME_RESOLVE_T);
 	cfr->u.resolve.gtype = cls->parent->generic_self;
 	cfr->u.resolve.typeargs = self->type_args;
 	il_type_argument_resolve(self->type_args, cctx);
 	self->c = class_ilfind_constructor(cls, self->argument_list, env, cctx, &temp);
 	self->constructor_index = temp;
-	call_context_pop(cctx);
+	PopCallContext(cctx);
 	if(temp == -1) {
 		ThrowBCError(BCERROR_NEW_INSTANCE_UNDEFINED_CTOR_T,
 			Ref2Str(cls->namev)

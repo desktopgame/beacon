@@ -107,7 +107,7 @@ static void il_factor_variable_local_load_field(il_factor_variable_local * self,
 	self->type = VARIABLE_LOCAL_FIELD_T;
 	//NOTE:トップレベルではここが空なので、
 	//定義されていない変数とみなせる？
-	type* tp = call_context_type(cctx);
+	type* tp = GetTypeCContext(cctx);
 	if(tp->tag == TYPE_INTERFACE_T/* この条件は構文規則からして満たさないはず */) {
 		ThrowBCError(BCERROR_REF_UNDEFINED_LOCAL_VARIABLE_T, Ref2Str(self->namev));
 		return;
@@ -133,8 +133,8 @@ static void il_factor_variable_local_load_field(il_factor_variable_local * self,
 		il_factor_variable_local_load_property(self, env, cctx);
 		return;
 	//フィールドが見つかったなら可視性を確認する
-	} else if(!class_accessible_field(call_context_class(cctx), f)) {
-		ThrowBCError(BCERROR_CAN_T_ACCESS_FIELD_T, Ref2Str(call_context_class(cctx)->namev), Ref2Str(f->namev));
+	} else if(!class_accessible_field(GetClassCContext(cctx), f)) {
+		ThrowBCError(BCERROR_CAN_T_ACCESS_FIELD_T, Ref2Str(GetClassCContext(cctx)->namev), Ref2Str(f->namev));
 		return;
 	}
 	set_gtype(self, f->gtype);
@@ -142,7 +142,7 @@ static void il_factor_variable_local_load_field(il_factor_variable_local * self,
 
 static void il_factor_variable_local_load_property(il_factor_variable_local * self, enviroment * env, call_context* cctx) {
 	int temp = -1;
-	type* tp = call_context_type(cctx);
+	type* tp = GetTypeCContext(cctx);
 	property* p = class_find_property_tree(TYPE2CLASS(tp), self->namev, &temp);
 	if(temp == -1) {
 		p = class_find_sproperty_tree(TYPE2CLASS(tp), self->namev, &temp);

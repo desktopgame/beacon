@@ -29,12 +29,12 @@ void script_method_execute(script_method * self, method* parent, frame * fr, env
 	if (!IsStaticModifier(parent->modifier)) {
 		object* receiver_obj = PopVector(fr->value_stack);
 		PushVector(sub->value_stack, receiver_obj);
-		cfr = call_context_push(sg_thread_context(), FRAME_INSTANCE_INVOKE_T);
+		cfr = PushCallContext(sg_thread_context(), FRAME_INSTANCE_INVOKE_T);
 		cfr->u.instance_invoke.receiver = receiver_obj->gtype;
 		cfr->u.instance_invoke.args = aArgs;
 		cfr->u.instance_invoke.typeargs = aTArgs;
 	} else {
-		cfr = call_context_push(sg_thread_context(), FRAME_STATIC_INVOKE_T);
+		cfr = PushCallContext(sg_thread_context(), FRAME_STATIC_INVOKE_T);
 		cfr->u.static_invoke.args = aArgs;
 		cfr->u.static_invoke.typeargs = aTArgs;
 	}
@@ -60,7 +60,7 @@ void script_method_execute(script_method * self, method* parent, frame * fr, env
 	}
 	DeleteVector(aArgs, VectorDeleterOfNull);
 	DeleteVector(aTArgs, VectorDeleterOfNull);
-	call_context_pop(sg_thread_context());
+	PopCallContext(sg_thread_context());
 	DeleteFrame(sub);
 }
 

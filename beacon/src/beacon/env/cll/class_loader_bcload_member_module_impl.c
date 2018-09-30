@@ -133,7 +133,7 @@ bool CLBC_field_impl(class_loader* self, type* tp, field* fi, namespace_* scope,
 
 void CLBC_fields_decl(class_loader* self, il_type* iltype, type* tp, Vector* ilfields, namespace_* scope) {
 	CL_ERROR(self);
-	call_context* cctx = call_context_new(CALL_DECL_T);
+	call_context* cctx = NewCallContext(CALL_DECL_T);
 	cctx->scope = scope;
 	cctx->ty = tp;
 	for (int i = 0; i < ilfields->length; i++) {
@@ -141,12 +141,12 @@ void CLBC_fields_decl(class_loader* self, il_type* iltype, type* tp, Vector* ilf
 			break;
 		}
 	}
-	call_context_delete(cctx);
+	DeleteCallContext(cctx);
 }
 
 void CLBC_fields_impl(class_loader* self, namespace_* scope, type* tp,Vector* ilfields, Vector* sgfields) {
 	CL_ERROR(self);
-	call_context* cctx = call_context_new(CALL_CTOR_T);
+	call_context* cctx = NewCallContext(CALL_CTOR_T);
 	cctx->scope = scope;
 	cctx->ty = tp;
 	for (int i = 0; i < sgfields->length; i++) {
@@ -154,7 +154,7 @@ void CLBC_fields_impl(class_loader* self, namespace_* scope, type* tp,Vector* il
 			break;
 		}
 	}
-	call_context_delete(cctx);
+	DeleteCallContext(cctx);
 }
 
 //
@@ -177,7 +177,7 @@ bool CLBC_property_decl(class_loader* self, il_type* iltype, type* tp, il_proper
 	   IsOverrideModifier(prop->modifier) ||
 	   IsNativeModifier(prop->modifier)) {
 		   ThrowBCError(BCERROR_NATIVE_FIELD_T, Ref2Str(prop->namev));
-			call_context_delete(cctx);
+			DeleteCallContext(cctx);
 		   return false;
 	   }
 	//プロパティアクセサの方がプロパティよりも緩いアクセスになっている
@@ -232,7 +232,7 @@ bool CLBC_property_impl(class_loader* self, il_type* iltype, type* tp, il_proper
 
 void CLBC_properties_decl(class_loader* self, il_type* iltype, type* tp, Vector* ilprops, namespace_* scope) {
 	CL_ERROR(self);
-	call_context* cctx = call_context_new(CALL_DECL_T);
+	call_context* cctx = NewCallContext(CALL_DECL_T);
 	cctx->scope = scope;
 	cctx->ty = tp;
 	for (int i = 0; i < ilprops->length; i++) {
@@ -240,12 +240,12 @@ void CLBC_properties_decl(class_loader* self, il_type* iltype, type* tp, Vector*
 			break;
 		}
 	}
-	call_context_delete(cctx);
+	DeleteCallContext(cctx);
 }
 
 void CLBC_properties_impl(class_loader* self,  il_type* iltype, type* tp, Vector* ilprops, Vector* sgprops, namespace_* scope) {
 	CL_ERROR(self);
-	call_context* cctx = call_context_new(CALL_DECL_T);
+	call_context* cctx = NewCallContext(CALL_DECL_T);
 	cctx->scope = scope;
 	cctx->ty = tp;
 	for (int i = 0; i < sgprops->length; i++) {
@@ -253,7 +253,7 @@ void CLBC_properties_impl(class_loader* self,  il_type* iltype, type* tp, Vector
 			break;
 		}
 	}
-	call_context_delete(cctx);
+	DeleteCallContext(cctx);
 }
 
 //
@@ -272,7 +272,7 @@ bool CLBC_method_decl(class_loader* self, il_type* iltype, type* tp, il_method* 
 	method->access = ilmethod->access;
 	method->modifier = ilmethod->modifier;
 	type_parameter_list_dup(ilmethod->type_parameter_list, method->type_parameters);
-	call_context* cctx = call_context_new(CALL_METHOD_T);
+	call_context* cctx = NewCallContext(CALL_METHOD_T);
 	cctx->scope = scope;
 	cctx->ty = tp;
 	cctx->u.mt = method;
@@ -295,7 +295,7 @@ bool CLBC_method_decl(class_loader* self, il_type* iltype, type* tp, il_method* 
 	  !TYPE2CLASS(tp)->is_abstract)) {
 		ThrowBCError(BCERROR_ABSTRACT_METHOD_BY_T, Ref2Str(method->namev));
 		method_delete(method);
-		call_context_delete(cctx);
+		DeleteCallContext(cctx);
 		return false;
 	}
 	//メソッドの本文が省略されているが、
@@ -306,7 +306,7 @@ bool CLBC_method_decl(class_loader* self, il_type* iltype, type* tp, il_method* 
 	) {
 		ThrowBCError(BCERROR_EMPTY_STMT_METHOD_T, Ref2Str(method->namev));
 		method_delete(method);
-		call_context_delete(cctx);
+		DeleteCallContext(cctx);
 		return false;
 	}
 	//ネイティブメソッドもしくは抽象メソッドなのに本文が書かれている
@@ -316,7 +316,7 @@ bool CLBC_method_decl(class_loader* self, il_type* iltype, type* tp, il_method* 
 	) {
 		ThrowBCError(BCERROR_NOT_EMPTY_STMT_METHOD_T, Ref2Str(method->namev));
 		method_delete(method);
-		call_context_delete(cctx);
+		DeleteCallContext(cctx);
 		return false;
 	}
 	//メソッドの修飾子が static override
@@ -327,7 +327,7 @@ bool CLBC_method_decl(class_loader* self, il_type* iltype, type* tp, il_method* 
 			Ref2Str(method->namev)
 		);
 		method_delete(method);
-		call_context_delete(cctx);
+		DeleteCallContext(cctx);
 		return false;
 	}
 	//.. abstract override
@@ -338,7 +338,7 @@ bool CLBC_method_decl(class_loader* self, il_type* iltype, type* tp, il_method* 
 			Ref2Str(method->namev)
 		);
 		method_delete(method);
-		call_context_delete(cctx);
+		DeleteCallContext(cctx);
 		return false;
 	}
 	//.. abstract static
@@ -349,7 +349,7 @@ bool CLBC_method_decl(class_loader* self, il_type* iltype, type* tp, il_method* 
 			Ref2Str(method->namev)
 		);
 		method_delete(method);
-		call_context_delete(cctx);
+		DeleteCallContext(cctx);
 		return false;
 	}
 	method->parent = tp;
@@ -365,7 +365,7 @@ bool CLBC_method_decl(class_loader* self, il_type* iltype, type* tp, il_method* 
 	}
 	CLBC_parameter_list(self, scope, ilmethod->parameter_list, method->parameters, cctx);
 	type_add_method(tp, method);
-	call_context_delete(cctx);
+	DeleteCallContext(cctx);
 	return true;
 }
 
@@ -383,7 +383,7 @@ bool CLBC_method_impl(class_loader* self, namespace_* scope, il_type* iltype, ty
 	//まずは仮引数の一覧にインデックスを割り振る
 	enviroment* env = NewEnviroment();
 	env->context_ref = self;
-	call_context* cctx = call_context_new(CALL_METHOD_T);
+	call_context* cctx = NewCallContext(CALL_METHOD_T);
 	cctx->scope = scope;
 	cctx->ty = tp;
 	cctx->u.mt = me;
@@ -407,7 +407,7 @@ bool CLBC_method_impl(class_loader* self, namespace_* scope, il_type* iltype, ty
 		AddOpcodeBuf(env->buf, (VectorItem)0);
 	}
 	CLBC_corutine(self, me, env, ilmethod->parameter_list, ilmethod->statement_list, cctx, scope);
-	call_context_delete(cctx);
+	DeleteCallContext(cctx);
 	return true;
 }
 
@@ -443,7 +443,7 @@ bool CLBC_ctor_decl(class_loader* self, il_type* iltype, type* tp, il_constructo
 	Vector* parameter_list = cons->parameter_list;
 	cons->access = ilcons->access;
 	cons->parent = tp;
-	call_context* cctx = call_context_new(CALL_CTOR_T);
+	call_context* cctx = NewCallContext(CALL_CTOR_T);
 	cctx->scope = scope;
 	cctx->ty = tp;
 	cctx->u.ctor = cons;
@@ -458,7 +458,7 @@ bool CLBC_ctor_decl(class_loader* self, il_type* iltype, type* tp, il_constructo
 	CLBC_parameter_list(self, scope, ilcons->parameter_list, cons->parameter_list, cctx);
 	CLBC_parameter_list_ctor(cons->parameter_list);
 	class_add_constructor(classz, cons);
-	call_context_delete(cctx);
+	DeleteCallContext(cctx);
 	return true;
 }
 
@@ -468,7 +468,7 @@ bool CLBC_ctor_impl(class_loader* self, il_type* iltype, type* tp, il_constructo
 	//まずは仮引数の一覧にインデックスを割り振る
 	enviroment* env = NewEnviroment();
 	env->context_ref = self;
-	call_context* cctx = call_context_new(CALL_CTOR_T);
+	call_context* cctx = NewCallContext(CALL_CTOR_T);
 	cctx->scope = scope;
 	cctx->ty = tp;
 	cctx->u.ctor = cons;
@@ -488,7 +488,7 @@ bool CLBC_ctor_impl(class_loader* self, il_type* iltype, type* tp, il_constructo
 	//NOTE:ここなら名前空間を設定出来る
 	CLBC_body(self, ilcons->statement_list, env, cctx, scope);
 	cons->env = env;
-	call_context_delete(cctx);
+	DeleteCallContext(cctx);
 	return true;
 }
 
@@ -530,7 +530,7 @@ bool CLBC_operator_overload_decl(class_loader* self, il_type* iltype, type* tp, 
 	operator_overload* opov = operator_overload_new(ilopov->op);
 	opov->access = ilopov->access;
 	//call_contextの設定
-	call_context* cctx = call_context_new(CALL_OPOV_T);
+	call_context* cctx = NewCallContext(CALL_OPOV_T);
 	cctx->scope = scope;
 	cctx->ty = tp;
 	cctx->u.opov = opov;
@@ -547,10 +547,10 @@ bool CLBC_operator_overload_decl(class_loader* self, il_type* iltype, type* tp, 
 	PushVector(tp->u.class_->operator_overload_list, opov);
 	//オペレータオーバロードの妥当性をテストする
 	if(CLBC_test_operator_overlaod(self, iltype, tp, opov)) {
-		call_context_delete(cctx);
+		DeleteCallContext(cctx);
 		return false;
 	}
-	call_context_delete(cctx);
+	DeleteCallContext(cctx);
 	return true;
 }
 
@@ -559,7 +559,7 @@ bool CLBC_operator_overload_impl(class_loader* self, il_type* iltype, type* tp, 
 	//FIXME:ILメソッドと実行時メソッドのインデックスが同じなのでとりあえず動く
 	//まずは仮引数の一覧にインデックスを割り振る
 	enviroment* env = NewEnviroment();
-	call_context* cctx = call_context_new(CALL_OPOV_T);
+	call_context* cctx = NewCallContext(CALL_OPOV_T);
 	cctx->scope = scope;
 	cctx->ty = tp;
 	cctx->u.opov = opov;
@@ -582,7 +582,7 @@ bool CLBC_operator_overload_impl(class_loader* self, il_type* iltype, type* tp, 
 	AddOpcodeBuf(env->buf, (VectorItem)0);
 	//NOTE:ここなら名前空間を設定出来る
 	CLBC_body(self, ilopov->statement_list, env, cctx, scope);
-	call_context_delete(cctx);
+	DeleteCallContext(cctx);
 	//ccpop_method();
 	opov->env = env;
 	return true;
@@ -711,10 +711,10 @@ static void CLBC_chain_root(class_loader * self, il_type * iltype, type * tp, il
 static void CLBC_chain_auto(class_loader * self, il_type * iltype, type * tp, il_constructor * ilcons, il_constructor_chain * ilchain, enviroment * env) {
 	class_* classz = tp->u.class_;
 	int emptyTemp = 0;
-	call_context* cctx = call_context_new(CALL_CTOR_ARGS_T);
+	call_context* cctx = NewCallContext(CALL_CTOR_ARGS_T);
 	cctx->ty = tp;
 	constructor* emptyTarget = class_ilfind_empty_constructor(classz->super_class->core_type->u.class_, env, cctx, &emptyTemp);
-	call_context_delete(cctx);
+	DeleteCallContext(cctx);
 	//連鎖を明示的に書いていないのに、
 	//親クラスにも空のコンストラクタが存在しない=エラー
 	//(この場合自動的にチェインコンストラクタを補うことが出来ないため。)
@@ -744,7 +744,7 @@ static void CLBC_chain_auto(class_loader * self, il_type * iltype, type * tp, il
 static void CLBC_chain_super(class_loader * self, il_type * iltype, type * tp, il_constructor * ilcons, il_constructor_chain * ilchain, enviroment * env) {
 	class_* classz = tp->u.class_;
 	//チェインコンストラクタの実引数をプッシュ
-	call_context* cctx = call_context_new(CALL_CTOR_ARGS_T);
+	call_context* cctx = NewCallContext(CALL_CTOR_ARGS_T);
 	cctx->ty = tp;
 	il_constructor_chain* chain = ilcons->chain;
 	for (int i = 0; i < chain->argument_list->length; i++) {
@@ -769,7 +769,7 @@ static void CLBC_chain_super(class_loader * self, il_type * iltype, type * tp, i
 		);
 		return;
 	}
-	call_context_delete(cctx);
+	DeleteCallContext(cctx);
 	chain->c = chainTarget;
 	chain->constructor_index = temp;
 	AddOpcodeBuf(env->buf, (VectorItem)temp);

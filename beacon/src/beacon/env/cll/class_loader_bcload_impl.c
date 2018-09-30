@@ -330,7 +330,7 @@ static type* CLBC_get_or_load_class(class_loader* self, namespace_* parent, il_t
 static void CLBC_register_class(class_loader* self, namespace_* parent, il_type* iltype, type* tp, class_* cls) {
 	type_init_generic(tp, iltype->u.class_->type_parameter_list->length);
 	type_parameter_list_dup(iltype->u.class_->type_parameter_list, cls->type_parameter_list);
-	call_context* cctx = call_context_new(CALL_DECL_T);
+	call_context* cctx = NewCallContext(CALL_DECL_T);
 	cctx->scope = parent;
 	cctx->ty = tp;
 	for (int i = 0; i < iltype->u.class_->extend_list->length; i++) {
@@ -355,12 +355,12 @@ static void CLBC_register_class(class_loader* self, namespace_* parent, il_type*
 			if(E->tag != TYPE_INTERFACE_T) {
 				ThrowBCError(BCERROR_CLASS_FIRST_T, Ref2Str(type_name(tp)));
 				namespace_add_type(parent, tp);
-				call_context_delete(cctx);
+				DeleteCallContext(cctx);
 				return;
 			}
 		}
 	}
-	call_context_delete(cctx);
+	DeleteCallContext(cctx);
 	cls->location = parent;
 	namespace_add_type(parent, tp);
 	//重複するインターフェイスを検出
@@ -392,7 +392,7 @@ static type* CLBC_get_or_load_interface(class_loader* self, namespace_* parent, 
 static void CLBC_register_interface(class_loader* self, namespace_* parent, il_type* iltype, type* tp, interface_* inter) {
 	type_init_generic(tp, iltype->u.interface_->type_parameter_list->length);
 	type_parameter_list_dup(iltype->u.interface_->type_parameter_list, inter->type_parameter_list);
-	call_context* cctx = call_context_new(CALL_DECL_T);
+	call_context* cctx = NewCallContext(CALL_DECL_T);
 	cctx->scope = parent;
 	cctx->ty = tp;
 	for (int i = 0; i < iltype->u.interface_->extends_list->length; i++) {
@@ -403,7 +403,7 @@ static void CLBC_register_interface(class_loader* self, namespace_* parent, il_t
 		if(E->tag != TYPE_INTERFACE_T) {
 			ThrowBCError(BCERROR_INTERFACE_ONLY_T, Ref2Str(type_name(tp)));
 			namespace_add_type(parent, tp);
-			call_context_delete(cctx);
+			DeleteCallContext(cctx);
 			return;
 		//インターフェイスの時のみ追加
 		} else {
@@ -412,7 +412,7 @@ static void CLBC_register_interface(class_loader* self, namespace_* parent, il_t
 	}
 	//場所を設定
 	inter->location = parent;
-	call_context_delete(cctx);
+	DeleteCallContext(cctx);
 	namespace_add_type(parent, tp);
 	//重複するインターフェイスを検出
 	interface_* ovinter = NULL;

@@ -568,7 +568,7 @@ static void vm_run(frame * self, enviroment * env, int pos, int deferStart) {
 				//また、現在のVMから実引数をポップ
 				frame* sub = SubFrame(self);
 				sub->receiver = tp;
-				call_frame* cfr = call_context_push(sg_thread_context(), FRAME_STATIC_INVOKE_T);
+				call_frame* cfr = PushCallContext(sg_thread_context(), FRAME_STATIC_INVOKE_T);
 				cfr->u.static_invoke.args = NewVector();
 				cfr->u.static_invoke.typeargs = NewVector();
 				for (int i = 0; i < ctor->parameter_list->length; i++) {
@@ -591,7 +591,7 @@ static void vm_run(frame * self, enviroment * env, int pos, int deferStart) {
 				ExecuteVM(sub, ctor->env);
 				DeleteVector(cfr->u.static_invoke.args, VectorDeleterOfNull);
 				DeleteVector(cfr->u.static_invoke.typeargs, VectorDeleterOfNull);
-				call_context_pop(sg_thread_context());
+				PopCallContext(sg_thread_context());
 				//コンストラクタを実行した場合、
 				//objectがスタックのトップに残っているはず
 				VectorItem returnV = TopVector(sub->value_stack);
@@ -612,7 +612,7 @@ static void vm_run(frame * self, enviroment * env, int pos, int deferStart) {
 				//コンストラクタを実行するためのVMを作成
 				frame* sub = SubFrame(self);
 				sub->receiver = tp;
-				call_frame* cfr = call_context_push(sg_thread_context(), FRAME_STATIC_INVOKE_T);
+				call_frame* cfr = PushCallContext(sg_thread_context(), FRAME_STATIC_INVOKE_T);
 				cfr->u.static_invoke.args = NewVector();
 				cfr->u.static_invoke.typeargs = NewVector();
 				//チェインコンストラクタに渡された実引数をプッシュ
@@ -629,7 +629,7 @@ static void vm_run(frame * self, enviroment * env, int pos, int deferStart) {
 				ExecuteVM(sub, ctor->env);
 				DeleteVector(cfr->u.static_invoke.args, VectorDeleterOfNull);
 				DeleteVector(cfr->u.static_invoke.typeargs, VectorDeleterOfNull);
-				call_context_pop(sg_thread_context());
+				PopCallContext(sg_thread_context());
 				//コンストラクタを実行した場合、
 				//objectがスタックのトップに残っているはず
 				VectorItem returnV = TopVector(sub->value_stack);

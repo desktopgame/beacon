@@ -150,9 +150,9 @@ int il_factor_unary_op_index2(il_factor* receiver, operator_type otype, envirome
 
 generic_type* il_factor_unary_op_apply(il_factor_unary_op* self, generic_type* gtype, enviroment* env, call_context* cctx) {
 	generic_type* lgtype = il_factor_eval(self->a, env, cctx);
-	call_frame* cfr = call_context_push(cctx, FRAME_INSTANCE_INVOKE_T);
+	call_frame* cfr = PushCallContext(cctx, FRAME_INSTANCE_INVOKE_T);
 	cfr->u.instance_invoke.receiver = lgtype;
 	generic_type* ret = generic_type_apply(gtype,cctx);
-	call_context_pop(cctx);
+	PopCallContext(cctx);
 	return ret;
 }

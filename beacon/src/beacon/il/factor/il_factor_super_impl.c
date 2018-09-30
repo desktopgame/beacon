@@ -26,7 +26,7 @@ void il_factor_super_load(il_factor_super * self, enviroment * env, call_context
 }
 
 generic_type* il_factor_super_eval(il_factor_super * self, enviroment * env, call_context* cctx) {
-	type* t = call_context_type(cctx);
+	type* t = GetTypeCContext(cctx);
 	return t->u.class_->super_class;
 }
 
@@ -43,7 +43,7 @@ static void check_context(il_factor_super * self, enviroment * env, call_context
 	if(cctx->tag != CALL_METHOD_T) {
 		return;
 	}
-	method* met = call_context_method(cctx);
+	method* met = GetMethodCContext(cctx);
 	if(IsStaticModifier(met->modifier)) {
 		ThrowBCError(BCERROR_ACCESS_TO_SUPER_AT_STATIC_METHOD_T,
 			Ref2Str(type_name(met->parent)),

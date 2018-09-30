@@ -426,7 +426,7 @@ static void class_create_vtable_override(class_* self) {
 	#if defined(DEBUG)
 	const char* clname = Ref2Str(self->namev);
 	#endif
-	call_context* cctx = call_context_new(CALL_DECL_T);
+	call_context* cctx = NewCallContext(CALL_DECL_T);
 	cctx->scope = self->parent->location;
 	cctx->ty = self->super_class->core_type;
 	class_create_vtable(self->super_class->core_type->u.class_);
@@ -438,7 +438,7 @@ static void class_create_vtable_override(class_* self) {
 			vtable_replace(self->vt, m, cctx);
 		}
 	}
-	call_context_delete(cctx);
+	DeleteCallContext(cctx);
 }
 
 static void class_create_vtable_interface(class_* self) {
@@ -509,7 +509,7 @@ static void class_native_method_ref_delete(NumericMapKey key, NumericMapItem ite
 }
 
 static method* class_find_impl_method(class_* self, method* virtualMethod) {
-	call_context* cctx = call_context_new(CALL_DECL_T);
+	call_context* cctx = NewCallContext(CALL_DECL_T);
 	cctx->scope = self->parent->location;
 	cctx->ty = self->parent;
 	method* ret = NULL;
@@ -521,7 +521,7 @@ static method* class_find_impl_method(class_* self, method* virtualMethod) {
 			break;
 		}
 	}
-	call_context_delete(cctx);
+	DeleteCallContext(cctx);
 	return ret;
 }
 

@@ -102,16 +102,16 @@ static void resolve_default(il_factor_invoke_static * self, enviroment * env, ca
 	if(self->resolved != NULL) {
 		return;
 	}
-	call_frame* cfr = call_context_push(cctx, FRAME_STATIC_INVOKE_T);
+	call_frame* cfr = PushCallContext(cctx, FRAME_STATIC_INVOKE_T);
 	cfr->u.static_invoke.args = self->args;
 	cfr->u.static_invoke.typeargs = self->type_args;
 	generic_type* rgtp = self->m->return_gtype;
 	self->resolved = generic_type_apply(rgtp, cctx);
-	call_context_pop(cctx);
+	PopCallContext(cctx);
 }
 
 static void il_factor_invoke_static_check(il_factor_invoke_static * self, enviroment * env, call_context* cctx) {
-	type* ty =call_context_eval_type(cctx, self->fqcn);
+	type* ty =GetEvalTypeCContext(cctx, self->fqcn);
 	if(ty == NULL) {
 		ThrowBCError(BCERROR_UNDEFINED_TYPE_STATIC_INVOKE_T,
 			Ref2Str(self->fqcn->namev),
@@ -132,7 +132,7 @@ static void il_factor_invoke_static_check(il_factor_invoke_static * self, enviro
 		il_argument* ilarg = AtVector(self->args, i);
 		il_factor_load(ilarg->factor, env, cctx);
 	}
-	call_frame* cfr = call_context_push(cctx, FRAME_STATIC_INVOKE_T);
+	call_frame* cfr = PushCallContext(cctx, FRAME_STATIC_INVOKE_T);
 	cfr->u.static_invoke.args = self->args;
 	cfr->u.static_invoke.typeargs = self->type_args;
 	self->m = class_ilfind_smethod(cls, self->namev, self->args, env, cctx, &temp);
@@ -144,7 +144,7 @@ static void il_factor_invoke_static_check(il_factor_invoke_static * self, enviro
 			Ref2Str(self->namev)
 		);
 	}
-	call_context_pop(cctx);
+	PopCallContext(cctx);
 }
 
 static void il_factor_invoke_static_args_delete(VectorItem item) {

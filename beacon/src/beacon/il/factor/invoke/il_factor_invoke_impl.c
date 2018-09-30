@@ -44,13 +44,13 @@ void il_factor_invoke_load(il_factor_invoke * self, enviroment * env, call_conte
 	if(self->index != -1) {
 		return;
 	}
-	call_frame* cfr = call_context_push(cctx, FRAME_INSTANCE_INVOKE_T);
+	call_frame* cfr = PushCallContext(cctx, FRAME_INSTANCE_INVOKE_T);
 	cfr->u.instance_invoke.args = self->args;
 	cfr->u.instance_invoke.typeargs = self->type_args;
 	cfr->u.instance_invoke.receiver = il_factor_eval(self->receiver, env, cctx);
 	il_factor_load(self->receiver, env, cctx);
 	il_factor_invoke_check(self, env, cctx);
-	call_context_pop(cctx);
+	PopCallContext(cctx);
 }
 
 generic_type* il_factor_invoke_eval(il_factor_invoke * self, enviroment * env, call_context* cctx) {
@@ -131,12 +131,12 @@ static void resolve_default(il_factor_invoke * self, enviroment * env, call_cont
 //	virtual_type returnvType = self->m->return_vtype;
 	//内側に型変数が含まれているかもしれないので、
 	//それをここで展開する。
-	call_frame* cfr = call_context_push(cctx, FRAME_INSTANCE_INVOKE_T);
+	call_frame* cfr = PushCallContext(cctx, FRAME_INSTANCE_INVOKE_T);
 	cfr->u.instance_invoke.receiver = receivergType;
 	cfr->u.instance_invoke.args = self->args;
 	cfr->u.instance_invoke.typeargs = self->type_args;
 	self->resolved = generic_type_apply(rgtp, cctx);
-	call_context_pop(cctx);
+	PopCallContext(cctx);
 }
 
 static void il_factor_invoke_check(il_factor_invoke * self, enviroment * env, call_context* cctx) {

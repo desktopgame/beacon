@@ -512,7 +512,7 @@ bool class_contains_method(Vector* method_list, method* m, method** outM) {
 	assert(!IsStaticModifier(m->modifier));
 	(*outM) = NULL;
 	bool ret = false;
-	call_context* cctx = call_context_new(CALL_DECL_T);
+	call_context* cctx = NewCallContext(CALL_DECL_T);
 	cctx->scope = m->parent->location;
 	cctx->ty = m->parent;
 	for(int i=0; i<method_list->length; i++) {
@@ -523,7 +523,7 @@ bool class_contains_method(Vector* method_list, method* m, method** outM) {
 			break;
 		}
 	}
-	call_context_delete(cctx);
+	DeleteCallContext(cctx);
 	return ret;
 }
 

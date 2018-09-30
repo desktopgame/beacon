@@ -73,13 +73,13 @@ generic_type* import_manager_resolve(namespace_* scope, generic_cache* fqcn, cal
 	}
 	generic_type* parameterized = generic_type_new(NULL);
 	//T, Eなど
-	method* mt = call_context_method(cctx);
+	method* mt = GetMethodCContext(cctx);
 	if(parameterized->virtual_type_index == -1 && mt != NULL) {
 		parameterized->tag = GENERIC_TYPE_TAG_METHOD_T;
 		parameterized->virtual_type_index = method_for_generic_index(mt, fqcn->fqcn->namev);
 		parameterized->u.method_ = mt;
 	}
-	type* ty = call_context_type(cctx);
+	type* ty = GetTypeCContext(cctx);
 	if(parameterized->virtual_type_index == -1 &&  ty != NULL) {
 		parameterized->tag = GENERIC_TYPE_TAG_CLASS_T;
 		parameterized->virtual_type_index = type_for_generic_index(ty, fqcn->fqcn->namev);
@@ -110,7 +110,7 @@ generic_type* import_manager_resolvef(namespace_* scope, fqcn_cache* fqcn, call_
 	//V = class_tag 1
 	generic_type* parameterized = generic_type_new(NULL);
 	//まずはメソッドの型変数を調べる
-	method* mt = call_context_method(cctx);
+	method* mt = GetMethodCContext(cctx);
 	if(parameterized->virtual_type_index == -1 && mt != NULL) {
 		#if defined(DEBUG)
 		const char* methodname = Ref2Str(mt->namev);
@@ -121,7 +121,7 @@ generic_type* import_manager_resolvef(namespace_* scope, fqcn_cache* fqcn, call_
 		parameterized->u.method_ = mt;
 	}
 	//次にクラスの型変数を調べる
-	type* ty = call_context_type(cctx);
+	type* ty = GetTypeCContext(cctx);
 	if(parameterized->virtual_type_index == -1 && ty != NULL) {
 		#if defined(DEBUG)
 		const char* typename_ = Ref2Str(type_name(ty));

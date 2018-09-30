@@ -21,7 +21,7 @@ static void check_method_return(il_stmt_return_empty self, enviroment * env, cal
 	if(cctx->tag != CALL_METHOD_T) {
 		return;
 	}
-	method* m = call_context_method(cctx);
+	method* m = GetMethodCContext(cctx);
 	//戻り値が Void ではないのに値を返さない
 	if(m->return_gtype->core_type != TYPE_VOID) {
 		ThrowBCError(BCERROR_NOT_RETURN_VALUE_NOT_VOID_METHOD_T,

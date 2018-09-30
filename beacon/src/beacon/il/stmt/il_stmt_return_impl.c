@@ -40,7 +40,7 @@ static void check_method_return(il_stmt_return * self, enviroment * env, call_co
 	if(cctx->tag != CALL_METHOD_T) {
 		return;
 	}
-	method* m = call_context_method(cctx);
+	method* m = GetMethodCContext(cctx);
 	//戻り値が Void なのに値を返している
 	if(m->return_gtype->core_type == TYPE_VOID) {
 		ThrowBCError(BCERROR_RETURN_VALUE_VOID_METHOD_T,
