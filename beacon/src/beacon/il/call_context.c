@@ -24,7 +24,7 @@ call_context* call_context_malloc(call_context_tag tag, const char* filename, in
 }
 
 call_frame* call_context_pushImpl(call_context* self, call_frame_tag tag, const char* filename, int lineno) {
-	call_frame* fr = call_frame_malloc(tag, filename, lineno);
+	call_frame* fr = MallocCallFrame(tag, filename, lineno);
 	PushVector(self->call_stack, fr);
 	return fr;
 }
@@ -35,7 +35,7 @@ call_frame* call_context_top(call_context* self) {
 
 void call_context_pop(call_context* self) {
 	call_frame* fr = PopVector(self->call_stack);
-	call_DeleteFrame(fr);
+	DeleteCallFrame(fr);
 }
 
 namespace_* call_context_namespace(call_context* self) {
