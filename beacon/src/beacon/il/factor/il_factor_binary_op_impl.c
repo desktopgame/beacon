@@ -44,13 +44,13 @@ void il_factor_binary_op_generate(il_factor_binary_op * self, enviroment* env, c
 			il_factor_compare_op_generate(self->u.compare_op, env, cctx);
 			break;
 		case OPERATOR_CLOGIC_T:
-			il_factor_logic_op_generate(self->u.logic_op, env, cctx);
+			GenerateILLogicOp(self->u.logic_op, env, cctx);
 			break;
 		case OPERATOR_CSHIFT_T:
-			il_factor_shift_op_generate(self->u.shift_op, env, cctx);
+			GenerateILShiftOp(self->u.shift_op, env, cctx);
 			break;
 		case OPERATOR_CEXCOR_T:
-			il_factor_excor_op_generate(self->u.excor_op, env, cctx);
+			GenerateILExcorOp(self->u.excor_op, env, cctx);
 			break;
 	}
 }
@@ -67,7 +67,7 @@ void LoadILBinaryOp(il_factor_binary_op * self, enviroment * env, call_context* 
 	//カテゴリーわけ
 	if(operator_arithmetic(self->type)) {
 		self->category = OPERATOR_CARITHMERIC_T;
-		il_factor_arithmetic_op* arith = il_factor_arithmetic_op_new(self->type);
+		il_factor_arithmetic_op* arith = NewILArithmeticOp(self->type);
 		arith->parent = self;
 		self->u.arithmetic_op = arith;
 		il_factor_arithmetic_OP_LOAD(arith, env, cctx);
@@ -156,7 +156,7 @@ void DeleteILBinaryOp(il_factor_binary_op * self) {
 			DeleteILLogicOp(self->u.logic_op);
 			break;
 		case OPERATOR_CCOMPARE_T:
-			il_factor_compare_op_delete(self->u.compare_op);
+			DeleteILCompareOp(self->u.compare_op);
 			break;
 		case OPERATOR_CSHIFT_T:
 			DeleteILShiftOp(self->u.shift_op);

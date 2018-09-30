@@ -41,7 +41,7 @@ generic_type* EvalILLogicOp(il_factor_logic_op* self, enviroment* env, call_cont
 	}
 }
 
-void il_factor_logic_op_generate(il_factor_logic_op* self, enviroment* env, call_context* cctx) {
+void GenerateILLogicOp(il_factor_logic_op* self, enviroment* env, call_context* cctx) {
 	if(self->operator_index == -1) {
 		GenerateILFactor(self->parent->right, env, cctx);
 		GenerateILFactor(self->parent->left, env, cctx);

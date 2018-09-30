@@ -16,7 +16,7 @@ il_factor_excor_op* NewILExcorOp(operator_type type);
 
 struct generic_type* EvalILExcorOp(il_factor_excor_op * self, struct enviroment * env, call_context* cctx);
 
-void il_factor_excor_op_generate(il_factor_excor_op* self, struct enviroment* env, call_context* cctx);
+void GenerateILExcorOp(il_factor_excor_op* self, struct enviroment* env, call_context* cctx);
 
 void LoadILExcorOp(il_factor_excor_op* self, struct enviroment* env, call_context* cctx);
 

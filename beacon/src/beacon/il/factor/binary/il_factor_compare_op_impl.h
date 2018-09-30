@@ -19,7 +19,7 @@ void il_factor_compare_op_generate(il_factor_compare_op* self, struct enviroment
 
 void LoadILCompareOp(il_factor_compare_op* self, struct enviroment* env, call_context* cctx);
 
-void il_factor_compare_op_delete(il_factor_compare_op* self);
+void DeleteILCompareOp(il_factor_compare_op* self);
 
 char* ILCompareOpToString(il_factor_compare_op* self, struct enviroment* env);
 #endif

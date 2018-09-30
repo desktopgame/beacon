@@ -46,7 +46,7 @@ generic_type* EvalILShiftOp(il_factor_shift_op * self, enviroment * env, call_co
 	return ApplyILBinaryOp(self->parent, operator_ov->return_gtype, env, cctx);
 }
 
-void il_factor_shift_op_generate(il_factor_shift_op* self, enviroment* env, call_context* cctx) {
+void GenerateILShiftOp(il_factor_shift_op* self, enviroment* env, call_context* cctx) {
 	if(self->operator_index == -1) {
 		GenerateILFactor(self->parent->right, env, cctx);
 		GenerateILFactor(self->parent->left, env, cctx);

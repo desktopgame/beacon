@@ -50,7 +50,7 @@ char* ILInstanceOfToString(il_factor_instanceof* self, enviroment* env) {
 	return ReleaseBuffer(sb);
 }
 
-void il_factor_instanceof_delete(il_factor_instanceof* self) {
+void DeleteILInstanceOf(il_factor_instanceof* self) {
 	DeleteILFactor(self->fact);
 	generic_cache_delete(self->gcache);
 	MEM_FREE(self);

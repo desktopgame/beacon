@@ -45,7 +45,7 @@ il_factor* WrapILVariable(il_factor_variable* self);
 #define il_factor_variable_new() (MallocILVariable(__FILE__, __LINE__))
 il_factor_variable* MallocILVariable(const char* filename, int lineno);
 
-void il_factor_variable_generate(il_factor_variable* self, struct enviroment* env, call_context* cctx);
+void GenerateILVariable(il_factor_variable* self, struct enviroment* env, call_context* cctx);
 
 void LoadILVariable(il_factor_variable* self, struct enviroment* env, call_context* cctx);
 

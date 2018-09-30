@@ -132,7 +132,7 @@ static il_factor* CLIL_factorImpl(class_loader* self, ast* source) {
 		ret->u.super_ = sp;
 		return ret;
 	} else if (source->tag == AST_NEW_INSTANCE_T) {
-		return il_factor_wrap_new_instance(CLIL_new_instance(self, source));
+		return WrapILNewInstance(CLIL_new_instance(self, source));
 	} else if (source->tag == AST_TRUE_T) {
 		return WrapILBool(CLIL_true(self, source));
 	} else if (source->tag == AST_FALSE_T) {

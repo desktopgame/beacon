@@ -39,7 +39,7 @@ generic_type* EvalILExcorOp(il_factor_excor_op * self, enviroment * env, call_co
 	return ApplyILBinaryOp(self->parent, operator_ov->return_gtype, env, cctx);
 }
 
-void il_factor_excor_op_generate(il_factor_excor_op* self, enviroment* env, call_context* cctx) {
+void GenerateILExcorOp(il_factor_excor_op* self, enviroment* env, call_context* cctx) {
 	//演算子オーバーロードが見つからない
 	if(self->operator_index == -1) {
 		GenerateILFactor(self->parent->right, env, cctx);

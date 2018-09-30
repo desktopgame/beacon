@@ -37,7 +37,7 @@ void GenerateILFactor(il_factor * self, enviroment* env, call_context* cctx) {
 			GenerateILString(self->u.string_, env, cctx);
 			break;
 		case ILFACTOR_VARIABLE_T:
-			il_factor_variable_generate(self->u.variable_, env, cctx);
+			GenerateILVariable(self->u.variable_, env, cctx);
 			break;
 		case ILFACTOR_UNARY_OP_T:
 			il_factor_unary_op_generate(self->u.unary_, env, cctx);
@@ -132,7 +132,7 @@ void LoadILFactor(il_factor * self, enviroment * env, call_context* cctx) {
 			LoadILSuper(self->u.super_, env, cctx);
 			break;
 		case ILFACTOR_NEW_INSTANCE_T:
-			il_factor_new_instance_load(self->u.new_instance_, env, cctx);
+			LoadILNewInstance(self->u.new_instance_, env, cctx);
 			break;
 		case ILFACTOR_BOOL_T:
 			//il_factor_bool_load(self->u.bool_, depth);
@@ -390,7 +390,7 @@ void DeleteILFactor(il_factor * self) {
 			DeleteILMemberOp(self->u.member_);
 			break;
 		case ILFACTOR_INSTANCEOF_T:
-			il_factor_instanceof_delete(self->u.instanceof_);
+			DeleteILInstanceOf(self->u.instanceof_);
 			break;
 		case ILFACTOR_EXPLICIT_UNARY_OP_T:
 			il_factor_explicit_unary_op_delete(self->u.exp_unary_op);

@@ -46,7 +46,7 @@ void LoadCallOp(il_factor_call_op* self, enviroment* env, call_context* cctx) {
 	} else if(self->type == ILCALL_TYPE_INVOKE_STATIC_T) {
 		il_factor_invoke_static_load(self->u.invoke_static_, env, cctx);
 	} else if(self->type == ILCALL_TYPE_INVOKE_BOUND_T) {
-		il_factor_invoke_bound_load(self->u.invoke_bound_, env, cctx);
+		LoadILInvokeBound(self->u.invoke_bound_, env, cctx);
 	}
 }
 
@@ -58,7 +58,7 @@ generic_type* EvalILCallOp(il_factor_call_op* self, enviroment* env, call_contex
 	} else if(self->type == ILCALL_TYPE_INVOKE_STATIC_T) {
 		ret =  il_factor_invoke_static_eval(self->u.invoke_static_, env, cctx);
 	} else if(self->type == ILCALL_TYPE_INVOKE_BOUND_T) {
-		ret = il_factor_invoke_bound_eval(self->u.invoke_bound_, env, cctx);
+		ret = EvalILInvokeBound(self->u.invoke_bound_, env, cctx);
 	}
 	if(GetLastBCError()) {
 		return ret;
@@ -183,7 +183,7 @@ static void il_factor_member_op_check_instance(il_factor_call_op* self, il_facto
 }
 
 static void il_factor_member_op_check_static(il_factor_call_op* self, il_factor_member_op* ilmem, il_factor_variable* ilvar, enviroment* env, call_context* cctx) {
-	il_factor_invoke_static* st = il_factor_invoke_static_new(ilmem->namev);
+	il_factor_invoke_static* st = NewILInvokeStatic(ilmem->namev);
 	self->type = ILCALL_TYPE_INVOKE_STATIC_T;
 	self->u.invoke_static_ = st;
 	//入れ替える

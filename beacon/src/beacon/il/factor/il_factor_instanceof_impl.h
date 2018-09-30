@@ -22,5 +22,5 @@ struct generic_type* EvalILInstanceOf(il_factor_instanceof* self, enviroment* en
 
 char* ILInstanceOfToString(il_factor_instanceof* self, enviroment* env);
 
-void il_factor_instanceof_delete(il_factor_instanceof* self);
+void DeleteILInstanceOf(il_factor_instanceof* self);
 #endif

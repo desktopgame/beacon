@@ -16,7 +16,7 @@ il_constructor_chain * NewILConstructorChain() {
 	return ret;
 }
 
-void il_constructor_chain_delete(il_constructor_chain * self) {
+void DeleteILConstructorChain(il_constructor_chain * self) {
 	if (self == NULL) {
 		return;
 	}

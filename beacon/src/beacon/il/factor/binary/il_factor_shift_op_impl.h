@@ -15,7 +15,7 @@ il_factor_shift_op* NewILShiftOp(operator_type type);
 
 struct generic_type* EvalILShiftOp(il_factor_shift_op * self, struct enviroment * env, call_context* cctx);
 
-void il_factor_shift_op_generate(il_factor_shift_op* self, struct enviroment* env, call_context* cctx);
+void GenerateILShiftOp(il_factor_shift_op* self, struct enviroment* env, call_context* cctx);
 
 void LoadILShiftOp(il_factor_shift_op* self, struct enviroment* env, call_context* cctx);
 

@@ -71,6 +71,6 @@ void DeleteILType(il_type * self) {
 	MEM_FREE(self);
 }
 
-Vector* il_type_type_parameter_list(il_type* self) {
+Vector* GetTypeParametersILType(il_type* self) {
 	return self->tag == ilTYPE_INTERFACE_T ? self->u.interface_->type_parameter_list : self->u.class_->type_parameter_list;
 }

@@ -21,7 +21,7 @@ static void il_factor_invoke_bound_args_delete(VectorItem item);
 static void il_factor_invoke_bound_generate_method(il_factor_invoke_bound* self, enviroment* env, call_context* cctx);
 static void il_factor_invoke_bound_generate_subscript(il_factor_invoke_bound* self, enviroment* env, call_context* cctx);
 static generic_type* il_factor_invoke_bound_return_gtype(il_factor_invoke_bound* self, call_context* cctx);
-static generic_type* il_factor_invoke_bound_evalImpl(il_factor_invoke_bound * self, enviroment * env, call_context* cctx);
+static generic_type* EvalILInvokeBoundImpl(il_factor_invoke_bound * self, enviroment * env, call_context* cctx);
 
 il_factor_invoke_bound* NewILInvokeBound(string_view namev) {
 	il_factor_invoke_bound* ret = (il_factor_invoke_bound*)MEM_MALLOC(sizeof(il_factor_invoke_bound));
@@ -39,12 +39,12 @@ void il_factor_invoke_bound_generate(il_factor_invoke_bound* self, enviroment* e
 	il_factor_invoke_bound_generate_subscript(self, env, cctx);
 }
 
-void il_factor_invoke_bound_load(il_factor_invoke_bound * self, enviroment * env, call_context* cctx) {
+void LoadILInvokeBound(il_factor_invoke_bound * self, enviroment * env, call_context* cctx) {
 	il_factor_invoke_bound_check(self, env, cctx);
 }
 
-generic_type* il_factor_invoke_bound_eval(il_factor_invoke_bound * self, enviroment * env, call_context* cctx) {
-	generic_type* ret = il_factor_invoke_bound_evalImpl(self, env, cctx);
+generic_type* EvalILInvokeBound(il_factor_invoke_bound * self, enviroment * env, call_context* cctx) {
+	generic_type* ret = EvalILInvokeBoundImpl(self, env, cctx);
 	assert(ret != NULL);
 	return ret;
 }
@@ -260,7 +260,7 @@ static generic_type* il_factor_invoke_bound_return_gtype(il_factor_invoke_bound*
 			self->u.subscript.opov->return_gtype, cctx);
 }
 
-static generic_type* il_factor_invoke_bound_evalImpl(il_factor_invoke_bound * self, enviroment * env, call_context* cctx) {
+static generic_type* EvalILInvokeBoundImpl(il_factor_invoke_bound * self, enviroment * env, call_context* cctx) {
 	type* tp = NULL;
 	//メソッドが見つからない
 	il_factor_invoke_bound_check(self, env, cctx);

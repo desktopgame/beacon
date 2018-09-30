@@ -16,7 +16,7 @@ il_factor_logic_op* NewILLogicOp(operator_type type);
 
 struct generic_type* EvalILLogicOp(il_factor_logic_op* self, struct enviroment* env, call_context* cctx);
 
-void il_factor_logic_op_generate(il_factor_logic_op* self, struct enviroment* env, call_context* cctx);
+void GenerateILLogicOp(il_factor_logic_op* self, struct enviroment* env, call_context* cctx);
 
 void LoadILLogicOp(il_factor_logic_op* self, struct enviroment* env, call_context* cctx);
 

@@ -17,7 +17,7 @@ typedef struct il_factor_invoke_static {
 	struct generic_type* resolved;
 } il_factor_invoke_static;
 
-il_factor_invoke_static* il_factor_invoke_static_new(string_view namev);
+il_factor_invoke_static* NewILInvokeStatic(string_view namev);
 
 void il_factor_invoke_static_generate(il_factor_invoke_static* self, struct enviroment* env, call_context* cctx);
 

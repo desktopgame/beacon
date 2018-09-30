@@ -22,13 +22,13 @@ typedef struct il_factor_new_instance {
 	int constructor_index;
 } il_factor_new_instance;
 
-il_factor* il_factor_wrap_new_instance(il_factor_new_instance* self);
+il_factor* WrapILNewInstance(il_factor_new_instance* self);
 
 il_factor_new_instance* NewILNewInstance();
 
 void il_factor_new_instance_generate(il_factor_new_instance* self, struct enviroment* env, call_context* cctx);
 
-void il_factor_new_instance_load(il_factor_new_instance* self, struct enviroment* env, call_context* cctx);
+void LoadILNewInstance(il_factor_new_instance* self, struct enviroment* env, call_context* cctx);
 
 generic_type* il_factor_new_instance_eval(il_factor_new_instance* self, struct enviroment* env, call_context* cctx);
 

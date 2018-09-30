@@ -19,7 +19,7 @@ il_constructor * NewILConstructor() {
 }
 
 void DeleteILConstructor(il_constructor * self) {
-	il_constructor_chain_delete(self->chain);
+	DeleteILConstructorChain(self->chain);
 	DeleteVector(self->parameter_list, il_constructor_parameter_delete);
 	DeleteVector(self->statement_list, il_constructor_stmt_delete);
 	MEM_FREE(self);

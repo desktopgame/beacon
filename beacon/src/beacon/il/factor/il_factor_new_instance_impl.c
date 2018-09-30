@@ -19,7 +19,7 @@ static void il_factor_new_instance_delete_typearg(VectorItem item);
 static void il_factor_new_instance_find(il_factor_new_instance * self, enviroment * env, call_context* cctx);
 static void il_Factor_new_instace_delete_arg(VectorItem item);
 
-il_factor * il_factor_wrap_new_instance(il_factor_new_instance * self) {
+il_factor * WrapILNewInstance(il_factor_new_instance * self) {
 	il_factor* ret = il_factor_new(ILFACTOR_NEW_INSTANCE_T);
 	ret->u.new_instance_ = self;
 	return ret;
@@ -58,7 +58,7 @@ void il_factor_new_instance_generate(il_factor_new_instance * self, enviroment *
 	AddOpcodeBuf(env->buf, self->constructor_index);
 }
 
-void il_factor_new_instance_load(il_factor_new_instance * self, enviroment * env, call_context* cctx) {
+void LoadILNewInstance(il_factor_new_instance * self, enviroment * env, call_context* cctx) {
 	il_factor_new_instance_find(self, env, cctx);
 	if(GetLastBCError()) {
 		return;

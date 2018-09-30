@@ -195,7 +195,7 @@ static void class_loader_load_toplevel(class_loader* self) {
 	il_stmt_inferenced_type_init* createWorldStmt = il_stmt_inferenced_type_init_new(InternString("$world"));
 	il_factor_new_instance* newWorldInstance = NewILNewInstance();
 	newWorldInstance->fqcnc->namev = InternString("World");
-	createWorldStmt->fact = il_factor_wrap_new_instance(newWorldInstance);
+	createWorldStmt->fact = WrapILNewInstance(newWorldInstance);
 	il_stmt* body = il_stmt_wrap_inferenced_type_init(createWorldStmt);
 	//これをやらないと -1 のまま
 	body->lineno = 0;

@@ -13,7 +13,7 @@
 static opcode operator_to_iopcode(operator_type type);
 static opcode operator_to_dopcode(operator_type type);
 
-il_factor_arithmetic_op* il_factor_arithmetic_op_new(operator_type type) {
+il_factor_arithmetic_op* NewILArithmeticOp(operator_type type) {
 	il_factor_arithmetic_op* ret = (il_factor_arithmetic_op*)MEM_MALLOC(sizeof(il_factor_arithmetic_op));
 	ret->type = type;
 	ret->parent = NULL;

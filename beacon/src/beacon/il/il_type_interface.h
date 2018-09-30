@@ -90,5 +90,5 @@ void DeleteILType(il_type* self);
  * @param self
  * @return
  */
-Vector* il_type_type_parameter_list(il_type* self);
+Vector* GetTypeParametersILType(il_type* self);
 #endif // !SIGNAL_IL_IL_TYPE_INTERFACE_H

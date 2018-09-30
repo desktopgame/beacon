@@ -33,9 +33,9 @@ il_factor_invoke_bound* NewILInvokeBound(string_view namev);
 
 void il_factor_invoke_bound_generate(il_factor_invoke_bound* self, struct enviroment* env, call_context* cctx);
 
-void il_factor_invoke_bound_load(il_factor_invoke_bound * self, struct enviroment * env, call_context* cctx);
+void LoadILInvokeBound(il_factor_invoke_bound * self, struct enviroment * env, call_context* cctx);
 
-struct generic_type* il_factor_invoke_bound_eval(il_factor_invoke_bound * self, struct enviroment * env, call_context* cctx);
+struct generic_type* EvalILInvokeBound(il_factor_invoke_bound * self, struct enviroment * env, call_context* cctx);
 
 char* il_factor_invoke_bound_tostr(il_factor_invoke_bound* self, struct enviroment* env);
 

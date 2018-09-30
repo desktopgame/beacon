@@ -11,7 +11,7 @@ typedef struct il_factor_arithmetic_op {
 	operator_type type;
 } il_factor_arithmetic_op;
 
-il_factor_arithmetic_op* il_factor_arithmetic_op_new(operator_type type);
+il_factor_arithmetic_op* NewILArithmeticOp(operator_type type);
 
 
 struct generic_type* il_factor_arithmetic_op_eval(il_factor_arithmetic_op * self, struct enviroment * env, call_context* cctx);

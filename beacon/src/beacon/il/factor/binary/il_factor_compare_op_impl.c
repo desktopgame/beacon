@@ -60,7 +60,7 @@ void LoadILCompareOp(il_factor_compare_op* self, enviroment* env, call_context* 
 	}
 }
 
-void il_factor_compare_op_delete(il_factor_compare_op* self) {
+void DeleteILCompareOp(il_factor_compare_op* self) {
 	MEM_FREE(self);
 }
 

@@ -23,5 +23,5 @@ il_constructor_chain* NewILConstructorChain();
  * コンストラクタの連鎖を表す要素を開放します.
  * @param self
  */
-void il_constructor_chain_delete(il_constructor_chain* self);
+void DeleteILConstructorChain(il_constructor_chain* self);
 #endif // !SIGNAL_IL_IL_CONSTRUCTOR_CHAIN_H
