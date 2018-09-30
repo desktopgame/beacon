@@ -7,7 +7,7 @@ typedef struct control_structure {
 	Vector* while_end;
 } control_structure;
 
-void control_structure_alloc(control_structure* self);
+void AllocControlStructure(control_structure* self);
 
-void control_structure_free(control_structure self);
+void FreeControlStructure(control_structure self);
 #endif

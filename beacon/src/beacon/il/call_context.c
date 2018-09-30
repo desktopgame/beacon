@@ -19,7 +19,7 @@ call_context* MallocCContext(call_context_tag tag, const char* filename, int lin
 	ret->ty = NULL;
 	ret->tag = tag;
 	ret->control = cs;
-	control_structure_alloc(&ret->control);
+	AllocControlStructure(&ret->control);
 	return ret;
 }
 
@@ -103,7 +103,7 @@ bool IsStaticCContext(call_context* self) {
 }
 
 void DeleteCallContext(call_context* self) {
-	control_structure_free(self->control);
+	FreeControlStructure(self->control);
 	DeleteVector(self->call_stack, VectorDeleterOfNull);
 	MEM_FREE(self);
 }
