@@ -33,7 +33,7 @@ generic_type* EvalILChildaOp(il_factor_childa_op * self, enviroment * env, call_
 		//演算子オーバーロードもない
 		assert(self->operator_index != -1);
 		operator_overload* operator_ov = class_get_operator_overload(TYPE2CLASS(GENERIC2TYPE(gtype)), self->operator_index);
-		return il_factor_unary_op_apply(self->parent, operator_ov->return_gtype, env, cctx);
+		return ApplyILUnaryOp(self->parent, operator_ov->return_gtype, env, cctx);
 	}
 }
 
@@ -59,7 +59,7 @@ void LoadILChildaOp(il_factor_childa_op* self, enviroment* env, call_context* cc
 	generic_type* gtype = EvalILFactor(self->parent->a, env, cctx);
 	if(GENERIC2TYPE(gtype) != TYPE_INT &&
 	   GENERIC2TYPE(gtype) != TYPE_BOOL) {
-		self->operator_index = il_factor_unary_op_index(self->parent, env, cctx);
+		self->operator_index = GetIndexILUnaryOp(self->parent, env, cctx);
 	}
 }
 

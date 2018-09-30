@@ -35,9 +35,9 @@ il_factor_binary_op* NewILBinaryOp(operator_type type);
 
 void il_factor_binary_op_generate(il_factor_binary_op* self, struct enviroment* env, call_context* cctx);
 
-void il_factor_binary_OP_LOAD(il_factor_binary_op* self, struct enviroment* env, call_context* cctx);
+void LoadILBinaryOp(il_factor_binary_op* self, struct enviroment* env, call_context* cctx);
 
-generic_type* il_factor_binary_op_eval(il_factor_binary_op* self, struct enviroment* env, call_context* cctx);
+generic_type* EvalILBinaryOp(il_factor_binary_op* self, struct enviroment* env, call_context* cctx);
 
 char* il_factor_binary_op_tostr(il_factor_binary_op* self, struct enviroment* env);
 

@@ -141,7 +141,7 @@ static void il_factor_new_instance_find(il_factor_new_instance * self, enviromen
 	call_frame* cfr = PushCallContext(cctx, FRAME_RESOLVE_T);
 	cfr->u.resolve.gtype = cls->parent->generic_self;
 	cfr->u.resolve.typeargs = self->type_args;
-	il_type_argument_resolve(self->type_args, cctx);
+	ResolveILTypeArgument(self->type_args, cctx);
 	self->c = class_ilfind_constructor(cls, self->argument_list, env, cctx, &temp);
 	self->constructor_index = temp;
 	PopCallContext(cctx);

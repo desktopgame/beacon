@@ -66,7 +66,7 @@ generic_type* EvalILCallOp(il_factor_call_op* self, enviroment* env, call_contex
 	return ret;
 }
 
-char* il_factor_call_op_to_str(il_factor_call_op* self, enviroment* env) {
+char* ILCallOpToString(il_factor_call_op* self, enviroment* env) {
 //	LoadCallOp(self, env);
 	if(self->type == ILCALL_TYPE_INVOKE_T) {
 		return ILInvokeToString(self->u.invoke_, env);
@@ -89,7 +89,7 @@ void il_factor_call_op_generate(il_factor_call_op* self, enviroment* env, call_c
 	}
 }
 
-void il_factor_call_op_delete(il_factor_call_op* self) {
+void DeleteILCallOp(il_factor_call_op* self) {
 	DeleteILFactor(self->receiver);
 	if(self->type == ILCALL_TYPE_INVOKE_T) {
 		DeleteILInvoke(self->u.invoke_);

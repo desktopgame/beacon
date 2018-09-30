@@ -44,7 +44,7 @@ void LoadILNotOp(il_factor_not_op* self, enviroment* env, call_context* cctx) {
 	 LoadILFactor(self->parent->a, env, cctx);
 	generic_type* gt = EvalILFactor(self->parent->a, env, cctx);
 	if(GENERIC2TYPE(gt) != TYPE_BOOL) {
-		self->operator_index = il_factor_unary_op_index(self->parent, env, cctx);
+		self->operator_index = GetIndexILUnaryOp(self->parent, env, cctx);
 	}
 }
 

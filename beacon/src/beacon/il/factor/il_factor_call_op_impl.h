@@ -43,10 +43,10 @@ void LoadCallOp(il_factor_call_op* self, struct enviroment* env, call_context* c
 
 struct generic_type* EvalILCallOp(il_factor_call_op* self, struct enviroment* env, call_context* cctx);
 
-char* il_factor_call_op_to_str(il_factor_call_op* self, struct enviroment* env);
+char* ILCallOpToString(il_factor_call_op* self, struct enviroment* env);
 
 void il_factor_call_op_generate(il_factor_call_op* self, struct enviroment* env, call_context* cctx);
 
-void il_factor_call_op_delete(il_factor_call_op* self);
+void DeleteILCallOp(il_factor_call_op* self);
 
 #endif

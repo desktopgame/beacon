@@ -125,7 +125,7 @@ static void il_factor_invoke_static_check(il_factor_invoke_static * self, enviro
 	const char* methodname = Ref2Str(self->namev);
 	#endif
 	int temp = -1;
-	il_type_argument_resolve(self->type_args, cctx);
+	ResolveILTypeArgument(self->type_args, cctx);
 	//環境を設定
 	//メソッドを検索
 	for(int i=0; i<self->args->length; i++) {

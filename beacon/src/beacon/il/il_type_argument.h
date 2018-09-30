@@ -30,7 +30,7 @@ void PrintILTypeArgument(Vector* iltype_args);
  * @param cctx
  * @return
  */
-void il_type_argument_resolve(Vector* iltype_args, struct call_context* cctx);
+void ResolveILTypeArgument(Vector* iltype_args, struct call_context* cctx);
 
 /**
  * 型実引数を解放します.

@@ -55,7 +55,7 @@ void il_factor_binary_op_generate(il_factor_binary_op * self, enviroment* env, c
 	}
 }
 
-void il_factor_binary_OP_LOAD(il_factor_binary_op * self, enviroment * env, call_context* cctx) {
+void LoadILBinaryOp(il_factor_binary_op * self, enviroment * env, call_context* cctx) {
 	if(self->load) {
 		return;
 	}
@@ -100,8 +100,8 @@ void il_factor_binary_OP_LOAD(il_factor_binary_op * self, enviroment * env, call
 	}
 }
 
-generic_type* il_factor_binary_op_eval(il_factor_binary_op * self, enviroment * env, call_context* cctx) {
-	il_factor_binary_OP_LOAD(self, env, cctx);
+generic_type* EvalILBinaryOp(il_factor_binary_op * self, enviroment * env, call_context* cctx) {
+	LoadILBinaryOp(self, env, cctx);
 	generic_type* ret = NULL;
 	switch(self->category) {
 		case OPERATOR_CARITHMERIC_T:

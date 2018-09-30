@@ -114,7 +114,7 @@ static void il_factor_invoke_bound_check(il_factor_invoke_bound * self, envirome
 	//対応するメソッドを検索
 	type* ctype = GetTypeCContext(cctx);
 	int temp = -1;
-	il_type_argument_resolve(self->type_args, cctx);
+	ResolveILTypeArgument(self->type_args, cctx);
 	for(int i=0; i<self->args->length; i++) {
 		il_argument* ilarg = AtVector(self->args, i);
 		LoadILFactor(ilarg->factor, env, cctx);

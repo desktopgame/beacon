@@ -154,7 +154,7 @@ static void il_factor_invoke_check(il_factor_invoke * self, enviroment * env, ca
 	if(GetLastBCError()) {
 		return;
 	}
-	il_type_argument_resolve(self->type_args, cctx);
+	ResolveILTypeArgument(self->type_args, cctx);
 	type* ctype = gtype->core_type;
 	#if defined(DEBUG)
 	const char* cname = Ref2Str(type_name(ctype));

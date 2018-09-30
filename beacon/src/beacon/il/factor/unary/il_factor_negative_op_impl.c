@@ -43,7 +43,7 @@ void il_factor_negative_OP_LOAD(il_factor_negative_op* self, enviroment* env, ca
 	generic_type* gt = EvalILFactor(self->parent->a, env, cctx);
 	if(GENERIC2TYPE(gt) != TYPE_INT &&
 	   GENERIC2TYPE(gt) != TYPE_DOUBLE) {
-		self->operator_index = il_factor_unary_op_index(self->parent, env, cctx);
+		self->operator_index = GetIndexILUnaryOp(self->parent, env, cctx);
 	}
 }
 

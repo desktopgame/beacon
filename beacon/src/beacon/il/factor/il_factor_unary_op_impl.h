@@ -40,9 +40,9 @@ void il_factor_unary_op_delete(il_factor_unary_op* self);
 
 char* ILUnaryOpToString_simple(il_factor_unary_op* self, struct enviroment* env);
 
-int il_factor_unary_op_index(il_factor_unary_op* self, struct enviroment* env, call_context* cctx);
+int GetIndexILUnaryOp(il_factor_unary_op* self, struct enviroment* env, call_context* cctx);
 
-int il_factor_unary_op_index2(il_factor* receiver, operator_type otype, struct enviroment* env, call_context* cctx);
+int GetIndexILUnaryOp2(il_factor* receiver, operator_type otype, struct enviroment* env, call_context* cctx);
 
-generic_type* il_factor_unary_op_apply(il_factor_unary_op* self, generic_type* gtype, struct enviroment* env, call_context* cctx);
+generic_type* ApplyILUnaryOp(il_factor_unary_op* self, generic_type* gtype, struct enviroment* env, call_context* cctx);
 #endif // !SIGNAL_IL_IL_FACTOR_UNARY_OP_H

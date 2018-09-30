@@ -29,7 +29,7 @@ void il_factor_explicit_unary_op_generate(il_factor_explicit_unary_op* self, env
 
 void il_factor_explicit_unary_OP_LOAD(il_factor_explicit_unary_op* self, enviroment* env, call_context* cctx) {
 	LoadILFactor(self->receiver, env, cctx);
-	self->index = il_factor_unary_op_index2(self->receiver, self->type, env, cctx);
+	self->index = GetIndexILUnaryOp2(self->receiver, self->type, env, cctx);
 	assert(self->index != -1);
 }
 

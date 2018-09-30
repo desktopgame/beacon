@@ -131,11 +131,11 @@ char* ILUnaryOpToString_simple(il_factor_unary_op* self, enviroment* env) {
 	return ReleaseBuffer(sb);
 }
 
-int il_factor_unary_op_index(il_factor_unary_op* self, enviroment* env, call_context* cctx) {
-	return il_factor_unary_op_index2(self->a, self->type, env, cctx);
+int GetIndexILUnaryOp(il_factor_unary_op* self, enviroment* env, call_context* cctx) {
+	return GetIndexILUnaryOp2(self->a, self->type, env, cctx);
 }
 
-int il_factor_unary_op_index2(il_factor* receiver, operator_type otype, enviroment* env, call_context* cctx) {
+int GetIndexILUnaryOp2(il_factor* receiver, operator_type otype, enviroment* env, call_context* cctx) {
 	Vector* args = NewVector();
 	generic_type* gtype = EvalILFactor(receiver, env, cctx);
 	if(gtype->virtual_type_index != -1) {
@@ -148,7 +148,7 @@ int il_factor_unary_op_index2(il_factor* receiver, operator_type otype, envirome
 	return temp;
 }
 
-generic_type* il_factor_unary_op_apply(il_factor_unary_op* self, generic_type* gtype, enviroment* env, call_context* cctx) {
+generic_type* ApplyILUnaryOp(il_factor_unary_op* self, generic_type* gtype, enviroment* env, call_context* cctx) {
 	generic_type* lgtype = EvalILFactor(self->a, env, cctx);
 	call_frame* cfr = PushCallContext(cctx, FRAME_INSTANCE_INVOKE_T);
 	cfr->u.instance_invoke.receiver = lgtype;

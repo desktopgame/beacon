@@ -120,7 +120,7 @@ void LoadILFactor(il_factor * self, enviroment * env, call_context* cctx) {
 			LoadILUnaryOp(self->u.unary_, env, cctx);
 			break;
 		case ILFACTOR_BINARY_OP_T:
-			il_factor_binary_OP_LOAD(self->u.binary_, env, cctx);
+			LoadILBinaryOp(self->u.binary_, env, cctx);
 			break;
 		case ILFACTOR_ASSIGN_T:
 			LoadILAssignOp(self->u.assign_, env, cctx);
@@ -162,7 +162,7 @@ void LoadILFactor(il_factor * self, enviroment * env, call_context* cctx) {
 			LoadILProperty(self->u.prop, env, cctx);
 			break;
 		case ILFACTOR_SUBSCRIPT_T:
-			il_factor_subscript_load(self->u.subscript, env, cctx);
+			LoadILSubscript(self->u.subscript, env, cctx);
 			break;
 		default:
 			break;
@@ -196,7 +196,7 @@ generic_type* EvalILFactor(il_factor * self, enviroment * env, call_context* cct
 			ret = EvalILUnaryOp(self->u.unary_, env, cctx);
 			break;
 		case ILFACTOR_BINARY_OP_T:
-			ret = il_factor_binary_op_eval(self->u.binary_, env, cctx);
+			ret = EvalILBinaryOp(self->u.binary_, env, cctx);
 			break;
 		case ILFACTOR_ASSIGN_T:
 			ret = EvalILAssignOp(self->u.assign_, env, cctx);
@@ -238,7 +238,7 @@ generic_type* EvalILFactor(il_factor * self, enviroment * env, call_context* cct
 			ret = EvalILProperty(self->u.prop, env, cctx);
 			break;
 		case ILFACTOR_SUBSCRIPT_T:
-			ret = il_factor_subscript_eval(self->u.subscript, env, cctx);
+			ret = EvalILSubscript(self->u.subscript, env, cctx);
 			break;
 		default:
 			assert(false);
@@ -282,7 +282,7 @@ char* ILFactorToString(il_factor* self, enviroment* env) {
 		case ILFACTOR_AS_T:
 			return ILAsToString(self->u.as_, env);
 		case ILFACTOR_CALL_OP_T:
-			return il_factor_call_op_to_str(self->u.call_, env);
+			return ILCallOpToString(self->u.call_, env);
 		case ILFACTOR_MEMBER_OP_T:
 			return il_factor_member_op_tostr(self->u.member_, env);
 		case ILFACTOR_INSTANCEOF_T:
@@ -384,7 +384,7 @@ void DeleteILFactor(il_factor * self) {
 			DeleteILAs(self->u.as_);
 			break;
 		case ILFACTOR_CALL_OP_T:
-			il_factor_call_op_delete(self->u.call_);
+			DeleteILCallOp(self->u.call_);
 			break;
 		case ILFACTOR_MEMBER_OP_T:
 			il_factor_member_op_delete(self->u.member_);

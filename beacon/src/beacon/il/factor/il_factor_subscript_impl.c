@@ -4,7 +4,7 @@
 #include "../../env/TYPE_IMPL.h"
 #include "../../env/operator_overload.h"
 
-il_factor* il_factor_wrap_subscript(il_factor_subscript* self) {
+il_factor* WrapILSubscript(il_factor_subscript* self) {
 	il_factor* ret = il_factor_new(ILFACTOR_SUBSCRIPT_T);
 	ret->u.subscript = self;
 	return ret;
@@ -26,7 +26,7 @@ void il_factor_subscript_generate(il_factor_subscript* self, enviroment* env, ca
 	AddOpcodeBuf(env->buf, self->operator_index);
 }
 
-void il_factor_subscript_load(il_factor_subscript* self, enviroment* env, call_context* cctx) {
+void LoadILSubscript(il_factor_subscript* self, enviroment* env, call_context* cctx) {
 	if(self->operator_index != -1) {
 		return;
 	}
@@ -42,7 +42,7 @@ void il_factor_subscript_load(il_factor_subscript* self, enviroment* env, call_c
 	DeleteVector(args, VectorDeleterOfNull);
 }
 
-generic_type* il_factor_subscript_eval(il_factor_subscript* self, enviroment* env, call_context* cctx) {
+generic_type* EvalILSubscript(il_factor_subscript* self, enviroment* env, call_context* cctx) {
 	return generic_type_apply(self->opov->return_gtype, cctx);
 }
 
