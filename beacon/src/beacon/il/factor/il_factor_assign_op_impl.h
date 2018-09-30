@@ -17,5 +17,5 @@ void il_factor_assign_op_generate(il_factor_assign_op* self, enviroment* env, ca
 
 struct generic_type* EvalILAssignOp(il_factor_assign_op* self, enviroment* env, call_context* cctx);
 
-void il_factor_assign_op_delete(il_factor_assign_op* self);
+void DeleteILAssignOp(il_factor_assign_op* self);
 #endif

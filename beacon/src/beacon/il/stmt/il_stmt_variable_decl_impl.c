@@ -8,13 +8,13 @@
 #include "../../env/class_loader.h"
 #include "../../env/import_manager.h"
 
-il_stmt * il_stmt_wrap_variable_decl(il_stmt_variable_decl * self) {
+il_stmt * WrapILVariableDecl(il_stmt_variable_decl * self) {
 	il_stmt* ret = il_stmt_new(ILSTMT_VARIABLE_DECL_T);
 	ret->u.variable_decl = self;
 	return ret;
 }
 
-il_stmt_variable_decl * il_stmt_variable_decl_new(string_view namev) {
+il_stmt_variable_decl * NewILVariableDecl(string_view namev) {
 	il_stmt_variable_decl* ret = (il_stmt_variable_decl*)MEM_MALLOC(sizeof(il_stmt_variable_decl));
 	ret->namev = namev;
 	ret->fqcn = generic_cache_new();
@@ -25,7 +25,7 @@ void il_stmt_variable_decl_generate(il_stmt_variable_decl * self, enviroment * e
 
 }
 
-void il_stmt_variable_decl_load(il_stmt_variable_decl * self, struct enviroment* env, call_context* cctx) {
+void LoadILVariableDecl(il_stmt_variable_decl * self, struct enviroment* env, call_context* cctx) {
 	if(IsContainsSymbol(env->sym_table, self->namev)) {
 		ThrowBCError(BCERROR_OVERWRAP_VARIABLE_NAME_T,
 			Ref2Str(self->namev)

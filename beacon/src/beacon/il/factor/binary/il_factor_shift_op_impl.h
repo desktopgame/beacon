@@ -19,7 +19,7 @@ void il_factor_shift_op_generate(il_factor_shift_op* self, struct enviroment* en
 
 void LoadILShiftOp(il_factor_shift_op* self, struct enviroment* env, call_context* cctx);
 
-void il_factor_shift_op_delete(il_factor_shift_op* self);
+void DeleteILShiftOp(il_factor_shift_op* self);
 
 char* ILShiftOpToString(il_factor_shift_op* self, struct enviroment* env);
 #endif

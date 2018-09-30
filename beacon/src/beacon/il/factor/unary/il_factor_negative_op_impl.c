@@ -17,7 +17,7 @@ il_factor_negative_op* il_factor_negative_op_malloc(operator_type type, const ch
 	return ret;
 }
 
-generic_type* il_factor_negative_op_eval(il_factor_negative_op * self, enviroment * env, call_context* cctx) {
+generic_type* EvalILNegativeOp(il_factor_negative_op * self, enviroment * env, call_context* cctx) {
 	return EvalILFactor(self->parent->a, env, cctx);
 }
 
@@ -39,7 +39,7 @@ void il_factor_negative_op_generate(il_factor_negative_op* self, enviroment* env
 	}
 }
 
-void il_factor_negative_OP_LOAD(il_factor_negative_op* self, enviroment* env, call_context* cctx) {
+void LoadILNegativeOp(il_factor_negative_op* self, enviroment* env, call_context* cctx) {
 	generic_type* gt = EvalILFactor(self->parent->a, env, cctx);
 	if(GENERIC2TYPE(gt) != TYPE_INT &&
 	   GENERIC2TYPE(gt) != TYPE_DOUBLE) {

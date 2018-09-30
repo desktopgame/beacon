@@ -134,7 +134,7 @@ char* ILBinaryOpToString(il_factor_binary_op* self, enviroment* env) {
 			ret = ILLogicOpToString(self->u.logic_op, env);
 			break;
 		case OPERATOR_CCOMPARE_T:
-			ret = il_factor_compare_op_tostr(self->u.compare_op, env);
+			ret = ILCompareOpToString(self->u.compare_op, env);
 			break;
 		case OPERATOR_CSHIFT_T:
 			ret = ILShiftOpToString(self->u.shift_op, env);
@@ -147,7 +147,7 @@ char* ILBinaryOpToString(il_factor_binary_op* self, enviroment* env) {
 	return ret;
 }
 
-void il_factor_binary_op_delete(il_factor_binary_op * self) {
+void DeleteILBinaryOp(il_factor_binary_op * self) {
 	switch(self->category) {
 		case OPERATOR_CARITHMERIC_T:
 			il_factor_arithmetic_op_delete(self->u.arithmetic_op);
@@ -159,7 +159,7 @@ void il_factor_binary_op_delete(il_factor_binary_op * self) {
 			il_factor_compare_op_delete(self->u.compare_op);
 			break;
 		case OPERATOR_CSHIFT_T:
-			il_factor_shift_op_delete(self->u.shift_op);
+			DeleteILShiftOp(self->u.shift_op);
 			break;
 		case OPERATOR_CEXCOR_T:
 			DeleteILExcorOp(self->u.excor_op);
@@ -198,15 +198,15 @@ bool il_factor_binary_op_char_char(il_factor_binary_op* self, enviroment* env, c
 	return type_test(self, env, cctx, TYPE_CHAR);
 }
 
-int il_factor_binary_op_index(il_factor_binary_op* self, enviroment* env, call_context* cctx) {
+int GetIndexILBinaryOp(il_factor_binary_op* self, enviroment* env, call_context* cctx) {
 	if(il_factor_binary_op_int_int(self, env, cctx) ||
 	  il_factor_binary_op_double_double(self, env, cctx)) {
 		  return -1;
 	}
-	return il_factor_binary_op_index2(self->left, self->right, self->type, env, cctx);
+	return GetIndexILBinaryOp2(self->left, self->right, self->type, env, cctx);
 }
 
-int il_factor_binary_op_index2(il_factor* receiver, il_factor* arg, operator_type otype, enviroment* env, call_context* cctx) {
+int GetIndexILBinaryOp2(il_factor* receiver, il_factor* arg, operator_type otype, enviroment* env, call_context* cctx) {
 	Vector* args = NewVector();
 	generic_type* lgtype = EvalILFactor(receiver, env, cctx);
 	generic_type* rgtype = EvalILFactor(arg, env, cctx);

@@ -21,5 +21,5 @@ void LoadILCompareOp(il_factor_compare_op* self, struct enviroment* env, call_co
 
 void il_factor_compare_op_delete(il_factor_compare_op* self);
 
-char* il_factor_compare_op_tostr(il_factor_compare_op* self, struct enviroment* env);
+char* ILCompareOpToString(il_factor_compare_op* self, struct enviroment* env);
 #endif

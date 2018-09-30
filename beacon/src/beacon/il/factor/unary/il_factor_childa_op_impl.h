@@ -20,7 +20,7 @@ void il_factor_childa_op_generate(il_factor_childa_op* self, struct enviroment* 
 
 void LoadILChildaOp(il_factor_childa_op* self, struct enviroment* env, call_context* cctx);
 
-void il_factor_childa_op_delete(il_factor_childa_op* self);
+void DeleteILChildaOp(il_factor_childa_op* self);
 
 char* ILChildaOpToString(il_factor_childa_op* self, struct enviroment* env);
 #endif

@@ -9,7 +9,7 @@
 #include <stdio.h>
 #include <assert.h>
 
-il_stmt * il_stmt_wrap_variable_init(il_stmt_variable_init * self) {
+il_stmt * WrapILVariableInit(il_stmt_variable_init * self) {
 	il_stmt* ret = (il_stmt*)MEM_MALLOC(sizeof(il_stmt_variable_init));
 	ret->type = ILSTMT_VARIABLE_INIT_T;
 	ret->u.variable_init = self;
@@ -47,7 +47,7 @@ void il_stmt_variable_init_generate(il_stmt_variable_init * self, enviroment * e
 	AddOpcodeBuf(env->buf, self->sym->index);
 }
 
-void il_stmt_variable_init_load(il_stmt_variable_init * self, enviroment * env, call_context* cctx) {
+void LoadILVariableInit(il_stmt_variable_init * self, enviroment * env, call_context* cctx) {
 	LoadILFactor(self->fact, env, cctx);
 	if(IsContainsSymbol(env->sym_table, self->namev)) {
 		ThrowBCError(BCERROR_OVERWRAP_VARIABLE_NAME_T,

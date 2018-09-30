@@ -62,7 +62,7 @@ void il_factor_excor_op_generate(il_factor_excor_op* self, enviroment* env, call
 void LoadILExcorOp(il_factor_excor_op* self, enviroment* env, call_context* cctx) {
 	if(!il_factor_binary_op_int_int(self->parent, env, cctx) &&
 	   !il_factor_binary_op_bool_bool(self->parent, env, cctx)) {
-	self->operator_index = il_factor_binary_op_index(self->parent, env, cctx);
+	self->operator_index = GetIndexILBinaryOp(self->parent, env, cctx);
 	}
 }
 

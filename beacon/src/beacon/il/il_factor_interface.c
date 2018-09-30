@@ -67,7 +67,7 @@ void GenerateILFactor(il_factor * self, enviroment* env, call_context* cctx) {
 			GenerateILAs(self->u.as_, env, cctx);
 			break;
 		case ILFACTOR_CALL_OP_T:
-			il_factor_call_op_generate(self->u.call_, env, cctx);
+			GenerateILCallOp(self->u.call_, env, cctx);
 			break;
 		case ILFACTOR_MEMBER_OP_T:
 			il_factor_member_op_generate(self->u.member_, env, cctx);
@@ -150,7 +150,7 @@ void LoadILFactor(il_factor * self, enviroment * env, call_context* cctx) {
 			LoadILMemberOp(self->u.member_, env, cctx);
 			break;
 		case ILFACTOR_INSTANCEOF_T:
-			il_factor_instanceof_load(self->u.instanceof_, env, cctx);
+			LoadILInstanceOf(self->u.instanceof_, env, cctx);
 			break;
 		case ILFACTOR_EXPLICIT_UNARY_OP_T:
 			il_factor_explicit_unary_OP_LOAD(self->u.exp_unary_op, env, cctx);
@@ -226,7 +226,7 @@ generic_type* EvalILFactor(il_factor * self, enviroment * env, call_context* cct
 			ret = EvalILMemberOp(self->u.member_, env, cctx);
 			break;
 		case ILFACTOR_INSTANCEOF_T:
-			ret = il_factor_instanceof_eval(self->u.instanceof_, env, cctx);
+			ret = EvalILInstanceOf(self->u.instanceof_, env, cctx);
 			break;
 		case ILFACTOR_EXPLICIT_UNARY_OP_T:
 			ret = il_factor_explicit_unary_op_eval(self->u.exp_unary_op, env, cctx);
@@ -284,9 +284,9 @@ char* ILFactorToString(il_factor* self, enviroment* env) {
 		case ILFACTOR_CALL_OP_T:
 			return ILCallOpToString(self->u.call_, env);
 		case ILFACTOR_MEMBER_OP_T:
-			return il_factor_member_op_tostr(self->u.member_, env);
+			return ILMemberOpToString(self->u.member_, env);
 		case ILFACTOR_INSTANCEOF_T:
-			return il_factor_instanceof_tostr(self->u.instanceof_, env);
+			return ILInstanceOfToString(self->u.instanceof_, env);
 		//あとで
 		case ILFACTOR_EXPLICIT_UNARY_OP_T:
 			return NULL;
@@ -361,10 +361,10 @@ void DeleteILFactor(il_factor * self) {
 			DeleteILUnaryOp(self->u.unary_);
 			break;
 		case ILFACTOR_BINARY_OP_T:
-			il_factor_binary_op_delete(self->u.binary_);
+			DeleteILBinaryOp(self->u.binary_);
 			break;
 		case ILFACTOR_ASSIGN_T:
-			il_factor_assign_op_delete(self->u.assign_);
+			DeleteILAssignOp(self->u.assign_);
 			break;
 		case ILFACTOR_THIS_T:
 			DeleteILThis(self->u.this_);
@@ -387,7 +387,7 @@ void DeleteILFactor(il_factor * self) {
 			DeleteILCallOp(self->u.call_);
 			break;
 		case ILFACTOR_MEMBER_OP_T:
-			il_factor_member_op_delete(self->u.member_);
+			DeleteILMemberOp(self->u.member_);
 			break;
 		case ILFACTOR_INSTANCEOF_T:
 			il_factor_instanceof_delete(self->u.instanceof_);
@@ -402,7 +402,7 @@ void DeleteILFactor(il_factor * self) {
 			DeleteILPropertyAccess(self->u.prop);
 			break;
 		case ILFACTOR_SUBSCRIPT_T:
-			il_factor_subscript_delete(self->u.subscript);
+			DeleteILSubscript(self->u.subscript);
 			break;
 		default:
 			break;

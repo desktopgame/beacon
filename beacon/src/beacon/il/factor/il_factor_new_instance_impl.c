@@ -25,7 +25,7 @@ il_factor * il_factor_wrap_new_instance(il_factor_new_instance * self) {
 	return ret;
 }
 
-il_factor_new_instance * il_factor_new_instance_new() {
+il_factor_new_instance * NewILNewInstance() {
 	il_factor_new_instance* ret = (il_factor_new_instance*)MEM_MALLOC(sizeof(il_factor_new_instance));
 	ret->fqcnc = fqcn_cache_new();
 	ret->type_args = NewVector();

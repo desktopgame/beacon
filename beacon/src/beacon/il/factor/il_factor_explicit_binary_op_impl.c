@@ -33,7 +33,7 @@ void il_factor_explicit_binary_op_generate(il_factor_explicit_binary_op* self, e
 void il_factor_explicit_binary_OP_LOAD(il_factor_explicit_binary_op* self, enviroment* env, call_context* cctx) {
 	LoadILFactor(self->receiver, env, cctx);
 	LoadILFactor(self->arg, env, cctx);
-	self->index = il_factor_binary_op_index2(self->receiver, self->arg, self->type, env, cctx);
+	self->index = GetIndexILBinaryOp2(self->receiver, self->arg, self->type, env, cctx);
 	assert(self->index != -1);
 }
 

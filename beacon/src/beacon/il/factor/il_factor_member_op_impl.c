@@ -71,7 +71,7 @@ generic_type* EvalILMemberOp(il_factor_member_op* self, enviroment* env, call_co
 	return AtVector(a->type_args_list, self->f->gtype->virtual_type_index);
 }
 
-char* il_factor_member_op_tostr(il_factor_member_op* self, enviroment* env) {
+char* ILMemberOpToString(il_factor_member_op* self, enviroment* env) {
 	string_buffer* sb = NewBuffer();
 	char* name = ILFactorToString(self->fact, env);
 	AppendsBuffer(sb, name);
@@ -81,7 +81,7 @@ char* il_factor_member_op_tostr(il_factor_member_op* self, enviroment* env) {
 	return ReleaseBuffer(sb);
 }
 
-void il_factor_member_op_delete(il_factor_member_op* self) {
+void DeleteILMemberOp(il_factor_member_op* self) {
 	DeleteILFactor(self->fact);
 	DeleteVector(self->type_args, il_factor_member_op_typearg_delete);
 	MEM_FREE(self);
@@ -168,7 +168,7 @@ static void il_factor_member_op_check_prop(il_factor_member_op* self, enviroment
 		DeleteILFactor(factp->fact);
 		factp->fact = NULL;
 	}
-	il_factor_member_op_delete(self);
+	DeleteILMemberOp(self);
 	(*swap) = true;
 }
 
@@ -190,7 +190,7 @@ static void il_factor_member_op_check_static_prop(il_factor_member_op* self, env
 		DeleteILFactor(factp->fact);
 		factp->fact = NULL;
 	}
-	il_factor_member_op_delete(self);
+	DeleteILMemberOp(self);
 	assert(temp != -1);
 	(*swap) = true;
 	assert(temp != -1);

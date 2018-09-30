@@ -100,7 +100,7 @@ static il_factor* CLIL_factorImpl(class_loader* self, ast* source) {
 		return WrapILAssign(CLIL_assign_arithmetic(self, source, OPERATOR_MOD_T));
 	//instanceof
 	} else if(source->tag == AST_INSTANCEOF_T) {
-		return il_factor_wrap_instanceof(CLIL_instanceof(self, source));
+		return WrapILInstanceOf(CLIL_instanceof(self, source));
 	//|= &=
 	} else if(source->tag == AST_OR_ASSIGN_T) {
 		return WrapILAssign(CLIL_assign_arithmetic(self, source, OPERATOR_BIT_OR_T));
@@ -229,7 +229,7 @@ static il_factor_new_instance* CLIL_new_instance(class_loader* self, ast* source
 	ast* afqcn = FirstAST(source);
 	ast* atype_args = SecondAST(source);
 	ast* aargs = AtAST(source, 2);
-	il_factor_new_instance* ret = il_factor_new_instance_new();
+	il_factor_new_instance* ret = NewILNewInstance();
 	CLIL_fqcn_cache(afqcn, ret->fqcnc);
 	CLIL_type_argument(self, atype_args, ret->type_args);
 	CLIL_argument_list(self, ret->argument_list, aargs);

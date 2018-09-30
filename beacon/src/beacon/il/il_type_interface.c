@@ -48,7 +48,7 @@ void AddPropertyILType(il_type* self, il_property* prop) {
 	if (self->tag == ilTYPE_CLASS_T) {
 		AddPropertyILClass(self->u.class_, prop);
 	} else if(self->tag == ilTYPE_INTERFACE_T) {
-		il_interface_add_property(self->u.interface_, prop);
+		AddPropertyILInterface(self->u.interface_, prop);
 	}
 }
 

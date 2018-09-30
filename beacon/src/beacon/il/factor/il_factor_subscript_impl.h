@@ -13,8 +13,8 @@ typedef struct il_factor_subscript {
 
 il_factor* WrapILSubscript(il_factor_subscript* self);
 
-#define il_factor_subscript_new() (il_factor_subscript_malloc(__FILE__, __LINE__))
-il_factor_subscript* il_factor_subscript_malloc(const char* filename, int lineno);
+#define il_factor_subscript_new() (MallocILSubscript(__FILE__, __LINE__))
+il_factor_subscript* MallocILSubscript(const char* filename, int lineno);
 
 void il_factor_subscript_generate(il_factor_subscript* self, enviroment* env, call_context* cctx);
 
@@ -24,5 +24,5 @@ generic_type* EvalILSubscript(il_factor_subscript* self, enviroment* env, call_c
 
 char* ILSubscriptToString(il_factor_subscript* self, enviroment* env);
 
-void il_factor_subscript_delete(il_factor_subscript* self);
+void DeleteILSubscript(il_factor_subscript* self);
 #endif

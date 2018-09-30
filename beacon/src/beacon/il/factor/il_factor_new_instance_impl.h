@@ -24,7 +24,7 @@ typedef struct il_factor_new_instance {
 
 il_factor* il_factor_wrap_new_instance(il_factor_new_instance* self);
 
-il_factor_new_instance* il_factor_new_instance_new();
+il_factor_new_instance* NewILNewInstance();
 
 void il_factor_new_instance_generate(il_factor_new_instance* self, struct enviroment* env, call_context* cctx);
 

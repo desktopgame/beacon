@@ -56,7 +56,7 @@ void LoadILCompareOp(il_factor_compare_op* self, enviroment* env, call_context* 
 	if(!il_factor_binary_op_int_int(self->parent, env, cctx) &&
 	   !il_factor_binary_op_double_double(self->parent, env, cctx) &&
 	   !il_factor_binary_op_char_char(self->parent, env, cctx)) {
-	self->operator_index = il_factor_binary_op_index(self->parent, env, cctx);
+	self->operator_index = GetIndexILBinaryOp(self->parent, env, cctx);
 	}
 }
 
@@ -64,7 +64,7 @@ void il_factor_compare_op_delete(il_factor_compare_op* self) {
 	MEM_FREE(self);
 }
 
-char* il_factor_compare_op_tostr(il_factor_compare_op* self, enviroment* env) {
+char* ILCompareOpToString(il_factor_compare_op* self, enviroment* env) {
 	return ILBinaryOpToString_simple(self->parent, env);
 }
 //static

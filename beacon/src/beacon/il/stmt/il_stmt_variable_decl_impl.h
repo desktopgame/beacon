@@ -17,14 +17,14 @@ typedef struct il_stmt_variable_decl {
  * @param self
  * @return
  */
-il_stmt* il_stmt_wrap_variable_decl(il_stmt_variable_decl* self);
+il_stmt* WrapILVariableDecl(il_stmt_variable_decl* self);
 
 /**
  * 型宣言を表す要素を作成します.
  * @param namev
  * @return
  */
-il_stmt_variable_decl* il_stmt_variable_decl_new(string_view namev);
+il_stmt_variable_decl* NewILVariableDecl(string_view namev);
 
 /**
  * 型宣言を表す要素を出力します.
@@ -40,7 +40,7 @@ void il_stmt_variable_decl_generate(il_stmt_variable_decl* self, struct envirome
  * @param env
  * @param cctx
  */
-void il_stmt_variable_decl_load(il_stmt_variable_decl* self, struct enviroment* env, call_context* cctx);
+void LoadILVariableDecl(il_stmt_variable_decl* self, struct enviroment* env, call_context* cctx);
 
 /**
  * 型宣言を表す要素を開放します.

@@ -94,10 +94,10 @@ void LoadILStmt(il_stmt * self, enviroment* env, call_context* cctx) {
 			LoadILProc(self->u.proc_, env, cctx);
 			break;
 		case ILSTMT_VARIABLE_DECL_T:
-			il_stmt_variable_decl_load(self->u.variable_decl, env, cctx);
+			LoadILVariableDecl(self->u.variable_decl, env, cctx);
 			break;
 		case ILSTMT_VARIABLE_INIT_T:
-			il_stmt_variable_init_load(self->u.variable_init, env, cctx);
+			LoadILVariableInit(self->u.variable_init, env, cctx);
 			break;
 		case ILSTMT_RETURN_T:
 			LoadILReturn(self->u.return_, env, cctx);

@@ -45,7 +45,7 @@ struct generic_type* EvalILCallOp(il_factor_call_op* self, struct enviroment* en
 
 char* ILCallOpToString(il_factor_call_op* self, struct enviroment* env);
 
-void il_factor_call_op_generate(il_factor_call_op* self, struct enviroment* env, call_context* cctx);
+void GenerateILCallOp(il_factor_call_op* self, struct enviroment* env, call_context* cctx);
 
 void DeleteILCallOp(il_factor_call_op* self);
 

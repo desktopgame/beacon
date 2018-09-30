@@ -10,17 +10,17 @@ typedef struct il_factor_instanceof {
 	struct generic_cache* gcache;
 } il_factor_instanceof;
 
-il_factor* il_factor_wrap_instanceof(il_factor_instanceof* self);
+il_factor* WrapILInstanceOf(il_factor_instanceof* self);
 
 il_factor_instanceof* NewILInstanceOf();
 
-void il_factor_instanceof_load(il_factor_instanceof* self, enviroment* env, call_context* cctx);
+void LoadILInstanceOf(il_factor_instanceof* self, enviroment* env, call_context* cctx);
 
 void il_factor_instanceof_generate(il_factor_instanceof* self, enviroment* env, call_context* cctx);
 
-struct generic_type* il_factor_instanceof_eval(il_factor_instanceof* self, enviroment* env, call_context* cctx);
+struct generic_type* EvalILInstanceOf(il_factor_instanceof* self, enviroment* env, call_context* cctx);
 
-char* il_factor_instanceof_tostr(il_factor_instanceof* self, enviroment* env);
+char* ILInstanceOfToString(il_factor_instanceof* self, enviroment* env);
 
 void il_factor_instanceof_delete(il_factor_instanceof* self);
 #endif

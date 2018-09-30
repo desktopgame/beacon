@@ -69,12 +69,12 @@ static il_stmt* CLIL_bodyImpl(class_loader* self, ast* asource) {
 		case AST_STMT_VARIABLE_DECL_T:
 		{
 			il_stmt_variable_decl* ilvardecl = CLIL_variable_decl(self, asource);
-			return il_stmt_wrap_variable_decl(ilvardecl);
+			return WrapILVariableDecl(ilvardecl);
 		}
 		case AST_STMT_VARIABLE_INIT_T:
 		{
 			il_stmt_variable_init* ilvarinit = CLIL_variable_init(self, asource);
-			return il_stmt_wrap_variable_init(ilvarinit);
+			return WrapILVariableInit(ilvarinit);
 		}
 		case AST_INFERENCED_TYPE_INIT_T:
 		{
@@ -180,7 +180,7 @@ static il_stmt_inferenced_type_init * CLIL_inferenced_type_init(class_loader * s
 static il_stmt_variable_decl* CLIL_variable_decl(class_loader* self, ast* asource) {
 	ast* afqcn = FirstAST(asource);
 	ast* aname = SecondAST(asource);
-	il_stmt_variable_decl* ret = il_stmt_variable_decl_new(aname->u.stringv_value);
+	il_stmt_variable_decl* ret = NewILVariableDecl(aname->u.stringv_value);
 	ret->namev = aname->u.stringv_value;
 	CLIL_generic_cache(FirstAST(afqcn), ret->fqcn);
 	return ret;

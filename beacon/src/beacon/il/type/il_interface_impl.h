@@ -35,7 +35,7 @@ il_interface* NewILInterface(string_view namev);
  * @param self
  * @param prop
  */
-void il_interface_add_property(il_interface* self, struct il_property* prop);
+void AddPropertyILInterface(il_interface* self, struct il_property* prop);
 
 /**
  * プロパティを追加します.

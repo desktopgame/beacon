@@ -8,7 +8,7 @@
 #include "../../util/mem.h"
 #include "../../util/text.h"
 
-il_factor* il_factor_wrap_instanceof(il_factor_instanceof* self) {
+il_factor* WrapILInstanceOf(il_factor_instanceof* self) {
 	il_factor* ret = il_factor_new(ILFACTOR_INSTANCEOF_T);
 	ret->u.instanceof_ = self;
 	return ret;
@@ -21,7 +21,7 @@ il_factor_instanceof* NewILInstanceOf() {
 	return ret;
 }
 
-void il_factor_instanceof_load(il_factor_instanceof* self, enviroment* env, call_context* cctx) {
+void LoadILInstanceOf(il_factor_instanceof* self, enviroment* env, call_context* cctx) {
 	LoadILFactor(self->fact, env, cctx);
 }
 
@@ -34,11 +34,11 @@ void il_factor_instanceof_generate(il_factor_instanceof* self, enviroment* env, 
 	AddOpcodeBuf(env->buf, OP_INSTANCEOF);
 }
 
-generic_type* il_factor_instanceof_eval(il_factor_instanceof* self, enviroment* env, call_context* cctx) {
+generic_type* EvalILInstanceOf(il_factor_instanceof* self, enviroment* env, call_context* cctx) {
 	return TYPE_BOOL->generic_self;
 }
 
-char* il_factor_instanceof_tostr(il_factor_instanceof* self, enviroment* env) {
+char* ILInstanceOfToString(il_factor_instanceof* self, enviroment* env) {
 	string_buffer* sb = NewBuffer();
 	char* a = ILFactorToString(self->fact, env);
 	char* b = generic_cache_tostr(self->gcache);

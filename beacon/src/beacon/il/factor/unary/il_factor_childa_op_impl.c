@@ -63,7 +63,7 @@ void LoadILChildaOp(il_factor_childa_op* self, enviroment* env, call_context* cc
 	}
 }
 
-void il_factor_childa_op_delete(il_factor_childa_op* self) {
+void DeleteILChildaOp(il_factor_childa_op* self) {
 	MEM_FREE(self);
 }
 

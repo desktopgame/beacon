@@ -78,7 +78,7 @@ char* ILCallOpToString(il_factor_call_op* self, enviroment* env) {
 	return NULL;
 }
 
-void il_factor_call_op_generate(il_factor_call_op* self, enviroment* env, call_context* cctx) {
+void GenerateILCallOp(il_factor_call_op* self, enviroment* env, call_context* cctx) {
 	LoadCallOp(self, env, cctx);
 	if(self->type == ILCALL_TYPE_INVOKE_T) {
 		return GenerateILInvoke(self->u.invoke_, env, cctx);
@@ -124,7 +124,7 @@ static void il_factor_call_op_check(il_factor_call_op* self, enviroment* env, ca
 static void il_factor_invoke_bound_check(il_factor_call_op* self, enviroment* env) {
 	il_factor* receiver = self->receiver;
 	il_factor_variable* ilvar = receiver->u.variable_;
-	il_factor_invoke_bound* bnd = il_factor_invoke_bound_new(ilvar->fqcn->namev);
+	il_factor_invoke_bound* bnd = NewILInvokeBound(ilvar->fqcn->namev);
 	assert(ilvar->fqcn->scope_vec->length == 0);
 	//入れ替え
 	bnd->args = self->argument_list;

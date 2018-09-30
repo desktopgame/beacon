@@ -58,7 +58,7 @@ void LoadILUnaryOp(il_factor_unary_op * self, enviroment * env, call_context* cc
 		il_factor_negative_op* neg = il_factor_negative_op_new(self->type);
 		neg->parent = self;
 		self->u.negative_op = neg;
-		il_factor_negative_OP_LOAD(neg, env, cctx);
+		LoadILNegativeOp(neg, env, cctx);
 	} else if(self->type == OPERATOR_CHILDA_T) {
 		self->category = OPERATOR_CCHILDA_T;
 		il_factor_childa_op* childa = NewILChildaOp(self->type);
@@ -81,7 +81,7 @@ generic_type* EvalILUnaryOp(il_factor_unary_op * self, enviroment * env, call_co
 			ret = EvalILChildaOp(self->u.childa_op, env, cctx);
 			break;
 		case OPERATOR_NEGATIVE_T:
-			ret = il_factor_negative_op_eval(self->u.negative_op, env, cctx);
+			ret = EvalILNegativeOp(self->u.negative_op, env, cctx);
 			break;
 	}
 	return ret;
@@ -113,7 +113,7 @@ void DeleteILUnaryOp(il_factor_unary_op * self) {
 			DeleteILNotOp(self->u.not_op);
 			break;
 		case OPERATOR_CHILDA_T:
-			il_factor_childa_op_delete(self->u.childa_op);
+			DeleteILChildaOp(self->u.childa_op);
 			break;
 		case OPERATOR_NEGATIVE_T:
 			il_factor_negative_op_delete(self->u.negative_op);

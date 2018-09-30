@@ -31,8 +31,8 @@ void il_factor_member_op_generate(il_factor_member_op* self, struct enviroment* 
 
 generic_type* EvalILMemberOp(il_factor_member_op* self, struct enviroment* env, call_context* cctx);
 
-char* il_factor_member_op_tostr(il_factor_member_op* self, struct enviroment* env);
+char* ILMemberOpToString(il_factor_member_op* self, struct enviroment* env);
 
-void il_factor_member_op_delete(il_factor_member_op* self);
+void DeleteILMemberOp(il_factor_member_op* self);
 
 #endif

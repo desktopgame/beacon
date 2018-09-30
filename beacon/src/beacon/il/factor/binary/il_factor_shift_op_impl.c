@@ -68,11 +68,11 @@ void il_factor_shift_op_generate(il_factor_shift_op* self, enviroment* env, call
 
 void LoadILShiftOp(il_factor_shift_op* self, enviroment* env, call_context* cctx) {
 	if(!il_factor_binary_op_int_int(self->parent, env, cctx)) {
-		self->operator_index = il_factor_binary_op_index(self->parent, env, cctx);
+		self->operator_index = GetIndexILBinaryOp(self->parent, env, cctx);
 	}
 }
 
-void il_factor_shift_op_delete(il_factor_shift_op* self) {
+void DeleteILShiftOp(il_factor_shift_op* self) {
 	MEM_FREE(self);
 }
 

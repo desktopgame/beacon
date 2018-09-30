@@ -10,7 +10,7 @@ il_factor* WrapILSubscript(il_factor_subscript* self) {
 	return ret;
 }
 
-il_factor_subscript* il_factor_subscript_malloc(const char* filename, int lineno) {
+il_factor_subscript* MallocILSubscript(const char* filename, int lineno) {
 	il_factor_subscript* ret = mem_malloc(sizeof(il_factor_subscript), filename, lineno);
 	ret->receiver = NULL;
 	ret->pos = NULL;
@@ -59,7 +59,7 @@ char* ILSubscriptToString(il_factor_subscript* self, enviroment* env) {
 	return ReleaseBuffer(buf);
 }
 
-void il_factor_subscript_delete(il_factor_subscript* self) {
+void DeleteILSubscript(il_factor_subscript* self) {
 	DeleteILFactor(self->receiver);
 	DeleteILFactor(self->pos);
 	MEM_FREE(self);

@@ -28,7 +28,7 @@ il_interface * NewILInterface(string_view namev) {
 	return ret;
 }
 
-void il_interface_add_property(il_interface* self, il_property* prop) {
+void AddPropertyILInterface(il_interface* self, il_property* prop) {
 	PushVector(self->prop_list, prop);
 }
 
