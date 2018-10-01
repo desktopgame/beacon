@@ -9,7 +9,7 @@ typedef struct import_info {
 	bool consume;
 } import_info;
 
-import_info* import_info_new();
+import_info* NewImportInfo();
 
-void import_info_delete(import_info* self);
+void DeleteImportInfo(import_info* self);
 #endif // !SIGNAL_ENV_IMPORT_INFO_H

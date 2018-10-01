@@ -25,7 +25,7 @@ import_manager * NewImportManager() {
 }
 
 import_info* ImportImportManager(import_manager * self, class_loader * target) {
-	import_info* info = import_info_new();
+	import_info* info = NewImportInfo();
 	info->context = target;
 	PushVector(self->info_vec, info);
 	return info;
@@ -142,5 +142,5 @@ void DeleteImportManager(import_manager * self) {
 //private
 static void DeleteImportManager_import_info(VectorItem item) {
 	import_info* e = (import_info*)item;
-	import_info_delete(e);
+	DeleteImportInfo(e);
 }
