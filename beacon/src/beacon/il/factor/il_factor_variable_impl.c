@@ -35,9 +35,9 @@ il_factor_variable * MallocILVariable(const char* filename, int lineno) {
 void GenerateILVariable(il_factor_variable * self, enviroment* env, call_context* cctx) {
 	il_factor_variable_check(self, env, cctx);
 	if(self->type == ILVARIABLE_TYPE_LOCAL_T) {
-		il_factor_variable_local_generate(self->u.local_, env, cctx);
+		GenerateILVariableLocal(self->u.local_, env, cctx);
 	} else if(self->type == ILVARIABLE_TYPE_STATIC_T) {
-		il_factor_variable_static_generate(self->u.static_, env, cctx);
+		GenerateILVariableStatic(self->u.static_, env, cctx);
 	}
 }
 

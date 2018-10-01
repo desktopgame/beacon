@@ -50,7 +50,7 @@ void GenerateILStmt(il_stmt * self, struct enviroment* env, call_context* cctx) 
 			GenerateILContinue(NULL, env, cctx);
 			break;
 		case ILSTMT_INFERENCED_TYPE_INIT_T:
-			il_stmt_inferenced_type_init_generate(self->u.inferenced_type_init, env, cctx);
+			GenerateILInferencedTypeInit(self->u.inferenced_type_init, env, cctx);
 			break;
 		case ILSTMT_TRY_T:
 			GenerateILTry(self->u.try_, env, cctx);
@@ -115,7 +115,7 @@ void LoadILStmt(il_stmt * self, enviroment* env, call_context* cctx) {
 			LoadILContinue(NULL, env, cctx);
 			break;
 		case ILSTMT_INFERENCED_TYPE_INIT_T:
-			il_stmt_inferenced_type_init_load(self->u.inferenced_type_init, env, cctx);
+			LoadILInferencedTypeInit(self->u.inferenced_type_init, env, cctx);
 			break;
 		case ILSTMT_TRY_T:
 			LoadILTry(self->u.try_, env, cctx);
@@ -171,7 +171,7 @@ void DeleteILStmt(il_stmt * self) {
 			DeleteILContinue(NULL);
 			break;
 		case ILSTMT_INFERENCED_TYPE_INIT_T:
-			il_stmt_inferenced_type_init_delete(self->u.inferenced_type_init);
+			DeleteILInferencedTypeInit(self->u.inferenced_type_init);
 			break;
 		case ILSTMT_TRY_T:
 			DeleteILTry(self->u.try_);

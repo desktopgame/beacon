@@ -21,7 +21,7 @@ il_factor_explicit_unary_op* NewILExplicitUnaryOp(operator_type type) {
 	return ret;
 }
 
-void il_factor_explicit_unary_op_generate(il_factor_explicit_unary_op* self, enviroment* env, call_context* cctx) {
+void GenerateILExplicitUnaryOp(il_factor_explicit_unary_op* self, enviroment* env, call_context* cctx) {
 	GenerateILFactor(self->receiver, env, cctx);
 	AddOpcodeBuf(env->buf, OP_INVOKEOPERATOR);
 	AddOpcodeBuf(env->buf, self->index);
@@ -39,7 +39,7 @@ generic_type* EvalILExplicitUnaryOp(il_factor_explicit_unary_op* self, enviromen
 	return operator_ov->return_gtype;
 }
 
-void il_factor_explicit_unary_op_delete(il_factor_explicit_unary_op* self) {
+void DeleteILExplicitUnaryOp(il_factor_explicit_unary_op* self) {
 	DeleteILFactor(self->receiver);
 	MEM_FREE(self);
 }

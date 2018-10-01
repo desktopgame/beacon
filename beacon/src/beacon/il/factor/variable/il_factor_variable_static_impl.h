@@ -12,7 +12,7 @@ typedef struct il_factor_variable_static {
 
 il_factor_variable_static* NewILVariableStatic();
 
-void il_factor_variable_static_generate(il_factor_variable_static* self, struct enviroment* env, call_context* cctx);
+void GenerateILVariableStatic(il_factor_variable_static* self, struct enviroment* env, call_context* cctx);
 
 void LoadILVariableStatic(il_factor_variable_static * self, struct enviroment * env, call_context* cctx);
 

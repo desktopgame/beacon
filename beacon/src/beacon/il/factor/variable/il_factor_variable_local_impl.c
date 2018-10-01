@@ -28,7 +28,7 @@ il_factor_variable_local* NewILVariableLocal(string_view namev) {
 	return ret;
 }
 
-void il_factor_variable_local_generate(il_factor_variable_local* self, enviroment* env, call_context* cctx) {
+void GenerateILVariableLocal(il_factor_variable_local* self, enviroment* env, call_context* cctx) {
 	LoadILVariableLocal(self, env, cctx);
 	assert(self->type != VARIABLE_LOCAL_UNDEFINED_T);
 	if(self->type == VARIABLE_LOCAL_SCOPE_T) {

@@ -34,7 +34,7 @@ void GenerateILCompareOp(il_factor_compare_op* self, enviroment* env, call_conte
 		GenerateILFactor(self->parent->left, env, cctx);
 		if(IsIntIntBinaryOp(self->parent, env, cctx)) {
 			AddOpcodeBuf(env->buf, (VectorItem)operator_to_iopcode(self->type));
-		} else if(il_factor_binary_op_double_double(self->parent, env, cctx)) {
+		} else if(IsDoubleDoubleBinaryOp(self->parent, env, cctx)) {
 			AddOpcodeBuf(env->buf, (VectorItem)operator_to_dopcode(self->type));
 		} else if(IsCharCharBinaryOp(self->parent, env, cctx)) {
 			AddOpcodeBuf(env->buf, (VectorItem)operator_to_copcode(self->type));
@@ -54,7 +54,7 @@ void GenerateILCompareOp(il_factor_compare_op* self, enviroment* env, call_conte
 
 void LoadILCompareOp(il_factor_compare_op* self, enviroment* env, call_context* cctx) {
 	if(!IsIntIntBinaryOp(self->parent, env, cctx) &&
-	   !il_factor_binary_op_double_double(self->parent, env, cctx) &&
+	   !IsDoubleDoubleBinaryOp(self->parent, env, cctx) &&
 	   !IsCharCharBinaryOp(self->parent, env, cctx)) {
 	self->operator_index = GetIndexILBinaryOp(self->parent, env, cctx);
 	}

@@ -23,7 +23,7 @@ il_factor_explicit_binary_op* NewILExplicitBinaryOp(operator_type type) {
 	return ret;
 }
 
-void il_factor_explicit_binary_op_generate(il_factor_explicit_binary_op* self, enviroment* env, call_context* cctx) {
+void GenerateILExplicitBinaryOp(il_factor_explicit_binary_op* self, enviroment* env, call_context* cctx) {
 	GenerateILFactor(self->arg, env, cctx);
 	GenerateILFactor(self->receiver, env, cctx);
 	AddOpcodeBuf(env->buf, OP_INVOKEOPERATOR);
@@ -37,13 +37,13 @@ void LoadILExplicitBinaryOp(il_factor_explicit_binary_op* self, enviroment* env,
 	assert(self->index != -1);
 }
 
-generic_type* il_factor_explicit_binary_op_eval(il_factor_explicit_binary_op* self, enviroment* env, call_context* cctx) {
+generic_type* EvalILExplicitBinaryOp(il_factor_explicit_binary_op* self, enviroment* env, call_context* cctx) {
 	generic_type* gt = EvalILFactor(self->receiver, env, cctx);
 	operator_overload* operator_ov = class_get_operator_overload(TYPE2CLASS(GENERIC2TYPE(gt)), self->index);
 	return operator_ov->return_gtype;
 }
 
-void il_factor_explicit_binary_op_delete(il_factor_explicit_binary_op* self) {
+void DeleteILExplicitBinaryOp(il_factor_explicit_binary_op* self) {
 	DeleteILFactor(self->receiver);
 	DeleteILFactor(self->arg);
 	MEM_FREE(self);

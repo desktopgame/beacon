@@ -43,7 +43,7 @@ typedef struct il_factor_variable_local {
 
 il_factor_variable_local* NewILVariableLocal(string_view namev);
 
-void il_factor_variable_local_generate(il_factor_variable_local* self, struct enviroment* env, call_context* cctx);
+void GenerateILVariableLocal(il_factor_variable_local* self, struct enviroment* env, call_context* cctx);
 
 void LoadILVariableLocal(il_factor_variable_local * self, struct enviroment * env, call_context* cctx);
 

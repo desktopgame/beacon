@@ -16,11 +16,11 @@ struct il_factor* WrapILExplicitUnaryOp(il_factor_explicit_unary_op* self);
 
 il_factor_explicit_unary_op* NewILExplicitUnaryOp(operator_type type);
 
-void il_factor_explicit_unary_op_generate(il_factor_explicit_unary_op* self, struct enviroment* env, call_context* cctx);
+void GenerateILExplicitUnaryOp(il_factor_explicit_unary_op* self, struct enviroment* env, call_context* cctx);
 
 void LoadILExplicitUnaryOp(il_factor_explicit_unary_op* self, struct enviroment* env, call_context* cctx);
 
 struct generic_type* EvalILExplicitUnaryOp(il_factor_explicit_unary_op* self, struct enviroment* env, call_context* cctx);
 
-void il_factor_explicit_unary_op_delete(il_factor_explicit_unary_op* self);
+void DeleteILExplicitUnaryOp(il_factor_explicit_unary_op* self);
 #endif

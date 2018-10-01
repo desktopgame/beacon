@@ -186,7 +186,7 @@ bool IsIntIntBinaryOp(il_factor_binary_op* self, enviroment* env, call_context* 
 	return type_test(self, env, cctx, TYPE_INT);
 }
 
-bool il_factor_binary_op_double_double(il_factor_binary_op* self, enviroment* env, call_context* cctx) {
+bool IsDoubleDoubleBinaryOp(il_factor_binary_op* self, enviroment* env, call_context* cctx) {
 	return type_test(self, env, cctx, TYPE_DOUBLE);
 }
 
@@ -200,7 +200,7 @@ bool IsCharCharBinaryOp(il_factor_binary_op* self, enviroment* env, call_context
 
 int GetIndexILBinaryOp(il_factor_binary_op* self, enviroment* env, call_context* cctx) {
 	if(IsIntIntBinaryOp(self, env, cctx) ||
-	  il_factor_binary_op_double_double(self, env, cctx)) {
+	  IsDoubleDoubleBinaryOp(self, env, cctx)) {
 		  return -1;
 	}
 	return GetIndexILBinaryOp2(self->left, self->right, self->type, env, cctx);

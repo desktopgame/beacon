@@ -36,7 +36,7 @@ il_stmt_inferenced_type_init* NewILInferencedTypeInit(string_view namev);
  * @param env
  * @param cctx
  */
-void il_stmt_inferenced_type_init_generate(il_stmt_inferenced_type_init* self, struct enviroment* env, call_context* cctx);
+void GenerateILInferencedTypeInit(il_stmt_inferenced_type_init* self, struct enviroment* env, call_context* cctx);
 
 /**
  * 推論された型の初期化を表す要素を読み込みます.
@@ -44,11 +44,11 @@ void il_stmt_inferenced_type_init_generate(il_stmt_inferenced_type_init* self, s
  * @param env
  * @param cctx
  */
-void il_stmt_inferenced_type_init_load(il_stmt_inferenced_type_init* self, struct enviroment* env, call_context* cctx);
+void LoadILInferencedTypeInit(il_stmt_inferenced_type_init* self, struct enviroment* env, call_context* cctx);
 
 /**
  * 推論された型の初期化を表す要素を開放します.
  * @param self
  */
-void il_stmt_inferenced_type_init_delete(il_stmt_inferenced_type_init* self);
+void DeleteILInferencedTypeInit(il_stmt_inferenced_type_init* self);
 #endif // !SIGNAL_IL_IL_STMT_INFERENCED_TYPE_INIT

@@ -76,10 +76,10 @@ void GenerateILFactor(il_factor * self, enviroment* env, call_context* cctx) {
 			GenerateILInstanceOf(self->u.instanceof_, env, cctx);
 			break;
 		case ILFACTOR_EXPLICIT_UNARY_OP_T:
-			il_factor_explicit_unary_op_generate(self->u.exp_unary_op, env, cctx);
+			GenerateILExplicitUnaryOp(self->u.exp_unary_op, env, cctx);
 			break;
 		case ILFACTOR_EXPLICIT_BINARY_OP_T:
-			il_factor_explicit_binary_op_generate(self->u.exp_binary_op, env, cctx);
+			GenerateILExplicitBinaryOp(self->u.exp_binary_op, env, cctx);
 			break;
 		case ILFACTOR_PROPERTY_T:
 			GenerateILPropertyAccess(self->u.prop, env, cctx);
@@ -232,7 +232,7 @@ generic_type* EvalILFactor(il_factor * self, enviroment * env, call_context* cct
 			ret = EvalILExplicitUnaryOp(self->u.exp_unary_op, env, cctx);
 			break;
 		case ILFACTOR_EXPLICIT_BINARY_OP_T:
-			ret = il_factor_explicit_binary_op_eval(self->u.exp_binary_op, env, cctx);
+			ret = EvalILExplicitBinaryOp(self->u.exp_binary_op, env, cctx);
 			break;
 		case ILFACTOR_PROPERTY_T:
 			ret = EvalILProperty(self->u.prop, env, cctx);
@@ -393,10 +393,10 @@ void DeleteILFactor(il_factor * self) {
 			DeleteILInstanceOf(self->u.instanceof_);
 			break;
 		case ILFACTOR_EXPLICIT_UNARY_OP_T:
-			il_factor_explicit_unary_op_delete(self->u.exp_unary_op);
+			DeleteILExplicitUnaryOp(self->u.exp_unary_op);
 			break;
 		case ILFACTOR_EXPLICIT_BINARY_OP_T:
-			il_factor_explicit_binary_op_delete(self->u.exp_binary_op);
+			DeleteILExplicitBinaryOp(self->u.exp_binary_op);
 			break;
 		case ILFACTOR_PROPERTY_T:
 			DeleteILPropertyAccess(self->u.prop);

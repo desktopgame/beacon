@@ -13,7 +13,7 @@ il_factor_variable_static* NewILVariableStatic() {
 	return ret;
 }
 
-void il_factor_variable_static_generate(il_factor_variable_static* self, enviroment* env, call_context* cctx) {
+void GenerateILVariableStatic(il_factor_variable_static* self, enviroment* env, call_context* cctx) {
 	//FATAL("not implemented, because must be wrapped by call operator");
 }
 

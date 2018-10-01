@@ -17,11 +17,11 @@ struct il_factor* WrapILExplicitBinaryOp(il_factor_explicit_binary_op* self);
 
 il_factor_explicit_binary_op* NewILExplicitBinaryOp(operator_type type);
 
-void il_factor_explicit_binary_op_generate(il_factor_explicit_binary_op* self, struct enviroment* env, call_context* cctx);
+void GenerateILExplicitBinaryOp(il_factor_explicit_binary_op* self, struct enviroment* env, call_context* cctx);
 
 void LoadILExplicitBinaryOp(il_factor_explicit_binary_op* self, struct enviroment* env, call_context* cctx);
 
-struct generic_type* il_factor_explicit_binary_op_eval(il_factor_explicit_binary_op* self, struct enviroment* env, call_context* cctx);
+struct generic_type* EvalILExplicitBinaryOp(il_factor_explicit_binary_op* self, struct enviroment* env, call_context* cctx);
 
-void il_factor_explicit_binary_op_delete(il_factor_explicit_binary_op* self);
+void DeleteILExplicitBinaryOp(il_factor_explicit_binary_op* self);
 #endif

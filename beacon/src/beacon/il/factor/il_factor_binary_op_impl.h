@@ -47,7 +47,7 @@ char* ILBinaryOpToString_simple(il_factor_binary_op* self, struct enviroment* en
 
 bool IsIntIntBinaryOp(il_factor_binary_op* self, struct enviroment* env, call_context* cctx);
 
-bool il_factor_binary_op_double_double(il_factor_binary_op* self, struct enviroment* env, call_context* cctx);
+bool IsDoubleDoubleBinaryOp(il_factor_binary_op* self, struct enviroment* env, call_context* cctx);
 
 bool IsBoolBoolBinaryOp(il_factor_binary_op* self, struct enviroment* env, call_context* cctx);
 
