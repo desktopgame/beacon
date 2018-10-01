@@ -30,7 +30,7 @@ char* ILVariableStaticToString(il_factor_variable_static * self, enviroment * en
 }
 
 void DeleteILVariableStatic(il_factor_variable_static* self) {
-	fqcn_cache_delete(self->fqcn);
+	DeleteFQCNCache(self->fqcn);
 	DeleteVector(self->type_args, il_factor_static_delete_typeargs);
 	MEM_FREE(self);
 }

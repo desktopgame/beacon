@@ -40,7 +40,7 @@ bool IsLoadedImportManager(import_manager * self, int index) {
 }
 
 generic_type* ResolveImportManager(namespace_* scope, generic_cache* fqcn, call_context* cctx) {
-	type* core_type = fqcn_type(fqcn->fqcn, scope);
+	type* core_type = GetTypeFQCN(fqcn->fqcn, scope);
 	#if defined(DEBUG)
 	const char* ctname = Ref2Str(type_name(core_type));
 	const char* it = Ref2Str(fqcn->fqcn->namev);
@@ -94,7 +94,7 @@ generic_type* ResolveImportManager(namespace_* scope, generic_cache* fqcn, call_
 }
 
 generic_type* ResolvefImportManager(namespace_* scope, fqcn_cache* fqcn, call_context* cctx) {
-	type* core_type = fqcn_type(fqcn, scope);
+	type* core_type = GetTypeFQCN(fqcn, scope);
 	//Int
 	//Foo::MyClass
 	if(core_type != NULL) {

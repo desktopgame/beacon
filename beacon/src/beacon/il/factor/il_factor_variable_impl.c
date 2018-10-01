@@ -26,7 +26,7 @@ il_factor * WrapILVariable(il_factor_variable * self) {
 
 il_factor_variable * MallocILVariable(const char* filename, int lineno) {
 	il_factor_variable* ret = (il_factor_variable*)mem_malloc(sizeof(il_factor_variable), filename, lineno);
-	ret->fqcn = fqcn_cache_malloc(filename, lineno);
+	ret->fqcn = MallocFQCNCache(filename, lineno);
 	ret->type_args = MallocVector(filename, lineno);
 	ret->type = ILVARIABLE_TYPE_UNDEFINED_T;
 	return ret;
@@ -77,7 +77,7 @@ void DeleteILVariable(il_factor_variable * self) {
 	} else if(self->type == ILVARIABLE_TYPE_STATIC_T) {
 		DeleteILVariableStatic(self->u.static_);
 	}
-	fqcn_cache_delete(self->fqcn);
+	DeleteFQCNCache(self->fqcn);
 	DeleteVector(self->type_args, DeleteILFactor_typeargs);
 	MEM_FREE(self);
 }

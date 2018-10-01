@@ -17,7 +17,7 @@ generic_cache * generic_cache_new() {
 }
 
 void generic_cache_print(generic_cache * self) {
-	fqcn_cache_print(self->fqcn);
+	PrintFQCNCache(self->fqcn);
 	if (self->type_args->length <= 0) {
 		return;
 	}
@@ -41,7 +41,7 @@ void generic_cache_dump(generic_cache * self, int depth) {
 char* generic_cache_tostr(generic_cache* self) {
 	string_buffer* sb = NewBuffer();
 	//Namespace::Class
-	char* name = fqcn_cache_tostr(self->fqcn);
+	char* name = FQCNCacheToString(self->fqcn);
 	AppendsBuffer(sb, name);
 	//Namespace::Class<|
 	if(self->type_args->length > 0) {
@@ -66,7 +66,7 @@ char* generic_cache_tostr(generic_cache* self) {
 }
 
 void generic_cache_delete(generic_cache * self) {
-	fqcn_cache_delete(self->fqcn);
+	DeleteFQCNCache(self->fqcn);
 	DeleteVector(self->type_args, generic_cache_tree_delete);
 	MEM_FREE(self);
 }
@@ -75,7 +75,7 @@ bool generic_cache_equals(generic_cache* a, generic_cache* b) {
 	if(a->type_args->length != b->type_args->length) {
 		return false;
 	}
-	if(!fqcn_cache_equals(a->fqcn, b->fqcn)) {
+	if(!EqualsFQCNCache(a->fqcn, b->fqcn)) {
 		return false;
 	}
 	if(a == b) {

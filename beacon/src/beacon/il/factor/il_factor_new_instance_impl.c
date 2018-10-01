@@ -96,7 +96,7 @@ generic_type* EvalILNewInstance(il_factor_new_instance * self, enviroment * env,
 char* ILNewInstanceToString(il_factor_new_instance* self, enviroment* env) {
 	string_buffer* sb = NewBuffer();
 	AppendsBuffer(sb, "new ");
-	char* type = fqcn_cache_tostr(self->fqcnc);
+	char* type = FQCNCacheToString(self->fqcnc);
 	AppendsBuffer(sb, type);
 	ILTypeArgsToString(sb, self->type_args, env);
 	ILArgsToString(sb, self->argument_list, env);
@@ -107,7 +107,7 @@ char* ILNewInstanceToString(il_factor_new_instance* self, enviroment* env) {
 void DeleteILNewInstance(il_factor_new_instance * self) {
 	DeleteVector(self->argument_list, il_Factor_new_instace_delete_arg);
 	DeleteVector(self->type_args, DeleteILNewInstance_typearg);
-	fqcn_cache_delete(self->fqcnc);
+	DeleteFQCNCache(self->fqcnc);
 	MEM_FREE(self);
 }
 

@@ -69,7 +69,7 @@ generic_type* EvalILInvokeStatic(il_factor_invoke_static * self, enviroment * en
 
 char* ILInvokeStaticToString(il_factor_invoke_static* self, enviroment* env) {
 	string_buffer* sb = NewBuffer();
-	char* name = fqcn_cache_tostr(self->fqcn);
+	char* name = FQCNCacheToString(self->fqcn);
 	AppendsBuffer(sb, name);
 	AppendBuffer(sb, '.');
 	AppendsBuffer(sb, Ref2Str(self->namev));
@@ -82,7 +82,7 @@ char* ILInvokeStaticToString(il_factor_invoke_static* self, enviroment* env) {
 void DeleteILInvokeStatic(il_factor_invoke_static* self) {
 	DeleteVector(self->args, il_factor_invoke_static_args_delete);
 	DeleteVector(self->type_args, il_factor_invoke_static_typeargs_delete);
-	fqcn_cache_delete(self->fqcn);
+	DeleteFQCNCache(self->fqcn);
 	MEM_FREE(self);
 }
 //private

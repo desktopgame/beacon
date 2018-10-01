@@ -20,26 +20,26 @@ typedef struct fqcn_cache {
  * FQCNキャッシュを作成します.
  * @return
  */
-#define fqcn_cache_new() (fqcn_cache_malloc(__FILE__, __LINE__))
+#define fqcn_cache_new() (MallocFQCNCache(__FILE__, __LINE__))
 
 /**
  * FQCNキャッシュを作成します.
  * @return
  */
-fqcn_cache* fqcn_cache_malloc(const char* filename, int lineno);
+fqcn_cache* MallocFQCNCache(const char* filename, int lineno);
 
 /**
  * FQCNキャッシュを出力します.
  * @param self
  * @param depth
  */
-void fqcn_cache_dump(fqcn_cache* self, int depth);
+void DumpFQCNCache(fqcn_cache* self, int depth);
 
 /**
  * FQCNを切り詰めて改行せずに表示します.
  * @param self
  */
-void fqcn_cache_print(fqcn_cache* self);
+void PrintFQCNCache(fqcn_cache* self);
 
 /**
  * FQCNが示す名前空間を返します.
@@ -48,7 +48,7 @@ void fqcn_cache_print(fqcn_cache* self);
  * @param current
  * @return
  */
-struct namespace_* fqcn_scope(fqcn_cache* self, struct namespace_* current);
+struct namespace_* GetScopeFQCN(fqcn_cache* self, struct namespace_* current);
 
 /**
  * X::Y の表すタイプを返します.
@@ -57,7 +57,7 @@ struct namespace_* fqcn_scope(fqcn_cache* self, struct namespace_* current);
  * @param current
  * @return
  */
-struct type* fqcn_type(fqcn_cache* self, struct namespace_* current);
+struct type* GetTypeFQCN(fqcn_cache* self, struct namespace_* current);
 
 /**
  * X::Y の表すタイプを返します.
@@ -66,7 +66,7 @@ struct type* fqcn_type(fqcn_cache* self, struct namespace_* current);
  * @param current
  * @return
  */
-struct interface_* fqcn_interface(fqcn_cache* self, struct namespace_* current);
+struct interface_* GetInterfaceFQCN(fqcn_cache* self, struct namespace_* current);
 
 /**
  * X::Y の表すタイプを返します.
@@ -75,20 +75,20 @@ struct interface_* fqcn_interface(fqcn_cache* self, struct namespace_* current);
  * @param current
  * @return
  */
-struct class_* fqcn_class(fqcn_cache* self, struct namespace_* current);
+struct class_* GetClassFQCN(fqcn_cache* self, struct namespace_* current);
 
 /**
  * 文字列に変換して返します.
  * @param self
  * @return
  */
-char* fqcn_cache_tostr(fqcn_cache* self);
+char* FQCNCacheToString(fqcn_cache* self);
 
 /**
  * FQCNキャッシュを開放します.
  * @param self
  */
-void fqcn_cache_delete(fqcn_cache* self);
+void DeleteFQCNCache(fqcn_cache* self);
 
 /**
  * 二つが同じなら true.
@@ -96,5 +96,5 @@ void fqcn_cache_delete(fqcn_cache* self);
  * @param b
  * @return
  */
-bool fqcn_cache_equals(fqcn_cache* a, fqcn_cache* b);
+bool EqualsFQCNCache(fqcn_cache* a, fqcn_cache* b);
 #endif // !SIGNAL_ENV_FQCN_CACHE_H

@@ -16,14 +16,14 @@ fqcn_cache * fqcn_cache_new() {
 }
 */
 
-fqcn_cache* fqcn_cache_malloc(const char* filename, int lineno) {
+fqcn_cache* MallocFQCNCache(const char* filename, int lineno) {
 	fqcn_cache* ret = (fqcn_cache*)mem_malloc(sizeof(fqcn_cache), filename, lineno);
 	ret->scope_vec = MallocVector(filename, lineno);
 	ret->namev = 0;
 	return ret;
 }
 
-void fqcn_cache_dump(fqcn_cache * self, int depth) {
+void DumpFQCNCache(fqcn_cache * self, int depth) {
 	Printi(depth);
 	printf("type %s", Ref2Str(self->namev));
 	Println();
@@ -41,7 +41,7 @@ void fqcn_cache_dump(fqcn_cache * self, int depth) {
 	}
 }
 
-void fqcn_cache_print(fqcn_cache * self) {
+void PrintFQCNCache(fqcn_cache * self) {
 	if(self == NULL) {
 		printf("NULL");
 		return;
@@ -57,7 +57,7 @@ void fqcn_cache_print(fqcn_cache * self) {
 	}
 }
 
-namespace_ * fqcn_scope(fqcn_cache * self, namespace_* current) {
+namespace_ * GetScopeFQCN(fqcn_cache * self, namespace_* current) {
 	if (self->scope_vec->length == 0) {
 		return current;
 	}
@@ -73,7 +73,7 @@ namespace_ * fqcn_scope(fqcn_cache * self, namespace_* current) {
 	return top;
 }
 
-type * fqcn_type(fqcn_cache * self, namespace_ * current) {
+type * GetTypeFQCN(fqcn_cache * self, namespace_ * current) {
 	type* ret = fqcn_TYPE_IMPL(self, current);
 	//Console(X::Yを含まない)のような指定なら
 	//signal::lang空間も探索する
@@ -83,15 +83,15 @@ type * fqcn_type(fqcn_cache * self, namespace_ * current) {
 	return ret;
 }
 
-interface_ * fqcn_interface(fqcn_cache * self, namespace_ * current) {
-	return type_as_interface(fqcn_type(self, current));
+interface_ * GetInterfaceFQCN(fqcn_cache * self, namespace_ * current) {
+	return type_as_interface(GetTypeFQCN(self, current));
 }
 
-class_ * fqcn_class(fqcn_cache * self, namespace_ * current) {
-	return type_as_class(fqcn_type(self, current));
+class_ * GetClassFQCN(fqcn_cache * self, namespace_ * current) {
+	return type_as_class(GetTypeFQCN(self, current));
 }
 
-char* fqcn_cache_tostr(fqcn_cache* self) {
+char* FQCNCacheToString(fqcn_cache* self) {
 	string_buffer* sb = NewBuffer();
 	for(int i=0; i<self->scope_vec->length; i++) {
 		string_view ev = (string_view)AtVector(self->scope_vec, i);
@@ -105,7 +105,7 @@ char* fqcn_cache_tostr(fqcn_cache* self) {
 	return ReleaseBuffer(sb);
 }
 
-void fqcn_cache_delete(fqcn_cache * self) {
+void DeleteFQCNCache(fqcn_cache * self) {
 	if(self == NULL) {
 		return;
 	}
@@ -113,7 +113,7 @@ void fqcn_cache_delete(fqcn_cache * self) {
 	MEM_FREE(self);
 }
 
-bool fqcn_cache_equals(fqcn_cache* a, fqcn_cache* b) {
+bool EqualsFQCNCache(fqcn_cache* a, fqcn_cache* b) {
 	if(a->namev != b->namev || a->scope_vec->length != b->scope_vec->length) {
 		return false;
 	}
@@ -156,7 +156,7 @@ static type * fqcn_TYPE_IMPL(fqcn_cache * self, namespace_* current) {
 		return FindTypeFromNamespace(current, self->namev);
 	}
 	//X::Yのような形式
-	namespace_* c = fqcn_scope(self, current);
+	namespace_* c = GetScopeFQCN(self, current);
 	if (c == NULL) {
 		return NULL;
 	}

@@ -105,7 +105,7 @@ static void il_class_ctor_delete(VectorItem item) {
 
 static void il_class_extend_delete(VectorItem item) {
 	//fqcn_cache* e = (fqcn_cache*)item;
-	//fqcn_cache_delete(e);
+	//DeleteFQCNCache(e);
 	generic_cache* e = (generic_cache*)item;
 	generic_cache_delete(e);
 }
