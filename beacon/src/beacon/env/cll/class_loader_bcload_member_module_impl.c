@@ -283,7 +283,7 @@ bool CLBC_method_decl(class_loader* self, il_type* iltype, type* tp, il_method* 
 		method->u.script_method = NULL;
 	} else {
 		if(IsNativeModifier(method->modifier)) {
-			method->u.native_method = native_method_new();
+			method->u.native_method = NewNativeMethod();
 		} else {
 			method->u.script_method = NewScriptMethod();
 		}
@@ -294,7 +294,7 @@ bool CLBC_method_decl(class_loader* self, il_type* iltype, type* tp, il_method* 
 	  (tp->tag == TYPE_CLASS_T &&
 	  !TYPE2CLASS(tp)->is_abstract)) {
 		ThrowBCError(BCERROR_ABSTRACT_METHOD_BY_T, Ref2Str(method->namev));
-		method_delete(method);
+		DeleteMethod(method);
 		DeleteCallContext(cctx);
 		return false;
 	}
@@ -305,7 +305,7 @@ bool CLBC_method_decl(class_loader* self, il_type* iltype, type* tp, il_method* 
 		(!IsAbstractModifier(method->modifier) && !IsNativeModifier(method->modifier))
 	) {
 		ThrowBCError(BCERROR_EMPTY_STMT_METHOD_T, Ref2Str(method->namev));
-		method_delete(method);
+		DeleteMethod(method);
 		DeleteCallContext(cctx);
 		return false;
 	}
@@ -315,7 +315,7 @@ bool CLBC_method_decl(class_loader* self, il_type* iltype, type* tp, il_method* 
 		(IsAbstractModifier(method->modifier) || IsNativeModifier(method->modifier))
 	) {
 		ThrowBCError(BCERROR_NOT_EMPTY_STMT_METHOD_T, Ref2Str(method->namev));
-		method_delete(method);
+		DeleteMethod(method);
 		DeleteCallContext(cctx);
 		return false;
 	}
@@ -326,7 +326,7 @@ bool CLBC_method_decl(class_loader* self, il_type* iltype, type* tp, il_method* 
 			Ref2Str(type_name(tp)),
 			Ref2Str(method->namev)
 		);
-		method_delete(method);
+		DeleteMethod(method);
 		DeleteCallContext(cctx);
 		return false;
 	}
@@ -337,7 +337,7 @@ bool CLBC_method_decl(class_loader* self, il_type* iltype, type* tp, il_method* 
 			Ref2Str(type_name(tp)),
 			Ref2Str(method->namev)
 		);
-		method_delete(method);
+		DeleteMethod(method);
 		DeleteCallContext(cctx);
 		return false;
 	}
@@ -348,7 +348,7 @@ bool CLBC_method_decl(class_loader* self, il_type* iltype, type* tp, il_method* 
 			Ref2Str(type_name(tp)),
 			Ref2Str(method->namev)
 		);
-		method_delete(method);
+		DeleteMethod(method);
 		DeleteCallContext(cctx);
 		return false;
 	}
@@ -614,14 +614,14 @@ bool CLBC_corutine(class_loader* self, method* mt, enviroment* env,  Vector* ilp
 	//戻り値が iterator なら、
 	//コルーチンとして使えるようにする
 	bool yield_err = false;
-	if(method_yield(mt, ilstmts, &yield_err)) {
+	if(IsYieldMethod(mt, ilstmts, &yield_err)) {
 		if(yield_err) {
 			abort();
 			return false;
 		}
 		//メソッド名からクラス名を作成して、
 		//beacon::$placeholderへ肩を格納する
-		type* iterT = method_create_iterator_type(mt, self, ilstmts);
+		type* iterT = CreateIteratorTypeFromMethod(mt, self, ilstmts);
 		AddOpcodeBuf(env->buf, OP_THIS);
 		for(int i=0; i<ilparams->length; i++) {
 			AddOpcodeBuf(env->buf, OP_LOAD);

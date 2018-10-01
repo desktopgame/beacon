@@ -517,7 +517,7 @@ bool class_contains_method(Vector* method_list, method* m, method** outM) {
 	cctx->ty = m->parent;
 	for(int i=0; i<method_list->length; i++) {
 		method* mE = AtVector(method_list, i);
-		if(method_override(m, mE, cctx)) {
+		if(IsOverridedMethod(m, mE, cctx)) {
 			(*outM) = mE;
 			ret = true;
 			break;

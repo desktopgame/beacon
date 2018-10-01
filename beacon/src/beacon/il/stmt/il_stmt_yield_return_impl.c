@@ -8,7 +8,7 @@
 #include "../../env/namespace.h"
 #include <stdio.h>
 
-static void check_method_yield_return(il_stmt_yield_return * self, enviroment * env, call_context* cctx);
+static void check_IsYieldMethod_return(il_stmt_yield_return * self, enviroment * env, call_context* cctx);
 
 il_stmt* WrapILYieldReturn(il_stmt_yield_return* self) {
 	il_stmt* ret = il_stmt_new(ILSTMT_YIELD_RETURN_T);
@@ -29,7 +29,7 @@ void GenerateILYieldReturn(il_stmt_yield_return* self, enviroment* env, call_con
 }
 
 void LoadILYieldReturn(il_stmt_yield_return * self, enviroment* env, call_context* cctx) {
-	check_method_yield_return(self, env, cctx);
+	check_IsYieldMethod_return(self, env, cctx);
 }
 
 void DeleteILYieldReturn(il_stmt_yield_return* self) {
@@ -37,7 +37,7 @@ void DeleteILYieldReturn(il_stmt_yield_return* self) {
 	MEM_FREE(self);
 }
 //private
-static void check_method_yield_return(il_stmt_yield_return * self, enviroment * env, call_context* cctx) {
+static void check_IsYieldMethod_return(il_stmt_yield_return * self, enviroment * env, call_context* cctx) {
 	if(cctx->tag != CALL_METHOD_T) {
 		return;
 	}

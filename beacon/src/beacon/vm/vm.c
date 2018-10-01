@@ -859,7 +859,7 @@ static void vm_run(frame * self, enviroment * env, int pos, int deferStart) {
 				}
 				method* m = class_get_impl_method(o->gtype->core_type->u.class_, tp, methodIndex);
 				call_context* cctx = sg_thread_context();
-				method_execute(m, self, env);
+				ExecuteMethod(m, self, env);
 				break;
 			}
 			case OP_INVOKESTATIC:
@@ -872,7 +872,7 @@ static void vm_run(frame * self, enviroment * env, int pos, int deferStart) {
 				const char* clsname = Ref2Str(type_name(cls));
 				const char* mname = Ref2Str(m->namev);
 				#endif
-				method_execute(m, self, env);
+				ExecuteMethod(m, self, env);
 				break;
 			}
 			case OP_INVOKEVIRTUAL:
@@ -883,7 +883,7 @@ static void vm_run(frame * self, enviroment * env, int pos, int deferStart) {
 					break;
 				}
 				method* m = class_get_method(o, index);
-				method_execute(m, self, env);
+				ExecuteMethod(m, self, env);
 				break;
 			}
 			case OP_INVOKESPECIAL:
@@ -900,7 +900,7 @@ static void vm_run(frame * self, enviroment * env, int pos, int deferStart) {
 					cl = TYPE2CLASS(self->receiver);
 				}
 				method* m = (method*)AtVector(cl->method_list, index);
-				method_execute(m, self, env);
+				ExecuteMethod(m, self, env);
 				break;
 			}
 			case OP_INVOKEOPERATOR:

@@ -50,8 +50,8 @@ typedef struct method {
  * @param lineno
  * @return
  */
-method* method_malloc(string_view namev, const char* filename, int lineno);
-#define method_new(namev) (method_malloc(namev, __FILE__, __LINE__))
+method* MallocMethod(string_view namev, const char* filename, int lineno);
+#define method_new(namev) (MallocMethod(namev, __FILE__, __LINE__))
 
 /**
  * メソッドを実行します.
@@ -59,7 +59,7 @@ method* method_malloc(string_view namev, const char* filename, int lineno);
  * @param frame
  * @param env
  */
-void method_execute(method* self, struct frame* fr, struct enviroment* env);
+void ExecuteMethod(method* self, struct frame* fr, struct enviroment* env);
 
 /**
  * メソッドa とb が完全に等価である場合に true を返します.
@@ -70,41 +70,41 @@ void method_execute(method* self, struct frame* fr, struct enviroment* env);
  * @param cctx
  * @return
  */
-bool method_override(method* superM, method* subM, struct call_context* cctx);
+bool IsOverridedMethod(method* superM, method* subM, struct call_context* cctx);
 
 /**
  * @param self
  * @param name
  * @return
  */
-int method_for_generic_index(method* self, string_view namev);
+int GetGenericIndexForMethod(method* self, string_view namev);
 
 /**
  * メソッドを開放します.
  * @param self
  */
-void method_delete(method* self);
+void DeleteMethod(method* self);
 
 /**
  * このメソッドのマングル表現を返します.
  * @param self
  * @return
  */
-string_view method_mangle(method* self);
+string_view MangleMethod(method* self);
 
 /**
  * 型の完全名とマングル表現を連結して返します.
  * @param self
  * @return
  */
-string_view method_unique(method* self);
+string_view GetMethodUniqueName(method* self);
 
 /**
  * メソッドがコルーチンとして機能できるなら true.
  * @param self
  * @return
  */
-bool method_coroutine(method* self);
+bool IsCoroutineMethod(method* self);
 
 /**
  * メソッドがイールドパターンで実装されているなら true.
@@ -112,7 +112,7 @@ bool method_coroutine(method* self);
  * @param error
  * @return
  */
-bool method_yield(method* self, Vector* stmt_list, bool* error);
+bool IsYieldMethod(method* self, Vector* stmt_list, bool* error);
 
 /**
  * このメソッドのためのユニークなイテレータ型を作成します.
@@ -122,6 +122,6 @@ bool method_yield(method* self, Vector* stmt_list, bool* error);
  * @param stmt_list
  * @return
  */
-struct type* method_create_iterator_type(method* self, struct class_loader* cll, Vector* stmt_list);
+struct type* CreateIteratorTypeFromMethod(method* self, struct class_loader* cll, Vector* stmt_list);
 
 #endif // !SIGNAL_ENV_METHOD_H

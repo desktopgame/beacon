@@ -76,7 +76,7 @@ generic_type* ResolveImportManager(namespace_* scope, generic_cache* fqcn, call_
 	method* mt = GetMethodCContext(cctx);
 	if(parameterized->virtual_type_index == -1 && mt != NULL) {
 		parameterized->tag = GENERIC_TYPE_TAG_METHOD_T;
-		parameterized->virtual_type_index = method_for_generic_index(mt, fqcn->fqcn->namev);
+		parameterized->virtual_type_index = GetGenericIndexForMethod(mt, fqcn->fqcn->namev);
 		parameterized->u.method_ = mt;
 	}
 	type* ty = GetTypeCContext(cctx);
@@ -115,7 +115,7 @@ generic_type* ResolvefImportManager(namespace_* scope, fqcn_cache* fqcn, call_co
 		#if defined(DEBUG)
 		const char* methodname = Ref2Str(mt->namev);
 		#endif
-		int index = method_for_generic_index(mt, fqcn->namev);
+		int index = GetGenericIndexForMethod(mt, fqcn->namev);
 		parameterized->tag = GENERIC_TYPE_TAG_METHOD_T;
 		parameterized->virtual_type_index = index;
 		parameterized->u.method_ = mt;

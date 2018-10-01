@@ -16,7 +16,7 @@ typedef struct native_method {
  * ネイティブメソッドを作成します.
  * @return
  */
-native_method* native_method_new();
+native_method* NewNativeMethod();
 
 /**
  * ネイティブメソッドを実行します.
@@ -24,18 +24,12 @@ native_method* native_method_new();
  * @param fr
  * @param env
  */
-void native_method_execute(native_method* self, struct method* parent, struct frame* fr, struct enviroment* env);
+void ExecuteNativeMethod(native_method* self, struct method* parent, struct frame* fr, struct enviroment* env);
 
 /**
  * ネイティブメソッドを開放します.
  * @param self
  */
-void native_method_delete(native_method* self);
+void DeleteNativeMethod(native_method* self);
 
-/**
- * ネイティブメソッドの空実装.
- * @param parent
- * @param fr
- */
-void native_method_empty(struct method* parent, struct frame* fr);
 #endif // !SIGNAL_ENV_NATIVE_METHOD_H

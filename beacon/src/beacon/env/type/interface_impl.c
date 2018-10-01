@@ -174,7 +174,7 @@ Vector* interface_get_generic_interface_treeImpl(interface_* self) {
 }
 static void interface_delete_method(VectorItem item) {
 	method* e = (method*)item;
-	method_delete(e);
+	DeleteMethod(e);
 }
 
 static void interface_type_parameter_delete(VectorItem item) {

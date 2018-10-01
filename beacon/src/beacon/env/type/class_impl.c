@@ -37,7 +37,7 @@ static void class_create_vtable_override(class_* self);
 static void class_create_vtable_interface(class_* self);
 static void class_impl_delete(VectorItem item);
 static void class_DeleteField(VectorItem item);
-static void class_method_delete(VectorItem item);
+static void class_DeleteMethod(VectorItem item);
 static void class_ctor_delete(VectorItem item);
 static void class_DeleteNativeMethodRef(NumericMapKey key, NumericMapItem item);
 static method* class_find_impl_method(class_* self, method* virtualMethod);
@@ -391,8 +391,8 @@ void class_unlink(class_ * self) {
 	DeleteVector(self->impl_list, class_impl_delete);
 	DeleteVector(self->field_list, class_DeleteField);
 	DeleteVector(self->sfield_list, class_DeleteField);
-	DeleteVector(self->method_list, class_method_delete);
-	DeleteVector(self->smethod_list, class_method_delete);
+	DeleteVector(self->method_list, class_DeleteMethod);
+	DeleteVector(self->smethod_list, class_DeleteMethod);
 	DeleteVector(self->constructor_list, class_ctor_delete);
 	DeleteVector(self->operator_overload_list, class_delete_operator_overload);
 	DeleteVector(self->prop_list, class_delete_property);
@@ -493,9 +493,9 @@ static void class_DeleteField(VectorItem item) {
 	DeleteField(e);
 }
 
-static void class_method_delete(VectorItem item) {
+static void class_DeleteMethod(VectorItem item) {
 	method* e = (method*)item;
-	method_delete(e);
+	DeleteMethod(e);
 }
 
 static void class_ctor_delete(VectorItem item) {
@@ -516,7 +516,7 @@ static method* class_find_impl_method(class_* self, method* virtualMethod) {
 	vtable* clVT = self->vt;
 	for (int i = 0; i < clVT->elements->length; i++) {
 		method* clM = AtVector(clVT->elements, i);
-		if (method_override(virtualMethod, clM, cctx)) {
+		if (IsOverridedMethod(virtualMethod, clM, cctx)) {
 			ret = clM;
 			break;
 		}

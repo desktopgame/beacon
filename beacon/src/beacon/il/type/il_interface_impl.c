@@ -7,7 +7,7 @@
 
 //proto
 static void il_interface_fqcn_delete(VectorItem item);
-static void il_interface_method_delete(VectorItem item);
+static void il_interface_DeleteMethod(VectorItem item);
 static void il_interface_type_parameter_delete(VectorItem item);
 static void il_interface_property_delete(VectorItem item);
 
@@ -38,7 +38,7 @@ void AddMethodILInterface(il_interface * self, il_method * method) {
 
 void DeleteILInterface(il_interface * self) {
 	DeleteVector(self->extends_list, il_interface_fqcn_delete);
-	DeleteVector(self->method_list, il_interface_method_delete);
+	DeleteVector(self->method_list, il_interface_DeleteMethod);
 	DeleteVector(self->type_parameter_list, il_interface_type_parameter_delete);
 	DeleteVector(self->prop_list, il_interface_property_delete);
 	MEM_FREE(self);
@@ -49,7 +49,7 @@ static void il_interface_fqcn_delete(VectorItem item) {
 	generic_cache_delete(e);
 }
 
-static void il_interface_method_delete(VectorItem item) {
+static void il_interface_DeleteMethod(VectorItem item) {
 	il_method* e = (il_method*)item;
 	DeleteILMethod(e);
 }

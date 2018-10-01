@@ -226,7 +226,7 @@ static void class_loader_load_toplevel_function(class_loader* self) {
 	//前回の実行で作成されたメソッドを解放
 	Vector* methods = TYPE2CLASS(worldT)->method_list;
 	if(methods->length > 0) {
-		DeleteVector(methods, method_delete);
+		DeleteVector(methods, DeleteMethod);
 		TYPE2CLASS(worldT)->method_list = NewVector();
 	}
 	//メソッドの宣言のみロード

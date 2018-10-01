@@ -34,7 +34,7 @@ static method* create_next(method* self, type* ty,class_loader* cll, generic_typ
 static Vector* method_vm_args(method* self, frame* fr, frame* a);
 static Vector* method_vm_typeargs(method* self, frame* fr, frame* a);
 
-method* method_malloc(string_view namev, const char* filename, int lineno) {
+method* MallocMethod(string_view namev, const char* filename, int lineno) {
 	method* ret = (method*)mem_malloc(sizeof(method), filename, lineno);
 	ret->namev = namev;
 	ret->parameters = MallocVector(filename, lineno);
@@ -47,7 +47,7 @@ method* method_malloc(string_view namev, const char* filename, int lineno) {
 	return ret;
 }
 
-void method_execute(method* self, frame * fr, enviroment* env) {
+void ExecuteMethod(method* self, frame * fr, enviroment* env) {
 	#if defined(DEBUG)
 	const char* namestr = Ref2Str(self->namev);
 	if(self->namev == InternString("writeLine")) {
@@ -74,7 +74,7 @@ void method_execute(method* self, frame * fr, enviroment* env) {
 			aArgs = cfr->u.static_invoke.args = method_vm_args(self, fr, a);
 			aTArgs = cfr->u.static_invoke.typeargs = method_vm_typeargs(self, fr, a);
 		}
-		native_method_execute(self->u.native_method, self, a, env);
+		ExecuteNativeMethod(self->u.native_method, self, a, env);
 		//戻り値を残す
 		//例外によって終了した場合には戻り値がない
 		if(self->return_gtype != TYPE_VOID->generic_self &&
@@ -88,7 +88,7 @@ void method_execute(method* self, frame * fr, enviroment* env) {
 	}
 }
 
-bool method_override(method* superM, method* subM, call_context* cctx) {
+bool IsOverridedMethod(method* superM, method* subM, call_context* cctx) {
 	//名前が違うか引数の数が違う
 	if (superM->namev != subM->namev ||
 		superM->parameters->length != subM->parameters->length) {
@@ -126,7 +126,7 @@ bool method_override(method* superM, method* subM, call_context* cctx) {
 	return ret != -1;
 }
 
-int method_for_generic_index(method * self, string_view namev) {
+int GetGenericIndexForMethod(method * self, string_view namev) {
 	int ret = -1;
 	for (int i = 0; i < self->type_parameters->length; i++) {
 		type_parameter* e = (type_parameter*)AtVector(self->type_parameters, i);
@@ -138,18 +138,18 @@ int method_for_generic_index(method * self, string_view namev) {
 	return ret;
 }
 
-void method_delete(method * self) {
+void DeleteMethod(method * self) {
 	DeleteVector(self->type_parameters, method_type_parameter_delete);
 	DeleteVector(self->parameters, method_parameter_delete);
 	if (self->type == METHOD_TYPE_SCRIPT_T) {
 		DeleteScriptMethod(self->u.script_method);
 	} else if (self->type == METHOD_TYPE_NATIVE_T) {
-		native_method_delete(self->u.native_method);
+		DeleteNativeMethod(self->u.native_method);
 	}
 	MEM_FREE(self);
 }
 
-string_view method_mangle(method* self) {
+string_view MangleMethod(method* self) {
 	string_buffer* ret = NewBuffer();
 	AppendsBuffer(ret, Ref2Str(self->namev));
 	//引数が一つもないので終了
@@ -188,24 +188,24 @@ string_view method_mangle(method* self) {
 	return sv;
 }
 
-string_view method_unique(method* self) {
+string_view GetMethodUniqueName(method* self) {
 	string_buffer* ret = NewBuffer();
 	AppendsBuffer(ret, Ref2Str(type_full_name(self->parent)));
-	AppendsBuffer(ret, Ref2Str(method_mangle(self)));
+	AppendsBuffer(ret, Ref2Str(MangleMethod(self)));
 	char* raw = ReleaseBuffer(ret);
 	string_view sv = InternString(raw);
 	MEM_FREE(raw);
 	return sv;
 }
 
-bool method_coroutine(method* self) {
+bool IsCoroutineMethod(method* self) {
 	type* iteratorT = namespace_get_type(namespace_lang(), InternString("Iterator"));
 	return (iteratorT && self->return_gtype->core_type == iteratorT);
 }
 
-bool method_yield(method* self, Vector* stmt_list, bool* error) {
+bool IsYieldMethod(method* self, Vector* stmt_list, bool* error) {
 	(*error) = false;
-	if(self->type != METHOD_TYPE_SCRIPT_T || !method_coroutine(self)) {
+	if(self->type != METHOD_TYPE_SCRIPT_T || !IsCoroutineMethod(self)) {
 		return false;
 	}
 	int yield_ret = 0;
@@ -226,11 +226,11 @@ bool method_yield(method* self, Vector* stmt_list, bool* error) {
 	return yield_ret > 0 ? true : false;
 }
 
-type* method_create_iterator_type(method* self,  class_loader* cll, Vector* stmt_list) {
+type* CreateIteratorTypeFromMethod(method* self,  class_loader* cll, Vector* stmt_list) {
 	call_context* lCctx = NewCallContext(CALL_CTOR_T);
 	call_frame* lCfr = PushCallContext(lCctx, FRAME_RESOLVE_T);
 	lCfr->u.resolve.gtype = self->return_gtype;
-	string_view iterName = method_unique(self);
+	string_view iterName = GetMethodUniqueName(self);
 	type* iterT = namespace_get_type(namespace_lang(), InternString("Iterator"));
 	//イテレータの実装クラスを登録
 	generic_type* iterImplGT = generic_type_apply(self->return_gtype, lCctx);

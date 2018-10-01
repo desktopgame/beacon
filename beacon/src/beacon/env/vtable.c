@@ -33,8 +33,8 @@ void vtable_replace(vtable * self, method * m, call_context* cctx) {
 	#endif
 	for (int i = 0; i < self->elements->length; i++) {
 		method* e = (method*)AtVector(self->elements, i);
-		//if (method_override(m, e, cctx)) {
-		if (method_override(e, m, cctx)) {
+		//if (IsOverridedMethod(m, e, cctx)) {
+		if (IsOverridedMethod(e, m, cctx)) {
 			AssignVector(self->elements, i, m);
 			return;
 		}
