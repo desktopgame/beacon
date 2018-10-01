@@ -3,7 +3,7 @@
 #include "cll/class_loader_bcload_impl.h"
 #include "class_loader.h"
 
-type_cache * type_cache_new() {
+type_cache * NewTypeCache() {
 	type_cache* ret = (type_cache*)MEM_MALLOC(sizeof(type_cache));
 	ret->context = NULL;
 	ret->iltype = NULL;
@@ -13,7 +13,7 @@ type_cache * type_cache_new() {
 	return ret;
 }
 
-type_cache * type_cache_init(type_cache * self, class_loader * context, il_type * iltype, type * tp, namespace_ * scope, cache_kind kind) {
+type_cache * InitTypeCache(type_cache * self, class_loader * context, il_type * iltype, type * tp, namespace_ * scope, cache_kind kind) {
 	self->context = context;
 	self->iltype = iltype;
 	self->tp = tp;
@@ -22,6 +22,6 @@ type_cache * type_cache_init(type_cache * self, class_loader * context, il_type 
 	return self;
 }
 
-void type_cache_delete(type_cache * self) {
+void DeleteTypeCache(type_cache * self) {
 	MEM_FREE(self);
 }

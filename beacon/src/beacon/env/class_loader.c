@@ -155,7 +155,7 @@ static void class_loader_link_recursive(class_loader* self, link_type type) {
 
 static void class_loader_cache_delete(VectorItem item) {
 	type_cache* e = (type_cache*)item;
-	type_cache_delete(e);
+	DeleteTypeCache(e);
 }
 
 static class_loader* class_loader_load_specialImpl(class_loader* self, class_loader* cll, char* full_path) {

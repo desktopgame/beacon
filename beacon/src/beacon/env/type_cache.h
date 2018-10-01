@@ -41,9 +41,9 @@ typedef struct type_cache {
 	bool consume;
 } type_cache;
 
-type_cache* type_cache_new();
+type_cache* NewTypeCache();
 
-type_cache * type_cache_init(
+type_cache * InitTypeCache(
 	type_cache* self,
 	struct class_loader* context,
 	il_type* iltype,
@@ -52,5 +52,5 @@ type_cache * type_cache_init(
 	cache_kind kind
 	);
 
-void type_cache_delete(type_cache* self);
+void DeleteTypeCache(type_cache* self);
 #endif // !SIGNAL_ENV_TYPE_CACHE_H

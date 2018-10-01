@@ -181,8 +181,8 @@ static void CLBC_enum(class_loader * self, il_type * iltype, namespace_ * parent
 		class_add_field(cls, f);
 	}
 	//宣言のロードを予約
-	type_cache* tc = type_cache_init(
-		type_cache_new(),
+	type_cache* tc = InitTypeCache(
+		NewTypeCache(),
 		self,
 		iltype,
 		tp,
@@ -191,8 +191,8 @@ static void CLBC_enum(class_loader * self, il_type * iltype, namespace_ * parent
 	);
 	PushVector(self->type_cache_vec, tc);
 	//実装のロードを予約
-	type_cache* mtc = type_cache_init(
-		type_cache_new(),
+	type_cache* mtc = InitTypeCache(
+		NewTypeCache(),
 		self,
 		iltype,
 		tp,
@@ -219,8 +219,8 @@ static void CLBC_class(class_loader* self, il_type* iltype, namespace_* parent) 
 	//デフォルトで親に Object を持つように
 	CLBC_check_superclass(cls);
 	//宣言のロードを予約
-	type_cache* tc = type_cache_init(
-		type_cache_new(),
+	type_cache* tc = InitTypeCache(
+		NewTypeCache(),
 		self,
 		iltype,
 		tp,
@@ -229,8 +229,8 @@ static void CLBC_class(class_loader* self, il_type* iltype, namespace_* parent) 
 	);
 	PushVector(self->type_cache_vec, tc);
 	//実装のロードを予約
-	type_cache* mtc = type_cache_init(
-		type_cache_new(),
+	type_cache* mtc = InitTypeCache(
+		NewTypeCache(),
 		self,
 		iltype,
 		tp,
@@ -253,8 +253,8 @@ static void CLBC_interface(class_loader * self, il_type * iltype, namespace_ * p
 	}
 	type_init_generic(tp, iltype->u.interface_->type_parameter_list->length);
 	//宣言のロードを予約
-	type_cache* tc = type_cache_init(
-		type_cache_new(),
+	type_cache* tc = InitTypeCache(
+		NewTypeCache(),
 		self,
 		iltype,
 		tp,
@@ -263,8 +263,8 @@ static void CLBC_interface(class_loader * self, il_type * iltype, namespace_ * p
 	);
 	PushVector(self->type_cache_vec, tc);
 	//実装のロードを予約
-	type_cache* mtc = type_cache_init(
-		type_cache_new(),
+	type_cache* mtc = InitTypeCache(
+		NewTypeCache(),
 		self,
 		iltype,
 		tp,
