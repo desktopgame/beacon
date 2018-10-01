@@ -40,13 +40,13 @@ void GenerateILFactor(il_factor * self, enviroment* env, call_context* cctx) {
 			GenerateILVariable(self->u.variable_, env, cctx);
 			break;
 		case ILFACTOR_UNARY_OP_T:
-			il_factor_unary_op_generate(self->u.unary_, env, cctx);
+			GenerateILUnaryOp(self->u.unary_, env, cctx);
 			break;
 		case ILFACTOR_BINARY_OP_T:
-			il_factor_binary_op_generate(self->u.binary_, env, cctx);
+			GenerateILBinaryOp(self->u.binary_, env, cctx);
 			break;
 		case ILFACTOR_ASSIGN_T:
-			il_factor_assign_op_generate(self->u.assign_, env, cctx);
+			GenerateILAssignOp(self->u.assign_, env, cctx);
 			break;
 		case ILFACTOR_THIS_T:
 			GenerateILThis(self->u.this_, env, cctx);
@@ -70,7 +70,7 @@ void GenerateILFactor(il_factor * self, enviroment* env, call_context* cctx) {
 			GenerateILCallOp(self->u.call_, env, cctx);
 			break;
 		case ILFACTOR_MEMBER_OP_T:
-			il_factor_member_op_generate(self->u.member_, env, cctx);
+			GenerateILMemberOp(self->u.member_, env, cctx);
 			break;
 		case ILFACTOR_INSTANCEOF_T:
 			il_factor_instanceof_generate(self->u.instanceof_, env, cctx);
@@ -82,10 +82,10 @@ void GenerateILFactor(il_factor * self, enviroment* env, call_context* cctx) {
 			il_factor_explicit_binary_op_generate(self->u.exp_binary_op, env, cctx);
 			break;
 		case ILFACTOR_PROPERTY_T:
-			il_factor_property_generate(self->u.prop, env, cctx);
+			GenerateILPropertyAccess(self->u.prop, env, cctx);
 			break;
 		case ILFACTOR_SUBSCRIPT_T:
-			il_factor_subscript_generate(self->u.subscript, env, cctx);
+			GenerateILSubscript(self->u.subscript, env, cctx);
 			break;
 		default:
 			break;
@@ -208,7 +208,7 @@ generic_type* EvalILFactor(il_factor * self, enviroment * env, call_context* cct
 			ret = EvalILSuper(self->u.super_, env, cctx);
 			break;
 		case ILFACTOR_NEW_INSTANCE_T:
-			ret = il_factor_new_instance_eval(self->u.new_instance_, env, cctx);
+			ret = EvalILNewInstance(self->u.new_instance_, env, cctx);
 			break;
 		case ILFACTOR_BOOL_T:
 			ret = EvalILBool(self->u.bool_,env, cctx);
@@ -274,7 +274,7 @@ char* ILFactorToString(il_factor* self, enviroment* env) {
 		case ILFACTOR_SUPER_T:
 			return ILSuperToString(self->u.super_, env);
 		case ILFACTOR_NEW_INSTANCE_T:
-			return il_factor_new_instance_tostr(self->u.new_instance_, env);
+			return ILNewInstanceToString(self->u.new_instance_, env);
 		case ILFACTOR_BOOL_T:
 			return ILBoolToString(self->u.bool_, env);
 		case ILFACTOR_NULL_T:

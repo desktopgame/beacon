@@ -17,7 +17,7 @@ il_factor_property* MallocILPropertyAccess(const char* filename, int lineno) {
 	return ret;
 }
 
-void il_factor_property_generate(il_factor_property* self, enviroment* env, call_context* cctx) {
+void GenerateILPropertyAccess(il_factor_property* self, enviroment* env, call_context* cctx) {
 	GenerateILFactor(self->fact, env, cctx);
 	GenerateGetProperty(env->buf, self->p, self->index);
 }

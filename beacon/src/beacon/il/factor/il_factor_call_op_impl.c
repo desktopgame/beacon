@@ -44,7 +44,7 @@ void LoadCallOp(il_factor_call_op* self, enviroment* env, call_context* cctx) {
 	if(self->type == ILCALL_TYPE_INVOKE_T) {
 		LoadILInvoke(self->u.invoke_, env, cctx);
 	} else if(self->type == ILCALL_TYPE_INVOKE_STATIC_T) {
-		il_factor_invoke_static_load(self->u.invoke_static_, env, cctx);
+		LoadILInvokeStatic(self->u.invoke_static_, env, cctx);
 	} else if(self->type == ILCALL_TYPE_INVOKE_BOUND_T) {
 		LoadILInvokeBound(self->u.invoke_bound_, env, cctx);
 	}
@@ -56,7 +56,7 @@ generic_type* EvalILCallOp(il_factor_call_op* self, enviroment* env, call_contex
 	if(self->type == ILCALL_TYPE_INVOKE_T) {
 		ret = EvalILInvoke(self->u.invoke_, env, cctx);
 	} else if(self->type == ILCALL_TYPE_INVOKE_STATIC_T) {
-		ret =  il_factor_invoke_static_eval(self->u.invoke_static_, env, cctx);
+		ret =  EvalILInvokeStatic(self->u.invoke_static_, env, cctx);
 	} else if(self->type == ILCALL_TYPE_INVOKE_BOUND_T) {
 		ret = EvalILInvokeBound(self->u.invoke_bound_, env, cctx);
 	}
@@ -71,7 +71,7 @@ char* ILCallOpToString(il_factor_call_op* self, enviroment* env) {
 	if(self->type == ILCALL_TYPE_INVOKE_T) {
 		return ILInvokeToString(self->u.invoke_, env);
 	} else if(self->type == ILCALL_TYPE_INVOKE_BOUND_T) {
-		return il_factor_invoke_bound_tostr(self->u.invoke_bound_, env);
+		return ILInvokeBoundToString(self->u.invoke_bound_, env);
 	} else if(self->type == ILCALL_TYPE_INVOKE_STATIC_T) {
 		return il_factor_invoke_static_tostr(self->u.invoke_static_, env);
 	}

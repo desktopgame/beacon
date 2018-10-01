@@ -37,7 +37,7 @@ generic_type* EvalILChildaOp(il_factor_childa_op * self, enviroment * env, call_
 	}
 }
 
-void il_factor_childa_op_generate(il_factor_childa_op* self, enviroment* env, call_context* cctx) {
+void GenerateILChildaOp(il_factor_childa_op* self, enviroment* env, call_context* cctx) {
 	if(self->operator_index == -1) {
 		GenerateILFactor(self->parent->a, env, cctx);
 		generic_type* gtype = EvalILFactor(self->parent->a, env, cctx);

@@ -108,7 +108,7 @@ static void il_factor_variable_check_instance(il_factor_variable* self, envirome
 		il_factor_variable_check_static(self, env, cctx);
 	//ただのローカル変数の場合
 	} else {
-		il_factor_variable_local* lc = il_factor_variable_local_new(self->fqcn->namev);
+		il_factor_variable_local* lc = NewILVariableLocal(self->fqcn->namev);
 		self->type = ILVARIABLE_TYPE_LOCAL_T;
 		//値を入れ替え
 		lc->type_args = self->type_args;

@@ -32,7 +32,7 @@ void il_factor_compare_op_generate(il_factor_compare_op* self, enviroment* env, 
 	if(self->operator_index == -1) {
 		GenerateILFactor(self->parent->right, env, cctx);
 		GenerateILFactor(self->parent->left, env, cctx);
-		if(il_factor_binary_op_int_int(self->parent, env, cctx)) {
+		if(IsIntIntBinaryOp(self->parent, env, cctx)) {
 			AddOpcodeBuf(env->buf, (VectorItem)operator_to_iopcode(self->type));
 		} else if(il_factor_binary_op_double_double(self->parent, env, cctx)) {
 			AddOpcodeBuf(env->buf, (VectorItem)operator_to_dopcode(self->type));
@@ -53,7 +53,7 @@ void il_factor_compare_op_generate(il_factor_compare_op* self, enviroment* env, 
 }
 
 void LoadILCompareOp(il_factor_compare_op* self, enviroment* env, call_context* cctx) {
-	if(!il_factor_binary_op_int_int(self->parent, env, cctx) &&
+	if(!IsIntIntBinaryOp(self->parent, env, cctx) &&
 	   !il_factor_binary_op_double_double(self->parent, env, cctx) &&
 	   !il_factor_binary_op_char_char(self->parent, env, cctx)) {
 	self->operator_index = GetIndexILBinaryOp(self->parent, env, cctx);

@@ -37,7 +37,7 @@ void LoadILInvokeBound(il_factor_invoke_bound * self, struct enviroment * env, c
 
 struct generic_type* EvalILInvokeBound(il_factor_invoke_bound * self, struct enviroment * env, call_context* cctx);
 
-char* il_factor_invoke_bound_tostr(il_factor_invoke_bound* self, struct enviroment* env);
+char* ILInvokeBoundToString(il_factor_invoke_bound* self, struct enviroment* env);
 
 void il_factor_invoke_bound_delete(il_factor_invoke_bound* self);
 

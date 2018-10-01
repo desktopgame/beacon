@@ -27,7 +27,7 @@ il_factor_member_op* NewILMemberOp(string_view namev);
 
 void LoadILMemberOp(il_factor_member_op* self, struct enviroment* env, call_context* cctx);
 
-void il_factor_member_op_generate(il_factor_member_op* self, struct enviroment* env, call_context* cctx);
+void GenerateILMemberOp(il_factor_member_op* self, struct enviroment* env, call_context* cctx);
 
 generic_type* EvalILMemberOp(il_factor_member_op* self, struct enviroment* env, call_context* cctx);
 

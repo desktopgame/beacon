@@ -19,7 +19,7 @@ il_stmt_inject_jni* NewILInjectJNI(string_view namev) {
 	return ret;
 }
 
-void il_stmt_inject_jni_generate(il_stmt_inject_jni* self, enviroment* env, call_context* cctx) {
+void GenerateILInjectJNI(il_stmt_inject_jni* self, enviroment* env, call_context* cctx) {
 	GenerateILFactor(self->fact, env, cctx);
 	AddOpcodeBuf(env->buf, OP_STORE);
 	AddOpcodeBuf(env->buf, self->se->index);

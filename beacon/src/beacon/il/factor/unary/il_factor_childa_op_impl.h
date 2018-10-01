@@ -16,7 +16,7 @@ il_factor_childa_op* NewILChildaOp(operator_type type);
 
 struct generic_type* EvalILChildaOp(il_factor_childa_op * self, struct enviroment * env, call_context* cctx);
 
-void il_factor_childa_op_generate(il_factor_childa_op* self, struct enviroment* env, call_context* cctx);
+void GenerateILChildaOp(il_factor_childa_op* self, struct enviroment* env, call_context* cctx);
 
 void LoadILChildaOp(il_factor_childa_op* self, struct enviroment* env, call_context* cctx);
 

@@ -19,7 +19,7 @@ il_factor_subscript* MallocILSubscript(const char* filename, int lineno) {
 	return ret;
 }
 
-void il_factor_subscript_generate(il_factor_subscript* self, enviroment* env, call_context* cctx) {
+void GenerateILSubscript(il_factor_subscript* self, enviroment* env, call_context* cctx) {
 	GenerateILFactor(self->pos, env, cctx);
 	GenerateILFactor(self->receiver, env, cctx);
 	AddOpcodeBuf(env->buf, OP_INVOKEOPERATOR);

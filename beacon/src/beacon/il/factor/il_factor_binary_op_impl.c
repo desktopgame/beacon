@@ -35,7 +35,7 @@ il_factor_binary_op * NewILBinaryOp(operator_type type) {
 	return ret;
 }
 
-void il_factor_binary_op_generate(il_factor_binary_op * self, enviroment* env, call_context* cctx) {
+void GenerateILBinaryOp(il_factor_binary_op * self, enviroment* env, call_context* cctx) {
 	switch(self->category) {
 		case OPERATOR_CARITHMERIC_T:
 			il_factor_arithmetic_op_generate(self->u.arithmetic_op, env, cctx);
@@ -70,7 +70,7 @@ void LoadILBinaryOp(il_factor_binary_op * self, enviroment * env, call_context* 
 		il_factor_arithmetic_op* arith = NewILArithmeticOp(self->type);
 		arith->parent = self;
 		self->u.arithmetic_op = arith;
-		il_factor_arithmetic_OP_LOAD(arith, env, cctx);
+		LoadILArithmeticOp(arith, env, cctx);
 	} else if(operator_compare(self->type)) {
 		self->category = OPERATOR_CCOMPARE_T;
 		il_factor_compare_op* comp = NewILCompareOp(self->type);
@@ -182,7 +182,7 @@ char* ILBinaryOpToString_simple(il_factor_binary_op* self, enviroment* env) {
 	return ReleaseBuffer(sb);
 }
 
-bool il_factor_binary_op_int_int(il_factor_binary_op* self, enviroment* env, call_context* cctx) {
+bool IsIntIntBinaryOp(il_factor_binary_op* self, enviroment* env, call_context* cctx) {
 	return type_test(self, env, cctx, TYPE_INT);
 }
 
@@ -199,7 +199,7 @@ bool il_factor_binary_op_char_char(il_factor_binary_op* self, enviroment* env, c
 }
 
 int GetIndexILBinaryOp(il_factor_binary_op* self, enviroment* env, call_context* cctx) {
-	if(il_factor_binary_op_int_int(self, env, cctx) ||
+	if(IsIntIntBinaryOp(self, env, cctx) ||
 	  il_factor_binary_op_double_double(self, env, cctx)) {
 		  return -1;
 	}

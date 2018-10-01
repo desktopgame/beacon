@@ -28,7 +28,7 @@ il_factor* WrapILUnary(il_factor_unary_op* self);
 
 il_factor_unary_op* NewILUnaryOp(operator_type type);
 
-void il_factor_unary_op_generate(il_factor_unary_op* self, struct enviroment* env, call_context* cctx);
+void GenerateILUnaryOp(il_factor_unary_op* self, struct enviroment* env, call_context* cctx);
 
 void LoadILUnaryOp(il_factor_unary_op* self, struct enviroment* env, call_context* cctx);
 

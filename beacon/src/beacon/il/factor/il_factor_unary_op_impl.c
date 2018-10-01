@@ -27,13 +27,13 @@ il_factor_unary_op * NewILUnaryOp(operator_type type) {
 	return ret;
 }
 
-void il_factor_unary_op_generate(il_factor_unary_op * self, enviroment* env, call_context* cctx) {
+void GenerateILUnaryOp(il_factor_unary_op * self, enviroment* env, call_context* cctx) {
 	switch(self->type) {
 		case OPERATOR_NOT_T:
 			GenerateILNotOp(self->u.not_op, env, cctx);
 			break;
 		case OPERATOR_CHILDA_T:
-			il_factor_childa_op_generate(self->u.childa_op, env, cctx);
+			GenerateILChildaOp(self->u.childa_op, env, cctx);
 			break;
 		case OPERATOR_NEGATIVE_T:
 			il_factor_negative_op_generate(self->u.negative_op, env, cctx);
@@ -97,7 +97,7 @@ char* ILUnaryOpToString(il_factor_unary_op* self, enviroment* env) {
 			ret = ILChildaOpToString(self->u.childa_op, env);
 			break;
 		case OPERATOR_NEGATIVE_T:
-			ret = il_factor_negative_op_tostr(self->u.negative_op, env);
+			ret = ILNegativeOpToString(self->u.negative_op, env);
 			break;
 	}
 	return ret;

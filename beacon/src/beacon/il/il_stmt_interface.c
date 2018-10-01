@@ -71,7 +71,7 @@ void GenerateILStmt(il_stmt * self, struct enviroment* env, call_context* cctx) 
 			il_stmt_yield_break_generate(self->u.yield_break, env, cctx);
 			break;
 		case ILSTMT_INJECT_JNI_T:
-			il_stmt_inject_jni_generate(self->u.inject_jni, env, cctx);
+			GenerateILInjectJNI(self->u.inject_jni, env, cctx);
 			break;
 		default:
 			//ERROR("ステートメントを開放出来ませんでした。");
@@ -153,7 +153,7 @@ void DeleteILStmt(il_stmt * self) {
 			DeleteILProc(self->u.proc_);
 			break;
 		case ILSTMT_VARIABLE_DECL_T:
-			il_stmt_variable_decl_delete(self->u.variable_decl);
+			DeleteILVariableDecl(self->u.variable_decl);
 			break;
 		case ILSTMT_VARIABLE_INIT_T:
 			il_stmt_variable_init_delete(self->u.variable_init);
@@ -186,7 +186,7 @@ void DeleteILStmt(il_stmt * self) {
 			DeleteILDefer(self->u.defer_);
 			break;
 		case ILSTMT_YIELD_RETURN_T:
-			il_stmt_yield_return_delete(self->u.yield_return);
+			DeleteILYieldReturn(self->u.yield_return);
 			break;
 		case ILSTMT_YIELD_BREAK_T:
 			//il_stmt_yield_break_delete(self->u.yield_break);

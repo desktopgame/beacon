@@ -28,7 +28,7 @@ generic_type* il_factor_arithmetic_op_eval(il_factor_arithmetic_op * self, envir
 	assert(rgtype != NULL);
 	type* cint = TYPE_INT;
 	type* cdouble = TYPE_DOUBLE;
-	if(il_factor_binary_op_int_int(self->parent, env, cctx)) {
+	if(IsIntIntBinaryOp(self->parent, env, cctx)) {
 		return TYPE2GENERIC(cint);
 	}
 	if(il_factor_binary_op_double_double(self->parent, env, cctx)) {
@@ -51,7 +51,7 @@ void il_factor_arithmetic_op_generate(il_factor_arithmetic_op* self, enviroment*
 	if(self->operator_index == -1) {
 		GenerateILFactor(self->parent->right, env, cctx);
 		GenerateILFactor(self->parent->left, env, cctx);
-		if(il_factor_binary_op_int_int(self->parent, env, cctx)) {
+		if(IsIntIntBinaryOp(self->parent, env, cctx)) {
 			AddOpcodeBuf(env->buf, (VectorItem)operator_to_iopcode(self->type));
 		} else if(il_factor_binary_op_double_double(self->parent, env, cctx)) {
 			AddOpcodeBuf(env->buf, (VectorItem)operator_to_dopcode(self->type));
@@ -66,8 +66,8 @@ void il_factor_arithmetic_op_generate(il_factor_arithmetic_op* self, enviroment*
 	}
 }
 
-void il_factor_arithmetic_OP_LOAD(il_factor_arithmetic_op* self, enviroment* env, call_context* cctx) {
-	if(!il_factor_binary_op_int_int(self->parent, env, cctx) &&
+void LoadILArithmeticOp(il_factor_arithmetic_op* self, enviroment* env, call_context* cctx) {
+	if(!IsIntIntBinaryOp(self->parent, env, cctx) &&
 	   !il_factor_binary_op_double_double(self->parent, env, cctx)) {
 		self->operator_index = GetIndexILBinaryOp(self->parent, env, cctx);
 	}

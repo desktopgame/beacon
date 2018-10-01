@@ -13,7 +13,7 @@ il_factor_assign_op* NewILAssignOp();
 
 void LoadILAssignOp(il_factor_assign_op* self, enviroment* env, call_context* cctx);
 
-void il_factor_assign_op_generate(il_factor_assign_op* self, enviroment* env, call_context* cctx);
+void GenerateILAssignOp(il_factor_assign_op* self, enviroment* env, call_context* cctx);
 
 struct generic_type* EvalILAssignOp(il_factor_assign_op* self, enviroment* env, call_context* cctx);
 

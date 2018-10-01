@@ -69,7 +69,7 @@ void LoadILNewInstance(il_factor_new_instance * self, enviroment * env, call_con
 	}
 }
 
-generic_type* il_factor_new_instance_eval(il_factor_new_instance * self, enviroment * env, call_context* cctx) {
+generic_type* EvalILNewInstance(il_factor_new_instance * self, enviroment * env, call_context* cctx) {
 	il_factor_new_instance_find(self, env, cctx);
 	if(GetLastBCError()) {
 		return NULL;
@@ -93,7 +93,7 @@ generic_type* il_factor_new_instance_eval(il_factor_new_instance * self, envirom
 	return self->instance_type;
 }
 
-char* il_factor_new_instance_tostr(il_factor_new_instance* self, enviroment* env) {
+char* ILNewInstanceToString(il_factor_new_instance* self, enviroment* env) {
 	string_buffer* sb = NewBuffer();
 	AppendsBuffer(sb, "new ");
 	char* type = fqcn_cache_tostr(self->fqcnc);

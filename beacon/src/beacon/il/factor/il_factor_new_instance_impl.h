@@ -30,9 +30,9 @@ void il_factor_new_instance_generate(il_factor_new_instance* self, struct enviro
 
 void LoadILNewInstance(il_factor_new_instance* self, struct enviroment* env, call_context* cctx);
 
-generic_type* il_factor_new_instance_eval(il_factor_new_instance* self, struct enviroment* env, call_context* cctx);
+generic_type* EvalILNewInstance(il_factor_new_instance* self, struct enviroment* env, call_context* cctx);
 
-char* il_factor_new_instance_tostr(il_factor_new_instance* self, struct enviroment* env);
+char* ILNewInstanceToString(il_factor_new_instance* self, struct enviroment* env);
 
 void il_factor_new_instance_delete(il_factor_new_instance* self);
 

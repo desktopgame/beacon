@@ -194,6 +194,7 @@ def rename_special(name, key)
     words = type.split("_").delete_if{|e| e == key}
     new_name = action + words.map{|e| if e == "il" then "IL" else e.capitalize end }.join
     new_name = new_name.gsub("Instanceof", "InstanceOf")
+    new_name = new_name.gsub("Jni", "JNI")
     if(new_name.start_with?("Tostr")) then
         new_name = new_name.slice("Tostr".length, new_name.length - "Tostr".length)
         new_name << "ToString"

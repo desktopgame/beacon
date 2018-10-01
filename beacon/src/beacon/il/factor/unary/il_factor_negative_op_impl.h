@@ -23,5 +23,5 @@ void LoadILNegativeOp(il_factor_negative_op* self, struct enviroment* env, call_
 
 void il_factor_negative_op_delete(il_factor_negative_op* self);
 
-char* il_factor_negative_op_tostr(il_factor_negative_op* self, struct enviroment* env);
+char* ILNegativeOpToString(il_factor_negative_op* self, struct enviroment* env);
 #endif

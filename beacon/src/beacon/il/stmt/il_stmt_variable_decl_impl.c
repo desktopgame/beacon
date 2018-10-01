@@ -42,7 +42,7 @@ void LoadILVariableDecl(il_stmt_variable_decl * self, struct enviroment* env, ca
 	}
 }
 
-void il_stmt_variable_decl_delete(il_stmt_variable_decl * self) {
+void DeleteILVariableDecl(il_stmt_variable_decl * self) {
 	if (self == NULL) {
 		return;
 	}

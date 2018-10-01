@@ -33,7 +33,7 @@ il_factor* WrapILBinary(il_factor_binary_op* self);
 
 il_factor_binary_op* NewILBinaryOp(operator_type type);
 
-void il_factor_binary_op_generate(il_factor_binary_op* self, struct enviroment* env, call_context* cctx);
+void GenerateILBinaryOp(il_factor_binary_op* self, struct enviroment* env, call_context* cctx);
 
 void LoadILBinaryOp(il_factor_binary_op* self, struct enviroment* env, call_context* cctx);
 
@@ -45,7 +45,7 @@ void DeleteILBinaryOp(il_factor_binary_op* self);
 
 char* ILBinaryOpToString_simple(il_factor_binary_op* self, struct enviroment* env);
 
-bool il_factor_binary_op_int_int(il_factor_binary_op* self, struct enviroment* env, call_context* cctx);
+bool IsIntIntBinaryOp(il_factor_binary_op* self, struct enviroment* env, call_context* cctx);
 
 bool il_factor_binary_op_double_double(il_factor_binary_op* self, struct enviroment* env, call_context* cctx);
 

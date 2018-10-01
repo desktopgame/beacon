@@ -48,7 +48,7 @@ void LoadILAssignOp(il_factor_assign_op* self, enviroment* env, call_context* cc
 	}
 }
 
-void il_factor_assign_op_generate(il_factor_assign_op* self, enviroment* env, call_context* cctx) {
+void GenerateILAssignOp(il_factor_assign_op* self, enviroment* env, call_context* cctx) {
 	if(self->left->type == ILFACTOR_VARIABLE_T) {
 		generate_assign_to_variable(self, env, cctx);
 		//NOTE:constかどうかの検査

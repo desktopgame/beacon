@@ -49,7 +49,7 @@ generic_type* EvalILInvokeBound(il_factor_invoke_bound * self, enviroment * env,
 	return ret;
 }
 
-char* il_factor_invoke_bound_tostr(il_factor_invoke_bound* self, enviroment* env) {
+char* ILInvokeBoundToString(il_factor_invoke_bound* self, enviroment* env) {
 	string_buffer* sb = NewBuffer();
 	AppendsBuffer(sb, Ref2Str(self->namev));
 	ILTypeArgsToString(sb, self->type_args, env);

@@ -17,7 +17,7 @@ il_stmt* WrapILYieldReturn(il_stmt_yield_return* self) {
 	return ret;
 }
 
-il_stmt_yield_return* il_stmt_yield_return_malloc(const char* filename, int lineno) {
+il_stmt_yield_return* MallocILYieldReturn(const char* filename, int lineno) {
 	il_stmt_yield_return* ret = (il_stmt_yield_return*)mem_malloc(sizeof(il_stmt_yield_return), filename, lineno);
 	ret->fact = NULL;
 	return ret;
@@ -32,7 +32,7 @@ void LoadILYieldReturn(il_stmt_yield_return * self, enviroment* env, call_contex
 	check_method_yield_return(self, env, cctx);
 }
 
-void il_stmt_yield_return_delete(il_stmt_yield_return* self) {
+void DeleteILYieldReturn(il_stmt_yield_return* self) {
 	DeleteILFactor(self->fact);
 	MEM_FREE(self);
 }

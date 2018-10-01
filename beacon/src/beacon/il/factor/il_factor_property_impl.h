@@ -16,7 +16,7 @@ typedef struct il_factor_property {
 #define il_factor_property_new() (MallocILPropertyAccess(__FILE__, __LINE__))
 il_factor_property* MallocILPropertyAccess(const char* filename, int lineno);
 
-void il_factor_property_generate(il_factor_property* self, struct enviroment* env, call_context* cctx);
+void GenerateILPropertyAccess(il_factor_property* self, struct enviroment* env, call_context* cctx);
 
 void LoadILProperty(il_factor_property* self, struct enviroment* env, call_context* cctx);
 

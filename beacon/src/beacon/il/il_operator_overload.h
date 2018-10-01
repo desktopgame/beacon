@@ -15,5 +15,5 @@ typedef struct il_operator_overload {
 
 il_operator_overload* NewILOperatorOverload(operator_type type);
 
-void il_operator_overload_delete(il_operator_overload* self);
+void DeleteILOperatorOverload(il_operator_overload* self);
 #endif

@@ -46,11 +46,11 @@ void il_factor_invoke_static_generate(il_factor_invoke_static* self, enviroment*
 	AddOpcodeBuf(env->buf, (VectorItem)self->index);
 }
 
-void il_factor_invoke_static_load(il_factor_invoke_static * self, enviroment * env, call_context* cctx) {
+void LoadILInvokeStatic(il_factor_invoke_static * self, enviroment * env, call_context* cctx) {
 	il_factor_invoke_static_check(self, env, cctx);
 }
 
-generic_type* il_factor_invoke_static_eval(il_factor_invoke_static * self, enviroment * env, call_context* cctx) {
+generic_type* EvalILInvokeStatic(il_factor_invoke_static * self, enviroment * env, call_context* cctx) {
 	il_factor_invoke_static_check(self, env, cctx);
 	//メソッドを解決できなかった場合
 	if(GetLastBCError()) {

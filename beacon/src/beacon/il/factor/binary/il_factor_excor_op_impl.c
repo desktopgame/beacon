@@ -21,7 +21,7 @@ generic_type* EvalILExcorOp(il_factor_excor_op * self, enviroment * env, call_co
 	generic_type* rgtype = EvalILFactor(self->parent->right, env, cctx);
 	assert(lgtype != NULL);
 	assert(rgtype != NULL);
-	if(il_factor_binary_op_int_int(self->parent, env, cctx)) {
+	if(IsIntIntBinaryOp(self->parent, env, cctx)) {
 		return TYPE2GENERIC(TYPE_INT);
 	}
 	if(il_factor_binary_op_bool_bool(self->parent, env, cctx)) {
@@ -44,7 +44,7 @@ void GenerateILExcorOp(il_factor_excor_op* self, enviroment* env, call_context* 
 	if(self->operator_index == -1) {
 		GenerateILFactor(self->parent->right, env, cctx);
 		GenerateILFactor(self->parent->left, env, cctx);
-		if(il_factor_binary_op_int_int(self->parent, env, cctx)) {
+		if(IsIntIntBinaryOp(self->parent, env, cctx)) {
 			AddOpcodeBuf(env->buf, OP_IEXCOR);
 		} else if(il_factor_binary_op_bool_bool(self->parent, env, cctx)) {
 			AddOpcodeBuf(env->buf, OP_BEXCOR);
@@ -60,7 +60,7 @@ void GenerateILExcorOp(il_factor_excor_op* self, enviroment* env, call_context* 
 }
 
 void LoadILExcorOp(il_factor_excor_op* self, enviroment* env, call_context* cctx) {
-	if(!il_factor_binary_op_int_int(self->parent, env, cctx) &&
+	if(!IsIntIntBinaryOp(self->parent, env, cctx) &&
 	   !il_factor_binary_op_bool_bool(self->parent, env, cctx)) {
 	self->operator_index = GetIndexILBinaryOp(self->parent, env, cctx);
 	}

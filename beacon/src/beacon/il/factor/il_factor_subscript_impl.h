@@ -16,7 +16,7 @@ il_factor* WrapILSubscript(il_factor_subscript* self);
 #define il_factor_subscript_new() (MallocILSubscript(__FILE__, __LINE__))
 il_factor_subscript* MallocILSubscript(const char* filename, int lineno);
 
-void il_factor_subscript_generate(il_factor_subscript* self, enviroment* env, call_context* cctx);
+void GenerateILSubscript(il_factor_subscript* self, enviroment* env, call_context* cctx);
 
 void LoadILSubscript(il_factor_subscript* self, enviroment* env, call_context* cctx);
 

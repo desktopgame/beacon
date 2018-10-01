@@ -18,7 +18,7 @@ struct generic_type* il_factor_arithmetic_op_eval(il_factor_arithmetic_op * self
 
 void il_factor_arithmetic_op_generate(il_factor_arithmetic_op* self, struct enviroment* env, call_context* cctx);
 
-void il_factor_arithmetic_OP_LOAD(il_factor_arithmetic_op* self, struct enviroment* env, call_context* cctx);
+void LoadILArithmeticOp(il_factor_arithmetic_op* self, struct enviroment* env, call_context* cctx);
 
 void il_factor_arithmetic_op_delete(il_factor_arithmetic_op* self);
 

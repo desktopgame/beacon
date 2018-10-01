@@ -51,6 +51,6 @@ void il_factor_negative_op_delete(il_factor_negative_op* self) {
 	MEM_FREE(self);
 }
 
-char* il_factor_negative_op_tostr(il_factor_negative_op* self, enviroment* env) {
+char* ILNegativeOpToString(il_factor_negative_op* self, enviroment* env) {
 	return ILUnaryOpToString_simple(self->parent, env);
 }

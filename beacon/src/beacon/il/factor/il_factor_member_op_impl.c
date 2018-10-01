@@ -43,7 +43,7 @@ void LoadILMemberOp(il_factor_member_op* self, enviroment* env, call_context* cc
 	il_factor_member_op_check(self, env, cctx, &swap);
 }
 
-void il_factor_member_op_generate(il_factor_member_op* self, enviroment* env, call_context* cctx) {
+void GenerateILMemberOp(il_factor_member_op* self, enviroment* env, call_context* cctx) {
 	if(!IsStaticModifier(self->f->modifier)) {
 		GenerateILFactor(self->fact, env, cctx);
 	}

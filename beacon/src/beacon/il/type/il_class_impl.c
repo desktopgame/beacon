@@ -117,7 +117,7 @@ static void il_class_type_parameter_delete(VectorItem item) {
 
 static void DeleteILClass_operator_overload(VectorItem item) {
 	il_operator_overload* e = (il_operator_overload*)item;
-	il_operator_overload_delete(e);
+	DeleteILOperatorOverload(e);
 }
 
 static void il_class_prop_delete(VectorItem item ) {

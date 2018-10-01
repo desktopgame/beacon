@@ -50,7 +50,7 @@ void GenerateILShiftOp(il_factor_shift_op* self, enviroment* env, call_context* 
 	if(self->operator_index == -1) {
 		GenerateILFactor(self->parent->right, env, cctx);
 		GenerateILFactor(self->parent->left, env, cctx);
-		if(il_factor_binary_op_int_int(self->parent, env, cctx)) {
+		if(IsIntIntBinaryOp(self->parent, env, cctx)) {
 			AddOpcodeBuf(env->buf, (VectorItem)operator_to_iopcode(self->type));
 		} else {
 			ThrowBCError(
@@ -67,7 +67,7 @@ void GenerateILShiftOp(il_factor_shift_op* self, enviroment* env, call_context* 
 }
 
 void LoadILShiftOp(il_factor_shift_op* self, enviroment* env, call_context* cctx) {
-	if(!il_factor_binary_op_int_int(self->parent, env, cctx)) {
+	if(!IsIntIntBinaryOp(self->parent, env, cctx)) {
 		self->operator_index = GetIndexILBinaryOp(self->parent, env, cctx);
 	}
 }

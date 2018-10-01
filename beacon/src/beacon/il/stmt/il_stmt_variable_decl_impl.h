@@ -46,5 +46,5 @@ void LoadILVariableDecl(il_stmt_variable_decl* self, struct enviroment* env, cal
  * 型宣言を表す要素を開放します.
  * @param self
  */
-void il_stmt_variable_decl_delete(il_stmt_variable_decl* self);
+void DeleteILVariableDecl(il_stmt_variable_decl* self);
 #endif // !SIGNAL_IL_IL_STMT_VARIABLE_DECL_H
