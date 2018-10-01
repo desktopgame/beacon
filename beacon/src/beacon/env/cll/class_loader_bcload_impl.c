@@ -277,7 +277,7 @@ static void CLBC_interface(class_loader * self, il_type * iltype, namespace_ * p
 
 static void CLBC_attach_native_method(class_loader* self, il_type* ilclass, class_* classz, il_method* ilmethod, method* me) {
 //	native_method.h で、実行時にリンクするようにしたので不要
-//	me->u.native_method->ref = native_method_ref_new(class_loader_sgload_debug_native_method);
+//	me->u.native_method->ref = NewNativeMethodRef(class_loader_sgload_debug_native_method);
 }
 
 static void CLBC_debug_native_method(method* parent, frame*fr, enviroment* env) {

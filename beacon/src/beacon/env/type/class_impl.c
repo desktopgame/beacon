@@ -39,7 +39,7 @@ static void class_impl_delete(VectorItem item);
 static void class_DeleteField(VectorItem item);
 static void class_method_delete(VectorItem item);
 static void class_ctor_delete(VectorItem item);
-static void class_native_method_ref_delete(NumericMapKey key, NumericMapItem item);
+static void class_DeleteNativeMethodRef(NumericMapKey key, NumericMapItem item);
 static method* class_find_impl_method(class_* self, method* virtualMethod);
 static void class_vtable_vec_delete(VectorItem item);
 static void class_type_parameter_delete(VectorItem item);
@@ -183,7 +183,7 @@ void class_define_native_method(class_* self, const char* name, native_impl impl
 }
 
 void class_define_native_method_by_ref(class_ * self, string_view namev, native_impl impl) {
-	native_method_ref* ref = native_method_ref_new(impl);
+	native_method_ref* ref = NewNativeMethodRef(impl);
 	PutNumericMap(self->native_method_ref_nmap, namev, ref);
 }
 
@@ -387,7 +387,7 @@ void class_unlink(class_ * self) {
 	}
 	//XSTREQ(self->name, "Object");
 	//generic_type_delete(self->super_class);
-	DeleteNumericMap(self->native_method_ref_nmap, class_native_method_ref_delete);
+	DeleteNumericMap(self->native_method_ref_nmap, class_DeleteNativeMethodRef);
 	DeleteVector(self->impl_list, class_impl_delete);
 	DeleteVector(self->field_list, class_DeleteField);
 	DeleteVector(self->sfield_list, class_DeleteField);
@@ -503,9 +503,9 @@ static void class_ctor_delete(VectorItem item) {
 	DeleteConstructor(e);
 }
 
-static void class_native_method_ref_delete(NumericMapKey key, NumericMapItem item) {
+static void class_DeleteNativeMethodRef(NumericMapKey key, NumericMapItem item) {
 	native_method_ref* e = (native_method_ref*)item;
-	native_method_ref_delete(e);
+	DeleteNativeMethodRef(e);
 }
 
 static method* class_find_impl_method(class_* self, method* virtualMethod) {

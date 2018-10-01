@@ -22,11 +22,11 @@ typedef struct native_method_ref {
  * @param impl
  * @return
  */
-native_method_ref* native_method_ref_new(native_impl impl);
+native_method_ref* NewNativeMethodRef(native_impl impl);
 
 /**
  * ラッパーを開放します.
  * @param self
  */
-void native_method_ref_delete(native_method_ref* self);
+void DeleteNativeMethodRef(native_method_ref* self);
 #endif // !SIGNAL_ENV_NATIVE_METHOD_REF_H
