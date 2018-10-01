@@ -8,7 +8,7 @@
 #include "../il/il_factor_interface.h"
 #include "generic_type.h"
 
-field * field_new(string_view namev) {
+field * NewField(string_view namev) {
 	field* ret = (field*)MEM_MALLOC(sizeof(field));
 	ret->namev = namev;
 	ret->access = ACCESS_PUBLIC_T;
@@ -22,7 +22,7 @@ field * field_new(string_view namev) {
 	return ret;
 }
 
-void field_delete(field * self) {
+void DeleteField(field * self) {
 	if (self == NULL) {
 		return;
 	}

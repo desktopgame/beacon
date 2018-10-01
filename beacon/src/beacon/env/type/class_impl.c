@@ -36,7 +36,7 @@ static void class_create_vtable_top(class_* self);
 static void class_create_vtable_override(class_* self);
 static void class_create_vtable_interface(class_* self);
 static void class_impl_delete(VectorItem item);
-static void class_field_delete(VectorItem item);
+static void class_DeleteField(VectorItem item);
 static void class_method_delete(VectorItem item);
 static void class_ctor_delete(VectorItem item);
 static void class_native_method_ref_delete(NumericMapKey key, NumericMapItem item);
@@ -154,7 +154,7 @@ void class_add_property(class_* self, property* p) {
 	const char* name = Ref2Str(p->namev);
 	#endif
 	if(p->is_short) {
-		field* f = field_new(ConcatIntern("$propery.", p->namev));
+		field* f = NewField(ConcatIntern("$propery.", p->namev));
 		f->access = ACCESS_PRIVATE_T;
 		f->gtype = p->gtype;
 		f->modifier = p->modifier;
@@ -389,8 +389,8 @@ void class_unlink(class_ * self) {
 	//generic_type_delete(self->super_class);
 	DeleteNumericMap(self->native_method_ref_nmap, class_native_method_ref_delete);
 	DeleteVector(self->impl_list, class_impl_delete);
-	DeleteVector(self->field_list, class_field_delete);
-	DeleteVector(self->sfield_list, class_field_delete);
+	DeleteVector(self->field_list, class_DeleteField);
+	DeleteVector(self->sfield_list, class_DeleteField);
 	DeleteVector(self->method_list, class_method_delete);
 	DeleteVector(self->smethod_list, class_method_delete);
 	DeleteVector(self->constructor_list, class_ctor_delete);
@@ -488,9 +488,9 @@ static void class_impl_delete(VectorItem item) {
 	//generic_type_delete(e);
 }
 
-static void class_field_delete(VectorItem item) {
+static void class_DeleteField(VectorItem item) {
 	field* e = (field*)item;
-	field_delete(e);
+	DeleteField(e);
 }
 
 static void class_method_delete(VectorItem item) {

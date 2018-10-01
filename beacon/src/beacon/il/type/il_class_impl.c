@@ -12,7 +12,7 @@
 #include "../il_property.h"
 
 //proto
-static void il_class_field_delete(VectorItem item);
+static void il_class_DeleteField(VectorItem item);
 static void il_class_method_delete(VectorItem item);
 static void il_class_ctor_delete(VectorItem item);
 static void il_class_extend_delete(VectorItem item);
@@ -74,8 +74,8 @@ void DeleteILClass(il_class * self) {
 	}
 	//printf("free class %s\n", self->name);
 	//MEM_FREE(self->super);
-	DeleteVector(self->field_list, il_class_field_delete);
-	DeleteVector(self->sfield_list, il_class_field_delete);
+	DeleteVector(self->field_list, il_class_DeleteField);
+	DeleteVector(self->sfield_list, il_class_DeleteField);
 	DeleteVector(self->method_list, il_class_method_delete);
 	DeleteVector(self->smethod_list, il_class_method_delete);
 	DeleteVector(self->constructor_list, il_class_ctor_delete);
@@ -88,7 +88,7 @@ void DeleteILClass(il_class * self) {
 }
 
 //private
-static void il_class_field_delete(VectorItem item) {
+static void il_class_DeleteField(VectorItem item) {
 	il_field* e = (il_field*)item;
 	DeleteILField(e);
 }

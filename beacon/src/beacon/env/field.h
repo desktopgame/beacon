@@ -30,11 +30,11 @@ typedef struct field {
  * @param namev
  * @return
  */
-field* field_new(string_view namev);
+field* NewField(string_view namev);
 
 /**
  * フィールドを開放します.
  * @param self
  */
-void field_delete(field* self);
+void DeleteField(field* self);
 #endif // !SIGNAL_ENV_FIELD_H

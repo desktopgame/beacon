@@ -43,7 +43,7 @@ static bool CLBC_test_operator_overlaod(class_loader* self, il_type* iltype, typ
 //
 //
 bool CLBC_field_decl(class_loader* self, il_type* iltype, type* tp, il_field* ilfi, namespace_* scope, call_context* cctx) {
-	field* fi = field_new(ilfi->namev);
+	field* fi = NewField(ilfi->namev);
 	fi->access = ilfi->access;
 	fi->modifier = ilfi->modifier;
 	fi->parent = tp;
