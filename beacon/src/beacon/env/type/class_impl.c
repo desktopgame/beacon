@@ -500,7 +500,7 @@ static void class_method_delete(VectorItem item) {
 
 static void class_ctor_delete(VectorItem item) {
 	constructor* e = (constructor*)item;
-	constructor_delete(e);
+	DeleteConstructor(e);
 }
 
 static void class_native_method_ref_delete(NumericMapKey key, NumericMapItem item) {

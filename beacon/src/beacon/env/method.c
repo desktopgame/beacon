@@ -334,7 +334,7 @@ static void method_count(il_stmt* s, int* yield_ret, int* ret) {
 
 static constructor* create_delegate_ctor(method* self, type* ty, class_loader* cll,int op_len) {
 	//イテレータのコンストラクタを作成
-	constructor* iterCons = constructor_new();
+	constructor* iterCons = NewConstructor();
 	enviroment* envIterCons = NewEnviroment();
 	//コルーチンを生成したオブジェクトを受け取るパラメータ追加
 	parameter* coroOwnerParam = parameter_new(InternString("owner"));

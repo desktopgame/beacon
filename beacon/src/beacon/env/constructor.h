@@ -22,7 +22,7 @@ typedef struct constructor {
  * コンストラクタを作成します.
  * @return
  */
-constructor* constructor_new();
+constructor* NewConstructor();
 
 /**
  * このコンストラクタを使用してオブジェクトを生成します.
@@ -31,11 +31,11 @@ constructor* constructor_new();
  * @param parent
  * @return
  */
-struct object* constructor_new_instance(constructor* self, Vector* args, struct frame* parent);
+struct object* NewInstanceConstructor(constructor* self, Vector* args, struct frame* parent);
 
 /**
  * コンストラクタを開放します.
  * @param self
  */
-void constructor_delete(constructor* self);
+void DeleteConstructor(constructor* self);
 #endif // !SIGNAL_ENV_CONSTRUCTOR_H

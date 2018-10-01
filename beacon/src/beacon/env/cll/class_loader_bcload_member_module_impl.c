@@ -439,7 +439,7 @@ bool CLBC_ctor_decl(class_loader* self, il_type* iltype, type* tp, il_constructo
 	Vector* ilparams = ilcons->parameter_list;
 	class_* classz = tp->u.class_;
 	//実行時のメソッド情報を作成する
-	constructor* cons = constructor_new();
+	constructor* cons = NewConstructor();
 	Vector* parameter_list = cons->parameter_list;
 	cons->access = ilcons->access;
 	cons->parent = tp;
