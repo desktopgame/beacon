@@ -11,7 +11,7 @@
 #include "unary/il_factor_negative_op_impl.h"
 #include "unary/il_factor_not_op_impl.h"
 
-il_factor * WrapILUnary(il_factor_unary_op * self) {
+il_factor * WrapILUnaryOp(il_factor_unary_op * self) {
 	il_factor* ret = il_factor_new(ILFACTOR_UNARY_OP_T);
 	ret->u.unary_ = self;
 	return ret;

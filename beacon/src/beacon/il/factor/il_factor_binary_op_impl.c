@@ -20,7 +20,7 @@
 
 static bool type_test(il_factor_binary_op* self, enviroment* env, call_context* cctx, type* t);
 
-il_factor * WrapILBinary(il_factor_binary_op * self) {
+il_factor * WrapILBinaryOp(il_factor_binary_op * self) {
 	il_factor* ret = il_factor_new(ILFACTOR_BINARY_OP_T);
 	ret->u.binary_ = self;
 	return ret;

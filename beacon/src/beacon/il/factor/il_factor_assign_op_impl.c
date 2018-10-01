@@ -22,7 +22,7 @@ static bool can_assign_to_field(field* f, il_factor_assign_op* self, enviroment*
 static void generate_assign_to_variable(il_factor_assign_op* self, enviroment* env, call_context* cctx);
 static void generate_assign_to_variable_local(il_factor_assign_op* self, enviroment* env, call_context* cctx);
 
-il_factor* WrapILAssign(il_factor_assign_op* self) {
+il_factor* WrapILAssignOp(il_factor_assign_op* self) {
 	il_factor* ret = il_factor_new(ILFACTOR_ASSIGN_T);
 	ret->u.assign_ = self;
 	return ret;

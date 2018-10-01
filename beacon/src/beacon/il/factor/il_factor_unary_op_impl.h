@@ -24,7 +24,7 @@ typedef struct il_factor_unary_op {
 	} u;
 } il_factor_unary_op;
 
-il_factor* WrapILUnary(il_factor_unary_op* self);
+il_factor* WrapILUnaryOp(il_factor_unary_op* self);
 
 il_factor_unary_op* NewILUnaryOp(operator_type type);
 
