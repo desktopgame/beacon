@@ -52,7 +52,7 @@ class_loader* CLBC_import_new(class_loader* self, char* full_path) {
 	script_context* ctx = GetCurrentScriptContext();
 	class_loader* cll = class_loader_new(full_path, CONTENT_LIB_T);
 	cll->parent = self;
-	import_info* info = import_manager_import(self->import_manager, cll);
+	import_info* info = ImportImportManager(self->import_manager, cll);
 	info->consume = false;
 	PutTreeMap(ctx->class_loader_map, full_path, cll);
 	return cll;
@@ -62,7 +62,7 @@ class_loader* CLBC_import_new(class_loader* self, char* full_path) {
 static void CLBC_import_internal(class_loader* self, Vector* ilimports, int i) {
 	CL_ERROR(self);
 	if (i >= ilimports->length ||
-	    import_manager_loaded(self->import_manager, i)) {
+	    IsLoadedImportManager(self->import_manager, i)) {
 		return;
 	}
 	VectorItem e = AtVector(ilimports, i);
@@ -101,7 +101,7 @@ static void CLBC_new_load_internal(class_loader * self, char * full_path) {
 static void CLBC_import_already(class_loader* self, class_loader* cll) {
 	CL_ERROR(self);
 	//self -> cll への参照を与える
-	import_info* info = import_manager_import(self->import_manager, cll);
+	import_info* info = ImportImportManager(self->import_manager, cll);
 	info->consume = false;
 	assert(cll->source_code != NULL);
 	assert(cll->il_code != NULL);

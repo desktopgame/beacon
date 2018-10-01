@@ -16,22 +16,22 @@
 #include "TYPE_IMPL.h"
 
 //proto
-static void import_manager_delete_import_info(VectorItem item);
+static void DeleteImportManager_import_info(VectorItem item);
 
-import_manager * import_manager_new() {
+import_manager * NewImportManager() {
 	import_manager* ret = (import_manager*)MEM_MALLOC(sizeof(import_manager));
 	ret->info_vec = NewVector();
 	return ret;
 }
 
-import_info* import_manager_import(import_manager * self, class_loader * target) {
+import_info* ImportImportManager(import_manager * self, class_loader * target) {
 	import_info* info = import_info_new();
 	info->context = target;
 	PushVector(self->info_vec, info);
 	return info;
 }
 
-bool import_manager_loaded(import_manager * self, int index) {
+bool IsLoadedImportManager(import_manager * self, int index) {
 	if (index >= self->info_vec->length) {
 		return false;
 	}
@@ -39,7 +39,7 @@ bool import_manager_loaded(import_manager * self, int index) {
 	return info->consume;
 }
 
-generic_type* import_manager_resolve(namespace_* scope, generic_cache* fqcn, call_context* cctx) {
+generic_type* ResolveImportManager(namespace_* scope, generic_cache* fqcn, call_context* cctx) {
 	type* core_type = fqcn_type(fqcn->fqcn, scope);
 	#if defined(DEBUG)
 	const char* ctname = Ref2Str(type_name(core_type));
@@ -61,7 +61,7 @@ generic_type* import_manager_resolve(namespace_* scope, generic_cache* fqcn, cal
 		assert(core_type->tag != TYPE_ENUM_T);
 		for (int i = 0; i < fqcn->type_args->length; i++) {
 			generic_cache* e = (generic_cache*)AtVector(fqcn->type_args, i);
-			generic_type* child = import_manager_resolve(scope, e, cctx);
+			generic_type* child = ResolveImportManager(scope, e, cctx);
 			generic_type_addargs(normalGType, child);
 		}
 		return normalGType;
@@ -93,7 +93,7 @@ generic_type* import_manager_resolve(namespace_* scope, generic_cache* fqcn, cal
 	return parameterized;
 }
 
-generic_type* import_manager_resolvef(namespace_* scope, fqcn_cache* fqcn, call_context* cctx) {
+generic_type* ResolvefImportManager(namespace_* scope, fqcn_cache* fqcn, call_context* cctx) {
 	type* core_type = fqcn_type(fqcn, scope);
 	//Int
 	//Foo::MyClass
@@ -135,12 +135,12 @@ generic_type* import_manager_resolvef(namespace_* scope, fqcn_cache* fqcn, call_
 	return parameterized;
 }
 
-void import_manager_delete(import_manager * self) {
-	DeleteVector(self->info_vec, import_manager_delete_import_info);
+void DeleteImportManager(import_manager * self) {
+	DeleteVector(self->info_vec, DeleteImportManager_import_info);
 	MEM_FREE(self);
 }
 //private
-static void import_manager_delete_import_info(VectorItem item) {
+static void DeleteImportManager_import_info(VectorItem item) {
 	import_info* e = (import_info*)item;
 	import_info_delete(e);
 }

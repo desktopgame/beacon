@@ -47,7 +47,7 @@ bool CLBC_field_decl(class_loader* self, il_type* iltype, type* tp, il_field* il
 	fi->access = ilfi->access;
 	fi->modifier = ilfi->modifier;
 	fi->parent = tp;
-	fi->gtype = import_manager_resolve(scope, ilfi->fqcn, cctx);
+	fi->gtype = ResolveImportManager(scope, ilfi->fqcn, cctx);
 	type_add_field(tp, fi);
 	//フィールドの初期値
 	fi->initial_value = ilfi->initial_value;
@@ -170,7 +170,7 @@ bool CLBC_property_decl(class_loader* self, il_type* iltype, type* tp, il_proper
 	prop->set->access = ilprop->set->access;
 	prop->get->access = ilprop->get->access;
 	prop->parent = tp;
-	prop->gtype = import_manager_resolve(scope, ilprop->fqcn, cctx);
+	prop->gtype = ResolveImportManager(scope, ilprop->fqcn, cctx);
 	prop->is_short = ilprop->set->is_short && ilprop->get->is_short;
 	   type_add_property(tp, prop);
 	if(IsAbstractModifier(prop->modifier) ||
@@ -353,7 +353,7 @@ bool CLBC_method_decl(class_loader* self, il_type* iltype, type* tp, il_method* 
 		return false;
 	}
 	method->parent = tp;
-	method->return_gtype = import_manager_resolve(scope, ilmethod->return_fqcn, cctx);
+	method->return_gtype = ResolveImportManager(scope, ilmethod->return_fqcn, cctx);
 	//ILパラメータを実行時パラメータへ変換
 	//NOTE:ここでは戻り値の型,引数の型を設定しません
 	//     class_loader_sgload_complete参照
@@ -392,7 +392,7 @@ bool CLBC_method_impl(class_loader* self, namespace_* scope, il_type* iltype, ty
 		il_parameter* ilparam = (il_parameter*)AtVector(ilmethod->parameter_list, i);
 		EntrySymbolTable(
 			env->sym_table,
-			import_manager_resolve(scope, ilparam->fqcn, cctx),
+			ResolveImportManager(scope, ilparam->fqcn, cctx),
 			ilparam->namev
 		);
 		//実引数を保存
@@ -476,7 +476,7 @@ bool CLBC_ctor_impl(class_loader* self, il_type* iltype, type* tp, il_constructo
 		il_parameter* ilparam = (il_parameter*)AtVector(ilcons->parameter_list, i);
 		EntrySymbolTable(
 			env->sym_table,
-			import_manager_resolve(scope, ilparam->fqcn, cctx),
+			ResolveImportManager(scope, ilparam->fqcn, cctx),
 			ilparam->namev
 		);
 		//実引数を保存
@@ -536,7 +536,7 @@ bool CLBC_operator_overload_decl(class_loader* self, il_type* iltype, type* tp, 
 	cctx->u.opov = opov;
 	//戻り値読み込み
 	opov->parent = tp;
-	opov->return_gtype = import_manager_resolve(scope, ilopov->return_fqcn, cctx);
+	opov->return_gtype = ResolveImportManager(scope, ilopov->return_fqcn, cctx);
 	//パラメータ読み込み
 	for(int j=0; j<ilopov->parameter_list->length; j++) {
 		il_parameter* ilparam = AtVector(ilopov->parameter_list, j);
@@ -569,7 +569,7 @@ bool CLBC_operator_overload_impl(class_loader* self, il_type* iltype, type* tp, 
 		il_parameter* ilparam = (il_parameter*)AtVector(ilopov->parameter_list, i);
 		EntrySymbolTable(
 			env->sym_table,
-			import_manager_resolve(scope, ilparam->fqcn, cctx),
+			ResolveImportManager(scope, ilparam->fqcn, cctx),
 			ilparam->namev
 		);
 		//実引数を保存
@@ -669,7 +669,7 @@ static void CLBC_parameter_list(class_loader* self, namespace_* scope, Vector* p
 		il_parameter* ilparam = (il_parameter*)e;
 		//FIXME:ILパラメータと実行時パラメータのインデックスが同じなのでとりあえず動く
 		parameter* mep = (parameter*)AtVector(sg_param_list, j);
-		mep->gtype = import_manager_resolve(
+		mep->gtype = ResolveImportManager(
 			scope,
 			ilparam->fqcn,
 			cctx

@@ -39,7 +39,7 @@ void LoadILAs(il_factor_as * self, enviroment * env, call_context* cctx) {
 		return;
 	}
 	LoadILFactor(self->fact, env, cctx);
-	self->gtype = import_manager_resolve(GetNamespaceCContext(cctx), self->fqcn, cctx);
+	self->gtype = ResolveImportManager(GetNamespaceCContext(cctx), self->fqcn, cctx);
 	generic_type* a = EvalILFactor(self->fact, env, cctx);
 	//キャスト元がインターフェイスなら常にアップキャスト
 	if(self->gtype->core_type != NULL && GENERIC2TYPE(self->gtype)->tag == TYPE_INTERFACE_T) {

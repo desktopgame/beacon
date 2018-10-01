@@ -33,7 +33,7 @@ void LoadILVariableDecl(il_stmt_variable_decl * self, struct enviroment* env, ca
 	}
 	symbol_entry* e = EntrySymbolTable(
 		env->sym_table,
-		import_manager_resolve(NULL, self->fqcn, cctx),
+		ResolveImportManager(NULL, self->fqcn, cctx),
 		self->namev
 	);
 	if(e->gtype->core_type != NULL &&

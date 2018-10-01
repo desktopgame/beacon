@@ -23,7 +23,7 @@ typedef struct import_manager {
  * インポートマネージャを作成します.
  * @return
  */
-import_manager* import_manager_new();
+import_manager* NewImportManager();
 
 /**
  * 指定のクラスローダをインポートの一覧に含めます.
@@ -31,7 +31,7 @@ import_manager* import_manager_new();
  * @param target
  * @return
  */
-struct import_info* import_manager_import(import_manager* self, struct class_loader* target);
+struct import_info* ImportImportManager(import_manager* self, struct class_loader* target);
 
 /**
  * 既に読み込まれたなら true.
@@ -39,7 +39,7 @@ struct import_info* import_manager_import(import_manager* self, struct class_loa
  * @param index
  * @return
  */
-bool import_manager_loaded(import_manager* self, int index);
+bool IsLoadedImportManager(import_manager* self, int index);
 
 /**
  * 指定の名前から型を解決します.
@@ -49,7 +49,7 @@ bool import_manager_loaded(import_manager* self, int index);
  * @param cctx
  * @return 解決出来なかったなら NULL を返します.
  */
-struct generic_type* import_manager_resolve(struct namespace_* scope, struct generic_cache* fqcn, struct call_context* cctx);
+struct generic_type* ResolveImportManager(struct namespace_* scope, struct generic_cache* fqcn, struct call_context* cctx);
 
 /**
  * 指定の名前から型を解決します.
@@ -59,11 +59,11 @@ struct generic_type* import_manager_resolve(struct namespace_* scope, struct gen
  * @param cctx
  * @return 解決出来なかったなら NULL を返します.
  */
-struct generic_type* import_manager_resolvef(struct namespace_* scope, struct fqcn_cache* fqcn, struct call_context* cctx);
+struct generic_type* ResolvefImportManager(struct namespace_* scope, struct fqcn_cache* fqcn, struct call_context* cctx);
 
 /**
  * インポートマネージャを開放します.
  * @param self
  */
-void import_manager_delete(import_manager* self);
+void DeleteImportManager(import_manager* self);
 #endif // !SIGNAL_ENV_IMPORT_MANAGER_H

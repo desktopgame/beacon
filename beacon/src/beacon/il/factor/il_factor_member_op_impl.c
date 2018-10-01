@@ -129,7 +129,7 @@ static void il_factor_member_op_check_static(il_factor_member_op* self, envirome
 	#endif
 	//Name.call
 	//の Name を型名として解決する
-	generic_type* ref = import_manager_resolvef(cctx->scope, ilvar->u.static_->fqcn, cctx);
+	generic_type* ref = ResolvefImportManager(cctx->scope, ilvar->u.static_->fqcn, cctx);
 	receiver_type = ref;
 	//Name.call
 	//の call をフィールドとして解決する

@@ -62,7 +62,7 @@ class_loader* class_loader_new(const char* filename, content_type type) {
 	ret->parent = NULL;
 	ret->type = type;
 	ret->link = LINK_NONE_T;
-	ret->import_manager = import_manager_new();
+	ret->import_manager = NewImportManager();
 	ret->env = NewEnviroment();
 	ret->level = 0;
 	ret->type_cache_vec = NewVector();
@@ -112,7 +112,7 @@ void class_loader_delete(class_loader * self) {
 	DeleteAST(self->source_code);
 	DeleteILToplevel(self->il_code);
 	DeleteVector(self->type_cache_vec, class_loader_cache_delete);
-	import_manager_delete(self->import_manager);
+	DeleteImportManager(self->import_manager);
 	DeleteEnviroment(self->env);
 	MEM_FREE(self->filename);
 	MEM_FREE(self);
@@ -248,7 +248,7 @@ static void class_loader_load_toplevel_function(class_loader* self) {
 		m->u.script_method = sm;
 		m->parent = worldT;
 		//戻り値を指定
-		m->return_gtype = import_manager_resolve(loc, ilfunc->return_fqcn, cctx);
+		m->return_gtype = ResolveImportManager(loc, ilfunc->return_fqcn, cctx);
 	//	generic_type_print(m->return_gtype);
 	//	Println();
 		//引数を指定
@@ -256,10 +256,10 @@ static void class_loader_load_toplevel_function(class_loader* self) {
 			il_parameter* ilparam = AtVector(ilfunc->parameter_list, j);
 			parameter* param = parameter_new(ilparam->namev);
 			PushVector(m->parameters, param);
-			param->gtype = import_manager_resolve(loc, ilparam->fqcn, cctx);
+			param->gtype = ResolveImportManager(loc, ilparam->fqcn, cctx);
 			EntrySymbolTable(
 				env->sym_table,
-				import_manager_resolve(loc, ilparam->fqcn, cctx),
+				ResolveImportManager(loc, ilparam->fqcn, cctx),
 				ilparam->namev
 			);
 			//実引数を保存

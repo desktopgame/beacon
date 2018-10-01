@@ -28,7 +28,7 @@ void GenerateILVariableInit(il_stmt_variable_init * self, enviroment * env, call
 	GenerateILFactor(self->fact, env, cctx);
 	//宣言型と代入型が異なる場合
 	generic_type* ga = EvalILFactor(self->fact, env, cctx);
-	generic_type* gb = import_manager_resolve(NULL, self->fqcn, cctx);
+	generic_type* gb = ResolveImportManager(NULL, self->fqcn, cctx);
 	//voidは代入できない
 	assert(gb != NULL);
 	BC_ERROR();
@@ -54,7 +54,7 @@ void LoadILVariableInit(il_stmt_variable_init * self, enviroment * env, call_con
 			Ref2Str(self->namev)
 		);
 	}
-	generic_type* gt = import_manager_resolve(NULL, self->fqcn, cctx);
+	generic_type* gt = ResolveImportManager(NULL, self->fqcn, cctx);
 	if(gt == NULL) {
 		ThrowBCError(
 			BCERROR_UNDEFINED_TYPE_DECL_T,
