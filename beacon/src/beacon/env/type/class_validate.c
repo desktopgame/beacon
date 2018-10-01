@@ -139,14 +139,14 @@ bool class_method_parameter_valid(class_* cls, method** out_method, string_view*
 	(*out_name) = ZERO_VIEW;
 	for(int i=0; i<cls->method_list->length; i++) {
 		method* m = (method*)AtVector(cls->method_list, i);
-		if(parameter_is_overwrapped_name(m->parameters, out_name)) {
+		if(IsOverwrappedParameterName(m->parameters, out_name)) {
 			(*out_method) = m;
 			return false;
 		}
 	}
 	for(int i=0; i<cls->smethod_list->length; i++) {
 		method* m = (method*)AtVector(cls->smethod_list, i);
-		if(parameter_is_overwrapped_name(m->parameters, out_name)) {
+		if(IsOverwrappedParameterName(m->parameters, out_name)) {
 			(*out_method) = m;
 			return false;
 		}
@@ -157,7 +157,7 @@ bool class_method_parameter_valid(class_* cls, method** out_method, string_view*
 bool class_ctor_parameter_valid(class_* self, constructor** out_ctor, string_view* out_name) {
 	for(int i=0; i<self->constructor_list->length; i++) {
 		constructor* ctor = (constructor*)AtVector(self->constructor_list, i);
-		if(parameter_is_overwrapped_name(ctor->parameter_list, out_name)) {
+		if(IsOverwrappedParameterName(ctor->parameter_list, out_name)) {
 			(*out_ctor) = ctor;
 			return false;
 		}
@@ -166,21 +166,21 @@ bool class_ctor_parameter_valid(class_* self, constructor** out_ctor, string_vie
 }
 
 bool class_type_type_parameter_valid(class_* self, string_view* out_name) {
-	return !type_parameter_is_overwrapped_name(self->type_parameter_list, out_name);
+	return !type_IsOverwrappedParameterName(self->type_parameter_list, out_name);
 }
 
 bool class_method_type_parameter_valid(class_* self, method** out_method, string_view* out_name) {
 	(*out_name) = ZERO_VIEW;
 	for(int i=0; i<self->method_list->length; i++) {
 		method* m = (method*)AtVector(self->method_list, i);
-		if(type_parameter_is_overwrapped_name(m->type_parameters, out_name)) {
+		if(type_IsOverwrappedParameterName(m->type_parameters, out_name)) {
 			(*out_method) = m;
 			return false;
 		}
 	}
 	for(int i=0; i<self->smethod_list->length; i++) {
 		method* m = (method*)AtVector(self->smethod_list, i);
-		if(type_parameter_is_overwrapped_name(m->type_parameters, out_name)) {
+		if(type_IsOverwrappedParameterName(m->type_parameters, out_name)) {
 			(*out_method) = m;
 			return false;
 		}

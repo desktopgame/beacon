@@ -360,7 +360,7 @@ bool CLBC_method_decl(class_loader* self, il_type* iltype, type* tp, il_method* 
 	for (int i = 0; i < ilparams->length; i++) {
 		VectorItem e = AtVector(ilparams, i);
 		il_parameter* ilp = (il_parameter*)e;
-		parameter* param = parameter_new(ilp->namev);
+		parameter* param = NewParameter(ilp->namev);
 		PushVector(parameter_list, param);
 	}
 	CLBC_parameter_list(self, scope, ilmethod->parameter_list, method->parameters, cctx);
@@ -452,7 +452,7 @@ bool CLBC_ctor_decl(class_loader* self, il_type* iltype, type* tp, il_constructo
 	for (int i = 0; i < ilparams->length; i++) {
 		VectorItem e = AtVector(ilparams, i);
 		il_parameter* ilp = (il_parameter*)e;
-		parameter* param = parameter_new(ilp->namev);
+		parameter* param = NewParameter(ilp->namev);
 		PushVector(parameter_list, param);
 	}
 	CLBC_parameter_list(self, scope, ilcons->parameter_list, cons->parameter_list, cctx);
@@ -540,7 +540,7 @@ bool CLBC_operator_overload_decl(class_loader* self, il_type* iltype, type* tp, 
 	//パラメータ読み込み
 	for(int j=0; j<ilopov->parameter_list->length; j++) {
 		il_parameter* ilparam = AtVector(ilopov->parameter_list, j);
-		parameter* param = parameter_new(ilparam->namev);
+		parameter* param = NewParameter(ilparam->namev);
 		PushVector(opov->parameter_list, param);
 	}
 	CLBC_parameter_list(self, scope, ilopov->parameter_list, opov->parameter_list, cctx);

@@ -17,13 +17,13 @@ typedef struct parameter {
  * @param namev
  * @return
  */
-parameter* parameter_new(string_view namev);
+parameter* NewParameter(string_view namev);
 
 /**
  * パラメータを開放します.
  * @param self
  */
-void parameter_delete(parameter* self);
+void DeleteParameter(parameter* self);
 
 /**
  * 重複するパラメータ名が存在するなら true.
@@ -31,5 +31,5 @@ void parameter_delete(parameter* self);
  * @param namev
  * @return
  */
-bool parameter_is_overwrapped_name(Vector* parameters, string_view* namev);
+bool IsOverwrappedParameterName(Vector* parameters, string_view* namev);
 #endif // !SIGNAL_ENV_PARAMETER_H

@@ -10,7 +10,7 @@
 #include "generic_type.h"
 
 //proto
-static void constructor_parameter_delete(VectorItem item);
+static void constructor_DeleteParameter(VectorItem item);
 
 constructor * NewConstructor() {
 	constructor* ret = (constructor*)MEM_MALLOC(sizeof(constructor));
@@ -34,12 +34,12 @@ object * NewInstanceConstructor(constructor * self, Vector * args, frame * paren
 
 void DeleteConstructor(constructor * self) {
 	DeleteEnviroment(self->env);
-	DeleteVector(self->parameter_list, constructor_parameter_delete);
+	DeleteVector(self->parameter_list, constructor_DeleteParameter);
 	MEM_FREE(self);
 }
 
 //private
-static void constructor_parameter_delete(VectorItem item) {
+static void constructor_DeleteParameter(VectorItem item) {
 	parameter* e = (parameter*)item;
-	parameter_delete(e);
+	DeleteParameter(e);
 }

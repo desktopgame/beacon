@@ -27,7 +27,7 @@ typedef struct type_parameter {
  * @param name
  * @return
  */
-type_parameter* type_parameter_new(string_view namev);
+type_parameter* type_NewParameter(string_view namev);
 
 /**
  * ILから型変数を生成します.
@@ -53,7 +53,7 @@ void type_parameter_print(Vector* v);
  * 型変数を解放します.
  * @param self
  */
-void type_parameter_delete(type_parameter* self);
+void type_DeleteParameter(type_parameter* self);
 
 /**
  * 重複するパラメータ名が存在するなら true.
@@ -61,5 +61,5 @@ void type_parameter_delete(type_parameter* self);
  * @param namev
  * @return
  */
-bool type_parameter_is_overwrapped_name(Vector* tparameters, string_view* namev);
+bool type_IsOverwrappedParameterName(Vector* tparameters, string_view* namev);
 #endif // !SIGNAL_ENV_TYPE_PARAMETER_H

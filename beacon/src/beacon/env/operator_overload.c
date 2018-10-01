@@ -51,5 +51,5 @@ void operator_overload_delete(operator_overload* self) {
 //private
 static void operator_overload_delete_param(VectorItem item) {
 	parameter* e = (parameter*)item;
-	parameter_delete(e);
+	DeleteParameter(e);
 }

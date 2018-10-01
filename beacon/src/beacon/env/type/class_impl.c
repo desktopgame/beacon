@@ -42,7 +42,7 @@ static void class_ctor_delete(VectorItem item);
 static void class_DeleteNativeMethodRef(NumericMapKey key, NumericMapItem item);
 static method* class_find_impl_method(class_* self, method* virtualMethod);
 static void class_vtable_vec_delete(VectorItem item);
-static void class_type_parameter_delete(VectorItem item);
+static void class_type_DeleteParameter(VectorItem item);
 static void class_generic_type_list_delete(VectorItem item);
 static void class_delete_operator_overload(VectorItem item);
 static void class_delete_property(VectorItem item);
@@ -407,7 +407,7 @@ void class_delete(class_ * self) {
 //	assert(self->ref_count == 0);
 //	MEM_FREE(self->name);
 	//printf("delete %s\n", self->name);
-	DeleteVector(self->type_parameter_list, class_type_parameter_delete);
+	DeleteVector(self->type_parameter_list, class_type_DeleteParameter);
 	MEM_FREE(self);
 }
 
@@ -530,9 +530,9 @@ static void class_vtable_vec_delete(VectorItem item) {
 	vtable_delete(e);
 }
 
-static void class_type_parameter_delete(VectorItem item) {
+static void class_type_DeleteParameter(VectorItem item) {
 	type_parameter* e = (type_parameter*)item;
-	type_parameter_delete(e);
+	type_DeleteParameter(e);
 }
 
 static void class_generic_type_list_delete(VectorItem item) {

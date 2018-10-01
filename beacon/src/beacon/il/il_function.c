@@ -8,8 +8,8 @@
 #include <stdio.h>
 
 //proto
-static void il_function_type_parameter_delete(VectorItem item);
-static void il_function_parameter_delete(VectorItem item);
+static void il_function_type_DeleteParameter(VectorItem item);
+static void il_function_DeleteParameter(VectorItem item);
 static void il_function_stmt_delete(VectorItem item);
 
 il_function * NewILFunction(string_view namev) {
@@ -23,20 +23,20 @@ il_function * NewILFunction(string_view namev) {
 }
 
 void DeleteILFunction(il_function * self) {
-	DeleteVector(self->type_parameter_vec, il_function_type_parameter_delete);
-	DeleteVector(self->parameter_list, il_function_parameter_delete);
+	DeleteVector(self->type_parameter_vec, il_function_type_DeleteParameter);
+	DeleteVector(self->parameter_list, il_function_DeleteParameter);
 	DeleteVector(self->statement_list, il_function_stmt_delete);
 	generic_cache_delete(self->return_fqcn);
 	MEM_FREE(self);
 }
 
 //private
-static void il_function_type_parameter_delete(VectorItem item) {
+static void il_function_type_DeleteParameter(VectorItem item) {
 	il_type_parameter* e = (il_type_parameter*)item;
 	DeleteILTypeParameter(e);
 }
 
-static void il_function_parameter_delete(VectorItem item) {
+static void il_function_DeleteParameter(VectorItem item) {
 	il_parameter* e = (il_parameter*)item;
 	DeleteILParameter(e);
 }

@@ -16,7 +16,7 @@ static void il_class_DeleteField(VectorItem item);
 static void il_class_DeleteMethod(VectorItem item);
 static void il_class_ctor_delete(VectorItem item);
 static void il_class_extend_delete(VectorItem item);
-static void il_class_type_parameter_delete(VectorItem item);
+static void il_class_type_DeleteParameter(VectorItem item);
 static void DeleteILClass_operator_overload(VectorItem item);
 static void il_class_prop_delete(VectorItem item );
 
@@ -80,7 +80,7 @@ void DeleteILClass(il_class * self) {
 	DeleteVector(self->smethod_list, il_class_DeleteMethod);
 	DeleteVector(self->constructor_list, il_class_ctor_delete);
 	DeleteVector(self->extend_list, il_class_extend_delete);
-	DeleteVector(self->type_parameter_list, il_class_type_parameter_delete);
+	DeleteVector(self->type_parameter_list, il_class_type_DeleteParameter);
 	DeleteVector(self->operator_overload_list, DeleteILClass_operator_overload);
 	DeleteVector(self->prop_list, il_class_prop_delete);
 	DeleteVector(self->sprop_list, il_class_prop_delete);
@@ -110,7 +110,7 @@ static void il_class_extend_delete(VectorItem item) {
 	generic_cache_delete(e);
 }
 
-static void il_class_type_parameter_delete(VectorItem item) {
+static void il_class_type_DeleteParameter(VectorItem item) {
 	il_type_parameter* e = (il_type_parameter*)item;
 	DeleteILTypeParameter(e);
 }

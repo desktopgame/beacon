@@ -8,7 +8,7 @@
 //proto
 static void type_parameter_rule_list_delete(VectorItem item);
 
-type_parameter * type_parameter_new(string_view namev) {
+type_parameter * type_NewParameter(string_view namev) {
 	type_parameter* ret = (type_parameter*)MEM_MALLOC(sizeof(type_parameter));
 	ret->namev = namev;
 	ret->kind = TYPE_PARAMETER_KIND_DEFAULT_T;
@@ -16,7 +16,7 @@ type_parameter * type_parameter_new(string_view namev) {
 }
 
 type_parameter * type_parameter_dup(il_type_parameter * src) {
-	type_parameter* ret = type_parameter_new(src->namev);
+	type_parameter* ret = type_NewParameter(src->namev);
 	switch (src->kind) {
 		case il_TYPE_PARAMETER_KIND_DEFAULT_T:
 			ret->kind = TYPE_PARAMETER_KIND_DEFAULT_T;
@@ -72,11 +72,11 @@ void type_parameter_print(Vector* v) {
 	printf(">");
 }
 
-void type_parameter_delete(type_parameter * self) {
+void type_DeleteParameter(type_parameter * self) {
 	MEM_FREE(self);
 }
 
-bool type_parameter_is_overwrapped_name(Vector* tparameters, string_view* namev) {
+bool type_IsOverwrappedParameterName(Vector* tparameters, string_view* namev) {
 	if(tparameters->length <= 1) {
 		return false;
 	}

@@ -25,8 +25,8 @@
 #endif
 
 //proto
-static void method_parameter_delete(VectorItem item);
-static void method_type_parameter_delete(VectorItem item);
+static void method_DeleteParameter(VectorItem item);
+static void method_type_DeleteParameter(VectorItem item);
 static void method_count(il_stmt* s, int* yeild_ret, int* ret);
 static constructor* create_delegate_ctor(method* self, type* ty, class_loader* cll,int op_len);
 static method* create_has_next(method* self, type* ty,class_loader* cll, Vector* stmt_list, int* out_op_len);
@@ -139,8 +139,8 @@ int GetGenericIndexForMethod(method * self, string_view namev) {
 }
 
 void DeleteMethod(method * self) {
-	DeleteVector(self->type_parameters, method_type_parameter_delete);
-	DeleteVector(self->parameters, method_parameter_delete);
+	DeleteVector(self->type_parameters, method_type_DeleteParameter);
+	DeleteVector(self->parameters, method_DeleteParameter);
 	if (self->type == METHOD_TYPE_SCRIPT_T) {
 		DeleteScriptMethod(self->u.script_method);
 	} else if (self->type == METHOD_TYPE_NATIVE_T) {
@@ -249,14 +249,14 @@ type* CreateIteratorTypeFromMethod(method* self,  class_loader* cll, Vector* stm
 }
 
 //private
-static void method_parameter_delete(VectorItem item) {
+static void method_DeleteParameter(VectorItem item) {
 	parameter* e = (parameter*)item;
-	parameter_delete(e);
+	DeleteParameter(e);
 }
 
-static void method_type_parameter_delete(VectorItem item) {
+static void method_type_DeleteParameter(VectorItem item) {
 	type_parameter* e = (type_parameter*)item;
-	type_parameter_delete(e);
+	type_DeleteParameter(e);
 }
 
 static void method_count(il_stmt* s, int* yield_ret, int* ret) {
@@ -337,13 +337,13 @@ static constructor* create_delegate_ctor(method* self, type* ty, class_loader* c
 	constructor* iterCons = NewConstructor();
 	enviroment* envIterCons = NewEnviroment();
 	//コルーチンを生成したオブジェクトを受け取るパラメータ追加
-	parameter* coroOwnerParam = parameter_new(InternString("owner"));
+	parameter* coroOwnerParam = NewParameter(InternString("owner"));
 	PushVector(iterCons->parameter_list, coroOwnerParam);
 	envIterCons->context_ref = cll;
 	//コルーチンに渡された引数を引き継ぐパラメータ追加
 	for(int i=0; i<self->parameters->length; i++) {
 		parameter* methP = (parameter*)AtVector(self->parameters, i);
-		parameter* consP = parameter_new(methP->namev);
+		parameter* consP = NewParameter(methP->namev);
 		consP->gtype = methP->gtype;
 		PushVector(iterCons->parameter_list, consP);
 	}

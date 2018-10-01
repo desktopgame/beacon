@@ -6,7 +6,7 @@
 #include "il_constructor_chain.h"
 
 //proto
-static void il_constructor_parameter_delete(VectorItem item);
+static void il_constructor_DeleteParameter(VectorItem item);
 static void il_constructor_stmt_delete(VectorItem item);
 
 il_constructor * NewILConstructor() {
@@ -20,12 +20,12 @@ il_constructor * NewILConstructor() {
 
 void DeleteILConstructor(il_constructor * self) {
 	DeleteILConstructorChain(self->chain);
-	DeleteVector(self->parameter_list, il_constructor_parameter_delete);
+	DeleteVector(self->parameter_list, il_constructor_DeleteParameter);
 	DeleteVector(self->statement_list, il_constructor_stmt_delete);
 	MEM_FREE(self);
 }
 //private
-static void il_constructor_parameter_delete(VectorItem item) {
+static void il_constructor_DeleteParameter(VectorItem item) {
 	il_parameter* e = (il_parameter*)item;
 	DeleteILParameter(e);
 }
