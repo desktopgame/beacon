@@ -192,11 +192,11 @@ static void class_loader_load_toplevel(class_loader* self) {
 		return;
 	}
 	//var $world = new beacon::lang::World();
-	il_stmt_inferenced_type_init* createWorldStmt = il_stmt_inferenced_type_init_new(InternString("$world"));
+	il_stmt_inferenced_type_init* createWorldStmt = NewILInferencedTypeInit(InternString("$world"));
 	il_factor_new_instance* newWorldInstance = NewILNewInstance();
 	newWorldInstance->fqcnc->namev = InternString("World");
 	createWorldStmt->fact = WrapILNewInstance(newWorldInstance);
-	il_stmt* body = il_stmt_wrap_inferenced_type_init(createWorldStmt);
+	il_stmt* body = WrapILInferencedTypeInit(createWorldStmt);
 	//これをやらないと -1 のまま
 	body->lineno = 0;
 	createWorldStmt->fact->lineno = 0;

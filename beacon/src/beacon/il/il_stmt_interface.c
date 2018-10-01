@@ -29,16 +29,16 @@ void GenerateILStmt(il_stmt * self, struct enviroment* env, call_context* cctx) 
 			//DeleteILProc(self->u.proc_);
 			break;
 		case ILSTMT_VARIABLE_DECL_T:
-			il_stmt_variable_decl_generate(self->u.variable_decl, env, cctx);
+			GenerateILVariableDecl(self->u.variable_decl, env, cctx);
 			break;
 		case ILSTMT_VARIABLE_INIT_T:
-			il_stmt_variable_init_generate(self->u.variable_init, env, cctx);
+			GenerateILVariableInit(self->u.variable_init, env, cctx);
 			break;
 		case ILSTMT_RETURN_T:
 			GenerateILReturn(self->u.return_, env, cctx);
 			break;
 		case ILSTMT_RETURN_EMPTY_T:
-			il_stmt_return_empty_generate(NULL, env, cctx);
+			GenerateILReturnEmpty(NULL, env, cctx);
 			break;
 		case ILSTMT_WHILE_T:
 			GenerateILWhile(self->u.while_, env, cctx);
@@ -65,10 +65,10 @@ void GenerateILStmt(il_stmt * self, struct enviroment* env, call_context* cctx) 
 			GenerateILDefer(self->u.defer_, env, cctx);
 			break;
 		case ILSTMT_YIELD_RETURN_T:
-			il_stmt_yield_return_generate(self->u.yield_return, env, cctx);
+			GenerateILYieldReturn(self->u.yield_return, env, cctx);
 			break;
 		case ILSTMT_YIELD_BREAK_T:
-			il_stmt_yield_break_generate(self->u.yield_break, env, cctx);
+			GenerateILYieldBreak(self->u.yield_break, env, cctx);
 			break;
 		case ILSTMT_INJECT_JNI_T:
 			GenerateILInjectJNI(self->u.inject_jni, env, cctx);
@@ -156,7 +156,7 @@ void DeleteILStmt(il_stmt * self) {
 			DeleteILVariableDecl(self->u.variable_decl);
 			break;
 		case ILSTMT_VARIABLE_INIT_T:
-			il_stmt_variable_init_delete(self->u.variable_init);
+			DeleteILVariableInit(self->u.variable_init);
 			break;
 		case ILSTMT_RETURN_T:
 			DeleteILReturn(self->u.return_);

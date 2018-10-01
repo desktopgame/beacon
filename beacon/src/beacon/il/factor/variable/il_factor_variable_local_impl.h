@@ -45,11 +45,11 @@ il_factor_variable_local* NewILVariableLocal(string_view namev);
 
 void il_factor_variable_local_generate(il_factor_variable_local* self, struct enviroment* env, call_context* cctx);
 
-void il_factor_variable_local_load(il_factor_variable_local * self, struct enviroment * env, call_context* cctx);
+void LoadILVariableLocal(il_factor_variable_local * self, struct enviroment * env, call_context* cctx);
 
-struct generic_type* il_factor_variable_local_eval(il_factor_variable_local * self, struct enviroment * env, call_context* cctx);
+struct generic_type* EvalILVariableLocal(il_factor_variable_local * self, struct enviroment * env, call_context* cctx);
 
-char* il_factor_variable_local_tostr(il_factor_variable_local * self, struct enviroment * env);
+char* ILVariableLocalToString(il_factor_variable_local * self, struct enviroment * env);
 
-void il_factor_variable_local_delete(il_factor_variable_local* self);
+void DeleteILVariableLocal(il_factor_variable_local* self);
 #endif

@@ -21,7 +21,7 @@ il_factor_arithmetic_op* NewILArithmeticOp(operator_type type) {
 	return ret;
 }
 
-generic_type* il_factor_arithmetic_op_eval(il_factor_arithmetic_op * self, enviroment * env, call_context* cctx) {
+generic_type* EvalILArithmeticOp(il_factor_arithmetic_op * self, enviroment * env, call_context* cctx) {
 	generic_type* lgtype = EvalILFactor(self->parent->left, env, cctx);
 	generic_type* rgtype = EvalILFactor(self->parent->right, env, cctx);
 	assert(lgtype != NULL);
@@ -46,7 +46,7 @@ generic_type* il_factor_arithmetic_op_eval(il_factor_arithmetic_op * self, envir
 	return ApplyILBinaryOp(self->parent, operator_ov->return_gtype, env, cctx);
 }
 
-void il_factor_arithmetic_op_generate(il_factor_arithmetic_op* self, enviroment* env, call_context* cctx) {
+void GenerateILArithmeticOp(il_factor_arithmetic_op* self, enviroment* env, call_context* cctx) {
 	//演算子オーバーロードが見つからない
 	if(self->operator_index == -1) {
 		GenerateILFactor(self->parent->right, env, cctx);
@@ -73,11 +73,11 @@ void LoadILArithmeticOp(il_factor_arithmetic_op* self, enviroment* env, call_con
 	}
 }
 
-void il_factor_arithmetic_op_delete(il_factor_arithmetic_op* self) {
+void DeleteILArithmeticOp(il_factor_arithmetic_op* self) {
 	MEM_FREE(self);
 }
 
-char* il_factor_arithmetic_op_tostr(il_factor_arithmetic_op* self, enviroment* env) {
+char* ILArithmeticOpToString(il_factor_arithmetic_op* self, enviroment* env) {
 	return ILBinaryOpToString_simple(self->parent, env);
 }
 //static

@@ -16,7 +16,7 @@ il_factor_instanceof* NewILInstanceOf();
 
 void LoadILInstanceOf(il_factor_instanceof* self, enviroment* env, call_context* cctx);
 
-void il_factor_instanceof_generate(il_factor_instanceof* self, enviroment* env, call_context* cctx);
+void GenerateILInstanceOf(il_factor_instanceof* self, enviroment* env, call_context* cctx);
 
 struct generic_type* EvalILInstanceOf(il_factor_instanceof* self, enviroment* env, call_context* cctx);
 

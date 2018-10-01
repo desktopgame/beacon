@@ -33,7 +33,7 @@ il_type_parameter* NewILTypeParameter(string_view namev);
  * 型引数の一覧を出力します.
  * @param v<il_>
  */
-void il_type_parameter_list_print(Vector* v);
+void PrintILTypeParameterList(Vector* v);
 
 /**
  * 型引数を解放します.

@@ -8,13 +8,13 @@
 #include "../il_factor_impl.h"
 #include <assert.h>
 
-il_factor* il_factor_wrap_explicit_binary_op(il_factor_explicit_binary_op* self) {
+il_factor* WrapILExplicitBinaryOp(il_factor_explicit_binary_op* self) {
 	il_factor* ret = il_factor_new(ILFACTOR_EXPLICIT_BINARY_OP_T);
 	ret->u.exp_binary_op = self;
 	return ret;
 }
 
-il_factor_explicit_binary_op* il_factor_explicit_binary_op_new(operator_type type) {
+il_factor_explicit_binary_op* NewILExplicitBinaryOp(operator_type type) {
 	il_factor_explicit_binary_op* ret = (il_factor_explicit_binary_op*)MEM_MALLOC(sizeof(il_factor_explicit_binary_op));
 	ret->type = type;
 	ret->receiver = NULL;
@@ -30,7 +30,7 @@ void il_factor_explicit_binary_op_generate(il_factor_explicit_binary_op* self, e
 	AddOpcodeBuf(env->buf, self->index);
 }
 
-void il_factor_explicit_binary_OP_LOAD(il_factor_explicit_binary_op* self, enviroment* env, call_context* cctx) {
+void LoadILExplicitBinaryOp(il_factor_explicit_binary_op* self, enviroment* env, call_context* cctx) {
 	LoadILFactor(self->receiver, env, cctx);
 	LoadILFactor(self->arg, env, cctx);
 	self->index = GetIndexILBinaryOp2(self->receiver, self->arg, self->type, env, cctx);

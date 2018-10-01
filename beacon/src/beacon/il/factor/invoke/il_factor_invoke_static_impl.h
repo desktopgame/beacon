@@ -19,13 +19,13 @@ typedef struct il_factor_invoke_static {
 
 il_factor_invoke_static* NewILInvokeStatic(string_view namev);
 
-void il_factor_invoke_static_generate(il_factor_invoke_static* self, struct enviroment* env, call_context* cctx);
+void GenerateILInvokeStatic(il_factor_invoke_static* self, struct enviroment* env, call_context* cctx);
 
 void LoadILInvokeStatic(il_factor_invoke_static * self, struct enviroment * env, call_context* cctx);
 
 struct generic_type* EvalILInvokeStatic(il_factor_invoke_static * self, struct enviroment * env, call_context* cctx);
 
-char* il_factor_invoke_static_tostr(il_factor_invoke_static* self, struct enviroment* env);
+char* ILInvokeStaticToString(il_factor_invoke_static* self, struct enviroment* env);
 
-void il_factor_invoke_static_delete(il_factor_invoke_static* self);
+void DeleteILInvokeStatic(il_factor_invoke_static* self);
 #endif

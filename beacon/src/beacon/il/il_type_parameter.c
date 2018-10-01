@@ -12,7 +12,7 @@ il_type_parameter * NewILTypeParameter(string_view namev) {
 	return ret;
 }
 
-void il_type_parameter_list_print(Vector * v) {
+void PrintILTypeParameterList(Vector * v) {
 	if (v->length <= 0) {
 		return;
 	}

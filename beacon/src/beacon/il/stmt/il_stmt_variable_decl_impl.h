@@ -32,7 +32,7 @@ il_stmt_variable_decl* NewILVariableDecl(string_view namev);
  * @param env
  * @param cctx
  */
-void il_stmt_variable_decl_generate(il_stmt_variable_decl* self, struct enviroment* env, call_context* cctx);
+void GenerateILVariableDecl(il_stmt_variable_decl* self, struct enviroment* env, call_context* cctx);
 
 /**
  * 型宣言を表す要素を出力します.

@@ -117,9 +117,9 @@ static il_factor* CLIL_factorImpl(class_loader* self, ast* source) {
 	} else if (source->tag == AST_NEG_T) {
 		return WrapILUnary(CLIL_unary(self, source, OPERATOR_NEGATIVE_T));
 	} else if(source->tag == AST_EXPLICIT_UOPERATOR_T) {
-		return il_factor_wrap_explicit_unary_op(CLIL_explicit_unary(self, source, source->u.operator_value));
+		return WrapILExplicitUnaryOp(CLIL_explicit_unary(self, source, source->u.operator_value));
 	} else if(source->tag == AST_EXPLICIT_BIOPERATOR_T) {
-		return il_factor_wrap_explicit_binary_op(CLIL_explicit_binary(self, source, source->u.operator_value));
+		return WrapILExplicitBinaryOp(CLIL_explicit_binary(self, source, source->u.operator_value));
 		//this super
 	} else if (source->tag == AST_THIS_T) {
 		il_factor* ret = il_factor_new(ILFACTOR_THIS_T);
@@ -179,13 +179,13 @@ static il_factor_binary_op* CLIL_binary(class_loader* self, ast* source, operato
 }
 
 static il_factor_explicit_unary_op* CLIL_explicit_unary(class_loader* self, ast* source, operator_type type) {
-	il_factor_explicit_unary_op* ret = il_factor_explicit_unary_op_new(type);
+	il_factor_explicit_unary_op* ret = NewILExplicitUnaryOp(type);
 	ret->receiver = CLIL_factor(self, FirstAST(source));
 	return ret;
 }
 
 static il_factor_explicit_binary_op* CLIL_explicit_binary(class_loader* self, ast* source, operator_type type) {
-	il_factor_explicit_binary_op* ret = il_factor_explicit_binary_op_new(type);
+	il_factor_explicit_binary_op* ret = NewILExplicitBinaryOp(type);
 	ret->receiver = CLIL_factor(self, FirstAST(source));
 	ret->arg = CLIL_factor(self, SecondAST(source));
 	return ret;

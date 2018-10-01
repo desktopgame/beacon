@@ -49,9 +49,9 @@ bool IsIntIntBinaryOp(il_factor_binary_op* self, struct enviroment* env, call_co
 
 bool il_factor_binary_op_double_double(il_factor_binary_op* self, struct enviroment* env, call_context* cctx);
 
-bool il_factor_binary_op_bool_bool(il_factor_binary_op* self, struct enviroment* env, call_context* cctx);
+bool IsBoolBoolBinaryOp(il_factor_binary_op* self, struct enviroment* env, call_context* cctx);
 
-bool il_factor_binary_op_char_char(il_factor_binary_op* self, struct enviroment* env, call_context* cctx);
+bool IsCharCharBinaryOp(il_factor_binary_op* self, struct enviroment* env, call_context* cctx);
 
 int GetIndexILBinaryOp(il_factor_binary_op* self, struct enviroment* env, call_context* cctx);
 

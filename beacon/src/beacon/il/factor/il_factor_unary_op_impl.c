@@ -36,7 +36,7 @@ void GenerateILUnaryOp(il_factor_unary_op * self, enviroment* env, call_context*
 			GenerateILChildaOp(self->u.childa_op, env, cctx);
 			break;
 		case OPERATOR_NEGATIVE_T:
-			il_factor_negative_op_generate(self->u.negative_op, env, cctx);
+			GenerateILNegativeOp(self->u.negative_op, env, cctx);
 			break;
 	}
 }
@@ -116,7 +116,7 @@ void DeleteILUnaryOp(il_factor_unary_op * self) {
 			DeleteILChildaOp(self->u.childa_op);
 			break;
 		case OPERATOR_NEGATIVE_T:
-			il_factor_negative_op_delete(self->u.negative_op);
+			DeleteILNegativeOp(self->u.negative_op);
 			break;
 	}
 	MEM_FREE(self);

@@ -14,13 +14,13 @@ typedef struct il_factor_arithmetic_op {
 il_factor_arithmetic_op* NewILArithmeticOp(operator_type type);
 
 
-struct generic_type* il_factor_arithmetic_op_eval(il_factor_arithmetic_op * self, struct enviroment * env, call_context* cctx);
+struct generic_type* EvalILArithmeticOp(il_factor_arithmetic_op * self, struct enviroment * env, call_context* cctx);
 
-void il_factor_arithmetic_op_generate(il_factor_arithmetic_op* self, struct enviroment* env, call_context* cctx);
+void GenerateILArithmeticOp(il_factor_arithmetic_op* self, struct enviroment* env, call_context* cctx);
 
 void LoadILArithmeticOp(il_factor_arithmetic_op* self, struct enviroment* env, call_context* cctx);
 
-void il_factor_arithmetic_op_delete(il_factor_arithmetic_op* self);
+void DeleteILArithmeticOp(il_factor_arithmetic_op* self);
 
-char* il_factor_arithmetic_op_tostr(il_factor_arithmetic_op* self, struct enviroment* env);
+char* ILArithmeticOpToString(il_factor_arithmetic_op* self, struct enviroment* env);
 #endif

@@ -12,7 +12,7 @@ il_stmt* WrapILYieldReturn(il_stmt_yield_return* self);
 #define il_stmt_yield_return_new() (MallocILYieldReturn(__FILE__, __LINE__))
 il_stmt_yield_return* MallocILYieldReturn(const char* filename, int lineno);
 
-void il_stmt_yield_return_generate(il_stmt_yield_return* self, enviroment* env, call_context* cctx);
+void GenerateILYieldReturn(il_stmt_yield_return* self, enviroment* env, call_context* cctx);
 
 void LoadILYieldReturn(il_stmt_yield_return * self, enviroment* env, call_context* cctx);
 

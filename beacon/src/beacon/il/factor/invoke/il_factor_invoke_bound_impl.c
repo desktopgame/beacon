@@ -13,13 +13,13 @@
 #include "../../il_type_argument.h"
 
 //proto
-static void il_factor_invoke_bound_delete_typeargs(VectorItem item);
+static void DeleteILInvokeBound_typeargs(VectorItem item);
 static void resolve_non_default(il_factor_invoke_bound * self, enviroment * env, call_context* cctx);
 static void resolve_default(il_factor_invoke_bound * self, enviroment * env, call_context* cctx);
 static void il_factor_invoke_bound_check(il_factor_invoke_bound * self, enviroment * env, call_context* cctx);
 static void il_factor_invoke_bound_args_delete(VectorItem item);
-static void il_factor_invoke_bound_generate_method(il_factor_invoke_bound* self, enviroment* env, call_context* cctx);
-static void il_factor_invoke_bound_generate_subscript(il_factor_invoke_bound* self, enviroment* env, call_context* cctx);
+static void GenerateILInvokeBound_method(il_factor_invoke_bound* self, enviroment* env, call_context* cctx);
+static void GenerateILInvokeBound_subscript(il_factor_invoke_bound* self, enviroment* env, call_context* cctx);
 static generic_type* il_factor_invoke_bound_return_gtype(il_factor_invoke_bound* self, call_context* cctx);
 static generic_type* EvalILInvokeBoundImpl(il_factor_invoke_bound * self, enviroment * env, call_context* cctx);
 
@@ -34,9 +34,9 @@ il_factor_invoke_bound* NewILInvokeBound(string_view namev) {
 	return ret;
 }
 
-void il_factor_invoke_bound_generate(il_factor_invoke_bound* self, enviroment* env, call_context* cctx) {
-	il_factor_invoke_bound_generate_method(self, env, cctx);
-	il_factor_invoke_bound_generate_subscript(self, env, cctx);
+void GenerateILInvokeBound(il_factor_invoke_bound* self, enviroment* env, call_context* cctx) {
+	GenerateILInvokeBound_method(self, env, cctx);
+	GenerateILInvokeBound_subscript(self, env, cctx);
 }
 
 void LoadILInvokeBound(il_factor_invoke_bound * self, enviroment * env, call_context* cctx) {
@@ -57,14 +57,14 @@ char* ILInvokeBoundToString(il_factor_invoke_bound* self, enviroment* env) {
 	return ReleaseBuffer(sb);
 }
 
-void il_factor_invoke_bound_delete(il_factor_invoke_bound* self) {
+void DeleteILInvokeBound(il_factor_invoke_bound* self) {
 	DeleteVector(self->args, il_factor_invoke_bound_args_delete);
-	DeleteVector(self->type_args, il_factor_invoke_bound_delete_typeargs);
+	DeleteVector(self->type_args, DeleteILInvokeBound_typeargs);
 	//generic_type_delete(self->resolved);
 	MEM_FREE(self);
 }
 
-operator_overload* il_factor_invoke_bound_find_set(il_factor_invoke_bound* self, il_factor* value, struct enviroment* env, call_context* cctx, int* outIndex) {
+operator_overload* FindSetILInvokeBound(il_factor_invoke_bound* self, il_factor* value, struct enviroment* env, call_context* cctx, int* outIndex) {
 	assert(self->tag == BOUND_INVOKE_SUBSCRIPT_T);
 	Vector* args = NewVector();
 	PushVector(args, ((il_argument*)AtVector(self->args, 0))->factor);
@@ -76,7 +76,7 @@ operator_overload* il_factor_invoke_bound_find_set(il_factor_invoke_bound* self,
 
 //private
 //FIXME:il_factor_invokeからのコピペ
-static void il_factor_invoke_bound_delete_typeargs(VectorItem item) {
+static void DeleteILInvokeBound_typeargs(VectorItem item) {
 	il_type_argument* e = (il_type_argument*)item;
 	DeleteILTypeArgument(e);
 }
@@ -184,7 +184,7 @@ static void il_factor_invoke_bound_args_delete(VectorItem item) {
 	DeleteILArgument(e);
 }
 
-static void il_factor_invoke_bound_generate_method(il_factor_invoke_bound* self, enviroment* env, call_context* cctx) {
+static void GenerateILInvokeBound_method(il_factor_invoke_bound* self, enviroment* env, call_context* cctx) {
 	assert(self->tag != BOUND_INVOKE_UNDEFINED_T);
 	if(self->tag != BOUND_INVOKE_METHOD_T) {
 		return;
@@ -218,7 +218,7 @@ static void il_factor_invoke_bound_generate_method(il_factor_invoke_bound* self,
 	}
 }
 
-static void il_factor_invoke_bound_generate_subscript(il_factor_invoke_bound* self, enviroment* env, call_context* cctx) {
+static void GenerateILInvokeBound_subscript(il_factor_invoke_bound* self, enviroment* env, call_context* cctx) {
 	assert(self->tag != BOUND_INVOKE_UNDEFINED_T);
 	if(self->tag != BOUND_INVOKE_SUBSCRIPT_T) {
 		return;

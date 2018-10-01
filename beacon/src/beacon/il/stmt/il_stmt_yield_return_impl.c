@@ -23,7 +23,7 @@ il_stmt_yield_return* MallocILYieldReturn(const char* filename, int lineno) {
 	return ret;
 }
 
-void il_stmt_yield_return_generate(il_stmt_yield_return* self, enviroment* env, call_context* cctx) {
+void GenerateILYieldReturn(il_stmt_yield_return* self, enviroment* env, call_context* cctx) {
 	GenerateILFactor(self->fact, env, cctx);
 	AddOpcodeBuf(env->buf, OP_CORO_NEXT);
 }

@@ -27,7 +27,7 @@ generic_type* EvalILCompareOp(il_factor_compare_op * self, enviroment * env, cal
 	return ret;
 }
 
-void il_factor_compare_op_generate(il_factor_compare_op* self, enviroment* env, call_context* cctx) {
+void GenerateILCompareOp(il_factor_compare_op* self, enviroment* env, call_context* cctx) {
 	//演算子オーバーロードが見つからない
 	if(self->operator_index == -1) {
 		GenerateILFactor(self->parent->right, env, cctx);
@@ -36,7 +36,7 @@ void il_factor_compare_op_generate(il_factor_compare_op* self, enviroment* env, 
 			AddOpcodeBuf(env->buf, (VectorItem)operator_to_iopcode(self->type));
 		} else if(il_factor_binary_op_double_double(self->parent, env, cctx)) {
 			AddOpcodeBuf(env->buf, (VectorItem)operator_to_dopcode(self->type));
-		} else if(il_factor_binary_op_char_char(self->parent, env, cctx)) {
+		} else if(IsCharCharBinaryOp(self->parent, env, cctx)) {
 			AddOpcodeBuf(env->buf, (VectorItem)operator_to_copcode(self->type));
 		} else {
 			ThrowBCError(BCERROR_UNDEFINED_COMPARE_OPERATOR_T,
@@ -55,7 +55,7 @@ void il_factor_compare_op_generate(il_factor_compare_op* self, enviroment* env, 
 void LoadILCompareOp(il_factor_compare_op* self, enviroment* env, call_context* cctx) {
 	if(!IsIntIntBinaryOp(self->parent, env, cctx) &&
 	   !il_factor_binary_op_double_double(self->parent, env, cctx) &&
-	   !il_factor_binary_op_char_char(self->parent, env, cctx)) {
+	   !IsCharCharBinaryOp(self->parent, env, cctx)) {
 	self->operator_index = GetIndexILBinaryOp(self->parent, env, cctx);
 	}
 }

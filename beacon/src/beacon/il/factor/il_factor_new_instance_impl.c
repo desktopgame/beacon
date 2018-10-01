@@ -15,7 +15,7 @@
 #include <assert.h>
 
 //proto
-static void il_factor_new_instance_delete_typearg(VectorItem item);
+static void DeleteILNewInstance_typearg(VectorItem item);
 static void il_factor_new_instance_find(il_factor_new_instance * self, enviroment * env, call_context* cctx);
 static void il_Factor_new_instace_delete_arg(VectorItem item);
 
@@ -36,7 +36,7 @@ il_factor_new_instance * NewILNewInstance() {
 	return ret;
 }
 
-void il_factor_new_instance_generate(il_factor_new_instance * self, enviroment * env, call_context* cctx) {
+void GenerateILNewInstance(il_factor_new_instance * self, enviroment * env, call_context* cctx) {
 	il_factor_new_instance_find(self, env, cctx);
 	for(int i=0; i<self->type_args->length; i++) {
 		il_type_argument* e = (il_type_argument*)AtVector(self->type_args, i);
@@ -104,15 +104,15 @@ char* ILNewInstanceToString(il_factor_new_instance* self, enviroment* env) {
 	return ReleaseBuffer(sb);
 }
 
-void il_factor_new_instance_delete(il_factor_new_instance * self) {
+void DeleteILNewInstance(il_factor_new_instance * self) {
 	DeleteVector(self->argument_list, il_Factor_new_instace_delete_arg);
-	DeleteVector(self->type_args, il_factor_new_instance_delete_typearg);
+	DeleteVector(self->type_args, DeleteILNewInstance_typearg);
 	fqcn_cache_delete(self->fqcnc);
 	MEM_FREE(self);
 }
 
 //private
-static void il_factor_new_instance_delete_typearg(VectorItem item) {
+static void DeleteILNewInstance_typearg(VectorItem item) {
 	il_type_argument* e = (il_type_argument*)item;
 	DeleteILTypeArgument(e);
 }

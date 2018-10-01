@@ -10,15 +10,15 @@ typedef struct il_factor_variable_static {
 	Vector* type_args;
 } il_factor_variable_static;
 
-il_factor_variable_static* il_factor_variable_static_new();
+il_factor_variable_static* NewILVariableStatic();
 
 void il_factor_variable_static_generate(il_factor_variable_static* self, struct enviroment* env, call_context* cctx);
 
-void il_factor_variable_static_load(il_factor_variable_static * self, struct enviroment * env, call_context* cctx);
+void LoadILVariableStatic(il_factor_variable_static * self, struct enviroment * env, call_context* cctx);
 
-struct generic_type* il_factor_variable_static_eval(il_factor_variable_static * self, struct enviroment * env, call_context* cctx);
+struct generic_type* EvalILVariableStatic(il_factor_variable_static * self, struct enviroment * env, call_context* cctx);
 
-char* il_factor_variable_static_tostr(il_factor_variable_static * self, struct enviroment * env);
+char* ILVariableStaticToString(il_factor_variable_static * self, struct enviroment * env);
 
-void il_factor_variable_static_delete(il_factor_variable_static* self);
+void DeleteILVariableStatic(il_factor_variable_static* self);
 #endif

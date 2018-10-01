@@ -8,7 +8,7 @@
  * @param env
  * @param cctx
  */
-void il_stmt_return_empty_generate(il_stmt_return_empty self, struct enviroment* env, call_context* cctx);
+void GenerateILReturnEmpty(il_stmt_return_empty self, struct enviroment* env, call_context* cctx);
 
 /**
  * 式を返却する文を読み込みます.

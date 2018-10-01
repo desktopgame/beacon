@@ -73,7 +73,7 @@ char* ILCallOpToString(il_factor_call_op* self, enviroment* env) {
 	} else if(self->type == ILCALL_TYPE_INVOKE_BOUND_T) {
 		return ILInvokeBoundToString(self->u.invoke_bound_, env);
 	} else if(self->type == ILCALL_TYPE_INVOKE_STATIC_T) {
-		return il_factor_invoke_static_tostr(self->u.invoke_static_, env);
+		return ILInvokeStaticToString(self->u.invoke_static_, env);
 	}
 	return NULL;
 }
@@ -83,9 +83,9 @@ void GenerateILCallOp(il_factor_call_op* self, enviroment* env, call_context* cc
 	if(self->type == ILCALL_TYPE_INVOKE_T) {
 		return GenerateILInvoke(self->u.invoke_, env, cctx);
 	} else if(self->type == ILCALL_TYPE_INVOKE_STATIC_T) {
-		return il_factor_invoke_static_generate(self->u.invoke_static_, env, cctx);
+		return GenerateILInvokeStatic(self->u.invoke_static_, env, cctx);
 	} else if(self->type == ILCALL_TYPE_INVOKE_BOUND_T) {
-		return il_factor_invoke_bound_generate(self->u.invoke_bound_, env, cctx);
+		return GenerateILInvokeBound(self->u.invoke_bound_, env, cctx);
 	}
 }
 
@@ -94,9 +94,9 @@ void DeleteILCallOp(il_factor_call_op* self) {
 	if(self->type == ILCALL_TYPE_INVOKE_T) {
 		DeleteILInvoke(self->u.invoke_);
 	} else if(self->type == ILCALL_TYPE_INVOKE_STATIC_T) {
-		il_factor_invoke_static_delete(self->u.invoke_static_);
+		DeleteILInvokeStatic(self->u.invoke_static_);
 	} else if(self->type == ILCALL_TYPE_INVOKE_BOUND_T) {
-		il_factor_invoke_bound_delete(self->u.invoke_bound_);
+		DeleteILInvokeBound(self->u.invoke_bound_);
 	}
 	DeleteVector(self->argument_list, il_factor_call_op_argument_delete);
 	MEM_FREE(self);

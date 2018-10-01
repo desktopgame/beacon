@@ -26,7 +26,7 @@ il_factor* WrapILNewInstance(il_factor_new_instance* self);
 
 il_factor_new_instance* NewILNewInstance();
 
-void il_factor_new_instance_generate(il_factor_new_instance* self, struct enviroment* env, call_context* cctx);
+void GenerateILNewInstance(il_factor_new_instance* self, struct enviroment* env, call_context* cctx);
 
 void LoadILNewInstance(il_factor_new_instance* self, struct enviroment* env, call_context* cctx);
 
@@ -34,6 +34,6 @@ generic_type* EvalILNewInstance(il_factor_new_instance* self, struct enviroment*
 
 char* ILNewInstanceToString(il_factor_new_instance* self, struct enviroment* env);
 
-void il_factor_new_instance_delete(il_factor_new_instance* self);
+void DeleteILNewInstance(il_factor_new_instance* self);
 
 #endif // !SIGNAL_IL_IL_FACTOR_NEW_INSTANCE_H

@@ -27,7 +27,7 @@ il_factor_invoke_static* NewILInvokeStatic(string_view namev) {
 	return ret;
 }
 
-void il_factor_invoke_static_generate(il_factor_invoke_static* self, enviroment* env, call_context* cctx) {
+void GenerateILInvokeStatic(il_factor_invoke_static* self, enviroment* env, call_context* cctx) {
 	for(int i=0; i<self->type_args->length; i++) {
 		il_type_argument* e = (il_type_argument*)AtVector(self->type_args, i);
 		assert(e->gtype != NULL);
@@ -67,7 +67,7 @@ generic_type* EvalILInvokeStatic(il_factor_invoke_static * self, enviroment * en
 	return NULL;
 }
 
-char* il_factor_invoke_static_tostr(il_factor_invoke_static* self, enviroment* env) {
+char* ILInvokeStaticToString(il_factor_invoke_static* self, enviroment* env) {
 	string_buffer* sb = NewBuffer();
 	char* name = fqcn_cache_tostr(self->fqcn);
 	AppendsBuffer(sb, name);
@@ -79,7 +79,7 @@ char* il_factor_invoke_static_tostr(il_factor_invoke_static* self, enviroment* e
 	return ReleaseBuffer(sb);
 }
 
-void il_factor_invoke_static_delete(il_factor_invoke_static* self) {
+void DeleteILInvokeStatic(il_factor_invoke_static* self) {
 	DeleteVector(self->args, il_factor_invoke_static_args_delete);
 	DeleteVector(self->type_args, il_factor_invoke_static_typeargs_delete);
 	fqcn_cache_delete(self->fqcn);

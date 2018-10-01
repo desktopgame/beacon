@@ -24,7 +24,7 @@ il_stmt_variable_init * NewILVariableInit(string_view namev) {
 	return ret;
 }
 
-void il_stmt_variable_init_generate(il_stmt_variable_init * self, enviroment * env, call_context* cctx) {
+void GenerateILVariableInit(il_stmt_variable_init * self, enviroment * env, call_context* cctx) {
 	GenerateILFactor(self->fact, env, cctx);
 	//宣言型と代入型が異なる場合
 	generic_type* ga = EvalILFactor(self->fact, env, cctx);
@@ -71,7 +71,7 @@ void LoadILVariableInit(il_stmt_variable_init * self, enviroment * env, call_con
 	assert(e->gtype != NULL);
 }
 
-void il_stmt_variable_init_delete(il_stmt_variable_init * self) {
+void DeleteILVariableInit(il_stmt_variable_init * self) {
 	DeleteILFactor(self->fact);
 	generic_cache_delete(self->fqcn);
 	MEM_FREE(self);

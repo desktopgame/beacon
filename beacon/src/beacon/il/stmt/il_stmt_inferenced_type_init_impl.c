@@ -7,13 +7,13 @@
 #include <stdio.h>
 #include <string.h>
 
-il_stmt * il_stmt_wrap_inferenced_type_init(il_stmt_inferenced_type_init * self) {
+il_stmt * WrapILInferencedTypeInit(il_stmt_inferenced_type_init * self) {
 	il_stmt* ret = il_stmt_new(ILSTMT_INFERENCED_TYPE_INIT_T);
 	ret->u.inferenced_type_init = self;
 	return ret;
 }
 
-il_stmt_inferenced_type_init * il_stmt_inferenced_type_init_new(string_view namev) {
+il_stmt_inferenced_type_init * NewILInferencedTypeInit(string_view namev) {
 	il_stmt_inferenced_type_init* ret = (il_stmt_inferenced_type_init*)MEM_MALLOC(sizeof(il_stmt_inferenced_type_init));
 	ret->namev = namev;
 	ret->fact = NULL;

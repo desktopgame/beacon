@@ -21,7 +21,7 @@ il_stmt_variable_decl * NewILVariableDecl(string_view namev) {
 	return ret;
 }
 
-void il_stmt_variable_decl_generate(il_stmt_variable_decl * self, enviroment * env, call_context* cctx) {
+void GenerateILVariableDecl(il_stmt_variable_decl * self, enviroment * env, call_context* cctx) {
 
 }
 

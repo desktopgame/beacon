@@ -79,7 +79,7 @@ static il_stmt* CLIL_bodyImpl(class_loader* self, ast* asource) {
 		case AST_INFERENCED_TYPE_INIT_T:
 		{
 			il_stmt_inferenced_type_init* ilinfer = CLIL_inferenced_type_init(self, asource);
-			return il_stmt_wrap_inferenced_type_init(ilinfer);
+			return WrapILInferencedTypeInit(ilinfer);
 		}
 		case AST_IF_T:
 		{
@@ -172,7 +172,7 @@ static il_stmt* CLIL_bodyImpl(class_loader* self, ast* asource) {
 static il_stmt_inferenced_type_init * CLIL_inferenced_type_init(class_loader * self, ast * asource) {
 	ast* aname = FirstAST(asource);
 	ast* afact = SecondAST(asource);
-	il_stmt_inferenced_type_init* ret = il_stmt_inferenced_type_init_new(aname->u.stringv_value);
+	il_stmt_inferenced_type_init* ret = NewILInferencedTypeInit(aname->u.stringv_value);
 	ret->fact = CLIL_factor(self, afact);
 	return ret;
 }

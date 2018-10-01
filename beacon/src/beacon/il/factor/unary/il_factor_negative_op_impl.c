@@ -9,7 +9,7 @@
 #include "../../../env/operator_overload.h"
 #include "../il_factor_unary_op_impl.h"
 
-il_factor_negative_op* il_factor_negative_op_malloc(operator_type type, const char* filename, int lineno) {
+il_factor_negative_op* MallocILNegativeOp(operator_type type, const char* filename, int lineno) {
 	il_factor_negative_op* ret = (il_factor_negative_op*)mem_malloc(sizeof(il_factor_negative_op), filename, lineno);
 	ret->type = type;
 	ret->parent = NULL;
@@ -21,7 +21,7 @@ generic_type* EvalILNegativeOp(il_factor_negative_op * self, enviroment * env, c
 	return EvalILFactor(self->parent->a, env, cctx);
 }
 
-void il_factor_negative_op_generate(il_factor_negative_op* self, enviroment* env, call_context* cctx) {
+void GenerateILNegativeOp(il_factor_negative_op* self, enviroment* env, call_context* cctx) {
 	generic_type* gt = EvalILFactor(self->parent->a, env, cctx);
 	if(self->operator_index == -1) {
 		GenerateILFactor(self->parent->a, env, cctx);
@@ -47,7 +47,7 @@ void LoadILNegativeOp(il_factor_negative_op* self, enviroment* env, call_context
 	}
 }
 
-void il_factor_negative_op_delete(il_factor_negative_op* self) {
+void DeleteILNegativeOp(il_factor_negative_op* self) {
 	MEM_FREE(self);
 }
 

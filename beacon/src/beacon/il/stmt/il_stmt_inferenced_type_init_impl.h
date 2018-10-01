@@ -21,14 +21,14 @@ typedef struct il_stmt_inferenced_type_init {
  * @param self
  * @return
  */
-il_stmt* il_stmt_wrap_inferenced_type_init(il_stmt_inferenced_type_init* self);
+il_stmt* WrapILInferencedTypeInit(il_stmt_inferenced_type_init* self);
 
 /**
  * 推論された型の初期化を表す要素を作成します.
  * @param namev
  * @return
  */
-il_stmt_inferenced_type_init* il_stmt_inferenced_type_init_new(string_view namev);
+il_stmt_inferenced_type_init* NewILInferencedTypeInit(string_view namev);
 
 /**
  * 推論された型の初期化を表す要素を生成します.

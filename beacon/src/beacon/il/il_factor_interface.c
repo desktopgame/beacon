@@ -55,7 +55,7 @@ void GenerateILFactor(il_factor * self, enviroment* env, call_context* cctx) {
 			GenerateILSuper(self->u.super_, env, cctx);
 			break;
 		case ILFACTOR_NEW_INSTANCE_T:
-			il_factor_new_instance_generate(self->u.new_instance_, env, cctx);
+			GenerateILNewInstance(self->u.new_instance_, env, cctx);
 			break;
 		case ILFACTOR_BOOL_T:
 			GenerateILBool(self->u.bool_, env, cctx);
@@ -73,7 +73,7 @@ void GenerateILFactor(il_factor * self, enviroment* env, call_context* cctx) {
 			GenerateILMemberOp(self->u.member_, env, cctx);
 			break;
 		case ILFACTOR_INSTANCEOF_T:
-			il_factor_instanceof_generate(self->u.instanceof_, env, cctx);
+			GenerateILInstanceOf(self->u.instanceof_, env, cctx);
 			break;
 		case ILFACTOR_EXPLICIT_UNARY_OP_T:
 			il_factor_explicit_unary_op_generate(self->u.exp_unary_op, env, cctx);
@@ -153,10 +153,10 @@ void LoadILFactor(il_factor * self, enviroment * env, call_context* cctx) {
 			LoadILInstanceOf(self->u.instanceof_, env, cctx);
 			break;
 		case ILFACTOR_EXPLICIT_UNARY_OP_T:
-			il_factor_explicit_unary_OP_LOAD(self->u.exp_unary_op, env, cctx);
+			LoadILExplicitUnaryOp(self->u.exp_unary_op, env, cctx);
 			break;
 		case ILFACTOR_EXPLICIT_BINARY_OP_T:
-			il_factor_explicit_binary_OP_LOAD(self->u.exp_binary_op, env, cctx);
+			LoadILExplicitBinaryOp(self->u.exp_binary_op, env, cctx);
 			break;
 		case ILFACTOR_PROPERTY_T:
 			LoadILProperty(self->u.prop, env, cctx);
@@ -229,7 +229,7 @@ generic_type* EvalILFactor(il_factor * self, enviroment * env, call_context* cct
 			ret = EvalILInstanceOf(self->u.instanceof_, env, cctx);
 			break;
 		case ILFACTOR_EXPLICIT_UNARY_OP_T:
-			ret = il_factor_explicit_unary_op_eval(self->u.exp_unary_op, env, cctx);
+			ret = EvalILExplicitUnaryOp(self->u.exp_unary_op, env, cctx);
 			break;
 		case ILFACTOR_EXPLICIT_BINARY_OP_T:
 			ret = il_factor_explicit_binary_op_eval(self->u.exp_binary_op, env, cctx);
@@ -373,7 +373,7 @@ void DeleteILFactor(il_factor * self) {
 			DeleteILSuper(self->u.super_);
 			break;
 		case ILFACTOR_NEW_INSTANCE_T:
-			il_factor_new_instance_delete(self->u.new_instance_);
+			DeleteILNewInstance(self->u.new_instance_);
 			break;
 		case ILFACTOR_BOOL_T:
 			DeleteILBool(self->u.bool_);

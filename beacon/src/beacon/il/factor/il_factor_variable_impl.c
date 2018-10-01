@@ -44,9 +44,9 @@ void GenerateILVariable(il_factor_variable * self, enviroment* env, call_context
 void LoadILVariable(il_factor_variable * self, enviroment * env, call_context* cctx) {
 	il_factor_variable_check(self, env, cctx);
 	if(self->type == ILVARIABLE_TYPE_LOCAL_T) {
-		il_factor_variable_local_load(self->u.local_, env, cctx);
+		LoadILVariableLocal(self->u.local_, env, cctx);
 	} else if(self->type == ILVARIABLE_TYPE_STATIC_T) {
-		il_factor_variable_static_load(self->u.static_, env, cctx);
+		LoadILVariableStatic(self->u.static_, env, cctx);
 	}
 }
 
@@ -54,18 +54,18 @@ generic_type* EvalILVariable(il_factor_variable * self, enviroment * env, call_c
 	il_factor_variable_check(self, env, cctx);
 	generic_type* ret = NULL;
 	if(self->type == ILVARIABLE_TYPE_LOCAL_T) {
-		ret = il_factor_variable_local_eval(self->u.local_, env, cctx);
+		ret = EvalILVariableLocal(self->u.local_, env, cctx);
 	} else if(self->type == ILVARIABLE_TYPE_STATIC_T) {
-		ret = il_factor_variable_static_eval(self->u.static_, env, cctx);
+		ret = EvalILVariableStatic(self->u.static_, env, cctx);
 	}
 	return ret;
 }
 
 char* ILVariableToString(il_factor_variable* self, enviroment* env) {
 	if(self->type == ILVARIABLE_TYPE_LOCAL_T) {
-		return il_factor_variable_local_tostr(self->u.local_, env);
+		return ILVariableLocalToString(self->u.local_, env);
 	} else if(self->type == ILVARIABLE_TYPE_STATIC_T) {
-		return il_factor_variable_static_tostr(self->u.static_, env);
+		return ILVariableStaticToString(self->u.static_, env);
 	}
 	return NULL;
 }
@@ -73,9 +73,9 @@ char* ILVariableToString(il_factor_variable* self, enviroment* env) {
 void DeleteILVariable(il_factor_variable * self) {
 	//MEM_FREE(self->name);
 	if(self->type == ILVARIABLE_TYPE_LOCAL_T) {
-		il_factor_variable_local_delete(self->u.local_);
+		DeleteILVariableLocal(self->u.local_);
 	} else if(self->type == ILVARIABLE_TYPE_STATIC_T) {
-		il_factor_variable_static_delete(self->u.static_);
+		DeleteILVariableStatic(self->u.static_);
 	}
 	fqcn_cache_delete(self->fqcn);
 	DeleteVector(self->type_args, DeleteILFactor_typeargs);
@@ -118,7 +118,7 @@ static void il_factor_variable_check_instance(il_factor_variable* self, envirome
 }
 
 static void il_factor_variable_check_static(il_factor_variable* self, enviroment* env, call_context* cctx) {
-	il_factor_variable_static* st = il_factor_variable_static_new();
+	il_factor_variable_static* st = NewILVariableStatic();
 	self->type = ILVARIABLE_TYPE_STATIC_T;
 	//値を入れ替え
 	st->fqcn = self->fqcn;

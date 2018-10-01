@@ -230,7 +230,7 @@ static void assign_by_invoke(il_factor_invoke* lhs, il_factor* rhs, enviroment* 
 
 static void assign_by_invoke_bound(il_factor_invoke_bound* lhs, il_factor* rhs, enviroment* env, call_context* cctx) {
 	int temp = -1;
-	il_factor_invoke_bound_find_set(lhs, rhs, env, cctx, &temp);
+	FindSetILInvokeBound(lhs, rhs, env, cctx, &temp);
 	assert(lhs->args->length == 1);
 	for(int i=0; i<lhs->args->length; i++) {
 		il_argument* arg = AtVector(lhs->args, i);

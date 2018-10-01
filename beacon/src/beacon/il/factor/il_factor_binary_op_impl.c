@@ -38,10 +38,10 @@ il_factor_binary_op * NewILBinaryOp(operator_type type) {
 void GenerateILBinaryOp(il_factor_binary_op * self, enviroment* env, call_context* cctx) {
 	switch(self->category) {
 		case OPERATOR_CARITHMERIC_T:
-			il_factor_arithmetic_op_generate(self->u.arithmetic_op, env, cctx);
+			GenerateILArithmeticOp(self->u.arithmetic_op, env, cctx);
 			break;
 		case OPERATOR_CCOMPARE_T:
-			il_factor_compare_op_generate(self->u.compare_op, env, cctx);
+			GenerateILCompareOp(self->u.compare_op, env, cctx);
 			break;
 		case OPERATOR_CLOGIC_T:
 			GenerateILLogicOp(self->u.logic_op, env, cctx);
@@ -105,7 +105,7 @@ generic_type* EvalILBinaryOp(il_factor_binary_op * self, enviroment * env, call_
 	generic_type* ret = NULL;
 	switch(self->category) {
 		case OPERATOR_CARITHMERIC_T:
-			ret = il_factor_arithmetic_op_eval(self->u.arithmetic_op, env, cctx);
+			ret = EvalILArithmeticOp(self->u.arithmetic_op, env, cctx);
 			break;
 		case OPERATOR_CCOMPARE_T:
 			ret = EvalILCompareOp(self->u.compare_op, env, cctx);
@@ -128,7 +128,7 @@ char* ILBinaryOpToString(il_factor_binary_op* self, enviroment* env) {
 	char* ret = NULL;
 	switch(self->category) {
 		case OPERATOR_CARITHMERIC_T:
-			ret = il_factor_arithmetic_op_tostr(self->u.arithmetic_op, env);
+			ret = ILArithmeticOpToString(self->u.arithmetic_op, env);
 			break;
 		case OPERATOR_CLOGIC_T:
 			ret = ILLogicOpToString(self->u.logic_op, env);
@@ -150,7 +150,7 @@ char* ILBinaryOpToString(il_factor_binary_op* self, enviroment* env) {
 void DeleteILBinaryOp(il_factor_binary_op * self) {
 	switch(self->category) {
 		case OPERATOR_CARITHMERIC_T:
-			il_factor_arithmetic_op_delete(self->u.arithmetic_op);
+			DeleteILArithmeticOp(self->u.arithmetic_op);
 			break;
 		case OPERATOR_CLOGIC_T:
 			DeleteILLogicOp(self->u.logic_op);
@@ -190,11 +190,11 @@ bool il_factor_binary_op_double_double(il_factor_binary_op* self, enviroment* en
 	return type_test(self, env, cctx, TYPE_DOUBLE);
 }
 
-bool il_factor_binary_op_bool_bool(il_factor_binary_op* self, enviroment* env, call_context* cctx) {
+bool IsBoolBoolBinaryOp(il_factor_binary_op* self, enviroment* env, call_context* cctx) {
 	return type_test(self, env, cctx, TYPE_BOOL);
 }
 
-bool il_factor_binary_op_char_char(il_factor_binary_op* self, enviroment* env, call_context* cctx) {
+bool IsCharCharBinaryOp(il_factor_binary_op* self, enviroment* env, call_context* cctx) {
 	return type_test(self, env, cctx, TYPE_CHAR);
 }
 

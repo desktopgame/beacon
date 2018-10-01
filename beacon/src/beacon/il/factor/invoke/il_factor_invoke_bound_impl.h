@@ -31,7 +31,7 @@ typedef struct il_factor_invoke_bound {
 
 il_factor_invoke_bound* NewILInvokeBound(string_view namev);
 
-void il_factor_invoke_bound_generate(il_factor_invoke_bound* self, struct enviroment* env, call_context* cctx);
+void GenerateILInvokeBound(il_factor_invoke_bound* self, struct enviroment* env, call_context* cctx);
 
 void LoadILInvokeBound(il_factor_invoke_bound * self, struct enviroment * env, call_context* cctx);
 
@@ -39,7 +39,7 @@ struct generic_type* EvalILInvokeBound(il_factor_invoke_bound * self, struct env
 
 char* ILInvokeBoundToString(il_factor_invoke_bound* self, struct enviroment* env);
 
-void il_factor_invoke_bound_delete(il_factor_invoke_bound* self);
+void DeleteILInvokeBound(il_factor_invoke_bound* self);
 
-struct operator_overload* il_factor_invoke_bound_find_set(il_factor_invoke_bound* self, il_factor* value, struct enviroment* env, call_context* cctx, int* outIndex);
+struct operator_overload* FindSetILInvokeBound(il_factor_invoke_bound* self, il_factor* value, struct enviroment* env, call_context* cctx, int* outIndex);
 #endif

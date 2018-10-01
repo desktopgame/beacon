@@ -12,16 +12,16 @@ typedef struct il_factor_negative_op {
 	int operator_index;
 } il_factor_negative_op;
 
-#define il_factor_negative_op_new(type) (il_factor_negative_op_malloc(type, __FILE__, __LINE__))
-il_factor_negative_op* il_factor_negative_op_malloc(operator_type type, const char* filename, int lineno);
+#define il_factor_negative_op_new(type) (MallocILNegativeOp(type, __FILE__, __LINE__))
+il_factor_negative_op* MallocILNegativeOp(operator_type type, const char* filename, int lineno);
 
 struct generic_type* EvalILNegativeOp(il_factor_negative_op * self, struct enviroment * env, call_context* cctx);
 
-void il_factor_negative_op_generate(il_factor_negative_op* self, struct enviroment* env, call_context* cctx);
+void GenerateILNegativeOp(il_factor_negative_op* self, struct enviroment* env, call_context* cctx);
 
 void LoadILNegativeOp(il_factor_negative_op* self, struct enviroment* env, call_context* cctx);
 
-void il_factor_negative_op_delete(il_factor_negative_op* self);
+void DeleteILNegativeOp(il_factor_negative_op* self);
 
 char* ILNegativeOpToString(il_factor_negative_op* self, struct enviroment* env);
 #endif

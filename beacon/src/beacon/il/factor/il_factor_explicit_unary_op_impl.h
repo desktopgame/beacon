@@ -12,15 +12,15 @@ typedef struct il_factor_explicit_unary_op {
 	int index;
 } il_factor_explicit_unary_op;
 
-struct il_factor* il_factor_wrap_explicit_unary_op(il_factor_explicit_unary_op* self);
+struct il_factor* WrapILExplicitUnaryOp(il_factor_explicit_unary_op* self);
 
-il_factor_explicit_unary_op* il_factor_explicit_unary_op_new(operator_type type);
+il_factor_explicit_unary_op* NewILExplicitUnaryOp(operator_type type);
 
 void il_factor_explicit_unary_op_generate(il_factor_explicit_unary_op* self, struct enviroment* env, call_context* cctx);
 
-void il_factor_explicit_unary_OP_LOAD(il_factor_explicit_unary_op* self, struct enviroment* env, call_context* cctx);
+void LoadILExplicitUnaryOp(il_factor_explicit_unary_op* self, struct enviroment* env, call_context* cctx);
 
-struct generic_type* il_factor_explicit_unary_op_eval(il_factor_explicit_unary_op* self, struct enviroment* env, call_context* cctx);
+struct generic_type* EvalILExplicitUnaryOp(il_factor_explicit_unary_op* self, struct enviroment* env, call_context* cctx);
 
 void il_factor_explicit_unary_op_delete(il_factor_explicit_unary_op* self);
 #endif
