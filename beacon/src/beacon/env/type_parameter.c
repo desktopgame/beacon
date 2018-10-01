@@ -8,15 +8,15 @@
 //proto
 static void type_parameter_rule_list_delete(VectorItem item);
 
-type_parameter * type_NewParameter(string_view namev) {
+type_parameter * NewTypeParameter(string_view namev) {
 	type_parameter* ret = (type_parameter*)MEM_MALLOC(sizeof(type_parameter));
 	ret->namev = namev;
 	ret->kind = TYPE_PARAMETER_KIND_DEFAULT_T;
 	return ret;
 }
 
-type_parameter * type_parameter_dup(il_type_parameter * src) {
-	type_parameter* ret = type_NewParameter(src->namev);
+type_parameter * DupTypeParameter(il_type_parameter * src) {
+	type_parameter* ret = NewTypeParameter(src->namev);
 	switch (src->kind) {
 		case il_TYPE_PARAMETER_KIND_DEFAULT_T:
 			ret->kind = TYPE_PARAMETER_KIND_DEFAULT_T;
@@ -34,7 +34,7 @@ type_parameter * type_parameter_dup(il_type_parameter * src) {
 	return ret;
 }
 
-void type_parameter_list_dup(Vector* ilSource, Vector* sgDest) {
+void DupTypeParameterList(Vector* ilSource, Vector* sgDest) {
 	assert(ilSource != NULL);
 	//これはILレベルの<K, V>の並びを
 	//SGレベルの<K, V> へ変換します。
@@ -42,16 +42,16 @@ void type_parameter_list_dup(Vector* ilSource, Vector* sgDest) {
 	//Kは仮想型としてIComparableで正しく認識されます。
 	//そのためには、type_parameterをとりえず登録しておいて、
 	//あとからルール一覧を対応づける必要があります。
-	//type_parameter_dupからルールの複製を削除したのもそのためです。
+	//DupTypeParameterからルールの複製を削除したのもそのためです。
 	for (int i = 0; i < ilSource->length; i++) {
 		il_type_parameter* e = (il_type_parameter*)AtVector(ilSource, i);
-		type_parameter* newTP = type_parameter_dup(e);
+		type_parameter* newTP = DupTypeParameter(e);
 		PushVector(sgDest, newTP);
 		//type_parameter_rule_list_dup(e->rule_vec, newTP->rule_vec, cache);
 	}
 }
 
-void type_parameter_print(Vector* v) {
+void PrintTypeParameter(Vector* v) {
 	//FIXME:il_type_parameterからのコピペ
 	if (v->length <= 0) {
 		return;
@@ -72,11 +72,11 @@ void type_parameter_print(Vector* v) {
 	printf(">");
 }
 
-void type_DeleteParameter(type_parameter * self) {
+void DeleteTypeParameter(type_parameter * self) {
 	MEM_FREE(self);
 }
 
-bool type_IsOverwrappedParameterName(Vector* tparameters, string_view* namev) {
+bool IsOverwrappedTypeParameterName(Vector* tparameters, string_view* namev) {
 	if(tparameters->length <= 1) {
 		return false;
 	}

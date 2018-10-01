@@ -271,7 +271,7 @@ bool CLBC_method_decl(class_loader* self, il_type* iltype, type* tp, il_method* 
 	method->type = IsNativeModifier(ilmethod->modifier) ? METHOD_TYPE_NATIVE_T : METHOD_TYPE_SCRIPT_T;
 	method->access = ilmethod->access;
 	method->modifier = ilmethod->modifier;
-	type_parameter_list_dup(ilmethod->type_parameter_list, method->type_parameters);
+	DupTypeParameterList(ilmethod->type_parameter_list, method->type_parameters);
 	call_context* cctx = NewCallContext(CALL_METHOD_T);
 	cctx->scope = scope;
 	cctx->ty = tp;

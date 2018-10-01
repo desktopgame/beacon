@@ -13,7 +13,7 @@
 //proto
 Vector* interface_get_generic_interface_treeImpl(interface_* self);
 static void interface_delete_method(VectorItem item);
-static void interface_type_DeleteParameter(VectorItem item);
+static void interface_DeleteTypeParameter(VectorItem item);
 static void interface_generic_type_list_delete(VectorItem item);
 static void interface_method_flattenImpl(interface_* self, Vector* dest, int depth);
 static void interface_delete_property(VectorItem item);
@@ -109,7 +109,7 @@ void interface_unlink(interface_ * self) {
 }
 
 void interface_delete(interface_ * self) {
-	DeleteVector(self->type_parameter_list, interface_type_DeleteParameter);
+	DeleteVector(self->type_parameter_list, interface_DeleteTypeParameter);
 	MEM_FREE(self);
 }
 
@@ -177,9 +177,9 @@ static void interface_delete_method(VectorItem item) {
 	DeleteMethod(e);
 }
 
-static void interface_type_DeleteParameter(VectorItem item) {
+static void interface_DeleteTypeParameter(VectorItem item) {
 	type_parameter* e = (type_parameter*)item;
-	type_DeleteParameter(e);
+	DeleteTypeParameter(e);
 }
 
 static void interface_generic_type_list_delete(VectorItem item) {

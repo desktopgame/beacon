@@ -233,7 +233,7 @@ static void class_loader_load_toplevel_function(class_loader* self) {
 	for(int i=0; i<funcs->length; i++) {
 		il_function* ilfunc = AtVector(funcs, i);
 		method* m = method_new(ilfunc->namev);
-		type_parameter_list_dup(ilfunc->type_parameter_vec, m->type_parameters);
+		DupTypeParameterList(ilfunc->type_parameter_vec, m->type_parameters);
 		script_method* sm = NewScriptMethod();
 		enviroment* env = NewEnviroment();
 		//call_contextの設定

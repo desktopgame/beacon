@@ -166,21 +166,21 @@ bool class_ctor_parameter_valid(class_* self, constructor** out_ctor, string_vie
 }
 
 bool class_type_type_parameter_valid(class_* self, string_view* out_name) {
-	return !type_IsOverwrappedParameterName(self->type_parameter_list, out_name);
+	return !IsOverwrappedTypeParameterName(self->type_parameter_list, out_name);
 }
 
 bool class_method_type_parameter_valid(class_* self, method** out_method, string_view* out_name) {
 	(*out_name) = ZERO_VIEW;
 	for(int i=0; i<self->method_list->length; i++) {
 		method* m = (method*)AtVector(self->method_list, i);
-		if(type_IsOverwrappedParameterName(m->type_parameters, out_name)) {
+		if(IsOverwrappedTypeParameterName(m->type_parameters, out_name)) {
 			(*out_method) = m;
 			return false;
 		}
 	}
 	for(int i=0; i<self->smethod_list->length; i++) {
 		method* m = (method*)AtVector(self->smethod_list, i);
-		if(type_IsOverwrappedParameterName(m->type_parameters, out_name)) {
+		if(IsOverwrappedTypeParameterName(m->type_parameters, out_name)) {
 			(*out_method) = m;
 			return false;
 		}

@@ -10,7 +10,7 @@
 //proto
 static void il_method_DeleteParameter(VectorItem item);
 static void il_method_stmt_delete(VectorItem item);
-static void il_method_type_DeleteParameter(VectorItem item);
+static void il_method_DeleteTypeParameter(VectorItem item);
 
 il_method * NewILMethod(string_view namev) {
 	il_method* ret = (il_method*)MEM_MALLOC(sizeof(il_method));
@@ -32,7 +32,7 @@ void DeleteILMethod(il_method * self) {
 	generic_cache_delete(self->return_fqcn);
 	DeleteVector(self->parameter_list, il_method_DeleteParameter);
 	DeleteVector(self->statement_list, il_method_stmt_delete);
-	DeleteVector(self->type_parameter_list, il_method_type_DeleteParameter);
+	DeleteVector(self->type_parameter_list, il_method_DeleteTypeParameter);
 	MEM_FREE(self);
 }
 
@@ -47,7 +47,7 @@ static void il_method_stmt_delete(VectorItem item) {
 	DeleteILStmt(e);
 }
 
-static void il_method_type_DeleteParameter(VectorItem item) {
+static void il_method_DeleteTypeParameter(VectorItem item) {
 	il_type_parameter* e = (il_type_parameter*)item;
 	DeleteILTypeParameter(e);
 }

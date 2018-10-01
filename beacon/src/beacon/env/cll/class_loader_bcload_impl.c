@@ -321,7 +321,7 @@ static type* CLBC_get_or_load_class(class_loader* self, namespace_* parent, il_t
 		if((tp->state & TYPE_REGISTER) == 0) {
 			//もしネイティブメソッドのために
 			//既に登録されていたならここが型変数がNULLになってしまう
-			type_parameter_list_dup(iltype->u.class_->type_parameter_list, outClass->type_parameter_list);
+			DupTypeParameterList(iltype->u.class_->type_parameter_list, outClass->type_parameter_list);
 		}
 	}
 	return tp;
@@ -329,7 +329,7 @@ static type* CLBC_get_or_load_class(class_loader* self, namespace_* parent, il_t
 
 static void CLBC_register_class(class_loader* self, namespace_* parent, il_type* iltype, type* tp, class_* cls) {
 	type_init_generic(tp, iltype->u.class_->type_parameter_list->length);
-	type_parameter_list_dup(iltype->u.class_->type_parameter_list, cls->type_parameter_list);
+	DupTypeParameterList(iltype->u.class_->type_parameter_list, cls->type_parameter_list);
 	call_context* cctx = NewCallContext(CALL_DECL_T);
 	cctx->scope = parent;
 	cctx->ty = tp;
@@ -383,7 +383,7 @@ static type* CLBC_get_or_load_interface(class_loader* self, namespace_* parent, 
 		if((tp->state & TYPE_REGISTER) == 0) {
 			//もしネイティブメソッドのために
 			//既に登録されていたならここが型変数がNULLになってしまう
-			type_parameter_list_dup(GetTypeParametersILType(iltype), inter->type_parameter_list);
+			DupTypeParameterList(GetTypeParametersILType(iltype), inter->type_parameter_list);
 		}
 	}
 	return tp;
@@ -391,7 +391,7 @@ static type* CLBC_get_or_load_interface(class_loader* self, namespace_* parent, 
 
 static void CLBC_register_interface(class_loader* self, namespace_* parent, il_type* iltype, type* tp, interface_* inter) {
 	type_init_generic(tp, iltype->u.interface_->type_parameter_list->length);
-	type_parameter_list_dup(iltype->u.interface_->type_parameter_list, inter->type_parameter_list);
+	DupTypeParameterList(iltype->u.interface_->type_parameter_list, inter->type_parameter_list);
 	call_context* cctx = NewCallContext(CALL_DECL_T);
 	cctx->scope = parent;
 	cctx->ty = tp;

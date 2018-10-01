@@ -26,7 +26,7 @@
 
 //proto
 static void method_DeleteParameter(VectorItem item);
-static void method_type_DeleteParameter(VectorItem item);
+static void method_DeleteTypeParameter(VectorItem item);
 static void method_count(il_stmt* s, int* yeild_ret, int* ret);
 static constructor* create_delegate_ctor(method* self, type* ty, class_loader* cll,int op_len);
 static method* create_has_next(method* self, type* ty,class_loader* cll, Vector* stmt_list, int* out_op_len);
@@ -139,7 +139,7 @@ int GetGenericIndexForMethod(method * self, string_view namev) {
 }
 
 void DeleteMethod(method * self) {
-	DeleteVector(self->type_parameters, method_type_DeleteParameter);
+	DeleteVector(self->type_parameters, method_DeleteTypeParameter);
 	DeleteVector(self->parameters, method_DeleteParameter);
 	if (self->type == METHOD_TYPE_SCRIPT_T) {
 		DeleteScriptMethod(self->u.script_method);
@@ -254,9 +254,9 @@ static void method_DeleteParameter(VectorItem item) {
 	DeleteParameter(e);
 }
 
-static void method_type_DeleteParameter(VectorItem item) {
+static void method_DeleteTypeParameter(VectorItem item) {
 	type_parameter* e = (type_parameter*)item;
-	type_DeleteParameter(e);
+	DeleteTypeParameter(e);
 }
 
 static void method_count(il_stmt* s, int* yield_ret, int* ret) {
