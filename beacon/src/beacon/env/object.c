@@ -84,7 +84,7 @@ object * object_string_malloc(const char * s, const char* filename, int lineno) 
 	arr->gtype = generic_type_new(arrType);
 	arr->vptr = type_vtable(arrType);
 	arr->tag = OBJECT_ARRAY_T;
-	generic_type_addargs(arr->gtype, GENERIC_CHAR);
+	AddArgsGenericType(arr->gtype, GENERIC_CHAR);
 	//ボックス化
 	const char* itr = s;
 	string_buffer* sb = NewBuffer();
@@ -263,7 +263,7 @@ void object_print(object * self) {
 		printf("Ref: Null");
 	} else if (self->tag == OBJECT_REF_T) {
 		printf("Ref: ");
-		generic_type_print(self->gtype);
+		PrintGenericType(self->gtype);
 	}
 }
 

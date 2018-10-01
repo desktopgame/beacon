@@ -26,7 +26,7 @@ il_factor_as * NewILAs() {
 void GenerateILAs(il_factor_as * self, enviroment * env, call_context* cctx) {
 	GenerateILFactor(self->fact, env, cctx);
 	AddOpcodeBuf(env->buf, OP_GENERIC_ADD);
-	generic_type_generate(self->gtype, env);
+	GenerateGenericType(self->gtype, env);
 	if(self->mode == CAST_DOWN_T) {
 		AddOpcodeBuf(env->buf, OP_DOWN_AS);
 	} else {
@@ -56,8 +56,8 @@ void LoadILAs(il_factor_as * self, enviroment * env, call_context* cctx) {
 		self->mode = CAST_UP_T;
 		return;
 	}
-	int downTo = generic_type_distance(self->gtype, a, cctx);
-	int upTo = generic_type_distance(a, self->gtype, cctx);
+	int downTo = DistanceGenericType(self->gtype, a, cctx);
+	int upTo = DistanceGenericType(a, self->gtype, cctx);
 	//ダウンキャスト
 	if(downTo >= 0) {
 		self->mode = CAST_UP_T;

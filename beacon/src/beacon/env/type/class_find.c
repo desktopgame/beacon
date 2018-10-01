@@ -436,7 +436,7 @@ operator_overload* class_gfind_operator_overload(class_* self, operator_type typ
 		for(int j=0; j<params->length; j++) {
 			parameter* param = AtVector(params, j);
 			generic_type* arg = AtVector(args, j);
-			int dist = generic_type_distance(param->gtype, arg, cctx);
+			int dist = DistanceGenericType(param->gtype, arg, cctx);
 			if(dist == -1) {
 				nomatch = true;
 				break;

@@ -37,7 +37,7 @@ static void bc_console_writeLine(method* parent, frame* fr, enviroment* env) {
 	} else if (o->tag == OBJECT_STRING_T) {
 		printf("%s\n", bc_string_raw(o)->text);
 	} else if (o->tag == OBJECT_REF_T) {
-		generic_type_print(o->gtype);
+		PrintGenericType(o->gtype);
 		printf("\n");
 	} else if (o->tag == OBJECT_CHAR_T) {
 		printf("%c\n", o->u.char_);
@@ -57,7 +57,7 @@ static void bc_console_write(method* parent, frame* fr, enviroment* env) {
 	} else if (o->tag == OBJECT_STRING_T) {
 		printf("%s", bc_string_raw(o)->text);
 	} else if (o->tag == OBJECT_REF_T) {
-		generic_type_print(o->gtype);
+		PrintGenericType(o->gtype);
 		//printf("\n");
 	} else if (o->tag == OBJECT_CHAR_T) {
 		printf("%c", o->u.char_);

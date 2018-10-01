@@ -152,7 +152,7 @@ generic_type* ApplyILUnaryOp(il_factor_unary_op* self, generic_type* gtype, envi
 	generic_type* lgtype = EvalILFactor(self->a, env, cctx);
 	call_frame* cfr = PushCallContext(cctx, FRAME_INSTANCE_INVOKE_T);
 	cfr->u.instance_invoke.receiver = lgtype;
-	generic_type* ret = generic_type_apply(gtype,cctx);
+	generic_type* ret = ApplyGenericType(gtype,cctx);
 	PopCallContext(cctx);
 	return ret;
 }

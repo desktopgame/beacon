@@ -42,7 +42,7 @@ void GenerateILNewInstance(il_factor_new_instance * self, enviroment * env, call
 		il_type_argument* e = (il_type_argument*)AtVector(self->type_args, i);
 		assert(e->gtype != NULL);
 		AddOpcodeBuf(env->buf, OP_GENERIC_ADD);
-		generic_type_generate(e->gtype, env);
+		GenerateGenericType(e->gtype, env);
 	}
 	//実引数を全てスタックへ
 	for (int i = 0; i < self->argument_list->length; i++) {
@@ -76,7 +76,7 @@ generic_type* EvalILNewInstance(il_factor_new_instance * self, enviroment * env,
 	}
 	//型引数がないのでそのまま
 	if (self->type_args->length == 0) {
-		generic_type* ret = generic_type_ref(self->c->parent);
+		generic_type* ret = RefGenericType(self->c->parent);
 		return ret;
 	}
 	//fqcn_cache typename_group
@@ -86,7 +86,7 @@ generic_type* EvalILNewInstance(il_factor_new_instance * self, enviroment * env,
 		for (int i = 0; i < self->type_args->length; i++) {
 			il_type_argument* e = (il_type_argument*)AtVector(self->type_args, i);
 			generic_type* arg = ResolveImportManager(GetNamespaceCContext(cctx), e->gcache, cctx);
-			generic_type_addargs(a, arg);
+			AddArgsGenericType(a, arg);
 		}
 		self->instance_type = a;
 	}

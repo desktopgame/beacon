@@ -32,7 +32,7 @@ void GenerateILInvokeStatic(il_factor_invoke_static* self, enviroment* env, call
 		il_type_argument* e = (il_type_argument*)AtVector(self->type_args, i);
 		assert(e->gtype != NULL);
 		AddOpcodeBuf(env->buf, OP_GENERIC_ADD);
-		generic_type_generate(e->gtype, env);
+		GenerateGenericType(e->gtype, env);
 	}
 	for(int i=0; i<self->args->length; i++) {
 		il_argument* e = (il_argument*)AtVector(self->args, i);
@@ -106,7 +106,7 @@ static void resolve_default(il_factor_invoke_static * self, enviroment * env, ca
 	cfr->u.static_invoke.args = self->args;
 	cfr->u.static_invoke.typeargs = self->type_args;
 	generic_type* rgtp = self->m->return_gtype;
-	self->resolved = generic_type_apply(rgtp, cctx);
+	self->resolved = ApplyGenericType(rgtp, cctx);
 	PopCallContext(cctx);
 }
 

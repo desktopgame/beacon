@@ -52,7 +52,7 @@ static void check_method_return(il_stmt_return * self, enviroment * env, call_co
 	//戻り値の型に互換性がない
 	generic_type* retT =EvalILFactor(self->fact, env, cctx);
 	if(retT->core_type != TYPE_NULL &&
-	   generic_type_distance(m->return_gtype, retT, cctx) < 0) {
+	   DistanceGenericType(m->return_gtype, retT, cctx) < 0) {
 		ThrowBCError(BCERROR_RETURN_VALUE_TYPE_IS_NOT_COMPATIBLE_NOT_VOID_METHOD_T,
 			Ref2Str(type_name(m->parent)),
 			Ref2Str(m->namev)

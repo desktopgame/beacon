@@ -26,7 +26,7 @@ void GenerateILThrow(il_stmt_throw* self, enviroment* env, call_context* cctx) {
 void LoadILThrow(il_stmt_throw* self, enviroment* env, call_context* cctx) {
 	LoadILFactor(self->fact, env, cctx);
 	generic_type* tgt = EvalILFactor(self->fact, env, cctx);
-	if(generic_type_distance(GENERIC_EXCEPTION, tgt, cctx) < 0) {
+	if(DistanceGenericType(GENERIC_EXCEPTION, tgt, cctx) < 0) {
 		if(tgt->core_type != NULL) {
 			ThrowBCError(
 				BCERROR_THROWN_NOT_EXCEPTION_TYPE_T,

@@ -229,7 +229,7 @@ generic_type* ApplyILBinaryOp(il_factor_binary_op* self, generic_type* gtype, en
 	generic_type* lgtype = EvalILFactor(self->left, env, cctx);
 	call_frame* cfr = PushCallContext(cctx, FRAME_INSTANCE_INVOKE_T);
 	cfr->u.instance_invoke.receiver = lgtype;
-	generic_type* ret = generic_type_apply(gtype,cctx);
+	generic_type* ret = ApplyGenericType(gtype,cctx);
 	PopCallContext(cctx);
 	return ret;
 }

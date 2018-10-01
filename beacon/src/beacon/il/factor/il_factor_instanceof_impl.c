@@ -30,7 +30,7 @@ void GenerateILInstanceOf(il_factor_instanceof* self, enviroment* env, call_cont
 	type* type = gtype->core_type;
 	GenerateILFactor(self->fact, env, cctx);
 	AddOpcodeBuf(env->buf, OP_GENERIC_ADD);
-	generic_type_generate(gtype, env);
+	GenerateGenericType(gtype, env);
 	AddOpcodeBuf(env->buf, OP_INSTANCEOF);
 }
 

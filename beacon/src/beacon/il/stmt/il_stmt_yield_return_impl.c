@@ -44,7 +44,7 @@ static void check_IsYieldMethod_return(il_stmt_yield_return * self, enviroment *
 	method* m = GetMethodCContext(cctx);
 	generic_type* arg = AtVector(m->return_gtype->type_args_list, 0);
 	//戻り値の型に互換性がない
-	if(generic_type_distance(arg, EvalILFactor(self->fact, env, cctx), cctx) < 0) {
+	if(DistanceGenericType(arg, EvalILFactor(self->fact, env, cctx), cctx) < 0) {
 		ThrowBCError(BCERROR_YIELD_RETURN_VALUE_TYPE_IS_NOT_COMPATIBLE_T,
 			Ref2Str(type_name(m->parent)),
 			Ref2Str(m->namev)

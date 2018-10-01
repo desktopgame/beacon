@@ -209,7 +209,7 @@ static void script_context_free(script_context* self) {
 	DeleteVector(self->pos_int_vec, CacheScriptContext_delete);
 	DeleteNumericMap(self->n_int_map, script_context_mcache_delete);
 	//object_delete(self->null_obj);
-	generic_type_collect();
+	CollectGenericType();
 	DeleteVector(self->all_generic_vec, VectorDeleterOfNull);
 	int x = object_count();
 

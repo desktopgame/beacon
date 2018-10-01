@@ -68,7 +68,7 @@ void DumpHeap(heap* self) {
 	for(int i=0; i<self->object_vec->length; i++) {
 		object* a = AtVector(self->object_vec, i);
 		printf("    ");
-		generic_type_print(a->gtype);
+		PrintGenericType(a->gtype);
 		printf("\n");
 	}
 }

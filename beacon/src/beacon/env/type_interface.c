@@ -31,7 +31,7 @@ generic_type* type_init_generic(type* self, int counts) {
 			arg->tag = GENERIC_TYPE_TAG_CLASS_T;
 			arg->virtual_type_index = i;
 			arg->u.type_ = self;
-			generic_type_addargs(self->generic_self, arg);
+			AddArgsGenericType(self->generic_self, arg);
 		}
 	}
 	return self->generic_self;
@@ -173,7 +173,7 @@ generic_type * type_find_impl(type * self, type * a) {
 		while (ptr != NULL) {
 			if (a->tag == TYPE_CLASS_T &&
 				ptr == a->u.class_) {
-				return generic_type_ref(ptr->parent);
+				return RefGenericType(ptr->parent);
 			}
 			if (a->tag == TYPE_INTERFACE_T) {
 				for (int i = 0; i < ptr->impl_list->length; i++) {
@@ -231,7 +231,7 @@ void type_delete(type * self) {
 	} else if (self->tag == TYPE_INTERFACE_T) {
 		interface_delete(self->u.interface_);
 	}
-	generic_type_lostownership(self->generic_self);
+	LostownershipGenericType(self->generic_self);
 	MEM_FREE(self);
 }
 

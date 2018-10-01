@@ -104,7 +104,7 @@ static void resolve_default(il_factor_invoke_bound * self, enviroment * env, cal
 		return;
 	}
 	generic_type* rgtp = il_factor_invoke_bound_return_gtype(self, cctx);
-	self->resolved = generic_type_apply(rgtp, cctx);
+	self->resolved = ApplyGenericType(rgtp, cctx);
 }
 
 static void il_factor_invoke_bound_check(il_factor_invoke_bound * self, enviroment * env, call_context* cctx) {
@@ -193,7 +193,7 @@ static void GenerateILInvokeBound_method(il_factor_invoke_bound* self, enviromen
 		il_type_argument* e = (il_type_argument*)AtVector(self->type_args, i);
 		assert(e->gtype != NULL);
 		AddOpcodeBuf(env->buf, OP_GENERIC_ADD);
-		generic_type_generate(e->gtype, env);
+		GenerateGenericType(e->gtype, env);
 	}
 	for(int i=0; i<self->args->length; i++) {
 		il_argument* e = (il_argument*)AtVector(self->args, i);
@@ -227,7 +227,7 @@ static void GenerateILInvokeBound_subscript(il_factor_invoke_bound* self, enviro
 		il_type_argument* e = (il_type_argument*)AtVector(self->type_args, i);
 		assert(e->gtype != NULL);
 		AddOpcodeBuf(env->buf, OP_GENERIC_ADD);
-		generic_type_generate(e->gtype, env);
+		GenerateGenericType(e->gtype, env);
 	}
 	for(int i=0; i<self->args->length; i++) {
 		il_argument* e = (il_argument*)AtVector(self->args, i);
@@ -255,7 +255,7 @@ static void GenerateILInvokeBound_subscript(il_factor_invoke_bound* self, enviro
 
 static generic_type* il_factor_invoke_bound_return_gtype(il_factor_invoke_bound* self, call_context* cctx) {
 	assert(self->tag != BOUND_INVOKE_UNDEFINED_T);
-	return generic_type_apply(self->tag == BOUND_INVOKE_METHOD_T ?
+	return ApplyGenericType(self->tag == BOUND_INVOKE_METHOD_T ?
 			self->u.m->return_gtype :
 			self->u.subscript.opov->return_gtype, cctx);
 }
@@ -274,7 +274,7 @@ static generic_type* EvalILInvokeBoundImpl(il_factor_invoke_bound * self, enviro
 		cfr->u.self_invoke.typeargs = self->type_args;
 	} else {
 		cfr = PushCallContext(cctx, FRAME_INSTANCE_INVOKE_T);
-		cfr->u.instance_invoke.receiver = generic_type_apply(subscript_descriptor_receiver(&self->u.subscript), cctx);
+		cfr->u.instance_invoke.receiver = ApplyGenericType(subscript_descriptor_receiver(&self->u.subscript), cctx);
 		cfr->u.instance_invoke.args = self->args;
 		cfr->u.instance_invoke.typeargs = self->type_args;
 	}

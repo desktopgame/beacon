@@ -103,9 +103,9 @@ bool CLBC_field_impl(class_loader* self, type* tp, field* fi, namespace_* scope,
 	GenerateILFactor(fi->initial_value, env, cctx);
 	//フィールドの型と互換性がない
 	generic_type* gf = EvalILFactor(fi->initial_value, env, cctx);
-	if(generic_type_distance(fi->gtype, gf, cctx) < 0) {
-		generic_type_print(fi->gtype); Println();
-		generic_type_print(gf); Println();
+	if(DistanceGenericType(fi->gtype, gf, cctx) < 0) {
+		PrintGenericType(fi->gtype); Println();
+		PrintGenericType(gf); Println();
 		ThrowBCError(BCERROR_FIELD_DEFAULT_VALUE_NOT_COMPATIBLE_TO_FIELD_TYPE_T,
 			Ref2Str(type_name(fi->parent)),
 			Ref2Str(fi->namev)

@@ -163,7 +163,7 @@ static void assign_to_property(il_factor_assign_op* self, enviroment* env, call_
 		);
 		return;
 	}
-	if(generic_type_distance(prop->p->gtype, EvalILFactor(self->right, env, cctx), cctx) < 0) {
+	if(DistanceGenericType(prop->p->gtype, EvalILFactor(self->right, env, cctx), cctx) < 0) {
 		ThrowBCError(BCERROR_ASSIGN_NOT_COMPATIBLE_PROPERTY_T,
 			Ref2Str(type_name(prop->p->parent)),
 			Ref2Str(prop->p->namev)
@@ -255,7 +255,7 @@ static void assign_by_invoke_bound(il_factor_invoke_bound* lhs, il_factor* rhs, 
 
 static bool can_assign_to_field(field* f, il_factor_assign_op* self, enviroment* env, call_context* cctx) {
 	generic_type* gt = EvalILFactor(self->right, env, cctx);
-	int dist = generic_type_distance(f->gtype, gt, cctx);
+	int dist = DistanceGenericType(f->gtype, gt, cctx);
 	if(dist >= 0) {
 		return true;
 	} else {
@@ -317,7 +317,7 @@ static void generate_assign_to_variable_local(il_factor_assign_op* self, envirom
 		GenerateILFactor(self->right, env, cctx);
 		AddOpcodeBuf(env->buf, OP_STORE);
 		AddOpcodeBuf(env->buf, e->index);
-		if(generic_type_distance(e->gtype, EvalILFactor(self->right, env, cctx), cctx) < 0) {
+		if(DistanceGenericType(e->gtype, EvalILFactor(self->right, env, cctx), cctx) < 0) {
 			ThrowBCError(BCERROR_ASSIGN_NOT_COMPATIBLE_LOCAL_T,
 				Ref2Str(ilvar->fqcn->namev)
 			);

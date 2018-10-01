@@ -112,12 +112,12 @@ static void resolve_non_default(il_factor_invoke * self, enviroment * env, call_
 		//レシーバの実体化された型の中で、
 		//メソッドの戻り値 'T' が表す位置に対応する実際の型を取り出す。
 		generic_type* instanced_type = (generic_type*)AtVector(receivergType->type_args_list, rgtp->virtual_type_index);
-		self->resolved = generic_type_clone(instanced_type);
+		self->resolved = CloneGenericType(instanced_type);
 		self->resolved->tag = GENERIC_TYPE_TAG_CLASS_T;
 	} else if(rgtp->tag == GENERIC_TYPE_TAG_METHOD_T) {
 		//メソッドに渡された型引数を参照する
 		generic_type* instanced_type = (generic_type*)AtVector(self->type_args, rgtp->virtual_type_index);
-		self->resolved = generic_type_clone(instanced_type);
+		self->resolved = CloneGenericType(instanced_type);
 		self->resolved->tag = GENERIC_TYPE_TAG_CLASS_T;
 	}
 }
@@ -135,7 +135,7 @@ static void resolve_default(il_factor_invoke * self, enviroment * env, call_cont
 	cfr->u.instance_invoke.receiver = receivergType;
 	cfr->u.instance_invoke.args = self->args;
 	cfr->u.instance_invoke.typeargs = self->type_args;
-	self->resolved = generic_type_apply(rgtp, cctx);
+	self->resolved = ApplyGenericType(rgtp, cctx);
 	PopCallContext(cctx);
 }
 
@@ -215,7 +215,7 @@ static void GenerateILInvoke_method(il_factor_invoke* self, enviroment* env, cal
 		il_type_argument* e = (il_type_argument*)AtVector(self->type_args, i);
 		assert(e->gtype != NULL);
 		AddOpcodeBuf(env->buf, OP_GENERIC_ADD);
-		generic_type_generate(e->gtype, env);
+		GenerateGenericType(e->gtype, env);
 	}
 	for(int i=0; i<self->args->length; i++) {
 		il_argument* e = (il_argument*)AtVector(self->args, i);
@@ -247,7 +247,7 @@ static void GenerateILInvoke_subscript(il_factor_invoke* self, enviroment* env, 
 		il_type_argument* e = (il_type_argument*)AtVector(self->type_args, i);
 		assert(e->gtype != NULL);
 		AddOpcodeBuf(env->buf, OP_GENERIC_ADD);
-		generic_type_generate(e->gtype, env);
+		GenerateGenericType(e->gtype, env);
 	}
 	for(int i=0; i<self->args->length; i++) {
 		il_argument* e = (il_argument*)AtVector(self->args, i);

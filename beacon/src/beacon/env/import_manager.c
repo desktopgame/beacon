@@ -62,7 +62,7 @@ generic_type* ResolveImportManager(namespace_* scope, generic_cache* fqcn, call_
 		for (int i = 0; i < fqcn->type_args->length; i++) {
 			generic_cache* e = (generic_cache*)AtVector(fqcn->type_args, i);
 			generic_type* child = ResolveImportManager(scope, e, cctx);
-			generic_type_addargs(normalGType, child);
+			AddArgsGenericType(normalGType, child);
 		}
 		return normalGType;
 	}

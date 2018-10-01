@@ -66,7 +66,7 @@ bool class_interface_property_implement_valid(class_* cls, property** out) {
 				DeleteVector(gimpl_list, VectorDeleterOfNull);
 				return false;
 			} else {
-				if(generic_type_distance(decl->gtype, impl->gtype, NULL) != 0) {
+				if(DistanceGenericType(decl->gtype, impl->gtype, NULL) != 0) {
 					(*out) = decl;
 					DeleteVector(gimpl_list, VectorDeleterOfNull);
 					return false;

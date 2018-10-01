@@ -37,7 +37,7 @@ void GenerateILVariableInit(il_stmt_variable_init * self, enviroment * env, call
 		   ThrowBCError(BCERROR_VOID_ASSIGN_T);
 		return;
 	}
-	int dist = generic_type_distance(gb, ga, cctx);
+	int dist = DistanceGenericType(gb, ga, cctx);
 	if (dist < 0) {
 		ThrowBCError(BCERROR_ASSIGN_NOT_COMPATIBLE_LOCAL_T,
 			Ref2Str(self->namev)

@@ -105,12 +105,12 @@ bool IsOverridedMethod(method* superM, method* subM, call_context* cctx) {
 
 		call_frame* cfr = PushCallContext(cctx, FRAME_RESOLVE_T);
 		cfr->u.resolve.gtype = bl;
-		generic_type* superGT2 = generic_type_apply(superGT, cctx);
+		generic_type* superGT2 = ApplyGenericType(superGT, cctx);
 		PopCallContext(cctx);
 //		assert(!generic_type_equals(superGT, superGT2));
 
 //		generic_type_diff(superGT, superGT2);
-		if(generic_type_distance(superGT2, subGT, cctx) != 0) {
+		if(DistanceGenericType(superGT2, subGT, cctx) != 0) {
 			return false;
 		}
 	}
@@ -118,10 +118,10 @@ bool IsOverridedMethod(method* superM, method* subM, call_context* cctx) {
 	generic_type* subRet = subM->return_gtype;
 	call_frame* cfr = PushCallContext(cctx, FRAME_RESOLVE_T);
 	cfr->u.resolve.gtype = bl;
-	generic_type* superRet2 = generic_type_apply(superRet, cctx);
+	generic_type* superRet2 = ApplyGenericType(superRet, cctx);
 //	generic_type_diff(superRet, superRet2);
 //	assert(!generic_type_equals(superRet, superRet2));
-	int ret =generic_type_distance(superRet2, subRet, cctx);
+	int ret =DistanceGenericType(superRet2, subRet, cctx);
 	PopCallContext(cctx);
 	return ret != -1;
 }
@@ -233,7 +233,7 @@ type* CreateIteratorTypeFromMethod(method* self,  class_loader* cll, Vector* stm
 	string_view iterName = GetMethodUniqueName(self);
 	type* iterT = FindTypeFromNamespace(GetLangNamespace(), InternString("Iterator"));
 	//イテレータの実装クラスを登録
-	generic_type* iterImplGT = generic_type_apply(self->return_gtype, lCctx);
+	generic_type* iterImplGT = ApplyGenericType(self->return_gtype, lCctx);
 	class_* iterImplC = class_new_proxy(iterImplGT, iterName);
 	type* iterImplT = type_wrap_class(iterImplC);
 	AddTypeNamespace(GetPlaceholderNamespace(), iterImplT);

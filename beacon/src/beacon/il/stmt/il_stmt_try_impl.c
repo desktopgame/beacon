@@ -72,7 +72,7 @@ void GenerateILTry(il_stmt_try* self, enviroment* env, call_context* cctx) {
 		//現在の例外と catch節 の型に互換性があるなら続行
 		AddOpcodeBuf(env->buf, OP_HEXCEPTION);;
 		AddOpcodeBuf(env->buf, OP_GENERIC_ADD);
-		generic_type_generate(exgType, env);
+		GenerateGenericType(exgType, env);
 		AddOpcodeBuf(env->buf, OP_INSTANCEOF);
 		//互換性がないので次のケースへ
 		AddOpcodeBuf(env->buf, OP_GOTO_if_false);

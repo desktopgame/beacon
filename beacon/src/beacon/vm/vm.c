@@ -497,11 +497,11 @@ static void vm_run(frame * self, enviroment * env, int pos, int deferStart) {
 			{
 				generic_type* gtype = (generic_type*)PopVector(self->type_args_vec);
 				object* v = (object*)PopVector(self->value_stack);
-				//generic_type_print(gtype);
+				//PrintGenericType(gtype);
 				//Printfln("");
-				//generic_type_print(v->gtype);
+				//PrintGenericType(v->gtype);
 				//Printfln("");
-				int dist = generic_type_distance(gtype, v->gtype, sg_thread_context());
+				int dist = DistanceGenericType(gtype, v->gtype, sg_thread_context());
 				object* b = object_bool_get(dist >= 0);
 				PushVector(self->value_stack, b);
 				break;
@@ -535,7 +535,7 @@ static void vm_run(frame * self, enviroment * env, int pos, int deferStart) {
 				object* obj = (object*)TopVector(self->value_stack);
 				//仮想関数テーブル更新
 				class_create_vtable(cls);
-				obj->gtype = generic_type_ref(cls->parent);
+				obj->gtype = RefGenericType(cls->parent);
 				obj->vptr = cls->vt;
 				//ジェネリック型を実体化
 				if(cls->type_parameter_list->length == 0) {
@@ -543,7 +543,7 @@ static void vm_run(frame * self, enviroment * env, int pos, int deferStart) {
 				} else {
 					generic_type* g = generic_type_new(tp);
 					for(int i=0; i<cls->type_parameter_list->length; i++) {
-						generic_type_addargs(g, (generic_type*)AtVector(self->type_args_vec, i));
+						AddArgsGenericType(g, (generic_type*)AtVector(self->type_args_vec, i));
 					}
 					obj->gtype = g;
 				}
@@ -804,7 +804,7 @@ static void vm_run(frame * self, enviroment * env, int pos, int deferStart) {
 			{
 				object* o = PopVector(self->value_stack);
 				generic_type* a = PopVector(self->type_args_vec);
-				a = generic_type_apply(a, sg_thread_context());
+				a = ApplyGenericType(a, sg_thread_context());
 				if(a->core_type->tag == TYPE_INTERFACE_T) {
 					interface_* inter = TYPE2INTERFACE(GENERIC2TYPE(a));
 					Vector* inter_list = class_get_interface_tree(TYPE2CLASS(GENERIC2TYPE(o->gtype)));
@@ -817,7 +817,7 @@ static void vm_run(frame * self, enviroment * env, int pos, int deferStart) {
 					}
 					break;
 				}
-				if(generic_type_distance(o->gtype, a, sg_thread_context()) < 0) {
+				if(DistanceGenericType(o->gtype, a, sg_thread_context()) < 0) {
 					PushVector(self->value_stack, object_get_null());
 				} else {
 					//o = object_clone(o);
@@ -830,7 +830,7 @@ static void vm_run(frame * self, enviroment * env, int pos, int deferStart) {
 			{
 				object* o = PopVector(self->value_stack);
 				generic_type* a = PopVector(self->type_args_vec);
-				a = generic_type_apply(a, sg_thread_context());
+				a = ApplyGenericType(a, sg_thread_context());
 				assert(a->core_type != NULL);
 				if(a->core_type->tag == TYPE_CLASS_T) {
 					PushVector(self->value_stack, o);
@@ -1057,7 +1057,7 @@ static void vm_run(frame * self, enviroment * env, int pos, int deferStart) {
 						int count = (int)PopVector(counts);
 						generic_type* head = AtVector(stack, 0);
 						for(int i=0; i<count; i++) {
-							generic_type_addargs(head, (generic_type*)PopVector(stack));
+							AddArgsGenericType(head, (generic_type*)PopVector(stack));
 						}
 						if(depth == 0) {
 							assert(stack->length == 1);

@@ -23,7 +23,7 @@ void operator_vt_replace(operator_vt* self, operator_overload* opov) {
 		} else if(operator_arg2(e->type)) {
 			parameter* param_a = AtVector(e->parameter_list, 0);
 			parameter* param_b = AtVector(opov->parameter_list, 0);
-			if(generic_type_distance(param_a->gtype, param_b->gtype, NULL) == 0) {
+			if(DistanceGenericType(param_a->gtype, param_b->gtype, NULL) == 0) {
 				AssignVector(self->vec, i, opov);
 				return;
 			}
