@@ -26,7 +26,7 @@ void VthrowBCError(bc_error_id id, va_list ap) {
 	char* fmt = VformatBCError(id, ap);
 	gGlobalError = id;
 	gLastMessage = InternString(fmt);
-	script_context* sctx = script_context_get_current();
+	script_context* sctx = GetCurrentScriptContext();
 	if(sctx->print_error) {
 		fprintf(stderr, "%s", fmt);
 	}

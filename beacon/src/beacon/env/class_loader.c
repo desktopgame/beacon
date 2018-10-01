@@ -94,7 +94,7 @@ void class_loader_load_pass_ast(class_loader* self, ast* a) {
 
 void class_loader_special(class_loader* self, char* relativePath) {
 	char* fullP = ResolveScriptPath(relativePath);
-	script_context* ctx = script_context_get_current();
+	script_context* ctx = GetCurrentScriptContext();
 	heap* he = GetHeap();
 	class_loader* cll = GetTreeMapValue(ctx->class_loader_map, fullP);
 	he->accept_blocking++;
@@ -214,7 +214,7 @@ static void class_loader_load_toplevel(class_loader* self) {
 	CLBC_body(self, self->il_code->statement_list, self->env, cctx, NULL);
 	DeleteILStmt(body);
 	DeleteCallContext(cctx);
-	script_context_cache();
+	CacheScriptContext();
 }
 
 static void class_loader_load_toplevel_function(class_loader* self) {

@@ -35,10 +35,10 @@ object * object_int_malloc(int i, const char* filename, int lineno) {
 }
 
 object* object_int_get(int i) {
-	script_context* ctx = script_context_get_current();
-	script_context_cache();
+	script_context* ctx = GetCurrentScriptContext();
+	CacheScriptContext();
 	if((i < -9) || i > 99) {
-		return script_context_iintern(ctx, i);
+		return IInternScriptContext(ctx, i);
 		//return object_int_new(i);
 	}
 	if(i < 0) { return (object*)AtVector(ctx->neg_int_vec, (-i) - 1); }
@@ -121,7 +121,7 @@ object * object_bool_get(bool b) {
 }
 
 object * object_get_true() {
-	script_context* ctx = script_context_get_current();
+	script_context* ctx = GetCurrentScriptContext();
 	if (ctx->true_obj == NULL) {
 		ctx->true_obj = object_malloc(OBJECT_BOOL_T);
 		ctx->true_obj->u.bool_ = true;
@@ -133,7 +133,7 @@ object * object_get_true() {
 }
 
 object * object_get_false() {
-	script_context* ctx = script_context_get_current();
+	script_context* ctx = GetCurrentScriptContext();
 	if (ctx->false_obj == NULL) {
 		ctx->false_obj = object_malloc(OBJECT_BOOL_T);
 		ctx->false_obj->u.bool_ = false;
@@ -145,7 +145,7 @@ object * object_get_false() {
 }
 
 object * object_get_null() {
-	script_context* ctx = script_context_get_current();
+	script_context* ctx = GetCurrentScriptContext();
 	if (ctx->null_obj == NULL) {
 		ctx->null_obj = object_malloc(OBJECT_NULL_T);
 		ctx->null_obj->gtype = generic_type_new(TYPE_NULL);

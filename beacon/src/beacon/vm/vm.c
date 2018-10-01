@@ -95,7 +95,7 @@ void NativeThrowVM(frame * self, object * exc) {
 	self->exception = exc;
 
 	ThrowVM(self, exc);
-	sg_thread* th = sg_thread_current(script_context_get_current());
+	sg_thread* th = sg_thread_current(GetCurrentScriptContext());
 	//空ならプログラムを終了
 	if (IsEmptyVector(th->trace_stack)) {
 		TerminateVM(self);
@@ -130,7 +130,7 @@ void CatchVM(frame * self) {
 }
 
 bool ValidateVM(frame* self, int source_len, int* pcDest) {
-	sg_thread* th = sg_thread_current(script_context_get_current());
+	sg_thread* th = sg_thread_current(GetCurrentScriptContext());
 	vm_trace* trace = (vm_trace*)TopVector(th->trace_stack);
 	self->validate = true;
 	//汚染
@@ -173,7 +173,7 @@ void TerminateVM(frame * self) {
 
 void UncaughtVM(frame * self, enviroment* env, int pc) {
 	char* message = create_error_message(self, env, pc);
-	script_context* sctx = script_context_get_current();
+	script_context* sctx = GetCurrentScriptContext();
 	if(sctx->print_error) {
 		fprintf(stderr, "%s", message);
 	}
@@ -191,7 +191,7 @@ string_view GetVMErrorMessage() {
 //private
 static void vm_run(frame * self, enviroment * env, int pos, int deferStart) {
 	assert(env != NULL);
-	script_context* ctx = script_context_get_current();
+	script_context* ctx = GetCurrentScriptContext();
 	int source_len = env->buf->source_vec->length;
 	self->context_ref = env;
 	heap* he = GetHeap();
@@ -450,7 +450,7 @@ static void vm_run(frame * self, enviroment * env, int pos, int deferStart) {
 				//例外は呼び出し全てへ伝播
 				object* e = (object*)PopVector(self->value_stack);
 				ThrowVM(self, e);
-				sg_thread* th = sg_thread_current(script_context_get_current());
+				sg_thread* th = sg_thread_current(GetCurrentScriptContext());
 				//空ならプログラムを終了
 				if (IsEmptyVector(th->trace_stack)) {
 					TerminateVM(self);
@@ -462,7 +462,7 @@ static void vm_run(frame * self, enviroment * env, int pos, int deferStart) {
 			}
 			case OP_TRY_ENTER:
 			{
-				sg_thread* th = sg_thread_current(script_context_get_current());
+				sg_thread* th = sg_thread_current(GetCurrentScriptContext());
 				vm_trace* trace = NewVMTrace(self);
 				trace->pc = IDX; //goto
 				PushVector(th->trace_stack, trace);
@@ -475,14 +475,14 @@ static void vm_run(frame * self, enviroment * env, int pos, int deferStart) {
 			}
 			case OP_TRY_EXIT:
 			{
-				sg_thread* th = sg_thread_current(script_context_get_current());
+				sg_thread* th = sg_thread_current(GetCurrentScriptContext());
 				vm_trace* trace = (vm_trace*)PopVector(th->trace_stack);
 				DeleteVMTrace(trace);
 				break;
 			}
 			case OP_TRY_CLEAR:
 			{
-				sg_thread* th = sg_thread_current(script_context_get_current());
+				sg_thread* th = sg_thread_current(GetCurrentScriptContext());
 				CatchVM(self);
 				vm_trace* trace = (vm_trace*)PopVector(th->trace_stack);
 				DeleteVMTrace(trace);

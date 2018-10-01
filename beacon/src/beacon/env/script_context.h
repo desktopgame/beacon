@@ -48,33 +48,33 @@ typedef struct script_context {
  * 既に作成されている場合は何もしません。
  * @return
  */
-script_context* script_context_open();
+script_context* OpenScriptContext();
 
 /**
  * 現在のスクリプトコンテキストを返します.
  * この呼び出しは同期される必要があります。
  * @return
  */
-script_context* script_context_get_current();
+script_context* GetCurrentScriptContext();
 
 /**
  * スクリプトコンテキストを登録するためのスクリプトコンテキストと、
  * そこから参照可能な全てのスクリプトコンテキストを開放します.
  */
-void script_context_close();
+void CloseScriptContext();
 
 /**
  * まだブートストラップクラスローダが起動していないなら起動します.
  * @param self
  */
-void script_context_bootstrap(script_context* self);
+void BootstrapScriptContext(script_context* self);
 
 /**
  * 全ての静的フィールドを訪問します.
  * @param self
  * @param act
  */
-void script_context_static_each(script_context* self, static_each act);
+void EachStaticScriptContext(script_context* self, static_each act);
 
 /**
  * 全ての静的フィールドをクリアします.
@@ -88,7 +88,7 @@ void script_context_static_each(script_context* self, static_each act);
  * なので、複数回実行する場合にはこれを使用して静的フィールドをクリアします。
  * @param self
  */
-void script_context_static_clear(script_context* self);
+void ClearScriptContext(script_context* self);
 
 /**
  * 指定の整数をキャッシュします.
@@ -96,10 +96,10 @@ void script_context_static_clear(script_context* self);
  * @param i
  * @return
  */
-struct object* script_context_iintern(script_context* self, int i);
+struct object* IInternScriptContext(script_context* self, int i);
 
 /**
  * 現在のコンテキストでリテラルをキャッシュします.
  */
-void script_context_cache();
+void CacheScriptContext();
 #endif // !SIGNAL_ENV_SCRIPT_CONTEXT_H

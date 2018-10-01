@@ -6,9 +6,9 @@
 
 int cl_test(int argc, char* argv[]) {
 #if defined(DEBUG) || (defined(_MSC_VER) && defined(_DEBUG))
-	script_context_open();
+	OpenScriptContext();
 	int ret = test_run(argc, argv);
-	script_context_close();
+	CloseScriptContext();
 	return ret;
 #else
 	fprintf(stderr, "not supported operation\n");
@@ -18,9 +18,9 @@ int cl_test(int argc, char* argv[]) {
 }
 
 int cl_bug(int argc, char* argv[]) {
-	script_context_open();
+	OpenScriptContext();
 	int ret = 0;
-	script_context_close();
+	CloseScriptContext();
 	return ret;
 }
 
@@ -30,22 +30,22 @@ int cl_ast(const char* filename) {
 }
 
 int cl_il(const char* filename){
-	script_context_open();
+	OpenScriptContext();
 	int ret = EvalIL(filename);
-	script_context_close();
+	CloseScriptContext();
 	return ret;
 }
 
 int cl_op(const char* filename) {
-	script_context_open();
+	OpenScriptContext();
 	int ret = EvalOp(filename);
-	script_context_close();
+	CloseScriptContext();
 	return ret;
 }
 
 int cl_run(const char* filename) {
-	script_context_open();
+	OpenScriptContext();
 	int ret = EvalFile(filename);
-	script_context_close();
+	CloseScriptContext();
 	return ret;
 }

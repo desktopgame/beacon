@@ -48,7 +48,7 @@ generic_type* generic_type_malloc(struct type* core_type, const char* filename, 
 	ret->tag = GENERIC_TYPE_TAG_NONE_T;
 	ret->is_ctor = false;
 	//現在のスクリプトコンテキストに登録
-	script_context* ctx = script_context_get_current();
+	script_context* ctx = GetCurrentScriptContext();
 	PushVector(ctx->all_generic_vec, ret);
 	return ret;
 }
@@ -70,7 +70,7 @@ generic_type* generic_type_clone(generic_type* self) {
 }
 
 void generic_type_collect() {
-	script_context* ctx = script_context_get_current();
+	script_context* ctx = GetCurrentScriptContext();
 	//マークを外す
 	for(int i=0; i<ctx->all_generic_vec->length; i++) {
 		generic_type* e= (generic_type*)AtVector(ctx->all_generic_vec, i);

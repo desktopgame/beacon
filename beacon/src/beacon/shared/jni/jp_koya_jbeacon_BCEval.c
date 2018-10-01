@@ -94,9 +94,9 @@ static jobject bc_EvalString(JNIEnv * env, jclass cls, jstring str, jobject tabl
 }
 
 static frame* bc_eval_allocate(class_loader* cll) {
-	script_context* ctx = script_context_get_current();
+	script_context* ctx = GetCurrentScriptContext();
 	frame* fr = NewFrame();
-	sg_thread_set_frame_ref(sg_thread_current(script_context_get_current()), fr);
+	sg_thread_set_frame_ref(sg_thread_current(GetCurrentScriptContext()), fr);
 	heap* he = GetHeap();
 	he->accept_blocking = 0;
 	if(!GetLastBCError()) {
@@ -287,7 +287,7 @@ static void bc_eval_release(JNIEnv* env, class_loader* cll, frame* fr) {
 	CatchVM(fr);
 	CollectHeap(GetHeap());
 	DeleteFrame(fr);
-	sg_thread_release_frame_ref(sg_thread_current(script_context_get_current()));
+	sg_thread_release_frame_ref(sg_thread_current(GetCurrentScriptContext()));
 
 	GetLastBCError();
 	class_loader_delete(cll);

@@ -26,7 +26,7 @@ static void namespace_put_indent(int depth);
 static void namespace_dump_class(NumericMap* root, bool isRoot, int depth);
 
 namespace_ * namespace_create_at_root(string_view namev) {
-	script_context* ctx = script_context_get_current();
+	script_context* ctx = GetCurrentScriptContext();
 	if (ctx->namespace_nmap == NULL) {
 		ctx->namespace_nmap = NewNumericMap();
 	}
@@ -39,7 +39,7 @@ namespace_ * namespace_create_at_root(string_view namev) {
 }
 
 namespace_ * namespace_get_at_root(string_view namev) {
-	script_context* ctx = script_context_get_current();
+	script_context* ctx = GetCurrentScriptContext();
 	return namespace_get_at_croot(ctx, namev);
 }
 
@@ -65,7 +65,7 @@ namespace_ * namespace_add_namespace(namespace_ * self, string_view namev) {
 }
 
 struct type* namespace_add_type(namespace_* self, type* type) {
-	script_context* ctx = script_context_get_current();
+	script_context* ctx = GetCurrentScriptContext();
 	type->location = self;
 	PutNumericMap(self->type_map, type_name(type), type);
 	type->absolute_index = ctx->type_vec->length;

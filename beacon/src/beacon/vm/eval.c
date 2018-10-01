@@ -88,7 +88,7 @@ bool EvalString(const char* source) {
 
 //private
 static bool eval_top_from_cll(class_loader* cll, ast* aOpt) {
-	script_context* ctx = script_context_get_current();
+	script_context* ctx = GetCurrentScriptContext();
 	if(aOpt == NULL) {
 		class_loader_load(cll);
 	} else {
@@ -96,7 +96,7 @@ static bool eval_top_from_cll(class_loader* cll, ast* aOpt) {
 	}
 	//実行
 	frame* fr = NewFrame();
-	sg_thread_set_frame_ref(sg_thread_current(script_context_get_current()), fr);
+	sg_thread_set_frame_ref(sg_thread_current(GetCurrentScriptContext()), fr);
 	//エラーによって中断された場合のため、ここで戻す
 	heap* he = GetHeap();
 	he->accept_blocking = 0;
@@ -112,7 +112,7 @@ static bool eval_top_from_cll(class_loader* cll, ast* aOpt) {
 	CatchVM(fr);
 	CollectHeap(GetHeap());
 	DeleteFrame(fr);
-	sg_thread_release_frame_ref(sg_thread_current(script_context_get_current()));
+	sg_thread_release_frame_ref(sg_thread_current(GetCurrentScriptContext()));
 
 	bool ret = GetLastBCError();
 	class_loader_delete(cll);

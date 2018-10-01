@@ -20,14 +20,14 @@ static void script_context_class_loader_delete(const char* name, tree_item item)
 
 static void script_context_namespace_unlink(NumericMapKey key, NumericMapItem item);
 static void script_context_namespace_delete(NumericMapKey key, NumericMapItem item);
-static void script_context_static_clearImpl(field* item);
-static void script_context_cache_delete(VectorItem item);
+static void ClearScriptContextImpl(field* item);
+static void CacheScriptContext_delete(VectorItem item);
 static void script_context_mcache_delete(NumericMapKey key, NumericMapItem item);
 
 static Vector* gScriptContextVec = NULL;
 static script_context* gScriptContext = NULL;
 
-script_context* script_context_open() {
+script_context* OpenScriptContext() {
 	if(gScriptContextVec == NULL) {
 		gScriptContextVec = NewVector();
 		sg_thread_launch();
@@ -35,16 +35,16 @@ script_context* script_context_open() {
 	script_context* sctx = script_context_malloc();
 	gScriptContext = sctx;
 	PushVector(gScriptContextVec, sctx);
-	script_context_bootstrap(sctx);
+	BootstrapScriptContext(sctx);
 	return sctx;
 }
 
-script_context * script_context_get_current() {
+script_context * GetCurrentScriptContext() {
 	assert(gScriptContext != NULL);
 	return gScriptContext;
 }
 
-void script_context_close() {
+void CloseScriptContext() {
 	script_context* sctx = (script_context*)PopVector(gScriptContextVec);
 	script_context_free(sctx);
 	gScriptContext = NULL;
@@ -57,7 +57,7 @@ void script_context_close() {
 	}
 }
 
-void script_context_bootstrap(script_context* self) {
+void BootstrapScriptContext(script_context* self) {
 	self->heap->accept_blocking++;
 	//プリロード
 	namespace_* beacon = namespace_create_at_root(InternString("beacon"));
@@ -103,7 +103,7 @@ void script_context_bootstrap(script_context* self) {
 	self->heap->accept_blocking--;
 }
 
-void script_context_static_each(script_context* self, static_each act) {
+void EachStaticScriptContext(script_context* self, static_each act) {
 	script_context* ctx = self;
 	for (int i = 0; i < ctx->type_vec->length; i++) {
 		type* e = (type*)AtVector(ctx->type_vec, i);
@@ -120,11 +120,11 @@ void script_context_static_each(script_context* self, static_each act) {
 	}
 }
 
-void script_context_static_clear(script_context* self) {
-	script_context_static_each(self, script_context_static_clearImpl);
+void ClearScriptContext(script_context* self) {
+	EachStaticScriptContext(self, ClearScriptContextImpl);
 }
 
-object* script_context_iintern(script_context* self, int i) {
+object* IInternScriptContext(script_context* self, int i) {
 	heap* he = self->heap;
 	NumericMap* cell = GetNumericMapCell(self->n_int_map, i);
 	he->accept_blocking++;
@@ -137,8 +137,8 @@ object* script_context_iintern(script_context* self, int i) {
 	return (object*)cell->item;
 }
 
-void script_context_cache() {
-	script_context* self = script_context_get_current();
+void CacheScriptContext() {
+	script_context* self = GetCurrentScriptContext();
 	if(self == NULL) return;
 	heap* h = GetHeap();
 	if(h != NULL) h->accept_blocking++;
@@ -205,8 +205,8 @@ static void script_context_free(script_context* self) {
 		object_destroy(self->null_obj);
 	}
 	DeleteHeap(self->heap);
-	DeleteVector(self->neg_int_vec, script_context_cache_delete);
-	DeleteVector(self->pos_int_vec, script_context_cache_delete);
+	DeleteVector(self->neg_int_vec, CacheScriptContext_delete);
+	DeleteVector(self->pos_int_vec, CacheScriptContext_delete);
 	DeleteNumericMap(self->n_int_map, script_context_mcache_delete);
 	//object_delete(self->null_obj);
 	generic_type_collect();
@@ -243,11 +243,11 @@ static void script_context_namespace_delete(NumericMapKey key, NumericMapItem it
 	namespace_delete(e);
 }
 
-static void script_context_static_clearImpl(field* item) {
+static void ClearScriptContextImpl(field* item) {
 	item->static_value = object_get_null();
 }
 
-static void script_context_cache_delete(VectorItem item) {
+static void CacheScriptContext_delete(VectorItem item) {
 	object_destroy((object*)item);
 }
 

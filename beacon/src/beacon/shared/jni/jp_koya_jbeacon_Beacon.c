@@ -5,10 +5,10 @@
 
 JNIEXPORT void JNICALL Java_jp_koya_jbeacon_Beacon_nativeInit(JNIEnv * env, jclass cls) {
 	InitStringPool();
-	script_context_open();
+	OpenScriptContext();
 }
 
 JNIEXPORT void JNICALL Java_jp_koya_jbeacon_Beacon_nativeDestroy(JNIEnv * env, jclass cls) {
-	script_context_close();
+	CloseScriptContext();
 	DestroyStringPool();
 }
