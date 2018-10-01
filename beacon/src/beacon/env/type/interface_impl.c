@@ -206,5 +206,5 @@ static void interface_method_flattenImpl(interface_* self, Vector* dest, int dep
 
 static void interface_delete_property(VectorItem item) {
 	property* e = (property*)item;
-	property_delete(e);
+	DeleteProperty(e);
 }

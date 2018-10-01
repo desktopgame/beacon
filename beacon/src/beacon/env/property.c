@@ -1,7 +1,7 @@
 #include "property.h"
 #include "../util/mem.h"
 
-property* property_malloc(string_view namev, const char* filename, int lineno) {
+property* MallocProperty(string_view namev, const char* filename, int lineno) {
 	property* ret = mem_malloc(sizeof(property), filename, lineno);
 	ret->namev = namev;
 	ret->gtype = NULL;
@@ -14,7 +14,7 @@ property* property_malloc(string_view namev, const char* filename, int lineno) {
 	ret->get->parent = ret;
 	return ret;
 }
-void property_delete(property* self) {
+void DeleteProperty(property* self) {
 	property_body_delete(self->set);
 	property_body_delete(self->get);
 	MEM_FREE(self);

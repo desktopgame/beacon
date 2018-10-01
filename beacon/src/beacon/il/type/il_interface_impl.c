@@ -9,7 +9,7 @@
 static void il_interface_fqcn_delete(VectorItem item);
 static void il_interface_DeleteMethod(VectorItem item);
 static void il_interface_DeleteTypeParameter(VectorItem item);
-static void il_interface_property_delete(VectorItem item);
+static void il_interface_DeleteProperty(VectorItem item);
 
 il_type * WrapILInterface(il_interface * self) {
 	il_type* ret = NewILType();
@@ -40,7 +40,7 @@ void DeleteILInterface(il_interface * self) {
 	DeleteVector(self->extends_list, il_interface_fqcn_delete);
 	DeleteVector(self->method_list, il_interface_DeleteMethod);
 	DeleteVector(self->type_parameter_list, il_interface_DeleteTypeParameter);
-	DeleteVector(self->prop_list, il_interface_property_delete);
+	DeleteVector(self->prop_list, il_interface_DeleteProperty);
 	MEM_FREE(self);
 }
 //private 
@@ -59,7 +59,7 @@ static void il_interface_DeleteTypeParameter(VectorItem item) {
 	DeleteILTypeParameter(e);
 }
 
-static void il_interface_property_delete(VectorItem item) {
+static void il_interface_DeleteProperty(VectorItem item) {
 	il_property* e = (il_property*)item;
 	DeleteILProperty(e);
 }

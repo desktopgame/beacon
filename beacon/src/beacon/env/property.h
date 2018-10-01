@@ -21,8 +21,8 @@ typedef struct property {
 	bool is_short;
 } property;
 
-#define property_new(namev) (property_malloc(namev, __FILE__, __LINE__))
-property* property_malloc(string_view namev, const char* filename, int lineno);
+#define property_new(namev) (MallocProperty(namev, __FILE__, __LINE__))
+property* MallocProperty(string_view namev, const char* filename, int lineno);
 
-void property_delete(property* self);
+void DeleteProperty(property* self);
 #endif

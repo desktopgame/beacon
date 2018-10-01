@@ -547,5 +547,5 @@ static void class_delete_operator_overload(VectorItem item) {
 
 static void class_delete_property(VectorItem item) {
 	property* e = (property*)item;
-	property_delete(e);
+	DeleteProperty(e);
 }
