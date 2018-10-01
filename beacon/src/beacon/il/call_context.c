@@ -42,7 +42,7 @@ namespace_* GetNamespaceCContext(call_context* self) {
 	if(self->scope != NULL) {
 		return self->scope;
 	}
-	return namespace_lang();
+	return GetLangNamespace();
 }
 
 method* GetMethodCContext(call_context* self) {
@@ -54,7 +54,7 @@ method* GetMethodCContext(call_context* self) {
 
 type* GetTypeCContext(call_context* self) {
 	if(self->tag == CALL_TOP_T) {
-		return namespace_get_type(namespace_lang(), InternString("World"));
+		return FindTypeFromNamespace(GetLangNamespace(), InternString("World"));
 	}
 	return self->ty;
 }
@@ -78,7 +78,7 @@ generic_type* GetReceiverCContext(call_context* self) {
 type* GetEvalTypeCContext(call_context* self, fqcn_cache* fqcn) {
 	type* tp = fqcn_type(fqcn, self->scope);
 	if(tp == NULL) {
-		tp = fqcn_type(fqcn, namespace_lang());
+		tp = fqcn_type(fqcn, GetLangNamespace());
 	}
 	return tp;
 }

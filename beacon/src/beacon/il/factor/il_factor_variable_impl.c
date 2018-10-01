@@ -99,9 +99,9 @@ static void il_factor_variable_check(il_factor_variable* self, enviroment* env, 
 
 static void il_factor_variable_check_instance(il_factor_variable* self, enviroment* env, call_context* cctx) {
 	namespace_* cur = GetNamespaceCContext(cctx);
-	class_* ctype = namespace_get_class(cur, self->fqcn->namev);
+	class_* ctype = FindClassFromNamespace(cur, self->fqcn->namev);
 	if(ctype == NULL) {
-		ctype = namespace_get_class(namespace_lang(), self->fqcn->namev);
+		ctype = FindClassFromNamespace(GetLangNamespace(), self->fqcn->namev);
 	}
 	//現在の名前空間から参照できるクラスがある場合
 	if(ctype != NULL) {

@@ -53,7 +53,7 @@ string_view type_full_name(type* self) {
 	if(self == NULL) {
 		return InternString("NULL");
 	}
-	string_view namespace_str = namespace_tostr(self->location);
+	string_view namespace_str = NamespaceToString(self->location);
 	string_view self_str = type_name(self);
 	return ConcatIntern(
 		Ref2Str(namespace_str),

@@ -12,10 +12,10 @@ static void bc_console_readLine(method* parent, frame* fr, enviroment* env);
 static void bc_console_read(method* parent, frame* fr, enviroment* env);
 
 void bc_console_init() {
-	namespace_* lang = namespace_lang();
+	namespace_* lang = GetLangNamespace();
 	type* consoleType = class_new_preload(InternString("Console"));
 	class_* consoleClass = TYPE2CLASS(consoleType);
-	namespace_add_type(lang, consoleType);
+	AddTypeNamespace(lang, consoleType);
 	class_define_native_method(consoleClass, "writeLine", bc_console_writeLine);
 	class_define_native_method(consoleClass, "write", bc_console_write);
 	class_define_native_method(consoleClass, "readLine", bc_console_readLine);
@@ -23,8 +23,8 @@ void bc_console_init() {
 }
 
 type* bc_console_type() {
-	namespace_* lang = namespace_lang();
-	return namespace_get_type(lang, InternString("Console"));
+	namespace_* lang = GetLangNamespace();
+	return FindTypeFromNamespace(lang, InternString("Console"));
 }
 
 //private

@@ -3,12 +3,12 @@
 
 
 void bc_null_init() {
-	namespace_* lang = namespace_lang();
+	namespace_* lang = GetLangNamespace();
 	type* nullType = class_new_preload(InternString("Null"));
-	namespace_add_type(lang, nullType);
+	AddTypeNamespace(lang, nullType);
 }
 
 type* bc_null_type() {
-	namespace_* lang = namespace_lang();
-	return namespace_get_type(lang, InternString("Null"));
+	namespace_* lang = GetLangNamespace();
+	return FindTypeFromNamespace(lang, InternString("Null"));
 }

@@ -14,17 +14,17 @@ static void bc_object_nativeToString(method* parent, frame* fr, enviroment* env)
 static void bc_object_nativeReferenceEquals(method* parent, frame* fr, enviroment* env);
 
 void bc_object_init() {
-	namespace_* lang = namespace_lang();
+	namespace_* lang = GetLangNamespace();
 	type* objectType = class_new_preload(InternString("Object"));
 	class_* objectClass = TYPE2CLASS(objectType);
-	namespace_add_type(lang, objectType);
+	AddTypeNamespace(lang, objectType);
 	class_define_native_method(objectClass, "nativeToString", bc_object_nativeToString);
 	class_define_native_method(objectClass, "nativeReferenceEquals", bc_object_nativeReferenceEquals);
 }
 
 type* bc_object_type() {
-	namespace_* lang = namespace_lang();
-	return namespace_get_type(lang, InternString("Object"));
+	namespace_* lang = GetLangNamespace();
+	return FindTypeFromNamespace(lang, InternString("Object"));
 }
 
 //private

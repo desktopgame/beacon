@@ -80,7 +80,7 @@ object * object_string_malloc(const char * s, const char* filename, int lineno) 
 	object* arr = object_ref_malloc(filename, lineno);
 	//arr->tag = OBJECT_ARRAY_T;
 	type* arrType = bc_array_type();
-	type* strType = namespace_get_type(namespace_lang(), InternString("String"));
+	type* strType = FindTypeFromNamespace(GetLangNamespace(), InternString("String"));
 	arr->gtype = generic_type_new(arrType);
 	arr->vptr = type_vtable(arrType);
 	arr->tag = OBJECT_ARRAY_T;

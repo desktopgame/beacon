@@ -65,9 +65,9 @@ namespace_ * fqcn_scope(fqcn_cache * self, namespace_* current) {
 	for (int i = 0; i < self->scope_vec->length; i++) {
 		string_view ev = (string_view)AtVector(self->scope_vec, i);
 		if (top == NULL) {
-			top = namespace_get_at_root(ev);
+			top = FindNamespaceFromRoot(ev);
 		} else {
-			top = namespace_get_namespace(top, ev);
+			top = FindNamespaceFromNamespace(top, ev);
 		}
 	}
 	return top;
@@ -78,7 +78,7 @@ type * fqcn_type(fqcn_cache * self, namespace_ * current) {
 	//Console(X::Yを含まない)のような指定なら
 	//signal::lang空間も探索する
 	if (ret == NULL && self->scope_vec->length == 0) {
-		ret = fqcn_TYPE_IMPL(self, namespace_lang());
+		ret = fqcn_TYPE_IMPL(self, GetLangNamespace());
 	}
 	return ret;
 }
@@ -153,12 +153,12 @@ static type * fqcn_TYPE_IMPL(fqcn_cache * self, namespace_* current) {
 		if (current == NULL) {
 			return NULL;
 		}
-		return namespace_get_type(current, self->namev);
+		return FindTypeFromNamespace(current, self->namev);
 	}
 	//X::Yのような形式
 	namespace_* c = fqcn_scope(self, current);
 	if (c == NULL) {
 		return NULL;
 	}
-	return namespace_get_type(c, self->namev);
+	return FindTypeFromNamespace(c, self->namev);
 }

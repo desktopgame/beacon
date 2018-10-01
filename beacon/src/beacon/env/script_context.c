@@ -18,8 +18,8 @@ static script_context* script_context_malloc(void);
 static void script_context_free(script_context* self);
 static void script_context_class_loader_delete(const char* name, tree_item item);
 
-static void script_context_namespace_unlink(NumericMapKey key, NumericMapItem item);
-static void script_context_namespace_delete(NumericMapKey key, NumericMapItem item);
+static void script_context_UnlinkNamespace(NumericMapKey key, NumericMapItem item);
+static void script_context_DeleteNamespace(NumericMapKey key, NumericMapItem item);
 static void ClearScriptContextImpl(field* item);
 static void CacheScriptContext_delete(VectorItem item);
 static void script_context_mcache_delete(NumericMapKey key, NumericMapItem item);
@@ -60,10 +60,10 @@ void CloseScriptContext() {
 void BootstrapScriptContext(script_context* self) {
 	self->heap->accept_blocking++;
 	//プリロード
-	namespace_* beacon = namespace_create_at_root(InternString("beacon"));
-	namespace_* lang = namespace_add_namespace(beacon, InternString("lang"));
-	namespace_* unsafe = namespace_add_namespace(beacon, InternString("unsafe"));
-	namespace_* placeholder = namespace_create_at_root(InternString("$placeholder"));
+	namespace_* beacon = CreateNamespaceAtRoot(InternString("beacon"));
+	namespace_* lang = AddNamespaceNamespace(beacon, InternString("lang"));
+	namespace_* unsafe = AddNamespaceNamespace(beacon, InternString("unsafe"));
+	namespace_* placeholder = CreateNamespaceAtRoot(InternString("$placeholder"));
 	bc_object_init();
 	bc_array_init();
 	bc_exception_init();
@@ -219,11 +219,11 @@ static void script_context_free(script_context* self) {
 	//ブートストラップクラスローダを意図的に起動していないなら、
 	//ここはまだNULL
 	if(self->namespace_nmap != NULL) {
-		EachNumericMap(self->namespace_nmap, script_context_namespace_unlink);
+		EachNumericMap(self->namespace_nmap, script_context_UnlinkNamespace);
 	}
 
 	int a = object_count();
-	DeleteNumericMap(self->namespace_nmap, script_context_namespace_delete);
+	DeleteNumericMap(self->namespace_nmap, script_context_DeleteNamespace);
 	DeleteFiles(self->include_vec);
 	MEM_FREE(self);
 }
@@ -233,14 +233,14 @@ static void script_context_class_loader_delete(const char* name, tree_item item)
 	class_loader_delete(e);
 }
 
-static void script_context_namespace_unlink(NumericMapKey key, NumericMapItem item) {
+static void script_context_UnlinkNamespace(NumericMapKey key, NumericMapItem item) {
 	namespace_* e = (namespace_*)item;
-	namespace_unlink(e);
+	UnlinkNamespace(e);
 }
 
-static void script_context_namespace_delete(NumericMapKey key, NumericMapItem item) {
+static void script_context_DeleteNamespace(NumericMapKey key, NumericMapItem item) {
 	namespace_* e = (namespace_*)item;
-	namespace_delete(e);
+	DeleteNamespace(e);
 }
 
 static void ClearScriptContextImpl(field* item) {

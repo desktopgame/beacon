@@ -132,9 +132,9 @@ static void CLBC_namespace(class_loader* self, il_namespace* ilnamespace, namesp
 	CL_ERROR(self);
 	namespace_* current = NULL;
 	if (parent == NULL) {
-		current = namespace_create_at_root(ilnamespace->namev);
+		current = CreateNamespaceAtRoot(ilnamespace->namev);
 	} else {
-		current = namespace_add_namespace(parent, ilnamespace->namev);
+		current = AddNamespaceNamespace(parent, ilnamespace->namev);
 	}
 	CLBC_namespace_list(self, ilnamespace->namespace_list, current);
 	CLBC_type_list(self, ilnamespace->type_list, current);
@@ -295,12 +295,12 @@ static void CLBC_check_superclass(class_* cls) {
 
 static type* CLBC_get_or_load_enum(namespace_* parent, il_type* iltype) {
 	class_* outClass = NULL;
-	type* tp = namespace_get_type(parent, iltype->u.enum_->namev);
+	type* tp = FindTypeFromNamespace(parent, iltype->u.enum_->namev);
 	if (tp == NULL) {
 		outClass = class_new(iltype->u.enum_->namev);
 		outClass->location = parent;
 		tp = type_wrap_class(outClass);
-		namespace_add_type(parent, tp);
+		AddTypeNamespace(parent, tp);
 	} else {
 		outClass = tp->u.class_;
 	}
@@ -308,7 +308,7 @@ static type* CLBC_get_or_load_enum(namespace_* parent, il_type* iltype) {
 }
 
 static type* CLBC_get_or_load_class(class_loader* self, namespace_* parent, il_type* iltype) {
-	type* tp = namespace_get_type(parent, iltype->u.class_->namev);
+	type* tp = FindTypeFromNamespace(parent, iltype->u.class_->namev);
 	class_* outClass = NULL;
 	//取得できなかった
 	if (tp == NULL) {
@@ -354,7 +354,7 @@ static void CLBC_register_class(class_loader* self, namespace_* parent, il_type*
 			PushVector(cls->impl_list, gtp);
 			if(E->tag != TYPE_INTERFACE_T) {
 				ThrowBCError(BCERROR_CLASS_FIRST_T, Ref2Str(type_name(tp)));
-				namespace_add_type(parent, tp);
+				AddTypeNamespace(parent, tp);
 				DeleteCallContext(cctx);
 				return;
 			}
@@ -362,7 +362,7 @@ static void CLBC_register_class(class_loader* self, namespace_* parent, il_type*
 	}
 	DeleteCallContext(cctx);
 	cls->location = parent;
-	namespace_add_type(parent, tp);
+	AddTypeNamespace(parent, tp);
 	//重複するインターフェイスを検出
 	interface_* inter = NULL;
 	if((inter = type_interface_valid(tp))) {
@@ -371,7 +371,7 @@ static void CLBC_register_class(class_loader* self, namespace_* parent, il_type*
 }
 
 static type* CLBC_get_or_load_interface(class_loader* self, namespace_* parent, il_type* iltype) {
-	type* tp = namespace_get_type(parent, iltype->u.interface_->namev);
+	type* tp = FindTypeFromNamespace(parent, iltype->u.interface_->namev);
 	interface_* inter = NULL;
 	if (tp == NULL) {
 		inter = interface_new(iltype->u.interface_->namev);
@@ -402,7 +402,7 @@ static void CLBC_register_interface(class_loader* self, namespace_* parent, il_t
 		type* E = GENERIC2TYPE(gtp);
 		if(E->tag != TYPE_INTERFACE_T) {
 			ThrowBCError(BCERROR_INTERFACE_ONLY_T, Ref2Str(type_name(tp)));
-			namespace_add_type(parent, tp);
+			AddTypeNamespace(parent, tp);
 			DeleteCallContext(cctx);
 			return;
 		//インターフェイスの時のみ追加
@@ -413,7 +413,7 @@ static void CLBC_register_interface(class_loader* self, namespace_* parent, il_t
 	//場所を設定
 	inter->location = parent;
 	DeleteCallContext(cctx);
-	namespace_add_type(parent, tp);
+	AddTypeNamespace(parent, tp);
 	//重複するインターフェイスを検出
 	interface_* ovinter = NULL;
 	if((ovinter = type_interface_valid(tp))) {

@@ -6,7 +6,7 @@
 
 //proto
 static void il_namespace_type_delete(VectorItem item);
-static void il_namespace_namespace_delete(VectorItem item);
+static void il_namespace_DeleteNamespace(VectorItem item);
 
 il_namespace* NewILNamespace(string_view namev) {
 	il_namespace* ret = (il_namespace*)MEM_MALLOC(sizeof(il_namespace));
@@ -31,7 +31,7 @@ void DeleteILNamespace(il_namespace* self) {
 	if(self == NULL) {
 		return;
 	}
-	DeleteVector(self->namespace_list, il_namespace_namespace_delete);
+	DeleteVector(self->namespace_list, il_namespace_DeleteNamespace);
 	DeleteVector(self->type_list, il_namespace_type_delete);
 	MEM_FREE(self);
 }
@@ -42,7 +42,7 @@ static void il_namespace_type_delete(VectorItem item) {
 	DeleteILType(e);
 }
 
-static void il_namespace_namespace_delete(VectorItem item) {
+static void il_namespace_DeleteNamespace(VectorItem item) {
 	il_namespace* e = (il_namespace*)item;
 	DeleteILNamespace(e);
 }

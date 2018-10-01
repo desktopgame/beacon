@@ -13,22 +13,22 @@
 static void bc_exception_nativeInit(method* parent, frame* fr, enviroment* env);
 
 void bc_exception_init() {
-	namespace_* lang = namespace_lang();
+	namespace_* lang = GetLangNamespace();
 	type* exceptionType = class_new_preload(InternString("Exception"));
 	class_* exceptionClass = TYPE2CLASS(exceptionType);
-	namespace_add_type(lang, exceptionType);
+	AddTypeNamespace(lang, exceptionType);
 	class_define_native_method(exceptionClass, "nativeInit", bc_exception_nativeInit);
 }
 
 type* bc_exception_type() {
-	namespace_* lang = namespace_lang();
-	return namespace_get_type(lang, InternString("Exception"));
+	namespace_* lang = GetLangNamespace();
+	return FindTypeFromNamespace(lang, InternString("Exception"));
 }
 //private
 static void bc_exception_nativeInit(method* parent, frame* fr, enviroment* env) {
-	namespace_* lang = namespace_lang();
-	class_* stackTraceElementClass = namespace_get_class(lang, InternString("StackTraceElement"));
-	class_* exceptionClass = namespace_get_class(lang, InternString("Exception"));
+	namespace_* lang = GetLangNamespace();
+	class_* stackTraceElementClass = FindClassFromNamespace(lang, InternString("StackTraceElement"));
+	class_* exceptionClass = FindClassFromNamespace(lang, InternString("Exception"));
 	object* self= (object*)AtVector(fr->ref_stack, 0);
 	//FXIME:???
 	heap* h = GetHeap();

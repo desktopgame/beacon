@@ -15,10 +15,10 @@ static void bc_double_nativeLE(method* parent, frame* fr, enviroment* env);
 static void bc_double_nativeEQ(method* parent, frame* fr, enviroment* env);
 
 void bc_double_init() {
-	namespace_* lang = namespace_lang();
+	namespace_* lang = GetLangNamespace();
 	type* doubleType = class_new_preload(InternString("Double"));
 	class_* doubleClass = TYPE2CLASS(doubleType);
-	namespace_add_type(lang, doubleType);
+	AddTypeNamespace(lang, doubleType);
 	class_define_native_method(doubleClass, "nativeInit", bc_double_nativeInit);
 	class_define_native_method(doubleClass, "nativeEquals", bc_double_nativeEquals);
 	class_define_native_method(doubleClass, "nativeAdd", bc_double_nativeAdd);
@@ -33,8 +33,8 @@ void bc_double_init() {
 }
 
 type* bc_double_type() {
-	namespace_* lang = namespace_lang();
-	return namespace_get_type(lang, InternString("Double"));
+	namespace_* lang = GetLangNamespace();
+	return FindTypeFromNamespace(lang, InternString("Double"));
 }
 //private
 static void bc_double_nativeInit(method* parent, frame* fr, enviroment* env) {

@@ -6,17 +6,17 @@ static void bc_char_nativeInit(method* parent, frame* fr, enviroment* env);
 static void bc_char_nativeToInt(method* parent, frame* fr, enviroment* env);
 
 void bc_char_init() {
-	namespace_* lang = namespace_lang();
+	namespace_* lang = GetLangNamespace();
 	type* charType = class_new_preload(InternString("Char"));
 	class_* charClass = TYPE2CLASS(charType);
-	namespace_add_type(lang, charType);
+	AddTypeNamespace(lang, charType);
 	class_define_native_method(charClass, "nativeInit", bc_char_nativeInit);
 	class_define_native_method(charClass, "nativeToInt", bc_char_nativeToInt);
 }
 
 type* bc_char_type() {
-	namespace_* lang = namespace_lang();
-	return namespace_get_type(lang, InternString("Char"));
+	namespace_* lang = GetLangNamespace();
+	return FindTypeFromNamespace(lang, InternString("Char"));
 }
 
 //private

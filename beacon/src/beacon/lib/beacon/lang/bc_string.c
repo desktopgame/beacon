@@ -6,10 +6,10 @@
 static void bc_string_nativeInit(method* parent, frame* fr, enviroment* env);
 
 void bc_string_init() {
-	namespace_* lang = namespace_lang();
+	namespace_* lang = GetLangNamespace();
 	type* stringType = class_new_preload(InternString("String"));
 	class_* stringClass = TYPE2CLASS(stringType);
-	namespace_add_type(lang, stringType);
+	AddTypeNamespace(lang, stringType);
 	class_define_native_method(stringClass, "nativeInit", bc_string_nativeInit);
 }
 
@@ -20,8 +20,8 @@ string_buffer * bc_string_raw(object* self) {
 }
 
 type* bc_string_type() {
-	namespace_* lang = namespace_lang();
-	return namespace_get_type(lang, InternString("String"));
+	namespace_* lang = GetLangNamespace();
+	return FindTypeFromNamespace(lang, InternString("String"));
 }
 
 //private

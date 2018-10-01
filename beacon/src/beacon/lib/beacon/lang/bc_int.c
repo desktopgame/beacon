@@ -21,10 +21,10 @@ static void bc_int_nativeEQ(method* parent, frame* fr, enviroment* env);
 static void bc_int_nativeToChar(method* parent, frame* fr, enviroment* env);
 
 void bc_int_init() {
-	namespace_* lang =  namespace_lang();
+	namespace_* lang =  GetLangNamespace();
 	type* intType = class_new_preload(InternString("Int"));
 	class_* intClass = TYPE2CLASS(intType);
-	namespace_add_type(lang, intType);
+	AddTypeNamespace(lang, intType);
 	class_define_native_method(intClass, "nativeInit", bc_int_nativeInit);
 	class_define_native_method(intClass, "nativeEquals", bc_int_nativeEquals);
 	class_define_native_method(intClass, "nativeAdd", bc_int_nativeAdd);
@@ -45,8 +45,8 @@ void bc_int_init() {
 }
 
 type* bc_int_type() {
-	namespace_* lang = namespace_lang();
-	return namespace_get_type(lang, InternString("Int"));
+	namespace_* lang = GetLangNamespace();
+	return FindTypeFromNamespace(lang, InternString("Int"));
 }
 //private
 static void bc_int_nativeInit(method* parent, frame* fr, enviroment* env) {

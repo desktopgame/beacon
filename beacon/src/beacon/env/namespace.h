@@ -7,26 +7,26 @@
 #include "../util/numeric_map.h"
 #include <stdint.h>
 struct script_context;
-#define TYPE_OBJECT (namespace_object_type())
-#define TYPE_INT (namespace_int_type())
-#define TYPE_DOUBLE (namespace_double_type())
-#define TYPE_CHAR (namespace_char_type())
-#define TYPE_STRING (namespace_string_type())
-#define TYPE_BOOL (namespace_bool_type())
-#define TYPE_VOID (namespace_void_type())
-#define TYPE_NULL (namespace_null_type())
-#define TYPE_EXCEPTION (namespace_exception_type())
+#define TYPE_OBJECT (GetObjectTypeNamespace())
+#define TYPE_INT (GetIntTypeNamespace())
+#define TYPE_DOUBLE (GetDoubleTypeNamespace())
+#define TYPE_CHAR (GetCharTypeNamespace())
+#define TYPE_STRING (GetStringTypeNamespace())
+#define TYPE_BOOL (GetBoolTypeNamespace())
+#define TYPE_VOID (GetVoidTypeNamespace())
+#define TYPE_NULL (GetNullTypeNamespace())
+#define TYPE_EXCEPTION (GetExceptionTypeNamespace())
 
 
-#define GENERIC_OBJECT ((namespace_object_type()->generic_self))
-#define GENERIC_INT ((namespace_int_type()->generic_self))
-#define GENERIC_DOUBLE ((namespace_double_type()->generic_self))
-#define GENERIC_CHAR ((namespace_char_type()->generic_self))
-#define GENERIC_STRING ((namespace_string_type()->generic_self))
-#define GENERIC_BOOL ((namespace_bool_type()->generic_self))
-#define GENERIC_VOID ((namespace_void_type()->generic_self))
-#define GENERIC_NULL ((namespace_null_type()->generic_self))
-#define GENERIC_EXCEPTION ((namespace_exception_type()->generic_self))
+#define GENERIC_OBJECT ((GetObjectTypeNamespace()->generic_self))
+#define GENERIC_INT ((GetIntTypeNamespace()->generic_self))
+#define GENERIC_DOUBLE ((GetDoubleTypeNamespace()->generic_self))
+#define GENERIC_CHAR ((GetCharTypeNamespace()->generic_self))
+#define GENERIC_STRING ((GetStringTypeNamespace()->generic_self))
+#define GENERIC_BOOL ((GetBoolTypeNamespace()->generic_self))
+#define GENERIC_VOID ((GetVoidTypeNamespace()->generic_self))
+#define GENERIC_NULL ((GetNullTypeNamespace()->generic_self))
+#define GENERIC_EXCEPTION ((GetExceptionTypeNamespace()->generic_self))
 
 struct type;
 struct class_;
@@ -47,14 +47,14 @@ typedef struct namespace_ {
  * @param namev
  * @return 既に存在するならそれを返します.
  */
-namespace_* namespace_create_at_root(string_view namev);
+namespace_* CreateNamespaceAtRoot(string_view namev);
 
 /**
  * 指定の名前でトップレベルから名前空間を検索します.
  * @param namev
  * @return
  */
-namespace_* namespace_get_at_root(string_view namev);
+namespace_* FindNamespaceFromRoot(string_view namev);
 
 /**
  * コンテキストを指定してトップレベルの名前空間を返します.
@@ -62,7 +62,7 @@ namespace_* namespace_get_at_root(string_view namev);
  * @param namev
  * @return
  */
-namespace_* namespace_get_at_croot(struct script_context* sctx, string_view namev);
+namespace_* CFindNamespaceFromRoot(struct script_context* sctx, string_view namev);
 
 /**
  * 指定の名前空間に新しい名前空間を定義します.
@@ -70,7 +70,7 @@ namespace_* namespace_get_at_croot(struct script_context* sctx, string_view name
  * @param namev
  * @return 既に存在するならそれを返します.
  */
-namespace_* namespace_add_namespace(namespace_* self, string_view namev);
+namespace_* AddNamespaceNamespace(namespace_* self, string_view namev);
 
 /**
  * この名前空間にクラスを含めます.
@@ -78,7 +78,7 @@ namespace_* namespace_add_namespace(namespace_* self, string_view namev);
  * @param self
  * @param type
  */
-struct type* namespace_add_type(namespace_* self, struct type* type);
+struct type* AddTypeNamespace(namespace_* self, struct type* type);
 
 /**
  * 指定の名前空間から指定の名前の名前空間を検索します.
@@ -86,7 +86,7 @@ struct type* namespace_add_type(namespace_* self, struct type* type);
  * @param namev
  * @return 見つからないなら NULL
  */
-namespace_* namespace_get_namespace(namespace_* self, string_view namev);
+namespace_* FindNamespaceFromNamespace(namespace_* self, string_view namev);
 
 /**
  * 指定の名前空間で指定の名前のタイプを検索します.
@@ -94,7 +94,7 @@ namespace_* namespace_get_namespace(namespace_* self, string_view namev);
  * @param namev
  * @return 見つからないなら NULL
  */
-struct type* namespace_get_type(namespace_* self, string_view namev);
+struct type* FindTypeFromNamespace(namespace_* self, string_view namev);
 
 /**
  * 指定の名前空間で指定の名前のクラスを検索します.
@@ -102,7 +102,7 @@ struct type* namespace_get_type(namespace_* self, string_view namev);
  * @param namev
  * @return 見つからないなら NULL
  */
-struct class_* namespace_get_class(namespace_* self, string_view namev);
+struct class_* FindClassFromNamespace(namespace_* self, string_view namev);
 
 /**
  * 指定の名前空間で指定の名前のインターフェースを検索します.
@@ -110,102 +110,102 @@ struct class_* namespace_get_class(namespace_* self, string_view namev);
  * @param namev
  * @return 見つからないなら NULL
  */
-struct interface_* namespace_get_interface(namespace_* self, string_view namev);
+struct interface_* FindInterfaceFromNamespace(namespace_* self, string_view namev);
 
 /**
  * beacon 名前空間を返します.
  * @return
  */
-namespace_* namespace_beacon();
+namespace_* GetBeaconNamespace();
 
 /**
  * beacon.lang 名前空間を返します.
  * @return
  */
-namespace_* namespace_lang();
+namespace_* GetLangNamespace();
 
 /**
  * beacon.unsafe 名前空間を返します.
  * @return
  */
-namespace_* namespace_unsafe();
+namespace_* GetUnsafeNamespace();
 
 /**
  * $placeholder 名前空間を返します.
  * @return
  */
-namespace_* namespace_placeholder();
+namespace_* GetPlaceholderNamespace();
 
 /**
  * 現在のスクリプトコンテキストで object タイプを返します.
  * @return
  */
-struct type* namespace_object_type();
+struct type* GetObjectTypeNamespace();
 
 /**
  * 現在のスクリプトコンテキストで int タイプを返します.
  * @return
  */
-struct type* namespace_int_type();
+struct type* GetIntTypeNamespace();
 
 /**
  * 現在のスクリプトコンテキストで double タイプを返します.
  * @return
  */
-struct type* namespace_double_type();
+struct type* GetDoubleTypeNamespace();
 
 /**
  * 現在のスクリプトコンテキストで char タイプを返します.
  * @return
  */
-struct type* namespace_char_type();
+struct type* GetCharTypeNamespace();
 
 /**
  * 現在のスクリプトコンテキストで string タイプを返します.
  * @return
  */
-struct type* namespace_string_type();
+struct type* GetStringTypeNamespace();
 
 /**
  * 現在のスクリプトコンテキストで bool タイプを返します.
  * @return
  */
-struct type* namespace_bool_type();
+struct type* GetBoolTypeNamespace();
 
 /**
  * 現在のスクリプトコンテキストで void タイプを返します.
  * @return
  */
-struct type* namespace_void_type();
+struct type* GetVoidTypeNamespace();
 
 /**
  * 現在のスクリプトコンテキストで null タイプを返します.
  * @return
  */
-struct type* namespace_null_type();
+struct type* GetNullTypeNamespace();
 
 /**
  * beacon::lang::Exception
  * @return
  */
-struct type* namespace_exception_type();
+struct type* GetExceptionTypeNamespace();
 
 /**
  * 指定の名前空間のすべての型で unlink を呼び出します.
  * @param self
  */
-void namespace_unlink(namespace_* self);
+void UnlinkNamespace(namespace_* self);
 
 /**
  * 名前空間を完全な文字列として返します.
  * @param self
  * @return
  */
-string_view namespace_tostr(namespace_* self);
+string_view NamespaceToString(namespace_* self);
 
 /**
  * 名前空間を開放します.
  * @param self
  */
-void namespace_delete(namespace_* self);
+void DeleteNamespace(namespace_* self);
 #endif // !SIGNAL_ENV_NAMESPACE_H

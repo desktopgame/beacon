@@ -1245,7 +1245,7 @@ static char* create_error_message(frame * self, enviroment* env, int pc) {
 		line = lr->lineno;
 	}
 	//例外のメッセージを取得
-	type* exceptionT = namespace_get_type(namespace_lang(), InternString("Exception"));
+	type* exceptionT = FindTypeFromNamespace(GetLangNamespace(), InternString("Exception"));
 	int temp = -1;
 	class_find_field(exceptionT->u.class_, InternString("message"), &temp);
 	object* ex = self->exception;
@@ -1259,7 +1259,7 @@ static char* create_error_message(frame * self, enviroment* env, int pc) {
 	AppendsBuffer(sbuf, cstr->text);
 	AppendBuffer(sbuf, '\n');
 	//スタックトレースの表示
-	type* stackTraceElementT = namespace_get_type(namespace_lang(), InternString("StackTraceElement"));
+	type* stackTraceElementT = FindTypeFromNamespace(GetLangNamespace(), InternString("StackTraceElement"));
 	//Exception#stackTraceを取得
 	temp = -1;
 	class_find_field(exceptionT->u.class_, InternString("stackTrace"), &temp);

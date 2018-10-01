@@ -9,7 +9,7 @@
 
 //proto
 static void il_top_level_import_delete(VectorItem item);
-static void il_top_level_namespace_delete(VectorItem item);
+static void il_top_level_DeleteNamespace(VectorItem item);
 static void il_top_level_function_delete(VectorItem item);
 static void il_top_level_stmt_delete(VectorItem item);
 
@@ -27,7 +27,7 @@ void DeleteILToplevel(il_top_level* self) {
 		return;
 	}
 	DeleteVector(self->import_list, il_top_level_import_delete);
-	DeleteVector(self->namespace_list, il_top_level_namespace_delete);
+	DeleteVector(self->namespace_list, il_top_level_DeleteNamespace);
 	DeleteVector(self->statement_list, il_top_level_stmt_delete);
 	DeleteVector(self->function_list, il_top_level_function_delete);
 	MEM_FREE(self);
@@ -39,7 +39,7 @@ static void il_top_level_import_delete(VectorItem item) {
 	DeleteILImport(e);
 }
 
-static void il_top_level_namespace_delete(VectorItem item) {
+static void il_top_level_DeleteNamespace(VectorItem item) {
 	il_namespace* e = (il_namespace*)item;
 	DeleteILNamespace(e);
 }

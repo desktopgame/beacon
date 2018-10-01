@@ -15,18 +15,18 @@ static void bc_system_nativeAbort(method* parent, frame* fr, enviroment* env);
 static void bc_system_nativeExec(method* parent, frame* fr, enviroment* env);
 
 void bc_system_init() {
-	namespace_* unsafe = namespace_unsafe();
+	namespace_* unsafe = GetUnsafeNamespace();
 	type* systemType = class_new_preload(InternString("System"));
 	class_* systemClass = TYPE2CLASS(systemType);
-	namespace_add_type(unsafe, systemType);
+	AddTypeNamespace(unsafe, systemType);
 	class_define_native_method(systemClass, "nativeExit", bc_system_nativeExit);
 	class_define_native_method(systemClass, "nativeAbort", bc_system_nativeAbort);
 	class_define_native_method(systemClass, "nativeExec", bc_system_nativeExec);
 }
 
 type* bc_system_type() {
-	namespace_* unsafe = namespace_unsafe();
-	return namespace_get_type(unsafe, InternString("System"));
+	namespace_* unsafe = GetUnsafeNamespace();
+	return FindTypeFromNamespace(unsafe, InternString("System"));
 }
 
 //private

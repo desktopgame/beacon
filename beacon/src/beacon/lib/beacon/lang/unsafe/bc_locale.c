@@ -21,10 +21,10 @@ static void bc_locale_nativeGetIntFracDigits(method* parent, frame* fr, envirome
 static void bc_locale_nativeGetFracDigits(method* parent, frame* fr, enviroment* env);
 
 void bc_locale_init() {
-	namespace_* unsafe = namespace_unsafe();
+	namespace_* unsafe = GetUnsafeNamespace();
 	type* localeType = class_new_preload(InternString("Locale"));
 	class_* localeClass = TYPE2CLASS(localeType);
-	namespace_add_type(unsafe, localeType);
+	AddTypeNamespace(unsafe, localeType);
 	class_define_native_method(localeClass, "nativeSetLocale", bc_locale_nativeSetLocale);
 	class_define_native_method(localeClass, "nativeGetDecimalPoint", bc_locale_nativeGetDecimalPoint);
 	class_define_native_method(localeClass, "nativeGetThousandsSep", bc_locale_nativeGetThousandsSep);
@@ -39,8 +39,8 @@ void bc_locale_init() {
 }
 
 type* bc_locale_type() {
-	namespace_* unsafe = namespace_unsafe();
-	return namespace_get_type(unsafe, InternString("Locale"));
+	namespace_* unsafe = GetUnsafeNamespace();
+	return FindTypeFromNamespace(unsafe, InternString("Locale"));
 }
 //private
 static void bc_locale_nativeSetLocale(method* parent, frame* fr, enviroment* env) {

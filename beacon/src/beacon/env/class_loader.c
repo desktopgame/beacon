@@ -202,7 +202,7 @@ static void class_loader_load_toplevel(class_loader* self) {
 	createWorldStmt->fact->lineno = 0;
 	//worldをselfにする
 	call_context* cctx = NewCallContext(CALL_TOP_T);
-	cctx->ty = namespace_get_type(namespace_lang(), InternString("World"));
+	cctx->ty = FindTypeFromNamespace(GetLangNamespace(), InternString("World"));
 	LoadILStmt(body, self->env, cctx);
 	GenerateILStmt(body, self->env, cctx);
 	//$worldをthisにする
@@ -222,7 +222,7 @@ static void class_loader_load_toplevel_function(class_loader* self) {
 		return;
 	}
 	Vector* funcs = self->il_code->function_list;
-	type* worldT = namespace_get_type(namespace_lang(), InternString("World"));
+	type* worldT = FindTypeFromNamespace(GetLangNamespace(), InternString("World"));
 	//前回の実行で作成されたメソッドを解放
 	Vector* methods = TYPE2CLASS(worldT)->method_list;
 	if(methods->length > 0) {
@@ -238,7 +238,7 @@ static void class_loader_load_toplevel_function(class_loader* self) {
 		enviroment* env = NewEnviroment();
 		//call_contextの設定
 		call_context* cctx = NewCallContext(CALL_METHOD_T);
-		cctx->scope = namespace_lang();
+		cctx->scope = GetLangNamespace();
 		cctx->ty = worldT;
 		cctx->u.mt = m;
 		namespace_* loc = GetNamespaceCContext(cctx);
@@ -270,7 +270,7 @@ static void class_loader_load_toplevel_function(class_loader* self) {
 		AddOpcodeBuf(env->buf, (VectorItem)OP_STORE);
 		AddOpcodeBuf(env->buf, (VectorItem)0);
 		PushVector(worldT->u.class_->method_list, m);
-		//CLBC_corutine(self, m, env, ilfunc->parameter_list, ilfunc->statement_list, cctx, namespace_lang());
+		//CLBC_corutine(self, m, env, ilfunc->parameter_list, ilfunc->statement_list, cctx, GetLangNamespace());
 		DeleteCallContext(cctx);
 	}
 	//実装のロード
@@ -279,10 +279,10 @@ static void class_loader_load_toplevel_function(class_loader* self) {
 		method* m = AtVector(TYPE2CLASS(worldT)->method_list, i);
 		script_method* sm = m->u.script_method;
 		call_context* cctx = NewCallContext(CALL_METHOD_T);
-		cctx->scope = namespace_lang();
+		cctx->scope = GetLangNamespace();
 		cctx->ty = worldT;
 		cctx->u.mt = m;
-		CLBC_corutine(self, m, sm->env, ilfunc->parameter_list, ilfunc->statement_list, cctx, namespace_lang());
+		CLBC_corutine(self, m, sm->env, ilfunc->parameter_list, ilfunc->statement_list, cctx, GetLangNamespace());
 		DeleteCallContext(cctx);
 	}
 }

@@ -3,13 +3,13 @@
 
 
 void bc_void_init() {
-	namespace_* lang = namespace_lang();
+	namespace_* lang = GetLangNamespace();
 	type* voidType = class_new_preload(InternString("Void"));
 	class_* voidClass = TYPE2CLASS(voidType);
-	namespace_add_type(lang, voidType);
+	AddTypeNamespace(lang, voidType);
 }
 
 type* bc_void_type() {
-	namespace_* lang = namespace_lang();
-	return namespace_get_type(lang, InternString("Void"));
+	namespace_* lang = GetLangNamespace();
+	return FindTypeFromNamespace(lang, InternString("Void"));
 }

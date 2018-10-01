@@ -21,10 +21,10 @@ static void bc_file_nativeClose(method* parent, frame* fr, enviroment* env);
 static object* file_new(FILE* fp, bool std);
 
 void bc_file_init() {
-	namespace_* unsafe = namespace_unsafe();
+	namespace_* unsafe = GetUnsafeNamespace();
 	type* fileType = class_new_preload(InternString("File"));
 	class_* fileClass = TYPE2CLASS(fileType);
-	namespace_add_type(unsafe, fileType);
+	AddTypeNamespace(unsafe, fileType);
 	class_define_native_method(fileClass, "nativeOpen", bc_file_nativeOpen);
 	class_define_native_method(fileClass, "nativePut", bc_file_nativePut);
 	class_define_native_method(fileClass, "nativeGet", bc_file_nativeGet);
@@ -36,8 +36,8 @@ void bc_file_init() {
 }
 
 type* bc_file_type() {
-	namespace_* unsafe = namespace_unsafe();
-	return namespace_get_type(unsafe, InternString("File"));
+	namespace_* unsafe = GetUnsafeNamespace();
+	return FindTypeFromNamespace(unsafe, InternString("File"));
 }
 //private
 static void bc_file_nativeOpen(method* parent, frame* fr, enviroment* env) {

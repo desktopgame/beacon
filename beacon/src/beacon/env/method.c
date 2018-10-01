@@ -199,7 +199,7 @@ string_view GetMethodUniqueName(method* self) {
 }
 
 bool IsCoroutineMethod(method* self) {
-	type* iteratorT = namespace_get_type(namespace_lang(), InternString("Iterator"));
+	type* iteratorT = FindTypeFromNamespace(GetLangNamespace(), InternString("Iterator"));
 	return (iteratorT && self->return_gtype->core_type == iteratorT);
 }
 
@@ -231,12 +231,12 @@ type* CreateIteratorTypeFromMethod(method* self,  class_loader* cll, Vector* stm
 	call_frame* lCfr = PushCallContext(lCctx, FRAME_RESOLVE_T);
 	lCfr->u.resolve.gtype = self->return_gtype;
 	string_view iterName = GetMethodUniqueName(self);
-	type* iterT = namespace_get_type(namespace_lang(), InternString("Iterator"));
+	type* iterT = FindTypeFromNamespace(GetLangNamespace(), InternString("Iterator"));
 	//イテレータの実装クラスを登録
 	generic_type* iterImplGT = generic_type_apply(self->return_gtype, lCctx);
 	class_* iterImplC = class_new_proxy(iterImplGT, iterName);
 	type* iterImplT = type_wrap_class(iterImplC);
-	namespace_add_type(namespace_placeholder(), iterImplT);
+	AddTypeNamespace(GetPlaceholderNamespace(), iterImplT);
 	type_init_generic(iterImplT, 0);
 	//イテレータのコンストラクタ追加
 	int op_len = 0;

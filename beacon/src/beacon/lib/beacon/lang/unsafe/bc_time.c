@@ -23,10 +23,10 @@ static void bc_time_nativeGetDayOfWeek(method* parent, frame* fr, enviroment* en
 static void bc_time_nativeGetDayOfYear(method* parent, frame* fr, enviroment* env);
 
 void bc_time_init() {
-	namespace_* unsafe = namespace_unsafe();
+	namespace_* unsafe = GetUnsafeNamespace();
 	type* timeType = class_new_preload(InternString("Time"));
 	class_* timeClass = TYPE2CLASS(timeType);
-	namespace_add_type(unsafe, timeType);
+	AddTypeNamespace(unsafe, timeType);
 	class_define_native_method(timeClass, "nativeRawTime", bc_time_nativeGetRawTime);
 	class_define_native_method(timeClass, "nativeToString", bc_time_nativeToString);
 	class_define_native_method(timeClass, "nativeGetSecond", bc_time_nativeGetSecond);
@@ -39,8 +39,8 @@ void bc_time_init() {
 }
 
 type* bc_time_type() {
-	namespace_* unsafe = namespace_unsafe();
-	return namespace_get_type(unsafe, InternString("Time"));
+	namespace_* unsafe = GetUnsafeNamespace();
+	return FindTypeFromNamespace(unsafe, InternString("Time"));
 }
 //private
 static void bc_time_nativeGetRawTime(method* parent, frame* fr, enviroment* env) {

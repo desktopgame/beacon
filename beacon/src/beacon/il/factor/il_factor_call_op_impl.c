@@ -157,9 +157,9 @@ static void il_factor_member_op_check_namebase(il_factor_call_op* self, il_facto
 		const char* clname = Ref2Str(ilvar->fqcn->namev);
 		#endif
 		namespace_* cur = GetNamespaceCContext(cctx);
-		class_* ctype = namespace_get_class(cur, ilvar->fqcn->namev);
+		class_* ctype = FindClassFromNamespace(cur, ilvar->fqcn->namev);
 		if(ctype == NULL) {
-			ctype = namespace_get_class(namespace_lang(), ilvar->fqcn->namev);
+			ctype = FindClassFromNamespace(GetLangNamespace(), ilvar->fqcn->namev);
 		}
 		if(ctype != NULL) {
 			il_factor_member_op_check_static(self, ilmem, ilvar, env, cctx);
