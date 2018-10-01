@@ -9,14 +9,14 @@
 #include "../vm/vm.h"
 
 //proto
-static void heap_delete_object(VectorItem item);
+static void DeleteHeap_object(VectorItem item);
 static void gc_clear(heap* self);
 static void gc_mark(heap* self);
 static void gc_sweep(heap* self);
 static void gc_delete(VectorItem item);
 
 
-heap * heap_new() {
+heap * NewHeap() {
 	heap* ret = (heap*)MEM_MALLOC(sizeof(heap));
 	ret->object_vec = NewVector();
 	ret->accept_blocking = 0;
@@ -24,13 +24,13 @@ heap * heap_new() {
 	return ret;
 }
 
-heap * heap_get() {
+heap * GetHeap() {
 	script_context* ctx = script_context_get_current();
 	if(ctx == NULL) { return NULL; }
 	return ctx->heap;
 }
 
-void heap_add(heap * self, object * obj) {
+void AddHeap(heap * self, object * obj) {
 	if(self == NULL) {
 		obj->paint = PAINT_ONEXIT_T;
 		return;
@@ -42,7 +42,7 @@ void heap_add(heap * self, object * obj) {
 	PushVector(self->object_vec, obj);
 }
 
-void heap_gc(heap * self) {
+void CollectHeap(heap * self) {
 	if(self->collect_blocking > 0) {
 		return;
 	}
@@ -51,19 +51,19 @@ void heap_gc(heap * self) {
 	gc_sweep(self);
 }
 
-void heap_ignore(heap* self, object* o) {
+void IgnoreHeap(heap* self, object* o) {
 	int i = FindVector(self->object_vec, o);
 	if(i >= 0) {
 		RemoveVector(self->object_vec, i);
 	}
 }
 
-void heap_delete(heap * self) {
-	DeleteVector(self->object_vec,heap_delete_object);
+void DeleteHeap(heap * self) {
+	DeleteVector(self->object_vec,DeleteHeap_object);
 	MEM_FREE(self);
 }
 
-void heap_dump(heap* self) {
+void DumpHeap(heap* self) {
 	printf("heap dump:\n");
 	for(int i=0; i<self->object_vec->length; i++) {
 		object* a = AtVector(self->object_vec, i);
@@ -74,7 +74,7 @@ void heap_dump(heap* self) {
 }
 
 //private
-static void heap_delete_object(VectorItem item) {
+static void DeleteHeap_object(VectorItem item) {
 	object* e = (object*)item;
 	object_delete(e);
 }

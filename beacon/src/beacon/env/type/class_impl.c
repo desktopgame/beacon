@@ -105,7 +105,7 @@ type* class_new_preload(string_view namev) {
 
 void class_alloc_fields(class_ * self, object * o, frame* fr) {
 	assert(o->tag == OBJECT_REF_T);
-	heap* he = heap_get();
+	heap* he = GetHeap();
 	for (int i = 0; i < self->field_list->length; i++) {
 		field* f = (field*)AtVector(self->field_list, i);
 		object* a = object_default(f->gtype);
@@ -346,7 +346,7 @@ object * class_new_instance(class_* self, frame* fr, Vector* args, Vector* type_
 	assert(temp != -1);
 	//コンストラクタを実行
 	frame* sub = SubFrame(fr);
-	heap* h = heap_get();
+	heap* h = GetHeap();
 	if(args != NULL) {
 		for (int i = args->length-1; i>=0; i--) {
 			object* o = AtVector(args, i);

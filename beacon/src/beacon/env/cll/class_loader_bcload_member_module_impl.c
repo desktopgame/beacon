@@ -114,7 +114,7 @@ bool CLBC_field_impl(class_loader* self, type* tp, field* fi, namespace_* scope,
 	}
 	//静的フィールドならついでに初期化
 	//静的フィールドでものすごいでかいオブジェクトを確保すると重くなるかも
-	heap* he = heap_get();
+	heap* he = GetHeap();
 	int abtmp = he->accept_blocking;
 	he->collect_blocking++;
 	he->accept_blocking = 0;

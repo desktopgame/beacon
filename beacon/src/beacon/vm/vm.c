@@ -180,7 +180,7 @@ void UncaughtVM(frame * self, enviroment* env, int pc) {
 	gVMError = InternString(message);
 	MEM_FREE(message);
 	CatchVM(GetRootFrame(self));
-	heap_gc(heap_get());
+	CollectHeap(GetHeap());
 }
 
 string_view GetVMErrorMessage() {
@@ -194,7 +194,7 @@ static void vm_run(frame * self, enviroment * env, int pos, int deferStart) {
 	script_context* ctx = script_context_get_current();
 	int source_len = env->buf->source_vec->length;
 	self->context_ref = env;
-	heap* he = heap_get();
+	heap* he = GetHeap();
 	for (int IDX = pos; IDX < source_len; IDX++) {
 		//このVMの子要素で例外がスローされ、
 		//それを子要素自身で処理できなかった場合には、

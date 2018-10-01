@@ -85,7 +85,7 @@ void class_loader_load(class_loader * self) {
 
 void class_loader_load_pass_ast(class_loader* self, ast* a) {
 	ClearBCError();
-	heap* hee = heap_get();
+	heap* hee = GetHeap();
 	hee->accept_blocking++;
 	self->source_code = a;
 	class_loader_load_impl(self);
@@ -95,7 +95,7 @@ void class_loader_load_pass_ast(class_loader* self, ast* a) {
 void class_loader_special(class_loader* self, char* relativePath) {
 	char* fullP = ResolveScriptPath(relativePath);
 	script_context* ctx = script_context_get_current();
-	heap* he = heap_get();
+	heap* he = GetHeap();
 	class_loader* cll = GetTreeMapValue(ctx->class_loader_map, fullP);
 	he->accept_blocking++;
 	if(cll == NULL) {

@@ -31,7 +31,7 @@ static void bc_exception_nativeInit(method* parent, frame* fr, enviroment* env) 
 	class_* exceptionClass = namespace_get_class(lang, InternString("Exception"));
 	object* self= (object*)AtVector(fr->ref_stack, 0);
 	//FXIME:???
-	heap* h = heap_get();
+	heap* h = GetHeap();
 	h->collect_blocking++;
 	//スタックトレースを作成する
 	frame* temp = fr;

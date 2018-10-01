@@ -24,13 +24,13 @@ typedef struct heap {
  * ヒープを作成します.
  * @return
  */
-heap* heap_new();
+heap* NewHeap();
 
 /**
  * 現在のスクリプトコンテキストでヒープを返します.
  * @return
  */
-heap* heap_get();
+heap* GetHeap();
 
 /**
  * ヒープにオブジェクトを追加します.
@@ -39,30 +39,30 @@ heap* heap_get();
  * @param self
  * @param obj
  */
-void heap_add(heap* self, object* obj);
+void AddHeap(heap* self, object* obj);
 
 /**
  * GCを実行します.
  * @param self
  */
-void heap_gc(heap* self);
+void CollectHeap(heap* self);
 
 /**
  * 指定のオブジェクトをヒープから取り除きます.
  * @param self
  * @param o
  */
-void heap_ignore(heap* self, object* o);
+void IgnoreHeap(heap* self, object* o);
 
 /**
  * ヒープを開放します.
  * @param self
  */
-void heap_delete(heap* self);
+void DeleteHeap(heap* self);
 
 /**
  * ヒープの中身をダンプします.
  * @param self
  */
-void heap_dump(heap* self);
+void DumpHeap(heap* self);
 #endif // !SIGNAL_ENV_HEAP_H

@@ -97,7 +97,7 @@ static frame* bc_eval_allocate(class_loader* cll) {
 	script_context* ctx = script_context_get_current();
 	frame* fr = NewFrame();
 	sg_thread_set_frame_ref(sg_thread_current(script_context_get_current()), fr);
-	heap* he = heap_get();
+	heap* he = GetHeap();
 	he->accept_blocking = 0;
 	if(!GetLastBCError()) {
 		ExecuteVM(fr, cll->env);
@@ -285,7 +285,7 @@ static void bc_eval_release(JNIEnv* env, class_loader* cll, frame* fr) {
 		MEM_FREE(mes);
 	}
 	CatchVM(fr);
-	heap_gc(heap_get());
+	CollectHeap(GetHeap());
 	DeleteFrame(fr);
 	sg_thread_release_frame_ref(sg_thread_current(script_context_get_current()));
 

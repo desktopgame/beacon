@@ -98,7 +98,7 @@ static bool eval_top_from_cll(class_loader* cll, ast* aOpt) {
 	frame* fr = NewFrame();
 	sg_thread_set_frame_ref(sg_thread_current(script_context_get_current()), fr);
 	//エラーによって中断された場合のため、ここで戻す
-	heap* he = heap_get();
+	heap* he = GetHeap();
 	he->accept_blocking = 0;
 #if defined(DEBUG)
 	Printfln("start");
@@ -110,7 +110,7 @@ static bool eval_top_from_cll(class_loader* cll, ast* aOpt) {
 		ThrowBCError(BCERROR_GENERIC_T, "unexpected terminate");
 	}
 	CatchVM(fr);
-	heap_gc(heap_get());
+	CollectHeap(GetHeap());
 	DeleteFrame(fr);
 	sg_thread_release_frame_ref(sg_thread_current(script_context_get_current()));
 

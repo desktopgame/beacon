@@ -398,7 +398,7 @@ static object* object_mallocImpl(object_tag type, const char* filename, int line
 	} else {
 		ret->native_slot_vec = NULL;
 	}
-	heap_add(heap_get(), ret);
+	AddHeap(GetHeap(), ret);
 	gObjectCount++;
 	return ret;
 }

@@ -140,7 +140,7 @@ object* script_context_iintern(script_context* self, int i) {
 void script_context_cache() {
 	script_context* self = script_context_get_current();
 	if(self == NULL) return;
-	heap* h = heap_get();
+	heap* h = GetHeap();
 	if(h != NULL) h->accept_blocking++;
 	//すでにキャッシュされている
 	if(self->pos_int_vec->length > 0 ||
@@ -168,7 +168,7 @@ static script_context* script_context_malloc(void) {
 	script_context* ret = (script_context*)MEM_MALLOC(sizeof(script_context));
 	ret->namespace_nmap = NewNumericMap();
 	ret->class_loader_map = NewTreeMap();
-	ret->heap = heap_new();
+	ret->heap = NewHeap();
 	ret->type_vec = NewVector();
 	ret->thread_vec = NewVector();
 	ret->bootstrap_class_loader = NULL;
@@ -200,11 +200,11 @@ static void script_context_free(script_context* self) {
 	CatchVM(thv);
 	class_loader_delete(self->bootstrap_class_loader);
 	if(self->null_obj != NULL) {
-		heap_ignore(self->heap, self->null_obj);
+		IgnoreHeap(self->heap, self->null_obj);
 		self->null_obj->paint = PAINT_ONEXIT_T;
 		object_destroy(self->null_obj);
 	}
-	heap_delete(self->heap);
+	DeleteHeap(self->heap);
 	DeleteVector(self->neg_int_vec, script_context_cache_delete);
 	DeleteVector(self->pos_int_vec, script_context_cache_delete);
 	DeleteNumericMap(self->n_int_map, script_context_mcache_delete);
