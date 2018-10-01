@@ -55,7 +55,7 @@ void method_execute(method* self, frame * fr, enviroment* env) {
 	}
 	#endif
 	if (self->type == METHOD_TYPE_SCRIPT_T) {
-		script_method_execute(self->u.script_method, self, fr, env);
+		ExecuteScriptMethod(self->u.script_method, self, fr, env);
 	} else if (self->type == METHOD_TYPE_NATIVE_T) {
 		frame* a = SubFrame(fr);
 		call_frame* cfr = NULL;
@@ -142,7 +142,7 @@ void method_delete(method * self) {
 	DeleteVector(self->type_parameters, method_type_parameter_delete);
 	DeleteVector(self->parameters, method_parameter_delete);
 	if (self->type == METHOD_TYPE_SCRIPT_T) {
-		script_method_delete(self->u.script_method);
+		DeleteScriptMethod(self->u.script_method);
 	} else if (self->type == METHOD_TYPE_NATIVE_T) {
 		native_method_delete(self->u.native_method);
 	}
@@ -379,7 +379,7 @@ static method* create_has_next(method* self, type* ty, class_loader* cll, Vector
 	mt->modifier = MODIFIER_NONE_T;
 	mt->access = ACCESS_PUBLIC_T;
 	mt->type = METHOD_TYPE_SCRIPT_T;
-	script_method* smt = script_method_new();
+	script_method* smt = NewScriptMethod();
 	enviroment* envSmt = NewEnviroment();
 	call_context* cctx = NewCallContext(CALL_METHOD_T);
 	cctx->scope = self->parent->location;
@@ -430,7 +430,7 @@ static method* create_next(method* self, type* ty, class_loader* cll,generic_typ
 	mt->modifier = MODIFIER_NONE_T;
 	mt->access = ACCESS_PUBLIC_T;
 	mt->type = METHOD_TYPE_SCRIPT_T;
-	script_method* smt = script_method_new();
+	script_method* smt = NewScriptMethod();
 	enviroment* envSmt = NewEnviroment();
 	call_context* cctx = NewCallContext(CALL_METHOD_T);
 	cctx->scope = self->parent->location;

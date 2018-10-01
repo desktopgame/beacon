@@ -285,7 +285,7 @@ bool CLBC_method_decl(class_loader* self, il_type* iltype, type* tp, il_method* 
 		if(IsNativeModifier(method->modifier)) {
 			method->u.native_method = native_method_new();
 		} else {
-			method->u.script_method = script_method_new();
+			method->u.script_method = NewScriptMethod();
 		}
 	}
 	//メソッドが抽象メソッドだが、
