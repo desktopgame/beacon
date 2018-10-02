@@ -76,7 +76,7 @@ void DumpHeap(heap* self) {
 //private
 static void DeleteHeap_object(VectorItem item) {
 	object* e = (object*)item;
-	object_delete(e);
+	DeleteObject(e);
 }
 
 static void gc_clear(heap* self) {
@@ -97,9 +97,9 @@ static void gc_mark(heap* self) {
 	MarkAllFrame(top);
 
 	//true/false/nullは常にマーク
-	object_get_true()->paint = PAINT_MARKED_T;
-	object_get_false()->paint = PAINT_MARKED_T;
-	object_get_null()->paint = PAINT_MARKED_T;
+	GetTrueObject()->paint = PAINT_MARKED_T;
+	GetFalseObject()->paint = PAINT_MARKED_T;
+	GetNullObject()->paint = PAINT_MARKED_T;
 }
 
 static void gc_sweep(heap* self) {
@@ -122,5 +122,5 @@ static void gc_sweep(heap* self) {
 
 static void gc_delete(VectorItem item) {
 	object* e = (object*)item;
-	object_delete(e);
+	DeleteObject(e);
 }

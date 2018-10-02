@@ -115,28 +115,28 @@ static void bc_int_nativeRShift(method* parent, frame* fr, enviroment* env) {
 static void bc_int_nativeGT(method* parent, frame* fr, enviroment* env) {
 	object* self = AtVector(fr->ref_stack, 0);
 	object* a = AtVector(fr->ref_stack, 1);
-	object* ret = object_bool_get(self->u.int_ > a->u.int_);
+	object* ret = GetBoolObject(self->u.int_ > a->u.int_);
 	PushVector(fr->value_stack, ret);
 }
 
 static void bc_int_nativeGE(method* parent, frame* fr, enviroment* env) {
 	object* self = AtVector(fr->ref_stack, 0);
 	object* a = AtVector(fr->ref_stack, 1);
-	object* ret = object_bool_get(self->u.int_ >= a->u.int_);
+	object* ret = GetBoolObject(self->u.int_ >= a->u.int_);
 	PushVector(fr->value_stack, ret);
 }
 
 static void bc_int_nativeLT(method* parent, frame* fr, enviroment* env) {
 	object* self = AtVector(fr->ref_stack, 0);
 	object* a = AtVector(fr->ref_stack, 1);
-	object* ret = object_bool_get(self->u.int_ < a->u.int_);
+	object* ret = GetBoolObject(self->u.int_ < a->u.int_);
 	PushVector(fr->value_stack, ret);
 }
 
 static void bc_int_nativeLE(method* parent, frame* fr, enviroment* env) {
 	object* self = AtVector(fr->ref_stack, 0);
 	object* a = AtVector(fr->ref_stack, 1);
-	object* ret = object_bool_get(self->u.int_ <= a->u.int_);
+	object* ret = GetBoolObject(self->u.int_ <= a->u.int_);
 	PushVector(fr->value_stack, ret);
 }
 
@@ -157,7 +157,7 @@ static void bc_int_nativeBitAnd(method* parent, frame* fr, enviroment* env) {
 static void bc_int_nativeEQ(method* parent, frame* fr, enviroment* env) {
 	object* self = AtVector(fr->ref_stack, 0);
 	object* a = AtVector(fr->ref_stack, 1);
-	object* ret = object_bool_get(self->u.int_ == a->u.int_);
+	object* ret = GetBoolObject(self->u.int_ == a->u.int_);
 	PushVector(fr->value_stack, ret);
 }
 

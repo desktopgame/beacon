@@ -40,9 +40,9 @@ static void bc_object_nativeToString(method* parent, frame* fr, enviroment* env)
 		ShrinkBuffer(sb);
 	//真偽型
 	} else if (self->tag == OBJECT_BOOL_T) {
-		if (self == object_get_true()) {
+		if (self == GetTrueObject()) {
 			AppendsBuffer(sb, "true");
-		} else if (self == object_get_false()) {
+		} else if (self == GetFalseObject()) {
 			AppendsBuffer(sb, "false");
 		}
 	//整数型
@@ -62,5 +62,5 @@ static void bc_object_nativeToString(method* parent, frame* fr, enviroment* env)
 static void bc_object_nativeReferenceEquals(method* parent, frame* fr, enviroment* env) {
 	object* a = (object*)AtVector(fr->ref_stack, 1);
 	object* b = (object*)AtVector(fr->ref_stack, 2);
-	PushVector(fr->value_stack, object_bool_get(a == b));
+	PushVector(fr->value_stack, GetBoolObject(a == b));
 }

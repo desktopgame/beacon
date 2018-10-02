@@ -16,7 +16,7 @@
 
 //proto
 static object* object_mallocImpl(object_tag type, const char* filename, int lineno);
-static void object_delete_self(VectorItem item);
+static void DeleteObject_self(VectorItem item);
 static void object_mark_coroutine(object* self);
 #define object_malloc(type) (object_mallocImpl(type, __FILE__, __LINE__))
 //static object* object_malloc(object_tag type);
@@ -26,7 +26,7 @@ static void object_mark_coroutine(object* self);
 static int gObjectCount = 0;
 
 
-object * object_int_malloc(int i, const char* filename, int lineno) {
+object * MallocIntObject(int i, const char* filename, int lineno) {
 	object* ret = object_mallocImpl(OBJECT_INT_T, filename, lineno);
 	ret->u.int_ = i;
 	ret->gtype = GENERIC_INT;
@@ -34,7 +34,7 @@ object * object_int_malloc(int i, const char* filename, int lineno) {
 	return ret;
 }
 
-object* object_int_get(int i) {
+object* GetIntObject(int i) {
 	script_context* ctx = GetCurrentScriptContext();
 	CacheScriptContext();
 	if((i < -9) || i > 99) {
@@ -45,7 +45,7 @@ object* object_int_get(int i) {
 	return (object*)AtVector(ctx->pos_int_vec, i);
 }
 
-object * object_double_malloc(double d, const char* filename, int lineno) {
+object * MallocDoubleObject(double d, const char* filename, int lineno) {
 	object* ret = object_mallocImpl(OBJECT_DOUBLE_T, filename, lineno);
 	ret->u.double_ = d;
 	ret->gtype = GENERIC_DOUBLE;
@@ -53,7 +53,7 @@ object * object_double_malloc(double d, const char* filename, int lineno) {
 	return ret;
 }
 
-object* object_long_malloc(long l, const char* filename, int lineno) {
+object* MallocLongObject(long l, const char* filename, int lineno) {
 	object* ret = object_mallocImpl(OBJECT_LONG_T, filename, lineno);
 	ret->u.long_ = l;
 	ret->gtype = GENERIC_OBJECT;
@@ -61,7 +61,7 @@ object* object_long_malloc(long l, const char* filename, int lineno) {
 	return ret;
 }
 
-object * object_char_malloc(char c, const char* filename, int lineno) {
+object * MallocCharObject(char c, const char* filename, int lineno) {
 	object* ret = object_mallocImpl(OBJECT_CHAR_T, filename, lineno);
 	ret->u.char_ = c;
 	ret->gtype = GENERIC_CHAR;
@@ -69,7 +69,7 @@ object * object_char_malloc(char c, const char* filename, int lineno) {
 	return ret;
 }
 
-object * object_string_malloc(const char * s, const char* filename, int lineno) {
+object * MallocStringObject(const char * s, const char* filename, int lineno) {
 	object* ret = object_mallocImpl(OBJECT_STRING_T, filename, lineno);
 	//ret->u.string_ = s;
 	ret->u.field_vec = NewVector();
@@ -77,7 +77,7 @@ object * object_string_malloc(const char * s, const char* filename, int lineno) 
 	ret->vptr = type_vtable(TYPE_STRING);
 
 	//配列を生成
-	object* arr = object_ref_malloc(filename, lineno);
+	object* arr = MallocRefObject(filename, lineno);
 	//arr->tag = OBJECT_ARRAY_T;
 	type* arrType = bc_array_type();
 	type* strType = FindTypeFromNamespace(GetLangNamespace(), InternString("String"));
@@ -90,7 +90,7 @@ object * object_string_malloc(const char * s, const char* filename, int lineno) 
 	string_buffer* sb = NewBuffer();
 	while ((*itr) != '\0') {
 		char e = (*itr);
-		PushVector(arr->native_slot_vec, object_char_malloc(e, filename, lineno));
+		PushVector(arr->native_slot_vec, MallocCharObject(e, filename, lineno));
 		itr++;
 		AppendBuffer(sb, e);
 	}
@@ -110,17 +110,17 @@ object * object_string_malloc(const char * s, const char* filename, int lineno) 
 	return ret;
 }
 
-object * object_ref_malloc(const char* filename, int lineno) {
+object * MallocRefObject(const char* filename, int lineno) {
 	object* ret= object_mallocImpl(OBJECT_REF_T, filename, lineno);
 	ret->u.field_vec = MallocVector(filename, lineno);
 	return ret;
 }
 
-object * object_bool_get(bool b) {
-	return (b ? object_get_true() : object_get_false());
+object * GetBoolObject(bool b) {
+	return (b ? GetTrueObject() : GetFalseObject());
 }
 
-object * object_get_true() {
+object * GetTrueObject() {
 	script_context* ctx = GetCurrentScriptContext();
 	if (ctx->true_obj == NULL) {
 		ctx->true_obj = object_malloc(OBJECT_BOOL_T);
@@ -132,7 +132,7 @@ object * object_get_true() {
 	return ctx->true_obj;
 }
 
-object * object_get_false() {
+object * GetFalseObject() {
 	script_context* ctx = GetCurrentScriptContext();
 	if (ctx->false_obj == NULL) {
 		ctx->false_obj = object_malloc(OBJECT_BOOL_T);
@@ -144,7 +144,7 @@ object * object_get_false() {
 	return ctx->false_obj;
 }
 
-object * object_get_null() {
+object * GetNullObject() {
 	script_context* ctx = GetCurrentScriptContext();
 	if (ctx->null_obj == NULL) {
 		ctx->null_obj = object_malloc(OBJECT_NULL_T);
@@ -154,7 +154,7 @@ object * object_get_null() {
 	return ctx->null_obj;
 }
 
-void object_inc(object * self) {
+void IncObject(object * self) {
 	if (self->tag == OBJECT_INT_T) {
 		self->u.int_++;
 	} else if (self->tag == OBJECT_DOUBLE_T) {
@@ -162,7 +162,7 @@ void object_inc(object * self) {
 	} else assert(false);
 }
 
-void object_dec(object * self) {
+void DecObject(object * self) {
 	if (self->tag == OBJECT_INT_T) {
 		self->u.int_--;
 	} else if (self->tag == OBJECT_DOUBLE_T) {
@@ -170,7 +170,7 @@ void object_dec(object * self) {
 	} else  assert(false);
 }
 
-object* object_copy(object * self) {
+object* CopyObject(object * self) {
 	/*
 	object* ret = NULL;
 	if (self->tag == OBJECT_INT_T) {
@@ -187,11 +187,11 @@ object* object_copy(object * self) {
 	return self;
 }
 
-object* object_clone(object* self) {
+object* CloneObject(object* self) {
 	if(self->tag != OBJECT_ARRAY_T &&
 	   self->tag != OBJECT_REF_T &&
 	   self->tag != OBJECT_STRING_T) {
-		   return object_copy(self);
+		   return CopyObject(self);
 	}
 	object* ret = NULL;
 	if(self->tag == OBJECT_REF_T ||
@@ -208,7 +208,7 @@ object* object_clone(object* self) {
 	return ret;
 }
 
-void object_paintall(object* self, object_paint paint) {
+void PaintAllObject(object* self, object_paint paint) {
 	//field#static_valueは
 	//実際に修飾子が static でないときは NULL
 	if (self == NULL) {
@@ -226,7 +226,7 @@ void object_paintall(object* self, object_paint paint) {
 		self->tag == OBJECT_ARRAY_T) {
 		for (int i = 0; i < self->u.field_vec->length; i++) {
 			object* e = (object*)AtVector(self->u.field_vec, i);
-			object_paintall(e, paint);
+			PaintAllObject(e, paint);
 		}
 	}
 	//配列型ならスロットも全てマーク
@@ -234,22 +234,22 @@ void object_paintall(object* self, object_paint paint) {
 	if (self->gtype->core_type == arrayType) {
 		for (int i = 0; i < self->native_slot_vec->length; i++) {
 			object* e = (object*)AtVector(self->native_slot_vec, i);
-			object_paintall(e, paint);
+			PaintAllObject(e, paint);
 		}
 	}
 	//コルーチンならその中身をマークする
 	object_mark_coroutine(self);
 }
 
-void object_markall(object * self) {
-	object_paintall(self, PAINT_MARKED_T);
+void MarkAllObject(object * self) {
+	PaintAllObject(self, PAINT_MARKED_T);
 }
 
-int object_count() {
+int CountActiveObject() {
 	return gObjectCount;
 }
 
-void object_print(object * self) {
+void PrintObject(object * self) {
 	if (self->tag == OBJECT_INT_T) {
 		printf("Int: %d", self->u.int_);
 	} else if (self->tag == OBJECT_DOUBLE_T) {
@@ -258,7 +258,7 @@ void object_print(object * self) {
 		string_buffer* sb = (string_buffer*)AtVector(self->native_slot_vec, 0);
 		printf("String: %s", sb->text);
 	} else if (self->tag == OBJECT_BOOL_T) {
-		printf("Bool: %s", (self == object_get_true() ? "true" : "false"));
+		printf("Bool: %s", (self == GetTrueObject() ? "true" : "false"));
 	} else if (self->tag == OBJECT_NULL_T) {
 		printf("Ref: Null");
 	} else if (self->tag == OBJECT_REF_T) {
@@ -267,7 +267,7 @@ void object_print(object * self) {
 	}
 }
 
-void object_delete(object * self) {
+void DeleteObject(object * self) {
 	gObjectCount--;
 	if(self->is_clone) {
 		MEM_FREE(self);
@@ -292,7 +292,7 @@ void object_delete(object * self) {
 	MEM_FREE(self);
 }
 
-void object_destroy(object* self) {
+void DestroyObject(object* self) {
 	if (self == NULL) {
 		return;
 	}
@@ -301,80 +301,80 @@ void object_destroy(object* self) {
 	if (self->tag == OBJECT_REF_T ||
 	   self->tag == OBJECT_STRING_T ||
 		self->tag == OBJECT_ARRAY_T) {
-		DeleteVector(self->u.field_vec, object_delete_self);
+		DeleteVector(self->u.field_vec, DeleteObject_self);
 		self->u.field_vec = NULL;
 	}
 	//String#charArray
 	if (self->tag == OBJECT_ARRAY_T) {
-		DeleteVector(self->u.field_vec, object_delete_self);
-		DeleteVector(self->native_slot_vec, object_delete_self);
+		DeleteVector(self->u.field_vec, DeleteObject_self);
+		DeleteVector(self->native_slot_vec, DeleteObject_self);
 		self->native_slot_vec = NULL;
 		self->u.field_vec = NULL;
 	}
 	//Printfln("delete object %s", type_name(obj->type));
-	object_delete(self);
+	DeleteObject(self);
 }
 
-int object_obj2int(object* self) {
+int ObjectToInt(object* self) {
 	assert(self->tag == OBJECT_INT_T);
 	return self->u.int_;
 }
 
-double object_obj2double(object* self) {
+double ObjectToDouble(object* self) {
 	assert(self->tag == OBJECT_DOUBLE_T);
 	return self->u.double_;
 }
 
-bool object_obj2bool(object* self) {
+bool ObjectToBool(object* self) {
 	assert(self->tag == OBJECT_BOOL_T);
 	return self->u.bool_;
 }
 
-char object_obj2char(object* self) {
+char ObjectToChar(object* self) {
 	assert(self->tag == OBJECT_CHAR_T);
 	return self->u.char_;
 }
 
-long object_obj2long(object* self) {
+long ObjectToLong(object* self) {
 	assert(self->tag == OBJECT_LONG_T);
 	return self->u.long_;
 }
 
-object* object_int2obj(int i) {
+object* IntToObject(int i) {
 	return object_int_new(i);
 }
 
-object* object_double2obj(double d) {
+object* DoubleToObject(double d) {
 	return object_double_new(d);
 }
 
-object* object_bool2obj(bool b) {
-	return object_bool_get(b);
+object* BoolToObject(bool b) {
+	return GetBoolObject(b);
 }
 
-object* object_char2obj(char c) {
+object* CharToObject(char c) {
 	return object_char_new(c);
 }
 
-object* object_long2obj(long l) {
+object* LongToObject(long l) {
 	return object_long_new(l);
 }
 
-object* object_default(generic_type* gt) {
-	object* a = object_get_null();
+object* GetDefaultObject(generic_type* gt) {
+	object* a = GetNullObject();
 	if (gt->core_type == TYPE_INT) {
-		a = object_int_get(0);
+		a = GetIntObject(0);
 	} else if (gt->core_type == TYPE_DOUBLE) {
 		a = object_double_new(0.0);
 	} else if (gt->core_type == TYPE_BOOL) {
-		a = object_bool_get(false);
+		a = GetBoolObject(false);
 	} else if (gt->core_type == TYPE_CHAR) {
 		a = object_char_new('\0');
 	}
 	return a;
 }
 
-const char* object_name(object* self) {
+const char* GetObjectName(object* self) {
 	const char* name = "NULL";
 	if(self->gtype != NULL && self->gtype->core_type != NULL) {
 		name = Ref2Str(type_full_name(self->gtype->core_type));
@@ -403,9 +403,9 @@ static object* object_mallocImpl(object_tag type, const char* filename, int line
 	return ret;
 }
 
-static void object_delete_self(VectorItem item) {
+static void DeleteObject_self(VectorItem item) {
 	object* e = (object*)item;
-	object_destroy(e);
+	DestroyObject(e);
 }
 
 static void object_mark_coroutine(object* self) {
@@ -414,10 +414,10 @@ static void object_mark_coroutine(object* self) {
 	}
 	//コルーチンの現在の値
 	yield_context* yctx = AtVector(self->native_slot_vec, 0);
-	object_markall(yctx->stock_obj);
-	object_markall(yctx->source_obj);
+	MarkAllObject(yctx->stock_obj);
+	MarkAllObject(yctx->source_obj);
 	//コルーチンに渡された引数
 	for(int i=0; i<yctx->parameter_vec->length; i++) {
-		object_markall(AtVector(yctx->parameter_vec, i));
+		MarkAllObject(AtVector(yctx->parameter_vec, i));
 	}
 }

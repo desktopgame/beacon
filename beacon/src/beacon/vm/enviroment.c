@@ -18,8 +18,8 @@
 static void enviroment_constant_pool_vec_delete(VectorItem item);
 static void enviroment_DeleteLineRange(VectorItem item);
 static void enviroment_add_constant(enviroment* self, object* o);
-static void enviroment_object_delete_self(VectorItem item);
-static void enviroment_object_delete(object* obj);
+static void enviroment_DeleteObject_self(VectorItem item);
+static void enviroment_DeleteObject(object* obj);
 
 enviroment * NewEnviroment() {
 	enviroment* ret = (enviroment*)MEM_MALLOC(sizeof(enviroment));
@@ -153,7 +153,7 @@ void DeleteEnviroment(enviroment * self) {
 
 //private
 static void enviroment_constant_pool_vec_delete(VectorItem item) {
-	enviroment_object_delete((object*)item);
+	enviroment_DeleteObject((object*)item);
 }
 
 static void enviroment_DeleteLineRange(VectorItem item) {
@@ -166,9 +166,9 @@ static void enviroment_add_constant(enviroment* self, object* o) {
 	assert(o->paint == PAINT_ONEXIT_T);
 }
 
-static void enviroment_object_delete_self(VectorItem item) {
+static void enviroment_DeleteObject_self(VectorItem item) {
 }
 
-static void enviroment_object_delete(object* obj) {
-	object_destroy(obj);
+static void enviroment_DeleteObject(object* obj) {
+	DestroyObject(obj);
 }

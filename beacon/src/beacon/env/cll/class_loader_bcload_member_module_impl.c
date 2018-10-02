@@ -91,7 +91,7 @@ bool CLBC_field_decl(class_loader* self, il_type* iltype, type* tp, il_field* il
 }
 
 bool CLBC_field_impl(class_loader* self, type* tp, field* fi, namespace_* scope, call_context* cctx) {
-	fi->static_value = object_default(fi->gtype);
+	fi->static_value = GetDefaultObject(fi->gtype);
 	if(fi->initial_value == NULL) {
 		return true;
 	}

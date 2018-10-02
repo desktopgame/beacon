@@ -113,10 +113,10 @@ static void bc_locale_nativeGetNegativeSign(method* parent, frame* fr, enviromen
 
 static void bc_locale_nativeGetIntFracDigits(method* parent, frame* fr, enviroment* env) {
 	struct lconv* lc = localeconv();
-	PushVector(fr->value_stack, object_int_get(lc->int_frac_digits));
+	PushVector(fr->value_stack, GetIntObject(lc->int_frac_digits));
 }
 
 static void bc_locale_nativeGetFracDigits(method* parent, frame* fr, enviroment* env) {
 	struct lconv* lc = localeconv();
-	PushVector(fr->value_stack, object_int_get(lc->frac_digits));
+	PushVector(fr->value_stack, GetIntObject(lc->frac_digits));
 }

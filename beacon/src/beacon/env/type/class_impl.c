@@ -108,7 +108,7 @@ void class_alloc_fields(class_ * self, object * o, frame* fr) {
 	heap* he = GetHeap();
 	for (int i = 0; i < self->field_list->length; i++) {
 		field* f = (field*)AtVector(self->field_list, i);
-		object* a = object_default(f->gtype);
+		object* a = GetDefaultObject(f->gtype);
 		//静的フィールドは別の場所に確保
 		if (IsStaticModifier(f->modifier)) {
 			continue;
@@ -159,7 +159,7 @@ void class_add_property(class_* self, property* p) {
 		f->gtype = p->gtype;
 		f->modifier = p->modifier;
 		f->parent = self->parent;
-		f->static_value = object_get_null();
+		f->static_value = GetNullObject();
 		p->source_ref = f;
 		class_add_field(self, f);
 	}

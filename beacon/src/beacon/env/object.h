@@ -4,17 +4,17 @@
 #include "../util/vector.h"
 #include <stdbool.h>
 
-#define OBJ2INT(a) (object_obj2int(a))
-#define OBJ2DOUBLE(a) (object_obj2double(a))
-#define OBJ2BOOL(a) (object_obj2bool(a))
-#define OBJ2CHAR(a) (object_obj2char(a))
-#define OBJ2LONG(a) (object_obj2long(a))
+#define OBJ2INT(a) (ObjectToInt(a))
+#define OBJ2DOUBLE(a) (ObjectToDouble(a))
+#define OBJ2BOOL(a) (ObjectToBool(a))
+#define OBJ2CHAR(a) (ObjectToChar(a))
+#define OBJ2LONG(a) (ObjectToLong(a))
 
-#define INT2OBJ(a) (object_int2obj(a))
-#define DOUBLE2OBJ(a) (object_double2obj(a))
-#define BOOL2OBJ(a) (object_bool2obj(a))
-#define CHAR2OBJ(a) (object_char2obj(a))
-#define LONG2OBJ(a) (object_long2obj(a))
+#define INT2OBJ(a) (IntToObject(a))
+#define DOUBLE2OBJ(a) (DoubleToObject(a))
+#define BOOL2OBJ(a) (BoolToObject(a))
+#define CHAR2OBJ(a) (CharToObject(a))
+#define LONG2OBJ(a) (LongToObject(a))
 
 struct generic_type;
 struct vtable;
@@ -81,93 +81,93 @@ typedef struct object {
  * @param i
  * @return
  */
-#define object_int_new(i) (object_int_malloc(i, __FILE__, __LINE__))
-object* object_int_malloc(int i, const char* filename, int lineno);
+#define object_int_new(i) (MallocIntObject(i, __FILE__, __LINE__))
+object* MallocIntObject(int i, const char* filename, int lineno);
 
 /**
  * 可能ならキャッシュを返します.
  * @param i
  * @return
  */
-object* object_int_get(int i);
+object* GetIntObject(int i);
 
 /**
  * 浮動小数型のオブジェクトを作成します.
  * @param d
  * @return
  */
-#define object_double_new(d) (object_double_malloc(d, __FILE__, __LINE__))
-object* object_double_malloc(double d, const char* filename, int lineno);
+#define object_double_new(d) (MallocDoubleObject(d, __FILE__, __LINE__))
+object* MallocDoubleObject(double d, const char* filename, int lineno);
 
 /**
  * long型の値を作成します.
  * @param l
  * @return
  */
-#define object_long_new(l) (object_long_malloc(l, __FILE__, __LINE__))
-object* object_long_malloc(long l, const char* filename, int lineno);
+#define object_long_new(l) (MallocLongObject(l, __FILE__, __LINE__))
+object* MallocLongObject(long l, const char* filename, int lineno);
 
 /**
  * 文字型のオブジェクトを作成します.
  * @param c
  * @return
  */
-#define object_char_new(c) (object_char_malloc(c, __FILE__, __LINE__))
-object* object_char_malloc(char c, const char* filename, int lineno);
+#define object_char_new(c) (MallocCharObject(c, __FILE__, __LINE__))
+object* MallocCharObject(char c, const char* filename, int lineno);
 
 /**
  * 文字列型のオブジェクトを作成します.
  * @param s
  * @return
  */
-#define object_string_new(s) (object_string_malloc(s, __FILE__, __LINE__))
-object* object_string_malloc(const char* s, const char* filename, int lineno);
+#define object_string_new(s) (MallocStringObject(s, __FILE__, __LINE__))
+object* MallocStringObject(const char* s, const char* filename, int lineno);
 
 /**
  * 参照型のオブジェクトを作成します.
  * @return
  */
-#define object_ref_new() (object_ref_malloc(__FILE__, __LINE__))
-object* object_ref_malloc(const char* filename, int lineno);
+#define object_ref_new() (MallocRefObject(__FILE__, __LINE__))
+object* MallocRefObject(const char* filename, int lineno);
 
 /**
  * 真偽値型の値を参照します.
  * @param b
  * @return
  */
-object* object_bool_get(bool b);
+object* GetBoolObject(bool b);
 
 /**
  * trueを参照します.
  * @return
  */
-object* object_get_true();
+object* GetTrueObject();
 
 /**
  * falseを参照します.
  * @return
  */
-object* object_get_false();
+object* GetFalseObject();
 
 /**
  * nullを参照します.
  * @return
  */
-object* object_get_null();
+object* GetNullObject();
 
 /**
  * このオブジェクトが数値型なら、
  * 内部の数値を +1 します.
  * @param self
  */
-void object_inc(object* self);
+void IncObject(object* self);
 
 /**
  * このオブジェクトが数値型なら、
  * 内部の数値を -1 します.
  * @param self
  */
-void object_dec(object* self);
+void DecObject(object* self);
 
 /**
  * このオブジェクトを複製します.
@@ -175,14 +175,14 @@ void object_dec(object* self);
  * @param self
  * @return
  */
-object* object_copy(object* self);
+object* CopyObject(object* self);
 
 /**
  * 参照としてオブジェクトを複製します.
  * @param self
  * @return
  */
-object* object_clone(object* self);
+object* CloneObject(object* self);
 
 /**
  * このオブジェクトと
@@ -190,120 +190,120 @@ object* object_clone(object* self);
  * @param self
  * @param paint
  */
-void object_paintall(object* self, object_paint paint);
+void PaintAllObject(object* self, object_paint paint);
 
 /**
  * このオブジェクトと
  * このオブジェクトから参照可能なオブジェクトを全てマークします.
  * @param self
  */
-void object_markall(object* self);
+void MarkAllObject(object* self);
 
 /**
  * まだ開放されていないオブジェクトの数を返します.
  * @return
  */
-int object_count();
+int CountActiveObject();
 
 /**
  * オブジェクトの詳細を出力します.
  * @param self
  */
-void object_print(object* self);
+void PrintObject(object* self);
 
 /**
  * オブジェクトを開放します.
  * @param self
  */
-void object_delete(object* self);
+void DeleteObject(object* self);
 
 /**
  * 定数などを解放するための関数.
  * @param self
  */
-void object_destroy(object* self);
+void DestroyObject(object* self);
 
 /**
  * beaconからCの int へ変換します.
  * @param self
  * @return
  */
-int object_obj2int(object* self);
+int ObjectToInt(object* self);
 
 /**
  * beaconからCの double へ変換します.
  * @param self
  * @return
  */
-double object_obj2double(object* self);
+double ObjectToDouble(object* self);
 
 /**
  * beaconからCの bool へ変換します.
  * @param self
  * @return
  */
-bool object_obj2bool(object* self);
+bool ObjectToBool(object* self);
 
 /**
  * beaconからCの char へ変換します.
  * @param self
  * @return
  */
-char object_obj2char(object* self);
+char ObjectToChar(object* self);
 
 /**
  * beaconからCの long へ変換します.
  * @param self
  * @return
  */
-long object_obj2long(object* self);
+long ObjectToLong(object* self);
 
 /**
  * Cからbeaconの Int へ変換します.
  * @param i
  * @return
  */
-object* object_int2obj(int i);
+object* IntToObject(int i);
 
 /**
  * Cからbeaconの Double へ変換します.
  * @param d
  * @return
  */
-object* object_double2obj(double d);
+object* DoubleToObject(double d);
 
 /**
  * Cからbeaconの bool へ変換します.
  * @param b
  * @return
  */
-object* object_bool2obj(bool b);
+object* BoolToObject(bool b);
 
 /**
  * Cからbeaconの char へ変換します.
  * @param c
  * @return
  */
-object* object_char2obj(char c);
+object* CharToObject(char c);
 
 /**
  * Cからbeacon
  * @param l
  * @return
  */
-object* object_long2obj(long l);
+object* LongToObject(long l);
 
 /**
  * 指定の型のデフォルト値を返します.
  * @param gt
  * @return
  */
-object* object_default(struct generic_type* gt);
+object* GetDefaultObject(struct generic_type* gt);
 
 /**
  * このオブジェクトのデバッグ表現を返します.
  * @param self
  * @return
  */
-const char* object_name(object* self);
+const char* GetObjectName(object* self);
 #endif // !SIGNAL_ENV_OBJECT_H

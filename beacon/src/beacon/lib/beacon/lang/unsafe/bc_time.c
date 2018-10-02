@@ -60,35 +60,35 @@ static void bc_time_nativeToString(method* parent, frame* fr, enviroment* env) {
 
 static void bc_time_nativeGetSecond(method* parent, frame* fr, enviroment* env) {
 	object* rawTime = AtVector(fr->ref_stack, 1);
-	PushVector(fr->value_stack, object_int_get(localtime(&(rawTime->u.long_))->tm_sec));
+	PushVector(fr->value_stack, GetIntObject(localtime(&(rawTime->u.long_))->tm_sec));
 }
 
 static void bc_time_nativeGetMinute(method* parent, frame* fr, enviroment* env) {
 	object* rawTime = AtVector(fr->ref_stack, 1);
-	PushVector(fr->value_stack, object_int_get(localtime(&(rawTime->u.long_))->tm_min));
+	PushVector(fr->value_stack, GetIntObject(localtime(&(rawTime->u.long_))->tm_min));
 }
 
 static void bc_time_nativeGetHour(method* parent, frame* fr, enviroment* env) {
 	object* rawTime = AtVector(fr->ref_stack, 1);
-	PushVector(fr->value_stack, object_int_get(localtime(&(rawTime->u.long_))->tm_hour));
+	PushVector(fr->value_stack, GetIntObject(localtime(&(rawTime->u.long_))->tm_hour));
 }
 
 static void bc_time_nativeGetDay(method* parent, frame* fr, enviroment* env) {
 	object* rawTime = AtVector(fr->ref_stack, 1);
-	PushVector(fr->value_stack, object_int_get(localtime(&(rawTime->u.long_))->tm_mday));
+	PushVector(fr->value_stack, GetIntObject(localtime(&(rawTime->u.long_))->tm_mday));
 }
 
 static void bc_time_nativeGetYear(method* parent, frame* fr, enviroment* env) {
 	object* rawTime = AtVector(fr->ref_stack, 1);
-	PushVector(fr->value_stack, object_int_get(localtime(&(rawTime->u.long_))->tm_year));
+	PushVector(fr->value_stack, GetIntObject(localtime(&(rawTime->u.long_))->tm_year));
 }
 
 static void bc_time_nativeGetDayOfWeek(method* parent, frame* fr, enviroment* env) {
 	object* rawTime = AtVector(fr->ref_stack, 1);
-	PushVector(fr->value_stack, object_int_get(localtime(&(rawTime->u.long_))->tm_wday));
+	PushVector(fr->value_stack, GetIntObject(localtime(&(rawTime->u.long_))->tm_wday));
 }
 
 static void bc_time_nativeGetDayOfYear(method* parent, frame* fr, enviroment* env) {
 	object* rawTime = AtVector(fr->ref_stack, 1);
-	PushVector(fr->value_stack, object_int_get(localtime(&(rawTime->u.long_))->tm_yday));
+	PushVector(fr->value_stack, GetIntObject(localtime(&(rawTime->u.long_))->tm_yday));
 }

@@ -193,7 +193,7 @@ static script_context* script_context_malloc(void) {
 }
 
 static void script_context_free(script_context* self) {
-	int aa = object_count();
+	int aa = CountActiveObject();
 	assert(self->heap->collect_blocking == 0);
 	//全ての例外フラグをクリア
 	frame* thv = sg_thread_get_frame_ref(sg_thread_current(self));
@@ -202,16 +202,16 @@ static void script_context_free(script_context* self) {
 	if(self->null_obj != NULL) {
 		IgnoreHeap(self->heap, self->null_obj);
 		self->null_obj->paint = PAINT_ONEXIT_T;
-		object_destroy(self->null_obj);
+		DestroyObject(self->null_obj);
 	}
 	DeleteHeap(self->heap);
 	DeleteVector(self->neg_int_vec, CacheScriptContext_delete);
 	DeleteVector(self->pos_int_vec, CacheScriptContext_delete);
 	DeleteNumericMap(self->n_int_map, script_context_mcache_delete);
-	//object_delete(self->null_obj);
+	//DeleteObject(self->null_obj);
 	CollectGenericType();
 	DeleteVector(self->all_generic_vec, VectorDeleterOfNull);
-	int x = object_count();
+	int x = CountActiveObject();
 
 	DeleteVector(self->type_vec, VectorDeleterOfNull);
 	DeleteVector(self->thread_vec, VectorDeleterOfNull);
@@ -222,7 +222,7 @@ static void script_context_free(script_context* self) {
 		EachNumericMap(self->namespace_nmap, script_context_UnlinkNamespace);
 	}
 
-	int a = object_count();
+	int a = CountActiveObject();
 	DeleteNumericMap(self->namespace_nmap, script_context_DeleteNamespace);
 	DeleteFiles(self->include_vec);
 	MEM_FREE(self);
@@ -244,13 +244,13 @@ static void script_context_DeleteNamespace(NumericMapKey key, NumericMapItem ite
 }
 
 static void ClearScriptContextImpl(field* item) {
-	item->static_value = object_get_null();
+	item->static_value = GetNullObject();
 }
 
 static void CacheScriptContext_delete(VectorItem item) {
-	object_destroy((object*)item);
+	DestroyObject((object*)item);
 }
 
 static void script_context_mcache_delete(NumericMapKey key, NumericMapItem item) {
-	object_destroy((object*)item);
+	DestroyObject((object*)item);
 }

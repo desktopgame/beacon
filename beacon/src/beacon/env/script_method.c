@@ -39,7 +39,7 @@ void ExecuteScriptMethod(script_method * self, method* parent, frame * fr, envir
 		cfr->u.static_invoke.typeargs = aTArgs;
 	}
 	for (int i = 0; i < parent->parameters->length; i++) {
-		object* arg = object_copy(PopVector(fr->value_stack));
+		object* arg = CopyObject(PopVector(fr->value_stack));
 		PushVector(sub->value_stack, arg);
 		AssignVector(aArgs, (parent->parameters->length - i), arg);
 	}

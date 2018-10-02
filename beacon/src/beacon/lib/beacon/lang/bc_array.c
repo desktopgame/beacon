@@ -71,7 +71,7 @@ static void bc_array_nativeInit(method* parent, frame* fr, enviroment* env) {
 	int len = lengthObj->u.int_;
 	assert(len >= 0);
 	for (int i = 0; i < len; i++) {
-		object* oe = object_default(targ);
+		object* oe = GetDefaultObject(targ);
 		PushVector(self->native_slot_vec, oe);
 	}
 }

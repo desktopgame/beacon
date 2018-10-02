@@ -21,13 +21,13 @@ type* bc_bool_type() {
 static void bc_bool_nativeBitOr(method* parent, frame* fr, enviroment* env) {
 	object* self = AtVector(fr->ref_stack, 0);
 	object* a = AtVector(fr->ref_stack, 1);
-	object* ret = object_bool_get(self->u.bool_ | a->u.bool_);
+	object* ret = GetBoolObject(self->u.bool_ | a->u.bool_);
 	PushVector(fr->value_stack, ret);
 }
 
 static void bc_bool_nativeBitAnd(method* parent, frame* fr, enviroment* env) {
 	object* self = AtVector(fr->ref_stack, 0);
 	object* a = AtVector(fr->ref_stack, 1);
-	object* ret = object_bool_get(self->u.bool_ & a->u.bool_);
+	object* ret = GetBoolObject(self->u.bool_ & a->u.bool_);
 	PushVector(fr->value_stack, ret);
 }

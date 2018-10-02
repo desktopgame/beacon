@@ -370,7 +370,7 @@ method* class_gfind_smethod(class_* self, string_view namev, Vector* gargs, int*
 method * class_get_method(object * o, int index) {
 	assert(index >= 0);
 	#if defined(DEBUG)
-	const char* name = object_name(o);
+	const char* name = GetObjectName(o);
 	#endif
 	if(o->tag == OBJECT_NULL_T) {
 		o->vptr = TYPE2CLASS(TYPE_OBJECT)->vt;

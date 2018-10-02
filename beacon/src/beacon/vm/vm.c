@@ -212,44 +212,44 @@ static void vm_run(frame * self, enviroment * env, int pos, int deferStart) {
 		switch (b) {
 			//int & int
 			case OP_IADD:
-				PushVector(self->value_stack, NON_NULL(object_int_get(SPI(self) + SPI(self))));
+				PushVector(self->value_stack, NON_NULL(GetIntObject(SPI(self) + SPI(self))));
 				break;
 			case OP_ISUB:
-				PushVector(self->value_stack, NON_NULL(object_int_get(SPI(self) - SPI(self))));
+				PushVector(self->value_stack, NON_NULL(GetIntObject(SPI(self) - SPI(self))));
 				break;
 			case OP_IMUL:
-				PushVector(self->value_stack, NON_NULL(object_int_get(SPI(self) * SPI(self))));
+				PushVector(self->value_stack, NON_NULL(GetIntObject(SPI(self) * SPI(self))));
 				break;
 			case OP_IDIV:
 			{
 				int a = SPI(self);
 				int b = SPI(self);
 				assert(b != 0);
-				PushVector(self->value_stack, NON_NULL(object_int_get(a / b)));
+				PushVector(self->value_stack, NON_NULL(GetIntObject(a / b)));
 				break;
 			}
 			case OP_IMOD:
-				PushVector(self->value_stack, NON_NULL(object_int_get(SPI(self) % SPI(self))));
+				PushVector(self->value_stack, NON_NULL(GetIntObject(SPI(self) % SPI(self))));
 				break;
 			case OP_IBIT_OR:
 			{
 				int a = SPI(self);
 				int b = SPI(self);
-				PushVector(self->value_stack, NON_NULL(object_int_get(a | b)));
+				PushVector(self->value_stack, NON_NULL(GetIntObject(a | b)));
 				break;
 			}
 			case OP_ILOGIC_OR:
 			{
 				int a = SPI(self);
 				int b = SPI(self);
-				PushVector(self->value_stack, NON_NULL(object_int_get(a || b)));
+				PushVector(self->value_stack, NON_NULL(GetIntObject(a || b)));
 				break;
 			}
 			case OP_IBIT_AND:
 			{
 				int a = SPI(self);
 				int b = SPI(self);
-				PushVector(self->value_stack, NON_NULL(object_int_get(a & b)));
+				PushVector(self->value_stack, NON_NULL(GetIntObject(a & b)));
 				break;
 			}
 			case OP_ILOGIC_AND:
@@ -259,61 +259,61 @@ static void vm_run(frame * self, enviroment * env, int pos, int deferStart) {
 				//短絡評価のせいだった
 				int a = SPI(self);
 				int b = SPI(self);
-				PushVector(self->value_stack, NON_NULL(object_int_get(a && b)));
+				PushVector(self->value_stack, NON_NULL(GetIntObject(a && b)));
 				break;
 			}
 			case OP_IEQ:
-				PushVector(self->value_stack, NON_NULL(object_bool_get(SPI(self) == SPI(self))));
+				PushVector(self->value_stack, NON_NULL(GetBoolObject(SPI(self) == SPI(self))));
 				break;
 			case OP_INOTEQ:
-				PushVector(self->value_stack, NON_NULL(object_bool_get(SPI(self) != SPI(self))));
+				PushVector(self->value_stack, NON_NULL(GetBoolObject(SPI(self) != SPI(self))));
 				break;
 			case OP_IGT:
-				PushVector(self->value_stack, NON_NULL(object_bool_get(SPI(self) > SPI(self))));
+				PushVector(self->value_stack, NON_NULL(GetBoolObject(SPI(self) > SPI(self))));
 				break;
 			case OP_IGE:
-				PushVector(self->value_stack, NON_NULL(object_bool_get(SPI(self) >= SPI(self))));
+				PushVector(self->value_stack, NON_NULL(GetBoolObject(SPI(self) >= SPI(self))));
 				break;
 			case OP_ILT:
 			{
 				object* a_ = PopVector(self->value_stack);
 				object* b_ = PopVector(self->value_stack);
-				PushVector(self->value_stack, NON_NULL(object_bool_get(OBJ2INT(a_) < OBJ2INT(b_))));
-				//PushVector(self->value_stack, object_bool_get(SPI(self) < SPI(self)));
+				PushVector(self->value_stack, NON_NULL(GetBoolObject(OBJ2INT(a_) < OBJ2INT(b_))));
+				//PushVector(self->value_stack, GetBoolObject(SPI(self) < SPI(self)));
 				break;
 			}
 			case OP_ILE:
-				PushVector(self->value_stack, NON_NULL(object_bool_get(SPI(self) <= SPI(self))));
+				PushVector(self->value_stack, NON_NULL(GetBoolObject(SPI(self) <= SPI(self))));
 				break;
 			case OP_ILSH:
-				PushVector(self->value_stack, NON_NULL(object_int_get(SPI(self) << SPI(self))));
+				PushVector(self->value_stack, NON_NULL(GetIntObject(SPI(self) << SPI(self))));
 				break;
 			case OP_IRSH:
-				PushVector(self->value_stack, NON_NULL(object_int_get(SPI(self) >> SPI(self))));
+				PushVector(self->value_stack, NON_NULL(GetIntObject(SPI(self) >> SPI(self))));
 				break;
 			case OP_IEXCOR:
-				PushVector(self->value_stack, NON_NULL(object_int_get(SPI(self) ^ SPI(self))));
+				PushVector(self->value_stack, NON_NULL(GetIntObject(SPI(self) ^ SPI(self))));
 				break;
 			case OP_IFLIP:
-				PushVector(self->value_stack, NON_NULL(object_int_get(~SPI(self))));
+				PushVector(self->value_stack, NON_NULL(GetIntObject(~SPI(self))));
 				break;
 			case OP_CEQ:
-				PushVector(self->value_stack, NON_NULL(object_bool_get(SPC(self) == SPC(self))));
+				PushVector(self->value_stack, NON_NULL(GetBoolObject(SPC(self) == SPC(self))));
 				break;
 			case OP_CNOTEQ:
-				PushVector(self->value_stack, NON_NULL(object_bool_get(SPC(self) != SPC(self))));
+				PushVector(self->value_stack, NON_NULL(GetBoolObject(SPC(self) != SPC(self))));
 				break;
 			case OP_CGT:
-				PushVector(self->value_stack, NON_NULL(object_bool_get(SPC(self) > SPC(self))));
+				PushVector(self->value_stack, NON_NULL(GetBoolObject(SPC(self) > SPC(self))));
 				break;
 			case OP_CGE:
-				PushVector(self->value_stack, NON_NULL(object_bool_get(SPC(self) >= SPC(self))));
+				PushVector(self->value_stack, NON_NULL(GetBoolObject(SPC(self) >= SPC(self))));
 				break;
 			case OP_CLT:
-				PushVector(self->value_stack, NON_NULL(object_bool_get(SPC(self) < SPC(self))));
+				PushVector(self->value_stack, NON_NULL(GetBoolObject(SPC(self) < SPC(self))));
 				break;
 			case OP_CLE:
-				PushVector(self->value_stack, NON_NULL(object_bool_get(SPC(self) <= SPC(self))));
+				PushVector(self->value_stack, NON_NULL(GetBoolObject(SPC(self) <= SPC(self))));
 				break;
 				//double & double
 			case OP_DADD:
@@ -332,25 +332,25 @@ static void vm_run(frame * self, enviroment * env, int pos, int deferStart) {
 				PushVector(self->value_stack, NON_NULL(object_double_new((double)((int)SPD(self) % (int)SPD(self)))));
 				break;
 			case OP_DEQ:
-				PushVector(self->value_stack, NON_NULL(object_bool_get(SPD(self) == SPD(self))));
+				PushVector(self->value_stack, NON_NULL(GetBoolObject(SPD(self) == SPD(self))));
 				break;
 			case OP_DNOTEQ:
-				PushVector(self->value_stack, NON_NULL(object_bool_get(SPD(self) != SPD(self))));
+				PushVector(self->value_stack, NON_NULL(GetBoolObject(SPD(self) != SPD(self))));
 				break;
 			case OP_DGT:
-				PushVector(self->value_stack, NON_NULL(object_bool_get(SPD(self) > SPD(self))));
+				PushVector(self->value_stack, NON_NULL(GetBoolObject(SPD(self) > SPD(self))));
 				break;
 			case OP_DGE:
-				PushVector(self->value_stack, NON_NULL(object_bool_get(SPD(self) >= SPD(self))));
+				PushVector(self->value_stack, NON_NULL(GetBoolObject(SPD(self) >= SPD(self))));
 				break;
 			case OP_DLT:
-				PushVector(self->value_stack, NON_NULL(object_bool_get(SPD(self) < SPD(self))));
+				PushVector(self->value_stack, NON_NULL(GetBoolObject(SPD(self) < SPD(self))));
 				break;
 			case OP_DLE:
-				PushVector(self->value_stack, NON_NULL(object_bool_get(SPD(self) <= SPD(self))));
+				PushVector(self->value_stack, NON_NULL(GetBoolObject(SPD(self) <= SPD(self))));
 				break;
 			case OP_INEG:
-				PushVector(self->value_stack, NON_NULL(object_int_get(-SPI(self))));
+				PushVector(self->value_stack, NON_NULL(GetIntObject(-SPI(self))));
 				break;
 			case OP_DNEG:
 				PushVector(self->value_stack, NON_NULL(object_double_new(-SPD(self))));
@@ -358,7 +358,7 @@ static void vm_run(frame * self, enviroment * env, int pos, int deferStart) {
 			case OP_BNOT:
 			{
 				bool a = SPB(self);
-				PushVector(self->value_stack, NON_NULL(object_bool_get(!a)));
+				PushVector(self->value_stack, NON_NULL(GetBoolObject(!a)));
 				break;
 			}
 				//TODO:短絡評価していない
@@ -366,35 +366,35 @@ static void vm_run(frame * self, enviroment * env, int pos, int deferStart) {
 			{
 				bool ab = SPB(self);
 				bool bb = SPB(self);
-				PushVector(self->value_stack, NON_NULL(object_bool_get(ab | bb)));
+				PushVector(self->value_stack, NON_NULL(GetBoolObject(ab | bb)));
 				break;
 			}
 			case OP_BLOGIC_OR:
 			{
 				bool ab = SPB(self);
 				bool bb = SPB(self);
-				PushVector(self->value_stack, NON_NULL(object_bool_get(ab || bb)));
+				PushVector(self->value_stack, NON_NULL(GetBoolObject(ab || bb)));
 				break;
 			}
 			case OP_BBIT_AND:
 			{
 				bool ab = SPB(self);
 				bool bb = SPB(self);
-				PushVector(self->value_stack,NON_NULL( object_bool_get(ab & bb)));
+				PushVector(self->value_stack,NON_NULL( GetBoolObject(ab & bb)));
 				break;
 			}
 			case OP_BLOGIC_AND:
 			{
 				bool ab = SPB(self);
 				bool bb = SPB(self);
-				PushVector(self->value_stack, NON_NULL(object_bool_get(ab && bb)));
+				PushVector(self->value_stack, NON_NULL(GetBoolObject(ab && bb)));
 				break;
 			}
 			case OP_BEXCOR:
-				PushVector(self->value_stack, NON_NULL(object_bool_get(SPB(self) ^ SPB(self))));
+				PushVector(self->value_stack, NON_NULL(GetBoolObject(SPB(self) ^ SPB(self))));
 				break;
 			case OP_BFLIP:
-				PushVector(self->value_stack, NON_NULL(object_bool_get(~SPB(self))));
+				PushVector(self->value_stack, NON_NULL(GetBoolObject(~SPB(self))));
 				break;
 				//push const
 			case OP_ICONST:
@@ -427,17 +427,17 @@ static void vm_run(frame * self, enviroment * env, int pos, int deferStart) {
 			}
 			case OP_TRUE:
 			{
-				PushVector(self->value_stack, object_get_true());
+				PushVector(self->value_stack, GetTrueObject());
 				break;
 			}
 			case OP_FALSE:
 			{
-				PushVector(self->value_stack, object_get_false());
+				PushVector(self->value_stack, GetFalseObject());
 				break;
 			}
 			case OP_NULL:
 			{
-				PushVector(self->value_stack, object_get_null());
+				PushVector(self->value_stack, GetNullObject());
 				break;
 			}
 			case OP_RETURN:
@@ -502,7 +502,7 @@ static void vm_run(frame * self, enviroment * env, int pos, int deferStart) {
 				//PrintGenericType(v->gtype);
 				//Printfln("");
 				int dist = DistanceGenericType(gtype, v->gtype, sg_thread_context());
-				object* b = object_bool_get(dist >= 0);
+				object* b = GetBoolObject(dist >= 0);
 				PushVector(self->value_stack, b);
 				break;
 			}
@@ -649,7 +649,7 @@ static void vm_run(frame * self, enviroment * env, int pos, int deferStart) {
 			case OP_SUPER:
 			{
 				object* a = AtVector(self->ref_stack, 0);
-				object* super = object_clone(a);
+				object* super = CloneObject(a);
 				super->gtype = TYPE2CLASS(GENERIC2TYPE(a->gtype))->super_class;
 				super->vptr = TYPE2CLASS(GENERIC2TYPE(TYPE2CLASS(GENERIC2TYPE(a->gtype))->super_class))->vt;
 				PushVector(self->value_stack, super);
@@ -811,16 +811,16 @@ static void vm_run(frame * self, enviroment * env, int pos, int deferStart) {
 					int iter = FindVector(inter_list, inter);
 					DeleteVector(inter_list, VectorDeleterOfNull);
 					if(iter == -1) {
-						PushVector(self->value_stack, object_get_null());
+						PushVector(self->value_stack, GetNullObject());
 					} else {
 						PushVector(self->value_stack, o);
 					}
 					break;
 				}
 				if(DistanceGenericType(o->gtype, a, sg_thread_context()) < 0) {
-					PushVector(self->value_stack, object_get_null());
+					PushVector(self->value_stack, GetNullObject());
 				} else {
-					//o = object_clone(o);
+					//o = CloneObject(o);
 					//o->gtype = a;
 					PushVector(self->value_stack, o);
 				}
@@ -840,7 +840,7 @@ static void vm_run(frame * self, enviroment * env, int pos, int deferStart) {
 					int iter = FindVector(inter_list, inter);
 					DeleteVector(inter_list, VectorDeleterOfNull);
 					if(iter == -1) {
-						PushVector(self->value_stack, object_get_null());
+						PushVector(self->value_stack, GetNullObject());
 					} else {
 						PushVector(self->value_stack, o);
 					}
@@ -932,7 +932,7 @@ static void vm_run(frame * self, enviroment * env, int pos, int deferStart) {
 				//iterate(int, int) の int, int を受け取る
 				yctx->source_obj = AtVector(self->ref_stack, 1);
 				#if defined(DEBUG)
-				const char* yname = object_name(yctx->source_obj);
+				const char* yname = GetObjectName(yctx->source_obj);
 				#endif
 				for(int i=2; i<param_len + 1; i++) {
 					object* a = AtVector(self->ref_stack, i);
@@ -968,7 +968,7 @@ static void vm_run(frame * self, enviroment * env, int pos, int deferStart) {
 				yctx->yield_count++;
 				IDX = source_len;
 				//まだ実行できる?
-				object* hasNext = object_bool_get(yctx->yield_offset < yctx->len);
+				object* hasNext = GetBoolObject(yctx->yield_offset < yctx->len);
 				PushVector(self->value_stack, hasNext);
 				break;
 			}
@@ -983,7 +983,7 @@ static void vm_run(frame * self, enviroment * env, int pos, int deferStart) {
 					self->ref_stack = yctx->vm_ref_stack;
 					self->value_stack = yctx->vm_value_stack;
 				}
-				PushVector(self->value_stack, object_get_false());
+				PushVector(self->value_stack, GetFalseObject());
 				break;
 			}
 			case OP_CORO_RESUME:
@@ -1020,8 +1020,8 @@ static void vm_run(frame * self, enviroment * env, int pos, int deferStart) {
 					break;
 				}
 				#if defined(DEBUG)
-				const char* oname = object_name(o);
-				const char* yname = object_name(yctx->source_obj);
+				const char* oname = GetObjectName(o);
+				const char* yname = GetObjectName(yctx->source_obj);
 				#endif
 				//[0] = Array
 				//[1] = ArrayIterator

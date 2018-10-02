@@ -82,34 +82,34 @@ static void bc_double_nativeDiv(method* parent, frame* fr, enviroment* env) {
 static void bc_double_nativeGT(method* parent, frame* fr, enviroment* env) {
 	object* self = AtVector(fr->ref_stack, 0);
 	object* a = AtVector(fr->ref_stack, 1);
-	object* ret = object_bool_get(self->u.double_ > a->u.double_);
+	object* ret = GetBoolObject(self->u.double_ > a->u.double_);
 	PushVector(fr->value_stack, ret);
 }
 
 static void bc_double_nativeGE(method* parent, frame* fr, enviroment* env) {
 	object* self = AtVector(fr->ref_stack, 0);
 	object* a = AtVector(fr->ref_stack, 1);
-	object* ret = object_bool_get(self->u.double_ >= a->u.double_);
+	object* ret = GetBoolObject(self->u.double_ >= a->u.double_);
 	PushVector(fr->value_stack, ret);
 }
 
 static void bc_double_nativeLT(method* parent, frame* fr, enviroment* env) {
 	object* self = AtVector(fr->ref_stack, 0);
 	object* a = AtVector(fr->ref_stack, 1);
-	object* ret = object_bool_get(self->u.double_ < a->u.double_);
+	object* ret = GetBoolObject(self->u.double_ < a->u.double_);
 	PushVector(fr->value_stack, ret);
 }
 
 static void bc_double_nativeLE(method* parent, frame* fr, enviroment* env) {
 	object* self = AtVector(fr->ref_stack, 0);
 	object* a = AtVector(fr->ref_stack, 1);
-	object* ret = object_bool_get(self->u.double_ <= a->u.double_);
+	object* ret = GetBoolObject(self->u.double_ <= a->u.double_);
 	PushVector(fr->value_stack, ret);
 }
 
 static void bc_double_nativeEQ(method* parent, frame* fr, enviroment* env) {
 	object* self = AtVector(fr->ref_stack, 0);
 	object* a = AtVector(fr->ref_stack, 1);
-	object* ret = object_bool_get(self->u.double_ == a->u.double_);
+	object* ret = GetBoolObject(self->u.double_ == a->u.double_);
 	PushVector(fr->value_stack, ret);
 }

@@ -30,7 +30,7 @@ void operator_overload_execute(operator_overload* self, frame* fr, enviroment* e
 	sub->receiver = fr->receiver;
 	PushVector(sub->value_stack, PopVector(fr->value_stack));
 	for (int i = 0; i < self->parameter_list->length; i++) {
-		PushVector(sub->value_stack, object_copy(PopVector(fr->value_stack)));
+		PushVector(sub->value_stack, CopyObject(PopVector(fr->value_stack)));
 	}
 	ExecuteVM(sub, self->env);
 	//戻り値が Void 以外ならスタックトップの値を引き継ぐ

@@ -50,7 +50,7 @@ static void bc_file_nativeOpen(method* parent, frame* fr, enviroment* env) {
 	FILE* fp = fopen(fileStr->text, modeStr->text);
 	if(fp == NULL) {
 		//ひらけなかった
-		PushVector(fr->value_stack, object_get_null());
+		PushVector(fr->value_stack, GetNullObject());
 		return;
 	}
 	object* file = file_new(fp, false);
@@ -77,7 +77,7 @@ static void bc_file_nativeAvailable(method* parent, frame* fr, enviroment* env) 
 	object* self = AtVector(fr->ref_stack, 0);
 	FILE* fp = AtVector(self->native_slot_vec, 0);
 	assert(fp != NULL);
-	PushVector(fr->value_stack, object_bool_get(!feof(fp)));
+	PushVector(fr->value_stack, GetBoolObject(!feof(fp)));
 }
 
 static void bc_file_nativeGetStdIn(method* parent, frame* fr, enviroment* env) {

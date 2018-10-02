@@ -79,7 +79,7 @@ static void frame_markStatic(field* item) {
 	//静的定数フィールドに初期値が割り当てられていない場合
 	if(item->static_value != NULL &&
 	   item->static_value->paint != PAINT_ONEXIT_T) {
-		object_markall(item->static_value);
+		MarkAllObject(item->static_value);
 	}
 }
 
@@ -90,16 +90,16 @@ static void frame_markRecursive(frame* self) {
 	}
 	for (int i = 0; i < self->value_stack->length; i++) {
 		object* e = (object*)AtVector(self->value_stack, i);
-		object_markall(e);
+		MarkAllObject(e);
 	}
 	for (int i = 0; i < self->ref_stack->length; i++) {
 		object* e = (object*)AtVector(self->ref_stack, i);
-		object_markall(e);
+		MarkAllObject(e);
 	}
 	//deferのために一時的に保存された領域
 	frame_mark_defer(self);
 	//例外をマークする
-	object_markall(self->exception);
+	MarkAllObject(self->exception);
 }
 
 static void frame_mark_defer(frame* self) {
@@ -111,7 +111,7 @@ static void frame_mark_defer(frame* self) {
 		Vector* bind = defctx->variable_vec;
 		for(int j=0; j<bind->length; j++) {
 			object* e = AtVector(bind, j);
-			object_markall(e);
+			MarkAllObject(e);
 		}
 	}
 }
