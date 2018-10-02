@@ -125,7 +125,8 @@
 			"bc_string.h": "c",
 			"parser.h": "c",
 			"error.h": "c",
-			"ast_new_literal.h": "c"
+			"ast_new_literal.h": "c",
+			"opcode.h": "c"
 		},
 		"ruby.lint": {
 			"reek": true,

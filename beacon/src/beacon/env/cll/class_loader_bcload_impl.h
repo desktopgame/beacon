@@ -9,11 +9,11 @@
  * SGは静的に型付けされたクラス階層をそのまま表現します。
  * @param self
  */
-void class_loader_bcload_impl(class_loader* self);
+void BCLoadClassLoader(class_loader* self);
 
 /**
  * beacon/langを仮読み込みするための関数.
  * @param self
  */
-void class_loader_bcload_special(class_loader* self);
+void SpecialBCLoadClassLoader(class_loader* self);
 #endif

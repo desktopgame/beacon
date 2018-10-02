@@ -45,31 +45,31 @@ bool EvalIL(const char* filename) {
 	abort();
 	return false;
 	/*
-	class_loader* cl = class_loader_new(filename, CONTENT_ENTRY_POINT_T);
-	class_loader_load(cl);
+	class_loader* cl = NewClassLoader(filename, CONTENT_ENTRY_POINT_T);
+	LoadClassLoader(cl);
 
 	if(!GetLastBCError()) {
 		il_top_level* il = cl->il_code;
 		il_top_level_dump(il, 0);
 	}
-	class_loader_delete(cl);
+	DeleteClassLoader(cl);
 	return true;
 	//*/
 }
 
 bool EvalOp(const char* filename) {
-	class_loader* cl = class_loader_new(filename, CONTENT_ENTRY_POINT_T);
-	class_loader_load(cl);
+	class_loader* cl = NewClassLoader(filename, CONTENT_ENTRY_POINT_T);
+	LoadClassLoader(cl);
 
 	if(!GetLastBCError()) {
 		DumpEnviromentOp(cl->env, 0);
 	}
-	class_loader_delete(cl);
+	DeleteClassLoader(cl);
 	return true;
 }
 
 bool EvalFile(const char * filename) {
-	class_loader* cll = class_loader_new(filename, CONTENT_ENTRY_POINT_T);
+	class_loader* cll = NewClassLoader(filename, CONTENT_ENTRY_POINT_T);
 	return eval_top_from_cll(cll, NULL);
 }
 
@@ -80,7 +80,7 @@ bool EvalString(const char* source) {
 		DestroyParser(p);
 		return false;
 	}
-	class_loader* cll = class_loader_new("", CONTENT_ENTRY_POINT_T);
+	class_loader* cll = NewClassLoader("", CONTENT_ENTRY_POINT_T);
 	ast* a = ReleaseParserAST(p);
 	DestroyParser(p);
 	return eval_top_from_cll(cll, a);
@@ -90,9 +90,9 @@ bool EvalString(const char* source) {
 static bool eval_top_from_cll(class_loader* cll, ast* aOpt) {
 	script_context* ctx = GetCurrentScriptContext();
 	if(aOpt == NULL) {
-		class_loader_load(cll);
+		LoadClassLoader(cll);
 	} else {
-		class_loader_load_pass_ast(cll, aOpt);
+		LoadPassASTClassLoader(cll, aOpt);
 	}
 	//実行
 	frame* fr = NewFrame();
@@ -115,6 +115,6 @@ static bool eval_top_from_cll(class_loader* cll, ast* aOpt) {
 	sg_thread_release_frame_ref(sg_thread_current(GetCurrentScriptContext()));
 
 	bool ret = GetLastBCError();
-	class_loader_delete(cll);
+	DeleteClassLoader(cll);
 	return ret;
 }

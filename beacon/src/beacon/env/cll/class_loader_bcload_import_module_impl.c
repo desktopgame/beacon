@@ -50,7 +50,7 @@ void CLBC_new_load(class_loader * self, char * fullPath) {
 class_loader* CLBC_import_new(class_loader* self, char* full_path) {
 	CL_ERROR_RET(self, self);
 	script_context* ctx = GetCurrentScriptContext();
-	class_loader* cll = class_loader_new(full_path, CONTENT_LIB_T);
+	class_loader* cll = NewClassLoader(full_path, CONTENT_LIB_T);
 	cll->parent = self;
 	import_info* info = ImportImportManager(self->import_manager, cll);
 	info->consume = false;
@@ -95,7 +95,7 @@ static void CLBC_new_load_internal(class_loader * self, char * full_path) {
 	if (GetLastBCError()) {
 		return;
 	}
-	class_loader_load(cll);
+	LoadClassLoader(cll);
 }
 
 static void CLBC_import_already(class_loader* self, class_loader* cll) {

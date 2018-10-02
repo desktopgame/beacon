@@ -46,16 +46,16 @@
 #include "heap.h"
 
 //proto
-static void class_loader_load_impl(class_loader* self);
-static void class_loader_link_recursive(class_loader* self, link_type type);
+static void LoadClassLoader_impl(class_loader* self);
+static void LinkClassLoader_recursive(class_loader* self, link_type type);
 static void class_loader_cache_delete(VectorItem item);
-static class_loader* class_loader_load_specialImpl(class_loader* self, class_loader* cll, char* full_path);
-static void class_loader_load_toplevel(class_loader* self);
-static void class_loader_load_linkall(class_loader* self);
-static void class_loader_load_toplevel_function(class_loader* self);
+static class_loader* LoadClassLoader_specialImpl(class_loader* self, class_loader* cll, char* full_path);
+static void LoadClassLoader_toplevel(class_loader* self);
+static void LoadClassLoader_linkall(class_loader* self);
+static void LoadClassLoader_toplevel_function(class_loader* self);
 static bool check_parser_error(parser* p);
 
-class_loader* class_loader_new(const char* filename, content_type type) {
+class_loader* NewClassLoader(const char* filename, content_type type) {
 	class_loader* ret = (class_loader*)MEM_MALLOC(sizeof(class_loader));
 	ret->source_code = NULL;
 	ret->il_code = NULL;
@@ -71,7 +71,7 @@ class_loader* class_loader_new(const char* filename, content_type type) {
 	return ret;
 }
 
-void class_loader_load(class_loader * self) {
+void LoadClassLoader(class_loader * self) {
 	//ASTを読み込む
 	parser* p = ParseFile(self->filename);
 	//解析に失敗した場合
@@ -80,32 +80,32 @@ void class_loader_load(class_loader * self) {
 	}
 	ast* a = ReleaseParserAST(p);
 	DestroyParser(p);
-	class_loader_load_pass_ast(self, a);
+	LoadPassASTClassLoader(self, a);
 }
 
-void class_loader_load_pass_ast(class_loader* self, ast* a) {
+void LoadPassASTClassLoader(class_loader* self, ast* a) {
 	ClearBCError();
 	heap* hee = GetHeap();
 	hee->accept_blocking++;
 	self->source_code = a;
-	class_loader_load_impl(self);
+	LoadClassLoader_impl(self);
 	hee->accept_blocking--;
 }
 
-void class_loader_special(class_loader* self, char* relativePath) {
+void SpecialLoadClassLoader(class_loader* self, char* relativePath) {
 	char* fullP = ResolveScriptPath(relativePath);
 	script_context* ctx = GetCurrentScriptContext();
 	heap* he = GetHeap();
 	class_loader* cll = GetTreeMapValue(ctx->class_loader_map, fullP);
 	he->accept_blocking++;
 	if(cll == NULL) {
-		cll = class_loader_load_specialImpl(self, cll, fullP);
+		cll = LoadClassLoader_specialImpl(self, cll, fullP);
 	}
 	he->accept_blocking--;
 	MEM_FREE(fullP);
 }
 
-void class_loader_delete(class_loader * self) {
+void DeleteClassLoader(class_loader * self) {
 	if(self == NULL) {
 		return;
 	}
@@ -120,21 +120,21 @@ void class_loader_delete(class_loader * self) {
 
 
 //private
-static void class_loader_load_impl(class_loader* self) {
+static void LoadClassLoader_impl(class_loader* self) {
 	assert(self != NULL);
 	//AST -> IL へ
-	class_loader_ilload_impl(self, self->source_code);
+	ILLoadClassLoader(self, self->source_code);
 	if (GetLastBCError()) { return; }
 	//IL -> SG へ
-	class_loader_bcload_impl(self);
+	BCLoadClassLoader(self);
 	if (GetLastBCError()) { return; }
 	//他のクラスローダーとリンク
-	class_loader_load_linkall(self);
-	class_loader_load_toplevel_function(self);
-	class_loader_load_toplevel(self);
+	LoadClassLoader_linkall(self);
+	LoadClassLoader_toplevel_function(self);
+	LoadClassLoader_toplevel(self);
 }
 
-static void class_loader_link_recursive(class_loader* self, link_type type) {
+static void LinkClassLoader_recursive(class_loader* self, link_type type) {
 	if (self->link == type) {
 		return;
 	}
@@ -148,9 +148,9 @@ static void class_loader_link_recursive(class_loader* self, link_type type) {
 		if (info->consume) {
 			continue;
 		}
-		class_loader_link_recursive(info->context, type);
+		LinkClassLoader_recursive(info->context, type);
 	}
-	class_loader_link(self, type);
+	LinkClassLoader(self, type);
 }
 
 static void class_loader_cache_delete(VectorItem item) {
@@ -158,7 +158,7 @@ static void class_loader_cache_delete(VectorItem item) {
 	DeleteTypeCache(e);
 }
 
-static class_loader* class_loader_load_specialImpl(class_loader* self, class_loader* cll, char* full_path) {
+static class_loader* LoadClassLoader_specialImpl(class_loader* self, class_loader* cll, char* full_path) {
 	cll = CLBC_import_new(self, full_path);
 	//parser
 	parser* p = ParseFile(full_path);
@@ -169,24 +169,24 @@ static class_loader* class_loader_load_specialImpl(class_loader* self, class_loa
 	cll->source_code = ReleaseParserAST(p);
 	DestroyParser(p);
 	//AST -> IL へ
-	class_loader_ilload_impl(cll, cll->source_code);
+	ILLoadClassLoader(cll, cll->source_code);
 	if (GetLastBCError()) { return cll; }
 	//IL -> SG へ
-	class_loader_bcload_special(cll);
+	SpecialBCLoadClassLoader(cll);
 	if (GetLastBCError()) { return cll; }
 	assert(cll->type == CONTENT_LIB_T);
 	return cll;
 }
 
-static void class_loader_load_linkall(class_loader* self) {
+static void LoadClassLoader_linkall(class_loader* self) {
 	if(self->type != CONTENT_ENTRY_POINT_T) {
 		return;
 	}
-	class_loader_link_recursive(self, LINK_DECL_T);
-	class_loader_link_recursive(self, LINK_IMPL_T);
+	LinkClassLoader_recursive(self, LINK_DECL_T);
+	LinkClassLoader_recursive(self, LINK_IMPL_T);
 }
 
-static void class_loader_load_toplevel(class_loader* self) {
+static void LoadClassLoader_toplevel(class_loader* self) {
 	//トップレベルのステートメントを読み込む
 	if(self->type != CONTENT_ENTRY_POINT_T) {
 		return;
@@ -217,7 +217,7 @@ static void class_loader_load_toplevel(class_loader* self) {
 	CacheScriptContext();
 }
 
-static void class_loader_load_toplevel_function(class_loader* self) {
+static void LoadClassLoader_toplevel_function(class_loader* self) {
 	if(self->level != 0 || self->type != CONTENT_ENTRY_POINT_T) {
 		return;
 	}

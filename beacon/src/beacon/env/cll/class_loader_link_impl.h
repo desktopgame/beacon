@@ -7,5 +7,5 @@
  * @param self
  * @param type
  */
-void class_loader_link(class_loader* self, link_type type);
+void LinkClassLoader(class_loader* self, link_type type);
 #endif

@@ -32,7 +32,7 @@ static void CLBC_excec_enum_impl(class_loader* self);
 static void CLBC_check_class(class_loader * self, il_type * iltype, type * tp, namespace_ * scope);
 static void CLBC_check_interface(class_loader * self, il_type * iltype, type * tp, namespace_ * scope);
 
-void class_loader_link(class_loader* self, link_type type) {
+void LinkClassLoader(class_loader* self, link_type type) {
 	CL_ERROR(self);
 	SetBCErrorFile(self->filename);
 	if(type == LINK_DECL_T) {

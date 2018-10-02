@@ -51,14 +51,14 @@ typedef struct class_loader {
  * @param type
  * @return
  */
-class_loader* class_loader_new(const char* filename, content_type type);
+class_loader* NewClassLoader(const char* filename, content_type type);
 
 /**
  * ファイルの内容を解析して必要に応じてインポート先のファイルの読み込み、
  * 型の解決などその他必要な情報をまとめあげます。
  * @param self
  */
-void class_loader_load(class_loader* self);
+void LoadClassLoader(class_loader* self);
 
 /**
  * ASTの解析をスキップして代わりに引数のASTを解析します.
@@ -67,7 +67,7 @@ void class_loader_load(class_loader* self);
  * @param self
  * @param a
  */
-void class_loader_load_pass_ast(class_loader* self, ast* a);
+void LoadPassASTClassLoader(class_loader* self, ast* a);
 
 /**
  * 実行時ディレクトリからの相対パスでファイルを仮読み込みします.
@@ -75,13 +75,13 @@ void class_loader_load_pass_ast(class_loader* self, ast* a);
  * @param self
  * @param relativePath
  */
-void class_loader_special(class_loader* self, char* relativePath);
+void SpecialLoadClassLoader(class_loader* self, char* relativePath);
 
 /**
  * このクラスローダーを開放します.
  * @param self
  */
-void class_loader_delete(class_loader* self);
+void DeleteClassLoader(class_loader* self);
 
 //void class_link_print(class_link link);
 #endif // !SIGNAL_PARSER_CLASS_LOADER_H

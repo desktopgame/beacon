@@ -106,7 +106,7 @@ static void class_loader_ilload_identifier_list(class_loader* self, Vector* list
 //static il_factor* CLIL_factorImpl(class_loader* self, ast* source);
 //static il_stmt* class_loader_ilload_bodyImpl(class_loader* self, ast* source);
 
-void class_loader_ilload_impl(class_loader* self, ast* source_code) {
+void ILLoadClassLoader(class_loader* self, ast* source_code) {
 	assert(self->il_code == NULL);
 	self->il_code = NewILToplevel();
 	for (int i = 0; i < source_code->vchildren->length; i++) {

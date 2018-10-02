@@ -16,7 +16,7 @@
 //proto
 static script_context* script_context_malloc(void);
 static void script_context_free(script_context* self);
-static void script_context_class_loader_delete(const char* name, tree_item item);
+static void script_context_DeleteClassLoader(const char* name, tree_item item);
 
 static void script_context_UnlinkNamespace(NumericMapKey key, NumericMapItem item);
 static void script_context_DeleteNamespace(NumericMapKey key, NumericMapItem item);
@@ -80,25 +80,25 @@ void BootstrapScriptContext(script_context* self) {
 	bc_locale_init();
 	bc_time_init();
 	//ブートストラップクラスローダー
-	self->bootstrap_class_loader = class_loader_new("bootstrap", CONTENT_LIB_T);
-	class_loader_special(self->bootstrap_class_loader, "beacon/lang/Object.bc");
+	self->bootstrap_class_loader = NewClassLoader("bootstrap", CONTENT_LIB_T);
+	SpecialLoadClassLoader(self->bootstrap_class_loader, "beacon/lang/Object.bc");
 
-	class_loader_special(self->bootstrap_class_loader, "beacon/lang/Int.bc");
-	class_loader_special(self->bootstrap_class_loader, "beacon/lang/Double.bc");
-	class_loader_special(self->bootstrap_class_loader, "beacon/lang/Char.bc");
-	class_loader_special(self->bootstrap_class_loader, "beacon/lang/Bool.bc");
-	class_loader_special(self->bootstrap_class_loader, "beacon/lang/Null.bc");
-	class_loader_special(self->bootstrap_class_loader, "beacon/lang/Void.bc");
+	SpecialLoadClassLoader(self->bootstrap_class_loader, "beacon/lang/Int.bc");
+	SpecialLoadClassLoader(self->bootstrap_class_loader, "beacon/lang/Double.bc");
+	SpecialLoadClassLoader(self->bootstrap_class_loader, "beacon/lang/Char.bc");
+	SpecialLoadClassLoader(self->bootstrap_class_loader, "beacon/lang/Bool.bc");
+	SpecialLoadClassLoader(self->bootstrap_class_loader, "beacon/lang/Null.bc");
+	SpecialLoadClassLoader(self->bootstrap_class_loader, "beacon/lang/Void.bc");
 
-	class_loader_special(self->bootstrap_class_loader, "beacon/lang/Iterable.bc");
-	class_loader_special(self->bootstrap_class_loader, "beacon/lang/Iterator.bc");
-	class_loader_special(self->bootstrap_class_loader, "beacon/lang/Array.bc");
-	class_loader_special(self->bootstrap_class_loader, "beacon/lang/String.bc");
-	class_loader_special(self->bootstrap_class_loader, "beacon/lang/Console.bc");
-	class_loader_special(self->bootstrap_class_loader, "beacon/lang/Exception.bc");
-	class_loader_special(self->bootstrap_class_loader, "beacon/lang/StackTraceElement.bc");
+	SpecialLoadClassLoader(self->bootstrap_class_loader, "beacon/lang/Iterable.bc");
+	SpecialLoadClassLoader(self->bootstrap_class_loader, "beacon/lang/Iterator.bc");
+	SpecialLoadClassLoader(self->bootstrap_class_loader, "beacon/lang/Array.bc");
+	SpecialLoadClassLoader(self->bootstrap_class_loader, "beacon/lang/String.bc");
+	SpecialLoadClassLoader(self->bootstrap_class_loader, "beacon/lang/Console.bc");
+	SpecialLoadClassLoader(self->bootstrap_class_loader, "beacon/lang/Exception.bc");
+	SpecialLoadClassLoader(self->bootstrap_class_loader, "beacon/lang/StackTraceElement.bc");
 
-	class_loader_special(self->bootstrap_class_loader, "beacon/lang/World.bc");
+	SpecialLoadClassLoader(self->bootstrap_class_loader, "beacon/lang/World.bc");
 	//退避していたコンテキストを復帰
 	self->heap->accept_blocking--;
 }
@@ -198,7 +198,7 @@ static void script_context_free(script_context* self) {
 	//全ての例外フラグをクリア
 	frame* thv = sg_thread_get_frame_ref(sg_thread_current(self));
 	CatchVM(thv);
-	class_loader_delete(self->bootstrap_class_loader);
+	DeleteClassLoader(self->bootstrap_class_loader);
 	if(self->null_obj != NULL) {
 		IgnoreHeap(self->heap, self->null_obj);
 		self->null_obj->paint = PAINT_ONEXIT_T;
@@ -215,7 +215,7 @@ static void script_context_free(script_context* self) {
 
 	DeleteVector(self->type_vec, VectorDeleterOfNull);
 	DeleteVector(self->thread_vec, VectorDeleterOfNull);
-	DeleteTreeMap(self->class_loader_map, script_context_class_loader_delete);
+	DeleteTreeMap(self->class_loader_map, script_context_DeleteClassLoader);
 	//ブートストラップクラスローダを意図的に起動していないなら、
 	//ここはまだNULL
 	if(self->namespace_nmap != NULL) {
@@ -228,9 +228,9 @@ static void script_context_free(script_context* self) {
 	MEM_FREE(self);
 }
 
-static void script_context_class_loader_delete(const char* name, tree_item item) {
+static void script_context_DeleteClassLoader(const char* name, tree_item item) {
 	class_loader* e = (class_loader*)item;
-	class_loader_delete(e);
+	DeleteClassLoader(e);
 }
 
 static void script_context_UnlinkNamespace(NumericMapKey key, NumericMapItem item) {

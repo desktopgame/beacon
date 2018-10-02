@@ -61,10 +61,10 @@ static jobject bc_EvalString(JNIEnv * env, jclass cls, jstring str, jobject tabl
 		DeleteAST(a);
 		return NULL;
 	}
-	class_loader* cll = class_loader_new(filename, CONTENT_ENTRY_POINT_T);
-	class_loader_load_pass_ast(cll, a);
+	class_loader* cll = NewClassLoader(filename, CONTENT_ENTRY_POINT_T);
+	LoadPassASTClassLoader(cll, a);
 	if(GetLastBCError()) {
-		class_loader_delete(cll);
+		DeleteClassLoader(cll);
 		jclass bc_compile_exc_cls = (*env)->FindClass(env, "jp/koya/jbeacon/BCCompileException");
 		(*env)->ThrowNew(env, bc_compile_exc_cls, Ref2Str(GetBCErrorMessage()));
 		return NULL;
@@ -290,7 +290,7 @@ static void bc_eval_release(JNIEnv* env, class_loader* cll, frame* fr) {
 	sg_thread_release_frame_ref(sg_thread_current(GetCurrentScriptContext()));
 
 	GetLastBCError();
-	class_loader_delete(cll);
+	DeleteClassLoader(cll);
 }
 
 //https://stackoverflow.com/questions/12719766/can-i-know-the-name-of-the-class-that-calls-a-jni-c-method
