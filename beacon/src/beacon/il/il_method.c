@@ -16,7 +16,7 @@ il_method * NewILMethod(string_view namev) {
 	il_method* ret = (il_method*)MEM_MALLOC(sizeof(il_method));
 	ret->namev = namev;
 	ret->parameter_list = NewVector();
-	ret->return_fqcn = generic_cache_new();
+	ret->return_fqcn = NewGenericCache();
 	ret->access = ACCESS_PUBLIC_T;
 	ret->modifier = MODIFIER_NONE_T;
 	ret->statement_list = NewVector();
@@ -29,7 +29,7 @@ void DeleteILMethod(il_method * self) {
 	if (self == NULL) {
 		return;
 	}
-	generic_cache_delete(self->return_fqcn);
+	DeleteGenericCache(self->return_fqcn);
 	DeleteVector(self->parameter_list, il_method_DeleteParameter);
 	DeleteVector(self->statement_list, il_method_stmt_delete);
 	DeleteVector(self->type_parameter_list, il_method_DeleteTypeParameter);

@@ -22,35 +22,35 @@ typedef struct generic_cache {
  * 型変数を含む型宣言を作成します.
  * @return
  */
-generic_cache* generic_cache_new();
+generic_cache* NewGenericCache();
 
 /**
  * 型変数つきの型宣言をインデント無しで出力します.
  * @param self
  */
-void generic_cache_print(generic_cache* self);
+void PrintGenericCache(generic_cache* self);
 /**
  * 型変数つきの型宣言をインデント付きで出力します.
  * @param self
  */
-void generic_cache_dump(generic_cache* self, int depth);
+void DumpGenericCache(generic_cache* self, int depth);
 
 /**
  * @param self
  * @return
  */
-char* generic_cache_tostr(generic_cache* self);
+char* GenericCacheToString(generic_cache* self);
 
 /**
  * 型変数つきの型宣言を解放します.
  * @param self
  */
-void generic_cache_delete(generic_cache* self);
+void DeleteGenericCache(generic_cache* self);
 
 /**
  * @param a
  * @param b
  * @return
  */
-bool generic_cache_equals(generic_cache* a, generic_cache* b);
+bool EqualsGenericCache(generic_cache* a, generic_cache* b);
 #endif // !SIGNAL_ENV_GENERIC_CACHE_H

@@ -17,7 +17,7 @@ il_stmt * WrapILVariableDecl(il_stmt_variable_decl * self) {
 il_stmt_variable_decl * NewILVariableDecl(string_view namev) {
 	il_stmt_variable_decl* ret = (il_stmt_variable_decl*)MEM_MALLOC(sizeof(il_stmt_variable_decl));
 	ret->namev = namev;
-	ret->fqcn = generic_cache_new();
+	ret->fqcn = NewGenericCache();
 	return ret;
 }
 

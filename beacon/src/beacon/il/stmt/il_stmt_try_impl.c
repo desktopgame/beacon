@@ -31,7 +31,7 @@ il_stmt_try* NewILTry() {
 il_stmt_catch* NewILCatch(string_view namev) {
 	il_stmt_catch* ret = (il_stmt_catch*)MEM_MALLOC(sizeof(il_stmt_catch));
 	ret->namev = namev;
-	ret->fqcn = generic_cache_new();
+	ret->fqcn = NewGenericCache();
 	ret->statement_list = NewVector();
 	return ret;
 }
@@ -126,7 +126,7 @@ void LoadILCatch(il_stmt_catch* self, enviroment* env, call_context* cctx) {
 }
 
 void DeleteILCatch(il_stmt_catch* self) {
-	generic_cache_delete(self->fqcn);
+	DeleteGenericCache(self->fqcn);
 	DeleteVector(self->statement_list, il_stmt_catch_stmt_delete);
 	MEM_FREE(self);
 }

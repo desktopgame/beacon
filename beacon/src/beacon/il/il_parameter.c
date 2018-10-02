@@ -9,7 +9,7 @@ il_parameter * NewILParameter(string_view namev) {
 	il_parameter* ret = (il_parameter*)MEM_MALLOC(sizeof(il_parameter));
 	ret->namev = namev;
 	ret->param_type = IL_PARAM_TYPE_DEFAULT;
-	ret->fqcn = generic_cache_new();
+	ret->fqcn = NewGenericCache();
 	return ret;
 }
 
@@ -17,6 +17,6 @@ void DeleteILParameter(il_parameter * self) {
 	if (self == NULL) {
 		return;
 	}
-	generic_cache_delete(self->fqcn);
+	DeleteGenericCache(self->fqcn);
 	MEM_FREE(self);
 }

@@ -8,7 +8,7 @@
 
 il_type_argument* NewILTypeArgument() {
 	il_type_argument* ret = (il_type_argument*)MEM_MALLOC(sizeof(il_type_argument));
-	ret->gcache = generic_cache_new();
+	ret->gcache = NewGenericCache();
 	ret->gtype = NULL;
 	return ret;
 }
@@ -20,7 +20,7 @@ void PrintILTypeArgument(Vector* iltype_args) {
 	printf("<");
 	for(int i=0; i<iltype_args->length; i++) {
 		il_type_argument* e = (il_type_argument*)AtVector(iltype_args, i);
-		generic_cache_print(e->gcache);
+		PrintGenericCache(e->gcache);
 		if(i != iltype_args->length - 1) {
 			printf(",");
 		}
@@ -40,6 +40,6 @@ void ResolveILTypeArgument(Vector* iltype_args, call_context* cctx) {
 }
 
 void DeleteILTypeArgument(il_type_argument* self) {
-	generic_cache_delete(self->gcache);
+	DeleteGenericCache(self->gcache);
 	MEM_FREE(self);
 }

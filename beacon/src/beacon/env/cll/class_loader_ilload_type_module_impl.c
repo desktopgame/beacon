@@ -46,7 +46,7 @@ void CLIL_typename_list(class_loader * self, Vector * dst, ast * atypename_list)
 		return;
 	}
 	if (atypename_list->tag == AST_TYPENAME_T) {
-		generic_cache* e = generic_cache_new();
+		generic_cache* e = NewGenericCache();
 		//[typename [fqcn]]
 		CLIL_generic_cache(atypename_list, e);
 		PushVector(dst, e);
@@ -170,7 +170,7 @@ static void CLIL_generic_cache_inner(ast* atype_args, generic_cache* dest) {
 			CLIL_generic_cache_inner(e, dest);
 		}
 	} else {
-		generic_cache* newCache = generic_cache_new();
+		generic_cache* newCache = NewGenericCache();
 		CLIL_generic_cache(atype_args, newCache);
 		PushVector(dest->type_args, newCache);
 	}
@@ -187,7 +187,7 @@ static void CLIL_type_parameter_rule(class_loader* self, ast* asource, Vector* d
 		if (source->tag == AST_TYPENAME_T) {
 			il_type_parameter_rule* rule = il_type_parameter_rule_new();
 			rule->tag = il_type_parameter_rule_polymorphic;
-			rule->u.fqcn_ = generic_cache_new();
+			rule->u.fqcn_ = NewGenericCache();
 			CLIL_generic_cache(source, rule->u.fqcn_);
 			PushVector(dest, rule);
 		}

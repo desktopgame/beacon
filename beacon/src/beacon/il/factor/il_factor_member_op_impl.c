@@ -199,7 +199,7 @@ static void il_factor_member_op_check_static_prop(il_factor_member_op* self, env
 
 static void il_factor_member_op_typearg_delete(VectorItem item) {
 //	generic_cache* e = (generic_cache*)item;
-//	generic_cache_delete(e);
+//	DeleteGenericCache(e);
 	il_type_argument* e = (il_type_argument*)item;
 	DeleteILTypeArgument(e);
 }

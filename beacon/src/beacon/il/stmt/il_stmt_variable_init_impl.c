@@ -20,7 +20,7 @@ il_stmt_variable_init * NewILVariableInit(string_view namev) {
 	il_stmt_variable_init* ret = (il_stmt_variable_init*)MEM_MALLOC(sizeof(il_stmt_variable_init));
 	ret->namev = namev;
 	ret->fact = NULL;
-	ret->fqcn = generic_cache_new();
+	ret->fqcn = NewGenericCache();
 	return ret;
 }
 
@@ -73,6 +73,6 @@ void LoadILVariableInit(il_stmt_variable_init * self, enviroment * env, call_con
 
 void DeleteILVariableInit(il_stmt_variable_init * self) {
 	DeleteILFactor(self->fact);
-	generic_cache_delete(self->fqcn);
+	DeleteGenericCache(self->fqcn);
 	MEM_FREE(self);
 }

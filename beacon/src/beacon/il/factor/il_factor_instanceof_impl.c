@@ -17,7 +17,7 @@ il_factor* WrapILInstanceOf(il_factor_instanceof* self) {
 il_factor_instanceof* NewILInstanceOf() {
 	il_factor_instanceof* ret = (il_factor_instanceof*)MEM_MALLOC(sizeof(il_factor_instanceof));
 	ret->fact = NULL;
-	ret->gcache = generic_cache_new();
+	ret->gcache = NewGenericCache();
 	return ret;
 }
 
@@ -41,7 +41,7 @@ generic_type* EvalILInstanceOf(il_factor_instanceof* self, enviroment* env, call
 char* ILInstanceOfToString(il_factor_instanceof* self, enviroment* env) {
 	string_buffer* sb = NewBuffer();
 	char* a = ILFactorToString(self->fact, env);
-	char* b = generic_cache_tostr(self->gcache);
+	char* b = GenericCacheToString(self->gcache);
 	AppendsBuffer(sb, a);
 	AppendsBuffer(sb, " is ");
 	AppendsBuffer(sb, b);
@@ -52,6 +52,6 @@ char* ILInstanceOfToString(il_factor_instanceof* self, enviroment* env) {
 
 void DeleteILInstanceOf(il_factor_instanceof* self) {
 	DeleteILFactor(self->fact);
-	generic_cache_delete(self->gcache);
+	DeleteGenericCache(self->gcache);
 	MEM_FREE(self);
 }

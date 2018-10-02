@@ -17,7 +17,7 @@ il_factor * WrapILAs(il_factor_as * self) {
 il_factor_as * NewILAs() {
 	il_factor_as* ret = (il_factor_as*)MEM_MALLOC(sizeof(il_factor_as));
 	ret->fact = NULL;
-	ret->fqcn = generic_cache_new();
+	ret->fqcn = NewGenericCache();
 	ret->gtype = NULL;
 	ret->mode = CAST_UNKNOWN_T;
 	return ret;
@@ -79,7 +79,7 @@ generic_type* EvalILAs(il_factor_as * self, enviroment * env, call_context* cctx
 }
 
 void DeleteILAs(il_factor_as * self) {
-	generic_cache_delete(self->fqcn);
+	DeleteGenericCache(self->fqcn);
 	DeleteILFactor(self->fact);
 	MEM_FREE(self);
 }
@@ -87,7 +87,7 @@ void DeleteILAs(il_factor_as * self) {
 char* ILAsToString(il_factor_as* self, enviroment* env) {
 	string_buffer* sb = NewBuffer();
 	char* factstr = ILFactorToString(self->fact, env);
-	char* to = generic_cache_tostr(self->fqcn);
+	char* to = GenericCacheToString(self->fqcn);
 	AppendfBuffer(sb, "%s as %s", factstr, to);
 	MEM_FREE(factstr);
 	MEM_FREE(to);

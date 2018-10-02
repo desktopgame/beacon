@@ -8,7 +8,7 @@
 
 il_field * NewILField(string_view namev) {
 	il_field* ret = (il_field*)MEM_MALLOC(sizeof(il_field));
-	ret->fqcn = generic_cache_new();
+	ret->fqcn = NewGenericCache();
 	ret->access = ACCESS_PUBLIC_T;
 	ret->modifier = MODIFIER_NONE_T;
 	ret->namev = namev;
@@ -21,6 +21,6 @@ void DeleteILField(il_field * self) {
 		return;
 	}
 	DeleteILFactor(self->initial_value);
-	generic_cache_delete(self->fqcn);
+	DeleteGenericCache(self->fqcn);
 	MEM_FREE(self);
 }

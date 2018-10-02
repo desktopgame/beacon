@@ -12,14 +12,14 @@ il_operator_overload* NewILOperatorOverload(operator_type type) {
 	ret->op = type;
 	ret->parameter_list = NewVector();
 	ret->statement_list = NewVector();
-	ret->return_fqcn = generic_cache_new();
+	ret->return_fqcn = NewGenericCache();
 	return ret;
 }
 
 void DeleteILOperatorOverload(il_operator_overload* self) {
 	DeleteVector(self->parameter_list, DeleteILOperatorOverload_parameter);
 	DeleteVector(self->statement_list, DeleteILOperatorOverload_stmt);
-	generic_cache_delete(self->return_fqcn);
+	DeleteGenericCache(self->return_fqcn);
 	MEM_FREE(self);
 }
 //private
