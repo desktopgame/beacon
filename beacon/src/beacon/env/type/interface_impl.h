@@ -24,7 +24,7 @@ typedef struct interface_ {
 	Vector* method_list;
 	namespace_* location;
 	vtable* vt;
-	Vector* type_parameter_list;
+	Vector* GetParameterListType;
 } interface_;
 
 /**
@@ -32,7 +32,7 @@ typedef struct interface_ {
  * @param self
  * @return
  */
-type* type_wrap_interface(interface_* self);
+type* WrapInterface(interface_* self);
 
 /** 
  * インターフェイスを作成します.

@@ -12,7 +12,7 @@ typedef struct il_interface {
 	string_view namev;
 	Vector* method_list;
 	Vector* extends_list;
-	Vector* type_parameter_list;
+	Vector* GetParameterListType;
 	Vector* prop_list;
 } il_interface;
 

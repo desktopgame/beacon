@@ -44,7 +44,7 @@ static void check_method_return(il_stmt_return * self, enviroment * env, call_co
 	//戻り値が Void なのに値を返している
 	if(m->return_gtype->core_type == TYPE_VOID) {
 		ThrowBCError(BCERROR_RETURN_VALUE_VOID_METHOD_T,
-			Ref2Str(type_name(m->parent)),
+			Ref2Str(GetTypeName(m->parent)),
 			Ref2Str(m->namev)
 		);
 		return;
@@ -54,7 +54,7 @@ static void check_method_return(il_stmt_return * self, enviroment * env, call_co
 	if(retT->core_type != TYPE_NULL &&
 	   DistanceGenericType(m->return_gtype, retT, cctx) < 0) {
 		ThrowBCError(BCERROR_RETURN_VALUE_TYPE_IS_NOT_COMPATIBLE_NOT_VOID_METHOD_T,
-			Ref2Str(type_name(m->parent)),
+			Ref2Str(GetTypeName(m->parent)),
 			Ref2Str(m->namev)
 		);
 	}

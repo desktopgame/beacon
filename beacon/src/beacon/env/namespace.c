@@ -67,7 +67,7 @@ namespace_ * AddNamespaceNamespace(namespace_ * self, string_view namev) {
 struct type* AddTypeNamespace(namespace_* self, type* type) {
 	script_context* ctx = GetCurrentScriptContext();
 	type->location = self;
-	PutNumericMap(self->type_map, type_name(type), type);
+	PutNumericMap(self->type_map, GetTypeName(type), type);
 	type->absolute_index = ctx->type_vec->length;
 	PushVector(ctx->type_vec, type);
 	return type;
@@ -84,11 +84,11 @@ type * FindTypeFromNamespace(namespace_ * self, string_view namev) {
 }
 
 class_ * FindClassFromNamespace(namespace_ * self, string_view namev) {
-	return type_as_class(FindTypeFromNamespace(self, namev));
+	return TypeToClass(FindTypeFromNamespace(self, namev));
 }
 
 interface_ * FindInterfaceFromNamespace(namespace_ * self, string_view namev) {
-	return type_as_interface(FindTypeFromNamespace(self, namev));
+	return TypeToInterface(FindTypeFromNamespace(self, namev));
 }
 
 namespace_ * GetBeaconNamespace() {
@@ -190,12 +190,12 @@ static void DeleteNamespace_namespace(NumericMapKey key, NumericMapItem item) {
 
 static void UnlinkNamespace_type(NumericMapKey key, NumericMapItem item) {
 	type* e = (type*)item;
-	type_unlink(e);
+	UnlinkType(e);
 }
 
 static void DeleteNamespace_type(NumericMapKey key, NumericMapItem item) {
 	type* e = (type*)item;
-	type_delete(e);
+	DeleteType(e);
 }
 
 static void namespace_dump_root(NumericMap* root, bool callSelf, int depth) {

@@ -31,7 +31,7 @@ void LoadILProperty(il_factor_property* self, enviroment* env, call_context* cct
 	if(temp == -1) {
 		ThrowBCError(
 			BCERROR_UNDEFINED_PROPERTY_T,
-			Ref2Str(type_name(receiverT)),
+			Ref2Str(GetTypeName(receiverT)),
 			Ref2Str(self->namev)
 		);
 	}

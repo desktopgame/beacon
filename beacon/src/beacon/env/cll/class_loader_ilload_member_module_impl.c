@@ -51,7 +51,7 @@ void CLIL_member_list(class_loader* self, il_type* current, ast* amember, access
 void CLIL_field(class_loader* self, il_type* current, ast* afield, access_level level) {
 	//assert(current->tag == ilTYPE_CLASS_T);
 	ast* amodifier = FirstAST(afield);
-	ast* atype_name = SecondAST(afield);
+	ast* aGetTypeName = SecondAST(afield);
 	ast* aaccess_name = AtAST(afield, 2);
 	ast* afact = AtAST(afield, 3);
 	//インターフェイスはフィールドを持てない
@@ -64,7 +64,7 @@ void CLIL_field(class_loader* self, il_type* current, ast* afield, access_level 
 		return;
 	}
 	il_field* v = NewILField(aaccess_name->u.stringv_value);
-	CLIL_generic_cache(atype_name, v->fqcn);
+	CLIL_generic_cache(aGetTypeName, v->fqcn);
 	bool error;
 	v->access = level;
 	v->modifier = ASTCastToModifier(amodifier, &error);
@@ -114,7 +114,7 @@ void CLIL_method(class_loader* self, il_type* current, ast* amethod, access_leve
 	ast* afunc_body = AtAST(amethod, 4);
 	ast* aret_name = AtAST(amethod, 5);
 	il_method* v = NewILMethod(afunc_name->u.stringv_value);
-	CLIL_type_parameter(self, ageneric, v->type_parameter_list);
+	CLIL_type_parameter(self, ageneric, v->GetParameterListType);
 	CLIL_generic_cache(aret_name, v->return_fqcn);
 	bool error;
 	v->access = level;

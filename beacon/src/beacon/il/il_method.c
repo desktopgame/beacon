@@ -20,7 +20,7 @@ il_method * NewILMethod(string_view namev) {
 	ret->access = ACCESS_PUBLIC_T;
 	ret->modifier = MODIFIER_NONE_T;
 	ret->statement_list = NewVector();
-	ret->type_parameter_list = NewVector();
+	ret->GetParameterListType = NewVector();
 	ret->no_stmt = false;
 	return ret;
 }
@@ -32,7 +32,7 @@ void DeleteILMethod(il_method * self) {
 	DeleteGenericCache(self->return_fqcn);
 	DeleteVector(self->parameter_list, il_method_DeleteParameter);
 	DeleteVector(self->statement_list, il_method_stmt_delete);
-	DeleteVector(self->type_parameter_list, il_method_DeleteTypeParameter);
+	DeleteVector(self->GetParameterListType, il_method_DeleteTypeParameter);
 	MEM_FREE(self);
 }
 

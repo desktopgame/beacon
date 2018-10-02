@@ -18,8 +18,8 @@ static void interface_generic_type_list_delete(VectorItem item);
 static void interface_method_flattenImpl(interface_* self, Vector* dest, int depth);
 static void interface_delete_property(VectorItem item);
 
-type * type_wrap_interface(interface_ * self) {
-	type* ret = type_new();
+type * WrapInterface(interface_ * self) {
+	type* ret = NewType();
 	ret->tag = TYPE_INTERFACE_T;
 	ret->u.interface_ = self;
 	self->parent = ret;
@@ -34,7 +34,7 @@ interface_ * interface_new(string_view namev) {
 	ret->method_list = NewVector();
 	ret->prop_list = NewVector();
 	ret->vt = NULL;
-	ret->type_parameter_list = NewVector();
+	ret->GetParameterListType = NewVector();
 	ret->parent = NULL;
 	return ret;
 }
@@ -109,7 +109,7 @@ void interface_unlink(interface_ * self) {
 }
 
 void interface_delete(interface_ * self) {
-	DeleteVector(self->type_parameter_list, interface_DeleteTypeParameter);
+	DeleteVector(self->GetParameterListType, interface_DeleteTypeParameter);
 	MEM_FREE(self);
 }
 
@@ -184,7 +184,7 @@ static void interface_DeleteTypeParameter(VectorItem item) {
 
 static void interface_generic_type_list_delete(VectorItem item) {
 	//generic_type* e = (generic_type*)item;
-	//generic_type_delete(e);
+	//generic_DeleteType(e);
 }
 
 static void interface_method_flattenImpl(interface_* self, Vector* dest, int depth) {

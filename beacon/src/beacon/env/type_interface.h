@@ -70,7 +70,7 @@ typedef struct type {
  * 型を作成します.
  * @return
  */
-type* type_new();
+type* NewType();
 
 /**
  * このタイプ自体を表すジェネリック型を初期化します.
@@ -78,42 +78,42 @@ type* type_new();
  * @param count 型変数の個数
  * @return
  */
-struct generic_type* type_init_generic(type* self, int counts);
+struct generic_type* InitGenericSelf(type* self, int counts);
 
 /**
  * この型の名前を返します.
  * @param self
  * @return
  */
-string_view type_name(type* self);
+string_view GetTypeName(type* self);
 
 /**
  * この型の完全な名前を返します.
  * @param self
  * @return
  */
-string_view type_full_name(type* self);
+string_view GetTypeFullName(type* self);
 
 /**
  * この型にフィールドを追加します.
  * @param self
  * @param f
  */
-void type_add_field(type* self, struct field* f);
+void AddFieldType(type* self, struct field* f);
 
 /**
  * この型にプロパティを追加します.
  * @param self
  * @param p
  */
-void type_add_property(type* self, struct property* p);
+void AddPropertyType(type* self, struct property* p);
 
 /**
  * この型にメソッドを追加します.
  * @param self
  * @param m
  */
-void type_add_method(type* self, struct method* m);
+void AddMethodType(type* self, struct method* m);
 
 /**
  * この型からメソッドを検索します.
@@ -125,7 +125,7 @@ void type_add_method(type* self, struct method* m);
  * @param outIndex
  * @return
  */
-struct method* type_ilfind_method(type* self, string_view namev, Vector* args, struct enviroment* env, call_context* cctx, int* outIndex);
+struct method* ILFindMethodType(type* self, string_view namev, Vector* args, struct enviroment* env, call_context* cctx, int* outIndex);
 
 /**
  * この型から静的メソッドを検索します.
@@ -137,14 +137,14 @@ struct method* type_ilfind_method(type* self, string_view namev, Vector* args, s
  * @param outIndex
  * @return
  */
-struct method* type_ilfind_smethod(type* self, string_view namev, Vector* args, struct enviroment* env, call_context* cctx, int* outIndex);
+struct method* ILFindSMethodType(type* self, string_view namev, Vector* args, struct enviroment* env, call_context* cctx, int* outIndex);
 
 /**
  * 仮想関数の一覧を返します.
  * @param self
  * @return
  */
-struct vtable* type_vtable(type* self);
+struct vtable* GetVTableType(type* self);
 
 /**
  * 型の距離を返します.
@@ -152,13 +152,13 @@ struct vtable* type_vtable(type* self);
  * @param sub
  * @return
  */
-int type_distance(type* super, type* sub);
+int DistanceType(type* super, type* sub);
 
 /**
  * 型情報を残してメソッドやフィールドなどのみを開放します.
  * @param self
  */
-void type_unlink(type* self);
+void UnlinkType(type* self);
 
 /**
  * 指定の名前の型変数が何番目に表れるかを返します.
@@ -166,7 +166,7 @@ void type_unlink(type* self);
  * @param namev
  * @return
  */
-int type_for_generic_index(type* self, string_view namev);
+int GetGenericIndexType(type* self, string_view namev);
 
 /**
  * selfの継承クラスや実装インターフェイスに a が現れるなら型変数付きで返します.
@@ -178,21 +178,21 @@ int type_for_generic_index(type* self, string_view namev);
  * @param a
  * @return
  */
-struct generic_type* type_find_impl(type* self, type* a);
+struct generic_type* FindImplementType(type* self, type* a);
 
 /**
  * この型の型引数の一覧を返します.
  * @param self
  * @return
  */
-Vector* type_parameter_list(type* self);
+Vector* GetParameterListType(type* self);
 
 /**
  * この型の実装インターフェイスの一覧を返します.
  * @param self
  * @return
  */
-Vector* TYPE_IMPLement_list(type* self);
+Vector* GetImplementList(type* self);
 
 /**
  * この型がクラス/インターフェイスを表すとき、
@@ -201,13 +201,13 @@ Vector* TYPE_IMPLement_list(type* self);
  * @param index
  * @return
  */
-struct generic_type* type_type_parameter_at(type* self, int index);
+struct generic_type* TypeParameterAtType(type* self, int index);
 
 /**
  * 型を開放します.
  * @param self
  */
-void type_delete(type* self);
+void DeleteType(type* self);
 
 /**
  * このタイプをクラスにキャストします.
@@ -229,21 +229,21 @@ struct interface_* CastInterfaceType(type* self);
  * @param concrete
  * @return
  */
-struct generic_type* type_baseline(type* abstract, type* concrete);
+struct generic_type* BaselineType(type* abstract, type* concrete);
 
 /**
  * 同じインターフェイスが二回現れるなら NULL 以外.
  * @param self
  * @return
  */
-struct interface_* type_interface_valid(type* self);
+struct interface_* IsValidInterface(type* self);
 
 /**
  * 抽象クラスかインターフェイスなら true.
  * @param self
  * @return
  */
-bool type_is_abstract(type* self);
+bool IsAbstractType(type* self);
 
 /**
  * 可能なら self を class へ変換します.
@@ -251,12 +251,12 @@ bool type_is_abstract(type* self);
  * @param self
  * @return
  */
-struct class_* type_as_class(type* self);
+struct class_* TypeToClass(type* self);
 /**
  * 可能なら self を interface へ変換します.
  * 失敗したなら NULL
  * @param self
  * @return
  */
-struct interface_* type_as_interface(type* self);
+struct interface_* TypeToInterface(type* self);
 #endif // !SIGNAL_ENV_TYPE_INTERFACE_H

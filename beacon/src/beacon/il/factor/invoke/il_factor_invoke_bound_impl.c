@@ -60,7 +60,7 @@ char* ILInvokeBoundToString(il_factor_invoke_bound* self, enviroment* env) {
 void DeleteILInvokeBound(il_factor_invoke_bound* self) {
 	DeleteVector(self->args, il_factor_invoke_bound_args_delete);
 	DeleteVector(self->type_args, DeleteILInvokeBound_typeargs);
-	//generic_type_delete(self->resolved);
+	//generic_DeleteType(self->resolved);
 	MEM_FREE(self);
 }
 
@@ -88,13 +88,13 @@ static void resolve_non_default(il_factor_invoke_bound * self, enviroment * env,
 	type* tp = NULL;
 	generic_type* rgtp  = il_factor_invoke_bound_return_gtype(self, cctx);
 	if(rgtp->tag == GENERIC_TYPE_TAG_CLASS_T) {
-		self->resolved = generic_type_new(NULL);
+		self->resolved = generic_NewType(NULL);
 		self->resolved->tag = GENERIC_TYPE_TAG_CLASS_T;
 		self->resolved->virtual_type_index = rgtp->virtual_type_index;
 	} else if(rgtp->tag == GENERIC_TYPE_TAG_METHOD_T) {
 		//メソッドに渡された型引数を参照する
 		generic_type* instanced_type = (generic_type*)AtVector(self->type_args, rgtp->virtual_type_index);
-		self->resolved = generic_type_new(instanced_type->core_type);
+		self->resolved = generic_NewType(instanced_type->core_type);
 		self->resolved->tag = GENERIC_TYPE_TAG_CLASS_T;
 	}
 }
@@ -122,7 +122,7 @@ static void il_factor_invoke_bound_check(il_factor_invoke_bound * self, envirome
 	BC_ERROR();
 	#if defined(DEBUG)
 	const char* nstr = Ref2Str(self->namev);
-	const char* str = Ref2Str(type_name(ctype));
+	const char* str = Ref2Str(GetTypeName(ctype));
 	#endif
 	call_frame* cfr = PushCallContext(cctx, FRAME_SELF_INVOKE_T);
 	cfr->u.self_invoke.args = self->args;
@@ -172,7 +172,7 @@ static void il_factor_invoke_bound_check(il_factor_invoke_bound * self, envirome
 	}
 	if(self->index == -1) {
 		ThrowBCError(BCERROR_INVOKE_BOUND_UNDEFINED_METHOD_T,
-			Ref2Str(type_name(ctype)),
+			Ref2Str(GetTypeName(ctype)),
 			Ref2Str(self->namev)
 		);
 	}

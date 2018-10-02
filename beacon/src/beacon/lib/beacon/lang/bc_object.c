@@ -33,7 +33,7 @@ static void bc_object_nativeToString(method* parent, frame* fr, enviroment* env)
 	string_buffer* sb = NewBuffer();
 	//参照型
 	if (self->tag == OBJECT_REF_T) {
-		//char* name = type_name(self->type);
+		//char* name = GetTypeName(self->type);
 		AppendBuffer(sb, '[');
 		AppendsBuffer(sb, "Ref");
 		AppendBuffer(sb, ']');

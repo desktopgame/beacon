@@ -53,7 +53,7 @@ typedef struct generic_type {
  * @param ctype
  * @return
  */
-#define generic_type_new(ctype) (MallocGenericType(ctype, __FILE__, __LINE__))
+#define generic_NewType(ctype) (MallocGenericType(ctype, __FILE__, __LINE__))
 
 /**
  * core_typeがNULL以外なら generic_selfを参照し、
@@ -65,7 +65,7 @@ generic_type* RefGenericType(struct type* core_type);
 
 /**
  * 新しい型変数つきの型宣言を作成します.
- * 通常はマクロ版の generic_type_new を使用します。
+ * 通常はマクロ版の generic_NewType を使用します。
  * @param ctype
  * @return
  */

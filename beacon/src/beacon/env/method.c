@@ -94,7 +94,7 @@ bool IsOverridedMethod(method* superM, method* subM, call_context* cctx) {
 		superM->parameters->length != subM->parameters->length) {
 		return false;
 	}
-	generic_type* bl = type_baseline(superM->parent, subM->parent);
+	generic_type* bl = BaselineType(superM->parent, subM->parent);
 	assert(bl != NULL);
 	//全ての引数を比較
 	for (int i = 0; i < superM->parameters->length; i++) {
@@ -179,7 +179,7 @@ string_view MangleMethod(method* self) {
 			sprintf(buff, "%d", gt->virtual_type_index);
 			AppendsBuffer(ret, buff);
 		} else {
-			AppendsBuffer(ret, Ref2Str(type_full_name(gt->core_type)));
+			AppendsBuffer(ret, Ref2Str(GetTypeFullName(gt->core_type)));
 		}
 	}
 	char* raw = ReleaseBuffer(ret);
@@ -190,7 +190,7 @@ string_view MangleMethod(method* self) {
 
 string_view GetMethodUniqueName(method* self) {
 	string_buffer* ret = NewBuffer();
-	AppendsBuffer(ret, Ref2Str(type_full_name(self->parent)));
+	AppendsBuffer(ret, Ref2Str(GetTypeFullName(self->parent)));
 	AppendsBuffer(ret, Ref2Str(MangleMethod(self)));
 	char* raw = ReleaseBuffer(ret);
 	string_view sv = InternString(raw);
@@ -235,9 +235,9 @@ type* CreateIteratorTypeFromMethod(method* self,  class_loader* cll, Vector* stm
 	//イテレータの実装クラスを登録
 	generic_type* iterImplGT = ApplyGenericType(self->return_gtype, lCctx);
 	class_* iterImplC = class_new_proxy(iterImplGT, iterName);
-	type* iterImplT = type_wrap_class(iterImplC);
+	type* iterImplT = WrapClass(iterImplC);
 	AddTypeNamespace(GetPlaceholderNamespace(), iterImplT);
-	type_init_generic(iterImplT, 0);
+	InitGenericSelf(iterImplT, 0);
 	//イテレータのコンストラクタ追加
 	int op_len = 0;
 	class_add_method(iterImplC, create_has_next(self,  iterImplT, cll, stmt_list, &op_len));
@@ -413,7 +413,7 @@ static method* create_has_next(method* self, type* ty, class_loader* cll, Vector
 		GenerateILStmt(e, envSmt, cctx);
 	}
 	AddOpcodeBuf(envSmt->buf, OP_CORO_EXIT);
-	if(type_name(self->parent) == InternString("Base")) {
+	if(GetTypeName(self->parent) == InternString("Base")) {
 	//	DumpEnviromentOp(envSmt, 0);
 	}
 	(*out_op_len) = envSmt->buf->source_vec->length;

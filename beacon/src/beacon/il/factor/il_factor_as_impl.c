@@ -67,8 +67,8 @@ void LoadILAs(il_factor_as * self, enviroment * env, call_context* cctx) {
 	//それ以外
 	} else {
 		ThrowBCError(BCERROR_CAST_NOT_COMPATIBLE_T,
-			Ref2Str(type_name(a->core_type)),
-			Ref2Str(type_name(self->gtype->core_type))
+			Ref2Str(GetTypeName(a->core_type)),
+			Ref2Str(GetTypeName(self->gtype->core_type))
 		);
 	}
 }

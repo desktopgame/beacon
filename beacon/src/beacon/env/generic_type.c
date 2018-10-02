@@ -23,19 +23,19 @@ static int DistanceGenericType_interface(int dist, generic_type* self, generic_t
 static Vector* ApplyGenericType_by_hierarchy(generic_type* impl_baseline, generic_type* impl);
 static generic_type* generic_type_typeargs_at(call_context* cctx, frame* fr, int index);
 static generic_type* generic_type_receiver_at(call_context* cctx, frame* fr, int index);
-static void generic_type_delete_self(VectorItem item);
-static void generic_type_deletercr_self(VectorItem item);
+static void generic_DeleteType_self(VectorItem item);
+static void generic_DeleteTypercr_self(VectorItem item);
 static void generic_type_recursive_mark(generic_type* a);
 static generic_type* generic_type_get(generic_type* a);
 /*
-generic_type * generic_type_new(type * core_type) {
+generic_type * generic_NewType(type * core_type) {
 
 }
 */
 
 generic_type* RefGenericType(type* core_type) {
 	if(core_type == NULL) {
-		return generic_type_new(core_type);
+		return generic_NewType(core_type);
 	}
 	return core_type->generic_self;
 }
@@ -54,7 +54,7 @@ generic_type* MallocGenericType(struct type* core_type, const char* filename, in
 }
 
 generic_type* CloneGenericType(generic_type* self) {
-	generic_type* a = generic_type_new(self->core_type);
+	generic_type* a = generic_NewType(self->core_type);
 	for(int i=0; i<self->type_args_list->length; i++) {
 		generic_type* e = AtVector(self->type_args_list, i);
 		AddArgsGenericType(a, CloneGenericType(e));
@@ -88,7 +88,7 @@ void CollectGenericType() {
 		PushVector((!e->mark ? dead : alive), e);
 	}
 	DeleteVector(ctx->all_generic_vec, VectorDeleterOfNull);
-	DeleteVector(dead, generic_type_delete_self);
+	DeleteVector(dead, generic_DeleteType_self);
 	ctx->all_generic_vec = alive;
 }
 
@@ -100,7 +100,7 @@ void LostownershipGenericType(generic_type* a) {
 	}
 	assert(a->core_type != NULL);
 	assert(a->core_type->generic_self == a);
-	generic_type_deletercr_self(a);
+	generic_DeleteTypercr_self(a);
 }
 
 void AddArgsGenericType(generic_type* self, generic_type* a) {
@@ -134,7 +134,7 @@ void PrintGenericType(generic_type * self) {
 	if (self->virtual_type_index != -1) {
 		//(Array)[0]
 		if(self->tag == GENERIC_TYPE_TAG_CLASS_T) {
-			printf("(%s)", Ref2Str(type_name(self->u.type_)));
+			printf("(%s)", Ref2Str(GetTypeName(self->u.type_)));
 		//copy[0]
 		} else if(self->tag == GENERIC_TYPE_TAG_METHOD_T) {
 			printf("(%s)", Ref2Str(self->u.method_->namev));
@@ -142,7 +142,7 @@ void PrintGenericType(generic_type * self) {
 		printf("[%d]", self->virtual_type_index);
 	//Intなど
 	} else {
-		printf("%s", Ref2Str(type_name(self->core_type)));
+		printf("%s", Ref2Str(GetTypeName(self->core_type)));
 	}
 	if(self->is_ctor) {
 		printf("!!");
@@ -215,7 +215,7 @@ static generic_type* ApplyGenericTypeImpl(generic_type* self, call_context* cctx
 			ret = CloneGenericType(generic_type_typeargs_at(cctx, fr, self->virtual_type_index));
 		}
 	} else {
-		ret = generic_type_new(self->core_type);
+		ret = generic_NewType(self->core_type);
 		ret->tag = self->tag;
 		ret->virtual_type_index = self->virtual_type_index;
 	}
@@ -263,12 +263,12 @@ static int DistanceGenericTypeImpl(generic_type* self, generic_type* other, fram
 static int DistanceGenericType_nogeneric(generic_type* self, generic_type* other, frame* fr, call_context* cctx) {
 	assert(self->core_type != NULL);
 	assert(other->core_type != NULL);
-	int dist = type_distance(self->core_type, other->core_type);
+	int dist = DistanceType(self->core_type, other->core_type);
 	assert(self->core_type != NULL);
 	assert(other->core_type != NULL);
 	#if defined(DEBUG)
-	const char* sname = Ref2Str(type_name(self->core_type));
-	const char* oname = Ref2Str(type_name(other->core_type));
+	const char* sname = Ref2Str(GetTypeName(self->core_type));
+	const char* oname = Ref2Str(GetTypeName(other->core_type));
 	#endif
 	//List : Dict みたいな型ならもうこの時点で次へ
 	if(dist == -1) {
@@ -405,15 +405,15 @@ static generic_type* generic_type_get(generic_type* a) {
 	return NULL;
 }
 
-static void generic_type_delete_self(VectorItem item) {
+static void generic_DeleteType_self(VectorItem item) {
 	generic_type* e = (generic_type*)item;
 	DeleteVector(e->type_args_list, VectorDeleterOfNull);
 	MEM_FREE(e);
 }
 
-static void generic_type_deletercr_self(VectorItem item) {
+static void generic_DeleteTypercr_self(VectorItem item) {
 	generic_type* e = (generic_type*)item;
-	DeleteVector(e->type_args_list, generic_type_deletercr_self);
+	DeleteVector(e->type_args_list, generic_DeleteTypercr_self);
 	MEM_FREE(e);
 }
 

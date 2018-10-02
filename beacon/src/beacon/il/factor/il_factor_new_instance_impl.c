@@ -64,8 +64,8 @@ void LoadILNewInstance(il_factor_new_instance * self, enviroment * env, call_con
 		return;
 	}
 	//抽象クラスはインスタンス化できない
-	if(type_is_abstract(self->c->parent)) {
-		ThrowBCError(BCERROR_CONSTRUCT_ABSTRACT_TYPE_T, Ref2Str(type_name(self->c->parent)));
+	if(IsAbstractType(self->c->parent)) {
+		ThrowBCError(BCERROR_CONSTRUCT_ABSTRACT_TYPE_T, Ref2Str(GetTypeName(self->c->parent)));
 	}
 }
 
@@ -82,7 +82,7 @@ generic_type* EvalILNewInstance(il_factor_new_instance * self, enviroment * env,
 	//fqcn_cache typename_group
 	if (self->instance_type == NULL) {
 		namespace_* scope = NULL;
-		generic_type* a = generic_type_new(self->c->parent);
+		generic_type* a = generic_NewType(self->c->parent);
 		for (int i = 0; i < self->type_args->length; i++) {
 			il_type_argument* e = (il_type_argument*)AtVector(self->type_args, i);
 			generic_type* arg = ResolveImportManager(GetNamespaceCContext(cctx), e->gcache, cctx);

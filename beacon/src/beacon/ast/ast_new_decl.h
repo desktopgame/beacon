@@ -128,12 +128,12 @@ ast* NewASTMemberDeclList(ast* amember_list, ast* amember);
 /**
  * フィールド宣言を表す要素を作成します.
  * @param amodifier
- * @param atype_name
+ * @param aGetTypeName
  * @param field_namev
  * @param afact
  * @return
  */
-ast* NewASTFieldDecl(ast* amodifier, ast* atype_name, string_view field_namev, ast* afact);
+ast* NewASTFieldDecl(ast* amodifier, ast* aGetTypeName, string_view field_namev, ast* afact);
 
 /**
  * 関数宣言を表す要素を作成します.
@@ -162,7 +162,7 @@ ast* NewASTFunctionDeclEmptyParams(string_view function_namev, ast* atypeparams,
  * @param atype_parameter
  * @param aparameter_list
  * @param abody
- * @param areturn_type_name
+ * @param areturn_GetTypeName
  * @return
  */
 ast* NewASTMethodDecl(ast* amodifier, string_view func_namev, ast* atype_parameter, ast* aparameter_list, ast* abody, ast* areturn_type);
@@ -173,7 +173,7 @@ ast* NewASTMethodDecl(ast* amodifier, string_view func_namev, ast* atype_paramet
  * @param func_namev
  * @param atype_parameter
  * @param abody
- * @param areturn_type_name
+ * @param areturn_GetTypeName
  * @return
  */
 ast* NewASTMethodDeclEmptyParams(ast* amodifier, string_view func_namev, ast* atype_parameter, ast* abody, ast* areturn_type);

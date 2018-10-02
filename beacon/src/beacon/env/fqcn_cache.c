@@ -84,11 +84,11 @@ type * GetTypeFQCN(fqcn_cache * self, namespace_ * current) {
 }
 
 interface_ * GetInterfaceFQCN(fqcn_cache * self, namespace_ * current) {
-	return type_as_interface(GetTypeFQCN(self, current));
+	return TypeToInterface(GetTypeFQCN(self, current));
 }
 
 class_ * GetClassFQCN(fqcn_cache * self, namespace_ * current) {
-	return type_as_class(GetTypeFQCN(self, current));
+	return TypeToClass(GetTypeFQCN(self, current));
 }
 
 char* FQCNCacheToString(fqcn_cache* self) {

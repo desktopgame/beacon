@@ -23,7 +23,7 @@ il_interface * NewILInterface(string_view namev) {
 	ret->extends_list = NewVector();
 	ret->method_list = NewVector();
 	ret->namev = namev;
-	ret->type_parameter_list = NewVector();
+	ret->GetParameterListType = NewVector();
 	ret->prop_list = NewVector();
 	return ret;
 }
@@ -39,7 +39,7 @@ void AddMethodILInterface(il_interface * self, il_method * method) {
 void DeleteILInterface(il_interface * self) {
 	DeleteVector(self->extends_list, il_interface_fqcn_delete);
 	DeleteVector(self->method_list, il_interface_DeleteMethod);
-	DeleteVector(self->type_parameter_list, il_interface_DeleteTypeParameter);
+	DeleteVector(self->GetParameterListType, il_interface_DeleteTypeParameter);
 	DeleteVector(self->prop_list, il_interface_DeleteProperty);
 	MEM_FREE(self);
 }

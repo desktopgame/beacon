@@ -2,12 +2,12 @@
 #include <stdlib.h>
 
 //proto
-static ast* ast_new_field_type_name(string_view type_namev);
+static ast* ast_new_field_GetTypeName(string_view GetTypeNamev);
 static ast* NewASTFieldAccess_name(string_view field_namev);
 static ast* ast_new_function_name(string_view func_namev);
 static ast* ast_new_method_name(string_view func_namev);
-static ast* ast_new_method_return_name(string_view return_type_namev);
-static ast* NewASTParameter_type_name(string_view type_namev);
+static ast* ast_new_method_return_name(string_view return_GetTypeNamev);
+static ast* NewASTParameter_GetTypeName(string_view GetTypeNamev);
 static ast* NewASTParameter_access_name(string_view parameter_namev);
 static ast* NewASTClassDeclImpl(ast* aclass_name, ast* aextend_list, ast* amember_list, ast_tag tag);
 
@@ -105,10 +105,10 @@ ast * NewASTMemberDeclList(ast* amember_list, ast* amember) {
 	return ret;
 }
 
-ast * NewASTFieldDecl(ast* amodifier, ast* atype_name, string_view field_namev, ast* afact) {
+ast * NewASTFieldDecl(ast* amodifier, ast* aGetTypeName, string_view field_namev, ast* afact) {
 	ast* ret = ast_new(AST_FIELD_DECL_T);
 	PushAST(ret, amodifier);
-	PushAST(ret, atype_name);
+	PushAST(ret, aGetTypeName);
 	PushAST(ret, NewASTFieldAccess_name(field_namev));
 	PushAST(ret, afact);
 	return ret;
@@ -265,9 +265,9 @@ ast* NewASTPropDecl(ast* amodifier, ast* atypename, string_view namev, ast* aset
 }
 
 //private
-static ast* ast_new_field_type_name(string_view type_namev) {
+static ast* ast_new_field_GetTypeName(string_view GetTypeNamev) {
 	ast* ret = ast_new(AST_FIELD_TYPE_NAME_T);
-	ret->u.stringv_value = type_namev;
+	ret->u.stringv_value = GetTypeNamev;
 	return ret;
 }
 
@@ -289,15 +289,15 @@ static ast* ast_new_method_name(string_view func_namev) {
 	return ret;
 }
 
-static ast* ast_new_method_return_name(string_view return_type_namev) {
+static ast* ast_new_method_return_name(string_view return_GetTypeNamev) {
 	ast* ret = ast_new(AST_METHOD_RETURN_NAME_T);
-	ret->u.stringv_value = return_type_namev;
+	ret->u.stringv_value = return_GetTypeNamev;
 	return ret;
 }
 
-static ast* NewASTParameter_type_name(string_view type_namev) {
+static ast* NewASTParameter_GetTypeName(string_view GetTypeNamev) {
 	ast* ret = ast_new(AST_PARAMETER_TYPE_NAME_T);
-	ret->u.stringv_value = type_namev;
+	ret->u.stringv_value = GetTypeNamev;
 	return ret;
 }
 

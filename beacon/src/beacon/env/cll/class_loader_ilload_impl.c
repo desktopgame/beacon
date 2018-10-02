@@ -252,7 +252,7 @@ static il_class* class_loader_ilload_classImpl(class_loader* self, il_namespace*
 	il_class* ilclassz = NewILClass(atypename->u.stringv_value);
 	il_type* iltype = WrapILClass(ilclassz);
 	//class Foo<A, B>
-	CLIL_type_parameter(self, FirstAST(atypename), ilclassz->type_parameter_list);
+	CLIL_type_parameter(self, FirstAST(atypename), ilclassz->GetParameterListType);
 	//class Foo : X, Y 
 	CLIL_typename_list(self, ilclassz->extend_list, aextend_list);
 	//public:
@@ -272,7 +272,7 @@ static void class_loader_ilload_interface(class_loader* self, il_namespace* curr
 	il_interface* ilinter = NewILInterface(atypename->u.stringv_value);
 	il_type* iltype = WrapILInterface(ilinter);
 	//interface Foo<A, B>
-	CLIL_type_parameter(self, FirstAST(atypename), ilinter->type_parameter_list);
+	CLIL_type_parameter(self, FirstAST(atypename), ilinter->GetParameterListType);
 	//interface Foo : XXX, YYY, CCC
 	CLIL_typename_list(self, ilinter->extends_list, aextends_list);
 	//public:

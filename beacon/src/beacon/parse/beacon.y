@@ -66,7 +66,7 @@
 					import 
 					parameterized_typename
 					type_parameter_group
-					type_parameter_list
+					GetParameterListType
 					type_parameter
 					abstract_class_decl
 					class_decl 
@@ -255,18 +255,18 @@ type_parameter_group
 	{
 		$$ = NewASTBlank();
 	}
-	| LSB type_parameter_list RSB
+	| LSB GetParameterListType RSB
 	{
 		$$ = $2;
 	}
 	;
 
-type_parameter_list
+GetParameterListType
 	: type_parameter
 	{
 		$$ = $1;
 	}
-	| type_parameter_list COMMA type_parameter
+	| GetParameterListType COMMA type_parameter
 	{
 		$$ = NewASTTypeParameterList($3, $1);
 	}

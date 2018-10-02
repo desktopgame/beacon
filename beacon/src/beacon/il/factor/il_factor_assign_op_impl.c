@@ -98,7 +98,7 @@ static void assign_by_namebase(il_factor_assign_op* self, enviroment* env, call_
 		//指定の静的フィールドにアクセスできない
 		if(!class_accessible_field(GetClassCContext(cctx), sf)) {
 			ThrowBCError(BCERROR_CAN_T_ACCESS_FIELD_T,
-				Ref2Str(type_name(cls->parent)),
+				Ref2Str(GetTypeName(cls->parent)),
 				Ref2Str(sf->namev)
 			);
 			return;
@@ -106,7 +106,7 @@ static void assign_by_namebase(il_factor_assign_op* self, enviroment* env, call_
 		//finalなので書き込めない
 		if(IsFinalModifier(sf->modifier)) {
 			ThrowBCError(BCERROR_ASSIGN_TO_FINAL_FIELD_T,
-				Ref2Str(type_name(cls->parent)),
+				Ref2Str(GetTypeName(cls->parent)),
 				Ref2Str(sf->namev)
 			);
 			return;
@@ -136,7 +136,7 @@ static void assign_to_field(il_factor_assign_op* self, il_factor* receiver, il_f
 	//指定のインスタンスフィールドにアクセスできない
 	if(!class_accessible_field(GetClassCContext(cctx), f)) {
 		ThrowBCError(BCERROR_CAN_T_ACCESS_FIELD_T,
-			Ref2Str(type_name(cls->parent)),
+			Ref2Str(GetTypeName(cls->parent)),
 			Ref2Str(f->namev)
 		);
 	}
@@ -151,21 +151,21 @@ static void assign_to_property(il_factor_assign_op* self, enviroment* env, call_
 	//プロパティへアクセスできない
 	if(!class_accessible_property(GetClassCContext(cctx), pp)) {
 		ThrowBCError(BCERROR_CAN_T_ACCESS_FIELD_T,
-			Ref2Str(type_name(pp->parent)),
+			Ref2Str(GetTypeName(pp->parent)),
 			Ref2Str(pp->namev)
 		);
 		return;
 	}
 	if(!class_accessible_property_accessor(GetClassCContext(cctx), pp->set)) {
 		ThrowBCError(BCERROR_CAN_T_ACCESS_FIELD_T,
-			Ref2Str(type_name(pp->parent)),
+			Ref2Str(GetTypeName(pp->parent)),
 			Ref2Str(pp->namev)
 		);
 		return;
 	}
 	if(DistanceGenericType(prop->p->gtype, EvalILFactor(self->right, env, cctx), cctx) < 0) {
 		ThrowBCError(BCERROR_ASSIGN_NOT_COMPATIBLE_PROPERTY_T,
-			Ref2Str(type_name(prop->p->parent)),
+			Ref2Str(GetTypeName(prop->p->parent)),
 			Ref2Str(prop->p->namev)
 		);
 		return;
@@ -260,7 +260,7 @@ static bool can_assign_to_field(field* f, il_factor_assign_op* self, enviroment*
 		return true;
 	} else {
 		ThrowBCError(BCERROR_ASSIGN_NOT_COMPATIBLE_FIELD_T,
-			Ref2Str(type_name(f->parent)),
+			Ref2Str(GetTypeName(f->parent)),
 			Ref2Str(f->namev)
 		);
 		return false;
@@ -278,7 +278,7 @@ static void check_final(il_factor* receiver, il_factor* source, string_view name
 		//finalなので書き込めない
 		if(IsFinalModifier(f->modifier)) {
 			ThrowBCError(BCERROR_ASSIGN_TO_FINAL_FIELD_T,
-				Ref2Str(type_name(cls->parent)),
+				Ref2Str(GetTypeName(cls->parent)),
 				Ref2Str(f->namev)
 			);
 		}
@@ -287,7 +287,7 @@ static void check_final(il_factor* receiver, il_factor* source, string_view name
 		if(IsFinalModifier(f->modifier) &&
 		   IsStaticModifier(f->modifier)) {
 			ThrowBCError(BCERROR_ASSIGN_TO_FINAL_FIELD_T,
-				Ref2Str(type_name(cls->parent)),
+				Ref2Str(GetTypeName(cls->parent)),
 				Ref2Str(f->namev)
 			);
 		}
@@ -336,7 +336,7 @@ static void generate_assign_to_variable_local(il_factor_assign_op* self, envirom
 		if(!IsStaticModifier(f->modifier) &&
 		    IsStaticCContext(cctx)) {
 			ThrowBCError(BCERROR_ACCESS_TO_THIS_AT_STATIC_METHOD_T,
-				Ref2Str(type_name(f->parent)),
+				Ref2Str(GetTypeName(f->parent)),
 				Ref2Str(f->namev)
 			);
 			return;
@@ -357,7 +357,7 @@ static void generate_assign_to_variable_local(il_factor_assign_op* self, envirom
 		if(!IsStaticModifier(p->modifier) &&
 		    IsStaticCContext(cctx)) {
 			ThrowBCError(BCERROR_ACCESS_TO_THIS_AT_STATIC_METHOD_T,
-				Ref2Str(type_name(p->parent)),
+				Ref2Str(GetTypeName(p->parent)),
 				Ref2Str(p->namev)
 			);
 			return;

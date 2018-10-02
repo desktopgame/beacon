@@ -47,8 +47,8 @@ static void class_generic_type_list_delete(VectorItem item);
 static void class_delete_operator_overload(VectorItem item);
 static void class_delete_property(VectorItem item);
 
-type * type_wrap_class(class_ * self) {
-	type* ret = type_new();
+type * WrapClass(class_ * self) {
+	type* ret = NewType();
 	ret->tag = TYPE_CLASS_T;
 	ret->u.class_ = self;
 	self->parent = ret;
@@ -72,7 +72,7 @@ class_ * class_new(string_view namev) {
 	ret->constructor_list = NewVector();
 	ret->native_method_ref_nmap = NewNumericMap();
 	ret->vt_vec = NewVector();
-	ret->type_parameter_list = NewVector();
+	ret->GetParameterListType = NewVector();
 	ret->vt = NULL;
 	ret->ovt = NULL;
 	ret->is_abstract = false;
@@ -90,14 +90,14 @@ class_* class_new_proxy(generic_type* gt, string_view namev) {
 
 type* class_new_preload(string_view namev) {
 	class_* cl = class_new(namev);
-	type* tp = type_wrap_class(cl);
+	type* tp = WrapClass(cl);
 	tp->state = TYPE_PENDING;
 	if (TYPE_OBJECT == NULL) {
 		return tp;
 	}
 	class_* objCls = TYPE_OBJECT->u.class_;
 	if (cl != objCls) {
-		type_init_generic(objCls->parent, 0);
+		InitGenericSelf(objCls->parent, 0);
 		cl->super_class = objCls->parent->generic_self;
 	}
 	return tp;
@@ -386,7 +386,7 @@ void class_unlink(class_ * self) {
 		self->super_class->core_type->u.class_->ref_count--;
 	}
 	//XSTREQ(self->name, "Object");
-	//generic_type_delete(self->super_class);
+	//generic_DeleteType(self->super_class);
 	DeleteNumericMap(self->native_method_ref_nmap, class_DeleteNativeMethodRef);
 	DeleteVector(self->impl_list, class_impl_delete);
 	DeleteVector(self->field_list, class_DeleteField);
@@ -407,7 +407,7 @@ void class_delete(class_ * self) {
 //	assert(self->ref_count == 0);
 //	MEM_FREE(self->name);
 	//printf("delete %s\n", self->name);
-	DeleteVector(self->type_parameter_list, class_DeleteTypeParameter);
+	DeleteVector(self->GetParameterListType, class_DeleteTypeParameter);
 	MEM_FREE(self);
 }
 
@@ -443,7 +443,7 @@ static void class_create_vtable_override(class_* self) {
 
 static void class_create_vtable_interface(class_* self) {
 	#if defined(DEBUG) || defined(_DEBUG)
-	const char* clname = Ref2Str(type_name(self->parent));
+	const char* clname = Ref2Str(GetTypeName(self->parent));
 	#endif
 	Vector* tbl = class_get_interface_tree(self);
 	//もしインターフェースを実装しているなら、
@@ -464,7 +464,7 @@ static void class_create_vtable_interface(class_* self) {
 			if(!self->is_abstract && classVTM == NULL) {
 				PushVector(self->vt_vec, newVT);
 				ThrowBCError(BCERROR_NOT_IMPLEMENT_INTERFACE_T,
-					Ref2Str(type_name(interVTM->parent)),
+					Ref2Str(GetTypeName(interVTM->parent)),
 					Ref2Str(interVTM->namev)
 				);
 				DeleteVector(tbl, VectorDeleterOfNull);
@@ -485,7 +485,7 @@ static void class_create_vtable_interface(class_* self) {
 
 static void class_impl_delete(VectorItem item) {
 	generic_type* e = (generic_type*)item;
-	//generic_type_delete(e);
+	//generic_DeleteType(e);
 }
 
 static void class_DeleteField(VectorItem item) {
@@ -537,7 +537,7 @@ static void class_DeleteTypeParameter(VectorItem item) {
 
 static void class_generic_type_list_delete(VectorItem item) {
 	generic_type* e = (generic_type*)item;
-//	generic_type_delete(e);
+//	generic_DeleteType(e);
 }
 
 static void class_delete_operator_overload(VectorItem item) {

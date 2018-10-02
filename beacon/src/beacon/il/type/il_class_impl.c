@@ -36,7 +36,7 @@ il_class* NewILClass(string_view namev) {
 	ret->method_list = NewVector();
 	ret->smethod_list = NewVector();
 	ret->constructor_list = NewVector();
-	ret->type_parameter_list = NewVector();
+	ret->GetParameterListType = NewVector();
 	ret->operator_overload_list = NewVector();
 	ret->prop_list = NewVector();
 	ret->sprop_list = NewVector();
@@ -80,7 +80,7 @@ void DeleteILClass(il_class * self) {
 	DeleteVector(self->smethod_list, il_class_DeleteMethod);
 	DeleteVector(self->constructor_list, il_class_ctor_delete);
 	DeleteVector(self->extend_list, il_class_extend_delete);
-	DeleteVector(self->type_parameter_list, il_class_DeleteTypeParameter);
+	DeleteVector(self->GetParameterListType, il_class_DeleteTypeParameter);
 	DeleteVector(self->operator_overload_list, DeleteILClass_operator_overload);
 	DeleteVector(self->prop_list, il_class_prop_delete);
 	DeleteVector(self->sprop_list, il_class_prop_delete);

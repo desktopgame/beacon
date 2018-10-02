@@ -15,7 +15,7 @@ bool interface_method_parameter_valid(interface_* inter, method** out_method, st
 }
 
 bool interface_type_type_parameter_valid(interface_* inter, string_view* out_name) {
-	return !IsOverwrappedTypeParameterName(inter->type_parameter_list, out_name);
+	return !IsOverwrappedTypeParameterName(inter->GetParameterListType, out_name);
 }
 
 bool interface_method_type_parameter_valid(interface_* inter, method** out_method, string_view* out_name) {

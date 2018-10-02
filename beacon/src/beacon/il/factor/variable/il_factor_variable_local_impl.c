@@ -76,7 +76,7 @@ char* ILVariableLocalToString(il_factor_variable_local * self, enviroment * env)
 
 void DeleteILVariableLocal(il_factor_variable_local* self) {
 	DeleteVector(self->type_args, DeleteILVariableLocal_typeargs);
-//	generic_type_delete(self->gt);
+//	generic_DeleteType(self->gt);
 	MEM_FREE(self);
 }
 //private
@@ -148,7 +148,7 @@ static void LoadILVariableLocal_property(il_factor_variable_local * self, enviro
 		p = class_find_sproperty_tree(TYPE2CLASS(tp), self->namev, &temp);
 	}
 	if(temp == -1) {
-		ThrowBCError(BCERROR_CAN_T_ACCESS_PROPERTY_T, Ref2Str(type_name(tp)), Ref2Str(self->namev));
+		ThrowBCError(BCERROR_CAN_T_ACCESS_PROPERTY_T, Ref2Str(GetTypeName(tp)), Ref2Str(self->namev));
 		return;
 	}
 #if defined(_MSC_VER)
@@ -162,7 +162,7 @@ static void LoadILVariableLocal_property(il_factor_variable_local * self, enviro
 	self->u.p_with_i = pwi;
 	//プロパティにアクセスできない
 	if(!class_accessible_property(TYPE2CLASS(tp), p)) {
-		ThrowBCError(BCERROR_CAN_T_ACCESS_PROPERTY_T, Ref2Str(type_name(tp)), Ref2Str(p->namev));
+		ThrowBCError(BCERROR_CAN_T_ACCESS_PROPERTY_T, Ref2Str(GetTypeName(tp)), Ref2Str(p->namev));
 	}
 	set_gtype(self, p->gtype);
 }
@@ -173,11 +173,11 @@ static void set_gtype(il_factor_variable_local * self, generic_type* gt) {
 	if(gt->tag == GENERIC_TYPE_TAG_NONE_T) {
 		self->gt = gt;
 	} else if(gt->tag == GENERIC_TYPE_TAG_CLASS_T) {
-		self->gt = generic_type_new(NULL);
+		self->gt = generic_NewType(NULL);
 		self->gt->tag = GENERIC_TYPE_TAG_CLASS_T;
 		self->gt->virtual_type_index = gt->virtual_type_index;
 	} else if(gt->tag == GENERIC_TYPE_TAG_METHOD_T) {
-		self->gt = generic_type_new(NULL);
+		self->gt = generic_NewType(NULL);
 		self->gt->tag = GENERIC_TYPE_TAG_METHOD_T;
 		self->gt->virtual_type_index = gt->virtual_type_index;
 	}

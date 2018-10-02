@@ -103,10 +103,10 @@ void CLIL_parameter_list(class_loader* self, Vector* list, ast* asource) {
 			CLIL_parameter_list(self, list, AtAST(asource, i));
 		}
 	} else if (asource->tag == AST_PARAMETER_T) {
-		ast* atype_name = FirstAST(asource);
+		ast* aGetTypeName = FirstAST(asource);
 		ast* aaccess_name = SecondAST(asource);
 		il_parameter* p = NewILParameter(aaccess_name->u.stringv_value);
-		CLIL_generic_cache(atype_name, p->fqcn);
+		CLIL_generic_cache(aGetTypeName, p->fqcn);
 		PushVector(list, p);
 	}
 }

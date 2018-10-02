@@ -30,7 +30,7 @@ object * MallocIntObject(int i, const char* filename, int lineno) {
 	object* ret = object_mallocImpl(OBJECT_INT_T, filename, lineno);
 	ret->u.int_ = i;
 	ret->gtype = GENERIC_INT;
-	ret->vptr = type_vtable(TYPE_INT);
+	ret->vptr = GetVTableType(TYPE_INT);
 	return ret;
 }
 
@@ -49,7 +49,7 @@ object * MallocDoubleObject(double d, const char* filename, int lineno) {
 	object* ret = object_mallocImpl(OBJECT_DOUBLE_T, filename, lineno);
 	ret->u.double_ = d;
 	ret->gtype = GENERIC_DOUBLE;
-	ret->vptr = type_vtable(TYPE_DOUBLE);
+	ret->vptr = GetVTableType(TYPE_DOUBLE);
 	return ret;
 }
 
@@ -57,7 +57,7 @@ object* MallocLongObject(long l, const char* filename, int lineno) {
 	object* ret = object_mallocImpl(OBJECT_LONG_T, filename, lineno);
 	ret->u.long_ = l;
 	ret->gtype = GENERIC_OBJECT;
-	ret->vptr = type_vtable(TYPE_OBJECT);
+	ret->vptr = GetVTableType(TYPE_OBJECT);
 	return ret;
 }
 
@@ -65,7 +65,7 @@ object * MallocCharObject(char c, const char* filename, int lineno) {
 	object* ret = object_mallocImpl(OBJECT_CHAR_T, filename, lineno);
 	ret->u.char_ = c;
 	ret->gtype = GENERIC_CHAR;
-	ret->vptr = type_vtable(TYPE_CHAR);
+	ret->vptr = GetVTableType(TYPE_CHAR);
 	return ret;
 }
 
@@ -74,15 +74,15 @@ object * MallocStringObject(const char * s, const char* filename, int lineno) {
 	//ret->u.string_ = s;
 	ret->u.field_vec = NewVector();
 	ret->gtype = GENERIC_STRING;
-	ret->vptr = type_vtable(TYPE_STRING);
+	ret->vptr = GetVTableType(TYPE_STRING);
 
 	//配列を生成
 	object* arr = MallocRefObject(filename, lineno);
 	//arr->tag = OBJECT_ARRAY_T;
 	type* arrType = bc_array_type();
 	type* strType = FindTypeFromNamespace(GetLangNamespace(), InternString("String"));
-	arr->gtype = generic_type_new(arrType);
-	arr->vptr = type_vtable(arrType);
+	arr->gtype = generic_NewType(arrType);
+	arr->vptr = GetVTableType(arrType);
 	arr->tag = OBJECT_ARRAY_T;
 	AddArgsGenericType(arr->gtype, GENERIC_CHAR);
 	//ボックス化
@@ -148,7 +148,7 @@ object * GetNullObject() {
 	script_context* ctx = GetCurrentScriptContext();
 	if (ctx->null_obj == NULL) {
 		ctx->null_obj = object_malloc(OBJECT_NULL_T);
-		ctx->null_obj->gtype = generic_type_new(TYPE_NULL);
+		ctx->null_obj->gtype = generic_NewType(TYPE_NULL);
 		ctx->null_obj->paint = PAINT_ONEXIT_T;
 	}
 	return ctx->null_obj;
@@ -311,7 +311,7 @@ void DestroyObject(object* self) {
 		self->native_slot_vec = NULL;
 		self->u.field_vec = NULL;
 	}
-	//Printfln("delete object %s", type_name(obj->type));
+	//Printfln("delete object %s", GetTypeName(obj->type));
 	DeleteObject(self);
 }
 
@@ -377,7 +377,7 @@ object* GetDefaultObject(generic_type* gt) {
 const char* GetObjectName(object* self) {
 	const char* name = "NULL";
 	if(self->gtype != NULL && self->gtype->core_type != NULL) {
-		name = Ref2Str(type_full_name(self->gtype->core_type));
+		name = Ref2Str(GetTypeFullName(self->gtype->core_type));
 	}
 	return name;
 }

@@ -18,7 +18,7 @@ typedef struct il_method {
 	generic_cache* return_fqcn;
 	access_level access;
 	modifier_type modifier;
-	Vector* type_parameter_list;
+	Vector* GetParameterListType;
 	bool no_stmt;
 } il_method;
 /**

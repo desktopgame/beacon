@@ -628,7 +628,7 @@ static const char *const yytname[] =
   "namespace_body", "namespace_member_decl", "namespace_member_decl_list",
   "namespace_member_decl_optional", "namespace_path", "import_list",
   "import", "parameterized_typename", "type_parameter_group",
-  "type_parameter_list", "type_parameter", "abstract_class_decl",
+  "GetParameterListType", "type_parameter", "abstract_class_decl",
   "class_decl", "enum_decl", "interface_decl", "access_member_tree_opt",
   "access_member_tree", "access_member_list", "member_define_list",
   "member_define", "constructor_define", "constructor_chain",

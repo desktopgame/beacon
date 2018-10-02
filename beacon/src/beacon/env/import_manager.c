@@ -42,7 +42,7 @@ bool IsLoadedImportManager(import_manager * self, int index) {
 generic_type* ResolveImportManager(namespace_* scope, generic_cache* fqcn, call_context* cctx) {
 	type* core_type = GetTypeFQCN(fqcn->fqcn, scope);
 	#if defined(DEBUG)
-	const char* ctname = Ref2Str(type_name(core_type));
+	const char* ctname = Ref2Str(GetTypeName(core_type));
 	const char* it = Ref2Str(fqcn->fqcn->namev);
 	if(fqcn->fqcn->namev == InternString("Token")) {
 		int a = 0;
@@ -57,7 +57,7 @@ generic_type* ResolveImportManager(namespace_* scope, generic_cache* fqcn, call_
 	if(core_type != NULL && fqcn->type_args->length > 0) {
 		//Array, Dictionary などはっきりした型が見つかった
 		//が、型引数があるのでそれを解決する
-		generic_type* normalGType = generic_type_new(core_type);
+		generic_type* normalGType = generic_NewType(core_type);
 		assert(core_type->tag != TYPE_ENUM_T);
 		for (int i = 0; i < fqcn->type_args->length; i++) {
 			generic_cache* e = (generic_cache*)AtVector(fqcn->type_args, i);
@@ -71,7 +71,7 @@ generic_type* ResolveImportManager(namespace_* scope, generic_cache* fqcn, call_
 	if(fqcn->type_args->length > 0) {
 		return NULL;
 	}
-	generic_type* parameterized = generic_type_new(NULL);
+	generic_type* parameterized = generic_NewType(NULL);
 	//T, Eなど
 	method* mt = GetMethodCContext(cctx);
 	if(parameterized->virtual_type_index == -1 && mt != NULL) {
@@ -82,7 +82,7 @@ generic_type* ResolveImportManager(namespace_* scope, generic_cache* fqcn, call_
 	type* ty = GetTypeCContext(cctx);
 	if(parameterized->virtual_type_index == -1 &&  ty != NULL) {
 		parameterized->tag = GENERIC_TYPE_TAG_CLASS_T;
-		parameterized->virtual_type_index = type_for_generic_index(ty, fqcn->fqcn->namev);
+		parameterized->virtual_type_index = GetGenericIndexType(ty, fqcn->fqcn->namev);
 		parameterized->u.type_ = ty;
 	}
 	//現在の名前空間でクラス名を解決できなかったし、
@@ -108,7 +108,7 @@ generic_type* ResolvefImportManager(namespace_* scope, fqcn_cache* fqcn, call_co
 	//例えば Dictionary[K, V] なら
 	//K = class_tag 0
 	//V = class_tag 1
-	generic_type* parameterized = generic_type_new(NULL);
+	generic_type* parameterized = generic_NewType(NULL);
 	//まずはメソッドの型変数を調べる
 	method* mt = GetMethodCContext(cctx);
 	if(parameterized->virtual_type_index == -1 && mt != NULL) {
@@ -124,9 +124,9 @@ generic_type* ResolvefImportManager(namespace_* scope, fqcn_cache* fqcn, call_co
 	type* ty = GetTypeCContext(cctx);
 	if(parameterized->virtual_type_index == -1 && ty != NULL) {
 		#if defined(DEBUG)
-		const char* typename_ = Ref2Str(type_name(ty));
+		const char* typename_ = Ref2Str(GetTypeName(ty));
 		#endif
-		int index = type_for_generic_index(ty, fqcn->namev);
+		int index = GetGenericIndexType(ty, fqcn->namev);
 		parameterized->tag = GENERIC_TYPE_TAG_CLASS_T;
 		parameterized->virtual_type_index = index;
 		parameterized->u.type_ = ty;

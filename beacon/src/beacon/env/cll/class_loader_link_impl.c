@@ -56,7 +56,7 @@ static void CLBC_class_decl(class_loader * self, il_type * iltype, type * tp, na
 		return;
 	}
 	#if defined(DEBUG)
-	const char* name = Ref2Str(type_name(tp));
+	const char* name = Ref2Str(GetTypeName(tp));
 	#endif
 	CL_ERROR(self);
 	CLBC_fields_decl(self, iltype, tp, iltype->u.class_->field_list, scope);
@@ -85,7 +85,7 @@ static void CLBC_class_impl(class_loader * self, il_type * iltype, type * tp, na
 		return;
 	}
 	#if defined(DEBUG) || defined(_DEBUG)
-	const char* tyname = Ref2Str(type_name(tp));
+	const char* tyname = Ref2Str(GetTypeName(tp));
 	#endif
 	class_create_vtable(tp->u.class_);
 	class_create_operator_vt(tp->u.class_);
@@ -124,7 +124,7 @@ static void CLBC_interface_decl(class_loader * self, il_type * iltype, type * tp
 		if(e->access == ACCESS_PRIVATE_T) {
 			ThrowBCError(
 				BCERROR_INTERFACE_HAS_PRIVATE_MEMBER_T,
-				Ref2Str(type_name(tp)),
+				Ref2Str(GetTypeName(tp)),
 				Ref2Str(e->namev)
 			);
 		}
@@ -134,7 +134,7 @@ static void CLBC_interface_decl(class_loader * self, il_type * iltype, type * tp
 		if(e->access == ACCESS_PRIVATE_T) {
 			ThrowBCError(
 				BCERROR_INTERFACE_HAS_PRIVATE_MEMBER_T,
-				Ref2Str(type_name(tp)),
+				Ref2Str(GetTypeName(tp)),
 				Ref2Str(e->namev)
 			);
 		}
@@ -307,7 +307,7 @@ static void CLBC_check_class(class_loader * self, il_type * iltype, type * tp, n
 	string_view out_overwrap_mname;
 	if(!class_method_parameter_valid(tp->u.class_, &out_overwrap_m, &out_overwrap_mname)) {
 		ThrowBCError(BCERROR_OVERWRAP_PARAMETER_NAME_T,
-			Ref2Str(type_name(tp)),
+			Ref2Str(GetTypeName(tp)),
 			Ref2Str(out_overwrap_m->namev),
 			Ref2Str(out_overwrap_mname)
 		);
@@ -318,7 +318,7 @@ static void CLBC_check_class(class_loader * self, il_type * iltype, type * tp, n
 	string_view out_overwrap_cname;
 	if(!class_ctor_parameter_valid(tp->u.class_, &out_overwrap_c, &out_overwrap_cname)) {
 		ThrowBCError(BCERROR_OVERWRAP_PARAMETER_NAME_T,
-			Ref2Str(type_name(tp)),
+			Ref2Str(GetTypeName(tp)),
 			"new",
 			Ref2Str(out_overwrap_cname)
 		);
@@ -328,7 +328,7 @@ static void CLBC_check_class(class_loader * self, il_type * iltype, type * tp, n
 	string_view out_overwrap_tpname;
 	if(!class_type_type_parameter_valid(tp->u.class_, &out_overwrap_tpname)) {
 		ThrowBCError(BCERROR_OVERWRAP_TYPE_TYPE_PARAMETER_NAME_T,
-			Ref2Str(type_name(tp)),
+			Ref2Str(GetTypeName(tp)),
 			Ref2Str(out_overwrap_tpname)
 		);
 		return;
@@ -338,7 +338,7 @@ static void CLBC_check_class(class_loader * self, il_type * iltype, type * tp, n
 	string_view out_overwrap_tpmname;
 	if(!class_method_type_parameter_valid(tp->u.class_, &out_overwrap_tpm, &out_overwrap_tpmname)) {
 		ThrowBCError(BCERROR_OVERWRAP_METHOD_TYPE_PARAMETER_NAME_T,
-			Ref2Str(type_name(tp)),
+			Ref2Str(GetTypeName(tp)),
 			Ref2Str(out_overwrap_tpm->namev),
 			Ref2Str(out_overwrap_tpmname)
 		);
@@ -355,7 +355,7 @@ static void CLBC_check_class(class_loader * self, il_type * iltype, type * tp, n
 			IsFinalModifier(fi->modifier) &&
 			!fi->not_initialized_at_ctor) {
 			ThrowBCError(BCERROR_NOT_INITIAL_FIELD_NOT_INITIALIZED_AT_CTOR_T,
-				Ref2Str(type_name(tp)),
+				Ref2Str(GetTypeName(tp)),
 				Ref2Str(fi->namev)
 			);
 			return;
@@ -369,7 +369,7 @@ static void CLBC_check_interface(class_loader * self, il_type * iltype, type * t
 	string_view out_overwrap_name;
 	if(!interface_method_parameter_valid(tp->u.interface_, &out_overwrap_m, &out_overwrap_name)) {
 		ThrowBCError(BCERROR_OVERWRAP_PARAMETER_NAME_T,
-			Ref2Str(type_name(tp)),
+			Ref2Str(GetTypeName(tp)),
 			Ref2Str(out_overwrap_m->namev),
 			Ref2Str(out_overwrap_name)
 		);
@@ -378,7 +378,7 @@ static void CLBC_check_interface(class_loader * self, il_type * iltype, type * t
 	string_view out_overwrap_tpname;
 	if(!interface_type_type_parameter_valid(tp->u.interface_, &out_overwrap_tpname)) {
 		ThrowBCError(BCERROR_OVERWRAP_TYPE_TYPE_PARAMETER_NAME_T,
-			Ref2Str(type_name(tp)),
+			Ref2Str(GetTypeName(tp)),
 			Ref2Str(out_overwrap_tpname)
 		);
 	}
@@ -387,7 +387,7 @@ static void CLBC_check_interface(class_loader * self, il_type * iltype, type * t
 	string_view out_overwrap_tpmname;
 	if(!interface_method_type_parameter_valid(tp->u.interface_, &out_overwrap_tpm, &out_overwrap_tpmname)) {
 		ThrowBCError(BCERROR_OVERWRAP_METHOD_TYPE_PARAMETER_NAME_T,
-			Ref2Str(type_name(tp)),
+			Ref2Str(GetTypeName(tp)),
 			Ref2Str(out_overwrap_tpm->namev),
 			Ref2Str(out_overwrap_tpmname)
 		);

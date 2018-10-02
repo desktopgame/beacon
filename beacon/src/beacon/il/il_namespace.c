@@ -5,7 +5,7 @@
 #include "il_type_interface.h"
 
 //proto
-static void il_namespace_type_delete(VectorItem item);
+static void il_namespace_DeleteType(VectorItem item);
 static void il_namespace_DeleteNamespace(VectorItem item);
 
 il_namespace* NewILNamespace(string_view namev) {
@@ -32,12 +32,12 @@ void DeleteILNamespace(il_namespace* self) {
 		return;
 	}
 	DeleteVector(self->namespace_list, il_namespace_DeleteNamespace);
-	DeleteVector(self->type_list, il_namespace_type_delete);
+	DeleteVector(self->type_list, il_namespace_DeleteType);
 	MEM_FREE(self);
 }
 
 //private
-static void il_namespace_type_delete(VectorItem item) {
+static void il_namespace_DeleteType(VectorItem item) {
 	il_type* e = (il_type*)item;
 	DeleteILType(e);
 }

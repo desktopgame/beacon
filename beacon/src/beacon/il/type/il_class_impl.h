@@ -20,7 +20,7 @@ typedef struct il_class {
 	Vector* method_list;
 	Vector* smethod_list;
 	Vector* constructor_list;
-	Vector* type_parameter_list;
+	Vector* GetParameterListType;
 	Vector* operator_overload_list;
 	Vector* prop_list;
 	Vector* sprop_list;

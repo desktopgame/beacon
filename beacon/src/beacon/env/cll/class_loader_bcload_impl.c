@@ -166,7 +166,7 @@ static void CLBC_enum(class_loader * self, il_type * iltype, namespace_ * parent
 	if((tp->state & TYPE_REGISTER) > 0) {
 		return;
 	}
-	type_init_generic(tp, 0);
+	InitGenericSelf(tp, 0);
 	//全ての列挙子を public static final フィールドとして追加
 	for (int i = 0; i < ilenum->item_vec->length; i++) {
 		string_view str = (string_view)AtVector(ilenum->item_vec, i);
@@ -215,7 +215,7 @@ static void CLBC_class(class_loader* self, il_type* iltype, namespace_* parent) 
 		return;
 	}
 	cls->is_abstract = iltype->u.class_->is_abstract;
-	type_init_generic(tp, iltype->u.class_->type_parameter_list->length);
+	InitGenericSelf(tp, iltype->u.class_->GetParameterListType->length);
 	//デフォルトで親に Object を持つように
 	CLBC_check_superclass(cls);
 	//宣言のロードを予約
@@ -251,7 +251,7 @@ static void CLBC_interface(class_loader * self, il_type * iltype, namespace_ * p
 	if((tp->state & TYPE_REGISTER) > 0) {
 		return;
 	}
-	type_init_generic(tp, iltype->u.interface_->type_parameter_list->length);
+	InitGenericSelf(tp, iltype->u.interface_->GetParameterListType->length);
 	//宣言のロードを予約
 	type_cache* tc = InitTypeCache(
 		NewTypeCache(),
@@ -299,7 +299,7 @@ static type* CLBC_get_or_load_enum(namespace_* parent, il_type* iltype) {
 	if (tp == NULL) {
 		outClass = class_new(iltype->u.enum_->namev);
 		outClass->location = parent;
-		tp = type_wrap_class(outClass);
+		tp = WrapClass(outClass);
 		AddTypeNamespace(parent, tp);
 	} else {
 		outClass = tp->u.class_;
@@ -313,7 +313,7 @@ static type* CLBC_get_or_load_class(class_loader* self, namespace_* parent, il_t
 	//取得できなかった
 	if (tp == NULL) {
 		outClass = class_new(iltype->u.class_->namev);
-		tp = type_wrap_class(outClass);
+		tp = WrapClass(outClass);
 		CLBC_register_class(self, parent, iltype, tp, outClass);
 		CL_ERROR_RET(self, tp);
 	} else {
@@ -321,15 +321,15 @@ static type* CLBC_get_or_load_class(class_loader* self, namespace_* parent, il_t
 		if((tp->state & TYPE_REGISTER) == 0) {
 			//もしネイティブメソッドのために
 			//既に登録されていたならここが型変数がNULLになってしまう
-			DupTypeParameterList(iltype->u.class_->type_parameter_list, outClass->type_parameter_list);
+			DupTypeParameterList(iltype->u.class_->GetParameterListType, outClass->GetParameterListType);
 		}
 	}
 	return tp;
 }
 
 static void CLBC_register_class(class_loader* self, namespace_* parent, il_type* iltype, type* tp, class_* cls) {
-	type_init_generic(tp, iltype->u.class_->type_parameter_list->length);
-	DupTypeParameterList(iltype->u.class_->type_parameter_list, cls->type_parameter_list);
+	InitGenericSelf(tp, iltype->u.class_->GetParameterListType->length);
+	DupTypeParameterList(iltype->u.class_->GetParameterListType, cls->GetParameterListType);
 	call_context* cctx = NewCallContext(CALL_DECL_T);
 	cctx->scope = parent;
 	cctx->ty = tp;
@@ -349,11 +349,11 @@ static void CLBC_register_class(class_loader* self, namespace_* parent, il_type*
 			generic_type* gtp = ResolveImportManager(parent, e, cctx);
 			type* E = GENERIC2TYPE(gtp);
 			#if defined(DEBUG)
-			const char* Estr = Ref2Str(type_name(E));
+			const char* Estr = Ref2Str(GetTypeName(E));
 			#endif
 			PushVector(cls->impl_list, gtp);
 			if(E->tag != TYPE_INTERFACE_T) {
-				ThrowBCError(BCERROR_CLASS_FIRST_T, Ref2Str(type_name(tp)));
+				ThrowBCError(BCERROR_CLASS_FIRST_T, Ref2Str(GetTypeName(tp)));
 				AddTypeNamespace(parent, tp);
 				DeleteCallContext(cctx);
 				return;
@@ -365,7 +365,7 @@ static void CLBC_register_class(class_loader* self, namespace_* parent, il_type*
 	AddTypeNamespace(parent, tp);
 	//重複するインターフェイスを検出
 	interface_* inter = NULL;
-	if((inter = type_interface_valid(tp))) {
+	if((inter = IsValidInterface(tp))) {
 		ThrowBCError(BCERROR_MULTI_EQINTERFACE_T, Ref2Str(inter->namev));
 	}
 }
@@ -375,7 +375,7 @@ static type* CLBC_get_or_load_interface(class_loader* self, namespace_* parent, 
 	interface_* inter = NULL;
 	if (tp == NULL) {
 		inter = interface_new(iltype->u.interface_->namev);
-		tp = type_wrap_interface(inter);
+		tp = WrapInterface(inter);
 		CLBC_register_interface(self, parent, iltype, tp, inter);
 		CL_ERROR_RET(self, tp);
 	} else {
@@ -383,15 +383,15 @@ static type* CLBC_get_or_load_interface(class_loader* self, namespace_* parent, 
 		if((tp->state & TYPE_REGISTER) == 0) {
 			//もしネイティブメソッドのために
 			//既に登録されていたならここが型変数がNULLになってしまう
-			DupTypeParameterList(GetTypeParametersILType(iltype), inter->type_parameter_list);
+			DupTypeParameterList(GetTypeParametersILType(iltype), inter->GetParameterListType);
 		}
 	}
 	return tp;
 }
 
 static void CLBC_register_interface(class_loader* self, namespace_* parent, il_type* iltype, type* tp, interface_* inter) {
-	type_init_generic(tp, iltype->u.interface_->type_parameter_list->length);
-	DupTypeParameterList(iltype->u.interface_->type_parameter_list, inter->type_parameter_list);
+	InitGenericSelf(tp, iltype->u.interface_->GetParameterListType->length);
+	DupTypeParameterList(iltype->u.interface_->GetParameterListType, inter->GetParameterListType);
 	call_context* cctx = NewCallContext(CALL_DECL_T);
 	cctx->scope = parent;
 	cctx->ty = tp;
@@ -401,7 +401,7 @@ static void CLBC_register_interface(class_loader* self, namespace_* parent, il_t
 		generic_type* gtp = ResolveImportManager(parent, e, cctx);
 		type* E = GENERIC2TYPE(gtp);
 		if(E->tag != TYPE_INTERFACE_T) {
-			ThrowBCError(BCERROR_INTERFACE_ONLY_T, Ref2Str(type_name(tp)));
+			ThrowBCError(BCERROR_INTERFACE_ONLY_T, Ref2Str(GetTypeName(tp)));
 			AddTypeNamespace(parent, tp);
 			DeleteCallContext(cctx);
 			return;
@@ -416,7 +416,7 @@ static void CLBC_register_interface(class_loader* self, namespace_* parent, il_t
 	AddTypeNamespace(parent, tp);
 	//重複するインターフェイスを検出
 	interface_* ovinter = NULL;
-	if((ovinter = type_interface_valid(tp))) {
+	if((ovinter = IsValidInterface(tp))) {
 		ThrowBCError(BCERROR_MULTI_EQINTERFACE_T, Ref2Str(ovinter->namev));
 	}
 }

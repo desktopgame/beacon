@@ -538,11 +538,11 @@ static void vm_run(frame * self, enviroment * env, int pos, int deferStart) {
 				obj->gtype = RefGenericType(cls->parent);
 				obj->vptr = cls->vt;
 				//ジェネリック型を実体化
-				if(cls->type_parameter_list->length == 0) {
+				if(cls->GetParameterListType->length == 0) {
 					obj->gtype = tp->generic_self;
 				} else {
-					generic_type* g = generic_type_new(tp);
-					for(int i=0; i<cls->type_parameter_list->length; i++) {
+					generic_type* g = generic_NewType(tp);
+					for(int i=0; i<cls->GetParameterListType->length; i++) {
 						AddArgsGenericType(g, (generic_type*)AtVector(self->type_args_vec, i));
 					}
 					obj->gtype = g;
@@ -578,14 +578,14 @@ static void vm_run(frame * self, enviroment * env, int pos, int deferStart) {
 					AssignVector(cfr->u.static_invoke.args, (ctor->parameter_list->length - i), o->gtype);
 				}
 				//コンストラクタに渡された型引数を引き継ぐ
-				int typeparams = cls->type_parameter_list->length;
+				int typeparams = cls->GetParameterListType->length;
 				for(int i=0; i<typeparams; i++) {
 					VectorItem e = PopVector(self->type_args_vec);
 					AssignVector(sub->type_args_vec, (typeparams - i) - 1, e);
-					AssignVector(cfr->u.static_invoke.typeargs, (cls->type_parameter_list->length - i), e);
+					AssignVector(cfr->u.static_invoke.typeargs, (cls->GetParameterListType->length - i), e);
 				}
 				//Printi(self->level);
-				//Printfln("[ %s#new ]", type_name(ctor->parent));
+				//Printfln("[ %s#new ]", GetTypeName(ctor->parent));
 				//DumpEnviromentOp(ctor->env, sub->level);
 				//DumpOpcodeBuf(ctor->env->buf, sub->level);
 				ExecuteVM(sub, ctor->env);
@@ -869,7 +869,7 @@ static void vm_run(frame * self, enviroment * env, int pos, int deferStart) {
 				type* cls = (type*)AtVector(ctx->type_vec, absClassIndex);
 				method* m = class_get_smethod(cls->u.class_, methodIndex);
 				#if defined(DEBUG)
-				const char* clsname = Ref2Str(type_name(cls));
+				const char* clsname = Ref2Str(GetTypeName(cls));
 				const char* mname = Ref2Str(m->namev);
 				#endif
 				ExecuteMethod(m, self, env);
@@ -1051,7 +1051,7 @@ static void vm_run(frame * self, enviroment * env, int pos, int deferStart) {
 						int count = (int)GetEnviromentSourceAt(env, ++IDX);
 						depth++;
 						PushVector(counts, count);
-						//PushVector(stack, generic_type_new(NULL));
+						//PushVector(stack, generic_NewType(NULL));
 					} else if(code == OP_GENERIC_EXIT) {
 						depth--;
 						int count = (int)PopVector(counts);
@@ -1071,7 +1071,7 @@ static void vm_run(frame * self, enviroment * env, int pos, int deferStart) {
 						int arg = (int)GetEnviromentSourceAt(env, ++IDX);
 						generic_type* a = NULL;
 						if(code == OP_GENERIC_UNIQUE_TYPE) {
-							a = generic_type_new((type*)AtVector(ctx->type_vec, arg));
+							a = generic_NewType((type*)AtVector(ctx->type_vec, arg));
 						} else if(code == OP_GENERIC_INSTANCE_TYPE) {
 							object* receiver = (object*)AtVector(self->ref_stack, 0);
 							a = (generic_type*)AtVector(receiver->gtype->type_args_list, arg);

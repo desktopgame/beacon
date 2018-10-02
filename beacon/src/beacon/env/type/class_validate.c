@@ -166,7 +166,7 @@ bool class_ctor_parameter_valid(class_* self, constructor** out_ctor, string_vie
 }
 
 bool class_type_type_parameter_valid(class_* self, string_view* out_name) {
-	return !IsOverwrappedTypeParameterName(self->type_parameter_list, out_name);
+	return !IsOverwrappedTypeParameterName(self->GetParameterListType, out_name);
 }
 
 bool class_method_type_parameter_valid(class_* self, method** out_method, string_view* out_name) {
@@ -228,7 +228,7 @@ static bool methods_is_all_abstract(Vector* v) {
 	for(int i=0; i<v->length; i++) {
 		method* e = AtVector(v, i);
 		#if defined(DEBUG)
-		const char* tyname = Ref2Str(type_name(e->parent));
+		const char* tyname = Ref2Str(GetTypeName(e->parent));
 		#endif
 		if(!IsAbstractModifier(e->modifier)) {
 			return false;

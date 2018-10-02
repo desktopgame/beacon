@@ -88,7 +88,7 @@ void DeleteILInvoke(il_factor_invoke* self) {
 	DeleteVector(self->args, il_factor_invoke_args_delete);
 	DeleteVector(self->type_args, VectorDeleterOfNull);
 	DeleteILFactor(self->receiver);
-	//generic_type_delete(self->resolved);
+	//generic_DeleteType(self->resolved);
 	MEM_FREE(self);
 }
 
@@ -157,7 +157,7 @@ static void il_factor_invoke_check(il_factor_invoke * self, enviroment * env, ca
 	ResolveILTypeArgument(self->type_args, cctx);
 	type* ctype = gtype->core_type;
 	#if defined(DEBUG)
-	const char* cname = Ref2Str(type_name(ctype));
+	const char* cname = Ref2Str(GetTypeName(ctype));
 	#endif
 	//ジェネリックな変数に対しても
 	//Objectクラスのメソッドは呼び出せる
@@ -168,7 +168,7 @@ static void il_factor_invoke_check(il_factor_invoke * self, enviroment * env, ca
 	assert(ctype != NULL);
 	int temp = -1;
 	self->tag = INSTANCE_INVOKE_METHOD_T;
-	self->u.m = type_ilfind_method(ctype, self->namev, self->args, env, cctx, &temp);
+	self->u.m = ILFindMethodType(ctype, self->namev, self->args, env, cctx, &temp);
 	self->index = temp;
 	if(temp != -1) {
 		return;
@@ -179,7 +179,7 @@ static void il_factor_invoke_check(il_factor_invoke * self, enviroment * env, ca
 		//hoge(1) = 0;
 		//の形式なら引数は一つのはず
 		ThrowBCError(BCERROR_INVOKE_INSTANCE_UNDEFINED_METHOD_T,
-			Ref2Str(type_name(ctype)),
+			Ref2Str(GetTypeName(ctype)),
 			Ref2Str(self->namev)
 		);
 		return;
@@ -189,7 +189,7 @@ static void il_factor_invoke_check(il_factor_invoke * self, enviroment * env, ca
 	self->index = temp;
 	if(temp == -1) {
 		ThrowBCError(BCERROR_INVOKE_INSTANCE_UNDEFINED_METHOD_T,
-			Ref2Str(type_name(ctype)),
+			Ref2Str(GetTypeName(ctype)),
 			Ref2Str(self->namev)
 		);
 		return;

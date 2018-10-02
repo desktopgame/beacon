@@ -47,7 +47,7 @@ typedef struct class_ {
 	//class_type type;
 	uint32_t ref_count;
 	NumericMap* native_method_ref_nmap;
-	Vector* type_parameter_list;
+	Vector* GetParameterListType;
 	//インターフェースに対応した
 	//実装メソッドのテーブルのベクター
 	//http://d.hatena.ne.jp/tetz42/20120205/1328449750
@@ -64,7 +64,7 @@ typedef struct class_ {
  * @param self
  * @return
  */
-type* type_wrap_class(class_* self);
+type* WrapClass(class_* self);
 
 /**
  * 新しいクラスを作成します.
