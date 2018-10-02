@@ -10,9 +10,9 @@ typedef struct operator_vt {
 	Vector* vec;
 } operator_vt;
 
-operator_vt* operator_vt_new();
+operator_vt* NewOperatorVt();
 
-void operator_vt_replace(operator_vt* self, struct operator_overload* opov);
+void ReplaceOperatorVt(operator_vt* self, struct operator_overload* opov);
 
-void operator_vt_delete(operator_vt* self);
+void DeleteOperatorVt(operator_vt* self);
 #endif

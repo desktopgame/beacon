@@ -5,13 +5,13 @@
 #include "../env/parameter.h"
 #include "../env/generic_type.h"
 
-operator_vt* operator_vt_new() {
+operator_vt* NewOperatorVt() {
 	operator_vt* ret = (operator_vt*)MEM_MALLOC(sizeof(operator_vt));
 	ret->vec = NewVector();
 	return ret;
 }
 
-void operator_vt_replace(operator_vt* self, operator_overload* opov) {
+void ReplaceOperatorVt(operator_vt* self, operator_overload* opov) {
 	for(int i=0; i<self->vec->length; i++) {
 		operator_overload* e = AtVector(self->vec, i);
 		if(e->type != opov->type) {
@@ -34,7 +34,7 @@ void operator_vt_replace(operator_vt* self, operator_overload* opov) {
 	PushVector(self->vec, opov);
 }
 
-void operator_vt_delete(operator_vt* self) {
+void DeleteOperatorVt(operator_vt* self) {
 	if(self == NULL) {
 		return;
 	}

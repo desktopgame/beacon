@@ -242,7 +242,7 @@ void class_create_operator_vt(class_* self) {
 	if(self->super_class != NULL) {
 		class_create_operator_vt(TYPE2CLASS(GENERIC2TYPE(self->super_class)));
 	}
-	self->ovt = operator_vt_new();
+	self->ovt = NewOperatorVt();
 	if(self->super_class == NULL) {
 		for(int i=0; i<self->operator_overload_list->length; i++) {
 			operator_overload* opov = AtVector(self->operator_overload_list, i);
@@ -256,7 +256,7 @@ void class_create_operator_vt(class_* self) {
 		}
 		for(int i=0; i<self->operator_overload_list->length; i++) {
 			operator_overload* opov = AtVector(self->operator_overload_list, i);
-			operator_vt_replace(self->ovt, opov);
+			ReplaceOperatorVt(self->ovt, opov);
 		}
 	}
 }
@@ -398,7 +398,7 @@ void class_unlink(class_ * self) {
 	DeleteVector(self->prop_list, class_delete_property);
 	DeleteVector(self->sprop_list, class_delete_property);
 	DeleteVTable(self->vt);
-	operator_vt_delete(self->ovt);
+	DeleteOperatorVt(self->ovt);
 	DeleteVector(self->vt_vec, class_vtable_vec_delete);
 }
 
