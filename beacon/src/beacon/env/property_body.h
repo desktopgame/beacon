@@ -16,8 +16,8 @@ typedef struct property_body {
 	struct enviroment* env;
 } property_body;
 
-#define property_body_new(tag) (property_body_malloc(tag, __FILE__, __LINE__))
-property_body* property_body_malloc(property_body_tag tag, const char* filename, int lineno);
+#define property_body_new(tag) (MallocPropertyBody(tag, __FILE__, __LINE__))
+property_body* MallocPropertyBody(property_body_tag tag, const char* filename, int lineno);
 
-void property_body_delete(property_body* self);
+void DeletePropertyBody(property_body* self);
 #endif
