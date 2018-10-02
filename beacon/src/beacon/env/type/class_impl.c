@@ -222,7 +222,7 @@ void class_create_vtable(class_ * self) {
 	if (self->vt != NULL) {
 		return;
 	}
-	self->vt = vtable_new();
+	self->vt = NewVTable();
 	//トップレベルではメソッドの一覧を配列に入れるだけ
 	if (self->super_class == NULL) {
 		class_create_vtable_top(self);
@@ -397,7 +397,7 @@ void class_unlink(class_ * self) {
 	DeleteVector(self->operator_overload_list, class_delete_operator_overload);
 	DeleteVector(self->prop_list, class_delete_property);
 	DeleteVector(self->sprop_list, class_delete_property);
-	vtable_delete(self->vt);
+	DeleteVTable(self->vt);
 	operator_vt_delete(self->ovt);
 	DeleteVector(self->vt_vec, class_vtable_vec_delete);
 }
@@ -417,7 +417,7 @@ static void class_create_vtable_top(class_* self) {
 		method* m = (method*)AtVector(self->method_list, i);
 		if(m->access != ACCESS_PRIVATE_T &&
 		   !IsStaticModifier(m->modifier)) {
-			vtable_add(self->vt, m);
+			AddVTable(self->vt, m);
 		}
 	}
 }
@@ -430,12 +430,12 @@ static void class_create_vtable_override(class_* self) {
 	cctx->scope = self->parent->location;
 	cctx->ty = self->super_class->core_type;
 	class_create_vtable(self->super_class->core_type->u.class_);
-	vtable_copy(self->super_class->core_type->u.class_->vt, self->vt);
+	CopyVTable(self->super_class->core_type->u.class_->vt, self->vt);
 	for (int i = 0; i < self->method_list->length; i++) {
 		method* m = (method*)AtVector(self->method_list, i);
 		if(m->access != ACCESS_PRIVATE_T &&
 		   !IsStaticModifier(m->modifier)) {
-			vtable_replace(self->vt, m, cctx);
+			ReplaceVTable(self->vt, m, cctx);
 		}
 	}
 	DeleteCallContext(cctx);
@@ -452,7 +452,7 @@ static void class_create_vtable_interface(class_* self) {
 		//generic_type* gtp = (generic_type*)AtVector(tbl, i);
 		interface_* inter = (interface_*)AtVector(tbl, i);
 		vtable* interVT = inter->vt;
-		vtable* newVT = vtable_new();
+		vtable* newVT = NewVTable();
 		assert(interVT != NULL);
 		//そのインターフェースに定義されたテーブルの一覧
 		//これはスーパーインターフェースも含む。
@@ -476,7 +476,7 @@ static void class_create_vtable_interface(class_* self) {
 			if(self->is_abstract && classVTM == NULL) {
 				classVTM = interVTM;
 			}
-			vtable_add(newVT, classVTM);
+			AddVTable(newVT, classVTM);
 		}
 		PushVector(self->vt_vec, newVT);
 	}
@@ -527,7 +527,7 @@ static method* class_find_impl_method(class_* self, method* virtualMethod) {
 
 static void class_vtable_vec_delete(VectorItem item) {
 	vtable* e = (vtable*)item;
-	vtable_delete(e);
+	DeleteVTable(e);
 }
 
 static void class_DeleteTypeParameter(VectorItem item) {

@@ -80,11 +80,11 @@ void interface_create_vtable(interface_ * self) {
 	if (self->vt != NULL) {
 		return;
 	}
-	self->vt = vtable_new();
+	self->vt = NewVTable();
 	//他のインターフェイスを継承していないならフラットに並べる
 	if (self->impl_list->length == 0) {
 		for (int i = 0; i < self->method_list->length; i++) {
-			vtable_add(self->vt, AtVector(self->method_list, i));
+			AddVTable(self->vt, AtVector(self->method_list, i));
 		}
 	} else {
 		for (int i = 0; i < self->impl_list->length; i++) {
@@ -93,10 +93,10 @@ void interface_create_vtable(interface_ * self) {
 			interface_* inter = TYPE2INTERFACE(cinter);
 //			interface_* inter = (interface_*)AtVector(self->impl_list, i);
 			interface_create_vtable(inter);
-			vtable_copy(inter->vt, self->vt);
+			CopyVTable(inter->vt, self->vt);
 		}
 		for (int i = 0; i < self->method_list->length; i++) {
-			vtable_add(self->vt, AtVector(self->method_list, i));
+			AddVTable(self->vt, AtVector(self->method_list, i));
 		}
 	}
 }
@@ -105,7 +105,7 @@ void interface_unlink(interface_ * self) {
 	DeleteVector(self->method_list, interface_delete_method);
 	DeleteVector(self->prop_list, interface_delete_property);
 	DeleteVector(self->impl_list, VectorDeleterOfNull);
-	vtable_delete(self->vt);
+	DeleteVTable(self->vt);
 }
 
 void interface_delete(interface_ * self) {

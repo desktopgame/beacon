@@ -19,14 +19,14 @@ typedef struct vtable {
  * vtableを作成します.
  * @return
  */
-vtable* vtable_new();
+vtable* NewVTable();
 
 /**
  * src の中身を dst へ複製します.
  * @param src
  * @param dst
  */
-void vtable_copy(vtable* src, vtable* dst);
+void CopyVTable(vtable* src, vtable* dst);
 
 /**
  * メソッド一覧に m を追加します.
@@ -35,7 +35,7 @@ void vtable_copy(vtable* src, vtable* dst);
  * @param self
  * @param m
  */
-void vtable_add(vtable* self, struct method* m);
+void AddVTable(vtable* self, struct method* m);
 
 /**
  * メソッド一覧に m を追加します.
@@ -45,11 +45,11 @@ void vtable_add(vtable* self, struct method* m);
  * @param m
  * @param cctx
  */
-void vtable_replace(vtable* self, struct method* m, struct call_context* cctx);
+void ReplaceVTable(vtable* self, struct method* m, struct call_context* cctx);
 
 /**
  * vtableを開放します.
  * @param self
  */
-void vtable_delete(vtable* self);
+void DeleteVTable(vtable* self);
 #endif // !SIGNAL_ENV_VTABLE_H
