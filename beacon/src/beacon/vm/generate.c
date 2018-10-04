@@ -16,7 +16,7 @@ void GenerateGetField(opcode_buf* buf, field* fi, int index) {
 
 void GenerateGetProperty(opcode_buf* buf, property* prop, int index) {
 	if(prop->is_short) {
-		GenerateGetField(buf, prop->source_ref, GetFieldClass_by_property(prop->parent->u.class_, prop));
+		GenerateGetField(buf, prop->source_ref, GetFieldByPropertyClass(prop->parent->u.class_, prop));
 	} else {
 		if(IsStaticModifier(prop->modifier)) {
 			AddOpcodeBuf(buf, OP_GET_STATIC_property);
@@ -42,7 +42,7 @@ void GeneratePutField(opcode_buf* buf, field* fi, int index) {
 
 void GeneratePutProperty(opcode_buf* buf, property* prop, int index) {
 	if(prop->is_short) {
-		GeneratePutField(buf, prop->source_ref, GetFieldClass_by_property(prop->parent->u.class_, prop));
+		GeneratePutField(buf, prop->source_ref, GetFieldByPropertyClass(prop->parent->u.class_, prop));
 	} else {
 		if(IsStaticModifier(prop->modifier)) {
 			AddOpcodeBuf(buf, OP_PUT_STATIC_property);

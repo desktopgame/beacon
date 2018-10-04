@@ -6,7 +6,7 @@ static void bc_bool_nativeBitAnd(method* parent, frame* fr, enviroment* env);
 
 void bc_bool_init() {
 	namespace_* lang = GetLangNamespace();
-	type* boolType = NewClass_preload(InternString("Bool"));
+	type* boolType = NewPreloadClass(InternString("Bool"));
 	class_* boolClass = TYPE2CLASS(boolType);
 	AddTypeNamespace(lang, boolType);
 	DefineNativeMethodClass(boolClass, "nativeBitOr", bc_bool_nativeBitOr);

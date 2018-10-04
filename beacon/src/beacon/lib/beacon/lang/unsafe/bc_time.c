@@ -24,7 +24,7 @@ static void bc_time_nativeGetDayOfYear(method* parent, frame* fr, enviroment* en
 
 void bc_time_init() {
 	namespace_* unsafe = GetUnsafeNamespace();
-	type* timeType = NewClass_preload(InternString("Time"));
+	type* timeType = NewPreloadClass(InternString("Time"));
 	class_* timeClass = TYPE2CLASS(timeType);
 	AddTypeNamespace(unsafe, timeType);
 	DefineNativeMethodClass(timeClass, "nativeRawTime", bc_time_nativeGetRawTime);

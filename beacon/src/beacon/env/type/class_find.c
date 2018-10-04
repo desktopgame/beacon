@@ -27,7 +27,7 @@ field * FindFieldClass(class_* self, string_view namev, int* outIndex) {
 	return NULL;
 }
 
-field * FindFieldClass_tree(class_ * self, string_view namev, int * outIndex) {
+field * FindTreeFieldClass(class_ * self, string_view namev, int * outIndex) {
 	class_* pointee = self;
 	do {
 		field* f = FindFieldClass(pointee, namev, outIndex);
@@ -56,7 +56,7 @@ field * FindSFieldClass(class_ * self, string_view namev, int * outIndex) {
 	return NULL;
 }
 
-field * FindSFieldClass_tree(class_ * self, string_view namev, int * outIndex) {
+field * FindTreeSFieldClass(class_ * self, string_view namev, int * outIndex) {
 	class_* pointee = self;
 	do {
 		field* f = FindSFieldClass(pointee, namev, outIndex);
@@ -181,7 +181,7 @@ bool IsAccessiblePropertyAccessorClass(class_* self, property_body* pb) {
 	return false;
 }
 
-int GetFieldClass_by_property(class_* self, property* p) {
+int GetFieldByPropertyClass(class_* self, property* p) {
 	int temp = -1;
 	assert(p->source_ref != NULL);
 	if(IsStaticModifier(p->modifier)) {
@@ -225,7 +225,7 @@ property* FindPropertyClass(class_* self, string_view namev, int* outIndex) {
 	return NULL;
 }
 
-property* FindPropertyClass_tree(class_* self, string_view namev, int* outIndex) {
+property* FindTreePropertyClass(class_* self, string_view namev, int* outIndex) {
 	class_* pointee = self;
 	do {
 		property* p = FindPropertyClass(pointee, namev, outIndex);
@@ -254,7 +254,7 @@ property* FindSPropertyClass(class_* self, string_view namev, int* outIndex) {
 	return NULL;
 }
 
-property* FindSPropertyClass_tree(class_* self, string_view namev, int* outIndex) {
+property* FindTreeSPropertyClass(class_* self, string_view namev, int* outIndex) {
 	class_* pointee = self;
 	do {
 		property* p = FindSPropertyClass(pointee, namev, outIndex);

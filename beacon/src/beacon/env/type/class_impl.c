@@ -80,7 +80,7 @@ class_ * NewClass(string_view namev) {
 	return ret;
 }
 
-class_* NewClass_proxy(generic_type* gt, string_view namev) {
+class_* NewClassProxy(generic_type* gt, string_view namev) {
 	assert(gt->core_type->tag == TYPE_INTERFACE_T);
 	class_* ret = NewClass(namev);
 	ret->super_class = GENERIC_OBJECT;
@@ -88,7 +88,7 @@ class_* NewClass_proxy(generic_type* gt, string_view namev) {
 	return ret;
 }
 
-type* NewClass_preload(string_view namev) {
+type* NewPreloadClass(string_view namev) {
 	class_* cl = NewClass(namev);
 	type* tp = WrapClass(cl);
 	tp->state = TYPE_PENDING;
@@ -179,10 +179,10 @@ void AddConstructorClass(class_ * self, constructor * c) {
 }
 
 void DefineNativeMethodClass(class_* self, const char* name, native_impl impl) {
-	DefineNativeMethodClass_by_ref(self, InternString(name), impl);
+	DefineNativeMethodByRefClass(self, InternString(name), impl);
 }
 
-void DefineNativeMethodClass_by_ref(class_ * self, string_view namev, native_impl impl) {
+void DefineNativeMethodByRefClass(class_ * self, string_view namev, native_impl impl) {
 	native_method_ref* ref = NewNativeMethodRef(impl);
 	PutNumericMap(self->native_method_ref_nmap, namev, ref);
 }
@@ -339,7 +339,7 @@ int CountAllSMethodClass(class_ * self) {
 	return sum;
 }
 
-object * NewClass_instance(class_* self, frame* fr, Vector* args, Vector* type_args) {
+object * NewInstanceClass(class_* self, frame* fr, Vector* args, Vector* type_args) {
 	//コンストラクタを検索
 	int temp = 0;
 	constructor* ctor = RFindConstructorClass(self, args, NULL, fr, &temp);

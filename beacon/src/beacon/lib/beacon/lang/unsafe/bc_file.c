@@ -22,7 +22,7 @@ static object* file_new(FILE* fp, bool std);
 
 void bc_file_init() {
 	namespace_* unsafe = GetUnsafeNamespace();
-	type* fileType = NewClass_preload(InternString("File"));
+	type* fileType = NewPreloadClass(InternString("File"));
 	class_* fileClass = TYPE2CLASS(fileType);
 	AddTypeNamespace(unsafe, fileType);
 	DefineNativeMethodClass(fileClass, "nativeOpen", bc_file_nativeOpen);

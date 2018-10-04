@@ -14,7 +14,7 @@ static void bc_exception_nativeInit(method* parent, frame* fr, enviroment* env);
 
 void bc_exception_init() {
 	namespace_* lang = GetLangNamespace();
-	type* exceptionType = NewClass_preload(InternString("Exception"));
+	type* exceptionType = NewPreloadClass(InternString("Exception"));
 	class_* exceptionClass = TYPE2CLASS(exceptionType);
 	AddTypeNamespace(lang, exceptionType);
 	DefineNativeMethodClass(exceptionClass, "nativeInit", bc_exception_nativeInit);
@@ -55,7 +55,7 @@ static void bc_exception_nativeInit(method* parent, frame* fr, enviroment* env) 
 		Vector* args = NewVector();
 		PushVector(args, object_string_new(temp->context_ref->context_ref->filename));
 		PushVector(args, object_int_new(lineno));
-		object* trace = NewClass_instance(
+		object* trace = NewInstanceClass(
 			stackTraceElementClass,
 			//ilctx,
 			fr,

@@ -124,7 +124,7 @@ static void assign_to_field(il_factor_assign_op* self, il_factor* receiver, il_f
 	generic_type* gt = EvalILFactor(receiver, env, cctx);
 	class_* cls = TYPE2CLASS(gt->core_type);
 	int temp = -1;
-	field* f = FindFieldClass_tree(cls, namev, &temp);
+	field* f = FindTreeFieldClass(cls, namev, &temp);
 	assert(temp != -1);
 	GenerateILFactor(receiver, env, cctx);
 	GenerateILFactor(source, env, cctx);
@@ -271,7 +271,7 @@ static void check_final(il_factor* receiver, il_factor* source, string_view name
 	generic_type* gt = EvalILFactor(receiver, env, cctx);
 	class_* cls = TYPE2CLASS(gt->core_type);
 	int temp = -1;
-	field* f = FindFieldClass_tree(cls, namev, &temp);
+	field* f = FindTreeFieldClass(cls, namev, &temp);
 	assert(temp != -1);
 	//コンストラクタ以外の場所では finalフィールドは初期化できない
 	if(cctx->tag != CALL_CTOR_T) {
@@ -326,9 +326,9 @@ static void generate_assign_to_variable_local(il_factor_assign_op* self, envirom
 	//src のような名前がフィールドを示す場合
 	} else if(illoc->type == VARIABLE_LOCAL_FIELD_T) {
 		int temp = -1;
-		field* f = FindFieldClass_tree(GetClassCContext(cctx), illoc->namev, &temp);
+		field* f = FindTreeFieldClass(GetClassCContext(cctx), illoc->namev, &temp);
 		if(temp == -1) {
-			f = FindSFieldClass_tree(GetClassCContext(cctx), illoc->namev, &temp);
+			f = FindTreeSFieldClass(GetClassCContext(cctx), illoc->namev, &temp);
 		}
 		assert(temp != -1);
 		//フィールドはstaticでないが
@@ -350,7 +350,7 @@ static void generate_assign_to_variable_local(il_factor_assign_op* self, envirom
 	//src のような名前がプロパティを示す場合
 	} else if(illoc->type == VARIABLE_LOCAL_PROPERTY_T) {
 		int temp = -1;
-		property* p = FindPropertyClass_tree(GetClassCContext(cctx), illoc->namev, &temp);
+		property* p = FindTreePropertyClass(GetClassCContext(cctx), illoc->namev, &temp);
 		assert(temp != -1);
 		//フィールドはstaticでないが
 		//現在のコンテキストはstaticなので this にアクセスできない

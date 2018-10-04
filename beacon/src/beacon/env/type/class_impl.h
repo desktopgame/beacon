@@ -80,13 +80,13 @@ class_* NewClass(string_view namev);
  * @param namev
  * @return
  */
-class_* NewClass_proxy(struct generic_type* gt, string_view namev);
+class_* NewClassProxy(struct generic_type* gt, string_view namev);
 
 /**
  * 事前に読みこまれる必要があるクラスを作成します.
  * @param namev
  */
-type* NewClass_preload(string_view namev);
+type* NewPreloadClass(string_view namev);
 
 /**
  * 指定のオブジェクトにこのクラスのフィールドを表す
@@ -151,7 +151,7 @@ void DefineNativeMethodClass(class_* self, const char* name, native_impl impl);
  * @param namev
  * @param impl
  */
-void DefineNativeMethodClass_by_ref(class_* self, string_view namev, native_impl impl);
+void DefineNativeMethodByRefClass(class_* self, string_view namev, native_impl impl);
 
 /**
  * super と sub の距離を返します.
@@ -226,7 +226,7 @@ int CountAllSMethodClass(class_* self);
  * @param type_args
  * @return
  */
-struct object* NewClass_instance(class_* self, frame* fr, Vector* args, Vector* type_args);
+struct object* NewInstanceClass(class_* self, frame* fr, Vector* args, Vector* type_args);
 
 /**
  * 全てのメンバーがこのクラスを参照できるようにします.

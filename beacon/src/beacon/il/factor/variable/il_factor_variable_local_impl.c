@@ -118,12 +118,12 @@ static void LoadILVariableLocal_field(il_factor_variable_local * self, enviromen
 #else
 	field_with_index fwi = {};
 #endif
-	field* f = FindFieldClass_tree(TYPE2CLASS(tp), self->namev, &temp);
+	field* f = FindTreeFieldClass(TYPE2CLASS(tp), self->namev, &temp);
 	fwi.fi = f;
 	fwi.index = temp;
 	self->type = VARIABLE_LOCAL_FIELD_T;
 	if(temp == -1) {
-		f = FindSFieldClass_tree(TYPE2CLASS(tp), self->namev, &temp);
+		f = FindTreeSFieldClass(TYPE2CLASS(tp), self->namev, &temp);
 		fwi.fi = f;
 		fwi.index = temp;
 		self->type = VARIABLE_LOCAL_FIELD_T;
@@ -143,9 +143,9 @@ static void LoadILVariableLocal_field(il_factor_variable_local * self, enviromen
 static void LoadILVariableLocal_property(il_factor_variable_local * self, enviroment * env, call_context* cctx) {
 	int temp = -1;
 	type* tp = GetTypeCContext(cctx);
-	property* p = FindPropertyClass_tree(TYPE2CLASS(tp), self->namev, &temp);
+	property* p = FindTreePropertyClass(TYPE2CLASS(tp), self->namev, &temp);
 	if(temp == -1) {
-		p = FindSPropertyClass_tree(TYPE2CLASS(tp), self->namev, &temp);
+		p = FindTreeSPropertyClass(TYPE2CLASS(tp), self->namev, &temp);
 	}
 	if(temp == -1) {
 		ThrowBCError(BCERROR_CAN_T_ACCESS_PROPERTY_T, Ref2Str(GetTypeName(tp)), Ref2Str(self->namev));

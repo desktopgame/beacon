@@ -7,7 +7,7 @@ static void bc_char_nativeToInt(method* parent, frame* fr, enviroment* env);
 
 void bc_char_init() {
 	namespace_* lang = GetLangNamespace();
-	type* charType = NewClass_preload(InternString("Char"));
+	type* charType = NewPreloadClass(InternString("Char"));
 	class_* charClass = TYPE2CLASS(charType);
 	AddTypeNamespace(lang, charType);
 	DefineNativeMethodClass(charClass, "nativeInit", bc_char_nativeInit);

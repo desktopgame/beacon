@@ -13,7 +13,7 @@ static void bc_console_read(method* parent, frame* fr, enviroment* env);
 
 void bc_console_init() {
 	namespace_* lang = GetLangNamespace();
-	type* consoleType = NewClass_preload(InternString("Console"));
+	type* consoleType = NewPreloadClass(InternString("Console"));
 	class_* consoleClass = TYPE2CLASS(consoleType);
 	AddTypeNamespace(lang, consoleType);
 	DefineNativeMethodClass(consoleClass, "writeLine", bc_console_writeLine);

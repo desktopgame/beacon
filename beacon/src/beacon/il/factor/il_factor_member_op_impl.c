@@ -105,7 +105,7 @@ static void il_factor_member_op_check(il_factor_member_op* self, enviroment* env
 	type* ctype = gtype->core_type;
 	assert(ctype->tag == TYPE_CLASS_T);
 	int temp = -1;
-	self->f = FindFieldClass_tree(TYPE2CLASS(ctype), self->namev, &temp);
+	self->f = FindTreeFieldClass(TYPE2CLASS(ctype), self->namev, &temp);
 	self->index = temp;
 	//インスタンスフィールドではない場合プロパティを検索
 	if(temp == -1) {
@@ -136,7 +136,7 @@ static void il_factor_member_op_check_static(il_factor_member_op* self, envirome
 	type* ccT = receiver_type->core_type;
 	assert(ccT->tag == TYPE_CLASS_T);
 	int temp = -1;
-	self->f = FindSFieldClass_tree(TYPE2CLASS(ccT), self->namev, &temp);
+	self->f = FindTreeSFieldClass(TYPE2CLASS(ccT), self->namev, &temp);
 	self->index = temp;
 	if(temp == -1) {
 		il_factor_member_op_check_static_prop(self, env, cctx, receiver_type, swap);
@@ -149,7 +149,7 @@ static void il_factor_member_op_check_prop(il_factor_member_op* self, enviroment
 	const char* name = Ref2Str(self->namev);
 	#endif
 	type* ctype = receiver_type->core_type;
-	property* p = FindPropertyClass_tree(TYPE2CLASS(ctype), self->namev, &temp);
+	property* p = FindTreePropertyClass(TYPE2CLASS(ctype), self->namev, &temp);
 	il_factor_property* factp = il_factor_property_new();
 	factp->fact = self->fact;
 	factp->namev = self->namev;
@@ -175,7 +175,7 @@ static void il_factor_member_op_check_prop(il_factor_member_op* self, enviroment
 static void il_factor_member_op_check_static_prop(il_factor_member_op* self, enviroment* env, call_context* cctx, generic_type* receiver_type,bool* swap) {
 	int temp = -1;
 	type* ctype = receiver_type->core_type;
-	property* p = FindSPropertyClass_tree(TYPE2CLASS(ctype), self->namev, &temp);
+	property* p = FindTreeSPropertyClass(TYPE2CLASS(ctype), self->namev, &temp);
 	il_factor_property* factp = il_factor_property_new();
 	factp->fact = self->fact;
 	factp->namev = self->namev;

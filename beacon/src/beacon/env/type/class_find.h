@@ -20,7 +20,7 @@ struct field* FindFieldClass(class_* self, string_view namev, int* outIndex);
  * @param outIndex
  * @return
  */
-struct field* FindFieldClass_tree(class_* self, string_view namev, int* outIndex);
+struct field* FindTreeFieldClass(class_* self, string_view namev, int* outIndex);
 
 /**
  * 指定の名前を持つ静的フィールドを返します.
@@ -39,7 +39,7 @@ struct field* FindSFieldClass(class_* self, string_view namev, int* outIndex);
  * @param outIndex
  * @return 無ければ NULL
  */
-struct field* FindSFieldClass_tree(class_* self, string_view namev, int* outIndex);
+struct field* FindTreeSFieldClass(class_* self, string_view namev, int* outIndex);
 
 /**
  * 指定位置のフィールドを返します.
@@ -125,7 +125,7 @@ bool IsAccessiblePropertyAccessorClass(class_* self, struct property_body* pb);
  * @param p
  * @return
  */
-int GetFieldClass_by_property(class_* self, struct property* p);
+int GetFieldByPropertyClass(class_* self, struct property* p);
 
 /**
  * @param self
@@ -157,7 +157,7 @@ struct property* FindPropertyClass(class_* self, string_view namev, int* outInde
  * @param outIndex
  * @return
  */
-struct property* FindPropertyClass_tree(class_* self, string_view namev, int* outIndex);
+struct property* FindTreePropertyClass(class_* self, string_view namev, int* outIndex);
 
 /**
  * 指定の名前の静的プロパティを検索します.
@@ -176,7 +176,7 @@ struct property* FindSPropertyClass(class_* self, string_view namev, int* outInd
  * @param outIndex
  * @return
  */
-struct property* FindSPropertyClass_tree(class_* self, string_view namev, int* outIndex);
+struct property* FindTreeSPropertyClass(class_* self, string_view namev, int* outIndex);
 
 
 
