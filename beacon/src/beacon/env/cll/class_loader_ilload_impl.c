@@ -103,7 +103,7 @@ static void class_loader_ilload_enum(class_loader* self, il_namespace* current, 
  */
 static void class_loader_ilload_identifier_list(class_loader* self, Vector* list, ast* asource);
 
-//static il_factor* CLIL_factorImpl(class_loader* self, ast* source);
+//static il_factor* CLILFactorImpl(class_loader* self, ast* source);
 //static il_stmt* class_loader_ilload_bodyImpl(class_loader* self, ast* source);
 
 void ILLoadClassLoader(class_loader* self, ast* source_code) {
@@ -119,7 +119,7 @@ void ILLoadClassLoader(class_loader* self, ast* source_code) {
 			class_loader_ilload_namespace(self, self->il_code->namespace_list, child);
 		//print();
 		} else if (IsStmtAST(child)) {
-			CLIL_body(self, self->il_code->statement_list, child);
+			CLILBody(self, self->il_code->statement_list, child);
 		//def f() { ... }
 		} else if(child->tag == AST_FUNCTION_DECL_T) {
 			class_loader_ilload_function(self, child);
@@ -139,10 +139,10 @@ static void class_loader_ilload_function(class_loader * self, ast * asource) {
 	ast* afunc_body = AtAST(asource, 3);
 	ast* aret_name = AtAST(asource, 4);
 	il_function* ilfunc = NewILFunction(afunc_name->u.stringv_value);
-	CLIL_type_parameter(self, atypeparams, ilfunc->type_parameter_vec);
-	CLIL_parameter_list(self, ilfunc->parameter_list, aparam_list);
-	CLIL_body(self, ilfunc->statement_list, afunc_body);
-	CLIL_generic_cache(aret_name, ilfunc->return_fqcn);
+	CLILTypeParameter(self, atypeparams, ilfunc->type_parameter_vec);
+	CLILParameterList(self, ilfunc->parameter_list, aparam_list);
+	CLILBody(self, ilfunc->statement_list, afunc_body);
+	CLILGenericCache(aret_name, ilfunc->return_fqcn);
 	PushVector(self->il_code->function_list, ilfunc);
 }
 
@@ -252,14 +252,14 @@ static il_class* class_loader_ilload_classImpl(class_loader* self, il_namespace*
 	il_class* ilclassz = NewILClass(atypename->u.stringv_value);
 	il_type* iltype = WrapILClass(ilclassz);
 	//class Foo<A, B>
-	CLIL_type_parameter(self, FirstAST(atypename), ilclassz->GetParameterListType);
+	CLILTypeParameter(self, FirstAST(atypename), ilclassz->GetParameterListType);
 	//class Foo : X, Y 
-	CLIL_typename_list(self, ilclassz->extend_list, aextend_list);
+	CLILTypenameList(self, ilclassz->extend_list, aextend_list);
 	//public:
 	//    ....
 	//    ....
 	if (!IsBlankAST(amember_tree)) {
-		CLIL_member_tree(self, iltype, amember_tree);
+		CLILMemberTree(self, iltype, amember_tree);
 	}
 	PushVector(current->type_list, iltype);
 	return ilclassz;
@@ -272,13 +272,13 @@ static void class_loader_ilload_interface(class_loader* self, il_namespace* curr
 	il_interface* ilinter = NewILInterface(atypename->u.stringv_value);
 	il_type* iltype = WrapILInterface(ilinter);
 	//interface Foo<A, B>
-	CLIL_type_parameter(self, FirstAST(atypename), ilinter->GetParameterListType);
+	CLILTypeParameter(self, FirstAST(atypename), ilinter->GetParameterListType);
 	//interface Foo : XXX, YYY, CCC
-	CLIL_typename_list(self, ilinter->extends_list, aextends_list);
+	CLILTypenameList(self, ilinter->extends_list, aextends_list);
 	//public:
 	//    ...
 	if (!IsBlankAST(amember_tree)) {
-		CLIL_member_tree(self, iltype, amember_tree);
+		CLILMemberTree(self, iltype, amember_tree);
 	}
 	PushVector(current->type_list, iltype);
 }

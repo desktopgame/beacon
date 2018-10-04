@@ -10,5 +10,5 @@ struct il_factor;
  * @param source
  * @return
  */
-struct il_factor* CLIL_factor(struct class_loader* self, struct ast* source);
+struct il_factor* CLILFactor(struct class_loader* self, struct ast* source);
 #endif
