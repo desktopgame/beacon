@@ -55,7 +55,7 @@ method* GFindMethodInterface(interface_* self, string_view namev, Vector* gargs,
 	return meta_gfind_method(self->method_list, namev, gargs, outIndex);
 }
 
-Vector* FlattenMethodInterface_list(Vector* inter_list) {
+Vector* FlattenMethodInterfaceList(Vector* inter_list) {
 	Vector* ret = NewVector();
 	for(int i=0; i<inter_list->length; i++) {
 		interface_* inter = AtVector(inter_list, i);

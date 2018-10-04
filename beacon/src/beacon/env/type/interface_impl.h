@@ -82,7 +82,7 @@ struct method* GFindMethodInterface(interface_* self, string_view namev, Vector*
  * @param inter_list
  * @return
  */
-Vector* FlattenMethodInterface_list(Vector* inter_list);
+Vector* FlattenMethodInterfaceList(Vector* inter_list);
 
 /**
  * あるインターフェイスとそれ自体が実装しているインターフェイスの一覧の
