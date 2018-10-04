@@ -342,6 +342,17 @@ commands = {
     "select" => lambda do
         printf "input selector: "
         selector = STDIN.gets.lstrip.rstrip
+        #複数のワードを含む要素で絞り込みたい場合
+        if selector.start_with?("*") then
+            selector = selector.slice(1, selector.length - 1)
+            patterns = selector.split(" ")
+            data = functions_edits.last
+            patterns.each do |e|
+                data = data.select {|f| f.name.include?(e)}
+            end
+            data.each {|e| puts e}
+            return
+        end
         functions_edits.last.select{|e| e.name.include?(selector)}.each{|e| puts e}
     end,
     "all" => lambda do
