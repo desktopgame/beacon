@@ -41,7 +41,7 @@ ast * NewASTVariable(ast* a, ast* atype_args) {
 	return ret;
 }
 
-ast * NewASTVariable_fromstr(string_view strv, ast* atype_args) {
+ast * NewASTVariableFromString(string_view strv, ast* atype_args) {
 	ast* ret = ast_new(AST_VARIABLE_T);
 	ret->u.stringv_value = strv;
 	PushAST(ret, atype_args);

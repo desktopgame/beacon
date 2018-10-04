@@ -246,7 +246,7 @@ import
 parameterized_typename
 	: IDENT type_parameter_group
 	{
-		$$ = NewASTParameterized_typename($1, $2);
+		$$ = NewASTParameterizedTypename($1, $2);
 	}
 	;
 
@@ -313,11 +313,11 @@ enum_decl
 interface_decl
 	: INTERFACE parameterized_typename LCB access_member_tree_opt RCB
 	{
-		$$ = NewASTInterface_decl($2, NewASTBlank(), $4);
+		$$ = NewASTInterfaceDecl($2, NewASTBlank(), $4);
 	}
 	| INTERFACE parameterized_typename COLON typename_list LCB access_member_tree_opt RCB
 	{
-		$$ = NewASTInterface_decl($2, $4, $6);
+		$$ = NewASTInterfaceDecl($2, $4, $6);
 	}
 	;
 
@@ -333,7 +333,7 @@ access_member_tree
 	: access_member_list
 	| access_member_tree access_member_list
 	{
-		$$ = NewASTAccess_member_tree($1, $2);
+		$$ = NewASTAccessMemberTree($1, $2);
 	}
 	;
 
@@ -1050,13 +1050,13 @@ stmt
 variable_decl_stmt
 	: typename_T IDENT SEMI
 	{
-		$$ = NewASTVariable_decl($1, $2);
+		$$ = NewASTVariableDecl($1, $2);
 	}
 	;
 variable_init_stmt
 	: typename_T IDENT ASSIGN expression stmt_term
 	{
-		$$ = NewASTVariable_init($1, $2, $4);
+		$$ = NewASTVariableInit($1, $2, $4);
 	}
 	;
 inferenced_type_init_stmt
@@ -1072,7 +1072,7 @@ if_stmt
 	}
 	| IF expression scope ELSE scope
 	{
-		$$ = NewASTIf_else($2, $3, $5);
+		$$ = NewASTIfElse($2, $3, $5);
 	}
 	| IF expression scope elif_list
 	{
@@ -1080,7 +1080,7 @@ if_stmt
 	}
 	| IF expression scope elif_list ELSE scope
 	{
-		$$ = NewASTIfElifList_else($2, $3, $4, $6);
+		$$ = NewASTIfElifListElse($2, $3, $4, $6);
 	}
 	;
 elif_list

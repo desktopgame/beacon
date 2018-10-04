@@ -6,7 +6,7 @@
 /**
  * 実行可能な文を表す要素を作成します.
  */
-#define ast_new_stmt(stmt) (MallocAST_stmt(stmt, __FILE__, __LINE__))
+#define ast_new_stmt(stmt) (MallocASTStmt(stmt, __FILE__, __LINE__))
 
 /**
  * 実行可能な文を表す要素を作成します.
@@ -15,7 +15,7 @@
  * @param lineno
  * @return
  */
-ast* MallocAST_stmt(ast* astmt, const char* filename, int lineno);
+ast* MallocASTStmt(ast* astmt, const char* filename, int lineno);
 
 /**
  * 実行可能な文を表す要素を作成します. 
@@ -47,7 +47,7 @@ ast* NewASTElse(ast* abody);
  * @param afalseBody
  * @return
  */
-ast* NewASTIf_else(ast* acond, ast* atrueBody, ast* afalseBody);
+ast* NewASTIfElse(ast* acond, ast* atrueBody, ast* afalseBody);
 
 /**
  * if-elif... を表す要素を作成します.
@@ -66,7 +66,7 @@ ast* NewASTIfElifList(ast* acond, ast* atrueBody, ast* aelifList);
  * @param aelseBody
  * @param
  */
-ast* NewASTIfElifList_else(ast* acond, ast* atrueBody, ast* aelifList, ast* aelseBody);
+ast* NewASTIfElifListElse(ast* acond, ast* atrueBody, ast* aelifList, ast* aelseBody);
 
 /**
  * elif...を表す要素を作成します.
@@ -173,7 +173,7 @@ ast* NewASTFQCN(ast* part_list, string_view class_namev);
 /**
  * 完全修飾クラス名の 1節 を表す要素を作成します.
  */
-#define NewASTFQCN_part(name) (MallocAST_fqcn_part(name, __FILE__, __LINE__))
+#define NewASTFQCN_part(name) (MallocASTFQCNPart(name, __FILE__, __LINE__))
 
 /**
  * 完全修飾クラス名の 1節 を表す要素を作成します.
@@ -182,7 +182,7 @@ ast* NewASTFQCN(ast* part_list, string_view class_namev);
  * @param lineno
  * @return
  */
-ast* MallocAST_fqcn_part(string_view namev, const char* filename, int lineno);
+ast* MallocASTFQCNPart(string_view namev, const char* filename, int lineno);
 
 /**
  * 完全修飾クラス名の名前空間部分(XX::YY::)の一覧を表す要素を作成します.
@@ -198,7 +198,7 @@ ast* NewASTFQCNPartList(ast* part, ast* part_list);
  * @param namev
  * @return
  */
-ast* NewASTVariable_decl(ast* type, string_view namev);
+ast* NewASTVariableDecl(ast* type, string_view namev);
 
 /**
  * X::Y y = new X::Y() のような初期化を表す要素を作成します.
@@ -207,7 +207,7 @@ ast* NewASTVariable_decl(ast* type, string_view namev);
  * @param afact
  * @return
  */
-ast* NewASTVariable_init(ast* type, string_view namev, ast* fact);
+ast* NewASTVariableInit(ast* type, string_view namev, ast* fact);
 
 /**
  * var y = new X::Y() のような初期化を表す要素を作成します.

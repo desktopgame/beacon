@@ -1,6 +1,6 @@
 #include "ast_new_stmt.h"
 
-ast * MallocAST_stmt(ast * astmt, const char* filename, int lineno) {
+ast * MallocASTStmt(ast * astmt, const char* filename, int lineno) {
 	ast* ret = MallocAST(AST_STMT_T, filename, lineno);
 	PushAST(ret, astmt);
 	return ret;
@@ -26,7 +26,7 @@ ast * NewASTElse(ast * abody) {
 	return ret;
 }
 
-ast * NewASTIf_else(ast * acond, ast * atrueBody, ast * afalseBody) {
+ast * NewASTIfElse(ast * acond, ast * atrueBody, ast * afalseBody) {
 	ast* ret = ast_new(AST_IF_ELSE_T);
 	PushAST(ret, NewASTIf(acond, atrueBody));
 	PushAST(ret, NewASTElse(afalseBody));
@@ -40,7 +40,7 @@ ast * NewASTIfElifList(ast * acond, ast * atrueBody, ast * aelifList) {
 	return ret;
 }
 
-ast * NewASTIfElifList_else(ast * acond, ast * atrueBody, ast * aelifList, ast * aelseBody) {
+ast * NewASTIfElifListElse(ast * acond, ast * atrueBody, ast * aelifList, ast * aelseBody) {
 	ast* ret = ast_new(AST_IF_ELIF_LIST_ELSE_T);
 	PushAST(ret, NewASTIfElifList(acond, atrueBody, aelifList));
 	PushAST(ret, NewASTElse(aelseBody));
@@ -139,7 +139,7 @@ ast * NewASTFQCN(ast * apart_list, string_view class_namev) {
 	return ret;
 }
 
-ast* MallocAST_fqcn_part(string_view namev, const char* filename, int lineno) {
+ast* MallocASTFQCNPart(string_view namev, const char* filename, int lineno) {
 	ast* ret = MallocAST(AST_FQCN_PART_T, filename, lineno);
 	ret->u.stringv_value = namev;
 	return ret;
@@ -152,7 +152,7 @@ ast * NewASTFQCNPartList(ast * apart, ast * apart_list) {
 	return ret;
 }
 
-ast * NewASTVariable_decl(ast * atype, string_view namev) {
+ast * NewASTVariableDecl(ast * atype, string_view namev) {
 	ast* ret = ast_new(AST_STMT_VARIABLE_DECL_T);
 	ast* aname = ast_new(AST_IDENTIFIER_T);
 	aname->u.stringv_value = namev;
@@ -161,7 +161,7 @@ ast * NewASTVariable_decl(ast * atype, string_view namev) {
 	return ret;
 }
 
-ast * NewASTVariable_init(ast * atype, string_view namev, ast * afact) {
+ast * NewASTVariableInit(ast * atype, string_view namev, ast * afact) {
 	ast* ret = ast_new(AST_STMT_VARIABLE_INIT_T);
 	ast* aname = ast_new(AST_IDENTIFIER_T);
 	aname->u.stringv_value = namev;

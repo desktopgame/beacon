@@ -2400,7 +2400,7 @@ yyreduce:
   case 26:
 #line 248 "beacon.y" /* yacc.c:1663  */
     {
-		(yyval.ast_value) = NewASTParameterized_typename((yyvsp[-1].stringv_value), (yyvsp[0].ast_value));
+		(yyval.ast_value) = NewASTParameterizedTypename((yyvsp[-1].stringv_value), (yyvsp[0].ast_value));
 	}
 #line 2406 "beacon.tab.c" /* yacc.c:1663  */
     break;
@@ -2496,7 +2496,7 @@ yyreduce:
   case 38:
 #line 315 "beacon.y" /* yacc.c:1663  */
     {
-		(yyval.ast_value) = NewASTInterface_decl((yyvsp[-3].ast_value), NewASTBlank(), (yyvsp[-1].ast_value));
+		(yyval.ast_value) = NewASTInterfaceDecl((yyvsp[-3].ast_value), NewASTBlank(), (yyvsp[-1].ast_value));
 	}
 #line 2502 "beacon.tab.c" /* yacc.c:1663  */
     break;
@@ -2504,7 +2504,7 @@ yyreduce:
   case 39:
 #line 319 "beacon.y" /* yacc.c:1663  */
     {
-		(yyval.ast_value) = NewASTInterface_decl((yyvsp[-5].ast_value), (yyvsp[-3].ast_value), (yyvsp[-1].ast_value));
+		(yyval.ast_value) = NewASTInterfaceDecl((yyvsp[-5].ast_value), (yyvsp[-3].ast_value), (yyvsp[-1].ast_value));
 	}
 #line 2510 "beacon.tab.c" /* yacc.c:1663  */
     break;
@@ -2520,7 +2520,7 @@ yyreduce:
   case 43:
 #line 335 "beacon.y" /* yacc.c:1663  */
     {
-		(yyval.ast_value) = NewASTAccess_member_tree((yyvsp[-1].ast_value), (yyvsp[0].ast_value));
+		(yyval.ast_value) = NewASTAccessMemberTree((yyvsp[-1].ast_value), (yyvsp[0].ast_value));
 	}
 #line 2526 "beacon.tab.c" /* yacc.c:1663  */
     break;
@@ -3696,7 +3696,7 @@ yyreduce:
   case 217:
 #line 1052 "beacon.y" /* yacc.c:1663  */
     {
-		(yyval.ast_value) = NewASTVariable_decl((yyvsp[-2].ast_value), (yyvsp[-1].stringv_value));
+		(yyval.ast_value) = NewASTVariableDecl((yyvsp[-2].ast_value), (yyvsp[-1].stringv_value));
 	}
 #line 3702 "beacon.tab.c" /* yacc.c:1663  */
     break;
@@ -3704,7 +3704,7 @@ yyreduce:
   case 218:
 #line 1058 "beacon.y" /* yacc.c:1663  */
     {
-		(yyval.ast_value) = NewASTVariable_init((yyvsp[-4].ast_value), (yyvsp[-3].stringv_value), (yyvsp[-1].ast_value));
+		(yyval.ast_value) = NewASTVariableInit((yyvsp[-4].ast_value), (yyvsp[-3].stringv_value), (yyvsp[-1].ast_value));
 	}
 #line 3710 "beacon.tab.c" /* yacc.c:1663  */
     break;
@@ -3728,7 +3728,7 @@ yyreduce:
   case 221:
 #line 1074 "beacon.y" /* yacc.c:1663  */
     {
-		(yyval.ast_value) = NewASTIf_else((yyvsp[-3].ast_value), (yyvsp[-2].ast_value), (yyvsp[0].ast_value));
+		(yyval.ast_value) = NewASTIfElse((yyvsp[-3].ast_value), (yyvsp[-2].ast_value), (yyvsp[0].ast_value));
 	}
 #line 3734 "beacon.tab.c" /* yacc.c:1663  */
     break;
@@ -3744,7 +3744,7 @@ yyreduce:
   case 223:
 #line 1082 "beacon.y" /* yacc.c:1663  */
     {
-		(yyval.ast_value) = NewASTIfElifList_else((yyvsp[-4].ast_value), (yyvsp[-3].ast_value), (yyvsp[-2].ast_value), (yyvsp[0].ast_value));
+		(yyval.ast_value) = NewASTIfElifListElse((yyvsp[-4].ast_value), (yyvsp[-3].ast_value), (yyvsp[-2].ast_value), (yyvsp[0].ast_value));
 	}
 #line 3750 "beacon.tab.c" /* yacc.c:1663  */
     break;

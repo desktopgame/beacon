@@ -55,7 +55,7 @@ ast* NewASTClassDecl(ast* aclass_name, ast* aextend_list, ast* amember_list);
  * @param amember_list
  * @return
  */
-ast* NewASTInterface_decl(ast* ainterface_name, ast* asuper_interface_list, ast* amember_list);
+ast* NewASTInterfaceDecl(ast* ainterface_name, ast* asuper_interface_list, ast* amember_list);
 
 /**
  * 列挙宣言を表す要素を作成します.
@@ -78,7 +78,7 @@ ast* NewASTSuperclass(ast* afqcn);
  * @param amember_list
  * @return
  */
-ast* NewASTAccess_member_tree(ast* member_tree, ast* member_list);
+ast* NewASTAccessMemberTree(ast* member_tree, ast* member_list);
 
 /**
  * アクセス修飾子とメンバーの一覧をセットにして返します.
@@ -253,7 +253,7 @@ ast* NewASTTypeParameterList(ast* aparam, ast* alist);
  * @param aparams
  * @return
  */
-ast * NewASTParameterized_typename(string_view namev, ast* aparams);
+ast * NewASTParameterizedTypename(string_view namev, ast* aparams);
 
 /**
  * 型制約の一覧を表す要素を作成します.

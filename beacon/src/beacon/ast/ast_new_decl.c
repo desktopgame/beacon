@@ -37,7 +37,7 @@ ast * NewASTClassDecl(ast* aclass_name, ast* aextend_list, ast* amember_list) {
 	return NewASTClassDeclImpl(aclass_name, aextend_list, amember_list, AST_CLASS_DECL_T);
 }
 
-ast * NewASTInterface_decl(ast* ainterface_name, ast* asuper_interface_list, ast * amember_list) {
+ast * NewASTInterfaceDecl(ast* ainterface_name, ast* asuper_interface_list, ast * amember_list) {
 	ast* ret = ast_new(AST_INTERFACE_DECL);
 	PushAST(ret, ainterface_name);
 	PushAST(ret, asuper_interface_list);
@@ -58,7 +58,7 @@ ast * NewASTSuperclass(ast* afqcn) {
 	return ret;
 }
 
-ast * NewASTAccess_member_tree(ast * amember_tree, ast * amember_list) {
+ast * NewASTAccessMemberTree(ast * amember_tree, ast * amember_list) {
 	ast* ret = ast_new(AST_ACCESS_MEMBER_TREE_T);
 	PushAST(ret, amember_tree);
 	PushAST(ret, amember_list);
@@ -218,7 +218,7 @@ ast * NewASTTypeParameterList(ast* aparam, ast * alist) {
 	return ret;
 }
 
-ast * NewASTParameterized_typename(string_view namev, ast * aparams) {
+ast * NewASTParameterizedTypename(string_view namev, ast * aparams) {
 	ast* ret = ast_new(AST_PARAMETERIZED_TYPENAME_T);
 	ret->u.stringv_value = namev;
 	PushAST(ret, aparams);

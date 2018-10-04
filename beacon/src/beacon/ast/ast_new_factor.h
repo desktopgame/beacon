@@ -58,7 +58,7 @@ ast* NewASTVariable(ast* a, ast* atype_args);
  * @param atype_args
  * @return
  */
-ast* NewASTVariable_fromstr(string_view strv, ast* atype_args);
+ast* NewASTVariableFromString(string_view strv, ast* atype_args);
 
 /**
  * 関数呼び出し演算子を表す要素を作成します.
