@@ -48,11 +48,11 @@ void AddPropertyInterface(interface_* self, property* p) {
 }
 
 method * ILFindMethodInterface(interface_ * self, string_view namev, Vector * args, enviroment * env, call_context* cctx, int * outIndex) {
-	return meta_ilfind_method(self->method_list, namev, args, env,cctx, outIndex);
+	return MetaILFindMethod(self->method_list, namev, args, env,cctx, outIndex);
 }
 
 method* GFindMethodInterface(interface_* self, string_view namev, Vector* gargs, int* outIndex) {
-	return meta_gfind_method(self->method_list, namev, gargs, outIndex);
+	return MetaGFindMethod(self->method_list, namev, gargs, outIndex);
 }
 
 Vector* FlattenMethodInterfaceList(Vector* inter_list) {

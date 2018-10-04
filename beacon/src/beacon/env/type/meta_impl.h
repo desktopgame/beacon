@@ -22,7 +22,7 @@ struct constructor;
  * @param cctx
  * @return
  */
-int meta_ilcalc_score(Vector* params, Vector* ilargs, struct enviroment* env, call_context* cctx);
+int MetaILCalcScore(Vector* params, Vector* ilargs, struct enviroment* env, call_context* cctx);
 
 /**
  * 仮引数と実引数のマッチ率を返します.
@@ -31,7 +31,7 @@ int meta_ilcalc_score(Vector* params, Vector* ilargs, struct enviroment* env, ca
  * @param gargs
  * @return
  */
-int meta_gcalc_score(Vector* params, Vector* gargs);
+int MetaGCalcScore(Vector* params, Vector* gargs);
 
 /**
  * 仮引数と実引数のマッチ率を返します.
@@ -42,7 +42,7 @@ int meta_gcalc_score(Vector* params, Vector* gargs);
  * @param fr
  * @return
  */
-int meta_rcalc_score(Vector* params, Vector* args, Vector* typeargs, struct frame* fr);
+int MetaRCalcScore(Vector* params, Vector* args, Vector* typeargs, struct frame* fr);
 
 /**
  * もっとも一致するメソッドを返します.
@@ -54,7 +54,7 @@ int meta_rcalc_score(Vector* params, Vector* args, Vector* typeargs, struct fram
  * @param outIndex
  * @return
  */
-method* meta_ilfind_method(Vector* method_vec, string_view namev, Vector * ilargs, enviroment * env, call_context* cctx, int * outIndex);
+method* MetaILFindMethod(Vector* method_vec, string_view namev, Vector * ilargs, enviroment * env, call_context* cctx, int * outIndex);
 
 /**
  * もっとも一致するメソッドを返します.
@@ -64,7 +64,7 @@ method* meta_ilfind_method(Vector* method_vec, string_view namev, Vector * ilarg
  * @param outIndex
  * @return
  */
-method* meta_gfind_method(Vector* method_vec, string_view namev, Vector * gargs, int* outIndex);
+method* MetaGFindMethod(Vector* method_vec, string_view namev, Vector * gargs, int* outIndex);
 
 /**
  * スコープに基づく方法でもっとも一致するメソッドを返します.
@@ -77,7 +77,7 @@ method* meta_gfind_method(Vector* method_vec, string_view namev, Vector * gargs,
  * @param outIndex
  * @return
  */
-method* meta_scoped_ilfind_method(struct class_* context, Vector* method_vec, string_view namev, Vector * ilargs, struct enviroment * env, call_context* cctx, int * outIndex);
+method* MetaScopedILFindMethod(struct class_* context, Vector* method_vec, string_view namev, Vector * ilargs, struct enviroment * env, call_context* cctx, int * outIndex);
 /**
  * スコープに基づく方法でもっとも一致するメソッドを返します.
  * @param context
@@ -87,7 +87,7 @@ method* meta_scoped_ilfind_method(struct class_* context, Vector* method_vec, st
  * @param outIndex
  * @return
  */
-method* meta_scoped_gfind_method(struct class_* context, Vector* method_vec, string_view namev, Vector * gargs, int * outIndex);
+method* MetaScopedGFindMethod(struct class_* context, Vector* method_vec, string_view namev, Vector * gargs, int * outIndex);
 
 /**
  * もっとも一致するコンストラクタを返します.
@@ -99,7 +99,7 @@ method* meta_scoped_gfind_method(struct class_* context, Vector* method_vec, str
  * @param outIndex
  * @return
  */
-constructor* meta_ilfind_ctor(Vector* ctor_vec, Vector* ilargs, struct enviroment* env, call_context* cctx, int* outIndex);
+constructor* MetaILFindConstructor(Vector* ctor_vec, Vector* ilargs, struct enviroment* env, call_context* cctx, int* outIndex);
 
 /**
  * もっとも一致するコンストラクタを返します.
@@ -110,7 +110,7 @@ constructor* meta_ilfind_ctor(Vector* ctor_vec, Vector* ilargs, struct enviromen
  * @param outIndex
  * @return
  */
-constructor* meta_rfind_ctor(Vector* ctor_vec, Vector* args, Vector* typeargs, struct frame* fr, int* outIndex);
+constructor* MetaRFindConstructor(Vector* ctor_vec, Vector* args, Vector* typeargs, struct frame* fr, int* outIndex);
 /**
  * スコープに基づく方法でもっとも一致するコンストラクタを返します.
  * @param context
@@ -121,7 +121,7 @@ constructor* meta_rfind_ctor(Vector* ctor_vec, Vector* args, Vector* typeargs, s
  * @param outIndex
  * @return
  */
-constructor* meta_scoped_ilfind_ctor(struct class_* context, Vector* ctor_vec, Vector* ilargs, struct enviroment* env, call_context* cctx, int* outIndex);
+constructor* MetaScopedILFindConstructor(struct class_* context, Vector* ctor_vec, Vector* ilargs, struct enviroment* env, call_context* cctx, int* outIndex);
 /**
  * スコープに基づく方法でもっとも一致するコンストラクタを返します.
  * @param context
@@ -132,7 +132,7 @@ constructor* meta_scoped_ilfind_ctor(struct class_* context, Vector* ctor_vec, V
  * @param outIndex
  * @return
  */
-constructor* meta_scoped_rfind_ctor(struct class_* context, Vector* ctor_vec, Vector* gargs, Vector* typeargs, struct frame* fr, int* outIndex);
+constructor* MetaScopedRFindConstructor(struct class_* context, Vector* ctor_vec, Vector* gargs, Vector* typeargs, struct frame* fr, int* outIndex);
 
 /**
  * 演算子オーバーロードを検索します.
@@ -142,7 +142,7 @@ constructor* meta_scoped_rfind_ctor(struct class_* context, Vector* ctor_vec, Ve
  * @param outIndex
  * @return
  */
-operator_overload* meta_gfind_operator(Vector* opov_vec, operator_type type, Vector* gargs, int* outIndex);
+operator_overload* MetaGFindOperator(Vector* opov_vec, operator_type type, Vector* gargs, int* outIndex);
 
 /**
  * 指定のメソッドが現在のコンテキストで有効なら true.
@@ -150,12 +150,12 @@ operator_overload* meta_gfind_operator(Vector* opov_vec, operator_type type, Vec
  * @param cctx
  * @return
  */
-bool meta_method_access_valid(struct method* m, call_context* cctx);
+bool IsMetaMethodAccessValid(struct method* m, call_context* cctx);
 /**
  * 指定のメソッドが現在のコンテキストで有効なら true.
  * @param m
  * @param cctx
  * @return
  */
-bool meta_ctor_access_valid(struct constructor* ctor, call_context* cctx);
+bool IsMetaConstructorAccessValid(struct constructor* ctor, call_context* cctx);
 #endif // !SIGNAL_ENV_META_H

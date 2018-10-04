@@ -273,14 +273,14 @@ property* FindTreeSPropertyClass(class_* self, string_view namev, int* outIndex)
 
 
 constructor * RFindConstructorClass(class_ * self, Vector * args, Vector* typeargs, frame* fr, int* outIndex) {
-	return meta_scoped_rfind_ctor(self, self->constructor_list, args, typeargs, fr, outIndex);
+	return MetaScopedRFindConstructor(self, self->constructor_list, args, typeargs, fr, outIndex);
 }
 
 constructor * ILFindConstructorClass(class_ * self, Vector * args, enviroment * env, call_context* cctx, int* outIndex) {
 	//	Vector* v = meta_find_constructors(self, args, env, ilctx);
 	//	(*outIndex) = -1;
 	//	return class_find_constructor_impl(v, args, env, ilctx, outIndex);
-	constructor* ctor = meta_scoped_ilfind_ctor(self, self->constructor_list, args, env, cctx, outIndex);
+	constructor* ctor = MetaScopedILFindConstructor(self, self->constructor_list, args, env, cctx, outIndex);
 	return ctor;
 }
 
@@ -301,15 +301,15 @@ method * ILFindMethodClass(class_ * self, string_view namev, Vector * args, envi
 	#endif
 	//assert(self->vt->elements->length > 0);
 	method* ret = NULL;
-	if((ret = meta_scoped_ilfind_method(self, self->vt->elements, namev, args, env, cctx, outIndex))
+	if((ret = MetaScopedILFindMethod(self, self->vt->elements, namev, args, env, cctx, outIndex))
 	   != NULL) {
 		   return ret;
 	}
-	if((ret = meta_scoped_ilfind_method(self, self->method_list, namev, args, env, cctx, outIndex))
+	if((ret = MetaScopedILFindMethod(self, self->method_list, namev, args, env, cctx, outIndex))
 	   != NULL) {
 		   return ret;
 	}
-	if((ret = meta_scoped_ilfind_method(self, self->smethod_list, namev, args, env, cctx, outIndex))
+	if((ret = MetaScopedILFindMethod(self, self->smethod_list, namev, args, env, cctx, outIndex))
 	   != NULL) {
 		   return ret;
 	}
@@ -321,15 +321,15 @@ method* GFindMethodClass(class_* self, string_view namev, Vector* gargs, int* ou
 	CreateVTableClass(self);
 	//assert(self->vt->elements->length > 0);
 	method* ret = NULL;
-	if((ret = meta_scoped_gfind_method(self, self->vt->elements, namev, gargs, outIndex))
+	if((ret = MetaScopedGFindMethod(self, self->vt->elements, namev, gargs, outIndex))
 	   != NULL) {
 		   return ret;
 	}
-	if((ret = meta_scoped_gfind_method(self, self->method_list, namev, gargs, outIndex))
+	if((ret = MetaScopedGFindMethod(self, self->method_list, namev, gargs, outIndex))
 	   != NULL) {
 		   return ret;
 	}
-	if((ret = meta_scoped_gfind_method(self, self->smethod_list, namev, gargs, outIndex))
+	if((ret = MetaScopedGFindMethod(self, self->smethod_list, namev, gargs, outIndex))
 	   != NULL) {
 		   return ret;
 	}
@@ -351,7 +351,7 @@ method * ILFindSMethodClass(class_ * self, string_view namev, Vector * args, env
 	(*outIndex) = -1;
 	CreateVTableClass(self);
 	int temp = 0;
-	method* ret = meta_ilfind_method(self->smethod_list, namev, args, env, cctx, &temp);
+	method* ret = MetaILFindMethod(self->smethod_list, namev, args, env, cctx, &temp);
 //	temp += (CountAllSMethodClass(self) - self->smethod_list->length);
 	(*outIndex) = temp;
 	return ret;
@@ -361,7 +361,7 @@ method* GFindSMethodClass(class_* self, string_view namev, Vector* gargs, int* o
 	(*outIndex) = -1;
 	CreateVTableClass(self);
 	int temp = 0;
-	method* ret = meta_gfind_method(self->smethod_list, namev, gargs, &temp);
+	method* ret = MetaGFindMethod(self->smethod_list, namev, gargs, &temp);
 //	temp += (CountAllSMethodClass(self) - self->smethod_list->length);
 	(*outIndex) = temp;
 	return ret;

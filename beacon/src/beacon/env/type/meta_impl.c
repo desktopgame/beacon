@@ -14,7 +14,7 @@
 #include "../../util/text.h"
 #include <string.h>
 
-int meta_ilcalc_score(Vector* params, Vector* ilargs, enviroment* env, call_context* cctx) {
+int MetaILCalcScore(Vector* params, Vector* ilargs, enviroment* env, call_context* cctx) {
 	assert(params->length == ilargs->length);
 	int score = 0;
 	bool illegal = false;
@@ -52,9 +52,9 @@ int meta_ilcalc_score(Vector* params, Vector* ilargs, enviroment* env, call_cont
 	return score;
 }
 
-int meta_gcalc_score(Vector* params, Vector* gargs) {
+int MetaGCalcScore(Vector* params, Vector* gargs) {
 	assert(params->length == gargs->length);
-	//meta_ilcalc_scoreからのコピペ
+	//MetaILCalcScoreからのコピペ
 	int score = 0;
 	bool illegal = false;
 	//assert(ilctx->type_args_vec->length != 0);
@@ -91,7 +91,7 @@ int meta_gcalc_score(Vector* params, Vector* gargs) {
 	return score;
 }
 
-int meta_rcalc_score(Vector* params, Vector* args, Vector* typeargs, frame* fr) {
+int MetaRCalcScore(Vector* params, Vector* args, Vector* typeargs, frame* fr) {
 	assert(params->length == args->length);
 	int score = 0;
 	bool illegal = false;
@@ -118,15 +118,15 @@ int meta_rcalc_score(Vector* params, Vector* args, Vector* typeargs, frame* fr) 
 	return score;
 }
 
-method * meta_ilfind_method(Vector * method_vec, string_view namev, Vector * ilargs, enviroment * env, call_context* cctx, int * outIndex) {
-	return meta_scoped_ilfind_method(NULL, method_vec, namev, ilargs, env, cctx, outIndex);
+method * MetaILFindMethod(Vector * method_vec, string_view namev, Vector * ilargs, enviroment * env, call_context* cctx, int * outIndex) {
+	return MetaScopedILFindMethod(NULL, method_vec, namev, ilargs, env, cctx, outIndex);
 }
 
-method* meta_gfind_method(Vector* method_vec, string_view namev, Vector * gargs, int* outIndex) {
-	return meta_scoped_gfind_method(NULL, method_vec, namev, gargs, outIndex);
+method* MetaGFindMethod(Vector* method_vec, string_view namev, Vector * gargs, int* outIndex) {
+	return MetaScopedGFindMethod(NULL, method_vec, namev, gargs, outIndex);
 }
 
-method* meta_scoped_ilfind_method(class_* context, Vector* method_vec, string_view namev, Vector * ilargs, enviroment * env, call_context* cctx, int * outIndex) {
+method* MetaScopedILFindMethod(class_* context, Vector* method_vec, string_view namev, Vector * ilargs, enviroment * env, call_context* cctx, int * outIndex) {
 	(*outIndex) = -1;
 	//CreateVTableClass(self);
 	method* ret = NULL;
@@ -135,7 +135,7 @@ method* meta_scoped_ilfind_method(class_* context, Vector* method_vec, string_vi
 	for (int i = 0; i < method_vec->length; i++) {
 		VectorItem ve = AtVector(method_vec, i);
 		method* m = (method*)ve;
-		if(!meta_method_access_valid(m, cctx)) {
+		if(!IsMetaMethodAccessValid(m, cctx)) {
 			continue;
 		}
 		//名前か引数の個数が違うので無視
@@ -150,7 +150,7 @@ method* meta_scoped_ilfind_method(class_* context, Vector* method_vec, string_vi
 			(*outIndex) = i;
 			return m;
 		}
-		int score = meta_ilcalc_score(m->parameters, ilargs, env, cctx);
+		int score = MetaILCalcScore(m->parameters, ilargs, env, cctx);
 		if(score == -1) {
 			continue;
 		}
@@ -163,7 +163,7 @@ method* meta_scoped_ilfind_method(class_* context, Vector* method_vec, string_vi
 	return ret;
 }
 
-method* meta_scoped_gfind_method(class_* context, Vector* method_vec, string_view namev, Vector * gargs, int * outIndex) {
+method* MetaScopedGFindMethod(class_* context, Vector* method_vec, string_view namev, Vector * gargs, int * outIndex) {
 	(*outIndex) = -1;
 	//CreateVTableClass(self);
 	method* ret = NULL;
@@ -184,7 +184,7 @@ method* meta_scoped_gfind_method(class_* context, Vector* method_vec, string_vie
 			(*outIndex) = i;
 			return m;
 		}
-		int score = meta_gcalc_score(m->parameters, gargs);
+		int score = MetaGCalcScore(m->parameters, gargs);
 		if(score == -1) {
 			continue;
 		}
@@ -197,22 +197,22 @@ method* meta_scoped_gfind_method(class_* context, Vector* method_vec, string_vie
 	return ret;
 }
 
-constructor* meta_ilfind_ctor(Vector* ctor_vec, Vector* ilargs, enviroment* env, call_context* cctx, int* outIndex) {
-	return meta_scoped_ilfind_ctor(NULL, ctor_vec, ilargs, env, cctx, outIndex);
+constructor* MetaILFindConstructor(Vector* ctor_vec, Vector* ilargs, enviroment* env, call_context* cctx, int* outIndex) {
+	return MetaScopedILFindConstructor(NULL, ctor_vec, ilargs, env, cctx, outIndex);
 }
 
-constructor* meta_rfind_ctor(Vector* ctor_vec, Vector* args, Vector* typeargs, frame* fr, int* outIndex) {
-	return meta_scoped_rfind_ctor(NULL, ctor_vec, args, typeargs, fr, outIndex);
+constructor* MetaRFindConstructor(Vector* ctor_vec, Vector* args, Vector* typeargs, frame* fr, int* outIndex) {
+	return MetaScopedRFindConstructor(NULL, ctor_vec, args, typeargs, fr, outIndex);
 }
 
-constructor* meta_scoped_ilfind_ctor(class_* context, Vector* ctor_vec, Vector* ilargs, enviroment* env, call_context* cctx, int* outIndex) {
+constructor* MetaScopedILFindConstructor(class_* context, Vector* ctor_vec, Vector* ilargs, enviroment* env, call_context* cctx, int* outIndex) {
 	//見つかった中からもっとも一致するコンストラクタを選択する
 	int min = 1024;
 	constructor* ret = NULL;
 	for (int i = 0; i < ctor_vec->length; i++) {
 		VectorItem ve = AtVector(ctor_vec, i);
 		constructor* ctor = (constructor*)ve;
-		if(!meta_ctor_access_valid(ctor, cctx)) {
+		if(!IsMetaConstructorAccessValid(ctor, cctx)) {
 			continue;
 		}
 		//引数の個数が違うので無視
@@ -226,7 +226,7 @@ constructor* meta_scoped_ilfind_ctor(class_* context, Vector* ctor_vec, Vector* 
 			return ctor;
 		}
 		//もっともスコアの高いメソッドを選択する
-		int score = meta_ilcalc_score(ctor->parameter_list, ilargs, env, cctx);
+		int score = MetaILCalcScore(ctor->parameter_list, ilargs, env, cctx);
 		if(score == -1) {
 			continue;
 		}
@@ -239,7 +239,7 @@ constructor* meta_scoped_ilfind_ctor(class_* context, Vector* ctor_vec, Vector* 
 	return ret;
 }
 
-constructor* meta_scoped_rfind_ctor(class_* context, Vector* ctor_vec, Vector* gargs, Vector* typeargs, frame* fr, int* outIndex) {
+constructor* MetaScopedRFindConstructor(class_* context, Vector* ctor_vec, Vector* gargs, Vector* typeargs, frame* fr, int* outIndex) {
 	//見つかった中からもっとも一致するコンストラクタを選択する
 	int min = 1024;
 	constructor* ret = NULL;
@@ -251,7 +251,7 @@ constructor* meta_scoped_rfind_ctor(class_* context, Vector* ctor_vec, Vector* g
 		if (ctor->parameter_list->length != gargs->length) {
 			continue;
 		}
-		int score = meta_rcalc_score(ctor->parameter_list, gargs, typeargs, fr);
+		int score = MetaRCalcScore(ctor->parameter_list, gargs, typeargs, fr);
 		if (score < min) {
 			min = score;
 			ret = ctor;
@@ -261,7 +261,7 @@ constructor* meta_scoped_rfind_ctor(class_* context, Vector* ctor_vec, Vector* g
 	return ret;
 }
 
-operator_overload* meta_gfind_operator(Vector* opov_vec, operator_type type, Vector* gargs, int* outIndex) {
+operator_overload* MetaGFindOperator(Vector* opov_vec, operator_type type, Vector* gargs, int* outIndex) {
 	(*outIndex) = -1;
 	int min = 1024;
 	operator_overload* ret = NULL;
@@ -275,7 +275,7 @@ operator_overload* meta_gfind_operator(Vector* opov_vec, operator_type type, Vec
 		if(opov->parameter_list->length != gargs->length) {
 			continue;
 		}
-		int score = meta_gcalc_score(opov->parameter_list, gargs);
+		int score = MetaGCalcScore(opov->parameter_list, gargs);
 		if(min == -1) {
 			continue;
 		}
@@ -288,7 +288,7 @@ operator_overload* meta_gfind_operator(Vector* opov_vec, operator_type type, Vec
 	return ret;
 }
 
-bool meta_method_access_valid(method* m, call_context* cctx) {
+bool IsMetaMethodAccessValid(method* m, call_context* cctx) {
 	class_* context = GetClassCContext(cctx);
 	//privateメソッドなのに現在のコンテキストではない
 	if(context != NULL &&
@@ -305,7 +305,7 @@ bool meta_method_access_valid(method* m, call_context* cctx) {
 	return true;
 }
 
-bool meta_ctor_access_valid(constructor* ctor, call_context* cctx) {
+bool IsMetaConstructorAccessValid(constructor* ctor, call_context* cctx) {
 	class_* context = GetClassCContext(cctx);
 	//privateメソッドなのに現在のコンテキストではない
 	if(context != NULL &&
