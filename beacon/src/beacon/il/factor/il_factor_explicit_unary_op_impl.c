@@ -35,7 +35,7 @@ void LoadILExplicitUnaryOp(il_factor_explicit_unary_op* self, enviroment* env, c
 
 generic_type* EvalILExplicitUnaryOp(il_factor_explicit_unary_op* self, enviroment* env, call_context* cctx) {
 	generic_type* gt = EvalILFactor(self->receiver, env, cctx);
-	operator_overload* operator_ov = class_get_operator_overload(TYPE2CLASS(GENERIC2TYPE(gt)), self->index);
+	operator_overload* operator_ov = GetOperatorOverloadClass(TYPE2CLASS(GENERIC2TYPE(gt)), self->index);
 	return operator_ov->return_gtype;
 }
 

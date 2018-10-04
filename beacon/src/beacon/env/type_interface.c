@@ -63,12 +63,12 @@ string_view GetTypeFullName(type* self) {
 
 void AddFieldType(type* self, field * f) {
 	assert(self->tag == TYPE_CLASS_T);
-	class_add_field(self->u.class_, f);
+	AddFieldClass(self->u.class_, f);
 }
 
 void AddPropertyType(type* self, property* p) {
 	if(self->tag == TYPE_CLASS_T) {
-		class_add_property(self->u.class_, p);
+		AddPropertyClass(self->u.class_, p);
 	} else if(self->tag == TYPE_INTERFACE_T) {
 		interface_add_property(self->u.interface_, p);
 	}
@@ -76,7 +76,7 @@ void AddPropertyType(type* self, property* p) {
 
 void AddMethodType(type* self, method * m) {
 	if (self->tag == TYPE_CLASS_T) {
-		class_add_method(self->u.class_, m);
+		AddMethodClass(self->u.class_, m);
 	} else if (self->tag == TYPE_INTERFACE_T) {
 		interface_add_method(self->u.interface_, m);
 	}
@@ -85,7 +85,7 @@ void AddMethodType(type* self, method * m) {
 method * ILFindMethodType(type * self, string_view namev, Vector * args, enviroment * env, call_context* cctx, int * outIndex) {
 	assert(self != NULL);
 	if (self->tag == TYPE_CLASS_T) {
-		return class_ilfind_method(self->u.class_, namev, args, env, cctx, outIndex);
+		return ILFindMethodClass(self->u.class_, namev, args, env, cctx, outIndex);
 	} else if (self->tag == TYPE_INTERFACE_T) {
 		return interface_ilfind_method(self->u.interface_, namev, args, env, cctx, outIndex);
 	}
@@ -94,12 +94,12 @@ method * ILFindMethodType(type * self, string_view namev, Vector * args, envirom
 
 method* ILFindSMethodType(type* self, string_view namev, Vector* args, struct enviroment* env, call_context* cctx, int* outIndex) {
 	assert(self->tag == TYPE_CLASS_T);
-	return class_ilfind_smethod(self->u.class_, namev, args, env, cctx, outIndex);
+	return ILFindSMethodClass(self->u.class_, namev, args, env, cctx, outIndex);
 }
 
 vtable * GetVTableType(type * self) {
 	if (self->tag == TYPE_CLASS_T) {
-		class_create_vtable(self->u.class_);
+		CreateVTableClass(self->u.class_);
 		return self->u.class_->vt;
 	} else if (self->tag == TYPE_INTERFACE_T) {
 		return self->u.interface_->vt;
@@ -118,7 +118,7 @@ int DistanceType(type * super, type * sub) {
 	if (super->tag == TYPE_INTERFACE_T &&
 		sub->tag == TYPE_CLASS_T) {
 		bool found = false;
-		Vector* gimpl_list = class_get_generic_interface_list(TYPE2CLASS(sub));
+		Vector* gimpl_list = GetGenericInterfaceListClass(TYPE2CLASS(sub));
 		for (int i = 0; i < gimpl_list->length; i++) {
 			generic_type* e = (generic_type*)AtVector(gimpl_list, i);
 			if (e->core_type == super) {
@@ -131,7 +131,7 @@ int DistanceType(type * super, type * sub) {
 	}
 	if (super->tag == TYPE_CLASS_T &&
 		sub->tag == TYPE_CLASS_T) {
-		int dist = class_distance(super->u.class_, sub->u.class_);
+		int dist = DistanceClass(super->u.class_, sub->u.class_);
 		return dist;
 	}
 	return -1;
@@ -139,7 +139,7 @@ int DistanceType(type * super, type * sub) {
 
 void UnlinkType(type * self) {
 	if (self->tag == TYPE_CLASS_T) {
-		class_unlink(self->u.class_);
+		UnlinkClass(self->u.class_);
 	} else if (self->tag == TYPE_INTERFACE_T) {
 		interface_unlink(self->u.interface_);
 	}
@@ -227,7 +227,7 @@ generic_type * TypeParameterAtType(type * self, int index) {
 
 void DeleteType(type * self) {
 	if (self->tag == TYPE_CLASS_T) {
-		class_delete(self->u.class_);
+		DeleteClass(self->u.class_);
 	} else if (self->tag == TYPE_INTERFACE_T) {
 		interface_delete(self->u.interface_);
 	}

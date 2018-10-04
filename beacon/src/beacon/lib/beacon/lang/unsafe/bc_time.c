@@ -24,18 +24,18 @@ static void bc_time_nativeGetDayOfYear(method* parent, frame* fr, enviroment* en
 
 void bc_time_init() {
 	namespace_* unsafe = GetUnsafeNamespace();
-	type* timeType = class_new_preload(InternString("Time"));
+	type* timeType = NewClass_preload(InternString("Time"));
 	class_* timeClass = TYPE2CLASS(timeType);
 	AddTypeNamespace(unsafe, timeType);
-	class_define_native_method(timeClass, "nativeRawTime", bc_time_nativeGetRawTime);
-	class_define_native_method(timeClass, "nativeToString", bc_time_nativeToString);
-	class_define_native_method(timeClass, "nativeGetSecond", bc_time_nativeGetSecond);
-	class_define_native_method(timeClass, "nativeGetMinute", bc_time_nativeGetMinute);
-	class_define_native_method(timeClass, "nativeGetHour", bc_time_nativeGetHour);
-	class_define_native_method(timeClass, "nativeGetDay", bc_time_nativeGetDay);
-	class_define_native_method(timeClass, "nativeGetYear", bc_time_nativeGetYear);
-	class_define_native_method(timeClass, "nativeGetDayOfWeek", bc_time_nativeGetDayOfWeek);
-	class_define_native_method(timeClass, "nativeGetDayOfYear", bc_time_nativeGetDayOfYear);
+	DefineNativeMethodClass(timeClass, "nativeRawTime", bc_time_nativeGetRawTime);
+	DefineNativeMethodClass(timeClass, "nativeToString", bc_time_nativeToString);
+	DefineNativeMethodClass(timeClass, "nativeGetSecond", bc_time_nativeGetSecond);
+	DefineNativeMethodClass(timeClass, "nativeGetMinute", bc_time_nativeGetMinute);
+	DefineNativeMethodClass(timeClass, "nativeGetHour", bc_time_nativeGetHour);
+	DefineNativeMethodClass(timeClass, "nativeGetDay", bc_time_nativeGetDay);
+	DefineNativeMethodClass(timeClass, "nativeGetYear", bc_time_nativeGetYear);
+	DefineNativeMethodClass(timeClass, "nativeGetDayOfWeek", bc_time_nativeGetDayOfWeek);
+	DefineNativeMethodClass(timeClass, "nativeGetDayOfYear", bc_time_nativeGetDayOfYear);
 }
 
 type* bc_time_type() {
@@ -53,7 +53,7 @@ static void bc_time_nativeGetRawTime(method* parent, frame* fr, enviroment* env)
 static void bc_time_nativeToString(method* parent, frame* fr, enviroment* env) {
 	object* self = AtVector(fr->ref_stack, 0);
 	int temp;
-	class_find_field(TYPE2CLASS(bc_time_type()), InternString("rawTime"), &temp);
+	FindFieldClass(TYPE2CLASS(bc_time_type()), InternString("rawTime"), &temp);
 	object* rawTime = (object*)AtVector(self->u.field_vec, temp);
 	PushVector(fr->value_stack, object_string_new(ctime(&(rawTime->u.long_))));
 }

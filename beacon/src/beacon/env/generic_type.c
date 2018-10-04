@@ -312,7 +312,7 @@ static int DistanceGenericType_interface(int dist, generic_type* self, generic_t
 	if (other->core_type->tag == TYPE_CLASS_T) {
 		//クラスからインターフェイスを探す
 		generic_type* impl_baseline = NULL;
-		generic_type* impl = class_find_interface_type(TYPE2CLASS(GENERIC2TYPE(other)), (GENERIC2TYPE(self)), &impl_baseline);
+		generic_type* impl = FindInterfaceTypeClass(TYPE2CLASS(GENERIC2TYPE(other)), (GENERIC2TYPE(self)), &impl_baseline);
 		if (impl_baseline == NULL) {
 			impl_baseline = other;
 		}

@@ -15,11 +15,11 @@ static void bc_object_nativeReferenceEquals(method* parent, frame* fr, enviromen
 
 void bc_object_init() {
 	namespace_* lang = GetLangNamespace();
-	type* objectType = class_new_preload(InternString("Object"));
+	type* objectType = NewClass_preload(InternString("Object"));
 	class_* objectClass = TYPE2CLASS(objectType);
 	AddTypeNamespace(lang, objectType);
-	class_define_native_method(objectClass, "nativeToString", bc_object_nativeToString);
-	class_define_native_method(objectClass, "nativeReferenceEquals", bc_object_nativeReferenceEquals);
+	DefineNativeMethodClass(objectClass, "nativeToString", bc_object_nativeToString);
+	DefineNativeMethodClass(objectClass, "nativeReferenceEquals", bc_object_nativeReferenceEquals);
 }
 
 type* bc_object_type() {

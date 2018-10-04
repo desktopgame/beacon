@@ -72,7 +72,7 @@ type* WrapClass(class_* self);
  * @param namev
  * @return
  */
-class_* class_new(string_view namev);
+class_* NewClass(string_view namev);
 
 /**
  * 指定のインターフェイスを実装するクラスを作成します.
@@ -80,13 +80,13 @@ class_* class_new(string_view namev);
  * @param namev
  * @return
  */
-class_* class_new_proxy(struct generic_type* gt, string_view namev);
+class_* NewClass_proxy(struct generic_type* gt, string_view namev);
 
 /**
  * 事前に読みこまれる必要があるクラスを作成します.
  * @param namev
  */
-type* class_new_preload(string_view namev);
+type* NewClass_preload(string_view namev);
 
 /**
  * 指定のオブジェクトにこのクラスのフィールドを表す
@@ -99,7 +99,7 @@ type* class_new_preload(string_view namev);
  * @param o
  * @param fr
  */
-void class_alloc_fields(class_* self, struct object* o, frame* fr);
+void AllocFieldsClass(class_* self, struct object* o, frame* fr);
 
 /**
  * 指定のオブジェクトに追加されたフィールドの一覧を開放します.
@@ -107,35 +107,35 @@ void class_alloc_fields(class_* self, struct object* o, frame* fr);
  * @param self
  * @param o
  */
-void class_free_fields(class_* self, struct object* o);
+void FreeClassFields(class_* self, struct object* o);
 
 /**
  * このクラスにフィールドを追加します.
  * @param self
  * @param f
  */
-void class_add_field(class_* self, struct field* f);
+void AddFieldClass(class_* self, struct field* f);
 
 /**
  * このクラスにプロパティを追加します.
  * @param self
  * @param p
  */
-void class_add_property(class_* self, struct property* p);
+void AddPropertyClass(class_* self, struct property* p);
 
 /**
  * このクラスにメソッドを追加します.
  * @param self
  * @param m
  */
-void class_add_method(class_* self, struct method* m);
+void AddMethodClass(class_* self, struct method* m);
 
 /**
  * このクラスにコンストラクタを追加します.
  * @param self
  * @param c
  */
-void class_add_constructor(class_* self, struct constructor* c);
+void AddConstructorClass(class_* self, struct constructor* c);
 
 /**
  * 指定の名前に対応するネイティブ関数を登録します.
@@ -143,7 +143,7 @@ void class_add_constructor(class_* self, struct constructor* c);
  * @param name
  * @param impl
  */
-void class_define_native_method(class_* self, const char* name, native_impl impl);
+void DefineNativeMethodClass(class_* self, const char* name, native_impl impl);
 
 /**
  * 指定の名前に対応するネイティブ関数を登録します.
@@ -151,7 +151,7 @@ void class_define_native_method(class_* self, const char* name, native_impl impl
  * @param namev
  * @param impl
  */
-void class_define_native_method_by_ref(class_* self, string_view namev, native_impl impl);
+void DefineNativeMethodClass_by_ref(class_* self, string_view namev, native_impl impl);
 
 /**
  * super と sub の距離を返します.
@@ -161,7 +161,7 @@ void class_define_native_method_by_ref(class_* self, string_view namev, native_i
  *         otherがselfのサブクラスなら正の数(階層の深さ)
  *         継承関係が異なるなら -1
  */
-int class_distance(class_* super, class_* sub);
+int DistanceClass(class_* super, class_* sub);
 
 /**
  * このクラスの vtable を、現在のメソッド一覧に基づいて作成します.
@@ -169,53 +169,53 @@ int class_distance(class_* super, class_* sub);
  * また、この関数は全てのメソッドが登録されてから呼び出してさい。
  * @param self
  */
-void class_create_vtable(class_* self);
+void CreateVTableClass(class_* self);
 /**
  * このクラスの operator_Vt を、現在のメソッド一覧に基づいて作成します.
  * @param self
  */
-void class_create_operator_vt(class_* self);
+void CreateOperatorVTClass(class_* self);
 
 /**
  * このクラスとその親全てに定義されたフィールドの合計を返します.
  * @param self
  * @return
  */
-int class_count_fieldall(class_* self);
+int CountAllFieldClass(class_* self);
 
 /**
  * このクラスとその親全てに定義された静的フィールドの合計を返します.
  * @param self
  * @return
  */
-int class_count_sfieldall(class_* self);
+int CountAllSFieldClass(class_* self);
 
 /**
  * このクラスとその親全てに定義されたプロパティの合計を返します.
  * @return
  */
-int class_count_propertyall(class_* self);
+int CountAllPropertyClass(class_* self);
 
 /**
  * このクラスとその親全てに定義された静的プロパティの合計を返します.
  * @param self
  * @return
  */
-int class_count_spropertyall(class_* self);
+int CountAllSPropertyClass(class_* self);
 
 /**
  * このクラスとその親全てに定義されたメソッドの合計を返します.
  * @param self
  * @return
  */
-int class_count_methodall(class_* self);
+int CountAllMethodClass(class_* self);
 
 /**
  * このクラスとその親全てに定義されたメソッドの合計を返します.
  * @param self
  * @return
  */
-int class_count_smethodall(class_* self);
+int CountAllSMethodClass(class_* self);
 
 /**
  * @param self
@@ -226,24 +226,24 @@ int class_count_smethodall(class_* self);
  * @param type_args
  * @return
  */
-struct object* class_new_instance(class_* self, frame* fr, Vector* args, Vector* type_args);
+struct object* NewClass_instance(class_* self, frame* fr, Vector* args, Vector* type_args);
 
 /**
  * 全てのメンバーがこのクラスを参照できるようにします.
  * @param self
  */
-void class_linkall(class_* self);
+void LinkAllClass(class_* self);
 
 /**
  * 型情報を残してメソッドやフィールドなどのみを開放します.
  * @param self
  */
-void class_unlink(class_* self);
+void UnlinkClass(class_* self);
 
 /**
  * このクラスを開放します.
  * ただし先にこのクラスを参照するサブクラスを開放する必要があります。
  * @param self
  */
-void class_delete(class_* self);
+void DeleteClass(class_* self);
 #endif // !SIGNAL_ENV_CLASS_H

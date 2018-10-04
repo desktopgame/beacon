@@ -22,26 +22,26 @@ static void bc_int_nativeToChar(method* parent, frame* fr, enviroment* env);
 
 void bc_int_init() {
 	namespace_* lang =  GetLangNamespace();
-	type* intType = class_new_preload(InternString("Int"));
+	type* intType = NewClass_preload(InternString("Int"));
 	class_* intClass = TYPE2CLASS(intType);
 	AddTypeNamespace(lang, intType);
-	class_define_native_method(intClass, "nativeInit", bc_int_nativeInit);
-	class_define_native_method(intClass, "nativeEquals", bc_int_nativeEquals);
-	class_define_native_method(intClass, "nativeAdd", bc_int_nativeAdd);
-	class_define_native_method(intClass, "nativeSub", bc_int_nativeSub);
-	class_define_native_method(intClass, "nativeMul", bc_int_nativeMul);
-	class_define_native_method(intClass, "nativeDiv", bc_int_nativeDiv);
-	class_define_native_method(intClass, "nativeMod", bc_int_nativeMod);
-	class_define_native_method(intClass, "nativeLShift", bc_int_nativeLShift);
-	class_define_native_method(intClass, "nativeRShift", bc_int_nativeRShift);
-	class_define_native_method(intClass, "nativeGT", bc_int_nativeGT);
-	class_define_native_method(intClass, "nativeGE", bc_int_nativeGE);
-	class_define_native_method(intClass, "nativeLT", bc_int_nativeLT);
-	class_define_native_method(intClass, "nativeLE", bc_int_nativeLE);
-	class_define_native_method(intClass, "nativeBitOr", bc_int_nativeBitOr);
-	class_define_native_method(intClass, "nativeBitAnd", bc_int_nativeBitAnd);
-	class_define_native_method(intClass, "nativeEQ", bc_int_nativeEQ);
-	class_define_native_method(intClass, "nativeToChar", bc_int_nativeToChar);
+	DefineNativeMethodClass(intClass, "nativeInit", bc_int_nativeInit);
+	DefineNativeMethodClass(intClass, "nativeEquals", bc_int_nativeEquals);
+	DefineNativeMethodClass(intClass, "nativeAdd", bc_int_nativeAdd);
+	DefineNativeMethodClass(intClass, "nativeSub", bc_int_nativeSub);
+	DefineNativeMethodClass(intClass, "nativeMul", bc_int_nativeMul);
+	DefineNativeMethodClass(intClass, "nativeDiv", bc_int_nativeDiv);
+	DefineNativeMethodClass(intClass, "nativeMod", bc_int_nativeMod);
+	DefineNativeMethodClass(intClass, "nativeLShift", bc_int_nativeLShift);
+	DefineNativeMethodClass(intClass, "nativeRShift", bc_int_nativeRShift);
+	DefineNativeMethodClass(intClass, "nativeGT", bc_int_nativeGT);
+	DefineNativeMethodClass(intClass, "nativeGE", bc_int_nativeGE);
+	DefineNativeMethodClass(intClass, "nativeLT", bc_int_nativeLT);
+	DefineNativeMethodClass(intClass, "nativeLE", bc_int_nativeLE);
+	DefineNativeMethodClass(intClass, "nativeBitOr", bc_int_nativeBitOr);
+	DefineNativeMethodClass(intClass, "nativeBitAnd", bc_int_nativeBitAnd);
+	DefineNativeMethodClass(intClass, "nativeEQ", bc_int_nativeEQ);
+	DefineNativeMethodClass(intClass, "nativeToChar", bc_int_nativeToChar);
 }
 
 type* bc_int_type() {

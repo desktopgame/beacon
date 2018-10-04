@@ -234,15 +234,15 @@ type* CreateIteratorTypeFromMethod(method* self,  class_loader* cll, Vector* stm
 	type* iterT = FindTypeFromNamespace(GetLangNamespace(), InternString("Iterator"));
 	//イテレータの実装クラスを登録
 	generic_type* iterImplGT = ApplyGenericType(self->return_gtype, lCctx);
-	class_* iterImplC = class_new_proxy(iterImplGT, iterName);
+	class_* iterImplC = NewClass_proxy(iterImplGT, iterName);
 	type* iterImplT = WrapClass(iterImplC);
 	AddTypeNamespace(GetPlaceholderNamespace(), iterImplT);
 	InitGenericSelf(iterImplT, 0);
 	//イテレータのコンストラクタ追加
 	int op_len = 0;
-	class_add_method(iterImplC, create_has_next(self,  iterImplT, cll, stmt_list, &op_len));
-	class_add_method(iterImplC, create_next(self, iterImplT, cll, AtVector(self->return_gtype->type_args_list, 0), stmt_list, &op_len));
-	class_add_constructor(iterImplC, create_delegate_ctor(self, iterImplT, cll, op_len));
+	AddMethodClass(iterImplC, create_has_next(self,  iterImplT, cll, stmt_list, &op_len));
+	AddMethodClass(iterImplC, create_next(self, iterImplT, cll, AtVector(self->return_gtype->type_args_list, 0), stmt_list, &op_len));
+	AddConstructorClass(iterImplC, create_delegate_ctor(self, iterImplT, cll, op_len));
 	PopCallContext(lCctx);
 	DeleteCallContext(lCctx);
 	return iterImplT;

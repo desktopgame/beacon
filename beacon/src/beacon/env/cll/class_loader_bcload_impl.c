@@ -178,7 +178,7 @@ static void CLBC_enum(class_loader * self, il_type * iltype, namespace_ * parent
 		//virtual_type_nongeneric_init(&f->vtype, GENERIC_INT);
 		f->parent = tp;
 		//f->static_value->paint = PAINT_MARKED_T;
-		class_add_field(cls, f);
+		AddFieldClass(cls, f);
 	}
 	//宣言のロードを予約
 	type_cache* tc = InitTypeCache(
@@ -297,7 +297,7 @@ static type* CLBC_get_or_load_enum(namespace_* parent, il_type* iltype) {
 	class_* outClass = NULL;
 	type* tp = FindTypeFromNamespace(parent, iltype->u.enum_->namev);
 	if (tp == NULL) {
-		outClass = class_new(iltype->u.enum_->namev);
+		outClass = NewClass(iltype->u.enum_->namev);
 		outClass->location = parent;
 		tp = WrapClass(outClass);
 		AddTypeNamespace(parent, tp);
@@ -312,7 +312,7 @@ static type* CLBC_get_or_load_class(class_loader* self, namespace_* parent, il_t
 	class_* outClass = NULL;
 	//取得できなかった
 	if (tp == NULL) {
-		outClass = class_new(iltype->u.class_->namev);
+		outClass = NewClass(iltype->u.class_->namev);
 		tp = WrapClass(outClass);
 		CLBC_register_class(self, parent, iltype, tp, outClass);
 		CL_ERROR_RET(self, tp);

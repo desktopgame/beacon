@@ -16,20 +16,20 @@ static void bc_double_nativeEQ(method* parent, frame* fr, enviroment* env);
 
 void bc_double_init() {
 	namespace_* lang = GetLangNamespace();
-	type* doubleType = class_new_preload(InternString("Double"));
+	type* doubleType = NewClass_preload(InternString("Double"));
 	class_* doubleClass = TYPE2CLASS(doubleType);
 	AddTypeNamespace(lang, doubleType);
-	class_define_native_method(doubleClass, "nativeInit", bc_double_nativeInit);
-	class_define_native_method(doubleClass, "nativeEquals", bc_double_nativeEquals);
-	class_define_native_method(doubleClass, "nativeAdd", bc_double_nativeAdd);
-	class_define_native_method(doubleClass, "nativeSub", bc_double_nativeSub);
-	class_define_native_method(doubleClass, "nativeMul", bc_double_nativeMul);
-	class_define_native_method(doubleClass, "nativeDiv", bc_double_nativeDiv);
-	class_define_native_method(doubleClass, "nativeGT", bc_double_nativeGT);
-	class_define_native_method(doubleClass, "nativeGE", bc_double_nativeGE);
-	class_define_native_method(doubleClass, "nativeLT", bc_double_nativeLT);
-	class_define_native_method(doubleClass, "nativeLE", bc_double_nativeLE);
-	class_define_native_method(doubleClass, "nativeEQ", bc_double_nativeEQ);
+	DefineNativeMethodClass(doubleClass, "nativeInit", bc_double_nativeInit);
+	DefineNativeMethodClass(doubleClass, "nativeEquals", bc_double_nativeEquals);
+	DefineNativeMethodClass(doubleClass, "nativeAdd", bc_double_nativeAdd);
+	DefineNativeMethodClass(doubleClass, "nativeSub", bc_double_nativeSub);
+	DefineNativeMethodClass(doubleClass, "nativeMul", bc_double_nativeMul);
+	DefineNativeMethodClass(doubleClass, "nativeDiv", bc_double_nativeDiv);
+	DefineNativeMethodClass(doubleClass, "nativeGT", bc_double_nativeGT);
+	DefineNativeMethodClass(doubleClass, "nativeGE", bc_double_nativeGE);
+	DefineNativeMethodClass(doubleClass, "nativeLT", bc_double_nativeLT);
+	DefineNativeMethodClass(doubleClass, "nativeLE", bc_double_nativeLE);
+	DefineNativeMethodClass(doubleClass, "nativeEQ", bc_double_nativeEQ);
 }
 
 type* bc_double_type() {

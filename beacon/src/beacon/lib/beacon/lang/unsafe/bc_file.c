@@ -22,17 +22,17 @@ static object* file_new(FILE* fp, bool std);
 
 void bc_file_init() {
 	namespace_* unsafe = GetUnsafeNamespace();
-	type* fileType = class_new_preload(InternString("File"));
+	type* fileType = NewClass_preload(InternString("File"));
 	class_* fileClass = TYPE2CLASS(fileType);
 	AddTypeNamespace(unsafe, fileType);
-	class_define_native_method(fileClass, "nativeOpen", bc_file_nativeOpen);
-	class_define_native_method(fileClass, "nativePut", bc_file_nativePut);
-	class_define_native_method(fileClass, "nativeGet", bc_file_nativeGet);
-	class_define_native_method(fileClass, "nativeAvailable", bc_file_nativeAvailable);
-	class_define_native_method(fileClass, "nativeGetStdIn", bc_file_nativeGetStdIn);
-	class_define_native_method(fileClass, "nativeGetStdOut", bc_file_nativeGetStdOut);
-	class_define_native_method(fileClass, "nativeGetStdErr", bc_file_nativeGetStdErr);
-	class_define_native_method(fileClass, "nativeClose", bc_file_nativeClose);
+	DefineNativeMethodClass(fileClass, "nativeOpen", bc_file_nativeOpen);
+	DefineNativeMethodClass(fileClass, "nativePut", bc_file_nativePut);
+	DefineNativeMethodClass(fileClass, "nativeGet", bc_file_nativeGet);
+	DefineNativeMethodClass(fileClass, "nativeAvailable", bc_file_nativeAvailable);
+	DefineNativeMethodClass(fileClass, "nativeGetStdIn", bc_file_nativeGetStdIn);
+	DefineNativeMethodClass(fileClass, "nativeGetStdOut", bc_file_nativeGetStdOut);
+	DefineNativeMethodClass(fileClass, "nativeGetStdErr", bc_file_nativeGetStdErr);
+	DefineNativeMethodClass(fileClass, "nativeClose", bc_file_nativeClose);
 }
 
 type* bc_file_type() {

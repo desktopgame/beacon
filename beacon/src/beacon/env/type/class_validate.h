@@ -14,7 +14,7 @@ struct constructor;
  * @param out
  * @return
  */
-bool class_interface_method_implement_valid(struct class_* cls, struct method** out);
+bool IsImplementInterfaceMethodValidClass(struct class_* cls, struct method** out);
 /**
  * クラスが全てのプロパティを正しく実装しているなら true.
  * インターフェイスを一つも持っていないなら 常にtrue です。
@@ -22,7 +22,7 @@ bool class_interface_method_implement_valid(struct class_* cls, struct method** 
  * @param out
  * @return
  */
-bool class_interface_property_implement_valid(struct class_* cls, struct property** out);
+bool IsImplementInterfacePropertyValidClass(struct class_* cls, struct property** out);
 
 /**
  * クラスが親の抽象メソッドを正しく実装しているなら true.
@@ -31,7 +31,7 @@ bool class_interface_property_implement_valid(struct class_* cls, struct propert
  * @param out
  * @return
  */
-bool class_abstract_class_implement_valid(struct class_* cls, struct method** out);
+bool IsImplementAbstractClassValidClass(struct class_* cls, struct method** out);
 
 /**
  * クラスのフィールド名のうち重複するものがないなら true.
@@ -40,7 +40,7 @@ bool class_abstract_class_implement_valid(struct class_* cls, struct method** ou
  * @param out
  * @return
  */
-bool class_field_valid(struct class_* cls, struct field** out);
+bool IsValidFieldClass(struct class_* cls, struct field** out);
 
 /**
  * クラスのプロパティ名のうち重複するものがないなら true.
@@ -48,7 +48,7 @@ bool class_field_valid(struct class_* cls, struct field** out);
  * @param out
  * @return
  */
-bool class_property_valid(struct class_* self, struct property** out);
+bool IsValidPropertyClass(struct class_* self, struct property** out);
 
 /**
  * 全てのメソッドを巡回して、全てにおいてパラメータ名の重複がないなら true.
@@ -57,7 +57,7 @@ bool class_property_valid(struct class_* self, struct property** out);
  * @param out_name
  * @return
  */
-bool class_method_parameter_valid(struct class_* cls, struct method** out_method, string_view* out_name);
+bool IsMethodParameterValidClass(struct class_* cls, struct method** out_method, string_view* out_name);
 
 /**
  * 全てのコンストラクタを巡回して、全てにおいてパラメータ名の重複がないなら true.
@@ -66,7 +66,7 @@ bool class_method_parameter_valid(struct class_* cls, struct method** out_method
  * @param out_name
  * @return
  */
-bool class_ctor_parameter_valid(struct class_* self, struct constructor** out_ctor, string_view* out_name);
+bool IsConstructorParameterValidClass(struct class_* self, struct constructor** out_ctor, string_view* out_name);
 
 /**
  * クラスの型変数に重複する名前がないなら true.
@@ -74,7 +74,7 @@ bool class_ctor_parameter_valid(struct class_* self, struct constructor** out_ct
  * @param out_name
  * @return
  */
-bool class_type_type_parameter_valid(struct class_* self, string_view* out_name);
+bool IsTypeParameterValidClass(struct class_* self, string_view* out_name);
 
 /**
  * メソッドの型変数に重複するものがないなら true.
@@ -83,5 +83,5 @@ bool class_type_type_parameter_valid(struct class_* self, string_view* out_name)
  * @param out_name
  * @return
  */
-bool class_method_type_parameter_valid(struct class_* self, struct method** out_method, string_view* out_name);
+bool IsMethodTypeParameterValidClass(struct class_* self, struct method** out_method, string_view* out_name);
 #endif

@@ -118,12 +118,12 @@ static void LoadILVariableLocal_field(il_factor_variable_local * self, enviromen
 #else
 	field_with_index fwi = {};
 #endif
-	field* f = class_find_field_tree(TYPE2CLASS(tp), self->namev, &temp);
+	field* f = FindFieldClass_tree(TYPE2CLASS(tp), self->namev, &temp);
 	fwi.fi = f;
 	fwi.index = temp;
 	self->type = VARIABLE_LOCAL_FIELD_T;
 	if(temp == -1) {
-		f = class_find_sfield_tree(TYPE2CLASS(tp), self->namev, &temp);
+		f = FindSFieldClass_tree(TYPE2CLASS(tp), self->namev, &temp);
 		fwi.fi = f;
 		fwi.index = temp;
 		self->type = VARIABLE_LOCAL_FIELD_T;
@@ -133,7 +133,7 @@ static void LoadILVariableLocal_field(il_factor_variable_local * self, enviromen
 		LoadILVariableLocal_property(self, env, cctx);
 		return;
 	//フィールドが見つかったなら可視性を確認する
-	} else if(!class_accessible_field(GetClassCContext(cctx), f)) {
+	} else if(!IsAccessibleFieldClass(GetClassCContext(cctx), f)) {
 		ThrowBCError(BCERROR_CAN_T_ACCESS_FIELD_T, Ref2Str(GetClassCContext(cctx)->namev), Ref2Str(f->namev));
 		return;
 	}
@@ -143,9 +143,9 @@ static void LoadILVariableLocal_field(il_factor_variable_local * self, enviromen
 static void LoadILVariableLocal_property(il_factor_variable_local * self, enviroment * env, call_context* cctx) {
 	int temp = -1;
 	type* tp = GetTypeCContext(cctx);
-	property* p = class_find_property_tree(TYPE2CLASS(tp), self->namev, &temp);
+	property* p = FindPropertyClass_tree(TYPE2CLASS(tp), self->namev, &temp);
 	if(temp == -1) {
-		p = class_find_sproperty_tree(TYPE2CLASS(tp), self->namev, &temp);
+		p = FindSPropertyClass_tree(TYPE2CLASS(tp), self->namev, &temp);
 	}
 	if(temp == -1) {
 		ThrowBCError(BCERROR_CAN_T_ACCESS_PROPERTY_T, Ref2Str(GetTypeName(tp)), Ref2Str(self->namev));
@@ -161,7 +161,7 @@ static void LoadILVariableLocal_property(il_factor_variable_local * self, enviro
 	self->type = VARIABLE_LOCAL_PROPERTY_T;
 	self->u.p_with_i = pwi;
 	//プロパティにアクセスできない
-	if(!class_accessible_property(TYPE2CLASS(tp), p)) {
+	if(!IsAccessiblePropertyClass(TYPE2CLASS(tp), p)) {
 		ThrowBCError(BCERROR_CAN_T_ACCESS_PROPERTY_T, Ref2Str(GetTypeName(tp)), Ref2Str(p->namev));
 	}
 	set_gtype(self, p->gtype);

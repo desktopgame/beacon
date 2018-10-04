@@ -32,9 +32,9 @@
 #endif
 
 //private
-static void class_create_vtable_top(class_* self);
-static void class_create_vtable_override(class_* self);
-static void class_create_vtable_interface(class_* self);
+static void CreateVTableClass_top(class_* self);
+static void CreateVTableClass_override(class_* self);
+static void CreateVTableClass_interface(class_* self);
 static void class_impl_delete(VectorItem item);
 static void class_DeleteField(VectorItem item);
 static void class_DeleteMethod(VectorItem item);
@@ -44,8 +44,8 @@ static method* class_find_impl_method(class_* self, method* virtualMethod);
 static void class_vtable_vec_delete(VectorItem item);
 static void class_DeleteTypeParameter(VectorItem item);
 static void class_generic_type_list_delete(VectorItem item);
-static void class_delete_operator_overload(VectorItem item);
-static void class_delete_property(VectorItem item);
+static void DeleteClass_operator_overload(VectorItem item);
+static void DeleteClass_property(VectorItem item);
 
 type * WrapClass(class_ * self) {
 	type* ret = NewType();
@@ -55,7 +55,7 @@ type * WrapClass(class_ * self) {
 	return ret;
 }
 
-class_ * class_new(string_view namev) {
+class_ * NewClass(string_view namev) {
 	class_* ret = (class_*)MEM_MALLOC(sizeof(class_));
 	ret->namev = namev;
 	ret->parent = NULL;
@@ -80,16 +80,16 @@ class_ * class_new(string_view namev) {
 	return ret;
 }
 
-class_* class_new_proxy(generic_type* gt, string_view namev) {
+class_* NewClass_proxy(generic_type* gt, string_view namev) {
 	assert(gt->core_type->tag == TYPE_INTERFACE_T);
-	class_* ret = class_new(namev);
+	class_* ret = NewClass(namev);
 	ret->super_class = GENERIC_OBJECT;
 	PushVector(ret->impl_list, gt);
 	return ret;
 }
 
-type* class_new_preload(string_view namev) {
-	class_* cl = class_new(namev);
+type* NewClass_preload(string_view namev) {
+	class_* cl = NewClass(namev);
 	type* tp = WrapClass(cl);
 	tp->state = TYPE_PENDING;
 	if (TYPE_OBJECT == NULL) {
@@ -103,7 +103,7 @@ type* class_new_preload(string_view namev) {
 	return tp;
 }
 
-void class_alloc_fields(class_ * self, object * o, frame* fr) {
+void AllocFieldsClass(class_ * self, object * o, frame* fr) {
 	assert(o->tag == OBJECT_REF_T);
 	heap* he = GetHeap();
 	for (int i = 0; i < self->field_list->length; i++) {
@@ -130,10 +130,10 @@ void class_alloc_fields(class_ * self, object * o, frame* fr) {
 	}
 }
 
-void class_free_fields(class_ * self, object * o) {
+void FreeClassFields(class_ * self, object * o) {
 }
 
-void class_add_field(class_ * self, field * f) {
+void AddFieldClass(class_ * self, field * f) {
 	assert(f != NULL);
 	if (IsStaticModifier(f->modifier)) {
 		PushVector(self->sfield_list, f);
@@ -142,7 +142,7 @@ void class_add_field(class_ * self, field * f) {
 	}
 }
 
-void class_add_property(class_* self, property* p) {
+void AddPropertyClass(class_* self, property* p) {
 	if (IsStaticModifier(p->modifier)) {
 		PushVector(self->sprop_list, p);
 	} else {
@@ -161,11 +161,11 @@ void class_add_property(class_* self, property* p) {
 		f->parent = self->parent;
 		f->static_value = GetNullObject();
 		p->source_ref = f;
-		class_add_field(self, f);
+		AddFieldClass(self, f);
 	}
 }
 
-void class_add_method(class_ * self, method * m) {
+void AddMethodClass(class_ * self, method * m) {
 	assert(m != NULL);
 	if (IsStaticModifier(m->modifier)) {
 		PushVector(self->smethod_list, m);
@@ -174,20 +174,20 @@ void class_add_method(class_ * self, method * m) {
 	}
 }
 
-void class_add_constructor(class_ * self, constructor * c) {
+void AddConstructorClass(class_ * self, constructor * c) {
 	PushVector(self->constructor_list, c);
 }
 
-void class_define_native_method(class_* self, const char* name, native_impl impl) {
-	class_define_native_method_by_ref(self, InternString(name), impl);
+void DefineNativeMethodClass(class_* self, const char* name, native_impl impl) {
+	DefineNativeMethodClass_by_ref(self, InternString(name), impl);
 }
 
-void class_define_native_method_by_ref(class_ * self, string_view namev, native_impl impl) {
+void DefineNativeMethodClass_by_ref(class_ * self, string_view namev, native_impl impl) {
 	native_method_ref* ref = NewNativeMethodRef(impl);
 	PutNumericMap(self->native_method_ref_nmap, namev, ref);
 }
 
-int class_distance(class_ * super, class_ * sub) {
+int DistanceClass(class_ * super, class_ * sub) {
 	if (super == sub) {
 		return 0;
 	}
@@ -212,7 +212,7 @@ int class_distance(class_ * super, class_ * sub) {
 	return depth;
 }
 
-void class_create_vtable(class_ * self) {
+void CreateVTableClass(class_ * self) {
 	//TEST(!strcmp(self->name, "Int"));
 	#if defined(DEBUG)
 	const char* str = Ref2Str(self->namev);
@@ -225,22 +225,22 @@ void class_create_vtable(class_ * self) {
 	self->vt = NewVTable();
 	//トップレベルではメソッドの一覧を配列に入れるだけ
 	if (self->super_class == NULL) {
-		class_create_vtable_top(self);
+		CreateVTableClass_top(self);
 	//あるクラスを継承する場合には、
 	//重複するメソッドを上書きするように
 	} else {
-		class_create_vtable_override(self);
+		CreateVTableClass_override(self);
 	}
-	class_create_vtable_interface(self);
+	CreateVTableClass_interface(self);
 	assert(self->vt->elements->length != 0);
 }
 
-void class_create_operator_vt(class_* self) {
+void CreateOperatorVTClass(class_* self) {
 	if(self->ovt != NULL) {
 		return;
 	}
 	if(self->super_class != NULL) {
-		class_create_operator_vt(TYPE2CLASS(GENERIC2TYPE(self->super_class)));
+		CreateOperatorVTClass(TYPE2CLASS(GENERIC2TYPE(self->super_class)));
 	}
 	self->ovt = NewOperatorVt();
 	if(self->super_class == NULL) {
@@ -261,7 +261,7 @@ void class_create_operator_vt(class_* self) {
 	}
 }
 
-int class_count_fieldall(class_ * self) {
+int CountAllFieldClass(class_ * self) {
 	class_* pt = self;
 	int sum = 0;
 	do {
@@ -274,7 +274,7 @@ int class_count_fieldall(class_ * self) {
 	return sum;
 }
 
-int class_count_sfieldall(class_ * self) {
+int CountAllSFieldClass(class_ * self) {
 	class_* pt = self;
 	int sum = 0;
 	do {
@@ -287,7 +287,7 @@ int class_count_sfieldall(class_ * self) {
 	return sum;
 }
 
-int class_count_propertyall(class_* self) {
+int CountAllPropertyClass(class_* self) {
 	class_* pt = self;
 	int sum = 0;
 	do {
@@ -300,7 +300,7 @@ int class_count_propertyall(class_* self) {
 	return sum;
 }
 
-int class_count_spropertyall(class_* self) {
+int CountAllSPropertyClass(class_* self) {
 	class_* pt = self;
 	int sum = 0;
 	do {
@@ -313,7 +313,7 @@ int class_count_spropertyall(class_* self) {
 	return sum;
 }
 
-int class_count_methodall(class_ * self) {
+int CountAllMethodClass(class_ * self) {
 	class_* pt = self;
 	int sum = 0;
 	do {
@@ -326,7 +326,7 @@ int class_count_methodall(class_ * self) {
 	return sum;
 }
 
-int class_count_smethodall(class_ * self) {
+int CountAllSMethodClass(class_ * self) {
 	class_* pt = self;
 	int sum = 0;
 	do {
@@ -339,10 +339,10 @@ int class_count_smethodall(class_ * self) {
 	return sum;
 }
 
-object * class_new_instance(class_* self, frame* fr, Vector* args, Vector* type_args) {
+object * NewClass_instance(class_* self, frame* fr, Vector* args, Vector* type_args) {
 	//コンストラクタを検索
 	int temp = 0;
-	constructor* ctor = class_rfind_constructor(self, args, NULL, fr, &temp);
+	constructor* ctor = RFindConstructorClass(self, args, NULL, fr, &temp);
 	assert(temp != -1);
 	//コンストラクタを実行
 	frame* sub = SubFrame(fr);
@@ -366,7 +366,7 @@ object * class_new_instance(class_* self, frame* fr, Vector* args, Vector* type_
 	return inst;
 }
 
-void class_linkall(class_ * self) {
+void LinkAllClass(class_ * self) {
 	for (int i = 0; i < self->field_list->length; i++) {
 		field* f = (field*)AtVector(self->field_list, i);
 		f->parent = self->parent;
@@ -381,7 +381,7 @@ void class_linkall(class_ * self) {
 	}
 }
 
-void class_unlink(class_ * self) {
+void UnlinkClass(class_ * self) {
 	if (self->super_class != NULL) {
 		self->super_class->core_type->u.class_->ref_count--;
 	}
@@ -394,15 +394,15 @@ void class_unlink(class_ * self) {
 	DeleteVector(self->method_list, class_DeleteMethod);
 	DeleteVector(self->smethod_list, class_DeleteMethod);
 	DeleteVector(self->constructor_list, class_ctor_delete);
-	DeleteVector(self->operator_overload_list, class_delete_operator_overload);
-	DeleteVector(self->prop_list, class_delete_property);
-	DeleteVector(self->sprop_list, class_delete_property);
+	DeleteVector(self->operator_overload_list, DeleteClass_operator_overload);
+	DeleteVector(self->prop_list, DeleteClass_property);
+	DeleteVector(self->sprop_list, DeleteClass_property);
 	DeleteVTable(self->vt);
 	DeleteOperatorVt(self->ovt);
 	DeleteVector(self->vt_vec, class_vtable_vec_delete);
 }
 
-void class_delete(class_ * self) {
+void DeleteClass(class_ * self) {
 //	printf("unlink %s\n", Ref2Str(self->namev));
 //	assert(self->ref_count == 0);
 //	MEM_FREE(self->name);
@@ -412,7 +412,7 @@ void class_delete(class_ * self) {
 }
 
 //private
-static void class_create_vtable_top(class_* self) {
+static void CreateVTableClass_top(class_* self) {
 	for (int i = 0; i < self->method_list->length; i++) {
 		method* m = (method*)AtVector(self->method_list, i);
 		if(m->access != ACCESS_PRIVATE_T &&
@@ -422,14 +422,14 @@ static void class_create_vtable_top(class_* self) {
 	}
 }
 
-static void class_create_vtable_override(class_* self) {
+static void CreateVTableClass_override(class_* self) {
 	#if defined(DEBUG)
 	const char* clname = Ref2Str(self->namev);
 	#endif
 	call_context* cctx = NewCallContext(CALL_DECL_T);
 	cctx->scope = self->parent->location;
 	cctx->ty = self->super_class->core_type;
-	class_create_vtable(self->super_class->core_type->u.class_);
+	CreateVTableClass(self->super_class->core_type->u.class_);
 	CopyVTable(self->super_class->core_type->u.class_->vt, self->vt);
 	for (int i = 0; i < self->method_list->length; i++) {
 		method* m = (method*)AtVector(self->method_list, i);
@@ -441,11 +441,11 @@ static void class_create_vtable_override(class_* self) {
 	DeleteCallContext(cctx);
 }
 
-static void class_create_vtable_interface(class_* self) {
+static void CreateVTableClass_interface(class_* self) {
 	#if defined(DEBUG) || defined(_DEBUG)
 	const char* clname = Ref2Str(GetTypeName(self->parent));
 	#endif
-	Vector* tbl = class_get_interface_tree(self);
+	Vector* tbl = GetInterfaceTreeClass(self);
 	//もしインターフェースを実装しているなら、
 	//インターフェースに対応する同じ並びのメソッドテーブルも作る
 	for (int i = 0; i < tbl->length; i++) {
@@ -540,12 +540,12 @@ static void class_generic_type_list_delete(VectorItem item) {
 //	generic_DeleteType(e);
 }
 
-static void class_delete_operator_overload(VectorItem item) {
+static void DeleteClass_operator_overload(VectorItem item) {
 	operator_overload* e = (operator_overload*)item;
 	operator_overload_delete(e);
 }
 
-static void class_delete_property(VectorItem item) {
+static void DeleteClass_property(VectorItem item) {
 	property* e = (property*)item;
 	DeleteProperty(e);
 }

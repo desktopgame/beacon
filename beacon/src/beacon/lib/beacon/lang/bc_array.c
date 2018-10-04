@@ -15,13 +15,13 @@ static void bc_array_nativeCopy(method* parent, frame* fr, enviroment* env);
 
 void bc_array_init() {
 	namespace_* lang = GetLangNamespace();
-	type* arrayType = class_new_preload(InternString("Array"));
+	type* arrayType = NewClass_preload(InternString("Array"));
 	class_* arrayClass = TYPE2CLASS(arrayType);
 	AddTypeNamespace(lang, arrayType);
-	class_define_native_method(arrayClass, "nativeInit", bc_array_nativeInit);
-	class_define_native_method(arrayClass, "nativeSet", bc_array_nativeSet);
-	class_define_native_method(arrayClass, "nativeGet", bc_array_nativeGet);
-	class_define_native_method(arrayClass, "nativeCopy", bc_array_nativeCopy);
+	DefineNativeMethodClass(arrayClass, "nativeInit", bc_array_nativeInit);
+	DefineNativeMethodClass(arrayClass, "nativeSet", bc_array_nativeSet);
+	DefineNativeMethodClass(arrayClass, "nativeGet", bc_array_nativeGet);
+	DefineNativeMethodClass(arrayClass, "nativeCopy", bc_array_nativeCopy);
 }
 
 type * bc_array_type() {
@@ -36,7 +36,7 @@ object * bc_array_new(struct generic_type* gtype, int length, frame * fr) {
 	Vector* type_args = NewVector();
 	PushVector(args, object_int_new(length));
 	PushVector(type_args, gtype);
-	object* ret = class_new_instance(arrayType->u.class_, fr, args,type_args);
+	object* ret = NewClass_instance(arrayType->u.class_, fr, args,type_args);
 	DeleteVector(args, VectorDeleterOfNull);
 	DeleteVector(type_args, VectorDeleterOfNull);
 
@@ -60,7 +60,7 @@ static void bc_array_nativeInit(method* parent, frame* fr, enviroment* env) {
 	type* tp = parent->parent;
 	//Array#lengthを取り出す
 	int temp = 0;
-	field* lengthField = class_find_field(tp->u.class_, InternString("length"), &temp);
+	field* lengthField = FindFieldClass(tp->u.class_, InternString("length"), &temp);
 	assert(lengthField != NULL && temp != -1);
 	//対応する位置のオブジェクトを取り出す
 	object* self = AtVector(fr->ref_stack, 0);

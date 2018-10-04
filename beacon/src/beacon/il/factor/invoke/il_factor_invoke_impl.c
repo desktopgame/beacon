@@ -97,7 +97,7 @@ operator_overload* FindSetILInvoke(il_factor_invoke* self, il_factor* value, env
 	Vector* args = NewVector();
 	PushVector(args, ((il_argument*)AtVector(self->args, 0))->factor);
 	PushVector(args, value);
-	operator_overload* opov = class_ilfind_operator_overload(TYPE2CLASS(self->u.opov->parent), OPERATOR_SUB_SCRIPT_SET_T, args, env, cctx, outIndex);
+	operator_overload* opov = ILFindOperatorOverloadClass(TYPE2CLASS(self->u.opov->parent), OPERATOR_SUB_SCRIPT_SET_T, args, env, cctx, outIndex);
 	DeleteVector(args, VectorDeleterOfNull);
 	return opov;
 }
@@ -185,7 +185,7 @@ static void il_factor_invoke_check(il_factor_invoke * self, enviroment * env, ca
 		return;
 	}
 	self->tag = INSTANCE_INVOKE_SUBSCRIPT_T;
-	self->u.opov = class_argfind_operator_overload(TYPE2CLASS(ctype), OPERATOR_SUB_SCRIPT_GET_T, self->args, env, cctx, &temp);
+	self->u.opov = ArgFindOperatorOverloadClass(TYPE2CLASS(ctype), OPERATOR_SUB_SCRIPT_GET_T, self->args, env, cctx, &temp);
 	self->index = temp;
 	if(temp == -1) {
 		ThrowBCError(BCERROR_INVOKE_INSTANCE_UNDEFINED_METHOD_T,

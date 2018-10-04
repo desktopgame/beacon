@@ -4,7 +4,7 @@
 
 void bc_void_init() {
 	namespace_* lang = GetLangNamespace();
-	type* voidType = class_new_preload(InternString("Void"));
+	type* voidType = NewClass_preload(InternString("Void"));
 	class_* voidClass = TYPE2CLASS(voidType);
 	AddTypeNamespace(lang, voidType);
 }

@@ -69,7 +69,7 @@ operator_overload* FindSetILInvokeBound(il_factor_invoke_bound* self, il_factor*
 	Vector* args = NewVector();
 	PushVector(args, ((il_argument*)AtVector(self->args, 0))->factor);
 	PushVector(args, value);
-	operator_overload* opov = class_ilfind_operator_overload(TYPE2CLASS(self->u.subscript.opov->parent), OPERATOR_SUB_SCRIPT_SET_T, args, env, cctx, outIndex);
+	operator_overload* opov = ILFindOperatorOverloadClass(TYPE2CLASS(self->u.subscript.opov->parent), OPERATOR_SUB_SCRIPT_SET_T, args, env, cctx, outIndex);
 	DeleteVector(args, VectorDeleterOfNull);
 	return opov;
 }
@@ -128,7 +128,7 @@ static void il_factor_invoke_bound_check(il_factor_invoke_bound * self, envirome
 	cfr->u.self_invoke.args = self->args;
 	cfr->u.self_invoke.typeargs = self->type_args;
 	self->tag = BOUND_INVOKE_METHOD_T;
-	self->u.m = class_ilfind_method(TYPE2CLASS(ctype), self->namev, self->args, env, cctx, &temp);
+	self->u.m = ILFindMethodClass(TYPE2CLASS(ctype), self->namev, self->args, env, cctx, &temp);
 	self->index = temp;
 	BC_ERROR();
 	if(self->index != -1) {
@@ -145,7 +145,7 @@ static void il_factor_invoke_bound_check(il_factor_invoke_bound * self, envirome
 		self->u.subscript.index = local->index;
 	}
 	//フィールドとして解決する
-	field* fi = class_find_field(GetClassCContext(cctx), self->namev, &temp);
+	field* fi = FindFieldClass(GetClassCContext(cctx), self->namev, &temp);
 	if(receiver_gtype == NULL && fi != NULL) {
 		receiver_gtype = fi->gtype;
 		self->u.subscript.tag = SUBSCRIPT_FIELD_T;
@@ -153,7 +153,7 @@ static void il_factor_invoke_bound_check(il_factor_invoke_bound * self, envirome
 		self->u.subscript.index = temp;
 	}
 	//プロパティとして解決する
-	property* prop = class_find_property(GetClassCContext(cctx), self->namev, &temp);
+	property* prop = FindPropertyClass(GetClassCContext(cctx), self->namev, &temp);
 	if(receiver_gtype == NULL && prop != NULL) {
 		receiver_gtype = prop->gtype;
 		self->u.subscript.tag = SUBSCRIPT_PROPERTY_T;
@@ -162,7 +162,7 @@ static void il_factor_invoke_bound_check(il_factor_invoke_bound * self, envirome
 	}
 	if(receiver_gtype != NULL) {
 		self->tag = BOUND_INVOKE_SUBSCRIPT_T;
-		self->u.subscript.opov = class_argfind_operator_overload(TYPE2CLASS(GENERIC2TYPE(receiver_gtype)), OPERATOR_SUB_SCRIPT_GET_T, self->args, env, cctx, &temp);
+		self->u.subscript.opov = ArgFindOperatorOverloadClass(TYPE2CLASS(GENERIC2TYPE(receiver_gtype)), OPERATOR_SUB_SCRIPT_GET_T, self->args, env, cctx, &temp);
 		self->index = temp;
 		if(temp == -1) {
 			ThrowBCError(BCERROR_INVOKE_BOUND_UNDEFINED_METHOD_T,

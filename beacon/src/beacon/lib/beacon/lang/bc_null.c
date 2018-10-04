@@ -4,7 +4,7 @@
 
 void bc_null_init() {
 	namespace_* lang = GetLangNamespace();
-	type* nullType = class_new_preload(InternString("Null"));
+	type* nullType = NewClass_preload(InternString("Null"));
 	AddTypeNamespace(lang, nullType);
 }
 

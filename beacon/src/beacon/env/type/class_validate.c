@@ -7,11 +7,11 @@
 #include "../type_parameter.h"
 #include "../field.h"
 #include "class_impl.h"
-static bool class_field_validImpl(Vector* field_vec, field** out);
-static bool class_property_validImpl(Vector* prop_vec, property** out);
+static bool IsValidFieldClassImpl(Vector* field_vec, field** out);
+static bool IsValidPropertyClassImpl(Vector* prop_vec, property** out);
 static bool methods_is_all_abstract(Vector* v);
 
-bool class_interface_method_implement_valid(class_* cls, method** out) {
+bool IsImplementInterfaceMethodValidClass(class_* cls, method** out) {
 	(*out) = NULL;
 	bool contains = true;
 	#if defined(DEBUG)
@@ -21,7 +21,7 @@ bool class_interface_method_implement_valid(class_* cls, method** out) {
 	}
 	#endif
 	//全ての実装インターフェイスを取得する
-	Vector* inter_list = class_get_interface_tree(cls);
+	Vector* inter_list = GetInterfaceTreeClass(cls);
 	Vector* methods = interface_method_flatten_list(inter_list);
 	if(inter_list->length == 0 || cls->is_abstract) {
 		DeleteVector(inter_list, VectorDeleterOfNull);
@@ -30,7 +30,7 @@ bool class_interface_method_implement_valid(class_* cls, method** out) {
 	}
 	for(int i=0; i<methods->length; i++) {
 		method* m = AtVector(methods, i);
-		Vector* methods = class_find_methods_tree(cls, m);
+		Vector* methods = FindTreeMethodClass(cls, m);
 		if(methods->length == 0 || methods_is_all_abstract(methods)) {
 			(*out) = m;
 			contains = false;
@@ -44,10 +44,10 @@ bool class_interface_method_implement_valid(class_* cls, method** out) {
 	return contains;
 }
 
-bool class_interface_property_implement_valid(class_* cls, property** out) {
+bool IsImplementInterfacePropertyValidClass(class_* cls, property** out) {
 	(*out) = NULL;
 	//全ての実装インターフェイスを取得する
-	Vector* gimpl_list = class_get_generic_interface_list(cls);
+	Vector* gimpl_list = GetGenericInterfaceListClass(cls);
 	if(gimpl_list->length == 0 || cls->is_abstract) {
 		DeleteVector(gimpl_list, VectorDeleterOfNull);
 		return true;
@@ -60,7 +60,7 @@ bool class_interface_property_implement_valid(class_* cls, property** out) {
 		for(int j=0; j<inter->prop_list->length; j++) {
 			int temp = 0;
 			property* decl = AtVector(inter->prop_list, j);
-			property* impl = class_find_property(cls, decl->namev, &temp);
+			property* impl = FindPropertyClass(cls, decl->namev, &temp);
 			if(temp == -1) {
 				(*out) = decl;
 				DeleteVector(gimpl_list, VectorDeleterOfNull);
@@ -84,7 +84,7 @@ bool class_interface_property_implement_valid(class_* cls, property** out) {
 	return true;
 }
 
-bool class_abstract_class_implement_valid(class_* cls, method** out) {
+bool IsImplementAbstractClassValidClass(class_* cls, method** out) {
 	(*out) = NULL;
 	//これ自体が抽象クラス
 	if(cls->is_abstract) {
@@ -113,7 +113,7 @@ bool class_abstract_class_implement_valid(class_* cls, method** out) {
 		const char* mename = Ref2Str(me->namev);
 		#endif
 		if(!IsAbstractModifier(me->modifier)) { continue; }
-		Vector* methods = class_find_methods_tree(cls, me);
+		Vector* methods = FindTreeMethodClass(cls, me);
 		if(methods->length == 0 || methods_is_all_abstract(methods)) {
 		   (*out) = me;
 		   ret = false;
@@ -125,17 +125,17 @@ bool class_abstract_class_implement_valid(class_* cls, method** out) {
 	return ret;
 }
 
-bool class_field_valid(class_* cls, field** out) {
-	return class_field_validImpl(cls->field_list, out) &&
-		   class_field_validImpl(cls->sfield_list, out);
+bool IsValidFieldClass(class_* cls, field** out) {
+	return IsValidFieldClassImpl(cls->field_list, out) &&
+		   IsValidFieldClassImpl(cls->sfield_list, out);
 }
 
-bool class_property_valid(class_* self, property** out) {
-	return class_property_validImpl(self->prop_list, out) &&
-	       class_property_validImpl(self->sprop_list, out);
+bool IsValidPropertyClass(class_* self, property** out) {
+	return IsValidPropertyClassImpl(self->prop_list, out) &&
+	       IsValidPropertyClassImpl(self->sprop_list, out);
 }
 
-bool class_method_parameter_valid(class_* cls, method** out_method, string_view* out_name) {
+bool IsMethodParameterValidClass(class_* cls, method** out_method, string_view* out_name) {
 	(*out_name) = ZERO_VIEW;
 	for(int i=0; i<cls->method_list->length; i++) {
 		method* m = (method*)AtVector(cls->method_list, i);
@@ -154,7 +154,7 @@ bool class_method_parameter_valid(class_* cls, method** out_method, string_view*
 	return true;
 }
 
-bool class_ctor_parameter_valid(class_* self, constructor** out_ctor, string_view* out_name) {
+bool IsConstructorParameterValidClass(class_* self, constructor** out_ctor, string_view* out_name) {
 	for(int i=0; i<self->constructor_list->length; i++) {
 		constructor* ctor = (constructor*)AtVector(self->constructor_list, i);
 		if(IsOverwrappedParameterName(ctor->parameter_list, out_name)) {
@@ -165,11 +165,11 @@ bool class_ctor_parameter_valid(class_* self, constructor** out_ctor, string_vie
 	return true;
 }
 
-bool class_type_type_parameter_valid(class_* self, string_view* out_name) {
+bool IsTypeParameterValidClass(class_* self, string_view* out_name) {
 	return !IsOverwrappedTypeParameterName(self->GetParameterListType, out_name);
 }
 
-bool class_method_type_parameter_valid(class_* self, method** out_method, string_view* out_name) {
+bool IsMethodTypeParameterValidClass(class_* self, method** out_method, string_view* out_name) {
 	(*out_name) = ZERO_VIEW;
 	for(int i=0; i<self->method_list->length; i++) {
 		method* m = (method*)AtVector(self->method_list, i);
@@ -188,7 +188,7 @@ bool class_method_type_parameter_valid(class_* self, method** out_method, string
 	return true;
 }
 //private
-static bool class_field_validImpl(Vector* field_vec, field** out) {
+static bool IsValidFieldClassImpl(Vector* field_vec, field** out) {
 	(*out) = NULL;
 	bool ret = true;
 	for(int i=0; i<field_vec->length; i++) {
@@ -206,7 +206,7 @@ static bool class_field_validImpl(Vector* field_vec, field** out) {
 	return ret;
 }
 
-static bool class_property_validImpl(Vector* prop_vec, property** out) {
+static bool IsValidPropertyClassImpl(Vector* prop_vec, property** out) {
 	(*out) = NULL;
 	bool ret = true;
 	for(int i=0; i<prop_vec->length; i++) {

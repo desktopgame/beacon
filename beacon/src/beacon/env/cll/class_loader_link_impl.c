@@ -87,8 +87,8 @@ static void CLBC_class_impl(class_loader * self, il_type * iltype, type * tp, na
 	#if defined(DEBUG) || defined(_DEBUG)
 	const char* tyname = Ref2Str(GetTypeName(tp));
 	#endif
-	class_create_vtable(tp->u.class_);
-	class_create_operator_vt(tp->u.class_);
+	CreateVTableClass(tp->u.class_);
+	CreateOperatorVTClass(tp->u.class_);
 	CL_ERROR(self);
 	CLBC_fields_impl(self, scope, tp, iltype->u.class_->field_list, (TYPE2CLASS(tp))->field_list);
 	CLBC_fields_impl(self, scope, tp, iltype->u.class_->sfield_list, (TYPE2CLASS(tp))->sfield_list);
@@ -162,7 +162,7 @@ static void CLBC_enum_decl(class_loader * self, il_type * iltype, type * tp, nam
 	field* outField = NULL;
 	if((tp->tag == TYPE_ENUM_T ||
 	   tp->tag == TYPE_CLASS_T) &&
-	   !class_field_valid(tp->u.class_, &outField)) {
+	   !IsValidFieldClass(tp->u.class_, &outField)) {
 		ThrowBCError(BCERROR_OVERWRAP_FIELD_NAME_T, Ref2Str(tp->u.class_->namev), Ref2Str(outField->namev));
 	}
 	tp->state = tp->state | TYPE_DECL;
@@ -266,27 +266,27 @@ static void CLBC_check_class(class_loader * self, il_type * iltype, type * tp, n
 	//実装されていないインターフェイスを確認する
 	method* outiMethod = NULL;
 	if(tp->tag == TYPE_CLASS_T &&
-	  !class_interface_method_implement_valid(TYPE2CLASS(tp), &outiMethod)) {
+	  !IsImplementInterfaceMethodValidClass(TYPE2CLASS(tp), &outiMethod)) {
 		ThrowBCError(BCERROR_NOT_IMPLEMENT_INTERFACE_T, Ref2Str(tp->u.class_->namev), Ref2Str(outiMethod->namev));
 		return;
 	}
 	//実装されていないプロパティを確認する
 	property* outiProperty = NULL;
 	if(tp->tag == TYPE_CLASS_T &&
-	  !class_interface_property_implement_valid(TYPE2CLASS(tp), &outiProperty)) {
+	  !IsImplementInterfacePropertyValidClass(TYPE2CLASS(tp), &outiProperty)) {
 		ThrowBCError(BCERROR_NOT_IMPLEMENT_ABSTRACT_METHOD_T, Ref2Str(tp->u.class_->namev), Ref2Str(outiProperty->namev));
 		return;
 	}
 	//実装されていない抽象メソッドを確認する
 	method* outaMethod = NULL;
 	if(tp->tag == TYPE_CLASS_T &&
-	   !class_abstract_class_implement_valid(TYPE2CLASS(tp), &outaMethod)) {
+	   !IsImplementAbstractClassValidClass(TYPE2CLASS(tp), &outaMethod)) {
 		ThrowBCError(BCERROR_NOT_IMPLEMENT_ABSTRACT_METHOD_T, Ref2Str(tp->u.class_->namev), Ref2Str(outaMethod->namev));
 		return;
 	   }
 	//重複するプロパティを確認する
 	property* outProp = NULL;
-	if(!class_property_valid(tp->u.class_, &outProp)) {
+	if(!IsValidPropertyClass(tp->u.class_, &outProp)) {
 		ThrowBCError(BCERROR_OVERWRAP_PROPERTY_NAME_T,
 			Ref2Str(tp->u.class_->namev),
 			Ref2Str(outProp->namev)
@@ -295,7 +295,7 @@ static void CLBC_check_class(class_loader * self, il_type * iltype, type * tp, n
 	}
 	//重複するフィールドを確認する
 	field* outField = NULL;
-	if(!class_field_valid(tp->u.class_, &outField)) {
+	if(!IsValidFieldClass(tp->u.class_, &outField)) {
 		ThrowBCError(BCERROR_OVERWRAP_FIELD_NAME_T,
 			Ref2Str(tp->u.class_->namev),
 			Ref2Str(outField->namev)
@@ -305,7 +305,7 @@ static void CLBC_check_class(class_loader * self, il_type * iltype, type * tp, n
 	//メソッドの重複するパラメータ名を検出する
 	method* out_overwrap_m = NULL;
 	string_view out_overwrap_mname;
-	if(!class_method_parameter_valid(tp->u.class_, &out_overwrap_m, &out_overwrap_mname)) {
+	if(!IsMethodParameterValidClass(tp->u.class_, &out_overwrap_m, &out_overwrap_mname)) {
 		ThrowBCError(BCERROR_OVERWRAP_PARAMETER_NAME_T,
 			Ref2Str(GetTypeName(tp)),
 			Ref2Str(out_overwrap_m->namev),
@@ -316,7 +316,7 @@ static void CLBC_check_class(class_loader * self, il_type * iltype, type * tp, n
 	//コンストラクタの重複するパラメータ名を検出する
 	constructor* out_overwrap_c = NULL;
 	string_view out_overwrap_cname;
-	if(!class_ctor_parameter_valid(tp->u.class_, &out_overwrap_c, &out_overwrap_cname)) {
+	if(!IsConstructorParameterValidClass(tp->u.class_, &out_overwrap_c, &out_overwrap_cname)) {
 		ThrowBCError(BCERROR_OVERWRAP_PARAMETER_NAME_T,
 			Ref2Str(GetTypeName(tp)),
 			"new",
@@ -326,7 +326,7 @@ static void CLBC_check_class(class_loader * self, il_type * iltype, type * tp, n
 	}
 	//クラスの重複する型パラメータ名を検出する
 	string_view out_overwrap_tpname;
-	if(!class_type_type_parameter_valid(tp->u.class_, &out_overwrap_tpname)) {
+	if(!IsTypeParameterValidClass(tp->u.class_, &out_overwrap_tpname)) {
 		ThrowBCError(BCERROR_OVERWRAP_TYPE_TYPE_PARAMETER_NAME_T,
 			Ref2Str(GetTypeName(tp)),
 			Ref2Str(out_overwrap_tpname)
@@ -336,7 +336,7 @@ static void CLBC_check_class(class_loader * self, il_type * iltype, type * tp, n
 	//メソッドの重複する型パラメータ名を検出する
 	method* out_overwrap_tpm = NULL;
 	string_view out_overwrap_tpmname;
-	if(!class_method_type_parameter_valid(tp->u.class_, &out_overwrap_tpm, &out_overwrap_tpmname)) {
+	if(!IsMethodTypeParameterValidClass(tp->u.class_, &out_overwrap_tpm, &out_overwrap_tpmname)) {
 		ThrowBCError(BCERROR_OVERWRAP_METHOD_TYPE_PARAMETER_NAME_T,
 			Ref2Str(GetTypeName(tp)),
 			Ref2Str(out_overwrap_tpm->namev),

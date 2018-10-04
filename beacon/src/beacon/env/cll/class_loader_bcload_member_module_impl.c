@@ -457,7 +457,7 @@ bool CLBC_ctor_decl(class_loader* self, il_type* iltype, type* tp, il_constructo
 	}
 	CLBC_parameter_list(self, scope, ilcons->parameter_list, cons->parameter_list, cctx);
 	CLBC_parameter_list_ctor(cons->parameter_list);
-	class_add_constructor(classz, cons);
+	AddConstructorClass(classz, cons);
 	DeleteCallContext(cctx);
 	return true;
 }
@@ -713,7 +713,7 @@ static void CLBC_chain_auto(class_loader * self, il_type * iltype, type * tp, il
 	int emptyTemp = 0;
 	call_context* cctx = NewCallContext(CALL_CTOR_ARGS_T);
 	cctx->ty = tp;
-	constructor* emptyTarget = class_ilfind_empty_constructor(classz->super_class->core_type->u.class_, env, cctx, &emptyTemp);
+	constructor* emptyTarget = ILFindEmptyConstructorClass(classz->super_class->core_type->u.class_, env, cctx, &emptyTemp);
 	DeleteCallContext(cctx);
 	//連鎖を明示的に書いていないのに、
 	//親クラスにも空のコンストラクタが存在しない=エラー
@@ -755,11 +755,11 @@ static void CLBC_chain_super(class_loader * self, il_type * iltype, type * tp, i
 	constructor* chainTarget = NULL;
 	int temp = 0;
 	if (chain->type == CHAIN_TYPE_THIS_T) {
-		chainTarget = class_ilfind_constructor(classz, chain->argument_list, env, cctx, &temp);
+		chainTarget = ILFindConstructorClass(classz, chain->argument_list, env, cctx, &temp);
 		AddOpcodeBuf(env->buf, (VectorItem)OP_CHAIN_THIS);
 		AddOpcodeBuf(env->buf, (VectorItem)(tp->absolute_index));
 	} else if (chain->type == CHAIN_TYPE_SUPER_T) {
-		chainTarget = class_ilfind_constructor(classz->super_class->core_type->u.class_, chain->argument_list, env, cctx, &temp);
+		chainTarget = ILFindConstructorClass(classz->super_class->core_type->u.class_, chain->argument_list, env, cctx, &temp);
 		AddOpcodeBuf(env->buf, OP_CHAIN_SUPER);
 		AddOpcodeBuf(env->buf, classz->super_class->core_type->absolute_index);
 	}

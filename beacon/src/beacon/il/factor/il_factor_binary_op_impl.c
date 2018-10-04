@@ -220,7 +220,7 @@ int GetIndexILBinaryOp2(il_factor* receiver, il_factor* arg, operator_type otype
 	assert(lctype->tag == TYPE_CLASS_T);
 	class_* lclass = TYPE2CLASS(lctype);
 	int temp = 0;
-	class_gfind_operator_overload(lclass, otype, args, env, cctx, &temp);
+	GFindOperatorOverloadClass(lclass, otype, args, env, cctx, &temp);
 	DeleteVector(args, VectorDeleterOfNull);
 	return temp;
 }

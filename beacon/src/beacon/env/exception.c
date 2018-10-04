@@ -16,7 +16,7 @@ object * exception_new_simple(frame* fr, const char* message) {
 	class_* excClass = exception_class();
 	Vector* args = NewVector();
 	PushVector(args, object_string_new(message));
-	object* e = class_new_instance(excClass, fr, args, NULL);
+	object* e = NewClass_instance(excClass, fr, args, NULL);
 	DeleteVector(args, VectorDeleterOfNull);
 	return e;
 }

@@ -37,7 +37,7 @@ void LoadILSubscript(il_factor_subscript* self, enviroment* env, call_context* c
 	Vector* args = NewVector();
 	PushVector(args, arg_gtype);
 	int temp = -1;
-	self->opov = class_gfind_operator_overload(TYPE2CLASS(GENERIC2TYPE(receiver_gtype)), OPERATOR_SUB_SCRIPT_GET_T, args, env, cctx, &temp);
+	self->opov = GFindOperatorOverloadClass(TYPE2CLASS(GENERIC2TYPE(receiver_gtype)), OPERATOR_SUB_SCRIPT_GET_T, args, env, cctx, &temp);
 	self->operator_index = temp;
 	DeleteVector(args, VectorDeleterOfNull);
 }

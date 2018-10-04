@@ -7,10 +7,10 @@ static void bc_string_nativeInit(method* parent, frame* fr, enviroment* env);
 
 void bc_string_init() {
 	namespace_* lang = GetLangNamespace();
-	type* stringType = class_new_preload(InternString("String"));
+	type* stringType = NewClass_preload(InternString("String"));
 	class_* stringClass = TYPE2CLASS(stringType);
 	AddTypeNamespace(lang, stringType);
-	class_define_native_method(stringClass, "nativeInit", bc_string_nativeInit);
+	DefineNativeMethodClass(stringClass, "nativeInit", bc_string_nativeInit);
 }
 
 string_buffer * bc_string_raw(object* self) {
@@ -36,7 +36,7 @@ static void bc_string_nativeInit(method* parent, frame* fr, enviroment* env) {
 
 	//String#charArrayを取得
 	int temp = 0;
-	class_find_field(TYPE_STRING->u.class_, InternString("charArray"), &temp);
+	FindFieldClass(TYPE_STRING->u.class_, InternString("charArray"), &temp);
 	object* charArr = AtVector(self->u.field_vec, temp);
 	//これを char* へ変換
 	string_buffer* sb = NewBuffer();

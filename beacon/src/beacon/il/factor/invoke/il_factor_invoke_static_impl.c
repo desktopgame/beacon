@@ -135,7 +135,7 @@ static void il_factor_invoke_static_check(il_factor_invoke_static * self, enviro
 	call_frame* cfr = PushCallContext(cctx, FRAME_STATIC_INVOKE_T);
 	cfr->u.static_invoke.args = self->args;
 	cfr->u.static_invoke.typeargs = self->type_args;
-	self->m = class_ilfind_smethod(cls, self->namev, self->args, env, cctx, &temp);
+	self->m = ILFindSMethodClass(cls, self->namev, self->args, env, cctx, &temp);
 	self->index = temp;
 	//メソッドが見つからない
 	if(temp == -1 || self->m == NULL) {

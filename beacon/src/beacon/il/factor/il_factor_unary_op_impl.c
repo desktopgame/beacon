@@ -143,7 +143,7 @@ int GetIndexILUnaryOp2(il_factor* receiver, operator_type otype, enviroment* env
 	}
 	class_* lclass = TYPE2CLASS(GENERIC2TYPE(gtype));
 	int temp = 0;
-	class_gfind_operator_overload(lclass, otype, args, env, cctx, &temp);
+	GFindOperatorOverloadClass(lclass, otype, args, env, cctx, &temp);
 	DeleteVector(args, VectorDeleterOfNull);
 	return temp;
 }

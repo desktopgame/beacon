@@ -128,7 +128,7 @@ method* meta_gfind_method(Vector* method_vec, string_view namev, Vector * gargs,
 
 method* meta_scoped_ilfind_method(class_* context, Vector* method_vec, string_view namev, Vector * ilargs, enviroment * env, call_context* cctx, int * outIndex) {
 	(*outIndex) = -1;
-	//class_create_vtable(self);
+	//CreateVTableClass(self);
 	method* ret = NULL;
 	int min = 1024;
 	//全てのメソッドへ
@@ -165,7 +165,7 @@ method* meta_scoped_ilfind_method(class_* context, Vector* method_vec, string_vi
 
 method* meta_scoped_gfind_method(class_* context, Vector* method_vec, string_view namev, Vector * gargs, int * outIndex) {
 	(*outIndex) = -1;
-	//class_create_vtable(self);
+	//CreateVTableClass(self);
 	method* ret = NULL;
 	int min = 1024;
 	//全てのメソッドへ
@@ -299,7 +299,7 @@ bool meta_method_access_valid(method* m, call_context* cctx) {
 	//protectedメソッドなのにそのサブクラスではない
 	if(context != NULL &&
 		m->access == ACCESS_PROTECTED_T &&
-		class_distance(TYPE2CLASS(m->parent), context) < 0) {
+		DistanceClass(TYPE2CLASS(m->parent), context) < 0) {
 		return false;
 	}
 	return true;
@@ -316,7 +316,7 @@ bool meta_ctor_access_valid(constructor* ctor, call_context* cctx) {
 	//protectedメソッドなのにそのサブクラスではない
 	if(context != NULL &&
 		ctor->access == ACCESS_PROTECTED_T &&
-		class_distance(TYPE2CLASS(ctor->parent), context) < 0) {
+		DistanceClass(TYPE2CLASS(ctor->parent), context) < 0) {
 		return false;
 	}
 	return true;

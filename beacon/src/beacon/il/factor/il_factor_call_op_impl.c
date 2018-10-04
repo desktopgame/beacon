@@ -202,7 +202,7 @@ static void il_factor_subscript_check(il_factor_call_op* self, enviroment* env, 
 	generic_type* receiver_gtype = EvalILFactor(receiver, env, cctx);
 	class_* receiver_cl = TYPE2CLASS(GENERIC2TYPE(receiver_gtype));
 	int temp;
-	iv->u.opov = class_argfind_operator_overload(receiver_cl, OPERATOR_SUB_SCRIPT_GET_T, self->argument_list, env, cctx, &temp);
+	iv->u.opov = ArgFindOperatorOverloadClass(receiver_cl, OPERATOR_SUB_SCRIPT_GET_T, self->argument_list, env, cctx, &temp);
 	iv->index = temp;
 	assert(temp != -1);
 	//入れ替える

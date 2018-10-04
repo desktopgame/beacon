@@ -91,12 +91,12 @@ static void assign_by_namebase(il_factor_assign_op* self, enviroment* env, call_
 	if(ilvar->type == ILVARIABLE_TYPE_STATIC_T) {
 		class_* cls = TYPE2CLASS(GetEvalTypeCContext(cctx, ilvar->u.static_->fqcn));
 		int temp = -1;
-		field* sf = class_find_sfield(cls, ilmem->namev, &temp);
+		field* sf = FindSFieldClass(cls, ilmem->namev, &temp);
 		assert(temp != -1);
 		GenerateILFactor(self->right, env, cctx);
 		GeneratePutField(env->buf, sf, temp);
 		//指定の静的フィールドにアクセスできない
-		if(!class_accessible_field(GetClassCContext(cctx), sf)) {
+		if(!IsAccessibleFieldClass(GetClassCContext(cctx), sf)) {
 			ThrowBCError(BCERROR_CAN_T_ACCESS_FIELD_T,
 				Ref2Str(GetTypeName(cls->parent)),
 				Ref2Str(sf->namev)
@@ -124,7 +124,7 @@ static void assign_to_field(il_factor_assign_op* self, il_factor* receiver, il_f
 	generic_type* gt = EvalILFactor(receiver, env, cctx);
 	class_* cls = TYPE2CLASS(gt->core_type);
 	int temp = -1;
-	field* f = class_find_field_tree(cls, namev, &temp);
+	field* f = FindFieldClass_tree(cls, namev, &temp);
 	assert(temp != -1);
 	GenerateILFactor(receiver, env, cctx);
 	GenerateILFactor(source, env, cctx);
@@ -134,7 +134,7 @@ static void assign_to_field(il_factor_assign_op* self, il_factor* receiver, il_f
 		return;
 	}
 	//指定のインスタンスフィールドにアクセスできない
-	if(!class_accessible_field(GetClassCContext(cctx), f)) {
+	if(!IsAccessibleFieldClass(GetClassCContext(cctx), f)) {
 		ThrowBCError(BCERROR_CAN_T_ACCESS_FIELD_T,
 			Ref2Str(GetTypeName(cls->parent)),
 			Ref2Str(f->namev)
@@ -149,14 +149,14 @@ static void assign_to_property(il_factor_assign_op* self, enviroment* env, call_
 	bool is_static = IsStaticModifier(prop->p->modifier);
 	BC_ERROR();
 	//プロパティへアクセスできない
-	if(!class_accessible_property(GetClassCContext(cctx), pp)) {
+	if(!IsAccessiblePropertyClass(GetClassCContext(cctx), pp)) {
 		ThrowBCError(BCERROR_CAN_T_ACCESS_FIELD_T,
 			Ref2Str(GetTypeName(pp->parent)),
 			Ref2Str(pp->namev)
 		);
 		return;
 	}
-	if(!class_accessible_property_accessor(GetClassCContext(cctx), pp->set)) {
+	if(!IsAccessiblePropertyAccessorClass(GetClassCContext(cctx), pp->set)) {
 		ThrowBCError(BCERROR_CAN_T_ACCESS_FIELD_T,
 			Ref2Str(GetTypeName(pp->parent)),
 			Ref2Str(pp->namev)
@@ -271,7 +271,7 @@ static void check_final(il_factor* receiver, il_factor* source, string_view name
 	generic_type* gt = EvalILFactor(receiver, env, cctx);
 	class_* cls = TYPE2CLASS(gt->core_type);
 	int temp = -1;
-	field* f = class_find_field_tree(cls, namev, &temp);
+	field* f = FindFieldClass_tree(cls, namev, &temp);
 	assert(temp != -1);
 	//コンストラクタ以外の場所では finalフィールドは初期化できない
 	if(cctx->tag != CALL_CTOR_T) {
@@ -326,9 +326,9 @@ static void generate_assign_to_variable_local(il_factor_assign_op* self, envirom
 	//src のような名前がフィールドを示す場合
 	} else if(illoc->type == VARIABLE_LOCAL_FIELD_T) {
 		int temp = -1;
-		field* f = class_find_field_tree(GetClassCContext(cctx), illoc->namev, &temp);
+		field* f = FindFieldClass_tree(GetClassCContext(cctx), illoc->namev, &temp);
 		if(temp == -1) {
-			f = class_find_sfield_tree(GetClassCContext(cctx), illoc->namev, &temp);
+			f = FindSFieldClass_tree(GetClassCContext(cctx), illoc->namev, &temp);
 		}
 		assert(temp != -1);
 		//フィールドはstaticでないが
@@ -350,7 +350,7 @@ static void generate_assign_to_variable_local(il_factor_assign_op* self, envirom
 	//src のような名前がプロパティを示す場合
 	} else if(illoc->type == VARIABLE_LOCAL_PROPERTY_T) {
 		int temp = -1;
-		property* p = class_find_property_tree(GetClassCContext(cctx), illoc->namev, &temp);
+		property* p = FindPropertyClass_tree(GetClassCContext(cctx), illoc->namev, &temp);
 		assert(temp != -1);
 		//フィールドはstaticでないが
 		//現在のコンテキストはstaticなので this にアクセスできない
