@@ -24,7 +24,7 @@ typedef struct operator_overload {
  * @param type
  * @return
  */
-operator_overload* operator_overload_new(operator_type type);
+operator_overload* NewOperatorOverload(operator_type type);
 
 /**
  * 演算子オーバーロードを実行します.
@@ -32,11 +32,11 @@ operator_overload* operator_overload_new(operator_type type);
  * @param fr
  * @param env
  */
-void operator_overload_execute(operator_overload* self, struct frame* fr, struct enviroment* env);
+void ExecuteOperatorOverload(operator_overload* self, struct frame* fr, struct enviroment* env);
 
 /**
  * 演算子オーバーロードを解放します.
  * @param self
  */
-void operator_overload_delete(operator_overload* self);
+void DeleteOperatorOverload(operator_overload* self);
 #endif

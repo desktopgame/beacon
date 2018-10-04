@@ -542,7 +542,7 @@ static void class_generic_type_list_delete(VectorItem item) {
 
 static void DeleteClass_operator_overload(VectorItem item) {
 	operator_overload* e = (operator_overload*)item;
-	operator_overload_delete(e);
+	DeleteOperatorOverload(e);
 }
 
 static void DeleteClass_property(VectorItem item) {

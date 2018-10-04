@@ -527,7 +527,7 @@ void CLBC_ctors_impl(class_loader* self, il_type* iltype, type* tp) {
 //
 bool CLBC_operator_overload_decl(class_loader* self, il_type* iltype, type* tp, il_operator_overload* ilopov, namespace_* scope) {
 	//演算子オーバーロード一覧から取り出す
-	operator_overload* opov = operator_overload_new(ilopov->op);
+	operator_overload* opov = NewOperatorOverload(ilopov->op);
 	opov->access = ilopov->access;
 	//call_contextの設定
 	call_context* cctx = NewCallContext(CALL_OPOV_T);

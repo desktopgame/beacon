@@ -913,7 +913,7 @@ static void vm_run(frame * self, enviroment * env, int pos, int deferStart) {
 				#endif
 				CreateOperatorVTClass(cl);
 				operator_overload* operator_ov = (operator_overload*)AtVector(cl->ovt->vec, index);
-				operator_overload_execute(operator_ov, self, env);
+				ExecuteOperatorOverload(operator_ov, self, env);
 				break;
 			}
 			case OP_CORO_INIT:

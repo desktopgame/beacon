@@ -13,9 +13,9 @@
 #include "generic_type.h"
 #include "parameter.h"
 
-static void operator_overload_delete_param(VectorItem item);
+static void DeleteOperatorOverload_param(VectorItem item);
 
-operator_overload* operator_overload_new(operator_type type) {
+operator_overload* NewOperatorOverload(operator_type type) {
 	operator_overload* ret = (operator_overload*)MEM_MALLOC(sizeof(operator_overload));
 	ret->parent = NULL;
 	ret->parameter_list = NewVector();
@@ -25,7 +25,7 @@ operator_overload* operator_overload_new(operator_type type) {
 	return ret;
 }
 
-void operator_overload_execute(operator_overload* self, frame* fr, enviroment* env) {
+void ExecuteOperatorOverload(operator_overload* self, frame* fr, enviroment* env) {
 	frame* sub = SubFrame(fr);
 	sub->receiver = fr->receiver;
 	PushVector(sub->value_stack, PopVector(fr->value_stack));
@@ -43,13 +43,13 @@ void operator_overload_execute(operator_overload* self, frame* fr, enviroment* e
 	DeleteFrame(sub);
 }
 
-void operator_overload_delete(operator_overload* self) {
+void DeleteOperatorOverload(operator_overload* self) {
 	DeleteEnviroment(self->env);
-	DeleteVector(self->parameter_list, operator_overload_delete_param);
+	DeleteVector(self->parameter_list, DeleteOperatorOverload_param);
 	MEM_FREE(self);
 }
 //private
-static void operator_overload_delete_param(VectorItem item) {
+static void DeleteOperatorOverload_param(VectorItem item) {
 	parameter* e = (parameter*)item;
 	DeleteParameter(e);
 }
