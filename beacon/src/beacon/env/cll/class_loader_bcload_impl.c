@@ -374,7 +374,7 @@ static type* CLBC_get_or_load_interface(class_loader* self, namespace_* parent, 
 	type* tp = FindTypeFromNamespace(parent, iltype->u.interface_->namev);
 	interface_* inter = NULL;
 	if (tp == NULL) {
-		inter = interface_new(iltype->u.interface_->namev);
+		inter = NewInterface(iltype->u.interface_->namev);
 		tp = WrapInterface(inter);
 		CLBC_register_interface(self, parent, iltype, tp, inter);
 		CL_ERROR_RET(self, tp);

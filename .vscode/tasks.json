@@ -42,7 +42,8 @@
 			"command": "make",
 			"args": [
 				"cov"
-			]
+			],
+			"problemMatcher": []
 		},
 		{
 			"label": "make clean",

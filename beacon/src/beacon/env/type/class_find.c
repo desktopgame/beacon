@@ -531,7 +531,7 @@ Vector* GetGenericInterfaceListClass(class_* self) {
 	Vector* ret = NewVector();
 	for(int i=0; i<self->impl_list->length; i++) {
 		generic_type* ginter = AtVector(self->impl_list, i);
-		Vector* inner = interface_get_generic_interface_tree(TYPE2INTERFACE(GENERIC2TYPE(ginter)));
+		Vector* inner = GetGenericInterfaceTreeInterface(TYPE2INTERFACE(GENERIC2TYPE(ginter)));
 		MergeVector(ret, inner);
 		PushVector(ret, ginter);
 		DeleteVector(inner, VectorDeleterOfNull);

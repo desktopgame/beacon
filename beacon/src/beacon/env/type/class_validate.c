@@ -22,7 +22,7 @@ bool IsImplementInterfaceMethodValidClass(class_* cls, method** out) {
 	#endif
 	//全ての実装インターフェイスを取得する
 	Vector* inter_list = GetInterfaceTreeClass(cls);
-	Vector* methods = interface_method_flatten_list(inter_list);
+	Vector* methods = FlattenMethodInterface_list(inter_list);
 	if(inter_list->length == 0 || cls->is_abstract) {
 		DeleteVector(inter_list, VectorDeleterOfNull);
 		DeleteVector(methods, VectorDeleterOfNull);

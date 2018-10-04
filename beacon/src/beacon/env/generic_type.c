@@ -329,7 +329,7 @@ static int DistanceGenericType_interface(int dist, generic_type* self, generic_t
 		DeleteVector(gargs, VectorDeleterOfNull);
 		return dist;
 	} else if (other->core_type->tag == TYPE_INTERFACE_T) {
-		generic_type* impl = interface_find_interface(TYPE2INTERFACE(GENERIC2TYPE(other)), (GENERIC2TYPE(self)));
+		generic_type* impl = FindInterfaceInterface(TYPE2INTERFACE(GENERIC2TYPE(other)), (GENERIC2TYPE(self)));
 		if (impl == NULL) {
 			impl = other;
 		}

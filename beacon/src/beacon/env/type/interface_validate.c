@@ -3,7 +3,7 @@
 #include "../parameter.h"
 #include "../type_parameter.h"
 
-bool interface_method_parameter_valid(interface_* inter, method** out_method, string_view* out_name) {
+bool IsMethodParameterValidInterface(interface_* inter, method** out_method, string_view* out_name) {
 	for(int i=0; i<inter->method_list->length; i++) {
 		method* m = (method*)AtVector(inter->method_list, i);
 		if(IsOverwrappedParameterName(m->parameters, out_name)) {
@@ -14,11 +14,11 @@ bool interface_method_parameter_valid(interface_* inter, method** out_method, st
 	return true;
 }
 
-bool interface_type_type_parameter_valid(interface_* inter, string_view* out_name) {
+bool IsTypeParameterValidInterface(interface_* inter, string_view* out_name) {
 	return !IsOverwrappedTypeParameterName(inter->GetParameterListType, out_name);
 }
 
-bool interface_method_type_parameter_valid(interface_* inter, method** out_method, string_view* out_name) {
+bool IsMethodTypeParameterValidInterface(interface_* inter, method** out_method, string_view* out_name) {
 	for(int i=0; i<inter->method_list->length; i++) {
 		method* m = (method*)AtVector(inter->method_list, i);
 		if(IsOverwrappedParameterName(m->type_parameters, out_name)) {

@@ -70,7 +70,7 @@ void AddPropertyType(type* self, property* p) {
 	if(self->tag == TYPE_CLASS_T) {
 		AddPropertyClass(self->u.class_, p);
 	} else if(self->tag == TYPE_INTERFACE_T) {
-		interface_add_property(self->u.interface_, p);
+		AddPropertyInterface(self->u.interface_, p);
 	}
 }
 
@@ -78,7 +78,7 @@ void AddMethodType(type* self, method * m) {
 	if (self->tag == TYPE_CLASS_T) {
 		AddMethodClass(self->u.class_, m);
 	} else if (self->tag == TYPE_INTERFACE_T) {
-		interface_add_method(self->u.interface_, m);
+		AddMethodInterface(self->u.interface_, m);
 	}
 }
 
@@ -87,7 +87,7 @@ method * ILFindMethodType(type * self, string_view namev, Vector * args, envirom
 	if (self->tag == TYPE_CLASS_T) {
 		return ILFindMethodClass(self->u.class_, namev, args, env, cctx, outIndex);
 	} else if (self->tag == TYPE_INTERFACE_T) {
-		return interface_ilfind_method(self->u.interface_, namev, args, env, cctx, outIndex);
+		return ILFindMethodInterface(self->u.interface_, namev, args, env, cctx, outIndex);
 	}
 	return NULL;
 }
@@ -141,7 +141,7 @@ void UnlinkType(type * self) {
 	if (self->tag == TYPE_CLASS_T) {
 		UnlinkClass(self->u.class_);
 	} else if (self->tag == TYPE_INTERFACE_T) {
-		interface_unlink(self->u.interface_);
+		UnlinkInterface(self->u.interface_);
 	}
 }
 
@@ -229,7 +229,7 @@ void DeleteType(type * self) {
 	if (self->tag == TYPE_CLASS_T) {
 		DeleteClass(self->u.class_);
 	} else if (self->tag == TYPE_INTERFACE_T) {
-		interface_delete(self->u.interface_);
+		DeleteInterface(self->u.interface_);
 	}
 	LostownershipGenericType(self->generic_self);
 	MEM_FREE(self);
@@ -263,7 +263,7 @@ generic_type* BaselineType(type* abstract, type* concrete) {
 		if(abstract->tag == TYPE_INTERFACE_T) {
 			for(int i=0; i<cls->impl_list->length; i++) {
 				generic_type* gE = (generic_type*)AtVector(cls->impl_list, i);
-				generic_type* impl = interface_contains(gE, abstract->u.interface_);
+				generic_type* impl = IsContainsTypeInterface(gE, abstract->u.interface_);
 				if(impl) {
 					return impl;
 				}
