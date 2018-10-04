@@ -96,7 +96,7 @@ static bool eval_top_from_cll(class_loader* cll, ast* aOpt) {
 	}
 	//実行
 	frame* fr = NewFrame();
-	sg_thread_set_frame_ref(sg_thread_current(GetCurrentScriptContext()), fr);
+	SetSGThreadFrameRef(GetCurrentSGThread(GetCurrentScriptContext()), fr);
 	//エラーによって中断された場合のため、ここで戻す
 	heap* he = GetHeap();
 	he->accept_blocking = 0;
@@ -112,7 +112,7 @@ static bool eval_top_from_cll(class_loader* cll, ast* aOpt) {
 	CatchVM(fr);
 	CollectHeap(GetHeap());
 	DeleteFrame(fr);
-	sg_thread_release_frame_ref(sg_thread_current(GetCurrentScriptContext()));
+	ReleaseSGThreadFrameRef(GetCurrentSGThread(GetCurrentScriptContext()));
 
 	bool ret = GetLastBCError();
 	DeleteClassLoader(cll);

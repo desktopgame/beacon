@@ -22,32 +22,32 @@ typedef struct sg_thread {
 /**
  * メインスレッドを作成します.
  */
-void sg_thread_launch();
+void LaunchSGThread();
 
 /**
  * 新しいスレッドを作成します.
  * @return
  */
-sg_thread* sg_thread_new();
+sg_thread* NewSGThread();
 
 /**
  * 現在のスレッドを返します.
  * @param sctx
  * @return
  */
-sg_thread* sg_thread_current(struct script_context* sctx);
+sg_thread* GetCurrentSGThread(struct script_context* sctx);
 
 /**
  * スレッドに記録された全てのトレースを解放します.
  * @param self
  */
-void sg_thread_clear(sg_thread* self);
+void ClearSGThread(sg_thread* self);
 
 /**
  * スレッドを解放します.
  * @param self
  */
-void sg_thread_delete(sg_thread* self);
+void DeleteSGThread(sg_thread* self);
 
 /**
  * このスレッドが "実行中のVMのルート" を渡します.
@@ -57,37 +57,37 @@ void sg_thread_delete(sg_thread* self);
  * @param self
  * @param frame_ref 呼び出し側で開放してください.
  */
-void sg_thread_set_frame_ref(sg_thread* self, struct frame* frame_ref);
+void SetSGThreadFrameRef(sg_thread* self, struct frame* frame_ref);
 
 /**
  * このスレッドが "実行中のVMのルート" を返します.
  * @param self
  * @return
  */
-struct frame* sg_thread_get_frame_ref(sg_thread* self);
+struct frame* GetSGThreadFrameRef(sg_thread* self);
 
 /**
  * このスレッドからVMを参照出来ないようにします.
  * 通常、このスレッドに設定されたVMを開放したあとに呼び出します。
  * @param self
  */
-void sg_thread_release_frame_ref(sg_thread* self);
+void ReleaseSGThreadFrameRef(sg_thread* self);
 
 /**
  * メインスレッドを返します.
  * @return
  */
-sg_thread* sg_thread_main();
+sg_thread* GetMainSGThread();
 
 
 /**
  * メインスレッドの呼び出しコンテキストを返します.
  * @return
  */
-struct call_context* sg_thread_context();
+struct call_context* GetSGThreadCContext();
 
 /**
  * メインスレッドを終了します.
  */
-void sg_thread_destroy();
+void DestroySGThread();
 #endif // SIGNAL_THREAD_THREAD_H

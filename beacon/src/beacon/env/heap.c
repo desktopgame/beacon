@@ -91,8 +91,8 @@ static void gc_clear(heap* self) {
 static void gc_mark(heap* self) {
 	//今はまだマルチスレッドに対応していないので、
 	//とりあえず実行中のスレッドのみを対象とする
-	sg_thread* th = sg_thread_current(GetCurrentScriptContext());
-	frame* top = sg_thread_get_frame_ref(th);
+	sg_thread* th = GetCurrentSGThread(GetCurrentScriptContext());
+	frame* top = GetSGThreadFrameRef(th);
 	assert(top != NULL);
 	MarkAllFrame(top);
 

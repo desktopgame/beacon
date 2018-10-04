@@ -95,7 +95,7 @@ void NativeThrowVM(frame * self, object * exc) {
 	self->exception = exc;
 
 	ThrowVM(self, exc);
-	sg_thread* th = sg_thread_current(GetCurrentScriptContext());
+	sg_thread* th = GetCurrentSGThread(GetCurrentScriptContext());
 	//空ならプログラムを終了
 	if (IsEmptyVector(th->trace_stack)) {
 		TerminateVM(self);
@@ -130,7 +130,7 @@ void CatchVM(frame * self) {
 }
 
 bool ValidateVM(frame* self, int source_len, int* pcDest) {
-	sg_thread* th = sg_thread_current(GetCurrentScriptContext());
+	sg_thread* th = GetCurrentSGThread(GetCurrentScriptContext());
 	vm_trace* trace = (vm_trace*)TopVector(th->trace_stack);
 	self->validate = true;
 	//汚染
@@ -163,7 +163,7 @@ bool ValidateVM(frame* self, int source_len, int* pcDest) {
 }
 
 void TerminateVM(frame * self) {
-	sg_thread_main()->vm_crush_by_exception = true;
+	GetMainSGThread()->vm_crush_by_exception = true;
 	frame* temp = self;
 	do {
 		temp->terminate = true;
@@ -450,7 +450,7 @@ static void vm_run(frame * self, enviroment * env, int pos, int deferStart) {
 				//例外は呼び出し全てへ伝播
 				object* e = (object*)PopVector(self->value_stack);
 				ThrowVM(self, e);
-				sg_thread* th = sg_thread_current(GetCurrentScriptContext());
+				sg_thread* th = GetCurrentSGThread(GetCurrentScriptContext());
 				//空ならプログラムを終了
 				if (IsEmptyVector(th->trace_stack)) {
 					TerminateVM(self);
@@ -462,7 +462,7 @@ static void vm_run(frame * self, enviroment * env, int pos, int deferStart) {
 			}
 			case OP_TRY_ENTER:
 			{
-				sg_thread* th = sg_thread_current(GetCurrentScriptContext());
+				sg_thread* th = GetCurrentSGThread(GetCurrentScriptContext());
 				vm_trace* trace = NewVMTrace(self);
 				trace->pc = IDX; //goto
 				PushVector(th->trace_stack, trace);
@@ -475,14 +475,14 @@ static void vm_run(frame * self, enviroment * env, int pos, int deferStart) {
 			}
 			case OP_TRY_EXIT:
 			{
-				sg_thread* th = sg_thread_current(GetCurrentScriptContext());
+				sg_thread* th = GetCurrentSGThread(GetCurrentScriptContext());
 				vm_trace* trace = (vm_trace*)PopVector(th->trace_stack);
 				DeleteVMTrace(trace);
 				break;
 			}
 			case OP_TRY_CLEAR:
 			{
-				sg_thread* th = sg_thread_current(GetCurrentScriptContext());
+				sg_thread* th = GetCurrentSGThread(GetCurrentScriptContext());
 				CatchVM(self);
 				vm_trace* trace = (vm_trace*)PopVector(th->trace_stack);
 				DeleteVMTrace(trace);
@@ -501,7 +501,7 @@ static void vm_run(frame * self, enviroment * env, int pos, int deferStart) {
 				//Printfln("");
 				//PrintGenericType(v->gtype);
 				//Printfln("");
-				int dist = DistanceGenericType(gtype, v->gtype, sg_thread_context());
+				int dist = DistanceGenericType(gtype, v->gtype, GetSGThreadCContext());
 				object* b = GetBoolObject(dist >= 0);
 				PushVector(self->value_stack, b);
 				break;
@@ -568,7 +568,7 @@ static void vm_run(frame * self, enviroment * env, int pos, int deferStart) {
 				//また、現在のVMから実引数をポップ
 				frame* sub = SubFrame(self);
 				sub->receiver = tp;
-				call_frame* cfr = PushCallContext(sg_thread_context(), FRAME_STATIC_INVOKE_T);
+				call_frame* cfr = PushCallContext(GetSGThreadCContext(), FRAME_STATIC_INVOKE_T);
 				cfr->u.static_invoke.args = NewVector();
 				cfr->u.static_invoke.typeargs = NewVector();
 				for (int i = 0; i < ctor->parameter_list->length; i++) {
@@ -591,7 +591,7 @@ static void vm_run(frame * self, enviroment * env, int pos, int deferStart) {
 				ExecuteVM(sub, ctor->env);
 				DeleteVector(cfr->u.static_invoke.args, VectorDeleterOfNull);
 				DeleteVector(cfr->u.static_invoke.typeargs, VectorDeleterOfNull);
-				PopCallContext(sg_thread_context());
+				PopCallContext(GetSGThreadCContext());
 				//コンストラクタを実行した場合、
 				//objectがスタックのトップに残っているはず
 				VectorItem returnV = TopVector(sub->value_stack);
@@ -612,7 +612,7 @@ static void vm_run(frame * self, enviroment * env, int pos, int deferStart) {
 				//コンストラクタを実行するためのVMを作成
 				frame* sub = SubFrame(self);
 				sub->receiver = tp;
-				call_frame* cfr = PushCallContext(sg_thread_context(), FRAME_STATIC_INVOKE_T);
+				call_frame* cfr = PushCallContext(GetSGThreadCContext(), FRAME_STATIC_INVOKE_T);
 				cfr->u.static_invoke.args = NewVector();
 				cfr->u.static_invoke.typeargs = NewVector();
 				//チェインコンストラクタに渡された実引数をプッシュ
@@ -629,7 +629,7 @@ static void vm_run(frame * self, enviroment * env, int pos, int deferStart) {
 				ExecuteVM(sub, ctor->env);
 				DeleteVector(cfr->u.static_invoke.args, VectorDeleterOfNull);
 				DeleteVector(cfr->u.static_invoke.typeargs, VectorDeleterOfNull);
-				PopCallContext(sg_thread_context());
+				PopCallContext(GetSGThreadCContext());
 				//コンストラクタを実行した場合、
 				//objectがスタックのトップに残っているはず
 				VectorItem returnV = TopVector(sub->value_stack);
@@ -804,7 +804,7 @@ static void vm_run(frame * self, enviroment * env, int pos, int deferStart) {
 			{
 				object* o = PopVector(self->value_stack);
 				generic_type* a = PopVector(self->type_args_vec);
-				a = ApplyGenericType(a, sg_thread_context());
+				a = ApplyGenericType(a, GetSGThreadCContext());
 				if(a->core_type->tag == TYPE_INTERFACE_T) {
 					interface_* inter = TYPE2INTERFACE(GENERIC2TYPE(a));
 					Vector* inter_list = GetInterfaceTreeClass(TYPE2CLASS(GENERIC2TYPE(o->gtype)));
@@ -817,7 +817,7 @@ static void vm_run(frame * self, enviroment * env, int pos, int deferStart) {
 					}
 					break;
 				}
-				if(DistanceGenericType(o->gtype, a, sg_thread_context()) < 0) {
+				if(DistanceGenericType(o->gtype, a, GetSGThreadCContext()) < 0) {
 					PushVector(self->value_stack, GetNullObject());
 				} else {
 					//o = CloneObject(o);
@@ -830,7 +830,7 @@ static void vm_run(frame * self, enviroment * env, int pos, int deferStart) {
 			{
 				object* o = PopVector(self->value_stack);
 				generic_type* a = PopVector(self->type_args_vec);
-				a = ApplyGenericType(a, sg_thread_context());
+				a = ApplyGenericType(a, GetSGThreadCContext());
 				assert(a->core_type != NULL);
 				if(a->core_type->tag == TYPE_CLASS_T) {
 					PushVector(self->value_stack, o);
@@ -858,7 +858,7 @@ static void vm_run(frame * self, enviroment * env, int pos, int deferStart) {
 					break;
 				}
 				method* m = GetImplMethodClass(o->gtype->core_type->u.class_, tp, methodIndex);
-				call_context* cctx = sg_thread_context();
+				call_context* cctx = GetSGThreadCContext();
 				ExecuteMethod(m, self, env);
 				break;
 			}
@@ -1159,7 +1159,7 @@ static void vm_run(frame * self, enviroment * env, int pos, int deferStart) {
 			self->native_throw_pos = -1;
 		}
 		//キャッチされなかった例外によって終了する
-		sg_thread* thr = sg_thread_main();
+		sg_thread* thr = GetMainSGThread();
 		if (self->terminate && !thr->vm_dump) {
 			UncaughtVM(self, env, IDX);
 			thr->vm_dump = true;

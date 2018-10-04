@@ -11,12 +11,12 @@ static void sg_thread_trace_delete(VectorItem item);
 
 static volatile sg_thread* g_sg_main_thread = NULL;
 
-void sg_thread_launch() {
+void LaunchSGThread() {
 	assert(g_sg_main_thread == NULL);
-	g_sg_main_thread = sg_thread_new();
+	g_sg_main_thread = NewSGThread();
 }
 
-sg_thread * sg_thread_new() {
+sg_thread * NewSGThread() {
 	sg_thread* ret = (sg_thread*)MEM_MALLOC(sizeof(sg_thread));
 	ret->trace_stack = NewVector();
 	ret->frame_ref = NULL;
@@ -24,7 +24,7 @@ sg_thread * sg_thread_new() {
 	return ret;
 }
 
-sg_thread * sg_thread_current(script_context* sctx) {
+sg_thread * GetCurrentSGThread(script_context* sctx) {
 	//script_context* ctx = GetCurrentScriptContext();
 	assert(sctx != NULL);
 	//TODO:今は仮実装なのでちゃんと現在のスレッドを返すようにする
@@ -32,19 +32,19 @@ sg_thread * sg_thread_current(script_context* sctx) {
 	return ret;
 }
 
-void sg_thread_clear(sg_thread* self) {
+void ClearSGThread(sg_thread* self) {
 	while (!IsEmptyStack(self->trace_stack)) {
 		vm_trace* trace = (vm_trace*)PopStack(self->trace_stack);
 		DeleteVMTrace(trace);
 	}
 }
 
-void sg_thread_delete(sg_thread * self) {
+void DeleteSGThread(sg_thread * self) {
 	DeleteVector(self->trace_stack, sg_thread_trace_delete);
 	MEM_FREE(self);
 }
 
-void sg_thread_set_frame_ref(sg_thread * self, frame * frame_ref) {
+void SetSGThreadFrameRef(sg_thread * self, frame * frame_ref) {
 	//TODO:ここで同期をとる
 	assert(frame_ref != NULL);
 	assert(self->cctx == NULL);
@@ -54,28 +54,28 @@ void sg_thread_set_frame_ref(sg_thread * self, frame * frame_ref) {
 	self->cctx = NewCallContext(CALL_TOP_T);
 }
 
-frame * sg_thread_get_frame_ref(sg_thread * self) {
+frame * GetSGThreadFrameRef(sg_thread * self) {
 	//TODO:ここで同期をとる
 	return self->frame_ref;
 }
 
-void sg_thread_release_frame_ref(sg_thread * self) {
+void ReleaseSGThreadFrameRef(sg_thread * self) {
 	assert(self->cctx != NULL);
 	self->frame_ref = NULL;
 	DeleteCallContext(self->cctx);
 	self->cctx = NULL;
 }
 
-sg_thread * sg_thread_main() {
+sg_thread * GetMainSGThread() {
 	return g_sg_main_thread;
 }
 
-call_context* sg_thread_context() {
+call_context* GetSGThreadCContext() {
 	return g_sg_main_thread->cctx;
 }
 
-void sg_thread_destroy() {
-	sg_thread_delete(g_sg_main_thread);
+void DestroySGThread() {
+	DeleteSGThread(g_sg_main_thread);
 	g_sg_main_thread = NULL;
 }
 //private

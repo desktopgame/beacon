@@ -77,7 +77,7 @@ int meta_gcalc_score(Vector* params, Vector* gargs) {
 			//	ApplyGenericType(argType, ilctx),
 			//	param->gtype,
 				argType,
-				sg_thread_context()
+				GetSGThreadCContext()
 			//	ilctx
 			);
 		}
