@@ -83,7 +83,7 @@ void DumpStringPool(FILE* fp) {
 }
 
 void DestroyStringPool() {
-	DeleteTreeMap(gMap, DeleteTreeMapr_null);
+	DeleteTreeMap(gMap, TreeMapDeleterOfNull);
 	DeleteVector(gVec, VectorDeleterOfNull);
 	gMap = NULL;
 	gVec = NULL;
