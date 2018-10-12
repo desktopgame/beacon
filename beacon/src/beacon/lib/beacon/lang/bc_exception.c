@@ -12,7 +12,7 @@
 //proto
 static void bc_exception_nativeInit(method* parent, frame* fr, enviroment* env);
 
-void bc_exception_init() {
+void InitBCException() {
 	namespace_* lang = GetLangNamespace();
 	type* exceptionType = NewPreloadClass(InternString("Exception"));
 	class_* exceptionClass = TYPE2CLASS(exceptionType);
@@ -20,7 +20,7 @@ void bc_exception_init() {
 	DefineNativeMethodClass(exceptionClass, "nativeInit", bc_exception_nativeInit);
 }
 
-type* bc_exception_type() {
+type* GetBCExceptionType() {
 	namespace_* lang = GetLangNamespace();
 	return FindTypeFromNamespace(lang, InternString("Exception"));
 }
@@ -72,9 +72,9 @@ static void bc_exception_nativeInit(method* parent, frame* fr, enviroment* env) 
 		}
 	} while (temp != NULL);
 	//配列へ
-	object* arr = bc_array_new(stackTraceElementClass->parent->generic_self, stackTraceElementVec->length, fr);
+	object* arr = NewBCArray(stackTraceElementClass->parent->generic_self, stackTraceElementVec->length, fr);
 	for (int i = 0; i < stackTraceElementVec->length; i++) {
-		bc_array_set(arr, i, AtVector(stackTraceElementVec, i));
+		SetBCArray(arr, i, AtVector(stackTraceElementVec, i));
 	}
 	//Exception#stackTraceをここで初期化する
 	int tempi = 0;

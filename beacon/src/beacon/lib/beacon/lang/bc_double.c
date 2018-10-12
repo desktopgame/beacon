@@ -14,7 +14,7 @@ static void bc_double_nativeLT(method* parent, frame* fr, enviroment* env);
 static void bc_double_nativeLE(method* parent, frame* fr, enviroment* env);
 static void bc_double_nativeEQ(method* parent, frame* fr, enviroment* env);
 
-void bc_double_init() {
+void InitBCDouble() {
 	namespace_* lang = GetLangNamespace();
 	type* doubleType = NewPreloadClass(InternString("Double"));
 	class_* doubleClass = TYPE2CLASS(doubleType);
@@ -32,7 +32,7 @@ void bc_double_init() {
 	DefineNativeMethodClass(doubleClass, "nativeEQ", bc_double_nativeEQ);
 }
 
-type* bc_double_type() {
+type* GetBCDoubleType() {
 	namespace_* lang = GetLangNamespace();
 	return FindTypeFromNamespace(lang, InternString("Double"));
 }

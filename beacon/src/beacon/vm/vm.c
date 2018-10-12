@@ -1189,7 +1189,7 @@ static char stack_topc(frame* self) {
 static char* stack_tops(frame* self) {
 	object* ret = (object*)TopVector(self->value_stack);
 	assert(ret->tag == OBJECT_STRING_T);
-	return bc_string_raw(ret)->text;
+	return GetRawBCString(ret)->text;
 }
 
 static bool stack_topb(frame* self) {
@@ -1220,7 +1220,7 @@ static char stack_popc(frame* self) {
 static char* stack_pops(frame* self) {
 	object* ret = (object*)PopVector(self->value_stack);
 	assert(ret->tag == OBJECT_STRING_T);
-	return bc_string_raw(ret)->text;
+	return GetRawBCString(ret)->text;
 }
 
 static bool stack_popb(frame* self) {
@@ -1270,12 +1270,12 @@ static char* create_error_message(frame * self, enviroment* env, int pc) {
 	int lineIndexptr = -1;
 	FindFieldClass(stackTraceElementT->u.class_, InternString("fileName"), &fileNameptr);
 	FindFieldClass(stackTraceElementT->u.class_, InternString("lineIndex"), &lineIndexptr);
-	int stackLen = bc_array_length(stackTraceObj);
+	int stackLen = GetLengthBCArray(stackTraceObj);
 	for(int i=0; i<stackLen; i++) {
-		object* e = bc_array_get(stackTraceObj, i);
+		object* e = GetBCArray(stackTraceObj, i);
 		object* fileNameObj = AtVector(e->u.field_vec, fileNameptr);
 		object* lineIndexObj = AtVector(e->u.field_vec, lineIndexptr);
-		sprintf(block, "    @%d: %s\n", OBJ2INT(lineIndexObj), bc_string_raw(fileNameObj)->text);
+		sprintf(block, "    @%d: %s\n", OBJ2INT(lineIndexObj), GetRawBCString(fileNameObj)->text);
 		AppendsBuffer(sbuf, block);
 	}
 	return ReleaseBuffer(sbuf);

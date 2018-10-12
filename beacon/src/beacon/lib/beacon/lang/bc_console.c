@@ -11,7 +11,7 @@ static void bc_console_write(method* parent, frame* fr, enviroment* env);
 static void bc_console_readLine(method* parent, frame* fr, enviroment* env);
 static void bc_console_read(method* parent, frame* fr, enviroment* env);
 
-void bc_console_init() {
+void InitBCConsole() {
 	namespace_* lang = GetLangNamespace();
 	type* consoleType = NewPreloadClass(InternString("Console"));
 	class_* consoleClass = TYPE2CLASS(consoleType);
@@ -22,7 +22,7 @@ void bc_console_init() {
 	DefineNativeMethodClass(consoleClass, "read", bc_console_read);
 }
 
-type* bc_console_type() {
+type* GetBCConsoleType() {
 	namespace_* lang = GetLangNamespace();
 	return FindTypeFromNamespace(lang, InternString("Console"));
 }
@@ -35,7 +35,7 @@ static void bc_console_writeLine(method* parent, frame* fr, enviroment* env) {
 	} else if(o->tag == OBJECT_DOUBLE_T) {
 		printf("%f\n", o->u.double_);
 	} else if (o->tag == OBJECT_STRING_T) {
-		printf("%s\n", bc_string_raw(o)->text);
+		printf("%s\n", GetRawBCString(o)->text);
 	} else if (o->tag == OBJECT_REF_T) {
 		PrintGenericType(o->gtype);
 		printf("\n");
@@ -55,7 +55,7 @@ static void bc_console_write(method* parent, frame* fr, enviroment* env) {
 	}  else if (o->tag == OBJECT_DOUBLE_T) {
 		printf("%f", o->u.double_);
 	} else if (o->tag == OBJECT_STRING_T) {
-		printf("%s", bc_string_raw(o)->text);
+		printf("%s", GetRawBCString(o)->text);
 	} else if (o->tag == OBJECT_REF_T) {
 		PrintGenericType(o->gtype);
 		//printf("\n");

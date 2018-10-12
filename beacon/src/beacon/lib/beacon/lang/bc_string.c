@@ -5,7 +5,7 @@
 //proto
 static void bc_string_nativeInit(method* parent, frame* fr, enviroment* env);
 
-void bc_string_init() {
+void InitBCString() {
 	namespace_* lang = GetLangNamespace();
 	type* stringType = NewPreloadClass(InternString("String"));
 	class_* stringClass = TYPE2CLASS(stringType);
@@ -13,13 +13,13 @@ void bc_string_init() {
 	DefineNativeMethodClass(stringClass, "nativeInit", bc_string_nativeInit);
 }
 
-string_buffer * bc_string_raw(object* self) {
+string_buffer * GetRawBCString(object* self) {
 	VectorItem e = AtVector(self->native_slot_vec, 0);
 	assert(self->tag == OBJECT_STRING_T);
 	return (string_buffer*)e;
 }
 
-type* bc_string_type() {
+type* GetBCStringType() {
 	namespace_* lang = GetLangNamespace();
 	return FindTypeFromNamespace(lang, InternString("String"));
 }

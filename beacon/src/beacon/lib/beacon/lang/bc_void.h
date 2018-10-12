@@ -5,11 +5,11 @@ struct type;
 /**
  * beacon::lang::Voidクラスを初期化します.
  */
-void bc_void_init();
+void InitBCVoid();
 
 /**
  * beacon::lang::Void型を返します.
  * @return
  */
-struct type* bc_void_type();
+struct type* GetBCVoidType();
 #endif // !SIGNAL_LIB_SIGNAL_LANG_VOID_H

@@ -20,7 +20,7 @@ static void bc_int_nativeBitAnd(method* parent, frame* fr, enviroment* env);
 static void bc_int_nativeEQ(method* parent, frame* fr, enviroment* env);
 static void bc_int_nativeToChar(method* parent, frame* fr, enviroment* env);
 
-void bc_int_init() {
+void InitBCInt() {
 	namespace_* lang =  GetLangNamespace();
 	type* intType = NewPreloadClass(InternString("Int"));
 	class_* intClass = TYPE2CLASS(intType);
@@ -44,7 +44,7 @@ void bc_int_init() {
 	DefineNativeMethodClass(intClass, "nativeToChar", bc_int_nativeToChar);
 }
 
-type* bc_int_type() {
+type* GetBCIntType() {
 	namespace_* lang = GetLangNamespace();
 	return FindTypeFromNamespace(lang, InternString("Int"));
 }

@@ -9,11 +9,11 @@ struct type;
 /**
  * beacon::unsafe::Fileクラスを初期化します.
  */
-void bc_file_init();
+void InitBCFile();
 
 /**
  * beacon::unsafe::Fileを返します.
  * @return
  */
-struct type* bc_file_type();
+struct type* GetBCFileType();
 #endif

@@ -22,7 +22,7 @@ static void bc_time_nativeGetYear(method* parent, frame* fr, enviroment* env);
 static void bc_time_nativeGetDayOfWeek(method* parent, frame* fr, enviroment* env);
 static void bc_time_nativeGetDayOfYear(method* parent, frame* fr, enviroment* env);
 
-void bc_time_init() {
+void InitBCTime() {
 	namespace_* unsafe = GetUnsafeNamespace();
 	type* timeType = NewPreloadClass(InternString("Time"));
 	class_* timeClass = TYPE2CLASS(timeType);
@@ -38,7 +38,7 @@ void bc_time_init() {
 	DefineNativeMethodClass(timeClass, "nativeGetDayOfYear", bc_time_nativeGetDayOfYear);
 }
 
-type* bc_time_type() {
+type* GetBCTimeType() {
 	namespace_* unsafe = GetUnsafeNamespace();
 	return FindTypeFromNamespace(unsafe, InternString("Time"));
 }
@@ -53,7 +53,7 @@ static void bc_time_nativeGetRawTime(method* parent, frame* fr, enviroment* env)
 static void bc_time_nativeToString(method* parent, frame* fr, enviroment* env) {
 	object* self = AtVector(fr->ref_stack, 0);
 	int temp;
-	FindFieldClass(TYPE2CLASS(bc_time_type()), InternString("rawTime"), &temp);
+	FindFieldClass(TYPE2CLASS(GetBCTimeType()), InternString("rawTime"), &temp);
 	object* rawTime = (object*)AtVector(self->u.field_vec, temp);
 	PushVector(fr->value_stack, object_string_new(ctime(&(rawTime->u.long_))));
 }

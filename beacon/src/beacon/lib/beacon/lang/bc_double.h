@@ -5,11 +5,11 @@ struct type;
 /**
  * beacon::lang::Doubleクラスを初期化します.
  */
-void bc_double_init();
+void InitBCDouble();
 
 /**
  * beacon::lang::Double型を返します.
  * @return
  */
-struct type* bc_double_type();
+struct type* GetBCDoubleType();
 #endif // !SIGNAL_LIB_SIGNAL_LANG_DOUBLE_H

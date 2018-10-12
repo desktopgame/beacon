@@ -6,11 +6,11 @@ struct type;
 /**
  * beacon::lang::Boolクラスを初期化します.
  */
-void bc_bool_init();
+void InitBCBool();
 
 /**
  * beacon::lang::Bool型を返します.
  * @return
  */
-struct type* bc_bool_type();
+struct type* GetBCBoolType();
 #endif // !SIGNAL_LIB_SIGNAL_LANG_BOOL_H

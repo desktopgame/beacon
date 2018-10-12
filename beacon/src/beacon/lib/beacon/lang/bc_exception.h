@@ -5,10 +5,10 @@ struct type;
 /**
  * beacon::lang::Exceptionクラスを初期化します.
  */
-void bc_exception_init();
+void InitBCException();
 
 /**
  * beacon::lang::Exception型を返します.
  */
-struct type* bc_exception_type();
+struct type* GetBCExceptionType();
 #endif // !SIGNAL_LIB_SIGNAL_LANG_EXCEPTION_H

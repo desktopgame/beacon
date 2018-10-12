@@ -20,7 +20,7 @@ static void bc_locale_nativeGetNegativeSign(method* parent, frame* fr, enviromen
 static void bc_locale_nativeGetIntFracDigits(method* parent, frame* fr, enviroment* env);
 static void bc_locale_nativeGetFracDigits(method* parent, frame* fr, enviroment* env);
 
-void bc_locale_init() {
+void InitBCLocaleType() {
 	namespace_* unsafe = GetUnsafeNamespace();
 	type* localeType = NewPreloadClass(InternString("Locale"));
 	class_* localeClass = TYPE2CLASS(localeType);
@@ -38,7 +38,7 @@ void bc_locale_init() {
 	DefineNativeMethodClass(localeClass, "nativeGetFracDigits", bc_locale_nativeGetFracDigits);
 }
 
-type* bc_locale_type() {
+type* GetBCLocaleType() {
 	namespace_* unsafe = GetUnsafeNamespace();
 	return FindTypeFromNamespace(unsafe, InternString("Locale"));
 }
@@ -67,7 +67,7 @@ static void bc_locale_nativeSetLocale(method* parent, frame* fr, enviroment* env
 			category = LC_TIME;
 			break;
 	}
-	const char* locale = bc_string_raw(localeObj)->text;
+	const char* locale = GetRawBCString(localeObj)->text;
 	assert(setlocale(category, locale) != NULL);
 }
 

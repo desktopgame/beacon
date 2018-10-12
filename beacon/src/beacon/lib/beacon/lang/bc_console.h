@@ -5,11 +5,11 @@ struct type;
 /**
  * beacon::lang::Consoleクラスを初期化します.
  */
-void bc_console_init();
+void InitBCConsole();
 
 /**
  * beacon::lang::Console型を返します.
  * @return
  */
-struct type* bc_console_type();
+struct type* GetBCConsoleType();
 #endif // !SIGNAL_LIB_SIGNAL_LANG_SG_CONSOLE_H

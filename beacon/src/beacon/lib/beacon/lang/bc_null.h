@@ -5,11 +5,11 @@ struct type;
 /**
  * beacon::lang::Nullクラスを初期化します.
  */
-void bc_null_init();
+void InitBCNull();
 
 /**
  * beacon::lang::Null型を返します.
  * @return
  */
-struct type* bc_null_type();
+struct type* GetBCNullType();
 #endif // !SIGNAL_LIB_SIGNAL_LANG_NULL_H

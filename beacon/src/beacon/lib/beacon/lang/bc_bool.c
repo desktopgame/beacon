@@ -4,7 +4,7 @@
 static void bc_bool_nativeBitOr(method* parent, frame* fr, enviroment* env);
 static void bc_bool_nativeBitAnd(method* parent, frame* fr, enviroment* env);
 
-void bc_bool_init() {
+void InitBCBool() {
 	namespace_* lang = GetLangNamespace();
 	type* boolType = NewPreloadClass(InternString("Bool"));
 	class_* boolClass = TYPE2CLASS(boolType);
@@ -13,7 +13,7 @@ void bc_bool_init() {
 	DefineNativeMethodClass(boolClass, "nativeBitAnd", bc_bool_nativeBitAnd);
 }
 
-type* bc_bool_type() {
+type* GetBCBoolType() {
 	namespace_* lang = GetLangNamespace();
 	return FindTypeFromNamespace(lang, InternString("Bool"));
 }

@@ -14,7 +14,7 @@ static void bc_system_nativeExit(method* parent, frame* fr, enviroment* env);
 static void bc_system_nativeAbort(method* parent, frame* fr, enviroment* env);
 static void bc_system_nativeExec(method* parent, frame* fr, enviroment* env);
 
-void bc_system_init() {
+void InitBCSystem() {
 	namespace_* unsafe = GetUnsafeNamespace();
 	type* systemType = NewPreloadClass(InternString("System"));
 	class_* systemClass = TYPE2CLASS(systemType);
@@ -24,7 +24,7 @@ void bc_system_init() {
 	DefineNativeMethodClass(systemClass, "nativeExec", bc_system_nativeExec);
 }
 
-type* bc_system_type() {
+type* GetBCSystemType() {
 	namespace_* unsafe = GetUnsafeNamespace();
 	return FindTypeFromNamespace(unsafe, InternString("System"));
 }
@@ -42,7 +42,7 @@ static void bc_system_nativeAbort(method* parent, frame* fr, enviroment* env) {
 
 static void bc_system_nativeExec(method* parent, frame* fr, enviroment* env) {
 	object* cmd = AtVector(fr->ref_stack, 1);
-	const char* str = bc_string_raw(cmd)->text;
+	const char* str = GetRawBCString(cmd)->text;
 	int ret = system(str);
 	PushVector(fr->value_stack, GetIntObject(ret));
 }

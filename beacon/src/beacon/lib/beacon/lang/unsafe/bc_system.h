@@ -6,8 +6,8 @@
  */
 struct type;
 
-void bc_system_init();
+void InitBCSystem();
 
-struct type* bc_system_type();
+struct type* GetBCSystemType();
 
 #endif

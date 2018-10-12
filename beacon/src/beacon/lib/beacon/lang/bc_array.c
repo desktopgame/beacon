@@ -13,7 +13,7 @@ static void bc_array_nativeSet(method* parent, frame* fr, enviroment* env);
 static void bc_array_nativeGet(method* parent, frame* fr, enviroment* env);
 static void bc_array_nativeCopy(method* parent, frame* fr, enviroment* env);
 
-void bc_array_init() {
+void InitBCArray() {
 	namespace_* lang = GetLangNamespace();
 	type* arrayType = NewPreloadClass(InternString("Array"));
 	class_* arrayClass = TYPE2CLASS(arrayType);
@@ -24,13 +24,13 @@ void bc_array_init() {
 	DefineNativeMethodClass(arrayClass, "nativeCopy", bc_array_nativeCopy);
 }
 
-type * bc_array_type() {
+type * GetBCArrayType() {
 	namespace_* lang = GetLangNamespace();
 	return FindTypeFromNamespace(lang, InternString("Array"));
 }
 
-object * bc_array_new(struct generic_type* gtype, int length, frame * fr) {
-	type* arrayType = bc_array_type();
+object * NewBCArray(struct generic_type* gtype, int length, frame * fr) {
+	type* arrayType = GetBCArrayType();
 
 	Vector* args = NewVector();
 	Vector* type_args = NewVector();
@@ -43,15 +43,15 @@ object * bc_array_new(struct generic_type* gtype, int length, frame * fr) {
 	return ret;
 }
 
-void bc_array_set(object * arr, int index, object * o) {
+void SetBCArray(object * arr, int index, object * o) {
 	AssignVector(arr->native_slot_vec, index, o);
 }
 
-object * bc_array_get(object * arr, int index) {
+object * GetBCArray(object * arr, int index) {
 	return (object*)AtVector(arr->native_slot_vec, index);
 }
 
-int bc_array_length(object* arr) {
+int GetLengthBCArray(object* arr) {
 	//assert(arr->tag == OBJECT_ARRAY_T);
 	return arr->native_slot_vec->length;
 }

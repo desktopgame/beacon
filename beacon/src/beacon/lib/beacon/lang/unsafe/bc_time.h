@@ -2,7 +2,7 @@
 #define BEACON_LIB_BEACON_LANG_UNSAFE_BC_TIME_H
 struct type;
 
-void bc_time_init();
+void InitBCTime();
 
-struct type* bc_time_type();
+struct type* GetBCTimeType();
 #endif

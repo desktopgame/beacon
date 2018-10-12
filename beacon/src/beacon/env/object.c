@@ -79,7 +79,7 @@ object * MallocStringObject(const char * s, const char* filename, int lineno) {
 	//配列を生成
 	object* arr = MallocRefObject(filename, lineno);
 	//arr->tag = OBJECT_ARRAY_T;
-	type* arrType = bc_array_type();
+	type* arrType = GetBCArrayType();
 	type* strType = FindTypeFromNamespace(GetLangNamespace(), InternString("String"));
 	arr->gtype = generic_NewType(arrType);
 	arr->vptr = GetVTableType(arrType);
@@ -230,7 +230,7 @@ void PaintAllObject(object* self, object_paint paint) {
 		}
 	}
 	//配列型ならスロットも全てマーク
-	type* arrayType = bc_array_type();
+	type* arrayType = GetBCArrayType();
 	if (self->gtype->core_type == arrayType) {
 		for (int i = 0; i < self->native_slot_vec->length; i++) {
 			object* e = (object*)AtVector(self->native_slot_vec, i);

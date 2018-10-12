@@ -20,7 +20,7 @@ static void bc_file_nativeGetStdErr(method* parent, frame* fr, enviroment* env);
 static void bc_file_nativeClose(method* parent, frame* fr, enviroment* env);
 static object* file_new(FILE* fp, bool std);
 
-void bc_file_init() {
+void InitBCFile() {
 	namespace_* unsafe = GetUnsafeNamespace();
 	type* fileType = NewPreloadClass(InternString("File"));
 	class_* fileClass = TYPE2CLASS(fileType);
@@ -35,7 +35,7 @@ void bc_file_init() {
 	DefineNativeMethodClass(fileClass, "nativeClose", bc_file_nativeClose);
 }
 
-type* bc_file_type() {
+type* GetBCFileType() {
 	namespace_* unsafe = GetUnsafeNamespace();
 	return FindTypeFromNamespace(unsafe, InternString("File"));
 }
@@ -43,8 +43,8 @@ type* bc_file_type() {
 static void bc_file_nativeOpen(method* parent, frame* fr, enviroment* env) {
 	object* fileObj = AtVector(fr->ref_stack, 1);
 	object* modeObj = AtVector(fr->ref_stack, 2);
-	string_buffer* fileStr = bc_string_raw(fileObj);
-	string_buffer* modeStr = bc_string_raw(modeObj);
+	string_buffer* fileStr = GetRawBCString(fileObj);
+	string_buffer* modeStr = GetRawBCString(modeObj);
 	//Printfln("%s : %s", fileStr->text, modeStr->text);
 
 	FILE* fp = fopen(fileStr->text, modeStr->text);
@@ -105,7 +105,7 @@ static void bc_file_nativeClose(method* parent, frame* fr, enviroment* env) {
 static object* file_new(FILE* fp, bool std) {
 	object* file = object_ref_new();
 	assert(file->paint != PAINT_ONEXIT_T);
-	type* fileType = bc_file_type();
+	type* fileType = GetBCFileType();
 	file->gtype = fileType->generic_self;
 	file->vptr = TYPE2CLASS(fileType)->vt;
 	AssignVector(file->native_slot_vec, 0, fp);

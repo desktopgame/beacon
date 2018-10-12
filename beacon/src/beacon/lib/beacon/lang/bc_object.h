@@ -5,10 +5,10 @@ struct type;
 /**
  * beacon::lang::Objectクラスを初期化します.
  */
-void bc_object_init();
+void InitBCObject();
 
 /**
  * beacon::lang::Object型を返します.
  */
-struct type* bc_object_type();
+struct type* GetBCObjectType();
 #endif // !SIGNAL_LIB_SIGNAL_LANG_H

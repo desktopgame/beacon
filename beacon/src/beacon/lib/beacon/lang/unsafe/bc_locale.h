@@ -3,7 +3,7 @@
 
 struct type;
 
-void bc_locale_init();
+void InitBCLocaleType();
 
-struct type* bc_locale_type();
+struct type* GetBCLocaleType();
 #endif
