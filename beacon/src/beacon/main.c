@@ -41,23 +41,23 @@ int main_cl(int argc, char *argv[]) {
 		switch(opt) {
 			case 't':
 				printf(":t :test\n");
-				ret = cl_test(argc, argv);
+				ret = TestCmd(argc, argv);
 				break;
 			case 'a':
 				printf(":a :ast\n");
-				ret = cl_ast(optarg);
+				ret = DumpASTCmd(optarg);
 				break;
 			case 'i':
 				printf(":i :il\n");
-				ret = cl_il(optarg);
+				ret = DumpILCmd(optarg);
 				break;
 			case 'r':
 				printf(":r :run\n");
-				ret = cl_run(optarg);
+				ret = RunCmd(optarg);
 				break;
 			case 'o':
 				printf(":o :op\n");
-				ret = cl_op(optarg);
+				ret = DumpOpCodeCmd(optarg);
 				break;
 			default:
 				printf("error! :%c :%c", opt, optopt);

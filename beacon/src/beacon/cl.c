@@ -4,7 +4,7 @@
 #include "test.h"
 #include <stdio.h>
 
-int cl_test(int argc, char* argv[]) {
+int TestCmd(int argc, char* argv[]) {
 #if defined(DEBUG) || (defined(_MSC_VER) && defined(_DEBUG))
 	OpenScriptContext();
 	int ret = test_run(argc, argv);
@@ -17,33 +17,26 @@ int cl_test(int argc, char* argv[]) {
 #endif
 }
 
-int cl_bug(int argc, char* argv[]) {
-	OpenScriptContext();
-	int ret = 0;
-	CloseScriptContext();
-	return ret;
-}
-
-int cl_ast(const char* filename) {
+int DumpASTCmd(const char* filename) {
 	int ret = EvalAST(filename);
 	return ret;
 }
 
-int cl_il(const char* filename){
+int DumpILCmd(const char* filename){
 	OpenScriptContext();
 	int ret = EvalIL(filename);
 	CloseScriptContext();
 	return ret;
 }
 
-int cl_op(const char* filename) {
+int DumpOpCodeCmd(const char* filename) {
 	OpenScriptContext();
 	int ret = EvalOp(filename);
 	CloseScriptContext();
 	return ret;
 }
 
-int cl_run(const char* filename) {
+int RunCmd(const char* filename) {
 	OpenScriptContext();
 	int ret = EvalFile(filename);
 	CloseScriptContext();

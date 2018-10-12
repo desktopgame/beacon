@@ -7,41 +7,33 @@
  * @param argv
  * @return
  */
-int cl_test(int argc, char* argv[]);
-
-/**
- * 前回のテストで失敗した箇所を実行します.
- * @param argc
- * @param argv
- * @return
- */
-int cl_bug(int argc, char* argv[]);
+int TestCmd(int argc, char* argv[]);
 
 /**
  * ASTをダンプします.
  * @param filename
  * @return
  */
-int cl_ast(const char* filename);
+int DumpASTCmd(const char* filename);
 
 /**
  * ASTをダンプします.
  * @param filename
  * @return
  */
-int cl_il(const char* filename);
+int DumpILCmd(const char* filename);
 
 /**
  * オペコードをダンプします.
  * @param filename
  * @return
  */
-int cl_op(const char* filename);
+int DumpOpCodeCmd(const char* filename);
 
 /**
  * 指定のファイルを実行します.
  * @param filename
  * @return
  */
-int cl_run(const char* filename);
+int RunCmd(const char* filename);
 #endif
