@@ -8,21 +8,21 @@
 #if defined(_MSC_VER)
 #pragma warning(disable:4996)
 #endif
-static bc_error_id gGlobalError = BCERROR_NONE_T;
+static BCErrorID gGlobalError = BCERROR_NONE_T;
 static string_view gErrorFile = ZERO_VIEW;
 static string_view gLastMessage = ZERO_VIEW;
 static int gErrorLineNo = -1;
 static int gErrorColumn = -1;
 static void check_abort(script_context* sctx);
 
-void ThrowBCError(bc_error_id id, ...) {
+void ThrowBCError(BCErrorID id, ...) {
 	va_list ap;
 	va_start(ap, id);
 	VthrowBCError(id, ap);
 	va_end(ap);
 }
 
-void VthrowBCError(bc_error_id id, va_list ap) {
+void VthrowBCError(BCErrorID id, va_list ap) {
 	char* fmt = VformatBCError(id, ap);
 	gGlobalError = id;
 	gLastMessage = InternString(fmt);
@@ -42,7 +42,7 @@ void VthrowBCError(bc_error_id id, va_list ap) {
 #endif
 }
 
-char* FormatBCError(bc_error_id id, ...) {
+char* FormatBCError(BCErrorID id, ...) {
 	va_list ap;
 	va_start(ap, id);
 	char* ret = VformatBCError(id, ap);
@@ -51,7 +51,7 @@ char* FormatBCError(bc_error_id id, ...) {
 	return ret;
 }
 
-char* VformatBCError(bc_error_id id, va_list ap) {
+char* VformatBCError(BCErrorID id, va_list ap) {
 	char* fmt = NULL;
 	//bool aa = cc_test(ccstate_toplevel);
 	switch(id) {
@@ -392,7 +392,7 @@ string_view GetBCErrorMessage() {
 	return gLastMessage;
 }
 
-bc_error_id GetLastBCError() {
+BCErrorID GetLastBCError() {
 	return gGlobalError;
 }
 //private

@@ -9,7 +9,7 @@
 /**
  * beaconインタプリタがソース解析中に検出したエラーを表す列挙.
  */
-typedef enum bc_error_id {
+typedef enum BCErrorID_t {
 	BCERROR_NONE_T = 0,
 	BCERROR_GENERIC_T,
 	BCERROR_PARSE_T,
@@ -120,21 +120,21 @@ typedef enum bc_error_id {
 	BCERROR_CAN_T_ACCESS_PROPERTY_T,
 	BCERROR_INVALID_ACCESS_LEVEL_OF_PROPERTY_T,
 	BCERROR_SPECIFIED_BOTH_PROPERTY_ACCESSOR_T,
-} bc_error_id;
+} BCErrorID;
 
 /**
  * 指定のIDでエラーを発生させます.
  * @param id
  * @param ...
  */
-void ThrowBCError(bc_error_id id, ...);
+void ThrowBCError(BCErrorID id, ...);
 
 /**
  * 指定のIDでエラーを発生させます.
  * @param id
  * @param ap
  */
-void VthrowBCError(bc_error_id id, va_list ap);
+void VthrowBCError(BCErrorID id, va_list ap);
 
 /**
  * エラーから文字列を作成します.
@@ -143,7 +143,7 @@ void VthrowBCError(bc_error_id id, va_list ap);
  * @param ...
  * @return
  */
-char* FormatBCError(bc_error_id id, ...);
+char* FormatBCError(BCErrorID id, ...);
 /**
  * エラーから文字列を作成します.
  * @param block
@@ -151,7 +151,7 @@ char* FormatBCError(bc_error_id id, ...);
  * @param ap
  * @return
  */
-char* VformatBCError(bc_error_id id, va_list ap);
+char* VformatBCError(BCErrorID id, va_list ap);
 
 /**
  * エラーフラグをクリアします.
@@ -186,5 +186,5 @@ string_view GetBCErrorMessage();
  * 現在発生中のエラーを返します.
  * @return
  */
-bc_error_id GetLastBCError();
+BCErrorID GetLastBCError();
 #endif
