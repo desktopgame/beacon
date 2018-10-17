@@ -23,7 +23,7 @@ il_stmt_assert* NewILAssert() {
 
 void GenerateILAssert(il_stmt_assert* self, enviroment* env, call_context* cctx) {
 	//https://code.i-harness.com/ja/q/2a1650
-	label* gt = AddLabelOpcodeBuf(env->buf, 0);
+	Label* gt = AddLabelOpcodeBuf(env->buf, 0);
 	GenerateILFactor(self->condition, env, cctx);
 	AddOpcodeBuf(env->buf, OP_GOTO_if_true);
 	AddOpcodeBuf(env->buf, gt);
@@ -33,7 +33,7 @@ void GenerateILAssert(il_stmt_assert* self, enviroment* env, call_context* cctx)
 	AddOpcodeBuf(env->buf, FindTypeFromNamespace(GetLangNamespace(), InternString("Exception"))->absolute_index);
 	AddOpcodeBuf(env->buf, 0);
 	AddOpcodeBuf(env->buf, OP_THROW);
-	gt->cursor = AddNOPOpcodeBuf(env->buf);
+	gt->Cursor = AddNOPOpcodeBuf(env->buf);
 }
 
 void LoadILAssert(il_stmt_assert* self, enviroment* env, call_context* cctx) {

@@ -19,16 +19,16 @@ void LoadILDefer(il_stmt_defer* self, enviroment* env, call_context* cctx) {
 }
 
 void GenerateILDefer(il_stmt_defer* self, enviroment* env, call_context* cctx) {
-	label* lb = AddLabelOpcodeBuf(env->buf, 0);
-	label* lb2 = AddLabelOpcodeBuf(env->buf, 0);
+	Label* lb = AddLabelOpcodeBuf(env->buf, 0);
+	Label* lb2 = AddLabelOpcodeBuf(env->buf, 0);
 	AddOpcodeBuf(env->buf, OP_DEFER_REGISTER);
 	AddOpcodeBuf(env->buf, lb2);
 	AddOpcodeBuf(env->buf, OP_GOTO);
 	AddOpcodeBuf(env->buf, lb);
-	lb2->cursor = AddOpcodeBuf(env->buf, OP_DEFER_ENTER);
+	lb2->Cursor = AddOpcodeBuf(env->buf, OP_DEFER_ENTER);
 	GenerateILStmt(self->stmt, env, cctx);
 	AddOpcodeBuf(env->buf, OP_DEFER_EXIT);
-	lb->cursor = AddNOPOpcodeBuf(env->buf);
+	lb->Cursor = AddNOPOpcodeBuf(env->buf);
 }
 
 void DeleteILDefer(il_stmt_defer* self) {

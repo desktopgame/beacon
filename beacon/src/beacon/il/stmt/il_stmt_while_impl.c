@@ -26,8 +26,8 @@ il_stmt_while * NewILWhile() {
 void GenerateILWhile(il_stmt_while * self, enviroment * env, call_context* cctx) {
 	env->sym_table->scope_depth++;
 	int prev = AddNOPOpcodeBuf(env->buf);
-	label* prevLab = AddLabelOpcodeBuf(env->buf, prev);
-	label* nextLab = AddLabelOpcodeBuf(env->buf, -1);
+	Label* prevLab = AddLabelOpcodeBuf(env->buf, prev);
+	Label* nextLab = AddLabelOpcodeBuf(env->buf, -1);
 	PushVector(cctx->control.while_start, prevLab);
 	PushVector(cctx->control.while_end, nextLab);
 	//条件を満たさないなら nextLab へ
@@ -45,7 +45,7 @@ void GenerateILWhile(il_stmt_while * self, enviroment * env, call_context* cctx)
 	PopVector(cctx->control.while_start);
 	PopVector(cctx->control.while_end);
 	int next = AddNOPOpcodeBuf(env->buf);
-	nextLab->cursor = next;
+	nextLab->Cursor = next;
 	env->sym_table->scope_depth--;
 }
 

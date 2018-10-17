@@ -2,17 +2,17 @@
 #include <stdlib.h>
 #include "../util/mem.h"
 
-label * NewLabel(int cursor) {
-	label* ret = (label*)MEM_MALLOC(sizeof(label));
-	ret->cursor = cursor;
+Label * NewLabel(int cursor) {
+	Label* ret = (Label*)MEM_MALLOC(sizeof(Label));
+	ret->Cursor = cursor;
 	return ret;
 }
 
-label * CloneLabel(label * src) {
-	label* ret = NewLabel(src->cursor);
+Label * CloneLabel(Label * src) {
+	Label* ret = NewLabel(src->Cursor);
 	return ret;
 }
 
-void DeleteLabel(label * self) {
+void DeleteLabel(Label * self) {
 	MEM_FREE(self);
 }

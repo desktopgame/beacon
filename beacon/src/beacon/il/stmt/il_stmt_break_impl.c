@@ -13,7 +13,7 @@ void GenerateILBreak(void * empty, enviroment * env, call_context* cctx) {
 		ThrowBCError(BCERROR_BREAK_AT_NOT_LOOP_T);
 		return;
 	}
-	label* lab = (label*)TopVector(cctx->control.while_end);
+	Label* lab = (Label*)TopVector(cctx->control.while_end);
 	AddOpcodeBuf(env->buf, OP_GOTO);
 	AddOpcodeBuf(env->buf, lab);
 }

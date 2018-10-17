@@ -13,7 +13,7 @@ void GenerateILContinue(void * empty, enviroment * env, call_context* cctx) {
 		ThrowBCError(BCERROR_CONTINUE_AT_NOT_LOOP_T);
 		return;
 	}
-	label* lab = (label*)TopVector(cctx->control.while_start);
+	Label* lab = (Label*)TopVector(cctx->control.while_start);
 	AddOpcodeBuf(env->buf, OP_GOTO);
 	AddOpcodeBuf(env->buf, lab);
 }

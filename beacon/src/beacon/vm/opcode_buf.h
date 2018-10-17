@@ -31,7 +31,7 @@ int AddOpcodeBuf(opcode_buf* self, VectorItem item);
  * @param index
  * @return
  */
-label* AddLabelOpcodeBuf(opcode_buf * self, int index);
+Label* AddLabelOpcodeBuf(opcode_buf * self, int index);
 
 /**
  * nop を追加してその位置を返します.

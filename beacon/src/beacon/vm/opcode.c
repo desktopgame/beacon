@@ -455,8 +455,8 @@ int FprintOpcode(FILE* fp, Vector* source, int index) {
 		}
 		case OP_DEFER_REGISTER:
 		{
-			label* l = (label*)AtVector(source, ++index);
-			fprintf(fp, "defer enter(%d)", l->cursor);
+			Label* l = (Label*)AtVector(source, ++index);
+			fprintf(fp, "defer enter(%d)", l->Cursor);
 			break;
 		}
 		case OP_DEFER_EXIT:
@@ -482,20 +482,20 @@ int FprintOpcode(FILE* fp, Vector* source, int index) {
 		//goto
 		case OP_GOTO:
 		{
-			label* l = (label*)AtVector(source, ++index);
-			fprintf(fp,"goto(%d)", l->cursor);
+			Label* l = (Label*)AtVector(source, ++index);
+			fprintf(fp,"goto(%d)", l->Cursor);
 			break;
 		}
 		case OP_GOTO_if_true:
 		{
-			label* l = (label*)AtVector(source, ++index);
-			fprintf(fp,"goto if true(%d)", l->cursor);
+			Label* l = (Label*)AtVector(source, ++index);
+			fprintf(fp,"goto if true(%d)", l->Cursor);
 			break;
 		}
 		case OP_GOTO_if_false:
 		{
-			label* l = (label*)AtVector(source, ++index);
-			fprintf(fp,"goto if false(%d)", l->cursor);
+			Label* l = (Label*)AtVector(source, ++index);
+			fprintf(fp,"goto if false(%d)", l->Cursor);
 			break;
 		}
 		default:

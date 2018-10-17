@@ -21,8 +21,8 @@ int AddOpcodeBuf(opcode_buf * self, VectorItem item) {
 	return len;
 }
 
-label * AddLabelOpcodeBuf(opcode_buf * self, int index) {
-	label* ret = NewLabel(index);
+Label * AddLabelOpcodeBuf(opcode_buf * self, int index) {
+	Label* ret = NewLabel(index);
 	PushVector(self->label_vec, ret);
 	return ret;
 }
@@ -61,7 +61,7 @@ void DeleteOpcodeBuf(opcode_buf * self) {
 
 //private
 static void DeleteOpcodeBuf_label(VectorItem item) {
-	label* l = (label*)item;
+	Label* l = (Label*)item;
 	DeleteLabel(l);
 }
 
@@ -73,7 +73,7 @@ static void opcode_buf_copy(opcode_buf* src, opcode_buf* dst) {
 			e == OP_GOTO_if_true) {
 
 			AddOpcodeBuf(dst, e);
-			label* lb = (label*)AtVector(src->source_vec, ++i);
+			Label* lb = (Label*)AtVector(src->source_vec, ++i);
 			AddOpcodeBuf(dst, e);
 			PushVector(dst->label_vec, lb);
 		} else {

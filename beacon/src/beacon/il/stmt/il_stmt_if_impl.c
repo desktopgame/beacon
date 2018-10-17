@@ -52,8 +52,8 @@ void GenerateILIf(il_stmt_if * self, enviroment* env, call_context* cctx) {
 	//if(...)
 	env->sym_table->scope_depth++;
 	GenerateILFactor(self->condition, env, cctx);
-	label* l1 = AddLabelOpcodeBuf(env->buf, -1);
-	label* tail = AddLabelOpcodeBuf(env->buf, -1);
+	Label* l1 = AddLabelOpcodeBuf(env->buf, -1);
+	Label* tail = AddLabelOpcodeBuf(env->buf, -1);
 	// { ... }
 	AddOpcodeBuf(env->buf, OP_GOTO_if_false);
 	AddOpcodeBuf(env->buf, l1);
@@ -64,12 +64,12 @@ void GenerateILIf(il_stmt_if * self, enviroment* env, call_context* cctx) {
 	//条件が満たされて実行されたら最後までジャンプ
 	AddOpcodeBuf(env->buf, OP_GOTO);
 	AddOpcodeBuf(env->buf, tail);
-	l1->cursor = AddNOPOpcodeBuf(env->buf);
+	l1->Cursor = AddNOPOpcodeBuf(env->buf);
 	// elif(...)
 	for (int i = 0; i < self->elif_list->Length; i++) {
 		il_stmt_elif* elif = (il_stmt_elif*)AtVector(self->elif_list, i);
 		GenerateILFactor(elif->condition, env, cctx);
-		label* l2 = AddLabelOpcodeBuf(env->buf, -1);
+		Label* l2 = AddLabelOpcodeBuf(env->buf, -1);
 		// { ... }
 		AddOpcodeBuf(env->buf, OP_GOTO_if_false);
 		AddOpcodeBuf(env->buf, l2);
@@ -80,18 +80,18 @@ void GenerateILIf(il_stmt_if * self, enviroment* env, call_context* cctx) {
 		//条件が満たされて実行されたら最後までジャンプ
 		AddOpcodeBuf(env->buf, OP_GOTO);
 		AddOpcodeBuf(env->buf, tail);
-		l2->cursor = AddNOPOpcodeBuf(env->buf);
+		l2->Cursor = AddNOPOpcodeBuf(env->buf);
 	}
 	// else { ... }
 	if (self->else_body == NULL ||
 		self->else_body->body->Length == 0) {
-		tail->cursor = AddNOPOpcodeBuf(env->buf);
+		tail->Cursor = AddNOPOpcodeBuf(env->buf);
 	} else {
 		for (int i = 0; i < self->else_body->body->Length; i++) {
 			il_stmt* stmt = (il_stmt*)AtVector(self->else_body->body, i);
 			GenerateILStmt(stmt, env, cctx);
 		}
-		tail->cursor = AddNOPOpcodeBuf(env->buf);
+		tail->Cursor = AddNOPOpcodeBuf(env->buf);
 	}
 	env->sym_table->scope_depth--;
 }

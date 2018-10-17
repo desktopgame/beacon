@@ -7,7 +7,7 @@
  * その時点でのpcと名前束縛を記録しておく構造体です.
  */
 typedef struct DeferContext_t {
-	label* Offset;
+	Label* Offset;
 	Vector* VariableTable;
 } DeferContext;
 

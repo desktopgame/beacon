@@ -80,10 +80,10 @@ void ResumeVM(frame * self, enviroment * env, int pos) {
 	vm_run(self, env, pos, -1);
 	while(self->defer_vec->Length > 0) {
 		DeferContext* defctx = (DeferContext*)PopVector(self->defer_vec);
-		label* offset = defctx->Offset;
+		Label* offset = defctx->Offset;
 		Vector* save = self->ref_stack;
 		self->ref_stack = defctx->VariableTable;
-		vm_run(self, env, offset->cursor, offset->cursor);
+		vm_run(self, env, offset->Cursor, offset->Cursor);
 		self->ref_stack = save;
 		DeleteDeferContext(defctx);
 	}
@@ -1108,7 +1108,7 @@ static void vm_run(frame * self, enviroment * env, int pos, int deferStart) {
 			}
 			case OP_DEFER_REGISTER:
 			{
-				label* offset = (label*)GetEnviromentSourceAt(env, ++IDX);
+				Label* offset = (Label*)GetEnviromentSourceAt(env, ++IDX);
 				Vector* bind = CloneVector(self->ref_stack);
 				DeferContext* defctx = NewDeferContext();
 				defctx->Offset = offset;
@@ -1124,17 +1124,17 @@ static void vm_run(frame * self, enviroment * env, int pos, int deferStart) {
 			//goto
 			case OP_GOTO:
 			{
-				label* l = (label*)GetEnviromentSourceAt(env, ++IDX);
-				IDX = l->cursor;
+				Label* l = (Label*)GetEnviromentSourceAt(env, ++IDX);
+				IDX = l->Cursor;
 				break;
 			}
 
 			case OP_GOTO_if_true:
 			{
 				bool v = SPB(self);
-				label* l = (label*)GetEnviromentSourceAt(env, ++IDX);
+				Label* l = (Label*)GetEnviromentSourceAt(env, ++IDX);
 				if (v) {
-					IDX = l->cursor;
+					IDX = l->Cursor;
 				}
 				break;
 			}
@@ -1142,10 +1142,10 @@ static void vm_run(frame * self, enviroment * env, int pos, int deferStart) {
 			case OP_GOTO_if_false:
 			{
 				bool v = SPB(self);
-				label* l = (label*)GetEnviromentSourceAt(env, ++IDX);
-				int a = l->cursor;
+				Label* l = (Label*)GetEnviromentSourceAt(env, ++IDX);
+				int a = l->Cursor;
 				if (!v) {
-					IDX = l->cursor;
+					IDX = l->Cursor;
 				}
 				break;
 			}

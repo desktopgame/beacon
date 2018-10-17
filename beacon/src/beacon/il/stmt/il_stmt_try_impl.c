@@ -37,8 +37,8 @@ il_stmt_catch* NewILCatch(StringView namev) {
 }
 
 void GenerateILTry(il_stmt_try* self, enviroment* env, call_context* cctx) {
-	label* try_end = AddLabelOpcodeBuf(env->buf, -1);
-	label* catch_start = AddLabelOpcodeBuf(env->buf, -1);
+	Label* try_end = AddLabelOpcodeBuf(env->buf, -1);
+	Label* catch_start = AddLabelOpcodeBuf(env->buf, -1);
 	AddOpcodeBuf(env->buf, OP_TRY_ENTER);
 	//ここでcatchの開始に飛ばしますが、
 	//OP_TRY_ENTERからはこの部分はスキップされます。
@@ -55,9 +55,9 @@ void GenerateILTry(il_stmt_try* self, enviroment* env, call_context* cctx) {
 	AddOpcodeBuf(env->buf, OP_GOTO);
 	AddOpcodeBuf(env->buf, try_end);
 	//例外を捕捉したらここに飛ぶように
-	catch_start->cursor = AddNOPOpcodeBuf(env->buf);
+	catch_start->Cursor = AddNOPOpcodeBuf(env->buf);
 	//全てのcatch節に対して
-	label* nextCause = NULL;
+	Label* nextCause = NULL;
 	for (int i = 0; i < self->catch_list->Length; i++) {
 		//例外を指定の名前でアクセス出来るように
 		il_stmt_catch* ilcatch = (il_stmt_catch*)AtVector(self->catch_list, i);
@@ -66,7 +66,7 @@ void GenerateILTry(il_stmt_try* self, enviroment* env, call_context* cctx) {
 		//直前のケースのジャンプ先をここに
 		if (nextCause != NULL) {
 			int head = AddNOPOpcodeBuf(env->buf);
-			nextCause->cursor = head;
+			nextCause->Cursor = head;
 		}
 		nextCause = AddLabelOpcodeBuf(env->buf, -1);
 		//現在の例外と catch節 の型に互換性があるなら続行
@@ -94,11 +94,11 @@ void GenerateILTry(il_stmt_try* self, enviroment* env, call_context* cctx) {
 		AddOpcodeBuf(env->buf, try_end);
 	}
 	//try-catchの最後
-	nextCause->cursor = AddNOPOpcodeBuf(env->buf);
+	nextCause->Cursor = AddNOPOpcodeBuf(env->buf);
 	//どのcatchにも引っかからなかった
 	AddOpcodeBuf(env->buf, OP_TRY_EXIT);
 	//catchを処理したらここに
-	try_end->cursor = AddNOPOpcodeBuf(env->buf);
+	try_end->Cursor = AddNOPOpcodeBuf(env->buf);
 }
 
 void GenerateILCatch(il_stmt_catch* self, enviroment* env, call_context* cctx) {
