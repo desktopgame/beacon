@@ -203,13 +203,13 @@ static void namespace_dump_root(NumericMap* root, bool callSelf, int depth) {
 		return;
 	}
 	if (callSelf) {
-		namespace_dump_impl((namespace_*)root->item, depth);
+		namespace_dump_impl((namespace_*)root->Item, depth);
 	}
-	if (root->left != NULL) {
-		namespace_dump_root(root->left, true, depth);
+	if (root->Left != NULL) {
+		namespace_dump_root(root->Left, true, depth);
 	}
-	if (root->right != NULL) {
-		namespace_dump_root(root->right, true, depth);
+	if (root->Right != NULL) {
+		namespace_dump_root(root->Right, true, depth);
 	}
 }
 
@@ -228,14 +228,14 @@ static void namespace_put_indent(int depth) {
 }
 
 static void namespace_dump_class(NumericMap* root, bool isRoot, int depth) {
-	if (!isRoot && (root == NULL || root->item == NULL)) {
+	if (!isRoot && (root == NULL || root->Item == NULL)) {
 		return;
 	}
 	if (!isRoot) {
-		type* e = ((type*)root->item);
+		type* e = ((type*)root->Item);
 		//type_dump(e, depth);
 		assert(false);
 	}
-	namespace_dump_class(root->left, false, depth);
-	namespace_dump_class(root->right, false, depth);
+	namespace_dump_class(root->Left, false, depth);
+	namespace_dump_class(root->Right, false, depth);
 }

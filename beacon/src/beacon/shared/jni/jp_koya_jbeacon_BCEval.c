@@ -85,8 +85,8 @@ static jobject bc_EvalString(JNIEnv * env, jclass cls, jstring str, jobject tabl
 	jobject symbol_table_obj = (*env)->NewObject(env, symbol_table_cls, symbol_table_ctor_id);
 	//スクリプトを実行
 	frame* fr =  bc_eval_allocate(cll);
-	bc_write_symbol(env, cll->env->sym_table->map->left, fr, symbol_table_obj);
-	bc_write_symbol(env, cll->env->sym_table->map->right, fr, symbol_table_obj);
+	bc_write_symbol(env, cll->env->sym_table->map->Left, fr, symbol_table_obj);
+	bc_write_symbol(env, cll->env->sym_table->map->Right, fr, symbol_table_obj);
 	bc_eval_release(env, cll, fr);
 	//https://stackoverflow.com/questions/23085044/jni-system-out-and-printf-behaviour
 	fflush(stdout);
@@ -189,8 +189,8 @@ static void bc_write_symbol(JNIEnv* env, NumericMap* nmap, frame* fr, jobject ta
 	if(nmap == NULL) {
 		return;
 	}
-	NumericMapKey key = nmap->key;
-	NumericMapItem val = nmap->item;
+	NumericMapKey key = nmap->Key;
+	NumericMapItem val = nmap->Item;
 	const char* name = Ref2Str(key);
 	symbol_entry* se = (symbol_entry*)val;
 	object* bcobj = AtVector(fr->ref_stack, se->index);
@@ -266,11 +266,11 @@ static void bc_write_symbol(JNIEnv* env, NumericMap* nmap, frame* fr, jobject ta
 		(*env)->CallVoidMethod(env, target, symbol_table_put_id, keyj, other);
 	}
 	//次の要素へ
-	if(nmap->left != NULL) {
-		bc_write_symbol(env, nmap->left, fr, target);
+	if(nmap->Left != NULL) {
+		bc_write_symbol(env, nmap->Left, fr, target);
 	}
-	if(nmap->right != NULL) {
-		bc_write_symbol(env, nmap->right, fr, target);
+	if(nmap->Right != NULL) {
+		bc_write_symbol(env, nmap->Right, fr, target);
 	}
 }
 

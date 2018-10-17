@@ -6,11 +6,11 @@ typedef void* NumericMapItem;
  * 整数をキーとして二分探索を行うマップ.
  */
 typedef struct NumericMap_t {
-	NumericMapKey key;
-	NumericMapItem item;
-	struct NumericMap_t* parent;
-	struct NumericMap_t* left;
-	struct NumericMap_t* right;
+	NumericMapKey Key;
+	NumericMapItem Item;
+	struct NumericMap_t* Parent;
+	struct NumericMap_t* Left;
+	struct NumericMap_t* Right;
 } NumericMap;
 /**
  * ツリーのアクション関数です.

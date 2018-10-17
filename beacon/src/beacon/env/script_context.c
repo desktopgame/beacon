@@ -134,7 +134,7 @@ object* IInternScriptContext(script_context* self, int i) {
 		cell = PutNumericMap(self->n_int_map, i, obj);
 	}
 	he->accept_blocking--;
-	return (object*)cell->item;
+	return (object*)cell->Item;
 }
 
 void CacheScriptContext() {

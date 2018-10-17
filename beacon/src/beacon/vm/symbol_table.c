@@ -24,7 +24,7 @@ symbol_table * NewSymbolTable() {
 symbol_entry* EntrySymbolTable(symbol_table* self, generic_type* gtp, string_view namev) {
 	NumericMap* data = GetNumericMapCell(self->map, namev);
 	if (data) {
-		return ((symbol_entry*)data->item);
+		return ((symbol_entry*)data->Item);
 	}
 	//フィールドアクセスのために追加
 	if (gtp == NULL) {
