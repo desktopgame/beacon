@@ -7,7 +7,7 @@
 int TestCmd(int argc, char* argv[]) {
 #if defined(DEBUG) || (defined(_MSC_VER) && defined(_DEBUG))
 	OpenScriptContext();
-	int ret = test_run(argc, argv);
+	int ret = RunTest(argc, argv);
 	CloseScriptContext();
 	return ret;
 #else
