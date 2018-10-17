@@ -2,7 +2,6 @@
 #ifndef BEACON_VM_EVAL_H
 #define BEACON_VM_EVAL_H
 #include <stdbool.h>
-struct script_context;
 
 /**
  * 指定のファイルを解析して AST を出力します.
