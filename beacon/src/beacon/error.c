@@ -2,7 +2,6 @@
 #include "env/script_context.h"
 #include "util/mem.h"
 #include "util/text.h"
-#include "util/system.h"
 #include "util/string_buffer.h"
 
 #if defined(_MSC_VER)
@@ -398,6 +397,6 @@ BCErrorID GetLastBCError() {
 //private
 static void check_abort(script_context* sctx) {
 	if(sctx->abort_on_error) {
-		system_abort();
+		abort();
 	}
 }
