@@ -38,7 +38,7 @@ generic_type* EvalILInt(il_factor_int * self, enviroment * env, call_context* cc
 }
 
 char* ILIntToString(il_factor_int* self, enviroment* env) {
-	string_buffer* sb = NewBuffer();
+	StringBuffer* sb = NewBuffer();
 	char block[32];
 	int res = sprintf(block, "%d", self->value);
 	assert(res >= 0);

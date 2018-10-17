@@ -8,24 +8,24 @@
 #pragma warning(disable:4996)
 #endif
 //proto
-string_buffer* MallocBuffer(const char* filename, int lineno) {
-	string_buffer* ret = mem_malloc(sizeof(string_buffer), filename, lineno);
-	ret->length = 0;
-	ret->capacity = 16;
-	ret->text = (char*)mem_malloc(sizeof(char) * 16, filename, lineno);
-	memset(ret->text, '\0', 16);
+StringBuffer* MallocBuffer(const char* filename, int lineno) {
+	StringBuffer* ret = mem_malloc(sizeof(StringBuffer), filename, lineno);
+	ret->Length = 0;
+	ret->Capacity = 16;
+	ret->Text = (char*)mem_malloc(sizeof(char) * 16, filename, lineno);
+	memset(ret->Text, '\0', 16);
 	return ret;
 }
 
-void AppendBuffer(string_buffer * self, char c) {
-	if (self->length >= self->capacity) {
+void AppendBuffer(StringBuffer * self, char c) {
+	if (self->Length >= self->Capacity) {
 		ReserveBuffer(self);
 	}
-	self->text[self->length] = c;
-	self->length++;
+	self->Text[self->Length] = c;
+	self->Length++;
 }
 
-void AppendfBuffer(string_buffer * self, const char * fmt, ...) {
+void AppendfBuffer(StringBuffer * self, const char * fmt, ...) {
 	va_list ap;
 	va_start(ap, fmt);
 
@@ -33,7 +33,7 @@ void AppendfBuffer(string_buffer * self, const char * fmt, ...) {
 	va_end(ap);
 }
 
-void VappendfBuffer(string_buffer * self, const char * fmt, va_list ap) {
+void VappendfBuffer(StringBuffer * self, const char * fmt, va_list ap) {
 #define BUFF_LEN (256)
 	char block[BUFF_LEN];
 	memset(block, '\0', BUFF_LEN);
@@ -49,7 +49,7 @@ void VappendfBuffer(string_buffer * self, const char * fmt, va_list ap) {
 #undef BUFF_LEN
 }
 
-void AppendsBuffer(string_buffer * self, const char * s) {
+void AppendsBuffer(StringBuffer * self, const char * s) {
 	for (int i = 0; ; i++) {
 		char c = s[i];
 		if (c == '\0') break;
@@ -57,40 +57,40 @@ void AppendsBuffer(string_buffer * self, const char * s) {
 	}
 }
 
-char* ReleaseBuffer(string_buffer* self) {
+char* ReleaseBuffer(StringBuffer* self) {
 	ShrinkBuffer(self);
-	char* ret = self->text;
-	self->text = NULL;
+	char* ret = self->Text;
+	self->Text = NULL;
 	MEM_FREE(self);
 	return ret;
 }
 
-void ReserveBuffer(string_buffer* self) {
-	int newSize = self->capacity + (self->capacity / 2);
-	char* temp = (char*)MEM_REALLOC(self->text, newSize);
+void ReserveBuffer(StringBuffer* self) {
+	int newSize = self->Capacity + (self->Capacity / 2);
+	char* temp = (char*)MEM_REALLOC(self->Text, newSize);
 	assert(temp != NULL);
 	//新しく確保された部分を 0埋め
-	self->text = temp;
-	self->capacity = newSize;
+	self->Text = temp;
+	self->Capacity = newSize;
 }
 
-void ShrinkBuffer(string_buffer * self) {
-	if (self->length == 0) {
+void ShrinkBuffer(StringBuffer * self) {
+	if (self->Length == 0) {
 		return;
 	}
-	char* temp = (char*)MEM_REALLOC(self->text, self->length + 1);
+	char* temp = (char*)MEM_REALLOC(self->Text, self->Length + 1);
 	assert(temp != NULL);
-	temp[self->length] = '\0';
-	self->text = temp;
-	self->capacity = self->length;
+	temp[self->Length] = '\0';
+	self->Text = temp;
+	self->Capacity = self->Length;
 }
 
-string_buffer* IndentBuffer(string_buffer* self, int lineIndex, int len) {
-	string_buffer* buf = NewBuffer();
+StringBuffer* IndentBuffer(StringBuffer* self, int lineIndex, int len) {
+	StringBuffer* buf = NewBuffer();
 	int linec = 0;
 	int pos = 0;
-	for(int i=0; i<self->length; i++) {
-		char c = self->text[i];
+	for(int i=0; i<self->Length; i++) {
+		char c = self->Text[i];
 		if(pos == 0 &&
 			((linec >= lineIndex && linec < (lineIndex + len)) ||
 			(lineIndex == -1 && len == -1))
@@ -109,7 +109,7 @@ string_buffer* IndentBuffer(string_buffer* self, int lineIndex, int len) {
 	return buf;
 }
 
-void DeleteBuffer(string_buffer * self) {
-	MEM_FREE(self->text);
+void DeleteBuffer(StringBuffer * self) {
+	MEM_FREE(self->Text);
 	MEM_FREE(self);
 }

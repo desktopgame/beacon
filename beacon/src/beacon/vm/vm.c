@@ -1189,7 +1189,7 @@ static char stack_topc(frame* self) {
 static char* stack_tops(frame* self) {
 	object* ret = (object*)TopVector(self->value_stack);
 	assert(ret->tag == OBJECT_STRING_T);
-	return GetRawBCString(ret)->text;
+	return GetRawBCString(ret)->Text;
 }
 
 static bool stack_topb(frame* self) {
@@ -1220,7 +1220,7 @@ static char stack_popc(frame* self) {
 static char* stack_pops(frame* self) {
 	object* ret = (object*)PopVector(self->value_stack);
 	assert(ret->tag == OBJECT_STRING_T);
-	return GetRawBCString(ret)->text;
+	return GetRawBCString(ret)->Text;
 }
 
 static bool stack_popb(frame* self) {
@@ -1238,7 +1238,7 @@ static bool throw_npe(frame* self, object* o) {
 }
 
 static char* create_error_message(frame * self, enviroment* env, int pc) {
-	string_buffer* sbuf = NewBuffer();
+	StringBuffer* sbuf = NewBuffer();
 	line_range* lr = FindLineRange(env->line_range_vec, pc);
 	int line = -1;
 	if (lr != NULL) {
@@ -1250,13 +1250,13 @@ static char* create_error_message(frame * self, enviroment* env, int pc) {
 	FindFieldClass(exceptionT->u.class_, InternString("message"), &temp);
 	object* ex = self->exception;
 	object* msg = AtVector(ex->u.field_vec, temp);
-	string_buffer* cstr = AtVector(msg->native_slot_vec, 0);
+	StringBuffer* cstr = AtVector(msg->native_slot_vec, 0);
 
 	char block[256] = {0};
 	sprintf(block, "file: %s <%d>", env->context_ref->filename, line);
 	AppendsBuffer(sbuf, block);
 	AppendBuffer(sbuf, '\n');
-	AppendsBuffer(sbuf, cstr->text);
+	AppendsBuffer(sbuf, cstr->Text);
 	AppendBuffer(sbuf, '\n');
 	//スタックトレースの表示
 	type* stackTraceElementT = FindTypeFromNamespace(GetLangNamespace(), InternString("StackTraceElement"));
@@ -1275,7 +1275,7 @@ static char* create_error_message(frame * self, enviroment* env, int pc) {
 		object* e = GetBCArray(stackTraceObj, i);
 		object* fileNameObj = AtVector(e->u.field_vec, fileNameptr);
 		object* lineIndexObj = AtVector(e->u.field_vec, lineIndexptr);
-		sprintf(block, "    @%d: %s\n", OBJ2INT(lineIndexObj), GetRawBCString(fileNameObj)->text);
+		sprintf(block, "    @%d: %s\n", OBJ2INT(lineIndexObj), GetRawBCString(fileNameObj)->Text);
 		AppendsBuffer(sbuf, block);
 	}
 	return ReleaseBuffer(sbuf);

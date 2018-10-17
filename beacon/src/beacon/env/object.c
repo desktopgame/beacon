@@ -87,7 +87,7 @@ object * MallocStringObject(const char * s, const char* filename, int lineno) {
 	AddArgsGenericType(arr->gtype, GENERIC_CHAR);
 	//ボックス化
 	const char* itr = s;
-	string_buffer* sb = NewBuffer();
+	StringBuffer* sb = NewBuffer();
 	while ((*itr) != '\0') {
 		char e = (*itr);
 		PushVector(arr->native_slot_vec, MallocCharObject(e, filename, lineno));
@@ -104,7 +104,7 @@ object * MallocStringObject(const char * s, const char* filename, int lineno) {
 	//Array#lengthを埋める
 	temp = 0;
 	FindFieldClass(arrType->u.class_, InternString("length"), &temp);
-	AssignVector(arr->u.field_vec, temp, object_int_new(sb->length));
+	AssignVector(arr->u.field_vec, temp, object_int_new(sb->Length));
 	//C形式の文字列でも保存
 	AssignVector(ret->native_slot_vec, 0, sb);
 	return ret;
@@ -255,8 +255,8 @@ void PrintObject(object * self) {
 	} else if (self->tag == OBJECT_DOUBLE_T) {
 		printf("Double: %lf", self->u.double_);
 	} else if (self->tag == OBJECT_STRING_T) {
-		string_buffer* sb = (string_buffer*)AtVector(self->native_slot_vec, 0);
-		printf("String: %s", sb->text);
+		StringBuffer* sb = (StringBuffer*)AtVector(self->native_slot_vec, 0);
+		printf("String: %s", sb->Text);
 	} else if (self->tag == OBJECT_BOOL_T) {
 		printf("Bool: %s", (self == GetTrueObject() ? "true" : "false"));
 	} else if (self->tag == OBJECT_NULL_T) {
@@ -279,7 +279,7 @@ void DeleteObject(object * self) {
 		DeleteYieldContext(yctx);
 	}
 	if (self->tag == OBJECT_STRING_T) {
-		string_buffer* sb = AtVector(self->native_slot_vec, 0);
+		StringBuffer* sb = AtVector(self->native_slot_vec, 0);
 		RemoveVector(self->native_slot_vec, 0);
 		DeleteBuffer(sb);
 	}

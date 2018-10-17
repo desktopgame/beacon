@@ -33,7 +33,7 @@ generic_type* EvalILChar(il_factor_char * self, enviroment * env, call_context* 
 }
 
 char* ILCharToString(il_factor_char* self, enviroment* env) {
-	string_buffer* sb = NewBuffer();
+	StringBuffer* sb = NewBuffer();
 	AppendBuffer(sb, '\'');
 	AppendBuffer(sb, self->value);
 	AppendBuffer(sb, '\'');

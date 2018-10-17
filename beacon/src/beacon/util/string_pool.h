@@ -1,8 +1,7 @@
 #ifndef BEACON_UTIL_STRINGPOOL_H
 #define BEACON_UTIL_STRINGPOOL_H
 #include <stdio.h>
-
-struct string_buffer;
+#include "string_buffer.h"
 
 /**
  * NULL に対応する string_view です.
@@ -36,7 +35,7 @@ string_view InternString(const char* str);
  * @param buffer
  * @return
  */
-string_view InternString2(struct string_buffer* buffer);
+string_view InternString2(StringBuffer* buffer);
 
 /**
  * 二つの文字列を連結してインターンします.

@@ -86,7 +86,7 @@ bool DeleteFile(const char * filename) {
 
 char * ReadText(const char * filename) {
 	assert(ExistsFile(filename));
-	string_buffer* buff = NewBuffer();
+	StringBuffer* buff = NewBuffer();
 #if defined(_MSC_VER)
 	FILE* fp;
 	errno_t err = fopen_s(&fp, filename, "r");
@@ -175,7 +175,7 @@ char * GetAbsolutePath(const char * target) {
 }
 
 char* ResolveScriptPath(const char* target) {
-	string_buffer* sb = NewBuffer();
+	StringBuffer* sb = NewBuffer();
 	char full[256] = {0};
 	GetCurrentPath(full, 256);
 	AppendsBuffer(sb, full);
@@ -265,7 +265,7 @@ bool IsMatchExtension(const char* filename, const char* ext) {
 }
 
 char* ConcatPath(const char* a, const char* b) {
-	string_buffer* buf = NewBuffer();
+	StringBuffer* buf = NewBuffer();
 	AppendsBuffer(buf, a);
 	AppendBuffer(buf, '/');
 	AppendsBuffer(buf, b);

@@ -301,7 +301,7 @@ char* ILFactorToString(il_factor* self, enviroment* env) {
 	}
 }
 
-void ILArgsToString(string_buffer* sb, Vector* args, enviroment* env) {
+void ILArgsToString(StringBuffer* sb, Vector* args, enviroment* env) {
 	if(args->length > 0) {
 		AppendBuffer(sb, '(');
 	}
@@ -319,7 +319,7 @@ void ILArgsToString(string_buffer* sb, Vector* args, enviroment* env) {
 	}
 }
 
-void ILTypeArgsToString(string_buffer* sb, Vector* type_args, enviroment* env) {
+void ILTypeArgsToString(StringBuffer* sb, Vector* type_args, enviroment* env) {
 	if(type_args->length > 0) {
 		AppendsBuffer(sb, "<|");
 	}

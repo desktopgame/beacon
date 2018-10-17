@@ -3,7 +3,6 @@
 #include "vector.h"
 #include "text.h"
 #include "mem.h"
-#include "string_buffer.h"
 #include <assert.h>
 
 static tree_map* gMap = NULL;
@@ -33,7 +32,7 @@ string_view InternString(const char* str) {
 	return (string_view)cell->item;
 }
 
-string_view InternString2(string_buffer* buffer) {
+string_view InternString2(StringBuffer* buffer) {
 	char* raw = ReleaseBuffer(buffer);
 	string_view sv = InternString(raw);
 	MEM_FREE(raw);
@@ -44,7 +43,7 @@ string_view InternString2(string_buffer* buffer) {
 string_view ConcatIntern(const char* head, string_view foot) {
 	//連結する
 	const char* footstr = Ref2Str(foot);
-	string_buffer* buf = NewBuffer();
+	StringBuffer* buf = NewBuffer();
 	AppendsBuffer(buf, head);
 	AppendsBuffer(buf, footstr);
 	char* retstr = ReleaseBuffer(buf);

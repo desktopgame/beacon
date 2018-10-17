@@ -35,7 +35,7 @@ static void bc_console_writeLine(method* parent, frame* fr, enviroment* env) {
 	} else if(o->tag == OBJECT_DOUBLE_T) {
 		printf("%f\n", o->u.double_);
 	} else if (o->tag == OBJECT_STRING_T) {
-		printf("%s\n", GetRawBCString(o)->text);
+		printf("%s\n", GetRawBCString(o)->Text);
 	} else if (o->tag == OBJECT_REF_T) {
 		PrintGenericType(o->gtype);
 		printf("\n");
@@ -55,7 +55,7 @@ static void bc_console_write(method* parent, frame* fr, enviroment* env) {
 	}  else if (o->tag == OBJECT_DOUBLE_T) {
 		printf("%f", o->u.double_);
 	} else if (o->tag == OBJECT_STRING_T) {
-		printf("%s", GetRawBCString(o)->text);
+		printf("%s", GetRawBCString(o)->Text);
 	} else if (o->tag == OBJECT_REF_T) {
 		PrintGenericType(o->gtype);
 		//printf("\n");

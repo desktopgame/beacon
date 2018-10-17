@@ -85,7 +85,7 @@ void DeleteILAs(il_factor_as * self) {
 }
 
 char* ILAsToString(il_factor_as* self, enviroment* env) {
-	string_buffer* sb = NewBuffer();
+	StringBuffer* sb = NewBuffer();
 	char* factstr = ILFactorToString(self->fact, env);
 	char* to = GenericCacheToString(self->fqcn);
 	AppendfBuffer(sb, "%s as %s", factstr, to);

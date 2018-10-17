@@ -252,7 +252,7 @@ static void bc_write_symbol(JNIEnv* env, NumericMap* nmap, frame* fr, jobject ta
 			(*env)->FatalError(env, "not found method: put");
 			return;
 		}
-		jstring str = (*env)->NewStringUTF(env, GetRawBCString(bcobj)->text);
+		jstring str = (*env)->NewStringUTF(env, GetRawBCString(bcobj)->Text);
 		(*env)->CallVoidMethod(env, target, symbol_table_put_id, keyj, str);
 	//それ以外の型はとりあえず BCObject へ変換する
 	} else {
@@ -276,7 +276,7 @@ static void bc_write_symbol(JNIEnv* env, NumericMap* nmap, frame* fr, jobject ta
 
 static void bc_eval_release(JNIEnv* env, class_loader* cll, frame* fr) {
 	if(GetLastBCError()) {
-		string_buffer* sbuf = NewBuffer();
+		StringBuffer* sbuf = NewBuffer();
 		AppendsBuffer(sbuf, "\n");
 		AppendsBuffer(sbuf, Ref2Str(GetVMErrorMessage()));
 		char* mes = ReleaseBuffer(sbuf);

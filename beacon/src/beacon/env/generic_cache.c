@@ -39,7 +39,7 @@ void DumpGenericCache(generic_cache * self, int depth) {
 }
 
 char* GenericCacheToString(generic_cache* self) {
-	string_buffer* sb = NewBuffer();
+	StringBuffer* sb = NewBuffer();
 	//Namespace::Class
 	char* name = FQCNCacheToString(self->fqcn);
 	AppendsBuffer(sb, name);

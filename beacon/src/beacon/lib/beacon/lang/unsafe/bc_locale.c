@@ -67,7 +67,7 @@ static void bc_locale_nativeSetLocale(method* parent, frame* fr, enviroment* env
 			category = LC_TIME;
 			break;
 	}
-	const char* locale = GetRawBCString(localeObj)->text;
+	const char* locale = GetRawBCString(localeObj)->Text;
 	assert(setlocale(category, locale) != NULL);
 }
 

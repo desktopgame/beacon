@@ -30,7 +30,7 @@ type* GetBCObjectType() {
 //private
 static void bc_object_nativeToString(method* parent, frame* fr, enviroment* env) {
 	object* self = (object*)AtVector(fr->ref_stack, 0);
-	string_buffer* sb = NewBuffer();
+	StringBuffer* sb = NewBuffer();
 	//参照型
 	if (self->tag == OBJECT_REF_T) {
 		//char* name = GetTypeName(self->type);
