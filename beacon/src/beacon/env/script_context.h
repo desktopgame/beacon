@@ -23,7 +23,7 @@ typedef void(*static_each)(struct field* item);
  */
 typedef struct script_context {
 	NumericMap* namespace_nmap;
-	tree_map* class_loader_map;
+	TreeMap* class_loader_map;
 	Vector* thread_vec;
 	Vector* include_vec;
 	struct class_loader* bootstrap_class_loader;

@@ -10,7 +10,7 @@
 #include "../util/text.h"
 #include "../util/mem.h"
 
-//static tree_map* tree_map_root = NULL;
+//static TreeMap* TreeMap_root = NULL;
 //proto
 static namespace_* namespace_malloc(StringView namev);
 
@@ -30,7 +30,7 @@ namespace_ * CreateNamespaceAtRoot(StringView namev) {
 	if (ctx->namespace_nmap == NULL) {
 		ctx->namespace_nmap = NewNumericMap();
 	}
-	tree_item item = GetNumericMapValue(ctx->namespace_nmap, namev);
+	TreeItem item = GetNumericMapValue(ctx->namespace_nmap, namev);
 	if (item == NULL) {
 		namespace_* newNamespace = namespace_malloc(namev);
 		PutNumericMap(ctx->namespace_nmap, namev, newNamespace);

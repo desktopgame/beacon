@@ -5,7 +5,7 @@
 #include "mem.h"
 #include <assert.h>
 
-static tree_map* gMap = NULL;
+static TreeMap* gMap = NULL;
 static Vector* gVec = NULL;
 
 #define HEADER (2)
@@ -20,16 +20,16 @@ void InitStringPool() {
 StringView InternString(const char* str) {
 	assert(gMap != NULL);
 	assert(gVec != NULL);
-	tree_map* cell = GetTreeMapCell(gMap, str);
+	TreeMap* cell = GetTreeMapCell(gMap, str);
 	if(cell == NULL) {
 		cell = PutTreeMap(gMap, str, (void*)(gVec->length + HEADER));
-		PushVector(gVec, cell->key);
+		PushVector(gVec, cell->Key);
 	}
 	if(cell == gMap) {
 		return ZERO_VIEW;
 	}
-	assert(cell->item != 0);
-	return (StringView)cell->item;
+	assert(cell->Item != 0);
+	return (StringView)cell->Item;
 }
 
 StringView InternString2(Buffer* buffer) {
@@ -53,11 +53,11 @@ StringView ConcatIntern(const char* head, StringView foot) {
 }
 
 StringView Str2Ref(const char* str) {
-	tree_map* cell = GetTreeMapCell(gMap, str);
+	TreeMap* cell = GetTreeMapCell(gMap, str);
 	if(cell == gMap) {
 		return ZERO_VIEW;
 	}
-	return (StringView)cell->item;
+	return (StringView)cell->Item;
 }
 
 const char* Ref2Str(StringView ref) {

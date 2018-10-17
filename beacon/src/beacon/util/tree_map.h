@@ -4,43 +4,43 @@
 /**
  * ツリーマップに格納可能なキーの型.
  */
-typedef const char* tree_key;
+typedef const char* TreeKey;
 
 /**
  * ツリーマップに格納可能な値の型.
  */
-typedef void* tree_item;
+typedef void* TreeItem;
 
 /** 
  * キーと値を紐づけて管理するマップ.
  */
-typedef struct tree_map {
-	char* key;
-	tree_item item;
-	//struct tree_map* parent;
-	struct tree_map* parent;
-	struct tree_map* left;
-	struct tree_map* right;
-} tree_map;
+typedef struct TreeMap_t {
+	char* Key;
+	TreeItem Item;
+	//struct TreeMap* parent;
+	struct TreeMap_t* Parent;
+	struct TreeMap_t* Left;
+	struct TreeMap_t* Right;
+} TreeMap;
 
 
 /**
  * ツリーのアクション関数です.
  * @param item
  */
-typedef void(*tree_action)(const char* name, tree_item item);
+typedef void(*tree_action)(const char* name, TreeItem item);
 
 /**
  * ツリーのデリータ関数です.
  * @param item
  */
-typedef void(*tree_element_deleter)(const char* name, tree_item item);
+typedef void(*tree_element_deleter)(const char* name, TreeItem item);
 
 /**
  * 新しいツリーマップを作成します.
  * @return
  */
-tree_map* NewTreeMap();
+TreeMap* NewTreeMap();
 
 /**
  * 指定のツリーマップで指定のキーと値を紐づけます.
@@ -48,7 +48,7 @@ tree_map* NewTreeMap();
  * @param key
  * @param item
  */
-tree_map* PutTreeMap(tree_map* self, tree_key key, tree_item item);
+TreeMap* PutTreeMap(TreeMap* self, TreeKey key, TreeItem item);
 
 /**
  * 指定のツリーマップで指定のキーに紐づけられた値を返します.
@@ -56,7 +56,7 @@ tree_map* PutTreeMap(tree_map* self, tree_key key, tree_item item);
  * @param key
  * @return
  */
-tree_item GetTreeMapValue(tree_map* self, tree_key key);
+TreeItem GetTreeMapValue(TreeMap* self, TreeKey key);
 
 /**
  * 要素を格納しているセルを返します.
@@ -64,7 +64,7 @@ tree_item GetTreeMapValue(tree_map* self, tree_key key);
  * @param key
  * @return
  */
-tree_map* GetTreeMapCell(tree_map* self, tree_key key);
+TreeMap* GetTreeMapCell(TreeMap* self, TreeKey key);
 
 /**
  * ツリーのキーと引数のキーを比較します.
@@ -72,31 +72,31 @@ tree_map* GetTreeMapCell(tree_map* self, tree_key key);
  * @param key
  * @return
  */
-int CompareTreeMap(tree_map* self, tree_key key);
+int CompareTreeMap(TreeMap* self, TreeKey key);
 
 /**
  * ツリー内のすべての要素を訪問します.
  * @param self
  * @param act
  */
-void EachTreeMap(tree_map* self, tree_action act);
+void EachTreeMap(TreeMap* self, tree_action act);
 
 /**
  * ツリーと全ての要素を削除します.
  * @param self
  * @param deleter
  */
-void DeleteTreeMap(tree_map* self, tree_element_deleter deleter);
+void DeleteTreeMap(TreeMap* self, tree_element_deleter deleter);
 
 /**
  * freeによって解放するデリータの実装です.
  * @param item
  */
-void TreeMapDeleterByFree(const char* key, tree_item item);
+void TreeMapDeleterByFree(const char* key, TreeItem item);
 
 /**
  * 何も行わないデリータの実装です.
  * @param item
  */
-void TreeMapDeleterOfNull(const char* key, tree_item item);
+void TreeMapDeleterOfNull(const char* key, TreeItem item);
 #endif // !SIGNAL_UTIL_TREE_MAP_H

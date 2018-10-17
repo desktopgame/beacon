@@ -16,7 +16,7 @@
 //proto
 static script_context* script_context_malloc(void);
 static void script_context_free(script_context* self);
-static void script_context_DeleteClassLoader(const char* name, tree_item item);
+static void script_context_DeleteClassLoader(const char* name, TreeItem item);
 
 static void script_context_UnlinkNamespace(NumericMapKey key, NumericMapItem item);
 static void script_context_DeleteNamespace(NumericMapKey key, NumericMapItem item);
@@ -228,7 +228,7 @@ static void script_context_free(script_context* self) {
 	MEM_FREE(self);
 }
 
-static void script_context_DeleteClassLoader(const char* name, tree_item item) {
+static void script_context_DeleteClassLoader(const char* name, TreeItem item) {
 	class_loader* e = (class_loader*)item;
 	DeleteClassLoader(e);
 }

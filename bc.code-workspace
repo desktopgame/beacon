@@ -126,7 +126,8 @@
 			"parser.h": "c",
 			"error.h": "c",
 			"ast_new_literal.h": "c",
-			"opcode.h": "c"
+			"opcode.h": "c",
+			"tree_map.h": "c"
 		},
 		"ruby.lint": {
 			"reek": true,
