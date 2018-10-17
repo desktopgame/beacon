@@ -79,10 +79,10 @@ void ResumeVM(frame * self, enviroment * env, int pos) {
 	self->defer_vec = NewVector();
 	vm_run(self, env, pos, -1);
 	while(self->defer_vec->Length > 0) {
-		defer_context* defctx = (defer_context*)PopVector(self->defer_vec);
-		label* offset = defctx->offset;
+		DeferContext* defctx = (DeferContext*)PopVector(self->defer_vec);
+		label* offset = defctx->Offset;
 		Vector* save = self->ref_stack;
-		self->ref_stack = defctx->variable_vec;
+		self->ref_stack = defctx->VariableTable;
 		vm_run(self, env, offset->cursor, offset->cursor);
 		self->ref_stack = save;
 		DeleteDeferContext(defctx);
@@ -1110,9 +1110,9 @@ static void vm_run(frame * self, enviroment * env, int pos, int deferStart) {
 			{
 				label* offset = (label*)GetEnviromentSourceAt(env, ++IDX);
 				Vector* bind = CloneVector(self->ref_stack);
-				defer_context* defctx = NewDeferContext();
-				defctx->offset = offset;
-				defctx->variable_vec = bind;
+				DeferContext* defctx = NewDeferContext();
+				defctx->Offset = offset;
+				defctx->VariableTable = bind;
 				PushVector(self->defer_vec, defctx);
 				break;
 			}

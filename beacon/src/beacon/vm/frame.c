@@ -107,8 +107,8 @@ static void frame_mark_defer(frame* self) {
 		return;
 	}
 	for(int i=0; i<self->defer_vec->Length; i++) {
-		defer_context* defctx = AtVector(self->defer_vec, i);
-		Vector* bind = defctx->variable_vec;
+		DeferContext* defctx = AtVector(self->defer_vec, i);
+		Vector* bind = defctx->VariableTable;
 		for(int j=0; j<bind->Length; j++) {
 			object* e = AtVector(bind, j);
 			MarkAllObject(e);
@@ -116,6 +116,6 @@ static void frame_mark_defer(frame* self) {
 	}
 }
 static void DeleteFrame_defctx(VectorItem e) {
-	defer_context* defctx = (defer_context*)e;
+	DeferContext* defctx = (DeferContext*)e;
 	DeleteDeferContext(defctx);
 }
