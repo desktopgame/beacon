@@ -11,7 +11,7 @@
 
 //proto
 static char* text_strclone(const char* source);
-static char* ReadLineImpl(FILE* fp);
+static char* read_line_impl(FILE* fp);
 static FILE* text_fp = NULL;
 static FILE* fake_stdout = NULL;
 static FILE* real_stdout = NULL;
@@ -141,11 +141,11 @@ bool IsIncluded(const char* source, const char* text) {
 }
 
 char* ReadLine() {
-	return ReadLineImpl(stdin);
+	return read_line_impl(stdin);
 }
 
 char* FreadLine(FILE* fp) {
-	return ReadLineImpl(fp);
+	return read_line_impl(fp);
 }
 
 //private
@@ -159,7 +159,7 @@ static char* text_strclone(const char* source) {
 	return block;
 }
 
-static char* ReadLineImpl(FILE* fp) {
+static char* read_line_impl(FILE* fp) {
 	Buffer* sb = NewBuffer();
 	while(1) {
 		char ch = getc(fp);
