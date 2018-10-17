@@ -78,5 +78,5 @@ void UncaughtVM(frame* self, enviroment* env, int pc);
  * そのメッセージを返します.
  * @return
  */
-string_view GetVMErrorMessage();
+StringView GetVMErrorMessage();
 #endif // !SIGNAL_VM_VM_H

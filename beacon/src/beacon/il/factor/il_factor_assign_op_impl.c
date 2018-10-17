@@ -11,13 +11,13 @@
 #include "../../env/field.h"
 
 static void assign_by_namebase(il_factor_assign_op* self, enviroment* env, call_context* cctx);
-static void assign_to_field(il_factor_assign_op* self,il_factor* receiver, il_factor* source, string_view namev, enviroment* env, call_context* cctx);
+static void assign_to_field(il_factor_assign_op* self,il_factor* receiver, il_factor* source, StringView namev, enviroment* env, call_context* cctx);
 static void assign_to_property(il_factor_assign_op* self, enviroment* env, call_context* cctx);
 static void assign_to_array(il_factor_assign_op* self, enviroment* env, call_context* cctx);
 static void assign_by_call(il_factor_assign_op* self, enviroment* env, call_context* cctx);
 static void assign_by_invoke(il_factor_invoke* lhs, il_factor* rhs, enviroment* env, call_context* cctx);
 static void assign_by_invoke_bound(il_factor_invoke_bound* lhs, il_factor* rhs, enviroment* env, call_context* cctx);
-static void check_final(il_factor* receiver, il_factor* source, string_view namev, enviroment* env, call_context* cctx);
+static void check_final(il_factor* receiver, il_factor* source, StringView namev, enviroment* env, call_context* cctx);
 static bool can_assign_to_field(field* f, il_factor_assign_op* self, enviroment* env, call_context* cctx);
 static void generate_assign_to_variable(il_factor_assign_op* self, enviroment* env, call_context* cctx);
 static void generate_assign_to_variable_local(il_factor_assign_op* self, enviroment* env, call_context* cctx);
@@ -120,7 +120,7 @@ static void assign_by_namebase(il_factor_assign_op* self, enviroment* env, call_
 	}
 }
 
-static void assign_to_field(il_factor_assign_op* self, il_factor* receiver, il_factor* source, string_view namev, enviroment* env, call_context* cctx) {
+static void assign_to_field(il_factor_assign_op* self, il_factor* receiver, il_factor* source, StringView namev, enviroment* env, call_context* cctx) {
 	generic_type* gt = EvalILFactor(receiver, env, cctx);
 	class_* cls = TYPE2CLASS(gt->core_type);
 	int temp = -1;
@@ -267,7 +267,7 @@ static bool can_assign_to_field(field* f, il_factor_assign_op* self, enviroment*
 	}
 }
 
-static void check_final(il_factor* receiver, il_factor* source, string_view namev, enviroment* env, call_context* cctx) {
+static void check_final(il_factor* receiver, il_factor* source, StringView namev, enviroment* env, call_context* cctx) {
 	generic_type* gt = EvalILFactor(receiver, env, cctx);
 	class_* cls = TYPE2CLASS(gt->core_type);
 	int temp = -1;

@@ -135,7 +135,7 @@ bool IsValidPropertyClass(class_* self, property** out) {
 	       IsValidPropertyClassImpl(self->sprop_list, out);
 }
 
-bool IsMethodParameterValidClass(class_* cls, method** out_method, string_view* out_name) {
+bool IsMethodParameterValidClass(class_* cls, method** out_method, StringView* out_name) {
 	(*out_name) = ZERO_VIEW;
 	for(int i=0; i<cls->method_list->length; i++) {
 		method* m = (method*)AtVector(cls->method_list, i);
@@ -154,7 +154,7 @@ bool IsMethodParameterValidClass(class_* cls, method** out_method, string_view* 
 	return true;
 }
 
-bool IsConstructorParameterValidClass(class_* self, constructor** out_ctor, string_view* out_name) {
+bool IsConstructorParameterValidClass(class_* self, constructor** out_ctor, StringView* out_name) {
 	for(int i=0; i<self->constructor_list->length; i++) {
 		constructor* ctor = (constructor*)AtVector(self->constructor_list, i);
 		if(IsOverwrappedParameterName(ctor->parameter_list, out_name)) {
@@ -165,11 +165,11 @@ bool IsConstructorParameterValidClass(class_* self, constructor** out_ctor, stri
 	return true;
 }
 
-bool IsTypeParameterValidClass(class_* self, string_view* out_name) {
+bool IsTypeParameterValidClass(class_* self, StringView* out_name) {
 	return !IsOverwrappedTypeParameterName(self->GetParameterListType, out_name);
 }
 
-bool IsMethodTypeParameterValidClass(class_* self, method** out_method, string_view* out_name) {
+bool IsMethodTypeParameterValidClass(class_* self, method** out_method, StringView* out_name) {
 	(*out_name) = ZERO_VIEW;
 	for(int i=0; i<self->method_list->length; i++) {
 		method* m = (method*)AtVector(self->method_list, i);

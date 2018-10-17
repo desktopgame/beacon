@@ -54,7 +54,7 @@ int MetaRCalcScore(Vector* params, Vector* args, Vector* typeargs, struct frame*
  * @param outIndex
  * @return
  */
-method* MetaILFindMethod(Vector* method_vec, string_view namev, Vector * ilargs, enviroment * env, call_context* cctx, int * outIndex);
+method* MetaILFindMethod(Vector* method_vec, StringView namev, Vector * ilargs, enviroment * env, call_context* cctx, int * outIndex);
 
 /**
  * もっとも一致するメソッドを返します.
@@ -64,7 +64,7 @@ method* MetaILFindMethod(Vector* method_vec, string_view namev, Vector * ilargs,
  * @param outIndex
  * @return
  */
-method* MetaGFindMethod(Vector* method_vec, string_view namev, Vector * gargs, int* outIndex);
+method* MetaGFindMethod(Vector* method_vec, StringView namev, Vector * gargs, int* outIndex);
 
 /**
  * スコープに基づく方法でもっとも一致するメソッドを返します.
@@ -77,7 +77,7 @@ method* MetaGFindMethod(Vector* method_vec, string_view namev, Vector * gargs, i
  * @param outIndex
  * @return
  */
-method* MetaScopedILFindMethod(struct class_* context, Vector* method_vec, string_view namev, Vector * ilargs, struct enviroment * env, call_context* cctx, int * outIndex);
+method* MetaScopedILFindMethod(struct class_* context, Vector* method_vec, StringView namev, Vector * ilargs, struct enviroment * env, call_context* cctx, int * outIndex);
 /**
  * スコープに基づく方法でもっとも一致するメソッドを返します.
  * @param context
@@ -87,7 +87,7 @@ method* MetaScopedILFindMethod(struct class_* context, Vector* method_vec, strin
  * @param outIndex
  * @return
  */
-method* MetaScopedGFindMethod(struct class_* context, Vector* method_vec, string_view namev, Vector * gargs, int * outIndex);
+method* MetaScopedGFindMethod(struct class_* context, Vector* method_vec, StringView namev, Vector * gargs, int * outIndex);
 
 /**
  * もっとも一致するコンストラクタを返します.

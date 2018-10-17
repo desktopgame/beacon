@@ -6,7 +6,7 @@
 #include "il_factor_interface.h"
 #include "../env/generic_cache.h"
 
-il_field * NewILField(string_view namev) {
+il_field * NewILField(StringView namev) {
 	il_field* ret = (il_field*)MEM_MALLOC(sizeof(il_field));
 	ret->fqcn = NewGenericCache();
 	ret->access = ACCESS_PUBLIC_T;

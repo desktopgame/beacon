@@ -18,14 +18,14 @@ typedef enum il_parameter_type {
 typedef struct il_parameter {
 	il_parameter_type param_type;
 	generic_cache* fqcn;
-	string_view namev;
+	StringView namev;
 } il_parameter;
 /**
  * パラメータを作成します.
  * @param name
  * @return
  */
-il_parameter* NewILParameter(string_view namev);
+il_parameter* NewILParameter(StringView namev);
 
 /**
  * パラメータを開放します.

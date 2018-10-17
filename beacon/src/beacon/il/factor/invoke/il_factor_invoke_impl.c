@@ -23,7 +23,7 @@ static generic_type* il_factor_invoke_return_gtype(il_factor_invoke* self);
 static void GenerateILInvoke_method(il_factor_invoke* self, enviroment* env, call_context* cctx);
 static void GenerateILInvoke_subscript(il_factor_invoke* self, enviroment* env, call_context* cctx);
 
-il_factor_invoke* NewILInvoke(string_view namev) {
+il_factor_invoke* NewILInvoke(StringView namev) {
 	il_factor_invoke* ret = (il_factor_invoke*)MEM_MALLOC(sizeof(il_factor_invoke));
 	ret->args = NULL;
 	ret->receiver = NULL;

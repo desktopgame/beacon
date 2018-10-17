@@ -12,7 +12,7 @@
 
 //static tree_map* tree_map_root = NULL;
 //proto
-static namespace_* namespace_malloc(string_view namev);
+static namespace_* namespace_malloc(StringView namev);
 
 static void UnlinkNamespace_namespace(NumericMapKey key, NumericMapItem item);
 static void DeleteNamespace_namespace(NumericMapKey key, NumericMapItem item);
@@ -25,7 +25,7 @@ static void namespace_dump_impl(namespace_* root, int depth);
 static void namespace_put_indent(int depth);
 static void namespace_dump_class(NumericMap* root, bool isRoot, int depth);
 
-namespace_ * CreateNamespaceAtRoot(string_view namev) {
+namespace_ * CreateNamespaceAtRoot(StringView namev) {
 	script_context* ctx = GetCurrentScriptContext();
 	if (ctx->namespace_nmap == NULL) {
 		ctx->namespace_nmap = NewNumericMap();
@@ -38,19 +38,19 @@ namespace_ * CreateNamespaceAtRoot(string_view namev) {
 	} else return (namespace_*)item;
 }
 
-namespace_ * FindNamespaceFromRoot(string_view namev) {
+namespace_ * FindNamespaceFromRoot(StringView namev) {
 	script_context* ctx = GetCurrentScriptContext();
 	return CFindNamespaceFromRoot(ctx, namev);
 }
 
-namespace_* CFindNamespaceFromRoot(script_context* sctx, string_view namev) {
+namespace_* CFindNamespaceFromRoot(script_context* sctx, StringView namev) {
 	if (sctx->namespace_nmap == NULL) {
 		return NULL;
 	}
 	return (namespace_*)GetNumericMapValue(sctx->namespace_nmap, namev);
 }
 
-namespace_ * AddNamespaceNamespace(namespace_ * self, string_view namev) {
+namespace_ * AddNamespaceNamespace(namespace_ * self, StringView namev) {
 	assert(self != NULL);
 	namespace_* child = FindNamespaceFromNamespace(self, namev);
 	if (child == NULL) {
@@ -73,21 +73,21 @@ struct type* AddTypeNamespace(namespace_* self, type* type) {
 	return type;
 }
 
-namespace_ * FindNamespaceFromNamespace(namespace_ * self, string_view namev) {
+namespace_ * FindNamespaceFromNamespace(namespace_ * self, StringView namev) {
 	assert(self != NULL);
 	return GetNumericMapValue(self->namespace_map, namev);
 }
 
-type * FindTypeFromNamespace(namespace_ * self, string_view namev) {
+type * FindTypeFromNamespace(namespace_ * self, StringView namev) {
 	assert(self != NULL);
 	return GetNumericMapValue(self->type_map, namev);
 }
 
-class_ * FindClassFromNamespace(namespace_ * self, string_view namev) {
+class_ * FindClassFromNamespace(namespace_ * self, StringView namev) {
 	return TypeToClass(FindTypeFromNamespace(self, namev));
 }
 
-interface_ * FindInterfaceFromNamespace(namespace_ * self, string_view namev) {
+interface_ * FindInterfaceFromNamespace(namespace_ * self, StringView namev) {
 	return TypeToInterface(FindTypeFromNamespace(self, namev));
 }
 
@@ -148,7 +148,7 @@ void UnlinkNamespace(namespace_ * self) {
 	EachNumericMap(self->type_map, UnlinkNamespace_type);
 }
 
-string_view NamespaceToString(namespace_* self) {
+StringView NamespaceToString(namespace_* self) {
 	if(self->parent == NULL) {
 		return self->namev;
 	}
@@ -168,7 +168,7 @@ void DeleteNamespace(namespace_ * self) {
 }
 
 //private
-static namespace_* namespace_malloc(string_view namev) {
+static namespace_* namespace_malloc(StringView namev) {
 	namespace_* ret = (namespace_*)MEM_MALLOC(sizeof(namespace_));
 	ret->namespace_map = NewNumericMap();
 	ret->type_map = NewNumericMap();

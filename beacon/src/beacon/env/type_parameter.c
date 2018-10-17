@@ -8,7 +8,7 @@
 //proto
 static void type_parameter_rule_list_delete(VectorItem item);
 
-type_parameter * NewTypeParameter(string_view namev) {
+type_parameter * NewTypeParameter(StringView namev) {
 	type_parameter* ret = (type_parameter*)MEM_MALLOC(sizeof(type_parameter));
 	ret->namev = namev;
 	ret->kind = TYPE_PARAMETER_KIND_DEFAULT_T;
@@ -76,7 +76,7 @@ void DeleteTypeParameter(type_parameter * self) {
 	MEM_FREE(self);
 }
 
-bool IsOverwrappedTypeParameterName(Vector* tparameters, string_view* namev) {
+bool IsOverwrappedTypeParameterName(Vector* tparameters, StringView* namev) {
 	if(tparameters->length <= 1) {
 		return false;
 	}

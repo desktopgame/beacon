@@ -33,13 +33,13 @@ ast * MallocAST(ast_tag tag, const char* filename, int lineno) {
 	return ret;
 }
 
-ast * NewASTNamespacePath(string_view namev) {
+ast * NewASTNamespacePath(StringView namev) {
 	ast* ret = ast_new(AST_NAMESPACE_PATH_T);
 	ret->u.stringv_value = namev;
 	return ret;
 }
 
-ast * NewASTNamespacePathList(ast * aforward, string_view namev) {
+ast * NewASTNamespacePathList(ast * aforward, StringView namev) {
 	ast* ret = ast_new(AST_NAMESPACE_PATH_LIST_T);
 	PushAST(ret, aforward);
 	PushAST(ret, NewASTNamespacePath(namev));
@@ -81,13 +81,13 @@ ast * NewASTBlank() {
 	return ast_new(AST_BLANK_T);
 }
 
-ast * NewASTIdentifier(string_view strv) {
+ast * NewASTIdentifier(StringView strv) {
 	ast* ret = ast_new(AST_IDENTIFIER_T);
 	ret->u.stringv_value = strv;
 	return ret;
 }
 
-ast * NewASTIdentifierList(string_view strv, ast * aident_list) {
+ast * NewASTIdentifierList(StringView strv, ast * aident_list) {
 	ast* ret = ast_new(AST_IDENTIFIER_LIST_T);
 	PushAST(ret, aident_list);
 	PushAST(ret, NewASTIdentifier(strv));

@@ -8,7 +8,7 @@ struct generic_type;
 struct method;
 
 typedef struct il_factor_invoke_static {
-	string_view namev;
+	StringView namev;
 	fqcn_cache* fqcn;
 	Vector* args;
 	Vector* type_args;
@@ -17,7 +17,7 @@ typedef struct il_factor_invoke_static {
 	struct generic_type* resolved;
 } il_factor_invoke_static;
 
-il_factor_invoke_static* NewILInvokeStatic(string_view namev);
+il_factor_invoke_static* NewILInvokeStatic(StringView namev);
 
 void GenerateILInvokeStatic(il_factor_invoke_static* self, struct enviroment* env, call_context* cctx);
 

@@ -3,7 +3,7 @@
 #include "../env/generic_cache.h"
 #include "../util/text.h"
 
-il_property* MallocILProperty(string_view namev, const char* filename, int lineno) {
+il_property* MallocILProperty(StringView namev, const char* filename, int lineno) {
 	il_property* ret = mem_malloc(sizeof(il_property), filename, lineno);
 	ret->namev = namev;
 	ret->fqcn = NewGenericCache();

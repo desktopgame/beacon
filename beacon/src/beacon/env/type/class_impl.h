@@ -32,7 +32,7 @@ struct operator_overload;
  */
 typedef struct class_ {
 	type* parent;
-	string_view namev;
+	StringView namev;
 	namespace_* location;
 	struct generic_type* super_class;
 	Vector* impl_list;
@@ -72,7 +72,7 @@ type* WrapClass(class_* self);
  * @param namev
  * @return
  */
-class_* NewClass(string_view namev);
+class_* NewClass(StringView namev);
 
 /**
  * 指定のインターフェイスを実装するクラスを作成します.
@@ -80,13 +80,13 @@ class_* NewClass(string_view namev);
  * @param namev
  * @return
  */
-class_* NewClassProxy(struct generic_type* gt, string_view namev);
+class_* NewClassProxy(struct generic_type* gt, StringView namev);
 
 /**
  * 事前に読みこまれる必要があるクラスを作成します.
  * @param namev
  */
-type* NewPreloadClass(string_view namev);
+type* NewPreloadClass(StringView namev);
 
 /**
  * 指定のオブジェクトにこのクラスのフィールドを表す
@@ -151,7 +151,7 @@ void DefineNativeMethodClass(class_* self, const char* name, native_impl impl);
  * @param namev
  * @param impl
  */
-void DefineNativeMethodByRefClass(class_* self, string_view namev, native_impl impl);
+void DefineNativeMethodByRefClass(class_* self, StringView namev, native_impl impl);
 
 /**
  * super と sub の距離を返します.

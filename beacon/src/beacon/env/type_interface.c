@@ -37,7 +37,7 @@ generic_type* InitGenericSelf(type* self, int counts) {
 	return self->generic_self;
 }
 
-string_view GetTypeName(type * self) {
+StringView GetTypeName(type * self) {
 	if(self == NULL) {
 		return InternString("NULL");
 	}
@@ -49,12 +49,12 @@ string_view GetTypeName(type * self) {
 	return 0;
 }
 
-string_view GetTypeFullName(type* self) {
+StringView GetTypeFullName(type* self) {
 	if(self == NULL) {
 		return InternString("NULL");
 	}
-	string_view namespace_str = NamespaceToString(self->location);
-	string_view self_str = GetTypeName(self);
+	StringView namespace_str = NamespaceToString(self->location);
+	StringView self_str = GetTypeName(self);
 	return ConcatIntern(
 		Ref2Str(namespace_str),
 		ConcatIntern(".", self_str)
@@ -82,7 +82,7 @@ void AddMethodType(type* self, method * m) {
 	}
 }
 
-method * ILFindMethodType(type * self, string_view namev, Vector * args, enviroment * env, call_context* cctx, int * outIndex) {
+method * ILFindMethodType(type * self, StringView namev, Vector * args, enviroment * env, call_context* cctx, int * outIndex) {
 	assert(self != NULL);
 	if (self->tag == TYPE_CLASS_T) {
 		return ILFindMethodClass(self->u.class_, namev, args, env, cctx, outIndex);
@@ -92,7 +92,7 @@ method * ILFindMethodType(type * self, string_view namev, Vector * args, envirom
 	return NULL;
 }
 
-method* ILFindSMethodType(type* self, string_view namev, Vector* args, struct enviroment* env, call_context* cctx, int* outIndex) {
+method* ILFindSMethodType(type* self, StringView namev, Vector* args, struct enviroment* env, call_context* cctx, int* outIndex) {
 	assert(self->tag == TYPE_CLASS_T);
 	return ILFindSMethodClass(self->u.class_, namev, args, env, cctx, outIndex);
 }
@@ -145,7 +145,7 @@ void UnlinkType(type * self) {
 	}
 }
 
-int GetGenericIndexType(type * self, string_view namev) {
+int GetGenericIndexType(type * self, StringView namev) {
 	assert(self->tag != TYPE_ENUM_T);
 	Vector* v = NULL;
 	if (self->tag == TYPE_CLASS_T) v = self->u.class_->GetParameterListType;

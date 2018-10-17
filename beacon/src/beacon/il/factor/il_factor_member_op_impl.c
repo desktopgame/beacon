@@ -27,7 +27,7 @@ il_factor* WrapILMemberOp(il_factor_member_op* self) {
 	return ret;
 }
 
-il_factor_member_op* NewILMemberOp(string_view namev) {
+il_factor_member_op* NewILMemberOp(StringView namev) {
 	il_factor_member_op* ret = (il_factor_member_op*)MEM_MALLOC(sizeof(il_factor_member_op));
 	ret->fact = NULL;
 	ret->type_args = NewVector();

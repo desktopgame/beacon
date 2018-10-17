@@ -33,7 +33,7 @@ void DumpFQCNCache(fqcn_cache * self, int depth) {
 		printf("scope");
 		Println();
 		for (int i = 0; i < self->scope_vec->length; i++) {
-			string_view sv = (string_view)AtVector(self->scope_vec, i);
+			StringView sv = (StringView)AtVector(self->scope_vec, i);
 			Printi(depth + 1);
 			printf("%s", Ref2Str(sv));
 			Println();
@@ -50,7 +50,7 @@ void PrintFQCNCache(fqcn_cache * self) {
 		printf("%s", Ref2Str(self->namev));
 	} else {
 		for (int i = 0; i < self->scope_vec->length; i++) {
-			printf("%s", Ref2Str((string_view)AtVector(self->scope_vec, i)));
+			printf("%s", Ref2Str((StringView)AtVector(self->scope_vec, i)));
 			printf("::");
 		}
 		printf("%s", Ref2Str(self->namev));
@@ -63,7 +63,7 @@ namespace_ * GetScopeFQCN(fqcn_cache * self, namespace_* current) {
 	}
 	namespace_* top = NULL;
 	for (int i = 0; i < self->scope_vec->length; i++) {
-		string_view ev = (string_view)AtVector(self->scope_vec, i);
+		StringView ev = (StringView)AtVector(self->scope_vec, i);
 		if (top == NULL) {
 			top = FindNamespaceFromRoot(ev);
 		} else {
@@ -94,7 +94,7 @@ class_ * GetClassFQCN(fqcn_cache * self, namespace_ * current) {
 char* FQCNCacheToString(fqcn_cache* self) {
 	Buffer* sb = NewBuffer();
 	for(int i=0; i<self->scope_vec->length; i++) {
-		string_view ev = (string_view)AtVector(self->scope_vec, i);
+		StringView ev = (StringView)AtVector(self->scope_vec, i);
 		AppendsBuffer(sb, Ref2Str(ev));
 		if(i == (self->scope_vec->length - 1)) {
 			break;
@@ -121,8 +121,8 @@ bool EqualsFQCNCache(fqcn_cache* a, fqcn_cache* b) {
 		return true;
 	}
 	for(int i=0; i<a->scope_vec->length; i++) {
-		string_view as = (string_view)AtVector(a->scope_vec, i);
-		string_view bs = (string_view)AtVector(b->scope_vec, i);
+		StringView as = (StringView)AtVector(a->scope_vec, i);
+		StringView bs = (StringView)AtVector(b->scope_vec, i);
 		if(as != bs) {
 			return false;
 		}
@@ -133,7 +133,7 @@ bool EqualsFQCNCache(fqcn_cache* a, fqcn_cache* b) {
 static type * fqcn_TYPE_IMPL(fqcn_cache * self, namespace_* current) {
 	//Y形式
 	if (self->scope_vec->length == 0) {
-		string_view namev = self->namev;
+		StringView namev = self->namev;
 		//プリミティブ型はどこからでも参照できる
 		if (namev == InternString("Object")) {
 			return TYPE_OBJECT;

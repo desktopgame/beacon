@@ -18,7 +18,7 @@ struct type;
  */
 typedef struct interface_ {
 	struct type* parent;
-	string_view namev;
+	StringView namev;
 	Vector* impl_list;
 	Vector* prop_list;
 	Vector* method_list;
@@ -39,7 +39,7 @@ type* WrapInterface(interface_* self);
  * @param namev
  * @return
  */
-interface_* NewInterface(string_view namev);
+interface_* NewInterface(StringView namev);
 
 /**
  * インターフェイスにメソッドを追加します.
@@ -65,7 +65,7 @@ void AddPropertyInterface(interface_* self, struct property* p);
  * @param outIndex
  * @return
  */
-struct method* ILFindMethodInterface(interface_* self, string_view namev, Vector * args, struct enviroment * env, call_context* cctx, int * outIndex);
+struct method* ILFindMethodInterface(interface_* self, StringView namev, Vector * args, struct enviroment * env, call_context* cctx, int * outIndex);
 
 /**
  * インターフェイスからメソッドを検索します.
@@ -75,7 +75,7 @@ struct method* ILFindMethodInterface(interface_* self, string_view namev, Vector
  * @param outIndex
  * @return
  */
-struct method* GFindMethodInterface(interface_* self, string_view namev, Vector* gargs, int* outIndex);
+struct method* GFindMethodInterface(interface_* self, StringView namev, Vector* gargs, int* outIndex);
 
 /**
  * 全てのインターフェイスに定義されたメソッドをフラットにして返します.

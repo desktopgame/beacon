@@ -10,7 +10,7 @@
  * @param outIndex
  * @return 無ければ NULL
  */
-struct field* FindFieldClass(class_* self, string_view namev, int* outIndex);
+struct field* FindFieldClass(class_* self, StringView namev, int* outIndex);
 
 /**
  * 指定の名前を持つフィールドを返します.
@@ -20,7 +20,7 @@ struct field* FindFieldClass(class_* self, string_view namev, int* outIndex);
  * @param outIndex
  * @return
  */
-struct field* FindTreeFieldClass(class_* self, string_view namev, int* outIndex);
+struct field* FindTreeFieldClass(class_* self, StringView namev, int* outIndex);
 
 /**
  * 指定の名前を持つ静的フィールドを返します.
@@ -29,7 +29,7 @@ struct field* FindTreeFieldClass(class_* self, string_view namev, int* outIndex)
  * @param outIndex
  * @return 無ければ NULL
  */
-struct field* FindSFieldClass(class_* self, string_view namev, int* outIndex);
+struct field* FindSFieldClass(class_* self, StringView namev, int* outIndex);
 
 /**
  * 指定の名前を持つ静的フィールドを返します.
@@ -39,7 +39,7 @@ struct field* FindSFieldClass(class_* self, string_view namev, int* outIndex);
  * @param outIndex
  * @return 無ければ NULL
  */
-struct field* FindTreeSFieldClass(class_* self, string_view namev, int* outIndex);
+struct field* FindTreeSFieldClass(class_* self, StringView namev, int* outIndex);
 
 /**
  * 指定位置のフィールドを返します.
@@ -147,7 +147,7 @@ struct property* GetSPropertyClass(class_* self, int index);
  * @param outIndex
  * @return
  */
-struct property* FindPropertyClass(class_* self, string_view namev, int* outIndex);
+struct property* FindPropertyClass(class_* self, StringView namev, int* outIndex);
 
 /**
  * 指定の名前を持つプロパティを返します.
@@ -157,7 +157,7 @@ struct property* FindPropertyClass(class_* self, string_view namev, int* outInde
  * @param outIndex
  * @return
  */
-struct property* FindTreePropertyClass(class_* self, string_view namev, int* outIndex);
+struct property* FindTreePropertyClass(class_* self, StringView namev, int* outIndex);
 
 /**
  * 指定の名前の静的プロパティを検索します.
@@ -166,7 +166,7 @@ struct property* FindTreePropertyClass(class_* self, string_view namev, int* out
  * @param outIndex
  * @return
  */
-struct property* FindSPropertyClass(class_* self, string_view namev, int* outIndex);
+struct property* FindSPropertyClass(class_* self, StringView namev, int* outIndex);
 
 /**
  * 指定の名前を持つ静的プロパティを返します.
@@ -176,7 +176,7 @@ struct property* FindSPropertyClass(class_* self, string_view namev, int* outInd
  * @param outIndex
  * @return
  */
-struct property* FindTreeSPropertyClass(class_* self, string_view namev, int* outIndex);
+struct property* FindTreeSPropertyClass(class_* self, StringView namev, int* outIndex);
 
 
 
@@ -221,7 +221,7 @@ struct constructor* ILFindEmptyConstructorClass(class_* self, enviroment* env, c
  * @param outIndex メソッドへのインデックス
  * @return
  */
-struct method* ILFindMethodClass(class_* self, string_view namev, Vector* args, enviroment* env, call_context* cctx, int* outIndex);
+struct method* ILFindMethodClass(class_* self, StringView namev, Vector* args, enviroment* env, call_context* cctx, int* outIndex);
 
 /**
  * もっとも一致するメソッドを返します.
@@ -231,7 +231,7 @@ struct method* ILFindMethodClass(class_* self, string_view namev, Vector* args, 
  * @param outIndex
  * @return
  */
-struct method* GFindMethodClass(class_* self, string_view namev, Vector* gargs, int* outIndex);
+struct method* GFindMethodClass(class_* self, StringView namev, Vector* gargs, int* outIndex);
 
 /**
  * equalsメソッドを検索します.
@@ -251,7 +251,7 @@ struct method* GFindEqMethodClass(class_* self, int* outIndex);
  * @param outIndex メソッドへのインデックス
  * @return
  */
-struct method* ILFindSMethodClass(class_* self, string_view namev, Vector* args, enviroment* env, call_context* cctx, int* outIndex);
+struct method* ILFindSMethodClass(class_* self, StringView namev, Vector* args, enviroment* env, call_context* cctx, int* outIndex);
 
 /**
  * もっとも一致する静的メソッドを返します.
@@ -261,7 +261,7 @@ struct method* ILFindSMethodClass(class_* self, string_view namev, Vector* args,
  * @param outIndex
  * @return
  */
-struct method* GFindSMethodClass(class_* self, string_view namev, Vector* gargs, int* outIndex);
+struct method* GFindSMethodClass(class_* self, StringView namev, Vector* gargs, int* outIndex);
 
 /**
  * 指定位置のメソッドを返します.

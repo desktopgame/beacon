@@ -5,7 +5,7 @@
 #include "../util/mem.h"
 #include "../env/fqcn_cache.h"
 
-il_parameter * NewILParameter(string_view namev) {
+il_parameter * NewILParameter(StringView namev) {
 	il_parameter* ret = (il_parameter*)MEM_MALLOC(sizeof(il_parameter));
 	ret->namev = namev;
 	ret->param_type = IL_PARAM_TYPE_DEFAULT;

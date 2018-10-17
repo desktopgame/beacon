@@ -102,7 +102,7 @@ int AddCCharEnviroment(enviroment * self, char c) {
 	return len;
 }
 
-int AddCStringEnviroment(enviroment * self, string_view sv) {
+int AddCStringEnviroment(enviroment * self, StringView sv) {
 	int len = self->constant_pool_vec->length;
 	enviroment_add_constant(self, object_string_new(Ref2Str(sv)));
 	return len;

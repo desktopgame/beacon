@@ -12,7 +12,7 @@ static void il_method_DeleteParameter(VectorItem item);
 static void il_method_stmt_delete(VectorItem item);
 static void il_method_DeleteTypeParameter(VectorItem item);
 
-il_method * NewILMethod(string_view namev) {
+il_method * NewILMethod(StringView namev) {
 	il_method* ret = (il_method*)MEM_MALLOC(sizeof(il_method));
 	ret->namev = namev;
 	ret->parameter_list = NewVector();

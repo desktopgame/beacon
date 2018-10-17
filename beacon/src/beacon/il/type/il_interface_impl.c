@@ -18,7 +18,7 @@ il_type * WrapILInterface(il_interface * self) {
 	return ret;
 }
 
-il_interface * NewILInterface(string_view namev) {
+il_interface * NewILInterface(StringView namev) {
 	il_interface* ret = (il_interface*)MEM_MALLOC(sizeof(il_interface));
 	ret->extends_list = NewVector();
 	ret->method_list = NewVector();

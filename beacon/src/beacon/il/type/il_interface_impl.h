@@ -9,7 +9,7 @@ struct il_method;
  * インターフェースを表す要素.
  */
 typedef struct il_interface {
-	string_view namev;
+	StringView namev;
 	Vector* method_list;
 	Vector* extends_list;
 	Vector* GetParameterListType;
@@ -28,7 +28,7 @@ il_type* WrapILInterface(il_interface* self);
  * @param namev
  * @return
  */
-il_interface* NewILInterface(string_view namev);
+il_interface* NewILInterface(StringView namev);
 
 /**
  * プロパティを追加します.

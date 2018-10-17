@@ -8,7 +8,7 @@
 static void il_namespace_DeleteType(VectorItem item);
 static void il_namespace_DeleteNamespace(VectorItem item);
 
-il_namespace* NewILNamespace(string_view namev) {
+il_namespace* NewILNamespace(StringView namev) {
 	il_namespace* ret = (il_namespace*)MEM_MALLOC(sizeof(il_namespace));
 	ret->namev = namev;
 	ret->namespace_list = NewVector();

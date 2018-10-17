@@ -14,7 +14,7 @@ struct il_factor;
  * フィールドを表す構造体.
  */
 typedef struct field {
-	string_view namev;
+	StringView namev;
 	struct type* parent;
 	struct generic_type* gtype;
 	struct object* static_value;
@@ -30,7 +30,7 @@ typedef struct field {
  * @param namev
  * @return
  */
-field* NewField(string_view namev);
+field* NewField(StringView namev);
 
 /**
  * フィールドを開放します.

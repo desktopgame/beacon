@@ -180,7 +180,7 @@ void SetBCErrorColumn(int column);
  * 最後に発生したエラーメッセージを返します.
  * @return
  */
-string_view GetBCErrorMessage();
+StringView GetBCErrorMessage();
 
 /**
  * 現在発生中のエラーを返します.

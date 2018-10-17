@@ -4,7 +4,7 @@
 #include "../util/mem.h"
 #include "../env/generic_type.h"
 
-parameter * NewParameter(string_view namev) {
+parameter * NewParameter(StringView namev) {
 	parameter* ret = (parameter*)MEM_MALLOC(sizeof(parameter));
 	ret->namev = namev;
 	ret->gtype = NULL;
@@ -15,7 +15,7 @@ void DeleteParameter(parameter * self) {
 	MEM_FREE(self);
 }
 
-bool IsOverwrappedParameterName(Vector* parameters, string_view* namev) {
+bool IsOverwrappedParameterName(Vector* parameters, StringView* namev) {
 	for(int i=0; i<parameters->length; i++) {
 		parameter* e = (parameter*)AtVector(parameters, i);
 		for(int j=0; j<parameters->length; j++) {

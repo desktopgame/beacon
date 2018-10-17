@@ -14,7 +14,7 @@ typedef struct il_stmt_try {
 
 typedef struct il_stmt_catch {
 	generic_cache* fqcn;
-	string_view namev;
+	StringView namev;
 	Vector* statement_list;
 } il_stmt_catch;
 
@@ -22,7 +22,7 @@ il_stmt* WrapILTry(il_stmt_try* self);
 
 il_stmt_try* NewILTry();
 
-il_stmt_catch* NewILCatch(string_view namev);
+il_stmt_catch* NewILCatch(StringView namev);
 
 void GenerateILTry(il_stmt_try* self, struct enviroment* env, call_context* cctx);
 

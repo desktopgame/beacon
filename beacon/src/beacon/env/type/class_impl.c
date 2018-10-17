@@ -55,7 +55,7 @@ type * WrapClass(class_ * self) {
 	return ret;
 }
 
-class_ * NewClass(string_view namev) {
+class_ * NewClass(StringView namev) {
 	class_* ret = (class_*)MEM_MALLOC(sizeof(class_));
 	ret->namev = namev;
 	ret->parent = NULL;
@@ -80,7 +80,7 @@ class_ * NewClass(string_view namev) {
 	return ret;
 }
 
-class_* NewClassProxy(generic_type* gt, string_view namev) {
+class_* NewClassProxy(generic_type* gt, StringView namev) {
 	assert(gt->core_type->tag == TYPE_INTERFACE_T);
 	class_* ret = NewClass(namev);
 	ret->super_class = GENERIC_OBJECT;
@@ -88,7 +88,7 @@ class_* NewClassProxy(generic_type* gt, string_view namev) {
 	return ret;
 }
 
-type* NewPreloadClass(string_view namev) {
+type* NewPreloadClass(StringView namev) {
 	class_* cl = NewClass(namev);
 	type* tp = WrapClass(cl);
 	tp->state = TYPE_PENDING;
@@ -182,7 +182,7 @@ void DefineNativeMethodClass(class_* self, const char* name, native_impl impl) {
 	DefineNativeMethodByRefClass(self, InternString(name), impl);
 }
 
-void DefineNativeMethodByRefClass(class_ * self, string_view namev, native_impl impl) {
+void DefineNativeMethodByRefClass(class_ * self, StringView namev, native_impl impl) {
 	native_method_ref* ref = NewNativeMethodRef(impl);
 	PutNumericMap(self->native_method_ref_nmap, namev, ref);
 }

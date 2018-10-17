@@ -34,7 +34,7 @@ static method* create_next(method* self, type* ty,class_loader* cll, generic_typ
 static Vector* method_vm_args(method* self, frame* fr, frame* a);
 static Vector* method_vm_typeargs(method* self, frame* fr, frame* a);
 
-method* MallocMethod(string_view namev, const char* filename, int lineno) {
+method* MallocMethod(StringView namev, const char* filename, int lineno) {
 	method* ret = (method*)mem_malloc(sizeof(method), filename, lineno);
 	ret->namev = namev;
 	ret->parameters = MallocVector(filename, lineno);
@@ -126,7 +126,7 @@ bool IsOverridedMethod(method* superM, method* subM, call_context* cctx) {
 	return ret != -1;
 }
 
-int GetGenericIndexForMethod(method * self, string_view namev) {
+int GetGenericIndexForMethod(method * self, StringView namev) {
 	int ret = -1;
 	for (int i = 0; i < self->type_parameters->length; i++) {
 		type_parameter* e = (type_parameter*)AtVector(self->type_parameters, i);
@@ -149,13 +149,13 @@ void DeleteMethod(method * self) {
 	MEM_FREE(self);
 }
 
-string_view MangleMethod(method* self) {
+StringView MangleMethod(method* self) {
 	Buffer* ret = NewBuffer();
 	AppendsBuffer(ret, Ref2Str(self->namev));
 	//引数が一つもないので終了
 	if(self->parameters->length == 0) {
 		char* raw = ReleaseBuffer(ret);
-		string_view sv = InternString(raw);
+		StringView sv = InternString(raw);
 		MEM_FREE(raw);
 		return sv;
 	}
@@ -183,17 +183,17 @@ string_view MangleMethod(method* self) {
 		}
 	}
 	char* raw = ReleaseBuffer(ret);
-	string_view sv = InternString(raw);
+	StringView sv = InternString(raw);
 	MEM_FREE(raw);
 	return sv;
 }
 
-string_view GetMethodUniqueName(method* self) {
+StringView GetMethodUniqueName(method* self) {
 	Buffer* ret = NewBuffer();
 	AppendsBuffer(ret, Ref2Str(GetTypeFullName(self->parent)));
 	AppendsBuffer(ret, Ref2Str(MangleMethod(self)));
 	char* raw = ReleaseBuffer(ret);
-	string_view sv = InternString(raw);
+	StringView sv = InternString(raw);
 	MEM_FREE(raw);
 	return sv;
 }
@@ -230,7 +230,7 @@ type* CreateIteratorTypeFromMethod(method* self,  class_loader* cll, Vector* stm
 	call_context* lCctx = NewCallContext(CALL_CTOR_T);
 	call_frame* lCfr = PushCallContext(lCctx, FRAME_RESOLVE_T);
 	lCfr->u.resolve.gtype = self->return_gtype;
-	string_view iterName = GetMethodUniqueName(self);
+	StringView iterName = GetMethodUniqueName(self);
 	type* iterT = FindTypeFromNamespace(GetLangNamespace(), InternString("Iterator"));
 	//イテレータの実装クラスを登録
 	generic_type* iterImplGT = ApplyGenericType(self->return_gtype, lCctx);

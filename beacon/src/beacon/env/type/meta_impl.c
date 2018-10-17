@@ -118,15 +118,15 @@ int MetaRCalcScore(Vector* params, Vector* args, Vector* typeargs, frame* fr) {
 	return score;
 }
 
-method * MetaILFindMethod(Vector * method_vec, string_view namev, Vector * ilargs, enviroment * env, call_context* cctx, int * outIndex) {
+method * MetaILFindMethod(Vector * method_vec, StringView namev, Vector * ilargs, enviroment * env, call_context* cctx, int * outIndex) {
 	return MetaScopedILFindMethod(NULL, method_vec, namev, ilargs, env, cctx, outIndex);
 }
 
-method* MetaGFindMethod(Vector* method_vec, string_view namev, Vector * gargs, int* outIndex) {
+method* MetaGFindMethod(Vector* method_vec, StringView namev, Vector * gargs, int* outIndex) {
 	return MetaScopedGFindMethod(NULL, method_vec, namev, gargs, outIndex);
 }
 
-method* MetaScopedILFindMethod(class_* context, Vector* method_vec, string_view namev, Vector * ilargs, enviroment * env, call_context* cctx, int * outIndex) {
+method* MetaScopedILFindMethod(class_* context, Vector* method_vec, StringView namev, Vector * ilargs, enviroment * env, call_context* cctx, int * outIndex) {
 	(*outIndex) = -1;
 	//CreateVTableClass(self);
 	method* ret = NULL;
@@ -163,7 +163,7 @@ method* MetaScopedILFindMethod(class_* context, Vector* method_vec, string_view 
 	return ret;
 }
 
-method* MetaScopedGFindMethod(class_* context, Vector* method_vec, string_view namev, Vector * gargs, int * outIndex) {
+method* MetaScopedGFindMethod(class_* context, Vector* method_vec, StringView namev, Vector * gargs, int * outIndex) {
 	(*outIndex) = -1;
 	//CreateVTableClass(self);
 	method* ret = NULL;

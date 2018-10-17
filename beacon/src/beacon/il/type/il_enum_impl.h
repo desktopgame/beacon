@@ -6,13 +6,13 @@
 #include "../il_type_interface.h"
 
 typedef struct il_enum {
-	string_view namev;
+	StringView namev;
 	Vector* item_vec;
 } il_enum;
 
 il_type* WrapILEnum(il_enum* self);
 
-il_enum* NewILEnum(string_view namev);
+il_enum* NewILEnum(StringView namev);
 
 void DeleteILEnum(il_enum* self);
 #endif // !SIGNAL_IL_IL_ENUM_H

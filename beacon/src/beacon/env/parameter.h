@@ -8,7 +8,7 @@
  * メソッドの仮引数を表す構造体です.
  */
 typedef struct parameter {
-	string_view namev;
+	StringView namev;
 	struct generic_type* gtype;
 } parameter;
 
@@ -17,7 +17,7 @@ typedef struct parameter {
  * @param namev
  * @return
  */
-parameter* NewParameter(string_view namev);
+parameter* NewParameter(StringView namev);
 
 /**
  * パラメータを開放します.
@@ -31,5 +31,5 @@ void DeleteParameter(parameter* self);
  * @param namev
  * @return
  */
-bool IsOverwrappedParameterName(Vector* parameters, string_view* namev);
+bool IsOverwrappedParameterName(Vector* parameters, StringView* namev);
 #endif // !SIGNAL_ENV_PARAMETER_H

@@ -15,7 +15,7 @@ struct field;
 typedef struct il_factor_member_op {
 	il_factor* parent;
 	il_factor* fact;
-	string_view namev;
+	StringView namev;
 	Vector* type_args;
 	int index;
 	struct field* f;
@@ -23,7 +23,7 @@ typedef struct il_factor_member_op {
 
 il_factor* WrapILMemberOp(il_factor_member_op* self);
 
-il_factor_member_op* NewILMemberOp(string_view namev);
+il_factor_member_op* NewILMemberOp(StringView namev);
 
 void LoadILMemberOp(il_factor_member_op* self, struct enviroment* env, call_context* cctx);
 

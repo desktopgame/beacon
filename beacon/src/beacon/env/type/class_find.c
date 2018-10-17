@@ -14,7 +14,7 @@
 static bool IsContainsFieldClassImpl(Vector* fields, field* f);
 static bool IsContainsPropertyClassImpl(Vector* props, property* p);
 
-field * FindFieldClass(class_* self, string_view namev, int* outIndex) {
+field * FindFieldClass(class_* self, StringView namev, int* outIndex) {
 	(*outIndex) = -1;
 	for (int i = 0; i < self->field_list->length; i++) {
 		VectorItem e = AtVector(self->field_list, i);
@@ -27,7 +27,7 @@ field * FindFieldClass(class_* self, string_view namev, int* outIndex) {
 	return NULL;
 }
 
-field * FindTreeFieldClass(class_ * self, string_view namev, int * outIndex) {
+field * FindTreeFieldClass(class_ * self, StringView namev, int * outIndex) {
 	class_* pointee = self;
 	do {
 		field* f = FindFieldClass(pointee, namev, outIndex);
@@ -43,7 +43,7 @@ field * FindTreeFieldClass(class_ * self, string_view namev, int * outIndex) {
 	return NULL;
 }
 
-field * FindSFieldClass(class_ * self, string_view namev, int * outIndex) {
+field * FindSFieldClass(class_ * self, StringView namev, int * outIndex) {
 	(*outIndex) = -1;
 	for (int i = 0; i < self->sfield_list->length; i++) {
 		VectorItem e = AtVector(self->sfield_list, i);
@@ -56,7 +56,7 @@ field * FindSFieldClass(class_ * self, string_view namev, int * outIndex) {
 	return NULL;
 }
 
-field * FindTreeSFieldClass(class_ * self, string_view namev, int * outIndex) {
+field * FindTreeSFieldClass(class_ * self, StringView namev, int * outIndex) {
 	class_* pointee = self;
 	do {
 		field* f = FindSFieldClass(pointee, namev, outIndex);
@@ -212,7 +212,7 @@ property* GetSPropertyClass(class_* self, int index) {
 	return GetPropertyClass(self->super_class->core_type->u.class_, index);
 }
 
-property* FindPropertyClass(class_* self, string_view namev, int* outIndex) {
+property* FindPropertyClass(class_* self, StringView namev, int* outIndex) {
 	(*outIndex) = -1;
 	for (int i = 0; i < self->prop_list->length; i++) {
 		VectorItem e = AtVector(self->prop_list, i);
@@ -225,7 +225,7 @@ property* FindPropertyClass(class_* self, string_view namev, int* outIndex) {
 	return NULL;
 }
 
-property* FindTreePropertyClass(class_* self, string_view namev, int* outIndex) {
+property* FindTreePropertyClass(class_* self, StringView namev, int* outIndex) {
 	class_* pointee = self;
 	do {
 		property* p = FindPropertyClass(pointee, namev, outIndex);
@@ -241,7 +241,7 @@ property* FindTreePropertyClass(class_* self, string_view namev, int* outIndex) 
 	return NULL;
 }
 
-property* FindSPropertyClass(class_* self, string_view namev, int* outIndex) {
+property* FindSPropertyClass(class_* self, StringView namev, int* outIndex) {
 	(*outIndex) = -1;
 	for (int i = 0; i < self->sprop_list->length; i++) {
 		VectorItem e = AtVector(self->sprop_list, i);
@@ -254,7 +254,7 @@ property* FindSPropertyClass(class_* self, string_view namev, int* outIndex) {
 	return NULL;
 }
 
-property* FindTreeSPropertyClass(class_* self, string_view namev, int* outIndex) {
+property* FindTreeSPropertyClass(class_* self, StringView namev, int* outIndex) {
 	class_* pointee = self;
 	do {
 		property* p = FindSPropertyClass(pointee, namev, outIndex);
@@ -293,7 +293,7 @@ constructor * ILFindEmptyConstructorClass(class_ * self, enviroment * env, call_
 
 
 
-method * ILFindMethodClass(class_ * self, string_view namev, Vector * args, enviroment * env, call_context* cctx, int * outIndex) {
+method * ILFindMethodClass(class_ * self, StringView namev, Vector * args, enviroment * env, call_context* cctx, int * outIndex) {
 	(*outIndex) = -1;
 	CreateVTableClass(self);
 	#if defined(DEBUG)
@@ -316,7 +316,7 @@ method * ILFindMethodClass(class_ * self, string_view namev, Vector * args, envi
 	return NULL;
 }
 
-method* GFindMethodClass(class_* self, string_view namev, Vector* gargs, int* outIndex) {
+method* GFindMethodClass(class_* self, StringView namev, Vector* gargs, int* outIndex) {
 	(*outIndex) = -1;
 	CreateVTableClass(self);
 	//assert(self->vt->elements->length > 0);
@@ -344,7 +344,7 @@ method* GFindEqMethodClass(class_* self, int* outIndex) {
 	return ret;
 }
 
-method * ILFindSMethodClass(class_ * self, string_view namev, Vector * args, enviroment * env, call_context* cctx, int * outIndex) {
+method * ILFindSMethodClass(class_ * self, StringView namev, Vector * args, enviroment * env, call_context* cctx, int * outIndex) {
 	#if defined(DEBUG)
 	const char* str = Ref2Str(namev);
 	#endif
@@ -357,7 +357,7 @@ method * ILFindSMethodClass(class_ * self, string_view namev, Vector * args, env
 	return ret;
 }
 
-method* GFindSMethodClass(class_* self, string_view namev, Vector* gargs, int* outIndex) {
+method* GFindSMethodClass(class_* self, StringView namev, Vector* gargs, int* outIndex) {
 	(*outIndex) = -1;
 	CreateVTableClass(self);
 	int temp = 0;

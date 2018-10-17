@@ -9,7 +9,7 @@ struct generic_cache;
  * 関数宣言を表す要素.
  */
 typedef struct il_function {
-	string_view namev;
+	StringView namev;
 	Vector* type_parameter_vec;
 	Vector* parameter_list;
 	Vector* statement_list;
@@ -22,7 +22,7 @@ typedef struct il_function {
  * @param namev
  * @return
  */
-il_function* NewILFunction(string_view namev);
+il_function* NewILFunction(StringView namev);
 
 /**
  * 関数を解放します.

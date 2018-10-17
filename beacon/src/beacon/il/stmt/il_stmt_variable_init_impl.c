@@ -16,7 +16,7 @@ il_stmt * WrapILVariableInit(il_stmt_variable_init * self) {
 	return ret;
 }
 
-il_stmt_variable_init * NewILVariableInit(string_view namev) {
+il_stmt_variable_init * NewILVariableInit(StringView namev) {
 	il_stmt_variable_init* ret = (il_stmt_variable_init*)MEM_MALLOC(sizeof(il_stmt_variable_init));
 	ret->namev = namev;
 	ret->fact = NULL;

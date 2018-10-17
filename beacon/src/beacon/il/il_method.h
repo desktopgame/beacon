@@ -11,7 +11,7 @@
  * メソッドの定義を表す要素.
  */
 typedef struct il_method {
-	string_view namev;
+	StringView namev;
 	Vector* parameter_list;
 	Vector* statement_list;
 	//il_type* return_type;
@@ -26,7 +26,7 @@ typedef struct il_method {
  * @param name
  * @return
  */
-il_method* NewILMethod(string_view namev);
+il_method* NewILMethod(StringView namev);
 
 /**
  * メソッドを開放します.

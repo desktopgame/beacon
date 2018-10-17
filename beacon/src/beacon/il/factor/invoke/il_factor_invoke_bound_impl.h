@@ -17,7 +17,7 @@ typedef enum bound_invoke {
 } bound_invoke;
 
 typedef struct il_factor_invoke_bound {
-	string_view namev;
+	StringView namev;
 	Vector* type_args;
 	Vector* args;
 	union {
@@ -29,7 +29,7 @@ typedef struct il_factor_invoke_bound {
 	bound_invoke tag;
 } il_factor_invoke_bound;
 
-il_factor_invoke_bound* NewILInvokeBound(string_view namev);
+il_factor_invoke_bound* NewILInvokeBound(StringView namev);
 
 void GenerateILInvokeBound(il_factor_invoke_bound* self, struct enviroment* env, call_context* cctx);
 

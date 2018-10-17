@@ -11,7 +11,7 @@ struct symbol_entry;
  * var y = new X::Y();
  */
 typedef struct il_stmt_inferenced_type_init {
-	string_view namev;
+	StringView namev;
 	il_factor* fact;
 	struct symbol_entry* sym;
 } il_stmt_inferenced_type_init;
@@ -28,7 +28,7 @@ il_stmt* WrapILInferencedTypeInit(il_stmt_inferenced_type_init* self);
  * @param namev
  * @return
  */
-il_stmt_inferenced_type_init* NewILInferencedTypeInit(string_view namev);
+il_stmt_inferenced_type_init* NewILInferencedTypeInit(StringView namev);
 
 /**
  * 推論された型の初期化を表す要素を生成します.

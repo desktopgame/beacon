@@ -10,7 +10,7 @@ struct method;
  * @param out
  * @return
  */
-bool IsMethodParameterValidInterface(struct interface_* inter, struct method** out_method, string_view* out_name);
+bool IsMethodParameterValidInterface(struct interface_* inter, struct method** out_method, StringView* out_name);
 
 /**
  * インターフェイスの型変数に重複する名前がないなら true.
@@ -18,7 +18,7 @@ bool IsMethodParameterValidInterface(struct interface_* inter, struct method** o
  * @param out_name
  * @return
  */
-bool IsTypeParameterValidInterface(struct interface_* inter, string_view* out_name);
+bool IsTypeParameterValidInterface(struct interface_* inter, StringView* out_name);
 
 /**
  * メソッドの型変数に重複するものがないなら true.
@@ -27,6 +27,6 @@ bool IsTypeParameterValidInterface(struct interface_* inter, string_view* out_na
  * @param out_name
  * @return
  */
-bool IsMethodTypeParameterValidInterface(struct interface_* inter, struct method** out_method, string_view* out_name);
+bool IsMethodTypeParameterValidInterface(struct interface_* inter, struct method** out_method, StringView* out_name);
 
 #endif

@@ -11,7 +11,7 @@ struct il_method;
  * クラスを表す要素.
  */
 typedef struct il_class {
-	string_view namev;
+	StringView namev;
 //	fqcn_cache* super;
 //	Vector* implement_list;
 	Vector* extend_list;
@@ -39,7 +39,7 @@ il_type* WrapILClass(il_class* self);
  * @param namev
  * @return
  */
-il_class* NewILClass(string_view namev);
+il_class* NewILClass(StringView namev);
 
 /**
  * フィールドを追加します.

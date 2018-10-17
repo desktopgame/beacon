@@ -27,5 +27,5 @@ ast* NewASTChar(char ch);
  * @param sv
  * @return
  */
-ast* NewASTString(string_view sv);
+ast* NewASTString(StringView sv);
 #endif // !SIGNAL_AST_AST_NEW_LITERAL_H

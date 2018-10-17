@@ -17,7 +17,7 @@ void InitStringPool() {
 	gVec = NewVector();
 }
 
-string_view InternString(const char* str) {
+StringView InternString(const char* str) {
 	assert(gMap != NULL);
 	assert(gVec != NULL);
 	tree_map* cell = GetTreeMapCell(gMap, str);
@@ -29,38 +29,38 @@ string_view InternString(const char* str) {
 		return ZERO_VIEW;
 	}
 	assert(cell->item != 0);
-	return (string_view)cell->item;
+	return (StringView)cell->item;
 }
 
-string_view InternString2(Buffer* buffer) {
+StringView InternString2(Buffer* buffer) {
 	char* raw = ReleaseBuffer(buffer);
-	string_view sv = InternString(raw);
+	StringView sv = InternString(raw);
 	MEM_FREE(raw);
 	assert(sv != 0);
 	return sv;
 }
 
-string_view ConcatIntern(const char* head, string_view foot) {
+StringView ConcatIntern(const char* head, StringView foot) {
 	//連結する
 	const char* footstr = Ref2Str(foot);
 	Buffer* buf = NewBuffer();
 	AppendsBuffer(buf, head);
 	AppendsBuffer(buf, footstr);
 	char* retstr = ReleaseBuffer(buf);
-	string_view ret = InternString(retstr);
+	StringView ret = InternString(retstr);
 	MEM_FREE(retstr);
 	return ret;
 }
 
-string_view Str2Ref(const char* str) {
+StringView Str2Ref(const char* str) {
 	tree_map* cell = GetTreeMapCell(gMap, str);
 	if(cell == gMap) {
 		return ZERO_VIEW;
 	}
-	return (string_view)cell->item;
+	return (StringView)cell->item;
 }
 
-const char* Ref2Str(string_view ref) {
+const char* Ref2Str(StringView ref) {
 	if(ref == NULL_VIEW) {
 		return NULL;
 	}

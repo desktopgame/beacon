@@ -28,7 +28,7 @@ il_stmt_try* NewILTry() {
 	return ret;
 }
 
-il_stmt_catch* NewILCatch(string_view namev) {
+il_stmt_catch* NewILCatch(StringView namev) {
 	il_stmt_catch* ret = (il_stmt_catch*)MEM_MALLOC(sizeof(il_stmt_catch));
 	ret->namev = namev;
 	ret->fqcn = NewGenericCache();

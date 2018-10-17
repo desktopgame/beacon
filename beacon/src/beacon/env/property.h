@@ -11,7 +11,7 @@ struct object;
 
 typedef struct property {
 	modifier_type modifier;
-	string_view namev;
+	StringView namev;
 	struct type* parent;
 	struct field* source_ref;
 	struct generic_type* gtype;
@@ -22,7 +22,7 @@ typedef struct property {
 } property;
 
 #define property_new(namev) (MallocProperty(namev, __FILE__, __LINE__))
-property* MallocProperty(string_view namev, const char* filename, int lineno);
+property* MallocProperty(StringView namev, const char* filename, int lineno);
 
 void DeleteProperty(property* self);
 #endif

@@ -10,13 +10,13 @@ typedef struct il_property {
 	struct generic_cache* fqcn;
 	access_level access;
 	modifier_type modifier;
-	string_view namev;
+	StringView namev;
 	il_property_body* set;
 	il_property_body* get;
 } il_property;
 
 #define il_property_new(namev) (MallocILProperty(namev, __FILE__, __LINE__))
-il_property* MallocILProperty(string_view namev, const char* filename, int lineno);
+il_property* MallocILProperty(StringView namev, const char* filename, int lineno);
 
 void DeleteILProperty(il_property* self);
 #endif

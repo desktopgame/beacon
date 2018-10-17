@@ -1,7 +1,7 @@
 #include "property.h"
 #include "../util/mem.h"
 
-property* MallocProperty(string_view namev, const char* filename, int lineno) {
+property* MallocProperty(StringView namev, const char* filename, int lineno) {
 	property* ret = mem_malloc(sizeof(property), filename, lineno);
 	ret->namev = namev;
 	ret->gtype = NULL;

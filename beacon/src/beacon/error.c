@@ -9,8 +9,8 @@
 #pragma warning(disable:4996)
 #endif
 static BCErrorID gGlobalError = BCERROR_NONE_T;
-static string_view gErrorFile = ZERO_VIEW;
-static string_view gLastMessage = ZERO_VIEW;
+static StringView gErrorFile = ZERO_VIEW;
+static StringView gLastMessage = ZERO_VIEW;
 static int gErrorLineNo = -1;
 static int gErrorColumn = -1;
 static void check_abort(script_context* sctx);
@@ -388,7 +388,7 @@ void SetBCErrorColumn(int column) {
 	gErrorColumn = column;
 }
 
-string_view GetBCErrorMessage() {
+StringView GetBCErrorMessage() {
 	return gLastMessage;
 }
 

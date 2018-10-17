@@ -137,7 +137,7 @@ ast* NewASTTry(ast* abody, ast* acatch_list);
  * @param abody
  * @return
  */
-ast* NewASTCatch(ast* stypename, string_view snamev, ast* abody);
+ast* NewASTCatch(ast* stypename, StringView snamev, ast* abody);
 
 /**
  * キャッチ節の一覧を作成します.
@@ -168,7 +168,7 @@ ast* NewASTArgumentList(ast* factor, ast* argument_list);
  * @param class_name
  * @return
  */
-ast* NewASTFQCN(ast* part_list, string_view class_namev);
+ast* NewASTFQCN(ast* part_list, StringView class_namev);
 
 /**
  * 完全修飾クラス名の 1節 を表す要素を作成します.
@@ -182,7 +182,7 @@ ast* NewASTFQCN(ast* part_list, string_view class_namev);
  * @param lineno
  * @return
  */
-ast* MallocASTFQCNPart(string_view namev, const char* filename, int lineno);
+ast* MallocASTFQCNPart(StringView namev, const char* filename, int lineno);
 
 /**
  * 完全修飾クラス名の名前空間部分(XX::YY::)の一覧を表す要素を作成します.
@@ -198,7 +198,7 @@ ast* NewASTFQCNPartList(ast* part, ast* part_list);
  * @param namev
  * @return
  */
-ast* NewASTVariableDecl(ast* type, string_view namev);
+ast* NewASTVariableDecl(ast* type, StringView namev);
 
 /**
  * X::Y y = new X::Y() のような初期化を表す要素を作成します.
@@ -207,7 +207,7 @@ ast* NewASTVariableDecl(ast* type, string_view namev);
  * @param afact
  * @return
  */
-ast* NewASTVariableInit(ast* type, string_view namev, ast* fact);
+ast* NewASTVariableInit(ast* type, StringView namev, ast* fact);
 
 /**
  * var y = new X::Y() のような初期化を表す要素を作成します.
@@ -215,7 +215,7 @@ ast* NewASTVariableInit(ast* type, string_view namev, ast* fact);
  * @param afact
  * @return
  */
-ast* NewASTInferencedTypeInit(string_view namev, ast* fact);
+ast* NewASTInferencedTypeInit(StringView namev, ast* fact);
 
 /**
  * assert 条件 を表す要素を作成します.
@@ -251,5 +251,5 @@ ast* NewASTYieldBreak();
  * @param avalue 値
  * @return
  */
-ast* NewASTInject(string_view namev, ast* avalue);
+ast* NewASTInject(StringView namev, ast* avalue);
 #endif // !SIGNAL_AST_AST_NEW_STMT_H

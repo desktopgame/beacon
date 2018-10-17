@@ -23,7 +23,7 @@ static void GenerateILInvokeBound_subscript(il_factor_invoke_bound* self, enviro
 static generic_type* il_factor_invoke_bound_return_gtype(il_factor_invoke_bound* self, call_context* cctx);
 static generic_type* EvalILInvokeBoundImpl(il_factor_invoke_bound * self, enviroment * env, call_context* cctx);
 
-il_factor_invoke_bound* NewILInvokeBound(string_view namev) {
+il_factor_invoke_bound* NewILInvokeBound(StringView namev) {
 	il_factor_invoke_bound* ret = (il_factor_invoke_bound*)MEM_MALLOC(sizeof(il_factor_invoke_bound));
 	ret->namev = namev;
 	ret->args = NULL;

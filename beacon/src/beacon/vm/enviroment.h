@@ -71,7 +71,7 @@ int AddCCharEnviroment(enviroment* self, char c);
  * @param sv
  * @return
  */
-int AddCStringEnviroment(enviroment* self, string_view sv);
+int AddCStringEnviroment(enviroment* self, StringView sv);
 
 /**
  * 指定位置のオペコード/オペランドを返します.

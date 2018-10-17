@@ -8,7 +8,7 @@ struct generic_type;
 
 typedef struct il_factor_property {
 	il_factor* fact;
-	string_view namev;
+	StringView namev;
 	int index;
 	property* p;
 } il_factor_property;

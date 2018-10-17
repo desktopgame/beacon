@@ -304,7 +304,7 @@ static void CLBC_check_class(class_loader * self, il_type * iltype, type * tp, n
 	}
 	//メソッドの重複するパラメータ名を検出する
 	method* out_overwrap_m = NULL;
-	string_view out_overwrap_mname;
+	StringView out_overwrap_mname;
 	if(!IsMethodParameterValidClass(tp->u.class_, &out_overwrap_m, &out_overwrap_mname)) {
 		ThrowBCError(BCERROR_OVERWRAP_PARAMETER_NAME_T,
 			Ref2Str(GetTypeName(tp)),
@@ -315,7 +315,7 @@ static void CLBC_check_class(class_loader * self, il_type * iltype, type * tp, n
 	}
 	//コンストラクタの重複するパラメータ名を検出する
 	constructor* out_overwrap_c = NULL;
-	string_view out_overwrap_cname;
+	StringView out_overwrap_cname;
 	if(!IsConstructorParameterValidClass(tp->u.class_, &out_overwrap_c, &out_overwrap_cname)) {
 		ThrowBCError(BCERROR_OVERWRAP_PARAMETER_NAME_T,
 			Ref2Str(GetTypeName(tp)),
@@ -325,7 +325,7 @@ static void CLBC_check_class(class_loader * self, il_type * iltype, type * tp, n
 		return;
 	}
 	//クラスの重複する型パラメータ名を検出する
-	string_view out_overwrap_tpname;
+	StringView out_overwrap_tpname;
 	if(!IsTypeParameterValidClass(tp->u.class_, &out_overwrap_tpname)) {
 		ThrowBCError(BCERROR_OVERWRAP_TYPE_TYPE_PARAMETER_NAME_T,
 			Ref2Str(GetTypeName(tp)),
@@ -335,7 +335,7 @@ static void CLBC_check_class(class_loader * self, il_type * iltype, type * tp, n
 	}
 	//メソッドの重複する型パラメータ名を検出する
 	method* out_overwrap_tpm = NULL;
-	string_view out_overwrap_tpmname;
+	StringView out_overwrap_tpmname;
 	if(!IsMethodTypeParameterValidClass(tp->u.class_, &out_overwrap_tpm, &out_overwrap_tpmname)) {
 		ThrowBCError(BCERROR_OVERWRAP_METHOD_TYPE_PARAMETER_NAME_T,
 			Ref2Str(GetTypeName(tp)),
@@ -366,7 +366,7 @@ static void CLBC_check_class(class_loader * self, il_type * iltype, type * tp, n
 static void CLBC_check_interface(class_loader * self, il_type * iltype, type * tp, namespace_ * scope) {
 	//重複するパラメータ名を検出する
 	method* out_overwrap_m = NULL;
-	string_view out_overwrap_name;
+	StringView out_overwrap_name;
 	if(!IsMethodParameterValidInterface(tp->u.interface_, &out_overwrap_m, &out_overwrap_name)) {
 		ThrowBCError(BCERROR_OVERWRAP_PARAMETER_NAME_T,
 			Ref2Str(GetTypeName(tp)),
@@ -375,7 +375,7 @@ static void CLBC_check_interface(class_loader * self, il_type * iltype, type * t
 		);
 	}
 	//インターフェイスの重複する型パラメータ名を検出する
-	string_view out_overwrap_tpname;
+	StringView out_overwrap_tpname;
 	if(!IsTypeParameterValidInterface(tp->u.interface_, &out_overwrap_tpname)) {
 		ThrowBCError(BCERROR_OVERWRAP_TYPE_TYPE_PARAMETER_NAME_T,
 			Ref2Str(GetTypeName(tp)),
@@ -384,7 +384,7 @@ static void CLBC_check_interface(class_loader * self, il_type * iltype, type * t
 	}
 	//メソッドの重複する型パラメータ名を検出する
 	method* out_overwrap_tpm = NULL;
-	string_view out_overwrap_tpmname;
+	StringView out_overwrap_tpmname;
 	if(!IsMethodTypeParameterValidInterface(tp->u.interface_, &out_overwrap_tpm, &out_overwrap_tpmname)) {
 		ThrowBCError(BCERROR_OVERWRAP_METHOD_TYPE_PARAMETER_NAME_T,
 			Ref2Str(GetTypeName(tp)),

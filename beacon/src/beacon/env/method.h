@@ -28,7 +28,7 @@ typedef enum method_type {
  * メソッドを表す構造体.
  */
 typedef struct method {
-	string_view namev;
+	StringView namev;
 	method_type type;
 	//struct class_* decleared_type;
 	struct type* parent;
@@ -50,7 +50,7 @@ typedef struct method {
  * @param lineno
  * @return
  */
-method* MallocMethod(string_view namev, const char* filename, int lineno);
+method* MallocMethod(StringView namev, const char* filename, int lineno);
 #define method_new(namev) (MallocMethod(namev, __FILE__, __LINE__))
 
 /**
@@ -77,7 +77,7 @@ bool IsOverridedMethod(method* superM, method* subM, struct call_context* cctx);
  * @param name
  * @return
  */
-int GetGenericIndexForMethod(method* self, string_view namev);
+int GetGenericIndexForMethod(method* self, StringView namev);
 
 /**
  * メソッドを開放します.
@@ -90,14 +90,14 @@ void DeleteMethod(method* self);
  * @param self
  * @return
  */
-string_view MangleMethod(method* self);
+StringView MangleMethod(method* self);
 
 /**
  * 型の完全名とマングル表現を連結して返します.
  * @param self
  * @return
  */
-string_view GetMethodUniqueName(method* self);
+StringView GetMethodUniqueName(method* self);
 
 /**
  * メソッドがコルーチンとして機能できるなら true.

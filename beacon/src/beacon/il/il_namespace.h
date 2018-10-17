@@ -8,7 +8,7 @@
  * 名前空間の宣言を表す要素.
  */
 typedef struct il_namespace {
-	string_view namev;
+	StringView namev;
 	struct il_namespace* parent;
 	Vector* namespace_list;
 	Vector* type_list;
@@ -19,7 +19,7 @@ typedef struct il_namespace {
  * @param namev
  * @return
  */
-il_namespace* NewILNamespace(string_view namev);
+il_namespace* NewILNamespace(StringView namev);
 
 /**
  * 最も上の要素を返します.

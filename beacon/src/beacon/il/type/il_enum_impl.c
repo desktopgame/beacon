@@ -13,7 +13,7 @@ il_type * WrapILEnum(il_enum * self) {
 	return ret;
 }
 
-il_enum * NewILEnum(string_view namev) {
+il_enum * NewILEnum(StringView namev) {
 	il_enum* ret = (il_enum*)MEM_MALLOC(sizeof(il_enum));
 	ret->namev = namev;
 	ret->item_vec = NewVector();

@@ -12,7 +12,7 @@ struct symbol_entry;
  */
 typedef struct il_stmt_variable_init {
 	generic_cache* fqcn;
-	string_view namev;
+	StringView namev;
 	il_factor* fact;
 	struct symbol_entry* sym;
 } il_stmt_variable_init;
@@ -29,7 +29,7 @@ il_stmt* WrapILVariableInit(il_stmt_variable_init* self);
  * @param namev
  * @return
  */
-il_stmt_variable_init* NewILVariableInit(string_view namev);
+il_stmt_variable_init* NewILVariableInit(StringView namev);
 
 /**
  * 変数の初期化を表す要素を出力します.

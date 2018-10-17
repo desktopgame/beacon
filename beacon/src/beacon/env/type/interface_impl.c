@@ -26,7 +26,7 @@ type * WrapInterface(interface_ * self) {
 	return ret;
 }
 
-interface_ * NewInterface(string_view namev) {
+interface_ * NewInterface(StringView namev) {
 	interface_* ret = (interface_*)MEM_MALLOC(sizeof(interface_));
 	ret->namev = namev;
 	ret->impl_list = NewVector();
@@ -47,11 +47,11 @@ void AddPropertyInterface(interface_* self, property* p) {
 	PushVector(self->prop_list, p);
 }
 
-method * ILFindMethodInterface(interface_ * self, string_view namev, Vector * args, enviroment * env, call_context* cctx, int * outIndex) {
+method * ILFindMethodInterface(interface_ * self, StringView namev, Vector * args, enviroment * env, call_context* cctx, int * outIndex) {
 	return MetaILFindMethod(self->method_list, namev, args, env,cctx, outIndex);
 }
 
-method* GFindMethodInterface(interface_* self, string_view namev, Vector* gargs, int* outIndex) {
+method* GFindMethodInterface(interface_* self, StringView namev, Vector* gargs, int* outIndex) {
 	return MetaGFindMethod(self->method_list, namev, gargs, outIndex);
 }
 

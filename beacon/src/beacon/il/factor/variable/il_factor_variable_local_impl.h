@@ -30,7 +30,7 @@ typedef struct property_with_index {
  * ローカル変数を表す構造体.
  */
 typedef struct il_factor_variable_local {
-	string_view namev;
+	StringView namev;
 	variable_local_type type;
 	struct generic_type* gt;
 	union {
@@ -41,7 +41,7 @@ typedef struct il_factor_variable_local {
 	Vector* type_args;
 } il_factor_variable_local;
 
-il_factor_variable_local* NewILVariableLocal(string_view namev);
+il_factor_variable_local* NewILVariableLocal(StringView namev);
 
 void GenerateILVariableLocal(il_factor_variable_local* self, struct enviroment* env, call_context* cctx);
 

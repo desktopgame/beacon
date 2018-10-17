@@ -13,7 +13,7 @@ struct interface_;
  */
 typedef struct fqcn_cache {
 	Vector* scope_vec;
-	string_view namev;
+	StringView namev;
 } fqcn_cache;
 
 /**

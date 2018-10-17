@@ -9,12 +9,12 @@
  * 文字列を表す要素.
  */
 typedef struct il_factor_string {
-	string_view valuev;
+	StringView valuev;
 } il_factor_string;
 
 il_factor* WrapILString(il_factor_string* self);
 
-il_factor_string* NewILString(string_view valuev);
+il_factor_string* NewILString(StringView valuev);
 
 void GenerateILString(il_factor_string* self, struct enviroment* env, call_context* cctx);
 

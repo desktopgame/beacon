@@ -13,7 +13,7 @@ il_stmt * WrapILInferencedTypeInit(il_stmt_inferenced_type_init * self) {
 	return ret;
 }
 
-il_stmt_inferenced_type_init * NewILInferencedTypeInit(string_view namev) {
+il_stmt_inferenced_type_init * NewILInferencedTypeInit(StringView namev) {
 	il_stmt_inferenced_type_init* ret = (il_stmt_inferenced_type_init*)MEM_MALLOC(sizeof(il_stmt_inferenced_type_init));
 	ret->namev = namev;
 	ret->fact = NULL;

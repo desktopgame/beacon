@@ -6,14 +6,14 @@
 struct symbol_entry;
 
 typedef struct il_stmt_inject_jni {
-	string_view namev;
+	StringView namev;
 	il_factor* fact;
 	struct symbol_entry* se;
 } il_stmt_inject_jni;
 
 il_stmt* WrapILInjectJNI(il_stmt_inject_jni* self);
 
-il_stmt_inject_jni* NewILInjectJNI(string_view namev);
+il_stmt_inject_jni* NewILInjectJNI(StringView namev);
 
 void GenerateILInjectJNI(il_stmt_inject_jni* self, enviroment* env, call_context* cctx);
 

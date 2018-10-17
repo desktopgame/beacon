@@ -19,7 +19,7 @@ ast * NewASTChar(char ch) {
 	return ret;
 }
 
-ast * NewASTString(string_view sv) {
+ast * NewASTString(StringView sv) {
 	ast* ret = ast_new(AST_STRING_T);
 	ret->u.stringv_value = sv;
 	return ret;

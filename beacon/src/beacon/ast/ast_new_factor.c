@@ -41,7 +41,7 @@ ast * NewASTVariable(ast* a, ast* atype_args) {
 	return ret;
 }
 
-ast * NewASTVariableFromString(string_view strv, ast* atype_args) {
+ast * NewASTVariableFromString(StringView strv, ast* atype_args) {
 	ast* ret = ast_new(AST_VARIABLE_T);
 	ret->u.stringv_value = strv;
 	PushAST(ret, atype_args);
@@ -63,7 +63,7 @@ ast * NewASTSuper() {
 	return ast_new(AST_SUPER_T);
 }
 
-ast * NewASTFieldAccess(ast * afact, string_view namev, ast* atype_args) {
+ast * NewASTFieldAccess(ast * afact, StringView namev, ast* atype_args) {
 	ast* ret = ast_new(AST_FIELD_ACCESS_T);
 	ast* aname = ast_new(AST_IDENTIFIER_T);
 	aname->u.stringv_value = namev;

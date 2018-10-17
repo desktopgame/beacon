@@ -85,14 +85,14 @@ struct generic_type* InitGenericSelf(type* self, int counts);
  * @param self
  * @return
  */
-string_view GetTypeName(type* self);
+StringView GetTypeName(type* self);
 
 /**
  * この型の完全な名前を返します.
  * @param self
  * @return
  */
-string_view GetTypeFullName(type* self);
+StringView GetTypeFullName(type* self);
 
 /**
  * この型にフィールドを追加します.
@@ -125,7 +125,7 @@ void AddMethodType(type* self, struct method* m);
  * @param outIndex
  * @return
  */
-struct method* ILFindMethodType(type* self, string_view namev, Vector* args, struct enviroment* env, call_context* cctx, int* outIndex);
+struct method* ILFindMethodType(type* self, StringView namev, Vector* args, struct enviroment* env, call_context* cctx, int* outIndex);
 
 /**
  * この型から静的メソッドを検索します.
@@ -137,7 +137,7 @@ struct method* ILFindMethodType(type* self, string_view namev, Vector* args, str
  * @param outIndex
  * @return
  */
-struct method* ILFindSMethodType(type* self, string_view namev, Vector* args, struct enviroment* env, call_context* cctx, int* outIndex);
+struct method* ILFindSMethodType(type* self, StringView namev, Vector* args, struct enviroment* env, call_context* cctx, int* outIndex);
 
 /**
  * 仮想関数の一覧を返します.
@@ -166,7 +166,7 @@ void UnlinkType(type* self);
  * @param namev
  * @return
  */
-int GetGenericIndexType(type* self, string_view namev);
+int GetGenericIndexType(type* self, StringView namev);
 
 /**
  * selfの継承クラスや実装インターフェイスに a が現れるなら型変数付きで返します.

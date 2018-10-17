@@ -21,7 +21,7 @@ symbol_table * NewSymbolTable() {
 	return ret;
 }
 
-symbol_entry* EntrySymbolTable(symbol_table* self, generic_type* gtp, string_view namev) {
+symbol_entry* EntrySymbolTable(symbol_table* self, generic_type* gtp, StringView namev) {
 	NumericMap* data = GetNumericMapCell(self->map, namev);
 	if (data) {
 		return ((symbol_entry*)data->Item);
@@ -40,7 +40,7 @@ symbol_entry* EntrySymbolTable(symbol_table* self, generic_type* gtp, string_vie
 	return e;
 }
 
-bool IsContainsSymbol(symbol_table* self, string_view namev) {
+bool IsContainsSymbol(symbol_table* self, StringView namev) {
 	return GetNumericMapCell(self->map, namev) != NULL;
 }
 

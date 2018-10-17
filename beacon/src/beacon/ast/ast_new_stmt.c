@@ -100,7 +100,7 @@ ast* NewASTTry(ast* abody, ast* acatch_list) {
 	return ret;
 }
 
-ast* NewASTCatch(ast* stypename, string_view snamev, ast* abody) {
+ast* NewASTCatch(ast* stypename, StringView snamev, ast* abody) {
 	ast* ret = ast_new(AST_STMT_CATCH_T);
 	ast* aname = ast_new(AST_IDENTIFIER_T);
 	aname->u.stringv_value = snamev;
@@ -130,7 +130,7 @@ ast * NewASTArgumentList(ast * afactor, ast * aargument_list) {
 	return ret;
 }
 
-ast * NewASTFQCN(ast * apart_list, string_view class_namev) {
+ast * NewASTFQCN(ast * apart_list, StringView class_namev) {
 	ast* ret = ast_new(AST_FQCN_T);
 	ast* a = ast_new(AST_FQCN_CLASS_NAME_T);
 	a->u.stringv_value = class_namev;
@@ -139,7 +139,7 @@ ast * NewASTFQCN(ast * apart_list, string_view class_namev) {
 	return ret;
 }
 
-ast* MallocASTFQCNPart(string_view namev, const char* filename, int lineno) {
+ast* MallocASTFQCNPart(StringView namev, const char* filename, int lineno) {
 	ast* ret = MallocAST(AST_FQCN_PART_T, filename, lineno);
 	ret->u.stringv_value = namev;
 	return ret;
@@ -152,7 +152,7 @@ ast * NewASTFQCNPartList(ast * apart, ast * apart_list) {
 	return ret;
 }
 
-ast * NewASTVariableDecl(ast * atype, string_view namev) {
+ast * NewASTVariableDecl(ast * atype, StringView namev) {
 	ast* ret = ast_new(AST_STMT_VARIABLE_DECL_T);
 	ast* aname = ast_new(AST_IDENTIFIER_T);
 	aname->u.stringv_value = namev;
@@ -161,7 +161,7 @@ ast * NewASTVariableDecl(ast * atype, string_view namev) {
 	return ret;
 }
 
-ast * NewASTVariableInit(ast * atype, string_view namev, ast * afact) {
+ast * NewASTVariableInit(ast * atype, StringView namev, ast * afact) {
 	ast* ret = ast_new(AST_STMT_VARIABLE_INIT_T);
 	ast* aname = ast_new(AST_IDENTIFIER_T);
 	aname->u.stringv_value = namev;
@@ -171,7 +171,7 @@ ast * NewASTVariableInit(ast * atype, string_view namev, ast * afact) {
 	return ret;
 }
 
-ast * NewASTInferencedTypeInit(string_view namev, ast * afact) {
+ast * NewASTInferencedTypeInit(StringView namev, ast * afact) {
 	ast* ret = ast_new(AST_INFERENCED_TYPE_INIT_T);
 	ast* aname = ast_new(AST_IDENTIFIER_T);
 	aname->u.stringv_value = namev;
@@ -203,7 +203,7 @@ ast* NewASTYieldBreak() {
 	return ast_new(AST_YIELD_BREAK_T);
 }
 
-ast* NewASTInject(string_view namev, ast* avalue) {
+ast* NewASTInject(StringView namev, ast* avalue) {
 	ast* ret = ast_new(AST_INJECT_JNI_VALUE_T);
 	ret->u.stringv_value = namev;
 	PushAST(ret, avalue);

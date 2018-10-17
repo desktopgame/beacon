@@ -50,7 +50,7 @@ static void frame_markStatic(field* item);
 static void vm_delete_defctx(VectorItem e);
 static bool throw_npe(frame* self, object* o);
 static char* create_error_message(frame * self, enviroment* env, int pc);
-static string_view gVMError = ZERO_VIEW;
+static StringView gVMError = ZERO_VIEW;
 
 //Stack Top
 #define STI(a) stack_topi(a)
@@ -183,7 +183,7 @@ void UncaughtVM(frame * self, enviroment* env, int pc) {
 	CollectHeap(GetHeap());
 }
 
-string_view GetVMErrorMessage() {
+StringView GetVMErrorMessage() {
 	return gVMError;
 }
 

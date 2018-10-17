@@ -19,7 +19,7 @@ static void LoadILVariableLocal_field(il_factor_variable_local * self, enviromen
 static void LoadILVariableLocal_property(il_factor_variable_local * self, enviroment * env, call_context* cctx);
 static void set_gtype(il_factor_variable_local * self, generic_type* gt);
 
-il_factor_variable_local* NewILVariableLocal(string_view namev) {
+il_factor_variable_local* NewILVariableLocal(StringView namev) {
 	il_factor_variable_local* ret = (il_factor_variable_local*)MEM_MALLOC(sizeof(il_factor_variable_local));
 	ret->namev = namev;
 	ret->type = VARIABLE_LOCAL_UNDEFINED_T;

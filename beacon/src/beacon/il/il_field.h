@@ -13,7 +13,7 @@ struct il_factor;
 typedef struct il_field {
 	//il_type* type;
 	struct generic_cache* fqcn;
-	string_view namev;
+	StringView namev;
 	access_level access;
 	modifier_type modifier;
 	struct il_factor* initial_value;
@@ -23,7 +23,7 @@ typedef struct il_field {
  * @param namev
  * @return
  */
-il_field* NewILField(string_view namev);
+il_field* NewILField(StringView namev);
 
 /**
  * フィールドを開放します.

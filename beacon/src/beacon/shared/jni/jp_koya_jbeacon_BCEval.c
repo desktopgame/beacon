@@ -155,7 +155,7 @@ static bool bc_read_symbol(JNIEnv* env, jobject table, ast* a) {
 		jstring keyE = (jstring)((*env)->GetObjectArrayElement(env, keys_array, i));
 		jobject valueE = (*env)->CallObjectMethod(env, table, symbol_table_get_id, keyE);
 		const char *keystr = (*env)->GetStringUTFChars(env, keyE, JNI_FALSE);
-		string_view keyv = InternString(keystr);
+		StringView keyv = InternString(keystr);
 		if(valueE == NULL) {
 			(*env)->FatalError(env, "null pointer: get");
 			return false;
@@ -172,7 +172,7 @@ static bool bc_read_symbol(JNIEnv* env, jobject table, ast* a) {
 		} else if((*env)->IsInstanceOf(env, valueE, string_cls) == JNI_TRUE) {
 			jstring valuej = (jstring)valueE;
 			const char *valuestr = (*env)->GetStringUTFChars(env, valuej, JNI_FALSE);
-			string_view valuev = InternString(valuestr);
+			StringView valuev = InternString(valuestr);
 			astmt = NewASTInject(keyv, NewASTString(valuev));
 		//それ以外はまだ未対応
 		} else {

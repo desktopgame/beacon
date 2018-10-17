@@ -18,7 +18,7 @@ typedef enum type_parameter_kind {
  * 型変数を表す構造体.
  */
 typedef struct type_parameter {
-	string_view namev;
+	StringView namev;
 	type_parameter_kind kind;
 //	struct Vector* rule_vec;
 } type_parameter;
@@ -27,7 +27,7 @@ typedef struct type_parameter {
  * @param name
  * @return
  */
-type_parameter* NewTypeParameter(string_view namev);
+type_parameter* NewTypeParameter(StringView namev);
 
 /**
  * ILから型変数を生成します.
@@ -61,5 +61,5 @@ void DeleteTypeParameter(type_parameter* self);
  * @param namev
  * @return
  */
-bool IsOverwrappedTypeParameterName(Vector* tparameters, string_view* namev);
+bool IsOverwrappedTypeParameterName(Vector* tparameters, StringView* namev);
 #endif // !SIGNAL_ENV_TYPE_PARAMETER_H

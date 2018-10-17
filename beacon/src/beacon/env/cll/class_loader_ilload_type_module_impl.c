@@ -37,7 +37,7 @@ void CLILGenericCache(ast* afqcn, generic_cache* dest) {
 	//FIXME: Int のような文字パースで失敗してしまうので対策
 	if (body->namev == 0 &&
 		body->scope_vec->length > 0) {
-		body->namev = (string_view)PopVector(body->scope_vec);
+		body->namev = (StringView)PopVector(body->scope_vec);
 	}
 }
 
@@ -119,7 +119,7 @@ static void CLILFQCNCache_impl(ast* afqcn, fqcn_cache* fqcn, int level) {
 	Vector* v = NewVector();
 	ast_fqcn_flatten(afqcn, v);
 	for(int i=0; i<v->length; i++) {
-		string_view S = (string_view)AtVector(v, i);
+		StringView S = (StringView)AtVector(v, i);
 		if(i < v->length - 1) {
 			PushVector(fqcn->scope_vec, S);
 		} else {

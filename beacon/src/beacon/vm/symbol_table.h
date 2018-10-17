@@ -33,7 +33,7 @@ symbol_table* NewSymbolTable();
  * @param namev
  * @return nameに対応するエントリが存在せず、clsがNULLならNULL
  */
-struct symbol_entry* EntrySymbolTable(symbol_table* self, struct generic_type* gtp, string_view namev);
+struct symbol_entry* EntrySymbolTable(symbol_table* self, struct generic_type* gtp, StringView namev);
 
 /**
  * 既に指定の名前が含まれるなら true.
@@ -41,7 +41,7 @@ struct symbol_entry* EntrySymbolTable(symbol_table* self, struct generic_type* g
  * @param namev
  * @return
  */
-bool IsContainsSymbol(symbol_table* self, string_view namev);
+bool IsContainsSymbol(symbol_table* self, StringView namev);
 
 /**
  * シンボルテーブルをダンプします.

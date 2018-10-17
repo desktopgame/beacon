@@ -169,7 +169,7 @@ static void CLBC_enum(class_loader * self, il_type * iltype, namespace_ * parent
 	InitGenericSelf(tp, 0);
 	//全ての列挙子を public static final フィールドとして追加
 	for (int i = 0; i < ilenum->item_vec->length; i++) {
-		string_view str = (string_view)AtVector(ilenum->item_vec, i);
+		StringView str = (StringView)AtVector(ilenum->item_vec, i);
 		field* f = NewField(str);
 		f->modifier = MODIFIER_STATIC_T;
 		f->access = ACCESS_PUBLIC_T;

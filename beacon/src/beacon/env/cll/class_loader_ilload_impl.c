@@ -297,7 +297,7 @@ static void class_loader_ilload_identifier_list(class_loader * self, Vector * li
 			class_loader_ilload_identifier_list(self, list, AtAST(asource, i));
 		}
 	} else if(asource->tag == AST_IDENTIFIER_T) {
-		string_view str = asource->u.stringv_value;
+		StringView str = asource->u.stringv_value;
 		PushVector(list, str);
 	}
 }

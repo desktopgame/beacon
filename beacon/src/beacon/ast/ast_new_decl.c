@@ -2,13 +2,13 @@
 #include <stdlib.h>
 
 //proto
-static ast* ast_new_field_GetTypeName(string_view GetTypeNamev);
-static ast* NewASTFieldAccess_name(string_view field_namev);
-static ast* ast_new_function_name(string_view func_namev);
-static ast* ast_new_method_name(string_view func_namev);
-static ast* ast_new_method_return_name(string_view return_GetTypeNamev);
-static ast* NewASTParameter_GetTypeName(string_view GetTypeNamev);
-static ast* NewASTParameter_access_name(string_view parameter_namev);
+static ast* ast_new_field_GetTypeName(StringView GetTypeNamev);
+static ast* NewASTFieldAccess_name(StringView field_namev);
+static ast* ast_new_function_name(StringView func_namev);
+static ast* ast_new_method_name(StringView func_namev);
+static ast* ast_new_method_return_name(StringView return_GetTypeNamev);
+static ast* NewASTParameter_GetTypeName(StringView GetTypeNamev);
+static ast* NewASTParameter_access_name(StringView parameter_namev);
 static ast* NewASTClassDeclImpl(ast* aclass_name, ast* aextend_list, ast* amember_list, ast_tag tag);
 
 ast * NewASTNamespaceDecl(ast * anamespace_path, ast * abody) {
@@ -45,7 +45,7 @@ ast * NewASTInterfaceDecl(ast* ainterface_name, ast* asuper_interface_list, ast 
 	return ret;
 }
 
-ast * NewASTEnumDecl(string_view enum_namev, ast * aident_list) {
+ast * NewASTEnumDecl(StringView enum_namev, ast * aident_list) {
 	ast* ret = ast_new(AST_ENUM_DECL_T);
 	ret->u.stringv_value = enum_namev;
 	PushAST(ret, aident_list);
@@ -105,7 +105,7 @@ ast * NewASTMemberDeclList(ast* amember_list, ast* amember) {
 	return ret;
 }
 
-ast * NewASTFieldDecl(ast* amodifier, ast* aGetTypeName, string_view field_namev, ast* afact) {
+ast * NewASTFieldDecl(ast* amodifier, ast* aGetTypeName, StringView field_namev, ast* afact) {
 	ast* ret = ast_new(AST_FIELD_DECL_T);
 	PushAST(ret, amodifier);
 	PushAST(ret, aGetTypeName);
@@ -114,7 +114,7 @@ ast * NewASTFieldDecl(ast* amodifier, ast* aGetTypeName, string_view field_namev
 	return ret;
 }
 
-ast * NewASTFunctionDecl(string_view function_namev, ast* atypeparams, ast * aparameter_list, ast * abody, ast * areturn_type) {
+ast * NewASTFunctionDecl(StringView function_namev, ast* atypeparams, ast * aparameter_list, ast * abody, ast * areturn_type) {
 	ast* ret = ast_new(AST_FUNCTION_DECL_T);
 	PushAST(ret, ast_new_function_name(function_namev));
 	PushAST(ret, atypeparams);
@@ -124,11 +124,11 @@ ast * NewASTFunctionDecl(string_view function_namev, ast* atypeparams, ast * apa
 	return ret;
 }
 
-ast * NewASTFunctionDeclEmptyParams(string_view function_namev, ast* atypeparams, ast * abody, ast * areturn_type) {
+ast * NewASTFunctionDeclEmptyParams(StringView function_namev, ast* atypeparams, ast * abody, ast * areturn_type) {
 	return NewASTFunctionDecl(function_namev, atypeparams, NewASTBlank(), abody, areturn_type);
 }
 
-ast * NewASTMethodDecl(ast* amodifier, string_view func_namev, ast* atype_parameter, ast * aparameter_list, ast* abody, ast* areturn_type) {
+ast * NewASTMethodDecl(ast* amodifier, StringView func_namev, ast* atype_parameter, ast * aparameter_list, ast* abody, ast* areturn_type) {
 	ast* ret = ast_new(AST_METHOD_DECL_T);
 	PushAST(ret, amodifier);
 	PushAST(ret, ast_new_method_name(func_namev));
@@ -139,7 +139,7 @@ ast * NewASTMethodDecl(ast* amodifier, string_view func_namev, ast* atype_parame
 	return ret;
 }
 
-ast * NewASTMethodDeclEmptyParams(ast* amodifier, string_view func_namev, ast* atype_parameter, ast* abody, ast* areturn_type) {
+ast * NewASTMethodDeclEmptyParams(ast* amodifier, StringView func_namev, ast* atype_parameter, ast* abody, ast* areturn_type) {
 	return NewASTMethodDecl(amodifier, func_namev, atype_parameter, NewASTBlank(), abody, areturn_type);
 }
 
@@ -162,14 +162,14 @@ ast * NewASTConstructorChain(constructor_chain_type chain_type, ast * aargument_
 	return ret;
 }
 
-ast * NewASTParameter(ast* atypename, string_view parameter_access_namev) {
+ast * NewASTParameter(ast* atypename, StringView parameter_access_namev) {
 	ast* ret = ast_new(AST_PARAMETER_T);
 	PushAST(ret, atypename);
 	PushAST(ret, NewASTParameter_access_name(parameter_access_namev));
 	return ret;
 }
 
-ast * NewASTParameterList(ast* atypename, string_view parameter_access_namev, ast * aparameter_list) {
+ast * NewASTParameterList(ast* atypename, StringView parameter_access_namev, ast * aparameter_list) {
 	ast* ret = ast_new(AST_PARAMETER_LIST_T);
 	PushAST(ret, aparameter_list);
 	PushAST(ret, NewASTParameter(atypename, parameter_access_namev));
@@ -190,21 +190,21 @@ ast * NewASTTypename(ast * afqcn, ast* atype_args) {
 	return ret;
 }
 
-ast * NewASTTypeParameter(string_view namev, ast* arule_list) {
+ast * NewASTTypeParameter(StringView namev, ast* arule_list) {
 	ast* ret = ast_new(AST_TYPE_PARAMETER_T);
 	ret->u.stringv_value = namev;
 	PushAST(ret, arule_list);
 	return ret;
 }
 
-ast * NewASTTypeInParameter(string_view namev, ast* arule_list) {
+ast * NewASTTypeInParameter(StringView namev, ast* arule_list) {
 	ast* ret = ast_new(AST_TYPE_IN_PARAMETER_T);
 	ret->u.stringv_value = namev;
 	PushAST(ret, arule_list);
 	return ret;
 }
 
-ast * NewASTTypeOutParameter(string_view namev, ast* arule_list) {
+ast * NewASTTypeOutParameter(StringView namev, ast* arule_list) {
 	ast* ret = ast_new(AST_TYPE_OUT_PARAMETER_T);
 	ret->u.stringv_value = namev;
 	PushAST(ret, arule_list);
@@ -218,7 +218,7 @@ ast * NewASTTypeParameterList(ast* aparam, ast * alist) {
 	return ret;
 }
 
-ast * NewASTParameterizedTypename(string_view namev, ast * aparams) {
+ast * NewASTParameterizedTypename(StringView namev, ast * aparams) {
 	ast* ret = ast_new(AST_PARAMETERIZED_TYPENAME_T);
 	ret->u.stringv_value = namev;
 	PushAST(ret, aparams);
@@ -254,7 +254,7 @@ ast* NewASTPropGet(ast* aacess, ast* abody) {
 	return aret;
 }
 
-ast* NewASTPropDecl(ast* amodifier, ast* atypename, string_view namev, ast* aset, ast* aget) {
+ast* NewASTPropDecl(ast* amodifier, ast* atypename, StringView namev, ast* aset, ast* aget) {
 	ast* aprop = ast_new(AST_PROP_DECL_T);
 	aprop->u.stringv_value = namev;
 	PushAST(aprop, amodifier);
@@ -265,43 +265,43 @@ ast* NewASTPropDecl(ast* amodifier, ast* atypename, string_view namev, ast* aset
 }
 
 //private
-static ast* ast_new_field_GetTypeName(string_view GetTypeNamev) {
+static ast* ast_new_field_GetTypeName(StringView GetTypeNamev) {
 	ast* ret = ast_new(AST_FIELD_TYPE_NAME_T);
 	ret->u.stringv_value = GetTypeNamev;
 	return ret;
 }
 
-static ast* NewASTFieldAccess_name(string_view field_namev) {
+static ast* NewASTFieldAccess_name(StringView field_namev) {
 	ast* ret = ast_new(AST_FIELD_ACCESS_NAME_T);
 	ret->u.stringv_value = field_namev;
 	return ret;
 }
 
-static ast* ast_new_function_name(string_view func_namev) {
+static ast* ast_new_function_name(StringView func_namev) {
 	ast* ret = ast_new(AST_FUNCTION_NAME_T);
 	ret->u.stringv_value = func_namev;
 	return ret;
 }
 
-static ast* ast_new_method_name(string_view func_namev) {
+static ast* ast_new_method_name(StringView func_namev) {
 	ast* ret = ast_new(AST_METHOD_NAME_T);
 	ret->u.stringv_value = func_namev;
 	return ret;
 }
 
-static ast* ast_new_method_return_name(string_view return_GetTypeNamev) {
+static ast* ast_new_method_return_name(StringView return_GetTypeNamev) {
 	ast* ret = ast_new(AST_METHOD_RETURN_NAME_T);
 	ret->u.stringv_value = return_GetTypeNamev;
 	return ret;
 }
 
-static ast* NewASTParameter_GetTypeName(string_view GetTypeNamev) {
+static ast* NewASTParameter_GetTypeName(StringView GetTypeNamev) {
 	ast* ret = ast_new(AST_PARAMETER_TYPE_NAME_T);
 	ret->u.stringv_value = GetTypeNamev;
 	return ret;
 }
 
-static ast* NewASTParameter_access_name(string_view parameter_namev) {
+static ast* NewASTParameter_access_name(StringView parameter_namev) {
 	ast* ret = ast_new(AST_PARAMETER_ACCESS_NAME_T);
 	ret->u.stringv_value = parameter_namev;
 	return ret;

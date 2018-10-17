@@ -15,7 +15,7 @@ static void il_factor_invoke_static_check(il_factor_invoke_static * self, enviro
 static void il_factor_invoke_static_args_delete(VectorItem item);
 static void il_factor_invoke_static_typeargs_delete(VectorItem item);
 
-il_factor_invoke_static* NewILInvokeStatic(string_view namev) {
+il_factor_invoke_static* NewILInvokeStatic(StringView namev) {
 	il_factor_invoke_static* ret = (il_factor_invoke_static*)MEM_MALLOC(sizeof(il_factor_invoke_static));
 	ret->args = NULL;
 	ret->fqcn = NULL;

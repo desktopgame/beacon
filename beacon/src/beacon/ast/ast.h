@@ -213,7 +213,7 @@ typedef struct ast {
 		int int_value;
 		double double_value;
 		char char_value;
-		string_view stringv_value;
+		StringView stringv_value;
 		access_level access_value;
 		modifier_type modifier_value;
 		operator_type operator_value;
@@ -249,7 +249,7 @@ ast* MallocAST(ast_tag tag, const char* filename, int lineno);
  * @param namev
  * @return
  */
-ast* NewASTNamespacePath(string_view namev);
+ast* NewASTNamespacePath(StringView namev);
 
 /**
  * 二つの名前空間を連結します.
@@ -257,7 +257,7 @@ ast* NewASTNamespacePath(string_view namev);
  * @param namev
  * @return
  */
-ast* NewASTNamespacePathList(ast* aforward, string_view namev);
+ast* NewASTNamespacePathList(ast* aforward, StringView namev);
 
 /**
  * インポート先のファイルを表す要素を作成します.
@@ -304,7 +304,7 @@ ast* NewASTBlank();
  * @param strv
  * @return
  */
-ast* NewASTIdentifier(string_view strv);
+ast* NewASTIdentifier(StringView strv);
 
 /**
  * 識別子のリストを表す要素を作成します.
@@ -312,7 +312,7 @@ ast* NewASTIdentifier(string_view strv);
  * @param aident_list
  * @return
  */
-ast* NewASTIdentifierList(string_view strv, ast* aident_list);
+ast* NewASTIdentifierList(StringView strv, ast* aident_list);
 
 /**
  * 計算可能な要素だけで構成される文を作成します.

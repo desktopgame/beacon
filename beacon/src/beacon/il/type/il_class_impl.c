@@ -27,7 +27,7 @@ il_type * WrapILClass(il_class * self) {
 	return ret;
 }
 
-il_class* NewILClass(string_view namev) {
+il_class* NewILClass(StringView namev) {
 	il_class* ret = (il_class*)MEM_MALLOC(sizeof(il_class));
 	ret->namev = namev;
 	ret->extend_list = NewVector();

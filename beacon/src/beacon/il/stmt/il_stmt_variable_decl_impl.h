@@ -10,7 +10,7 @@ struct enviroment;
  */
 typedef struct il_stmt_variable_decl {
 	generic_cache* fqcn;
-	string_view namev;
+	StringView namev;
 } il_stmt_variable_decl;
 /**
  * 型宣言を表す要素をスーパーセットにラップします.
@@ -24,7 +24,7 @@ il_stmt* WrapILVariableDecl(il_stmt_variable_decl* self);
  * @param namev
  * @return
  */
-il_stmt_variable_decl* NewILVariableDecl(string_view namev);
+il_stmt_variable_decl* NewILVariableDecl(StringView namev);
 
 /**
  * 型宣言を表す要素を出力します.
