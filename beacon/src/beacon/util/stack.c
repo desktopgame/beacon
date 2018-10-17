@@ -5,74 +5,74 @@
 
 Stack* NewStack() {
 	Stack* ret = (Stack*)MEM_MALLOC(sizeof(Stack));
-	ret->item = NULL;
-	ret->prev = NULL;
-	ret->next = NULL;
+	ret->Item = NULL;
+	ret->Prev = NULL;
+	ret->Next = NULL;
 	return ret;
 }
 
 void PushStack(Stack* self, StackItem item) {
 	assert(self != NULL);
 	assert(item != NULL);
-	if (self->item == NULL) {
-		self->item = item;
+	if (self->Item == NULL) {
+		self->Item = item;
 		return;
 	}
-	if (self->next == NULL) {
+	if (self->Next == NULL) {
 		Stack* next_elem = NewStack();
-		self->next = next_elem;
-		next_elem->prev = self;
-		next_elem->item = item;
+		self->Next = next_elem;
+		next_elem->Prev = self;
+		next_elem->Item = item;
 	} else {
-		PushStack(self->next, item);
+		PushStack(self->Next, item);
 	}
 }
 
 StackItem TopStack(Stack* self) {
 	assert(self != NULL);
-	if (self->next == NULL) {
-		return self->item;
+	if (self->Next == NULL) {
+		return self->Item;
 	} else {
-		return TopStack(self->next);
+		return TopStack(self->Next);
 	}
 }
 
 StackItem PopStack(Stack* self) {
 	assert(self != NULL);
-	if (self->next == NULL) {
-		if (self->prev == NULL) {
-			StackItem ret = self->item;
-			self->item = NULL;
+	if (self->Next == NULL) {
+		if (self->Prev == NULL) {
+			StackItem ret = self->Item;
+			self->Item = NULL;
 			return ret;
 		} else {
-			Stack* prev_elem = self->prev;
-			prev_elem->next = NULL;
-			self->prev = NULL;
-			StackItem ret = self->item;
+			Stack* prev_elem = self->Prev;
+			prev_elem->Next = NULL;
+			self->Prev = NULL;
+			StackItem ret = self->Item;
 			MEM_FREE(self);
 			return ret;
 		}
 	} else {
-		return PopStack(self->next);
+		return PopStack(self->Next);
 	}
 }
 
 bool IsEmptyStack(Stack * self) {
 	assert(self != NULL);
-	return (self->item == NULL);
+	return (self->Item == NULL);
 }
 
 void DeleteStack(Stack* self, StackElementDeleter deleter) {
 	assert(self != NULL);
 	Stack* pointee = self;
 	while (1) {
-		Stack* next = pointee->next;
-		pointee->next = NULL;
+		Stack* next = pointee->Next;
+		pointee->Next = NULL;
 		if (next) {
-			next->prev = NULL;
+			next->Prev = NULL;
 		}
-		StackItem item = pointee->item;
-		pointee->item = NULL;
+		StackItem item = pointee->Item;
+		pointee->Item = NULL;
 		if (item) {
 			deleter(item);
 		}

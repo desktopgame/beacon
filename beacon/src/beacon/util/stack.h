@@ -12,9 +12,9 @@ typedef void* StackItem;
  * スタックを表す構造体.
  */
 typedef struct Stack_t {
-	StackItem item;
-	struct Stack_t* prev;
-	struct Stack_t* next;
+	StackItem Item;
+	struct Stack_t* Prev;
+	struct Stack_t* Next;
 } Stack;
 
 /**
