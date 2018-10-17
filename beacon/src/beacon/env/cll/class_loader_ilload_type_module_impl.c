@@ -36,7 +36,7 @@ void CLILGenericCache(ast* afqcn, generic_cache* dest) {
 	fqcn_cache* body = dest->fqcn;
 	//FIXME: Int のような文字パースで失敗してしまうので対策
 	if (body->namev == 0 &&
-		body->scope_vec->length > 0) {
+		body->scope_vec->Length > 0) {
 		body->namev = (StringView)PopVector(body->scope_vec);
 	}
 }
@@ -51,7 +51,7 @@ void CLILTypenameList(class_loader * self, Vector * dst, ast * atypename_list) {
 		CLILGenericCache(atypename_list, e);
 		PushVector(dst, e);
 	} else if(atypename_list->tag == AST_TYPENAME_LIST_T) {
-		for (int i = 0; i < atypename_list->vchildren->length; i++) {
+		for (int i = 0; i < atypename_list->vchildren->Length; i++) {
 			CLILTypenameList(self, dst, AtAST(atypename_list, i));
 		}
 	}
@@ -63,7 +63,7 @@ void CLILTypeParameter(class_loader* self, ast* asource, Vector* dest) {
 		return;
 	}
 	if (asource->tag == AST_TYPE_PARAMETER_LIST_T) {
-		for (int i = 0; i < asource->vchildren->length; i++) {
+		for (int i = 0; i < asource->vchildren->Length; i++) {
 			CLILTypeParameter(self, AtAST(asource, i), dest);
 		}
 		return;
@@ -86,7 +86,7 @@ void CLILTypeArgument(class_loader* self, ast* atype_args, Vector* dest) {
 		return;
 	}
 	if(atype_args->tag == AST_TYPENAME_LIST_T) {
-		for(int i=0; i<atype_args->vchildren->length; i++) {
+		for(int i=0; i<atype_args->vchildren->Length; i++) {
 			ast* e = AtAST(atype_args, i);
 			CLILTypeArgument(self, e, dest);
 		}
@@ -99,7 +99,7 @@ void CLILTypeArgument(class_loader* self, ast* atype_args, Vector* dest) {
 
 void CLILParameterList(class_loader* self, Vector* list, ast* asource) {
 	if (asource->tag == AST_PARAMETER_LIST_T) {
-		for (int i = 0; i < asource->vchildren->length; i++) {
+		for (int i = 0; i < asource->vchildren->Length; i++) {
 			CLILParameterList(self, list, AtAST(asource, i));
 		}
 	} else if (asource->tag == AST_PARAMETER_T) {
@@ -118,9 +118,9 @@ void CLILArgumentList(class_loader* self, Vector* list, ast* asource) {
 static void CLILFQCNCache_impl(ast* afqcn, fqcn_cache* fqcn, int level) {
 	Vector* v = NewVector();
 	ast_fqcn_flatten(afqcn, v);
-	for(int i=0; i<v->length; i++) {
+	for(int i=0; i<v->Length; i++) {
 		StringView S = (StringView)AtVector(v, i);
-		if(i < v->length - 1) {
+		if(i < v->Length - 1) {
 			PushVector(fqcn->scope_vec, S);
 		} else {
 			fqcn->namev = S;
@@ -145,14 +145,14 @@ static void CLILGenericCache_impl(ast* afqcn, generic_cache* dest) {
 	if (afqcn->tag == AST_FQCN_T ||
 		afqcn->tag == AST_FQCN_PART_LIST_T) {
 		if (afqcn->tag == AST_FQCN_PART_LIST_T &&
-			afqcn->vchildren->length == 0) {
+			afqcn->vchildren->Length == 0) {
 			//FIXME:もうちょっと高速に出来る
 			//FIXME:とりあえずここでタグを直してるけどast.cの時点でどうにかするべき
 			afqcn->tag = AST_FQCN_CLASS_NAME_T;
 			body->namev = afqcn->u.stringv_value;
 			return;
 		}
-		for (int i = 0; i < afqcn->vchildren->length; i++) {
+		for (int i = 0; i < afqcn->vchildren->Length; i++) {
 			ast* c = AtAST(afqcn, i);
 			CLILGenericCache_impl(c, dest);
 		}
@@ -165,7 +165,7 @@ static void CLILGenericCache_impl(ast* afqcn, generic_cache* dest) {
 
 static void CLILGenericCache_inner(ast* atype_args, generic_cache* dest) {
 	if (atype_args->tag == AST_TYPENAME_LIST_T) {
-		for (int i = 0; i < atype_args->vchildren->length; i++) {
+		for (int i = 0; i < atype_args->vchildren->Length; i++) {
 			ast* e = AtAST(atype_args, i);
 			CLILGenericCache_inner(e, dest);
 		}
@@ -199,7 +199,7 @@ static void ast_fqcn_flatten(ast* afqcn, Vector* dest) {
 	if(afqcn->tag == AST_FQCN_PART_T) {
 		PushVector(dest, afqcn->u.stringv_value);
 	} else {
-		for(int i=0; i<afqcn->vchildren->length; i++) {
+		for(int i=0; i<afqcn->vchildren->Length; i++) {
 			ast_fqcn_flatten(AtAST(afqcn, i), dest);
 		}
 	}
@@ -207,7 +207,7 @@ static void ast_fqcn_flatten(ast* afqcn, Vector* dest) {
 
 static void CLILArgumentListImpl(class_loader* self, Vector* list, ast* asource) {
 	if (asource->tag == AST_ARGUMENT_LIST_T) {
-		for (int i = 0; i < asource->vchildren->length; i++) {
+		for (int i = 0; i < asource->vchildren->Length; i++) {
 			CLILArgumentListImpl(self, list, AtAST(asource, i));
 		}
 	} else if (asource->tag == AST_ARGUMENT_T) {

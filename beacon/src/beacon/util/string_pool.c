@@ -22,7 +22,7 @@ StringView InternString(const char* str) {
 	assert(gVec != NULL);
 	TreeMap* cell = GetTreeMapCell(gMap, str);
 	if(cell == NULL) {
-		cell = PutTreeMap(gMap, str, (void*)(gVec->length + HEADER));
+		cell = PutTreeMap(gMap, str, (void*)(gVec->Length + HEADER));
 		PushVector(gVec, cell->Key);
 	}
 	if(cell == gMap) {
@@ -75,7 +75,7 @@ void DumpStringPool(FILE* fp) {
 	assert(gMap != NULL);
 	assert(gVec != NULL);
 	fprintf(fp, "string pool---\n");
-	for(int i=0; i<gVec->length; i++) {
+	for(int i=0; i<gVec->Length; i++) {
 		char* e = (char*)AtVector(gVec, i);
 		fprintf(fp, "    [%d] = %s\n", i, e);
 	}

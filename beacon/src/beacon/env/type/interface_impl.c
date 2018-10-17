@@ -57,11 +57,11 @@ method* GFindMethodInterface(interface_* self, StringView namev, Vector* gargs, 
 
 Vector* FlattenMethodInterfaceList(Vector* inter_list) {
 	Vector* ret = NewVector();
-	for(int i=0; i<inter_list->length; i++) {
+	for(int i=0; i<inter_list->Length; i++) {
 		interface_* inter = AtVector(inter_list, i);
 		//インターフェイスのメソッド一覧を挿入
 		Vector* list = FlattenMethodInterface(inter);
-		for(int j=0; j<list->length; j++) {
+		for(int j=0; j<list->Length; j++) {
 			PushVector(ret, AtVector(list, j));
 		}
 		DeleteVector(list, VectorDeleterOfNull);
@@ -82,12 +82,12 @@ void CreateVTableInterface(interface_ * self) {
 	}
 	self->vt = NewVTable();
 	//他のインターフェイスを継承していないならフラットに並べる
-	if (self->impl_list->length == 0) {
-		for (int i = 0; i < self->method_list->length; i++) {
+	if (self->impl_list->Length == 0) {
+		for (int i = 0; i < self->method_list->Length; i++) {
 			AddVTable(self->vt, AtVector(self->method_list, i));
 		}
 	} else {
-		for (int i = 0; i < self->impl_list->length; i++) {
+		for (int i = 0; i < self->impl_list->Length; i++) {
 			generic_type* ginter = (generic_type*)AtVector(self->impl_list, i);
 			type* cinter = GENERIC2TYPE(ginter);
 			interface_* inter = TYPE2INTERFACE(cinter);
@@ -95,7 +95,7 @@ void CreateVTableInterface(interface_ * self) {
 			CreateVTableInterface(inter);
 			CopyVTable(inter->vt, self->vt);
 		}
-		for (int i = 0; i < self->method_list->length; i++) {
+		for (int i = 0; i < self->method_list->Length; i++) {
 			AddVTable(self->vt, AtVector(self->method_list, i));
 		}
 	}
@@ -118,7 +118,7 @@ generic_type* IsContainsTypeInterface(generic_type* source, interface_* find) {
 	if(self == find) {
 		return source;
 	}
-	for(int i=0; i<self->impl_list->length; i++) {
+	for(int i=0; i<self->impl_list->Length; i++) {
 		generic_type* gE = AtVector(self->impl_list, i);
 		if(gE->core_type->u.interface_ == find) {
 			return gE;
@@ -134,7 +134,7 @@ bool IsFunctionalInterface(interface_* self) {
 method* GetFunctionInterface(interface_* self) {
 	Vector* v = FlattenMethodInterface(self);
 	method* ret = NULL;
-	if(v->length == 1) {
+	if(v->Length == 1) {
 		ret = AtVector(v, 0);
 	}
 	DeleteVector(v, VectorDeleterOfNull);
@@ -151,7 +151,7 @@ generic_type* FindInterfaceInterface(interface_* self, type* tinter) {
 	if (self == TYPE2INTERFACE(tinter)) {
 		return NULL;
 	}
-	for (int i = 0; i < self->impl_list->length; i++) {
+	for (int i = 0; i < self->impl_list->Length; i++) {
 		generic_type* e = AtVector(self->impl_list, i);
 		if (e->core_type == tinter) {
 			return e;
@@ -163,7 +163,7 @@ generic_type* FindInterfaceInterface(interface_* self, type* tinter) {
 //private
 Vector* GetGenericInterfaceTreeInterfaceImpl(interface_* self) {
 	Vector* ret = NewVector();
-	for(int i=0; i<self->impl_list->length; i++) {
+	for(int i=0; i<self->impl_list->Length; i++) {
 		generic_type* ginter = AtVector(self->impl_list, i);
 		PushVector(ret, ginter);
 		Vector* inner = GetGenericInterfaceTreeInterfaceImpl(TYPE2INTERFACE(GENERIC2TYPE(ginter)));
@@ -193,11 +193,11 @@ static void FlattenMethodInterfaceImpl(interface_* self, Vector* dest, int depth
 	const char* intername = Ref2Str(self->namev);
 	#endif
 	assert(depth < 42);
-	for(int i=0; i<self->method_list->length; i++) {
+	for(int i=0; i<self->method_list->Length; i++) {
 		method* m = AtVector(self->method_list, i);
 		PushVector(dest, m);
 	}
-	for(int i=0; i<self->impl_list->length; i++) {
+	for(int i=0; i<self->impl_list->Length; i++) {
 		generic_type* e = AtVector(self->impl_list, i);
 		interface_* inter = TYPE2INTERFACE(e->core_type);
 		FlattenMethodInterfaceImpl(inter, dest, depth + 1);

@@ -40,7 +40,7 @@ static void bc_string_nativeInit(method* parent, frame* fr, enviroment* env) {
 	object* charArr = AtVector(self->u.field_vec, temp);
 	//これを char* へ変換
 	Buffer* sb = NewBuffer();
-	for (int i = 0; i < charArr->native_slot_vec->length; i++) {
+	for (int i = 0; i < charArr->native_slot_vec->Length; i++) {
 		object* e = (object*)AtVector(charArr->native_slot_vec, i);
 		assert(e->tag == OBJECT_CHAR_T);
 		AppendBuffer(sb, e->u.char_);

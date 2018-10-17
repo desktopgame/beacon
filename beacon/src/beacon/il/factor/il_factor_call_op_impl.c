@@ -125,7 +125,7 @@ static void il_factor_invoke_bound_check(il_factor_call_op* self, enviroment* en
 	il_factor* receiver = self->receiver;
 	il_factor_variable* ilvar = receiver->u.variable_;
 	il_factor_invoke_bound* bnd = NewILInvokeBound(ilvar->fqcn->namev);
-	assert(ilvar->fqcn->scope_vec->length == 0);
+	assert(ilvar->fqcn->scope_vec->Length == 0);
 	//入れ替え
 	bnd->args = self->argument_list;
 	bnd->type_args = ilvar->type_args;
@@ -149,7 +149,7 @@ static void il_factor_member_op_check(il_factor_call_op* self, enviroment* env, 
 static void il_factor_member_op_check_namebase(il_factor_call_op* self, il_factor_member_op* ilmem, enviroment* env, call_context* cctx) {
 	il_factor_variable* ilvar = ilmem->fact->u.variable_;
 	//Namespace::Class.foo()
-	if(ilvar->fqcn->scope_vec->length > 0) {
+	if(ilvar->fqcn->scope_vec->Length > 0) {
 		il_factor_member_op_check_static(self, ilmem, ilvar, env, cctx);
 	//hoge.foo()
 	} else {

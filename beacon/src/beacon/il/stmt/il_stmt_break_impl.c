@@ -9,7 +9,7 @@ il_stmt * WrapILBreak() {
 }
 
 void GenerateILBreak(void * empty, enviroment * env, call_context* cctx) {
-	if(cctx->control.while_start->length == 0) {
+	if(cctx->control.while_start->Length == 0) {
 		ThrowBCError(BCERROR_BREAK_AT_NOT_LOOP_T);
 		return;
 	}

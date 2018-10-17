@@ -9,7 +9,7 @@ il_stmt * WrapILContinue() {
 }
 
 void GenerateILContinue(void * empty, enviroment * env, call_context* cctx) {
-	if(cctx->control.while_start->length == 0) {
+	if(cctx->control.while_start->Length == 0) {
 		ThrowBCError(BCERROR_CONTINUE_AT_NOT_LOOP_T);
 		return;
 	}

@@ -175,7 +175,7 @@ static void il_factor_invoke_check(il_factor_invoke * self, enviroment * env, ca
 	}
 	//メソッドが見つからなかったら
 	//subscript(添字アクセス)として解決する
-	if(self->args->length != 1) {
+	if(self->args->Length != 1) {
 		//hoge(1) = 0;
 		//の形式なら引数は一つのはず
 		ThrowBCError(BCERROR_INVOKE_INSTANCE_UNDEFINED_METHOD_T,
@@ -211,13 +211,13 @@ static void GenerateILInvoke_method(il_factor_invoke* self, enviroment* env, cal
 	if(self->tag != INSTANCE_INVOKE_METHOD_T) {
 		return;
 	}
-	for(int i=0; i<self->type_args->length; i++) {
+	for(int i=0; i<self->type_args->Length; i++) {
 		il_type_argument* e = (il_type_argument*)AtVector(self->type_args, i);
 		assert(e->gtype != NULL);
 		AddOpcodeBuf(env->buf, OP_GENERIC_ADD);
 		GenerateGenericType(e->gtype, env);
 	}
-	for(int i=0; i<self->args->length; i++) {
+	for(int i=0; i<self->args->Length; i++) {
 		il_argument* e = (il_argument*)AtVector(self->args, i);
 		GenerateILFactor(e->factor, env, cctx);
 	}
@@ -243,13 +243,13 @@ static void GenerateILInvoke_subscript(il_factor_invoke* self, enviroment* env, 
 	if(self->tag != INSTANCE_INVOKE_SUBSCRIPT_T) {
 		return;
 	}
-	for(int i=0; i<self->type_args->length; i++) {
+	for(int i=0; i<self->type_args->Length; i++) {
 		il_type_argument* e = (il_type_argument*)AtVector(self->type_args, i);
 		assert(e->gtype != NULL);
 		AddOpcodeBuf(env->buf, OP_GENERIC_ADD);
 		GenerateGenericType(e->gtype, env);
 	}
-	for(int i=0; i<self->args->length; i++) {
+	for(int i=0; i<self->args->Length; i++) {
 		il_argument* e = (il_argument*)AtVector(self->args, i);
 		GenerateILFactor(e->factor, env, cctx);
 	}

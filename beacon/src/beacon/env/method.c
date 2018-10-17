@@ -78,7 +78,7 @@ void ExecuteMethod(method* self, frame * fr, enviroment* env) {
 		//戻り値を残す
 		//例外によって終了した場合には戻り値がない
 		if(self->return_gtype != TYPE_VOID->generic_self &&
-	  		 a->value_stack->length > 0) {
+	  		 a->value_stack->Length > 0) {
 			PushVector(fr->value_stack, PopVector(a->value_stack));
 		}
 		DeleteVector(aArgs, VectorDeleterOfNull);
@@ -91,13 +91,13 @@ void ExecuteMethod(method* self, frame * fr, enviroment* env) {
 bool IsOverridedMethod(method* superM, method* subM, call_context* cctx) {
 	//名前が違うか引数の数が違う
 	if (superM->namev != subM->namev ||
-		superM->parameters->length != subM->parameters->length) {
+		superM->parameters->Length != subM->parameters->Length) {
 		return false;
 	}
 	generic_type* bl = BaselineType(superM->parent, subM->parent);
 	assert(bl != NULL);
 	//全ての引数を比較
-	for (int i = 0; i < superM->parameters->length; i++) {
+	for (int i = 0; i < superM->parameters->Length; i++) {
 		parameter* superP = ((parameter*)AtVector(superM->parameters, i));
 		parameter* subP = ((parameter*)AtVector(subM->parameters, i));
 		generic_type* superGT = superP->gtype;
@@ -128,7 +128,7 @@ bool IsOverridedMethod(method* superM, method* subM, call_context* cctx) {
 
 int GetGenericIndexForMethod(method * self, StringView namev) {
 	int ret = -1;
-	for (int i = 0; i < self->type_parameters->length; i++) {
+	for (int i = 0; i < self->type_parameters->Length; i++) {
 		type_parameter* e = (type_parameter*)AtVector(self->type_parameters, i);
 		if (e->namev == namev) {
 			ret = i;
@@ -153,13 +153,13 @@ StringView MangleMethod(method* self) {
 	Buffer* ret = NewBuffer();
 	AppendsBuffer(ret, Ref2Str(self->namev));
 	//引数が一つもないので終了
-	if(self->parameters->length == 0) {
+	if(self->parameters->Length == 0) {
 		char* raw = ReleaseBuffer(ret);
 		StringView sv = InternString(raw);
 		MEM_FREE(raw);
 		return sv;
 	}
-	for(int i=0; i<self->parameters->length; i++) {
+	for(int i=0; i<self->parameters->Length; i++) {
 		parameter* e = (parameter*)AtVector(self->parameters, i);
 		generic_type* gt = e->gtype;
 		AppendBuffer(ret, '_');
@@ -210,7 +210,7 @@ bool IsYieldMethod(method* self, Vector* stmt_list, bool* error) {
 	}
 	int yield_ret = 0;
 	int ret = 0;
-	for(int i=0; i<stmt_list->length; i++) {
+	for(int i=0; i<stmt_list->Length; i++) {
 		int yrtemp = 0;
 		int rtemp = 0;
 		il_stmt* e = (il_stmt*)AtVector(stmt_list, i);
@@ -265,17 +265,17 @@ static void method_count(il_stmt* s, int* yield_ret, int* ret) {
 		{
 			//if() { ... }
 			il_stmt_if* sif = s->u.if_;
-			for(int i=0; i<sif->body->length; i++) {
+			for(int i=0; i<sif->body->Length; i++) {
 				method_count((il_stmt*)AtVector(sif->body, i), yield_ret, ret);
 			}
-			for(int i=0; i<sif->elif_list->length; i++) {
+			for(int i=0; i<sif->elif_list->Length; i++) {
 				il_stmt_elif* seif = (il_stmt_elif*)AtVector(sif->elif_list, i);
 				Vector* body = seif->body;
-				for(int j=0; j<body->length; j++) {
+				for(int j=0; j<body->Length; j++) {
 					method_count((il_stmt*)AtVector(body, j), yield_ret, ret);
 				}
 			}
-			for(int i=0; i<sif->else_body->body->length; i++) {
+			for(int i=0; i<sif->else_body->body->Length; i++) {
 				il_stmt* e = AtVector(sif->else_body->body, i);
 				method_count(e, yield_ret, ret);
 			}
@@ -291,7 +291,7 @@ static void method_count(il_stmt* s, int* yield_ret, int* ret) {
 		case ILSTMT_WHILE_T:
 		{
 			il_stmt_while* whi = s->u.while_;
-			for(int i=0; i<whi->statement_list->length; i++) {
+			for(int i=0; i<whi->statement_list->Length; i++) {
 				il_stmt* e = AtVector(whi->statement_list, i);
 				method_count(e, yield_ret, ret);
 			}
@@ -304,14 +304,14 @@ static void method_count(il_stmt* s, int* yield_ret, int* ret) {
 		case ILSTMT_TRY_T:
 		{
 			il_stmt_try* tr = s->u.try_;
-			for(int i=0; i<tr->statement_list->length; i++) {
+			for(int i=0; i<tr->statement_list->Length; i++) {
 				il_stmt* e = (il_stmt*)AtVector(tr->statement_list, i);
 				method_count(e, yield_ret, ret);
 			}
 			Vector* catches = tr->catch_list;
-			for(int i=0; i<catches->length; i++) {
+			for(int i=0; i<catches->Length; i++) {
 				il_stmt_catch* ce = (il_stmt_catch*)AtVector(catches, i);
-				for(int j=0; j<ce->statement_list->length; j++) {
+				for(int j=0; j<ce->statement_list->Length; j++) {
 					il_stmt* e = (il_stmt*)AtVector(ce->statement_list, j);
 					method_count(e, yield_ret, ret);
 				}
@@ -341,13 +341,13 @@ static constructor* create_delegate_ctor(method* self, type* ty, class_loader* c
 	PushVector(iterCons->parameter_list, coroOwnerParam);
 	envIterCons->context_ref = cll;
 	//コルーチンに渡された引数を引き継ぐパラメータ追加
-	for(int i=0; i<self->parameters->length; i++) {
+	for(int i=0; i<self->parameters->Length; i++) {
 		parameter* methP = (parameter*)AtVector(self->parameters, i);
 		parameter* consP = NewParameter(methP->namev);
 		consP->gtype = methP->gtype;
 		PushVector(iterCons->parameter_list, consP);
 	}
-	for (int i = 0; i < iterCons->parameter_list->length; i++) {
+	for (int i = 0; i < iterCons->parameter_list->Length; i++) {
 		parameter* e = (parameter*)AtVector(iterCons->parameter_list, i);
 		EntrySymbolTable(
 			envIterCons->sym_table,
@@ -367,7 +367,7 @@ static constructor* create_delegate_ctor(method* self, type* ty, class_loader* c
 	AddOpcodeBuf(envIterCons->buf, (VectorItem)OP_ALLOC_FIELD);
 	AddOpcodeBuf(envIterCons->buf, (VectorItem)ty->absolute_index);
 	AddOpcodeBuf(envIterCons->buf, OP_CORO_INIT);
-	AddOpcodeBuf(envIterCons->buf, iterCons->parameter_list->length);
+	AddOpcodeBuf(envIterCons->buf, iterCons->parameter_list->Length);
 	AddOpcodeBuf(envIterCons->buf, op_len);
 	iterCons->env = envIterCons;
 	return iterCons;
@@ -388,7 +388,7 @@ static method* create_has_next(method* self, type* ty, class_loader* cll, Vector
 	envSmt->context_ref = cll;
 
 	//iterate(int,int)のint,intを受け取る
-	for(int i=0; i<self->parameters->length; i++) {
+	for(int i=0; i<self->parameters->Length; i++) {
 		parameter* e = AtVector(self->parameters, i);
 		EntrySymbolTable(
 			envSmt->sym_table,
@@ -404,11 +404,11 @@ static method* create_has_next(method* self, type* ty, class_loader* cll, Vector
 	AddOpcodeBuf(envSmt->buf, (VectorItem)0);
 	AddOpcodeBuf(envSmt->buf, (VectorItem)OP_CORO_SWAP_SELF);
 	AddOpcodeBuf(envSmt->buf, (VectorItem)OP_CORO_RESUME);
-	for(int i=0; i<stmt_list->length; i++) {
+	for(int i=0; i<stmt_list->Length; i++) {
 		il_stmt* e = (il_stmt*)AtVector(stmt_list, i);
 		LoadILStmt(e, envSmt, cctx);
 	}
-	for(int i=0; i<stmt_list->length; i++) {
+	for(int i=0; i<stmt_list->Length; i++) {
 		il_stmt* e = (il_stmt*)AtVector(stmt_list, i);
 		GenerateILStmt(e, envSmt, cctx);
 	}
@@ -416,7 +416,7 @@ static method* create_has_next(method* self, type* ty, class_loader* cll, Vector
 	if(GetTypeName(self->parent) == InternString("Base")) {
 	//	DumpEnviromentOp(envSmt, 0);
 	}
-	(*out_op_len) = envSmt->buf->source_vec->length;
+	(*out_op_len) = envSmt->buf->source_vec->Length;
 	DeleteCallContext(cctx);
 	smt->env = envSmt;
 	mt->u.script_method = smt;
@@ -458,7 +458,7 @@ static method* create_next(method* self, type* ty, class_loader* cll,generic_typ
 static Vector* method_vm_args(method* self, frame* fr, frame* a) {
 	Vector* args = NewVector();
 	//引数を引き継ぐ
-	int len = self->parameters->length;
+	int len = self->parameters->Length;
 	for(int i=0; i<len; i++) {
 		object* ARG = PopVector(fr->value_stack);
 		assert(ARG != NULL);
@@ -471,7 +471,7 @@ static Vector* method_vm_args(method* self, frame* fr, frame* a) {
 static Vector* method_vm_typeargs(method* self, frame* fr, frame* a) {
 	//メソッドに渡された型引数を引き継ぐ
 	Vector* typeargs = NewVector();
-	int typeparams = self->type_parameters->length;
+	int typeparams = self->type_parameters->Length;
 	for(int i=0; i<typeparams; i++) {
 		VectorItem e = PopVector(fr->type_args_vec);
 		AssignVector(a->type_args_vec, (typeparams - i) - 1, e);

@@ -43,7 +43,7 @@ void DupTypeParameterList(Vector* ilSource, Vector* sgDest) {
 	//そのためには、type_parameterをとりえず登録しておいて、
 	//あとからルール一覧を対応づける必要があります。
 	//DupTypeParameterからルールの複製を削除したのもそのためです。
-	for (int i = 0; i < ilSource->length; i++) {
+	for (int i = 0; i < ilSource->Length; i++) {
 		il_type_parameter* e = (il_type_parameter*)AtVector(ilSource, i);
 		type_parameter* newTP = DupTypeParameter(e);
 		PushVector(sgDest, newTP);
@@ -53,11 +53,11 @@ void DupTypeParameterList(Vector* ilSource, Vector* sgDest) {
 
 void PrintTypeParameter(Vector* v) {
 	//FIXME:il_type_parameterからのコピペ
-	if (v->length <= 0) {
+	if (v->Length <= 0) {
 		return;
 	}
 	printf("<");
-	for (int i = 0; i < v->length; i++) {
+	for (int i = 0; i < v->Length; i++) {
 		type_parameter* e = (type_parameter*)AtVector(v, i);
 		if (e->kind == TYPE_PARAMETER_KIND_IN_T) {
 			printf("in ");
@@ -65,7 +65,7 @@ void PrintTypeParameter(Vector* v) {
 			printf("out ");
 		}
 		printf("%s", Ref2Str(e->namev));
-		if (i != v->length - 1) {
+		if (i != v->Length - 1) {
 			printf(", ");
 		}
 	}
@@ -77,12 +77,12 @@ void DeleteTypeParameter(type_parameter * self) {
 }
 
 bool IsOverwrappedTypeParameterName(Vector* tparameters, StringView* namev) {
-	if(tparameters->length <= 1) {
+	if(tparameters->Length <= 1) {
 		return false;
 	}
-	for(int i=0; i<tparameters->length; i++) {
+	for(int i=0; i<tparameters->Length; i++) {
 		type_parameter* e = (type_parameter*)AtVector(tparameters, i);
-		for(int j=0; j<tparameters->length; j++) {
+		for(int j=0; j<tparameters->Length; j++) {
 			if(i == j) { continue; }
 			type_parameter* e2 = (type_parameter*)AtVector(tparameters, j);
 			if(e->namev == e2->namev) {

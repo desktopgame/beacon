@@ -16,7 +16,7 @@ static il_property_body* CLILProperty_body(class_loader* self, il_type* current,
 
 void CLILMemberTree(class_loader* self, il_type* current, ast* atree) {
 	if (atree->tag == AST_ACCESS_MEMBER_TREE_T) {
-		for (int i = 0; i < atree->vchildren->length; i++) {
+		for (int i = 0; i < atree->vchildren->Length; i++) {
 			CLILMemberTree(self, current, AtAST(atree, i));
 		}
 	} else if (atree->tag == AST_ACCESS_MEMBER_LIST_T) {
@@ -29,7 +29,7 @@ void CLILMemberTree(class_loader* self, il_type* current, ast* atree) {
 
 void CLILMemberList(class_loader* self, il_type* current, ast* amember, access_level level) {
 	if(amember->tag == AST_MEMBER_DECL_LIST_T) {
-		for(int i=0; i<amember->vchildren->length; i++) {
+		for(int i=0; i<amember->vchildren->Length; i++) {
 			CLILMemberList(self, current, AtAST(amember, i), level);
 		}
 	} else if(amember->tag == AST_MEMBER_DECL_T) {
@@ -195,7 +195,7 @@ static il_property_body* CLILProperty_body(class_loader* self, il_type* current,
 	if(!IsBlankAST(aacess)) {
 		ret->access = aacess->u.access_value;
 	}
-	if(ret->statement_list->length == 0) {
+	if(ret->statement_list->Length == 0) {
 		ret->is_short = true;
 	}
 	return ret;

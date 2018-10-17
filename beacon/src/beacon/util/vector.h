@@ -15,12 +15,12 @@ typedef void* VectorItem;
  */
 typedef struct Vector_t {
 	//使用されている長さ
-	int length;
+	int Length;
 	//余分に確保された分も含めた長さ
-	int capacity;
+	int Capacity;
 	//要素一つ分のサイズ
 	//vector_slot_size_t slotSize;
-	VectorItem* memory;
+	VectorItem* Memory;
 } Vector;
 
 /**

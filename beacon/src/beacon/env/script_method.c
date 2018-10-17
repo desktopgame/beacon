@@ -38,13 +38,13 @@ void ExecuteScriptMethod(script_method * self, method* parent, frame * fr, envir
 		cfr->u.static_invoke.args = aArgs;
 		cfr->u.static_invoke.typeargs = aTArgs;
 	}
-	for (int i = 0; i < parent->parameters->length; i++) {
+	for (int i = 0; i < parent->parameters->Length; i++) {
 		object* arg = CopyObject(PopVector(fr->value_stack));
 		PushVector(sub->value_stack, arg);
-		AssignVector(aArgs, (parent->parameters->length - i), arg);
+		AssignVector(aArgs, (parent->parameters->Length - i), arg);
 	}
 	//メソッドに渡された型引数を引き継ぐ
-	int typeparams = parent->type_parameters->length;
+	int typeparams = parent->type_parameters->Length;
 	for(int i=0; i<typeparams; i++) {
 		VectorItem e = PopVector(fr->type_args_vec);
 		AssignVector(sub->type_args_vec, (typeparams - i) - 1, e);
@@ -54,7 +54,7 @@ void ExecuteScriptMethod(script_method * self, method* parent, frame * fr, envir
 	//戻り値が Void 以外ならスタックトップの値を引き継ぐ
 	//例外によって終了した場合には戻り値がない
 	if(parent->return_gtype != TYPE_VOID->generic_self &&
-	   sub->value_stack->length > 0) {
+	   sub->value_stack->Length > 0) {
 		object* o = (object*)PopVector(sub->value_stack);
 		PushVector(fr->value_stack, NON_NULL(o));
 	}

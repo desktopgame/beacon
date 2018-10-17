@@ -23,7 +23,7 @@ constructor * NewConstructor() {
 
 object * NewInstanceConstructor(constructor * self, Vector * args, frame * parent) {
 	frame* sub = SubFrame(parent);
-	for (int i = 0; i < args->length; i++) {
+	for (int i = 0; i < args->Length; i++) {
 		PushVector(sub->value_stack, AtVector(args, i));
 	}
 	ExecuteVM(sub, self->env);

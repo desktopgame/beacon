@@ -48,7 +48,7 @@ void CloseScriptContext() {
 	script_context* sctx = (script_context*)PopVector(gScriptContextVec);
 	script_context_free(sctx);
 	gScriptContext = NULL;
-	if(gScriptContextVec->length == 0) {
+	if(gScriptContextVec->Length == 0) {
 		DestroySGThread();
 		DeleteVector(gScriptContextVec, VectorDeleterOfNull);
 		gScriptContextVec = NULL;
@@ -105,13 +105,13 @@ void BootstrapScriptContext(script_context* self) {
 
 void EachStaticScriptContext(script_context* self, static_each act) {
 	script_context* ctx = self;
-	for (int i = 0; i < ctx->type_vec->length; i++) {
+	for (int i = 0; i < ctx->type_vec->Length; i++) {
 		type* e = (type*)AtVector(ctx->type_vec, i);
 		if (e->tag != TYPE_CLASS_T) {
 			continue;
 		}
 		class_* cls = e->u.class_;
-		for (int j = 0; j < cls->sfield_list->length; j++) {
+		for (int j = 0; j < cls->sfield_list->Length; j++) {
 			field* f = (field*)AtVector(cls->sfield_list, j);
 			if(IsStaticModifier(f->modifier)) {
 				act(f);
@@ -143,8 +143,8 @@ void CacheScriptContext() {
 	heap* h = GetHeap();
 	if(h != NULL) h->accept_blocking++;
 	//すでにキャッシュされている
-	if(self->pos_int_vec->length > 0 ||
-	   self->neg_int_vec->length > 0) {
+	if(self->pos_int_vec->Length > 0 ||
+	   self->neg_int_vec->Length > 0) {
 		if(h != NULL) h->accept_blocking--;
 		   return;
 	   }

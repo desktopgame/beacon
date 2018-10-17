@@ -35,7 +35,7 @@ void GenerateILWhile(il_stmt_while * self, enviroment * env, call_context* cctx)
 	AddOpcodeBuf(env->buf, OP_GOTO_if_false);
 	AddOpcodeBuf(env->buf, nextLab);
 	//全てのステートメントを実行
-	for (int i = 0; i < self->statement_list->length; i++) {
+	for (int i = 0; i < self->statement_list->Length; i++) {
 		il_stmt* e = (il_stmt*)AtVector(self->statement_list, i);
 		GenerateILStmt(e, env, cctx);
 	}
@@ -58,7 +58,7 @@ void DeleteILWhile(il_stmt_while * self) {
 void LoadILWhile(il_stmt_while* self, struct enviroment* env, call_context* cctx) {
 	env->sym_table->scope_depth++;
 	LoadILFactor(self->condition, env, cctx);
-	for(int i=0; i<self->statement_list->length; i++) {
+	for(int i=0; i<self->statement_list->Length; i++) {
 		il_stmt* e = (il_stmt*)AtVector(self->statement_list, i);
 		LoadILStmt(e, env, cctx);
 	}

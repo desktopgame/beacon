@@ -114,12 +114,12 @@ static void CLBC_interface_decl(class_loader * self, il_type * iltype, type * tp
 	if((tp->state & TYPE_DECL) > 0) {
 		return;
 	}
-	assert(tp->u.interface_->method_list->length == 0);
+	assert(tp->u.interface_->method_list->Length == 0);
 	CL_ERROR(self);
 	CLBC_methods_decl(self, iltype, tp, iltype->u.interface_->method_list, scope);
 	CLBC_properties_decl(self, iltype, tp, iltype->u.interface_->prop_list, scope);
 	//privateなメンバーは定義できない
-	for(int i=0; i<tp->u.interface_->method_list->length; i++) {
+	for(int i=0; i<tp->u.interface_->method_list->Length; i++) {
 		method* e = AtVector(tp->u.interface_->method_list, i);
 		if(e->access == ACCESS_PRIVATE_T) {
 			ThrowBCError(
@@ -129,7 +129,7 @@ static void CLBC_interface_decl(class_loader * self, il_type * iltype, type * tp
 			);
 		}
 	}
-	for(int i=0; i<tp->u.interface_->prop_list->length; i++) {
+	for(int i=0; i<tp->u.interface_->prop_list->Length; i++) {
 		property* e = AtVector(tp->u.interface_->prop_list, i);
 		if(e->access == ACCESS_PRIVATE_T) {
 			ThrowBCError(
@@ -172,7 +172,7 @@ static void CLBC_enum_impl(class_loader * self, il_type * iltype, type * tp, nam
 	if((tp->state & TYPE_IMPL) > 0) {
 		return;
 	}
-	for(int i=0; i<tp->u.class_->sfield_list->length; i++) {
+	for(int i=0; i<tp->u.class_->sfield_list->Length; i++) {
 		field* f = AtVector(tp->u.class_->sfield_list, i);
 		f->static_value = GetIntObject(i);
 	}
@@ -182,7 +182,7 @@ static void CLBC_enum_impl(class_loader * self, il_type * iltype, type * tp, nam
 static void CLBC_excec_class_decl(class_loader* self) {
 	CL_ERROR(self);
 	int count = 0;
-	for (int i = 0; i < self->type_cache_vec->length; i++) {
+	for (int i = 0; i < self->type_cache_vec->Length; i++) {
 		type_cache* e = (type_cache*)AtVector(self->type_cache_vec, i);
 		if (e->kind != CACHEKIND_CLASS_DECL_T || e->consume) {
 			continue;
@@ -195,7 +195,7 @@ static void CLBC_excec_class_decl(class_loader* self) {
 
 static void CLBC_excec_class_impl(class_loader* self) {
 	int count = 0;
-	for (int i = 0; i < self->type_cache_vec->length; i++) {
+	for (int i = 0; i < self->type_cache_vec->Length; i++) {
 		type_cache* e = (type_cache*)AtVector(self->type_cache_vec, i);
 		if (e->kind != CACHEKIND_CLASS_IMPL_T || e->consume) {
 			continue;
@@ -209,7 +209,7 @@ static void CLBC_excec_class_impl(class_loader* self) {
 static void CLBC_excec_interface_decl(class_loader* self) {
 	CL_ERROR(self);
 	int count = 0;
-	for (int i = 0; i < self->type_cache_vec->length; i++) {
+	for (int i = 0; i < self->type_cache_vec->Length; i++) {
 		type_cache* e = (type_cache*)AtVector(self->type_cache_vec, i);
 		if (e->kind != CACHEKIND_INTERFACE_DECL_T || e->consume) {
 			continue;
@@ -223,7 +223,7 @@ static void CLBC_excec_interface_decl(class_loader* self) {
 static void CLBC_excec_interface_impl(class_loader* self) {
 	CL_ERROR(self);
 	int count = 0;
-	for (int i = 0; i < self->type_cache_vec->length; i++) {
+	for (int i = 0; i < self->type_cache_vec->Length; i++) {
 		type_cache* e = (type_cache*)AtVector(self->type_cache_vec, i);
 		if (e->kind != CACHEKIND_INTERFACE_IMPL_T || e->consume) {
 			continue;
@@ -237,7 +237,7 @@ static void CLBC_excec_interface_impl(class_loader* self) {
 static void CLBC_excec_enum_decl(class_loader* self) {
 	CL_ERROR(self);
 	int count = 0;
-	for (int i = 0; i < self->type_cache_vec->length; i++) {
+	for (int i = 0; i < self->type_cache_vec->Length; i++) {
 		type_cache* e = (type_cache*)AtVector(self->type_cache_vec, i);
 		if (e->kind != CACHEKIND_ENUM_DECL_T || e->consume) {
 			continue;
@@ -251,7 +251,7 @@ static void CLBC_excec_enum_decl(class_loader* self) {
 static void CLBC_excec_enum_impl(class_loader* self) {
 	CL_ERROR(self);
 	int count = 0;
-	for (int i = 0; i < self->type_cache_vec->length; i++) {
+	for (int i = 0; i < self->type_cache_vec->Length; i++) {
 		type_cache* e = (type_cache*)AtVector(self->type_cache_vec, i);
 		if (e->kind != CACHEKIND_ENUM_IMPL_T || e->consume) {
 			continue;
@@ -347,7 +347,7 @@ static void CLBC_check_class(class_loader * self, il_type * iltype, type * tp, n
 	//コンストラクタで初期化されていない final フィールドの確認
 	//これはコンストラクタが生成されてからでないといけない
 	class_* cls = TYPE2CLASS(tp);
-	for(int i=0; i<cls->field_list->length; i++) {
+	for(int i=0; i<cls->field_list->Length; i++) {
 		field* fi = AtVector(cls->field_list, i);
 		//インスタンス定数が
 		//フィールドでもコンストラクタでも初期化されない

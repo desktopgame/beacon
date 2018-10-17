@@ -72,8 +72,8 @@ static void bc_exception_nativeInit(method* parent, frame* fr, enviroment* env) 
 		}
 	} while (temp != NULL);
 	//配列へ
-	object* arr = NewBCArray(stackTraceElementClass->parent->generic_self, stackTraceElementVec->length, fr);
-	for (int i = 0; i < stackTraceElementVec->length; i++) {
+	object* arr = NewBCArray(stackTraceElementClass->parent->generic_self, stackTraceElementVec->Length, fr);
+	for (int i = 0; i < stackTraceElementVec->Length; i++) {
 		SetBCArray(arr, i, AtVector(stackTraceElementVec, i));
 	}
 	//Exception#stackTraceをここで初期化する

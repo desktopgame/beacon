@@ -57,7 +57,7 @@ void GenerateILIf(il_stmt_if * self, enviroment* env, call_context* cctx) {
 	// { ... }
 	AddOpcodeBuf(env->buf, OP_GOTO_if_false);
 	AddOpcodeBuf(env->buf, l1);
-	for (int i = 0; i < self->body->length; i++) {
+	for (int i = 0; i < self->body->Length; i++) {
 		il_stmt* stmt = (il_stmt*)AtVector(self->body, i);
 		GenerateILStmt(stmt, env, cctx);
 	}
@@ -66,14 +66,14 @@ void GenerateILIf(il_stmt_if * self, enviroment* env, call_context* cctx) {
 	AddOpcodeBuf(env->buf, tail);
 	l1->cursor = AddNOPOpcodeBuf(env->buf);
 	// elif(...)
-	for (int i = 0; i < self->elif_list->length; i++) {
+	for (int i = 0; i < self->elif_list->Length; i++) {
 		il_stmt_elif* elif = (il_stmt_elif*)AtVector(self->elif_list, i);
 		GenerateILFactor(elif->condition, env, cctx);
 		label* l2 = AddLabelOpcodeBuf(env->buf, -1);
 		// { ... }
 		AddOpcodeBuf(env->buf, OP_GOTO_if_false);
 		AddOpcodeBuf(env->buf, l2);
-		for (int j = 0; j < elif->body->length; j++) {
+		for (int j = 0; j < elif->body->Length; j++) {
 			il_stmt* stmt = (il_stmt*)AtVector(elif->body, j);
 			GenerateILStmt(stmt, env, cctx);
 		}
@@ -84,10 +84,10 @@ void GenerateILIf(il_stmt_if * self, enviroment* env, call_context* cctx) {
 	}
 	// else { ... }
 	if (self->else_body == NULL ||
-		self->else_body->body->length == 0) {
+		self->else_body->body->Length == 0) {
 		tail->cursor = AddNOPOpcodeBuf(env->buf);
 	} else {
-		for (int i = 0; i < self->else_body->body->length; i++) {
+		for (int i = 0; i < self->else_body->body->Length; i++) {
 			il_stmt* stmt = (il_stmt*)AtVector(self->else_body->body, i);
 			GenerateILStmt(stmt, env, cctx);
 		}
@@ -99,22 +99,22 @@ void GenerateILIf(il_stmt_if * self, enviroment* env, call_context* cctx) {
 void LoadILIf(il_stmt_if * self, struct enviroment* env, call_context* cctx) {
 	env->sym_table->scope_depth++;
 	LoadILFactor(self->condition, env, cctx);
-	for(int i=0; i<self->body->length; i++) {
+	for(int i=0; i<self->body->Length; i++) {
 		il_stmt* e = (il_stmt*)AtVector(self->body, i);
 		LoadILStmt(e, env, cctx);
 		BC_ERROR();
 	}
-	for(int i=0; i<self->elif_list->length; i++) {
+	for(int i=0; i<self->elif_list->Length; i++) {
 		il_stmt_elif* e = (il_stmt_elif*)AtVector(self->elif_list, i);
 		LoadILFactor(e->condition, env, cctx);
-		for(int j=0; j<e->body->length; j++) {
+		for(int j=0; j<e->body->Length; j++) {
 			il_stmt* st = (il_stmt*)AtVector(e->body, j);
 			LoadILStmt(st, env, cctx);
 			BC_ERROR();
 		}
 		BC_ERROR();
 	}
-	for(int i=0; i<self->else_body->body->length; i++) {
+	for(int i=0; i<self->else_body->body->Length; i++) {
 		il_stmt* e = (il_stmt*)AtVector(self->else_body->body, i);
 		LoadILStmt(e, env, cctx);
 		BC_ERROR();
@@ -122,7 +122,7 @@ void LoadILIf(il_stmt_if * self, struct enviroment* env, call_context* cctx) {
 	//条件が bool を返さない
 	BC_ERROR();
 	check_condition_type(self->condition, env, cctx);
-	for(int i=0; i<self->elif_list->length; i++) {
+	for(int i=0; i<self->elif_list->Length; i++) {
 		il_stmt_elif* elif = AtVector(self->elif_list, i);
 		check_condition_type(elif->condition, env, cctx);
 		BC_ERROR();

@@ -12,7 +12,7 @@ operator_vt* NewOperatorVt() {
 }
 
 void ReplaceOperatorVt(operator_vt* self, operator_overload* opov) {
-	for(int i=0; i<self->vec->length; i++) {
+	for(int i=0; i<self->vec->Length; i++) {
 		operator_overload* e = AtVector(self->vec, i);
 		if(e->type != opov->type) {
 			continue;

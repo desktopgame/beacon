@@ -28,13 +28,13 @@ il_factor_invoke_static* NewILInvokeStatic(StringView namev) {
 }
 
 void GenerateILInvokeStatic(il_factor_invoke_static* self, enviroment* env, call_context* cctx) {
-	for(int i=0; i<self->type_args->length; i++) {
+	for(int i=0; i<self->type_args->Length; i++) {
 		il_type_argument* e = (il_type_argument*)AtVector(self->type_args, i);
 		assert(e->gtype != NULL);
 		AddOpcodeBuf(env->buf, OP_GENERIC_ADD);
 		GenerateGenericType(e->gtype, env);
 	}
-	for(int i=0; i<self->args->length; i++) {
+	for(int i=0; i<self->args->Length; i++) {
 		il_argument* e = (il_argument*)AtVector(self->args, i);
 		GenerateILFactor(e->factor, env, cctx);
 		if(GetLastBCError()) {
@@ -128,7 +128,7 @@ static void il_factor_invoke_static_check(il_factor_invoke_static * self, enviro
 	ResolveILTypeArgument(self->type_args, cctx);
 	//環境を設定
 	//メソッドを検索
-	for(int i=0; i<self->args->length; i++) {
+	for(int i=0; i<self->args->Length; i++) {
 		il_argument* ilarg = AtVector(self->args, i);
 		LoadILFactor(ilarg->factor, env, cctx);
 	}

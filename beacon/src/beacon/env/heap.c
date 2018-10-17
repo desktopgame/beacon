@@ -65,7 +65,7 @@ void DeleteHeap(heap * self) {
 
 void DumpHeap(heap* self) {
 	printf("heap dump:\n");
-	for(int i=0; i<self->object_vec->length; i++) {
+	for(int i=0; i<self->object_vec->Length; i++) {
 		object* a = AtVector(self->object_vec, i);
 		printf("    ");
 		PrintGenericType(a->gtype);
@@ -80,7 +80,7 @@ static void DeleteHeap_object(VectorItem item) {
 }
 
 static void gc_clear(heap* self) {
-	for (int i = 0; i < self->object_vec->length; i++) {
+	for (int i = 0; i < self->object_vec->Length; i++) {
 		object* e = (object*)AtVector(self->object_vec, i);
 		if (e->paint == PAINT_MARKED_T) {
 			e->paint = PAINT_UNMARKED_T;
@@ -106,7 +106,7 @@ static void gc_sweep(heap* self) {
 	int sweep = 0;
 	Vector* recycle = NewVector();
 	Vector* garabage = NewVector();
-	for (int i = 0; i < self->object_vec->length; i++) {
+	for (int i = 0; i < self->object_vec->Length; i++) {
 		object* e = (object*)AtVector(self->object_vec, i);
 		if (e->paint == PAINT_UNMARKED_T) {
 			PushVector(garabage, e);

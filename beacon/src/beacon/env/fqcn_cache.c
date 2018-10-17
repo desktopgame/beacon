@@ -28,11 +28,11 @@ void DumpFQCNCache(fqcn_cache * self, int depth) {
 	printf("type %s", Ref2Str(self->namev));
 	Println();
 	//X::C.call() のような呼び出しなら
-	if (self->scope_vec->length > 0) {
+	if (self->scope_vec->Length > 0) {
 		Printi(depth);
 		printf("scope");
 		Println();
-		for (int i = 0; i < self->scope_vec->length; i++) {
+		for (int i = 0; i < self->scope_vec->Length; i++) {
 			StringView sv = (StringView)AtVector(self->scope_vec, i);
 			Printi(depth + 1);
 			printf("%s", Ref2Str(sv));
@@ -46,10 +46,10 @@ void PrintFQCNCache(fqcn_cache * self) {
 		printf("NULL");
 		return;
 	}
-	if (self->scope_vec->length == 0) {
+	if (self->scope_vec->Length == 0) {
 		printf("%s", Ref2Str(self->namev));
 	} else {
-		for (int i = 0; i < self->scope_vec->length; i++) {
+		for (int i = 0; i < self->scope_vec->Length; i++) {
 			printf("%s", Ref2Str((StringView)AtVector(self->scope_vec, i)));
 			printf("::");
 		}
@@ -58,11 +58,11 @@ void PrintFQCNCache(fqcn_cache * self) {
 }
 
 namespace_ * GetScopeFQCN(fqcn_cache * self, namespace_* current) {
-	if (self->scope_vec->length == 0) {
+	if (self->scope_vec->Length == 0) {
 		return current;
 	}
 	namespace_* top = NULL;
-	for (int i = 0; i < self->scope_vec->length; i++) {
+	for (int i = 0; i < self->scope_vec->Length; i++) {
 		StringView ev = (StringView)AtVector(self->scope_vec, i);
 		if (top == NULL) {
 			top = FindNamespaceFromRoot(ev);
@@ -77,7 +77,7 @@ type * GetTypeFQCN(fqcn_cache * self, namespace_ * current) {
 	type* ret = fqcn_TYPE_IMPL(self, current);
 	//Console(X::Yを含まない)のような指定なら
 	//signal::lang空間も探索する
-	if (ret == NULL && self->scope_vec->length == 0) {
+	if (ret == NULL && self->scope_vec->Length == 0) {
 		ret = fqcn_TYPE_IMPL(self, GetLangNamespace());
 	}
 	return ret;
@@ -93,10 +93,10 @@ class_ * GetClassFQCN(fqcn_cache * self, namespace_ * current) {
 
 char* FQCNCacheToString(fqcn_cache* self) {
 	Buffer* sb = NewBuffer();
-	for(int i=0; i<self->scope_vec->length; i++) {
+	for(int i=0; i<self->scope_vec->Length; i++) {
 		StringView ev = (StringView)AtVector(self->scope_vec, i);
 		AppendsBuffer(sb, Ref2Str(ev));
-		if(i == (self->scope_vec->length - 1)) {
+		if(i == (self->scope_vec->Length - 1)) {
 			break;
 		}
 		AppendsBuffer(sb, "::");
@@ -114,13 +114,13 @@ void DeleteFQCNCache(fqcn_cache * self) {
 }
 
 bool EqualsFQCNCache(fqcn_cache* a, fqcn_cache* b) {
-	if(a->namev != b->namev || a->scope_vec->length != b->scope_vec->length) {
+	if(a->namev != b->namev || a->scope_vec->Length != b->scope_vec->Length) {
 		return false;
 	}
 	if(a == b) {
 		return true;
 	}
-	for(int i=0; i<a->scope_vec->length; i++) {
+	for(int i=0; i<a->scope_vec->Length; i++) {
 		StringView as = (StringView)AtVector(a->scope_vec, i);
 		StringView bs = (StringView)AtVector(b->scope_vec, i);
 		if(as != bs) {
@@ -132,7 +132,7 @@ bool EqualsFQCNCache(fqcn_cache* a, fqcn_cache* b) {
 //private
 static type * fqcn_TYPE_IMPL(fqcn_cache * self, namespace_* current) {
 	//Y形式
-	if (self->scope_vec->length == 0) {
+	if (self->scope_vec->Length == 0) {
 		StringView namev = self->namev;
 		//プリミティブ型はどこからでも参照できる
 		if (namev == InternString("Object")) {

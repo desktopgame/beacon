@@ -78,7 +78,7 @@ void ExecuteVM(frame* self, enviroment* env) {
 void ResumeVM(frame * self, enviroment * env, int pos) {
 	self->defer_vec = NewVector();
 	vm_run(self, env, pos, -1);
-	while(self->defer_vec->length > 0) {
+	while(self->defer_vec->Length > 0) {
 		defer_context* defctx = (defer_context*)PopVector(self->defer_vec);
 		label* offset = defctx->offset;
 		Vector* save = self->ref_stack;
@@ -102,7 +102,7 @@ void NativeThrowVM(frame * self, object * exc) {
 	//どこかでキャッチしようとしている
 	} else {
 		int temp = 0;
-		ValidateVM(self, self->context_ref->buf->source_vec->length, &temp);
+		ValidateVM(self, self->context_ref->buf->source_vec->Length, &temp);
 		self->native_throw_pos = temp;
 	}
 }
@@ -192,7 +192,7 @@ StringView GetVMErrorMessage() {
 static void vm_run(frame * self, enviroment * env, int pos, int deferStart) {
 	assert(env != NULL);
 	script_context* ctx = GetCurrentScriptContext();
-	int source_len = env->buf->source_vec->length;
+	int source_len = env->buf->source_vec->Length;
 	self->context_ref = env;
 	heap* he = GetHeap();
 	for (int IDX = pos; IDX < source_len; IDX++) {
@@ -538,11 +538,11 @@ static void vm_run(frame * self, enviroment * env, int pos, int deferStart) {
 				obj->gtype = RefGenericType(cls->parent);
 				obj->vptr = cls->vt;
 				//ジェネリック型を実体化
-				if(cls->GetParameterListType->length == 0) {
+				if(cls->GetParameterListType->Length == 0) {
 					obj->gtype = tp->generic_self;
 				} else {
 					generic_type* g = generic_NewType(tp);
-					for(int i=0; i<cls->GetParameterListType->length; i++) {
+					for(int i=0; i<cls->GetParameterListType->Length; i++) {
 						AddArgsGenericType(g, (generic_type*)AtVector(self->type_args_vec, i));
 					}
 					obj->gtype = g;
@@ -571,18 +571,18 @@ static void vm_run(frame * self, enviroment * env, int pos, int deferStart) {
 				call_frame* cfr = PushCallContext(GetSGThreadCContext(), FRAME_STATIC_INVOKE_T);
 				cfr->u.static_invoke.args = NewVector();
 				cfr->u.static_invoke.typeargs = NewVector();
-				for (int i = 0; i < ctor->parameter_list->length; i++) {
+				for (int i = 0; i < ctor->parameter_list->Length; i++) {
 					VectorItem e = PopVector(self->value_stack);
 					object* o = (object*)e;
 					PushVector(sub->value_stack, NON_NULL(e));
-					AssignVector(cfr->u.static_invoke.args, (ctor->parameter_list->length - i), o->gtype);
+					AssignVector(cfr->u.static_invoke.args, (ctor->parameter_list->Length - i), o->gtype);
 				}
 				//コンストラクタに渡された型引数を引き継ぐ
-				int typeparams = cls->GetParameterListType->length;
+				int typeparams = cls->GetParameterListType->Length;
 				for(int i=0; i<typeparams; i++) {
 					VectorItem e = PopVector(self->type_args_vec);
 					AssignVector(sub->type_args_vec, (typeparams - i) - 1, e);
-					AssignVector(cfr->u.static_invoke.typeargs, (cls->GetParameterListType->length - i), e);
+					AssignVector(cfr->u.static_invoke.typeargs, (cls->GetParameterListType->Length - i), e);
 				}
 				//Printi(self->level);
 				//Printfln("[ %s#new ]", GetTypeName(ctor->parent));
@@ -616,12 +616,12 @@ static void vm_run(frame * self, enviroment * env, int pos, int deferStart) {
 				cfr->u.static_invoke.args = NewVector();
 				cfr->u.static_invoke.typeargs = NewVector();
 				//チェインコンストラクタに渡された実引数をプッシュ
-				for (int i = 0; i < ctor->parameter_list->length; i++) {
+				for (int i = 0; i < ctor->parameter_list->Length; i++) {
 					object* o = (object*)PopVector(self->value_stack);
 					PushVector(sub->value_stack, NON_NULL(o));
-					AssignVector(cfr->u.static_invoke.args, (ctor->parameter_list->length - i), o->gtype);
+					AssignVector(cfr->u.static_invoke.args, (ctor->parameter_list->Length - i), o->gtype);
 				}
-				for(int i=0; i<self->type_args_vec->length; i++) {
+				for(int i=0; i<self->type_args_vec->Length; i++) {
 					PushVector(cfr->u.static_invoke.typeargs, self->type_args_vec);
 				}
 				//		DumpEnviromentOp(ctor->env, sub->level);
@@ -1027,7 +1027,7 @@ static void vm_run(frame * self, enviroment * env, int pos, int deferStart) {
 				//[1] = ArrayIterator
 				AssignVector(self->ref_stack, 0, yctx->source_obj);
 				assert(yctx->source_obj != NULL);
-				for(int i=0; i<yctx->parameter_vec->length; i++) {
+				for(int i=0; i<yctx->parameter_vec->Length; i++) {
 					object* e = AtVector(yctx->parameter_vec, i);
 					assert(e != NULL);
 					AssignVector(self->ref_stack, i + 1, e);
@@ -1060,7 +1060,7 @@ static void vm_run(frame * self, enviroment * env, int pos, int deferStart) {
 							AddArgsGenericType(head, (generic_type*)PopVector(stack));
 						}
 						if(depth == 0) {
-							assert(stack->length == 1);
+							assert(stack->Length == 1);
 							ret = head;
 							break;
 						}

@@ -13,11 +13,11 @@ il_type_parameter * NewILTypeParameter(StringView namev) {
 }
 
 void PrintILTypeParameterList(Vector * v) {
-	if (v->length <= 0) {
+	if (v->Length <= 0) {
 		return;
 	}
 	printf("<");
-	for (int i = 0; i < v->length; i++) {
+	for (int i = 0; i < v->Length; i++) {
 		il_type_parameter* e = (il_type_parameter*)AtVector(v, i);
 		if (e->kind == il_TYPE_PARAMETER_KIND_IN_T) {
 			printf("in ");
@@ -25,7 +25,7 @@ void PrintILTypeParameterList(Vector * v) {
 			printf("out ");
 		}
 		printf("%s", Ref2Str(e->namev));
-		if (i != v->length - 1) {
+		if (i != v->Length - 1) {
 			printf(", ");
 		}
 	}

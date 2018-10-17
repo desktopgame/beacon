@@ -46,7 +46,7 @@ void GenerateILTry(il_stmt_try* self, enviroment* env, call_context* cctx) {
 	AddOpcodeBuf(env->buf, catch_start);
 	//例外が発生するかもしれない
 	//ステートメントの一覧
-	for (int i = 0; i < self->statement_list->length; i++) {
+	for (int i = 0; i < self->statement_list->Length; i++) {
 		il_stmt* e = (il_stmt*)AtVector(self->statement_list, i);
 		GenerateILStmt(e, env, cctx);
 	}
@@ -58,7 +58,7 @@ void GenerateILTry(il_stmt_try* self, enviroment* env, call_context* cctx) {
 	catch_start->cursor = AddNOPOpcodeBuf(env->buf);
 	//全てのcatch節に対して
 	label* nextCause = NULL;
-	for (int i = 0; i < self->catch_list->length; i++) {
+	for (int i = 0; i < self->catch_list->Length; i++) {
 		//例外を指定の名前でアクセス出来るように
 		il_stmt_catch* ilcatch = (il_stmt_catch*)AtVector(self->catch_list, i);
 		generic_type* exgType = ResolveImportManager(NULL, ilcatch->fqcn, cctx);
@@ -82,7 +82,7 @@ void GenerateILTry(il_stmt_try* self, enviroment* env, call_context* cctx) {
 		AddOpcodeBuf(env->buf, OP_STORE);
 		AddOpcodeBuf(env->buf, exIndex);
 		//catchの内側のステートメントを生成
-		for (int j = 0; j < ilcatch->statement_list->length; j++) {
+		for (int j = 0; j < ilcatch->statement_list->Length; j++) {
 			il_stmt* e = (il_stmt*)AtVector(ilcatch->statement_list, j);
 			GenerateILStmt(e, env, cctx);
 		}
@@ -106,11 +106,11 @@ void GenerateILCatch(il_stmt_catch* self, enviroment* env, call_context* cctx) {
 }
 
 void LoadILTry(il_stmt_try* self, enviroment* env, call_context* cctx) {
-	for(int i=0; i<self->statement_list->length; i++) {
+	for(int i=0; i<self->statement_list->Length; i++) {
 		il_stmt* e = (il_stmt*)AtVector(self->statement_list, i);
 		LoadILStmt(e, env, cctx);
 	}
-	for(int i=0; i<self->catch_list->length; i++) {
+	for(int i=0; i<self->catch_list->Length; i++) {
 		il_stmt_catch* e = (il_stmt_catch*)AtVector(self->catch_list, i);
 		LoadILCatch(e, env, cctx);
 	}
@@ -119,7 +119,7 @@ void LoadILTry(il_stmt_try* self, enviroment* env, call_context* cctx) {
 void LoadILCatch(il_stmt_catch* self, enviroment* env, call_context* cctx) {
 	generic_type* exgType = ResolveImportManager(NULL, self->fqcn, cctx);
 	EntrySymbolTable(env->sym_table, exgType, self->namev);
-	for(int i=0; i<self->statement_list->length; i++) {
+	for(int i=0; i<self->statement_list->Length; i++) {
 		il_stmt* e = (il_stmt*)AtVector(self->statement_list, i);
 		LoadILStmt(e, env, cctx);
 	}

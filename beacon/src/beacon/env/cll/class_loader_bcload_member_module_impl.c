@@ -136,7 +136,7 @@ void CLBC_fields_decl(class_loader* self, il_type* iltype, type* tp, Vector* ilf
 	call_context* cctx = NewCallContext(CALL_DECL_T);
 	cctx->scope = scope;
 	cctx->ty = tp;
-	for (int i = 0; i < ilfields->length; i++) {
+	for (int i = 0; i < ilfields->Length; i++) {
 		if(!CLBC_field_decl(self, iltype, tp, AtVector(ilfields, i), scope, cctx)) {
 			break;
 		}
@@ -149,7 +149,7 @@ void CLBC_fields_impl(class_loader* self, namespace_* scope, type* tp,Vector* il
 	call_context* cctx = NewCallContext(CALL_CTOR_T);
 	cctx->scope = scope;
 	cctx->ty = tp;
-	for (int i = 0; i < sgfields->length; i++) {
+	for (int i = 0; i < sgfields->Length; i++) {
 		if(!CLBC_field_impl(self, tp, AtVector(sgfields, i), scope, cctx)) {
 			break;
 		}
@@ -235,7 +235,7 @@ void CLBC_properties_decl(class_loader* self, il_type* iltype, type* tp, Vector*
 	call_context* cctx = NewCallContext(CALL_DECL_T);
 	cctx->scope = scope;
 	cctx->ty = tp;
-	for (int i = 0; i < ilprops->length; i++) {
+	for (int i = 0; i < ilprops->Length; i++) {
 		if(!CLBC_property_decl(self, iltype, tp, AtVector(ilprops, i), scope, cctx)) {
 			break;
 		}
@@ -248,7 +248,7 @@ void CLBC_properties_impl(class_loader* self,  il_type* iltype, type* tp, Vector
 	call_context* cctx = NewCallContext(CALL_DECL_T);
 	cctx->scope = scope;
 	cctx->ty = tp;
-	for (int i = 0; i < sgprops->length; i++) {
+	for (int i = 0; i < sgprops->Length; i++) {
 		if(!CLBC_property_impl(self, iltype, tp, AtVector(ilprops, i), AtVector(sgprops, i), scope, cctx)) {
 			break;
 		}
@@ -357,7 +357,7 @@ bool CLBC_method_decl(class_loader* self, il_type* iltype, type* tp, il_method* 
 	//ILパラメータを実行時パラメータへ変換
 	//NOTE:ここでは戻り値の型,引数の型を設定しません
 	//     class_loader_sgload_complete参照
-	for (int i = 0; i < ilparams->length; i++) {
+	for (int i = 0; i < ilparams->Length; i++) {
 		VectorItem e = AtVector(ilparams, i);
 		il_parameter* ilp = (il_parameter*)e;
 		parameter* param = NewParameter(ilp->namev);
@@ -388,7 +388,7 @@ bool CLBC_method_impl(class_loader* self, namespace_* scope, il_type* iltype, ty
 	cctx->ty = tp;
 	cctx->u.mt = me;
 	//引数を保存
-	for (int i = 0; i < ilmethod->parameter_list->length; i++) {
+	for (int i = 0; i < ilmethod->parameter_list->Length; i++) {
 		il_parameter* ilparam = (il_parameter*)AtVector(ilmethod->parameter_list, i);
 		EntrySymbolTable(
 			env->sym_table,
@@ -413,7 +413,7 @@ bool CLBC_method_impl(class_loader* self, namespace_* scope, il_type* iltype, ty
 
 void CLBC_methods_decl(class_loader* self, il_type* iltype, type* tp, Vector* ilmethods, namespace_* scope) {
 	CL_ERROR(self);
-	for (int i = 0; i < ilmethods->length; i++) {
+	for (int i = 0; i < ilmethods->Length; i++) {
 		if(!CLBC_method_decl(self, iltype, tp, AtVector(ilmethods,i),scope)) {
 			break;
 		}
@@ -422,7 +422,7 @@ void CLBC_methods_decl(class_loader* self, il_type* iltype, type* tp, Vector* il
 
 void CLBC_methods_impl(class_loader* self, namespace_* scope, il_type* iltype, type* tp, Vector* ilmethods, Vector* sgmethods) {
 	CL_ERROR(self);
-	for (int i = 0; i < ilmethods->length; i++) {
+	for (int i = 0; i < ilmethods->Length; i++) {
 		if(!CLBC_method_impl(self, scope, iltype, tp, AtVector(ilmethods, i), AtVector(sgmethods, i))) {
 			break;
 		}
@@ -449,7 +449,7 @@ bool CLBC_ctor_decl(class_loader* self, il_type* iltype, type* tp, il_constructo
 	cctx->u.ctor = cons;
 	//NOTE:ここでは戻り値の型,引数の型を設定しません
 	//     class_loader_sgload_complete参照
-	for (int i = 0; i < ilparams->length; i++) {
+	for (int i = 0; i < ilparams->Length; i++) {
 		VectorItem e = AtVector(ilparams, i);
 		il_parameter* ilp = (il_parameter*)e;
 		parameter* param = NewParameter(ilp->namev);
@@ -472,7 +472,7 @@ bool CLBC_ctor_impl(class_loader* self, il_type* iltype, type* tp, il_constructo
 	cctx->scope = scope;
 	cctx->ty = tp;
 	cctx->u.ctor = cons;
-	for (int i = 0; i < cons->parameter_list->length; i++) {
+	for (int i = 0; i < cons->parameter_list->Length; i++) {
 		il_parameter* ilparam = (il_parameter*)AtVector(ilcons->parameter_list, i);
 		EntrySymbolTable(
 			env->sym_table,
@@ -496,7 +496,7 @@ void CLBC_ctors_decl(class_loader* self, il_type* iltype, type* tp, namespace_* 
 	CL_ERROR(self);
 	class_* classz = tp->u.class_;
 	Vector* ilcons_list = iltype->u.class_->constructor_list;
-	for (int i = 0; i < ilcons_list->length; i++) {
+	for (int i = 0; i < ilcons_list->Length; i++) {
 		if(!CLBC_ctor_decl(self, iltype, tp, AtVector(ilcons_list, i), scope)) {
 			break;
 		}
@@ -514,7 +514,7 @@ void CLBC_ctors_impl(class_loader* self, il_type* iltype, type* tp) {
 	}
 	//既に登録されたが、
 	//オペコードが空っぽになっているコンストラクタの一覧
-	for (int i = 0; i < constructors->length; i++) {
+	for (int i = 0; i < constructors->Length; i++) {
 		if(!CLBC_ctor_impl(self, iltype, tp, AtVector(iltype->u.class_->constructor_list,i),AtVector(constructors, i), scope)) {
 			break;
 		}
@@ -538,7 +538,7 @@ bool CLBC_operator_overload_decl(class_loader* self, il_type* iltype, type* tp, 
 	opov->parent = tp;
 	opov->return_gtype = ResolveImportManager(scope, ilopov->return_fqcn, cctx);
 	//パラメータ読み込み
-	for(int j=0; j<ilopov->parameter_list->length; j++) {
+	for(int j=0; j<ilopov->parameter_list->Length; j++) {
 		il_parameter* ilparam = AtVector(ilopov->parameter_list, j);
 		parameter* param = NewParameter(ilparam->namev);
 		PushVector(opov->parameter_list, param);
@@ -565,7 +565,7 @@ bool CLBC_operator_overload_impl(class_loader* self, il_type* iltype, type* tp, 
 	cctx->u.opov = opov;
 	//ccpush_method(me);
 	env->context_ref = self;
-	for (int i = 0; i < ilopov->parameter_list->length; i++) {
+	for (int i = 0; i < ilopov->parameter_list->Length; i++) {
 		il_parameter* ilparam = (il_parameter*)AtVector(ilopov->parameter_list, i);
 		EntrySymbolTable(
 			env->sym_table,
@@ -591,7 +591,7 @@ bool CLBC_operator_overload_impl(class_loader* self, il_type* iltype, type* tp, 
 void CLBC_operator_overloads_decl(class_loader* self, il_type* iltype, type* tp, namespace_* scope) {
 	CL_ERROR(self);
 	Vector* opov_list = iltype->u.class_->operator_overload_list;
-	for (int i = 0; i < opov_list->length; i++) {
+	for (int i = 0; i < opov_list->Length; i++) {
 		if(!CLBC_operator_overload_decl(self, iltype, tp, AtVector(opov_list, i), scope)) {
 			break;
 		}
@@ -603,7 +603,7 @@ void CLBC_operator_overloads_impl(class_loader* self, il_type* iltype, type* tp,
 	CL_ERROR(self);
 	Vector* opov_list = tp->u.class_->operator_overload_list;
 	//ここで暗黙的に作成される == != によって長さが合わなくなる
-	for (int i = 0; i < iltype->u.class_->operator_overload_list->length; i++) {
+	for (int i = 0; i < iltype->u.class_->operator_overload_list->Length; i++) {
 		if(!CLBC_operator_overload_impl(self, iltype, tp, AtVector(iltype->u.class_->operator_overload_list, i), AtVector(opov_list, i), scope)) {
 			break;
 		}
@@ -623,7 +623,7 @@ bool CLBC_corutine(class_loader* self, method* mt, enviroment* env,  Vector* ilp
 		//beacon::$placeholderへ肩を格納する
 		type* iterT = CreateIteratorTypeFromMethod(mt, self, ilstmts);
 		AddOpcodeBuf(env->buf, OP_THIS);
-		for(int i=0; i<ilparams->length; i++) {
+		for(int i=0; i<ilparams->Length; i++) {
 			AddOpcodeBuf(env->buf, OP_LOAD);
 			AddOpcodeBuf(env->buf, i + 1);
 		}
@@ -643,7 +643,7 @@ bool CLBC_corutine(class_loader* self, method* mt, enviroment* env,  Vector* ilp
 void CLBC_body(class_loader* self, Vector* stmt_list, enviroment* dest, call_context* cctx, namespace_* range) {
 	CL_ERROR(self);
 	//まずは全てのステートメントを読み込む
-	for (int i = 0; i < stmt_list->length; i++) {
+	for (int i = 0; i < stmt_list->Length; i++) {
 		if(GetLastBCError()) {
 			break;
 		}
@@ -652,7 +652,7 @@ void CLBC_body(class_loader* self, Vector* stmt_list, enviroment* dest, call_con
 		LoadILStmt(s, dest, cctx);
 	}
 	//オペコードを生成
-	for (int i = 0; i < stmt_list->length; i++) {
+	for (int i = 0; i < stmt_list->Length; i++) {
 		if(GetLastBCError()) {
 			break;
 		}
@@ -664,7 +664,7 @@ void CLBC_body(class_loader* self, Vector* stmt_list, enviroment* dest, call_con
 
 //private
 static void CLBC_parameter_list(class_loader* self, namespace_* scope, Vector* param_list, Vector* sg_param_list, call_context* cctx) {
-	for (int j = 0; j < param_list->length; j++) {
+	for (int j = 0; j < param_list->Length; j++) {
 		VectorItem e = AtVector(param_list, j);
 		il_parameter* ilparam = (il_parameter*)e;
 		//FIXME:ILパラメータと実行時パラメータのインデックスが同じなのでとりあえず動く
@@ -678,7 +678,7 @@ static void CLBC_parameter_list(class_loader* self, namespace_* scope, Vector* p
 }
 
 static void CLBC_parameter_list_ctor(Vector* param_list) {
-	for(int i=0; i<param_list->length; i++) {
+	for(int i=0; i<param_list->Length; i++) {
 		parameter* param = AtVector(param_list, i);
 		param->gtype->is_ctor = true;
 	}
@@ -747,7 +747,7 @@ static void CLBC_chain_super(class_loader * self, il_type * iltype, type * tp, i
 	call_context* cctx = NewCallContext(CALL_CTOR_ARGS_T);
 	cctx->ty = tp;
 	il_constructor_chain* chain = ilcons->chain;
-	for (int i = 0; i < chain->argument_list->length; i++) {
+	for (int i = 0; i < chain->argument_list->Length; i++) {
 		il_argument* ilarg = (il_argument*)AtVector(chain->argument_list, i);
 		GenerateILFactor(ilarg->factor, env, cctx);
 	}
@@ -785,12 +785,12 @@ static bool CLBC_test_operator_overlaod(class_loader* self, il_type* iltype, typ
 		return true;
 	}
 	//二項演算子であるなら引数は1
-	if(operator_arg2(opov->type) && opov->parameter_list->length != 1) {
+	if(operator_arg2(opov->type) && opov->parameter_list->Length != 1) {
 		ThrowBCError(BCERROR_ARG_COUNT_NOT2_BIOPERATOR_T, GetTypeName(tp), operator_tostring(opov->type));
 		return true;
 	}
 	//単項演算子であるなら引数は0
-	if(operator_arg1(opov->type) && opov->parameter_list->length != 0) {
+	if(operator_arg1(opov->type) && opov->parameter_list->Length != 0) {
 		ThrowBCError(BCERROR_ARG_COUNT_NOT1_UOPERATOR_T,
 			GetTypeName(tp),
 			operator_tostring(opov->type)
@@ -798,7 +798,7 @@ static bool CLBC_test_operator_overlaod(class_loader* self, il_type* iltype, typ
 		return true;
 	}
 	//配列参照演算子であるあんら引数は1
-	if(opov->type == OPERATOR_SUB_SCRIPT_GET_T && opov->parameter_list->length != 1) {
+	if(opov->type == OPERATOR_SUB_SCRIPT_GET_T && opov->parameter_list->Length != 1) {
 		ThrowBCError(BCERROR_ARG_COUNT_NOT1_SUBSCRIPT_GET_OP_T,
 			GetTypeName(tp),
 			operator_tostring(opov->type)
@@ -806,7 +806,7 @@ static bool CLBC_test_operator_overlaod(class_loader* self, il_type* iltype, typ
 		return true;
 	}
 	//配列書き込み演算子であるあんら引数は2
-	if(opov->type == OPERATOR_SUB_SCRIPT_SET_T && opov->parameter_list->length != 2) {
+	if(opov->type == OPERATOR_SUB_SCRIPT_SET_T && opov->parameter_list->Length != 2) {
 		ThrowBCError(BCERROR_ARG_COUNT_NOT2_SUBSCRIPT_SET_OP_T,
 			GetTypeName(tp),
 			operator_tostring(opov->type)

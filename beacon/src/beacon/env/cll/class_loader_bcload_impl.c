@@ -120,7 +120,7 @@ static void CLBC_namespace_tree(class_loader* self) {
 static void CLBC_namespace_list(class_loader* self, Vector* ilnamespace_list, namespace_* parent) {
 	//self->link = classlink_resume;
 	CL_ERROR(self);
-	for (int i = 0; i < ilnamespace_list->length; i++) {
+	for (int i = 0; i < ilnamespace_list->Length; i++) {
 		VectorItem e = AtVector(ilnamespace_list, i);
 		il_namespace* iln = (il_namespace*)e;
 		CLBC_namespace(self, iln, parent);
@@ -142,7 +142,7 @@ static void CLBC_namespace(class_loader* self, il_namespace* ilnamespace, namesp
 
 static void CLBC_type_list(class_loader* self, Vector* iltype_list, namespace_* parent) {
 	CL_ERROR(self);
-	for (int i = 0; i < iltype_list->length; i++) {
+	for (int i = 0; i < iltype_list->Length; i++) {
 		VectorItem e = AtVector(iltype_list, i);
 		il_type* ilt = (il_type*)e;
 		if (ilt->tag == ilTYPE_CLASS_T) {
@@ -168,7 +168,7 @@ static void CLBC_enum(class_loader * self, il_type * iltype, namespace_ * parent
 	}
 	InitGenericSelf(tp, 0);
 	//全ての列挙子を public static final フィールドとして追加
-	for (int i = 0; i < ilenum->item_vec->length; i++) {
+	for (int i = 0; i < ilenum->item_vec->Length; i++) {
 		StringView str = (StringView)AtVector(ilenum->item_vec, i);
 		field* f = NewField(str);
 		f->modifier = MODIFIER_STATIC_T;
@@ -215,7 +215,7 @@ static void CLBC_class(class_loader* self, il_type* iltype, namespace_* parent) 
 		return;
 	}
 	cls->is_abstract = iltype->u.class_->is_abstract;
-	InitGenericSelf(tp, iltype->u.class_->GetParameterListType->length);
+	InitGenericSelf(tp, iltype->u.class_->GetParameterListType->Length);
 	//デフォルトで親に Object を持つように
 	CLBC_check_superclass(cls);
 	//宣言のロードを予約
@@ -251,7 +251,7 @@ static void CLBC_interface(class_loader * self, il_type * iltype, namespace_ * p
 	if((tp->state & TYPE_REGISTER) > 0) {
 		return;
 	}
-	InitGenericSelf(tp, iltype->u.interface_->GetParameterListType->length);
+	InitGenericSelf(tp, iltype->u.interface_->GetParameterListType->Length);
 	//宣言のロードを予約
 	type_cache* tc = InitTypeCache(
 		NewTypeCache(),
@@ -328,12 +328,12 @@ static type* CLBC_get_or_load_class(class_loader* self, namespace_* parent, il_t
 }
 
 static void CLBC_register_class(class_loader* self, namespace_* parent, il_type* iltype, type* tp, class_* cls) {
-	InitGenericSelf(tp, iltype->u.class_->GetParameterListType->length);
+	InitGenericSelf(tp, iltype->u.class_->GetParameterListType->Length);
 	DupTypeParameterList(iltype->u.class_->GetParameterListType, cls->GetParameterListType);
 	call_context* cctx = NewCallContext(CALL_DECL_T);
 	cctx->scope = parent;
 	cctx->ty = tp;
-	for (int i = 0; i < iltype->u.class_->extend_list->length; i++) {
+	for (int i = 0; i < iltype->u.class_->extend_list->Length; i++) {
 		generic_cache* e = (generic_cache*)AtVector(iltype->u.class_->extend_list, i);
 		//最初の一つはクラスでもインターフェースでもよい
 		if (i == 0) {
@@ -390,12 +390,12 @@ static type* CLBC_get_or_load_interface(class_loader* self, namespace_* parent, 
 }
 
 static void CLBC_register_interface(class_loader* self, namespace_* parent, il_type* iltype, type* tp, interface_* inter) {
-	InitGenericSelf(tp, iltype->u.interface_->GetParameterListType->length);
+	InitGenericSelf(tp, iltype->u.interface_->GetParameterListType->Length);
 	DupTypeParameterList(iltype->u.interface_->GetParameterListType, inter->GetParameterListType);
 	call_context* cctx = NewCallContext(CALL_DECL_T);
 	cctx->scope = parent;
 	cctx->ty = tp;
-	for (int i = 0; i < iltype->u.interface_->extends_list->length; i++) {
+	for (int i = 0; i < iltype->u.interface_->extends_list->Length; i++) {
 		generic_cache* e = (generic_cache*)AtVector(iltype->u.interface_->extends_list, i);
 		//インターフェースはインターフェースのみ継承
 		generic_type* gtp = ResolveImportManager(parent, e, cctx);

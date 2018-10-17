@@ -12,7 +12,7 @@ vtable * NewVTable() {
 }
 
 void CopyVTable(vtable * src, vtable * dst) {
-	for (int i = 0; i < src->elements->length; i++) {
+	for (int i = 0; i < src->elements->Length; i++) {
 		PushVector(dst->elements, AtVector(src->elements, i));
 	}
 }
@@ -31,7 +31,7 @@ void ReplaceVTable(vtable * self, method * m, call_context* cctx) {
 	#if defined(DEBUG)
 	const char* methodname = Ref2Str(m->namev);
 	#endif
-	for (int i = 0; i < self->elements->length; i++) {
+	for (int i = 0; i < self->elements->Length; i++) {
 		method* e = (method*)AtVector(self->elements, i);
 		//if (IsOverridedMethod(m, e, cctx)) {
 		if (IsOverridedMethod(e, m, cctx)) {

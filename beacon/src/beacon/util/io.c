@@ -209,7 +209,7 @@ Vector* GetFiles(const char* dirname) {
 		PushVector(v, e);
 	} while (FindNextFile(h, &ffd));
 	FindClose(h);
-	qsort(v->memory, v->length, sizeof(void*), GetFiles_sort);
+	qsort(v->memory, v->Length, sizeof(void*), GetFiles_sort);
 	return v;
 #else
 	Vector* ret = NewVector();
@@ -227,7 +227,7 @@ Vector* GetFiles(const char* dirname) {
 		}
 	}
 	closedir(dir);
-	qsort(ret->memory, ret->length, sizeof(void*), SortFiles);
+	qsort(ret->Memory, ret->Length, sizeof(void*), SortFiles);
 	return ret;
 #endif
 }

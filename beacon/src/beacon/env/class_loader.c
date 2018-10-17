@@ -143,7 +143,7 @@ static void LinkClassLoader_recursive(class_loader* self, link_type type) {
 	}
 	self->link = type;
 	import_manager* importMgr = self->import_manager;
-	for (int i = 0; i < importMgr->info_vec->length; i++) {
+	for (int i = 0; i < importMgr->info_vec->Length; i++) {
 		import_info* info = (import_info*)AtVector(importMgr->info_vec, i);
 		if (info->consume) {
 			continue;
@@ -225,12 +225,12 @@ static void LoadClassLoader_toplevel_function(class_loader* self) {
 	type* worldT = FindTypeFromNamespace(GetLangNamespace(), InternString("World"));
 	//前回の実行で作成されたメソッドを解放
 	Vector* methods = TYPE2CLASS(worldT)->method_list;
-	if(methods->length > 0) {
+	if(methods->Length > 0) {
 		DeleteVector(methods, DeleteMethod);
 		TYPE2CLASS(worldT)->method_list = NewVector();
 	}
 	//メソッドの宣言のみロード
-	for(int i=0; i<funcs->length; i++) {
+	for(int i=0; i<funcs->Length; i++) {
 		il_function* ilfunc = AtVector(funcs, i);
 		method* m = method_new(ilfunc->namev);
 		DupTypeParameterList(ilfunc->type_parameter_vec, m->type_parameters);
@@ -252,7 +252,7 @@ static void LoadClassLoader_toplevel_function(class_loader* self) {
 	//	PrintGenericType(m->return_gtype);
 	//	Println();
 		//引数を指定
-		for(int j=0; j<ilfunc->parameter_list->length; j++) {
+		for(int j=0; j<ilfunc->parameter_list->Length; j++) {
 			il_parameter* ilparam = AtVector(ilfunc->parameter_list, j);
 			parameter* param = NewParameter(ilparam->namev);
 			PushVector(m->parameters, param);
@@ -274,7 +274,7 @@ static void LoadClassLoader_toplevel_function(class_loader* self) {
 		DeleteCallContext(cctx);
 	}
 	//実装のロード
-	for(int i=0; i<funcs->length; i++) {
+	for(int i=0; i<funcs->Length; i++) {
 		il_function* ilfunc = AtVector(funcs, i);
 		method* m = AtVector(TYPE2CLASS(worldT)->method_list, i);
 		script_method* sm = m->u.script_method;

@@ -14,14 +14,14 @@ il_type_argument* NewILTypeArgument() {
 }
 
 void PrintILTypeArgument(Vector* iltype_args) {
-	if(iltype_args->length == 0) {
+	if(iltype_args->Length == 0) {
 		return;
 	}
 	printf("<");
-	for(int i=0; i<iltype_args->length; i++) {
+	for(int i=0; i<iltype_args->Length; i++) {
 		il_type_argument* e = (il_type_argument*)AtVector(iltype_args, i);
 		PrintGenericCache(e->gcache);
-		if(i != iltype_args->length - 1) {
+		if(i != iltype_args->Length - 1) {
 			printf(",");
 		}
 	}
@@ -29,7 +29,7 @@ void PrintILTypeArgument(Vector* iltype_args) {
 }
 
 void ResolveILTypeArgument(Vector* iltype_args, call_context* cctx) {
-	for(int i=0; i<iltype_args->length; i++) {
+	for(int i=0; i<iltype_args->Length; i++) {
 		il_type_argument* e = (il_type_argument*)AtVector(iltype_args, i);
 		if(e->gtype == NULL) {
 	//		namespace_* scope = cc_namespace(

@@ -10,7 +10,7 @@ line_range * NewLineRange() {
 }
 
 line_range * FindLineRange(Vector * line_rangeVec, int pc) {
-	for (int i = 0; i < line_rangeVec->length; i++) {
+	for (int i = 0; i < line_rangeVec->Length; i++) {
 		line_range* lr = (line_range*)AtVector(line_rangeVec, i);
 		if (i >= lr->start_offset && i <= lr->end_offset) {
 			return lr;

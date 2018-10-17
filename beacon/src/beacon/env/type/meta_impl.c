@@ -15,12 +15,12 @@
 #include <string.h>
 
 int MetaILCalcScore(Vector* params, Vector* ilargs, enviroment* env, call_context* cctx) {
-	assert(params->length == ilargs->length);
+	assert(params->Length == ilargs->Length);
 	int score = 0;
 	bool illegal = false;
-	//assert(ilctx->type_args_vec->length != 0);
+	//assert(ilctx->type_args_vec->Length != 0);
 	//Vector* type_args = TopVector(ilctx->type_args_vec);
-	for (int i = 0; i < params->length; i++) {
+	for (int i = 0; i < params->Length; i++) {
 		VectorItem varg = AtVector(ilargs, i);
 		VectorItem vparam = AtVector(params, i);
 		il_argument* arg = (il_argument*)varg;
@@ -53,13 +53,13 @@ int MetaILCalcScore(Vector* params, Vector* ilargs, enviroment* env, call_contex
 }
 
 int MetaGCalcScore(Vector* params, Vector* gargs) {
-	assert(params->length == gargs->length);
+	assert(params->Length == gargs->Length);
 	//MetaILCalcScoreからのコピペ
 	int score = 0;
 	bool illegal = false;
-	//assert(ilctx->type_args_vec->length != 0);
+	//assert(ilctx->type_args_vec->Length != 0);
 	//Vector* type_args = TopVector(ilctx->type_args_vec);
-	for (int i = 0; i < params->length; i++) {
+	for (int i = 0; i < params->Length; i++) {
 		VectorItem varg = AtVector(gargs, i);
 		VectorItem vparam = AtVector(params, i);
 		//il_argument* arg = (il_argument*)varg;
@@ -92,10 +92,10 @@ int MetaGCalcScore(Vector* params, Vector* gargs) {
 }
 
 int MetaRCalcScore(Vector* params, Vector* args, Vector* typeargs, frame* fr) {
-	assert(params->length == args->length);
+	assert(params->Length == args->Length);
 	int score = 0;
 	bool illegal = false;
-	for (int i = 0; i < params->length; i++) {
+	for (int i = 0; i < params->Length; i++) {
 		VectorItem varg = AtVector(args, i);
 		VectorItem vparam = AtVector(params, i);
 		object* arg = (object*)varg;
@@ -132,7 +132,7 @@ method* MetaScopedILFindMethod(class_* context, Vector* method_vec, StringView n
 	method* ret = NULL;
 	int min = 1024;
 	//全てのメソッドへ
-	for (int i = 0; i < method_vec->length; i++) {
+	for (int i = 0; i < method_vec->Length; i++) {
 		VectorItem ve = AtVector(method_vec, i);
 		method* m = (method*)ve;
 		if(!IsMetaMethodAccessValid(m, cctx)) {
@@ -140,13 +140,13 @@ method* MetaScopedILFindMethod(class_* context, Vector* method_vec, StringView n
 		}
 		//名前か引数の個数が違うので無視
 		if (m->namev != namev ||
-			m->parameters->length != ilargs->length
+			m->parameters->Length != ilargs->Length
 			) {
 			continue;
 		}
 		//引数がひとつもないので、
 		//型のチェックを行わない
-		if (ilargs->length == 0) {
+		if (ilargs->Length == 0) {
 			(*outIndex) = i;
 			return m;
 		}
@@ -169,18 +169,18 @@ method* MetaScopedGFindMethod(class_* context, Vector* method_vec, StringView na
 	method* ret = NULL;
 	int min = 1024;
 	//全てのメソッドへ
-	for (int i = 0; i < method_vec->length; i++) {
+	for (int i = 0; i < method_vec->Length; i++) {
 		VectorItem ve = AtVector(method_vec, i);
 		method* m = (method*)ve;
 		//名前か引数の個数が違うので無視
 		if (m->namev != namev ||
-			m->parameters->length != gargs->length
+			m->parameters->Length != gargs->Length
 			) {
 			continue;
 		}
 		//引数がひとつもないので、
 		//型のチェックを行わない
-		if (gargs->length == 0) {
+		if (gargs->Length == 0) {
 			(*outIndex) = i;
 			return m;
 		}
@@ -209,19 +209,19 @@ constructor* MetaScopedILFindConstructor(class_* context, Vector* ctor_vec, Vect
 	//見つかった中からもっとも一致するコンストラクタを選択する
 	int min = 1024;
 	constructor* ret = NULL;
-	for (int i = 0; i < ctor_vec->length; i++) {
+	for (int i = 0; i < ctor_vec->Length; i++) {
 		VectorItem ve = AtVector(ctor_vec, i);
 		constructor* ctor = (constructor*)ve;
 		if(!IsMetaConstructorAccessValid(ctor, cctx)) {
 			continue;
 		}
 		//引数の個数が違うので無視
-		if (ctor->parameter_list->length != ilargs->length) {
+		if (ctor->parameter_list->Length != ilargs->Length) {
 			continue;
 		}
 		//引数がひとつもないので、
 		//型のチェックを行わない
-		if (ilargs->length == 0) {
+		if (ilargs->Length == 0) {
 			(*outIndex) = i;
 			return ctor;
 		}
@@ -243,12 +243,12 @@ constructor* MetaScopedRFindConstructor(class_* context, Vector* ctor_vec, Vecto
 	//見つかった中からもっとも一致するコンストラクタを選択する
 	int min = 1024;
 	constructor* ret = NULL;
-	for (int i = 0; i < ctor_vec->length; i++) {
+	for (int i = 0; i < ctor_vec->Length; i++) {
 		VectorItem ve = AtVector(ctor_vec, i);
 		constructor* ctor = (constructor*)ve;
 		class_* cls = TYPE2CLASS(ctor->parent);
 		//引数の個数が違うので無視
-		if (ctor->parameter_list->length != gargs->length) {
+		if (ctor->parameter_list->Length != gargs->Length) {
 			continue;
 		}
 		int score = MetaRCalcScore(ctor->parameter_list, gargs, typeargs, fr);
@@ -265,14 +265,14 @@ operator_overload* MetaGFindOperator(Vector* opov_vec, operator_type type, Vecto
 	(*outIndex) = -1;
 	int min = 1024;
 	operator_overload* ret = NULL;
-	for(int i=0; i<opov_vec->length; i++) {
+	for(int i=0; i<opov_vec->Length; i++) {
 		operator_overload* opov = AtVector(opov_vec, i);
 		//オペレータの種類が違うので無視
 		if(opov->type != type) {
 			continue;
 		}
 		//引数の数が違うので無視
-		if(opov->parameter_list->length != gargs->length) {
+		if(opov->parameter_list->Length != gargs->Length) {
 			continue;
 		}
 		int score = MetaGCalcScore(opov->parameter_list, gargs);

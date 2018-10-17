@@ -16,7 +16,7 @@ opcode_buf * NewOpcodeBuf() {
 }
 
 int AddOpcodeBuf(opcode_buf * self, VectorItem item) {
-	int len = self->source_vec->length;
+	int len = self->source_vec->Length;
 	PushVector(self->source_vec, item);
 	return len;
 }
@@ -28,13 +28,13 @@ label * AddLabelOpcodeBuf(opcode_buf * self, int index) {
 }
 
 int AddNOPOpcodeBuf(opcode_buf * self) {
-	int len = self->source_vec->length;
+	int len = self->source_vec->Length;
 	AddOpcodeBuf(self, OP_NOP);
 	return len;
 }
 
 void DumpOpcodeBuf(opcode_buf * self, int depth) {
-	for (int i = 0; i < self->source_vec->length; i++) {
+	for (int i = 0; i < self->source_vec->Length; i++) {
 		Printi(depth);
 		i = PrintOpcode(self->source_vec, i);
 		Println();
@@ -66,7 +66,7 @@ static void DeleteOpcodeBuf_label(VectorItem item) {
 }
 
 static void opcode_buf_copy(opcode_buf* src, opcode_buf* dst) {
-	for (int i = 0; i < src->source_vec->length; i++) {
+	for (int i = 0; i < src->source_vec->Length; i++) {
 		VectorItem e = AtVector(src->source_vec, i);
 		if (e == OP_GOTO ||
 			e == OP_GOTO_if_false ||

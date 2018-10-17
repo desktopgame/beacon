@@ -224,7 +224,7 @@ void PaintAllObject(object* self, object_paint paint) {
 	if (self->tag == OBJECT_STRING_T ||
 		self->tag == OBJECT_REF_T ||
 		self->tag == OBJECT_ARRAY_T) {
-		for (int i = 0; i < self->u.field_vec->length; i++) {
+		for (int i = 0; i < self->u.field_vec->Length; i++) {
 			object* e = (object*)AtVector(self->u.field_vec, i);
 			PaintAllObject(e, paint);
 		}
@@ -232,7 +232,7 @@ void PaintAllObject(object* self, object_paint paint) {
 	//配列型ならスロットも全てマーク
 	type* arrayType = GetBCArrayType();
 	if (self->gtype->core_type == arrayType) {
-		for (int i = 0; i < self->native_slot_vec->length; i++) {
+		for (int i = 0; i < self->native_slot_vec->Length; i++) {
 			object* e = (object*)AtVector(self->native_slot_vec, i);
 			PaintAllObject(e, paint);
 		}
@@ -417,7 +417,7 @@ static void object_mark_coroutine(object* self) {
 	MarkAllObject(yctx->stock_obj);
 	MarkAllObject(yctx->source_obj);
 	//コルーチンに渡された引数
-	for(int i=0; i<yctx->parameter_vec->length; i++) {
+	for(int i=0; i<yctx->parameter_vec->Length; i++) {
 		MarkAllObject(AtVector(yctx->parameter_vec, i));
 	}
 }

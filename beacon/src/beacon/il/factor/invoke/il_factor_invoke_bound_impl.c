@@ -115,7 +115,7 @@ static void il_factor_invoke_bound_check(il_factor_invoke_bound * self, envirome
 	type* ctype = GetTypeCContext(cctx);
 	int temp = -1;
 	ResolveILTypeArgument(self->type_args, cctx);
-	for(int i=0; i<self->args->length; i++) {
+	for(int i=0; i<self->args->Length; i++) {
 		il_argument* ilarg = AtVector(self->args, i);
 		LoadILFactor(ilarg->factor, env, cctx);
 	}
@@ -189,13 +189,13 @@ static void GenerateILInvokeBound_method(il_factor_invoke_bound* self, enviromen
 	if(self->tag != BOUND_INVOKE_METHOD_T) {
 		return;
 	}
-	for(int i=0; i<self->type_args->length; i++) {
+	for(int i=0; i<self->type_args->Length; i++) {
 		il_type_argument* e = (il_type_argument*)AtVector(self->type_args, i);
 		assert(e->gtype != NULL);
 		AddOpcodeBuf(env->buf, OP_GENERIC_ADD);
 		GenerateGenericType(e->gtype, env);
 	}
-	for(int i=0; i<self->args->length; i++) {
+	for(int i=0; i<self->args->Length; i++) {
 		il_argument* e = (il_argument*)AtVector(self->args, i);
 		GenerateILFactor(e->factor, env, cctx);
 		if(GetLastBCError()) {
@@ -223,13 +223,13 @@ static void GenerateILInvokeBound_subscript(il_factor_invoke_bound* self, enviro
 	if(self->tag != BOUND_INVOKE_SUBSCRIPT_T) {
 		return;
 	}
-	for(int i=0; i<self->type_args->length; i++) {
+	for(int i=0; i<self->type_args->Length; i++) {
 		il_type_argument* e = (il_type_argument*)AtVector(self->type_args, i);
 		assert(e->gtype != NULL);
 		AddOpcodeBuf(env->buf, OP_GENERIC_ADD);
 		GenerateGenericType(e->gtype, env);
 	}
-	for(int i=0; i<self->args->length; i++) {
+	for(int i=0; i<self->args->Length; i++) {
 		il_argument* e = (il_argument*)AtVector(self->args, i);
 		GenerateILFactor(e->factor, env, cctx);
 		if(GetLastBCError()) {

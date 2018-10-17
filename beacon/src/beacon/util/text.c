@@ -97,15 +97,15 @@ char * GetLineAt(const char * src, int lineno) {
 }
 
 char* JoinString(Vector * v, char * join) {
-	if (v == NULL || v->length == 0) {
+	if (v == NULL || v->Length == 0) {
 		return NULL;
 	}
 	//FIXME:もうちょっと無駄をなくせるはず
 	char* head = Strdup((char*)AtVector(v, 0));
 	int ptr = strlen(head);
-	for (int i = 1; i < v->length; i++) {
+	for (int i = 1; i < v->Length; i++) {
 		char* e = (char*)AtVector(v, i);
-		if (i <= (v->length - 1) && 
+		if (i <= (v->Length - 1) && 
 			join != NULL) {
 			char* conn = ConcatString(head, join);
 			MEM_FREE(head);

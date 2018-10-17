@@ -16,11 +16,11 @@ static bool IsContainsPropertyClassImpl(Vector* props, property* p);
 
 field * FindFieldClass(class_* self, StringView namev, int* outIndex) {
 	(*outIndex) = -1;
-	for (int i = 0; i < self->field_list->length; i++) {
+	for (int i = 0; i < self->field_list->Length; i++) {
 		VectorItem e = AtVector(self->field_list, i);
 		field* f = (field*)e;
 		if (namev == f->namev) {
-			(*outIndex) = (CountAllFieldClass(self) - self->field_list->length) + i;
+			(*outIndex) = (CountAllFieldClass(self) - self->field_list->Length) + i;
 			return f;
 		}
 	}
@@ -45,11 +45,11 @@ field * FindTreeFieldClass(class_ * self, StringView namev, int * outIndex) {
 
 field * FindSFieldClass(class_ * self, StringView namev, int * outIndex) {
 	(*outIndex) = -1;
-	for (int i = 0; i < self->sfield_list->length; i++) {
+	for (int i = 0; i < self->sfield_list->Length; i++) {
 		VectorItem e = AtVector(self->sfield_list, i);
 		field* f = (field*)e;
 		if (namev == f->namev) {
-			(*outIndex) = (CountAllSFieldClass(self) - self->sfield_list->length) + i;
+			(*outIndex) = (CountAllSFieldClass(self) - self->sfield_list->Length) + i;
 			return f;
 		}
 	}
@@ -74,9 +74,9 @@ field * FindTreeSFieldClass(class_ * self, StringView namev, int * outIndex) {
 field * GetFieldClass(class_ * self, int index) {
 	assert(index >= 0);
 	int all = CountAllFieldClass(self);
-	if (index >= (all - self->field_list->length) &&
+	if (index >= (all - self->field_list->Length) &&
 		index < all) {
-		return AtVector(self->field_list, self->field_list->length - (all - index));
+		return AtVector(self->field_list, self->field_list->Length - (all - index));
 	}
 	return GetFieldClass(self->super_class->core_type->u.class_, index);
 }
@@ -84,9 +84,9 @@ field * GetFieldClass(class_ * self, int index) {
 field * GetSFieldClass(class_ * self, int index) {
 	assert(index >= 0);
 	int all = CountAllSFieldClass(self);
-	if (index >= (all - self->sfield_list->length) &&
+	if (index >= (all - self->sfield_list->Length) &&
 		index < all) {
-		return AtVector(self->sfield_list, self->sfield_list->length - (all - index));
+		return AtVector(self->sfield_list, self->sfield_list->Length - (all - index));
 	}
 	return GetSFieldClass(self->super_class->core_type->u.class_, index);
 }
@@ -195,9 +195,9 @@ int GetFieldByPropertyClass(class_* self, property* p) {
 property* GetPropertyClass(class_* self, int index) {
 	assert(index >= 0);
 	int all = CountAllPropertyClass(self);
-	if (index >= (all - self->prop_list->length) &&
+	if (index >= (all - self->prop_list->Length) &&
 		index < all) {
-		return AtVector(self->prop_list, self->prop_list->length - (all - index));
+		return AtVector(self->prop_list, self->prop_list->Length - (all - index));
 	}
 	return GetPropertyClass(self->super_class->core_type->u.class_, index);
 }
@@ -205,20 +205,20 @@ property* GetPropertyClass(class_* self, int index) {
 property* GetSPropertyClass(class_* self, int index) {
 	assert(index >= 0);
 	int all = CountAllSPropertyClass(self);
-	if (index >= (all - self->sprop_list->length) &&
+	if (index >= (all - self->sprop_list->Length) &&
 		index < all) {
-		return AtVector(self->sprop_list, self->sprop_list->length - (all - index));
+		return AtVector(self->sprop_list, self->sprop_list->Length - (all - index));
 	}
 	return GetPropertyClass(self->super_class->core_type->u.class_, index);
 }
 
 property* FindPropertyClass(class_* self, StringView namev, int* outIndex) {
 	(*outIndex) = -1;
-	for (int i = 0; i < self->prop_list->length; i++) {
+	for (int i = 0; i < self->prop_list->Length; i++) {
 		VectorItem e = AtVector(self->prop_list, i);
 		property* p = (property*)e;
 		if (namev == p->namev) {
-			(*outIndex) = (CountAllPropertyClass(self) - self->prop_list->length) + i;
+			(*outIndex) = (CountAllPropertyClass(self) - self->prop_list->Length) + i;
 			return p;
 		}
 	}
@@ -243,11 +243,11 @@ property* FindTreePropertyClass(class_* self, StringView namev, int* outIndex) {
 
 property* FindSPropertyClass(class_* self, StringView namev, int* outIndex) {
 	(*outIndex) = -1;
-	for (int i = 0; i < self->sprop_list->length; i++) {
+	for (int i = 0; i < self->sprop_list->Length; i++) {
 		VectorItem e = AtVector(self->sprop_list, i);
 		property* p = (property*)e;
 		if (namev == p->namev) {
-			(*outIndex) = (CountAllSPropertyClass(self) - self->sprop_list->length) + i;
+			(*outIndex) = (CountAllSPropertyClass(self) - self->sprop_list->Length) + i;
 			return p;
 		}
 	}
@@ -299,7 +299,7 @@ method * ILFindMethodClass(class_ * self, StringView namev, Vector * args, envir
 	#if defined(DEBUG)
 	const char* str = Ref2Str(self->namev);
 	#endif
-	//assert(self->vt->elements->length > 0);
+	//assert(self->vt->elements->Length > 0);
 	method* ret = NULL;
 	if((ret = MetaScopedILFindMethod(self, self->vt->elements, namev, args, env, cctx, outIndex))
 	   != NULL) {
@@ -319,7 +319,7 @@ method * ILFindMethodClass(class_ * self, StringView namev, Vector * args, envir
 method* GFindMethodClass(class_* self, StringView namev, Vector* gargs, int* outIndex) {
 	(*outIndex) = -1;
 	CreateVTableClass(self);
-	//assert(self->vt->elements->length > 0);
+	//assert(self->vt->elements->Length > 0);
 	method* ret = NULL;
 	if((ret = MetaScopedGFindMethod(self, self->vt->elements, namev, gargs, outIndex))
 	   != NULL) {
@@ -352,7 +352,7 @@ method * ILFindSMethodClass(class_ * self, StringView namev, Vector * args, envi
 	CreateVTableClass(self);
 	int temp = 0;
 	method* ret = MetaILFindMethod(self->smethod_list, namev, args, env, cctx, &temp);
-//	temp += (CountAllSMethodClass(self) - self->smethod_list->length);
+//	temp += (CountAllSMethodClass(self) - self->smethod_list->Length);
 	(*outIndex) = temp;
 	return ret;
 }
@@ -362,7 +362,7 @@ method* GFindSMethodClass(class_* self, StringView namev, Vector* gargs, int* ou
 	CreateVTableClass(self);
 	int temp = 0;
 	method* ret = MetaGFindMethod(self->smethod_list, namev, gargs, &temp);
-//	temp += (CountAllSMethodClass(self) - self->smethod_list->length);
+//	temp += (CountAllSMethodClass(self) - self->smethod_list->Length);
 	(*outIndex) = temp;
 	return ret;
 }
@@ -384,9 +384,9 @@ method * GetSMethodClass(class_* self, int index) {
 	/*
 	//class_* self = o->classz;
 	int all = CountAllSMethodClass(self);
-	if (index >= (all - self->smethod_list->length) &&
+	if (index >= (all - self->smethod_list->Length) &&
 		index < all) {
-		return AtVector(self->smethod_list, self->smethod_list->length - (all - index));
+		return AtVector(self->smethod_list, self->smethod_list->Length - (all - index));
 	}
 	return GetSMethodClass(self->super_class->core_type->u.class_, index);
 	//*/
@@ -397,12 +397,12 @@ method * GetImplMethodClass(class_ * self, type * interType, int interMIndex) {
 	#if defined(DEBUG)
 	const char* str = Ref2Str(self->namev);
 	#endif
-	assert(self->vt_vec->length > 0);
+	assert(self->vt_vec->Length > 0);
 	Vector* tbl = GetGenericInterfaceTreeClass(self);
 	//指定のインターフェイスが
 	//このクラスにおいて何番目かを調べる
 	int declIndex = -1;
-	for (int i = 0; i < tbl->length; i++) {
+	for (int i = 0; i < tbl->Length; i++) {
 		generic_type* e = AtVector(tbl, i);
 		interface_* inter = e->core_type->u.interface_;
 		if (inter == interType->u.interface_) {
@@ -424,7 +424,7 @@ operator_overload* GFindOperatorOverloadClass(class_* self, operator_type type, 
 	(*outIndex) = -1;
 	operator_overload* ret = NULL;
 	CreateOperatorVTClass(self);
-	for(int i=0; i<self->ovt->vec->length; i++) {
+	for(int i=0; i<self->ovt->vec->Length; i++) {
 		operator_overload* operator_ov = AtVector(self->ovt->vec, i);
 		if(operator_ov->type != type) {
 			continue;
@@ -433,7 +433,7 @@ operator_overload* GFindOperatorOverloadClass(class_* self, operator_type type, 
 		int score = 1024;
 		int sum = 0;
 		Vector* params = operator_ov->parameter_list;
-		for(int j=0; j<params->length; j++) {
+		for(int j=0; j<params->Length; j++) {
 			parameter* param = AtVector(params, j);
 			generic_type* arg = AtVector(args, j);
 			int dist = DistanceGenericType(param->gtype, arg, cctx);
@@ -457,7 +457,7 @@ operator_overload* GFindOperatorOverloadClass(class_* self, operator_type type, 
 
 operator_overload* ILFindOperatorOverloadClass(class_* self, operator_type type, Vector* args, enviroment* env, call_context* cctx, int* outIndex) {
 	Vector* gargs =NewVector();
-	for(int i=0; i<args->length; i++) {
+	for(int i=0; i<args->Length; i++) {
 		il_factor* ilfact = (il_factor*)AtVector(args,i);
 		generic_type* g = EvalILFactor(ilfact, env, cctx);
 		PushVector(gargs, g);
@@ -469,7 +469,7 @@ operator_overload* ILFindOperatorOverloadClass(class_* self, operator_type type,
 
 operator_overload* ArgFindOperatorOverloadClass(class_* self, operator_type type, Vector* args, enviroment* env, call_context* cctx, int* outIndex) {
 	Vector* gargs =NewVector();
-	for(int i=0; i<args->length; i++) {
+	for(int i=0; i<args->Length; i++) {
 		//il_factor* ilfact = (il_factor*)AtVector(args,i);
 		il_argument* ilarg = (il_argument*)AtVector(args, i);
 		il_factor* ilfact = ilarg->factor;
@@ -515,7 +515,7 @@ bool IsContainsMethod(Vector* method_list, method* m, method** outM) {
 	call_context* cctx = NewCallContext(CALL_DECL_T);
 	cctx->scope = m->parent->location;
 	cctx->ty = m->parent;
-	for(int i=0; i<method_list->length; i++) {
+	for(int i=0; i<method_list->Length; i++) {
 		method* mE = AtVector(method_list, i);
 		if(IsOverridedMethod(m, mE, cctx)) {
 			(*outM) = mE;
@@ -529,7 +529,7 @@ bool IsContainsMethod(Vector* method_list, method* m, method** outM) {
 
 Vector* GetGenericInterfaceListClass(class_* self) {
 	Vector* ret = NewVector();
-	for(int i=0; i<self->impl_list->length; i++) {
+	for(int i=0; i<self->impl_list->Length; i++) {
 		generic_type* ginter = AtVector(self->impl_list, i);
 		Vector* inner = GetGenericInterfaceTreeInterface(TYPE2INTERFACE(GENERIC2TYPE(ginter)));
 		MergeVector(ret, inner);
@@ -557,7 +557,7 @@ Vector* GetGenericInterfaceTreeClass(class_* self) {
 Vector* GetInterfaceListClass(class_* self) {
 	Vector* ret = NewVector();
 	Vector* c = GetGenericInterfaceListClass(self);
-	for(int i=0; i<c->length; i++) {
+	for(int i=0; i<c->Length; i++) {
 		generic_type* gt = AtVector(c, i);
 		PushVector(ret, TYPE2INTERFACE(GENERIC2TYPE(gt)));
 	}
@@ -568,7 +568,7 @@ Vector* GetInterfaceListClass(class_* self) {
 Vector* GetInterfaceTreeClass(class_* self) {
 	Vector* ret = NewVector();
 	Vector* c = GetGenericInterfaceTreeClass(self);
-	for(int i=0; i<c->length; i++) {
+	for(int i=0; i<c->Length; i++) {
 		generic_type* gt = AtVector(c, i);
 		PushVector(ret, TYPE2INTERFACE(GENERIC2TYPE(gt)));
 	}
@@ -590,7 +590,7 @@ generic_type* FindInterfaceTypeClass(class_* self, type* tinter, generic_type** 
 		bool found = false;
 		//Vector* gimpl_list = GetGenericInterfaceListClass(ptr);
 		Vector* gimpl_list = ptr->impl_list;
-		for (int i = 0; i < gimpl_list->length; i++) {
+		for (int i = 0; i < gimpl_list->Length; i++) {
 			generic_type* gimpl = AtVector(gimpl_list, i);
 			if (gimpl->core_type == tinter) {
 				found = true;
@@ -611,7 +611,7 @@ generic_type* FindInterfaceTypeClass(class_* self, type* tinter, generic_type** 
 
 //private
 static bool IsContainsFieldClassImpl(Vector* fields, field* f) {
-	for(int i=0; i<fields->length; i++) {
+	for(int i=0; i<fields->Length; i++) {
 		field* e = (field*)AtVector(fields, i);
 		if(e == f) {
 			return true;
@@ -621,7 +621,7 @@ static bool IsContainsFieldClassImpl(Vector* fields, field* f) {
 }
 
 static bool IsContainsPropertyClassImpl(Vector* props, property* p) {
-	for(int i=0; i<props->length; i++) {
+	for(int i=0; i<props->Length; i++) {
 		property* e = (property*)AtVector(props, i);
 		if(e == p) {
 			return true;

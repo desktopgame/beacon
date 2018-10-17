@@ -38,14 +38,14 @@ il_factor_new_instance * NewILNewInstance() {
 
 void GenerateILNewInstance(il_factor_new_instance * self, enviroment * env, call_context* cctx) {
 	il_factor_new_instance_find(self, env, cctx);
-	for(int i=0; i<self->type_args->length; i++) {
+	for(int i=0; i<self->type_args->Length; i++) {
 		il_type_argument* e = (il_type_argument*)AtVector(self->type_args, i);
 		assert(e->gtype != NULL);
 		AddOpcodeBuf(env->buf, OP_GENERIC_ADD);
 		GenerateGenericType(e->gtype, env);
 	}
 	//実引数を全てスタックへ
-	for (int i = 0; i < self->argument_list->length; i++) {
+	for (int i = 0; i < self->argument_list->Length; i++) {
 		il_argument* ilarg = (il_argument*)AtVector(self->argument_list, i);
 		GenerateILFactor(ilarg->factor, env, cctx);
 		if(GetLastBCError()) {
@@ -75,7 +75,7 @@ generic_type* EvalILNewInstance(il_factor_new_instance * self, enviroment * env,
 		return NULL;
 	}
 	//型引数がないのでそのまま
-	if (self->type_args->length == 0) {
+	if (self->type_args->Length == 0) {
 		generic_type* ret = RefGenericType(self->c->parent);
 		return ret;
 	}
@@ -83,7 +83,7 @@ generic_type* EvalILNewInstance(il_factor_new_instance * self, enviroment * env,
 	if (self->instance_type == NULL) {
 		namespace_* scope = NULL;
 		generic_type* a = generic_NewType(self->c->parent);
-		for (int i = 0; i < self->type_args->length; i++) {
+		for (int i = 0; i < self->type_args->Length; i++) {
 			il_type_argument* e = (il_type_argument*)AtVector(self->type_args, i);
 			generic_type* arg = ResolveImportManager(GetNamespaceCContext(cctx), e->gcache, cctx);
 			AddArgsGenericType(a, arg);

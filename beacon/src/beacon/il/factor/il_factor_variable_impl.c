@@ -89,10 +89,10 @@ static void il_factor_variable_check(il_factor_variable* self, enviroment* env, 
 	}
 	assert(self->fqcn != NULL);
 	//hoge, foo のような文字列の場合
-	if(self->fqcn->scope_vec->length == 0) {
+	if(self->fqcn->scope_vec->Length == 0) {
 		il_factor_variable_check_instance(self, env, cctx);
 	//Namespace::Hoge Namespace::Foo のような文字列の場合.
-	} else if(self->fqcn->scope_vec->length > 0) {
+	} else if(self->fqcn->scope_vec->Length > 0) {
 		il_factor_variable_check_static(self, env, cctx);
 	}
 }

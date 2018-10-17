@@ -215,7 +215,7 @@ static void DeleteAST_impl(ast* self) {
 
 static modifier_type ASTCastToModifierImpl(ast * self, bool* error) {
 	int ret = -1;
-	for(int i=0; i<self->vchildren->length; i++) {
+	for(int i=0; i<self->vchildren->Length; i++) {
 		if((*error)) {
 			break;
 		}

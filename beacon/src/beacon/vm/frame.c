@@ -84,15 +84,15 @@ static void frame_markStatic(field* item) {
 }
 
 static void frame_markRecursive(frame* self) {
-	for (int i = 0; i < self->children_vec->length; i++) {
+	for (int i = 0; i < self->children_vec->Length; i++) {
 		frame* e = (frame*)AtVector(self->children_vec, i);
 		frame_markRecursive(e);
 	}
-	for (int i = 0; i < self->value_stack->length; i++) {
+	for (int i = 0; i < self->value_stack->Length; i++) {
 		object* e = (object*)AtVector(self->value_stack, i);
 		MarkAllObject(e);
 	}
-	for (int i = 0; i < self->ref_stack->length; i++) {
+	for (int i = 0; i < self->ref_stack->Length; i++) {
 		object* e = (object*)AtVector(self->ref_stack, i);
 		MarkAllObject(e);
 	}
@@ -106,10 +106,10 @@ static void frame_mark_defer(frame* self) {
 	if(self->defer_vec == NULL) {
 		return;
 	}
-	for(int i=0; i<self->defer_vec->length; i++) {
+	for(int i=0; i<self->defer_vec->Length; i++) {
 		defer_context* defctx = AtVector(self->defer_vec, i);
 		Vector* bind = defctx->variable_vec;
-		for(int j=0; j<bind->length; j++) {
+		for(int j=0; j<bind->Length; j++) {
 			object* e = AtVector(bind, j);
 			MarkAllObject(e);
 		}

@@ -53,7 +53,7 @@ object * GetBCArray(object * arr, int index) {
 
 int GetLengthBCArray(object* arr) {
 	//assert(arr->tag == OBJECT_ARRAY_T);
-	return arr->native_slot_vec->length;
+	return arr->native_slot_vec->Length;
 }
 //private
 static void bc_array_nativeInit(method* parent, frame* fr, enviroment* env) {
@@ -100,8 +100,8 @@ static void bc_array_nativeCopy(method* parent, frame* fr, enviroment* env) {
 	object* dst = AtVector(fr->ref_stack, 3);
 	object* dstOffset = AtVector(fr->ref_stack, 4);
 	object* length = AtVector(fr->ref_stack, 5);
-	int srcLen = src->native_slot_vec->length;
-	int dstLen = dst->native_slot_vec->length;
+	int srcLen = src->native_slot_vec->Length;
+	int dstLen = dst->native_slot_vec->Length;
 	int cpyLen = length->u.int_;
 	//添え字がマイナス
 	if (srcOffset->u.int_ < 0 ||

@@ -36,7 +36,7 @@ void CLILBody(class_loader* self, Vector* list, ast* source) {
 		return;
 	}
 	if (source->tag == AST_STMT_LIST_T || source->tag == AST_SCOPE_T) {
-		for (int i = 0; i < source->vchildren->length; i++) {
+		for (int i = 0; i < source->vchildren->Length; i++) {
 			CLILBody(self, list, AtAST(source, i));
 		}
 	} else {
@@ -243,7 +243,7 @@ static il_stmt_while * CLIL_while(class_loader * self, ast * asource) {
 
 static void CLIL_elif_list(class_loader* self, Vector* list, ast* asource) {
 	if (asource->tag == AST_ELIF_LIST_T) {
-		for (int i = 0; i < asource->vchildren->length; i++) {
+		for (int i = 0; i < asource->vchildren->Length; i++) {
 			CLIL_elif_list(self, list, AtAST(asource, i));
 		}
 	} else if (asource->tag == AST_ELIF_T) {
@@ -285,7 +285,7 @@ static void CLIL_catch_list(class_loader* self, Vector* dest, ast* asource) {
 		PushVector(dest, ilcatch);
 
 	} else if(asource->tag == AST_STMT_CATCH_LIST_T) {
-		for(int i=0; i<asource->vchildren->length; i++) {
+		for(int i=0; i<asource->vchildren->Length; i++) {
 			CLIL_catch_list(self, dest, AtAST(asource, i));
 		}
 	}

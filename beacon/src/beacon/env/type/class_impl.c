@@ -106,7 +106,7 @@ type* NewPreloadClass(StringView namev) {
 void AllocFieldsClass(class_ * self, object * o, frame* fr) {
 	assert(o->tag == OBJECT_REF_T);
 	heap* he = GetHeap();
-	for (int i = 0; i < self->field_list->length; i++) {
+	for (int i = 0; i < self->field_list->Length; i++) {
 		field* f = (field*)AtVector(self->field_list, i);
 		object* a = GetDefaultObject(f->gtype);
 		//静的フィールドは別の場所に確保
@@ -116,7 +116,7 @@ void AllocFieldsClass(class_ * self, object * o, frame* fr) {
 		he->collect_blocking++;
 		if(f->initial_value != NULL) {
 			frame* sub = SubFrame(fr);
-			for(int i=0; i<fr->type_args_vec->length; i++) {
+			for(int i=0; i<fr->type_args_vec->Length; i++) {
 				PushVector(sub->type_args_vec, AtVector(fr->type_args_vec, i));
 			}
 			sub->receiver = self->parent;
@@ -232,7 +232,7 @@ void CreateVTableClass(class_ * self) {
 		CreateVTableClass_override(self);
 	}
 	CreateVTableClass_interface(self);
-	assert(self->vt->elements->length != 0);
+	assert(self->vt->elements->Length != 0);
 }
 
 void CreateOperatorVTClass(class_* self) {
@@ -244,17 +244,17 @@ void CreateOperatorVTClass(class_* self) {
 	}
 	self->ovt = NewOperatorVt();
 	if(self->super_class == NULL) {
-		for(int i=0; i<self->operator_overload_list->length; i++) {
+		for(int i=0; i<self->operator_overload_list->Length; i++) {
 			operator_overload* opov = AtVector(self->operator_overload_list, i);
 			PushVector(self->ovt->vec, opov);
 		}
 	} else {
 		operator_vt* super_vt = TYPE2CLASS(GENERIC2TYPE(self->super_class))->ovt;
-		for(int i=0; i<super_vt->vec->length; i++) {
+		for(int i=0; i<super_vt->vec->Length; i++) {
 			operator_overload* opov = AtVector(super_vt->vec, i);
 			PushVector(self->ovt->vec, opov);
 		}
-		for(int i=0; i<self->operator_overload_list->length; i++) {
+		for(int i=0; i<self->operator_overload_list->Length; i++) {
 			operator_overload* opov = AtVector(self->operator_overload_list, i);
 			ReplaceOperatorVt(self->ovt, opov);
 		}
@@ -265,7 +265,7 @@ int CountAllFieldClass(class_ * self) {
 	class_* pt = self;
 	int sum = 0;
 	do {
-		sum += (pt->field_list->length);
+		sum += (pt->field_list->Length);
 		if(pt->super_class == NULL) {
 			break;
 		}
@@ -278,7 +278,7 @@ int CountAllSFieldClass(class_ * self) {
 	class_* pt = self;
 	int sum = 0;
 	do {
-		sum += (pt->sfield_list->length);
+		sum += (pt->sfield_list->Length);
 		if(pt->super_class == NULL) {
 			break;
 		}
@@ -291,7 +291,7 @@ int CountAllPropertyClass(class_* self) {
 	class_* pt = self;
 	int sum = 0;
 	do {
-		sum += (pt->prop_list->length);
+		sum += (pt->prop_list->Length);
 		if(pt->super_class == NULL) {
 			break;
 		}
@@ -304,7 +304,7 @@ int CountAllSPropertyClass(class_* self) {
 	class_* pt = self;
 	int sum = 0;
 	do {
-		sum += (pt->sprop_list->length);
+		sum += (pt->sprop_list->Length);
 		if(pt->super_class == NULL) {
 			break;
 		}
@@ -317,7 +317,7 @@ int CountAllMethodClass(class_ * self) {
 	class_* pt = self;
 	int sum = 0;
 	do {
-		sum += (pt->method_list->length);
+		sum += (pt->method_list->Length);
 		if(pt->super_class == NULL) {
 			break;
 		}
@@ -330,7 +330,7 @@ int CountAllSMethodClass(class_ * self) {
 	class_* pt = self;
 	int sum = 0;
 	do {
-		sum += (pt->smethod_list->length);
+		sum += (pt->smethod_list->Length);
 		if(pt->super_class == NULL) {
 			break;
 		}
@@ -348,13 +348,13 @@ object * NewInstanceClass(class_* self, frame* fr, Vector* args, Vector* type_ar
 	frame* sub = SubFrame(fr);
 	heap* h = GetHeap();
 	if(args != NULL) {
-		for (int i = args->length-1; i>=0; i--) {
+		for (int i = args->Length-1; i>=0; i--) {
 			object* o = AtVector(args, i);
 			PushVector(sub->value_stack, o);
 		}
 	}
 	if(type_args != NULL) {
-		for(int i = 0; i<type_args->length; i++) {
+		for(int i = 0; i<type_args->Length; i++) {
 			PushVector(sub->type_args_vec, AtVector(type_args, i));
 		}
 	}
@@ -367,15 +367,15 @@ object * NewInstanceClass(class_* self, frame* fr, Vector* args, Vector* type_ar
 }
 
 void LinkAllClass(class_ * self) {
-	for (int i = 0; i < self->field_list->length; i++) {
+	for (int i = 0; i < self->field_list->Length; i++) {
 		field* f = (field*)AtVector(self->field_list, i);
 		f->parent = self->parent;
 	}
-	for (int i = 0; i < self->method_list->length; i++) {
+	for (int i = 0; i < self->method_list->Length; i++) {
 		method* m = (method*)AtVector(self->method_list, i);
 		m->parent = self->parent;
 	}
-	for (int i = 0; i < self->constructor_list->length; i++) {
+	for (int i = 0; i < self->constructor_list->Length; i++) {
 		constructor* ctor = (constructor*)AtVector(self->constructor_list, i);
 		ctor->parent = self->parent;
 	}
@@ -413,7 +413,7 @@ void DeleteClass(class_ * self) {
 
 //private
 static void CreateVTableClass_top(class_* self) {
-	for (int i = 0; i < self->method_list->length; i++) {
+	for (int i = 0; i < self->method_list->Length; i++) {
 		method* m = (method*)AtVector(self->method_list, i);
 		if(m->access != ACCESS_PRIVATE_T &&
 		   !IsStaticModifier(m->modifier)) {
@@ -431,7 +431,7 @@ static void CreateVTableClass_override(class_* self) {
 	cctx->ty = self->super_class->core_type;
 	CreateVTableClass(self->super_class->core_type->u.class_);
 	CopyVTable(self->super_class->core_type->u.class_->vt, self->vt);
-	for (int i = 0; i < self->method_list->length; i++) {
+	for (int i = 0; i < self->method_list->Length; i++) {
 		method* m = (method*)AtVector(self->method_list, i);
 		if(m->access != ACCESS_PRIVATE_T &&
 		   !IsStaticModifier(m->modifier)) {
@@ -448,7 +448,7 @@ static void CreateVTableClass_interface(class_* self) {
 	Vector* tbl = GetInterfaceTreeClass(self);
 	//もしインターフェースを実装しているなら、
 	//インターフェースに対応する同じ並びのメソッドテーブルも作る
-	for (int i = 0; i < tbl->length; i++) {
+	for (int i = 0; i < tbl->Length; i++) {
 		//generic_type* gtp = (generic_type*)AtVector(tbl, i);
 		interface_* inter = (interface_*)AtVector(tbl, i);
 		vtable* interVT = inter->vt;
@@ -456,7 +456,7 @@ static void CreateVTableClass_interface(class_* self) {
 		assert(interVT != NULL);
 		//そのインターフェースに定義されたテーブルの一覧
 		//これはスーパーインターフェースも含む。
-		for (int j = 0; j < interVT->elements->length; j++) {
+		for (int j = 0; j < interVT->elements->Length; j++) {
 			//実装クラスの中の、
 			//シグネチャが同じメソッドをテーブルへ。
 			method* interVTM = AtVector(interVT->elements, j);
@@ -514,7 +514,7 @@ static method* class_find_impl_method(class_* self, method* virtualMethod) {
 	cctx->ty = self->parent;
 	method* ret = NULL;
 	vtable* clVT = self->vt;
-	for (int i = 0; i < clVT->elements->length; i++) {
+	for (int i = 0; i < clVT->elements->Length; i++) {
 		method* clM = AtVector(clVT->elements, i);
 		if (IsOverridedMethod(virtualMethod, clM, cctx)) {
 			ret = clM;

@@ -119,7 +119,7 @@ int DistanceType(type * super, type * sub) {
 		sub->tag == TYPE_CLASS_T) {
 		bool found = false;
 		Vector* gimpl_list = GetGenericInterfaceListClass(TYPE2CLASS(sub));
-		for (int i = 0; i < gimpl_list->length; i++) {
+		for (int i = 0; i < gimpl_list->Length; i++) {
 			generic_type* e = (generic_type*)AtVector(gimpl_list, i);
 			if (e->core_type == super) {
 				found = true;
@@ -152,7 +152,7 @@ int GetGenericIndexType(type * self, StringView namev) {
 	if (self->tag == TYPE_INTERFACE_T) v = self->u.interface_->GetParameterListType;
 	//全ての型変数と比べる
 	int ret = -1;
-	for (int i = 0; i < v->length; i++) {
+	for (int i = 0; i < v->Length; i++) {
 		type_parameter* e = (type_parameter*)AtVector(v, i);
 		if (e->namev == namev) {
 			ret = i;
@@ -176,7 +176,7 @@ generic_type * FindImplementType(type * self, type * a) {
 				return RefGenericType(ptr->parent);
 			}
 			if (a->tag == TYPE_INTERFACE_T) {
-				for (int i = 0; i < ptr->impl_list->length; i++) {
+				for (int i = 0; i < ptr->impl_list->Length; i++) {
 					generic_type* inter = (generic_type*)AtVector(ptr->impl_list, i);
 					if (inter->core_type == a) {
 						return inter;
@@ -187,7 +187,7 @@ generic_type * FindImplementType(type * self, type * a) {
 		}
 	} else if (self->tag == TYPE_INTERFACE_T) {
 		interface_* inter = self->u.interface_;
-		for (int i = 0; i < inter->impl_list->length; i++) {
+		for (int i = 0; i < inter->impl_list->Length; i++) {
 			generic_type* e = (generic_type*)AtVector(inter->impl_list, i);
 			if (e->core_type == a) {
 				return e;
@@ -261,7 +261,7 @@ generic_type* BaselineType(type* abstract, type* concrete) {
 			return cls->super_class;
 		}
 		if(abstract->tag == TYPE_INTERFACE_T) {
-			for(int i=0; i<cls->impl_list->length; i++) {
+			for(int i=0; i<cls->impl_list->Length; i++) {
 				generic_type* gE = (generic_type*)AtVector(cls->impl_list, i);
 				generic_type* impl = IsContainsTypeInterface(gE, abstract->u.interface_);
 				if(impl) {
@@ -287,10 +287,10 @@ interface_* IsValidInterface(type* self) {
 #else
 	Vector* impl_list = GetImplementList(self);
 #endif
-	for(int i=0; i<impl_list->length; i++) {
+	for(int i=0; i<impl_list->Length; i++) {
 		generic_type* gE = AtVector(impl_list, i);
 		interface_* iE = TYPE2INTERFACE(GENERIC2TYPE(gE));
-		for(int j=0; j<impl_list->length; j++) {
+		for(int j=0; j<impl_list->Length; j++) {
 			if(i == j) { continue; }
 			generic_type* gE2 = AtVector(impl_list, j);
 			interface_* iE2 = TYPE2INTERFACE(GENERIC2TYPE(gE2));

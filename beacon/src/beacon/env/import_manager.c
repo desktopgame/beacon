@@ -32,7 +32,7 @@ import_info* ImportImportManager(import_manager * self, class_loader * target) {
 }
 
 bool IsLoadedImportManager(import_manager * self, int index) {
-	if (index >= self->info_vec->length) {
+	if (index >= self->info_vec->Length) {
 		return false;
 	}
 	import_info* info = (import_info*)AtVector(self->info_vec, index);
@@ -49,17 +49,17 @@ generic_type* ResolveImportManager(namespace_* scope, generic_cache* fqcn, call_
 	}
 	#endif
 	//Int, Double
-	if(core_type != NULL && fqcn->type_args->length == 0) {
+	if(core_type != NULL && fqcn->type_args->Length == 0) {
 		assert(core_type->generic_self != NULL);
 		return core_type->generic_self;
 	}
 	//Array[T], Dictionary[K, V]
-	if(core_type != NULL && fqcn->type_args->length > 0) {
+	if(core_type != NULL && fqcn->type_args->Length > 0) {
 		//Array, Dictionary などはっきりした型が見つかった
 		//が、型引数があるのでそれを解決する
 		generic_type* normalGType = generic_NewType(core_type);
 		assert(core_type->tag != TYPE_ENUM_T);
-		for (int i = 0; i < fqcn->type_args->length; i++) {
+		for (int i = 0; i < fqcn->type_args->Length; i++) {
 			generic_cache* e = (generic_cache*)AtVector(fqcn->type_args, i);
 			generic_type* child = ResolveImportManager(scope, e, cctx);
 			AddArgsGenericType(normalGType, child);
@@ -67,8 +67,8 @@ generic_type* ResolveImportManager(namespace_* scope, generic_cache* fqcn, call_
 		return normalGType;
 	}
 	assert(core_type == NULL);
-	assert(fqcn->fqcn->scope_vec->length == 0);
-	if(fqcn->type_args->length > 0) {
+	assert(fqcn->fqcn->scope_vec->Length == 0);
+	if(fqcn->type_args->Length > 0) {
 		return NULL;
 	}
 	generic_type* parameterized = generic_NewType(NULL);
@@ -101,7 +101,7 @@ generic_type* ResolvefImportManager(namespace_* scope, fqcn_cache* fqcn, call_co
 		return core_type->generic_self;
 	}
 	//Foo::UndefinedClassName
-	if(fqcn->scope_vec->length > 0) {
+	if(fqcn->scope_vec->Length > 0) {
 		return NULL;
 	}
 	//T, E などの型変数

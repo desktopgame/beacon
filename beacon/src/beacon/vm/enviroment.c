@@ -46,11 +46,11 @@ void AddRangeEnviroment(enviroment* self, int lineno) {
 	//最後についかしたレンジを伸ばすか新たに追加する
 	line_range* lrt = (line_range*)TopVector(self->line_range_vec);
 	if (lrt->lineno == lineno) {
-		lrt->end_offset = self->buf->source_vec->length;
+		lrt->end_offset = self->buf->source_vec->Length;
 	} else {
 		line_range* lr = NewLineRange();
-		lr->start_offset = self->buf->source_vec->length;
-		lr->end_offset = self->buf->source_vec->length;
+		lr->start_offset = self->buf->source_vec->Length;
+		lr->end_offset = self->buf->source_vec->Length;
 		lr->lineno = lineno;
 		PushVector(self->line_range_vec, lr);
 	}
@@ -60,7 +60,7 @@ void DumpEnviromentOp(enviroment * self, int depth) {
 	opcode_buf* buf = self->buf;
 	line_range* lr = NULL;
 	int lrPos = -1;
-	for (int i = 0; i < buf->source_vec->length; i++) {
+	for (int i = 0; i < buf->source_vec->Length; i++) {
 		Printi(depth);
 		i = PrintOpcode(buf->source_vec, i);
 		if (!IsEmptyVector(self->line_range_vec)) {
@@ -70,7 +70,7 @@ void DumpEnviromentOp(enviroment * self, int depth) {
 			} else {
 				if (i > lr->end_offset) {
 					lrPos++;
-					if (lrPos < self->line_range_vec->length) {
+					if (lrPos < self->line_range_vec->Length) {
 						lr = AtVector(self->line_range_vec, lrPos);
 					}
 				}
@@ -85,25 +85,25 @@ void DumpEnviromentOp(enviroment * self, int depth) {
 }
 
 int AddCIntEnviroment(enviroment * self, int i) {
-	int len = self->constant_pool_vec->length;
+	int len = self->constant_pool_vec->Length;
 	enviroment_add_constant(self, object_int_new(i));
 	return len;
 }
 
 int AddCDoubleEnviroment(enviroment * self, double d) {
-	int len = self->constant_pool_vec->length;
+	int len = self->constant_pool_vec->Length;
 	enviroment_add_constant(self, object_double_new(d));
 	return len;
 }
 
 int AddCCharEnviroment(enviroment * self, char c) {
-	int len = self->constant_pool_vec->length;
+	int len = self->constant_pool_vec->Length;
 	enviroment_add_constant(self, object_char_new(c));
 	return len;
 }
 
 int AddCStringEnviroment(enviroment * self, StringView sv) {
-	int len = self->constant_pool_vec->length;
+	int len = self->constant_pool_vec->Length;
 	enviroment_add_constant(self, object_string_new(Ref2Str(sv)));
 	return len;
 }

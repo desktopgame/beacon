@@ -16,9 +16,9 @@ void DeleteParameter(parameter * self) {
 }
 
 bool IsOverwrappedParameterName(Vector* parameters, StringView* namev) {
-	for(int i=0; i<parameters->length; i++) {
+	for(int i=0; i<parameters->Length; i++) {
 		parameter* e = (parameter*)AtVector(parameters, i);
-		for(int j=0; j<parameters->length; j++) {
+		for(int j=0; j<parameters->Length; j++) {
 			if(i == j) { continue; }
 			parameter* e2 = (parameter*)AtVector(parameters, j);
 			if(e->namev == e2->namev) {

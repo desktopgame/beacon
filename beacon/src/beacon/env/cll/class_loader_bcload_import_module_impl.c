@@ -22,14 +22,14 @@ static void CLBC_import_already(class_loader* self, class_loader* cll);
 
 void CLBC_import(class_loader* self, Vector* ilimports) {
 	CL_ERROR(self);
-	for (int i = self->import_manager->info_vec->length; i < ilimports->length; i++) {
+	for (int i = self->import_manager->info_vec->Length; i < ilimports->Length; i++) {
 		CLBC_import_internal(self, ilimports, i);
 		CL_ERROR(self);
 	}
 	//Javaがjava.langをインポートせずに使用できるのと同じように、
 	//全てのクラスローダーはデフォルトで beacon/lang をロードする
 	script_context* ctx = GetCurrentScriptContext();
-	for(int i=0; i<ctx->include_vec->length; i++) {
+	for(int i=0; i<ctx->include_vec->Length; i++) {
 		FileEntry* entry = AtVector(ctx->include_vec, i);
 		if(entry->IsFile && IsMatchExtension(entry->FileName, "bc")) {
 			char* p = GetAbsolutePath(entry->FileName);
@@ -61,7 +61,7 @@ class_loader* CLBC_import_new(class_loader* self, char* full_path) {
 //private
 static void CLBC_import_internal(class_loader* self, Vector* ilimports, int i) {
 	CL_ERROR(self);
-	if (i >= ilimports->length ||
+	if (i >= ilimports->Length ||
 	    IsLoadedImportManager(self->import_manager, i)) {
 		return;
 	}
