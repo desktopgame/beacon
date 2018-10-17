@@ -36,14 +36,14 @@ static void test_bison_grammerImpl(const char* dirname, bool require);
 static void test_bison_grammer();
 static bool gTest = false;
 
-int test_run() {
+int RunTest() {
 	gTest = true;
 	int ret = test_semantics();
 	gTest = false;
 	return ret;
 }
 
-bool test_now() {
+bool IsTestNow() {
 	return gTest;
 }
 

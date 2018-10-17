@@ -3,7 +3,7 @@
 #define BEACON_TEST_H
 #include <stdbool.h>
 
-int test_run();
+int RunTest();
 
-bool test_now();
+bool IsTestNow();
 #endif // !SIGNAL_TEST_H
