@@ -58,7 +58,7 @@ char * ConcatString(const char * a, const char * b) {
 	block[alen + blen] = '\0';
 	return block;
 	#else
-	StringBuffer* buff = NewBuffer();
+	Buffer* buff = NewBuffer();
 	AppendsBuffer(buff, a);
 	AppendsBuffer(buff, b);
 	char* ret = ReleaseBuffer(buff);
@@ -74,7 +74,7 @@ char * GetLineAt(const char * src, int lineno) {
 	}
 	int len = strlen(src);
 	int curLine = 0;
-	StringBuffer* buf = NewBuffer();
+	Buffer* buf = NewBuffer();
 	char* PTR = NULL;
 	for (int i = 0; i < len; i++) {
 		char c = src[i];
@@ -160,7 +160,7 @@ static char* text_strclone(const char* source) {
 }
 
 static char* ReadLineImpl(FILE* fp) {
-	StringBuffer* sb = NewBuffer();
+	Buffer* sb = NewBuffer();
 	while(1) {
 		char ch = getc(fp);
 		if(ch == '\0' || ch == '\n' || feof(fp)) {

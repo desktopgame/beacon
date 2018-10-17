@@ -1,17 +1,17 @@
 #pragma once
-#ifndef BEACON_UTIL_StringBuffer_H
-#define BEACON_UTIL_StringBuffer_H
+#ifndef BEACON_UTIL_Buffer_H
+#define BEACON_UTIL_Buffer_H
 #include <stdarg.h>
 
 /**
  * 可変長の文字列を格納する構造体.
  * 文字を格納する場合はこちらを使用します。
  */
-typedef struct StringBuffer_t {
+typedef struct Buffer_t {
 	int Length;
 	int Capacity;
 	char* Text;
-} StringBuffer;
+} Buffer;
 
 /**
  * 文字列バッファーを作成します.
@@ -25,14 +25,14 @@ typedef struct StringBuffer_t {
  * @param lineno
  * @return
  */
-StringBuffer* MallocBuffer(const char* filename, int lineno);
+Buffer* MallocBuffer(const char* filename, int lineno);
 
 /**
  * バッファーの最後に追記します.
  * @param self
  * @param c
  */
-void AppendBuffer(StringBuffer* self, char c);
+void AppendBuffer(Buffer* self, char c);
 
 /**
  * フォーマットして追記します.
@@ -40,7 +40,7 @@ void AppendBuffer(StringBuffer* self, char c);
  * @param fmt
  * @param ...
  */
-void AppendfBuffer(StringBuffer* self, const char* fmt, ...);
+void AppendfBuffer(Buffer* self, const char* fmt, ...);
 
 /**
  * フォーマットして追記します.
@@ -48,34 +48,34 @@ void AppendfBuffer(StringBuffer* self, const char* fmt, ...);
  * @param fmt
  * @param ap
  */
-void VappendfBuffer(StringBuffer* self, const char* fmt, va_list ap);
+void VappendfBuffer(Buffer* self, const char* fmt, va_list ap);
 
 /**
  * 全て追記します.
  * @param self
  * @param s
  */
-void AppendsBuffer(StringBuffer* self, const char* s);
+void AppendsBuffer(Buffer* self, const char* s);
 
 /**
  * shrink,freeを実行して文字列だけを返します.
  * @param self
  * @return
  */
-char* ReleaseBuffer(StringBuffer* self);
+char* ReleaseBuffer(Buffer* self);
 
 /**
  * バッファを拡張します.
  * @param self
  */
-void ReserveBuffer(StringBuffer* self);
+void ReserveBuffer(Buffer* self);
 
 /**
  * 将来の拡張のために確保された余分な領域を開放します.
  * また、末尾をゼロ文字にします。
  * @param self
  */
-void ShrinkBuffer(StringBuffer* self);
+void ShrinkBuffer(Buffer* self);
 
 /**
  * @param self
@@ -83,11 +83,11 @@ void ShrinkBuffer(StringBuffer* self);
  * @param len
  * @return
  */
-StringBuffer* IndentBuffer(StringBuffer* self, int lineIndex, int len);
+Buffer* IndentBuffer(Buffer* self, int lineIndex, int len);
 
 /**
  * バッファーと中身を開放します.
  * @param self
  */
-void DeleteBuffer(StringBuffer* self);
-#endif // !SIGNAL_UTIL_StringBuffer_H
+void DeleteBuffer(Buffer* self);
+#endif // !SIGNAL_UTIL_Buffer_H

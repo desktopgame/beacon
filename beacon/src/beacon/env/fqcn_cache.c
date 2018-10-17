@@ -92,7 +92,7 @@ class_ * GetClassFQCN(fqcn_cache * self, namespace_ * current) {
 }
 
 char* FQCNCacheToString(fqcn_cache* self) {
-	StringBuffer* sb = NewBuffer();
+	Buffer* sb = NewBuffer();
 	for(int i=0; i<self->scope_vec->length; i++) {
 		string_view ev = (string_view)AtVector(self->scope_vec, i);
 		AppendsBuffer(sb, Ref2Str(ev));

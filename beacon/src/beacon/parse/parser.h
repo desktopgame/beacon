@@ -23,7 +23,7 @@ typedef enum parse_result {
  */
 typedef struct parser {
 	ast* root;
-	StringBuffer* literal_buffer;
+	Buffer* literal_buffer;
 	//char* source;
 	char* source_name;
 	char* error_line_text;

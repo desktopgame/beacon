@@ -87,7 +87,7 @@ object * MallocStringObject(const char * s, const char* filename, int lineno) {
 	AddArgsGenericType(arr->gtype, GENERIC_CHAR);
 	//ボックス化
 	const char* itr = s;
-	StringBuffer* sb = NewBuffer();
+	Buffer* sb = NewBuffer();
 	while ((*itr) != '\0') {
 		char e = (*itr);
 		PushVector(arr->native_slot_vec, MallocCharObject(e, filename, lineno));
@@ -255,7 +255,7 @@ void PrintObject(object * self) {
 	} else if (self->tag == OBJECT_DOUBLE_T) {
 		printf("Double: %lf", self->u.double_);
 	} else if (self->tag == OBJECT_STRING_T) {
-		StringBuffer* sb = (StringBuffer*)AtVector(self->native_slot_vec, 0);
+		Buffer* sb = (Buffer*)AtVector(self->native_slot_vec, 0);
 		printf("String: %s", sb->Text);
 	} else if (self->tag == OBJECT_BOOL_T) {
 		printf("Bool: %s", (self == GetTrueObject() ? "true" : "false"));
@@ -279,7 +279,7 @@ void DeleteObject(object * self) {
 		DeleteYieldContext(yctx);
 	}
 	if (self->tag == OBJECT_STRING_T) {
-		StringBuffer* sb = AtVector(self->native_slot_vec, 0);
+		Buffer* sb = AtVector(self->native_slot_vec, 0);
 		RemoveVector(self->native_slot_vec, 0);
 		DeleteBuffer(sb);
 	}

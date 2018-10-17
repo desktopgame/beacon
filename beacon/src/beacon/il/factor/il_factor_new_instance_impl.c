@@ -94,7 +94,7 @@ generic_type* EvalILNewInstance(il_factor_new_instance * self, enviroment * env,
 }
 
 char* ILNewInstanceToString(il_factor_new_instance* self, enviroment* env) {
-	StringBuffer* sb = NewBuffer();
+	Buffer* sb = NewBuffer();
 	AppendsBuffer(sb, "new ");
 	char* type = FQCNCacheToString(self->fqcnc);
 	AppendsBuffer(sb, type);

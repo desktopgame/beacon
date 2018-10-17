@@ -349,7 +349,7 @@ char* VformatBCError(BCErrorID id, va_list ap) {
 				return Strdup("if shown this message, it compiler bug\n");
 			}
 	}
-	StringBuffer* sbuf = NewBuffer();
+	Buffer* sbuf = NewBuffer();
 	//メインメッセージを出力
 	char block[256] = {0};
 	vsprintf(block, fmt, ap);

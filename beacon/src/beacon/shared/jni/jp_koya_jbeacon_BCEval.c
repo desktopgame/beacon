@@ -276,7 +276,7 @@ static void bc_write_symbol(JNIEnv* env, NumericMap* nmap, frame* fr, jobject ta
 
 static void bc_eval_release(JNIEnv* env, class_loader* cll, frame* fr) {
 	if(GetLastBCError()) {
-		StringBuffer* sbuf = NewBuffer();
+		Buffer* sbuf = NewBuffer();
 		AppendsBuffer(sbuf, "\n");
 		AppendsBuffer(sbuf, Ref2Str(GetVMErrorMessage()));
 		char* mes = ReleaseBuffer(sbuf);

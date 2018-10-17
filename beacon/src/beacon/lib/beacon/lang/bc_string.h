@@ -14,7 +14,7 @@ void InitBCString();
  * @param self
  * @return
  */
-StringBuffer* GetRawBCString(struct object* self);
+Buffer* GetRawBCString(struct object* self);
 
 /**
  * beacon::lang::String型を返します.

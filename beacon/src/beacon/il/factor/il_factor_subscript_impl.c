@@ -47,7 +47,7 @@ generic_type* EvalILSubscript(il_factor_subscript* self, enviroment* env, call_c
 }
 
 char* ILSubscriptToString(il_factor_subscript* self, enviroment* env) {
-	StringBuffer* buf = NewBuffer();
+	Buffer* buf = NewBuffer();
 	char* src = ILFactorToString(self->receiver, env);
 	char* pos = ILFactorToString(self->pos, env);
 	AppendsBuffer(buf, src);

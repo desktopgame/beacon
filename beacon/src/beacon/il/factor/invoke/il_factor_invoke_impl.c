@@ -73,7 +73,7 @@ generic_type* EvalILInvoke(il_factor_invoke * self, enviroment * env, call_conte
 }
 
 char* ILInvokeToString(il_factor_invoke* self, enviroment* env) {
-	StringBuffer* sb = NewBuffer();
+	Buffer* sb = NewBuffer();
 	char* invstr = ILFactorToString(self->receiver, env);
 	AppendsBuffer(sb, invstr);
 	AppendBuffer(sb, '.');

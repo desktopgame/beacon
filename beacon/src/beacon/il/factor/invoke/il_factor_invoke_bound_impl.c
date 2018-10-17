@@ -50,7 +50,7 @@ generic_type* EvalILInvokeBound(il_factor_invoke_bound * self, enviroment * env,
 }
 
 char* ILInvokeBoundToString(il_factor_invoke_bound* self, enviroment* env) {
-	StringBuffer* sb = NewBuffer();
+	Buffer* sb = NewBuffer();
 	AppendsBuffer(sb, Ref2Str(self->namev));
 	ILTypeArgsToString(sb, self->type_args, env);
 	ILArgsToString(sb, self->type_args, env);

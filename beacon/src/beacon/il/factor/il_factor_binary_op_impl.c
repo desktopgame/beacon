@@ -171,7 +171,7 @@ void DeleteILBinaryOp(il_factor_binary_op * self) {
 }
 
 char* ILBinaryOpToString_simple(il_factor_binary_op* self, enviroment* env) {
-	StringBuffer* sb = NewBuffer();
+	Buffer* sb = NewBuffer();
 	char* a = ILFactorToString(self->left, env);
 	char* b = ILFactorToString(self->right, env);
 	AppendsBuffer(sb, a);

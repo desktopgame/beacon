@@ -150,7 +150,7 @@ void DeleteMethod(method * self) {
 }
 
 string_view MangleMethod(method* self) {
-	StringBuffer* ret = NewBuffer();
+	Buffer* ret = NewBuffer();
 	AppendsBuffer(ret, Ref2Str(self->namev));
 	//引数が一つもないので終了
 	if(self->parameters->length == 0) {
@@ -189,7 +189,7 @@ string_view MangleMethod(method* self) {
 }
 
 string_view GetMethodUniqueName(method* self) {
-	StringBuffer* ret = NewBuffer();
+	Buffer* ret = NewBuffer();
 	AppendsBuffer(ret, Ref2Str(GetTypeFullName(self->parent)));
 	AppendsBuffer(ret, Ref2Str(MangleMethod(self)));
 	char* raw = ReleaseBuffer(ret);

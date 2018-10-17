@@ -32,7 +32,7 @@ string_view InternString(const char* str) {
 	return (string_view)cell->item;
 }
 
-string_view InternString2(StringBuffer* buffer) {
+string_view InternString2(Buffer* buffer) {
 	char* raw = ReleaseBuffer(buffer);
 	string_view sv = InternString(raw);
 	MEM_FREE(raw);
@@ -43,7 +43,7 @@ string_view InternString2(StringBuffer* buffer) {
 string_view ConcatIntern(const char* head, string_view foot) {
 	//連結する
 	const char* footstr = Ref2Str(foot);
-	StringBuffer* buf = NewBuffer();
+	Buffer* buf = NewBuffer();
 	AppendsBuffer(buf, head);
 	AppendsBuffer(buf, footstr);
 	char* retstr = ReleaseBuffer(buf);

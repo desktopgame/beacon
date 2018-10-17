@@ -39,7 +39,7 @@ generic_type* EvalILInstanceOf(il_factor_instanceof* self, enviroment* env, call
 }
 
 char* ILInstanceOfToString(il_factor_instanceof* self, enviroment* env) {
-	StringBuffer* sb = NewBuffer();
+	Buffer* sb = NewBuffer();
 	char* a = ILFactorToString(self->fact, env);
 	char* b = GenericCacheToString(self->gcache);
 	AppendsBuffer(sb, a);

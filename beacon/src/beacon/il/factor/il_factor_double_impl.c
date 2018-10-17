@@ -36,7 +36,7 @@ generic_type* EvalILDouble(il_factor_double * self, enviroment * env, call_conte
 }
 
 char* ILDoubleToString(il_factor_double* self, enviroment* env) {
-	StringBuffer* sb = NewBuffer();
+	Buffer* sb = NewBuffer();
 	char block[32] = {0};
 	int res = sprintf(block, "%lf", self->value);
 	assert(res >= 0);

@@ -35,7 +35,7 @@ string_view InternString(const char* str);
  * @param buffer
  * @return
  */
-string_view InternString2(StringBuffer* buffer);
+string_view InternString2(Buffer* buffer);
 
 /**
  * 二つの文字列を連結してインターンします.

@@ -1238,7 +1238,7 @@ static bool throw_npe(frame* self, object* o) {
 }
 
 static char* create_error_message(frame * self, enviroment* env, int pc) {
-	StringBuffer* sbuf = NewBuffer();
+	Buffer* sbuf = NewBuffer();
 	line_range* lr = FindLineRange(env->line_range_vec, pc);
 	int line = -1;
 	if (lr != NULL) {
@@ -1250,7 +1250,7 @@ static char* create_error_message(frame * self, enviroment* env, int pc) {
 	FindFieldClass(exceptionT->u.class_, InternString("message"), &temp);
 	object* ex = self->exception;
 	object* msg = AtVector(ex->u.field_vec, temp);
-	StringBuffer* cstr = AtVector(msg->native_slot_vec, 0);
+	Buffer* cstr = AtVector(msg->native_slot_vec, 0);
 
 	char block[256] = {0};
 	sprintf(block, "file: %s <%d>", env->context_ref->filename, line);

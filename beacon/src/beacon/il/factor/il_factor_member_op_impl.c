@@ -72,7 +72,7 @@ generic_type* EvalILMemberOp(il_factor_member_op* self, enviroment* env, call_co
 }
 
 char* ILMemberOpToString(il_factor_member_op* self, enviroment* env) {
-	StringBuffer* sb = NewBuffer();
+	Buffer* sb = NewBuffer();
 	char* name = ILFactorToString(self->fact, env);
 	AppendsBuffer(sb, name);
 	AppendBuffer(sb, '.');

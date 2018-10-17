@@ -68,7 +68,7 @@ generic_type* EvalILInvokeStatic(il_factor_invoke_static * self, enviroment * en
 }
 
 char* ILInvokeStaticToString(il_factor_invoke_static* self, enviroment* env) {
-	StringBuffer* sb = NewBuffer();
+	Buffer* sb = NewBuffer();
 	char* name = FQCNCacheToString(self->fqcn);
 	AppendsBuffer(sb, name);
 	AppendBuffer(sb, '.');

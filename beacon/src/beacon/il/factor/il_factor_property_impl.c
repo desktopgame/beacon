@@ -42,7 +42,7 @@ generic_type* EvalILProperty(il_factor_property* self, enviroment* env, call_con
 }
 
 char* ILPropertyToString(il_factor_property* self, enviroment* env) {
-	StringBuffer* sb = NewBuffer();
+	Buffer* sb = NewBuffer();
 	char* name = ILFactorToString(self->fact, env);
 	AppendsBuffer(sb, name);
 	AppendBuffer(sb, '.');

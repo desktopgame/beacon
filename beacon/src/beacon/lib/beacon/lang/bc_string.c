@@ -13,10 +13,10 @@ void InitBCString() {
 	DefineNativeMethodClass(stringClass, "nativeInit", bc_string_nativeInit);
 }
 
-StringBuffer * GetRawBCString(object* self) {
+Buffer * GetRawBCString(object* self) {
 	VectorItem e = AtVector(self->native_slot_vec, 0);
 	assert(self->tag == OBJECT_STRING_T);
-	return (StringBuffer*)e;
+	return (Buffer*)e;
 }
 
 type* GetBCStringType() {
@@ -39,7 +39,7 @@ static void bc_string_nativeInit(method* parent, frame* fr, enviroment* env) {
 	FindFieldClass(TYPE_STRING->u.class_, InternString("charArray"), &temp);
 	object* charArr = AtVector(self->u.field_vec, temp);
 	//これを char* へ変換
-	StringBuffer* sb = NewBuffer();
+	Buffer* sb = NewBuffer();
 	for (int i = 0; i < charArr->native_slot_vec->length; i++) {
 		object* e = (object*)AtVector(charArr->native_slot_vec, i);
 		assert(e->tag == OBJECT_CHAR_T);
