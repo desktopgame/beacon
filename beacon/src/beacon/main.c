@@ -86,8 +86,6 @@ int main(int argc, char *argv[]) {
 	//設定を元に戻す
 	//DumpStringPool(stdout);
 	DestroyStringPool();
-	mem_dump();
-	mem_destroy();
 #if defined(_MSC_VER) && defined(_DEBUG)
 	_CrtDumpMemoryLeaks();
 #endif
