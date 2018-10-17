@@ -93,15 +93,15 @@ static void test_semanticsImpl(const char* dirname, bool require, char** outFile
 	for(int i=0; i<files->length; i++) {
 		//.bc以外は無視する
 		FileEntry* e = (FileEntry*)AtVector(files, i);
-		if(!IsMatchExtension(e->filename, "bc")) {
+		if(!IsMatchExtension(e->FileName, "bc")) {
 			continue;
 		}
 		//これから実行するファイルを記録
 		ClearBCError();
-		filename = e->filename;
+		filename = e->FileName;
 		//標準出力を入れ替えて実行
-		fprintf(STDOUT, "[%s]\n", e->filename);
-		bool result = EvalFile(e->filename);
+		fprintf(STDOUT, "[%s]\n", e->FileName);
+		bool result = EvalFile(e->FileName);
 		rewind(out);
 		while(!feof(out)) {
 			char* line = FreadLine(out);

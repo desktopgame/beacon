@@ -8,11 +8,11 @@ FileEntry* NewFileEntry(const char* filename) {
 
 FileEntry* RefFileEntry(char* filename) {
 	FileEntry* ret = (FileEntry*)MEM_MALLOC(sizeof(FileEntry));
-	ret->filename = filename;
+	ret->FileName = filename;
 	return ret;
 }
 
 void DeleteFileEntry(FileEntry* self) {
-	MEM_FREE(self->filename);
+	MEM_FREE(self->FileName);
 	MEM_FREE(self);
 }

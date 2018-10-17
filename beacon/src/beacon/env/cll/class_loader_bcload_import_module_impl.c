@@ -31,8 +31,8 @@ void CLBC_import(class_loader* self, Vector* ilimports) {
 	script_context* ctx = GetCurrentScriptContext();
 	for(int i=0; i<ctx->include_vec->length; i++) {
 		FileEntry* entry = AtVector(ctx->include_vec, i);
-		if(entry->is_file && IsMatchExtension(entry->filename, "bc")) {
-			char* p = GetAbsolutePath(entry->filename);
+		if(entry->IsFile && IsMatchExtension(entry->FileName, "bc")) {
+			char* p = GetAbsolutePath(entry->FileName);
 			CLBC_new_load(self, p);
 			MEM_FREE(p);
 		}

@@ -6,8 +6,8 @@
  * フルパスを表します。
  */
 typedef struct FileEntry_t {
-	char* filename;
-	bool is_file;
+	char* FileName;
+	bool IsFile;
 } FileEntry;
 
 /**

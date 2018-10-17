@@ -222,7 +222,7 @@ Vector* GetFiles(const char* dirname) {
 			char* path = ConcatPath(dirname, dp->d_name);
 			FileEntry* entry = RefFileEntry(path);
 			stat(path, &fi);
-			entry->is_file = !S_ISDIR(fi.st_mode);
+			entry->IsFile = !S_ISDIR(fi.st_mode);
 			PushVector(ret, entry);
 		}
 	}
@@ -235,7 +235,7 @@ Vector* GetFiles(const char* dirname) {
 int SortFiles(const void* a, const void* b) {
 	FileEntry* aF = *(FileEntry**)a;
 	FileEntry* bF = *(FileEntry**)b;
-	return strcmp(aF->filename, bF->filename);
+	return strcmp(aF->FileName, bF->FileName);
 }
 
 void DeleteFiles(Vector* files) {
