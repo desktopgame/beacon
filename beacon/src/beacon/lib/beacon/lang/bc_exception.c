@@ -40,8 +40,8 @@ static void bc_exception_nativeInit(method* parent, frame* fr, enviroment* env) 
 	int llineno = -1;
 	do {
 		//実行中のインストラクションの行番号を取得
-		line_range* lr = FindLineRange(temp->context_ref->line_range_vec, temp->pc);
-		int lineno = lr == NULL ? -1 : lr->lineno;
+		LineRange* lr = FindLineRange(temp->context_ref->line_range_vec, temp->pc);
+		int lineno = lr == NULL ? -1 : lr->Lineno;
 		//assert(lineno != -1);
 		//直前の表示と同じ
 		if(lfilename != NULL &&

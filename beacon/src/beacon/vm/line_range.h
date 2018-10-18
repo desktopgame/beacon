@@ -7,16 +7,16 @@
 /**
  * オペコードのどこからどこまでが何行目なのかを表す構造体.
  */
-typedef struct line_range {
-	int start_offset;
-	int end_offset;
-	int lineno;
-} line_range;
+typedef struct LineRange {
+	int StartOffset;
+	int EndOffset;
+	int Lineno;
+} LineRange;
 /**
  * 新しい範囲を作成します.
  * @return
  */
-line_range* NewLineRange();
+LineRange* NewLineRange();
 
 /**
  * line_rangeの一覧から、指定の pc を含むレンジを返します.
@@ -24,7 +24,7 @@ line_range* NewLineRange();
  * @param pc
  * @return 見つからなければ NULL
  */
-line_range* FindLineRange(Vector* line_rangeVec, int pc);
+LineRange* FindLineRange(Vector* line_rangeVec, int pc);
 
-void DeleteLineRange(line_range* self);
+void DeleteLineRange(LineRange* self);
 #endif // !SIGNAL_VM_LINE_RANGE_H

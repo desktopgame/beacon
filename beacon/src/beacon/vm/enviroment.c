@@ -35,30 +35,30 @@ void AddRangeEnviroment(enviroment* self, int lineno) {
 	assert(lineno >= 0);
 	//空なので追加
 	if (IsEmptyVector(self->line_range_vec)) {
-		line_range* lr = NewLineRange();
-		lr->start_offset = 0;
-		lr->end_offset = 0;
-		lr->lineno = lineno;
+		LineRange* lr = NewLineRange();
+		lr->StartOffset = 0;
+		lr->EndOffset = 0;
+		lr->Lineno = lineno;
 		PushVector(self->line_range_vec, lr);
 		return;
 	}
 	//空ではないなら、
 	//最後についかしたレンジを伸ばすか新たに追加する
-	line_range* lrt = (line_range*)TopVector(self->line_range_vec);
-	if (lrt->lineno == lineno) {
-		lrt->end_offset = self->buf->source_vec->Length;
+	LineRange* lrt = (LineRange*)TopVector(self->line_range_vec);
+	if (lrt->Lineno == lineno) {
+		lrt->EndOffset = self->buf->source_vec->Length;
 	} else {
-		line_range* lr = NewLineRange();
-		lr->start_offset = self->buf->source_vec->Length;
-		lr->end_offset = self->buf->source_vec->Length;
-		lr->lineno = lineno;
+		LineRange* lr = NewLineRange();
+		lr->StartOffset = self->buf->source_vec->Length;
+		lr->EndOffset = self->buf->source_vec->Length;
+		lr->Lineno = lineno;
 		PushVector(self->line_range_vec, lr);
 	}
 }
 
 void DumpEnviromentOp(enviroment * self, int depth) {
 	opcode_buf* buf = self->buf;
-	line_range* lr = NULL;
+	LineRange* lr = NULL;
 	int lrPos = -1;
 	for (int i = 0; i < buf->source_vec->Length; i++) {
 		Printi(depth);
@@ -68,7 +68,7 @@ void DumpEnviromentOp(enviroment * self, int depth) {
 				lr = AtVector(self->line_range_vec, 0);
 				lrPos = 0;
 			} else {
-				if (i > lr->end_offset) {
+				if (i > lr->EndOffset) {
 					lrPos++;
 					if (lrPos < self->line_range_vec->Length) {
 						lr = AtVector(self->line_range_vec, lrPos);
@@ -77,7 +77,7 @@ void DumpEnviromentOp(enviroment * self, int depth) {
 			}
 		}
 		if (lr != NULL) {
-			printf("<%d>", lr->lineno);
+			printf("<%d>", lr->Lineno);
 		}
 		Println();
 	}
@@ -157,7 +157,7 @@ static void enviroment_constant_pool_vec_delete(VectorItem item) {
 }
 
 static void enviroment_DeleteLineRange(VectorItem item) {
-	line_range* e = (line_range*)item;
+	LineRange* e = (LineRange*)item;
 	DeleteLineRange(e);
 }
 

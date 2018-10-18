@@ -8,7 +8,7 @@ printf("replace word: ")
 @replace = STDIN.gets.lstrip.rstrip
 
 class Token
-    attr_accessor :offset, :length, :text, :line
+    attr_accessor :offset, :length, :text, :line, :column_start, :column_end
 
     def initialize(offset, length, text)
         @offset = offset
@@ -17,26 +17,39 @@ class Token
     end
 end
 
+def make_hit_line(tok)
+    buff = ""
+    tok.column_start.times do |i|
+        buff << " "
+    end
+    buff << "^"
+    buff
+end
+
 def forward_line_pos(content, pos)
     ret = pos
+    col_end = 0
     while(content[ret] != "\n")
         ret += 1
+        col_end += 1
         if(ret >= content.length) then
-            return content.length
+            return [content.length, col_end]
         end
     end
-    ret - 1
+    [ret - 1, col_end]
 end
 
 def backward_line_pos(content, pos)
     ret = pos
+    col_start = 0
     while(content[ret] != "\n")
         ret -= 1
+        col_start += 1
         if(ret < 0) then
-            return 0
+            return [0, col_start]
         end
     end
-    ret + 1
+    [ret + 1, col_start]
 end
 
 def tokenize_text(content)
@@ -66,25 +79,44 @@ def tokenize_file(file)
         ret = tokenize_text(content)
         ret.each do |e|
             #行の最初を求める
-            lstart = backward_line_pos(content, e.offset)
-            lend = forward_line_pos(content, e.offset)
-            e.line = content.slice(lstart, lend-lstart)
+            lstart, cstart = backward_line_pos(content, e.offset)
+            lend, cend = forward_line_pos(content, e.offset)
+            e.line = content.slice(lstart, lend-lstart).lstrip.rstrip
+            e.column_start = cstart
+            e.column_end = cend
             raise (e.text + ":" + e.line.to_s + ":" + lstart.to_s + "~" + lend.to_s) if e.line == nil || e.line.include?("\n")
         end
-    end
-    ret.each do |e|
-        puts e.text + "[" + e.line + "]"
     end
     ret
 end
 #行をすべてファイルへ出力する
 def tokens_map(file, tokens)
     content = File.open(file, "r") {|fp| fp.read }
-    hits = tokens.map{|e| e.text.include?(@find)}
-    hits.each do |token|
-        content[token.offset, token.offset + token.length] = ''
+    hits = tokens.select{|e| e.text.include?(@find)}
+    if(hits.length == 0) then
+        return
     end
-    File.open(file, "w") {|fp| fp.write(content) }
+    puts sprintf("file: %s hits: %d", file, hits.length)
+    hits = hits.select do |token|
+        puts ("    " + token.line)
+        puts ("    " + make_hit_line(token))
+        puts
+        #トークンを変換するかどうか
+        cmd = nil
+        while(cmd == nil)
+            cmd = STDIN.gets.lstrip.rstrip
+            if cmd == "y" then
+                next true
+            elsif cmd == "n" then
+                next false
+            elsif cmd == "abort" then
+                abort()
+            else
+                cmd = nil
+                puts(sprintf("undefined command: %s", cmd))
+            end
+        end
+    end
 end
 
 Dir.glob("**/*") do |file|

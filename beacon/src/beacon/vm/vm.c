@@ -1239,10 +1239,10 @@ static bool throw_npe(frame* self, object* o) {
 
 static char* create_error_message(frame * self, enviroment* env, int pc) {
 	Buffer* sbuf = NewBuffer();
-	line_range* lr = FindLineRange(env->line_range_vec, pc);
+	LineRange* lr = FindLineRange(env->line_range_vec, pc);
 	int line = -1;
 	if (lr != NULL) {
-		line = lr->lineno;
+		line = lr->Lineno;
 	}
 	//例外のメッセージを取得
 	type* exceptionT = FindTypeFromNamespace(GetLangNamespace(), InternString("Exception"));

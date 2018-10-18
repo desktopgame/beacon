@@ -1,24 +1,24 @@
 #include "line_range.h"
 #include "../util/mem.h"
 
-line_range * NewLineRange() {
-	line_range* ret = (line_range*)MEM_MALLOC(sizeof(line_range));
-	ret->start_offset = -1;
-	ret->end_offset = -1;
-	ret->lineno = -1;
+LineRange * NewLineRange() {
+	LineRange* ret = (LineRange*)MEM_MALLOC(sizeof(LineRange));
+	ret->StartOffset = -1;
+	ret->EndOffset = -1;
+	ret->Lineno = -1;
 	return ret;
 }
 
-line_range * FindLineRange(Vector * line_rangeVec, int pc) {
-	for (int i = 0; i < line_rangeVec->Length; i++) {
-		line_range* lr = (line_range*)AtVector(line_rangeVec, i);
-		if (i >= lr->start_offset && i <= lr->end_offset) {
+LineRange * FindLineRange(Vector * LineRangeVec, int pc) {
+	for (int i = 0; i < LineRangeVec->Length; i++) {
+		LineRange* lr = (LineRange*)AtVector(LineRangeVec, i);
+		if (i >= lr->StartOffset && i <= lr->EndOffset) {
 			return lr;
 		}
 	}
 	return NULL;
 }
 
-void DeleteLineRange(line_range * self) {
+void DeleteLineRange(LineRange * self) {
 	MEM_FREE(self);
 }
