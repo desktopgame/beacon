@@ -10,7 +10,7 @@
 #include <string.h>
 #include <assert.h>
 //proto
-static void bc_exception_nativeInit(method* parent, frame* fr, enviroment* env);
+static void bc_exception_nativeInit(method* parent, frame* fr, Enviroment* env);
 
 void InitBCException() {
 	namespace_* lang = GetLangNamespace();
@@ -25,7 +25,7 @@ type* GetBCExceptionType() {
 	return FindTypeFromNamespace(lang, InternString("Exception"));
 }
 //private
-static void bc_exception_nativeInit(method* parent, frame* fr, enviroment* env) {
+static void bc_exception_nativeInit(method* parent, frame* fr, Enviroment* env) {
 	namespace_* lang = GetLangNamespace();
 	class_* stackTraceElementClass = FindClassFromNamespace(lang, InternString("StackTraceElement"));
 	class_* exceptionClass = FindClassFromNamespace(lang, InternString("Exception"));
@@ -40,12 +40,12 @@ static void bc_exception_nativeInit(method* parent, frame* fr, enviroment* env) 
 	int llineno = -1;
 	do {
 		//実行中のインストラクションの行番号を取得
-		LineRange* lr = FindLineRange(temp->context_ref->line_range_vec, temp->pc);
+		LineRange* lr = FindLineRange(temp->context_ref->LineRangeTable, temp->pc);
 		int lineno = lr == NULL ? -1 : lr->Lineno;
 		//assert(lineno != -1);
 		//直前の表示と同じ
 		if(lfilename != NULL &&
-		   !strcmp(temp->context_ref->context_ref->filename, lfilename) &&
+		   !strcmp(temp->context_ref->ContextRef->filename, lfilename) &&
 		   llineno == lineno) {
 			temp = temp->parent;
 			continue;
@@ -53,7 +53,7 @@ static void bc_exception_nativeInit(method* parent, frame* fr, enviroment* env) 
 		//スタックトレースを作成
 		//assert(lineno >= 0);
 		Vector* args = NewVector();
-		PushVector(args, object_string_new(temp->context_ref->context_ref->filename));
+		PushVector(args, object_string_new(temp->context_ref->ContextRef->filename));
 		PushVector(args, object_int_new(lineno));
 		object* trace = NewInstanceClass(
 			stackTraceElementClass,
@@ -67,7 +67,7 @@ static void bc_exception_nativeInit(method* parent, frame* fr, enviroment* env) 
 		temp = temp->parent;
 		//今回の表示情報を記録
 		if(temp != NULL) {
-			lfilename = temp->context_ref->context_ref->filename;
+			lfilename = temp->context_ref->ContextRef->filename;
 			llineno = lineno;
 		}
 	} while (temp != NULL);

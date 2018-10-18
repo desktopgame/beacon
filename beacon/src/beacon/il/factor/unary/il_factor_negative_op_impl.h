@@ -4,7 +4,7 @@
 #include "../../call_context.h"
 struct il_factor_unary_op;
 struct generic_type;
-struct enviroment;
+struct Enviroment;
 
 typedef struct il_factor_negative_op {
 	struct il_factor_unary_op* parent;
@@ -15,13 +15,13 @@ typedef struct il_factor_negative_op {
 #define il_factor_negative_op_new(type) (MallocILNegativeOp(type, __FILE__, __LINE__))
 il_factor_negative_op* MallocILNegativeOp(operator_type type, const char* filename, int lineno);
 
-struct generic_type* EvalILNegativeOp(il_factor_negative_op * self, struct enviroment * env, call_context* cctx);
+struct generic_type* EvalILNegativeOp(il_factor_negative_op * self, struct Enviroment * env, call_context* cctx);
 
-void GenerateILNegativeOp(il_factor_negative_op* self, struct enviroment* env, call_context* cctx);
+void GenerateILNegativeOp(il_factor_negative_op* self, struct Enviroment* env, call_context* cctx);
 
-void LoadILNegativeOp(il_factor_negative_op* self, struct enviroment* env, call_context* cctx);
+void LoadILNegativeOp(il_factor_negative_op* self, struct Enviroment* env, call_context* cctx);
 
 void DeleteILNegativeOp(il_factor_negative_op* self);
 
-char* ILNegativeOpToString(il_factor_negative_op* self, struct enviroment* env);
+char* ILNegativeOpToString(il_factor_negative_op* self, struct Enviroment* env);
 #endif

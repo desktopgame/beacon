@@ -4,7 +4,7 @@
 #include "../../call_context.h"
 struct il_factor_binary_op;
 struct generic_type;
-struct enviroment;
+struct Enviroment;
 typedef struct il_factor_arithmetic_op {
 	struct il_factor_binary_op* parent;
 	int operator_index;
@@ -14,13 +14,13 @@ typedef struct il_factor_arithmetic_op {
 il_factor_arithmetic_op* NewILArithmeticOp(operator_type type);
 
 
-struct generic_type* EvalILArithmeticOp(il_factor_arithmetic_op * self, struct enviroment * env, call_context* cctx);
+struct generic_type* EvalILArithmeticOp(il_factor_arithmetic_op * self, struct Enviroment * env, call_context* cctx);
 
-void GenerateILArithmeticOp(il_factor_arithmetic_op* self, struct enviroment* env, call_context* cctx);
+void GenerateILArithmeticOp(il_factor_arithmetic_op* self, struct Enviroment* env, call_context* cctx);
 
-void LoadILArithmeticOp(il_factor_arithmetic_op* self, struct enviroment* env, call_context* cctx);
+void LoadILArithmeticOp(il_factor_arithmetic_op* self, struct Enviroment* env, call_context* cctx);
 
 void DeleteILArithmeticOp(il_factor_arithmetic_op* self);
 
-char* ILArithmeticOpToString(il_factor_arithmetic_op* self, struct enviroment* env);
+char* ILArithmeticOpToString(il_factor_arithmetic_op* self, struct Enviroment* env);
 #endif

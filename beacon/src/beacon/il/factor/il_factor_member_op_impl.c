@@ -14,10 +14,10 @@
 #include "../../il/il_factor_impl.h"
 
 //proto
-static void il_factor_member_op_check(il_factor_member_op* self, enviroment* env, call_context* cctx, bool* swap);
-static void il_factor_member_op_check_static(il_factor_member_op* self, enviroment* env, call_context* cctx, generic_type* receiver_type, bool* swap);
-static void il_factor_member_op_check_prop(il_factor_member_op* self, enviroment* env, call_context* cctx, generic_type* receiver_type,bool* swap);
-static void il_factor_member_op_check_static_prop(il_factor_member_op* self, enviroment* env, call_context* cctx, generic_type* receiver_type,bool* swap);
+static void il_factor_member_op_check(il_factor_member_op* self, Enviroment* env, call_context* cctx, bool* swap);
+static void il_factor_member_op_check_static(il_factor_member_op* self, Enviroment* env, call_context* cctx, generic_type* receiver_type, bool* swap);
+static void il_factor_member_op_check_prop(il_factor_member_op* self, Enviroment* env, call_context* cctx, generic_type* receiver_type,bool* swap);
+static void il_factor_member_op_check_static_prop(il_factor_member_op* self, Enviroment* env, call_context* cctx, generic_type* receiver_type,bool* swap);
 static void il_factor_member_op_typearg_delete(VectorItem item);
 
 il_factor* WrapILMemberOp(il_factor_member_op* self) {
@@ -37,20 +37,20 @@ il_factor_member_op* NewILMemberOp(StringView namev) {
 	return ret;
 }
 
-void LoadILMemberOp(il_factor_member_op* self, enviroment* env, call_context* cctx) {
+void LoadILMemberOp(il_factor_member_op* self, Enviroment* env, call_context* cctx) {
 	bool swap;
 	LoadILFactor(self->fact, env, cctx);
 	il_factor_member_op_check(self, env, cctx, &swap);
 }
 
-void GenerateILMemberOp(il_factor_member_op* self, enviroment* env, call_context* cctx) {
+void GenerateILMemberOp(il_factor_member_op* self, Enviroment* env, call_context* cctx) {
 	if(!IsStaticModifier(self->f->modifier)) {
 		GenerateILFactor(self->fact, env, cctx);
 	}
-	GenerateGetField(env->buf, self->f, self->index);
+	GenerateGetField(env->Bytecode, self->f, self->index);
 }
 
-generic_type* EvalILMemberOp(il_factor_member_op* self, enviroment* env, call_context* cctx) {
+generic_type* EvalILMemberOp(il_factor_member_op* self, Enviroment* env, call_context* cctx) {
 	//il_factor_member_op_checkは、
 	//フィールドアクセスとプロパティアクセスを区別して、
 	//プロパティなら木構造を入れ替える
@@ -71,7 +71,7 @@ generic_type* EvalILMemberOp(il_factor_member_op* self, enviroment* env, call_co
 	return AtVector(a->type_args_list, self->f->gtype->virtual_type_index);
 }
 
-char* ILMemberOpToString(il_factor_member_op* self, enviroment* env) {
+char* ILMemberOpToString(il_factor_member_op* self, Enviroment* env) {
 	Buffer* sb = NewBuffer();
 	char* name = ILFactorToString(self->fact, env);
 	AppendsBuffer(sb, name);
@@ -87,7 +87,7 @@ void DeleteILMemberOp(il_factor_member_op* self) {
 	MEM_FREE(self);
 }
 //private
-static void il_factor_member_op_check(il_factor_member_op* self, enviroment* env, call_context* cctx, bool* swap) {
+static void il_factor_member_op_check(il_factor_member_op* self, Enviroment* env, call_context* cctx, bool* swap) {
 	(*swap) = false;
 	if(self->index != -1) {
 		return;
@@ -121,7 +121,7 @@ static void il_factor_member_op_check(il_factor_member_op* self, enviroment* env
 	}
 }
 
-static void il_factor_member_op_check_static(il_factor_member_op* self, enviroment* env, call_context* cctx, generic_type* receiver_type, bool* swap) {
+static void il_factor_member_op_check_static(il_factor_member_op* self, Enviroment* env, call_context* cctx, generic_type* receiver_type, bool* swap) {
 	il_factor* fact = self->fact;
 	il_factor_variable* ilvar = fact->u.variable_;
 	#if defined(DEBUG)
@@ -143,7 +143,7 @@ static void il_factor_member_op_check_static(il_factor_member_op* self, envirome
 	}
 }
 
-static void il_factor_member_op_check_prop(il_factor_member_op* self, enviroment* env, call_context* cctx, generic_type* receiver_type,bool* swap) {
+static void il_factor_member_op_check_prop(il_factor_member_op* self, Enviroment* env, call_context* cctx, generic_type* receiver_type,bool* swap) {
 	int temp = -1;
 	#if defined(DEBUG)
 	const char* name = Ref2Str(self->namev);
@@ -172,7 +172,7 @@ static void il_factor_member_op_check_prop(il_factor_member_op* self, enviroment
 	(*swap) = true;
 }
 
-static void il_factor_member_op_check_static_prop(il_factor_member_op* self, enviroment* env, call_context* cctx, generic_type* receiver_type,bool* swap) {
+static void il_factor_member_op_check_static_prop(il_factor_member_op* self, Enviroment* env, call_context* cctx, generic_type* receiver_type,bool* swap) {
 	int temp = -1;
 	type* ctype = receiver_type->core_type;
 	property* p = FindTreeSPropertyClass(TYPE2CLASS(ctype), self->namev, &temp);

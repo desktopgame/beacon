@@ -11,7 +11,7 @@
 struct type;
 struct interface_;
 struct frame;
-struct enviroment;
+struct Enviroment;
 struct call_context;
 struct class_loader;
 
@@ -59,7 +59,7 @@ method* MallocMethod(StringView namev, const char* filename, int lineno);
  * @param frame
  * @param env
  */
-void ExecuteMethod(method* self, struct frame* fr, struct enviroment* env);
+void ExecuteMethod(method* self, struct frame* fr, Enviroment* env);
 
 /**
  * メソッドa とb が完全に等価である場合に true を返します.

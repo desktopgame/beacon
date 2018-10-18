@@ -80,7 +80,7 @@ typedef struct frame {
 	//定数プールを提供している enviroment への参照です。
 	//あくまで参照しているだけなので、
 	//このVMが開放されてもこの enviroment は開放されません。
-	enviroment* context_ref;
+	Enviroment* context_ref;
 
 	//例外がスローされた最も深いVMからルートへ向かって true に切り替えられるフラグ.
 	//例外がスローされた場合、

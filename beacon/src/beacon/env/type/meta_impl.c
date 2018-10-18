@@ -14,7 +14,7 @@
 #include "../../util/text.h"
 #include <string.h>
 
-int MetaILCalcScore(Vector* params, Vector* ilargs, enviroment* env, call_context* cctx) {
+int MetaILCalcScore(Vector* params, Vector* ilargs, Enviroment* env, call_context* cctx) {
 	assert(params->Length == ilargs->Length);
 	int score = 0;
 	bool illegal = false;
@@ -118,7 +118,7 @@ int MetaRCalcScore(Vector* params, Vector* args, Vector* typeargs, frame* fr) {
 	return score;
 }
 
-method * MetaILFindMethod(Vector * method_vec, StringView namev, Vector * ilargs, enviroment * env, call_context* cctx, int * outIndex) {
+method * MetaILFindMethod(Vector * method_vec, StringView namev, Vector * ilargs, Enviroment * env, call_context* cctx, int * outIndex) {
 	return MetaScopedILFindMethod(NULL, method_vec, namev, ilargs, env, cctx, outIndex);
 }
 
@@ -126,7 +126,7 @@ method* MetaGFindMethod(Vector* method_vec, StringView namev, Vector * gargs, in
 	return MetaScopedGFindMethod(NULL, method_vec, namev, gargs, outIndex);
 }
 
-method* MetaScopedILFindMethod(class_* context, Vector* method_vec, StringView namev, Vector * ilargs, enviroment * env, call_context* cctx, int * outIndex) {
+method* MetaScopedILFindMethod(class_* context, Vector* method_vec, StringView namev, Vector * ilargs, Enviroment * env, call_context* cctx, int * outIndex) {
 	(*outIndex) = -1;
 	//CreateVTableClass(self);
 	method* ret = NULL;
@@ -197,7 +197,7 @@ method* MetaScopedGFindMethod(class_* context, Vector* method_vec, StringView na
 	return ret;
 }
 
-constructor* MetaILFindConstructor(Vector* ctor_vec, Vector* ilargs, enviroment* env, call_context* cctx, int* outIndex) {
+constructor* MetaILFindConstructor(Vector* ctor_vec, Vector* ilargs, Enviroment* env, call_context* cctx, int* outIndex) {
 	return MetaScopedILFindConstructor(NULL, ctor_vec, ilargs, env, cctx, outIndex);
 }
 
@@ -205,7 +205,7 @@ constructor* MetaRFindConstructor(Vector* ctor_vec, Vector* args, Vector* typear
 	return MetaScopedRFindConstructor(NULL, ctor_vec, args, typeargs, fr, outIndex);
 }
 
-constructor* MetaScopedILFindConstructor(class_* context, Vector* ctor_vec, Vector* ilargs, enviroment* env, call_context* cctx, int* outIndex) {
+constructor* MetaScopedILFindConstructor(class_* context, Vector* ctor_vec, Vector* ilargs, Enviroment* env, call_context* cctx, int* outIndex) {
 	//見つかった中からもっとも一致するコンストラクタを選択する
 	int min = 1024;
 	constructor* ret = NULL;

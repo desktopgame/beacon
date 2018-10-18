@@ -4,7 +4,7 @@
 #include "../../call_context.h"
 struct il_factor_unary_op;
 struct generic_type;
-struct enviroment;
+struct Enviroment;
 
 typedef struct il_factor_childa_op {
 	struct il_factor_unary_op* parent;
@@ -14,13 +14,13 @@ typedef struct il_factor_childa_op {
 
 il_factor_childa_op* NewILChildaOp(operator_type type);
 
-struct generic_type* EvalILChildaOp(il_factor_childa_op * self, struct enviroment * env, call_context* cctx);
+struct generic_type* EvalILChildaOp(il_factor_childa_op * self, struct Enviroment * env, call_context* cctx);
 
-void GenerateILChildaOp(il_factor_childa_op* self, struct enviroment* env, call_context* cctx);
+void GenerateILChildaOp(il_factor_childa_op* self, struct Enviroment* env, call_context* cctx);
 
-void LoadILChildaOp(il_factor_childa_op* self, struct enviroment* env, call_context* cctx);
+void LoadILChildaOp(il_factor_childa_op* self, struct Enviroment* env, call_context* cctx);
 
 void DeleteILChildaOp(il_factor_childa_op* self);
 
-char* ILChildaOpToString(il_factor_childa_op* self, struct enviroment* env);
+char* ILChildaOpToString(il_factor_childa_op* self, struct Enviroment* env);
 #endif

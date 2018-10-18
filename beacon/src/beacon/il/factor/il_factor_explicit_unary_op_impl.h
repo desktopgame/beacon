@@ -3,7 +3,7 @@
 #include "../../ast/operator_type.h"
 #include "../call_context.h"
 struct il_factor;
-struct enviroment;
+struct Enviroment;
 struct generic_type;
 
 typedef struct il_factor_explicit_unary_op {
@@ -16,11 +16,11 @@ struct il_factor* WrapILExplicitUnaryOp(il_factor_explicit_unary_op* self);
 
 il_factor_explicit_unary_op* NewILExplicitUnaryOp(operator_type type);
 
-void GenerateILExplicitUnaryOp(il_factor_explicit_unary_op* self, struct enviroment* env, call_context* cctx);
+void GenerateILExplicitUnaryOp(il_factor_explicit_unary_op* self, struct Enviroment* env, call_context* cctx);
 
-void LoadILExplicitUnaryOp(il_factor_explicit_unary_op* self, struct enviroment* env, call_context* cctx);
+void LoadILExplicitUnaryOp(il_factor_explicit_unary_op* self, struct Enviroment* env, call_context* cctx);
 
-struct generic_type* EvalILExplicitUnaryOp(il_factor_explicit_unary_op* self, struct enviroment* env, call_context* cctx);
+struct generic_type* EvalILExplicitUnaryOp(il_factor_explicit_unary_op* self, struct Enviroment* env, call_context* cctx);
 
 void DeleteILExplicitUnaryOp(il_factor_explicit_unary_op* self);
 #endif

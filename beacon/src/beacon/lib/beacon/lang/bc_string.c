@@ -3,7 +3,7 @@
 #include <assert.h>
 
 //proto
-static void bc_string_nativeInit(method* parent, frame* fr, enviroment* env);
+static void bc_string_nativeInit(method* parent, frame* fr, Enviroment* env);
 
 void InitBCString() {
 	namespace_* lang = GetLangNamespace();
@@ -25,7 +25,7 @@ type* GetBCStringType() {
 }
 
 //private
-static void bc_string_nativeInit(method* parent, frame* fr, enviroment* env) {
+static void bc_string_nativeInit(method* parent, frame* fr, Enviroment* env) {
 	object* self = AtVector(fr->ref_stack, 0);
 	//プログラムの中で ダブルクォート("HelloWorld") によって
 	//文字列が作成された場合には object_string_new() 

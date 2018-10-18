@@ -4,7 +4,7 @@
 #include "../../call_context.h"
 struct il_factor_binary_op;
 struct generic_type;
-struct enviroment;
+struct Enviroment;
 
 typedef struct il_factor_excor_op {
 	struct il_factor_binary_op* parent;
@@ -14,13 +14,13 @@ typedef struct il_factor_excor_op {
 
 il_factor_excor_op* NewILExcorOp(operator_type type);
 
-struct generic_type* EvalILExcorOp(il_factor_excor_op * self, struct enviroment * env, call_context* cctx);
+struct generic_type* EvalILExcorOp(il_factor_excor_op * self, struct Enviroment * env, call_context* cctx);
 
-void GenerateILExcorOp(il_factor_excor_op* self, struct enviroment* env, call_context* cctx);
+void GenerateILExcorOp(il_factor_excor_op* self, struct Enviroment* env, call_context* cctx);
 
-void LoadILExcorOp(il_factor_excor_op* self, struct enviroment* env, call_context* cctx);
+void LoadILExcorOp(il_factor_excor_op* self, struct Enviroment* env, call_context* cctx);
 
 void DeleteILExcorOp(il_factor_excor_op* self);
 
-char* ILExcorOpToString(il_factor_excor_op* self, struct enviroment* env);
+char* ILExcorOpToString(il_factor_excor_op* self, struct Enviroment* env);
 #endif

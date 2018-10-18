@@ -9,7 +9,7 @@
 #include <stdint.h>
 #include <stdarg.h>
 #include <stdbool.h>
-struct enviroment;
+struct Enviroment;
 struct parser;
 
 /**
@@ -19,7 +19,7 @@ typedef struct class_loader {
 	ast* source_code;
 	il_top_level* il_code;
 
-	struct enviroment* env;
+	struct Enviroment* env;
 	import_manager* import_manager;
 	content_type type;
 	link_type link;

@@ -5,14 +5,14 @@
 #include "../vm/enviroment.h"
 struct frame;
 struct method;
-struct enviroment;
+struct Enviroment;
 
 /**
  * スクリプトで実装されたメソッド.
  */
 typedef struct script_method {
 //	Vector* source;
-	enviroment* env;
+	Enviroment* env;
 } script_method;
 
 /**
@@ -28,7 +28,7 @@ script_method* NewScriptMethod();
  * @param fr
  * @param env
  */
-void ExecuteScriptMethod(script_method* self, struct method* parent, struct frame* fr, struct enviroment* env);
+void ExecuteScriptMethod(script_method* self, struct method* parent, struct frame* fr, Enviroment* env);
 
 /**
  * メソッドを開放します.

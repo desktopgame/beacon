@@ -19,14 +19,14 @@ il_factor_subscript* MallocILSubscript(const char* filename, int lineno) {
 	return ret;
 }
 
-void GenerateILSubscript(il_factor_subscript* self, enviroment* env, call_context* cctx) {
+void GenerateILSubscript(il_factor_subscript* self, Enviroment* env, call_context* cctx) {
 	GenerateILFactor(self->pos, env, cctx);
 	GenerateILFactor(self->receiver, env, cctx);
-	AddOpcodeBuf(env->buf, OP_INVOKEOPERATOR);
-	AddOpcodeBuf(env->buf, self->operator_index);
+	AddOpcodeBuf(env->Bytecode, OP_INVOKEOPERATOR);
+	AddOpcodeBuf(env->Bytecode, self->operator_index);
 }
 
-void LoadILSubscript(il_factor_subscript* self, enviroment* env, call_context* cctx) {
+void LoadILSubscript(il_factor_subscript* self, Enviroment* env, call_context* cctx) {
 	if(self->operator_index != -1) {
 		return;
 	}
@@ -42,11 +42,11 @@ void LoadILSubscript(il_factor_subscript* self, enviroment* env, call_context* c
 	DeleteVector(args, VectorDeleterOfNull);
 }
 
-generic_type* EvalILSubscript(il_factor_subscript* self, enviroment* env, call_context* cctx) {
+generic_type* EvalILSubscript(il_factor_subscript* self, Enviroment* env, call_context* cctx) {
 	return ApplyGenericType(self->opov->return_gtype, cctx);
 }
 
-char* ILSubscriptToString(il_factor_subscript* self, enviroment* env) {
+char* ILSubscriptToString(il_factor_subscript* self, Enviroment* env) {
 	Buffer* buf = NewBuffer();
 	char* src = ILFactorToString(self->receiver, env);
 	char* pos = ILFactorToString(self->pos, env);

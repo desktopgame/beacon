@@ -17,11 +17,11 @@ il_factor* MallocILFactor(il_factor_type type, const char* filename, int lineno)
 	return ret;
 }
 
-void GenerateILFactor(il_factor * self, enviroment* env, call_context* cctx) {
+void GenerateILFactor(il_factor * self, Enviroment* env, call_context* cctx) {
 	if(GetLastBCError()) {
 		return;
 	}
-	SetBCErrorFile(env->context_ref->filename);
+	SetBCErrorFile(env->ContextRef->filename);
 	SetBCErrorLine(self->lineno);
 	switch (self->type) {
 		case ILFACTOR_INT_T:
@@ -94,11 +94,11 @@ void GenerateILFactor(il_factor * self, enviroment* env, call_context* cctx) {
 	AddRangeEnviroment(env, self->lineno);
 }
 
-void LoadILFactor(il_factor * self, enviroment * env, call_context* cctx) {
+void LoadILFactor(il_factor * self, Enviroment * env, call_context* cctx) {
 	if(GetLastBCError()) {
 		return;
 	}
-	SetBCErrorFile(env->context_ref->filename);
+	SetBCErrorFile(env->ContextRef->filename);
 	SetBCErrorLine(self->lineno);
 	switch (self->type) {
 		case ILFACTOR_INT_T:
@@ -169,11 +169,11 @@ void LoadILFactor(il_factor * self, enviroment * env, call_context* cctx) {
 	}
 }
 
-generic_type* EvalILFactor(il_factor * self, enviroment * env, call_context* cctx) {
+generic_type* EvalILFactor(il_factor * self, Enviroment * env, call_context* cctx) {
 	if(GetLastBCError()) {
 		return NULL;
 	}
-	SetBCErrorFile(env->context_ref->filename);
+	SetBCErrorFile(env->ContextRef->filename);
 	SetBCErrorLine(self->lineno);
 	generic_type* ret = NULL;
 	switch (self->type) {
@@ -248,7 +248,7 @@ generic_type* EvalILFactor(il_factor * self, enviroment * env, call_context* cct
 	return ret;
 }
 
-char* ILFactorToString(il_factor* self, enviroment* env) {
+char* ILFactorToString(il_factor* self, Enviroment* env) {
 	if(GetLastBCError()) {
 		return NULL;
 	}
@@ -301,7 +301,7 @@ char* ILFactorToString(il_factor* self, enviroment* env) {
 	}
 }
 
-void ILArgsToString(Buffer* sb, Vector* args, enviroment* env) {
+void ILArgsToString(Buffer* sb, Vector* args, Enviroment* env) {
 	if(args->Length > 0) {
 		AppendBuffer(sb, '(');
 	}
@@ -319,7 +319,7 @@ void ILArgsToString(Buffer* sb, Vector* args, enviroment* env) {
 	}
 }
 
-void ILTypeArgsToString(Buffer* sb, Vector* type_args, enviroment* env) {
+void ILTypeArgsToString(Buffer* sb, Vector* type_args, Enviroment* env) {
 	if(type_args->Length > 0) {
 		AppendsBuffer(sb, "<|");
 	}

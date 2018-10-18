@@ -16,13 +16,13 @@ il_factor* WrapILString(il_factor_string* self);
 
 il_factor_string* NewILString(StringView valuev);
 
-void GenerateILString(il_factor_string* self, struct enviroment* env, call_context* cctx);
+void GenerateILString(il_factor_string* self, Enviroment* env, call_context* cctx);
 
-void LoadILString(il_factor_string* self, struct enviroment* env, call_context* cctx);
+void LoadILString(il_factor_string* self, Enviroment* env, call_context* cctx);
 
-generic_type* EvalILString(il_factor_string* self, struct enviroment* env, call_context* cctx);
+generic_type* EvalILString(il_factor_string* self, Enviroment* env, call_context* cctx);
 
-char* ILStringToString(il_factor_string* self, struct enviroment* env);
+char* ILStringToString(il_factor_string* self, Enviroment* env);
 
 void DeleteILString(il_factor_string* self);
 

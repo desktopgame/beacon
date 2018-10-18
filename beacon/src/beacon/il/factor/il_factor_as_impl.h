@@ -21,7 +21,7 @@ typedef struct il_factor_as {
 	cast_mode mode;
 } il_factor_as;
 
-struct enviroment;
+struct Enviroment;
 struct type;
 struct field;
 
@@ -29,13 +29,13 @@ il_factor* WrapILAs(il_factor_as* self);
 
 il_factor_as* NewILAs();
 
-void GenerateILAs(il_factor_as* self, struct enviroment* env, call_context* cctx);
+void GenerateILAs(il_factor_as* self, Enviroment* env, call_context* cctx);
 
-void LoadILAs(il_factor_as* self, struct enviroment* env, call_context* cctx);
+void LoadILAs(il_factor_as* self, Enviroment* env, call_context* cctx);
 
-generic_type* EvalILAs(il_factor_as* self, struct enviroment* env, call_context* cctx);
+generic_type* EvalILAs(il_factor_as* self, Enviroment* env, call_context* cctx);
 
 void DeleteILAs(il_factor_as* self);
 
-char* ILAsToString(il_factor_as* self, enviroment* env);
+char* ILAsToString(il_factor_as* self, Enviroment* env);
 #endif // !SIGNAL_IL_IL_FACTOR_AS_H

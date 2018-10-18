@@ -17,11 +17,11 @@ il_factor_not_op* NewILNotOp(operator_type type) {
 	return ret;
 }
 
-generic_type* EvalILNotOp(il_factor_not_op * self, enviroment * env, call_context* cctx) {
+generic_type* EvalILNotOp(il_factor_not_op * self, Enviroment * env, call_context* cctx) {
 	return TYPE2GENERIC(TYPE_BOOL);
 }
 
-void GenerateILNotOp(il_factor_not_op* self, enviroment* env, call_context* cctx) {
+void GenerateILNotOp(il_factor_not_op* self, Enviroment* env, call_context* cctx) {
 	if(self->operator_index == -1) {
 		GenerateILFactor(self->parent->a, env, cctx);
 		if(GetLastBCError()) {
@@ -29,18 +29,18 @@ void GenerateILNotOp(il_factor_not_op* self, enviroment* env, call_context* cctx
 		}
 		generic_type* gt = EvalILFactor(self->parent->a, env, cctx);
 		if(GENERIC2TYPE(gt) == TYPE_BOOL) {
-			AddOpcodeBuf(env->buf, OP_BNOT);
+			AddOpcodeBuf(env->Bytecode, OP_BNOT);
 		} else {
 			assert(false);
 		}
 	} else {
 		GenerateILFactor(self->parent->a, env, cctx);
-		AddOpcodeBuf(env->buf, OP_INVOKEOPERATOR);
-		AddOpcodeBuf(env->buf, self->operator_index);
+		AddOpcodeBuf(env->Bytecode, OP_INVOKEOPERATOR);
+		AddOpcodeBuf(env->Bytecode, self->operator_index);
 	}
 }
 
-void LoadILNotOp(il_factor_not_op* self, enviroment* env, call_context* cctx) {
+void LoadILNotOp(il_factor_not_op* self, Enviroment* env, call_context* cctx) {
 	 LoadILFactor(self->parent->a, env, cctx);
 	generic_type* gt = EvalILFactor(self->parent->a, env, cctx);
 	if(GENERIC2TYPE(gt) != TYPE_BOOL) {
@@ -52,6 +52,6 @@ void DeleteILNotOp(il_factor_not_op* self) {
 	MEM_FREE(self);
 }
 
-char* ILNotOpToString(il_factor_not_op* self, enviroment* env) {
+char* ILNotOpToString(il_factor_not_op* self, Enviroment* env) {
 	return ILUnaryOpToString_simple(self->parent, env);
 }

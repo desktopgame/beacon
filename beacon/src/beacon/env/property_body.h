@@ -1,7 +1,7 @@
 #ifndef BEACON_ENV_PROPERTY_BODY_H
 #define BEACON_ENV_PROPERTY_BODY_H
 #include "../ast/access_level.h"
-struct enviroment;
+struct Enviroment;
 struct property;
 
 typedef enum property_body_tag {
@@ -13,7 +13,7 @@ typedef struct property_body {
 	struct property* parent;
 	access_level access;
 	property_body_tag tag;
-	struct enviroment* env;
+	struct Enviroment* env;
 } property_body;
 
 #define property_body_new(tag) (MallocPropertyBody(tag, __FILE__, __LINE__))

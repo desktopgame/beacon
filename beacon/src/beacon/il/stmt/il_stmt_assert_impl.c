@@ -21,22 +21,22 @@ il_stmt_assert* NewILAssert() {
 	return ret;
 }
 
-void GenerateILAssert(il_stmt_assert* self, enviroment* env, call_context* cctx) {
+void GenerateILAssert(il_stmt_assert* self, Enviroment* env, call_context* cctx) {
 	//https://code.i-harness.com/ja/q/2a1650
-	Label* gt = AddLabelOpcodeBuf(env->buf, 0);
+	Label* gt = AddLabelOpcodeBuf(env->Bytecode, 0);
 	GenerateILFactor(self->condition, env, cctx);
-	AddOpcodeBuf(env->buf, OP_GOTO_if_true);
-	AddOpcodeBuf(env->buf, gt);
+	AddOpcodeBuf(env->Bytecode, OP_GOTO_if_true);
+	AddOpcodeBuf(env->Bytecode, gt);
 
 	GenerateILFactor(self->message, env, cctx);
-	AddOpcodeBuf(env->buf, OP_NEW_INSTANCE);
-	AddOpcodeBuf(env->buf, FindTypeFromNamespace(GetLangNamespace(), InternString("Exception"))->absolute_index);
-	AddOpcodeBuf(env->buf, 0);
-	AddOpcodeBuf(env->buf, OP_THROW);
-	gt->Cursor = AddNOPOpcodeBuf(env->buf);
+	AddOpcodeBuf(env->Bytecode, OP_NEW_INSTANCE);
+	AddOpcodeBuf(env->Bytecode, FindTypeFromNamespace(GetLangNamespace(), InternString("Exception"))->absolute_index);
+	AddOpcodeBuf(env->Bytecode, 0);
+	AddOpcodeBuf(env->Bytecode, OP_THROW);
+	gt->Cursor = AddNOPOpcodeBuf(env->Bytecode);
 }
 
-void LoadILAssert(il_stmt_assert* self, enviroment* env, call_context* cctx) {
+void LoadILAssert(il_stmt_assert* self, Enviroment* env, call_context* cctx) {
 	LoadILFactor(self->condition, env, cctx);
 	if(self->message == NULL) {
 		char* str = ILFactorToString(self->condition, env);

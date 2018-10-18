@@ -20,7 +20,7 @@ il_factor_logic_op* NewILLogicOp(operator_type type) {
 	return ret;
 }
 
-generic_type* EvalILLogicOp(il_factor_logic_op* self, enviroment* env, call_context* cctx) {
+generic_type* EvalILLogicOp(il_factor_logic_op* self, Enviroment* env, call_context* cctx) {
 	if(IsIntIntBinaryOp(self->parent, env, cctx)) {
 		return TYPE2GENERIC(TYPE_INT);
 	} else if(IsBoolBoolBinaryOp(self->parent, env, cctx)) {
@@ -41,26 +41,26 @@ generic_type* EvalILLogicOp(il_factor_logic_op* self, enviroment* env, call_cont
 	}
 }
 
-void GenerateILLogicOp(il_factor_logic_op* self, enviroment* env, call_context* cctx) {
+void GenerateILLogicOp(il_factor_logic_op* self, Enviroment* env, call_context* cctx) {
 	if(self->operator_index == -1) {
 		GenerateILFactor(self->parent->right, env, cctx);
 		GenerateILFactor(self->parent->left, env, cctx);
 		if(IsIntIntBinaryOp(self->parent, env, cctx)) {
-			AddOpcodeBuf(env->buf, (VectorItem)operator_to_iopcode(self->type));
+			AddOpcodeBuf(env->Bytecode, (VectorItem)operator_to_iopcode(self->type));
 		} else if(IsBoolBoolBinaryOp(self->parent, env, cctx)) {
-			AddOpcodeBuf(env->buf, (VectorItem)operator_to_bopcode(self->type));
+			AddOpcodeBuf(env->Bytecode, (VectorItem)operator_to_bopcode(self->type));
 		} else {
 			assert(false);
 		}
 	} else {
 		GenerateILFactor(self->parent->right, env, cctx);
 		GenerateILFactor(self->parent->left, env, cctx);
-		AddOpcodeBuf(env->buf, OP_INVOKEOPERATOR);
-		AddOpcodeBuf(env->buf, self->operator_index);
+		AddOpcodeBuf(env->Bytecode, OP_INVOKEOPERATOR);
+		AddOpcodeBuf(env->Bytecode, self->operator_index);
 	}
 }
 
-void LoadILLogicOp(il_factor_logic_op* self, enviroment* env, call_context* cctx) {
+void LoadILLogicOp(il_factor_logic_op* self, Enviroment* env, call_context* cctx) {
 	if(!IsIntIntBinaryOp(self->parent, env, cctx) &&
 	   !IsBoolBoolBinaryOp(self->parent, env, cctx)) {
 	self->operator_index = GetIndexILBinaryOp(self->parent, env, cctx);
@@ -71,7 +71,7 @@ void DeleteILLogicOp(il_factor_logic_op* self) {
 	MEM_FREE(self);
 }
 
-char* ILLogicOpToString(il_factor_logic_op* self, enviroment* env) {
+char* ILLogicOpToString(il_factor_logic_op* self, Enviroment* env) {
 	return ILBinaryOpToString_simple(self->parent, env);
 }
 //static

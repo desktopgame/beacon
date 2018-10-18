@@ -6,7 +6,7 @@
 #include "../../env/generic_cache.h"
 #include "../il_factor_interface.h"
 
-struct enviroment;
+struct Enviroment;
 struct type;
 struct constructor;
 /**
@@ -26,13 +26,13 @@ il_factor* WrapILNewInstance(il_factor_new_instance* self);
 
 il_factor_new_instance* NewILNewInstance();
 
-void GenerateILNewInstance(il_factor_new_instance* self, struct enviroment* env, call_context* cctx);
+void GenerateILNewInstance(il_factor_new_instance* self, Enviroment* env, call_context* cctx);
 
-void LoadILNewInstance(il_factor_new_instance* self, struct enviroment* env, call_context* cctx);
+void LoadILNewInstance(il_factor_new_instance* self, Enviroment* env, call_context* cctx);
 
-generic_type* EvalILNewInstance(il_factor_new_instance* self, struct enviroment* env, call_context* cctx);
+generic_type* EvalILNewInstance(il_factor_new_instance* self, Enviroment* env, call_context* cctx);
 
-char* ILNewInstanceToString(il_factor_new_instance* self, struct enviroment* env);
+char* ILNewInstanceToString(il_factor_new_instance* self, Enviroment* env);
 
 void DeleteILNewInstance(il_factor_new_instance* self);
 

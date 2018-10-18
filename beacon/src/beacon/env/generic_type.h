@@ -11,7 +11,7 @@
 
 struct type;
 struct method;
-struct enviroment;
+struct Enviroment;
 struct virtual_type;
 struct frame;
 struct call_context;
@@ -133,7 +133,7 @@ void PrintGenericType(generic_type* self);
  * @param env
  * @param ilctx
  */
-void GenerateGenericType(generic_type* self, struct enviroment* env);
+void GenerateGenericType(generic_type* self, struct Enviroment* env);
 
 /**
  * 現在のコンテキストで self の型変数を解決します.

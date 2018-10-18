@@ -8,17 +8,17 @@ il_stmt * WrapILContinue() {
 	return ret;
 }
 
-void GenerateILContinue(void * empty, enviroment * env, call_context* cctx) {
+void GenerateILContinue(void * empty, Enviroment * env, call_context* cctx) {
 	if(cctx->control.while_start->Length == 0) {
 		ThrowBCError(BCERROR_CONTINUE_AT_NOT_LOOP_T);
 		return;
 	}
 	Label* lab = (Label*)TopVector(cctx->control.while_start);
-	AddOpcodeBuf(env->buf, OP_GOTO);
-	AddOpcodeBuf(env->buf, lab);
+	AddOpcodeBuf(env->Bytecode, OP_GOTO);
+	AddOpcodeBuf(env->Bytecode, lab);
 }
 
-void LoadILContinue(void * empty, enviroment * env, call_context* cctx) {
+void LoadILContinue(void * empty, Enviroment * env, call_context* cctx) {
 }
 
 void DeleteILContinue(void * empty) {

@@ -10,8 +10,8 @@
 #endif
 
 //proto
-static void bc_object_nativeToString(method* parent, frame* fr, enviroment* env);
-static void bc_object_nativeReferenceEquals(method* parent, frame* fr, enviroment* env);
+static void bc_object_nativeToString(method* parent, frame* fr, Enviroment* env);
+static void bc_object_nativeReferenceEquals(method* parent, frame* fr, Enviroment* env);
 
 void InitBCObject() {
 	namespace_* lang = GetLangNamespace();
@@ -28,7 +28,7 @@ type* GetBCObjectType() {
 }
 
 //private
-static void bc_object_nativeToString(method* parent, frame* fr, enviroment* env) {
+static void bc_object_nativeToString(method* parent, frame* fr, Enviroment* env) {
 	object* self = (object*)AtVector(fr->ref_stack, 0);
 	Buffer* sb = NewBuffer();
 	//参照型
@@ -59,7 +59,7 @@ static void bc_object_nativeToString(method* parent, frame* fr, enviroment* env)
 	MEM_FREE(str);
 }
 
-static void bc_object_nativeReferenceEquals(method* parent, frame* fr, enviroment* env) {
+static void bc_object_nativeReferenceEquals(method* parent, frame* fr, Enviroment* env) {
 	object* a = (object*)AtVector(fr->ref_stack, 1);
 	object* b = (object*)AtVector(fr->ref_stack, 2);
 	PushVector(fr->value_stack, GetBoolObject(a == b));

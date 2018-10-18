@@ -4,7 +4,7 @@
 #include "../util/vector.h"
 #include "../ast/access_level.h"
 struct type;
-struct enviroment;
+struct Enviroment;
 struct generic_type;
 struct frame;
 /**
@@ -15,7 +15,7 @@ typedef struct operator_overload {
 	struct generic_type* return_gtype;
 	operator_type type;
 	Vector* parameter_list;
-	struct enviroment* env;
+	struct Enviroment* env;
 	access_level access;
 } operator_overload;
 
@@ -32,7 +32,7 @@ operator_overload* NewOperatorOverload(operator_type type);
  * @param fr
  * @param env
  */
-void ExecuteOperatorOverload(operator_overload* self, struct frame* fr, struct enviroment* env);
+void ExecuteOperatorOverload(operator_overload* self, struct frame* fr, struct Enviroment* env);
 
 /**
  * 演算子オーバーロードを解放します.

@@ -4,7 +4,7 @@
 #include <stdbool.h>
 #include "../il_factor_interface.h"
 
-struct enviroment;
+struct Enviroment;
 struct type;
 /**
  * boolリテラルを表す要素.
@@ -17,11 +17,11 @@ il_factor* WrapILBool(il_factor_bool* self);
 
 il_factor_bool* NewILBool(bool b);
 
-void GenerateILBool(il_factor_bool* self, struct enviroment* env, call_context* cctx);
+void GenerateILBool(il_factor_bool* self, Enviroment* env, call_context* cctx);
 
-generic_type* EvalILBool(il_factor_bool* self, struct enviroment* env, call_context* cctx);
+generic_type* EvalILBool(il_factor_bool* self, Enviroment* env, call_context* cctx);
 
-char* ILBoolToString(il_factor_bool* self, struct enviroment* env);
+char* ILBoolToString(il_factor_bool* self, Enviroment* env);
 
 void DeleteILBool(il_factor_bool* self);
 

@@ -12,7 +12,7 @@
  * @param self
  * @param env
  */
-void ExecuteVM(frame* self, enviroment* env);
+void ExecuteVM(frame* self, Enviroment* env);
 
 /**
  * 開始位置を指定して指定のバイトコードを実行します.
@@ -20,7 +20,7 @@ void ExecuteVM(frame* self, enviroment* env);
  * @param env
  * @param pos
  */
-void ResumeVM(frame* self, enviroment* env, int pos);
+void ResumeVM(frame* self, Enviroment* env, int pos);
 
 /**
  * ネイティブメソッドから例外をスローする場合にはこちらを使用します.
@@ -71,7 +71,7 @@ void TerminateVM(frame* self);
  * @param env
  * @param pc
  */
-void UncaughtVM(frame* self, enviroment* env, int pc);
+void UncaughtVM(frame* self, Enviroment* env, int pc);
 
 /**
  * VMがキャッチされなかった例外によって終了した時、

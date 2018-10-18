@@ -5,7 +5,7 @@
 #include "../util/vector.h"
 struct type;
 struct class_;
-struct enviroment;
+struct Enviroment;
 struct object;
 struct frame;
 /**
@@ -13,7 +13,7 @@ struct frame;
  */
 typedef struct constructor {
 	struct type* parent;
-	struct enviroment* env;
+	struct Enviroment* env;
 	Vector* parameter_list;
 	access_level access;
 } constructor;

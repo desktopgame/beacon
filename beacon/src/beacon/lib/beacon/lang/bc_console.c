@@ -6,10 +6,10 @@
 #include "../../../env/generic_type.h"
 
 //proto
-static void bc_console_writeLine(method* parent, frame* fr, enviroment* env);
-static void bc_console_write(method* parent, frame* fr, enviroment* env);
-static void bc_console_readLine(method* parent, frame* fr, enviroment* env);
-static void bc_console_read(method* parent, frame* fr, enviroment* env);
+static void bc_console_writeLine(method* parent, frame* fr, Enviroment* env);
+static void bc_console_write(method* parent, frame* fr, Enviroment* env);
+static void bc_console_readLine(method* parent, frame* fr, Enviroment* env);
+static void bc_console_read(method* parent, frame* fr, Enviroment* env);
 
 void InitBCConsole() {
 	namespace_* lang = GetLangNamespace();
@@ -28,7 +28,7 @@ type* GetBCConsoleType() {
 }
 
 //private
-static void bc_console_writeLine(method* parent, frame* fr, enviroment* env) {
+static void bc_console_writeLine(method* parent, frame* fr, Enviroment* env) {
 	object* o = AtVector(fr->ref_stack, 1);
 	if (o->tag == OBJECT_INT_T) {
 		printf("%d\n", o->u.int_);
@@ -48,7 +48,7 @@ static void bc_console_writeLine(method* parent, frame* fr, enviroment* env) {
 	}
 }
 
-static void bc_console_write(method* parent, frame* fr, enviroment* env) {
+static void bc_console_write(method* parent, frame* fr, Enviroment* env) {
 	object* o = AtVector(fr->ref_stack, 1);
 	if (o->tag == OBJECT_INT_T) {
 		printf("%d", o->u.int_);
@@ -68,13 +68,13 @@ static void bc_console_write(method* parent, frame* fr, enviroment* env) {
 	}
 }
 
-static void bc_console_read(method* parent, frame* fr, enviroment* env) {
+static void bc_console_read(method* parent, frame* fr, Enviroment* env) {
 	char c = getchar();
 	object* o = object_char_new(c);
 	PushVector(fr->value_stack, o);
 }
 
-static void bc_console_readLine(method* parent, frame* fr, enviroment* env) {
+static void bc_console_readLine(method* parent, frame* fr, Enviroment* env) {
 	char* s = ReadLine();
 	object* o = object_string_new(s);
 	PushVector(fr->value_stack, o);

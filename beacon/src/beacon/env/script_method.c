@@ -17,7 +17,7 @@ script_method * NewScriptMethod() {
 	return ret;
 }
 
-void ExecuteScriptMethod(script_method * self, method* parent, frame * fr, enviroment* env) {
+void ExecuteScriptMethod(script_method * self, method* parent, frame * fr, Enviroment* env) {
 #if defined(DEBUG)
 	const char* name = Ref2Str(parent->namev);
 #endif

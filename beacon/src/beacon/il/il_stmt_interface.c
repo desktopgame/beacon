@@ -13,11 +13,11 @@ il_stmt* MallocILStmt(il_stmt_type type, const char* filename, int lineno) {
 	return ret;
 }
 
-void GenerateILStmt(il_stmt * self, struct enviroment* env, call_context* cctx) {
+void GenerateILStmt(il_stmt * self, Enviroment* env, call_context* cctx) {
 	if(GetLastBCError()) {
 		return;
 	}
-	SetBCErrorFile(env->context_ref->filename);
+	SetBCErrorFile(env->ContextRef->filename);
 	SetBCErrorLine(self->lineno);
 	switch (self->type) {
 		case ILSTMT_IF_T:
@@ -80,11 +80,11 @@ void GenerateILStmt(il_stmt * self, struct enviroment* env, call_context* cctx) 
 	AddRangeEnviroment(env, self->lineno);
 }
 
-void LoadILStmt(il_stmt * self, enviroment* env, call_context* cctx) {
+void LoadILStmt(il_stmt * self, Enviroment* env, call_context* cctx) {
 	if(GetLastBCError()) {
 		return;
 	}
-	SetBCErrorFile(env->context_ref->filename);
+	SetBCErrorFile(env->ContextRef->filename);
 	SetBCErrorLine(self->lineno);
 	switch (self->type) {
 		case ILSTMT_IF_T:

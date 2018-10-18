@@ -9,9 +9,9 @@
 #include "../../../util/vector.h"
 
 //proto
-static void resolve_non_default(il_factor_invoke_static * self, enviroment * env, call_context* cctx);
-static void resolve_default(il_factor_invoke_static * self, enviroment * env, call_context* cctx);
-static void il_factor_invoke_static_check(il_factor_invoke_static * self, enviroment * env, call_context* cctx);
+static void resolve_non_default(il_factor_invoke_static * self, Enviroment* env, call_context* cctx);
+static void resolve_default(il_factor_invoke_static * self, Enviroment* env, call_context* cctx);
+static void il_factor_invoke_static_check(il_factor_invoke_static * self, Enviroment* env, call_context* cctx);
 static void il_factor_invoke_static_args_delete(VectorItem item);
 static void il_factor_invoke_static_typeargs_delete(VectorItem item);
 
@@ -27,11 +27,11 @@ il_factor_invoke_static* NewILInvokeStatic(StringView namev) {
 	return ret;
 }
 
-void GenerateILInvokeStatic(il_factor_invoke_static* self, enviroment* env, call_context* cctx) {
+void GenerateILInvokeStatic(il_factor_invoke_static* self, Enviroment* env, call_context* cctx) {
 	for(int i=0; i<self->type_args->Length; i++) {
 		il_type_argument* e = (il_type_argument*)AtVector(self->type_args, i);
 		assert(e->gtype != NULL);
-		AddOpcodeBuf(env->buf, OP_GENERIC_ADD);
+		AddOpcodeBuf(env->Bytecode, OP_GENERIC_ADD);
 		GenerateGenericType(e->gtype, env);
 	}
 	for(int i=0; i<self->args->Length; i++) {
@@ -41,16 +41,16 @@ void GenerateILInvokeStatic(il_factor_invoke_static* self, enviroment* env, call
 			return;
 		}
 	}
-	AddOpcodeBuf(env->buf, (VectorItem)OP_INVOKESTATIC);
-	AddOpcodeBuf(env->buf, (VectorItem)self->m->parent->absolute_index);
-	AddOpcodeBuf(env->buf, (VectorItem)self->index);
+	AddOpcodeBuf(env->Bytecode, (VectorItem)OP_INVOKESTATIC);
+	AddOpcodeBuf(env->Bytecode, (VectorItem)self->m->parent->absolute_index);
+	AddOpcodeBuf(env->Bytecode, (VectorItem)self->index);
 }
 
-void LoadILInvokeStatic(il_factor_invoke_static * self, enviroment * env, call_context* cctx) {
+void LoadILInvokeStatic(il_factor_invoke_static * self, Enviroment* env, call_context* cctx) {
 	il_factor_invoke_static_check(self, env, cctx);
 }
 
-generic_type* EvalILInvokeStatic(il_factor_invoke_static * self, enviroment * env, call_context* cctx) {
+generic_type* EvalILInvokeStatic(il_factor_invoke_static * self, Enviroment* env, call_context* cctx) {
 	il_factor_invoke_static_check(self, env, cctx);
 	//メソッドを解決できなかった場合
 	if(GetLastBCError()) {
@@ -67,7 +67,7 @@ generic_type* EvalILInvokeStatic(il_factor_invoke_static * self, enviroment * en
 	return NULL;
 }
 
-char* ILInvokeStaticToString(il_factor_invoke_static* self, enviroment* env) {
+char* ILInvokeStaticToString(il_factor_invoke_static* self, Enviroment* env) {
 	Buffer* sb = NewBuffer();
 	char* name = FQCNCacheToString(self->fqcn);
 	AppendsBuffer(sb, name);
@@ -87,7 +87,7 @@ void DeleteILInvokeStatic(il_factor_invoke_static* self) {
 }
 //private
 //FIXME:il_factor_invokeからのコピペ
-static void resolve_non_default(il_factor_invoke_static * self, enviroment * env, call_context* cctx) {
+static void resolve_non_default(il_factor_invoke_static * self, Enviroment* env, call_context* cctx) {
 	if(self->resolved != NULL) {
 		return;
 	}
@@ -98,7 +98,7 @@ static void resolve_non_default(il_factor_invoke_static * self, enviroment * env
 	self->resolved->virtual_type_index = rgtp->virtual_type_index;
 }
 
-static void resolve_default(il_factor_invoke_static * self, enviroment * env, call_context* cctx) {
+static void resolve_default(il_factor_invoke_static * self, Enviroment* env, call_context* cctx) {
 	if(self->resolved != NULL) {
 		return;
 	}
@@ -110,7 +110,7 @@ static void resolve_default(il_factor_invoke_static * self, enviroment * env, ca
 	PopCallContext(cctx);
 }
 
-static void il_factor_invoke_static_check(il_factor_invoke_static * self, enviroment * env, call_context* cctx) {
+static void il_factor_invoke_static_check(il_factor_invoke_static * self, Enviroment* env, call_context* cctx) {
 	type* ty =GetEvalTypeCContext(cctx, self->fqcn);
 	if(ty == NULL) {
 		ThrowBCError(BCERROR_UNDEFINED_TYPE_STATIC_INVOKE_T,

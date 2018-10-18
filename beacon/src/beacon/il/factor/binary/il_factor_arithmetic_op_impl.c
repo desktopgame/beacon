@@ -21,7 +21,7 @@ il_factor_arithmetic_op* NewILArithmeticOp(operator_type type) {
 	return ret;
 }
 
-generic_type* EvalILArithmeticOp(il_factor_arithmetic_op * self, enviroment * env, call_context* cctx) {
+generic_type* EvalILArithmeticOp(il_factor_arithmetic_op * self, Enviroment* env, call_context* cctx) {
 	generic_type* lgtype = EvalILFactor(self->parent->left, env, cctx);
 	generic_type* rgtype = EvalILFactor(self->parent->right, env, cctx);
 	assert(lgtype != NULL);
@@ -46,27 +46,27 @@ generic_type* EvalILArithmeticOp(il_factor_arithmetic_op * self, enviroment * en
 	return ApplyILBinaryOp(self->parent, operator_ov->return_gtype, env, cctx);
 }
 
-void GenerateILArithmeticOp(il_factor_arithmetic_op* self, enviroment* env, call_context* cctx) {
+void GenerateILArithmeticOp(il_factor_arithmetic_op* self, Enviroment* env, call_context* cctx) {
 	//演算子オーバーロードが見つからない
 	if(self->operator_index == -1) {
 		GenerateILFactor(self->parent->right, env, cctx);
 		GenerateILFactor(self->parent->left, env, cctx);
 		if(IsIntIntBinaryOp(self->parent, env, cctx)) {
-			AddOpcodeBuf(env->buf, (VectorItem)operator_to_iopcode(self->type));
+			AddOpcodeBuf(env->Bytecode, (VectorItem)operator_to_iopcode(self->type));
 		} else if(IsDoubleDoubleBinaryOp(self->parent, env, cctx)) {
-			AddOpcodeBuf(env->buf, (VectorItem)operator_to_dopcode(self->type));
+			AddOpcodeBuf(env->Bytecode, (VectorItem)operator_to_dopcode(self->type));
 		} else {
 			assert(false);
 		}
 	} else {
 		GenerateILFactor(self->parent->right, env, cctx);
 		GenerateILFactor(self->parent->left, env, cctx);
-		AddOpcodeBuf(env->buf, OP_INVOKEOPERATOR);
-		AddOpcodeBuf(env->buf, self->operator_index);
+		AddOpcodeBuf(env->Bytecode, OP_INVOKEOPERATOR);
+		AddOpcodeBuf(env->Bytecode, self->operator_index);
 	}
 }
 
-void LoadILArithmeticOp(il_factor_arithmetic_op* self, enviroment* env, call_context* cctx) {
+void LoadILArithmeticOp(il_factor_arithmetic_op* self, Enviroment* env, call_context* cctx) {
 	if(!IsIntIntBinaryOp(self->parent, env, cctx) &&
 	   !IsDoubleDoubleBinaryOp(self->parent, env, cctx)) {
 		self->operator_index = GetIndexILBinaryOp(self->parent, env, cctx);
@@ -77,7 +77,7 @@ void DeleteILArithmeticOp(il_factor_arithmetic_op* self) {
 	MEM_FREE(self);
 }
 
-char* ILArithmeticOpToString(il_factor_arithmetic_op* self, enviroment* env) {
+char* ILArithmeticOpToString(il_factor_arithmetic_op* self, Enviroment* env) {
 	return ILBinaryOpToString_simple(self->parent, env);
 }
 //static

@@ -47,7 +47,7 @@ method* MallocMethod(StringView namev, const char* filename, int lineno) {
 	return ret;
 }
 
-void ExecuteMethod(method* self, frame * fr, enviroment* env) {
+void ExecuteMethod(method* self, frame * fr, Enviroment* env) {
 	#if defined(DEBUG)
 	const char* namestr = Ref2Str(self->namev);
 	if(self->namev == InternString("writeLine")) {
@@ -335,11 +335,11 @@ static void method_count(il_stmt* s, int* yield_ret, int* ret) {
 static constructor* create_delegate_ctor(method* self, type* ty, class_loader* cll,int op_len) {
 	//イテレータのコンストラクタを作成
 	constructor* iterCons = NewConstructor();
-	enviroment* envIterCons = NewEnviroment();
+	Enviroment* envIterCons = NewEnviroment();
 	//コルーチンを生成したオブジェクトを受け取るパラメータ追加
 	parameter* coroOwnerParam = NewParameter(InternString("owner"));
 	PushVector(iterCons->parameter_list, coroOwnerParam);
-	envIterCons->context_ref = cll;
+	envIterCons->ContextRef = cll;
 	//コルーチンに渡された引数を引き継ぐパラメータ追加
 	for(int i=0; i<self->parameters->Length; i++) {
 		parameter* methP = (parameter*)AtVector(self->parameters, i);
@@ -350,25 +350,25 @@ static constructor* create_delegate_ctor(method* self, type* ty, class_loader* c
 	for (int i = 0; i < iterCons->parameter_list->Length; i++) {
 		parameter* e = (parameter*)AtVector(iterCons->parameter_list, i);
 		EntrySymbolTable(
-			envIterCons->sym_table,
+			envIterCons->Symboles,
 			e->gtype,
 			e->namev
 		);
 		//実引数を保存
 		//0番目は this のために開けておく
-		AddOpcodeBuf(envIterCons->buf, (VectorItem)OP_STORE);
-		AddOpcodeBuf(envIterCons->buf, (VectorItem)(i + 1));
+		AddOpcodeBuf(envIterCons->Bytecode, (VectorItem)OP_STORE);
+		AddOpcodeBuf(envIterCons->Bytecode, (VectorItem)(i + 1));
 	}
 	//親クラスへ連鎖
-	AddOpcodeBuf(envIterCons->buf, (VectorItem)OP_CHAIN_SUPER);
-	AddOpcodeBuf(envIterCons->buf, (VectorItem)0);
-	AddOpcodeBuf(envIterCons->buf, (VectorItem)0);
+	AddOpcodeBuf(envIterCons->Bytecode, (VectorItem)OP_CHAIN_SUPER);
+	AddOpcodeBuf(envIterCons->Bytecode, (VectorItem)0);
+	AddOpcodeBuf(envIterCons->Bytecode, (VectorItem)0);
 	//このクラスのフィールドを確保
-	AddOpcodeBuf(envIterCons->buf, (VectorItem)OP_ALLOC_FIELD);
-	AddOpcodeBuf(envIterCons->buf, (VectorItem)ty->absolute_index);
-	AddOpcodeBuf(envIterCons->buf, OP_CORO_INIT);
-	AddOpcodeBuf(envIterCons->buf, iterCons->parameter_list->Length);
-	AddOpcodeBuf(envIterCons->buf, op_len);
+	AddOpcodeBuf(envIterCons->Bytecode, (VectorItem)OP_ALLOC_FIELD);
+	AddOpcodeBuf(envIterCons->Bytecode, (VectorItem)ty->absolute_index);
+	AddOpcodeBuf(envIterCons->Bytecode, OP_CORO_INIT);
+	AddOpcodeBuf(envIterCons->Bytecode, iterCons->parameter_list->Length);
+	AddOpcodeBuf(envIterCons->Bytecode, op_len);
 	iterCons->env = envIterCons;
 	return iterCons;
 }
@@ -380,30 +380,30 @@ static method* create_has_next(method* self, type* ty, class_loader* cll, Vector
 	mt->access = ACCESS_PUBLIC_T;
 	mt->type = METHOD_TYPE_SCRIPT_T;
 	script_method* smt = NewScriptMethod();
-	enviroment* envSmt = NewEnviroment();
+	Enviroment* envSmt = NewEnviroment();
 	call_context* cctx = NewCallContext(CALL_METHOD_T);
 	cctx->scope = self->parent->location;
 	cctx->ty = self->parent;
 	cctx->u.mt = self;
-	envSmt->context_ref = cll;
+	envSmt->ContextRef = cll;
 
 	//iterate(int,int)のint,intを受け取る
 	for(int i=0; i<self->parameters->Length; i++) {
 		parameter* e = AtVector(self->parameters, i);
 		EntrySymbolTable(
-			envSmt->sym_table,
+			envSmt->Symboles,
 			e->gtype,
 			e->namev
 		);
 		//実引数を保存
 		//0番目は this のために開けておく
-		//AddOpcodeBuf(envSmt->buf, (VectorItem)OP_STORE);
-		//AddOpcodeBuf(envSmt->buf, (VectorItem)(i + 1));
+		//AddOpcodeBuf(envSmt->Bytecode, (VectorItem)OP_STORE);
+		//AddOpcodeBuf(envSmt->Bytecode, (VectorItem)(i + 1));
 	}
-	AddOpcodeBuf(envSmt->buf, (VectorItem)OP_STORE);
-	AddOpcodeBuf(envSmt->buf, (VectorItem)0);
-	AddOpcodeBuf(envSmt->buf, (VectorItem)OP_CORO_SWAP_SELF);
-	AddOpcodeBuf(envSmt->buf, (VectorItem)OP_CORO_RESUME);
+	AddOpcodeBuf(envSmt->Bytecode, (VectorItem)OP_STORE);
+	AddOpcodeBuf(envSmt->Bytecode, (VectorItem)0);
+	AddOpcodeBuf(envSmt->Bytecode, (VectorItem)OP_CORO_SWAP_SELF);
+	AddOpcodeBuf(envSmt->Bytecode, (VectorItem)OP_CORO_RESUME);
 	for(int i=0; i<stmt_list->Length; i++) {
 		il_stmt* e = (il_stmt*)AtVector(stmt_list, i);
 		LoadILStmt(e, envSmt, cctx);
@@ -412,11 +412,11 @@ static method* create_has_next(method* self, type* ty, class_loader* cll, Vector
 		il_stmt* e = (il_stmt*)AtVector(stmt_list, i);
 		GenerateILStmt(e, envSmt, cctx);
 	}
-	AddOpcodeBuf(envSmt->buf, OP_CORO_EXIT);
+	AddOpcodeBuf(envSmt->Bytecode, OP_CORO_EXIT);
 	if(GetTypeName(self->parent) == InternString("Base")) {
 	//	DumpEnviromentOp(envSmt, 0);
 	}
-	(*out_op_len) = envSmt->buf->source_vec->Length;
+	(*out_op_len) = envSmt->Bytecode->source_vec->Length;
 	DeleteCallContext(cctx);
 	smt->env = envSmt;
 	mt->u.script_method = smt;
@@ -431,18 +431,18 @@ static method* create_next(method* self, type* ty, class_loader* cll,generic_typ
 	mt->access = ACCESS_PUBLIC_T;
 	mt->type = METHOD_TYPE_SCRIPT_T;
 	script_method* smt = NewScriptMethod();
-	enviroment* envSmt = NewEnviroment();
+	Enviroment* envSmt = NewEnviroment();
 	call_context* cctx = NewCallContext(CALL_METHOD_T);
 	cctx->scope = self->parent->location;
 	cctx->ty = self->parent;
 	cctx->u.mt = mt;
 
-	AddOpcodeBuf(envSmt->buf, (VectorItem)OP_STORE);
-	AddOpcodeBuf(envSmt->buf, (VectorItem)0);
-	AddOpcodeBuf(envSmt->buf, (VectorItem)OP_CORO_SWAP_SELF);
-	AddOpcodeBuf(envSmt->buf, (VectorItem)OP_CORO_CURRENT);
+	AddOpcodeBuf(envSmt->Bytecode, (VectorItem)OP_STORE);
+	AddOpcodeBuf(envSmt->Bytecode, (VectorItem)0);
+	AddOpcodeBuf(envSmt->Bytecode, (VectorItem)OP_CORO_SWAP_SELF);
+	AddOpcodeBuf(envSmt->Bytecode, (VectorItem)OP_CORO_CURRENT);
 
-	envSmt->context_ref = cll;
+	envSmt->ContextRef = cll;
 	cctx->scope = self->parent->location;
 	cctx->ty = self->parent;
 	cctx->u.mt = self;

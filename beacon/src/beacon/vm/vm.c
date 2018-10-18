@@ -33,7 +33,7 @@
 #pragma warning(disable:4996)
 #endif
 //proto
-static void vm_run(frame * self, enviroment * env, int pos, int deferStart);
+static void vm_run(frame * self, Enviroment * env, int pos, int deferStart);
 static int stack_topi(frame* self);
 static double stack_topd(frame* self);
 static char stack_topc(frame* self);
@@ -49,7 +49,7 @@ static void remove_from_parent(frame* self);
 static void frame_markStatic(field* item);
 static void vm_delete_defctx(VectorItem e);
 static bool throw_npe(frame* self, object* o);
-static char* create_error_message(frame * self, enviroment* env, int pc);
+static char* create_error_message(frame * self, Enviroment* env, int pc);
 static StringView gVMError = ZERO_VIEW;
 
 //Stack Top
@@ -71,11 +71,11 @@ static StringView gVMError = ZERO_VIEW;
 
 
 
-void ExecuteVM(frame* self, enviroment* env) {
+void ExecuteVM(frame* self, Enviroment* env) {
 	ResumeVM(self, env, 0);
 }
 
-void ResumeVM(frame * self, enviroment * env, int pos) {
+void ResumeVM(frame * self, Enviroment * env, int pos) {
 	self->defer_vec = NewVector();
 	vm_run(self, env, pos, -1);
 	while(self->defer_vec->Length > 0) {
@@ -102,7 +102,7 @@ void NativeThrowVM(frame * self, object * exc) {
 	//どこかでキャッチしようとしている
 	} else {
 		int temp = 0;
-		ValidateVM(self, self->context_ref->buf->source_vec->Length, &temp);
+		ValidateVM(self, self->context_ref->Bytecode->source_vec->Length, &temp);
 		self->native_throw_pos = temp;
 	}
 }
@@ -171,7 +171,7 @@ void TerminateVM(frame * self) {
 	} while (temp != NULL);
 }
 
-void UncaughtVM(frame * self, enviroment* env, int pc) {
+void UncaughtVM(frame * self, Enviroment* env, int pc) {
 	char* message = create_error_message(self, env, pc);
 	script_context* sctx = GetCurrentScriptContext();
 	if(sctx->print_error) {
@@ -189,10 +189,10 @@ StringView GetVMErrorMessage() {
 
 
 //private
-static void vm_run(frame * self, enviroment * env, int pos, int deferStart) {
+static void vm_run(frame * self, Enviroment * env, int pos, int deferStart) {
 	assert(env != NULL);
 	script_context* ctx = GetCurrentScriptContext();
-	int source_len = env->buf->source_vec->Length;
+	int source_len = env->Bytecode->source_vec->Length;
 	self->context_ref = env;
 	heap* he = GetHeap();
 	for (int IDX = pos; IDX < source_len; IDX++) {
@@ -587,7 +587,7 @@ static void vm_run(frame * self, enviroment * env, int pos, int deferStart) {
 				//Printi(self->level);
 				//Printfln("[ %s#new ]", GetTypeName(ctor->parent));
 				//DumpEnviromentOp(ctor->env, sub->level);
-				//DumpOpcodeBuf(ctor->env->buf, sub->level);
+				//DumpOpcodeBuf(ctor->env->Bytecode, sub->level);
 				ExecuteVM(sub, ctor->env);
 				DeleteVector(cfr->u.static_invoke.args, VectorDeleterOfNull);
 				DeleteVector(cfr->u.static_invoke.typeargs, VectorDeleterOfNull);
@@ -625,7 +625,7 @@ static void vm_run(frame * self, enviroment * env, int pos, int deferStart) {
 					PushVector(cfr->u.static_invoke.typeargs, self->type_args_vec);
 				}
 				//		DumpEnviromentOp(ctor->env, sub->level);
-				//DumpOpcodeBuf(ctor->env->buf, sub->level);
+				//DumpOpcodeBuf(ctor->env->Bytecode, sub->level);
 				ExecuteVM(sub, ctor->env);
 				DeleteVector(cfr->u.static_invoke.args, VectorDeleterOfNull);
 				DeleteVector(cfr->u.static_invoke.typeargs, VectorDeleterOfNull);
@@ -1237,9 +1237,9 @@ static bool throw_npe(frame* self, object* o) {
 	return false;
 }
 
-static char* create_error_message(frame * self, enviroment* env, int pc) {
+static char* create_error_message(frame * self, Enviroment* env, int pc) {
 	Buffer* sbuf = NewBuffer();
-	LineRange* lr = FindLineRange(env->line_range_vec, pc);
+	LineRange* lr = FindLineRange(env->LineRangeTable, pc);
 	int line = -1;
 	if (lr != NULL) {
 		line = lr->Lineno;
@@ -1253,7 +1253,7 @@ static char* create_error_message(frame * self, enviroment* env, int pc) {
 	Buffer* cstr = AtVector(msg->native_slot_vec, 0);
 
 	char block[256] = {0};
-	sprintf(block, "file: %s <%d>", env->context_ref->filename, line);
+	sprintf(block, "file: %s <%d>", env->ContextRef->filename, line);
 	AppendsBuffer(sbuf, block);
 	AppendBuffer(sbuf, '\n');
 	AppendsBuffer(sbuf, cstr->Text);

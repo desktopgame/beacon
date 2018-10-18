@@ -20,21 +20,21 @@ il_factor_string * NewILString(StringView valuev) {
 	return ret;
 }
 
-void GenerateILString(il_factor_string * self, enviroment* env, call_context* cctx) {
+void GenerateILString(il_factor_string * self, Enviroment* env, call_context* cctx) {
 	int index = AddCStringEnviroment(env, self->valuev);
-	AddOpcodeBuf(env->buf, (VectorItem)OP_SCONST);
-	AddOpcodeBuf(env->buf, (VectorItem)index);
+	AddOpcodeBuf(env->Bytecode, (VectorItem)OP_SCONST);
+	AddOpcodeBuf(env->Bytecode, (VectorItem)index);
 }
 
-void LoadILString(il_factor_string * self, enviroment * env, call_context* cctx) {
+void LoadILString(il_factor_string * self, Enviroment * env, call_context* cctx) {
 }
 
-generic_type* EvalILString(il_factor_string * self, enviroment * env, call_context* cctx) {
+generic_type* EvalILString(il_factor_string * self, Enviroment * env, call_context* cctx) {
 //	assert(TYPE_STRING->generic_self->core_type != NULL);
 	return GENERIC_STRING;
 }
 
-char* ILStringToString(il_factor_string* self, enviroment* env) {
+char* ILStringToString(il_factor_string* self, Enviroment* env) {
 	return Strdup(Ref2Str(self->valuev));
 }
 

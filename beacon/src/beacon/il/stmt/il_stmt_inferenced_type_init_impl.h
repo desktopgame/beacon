@@ -4,7 +4,7 @@
 #include "../il_factor_interface.h"
 #include "../il_stmt_interface.h"
 #include "../../util/string_pool.h"
-struct enviroment;
+struct Enviroment;
 struct symbol_entry;
 /**
  * 推論された型の初期化を表す要素.
@@ -36,7 +36,7 @@ il_stmt_inferenced_type_init* NewILInferencedTypeInit(StringView namev);
  * @param env
  * @param cctx
  */
-void GenerateILInferencedTypeInit(il_stmt_inferenced_type_init* self, struct enviroment* env, call_context* cctx);
+void GenerateILInferencedTypeInit(il_stmt_inferenced_type_init* self, Enviroment* env, call_context* cctx);
 
 /**
  * 推論された型の初期化を表す要素を読み込みます.
@@ -44,7 +44,7 @@ void GenerateILInferencedTypeInit(il_stmt_inferenced_type_init* self, struct env
  * @param env
  * @param cctx
  */
-void LoadILInferencedTypeInit(il_stmt_inferenced_type_init* self, struct enviroment* env, call_context* cctx);
+void LoadILInferencedTypeInit(il_stmt_inferenced_type_init* self, Enviroment* env, call_context* cctx);
 
 /**
  * 推論された型の初期化を表す要素を開放します.

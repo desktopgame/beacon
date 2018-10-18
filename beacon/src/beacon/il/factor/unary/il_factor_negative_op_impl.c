@@ -17,29 +17,29 @@ il_factor_negative_op* MallocILNegativeOp(operator_type type, const char* filena
 	return ret;
 }
 
-generic_type* EvalILNegativeOp(il_factor_negative_op * self, enviroment * env, call_context* cctx) {
+generic_type* EvalILNegativeOp(il_factor_negative_op * self, Enviroment * env, call_context* cctx) {
 	return EvalILFactor(self->parent->a, env, cctx);
 }
 
-void GenerateILNegativeOp(il_factor_negative_op* self, enviroment* env, call_context* cctx) {
+void GenerateILNegativeOp(il_factor_negative_op* self, Enviroment* env, call_context* cctx) {
 	generic_type* gt = EvalILFactor(self->parent->a, env, cctx);
 	if(self->operator_index == -1) {
 		GenerateILFactor(self->parent->a, env, cctx);
 		if(GENERIC2TYPE(gt) == TYPE_INT) {
-			AddOpcodeBuf(env->buf, OP_INEG);
+			AddOpcodeBuf(env->Bytecode, OP_INEG);
 		} else if(GENERIC2TYPE(gt) == TYPE_DOUBLE) {
-			AddOpcodeBuf(env->buf, OP_DNEG);
+			AddOpcodeBuf(env->Bytecode, OP_DNEG);
 		} else {
 			assert(false);
 		}
 	} else {
 		GenerateILFactor(self->parent->a, env, cctx);
-		AddOpcodeBuf(env->buf, OP_INVOKEOPERATOR);
-		AddOpcodeBuf(env->buf, self->operator_index);
+		AddOpcodeBuf(env->Bytecode, OP_INVOKEOPERATOR);
+		AddOpcodeBuf(env->Bytecode, self->operator_index);
 	}
 }
 
-void LoadILNegativeOp(il_factor_negative_op* self, enviroment* env, call_context* cctx) {
+void LoadILNegativeOp(il_factor_negative_op* self, Enviroment* env, call_context* cctx) {
 	generic_type* gt = EvalILFactor(self->parent->a, env, cctx);
 	if(GENERIC2TYPE(gt) != TYPE_INT &&
 	   GENERIC2TYPE(gt) != TYPE_DOUBLE) {
@@ -51,6 +51,6 @@ void DeleteILNegativeOp(il_factor_negative_op* self) {
 	MEM_FREE(self);
 }
 
-char* ILNegativeOpToString(il_factor_negative_op* self, enviroment* env) {
+char* ILNegativeOpToString(il_factor_negative_op* self, Enviroment* env) {
 	return ILUnaryOpToString_simple(self->parent, env);
 }

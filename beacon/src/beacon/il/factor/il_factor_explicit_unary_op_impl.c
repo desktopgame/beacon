@@ -21,19 +21,19 @@ il_factor_explicit_unary_op* NewILExplicitUnaryOp(operator_type type) {
 	return ret;
 }
 
-void GenerateILExplicitUnaryOp(il_factor_explicit_unary_op* self, enviroment* env, call_context* cctx) {
+void GenerateILExplicitUnaryOp(il_factor_explicit_unary_op* self, Enviroment* env, call_context* cctx) {
 	GenerateILFactor(self->receiver, env, cctx);
-	AddOpcodeBuf(env->buf, OP_INVOKEOPERATOR);
-	AddOpcodeBuf(env->buf, self->index);
+	AddOpcodeBuf(env->Bytecode, OP_INVOKEOPERATOR);
+	AddOpcodeBuf(env->Bytecode, self->index);
 }
 
-void LoadILExplicitUnaryOp(il_factor_explicit_unary_op* self, enviroment* env, call_context* cctx) {
+void LoadILExplicitUnaryOp(il_factor_explicit_unary_op* self, Enviroment* env, call_context* cctx) {
 	LoadILFactor(self->receiver, env, cctx);
 	self->index = GetIndexILUnaryOp2(self->receiver, self->type, env, cctx);
 	assert(self->index != -1);
 }
 
-generic_type* EvalILExplicitUnaryOp(il_factor_explicit_unary_op* self, enviroment* env, call_context* cctx) {
+generic_type* EvalILExplicitUnaryOp(il_factor_explicit_unary_op* self, Enviroment* env, call_context* cctx) {
 	generic_type* gt = EvalILFactor(self->receiver, env, cctx);
 	operator_overload* operator_ov = GetOperatorOverloadClass(TYPE2CLASS(GENERIC2TYPE(gt)), self->index);
 	return operator_ov->return_gtype;

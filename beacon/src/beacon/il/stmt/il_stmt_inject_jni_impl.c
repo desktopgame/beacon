@@ -19,20 +19,20 @@ il_stmt_inject_jni* NewILInjectJNI(StringView namev) {
 	return ret;
 }
 
-void GenerateILInjectJNI(il_stmt_inject_jni* self, enviroment* env, call_context* cctx) {
+void GenerateILInjectJNI(il_stmt_inject_jni* self, Enviroment* env, call_context* cctx) {
 	GenerateILFactor(self->fact, env, cctx);
-	AddOpcodeBuf(env->buf, OP_STORE);
-	AddOpcodeBuf(env->buf, self->se->index);
+	AddOpcodeBuf(env->Bytecode, OP_STORE);
+	AddOpcodeBuf(env->Bytecode, self->se->index);
 }
 
-void LoadILInjectJNI(il_stmt_inject_jni * self, enviroment* env, call_context* cctx) {
+void LoadILInjectJNI(il_stmt_inject_jni * self, Enviroment* env, call_context* cctx) {
 	if(self->se != NULL) {
 		return;
 	}
 	self->fact->lineno = 0;
 	LoadILFactor(self->fact, env, cctx);
 	generic_type* gtype = EvalILFactor(self->fact, env, cctx);
-	self->se = EntrySymbolTable(env->sym_table, gtype, self->namev);
+	self->se = EntrySymbolTable(env->Symboles, gtype, self->namev);
 }
 
 void DeleteILInjectJni(il_stmt_inject_jni* self) {

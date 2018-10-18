@@ -4,7 +4,7 @@
 #include "../il_stmt_interface.h"
 #include "../../util/string_pool.h"
 #include "../../env/generic_cache.h"
-struct enviroment;
+struct Enviroment;
 /**
  * 型宣言を表す要素.
  */
@@ -32,7 +32,7 @@ il_stmt_variable_decl* NewILVariableDecl(StringView namev);
  * @param env
  * @param cctx
  */
-void GenerateILVariableDecl(il_stmt_variable_decl* self, struct enviroment* env, call_context* cctx);
+void GenerateILVariableDecl(il_stmt_variable_decl* self, Enviroment* env, call_context* cctx);
 
 /**
  * 型宣言を表す要素を出力します.
@@ -40,7 +40,7 @@ void GenerateILVariableDecl(il_stmt_variable_decl* self, struct enviroment* env,
  * @param env
  * @param cctx
  */
-void LoadILVariableDecl(il_stmt_variable_decl* self, struct enviroment* env, call_context* cctx);
+void LoadILVariableDecl(il_stmt_variable_decl* self, Enviroment* env, call_context* cctx);
 
 /**
  * 型宣言を表す要素を開放します.

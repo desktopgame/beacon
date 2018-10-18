@@ -3,7 +3,7 @@
 #include "../../il_factor_interface.h"
 #include "../../../util/string_pool.h"
 #include "subscript_descriptor.h"
-struct enviroment;
+struct Enviroment;
 struct generic_type;
 struct operator_overload;
 struct method;
@@ -30,15 +30,15 @@ typedef struct il_factor_invoke {
 
 il_factor_invoke* NewILInvoke(StringView namev);
 
-void GenerateILInvoke(il_factor_invoke* self, struct enviroment* env, call_context* cctx);
+void GenerateILInvoke(il_factor_invoke* self, Enviroment* env, call_context* cctx);
 
-void LoadILInvoke(il_factor_invoke * self, struct enviroment * env, call_context* cctx);
+void LoadILInvoke(il_factor_invoke * self, Enviroment * env, call_context* cctx);
 
-struct generic_type* EvalILInvoke(il_factor_invoke * self, struct enviroment * env, call_context* cctx);
+struct generic_type* EvalILInvoke(il_factor_invoke * self, Enviroment * env, call_context* cctx);
 
-char* ILInvokeToString(il_factor_invoke* self, struct enviroment* env);
+char* ILInvokeToString(il_factor_invoke* self, Enviroment* env);
 
 void DeleteILInvoke(il_factor_invoke* self);
 
-struct operator_overload* FindSetILInvoke(il_factor_invoke* self, il_factor* value, struct enviroment* env, call_context* cctx, int* outIndex);
+struct operator_overload* FindSetILInvoke(il_factor_invoke* self, il_factor* value, Enviroment* env, call_context* cctx, int* outIndex);
 #endif

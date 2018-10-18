@@ -21,23 +21,23 @@ il_factor_compare_op* NewILCompareOp(operator_type type) {
 	return ret;
 }
 
-generic_type* EvalILCompareOp(il_factor_compare_op * self, enviroment * env, call_context* cctx) {
+generic_type* EvalILCompareOp(il_factor_compare_op * self, Enviroment* env, call_context* cctx) {
 	generic_type* ret = TYPE2GENERIC(TYPE_BOOL);
 	assert(ret != NULL);
 	return ret;
 }
 
-void GenerateILCompareOp(il_factor_compare_op* self, enviroment* env, call_context* cctx) {
+void GenerateILCompareOp(il_factor_compare_op* self, Enviroment* env, call_context* cctx) {
 	//演算子オーバーロードが見つからない
 	if(self->operator_index == -1) {
 		GenerateILFactor(self->parent->right, env, cctx);
 		GenerateILFactor(self->parent->left, env, cctx);
 		if(IsIntIntBinaryOp(self->parent, env, cctx)) {
-			AddOpcodeBuf(env->buf, (VectorItem)operator_to_iopcode(self->type));
+			AddOpcodeBuf(env->Bytecode, (VectorItem)operator_to_iopcode(self->type));
 		} else if(IsDoubleDoubleBinaryOp(self->parent, env, cctx)) {
-			AddOpcodeBuf(env->buf, (VectorItem)operator_to_dopcode(self->type));
+			AddOpcodeBuf(env->Bytecode, (VectorItem)operator_to_dopcode(self->type));
 		} else if(IsCharCharBinaryOp(self->parent, env, cctx)) {
-			AddOpcodeBuf(env->buf, (VectorItem)operator_to_copcode(self->type));
+			AddOpcodeBuf(env->Bytecode, (VectorItem)operator_to_copcode(self->type));
 		} else {
 			ThrowBCError(BCERROR_UNDEFINED_COMPARE_OPERATOR_T,
 				operator_tostring(self->type)
@@ -47,12 +47,12 @@ void GenerateILCompareOp(il_factor_compare_op* self, enviroment* env, call_conte
 	} else {
 		GenerateILFactor(self->parent->right, env, cctx);
 		GenerateILFactor(self->parent->left, env, cctx);
-		AddOpcodeBuf(env->buf, OP_INVOKEOPERATOR);
-		AddOpcodeBuf(env->buf, self->operator_index);
+		AddOpcodeBuf(env->Bytecode, OP_INVOKEOPERATOR);
+		AddOpcodeBuf(env->Bytecode, self->operator_index);
 	}
 }
 
-void LoadILCompareOp(il_factor_compare_op* self, enviroment* env, call_context* cctx) {
+void LoadILCompareOp(il_factor_compare_op* self, Enviroment* env, call_context* cctx) {
 	if(!IsIntIntBinaryOp(self->parent, env, cctx) &&
 	   !IsDoubleDoubleBinaryOp(self->parent, env, cctx) &&
 	   !IsCharCharBinaryOp(self->parent, env, cctx)) {
@@ -64,7 +64,7 @@ void DeleteILCompareOp(il_factor_compare_op* self) {
 	MEM_FREE(self);
 }
 
-char* ILCompareOpToString(il_factor_compare_op* self, enviroment* env) {
+char* ILCompareOpToString(il_factor_compare_op* self, Enviroment* env) {
 	return ILBinaryOpToString_simple(self->parent, env);
 }
 //static

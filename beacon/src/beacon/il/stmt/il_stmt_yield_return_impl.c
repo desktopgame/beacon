@@ -8,7 +8,7 @@
 #include "../../env/namespace.h"
 #include <stdio.h>
 
-static void check_IsYieldMethod_return(il_stmt_yield_return * self, enviroment * env, call_context* cctx);
+static void check_IsYieldMethod_return(il_stmt_yield_return * self, Enviroment * env, call_context* cctx);
 
 il_stmt* WrapILYieldReturn(il_stmt_yield_return* self) {
 	il_stmt* ret = il_stmt_new(ILSTMT_YIELD_RETURN_T);
@@ -23,12 +23,12 @@ il_stmt_yield_return* MallocILYieldReturn(const char* filename, int lineno) {
 	return ret;
 }
 
-void GenerateILYieldReturn(il_stmt_yield_return* self, enviroment* env, call_context* cctx) {
+void GenerateILYieldReturn(il_stmt_yield_return* self, Enviroment* env, call_context* cctx) {
 	GenerateILFactor(self->fact, env, cctx);
-	AddOpcodeBuf(env->buf, OP_CORO_NEXT);
+	AddOpcodeBuf(env->Bytecode, OP_CORO_NEXT);
 }
 
-void LoadILYieldReturn(il_stmt_yield_return * self, enviroment* env, call_context* cctx) {
+void LoadILYieldReturn(il_stmt_yield_return * self, Enviroment* env, call_context* cctx) {
 	check_IsYieldMethod_return(self, env, cctx);
 }
 
@@ -37,7 +37,7 @@ void DeleteILYieldReturn(il_stmt_yield_return* self) {
 	MEM_FREE(self);
 }
 //private
-static void check_IsYieldMethod_return(il_stmt_yield_return * self, enviroment * env, call_context* cctx) {
+static void check_IsYieldMethod_return(il_stmt_yield_return * self, Enviroment * env, call_context* cctx) {
 	if(cctx->tag != CALL_METHOD_T) {
 		return;
 	}

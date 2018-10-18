@@ -162,27 +162,27 @@ void PrintGenericType(generic_type * self) {
 	printf("]");
 }
 
-void GenerateGenericType(generic_type* self, enviroment* env) {
-	AddOpcodeBuf(env->buf, OP_GENERIC_ENTER);
-	AddOpcodeBuf(env->buf, self->type_args_list->Length);
+void GenerateGenericType(generic_type* self, Enviroment* env) {
+	AddOpcodeBuf(env->Bytecode, OP_GENERIC_ENTER);
+	AddOpcodeBuf(env->Bytecode, self->type_args_list->Length);
 	if(self->core_type == NULL) {
 		if(self->tag == GENERIC_TYPE_TAG_CLASS_T) {
-			AddOpcodeBuf(env->buf, OP_GENERIC_INSTANCE_TYPE);
-			AddOpcodeBuf(env->buf, self->virtual_type_index);
+			AddOpcodeBuf(env->Bytecode, OP_GENERIC_INSTANCE_TYPE);
+			AddOpcodeBuf(env->Bytecode, self->virtual_type_index);
 			//assert(self->virtual_type_index != -1);
 		} else {
-			AddOpcodeBuf(env->buf, OP_GENERIC_STATIC_TYPE);
-			AddOpcodeBuf(env->buf, self->virtual_type_index);
+			AddOpcodeBuf(env->Bytecode, OP_GENERIC_STATIC_TYPE);
+			AddOpcodeBuf(env->Bytecode, self->virtual_type_index);
 		}
 	} else {
-		AddOpcodeBuf(env->buf, OP_GENERIC_UNIQUE_TYPE);
-		AddOpcodeBuf(env->buf, self->core_type->absolute_index);
+		AddOpcodeBuf(env->Bytecode, OP_GENERIC_UNIQUE_TYPE);
+		AddOpcodeBuf(env->Bytecode, self->core_type->absolute_index);
 	}
 	for(int i=0; i<self->type_args_list->Length; i++) {
 		generic_type* e = (generic_type*)AtVector(self->type_args_list, i);
 		GenerateGenericType(e, env);
 	}
-	AddOpcodeBuf(env->buf, OP_GENERIC_EXIT);
+	AddOpcodeBuf(env->Bytecode, OP_GENERIC_EXIT);
 }
 
 //Hash<String,List<Int>>

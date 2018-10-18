@@ -10,7 +10,7 @@
 //proto
 static void DeleteILElifList_impl(VectorItem item);
 static void DeleteILIf_stmt(VectorItem item);
-static void check_condition_type(il_factor* fact, enviroment* env, call_context* cctx);
+static void check_condition_type(il_factor* fact, Enviroment* env, call_context* cctx);
 
 il_stmt * WrapILIf(il_stmt_if * self) {
 	il_stmt* ret = il_stmt_new(ILSTMT_IF_T);
@@ -48,56 +48,56 @@ void PushILElifList(Vector * self, il_stmt_elif * child) {
 	PushVector(self, child);
 }
 
-void GenerateILIf(il_stmt_if * self, enviroment* env, call_context* cctx) {
+void GenerateILIf(il_stmt_if * self, Enviroment* env, call_context* cctx) {
 	//if(...)
-	env->sym_table->scope_depth++;
+	env->Symboles->scope_depth++;
 	GenerateILFactor(self->condition, env, cctx);
-	Label* l1 = AddLabelOpcodeBuf(env->buf, -1);
-	Label* tail = AddLabelOpcodeBuf(env->buf, -1);
+	Label* l1 = AddLabelOpcodeBuf(env->Bytecode, -1);
+	Label* tail = AddLabelOpcodeBuf(env->Bytecode, -1);
 	// { ... }
-	AddOpcodeBuf(env->buf, OP_GOTO_if_false);
-	AddOpcodeBuf(env->buf, l1);
+	AddOpcodeBuf(env->Bytecode, OP_GOTO_if_false);
+	AddOpcodeBuf(env->Bytecode, l1);
 	for (int i = 0; i < self->body->Length; i++) {
 		il_stmt* stmt = (il_stmt*)AtVector(self->body, i);
 		GenerateILStmt(stmt, env, cctx);
 	}
 	//条件が満たされて実行されたら最後までジャンプ
-	AddOpcodeBuf(env->buf, OP_GOTO);
-	AddOpcodeBuf(env->buf, tail);
-	l1->Cursor = AddNOPOpcodeBuf(env->buf);
+	AddOpcodeBuf(env->Bytecode, OP_GOTO);
+	AddOpcodeBuf(env->Bytecode, tail);
+	l1->Cursor = AddNOPOpcodeBuf(env->Bytecode);
 	// elif(...)
 	for (int i = 0; i < self->elif_list->Length; i++) {
 		il_stmt_elif* elif = (il_stmt_elif*)AtVector(self->elif_list, i);
 		GenerateILFactor(elif->condition, env, cctx);
-		Label* l2 = AddLabelOpcodeBuf(env->buf, -1);
+		Label* l2 = AddLabelOpcodeBuf(env->Bytecode, -1);
 		// { ... }
-		AddOpcodeBuf(env->buf, OP_GOTO_if_false);
-		AddOpcodeBuf(env->buf, l2);
+		AddOpcodeBuf(env->Bytecode, OP_GOTO_if_false);
+		AddOpcodeBuf(env->Bytecode, l2);
 		for (int j = 0; j < elif->body->Length; j++) {
 			il_stmt* stmt = (il_stmt*)AtVector(elif->body, j);
 			GenerateILStmt(stmt, env, cctx);
 		}
 		//条件が満たされて実行されたら最後までジャンプ
-		AddOpcodeBuf(env->buf, OP_GOTO);
-		AddOpcodeBuf(env->buf, tail);
-		l2->Cursor = AddNOPOpcodeBuf(env->buf);
+		AddOpcodeBuf(env->Bytecode, OP_GOTO);
+		AddOpcodeBuf(env->Bytecode, tail);
+		l2->Cursor = AddNOPOpcodeBuf(env->Bytecode);
 	}
 	// else { ... }
 	if (self->else_body == NULL ||
 		self->else_body->body->Length == 0) {
-		tail->Cursor = AddNOPOpcodeBuf(env->buf);
+		tail->Cursor = AddNOPOpcodeBuf(env->Bytecode);
 	} else {
 		for (int i = 0; i < self->else_body->body->Length; i++) {
 			il_stmt* stmt = (il_stmt*)AtVector(self->else_body->body, i);
 			GenerateILStmt(stmt, env, cctx);
 		}
-		tail->Cursor = AddNOPOpcodeBuf(env->buf);
+		tail->Cursor = AddNOPOpcodeBuf(env->Bytecode);
 	}
-	env->sym_table->scope_depth--;
+	env->Symboles->scope_depth--;
 }
 
-void LoadILIf(il_stmt_if * self, struct enviroment* env, call_context* cctx) {
-	env->sym_table->scope_depth++;
+void LoadILIf(il_stmt_if * self, Enviroment* env, call_context* cctx) {
+	env->Symboles->scope_depth++;
 	LoadILFactor(self->condition, env, cctx);
 	for(int i=0; i<self->body->Length; i++) {
 		il_stmt* e = (il_stmt*)AtVector(self->body, i);
@@ -127,7 +127,7 @@ void LoadILIf(il_stmt_if * self, struct enviroment* env, call_context* cctx) {
 		check_condition_type(elif->condition, env, cctx);
 		BC_ERROR();
 	}
-	env->sym_table->scope_depth--;
+	env->Symboles->scope_depth--;
 }
 
 void DeleteILIf(il_stmt_if * self) {
@@ -164,7 +164,7 @@ static void DeleteILIf_stmt(VectorItem item) {
 	DeleteILStmt(e);
 }
 
-static void check_condition_type(il_factor* fact, enviroment* env, call_context* cctx) {
+static void check_condition_type(il_factor* fact, Enviroment* env, call_context* cctx) {
 	generic_type* cond_T = EvalILFactor(fact, env, cctx);
 	if(cond_T->core_type != TYPE_BOOL) {
 		char* condstr = ILFactorToString(fact, env);

@@ -5,7 +5,7 @@
 
 struct il_factor_binary_op;
 struct generic_type;
-struct enviroment;
+struct Enviroment;
 typedef struct il_factor_logic_op {
 	struct il_factor_binary_op* parent;
 	operator_type type;
@@ -14,13 +14,13 @@ typedef struct il_factor_logic_op {
 
 il_factor_logic_op* NewILLogicOp(operator_type type);
 
-struct generic_type* EvalILLogicOp(il_factor_logic_op* self, struct enviroment* env, call_context* cctx);
+struct generic_type* EvalILLogicOp(il_factor_logic_op* self, struct Enviroment* env, call_context* cctx);
 
-void GenerateILLogicOp(il_factor_logic_op* self, struct enviroment* env, call_context* cctx);
+void GenerateILLogicOp(il_factor_logic_op* self, struct Enviroment* env, call_context* cctx);
 
-void LoadILLogicOp(il_factor_logic_op* self, struct enviroment* env, call_context* cctx);
+void LoadILLogicOp(il_factor_logic_op* self, struct Enviroment* env, call_context* cctx);
 
 void DeleteILLogicOp(il_factor_logic_op* self);
 
-char* ILLogicOpToString(il_factor_logic_op* self, struct enviroment* env);
+char* ILLogicOpToString(il_factor_logic_op* self, struct Enviroment* env);
 #endif

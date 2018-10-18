@@ -19,20 +19,20 @@ il_factor_char * NewILChar(char c) {
 	return ret;
 }
 
-void GenerateILChar(il_factor_char * self, enviroment * env, call_context* cctx) {
+void GenerateILChar(il_factor_char * self, Enviroment * env, call_context* cctx) {
 	int index = AddCCharEnviroment(env, self->value);
-	AddOpcodeBuf(env->buf, OP_CCONST);
-	AddOpcodeBuf(env->buf, index);
+	AddOpcodeBuf(env->Bytecode, OP_CCONST);
+	AddOpcodeBuf(env->Bytecode, index);
 }
 
-void LoadILChar(il_factor_char * self, enviroment * env, call_context* cctx) {
+void LoadILChar(il_factor_char * self, Enviroment * env, call_context* cctx) {
 }
 
-generic_type* EvalILChar(il_factor_char * self, enviroment * env, call_context* cctx) {
+generic_type* EvalILChar(il_factor_char * self, Enviroment * env, call_context* cctx) {
 	return GENERIC_CHAR;
 }
 
-char* ILCharToString(il_factor_char* self, enviroment* env) {
+char* ILCharToString(il_factor_char* self, Enviroment* env) {
 	Buffer* sb = NewBuffer();
 	AppendBuffer(sb, '\'');
 	AppendBuffer(sb, self->value);

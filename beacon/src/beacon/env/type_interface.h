@@ -23,7 +23,7 @@ struct interface_;
 struct field;
 struct method;
 struct property;
-struct enviroment;
+struct Enviroment;
 struct vtable;
 struct generic_type;
 
@@ -125,7 +125,7 @@ void AddMethodType(type* self, struct method* m);
  * @param outIndex
  * @return
  */
-struct method* ILFindMethodType(type* self, StringView namev, Vector* args, struct enviroment* env, call_context* cctx, int* outIndex);
+struct method* ILFindMethodType(type* self, StringView namev, Vector* args, struct Enviroment* env, call_context* cctx, int* outIndex);
 
 /**
  * この型から静的メソッドを検索します.
@@ -137,7 +137,7 @@ struct method* ILFindMethodType(type* self, StringView namev, Vector* args, stru
  * @param outIndex
  * @return
  */
-struct method* ILFindSMethodType(type* self, StringView namev, Vector* args, struct enviroment* env, call_context* cctx, int* outIndex);
+struct method* ILFindSMethodType(type* self, StringView namev, Vector* args, struct Enviroment* env, call_context* cctx, int* outIndex);
 
 /**
  * 仮想関数の一覧を返します.

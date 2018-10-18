@@ -6,7 +6,7 @@
 #include "../../env/generic_cache.h"
 #include "../il_factor_interface.h"
 
-struct enviroment;
+struct Enviroment;
 struct field;
 
 /**
@@ -25,13 +25,13 @@ il_factor* WrapILMemberOp(il_factor_member_op* self);
 
 il_factor_member_op* NewILMemberOp(StringView namev);
 
-void LoadILMemberOp(il_factor_member_op* self, struct enviroment* env, call_context* cctx);
+void LoadILMemberOp(il_factor_member_op* self, Enviroment* env, call_context* cctx);
 
-void GenerateILMemberOp(il_factor_member_op* self, struct enviroment* env, call_context* cctx);
+void GenerateILMemberOp(il_factor_member_op* self, Enviroment* env, call_context* cctx);
 
-generic_type* EvalILMemberOp(il_factor_member_op* self, struct enviroment* env, call_context* cctx);
+generic_type* EvalILMemberOp(il_factor_member_op* self, Enviroment* env, call_context* cctx);
 
-char* ILMemberOpToString(il_factor_member_op* self, struct enviroment* env);
+char* ILMemberOpToString(il_factor_member_op* self, Enviroment* env);
 
 void DeleteILMemberOp(il_factor_member_op* self);
 

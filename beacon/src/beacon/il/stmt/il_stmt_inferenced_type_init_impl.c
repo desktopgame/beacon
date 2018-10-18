@@ -20,14 +20,14 @@ il_stmt_inferenced_type_init * NewILInferencedTypeInit(StringView namev) {
 	return ret;
 }
 
-void GenerateILInferencedTypeInit(il_stmt_inferenced_type_init * self, enviroment * env, call_context* cctx) {
+void GenerateILInferencedTypeInit(il_stmt_inferenced_type_init * self, Enviroment * env, call_context* cctx) {
 	//右辺の方で宣言する
 	GenerateILFactor(self->fact, env, cctx);
-	AddOpcodeBuf(env->buf, OP_STORE);
-	AddOpcodeBuf(env->buf, self->sym->index);
+	AddOpcodeBuf(env->Bytecode, OP_STORE);
+	AddOpcodeBuf(env->Bytecode, self->sym->index);
 }
 
-void LoadILInferencedTypeInit(il_stmt_inferenced_type_init * self, enviroment * env, call_context* cctx) {
+void LoadILInferencedTypeInit(il_stmt_inferenced_type_init * self, Enviroment * env, call_context* cctx) {
 	//代入するオブジェクトを計算
 	LoadILFactor(self->fact, env, cctx);
 	generic_type* gtp = EvalILFactor(self->fact, env, cctx);
@@ -39,13 +39,13 @@ void LoadILInferencedTypeInit(il_stmt_inferenced_type_init * self, enviroment * 
 		return;
 	}
 	//変数を登録
-	if(IsContainsSymbol(env->sym_table, self->namev)) {
+	if(IsContainsSymbol(env->Symboles, self->namev)) {
 		ThrowBCError(BCERROR_OVERWRAP_VARIABLE_NAME_T,
 			Ref2Str(self->namev)
 		);
 	}
 	symbol_entry* e = EntrySymbolTable(
-		env->sym_table,
+		env->Symboles,
 		gtp,
 		self->namev
 	);

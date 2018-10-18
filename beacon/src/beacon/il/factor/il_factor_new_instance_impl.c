@@ -16,7 +16,7 @@
 
 //proto
 static void DeleteILNewInstance_typearg(VectorItem item);
-static void il_factor_new_instance_find(il_factor_new_instance * self, enviroment * env, call_context* cctx);
+static void il_factor_new_instance_find(il_factor_new_instance * self, Enviroment * env, call_context* cctx);
 static void il_Factor_new_instace_delete_arg(VectorItem item);
 
 il_factor * WrapILNewInstance(il_factor_new_instance * self) {
@@ -36,12 +36,12 @@ il_factor_new_instance * NewILNewInstance() {
 	return ret;
 }
 
-void GenerateILNewInstance(il_factor_new_instance * self, enviroment * env, call_context* cctx) {
+void GenerateILNewInstance(il_factor_new_instance * self, Enviroment * env, call_context* cctx) {
 	il_factor_new_instance_find(self, env, cctx);
 	for(int i=0; i<self->type_args->Length; i++) {
 		il_type_argument* e = (il_type_argument*)AtVector(self->type_args, i);
 		assert(e->gtype != NULL);
-		AddOpcodeBuf(env->buf, OP_GENERIC_ADD);
+		AddOpcodeBuf(env->Bytecode, OP_GENERIC_ADD);
 		GenerateGenericType(e->gtype, env);
 	}
 	//実引数を全てスタックへ
@@ -53,12 +53,12 @@ void GenerateILNewInstance(il_factor_new_instance * self, enviroment * env, call
 		}
 	}
 	//クラスとコンストラクタのインデックスをプッシュ
-	AddOpcodeBuf(env->buf, OP_NEW_INSTANCE);
-	AddOpcodeBuf(env->buf, self->c->parent->absolute_index);
-	AddOpcodeBuf(env->buf, self->constructor_index);
+	AddOpcodeBuf(env->Bytecode, OP_NEW_INSTANCE);
+	AddOpcodeBuf(env->Bytecode, self->c->parent->absolute_index);
+	AddOpcodeBuf(env->Bytecode, self->constructor_index);
 }
 
-void LoadILNewInstance(il_factor_new_instance * self, enviroment * env, call_context* cctx) {
+void LoadILNewInstance(il_factor_new_instance * self, Enviroment * env, call_context* cctx) {
 	il_factor_new_instance_find(self, env, cctx);
 	if(GetLastBCError()) {
 		return;
@@ -69,7 +69,7 @@ void LoadILNewInstance(il_factor_new_instance * self, enviroment * env, call_con
 	}
 }
 
-generic_type* EvalILNewInstance(il_factor_new_instance * self, enviroment * env, call_context* cctx) {
+generic_type* EvalILNewInstance(il_factor_new_instance * self, Enviroment * env, call_context* cctx) {
 	il_factor_new_instance_find(self, env, cctx);
 	if(GetLastBCError()) {
 		return NULL;
@@ -93,7 +93,7 @@ generic_type* EvalILNewInstance(il_factor_new_instance * self, enviroment * env,
 	return self->instance_type;
 }
 
-char* ILNewInstanceToString(il_factor_new_instance* self, enviroment* env) {
+char* ILNewInstanceToString(il_factor_new_instance* self, Enviroment* env) {
 	Buffer* sb = NewBuffer();
 	AppendsBuffer(sb, "new ");
 	char* type = FQCNCacheToString(self->fqcnc);
@@ -117,7 +117,7 @@ static void DeleteILNewInstance_typearg(VectorItem item) {
 	DeleteILTypeArgument(e);
 }
 
-static void il_factor_new_instance_find(il_factor_new_instance * self, enviroment * env, call_context* cctx) {
+static void il_factor_new_instance_find(il_factor_new_instance * self, Enviroment * env, call_context* cctx) {
 	if(self->constructor_index != -1) {
 		return;
 	}

@@ -4,7 +4,7 @@
 #include "../../../util/string_pool.h"
 #include "../../il_factor_interface.h"
 struct symbol_entry;
-struct enviroment;
+struct Enviroment;
 struct generic_type;
 struct field;
 struct property;
@@ -43,13 +43,13 @@ typedef struct il_factor_variable_local {
 
 il_factor_variable_local* NewILVariableLocal(StringView namev);
 
-void GenerateILVariableLocal(il_factor_variable_local* self, struct enviroment* env, call_context* cctx);
+void GenerateILVariableLocal(il_factor_variable_local* self, Enviroment* env, call_context* cctx);
 
-void LoadILVariableLocal(il_factor_variable_local * self, struct enviroment * env, call_context* cctx);
+void LoadILVariableLocal(il_factor_variable_local * self, Enviroment * env, call_context* cctx);
 
-struct generic_type* EvalILVariableLocal(il_factor_variable_local * self, struct enviroment * env, call_context* cctx);
+struct generic_type* EvalILVariableLocal(il_factor_variable_local * self, Enviroment * env, call_context* cctx);
 
-char* ILVariableLocalToString(il_factor_variable_local * self, struct enviroment * env);
+char* ILVariableLocalToString(il_factor_variable_local * self, Enviroment * env);
 
 void DeleteILVariableLocal(il_factor_variable_local* self);
 #endif

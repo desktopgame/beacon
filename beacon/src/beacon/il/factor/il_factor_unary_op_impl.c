@@ -27,7 +27,7 @@ il_factor_unary_op * NewILUnaryOp(operator_type type) {
 	return ret;
 }
 
-void GenerateILUnaryOp(il_factor_unary_op * self, enviroment* env, call_context* cctx) {
+void GenerateILUnaryOp(il_factor_unary_op * self, Enviroment* env, call_context* cctx) {
 	switch(self->type) {
 		case OPERATOR_NOT_T:
 			GenerateILNotOp(self->u.not_op, env, cctx);
@@ -41,7 +41,7 @@ void GenerateILUnaryOp(il_factor_unary_op * self, enviroment* env, call_context*
 	}
 }
 
-void LoadILUnaryOp(il_factor_unary_op * self, enviroment * env, call_context* cctx) {
+void LoadILUnaryOp(il_factor_unary_op * self, Enviroment * env, call_context* cctx) {
 	if(self->type == OPERATOR_NOT_T && self->u.not_op != NULL) return;
 	if(self->type == OPERATOR_CHILDA_T && self->u.childa_op != NULL) return;
 	if(self->type == OPERATOR_NEGATIVE_T && self->u.negative_op != NULL) return;
@@ -70,7 +70,7 @@ void LoadILUnaryOp(il_factor_unary_op * self, enviroment * env, call_context* cc
 	}
 }
 
-generic_type* EvalILUnaryOp(il_factor_unary_op * self, enviroment * env, call_context* cctx) {
+generic_type* EvalILUnaryOp(il_factor_unary_op * self, Enviroment * env, call_context* cctx) {
 	LoadILUnaryOp(self, env, cctx);
 	generic_type* ret = NULL;
 	switch(self->type) {
@@ -87,7 +87,7 @@ generic_type* EvalILUnaryOp(il_factor_unary_op * self, enviroment * env, call_co
 	return ret;
 }
 
-char* ILUnaryOpToString(il_factor_unary_op* self, enviroment* env) {
+char* ILUnaryOpToString(il_factor_unary_op* self, Enviroment* env) {
 	char* ret = NULL;
 	switch(self->type) {
 		case OPERATOR_NOT_T:
@@ -122,7 +122,7 @@ void DeleteILUnaryOp(il_factor_unary_op * self) {
 	MEM_FREE(self);
 }
 
-char* ILUnaryOpToString_simple(il_factor_unary_op* self, enviroment* env) {
+char* ILUnaryOpToString_simple(il_factor_unary_op* self, Enviroment* env) {
 	Buffer* sb = NewBuffer();
 	char* a = ILFactorToString(self->a, env);
 	AppendfBuffer(sb, "%s", operator_tostring(self->type));
@@ -131,11 +131,11 @@ char* ILUnaryOpToString_simple(il_factor_unary_op* self, enviroment* env) {
 	return ReleaseBuffer(sb);
 }
 
-int GetIndexILUnaryOp(il_factor_unary_op* self, enviroment* env, call_context* cctx) {
+int GetIndexILUnaryOp(il_factor_unary_op* self, Enviroment* env, call_context* cctx) {
 	return GetIndexILUnaryOp2(self->a, self->type, env, cctx);
 }
 
-int GetIndexILUnaryOp2(il_factor* receiver, operator_type otype, enviroment* env, call_context* cctx) {
+int GetIndexILUnaryOp2(il_factor* receiver, operator_type otype, Enviroment* env, call_context* cctx) {
 	Vector* args = NewVector();
 	generic_type* gtype = EvalILFactor(receiver, env, cctx);
 	if(gtype->virtual_type_index != -1) {
@@ -148,7 +148,7 @@ int GetIndexILUnaryOp2(il_factor* receiver, operator_type otype, enviroment* env
 	return temp;
 }
 
-generic_type* ApplyILUnaryOp(il_factor_unary_op* self, generic_type* gtype, enviroment* env, call_context* cctx) {
+generic_type* ApplyILUnaryOp(il_factor_unary_op* self, generic_type* gtype, Enviroment* env, call_context* cctx) {
 	generic_type* lgtype = EvalILFactor(self->a, env, cctx);
 	call_frame* cfr = PushCallContext(cctx, FRAME_INSTANCE_INVOKE_T);
 	cfr->u.instance_invoke.receiver = lgtype;

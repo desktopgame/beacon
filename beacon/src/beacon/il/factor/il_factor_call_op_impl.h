@@ -7,7 +7,7 @@
 #include "invoke/il_factor_invoke_bound_impl.h"
 
 
-struct enviroment;
+struct Enviroment;
 struct generic_type;
 /**
  * 関数呼び出し演算子の種類を表す列挙型.
@@ -39,13 +39,13 @@ il_factor* WrapCallOp(il_factor_call_op* self);
 
 il_factor_call_op* NewILCallOp();
 
-void LoadCallOp(il_factor_call_op* self, struct enviroment* env, call_context* cctx);
+void LoadCallOp(il_factor_call_op* self, Enviroment* env, call_context* cctx);
 
-struct generic_type* EvalILCallOp(il_factor_call_op* self, struct enviroment* env, call_context* cctx);
+struct generic_type* EvalILCallOp(il_factor_call_op* self, Enviroment* env, call_context* cctx);
 
-char* ILCallOpToString(il_factor_call_op* self, struct enviroment* env);
+char* ILCallOpToString(il_factor_call_op* self, Enviroment* env);
 
-void GenerateILCallOp(il_factor_call_op* self, struct enviroment* env, call_context* cctx);
+void GenerateILCallOp(il_factor_call_op* self, Enviroment* env, call_context* cctx);
 
 void DeleteILCallOp(il_factor_call_op* self);
 

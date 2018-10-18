@@ -6,20 +6,20 @@
 
 static generic_type* gSelf = NULL;
 
-void GenerateILNull(void * empty, enviroment * env, call_context* cctx) {
-	AddOpcodeBuf(env->buf, OP_NULL);
+void GenerateILNull(void * empty, Enviroment * env, call_context* cctx) {
+	AddOpcodeBuf(env->Bytecode, OP_NULL);
 }
 
-void LoadILNull(void * empty, enviroment * env, call_context* cctx) {
+void LoadILNull(void * empty, Enviroment * env, call_context* cctx) {
 }
 
-generic_type* EvalILNull(void * empty, enviroment * env, call_context* cctx) {
+generic_type* EvalILNull(void * empty, Enviroment * env, call_context* cctx) {
 	if(gSelf == NULL) {
 		gSelf =  generic_NewType(TYPE_NULL);
 	}
 	return gSelf;
 }
 
-char* ILNullToString(void* empty, enviroment* env) {
+char* ILNullToString(void* empty, Enviroment* env) {
 	return Strdup("null");
 }

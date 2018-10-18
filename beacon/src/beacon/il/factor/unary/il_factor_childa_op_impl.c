@@ -17,7 +17,7 @@ il_factor_childa_op* NewILChildaOp(operator_type type) {
 	return ret;
 }
 
-generic_type* EvalILChildaOp(il_factor_childa_op * self, enviroment * env, call_context* cctx) {
+generic_type* EvalILChildaOp(il_factor_childa_op * self, Enviroment * env, call_context* cctx) {
 	generic_type* gtype = EvalILFactor(self->parent->a, env, cctx);
 	if(self->operator_index == -1) {
 		//GenerateILFactor(self->parent->a, env);
@@ -37,25 +37,25 @@ generic_type* EvalILChildaOp(il_factor_childa_op * self, enviroment * env, call_
 	}
 }
 
-void GenerateILChildaOp(il_factor_childa_op* self, enviroment* env, call_context* cctx) {
+void GenerateILChildaOp(il_factor_childa_op* self, Enviroment* env, call_context* cctx) {
 	if(self->operator_index == -1) {
 		GenerateILFactor(self->parent->a, env, cctx);
 		generic_type* gtype = EvalILFactor(self->parent->a, env, cctx);
 		if(GENERIC2TYPE(gtype) == TYPE_INT) {
-			AddOpcodeBuf(env->buf, OP_IFLIP);
+			AddOpcodeBuf(env->Bytecode, OP_IFLIP);
 		} else if(GENERIC2TYPE(gtype) == TYPE_BOOL) {
-			AddOpcodeBuf(env->buf, OP_BFLIP);
+			AddOpcodeBuf(env->Bytecode, OP_BFLIP);
 		} else {
 			assert(false);
 		}
 	} else {
 		GenerateILFactor(self->parent->a, env, cctx);
-		AddOpcodeBuf(env->buf, OP_INVOKEOPERATOR);
-		AddOpcodeBuf(env->buf, self->operator_index);
+		AddOpcodeBuf(env->Bytecode, OP_INVOKEOPERATOR);
+		AddOpcodeBuf(env->Bytecode, self->operator_index);
 	}
 }
 
-void LoadILChildaOp(il_factor_childa_op* self, enviroment* env, call_context* cctx) {
+void LoadILChildaOp(il_factor_childa_op* self, Enviroment* env, call_context* cctx) {
 	generic_type* gtype = EvalILFactor(self->parent->a, env, cctx);
 	if(GENERIC2TYPE(gtype) != TYPE_INT &&
 	   GENERIC2TYPE(gtype) != TYPE_BOOL) {
@@ -67,6 +67,6 @@ void DeleteILChildaOp(il_factor_childa_op* self) {
 	MEM_FREE(self);
 }
 
-char* ILChildaOpToString(il_factor_childa_op* self, enviroment* env) {
+char* ILChildaOpToString(il_factor_childa_op* self, Enviroment* env) {
 	return ILUnaryOpToString_simple(self->parent, env);
 }

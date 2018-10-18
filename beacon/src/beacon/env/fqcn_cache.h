@@ -7,7 +7,7 @@ struct namespace_;
 struct type;
 struct class_;
 struct interface_;
-//struct enviroment;
+//struct Enviroment;
 /**
  * Full Quality Class Name を表す構造体.
  */

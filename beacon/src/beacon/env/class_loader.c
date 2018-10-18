@@ -67,7 +67,7 @@ class_loader* NewClassLoader(const char* filename, content_type type) {
 	ret->level = 0;
 	ret->type_cache_vec = NewVector();
 	ret->filename = Strdup(filename);
-	ret->env->context_ref = ret;
+	ret->env->ContextRef = ret;
 	return ret;
 }
 
@@ -206,10 +206,10 @@ static void LoadClassLoader_toplevel(class_loader* self) {
 	LoadILStmt(body, self->env, cctx);
 	GenerateILStmt(body, self->env, cctx);
 	//$worldをthisにする
-	AddOpcodeBuf(self->env->buf, OP_LOAD);
-	AddOpcodeBuf(self->env->buf, 1);
-	AddOpcodeBuf(self->env->buf, OP_STORE);
-	AddOpcodeBuf(self->env->buf, 0);
+	AddOpcodeBuf(self->env->Bytecode, OP_LOAD);
+	AddOpcodeBuf(self->env->Bytecode, 1);
+	AddOpcodeBuf(self->env->Bytecode, OP_STORE);
+	AddOpcodeBuf(self->env->Bytecode, 0);
 	//以下読み込み
 	CLBC_body(self, self->il_code->statement_list, self->env, cctx, NULL);
 	DeleteILStmt(body);
@@ -235,14 +235,14 @@ static void LoadClassLoader_toplevel_function(class_loader* self) {
 		method* m = method_new(ilfunc->namev);
 		DupTypeParameterList(ilfunc->type_parameter_vec, m->type_parameters);
 		script_method* sm = NewScriptMethod();
-		enviroment* env = NewEnviroment();
+		Enviroment* env = NewEnviroment();
 		//call_contextの設定
 		call_context* cctx = NewCallContext(CALL_METHOD_T);
 		cctx->scope = GetLangNamespace();
 		cctx->ty = worldT;
 		cctx->u.mt = m;
 		namespace_* loc = GetNamespaceCContext(cctx);
-		env->context_ref = self;
+		env->ContextRef = self;
 		sm->env = env;
 		m->access = ACCESS_PRIVATE_T;
 		m->u.script_method = sm;
@@ -258,17 +258,17 @@ static void LoadClassLoader_toplevel_function(class_loader* self) {
 			PushVector(m->parameters, param);
 			param->gtype = ResolveImportManager(loc, ilparam->fqcn, cctx);
 			EntrySymbolTable(
-				env->sym_table,
+				env->Symboles,
 				ResolveImportManager(loc, ilparam->fqcn, cctx),
 				ilparam->namev
 			);
 			//実引数を保存
 			//0番目は this のために開けておく
-			AddOpcodeBuf(env->buf, OP_STORE);
-			AddOpcodeBuf(env->buf, (j + 1));
+			AddOpcodeBuf(env->Bytecode, OP_STORE);
+			AddOpcodeBuf(env->Bytecode, (j + 1));
 		}
-		AddOpcodeBuf(env->buf, (VectorItem)OP_STORE);
-		AddOpcodeBuf(env->buf, (VectorItem)0);
+		AddOpcodeBuf(env->Bytecode, (VectorItem)OP_STORE);
+		AddOpcodeBuf(env->Bytecode, (VectorItem)0);
 		PushVector(worldT->u.class_->method_list, m);
 		//CLBC_corutine(self, m, env, ilfunc->parameter_list, ilfunc->statement_list, cctx, GetLangNamespace());
 		DeleteCallContext(cctx);

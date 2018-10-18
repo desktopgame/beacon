@@ -21,18 +21,18 @@ il_stmt_variable_decl * NewILVariableDecl(StringView namev) {
 	return ret;
 }
 
-void GenerateILVariableDecl(il_stmt_variable_decl * self, enviroment * env, call_context* cctx) {
+void GenerateILVariableDecl(il_stmt_variable_decl * self, Enviroment * env, call_context* cctx) {
 
 }
 
-void LoadILVariableDecl(il_stmt_variable_decl * self, struct enviroment* env, call_context* cctx) {
-	if(IsContainsSymbol(env->sym_table, self->namev)) {
+void LoadILVariableDecl(il_stmt_variable_decl * self, Enviroment* env, call_context* cctx) {
+	if(IsContainsSymbol(env->Symboles, self->namev)) {
 		ThrowBCError(BCERROR_OVERWRAP_VARIABLE_NAME_T,
 			Ref2Str(self->namev)
 		);
 	}
 	symbol_entry* e = EntrySymbolTable(
-		env->sym_table,
+		env->Symboles,
 		ResolveImportManager(NULL, self->fqcn, cctx),
 		self->namev
 	);
