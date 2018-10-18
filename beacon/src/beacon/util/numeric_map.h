@@ -5,12 +5,12 @@ typedef void* NumericMapItem;
 /**
  * 整数をキーとして二分探索を行うマップ.
  */
-typedef struct NumericMap_t {
+typedef struct NumericMap {
 	NumericMapKey Key;
 	NumericMapItem Item;
-	struct NumericMap_t* Parent;
-	struct NumericMap_t* Left;
-	struct NumericMap_t* Right;
+	struct NumericMap* Parent;
+	struct NumericMap* Left;
+	struct NumericMap* Right;
 } NumericMap;
 /**
  * ツリーのアクション関数です.

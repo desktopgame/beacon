@@ -7,7 +7,7 @@
  * 可変長の文字列を格納する構造体.
  * 文字を格納する場合はこちらを使用します。
  */
-typedef struct Buffer_t {
+typedef struct Buffer {
 	int Length;
 	int Capacity;
 	char* Text;

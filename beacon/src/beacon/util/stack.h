@@ -11,7 +11,7 @@ typedef void* StackItem;
 /**
  * スタックを表す構造体.
  */
-typedef struct Stack_t {
+typedef struct Stack {
 	StackItem Item;
 	struct Stack_t* Prev;
 	struct Stack_t* Next;

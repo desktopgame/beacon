@@ -6,7 +6,7 @@
  * deferステートメントが実行された時、
  * その時点でのpcと名前束縛を記録しておく構造体です.
  */
-typedef struct DeferContext_t {
+typedef struct DeferContext {
 	Label* Offset;
 	Vector* VariableTable;
 } DeferContext;

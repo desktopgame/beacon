@@ -6,7 +6,7 @@
  * goto の引数として使用します。
  * ジャンプ先が後方であるとき、これを使用して前方参照します。
  */
-typedef struct Label_t {
+typedef struct Label {
 	int Cursor;
 } Label;
 

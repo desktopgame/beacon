@@ -5,7 +5,7 @@
  * ファイルを表す構造体.
  * フルパスを表します。
  */
-typedef struct FileEntry_t {
+typedef struct FileEntry {
 	char* FileName;
 	bool IsFile;
 } FileEntry;

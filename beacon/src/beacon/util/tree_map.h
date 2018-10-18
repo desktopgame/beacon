@@ -14,13 +14,13 @@ typedef void* TreeItem;
 /** 
  * キーと値を紐づけて管理するマップ.
  */
-typedef struct TreeMap_t {
+typedef struct TreeMap {
 	char* Key;
 	TreeItem Item;
 	//struct TreeMap* parent;
-	struct TreeMap_t* Parent;
-	struct TreeMap_t* Left;
-	struct TreeMap_t* Right;
+	struct TreeMap* Parent;
+	struct TreeMap* Left;
+	struct TreeMap* Right;
 } TreeMap;
 
 

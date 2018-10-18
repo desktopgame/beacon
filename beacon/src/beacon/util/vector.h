@@ -13,7 +13,7 @@ typedef void* VectorItem;
  * 再帰を使用せずに実装された可変長配列です.
  * 0/NULLを格納することが出来ます。
  */
-typedef struct Vector_t {
+typedef struct Vector {
 	//使用されている長さ
 	int Length;
 	//余分に確保された分も含めた長さ
