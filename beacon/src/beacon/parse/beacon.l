@@ -43,11 +43,11 @@ int yywrap(void) {
 
 int yyerror(char * err_str) {
 	Parser* p = GetCurrentParser();
-	p->result = PARSE_SYNTAX_ERROR_T;
-	p->error_line_index = yylloc.last_line;
-	p->error_column_index = yylloc.last_column;
-	p->error_message = Strdup(err_str);
-	p->error_line_text  = GetLineAt(yaccSourceBuffer, yylloc.last_line);
+	p->Result = PARSE_SYNTAX_ERROR_T;
+	p->ErrorLineIndex = yylloc.last_line;
+	p->ErrorColumnIndex = yylloc.last_column;
+	p->ErrorMessage = Strdup(err_str);
+	p->ErrorLineText  = GetLineAt(yaccSourceBuffer, yylloc.last_line);
 	return 1;
 }
 
@@ -101,7 +101,7 @@ static int string_input(char *buf, int max_size) {
 static int my_yyinput(char *buf, int max_size) {
 	int result;
 	Parser* p = GetCurrentParser();
-	switch (p->input_type) {
+	switch (p->InputType) {
 		case YINPUT_FILE_T:
 			result = file_input(buf, max_size);
 			break;
@@ -259,7 +259,7 @@ static void update_loc() {
 }
 
 <INITIAL>"\n" {
-	GetCurrentParser()->lineno++;
+	GetCurrentParser()->Lineno++;
 }
 
 <INITIAL>[1-9][0-9]* {
@@ -287,14 +287,14 @@ static void update_loc() {
 <INITIAL>"/*"     BEGIN ML_COMMENT;
 <INITIAL>"//"     BEGIN L_COMMENT;
 <ML_COMMENT>\n     {
-	GetCurrentParser()->lineno++;
+	GetCurrentParser()->Lineno++;
 }
 <ML_COMMENT>"*/"     {
     BEGIN INITIAL;
 }
 <ML_COMMENT>.      ;
 <L_COMMENT>\n  {
-	GetCurrentParser()->lineno++;
+	GetCurrentParser()->Lineno++;
 	BEGIN INITIAL;
 }
 <L_COMMENT><<EOF>>   {

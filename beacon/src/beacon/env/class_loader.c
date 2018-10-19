@@ -288,12 +288,12 @@ static void LoadClassLoader_toplevel_function(class_loader* self) {
 }
 
 static bool check_parser_error(Parser* p) {
-	if(p->result == PARSE_SYNTAX_ERROR_T) {
-		ThrowBCError(BCERROR_PARSE_T, p->error_message);
+	if(p->Result == PARSE_SYNTAX_ERROR_T) {
+		ThrowBCError(BCERROR_PARSE_T, p->ErrorMessage);
 		DestroyParser(p);
 		return true;
-	} else if(p->result == PARSE_OPEN_ERROR_T) {
-		ThrowBCError(BCERROR_REQUIRE_NOT_FOUND_T, p->source_name);
+	} else if(p->Result == PARSE_OPEN_ERROR_T) {
+		ThrowBCError(BCERROR_REQUIRE_NOT_FOUND_T, p->SourceName);
 		DestroyParser(p);
 		return true;
 	}

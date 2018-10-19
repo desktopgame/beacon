@@ -22,18 +22,18 @@ typedef enum ParseResult {
  * Yacc/Bisonの解析結果を保存する構造体です.
  */
 typedef struct Parser {
-	ast* root;
-	Buffer* literal_buffer;
+	ast* Root;
+	Buffer* LiteralBuffer;
 	//char* source;
-	char* source_name;
-	char* error_line_text;
-	char* error_message;
-	int error_line_index;
-	int error_column_index;
-	YaccInputType input_type;
-	ParseResult result;
-	int lineno;
-	Vector* lineno_vec;
+	char* SourceName;
+	char* ErrorLineText;
+	char* ErrorMessage;
+	int ErrorLineIndex;
+	int ErrorColumnIndex;
+	YaccInputType InputType;
+	ParseResult Result;
+	int Lineno;
+	Vector* LinenoTable;
 } Parser;
 
 /**

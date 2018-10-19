@@ -682,11 +682,11 @@ int yywrap(void) {
 
 int yyerror(char * err_str) {
 	Parser* p = GetCurrentParser();
-	p->result = PARSE_SYNTAX_ERROR_T;
-	p->error_line_index = yylloc.last_line;
-	p->error_column_index = yylloc.last_column;
-	p->error_message = Strdup(err_str);
-	p->error_line_text  = GetLineAt(yaccSourceBuffer, yylloc.last_line);
+	p->Result = PARSE_SYNTAX_ERROR_T;
+	p->ErrorLineIndex = yylloc.last_line;
+	p->ErrorColumnIndex = yylloc.last_column;
+	p->ErrorMessage = Strdup(err_str);
+	p->ErrorLineText  = GetLineAt(yaccSourceBuffer, yylloc.last_line);
 	return 1;
 }
 
@@ -740,7 +740,7 @@ static int string_input(char *buf, int max_size) {
 static int my_yyinput(char *buf, int max_size) {
 	int result;
 	Parser* p = GetCurrentParser();
-	switch (p->input_type) {
+	switch (p->InputType) {
 		case YINPUT_FILE_T:
 			result = file_input(buf, max_size);
 			break;
@@ -1517,7 +1517,7 @@ case 92:
 YY_RULE_SETUP
 #line 261 "beacon.l"
 {
-	GetCurrentParser()->lineno++;
+	GetCurrentParser()->Lineno++;
 }
 	YY_BREAK
 case 93:
@@ -1573,7 +1573,7 @@ case 100:
 YY_RULE_SETUP
 #line 289 "beacon.l"
 {
-	GetCurrentParser()->lineno++;
+	GetCurrentParser()->Lineno++;
 }
 	YY_BREAK
 case 101:
@@ -1593,7 +1593,7 @@ case 103:
 YY_RULE_SETUP
 #line 296 "beacon.l"
 {
-	GetCurrentParser()->lineno++;
+	GetCurrentParser()->Lineno++;
 	BEGIN INITIAL;
 }
 	YY_BREAK

@@ -13,7 +13,7 @@ static void DeleteAST_self(VectorItem item);
 
 void CompileEntryAST(ast * self) {
 	Parser* p = GetCurrentParser();
-	PushAST(p->root, self);
+	PushAST(p->Root, self);
 }
 
 ast * MallocAST(ast_tag tag, const char* filename, int lineno) {
@@ -24,9 +24,9 @@ ast * MallocAST(ast_tag tag, const char* filename, int lineno) {
 	//行番号を取得
 	Parser* p = GetCurrentParser();
 	if (p != NULL) {
-		ret->lineno = p->lineno;
-		assert(p->lineno >= 0);
-		PushVector(p->lineno_vec, p->lineno);
+		ret->lineno = p->Lineno;
+		assert(p->Lineno >= 0);
+		PushVector(p->LinenoTable, p->Lineno);
 	} else {
 		ret->lineno = -1;
 	}
@@ -110,8 +110,8 @@ ast * PushAST(ast * self, ast * achild) {
 	//行番号を補正
 	Parser* p = GetCurrentParser();
 	if (p != NULL) {
-		if (!IsEmptyVector(p->lineno_vec)) {
-			int lineno = (int)PopVector(p->lineno_vec);
+		if (!IsEmptyVector(p->LinenoTable)) {
+			int lineno = (int)PopVector(p->LinenoTable);
 			assert(lineno >= 0);
 			self->lineno = lineno;
 		}
