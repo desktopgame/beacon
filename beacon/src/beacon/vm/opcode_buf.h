@@ -8,8 +8,8 @@
  * オペコードの一覧を表す構造体.
  */
 typedef struct OpcodeBuf {
-	Vector* source_vec;
-	Vector* label_vec;
+	Vector* Instructions;
+	Vector* LabelTable;
 } OpcodeBuf;
 
 /**

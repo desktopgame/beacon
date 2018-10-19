@@ -102,7 +102,7 @@ void NativeThrowVM(frame * self, object * exc) {
 	//どこかでキャッチしようとしている
 	} else {
 		int temp = 0;
-		ValidateVM(self, self->context_ref->Bytecode->source_vec->Length, &temp);
+		ValidateVM(self, self->context_ref->Bytecode->Instructions->Length, &temp);
 		self->native_throw_pos = temp;
 	}
 }
@@ -192,7 +192,7 @@ StringView GetVMErrorMessage() {
 static void vm_run(frame * self, Enviroment * env, int pos, int deferStart) {
 	assert(env != NULL);
 	script_context* ctx = GetCurrentScriptContext();
-	int source_len = env->Bytecode->source_vec->Length;
+	int source_len = env->Bytecode->Instructions->Length;
 	self->context_ref = env;
 	heap* he = GetHeap();
 	for (int IDX = pos; IDX < source_len; IDX++) {

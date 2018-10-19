@@ -46,11 +46,11 @@ void AddRangeEnviroment(Enviroment* self, int lineno) {
 	//最後についかしたレンジを伸ばすか新たに追加する
 	LineRange* lrt = (LineRange*)TopVector(self->LineRangeTable);
 	if (lrt->Lineno == lineno) {
-		lrt->EndOffset = self->Bytecode->source_vec->Length;
+		lrt->EndOffset = self->Bytecode->Instructions->Length;
 	} else {
 		LineRange* lr = NewLineRange();
-		lr->StartOffset = self->Bytecode->source_vec->Length;
-		lr->EndOffset = self->Bytecode->source_vec->Length;
+		lr->StartOffset = self->Bytecode->Instructions->Length;
+		lr->EndOffset = self->Bytecode->Instructions->Length;
 		lr->Lineno = lineno;
 		PushVector(self->LineRangeTable, lr);
 	}
@@ -60,9 +60,9 @@ void DumpEnviromentOp(Enviroment * self, int depth) {
 	OpcodeBuf* buf = self->Bytecode;
 	LineRange* lr = NULL;
 	int lrPos = -1;
-	for (int i = 0; i < buf->source_vec->Length; i++) {
+	for (int i = 0; i < buf->Instructions->Length; i++) {
 		Printi(depth);
-		i = PrintOpcode(buf->source_vec, i);
+		i = PrintOpcode(buf->Instructions, i);
 		if (!IsEmptyVector(self->LineRangeTable)) {
 			if (lr == NULL) {
 				lr = AtVector(self->LineRangeTable, 0);
@@ -109,7 +109,7 @@ int AddCStringEnviroment(Enviroment * self, StringView sv) {
 }
 
 VectorItem GetEnviromentSourceAt(Enviroment * self, int index) {
-	return AtVector(self->Bytecode->source_vec, index);
+	return AtVector(self->Bytecode->Instructions, index);
 }
 
 object* GetEnviromentConstantAt(Enviroment * self, int index) {

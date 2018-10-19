@@ -10,33 +10,33 @@ static void OpcodeBuf_copy(OpcodeBuf* src, OpcodeBuf* dst);
 
 OpcodeBuf * NewOpcodeBuf() {
 	OpcodeBuf* ret = (OpcodeBuf*)MEM_MALLOC(sizeof(OpcodeBuf));
-	ret->label_vec = NewVector();
-	ret->source_vec = NewVector();
+	ret->LabelTable = NewVector();
+	ret->Instructions = NewVector();
 	return ret;
 }
 
 int AddOpcodeBuf(OpcodeBuf * self, VectorItem item) {
-	int len = self->source_vec->Length;
-	PushVector(self->source_vec, item);
+	int len = self->Instructions->Length;
+	PushVector(self->Instructions, item);
 	return len;
 }
 
 Label * AddLabelOpcodeBuf(OpcodeBuf * self, int index) {
 	Label* ret = NewLabel(index);
-	PushVector(self->label_vec, ret);
+	PushVector(self->LabelTable, ret);
 	return ret;
 }
 
 int AddNOPOpcodeBuf(OpcodeBuf * self) {
-	int len = self->source_vec->Length;
+	int len = self->Instructions->Length;
 	AddOpcodeBuf(self, OP_NOP);
 	return len;
 }
 
 void DumpOpcodeBuf(OpcodeBuf * self, int depth) {
-	for (int i = 0; i < self->source_vec->Length; i++) {
+	for (int i = 0; i < self->Instructions->Length; i++) {
 		Printi(depth);
-		i = PrintOpcode(self->source_vec, i);
+		i = PrintOpcode(self->Instructions, i);
 		Println();
 	}
 	Println();
@@ -53,8 +53,8 @@ void DeleteOpcodeBuf(OpcodeBuf * self) {
 	if (self == NULL) {
 		return;
 	}
-	DeleteVector(self->source_vec, VectorDeleterOfNull);
-	DeleteVector(self->label_vec, DeleteOpcodeBuf_label);
+	DeleteVector(self->Instructions, VectorDeleterOfNull);
+	DeleteVector(self->LabelTable, DeleteOpcodeBuf_label);
 	MEM_FREE(self);
 }
 
@@ -66,16 +66,16 @@ static void DeleteOpcodeBuf_label(VectorItem item) {
 }
 
 static void OpcodeBuf_copy(OpcodeBuf* src, OpcodeBuf* dst) {
-	for (int i = 0; i < src->source_vec->Length; i++) {
-		VectorItem e = AtVector(src->source_vec, i);
+	for (int i = 0; i < src->Instructions->Length; i++) {
+		VectorItem e = AtVector(src->Instructions, i);
 		if (e == OP_GOTO ||
 			e == OP_GOTO_if_false ||
 			e == OP_GOTO_if_true) {
 
 			AddOpcodeBuf(dst, e);
-			Label* lb = (Label*)AtVector(src->source_vec, ++i);
+			Label* lb = (Label*)AtVector(src->Instructions, ++i);
 			AddOpcodeBuf(dst, e);
-			PushVector(dst->label_vec, lb);
+			PushVector(dst->LabelTable, lb);
 		} else {
 			AddOpcodeBuf(dst, e);
 		}

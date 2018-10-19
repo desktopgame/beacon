@@ -416,7 +416,7 @@ static method* create_has_next(method* self, type* ty, class_loader* cll, Vector
 	if(GetTypeName(self->parent) == InternString("Base")) {
 	//	DumpEnviromentOp(envSmt, 0);
 	}
-	(*out_op_len) = envSmt->Bytecode->source_vec->Length;
+	(*out_op_len) = envSmt->Bytecode->Instructions->Length;
 	DeleteCallContext(cctx);
 	smt->env = envSmt;
 	mt->u.script_method = smt;
