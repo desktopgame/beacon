@@ -30,7 +30,7 @@ typedef struct parser {
 	char* error_message;
 	int error_line_index;
 	int error_column_index;
-	yacc_input_type input_type;
+	YaccInputType input_type;
 	ParseResult result;
 	int lineno;
 	Vector* lineno_vec;
