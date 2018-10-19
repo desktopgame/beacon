@@ -12,7 +12,7 @@ static modifier_type ASTCastToModifierImpl(ast * self, bool* error);
 static void DeleteAST_self(VectorItem item);
 
 void CompileEntryAST(ast * self) {
-	parser* p = GetCurrentParser();
+	Parser* p = GetCurrentParser();
 	PushAST(p->root, self);
 }
 
@@ -22,7 +22,7 @@ ast * MallocAST(ast_tag tag, const char* filename, int lineno) {
 	ret->tag = tag;
 	ret->vchildren = NULL;
 	//行番号を取得
-	parser* p = GetCurrentParser();
+	Parser* p = GetCurrentParser();
 	if (p != NULL) {
 		ret->lineno = p->lineno;
 		assert(p->lineno >= 0);
@@ -108,7 +108,7 @@ ast * PushAST(ast * self, ast * achild) {
 	}
 	PushVector(self->vchildren, achild);
 	//行番号を補正
-	parser* p = GetCurrentParser();
+	Parser* p = GetCurrentParser();
 	if (p != NULL) {
 		if (!IsEmptyVector(p->lineno_vec)) {
 			int lineno = (int)PopVector(p->lineno_vec);

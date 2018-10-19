@@ -53,7 +53,7 @@ static class_loader* LoadClassLoader_specialImpl(class_loader* self, class_loade
 static void LoadClassLoader_toplevel(class_loader* self);
 static void LoadClassLoader_linkall(class_loader* self);
 static void LoadClassLoader_toplevel_function(class_loader* self);
-static bool check_parser_error(parser* p);
+static bool check_parser_error(Parser* p);
 
 class_loader* NewClassLoader(const char* filename, content_type type) {
 	class_loader* ret = (class_loader*)MEM_MALLOC(sizeof(class_loader));
@@ -73,7 +73,7 @@ class_loader* NewClassLoader(const char* filename, content_type type) {
 
 void LoadClassLoader(class_loader * self) {
 	//ASTを読み込む
-	parser* p = ParseFile(self->filename);
+	Parser* p = ParseFile(self->filename);
 	//解析に失敗した場合
 	if (check_parser_error(p)) {
 		return;
@@ -161,7 +161,7 @@ static void class_loader_cache_delete(VectorItem item) {
 static class_loader* LoadClassLoader_specialImpl(class_loader* self, class_loader* cll, char* full_path) {
 	cll = CLBC_import_new(self, full_path);
 	//parser
-	parser* p = ParseFile(full_path);
+	Parser* p = ParseFile(full_path);
 	if(check_parser_error(p)) {
 		return cll;
 	}
@@ -287,7 +287,7 @@ static void LoadClassLoader_toplevel_function(class_loader* self) {
 	}
 }
 
-static bool check_parser_error(parser* p) {
+static bool check_parser_error(Parser* p) {
 	if(p->result == PARSE_SYNTAX_ERROR_T) {
 		ThrowBCError(BCERROR_PARSE_T, p->error_message);
 		DestroyParser(p);

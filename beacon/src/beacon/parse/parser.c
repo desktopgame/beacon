@@ -10,10 +10,10 @@
 #pragma warning(disable:4996)
 #endif
 
-static parser* parser_new();
-static parser* gParser;
+static Parser* parser_new();
+static Parser* gParser;
 
-parser* ParseString(const char* source) {
+Parser* ParseString(const char* source) {
 	assert(gParser == NULL);
 	extern void yy_setstr(char *source);
 	extern void yy_clearstr();
@@ -33,7 +33,7 @@ parser* ParseString(const char* source) {
 	return gParser;
 }
 
-parser* ParseFile(const char* filename) {
+Parser* ParseFile(const char* filename) {
 	assert(gParser == NULL);
 	extern void yy_setstr(char *source);
 	extern int yyparse(void);
@@ -57,11 +57,11 @@ parser* ParseFile(const char* filename) {
 	return gParser;
 }
 
-parser* GetCurrentParser() {
+Parser* GetCurrentParser() {
 	return gParser;
 }
 
-void DestroyParser(parser* self) {
+void DestroyParser(Parser* self) {
 	assert(gParser != NULL);
 	if (gParser->root) {
 		DeleteAST(gParser->root);
@@ -73,18 +73,18 @@ void DestroyParser(parser* self) {
 	gParser =  NULL;
 }
 
-void ClearParserBuffer(parser* self) {
+void ClearParserBuffer(Parser* self) {
 	self->literal_buffer = NULL;
 }
 
-void AppendParserBuffer(parser* self, char ch) {
+void AppendParserBuffer(Parser* self, char ch) {
 	if (self->literal_buffer == NULL) {
 		self->literal_buffer = NewBuffer();
 	}
 	AppendBuffer(self->literal_buffer, ch);
 }
 
-ast* ReduceParserBuffer(parser* self) {
+ast* ReduceParserBuffer(Parser* self) {
 	//""のような空文字の場合
 	if (self->literal_buffer == NULL) {
 		return NewASTString(InternString(""));
@@ -94,21 +94,21 @@ ast* ReduceParserBuffer(parser* self) {
 	return ret;
 }
 
-ast* ReleaseParserAST(parser* self) {
+ast* ReleaseParserAST(Parser* self) {
 	ast* ret = self->root;
 	self->root = NULL;
 	return ret;
 }
 
-void RelocationParserError(parser* p) {
+void RelocationParserError(Parser* p) {
 	SetBCErrorFile(p->source_name);
 	SetBCErrorLine(p->error_line_index);
 	SetBCErrorColumn(p->error_column_index);
 }
 
 //private
-static parser* parser_new() {
-	parser* ret = MEM_MALLOC(sizeof(parser));
+static Parser* parser_new() {
+	Parser* ret = MEM_MALLOC(sizeof(Parser));
 	assert(gParser == NULL);
 	gParser = ret;
 	ret->source_name = NULL;

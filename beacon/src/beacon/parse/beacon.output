@@ -58,10 +58,10 @@ Grammar
    25 parameterized_typename: IDENT type_parameter_group
 
    26 type_parameter_group: %empty
-   27                     | LSB type_parameter_list RSB
+   27                     | LSB GetParameterListType RSB
 
-   28 type_parameter_list: type_parameter
-   29                    | type_parameter_list COMMA type_parameter
+   28 GetParameterListType: type_parameter
+   29                     | GetParameterListType COMMA type_parameter
 
    30 type_parameter: IDENT
 
@@ -488,7 +488,7 @@ parameterized_typename (119)
     on left: 25, on right: 31 32 33 34 37 38
 type_parameter_group (120)
     on left: 26 27, on right: 25 59 60 61 62 63 64
-type_parameter_list (121)
+GetParameterListType (121)
     on left: 28 29, on right: 27 29
 type_parameter (122)
     on left: 30, on right: 28 29
@@ -3156,7 +3156,7 @@ State 72
 State 73
 
    26 type_parameter_group: . %empty  [LRB]
-   27                     | . LSB type_parameter_list RSB
+   27                     | . LSB GetParameterListType RSB
    59 function_define: DEF IDENT . type_parameter_group LRB parameter_list RRB ARROW typename_T scope_optional
    60                | DEF IDENT . type_parameter_group LRB RRB ARROW typename_T scope_optional
 
@@ -7303,15 +7303,15 @@ State 131
 
 State 132
 
-   27 type_parameter_group: LSB . type_parameter_list RSB
-   28 type_parameter_list: . type_parameter
-   29                    | . type_parameter_list COMMA type_parameter
+   27 type_parameter_group: LSB . GetParameterListType RSB
+   28 GetParameterListType: . type_parameter
+   29                     | . GetParameterListType COMMA type_parameter
    30 type_parameter: . IDENT
 
     IDENT  shift, and go to state 216
 
-    type_parameter_list  go to state 217
-    type_parameter       go to state 218
+    GetParameterListType  go to state 217
+    type_parameter        go to state 218
 
 
 State 133
@@ -10930,8 +10930,8 @@ State 216
 
 State 217
 
-   27 type_parameter_group: LSB type_parameter_list . RSB
-   29 type_parameter_list: type_parameter_list . COMMA type_parameter
+   27 type_parameter_group: LSB GetParameterListType . RSB
+   29 GetParameterListType: GetParameterListType . COMMA type_parameter
 
     COMMA  shift, and go to state 273
     RSB    shift, and go to state 274
@@ -10939,9 +10939,9 @@ State 217
 
 State 218
 
-   28 type_parameter_list: type_parameter .
+   28 GetParameterListType: type_parameter .
 
-    $default  reduce using rule 28 (type_parameter_list)
+    $default  reduce using rule 28 (GetParameterListType)
 
 
 State 219
@@ -13495,7 +13495,7 @@ State 272
 
 State 273
 
-   29 type_parameter_list: type_parameter_list COMMA . type_parameter
+   29 GetParameterListType: GetParameterListType COMMA . type_parameter
    30 type_parameter: . IDENT
 
     IDENT  shift, and go to state 216
@@ -13505,7 +13505,7 @@ State 273
 
 State 274
 
-   27 type_parameter_group: LSB type_parameter_list RSB .
+   27 type_parameter_group: LSB GetParameterListType RSB .
 
     $default  reduce using rule 27 (type_parameter_group)
 
@@ -13548,7 +13548,7 @@ State 279
 
    25 parameterized_typename: IDENT . type_parameter_group
    26 type_parameter_group: . %empty  [COLON, LCB]
-   27                     | . LSB type_parameter_list RSB
+   27                     | . LSB GetParameterListType RSB
 
     LSB  shift, and go to state 132
 
@@ -15097,9 +15097,9 @@ State 316
 
 State 317
 
-   29 type_parameter_list: type_parameter_list COMMA type_parameter .
+   29 GetParameterListType: GetParameterListType COMMA type_parameter .
 
-    $default  reduce using rule 29 (type_parameter_list)
+    $default  reduce using rule 29 (GetParameterListType)
 
 
 State 318
@@ -16208,7 +16208,7 @@ State 410
 State 411
 
    26 type_parameter_group: . %empty  [LRB]
-   27                     | . LSB type_parameter_list RSB
+   27                     | . LSB GetParameterListType RSB
    63 method_define: DEF IDENT . type_parameter_group LRB parameter_list RRB ARROW typename_T scope_optional
    64              | DEF IDENT . type_parameter_group LRB RRB ARROW typename_T scope_optional
 
@@ -16489,7 +16489,7 @@ State 445
 State 446
 
    26 type_parameter_group: . %empty  [LRB]
-   27                     | . LSB type_parameter_list RSB
+   27                     | . LSB GetParameterListType RSB
    61 method_define: DEF modifier_type_T_list IDENT . type_parameter_group LRB parameter_list RRB ARROW typename_T scope_optional
    62              | DEF modifier_type_T_list IDENT . type_parameter_group LRB RRB ARROW typename_T scope_optional
 

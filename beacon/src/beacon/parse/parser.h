@@ -21,7 +21,7 @@ typedef enum ParseResult {
 /**
  * Yacc/Bisonの解析結果を保存する構造体です.
  */
-typedef struct parser {
+typedef struct Parser {
 	ast* root;
 	Buffer* literal_buffer;
 	//char* source;
@@ -34,7 +34,7 @@ typedef struct parser {
 	ParseResult result;
 	int lineno;
 	Vector* lineno_vec;
-} parser;
+} Parser;
 
 /**
  * 文字列を入力として構文解析を実行します.
@@ -42,7 +42,7 @@ typedef struct parser {
  * @param source
  * @return
  */
-parser* ParseString(const char* source);
+Parser* ParseString(const char* source);
 
 /**
  * ファイルを入力として構文解析を実行します.
@@ -50,39 +50,39 @@ parser* ParseString(const char* source);
  * @param source
  * @return
  */
-parser* ParseFile(const char* filename);
+Parser* ParseFile(const char* filename);
 
 /**
  * 現在のパーサーを返します.
  * @return
  */
-parser* GetCurrentParser();
+Parser* GetCurrentParser();
 
 /**
  * エラー情報とASTを解放します.
  * @param self
  */
-void DestroyParser(parser* self);
+void DestroyParser(Parser* self);
 
 /**
  * 文字列バッファーをクリアします.
  * @param self
  */
-void ClearParserBuffer(parser* self);
+void ClearParserBuffer(Parser* self);
 
 /**
  * 文字列バッファーに一文字加算します.
  * @param self
  * @return
  */
-void AppendParserBuffer(parser* self, char ch);
+void AppendParserBuffer(Parser* self, char ch);
 
 /**
  * 文字列バッファーをリテラルノードへ還元します.
  * @param self
  * @return
  */
-ast* ReduceParserBuffer(parser* self);
+ast* ReduceParserBuffer(Parser* self);
 
 /**
  * パーサーからASTを取り上げて解放させないようにします.
@@ -90,11 +90,11 @@ ast* ReduceParserBuffer(parser* self);
  * @param self
  * @return
  */
-ast* ReleaseParserAST(parser* self);
+ast* ReleaseParserAST(Parser* self);
 
 /**
  * エラー発生位置を設定します.
  * @param p
  */
-void RelocationParserError(parser* p);
+void RelocationParserError(Parser* p);
 #endif // !SIGNAL_PARSE_PARSER_H

@@ -45,7 +45,7 @@ JNIEXPORT jobject JNICALL Java_jp_koya_jbeacon_BCEval_nativeString(JNIEnv * env,
 //private
 static jobject bc_eval_string(JNIEnv * env, jclass cls, jstring str, jobject table, const char* filename, const char* source) {
 	//文字列を解析
-	parser* p = ParseString(source);
+	Parser* p = ParseString(source);
 	if (p->result != PARSE_COMPLETE_T) {
 		ThrowBCError(BCERROR_PARSE_T, p->error_message);
 		DestroyParser(p);

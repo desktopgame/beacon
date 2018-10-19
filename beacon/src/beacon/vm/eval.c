@@ -74,7 +74,7 @@ bool EvalFile(const char * filename) {
 }
 
 bool EvalString(const char* source) {
-	parser* p = ParseString(source);
+	Parser* p = ParseString(source);
 	if (p->result != PARSE_COMPLETE_T) {
 		ThrowBCError(BCERROR_PARSE_T, p->error_message);
 		DestroyParser(p);
