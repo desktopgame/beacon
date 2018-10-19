@@ -34,7 +34,7 @@ sg_thread * GetCurrentSGThread(script_context* sctx) {
 
 void ClearSGThread(sg_thread* self) {
 	while (!IsEmptyStack(self->trace_stack)) {
-		vm_trace* trace = (vm_trace*)PopStack(self->trace_stack);
+		VMTrace* trace = (VMTrace*)PopStack(self->trace_stack);
 		DeleteVMTrace(trace);
 	}
 }
@@ -80,6 +80,6 @@ void DestroySGThread() {
 }
 //private
 static void sg_thread_trace_delete(VectorItem item) {
-	vm_trace* e = (vm_trace*)item;
+	VMTrace* e = (VMTrace*)item;
 	DeleteVMTrace(e);
 }

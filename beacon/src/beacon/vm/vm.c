@@ -131,7 +131,7 @@ void CatchVM(frame * self) {
 
 bool ValidateVM(frame* self, int source_len, int* pcDest) {
 	sg_thread* th = GetCurrentSGThread(GetCurrentScriptContext());
-	vm_trace* trace = (vm_trace*)TopVector(th->trace_stack);
+	VMTrace* trace = (VMTrace*)TopVector(th->trace_stack);
 	self->validate = true;
 	//汚染
 	frame* p = self->parent;
@@ -140,7 +140,7 @@ bool ValidateVM(frame* self, int source_len, int* pcDest) {
 		p = p->parent;
 	}
 	//ここなので catch節 へ向かう
-	if (trace->fr == self) {
+	if (trace->SnapShot == self) {
 		//ここでジャンプレベルを確認するのは
 		//例えば
 		// try { throw ... } catch { ... }
@@ -149,14 +149,14 @@ bool ValidateVM(frame* self, int source_len, int* pcDest) {
 		//では、
 		//プログラムカウンタの位置が異なるためです。
 		//
-		if (trace->jump_level > 0) {
-			*pcDest = trace->pc + 1;
-		} else *pcDest = trace->pc;
+		if (trace->JumpLevel > 0) {
+			*pcDest = trace->PC + 1;
+		} else *pcDest = trace->PC;
 		self->validate = false;
 		return true;
 	//ここではないので終了
 	} else {
-		trace->jump_level++;
+		trace->JumpLevel++;
 		*pcDest = source_len;
 		return false;
 	}
@@ -463,8 +463,8 @@ static void vm_run(frame * self, Enviroment * env, int pos, int deferStart) {
 			case OP_TRY_ENTER:
 			{
 				sg_thread* th = GetCurrentSGThread(GetCurrentScriptContext());
-				vm_trace* trace = NewVMTrace(self);
-				trace->pc = IDX; //goto
+				VMTrace* trace = NewVMTrace(self);
+				trace->PC = IDX; //goto
 				PushVector(th->trace_stack, trace);
 				//goto
 				IDX++;
@@ -476,7 +476,7 @@ static void vm_run(frame * self, Enviroment * env, int pos, int deferStart) {
 			case OP_TRY_EXIT:
 			{
 				sg_thread* th = GetCurrentSGThread(GetCurrentScriptContext());
-				vm_trace* trace = (vm_trace*)PopVector(th->trace_stack);
+				VMTrace* trace = (VMTrace*)PopVector(th->trace_stack);
 				DeleteVMTrace(trace);
 				break;
 			}
@@ -484,7 +484,7 @@ static void vm_run(frame * self, Enviroment * env, int pos, int deferStart) {
 			{
 				sg_thread* th = GetCurrentSGThread(GetCurrentScriptContext());
 				CatchVM(self);
-				vm_trace* trace = (vm_trace*)PopVector(th->trace_stack);
+				VMTrace* trace = (VMTrace*)PopVector(th->trace_stack);
 				DeleteVMTrace(trace);
 				break;
 			}
