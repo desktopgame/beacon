@@ -9,8 +9,8 @@
 #include "../../../env/namespace.h"
 #include "../../../env/TYPE_IMPL.h"
 
-static opcode operator_to_iopcode(operator_type type);
-static opcode operator_to_bopcode(operator_type type);
+static Opcode operator_to_iopcode(operator_type type);
+static Opcode operator_to_bopcode(operator_type type);
 
 il_factor_logic_op* NewILLogicOp(operator_type type) {
 	il_factor_logic_op* ret = (il_factor_logic_op*)MEM_MALLOC(sizeof(il_factor_logic_op));
@@ -75,7 +75,7 @@ char* ILLogicOpToString(il_factor_logic_op* self, Enviroment* env) {
 	return ILBinaryOpToString_simple(self->parent, env);
 }
 //static
-static opcode operator_to_iopcode(operator_type type) {
+static Opcode operator_to_iopcode(operator_type type) {
 	switch(type) {
 		case OPERATOR_BIT_OR_T: return OP_IBIT_OR;
 		case OPERATOR_BIT_AND_T: return OP_IBIT_AND;
@@ -85,7 +85,7 @@ static opcode operator_to_iopcode(operator_type type) {
 	assert(false);
 }
 
-static opcode operator_to_bopcode(operator_type type) {
+static Opcode operator_to_bopcode(operator_type type) {
 	switch(type) {
 		case OPERATOR_BIT_OR_T: return OP_BBIT_OR;
 		case OPERATOR_BIT_AND_T: return OP_BBIT_AND;

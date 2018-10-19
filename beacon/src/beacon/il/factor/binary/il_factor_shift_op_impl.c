@@ -9,8 +9,8 @@
 #include "../../../env/TYPE_IMPL.h"
 #include "../../../env/operator_overload.h"
 
-static opcode operator_to_iopcode(operator_type type);
-static opcode operator_to_dopcode(operator_type type);
+static Opcode operator_to_iopcode(operator_type type);
+static Opcode operator_to_dopcode(operator_type type);
 
 il_factor_shift_op* NewILShiftOp(operator_type type) {
 	il_factor_shift_op* ret = (il_factor_shift_op*)MEM_MALLOC(sizeof(il_factor_shift_op));
@@ -80,7 +80,7 @@ char* ILShiftOpToString(il_factor_shift_op* self, Enviroment* env) {
 	return ILBinaryOpToString_simple(self->parent, env);
 }
 //static
-static opcode operator_to_iopcode(operator_type type) {
+static Opcode operator_to_iopcode(operator_type type) {
 	switch(type) {
 		case OPERATOR_LSHIFT_T: return OP_ILSH;
 		case OPERATOR_RSHIFT_T: return OP_IRSH;
@@ -88,6 +88,6 @@ static opcode operator_to_iopcode(operator_type type) {
 	assert(false);
 }
 
-static opcode operator_to_dopcode(operator_type type) {
+static Opcode operator_to_dopcode(operator_type type) {
 	assert(false);
 }

@@ -208,7 +208,7 @@ static void vm_run(frame * self, Enviroment * env, int pos, int deferStart) {
 			break;
 		}
 		self->pc = IDX;
-		opcode b = (opcode)GetEnviromentSourceAt(env, IDX);
+		Opcode b = (Opcode)GetEnviromentSourceAt(env, IDX);
 		switch (b) {
 			//int & int
 			case OP_IADD:

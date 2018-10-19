@@ -10,8 +10,8 @@
 #include "../../../env/TYPE_IMPL.h"
 #include <assert.h>
 
-static opcode operator_to_iopcode(operator_type type);
-static opcode operator_to_dopcode(operator_type type);
+static Opcode operator_to_iopcode(operator_type type);
+static Opcode operator_to_dopcode(operator_type type);
 
 il_factor_arithmetic_op* NewILArithmeticOp(operator_type type) {
 	il_factor_arithmetic_op* ret = (il_factor_arithmetic_op*)MEM_MALLOC(sizeof(il_factor_arithmetic_op));
@@ -81,7 +81,7 @@ char* ILArithmeticOpToString(il_factor_arithmetic_op* self, Enviroment* env) {
 	return ILBinaryOpToString_simple(self->parent, env);
 }
 //static
-static opcode operator_to_iopcode(operator_type type) {
+static Opcode operator_to_iopcode(operator_type type) {
 	switch(type) {
 		case OPERATOR_ADD_T: return OP_IADD;
 		case OPERATOR_SUB_T: return OP_ISUB;
@@ -92,7 +92,7 @@ static opcode operator_to_iopcode(operator_type type) {
 	assert(false);
 }
 
-static opcode operator_to_dopcode(operator_type type) {
+static Opcode operator_to_dopcode(operator_type type) {
 	switch(type) {
 		case OPERATOR_ADD_T: return OP_DADD;
 		case OPERATOR_SUB_T: return OP_DSUB;

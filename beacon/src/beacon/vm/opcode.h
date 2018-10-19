@@ -7,7 +7,7 @@
 /**
  * 命令の一覧です.
  */
-typedef enum opcode {
+typedef enum Opcode {
 	OP_IADD = 1,
 	OP_ISUB,
 	OP_IMUL,
@@ -134,7 +134,7 @@ typedef enum opcode {
 	OP_GOTO_IF_TRUE,
 	OP_GOTO_IF_FALSE,
 	OP_SIZE,
-} opcode;
+} Opcode;
 
 /**
  * オペコードを出力します.

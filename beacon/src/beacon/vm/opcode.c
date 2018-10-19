@@ -9,7 +9,7 @@ int PrintOpcode(Vector* source, int index) {
 
 int FprintOpcode(FILE* fp, Vector* source, int index) {
 	VectorItem e = AtVector(source, index);
-	opcode code = (opcode)e;
+	Opcode code = (Opcode)e;
 	fprintf(fp,"%d: ", index);
 	switch (code) {
 		//int & int
