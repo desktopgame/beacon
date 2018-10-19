@@ -6,34 +6,34 @@
 
 //proto
 static void DeleteOpcodeBuf_label(VectorItem item);
-static void opcode_buf_copy(opcode_buf* src, opcode_buf* dst);
+static void OpcodeBuf_copy(OpcodeBuf* src, OpcodeBuf* dst);
 
-opcode_buf * NewOpcodeBuf() {
-	opcode_buf* ret = (opcode_buf*)MEM_MALLOC(sizeof(opcode_buf));
+OpcodeBuf * NewOpcodeBuf() {
+	OpcodeBuf* ret = (OpcodeBuf*)MEM_MALLOC(sizeof(OpcodeBuf));
 	ret->label_vec = NewVector();
 	ret->source_vec = NewVector();
 	return ret;
 }
 
-int AddOpcodeBuf(opcode_buf * self, VectorItem item) {
+int AddOpcodeBuf(OpcodeBuf * self, VectorItem item) {
 	int len = self->source_vec->Length;
 	PushVector(self->source_vec, item);
 	return len;
 }
 
-Label * AddLabelOpcodeBuf(opcode_buf * self, int index) {
+Label * AddLabelOpcodeBuf(OpcodeBuf * self, int index) {
 	Label* ret = NewLabel(index);
 	PushVector(self->label_vec, ret);
 	return ret;
 }
 
-int AddNOPOpcodeBuf(opcode_buf * self) {
+int AddNOPOpcodeBuf(OpcodeBuf * self) {
 	int len = self->source_vec->Length;
 	AddOpcodeBuf(self, OP_NOP);
 	return len;
 }
 
-void DumpOpcodeBuf(opcode_buf * self, int depth) {
+void DumpOpcodeBuf(OpcodeBuf * self, int depth) {
 	for (int i = 0; i < self->source_vec->Length; i++) {
 		Printi(depth);
 		i = PrintOpcode(self->source_vec, i);
@@ -42,14 +42,14 @@ void DumpOpcodeBuf(opcode_buf * self, int depth) {
 	Println();
 }
 
-opcode_buf * MergeOpcodeBuf(opcode_buf * a, opcode_buf * b) {
-	opcode_buf* ret = NewOpcodeBuf();
-	opcode_buf_copy(a, ret);
-	opcode_buf_copy(b, ret);
+OpcodeBuf * MergeOpcodeBuf(OpcodeBuf * a, OpcodeBuf * b) {
+	OpcodeBuf* ret = NewOpcodeBuf();
+	OpcodeBuf_copy(a, ret);
+	OpcodeBuf_copy(b, ret);
 	return ret;
 }
 
-void DeleteOpcodeBuf(opcode_buf * self) {
+void DeleteOpcodeBuf(OpcodeBuf * self) {
 	if (self == NULL) {
 		return;
 	}
@@ -65,7 +65,7 @@ static void DeleteOpcodeBuf_label(VectorItem item) {
 	DeleteLabel(l);
 }
 
-static void opcode_buf_copy(opcode_buf* src, opcode_buf* dst) {
+static void OpcodeBuf_copy(OpcodeBuf* src, OpcodeBuf* dst) {
 	for (int i = 0; i < src->source_vec->Length; i++) {
 		VectorItem e = AtVector(src->source_vec, i);
 		if (e == OP_GOTO ||

@@ -18,7 +18,7 @@ struct fqcn_cache;
  */
 typedef struct Enviroment {
 	struct class_loader* ContextRef;
-	opcode_buf* Bytecode;
+	OpcodeBuf* Bytecode;
 	symbol_table* Symboles;
 	Vector* ConstantPool;
 	Vector* LineRangeTable;

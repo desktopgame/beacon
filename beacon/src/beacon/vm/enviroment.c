@@ -57,7 +57,7 @@ void AddRangeEnviroment(Enviroment* self, int lineno) {
 }
 
 void DumpEnviromentOp(Enviroment * self, int depth) {
-	opcode_buf* buf = self->Bytecode;
+	OpcodeBuf* buf = self->Bytecode;
 	LineRange* lr = NULL;
 	int lrPos = -1;
 	for (int i = 0; i < buf->source_vec->Length; i++) {
