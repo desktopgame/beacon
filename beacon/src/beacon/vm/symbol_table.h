@@ -13,17 +13,17 @@ struct symbol_entry;
  * 変数名とインデックスの変換テーブルです.
  * オペコードの中では、添え字で変数アクセスを行います。
  */
-typedef struct symbol_table {
-	NumericMap* map;
-	int count;
-	int scope_depth;
-} symbol_table;
+typedef struct SymbolTable {
+	NumericMap* VariableMap;
+	int Count;
+	int ScopeDepth;
+} SymbolTable;
 
 /**
  * シンボルテーブルを作成します.
  * @return
  */
-symbol_table* NewSymbolTable();
+SymbolTable* NewSymbolTable();
 
 /**
  * 指定の名前に対応するインデックスを返します.
@@ -33,7 +33,7 @@ symbol_table* NewSymbolTable();
  * @param namev
  * @return nameに対応するエントリが存在せず、clsがNULLならNULL
  */
-struct symbol_entry* EntrySymbolTable(symbol_table* self, struct generic_type* gtp, StringView namev);
+struct symbol_entry* EntrySymbolTable(SymbolTable* self, struct generic_type* gtp, StringView namev);
 
 /**
  * 既に指定の名前が含まれるなら true.
@@ -41,17 +41,17 @@ struct symbol_entry* EntrySymbolTable(symbol_table* self, struct generic_type* g
  * @param namev
  * @return
  */
-bool IsContainsSymbol(symbol_table* self, StringView namev);
+bool IsContainsSymbol(SymbolTable* self, StringView namev);
 
 /**
  * シンボルテーブルをダンプします.
  * @param self
  */
-void DumpSymbolTable(symbol_table* self);
+void DumpSymbolTable(SymbolTable* self);
 
 /**
  * シンボルテーブルを開放します.
  * @param self
  */
-void DeleteSymbolTable(symbol_table* self);
+void DeleteSymbolTable(SymbolTable* self);
 #endif // !SIGNAL_VM_SYMBOL_TABLE_H

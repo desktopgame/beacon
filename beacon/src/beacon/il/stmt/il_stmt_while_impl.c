@@ -24,7 +24,7 @@ il_stmt_while * NewILWhile() {
 }
 
 void GenerateILWhile(il_stmt_while * self, Enviroment * env, call_context* cctx) {
-	env->Symboles->scope_depth++;
+	env->Symboles->ScopeDepth++;
 	int prev = AddNOPOpcodeBuf(env->Bytecode);
 	Label* prevLab = AddLabelOpcodeBuf(env->Bytecode, prev);
 	Label* nextLab = AddLabelOpcodeBuf(env->Bytecode, -1);
@@ -46,7 +46,7 @@ void GenerateILWhile(il_stmt_while * self, Enviroment * env, call_context* cctx)
 	PopVector(cctx->control.while_end);
 	int next = AddNOPOpcodeBuf(env->Bytecode);
 	nextLab->Cursor = next;
-	env->Symboles->scope_depth--;
+	env->Symboles->ScopeDepth--;
 }
 
 void DeleteILWhile(il_stmt_while * self) {
@@ -56,14 +56,14 @@ void DeleteILWhile(il_stmt_while * self) {
 }
 
 void LoadILWhile(il_stmt_while* self, Enviroment* env, call_context* cctx) {
-	env->Symboles->scope_depth++;
+	env->Symboles->ScopeDepth++;
 	LoadILFactor(self->condition, env, cctx);
 	for(int i=0; i<self->statement_list->Length; i++) {
 		il_stmt* e = (il_stmt*)AtVector(self->statement_list, i);
 		LoadILStmt(e, env, cctx);
 	}
 	check_condition_type(self->condition, env, cctx);
-	env->Symboles->scope_depth--;
+	env->Symboles->ScopeDepth--;
 }
 
 //private

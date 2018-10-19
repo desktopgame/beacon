@@ -13,16 +13,16 @@
 static void DeleteSymbolTable_entry(NumericMapKey key, NumericMapItem item);
 static void DumpSymbolTable_entry(NumericMapKey key, NumericMapItem item);
 
-symbol_table * NewSymbolTable() {
-	symbol_table* ret = (symbol_table*)MEM_MALLOC(sizeof(symbol_table));
-	ret->count = 1;
-	ret->map = NewNumericMap();
-	ret->scope_depth = 0;
+SymbolTable * NewSymbolTable() {
+	SymbolTable* ret = (SymbolTable*)MEM_MALLOC(sizeof(SymbolTable));
+	ret->Count = 1;
+	ret->VariableMap = NewNumericMap();
+	ret->ScopeDepth = 0;
 	return ret;
 }
 
-symbol_entry* EntrySymbolTable(symbol_table* self, generic_type* gtp, StringView namev) {
-	NumericMap* data = GetNumericMapCell(self->map, namev);
+symbol_entry* EntrySymbolTable(SymbolTable* self, generic_type* gtp, StringView namev) {
+	NumericMap* data = GetNumericMapCell(self->VariableMap, namev);
 	if (data) {
 		return ((symbol_entry*)data->Item);
 	}
@@ -30,26 +30,26 @@ symbol_entry* EntrySymbolTable(symbol_table* self, generic_type* gtp, StringView
 	if (gtp == NULL) {
 		return NULL;
 	}
-	int ret = self->count;
+	int ret = self->Count;
 	symbol_entry* e = NewSymbolEntry();
-	e->index = self->count;
+	e->index = self->Count;
 	e->gtype = gtp;
-	e->scope_depth = self->scope_depth;
-	PutNumericMap(self->map, namev, e);
-	self->count++;
+	e->scope_depth = self->ScopeDepth;
+	PutNumericMap(self->VariableMap, namev, e);
+	self->Count++;
 	return e;
 }
 
-bool IsContainsSymbol(symbol_table* self, StringView namev) {
-	return GetNumericMapCell(self->map, namev) != NULL;
+bool IsContainsSymbol(SymbolTable* self, StringView namev) {
+	return GetNumericMapCell(self->VariableMap, namev) != NULL;
 }
 
-void DumpSymbolTable(symbol_table* self) {
-	EachNumericMap(self->map, DumpSymbolTable_entry);
+void DumpSymbolTable(SymbolTable* self) {
+	EachNumericMap(self->VariableMap, DumpSymbolTable_entry);
 }
 
-void DeleteSymbolTable(symbol_table * self) {
-	DeleteNumericMap(self->map, DeleteSymbolTable_entry);
+void DeleteSymbolTable(SymbolTable * self) {
+	DeleteNumericMap(self->VariableMap, DeleteSymbolTable_entry);
 	MEM_FREE(self);
 }
 

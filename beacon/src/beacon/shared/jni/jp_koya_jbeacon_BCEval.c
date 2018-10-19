@@ -85,8 +85,8 @@ static jobject bc_eval_string(JNIEnv * env, jclass cls, jstring str, jobject tab
 	jobject symbol_table_obj = (*env)->NewObject(env, symbol_table_cls, symbol_table_ctor_id);
 	//スクリプトを実行
 	frame* fr =  bc_eval_allocate(cll);
-	bc_write_symbol(env, cll->env->Symboles->map->Left, fr, symbol_table_obj);
-	bc_write_symbol(env, cll->env->Symboles->map->Right, fr, symbol_table_obj);
+	bc_write_symbol(env, cll->env->Symboles->VariableMap->Left, fr, symbol_table_obj);
+	bc_write_symbol(env, cll->env->Symboles->VariableMap->Right, fr, symbol_table_obj);
 	bc_eval_release(env, cll, fr);
 	//https://stackoverflow.com/questions/23085044/jni-system-out-and-printf-behaviour
 	fflush(stdout);

@@ -33,7 +33,7 @@ void GenerateILVariableLocal(il_factor_variable_local* self, Enviroment* env, ca
 	assert(self->type != VARIABLE_LOCAL_UNDEFINED_T);
 	if(self->type == VARIABLE_LOCAL_SCOPE_T) {
 		//より深くネストされたブロックで定義された変数
-		if(self->u.entry_->scope_depth > env->Symboles->scope_depth) {
+		if(self->u.entry_->scope_depth > env->Symboles->ScopeDepth) {
 			ThrowBCError(
 				BCERROR_REF_UNDEFINED_LOCAL_VARIABLE_T,
 				Ref2Str(self->namev)

@@ -50,7 +50,7 @@ void PushILElifList(Vector * self, il_stmt_elif * child) {
 
 void GenerateILIf(il_stmt_if * self, Enviroment* env, call_context* cctx) {
 	//if(...)
-	env->Symboles->scope_depth++;
+	env->Symboles->ScopeDepth++;
 	GenerateILFactor(self->condition, env, cctx);
 	Label* l1 = AddLabelOpcodeBuf(env->Bytecode, -1);
 	Label* tail = AddLabelOpcodeBuf(env->Bytecode, -1);
@@ -93,11 +93,11 @@ void GenerateILIf(il_stmt_if * self, Enviroment* env, call_context* cctx) {
 		}
 		tail->Cursor = AddNOPOpcodeBuf(env->Bytecode);
 	}
-	env->Symboles->scope_depth--;
+	env->Symboles->ScopeDepth--;
 }
 
 void LoadILIf(il_stmt_if * self, Enviroment* env, call_context* cctx) {
-	env->Symboles->scope_depth++;
+	env->Symboles->ScopeDepth++;
 	LoadILFactor(self->condition, env, cctx);
 	for(int i=0; i<self->body->Length; i++) {
 		il_stmt* e = (il_stmt*)AtVector(self->body, i);
@@ -127,7 +127,7 @@ void LoadILIf(il_stmt_if * self, Enviroment* env, call_context* cctx) {
 		check_condition_type(elif->condition, env, cctx);
 		BC_ERROR();
 	}
-	env->Symboles->scope_depth--;
+	env->Symboles->ScopeDepth--;
 }
 
 void DeleteILIf(il_stmt_if * self) {
