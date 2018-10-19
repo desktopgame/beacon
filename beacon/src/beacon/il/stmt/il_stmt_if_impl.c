@@ -55,7 +55,7 @@ void GenerateILIf(il_stmt_if * self, Enviroment* env, call_context* cctx) {
 	Label* l1 = AddLabelOpcodeBuf(env->Bytecode, -1);
 	Label* tail = AddLabelOpcodeBuf(env->Bytecode, -1);
 	// { ... }
-	AddOpcodeBuf(env->Bytecode, OP_GOTO_if_false);
+	AddOpcodeBuf(env->Bytecode, OP_GOTO_IF_FALSE);
 	AddOpcodeBuf(env->Bytecode, l1);
 	for (int i = 0; i < self->body->Length; i++) {
 		il_stmt* stmt = (il_stmt*)AtVector(self->body, i);
@@ -71,7 +71,7 @@ void GenerateILIf(il_stmt_if * self, Enviroment* env, call_context* cctx) {
 		GenerateILFactor(elif->condition, env, cctx);
 		Label* l2 = AddLabelOpcodeBuf(env->Bytecode, -1);
 		// { ... }
-		AddOpcodeBuf(env->Bytecode, OP_GOTO_if_false);
+		AddOpcodeBuf(env->Bytecode, OP_GOTO_IF_FALSE);
 		AddOpcodeBuf(env->Bytecode, l2);
 		for (int j = 0; j < elif->body->Length; j++) {
 			il_stmt* stmt = (il_stmt*)AtVector(elif->body, j);

@@ -25,7 +25,7 @@ void GenerateILAssert(il_stmt_assert* self, Enviroment* env, call_context* cctx)
 	//https://code.i-harness.com/ja/q/2a1650
 	Label* gt = AddLabelOpcodeBuf(env->Bytecode, 0);
 	GenerateILFactor(self->condition, env, cctx);
-	AddOpcodeBuf(env->Bytecode, OP_GOTO_if_true);
+	AddOpcodeBuf(env->Bytecode, OP_GOTO_IF_TRUE);
 	AddOpcodeBuf(env->Bytecode, gt);
 
 	GenerateILFactor(self->message, env, cctx);

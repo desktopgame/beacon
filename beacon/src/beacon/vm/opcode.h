@@ -90,8 +90,8 @@ typedef enum opcode {
 
 	OP_PUT_PROPERTY,
 	OP_GET_PROPERTY,
-	OP_PUT_STATIC_property,
-	OP_GET_STATIC_property,
+	OP_PUT_STATIC_PROPERTY,
+	OP_GET_STATIC_PROPERTY,
 
 	//op_lookup,
 	//op_glookup,
@@ -131,8 +131,8 @@ typedef enum opcode {
 	OP_BREAKPOINT,
 
 	OP_GOTO,
-	OP_GOTO_if_true,
-	OP_GOTO_if_false,
+	OP_GOTO_IF_TRUE,
+	OP_GOTO_IF_FALSE,
 	OP_SIZE,
 } opcode;
 

@@ -75,7 +75,7 @@ void GenerateILTry(il_stmt_try* self, Enviroment* env, call_context* cctx) {
 		GenerateGenericType(exgType, env);
 		AddOpcodeBuf(env->Bytecode, OP_INSTANCEOF);
 		//互換性がないので次のケースへ
-		AddOpcodeBuf(env->Bytecode, OP_GOTO_if_false);
+		AddOpcodeBuf(env->Bytecode, OP_GOTO_IF_FALSE);
 		AddOpcodeBuf(env->Bytecode, nextCause);
 		//指定の名前で例外を宣言
 		AddOpcodeBuf(env->Bytecode, OP_HEXCEPTION);

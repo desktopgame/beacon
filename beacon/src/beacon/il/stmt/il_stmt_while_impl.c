@@ -32,7 +32,7 @@ void GenerateILWhile(il_stmt_while * self, Enviroment * env, call_context* cctx)
 	PushVector(cctx->control.while_end, nextLab);
 	//条件を満たさないなら nextLab へ
 	GenerateILFactor(self->condition, env, cctx);
-	AddOpcodeBuf(env->Bytecode, OP_GOTO_if_false);
+	AddOpcodeBuf(env->Bytecode, OP_GOTO_IF_FALSE);
 	AddOpcodeBuf(env->Bytecode, nextLab);
 	//全てのステートメントを実行
 	for (int i = 0; i < self->statement_list->Length; i++) {

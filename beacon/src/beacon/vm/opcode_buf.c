@@ -69,8 +69,8 @@ static void OpcodeBuf_copy(OpcodeBuf* src, OpcodeBuf* dst) {
 	for (int i = 0; i < src->Instructions->Length; i++) {
 		VectorItem e = AtVector(src->Instructions, i);
 		if (e == OP_GOTO ||
-			e == OP_GOTO_if_false ||
-			e == OP_GOTO_if_true) {
+			e == OP_GOTO_IF_FALSE ||
+			e == OP_GOTO_IF_TRUE) {
 
 			AddOpcodeBuf(dst, e);
 			Label* lb = (Label*)AtVector(src->Instructions, ++i);

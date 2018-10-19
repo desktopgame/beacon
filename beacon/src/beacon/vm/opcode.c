@@ -245,14 +245,14 @@ int FprintOpcode(FILE* fp, Vector* source, int index) {
 			fprintf(fp,"get property(%d)", b);
 			break;
 		}
-		case OP_PUT_STATIC_property:
+		case OP_PUT_STATIC_PROPERTY:
 		{
 			int a = (int)AtVector(source, ++index);
 			int b = (int)AtVector(source, ++index);
 			fprintf(fp,"put static_property(%d %d)", a, b);
 			break;
 		}
-		case OP_GET_STATIC_property:
+		case OP_GET_STATIC_PROPERTY:
 		{
 			int a = (int)AtVector(source, ++index);
 			int b = (int)AtVector(source, ++index);
@@ -486,13 +486,13 @@ int FprintOpcode(FILE* fp, Vector* source, int index) {
 			fprintf(fp,"goto(%d)", l->Cursor);
 			break;
 		}
-		case OP_GOTO_if_true:
+		case OP_GOTO_IF_TRUE:
 		{
 			Label* l = (Label*)AtVector(source, ++index);
 			fprintf(fp,"goto if true(%d)", l->Cursor);
 			break;
 		}
-		case OP_GOTO_if_false:
+		case OP_GOTO_IF_FALSE:
 		{
 			Label* l = (Label*)AtVector(source, ++index);
 			fprintf(fp,"goto if false(%d)", l->Cursor);

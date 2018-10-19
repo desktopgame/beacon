@@ -744,7 +744,7 @@ static void vm_run(frame * self, Enviroment * env, int pos, int deferStart) {
 				DeleteFrame(sub);
 				break;
 			}
-			case OP_PUT_STATIC_property:
+			case OP_PUT_STATIC_PROPERTY:
 			{
 				object* sv = (object*)PopVector(self->value_stack);
 				int absClsIndex = (int)GetEnviromentSourceAt(env, ++IDX);
@@ -760,7 +760,7 @@ static void vm_run(frame * self, Enviroment * env, int pos, int deferStart) {
 				DeleteFrame(sub);
 				break;
 			}
-			case OP_GET_STATIC_property:
+			case OP_GET_STATIC_PROPERTY:
 			{
 				object* sv = (object*)PopVector(self->value_stack);
 				int absClsIndex = (int)GetEnviromentSourceAt(env, ++IDX);
@@ -1129,7 +1129,7 @@ static void vm_run(frame * self, Enviroment * env, int pos, int deferStart) {
 				break;
 			}
 
-			case OP_GOTO_if_true:
+			case OP_GOTO_IF_TRUE:
 			{
 				bool v = SPB(self);
 				Label* l = (Label*)GetEnviromentSourceAt(env, ++IDX);
@@ -1139,7 +1139,7 @@ static void vm_run(frame * self, Enviroment * env, int pos, int deferStart) {
 				break;
 			}
 
-			case OP_GOTO_if_false:
+			case OP_GOTO_IF_FALSE:
 			{
 				bool v = SPB(self);
 				Label* l = (Label*)GetEnviromentSourceAt(env, ++IDX);
