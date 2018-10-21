@@ -14,8 +14,8 @@ struct il_factor_not_op;
  * 単項演算子を表す要素.
  */
 typedef struct il_factor_unary_op {
-	operator_type type;
-	operator_category category;
+	OperatorType type;
+	OperatorCategory category;
 	il_factor* a;
 	union {
 		struct il_factor_childa_op* childa_op;
@@ -26,7 +26,7 @@ typedef struct il_factor_unary_op {
 
 il_factor* WrapILUnaryOp(il_factor_unary_op* self);
 
-il_factor_unary_op* NewILUnaryOp(operator_type type);
+il_factor_unary_op* NewILUnaryOp(OperatorType type);
 
 void GenerateILUnaryOp(il_factor_unary_op* self, Enviroment* env, call_context* cctx);
 
@@ -42,7 +42,7 @@ char* ILUnaryOpToString_simple(il_factor_unary_op* self, Enviroment* env);
 
 int GetIndexILUnaryOp(il_factor_unary_op* self, Enviroment* env, call_context* cctx);
 
-int GetIndexILUnaryOp2(il_factor* receiver, operator_type otype, Enviroment* env, call_context* cctx);
+int GetIndexILUnaryOp2(il_factor* receiver, OperatorType otype, Enviroment* env, call_context* cctx);
 
 generic_type* ApplyILUnaryOp(il_factor_unary_op* self, generic_type* gtype, Enviroment* env, call_context* cctx);
 #endif // !SIGNAL_IL_IL_FACTOR_UNARY_OP_H

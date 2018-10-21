@@ -8,12 +8,12 @@ struct Enviroment;
 
 typedef struct il_factor_negative_op {
 	struct il_factor_unary_op* parent;
-	operator_type type;
+	OperatorType type;
 	int operator_index;
 } il_factor_negative_op;
 
 #define il_factor_negative_op_new(type) (MallocILNegativeOp(type, __FILE__, __LINE__))
-il_factor_negative_op* MallocILNegativeOp(operator_type type, const char* filename, int lineno);
+il_factor_negative_op* MallocILNegativeOp(OperatorType type, const char* filename, int lineno);
 
 struct generic_type* EvalILNegativeOp(il_factor_negative_op * self, struct Enviroment * env, call_context* cctx);
 

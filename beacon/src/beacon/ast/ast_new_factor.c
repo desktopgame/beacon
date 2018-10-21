@@ -88,7 +88,7 @@ AST* NewASTInstanceTof(AST* afact, AST* atype) {
 	return ret;
 }
 
-AST* NewASTExplicitBiOperator(AST* afact, operator_type type, AST* aarg) {
+AST* NewASTExplicitBiOperator(AST* afact, OperatorType type, AST* aarg) {
 	AST* ret = ast_new(AST_EXPLICIT_BIOPERATOR_T);
 	ret->Attr.OperatorValue = type;
 	PushAST(ret, afact);
@@ -96,7 +96,7 @@ AST* NewASTExplicitBiOperator(AST* afact, operator_type type, AST* aarg) {
 	return ret;
 }
 
-AST* NewASTExplicitUOperator(AST* afact, operator_type type) {
+AST* NewASTExplicitUOperator(AST* afact, OperatorType type) {
 	AST* ret = ast_new(AST_EXPLICIT_UOPERATOR_T);
 	ret->Attr.OperatorValue = type;
 	PushAST(ret, afact);

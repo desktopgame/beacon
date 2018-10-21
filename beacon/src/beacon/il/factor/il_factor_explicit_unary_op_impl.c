@@ -13,7 +13,7 @@ il_factor* WrapILExplicitUnaryOp(il_factor_explicit_unary_op* self) {
 	return ret;
 }
 
-il_factor_explicit_unary_op* NewILExplicitUnaryOp(operator_type type) {
+il_factor_explicit_unary_op* NewILExplicitUnaryOp(OperatorType type) {
 	il_factor_explicit_unary_op* ret = (il_factor_explicit_unary_op*)MEM_MALLOC(sizeof(il_factor_explicit_unary_op));
 	ret->type = type;
 	ret->receiver = NULL;

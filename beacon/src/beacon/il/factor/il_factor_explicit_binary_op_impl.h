@@ -9,13 +9,13 @@ struct generic_type;
 typedef struct il_factor_explicit_binary_op {
 	struct il_factor* receiver;
 	struct il_factor* arg;
-	operator_type type;
+	OperatorType type;
 	int index;
 } il_factor_explicit_binary_op;
 
 struct il_factor* WrapILExplicitBinaryOp(il_factor_explicit_binary_op* self);
 
-il_factor_explicit_binary_op* NewILExplicitBinaryOp(operator_type type);
+il_factor_explicit_binary_op* NewILExplicitBinaryOp(OperatorType type);
 
 void GenerateILExplicitBinaryOp(il_factor_explicit_binary_op* self, struct Enviroment* env, call_context* cctx);
 

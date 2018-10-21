@@ -420,7 +420,7 @@ method * GetImplMethodClass(class_ * self, type * interType, int interMIndex) {
 
 
 
-operator_overload* GFindOperatorOverloadClass(class_* self, operator_type type, Vector* args, Enviroment* env, call_context* cctx, int* outIndex) {
+operator_overload* GFindOperatorOverloadClass(class_* self, OperatorType type, Vector* args, Enviroment* env, call_context* cctx, int* outIndex) {
 	(*outIndex) = -1;
 	operator_overload* ret = NULL;
 	CreateOperatorVTClass(self);
@@ -455,7 +455,7 @@ operator_overload* GFindOperatorOverloadClass(class_* self, operator_type type, 
 	return ret;
 }
 
-operator_overload* ILFindOperatorOverloadClass(class_* self, operator_type type, Vector* args, Enviroment* env, call_context* cctx, int* outIndex) {
+operator_overload* ILFindOperatorOverloadClass(class_* self, OperatorType type, Vector* args, Enviroment* env, call_context* cctx, int* outIndex) {
 	Vector* gargs =NewVector();
 	for(int i=0; i<args->Length; i++) {
 		il_factor* ilfact = (il_factor*)AtVector(args,i);
@@ -467,7 +467,7 @@ operator_overload* ILFindOperatorOverloadClass(class_* self, operator_type type,
 	return ret;
 }
 
-operator_overload* ArgFindOperatorOverloadClass(class_* self, operator_type type, Vector* args, Enviroment* env, call_context* cctx, int* outIndex) {
+operator_overload* ArgFindOperatorOverloadClass(class_* self, OperatorType type, Vector* args, Enviroment* env, call_context* cctx, int* outIndex) {
 	Vector* gargs =NewVector();
 	for(int i=0; i<args->Length; i++) {
 		//il_factor* ilfact = (il_factor*)AtVector(args,i);

@@ -26,7 +26,7 @@ il_factor * WrapILBinaryOp(il_factor_binary_op * self) {
 	return ret;
 }
 
-il_factor_binary_op * NewILBinaryOp(operator_type type) {
+il_factor_binary_op * NewILBinaryOp(OperatorType type) {
 	il_factor_binary_op* ret = (il_factor_binary_op*)MEM_MALLOC(sizeof(il_factor_binary_op));
 	ret->type = type;
 	ret->left = NULL;
@@ -206,7 +206,7 @@ int GetIndexILBinaryOp(il_factor_binary_op* self, Enviroment* env, call_context*
 	return GetIndexILBinaryOp2(self->left, self->right, self->type, env, cctx);
 }
 
-int GetIndexILBinaryOp2(il_factor* receiver, il_factor* arg, operator_type otype, Enviroment* env, call_context* cctx) {
+int GetIndexILBinaryOp2(il_factor* receiver, il_factor* arg, OperatorType otype, Enviroment* env, call_context* cctx) {
 	Vector* args = NewVector();
 	generic_type* lgtype = EvalILFactor(receiver, env, cctx);
 	generic_type* rgtype = EvalILFactor(arg, env, cctx);

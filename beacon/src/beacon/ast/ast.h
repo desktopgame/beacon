@@ -216,7 +216,7 @@ typedef struct AST {
 		StringView StringVValue;
 		AccessLevel AccessValue;
 		ModifierType ModifierValue;
-		operator_type OperatorValue;
+		OperatorType OperatorValue;
 	} Attr;
 	ASTTag Tag;
 	int Lineno;

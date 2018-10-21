@@ -8,11 +8,11 @@ struct Enviroment;
 
 typedef struct il_factor_excor_op {
 	struct il_factor_binary_op* parent;
-	operator_type type;
+	OperatorType type;
 	int operator_index;
 } il_factor_excor_op;
 
-il_factor_excor_op* NewILExcorOp(operator_type type);
+il_factor_excor_op* NewILExcorOp(OperatorType type);
 
 struct generic_type* EvalILExcorOp(il_factor_excor_op * self, struct Enviroment * env, call_context* cctx);
 

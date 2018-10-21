@@ -8,11 +8,11 @@ struct generic_type;
 struct Enviroment;
 typedef struct il_factor_logic_op {
 	struct il_factor_binary_op* parent;
-	operator_type type;
+	OperatorType type;
 	int operator_index;
 } il_factor_logic_op;
 
-il_factor_logic_op* NewILLogicOp(operator_type type);
+il_factor_logic_op* NewILLogicOp(OperatorType type);
 
 struct generic_type* EvalILLogicOp(il_factor_logic_op* self, struct Enviroment* env, call_context* cctx);
 

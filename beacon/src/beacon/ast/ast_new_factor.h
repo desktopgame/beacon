@@ -113,7 +113,7 @@ AST* NewASTInstanceTof(AST* afact, AST* atype);
  * @param aarg
  * @return
  */
-AST* NewASTExplicitBiOperator(AST* afact, operator_type type, AST* aarg);
+AST* NewASTExplicitBiOperator(AST* afact, OperatorType type, AST* aarg);
 
 /**
  * 明示的な単項演算の呼び出しを表す要素を作成します.
@@ -121,7 +121,7 @@ AST* NewASTExplicitBiOperator(AST* afact, operator_type type, AST* aarg);
  * @param type
  * @return
  */
-AST* NewASTExplicitUOperator(AST* afact, operator_type type);
+AST* NewASTExplicitUOperator(AST* afact, OperatorType type);
 
 /**
  * @param afact

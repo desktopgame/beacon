@@ -8,11 +8,11 @@ struct Enviroment;
 
 typedef struct il_factor_not_op {
 	struct il_factor_unary_op* parent;
-	operator_type type;
+	OperatorType type;
 	int operator_index;
 } il_factor_not_op;
 
-il_factor_not_op* NewILNotOp(operator_type type);
+il_factor_not_op* NewILNotOp(OperatorType type);
 
 struct generic_type* EvalILNotOp(il_factor_not_op * self, struct Enviroment * env, call_context* cctx);
 

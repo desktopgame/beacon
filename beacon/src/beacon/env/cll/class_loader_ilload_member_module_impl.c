@@ -164,7 +164,7 @@ void CLILConstructor(class_loader* self, il_type* current, AST* aconstructor, Ac
 
 void CLILOperatorOverload(class_loader* self, il_type* current, AST* aopov, AccessLevel level) {
 	//assert(aopov->Tag == AST_OPERATOR_OVERLOAD_T);
-	operator_type ot = aopov->Attr.OperatorValue;
+	OperatorType ot = aopov->Attr.OperatorValue;
 	AST* aparam_list = AtAST(aopov, 0);
 	AST* abody = AtAST(aopov, 1);
 	AST* areturn = AtAST(aopov, 2);

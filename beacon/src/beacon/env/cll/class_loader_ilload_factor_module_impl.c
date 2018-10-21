@@ -8,12 +8,12 @@
 static il_factor* CLILFactorImpl(class_loader* self, AST* source);
 static il_factor_bool* CLIL_true(class_loader* self, AST* source);
 static il_factor_bool* CLIL_false(class_loader* self, AST* source);
-static il_factor_unary_op* CLIL_unary(class_loader* self, AST* source, operator_type type);
-static il_factor_binary_op* CLIL_binary(class_loader* self, AST* source, operator_type type);
-static il_factor_explicit_unary_op* CLIL_explicit_unary(class_loader* self, AST* source, operator_type type);
-static il_factor_explicit_binary_op* CLIL_explicit_binary(class_loader* self, AST* source, operator_type type);
+static il_factor_unary_op* CLIL_unary(class_loader* self, AST* source, OperatorType type);
+static il_factor_binary_op* CLIL_binary(class_loader* self, AST* source, OperatorType type);
+static il_factor_explicit_unary_op* CLIL_explicit_unary(class_loader* self, AST* source, OperatorType type);
+static il_factor_explicit_binary_op* CLIL_explicit_binary(class_loader* self, AST* source, OperatorType type);
 static il_factor_assign_op* CLIL_assign(class_loader* self, AST* source);
-static il_factor_assign_op* CLIL_assign_arithmetic(class_loader* self, AST* source, operator_type type);
+static il_factor_assign_op* CLIL_assign_arithmetic(class_loader* self, AST* source, OperatorType type);
 static il_factor_variable* CLIL_variable(class_loader* self, AST* source);
 static il_factor_new_instance* CLIL_new_instance(class_loader* self, AST* source);
 static il_factor_as* CLIL_as(class_loader* self, AST* source);
@@ -162,14 +162,14 @@ static il_factor_bool * CLIL_false(class_loader * self, AST* source) {
 	return NewILBool(false);
 }
 
-static il_factor_unary_op* CLIL_unary(class_loader* self, AST* source, operator_type type) {
+static il_factor_unary_op* CLIL_unary(class_loader* self, AST* source, OperatorType type) {
 	il_factor_unary_op* ret = NewILUnaryOp(type);
 	AST* a = FirstAST(source);
 	ret->a = CLILFactor(self, a);
 	return ret;
 }
 
-static il_factor_binary_op* CLIL_binary(class_loader* self, AST* source, operator_type type) {
+static il_factor_binary_op* CLIL_binary(class_loader* self, AST* source, OperatorType type) {
 	il_factor_binary_op* ret = NewILBinaryOp(type);
 	AST* aleft = FirstAST(source);
 	AST* aright = SecondAST(source);
@@ -178,13 +178,13 @@ static il_factor_binary_op* CLIL_binary(class_loader* self, AST* source, operato
 	return ret;
 }
 
-static il_factor_explicit_unary_op* CLIL_explicit_unary(class_loader* self, AST* source, operator_type type) {
+static il_factor_explicit_unary_op* CLIL_explicit_unary(class_loader* self, AST* source, OperatorType type) {
 	il_factor_explicit_unary_op* ret = NewILExplicitUnaryOp(type);
 	ret->receiver = CLILFactor(self, FirstAST(source));
 	return ret;
 }
 
-static il_factor_explicit_binary_op* CLIL_explicit_binary(class_loader* self, AST* source, operator_type type) {
+static il_factor_explicit_binary_op* CLIL_explicit_binary(class_loader* self, AST* source, OperatorType type) {
 	il_factor_explicit_binary_op* ret = NewILExplicitBinaryOp(type);
 	ret->receiver = CLILFactor(self, FirstAST(source));
 	ret->arg = CLILFactor(self, SecondAST(source));
@@ -200,7 +200,7 @@ static il_factor_assign_op* CLIL_assign(class_loader* self, AST* source) {
 	return ret;
 }
 
-static il_factor_assign_op* CLIL_assign_arithmetic(class_loader* self, AST* source, operator_type type) {
+static il_factor_assign_op* CLIL_assign_arithmetic(class_loader* self, AST* source, OperatorType type) {
 	//a += b
 	il_factor_assign_op* ret = NewILAssignOp();
 	il_factor_binary_op* bin = NewILBinaryOp(type);

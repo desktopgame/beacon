@@ -9,7 +9,7 @@
 #include "../../../env/operator_overload.h"
 #include "../il_factor_unary_op_impl.h"
 
-il_factor_not_op* NewILNotOp(operator_type type) {
+il_factor_not_op* NewILNotOp(OperatorType type) {
 	il_factor_not_op* ret = (il_factor_not_op*)MEM_MALLOC(sizeof(il_factor_not_op));
 	ret->parent = NULL;
 	ret->type = type;

@@ -9,7 +9,7 @@
 #include "../../../env/operator_overload.h"
 #include "../il_factor_unary_op_impl.h"
 
-il_factor_negative_op* MallocILNegativeOp(operator_type type, const char* filename, int lineno) {
+il_factor_negative_op* MallocILNegativeOp(OperatorType type, const char* filename, int lineno) {
 	il_factor_negative_op* ret = (il_factor_negative_op*)mem_malloc(sizeof(il_factor_negative_op), filename, lineno);
 	ret->type = type;
 	ret->parent = NULL;

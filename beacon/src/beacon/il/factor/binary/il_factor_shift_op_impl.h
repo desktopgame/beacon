@@ -7,11 +7,11 @@ struct Enviroment;
 struct il_factor_binary_op;
 typedef struct il_factor_shift_op {
 	struct il_factor_binary_op* parent;
-	operator_type type;
+	OperatorType type;
 	int operator_index;
 } il_factor_shift_op;
 
-il_factor_shift_op* NewILShiftOp(operator_type type);
+il_factor_shift_op* NewILShiftOp(OperatorType type);
 
 struct generic_type* EvalILShiftOp(il_factor_shift_op * self, struct Enviroment* env, call_context* cctx);
 

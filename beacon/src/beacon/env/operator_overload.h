@@ -13,7 +13,7 @@ struct frame;
 typedef struct operator_overload {
 	struct type* parent;
 	struct generic_type* return_gtype;
-	operator_type type;
+	OperatorType type;
 	Vector* parameter_list;
 	struct Enviroment* env;
 	AccessLevel access;
@@ -24,7 +24,7 @@ typedef struct operator_overload {
  * @param type
  * @return
  */
-operator_overload* NewOperatorOverload(operator_type type);
+operator_overload* NewOperatorOverload(OperatorType type);
 
 /**
  * 演算子オーバーロードを実行します.

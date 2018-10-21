@@ -6,14 +6,14 @@
 #include "il_type_interface.h"
 #include "../ast/access_level.h"
 typedef struct il_operator_overload {
-	operator_type op;
+	OperatorType op;
 	Vector* parameter_list;
 	Vector* statement_list;
 	generic_cache* return_fqcn;
 	AccessLevel access;
 } il_operator_overload;
 
-il_operator_overload* NewILOperatorOverload(operator_type type);
+il_operator_overload* NewILOperatorOverload(OperatorType type);
 
 void DeleteILOperatorOverload(il_operator_overload* self);
 #endif

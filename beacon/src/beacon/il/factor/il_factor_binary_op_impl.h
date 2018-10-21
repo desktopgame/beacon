@@ -15,8 +15,8 @@ struct il_factor_excor_op;
  * 二項演算子を表す要素.
  */
 typedef struct il_factor_binary_op {
-	operator_type type;
-	operator_category category;
+	OperatorType type;
+	OperatorCategory category;
 	il_factor* left;
 	il_factor* right;
 	bool load;
@@ -31,7 +31,7 @@ typedef struct il_factor_binary_op {
 
 il_factor* WrapILBinaryOp(il_factor_binary_op* self);
 
-il_factor_binary_op* NewILBinaryOp(operator_type type);
+il_factor_binary_op* NewILBinaryOp(OperatorType type);
 
 void GenerateILBinaryOp(il_factor_binary_op* self, Enviroment* env, call_context* cctx);
 
@@ -55,7 +55,7 @@ bool IsCharCharBinaryOp(il_factor_binary_op* self, Enviroment* env, call_context
 
 int GetIndexILBinaryOp(il_factor_binary_op* self, Enviroment* env, call_context* cctx);
 
-int GetIndexILBinaryOp2(il_factor* receiver, il_factor* arg, operator_type otype, Enviroment* env, call_context* cctx);
+int GetIndexILBinaryOp2(il_factor* receiver, il_factor* arg, OperatorType otype, Enviroment* env, call_context* cctx);
 
 generic_type* ApplyILBinaryOp(il_factor_binary_op* self, generic_type* gtype, Enviroment* env, call_context* cctx);
 #endif // !SIGNAL_IL_IL_FACTOR_BINARY_OP_H

@@ -6,7 +6,7 @@
 /**
  * 演算子のカテゴリを表す列挙.
  */
-typedef enum operator_category {
+typedef enum OperatorCategory {
 	OPERATOR_CARITHMERIC_T,
 	OPERATOR_CLOGIC_T,
 	OPERATOR_CCOMPARE_T,
@@ -15,12 +15,12 @@ typedef enum operator_category {
 	OPERATOR_CNEGATIVE_T,
 	OPERATOR_CNOT_T,
 	OPERATOR_CEXCOR_T,
-} operator_category;
+} OperatorCategory;
 
 /**
  * 演算子の種類を表す列挙.
  */
-typedef enum operator_type {
+typedef enum OperatorType {
 	OPERATOR_ADD_T,
 	OPERATOR_SUB_T,
 	OPERATOR_MUL_T,
@@ -50,67 +50,67 @@ typedef enum operator_type {
 
 	OPERATOR_SUB_SCRIPT_SET_T,
 	OPERATOR_SUB_SCRIPT_GET_T,
-} operator_type;
+} OperatorType;
 /**
  * オペレータを文字列として出力します.
  * @param fp
  * @param self
  */
-void FprintfOperator(FILE* fp, operator_type self);
+void FprintfOperator(FILE* fp, OperatorType self);
 
 /**
  * オペレータを文字列にして返します.
  * @param self
  * @return
  */
-char* OperatorToString(operator_type self);
+char* OperatorToString(OperatorType self);
 
 /**
  * オペレータが算術演算子なら true.
  * @param self
  * @return
  */
-bool IsArithmeticOperator(operator_type self);
+bool IsArithmeticOperator(OperatorType self);
 
 /**
  * オペレータがビット演算子なら true.
  * @param self
  * @return
  */
-bool IsBitOperator(operator_type self);
+bool IsBitOperator(OperatorType self);
 
 /**
  * オペレータが論理演算子なら true.
  * @param self
  * @return
  */
-bool IsLogicOperator(operator_type self);
+bool IsLogicOperator(OperatorType self);
 
 /**
  * オペレータが比較演算子なら true.
  * @param self
  * @return
  */
-bool IsCompareOperator(operator_type self);
+bool IsCompareOperator(OperatorType self);
 
 /**
  * オペレータがシフト演算子なら true.
  * @param self
  * @return
  */
-bool IsShiftOperator(operator_type self);
+bool IsShiftOperator(OperatorType self);
 
 /**
  * オペレータが二項演算子なら true.
  * @param self
  * @return
  */
-bool Is2ArgOperator(operator_type self);
+bool Is2ArgOperator(OperatorType self);
 
 /**
  * オペレータが単項演算子なら true.
  * @param self
  * @return
  */
-bool Is1ArgOperator(operator_type self);
+bool Is1ArgOperator(OperatorType self);
 #endif

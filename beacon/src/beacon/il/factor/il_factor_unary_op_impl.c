@@ -17,7 +17,7 @@ il_factor * WrapILUnaryOp(il_factor_unary_op * self) {
 	return ret;
 }
 
-il_factor_unary_op * NewILUnaryOp(operator_type type) {
+il_factor_unary_op * NewILUnaryOp(OperatorType type) {
 	il_factor_unary_op* ret = (il_factor_unary_op*)MEM_MALLOC(sizeof(il_factor_unary_op));
 	ret->type = type;
 	ret->a = NULL;
@@ -135,7 +135,7 @@ int GetIndexILUnaryOp(il_factor_unary_op* self, Enviroment* env, call_context* c
 	return GetIndexILUnaryOp2(self->a, self->type, env, cctx);
 }
 
-int GetIndexILUnaryOp2(il_factor* receiver, operator_type otype, Enviroment* env, call_context* cctx) {
+int GetIndexILUnaryOp2(il_factor* receiver, OperatorType otype, Enviroment* env, call_context* cctx) {
 	Vector* args = NewVector();
 	generic_type* gtype = EvalILFactor(receiver, env, cctx);
 	if(gtype->virtual_type_index != -1) {

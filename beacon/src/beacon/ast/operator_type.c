@@ -1,10 +1,10 @@
 #include "operator_type.h"
 
-void FprintfOperator(FILE* fp, operator_type self) {
+void FprintfOperator(FILE* fp, OperatorType self) {
 	fprintf(fp, "%s", OperatorToString(self));
 }
 
-char* OperatorToString(operator_type self) {
+char* OperatorToString(OperatorType self) {
 	switch(self) {
 		case OPERATOR_ADD_T: return "+";
 		case OPERATOR_SUB_T: return "-";
@@ -39,7 +39,7 @@ char* OperatorToString(operator_type self) {
 	}
 }
 
-bool IsArithmeticOperator(operator_type self) {
+bool IsArithmeticOperator(OperatorType self) {
 	switch(self) {
 		case OPERATOR_ADD_T:
 		case OPERATOR_SUB_T:
@@ -51,7 +51,7 @@ bool IsArithmeticOperator(operator_type self) {
 	return false;
 }
 
-bool IsBitOperator(operator_type self) {
+bool IsBitOperator(OperatorType self) {
 	switch(self) {
 		case OPERATOR_BIT_OR_T:
 		case OPERATOR_BIT_AND_T:
@@ -60,7 +60,7 @@ bool IsBitOperator(operator_type self) {
 	return false;
 }
 
-bool IsLogicOperator(operator_type self) {
+bool IsLogicOperator(OperatorType self) {
 	switch(self) {
 		case OPERATOR_LOGIC_OR_T:
 		case OPERATOR_LOGIC_AND_T:
@@ -69,7 +69,7 @@ bool IsLogicOperator(operator_type self) {
 	return false;
 }
 
-bool IsCompareOperator(operator_type self) {
+bool IsCompareOperator(OperatorType self) {
 	switch(self) {
 		case OPERATOR_EQ_T:
 		case OPERATOR_NOT_EQ_T:
@@ -82,7 +82,7 @@ bool IsCompareOperator(operator_type self) {
 	return false;
 }
 
-bool IsShiftOperator(operator_type self) {
+bool IsShiftOperator(OperatorType self) {
 	switch(self) {
 		case OPERATOR_LSHIFT_T:
 		case OPERATOR_RSHIFT_T:
@@ -91,7 +91,7 @@ bool IsShiftOperator(operator_type self) {
 	return false;
 }
 
-bool Is2ArgOperator(operator_type self) {
+bool Is2ArgOperator(OperatorType self) {
 	switch(self) {
 		case OPERATOR_ADD_T:
 		case OPERATOR_SUB_T:
@@ -112,6 +112,6 @@ bool Is2ArgOperator(operator_type self) {
 	return false;
 }
 
-bool Is1ArgOperator(operator_type self) {
+bool Is1ArgOperator(OperatorType self) {
 	return false;
 }

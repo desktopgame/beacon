@@ -305,11 +305,11 @@ struct method* GetImplMethodClass(class_* self, type* interType, int interMIndex
  * @param outIndex
  * @return
  */
-struct operator_overload* GFindOperatorOverloadClass(class_* self, operator_type type, Vector* args, Enviroment* env, call_context* cctx, int* outIndex);
+struct operator_overload* GFindOperatorOverloadClass(class_* self, OperatorType type, Vector* args, Enviroment* env, call_context* cctx, int* outIndex);
 
-struct operator_overload* ILFindOperatorOverloadClass(class_* self, operator_type type, Vector* args, Enviroment* env, call_context* cctx, int* outIndex);
+struct operator_overload* ILFindOperatorOverloadClass(class_* self, OperatorType type, Vector* args, Enviroment* env, call_context* cctx, int* outIndex);
 
-struct operator_overload* ArgFindOperatorOverloadClass(class_* self, operator_type type, Vector* args, Enviroment* env, call_context* cctx, int* outIndex);
+struct operator_overload* ArgFindOperatorOverloadClass(class_* self, OperatorType type, Vector* args, Enviroment* env, call_context* cctx, int* outIndex);
 
 /**
  * @param self

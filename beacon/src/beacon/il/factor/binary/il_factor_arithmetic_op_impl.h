@@ -8,10 +8,10 @@ struct Enviroment;
 typedef struct il_factor_arithmetic_op {
 	struct il_factor_binary_op* parent;
 	int operator_index;
-	operator_type type;
+	OperatorType type;
 } il_factor_arithmetic_op;
 
-il_factor_arithmetic_op* NewILArithmeticOp(operator_type type);
+il_factor_arithmetic_op* NewILArithmeticOp(OperatorType type);
 
 
 struct generic_type* EvalILArithmeticOp(il_factor_arithmetic_op * self, struct Enviroment * env, call_context* cctx);

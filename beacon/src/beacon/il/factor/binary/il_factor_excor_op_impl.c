@@ -8,7 +8,7 @@
 #include "../../../env/TYPE_IMPL.h"
 #include "../../../env/operator_overload.h"
 
-il_factor_excor_op* NewILExcorOp(operator_type type) {
+il_factor_excor_op* NewILExcorOp(OperatorType type) {
 	il_factor_excor_op* ret = (il_factor_excor_op*)MEM_MALLOC(sizeof(il_factor_excor_op));
 	ret->type = type;
 	ret->parent = NULL;

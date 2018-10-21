@@ -261,7 +261,7 @@ constructor* MetaScopedRFindConstructor(class_* context, Vector* ctor_vec, Vecto
 	return ret;
 }
 
-operator_overload* MetaGFindOperator(Vector* opov_vec, operator_type type, Vector* gargs, int* outIndex) {
+operator_overload* MetaGFindOperator(Vector* opov_vec, OperatorType type, Vector* gargs, int* outIndex) {
 	(*outIndex) = -1;
 	int min = 1024;
 	operator_overload* ret = NULL;

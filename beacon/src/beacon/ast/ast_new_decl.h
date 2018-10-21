@@ -269,7 +269,7 @@ AST* NewASTTypeParameterRuleList(AST* arule_list);
  * @param abody
  * @param areturn
  */
-AST* NewASTOperatorOverload(operator_type type, AST* aparam_list, AST* abody, AST* areturn);
+AST* NewASTOperatorOverload(OperatorType type, AST* aparam_list, AST* abody, AST* areturn);
 
 /**
  * プロパティの set部分 を表す要素を作成します.

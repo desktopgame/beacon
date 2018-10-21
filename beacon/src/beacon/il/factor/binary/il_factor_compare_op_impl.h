@@ -7,11 +7,11 @@ struct generic_type;
 struct Enviroment;
 typedef struct il_factor_compare_op {
 	struct il_factor_binary_op* parent;
-	operator_type type;
+	OperatorType type;
 	int operator_index;
 } il_factor_compare_op;
 
-il_factor_compare_op* NewILCompareOp(operator_type type);
+il_factor_compare_op* NewILCompareOp(OperatorType type);
 
 struct generic_type* EvalILCompareOp(il_factor_compare_op * self, struct Enviroment * env, call_context* cctx);
 

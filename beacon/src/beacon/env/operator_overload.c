@@ -15,7 +15,7 @@
 
 static void DeleteOperatorOverload_param(VectorItem item);
 
-operator_overload* NewOperatorOverload(operator_type type) {
+operator_overload* NewOperatorOverload(OperatorType type) {
 	operator_overload* ret = (operator_overload*)MEM_MALLOC(sizeof(operator_overload));
 	ret->parent = NULL;
 	ret->parameter_list = NewVector();

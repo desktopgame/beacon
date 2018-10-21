@@ -231,7 +231,7 @@ AST* NewASTTypeParameterRuleList(AST* arule_list) {
 	return ret;
 }
 
-AST* NewASTOperatorOverload(operator_type type, AST* aparam_list, AST* abody, AST* areturn) {
+AST* NewASTOperatorOverload(OperatorType type, AST* aparam_list, AST* abody, AST* areturn) {
 	AST* ret = ast_new(AST_OPERATOR_OVERLOAD_T);
 	ret->Attr.OperatorValue = type;
 	PushAST(ret, aparam_list);

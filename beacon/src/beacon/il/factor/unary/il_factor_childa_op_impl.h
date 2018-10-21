@@ -8,11 +8,11 @@ struct Enviroment;
 
 typedef struct il_factor_childa_op {
 	struct il_factor_unary_op* parent;
-	operator_type type;
+	OperatorType type;
 	int operator_index;
 } il_factor_childa_op;
 
-il_factor_childa_op* NewILChildaOp(operator_type type);
+il_factor_childa_op* NewILChildaOp(OperatorType type);
 
 struct generic_type* EvalILChildaOp(il_factor_childa_op * self, struct Enviroment * env, call_context* cctx);
 
