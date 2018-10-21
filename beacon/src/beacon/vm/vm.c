@@ -1231,7 +1231,7 @@ static bool stack_popb(frame* self) {
 
 static bool throw_npe(frame* self, object* o) {
 	if(o->tag == OBJECT_NULL_T) {
-		NativeThrowVM(self, exception_new_simplef(self, "NullPointerException"));
+		NativeThrowVM(self, NewSimplefException(self, "NullPointerException"));
 		return true;
 	}
 	return false;

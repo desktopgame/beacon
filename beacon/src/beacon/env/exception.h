@@ -12,7 +12,7 @@ struct frame;
  * @param message
  * @return
  */
-struct object* exception_new_simple(struct frame* fr, const char* message);
+struct object* NewSimpleException(struct frame* fr, const char* message);
 /**
  * signal::lang::Exception 型の例外を作成します.
  * フォーマット付きです.
@@ -21,5 +21,5 @@ struct object* exception_new_simple(struct frame* fr, const char* message);
  * @param ...
  * @return
  */
-struct object* exception_new_simplef(struct frame* fr, const char* message, ...);
+struct object* NewSimplefException(struct frame* fr, const char* message, ...);
 #endif // !SIGNAL_ENV_EXCEPTION_H

@@ -106,13 +106,13 @@ static void bc_array_nativeCopy(method* parent, frame* fr, Enviroment* env) {
 	//添え字がマイナス
 	if (srcOffset->u.int_ < 0 ||
 		dstOffset->u.int_ < 0) {
-		NativeThrowVM(fr, exception_new_simplef(fr, "index must be positive: %d - %d", srcOffset->u.int_, dstOffset->u.int_));
+		NativeThrowVM(fr, NewSimplefException(fr, "index must be positive: %d - %d", srcOffset->u.int_, dstOffset->u.int_));
 		return;
 	}
 	//添え字がはみ出している
 	if ((srcOffset->u.int_ + cpyLen) > srcLen ||
 		(dstOffset->u.int_ + cpyLen) > dstLen) {
-		NativeThrowVM(fr, exception_new_simplef(fr, "index must be less than size of array: %d - %d", srcOffset->u.int_, dstOffset->u.int_));
+		NativeThrowVM(fr, NewSimplefException(fr, "index must be less than size of array: %d - %d", srcOffset->u.int_, dstOffset->u.int_));
 		return;
 	}
 	for (int i = srcOffset->u.int_;
