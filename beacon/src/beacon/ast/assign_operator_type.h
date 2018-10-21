@@ -4,12 +4,12 @@
 /**
  * 代入演算子の種類.
  */
-typedef enum assign_operator_type {
+typedef enum AssignOperatorType {
 	ASSIGN_OTYPE_DEF_T,
 	ASSIGN_OTYPE_ADD_T,
 	ASSIGN_OTYPE_SUB_T,
 	ASSIGN_OTYPE_MUL_T,
 	ASSIGN_OTYPE_DIV_T,
 	ASSIGN_OTYPE_MOD_T,
-} assign_operator_type;
+} AssignOperatorType;
 #endif // !SIGNAL_AST_ASSIGN_OPERATOR_TYPE_H

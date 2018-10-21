@@ -168,7 +168,7 @@ union YYSTYPE
 	char char_value;
 	StringView stringv_value;
 	AST* ast_value;
-	assign_operator_type assign_otype_value;
+	AssignOperatorType assign_otype_value;
 	constructor_chain_type chain_type_value;
 	AccessLevel access_level_value;
 
