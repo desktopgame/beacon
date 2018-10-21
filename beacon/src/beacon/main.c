@@ -15,6 +15,7 @@
 #include "env/script_context.h"
 #include "util/string_pool.h"
 #include "util/mem.h"
+#include "thread/native_thread.h"
 
 
 /**
@@ -78,6 +79,7 @@ int main(int argc, char *argv[]) {
 	);
 	//_CrtSetBreakAlloc(36862);
 #endif
+	InitNativeThread();
 	InitStringPool();
 	HideILPrintLayout(true);
 	//mem_break(16066);
@@ -86,6 +88,7 @@ int main(int argc, char *argv[]) {
 	//設定を元に戻す
 	//DumpStringPool(stdout);
 	DestroyStringPool();
+	DestroyNativeThread();
 #if defined(_MSC_VER) && defined(_DEBUG)
 	_CrtDumpMemoryLeaks();
 #endif
