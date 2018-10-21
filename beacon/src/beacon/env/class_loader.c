@@ -85,23 +85,23 @@ void LoadClassLoader(class_loader * self) {
 
 void LoadPassASTClassLoader(class_loader* self, AST* a) {
 	ClearBCError();
-	heap* hee = GetHeap();
-	hee->accept_blocking++;
+	Heap* hee = GetHeap();
+	hee->AcceptBlocking++;
 	self->source_code = a;
 	LoadClassLoader_impl(self);
-	hee->accept_blocking--;
+	hee->AcceptBlocking--;
 }
 
 void SpecialLoadClassLoader(class_loader* self, char* relativePath) {
 	char* fullP = ResolveScriptPath(relativePath);
 	script_context* ctx = GetCurrentScriptContext();
-	heap* he = GetHeap();
+	Heap* he = GetHeap();
 	class_loader* cll = GetTreeMapValue(ctx->class_loader_map, fullP);
-	he->accept_blocking++;
+	he->AcceptBlocking++;
 	if(cll == NULL) {
 		cll = LoadClassLoader_specialImpl(self, cll, fullP);
 	}
-	he->accept_blocking--;
+	he->AcceptBlocking--;
 	MEM_FREE(fullP);
 }
 

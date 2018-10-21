@@ -114,10 +114,10 @@ bool CLBC_field_impl(class_loader* self, type* tp, field* fi, namespace_* scope,
 	}
 	//静的フィールドならついでに初期化
 	//静的フィールドでものすごいでかいオブジェクトを確保すると重くなるかも
-	heap* he = GetHeap();
-	int abtmp = he->accept_blocking;
-	he->collect_blocking++;
-	he->accept_blocking = 0;
+	Heap* he = GetHeap();
+	int abtmp = he->AcceptBlocking;
+	he->CollectBlocking++;
+	he->AcceptBlocking = 0;
 	if(IsStaticModifier(fi->modifier)) {
 		frame* f = NewFrame();
 		SetSGThreadFrameRef(GetMainSGThread(), f);
@@ -126,8 +126,8 @@ bool CLBC_field_impl(class_loader* self, type* tp, field* fi, namespace_* scope,
 		ReleaseSGThreadFrameRef(GetMainSGThread());
 		DeleteFrame(f);
 	}
-	he->accept_blocking = abtmp;
-	he->collect_blocking--;
+	he->AcceptBlocking = abtmp;
+	he->CollectBlocking--;
 	return true;
 }
 

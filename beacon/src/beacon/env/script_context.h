@@ -6,7 +6,7 @@
 #include "../util/tree_map.h"
 #include "../util/vector.h"
 #include "../util/numeric_map.h"
-struct heap;
+struct Heap;
 struct object;
 struct class_loader;
 struct field;
@@ -36,7 +36,7 @@ typedef struct script_context {
 	NumericMap* n_int_map;
 	bool print_error;
 	bool abort_on_error;
-	struct heap* heap;
+	struct Heap* heap;
 	struct object* true_obj;
 	struct object* false_obj;
 	struct object* null_obj;

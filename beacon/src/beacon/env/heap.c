@@ -10,40 +10,40 @@
 
 //proto
 static void DeleteHeap_object(VectorItem item);
-static void gc_clear(heap* self);
-static void gc_mark(heap* self);
-static void gc_sweep(heap* self);
+static void gc_clear(Heap* self);
+static void gc_mark(Heap* self);
+static void gc_sweep(Heap* self);
 static void gc_delete(VectorItem item);
 
 
-heap * NewHeap() {
-	heap* ret = (heap*)MEM_MALLOC(sizeof(heap));
-	ret->object_vec = NewVector();
-	ret->accept_blocking = 0;
-	ret->collect_blocking = 0;
+Heap * NewHeap() {
+	Heap* ret = (Heap*)MEM_MALLOC(sizeof(Heap));
+	ret->Objects = NewVector();
+	ret->AcceptBlocking= 0;
+	ret->CollectBlocking = 0;
 	return ret;
 }
 
-heap * GetHeap() {
+Heap * GetHeap() {
 	script_context* ctx = GetCurrentScriptContext();
 	if(ctx == NULL) { return NULL; }
 	return ctx->heap;
 }
 
-void AddHeap(heap * self, object * obj) {
+void AddHeap(Heap * self, object * obj) {
 	if(self == NULL) {
 		obj->paint = PAINT_ONEXIT_T;
 		return;
 	}
-	if (self->accept_blocking > 0) {
+	if (self->AcceptBlocking > 0) {
 		obj->paint = PAINT_ONEXIT_T;
 		return;
 	}
-	PushVector(self->object_vec, obj);
+	PushVector(self->Objects, obj);
 }
 
-void CollectHeap(heap * self) {
-	if(self->collect_blocking > 0) {
+void CollectHeap(Heap * self) {
+	if(self->CollectBlocking > 0) {
 		return;
 	}
 	gc_clear(self);
@@ -51,22 +51,22 @@ void CollectHeap(heap * self) {
 	gc_sweep(self);
 }
 
-void IgnoreHeap(heap* self, object* o) {
-	int i = FindVector(self->object_vec, o);
+void IgnoreHeap(Heap* self, object* o) {
+	int i = FindVector(self->Objects, o);
 	if(i >= 0) {
-		RemoveVector(self->object_vec, i);
+		RemoveVector(self->Objects, i);
 	}
 }
 
-void DeleteHeap(heap * self) {
-	DeleteVector(self->object_vec,DeleteHeap_object);
+void DeleteHeap(Heap * self) {
+	DeleteVector(self->Objects,DeleteHeap_object);
 	MEM_FREE(self);
 }
 
-void DumpHeap(heap* self) {
+void DumpHeap(Heap* self) {
 	printf("heap dump:\n");
-	for(int i=0; i<self->object_vec->Length; i++) {
-		object* a = AtVector(self->object_vec, i);
+	for(int i=0; i<self->Objects->Length; i++) {
+		object* a = AtVector(self->Objects, i);
 		printf("    ");
 		PrintGenericType(a->gtype);
 		printf("\n");
@@ -79,16 +79,16 @@ static void DeleteHeap_object(VectorItem item) {
 	DeleteObject(e);
 }
 
-static void gc_clear(heap* self) {
-	for (int i = 0; i < self->object_vec->Length; i++) {
-		object* e = (object*)AtVector(self->object_vec, i);
+static void gc_clear(Heap* self) {
+	for (int i = 0; i < self->Objects->Length; i++) {
+		object* e = (object*)AtVector(self->Objects, i);
 		if (e->paint == PAINT_MARKED_T) {
 			e->paint = PAINT_UNMARKED_T;
 		}
 	}
 }
 
-static void gc_mark(heap* self) {
+static void gc_mark(Heap* self) {
 	//今はまだマルチスレッドに対応していないので、
 	//とりあえず実行中のスレッドのみを対象とする
 	sg_thread* th = GetCurrentSGThread(GetCurrentScriptContext());
@@ -102,12 +102,12 @@ static void gc_mark(heap* self) {
 	GetNullObject()->paint = PAINT_MARKED_T;
 }
 
-static void gc_sweep(heap* self) {
+static void gc_sweep(Heap* self) {
 	int sweep = 0;
 	Vector* recycle = NewVector();
 	Vector* garabage = NewVector();
-	for (int i = 0; i < self->object_vec->Length; i++) {
-		object* e = (object*)AtVector(self->object_vec, i);
+	for (int i = 0; i < self->Objects->Length; i++) {
+		object* e = (object*)AtVector(self->Objects, i);
 		if (e->paint == PAINT_UNMARKED_T) {
 			PushVector(garabage, e);
 			sweep++;
@@ -115,9 +115,9 @@ static void gc_sweep(heap* self) {
 			PushVector(recycle, e);
 		}
 	}
-	DeleteVector(self->object_vec, VectorDeleterOfNull);
+	DeleteVector(self->Objects, VectorDeleterOfNull);
 	DeleteVector(garabage, gc_delete);
-	self->object_vec = recycle;
+	self->Objects = recycle;
 }
 
 static void gc_delete(VectorItem item) {

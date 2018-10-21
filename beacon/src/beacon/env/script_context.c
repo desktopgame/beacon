@@ -58,7 +58,7 @@ void CloseScriptContext() {
 }
 
 void BootstrapScriptContext(script_context* self) {
-	self->heap->accept_blocking++;
+	self->heap->AcceptBlocking++;
 	//プリロード
 	namespace_* beacon = CreateNamespaceAtRoot(InternString("beacon"));
 	namespace_* lang = AddNamespaceNamespace(beacon, InternString("lang"));
@@ -100,7 +100,7 @@ void BootstrapScriptContext(script_context* self) {
 
 	SpecialLoadClassLoader(self->bootstrap_class_loader, "beacon/lang/World.bc");
 	//退避していたコンテキストを復帰
-	self->heap->accept_blocking--;
+	self->heap->AcceptBlocking--;
 }
 
 void EachStaticScriptContext(script_context* self, static_each act) {
@@ -125,27 +125,27 @@ void ClearScriptContext(script_context* self) {
 }
 
 object* IInternScriptContext(script_context* self, int i) {
-	heap* he = self->heap;
+	Heap* he = self->heap;
 	NumericMap* cell = GetNumericMapCell(self->n_int_map, i);
-	he->accept_blocking++;
+	he->AcceptBlocking++;
 	if(cell == NULL) {
 		object* obj = object_int_new(i);
 		obj->paint = PAINT_ONEXIT_T;
 		cell = PutNumericMap(self->n_int_map, i, obj);
 	}
-	he->accept_blocking--;
+	he->AcceptBlocking--;
 	return (object*)cell->Item;
 }
 
 void CacheScriptContext() {
 	script_context* self = GetCurrentScriptContext();
 	if(self == NULL) return;
-	heap* h = GetHeap();
-	if(h != NULL) h->accept_blocking++;
+	Heap* h = GetHeap();
+	if(h != NULL) h->AcceptBlocking++;
 	//すでにキャッシュされている
 	if(self->pos_int_vec->Length > 0 ||
 	   self->neg_int_vec->Length > 0) {
-		if(h != NULL) h->accept_blocking--;
+		if(h != NULL) h->AcceptBlocking--;
 		   return;
 	   }
 	//正の数のキャッシュ
@@ -160,7 +160,7 @@ void CacheScriptContext() {
 		PushVector(self->neg_int_vec, a);
 		a->paint = PAINT_ONEXIT_T;
 	}
-	if(h != NULL) h->accept_blocking--;
+	if(h != NULL) h->AcceptBlocking--;
 }
 
 //private
@@ -194,7 +194,7 @@ static script_context* script_context_malloc(void) {
 
 static void script_context_free(script_context* self) {
 	int aa = CountActiveObject();
-	assert(self->heap->collect_blocking == 0);
+	assert(self->heap->CollectBlocking == 0);
 	//全ての例外フラグをクリア
 	frame* thv = GetSGThreadFrameRef(GetCurrentSGThread(self));
 	CatchVM(thv);

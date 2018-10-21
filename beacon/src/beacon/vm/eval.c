@@ -98,8 +98,8 @@ static bool eval_top_from_cll(class_loader* cll, AST* aOpt) {
 	frame* fr = NewFrame();
 	SetSGThreadFrameRef(GetCurrentSGThread(GetCurrentScriptContext()), fr);
 	//エラーによって中断された場合のため、ここで戻す
-	heap* he = GetHeap();
-	he->accept_blocking = 0;
+	Heap* he = GetHeap();
+	he->AcceptBlocking = 0;
 #if defined(DEBUG)
 	Printfln("start");
 #endif

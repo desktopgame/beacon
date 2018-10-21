@@ -105,7 +105,7 @@ type* NewPreloadClass(StringView namev) {
 
 void AllocFieldsClass(class_ * self, object * o, frame* fr) {
 	assert(o->tag == OBJECT_REF_T);
-	heap* he = GetHeap();
+	Heap* he = GetHeap();
 	for (int i = 0; i < self->field_list->Length; i++) {
 		field* f = (field*)AtVector(self->field_list, i);
 		object* a = GetDefaultObject(f->gtype);
@@ -113,7 +113,7 @@ void AllocFieldsClass(class_ * self, object * o, frame* fr) {
 		if (IsStaticModifier(f->modifier)) {
 			continue;
 		}
-		he->collect_blocking++;
+		he->CollectBlocking++;
 		if(f->initial_value != NULL) {
 			frame* sub = SubFrame(fr);
 			for(int i=0; i<fr->type_args_vec->Length; i++) {
@@ -126,7 +126,7 @@ void AllocFieldsClass(class_ * self, object * o, frame* fr) {
 			DeleteFrame(sub);
 		}
 		PushVector(o->u.field_vec, a);
-		he->collect_blocking--;
+		he->CollectBlocking--;
 	}
 }
 
@@ -346,7 +346,7 @@ object * NewInstanceClass(class_* self, frame* fr, Vector* args, Vector* type_ar
 	assert(temp != -1);
 	//コンストラクタを実行
 	frame* sub = SubFrame(fr);
-	heap* h = GetHeap();
+	Heap* h = GetHeap();
 	if(args != NULL) {
 		for (int i = args->Length-1; i>=0; i--) {
 			object* o = AtVector(args, i);
@@ -360,9 +360,9 @@ object * NewInstanceClass(class_* self, frame* fr, Vector* args, Vector* type_ar
 	}
 	ExecuteVM(sub, ctor->env);
 	object* inst = PopVector(sub->value_stack);
-	h->collect_blocking++;
+	h->CollectBlocking++;
 	DeleteFrame(sub);
-	h->collect_blocking--;
+	h->CollectBlocking--;
 	return inst;
 }
 

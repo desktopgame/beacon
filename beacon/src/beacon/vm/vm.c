@@ -194,7 +194,7 @@ static void vm_run(frame * self, Enviroment * env, int pos, int deferStart) {
 	script_context* ctx = GetCurrentScriptContext();
 	int source_len = env->Bytecode->Instructions->Length;
 	self->context_ref = env;
-	heap* he = GetHeap();
+	Heap* he = GetHeap();
 	for (int IDX = pos; IDX < source_len; IDX++) {
 		//このVMの子要素で例外がスローされ、
 		//それを子要素自身で処理できなかった場合には、

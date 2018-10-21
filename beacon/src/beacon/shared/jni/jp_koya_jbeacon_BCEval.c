@@ -97,8 +97,8 @@ static frame* bc_eval_allocate(class_loader* cll) {
 	script_context* ctx = GetCurrentScriptContext();
 	frame* fr = NewFrame();
 	SetSGThreadFrameRef(GetCurrentSGThread(GetCurrentScriptContext()), fr);
-	heap* he = GetHeap();
-	he->accept_blocking = 0;
+	Heap* he = GetHeap();
+	he->AcceptBlocking = 0;
 	if(!GetLastBCError()) {
 		ExecuteVM(fr, cll->env);
 	}
