@@ -151,7 +151,7 @@ AST* NewASTConstructorDecl(AST* aparameter_list, AST* aconstructor_chain, AST* a
 	return ret;
 }
 
-AST* NewASTConstructorChain(constructor_chain_type chain_type, AST* aargument_list) {
+AST* NewASTConstructorChain(ConstructorChainType chain_type, AST* aargument_list) {
 	AST* ret = ast_new(AST_CONSTRUCTOR_CHAIN_T);
 	if (chain_type == CHAIN_TYPE_THIS_T) {
 		PushAST(ret, ast_new(AST_CONSTRUCTOR_CHAIN_THIS_T));

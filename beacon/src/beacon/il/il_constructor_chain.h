@@ -8,7 +8,7 @@ struct constructor;
  * コンストラクタの連鎖を表す要素.
  */
 typedef struct il_constructor_chain {
-	constructor_chain_type type;
+	ConstructorChainType type;
 	Vector* argument_list;
 	struct constructor* c;
 	int constructor_index;

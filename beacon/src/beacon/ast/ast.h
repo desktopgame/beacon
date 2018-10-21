@@ -401,5 +401,5 @@ modifier_type ASTCastToModifier(AST* self, bool* error);
  * @param self
  * @return
  */
-constructor_chain_type ASTCastToChainType(AST* self);
+ConstructorChainType ASTCastToChainType(AST* self);
 #endif // !SIGNAL_AST_AST_H

@@ -193,7 +193,7 @@ AST* NewASTConstructorDecl(AST* aparameter_list, AST* aconstructor_chain, AST* a
  * @param aargument_list
  * @return
  */
-AST* NewASTConstructorChain(constructor_chain_type chain_type, AST* aargument_list);
+AST* NewASTConstructorChain(ConstructorChainType chain_type, AST* aargument_list);
 
 /**
  * 仮引数を表す要素を作成します.

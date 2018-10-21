@@ -169,7 +169,7 @@ union YYSTYPE
 	StringView stringv_value;
 	AST* ast_value;
 	AssignOperatorType assign_otype_value;
-	constructor_chain_type chain_type_value;
+	ConstructorChainType chain_type_value;
 	AccessLevel access_level_value;
 
 #line 169 "beacon.tab.h" /* yacc.c:1916  */
