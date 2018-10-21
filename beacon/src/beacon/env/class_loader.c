@@ -144,11 +144,11 @@ static void LinkClassLoader_recursive(class_loader* self, LinkType type) {
 	self->link = type;
 	import_manager* importMgr = self->import_manager;
 	for (int i = 0; i < importMgr->info_vec->Length; i++) {
-		import_info* info = (import_info*)AtVector(importMgr->info_vec, i);
-		if (info->consume) {
+		ImportInfo* info = (ImportInfo*)AtVector(importMgr->info_vec, i);
+		if (info->IsConsume) {
 			continue;
 		}
-		LinkClassLoader_recursive(info->context, type);
+		LinkClassLoader_recursive(info->Context, type);
 	}
 	LinkClassLoader(self, type);
 }

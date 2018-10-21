@@ -24,9 +24,9 @@ import_manager * NewImportManager() {
 	return ret;
 }
 
-import_info* ImportImportManager(import_manager * self, class_loader * target) {
-	import_info* info = NewImportInfo();
-	info->context = target;
+ImportInfo* ImportImportManager(import_manager * self, class_loader * target) {
+	ImportInfo* info = NewImportInfo();
+	info->Context = target;
 	PushVector(self->info_vec, info);
 	return info;
 }
@@ -35,8 +35,8 @@ bool IsLoadedImportManager(import_manager * self, int index) {
 	if (index >= self->info_vec->Length) {
 		return false;
 	}
-	import_info* info = (import_info*)AtVector(self->info_vec, index);
-	return info->consume;
+	ImportInfo* info = (ImportInfo*)AtVector(self->info_vec, index);
+	return info->IsConsume;
 }
 
 generic_type* ResolveImportManager(namespace_* scope, generic_cache* fqcn, call_context* cctx) {
@@ -141,6 +141,6 @@ void DeleteImportManager(import_manager * self) {
 }
 //private
 static void DeleteImportManager_import_info(VectorItem item) {
-	import_info* e = (import_info*)item;
+	ImportInfo* e = (ImportInfo*)item;
 	DeleteImportInfo(e);
 }

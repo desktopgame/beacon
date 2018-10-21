@@ -4,12 +4,12 @@
 #include <stdbool.h>
 struct class_loader;
 
-typedef struct import_info {
-	struct class_loader* context;
-	bool consume;
-} import_info;
+typedef struct ImportInfo {
+	struct class_loader* Context;
+	bool IsConsume;
+} ImportInfo;
 
-import_info* NewImportInfo();
+ImportInfo* NewImportInfo();
 
-void DeleteImportInfo(import_info* self);
+void DeleteImportInfo(ImportInfo* self);
 #endif // !SIGNAL_ENV_IMPORT_INFO_H

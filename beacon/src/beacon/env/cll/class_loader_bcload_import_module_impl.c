@@ -52,8 +52,8 @@ class_loader* CLBC_import_new(class_loader* self, char* full_path) {
 	script_context* ctx = GetCurrentScriptContext();
 	class_loader* cll = NewClassLoader(full_path, CONTENT_LIB_T);
 	cll->parent = self;
-	import_info* info = ImportImportManager(self->import_manager, cll);
-	info->consume = false;
+	ImportInfo* info = ImportImportManager(self->import_manager, cll);
+	info->IsConsume = false;
 	PutTreeMap(ctx->class_loader_map, full_path, cll);
 	return cll;
 }
@@ -101,8 +101,8 @@ static void CLBC_new_load_internal(class_loader * self, char * full_path) {
 static void CLBC_import_already(class_loader* self, class_loader* cll) {
 	CL_ERROR(self);
 	//self -> cll への参照を与える
-	import_info* info = ImportImportManager(self->import_manager, cll);
-	info->consume = false;
+	ImportInfo* info = ImportImportManager(self->import_manager, cll);
+	info->IsConsume = false;
 	assert(cll->source_code != NULL);
 	assert(cll->il_code != NULL);
 	//そのローダーが破損しているなら

@@ -9,7 +9,7 @@ struct generic_type;
 struct fqcn_cache;
 struct namespace_;
 struct class_loader;
-struct import_info;
+struct ImportInfo;
 struct call_context;
 
 /**
@@ -31,7 +31,7 @@ import_manager* NewImportManager();
  * @param target
  * @return
  */
-struct import_info* ImportImportManager(import_manager* self, struct class_loader* target);
+struct ImportInfo* ImportImportManager(import_manager* self, struct class_loader* target);
 
 /**
  * 既に読み込まれたなら true.
