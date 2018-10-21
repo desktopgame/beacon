@@ -108,7 +108,7 @@ AST* NewASTModifierList(AST* amod, AST* amod_list);
  * @param type
  * @return
  */
-AST* NewASTModifier(modifier_type type);
+AST* NewASTModifier(ModifierType type);
 
 /**
  * メンバーを表す要素を作成します.

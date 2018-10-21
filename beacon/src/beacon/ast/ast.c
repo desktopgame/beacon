@@ -8,7 +8,7 @@
 #include "../util/mem.h"
 //proto
 static void DeleteAST_impl(AST* self);
-static modifier_type ASTCastToModifierImpl(AST* self, bool* error);
+static ModifierType ASTCastToModifierImpl(AST* self, bool* error);
 static void DeleteAST_self(VectorItem item);
 
 void CompileEntryAST(AST* self) {
@@ -184,7 +184,7 @@ AccessLevel ASTCastToAccess(AST* self) {
 	return self->Attr.AccessValue;
 }
 
-modifier_type ASTCastToModifier(AST* self, bool* error) {
+ModifierType ASTCastToModifier(AST* self, bool* error) {
 	(*error) = false;
 	if(self->Tag == AST_MOD_Tifier_list) {
 		return ASTCastToModifierImpl(self, error);
@@ -213,7 +213,7 @@ static void DeleteAST_impl(AST* self) {
 	MEM_FREE(self);
 }
 
-static modifier_type ASTCastToModifierImpl(AST* self, bool* error) {
+static ModifierType ASTCastToModifierImpl(AST* self, bool* error) {
 	int ret = -1;
 	for(int i=0; i<self->Children->Length; i++) {
 		if((*error)) {
@@ -224,14 +224,14 @@ static modifier_type ASTCastToModifierImpl(AST* self, bool* error) {
 			ret = ASTCastToModifier(AtAST(self, i), error);
 		} else {
 			//追加の属性がすでに含まれているかどうか
-			modifier_type add = ASTCastToModifier(AtAST(self, i), error);
+			ModifierType add = ASTCastToModifier(AtAST(self, i), error);
 			if((ret & add) > 0) {
 				(*error) = true;
 			}
 			ret |= add;
 		}
 	}
-	modifier_type mt = (modifier_type)ret;
+	ModifierType mt = (ModifierType)ret;
 	return mt;
 }
 

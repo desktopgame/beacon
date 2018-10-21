@@ -19,7 +19,7 @@ typedef struct field {
 	struct generic_type* gtype;
 	struct object* static_value;
 	AccessLevel access;
-	modifier_type modifier;
+	ModifierType modifier;
 	struct il_factor* initial_value;
 	struct Enviroment* initial_value_env;
 	bool not_initialized_at_ctor;

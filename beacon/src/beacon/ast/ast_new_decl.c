@@ -86,7 +86,7 @@ AST* NewASTModifierList(AST* amod, AST* amod_list) {
 	return ret;
 }
 
-AST* NewASTModifier(modifier_type type) {
+AST* NewASTModifier(ModifierType type) {
 	AST* ret = ast_new(AST_MOD_Tifier);
 	ret->Attr.ModifierValue = type;
 	return ret;

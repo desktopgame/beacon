@@ -36,7 +36,7 @@ typedef struct method {
 	Vector* parameters;
 	Vector* type_parameters;
 	AccessLevel access;
-	modifier_type modifier;
+	ModifierType modifier;
 	union {
 		script_method* script_method;
 		native_method* native_method;

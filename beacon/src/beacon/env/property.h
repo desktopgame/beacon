@@ -10,7 +10,7 @@ struct field;
 struct object;
 
 typedef struct property {
-	modifier_type modifier;
+	ModifierType modifier;
 	StringView namev;
 	struct type* parent;
 	struct field* source_ref;

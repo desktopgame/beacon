@@ -215,7 +215,7 @@ typedef struct AST {
 		char CharValue;
 		StringView StringVValue;
 		AccessLevel AccessValue;
-		modifier_type ModifierValue;
+		ModifierType ModifierValue;
 		operator_type OperatorValue;
 	} Attr;
 	ASTTag Tag;
@@ -394,7 +394,7 @@ AccessLevel ASTCastToAccess(AST* self);
  * @param error
  * @return
  */
-modifier_type ASTCastToModifier(AST* self, bool* error);
+ModifierType ASTCastToModifier(AST* self, bool* error);
 
 /**
  * 指定の要素が連鎖を表す要素なら列挙型に変換します.

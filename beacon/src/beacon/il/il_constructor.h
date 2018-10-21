@@ -17,7 +17,7 @@ typedef struct il_constructor {
 	//il_type* return_type;
 	//fqcn_cache* return_fqcn;
 	AccessLevel access;
-	//modifier_type modifier;
+	//ModifierType modifier;
 } il_constructor;
 
 /**

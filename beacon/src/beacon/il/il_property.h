@@ -9,7 +9,7 @@ struct generic_cache;
 typedef struct il_property {
 	struct generic_cache* fqcn;
 	AccessLevel access;
-	modifier_type modifier;
+	ModifierType modifier;
 	StringView namev;
 	il_property_body* set;
 	il_property_body* get;
