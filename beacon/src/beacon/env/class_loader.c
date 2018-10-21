@@ -55,7 +55,7 @@ static void LoadClassLoader_linkall(class_loader* self);
 static void LoadClassLoader_toplevel_function(class_loader* self);
 static bool check_parser_error(Parser* p);
 
-class_loader* NewClassLoader(const char* filename, content_type type) {
+class_loader* NewClassLoader(const char* filename, ContentType type) {
 	class_loader* ret = (class_loader*)MEM_MALLOC(sizeof(class_loader));
 	ret->source_code = NULL;
 	ret->il_code = NULL;

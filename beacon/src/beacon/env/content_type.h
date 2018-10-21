@@ -4,8 +4,8 @@
 /**
  * クラスローダーによって読み込まれるコンテンツの種類を表す列挙型.
  */
-typedef enum content_type {
+typedef enum ContentType {
 	CONTENT_ENTRY_POINT_T,
 	CONTENT_LIB_T
-} content_type;
+} ContentType;
 #endif // !SIGNAL_ENV_CONTEN_TYPE_H

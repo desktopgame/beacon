@@ -21,7 +21,7 @@ typedef struct class_loader {
 
 	struct Enviroment* env;
 	import_manager* import_manager;
-	content_type type;
+	ContentType type;
 	link_type link;
 	Vector* type_cache_vec;
 
@@ -51,7 +51,7 @@ typedef struct class_loader {
  * @param type
  * @return
  */
-class_loader* NewClassLoader(const char* filename, content_type type);
+class_loader* NewClassLoader(const char* filename, ContentType type);
 
 /**
  * ファイルの内容を解析して必要に応じてインポート先のファイルの読み込み、
