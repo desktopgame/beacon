@@ -9,7 +9,7 @@
 /**
  * beaconインタプリタがソース解析中に検出したエラーを表す列挙.
  */
-typedef enum BCErrorID_t {
+typedef enum BCErrorID {
 	BCERROR_NONE_T = 0,
 	BCERROR_GENERIC_T,
 	BCERROR_PARSE_T,
