@@ -130,7 +130,7 @@ int GetGenericIndexForMethod(method * self, StringView namev) {
 	int ret = -1;
 	for (int i = 0; i < self->type_parameters->Length; i++) {
 		TypeParameter* e = (TypeParameter*)AtVector(self->type_parameters, i);
-		if (e->namev == namev) {
+		if (e->Name == namev) {
 			ret = i;
 			break;
 		}

@@ -10,8 +10,8 @@ static void TypeParameter_rule_list_delete(VectorItem item);
 
 TypeParameter * NewTypeParameter(StringView namev) {
 	TypeParameter* ret = (TypeParameter*)MEM_MALLOC(sizeof(TypeParameter));
-	ret->namev = namev;
-	ret->kind = TYPE_PARAMETER_KIND_DEFAULT_T;
+	ret->Name = namev;
+	ret->Kind = TYPE_PARAMETER_KIND_DEFAULT_T;
 	return ret;
 }
 
@@ -19,13 +19,13 @@ TypeParameter * DupTypeParameter(il_type_parameter * src) {
 	TypeParameter* ret = NewTypeParameter(src->namev);
 	switch (src->kind) {
 		case il_TYPE_PARAMETER_KIND_DEFAULT_T:
-			ret->kind = TYPE_PARAMETER_KIND_DEFAULT_T;
+			ret->Kind = TYPE_PARAMETER_KIND_DEFAULT_T;
 			break;
 		case il_TYPE_PARAMETER_KIND_IN_T:
-			ret->kind = TYPE_PARAMETER_KIND_IN_T;
+			ret->Kind = TYPE_PARAMETER_KIND_IN_T;
 			break;
 		case il_TYPE_PARAMETER_KIND_OUT_T:
-			ret->kind = TYPE_PARAMETER_KIND_OUT_T;
+			ret->Kind = TYPE_PARAMETER_KIND_OUT_T;
 			break;
 		default:
 			break;
@@ -59,12 +59,12 @@ void PrintTypeParameter(Vector* v) {
 	printf("<");
 	for (int i = 0; i < v->Length; i++) {
 		TypeParameter* e = (TypeParameter*)AtVector(v, i);
-		if (e->kind == TYPE_PARAMETER_KIND_IN_T) {
+		if (e->Kind == TYPE_PARAMETER_KIND_IN_T) {
 			printf("in ");
-		} else if (e->kind == TYPE_PARAMETER_KIND_OUT_T) {
+		} else if (e->Kind == TYPE_PARAMETER_KIND_OUT_T) {
 			printf("out ");
 		}
-		printf("%s", Ref2Str(e->namev));
+		printf("%s", Ref2Str(e->Name));
 		if (i != v->Length - 1) {
 			printf(", ");
 		}
@@ -85,8 +85,8 @@ bool IsOverwrappedTypeParameterName(Vector* tparameters, StringView* namev) {
 		for(int j=0; j<tparameters->Length; j++) {
 			if(i == j) { continue; }
 			TypeParameter* e2 = (TypeParameter*)AtVector(tparameters, j);
-			if(e->namev == e2->namev) {
-				(*namev) = e->namev;
+			if(e->Name == e2->Name) {
+				(*namev) = e->Name;
 				return true;
 			}
 		}

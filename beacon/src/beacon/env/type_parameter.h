@@ -18,9 +18,8 @@ typedef enum TypeParameterKind {
  * 型変数を表す構造体.
  */
 typedef struct TypeParameter {
-	StringView namev;
-	TypeParameterKind kind;
-//	struct Vector* rule_vec;
+	StringView Name;
+	TypeParameterKind Kind;
 } TypeParameter;
 /**
  * 新しい型変数を生成します.

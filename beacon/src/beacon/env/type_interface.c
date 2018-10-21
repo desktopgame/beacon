@@ -154,7 +154,7 @@ int GetGenericIndexType(type * self, StringView namev) {
 	int ret = -1;
 	for (int i = 0; i < v->Length; i++) {
 		TypeParameter* e = (TypeParameter*)AtVector(v, i);
-		if (e->namev == namev) {
+		if (e->Name == namev) {
 			ret = i;
 			break;
 		}
