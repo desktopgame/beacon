@@ -12,7 +12,7 @@
 /**
  * AST(AbstractSourceTree) の種類を表すタグです.
  */
-typedef enum ast_tag {
+typedef enum ASTTag {
 	AST_ROOT_T,
 	AST_BLANK_T,
 	AST_INJECT_JNI_VALUE_T,
@@ -203,7 +203,7 @@ typedef enum ast_tag {
 	AST_IF_ELIF_LIST_ELSE_T,
 	AST_ELIF_LIST_T,
 	AST_ELIF_T,
-} ast_tag;
+} ASTTag;
 
 /**
  * ソースコード中の要素を表します.
@@ -218,7 +218,7 @@ typedef struct ast {
 		modifier_type modifier_value;
 		operator_type operator_value;
 	} u;
-	ast_tag tag;
+	ASTTag tag;
 	//uint32_t child_count;
 	uint32_t lineno;
 	Vector* vchildren;
@@ -242,7 +242,7 @@ void CompileEntryAST(ast* self);
  * @param filename
  * @param lineno
  */
-ast* MallocAST(ast_tag tag, const char* filename, int lineno);
+ast* MallocAST(ASTTag tag, const char* filename, int lineno);
 
 /**
  * 名前空間の一節(. ~~~ .)を表す要素を作成します.

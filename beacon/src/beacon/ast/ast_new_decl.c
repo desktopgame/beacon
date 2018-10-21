@@ -9,7 +9,7 @@ static ast* ast_new_method_name(StringView func_namev);
 static ast* ast_new_method_return_name(StringView return_GetTypeNamev);
 static ast* NewASTParameter_GetTypeName(StringView GetTypeNamev);
 static ast* NewASTParameter_access_name(StringView parameter_namev);
-static ast* NewASTClassDeclImpl(ast* aclass_name, ast* aextend_list, ast* amember_list, ast_tag tag);
+static ast* NewASTClassDeclImpl(ast* aclass_name, ast* aextend_list, ast* amember_list, ASTTag tag);
 
 ast * NewASTNamespaceDecl(ast * anamespace_path, ast * abody) {
 	ast* ret = ast_new(AST_NAMESPACE_DECL_T);
@@ -307,7 +307,7 @@ static ast* NewASTParameter_access_name(StringView parameter_namev) {
 	return ret;
 }
 
-static ast* NewASTClassDeclImpl(ast* aclass_name, ast* aextend_list, ast* amember_list, ast_tag tag) {
+static ast* NewASTClassDeclImpl(ast* aclass_name, ast* aextend_list, ast* amember_list, ASTTag tag) {
 	ast* ret = ast_new(tag);
 	PushAST(ret, aclass_name);
 	PushAST(ret, aextend_list);

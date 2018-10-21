@@ -16,7 +16,7 @@ void CompileEntryAST(ast * self) {
 	PushAST(p->Root, self);
 }
 
-ast * MallocAST(ast_tag tag, const char* filename, int lineno) {
+ast * MallocAST(ASTTag tag, const char* filename, int lineno) {
 	ast* ret = (ast*)mem_malloc(sizeof(ast), filename, lineno);
 	assert(ret != NULL);
 	ret->tag = tag;
@@ -207,7 +207,7 @@ constructor_chain_type ASTCastToChainType(ast * self) {
 
 //private
 static void DeleteAST_impl(ast* self) {
-	ast_tag tag =self->tag;
+	ASTTag tag =self->tag;
 	DeleteVector(self->vchildren, DeleteAST_self);
 	self->vchildren = NULL;
 	MEM_FREE(self);
