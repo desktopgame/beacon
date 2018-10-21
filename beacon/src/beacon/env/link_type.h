@@ -3,9 +3,9 @@
 /**
  * クラスローダーの現在のリンク状態.
  */
-typedef enum link_type {
+typedef enum LinkType {
 	LINK_DECL_T,
 	LINK_IMPL_T,
 	LINK_NONE_T,
-} link_type;
+} LinkType;
 #endif

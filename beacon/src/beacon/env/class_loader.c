@@ -47,7 +47,7 @@
 
 //proto
 static void LoadClassLoader_impl(class_loader* self);
-static void LinkClassLoader_recursive(class_loader* self, link_type type);
+static void LinkClassLoader_recursive(class_loader* self, LinkType type);
 static void class_loader_cache_delete(VectorItem item);
 static class_loader* LoadClassLoader_specialImpl(class_loader* self, class_loader* cll, char* full_path);
 static void LoadClassLoader_toplevel(class_loader* self);
@@ -134,7 +134,7 @@ static void LoadClassLoader_impl(class_loader* self) {
 	LoadClassLoader_toplevel(self);
 }
 
-static void LinkClassLoader_recursive(class_loader* self, link_type type) {
+static void LinkClassLoader_recursive(class_loader* self, LinkType type) {
 	if (self->link == type) {
 		return;
 	}

@@ -22,7 +22,7 @@ typedef struct class_loader {
 	struct Enviroment* env;
 	import_manager* import_manager;
 	ContentType type;
-	link_type link;
+	LinkType link;
 	Vector* type_cache_vec;
 
 	struct class_loader* parent;
