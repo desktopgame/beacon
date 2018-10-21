@@ -6,17 +6,17 @@
 #include <assert.h>
 
 //proto
-static void type_parameter_rule_list_delete(VectorItem item);
+static void TypeParameter_rule_list_delete(VectorItem item);
 
-type_parameter * NewTypeParameter(StringView namev) {
-	type_parameter* ret = (type_parameter*)MEM_MALLOC(sizeof(type_parameter));
+TypeParameter * NewTypeParameter(StringView namev) {
+	TypeParameter* ret = (TypeParameter*)MEM_MALLOC(sizeof(TypeParameter));
 	ret->namev = namev;
 	ret->kind = TYPE_PARAMETER_KIND_DEFAULT_T;
 	return ret;
 }
 
-type_parameter * DupTypeParameter(il_type_parameter * src) {
-	type_parameter* ret = NewTypeParameter(src->namev);
+TypeParameter * DupTypeParameter(il_type_parameter * src) {
+	TypeParameter* ret = NewTypeParameter(src->namev);
 	switch (src->kind) {
 		case il_TYPE_PARAMETER_KIND_DEFAULT_T:
 			ret->kind = TYPE_PARAMETER_KIND_DEFAULT_T;
@@ -30,7 +30,7 @@ type_parameter * DupTypeParameter(il_type_parameter * src) {
 		default:
 			break;
 	}
-//	type_parameter_rule_list_dup(src->rule_vec, ret->rule_vec, cache);
+//	TypeParameter_rule_list_dup(src->rule_vec, ret->rule_vec, cache);
 	return ret;
 }
 
@@ -40,25 +40,25 @@ void DupTypeParameterList(Vector* ilSource, Vector* sgDest) {
 	//SGレベルの<K, V> へ変換します。
 	//<K(IComparable<K>), V>のような宣言をするとき、
 	//Kは仮想型としてIComparableで正しく認識されます。
-	//そのためには、type_parameterをとりえず登録しておいて、
+	//そのためには、TypeParameterをとりえず登録しておいて、
 	//あとからルール一覧を対応づける必要があります。
 	//DupTypeParameterからルールの複製を削除したのもそのためです。
 	for (int i = 0; i < ilSource->Length; i++) {
 		il_type_parameter* e = (il_type_parameter*)AtVector(ilSource, i);
-		type_parameter* newTP = DupTypeParameter(e);
+		TypeParameter* newTP = DupTypeParameter(e);
 		PushVector(sgDest, newTP);
-		//type_parameter_rule_list_dup(e->rule_vec, newTP->rule_vec, cache);
+		//TypeParameter_rule_list_dup(e->rule_vec, newTP->rule_vec, cache);
 	}
 }
 
 void PrintTypeParameter(Vector* v) {
-	//FIXME:il_type_parameterからのコピペ
+	//FIXME:il_TypeParameterからのコピペ
 	if (v->Length <= 0) {
 		return;
 	}
 	printf("<");
 	for (int i = 0; i < v->Length; i++) {
-		type_parameter* e = (type_parameter*)AtVector(v, i);
+		TypeParameter* e = (TypeParameter*)AtVector(v, i);
 		if (e->kind == TYPE_PARAMETER_KIND_IN_T) {
 			printf("in ");
 		} else if (e->kind == TYPE_PARAMETER_KIND_OUT_T) {
@@ -72,7 +72,7 @@ void PrintTypeParameter(Vector* v) {
 	printf(">");
 }
 
-void DeleteTypeParameter(type_parameter * self) {
+void DeleteTypeParameter(TypeParameter * self) {
 	MEM_FREE(self);
 }
 
@@ -81,10 +81,10 @@ bool IsOverwrappedTypeParameterName(Vector* tparameters, StringView* namev) {
 		return false;
 	}
 	for(int i=0; i<tparameters->Length; i++) {
-		type_parameter* e = (type_parameter*)AtVector(tparameters, i);
+		TypeParameter* e = (TypeParameter*)AtVector(tparameters, i);
 		for(int j=0; j<tparameters->Length; j++) {
 			if(i == j) { continue; }
-			type_parameter* e2 = (type_parameter*)AtVector(tparameters, j);
+			TypeParameter* e2 = (TypeParameter*)AtVector(tparameters, j);
 			if(e->namev == e2->namev) {
 				(*namev) = e->namev;
 				return true;
@@ -95,8 +95,8 @@ bool IsOverwrappedTypeParameterName(Vector* tparameters, StringView* namev) {
 }
 
 //private
-static void type_parameter_rule_list_delete(VectorItem item) {
-//	type_parameter_rule* e = (type_parameter_rule*)item;
-//	type_parameter_rule_delete(e);
+static void TypeParameter_rule_list_delete(VectorItem item) {
+//	TypeParameter_rule* e = (TypeParameter_rule*)item;
+//	TypeParameter_rule_delete(e);
 }
 

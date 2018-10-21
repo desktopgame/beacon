@@ -129,7 +129,7 @@ bool IsOverridedMethod(method* superM, method* subM, call_context* cctx) {
 int GetGenericIndexForMethod(method * self, StringView namev) {
 	int ret = -1;
 	for (int i = 0; i < self->type_parameters->Length; i++) {
-		type_parameter* e = (type_parameter*)AtVector(self->type_parameters, i);
+		TypeParameter* e = (TypeParameter*)AtVector(self->type_parameters, i);
 		if (e->namev == namev) {
 			ret = i;
 			break;
@@ -255,7 +255,7 @@ static void method_DeleteParameter(VectorItem item) {
 }
 
 static void method_DeleteTypeParameter(VectorItem item) {
-	type_parameter* e = (type_parameter*)item;
+	TypeParameter* e = (TypeParameter*)item;
 	DeleteTypeParameter(e);
 }
 

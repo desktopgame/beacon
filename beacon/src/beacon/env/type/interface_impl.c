@@ -178,7 +178,7 @@ static void DeleteInterface_method(VectorItem item) {
 }
 
 static void interface_DeleteTypeParameter(VectorItem item) {
-	type_parameter* e = (type_parameter*)item;
+	TypeParameter* e = (TypeParameter*)item;
 	DeleteTypeParameter(e);
 }
 

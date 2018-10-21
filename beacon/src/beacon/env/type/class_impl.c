@@ -531,7 +531,7 @@ static void class_vtable_vec_delete(VectorItem item) {
 }
 
 static void class_DeleteTypeParameter(VectorItem item) {
-	type_parameter* e = (type_parameter*)item;
+	TypeParameter* e = (TypeParameter*)item;
 	DeleteTypeParameter(e);
 }
 

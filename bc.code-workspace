@@ -127,7 +127,8 @@
 			"error.h": "c",
 			"ast_new_literal.h": "c",
 			"opcode.h": "c",
-			"tree_map.h": "c"
+			"tree_map.h": "c",
+			"type_parameter.h": "c"
 		},
 		"ruby.lint": {
 			"reek": true,

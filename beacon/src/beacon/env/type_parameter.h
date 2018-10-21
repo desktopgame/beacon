@@ -17,24 +17,24 @@ typedef enum TypeParameterKind {
 /**
  * 型変数を表す構造体.
  */
-typedef struct type_parameter {
+typedef struct TypeParameter {
 	StringView namev;
 	TypeParameterKind kind;
 //	struct Vector* rule_vec;
-} type_parameter;
+} TypeParameter;
 /**
  * 新しい型変数を生成します.
  * @param name
  * @return
  */
-type_parameter* NewTypeParameter(StringView namev);
+TypeParameter* NewTypeParameter(StringView namev);
 
 /**
  * ILから型変数を生成します.
  * @param src
  * @param return
  */
-type_parameter* DupTypeParameter(struct il_type_parameter* src);
+TypeParameter* DupTypeParameter(struct il_type_parameter* src);
 
 /**
  * ILから型変数を生成します.
@@ -53,7 +53,7 @@ void PrintTypeParameter(Vector* v);
  * 型変数を解放します.
  * @param self
  */
-void DeleteTypeParameter(type_parameter* self);
+void DeleteTypeParameter(TypeParameter* self);
 
 /**
  * 重複するパラメータ名が存在するなら true.

@@ -153,7 +153,7 @@ int GetGenericIndexType(type * self, StringView namev) {
 	//全ての型変数と比べる
 	int ret = -1;
 	for (int i = 0; i < v->Length; i++) {
-		type_parameter* e = (type_parameter*)AtVector(v, i);
+		TypeParameter* e = (TypeParameter*)AtVector(v, i);
 		if (e->namev == namev) {
 			ret = i;
 			break;
