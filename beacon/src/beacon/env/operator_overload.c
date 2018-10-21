@@ -50,6 +50,6 @@ void DeleteOperatorOverload(operator_overload* self) {
 }
 //private
 static void DeleteOperatorOverload_param(VectorItem item) {
-	parameter* e = (parameter*)item;
+	Parameter* e = (Parameter*)item;
 	DeleteParameter(e);
 }

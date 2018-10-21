@@ -21,9 +21,9 @@ void ReplaceOperatorVt(operator_vt* self, operator_overload* opov) {
 			AssignVector(self->vec, i, opov);
 			return;
 		} else if(Is2ArgOperator(e->type)) {
-			parameter* param_a = AtVector(e->parameter_list, 0);
-			parameter* param_b = AtVector(opov->parameter_list, 0);
-			if(DistanceGenericType(param_a->gtype, param_b->gtype, NULL) == 0) {
+			Parameter* param_a = AtVector(e->parameter_list, 0);
+			Parameter* param_b = AtVector(opov->parameter_list, 0);
+			if(DistanceGenericType(param_a->GType, param_b->GType, NULL) == 0) {
 				AssignVector(self->vec, i, opov);
 				return;
 			}

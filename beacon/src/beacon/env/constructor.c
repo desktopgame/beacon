@@ -40,6 +40,6 @@ void DeleteConstructor(constructor * self) {
 
 //private
 static void constructor_DeleteParameter(VectorItem item) {
-	parameter* e = (parameter*)item;
+	Parameter* e = (Parameter*)item;
 	DeleteParameter(e);
 }

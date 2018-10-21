@@ -98,10 +98,10 @@ bool IsOverridedMethod(method* superM, method* subM, call_context* cctx) {
 	assert(bl != NULL);
 	//全ての引数を比較
 	for (int i = 0; i < superM->parameters->Length; i++) {
-		parameter* superP = ((parameter*)AtVector(superM->parameters, i));
-		parameter* subP = ((parameter*)AtVector(subM->parameters, i));
-		generic_type* superGT = superP->gtype;
-		generic_type* subGT = subP->gtype;
+		Parameter* superP = ((Parameter*)AtVector(superM->parameters, i));
+		Parameter* subP = ((Parameter*)AtVector(subM->parameters, i));
+		generic_type* superGT = superP->GType;
+		generic_type* subGT = subP->GType;
 
 		call_frame* cfr = PushCallContext(cctx, FRAME_RESOLVE_T);
 		cfr->u.resolve.gtype = bl;
@@ -160,8 +160,8 @@ StringView MangleMethod(method* self) {
 		return sv;
 	}
 	for(int i=0; i<self->parameters->Length; i++) {
-		parameter* e = (parameter*)AtVector(self->parameters, i);
-		generic_type* gt = e->gtype;
+		Parameter* e = (Parameter*)AtVector(self->parameters, i);
+		generic_type* gt = e->GType;
 		AppendBuffer(ret, '_');
 		if(gt->core_type == NULL) {
 			//ジェネリックの場合は methodname_c0 のように
@@ -250,7 +250,7 @@ type* CreateIteratorTypeFromMethod(method* self,  class_loader* cll, Vector* stm
 
 //private
 static void method_DeleteParameter(VectorItem item) {
-	parameter* e = (parameter*)item;
+	Parameter* e = (Parameter*)item;
 	DeleteParameter(e);
 }
 
@@ -337,22 +337,22 @@ static constructor* create_delegate_ctor(method* self, type* ty, class_loader* c
 	constructor* iterCons = NewConstructor();
 	Enviroment* envIterCons = NewEnviroment();
 	//コルーチンを生成したオブジェクトを受け取るパラメータ追加
-	parameter* coroOwnerParam = NewParameter(InternString("owner"));
+	Parameter* coroOwnerParam = NewParameter(InternString("owner"));
 	PushVector(iterCons->parameter_list, coroOwnerParam);
 	envIterCons->ContextRef = cll;
 	//コルーチンに渡された引数を引き継ぐパラメータ追加
 	for(int i=0; i<self->parameters->Length; i++) {
-		parameter* methP = (parameter*)AtVector(self->parameters, i);
-		parameter* consP = NewParameter(methP->namev);
-		consP->gtype = methP->gtype;
+		Parameter* methP = (Parameter*)AtVector(self->parameters, i);
+		Parameter* consP = NewParameter(methP->Name);
+		consP->GType = methP->GType;
 		PushVector(iterCons->parameter_list, consP);
 	}
 	for (int i = 0; i < iterCons->parameter_list->Length; i++) {
-		parameter* e = (parameter*)AtVector(iterCons->parameter_list, i);
+		Parameter* e = (Parameter*)AtVector(iterCons->parameter_list, i);
 		EntrySymbolTable(
 			envIterCons->Symboles,
-			e->gtype,
-			e->namev
+			e->GType,
+			e->Name
 		);
 		//実引数を保存
 		//0番目は this のために開けておく
@@ -389,11 +389,11 @@ static method* create_has_next(method* self, type* ty, class_loader* cll, Vector
 
 	//iterate(int,int)のint,intを受け取る
 	for(int i=0; i<self->parameters->Length; i++) {
-		parameter* e = AtVector(self->parameters, i);
+		Parameter* e = AtVector(self->parameters, i);
 		EntrySymbolTable(
 			envSmt->Symboles,
-			e->gtype,
-			e->namev
+			e->GType,
+			e->Name
 		);
 		//実引数を保存
 		//0番目は this のために開けておく

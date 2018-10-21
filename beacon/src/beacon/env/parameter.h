@@ -7,23 +7,23 @@
 /**
  * メソッドの仮引数を表す構造体です.
  */
-typedef struct parameter {
-	StringView namev;
-	struct generic_type* gtype;
-} parameter;
+typedef struct Parameter {
+	StringView Name;
+	struct generic_type* GType;
+} Parameter;
 
 /**
  * 新しいパラメータを作成します.
  * @param namev
  * @return
  */
-parameter* NewParameter(StringView namev);
+Parameter* NewParameter(StringView namev);
 
 /**
  * パラメータを開放します.
  * @param self
  */
-void DeleteParameter(parameter* self);
+void DeleteParameter(Parameter* self);
 
 /**
  * 重複するパラメータ名が存在するなら true.

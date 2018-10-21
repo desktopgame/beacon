@@ -434,9 +434,9 @@ operator_overload* GFindOperatorOverloadClass(class_* self, OperatorType type, V
 		int sum = 0;
 		Vector* params = operator_ov->parameter_list;
 		for(int j=0; j<params->Length; j++) {
-			parameter* param = AtVector(params, j);
+			Parameter* param = AtVector(params, j);
 			generic_type* arg = AtVector(args, j);
-			int dist = DistanceGenericType(param->gtype, arg, cctx);
+			int dist = DistanceGenericType(param->GType, arg, cctx);
 			if(dist == -1) {
 				nomatch = true;
 				break;

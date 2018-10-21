@@ -360,7 +360,7 @@ bool CLBC_method_decl(class_loader* self, il_type* iltype, type* tp, il_method* 
 	for (int i = 0; i < ilparams->Length; i++) {
 		VectorItem e = AtVector(ilparams, i);
 		il_parameter* ilp = (il_parameter*)e;
-		parameter* param = NewParameter(ilp->namev);
+		Parameter* param = NewParameter(ilp->namev);
 		PushVector(parameter_list, param);
 	}
 	CLBC_parameter_list(self, scope, ilmethod->parameter_list, method->parameters, cctx);
@@ -452,7 +452,7 @@ bool CLBC_ctor_decl(class_loader* self, il_type* iltype, type* tp, il_constructo
 	for (int i = 0; i < ilparams->Length; i++) {
 		VectorItem e = AtVector(ilparams, i);
 		il_parameter* ilp = (il_parameter*)e;
-		parameter* param = NewParameter(ilp->namev);
+		Parameter* param = NewParameter(ilp->namev);
 		PushVector(parameter_list, param);
 	}
 	CLBC_parameter_list(self, scope, ilcons->parameter_list, cons->parameter_list, cctx);
@@ -540,7 +540,7 @@ bool CLBC_operator_overload_decl(class_loader* self, il_type* iltype, type* tp, 
 	//パラメータ読み込み
 	for(int j=0; j<ilopov->parameter_list->Length; j++) {
 		il_parameter* ilparam = AtVector(ilopov->parameter_list, j);
-		parameter* param = NewParameter(ilparam->namev);
+		Parameter* param = NewParameter(ilparam->namev);
 		PushVector(opov->parameter_list, param);
 	}
 	CLBC_parameter_list(self, scope, ilopov->parameter_list, opov->parameter_list, cctx);
@@ -668,8 +668,8 @@ static void CLBC_parameter_list(class_loader* self, namespace_* scope, Vector* p
 		VectorItem e = AtVector(param_list, j);
 		il_parameter* ilparam = (il_parameter*)e;
 		//FIXME:ILパラメータと実行時パラメータのインデックスが同じなのでとりあえず動く
-		parameter* mep = (parameter*)AtVector(sg_param_list, j);
-		mep->gtype = ResolveImportManager(
+		Parameter* mep = (Parameter*)AtVector(sg_param_list, j);
+		mep->GType = ResolveImportManager(
 			scope,
 			ilparam->fqcn,
 			cctx
@@ -679,8 +679,8 @@ static void CLBC_parameter_list(class_loader* self, namespace_* scope, Vector* p
 
 static void CLBC_parameter_list_ctor(Vector* param_list) {
 	for(int i=0; i<param_list->Length; i++) {
-		parameter* param = AtVector(param_list, i);
-		param->gtype->is_ctor = true;
+		Parameter* param = AtVector(param_list, i);
+		param->GType->is_ctor = true;
 	}
 }
 
