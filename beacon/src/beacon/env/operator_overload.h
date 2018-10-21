@@ -16,7 +16,7 @@ typedef struct operator_overload {
 	operator_type type;
 	Vector* parameter_list;
 	struct Enviroment* env;
-	access_level access;
+	AccessLevel access;
 } operator_overload;
 
 /**

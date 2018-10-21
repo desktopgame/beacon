@@ -86,14 +86,14 @@ AST* NewASTAccessMemberTree(AST* member_tree, AST* member_list);
  * @param amember_list
  * @return
  */
-AST* NewASTAccessMemberList(access_level level, AST* amember_list);
+AST* NewASTAccessMemberList(AccessLevel level, AST* amember_list);
 
 /**
  * アクセスレベルを表す要素を作成します.
  * @param level
  * @return
  */
-AST* NewASTAccess(access_level level);
+AST* NewASTAccess(AccessLevel level);
 
 /**
  * 修飾子の一覧を表す要素を作成します.

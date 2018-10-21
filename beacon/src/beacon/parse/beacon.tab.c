@@ -232,7 +232,7 @@ union YYSTYPE
 	AST* ast_value;
 	assign_operator_type assign_otype_value;
 	constructor_chain_type chain_type_value;
-	access_level access_level_value;
+	AccessLevel access_level_value;
 
 #line 238 "beacon.tab.c" /* yacc.c:355  */
 };

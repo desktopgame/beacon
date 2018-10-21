@@ -15,7 +15,7 @@ typedef struct property {
 	struct type* parent;
 	struct field* source_ref;
 	struct generic_type* gtype;
-	access_level access;
+	AccessLevel access;
 	property_body* set;
 	property_body* get;
 	bool is_short;

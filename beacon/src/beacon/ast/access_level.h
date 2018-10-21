@@ -5,19 +5,19 @@
 /**
  * アクセスレベルを定義する列挙型.
  */
-typedef enum access_level {
+typedef enum AccessLevel {
 	ACCESS_PUBLIC_T = 0,
 	ACCESS_PROTECTED_T,
 	ACCESS_PRIVATE_T,
-} access_level;
+} AccessLevel;
 
 /**
  * アクセスレベルを出力します.
  * @param level
  */
-void PrintAccess(access_level level);
+void PrintAccess(AccessLevel level);
 
-bool IsSecureAccess(access_level self, access_level other);
+bool IsSecureAccess(AccessLevel self, AccessLevel other);
 
-bool IsWeakAccess(access_level self, access_level other);
+bool IsWeakAccess(AccessLevel self, AccessLevel other);
 #endif // !SIGNAL_AST_ACCESS_LEVEL_H

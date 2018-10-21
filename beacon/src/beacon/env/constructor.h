@@ -15,7 +15,7 @@ typedef struct constructor {
 	struct type* parent;
 	struct Enviroment* env;
 	Vector* parameter_list;
-	access_level access;
+	AccessLevel access;
 } constructor;
 
 /**

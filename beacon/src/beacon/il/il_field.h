@@ -14,7 +14,7 @@ typedef struct il_field {
 	//il_type* type;
 	struct generic_cache* fqcn;
 	StringView namev;
-	access_level access;
+	AccessLevel access;
 	modifier_type modifier;
 	struct il_factor* initial_value;
 } il_field;

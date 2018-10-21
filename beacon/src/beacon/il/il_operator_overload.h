@@ -10,7 +10,7 @@ typedef struct il_operator_overload {
 	Vector* parameter_list;
 	Vector* statement_list;
 	generic_cache* return_fqcn;
-	access_level access;
+	AccessLevel access;
 } il_operator_overload;
 
 il_operator_overload* NewILOperatorOverload(operator_type type);

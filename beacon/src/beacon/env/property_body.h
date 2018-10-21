@@ -11,7 +11,7 @@ typedef enum property_body_tag {
 
 typedef struct property_body {
 	struct property* parent;
-	access_level access;
+	AccessLevel access;
 	property_body_tag tag;
 	struct Enviroment* env;
 } property_body;

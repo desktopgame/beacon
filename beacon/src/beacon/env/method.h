@@ -35,7 +35,7 @@ typedef struct method {
 	struct generic_type* return_gtype;
 	Vector* parameters;
 	Vector* type_parameters;
-	access_level access;
+	AccessLevel access;
 	modifier_type modifier;
 	union {
 		script_method* script_method;

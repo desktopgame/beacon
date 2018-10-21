@@ -179,7 +179,7 @@ bool IsStmtAST(AST* self) {
 	return false;
 }
 
-access_level ASTCastToAccess(AST* self) {
+AccessLevel ASTCastToAccess(AST* self) {
 	assert(IsAccessAST(self));
 	return self->Attr.AccessValue;
 }
