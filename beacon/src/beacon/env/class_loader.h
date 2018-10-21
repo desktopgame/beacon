@@ -16,7 +16,7 @@ struct parser;
  * クラスローダーを表す構造体です.
  */
 typedef struct class_loader {
-	ast* source_code;
+	AST* source_code;
 	il_top_level* il_code;
 
 	struct Enviroment* env;
@@ -67,7 +67,7 @@ void LoadClassLoader(class_loader* self);
  * @param self
  * @param a
  */
-void LoadPassASTClassLoader(class_loader* self, ast* a);
+void LoadPassASTClassLoader(class_loader* self, AST* a);
 
 /**
  * 実行時ディレクトリからの相対パスでファイルを仮読み込みします.

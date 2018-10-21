@@ -7,25 +7,25 @@
  * 整数型の値を保存する要素を作成します.
  * @param i
  */
-ast* NewASTInt(int i);
+AST* NewASTInt(int i);
 
 /**
  * 実数型の値を保存する要素を作成します.
  * @param d
  */
-ast* NewASTDouble(double d);
+AST* NewASTDouble(double d);
 
 /**
  * 文字を保存する要素を作成します.
  * @param ch
  * @return
  */
-ast* NewASTChar(char ch);
+AST* NewASTChar(char ch);
 
 /**
  * 文字を保存する要素を作成します.
  * @param sv
  * @return
  */
-ast* NewASTString(StringView sv);
+AST* NewASTString(StringView sv);
 #endif // !SIGNAL_AST_AST_NEW_LITERAL_H

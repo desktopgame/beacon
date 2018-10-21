@@ -208,28 +208,26 @@ typedef enum ASTTag {
 /**
  * ソースコード中の要素を表します.
  */
-typedef struct ast {
+typedef struct AST {
 	union {
-		int int_value;
-		double double_value;
-		char char_value;
-		StringView stringv_value;
-		access_level access_value;
-		modifier_type modifier_value;
-		operator_type operator_value;
-	} u;
-	ASTTag tag;
-	//uint32_t child_count;
-	uint32_t lineno;
-	Vector* vchildren;
-	//list* children;
-} ast;
+		int IntValue;
+		double DoubleValue;
+		char CharValue;
+		StringView StringVValue;
+		access_level AccessValue;
+		modifier_type ModifierValue;
+		operator_type OperatorValue;
+	} Attr;
+	ASTTag Tag;
+	int Lineno;
+	Vector* Children;
+} AST;
 
 /**
  * 現在のコンパイラに AST を追加します.
  * @param self
  */
-void CompileEntryAST(ast* self);
+void CompileEntryAST(AST* self);
 
 /**
  * 指定のタグで子要素を持たない AST を作成します.
@@ -242,14 +240,14 @@ void CompileEntryAST(ast* self);
  * @param filename
  * @param lineno
  */
-ast* MallocAST(ASTTag tag, const char* filename, int lineno);
+AST* MallocAST(ASTTag tag, const char* filename, int lineno);
 
 /**
  * 名前空間の一節(. ~~~ .)を表す要素を作成します.
  * @param namev
  * @return
  */
-ast* NewASTNamespacePath(StringView namev);
+AST* NewASTNamespacePath(StringView namev);
 
 /**
  * 二つの名前空間を連結します.
@@ -257,21 +255,21 @@ ast* NewASTNamespacePath(StringView namev);
  * @param namev
  * @return
  */
-ast* NewASTNamespacePathList(ast* aforward, StringView namev);
+AST* NewASTNamespacePathList(AST* aforward, StringView namev);
 
 /**
  * インポート先のファイルを表す要素を作成します.
  * @param astr
  * @return
  */
-ast* NewASTImportPath(ast* astr);
+AST* NewASTImportPath(AST* astr);
 
 /**
  * インポート宣言を表す要素を作成します.
  * @param aimport_path
  * @return
  */
-ast* NewASTImportDecl(ast* aimport_path);
+AST* NewASTImportDecl(AST* aimport_path);
 
 /**
  * インポートの一覧を表す要素を作成します.
@@ -279,32 +277,32 @@ ast* NewASTImportDecl(ast* aimport_path);
  * @param aimport_list
  * @return
  */
-ast* NewASTImportDeclList(ast* aimport, ast* aimport_list);
+AST* NewASTImportDeclList(AST* aimport, AST* aimport_list);
 
 /**
  * スコープ({ ... }) を表す要素を作成します.
  * @param astmt_list
  * @return
  */
-ast* NewASTScope(ast* astmt_list);
+AST* NewASTScope(AST* astmt_list);
 
 /**
  * 空のスコープを表す要素を作成します.
  * @return
  */
-ast* NewASTScopeEmpty();
+AST* NewASTScopeEmpty();
 
 /**
  * 空の要素を作成します.
  */
-ast* NewASTBlank();
+AST* NewASTBlank();
 
 /**
  * 識別子を表す要素を作成します.
  * @param strv
  * @return
  */
-ast* NewASTIdentifier(StringView strv);
+AST* NewASTIdentifier(StringView strv);
 
 /**
  * 識別子のリストを表す要素を作成します.
@@ -312,83 +310,83 @@ ast* NewASTIdentifier(StringView strv);
  * @param aident_list
  * @return
  */
-ast* NewASTIdentifierList(StringView strv, ast* aident_list);
+AST* NewASTIdentifierList(StringView strv, AST* aident_list);
 
 /**
  * 計算可能な要素だけで構成される文を作成します.
  * @param aexpr
  * @return
  */
-ast* NewASTProc(ast* aexpr);
+AST* NewASTProc(AST* aexpr);
 
 /**
  * self に child を子要素として追加します.
  * @param self
  * @param achild
  */
-ast* PushAST(ast* self, ast* achild);
+AST* PushAST(AST* self, AST* achild);
 
 /** 
  * 指定位置の子要素を返します.
  * @param self
  * @param index
  */
-ast* AtAST(ast* self, int index);
+AST* AtAST(AST* self, int index);
 
 /**
  * 最初の子要素を返します.
  * @param self
  * @return
  */
-ast* FirstAST(ast* self);
+AST* FirstAST(AST* self);
 
 /**
  * 二番目の子要素を返します.
  * @param self
  * @return
  */
-ast* SecondAST(ast* self);
+AST* SecondAST(AST* self);
 
 /**
  * 指定の AST とその子要素を全て開放します.
  * @param self
  */
-void DeleteAST(ast* self);
+void DeleteAST(AST* self);
 
 /**
  * 指定の要素が空なら true.
  * @param self
  * @return
  */
-bool IsBlankAST(ast* self);
+bool IsBlankAST(AST* self);
 
 /**
  * 指定の要素がアクセスレベルなら true.
  * @param self
  * @return
  */
-bool IsAccessAST(ast* self);
+bool IsAccessAST(AST* self);
 
 /**
  * 指定の要素が修飾子なら true.
  * @param self
  * @return
  */
-bool IsModifierAST(ast* self);
+bool IsModifierAST(AST* self);
 
 /**
  * 指定の要素がステートメントなら true.
  * @param self
  * @return
  */
-bool IsStmtAST(ast* self);
+bool IsStmtAST(AST* self);
 
 /**
  * 指定の要素がアクセスレベルを表す要素なら列挙型に変換します.
  * @param self
  * @return
  */
-access_level ASTCastToAccess(ast* self);
+access_level ASTCastToAccess(AST* self);
 
 /**
  * 指定の要素が修飾子を表す要素なら列挙型に変換します.
@@ -396,12 +394,12 @@ access_level ASTCastToAccess(ast* self);
  * @param error
  * @return
  */
-modifier_type ASTCastToModifier(ast* self, bool* error);
+modifier_type ASTCastToModifier(AST* self, bool* error);
 
 /**
  * 指定の要素が連鎖を表す要素なら列挙型に変換します.
  * @param self
  * @return
  */
-constructor_chain_type ASTCastToChainType(ast* self);
+constructor_chain_type ASTCastToChainType(AST* self);
 #endif // !SIGNAL_AST_AST_H

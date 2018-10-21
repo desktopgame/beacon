@@ -21,7 +21,7 @@
 
 static jobject bc_eval_string(JNIEnv * env, jclass cls, jstring str, jobject table, const char* filename, const char* source);
 static frame* bc_eval_allocate(class_loader* cll);
-static bool bc_read_symbol(JNIEnv* env, jobject table, ast* a);
+static bool bc_read_symbol(JNIEnv* env, jobject table, AST* a);
 static void bc_write_symbol(JNIEnv* env, NumericMap* nmap, frame* fr, jobject target);
 static void bc_eval_release(JNIEnv* env, class_loader* cll, frame* fr);
 static void printClassInfo(JNIEnv* env, jobject object);
@@ -53,7 +53,7 @@ static jobject bc_eval_string(JNIEnv * env, jclass cls, jstring str, jobject tab
 		(*env)->ThrowNew(env, bc_compile_exc_cls, Ref2Str(GetBCErrorMessage()));
 		return NULL;
 	}
-	ast* a = ReleaseParserAST(p);
+	AST* a = ReleaseParserAST(p);
 	DestroyParser(p);
 	//javaから beacon へインジェクションしようとしたが、
 	//参照型をインジェクションしようとした場合
@@ -108,7 +108,7 @@ static frame* bc_eval_allocate(class_loader* cll) {
 	return fr;
 }
 
-static bool bc_read_symbol(JNIEnv* env, jobject table, ast* a) {
+static bool bc_read_symbol(JNIEnv* env, jobject table, AST* a) {
 	if(table == NULL) {
 		return true;
 	}
@@ -160,7 +160,7 @@ static bool bc_read_symbol(JNIEnv* env, jobject table, ast* a) {
 			(*env)->FatalError(env, "null pointer: get");
 			return false;
 		}
-		ast* astmt = NULL;
+		AST* astmt = NULL;
 		if((*env)->IsInstanceOf(env, valueE, integer_cls) == JNI_TRUE) {
 			astmt = NewASTInject(keyv, NewASTInt(jobject2jint(env, valueE)));
 		} else if((*env)->IsInstanceOf(env, valueE, double_cls) == JNI_TRUE) {
@@ -180,7 +180,7 @@ static bool bc_read_symbol(JNIEnv* env, jobject table, ast* a) {
 			(*env)->ThrowNew(env, bc_not_supported_exc_cls, "not supported inject of reference type");
 			return false;
 		}
-		InsertVector(a->vchildren, 0, astmt);
+		InsertVector(a->Children, 0, astmt);
 	}
 	return true;
 }

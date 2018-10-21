@@ -78,12 +78,12 @@ void LoadClassLoader(class_loader * self) {
 	if (check_parser_error(p)) {
 		return;
 	}
-	ast* a = ReleaseParserAST(p);
+	AST* a = ReleaseParserAST(p);
 	DestroyParser(p);
 	LoadPassASTClassLoader(self, a);
 }
 
-void LoadPassASTClassLoader(class_loader* self, ast* a) {
+void LoadPassASTClassLoader(class_loader* self, AST* a) {
 	ClearBCError();
 	heap* hee = GetHeap();
 	hee->accept_blocking++;

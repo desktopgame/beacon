@@ -84,18 +84,18 @@ void AppendParserBuffer(Parser* self, char ch) {
 	AppendBuffer(self->LiteralBuffer, ch);
 }
 
-ast* ReduceParserBuffer(Parser* self) {
+AST* ReduceParserBuffer(Parser* self) {
 	//""のような空文字の場合
 	if (self->LiteralBuffer == NULL) {
 		return NewASTString(InternString(""));
 	}
-	ast* ret = NewASTString(InternString2(self->LiteralBuffer));
+	AST* ret = NewASTString(InternString2(self->LiteralBuffer));
 	self->LiteralBuffer = NULL;
 	return ret;
 }
 
-ast* ReleaseParserAST(Parser* self) {
-	ast* ret = self->Root;
+AST* ReleaseParserAST(Parser* self) {
+	AST* ret = self->Root;
 	self->Root = NULL;
 	return ret;
 }

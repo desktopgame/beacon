@@ -229,7 +229,7 @@ union YYSTYPE
 
 	char char_value;
 	StringView stringv_value;
-	ast* ast_value;
+	AST* ast_value;
 	assign_operator_type assign_otype_value;
 	constructor_chain_type chain_type_value;
 	access_level access_level_value;

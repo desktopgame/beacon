@@ -7,152 +7,152 @@
 #include "../env/fqcn_cache.h"
 #include "../util/mem.h"
 //proto
-static void DeleteAST_impl(ast* self);
-static modifier_type ASTCastToModifierImpl(ast * self, bool* error);
+static void DeleteAST_impl(AST* self);
+static modifier_type ASTCastToModifierImpl(AST* self, bool* error);
 static void DeleteAST_self(VectorItem item);
 
-void CompileEntryAST(ast * self) {
+void CompileEntryAST(AST* self) {
 	Parser* p = GetCurrentParser();
 	PushAST(p->Root, self);
 }
 
-ast * MallocAST(ASTTag tag, const char* filename, int lineno) {
-	ast* ret = (ast*)mem_malloc(sizeof(ast), filename, lineno);
+AST* MallocAST(ASTTag tag, const char* filename, int lineno) {
+	AST* ret = (AST*)mem_malloc(sizeof(AST), filename, lineno);
 	assert(ret != NULL);
-	ret->tag = tag;
-	ret->vchildren = NULL;
+	ret->Tag = tag;
+	ret->Children = NULL;
 	//行番号を取得
 	Parser* p = GetCurrentParser();
 	if (p != NULL) {
-		ret->lineno = p->Lineno;
+		ret->Lineno = p->Lineno;
 		assert(p->Lineno >= 0);
 		PushVector(p->LinenoTable, p->Lineno);
 	} else {
-		ret->lineno = -1;
+		ret->Lineno = -1;
 	}
 	return ret;
 }
 
-ast * NewASTNamespacePath(StringView namev) {
-	ast* ret = ast_new(AST_NAMESPACE_PATH_T);
-	ret->u.stringv_value = namev;
+AST* NewASTNamespacePath(StringView namev) {
+	AST* ret = ast_new(AST_NAMESPACE_PATH_T);
+	ret->Attr.StringVValue = namev;
 	return ret;
 }
 
-ast * NewASTNamespacePathList(ast * aforward, StringView namev) {
-	ast* ret = ast_new(AST_NAMESPACE_PATH_LIST_T);
+AST* NewASTNamespacePathList(AST* aforward, StringView namev) {
+	AST* ret = ast_new(AST_NAMESPACE_PATH_LIST_T);
 	PushAST(ret, aforward);
 	PushAST(ret, NewASTNamespacePath(namev));
 	return ret;
 }
 
-ast * NewASTImportPath(ast* astr) {
-	ast* ret = ast_new(AST_IMPORT_PATH_T);
-	ret->u.stringv_value = astr->u.stringv_value;
-	astr->u.stringv_value = 0;
+AST* NewASTImportPath(AST* astr) {
+	AST* ret = ast_new(AST_IMPORT_PATH_T);
+	ret->Attr.StringVValue = astr->Attr.StringVValue;
+	astr->Attr.StringVValue = 0;
 	MEM_FREE(astr);
 	return ret;
 }
 
-ast * NewASTImportDecl(ast * aimport_path) {
-	ast* ret = ast_new(AST_IMPORT_DECL_T);
+AST* NewASTImportDecl(AST* aimport_path) {
+	AST* ret = ast_new(AST_IMPORT_DECL_T);
 	PushAST(ret, aimport_path);
 	return ret;
 }
 
-ast* NewASTImportDeclList(ast* aimport, ast* aimport_list) {
-	ast* ret = ast_new(AST_IMPORT_DECL_LIST_T);
+AST* NewASTImportDeclList(AST* aimport, AST* aimport_list) {
+	AST* ret = ast_new(AST_IMPORT_DECL_LIST_T);
 	PushAST(ret, aimport);
 	PushAST(ret, aimport_list);
 	return ret;
 }
 
-ast * NewASTScope(ast * astmt_list) {
-	ast* ret = ast_new(AST_SCOPE_T);
+AST* NewASTScope(AST* astmt_list) {
+	AST* ret = ast_new(AST_SCOPE_T);
 	PushAST(ret, astmt_list);
 	return ret;
 }
 
-ast * NewASTScopeEmpty() {
+AST* NewASTScopeEmpty() {
 	return NewASTScope(NewASTBlank());
 }
 
-ast * NewASTBlank() {
+AST* NewASTBlank() {
 	return ast_new(AST_BLANK_T);
 }
 
-ast * NewASTIdentifier(StringView strv) {
-	ast* ret = ast_new(AST_IDENTIFIER_T);
-	ret->u.stringv_value = strv;
+AST* NewASTIdentifier(StringView strv) {
+	AST* ret = ast_new(AST_IDENTIFIER_T);
+	ret->Attr.StringVValue = strv;
 	return ret;
 }
 
-ast * NewASTIdentifierList(StringView strv, ast * aident_list) {
-	ast* ret = ast_new(AST_IDENTIFIER_LIST_T);
+AST* NewASTIdentifierList(StringView strv, AST* aident_list) {
+	AST* ret = ast_new(AST_IDENTIFIER_LIST_T);
 	PushAST(ret, aident_list);
 	PushAST(ret, NewASTIdentifier(strv));
 	return ret;
 }
 
-ast * NewASTProc(ast * aexpr) {
-	ast* ret = ast_new(AST_PROC_T);
+AST* NewASTProc(AST* aexpr) {
+	AST* ret = ast_new(AST_PROC_T);
 	PushAST(ret, aexpr);
 	return ret;
 }
 
-ast * PushAST(ast * self, ast * achild) {
+AST* PushAST(AST* self, AST* achild) {
 	assert(self != NULL);
 	assert(achild != NULL);
-	if (self->vchildren == NULL) {
-		self->vchildren = NewVector();
+	if (self->Children == NULL) {
+		self->Children = NewVector();
 	}
-	PushVector(self->vchildren, achild);
+	PushVector(self->Children, achild);
 	//行番号を補正
 	Parser* p = GetCurrentParser();
 	if (p != NULL) {
 		if (!IsEmptyVector(p->LinenoTable)) {
 			int lineno = (int)PopVector(p->LinenoTable);
 			assert(lineno >= 0);
-			self->lineno = lineno;
+			self->Lineno = lineno;
 		}
 	}
 	return self;
 }
 
-ast* AtAST(ast * self, int index) {
+AST* AtAST(AST* self, int index) {
 	assert(self != NULL);
-	return (ast*)AtVector(self->vchildren, index);
+	return (AST*)AtVector(self->Children, index);
 }
 
-ast * FirstAST(ast * self) {
+AST* FirstAST(AST* self) {
 	return AtAST(self, 0);
 }
 
-ast * SecondAST(ast * self) {
+AST* SecondAST(AST* self) {
 	return AtAST(self, 1);
 }
 
-void DeleteAST(ast * self) {
+void DeleteAST(AST* self) {
 	if (self == NULL) {
 		return;
 	}
 	DeleteAST_impl(self);
 }
 
-bool IsBlankAST(ast * self) {
-	return self == NULL || self->tag == AST_BLANK_T;
+bool IsBlankAST(AST* self) {
+	return self == NULL || self->Tag == AST_BLANK_T;
 }
 
-bool IsAccessAST(ast * self) {
-	return self->tag == AST_ACCESS_LEVEL_T;
+bool IsAccessAST(AST* self) {
+	return self->Tag == AST_ACCESS_LEVEL_T;
 }
 
-bool IsModifierAST(ast * self) {
-	return self->tag == AST_MOD_Tifier;
+bool IsModifierAST(AST* self) {
+	return self->Tag == AST_MOD_Tifier;
 }
 
-bool IsStmtAST(ast* self) {
-	switch(self->tag) {
+bool IsStmtAST(AST* self) {
+	switch(self->Tag) {
 		case AST_STMT_T:
 		case AST_STMT_LIST_T:
 		case AST_STMT_VARIABLE_DECL_T:
@@ -179,22 +179,22 @@ bool IsStmtAST(ast* self) {
 	return false;
 }
 
-access_level ASTCastToAccess(ast * self) {
+access_level ASTCastToAccess(AST* self) {
 	assert(IsAccessAST(self));
-	return self->u.access_value;
+	return self->Attr.AccessValue;
 }
 
-modifier_type ASTCastToModifier(ast * self, bool* error) {
+modifier_type ASTCastToModifier(AST* self, bool* error) {
 	(*error) = false;
-	if(self->tag == AST_MOD_Tifier_list) {
+	if(self->Tag == AST_MOD_Tifier_list) {
 		return ASTCastToModifierImpl(self, error);
 	}
 	assert(IsModifierAST(self));
-	return self->u.modifier_value;
+	return self->Attr.ModifierValue;
 }
 
-constructor_chain_type ASTCastToChainType(ast * self) {
-	switch (self->tag) {
+constructor_chain_type ASTCastToChainType(AST* self) {
+	switch (self->Tag) {
 		case AST_CONSTRUCTOR_CHAIN_THIS_T:
 			return CHAIN_TYPE_THIS_T;
 		case AST_CONSTRUCTOR_CHAIN_SUPER_T:
@@ -206,16 +206,16 @@ constructor_chain_type ASTCastToChainType(ast * self) {
 }
 
 //private
-static void DeleteAST_impl(ast* self) {
-	ASTTag tag =self->tag;
-	DeleteVector(self->vchildren, DeleteAST_self);
-	self->vchildren = NULL;
+static void DeleteAST_impl(AST* self) {
+	ASTTag tag = self->Tag;
+	DeleteVector(self->Children, DeleteAST_self);
+	self->Children = NULL;
 	MEM_FREE(self);
 }
 
-static modifier_type ASTCastToModifierImpl(ast * self, bool* error) {
+static modifier_type ASTCastToModifierImpl(AST* self, bool* error) {
 	int ret = -1;
-	for(int i=0; i<self->vchildren->Length; i++) {
+	for(int i=0; i<self->Children->Length; i++) {
 		if((*error)) {
 			break;
 		}
@@ -236,6 +236,6 @@ static modifier_type ASTCastToModifierImpl(ast * self, bool* error) {
 }
 
 static void DeleteAST_self(VectorItem item) {
-	ast* e = (ast*)item;
+	AST* e = (AST*)item;
 	DeleteAST(e);
 }

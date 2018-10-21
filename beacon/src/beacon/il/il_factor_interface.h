@@ -90,7 +90,7 @@ typedef struct il_factor {
 		struct il_factor_this* this_;
 		struct il_factor_super* super_;
 		struct il_factor_new_instance* new_instance_;
-		struct il_factor_cast* cast_;
+		struct il_factor_cAST* cast_;
 		struct il_factor_bool* bool_;
 		struct il_factor_null* null_;
 		struct il_factor_as* as_;
