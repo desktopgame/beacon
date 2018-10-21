@@ -8,18 +8,18 @@ struct il_type_parameter;
 /**
  * 型変数の種類を表す列挙.
  */
-typedef enum type_parameter_kind {
+typedef enum TypeParameterKind {
 	TYPE_PARAMETER_KIND_DEFAULT_T,
 	TYPE_PARAMETER_KIND_IN_T,
 	TYPE_PARAMETER_KIND_OUT_T,
-} type_parameter_kind;
+} TypeParameterKind;
 
 /**
  * 型変数を表す構造体.
  */
 typedef struct type_parameter {
 	StringView namev;
-	type_parameter_kind kind;
+	TypeParameterKind kind;
 //	struct Vector* rule_vec;
 } type_parameter;
 /**
