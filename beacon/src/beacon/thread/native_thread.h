@@ -61,7 +61,7 @@ int StartNativeThread(Runnable runnable, ThreadStartArgument arg, NativeThread**
  * 指定のミューテックスを初期化します。
  * @param mtx
  */
-void NativeMutexInit(NativeMutex * mtx);
+void InitNativeMutex(NativeMutex * mtx);
 
 /**
  * 現在のコンテキストでモニターをロックします。
@@ -76,6 +76,12 @@ void NativeMutexEnter(NativeMutex * mtx);
  * @param mtx
  */
 void NativeMutexExit(NativeMutex * mtx);
+
+/**
+ * ミューテックスを解放します。
+ * @param mtx
+ */
+void DestroyNativeMutex(NativeMutex * mtx);
 
 /**
  * 実行中のスレッドで指定の秒数だけ待機します。

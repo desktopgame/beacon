@@ -34,7 +34,7 @@ int StartNativeThread(Runnable runnable, ThreadStartArgument arg, NativeThread**
 	#endif
 }
 
-void NativeMutexInit(NativeMutex * mtx) {
+void InitNativeMutex(NativeMutex * mtx) {
 	#if defined(USE_PTHREAD)
 	pthread_mutex_init(mtx, NULL);
 	#elif defined(USE_WINTHREAD)
@@ -53,6 +53,14 @@ void NativeMutexEnter(NativeMutex * mtx) {
 void NativeMutexExit(NativeMutex * mtx) {
 	#if defined(USE_PTHREAD)
 	pthread_mutex_unlock(mtx);
+	#elif defined(USE_WINTHREAD)
+
+	#endif
+}
+
+void DestroyNativeMutex(NativeMutex * mtx) {
+	#if defined(USE_PTHREAD)
+	pthread_mutex_destroy(mtx);
 	#elif defined(USE_WINTHREAD)
 
 	#endif
