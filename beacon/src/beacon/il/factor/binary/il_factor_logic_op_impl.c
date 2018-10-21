@@ -32,7 +32,7 @@ generic_type* EvalILLogicOp(il_factor_logic_op* self, Enviroment* env, call_cont
 		if(self->operator_index == -1) {
 			ThrowBCError(
 				BCERROR_UNDEFINED_LOGIC_OPERATOR_T,
-				operator_tostring(self->type)
+				OperatorToString(self->type)
 			);
 			return NULL;
 		}

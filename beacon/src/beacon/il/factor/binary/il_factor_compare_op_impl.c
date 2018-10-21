@@ -40,7 +40,7 @@ void GenerateILCompareOp(il_factor_compare_op* self, Enviroment* env, call_conte
 			AddOpcodeBuf(env->Bytecode, (VectorItem)operator_to_copcode(self->type));
 		} else {
 			ThrowBCError(BCERROR_UNDEFINED_COMPARE_OPERATOR_T,
-				operator_tostring(self->type)
+				OperatorToString(self->type)
 			);
 //			assert(false);
 		}

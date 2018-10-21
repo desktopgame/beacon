@@ -1,10 +1,10 @@
 #include "operator_type.h"
 
-void operator_fprintf(FILE* fp, operator_type self) {
-	fprintf(fp, "%s", operator_tostring(self));
+void FprintfOperator(FILE* fp, operator_type self) {
+	fprintf(fp, "%s", OperatorToString(self));
 }
 
-char* operator_tostring(operator_type self) {
+char* OperatorToString(operator_type self) {
 	switch(self) {
 		case OPERATOR_ADD_T: return "+";
 		case OPERATOR_SUB_T: return "-";
@@ -39,7 +39,7 @@ char* operator_tostring(operator_type self) {
 	}
 }
 
-bool operator_arithmetic(operator_type self) {
+bool IsArithmeticOperator(operator_type self) {
 	switch(self) {
 		case OPERATOR_ADD_T:
 		case OPERATOR_SUB_T:
@@ -51,7 +51,7 @@ bool operator_arithmetic(operator_type self) {
 	return false;
 }
 
-bool operator_bit(operator_type self) {
+bool IsBitOperator(operator_type self) {
 	switch(self) {
 		case OPERATOR_BIT_OR_T:
 		case OPERATOR_BIT_AND_T:
@@ -60,7 +60,7 @@ bool operator_bit(operator_type self) {
 	return false;
 }
 
-bool operator_logic(operator_type self) {
+bool IsLogicOperator(operator_type self) {
 	switch(self) {
 		case OPERATOR_LOGIC_OR_T:
 		case OPERATOR_LOGIC_AND_T:
@@ -69,7 +69,7 @@ bool operator_logic(operator_type self) {
 	return false;
 }
 
-bool operator_compare(operator_type self) {
+bool IsCompareOperator(operator_type self) {
 	switch(self) {
 		case OPERATOR_EQ_T:
 		case OPERATOR_NOT_EQ_T:
@@ -82,7 +82,7 @@ bool operator_compare(operator_type self) {
 	return false;
 }
 
-bool operator_shift(operator_type self) {
+bool IsShiftOperator(operator_type self) {
 	switch(self) {
 		case OPERATOR_LSHIFT_T:
 		case OPERATOR_RSHIFT_T:
@@ -91,7 +91,7 @@ bool operator_shift(operator_type self) {
 	return false;
 }
 
-bool operator_arg2(operator_type self) {
+bool Is2ArgOperator(operator_type self) {
 	switch(self) {
 		case OPERATOR_ADD_T:
 		case OPERATOR_SUB_T:
@@ -112,6 +112,6 @@ bool operator_arg2(operator_type self) {
 	return false;
 }
 
-bool operator_arg1(operator_type self) {
+bool Is1ArgOperator(operator_type self) {
 	return false;
 }

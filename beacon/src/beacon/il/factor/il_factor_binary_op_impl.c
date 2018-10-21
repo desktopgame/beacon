@@ -65,25 +65,25 @@ void LoadILBinaryOp(il_factor_binary_op * self, Enviroment * env, call_context* 
 	LoadILFactor(self->right, env, cctx);
 	BC_ERROR();
 	//カテゴリーわけ
-	if(operator_arithmetic(self->type)) {
+	if(IsArithmeticOperator(self->type)) {
 		self->category = OPERATOR_CARITHMERIC_T;
 		il_factor_arithmetic_op* arith = NewILArithmeticOp(self->type);
 		arith->parent = self;
 		self->u.arithmetic_op = arith;
 		LoadILArithmeticOp(arith, env, cctx);
-	} else if(operator_compare(self->type)) {
+	} else if(IsCompareOperator(self->type)) {
 		self->category = OPERATOR_CCOMPARE_T;
 		il_factor_compare_op* comp = NewILCompareOp(self->type);
 		comp->parent = self;
 		self->u.compare_op = comp;
 		LoadILCompareOp(comp, env, cctx);
-	} else if(operator_bit(self->type) || operator_logic(self->type)) {
+	} else if(IsBitOperator(self->type) || IsLogicOperator(self->type)) {
 		self->category = OPERATOR_CLOGIC_T;
 		il_factor_logic_op* logic = NewILLogicOp(self->type);
 		logic->parent = self;
 		self->u.logic_op = logic;
 		LoadILLogicOp(logic, env, cctx);
-	} else if(operator_shift(self->type)) {
+	} else if(IsShiftOperator(self->type)) {
 		self->category = OPERATOR_CSHIFT_T;
 		il_factor_shift_op* shift = NewILShiftOp(self->type);
 		shift->parent = self;
@@ -175,7 +175,7 @@ char* ILBinaryOpToString_simple(il_factor_binary_op* self, Enviroment* env) {
 	char* a = ILFactorToString(self->left, env);
 	char* b = ILFactorToString(self->right, env);
 	AppendsBuffer(sb, a);
-	AppendfBuffer(sb, " %s ", operator_tostring(self->type));
+	AppendfBuffer(sb, " %s ", OperatorToString(self->type));
 	AppendsBuffer(sb, b);
 	MEM_FREE(a);
 	MEM_FREE(b);

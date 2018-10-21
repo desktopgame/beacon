@@ -785,15 +785,15 @@ static bool CLBC_test_operator_overlaod(class_loader* self, il_type* iltype, typ
 		return true;
 	}
 	//二項演算子であるなら引数は1
-	if(operator_arg2(opov->type) && opov->parameter_list->Length != 1) {
-		ThrowBCError(BCERROR_ARG_COUNT_NOT2_BIOPERATOR_T, GetTypeName(tp), operator_tostring(opov->type));
+	if(Is2ArgOperator(opov->type) && opov->parameter_list->Length != 1) {
+		ThrowBCError(BCERROR_ARG_COUNT_NOT2_BIOPERATOR_T, GetTypeName(tp), OperatorToString(opov->type));
 		return true;
 	}
 	//単項演算子であるなら引数は0
-	if(operator_arg1(opov->type) && opov->parameter_list->Length != 0) {
+	if(Is1ArgOperator(opov->type) && opov->parameter_list->Length != 0) {
 		ThrowBCError(BCERROR_ARG_COUNT_NOT1_UOPERATOR_T,
 			GetTypeName(tp),
-			operator_tostring(opov->type)
+			OperatorToString(opov->type)
 		);
 		return true;
 	}
@@ -801,7 +801,7 @@ static bool CLBC_test_operator_overlaod(class_loader* self, il_type* iltype, typ
 	if(opov->type == OPERATOR_SUB_SCRIPT_GET_T && opov->parameter_list->Length != 1) {
 		ThrowBCError(BCERROR_ARG_COUNT_NOT1_SUBSCRIPT_GET_OP_T,
 			GetTypeName(tp),
-			operator_tostring(opov->type)
+			OperatorToString(opov->type)
 		);
 		return true;
 	}
@@ -809,15 +809,15 @@ static bool CLBC_test_operator_overlaod(class_loader* self, il_type* iltype, typ
 	if(opov->type == OPERATOR_SUB_SCRIPT_SET_T && opov->parameter_list->Length != 2) {
 		ThrowBCError(BCERROR_ARG_COUNT_NOT2_SUBSCRIPT_SET_OP_T,
 			GetTypeName(tp),
-			operator_tostring(opov->type)
+			OperatorToString(opov->type)
 		);
 		return true;
 	}
 	//== などの比較演算子の戻り値が bool ではない
-	if(operator_compare(opov->type) && opov->return_gtype->core_type != TYPE_BOOL) {
+	if(IsCompareOperator(opov->type) && opov->return_gtype->core_type != TYPE_BOOL) {
 		ThrowBCError(BCERROR_RETURN_TYPE_NOT_BOOL_COMPARE_OPERATOR_T,
 			Ref2Str(GetTypeName(tp)),
-			operator_tostring(opov->type)
+			OperatorToString(opov->type)
 		);
 		return true;
 	}
@@ -825,7 +825,7 @@ static bool CLBC_test_operator_overlaod(class_loader* self, il_type* iltype, typ
 	if(opov->type == OPERATOR_NOT_T && opov->return_gtype->core_type != TYPE_BOOL) {
 		ThrowBCError(BCERROR_RETURN_TYPE_NOT_BOOL_NOT_OPERATOR_T,
 			Ref2Str(GetTypeName(tp)),
-			operator_tostring(opov->type)
+			OperatorToString(opov->type)
 		);
 		return true;
 	}
@@ -834,7 +834,7 @@ static bool CLBC_test_operator_overlaod(class_loader* self, il_type* iltype, typ
 	if(opov->type == OPERATOR_NEGATIVE_T && opov->return_gtype->core_type != opov->parent) {
 		ThrowBCError(BCERROR_RETURN_TYPE_NOT_EQUAL_NEGATIVE_OPERATOR_T,
 			Ref2Str(GetTypeName(tp)),
-			operator_tostring(opov->type)
+			OperatorToString(opov->type)
 		);
 		return true;
 	}

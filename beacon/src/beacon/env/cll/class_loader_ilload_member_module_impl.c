@@ -173,7 +173,7 @@ void CLILOperatorOverload(class_loader* self, il_type* current, AST* aopov, Acce
 		ThrowBCError(
 			BCERROR_INTERFACE_HAS_OPOV_T,
 			Ref2Str(current->u.interface_->namev),
-			operator_tostring(ot)
+			OperatorToString(ot)
 		);
 		return;
 	}

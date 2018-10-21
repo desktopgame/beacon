@@ -38,7 +38,7 @@ generic_type* EvalILShiftOp(il_factor_shift_op * self, Enviroment* env, call_con
 	if(self->operator_index == -1) {
 		ThrowBCError(
 			BCERROR_UNDEFINED_SHIFT_OPERATOR_T,
-			operator_tostring(self->type)
+			OperatorToString(self->type)
 		);
 		return NULL;
 	}
@@ -55,7 +55,7 @@ void GenerateILShiftOp(il_factor_shift_op* self, Enviroment* env, call_context* 
 		} else {
 			ThrowBCError(
 				BCERROR_UNDEFINED_SHIFT_OPERATOR_T,
-				operator_tostring(self->type)
+				OperatorToString(self->type)
 			);
 		}
 	} else {

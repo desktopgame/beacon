@@ -38,7 +38,7 @@ generic_type* EvalILArithmeticOp(il_factor_arithmetic_op * self, Enviroment* env
 	//演算子オーバーロードもない
 	if(self->operator_index == -1) {
 		ThrowBCError(BCERROR_UNDEFINED_COMPARE_OPERATOR_T,
-			operator_tostring(self->type)
+			OperatorToString(self->type)
 		);
 		return NULL;
 	}

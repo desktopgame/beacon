@@ -125,7 +125,7 @@ void DeleteILUnaryOp(il_factor_unary_op * self) {
 char* ILUnaryOpToString_simple(il_factor_unary_op* self, Enviroment* env) {
 	Buffer* sb = NewBuffer();
 	char* a = ILFactorToString(self->a, env);
-	AppendfBuffer(sb, "%s", operator_tostring(self->type));
+	AppendfBuffer(sb, "%s", OperatorToString(self->type));
 	AppendsBuffer(sb, a);
 	MEM_FREE(a);
 	return ReleaseBuffer(sb);

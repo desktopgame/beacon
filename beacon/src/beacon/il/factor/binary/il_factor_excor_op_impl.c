@@ -31,7 +31,7 @@ generic_type* EvalILExcorOp(il_factor_excor_op * self, Enviroment* env, call_con
 	//演算子オーバーロードもない
 	if(self->operator_index == -1) {
 		ThrowBCError(BCERROR_UNDEFINED_EXCOR_OPERATOR_T,
-			operator_tostring(self->type)
+			OperatorToString(self->type)
 		);
 		return NULL;
 	}
