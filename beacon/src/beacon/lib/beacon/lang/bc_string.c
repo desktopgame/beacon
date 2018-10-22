@@ -26,7 +26,7 @@ type* GetBCStringType() {
 
 //private
 static void bc_string_nativeInit(method* parent, Frame* fr, Enviroment* env) {
-	object* self = AtVector(fr->ref_stack, 0);
+	object* self = AtVector(fr->VariableTable, 0);
 	//プログラムの中で ダブルクォート("HelloWorld") によって
 	//文字列が作成された場合には object_string_new() 
 	//によって生成されます。

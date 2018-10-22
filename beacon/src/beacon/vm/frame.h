@@ -10,15 +10,15 @@ struct type;
  */
 typedef struct Frame {
 	//演算子や引数を記憶しておくためのスタックです
-	Vector* value_stack;
+	Vector* ValueStack;
 
 	//ローカル変数や引数を記憶しておくためのスタックです
 	//0番目は this であることが保証されます。
 	//その次には実引数が順番に並びます。
-	Vector* ref_stack;
+	Vector* VariableTable;
 
 	//コンストラクタやメソッドの型引数を記憶するベクタ
-	Vector* type_args_vec;
+	Vector* TypeArgs;
 
 	//このVMの子要素です。
 	//VMを分ける必要があるのは主に例外のためです。
@@ -28,7 +28,7 @@ typedef struct Frame {
 	//つまりメインファイルとなります。
 	//子要素を記憶しておく必要があるのは、
 	//ガベージコレクションのためです。
-	Vector* children_vec;
+	Vector* Children;
 
 	//親VMです.
 	//コンストラクタ/メソッドが終了した場合、
@@ -39,24 +39,24 @@ typedef struct Frame {
 	//実行中のVMを開放したのち、
 	//親のVMの childrenVec からも削除される必要があるため
 	//ここで親VMへの参照を持っています。
-	struct Frame* parent;
+	struct Frame* Parent;
 
 	//最後にスローされた例外です.
-	struct object* exception;
+	struct object* Exception;
 
 	//コルーチンの実装クラスオブジェクトです.
-	struct object* coroutine;
+	struct object* Coroutine;
 
 	//メソッドを実行中のレシーバ型
-	struct type* receiver;
+	struct type* Receiver;
 
 	//VMの階層の深さです.
 	//デバッグ用の情報です。
-	int level;
+	int Level;
 
 	//現在実行中のインストラクションへの添え字をトレースします.
 	//Program Counterの略です。
-	int pc;
+	int PC;
 
 	//ネイティブメソッドから例外がスローされたとき、
 	//復帰先のプログラムカウンタを記録しておく変数です。
@@ -68,19 +68,19 @@ typedef struct Frame {
 	//この変数はVMがインストラクションを実行したあと毎回確認され、
 	//-1以外の値を格納している場合には現在のプログラムカウンタを上書きし、
 	//この変数自体を-1にリセットします。
-	int native_throw_pos;
+	int NativeThrowPos;
 
 	//deferによる強制実行を記録するベクタ
-	Vector* defer_vec;
+	Vector* DeferList;
 
 	//現在実行している強制実行
-	int defer_at;
+	int DeferAt;
 
 	//現在実行しているインストラクションの一覧や、
 	//定数プールを提供している enviroment への参照です。
 	//あくまで参照しているだけなので、
 	//このVMが開放されてもこの enviroment は開放されません。
-	Enviroment* context_ref;
+	Enviroment* ContextRef;
 
 	//例外がスローされた最も深いVMからルートへ向かって true に切り替えられるフラグ.
 	//例外がスローされた場合、
@@ -93,12 +93,12 @@ typedef struct Frame {
 	//この変数で親VMに通知します。
 	//この変数はあらゆるインストラクションを実行するよりも前に、
 	//毎回検査されます。
-	bool validate;
+	bool IsValidate;
 
 	//例外がスローされたとき、
 	//誰もそれをキャッチしようとしていないなら
 	//即座に全てのVMを終了します。
-	bool terminate;
+	bool IsTerminate;
 } Frame;
 
 /**

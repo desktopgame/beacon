@@ -29,7 +29,7 @@ static void bc_exception_nativeInit(method* parent, Frame* fr, Enviroment* env) 
 	namespace_* lang = GetLangNamespace();
 	class_* stackTraceElementClass = FindClassFromNamespace(lang, InternString("StackTraceElement"));
 	class_* exceptionClass = FindClassFromNamespace(lang, InternString("Exception"));
-	object* self= (object*)AtVector(fr->ref_stack, 0);
+	object* self= (object*)AtVector(fr->VariableTable, 0);
 	//FXIME:???
 	Heap* h = GetHeap();
 	h->CollectBlocking++;
@@ -40,20 +40,20 @@ static void bc_exception_nativeInit(method* parent, Frame* fr, Enviroment* env) 
 	int llineno = -1;
 	do {
 		//実行中のインストラクションの行番号を取得
-		LineRange* lr = FindLineRange(temp->context_ref->LineRangeTable, temp->pc);
+		LineRange* lr = FindLineRange(temp->ContextRef->LineRangeTable, temp->PC);
 		int lineno = lr == NULL ? -1 : lr->Lineno;
 		//assert(lineno != -1);
 		//直前の表示と同じ
 		if(lfilename != NULL &&
-		   !strcmp(temp->context_ref->ContextRef->filename, lfilename) &&
+		   !strcmp(temp->ContextRef->ContextRef->filename, lfilename) &&
 		   llineno == lineno) {
-			temp = temp->parent;
+			temp = temp->Parent;
 			continue;
 		}
 		//スタックトレースを作成
 		//assert(lineno >= 0);
 		Vector* args = NewVector();
-		PushVector(args, object_string_new(temp->context_ref->ContextRef->filename));
+		PushVector(args, object_string_new(temp->ContextRef->ContextRef->filename));
 		PushVector(args, object_int_new(lineno));
 		object* trace = NewInstanceClass(
 			stackTraceElementClass,
@@ -64,10 +64,10 @@ static void bc_exception_nativeInit(method* parent, Frame* fr, Enviroment* env) 
 		);
 		DeleteVector(args, VectorDeleterOfNull);
 		PushVector(stackTraceElementVec, trace);
-		temp = temp->parent;
+		temp = temp->Parent;
 		//今回の表示情報を記録
 		if(temp != NULL) {
-			lfilename = temp->context_ref->ContextRef->filename;
+			lfilename = temp->ContextRef->ContextRef->filename;
 			llineno = lineno;
 		}
 	} while (temp != NULL);

@@ -63,8 +63,8 @@ void ExecuteMethod(method* self, Frame* fr, Enviroment* env) {
 		Vector* aTArgs = NULL;
 		//レシーバも
 		if(!IsStaticModifier(self->modifier)) {
-			object* receiver_obj = PopVector(fr->value_stack);
-			AssignVector(a->ref_stack, 0, receiver_obj);
+			object* receiver_obj = PopVector(fr->ValueStack);
+			AssignVector(a->VariableTable, 0, receiver_obj);
 			cfr = PushCallContext(GetSGThreadCContext(), FRAME_INSTANCE_INVOKE_T);
 			cfr->Kind.InstanceInvoke.Receiver = receiver_obj->gtype;
 			aArgs = cfr->Kind.InstanceInvoke.Args = method_vm_args(self, fr, a);
@@ -78,8 +78,8 @@ void ExecuteMethod(method* self, Frame* fr, Enviroment* env) {
 		//戻り値を残す
 		//例外によって終了した場合には戻り値がない
 		if(self->return_gtype != TYPE_VOID->generic_self &&
-	  		 a->value_stack->Length > 0) {
-			PushVector(fr->value_stack, PopVector(a->value_stack));
+	  		 a->ValueStack->Length > 0) {
+			PushVector(fr->ValueStack, PopVector(a->ValueStack));
 		}
 		DeleteVector(aArgs, VectorDeleterOfNull);
 		DeleteVector(aTArgs, VectorDeleterOfNull);
@@ -460,9 +460,9 @@ static Vector* method_vm_args(method* self, Frame* fr, Frame* a) {
 	//引数を引き継ぐ
 	int len = self->parameters->Length;
 	for(int i=0; i<len; i++) {
-		object* ARG = PopVector(fr->value_stack);
+		object* ARG = PopVector(fr->ValueStack);
 		assert(ARG != NULL);
-		AssignVector(a->ref_stack, (len - i), ARG);
+		AssignVector(a->VariableTable, (len - i), ARG);
 		AssignVector(args, (len - i), ARG->gtype);
 	}
 	return args;
@@ -473,8 +473,8 @@ static Vector* method_vm_typeargs(method* self, Frame* fr, Frame* a) {
 	Vector* typeargs = NewVector();
 	int typeparams = self->type_parameters->Length;
 	for(int i=0; i<typeparams; i++) {
-		VectorItem e = PopVector(fr->type_args_vec);
-		AssignVector(a->type_args_vec, (typeparams - i) - 1, e);
+		VectorItem e = PopVector(fr->TypeArgs);
+		AssignVector(a->TypeArgs, (typeparams - i) - 1, e);
 		AssignVector(typeargs, (typeparams - i) - 1, e);
 	}
 	return typeargs;

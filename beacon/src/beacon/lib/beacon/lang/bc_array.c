@@ -63,7 +63,7 @@ static void bc_array_nativeInit(method* parent, Frame* fr, Enviroment* env) {
 	field* lengthField = FindFieldClass(tp->u.class_, InternString("length"), &temp);
 	assert(lengthField != NULL && temp != -1);
 	//対応する位置のオブジェクトを取り出す
-	object* self = AtVector(fr->ref_stack, 0);
+	object* self = AtVector(fr->VariableTable, 0);
 	object* lengthObj = AtVector(self->u.field_vec, temp);
 	assert(lengthObj != NULL);
 	generic_type* targ = AtVector(self->gtype->type_args_list, 0);
@@ -77,29 +77,29 @@ static void bc_array_nativeInit(method* parent, Frame* fr, Enviroment* env) {
 }
 
 static void bc_array_nativeSet(method* parent, Frame* fr, Enviroment* env) {
-	object* self = AtVector(fr->ref_stack, 0);
-	object* idx = AtVector(fr->ref_stack, 1);
-	object* val = AtVector(fr->ref_stack, 2);
+	object* self = AtVector(fr->VariableTable, 0);
+	object* idx = AtVector(fr->VariableTable, 1);
+	object* val = AtVector(fr->VariableTable, 2);
 	assert(idx->tag == OBJECT_INT_T);
 	AssignVector(self->native_slot_vec, idx->u.int_, val);
 }
 
 static void bc_array_nativeGet(method* parent, Frame* fr, Enviroment* env) {
-	object* self = AtVector(fr->ref_stack, 0);
-	object* idx = AtVector(fr->ref_stack, 1);
-//	object* a = AtVector(vm->ref_stack, 2);
+	object* self = AtVector(fr->VariableTable, 0);
+	object* idx = AtVector(fr->VariableTable, 1);
+//	object* a = AtVector(vm->VariableTable, 2);
 	assert(idx->tag == OBJECT_INT_T);
 	object* ret = (object*)AtVector(self->native_slot_vec, idx->u.int_);
 	//Printfln("array get %d", idx->u.int_);
-	PushVector(fr->value_stack, ret);
+	PushVector(fr->ValueStack, ret);
 }
 
 static void bc_array_nativeCopy(method* parent, Frame* fr, Enviroment* env) {
-	object* src = AtVector(fr->ref_stack, 1);
-	object* srcOffset = AtVector(fr->ref_stack, 2);
-	object* dst = AtVector(fr->ref_stack, 3);
-	object* dstOffset = AtVector(fr->ref_stack, 4);
-	object* length = AtVector(fr->ref_stack, 5);
+	object* src = AtVector(fr->VariableTable, 1);
+	object* srcOffset = AtVector(fr->VariableTable, 2);
+	object* dst = AtVector(fr->VariableTable, 3);
+	object* dstOffset = AtVector(fr->VariableTable, 4);
+	object* length = AtVector(fr->VariableTable, 5);
 	int srcLen = src->native_slot_vec->Length;
 	int dstLen = dst->native_slot_vec->Length;
 	int cpyLen = length->u.int_;

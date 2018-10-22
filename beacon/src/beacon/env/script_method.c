@@ -23,12 +23,12 @@ void ExecuteScriptMethod(script_method * self, method* parent, Frame* fr, Enviro
 #endif
 	Frame* sub = SubFrame(fr);
 	CallFrame* cfr = NULL;
-	sub->receiver = parent->parent;
+	sub->Receiver = parent->parent;
 	Vector* aArgs = NewVector();
 	Vector* aTArgs = NewVector();
 	if (!IsStaticModifier(parent->modifier)) {
-		object* receiver_obj = PopVector(fr->value_stack);
-		PushVector(sub->value_stack, receiver_obj);
+		object* receiver_obj = PopVector(fr->ValueStack);
+		PushVector(sub->ValueStack, receiver_obj);
 		cfr = PushCallContext(GetSGThreadCContext(), FRAME_INSTANCE_INVOKE_T);
 		cfr->Kind.InstanceInvoke.Receiver = receiver_obj->gtype;
 		cfr->Kind.InstanceInvoke.Args = aArgs;
@@ -39,24 +39,24 @@ void ExecuteScriptMethod(script_method * self, method* parent, Frame* fr, Enviro
 		cfr->Kind.StaticInvoke.TypeArgs = aTArgs;
 	}
 	for (int i = 0; i < parent->parameters->Length; i++) {
-		object* arg = CopyObject(PopVector(fr->value_stack));
-		PushVector(sub->value_stack, arg);
+		object* arg = CopyObject(PopVector(fr->ValueStack));
+		PushVector(sub->ValueStack, arg);
 		AssignVector(aArgs, (parent->parameters->Length - i), arg);
 	}
 	//メソッドに渡された型引数を引き継ぐ
 	int typeparams = parent->type_parameters->Length;
 	for(int i=0; i<typeparams; i++) {
-		VectorItem e = PopVector(fr->type_args_vec);
-		AssignVector(sub->type_args_vec, (typeparams - i) - 1, e);
+		VectorItem e = PopVector(fr->TypeArgs);
+		AssignVector(sub->TypeArgs, (typeparams - i) - 1, e);
 		AssignVector(aTArgs, (typeparams - i) - 1, e);
 	}
 	ExecuteVM(sub, self->env);
 	//戻り値が Void 以外ならスタックトップの値を引き継ぐ
 	//例外によって終了した場合には戻り値がない
 	if(parent->return_gtype != TYPE_VOID->generic_self &&
-	   sub->value_stack->Length > 0) {
-		object* o = (object*)PopVector(sub->value_stack);
-		PushVector(fr->value_stack, NON_NULL(o));
+	   sub->ValueStack->Length > 0) {
+		object* o = (object*)PopVector(sub->ValueStack);
+		PushVector(fr->ValueStack, NON_NULL(o));
 	}
 	DeleteVector(aArgs, VectorDeleterOfNull);
 	DeleteVector(aTArgs, VectorDeleterOfNull);

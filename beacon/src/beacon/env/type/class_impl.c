@@ -116,13 +116,13 @@ void AllocFieldsClass(class_ * self, object * o, Frame* fr) {
 		he->CollectBlocking++;
 		if(f->initial_value != NULL) {
 			Frame* sub = SubFrame(fr);
-			for(int i=0; i<fr->type_args_vec->Length; i++) {
-				PushVector(sub->type_args_vec, AtVector(fr->type_args_vec, i));
+			for(int i=0; i<fr->TypeArgs->Length; i++) {
+				PushVector(sub->TypeArgs, AtVector(fr->TypeArgs, i));
 			}
-			sub->receiver = self->parent;
-			CopyVector(fr->ref_stack, sub->ref_stack);
+			sub->Receiver = self->parent;
+			CopyVector(fr->VariableTable, sub->VariableTable);
 			ExecuteVM(sub, f->initial_value_env);
-			a = PopVector(sub->value_stack);
+			a = PopVector(sub->ValueStack);
 			DeleteFrame(sub);
 		}
 		PushVector(o->u.field_vec, a);
@@ -350,16 +350,16 @@ object * NewInstanceClass(class_* self, Frame* fr, Vector* args, Vector* type_ar
 	if(args != NULL) {
 		for (int i = args->Length-1; i>=0; i--) {
 			object* o = AtVector(args, i);
-			PushVector(sub->value_stack, o);
+			PushVector(sub->ValueStack, o);
 		}
 	}
 	if(type_args != NULL) {
 		for(int i = 0; i<type_args->Length; i++) {
-			PushVector(sub->type_args_vec, AtVector(type_args, i));
+			PushVector(sub->TypeArgs, AtVector(type_args, i));
 		}
 	}
 	ExecuteVM(sub, ctor->env);
-	object* inst = PopVector(sub->value_stack);
+	object* inst = PopVector(sub->ValueStack);
 	h->CollectBlocking++;
 	DeleteFrame(sub);
 	h->CollectBlocking--;

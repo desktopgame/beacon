@@ -47,48 +47,48 @@ static void bc_time_nativeGetRawTime(method* parent, Frame* fr, Enviroment* env)
 	time_t tref;
 	time(&tref);
 	//FIXME:long型を導入する
-	PushVector(fr->value_stack, object_long_new(tref));
+	PushVector(fr->ValueStack, object_long_new(tref));
 }
 
 static void bc_time_nativeToString(method* parent, Frame* fr, Enviroment* env) {
-	object* self = AtVector(fr->ref_stack, 0);
+	object* self = AtVector(fr->VariableTable, 0);
 	int temp;
 	FindFieldClass(TYPE2CLASS(GetBCTimeType()), InternString("rawTime"), &temp);
 	object* rawTime = (object*)AtVector(self->u.field_vec, temp);
-	PushVector(fr->value_stack, object_string_new(ctime(&(rawTime->u.long_))));
+	PushVector(fr->ValueStack, object_string_new(ctime(&(rawTime->u.long_))));
 }
 
 static void bc_time_nativeGetSecond(method* parent, Frame* fr, Enviroment* env) {
-	object* rawTime = AtVector(fr->ref_stack, 1);
-	PushVector(fr->value_stack, GetIntObject(localtime(&(rawTime->u.long_))->tm_sec));
+	object* rawTime = AtVector(fr->VariableTable, 1);
+	PushVector(fr->ValueStack, GetIntObject(localtime(&(rawTime->u.long_))->tm_sec));
 }
 
 static void bc_time_nativeGetMinute(method* parent, Frame* fr, Enviroment* env) {
-	object* rawTime = AtVector(fr->ref_stack, 1);
-	PushVector(fr->value_stack, GetIntObject(localtime(&(rawTime->u.long_))->tm_min));
+	object* rawTime = AtVector(fr->VariableTable, 1);
+	PushVector(fr->ValueStack, GetIntObject(localtime(&(rawTime->u.long_))->tm_min));
 }
 
 static void bc_time_nativeGetHour(method* parent, Frame* fr, Enviroment* env) {
-	object* rawTime = AtVector(fr->ref_stack, 1);
-	PushVector(fr->value_stack, GetIntObject(localtime(&(rawTime->u.long_))->tm_hour));
+	object* rawTime = AtVector(fr->VariableTable, 1);
+	PushVector(fr->ValueStack, GetIntObject(localtime(&(rawTime->u.long_))->tm_hour));
 }
 
 static void bc_time_nativeGetDay(method* parent, Frame* fr, Enviroment* env) {
-	object* rawTime = AtVector(fr->ref_stack, 1);
-	PushVector(fr->value_stack, GetIntObject(localtime(&(rawTime->u.long_))->tm_mday));
+	object* rawTime = AtVector(fr->VariableTable, 1);
+	PushVector(fr->ValueStack, GetIntObject(localtime(&(rawTime->u.long_))->tm_mday));
 }
 
 static void bc_time_nativeGetYear(method* parent, Frame* fr, Enviroment* env) {
-	object* rawTime = AtVector(fr->ref_stack, 1);
-	PushVector(fr->value_stack, GetIntObject(localtime(&(rawTime->u.long_))->tm_year));
+	object* rawTime = AtVector(fr->VariableTable, 1);
+	PushVector(fr->ValueStack, GetIntObject(localtime(&(rawTime->u.long_))->tm_year));
 }
 
 static void bc_time_nativeGetDayOfWeek(method* parent, Frame* fr, Enviroment* env) {
-	object* rawTime = AtVector(fr->ref_stack, 1);
-	PushVector(fr->value_stack, GetIntObject(localtime(&(rawTime->u.long_))->tm_wday));
+	object* rawTime = AtVector(fr->VariableTable, 1);
+	PushVector(fr->ValueStack, GetIntObject(localtime(&(rawTime->u.long_))->tm_wday));
 }
 
 static void bc_time_nativeGetDayOfYear(method* parent, Frame* fr, Enviroment* env) {
-	object* rawTime = AtVector(fr->ref_stack, 1);
-	PushVector(fr->value_stack, GetIntObject(localtime(&(rawTime->u.long_))->tm_yday));
+	object* rawTime = AtVector(fr->VariableTable, 1);
+	PushVector(fr->ValueStack, GetIntObject(localtime(&(rawTime->u.long_))->tm_yday));
 }

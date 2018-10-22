@@ -29,7 +29,7 @@ type* GetBCObjectType() {
 
 //private
 static void bc_object_nativeToString(method* parent, Frame* fr, Enviroment* env) {
-	object* self = (object*)AtVector(fr->ref_stack, 0);
+	object* self = (object*)AtVector(fr->VariableTable, 0);
 	Buffer* sb = NewBuffer();
 	//参照型
 	if (self->tag == OBJECT_REF_T) {
@@ -55,12 +55,12 @@ static void bc_object_nativeToString(method* parent, Frame* fr, Enviroment* env)
 	}
 	char* str = ReleaseBuffer(sb);
 	object* ret = object_string_new(str);
-	PushVector(fr->value_stack, ret);
+	PushVector(fr->ValueStack, ret);
 	MEM_FREE(str);
 }
 
 static void bc_object_nativeReferenceEquals(method* parent, Frame* fr, Enviroment* env) {
-	object* a = (object*)AtVector(fr->ref_stack, 1);
-	object* b = (object*)AtVector(fr->ref_stack, 2);
-	PushVector(fr->value_stack, GetBoolObject(a == b));
+	object* a = (object*)AtVector(fr->VariableTable, 1);
+	object* b = (object*)AtVector(fr->VariableTable, 2);
+	PushVector(fr->ValueStack, GetBoolObject(a == b));
 }

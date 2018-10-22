@@ -15,29 +15,29 @@ static void DeleteFrame_defctx(VectorItem e);
 
 Frame* NewFrame() {
 	Frame* ret = (Frame*)MEM_MALLOC(sizeof(Frame));
-	ret->value_stack = NewVector();
-	ret->ref_stack = NewVector();
-	ret->parent = NULL;
-	ret->level = 0;
-	ret->terminate = false;
-	ret->validate = false;
-	ret->native_throw_pos = -1;
-	ret->exception = NULL;
-	ret->children_vec = NewVector();
-	ret->defer_at = 0;
-	ret->defer_vec = NULL;
-	ret->type_args_vec = NewVector();
-	ret->receiver = NULL;
-	ret->coroutine = NULL;
+	ret->ValueStack = NewVector();
+	ret->VariableTable = NewVector();
+	ret->Parent = NULL;
+	ret->Level = 0;
+	ret->IsTerminate = false;
+	ret->IsValidate = false;
+	ret->NativeThrowPos = -1;
+	ret->Exception = NULL;
+	ret->Children = NewVector();
+	ret->DeferAt = 0;
+	ret->DeferList = NULL;
+	ret->TypeArgs = NewVector();
+	ret->Receiver = NULL;
+	ret->Coroutine = NULL;
 	return ret;
 }
 
 Frame* SubFrame(Frame* parent) {
 	Frame* ret = NewFrame();
-	ret->parent = parent;
-	ret->level = parent->level + 1;
-	ret->context_ref = parent->context_ref;
-	PushVector(parent->children_vec, ret);
+	ret->Parent = parent;
+	ret->Level = parent->Level + 1;
+	ret->ContextRef = parent->ContextRef;
+	PushVector(parent->Children, ret);
 	return ret;
 }
 
@@ -51,26 +51,26 @@ void MarkAllFrame(Frame* self) {
 
 void DeleteFrame(Frame* self) {
 	remove_from_parent(self);
-	ClearVector(self->value_stack);
-	ClearVector(self->ref_stack);
+	ClearVector(self->ValueStack);
+	ClearVector(self->VariableTable);
 	CollectHeap(GetHeap());
-	DeleteVector(self->value_stack, VectorDeleterOfNull);
-	DeleteVector(self->ref_stack, VectorDeleterOfNull);
-	DeleteVector(self->children_vec, VectorDeleterOfNull);
-	DeleteVector(self->type_args_vec, VectorDeleterOfNull);
-	DeleteVector(self->defer_vec, DeleteFrame_defctx);
+	DeleteVector(self->ValueStack, VectorDeleterOfNull);
+	DeleteVector(self->VariableTable, VectorDeleterOfNull);
+	DeleteVector(self->Children, VectorDeleterOfNull);
+	DeleteVector(self->TypeArgs, VectorDeleterOfNull);
+	DeleteVector(self->DeferList, DeleteFrame_defctx);
 	MEM_FREE(self);
 }
 
 Frame* GetRootFrame(Frame* self) {
-	return self->parent != NULL ? GetRootFrame(self->parent) : self->parent;
+	return self->Parent != NULL ? GetRootFrame(self->Parent) : self->Parent;
 }
 
 //private
 static void remove_from_parent(Frame* self) {
-	if (self->parent != NULL) {
-		int idx = FindVector(self->parent->children_vec, self);
-		RemoveVector(self->parent->children_vec, idx);
+	if (self->Parent != NULL) {
+		int idx = FindVector(self->Parent->Children, self);
+		RemoveVector(self->Parent->Children, idx);
 	}
 }
 
@@ -84,30 +84,30 @@ static void frame_markStatic(field* item) {
 }
 
 static void frame_markRecursive(Frame* self) {
-	for (int i = 0; i < self->children_vec->Length; i++) {
-		Frame* e = (Frame*)AtVector(self->children_vec, i);
+	for (int i = 0; i < self->Children->Length; i++) {
+		Frame* e = (Frame*)AtVector(self->Children, i);
 		frame_markRecursive(e);
 	}
-	for (int i = 0; i < self->value_stack->Length; i++) {
-		object* e = (object*)AtVector(self->value_stack, i);
+	for (int i = 0; i < self->ValueStack->Length; i++) {
+		object* e = (object*)AtVector(self->ValueStack, i);
 		MarkAllObject(e);
 	}
-	for (int i = 0; i < self->ref_stack->Length; i++) {
-		object* e = (object*)AtVector(self->ref_stack, i);
+	for (int i = 0; i < self->VariableTable->Length; i++) {
+		object* e = (object*)AtVector(self->VariableTable, i);
 		MarkAllObject(e);
 	}
 	//deferのために一時的に保存された領域
 	frame_mark_defer(self);
 	//例外をマークする
-	MarkAllObject(self->exception);
+	MarkAllObject(self->Exception);
 }
 
 static void frame_mark_defer(Frame* self) {
-	if(self->defer_vec == NULL) {
+	if(self->DeferList == NULL) {
 		return;
 	}
-	for(int i=0; i<self->defer_vec->Length; i++) {
-		DeferContext* defctx = AtVector(self->defer_vec, i);
+	for(int i=0; i<self->DeferList->Length; i++) {
+		DeferContext* defctx = AtVector(self->DeferList, i);
 		Vector* bind = defctx->VariableTable;
 		for(int j=0; j<bind->Length; j++) {
 			object* e = AtVector(bind, j);

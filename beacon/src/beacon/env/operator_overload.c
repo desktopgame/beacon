@@ -27,18 +27,18 @@ operator_overload* NewOperatorOverload(OperatorType type) {
 
 void ExecuteOperatorOverload(operator_overload* self, Frame* fr, Enviroment* env) {
 	Frame* sub = SubFrame(fr);
-	sub->receiver = fr->receiver;
-	PushVector(sub->value_stack, PopVector(fr->value_stack));
+	sub->Receiver = fr->Receiver;
+	PushVector(sub->ValueStack, PopVector(fr->ValueStack));
 	for (int i = 0; i < self->parameter_list->Length; i++) {
-		PushVector(sub->value_stack, CopyObject(PopVector(fr->value_stack)));
+		PushVector(sub->ValueStack, CopyObject(PopVector(fr->ValueStack)));
 	}
 	ExecuteVM(sub, self->env);
 	//戻り値が Void 以外ならスタックトップの値を引き継ぐ
 	//例外によって終了した場合には戻り値がない
 	if(self->return_gtype != TYPE_VOID->generic_self &&
-	   sub->value_stack->Length > 0) {
-		object* o = (object*)PopVector(sub->value_stack);
-		PushVector(fr->value_stack, o);
+	   sub->ValueStack->Length > 0) {
+		object* o = (object*)PopVector(sub->ValueStack);
+		PushVector(fr->ValueStack, o);
 	}
 	DeleteFrame(sub);
 }

@@ -106,7 +106,7 @@ static bool eval_top_from_cll(class_loader* cll, AST* aOpt) {
 	if(!GetLastBCError()) {
 		ExecuteVM(fr, cll->env);
 	}
-	if(fr->terminate) {
+	if(fr->IsTerminate) {
 		ThrowBCError(BCERROR_GENERIC_T, "unexpected terminate");
 	}
 	CatchVM(fr);

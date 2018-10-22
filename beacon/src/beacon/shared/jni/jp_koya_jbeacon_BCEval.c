@@ -102,7 +102,7 @@ static Frame* bc_eval_allocate(class_loader* cll) {
 	if(!GetLastBCError()) {
 		ExecuteVM(fr, cll->env);
 	}
-	if(fr->terminate) {
+	if(fr->IsTerminate) {
 		ThrowBCError(BCERROR_GENERIC_T, "unexpected terminate");
 	}
 	return fr;
@@ -193,7 +193,7 @@ static void bc_write_symbol(JNIEnv* env, NumericMap* nmap, Frame* fr, jobject ta
 	NumericMapItem val = nmap->Item;
 	const char* name = Ref2Str(key);
 	SymbolEntry* se = (SymbolEntry*)val;
-	object* bcobj = AtVector(fr->ref_stack, se->Index);
+	object* bcobj = AtVector(fr->VariableTable, se->Index);
 	//jp.koya.jbeacon.SymbolTableを検索する
 	jclass symbol_table_cls = (*env)->FindClass(env, "jp/koya/jbeacon/SymbolTable");
 	if(symbol_table_cls == NULL) {
