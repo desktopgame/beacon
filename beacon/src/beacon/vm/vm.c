@@ -569,28 +569,28 @@ static void vm_run(frame * self, Enviroment * env, int pos, int deferStart) {
 				frame* sub = SubFrame(self);
 				sub->receiver = tp;
 				call_frame* cfr = PushCallContext(GetSGThreadCContext(), FRAME_STATIC_INVOKE_T);
-				cfr->u.static_invoke.args = NewVector();
-				cfr->u.static_invoke.typeargs = NewVector();
+				cfr->u.static_invoke.Args = NewVector();
+				cfr->u.static_invoke.TypeArgs = NewVector();
 				for (int i = 0; i < ctor->parameter_list->Length; i++) {
 					VectorItem e = PopVector(self->value_stack);
 					object* o = (object*)e;
 					PushVector(sub->value_stack, NON_NULL(e));
-					AssignVector(cfr->u.static_invoke.args, (ctor->parameter_list->Length - i), o->gtype);
+					AssignVector(cfr->u.static_invoke.Args, (ctor->parameter_list->Length - i), o->gtype);
 				}
 				//コンストラクタに渡された型引数を引き継ぐ
 				int typeparams = cls->GetParameterListType->Length;
 				for(int i=0; i<typeparams; i++) {
 					VectorItem e = PopVector(self->type_args_vec);
 					AssignVector(sub->type_args_vec, (typeparams - i) - 1, e);
-					AssignVector(cfr->u.static_invoke.typeargs, (cls->GetParameterListType->Length - i), e);
+					AssignVector(cfr->u.static_invoke.TypeArgs, (cls->GetParameterListType->Length - i), e);
 				}
 				//Printi(self->level);
 				//Printfln("[ %s#new ]", GetTypeName(ctor->parent));
 				//DumpEnviromentOp(ctor->env, sub->level);
 				//DumpOpcodeBuf(ctor->env->Bytecode, sub->level);
 				ExecuteVM(sub, ctor->env);
-				DeleteVector(cfr->u.static_invoke.args, VectorDeleterOfNull);
-				DeleteVector(cfr->u.static_invoke.typeargs, VectorDeleterOfNull);
+				DeleteVector(cfr->u.static_invoke.Args, VectorDeleterOfNull);
+				DeleteVector(cfr->u.static_invoke.TypeArgs, VectorDeleterOfNull);
 				PopCallContext(GetSGThreadCContext());
 				//コンストラクタを実行した場合、
 				//objectがスタックのトップに残っているはず
@@ -613,22 +613,22 @@ static void vm_run(frame * self, Enviroment * env, int pos, int deferStart) {
 				frame* sub = SubFrame(self);
 				sub->receiver = tp;
 				call_frame* cfr = PushCallContext(GetSGThreadCContext(), FRAME_STATIC_INVOKE_T);
-				cfr->u.static_invoke.args = NewVector();
-				cfr->u.static_invoke.typeargs = NewVector();
+				cfr->u.static_invoke.Args = NewVector();
+				cfr->u.static_invoke.TypeArgs = NewVector();
 				//チェインコンストラクタに渡された実引数をプッシュ
 				for (int i = 0; i < ctor->parameter_list->Length; i++) {
 					object* o = (object*)PopVector(self->value_stack);
 					PushVector(sub->value_stack, NON_NULL(o));
-					AssignVector(cfr->u.static_invoke.args, (ctor->parameter_list->Length - i), o->gtype);
+					AssignVector(cfr->u.static_invoke.Args, (ctor->parameter_list->Length - i), o->gtype);
 				}
 				for(int i=0; i<self->type_args_vec->Length; i++) {
-					PushVector(cfr->u.static_invoke.typeargs, self->type_args_vec);
+					PushVector(cfr->u.static_invoke.TypeArgs, self->type_args_vec);
 				}
 				//		DumpEnviromentOp(ctor->env, sub->level);
 				//DumpOpcodeBuf(ctor->env->Bytecode, sub->level);
 				ExecuteVM(sub, ctor->env);
-				DeleteVector(cfr->u.static_invoke.args, VectorDeleterOfNull);
-				DeleteVector(cfr->u.static_invoke.typeargs, VectorDeleterOfNull);
+				DeleteVector(cfr->u.static_invoke.Args, VectorDeleterOfNull);
+				DeleteVector(cfr->u.static_invoke.TypeArgs, VectorDeleterOfNull);
 				PopCallContext(GetSGThreadCContext());
 				//コンストラクタを実行した場合、
 				//objectがスタックのトップに残っているはず

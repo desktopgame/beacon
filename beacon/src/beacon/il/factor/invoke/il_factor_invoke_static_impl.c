@@ -103,8 +103,8 @@ static void resolve_default(il_factor_invoke_static * self, Enviroment* env, cal
 		return;
 	}
 	call_frame* cfr = PushCallContext(cctx, FRAME_STATIC_INVOKE_T);
-	cfr->u.static_invoke.args = self->args;
-	cfr->u.static_invoke.typeargs = self->type_args;
+	cfr->u.static_invoke.Args = self->args;
+	cfr->u.static_invoke.TypeArgs = self->type_args;
 	generic_type* rgtp = self->m->return_gtype;
 	self->resolved = ApplyGenericType(rgtp, cctx);
 	PopCallContext(cctx);
@@ -133,8 +133,8 @@ static void il_factor_invoke_static_check(il_factor_invoke_static * self, Enviro
 		LoadILFactor(ilarg->factor, env, cctx);
 	}
 	call_frame* cfr = PushCallContext(cctx, FRAME_STATIC_INVOKE_T);
-	cfr->u.static_invoke.args = self->args;
-	cfr->u.static_invoke.typeargs = self->type_args;
+	cfr->u.static_invoke.Args = self->args;
+	cfr->u.static_invoke.TypeArgs = self->type_args;
 	self->m = ILFindSMethodClass(cls, self->namev, self->args, env, cctx, &temp);
 	self->index = temp;
 	//メソッドが見つからない

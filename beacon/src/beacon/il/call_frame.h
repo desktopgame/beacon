@@ -24,10 +24,10 @@ typedef struct CallSelfInvoke {
 	Vector* TypeArgs;
 } CallSelfInvoke;
 
-typedef struct call_static_invoke {
-	Vector* args;
-	Vector* typeargs;
-} call_static_invoke;
+typedef struct CallStaticInvoke {
+	Vector* Args;
+	Vector* TypeArgs;
+} CallStaticInvoke;
 
 typedef struct call_instance_invoke {
 	struct generic_type* receiver;
@@ -40,7 +40,7 @@ typedef struct call_frame {
 	union {
 		CallResolve resolve;
 		CallSelfInvoke self_invoke;
-		call_static_invoke static_invoke;
+		CallStaticInvoke static_invoke;
 		call_instance_invoke instance_invoke;
 	} u;
 } call_frame;

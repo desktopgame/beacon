@@ -71,8 +71,8 @@ void ExecuteMethod(method* self, frame * fr, Enviroment* env) {
 			aTArgs = cfr->u.instance_invoke.typeargs = method_vm_typeargs(self, fr, a);
 		} else {
 			cfr = PushCallContext(GetSGThreadCContext(), FRAME_STATIC_INVOKE_T);
-			aArgs = cfr->u.static_invoke.args = method_vm_args(self, fr, a);
-			aTArgs = cfr->u.static_invoke.typeargs = method_vm_typeargs(self, fr, a);
+			aArgs = cfr->u.static_invoke.Args = method_vm_args(self, fr, a);
+			aTArgs = cfr->u.static_invoke.TypeArgs = method_vm_typeargs(self, fr, a);
 		}
 		ExecuteNativeMethod(self->u.native_method, self, a, env);
 		//戻り値を残す

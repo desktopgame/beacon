@@ -35,8 +35,8 @@ void ExecuteScriptMethod(script_method * self, method* parent, frame * fr, Envir
 		cfr->u.instance_invoke.typeargs = aTArgs;
 	} else {
 		cfr = PushCallContext(GetSGThreadCContext(), FRAME_STATIC_INVOKE_T);
-		cfr->u.static_invoke.args = aArgs;
-		cfr->u.static_invoke.typeargs = aTArgs;
+		cfr->u.static_invoke.Args = aArgs;
+		cfr->u.static_invoke.TypeArgs = aTArgs;
 	}
 	for (int i = 0; i < parent->parameters->Length; i++) {
 		object* arg = CopyObject(PopVector(fr->value_stack));
