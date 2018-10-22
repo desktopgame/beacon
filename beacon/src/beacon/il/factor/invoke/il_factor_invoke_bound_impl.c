@@ -124,9 +124,9 @@ static void il_factor_invoke_bound_check(il_factor_invoke_bound * self, Envirome
 	const char* nstr = Ref2Str(self->namev);
 	const char* str = Ref2Str(GetTypeName(ctype));
 	#endif
-	call_frame* cfr = PushCallContext(cctx, FRAME_SELF_INVOKE_T);
-	cfr->u.self_invoke.Args = self->args;
-	cfr->u.self_invoke.TypeArgs = self->type_args;
+	CallFrame* cfr = PushCallContext(cctx, FRAME_SELF_INVOKE_T);
+	cfr->Kind.SelfInvoke.Args = self->args;
+	cfr->Kind.SelfInvoke.TypeArgs = self->type_args;
 	self->tag = BOUND_INVOKE_METHOD_T;
 	self->u.m = ILFindMethodClass(TYPE2CLASS(ctype), self->namev, self->args, env, cctx, &temp);
 	self->index = temp;
@@ -267,16 +267,16 @@ static generic_type* EvalILInvokeBoundImpl(il_factor_invoke_bound * self, Enviro
 	if(GetLastBCError()) {
 		return NULL;
 	}
-	call_frame* cfr = NULL;
+	CallFrame* cfr = NULL;
 	if(self->tag == BOUND_INVOKE_METHOD_T) {
 		cfr = PushCallContext(cctx, FRAME_SELF_INVOKE_T);
-		cfr->u.self_invoke.Args = self->args;
-		cfr->u.self_invoke.TypeArgs = self->type_args;
+		cfr->Kind.SelfInvoke.Args = self->args;
+		cfr->Kind.SelfInvoke.TypeArgs = self->type_args;
 	} else {
 		cfr = PushCallContext(cctx, FRAME_INSTANCE_INVOKE_T);
-		cfr->u.instance_invoke.Receiver = ApplyGenericType(subscript_descriptor_receiver(&self->u.subscript), cctx);
-		cfr->u.instance_invoke.Args = self->args;
-		cfr->u.instance_invoke.TypeArgs = self->type_args;
+		cfr->Kind.InstanceInvoke.Receiver = ApplyGenericType(subscript_descriptor_receiver(&self->u.subscript), cctx);
+		cfr->Kind.InstanceInvoke.Args = self->args;
+		cfr->Kind.InstanceInvoke.TypeArgs = self->type_args;
 	}
 
 	if(il_factor_invoke_bound_return_gtype(self, cctx)->tag != GENERIC_TYPE_TAG_NONE_T) {

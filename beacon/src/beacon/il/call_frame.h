@@ -35,18 +35,18 @@ typedef struct CallInstanceInvoke {
 	Vector* TypeArgs;
 } CallInstanceInvoke;
 
-typedef struct call_frame {
-	CallFrameTag tag;
+typedef struct CallFrame {
+	CallFrameTag Tag;
 	union {
-		CallResolve resolve;
-		CallSelfInvoke self_invoke;
-		CallStaticInvoke static_invoke;
-		CallInstanceInvoke instance_invoke;
-	} u;
-} call_frame;
+		CallResolve Resolve;
+		CallSelfInvoke SelfInvoke;
+		CallStaticInvoke StaticInvoke;
+		CallInstanceInvoke InstanceInvoke;
+	} Kind;
+} CallFrame;
 
 #define NewCallFrame(tag) (MallocCallFrame(tag, __FILE__, __LINE__))
-call_frame* MallocCallFrame(CallFrameTag tag, const char* filename, int lineno);
+CallFrame* MallocCallFrame(CallFrameTag tag, const char* filename, int lineno);
 
-void DeleteCallFrame(call_frame* self);
+void DeleteCallFrame(CallFrame* self);
 #endif

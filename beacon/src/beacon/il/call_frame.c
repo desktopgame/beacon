@@ -1,12 +1,12 @@
 #include "call_frame.h"
 #include "../util/mem.h"
 
-call_frame* MallocCallFrame(CallFrameTag tag, const char* filename, int lineno) {
-	call_frame* ret = mem_malloc(sizeof(call_frame), filename, lineno);
-	ret->tag = tag;
+CallFrame* MallocCallFrame(CallFrameTag tag, const char* filename, int lineno) {
+	CallFrame* ret = mem_malloc(sizeof(CallFrame), filename, lineno);
+	ret->Tag = tag;
 	return ret;
 }
 
-void DeleteCallFrame(call_frame* self) {
+void DeleteCallFrame(CallFrame* self) {
 	MEM_FREE(self);
 }

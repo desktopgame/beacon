@@ -44,9 +44,9 @@ typedef struct call_context {
 call_context* MallocCContext(CallFrameTag tag, const char* filename, int lineno);
 
 #define PushCallContext(self, tag) (PushImplCallContext(self, tag, __FILE__, __LINE__))
-call_frame* PushImplCallContext(call_context* self, CallFrameTag tag, const char* filename, int lineno);
+CallFrame* PushImplCallContext(call_context* self, CallFrameTag tag, const char* filename, int lineno);
 
-call_frame* TopCallContext(call_context* self);
+CallFrame* TopCallContext(call_context* self);
 
 void PopCallContext(call_context* self);
 

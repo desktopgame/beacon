@@ -22,7 +22,7 @@ void ExecuteScriptMethod(script_method * self, method* parent, frame * fr, Envir
 	const char* name = Ref2Str(parent->namev);
 #endif
 	frame* sub = SubFrame(fr);
-	call_frame* cfr = NULL;
+	CallFrame* cfr = NULL;
 	sub->receiver = parent->parent;
 	Vector* aArgs = NewVector();
 	Vector* aTArgs = NewVector();
@@ -30,13 +30,13 @@ void ExecuteScriptMethod(script_method * self, method* parent, frame * fr, Envir
 		object* receiver_obj = PopVector(fr->value_stack);
 		PushVector(sub->value_stack, receiver_obj);
 		cfr = PushCallContext(GetSGThreadCContext(), FRAME_INSTANCE_INVOKE_T);
-		cfr->u.instance_invoke.Receiver = receiver_obj->gtype;
-		cfr->u.instance_invoke.Args = aArgs;
-		cfr->u.instance_invoke.TypeArgs = aTArgs;
+		cfr->Kind.InstanceInvoke.Receiver = receiver_obj->gtype;
+		cfr->Kind.InstanceInvoke.Args = aArgs;
+		cfr->Kind.InstanceInvoke.TypeArgs = aTArgs;
 	} else {
 		cfr = PushCallContext(GetSGThreadCContext(), FRAME_STATIC_INVOKE_T);
-		cfr->u.static_invoke.Args = aArgs;
-		cfr->u.static_invoke.TypeArgs = aTArgs;
+		cfr->Kind.StaticInvoke.Args = aArgs;
+		cfr->Kind.StaticInvoke.TypeArgs = aTArgs;
 	}
 	for (int i = 0; i < parent->parameters->Length; i++) {
 		object* arg = CopyObject(PopVector(fr->value_stack));

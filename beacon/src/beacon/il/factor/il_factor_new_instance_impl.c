@@ -138,9 +138,9 @@ static void il_factor_new_instance_find(il_factor_new_instance * self, Enviromen
 	//使用するコンストラクタを取得
 	class_* cls = TYPE2CLASS(ty);
 	int temp = -1;
-	call_frame* cfr = PushCallContext(cctx, FRAME_RESOLVE_T);
-	cfr->u.resolve.GType = cls->parent->generic_self;
-	cfr->u.resolve.TypeArgs = self->type_args;
+	CallFrame* cfr = PushCallContext(cctx, FRAME_RESOLVE_T);
+	cfr->Kind.Resolve.GType = cls->parent->generic_self;
+	cfr->Kind.Resolve.TypeArgs = self->type_args;
 	ResolveILTypeArgument(self->type_args, cctx);
 	self->c = ILFindConstructorClass(cls, self->argument_list, env, cctx, &temp);
 	self->constructor_index = temp;

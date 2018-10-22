@@ -23,18 +23,18 @@ call_context* MallocCContext(CallFrameTag tag, const char* filename, int lineno)
 	return ret;
 }
 
-call_frame* PushImplCallContext(call_context* self, CallFrameTag tag, const char* filename, int lineno) {
-	call_frame* fr = MallocCallFrame(tag, filename, lineno);
+CallFrame* PushImplCallContext(call_context* self, CallFrameTag tag, const char* filename, int lineno) {
+	CallFrame* fr = MallocCallFrame(tag, filename, lineno);
 	PushVector(self->call_stack, fr);
 	return fr;
 }
 
-call_frame* TopCallContext(call_context* self) {
+CallFrame* TopCallContext(call_context* self) {
 	return TopVector(self->call_stack);
 }
 
 void PopCallContext(call_context* self) {
-	call_frame* fr = PopVector(self->call_stack);
+	CallFrame* fr = PopVector(self->call_stack);
 	DeleteCallFrame(fr);
 }
 
@@ -64,13 +64,13 @@ class_* GetClassCContext(call_context* self) {
 }
 
 generic_type* GetReceiverCContext(call_context* self) {
-	call_frame* cfr = TopVector(self->call_stack);
-	if(cfr->tag == FRAME_INSTANCE_INVOKE_T) {
-		return cfr->u.instance_invoke.Receiver;
-	} else if(cfr->tag == FRAME_SELF_INVOKE_T) {
+	CallFrame* cfr = TopVector(self->call_stack);
+	if(cfr->Tag == FRAME_INSTANCE_INVOKE_T) {
+		return cfr->Kind.InstanceInvoke.Receiver;
+	} else if(cfr->Tag == FRAME_SELF_INVOKE_T) {
 		return self->ty->generic_self;
-	} else if(cfr->tag == FRAME_RESOLVE_T) {
-		return cfr->u.resolve.GType;
+	} else if(cfr->Tag == FRAME_RESOLVE_T) {
+		return cfr->Kind.Resolve.GType;
 	}
 	return NULL;
 }
@@ -84,15 +84,15 @@ type* GetEvalTypeCContext(call_context* self, fqcn_cache* fqcn) {
 }
 
 Vector* GetTypeArgsCContext(call_context* self) {
-	call_frame* cfr = TopVector(self->call_stack);
-	if(cfr->tag == FRAME_INSTANCE_INVOKE_T) {
-		return cfr->u.instance_invoke.TypeArgs;
-	} else if(cfr->tag == FRAME_STATIC_INVOKE_T) {
-		return cfr->u.static_invoke.TypeArgs;
-	} else if(cfr->tag == FRAME_SELF_INVOKE_T) {
-		return cfr->u.self_invoke.TypeArgs;
-	} else if(cfr->tag == FRAME_RESOLVE_T) {
-		return cfr->u.resolve.TypeArgs;
+	CallFrame* cfr = TopVector(self->call_stack);
+	if(cfr->Tag == FRAME_INSTANCE_INVOKE_T) {
+		return cfr->Kind.InstanceInvoke.TypeArgs;
+	} else if(cfr->Tag == FRAME_STATIC_INVOKE_T) {
+		return cfr->Kind.StaticInvoke.TypeArgs;
+	} else if(cfr->Tag == FRAME_SELF_INVOKE_T) {
+		return cfr->Kind.SelfInvoke.TypeArgs;
+	} else if(cfr->Tag == FRAME_RESOLVE_T) {
+		return cfr->Kind.Resolve.TypeArgs;
 	}
 	return NULL;
 }

@@ -58,7 +58,7 @@ void ExecuteMethod(method* self, frame * fr, Enviroment* env) {
 		ExecuteScriptMethod(self->u.script_method, self, fr, env);
 	} else if (self->type == METHOD_TYPE_NATIVE_T) {
 		frame* a = SubFrame(fr);
-		call_frame* cfr = NULL;
+		CallFrame* cfr = NULL;
 		Vector* aArgs = NULL;
 		Vector* aTArgs = NULL;
 		//レシーバも
@@ -66,13 +66,13 @@ void ExecuteMethod(method* self, frame * fr, Enviroment* env) {
 			object* receiver_obj = PopVector(fr->value_stack);
 			AssignVector(a->ref_stack, 0, receiver_obj);
 			cfr = PushCallContext(GetSGThreadCContext(), FRAME_INSTANCE_INVOKE_T);
-			cfr->u.instance_invoke.Receiver = receiver_obj->gtype;
-			aArgs = cfr->u.instance_invoke.Args = method_vm_args(self, fr, a);
-			aTArgs = cfr->u.instance_invoke.TypeArgs = method_vm_typeargs(self, fr, a);
+			cfr->Kind.InstanceInvoke.Receiver = receiver_obj->gtype;
+			aArgs = cfr->Kind.InstanceInvoke.Args = method_vm_args(self, fr, a);
+			aTArgs = cfr->Kind.InstanceInvoke.TypeArgs = method_vm_typeargs(self, fr, a);
 		} else {
 			cfr = PushCallContext(GetSGThreadCContext(), FRAME_STATIC_INVOKE_T);
-			aArgs = cfr->u.static_invoke.Args = method_vm_args(self, fr, a);
-			aTArgs = cfr->u.static_invoke.TypeArgs = method_vm_typeargs(self, fr, a);
+			aArgs = cfr->Kind.StaticInvoke.Args = method_vm_args(self, fr, a);
+			aTArgs = cfr->Kind.StaticInvoke.TypeArgs = method_vm_typeargs(self, fr, a);
 		}
 		ExecuteNativeMethod(self->u.native_method, self, a, env);
 		//戻り値を残す
@@ -103,8 +103,8 @@ bool IsOverridedMethod(method* superM, method* subM, call_context* cctx) {
 		generic_type* superGT = superP->GType;
 		generic_type* subGT = subP->GType;
 
-		call_frame* cfr = PushCallContext(cctx, FRAME_RESOLVE_T);
-		cfr->u.resolve.GType = bl;
+		CallFrame* cfr = PushCallContext(cctx, FRAME_RESOLVE_T);
+		cfr->Kind.Resolve.GType = bl;
 		generic_type* superGT2 = ApplyGenericType(superGT, cctx);
 		PopCallContext(cctx);
 //		assert(!generic_type_equals(superGT, superGT2));
@@ -116,8 +116,8 @@ bool IsOverridedMethod(method* superM, method* subM, call_context* cctx) {
 	}
 	generic_type* superRet = superM->return_gtype;
 	generic_type* subRet = subM->return_gtype;
-	call_frame* cfr = PushCallContext(cctx, FRAME_RESOLVE_T);
-	cfr->u.resolve.GType = bl;
+	CallFrame* cfr = PushCallContext(cctx, FRAME_RESOLVE_T);
+	cfr->Kind.Resolve.GType = bl;
 	generic_type* superRet2 = ApplyGenericType(superRet, cctx);
 //	generic_type_diff(superRet, superRet2);
 //	assert(!generic_type_equals(superRet, superRet2));
@@ -228,8 +228,8 @@ bool IsYieldMethod(method* self, Vector* stmt_list, bool* error) {
 
 type* CreateIteratorTypeFromMethod(method* self,  class_loader* cll, Vector* stmt_list) {
 	call_context* lCctx = NewCallContext(CALL_CTOR_T);
-	call_frame* lCfr = PushCallContext(lCctx, FRAME_RESOLVE_T);
-	lCfr->u.resolve.GType = self->return_gtype;
+	CallFrame* lCfr = PushCallContext(lCctx, FRAME_RESOLVE_T);
+	lCfr->Kind.Resolve.GType = self->return_gtype;
 	StringView iterName = GetMethodUniqueName(self);
 	type* iterT = FindTypeFromNamespace(GetLangNamespace(), InternString("Iterator"));
 	//イテレータの実装クラスを登録
