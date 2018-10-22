@@ -21,20 +21,20 @@ SymbolTable * NewSymbolTable() {
 	return ret;
 }
 
-symbol_entry* EntrySymbolTable(SymbolTable* self, generic_type* gtp, StringView namev) {
+SymbolEntry* EntrySymbolTable(SymbolTable* self, generic_type* gtp, StringView namev) {
 	NumericMap* data = GetNumericMapCell(self->VariableMap, namev);
 	if (data) {
-		return ((symbol_entry*)data->Item);
+		return ((SymbolEntry*)data->Item);
 	}
 	//フィールドアクセスのために追加
 	if (gtp == NULL) {
 		return NULL;
 	}
 	int ret = self->Count;
-	symbol_entry* e = NewSymbolEntry();
-	e->index = self->Count;
-	e->gtype = gtp;
-	e->scope_depth = self->ScopeDepth;
+	SymbolEntry* e = NewSymbolEntry();
+	e->Index = self->Count;
+	e->GType = gtp;
+	e->ScopeDepth = self->ScopeDepth;
 	PutNumericMap(self->VariableMap, namev, e);
 	self->Count++;
 	return e;
@@ -55,9 +55,9 @@ void DeleteSymbolTable(SymbolTable * self) {
 
 //private
 static void DeleteSymbolTable_entry(NumericMapKey key, NumericMapItem item) {
-	symbol_entry* e = (symbol_entry*)item;
+	SymbolEntry* e = (SymbolEntry*)item;
 	DeleteSymbolEntry(e);
 }
 static void DumpSymbolTable_entry(NumericMapKey key, NumericMapItem item) {
-	printf("[%s] = %d\n", Ref2Str(key), ((symbol_entry*)item)->index);
+	printf("[%s] = %d\n", Ref2Str(key), ((SymbolEntry*)item)->Index);
 }

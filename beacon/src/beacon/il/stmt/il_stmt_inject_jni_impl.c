@@ -22,7 +22,7 @@ il_stmt_inject_jni* NewILInjectJNI(StringView namev) {
 void GenerateILInjectJNI(il_stmt_inject_jni* self, Enviroment* env, CallContext* cctx) {
 	GenerateILFactor(self->fact, env, cctx);
 	AddOpcodeBuf(env->Bytecode, OP_STORE);
-	AddOpcodeBuf(env->Bytecode, self->se->index);
+	AddOpcodeBuf(env->Bytecode, self->se->Index);
 }
 
 void LoadILInjectJNI(il_stmt_inject_jni * self, Enviroment* env, CallContext* cctx) {

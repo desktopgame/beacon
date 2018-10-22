@@ -6,7 +6,7 @@
 
 generic_type* subscript_descriptor_receiver(const subscript_descriptor* desc) {
 	if(desc->tag == SUBSCRIPT_LOCAL_T) {
-		return desc->u.local->gtype;
+		return desc->u.local->GType;
 	} else if(desc->tag == SUBSCRIPT_FIELD_T) {
 		return desc->u.fi->gtype;
 	} else if(desc->tag == SUBSCRIPT_PROPERTY_T) {

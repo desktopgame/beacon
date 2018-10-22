@@ -44,7 +44,7 @@ void GenerateILVariableInit(il_stmt_variable_init * self, Enviroment * env, Call
 		);
 	}
 	AddOpcodeBuf(env->Bytecode, OP_STORE);
-	AddOpcodeBuf(env->Bytecode, self->sym->index);
+	AddOpcodeBuf(env->Bytecode, self->sym->Index);
 }
 
 void LoadILVariableInit(il_stmt_variable_init * self, Enviroment * env, CallContext* cctx) {
@@ -62,13 +62,13 @@ void LoadILVariableInit(il_stmt_variable_init * self, Enviroment * env, CallCont
 		);
 		return;
 	}
-	symbol_entry* e = EntrySymbolTable(
+	SymbolEntry* e = EntrySymbolTable(
 		env->Symboles,
 		gt,
 		self->namev
 	);
 	self->sym = e;
-	assert(e->gtype != NULL);
+	assert(e->GType != NULL);
 }
 
 void DeleteILVariableInit(il_stmt_variable_init * self) {

@@ -213,13 +213,13 @@ bool CLBC_property_impl(class_loader* self, il_type* iltype, type* tp, il_proper
 	set->env->ContextRef = self;
 	get->env->ContextRef = self;
 	//setterのオペコードを生成
-	symbol_entry* valueE = EntrySymbolTable(set->env->Symboles, pr->gtype, InternString("value"));
+	SymbolEntry* valueE = EntrySymbolTable(set->env->Symboles, pr->gtype, InternString("value"));
 	if(!IsStaticModifier(pr->modifier)) {
 		AddOpcodeBuf(set->env->Bytecode, OP_STORE);
 		AddOpcodeBuf(set->env->Bytecode, 0);
 	}
 	AddOpcodeBuf(set->env->Bytecode, OP_STORE);
-	AddOpcodeBuf(set->env->Bytecode, valueE->index);
+	AddOpcodeBuf(set->env->Bytecode, valueE->Index);
 	CLBC_body(self, set_stmt_list, set->env, cctx, scope);
 	//getterのオペコードを生成
 	if(!IsStaticModifier(pr->modifier)) {

@@ -312,12 +312,12 @@ static void generate_assign_to_variable_local(il_factor_assign_op* self, Envirom
 		#if defined(DEBUG)
 		const char* vname = Ref2Str(ilvar->fqcn->namev);
 		#endif
-		symbol_entry* e = EntrySymbolTable(env->Symboles, NULL, ilvar->fqcn->namev);
+		SymbolEntry* e = EntrySymbolTable(env->Symboles, NULL, ilvar->fqcn->namev);
 		//e==NULL の時変数がない
 		GenerateILFactor(self->right, env, cctx);
 		AddOpcodeBuf(env->Bytecode, OP_STORE);
-		AddOpcodeBuf(env->Bytecode, e->index);
-		if(DistanceGenericType(e->gtype, EvalILFactor(self->right, env, cctx), cctx) < 0) {
+		AddOpcodeBuf(env->Bytecode, e->Index);
+		if(DistanceGenericType(e->GType, EvalILFactor(self->right, env, cctx), cctx) < 0) {
 			ThrowBCError(BCERROR_ASSIGN_NOT_COMPATIBLE_LOCAL_T,
 				Ref2Str(ilvar->fqcn->namev)
 			);

@@ -5,7 +5,7 @@
 #include "../il_stmt_interface.h"
 #include "../../util/string_pool.h"
 struct Enviroment;
-struct symbol_entry;
+struct SymbolEntry;
 /**
  * 推論された型の初期化を表す要素.
  * var y = new X::Y();
@@ -13,7 +13,7 @@ struct symbol_entry;
 typedef struct il_stmt_inferenced_type_init {
 	StringView namev;
 	il_factor* fact;
-	struct symbol_entry* sym;
+	struct SymbolEntry* sym;
 } il_stmt_inferenced_type_init;
 
 /**

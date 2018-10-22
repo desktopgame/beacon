@@ -2,7 +2,7 @@
 #define BEACON_IL_FACTOR_INVOKE_SUBSCRIPT_DESCRIPTOR_H
 
 struct operator_overload;
-struct symbol_entry;
+struct SymbolEntry;
 struct field;
 struct property;
 
@@ -18,7 +18,7 @@ typedef struct subscript_descriptor {
 	struct operator_overload* opov;
 	int index;
 	union {
-		struct symbol_entry* local;
+		struct SymbolEntry* local;
 		struct field* fi;
 		struct property* prop;
 	} u;

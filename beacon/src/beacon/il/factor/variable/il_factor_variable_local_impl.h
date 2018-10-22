@@ -3,7 +3,7 @@
 #include "../../../util/vector.h"
 #include "../../../util/string_pool.h"
 #include "../../il_factor_interface.h"
-struct symbol_entry;
+struct SymbolEntry;
 struct Enviroment;
 struct generic_type;
 struct field;
@@ -34,7 +34,7 @@ typedef struct il_factor_variable_local {
 	variable_local_type type;
 	struct generic_type* gt;
 	union {
-		struct symbol_entry* entry_;
+		struct SymbolEntry* entry_;
 		field_with_index f_with_i;
 		property_with_index p_with_i;
 	} u;

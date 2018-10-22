@@ -6,7 +6,7 @@
 #include "../il_stmt_interface.h"
 #include "../il_factor_interface.h"
 struct Enviroment;
-struct symbol_entry;
+struct SymbolEntry;
 /**
  * 変数の初期化を表す要素.
  */
@@ -14,7 +14,7 @@ typedef struct il_stmt_variable_init {
 	generic_cache* fqcn;
 	StringView namev;
 	il_factor* fact;
-	struct symbol_entry* sym;
+	struct SymbolEntry* sym;
 } il_stmt_variable_init;
 
 /**

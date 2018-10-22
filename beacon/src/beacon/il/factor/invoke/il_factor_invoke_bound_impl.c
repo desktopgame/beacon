@@ -137,12 +137,12 @@ static void il_factor_invoke_bound_check(il_factor_invoke_bound * self, Envirome
 	}
 	//添字アクセスとして解決する
 	generic_type* receiver_gtype = NULL;
-	symbol_entry* local = EntrySymbolTable(env->Symboles, NULL, self->namev);
+	SymbolEntry* local = EntrySymbolTable(env->Symboles, NULL, self->namev);
 	if(receiver_gtype == NULL && local != NULL) {
-		receiver_gtype = local->gtype;
+		receiver_gtype = local->GType;
 		self->u.subscript.tag = SUBSCRIPT_LOCAL_T;
 		self->u.subscript.u.local = local;
-		self->u.subscript.index = local->index;
+		self->u.subscript.index = local->Index;
 	}
 	//フィールドとして解決する
 	field* fi = FindFieldClass(GetClassCContext(cctx), self->namev, &temp);

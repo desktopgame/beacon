@@ -3,12 +3,12 @@
 #include "../../util/string_pool.h"
 #include "../il_factor_interface.h"
 #include "../il_stmt_interface.h"
-struct symbol_entry;
+struct SymbolEntry;
 
 typedef struct il_stmt_inject_jni {
 	StringView namev;
 	il_factor* fact;
-	struct symbol_entry* se;
+	struct SymbolEntry* se;
 } il_stmt_inject_jni;
 
 il_stmt* WrapILInjectJNI(il_stmt_inject_jni* self);

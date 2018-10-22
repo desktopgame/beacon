@@ -33,7 +33,7 @@ void GenerateILVariableLocal(il_factor_variable_local* self, Enviroment* env, Ca
 	assert(self->type != VARIABLE_LOCAL_UNDEFINED_T);
 	if(self->type == VARIABLE_LOCAL_SCOPE_T) {
 		//より深くネストされたブロックで定義された変数
-		if(self->u.entry_->scope_depth > env->Symboles->ScopeDepth) {
+		if(self->u.entry_->ScopeDepth > env->Symboles->ScopeDepth) {
 			ThrowBCError(
 				BCERROR_REF_UNDEFINED_LOCAL_VARIABLE_T,
 				Ref2Str(self->namev)
@@ -41,7 +41,7 @@ void GenerateILVariableLocal(il_factor_variable_local* self, Enviroment* env, Ca
 			return;
 		}
 		AddOpcodeBuf(env->Bytecode, (VectorItem)OP_LOAD);
-		AddOpcodeBuf(env->Bytecode, (VectorItem)self->u.entry_->index);
+		AddOpcodeBuf(env->Bytecode, (VectorItem)self->u.entry_->Index);
 	} else if(self->type == VARIABLE_LOCAL_FIELD_T) {
 		field* f = self->u.f_with_i.fi;
 		if(!IsStaticModifier(f->modifier)) {
@@ -91,14 +91,14 @@ static void LoadILVariableLocalImpl(il_factor_variable_local * self, Enviroment 
 	//stmtはgenerate時点でシンボルテーブルへ書き込むので、
 	//NULLになることがある。
 	self->type = VARIABLE_LOCAL_SCOPE_T;
-	symbol_entry* ent = EntrySymbolTable(env->Symboles, NULL, self->namev);
+	SymbolEntry* ent = EntrySymbolTable(env->Symboles, NULL, self->namev);
 	//ローカル変数として解決出来なかったので、
 	//フィールドとして解決する
 	if(ent == NULL) {
 		LoadILVariableLocal_field(self, env, cctx);
 	} else {
 		self->u.entry_ = ent;
-		self->gt = ent->gtype;
+		self->gt = ent->GType;
 	}
 }
 

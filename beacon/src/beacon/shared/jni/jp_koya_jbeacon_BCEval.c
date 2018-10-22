@@ -192,8 +192,8 @@ static void bc_write_symbol(JNIEnv* env, NumericMap* nmap, frame* fr, jobject ta
 	NumericMapKey key = nmap->Key;
 	NumericMapItem val = nmap->Item;
 	const char* name = Ref2Str(key);
-	symbol_entry* se = (symbol_entry*)val;
-	object* bcobj = AtVector(fr->ref_stack, se->index);
+	SymbolEntry* se = (SymbolEntry*)val;
+	object* bcobj = AtVector(fr->ref_stack, se->Index);
 	//jp.koya.jbeacon.SymbolTableを検索する
 	jclass symbol_table_cls = (*env)->FindClass(env, "jp/koya/jbeacon/SymbolTable");
 	if(symbol_table_cls == NULL) {

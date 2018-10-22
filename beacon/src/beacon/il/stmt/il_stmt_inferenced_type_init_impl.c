@@ -24,7 +24,7 @@ void GenerateILInferencedTypeInit(il_stmt_inferenced_type_init * self, Enviromen
 	//右辺の方で宣言する
 	GenerateILFactor(self->fact, env, cctx);
 	AddOpcodeBuf(env->Bytecode, OP_STORE);
-	AddOpcodeBuf(env->Bytecode, self->sym->index);
+	AddOpcodeBuf(env->Bytecode, self->sym->Index);
 }
 
 void LoadILInferencedTypeInit(il_stmt_inferenced_type_init * self, Enviroment * env, CallContext* cctx) {
@@ -44,7 +44,7 @@ void LoadILInferencedTypeInit(il_stmt_inferenced_type_init * self, Enviroment * 
 			Ref2Str(self->namev)
 		);
 	}
-	symbol_entry* e = EntrySymbolTable(
+	SymbolEntry* e = EntrySymbolTable(
 		env->Symboles,
 		gtp,
 		self->namev

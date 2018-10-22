@@ -62,7 +62,7 @@ void GenerateILTry(il_stmt_try* self, Enviroment* env, CallContext* cctx) {
 		//例外を指定の名前でアクセス出来るように
 		il_stmt_catch* ilcatch = (il_stmt_catch*)AtVector(self->catch_list, i);
 		generic_type* exgType = ResolveImportManager(NULL, ilcatch->fqcn, cctx);
-		int exIndex = EntrySymbolTable(env->Symboles, exgType, ilcatch->namev)->index;
+		int exIndex = EntrySymbolTable(env->Symboles, exgType, ilcatch->namev)->Index;
 		//直前のケースのジャンプ先をここに
 		if (nextCause != NULL) {
 			int head = AddNOPOpcodeBuf(env->Bytecode);
