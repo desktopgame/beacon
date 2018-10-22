@@ -151,7 +151,7 @@ int GetIndexILUnaryOp2(il_factor* receiver, OperatorType otype, Enviroment* env,
 generic_type* ApplyILUnaryOp(il_factor_unary_op* self, generic_type* gtype, Enviroment* env, call_context* cctx) {
 	generic_type* lgtype = EvalILFactor(self->a, env, cctx);
 	call_frame* cfr = PushCallContext(cctx, FRAME_INSTANCE_INVOKE_T);
-	cfr->u.instance_invoke.receiver = lgtype;
+	cfr->u.instance_invoke.Receiver = lgtype;
 	generic_type* ret = ApplyGenericType(gtype,cctx);
 	PopCallContext(cctx);
 	return ret;

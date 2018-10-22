@@ -45,9 +45,9 @@ void LoadILInvoke(il_factor_invoke * self, Enviroment* env, call_context* cctx) 
 		return;
 	}
 	call_frame* cfr = PushCallContext(cctx, FRAME_INSTANCE_INVOKE_T);
-	cfr->u.instance_invoke.args = self->args;
-	cfr->u.instance_invoke.typeargs = self->type_args;
-	cfr->u.instance_invoke.receiver = EvalILFactor(self->receiver, env, cctx);
+	cfr->u.instance_invoke.Args = self->args;
+	cfr->u.instance_invoke.TypeArgs = self->type_args;
+	cfr->u.instance_invoke.Receiver = EvalILFactor(self->receiver, env, cctx);
 	LoadILFactor(self->receiver, env, cctx);
 	il_factor_invoke_check(self, env, cctx);
 	PopCallContext(cctx);
@@ -132,9 +132,9 @@ static void resolve_default(il_factor_invoke * self, Enviroment* env, call_conte
 	//内側に型変数が含まれているかもしれないので、
 	//それをここで展開する。
 	call_frame* cfr = PushCallContext(cctx, FRAME_INSTANCE_INVOKE_T);
-	cfr->u.instance_invoke.receiver = receivergType;
-	cfr->u.instance_invoke.args = self->args;
-	cfr->u.instance_invoke.typeargs = self->type_args;
+	cfr->u.instance_invoke.Receiver = receivergType;
+	cfr->u.instance_invoke.Args = self->args;
+	cfr->u.instance_invoke.TypeArgs = self->type_args;
 	self->resolved = ApplyGenericType(rgtp, cctx);
 	PopCallContext(cctx);
 }

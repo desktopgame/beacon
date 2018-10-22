@@ -66,7 +66,7 @@ class_* GetClassCContext(call_context* self) {
 generic_type* GetReceiverCContext(call_context* self) {
 	call_frame* cfr = TopVector(self->call_stack);
 	if(cfr->tag == FRAME_INSTANCE_INVOKE_T) {
-		return cfr->u.instance_invoke.receiver;
+		return cfr->u.instance_invoke.Receiver;
 	} else if(cfr->tag == FRAME_SELF_INVOKE_T) {
 		return self->ty->generic_self;
 	} else if(cfr->tag == FRAME_RESOLVE_T) {
@@ -86,7 +86,7 @@ type* GetEvalTypeCContext(call_context* self, fqcn_cache* fqcn) {
 Vector* GetTypeArgsCContext(call_context* self) {
 	call_frame* cfr = TopVector(self->call_stack);
 	if(cfr->tag == FRAME_INSTANCE_INVOKE_T) {
-		return cfr->u.instance_invoke.typeargs;
+		return cfr->u.instance_invoke.TypeArgs;
 	} else if(cfr->tag == FRAME_STATIC_INVOKE_T) {
 		return cfr->u.static_invoke.TypeArgs;
 	} else if(cfr->tag == FRAME_SELF_INVOKE_T) {

@@ -29,11 +29,11 @@ typedef struct CallStaticInvoke {
 	Vector* TypeArgs;
 } CallStaticInvoke;
 
-typedef struct call_instance_invoke {
-	struct generic_type* receiver;
-	Vector* args;
-	Vector* typeargs;
-} call_instance_invoke;
+typedef struct CallInstanceInvoke {
+	struct generic_type* Receiver;
+	Vector* Args;
+	Vector* TypeArgs;
+} CallInstanceInvoke;
 
 typedef struct call_frame {
 	CallFrameTag tag;
@@ -41,7 +41,7 @@ typedef struct call_frame {
 		CallResolve resolve;
 		CallSelfInvoke self_invoke;
 		CallStaticInvoke static_invoke;
-		call_instance_invoke instance_invoke;
+		CallInstanceInvoke instance_invoke;
 	} u;
 } call_frame;
 

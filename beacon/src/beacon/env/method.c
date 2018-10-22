@@ -66,9 +66,9 @@ void ExecuteMethod(method* self, frame * fr, Enviroment* env) {
 			object* receiver_obj = PopVector(fr->value_stack);
 			AssignVector(a->ref_stack, 0, receiver_obj);
 			cfr = PushCallContext(GetSGThreadCContext(), FRAME_INSTANCE_INVOKE_T);
-			cfr->u.instance_invoke.receiver = receiver_obj->gtype;
-			aArgs = cfr->u.instance_invoke.args = method_vm_args(self, fr, a);
-			aTArgs = cfr->u.instance_invoke.typeargs = method_vm_typeargs(self, fr, a);
+			cfr->u.instance_invoke.Receiver = receiver_obj->gtype;
+			aArgs = cfr->u.instance_invoke.Args = method_vm_args(self, fr, a);
+			aTArgs = cfr->u.instance_invoke.TypeArgs = method_vm_typeargs(self, fr, a);
 		} else {
 			cfr = PushCallContext(GetSGThreadCContext(), FRAME_STATIC_INVOKE_T);
 			aArgs = cfr->u.static_invoke.Args = method_vm_args(self, fr, a);

@@ -274,9 +274,9 @@ static generic_type* EvalILInvokeBoundImpl(il_factor_invoke_bound * self, Enviro
 		cfr->u.self_invoke.TypeArgs = self->type_args;
 	} else {
 		cfr = PushCallContext(cctx, FRAME_INSTANCE_INVOKE_T);
-		cfr->u.instance_invoke.receiver = ApplyGenericType(subscript_descriptor_receiver(&self->u.subscript), cctx);
-		cfr->u.instance_invoke.args = self->args;
-		cfr->u.instance_invoke.typeargs = self->type_args;
+		cfr->u.instance_invoke.Receiver = ApplyGenericType(subscript_descriptor_receiver(&self->u.subscript), cctx);
+		cfr->u.instance_invoke.Args = self->args;
+		cfr->u.instance_invoke.TypeArgs = self->type_args;
 	}
 
 	if(il_factor_invoke_bound_return_gtype(self, cctx)->tag != GENERIC_TYPE_TAG_NONE_T) {
