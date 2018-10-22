@@ -1,6 +1,6 @@
 #ifndef BEACON_LIB_BEACON_LANG_BC_FILE_H
 #define BEACON_LIB_BEACON_LANG_BC_FILE_H
-struct frame;
+struct Frame;
 struct type;
 struct object;
 struct generic_type;

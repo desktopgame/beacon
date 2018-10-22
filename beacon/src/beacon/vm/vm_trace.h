@@ -2,12 +2,12 @@
 #ifndef BEACON_VM_TRACE_H
 #define BEACON_VM_TRACE_H
 #include <stdint.h>
-struct frame;
+struct Frame;
 /**
  * 実行中のVMの実行位置を保存する構造体.
  */
 typedef struct VMTrace {
-	struct frame* SnapShot;
+	struct Frame* SnapShot;
 	int PC;
 	int JumpLevel;
 } VMTrace;
@@ -17,7 +17,7 @@ typedef struct VMTrace {
  * @param v
  * @return
  */
-VMTrace* NewVMTrace(struct frame* snapShot);
+VMTrace* NewVMTrace(struct Frame* snapShot);
 
 /**
  * トレースを解放します.

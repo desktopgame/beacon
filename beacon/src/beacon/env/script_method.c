@@ -17,11 +17,11 @@ script_method * NewScriptMethod() {
 	return ret;
 }
 
-void ExecuteScriptMethod(script_method * self, method* parent, frame * fr, Enviroment* env) {
+void ExecuteScriptMethod(script_method * self, method* parent, Frame* fr, Enviroment* env) {
 #if defined(DEBUG)
 	const char* name = Ref2Str(parent->namev);
 #endif
-	frame* sub = SubFrame(fr);
+	Frame* sub = SubFrame(fr);
 	CallFrame* cfr = NULL;
 	sub->receiver = parent->parent;
 	Vector* aArgs = NewVector();

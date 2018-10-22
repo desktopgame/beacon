@@ -2,7 +2,7 @@
 #include "frame.h"
 #include "../util/mem.h"
 
-VMTrace * NewVMTrace(frame * snapShot) {
+VMTrace * NewVMTrace(Frame* snapShot) {
 	VMTrace* ret = (VMTrace*)MEM_MALLOC(sizeof(VMTrace));
 	ret->SnapShot = snapShot;
 	ret->PC = -1;

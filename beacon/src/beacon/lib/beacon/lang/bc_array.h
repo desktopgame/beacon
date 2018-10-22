@@ -1,7 +1,7 @@
 #pragma once
 #ifndef BEACON_LIB_SIGNAL_LANG_SG_ARRAY_H
 #define BEACON_LIB_SIGNAL_LANG_SG_ARRAY_H
-struct frame;
+struct Frame;
 struct type;
 struct object;
 struct generic_type;
@@ -24,7 +24,7 @@ struct type* GetBCArrayType();
  * @param fr
  * @return
  */
-struct object* NewBCArray(struct generic_type* gtype, int length, struct frame* fr);
+struct object* NewBCArray(struct generic_type* gtype, int length, struct Frame* fr);
 
 /**
  * @param arr

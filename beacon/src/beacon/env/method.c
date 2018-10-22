@@ -31,8 +31,8 @@ static void method_count(il_stmt* s, int* yeild_ret, int* ret);
 static constructor* create_delegate_ctor(method* self, type* ty, class_loader* cll,int op_len);
 static method* create_has_next(method* self, type* ty,class_loader* cll, Vector* stmt_list, int* out_op_len);
 static method* create_next(method* self, type* ty,class_loader* cll, generic_type* a, Vector* stmt_list, int* out_op_len);
-static Vector* method_vm_args(method* self, frame* fr, frame* a);
-static Vector* method_vm_typeargs(method* self, frame* fr, frame* a);
+static Vector* method_vm_args(method* self, Frame* fr, Frame* a);
+static Vector* method_vm_typeargs(method* self, Frame* fr, Frame* a);
 
 method* MallocMethod(StringView namev, const char* filename, int lineno) {
 	method* ret = (method*)mem_malloc(sizeof(method), filename, lineno);
@@ -47,7 +47,7 @@ method* MallocMethod(StringView namev, const char* filename, int lineno) {
 	return ret;
 }
 
-void ExecuteMethod(method* self, frame * fr, Enviroment* env) {
+void ExecuteMethod(method* self, Frame* fr, Enviroment* env) {
 	#if defined(DEBUG)
 	const char* namestr = Ref2Str(self->namev);
 	if(self->namev == InternString("writeLine")) {
@@ -57,7 +57,7 @@ void ExecuteMethod(method* self, frame * fr, Enviroment* env) {
 	if (self->type == METHOD_TYPE_SCRIPT_T) {
 		ExecuteScriptMethod(self->u.script_method, self, fr, env);
 	} else if (self->type == METHOD_TYPE_NATIVE_T) {
-		frame* a = SubFrame(fr);
+		Frame* a = SubFrame(fr);
 		CallFrame* cfr = NULL;
 		Vector* aArgs = NULL;
 		Vector* aTArgs = NULL;
@@ -455,7 +455,7 @@ static method* create_next(method* self, type* ty, class_loader* cll,generic_typ
 	return mt;
 }
 
-static Vector* method_vm_args(method* self, frame* fr, frame* a) {
+static Vector* method_vm_args(method* self, Frame* fr, Frame* a) {
 	Vector* args = NewVector();
 	//引数を引き継ぐ
 	int len = self->parameters->Length;
@@ -468,7 +468,7 @@ static Vector* method_vm_args(method* self, frame* fr, frame* a) {
 	return args;
 }
 
-static Vector* method_vm_typeargs(method* self, frame* fr, frame* a) {
+static Vector* method_vm_typeargs(method* self, Frame* fr, Frame* a) {
 	//メソッドに渡された型引数を引き継ぐ
 	Vector* typeargs = NewVector();
 	int typeparams = self->type_parameters->Length;

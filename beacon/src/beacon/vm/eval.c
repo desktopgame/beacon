@@ -95,7 +95,7 @@ static bool eval_top_from_cll(class_loader* cll, AST* aOpt) {
 		LoadPassASTClassLoader(cll, aOpt);
 	}
 	//実行
-	frame* fr = NewFrame();
+	Frame* fr = NewFrame();
 	SetSGThreadFrameRef(GetCurrentSGThread(GetCurrentScriptContext()), fr);
 	//エラーによって中断された場合のため、ここで戻す
 	Heap* he = GetHeap();

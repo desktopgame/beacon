@@ -272,7 +272,7 @@ property* FindTreeSPropertyClass(class_* self, StringView namev, int* outIndex) 
 
 
 
-constructor * RFindConstructorClass(class_ * self, Vector * args, Vector* typeargs, frame* fr, int* outIndex) {
+constructor * RFindConstructorClass(class_ * self, Vector * args, Vector* typeargs, Frame* fr, int* outIndex) {
 	return MetaScopedRFindConstructor(self, self->constructor_list, args, typeargs, fr, outIndex);
 }
 

@@ -99,7 +99,7 @@ type* NewPreloadClass(StringView namev);
  * @param o
  * @param fr
  */
-void AllocFieldsClass(class_* self, struct object* o, frame* fr);
+void AllocFieldsClass(class_* self, struct object* o, Frame* fr);
 
 /**
  * 指定のオブジェクトに追加されたフィールドの一覧を開放します.
@@ -226,7 +226,7 @@ int CountAllSMethodClass(class_* self);
  * @param type_args
  * @return
  */
-struct object* NewInstanceClass(class_* self, frame* fr, Vector* args, Vector* type_args);
+struct object* NewInstanceClass(class_* self, Frame* fr, Vector* args, Vector* type_args);
 
 /**
  * 全てのメンバーがこのクラスを参照できるようにします.

@@ -103,7 +103,7 @@ type* NewPreloadClass(StringView namev) {
 	return tp;
 }
 
-void AllocFieldsClass(class_ * self, object * o, frame* fr) {
+void AllocFieldsClass(class_ * self, object * o, Frame* fr) {
 	assert(o->tag == OBJECT_REF_T);
 	Heap* he = GetHeap();
 	for (int i = 0; i < self->field_list->Length; i++) {
@@ -115,7 +115,7 @@ void AllocFieldsClass(class_ * self, object * o, frame* fr) {
 		}
 		he->CollectBlocking++;
 		if(f->initial_value != NULL) {
-			frame* sub = SubFrame(fr);
+			Frame* sub = SubFrame(fr);
 			for(int i=0; i<fr->type_args_vec->Length; i++) {
 				PushVector(sub->type_args_vec, AtVector(fr->type_args_vec, i));
 			}
@@ -339,13 +339,13 @@ int CountAllSMethodClass(class_ * self) {
 	return sum;
 }
 
-object * NewInstanceClass(class_* self, frame* fr, Vector* args, Vector* type_args) {
+object * NewInstanceClass(class_* self, Frame* fr, Vector* args, Vector* type_args) {
 	//コンストラクタを検索
 	int temp = 0;
 	constructor* ctor = RFindConstructorClass(self, args, NULL, fr, &temp);
 	assert(temp != -1);
 	//コンストラクタを実行
-	frame* sub = SubFrame(fr);
+	Frame* sub = SubFrame(fr);
 	Heap* h = GetHeap();
 	if(args != NULL) {
 		for (int i = args->Length-1; i>=0; i--) {

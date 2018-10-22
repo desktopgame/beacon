@@ -92,7 +92,7 @@ static void gc_mark(Heap* self) {
 	//今はまだマルチスレッドに対応していないので、
 	//とりあえず実行中のスレッドのみを対象とする
 	ScriptThread* th = GetCurrentSGThread(GetCurrentScriptContext());
-	frame* top = GetSGThreadFrameRef(th);
+	Frame* top = GetSGThreadFrameRef(th);
 	assert(top != NULL);
 	MarkAllFrame(top);
 

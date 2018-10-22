@@ -20,10 +20,10 @@
 #include "../../error.h"
 
 static jobject bc_eval_string(JNIEnv * env, jclass cls, jstring str, jobject table, const char* filename, const char* source);
-static frame* bc_eval_allocate(class_loader* cll);
+static Frame* bc_eval_allocate(class_loader* cll);
 static bool bc_read_symbol(JNIEnv* env, jobject table, AST* a);
-static void bc_write_symbol(JNIEnv* env, NumericMap* nmap, frame* fr, jobject target);
-static void bc_eval_release(JNIEnv* env, class_loader* cll, frame* fr);
+static void bc_write_symbol(JNIEnv* env, NumericMap* nmap, Frame* fr, jobject target);
+static void bc_eval_release(JNIEnv* env, class_loader* cll, Frame* fr);
 static void printClassInfo(JNIEnv* env, jobject object);
 static jint jobject2jint(JNIEnv* env, jobject obj);
 static jchar jobject2jchar(JNIEnv* env, jobject obj);
@@ -84,7 +84,7 @@ static jobject bc_eval_string(JNIEnv * env, jclass cls, jstring str, jobject tab
 	//インスタンスを生成
 	jobject symbol_table_obj = (*env)->NewObject(env, symbol_table_cls, symbol_table_ctor_id);
 	//スクリプトを実行
-	frame* fr =  bc_eval_allocate(cll);
+	Frame* fr =  bc_eval_allocate(cll);
 	bc_write_symbol(env, cll->env->Symboles->VariableMap->Left, fr, symbol_table_obj);
 	bc_write_symbol(env, cll->env->Symboles->VariableMap->Right, fr, symbol_table_obj);
 	bc_eval_release(env, cll, fr);
@@ -93,9 +93,9 @@ static jobject bc_eval_string(JNIEnv * env, jclass cls, jstring str, jobject tab
 	return symbol_table_obj;
 }
 
-static frame* bc_eval_allocate(class_loader* cll) {
+static Frame* bc_eval_allocate(class_loader* cll) {
 	script_context* ctx = GetCurrentScriptContext();
-	frame* fr = NewFrame();
+	Frame* fr = NewFrame();
 	SetSGThreadFrameRef(GetCurrentSGThread(GetCurrentScriptContext()), fr);
 	Heap* he = GetHeap();
 	he->AcceptBlocking = 0;
@@ -185,7 +185,7 @@ static bool bc_read_symbol(JNIEnv* env, jobject table, AST* a) {
 	return true;
 }
 
-static void bc_write_symbol(JNIEnv* env, NumericMap* nmap, frame* fr, jobject target) {
+static void bc_write_symbol(JNIEnv* env, NumericMap* nmap, Frame* fr, jobject target) {
 	if(nmap == NULL) {
 		return;
 	}
@@ -274,7 +274,7 @@ static void bc_write_symbol(JNIEnv* env, NumericMap* nmap, frame* fr, jobject ta
 	}
 }
 
-static void bc_eval_release(JNIEnv* env, class_loader* cll, frame* fr) {
+static void bc_eval_release(JNIEnv* env, class_loader* cll, Frame* fr) {
 	if(GetLastBCError()) {
 		Buffer* sbuf = NewBuffer();
 		AppendsBuffer(sbuf, "\n");

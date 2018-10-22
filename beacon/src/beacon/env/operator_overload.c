@@ -25,8 +25,8 @@ operator_overload* NewOperatorOverload(OperatorType type) {
 	return ret;
 }
 
-void ExecuteOperatorOverload(operator_overload* self, frame* fr, Enviroment* env) {
-	frame* sub = SubFrame(fr);
+void ExecuteOperatorOverload(operator_overload* self, Frame* fr, Enviroment* env) {
+	Frame* sub = SubFrame(fr);
 	sub->receiver = fr->receiver;
 	PushVector(sub->value_stack, PopVector(fr->value_stack));
 	for (int i = 0; i < self->parameter_list->Length; i++) {

@@ -7,14 +7,14 @@
 #include "defer_context.h"
 
 //proto
-static void remove_from_parent(frame* self);
+static void remove_from_parent(Frame* self);
 static void frame_markStatic(field* item);
-static void frame_markRecursive(frame* self);
-static void frame_mark_defer(frame* self);
+static void frame_markRecursive(Frame* self);
+static void frame_mark_defer(Frame* self);
 static void DeleteFrame_defctx(VectorItem e);
 
-frame * NewFrame() {
-	frame* ret = (frame*)MEM_MALLOC(sizeof(frame));
+Frame* NewFrame() {
+	Frame* ret = (Frame*)MEM_MALLOC(sizeof(Frame));
 	ret->value_stack = NewVector();
 	ret->ref_stack = NewVector();
 	ret->parent = NULL;
@@ -32,8 +32,8 @@ frame * NewFrame() {
 	return ret;
 }
 
-frame * SubFrame(frame * parent) {
-	frame* ret = NewFrame();
+Frame* SubFrame(Frame* parent) {
+	Frame* ret = NewFrame();
 	ret->parent = parent;
 	ret->level = parent->level + 1;
 	ret->context_ref = parent->context_ref;
@@ -41,7 +41,7 @@ frame * SubFrame(frame * parent) {
 	return ret;
 }
 
-void MarkAllFrame(frame * self) {
+void MarkAllFrame(Frame* self) {
 	//全ての静的フィールドをマークする
 	script_context* ctx = GetCurrentScriptContext();
 	EachStaticScriptContext(ctx, frame_markStatic);
@@ -49,7 +49,7 @@ void MarkAllFrame(frame * self) {
 	frame_markRecursive(self);
 }
 
-void DeleteFrame(frame * self) {
+void DeleteFrame(Frame* self) {
 	remove_from_parent(self);
 	ClearVector(self->value_stack);
 	ClearVector(self->ref_stack);
@@ -62,12 +62,12 @@ void DeleteFrame(frame * self) {
 	MEM_FREE(self);
 }
 
-frame* GetRootFrame(frame* self) {
+Frame* GetRootFrame(Frame* self) {
 	return self->parent != NULL ? GetRootFrame(self->parent) : self->parent;
 }
 
 //private
-static void remove_from_parent(frame* self) {
+static void remove_from_parent(Frame* self) {
 	if (self->parent != NULL) {
 		int idx = FindVector(self->parent->children_vec, self);
 		RemoveVector(self->parent->children_vec, idx);
@@ -83,9 +83,9 @@ static void frame_markStatic(field* item) {
 	}
 }
 
-static void frame_markRecursive(frame* self) {
+static void frame_markRecursive(Frame* self) {
 	for (int i = 0; i < self->children_vec->Length; i++) {
-		frame* e = (frame*)AtVector(self->children_vec, i);
+		Frame* e = (Frame*)AtVector(self->children_vec, i);
 		frame_markRecursive(e);
 	}
 	for (int i = 0; i < self->value_stack->Length; i++) {
@@ -102,7 +102,7 @@ static void frame_markRecursive(frame* self) {
 	MarkAllObject(self->exception);
 }
 
-static void frame_mark_defer(frame* self) {
+static void frame_mark_defer(Frame* self) {
 	if(self->defer_vec == NULL) {
 		return;
 	}

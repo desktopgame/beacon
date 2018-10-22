@@ -119,7 +119,7 @@ bool CLBC_field_impl(class_loader* self, type* tp, field* fi, namespace_* scope,
 	he->CollectBlocking++;
 	he->AcceptBlocking = 0;
 	if(IsStaticModifier(fi->modifier)) {
-		frame* f = NewFrame();
+		Frame* f = NewFrame();
 		SetSGThreadFrameRef(GetMainSGThread(), f);
 		ExecuteVM(f, env);
 		fi->static_value = PopVector(f->value_stack);

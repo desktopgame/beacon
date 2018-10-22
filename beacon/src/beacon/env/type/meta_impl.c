@@ -91,7 +91,7 @@ int MetaGCalcScore(Vector* params, Vector* gargs) {
 	return score;
 }
 
-int MetaRCalcScore(Vector* params, Vector* args, Vector* typeargs, frame* fr) {
+int MetaRCalcScore(Vector* params, Vector* args, Vector* typeargs, Frame* fr) {
 	assert(params->Length == args->Length);
 	int score = 0;
 	bool illegal = false;
@@ -201,7 +201,7 @@ constructor* MetaILFindConstructor(Vector* ctor_vec, Vector* ilargs, Enviroment*
 	return MetaScopedILFindConstructor(NULL, ctor_vec, ilargs, env, cctx, outIndex);
 }
 
-constructor* MetaRFindConstructor(Vector* ctor_vec, Vector* args, Vector* typeargs, frame* fr, int* outIndex) {
+constructor* MetaRFindConstructor(Vector* ctor_vec, Vector* args, Vector* typeargs, Frame* fr, int* outIndex) {
 	return MetaScopedRFindConstructor(NULL, ctor_vec, args, typeargs, fr, outIndex);
 }
 
@@ -239,7 +239,7 @@ constructor* MetaScopedILFindConstructor(class_* context, Vector* ctor_vec, Vect
 	return ret;
 }
 
-constructor* MetaScopedRFindConstructor(class_* context, Vector* ctor_vec, Vector* gargs, Vector* typeargs, frame* fr, int* outIndex) {
+constructor* MetaScopedRFindConstructor(class_* context, Vector* ctor_vec, Vector* gargs, Vector* typeargs, Frame* fr, int* outIndex) {
 	//見つかった中からもっとも一致するコンストラクタを選択する
 	int min = 1024;
 	constructor* ret = NULL;

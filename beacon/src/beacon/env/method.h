@@ -10,7 +10,7 @@
 #include <stdbool.h>
 struct type;
 struct interface_;
-struct frame;
+struct Frame;
 struct Enviroment;
 struct CallContext;
 struct class_loader;
@@ -59,7 +59,7 @@ method* MallocMethod(StringView namev, const char* filename, int lineno);
  * @param frame
  * @param env
  */
-void ExecuteMethod(method* self, struct frame* fr, Enviroment* env);
+void ExecuteMethod(method* self, struct Frame* fr, Enviroment* env);
 
 /**
  * メソッドa とb が完全に等価である場合に true を返します.

@@ -42,7 +42,7 @@ int MetaGCalcScore(Vector* params, Vector* gargs);
  * @param fr
  * @return
  */
-int MetaRCalcScore(Vector* params, Vector* args, Vector* typeargs, struct frame* fr);
+int MetaRCalcScore(Vector* params, Vector* args, Vector* typeargs, struct Frame* fr);
 
 /**
  * もっとも一致するメソッドを返します.
@@ -110,7 +110,7 @@ constructor* MetaILFindConstructor(Vector* ctor_vec, Vector* ilargs, Enviroment*
  * @param outIndex
  * @return
  */
-constructor* MetaRFindConstructor(Vector* ctor_vec, Vector* args, Vector* typeargs, struct frame* fr, int* outIndex);
+constructor* MetaRFindConstructor(Vector* ctor_vec, Vector* args, Vector* typeargs, struct Frame* fr, int* outIndex);
 /**
  * スコープに基づく方法でもっとも一致するコンストラクタを返します.
  * @param context
@@ -132,7 +132,7 @@ constructor* MetaScopedILFindConstructor(struct class_* context, Vector* ctor_ve
  * @param outIndex
  * @return
  */
-constructor* MetaScopedRFindConstructor(struct class_* context, Vector* ctor_vec, Vector* gargs, Vector* typeargs, struct frame* fr, int* outIndex);
+constructor* MetaScopedRFindConstructor(struct class_* context, Vector* ctor_vec, Vector* gargs, Vector* typeargs, struct Frame* fr, int* outIndex);
 
 /**
  * 演算子オーバーロードを検索します.

@@ -8,7 +8,7 @@ struct type;
 /**
  * 実行時の情報を格納する構造体.
  */
-typedef struct frame {
+typedef struct Frame {
 	//演算子や引数を記憶しておくためのスタックです
 	Vector* value_stack;
 
@@ -39,7 +39,7 @@ typedef struct frame {
 	//実行中のVMを開放したのち、
 	//親のVMの childrenVec からも削除される必要があるため
 	//ここで親VMへの参照を持っています。
-	struct frame* parent;
+	struct Frame* parent;
 
 	//最後にスローされた例外です.
 	struct object* exception;
@@ -99,37 +99,37 @@ typedef struct frame {
 	//誰もそれをキャッチしようとしていないなら
 	//即座に全てのVMを終了します。
 	bool terminate;
-} frame;
+} Frame;
 
 /**
  * 新しいフレームを作成します.
  * @return
  */
-frame* NewFrame();
+Frame* NewFrame();
 
 /**
  * 親を指定してフレームを作成します.
  * @param parent
  * @return
  */
-frame* SubFrame(frame* parent);
+Frame* SubFrame(Frame* parent);
 
 /**
  * このVMの変数を全てマークします.
  * @param self
  */
-void MarkAllFrame(frame* self);
+void MarkAllFrame(Frame* self);
 
 /**
  * 仮想マシンを開放します.
  * @param self
  */
-void DeleteFrame(frame* self);
+void DeleteFrame(Frame* self);
 
 /**
  * フレームのルートを返します.
  * @param self
  * @return
  */
-frame* GetRootFrame(frame* self);
+Frame* GetRootFrame(Frame* self);
 #endif

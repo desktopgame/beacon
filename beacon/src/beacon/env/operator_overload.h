@@ -6,7 +6,7 @@
 struct type;
 struct Enviroment;
 struct generic_type;
-struct frame;
+struct Frame;
 /**
  * 演算子オーバーロードを表す構造体.
  */
@@ -32,7 +32,7 @@ operator_overload* NewOperatorOverload(OperatorType type);
  * @param fr
  * @param env
  */
-void ExecuteOperatorOverload(operator_overload* self, struct frame* fr, struct Enviroment* env);
+void ExecuteOperatorOverload(operator_overload* self, struct Frame* fr, struct Enviroment* env);
 
 /**
  * 演算子オーバーロードを解放します.

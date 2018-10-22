@@ -13,7 +13,7 @@ struct type;
 struct method;
 struct Enviroment;
 struct virtual_type;
-struct frame;
+struct Frame;
 struct CallContext;
 /**
  * 型変数つきの型宣言の型引数では generic_type 自身が使われますが、
@@ -119,7 +119,7 @@ int DistanceGenericType(generic_type* self, generic_type* other, struct CallCont
  *         異なる継承階層なら -1
  *         サブタイプなら階層の数
  */
-int RDistanceGenericType(generic_type* self, generic_type* other, struct frame* fr);
+int RDistanceGenericType(generic_type* self, generic_type* other, struct Frame* fr);
 
 /**
  * 型変数と型を出力します.
@@ -150,7 +150,7 @@ generic_type* ApplyGenericType(generic_type* self, struct CallContext* cctx);
  * @param fr
  * @return
  */
-generic_type* RApplyGenericType(generic_type* self, struct CallContext* cctx, struct frame* fr);
+generic_type* RApplyGenericType(generic_type* self, struct CallContext* cctx, struct Frame* fr);
 
 /**
  * generic_type を type へ変換します.

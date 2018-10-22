@@ -8,17 +8,17 @@
 #include <assert.h>
 #include <locale.h>
 
-static void bc_locale_nativeSetLocale(method* parent, frame* fr, Enviroment* env);
-static void bc_locale_nativeGetDecimalPoint(method* parent, frame* fr, Enviroment* env);
-static void bc_locale_nativeGetThousandsSep(method* parent, frame* fr, Enviroment* env);
-static void bc_locale_nativeGetIntCurrSymbol(method* parent, frame* fr, Enviroment* env);
-static void bc_locale_nativeGetCurrencySymbol(method* parent, frame* fr, Enviroment* env);
-static void bc_locale_nativeGetMonDecimalPoint(method* parent, frame* fr, Enviroment* env);
-static void bc_locale_nativeGetMonThousandsSep(method* parent, frame* fr, Enviroment* env);
-static void bc_locale_nativeGetPositiveSign(method* parent, frame* fr, Enviroment* env);
-static void bc_locale_nativeGetNegativeSign(method* parent, frame* fr, Enviroment* env);
-static void bc_locale_nativeGetIntFracDigits(method* parent, frame* fr, Enviroment* env);
-static void bc_locale_nativeGetFracDigits(method* parent, frame* fr, Enviroment* env);
+static void bc_locale_nativeSetLocale(method* parent, Frame* fr, Enviroment* env);
+static void bc_locale_nativeGetDecimalPoint(method* parent, Frame* fr, Enviroment* env);
+static void bc_locale_nativeGetThousandsSep(method* parent, Frame* fr, Enviroment* env);
+static void bc_locale_nativeGetIntCurrSymbol(method* parent, Frame* fr, Enviroment* env);
+static void bc_locale_nativeGetCurrencySymbol(method* parent, Frame* fr, Enviroment* env);
+static void bc_locale_nativeGetMonDecimalPoint(method* parent, Frame* fr, Enviroment* env);
+static void bc_locale_nativeGetMonThousandsSep(method* parent, Frame* fr, Enviroment* env);
+static void bc_locale_nativeGetPositiveSign(method* parent, Frame* fr, Enviroment* env);
+static void bc_locale_nativeGetNegativeSign(method* parent, Frame* fr, Enviroment* env);
+static void bc_locale_nativeGetIntFracDigits(method* parent, Frame* fr, Enviroment* env);
+static void bc_locale_nativeGetFracDigits(method* parent, Frame* fr, Enviroment* env);
 
 void InitBCLocaleType() {
 	namespace_* unsafe = GetUnsafeNamespace();
@@ -43,7 +43,7 @@ type* GetBCLocaleType() {
 	return FindTypeFromNamespace(unsafe, InternString("Locale"));
 }
 //private
-static void bc_locale_nativeSetLocale(method* parent, frame* fr, Enviroment* env) {
+static void bc_locale_nativeSetLocale(method* parent, Frame* fr, Enviroment* env) {
 	object* categoryObj = AtVector(fr->ref_stack, 1);
 	object* localeObj = AtVector(fr->ref_stack, 2);
 	int category = OBJ2INT(categoryObj);
@@ -71,52 +71,52 @@ static void bc_locale_nativeSetLocale(method* parent, frame* fr, Enviroment* env
 	assert(setlocale(category, locale) != NULL);
 }
 
-static void bc_locale_nativeGetDecimalPoint(method* parent, frame* fr, Enviroment* env) {
+static void bc_locale_nativeGetDecimalPoint(method* parent, Frame* fr, Enviroment* env) {
 	struct lconv* lc = localeconv();
 	PushVector(fr->value_stack, object_string_new(lc->decimal_point));
 }
 
-static void bc_locale_nativeGetThousandsSep(method* parent, frame* fr, Enviroment* env) {
+static void bc_locale_nativeGetThousandsSep(method* parent, Frame* fr, Enviroment* env) {
 	struct lconv* lc = localeconv();
 	PushVector(fr->value_stack, object_string_new(lc->thousands_sep));
 }
 
-static void bc_locale_nativeGetIntCurrSymbol(method* parent, frame* fr, Enviroment* env) {
+static void bc_locale_nativeGetIntCurrSymbol(method* parent, Frame* fr, Enviroment* env) {
 	struct lconv* lc = localeconv();
 	PushVector(fr->value_stack, object_string_new(lc->int_curr_symbol));
 }
 
-static void bc_locale_nativeGetCurrencySymbol(method* parent, frame* fr, Enviroment* env) {
+static void bc_locale_nativeGetCurrencySymbol(method* parent, Frame* fr, Enviroment* env) {
 	struct lconv* lc = localeconv();
 	PushVector(fr->value_stack, object_string_new(lc->currency_symbol));
 }
 
-static void bc_locale_nativeGetMonDecimalPoint(method* parent, frame* fr, Enviroment* env) {
+static void bc_locale_nativeGetMonDecimalPoint(method* parent, Frame* fr, Enviroment* env) {
 	struct lconv* lc = localeconv();
 	PushVector(fr->value_stack, object_string_new(lc->mon_decimal_point));
 }
 
-static void bc_locale_nativeGetMonThousandsSep(method* parent, frame* fr, Enviroment* env) {
+static void bc_locale_nativeGetMonThousandsSep(method* parent, Frame* fr, Enviroment* env) {
 	struct lconv* lc = localeconv();
 	PushVector(fr->value_stack, object_string_new(lc->mon_thousands_sep));
 }
 
-static void bc_locale_nativeGetPositiveSign(method* parent, frame* fr, Enviroment* env) {
+static void bc_locale_nativeGetPositiveSign(method* parent, Frame* fr, Enviroment* env) {
 	struct lconv* lc = localeconv();
 	PushVector(fr->value_stack, object_string_new(lc->positive_sign));
 }
 
-static void bc_locale_nativeGetNegativeSign(method* parent, frame* fr, Enviroment* env) {
+static void bc_locale_nativeGetNegativeSign(method* parent, Frame* fr, Enviroment* env) {
 	struct lconv* lc = localeconv();
 	PushVector(fr->value_stack, object_string_new(lc->negative_sign));
 }
 
-static void bc_locale_nativeGetIntFracDigits(method* parent, frame* fr, Enviroment* env) {
+static void bc_locale_nativeGetIntFracDigits(method* parent, Frame* fr, Enviroment* env) {
 	struct lconv* lc = localeconv();
 	PushVector(fr->value_stack, GetIntObject(lc->int_frac_digits));
 }
 
-static void bc_locale_nativeGetFracDigits(method* parent, frame* fr, Enviroment* env) {
+static void bc_locale_nativeGetFracDigits(method* parent, Frame* fr, Enviroment* env) {
 	struct lconv* lc = localeconv();
 	PushVector(fr->value_stack, GetIntObject(lc->frac_digits));
 }

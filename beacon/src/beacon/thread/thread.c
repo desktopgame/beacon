@@ -44,7 +44,7 @@ void DeleteSGThread(ScriptThread * self) {
 	MEM_FREE(self);
 }
 
-void SetSGThreadFrameRef(ScriptThread * self, frame * frame_ref) {
+void SetSGThreadFrameRef(ScriptThread * self, Frame* frame_ref) {
 	//TODO:ここで同期をとる
 	assert(frame_ref != NULL);
 	assert(self->CCtx == NULL);
@@ -54,7 +54,7 @@ void SetSGThreadFrameRef(ScriptThread * self, frame * frame_ref) {
 	self->CCtx = NewCallContext(CALL_TOP_T);
 }
 
-frame * GetSGThreadFrameRef(ScriptThread * self) {
+Frame* GetSGThreadFrameRef(ScriptThread * self) {
 	//TODO:ここで同期をとる
 	return self->FrameRef;
 }

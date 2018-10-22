@@ -10,9 +10,9 @@
  * created by rbtools/rnative.rb
  * time: 2018-08-17
  */
-static void bc_system_nativeExit(method* parent, frame* fr, Enviroment* env);
-static void bc_system_nativeAbort(method* parent, frame* fr, Enviroment* env);
-static void bc_system_nativeExec(method* parent, frame* fr, Enviroment* env);
+static void bc_system_nativeExit(method* parent, Frame* fr, Enviroment* env);
+static void bc_system_nativeAbort(method* parent, Frame* fr, Enviroment* env);
+static void bc_system_nativeExec(method* parent, Frame* fr, Enviroment* env);
 
 void InitBCSystem() {
 	namespace_* unsafe = GetUnsafeNamespace();
@@ -30,17 +30,17 @@ type* GetBCSystemType() {
 }
 
 //private
-static void bc_system_nativeExit(method* parent, frame* fr, Enviroment* env) {
+static void bc_system_nativeExit(method* parent, Frame* fr, Enviroment* env) {
 	object* returnCodeObj = AtVector(fr->ref_stack, 1);
 	int returnCode = OBJ2INT(returnCodeObj);
 	exit(returnCode);
 }
 
-static void bc_system_nativeAbort(method* parent, frame* fr, Enviroment* env) {
+static void bc_system_nativeAbort(method* parent, Frame* fr, Enviroment* env) {
 	abort();
 }
 
-static void bc_system_nativeExec(method* parent, frame* fr, Enviroment* env) {
+static void bc_system_nativeExec(method* parent, Frame* fr, Enviroment* env) {
 	object* cmd = AtVector(fr->ref_stack, 1);
 	const char* str = GetRawBCString(cmd)->Text;
 	int ret = system(str);

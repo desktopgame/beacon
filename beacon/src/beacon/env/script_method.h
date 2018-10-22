@@ -3,7 +3,7 @@
 #define BEACON_ENV_SCRIPT_METHOD_H
 #include "../util/vector.h"
 #include "../vm/enviroment.h"
-struct frame;
+struct Frame;
 struct method;
 struct Enviroment;
 
@@ -28,7 +28,7 @@ script_method* NewScriptMethod();
  * @param fr
  * @param env
  */
-void ExecuteScriptMethod(script_method* self, struct method* parent, struct frame* fr, Enviroment* env);
+void ExecuteScriptMethod(script_method* self, struct method* parent, struct Frame* fr, Enviroment* env);
 
 /**
  * メソッドを開放します.

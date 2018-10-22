@@ -21,8 +21,8 @@ constructor * NewConstructor() {
 	return ret;
 }
 
-object * NewInstanceConstructor(constructor * self, Vector * args, frame * parent) {
-	frame* sub = SubFrame(parent);
+object * NewInstanceConstructor(constructor * self, Vector * args, Frame* parent) {
+	Frame* sub = SubFrame(parent);
 	for (int i = 0; i < args->Length; i++) {
 		PushVector(sub->value_stack, AtVector(args, i));
 	}

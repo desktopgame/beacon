@@ -33,23 +33,23 @@
 #pragma warning(disable:4996)
 #endif
 //proto
-static void vm_run(frame * self, Enviroment * env, int pos, int deferStart);
-static int stack_topi(frame* self);
-static double stack_topd(frame* self);
-static char stack_topc(frame* self);
-static char* stack_tops(frame* self);
-static bool stack_topb(frame* self);
+static void vm_run(Frame* self, Enviroment * env, int pos, int deferStart);
+static int stack_topi(Frame* self);
+static double stack_topd(Frame* self);
+static char stack_topc(Frame* self);
+static char* stack_tops(Frame* self);
+static bool stack_topb(Frame* self);
 
-static int stack_popi(frame* self);
-static double stack_popd(frame* self);
-static char stack_popc(frame* self);
-static char* stack_pops(frame* self);
-static bool stack_popb(frame* self);
-static void remove_from_parent(frame* self);
+static int stack_popi(Frame* self);
+static double stack_popd(Frame* self);
+static char stack_popc(Frame* self);
+static char* stack_pops(Frame* self);
+static bool stack_popb(Frame* self);
+static void remove_from_parent(Frame* self);
 static void frame_markStatic(field* item);
 static void vm_delete_defctx(VectorItem e);
-static bool throw_npe(frame* self, object* o);
-static char* create_error_message(frame * self, Enviroment* env, int pc);
+static bool throw_npe(Frame* self, object* o);
+static char* create_error_message(Frame* self, Enviroment* env, int pc);
 static StringView gVMError = ZERO_VIEW;
 
 //Stack Top
@@ -71,11 +71,11 @@ static StringView gVMError = ZERO_VIEW;
 
 
 
-void ExecuteVM(frame* self, Enviroment* env) {
+void ExecuteVM(Frame* self, Enviroment* env) {
 	ResumeVM(self, env, 0);
 }
 
-void ResumeVM(frame * self, Enviroment * env, int pos) {
+void ResumeVM(Frame* self, Enviroment * env, int pos) {
 	self->defer_vec = NewVector();
 	vm_run(self, env, pos, -1);
 	while(self->defer_vec->Length > 0) {
@@ -91,7 +91,7 @@ void ResumeVM(frame * self, Enviroment * env, int pos) {
 	self->defer_vec = NULL;
 }
 
-void NativeThrowVM(frame * self, object * exc) {
+void NativeThrowVM(Frame* self, object * exc) {
 	self->exception = exc;
 
 	ThrowVM(self, exc);
@@ -107,15 +107,15 @@ void NativeThrowVM(frame * self, object * exc) {
 	}
 }
 
-void ThrowVM(frame * self, object * exc) {
-	frame* temp = self;
+void ThrowVM(Frame* self, object * exc) {
+	Frame* temp = self;
 	do {
 		temp->exception = exc;
 		temp = temp->parent;
 	} while (temp != NULL);
 }
 
-void CatchVM(frame * self) {
+void CatchVM(Frame* self) {
 	if (self == NULL) {
 		return;
 	}
@@ -129,12 +129,12 @@ void CatchVM(frame * self) {
 	}
 }
 
-bool ValidateVM(frame* self, int source_len, int* pcDest) {
+bool ValidateVM(Frame* self, int source_len, int* pcDest) {
 	ScriptThread* th = GetCurrentSGThread(GetCurrentScriptContext());
 	VMTrace* trace = (VMTrace*)TopVector(th->TraceStack);
 	self->validate = true;
 	//汚染
-	frame* p = self->parent;
+	Frame* p = self->parent;
 	while(p != NULL) {
 		p->validate = true;
 		p = p->parent;
@@ -162,16 +162,16 @@ bool ValidateVM(frame* self, int source_len, int* pcDest) {
 	}
 }
 
-void TerminateVM(frame * self) {
+void TerminateVM(Frame* self) {
 	GetMainSGThread()->IsVMCrushByException = true;
-	frame* temp = self;
+	Frame* temp = self;
 	do {
 		temp->terminate = true;
 		temp = temp->parent;
 	} while (temp != NULL);
 }
 
-void UncaughtVM(frame * self, Enviroment* env, int pc) {
+void UncaughtVM(Frame* self, Enviroment* env, int pc) {
 	char* message = create_error_message(self, env, pc);
 	script_context* sctx = GetCurrentScriptContext();
 	if(sctx->print_error) {
@@ -189,7 +189,7 @@ StringView GetVMErrorMessage() {
 
 
 //private
-static void vm_run(frame * self, Enviroment * env, int pos, int deferStart) {
+static void vm_run(Frame* self, Enviroment * env, int pos, int deferStart) {
 	assert(env != NULL);
 	script_context* ctx = GetCurrentScriptContext();
 	int source_len = env->Bytecode->Instructions->Length;
@@ -566,7 +566,7 @@ static void vm_run(frame * self, Enviroment * env, int pos, int deferStart) {
 				constructor* ctor = (constructor*)AtVector(cls->constructor_list, constructorIndex);
 				//新しいVMでコンストラクタを実行
 				//また、現在のVMから実引数をポップ
-				frame* sub = SubFrame(self);
+				Frame* sub = SubFrame(self);
 				sub->receiver = tp;
 				CallFrame* cfr = PushCallContext(GetSGThreadCContext(), FRAME_STATIC_INVOKE_T);
 				cfr->Kind.StaticInvoke.Args = NewVector();
@@ -610,7 +610,7 @@ static void vm_run(frame * self, Enviroment * env, int pos, int deferStart) {
 				class_* cls = tp->u.class_;
 				constructor* ctor = (constructor*)AtVector(cls->constructor_list, ctorIndex);
 				//コンストラクタを実行するためのVMを作成
-				frame* sub = SubFrame(self);
+				Frame* sub = SubFrame(self);
 				sub->receiver = tp;
 				CallFrame* cfr = PushCallContext(GetSGThreadCContext(), FRAME_STATIC_INVOKE_T);
 				cfr->Kind.StaticInvoke.Args = NewVector();
@@ -715,7 +715,7 @@ static void vm_run(frame * self, Enviroment * env, int pos, int deferStart) {
 				int propIndex = (int)GetEnviromentSourceAt(env, ++IDX);
 				property* pro = GetPropertyClass(TYPE2CLASS(GENERIC2TYPE(assignTarget->gtype)), propIndex);
 				//プロパティを実行
-				frame* sub = SubFrame(self);
+				Frame* sub = SubFrame(self);
 				sub->receiver = pro->parent;
 				PushVector(sub->value_stack, assignValue);
 				PushVector(sub->value_stack, assignTarget);
@@ -732,7 +732,7 @@ static void vm_run(frame * self, Enviroment * env, int pos, int deferStart) {
 				int propIndex = (int)GetEnviromentSourceAt(env, ++IDX);
 				property* pro = GetPropertyClass(TYPE2CLASS(GENERIC2TYPE(sourceObject->gtype)), propIndex);
 				//プロパティを実行
-				frame* sub = SubFrame(self);
+				Frame* sub = SubFrame(self);
 				sub->receiver = pro->parent;
 				PushVector(sub->value_stack, sourceObject);
 				ExecuteVM(sub, pro->get->env);
@@ -753,7 +753,7 @@ static void vm_run(frame * self, Enviroment * env, int pos, int deferStart) {
 				class_* cls = tp->u.class_;
 				property * p = GetSPropertyClass(cls, propIndex);
 				//プロパティを実行
-				frame* sub = SubFrame(self);
+				Frame* sub = SubFrame(self);
 				sub->receiver = NULL;
 				PushVector(sub->value_stack, sv);
 				ExecuteVM(sub, p->set->env);
@@ -769,7 +769,7 @@ static void vm_run(frame * self, Enviroment * env, int pos, int deferStart) {
 				class_* cls = tp->u.class_;
 				property * p = GetSPropertyClass(cls, propIndex);
 				//プロパティを実行
-				frame* sub = SubFrame(self);
+				Frame* sub = SubFrame(self);
 				sub->receiver = NULL;
 				ExecuteVM(sub, p->get->env);
 				//戻り値をスタックに残す
@@ -1168,68 +1168,68 @@ static void vm_run(frame * self, Enviroment * env, int pos, int deferStart) {
 	}
 }
 
-static int stack_topi(frame* self) {
+static int stack_topi(Frame* self) {
 	object* ret = (object*)TopVector(self->value_stack);
 	assert(ret->tag == OBJECT_INT_T);
 	return ret->u.int_;
 }
 
-static double stack_topd(frame* self) {
+static double stack_topd(Frame* self) {
 	object* ret = (object*)TopVector(self->value_stack);
 	assert(ret->tag == OBJECT_DOUBLE_T);
 	return ret->u.double_;
 }
 
-static char stack_topc(frame* self) {
+static char stack_topc(Frame* self) {
 	object* ret = (object*)TopVector(self->value_stack);
 	assert(ret->tag == OBJECT_CHAR_T);
 	return ret->u.char_;
 }
 
-static char* stack_tops(frame* self) {
+static char* stack_tops(Frame* self) {
 	object* ret = (object*)TopVector(self->value_stack);
 	assert(ret->tag == OBJECT_STRING_T);
 	return GetRawBCString(ret)->Text;
 }
 
-static bool stack_topb(frame* self) {
+static bool stack_topb(Frame* self) {
 	object* ret = (object*)TopVector(self->value_stack);
 	assert(ret->tag == OBJECT_BOOL_T);
 	return ret->u.bool_;
 }
 
 
-static int stack_popi(frame* self) {
+static int stack_popi(Frame* self) {
 	object* ret = (object*)PopVector(self->value_stack);
 	assert(ret->tag == OBJECT_INT_T);
 	return ret->u.int_;
 }
 
-static double stack_popd(frame* self) {
+static double stack_popd(Frame* self) {
 	object* ret = (object*)PopVector(self->value_stack);
 	assert(ret->tag == OBJECT_DOUBLE_T);
 	return ret->u.double_;
 }
 
-static char stack_popc(frame* self) {
+static char stack_popc(Frame* self) {
 	object* ret = (object*)PopVector(self->value_stack);
 	assert(ret->tag == OBJECT_CHAR_T);
 	return ret->u.char_;
 }
 
-static char* stack_pops(frame* self) {
+static char* stack_pops(Frame* self) {
 	object* ret = (object*)PopVector(self->value_stack);
 	assert(ret->tag == OBJECT_STRING_T);
 	return GetRawBCString(ret)->Text;
 }
 
-static bool stack_popb(frame* self) {
+static bool stack_popb(Frame* self) {
 	object* ret = (object*)PopVector(self->value_stack);
 	assert(ret->tag == OBJECT_BOOL_T);
 	return ret->u.bool_;
 }
 
-static bool throw_npe(frame* self, object* o) {
+static bool throw_npe(Frame* self, object* o) {
 	if(o->tag == OBJECT_NULL_T) {
 		NativeThrowVM(self, NewSimplefException(self, "NullPointerException"));
 		return true;
@@ -1237,7 +1237,7 @@ static bool throw_npe(frame* self, object* o) {
 	return false;
 }
 
-static char* create_error_message(frame * self, Enviroment* env, int pc) {
+static char* create_error_message(Frame* self, Enviroment* env, int pc) {
 	Buffer* sbuf = NewBuffer();
 	LineRange* lr = FindLineRange(env->LineRangeTable, pc);
 	int line = -1;

@@ -188,7 +188,7 @@ struct property* FindTreeSPropertyClass(class_* self, StringView namev, int* out
  * @param outIndex
  * @return 無ければ空
  */
-struct constructor* RFindConstructorClass(class_* self, Vector* args, Vector* typeargs, frame* fr, int* outIndex);
+struct constructor* RFindConstructorClass(class_* self, Vector* args, Vector* typeargs, Frame* fr, int* outIndex);
 
 /**
  * もっとも一致するコンストラクタを返します.

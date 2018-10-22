@@ -12,7 +12,7 @@
  * @param self
  * @param env
  */
-void ExecuteVM(frame* self, Enviroment* env);
+void ExecuteVM(Frame* self, Enviroment* env);
 
 /**
  * 開始位置を指定して指定のバイトコードを実行します.
@@ -20,27 +20,27 @@ void ExecuteVM(frame* self, Enviroment* env);
  * @param env
  * @param pos
  */
-void ResumeVM(frame* self, Enviroment* env, int pos);
+void ResumeVM(Frame* self, Enviroment* env, int pos);
 
 /**
  * ネイティブメソッドから例外をスローする場合にはこちらを使用します.
  * @param self
  * @param exc
  */
-void NativeThrowVM(frame* self, struct object* exc);
+void NativeThrowVM(Frame* self, struct object* exc);
 
 /**
  * selfより上の全てのフレームに例外を伝播します.
  * @param self
  * @param exc
  */
-void ThrowVM(frame* self, struct object* exc);
+void ThrowVM(Frame* self, struct object* exc);
 
 /**
  * selfを起点としてたどれるVM全ての例外フラグをクリアします.
  * @param self NULLのときは何もしません。
  */
-void CatchVM(frame* self);
+void CatchVM(Frame* self);
 
 /**
  * 現在のスレッドのトレース・スタックのトップに
@@ -54,14 +54,14 @@ void CatchVM(frame* self);
  * @param pcDest
  * @return このVMで処理できるなら true.
  */
-bool ValidateVM(frame* self, int source_len, int* pcDest);
+bool ValidateVM(Frame* self, int source_len, int* pcDest);
 
 /**
  * selfを起点としてたどれるVM全ての terminate を true にします.
  * 実行中のVMはこのフラグによって終了します。
  * @param self
  */
-void TerminateVM(frame* self);
+void TerminateVM(Frame* self);
 
 /**
  * 捕捉されなかった例外によってこのVMが終了するとき、
@@ -71,7 +71,7 @@ void TerminateVM(frame* self);
  * @param env
  * @param pc
  */
-void UncaughtVM(frame* self, Enviroment* env, int pc);
+void UncaughtVM(Frame* self, Enviroment* env, int pc);
 
 /**
  * VMがキャッチされなかった例外によって終了した時、

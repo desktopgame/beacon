@@ -196,7 +196,7 @@ static void script_context_free(script_context* self) {
 	int aa = CountActiveObject();
 	assert(self->heap->CollectBlocking == 0);
 	//全ての例外フラグをクリア
-	frame* thv = GetSGThreadFrameRef(GetCurrentSGThread(self));
+	Frame* thv = GetSGThreadFrameRef(GetCurrentSGThread(self));
 	CatchVM(thv);
 	DeleteClassLoader(self->bootstrap_class_loader);
 	if(self->null_obj != NULL) {
