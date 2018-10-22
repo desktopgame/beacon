@@ -95,9 +95,9 @@ void NativeThrowVM(frame * self, object * exc) {
 	self->exception = exc;
 
 	ThrowVM(self, exc);
-	sg_thread* th = GetCurrentSGThread(GetCurrentScriptContext());
+	ScriptThread* th = GetCurrentSGThread(GetCurrentScriptContext());
 	//空ならプログラムを終了
-	if (IsEmptyVector(th->trace_stack)) {
+	if (IsEmptyVector(th->TraceStack)) {
 		TerminateVM(self);
 	//どこかでキャッチしようとしている
 	} else {
@@ -130,8 +130,8 @@ void CatchVM(frame * self) {
 }
 
 bool ValidateVM(frame* self, int source_len, int* pcDest) {
-	sg_thread* th = GetCurrentSGThread(GetCurrentScriptContext());
-	VMTrace* trace = (VMTrace*)TopVector(th->trace_stack);
+	ScriptThread* th = GetCurrentSGThread(GetCurrentScriptContext());
+	VMTrace* trace = (VMTrace*)TopVector(th->TraceStack);
 	self->validate = true;
 	//汚染
 	frame* p = self->parent;
@@ -163,7 +163,7 @@ bool ValidateVM(frame* self, int source_len, int* pcDest) {
 }
 
 void TerminateVM(frame * self) {
-	GetMainSGThread()->vm_crush_by_exception = true;
+	GetMainSGThread()->IsVMCrushByException = true;
 	frame* temp = self;
 	do {
 		temp->terminate = true;
@@ -450,9 +450,9 @@ static void vm_run(frame * self, Enviroment * env, int pos, int deferStart) {
 				//例外は呼び出し全てへ伝播
 				object* e = (object*)PopVector(self->value_stack);
 				ThrowVM(self, e);
-				sg_thread* th = GetCurrentSGThread(GetCurrentScriptContext());
+				ScriptThread* th = GetCurrentSGThread(GetCurrentScriptContext());
 				//空ならプログラムを終了
-				if (IsEmptyVector(th->trace_stack)) {
+				if (IsEmptyVector(th->TraceStack)) {
 					TerminateVM(self);
 					//どこかでキャッチしようとしている
 				} else {
@@ -462,10 +462,10 @@ static void vm_run(frame * self, Enviroment * env, int pos, int deferStart) {
 			}
 			case OP_TRY_ENTER:
 			{
-				sg_thread* th = GetCurrentSGThread(GetCurrentScriptContext());
+				ScriptThread* th = GetCurrentSGThread(GetCurrentScriptContext());
 				VMTrace* trace = NewVMTrace(self);
 				trace->PC = IDX; //goto
-				PushVector(th->trace_stack, trace);
+				PushVector(th->TraceStack, trace);
 				//goto
 				IDX++;
 				//label
@@ -475,16 +475,16 @@ static void vm_run(frame * self, Enviroment * env, int pos, int deferStart) {
 			}
 			case OP_TRY_EXIT:
 			{
-				sg_thread* th = GetCurrentSGThread(GetCurrentScriptContext());
-				VMTrace* trace = (VMTrace*)PopVector(th->trace_stack);
+				ScriptThread* th = GetCurrentSGThread(GetCurrentScriptContext());
+				VMTrace* trace = (VMTrace*)PopVector(th->TraceStack);
 				DeleteVMTrace(trace);
 				break;
 			}
 			case OP_TRY_CLEAR:
 			{
-				sg_thread* th = GetCurrentSGThread(GetCurrentScriptContext());
+				ScriptThread* th = GetCurrentSGThread(GetCurrentScriptContext());
 				CatchVM(self);
-				VMTrace* trace = (VMTrace*)PopVector(th->trace_stack);
+				VMTrace* trace = (VMTrace*)PopVector(th->TraceStack);
 				DeleteVMTrace(trace);
 				break;
 			}
@@ -1159,10 +1159,10 @@ static void vm_run(frame * self, Enviroment * env, int pos, int deferStart) {
 			self->native_throw_pos = -1;
 		}
 		//キャッチされなかった例外によって終了する
-		sg_thread* thr = GetMainSGThread();
-		if (self->terminate && !thr->vm_dump) {
+		ScriptThread* thr = GetMainSGThread();
+		if (self->terminate && !thr->IsVMDump) {
 			UncaughtVM(self, env, IDX);
-			thr->vm_dump = true;
+			thr->IsVMDump = true;
 			break;
 		}
 	}

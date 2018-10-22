@@ -11,13 +11,13 @@ struct CallContext;
  * 並列実行のための構造体です.
  * 現在の呼び出し位置を表すトレースのスタックを含みます。
  */
-typedef struct sg_thread {
-	Vector* trace_stack;
-	bool vm_crush_by_exception;
-	bool vm_dump;
-	struct frame* frame_ref;
-	struct CallContext* cctx;
-} sg_thread;
+typedef struct ScriptThread {
+	Vector* TraceStack;
+	bool IsVMCrushByException;
+	bool IsVMDump;
+	struct frame* FrameRef;
+	struct CallContext* CCtx;
+} ScriptThread;
 
 /**
  * メインスレッドを作成します.
@@ -28,26 +28,26 @@ void LaunchSGThread();
  * 新しいスレッドを作成します.
  * @return
  */
-sg_thread* NewSGThread();
+ScriptThread* NewSGThread();
 
 /**
  * 現在のスレッドを返します.
  * @param sctx
  * @return
  */
-sg_thread* GetCurrentSGThread(struct script_context* sctx);
+ScriptThread* GetCurrentSGThread(struct script_context* sctx);
 
 /**
  * スレッドに記録された全てのトレースを解放します.
  * @param self
  */
-void ClearSGThread(sg_thread* self);
+void ClearSGThread(ScriptThread* self);
 
 /**
  * スレッドを解放します.
  * @param self
  */
-void DeleteSGThread(sg_thread* self);
+void DeleteSGThread(ScriptThread* self);
 
 /**
  * このスレッドが "実行中のVMのルート" を渡します.
@@ -57,27 +57,27 @@ void DeleteSGThread(sg_thread* self);
  * @param self
  * @param frame_ref 呼び出し側で開放してください.
  */
-void SetSGThreadFrameRef(sg_thread* self, struct frame* frame_ref);
+void SetSGThreadFrameRef(ScriptThread* self, struct frame* frame_ref);
 
 /**
  * このスレッドが "実行中のVMのルート" を返します.
  * @param self
  * @return
  */
-struct frame* GetSGThreadFrameRef(sg_thread* self);
+struct frame* GetSGThreadFrameRef(ScriptThread* self);
 
 /**
  * このスレッドからVMを参照出来ないようにします.
  * 通常、このスレッドに設定されたVMを開放したあとに呼び出します。
  * @param self
  */
-void ReleaseSGThreadFrameRef(sg_thread* self);
+void ReleaseSGThreadFrameRef(ScriptThread* self);
 
 /**
  * メインスレッドを返します.
  * @return
  */
-sg_thread* GetMainSGThread();
+ScriptThread* GetMainSGThread();
 
 
 /**
