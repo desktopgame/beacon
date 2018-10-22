@@ -513,8 +513,8 @@ bool IsContainsMethod(Vector* method_list, method* m, method** outM) {
 	(*outM) = NULL;
 	bool ret = false;
 	CallContext* cctx = NewCallContext(CALL_DECL_T);
-	cctx->scope = m->parent->location;
-	cctx->ty = m->parent;
+	cctx->Scope = m->parent->location;
+	cctx->Ty = m->parent;
 	for(int i=0; i<method_list->Length; i++) {
 		method* mE = AtVector(method_list, i);
 		if(IsOverridedMethod(m, mE, cctx)) {

@@ -331,8 +331,8 @@ static void CLBC_register_class(class_loader* self, namespace_* parent, il_type*
 	InitGenericSelf(tp, iltype->u.class_->GetParameterListType->Length);
 	DupTypeParameterList(iltype->u.class_->GetParameterListType, cls->GetParameterListType);
 	CallContext* cctx = NewCallContext(CALL_DECL_T);
-	cctx->scope = parent;
-	cctx->ty = tp;
+	cctx->Scope = parent;
+	cctx->Ty = tp;
 	for (int i = 0; i < iltype->u.class_->extend_list->Length; i++) {
 		generic_cache* e = (generic_cache*)AtVector(iltype->u.class_->extend_list, i);
 		//最初の一つはクラスでもインターフェースでもよい
@@ -393,8 +393,8 @@ static void CLBC_register_interface(class_loader* self, namespace_* parent, il_t
 	InitGenericSelf(tp, iltype->u.interface_->GetParameterListType->Length);
 	DupTypeParameterList(iltype->u.interface_->GetParameterListType, inter->GetParameterListType);
 	CallContext* cctx = NewCallContext(CALL_DECL_T);
-	cctx->scope = parent;
-	cctx->ty = tp;
+	cctx->Scope = parent;
+	cctx->Ty = tp;
 	for (int i = 0; i < iltype->u.interface_->extends_list->Length; i++) {
 		generic_cache* e = (generic_cache*)AtVector(iltype->u.interface_->extends_list, i);
 		//インターフェースはインターフェースのみ継承

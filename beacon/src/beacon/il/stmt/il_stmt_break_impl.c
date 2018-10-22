@@ -9,11 +9,11 @@ il_stmt * WrapILBreak() {
 }
 
 void GenerateILBreak(void * empty, Enviroment * env, CallContext* cctx) {
-	if(cctx->control.WhileStartTable->Length == 0) {
+	if(cctx->Control.WhileStartTable->Length == 0) {
 		ThrowBCError(BCERROR_BREAK_AT_NOT_LOOP_T);
 		return;
 	}
-	Label* lab = (Label*)TopVector(cctx->control.WhileEndTable);
+	Label* lab = (Label*)TopVector(cctx->Control.WhileEndTable);
 	AddOpcodeBuf(env->Bytecode, OP_GOTO);
 	AddOpcodeBuf(env->Bytecode, lab);
 }

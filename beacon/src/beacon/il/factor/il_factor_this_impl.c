@@ -38,7 +38,7 @@ void DeleteILThis(il_factor_this * self) {
 }
 //private
 static void check_context(il_factor_this * self, Enviroment * env, CallContext* cctx) {
-	if(cctx->tag != CALL_METHOD_T) {
+	if(cctx->Tag != CALL_METHOD_T) {
 		return;
 	}
 	method* met = GetMethodCContext(cctx);

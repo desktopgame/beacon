@@ -28,8 +28,8 @@ void GenerateILWhile(il_stmt_while * self, Enviroment * env, CallContext* cctx) 
 	int prev = AddNOPOpcodeBuf(env->Bytecode);
 	Label* prevLab = AddLabelOpcodeBuf(env->Bytecode, prev);
 	Label* nextLab = AddLabelOpcodeBuf(env->Bytecode, -1);
-	PushVector(cctx->control.WhileStartTable, prevLab);
-	PushVector(cctx->control.WhileEndTable, nextLab);
+	PushVector(cctx->Control.WhileStartTable, prevLab);
+	PushVector(cctx->Control.WhileEndTable, nextLab);
 	//条件を満たさないなら nextLab へ
 	GenerateILFactor(self->condition, env, cctx);
 	AddOpcodeBuf(env->Bytecode, OP_GOTO_IF_FALSE);
@@ -42,8 +42,8 @@ void GenerateILWhile(il_stmt_while * self, Enviroment * env, CallContext* cctx) 
 	//prevLab へ行って再判定
 	AddOpcodeBuf(env->Bytecode, OP_GOTO);
 	AddOpcodeBuf(env->Bytecode, prevLab);
-	PopVector(cctx->control.WhileStartTable);
-	PopVector(cctx->control.WhileEndTable);
+	PopVector(cctx->Control.WhileStartTable);
+	PopVector(cctx->Control.WhileEndTable);
 	int next = AddNOPOpcodeBuf(env->Bytecode);
 	nextLab->Cursor = next;
 	env->Symboles->ScopeDepth--;

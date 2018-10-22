@@ -274,7 +274,7 @@ static void check_final(il_factor* receiver, il_factor* source, StringView namev
 	field* f = FindTreeFieldClass(cls, namev, &temp);
 	assert(temp != -1);
 	//コンストラクタ以外の場所では finalフィールドは初期化できない
-	if(cctx->tag != CALL_CTOR_T) {
+	if(cctx->Tag != CALL_CTOR_T) {
 		//finalなので書き込めない
 		if(IsFinalModifier(f->modifier)) {
 			ThrowBCError(BCERROR_ASSIGN_TO_FINAL_FIELD_T,

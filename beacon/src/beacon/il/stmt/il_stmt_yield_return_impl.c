@@ -38,7 +38,7 @@ void DeleteILYieldReturn(il_stmt_yield_return* self) {
 }
 //private
 static void check_IsYieldMethod_return(il_stmt_yield_return * self, Enviroment * env, CallContext* cctx) {
-	if(cctx->tag != CALL_METHOD_T) {
+	if(cctx->Tag != CALL_METHOD_T) {
 		return;
 	}
 	method* m = GetMethodCContext(cctx);

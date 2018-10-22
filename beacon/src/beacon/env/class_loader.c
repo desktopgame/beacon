@@ -202,7 +202,7 @@ static void LoadClassLoader_toplevel(class_loader* self) {
 	createWorldStmt->fact->lineno = 0;
 	//worldをselfにする
 	CallContext* cctx = NewCallContext(CALL_TOP_T);
-	cctx->ty = FindTypeFromNamespace(GetLangNamespace(), InternString("World"));
+	cctx->Ty = FindTypeFromNamespace(GetLangNamespace(), InternString("World"));
 	LoadILStmt(body, self->env, cctx);
 	GenerateILStmt(body, self->env, cctx);
 	//$worldをthisにする
@@ -238,9 +238,9 @@ static void LoadClassLoader_toplevel_function(class_loader* self) {
 		Enviroment* env = NewEnviroment();
 		//CallContextの設定
 		CallContext* cctx = NewCallContext(CALL_METHOD_T);
-		cctx->scope = GetLangNamespace();
-		cctx->ty = worldT;
-		cctx->u.mt = m;
+		cctx->Scope = GetLangNamespace();
+		cctx->Ty = worldT;
+		cctx->Kind.Method = m;
 		namespace_* loc = GetNamespaceCContext(cctx);
 		env->ContextRef = self;
 		sm->env = env;
@@ -279,9 +279,9 @@ static void LoadClassLoader_toplevel_function(class_loader* self) {
 		method* m = AtVector(TYPE2CLASS(worldT)->method_list, i);
 		script_method* sm = m->u.script_method;
 		CallContext* cctx = NewCallContext(CALL_METHOD_T);
-		cctx->scope = GetLangNamespace();
-		cctx->ty = worldT;
-		cctx->u.mt = m;
+		cctx->Scope = GetLangNamespace();
+		cctx->Ty = worldT;
+		cctx->Kind.Method = m;
 		CLBC_corutine(self, m, sm->env, ilfunc->parameter_list, ilfunc->statement_list, cctx, GetLangNamespace());
 		DeleteCallContext(cctx);
 	}

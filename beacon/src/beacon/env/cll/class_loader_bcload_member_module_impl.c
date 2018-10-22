@@ -134,8 +134,8 @@ bool CLBC_field_impl(class_loader* self, type* tp, field* fi, namespace_* scope,
 void CLBC_fields_decl(class_loader* self, il_type* iltype, type* tp, Vector* ilfields, namespace_* scope) {
 	CL_ERROR(self);
 	CallContext* cctx = NewCallContext(CALL_DECL_T);
-	cctx->scope = scope;
-	cctx->ty = tp;
+	cctx->Scope = scope;
+	cctx->Ty = tp;
 	for (int i = 0; i < ilfields->Length; i++) {
 		if(!CLBC_field_decl(self, iltype, tp, AtVector(ilfields, i), scope, cctx)) {
 			break;
@@ -147,8 +147,8 @@ void CLBC_fields_decl(class_loader* self, il_type* iltype, type* tp, Vector* ilf
 void CLBC_fields_impl(class_loader* self, namespace_* scope, type* tp,Vector* ilfields, Vector* sgfields) {
 	CL_ERROR(self);
 	CallContext* cctx = NewCallContext(CALL_CTOR_T);
-	cctx->scope = scope;
-	cctx->ty = tp;
+	cctx->Scope = scope;
+	cctx->Ty = tp;
 	for (int i = 0; i < sgfields->Length; i++) {
 		if(!CLBC_field_impl(self, tp, AtVector(sgfields, i), scope, cctx)) {
 			break;
@@ -233,8 +233,8 @@ bool CLBC_property_impl(class_loader* self, il_type* iltype, type* tp, il_proper
 void CLBC_properties_decl(class_loader* self, il_type* iltype, type* tp, Vector* ilprops, namespace_* scope) {
 	CL_ERROR(self);
 	CallContext* cctx = NewCallContext(CALL_DECL_T);
-	cctx->scope = scope;
-	cctx->ty = tp;
+	cctx->Scope = scope;
+	cctx->Ty = tp;
 	for (int i = 0; i < ilprops->Length; i++) {
 		if(!CLBC_property_decl(self, iltype, tp, AtVector(ilprops, i), scope, cctx)) {
 			break;
@@ -246,8 +246,8 @@ void CLBC_properties_decl(class_loader* self, il_type* iltype, type* tp, Vector*
 void CLBC_properties_impl(class_loader* self,  il_type* iltype, type* tp, Vector* ilprops, Vector* sgprops, namespace_* scope) {
 	CL_ERROR(self);
 	CallContext* cctx = NewCallContext(CALL_DECL_T);
-	cctx->scope = scope;
-	cctx->ty = tp;
+	cctx->Scope = scope;
+	cctx->Ty = tp;
 	for (int i = 0; i < sgprops->Length; i++) {
 		if(!CLBC_property_impl(self, iltype, tp, AtVector(ilprops, i), AtVector(sgprops, i), scope, cctx)) {
 			break;
@@ -273,9 +273,9 @@ bool CLBC_method_decl(class_loader* self, il_type* iltype, type* tp, il_method* 
 	method->modifier = ilmethod->modifier;
 	DupTypeParameterList(ilmethod->GetParameterListType, method->type_parameters);
 	CallContext* cctx = NewCallContext(CALL_METHOD_T);
-	cctx->scope = scope;
-	cctx->ty = tp;
-	cctx->u.mt = method;
+	cctx->Scope = scope;
+	cctx->Ty = tp;
+	cctx->Kind.Method = method;
 	//インターフェースなら空
 	if (tp->tag == TYPE_INTERFACE_T ||
 	   IsAbstractModifier(method->modifier)) {
@@ -384,9 +384,9 @@ bool CLBC_method_impl(class_loader* self, namespace_* scope, il_type* iltype, ty
 	Enviroment* env = NewEnviroment();
 	env->ContextRef = self;
 	CallContext* cctx = NewCallContext(CALL_METHOD_T);
-	cctx->scope = scope;
-	cctx->ty = tp;
-	cctx->u.mt = me;
+	cctx->Scope = scope;
+	cctx->Ty = tp;
+	cctx->Kind.Method = me;
 	//引数を保存
 	for (int i = 0; i < ilmethod->parameter_list->Length; i++) {
 		il_parameter* ilparam = (il_parameter*)AtVector(ilmethod->parameter_list, i);
@@ -444,9 +444,9 @@ bool CLBC_ctor_decl(class_loader* self, il_type* iltype, type* tp, il_constructo
 	cons->access = ilcons->access;
 	cons->parent = tp;
 	CallContext* cctx = NewCallContext(CALL_CTOR_T);
-	cctx->scope = scope;
-	cctx->ty = tp;
-	cctx->u.ctor = cons;
+	cctx->Scope = scope;
+	cctx->Ty = tp;
+	cctx->Kind.Ctor = cons;
 	//NOTE:ここでは戻り値の型,引数の型を設定しません
 	//     class_loader_sgload_complete参照
 	for (int i = 0; i < ilparams->Length; i++) {
@@ -469,9 +469,9 @@ bool CLBC_ctor_impl(class_loader* self, il_type* iltype, type* tp, il_constructo
 	Enviroment* env = NewEnviroment();
 	env->ContextRef = self;
 	CallContext* cctx = NewCallContext(CALL_CTOR_T);
-	cctx->scope = scope;
-	cctx->ty = tp;
-	cctx->u.ctor = cons;
+	cctx->Scope = scope;
+	cctx->Ty = tp;
+	cctx->Kind.Ctor = cons;
 	for (int i = 0; i < cons->parameter_list->Length; i++) {
 		il_parameter* ilparam = (il_parameter*)AtVector(ilcons->parameter_list, i);
 		EntrySymbolTable(
@@ -531,9 +531,9 @@ bool CLBC_operator_overload_decl(class_loader* self, il_type* iltype, type* tp, 
 	opov->access = ilopov->access;
 	//CallContextの設定
 	CallContext* cctx = NewCallContext(CALL_OPOV_T);
-	cctx->scope = scope;
-	cctx->ty = tp;
-	cctx->u.opov = opov;
+	cctx->Scope = scope;
+	cctx->Ty = tp;
+	cctx->Kind.OpOv = opov;
 	//戻り値読み込み
 	opov->parent = tp;
 	opov->return_gtype = ResolveImportManager(scope, ilopov->return_fqcn, cctx);
@@ -560,9 +560,9 @@ bool CLBC_operator_overload_impl(class_loader* self, il_type* iltype, type* tp, 
 	//まずは仮引数の一覧にインデックスを割り振る
 	Enviroment* env = NewEnviroment();
 	CallContext* cctx = NewCallContext(CALL_OPOV_T);
-	cctx->scope = scope;
-	cctx->ty = tp;
-	cctx->u.opov = opov;
+	cctx->Scope = scope;
+	cctx->Ty = tp;
+	cctx->Kind.OpOv = opov;
 	//ccpush_method(me);
 	env->ContextRef = self;
 	for (int i = 0; i < ilopov->parameter_list->Length; i++) {
@@ -712,7 +712,7 @@ static void CLBC_chain_auto(class_loader * self, il_type * iltype, type * tp, il
 	class_* classz = tp->u.class_;
 	int emptyTemp = 0;
 	CallContext* cctx = NewCallContext(CALL_CTOR_ARGS_T);
-	cctx->ty = tp;
+	cctx->Ty = tp;
 	constructor* emptyTarget = ILFindEmptyConstructorClass(classz->super_class->core_type->u.class_, env, cctx, &emptyTemp);
 	DeleteCallContext(cctx);
 	//連鎖を明示的に書いていないのに、
@@ -745,7 +745,7 @@ static void CLBC_chain_super(class_loader * self, il_type * iltype, type * tp, i
 	class_* classz = tp->u.class_;
 	//チェインコンストラクタの実引数をプッシュ
 	CallContext* cctx = NewCallContext(CALL_CTOR_ARGS_T);
-	cctx->ty = tp;
+	cctx->Ty = tp;
 	il_constructor_chain* chain = ilcons->chain;
 	for (int i = 0; i < chain->argument_list->Length; i++) {
 		il_argument* ilarg = (il_argument*)AtVector(chain->argument_list, i);

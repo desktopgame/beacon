@@ -382,9 +382,9 @@ static method* create_has_next(method* self, type* ty, class_loader* cll, Vector
 	script_method* smt = NewScriptMethod();
 	Enviroment* envSmt = NewEnviroment();
 	CallContext* cctx = NewCallContext(CALL_METHOD_T);
-	cctx->scope = self->parent->location;
-	cctx->ty = self->parent;
-	cctx->u.mt = self;
+	cctx->Scope = self->parent->location;
+	cctx->Ty = self->parent;
+	cctx->Kind.Method = self;
 	envSmt->ContextRef = cll;
 
 	//iterate(int,int)のint,intを受け取る
@@ -433,9 +433,9 @@ static method* create_next(method* self, type* ty, class_loader* cll,generic_typ
 	script_method* smt = NewScriptMethod();
 	Enviroment* envSmt = NewEnviroment();
 	CallContext* cctx = NewCallContext(CALL_METHOD_T);
-	cctx->scope = self->parent->location;
-	cctx->ty = self->parent;
-	cctx->u.mt = mt;
+	cctx->Scope = self->parent->location;
+	cctx->Ty = self->parent;
+	cctx->Kind.Method = mt;
 
 	AddOpcodeBuf(envSmt->Bytecode, (VectorItem)OP_STORE);
 	AddOpcodeBuf(envSmt->Bytecode, (VectorItem)0);
@@ -443,9 +443,9 @@ static method* create_next(method* self, type* ty, class_loader* cll,generic_typ
 	AddOpcodeBuf(envSmt->Bytecode, (VectorItem)OP_CORO_CURRENT);
 
 	envSmt->ContextRef = cll;
-	cctx->scope = self->parent->location;
-	cctx->ty = self->parent;
-	cctx->u.mt = self;
+	cctx->Scope = self->parent->location;
+	cctx->Ty = self->parent;
+	cctx->Kind.Method = self;
 	
 	smt->env = envSmt;
 	mt->u.script_method = smt;

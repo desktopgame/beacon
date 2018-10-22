@@ -18,7 +18,7 @@ void LoadILReturnEmpty(il_stmt_return_empty self, Enviroment* env, CallContext* 
 }
 //private
 static void check_method_return(il_stmt_return_empty self, Enviroment * env, CallContext* cctx) {
-	if(cctx->tag != CALL_METHOD_T) {
+	if(cctx->Tag != CALL_METHOD_T) {
 		return;
 	}
 	method* m = GetMethodCContext(cctx);

@@ -28,16 +28,16 @@ typedef enum CallContextTag {
 } CallContextTag;
 
 typedef struct CallContext {
-	Vector* call_stack;
-	ControlStructure control;
-	CallContextTag tag;
-	struct namespace_* scope;
-	struct type* ty;
+	Vector* CallStack;
+	ControlStructure Control;
+	CallContextTag Tag;
+	struct namespace_* Scope;
+	struct type* Ty;
 	union {
-		struct method* mt;
-		struct constructor* ctor;
-		struct operator_overload* opov;
-	} u;
+		struct method* Method;
+		struct constructor* Ctor;
+		struct operator_overload* OpOv;
+	} Kind;
 } CallContext;
 
 #define NewCallContext(tag) (MallocCContext(tag, __FILE__, __LINE__))

@@ -33,7 +33,7 @@ void ResolveILTypeArgument(Vector* iltype_args, CallContext* cctx) {
 		il_type_argument* e = (il_type_argument*)AtVector(iltype_args, i);
 		if(e->gtype == NULL) {
 	//		namespace_* scope = cc_namespace(
-			e->gtype = ResolveImportManager(cctx->scope, e->gcache, cctx);
+			e->gtype = ResolveImportManager(cctx->Scope, e->gcache, cctx);
 			//assert(e->gtype->core_type != NULL || e->gtype->virtual_type_index != -1);
 		}
 	}

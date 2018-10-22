@@ -427,8 +427,8 @@ static void CreateVTableClass_override(class_* self) {
 	const char* clname = Ref2Str(self->namev);
 	#endif
 	CallContext* cctx = NewCallContext(CALL_DECL_T);
-	cctx->scope = self->parent->location;
-	cctx->ty = self->super_class->core_type;
+	cctx->Scope = self->parent->location;
+	cctx->Ty = self->super_class->core_type;
 	CreateVTableClass(self->super_class->core_type->u.class_);
 	CopyVTable(self->super_class->core_type->u.class_->vt, self->vt);
 	for (int i = 0; i < self->method_list->Length; i++) {
@@ -510,8 +510,8 @@ static void class_DeleteNativeMethodRef(NumericMapKey key, NumericMapItem item) 
 
 static method* class_find_impl_method(class_* self, method* virtualMethod) {
 	CallContext* cctx = NewCallContext(CALL_DECL_T);
-	cctx->scope = self->parent->location;
-	cctx->ty = self->parent;
+	cctx->Scope = self->parent->location;
+	cctx->Ty = self->parent;
 	method* ret = NULL;
 	vtable* clVT = self->vt;
 	for (int i = 0; i < clVT->elements->Length; i++) {
