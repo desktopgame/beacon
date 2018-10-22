@@ -7,12 +7,12 @@ struct constructor;
 struct operator_overload;
 struct generic_type;
 
-typedef enum call_frame_tag {
+typedef enum CallFrameTag {
 	FRAME_RESOLVE_T,
 	FRAME_SELF_INVOKE_T,
 	FRAME_STATIC_INVOKE_T,
 	FRAME_INSTANCE_INVOKE_T,
-} call_frame_tag;
+} CallFrameTag;
 
 typedef struct call_resolve {
 	struct generic_type* gtype;
@@ -36,7 +36,7 @@ typedef struct call_instance_invoke {
 } call_instance_invoke;
 
 typedef struct call_frame {
-	call_frame_tag tag;
+	CallFrameTag tag;
 	union {
 		call_resolve resolve;
 		call_self_invoke self_invoke;
@@ -46,7 +46,7 @@ typedef struct call_frame {
 } call_frame;
 
 #define NewCallFrame(tag) (MallocCallFrame(tag, __FILE__, __LINE__))
-call_frame* MallocCallFrame(call_frame_tag tag, const char* filename, int lineno);
+call_frame* MallocCallFrame(CallFrameTag tag, const char* filename, int lineno);
 
 void DeleteCallFrame(call_frame* self);
 #endif

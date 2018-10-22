@@ -7,7 +7,7 @@
 #include "../env/generic_type.h"
 #include "../env/fqcn_cache.h"
 
-call_context* MallocCContext(call_context_tag tag, const char* filename, int lineno) {
+call_context* MallocCContext(CallFrameTag tag, const char* filename, int lineno) {
 	call_context* ret = mem_malloc(sizeof(call_context), filename, lineno);
 #if defined(_MSC_VER)
 	ControlStructure cs = { 0 };
@@ -23,7 +23,7 @@ call_context* MallocCContext(call_context_tag tag, const char* filename, int lin
 	return ret;
 }
 
-call_frame* PushImplCallContext(call_context* self, call_frame_tag tag, const char* filename, int lineno) {
+call_frame* PushImplCallContext(call_context* self, CallFrameTag tag, const char* filename, int lineno) {
 	call_frame* fr = MallocCallFrame(tag, filename, lineno);
 	PushVector(self->call_stack, fr);
 	return fr;
