@@ -90,7 +90,7 @@ Vector* GetTypeArgsCContext(call_context* self) {
 	} else if(cfr->tag == FRAME_STATIC_INVOKE_T) {
 		return cfr->u.static_invoke.typeargs;
 	} else if(cfr->tag == FRAME_SELF_INVOKE_T) {
-		return cfr->u.self_invoke.typeargs;
+		return cfr->u.self_invoke.TypeArgs;
 	} else if(cfr->tag == FRAME_RESOLVE_T) {
 		return cfr->u.resolve.TypeArgs;
 	}

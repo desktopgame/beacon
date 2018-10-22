@@ -19,10 +19,10 @@ typedef struct CallResolve {
 	Vector* TypeArgs;
 } CallResolve;
 
-typedef struct call_self_invoke {
-	Vector* args;
-	Vector* typeargs;
-} call_self_invoke;
+typedef struct CallSelfInvoke {
+	Vector* Args;
+	Vector* TypeArgs;
+} CallSelfInvoke;
 
 typedef struct call_static_invoke {
 	Vector* args;
@@ -39,7 +39,7 @@ typedef struct call_frame {
 	CallFrameTag tag;
 	union {
 		CallResolve resolve;
-		call_self_invoke self_invoke;
+		CallSelfInvoke self_invoke;
 		call_static_invoke static_invoke;
 		call_instance_invoke instance_invoke;
 	} u;
