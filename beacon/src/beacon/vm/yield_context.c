@@ -1,32 +1,30 @@
 #include "yield_context.h"
 #include "../util/mem.h"
-
-yield_context* MallocYieldContext(const char* filename, int lineno) {
-	yield_context* ret = (yield_context*)mem_malloc(sizeof(yield_context), filename, lineno);
-	ret->backup_ref_stack = NULL;
-	ret->backup_value_stack = NULL;
-	ret->vm_ref_stack = NULL;
-	ret->vm_value_stack = NULL;
-	ret->yield_count = -1;
-	ret->yield_offset = -1;
-	ret->len = -1;
-	ret->stock_obj = NULL;
-	ret->stock_obj = NULL;
-	ret->source_obj = NULL;
-	ret->cached = false;
+YieldContext* MallocYieldContext(const char* filename, int lineno) {
+	YieldContext* ret = (YieldContext*)mem_malloc(sizeof(YieldContext), filename, lineno);
+	ret->BackupVariableTable = NULL;
+	ret->BackupValueStack = NULL;
+	ret->VariableTable = NULL;
+	ret->ValueStack = NULL;
+	ret->YieldCount = -1;
+	ret->YieldOffset = -1;
+	ret->Length = -1;
+	ret->Stock = NULL;
+	ret->Source = NULL;
+	ret->IsCached = false;
 	return ret;
 }
 
-void ClearBackupYieldContext(yield_context* self) {
-	DeleteVector(self->backup_ref_stack, VectorDeleterOfNull);
-	DeleteVector(self->backup_value_stack, VectorDeleterOfNull);
-	self->backup_ref_stack = NULL;
-	self->backup_value_stack = NULL;
+void ClearBackupYieldContext(YieldContext* self) {
+	DeleteVector(self->BackupVariableTable, VectorDeleterOfNull);
+	DeleteVector(self->BackupValueStack, VectorDeleterOfNull);
+	self->BackupVariableTable = NULL;
+	self->BackupValueStack = NULL;
 }
 
-void DeleteYieldContext(yield_context* self) {
-	DeleteVector(self->backup_ref_stack, VectorDeleterOfNull);
-	DeleteVector(self->backup_value_stack, VectorDeleterOfNull);
-	DeleteVector(self->parameter_vec, VectorDeleterOfNull);
+void DeleteYieldContext(YieldContext* self) {
+	DeleteVector(self->BackupVariableTable, VectorDeleterOfNull);
+	DeleteVector(self->BackupValueStack, VectorDeleterOfNull);
+	DeleteVector(self->Parameters, VectorDeleterOfNull);
 	MEM_FREE(self);
 }

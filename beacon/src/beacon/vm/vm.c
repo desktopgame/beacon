@@ -924,20 +924,20 @@ static void vm_run(Frame* self, Enviroment * env, int pos, int deferStart) {
 				}
 				int param_len = (int)GetEnviromentSourceAt(env, ++IDX);
 				int op_len = (int)GetEnviromentSourceAt(env, ++IDX);
-				yield_context* yctx = NewYieldContext();
-				yctx->yield_offset = 0;
-				yctx->yield_count = 0;
-				yctx->len = op_len;
-				yctx->parameter_vec = NewVector();
+				YieldContext* yctx = NewYieldContext();
+				yctx->YieldOffset = 0;
+				yctx->YieldCount = 0;
+				yctx->Length = op_len;
+				yctx->Parameters = NewVector();
 				//iterate(int, int) の int, int を受け取る
-				yctx->source_obj = AtVector(self->VariableTable, 1);
+				yctx->Source = AtVector(self->VariableTable, 1);
 				#if defined(DEBUG)
-				const char* yname = GetObjectName(yctx->source_obj);
+				const char* yname = GetObjectName(yctx->Source);
 				#endif
 				for(int i=2; i<param_len + 1; i++) {
 					object* a = AtVector(self->VariableTable, i);
 					assert(a != NULL);
-					PushVector(yctx->parameter_vec, a);
+					PushVector(yctx->Parameters, a);
 				}
 				//暗黙的に生成されるイテレータ実装クラスのコンストラクタは、
 				//必ず最後に iterate() を定義したクラスのオブジェクトを受け取る。
@@ -950,25 +950,25 @@ static void vm_run(Frame* self, Enviroment * env, int pos, int deferStart) {
 				object* o = self->Coroutine;
 				object* ret = (object*)PopVector(self->ValueStack);
 				assert(o->is_coroutine);
-				yield_context* yctx = (yield_context*)AtVector(o->native_slot_vec, 0);
+				YieldContext* yctx = (YieldContext*)AtVector(o->native_slot_vec, 0);
 				//この実行コードが
 				//前回からの再開によって開始した場合、それを元に戻す
-				if(yctx->vm_ref_stack != NULL) {
-					self->VariableTable = yctx->vm_ref_stack;
-					self->ValueStack = yctx->vm_value_stack;
+				if(yctx->VariableTable != NULL) {
+					self->VariableTable = yctx->VariableTable;
+					self->ValueStack = yctx->ValueStack;
 				}
 				assert(ret != NULL);
-				yctx->stock_obj = ret;
+				yctx->Stock = ret;
 				//最初に実行された yield return に時点でコピーする
-				if(yctx->vm_ref_stack == NULL) {
-					yctx->backup_ref_stack = CloneVector(self->VariableTable);
-					yctx->backup_value_stack = NewVector();
+				if(yctx->VariableTable == NULL) {
+					yctx->BackupVariableTable = CloneVector(self->VariableTable);
+					yctx->BackupValueStack = NewVector();
 				}
-				yctx->yield_offset = IDX + 1;
-				yctx->yield_count++;
+				yctx->YieldOffset = IDX + 1;
+				yctx->YieldCount++;
 				IDX = source_len;
 				//まだ実行できる?
-				object* hasNext = GetBoolObject(yctx->yield_offset < yctx->len);
+				object* hasNext = GetBoolObject(yctx->YieldOffset < yctx->Length);
 				PushVector(self->ValueStack, hasNext);
 				break;
 			}
@@ -976,12 +976,12 @@ static void vm_run(Frame* self, Enviroment * env, int pos, int deferStart) {
 			{
 				object* o = self->Coroutine;
 				assert(o->is_coroutine);
-				yield_context* yctx = (yield_context*)AtVector(o->native_slot_vec, 0);
+				YieldContext* yctx = (YieldContext*)AtVector(o->native_slot_vec, 0);
 				IDX = source_len;
-				yctx->yield_offset = source_len;
-				if(yctx->vm_ref_stack != NULL) {
-					self->VariableTable = yctx->vm_ref_stack;
-					self->ValueStack = yctx->vm_value_stack;
+				yctx->YieldOffset = source_len;
+				if(yctx->VariableTable != NULL) {
+					self->VariableTable = yctx->VariableTable;
+					self->ValueStack = yctx->ValueStack;
 				}
 				PushVector(self->ValueStack, GetFalseObject());
 				break;
@@ -990,14 +990,14 @@ static void vm_run(Frame* self, Enviroment * env, int pos, int deferStart) {
 			{
 				object* o = self->Coroutine;
 				assert(o->is_coroutine);
-				yield_context* yctx = (yield_context*)AtVector(o->native_slot_vec, 0);
+				YieldContext* yctx = (YieldContext*)AtVector(o->native_slot_vec, 0);
 				//前回の位置が記録されているのでそこから
-				if(yctx->yield_offset != 0) {
-					IDX = yctx->yield_offset - 1;
-					yctx->vm_ref_stack = self->VariableTable;
-					yctx->vm_value_stack = self->ValueStack;
-					self->VariableTable = yctx->backup_ref_stack;
-					self->ValueStack = yctx->backup_value_stack;
+				if(yctx->YieldOffset != 0) {
+					IDX = yctx->YieldOffset - 1;
+					yctx->VariableTable = self->VariableTable;
+					yctx->ValueStack = self->ValueStack;
+					self->VariableTable = yctx->BackupVariableTable;
+					self->ValueStack = yctx->BackupValueStack;
 				}
 				break;
 			}
@@ -1005,8 +1005,8 @@ static void vm_run(Frame* self, Enviroment * env, int pos, int deferStart) {
 			{
 				object* o = self->Coroutine;
 				assert(o->is_coroutine);
-				yield_context* yctx = (yield_context*)AtVector(o->native_slot_vec, 0);
-				PushVector(self->ValueStack, yctx->stock_obj);
+				YieldContext* yctx = (YieldContext*)AtVector(o->native_slot_vec, 0);
+				PushVector(self->ValueStack, yctx->Stock);
 				break;
 			}
 			case OP_CORO_SWAP_SELF:
@@ -1014,26 +1014,26 @@ static void vm_run(Frame* self, Enviroment * env, int pos, int deferStart) {
 				assert(self->Coroutine == NULL);
 				object* o = (object*)AtVector(self->VariableTable, 0);
 				assert(o->is_coroutine);
-				yield_context* yctx = AtVector(o->native_slot_vec, 0);
-				if(yctx->cached) {
+				YieldContext* yctx = AtVector(o->native_slot_vec, 0);
+				if(yctx->IsCached) {
 					self->Coroutine = o;
 					break;
 				}
 				#if defined(DEBUG)
 				const char* oname = GetObjectName(o);
-				const char* yname = GetObjectName(yctx->source_obj);
+				const char* yname = GetObjectName(yctx->Source);
 				#endif
 				//[0] = Array
 				//[1] = ArrayIterator
-				AssignVector(self->VariableTable, 0, yctx->source_obj);
-				assert(yctx->source_obj != NULL);
-				for(int i=0; i<yctx->parameter_vec->Length; i++) {
-					object* e = AtVector(yctx->parameter_vec, i);
+				AssignVector(self->VariableTable, 0, yctx->Source);
+				assert(yctx->Source != NULL);
+				for(int i=0; i<yctx->Parameters->Length; i++) {
+					object* e = AtVector(yctx->Parameters, i);
 					assert(e != NULL);
 					AssignVector(self->VariableTable, i + 1, e);
 				}
 				self->Coroutine = o;
-				yctx->cached = true;
+				yctx->IsCached = true;
 				break;
 			}
 			case OP_GENERIC_ADD:

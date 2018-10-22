@@ -274,7 +274,7 @@ void DeleteObject(object * self) {
 		return;
 	}
 	if(self->is_coroutine) {
-		yield_context* yctx = AtVector(self->native_slot_vec, 0);
+		YieldContext* yctx = AtVector(self->native_slot_vec, 0);
 		RemoveVector(self->native_slot_vec, 0);
 		DeleteYieldContext(yctx);
 	}
@@ -413,11 +413,11 @@ static void object_mark_coroutine(object* self) {
 		return;
 	}
 	//コルーチンの現在の値
-	yield_context* yctx = AtVector(self->native_slot_vec, 0);
-	MarkAllObject(yctx->stock_obj);
-	MarkAllObject(yctx->source_obj);
+	YieldContext* yctx = AtVector(self->native_slot_vec, 0);
+	MarkAllObject(yctx->Stock);
+	MarkAllObject(yctx->Source);
 	//コルーチンに渡された引数
-	for(int i=0; i<yctx->parameter_vec->Length; i++) {
-		MarkAllObject(AtVector(yctx->parameter_vec, i));
+	for(int i=0; i<yctx->Parameters->Length; i++) {
+		MarkAllObject(AtVector(yctx->Parameters, i));
 	}
 }
