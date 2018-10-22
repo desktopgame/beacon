@@ -16,8 +16,8 @@
 #include "../../env/operator_overload.h"
 #include "../../env/property.h"
 
-bool CLBC_field_decl(class_loader* self, il_type* iltype, type* tp, il_field* ilfi, namespace_* scope, call_context* cctx);
-bool CLBC_field_impl(class_loader* self, type* tp, field* fi, namespace_* scope, call_context* cctx);
+bool CLBC_field_decl(class_loader* self, il_type* iltype, type* tp, il_field* ilfi, namespace_* scope, CallContext* cctx);
+bool CLBC_field_impl(class_loader* self, type* tp, field* fi, namespace_* scope, CallContext* cctx);
 /**
  * フィールド宣言を読み込んでクラスに追加します.
  * @param self
@@ -28,8 +28,8 @@ bool CLBC_field_impl(class_loader* self, type* tp, field* fi, namespace_* scope,
 void CLBC_fields_decl(class_loader* self, il_type* iltype, type* tp, Vector* ilfields, namespace_* scope);
 void CLBC_fields_impl(class_loader* self, namespace_* scope, type* tp,Vector* ilfields, Vector* sgfields);
 
-bool CLBC_property_decl(class_loader* self, il_type* iltype, type* tp, il_property* ilprop, namespace_* scope, call_context* cctx);
-bool CLBC_property_impl(class_loader* self, il_type* iltype, type* tp, il_property* ilprop, property* prop, namespace_* scope, call_context* cctx);
+bool CLBC_property_decl(class_loader* self, il_type* iltype, type* tp, il_property* ilprop, namespace_* scope, CallContext* cctx);
+bool CLBC_property_impl(class_loader* self, il_type* iltype, type* tp, il_property* ilprop, property* prop, namespace_* scope, CallContext* cctx);
 
 /**
  * @param self
@@ -74,7 +74,7 @@ bool CLBC_operator_overload_impl(class_loader* self, il_type* iltype, type* tp, 
 void CLBC_operator_overloads_decl(class_loader* self, il_type* iltype, type* tp, namespace_* scope);
 void CLBC_operator_overloads_impl(class_loader* self, il_type* iltype, type* tp, namespace_* scope);
 
-bool CLBC_corutine(class_loader* self, method* mt, Enviroment* env, Vector* ilparams, Vector* ilstmts, call_context* cctx, namespace_* range);
+bool CLBC_corutine(class_loader* self, method* mt, Enviroment* env, Vector* ilparams, Vector* ilstmts, CallContext* cctx, namespace_* range);
 
-void CLBC_body(class_loader* self, Vector* stmt_list, Enviroment* dest, call_context* cctx, namespace_* range);
+void CLBC_body(class_loader* self, Vector* stmt_list, Enviroment* dest, CallContext* cctx, namespace_* range);
 #endif

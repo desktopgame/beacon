@@ -24,13 +24,13 @@ il_stmt_try* NewILTry();
 
 il_stmt_catch* NewILCatch(StringView namev);
 
-void GenerateILTry(il_stmt_try* self, Enviroment* env, call_context* cctx);
+void GenerateILTry(il_stmt_try* self, Enviroment* env, CallContext* cctx);
 
-void GenerateILCatch(il_stmt_catch* self, Enviroment* env, call_context* cctx);
+void GenerateILCatch(il_stmt_catch* self, Enviroment* env, CallContext* cctx);
 
-void LoadILTry(il_stmt_try* self, Enviroment* env, call_context* cctx);
+void LoadILTry(il_stmt_try* self, Enviroment* env, CallContext* cctx);
 
-void LoadILCatch(il_stmt_catch* self, Enviroment* env, call_context* cctx);
+void LoadILCatch(il_stmt_catch* self, Enviroment* env, CallContext* cctx);
 
 void DeleteILCatch(il_stmt_catch* self);
 

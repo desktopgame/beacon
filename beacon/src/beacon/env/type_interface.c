@@ -82,7 +82,7 @@ void AddMethodType(type* self, method * m) {
 	}
 }
 
-method * ILFindMethodType(type * self, StringView namev, Vector * args, Enviroment * env, call_context* cctx, int * outIndex) {
+method * ILFindMethodType(type * self, StringView namev, Vector * args, Enviroment * env, CallContext* cctx, int * outIndex) {
 	assert(self != NULL);
 	if (self->tag == TYPE_CLASS_T) {
 		return ILFindMethodClass(self->u.class_, namev, args, env, cctx, outIndex);
@@ -92,7 +92,7 @@ method * ILFindMethodType(type * self, StringView namev, Vector * args, Envirome
 	return NULL;
 }
 
-method* ILFindSMethodType(type* self, StringView namev, Vector* args, Enviroment* env, call_context* cctx, int* outIndex) {
+method* ILFindSMethodType(type* self, StringView namev, Vector* args, Enviroment* env, CallContext* cctx, int* outIndex) {
 	assert(self->tag == TYPE_CLASS_T);
 	return ILFindSMethodClass(self->u.class_, namev, args, env, cctx, outIndex);
 }

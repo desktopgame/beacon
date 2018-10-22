@@ -37,7 +37,7 @@ il_stmt_variable_init* NewILVariableInit(StringView namev);
  * @param env
  * @param ccctx
  */
-void GenerateILVariableInit(il_stmt_variable_init* self, Enviroment* env, call_context* cctx);
+void GenerateILVariableInit(il_stmt_variable_init* self, Enviroment* env, CallContext* cctx);
 
 /**
  * 変数の初期化を表す要素を読み込みます.
@@ -45,7 +45,7 @@ void GenerateILVariableInit(il_stmt_variable_init* self, Enviroment* env, call_c
  * @param env
  * @param cctx
  */
-void LoadILVariableInit(il_stmt_variable_init* self, Enviroment* env, call_context* cctx);
+void LoadILVariableInit(il_stmt_variable_init* self, Enviroment* env, CallContext* cctx);
 
 /**
  * 変数の初期化を表す要素を開放します.

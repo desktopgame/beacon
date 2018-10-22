@@ -15,9 +15,9 @@ il_stmt* WrapILInjectJNI(il_stmt_inject_jni* self);
 
 il_stmt_inject_jni* NewILInjectJNI(StringView namev);
 
-void GenerateILInjectJNI(il_stmt_inject_jni* self, Enviroment* env, call_context* cctx);
+void GenerateILInjectJNI(il_stmt_inject_jni* self, Enviroment* env, CallContext* cctx);
 
-void LoadILInjectJNI(il_stmt_inject_jni * self, Enviroment* env, call_context* cctx);
+void LoadILInjectJNI(il_stmt_inject_jni * self, Enviroment* env, CallContext* cctx);
 
 void DeleteILInjectJni(il_stmt_inject_jni* self);
 #endif

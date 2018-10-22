@@ -17,7 +17,7 @@ il_factor* MallocILFactor(il_factor_type type, const char* filename, int lineno)
 	return ret;
 }
 
-void GenerateILFactor(il_factor * self, Enviroment* env, call_context* cctx) {
+void GenerateILFactor(il_factor * self, Enviroment* env, CallContext* cctx) {
 	if(GetLastBCError()) {
 		return;
 	}
@@ -94,7 +94,7 @@ void GenerateILFactor(il_factor * self, Enviroment* env, call_context* cctx) {
 	AddRangeEnviroment(env, self->lineno);
 }
 
-void LoadILFactor(il_factor * self, Enviroment * env, call_context* cctx) {
+void LoadILFactor(il_factor * self, Enviroment * env, CallContext* cctx) {
 	if(GetLastBCError()) {
 		return;
 	}
@@ -169,7 +169,7 @@ void LoadILFactor(il_factor * self, Enviroment * env, call_context* cctx) {
 	}
 }
 
-generic_type* EvalILFactor(il_factor * self, Enviroment * env, call_context* cctx) {
+generic_type* EvalILFactor(il_factor * self, Enviroment * env, CallContext* cctx) {
 	if(GetLastBCError()) {
 		return NULL;
 	}

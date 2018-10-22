@@ -24,7 +24,7 @@ void AddVTable(vtable * self, method * m) {
 	PushVector(self->elements, m);
 }
 
-void ReplaceVTable(vtable * self, method * m, call_context* cctx) {
+void ReplaceVTable(vtable * self, method * m, CallContext* cctx) {
 	if (IsStaticModifier(m->modifier)) {
 		return;
 	}

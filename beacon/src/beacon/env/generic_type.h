@@ -14,7 +14,7 @@ struct method;
 struct Enviroment;
 struct virtual_type;
 struct frame;
-struct call_context;
+struct CallContext;
 /**
  * 型変数つきの型宣言の型引数では generic_type 自身が使われますが、
  * それ自体が型変数の場合、何の型変数を指しているかを示す列挙型です.
@@ -108,7 +108,7 @@ void AddArgsGenericType(generic_type* self, generic_type* a);
  *         異なる継承階層なら -1
  *         サブタイプなら階層の数
  */
-int DistanceGenericType(generic_type* self, generic_type* other, struct call_context* cctx);
+int DistanceGenericType(generic_type* self, generic_type* other, struct CallContext* cctx);
 /**
  * a と b の距離を返します.
  * メソッドを解決する時、もっともマッチするオーバーロードを見つけるために使用されます。
@@ -142,7 +142,7 @@ void GenerateGenericType(generic_type* self, struct Enviroment* env);
  * @param cctx
  * @return
  */
-generic_type* ApplyGenericType(generic_type* self, struct call_context* cctx);
+generic_type* ApplyGenericType(generic_type* self, struct CallContext* cctx);
 /**
  * 現在のコンテキストで self の型変数を解決します.
  * T ではなく T を内包する型(List<T>) などが戻り値になる時に使用されます。
@@ -150,7 +150,7 @@ generic_type* ApplyGenericType(generic_type* self, struct call_context* cctx);
  * @param fr
  * @return
  */
-generic_type* RApplyGenericType(generic_type* self, struct call_context* cctx, struct frame* fr);
+generic_type* RApplyGenericType(generic_type* self, struct CallContext* cctx, struct frame* fr);
 
 /**
  * generic_type を type へ変換します.

@@ -23,21 +23,21 @@ il_factor_explicit_binary_op* NewILExplicitBinaryOp(OperatorType type) {
 	return ret;
 }
 
-void GenerateILExplicitBinaryOp(il_factor_explicit_binary_op* self, Enviroment* env, call_context* cctx) {
+void GenerateILExplicitBinaryOp(il_factor_explicit_binary_op* self, Enviroment* env, CallContext* cctx) {
 	GenerateILFactor(self->arg, env, cctx);
 	GenerateILFactor(self->receiver, env, cctx);
 	AddOpcodeBuf(env->Bytecode, OP_INVOKEOPERATOR);
 	AddOpcodeBuf(env->Bytecode, self->index);
 }
 
-void LoadILExplicitBinaryOp(il_factor_explicit_binary_op* self, Enviroment* env, call_context* cctx) {
+void LoadILExplicitBinaryOp(il_factor_explicit_binary_op* self, Enviroment* env, CallContext* cctx) {
 	LoadILFactor(self->receiver, env, cctx);
 	LoadILFactor(self->arg, env, cctx);
 	self->index = GetIndexILBinaryOp2(self->receiver, self->arg, self->type, env, cctx);
 	assert(self->index != -1);
 }
 
-generic_type* EvalILExplicitBinaryOp(il_factor_explicit_binary_op* self, Enviroment* env, call_context* cctx) {
+generic_type* EvalILExplicitBinaryOp(il_factor_explicit_binary_op* self, Enviroment* env, CallContext* cctx) {
 	generic_type* gt = EvalILFactor(self->receiver, env, cctx);
 	operator_overload* operator_ov = GetOperatorOverloadClass(TYPE2CLASS(GENERIC2TYPE(gt)), self->index);
 	return operator_ov->return_gtype;

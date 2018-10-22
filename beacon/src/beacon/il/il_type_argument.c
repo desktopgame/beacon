@@ -28,7 +28,7 @@ void PrintILTypeArgument(Vector* iltype_args) {
 	printf("<");
 }
 
-void ResolveILTypeArgument(Vector* iltype_args, call_context* cctx) {
+void ResolveILTypeArgument(Vector* iltype_args, CallContext* cctx) {
 	for(int i=0; i<iltype_args->Length; i++) {
 		il_type_argument* e = (il_type_argument*)AtVector(iltype_args, i);
 		if(e->gtype == NULL) {

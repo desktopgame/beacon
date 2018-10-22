@@ -14,9 +14,9 @@
 #include <stdio.h>
 
 static void DeleteILVariableLocal_typeargs(VectorItem item);
-static void LoadILVariableLocalImpl(il_factor_variable_local * self, Enviroment * env, call_context* cctx);
-static void LoadILVariableLocal_field(il_factor_variable_local * self, Enviroment * env, call_context* cctx);
-static void LoadILVariableLocal_property(il_factor_variable_local * self, Enviroment * env, call_context* cctx);
+static void LoadILVariableLocalImpl(il_factor_variable_local * self, Enviroment * env, CallContext* cctx);
+static void LoadILVariableLocal_field(il_factor_variable_local * self, Enviroment * env, CallContext* cctx);
+static void LoadILVariableLocal_property(il_factor_variable_local * self, Enviroment * env, CallContext* cctx);
 static void set_gtype(il_factor_variable_local * self, generic_type* gt);
 
 il_factor_variable_local* NewILVariableLocal(StringView namev) {
@@ -28,7 +28,7 @@ il_factor_variable_local* NewILVariableLocal(StringView namev) {
 	return ret;
 }
 
-void GenerateILVariableLocal(il_factor_variable_local* self, Enviroment* env, call_context* cctx) {
+void GenerateILVariableLocal(il_factor_variable_local* self, Enviroment* env, CallContext* cctx) {
 	LoadILVariableLocal(self, env, cctx);
 	assert(self->type != VARIABLE_LOCAL_UNDEFINED_T);
 	if(self->type == VARIABLE_LOCAL_SCOPE_T) {
@@ -57,14 +57,14 @@ void GenerateILVariableLocal(il_factor_variable_local* self, Enviroment* env, ca
 	}
 }
 
-void LoadILVariableLocal(il_factor_variable_local * self, Enviroment * env, call_context* cctx) {
+void LoadILVariableLocal(il_factor_variable_local * self, Enviroment * env, CallContext* cctx) {
 	if(self->type != VARIABLE_LOCAL_UNDEFINED_T) {
 		return;
 	}
 	LoadILVariableLocalImpl(self, env, cctx);
 }
 
-generic_type* EvalILVariableLocal(il_factor_variable_local * self, Enviroment * env, call_context* cctx) {
+generic_type* EvalILVariableLocal(il_factor_variable_local * self, Enviroment * env, CallContext* cctx) {
 	LoadILVariableLocal(self, env, cctx);
 	assert(self->type != VARIABLE_LOCAL_UNDEFINED_T);
 	return self->gt;
@@ -85,7 +85,7 @@ static void DeleteILVariableLocal_typeargs(VectorItem item) {
 	DeleteILTypeArgument(e);
 }
 
-static void LoadILVariableLocalImpl(il_factor_variable_local * self, Enviroment * env, call_context* cctx) {
+static void LoadILVariableLocalImpl(il_factor_variable_local * self, Enviroment * env, CallContext* cctx) {
 	//NOTE:変数宣言の後にその変数を使用する場合、
 	//factorはload時点でシンボルエントリーを取得しようとするが、
 	//stmtはgenerate時点でシンボルテーブルへ書き込むので、
@@ -102,7 +102,7 @@ static void LoadILVariableLocalImpl(il_factor_variable_local * self, Enviroment 
 	}
 }
 
-static void LoadILVariableLocal_field(il_factor_variable_local * self, Enviroment * env, call_context* cctx) {
+static void LoadILVariableLocal_field(il_factor_variable_local * self, Enviroment * env, CallContext* cctx) {
 	//対応するフィールドを検索
 	self->type = VARIABLE_LOCAL_FIELD_T;
 	//NOTE:トップレベルではここが空なので、
@@ -140,7 +140,7 @@ static void LoadILVariableLocal_field(il_factor_variable_local * self, Enviromen
 	set_gtype(self, f->gtype);
 }
 
-static void LoadILVariableLocal_property(il_factor_variable_local * self, Enviroment * env, call_context* cctx) {
+static void LoadILVariableLocal_property(il_factor_variable_local * self, Enviroment * env, CallContext* cctx) {
 	int temp = -1;
 	type* tp = GetTypeCContext(cctx);
 	property* p = FindTreePropertyClass(TYPE2CLASS(tp), self->namev, &temp);

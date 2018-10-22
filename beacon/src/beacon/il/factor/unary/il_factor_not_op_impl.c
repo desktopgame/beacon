@@ -17,11 +17,11 @@ il_factor_not_op* NewILNotOp(OperatorType type) {
 	return ret;
 }
 
-generic_type* EvalILNotOp(il_factor_not_op * self, Enviroment * env, call_context* cctx) {
+generic_type* EvalILNotOp(il_factor_not_op * self, Enviroment * env, CallContext* cctx) {
 	return TYPE2GENERIC(TYPE_BOOL);
 }
 
-void GenerateILNotOp(il_factor_not_op* self, Enviroment* env, call_context* cctx) {
+void GenerateILNotOp(il_factor_not_op* self, Enviroment* env, CallContext* cctx) {
 	if(self->operator_index == -1) {
 		GenerateILFactor(self->parent->a, env, cctx);
 		if(GetLastBCError()) {
@@ -40,7 +40,7 @@ void GenerateILNotOp(il_factor_not_op* self, Enviroment* env, call_context* cctx
 	}
 }
 
-void LoadILNotOp(il_factor_not_op* self, Enviroment* env, call_context* cctx) {
+void LoadILNotOp(il_factor_not_op* self, Enviroment* env, CallContext* cctx) {
 	 LoadILFactor(self->parent->a, env, cctx);
 	generic_type* gt = EvalILFactor(self->parent->a, env, cctx);
 	if(GENERIC2TYPE(gt) != TYPE_BOOL) {

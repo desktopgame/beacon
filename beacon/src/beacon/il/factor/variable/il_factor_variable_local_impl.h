@@ -43,11 +43,11 @@ typedef struct il_factor_variable_local {
 
 il_factor_variable_local* NewILVariableLocal(StringView namev);
 
-void GenerateILVariableLocal(il_factor_variable_local* self, Enviroment* env, call_context* cctx);
+void GenerateILVariableLocal(il_factor_variable_local* self, Enviroment* env, CallContext* cctx);
 
-void LoadILVariableLocal(il_factor_variable_local * self, Enviroment * env, call_context* cctx);
+void LoadILVariableLocal(il_factor_variable_local * self, Enviroment * env, CallContext* cctx);
 
-struct generic_type* EvalILVariableLocal(il_factor_variable_local * self, Enviroment * env, call_context* cctx);
+struct generic_type* EvalILVariableLocal(il_factor_variable_local * self, Enviroment * env, CallContext* cctx);
 
 char* ILVariableLocalToString(il_factor_variable_local * self, Enviroment * env);
 

@@ -13,11 +13,11 @@ typedef struct il_factor_shift_op {
 
 il_factor_shift_op* NewILShiftOp(OperatorType type);
 
-struct generic_type* EvalILShiftOp(il_factor_shift_op * self, struct Enviroment* env, call_context* cctx);
+struct generic_type* EvalILShiftOp(il_factor_shift_op * self, struct Enviroment* env, CallContext* cctx);
 
-void GenerateILShiftOp(il_factor_shift_op* self, struct Enviroment* env, call_context* cctx);
+void GenerateILShiftOp(il_factor_shift_op* self, struct Enviroment* env, CallContext* cctx);
 
-void LoadILShiftOp(il_factor_shift_op* self, struct Enviroment* env, call_context* cctx);
+void LoadILShiftOp(il_factor_shift_op* self, struct Enviroment* env, CallContext* cctx);
 
 void DeleteILShiftOp(il_factor_shift_op* self);
 

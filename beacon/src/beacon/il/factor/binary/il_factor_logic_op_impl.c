@@ -20,7 +20,7 @@ il_factor_logic_op* NewILLogicOp(OperatorType type) {
 	return ret;
 }
 
-generic_type* EvalILLogicOp(il_factor_logic_op* self, Enviroment* env, call_context* cctx) {
+generic_type* EvalILLogicOp(il_factor_logic_op* self, Enviroment* env, CallContext* cctx) {
 	if(IsIntIntBinaryOp(self->parent, env, cctx)) {
 		return TYPE2GENERIC(TYPE_INT);
 	} else if(IsBoolBoolBinaryOp(self->parent, env, cctx)) {
@@ -41,7 +41,7 @@ generic_type* EvalILLogicOp(il_factor_logic_op* self, Enviroment* env, call_cont
 	}
 }
 
-void GenerateILLogicOp(il_factor_logic_op* self, Enviroment* env, call_context* cctx) {
+void GenerateILLogicOp(il_factor_logic_op* self, Enviroment* env, CallContext* cctx) {
 	if(self->operator_index == -1) {
 		GenerateILFactor(self->parent->right, env, cctx);
 		GenerateILFactor(self->parent->left, env, cctx);
@@ -60,7 +60,7 @@ void GenerateILLogicOp(il_factor_logic_op* self, Enviroment* env, call_context* 
 	}
 }
 
-void LoadILLogicOp(il_factor_logic_op* self, Enviroment* env, call_context* cctx) {
+void LoadILLogicOp(il_factor_logic_op* self, Enviroment* env, CallContext* cctx) {
 	if(!IsIntIntBinaryOp(self->parent, env, cctx) &&
 	   !IsBoolBoolBinaryOp(self->parent, env, cctx)) {
 	self->operator_index = GetIndexILBinaryOp(self->parent, env, cctx);

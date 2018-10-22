@@ -36,7 +36,7 @@ il_stmt_inferenced_type_init* NewILInferencedTypeInit(StringView namev);
  * @param env
  * @param cctx
  */
-void GenerateILInferencedTypeInit(il_stmt_inferenced_type_init* self, Enviroment* env, call_context* cctx);
+void GenerateILInferencedTypeInit(il_stmt_inferenced_type_init* self, Enviroment* env, CallContext* cctx);
 
 /**
  * 推論された型の初期化を表す要素を読み込みます.
@@ -44,7 +44,7 @@ void GenerateILInferencedTypeInit(il_stmt_inferenced_type_init* self, Enviroment
  * @param env
  * @param cctx
  */
-void LoadILInferencedTypeInit(il_stmt_inferenced_type_init* self, Enviroment* env, call_context* cctx);
+void LoadILInferencedTypeInit(il_stmt_inferenced_type_init* self, Enviroment* env, CallContext* cctx);
 
 /**
  * 推論された型の初期化を表す要素を開放します.

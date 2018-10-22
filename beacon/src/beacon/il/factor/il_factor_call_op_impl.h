@@ -39,13 +39,13 @@ il_factor* WrapCallOp(il_factor_call_op* self);
 
 il_factor_call_op* NewILCallOp();
 
-void LoadCallOp(il_factor_call_op* self, Enviroment* env, call_context* cctx);
+void LoadCallOp(il_factor_call_op* self, Enviroment* env, CallContext* cctx);
 
-struct generic_type* EvalILCallOp(il_factor_call_op* self, Enviroment* env, call_context* cctx);
+struct generic_type* EvalILCallOp(il_factor_call_op* self, Enviroment* env, CallContext* cctx);
 
 char* ILCallOpToString(il_factor_call_op* self, Enviroment* env);
 
-void GenerateILCallOp(il_factor_call_op* self, Enviroment* env, call_context* cctx);
+void GenerateILCallOp(il_factor_call_op* self, Enviroment* env, CallContext* cctx);
 
 void DeleteILCallOp(il_factor_call_op* self);
 

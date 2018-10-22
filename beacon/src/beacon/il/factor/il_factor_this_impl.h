@@ -14,11 +14,11 @@ typedef struct il_factor_this {
 
 il_factor_this* NewILThis();
 
-void GenerateILThis(il_factor_this* self, struct Enviroment* env, call_context* cctx);
+void GenerateILThis(il_factor_this* self, struct Enviroment* env, CallContext* cctx);
 
-void LoadILThis(il_factor_this* self, struct Enviroment* env, call_context* cctx);
+void LoadILThis(il_factor_this* self, struct Enviroment* env, CallContext* cctx);
 
-generic_type* EvalILThis(il_factor_this* self, struct Enviroment* env, call_context* cctx);
+generic_type* EvalILThis(il_factor_this* self, struct Enviroment* env, CallContext* cctx);
 
 char* ILThisToString(il_factor_this* self, struct Enviroment* env);
 

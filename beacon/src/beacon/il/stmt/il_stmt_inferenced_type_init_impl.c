@@ -20,14 +20,14 @@ il_stmt_inferenced_type_init * NewILInferencedTypeInit(StringView namev) {
 	return ret;
 }
 
-void GenerateILInferencedTypeInit(il_stmt_inferenced_type_init * self, Enviroment * env, call_context* cctx) {
+void GenerateILInferencedTypeInit(il_stmt_inferenced_type_init * self, Enviroment * env, CallContext* cctx) {
 	//右辺の方で宣言する
 	GenerateILFactor(self->fact, env, cctx);
 	AddOpcodeBuf(env->Bytecode, OP_STORE);
 	AddOpcodeBuf(env->Bytecode, self->sym->index);
 }
 
-void LoadILInferencedTypeInit(il_stmt_inferenced_type_init * self, Enviroment * env, call_context* cctx) {
+void LoadILInferencedTypeInit(il_stmt_inferenced_type_init * self, Enviroment * env, CallContext* cctx) {
 	//代入するオブジェクトを計算
 	LoadILFactor(self->fact, env, cctx);
 	generic_type* gtp = EvalILFactor(self->fact, env, cctx);

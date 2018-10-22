@@ -19,13 +19,13 @@ il_stmt_inject_jni* NewILInjectJNI(StringView namev) {
 	return ret;
 }
 
-void GenerateILInjectJNI(il_stmt_inject_jni* self, Enviroment* env, call_context* cctx) {
+void GenerateILInjectJNI(il_stmt_inject_jni* self, Enviroment* env, CallContext* cctx) {
 	GenerateILFactor(self->fact, env, cctx);
 	AddOpcodeBuf(env->Bytecode, OP_STORE);
 	AddOpcodeBuf(env->Bytecode, self->se->index);
 }
 
-void LoadILInjectJNI(il_stmt_inject_jni * self, Enviroment* env, call_context* cctx) {
+void LoadILInjectJNI(il_stmt_inject_jni * self, Enviroment* env, CallContext* cctx) {
 	if(self->se != NULL) {
 		return;
 	}

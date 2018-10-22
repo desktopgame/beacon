@@ -858,7 +858,7 @@ static void vm_run(frame * self, Enviroment * env, int pos, int deferStart) {
 					break;
 				}
 				method* m = GetImplMethodClass(o->gtype->core_type->u.class_, tp, methodIndex);
-				call_context* cctx = GetSGThreadCContext();
+				CallContext* cctx = GetSGThreadCContext();
 				ExecuteMethod(m, self, env);
 				break;
 			}

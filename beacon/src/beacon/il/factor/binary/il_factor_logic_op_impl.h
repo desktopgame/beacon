@@ -14,11 +14,11 @@ typedef struct il_factor_logic_op {
 
 il_factor_logic_op* NewILLogicOp(OperatorType type);
 
-struct generic_type* EvalILLogicOp(il_factor_logic_op* self, struct Enviroment* env, call_context* cctx);
+struct generic_type* EvalILLogicOp(il_factor_logic_op* self, struct Enviroment* env, CallContext* cctx);
 
-void GenerateILLogicOp(il_factor_logic_op* self, struct Enviroment* env, call_context* cctx);
+void GenerateILLogicOp(il_factor_logic_op* self, struct Enviroment* env, CallContext* cctx);
 
-void LoadILLogicOp(il_factor_logic_op* self, struct Enviroment* env, call_context* cctx);
+void LoadILLogicOp(il_factor_logic_op* self, struct Enviroment* env, CallContext* cctx);
 
 void DeleteILLogicOp(il_factor_logic_op* self);
 

@@ -20,7 +20,7 @@ il_factor_shift_op* NewILShiftOp(OperatorType type) {
 	return ret;
 }
 
-generic_type* EvalILShiftOp(il_factor_shift_op * self, Enviroment* env, call_context* cctx) {
+generic_type* EvalILShiftOp(il_factor_shift_op * self, Enviroment* env, CallContext* cctx) {
 	generic_type* lgtype = EvalILFactor(self->parent->left, env, cctx);
 	generic_type* rgtype = EvalILFactor(self->parent->right, env, cctx);
 	assert(lgtype != NULL);
@@ -46,7 +46,7 @@ generic_type* EvalILShiftOp(il_factor_shift_op * self, Enviroment* env, call_con
 	return ApplyILBinaryOp(self->parent, operator_ov->return_gtype, env, cctx);
 }
 
-void GenerateILShiftOp(il_factor_shift_op* self, Enviroment* env, call_context* cctx) {
+void GenerateILShiftOp(il_factor_shift_op* self, Enviroment* env, CallContext* cctx) {
 	if(self->operator_index == -1) {
 		GenerateILFactor(self->parent->right, env, cctx);
 		GenerateILFactor(self->parent->left, env, cctx);
@@ -66,7 +66,7 @@ void GenerateILShiftOp(il_factor_shift_op* self, Enviroment* env, call_context* 
 	}
 }
 
-void LoadILShiftOp(il_factor_shift_op* self, Enviroment* env, call_context* cctx) {
+void LoadILShiftOp(il_factor_shift_op* self, Enviroment* env, CallContext* cctx) {
 	if(!IsIntIntBinaryOp(self->parent, env, cctx)) {
 		self->operator_index = GetIndexILBinaryOp(self->parent, env, cctx);
 	}

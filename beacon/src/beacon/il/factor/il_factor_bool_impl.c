@@ -17,7 +17,7 @@ il_factor_bool * NewILBool(bool b) {
 	return ret;
 }
 
-void GenerateILBool(il_factor_bool * self, Enviroment * env, call_context* cctx) {
+void GenerateILBool(il_factor_bool * self, Enviroment * env, CallContext* cctx) {
 	if (self->a) {
 		AddOpcodeBuf(env->Bytecode, OP_TRUE);
 	} else {
@@ -25,7 +25,7 @@ void GenerateILBool(il_factor_bool * self, Enviroment * env, call_context* cctx)
 	}
 }
 
-generic_type* EvalILBool(il_factor_bool * self, Enviroment * env, call_context* cctx) {
+generic_type* EvalILBool(il_factor_bool * self, Enviroment * env, CallContext* cctx) {
 	return GENERIC_BOOL;
 }
 

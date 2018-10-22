@@ -26,11 +26,11 @@ il_factor* WrapILNewInstance(il_factor_new_instance* self);
 
 il_factor_new_instance* NewILNewInstance();
 
-void GenerateILNewInstance(il_factor_new_instance* self, Enviroment* env, call_context* cctx);
+void GenerateILNewInstance(il_factor_new_instance* self, Enviroment* env, CallContext* cctx);
 
-void LoadILNewInstance(il_factor_new_instance* self, Enviroment* env, call_context* cctx);
+void LoadILNewInstance(il_factor_new_instance* self, Enviroment* env, CallContext* cctx);
 
-generic_type* EvalILNewInstance(il_factor_new_instance* self, Enviroment* env, call_context* cctx);
+generic_type* EvalILNewInstance(il_factor_new_instance* self, Enviroment* env, CallContext* cctx);
 
 char* ILNewInstanceToString(il_factor_new_instance* self, Enviroment* env);
 

@@ -24,7 +24,7 @@ il_stmt_variable_init * NewILVariableInit(StringView namev) {
 	return ret;
 }
 
-void GenerateILVariableInit(il_stmt_variable_init * self, Enviroment * env, call_context* cctx) {
+void GenerateILVariableInit(il_stmt_variable_init * self, Enviroment * env, CallContext* cctx) {
 	GenerateILFactor(self->fact, env, cctx);
 	//宣言型と代入型が異なる場合
 	generic_type* ga = EvalILFactor(self->fact, env, cctx);
@@ -47,7 +47,7 @@ void GenerateILVariableInit(il_stmt_variable_init * self, Enviroment * env, call
 	AddOpcodeBuf(env->Bytecode, self->sym->index);
 }
 
-void LoadILVariableInit(il_stmt_variable_init * self, Enviroment * env, call_context* cctx) {
+void LoadILVariableInit(il_stmt_variable_init * self, Enviroment * env, CallContext* cctx) {
 	LoadILFactor(self->fact, env, cctx);
 	if(IsContainsSymbol(env->Symboles, self->namev)) {
 		ThrowBCError(BCERROR_OVERWRAP_VARIABLE_NAME_T,

@@ -12,11 +12,11 @@ typedef struct il_factor_variable_static {
 
 il_factor_variable_static* NewILVariableStatic();
 
-void GenerateILVariableStatic(il_factor_variable_static* self, Enviroment* env, call_context* cctx);
+void GenerateILVariableStatic(il_factor_variable_static* self, Enviroment* env, CallContext* cctx);
 
-void LoadILVariableStatic(il_factor_variable_static * self, Enviroment * env, call_context* cctx);
+void LoadILVariableStatic(il_factor_variable_static * self, Enviroment * env, CallContext* cctx);
 
-struct generic_type* EvalILVariableStatic(il_factor_variable_static * self, Enviroment * env, call_context* cctx);
+struct generic_type* EvalILVariableStatic(il_factor_variable_static * self, Enviroment * env, CallContext* cctx);
 
 char* ILVariableStaticToString(il_factor_variable_static * self, Enviroment * env);
 

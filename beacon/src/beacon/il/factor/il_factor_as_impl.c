@@ -23,7 +23,7 @@ il_factor_as * NewILAs() {
 	return ret;
 }
 
-void GenerateILAs(il_factor_as * self, Enviroment * env, call_context* cctx) {
+void GenerateILAs(il_factor_as * self, Enviroment * env, CallContext* cctx) {
 	GenerateILFactor(self->fact, env, cctx);
 	AddOpcodeBuf(env->Bytecode, OP_GENERIC_ADD);
 	GenerateGenericType(self->gtype, env);
@@ -34,7 +34,7 @@ void GenerateILAs(il_factor_as * self, Enviroment * env, call_context* cctx) {
 	}
 }
 
-void LoadILAs(il_factor_as * self, Enviroment * env, call_context* cctx) {
+void LoadILAs(il_factor_as * self, Enviroment * env, CallContext* cctx) {
 	if(self->gtype != NULL) {
 		return;
 	}
@@ -73,7 +73,7 @@ void LoadILAs(il_factor_as * self, Enviroment * env, call_context* cctx) {
 	}
 }
 
-generic_type* EvalILAs(il_factor_as * self, Enviroment * env, call_context* cctx) {
+generic_type* EvalILAs(il_factor_as * self, Enviroment * env, CallContext* cctx) {
 	LoadILAs(self, env, cctx);
 	return self->gtype;
 }

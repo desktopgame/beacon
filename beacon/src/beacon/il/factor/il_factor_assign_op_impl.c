@@ -10,17 +10,17 @@
 #include "../../il/il_argument.h"
 #include "../../env/field.h"
 
-static void assign_by_namebase(il_factor_assign_op* self, Enviroment* env, call_context* cctx);
-static void assign_to_field(il_factor_assign_op* self,il_factor* receiver, il_factor* source, StringView namev, Enviroment* env, call_context* cctx);
-static void assign_to_property(il_factor_assign_op* self, Enviroment* env, call_context* cctx);
-static void assign_to_array(il_factor_assign_op* self, Enviroment* env, call_context* cctx);
-static void assign_by_call(il_factor_assign_op* self, Enviroment* env, call_context* cctx);
-static void assign_by_invoke(il_factor_invoke* lhs, il_factor* rhs, Enviroment* env, call_context* cctx);
-static void assign_by_invoke_bound(il_factor_invoke_bound* lhs, il_factor* rhs, Enviroment* env, call_context* cctx);
-static void check_final(il_factor* receiver, il_factor* source, StringView namev, Enviroment* env, call_context* cctx);
-static bool can_assign_to_field(field* f, il_factor_assign_op* self, Enviroment* env, call_context* cctx);
-static void generate_assign_to_variable(il_factor_assign_op* self, Enviroment* env, call_context* cctx);
-static void generate_assign_to_variable_local(il_factor_assign_op* self, Enviroment* env, call_context* cctx);
+static void assign_by_namebase(il_factor_assign_op* self, Enviroment* env, CallContext* cctx);
+static void assign_to_field(il_factor_assign_op* self,il_factor* receiver, il_factor* source, StringView namev, Enviroment* env, CallContext* cctx);
+static void assign_to_property(il_factor_assign_op* self, Enviroment* env, CallContext* cctx);
+static void assign_to_array(il_factor_assign_op* self, Enviroment* env, CallContext* cctx);
+static void assign_by_call(il_factor_assign_op* self, Enviroment* env, CallContext* cctx);
+static void assign_by_invoke(il_factor_invoke* lhs, il_factor* rhs, Enviroment* env, CallContext* cctx);
+static void assign_by_invoke_bound(il_factor_invoke_bound* lhs, il_factor* rhs, Enviroment* env, CallContext* cctx);
+static void check_final(il_factor* receiver, il_factor* source, StringView namev, Enviroment* env, CallContext* cctx);
+static bool can_assign_to_field(field* f, il_factor_assign_op* self, Enviroment* env, CallContext* cctx);
+static void generate_assign_to_variable(il_factor_assign_op* self, Enviroment* env, CallContext* cctx);
+static void generate_assign_to_variable_local(il_factor_assign_op* self, Enviroment* env, CallContext* cctx);
 
 il_factor* WrapILAssignOp(il_factor_assign_op* self) {
 	il_factor* ret = il_factor_new(ILFACTOR_ASSIGN_T);
@@ -35,7 +35,7 @@ il_factor_assign_op* NewILAssignOp() {
 	return ret;
 }
 
-void LoadILAssignOp(il_factor_assign_op* self, Enviroment* env, call_context* cctx) {
+void LoadILAssignOp(il_factor_assign_op* self, Enviroment* env, CallContext* cctx) {
 	LoadILFactor(self->left, env, cctx);
 	LoadILFactor(self->right, env, cctx);
 	//voidは代入できない
@@ -48,7 +48,7 @@ void LoadILAssignOp(il_factor_assign_op* self, Enviroment* env, call_context* cc
 	}
 }
 
-void GenerateILAssignOp(il_factor_assign_op* self, Enviroment* env, call_context* cctx) {
+void GenerateILAssignOp(il_factor_assign_op* self, Enviroment* env, CallContext* cctx) {
 	if(self->left->type == ILFACTOR_VARIABLE_T) {
 		generate_assign_to_variable(self, env, cctx);
 		//NOTE:constかどうかの検査
@@ -73,7 +73,7 @@ void GenerateILAssignOp(il_factor_assign_op* self, Enviroment* env, call_context
 	}
 }
 
-generic_type* EvalILAssignOp(il_factor_assign_op* self, Enviroment* env, call_context* cctx) {
+generic_type* EvalILAssignOp(il_factor_assign_op* self, Enviroment* env, CallContext* cctx) {
 	return EvalILFactor(self->right, env, cctx);
 }
 
@@ -83,7 +83,7 @@ void DeleteILAssignOp(il_factor_assign_op* self) {
 	MEM_FREE(self);
 }
 //private
-static void assign_by_namebase(il_factor_assign_op* self, Enviroment* env, call_context* cctx) {
+static void assign_by_namebase(il_factor_assign_op* self, Enviroment* env, CallContext* cctx) {
 	il_factor_member_op* ilmem = self->left->u.member_;
 	il_factor* ilsrc = ilmem->fact;
 	il_factor_variable* ilvar = ilsrc->u.variable_;
@@ -120,7 +120,7 @@ static void assign_by_namebase(il_factor_assign_op* self, Enviroment* env, call_
 	}
 }
 
-static void assign_to_field(il_factor_assign_op* self, il_factor* receiver, il_factor* source, StringView namev, Enviroment* env, call_context* cctx) {
+static void assign_to_field(il_factor_assign_op* self, il_factor* receiver, il_factor* source, StringView namev, Enviroment* env, CallContext* cctx) {
 	generic_type* gt = EvalILFactor(receiver, env, cctx);
 	class_* cls = TYPE2CLASS(gt->core_type);
 	int temp = -1;
@@ -143,7 +143,7 @@ static void assign_to_field(il_factor_assign_op* self, il_factor* receiver, il_f
 	check_final(receiver, source, namev, env, cctx);
 }
 
-static void assign_to_property(il_factor_assign_op* self, Enviroment* env, call_context* cctx) {
+static void assign_to_property(il_factor_assign_op* self, Enviroment* env, CallContext* cctx) {
 	il_factor_property* prop = self->left->u.prop;
 	property* pp = prop->p;
 	bool is_static = IsStaticModifier(prop->p->modifier);
@@ -182,7 +182,7 @@ static void assign_to_property(il_factor_assign_op* self, Enviroment* env, call_
 	GeneratePutProperty(env->Bytecode, pp, prop->index);
 }
 
-static void assign_to_array(il_factor_assign_op* self, Enviroment* env, call_context* cctx) {
+static void assign_to_array(il_factor_assign_op* self, Enviroment* env, CallContext* cctx) {
 	il_factor_subscript* subs = self->left->u.subscript;
 	GenerateILFactor(subs->receiver, env, cctx);
 	GenerateILFactor(subs->pos, env, cctx);
@@ -190,7 +190,7 @@ static void assign_to_array(il_factor_assign_op* self, Enviroment* env, call_con
 	AddOpcodeBuf(env->Bytecode, subs->operator_index);
 }
 
-static void assign_by_call(il_factor_assign_op* self, Enviroment* env, call_context* cctx) {
+static void assign_by_call(il_factor_assign_op* self, Enviroment* env, CallContext* cctx) {
 	il_factor_call_op* call = self->left->u.call_;
 	if(call->type == ILCALL_TYPE_INVOKE_STATIC_T) {
 		ThrowBCError(
@@ -208,7 +208,7 @@ static void assign_by_call(il_factor_assign_op* self, Enviroment* env, call_cont
 	}
 }
 
-static void assign_by_invoke(il_factor_invoke* lhs, il_factor* rhs, Enviroment* env, call_context* cctx) {
+static void assign_by_invoke(il_factor_invoke* lhs, il_factor* rhs, Enviroment* env, CallContext* cctx) {
 	int temp = -1;
 	if(lhs->tag != INSTANCE_INVOKE_SUBSCRIPT_T) {
 		ThrowBCError(BCERROR_ASSIGN_TO_INVOKE_T,
@@ -228,7 +228,7 @@ static void assign_by_invoke(il_factor_invoke* lhs, il_factor* rhs, Enviroment* 
 	AddOpcodeBuf(env->Bytecode, OP_NOP);
 }
 
-static void assign_by_invoke_bound(il_factor_invoke_bound* lhs, il_factor* rhs, Enviroment* env, call_context* cctx) {
+static void assign_by_invoke_bound(il_factor_invoke_bound* lhs, il_factor* rhs, Enviroment* env, CallContext* cctx) {
 	int temp = -1;
 	FindSetILInvokeBound(lhs, rhs, env, cctx, &temp);
 	assert(lhs->args->Length == 1);
@@ -253,7 +253,7 @@ static void assign_by_invoke_bound(il_factor_invoke_bound* lhs, il_factor* rhs, 
 	AddOpcodeBuf(env->Bytecode, temp);
 }
 
-static bool can_assign_to_field(field* f, il_factor_assign_op* self, Enviroment* env, call_context* cctx) {
+static bool can_assign_to_field(field* f, il_factor_assign_op* self, Enviroment* env, CallContext* cctx) {
 	generic_type* gt = EvalILFactor(self->right, env, cctx);
 	int dist = DistanceGenericType(f->gtype, gt, cctx);
 	if(dist >= 0) {
@@ -267,7 +267,7 @@ static bool can_assign_to_field(field* f, il_factor_assign_op* self, Enviroment*
 	}
 }
 
-static void check_final(il_factor* receiver, il_factor* source, StringView namev, Enviroment* env, call_context* cctx) {
+static void check_final(il_factor* receiver, il_factor* source, StringView namev, Enviroment* env, CallContext* cctx) {
 	generic_type* gt = EvalILFactor(receiver, env, cctx);
 	class_* cls = TYPE2CLASS(gt->core_type);
 	int temp = -1;
@@ -296,7 +296,7 @@ static void check_final(il_factor* receiver, il_factor* source, StringView namev
 
 }
 
-static void generate_assign_to_variable(il_factor_assign_op* self, Enviroment* env, call_context* cctx) {
+static void generate_assign_to_variable(il_factor_assign_op* self, Enviroment* env, CallContext* cctx) {
 	assert(self->left->type == ILFACTOR_VARIABLE_T);
 	il_factor_variable* ilvar = self->left->u.variable_;
 	if(ilvar->type == ILVARIABLE_TYPE_LOCAL_T) {
@@ -304,7 +304,7 @@ static void generate_assign_to_variable(il_factor_assign_op* self, Enviroment* e
 	}
 }
 
-static void generate_assign_to_variable_local(il_factor_assign_op* self, Enviroment* env, call_context* cctx) {
+static void generate_assign_to_variable_local(il_factor_assign_op* self, Enviroment* env, CallContext* cctx) {
 	il_factor_variable* ilvar = self->left->u.variable_;
 	il_factor_variable_local* illoc = ilvar->u.local_;
 	//src のような名前がローカル変数を示す場合

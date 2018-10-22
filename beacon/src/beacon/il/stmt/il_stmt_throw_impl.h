@@ -13,9 +13,9 @@ il_stmt* WrapILThrow(il_stmt_throw* self);
 
 il_stmt_throw* NewILThrow();
 
-void GenerateILThrow(il_stmt_throw* self, Enviroment* env, call_context* cctx);
+void GenerateILThrow(il_stmt_throw* self, Enviroment* env, CallContext* cctx);
 
-void LoadILThrow(il_stmt_throw* self, Enviroment* env, call_context* cctx);
+void LoadILThrow(il_stmt_throw* self, Enviroment* env, CallContext* cctx);
 
 void DeleteILThrow(il_stmt_throw* self);
 #endif

@@ -13,7 +13,7 @@ il_stmt* MallocILStmt(il_stmt_type type, const char* filename, int lineno) {
 	return ret;
 }
 
-void GenerateILStmt(il_stmt * self, Enviroment* env, call_context* cctx) {
+void GenerateILStmt(il_stmt * self, Enviroment* env, CallContext* cctx) {
 	if(GetLastBCError()) {
 		return;
 	}
@@ -80,7 +80,7 @@ void GenerateILStmt(il_stmt * self, Enviroment* env, call_context* cctx) {
 	AddRangeEnviroment(env, self->lineno);
 }
 
-void LoadILStmt(il_stmt * self, Enviroment* env, call_context* cctx) {
+void LoadILStmt(il_stmt * self, Enviroment* env, CallContext* cctx) {
 	if(GetLastBCError()) {
 		return;
 	}

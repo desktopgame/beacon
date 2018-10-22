@@ -14,11 +14,11 @@ typedef struct il_factor_childa_op {
 
 il_factor_childa_op* NewILChildaOp(OperatorType type);
 
-struct generic_type* EvalILChildaOp(il_factor_childa_op * self, struct Enviroment * env, call_context* cctx);
+struct generic_type* EvalILChildaOp(il_factor_childa_op * self, struct Enviroment * env, CallContext* cctx);
 
-void GenerateILChildaOp(il_factor_childa_op* self, struct Enviroment* env, call_context* cctx);
+void GenerateILChildaOp(il_factor_childa_op* self, struct Enviroment* env, CallContext* cctx);
 
-void LoadILChildaOp(il_factor_childa_op* self, struct Enviroment* env, call_context* cctx);
+void LoadILChildaOp(il_factor_childa_op* self, struct Enviroment* env, CallContext* cctx);
 
 void DeleteILChildaOp(il_factor_childa_op* self);
 

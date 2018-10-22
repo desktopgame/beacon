@@ -13,11 +13,11 @@ typedef struct il_factor_compare_op {
 
 il_factor_compare_op* NewILCompareOp(OperatorType type);
 
-struct generic_type* EvalILCompareOp(il_factor_compare_op * self, struct Enviroment * env, call_context* cctx);
+struct generic_type* EvalILCompareOp(il_factor_compare_op * self, struct Enviroment * env, CallContext* cctx);
 
-void GenerateILCompareOp(il_factor_compare_op* self, struct Enviroment* env, call_context* cctx);
+void GenerateILCompareOp(il_factor_compare_op* self, struct Enviroment* env, CallContext* cctx);
 
-void LoadILCompareOp(il_factor_compare_op* self, struct Enviroment* env, call_context* cctx);
+void LoadILCompareOp(il_factor_compare_op* self, struct Enviroment* env, CallContext* cctx);
 
 void DeleteILCompareOp(il_factor_compare_op* self);
 

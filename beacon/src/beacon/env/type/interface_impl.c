@@ -47,7 +47,7 @@ void AddPropertyInterface(interface_* self, property* p) {
 	PushVector(self->prop_list, p);
 }
 
-method * ILFindMethodInterface(interface_ * self, StringView namev, Vector * args, Enviroment * env, call_context* cctx, int * outIndex) {
+method * ILFindMethodInterface(interface_ * self, StringView namev, Vector * args, Enviroment * env, CallContext* cctx, int * outIndex) {
 	return MetaILFindMethod(self->method_list, namev, args, env,cctx, outIndex);
 }
 

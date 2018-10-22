@@ -65,7 +65,7 @@ void AddPropertyInterface(interface_* self, struct property* p);
  * @param outIndex
  * @return
  */
-struct method* ILFindMethodInterface(interface_* self, StringView namev, Vector * args, struct Enviroment * env, call_context* cctx, int * outIndex);
+struct method* ILFindMethodInterface(interface_* self, StringView namev, Vector * args, struct Enviroment * env, CallContext* cctx, int * outIndex);
 
 /**
  * インターフェイスからメソッドを検索します.

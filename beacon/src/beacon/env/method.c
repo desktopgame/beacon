@@ -88,7 +88,7 @@ void ExecuteMethod(method* self, frame * fr, Enviroment* env) {
 	}
 }
 
-bool IsOverridedMethod(method* superM, method* subM, call_context* cctx) {
+bool IsOverridedMethod(method* superM, method* subM, CallContext* cctx) {
 	//名前が違うか引数の数が違う
 	if (superM->namev != subM->namev ||
 		superM->parameters->Length != subM->parameters->Length) {
@@ -227,7 +227,7 @@ bool IsYieldMethod(method* self, Vector* stmt_list, bool* error) {
 }
 
 type* CreateIteratorTypeFromMethod(method* self,  class_loader* cll, Vector* stmt_list) {
-	call_context* lCctx = NewCallContext(CALL_CTOR_T);
+	CallContext* lCctx = NewCallContext(CALL_CTOR_T);
 	CallFrame* lCfr = PushCallContext(lCctx, FRAME_RESOLVE_T);
 	lCfr->Kind.Resolve.GType = self->return_gtype;
 	StringView iterName = GetMethodUniqueName(self);
@@ -381,7 +381,7 @@ static method* create_has_next(method* self, type* ty, class_loader* cll, Vector
 	mt->type = METHOD_TYPE_SCRIPT_T;
 	script_method* smt = NewScriptMethod();
 	Enviroment* envSmt = NewEnviroment();
-	call_context* cctx = NewCallContext(CALL_METHOD_T);
+	CallContext* cctx = NewCallContext(CALL_METHOD_T);
 	cctx->scope = self->parent->location;
 	cctx->ty = self->parent;
 	cctx->u.mt = self;
@@ -432,7 +432,7 @@ static method* create_next(method* self, type* ty, class_loader* cll,generic_typ
 	mt->type = METHOD_TYPE_SCRIPT_T;
 	script_method* smt = NewScriptMethod();
 	Enviroment* envSmt = NewEnviroment();
-	call_context* cctx = NewCallContext(CALL_METHOD_T);
+	CallContext* cctx = NewCallContext(CALL_METHOD_T);
 	cctx->scope = self->parent->location;
 	cctx->ty = self->parent;
 	cctx->u.mt = mt;

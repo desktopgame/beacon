@@ -8,7 +8,7 @@ il_stmt * WrapILContinue() {
 	return ret;
 }
 
-void GenerateILContinue(void * empty, Enviroment * env, call_context* cctx) {
+void GenerateILContinue(void * empty, Enviroment * env, CallContext* cctx) {
 	if(cctx->control.WhileStartTable->Length == 0) {
 		ThrowBCError(BCERROR_CONTINUE_AT_NOT_LOOP_T);
 		return;
@@ -18,7 +18,7 @@ void GenerateILContinue(void * empty, Enviroment * env, call_context* cctx) {
 	AddOpcodeBuf(env->Bytecode, lab);
 }
 
-void LoadILContinue(void * empty, Enviroment * env, call_context* cctx) {
+void LoadILContinue(void * empty, Enviroment * env, CallContext* cctx) {
 }
 
 void DeleteILContinue(void * empty) {

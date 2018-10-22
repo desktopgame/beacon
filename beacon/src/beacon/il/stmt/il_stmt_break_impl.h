@@ -7,9 +7,9 @@ struct Enviroment;
 
 il_stmt* WrapILBreak();
 
-void GenerateILBreak(void* empty, Enviroment* env, call_context* cctx);
+void GenerateILBreak(void* empty, Enviroment* env, CallContext* cctx);
 
-void LoadILBreak(void* empty, Enviroment* env, call_context* cctx);
+void LoadILBreak(void* empty, Enviroment* env, CallContext* cctx);
 
 void DeleteILBreak(void* empty);
 #endif // !SIGNAL_IL_IL_STMT_BREAK_H

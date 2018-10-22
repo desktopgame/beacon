@@ -426,7 +426,7 @@ static void CreateVTableClass_override(class_* self) {
 	#if defined(DEBUG)
 	const char* clname = Ref2Str(self->namev);
 	#endif
-	call_context* cctx = NewCallContext(CALL_DECL_T);
+	CallContext* cctx = NewCallContext(CALL_DECL_T);
 	cctx->scope = self->parent->location;
 	cctx->ty = self->super_class->core_type;
 	CreateVTableClass(self->super_class->core_type->u.class_);
@@ -509,7 +509,7 @@ static void class_DeleteNativeMethodRef(NumericMapKey key, NumericMapItem item) 
 }
 
 static method* class_find_impl_method(class_* self, method* virtualMethod) {
-	call_context* cctx = NewCallContext(CALL_DECL_T);
+	CallContext* cctx = NewCallContext(CALL_DECL_T);
 	cctx->scope = self->parent->location;
 	cctx->ty = self->parent;
 	method* ret = NULL;

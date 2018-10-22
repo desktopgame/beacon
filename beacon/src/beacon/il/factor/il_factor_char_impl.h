@@ -15,11 +15,11 @@ il_factor* WrapILChar(il_factor_char* self);
 
 il_factor_char* NewILChar(char c);
 
-void GenerateILChar(il_factor_char* self, Enviroment* env, call_context* cctx);
+void GenerateILChar(il_factor_char* self, Enviroment* env, CallContext* cctx);
 
-void LoadILChar(il_factor_char* self, Enviroment* env, call_context* cctx);
+void LoadILChar(il_factor_char* self, Enviroment* env, CallContext* cctx);
 
-generic_type* EvalILChar(il_factor_char* self, Enviroment* env, call_context* cctx);
+generic_type* EvalILChar(il_factor_char* self, Enviroment* env, CallContext* cctx);
 
 char* ILCharToString(il_factor_char* self, Enviroment* env);
 

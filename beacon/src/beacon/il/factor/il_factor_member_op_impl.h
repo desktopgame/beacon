@@ -25,11 +25,11 @@ il_factor* WrapILMemberOp(il_factor_member_op* self);
 
 il_factor_member_op* NewILMemberOp(StringView namev);
 
-void LoadILMemberOp(il_factor_member_op* self, Enviroment* env, call_context* cctx);
+void LoadILMemberOp(il_factor_member_op* self, Enviroment* env, CallContext* cctx);
 
-void GenerateILMemberOp(il_factor_member_op* self, Enviroment* env, call_context* cctx);
+void GenerateILMemberOp(il_factor_member_op* self, Enviroment* env, CallContext* cctx);
 
-generic_type* EvalILMemberOp(il_factor_member_op* self, Enviroment* env, call_context* cctx);
+generic_type* EvalILMemberOp(il_factor_member_op* self, Enviroment* env, CallContext* cctx);
 
 char* ILMemberOpToString(il_factor_member_op* self, Enviroment* env);
 

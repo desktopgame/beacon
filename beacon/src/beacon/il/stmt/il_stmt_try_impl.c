@@ -36,7 +36,7 @@ il_stmt_catch* NewILCatch(StringView namev) {
 	return ret;
 }
 
-void GenerateILTry(il_stmt_try* self, Enviroment* env, call_context* cctx) {
+void GenerateILTry(il_stmt_try* self, Enviroment* env, CallContext* cctx) {
 	Label* try_end = AddLabelOpcodeBuf(env->Bytecode, -1);
 	Label* catch_start = AddLabelOpcodeBuf(env->Bytecode, -1);
 	AddOpcodeBuf(env->Bytecode, OP_TRY_ENTER);
@@ -101,11 +101,11 @@ void GenerateILTry(il_stmt_try* self, Enviroment* env, call_context* cctx) {
 	try_end->Cursor = AddNOPOpcodeBuf(env->Bytecode);
 }
 
-void GenerateILCatch(il_stmt_catch* self, Enviroment* env, call_context* cctx) {
+void GenerateILCatch(il_stmt_catch* self, Enviroment* env, CallContext* cctx) {
 
 }
 
-void LoadILTry(il_stmt_try* self, Enviroment* env, call_context* cctx) {
+void LoadILTry(il_stmt_try* self, Enviroment* env, CallContext* cctx) {
 	for(int i=0; i<self->statement_list->Length; i++) {
 		il_stmt* e = (il_stmt*)AtVector(self->statement_list, i);
 		LoadILStmt(e, env, cctx);
@@ -116,7 +116,7 @@ void LoadILTry(il_stmt_try* self, Enviroment* env, call_context* cctx) {
 	}
 }
 
-void LoadILCatch(il_stmt_catch* self, Enviroment* env, call_context* cctx) {
+void LoadILCatch(il_stmt_catch* self, Enviroment* env, CallContext* cctx) {
 	generic_type* exgType = ResolveImportManager(NULL, self->fqcn, cctx);
 	EntrySymbolTable(env->Symboles, exgType, self->namev);
 	for(int i=0; i<self->statement_list->Length; i++) {

@@ -199,7 +199,7 @@ struct constructor* RFindConstructorClass(class_* self, Vector* args, Vector* ty
  * @param outIndex
  * @return 無ければ空
  */
-struct constructor* ILFindConstructorClass(class_* self, Vector* args, Enviroment* env, call_context* cctx, int* outIndex);
+struct constructor* ILFindConstructorClass(class_* self, Vector* args, Enviroment* env, CallContext* cctx, int* outIndex);
 
 /**
  * 引数が一つもないコンストラクタを検索して返します.
@@ -209,7 +209,7 @@ struct constructor* ILFindConstructorClass(class_* self, Vector* args, Enviromen
  * @param outIndex
  * @return
  */
-struct constructor* ILFindEmptyConstructorClass(class_* self, Enviroment* env, call_context* cctx, int* outIndex);
+struct constructor* ILFindEmptyConstructorClass(class_* self, Enviroment* env, CallContext* cctx, int* outIndex);
 
 /**
  * もっとも一致するメソッドを返します.
@@ -221,7 +221,7 @@ struct constructor* ILFindEmptyConstructorClass(class_* self, Enviroment* env, c
  * @param outIndex メソッドへのインデックス
  * @return
  */
-struct method* ILFindMethodClass(class_* self, StringView namev, Vector* args, Enviroment* env, call_context* cctx, int* outIndex);
+struct method* ILFindMethodClass(class_* self, StringView namev, Vector* args, Enviroment* env, CallContext* cctx, int* outIndex);
 
 /**
  * もっとも一致するメソッドを返します.
@@ -251,7 +251,7 @@ struct method* GFindEqMethodClass(class_* self, int* outIndex);
  * @param outIndex メソッドへのインデックス
  * @return
  */
-struct method* ILFindSMethodClass(class_* self, StringView namev, Vector* args, Enviroment* env, call_context* cctx, int* outIndex);
+struct method* ILFindSMethodClass(class_* self, StringView namev, Vector* args, Enviroment* env, CallContext* cctx, int* outIndex);
 
 /**
  * もっとも一致する静的メソッドを返します.
@@ -305,11 +305,11 @@ struct method* GetImplMethodClass(class_* self, type* interType, int interMIndex
  * @param outIndex
  * @return
  */
-struct operator_overload* GFindOperatorOverloadClass(class_* self, OperatorType type, Vector* args, Enviroment* env, call_context* cctx, int* outIndex);
+struct operator_overload* GFindOperatorOverloadClass(class_* self, OperatorType type, Vector* args, Enviroment* env, CallContext* cctx, int* outIndex);
 
-struct operator_overload* ILFindOperatorOverloadClass(class_* self, OperatorType type, Vector* args, Enviroment* env, call_context* cctx, int* outIndex);
+struct operator_overload* ILFindOperatorOverloadClass(class_* self, OperatorType type, Vector* args, Enviroment* env, CallContext* cctx, int* outIndex);
 
-struct operator_overload* ArgFindOperatorOverloadClass(class_* self, OperatorType type, Vector* args, Enviroment* env, call_context* cctx, int* outIndex);
+struct operator_overload* ArgFindOperatorOverloadClass(class_* self, OperatorType type, Vector* args, Enviroment* env, CallContext* cctx, int* outIndex);
 
 /**
  * @param self

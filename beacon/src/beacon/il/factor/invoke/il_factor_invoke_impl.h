@@ -30,15 +30,15 @@ typedef struct il_factor_invoke {
 
 il_factor_invoke* NewILInvoke(StringView namev);
 
-void GenerateILInvoke(il_factor_invoke* self, Enviroment* env, call_context* cctx);
+void GenerateILInvoke(il_factor_invoke* self, Enviroment* env, CallContext* cctx);
 
-void LoadILInvoke(il_factor_invoke * self, Enviroment * env, call_context* cctx);
+void LoadILInvoke(il_factor_invoke * self, Enviroment * env, CallContext* cctx);
 
-struct generic_type* EvalILInvoke(il_factor_invoke * self, Enviroment * env, call_context* cctx);
+struct generic_type* EvalILInvoke(il_factor_invoke * self, Enviroment * env, CallContext* cctx);
 
 char* ILInvokeToString(il_factor_invoke* self, Enviroment* env);
 
 void DeleteILInvoke(il_factor_invoke* self);
 
-struct operator_overload* FindSetILInvoke(il_factor_invoke* self, il_factor* value, Enviroment* env, call_context* cctx, int* outIndex);
+struct operator_overload* FindSetILInvoke(il_factor_invoke* self, il_factor* value, Enviroment* env, CallContext* cctx, int* outIndex);
 #endif

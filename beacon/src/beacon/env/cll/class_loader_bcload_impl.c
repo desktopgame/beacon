@@ -330,7 +330,7 @@ static type* CLBC_get_or_load_class(class_loader* self, namespace_* parent, il_t
 static void CLBC_register_class(class_loader* self, namespace_* parent, il_type* iltype, type* tp, class_* cls) {
 	InitGenericSelf(tp, iltype->u.class_->GetParameterListType->Length);
 	DupTypeParameterList(iltype->u.class_->GetParameterListType, cls->GetParameterListType);
-	call_context* cctx = NewCallContext(CALL_DECL_T);
+	CallContext* cctx = NewCallContext(CALL_DECL_T);
 	cctx->scope = parent;
 	cctx->ty = tp;
 	for (int i = 0; i < iltype->u.class_->extend_list->Length; i++) {
@@ -392,7 +392,7 @@ static type* CLBC_get_or_load_interface(class_loader* self, namespace_* parent, 
 static void CLBC_register_interface(class_loader* self, namespace_* parent, il_type* iltype, type* tp, interface_* inter) {
 	InitGenericSelf(tp, iltype->u.interface_->GetParameterListType->Length);
 	DupTypeParameterList(iltype->u.interface_->GetParameterListType, inter->GetParameterListType);
-	call_context* cctx = NewCallContext(CALL_DECL_T);
+	CallContext* cctx = NewCallContext(CALL_DECL_T);
 	cctx->scope = parent;
 	cctx->ty = tp;
 	for (int i = 0; i < iltype->u.interface_->extends_list->Length; i++) {

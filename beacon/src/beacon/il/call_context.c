@@ -7,8 +7,8 @@
 #include "../env/generic_type.h"
 #include "../env/fqcn_cache.h"
 
-call_context* MallocCContext(CallFrameTag tag, const char* filename, int lineno) {
-	call_context* ret = mem_malloc(sizeof(call_context), filename, lineno);
+CallContext* MallocCContext(CallFrameTag tag, const char* filename, int lineno) {
+	CallContext* ret = mem_malloc(sizeof(CallContext), filename, lineno);
 #if defined(_MSC_VER)
 	ControlStructure cs = { 0 };
 #else
@@ -23,47 +23,47 @@ call_context* MallocCContext(CallFrameTag tag, const char* filename, int lineno)
 	return ret;
 }
 
-CallFrame* PushImplCallContext(call_context* self, CallFrameTag tag, const char* filename, int lineno) {
+CallFrame* PushImplCallContext(CallContext* self, CallFrameTag tag, const char* filename, int lineno) {
 	CallFrame* fr = MallocCallFrame(tag, filename, lineno);
 	PushVector(self->call_stack, fr);
 	return fr;
 }
 
-CallFrame* TopCallContext(call_context* self) {
+CallFrame* TopCallContext(CallContext* self) {
 	return TopVector(self->call_stack);
 }
 
-void PopCallContext(call_context* self) {
+void PopCallContext(CallContext* self) {
 	CallFrame* fr = PopVector(self->call_stack);
 	DeleteCallFrame(fr);
 }
 
-namespace_* GetNamespaceCContext(call_context* self) {
+namespace_* GetNamespaceCContext(CallContext* self) {
 	if(self->scope != NULL) {
 		return self->scope;
 	}
 	return GetLangNamespace();
 }
 
-method* GetMethodCContext(call_context* self) {
+method* GetMethodCContext(CallContext* self) {
 	if(self->tag != CALL_METHOD_T) {
 		return NULL;
 	}
 	return self->u.mt;
 }
 
-type* GetTypeCContext(call_context* self) {
+type* GetTypeCContext(CallContext* self) {
 	if(self->tag == CALL_TOP_T) {
 		return FindTypeFromNamespace(GetLangNamespace(), InternString("World"));
 	}
 	return self->ty;
 }
 
-class_* GetClassCContext(call_context* self) {
+class_* GetClassCContext(CallContext* self) {
 	return TYPE2CLASS(GetTypeCContext(self));
 }
 
-generic_type* GetReceiverCContext(call_context* self) {
+generic_type* GetReceiverCContext(CallContext* self) {
 	CallFrame* cfr = TopVector(self->call_stack);
 	if(cfr->Tag == FRAME_INSTANCE_INVOKE_T) {
 		return cfr->Kind.InstanceInvoke.Receiver;
@@ -75,7 +75,7 @@ generic_type* GetReceiverCContext(call_context* self) {
 	return NULL;
 }
 
-type* GetEvalTypeCContext(call_context* self, fqcn_cache* fqcn) {
+type* GetEvalTypeCContext(CallContext* self, fqcn_cache* fqcn) {
 	type* tp = GetTypeFQCN(fqcn, self->scope);
 	if(tp == NULL) {
 		tp = GetTypeFQCN(fqcn, GetLangNamespace());
@@ -83,7 +83,7 @@ type* GetEvalTypeCContext(call_context* self, fqcn_cache* fqcn) {
 	return tp;
 }
 
-Vector* GetTypeArgsCContext(call_context* self) {
+Vector* GetTypeArgsCContext(CallContext* self) {
 	CallFrame* cfr = TopVector(self->call_stack);
 	if(cfr->Tag == FRAME_INSTANCE_INVOKE_T) {
 		return cfr->Kind.InstanceInvoke.TypeArgs;
@@ -97,12 +97,12 @@ Vector* GetTypeArgsCContext(call_context* self) {
 	return NULL;
 }
 
-bool IsStaticCContext(call_context* self) {
+bool IsStaticCContext(CallContext* self) {
 	return self->tag == CALL_METHOD_T &&
 	       IsStaticModifier(self->u.mt->modifier);
 }
 
-void DeleteCallContext(call_context* self) {
+void DeleteCallContext(CallContext* self) {
 	FreeControlStructure(self->control);
 	DeleteVector(self->call_stack, VectorDeleterOfNull);
 	MEM_FREE(self);

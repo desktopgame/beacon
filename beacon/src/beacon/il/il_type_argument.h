@@ -3,7 +3,7 @@
 #include "../env/generic_cache.h"
 #include "../env/generic_type.h"
 #include "../util/vector.h"
-struct call_context;
+struct CallContext;
 
 /**
  * 型実引数を表す構造体.
@@ -30,7 +30,7 @@ void PrintILTypeArgument(Vector* iltype_args);
  * @param cctx
  * @return
  */
-void ResolveILTypeArgument(Vector* iltype_args, struct call_context* cctx);
+void ResolveILTypeArgument(Vector* iltype_args, struct CallContext* cctx);
 
 /**
  * 型実引数を解放します.

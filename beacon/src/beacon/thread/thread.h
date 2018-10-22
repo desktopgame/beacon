@@ -6,7 +6,7 @@
 #include "../util/vector.h"
 struct script_context;
 struct frame;
-struct call_context;
+struct CallContext;
 /**
  * 並列実行のための構造体です.
  * 現在の呼び出し位置を表すトレースのスタックを含みます。
@@ -16,7 +16,7 @@ typedef struct sg_thread {
 	bool vm_crush_by_exception;
 	bool vm_dump;
 	struct frame* frame_ref;
-	struct call_context* cctx;
+	struct CallContext* cctx;
 } sg_thread;
 
 /**
@@ -84,7 +84,7 @@ sg_thread* GetMainSGThread();
  * メインスレッドの呼び出しコンテキストを返します.
  * @return
  */
-struct call_context* GetSGThreadCContext();
+struct CallContext* GetSGThreadCContext();
 
 /**
  * メインスレッドを終了します.

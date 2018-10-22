@@ -29,7 +29,7 @@ il_stmt_proc* NewILProc();
  * @param env
  * @param cctx
  */
-void GenerateILProc(il_stmt_proc* self, Enviroment* env, call_context* cctx);
+void GenerateILProc(il_stmt_proc* self, Enviroment* env, CallContext* cctx);
 
 /**
  * 式のみで構成される文を読み込みます.
@@ -37,7 +37,7 @@ void GenerateILProc(il_stmt_proc* self, Enviroment* env, call_context* cctx);
  * @param env
  * @param cctx
  */
-void LoadILProc(il_stmt_proc* self, Enviroment* env, call_context* cctx);
+void LoadILProc(il_stmt_proc* self, Enviroment* env, CallContext* cctx);
 
 /**
  * 式のみで構成される文を表す要素を開放します.

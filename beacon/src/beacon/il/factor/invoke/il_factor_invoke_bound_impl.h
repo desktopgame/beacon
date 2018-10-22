@@ -31,15 +31,15 @@ typedef struct il_factor_invoke_bound {
 
 il_factor_invoke_bound* NewILInvokeBound(StringView namev);
 
-void GenerateILInvokeBound(il_factor_invoke_bound* self, Enviroment* env, call_context* cctx);
+void GenerateILInvokeBound(il_factor_invoke_bound* self, Enviroment* env, CallContext* cctx);
 
-void LoadILInvokeBound(il_factor_invoke_bound * self, Enviroment * env, call_context* cctx);
+void LoadILInvokeBound(il_factor_invoke_bound * self, Enviroment * env, CallContext* cctx);
 
-struct generic_type* EvalILInvokeBound(il_factor_invoke_bound * self, Enviroment * env, call_context* cctx);
+struct generic_type* EvalILInvokeBound(il_factor_invoke_bound * self, Enviroment * env, CallContext* cctx);
 
 char* ILInvokeBoundToString(il_factor_invoke_bound* self, Enviroment* env);
 
 void DeleteILInvokeBound(il_factor_invoke_bound* self);
 
-struct operator_overload* FindSetILInvokeBound(il_factor_invoke_bound* self, il_factor* value, Enviroment* env, call_context* cctx, int* outIndex);
+struct operator_overload* FindSetILInvokeBound(il_factor_invoke_bound* self, il_factor* value, Enviroment* env, CallContext* cctx, int* outIndex);
 #endif

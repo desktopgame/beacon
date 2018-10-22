@@ -29,11 +29,11 @@ il_factor* WrapILAs(il_factor_as* self);
 
 il_factor_as* NewILAs();
 
-void GenerateILAs(il_factor_as* self, Enviroment* env, call_context* cctx);
+void GenerateILAs(il_factor_as* self, Enviroment* env, CallContext* cctx);
 
-void LoadILAs(il_factor_as* self, Enviroment* env, call_context* cctx);
+void LoadILAs(il_factor_as* self, Enviroment* env, CallContext* cctx);
 
-generic_type* EvalILAs(il_factor_as* self, Enviroment* env, call_context* cctx);
+generic_type* EvalILAs(il_factor_as* self, Enviroment* env, CallContext* cctx);
 
 void DeleteILAs(il_factor_as* self);
 

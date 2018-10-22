@@ -14,11 +14,11 @@ typedef struct il_factor_not_op {
 
 il_factor_not_op* NewILNotOp(OperatorType type);
 
-struct generic_type* EvalILNotOp(il_factor_not_op * self, struct Enviroment * env, call_context* cctx);
+struct generic_type* EvalILNotOp(il_factor_not_op * self, struct Enviroment * env, CallContext* cctx);
 
-void GenerateILNotOp(il_factor_not_op* self, struct Enviroment* env, call_context* cctx);
+void GenerateILNotOp(il_factor_not_op* self, struct Enviroment* env, CallContext* cctx);
 
-void LoadILNotOp(il_factor_not_op* self, struct Enviroment* env, call_context* cctx);
+void LoadILNotOp(il_factor_not_op* self, struct Enviroment* env, CallContext* cctx);
 
 void DeleteILNotOp(il_factor_not_op* self);
 

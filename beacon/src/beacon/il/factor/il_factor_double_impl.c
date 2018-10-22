@@ -22,16 +22,16 @@ il_factor_double * NewILDouble(double d) {
 	return ret;
 }
 
-void GenerateILDouble(il_factor_double * self, Enviroment* env, call_context* cctx) {
+void GenerateILDouble(il_factor_double * self, Enviroment* env, CallContext* cctx) {
 	int index = AddCDoubleEnviroment(env, self->value);
 	AddOpcodeBuf(env->Bytecode, OP_DCONST);
 	AddOpcodeBuf(env->Bytecode, index);
 }
 
-void LoadILDouble(il_factor_double * self, Enviroment * env, call_context* cctx) {
+void LoadILDouble(il_factor_double * self, Enviroment * env, CallContext* cctx) {
 }
 
-generic_type* EvalILDouble(il_factor_double * self, Enviroment * env, call_context* cctx) {
+generic_type* EvalILDouble(il_factor_double * self, Enviroment * env, CallContext* cctx) {
 	return GENERIC_DOUBLE;
 }
 

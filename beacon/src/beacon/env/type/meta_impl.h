@@ -22,7 +22,7 @@ struct constructor;
  * @param cctx
  * @return
  */
-int MetaILCalcScore(Vector* params, Vector* ilargs, Enviroment* env, call_context* cctx);
+int MetaILCalcScore(Vector* params, Vector* ilargs, Enviroment* env, CallContext* cctx);
 
 /**
  * 仮引数と実引数のマッチ率を返します.
@@ -54,7 +54,7 @@ int MetaRCalcScore(Vector* params, Vector* args, Vector* typeargs, struct frame*
  * @param outIndex
  * @return
  */
-method* MetaILFindMethod(Vector* method_vec, StringView namev, Vector * ilargs, Enviroment * env, call_context* cctx, int * outIndex);
+method* MetaILFindMethod(Vector* method_vec, StringView namev, Vector * ilargs, Enviroment * env, CallContext* cctx, int * outIndex);
 
 /**
  * もっとも一致するメソッドを返します.
@@ -77,7 +77,7 @@ method* MetaGFindMethod(Vector* method_vec, StringView namev, Vector * gargs, in
  * @param outIndex
  * @return
  */
-method* MetaScopedILFindMethod(struct class_* context, Vector* method_vec, StringView namev, Vector * ilargs, Enviroment * env, call_context* cctx, int * outIndex);
+method* MetaScopedILFindMethod(struct class_* context, Vector* method_vec, StringView namev, Vector * ilargs, Enviroment * env, CallContext* cctx, int * outIndex);
 /**
  * スコープに基づく方法でもっとも一致するメソッドを返します.
  * @param context
@@ -99,7 +99,7 @@ method* MetaScopedGFindMethod(struct class_* context, Vector* method_vec, String
  * @param outIndex
  * @return
  */
-constructor* MetaILFindConstructor(Vector* ctor_vec, Vector* ilargs, Enviroment* env, call_context* cctx, int* outIndex);
+constructor* MetaILFindConstructor(Vector* ctor_vec, Vector* ilargs, Enviroment* env, CallContext* cctx, int* outIndex);
 
 /**
  * もっとも一致するコンストラクタを返します.
@@ -121,7 +121,7 @@ constructor* MetaRFindConstructor(Vector* ctor_vec, Vector* args, Vector* typear
  * @param outIndex
  * @return
  */
-constructor* MetaScopedILFindConstructor(struct class_* context, Vector* ctor_vec, Vector* ilargs, Enviroment* env, call_context* cctx, int* outIndex);
+constructor* MetaScopedILFindConstructor(struct class_* context, Vector* ctor_vec, Vector* ilargs, Enviroment* env, CallContext* cctx, int* outIndex);
 /**
  * スコープに基づく方法でもっとも一致するコンストラクタを返します.
  * @param context
@@ -150,12 +150,12 @@ operator_overload* MetaGFindOperator(Vector* opov_vec, OperatorType type, Vector
  * @param cctx
  * @return
  */
-bool IsMetaMethodAccessValid(struct method* m, call_context* cctx);
+bool IsMetaMethodAccessValid(struct method* m, CallContext* cctx);
 /**
  * 指定のメソッドが現在のコンテキストで有効なら true.
  * @param m
  * @param cctx
  * @return
  */
-bool IsMetaConstructorAccessValid(struct constructor* ctor, call_context* cctx);
+bool IsMetaConstructorAccessValid(struct constructor* ctor, CallContext* cctx);
 #endif // !SIGNAL_ENV_META_H

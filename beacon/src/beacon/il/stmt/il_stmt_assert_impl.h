@@ -15,9 +15,9 @@ il_stmt* WrapILAssert(il_stmt_assert* self);
 
 il_stmt_assert* NewILAssert();
 
-void GenerateILAssert(il_stmt_assert* self, Enviroment* env, call_context* cctx);
+void GenerateILAssert(il_stmt_assert* self, Enviroment* env, CallContext* cctx);
 
-void LoadILAssert(il_stmt_assert* self, Enviroment* env, call_context* cctx);
+void LoadILAssert(il_stmt_assert* self, Enviroment* env, CallContext* cctx);
 
 void DeleteILAssert(il_stmt_assert* self);
 #endif

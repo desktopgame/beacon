@@ -18,12 +18,12 @@ il_stmt_throw* NewILThrow() {
 	return ret;
 }
 
-void GenerateILThrow(il_stmt_throw* self, Enviroment* env, call_context* cctx) {
+void GenerateILThrow(il_stmt_throw* self, Enviroment* env, CallContext* cctx) {
 	GenerateILFactor(self->fact, env, cctx);
 	AddOpcodeBuf(env->Bytecode, OP_THROW);
 }
 
-void LoadILThrow(il_stmt_throw* self, Enviroment* env, call_context* cctx) {
+void LoadILThrow(il_stmt_throw* self, Enviroment* env, CallContext* cctx) {
 	LoadILFactor(self->fact, env, cctx);
 	generic_type* tgt = EvalILFactor(self->fact, env, cctx);
 	if(DistanceGenericType(GENERIC_EXCEPTION, tgt, cctx) < 0) {

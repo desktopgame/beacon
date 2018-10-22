@@ -12,7 +12,7 @@ struct operator_overload;
 struct generic_type;
 struct fqcn_cache;
 
-typedef enum call_context_tag {
+typedef enum CallContextTag {
 	//プログラムのトップレベル
 	CALL_TOP_T,
 	//メソッド
@@ -25,12 +25,12 @@ typedef enum call_context_tag {
 	CALL_CTOR_ARGS_T,
 
 	CALL_DECL_T
-} call_context_tag;
+} CallContextTag;
 
-typedef struct call_context {
+typedef struct CallContext {
 	Vector* call_stack;
 	ControlStructure control;
-	call_context_tag tag;
+	CallContextTag tag;
 	struct namespace_* scope;
 	struct type* ty;
 	union {
@@ -38,33 +38,33 @@ typedef struct call_context {
 		struct constructor* ctor;
 		struct operator_overload* opov;
 	} u;
-} call_context;
+} CallContext;
 
 #define NewCallContext(tag) (MallocCContext(tag, __FILE__, __LINE__))
-call_context* MallocCContext(CallFrameTag tag, const char* filename, int lineno);
+CallContext* MallocCContext(CallFrameTag tag, const char* filename, int lineno);
 
 #define PushCallContext(self, tag) (PushImplCallContext(self, tag, __FILE__, __LINE__))
-CallFrame* PushImplCallContext(call_context* self, CallFrameTag tag, const char* filename, int lineno);
+CallFrame* PushImplCallContext(CallContext* self, CallFrameTag tag, const char* filename, int lineno);
 
-CallFrame* TopCallContext(call_context* self);
+CallFrame* TopCallContext(CallContext* self);
 
-void PopCallContext(call_context* self);
+void PopCallContext(CallContext* self);
 
-struct namespace_* GetNamespaceCContext(call_context* self);
+struct namespace_* GetNamespaceCContext(CallContext* self);
 
-struct method* GetMethodCContext(call_context* self);
+struct method* GetMethodCContext(CallContext* self);
 
-struct type* GetTypeCContext(call_context* self);
+struct type* GetTypeCContext(CallContext* self);
 
-struct class_* GetClassCContext(call_context* self);
+struct class_* GetClassCContext(CallContext* self);
 
-struct generic_type* GetReceiverCContext(call_context* self);
+struct generic_type* GetReceiverCContext(CallContext* self);
 
-struct type* GetEvalTypeCContext(call_context* self, struct fqcn_cache* fqcn);
+struct type* GetEvalTypeCContext(CallContext* self, struct fqcn_cache* fqcn);
 
-Vector* GetTypeArgsCContext(call_context* self);
+Vector* GetTypeArgsCContext(CallContext* self);
 
-bool IsStaticCContext(call_context* self);
+bool IsStaticCContext(CallContext* self);
 
-void DeleteCallContext(call_context* self);
+void DeleteCallContext(CallContext* self);
 #endif

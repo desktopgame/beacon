@@ -15,11 +15,11 @@ il_factor* WrapILDouble(il_factor_double* self);
 
 il_factor_double* NewILDouble(double d);
 
-void GenerateILDouble(il_factor_double* self, Enviroment* env, call_context* cctx);
+void GenerateILDouble(il_factor_double* self, Enviroment* env, CallContext* cctx);
 
-void LoadILDouble(il_factor_double* self, Enviroment* env, call_context* cctx);
+void LoadILDouble(il_factor_double* self, Enviroment* env, CallContext* cctx);
 
-generic_type* EvalILDouble(il_factor_double* self, Enviroment* env, call_context* cctx);
+generic_type* EvalILDouble(il_factor_double* self, Enviroment* env, CallContext* cctx);
 
 char* ILDoubleToString(il_factor_double* self, Enviroment* env);
 

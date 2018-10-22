@@ -21,13 +21,13 @@ il_factor_compare_op* NewILCompareOp(OperatorType type) {
 	return ret;
 }
 
-generic_type* EvalILCompareOp(il_factor_compare_op * self, Enviroment* env, call_context* cctx) {
+generic_type* EvalILCompareOp(il_factor_compare_op * self, Enviroment* env, CallContext* cctx) {
 	generic_type* ret = TYPE2GENERIC(TYPE_BOOL);
 	assert(ret != NULL);
 	return ret;
 }
 
-void GenerateILCompareOp(il_factor_compare_op* self, Enviroment* env, call_context* cctx) {
+void GenerateILCompareOp(il_factor_compare_op* self, Enviroment* env, CallContext* cctx) {
 	//演算子オーバーロードが見つからない
 	if(self->operator_index == -1) {
 		GenerateILFactor(self->parent->right, env, cctx);
@@ -52,7 +52,7 @@ void GenerateILCompareOp(il_factor_compare_op* self, Enviroment* env, call_conte
 	}
 }
 
-void LoadILCompareOp(il_factor_compare_op* self, Enviroment* env, call_context* cctx) {
+void LoadILCompareOp(il_factor_compare_op* self, Enviroment* env, CallContext* cctx) {
 	if(!IsIntIntBinaryOp(self->parent, env, cctx) &&
 	   !IsDoubleDoubleBinaryOp(self->parent, env, cctx) &&
 	   !IsCharCharBinaryOp(self->parent, env, cctx)) {

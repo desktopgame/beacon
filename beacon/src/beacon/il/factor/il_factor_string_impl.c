@@ -20,16 +20,16 @@ il_factor_string * NewILString(StringView valuev) {
 	return ret;
 }
 
-void GenerateILString(il_factor_string * self, Enviroment* env, call_context* cctx) {
+void GenerateILString(il_factor_string * self, Enviroment* env, CallContext* cctx) {
 	int index = AddCStringEnviroment(env, self->valuev);
 	AddOpcodeBuf(env->Bytecode, (VectorItem)OP_SCONST);
 	AddOpcodeBuf(env->Bytecode, (VectorItem)index);
 }
 
-void LoadILString(il_factor_string * self, Enviroment * env, call_context* cctx) {
+void LoadILString(il_factor_string * self, Enviroment * env, CallContext* cctx) {
 }
 
-generic_type* EvalILString(il_factor_string * self, Enviroment * env, call_context* cctx) {
+generic_type* EvalILString(il_factor_string * self, Enviroment * env, CallContext* cctx) {
 //	assert(TYPE_STRING->generic_self->core_type != NULL);
 	return GENERIC_STRING;
 }

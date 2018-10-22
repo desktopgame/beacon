@@ -39,7 +39,7 @@ bool IsLoadedImportManager(import_manager * self, int index) {
 	return info->IsConsume;
 }
 
-generic_type* ResolveImportManager(namespace_* scope, generic_cache* fqcn, call_context* cctx) {
+generic_type* ResolveImportManager(namespace_* scope, generic_cache* fqcn, CallContext* cctx) {
 	type* core_type = GetTypeFQCN(fqcn->fqcn, scope);
 	#if defined(DEBUG)
 	const char* ctname = Ref2Str(GetTypeName(core_type));
@@ -93,7 +93,7 @@ generic_type* ResolveImportManager(namespace_* scope, generic_cache* fqcn, call_
 	return parameterized;
 }
 
-generic_type* ResolvefImportManager(namespace_* scope, fqcn_cache* fqcn, call_context* cctx) {
+generic_type* ResolvefImportManager(namespace_* scope, fqcn_cache* fqcn, CallContext* cctx) {
 	type* core_type = GetTypeFQCN(fqcn, scope);
 	//Int
 	//Foo::MyClass

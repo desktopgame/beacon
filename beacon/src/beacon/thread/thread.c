@@ -70,7 +70,7 @@ sg_thread * GetMainSGThread() {
 	return g_sg_main_thread;
 }
 
-call_context* GetSGThreadCContext() {
+CallContext* GetSGThreadCContext() {
 	return g_sg_main_thread->cctx;
 }
 

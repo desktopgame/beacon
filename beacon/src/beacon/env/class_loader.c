@@ -201,7 +201,7 @@ static void LoadClassLoader_toplevel(class_loader* self) {
 	body->lineno = 0;
 	createWorldStmt->fact->lineno = 0;
 	//worldをselfにする
-	call_context* cctx = NewCallContext(CALL_TOP_T);
+	CallContext* cctx = NewCallContext(CALL_TOP_T);
 	cctx->ty = FindTypeFromNamespace(GetLangNamespace(), InternString("World"));
 	LoadILStmt(body, self->env, cctx);
 	GenerateILStmt(body, self->env, cctx);
@@ -236,8 +236,8 @@ static void LoadClassLoader_toplevel_function(class_loader* self) {
 		DupTypeParameterList(ilfunc->type_parameter_vec, m->type_parameters);
 		script_method* sm = NewScriptMethod();
 		Enviroment* env = NewEnviroment();
-		//call_contextの設定
-		call_context* cctx = NewCallContext(CALL_METHOD_T);
+		//CallContextの設定
+		CallContext* cctx = NewCallContext(CALL_METHOD_T);
 		cctx->scope = GetLangNamespace();
 		cctx->ty = worldT;
 		cctx->u.mt = m;
@@ -278,7 +278,7 @@ static void LoadClassLoader_toplevel_function(class_loader* self) {
 		il_function* ilfunc = AtVector(funcs, i);
 		method* m = AtVector(TYPE2CLASS(worldT)->method_list, i);
 		script_method* sm = m->u.script_method;
-		call_context* cctx = NewCallContext(CALL_METHOD_T);
+		CallContext* cctx = NewCallContext(CALL_METHOD_T);
 		cctx->scope = GetLangNamespace();
 		cctx->ty = worldT;
 		cctx->u.mt = m;

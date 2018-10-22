@@ -8,7 +8,7 @@ il_stmt * WrapILBreak() {
 	return ret;
 }
 
-void GenerateILBreak(void * empty, Enviroment * env, call_context* cctx) {
+void GenerateILBreak(void * empty, Enviroment * env, CallContext* cctx) {
 	if(cctx->control.WhileStartTable->Length == 0) {
 		ThrowBCError(BCERROR_BREAK_AT_NOT_LOOP_T);
 		return;
@@ -18,7 +18,7 @@ void GenerateILBreak(void * empty, Enviroment * env, call_context* cctx) {
 	AddOpcodeBuf(env->Bytecode, lab);
 }
 
-void LoadILBreak(void * empty, Enviroment * env, call_context* cctx) {
+void LoadILBreak(void * empty, Enviroment * env, CallContext* cctx) {
 }
 
 void DeleteILBreak(void * empty) {

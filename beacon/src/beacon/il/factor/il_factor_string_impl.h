@@ -16,11 +16,11 @@ il_factor* WrapILString(il_factor_string* self);
 
 il_factor_string* NewILString(StringView valuev);
 
-void GenerateILString(il_factor_string* self, Enviroment* env, call_context* cctx);
+void GenerateILString(il_factor_string* self, Enviroment* env, CallContext* cctx);
 
-void LoadILString(il_factor_string* self, Enviroment* env, call_context* cctx);
+void LoadILString(il_factor_string* self, Enviroment* env, CallContext* cctx);
 
-generic_type* EvalILString(il_factor_string* self, Enviroment* env, call_context* cctx);
+generic_type* EvalILString(il_factor_string* self, Enviroment* env, CallContext* cctx);
 
 char* ILStringToString(il_factor_string* self, Enviroment* env);
 

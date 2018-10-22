@@ -14,11 +14,11 @@ il_stmt_defer* NewILDefer() {
 	return ret;
 }
 
-void LoadILDefer(il_stmt_defer* self, Enviroment* env, call_context* cctx) {
+void LoadILDefer(il_stmt_defer* self, Enviroment* env, CallContext* cctx) {
 	LoadILStmt(self->stmt, env, cctx);
 }
 
-void GenerateILDefer(il_stmt_defer* self, Enviroment* env, call_context* cctx) {
+void GenerateILDefer(il_stmt_defer* self, Enviroment* env, CallContext* cctx) {
 	Label* lb = AddLabelOpcodeBuf(env->Bytecode, 0);
 	Label* lb2 = AddLabelOpcodeBuf(env->Bytecode, 0);
 	AddOpcodeBuf(env->Bytecode, OP_DEFER_REGISTER);

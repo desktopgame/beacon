@@ -11,13 +11,13 @@
 #include <assert.h>
 
 //proto
-static void il_factor_call_op_check(il_factor_call_op* self, Enviroment* env, call_context* cctx);
-static void il_factor_member_op_check_namebase(il_factor_call_op* self, il_factor_member_op* ilmem, Enviroment* env, call_context* cctx);
-static void il_factor_member_op_check_instance(il_factor_call_op* self, il_factor_member_op* ilmem, Enviroment* env, call_context* cctx);
-static void il_factor_member_op_check_static(il_factor_call_op* self, il_factor_member_op* ilmem, il_factor_variable* ilvar, Enviroment* env, call_context* cctx);
+static void il_factor_call_op_check(il_factor_call_op* self, Enviroment* env, CallContext* cctx);
+static void il_factor_member_op_check_namebase(il_factor_call_op* self, il_factor_member_op* ilmem, Enviroment* env, CallContext* cctx);
+static void il_factor_member_op_check_instance(il_factor_call_op* self, il_factor_member_op* ilmem, Enviroment* env, CallContext* cctx);
+static void il_factor_member_op_check_static(il_factor_call_op* self, il_factor_member_op* ilmem, il_factor_variable* ilvar, Enviroment* env, CallContext* cctx);
 static void il_factor_invoke_bound_check(il_factor_call_op* self, Enviroment* env);
-static void il_factor_member_op_check(il_factor_call_op* self, Enviroment* env, call_context* cctx);
-static void il_factor_subscript_check(il_factor_call_op* self, Enviroment* env, call_context* cctx);
+static void il_factor_member_op_check(il_factor_call_op* self, Enviroment* env, CallContext* cctx);
+static void il_factor_subscript_check(il_factor_call_op* self, Enviroment* env, CallContext* cctx);
 
 static void il_factor_call_op_argument_delete(VectorItem item);
 static void il_factor_call_op_type_argument_delete(VectorItem item);
@@ -37,7 +37,7 @@ il_factor_call_op* NewILCallOp() {
 	return ret;
 }
 
-void LoadCallOp(il_factor_call_op* self, Enviroment* env, call_context* cctx) {
+void LoadCallOp(il_factor_call_op* self, Enviroment* env, CallContext* cctx) {
 	//argumentlistはサブクラスに渡しちゃってる
 	//LoadILFactor(self->receiver, env, ilctx, eh);
 	il_factor_call_op_check(self, env, cctx);
@@ -50,7 +50,7 @@ void LoadCallOp(il_factor_call_op* self, Enviroment* env, call_context* cctx) {
 	}
 }
 
-generic_type* EvalILCallOp(il_factor_call_op* self, Enviroment* env, call_context* cctx) {
+generic_type* EvalILCallOp(il_factor_call_op* self, Enviroment* env, CallContext* cctx) {
 	il_factor_call_op_check(self, env, cctx);
 	generic_type* ret = NULL;
 	if(self->type == ILCALL_TYPE_INVOKE_T) {
@@ -78,7 +78,7 @@ char* ILCallOpToString(il_factor_call_op* self, Enviroment* env) {
 	return NULL;
 }
 
-void GenerateILCallOp(il_factor_call_op* self, Enviroment* env, call_context* cctx) {
+void GenerateILCallOp(il_factor_call_op* self, Enviroment* env, CallContext* cctx) {
 	LoadCallOp(self, env, cctx);
 	if(self->type == ILCALL_TYPE_INVOKE_T) {
 		return GenerateILInvoke(self->u.invoke_, env, cctx);
@@ -103,7 +103,7 @@ void DeleteILCallOp(il_factor_call_op* self) {
 }
 
 //private
-static void il_factor_call_op_check(il_factor_call_op* self, Enviroment* env, call_context* cctx) {
+static void il_factor_call_op_check(il_factor_call_op* self, Enviroment* env, CallContext* cctx) {
 	if(self->type != ILCALL_TYPE_UNDEFINED_T) {
 		return;
 	}
@@ -135,7 +135,7 @@ static void il_factor_invoke_bound_check(il_factor_call_op* self, Enviroment* en
 	self->type = ILCALL_TYPE_INVOKE_BOUND_T;
 }
 
-static void il_factor_member_op_check(il_factor_call_op* self, Enviroment* env, call_context* cctx) {
+static void il_factor_member_op_check(il_factor_call_op* self, Enviroment* env, CallContext* cctx) {
 	il_factor* receiver = self->receiver;
 	il_factor_member_op* ilmem = receiver->u.member_;
 	//hoge.foo
@@ -146,7 +146,7 @@ static void il_factor_member_op_check(il_factor_call_op* self, Enviroment* env, 
 	}
 }
 
-static void il_factor_member_op_check_namebase(il_factor_call_op* self, il_factor_member_op* ilmem, Enviroment* env, call_context* cctx) {
+static void il_factor_member_op_check_namebase(il_factor_call_op* self, il_factor_member_op* ilmem, Enviroment* env, CallContext* cctx) {
 	il_factor_variable* ilvar = ilmem->fact->u.variable_;
 	//Namespace::Class.foo()
 	if(ilvar->fqcn->scope_vec->Length > 0) {
@@ -169,7 +169,7 @@ static void il_factor_member_op_check_namebase(il_factor_call_op* self, il_facto
 	}
 }
 
-static void il_factor_member_op_check_instance(il_factor_call_op* self, il_factor_member_op* ilmem, Enviroment* env, call_context* cctx) {
+static void il_factor_member_op_check_instance(il_factor_call_op* self, il_factor_member_op* ilmem, Enviroment* env, CallContext* cctx) {
 	//入れ替える
 	il_factor_invoke* iv = NewILInvoke(ilmem->namev);
 	iv->args = self->argument_list;
@@ -182,7 +182,7 @@ static void il_factor_member_op_check_instance(il_factor_call_op* self, il_facto
 	self->argument_list = NULL;
 }
 
-static void il_factor_member_op_check_static(il_factor_call_op* self, il_factor_member_op* ilmem, il_factor_variable* ilvar, Enviroment* env, call_context* cctx) {
+static void il_factor_member_op_check_static(il_factor_call_op* self, il_factor_member_op* ilmem, il_factor_variable* ilvar, Enviroment* env, CallContext* cctx) {
 	il_factor_invoke_static* st = NewILInvokeStatic(ilmem->namev);
 	self->type = ILCALL_TYPE_INVOKE_STATIC_T;
 	self->u.invoke_static_ = st;
@@ -195,7 +195,7 @@ static void il_factor_member_op_check_static(il_factor_call_op* self, il_factor_
 	ilvar->fqcn = NULL;
 }
 
-static void il_factor_subscript_check(il_factor_call_op* self, Enviroment* env, call_context* cctx) {
+static void il_factor_subscript_check(il_factor_call_op* self, Enviroment* env, CallContext* cctx) {
 	il_factor* receiver = self->receiver;
 	il_factor_call_op* call_left = receiver->u.call_;
 	il_factor_invoke* iv = NewILInvoke(ZERO_VIEW);

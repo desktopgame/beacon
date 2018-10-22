@@ -14,11 +14,11 @@ typedef struct il_factor_excor_op {
 
 il_factor_excor_op* NewILExcorOp(OperatorType type);
 
-struct generic_type* EvalILExcorOp(il_factor_excor_op * self, struct Enviroment * env, call_context* cctx);
+struct generic_type* EvalILExcorOp(il_factor_excor_op * self, struct Enviroment * env, CallContext* cctx);
 
-void GenerateILExcorOp(il_factor_excor_op* self, struct Enviroment* env, call_context* cctx);
+void GenerateILExcorOp(il_factor_excor_op* self, struct Enviroment* env, CallContext* cctx);
 
-void LoadILExcorOp(il_factor_excor_op* self, struct Enviroment* env, call_context* cctx);
+void LoadILExcorOp(il_factor_excor_op* self, struct Enviroment* env, CallContext* cctx);
 
 void DeleteILExcorOp(il_factor_excor_op* self);
 

@@ -14,11 +14,11 @@ il_factor* WrapILInstanceOf(il_factor_instanceof* self);
 
 il_factor_instanceof* NewILInstanceOf();
 
-void LoadILInstanceOf(il_factor_instanceof* self, Enviroment* env, call_context* cctx);
+void LoadILInstanceOf(il_factor_instanceof* self, Enviroment* env, CallContext* cctx);
 
-void GenerateILInstanceOf(il_factor_instanceof* self, Enviroment* env, call_context* cctx);
+void GenerateILInstanceOf(il_factor_instanceof* self, Enviroment* env, CallContext* cctx);
 
-struct generic_type* EvalILInstanceOf(il_factor_instanceof* self, Enviroment* env, call_context* cctx);
+struct generic_type* EvalILInstanceOf(il_factor_instanceof* self, Enviroment* env, CallContext* cctx);
 
 char* ILInstanceOfToString(il_factor_instanceof* self, Enviroment* env);
 

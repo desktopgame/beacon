@@ -12,7 +12,7 @@ struct type;
 struct interface_;
 struct frame;
 struct Enviroment;
-struct call_context;
+struct CallContext;
 struct class_loader;
 
 /**
@@ -70,7 +70,7 @@ void ExecuteMethod(method* self, struct frame* fr, Enviroment* env);
  * @param cctx
  * @return
  */
-bool IsOverridedMethod(method* superM, method* subM, struct call_context* cctx);
+bool IsOverridedMethod(method* superM, method* subM, struct CallContext* cctx);
 
 /**
  * @param self

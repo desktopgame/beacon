@@ -10,7 +10,7 @@
 //proto
 static void DeleteILElifList_impl(VectorItem item);
 static void DeleteILIf_stmt(VectorItem item);
-static void check_condition_type(il_factor* fact, Enviroment* env, call_context* cctx);
+static void check_condition_type(il_factor* fact, Enviroment* env, CallContext* cctx);
 
 il_stmt * WrapILIf(il_stmt_if * self) {
 	il_stmt* ret = il_stmt_new(ILSTMT_IF_T);
@@ -48,7 +48,7 @@ void PushILElifList(Vector * self, il_stmt_elif * child) {
 	PushVector(self, child);
 }
 
-void GenerateILIf(il_stmt_if * self, Enviroment* env, call_context* cctx) {
+void GenerateILIf(il_stmt_if * self, Enviroment* env, CallContext* cctx) {
 	//if(...)
 	env->Symboles->ScopeDepth++;
 	GenerateILFactor(self->condition, env, cctx);
@@ -96,7 +96,7 @@ void GenerateILIf(il_stmt_if * self, Enviroment* env, call_context* cctx) {
 	env->Symboles->ScopeDepth--;
 }
 
-void LoadILIf(il_stmt_if * self, Enviroment* env, call_context* cctx) {
+void LoadILIf(il_stmt_if * self, Enviroment* env, CallContext* cctx) {
 	env->Symboles->ScopeDepth++;
 	LoadILFactor(self->condition, env, cctx);
 	for(int i=0; i<self->body->Length; i++) {
@@ -164,7 +164,7 @@ static void DeleteILIf_stmt(VectorItem item) {
 	DeleteILStmt(e);
 }
 
-static void check_condition_type(il_factor* fact, Enviroment* env, call_context* cctx) {
+static void check_condition_type(il_factor* fact, Enviroment* env, CallContext* cctx) {
 	generic_type* cond_T = EvalILFactor(fact, env, cctx);
 	if(cond_T->core_type != TYPE_BOOL) {
 		char* condstr = ILFactorToString(fact, env);

@@ -10,9 +10,9 @@ il_stmt* WrapILDefer(il_stmt_defer* self);
 
 il_stmt_defer* NewILDefer();
 
-void LoadILDefer(il_stmt_defer* self, Enviroment* env, call_context* cctx);
+void LoadILDefer(il_stmt_defer* self, Enviroment* env, CallContext* cctx);
 
-void GenerateILDefer(il_stmt_defer* self, Enviroment* env, call_context* cctx);
+void GenerateILDefer(il_stmt_defer* self, Enviroment* env, CallContext* cctx);
 
 void DeleteILDefer(il_stmt_defer* self);
 #endif

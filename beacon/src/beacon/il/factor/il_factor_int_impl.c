@@ -22,7 +22,7 @@ il_factor_int * MallocILInt(int32_t i, const char* filename, int lineno) {
 	return ret;
 }
 
-void GenerateILInt(il_factor_int * self, Enviroment* env, call_context* cctx) {
+void GenerateILInt(il_factor_int * self, Enviroment* env, CallContext* cctx) {
 	assert(self->count == 0);
 	int index = AddCIntEnviroment(env, self->value);
 	AddOpcodeBuf(env->Bytecode, OP_ICONST);
@@ -30,10 +30,10 @@ void GenerateILInt(il_factor_int * self, Enviroment* env, call_context* cctx) {
 	self->count++;
 }
 
-void LoadILInt(il_factor_int * self, Enviroment * env, call_context* cctx) {
+void LoadILInt(il_factor_int * self, Enviroment * env, CallContext* cctx) {
 }
 
-generic_type* EvalILInt(il_factor_int * self, Enviroment * env, call_context* cctx) {
+generic_type* EvalILInt(il_factor_int * self, Enviroment * env, CallContext* cctx) {
 	return GENERIC_INT;
 }
 

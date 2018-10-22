@@ -21,11 +21,11 @@ il_stmt_variable_decl * NewILVariableDecl(StringView namev) {
 	return ret;
 }
 
-void GenerateILVariableDecl(il_stmt_variable_decl * self, Enviroment * env, call_context* cctx) {
+void GenerateILVariableDecl(il_stmt_variable_decl * self, Enviroment * env, CallContext* cctx) {
 
 }
 
-void LoadILVariableDecl(il_stmt_variable_decl * self, Enviroment* env, call_context* cctx) {
+void LoadILVariableDecl(il_stmt_variable_decl * self, Enviroment* env, CallContext* cctx) {
 	if(IsContainsSymbol(env->Symboles, self->namev)) {
 		ThrowBCError(BCERROR_OVERWRAP_VARIABLE_NAME_T,
 			Ref2Str(self->namev)

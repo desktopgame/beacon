@@ -17,9 +17,9 @@ il_factor* WrapILBool(il_factor_bool* self);
 
 il_factor_bool* NewILBool(bool b);
 
-void GenerateILBool(il_factor_bool* self, Enviroment* env, call_context* cctx);
+void GenerateILBool(il_factor_bool* self, Enviroment* env, CallContext* cctx);
 
-generic_type* EvalILBool(il_factor_bool* self, Enviroment* env, call_context* cctx);
+generic_type* EvalILBool(il_factor_bool* self, Enviroment* env, CallContext* cctx);
 
 char* ILBoolToString(il_factor_bool* self, Enviroment* env);
 

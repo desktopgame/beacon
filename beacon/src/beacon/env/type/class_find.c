@@ -276,7 +276,7 @@ constructor * RFindConstructorClass(class_ * self, Vector * args, Vector* typear
 	return MetaScopedRFindConstructor(self, self->constructor_list, args, typeargs, fr, outIndex);
 }
 
-constructor * ILFindConstructorClass(class_ * self, Vector * args, Enviroment * env, call_context* cctx, int* outIndex) {
+constructor * ILFindConstructorClass(class_ * self, Vector * args, Enviroment * env, CallContext* cctx, int* outIndex) {
 	//	Vector* v = meta_find_constructors(self, args, env, ilctx);
 	//	(*outIndex) = -1;
 	//	return class_find_constructor_impl(v, args, env, ilctx, outIndex);
@@ -284,7 +284,7 @@ constructor * ILFindConstructorClass(class_ * self, Vector * args, Enviroment * 
 	return ctor;
 }
 
-constructor * ILFindEmptyConstructorClass(class_ * self, Enviroment * env, call_context* cctx, int * outIndex) {
+constructor * ILFindEmptyConstructorClass(class_ * self, Enviroment * env, CallContext* cctx, int * outIndex) {
 	Vector* emptyArgs = NewVector();
 	constructor* ret = ILFindConstructorClass(self, emptyArgs, env, cctx, outIndex);
 	DeleteVector(emptyArgs, VectorDeleterOfNull);
@@ -293,7 +293,7 @@ constructor * ILFindEmptyConstructorClass(class_ * self, Enviroment * env, call_
 
 
 
-method * ILFindMethodClass(class_ * self, StringView namev, Vector * args, Enviroment * env, call_context* cctx, int * outIndex) {
+method * ILFindMethodClass(class_ * self, StringView namev, Vector * args, Enviroment * env, CallContext* cctx, int * outIndex) {
 	(*outIndex) = -1;
 	CreateVTableClass(self);
 	#if defined(DEBUG)
@@ -344,7 +344,7 @@ method* GFindEqMethodClass(class_* self, int* outIndex) {
 	return ret;
 }
 
-method * ILFindSMethodClass(class_ * self, StringView namev, Vector * args, Enviroment * env, call_context* cctx, int * outIndex) {
+method * ILFindSMethodClass(class_ * self, StringView namev, Vector * args, Enviroment * env, CallContext* cctx, int * outIndex) {
 	#if defined(DEBUG)
 	const char* str = Ref2Str(namev);
 	#endif
@@ -420,7 +420,7 @@ method * GetImplMethodClass(class_ * self, type * interType, int interMIndex) {
 
 
 
-operator_overload* GFindOperatorOverloadClass(class_* self, OperatorType type, Vector* args, Enviroment* env, call_context* cctx, int* outIndex) {
+operator_overload* GFindOperatorOverloadClass(class_* self, OperatorType type, Vector* args, Enviroment* env, CallContext* cctx, int* outIndex) {
 	(*outIndex) = -1;
 	operator_overload* ret = NULL;
 	CreateOperatorVTClass(self);
@@ -455,7 +455,7 @@ operator_overload* GFindOperatorOverloadClass(class_* self, OperatorType type, V
 	return ret;
 }
 
-operator_overload* ILFindOperatorOverloadClass(class_* self, OperatorType type, Vector* args, Enviroment* env, call_context* cctx, int* outIndex) {
+operator_overload* ILFindOperatorOverloadClass(class_* self, OperatorType type, Vector* args, Enviroment* env, CallContext* cctx, int* outIndex) {
 	Vector* gargs =NewVector();
 	for(int i=0; i<args->Length; i++) {
 		il_factor* ilfact = (il_factor*)AtVector(args,i);
@@ -467,7 +467,7 @@ operator_overload* ILFindOperatorOverloadClass(class_* self, OperatorType type, 
 	return ret;
 }
 
-operator_overload* ArgFindOperatorOverloadClass(class_* self, OperatorType type, Vector* args, Enviroment* env, call_context* cctx, int* outIndex) {
+operator_overload* ArgFindOperatorOverloadClass(class_* self, OperatorType type, Vector* args, Enviroment* env, CallContext* cctx, int* outIndex) {
 	Vector* gargs =NewVector();
 	for(int i=0; i<args->Length; i++) {
 		//il_factor* ilfact = (il_factor*)AtVector(args,i);
@@ -512,7 +512,7 @@ bool IsContainsMethod(Vector* method_list, method* m, method** outM) {
 	assert(!IsStaticModifier(m->modifier));
 	(*outM) = NULL;
 	bool ret = false;
-	call_context* cctx = NewCallContext(CALL_DECL_T);
+	CallContext* cctx = NewCallContext(CALL_DECL_T);
 	cctx->scope = m->parent->location;
 	cctx->ty = m->parent;
 	for(int i=0; i<method_list->Length; i++) {

@@ -17,12 +17,12 @@ il_factor_property* MallocILPropertyAccess(const char* filename, int lineno) {
 	return ret;
 }
 
-void GenerateILPropertyAccess(il_factor_property* self, Enviroment* env, call_context* cctx) {
+void GenerateILPropertyAccess(il_factor_property* self, Enviroment* env, CallContext* cctx) {
 	GenerateILFactor(self->fact, env, cctx);
 	GenerateGetProperty(env->Bytecode, self->p, self->index);
 }
 
-void LoadILProperty(il_factor_property* self, Enviroment* env, call_context* cctx) {
+void LoadILProperty(il_factor_property* self, Enviroment* env, CallContext* cctx) {
 	generic_type* receiver = EvalILFactor(self->fact, env, cctx);
 	type* receiverT = GENERIC2TYPE(receiver);
 	int temp = -1;
@@ -37,7 +37,7 @@ void LoadILProperty(il_factor_property* self, Enviroment* env, call_context* cct
 	}
 }
 
-generic_type* EvalILProperty(il_factor_property* self, Enviroment* env, call_context* cctx) {
+generic_type* EvalILProperty(il_factor_property* self, Enviroment* env, CallContext* cctx) {
 	return self->p->gtype;
 }
 

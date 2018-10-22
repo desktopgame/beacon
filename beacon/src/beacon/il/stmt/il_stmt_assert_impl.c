@@ -21,7 +21,7 @@ il_stmt_assert* NewILAssert() {
 	return ret;
 }
 
-void GenerateILAssert(il_stmt_assert* self, Enviroment* env, call_context* cctx) {
+void GenerateILAssert(il_stmt_assert* self, Enviroment* env, CallContext* cctx) {
 	//https://code.i-harness.com/ja/q/2a1650
 	Label* gt = AddLabelOpcodeBuf(env->Bytecode, 0);
 	GenerateILFactor(self->condition, env, cctx);
@@ -36,7 +36,7 @@ void GenerateILAssert(il_stmt_assert* self, Enviroment* env, call_context* cctx)
 	gt->Cursor = AddNOPOpcodeBuf(env->Bytecode);
 }
 
-void LoadILAssert(il_stmt_assert* self, Enviroment* env, call_context* cctx) {
+void LoadILAssert(il_stmt_assert* self, Enviroment* env, CallContext* cctx) {
 	LoadILFactor(self->condition, env, cctx);
 	if(self->message == NULL) {
 		char* str = ILFactorToString(self->condition, env);
