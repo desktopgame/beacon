@@ -14,10 +14,10 @@ typedef enum CallFrameTag {
 	FRAME_INSTANCE_INVOKE_T,
 } CallFrameTag;
 
-typedef struct call_resolve {
-	struct generic_type* gtype;
-	Vector* typeargs;
-} call_resolve;
+typedef struct CallResolve {
+	struct generic_type* GType;
+	Vector* TypeArgs;
+} CallResolve;
 
 typedef struct call_self_invoke {
 	Vector* args;
@@ -38,7 +38,7 @@ typedef struct call_instance_invoke {
 typedef struct call_frame {
 	CallFrameTag tag;
 	union {
-		call_resolve resolve;
+		CallResolve resolve;
 		call_self_invoke self_invoke;
 		call_static_invoke static_invoke;
 		call_instance_invoke instance_invoke;

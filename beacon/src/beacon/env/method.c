@@ -104,7 +104,7 @@ bool IsOverridedMethod(method* superM, method* subM, call_context* cctx) {
 		generic_type* subGT = subP->GType;
 
 		call_frame* cfr = PushCallContext(cctx, FRAME_RESOLVE_T);
-		cfr->u.resolve.gtype = bl;
+		cfr->u.resolve.GType = bl;
 		generic_type* superGT2 = ApplyGenericType(superGT, cctx);
 		PopCallContext(cctx);
 //		assert(!generic_type_equals(superGT, superGT2));
@@ -117,7 +117,7 @@ bool IsOverridedMethod(method* superM, method* subM, call_context* cctx) {
 	generic_type* superRet = superM->return_gtype;
 	generic_type* subRet = subM->return_gtype;
 	call_frame* cfr = PushCallContext(cctx, FRAME_RESOLVE_T);
-	cfr->u.resolve.gtype = bl;
+	cfr->u.resolve.GType = bl;
 	generic_type* superRet2 = ApplyGenericType(superRet, cctx);
 //	generic_type_diff(superRet, superRet2);
 //	assert(!generic_type_equals(superRet, superRet2));
@@ -229,7 +229,7 @@ bool IsYieldMethod(method* self, Vector* stmt_list, bool* error) {
 type* CreateIteratorTypeFromMethod(method* self,  class_loader* cll, Vector* stmt_list) {
 	call_context* lCctx = NewCallContext(CALL_CTOR_T);
 	call_frame* lCfr = PushCallContext(lCctx, FRAME_RESOLVE_T);
-	lCfr->u.resolve.gtype = self->return_gtype;
+	lCfr->u.resolve.GType = self->return_gtype;
 	StringView iterName = GetMethodUniqueName(self);
 	type* iterT = FindTypeFromNamespace(GetLangNamespace(), InternString("Iterator"));
 	//イテレータの実装クラスを登録

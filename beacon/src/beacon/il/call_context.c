@@ -70,7 +70,7 @@ generic_type* GetReceiverCContext(call_context* self) {
 	} else if(cfr->tag == FRAME_SELF_INVOKE_T) {
 		return self->ty->generic_self;
 	} else if(cfr->tag == FRAME_RESOLVE_T) {
-		return cfr->u.resolve.gtype;
+		return cfr->u.resolve.GType;
 	}
 	return NULL;
 }
@@ -92,7 +92,7 @@ Vector* GetTypeArgsCContext(call_context* self) {
 	} else if(cfr->tag == FRAME_SELF_INVOKE_T) {
 		return cfr->u.self_invoke.typeargs;
 	} else if(cfr->tag == FRAME_RESOLVE_T) {
-		return cfr->u.resolve.typeargs;
+		return cfr->u.resolve.TypeArgs;
 	}
 	return NULL;
 }
