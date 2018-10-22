@@ -95,7 +95,7 @@ void DeleteILInvoke(il_factor_invoke* self) {
 operator_overload* FindSetILInvoke(il_factor_invoke* self, il_factor* value, Enviroment* env, CallContext* cctx, int* outIndex) {
 	assert(self->tag == INSTANCE_INVOKE_SUBSCRIPT_T);
 	Vector* args = NewVector();
-	PushVector(args, ((il_argument*)AtVector(self->args, 0))->factor);
+	PushVector(args, ((ILArgument*)AtVector(self->args, 0))->Factor);
 	PushVector(args, value);
 	operator_overload* opov = ILFindOperatorOverloadClass(TYPE2CLASS(self->u.opov->parent), OPERATOR_SUB_SCRIPT_SET_T, args, env, cctx, outIndex);
 	DeleteVector(args, VectorDeleterOfNull);
@@ -197,7 +197,7 @@ static void il_factor_invoke_check(il_factor_invoke * self, Enviroment * env, Ca
 }
 
 static void il_factor_invoke_args_delete(VectorItem item) {
-	il_argument* e = (il_argument*)item;
+	ILArgument* e = (ILArgument*)item;
 	DeleteILArgument(e);
 }
 
@@ -218,8 +218,8 @@ static void GenerateILInvoke_method(il_factor_invoke* self, Enviroment* env, Cal
 		GenerateGenericType(e->gtype, env);
 	}
 	for(int i=0; i<self->args->Length; i++) {
-		il_argument* e = (il_argument*)AtVector(self->args, i);
-		GenerateILFactor(e->factor, env, cctx);
+		ILArgument* e = (ILArgument*)AtVector(self->args, i);
+		GenerateILFactor(e->Factor, env, cctx);
 	}
 	GenerateILFactor(self->receiver, env, cctx);
 	if(self->u.m->parent->tag == TYPE_INTERFACE_T) {
@@ -250,8 +250,8 @@ static void GenerateILInvoke_subscript(il_factor_invoke* self, Enviroment* env, 
 		GenerateGenericType(e->gtype, env);
 	}
 	for(int i=0; i<self->args->Length; i++) {
-		il_argument* e = (il_argument*)AtVector(self->args, i);
-		GenerateILFactor(e->factor, env, cctx);
+		ILArgument* e = (ILArgument*)AtVector(self->args, i);
+		GenerateILFactor(e->Factor, env, cctx);
 	}
 	GenerateILFactor(self->receiver, env, cctx);
 	AddOpcodeBuf(env->Bytecode, OP_INVOKEOPERATOR);

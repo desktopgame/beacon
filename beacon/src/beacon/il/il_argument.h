@@ -5,20 +5,20 @@
 /**
  * 実引数を表す要素.
  */
-typedef struct il_argument {
+typedef struct ILArgument {
 	//char* name;
-	il_factor* factor;
-} il_argument;
+	il_factor* Factor;
+} ILArgument;
 
 /**
  * 実引数を表す要素を作成します.
  * @return
  */
-il_argument* NewILArgument();
+ILArgument* NewILArgument();
 
 /**
  * 実引数を表す要素を開放します.
  * @param self
  */
-void DeleteILArgument(il_argument* self);
+void DeleteILArgument(ILArgument* self);
 #endif // !SIGNAL_IL_IL_ARGUMENT_H

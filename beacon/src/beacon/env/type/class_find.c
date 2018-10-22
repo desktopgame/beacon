@@ -471,8 +471,8 @@ operator_overload* ArgFindOperatorOverloadClass(class_* self, OperatorType type,
 	Vector* gargs =NewVector();
 	for(int i=0; i<args->Length; i++) {
 		//il_factor* ilfact = (il_factor*)AtVector(args,i);
-		il_argument* ilarg = (il_argument*)AtVector(args, i);
-		il_factor* ilfact = ilarg->factor;
+		ILArgument* ilarg = (ILArgument*)AtVector(args, i);
+		il_factor* ilfact = ilarg->Factor;
 		generic_type* g = EvalILFactor(ilfact, env, cctx);
 		PushVector(gargs, g);
 	}

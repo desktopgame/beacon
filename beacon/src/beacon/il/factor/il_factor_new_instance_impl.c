@@ -46,8 +46,8 @@ void GenerateILNewInstance(il_factor_new_instance * self, Enviroment * env, Call
 	}
 	//実引数を全てスタックへ
 	for (int i = 0; i < self->argument_list->Length; i++) {
-		il_argument* ilarg = (il_argument*)AtVector(self->argument_list, i);
-		GenerateILFactor(ilarg->factor, env, cctx);
+		ILArgument* ilarg = (ILArgument*)AtVector(self->argument_list, i);
+		GenerateILFactor(ilarg->Factor, env, cctx);
 		if(GetLastBCError()) {
 			return;
 		}
@@ -153,6 +153,6 @@ static void il_factor_new_instance_find(il_factor_new_instance * self, Enviromen
 }
 
 static void il_Factor_new_instace_delete_arg(VectorItem item) {
-	il_argument* e = (il_argument*)item;
+	ILArgument* e = (ILArgument*)item;
 	DeleteILArgument(e);
 }

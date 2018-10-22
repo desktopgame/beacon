@@ -212,8 +212,8 @@ static void CLILArgumentListImpl(class_loader* self, Vector* list, AST* asource)
 		}
 	} else if (asource->Tag == AST_ARGUMENT_T) {
 		AST* aprimary = FirstAST(asource);
-		il_argument* ilarg = NewILArgument();
-		ilarg->factor = CLILFactor(self, aprimary);
+		ILArgument* ilarg = NewILArgument();
+		ilarg->Factor = CLILFactor(self, aprimary);
 		PushVector(list, ilarg);
 	}
 }

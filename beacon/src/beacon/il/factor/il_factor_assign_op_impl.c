@@ -218,8 +218,8 @@ static void assign_by_invoke(il_factor_invoke* lhs, il_factor* rhs, Enviroment* 
 	}
 	FindSetILInvoke(lhs, rhs, env, cctx, &temp);
 	for(int i=0; i<lhs->args->Length; i++) {
-		il_argument* arg = AtVector(lhs->args, i);
-		GenerateILFactor(arg->factor, env, cctx);
+		ILArgument* arg = AtVector(lhs->args, i);
+		GenerateILFactor(arg->Factor, env, cctx);
 	}
 	GenerateILFactor(rhs, env, cctx);
 	GenerateILFactor(lhs->receiver, env, cctx);
@@ -233,8 +233,8 @@ static void assign_by_invoke_bound(il_factor_invoke_bound* lhs, il_factor* rhs, 
 	FindSetILInvokeBound(lhs, rhs, env, cctx, &temp);
 	assert(lhs->args->Length == 1);
 	for(int i=0; i<lhs->args->Length; i++) {
-		il_argument* arg = AtVector(lhs->args, i);
-		GenerateILFactor(arg->factor, env, cctx);
+		ILArgument* arg = AtVector(lhs->args, i);
+		GenerateILFactor(arg->Factor, env, cctx);
 	}
 	GenerateILFactor(rhs, env, cctx);
 	//GenerateILFactor(lhs->receiver, env, cctx);

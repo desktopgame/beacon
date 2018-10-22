@@ -23,11 +23,11 @@ int MetaILCalcScore(Vector* params, Vector* ilargs, Enviroment* env, CallContext
 	for (int i = 0; i < params->Length; i++) {
 		VectorItem varg = AtVector(ilargs, i);
 		VectorItem vparam = AtVector(params, i);
-		il_argument* arg = (il_argument*)varg;
+		ILArgument* arg = (ILArgument*)varg;
 		Parameter* param = (Parameter*)vparam;
 		//実引数が NULL なら常に許容する
 		int dist = 0;
-		generic_type* argType = EvalILFactor(arg->factor, env, cctx);
+		generic_type* argType = EvalILFactor(arg->Factor, env, cctx);
 		if(GetLastBCError()) {
 			return -1;
 		}

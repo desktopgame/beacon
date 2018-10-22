@@ -35,8 +35,8 @@ void GenerateILInvokeStatic(il_factor_invoke_static* self, Enviroment* env, Call
 		GenerateGenericType(e->gtype, env);
 	}
 	for(int i=0; i<self->args->Length; i++) {
-		il_argument* e = (il_argument*)AtVector(self->args, i);
-		GenerateILFactor(e->factor, env, cctx);
+		ILArgument* e = (ILArgument*)AtVector(self->args, i);
+		GenerateILFactor(e->Factor, env, cctx);
 		if(GetLastBCError()) {
 			return;
 		}
@@ -129,8 +129,8 @@ static void il_factor_invoke_static_check(il_factor_invoke_static * self, Enviro
 	//環境を設定
 	//メソッドを検索
 	for(int i=0; i<self->args->Length; i++) {
-		il_argument* ilarg = AtVector(self->args, i);
-		LoadILFactor(ilarg->factor, env, cctx);
+		ILArgument* ilarg = AtVector(self->args, i);
+		LoadILFactor(ilarg->Factor, env, cctx);
 	}
 	CallFrame* cfr = PushCallContext(cctx, FRAME_STATIC_INVOKE_T);
 	cfr->Kind.StaticInvoke.Args = self->args;
@@ -148,7 +148,7 @@ static void il_factor_invoke_static_check(il_factor_invoke_static * self, Enviro
 }
 
 static void il_factor_invoke_static_args_delete(VectorItem item) {
-	il_argument* e = (il_argument*)item;
+	ILArgument* e = (ILArgument*)item;
 	DeleteILArgument(e);
 }
 

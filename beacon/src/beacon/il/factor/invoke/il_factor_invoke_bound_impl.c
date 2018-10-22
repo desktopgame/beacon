@@ -67,7 +67,7 @@ void DeleteILInvokeBound(il_factor_invoke_bound* self) {
 operator_overload* FindSetILInvokeBound(il_factor_invoke_bound* self, il_factor* value, Enviroment* env, CallContext* cctx, int* outIndex) {
 	assert(self->tag == BOUND_INVOKE_SUBSCRIPT_T);
 	Vector* args = NewVector();
-	PushVector(args, ((il_argument*)AtVector(self->args, 0))->factor);
+	PushVector(args, ((ILArgument*)AtVector(self->args, 0))->Factor);
 	PushVector(args, value);
 	operator_overload* opov = ILFindOperatorOverloadClass(TYPE2CLASS(self->u.subscript.opov->parent), OPERATOR_SUB_SCRIPT_SET_T, args, env, cctx, outIndex);
 	DeleteVector(args, VectorDeleterOfNull);
@@ -116,8 +116,8 @@ static void il_factor_invoke_bound_check(il_factor_invoke_bound * self, Envirome
 	int temp = -1;
 	ResolveILTypeArgument(self->type_args, cctx);
 	for(int i=0; i<self->args->Length; i++) {
-		il_argument* ilarg = AtVector(self->args, i);
-		LoadILFactor(ilarg->factor, env, cctx);
+		ILArgument* ilarg = AtVector(self->args, i);
+		LoadILFactor(ilarg->Factor, env, cctx);
 	}
 	BC_ERROR();
 	#if defined(DEBUG)
@@ -180,7 +180,7 @@ static void il_factor_invoke_bound_check(il_factor_invoke_bound * self, Envirome
 }
 
 static void il_factor_invoke_bound_args_delete(VectorItem item) {
-	il_argument* e = (il_argument*)item;
+	ILArgument* e = (ILArgument*)item;
 	DeleteILArgument(e);
 }
 
@@ -196,8 +196,8 @@ static void GenerateILInvokeBound_method(il_factor_invoke_bound* self, Enviromen
 		GenerateGenericType(e->gtype, env);
 	}
 	for(int i=0; i<self->args->Length; i++) {
-		il_argument* e = (il_argument*)AtVector(self->args, i);
-		GenerateILFactor(e->factor, env, cctx);
+		ILArgument* e = (ILArgument*)AtVector(self->args, i);
+		GenerateILFactor(e->Factor, env, cctx);
 		if(GetLastBCError()) {
 			return;
 		}
@@ -230,8 +230,8 @@ static void GenerateILInvokeBound_subscript(il_factor_invoke_bound* self, Enviro
 		GenerateGenericType(e->gtype, env);
 	}
 	for(int i=0; i<self->args->Length; i++) {
-		il_argument* e = (il_argument*)AtVector(self->args, i);
-		GenerateILFactor(e->factor, env, cctx);
+		ILArgument* e = (ILArgument*)AtVector(self->args, i);
+		GenerateILFactor(e->Factor, env, cctx);
 		if(GetLastBCError()) {
 			return;
 		}

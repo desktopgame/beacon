@@ -306,8 +306,8 @@ void ILArgsToString(Buffer* sb, Vector* args, Enviroment* env) {
 		AppendBuffer(sb, '(');
 	}
 	for(int i=0; i<args->Length; i++) {
-		il_argument* e = (il_argument*)AtVector(args, i);
-		char* str = ILFactorToString(e->factor, env);
+		ILArgument* e = (ILArgument*)AtVector(args, i);
+		char* str = ILFactorToString(e->Factor, env);
 		AppendsBuffer(sb, str);
 		if(i != (args->Length)) {
 			AppendsBuffer(sb, ", ");

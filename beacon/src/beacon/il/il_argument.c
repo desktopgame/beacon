@@ -5,15 +5,15 @@
 #include "../util/text.h"
 #include "../util/mem.h"
 
-il_argument * NewILArgument() {
-	void* block = MEM_MALLOC(sizeof(il_argument));
+ILArgument * NewILArgument() {
+	void* block = MEM_MALLOC(sizeof(ILArgument));
 	assert(block != NULL);
-	il_argument* ret = (il_argument*)block;
-	ret->factor = NULL;
+	ILArgument* ret = (ILArgument*)block;
+	ret->Factor = NULL;
 	return ret;
 }
 
-void DeleteILArgument(il_argument * self) {
-	DeleteILFactor(self->factor);
+void DeleteILArgument(ILArgument * self) {
+	DeleteILFactor(self->Factor);
 	MEM_FREE(self);
 }

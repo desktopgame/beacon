@@ -25,6 +25,6 @@ void DeleteILConstructorChain(il_constructor_chain * self) {
 }
 //private
 static void il_constructor_argument_delete(VectorItem item) {
-	il_argument* e = (il_argument*)item;
+	ILArgument* e = (ILArgument*)item;
 	DeleteILArgument(e);
 }

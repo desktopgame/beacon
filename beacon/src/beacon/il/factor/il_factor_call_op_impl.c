@@ -217,7 +217,7 @@ static void il_factor_subscript_check(il_factor_call_op* self, Enviroment* env, 
 }
 
 static void il_factor_call_op_argument_delete(VectorItem item) {
-	il_argument* e = (il_argument*)item;
+	ILArgument* e = (ILArgument*)item;
 	DeleteILArgument(e);
 }
 

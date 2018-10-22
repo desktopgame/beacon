@@ -748,8 +748,8 @@ static void CLBC_chain_super(class_loader * self, il_type * iltype, type * tp, i
 	cctx->Ty = tp;
 	il_constructor_chain* chain = ilcons->chain;
 	for (int i = 0; i < chain->argument_list->Length; i++) {
-		il_argument* ilarg = (il_argument*)AtVector(chain->argument_list, i);
-		GenerateILFactor(ilarg->factor, env, cctx);
+		ILArgument* ilarg = (ILArgument*)AtVector(chain->argument_list, i);
+		GenerateILFactor(ilarg->Factor, env, cctx);
 	}
 	//連鎖先のコンストラクタを検索する
 	constructor* chainTarget = NULL;
