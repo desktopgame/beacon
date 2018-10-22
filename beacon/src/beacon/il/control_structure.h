@@ -2,12 +2,12 @@
 #define BEACON_IL_CONTROL_STRUCTURE_H
 #include "../util/vector.h"
 
-typedef struct control_structure {
-	Vector* while_start;
-	Vector* while_end;
-} control_structure;
+typedef struct ControlStructure {
+	Vector* WhileStartTable;
+	Vector* WhileEndTable;
+} ControlStructure;
 
-void AllocControlStructure(control_structure* self);
+void AllocControlStructure(ControlStructure* self);
 
-void FreeControlStructure(control_structure self);
+void FreeControlStructure(ControlStructure self);
 #endif

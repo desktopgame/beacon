@@ -10,9 +10,9 @@
 call_context* MallocCContext(call_context_tag tag, const char* filename, int lineno) {
 	call_context* ret = mem_malloc(sizeof(call_context), filename, lineno);
 #if defined(_MSC_VER)
-	control_structure cs = { 0 };
+	ControlStructure cs = { 0 };
 #else
-	control_structure cs = {};
+	ControlStructure cs = {};
 #endif
 	ret->call_stack = MallocVector(filename, lineno);
 	ret->scope = NULL;

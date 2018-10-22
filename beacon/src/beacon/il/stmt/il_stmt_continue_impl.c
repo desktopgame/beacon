@@ -9,11 +9,11 @@ il_stmt * WrapILContinue() {
 }
 
 void GenerateILContinue(void * empty, Enviroment * env, call_context* cctx) {
-	if(cctx->control.while_start->Length == 0) {
+	if(cctx->control.WhileStartTable->Length == 0) {
 		ThrowBCError(BCERROR_CONTINUE_AT_NOT_LOOP_T);
 		return;
 	}
-	Label* lab = (Label*)TopVector(cctx->control.while_start);
+	Label* lab = (Label*)TopVector(cctx->control.WhileStartTable);
 	AddOpcodeBuf(env->Bytecode, OP_GOTO);
 	AddOpcodeBuf(env->Bytecode, lab);
 }

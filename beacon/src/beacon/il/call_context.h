@@ -29,7 +29,7 @@ typedef enum call_context_tag {
 
 typedef struct call_context {
 	Vector* call_stack;
-	control_structure control;
+	ControlStructure control;
 	call_context_tag tag;
 	struct namespace_* scope;
 	struct type* ty;
