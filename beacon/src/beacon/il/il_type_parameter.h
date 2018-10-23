@@ -7,17 +7,17 @@
 /**
  * 型引数の属性を表す列挙型.
  */
-typedef enum il_type_parameter_kind {
-	il_TYPE_PARAMETER_KIND_DEFAULT_T,
-	il_TYPE_PARAMETER_KIND_IN_T,
-	il_TYPE_PARAMETER_KIND_OUT_T,
-} il_type_parameter_kind;
+typedef enum ILTypeParameterTag {
+	IL_TYPE_PARAMETER_KIND_DEFAULT_T,
+	IL_TYPE_PARAMETER_KIND_IN_T,
+	IL_TYPE_PARAMETER_KIND_OUT_T,
+} ILTypeParameterTag;
 
 /**
  * 型引数を表す構造体.
  */
 typedef struct il_type_parameter {
-	il_type_parameter_kind kind;
+	ILTypeParameterTag kind;
 	StringView namev;
 //	Vector* rule_vec;
 } il_type_parameter;
