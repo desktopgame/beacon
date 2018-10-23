@@ -4,13 +4,13 @@
 #include <assert.h>
 #include "../util/mem.h"
 
-il_import* NewILImport(StringView pathv) {
-	il_import* ret = (il_import*)MEM_MALLOC(sizeof(il_import));
-	ret->pathv = pathv;
+ILImport* NewILImport(StringView path) {
+	ILImport* ret = (ILImport*)MEM_MALLOC(sizeof(ILImport));
+	ret->Path = path;
 	return ret;
 }
 
-void DeleteILImport(il_import* self) {
+void DeleteILImport(ILImport* self) {
 	if(self == NULL) {
 		return;
 	}

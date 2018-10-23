@@ -66,8 +66,8 @@ static void CLBC_import_internal(class_loader* self, Vector* ilimports, int i) {
 		return;
 	}
 	VectorItem e = AtVector(ilimports, i);
-	il_import* import = (il_import*)e;
-	char* withExt = ConcatString(Ref2Str(import->pathv), ".bc");
+	ILImport* import = (ILImport*)e;
+	char* withExt = ConcatString(Ref2Str(import->Path), ".bc");
 	char* fullPath = ResolveScriptPath(withExt);
 	CLBC_new_load(self, fullPath);
 	MEM_FREE(withExt);

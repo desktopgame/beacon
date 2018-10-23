@@ -4,21 +4,21 @@
 /**
  * インポート宣言を表す要素.
  */
-typedef struct il_import {
-	StringView pathv;
-} il_import;
+typedef struct ILImport {
+	StringView Path;
+} ILImport;
 
 /**
  * 指定のパスをインポートするインポート宣言を作成します.
  * 引数は呼び出し側で解放してください。
- * @param pathv
+ * @param path
  * @return
  */
-il_import* NewILImport(StringView pathv);
+ILImport* NewILImport(StringView path);
 
 /**
  * このインポート宣言と包含された文字列を解放します.
  * @param self
  */
-void DeleteILImport(il_import* self);
+void DeleteILImport(ILImport* self);
 #endif // !SIGNAL_IL_IL_IMPORT_H

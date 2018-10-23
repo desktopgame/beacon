@@ -35,7 +35,7 @@ void DeleteILToplevel(il_top_level* self) {
 
 //private
 static void il_top_level_import_delete(VectorItem item) {
-	il_import* e = (il_import*)item;
+	ILImport* e = (ILImport*)item;
 	DeleteILImport(e);
 }
 

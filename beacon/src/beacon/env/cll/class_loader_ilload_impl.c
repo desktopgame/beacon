@@ -160,7 +160,7 @@ static void class_loader_ilload_import_list(class_loader* self, AST* asource) {
 static void class_loader_ilload_import(class_loader* self, AST* aimport_decl) {
 	assert(aimport_decl->Tag == AST_IMPORT_DECL_T);
 	AST* apath = FirstAST(aimport_decl);
-	il_import* ret = NewILImport(apath->Attr.StringVValue);
+	ILImport* ret = NewILImport(apath->Attr.StringVValue);
 	PushVector(self->il_code->import_list, ret);
 }
 
