@@ -32,10 +32,10 @@
 static void CLBC_parameter_list(class_loader* self, namespace_* scope, Vector* param_list, Vector* sg_param_liste, CallContext* cctx);
 static void CLBC_parameter_list_ctor(Vector* param_list);
 
-static void CLBC_chain(class_loader* self, il_type* iltype, type* tp, il_constructor* ilcons, il_constructor_chain* ilchain, Enviroment* env);
-static void CLBC_chain_root(class_loader* self, il_type* iltype, type* tp, il_constructor* ilcons, il_constructor_chain* ilchain, Enviroment* env);
-static void CLBC_chain_auto(class_loader* self, il_type* iltype, type* tp, il_constructor* ilcons, il_constructor_chain* ilchain, Enviroment* env);
-static void CLBC_chain_super(class_loader* self, il_type* iltype, type* tp, il_constructor* ilcons, il_constructor_chain* ilchain, Enviroment* env);
+static void CLBC_chain(class_loader* self, il_type* iltype, type* tp, il_constructor* ilcons, ILConstructorChain* ilchain, Enviroment* env);
+static void CLBC_chain_root(class_loader* self, il_type* iltype, type* tp, il_constructor* ilcons, ILConstructorChain* ilchain, Enviroment* env);
+static void CLBC_chain_auto(class_loader* self, il_type* iltype, type* tp, il_constructor* ilcons, ILConstructorChain* ilchain, Enviroment* env);
+static void CLBC_chain_super(class_loader* self, il_type* iltype, type* tp, il_constructor* ilcons, ILConstructorChain* ilchain, Enviroment* env);
 static bool CLBC_test_operator_overlaod(class_loader* self, il_type* iltype, type* tp, operator_overload* opov);
 
 //
@@ -685,7 +685,7 @@ static void CLBC_parameter_list_ctor(Vector* param_list) {
 }
 
 
-static void CLBC_chain(class_loader* self, il_type* iltype, type* tp, il_constructor* ilcons, il_constructor_chain* ilchain, Enviroment* env) {
+static void CLBC_chain(class_loader* self, il_type* iltype, type* tp, il_constructor* ilcons, ILConstructorChain* ilchain, Enviroment* env) {
 	//親クラスがないなら作成
 	class_* classz = tp->u.class_;
 	if (classz->super_class == NULL &&
@@ -702,13 +702,13 @@ static void CLBC_chain(class_loader* self, il_type* iltype, type* tp, il_constru
 	CLBC_chain_super(self, iltype, tp, ilcons, ilchain, env);
 }
 
-static void CLBC_chain_root(class_loader * self, il_type * iltype, type * tp, il_constructor * ilcons, il_constructor_chain * ilchain, Enviroment * env) {
+static void CLBC_chain_root(class_loader * self, il_type * iltype, type * tp, il_constructor * ilcons, ILConstructorChain * ilchain, Enviroment * env) {
 	AddOpcodeBuf(env->Bytecode, (VectorItem)OP_NEW_OBJECT);
 	AddOpcodeBuf(env->Bytecode, (VectorItem)OP_ALLOC_FIELD);
 	AddOpcodeBuf(env->Bytecode, (VectorItem)tp->absolute_index);
 }
 
-static void CLBC_chain_auto(class_loader * self, il_type * iltype, type * tp, il_constructor * ilcons, il_constructor_chain * ilchain, Enviroment * env) {
+static void CLBC_chain_auto(class_loader * self, il_type * iltype, type * tp, il_constructor * ilcons, ILConstructorChain * ilchain, Enviroment * env) {
 	class_* classz = tp->u.class_;
 	int emptyTemp = 0;
 	CallContext* cctx = NewCallContext(CALL_CTOR_ARGS_T);
@@ -727,7 +727,7 @@ static void CLBC_chain_auto(class_loader * self, il_type * iltype, type * tp, il
 	assert((emptyTarget != NULL));
 	//空のコンストラクタを見つけることが出来たので、
 	//自動的にそれへ連鎖するチェインをおぎなう
-	il_constructor_chain* ch_empty = NewILConstructorChain();
+	ILConstructorChain* ch_empty = NewILConstructorChain();
 	ch_empty->c = emptyTarget;
 	ch_empty->constructor_index = emptyTemp;
 	ch_empty->type = AST_CONSTRUCTOR_CHAIN_SUPER_T;
@@ -741,12 +741,12 @@ static void CLBC_chain_auto(class_loader * self, il_type * iltype, type * tp, il
 	AddOpcodeBuf(env->Bytecode, (VectorItem)tp->absolute_index);
 }
 
-static void CLBC_chain_super(class_loader * self, il_type * iltype, type * tp, il_constructor * ilcons, il_constructor_chain * ilchain, Enviroment * env) {
+static void CLBC_chain_super(class_loader * self, il_type * iltype, type * tp, il_constructor * ilcons, ILConstructorChain * ilchain, Enviroment * env) {
 	class_* classz = tp->u.class_;
 	//チェインコンストラクタの実引数をプッシュ
 	CallContext* cctx = NewCallContext(CALL_CTOR_ARGS_T);
 	cctx->Ty = tp;
-	il_constructor_chain* chain = ilcons->chain;
+	ILConstructorChain* chain = ilcons->chain;
 	for (int i = 0; i < chain->argument_list->Length; i++) {
 		ILArgument* ilarg = (ILArgument*)AtVector(chain->argument_list, i);
 		GenerateILFactor(ilarg->Factor, env, cctx);

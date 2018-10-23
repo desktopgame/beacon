@@ -7,8 +7,8 @@
 //proto
 static void il_constructor_argument_delete(VectorItem item);
 
-il_constructor_chain * NewILConstructorChain() {
-	il_constructor_chain* ret = (il_constructor_chain*)MEM_MALLOC(sizeof(il_constructor_chain));
+ILConstructorChain * NewILConstructorChain() {
+	ILConstructorChain* ret = (ILConstructorChain*)MEM_MALLOC(sizeof(ILConstructorChain));
 	ret->type = CHAIN_TYPE_THIS_T;
 	ret->argument_list = NewVector();
 	ret->c = NULL;
@@ -16,7 +16,7 @@ il_constructor_chain * NewILConstructorChain() {
 	return ret;
 }
 
-void DeleteILConstructorChain(il_constructor_chain * self) {
+void DeleteILConstructorChain(ILConstructorChain * self) {
 	if (self == NULL) {
 		return;
 	}

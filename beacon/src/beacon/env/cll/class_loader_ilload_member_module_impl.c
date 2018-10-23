@@ -138,7 +138,7 @@ void CLILConstructor(class_loader* self, il_type* current, AST* aconstructor, Ac
 	AST* aparams = AtAST(aconstructor, 0);
 	AST* achain = AtAST(aconstructor, 1);
 	AST* abody = AtAST(aconstructor, 2);
-	il_constructor_chain* ilchain = NULL;
+	ILConstructorChain* ilchain = NULL;
 	//インターフェイスはコンストラクタを持てない
 	if(current->tag == ilTYPE_INTERFACE_T) {
 		ThrowBCError(

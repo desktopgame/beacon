@@ -7,21 +7,21 @@ struct constructor;
 /**
  * コンストラクタの連鎖を表す要素.
  */
-typedef struct il_constructor_chain {
+typedef struct ILConstructorChain {
 	ConstructorChainType type;
 	Vector* argument_list;
 	struct constructor* c;
 	int constructor_index;
-} il_constructor_chain;
+} ILConstructorChain;
 /**
  * コンストラクタの連鎖を表す要素を作成します.
  * @return
  */
-il_constructor_chain* NewILConstructorChain();
+ILConstructorChain* NewILConstructorChain();
 
 /**
  * コンストラクタの連鎖を表す要素を開放します.
  * @param self
  */
-void DeleteILConstructorChain(il_constructor_chain* self);
+void DeleteILConstructorChain(ILConstructorChain* self);
 #endif // !SIGNAL_IL_IL_CONSTRUCTOR_CHAIN_H

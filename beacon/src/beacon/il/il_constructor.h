@@ -5,7 +5,7 @@
 #include "../util/vector.h"
 #include "../ast/access_level.h"
 #include "../ast/modifier_type.h"
-struct il_constructor_chain;
+struct ILConstructorChain;
 /**
  * コンストラクタを表す要素.
  */
@@ -13,7 +13,7 @@ typedef struct il_constructor {
 	//char* name;
 	Vector* parameter_list;
 	Vector* statement_list;
-	struct il_constructor_chain* chain;
+	struct ILConstructorChain* chain;
 	//il_type* return_type;
 	//fqcn_cache* return_fqcn;
 	AccessLevel access;
