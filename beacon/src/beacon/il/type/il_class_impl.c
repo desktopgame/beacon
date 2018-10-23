@@ -99,7 +99,7 @@ static void il_class_DeleteMethod(VectorItem item) {
 }
 
 static void il_class_ctor_delete(VectorItem item) {
-	il_constructor* e = (il_constructor*)item;
+	ILConstructor* e = (ILConstructor*)item;
 	DeleteILConstructor(e);
 }
 

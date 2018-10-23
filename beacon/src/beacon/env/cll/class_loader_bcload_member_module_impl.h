@@ -55,8 +55,8 @@ void CLBC_methods_decl(class_loader* self, il_type* iltype, type* tp, Vector* il
 void CLBC_methods_impl(class_loader* self, namespace_* scope, il_type* iltype, type* tp, Vector* ilmethods, Vector* sgmethods);
 
 
-bool CLBC_ctor_decl(class_loader* self, il_type* iltype, type* tp, il_constructor* ilcons, namespace_* scope);
-bool CLBC_ctor_impl(class_loader* self, il_type* iltype, type* tp, il_constructor* ilcons, constructor* cons, namespace_* scope);
+bool CLBC_ctor_decl(class_loader* self, il_type* iltype, type* tp, ILConstructor* ilcons, namespace_* scope);
+bool CLBC_ctor_impl(class_loader* self, il_type* iltype, type* tp, ILConstructor* ilcons, constructor* cons, namespace_* scope);
 
 /**
  * コンストラクタ宣言を読み込んでクラスに追加します.

@@ -5,7 +5,7 @@
 #include <stdio.h>
 
 //proto
-static void il_constructor_argument_delete(VectorItem item);
+static void ILConstructor_argument_delete(VectorItem item);
 
 ILConstructorChain * NewILConstructorChain() {
 	ILConstructorChain* ret = (ILConstructorChain*)MEM_MALLOC(sizeof(ILConstructorChain));
@@ -20,11 +20,11 @@ void DeleteILConstructorChain(ILConstructorChain * self) {
 	if (self == NULL) {
 		return;
 	}
-	DeleteVector(self->Arguments, il_constructor_argument_delete);
+	DeleteVector(self->Arguments, ILConstructor_argument_delete);
 	MEM_FREE(self);
 }
 //private
-static void il_constructor_argument_delete(VectorItem item) {
+static void ILConstructor_argument_delete(VectorItem item) {
 	ILArgument* e = (ILArgument*)item;
 	DeleteILArgument(e);
 }

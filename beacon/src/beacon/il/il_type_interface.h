@@ -17,7 +17,7 @@ struct il_enum;
 struct il_field;
 struct il_method;
 struct il_property;
-struct il_constructor;
+struct ILConstructor;
 
 /**
  * 名前空間に含めることが出来る型.
@@ -56,7 +56,7 @@ Vector* GetSMethodsILType(il_type* self);
  * @param self
  * @param ctor
  */
-void AddConstructorILType(il_type* self, struct il_constructor* ctor);
+void AddConstructorILType(il_type* self, struct ILConstructor* ctor);
 
 /**
  * フィールドを追加します.

@@ -154,7 +154,7 @@ void CLILConstructor(class_loader* self, il_type* current, AST* aconstructor, Ac
 		ilchain->Type = ASTCastToChainType(achain_type);
 		CLILArgumentList(self, ilchain->Arguments, aargs);
 	}
-	il_constructor* ilcons = NewILConstructor();
+	ILConstructor* ilcons = NewILConstructor();
 	ilcons->access = level;
 	ilcons->chain = ilchain;
 	CLILParameterList(self, ilcons->parameter_list, aparams);

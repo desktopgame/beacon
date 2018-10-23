@@ -9,7 +9,7 @@ struct ILConstructorChain;
 /**
  * コンストラクタを表す要素.
  */
-typedef struct il_constructor {
+typedef struct ILConstructor {
 	//char* name;
 	Vector* parameter_list;
 	Vector* statement_list;
@@ -18,17 +18,17 @@ typedef struct il_constructor {
 	//fqcn_cache* return_fqcn;
 	AccessLevel access;
 	//ModifierType modifier;
-} il_constructor;
+} ILConstructor;
 
 /**
  * コンストラクタを表す要素を作成します.
  * @return
  */
-il_constructor* NewILConstructor();
+ILConstructor* NewILConstructor();
 
 /**
  * コンストラクタを表す要素を開放します.
  * @param self
  */
-void DeleteILConstructor(il_constructor* self);
+void DeleteILConstructor(ILConstructor* self);
 #endif // !SIGNAL_IL_IL_CONSTRUCTOR_H

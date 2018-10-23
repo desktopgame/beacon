@@ -32,10 +32,10 @@
 static void CLBC_parameter_list(class_loader* self, namespace_* scope, Vector* param_list, Vector* sg_param_liste, CallContext* cctx);
 static void CLBC_parameter_list_ctor(Vector* param_list);
 
-static void CLBC_chain(class_loader* self, il_type* iltype, type* tp, il_constructor* ilcons, ILConstructorChain* ilchain, Enviroment* env);
-static void CLBC_chain_root(class_loader* self, il_type* iltype, type* tp, il_constructor* ilcons, ILConstructorChain* ilchain, Enviroment* env);
-static void CLBC_chain_auto(class_loader* self, il_type* iltype, type* tp, il_constructor* ilcons, ILConstructorChain* ilchain, Enviroment* env);
-static void CLBC_chain_super(class_loader* self, il_type* iltype, type* tp, il_constructor* ilcons, ILConstructorChain* ilchain, Enviroment* env);
+static void CLBC_chain(class_loader* self, il_type* iltype, type* tp, ILConstructor* ilcons, ILConstructorChain* ilchain, Enviroment* env);
+static void CLBC_chain_root(class_loader* self, il_type* iltype, type* tp, ILConstructor* ilcons, ILConstructorChain* ilchain, Enviroment* env);
+static void CLBC_chain_auto(class_loader* self, il_type* iltype, type* tp, ILConstructor* ilcons, ILConstructorChain* ilchain, Enviroment* env);
+static void CLBC_chain_super(class_loader* self, il_type* iltype, type* tp, ILConstructor* ilcons, ILConstructorChain* ilchain, Enviroment* env);
 static bool CLBC_test_operator_overlaod(class_loader* self, il_type* iltype, type* tp, operator_overload* opov);
 
 //
@@ -434,7 +434,7 @@ void CLBC_methods_impl(class_loader* self, namespace_* scope, il_type* iltype, t
 //ctor
 //
 //
-bool CLBC_ctor_decl(class_loader* self, il_type* iltype, type* tp, il_constructor* ilcons, namespace_* scope) {
+bool CLBC_ctor_decl(class_loader* self, il_type* iltype, type* tp, ILConstructor* ilcons, namespace_* scope) {
 	//メソッドから仮引数一覧を取りだす
 	Vector* ilparams = ilcons->parameter_list;
 	class_* classz = tp->u.class_;
@@ -462,7 +462,7 @@ bool CLBC_ctor_decl(class_loader* self, il_type* iltype, type* tp, il_constructo
 	return true;
 }
 
-bool CLBC_ctor_impl(class_loader* self, il_type* iltype, type* tp, il_constructor* ilcons, constructor* cons, namespace_* scope) {
+bool CLBC_ctor_impl(class_loader* self, il_type* iltype, type* tp, ILConstructor* ilcons, constructor* cons, namespace_* scope) {
 	//仮引数に型を設定する
 	//class_loader_sgload_params(self, scope, ilcons->parameter_list, cons->parameter_list);
 	//まずは仮引数の一覧にインデックスを割り振る
@@ -685,7 +685,7 @@ static void CLBC_parameter_list_ctor(Vector* param_list) {
 }
 
 
-static void CLBC_chain(class_loader* self, il_type* iltype, type* tp, il_constructor* ilcons, ILConstructorChain* ilchain, Enviroment* env) {
+static void CLBC_chain(class_loader* self, il_type* iltype, type* tp, ILConstructor* ilcons, ILConstructorChain* ilchain, Enviroment* env) {
 	//親クラスがないなら作成
 	class_* classz = tp->u.class_;
 	if (classz->super_class == NULL &&
@@ -702,13 +702,13 @@ static void CLBC_chain(class_loader* self, il_type* iltype, type* tp, il_constru
 	CLBC_chain_super(self, iltype, tp, ilcons, ilchain, env);
 }
 
-static void CLBC_chain_root(class_loader * self, il_type * iltype, type * tp, il_constructor * ilcons, ILConstructorChain * ilchain, Enviroment * env) {
+static void CLBC_chain_root(class_loader * self, il_type * iltype, type * tp, ILConstructor * ilcons, ILConstructorChain * ilchain, Enviroment * env) {
 	AddOpcodeBuf(env->Bytecode, (VectorItem)OP_NEW_OBJECT);
 	AddOpcodeBuf(env->Bytecode, (VectorItem)OP_ALLOC_FIELD);
 	AddOpcodeBuf(env->Bytecode, (VectorItem)tp->absolute_index);
 }
 
-static void CLBC_chain_auto(class_loader * self, il_type * iltype, type * tp, il_constructor * ilcons, ILConstructorChain * ilchain, Enviroment * env) {
+static void CLBC_chain_auto(class_loader * self, il_type * iltype, type * tp, ILConstructor * ilcons, ILConstructorChain * ilchain, Enviroment * env) {
 	class_* classz = tp->u.class_;
 	int emptyTemp = 0;
 	CallContext* cctx = NewCallContext(CALL_CTOR_ARGS_T);
@@ -741,7 +741,7 @@ static void CLBC_chain_auto(class_loader * self, il_type * iltype, type * tp, il
 	AddOpcodeBuf(env->Bytecode, (VectorItem)tp->absolute_index);
 }
 
-static void CLBC_chain_super(class_loader * self, il_type * iltype, type * tp, il_constructor * ilcons, ILConstructorChain * ilchain, Enviroment * env) {
+static void CLBC_chain_super(class_loader * self, il_type * iltype, type * tp, ILConstructor * ilcons, ILConstructorChain * ilchain, Enviroment * env) {
 	class_* classz = tp->u.class_;
 	//チェインコンストラクタの実引数をプッシュ
 	CallContext* cctx = NewCallContext(CALL_CTOR_ARGS_T);

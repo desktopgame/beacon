@@ -128,7 +128,8 @@
 			"ast_new_literal.h": "c",
 			"opcode.h": "c",
 			"tree_map.h": "c",
-			"type_parameter.h": "c"
+			"type_parameter.h": "c",
+			"il_constructor_chain.h": "c"
 		},
 		"ruby.lint": {
 			"reek": true,
