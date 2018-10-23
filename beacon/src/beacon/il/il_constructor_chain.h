@@ -8,10 +8,10 @@ struct constructor;
  * コンストラクタの連鎖を表す要素.
  */
 typedef struct ILConstructorChain {
-	ConstructorChainType type;
-	Vector* argument_list;
-	struct constructor* c;
-	int constructor_index;
+	ConstructorChainType Type;
+	Vector* Arguments;
+	struct constructor* Constructor;
+	int ConstructorIndex;
 } ILConstructorChain;
 /**
  * コンストラクタの連鎖を表す要素を作成します.

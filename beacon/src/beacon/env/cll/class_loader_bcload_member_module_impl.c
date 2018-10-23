@@ -728,9 +728,9 @@ static void CLBC_chain_auto(class_loader * self, il_type * iltype, type * tp, il
 	//空のコンストラクタを見つけることが出来たので、
 	//自動的にそれへ連鎖するチェインをおぎなう
 	ILConstructorChain* ch_empty = NewILConstructorChain();
-	ch_empty->c = emptyTarget;
-	ch_empty->constructor_index = emptyTemp;
-	ch_empty->type = AST_CONSTRUCTOR_CHAIN_SUPER_T;
+	ch_empty->Constructor = emptyTarget;
+	ch_empty->ConstructorIndex = emptyTemp;
+	ch_empty->Type = AST_CONSTRUCTOR_CHAIN_SUPER_T;
 	ilcons->chain = ch_empty;
 	//親クラスへ連鎖
 	AddOpcodeBuf(env->Bytecode, (VectorItem)OP_CHAIN_SUPER);
@@ -747,19 +747,19 @@ static void CLBC_chain_super(class_loader * self, il_type * iltype, type * tp, i
 	CallContext* cctx = NewCallContext(CALL_CTOR_ARGS_T);
 	cctx->Ty = tp;
 	ILConstructorChain* chain = ilcons->chain;
-	for (int i = 0; i < chain->argument_list->Length; i++) {
-		ILArgument* ilarg = (ILArgument*)AtVector(chain->argument_list, i);
+	for (int i = 0; i < chain->Arguments->Length; i++) {
+		ILArgument* ilarg = (ILArgument*)AtVector(chain->Arguments, i);
 		GenerateILFactor(ilarg->Factor, env, cctx);
 	}
 	//連鎖先のコンストラクタを検索する
 	constructor* chainTarget = NULL;
 	int temp = 0;
-	if (chain->type == CHAIN_TYPE_THIS_T) {
-		chainTarget = ILFindConstructorClass(classz, chain->argument_list, env, cctx, &temp);
+	if (chain->Type == CHAIN_TYPE_THIS_T) {
+		chainTarget = ILFindConstructorClass(classz, chain->Arguments, env, cctx, &temp);
 		AddOpcodeBuf(env->Bytecode, (VectorItem)OP_CHAIN_THIS);
 		AddOpcodeBuf(env->Bytecode, (VectorItem)(tp->absolute_index));
-	} else if (chain->type == CHAIN_TYPE_SUPER_T) {
-		chainTarget = ILFindConstructorClass(classz->super_class->core_type->u.class_, chain->argument_list, env, cctx, &temp);
+	} else if (chain->Type == CHAIN_TYPE_SUPER_T) {
+		chainTarget = ILFindConstructorClass(classz->super_class->core_type->u.class_, chain->Arguments, env, cctx, &temp);
 		AddOpcodeBuf(env->Bytecode, OP_CHAIN_SUPER);
 		AddOpcodeBuf(env->Bytecode, classz->super_class->core_type->absolute_index);
 	}
@@ -770,8 +770,8 @@ static void CLBC_chain_super(class_loader * self, il_type * iltype, type * tp, i
 		return;
 	}
 	DeleteCallContext(cctx);
-	chain->c = chainTarget;
-	chain->constructor_index = temp;
+	chain->Constructor = chainTarget;
+	chain->ConstructorIndex = temp;
 	AddOpcodeBuf(env->Bytecode, (VectorItem)temp);
 	//親クラスへのチェインなら即座にフィールドを確保
 	AddOpcodeBuf(env->Bytecode, (VectorItem)OP_ALLOC_FIELD);

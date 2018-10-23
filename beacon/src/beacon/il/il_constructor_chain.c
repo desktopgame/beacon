@@ -9,10 +9,10 @@ static void il_constructor_argument_delete(VectorItem item);
 
 ILConstructorChain * NewILConstructorChain() {
 	ILConstructorChain* ret = (ILConstructorChain*)MEM_MALLOC(sizeof(ILConstructorChain));
-	ret->type = CHAIN_TYPE_THIS_T;
-	ret->argument_list = NewVector();
-	ret->c = NULL;
-	ret->constructor_index = -1;
+	ret->Type = CHAIN_TYPE_THIS_T;
+	ret->Arguments = NewVector();
+	ret->Constructor = NULL;
+	ret->ConstructorIndex = -1;
 	return ret;
 }
 
@@ -20,7 +20,7 @@ void DeleteILConstructorChain(ILConstructorChain * self) {
 	if (self == NULL) {
 		return;
 	}
-	DeleteVector(self->argument_list, il_constructor_argument_delete);
+	DeleteVector(self->Arguments, il_constructor_argument_delete);
 	MEM_FREE(self);
 }
 //private
