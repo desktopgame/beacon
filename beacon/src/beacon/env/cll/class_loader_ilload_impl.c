@@ -138,7 +138,7 @@ static void class_loader_ilload_function(class_loader * self, AST* asource) {
 	AST* aparam_list = AtAST(asource, 2);
 	AST* afunc_body = AtAST(asource, 3);
 	AST* aret_name = AtAST(asource, 4);
-	il_function* ilfunc = NewILFunction(afunc_name->Attr.StringVValue);
+	ILFunction* ilfunc = NewILFunction(afunc_name->Attr.StringVValue);
 	CLILTypeParameter(self, atypeparams, ilfunc->type_parameter_vec);
 	CLILParameterList(self, ilfunc->parameter_list, aparam_list);
 	CLILBody(self, ilfunc->statement_list, afunc_body);

@@ -45,7 +45,7 @@ static void il_top_level_DeleteNamespace(VectorItem item) {
 }
 
 static void il_top_level_function_delete(VectorItem item) {
-	il_function* e = (il_function*)item;
+	ILFunction* e = (ILFunction*)item;
 	DeleteILFunction(e);
 }
 
