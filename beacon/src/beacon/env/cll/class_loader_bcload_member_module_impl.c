@@ -167,11 +167,11 @@ bool CLBC_property_decl(class_loader* self, il_type* iltype, type* tp, il_proper
 	property* prop = property_new(ilprop->namev);
 	prop->access = ilprop->access;
 	prop->modifier = ilprop->modifier;
-	prop->set->access = ilprop->set->access;
-	prop->get->access = ilprop->get->access;
+	prop->set->access = ilprop->set->Access;
+	prop->get->access = ilprop->get->Access;
 	prop->parent = tp;
 	prop->gtype = ResolveImportManager(scope, ilprop->fqcn, cctx);
-	prop->is_short = ilprop->set->is_short && ilprop->get->is_short;
+	prop->is_short = ilprop->set->IsShort && ilprop->get->IsShort;
 	   AddPropertyType(tp, prop);
 	if(IsAbstractModifier(prop->modifier) ||
 	   IsOverrideModifier(prop->modifier) ||
@@ -181,8 +181,8 @@ bool CLBC_property_decl(class_loader* self, il_type* iltype, type* tp, il_proper
 		   return false;
 	   }
 	//プロパティアクセサの方がプロパティよりも緩いアクセスになっている
-	if(IsWeakAccess(ilprop->access, ilprop->set->access) ||
-	   IsWeakAccess(ilprop->access, ilprop->get->access)) {
+	if(IsWeakAccess(ilprop->access, ilprop->set->Access) ||
+	   IsWeakAccess(ilprop->access, ilprop->get->Access)) {
 		ThrowBCError(BCERROR_INVALID_ACCESS_LEVEL_OF_PROPERTY_T,
 			Ref2Str(GetTypeName(tp)),
 			Ref2Str(ilprop->namev)
@@ -190,8 +190,8 @@ bool CLBC_property_decl(class_loader* self, il_type* iltype, type* tp, il_proper
 		   return false;
 	}
 	//二つのアクセサがどちらもプロパティと異なるアクセスレベル
-	if((ilprop->access != ilprop->set->access) &&
-	    ilprop->access != ilprop->get->access) {
+	if((ilprop->access != ilprop->set->Access) &&
+	    ilprop->access != ilprop->get->Access) {
 		ThrowBCError(BCERROR_SPECIFIED_BOTH_PROPERTY_ACCESSOR_T,
 			Ref2Str(GetTypeName(tp)),
 			Ref2Str(ilprop->namev)
@@ -208,8 +208,8 @@ bool CLBC_property_impl(class_loader* self, il_type* iltype, type* tp, il_proper
 	if(pr->is_short) { return true; }
 	property_body* set = pr->set;
 	property_body* get = pr->get;
-	Vector* set_stmt_list = ilpr->set->statement_list;
-	Vector* get_stmt_list = ilpr->get->statement_list;
+	Vector* set_stmt_list = ilpr->set->Statements;
+	Vector* get_stmt_list = ilpr->get->Statements;
 	set->env->ContextRef = self;
 	get->env->ContextRef = self;
 	//setterのオペコードを生成

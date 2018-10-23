@@ -8,14 +8,14 @@ static void ILPropertyBody_stmt_delete(VectorItem item);
 
 ILPropertyBody* MallocILPropertyBody(ILPropertyBodyTag tag, const char* filename, int lineno) {
 	ILPropertyBody* ret = mem_malloc(sizeof(ILPropertyBody), filename, lineno);
-	ret->statement_list = NewVector();
-	ret->tag = tag;
-	ret->is_short = false;
+	ret->Statements = NewVector();
+	ret->Tag = tag;
+	ret->IsShort = false;
 	return ret;
 }
 
 void DeleteILPropertyBody(ILPropertyBody* self) {
-	DeleteVector(self->statement_list, ILPropertyBody_stmt_delete);
+	DeleteVector(self->Statements, ILPropertyBody_stmt_delete);
 	MEM_FREE(self);
 }
 //private

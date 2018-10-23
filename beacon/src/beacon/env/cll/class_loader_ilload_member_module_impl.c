@@ -97,10 +97,10 @@ void CLILProperty(class_loader* self, il_type* current, AST* aprop, AccessLevel 
 		}
 	}
 	ret->access = level;
-	ret->set = CLILProperty_body(self, current, aset, ilPROPERTY_SET_T, level);
-	ret->get = CLILProperty_body(self, current, aget, ilPROPERTY_GET_T, level);
+	ret->set = CLILProperty_body(self, current, aset, IL_PROPERTY_SET_T, level);
+	ret->get = CLILProperty_body(self, current, aget, IL_PROPERTY_GET_T, level);
 	AddPropertyILType(current, ret);
-	if(ret->set->is_short != ret->get->is_short) {
+	if(ret->set->IsShort != ret->get->IsShort) {
 		ThrowBCError(BCERROR_INVALID_PROPERTY_DECL_T, Ref2Str(current->u.class_->namev), Ref2Str(propname));
 	}
 }
@@ -190,13 +190,13 @@ static ILPropertyBody* CLILProperty_body(class_loader* self, il_type* current, A
 	assert(abody->Tag == AST_PROP_SET_T || abody->Tag == AST_PROP_GET_T);
 	AST* aacess = FirstAST(abody);
 	AST* astmt_list = SecondAST(abody);
-	ret->access = level;
-	CLILBody(self, ret->statement_list, astmt_list);
+	ret->Access = level;
+	CLILBody(self, ret->Statements, astmt_list);
 	if(!IsBlankAST(aacess)) {
-		ret->access = aacess->Attr.AccessValue;
+		ret->Access = aacess->Attr.AccessValue;
 	}
-	if(ret->statement_list->Length == 0) {
-		ret->is_short = true;
+	if(ret->Statements->Length == 0) {
+		ret->IsShort = true;
 	}
 	return ret;
 }

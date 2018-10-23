@@ -7,15 +7,15 @@
 struct generic_cache;
 
 typedef enum ILPropertyBodyTag {
-	ilPROPERTY_SET_T,
-	ilPROPERTY_GET_T,
+	IL_PROPERTY_SET_T,
+	IL_PROPERTY_GET_T,
 } ILPropertyBodyTag;
 
 typedef struct ILPropertyBody {
-	AccessLevel access;
-	Vector* statement_list;
-	ILPropertyBodyTag tag;
-	bool is_short;
+	AccessLevel Access;
+	Vector* Statements;
+	ILPropertyBodyTag Tag;
+	bool IsShort;
 } ILPropertyBody;
 
 #define ILPropertyBody_new(tag) (MallocILPropertyBody(tag, __FILE__, __LINE__))
