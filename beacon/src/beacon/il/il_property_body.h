@@ -6,20 +6,20 @@
 
 struct generic_cache;
 
-typedef enum il_property_body_tag {
+typedef enum ILPropertyBodyTag {
 	ilPROPERTY_SET_T,
 	ilPROPERTY_GET_T,
-} il_property_body_tag;
+} ILPropertyBodyTag;
 
 typedef struct il_property_body {
 	AccessLevel access;
 	Vector* statement_list;
-	il_property_body_tag tag;
+	ILPropertyBodyTag tag;
 	bool is_short;
 } il_property_body;
 
 #define il_property_body_new(tag) (MallocILPropertyBody(tag, __FILE__, __LINE__))
-il_property_body* MallocILPropertyBody(il_property_body_tag tag, const char* filename, int lineno);
+il_property_body* MallocILPropertyBody(ILPropertyBodyTag tag, const char* filename, int lineno);
 
 void DeleteILPropertyBody(il_property_body* self);
 #endif

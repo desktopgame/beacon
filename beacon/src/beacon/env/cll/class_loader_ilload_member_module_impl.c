@@ -12,7 +12,7 @@
 #include "class_loader_ilload_stmt_module_impl.h"
 #include <assert.h>
 
-static il_property_body* CLILProperty_body(class_loader* self, il_type* current, AST* abody, il_property_body_tag tag, AccessLevel level);
+static il_property_body* CLILProperty_body(class_loader* self, il_type* current, AST* abody, ILPropertyBodyTag tag, AccessLevel level);
 
 void CLILMemberTree(class_loader* self, il_type* current, AST* atree) {
 	if (atree->Tag == AST_ACCESS_MEMBER_TREE_T) {
@@ -185,7 +185,7 @@ void CLILOperatorOverload(class_loader* self, il_type* current, AST* aopov, Acce
 	PushVector(current->u.class_->operator_overload_list, ilopov);
 }
 //private
-static il_property_body* CLILProperty_body(class_loader* self, il_type* current, AST* abody, il_property_body_tag tag, AccessLevel level) {
+static il_property_body* CLILProperty_body(class_loader* self, il_type* current, AST* abody, ILPropertyBodyTag tag, AccessLevel level) {
 	il_property_body* ret = il_property_body_new(tag);
 	assert(abody->Tag == AST_PROP_SET_T || abody->Tag == AST_PROP_GET_T);
 	AST* aacess = FirstAST(abody);
