@@ -10,14 +10,10 @@ struct ILConstructorChain;
  * コンストラクタを表す要素.
  */
 typedef struct ILConstructor {
-	//char* name;
-	Vector* parameter_list;
-	Vector* statement_list;
-	struct ILConstructorChain* chain;
-	//il_type* return_type;
-	//fqcn_cache* return_fqcn;
-	AccessLevel access;
-	//ModifierType modifier;
+	Vector* Parameters;
+	Vector* Statements;
+	struct ILConstructorChain* Chain;
+	AccessLevel Access;
 } ILConstructor;
 
 /**

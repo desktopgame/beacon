@@ -155,10 +155,10 @@ void CLILConstructor(class_loader* self, il_type* current, AST* aconstructor, Ac
 		CLILArgumentList(self, ilchain->Arguments, aargs);
 	}
 	ILConstructor* ilcons = NewILConstructor();
-	ilcons->access = level;
-	ilcons->chain = ilchain;
-	CLILParameterList(self, ilcons->parameter_list, aparams);
-	CLILBody(self, ilcons->statement_list, abody);
+	ilcons->Access = level;
+	ilcons->Chain = ilchain;
+	CLILParameterList(self, ilcons->Parameters, aparams);
+	CLILBody(self, ilcons->Statements, abody);
 	PushVector(current->u.class_->constructor_list, ilcons);
 }
 

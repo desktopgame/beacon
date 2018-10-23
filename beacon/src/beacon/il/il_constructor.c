@@ -11,17 +11,17 @@ static void ILConstructor_stmt_delete(VectorItem item);
 
 ILConstructor * NewILConstructor() {
 	ILConstructor* ret = (ILConstructor*)MEM_MALLOC(sizeof(ILConstructor));
-	ret->access = ACCESS_PUBLIC_T;
-	ret->parameter_list = NewVector();
-	ret->statement_list = NewVector();
-	ret->chain = NULL;
+	ret->Access = ACCESS_PUBLIC_T;
+	ret->Parameters = NewVector();
+	ret->Statements = NewVector();
+	ret->Chain = NULL;
 	return ret;
 }
 
 void DeleteILConstructor(ILConstructor * self) {
-	DeleteILConstructorChain(self->chain);
-	DeleteVector(self->parameter_list, ILConstructor_DeleteParameter);
-	DeleteVector(self->statement_list, ILConstructor_stmt_delete);
+	DeleteILConstructorChain(self->Chain);
+	DeleteVector(self->Parameters, ILConstructor_DeleteParameter);
+	DeleteVector(self->Statements, ILConstructor_stmt_delete);
 	MEM_FREE(self);
 }
 //private

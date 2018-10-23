@@ -436,12 +436,12 @@ void CLBC_methods_impl(class_loader* self, namespace_* scope, il_type* iltype, t
 //
 bool CLBC_ctor_decl(class_loader* self, il_type* iltype, type* tp, ILConstructor* ilcons, namespace_* scope) {
 	//メソッドから仮引数一覧を取りだす
-	Vector* ilparams = ilcons->parameter_list;
+	Vector* ilparams = ilcons->Parameters;
 	class_* classz = tp->u.class_;
 	//実行時のメソッド情報を作成する
 	constructor* cons = NewConstructor();
 	Vector* parameter_list = cons->parameter_list;
-	cons->access = ilcons->access;
+	cons->access = ilcons->Access;
 	cons->parent = tp;
 	CallContext* cctx = NewCallContext(CALL_CTOR_T);
 	cctx->Scope = scope;
@@ -455,7 +455,7 @@ bool CLBC_ctor_decl(class_loader* self, il_type* iltype, type* tp, ILConstructor
 		Parameter* param = NewParameter(ilp->namev);
 		PushVector(parameter_list, param);
 	}
-	CLBC_parameter_list(self, scope, ilcons->parameter_list, cons->parameter_list, cctx);
+	CLBC_parameter_list(self, scope, ilcons->Parameters, cons->parameter_list, cctx);
 	CLBC_parameter_list_ctor(cons->parameter_list);
 	AddConstructorClass(classz, cons);
 	DeleteCallContext(cctx);
@@ -473,7 +473,7 @@ bool CLBC_ctor_impl(class_loader* self, il_type* iltype, type* tp, ILConstructor
 	cctx->Ty = tp;
 	cctx->Kind.Ctor = cons;
 	for (int i = 0; i < cons->parameter_list->Length; i++) {
-		il_parameter* ilparam = (il_parameter*)AtVector(ilcons->parameter_list, i);
+		il_parameter* ilparam = (il_parameter*)AtVector(ilcons->Parameters, i);
 		EntrySymbolTable(
 			env->Symboles,
 			ResolveImportManager(scope, ilparam->fqcn, cctx),
@@ -484,9 +484,9 @@ bool CLBC_ctor_impl(class_loader* self, il_type* iltype, type* tp, ILConstructor
 		AddOpcodeBuf(env->Bytecode, OP_STORE);
 		AddOpcodeBuf(env->Bytecode, (i + 1));
 	}
-	CLBC_chain(self, iltype, tp, ilcons, ilcons->chain, env);
+	CLBC_chain(self, iltype, tp, ilcons, ilcons->Chain, env);
 	//NOTE:ここなら名前空間を設定出来る
-	CLBC_body(self, ilcons->statement_list, env, cctx, scope);
+	CLBC_body(self, ilcons->Statements, env, cctx, scope);
 	cons->env = env;
 	DeleteCallContext(cctx);
 	return true;
@@ -689,13 +689,13 @@ static void CLBC_chain(class_loader* self, il_type* iltype, type* tp, ILConstruc
 	//親クラスがないなら作成
 	class_* classz = tp->u.class_;
 	if (classz->super_class == NULL &&
-		ilcons->chain == NULL) {
+		ilcons->Chain == NULL) {
 		CLBC_chain_root(self, iltype, tp, ilcons, ilchain, env);
 		return;
 	}
 	//親クラスがあるのに連鎖がない
 	if (classz->super_class != NULL &&
-		ilcons->chain == NULL) {
+		ilcons->Chain == NULL) {
 		CLBC_chain_auto(self, iltype, tp, ilcons, ilchain, env);
 		return;
 	}
@@ -731,7 +731,7 @@ static void CLBC_chain_auto(class_loader * self, il_type * iltype, type * tp, IL
 	ch_empty->Constructor = emptyTarget;
 	ch_empty->ConstructorIndex = emptyTemp;
 	ch_empty->Type = AST_CONSTRUCTOR_CHAIN_SUPER_T;
-	ilcons->chain = ch_empty;
+	ilcons->Chain = ch_empty;
 	//親クラスへ連鎖
 	AddOpcodeBuf(env->Bytecode, (VectorItem)OP_CHAIN_SUPER);
 	AddOpcodeBuf(env->Bytecode, (VectorItem)classz->super_class->core_type->absolute_index);
@@ -746,7 +746,7 @@ static void CLBC_chain_super(class_loader * self, il_type * iltype, type * tp, I
 	//チェインコンストラクタの実引数をプッシュ
 	CallContext* cctx = NewCallContext(CALL_CTOR_ARGS_T);
 	cctx->Ty = tp;
-	ILConstructorChain* chain = ilcons->chain;
+	ILConstructorChain* chain = ilcons->Chain;
 	for (int i = 0; i < chain->Arguments->Length; i++) {
 		ILArgument* ilarg = (ILArgument*)AtVector(chain->Arguments, i);
 		GenerateILFactor(ilarg->Factor, env, cctx);
