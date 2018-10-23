@@ -11,22 +11,21 @@
  * メソッドの定義を表す要素.
  */
 typedef struct ILMethod {
-	StringView namev;
-	Vector* parameter_list;
-	Vector* statement_list;
-	//il_type* return_type;
-	generic_cache* return_fqcn;
-	AccessLevel access;
-	ModifierType modifier;
-	Vector* GetParameterListType;
-	bool no_stmt;
+	StringView Name;
+	Vector* Parameters;
+	Vector* Statements;
+	generic_cache* ReturnGCache;
+	AccessLevel Access;
+	ModifierType Modifier;
+	Vector* TypeParameters;
+	bool IsNoStmt;
 } ILMethod;
 /**
  * メソッドを作成します.
  * @param name
  * @return
  */
-ILMethod* NewILMethod(StringView namev);
+ILMethod* NewILMethod(StringView name);
 
 /**
  * メソッドを開放します.

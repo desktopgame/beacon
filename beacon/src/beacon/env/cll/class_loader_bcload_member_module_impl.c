@@ -264,14 +264,14 @@ bool CLBC_method_decl(class_loader* self, il_type* iltype, type* tp, ILMethod* i
 	//メソッド一覧から取り出す
 	ILMethod* ilmethod = ilmt;
 	//メソッドから仮引数一覧を取りだす
-	Vector* ilparams = ilmethod->parameter_list;
+	Vector* ilparams = ilmethod->Parameters;
 	//実行時のメソッド情報を作成する
-	method* method = method_new(ilmethod->namev);
+	method* method = method_new(ilmethod->Name);
 	Vector* parameter_list = method->parameters;
-	method->type = IsNativeModifier(ilmethod->modifier) ? METHOD_TYPE_NATIVE_T : METHOD_TYPE_SCRIPT_T;
-	method->access = ilmethod->access;
-	method->modifier = ilmethod->modifier;
-	DupTypeParameterList(ilmethod->GetParameterListType, method->type_parameters);
+	method->type = IsNativeModifier(ilmethod->Modifier) ? METHOD_TYPE_NATIVE_T : METHOD_TYPE_SCRIPT_T;
+	method->access = ilmethod->Access;
+	method->modifier = ilmethod->Modifier;
+	DupTypeParameterList(ilmethod->TypeParameters, method->type_parameters);
 	CallContext* cctx = NewCallContext(CALL_METHOD_T);
 	cctx->Scope = scope;
 	cctx->Ty = tp;
@@ -301,7 +301,7 @@ bool CLBC_method_decl(class_loader* self, il_type* iltype, type* tp, ILMethod* i
 	//メソッドの本文が省略されているが、
 	//ネイティブメソッドでも抽象メソッドでもない
 	if(tp->tag == TYPE_CLASS_T &&
-	   ilmethod->no_stmt &&
+	   ilmethod->IsNoStmt &&
 		(!IsAbstractModifier(method->modifier) && !IsNativeModifier(method->modifier))
 	) {
 		ThrowBCError(BCERROR_EMPTY_STMT_METHOD_T, Ref2Str(method->namev));
@@ -311,7 +311,7 @@ bool CLBC_method_decl(class_loader* self, il_type* iltype, type* tp, ILMethod* i
 	}
 	//ネイティブメソッドもしくは抽象メソッドなのに本文が書かれている
 	if(tp->tag == TYPE_CLASS_T &&
-	   !ilmethod->no_stmt &&
+	   !ilmethod->IsNoStmt &&
 		(IsAbstractModifier(method->modifier) || IsNativeModifier(method->modifier))
 	) {
 		ThrowBCError(BCERROR_NOT_EMPTY_STMT_METHOD_T, Ref2Str(method->namev));
@@ -353,7 +353,7 @@ bool CLBC_method_decl(class_loader* self, il_type* iltype, type* tp, ILMethod* i
 		return false;
 	}
 	method->parent = tp;
-	method->return_gtype = ResolveImportManager(scope, ilmethod->return_fqcn, cctx);
+	method->return_gtype = ResolveImportManager(scope, ilmethod->ReturnGCache, cctx);
 	//ILパラメータを実行時パラメータへ変換
 	//NOTE:ここでは戻り値の型,引数の型を設定しません
 	//     class_loader_sgload_complete参照
@@ -363,7 +363,7 @@ bool CLBC_method_decl(class_loader* self, il_type* iltype, type* tp, ILMethod* i
 		Parameter* param = NewParameter(ilp->namev);
 		PushVector(parameter_list, param);
 	}
-	CLBC_parameter_list(self, scope, ilmethod->parameter_list, method->parameters, cctx);
+	CLBC_parameter_list(self, scope, ilmethod->Parameters, method->parameters, cctx);
 	AddMethodType(tp, method);
 	DeleteCallContext(cctx);
 	return true;
@@ -388,8 +388,8 @@ bool CLBC_method_impl(class_loader* self, namespace_* scope, il_type* iltype, ty
 	cctx->Ty = tp;
 	cctx->Kind.Method = me;
 	//引数を保存
-	for (int i = 0; i < ilmethod->parameter_list->Length; i++) {
-		il_parameter* ilparam = (il_parameter*)AtVector(ilmethod->parameter_list, i);
+	for (int i = 0; i < ilmethod->Parameters->Length; i++) {
+		il_parameter* ilparam = (il_parameter*)AtVector(ilmethod->Parameters, i);
 		EntrySymbolTable(
 			env->Symboles,
 			ResolveImportManager(scope, ilparam->fqcn, cctx),
@@ -406,7 +406,7 @@ bool CLBC_method_impl(class_loader* self, namespace_* scope, il_type* iltype, ty
 		AddOpcodeBuf(env->Bytecode, (VectorItem)OP_STORE);
 		AddOpcodeBuf(env->Bytecode, (VectorItem)0);
 	}
-	CLBC_corutine(self, me, env, ilmethod->parameter_list, ilmethod->statement_list, cctx, scope);
+	CLBC_corutine(self, me, env, ilmethod->Parameters, ilmethod->Statements, cctx, scope);
 	DeleteCallContext(cctx);
 	return true;
 }

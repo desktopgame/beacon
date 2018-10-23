@@ -12,16 +12,16 @@ static void ILMethod_DeleteParameter(VectorItem item);
 static void ILMethod_stmt_delete(VectorItem item);
 static void ILMethod_DeleteTypeParameter(VectorItem item);
 
-ILMethod * NewILMethod(StringView namev) {
+ILMethod * NewILMethod(StringView name) {
 	ILMethod* ret = (ILMethod*)MEM_MALLOC(sizeof(ILMethod));
-	ret->namev = namev;
-	ret->parameter_list = NewVector();
-	ret->return_fqcn = NewGenericCache();
-	ret->access = ACCESS_PUBLIC_T;
-	ret->modifier = MODIFIER_NONE_T;
-	ret->statement_list = NewVector();
-	ret->GetParameterListType = NewVector();
-	ret->no_stmt = false;
+	ret->Name = name;
+	ret->Parameters = NewVector();
+	ret->ReturnGCache = NewGenericCache();
+	ret->Access = ACCESS_PUBLIC_T;
+	ret->Modifier = MODIFIER_NONE_T;
+	ret->Statements = NewVector();
+	ret->TypeParameters = NewVector();
+	ret->IsNoStmt = false;
 	return ret;
 }
 
@@ -29,10 +29,10 @@ void DeleteILMethod(ILMethod * self) {
 	if (self == NULL) {
 		return;
 	}
-	DeleteGenericCache(self->return_fqcn);
-	DeleteVector(self->parameter_list, ILMethod_DeleteParameter);
-	DeleteVector(self->statement_list, ILMethod_stmt_delete);
-	DeleteVector(self->GetParameterListType, ILMethod_DeleteTypeParameter);
+	DeleteGenericCache(self->ReturnGCache);
+	DeleteVector(self->Parameters, ILMethod_DeleteParameter);
+	DeleteVector(self->Statements, ILMethod_stmt_delete);
+	DeleteVector(self->TypeParameters, ILMethod_DeleteTypeParameter);
 	MEM_FREE(self);
 }
 

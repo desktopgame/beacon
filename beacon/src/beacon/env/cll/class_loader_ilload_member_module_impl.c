@@ -114,22 +114,22 @@ void CLILMethod(class_loader* self, il_type* current, AST* amethod, AccessLevel 
 	AST* afunc_body = AtAST(amethod, 4);
 	AST* aret_name = AtAST(amethod, 5);
 	ILMethod* v = NewILMethod(afunc_name->Attr.StringVValue);
-	CLILTypeParameter(self, ageneric, v->GetParameterListType);
-	CLILGenericCache(aret_name, v->return_fqcn);
+	CLILTypeParameter(self, ageneric, v->TypeParameters);
+	CLILGenericCache(aret_name, v->ReturnGCache);
 	bool error;
-	v->access = level;
-	v->modifier = ASTCastToModifier(amodifier, &error);
-	CLILParameterList(self, v->parameter_list, aparam_list);
-	CLILBody(self, v->statement_list, afunc_body);
+	v->Access = level;
+	v->Modifier = ASTCastToModifier(amodifier, &error);
+	CLILParameterList(self, v->Parameters, aparam_list);
+	CLILBody(self, v->Statements, afunc_body);
 	//メソッドの本文が省略されているかどうか
 	//例えばネイティブメソッドや抽象メソッドは省略されているべき
 	if(IsBlankAST(afunc_body)) {
-		v->no_stmt = true;
+		v->IsNoStmt = true;
 	}
 	AddMethodILType(current, v);
 	//重複する修飾子を検出
 	if(error) {
-		ThrowBCError(BCERROR_OVERWRAP_MODIFIER_T, Ref2Str(v->namev));
+		ThrowBCError(BCERROR_OVERWRAP_MODIFIER_T, Ref2Str(v->Name));
 	}
 }
 

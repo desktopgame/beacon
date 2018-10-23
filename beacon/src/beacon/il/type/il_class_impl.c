@@ -61,7 +61,7 @@ void AddPropertyILClass(il_class* self, il_property* prop) {
 }
 
 void AddMethodILClass(il_class * self, ILMethod * m) {
-	if (IsStaticModifier(m->modifier)) {
+	if (IsStaticModifier(m->Modifier)) {
 		PushVector(self->smethod_list, m);
 	} else {
 		PushVector(self->method_list, m);
