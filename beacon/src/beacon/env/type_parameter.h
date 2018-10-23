@@ -4,7 +4,7 @@
 #include "../util/string_pool.h"
 #include "../util/vector.h"
 #include <stdbool.h>
-struct il_type_parameter;
+struct ILTypeParameter;
 /**
  * 型変数の種類を表す列挙.
  */
@@ -33,7 +33,7 @@ TypeParameter* NewTypeParameter(StringView namev);
  * @param src
  * @param return
  */
-TypeParameter* DupTypeParameter(struct il_type_parameter* src);
+TypeParameter* DupTypeParameter(struct ILTypeParameter* src);
 
 /**
  * ILから型変数を生成します.

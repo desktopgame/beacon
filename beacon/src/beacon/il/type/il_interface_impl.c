@@ -55,7 +55,7 @@ static void il_interface_DeleteMethod(VectorItem item) {
 }
 
 static void il_interface_DeleteTypeParameter(VectorItem item) {
-	il_type_parameter* e = (il_type_parameter*)item;
+	ILTypeParameter* e = (ILTypeParameter*)item;
 	DeleteILTypeParameter(e);
 }
 

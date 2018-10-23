@@ -7,7 +7,7 @@
 #include "../../util/text.h"
 
 #include "../class_loader.h"
-//#include "../../il/il_type_parameter_rule.h"
+//#include "../../il/ILTypeParameter_rule.h"
 #include "../../il/il_type_parameter.h"
 #include "../../il/il_type_argument.h"
 #include "../../il/il_parameter.h"
@@ -72,7 +72,7 @@ void CLILTypeParameter(class_loader* self, AST* asource, Vector* dest) {
 		   asource->Tag == AST_TYPE_IN_PARAMETER_T ||
 		   asource->Tag == AST_TYPE_OUT_PARAMETER_T);
 	AST* arule_list = FirstAST(asource);
-	il_type_parameter* iltypeparam = NewILTypeParameter(asource->Attr.StringVValue);
+	ILTypeParameter* iltypeparam = NewILTypeParameter(asource->Attr.StringVValue);
 	if (asource->Tag == AST_TYPE_IN_PARAMETER_T) iltypeparam->kind = IL_TYPE_PARAMETER_KIND_IN_T;
 	if (asource->Tag == AST_TYPE_OUT_PARAMETER_T) iltypeparam->kind = IL_TYPE_PARAMETER_KIND_OUT_T;
 	PushVector(dest, iltypeparam);
@@ -185,8 +185,8 @@ static void CLILTypeParameter_rule(class_loader* self, AST* asource, Vector* des
 		}
 	} else {
 		if (source->Tag == AST_TYPENAME_T) {
-			il_type_parameter_rule* rule = il_type_parameter_rule_new();
-			rule->Tag = il_type_parameter_rule_polymorphic;
+			ILTypeParameter_rule* rule = ILTypeParameter_rule_new();
+			rule->Tag = ILTypeParameter_rule_polymorphic;
 			rule->u.fqcn_ = NewGenericCache();
 			CLILGenericCache(source, rule->u.fqcn_);
 			PushVector(dest, rule);

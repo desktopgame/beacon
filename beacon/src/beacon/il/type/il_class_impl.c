@@ -111,7 +111,7 @@ static void il_class_extend_delete(VectorItem item) {
 }
 
 static void il_class_DeleteTypeParameter(VectorItem item) {
-	il_type_parameter* e = (il_type_parameter*)item;
+	ILTypeParameter* e = (ILTypeParameter*)item;
 	DeleteILTypeParameter(e);
 }
 

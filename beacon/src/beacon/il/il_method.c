@@ -48,6 +48,6 @@ static void ILMethod_stmt_delete(VectorItem item) {
 }
 
 static void ILMethod_DeleteTypeParameter(VectorItem item) {
-	il_type_parameter* e = (il_type_parameter*)item;
+	ILTypeParameter* e = (ILTypeParameter*)item;
 	DeleteILTypeParameter(e);
 }

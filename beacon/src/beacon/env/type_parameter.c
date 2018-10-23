@@ -15,7 +15,7 @@ TypeParameter * NewTypeParameter(StringView namev) {
 	return ret;
 }
 
-TypeParameter * DupTypeParameter(il_type_parameter * src) {
+TypeParameter * DupTypeParameter(ILTypeParameter * src) {
 	TypeParameter* ret = NewTypeParameter(src->namev);
 	switch (src->kind) {
 		case IL_TYPE_PARAMETER_KIND_DEFAULT_T:
@@ -44,7 +44,7 @@ void DupTypeParameterList(Vector* ilSource, Vector* sgDest) {
 	//あとからルール一覧を対応づける必要があります。
 	//DupTypeParameterからルールの複製を削除したのもそのためです。
 	for (int i = 0; i < ilSource->Length; i++) {
-		il_type_parameter* e = (il_type_parameter*)AtVector(ilSource, i);
+		ILTypeParameter* e = (ILTypeParameter*)AtVector(ilSource, i);
 		TypeParameter* newTP = DupTypeParameter(e);
 		PushVector(sgDest, newTP);
 		//TypeParameter_rule_list_dup(e->rule_vec, newTP->rule_vec, cache);

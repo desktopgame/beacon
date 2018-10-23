@@ -16,18 +16,18 @@ typedef enum ILTypeParameterTag {
 /**
  * 型引数を表す構造体.
  */
-typedef struct il_type_parameter {
+typedef struct ILTypeParameter {
 	ILTypeParameterTag kind;
 	StringView namev;
 //	Vector* rule_vec;
-} il_type_parameter;
+} ILTypeParameter;
 
 /**
  * 新しい型引数を作成します.
  * @param name
  * @return
  */
-il_type_parameter* NewILTypeParameter(StringView namev);
+ILTypeParameter* NewILTypeParameter(StringView namev);
 
 /**
  * 型引数の一覧を出力します.
@@ -39,5 +39,5 @@ void PrintILTypeParameterList(Vector* v);
  * 型引数を解放します.
  * @param self
  */
-void DeleteILTypeParameter(il_type_parameter* self);
+void DeleteILTypeParameter(ILTypeParameter* self);
 #endif // !SIGNAL_IL_IL_TYPE_PARAMETER_H
