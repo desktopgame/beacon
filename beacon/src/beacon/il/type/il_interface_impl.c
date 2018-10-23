@@ -32,7 +32,7 @@ void AddPropertyILInterface(il_interface* self, il_property* prop) {
 	PushVector(self->prop_list, prop);
 }
 
-void AddMethodILInterface(il_interface * self, il_method * method) {
+void AddMethodILInterface(il_interface * self, ILMethod * method) {
 	PushVector(self->method_list, method);
 }
 
@@ -50,7 +50,7 @@ static void il_interface_fqcn_delete(VectorItem item) {
 }
 
 static void il_interface_DeleteMethod(VectorItem item) {
-	il_method* e = (il_method*)item;
+	ILMethod* e = (ILMethod*)item;
 	DeleteILMethod(e);
 }
 

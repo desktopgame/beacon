@@ -40,8 +40,8 @@ bool CLBC_property_impl(class_loader* self, il_type* iltype, type* tp, il_proper
 void CLBC_properties_decl(class_loader* self, il_type* iltype, type* tp, Vector* ilprops, namespace_* scope);
 void CLBC_properties_impl(class_loader* self, il_type* iltype, type* tp, Vector* ilprops, Vector* sgprops, namespace_* scope);
 
-bool CLBC_method_decl(class_loader* self, il_type* iltype, type* tp, il_method* ilmt, namespace_* scope);
-bool CLBC_method_impl(class_loader* self, namespace_* scope, il_type* iltype, type* tp, il_method* ilmt, method* mt);
+bool CLBC_method_decl(class_loader* self, il_type* iltype, type* tp, ILMethod* ilmt, namespace_* scope);
+bool CLBC_method_impl(class_loader* self, namespace_* scope, il_type* iltype, type* tp, ILMethod* ilmt, method* mt);
 
 /**
  * メソッド宣言を読み込んでクラスに追加します.

@@ -60,7 +60,7 @@ void AddPropertyILClass(il_class* self, il_property* prop) {
 	}
 }
 
-void AddMethodILClass(il_class * self, il_method * m) {
+void AddMethodILClass(il_class * self, ILMethod * m) {
 	if (IsStaticModifier(m->modifier)) {
 		PushVector(self->smethod_list, m);
 	} else {
@@ -94,7 +94,7 @@ static void il_class_DeleteField(VectorItem item) {
 }
 
 static void il_class_DeleteMethod(VectorItem item) {
-	il_method* e = (il_method*)item;
+	ILMethod* e = (ILMethod*)item;
 	DeleteILMethod(e);
 }
 

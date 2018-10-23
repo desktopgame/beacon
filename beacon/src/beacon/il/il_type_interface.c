@@ -52,7 +52,7 @@ void AddPropertyILType(il_type* self, il_property* prop) {
 	}
 }
 
-void AddMethodILType(il_type * self, il_method * method) {
+void AddMethodILType(il_type * self, ILMethod * method) {
 	if (self->tag == ilTYPE_CLASS_T) {
 		AddMethodILClass(self->u.class_, method);
 	} else if (self->tag == ilTYPE_INTERFACE_T) {

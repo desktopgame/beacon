@@ -4,7 +4,7 @@
 #include "../../util/vector.h"
 #include "../../util/string_pool.h"
 #include "../il_type_interface.h"
-struct il_method;
+struct ILMethod;
 /**
  * インターフェースを表す要素.
  */
@@ -42,7 +42,7 @@ void AddPropertyILInterface(il_interface* self, struct il_property* prop);
  * @param self
  * @param method
  */
-void AddMethodILInterface(il_interface* self, struct il_method* method);
+void AddMethodILInterface(il_interface* self, struct ILMethod* method);
 
 /**
  * インターフェースを開放します.

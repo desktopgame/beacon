@@ -10,7 +10,7 @@
 /**
  * メソッドの定義を表す要素.
  */
-typedef struct il_method {
+typedef struct ILMethod {
 	StringView namev;
 	Vector* parameter_list;
 	Vector* statement_list;
@@ -20,17 +20,17 @@ typedef struct il_method {
 	ModifierType modifier;
 	Vector* GetParameterListType;
 	bool no_stmt;
-} il_method;
+} ILMethod;
 /**
  * メソッドを作成します.
  * @param name
  * @return
  */
-il_method* NewILMethod(StringView namev);
+ILMethod* NewILMethod(StringView namev);
 
 /**
  * メソッドを開放します.
  * @param self
  */
-void DeleteILMethod(il_method* self);
+void DeleteILMethod(ILMethod* self);
 #endif // !SIGNAL_IL_IL_METHOD_H

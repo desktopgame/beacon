@@ -85,7 +85,7 @@ static void CLBC_class(class_loader* self, il_type* iltype, namespace_* parent);
  */
 static void CLBC_interface(class_loader* self, il_type* iltype, namespace_* parent);
 
-static void CLBC_attach_native_method(class_loader* self, il_type* iltype, class_* classz, il_method* ilmethod, method* me);
+static void CLBC_attach_native_method(class_loader* self, il_type* iltype, class_* classz, ILMethod* ilmethod, method* me);
 static void CLBC_debug_native_method(method* parent, Frame* fr, Enviroment* env);
 
 static void CLBC_check_superclass(class_* cls);
@@ -275,7 +275,7 @@ static void CLBC_interface(class_loader * self, il_type * iltype, namespace_ * p
 	tp->state = tp->state | TYPE_REGISTER;
 }
 
-static void CLBC_attach_native_method(class_loader* self, il_type* ilclass, class_* classz, il_method* ilmethod, method* me) {
+static void CLBC_attach_native_method(class_loader* self, il_type* ilclass, class_* classz, ILMethod* ilmethod, method* me) {
 //	native_method.h で、実行時にリンクするようにしたので不要
 //	me->u.native_method->ref = NewNativeMethodRef(class_loader_sgload_debug_native_method);
 }

@@ -6,7 +6,7 @@
 #include "../il_type_interface.h"
 #include <stdbool.h>
 struct ILField;
-struct il_method;
+struct ILMethod;
 /**
  * クラスを表す要素.
  */
@@ -60,7 +60,7 @@ void AddPropertyILClass(il_class* self, struct il_property* prop);
  * @param self
  * @param m
  */
-void AddMethodILClass(il_class* self, struct il_method* m);
+void AddMethodILClass(il_class* self, struct ILMethod* m);
 
 /**
  * クラスと含まれるメンバー宣言の一覧を解放します.

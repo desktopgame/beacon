@@ -260,9 +260,9 @@ void CLBC_properties_impl(class_loader* self,  il_type* iltype, type* tp, Vector
 //method
 //
 //
-bool CLBC_method_decl(class_loader* self, il_type* iltype, type* tp, il_method* ilmt, namespace_* scope) {
+bool CLBC_method_decl(class_loader* self, il_type* iltype, type* tp, ILMethod* ilmt, namespace_* scope) {
 	//メソッド一覧から取り出す
-	il_method* ilmethod = ilmt;
+	ILMethod* ilmethod = ilmt;
 	//メソッドから仮引数一覧を取りだす
 	Vector* ilparams = ilmethod->parameter_list;
 	//実行時のメソッド情報を作成する
@@ -369,10 +369,10 @@ bool CLBC_method_decl(class_loader* self, il_type* iltype, type* tp, il_method* 
 	return true;
 }
 
-bool CLBC_method_impl(class_loader* self, namespace_* scope, il_type* iltype, type* tp, il_method* ilmt, method* mt) {
+bool CLBC_method_impl(class_loader* self, namespace_* scope, il_type* iltype, type* tp, ILMethod* ilmt, method* mt) {
 	//	VectorItem e = AtVector(sgmethods, i);
 	method* me = mt;
-	il_method* ilmethod = ilmt;
+	ILMethod* ilmethod = ilmt;
 	//ネイティブメソッドならオペコードは不要
 	if (me->type == METHOD_TYPE_NATIVE_T ||
 		me->type == METHOD_TYPE_ABSTRACT_T) {

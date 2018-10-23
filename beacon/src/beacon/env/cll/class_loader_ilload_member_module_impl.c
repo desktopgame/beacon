@@ -113,7 +113,7 @@ void CLILMethod(class_loader* self, il_type* current, AST* amethod, AccessLevel 
 	AST* aparam_list = AtAST(amethod, 3);
 	AST* afunc_body = AtAST(amethod, 4);
 	AST* aret_name = AtAST(amethod, 5);
-	il_method* v = NewILMethod(afunc_name->Attr.StringVValue);
+	ILMethod* v = NewILMethod(afunc_name->Attr.StringVValue);
 	CLILTypeParameter(self, ageneric, v->GetParameterListType);
 	CLILGenericCache(aret_name, v->return_fqcn);
 	bool error;

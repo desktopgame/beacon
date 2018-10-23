@@ -15,7 +15,7 @@ struct il_class;
 struct il_interface;
 struct il_enum;
 struct ILField;
-struct il_method;
+struct ILMethod;
 struct il_property;
 struct ILConstructor;
 
@@ -77,7 +77,7 @@ void AddPropertyILType(il_type* self, struct il_property* prop);
  * @param self
  * @param field
  */
-void AddMethodILType(il_type* self, struct il_method* method);
+void AddMethodILType(il_type* self, struct ILMethod* method);
 
 /**
  * 型を開放します.
