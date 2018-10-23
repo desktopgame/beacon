@@ -11,15 +11,15 @@ typedef enum ILPropertyBodyTag {
 	ilPROPERTY_GET_T,
 } ILPropertyBodyTag;
 
-typedef struct il_property_body {
+typedef struct ILPropertyBody {
 	AccessLevel access;
 	Vector* statement_list;
 	ILPropertyBodyTag tag;
 	bool is_short;
-} il_property_body;
+} ILPropertyBody;
 
-#define il_property_body_new(tag) (MallocILPropertyBody(tag, __FILE__, __LINE__))
-il_property_body* MallocILPropertyBody(ILPropertyBodyTag tag, const char* filename, int lineno);
+#define ILPropertyBody_new(tag) (MallocILPropertyBody(tag, __FILE__, __LINE__))
+ILPropertyBody* MallocILPropertyBody(ILPropertyBodyTag tag, const char* filename, int lineno);
 
-void DeleteILPropertyBody(il_property_body* self);
+void DeleteILPropertyBody(ILPropertyBody* self);
 #endif

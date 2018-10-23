@@ -11,8 +11,8 @@ typedef struct il_property {
 	AccessLevel access;
 	ModifierType modifier;
 	StringView namev;
-	il_property_body* set;
-	il_property_body* get;
+	ILPropertyBody* set;
+	ILPropertyBody* get;
 } il_property;
 
 #define il_property_new(namev) (MallocILProperty(namev, __FILE__, __LINE__))
