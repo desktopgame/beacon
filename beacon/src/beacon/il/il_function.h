@@ -9,20 +9,19 @@ struct generic_cache;
  * 関数宣言を表す要素.
  */
 typedef struct ILFunction {
-	StringView namev;
-	Vector* type_parameter_vec;
-	Vector* parameter_list;
-	Vector* statement_list;
-	//il_type* return_type;
-	struct generic_cache* return_fqcn;
+	StringView Name;
+	Vector* TypeParameters;
+	Vector* Parameters;
+	Vector* Statements;
+	struct generic_cache* ReturnGCache;
 } ILFunction;
 
 /**
  * 新しい関数宣言を作成します.
- * @param namev
+ * @param name
  * @return
  */
-ILFunction* NewILFunction(StringView namev);
+ILFunction* NewILFunction(StringView name);
 
 /**
  * 関数を解放します.

@@ -12,21 +12,21 @@ static void ILFunction_DeleteTypeParameter(VectorItem item);
 static void ILFunction_DeleteParameter(VectorItem item);
 static void ILFunction_stmt_delete(VectorItem item);
 
-ILFunction * NewILFunction(StringView namev) {
+ILFunction * NewILFunction(StringView name) {
 	ILFunction* ret = (ILFunction*)MEM_MALLOC(sizeof(ILFunction));
-	ret->namev = namev;
-	ret->type_parameter_vec = NewVector();
-	ret->parameter_list = NewVector();
-	ret->statement_list = NewVector();
-	ret->return_fqcn = NewGenericCache();
+	ret->Name = name;
+	ret->TypeParameters = NewVector();
+	ret->Parameters = NewVector();
+	ret->Statements = NewVector();
+	ret->ReturnGCache = NewGenericCache();
 	return ret;
 }
 
 void DeleteILFunction(ILFunction * self) {
-	DeleteVector(self->type_parameter_vec, ILFunction_DeleteTypeParameter);
-	DeleteVector(self->parameter_list, ILFunction_DeleteParameter);
-	DeleteVector(self->statement_list, ILFunction_stmt_delete);
-	DeleteGenericCache(self->return_fqcn);
+	DeleteVector(self->TypeParameters, ILFunction_DeleteTypeParameter);
+	DeleteVector(self->Parameters, ILFunction_DeleteParameter);
+	DeleteVector(self->Statements, ILFunction_stmt_delete);
+	DeleteGenericCache(self->ReturnGCache);
 	MEM_FREE(self);
 }
 

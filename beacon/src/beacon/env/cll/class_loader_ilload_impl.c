@@ -139,10 +139,10 @@ static void class_loader_ilload_function(class_loader * self, AST* asource) {
 	AST* afunc_body = AtAST(asource, 3);
 	AST* aret_name = AtAST(asource, 4);
 	ILFunction* ilfunc = NewILFunction(afunc_name->Attr.StringVValue);
-	CLILTypeParameter(self, atypeparams, ilfunc->type_parameter_vec);
-	CLILParameterList(self, ilfunc->parameter_list, aparam_list);
-	CLILBody(self, ilfunc->statement_list, afunc_body);
-	CLILGenericCache(aret_name, ilfunc->return_fqcn);
+	CLILTypeParameter(self, atypeparams, ilfunc->TypeParameters);
+	CLILParameterList(self, ilfunc->Parameters, aparam_list);
+	CLILBody(self, ilfunc->Statements, afunc_body);
+	CLILGenericCache(aret_name, ilfunc->ReturnGCache);
 	PushVector(self->il_code->function_list, ilfunc);
 }
 

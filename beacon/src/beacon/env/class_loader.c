@@ -232,8 +232,8 @@ static void LoadClassLoader_toplevel_function(class_loader* self) {
 	//メソッドの宣言のみロード
 	for(int i=0; i<funcs->Length; i++) {
 		ILFunction* ilfunc = AtVector(funcs, i);
-		method* m = method_new(ilfunc->namev);
-		DupTypeParameterList(ilfunc->type_parameter_vec, m->type_parameters);
+		method* m = method_new(ilfunc->Name);
+		DupTypeParameterList(ilfunc->TypeParameters, m->type_parameters);
 		script_method* sm = NewScriptMethod();
 		Enviroment* env = NewEnviroment();
 		//CallContextの設定
@@ -248,12 +248,12 @@ static void LoadClassLoader_toplevel_function(class_loader* self) {
 		m->u.script_method = sm;
 		m->parent = worldT;
 		//戻り値を指定
-		m->return_gtype = ResolveImportManager(loc, ilfunc->return_fqcn, cctx);
+		m->return_gtype = ResolveImportManager(loc, ilfunc->ReturnGCache, cctx);
 	//	PrintGenericType(m->return_gtype);
 	//	Println();
 		//引数を指定
-		for(int j=0; j<ilfunc->parameter_list->Length; j++) {
-			il_parameter* ilparam = AtVector(ilfunc->parameter_list, j);
+		for(int j=0; j<ilfunc->Parameters->Length; j++) {
+			il_parameter* ilparam = AtVector(ilfunc->Parameters, j);
 			Parameter* param = NewParameter(ilparam->namev);
 			PushVector(m->parameters, param);
 			param->GType = ResolveImportManager(loc, ilparam->fqcn, cctx);
@@ -282,7 +282,7 @@ static void LoadClassLoader_toplevel_function(class_loader* self) {
 		cctx->Scope = GetLangNamespace();
 		cctx->Ty = worldT;
 		cctx->Kind.Method = m;
-		CLBC_corutine(self, m, sm->env, ilfunc->parameter_list, ilfunc->statement_list, cctx, GetLangNamespace());
+		CLBC_corutine(self, m, sm->env, ilfunc->Parameters, ilfunc->Statements, cctx, GetLangNamespace());
 		DeleteCallContext(cctx);
 	}
 }
