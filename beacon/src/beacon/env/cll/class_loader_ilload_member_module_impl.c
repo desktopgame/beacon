@@ -63,7 +63,7 @@ void CLILField(class_loader* self, il_type* current, AST* afield, AccessLevel le
 		);
 		return;
 	}
-	il_field* v = NewILField(aaccess_name->Attr.StringVValue);
+	ILField* v = NewILField(aaccess_name->Attr.StringVValue);
 	CLILGenericCache(aGetTypeName, v->fqcn);
 	bool error;
 	v->access = level;

@@ -14,7 +14,7 @@ typedef enum il_type_tag {
 struct il_class;
 struct il_interface;
 struct il_enum;
-struct il_field;
+struct ILField;
 struct il_method;
 struct il_property;
 struct ILConstructor;
@@ -63,7 +63,7 @@ void AddConstructorILType(il_type* self, struct ILConstructor* ctor);
  * @param self
  * @param field
  */
-void AddFieldILType(il_type* self, struct il_field* field);
+void AddFieldILType(il_type* self, struct ILField* field);
 
 /**
  * プロパティを追加します.

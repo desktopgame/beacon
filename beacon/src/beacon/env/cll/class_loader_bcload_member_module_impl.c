@@ -42,7 +42,7 @@ static bool CLBC_test_operator_overlaod(class_loader* self, il_type* iltype, typ
 //field
 //
 //
-bool CLBC_field_decl(class_loader* self, il_type* iltype, type* tp, il_field* ilfi, namespace_* scope, CallContext* cctx) {
+bool CLBC_field_decl(class_loader* self, il_type* iltype, type* tp, ILField* ilfi, namespace_* scope, CallContext* cctx) {
 	field* fi = NewField(ilfi->namev);
 	fi->access = ilfi->access;
 	fi->modifier = ilfi->modifier;

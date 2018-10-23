@@ -16,7 +16,7 @@
 #include "../../env/operator_overload.h"
 #include "../../env/property.h"
 
-bool CLBC_field_decl(class_loader* self, il_type* iltype, type* tp, il_field* ilfi, namespace_* scope, CallContext* cctx);
+bool CLBC_field_decl(class_loader* self, il_type* iltype, type* tp, ILField* ilfi, namespace_* scope, CallContext* cctx);
 bool CLBC_field_impl(class_loader* self, type* tp, field* fi, namespace_* scope, CallContext* cctx);
 /**
  * フィールド宣言を読み込んでクラスに追加します.

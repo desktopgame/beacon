@@ -37,7 +37,7 @@ void AddConstructorILType(il_type * self, ILConstructor * ctor) {
 	}
 }
 
-void AddFieldILType(il_type * self, il_field * field) {
+void AddFieldILType(il_type * self, ILField * field) {
 	assert(self->tag == ilTYPE_CLASS_T);
 	if (self->tag == ilTYPE_CLASS_T) {
 		AddFieldILClass(self->u.class_, field);

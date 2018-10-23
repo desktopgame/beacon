@@ -6,8 +6,8 @@
 #include "il_factor_interface.h"
 #include "../env/generic_cache.h"
 
-il_field * NewILField(StringView namev) {
-	il_field* ret = (il_field*)MEM_MALLOC(sizeof(il_field));
+ILField * NewILField(StringView namev) {
+	ILField* ret = (ILField*)MEM_MALLOC(sizeof(ILField));
 	ret->fqcn = NewGenericCache();
 	ret->access = ACCESS_PUBLIC_T;
 	ret->modifier = MODIFIER_NONE_T;
@@ -16,7 +16,7 @@ il_field * NewILField(StringView namev) {
 	return ret;
 }
 
-void DeleteILField(il_field * self) {
+void DeleteILField(ILField * self) {
 	if (self == NULL) {
 		return;
 	}

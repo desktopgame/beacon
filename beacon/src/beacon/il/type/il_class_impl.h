@@ -5,7 +5,7 @@
 #include "../../env/fqcn_cache.h"
 #include "../il_type_interface.h"
 #include <stdbool.h>
-struct il_field;
+struct ILField;
 struct il_method;
 /**
  * クラスを表す要素.
@@ -46,7 +46,7 @@ il_class* NewILClass(StringView namev);
  * @param self
  * @param f
  */
-void AddFieldILClass(il_class* self, struct il_field* f);
+void AddFieldILClass(il_class* self, struct ILField* f);
 
 /**
  * プロパティを追加します.

@@ -44,7 +44,7 @@ il_class* NewILClass(StringView namev) {
 	return ret;
 }
 
-void AddFieldILClass(il_class * self, il_field * f) {
+void AddFieldILClass(il_class * self, ILField * f) {
 	if (IsStaticModifier(f->modifier)) {
 		PushVector(self->sfield_list, f);
 	} else {
@@ -89,7 +89,7 @@ void DeleteILClass(il_class * self) {
 
 //private
 static void il_class_DeleteField(VectorItem item) {
-	il_field* e = (il_field*)item;
+	ILField* e = (ILField*)item;
 	DeleteILField(e);
 }
 
