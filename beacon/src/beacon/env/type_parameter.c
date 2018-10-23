@@ -16,8 +16,8 @@ TypeParameter * NewTypeParameter(StringView namev) {
 }
 
 TypeParameter * DupTypeParameter(ILTypeParameter * src) {
-	TypeParameter* ret = NewTypeParameter(src->namev);
-	switch (src->kind) {
+	TypeParameter* ret = NewTypeParameter(src->Name);
+	switch (src->Tag) {
 		case IL_TYPE_PARAMETER_KIND_DEFAULT_T:
 			ret->Kind = TYPE_PARAMETER_KIND_DEFAULT_T;
 			break;

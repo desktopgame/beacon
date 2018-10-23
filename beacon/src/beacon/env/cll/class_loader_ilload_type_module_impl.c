@@ -73,8 +73,8 @@ void CLILTypeParameter(class_loader* self, AST* asource, Vector* dest) {
 		   asource->Tag == AST_TYPE_OUT_PARAMETER_T);
 	AST* arule_list = FirstAST(asource);
 	ILTypeParameter* iltypeparam = NewILTypeParameter(asource->Attr.StringVValue);
-	if (asource->Tag == AST_TYPE_IN_PARAMETER_T) iltypeparam->kind = IL_TYPE_PARAMETER_KIND_IN_T;
-	if (asource->Tag == AST_TYPE_OUT_PARAMETER_T) iltypeparam->kind = IL_TYPE_PARAMETER_KIND_OUT_T;
+	if (asource->Tag == AST_TYPE_IN_PARAMETER_T) iltypeparam->Tag = IL_TYPE_PARAMETER_KIND_IN_T;
+	if (asource->Tag == AST_TYPE_OUT_PARAMETER_T) iltypeparam->Tag = IL_TYPE_PARAMETER_KIND_OUT_T;
 	PushVector(dest, iltypeparam);
 	//制約があるならそれも設定
 	//制約はとりあえずなしで

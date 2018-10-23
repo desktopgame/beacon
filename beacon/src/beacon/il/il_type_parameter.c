@@ -5,10 +5,10 @@
 //proto
 static void ILTypeParameter_rule_list_delete(VectorItem item);
 
-ILTypeParameter * NewILTypeParameter(StringView namev) {
+ILTypeParameter * NewILTypeParameter(StringView name) {
 	ILTypeParameter* ret = (ILTypeParameter*)MEM_MALLOC(sizeof(ILTypeParameter));
-	ret->kind = IL_TYPE_PARAMETER_KIND_DEFAULT_T;
-	ret->namev = namev;
+	ret->Tag = IL_TYPE_PARAMETER_KIND_DEFAULT_T;
+	ret->Name = name;
 	return ret;
 }
 
@@ -19,12 +19,12 @@ void PrintILTypeParameterList(Vector * v) {
 	printf("<");
 	for (int i = 0; i < v->Length; i++) {
 		ILTypeParameter* e = (ILTypeParameter*)AtVector(v, i);
-		if (e->kind == IL_TYPE_PARAMETER_KIND_IN_T) {
+		if (e->Tag == IL_TYPE_PARAMETER_KIND_IN_T) {
 			printf("in ");
-		} else if (e->kind == IL_TYPE_PARAMETER_KIND_OUT_T) {
+		} else if (e->Tag == IL_TYPE_PARAMETER_KIND_OUT_T) {
 			printf("out ");
 		}
-		printf("%s", Ref2Str(e->namev));
+		printf("%s", Ref2Str(e->Name));
 		if (i != v->Length - 1) {
 			printf(", ");
 		}
