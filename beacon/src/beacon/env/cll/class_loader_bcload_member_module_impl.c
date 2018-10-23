@@ -43,15 +43,15 @@ static bool CLBC_test_operator_overlaod(class_loader* self, il_type* iltype, typ
 //
 //
 bool CLBC_field_decl(class_loader* self, il_type* iltype, type* tp, ILField* ilfi, namespace_* scope, CallContext* cctx) {
-	field* fi = NewField(ilfi->namev);
-	fi->access = ilfi->access;
-	fi->modifier = ilfi->modifier;
+	field* fi = NewField(ilfi->Name);
+	fi->access = ilfi->Access;
+	fi->modifier = ilfi->Modifier;
 	fi->parent = tp;
-	fi->gtype = ResolveImportManager(scope, ilfi->fqcn, cctx);
+	fi->gtype = ResolveImportManager(scope, ilfi->GCache, cctx);
 	AddFieldType(tp, fi);
 	//フィールドの初期値
-	fi->initial_value = ilfi->initial_value;
-	ilfi->initial_value = NULL;
+	fi->initial_value = ilfi->InitialValue;
+	ilfi->InitialValue = NULL;
 	//フィールドの修飾子に native が使用されている
 	if(IsNativeModifier(fi->modifier)) {
 		ThrowBCError(BCERROR_NATIVE_FIELD_T,

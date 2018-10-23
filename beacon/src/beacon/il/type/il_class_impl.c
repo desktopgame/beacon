@@ -45,7 +45,7 @@ il_class* NewILClass(StringView namev) {
 }
 
 void AddFieldILClass(il_class * self, ILField * f) {
-	if (IsStaticModifier(f->modifier)) {
+	if (IsStaticModifier(f->Modifier)) {
 		PushVector(self->sfield_list, f);
 	} else {
 		PushVector(self->field_list, f);

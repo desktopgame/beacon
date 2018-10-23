@@ -11,19 +11,18 @@ struct il_factor;
  * フィールドを表す要素.
  */
 typedef struct ILField {
-	//il_type* type;
-	struct generic_cache* fqcn;
-	StringView namev;
-	AccessLevel access;
-	ModifierType modifier;
-	struct il_factor* initial_value;
+	struct generic_cache* GCache;
+	StringView Name;
+	AccessLevel Access;
+	ModifierType Modifier;
+	struct il_factor* InitialValue;
 } ILField;
 /**
  * 新しいフィールドを作成します.
- * @param namev
+ * @param name
  * @return
  */
-ILField* NewILField(StringView namev);
+ILField* NewILField(StringView name);
 
 /**
  * フィールドを開放します.

@@ -64,18 +64,18 @@ void CLILField(class_loader* self, il_type* current, AST* afield, AccessLevel le
 		return;
 	}
 	ILField* v = NewILField(aaccess_name->Attr.StringVValue);
-	CLILGenericCache(aGetTypeName, v->fqcn);
+	CLILGenericCache(aGetTypeName, v->GCache);
 	bool error;
-	v->access = level;
-	v->modifier = ASTCastToModifier(amodifier, &error);
+	v->Access = level;
+	v->Modifier = ASTCastToModifier(amodifier, &error);
 	AddFieldILType(current, v);
 	//設定されているなら初期値も
 	if(!IsBlankAST(afact)) {
-		v->initial_value = CLILFactor(self, afact);
+		v->InitialValue = CLILFactor(self, afact);
 	}
 	//重複する修飾子を検出
 	if(error) {
-		ThrowBCError(BCERROR_OVERWRAP_MODIFIER_T, Ref2Str(v->namev));
+		ThrowBCError(BCERROR_OVERWRAP_MODIFIER_T, Ref2Str(v->Name));
 	}
 }
 
