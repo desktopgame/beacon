@@ -40,7 +40,7 @@ static void il_top_level_import_delete(VectorItem item) {
 }
 
 static void il_top_level_DeleteNamespace(VectorItem item) {
-	il_namespace* e = (il_namespace*)item;
+	ILNamespace* e = (ILNamespace*)item;
 	DeleteILNamespace(e);
 }
 

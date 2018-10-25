@@ -51,7 +51,7 @@ static void CLBC_Namespacelist(class_loader* self, Vector* ilNamespacelist, Name
  * @param ilnamespace
  * @param parent
  */
-static void CLBC_namespace(class_loader* self, il_namespace* ilnamespace, Namespace* parent);
+static void CLBC_namespace(class_loader* self, ILNamespace* ilnamespace, Namespace* parent);
 
 /**
  * 型宣言の一覧を読み込みます.
@@ -122,13 +122,13 @@ static void CLBC_Namespacelist(class_loader* self, Vector* ilNamespacelist, Name
 	CL_ERROR(self);
 	for (int i = 0; i < ilNamespacelist->Length; i++) {
 		VectorItem e = AtVector(ilNamespacelist, i);
-		il_namespace* iln = (il_namespace*)e;
+		ILNamespace* iln = (ILNamespace*)e;
 		CLBC_namespace(self, iln, parent);
 		CL_ERROR(self);
 	}
 }
 
-static void CLBC_namespace(class_loader* self, il_namespace* ilnamespace, Namespace* parent) {
+static void CLBC_namespace(class_loader* self, ILNamespace* ilnamespace, Namespace* parent) {
 	CL_ERROR(self);
 	Namespace* current = NULL;
 	if (parent == NULL) {
