@@ -4,20 +4,20 @@
 struct Enviroment;
 struct property;
 
-typedef enum property_body_tag {
+typedef enum PropertyBodyTag {
 	PROPERTY_SET_T,
 	PROPERTY_GET_T
-} property_body_tag;
+} PropertyBodyTag;
 
 typedef struct property_body {
 	struct property* parent;
 	AccessLevel access;
-	property_body_tag tag;
+	PropertyBodyTag tag;
 	struct Enviroment* env;
 } property_body;
 
 #define property_body_new(tag) (MallocPropertyBody(tag, __FILE__, __LINE__))
-property_body* MallocPropertyBody(property_body_tag tag, const char* filename, int lineno);
+property_body* MallocPropertyBody(PropertyBodyTag tag, const char* filename, int lineno);
 
 void DeletePropertyBody(property_body* self);
 #endif

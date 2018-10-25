@@ -2,7 +2,7 @@
 #include "../util/mem.h"
 #include "../vm/enviroment.h"
 
-property_body* MallocPropertyBody(property_body_tag tag, const char* filename, int lineno) {
+property_body* MallocPropertyBody(PropertyBodyTag tag, const char* filename, int lineno) {
 	property_body* ret = mem_malloc(sizeof(property_body), filename, lineno);
 	ret->tag = tag;
 	ret->env = NewEnviroment();
