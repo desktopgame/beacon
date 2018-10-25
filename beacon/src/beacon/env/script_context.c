@@ -126,12 +126,12 @@ void ClearScriptContext(ScriptContext* self) {
 
 object* IInternScriptContext(ScriptContext* self, int i) {
 	Heap* he = self->heap;
-	NumericMap* cell = GetNumericMapCell(self->n_int_map, i);
+	NumericMap* cell = GetNumericMapCell(self->IntegerCacheMap, i);
 	he->AcceptBlocking++;
 	if(cell == NULL) {
 		object* obj = object_int_new(i);
 		obj->paint = PAINT_ONEXIT_T;
-		cell = PutNumericMap(self->n_int_map, i, obj);
+		cell = PutNumericMap(self->IntegerCacheMap, i, obj);
 	}
 	he->AcceptBlocking--;
 	return (object*)cell->Item;
@@ -143,21 +143,21 @@ void CacheScriptContext() {
 	Heap* h = GetHeap();
 	if(h != NULL) h->AcceptBlocking++;
 	//すでにキャッシュされている
-	if(self->pos_int_vec->Length > 0 ||
-	   self->neg_int_vec->Length > 0) {
+	if(self->PositiveIntegerCacheList->Length > 0 ||
+	   self->NegativeIntegerCacheList->Length > 0) {
 		if(h != NULL) h->AcceptBlocking--;
 		   return;
 	   }
 	//正の数のキャッシュ
 	for(int i=0; i<100; i++) {
 		object* a = object_int_new(i);
-		PushVector(self->pos_int_vec, a);
+		PushVector(self->PositiveIntegerCacheList, a);
 		a->paint = PAINT_ONEXIT_T;
 	}
 	//負の数のキャッシュ
 	for(int i=1; i<10; i++) {
 		object* a = object_int_new(-i);
-		PushVector(self->neg_int_vec, a);
+		PushVector(self->NegativeIntegerCacheList, a);
 		a->paint = PAINT_ONEXIT_T;
 	}
 	if(h != NULL) h->AcceptBlocking--;
@@ -183,9 +183,9 @@ static ScriptContext* ScriptContext_malloc(void) {
 #else
 	ret->IncludeList = GetFiles("script-lib/beacon/lang");
 #endif
-	ret->pos_int_vec = NewVector();
-	ret->neg_int_vec = NewVector();
-	ret->n_int_map = NewNumericMap();
+	ret->PositiveIntegerCacheList = NewVector();
+	ret->NegativeIntegerCacheList = NewVector();
+	ret->IntegerCacheMap = NewNumericMap();
 	ret->print_error = true;
 	ret->abort_on_error = true;
 	PushVector(ret->ThreadList, GetMainSGThread());
@@ -205,9 +205,9 @@ static void ScriptContext_free(ScriptContext* self) {
 		DestroyObject(self->null_obj);
 	}
 	DeleteHeap(self->heap);
-	DeleteVector(self->neg_int_vec, CacheScriptContext_delete);
-	DeleteVector(self->pos_int_vec, CacheScriptContext_delete);
-	DeleteNumericMap(self->n_int_map, ScriptContext_mcache_delete);
+	DeleteVector(self->NegativeIntegerCacheList, CacheScriptContext_delete);
+	DeleteVector(self->PositiveIntegerCacheList, CacheScriptContext_delete);
+	DeleteNumericMap(self->IntegerCacheMap, ScriptContext_mcache_delete);
 	//DeleteObject(self->null_obj);
 	CollectGenericType();
 	DeleteVector(self->AllGenericList, VectorDeleterOfNull);

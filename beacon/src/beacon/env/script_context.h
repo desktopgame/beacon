@@ -31,9 +31,9 @@ typedef struct ScriptContext {
 	Vector* TypeList;
 	Vector* AllGenericList;
 	//整数のキャッシュ
-	Vector* pos_int_vec;
-	Vector* neg_int_vec;
-	NumericMap* n_int_map;
+	Vector* PositiveIntegerCacheList;
+	Vector* NegativeIntegerCacheList;
+	NumericMap* IntegerCacheMap;
 	bool print_error;
 	bool abort_on_error;
 	struct Heap* heap;

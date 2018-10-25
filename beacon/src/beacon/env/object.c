@@ -41,8 +41,8 @@ object* GetIntObject(int i) {
 		return IInternScriptContext(ctx, i);
 		//return object_int_new(i);
 	}
-	if(i < 0) { return (object*)AtVector(ctx->neg_int_vec, (-i) - 1); }
-	return (object*)AtVector(ctx->pos_int_vec, i);
+	if(i < 0) { return (object*)AtVector(ctx->NegativeIntegerCacheList, (-i) - 1); }
+	return (object*)AtVector(ctx->PositiveIntegerCacheList, i);
 }
 
 object * MallocDoubleObject(double d, const char* filename, int lineno) {
