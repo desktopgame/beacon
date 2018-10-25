@@ -525,7 +525,7 @@ void CLBC_ctors_impl(class_loader* self, il_type* iltype, type* tp) {
 //operator overload
 //
 //
-bool CLBC_operator_overload_decl(class_loader* self, il_type* iltype, type* tp, il_operator_overload* ilopov, Namespace* scope) {
+bool CLBC_operator_overload_decl(class_loader* self, il_type* iltype, type* tp, ILOperatorOverload* ilopov, Namespace* scope) {
 	//演算子オーバーロード一覧から取り出す
 	operator_overload* opov = NewOperatorOverload(ilopov->op);
 	opov->access = ilopov->access;
@@ -554,7 +554,7 @@ bool CLBC_operator_overload_decl(class_loader* self, il_type* iltype, type* tp, 
 	return true;
 }
 
-bool CLBC_operator_overload_impl(class_loader* self, il_type* iltype, type* tp, il_operator_overload* ilopov, operator_overload* opov, Namespace* scope) {
+bool CLBC_operator_overload_impl(class_loader* self, il_type* iltype, type* tp, ILOperatorOverload* ilopov, operator_overload* opov, Namespace* scope) {
 	//オペコードを作成
 	//FIXME:ILメソッドと実行時メソッドのインデックスが同じなのでとりあえず動く
 	//まずは仮引数の一覧にインデックスを割り振る

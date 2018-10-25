@@ -116,7 +116,7 @@ static void il_class_DeleteTypeParameter(VectorItem item) {
 }
 
 static void DeleteILClass_operator_overload(VectorItem item) {
-	il_operator_overload* e = (il_operator_overload*)item;
+	ILOperatorOverload* e = (ILOperatorOverload*)item;
 	DeleteILOperatorOverload(e);
 }
 

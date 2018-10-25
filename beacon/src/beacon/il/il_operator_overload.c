@@ -7,8 +7,8 @@
 static void DeleteILOperatorOverload_parameter(VectorItem item);
 static void DeleteILOperatorOverload_stmt(VectorItem item);
 
-il_operator_overload* NewILOperatorOverload(OperatorType type) {
-	il_operator_overload* ret = (il_operator_overload*)MEM_MALLOC(sizeof(il_operator_overload));
+ILOperatorOverload* NewILOperatorOverload(OperatorType type) {
+	ILOperatorOverload* ret = (ILOperatorOverload*)MEM_MALLOC(sizeof(ILOperatorOverload));
 	ret->op = type;
 	ret->parameter_list = NewVector();
 	ret->statement_list = NewVector();
@@ -16,7 +16,7 @@ il_operator_overload* NewILOperatorOverload(OperatorType type) {
 	return ret;
 }
 
-void DeleteILOperatorOverload(il_operator_overload* self) {
+void DeleteILOperatorOverload(ILOperatorOverload* self) {
 	DeleteVector(self->parameter_list, DeleteILOperatorOverload_parameter);
 	DeleteVector(self->statement_list, DeleteILOperatorOverload_stmt);
 	DeleteGenericCache(self->return_fqcn);

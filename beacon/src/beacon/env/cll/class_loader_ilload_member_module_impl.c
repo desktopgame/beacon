@@ -177,7 +177,7 @@ void CLILOperatorOverload(class_loader* self, il_type* current, AST* aopov, Acce
 		);
 		return;
 	}
-	il_operator_overload* ilopov = NewILOperatorOverload(ot);
+	ILOperatorOverload* ilopov = NewILOperatorOverload(ot);
 	ilopov->access = level;
 	CLILParameterList(self, ilopov->parameter_list, aparam_list);
 	CLILBody(self, ilopov->statement_list, abody);
