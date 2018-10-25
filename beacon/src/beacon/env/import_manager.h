@@ -6,7 +6,7 @@
 //#include "fqcn_cache.h"
 struct generic_cache;
 struct generic_type;
-struct fqcn_cache;
+struct FQCNCache;
 struct Namespace;
 struct class_loader;
 struct ImportInfo;
@@ -59,7 +59,7 @@ struct generic_type* ResolveImportManager(struct Namespace* scope, struct generi
  * @param cctx
  * @return 解決出来なかったなら NULL を返します.
  */
-struct generic_type* ResolvefImportManager(struct Namespace* scope, struct fqcn_cache* fqcn, struct CallContext* cctx);
+struct generic_type* ResolvefImportManager(struct Namespace* scope, struct FQCNCache* fqcn, struct CallContext* cctx);
 
 /**
  * インポートマネージャを開放します.

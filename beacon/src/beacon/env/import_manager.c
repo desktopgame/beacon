@@ -93,7 +93,7 @@ generic_type* ResolveImportManager(Namespace* scope, generic_cache* fqcn, CallCo
 	return parameterized;
 }
 
-generic_type* ResolvefImportManager(Namespace* scope, fqcn_cache* fqcn, CallContext* cctx) {
+generic_type* ResolvefImportManager(Namespace* scope, FQCNCache* fqcn, CallContext* cctx) {
 	type* core_type = GetTypeFQCN(fqcn, scope);
 	//Int
 	//Foo::MyClass

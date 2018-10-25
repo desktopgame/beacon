@@ -75,7 +75,7 @@ generic_type* GetReceiverCContext(CallContext* self) {
 	return NULL;
 }
 
-type* GetEvalTypeCContext(CallContext* self, fqcn_cache* fqcn) {
+type* GetEvalTypeCContext(CallContext* self, FQCNCache* fqcn) {
 	type* tp = GetTypeFQCN(fqcn, self->Scope);
 	if(tp == NULL) {
 		tp = GetTypeFQCN(fqcn, GetLangNamespace());

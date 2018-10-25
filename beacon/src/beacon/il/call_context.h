@@ -10,7 +10,7 @@ struct Method;
 struct constructor;
 struct operator_overload;
 struct generic_type;
-struct fqcn_cache;
+struct FQCNCache;
 
 typedef enum CallContextTag {
 	//プログラムのトップレベル
@@ -60,7 +60,7 @@ struct class_* GetClassCContext(CallContext* self);
 
 struct generic_type* GetReceiverCContext(CallContext* self);
 
-struct type* GetEvalTypeCContext(CallContext* self, struct fqcn_cache* fqcn);
+struct type* GetEvalTypeCContext(CallContext* self, struct FQCNCache* fqcn);
 
 Vector* GetTypeArgsCContext(CallContext* self);
 

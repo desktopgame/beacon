@@ -6,7 +6,7 @@ struct Enviroment;
 struct generic_type;
 
 typedef struct il_factor_variable_static {
-	fqcn_cache* fqcn;
+	FQCNCache* fqcn;
 	Vector* type_args;
 } il_factor_variable_static;
 

@@ -14,7 +14,7 @@ struct Namespace;
  * 型変数を含む型の宣言.
  */
 typedef struct generic_cache {
-	fqcn_cache* fqcn;
+	FQCNCache* fqcn;
 	Vector* type_args;
 } generic_cache;
 

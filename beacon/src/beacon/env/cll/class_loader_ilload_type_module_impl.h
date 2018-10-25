@@ -3,11 +3,11 @@
 #include "../../util/vector.h"
 //このファイルは非公開ヘッダーか .c からのみインクルードして下さい。
 struct AST;
-struct fqcn_cache;
+struct FQCNCache;
 struct generic_cache;
 struct class_loader;
 
-void CLILFQCNCache(struct AST* afqcn, struct fqcn_cache* fqcn);
+void CLILFQCNCache(struct AST* afqcn, struct FQCNCache* fqcn);
 
 void CLILGenericCache(struct AST* afqcn, struct generic_cache* dest);
 

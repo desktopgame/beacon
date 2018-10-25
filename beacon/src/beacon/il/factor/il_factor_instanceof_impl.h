@@ -3,7 +3,7 @@
 #include "../il_factor_interface.h"
 struct generic_cache;
 struct generic_type;
-struct fqcn_cache;
+struct FQCNCache;
 
 typedef struct il_factor_instanceof {
 	il_factor* fact;

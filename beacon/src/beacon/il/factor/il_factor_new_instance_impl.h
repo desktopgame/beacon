@@ -14,7 +14,7 @@ struct constructor;
  */
 typedef struct il_factor_new_instance {
 	Vector* argument_list;
-	fqcn_cache* fqcnc;
+	FQCNCache* fqcnc;
 	Vector* type_args;
 //	generic_cache* fqcn;
 	generic_type* instance_type;

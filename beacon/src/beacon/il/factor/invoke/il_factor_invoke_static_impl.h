@@ -9,7 +9,7 @@ struct Method;
 
 typedef struct il_factor_invoke_static {
 	StringView namev;
-	fqcn_cache* fqcn;
+	FQCNCache* fqcn;
 	Vector* args;
 	Vector* type_args;
 	struct Method* m;

@@ -30,7 +30,7 @@ typedef enum il_variable_type {
  * 変数を表す要素.
  */
 typedef struct il_factor_variable {
-	fqcn_cache* fqcn;
+	FQCNCache* fqcn;
 	Vector* type_args;
 	int index;
 	il_variable_type type;

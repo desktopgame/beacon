@@ -12,7 +12,7 @@ struct ILMethod;
  */
 typedef struct il_class {
 	StringView namev;
-//	fqcn_cache* super;
+//	FQCNCache* super;
 //	Vector* implement_list;
 	Vector* extend_list;
 	Vector* field_list;

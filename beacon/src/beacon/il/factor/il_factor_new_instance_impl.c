@@ -27,7 +27,7 @@ il_factor * WrapILNewInstance(il_factor_new_instance * self) {
 
 il_factor_new_instance * NewILNewInstance() {
 	il_factor_new_instance* ret = (il_factor_new_instance*)MEM_MALLOC(sizeof(il_factor_new_instance));
-	ret->fqcnc = fqcn_cache_new();
+	ret->fqcnc = FQCNCache_new();
 	ret->type_args = NewVector();
 	ret->argument_list = NewVector();
 	ret->c = NULL;
@@ -79,7 +79,7 @@ generic_type* EvalILNewInstance(il_factor_new_instance * self, Enviroment * env,
 		generic_type* ret = RefGenericType(self->c->parent);
 		return ret;
 	}
-	//fqcn_cache typename_group
+	//FQCNCache typename_group
 	if (self->instance_type == NULL) {
 		Namespace* scope = NULL;
 		generic_type* a = generic_NewType(self->c->parent);

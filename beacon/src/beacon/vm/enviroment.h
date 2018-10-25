@@ -9,7 +9,7 @@
 struct class_;
 struct object;
 struct class_loader;
-struct fqcn_cache;
+struct FQCNCache;
 /**
  * プログラムの実行環境です.
  * スタックや変数は実行時に変化しますが、
