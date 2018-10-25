@@ -15,10 +15,10 @@ static void ILToplevel_stmt_delete(VectorItem item);
 
 ILToplevel* NewILToplevel() {
 	ILToplevel* ret = (ILToplevel*)MEM_MALLOC(sizeof(ILToplevel));
-	ret->import_list = NewVector();
-	ret->Namespacelist = NewVector();
-	ret->statement_list = NewVector();
-	ret->function_list = NewVector();
+	ret->ImportList = NewVector();
+	ret->NamespaceList = NewVector();
+	ret->StatementList = NewVector();
+	ret->FunctionList = NewVector();
 	return ret;
 }
 
@@ -26,10 +26,10 @@ void DeleteILToplevel(ILToplevel* self) {
 	if(self == NULL) {
 		return;
 	}
-	DeleteVector(self->import_list, ILToplevel_import_delete);
-	DeleteVector(self->Namespacelist, ILToplevel_DeleteNamespace);
-	DeleteVector(self->statement_list, ILToplevel_stmt_delete);
-	DeleteVector(self->function_list, ILToplevel_function_delete);
+	DeleteVector(self->ImportList, ILToplevel_import_delete);
+	DeleteVector(self->NamespaceList, ILToplevel_DeleteNamespace);
+	DeleteVector(self->StatementList, ILToplevel_stmt_delete);
+	DeleteVector(self->FunctionList, ILToplevel_function_delete);
 	MEM_FREE(self);
 }
 

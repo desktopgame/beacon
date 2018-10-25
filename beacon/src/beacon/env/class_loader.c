@@ -211,7 +211,7 @@ static void LoadClassLoader_toplevel(class_loader* self) {
 	AddOpcodeBuf(self->env->Bytecode, OP_STORE);
 	AddOpcodeBuf(self->env->Bytecode, 0);
 	//以下読み込み
-	CLBC_body(self, self->il_code->statement_list, self->env, cctx, NULL);
+	CLBC_body(self, self->il_code->StatementList, self->env, cctx, NULL);
 	DeleteILStmt(body);
 	DeleteCallContext(cctx);
 	CacheScriptContext();
@@ -221,7 +221,7 @@ static void LoadClassLoader_toplevel_function(class_loader* self) {
 	if(self->level != 0 || self->type != CONTENT_ENTRY_POINT_T) {
 		return;
 	}
-	Vector* funcs = self->il_code->function_list;
+	Vector* funcs = self->il_code->FunctionList;
 	type* worldT = FindTypeFromNamespace(GetLangNamespace(), InternString("World"));
 	//前回の実行で作成されたメソッドを解放
 	Vector* methods = TYPE2CLASS(worldT)->method_list;

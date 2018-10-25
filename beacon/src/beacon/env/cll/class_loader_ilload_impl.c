@@ -116,10 +116,10 @@ void ILLoadClassLoader(class_loader* self, AST* source_code) {
 			class_loader_ilload_import_list(self, child);
 		//namespace Foo { ... }
 		} else if (child->Tag == AST_NAMESPACE_DECL_T) {
-			class_loader_ilload_namespace(self, self->il_code->Namespacelist, child);
+			class_loader_ilload_namespace(self, self->il_code->NamespaceList, child);
 		//print();
 		} else if (IsStmtAST(child)) {
-			CLILBody(self, self->il_code->statement_list, child);
+			CLILBody(self, self->il_code->StatementList, child);
 		//def f() { ... }
 		} else if(child->Tag == AST_FUNCTION_DECL_T) {
 			class_loader_ilload_function(self, child);
@@ -143,7 +143,7 @@ static void class_loader_ilload_function(class_loader * self, AST* asource) {
 	CLILParameterList(self, ilfunc->Parameters, aparam_list);
 	CLILBody(self, ilfunc->Statements, afunc_body);
 	CLILGenericCache(aret_name, ilfunc->ReturnGCache);
-	PushVector(self->il_code->function_list, ilfunc);
+	PushVector(self->il_code->FunctionList, ilfunc);
 }
 
 static void class_loader_ilload_import_list(class_loader* self, AST* asource) {
@@ -161,7 +161,7 @@ static void class_loader_ilload_import(class_loader* self, AST* aimport_decl) {
 	assert(aimport_decl->Tag == AST_IMPORT_DECL_T);
 	AST* apath = FirstAST(aimport_decl);
 	ILImport* ret = NewILImport(apath->Attr.StringVValue);
-	PushVector(self->il_code->import_list, ret);
+	PushVector(self->il_code->ImportList, ret);
 }
 
 static void class_loader_ilload_namespace(class_loader* self, Vector* parent, AST* aNamespacedecl) {

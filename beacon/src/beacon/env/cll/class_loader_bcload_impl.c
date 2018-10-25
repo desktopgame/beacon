@@ -99,7 +99,7 @@ void BCLoadClassLoader(class_loader* self) {
 	CL_ERROR(self);
 	script_context* ctx = GetCurrentScriptContext();
 	ILToplevel* iltop = self->il_code;
-	CLBC_import(self, self->il_code->import_list);
+	CLBC_import(self, self->il_code->ImportList);
 	CLBC_Namespacetree(self);
 }
 
@@ -114,7 +114,7 @@ void SpecialBCLoadClassLoader(class_loader* self) {
 //private
 static void CLBC_Namespacetree(class_loader* self) {
 	CL_ERROR(self);
-	CLBC_Namespacelist(self, self->il_code->Namespacelist, NULL);
+	CLBC_Namespacelist(self, self->il_code->NamespaceList, NULL);
 }
 
 static void CLBC_Namespacelist(class_loader* self, Vector* ilNamespacelist, Namespace* parent) {
