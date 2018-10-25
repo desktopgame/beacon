@@ -35,11 +35,11 @@ struct interface_;
  * 名前空間を表す構造体.
  */
 typedef struct Namespace {
-	StringView namev;
-	struct Namespace* parent;
-	NumericMap* Namespacemap;
-	NumericMap* type_map;
-	uint32_t ref_count;
+	StringView Name;
+	struct Namespace* Parent;
+	NumericMap* NamespaceMap;
+	NumericMap* TypeMap;
+	uint32_t RefCount;
 } Namespace;
 
 /**

@@ -55,11 +55,11 @@ Namespace * AddNamespaceNamespace(Namespace * self, StringView namev) {
 	Namespace* child = FindNamespaceFromNamespace(self, namev);
 	if (child == NULL) {
 		Namespace* newNamespace = Namespacemalloc(namev);
-		newNamespace->parent = self;
+		newNamespace->Parent = self;
 		child = newNamespace;
-		PutNumericMap(self->Namespacemap, namev, child);
+		PutNumericMap(self->NamespaceMap, namev, child);
 		//PushVector(self->Namespacevec, child);
-		self->ref_count++;
+		self->RefCount++;
 	}
 	return child;
 }
@@ -67,7 +67,7 @@ Namespace * AddNamespaceNamespace(Namespace * self, StringView namev) {
 struct type* AddTypeNamespace(Namespace* self, type* type) {
 	script_context* ctx = GetCurrentScriptContext();
 	type->location = self;
-	PutNumericMap(self->type_map, GetTypeName(type), type);
+	PutNumericMap(self->TypeMap, GetTypeName(type), type);
 	type->absolute_index = ctx->type_vec->Length;
 	PushVector(ctx->type_vec, type);
 	return type;
@@ -75,12 +75,12 @@ struct type* AddTypeNamespace(Namespace* self, type* type) {
 
 Namespace * FindNamespaceFromNamespace(Namespace * self, StringView namev) {
 	assert(self != NULL);
-	return GetNumericMapValue(self->Namespacemap, namev);
+	return GetNumericMapValue(self->NamespaceMap, namev);
 }
 
 type * FindTypeFromNamespace(Namespace * self, StringView namev) {
 	assert(self != NULL);
-	return GetNumericMapValue(self->type_map, namev);
+	return GetNumericMapValue(self->TypeMap, namev);
 }
 
 class_ * FindClassFromNamespace(Namespace * self, StringView namev) {
@@ -144,37 +144,37 @@ type* GetExceptionTypeNamespace() {
 }
 
 void UnlinkNamespace(Namespace * self) {
-	EachNumericMap(self->Namespacemap, UnlinkNamespace_namespace);
-	EachNumericMap(self->type_map, UnlinkNamespace_type);
+	EachNumericMap(self->NamespaceMap, UnlinkNamespace_namespace);
+	EachNumericMap(self->TypeMap, UnlinkNamespace_type);
 }
 
 StringView NamespaceToString(Namespace* self) {
-	if(self->parent == NULL) {
-		return self->namev;
+	if(self->Parent == NULL) {
+		return self->Name;
 	}
 	return ConcatIntern(
 		Ref2Str(ConcatIntern(
-			Ref2Str(NamespaceToString(self->parent)),
+			Ref2Str(NamespaceToString(self->Parent)),
 			InternString("::")
 		)),
-		self->namev
+		self->Name
 	);
 }
 
 void DeleteNamespace(Namespace * self) {
-	DeleteNumericMap(self->Namespacemap, DeleteNamespace_namespace);
-	DeleteNumericMap(self->type_map, DeleteNamespace_type);
+	DeleteNumericMap(self->NamespaceMap, DeleteNamespace_namespace);
+	DeleteNumericMap(self->TypeMap, DeleteNamespace_type);
 	MEM_FREE(self);
 }
 
 //private
 static Namespace* Namespacemalloc(StringView namev) {
 	Namespace* ret = (Namespace*)MEM_MALLOC(sizeof(Namespace));
-	ret->Namespacemap = NewNumericMap();
-	ret->type_map = NewNumericMap();
-	ret->parent = NULL;
-	ret->namev = namev;
-	ret->ref_count = 0;
+	ret->NamespaceMap = NewNumericMap();
+	ret->TypeMap = NewNumericMap();
+	ret->Parent = NULL;
+	ret->Name = namev;
+	ret->RefCount = 0;
 	return ret;
 }
 
@@ -215,10 +215,10 @@ static void Namespacedump_root(NumericMap* root, bool callSelf, int depth) {
 
 static void Namespacedump_impl(Namespace* root, int depth) {
 	Namespaceput_indent(depth);
-	printf("%s", Ref2Str(root->namev));
+	printf("%s", Ref2Str(root->Name));
 	Println();
-	Namespacedump_class(root->type_map, true, depth + 1);
-	Namespacedump_root(root->Namespacemap, false, depth + 1);
+	Namespacedump_class(root->TypeMap, true, depth + 1);
+	Namespacedump_root(root->NamespaceMap, false, depth + 1);
 }
 
 static void Namespaceput_indent(int depth) {
