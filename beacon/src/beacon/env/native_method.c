@@ -20,7 +20,7 @@ void ExecuteNativeMethod(native_method * self, Method * parent, Frame* fr, Envir
 		class_* declared = parent->Parent->u.class_;
 		self->ref = GetNumericMapValue(declared->NativeMethodRef_nmap, parent->Name);
 	}
-	self->ref->impl(parent, fr, env);
+	self->ref->Body(parent, fr, env);
 }
 
 void DeleteNativeMethod(native_method * self) {

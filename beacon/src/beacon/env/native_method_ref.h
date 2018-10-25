@@ -14,7 +14,7 @@ typedef void(*NativeImpl)(Method* parent, Frame* vm, Enviroment* env);
  * ネイティブメソッドを表す関数ポインタをラップする構造体.
  */
 typedef struct NativeMethodRef {
-	NativeImpl impl;
+	NativeImpl Body;
 } NativeMethodRef;
 
 /**

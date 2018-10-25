@@ -4,7 +4,7 @@
 
 NativeMethodRef * NewNativeMethodRef(NativeImpl impl) {
 	NativeMethodRef* ret = (NativeMethodRef*)MEM_MALLOC(sizeof(NativeMethodRef));
-	ret->impl = impl;
+	ret->Body = impl;
 	return ret;
 }
 
