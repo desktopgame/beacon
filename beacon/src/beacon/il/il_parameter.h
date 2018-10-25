@@ -7,16 +7,16 @@
 /**
  * パラメータの種類を表す列挙型.
  */
-typedef enum il_parameter_type {
+typedef enum ILParameterType {
 	IL_PARAM_TYPE_DEFAULT,
 	IL_PARAM_TYPE_REF_T,
 	IL_PARAM_TYPE_OUT_T,
-} il_parameter_type;
+} ILParameterType;
 /**
  * メソッド/関数の引数を表す要素.
  */
 typedef struct il_parameter {
-	il_parameter_type param_type;
+	ILParameterType param_type;
 	generic_cache* fqcn;
 	StringView namev;
 } il_parameter;
