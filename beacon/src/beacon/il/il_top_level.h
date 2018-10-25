@@ -5,21 +5,21 @@
 /**
  * 中間言語ILのトップレベル要素です.
  */
-typedef struct il_top_level {
+typedef struct ILToplevel {
 	Vector* import_list;
 	Vector* Namespacelist;
 	Vector* statement_list;
 	Vector* function_list;
-} il_top_level;
+} ILToplevel;
 /**
  * トップレベルの要素を作成します.
  * @return
  */
-il_top_level* NewILToplevel();
+ILToplevel* NewILToplevel();
 
 /**
  * この要素と付随する全てを解放します.
  * @param self
  */
-void DeleteILToplevel(il_top_level* self);
+void DeleteILToplevel(ILToplevel* self);
 #endif // !SIGNAL_IL_IL_TOP_LEVEL_H

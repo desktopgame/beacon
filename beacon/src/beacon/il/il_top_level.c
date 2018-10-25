@@ -8,13 +8,13 @@
 #include "il_function.h"
 
 //proto
-static void il_top_level_import_delete(VectorItem item);
-static void il_top_level_DeleteNamespace(VectorItem item);
-static void il_top_level_function_delete(VectorItem item);
-static void il_top_level_stmt_delete(VectorItem item);
+static void ILToplevel_import_delete(VectorItem item);
+static void ILToplevel_DeleteNamespace(VectorItem item);
+static void ILToplevel_function_delete(VectorItem item);
+static void ILToplevel_stmt_delete(VectorItem item);
 
-il_top_level* NewILToplevel() {
-	il_top_level* ret = (il_top_level*)MEM_MALLOC(sizeof(il_top_level));
+ILToplevel* NewILToplevel() {
+	ILToplevel* ret = (ILToplevel*)MEM_MALLOC(sizeof(ILToplevel));
 	ret->import_list = NewVector();
 	ret->Namespacelist = NewVector();
 	ret->statement_list = NewVector();
@@ -22,34 +22,34 @@ il_top_level* NewILToplevel() {
 	return ret;
 }
 
-void DeleteILToplevel(il_top_level* self) {
+void DeleteILToplevel(ILToplevel* self) {
 	if(self == NULL) {
 		return;
 	}
-	DeleteVector(self->import_list, il_top_level_import_delete);
-	DeleteVector(self->Namespacelist, il_top_level_DeleteNamespace);
-	DeleteVector(self->statement_list, il_top_level_stmt_delete);
-	DeleteVector(self->function_list, il_top_level_function_delete);
+	DeleteVector(self->import_list, ILToplevel_import_delete);
+	DeleteVector(self->Namespacelist, ILToplevel_DeleteNamespace);
+	DeleteVector(self->statement_list, ILToplevel_stmt_delete);
+	DeleteVector(self->function_list, ILToplevel_function_delete);
 	MEM_FREE(self);
 }
 
 //private
-static void il_top_level_import_delete(VectorItem item) {
+static void ILToplevel_import_delete(VectorItem item) {
 	ILImport* e = (ILImport*)item;
 	DeleteILImport(e);
 }
 
-static void il_top_level_DeleteNamespace(VectorItem item) {
+static void ILToplevel_DeleteNamespace(VectorItem item) {
 	ILNamespace* e = (ILNamespace*)item;
 	DeleteILNamespace(e);
 }
 
-static void il_top_level_function_delete(VectorItem item) {
+static void ILToplevel_function_delete(VectorItem item) {
 	ILFunction* e = (ILFunction*)item;
 	DeleteILFunction(e);
 }
 
-static void il_top_level_stmt_delete(VectorItem item) {
+static void ILToplevel_stmt_delete(VectorItem item) {
 	il_stmt* e = (il_stmt*)item;
 	DeleteILStmt(e);
 }

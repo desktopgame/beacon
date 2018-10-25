@@ -17,7 +17,7 @@ struct parser;
  */
 typedef struct class_loader {
 	AST* source_code;
-	il_top_level* il_code;
+	ILToplevel* il_code;
 
 	struct Enviroment* env;
 	ImportManager* ImportManager;

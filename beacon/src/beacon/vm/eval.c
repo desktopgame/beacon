@@ -49,8 +49,8 @@ bool EvalIL(const char* filename) {
 	LoadClassLoader(cl);
 
 	if(!GetLastBCError()) {
-		il_top_level* il = cl->il_code;
-		il_top_level_dump(il, 0);
+		ILToplevel* il = cl->il_code;
+		ILToplevel_dump(il, 0);
 	}
 	DeleteClassLoader(cl);
 	return true;
