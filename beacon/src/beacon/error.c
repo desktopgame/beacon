@@ -26,7 +26,7 @@ void VthrowBCError(BCErrorID id, va_list ap) {
 	gGlobalError = id;
 	gLastMessage = InternString(fmt);
 	ScriptContext* sctx = GetCurrentScriptContext();
-	if(sctx->print_error) {
+	if(sctx->IsPrintError) {
 		fprintf(stderr, "%s", fmt);
 	}
 	MEM_FREE(fmt);
@@ -396,7 +396,7 @@ BCErrorID GetLastBCError() {
 }
 //private
 static void check_abort(ScriptContext* sctx) {
-	if(sctx->abort_on_error) {
+	if(sctx->IsAbortOnError) {
 		abort();
 	}
 }

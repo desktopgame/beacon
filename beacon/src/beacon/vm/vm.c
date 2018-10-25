@@ -174,7 +174,7 @@ void TerminateVM(Frame* self) {
 void UncaughtVM(Frame* self, Enviroment* env, int pc) {
 	char* message = create_error_message(self, env, pc);
 	ScriptContext* sctx = GetCurrentScriptContext();
-	if(sctx->print_error) {
+	if(sctx->IsPrintError) {
 		fprintf(stderr, "%s", message);
 	}
 	gVMError = InternString(message);

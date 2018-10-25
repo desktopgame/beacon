@@ -186,8 +186,8 @@ static ScriptContext* ScriptContext_malloc(void) {
 	ret->PositiveIntegerCacheList = NewVector();
 	ret->NegativeIntegerCacheList = NewVector();
 	ret->IntegerCacheMap = NewNumericMap();
-	ret->print_error = true;
-	ret->abort_on_error = true;
+	ret->IsPrintError = true;
+	ret->IsAbortOnError = true;
 	PushVector(ret->ThreadList, GetMainSGThread());
 	return ret;
 }

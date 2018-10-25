@@ -34,8 +34,8 @@ typedef struct ScriptContext {
 	Vector* PositiveIntegerCacheList;
 	Vector* NegativeIntegerCacheList;
 	NumericMap* IntegerCacheMap;
-	bool print_error;
-	bool abort_on_error;
+	bool IsPrintError;
+	bool IsAbortOnError;
 	struct Heap* heap;
 	struct object* true_obj;
 	struct object* false_obj;
