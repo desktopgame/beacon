@@ -44,7 +44,7 @@ void AddFieldILType(il_type * self, ILField * field) {
 	}
 }
 
-void AddPropertyILType(il_type* self, il_property* prop) {
+void AddPropertyILType(il_type* self, ILProperty* prop) {
 	if (self->tag == ilTYPE_CLASS_T) {
 		AddPropertyILClass(self->u.class_, prop);
 	} else if(self->tag == ilTYPE_INTERFACE_T) {

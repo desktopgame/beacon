@@ -16,7 +16,7 @@ struct il_interface;
 struct il_enum;
 struct ILField;
 struct ILMethod;
-struct il_property;
+struct ILProperty;
 struct ILConstructor;
 
 /**
@@ -70,7 +70,7 @@ void AddFieldILType(il_type* self, struct ILField* field);
  * @param self
  * @param prop
  */
-void AddPropertyILType(il_type* self, struct il_property* prop);
+void AddPropertyILType(il_type* self, struct ILProperty* prop);
 
 /**
  * メソッドを追加します.

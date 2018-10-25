@@ -161,9 +161,9 @@ void CLBC_fields_impl(class_loader* self, Namespace* scope, type* tp,Vector* ilf
 //property
 //
 //
-bool CLBC_property_decl(class_loader* self, il_type* iltype, type* tp, il_property* ilprop, Namespace* scope, CallContext* cctx) {
+bool CLBC_property_decl(class_loader* self, il_type* iltype, type* tp, ILProperty* ilprop, Namespace* scope, CallContext* cctx) {
 	//VectorItem e = AtVector(ilprops, i);
-	//il_property* ilprop = e;
+	//ILProperty* ilprop = e;
 	property* prop = property_new(ilprop->namev);
 	prop->access = ilprop->access;
 	prop->modifier = ilprop->modifier;
@@ -201,10 +201,10 @@ bool CLBC_property_decl(class_loader* self, il_type* iltype, type* tp, il_proper
 	return true;
 }
 
-bool CLBC_property_impl(class_loader* self, il_type* iltype, type* tp, il_property* ilprop, property* prop, Namespace* scope, CallContext* cctx) {
+bool CLBC_property_impl(class_loader* self, il_type* iltype, type* tp, ILProperty* ilprop, property* prop, Namespace* scope, CallContext* cctx) {
 	//VectorItem e = AtVector(sgprops, i);
 	property* pr = prop;
-	il_property* ilpr = ilprop;
+	ILProperty* ilpr = ilprop;
 	if(pr->is_short) { return true; }
 	property_body* set = pr->set;
 	property_body* get = pr->get;

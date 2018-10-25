@@ -28,7 +28,7 @@ il_interface * NewILInterface(StringView namev) {
 	return ret;
 }
 
-void AddPropertyILInterface(il_interface* self, il_property* prop) {
+void AddPropertyILInterface(il_interface* self, ILProperty* prop) {
 	PushVector(self->prop_list, prop);
 }
 
@@ -60,6 +60,6 @@ static void il_interface_DeleteTypeParameter(VectorItem item) {
 }
 
 static void il_interface_DeleteProperty(VectorItem item) {
-	il_property* e = (il_property*)item;
+	ILProperty* e = (ILProperty*)item;
 	DeleteILProperty(e);
 }

@@ -52,7 +52,7 @@ void AddFieldILClass(il_class * self, ILField * f) {
 	}
 }
 
-void AddPropertyILClass(il_class* self, il_property* prop) {
+void AddPropertyILClass(il_class* self, ILProperty* prop) {
 	if(IsStaticModifier(prop->modifier)) {
 		PushVector(self->sprop_list, prop);
 	} else {
@@ -121,6 +121,6 @@ static void DeleteILClass_operator_overload(VectorItem item) {
 }
 
 static void il_class_prop_delete(VectorItem item ) {
-	il_property* e = (il_property*)item;
+	ILProperty* e = (ILProperty*)item;
 	DeleteILProperty(e);
 }

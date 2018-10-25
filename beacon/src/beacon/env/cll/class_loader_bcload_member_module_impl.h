@@ -28,8 +28,8 @@ bool CLBC_field_impl(class_loader* self, type* tp, field* fi, Namespace* scope, 
 void CLBC_fields_decl(class_loader* self, il_type* iltype, type* tp, Vector* ilfields, Namespace* scope);
 void CLBC_fields_impl(class_loader* self, Namespace* scope, type* tp,Vector* ilfields, Vector* sgfields);
 
-bool CLBC_property_decl(class_loader* self, il_type* iltype, type* tp, il_property* ilprop, Namespace* scope, CallContext* cctx);
-bool CLBC_property_impl(class_loader* self, il_type* iltype, type* tp, il_property* ilprop, property* prop, Namespace* scope, CallContext* cctx);
+bool CLBC_property_decl(class_loader* self, il_type* iltype, type* tp, ILProperty* ilprop, Namespace* scope, CallContext* cctx);
+bool CLBC_property_impl(class_loader* self, il_type* iltype, type* tp, ILProperty* ilprop, property* prop, Namespace* scope, CallContext* cctx);
 
 /**
  * @param self

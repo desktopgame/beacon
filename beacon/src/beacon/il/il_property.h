@@ -6,17 +6,17 @@
 #include "il_property_body.h"
 struct generic_cache;
 
-typedef struct il_property {
+typedef struct ILProperty {
 	struct generic_cache* fqcn;
 	AccessLevel access;
 	ModifierType modifier;
 	StringView namev;
 	ILPropertyBody* set;
 	ILPropertyBody* get;
-} il_property;
+} ILProperty;
 
-#define il_property_new(namev) (MallocILProperty(namev, __FILE__, __LINE__))
-il_property* MallocILProperty(StringView namev, const char* filename, int lineno);
+#define ILProperty_new(namev) (MallocILProperty(namev, __FILE__, __LINE__))
+ILProperty* MallocILProperty(StringView namev, const char* filename, int lineno);
 
-void DeleteILProperty(il_property* self);
+void DeleteILProperty(ILProperty* self);
 #endif
