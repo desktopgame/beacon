@@ -10,8 +10,8 @@ property* MallocProperty(StringView namev, const char* filename, int lineno) {
 	ret->get = PropertyBody_new(PROPERTY_GET_T);
 	ret->is_short = false;
 	ret->source_ref = NULL;
-	ret->set->parent = ret;
-	ret->get->parent = ret;
+	ret->set->Parent = ret;
+	ret->get->Parent = ret;
 	return ret;
 }
 void DeleteProperty(property* self) {

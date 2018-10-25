@@ -71,8 +71,8 @@ bool IsImplementInterfacePropertyValidClass(class_* cls, property** out) {
 					DeleteVector(gimpl_list, VectorDeleterOfNull);
 					return false;
 				}
-				if(decl->set->access != impl->set->access ||
-				   decl->get->access != impl->get->access) {
+				if(decl->set->Access != impl->set->Access ||
+				   decl->get->Access != impl->get->Access) {
 					(*out) = decl;
 					DeleteVector(gimpl_list, VectorDeleterOfNull);
 					return false;

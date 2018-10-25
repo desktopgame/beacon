@@ -10,10 +10,10 @@ typedef enum PropertyBodyTag {
 } PropertyBodyTag;
 
 typedef struct PropertyBody {
-	struct property* parent;
-	AccessLevel access;
-	PropertyBodyTag tag;
-	struct Enviroment* env;
+	struct property* Parent;
+	AccessLevel Access;
+	PropertyBodyTag Tag;
+	struct Enviroment* Env;
 } PropertyBody;
 
 #define PropertyBody_new(tag) (MallocPropertyBody(tag, __FILE__, __LINE__))

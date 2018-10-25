@@ -167,8 +167,8 @@ bool CLBC_property_decl(class_loader* self, il_type* iltype, type* tp, ILPropert
 	property* prop = property_new(ilprop->Name);
 	prop->access = ilprop->Access;
 	prop->modifier = ilprop->Modifier;
-	prop->set->access = ilprop->Set->Access;
-	prop->get->access = ilprop->Get->Access;
+	prop->set->Access = ilprop->Set->Access;
+	prop->get->Access = ilprop->Get->Access;
 	prop->parent = tp;
 	prop->gtype = ResolveImportManager(scope, ilprop->GCache, cctx);
 	prop->is_short = ilprop->Set->IsShort && ilprop->Get->IsShort;
@@ -210,23 +210,23 @@ bool CLBC_property_impl(class_loader* self, il_type* iltype, type* tp, ILPropert
 	PropertyBody* get = pr->get;
 	Vector* set_stmt_list = ilpr->Set->Statements;
 	Vector* get_stmt_list = ilpr->Get->Statements;
-	set->env->ContextRef = self;
-	get->env->ContextRef = self;
+	set->Env->ContextRef = self;
+	get->Env->ContextRef = self;
 	//setterのオペコードを生成
-	SymbolEntry* valueE = EntrySymbolTable(set->env->Symboles, pr->gtype, InternString("value"));
+	SymbolEntry* valueE = EntrySymbolTable(set->Env->Symboles, pr->gtype, InternString("value"));
 	if(!IsStaticModifier(pr->modifier)) {
-		AddOpcodeBuf(set->env->Bytecode, OP_STORE);
-		AddOpcodeBuf(set->env->Bytecode, 0);
+		AddOpcodeBuf(set->Env->Bytecode, OP_STORE);
+		AddOpcodeBuf(set->Env->Bytecode, 0);
 	}
-	AddOpcodeBuf(set->env->Bytecode, OP_STORE);
-	AddOpcodeBuf(set->env->Bytecode, valueE->Index);
-	CLBC_body(self, set_stmt_list, set->env, cctx, scope);
+	AddOpcodeBuf(set->Env->Bytecode, OP_STORE);
+	AddOpcodeBuf(set->Env->Bytecode, valueE->Index);
+	CLBC_body(self, set_stmt_list, set->Env, cctx, scope);
 	//getterのオペコードを生成
 	if(!IsStaticModifier(pr->modifier)) {
-		AddOpcodeBuf(get->env->Bytecode, OP_STORE);
-		AddOpcodeBuf(get->env->Bytecode, 0);
+		AddOpcodeBuf(get->Env->Bytecode, OP_STORE);
+		AddOpcodeBuf(get->Env->Bytecode, 0);
 	}
-	CLBC_body(self, get_stmt_list, get->env, cctx, scope);
+	CLBC_body(self, get_stmt_list, get->Env, cctx, scope);
 	return true;
 }
 

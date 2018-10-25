@@ -4,13 +4,13 @@
 
 PropertyBody* MallocPropertyBody(PropertyBodyTag tag, const char* filename, int lineno) {
 	PropertyBody* ret = mem_malloc(sizeof(PropertyBody), filename, lineno);
-	ret->tag = tag;
-	ret->env = NewEnviroment();
-	ret->parent = NULL;
+	ret->Tag = tag;
+	ret->Env = NewEnviroment();
+	ret->Parent = NULL;
 	return ret;
 }
 
 void DeletePropertyBody(PropertyBody* self) {
-	DeleteEnviroment(self->env);
+	DeleteEnviroment(self->Env);
 	MEM_FREE(self);
 }

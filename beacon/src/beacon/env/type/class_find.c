@@ -159,14 +159,14 @@ bool IsAccessiblePropertyClass(class_* self, property* p) {
 
 bool IsAccessiblePropertyAccessorClass(class_* self, PropertyBody* pb) {
 	assert(pb != NULL);
-	if(pb->access == ACCESS_PUBLIC_T) {
+	if(pb->Access == ACCESS_PUBLIC_T) {
 		return true;
 	}
-	if(pb->access == ACCESS_PRIVATE_T) {
-		return self == TYPE2CLASS(pb->parent->parent);
+	if(pb->Access == ACCESS_PRIVATE_T) {
+		return self == TYPE2CLASS(pb->Parent->parent);
 	}
 	type* ty = self->parent;
-	class_* fcl = TYPE2CLASS(pb->parent->parent);
+	class_* fcl = TYPE2CLASS(pb->Parent->parent);
 	while(true) {
 		class_* c = TYPE2CLASS(ty);
 		if(c == fcl) {
