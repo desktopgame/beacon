@@ -39,7 +39,7 @@ typedef struct Method {
 	ModifierType Modifier;
 	union {
 		script_method* Script;
-		native_method* Native;
+		NativeMethod* Native;
 	} Kind;
 } Method;
 

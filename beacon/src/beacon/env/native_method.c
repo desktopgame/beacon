@@ -9,13 +9,13 @@
 #include "native_method_ref.h"
 #include "generic_type.h"
 
-native_method * NewNativeMethod() {
-	native_method* ret = (native_method*)MEM_MALLOC(sizeof(native_method));
+NativeMethod * NewNativeMethod() {
+	NativeMethod* ret = (NativeMethod*)MEM_MALLOC(sizeof(NativeMethod));
 	ret->ref = NULL;
 	return ret;
 }
 
-void ExecuteNativeMethod(native_method * self, Method * parent, Frame* fr, Enviroment* env) {
+void ExecuteNativeMethod(NativeMethod * self, Method * parent, Frame* fr, Enviroment* env) {
 	if (self->ref == NULL) {
 		class_* declared = parent->Parent->u.class_;
 		self->ref = GetNumericMapValue(declared->NativeMethodRef_nmap, parent->Name);
@@ -23,6 +23,6 @@ void ExecuteNativeMethod(native_method * self, Method * parent, Frame* fr, Envir
 	self->ref->Body(parent, fr, env);
 }
 
-void DeleteNativeMethod(native_method * self) {
+void DeleteNativeMethod(NativeMethod * self) {
 	MEM_FREE(self);
 }

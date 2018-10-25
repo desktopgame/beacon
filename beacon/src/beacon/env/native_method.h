@@ -8,15 +8,15 @@ struct Frame;
 /**
  * Cで実装されたメソッド.
  */
-typedef struct native_method {
+typedef struct NativeMethod {
 	struct NativeMethodRef* ref;
-} native_method;
+} NativeMethod;
 
 /**
  * ネイティブメソッドを作成します.
  * @return
  */
-native_method* NewNativeMethod();
+NativeMethod* NewNativeMethod();
 
 /**
  * ネイティブメソッドを実行します.
@@ -24,12 +24,12 @@ native_method* NewNativeMethod();
  * @param fr
  * @param env
  */
-void ExecuteNativeMethod(native_method* self, struct Method* parent, struct Frame* fr, struct Enviroment* env);
+void ExecuteNativeMethod(NativeMethod* self, struct Method* parent, struct Frame* fr, struct Enviroment* env);
 
 /**
  * ネイティブメソッドを開放します.
  * @param self
  */
-void DeleteNativeMethod(native_method* self);
+void DeleteNativeMethod(NativeMethod* self);
 
 #endif // !SIGNAL_ENV_NATIVE_METHOD_H
