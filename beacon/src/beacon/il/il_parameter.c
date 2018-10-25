@@ -7,9 +7,9 @@
 
 ILParameter * NewILParameter(StringView namev) {
 	ILParameter* ret = (ILParameter*)MEM_MALLOC(sizeof(ILParameter));
-	ret->namev = namev;
-	ret->param_type = IL_PARAM_TYPE_DEFAULT;
-	ret->fqcn = NewGenericCache();
+	ret->Name = namev;
+	ret->Type = IL_PARAM_TYPE_DEFAULT;
+	ret->GCache = NewGenericCache();
 	return ret;
 }
 
@@ -17,6 +17,6 @@ void DeleteILParameter(ILParameter * self) {
 	if (self == NULL) {
 		return;
 	}
-	DeleteGenericCache(self->fqcn);
+	DeleteGenericCache(self->GCache);
 	MEM_FREE(self);
 }

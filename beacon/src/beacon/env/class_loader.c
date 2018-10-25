@@ -254,13 +254,13 @@ static void LoadClassLoader_toplevel_function(class_loader* self) {
 		//引数を指定
 		for(int j=0; j<ilfunc->Parameters->Length; j++) {
 			ILParameter* ilparam = AtVector(ilfunc->Parameters, j);
-			Parameter* param = NewParameter(ilparam->namev);
+			Parameter* param = NewParameter(ilparam->Name);
 			PushVector(m->Parameters, param);
-			param->GType = ResolveImportManager(loc, ilparam->fqcn, cctx);
+			param->GType = ResolveImportManager(loc, ilparam->GCache, cctx);
 			EntrySymbolTable(
 				env->Symboles,
-				ResolveImportManager(loc, ilparam->fqcn, cctx),
-				ilparam->namev
+				ResolveImportManager(loc, ilparam->GCache, cctx),
+				ilparam->Name
 			);
 			//実引数を保存
 			//0番目は this のために開けておく

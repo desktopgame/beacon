@@ -16,9 +16,9 @@ typedef enum ILParameterType {
  * メソッド/関数の引数を表す要素.
  */
 typedef struct ILParameter {
-	ILParameterType param_type;
-	generic_cache* fqcn;
-	StringView namev;
+	ILParameterType Type;
+	generic_cache* GCache;
+	StringView Name;
 } ILParameter;
 /**
  * パラメータを作成します.

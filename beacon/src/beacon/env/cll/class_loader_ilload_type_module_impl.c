@@ -106,7 +106,7 @@ void CLILParameterList(class_loader* self, Vector* list, AST* asource) {
 		AST* aGetTypeName = FirstAST(asource);
 		AST* aaccess_name = SecondAST(asource);
 		ILParameter* p = NewILParameter(aaccess_name->Attr.StringVValue);
-		CLILGenericCache(aGetTypeName, p->fqcn);
+		CLILGenericCache(aGetTypeName, p->GCache);
 		PushVector(list, p);
 	}
 }
