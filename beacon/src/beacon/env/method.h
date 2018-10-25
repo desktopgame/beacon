@@ -18,18 +18,18 @@ struct class_loader;
 /**
  * メソッドの種類を表す列挙.
  */
-typedef enum method_type {
+typedef enum MethodType {
 	METHOD_TYPE_SCRIPT_T,
 	METHOD_TYPE_NATIVE_T,
 	METHOD_TYPE_ABSTRACT_T,
-} method_type;
+} MethodType;
 
 /**
  * メソッドを表す構造体.
  */
 typedef struct method {
 	StringView namev;
-	method_type type;
+	MethodType type;
 	//struct class_* decleared_type;
 	struct type* parent;
 	struct generic_type* return_gtype;
