@@ -527,8 +527,8 @@ void CLBC_ctors_impl(class_loader* self, il_type* iltype, type* tp) {
 //
 bool CLBC_operator_overload_decl(class_loader* self, il_type* iltype, type* tp, ILOperatorOverload* ilopov, Namespace* scope) {
 	//演算子オーバーロード一覧から取り出す
-	operator_overload* opov = NewOperatorOverload(ilopov->op);
-	opov->access = ilopov->access;
+	operator_overload* opov = NewOperatorOverload(ilopov->Type);
+	opov->access = ilopov->Access;
 	//CallContextの設定
 	CallContext* cctx = NewCallContext(CALL_OPOV_T);
 	cctx->Scope = scope;
@@ -536,14 +536,14 @@ bool CLBC_operator_overload_decl(class_loader* self, il_type* iltype, type* tp, 
 	cctx->Kind.OpOv = opov;
 	//戻り値読み込み
 	opov->parent = tp;
-	opov->return_gtype = ResolveImportManager(scope, ilopov->return_fqcn, cctx);
+	opov->return_gtype = ResolveImportManager(scope, ilopov->ReturnGCache, cctx);
 	//パラメータ読み込み
-	for(int j=0; j<ilopov->parameter_list->Length; j++) {
-		ILParameter* ilparam = AtVector(ilopov->parameter_list, j);
+	for(int j=0; j<ilopov->Parameters->Length; j++) {
+		ILParameter* ilparam = AtVector(ilopov->Parameters, j);
 		Parameter* param = NewParameter(ilparam->Name);
 		PushVector(opov->parameter_list, param);
 	}
-	CLBC_parameter_list(self, scope, ilopov->parameter_list, opov->parameter_list, cctx);
+	CLBC_parameter_list(self, scope, ilopov->Parameters, opov->parameter_list, cctx);
 	PushVector(tp->u.class_->operator_overload_list, opov);
 	//オペレータオーバロードの妥当性をテストする
 	if(CLBC_test_operator_overlaod(self, iltype, tp, opov)) {
@@ -565,8 +565,8 @@ bool CLBC_operator_overload_impl(class_loader* self, il_type* iltype, type* tp, 
 	cctx->Kind.OpOv = opov;
 	//ccpush_method(me);
 	env->ContextRef = self;
-	for (int i = 0; i < ilopov->parameter_list->Length; i++) {
-		ILParameter* ilparam = (ILParameter*)AtVector(ilopov->parameter_list, i);
+	for (int i = 0; i < ilopov->Parameters->Length; i++) {
+		ILParameter* ilparam = (ILParameter*)AtVector(ilopov->Parameters, i);
 		EntrySymbolTable(
 			env->Symboles,
 			ResolveImportManager(scope, ilparam->GCache, cctx),
@@ -581,7 +581,7 @@ bool CLBC_operator_overload_impl(class_loader* self, il_type* iltype, type* tp, 
 	AddOpcodeBuf(env->Bytecode, (VectorItem)OP_STORE);
 	AddOpcodeBuf(env->Bytecode, (VectorItem)0);
 	//NOTE:ここなら名前空間を設定出来る
-	CLBC_body(self, ilopov->statement_list, env, cctx, scope);
+	CLBC_body(self, ilopov->Statements, env, cctx, scope);
 	DeleteCallContext(cctx);
 	//ccpop_method();
 	opov->env = env;

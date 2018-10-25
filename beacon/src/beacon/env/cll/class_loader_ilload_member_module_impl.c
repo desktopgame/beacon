@@ -178,10 +178,10 @@ void CLILOperatorOverload(class_loader* self, il_type* current, AST* aopov, Acce
 		return;
 	}
 	ILOperatorOverload* ilopov = NewILOperatorOverload(ot);
-	ilopov->access = level;
-	CLILParameterList(self, ilopov->parameter_list, aparam_list);
-	CLILBody(self, ilopov->statement_list, abody);
-	CLILGenericCache(areturn, ilopov->return_fqcn);
+	ilopov->Access = level;
+	CLILParameterList(self, ilopov->Parameters, aparam_list);
+	CLILBody(self, ilopov->Statements, abody);
+	CLILGenericCache(areturn, ilopov->ReturnGCache);
 	PushVector(current->u.class_->operator_overload_list, ilopov);
 }
 //private
