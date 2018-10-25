@@ -89,26 +89,26 @@ static void il_factor_variable_check(il_factor_variable* self, Enviroment* env, 
 	}
 	assert(self->fqcn != NULL);
 	//hoge, foo のような文字列の場合
-	if(self->fqcn->scope_vec->Length == 0) {
+	if(self->fqcn->Scope->Length == 0) {
 		il_factor_variable_check_instance(self, env, cctx);
 	//Namespace::Hoge Namespace::Foo のような文字列の場合.
-	} else if(self->fqcn->scope_vec->Length > 0) {
+	} else if(self->fqcn->Scope->Length > 0) {
 		il_factor_variable_check_static(self, env, cctx);
 	}
 }
 
 static void il_factor_variable_check_instance(il_factor_variable* self, Enviroment* env, CallContext* cctx) {
 	Namespace* cur = GetNamespaceCContext(cctx);
-	class_* ctype = FindClassFromNamespace(cur, self->fqcn->namev);
+	class_* ctype = FindClassFromNamespace(cur, self->fqcn->Name);
 	if(ctype == NULL) {
-		ctype = FindClassFromNamespace(GetLangNamespace(), self->fqcn->namev);
+		ctype = FindClassFromNamespace(GetLangNamespace(), self->fqcn->Name);
 	}
 	//現在の名前空間から参照できるクラスがある場合
 	if(ctype != NULL) {
 		il_factor_variable_check_static(self, env, cctx);
 	//ただのローカル変数の場合
 	} else {
-		il_factor_variable_local* lc = NewILVariableLocal(self->fqcn->namev);
+		il_factor_variable_local* lc = NewILVariableLocal(self->fqcn->Name);
 		self->type = ILVARIABLE_TYPE_LOCAL_T;
 		//値を入れ替え
 		lc->type_args = self->type_args;

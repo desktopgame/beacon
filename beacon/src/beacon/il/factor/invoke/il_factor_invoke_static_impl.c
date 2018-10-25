@@ -114,7 +114,7 @@ static void il_factor_invoke_static_check(il_factor_invoke_static * self, Enviro
 	type* ty =GetEvalTypeCContext(cctx, self->fqcn);
 	if(ty == NULL) {
 		ThrowBCError(BCERROR_UNDEFINED_TYPE_STATIC_INVOKE_T,
-			Ref2Str(self->fqcn->namev),
+			Ref2Str(self->fqcn->Name),
 			Ref2Str(self->namev)
 		);
 		return;

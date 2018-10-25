@@ -12,8 +12,8 @@ struct interface_;
  * Full Quality Class Name を表す構造体.
  */
 typedef struct FQCNCache {
-	Vector* scope_vec;
-	StringView namev;
+	Vector* Scope;
+	StringView Name;
 } FQCNCache;
 
 /**

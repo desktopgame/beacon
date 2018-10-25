@@ -122,8 +122,8 @@ static void il_factor_new_instance_find(il_factor_new_instance * self, Enviromen
 		return;
 	}
 	#if defined(DEBUG)
-	const char* namea = Ref2Str(self->fqcnc->namev);
-	if(self->fqcnc->namev == InternString("Vector")) {
+	const char* namea = Ref2Str(self->fqcnc->Name);
+	if(self->fqcnc->Name == InternString("Vector")) {
 		int a = 0;
 	}
 	#endif
@@ -131,7 +131,7 @@ static void il_factor_new_instance_find(il_factor_new_instance * self, Enviromen
 	type* ty = GetEvalTypeCContext(cctx, self->fqcnc);
 	if(ty == NULL) {
 		ThrowBCError(BCERROR_NEW_INSTANCE_UNDEFINED_CLASS_T,
-			Ref2Str(self->fqcnc->namev)
+			Ref2Str(self->fqcnc->Name)
 		);
 		return;
 	}

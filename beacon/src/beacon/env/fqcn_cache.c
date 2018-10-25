@@ -18,22 +18,22 @@ FQCNCache * FQCNCache_new() {
 
 FQCNCache* MallocFQCNCache(const char* filename, int lineno) {
 	FQCNCache* ret = (FQCNCache*)mem_malloc(sizeof(FQCNCache), filename, lineno);
-	ret->scope_vec = MallocVector(filename, lineno);
-	ret->namev = 0;
+	ret->Scope = MallocVector(filename, lineno);
+	ret->Name = 0;
 	return ret;
 }
 
 void DumpFQCNCache(FQCNCache * self, int depth) {
 	Printi(depth);
-	printf("type %s", Ref2Str(self->namev));
+	printf("type %s", Ref2Str(self->Name));
 	Println();
 	//X::C.call() のような呼び出しなら
-	if (self->scope_vec->Length > 0) {
+	if (self->Scope->Length > 0) {
 		Printi(depth);
 		printf("scope");
 		Println();
-		for (int i = 0; i < self->scope_vec->Length; i++) {
-			StringView sv = (StringView)AtVector(self->scope_vec, i);
+		for (int i = 0; i < self->Scope->Length; i++) {
+			StringView sv = (StringView)AtVector(self->Scope, i);
 			Printi(depth + 1);
 			printf("%s", Ref2Str(sv));
 			Println();
@@ -46,24 +46,24 @@ void PrintFQCNCache(FQCNCache * self) {
 		printf("NULL");
 		return;
 	}
-	if (self->scope_vec->Length == 0) {
-		printf("%s", Ref2Str(self->namev));
+	if (self->Scope->Length == 0) {
+		printf("%s", Ref2Str(self->Name));
 	} else {
-		for (int i = 0; i < self->scope_vec->Length; i++) {
-			printf("%s", Ref2Str((StringView)AtVector(self->scope_vec, i)));
+		for (int i = 0; i < self->Scope->Length; i++) {
+			printf("%s", Ref2Str((StringView)AtVector(self->Scope, i)));
 			printf("::");
 		}
-		printf("%s", Ref2Str(self->namev));
+		printf("%s", Ref2Str(self->Name));
 	}
 }
 
 Namespace * GetScopeFQCN(FQCNCache * self, Namespace* current) {
-	if (self->scope_vec->Length == 0) {
+	if (self->Scope->Length == 0) {
 		return current;
 	}
 	Namespace* top = NULL;
-	for (int i = 0; i < self->scope_vec->Length; i++) {
-		StringView ev = (StringView)AtVector(self->scope_vec, i);
+	for (int i = 0; i < self->Scope->Length; i++) {
+		StringView ev = (StringView)AtVector(self->Scope, i);
 		if (top == NULL) {
 			top = FindNamespaceFromRoot(ev);
 		} else {
@@ -77,7 +77,7 @@ type * GetTypeFQCN(FQCNCache * self, Namespace * current) {
 	type* ret = fqcn_TYPE_IMPL(self, current);
 	//Console(X::Yを含まない)のような指定なら
 	//signal::lang空間も探索する
-	if (ret == NULL && self->scope_vec->Length == 0) {
+	if (ret == NULL && self->Scope->Length == 0) {
 		ret = fqcn_TYPE_IMPL(self, GetLangNamespace());
 	}
 	return ret;
@@ -93,15 +93,15 @@ class_ * GetClassFQCN(FQCNCache * self, Namespace * current) {
 
 char* FQCNCacheToString(FQCNCache* self) {
 	Buffer* sb = NewBuffer();
-	for(int i=0; i<self->scope_vec->Length; i++) {
-		StringView ev = (StringView)AtVector(self->scope_vec, i);
+	for(int i=0; i<self->Scope->Length; i++) {
+		StringView ev = (StringView)AtVector(self->Scope, i);
 		AppendsBuffer(sb, Ref2Str(ev));
-		if(i == (self->scope_vec->Length - 1)) {
+		if(i == (self->Scope->Length - 1)) {
 			break;
 		}
 		AppendsBuffer(sb, "::");
 	}
-	AppendsBuffer(sb, Ref2Str(self->namev));
+	AppendsBuffer(sb, Ref2Str(self->Name));
 	return ReleaseBuffer(sb);
 }
 
@@ -109,20 +109,20 @@ void DeleteFQCNCache(FQCNCache * self) {
 	if(self == NULL) {
 		return;
 	}
-	DeleteVector(self->scope_vec, VectorDeleterOfNull);
+	DeleteVector(self->Scope, VectorDeleterOfNull);
 	MEM_FREE(self);
 }
 
 bool EqualsFQCNCache(FQCNCache* a, FQCNCache* b) {
-	if(a->namev != b->namev || a->scope_vec->Length != b->scope_vec->Length) {
+	if(a->Name != b->Name || a->Scope->Length != b->Scope->Length) {
 		return false;
 	}
 	if(a == b) {
 		return true;
 	}
-	for(int i=0; i<a->scope_vec->Length; i++) {
-		StringView as = (StringView)AtVector(a->scope_vec, i);
-		StringView bs = (StringView)AtVector(b->scope_vec, i);
+	for(int i=0; i<a->Scope->Length; i++) {
+		StringView as = (StringView)AtVector(a->Scope, i);
+		StringView bs = (StringView)AtVector(b->Scope, i);
 		if(as != bs) {
 			return false;
 		}
@@ -132,8 +132,8 @@ bool EqualsFQCNCache(FQCNCache* a, FQCNCache* b) {
 //private
 static type * fqcn_TYPE_IMPL(FQCNCache * self, Namespace* current) {
 	//Y形式
-	if (self->scope_vec->Length == 0) {
-		StringView namev = self->namev;
+	if (self->Scope->Length == 0) {
+		StringView namev = self->Name;
 		//プリミティブ型はどこからでも参照できる
 		if (namev == InternString("Object")) {
 			return TYPE_OBJECT;
@@ -153,12 +153,12 @@ static type * fqcn_TYPE_IMPL(FQCNCache * self, Namespace* current) {
 		if (current == NULL) {
 			return NULL;
 		}
-		return FindTypeFromNamespace(current, self->namev);
+		return FindTypeFromNamespace(current, self->Name);
 	}
 	//X::Yのような形式
 	Namespace* c = GetScopeFQCN(self, current);
 	if (c == NULL) {
 		return NULL;
 	}
-	return FindTypeFromNamespace(c, self->namev);
+	return FindTypeFromNamespace(c, self->Name);
 }

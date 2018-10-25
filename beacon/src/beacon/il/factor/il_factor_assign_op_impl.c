@@ -310,16 +310,16 @@ static void generate_assign_to_variable_local(il_factor_assign_op* self, Envirom
 	//src のような名前がローカル変数を示す場合
 	if(illoc->type == VARIABLE_LOCAL_SCOPE_T) {
 		#if defined(DEBUG)
-		const char* vname = Ref2Str(ilvar->fqcn->namev);
+		const char* vname = Ref2Str(ilvar->fqcn->Name);
 		#endif
-		SymbolEntry* e = EntrySymbolTable(env->Symboles, NULL, ilvar->fqcn->namev);
+		SymbolEntry* e = EntrySymbolTable(env->Symboles, NULL, ilvar->fqcn->Name);
 		//e==NULL の時変数がない
 		GenerateILFactor(self->right, env, cctx);
 		AddOpcodeBuf(env->Bytecode, OP_STORE);
 		AddOpcodeBuf(env->Bytecode, e->Index);
 		if(DistanceGenericType(e->GType, EvalILFactor(self->right, env, cctx), cctx) < 0) {
 			ThrowBCError(BCERROR_ASSIGN_NOT_COMPATIBLE_LOCAL_T,
-				Ref2Str(ilvar->fqcn->namev)
+				Ref2Str(ilvar->fqcn->Name)
 			);
 			return;
 		}

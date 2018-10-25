@@ -43,8 +43,8 @@ generic_type* ResolveImportManager(Namespace* scope, generic_cache* fqcn, CallCo
 	type* core_type = GetTypeFQCN(fqcn->fqcn, scope);
 	#if defined(DEBUG)
 	const char* ctname = Ref2Str(GetTypeName(core_type));
-	const char* it = Ref2Str(fqcn->fqcn->namev);
-	if(fqcn->fqcn->namev == InternString("Token")) {
+	const char* it = Ref2Str(fqcn->fqcn->Name);
+	if(fqcn->fqcn->Name == InternString("Token")) {
 		int a = 0;
 	}
 	#endif
@@ -67,7 +67,7 @@ generic_type* ResolveImportManager(Namespace* scope, generic_cache* fqcn, CallCo
 		return normalGType;
 	}
 	assert(core_type == NULL);
-	assert(fqcn->fqcn->scope_vec->Length == 0);
+	assert(fqcn->fqcn->Scope->Length == 0);
 	if(fqcn->type_args->Length > 0) {
 		return NULL;
 	}
@@ -76,13 +76,13 @@ generic_type* ResolveImportManager(Namespace* scope, generic_cache* fqcn, CallCo
 	Method* mt = GetMethodCContext(cctx);
 	if(parameterized->virtual_type_index == -1 && mt != NULL) {
 		parameterized->tag = GENERIC_TYPE_TAG_METHOD_T;
-		parameterized->virtual_type_index = GetGenericIndexForMethod(mt, fqcn->fqcn->namev);
+		parameterized->virtual_type_index = GetGenericIndexForMethod(mt, fqcn->fqcn->Name);
 		parameterized->u.method_ = mt;
 	}
 	type* ty = GetTypeCContext(cctx);
 	if(parameterized->virtual_type_index == -1 &&  ty != NULL) {
 		parameterized->tag = GENERIC_TYPE_TAG_CLASS_T;
-		parameterized->virtual_type_index = GetGenericIndexType(ty, fqcn->fqcn->namev);
+		parameterized->virtual_type_index = GetGenericIndexType(ty, fqcn->fqcn->Name);
 		parameterized->u.type_ = ty;
 	}
 	//現在の名前空間でクラス名を解決できなかったし、
@@ -101,7 +101,7 @@ generic_type* ResolvefImportManager(Namespace* scope, FQCNCache* fqcn, CallConte
 		return core_type->generic_self;
 	}
 	//Foo::UndefinedClassName
-	if(fqcn->scope_vec->Length > 0) {
+	if(fqcn->Scope->Length > 0) {
 		return NULL;
 	}
 	//T, E などの型変数
@@ -115,7 +115,7 @@ generic_type* ResolvefImportManager(Namespace* scope, FQCNCache* fqcn, CallConte
 		#if defined(DEBUG)
 		const char* methodname = Ref2Str(mt->Name);
 		#endif
-		int index = GetGenericIndexForMethod(mt, fqcn->namev);
+		int index = GetGenericIndexForMethod(mt, fqcn->Name);
 		parameterized->tag = GENERIC_TYPE_TAG_METHOD_T;
 		parameterized->virtual_type_index = index;
 		parameterized->u.method_ = mt;
@@ -126,7 +126,7 @@ generic_type* ResolvefImportManager(Namespace* scope, FQCNCache* fqcn, CallConte
 		#if defined(DEBUG)
 		const char* typename_ = Ref2Str(GetTypeName(ty));
 		#endif
-		int index = GetGenericIndexType(ty, fqcn->namev);
+		int index = GetGenericIndexType(ty, fqcn->Name);
 		parameterized->tag = GENERIC_TYPE_TAG_CLASS_T;
 		parameterized->virtual_type_index = index;
 		parameterized->u.type_ = ty;

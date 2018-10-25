@@ -125,7 +125,7 @@ static void il_factor_member_op_check_static(il_factor_member_op* self, Envirome
 	il_factor* fact = self->fact;
 	il_factor_variable* ilvar = fact->u.variable_;
 	#if defined(DEBUG)
-	const char* ilvarname = Ref2Str(ilvar->u.static_->fqcn->namev);
+	const char* ilvarname = Ref2Str(ilvar->u.static_->fqcn->Name);
 	#endif
 	//Name.call
 	//の Name を型名として解決する

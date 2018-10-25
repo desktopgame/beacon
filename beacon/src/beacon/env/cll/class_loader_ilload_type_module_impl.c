@@ -29,15 +29,15 @@ void CLILFQCNCache(AST* afqcn, FQCNCache* fqcn) {
 
 void CLILGenericCache(AST* afqcn, generic_cache* dest) {
 	if(afqcn->Tag == AST_FQCN_CLASS_NAME_T) {
-		dest->fqcn->namev = afqcn->Attr.StringVValue;
+		dest->fqcn->Name = afqcn->Attr.StringVValue;
 		return;
 	}
 	CLILGenericCache_impl(afqcn, dest);
 	FQCNCache* body = dest->fqcn;
 	//FIXME: Int のような文字パースで失敗してしまうので対策
-	if (body->namev == 0 &&
-		body->scope_vec->Length > 0) {
-		body->namev = (StringView)PopVector(body->scope_vec);
+	if (body->Name == 0 &&
+		body->Scope->Length > 0) {
+		body->Name = (StringView)PopVector(body->Scope);
 	}
 }
 
@@ -121,9 +121,9 @@ static void CLILFQCNCache_impl(AST* afqcn, FQCNCache* fqcn, int level) {
 	for(int i=0; i<v->Length; i++) {
 		StringView S = (StringView)AtVector(v, i);
 		if(i < v->Length - 1) {
-			PushVector(fqcn->scope_vec, S);
+			PushVector(fqcn->Scope, S);
 		} else {
-			fqcn->namev = S;
+			fqcn->Name = S;
 		}
 	}
 	DeleteVector(v, VectorDeleterOfNull);
@@ -149,7 +149,7 @@ static void CLILGenericCache_impl(AST* afqcn, generic_cache* dest) {
 			//FIXME:もうちょっと高速に出来る
 			//FIXME:とりあえずここでタグを直してるけどast.cの時点でどうにかするべき
 			afqcn->Tag = AST_FQCN_CLASS_NAME_T;
-			body->namev = afqcn->Attr.StringVValue;
+			body->Name = afqcn->Attr.StringVValue;
 			return;
 		}
 		for (int i = 0; i < afqcn->Children->Length; i++) {
@@ -158,7 +158,7 @@ static void CLILGenericCache_impl(AST* afqcn, generic_cache* dest) {
 		}
 	} else {
 		//FIXME:とりあえずここでタグを直してるけどast.cの時点でどうにかするべき
-		PushVector(body->scope_vec, afqcn->Attr.StringVValue);
+		PushVector(body->Scope, afqcn->Attr.StringVValue);
 		afqcn->Tag = AST_FQCN_PART_T;
 	}
 }
