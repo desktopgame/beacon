@@ -45,7 +45,7 @@ void DeleteILInterface(il_interface * self) {
 }
 //private 
 static void il_interface_fqcn_delete(VectorItem item) {
-	generic_cache* e = (generic_cache*)item;
+	GenericCache* e = (GenericCache*)item;
 	DeleteGenericCache(e);
 }
 

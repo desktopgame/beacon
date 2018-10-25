@@ -7,83 +7,83 @@
 #include <assert.h>
 
 //proto
-static void generic_cache_tree_delete(VectorItem item);
+static void GenericCache_tree_delete(VectorItem item);
 
-generic_cache * NewGenericCache() {
-	generic_cache* ret = (generic_cache*)MEM_MALLOC(sizeof(generic_cache));
-	ret->fqcn = FQCNCache_new();
-	ret->type_args = NewVector();
+GenericCache * NewGenericCache() {
+	GenericCache* ret = (GenericCache*)MEM_MALLOC(sizeof(GenericCache));
+	ret->FQCN = FQCNCache_new();
+	ret->TypeArgs = NewVector();
 	return ret;
 }
 
-void PrintGenericCache(generic_cache * self) {
-	PrintFQCNCache(self->fqcn);
-	if (self->type_args->Length <= 0) {
+void PrintGenericCache(GenericCache * self) {
+	PrintFQCNCache(self->FQCN);
+	if (self->TypeArgs->Length <= 0) {
 		return;
 	}
 	printf("<");
-	for (int i = 0; i < self->type_args->Length; i++) {
-		generic_cache* e = (generic_cache*)AtVector(self->type_args, i);
+	for (int i = 0; i < self->TypeArgs->Length; i++) {
+		GenericCache* e = (GenericCache*)AtVector(self->TypeArgs, i);
 		PrintGenericCache(e);
-		if (i != self->type_args->Length - 1) {
+		if (i != self->TypeArgs->Length - 1) {
 			printf(", ");
 		}
 	}
 	printf(">");
 }
 
-void DumpGenericCache(generic_cache * self, int depth) {
+void DumpGenericCache(GenericCache * self, int depth) {
 	Printi(depth);
 	PrintGenericCache(self);
 	Println();
 }
 
-char* GenericCacheToString(generic_cache* self) {
+char* GenericCacheToString(GenericCache* self) {
 	Buffer* sb = NewBuffer();
 	//Namespace::Class
-	char* name = FQCNCacheToString(self->fqcn);
+	char* name = FQCNCacheToString(self->FQCN);
 	AppendsBuffer(sb, name);
 	//Namespace::Class<|
-	if(self->type_args->Length > 0) {
+	if(self->TypeArgs->Length > 0) {
 		AppendsBuffer(sb, "<|");
 	}
 	//Namespace::Class<|...
-	for(int i=0; i<self->type_args->Length; i++) {
-		generic_cache* e = (generic_cache*)AtVector(self->type_args, i);
+	for(int i=0; i<self->TypeArgs->Length; i++) {
+		GenericCache* e = (GenericCache*)AtVector(self->TypeArgs, i);
 		char* type = GenericCacheToString(e);
 		AppendsBuffer(sb, type);
-		if(i != (self->type_args->Length - 1)) {
+		if(i != (self->TypeArgs->Length - 1)) {
 			AppendsBuffer(sb, ", ");
 		}
 		MEM_FREE(type);
 	}
 	//Namespace::Class<|...|>
-	if(self->type_args->Length > 0) {
+	if(self->TypeArgs->Length > 0) {
 		AppendsBuffer(sb, "|>");
 	}
 	MEM_FREE(name);
 	return ReleaseBuffer(sb);
 }
 
-void DeleteGenericCache(generic_cache * self) {
-	DeleteFQCNCache(self->fqcn);
-	DeleteVector(self->type_args, generic_cache_tree_delete);
+void DeleteGenericCache(GenericCache * self) {
+	DeleteFQCNCache(self->FQCN);
+	DeleteVector(self->TypeArgs, GenericCache_tree_delete);
 	MEM_FREE(self);
 }
 
-bool EqualsGenericCache(generic_cache* a, generic_cache* b) {
-	if(a->type_args->Length != b->type_args->Length) {
+bool EqualsGenericCache(GenericCache* a, GenericCache* b) {
+	if(a->TypeArgs->Length != b->TypeArgs->Length) {
 		return false;
 	}
-	if(!EqualsFQCNCache(a->fqcn, b->fqcn)) {
+	if(!EqualsFQCNCache(a->FQCN, b->FQCN)) {
 		return false;
 	}
 	if(a == b) {
 		return true;
 	}
-	for(int i=0; i<a->type_args->Length; i++) {
-		generic_cache* ag = AtVector(a->type_args, i);
-		generic_cache* bg = AtVector(b->type_args, i);
+	for(int i=0; i<a->TypeArgs->Length; i++) {
+		GenericCache* ag = AtVector(a->TypeArgs, i);
+		GenericCache* bg = AtVector(b->TypeArgs, i);
 		if(!EqualsGenericCache(ag, bg)) {
 			return false;
 		}
@@ -91,7 +91,7 @@ bool EqualsGenericCache(generic_cache* a, generic_cache* b) {
 	return true;
 }
 //private
-static void generic_cache_tree_delete(VectorItem item) {
-	generic_cache* e = (generic_cache*)item;
+static void GenericCache_tree_delete(VectorItem item) {
+	GenericCache* e = (GenericCache*)item;
 	DeleteGenericCache(e);
 }

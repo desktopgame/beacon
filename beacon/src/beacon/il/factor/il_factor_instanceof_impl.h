@@ -1,13 +1,13 @@
 #ifndef BEACON_IL_IL_FACTOR_INSTANCEOF_IMPL_H
 #define BEACON_IL_IL_FACTOR_INSTANCEOF_IMPL_H
 #include "../il_factor_interface.h"
-struct generic_cache;
+struct GenericCache;
 struct generic_type;
 struct FQCNCache;
 
 typedef struct il_factor_instanceof {
 	il_factor* fact;
-	struct generic_cache* gcache;
+	struct GenericCache* gcache;
 } il_factor_instanceof;
 
 il_factor* WrapILInstanceOf(il_factor_instanceof* self);

@@ -9,7 +9,7 @@ struct Enviroment;
  * 型宣言を表す要素.
  */
 typedef struct il_stmt_variable_decl {
-	generic_cache* fqcn;
+	GenericCache* fqcn;
 	StringView namev;
 } il_stmt_variable_decl;
 /**

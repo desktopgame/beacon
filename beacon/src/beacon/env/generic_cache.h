@@ -13,44 +13,44 @@ struct Namespace;
 /**
  * 型変数を含む型の宣言.
  */
-typedef struct generic_cache {
-	FQCNCache* fqcn;
-	Vector* type_args;
-} generic_cache;
+typedef struct GenericCache {
+	FQCNCache* FQCN;
+	Vector* TypeArgs;
+} GenericCache;
 
 /**
  * 型変数を含む型宣言を作成します.
  * @return
  */
-generic_cache* NewGenericCache();
+GenericCache* NewGenericCache();
 
 /**
  * 型変数つきの型宣言をインデント無しで出力します.
  * @param self
  */
-void PrintGenericCache(generic_cache* self);
+void PrintGenericCache(GenericCache* self);
 /**
  * 型変数つきの型宣言をインデント付きで出力します.
  * @param self
  */
-void DumpGenericCache(generic_cache* self, int depth);
+void DumpGenericCache(GenericCache* self, int depth);
 
 /**
  * @param self
  * @return
  */
-char* GenericCacheToString(generic_cache* self);
+char* GenericCacheToString(GenericCache* self);
 
 /**
  * 型変数つきの型宣言を解放します.
  * @param self
  */
-void DeleteGenericCache(generic_cache* self);
+void DeleteGenericCache(GenericCache* self);
 
 /**
  * @param a
  * @param b
  * @return
  */
-bool EqualsGenericCache(generic_cache* a, generic_cache* b);
+bool EqualsGenericCache(GenericCache* a, GenericCache* b);
 #endif // !SIGNAL_ENV_GENERIC_CACHE_H

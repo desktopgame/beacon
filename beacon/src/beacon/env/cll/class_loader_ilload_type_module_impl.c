@@ -17,8 +17,8 @@
 
 //proto
 static void CLILFQCNCache_impl(AST* afqcn, FQCNCache* fqcn, int level);
-static void CLILGenericCache_impl(AST* afqcn, generic_cache* dest);
-static void CLILGenericCache_inner(AST* atype_args, generic_cache* dest);
+static void CLILGenericCache_impl(AST* afqcn, GenericCache* dest);
+static void CLILGenericCache_inner(AST* atype_args, GenericCache* dest);
 static void CLILTypeParameter_rule(struct class_loader* self, struct AST* asource, Vector* dest);
 static void ast_fqcn_flatten(AST* afqcn, Vector* dest);
 static void CLILArgumentListImpl(class_loader* self, Vector* list, AST* asource);
@@ -27,13 +27,13 @@ void CLILFQCNCache(AST* afqcn, FQCNCache* fqcn) {
 	CLILFQCNCache_impl(afqcn, fqcn, 0);
 }
 
-void CLILGenericCache(AST* afqcn, generic_cache* dest) {
+void CLILGenericCache(AST* afqcn, GenericCache* dest) {
 	if(afqcn->Tag == AST_FQCN_CLASS_NAME_T) {
-		dest->fqcn->Name = afqcn->Attr.StringVValue;
+		dest->FQCN->Name = afqcn->Attr.StringVValue;
 		return;
 	}
 	CLILGenericCache_impl(afqcn, dest);
-	FQCNCache* body = dest->fqcn;
+	FQCNCache* body = dest->FQCN;
 	//FIXME: Int のような文字パースで失敗してしまうので対策
 	if (body->Name == 0 &&
 		body->Scope->Length > 0) {
@@ -46,7 +46,7 @@ void CLILTypenameList(class_loader * self, Vector * dst, AST* atypename_list) {
 		return;
 	}
 	if (atypename_list->Tag == AST_TYPENAME_T) {
-		generic_cache* e = NewGenericCache();
+		GenericCache* e = NewGenericCache();
 		//[typename [fqcn]]
 		CLILGenericCache(atypename_list, e);
 		PushVector(dst, e);
@@ -129,8 +129,8 @@ static void CLILFQCNCache_impl(AST* afqcn, FQCNCache* fqcn, int level) {
 	DeleteVector(v, VectorDeleterOfNull);
 }
 
-static void CLILGenericCache_impl(AST* afqcn, generic_cache* dest) {
-	FQCNCache* body = dest->fqcn;
+static void CLILGenericCache_impl(AST* afqcn, GenericCache* dest) {
+	FQCNCache* body = dest->FQCN;
 	//型引数を解析する
 	if (afqcn->Tag == AST_TYPENAME_T) {
 		AST* atype_args = SecondAST(afqcn);
@@ -163,16 +163,16 @@ static void CLILGenericCache_impl(AST* afqcn, generic_cache* dest) {
 	}
 }
 
-static void CLILGenericCache_inner(AST* atype_args, generic_cache* dest) {
+static void CLILGenericCache_inner(AST* atype_args, GenericCache* dest) {
 	if (atype_args->Tag == AST_TYPENAME_LIST_T) {
 		for (int i = 0; i < atype_args->Children->Length; i++) {
 			AST* e = AtAST(atype_args, i);
 			CLILGenericCache_inner(e, dest);
 		}
 	} else {
-		generic_cache* newCache = NewGenericCache();
+		GenericCache* newCache = NewGenericCache();
 		CLILGenericCache(atype_args, newCache);
-		PushVector(dest->type_args, newCache);
+		PushVector(dest->TypeArgs, newCache);
 	}
 }
 

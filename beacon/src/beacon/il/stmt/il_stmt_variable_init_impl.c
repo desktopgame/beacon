@@ -58,7 +58,7 @@ void LoadILVariableInit(il_stmt_variable_init * self, Enviroment * env, CallCont
 	if(gt == NULL) {
 		ThrowBCError(
 			BCERROR_UNDEFINED_TYPE_DECL_T,
-			Ref2Str(self->fqcn->fqcn->Name)
+			Ref2Str(self->fqcn->FQCN->Name)
 		);
 		return;
 	}

@@ -16,7 +16,7 @@ typedef enum cast_mode {
  */
 typedef struct il_factor_as {
 	il_factor* fact;
-	generic_cache* fqcn;
+	GenericCache* fqcn;
 	generic_type* gtype;
 	cast_mode mode;
 } il_factor_as;

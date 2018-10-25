@@ -17,7 +17,7 @@ typedef enum ILParameterType {
  */
 typedef struct ILParameter {
 	ILParameterType Type;
-	generic_cache* GCache;
+	GenericCache* GCache;
 	StringView Name;
 } ILParameter;
 /**

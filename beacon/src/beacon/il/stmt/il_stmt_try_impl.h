@@ -13,7 +13,7 @@ typedef struct il_stmt_try {
 } il_stmt_try;
 
 typedef struct il_stmt_catch {
-	generic_cache* fqcn;
+	GenericCache* fqcn;
 	StringView namev;
 	Vector* statement_list;
 } il_stmt_catch;

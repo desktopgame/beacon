@@ -4,12 +4,12 @@
 //このファイルは非公開ヘッダーか .c からのみインクルードして下さい。
 struct AST;
 struct FQCNCache;
-struct generic_cache;
+struct GenericCache;
 struct class_loader;
 
 void CLILFQCNCache(struct AST* afqcn, struct FQCNCache* fqcn);
 
-void CLILGenericCache(struct AST* afqcn, struct generic_cache* dest);
+void CLILGenericCache(struct AST* afqcn, struct GenericCache* dest);
 
 /**
  * 型名の一覧を dst へ出力します.

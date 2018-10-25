@@ -4,10 +4,10 @@
 #include "../ast/modifier_type.h"
 #include "../util/string_pool.h"
 #include "il_property_body.h"
-struct generic_cache;
+struct GenericCache;
 
 typedef struct ILProperty {
-	struct generic_cache* GCache;
+	struct GenericCache* GCache;
 	AccessLevel Access;
 	ModifierType Modifier;
 	StringView Name;

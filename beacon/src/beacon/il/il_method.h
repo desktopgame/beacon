@@ -14,7 +14,7 @@ typedef struct ILMethod {
 	StringView Name;
 	Vector* Parameters;
 	Vector* Statements;
-	generic_cache* ReturnGCache;
+	GenericCache* ReturnGCache;
 	AccessLevel Access;
 	ModifierType Modifier;
 	Vector* TypeParameters;

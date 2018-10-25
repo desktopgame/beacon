@@ -334,7 +334,7 @@ static void CLBC_register_class(class_loader* self, Namespace* parent, il_type* 
 	cctx->Scope = parent;
 	cctx->Ty = tp;
 	for (int i = 0; i < iltype->u.class_->extend_list->Length; i++) {
-		generic_cache* e = (generic_cache*)AtVector(iltype->u.class_->extend_list, i);
+		GenericCache* e = (GenericCache*)AtVector(iltype->u.class_->extend_list, i);
 		//最初の一つはクラスでもインターフェースでもよい
 		if (i == 0) {
 			generic_type* gtp = ResolveImportManager(parent, e, cctx);
@@ -396,7 +396,7 @@ static void CLBC_register_interface(class_loader* self, Namespace* parent, il_ty
 	cctx->Scope = parent;
 	cctx->Ty = tp;
 	for (int i = 0; i < iltype->u.interface_->extends_list->Length; i++) {
-		generic_cache* e = (generic_cache*)AtVector(iltype->u.interface_->extends_list, i);
+		GenericCache* e = (GenericCache*)AtVector(iltype->u.interface_->extends_list, i);
 		//インターフェースはインターフェースのみ継承
 		generic_type* gtp = ResolveImportManager(parent, e, cctx);
 		type* E = GENERIC2TYPE(gtp);

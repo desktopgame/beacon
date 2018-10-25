@@ -9,7 +9,7 @@ typedef struct ILOperatorOverload {
 	OperatorType Type;
 	Vector* Parameters;
 	Vector* Statements;
-	generic_cache* ReturnGCache;
+	GenericCache* ReturnGCache;
 	AccessLevel Access;
 } ILOperatorOverload;
 

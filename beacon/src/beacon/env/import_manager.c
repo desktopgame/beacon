@@ -39,36 +39,36 @@ bool IsLoadedImportManager(ImportManager * self, int index) {
 	return info->IsConsume;
 }
 
-generic_type* ResolveImportManager(Namespace* scope, generic_cache* fqcn, CallContext* cctx) {
-	type* core_type = GetTypeFQCN(fqcn->fqcn, scope);
+generic_type* ResolveImportManager(Namespace* scope, GenericCache* fqcn, CallContext* cctx) {
+	type* core_type = GetTypeFQCN(fqcn->FQCN, scope);
 	#if defined(DEBUG)
 	const char* ctname = Ref2Str(GetTypeName(core_type));
-	const char* it = Ref2Str(fqcn->fqcn->Name);
-	if(fqcn->fqcn->Name == InternString("Token")) {
+	const char* it = Ref2Str(fqcn->FQCN->Name);
+	if(fqcn->FQCN->Name == InternString("Token")) {
 		int a = 0;
 	}
 	#endif
 	//Int, Double
-	if(core_type != NULL && fqcn->type_args->Length == 0) {
+	if(core_type != NULL && fqcn->TypeArgs->Length == 0) {
 		assert(core_type->generic_self != NULL);
 		return core_type->generic_self;
 	}
 	//Array[T], Dictionary[K, V]
-	if(core_type != NULL && fqcn->type_args->Length > 0) {
+	if(core_type != NULL && fqcn->TypeArgs->Length > 0) {
 		//Array, Dictionary などはっきりした型が見つかった
 		//が、型引数があるのでそれを解決する
 		generic_type* normalGType = generic_NewType(core_type);
 		assert(core_type->tag != TYPE_ENUM_T);
-		for (int i = 0; i < fqcn->type_args->Length; i++) {
-			generic_cache* e = (generic_cache*)AtVector(fqcn->type_args, i);
+		for (int i = 0; i < fqcn->TypeArgs->Length; i++) {
+			GenericCache* e = (GenericCache*)AtVector(fqcn->TypeArgs, i);
 			generic_type* child = ResolveImportManager(scope, e, cctx);
 			AddArgsGenericType(normalGType, child);
 		}
 		return normalGType;
 	}
 	assert(core_type == NULL);
-	assert(fqcn->fqcn->Scope->Length == 0);
-	if(fqcn->type_args->Length > 0) {
+	assert(fqcn->FQCN->Scope->Length == 0);
+	if(fqcn->TypeArgs->Length > 0) {
 		return NULL;
 	}
 	generic_type* parameterized = generic_NewType(NULL);
@@ -76,13 +76,13 @@ generic_type* ResolveImportManager(Namespace* scope, generic_cache* fqcn, CallCo
 	Method* mt = GetMethodCContext(cctx);
 	if(parameterized->virtual_type_index == -1 && mt != NULL) {
 		parameterized->tag = GENERIC_TYPE_TAG_METHOD_T;
-		parameterized->virtual_type_index = GetGenericIndexForMethod(mt, fqcn->fqcn->Name);
+		parameterized->virtual_type_index = GetGenericIndexForMethod(mt, fqcn->FQCN->Name);
 		parameterized->u.method_ = mt;
 	}
 	type* ty = GetTypeCContext(cctx);
 	if(parameterized->virtual_type_index == -1 &&  ty != NULL) {
 		parameterized->tag = GENERIC_TYPE_TAG_CLASS_T;
-		parameterized->virtual_type_index = GetGenericIndexType(ty, fqcn->fqcn->Name);
+		parameterized->virtual_type_index = GetGenericIndexType(ty, fqcn->FQCN->Name);
 		parameterized->u.type_ = ty;
 	}
 	//現在の名前空間でクラス名を解決できなかったし、

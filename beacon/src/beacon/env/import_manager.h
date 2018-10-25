@@ -4,7 +4,7 @@
 #include "../util/vector.h"
 //#include "virtual_type.h"
 //#include "fqcn_cache.h"
-struct generic_cache;
+struct GenericCache;
 struct generic_type;
 struct FQCNCache;
 struct Namespace;
@@ -49,7 +49,7 @@ bool IsLoadedImportManager(ImportManager* self, int index);
  * @param cctx
  * @return 解決出来なかったなら NULL を返します.
  */
-struct generic_type* ResolveImportManager(struct Namespace* scope, struct generic_cache* fqcn, struct CallContext* cctx);
+struct generic_type* ResolveImportManager(struct Namespace* scope, struct GenericCache* fqcn, struct CallContext* cctx);
 
 /**
  * 指定の名前から型を解決します.

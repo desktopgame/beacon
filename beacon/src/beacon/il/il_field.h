@@ -5,13 +5,13 @@
 #include "../ast/modifier_type.h"
 #include "../util/string_pool.h"
 //#include "../env/fqcn_cache.h"
-struct generic_cache;
+struct GenericCache;
 struct il_factor;
 /**
  * フィールドを表す要素.
  */
 typedef struct ILField {
-	struct generic_cache* GCache;
+	struct GenericCache* GCache;
 	StringView Name;
 	AccessLevel Access;
 	ModifierType Modifier;
