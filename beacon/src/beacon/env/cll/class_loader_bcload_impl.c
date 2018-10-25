@@ -132,12 +132,12 @@ static void CLBC_namespace(class_loader* self, ILNamespace* ilnamespace, Namespa
 	CL_ERROR(self);
 	Namespace* current = NULL;
 	if (parent == NULL) {
-		current = CreateNamespaceAtRoot(ilnamespace->namev);
+		current = CreateNamespaceAtRoot(ilnamespace->Name);
 	} else {
-		current = AddNamespaceNamespace(parent, ilnamespace->namev);
+		current = AddNamespaceNamespace(parent, ilnamespace->Name);
 	}
-	CLBC_Namespacelist(self, ilnamespace->Namespacelist, current);
-	CLBC_type_list(self, ilnamespace->type_list, current);
+	CLBC_Namespacelist(self, ilnamespace->NamespaceList, current);
+	CLBC_type_list(self, ilnamespace->TypeList, current);
 }
 
 static void CLBC_type_list(class_loader* self, Vector* iltype_list, Namespace* parent) {

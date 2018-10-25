@@ -10,10 +10,10 @@ static void il_NamespaceDeleteNamespace(VectorItem item);
 
 ILNamespace* NewILNamespace(StringView namev) {
 	ILNamespace* ret = (ILNamespace*)MEM_MALLOC(sizeof(ILNamespace));
-	ret->namev = namev;
-	ret->Namespacelist = NewVector();
-	ret->type_list = NewVector();
-	ret->parent = NULL;
+	ret->Name = namev;
+	ret->NamespaceList = NewVector();
+	ret->TypeList = NewVector();
+	ret->Parent = NULL;
 	return ret;
 }
 
@@ -21,18 +21,18 @@ ILNamespace* GetRootILNamespace(ILNamespace* self) {
 	if(self == NULL) {
 		return NULL;
 	}
-	if(self->parent == NULL) {
+	if(self->Parent == NULL) {
 		return self;
 	}
-	return GetRootILNamespace(self->parent);
+	return GetRootILNamespace(self->Parent);
 }
 
 void DeleteILNamespace(ILNamespace* self) {
 	if(self == NULL) {
 		return;
 	}
-	DeleteVector(self->Namespacelist, il_NamespaceDeleteNamespace);
-	DeleteVector(self->type_list, il_NamespaceDeleteType);
+	DeleteVector(self->NamespaceList, il_NamespaceDeleteNamespace);
+	DeleteVector(self->TypeList, il_NamespaceDeleteType);
 	MEM_FREE(self);
 }
 

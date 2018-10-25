@@ -8,10 +8,10 @@
  * 名前空間の宣言を表す要素.
  */
 typedef struct ILNamespace {
-	StringView namev;
-	struct ILNamespace* parent;
-	Vector* Namespacelist;
-	Vector* type_list;
+	StringView Name;
+	struct ILNamespace* Parent;
+	Vector* NamespaceList;
+	Vector* TypeList;
 } ILNamespace;
 
 /**

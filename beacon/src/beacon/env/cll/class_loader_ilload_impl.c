@@ -172,7 +172,7 @@ static void class_loader_ilload_namespace(class_loader* self, Vector* parent, AS
 	ILNamespace* top = GetRootILNamespace(iln);
 	PushVector(parent, top);
 	class_loader_ilload_Namespacepath_recursive(self, aNamespacepath, aNamespacebody);
-	class_loader_ilload_Namespacebody(self, iln, iln->Namespacelist, aNamespacebody);
+	class_loader_ilload_Namespacebody(self, iln, iln->NamespaceList, aNamespacebody);
 }
 
 static void class_loader_ilload_Namespacepath_recursive(class_loader* self, AST* aNamespacepath, AST* aNamespacebody) {
@@ -197,8 +197,8 @@ static ILNamespace* class_loader_ilload_ast_to_namespace(AST* a) {
 		AST* ar = SecondAST(a);
 		ILNamespace* parent = class_loader_ilload_ast_to_namespace(al);
 		ILNamespace* child = class_loader_ilload_ast_to_namespace(ar);
-		child->parent = parent;
-		PushVector(parent->Namespacelist, child);
+		child->Parent = parent;
+		PushVector(parent->NamespaceList, child);
 		return child;
 	}
 	return NULL;
@@ -261,7 +261,7 @@ static il_class* class_loader_ilload_classImpl(class_loader* self, ILNamespace* 
 	if (!IsBlankAST(amember_tree)) {
 		CLILMemberTree(self, iltype, amember_tree);
 	}
-	PushVector(current->type_list, iltype);
+	PushVector(current->TypeList, iltype);
 	return ilclassz;
 }
 
@@ -280,7 +280,7 @@ static void class_loader_ilload_interface(class_loader* self, ILNamespace* curre
 	if (!IsBlankAST(amember_tree)) {
 		CLILMemberTree(self, iltype, amember_tree);
 	}
-	PushVector(current->type_list, iltype);
+	PushVector(current->TypeList, iltype);
 }
 
 static void class_loader_ilload_enum(class_loader * self, ILNamespace * current, AST* aenum_decl) {
@@ -288,7 +288,7 @@ static void class_loader_ilload_enum(class_loader * self, ILNamespace * current,
 	AST* aname_list = FirstAST(aenum_decl);
 	il_enum* ilenum = NewILEnum(aenum_decl->Attr.StringVValue);
 	class_loader_ilload_identifier_list(self, ilenum->item_vec, aname_list);
-	PushVector(current->type_list, WrapILEnum(ilenum));
+	PushVector(current->TypeList, WrapILEnum(ilenum));
 }
 
 static void class_loader_ilload_identifier_list(class_loader * self, Vector * list, AST* asource) {
