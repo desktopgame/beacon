@@ -11,16 +11,16 @@
 
 NativeMethod * NewNativeMethod() {
 	NativeMethod* ret = (NativeMethod*)MEM_MALLOC(sizeof(NativeMethod));
-	ret->ref = NULL;
+	ret->Ref = NULL;
 	return ret;
 }
 
 void ExecuteNativeMethod(NativeMethod * self, Method * parent, Frame* fr, Enviroment* env) {
-	if (self->ref == NULL) {
+	if (self->Ref == NULL) {
 		class_* declared = parent->Parent->u.class_;
-		self->ref = GetNumericMapValue(declared->NativeMethodRef_nmap, parent->Name);
+		self->Ref = GetNumericMapValue(declared->NativeMethodRef_nmap, parent->Name);
 	}
-	self->ref->Body(parent, fr, env);
+	self->Ref->Body(parent, fr, env);
 }
 
 void DeleteNativeMethod(NativeMethod * self) {

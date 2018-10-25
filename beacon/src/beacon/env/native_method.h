@@ -9,7 +9,7 @@ struct Frame;
  * Cで実装されたメソッド.
  */
 typedef struct NativeMethod {
-	struct NativeMethodRef* ref;
+	struct NativeMethodRef* Ref;
 } NativeMethod;
 
 /**
