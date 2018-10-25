@@ -7,12 +7,12 @@
 struct generic_cache;
 
 typedef struct ILProperty {
-	struct generic_cache* fqcn;
-	AccessLevel access;
-	ModifierType modifier;
-	StringView namev;
-	ILPropertyBody* set;
-	ILPropertyBody* get;
+	struct generic_cache* GCache;
+	AccessLevel Access;
+	ModifierType Modifier;
+	StringView Name;
+	ILPropertyBody* Set;
+	ILPropertyBody* Get;
 } ILProperty;
 
 #define ILProperty_new(namev) (MallocILProperty(namev, __FILE__, __LINE__))

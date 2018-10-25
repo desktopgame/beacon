@@ -5,16 +5,16 @@
 
 ILProperty* MallocILProperty(StringView namev, const char* filename, int lineno) {
 	ILProperty* ret = mem_malloc(sizeof(ILProperty), filename, lineno);
-	ret->namev = namev;
-	ret->fqcn = NewGenericCache();
-	ret->set = NULL;
-	ret->get = NULL;
+	ret->Name = namev;
+	ret->GCache = NewGenericCache();
+	ret->Set = NULL;
+	ret->Get = NULL;
 	return ret;
 }
 
 void DeleteILProperty(ILProperty* self) {
-	DeleteGenericCache(self->fqcn);
-	DeleteILPropertyBody(self->set);
-	DeleteILPropertyBody(self->get);
+	DeleteGenericCache(self->GCache);
+	DeleteILPropertyBody(self->Set);
+	DeleteILPropertyBody(self->Get);
 	MEM_FREE(self);
 }

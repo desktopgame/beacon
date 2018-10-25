@@ -53,7 +53,7 @@ void AddFieldILClass(il_class * self, ILField * f) {
 }
 
 void AddPropertyILClass(il_class* self, ILProperty* prop) {
-	if(IsStaticModifier(prop->modifier)) {
+	if(IsStaticModifier(prop->Modifier)) {
 		PushVector(self->sprop_list, prop);
 	} else {
 		PushVector(self->prop_list, prop);

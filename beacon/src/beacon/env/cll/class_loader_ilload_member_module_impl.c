@@ -86,21 +86,21 @@ void CLILProperty(class_loader* self, il_type* current, AST* aprop, AccessLevel 
 	AST* aget = AtAST(aprop, 3);
 	StringView propname = aprop->Attr.StringVValue;
 	ILProperty* ret = ILProperty_new(propname);
-	CLILGenericCache(atypename, ret->fqcn);
+	CLILGenericCache(atypename, ret->GCache);
 	if(IsBlankAST(amod)) {
-		ret->modifier = MODIFIER_NONE_T;
+		ret->Modifier = MODIFIER_NONE_T;
 	} else {
 		bool err = false;
-		ret->modifier = ASTCastToModifier(amod, &err);
+		ret->Modifier = ASTCastToModifier(amod, &err);
 		if(err) {
-			ThrowBCError(BCERROR_OVERWRAP_MODIFIER_T, Ref2Str(ret->namev));
+			ThrowBCError(BCERROR_OVERWRAP_MODIFIER_T, Ref2Str(ret->Name));
 		}
 	}
-	ret->access = level;
-	ret->set = CLILProperty_body(self, current, aset, IL_PROPERTY_SET_T, level);
-	ret->get = CLILProperty_body(self, current, aget, IL_PROPERTY_GET_T, level);
+	ret->Access = level;
+	ret->Set = CLILProperty_body(self, current, aset, IL_PROPERTY_SET_T, level);
+	ret->Get = CLILProperty_body(self, current, aget, IL_PROPERTY_GET_T, level);
 	AddPropertyILType(current, ret);
-	if(ret->set->IsShort != ret->get->IsShort) {
+	if(ret->Set->IsShort != ret->Get->IsShort) {
 		ThrowBCError(BCERROR_INVALID_PROPERTY_DECL_T, Ref2Str(current->u.class_->namev), Ref2Str(propname));
 	}
 }

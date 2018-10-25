@@ -164,14 +164,14 @@ void CLBC_fields_impl(class_loader* self, Namespace* scope, type* tp,Vector* ilf
 bool CLBC_property_decl(class_loader* self, il_type* iltype, type* tp, ILProperty* ilprop, Namespace* scope, CallContext* cctx) {
 	//VectorItem e = AtVector(ilprops, i);
 	//ILProperty* ilprop = e;
-	property* prop = property_new(ilprop->namev);
-	prop->access = ilprop->access;
-	prop->modifier = ilprop->modifier;
-	prop->set->access = ilprop->set->Access;
-	prop->get->access = ilprop->get->Access;
+	property* prop = property_new(ilprop->Name);
+	prop->access = ilprop->Access;
+	prop->modifier = ilprop->Modifier;
+	prop->set->access = ilprop->Set->Access;
+	prop->get->access = ilprop->Get->Access;
 	prop->parent = tp;
-	prop->gtype = ResolveImportManager(scope, ilprop->fqcn, cctx);
-	prop->is_short = ilprop->set->IsShort && ilprop->get->IsShort;
+	prop->gtype = ResolveImportManager(scope, ilprop->GCache, cctx);
+	prop->is_short = ilprop->Set->IsShort && ilprop->Get->IsShort;
 	   AddPropertyType(tp, prop);
 	if(IsAbstractModifier(prop->modifier) ||
 	   IsOverrideModifier(prop->modifier) ||
@@ -181,20 +181,20 @@ bool CLBC_property_decl(class_loader* self, il_type* iltype, type* tp, ILPropert
 		   return false;
 	   }
 	//プロパティアクセサの方がプロパティよりも緩いアクセスになっている
-	if(IsWeakAccess(ilprop->access, ilprop->set->Access) ||
-	   IsWeakAccess(ilprop->access, ilprop->get->Access)) {
+	if(IsWeakAccess(ilprop->Access, ilprop->Set->Access) ||
+	   IsWeakAccess(ilprop->Access, ilprop->Get->Access)) {
 		ThrowBCError(BCERROR_INVALID_ACCESS_LEVEL_OF_PROPERTY_T,
 			Ref2Str(GetTypeName(tp)),
-			Ref2Str(ilprop->namev)
+			Ref2Str(ilprop->Name)
 		);
 		   return false;
 	}
 	//二つのアクセサがどちらもプロパティと異なるアクセスレベル
-	if((ilprop->access != ilprop->set->Access) &&
-	    ilprop->access != ilprop->get->Access) {
+	if((ilprop->Access != ilprop->Set->Access) &&
+	    ilprop->Access != ilprop->Get->Access) {
 		ThrowBCError(BCERROR_SPECIFIED_BOTH_PROPERTY_ACCESSOR_T,
 			Ref2Str(GetTypeName(tp)),
-			Ref2Str(ilprop->namev)
+			Ref2Str(ilprop->Name)
 		);
 		   return false;
 	}
@@ -208,8 +208,8 @@ bool CLBC_property_impl(class_loader* self, il_type* iltype, type* tp, ILPropert
 	if(pr->is_short) { return true; }
 	property_body* set = pr->set;
 	property_body* get = pr->get;
-	Vector* set_stmt_list = ilpr->set->Statements;
-	Vector* get_stmt_list = ilpr->get->Statements;
+	Vector* set_stmt_list = ilpr->Set->Statements;
+	Vector* get_stmt_list = ilpr->Get->Statements;
 	set->env->ContextRef = self;
 	get->env->ContextRef = self;
 	//setterのオペコードを生成
