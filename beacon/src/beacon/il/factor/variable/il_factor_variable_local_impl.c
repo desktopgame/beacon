@@ -81,7 +81,7 @@ void DeleteILVariableLocal(il_factor_variable_local* self) {
 }
 //private
 static void DeleteILVariableLocal_typeargs(VectorItem item) {
-	il_type_argument* e = (il_type_argument*)item;
+	ILTypeArgument* e = (ILTypeArgument*)item;
 	DeleteILTypeArgument(e);
 }
 

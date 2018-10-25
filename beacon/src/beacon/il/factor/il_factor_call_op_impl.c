@@ -222,6 +222,6 @@ static void il_factor_call_op_argument_delete(VectorItem item) {
 }
 
 static void il_factor_call_op_type_argument_delete(VectorItem item) {
-	il_type_argument* e = (il_type_argument*)item;
+	ILTypeArgument* e = (ILTypeArgument*)item;
 	DeleteILTypeArgument(e);
 }

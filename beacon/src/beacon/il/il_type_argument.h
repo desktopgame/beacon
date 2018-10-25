@@ -8,16 +8,16 @@ struct CallContext;
 /**
  * 型実引数を表す構造体.
  */
-typedef struct il_type_argument {
+typedef struct ILTypeArgument {
 	generic_cache* gcache;
 	generic_type* gtype;
-} il_type_argument;
+} ILTypeArgument;
 
 /**
  * 新しい型実引数を作成します.
  * @return
  */
-il_type_argument* NewILTypeArgument();
+ILTypeArgument* NewILTypeArgument();
 
 /**
  * 全ての型実引数を出力します.
@@ -36,5 +36,5 @@ void ResolveILTypeArgument(Vector* iltype_args, struct CallContext* cctx);
  * 型実引数を解放します.
  * @param self
  */
-void DeleteILTypeArgument(il_type_argument* self);
+void DeleteILTypeArgument(ILTypeArgument* self);
 #endif

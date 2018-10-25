@@ -6,8 +6,8 @@
 #include "../env/import_manager.h"
 #include "../il/call_context.h"
 
-il_type_argument* NewILTypeArgument() {
-	il_type_argument* ret = (il_type_argument*)MEM_MALLOC(sizeof(il_type_argument));
+ILTypeArgument* NewILTypeArgument() {
+	ILTypeArgument* ret = (ILTypeArgument*)MEM_MALLOC(sizeof(ILTypeArgument));
 	ret->gcache = NewGenericCache();
 	ret->gtype = NULL;
 	return ret;
@@ -19,7 +19,7 @@ void PrintILTypeArgument(Vector* iltype_args) {
 	}
 	printf("<");
 	for(int i=0; i<iltype_args->Length; i++) {
-		il_type_argument* e = (il_type_argument*)AtVector(iltype_args, i);
+		ILTypeArgument* e = (ILTypeArgument*)AtVector(iltype_args, i);
 		PrintGenericCache(e->gcache);
 		if(i != iltype_args->Length - 1) {
 			printf(",");
@@ -30,7 +30,7 @@ void PrintILTypeArgument(Vector* iltype_args) {
 
 void ResolveILTypeArgument(Vector* iltype_args, CallContext* cctx) {
 	for(int i=0; i<iltype_args->Length; i++) {
-		il_type_argument* e = (il_type_argument*)AtVector(iltype_args, i);
+		ILTypeArgument* e = (ILTypeArgument*)AtVector(iltype_args, i);
 		if(e->gtype == NULL) {
 	//		Namespace* scope = cc_namespace(
 			e->gtype = ResolveImportManager(cctx->Scope, e->gcache, cctx);
@@ -39,7 +39,7 @@ void ResolveILTypeArgument(Vector* iltype_args, CallContext* cctx) {
 	}
 }
 
-void DeleteILTypeArgument(il_type_argument* self) {
+void DeleteILTypeArgument(ILTypeArgument* self) {
 	DeleteGenericCache(self->gcache);
 	MEM_FREE(self);
 }

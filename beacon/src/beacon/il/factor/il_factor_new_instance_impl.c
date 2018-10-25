@@ -39,7 +39,7 @@ il_factor_new_instance * NewILNewInstance() {
 void GenerateILNewInstance(il_factor_new_instance * self, Enviroment * env, CallContext* cctx) {
 	il_factor_new_instance_find(self, env, cctx);
 	for(int i=0; i<self->type_args->Length; i++) {
-		il_type_argument* e = (il_type_argument*)AtVector(self->type_args, i);
+		ILTypeArgument* e = (ILTypeArgument*)AtVector(self->type_args, i);
 		assert(e->gtype != NULL);
 		AddOpcodeBuf(env->Bytecode, OP_GENERIC_ADD);
 		GenerateGenericType(e->gtype, env);
@@ -84,7 +84,7 @@ generic_type* EvalILNewInstance(il_factor_new_instance * self, Enviroment * env,
 		Namespace* scope = NULL;
 		generic_type* a = generic_NewType(self->c->parent);
 		for (int i = 0; i < self->type_args->Length; i++) {
-			il_type_argument* e = (il_type_argument*)AtVector(self->type_args, i);
+			ILTypeArgument* e = (ILTypeArgument*)AtVector(self->type_args, i);
 			generic_type* arg = ResolveImportManager(GetNamespaceCContext(cctx), e->gcache, cctx);
 			AddArgsGenericType(a, arg);
 		}
@@ -113,7 +113,7 @@ void DeleteILNewInstance(il_factor_new_instance * self) {
 
 //private
 static void DeleteILNewInstance_typearg(VectorItem item) {
-	il_type_argument* e = (il_type_argument*)item;
+	ILTypeArgument* e = (ILTypeArgument*)item;
 	DeleteILTypeArgument(e);
 }
 

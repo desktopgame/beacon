@@ -366,7 +366,7 @@ static Vector* ApplyGenericType_by_hierarchy(generic_type* impl_baseline, generi
 static generic_type* generic_type_typeargs_at(CallContext* cctx, Frame* fr, int index) {
 	if(fr == NULL) {
 		Vector* type_args = GetTypeArgsCContext(cctx);
-		il_type_argument* a = AtVector(type_args, index);
+		ILTypeArgument* a = AtVector(type_args, index);
 		return a->gtype;
 	} else {
 		generic_type* a = AtVector(fr->TypeArgs, index);

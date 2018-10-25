@@ -77,7 +77,7 @@ operator_overload* FindSetILInvokeBound(il_factor_invoke_bound* self, il_factor*
 //private
 //FIXME:il_factor_invokeからのコピペ
 static void DeleteILInvokeBound_typeargs(VectorItem item) {
-	il_type_argument* e = (il_type_argument*)item;
+	ILTypeArgument* e = (ILTypeArgument*)item;
 	DeleteILTypeArgument(e);
 }
 
@@ -190,7 +190,7 @@ static void GenerateILInvokeBound_method(il_factor_invoke_bound* self, Enviromen
 		return;
 	}
 	for(int i=0; i<self->type_args->Length; i++) {
-		il_type_argument* e = (il_type_argument*)AtVector(self->type_args, i);
+		ILTypeArgument* e = (ILTypeArgument*)AtVector(self->type_args, i);
 		assert(e->gtype != NULL);
 		AddOpcodeBuf(env->Bytecode, OP_GENERIC_ADD);
 		GenerateGenericType(e->gtype, env);
@@ -224,7 +224,7 @@ static void GenerateILInvokeBound_subscript(il_factor_invoke_bound* self, Enviro
 		return;
 	}
 	for(int i=0; i<self->type_args->Length; i++) {
-		il_type_argument* e = (il_type_argument*)AtVector(self->type_args, i);
+		ILTypeArgument* e = (ILTypeArgument*)AtVector(self->type_args, i);
 		assert(e->gtype != NULL);
 		AddOpcodeBuf(env->Bytecode, OP_GENERIC_ADD);
 		GenerateGenericType(e->gtype, env);

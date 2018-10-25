@@ -129,6 +129,6 @@ static void il_factor_variable_check_static(il_factor_variable* self, Enviroment
 }
 
 static void DeleteILFactor_typeargs(VectorItem item) {
-	il_type_argument* e = (il_type_argument*)item;
+	ILTypeArgument* e = (ILTypeArgument*)item;
 	DeleteILTypeArgument(e);
 }

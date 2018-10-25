@@ -91,7 +91,7 @@ void CLILTypeArgument(class_loader* self, AST* atype_args, Vector* dest) {
 			CLILTypeArgument(self, e, dest);
 		}
 	} else if(atype_args->Tag == AST_TYPENAME_T) {
-		il_type_argument* iltype_arg = NewILTypeArgument();
+		ILTypeArgument* iltype_arg = NewILTypeArgument();
 		PushVector(dest, iltype_arg);
 		CLILGenericCache(atype_args, iltype_arg->gcache);
 	} else assert(false);
