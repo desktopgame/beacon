@@ -272,21 +272,21 @@ Property* FindTreeSPropertyClass(class_* self, StringView namev, int* outIndex) 
 
 
 
-constructor * RFindConstructorClass(class_ * self, Vector * args, Vector* typeargs, Frame* fr, int* outIndex) {
+Constructor* RFindConstructorClass(class_ * self, Vector * args, Vector* typeargs, Frame* fr, int* outIndex) {
 	return MetaScopedRFindConstructor(self, self->constructor_list, args, typeargs, fr, outIndex);
 }
 
-constructor * ILFindConstructorClass(class_ * self, Vector * args, Enviroment * env, CallContext* cctx, int* outIndex) {
+Constructor* ILFindConstructorClass(class_ * self, Vector * args, Enviroment * env, CallContext* cctx, int* outIndex) {
 	//	Vector* v = meta_find_constructors(self, args, env, ilctx);
 	//	(*outIndex) = -1;
 	//	return class_find_constructor_impl(v, args, env, ilctx, outIndex);
-	constructor* ctor = MetaScopedILFindConstructor(self, self->constructor_list, args, env, cctx, outIndex);
+	Constructor* ctor = MetaScopedILFindConstructor(self, self->constructor_list, args, env, cctx, outIndex);
 	return ctor;
 }
 
-constructor * ILFindEmptyConstructorClass(class_ * self, Enviroment * env, CallContext* cctx, int * outIndex) {
+Constructor * ILFindEmptyConstructorClass(class_ * self, Enviroment * env, CallContext* cctx, int * outIndex) {
 	Vector* emptyArgs = NewVector();
-	constructor* ret = ILFindConstructorClass(self, emptyArgs, env, cctx, outIndex);
+	Constructor* ret = ILFindConstructorClass(self, emptyArgs, env, cctx, outIndex);
 	DeleteVector(emptyArgs, VectorDeleterOfNull);
 	return ret;
 }

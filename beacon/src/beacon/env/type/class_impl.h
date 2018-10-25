@@ -24,7 +24,7 @@ struct field;
 struct Property;
 struct PropertyBody;
 struct Method;
-struct constructor;
+struct Constructor;
 struct generic_type;
 struct operator_overload;
 /**
@@ -135,7 +135,7 @@ void AddMethodClass(class_* self, struct Method* m);
  * @param self
  * @param c
  */
-void AddConstructorClass(class_* self, struct constructor* c);
+void AddConstructorClass(class_* self, struct Constructor* c);
 
 /**
  * 指定の名前に対応するネイティブ関数を登録します.

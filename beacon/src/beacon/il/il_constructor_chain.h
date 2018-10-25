@@ -3,14 +3,14 @@
 #define BEACON_IL_IL_CONSTRUCTOR_CHAIN_H
 #include "../util/vector.h"
 #include "../ast/constructor_chain_type.h"
-struct constructor;
+struct Constructor;
 /**
  * コンストラクタの連鎖を表す要素.
  */
 typedef struct ILConstructorChain {
 	ConstructorChainType Type;
 	Vector* Arguments;
-	struct constructor* Constructor;
+	struct Constructor* Constructor;
 	int ConstructorIndex;
 } ILConstructorChain;
 /**

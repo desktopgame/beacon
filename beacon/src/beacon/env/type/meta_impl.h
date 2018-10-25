@@ -11,7 +11,7 @@
 #include "../../vm/enviroment.h"
 struct type;
 struct class_;
-struct constructor;
+struct Constructor;
 /**
  * 仮引数と実引数のマッチ率を返します.
  * 一つでも継承関係のないパラメータ/アーギュメントの組みを見つけると -1 を返します.
@@ -99,7 +99,7 @@ Method* MetaScopedGFindMethod(struct class_* context, Vector* method_vec, String
  * @param outIndex
  * @return
  */
-constructor* MetaILFindConstructor(Vector* ctor_vec, Vector* ilargs, Enviroment* env, CallContext* cctx, int* outIndex);
+Constructor* MetaILFindConstructor(Vector* ctor_vec, Vector* ilargs, Enviroment* env, CallContext* cctx, int* outIndex);
 
 /**
  * もっとも一致するコンストラクタを返します.
@@ -110,7 +110,7 @@ constructor* MetaILFindConstructor(Vector* ctor_vec, Vector* ilargs, Enviroment*
  * @param outIndex
  * @return
  */
-constructor* MetaRFindConstructor(Vector* ctor_vec, Vector* args, Vector* typeargs, struct Frame* fr, int* outIndex);
+Constructor* MetaRFindConstructor(Vector* ctor_vec, Vector* args, Vector* typeargs, struct Frame* fr, int* outIndex);
 /**
  * スコープに基づく方法でもっとも一致するコンストラクタを返します.
  * @param context
@@ -121,7 +121,7 @@ constructor* MetaRFindConstructor(Vector* ctor_vec, Vector* args, Vector* typear
  * @param outIndex
  * @return
  */
-constructor* MetaScopedILFindConstructor(struct class_* context, Vector* ctor_vec, Vector* ilargs, Enviroment* env, CallContext* cctx, int* outIndex);
+Constructor* MetaScopedILFindConstructor(struct class_* context, Vector* ctor_vec, Vector* ilargs, Enviroment* env, CallContext* cctx, int* outIndex);
 /**
  * スコープに基づく方法でもっとも一致するコンストラクタを返します.
  * @param context
@@ -132,7 +132,7 @@ constructor* MetaScopedILFindConstructor(struct class_* context, Vector* ctor_ve
  * @param outIndex
  * @return
  */
-constructor* MetaScopedRFindConstructor(struct class_* context, Vector* ctor_vec, Vector* gargs, Vector* typeargs, struct Frame* fr, int* outIndex);
+Constructor* MetaScopedRFindConstructor(struct class_* context, Vector* ctor_vec, Vector* gargs, Vector* typeargs, struct Frame* fr, int* outIndex);
 
 /**
  * 演算子オーバーロードを検索します.
@@ -157,5 +157,5 @@ bool IsMetaMethodAccessValid(struct Method* m, CallContext* cctx);
  * @param cctx
  * @return
  */
-bool IsMetaConstructorAccessValid(struct constructor* ctor, CallContext* cctx);
+bool IsMetaConstructorAccessValid(struct Constructor* ctor, CallContext* cctx);
 #endif // !SIGNAL_ENV_META_H

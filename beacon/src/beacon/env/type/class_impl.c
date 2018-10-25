@@ -174,7 +174,7 @@ void AddMethodClass(class_ * self, Method * m) {
 	}
 }
 
-void AddConstructorClass(class_ * self, constructor * c) {
+void AddConstructorClass(class_ * self, Constructor* c) {
 	PushVector(self->constructor_list, c);
 }
 
@@ -342,7 +342,7 @@ int CountAllSMethodClass(class_ * self) {
 object * NewInstanceClass(class_* self, Frame* fr, Vector* args, Vector* type_args) {
 	//コンストラクタを検索
 	int temp = 0;
-	constructor* ctor = RFindConstructorClass(self, args, NULL, fr, &temp);
+	Constructor* ctor = RFindConstructorClass(self, args, NULL, fr, &temp);
 	assert(temp != -1);
 	//コンストラクタを実行
 	Frame* sub = SubFrame(fr);
@@ -376,7 +376,7 @@ void LinkAllClass(class_ * self) {
 		m->Parent = self->parent;
 	}
 	for (int i = 0; i < self->constructor_list->Length; i++) {
-		constructor* ctor = (constructor*)AtVector(self->constructor_list, i);
+		Constructor* ctor = (Constructor*)AtVector(self->constructor_list, i);
 		ctor->parent = self->parent;
 	}
 }
@@ -499,7 +499,7 @@ static void class_DeleteMethod(VectorItem item) {
 }
 
 static void class_ctor_delete(VectorItem item) {
-	constructor* e = (constructor*)item;
+	Constructor* e = (Constructor*)item;
 	DeleteConstructor(e);
 }
 

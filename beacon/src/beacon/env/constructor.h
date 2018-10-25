@@ -11,18 +11,18 @@ struct Frame;
 /**
  * コンストラクタを表す構造体.
  */
-typedef struct constructor {
+typedef struct Constructor {
 	struct type* parent;
 	struct Enviroment* env;
 	Vector* parameter_list;
 	AccessLevel access;
-} constructor;
+} Constructor;
 
 /**
  * コンストラクタを作成します.
  * @return
  */
-constructor* NewConstructor();
+Constructor* NewConstructor();
 
 /**
  * このコンストラクタを使用してオブジェクトを生成します.
@@ -31,11 +31,11 @@ constructor* NewConstructor();
  * @param parent
  * @return
  */
-struct object* NewInstanceConstructor(constructor* self, Vector* args, struct Frame* parent);
+struct object* NewInstanceConstructor(Constructor* self, Vector* args, struct Frame* parent);
 
 /**
  * コンストラクタを開放します.
  * @param self
  */
-void DeleteConstructor(constructor* self);
+void DeleteConstructor(Constructor* self);
 #endif // !SIGNAL_ENV_CONSTRUCTOR_H

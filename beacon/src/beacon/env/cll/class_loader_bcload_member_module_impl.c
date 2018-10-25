@@ -439,7 +439,7 @@ bool CLBC_ctor_decl(class_loader* self, il_type* iltype, type* tp, ILConstructor
 	Vector* ilparams = ilcons->Parameters;
 	class_* classz = tp->u.class_;
 	//実行時のメソッド情報を作成する
-	constructor* cons = NewConstructor();
+	Constructor* cons = NewConstructor();
 	Vector* parameter_list = cons->parameter_list;
 	cons->access = ilcons->Access;
 	cons->parent = tp;
@@ -462,7 +462,7 @@ bool CLBC_ctor_decl(class_loader* self, il_type* iltype, type* tp, ILConstructor
 	return true;
 }
 
-bool CLBC_ctor_impl(class_loader* self, il_type* iltype, type* tp, ILConstructor* ilcons, constructor* cons, Namespace* scope) {
+bool CLBC_ctor_impl(class_loader* self, il_type* iltype, type* tp, ILConstructor* ilcons, Constructor* cons, Namespace* scope) {
 	//仮引数に型を設定する
 	//class_loader_sgload_params(self, scope, ilcons->parameter_list, cons->parameter_list);
 	//まずは仮引数の一覧にインデックスを割り振る
@@ -713,7 +713,7 @@ static void CLBC_chain_auto(class_loader * self, il_type * iltype, type * tp, IL
 	int emptyTemp = 0;
 	CallContext* cctx = NewCallContext(CALL_CTOR_ARGS_T);
 	cctx->Ty = tp;
-	constructor* emptyTarget = ILFindEmptyConstructorClass(classz->super_class->core_type->u.class_, env, cctx, &emptyTemp);
+	Constructor* emptyTarget = ILFindEmptyConstructorClass(classz->super_class->core_type->u.class_, env, cctx, &emptyTemp);
 	DeleteCallContext(cctx);
 	//連鎖を明示的に書いていないのに、
 	//親クラスにも空のコンストラクタが存在しない=エラー
@@ -752,7 +752,7 @@ static void CLBC_chain_super(class_loader * self, il_type * iltype, type * tp, I
 		GenerateILFactor(ilarg->Factor, env, cctx);
 	}
 	//連鎖先のコンストラクタを検索する
-	constructor* chainTarget = NULL;
+	Constructor* chainTarget = NULL;
 	int temp = 0;
 	if (chain->Type == CHAIN_TYPE_THIS_T) {
 		chainTarget = ILFindConstructorClass(classz, chain->Arguments, env, cctx, &temp);

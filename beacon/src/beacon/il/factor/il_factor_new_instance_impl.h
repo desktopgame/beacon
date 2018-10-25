@@ -8,7 +8,7 @@
 
 struct Enviroment;
 struct type;
-struct constructor;
+struct Constructor;
 /**
  * コンストラクタの呼び出しを表す要素.
  */
@@ -18,7 +18,7 @@ typedef struct il_factor_new_instance {
 	Vector* type_args;
 //	GenericCache* fqcn;
 	generic_type* instance_type;
-	struct constructor* c;
+	struct Constructor* c;
 	int constructor_index;
 } il_factor_new_instance;
 

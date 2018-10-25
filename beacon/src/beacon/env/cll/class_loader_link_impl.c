@@ -314,7 +314,7 @@ static void CLBC_check_class(class_loader * self, il_type * iltype, type * tp, N
 		return;
 	}
 	//コンストラクタの重複するパラメータ名を検出する
-	constructor* out_overwrap_c = NULL;
+	Constructor* out_overwrap_c = NULL;
 	StringView out_overwrap_cname;
 	if(!IsConstructorParameterValidClass(tp->u.class_, &out_overwrap_c, &out_overwrap_cname)) {
 		ThrowBCError(BCERROR_OVERWRAP_PARAMETER_NAME_T,

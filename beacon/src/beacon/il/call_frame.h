@@ -3,7 +3,7 @@
 #include "../util/vector.h"
 
 struct Method;
-struct constructor;
+struct Constructor;
 struct operator_overload;
 struct generic_type;
 

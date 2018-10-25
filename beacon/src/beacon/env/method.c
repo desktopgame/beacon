@@ -28,7 +28,7 @@
 static void method_DeleteParameter(VectorItem item);
 static void method_DeleteTypeParameter(VectorItem item);
 static void method_count(il_stmt* s, int* yeild_ret, int* ret);
-static constructor* create_delegate_ctor(Method* self, type* ty, class_loader* cll,int op_len);
+static Constructor* create_delegate_ctor(Method* self, type* ty, class_loader* cll,int op_len);
 static Method* create_has_next(Method* self, type* ty,class_loader* cll, Vector* stmt_list, int* out_op_len);
 static Method* create_next(Method* self, type* ty,class_loader* cll, generic_type* a, Vector* stmt_list, int* out_op_len);
 static Vector* method_vm_args(Method* self, Frame* fr, Frame* a);
@@ -332,9 +332,9 @@ static void method_count(il_stmt* s, int* yield_ret, int* ret) {
 	}
 }
 
-static constructor* create_delegate_ctor(Method* self, type* ty, class_loader* cll,int op_len) {
+static Constructor* create_delegate_ctor(Method* self, type* ty, class_loader* cll,int op_len) {
 	//イテレータのコンストラクタを作成
-	constructor* iterCons = NewConstructor();
+	Constructor* iterCons = NewConstructor();
 	Enviroment* envIterCons = NewEnviroment();
 	//コルーチンを生成したオブジェクトを受け取るパラメータ追加
 	Parameter* coroOwnerParam = NewParameter(InternString("owner"));
