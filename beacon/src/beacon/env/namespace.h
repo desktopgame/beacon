@@ -34,27 +34,27 @@ struct interface_;
 /**
  * 名前空間を表す構造体.
  */
-typedef struct namespace_ {
+typedef struct Namespace {
 	StringView namev;
-	struct namespace_* parent;
-	NumericMap* namespace_map;
+	struct Namespace* parent;
+	NumericMap* Namespacemap;
 	NumericMap* type_map;
 	uint32_t ref_count;
-} namespace_;
+} Namespace;
 
 /**
  * 指定の名前でトップレベルに新しい名前空間を定義します.
  * @param namev
  * @return 既に存在するならそれを返します.
  */
-namespace_* CreateNamespaceAtRoot(StringView namev);
+Namespace* CreateNamespaceAtRoot(StringView namev);
 
 /**
  * 指定の名前でトップレベルから名前空間を検索します.
  * @param namev
  * @return
  */
-namespace_* FindNamespaceFromRoot(StringView namev);
+Namespace* FindNamespaceFromRoot(StringView namev);
 
 /**
  * コンテキストを指定してトップレベルの名前空間を返します.
@@ -62,7 +62,7 @@ namespace_* FindNamespaceFromRoot(StringView namev);
  * @param namev
  * @return
  */
-namespace_* CFindNamespaceFromRoot(struct script_context* sctx, StringView namev);
+Namespace* CFindNamespaceFromRoot(struct script_context* sctx, StringView namev);
 
 /**
  * 指定の名前空間に新しい名前空間を定義します.
@@ -70,7 +70,7 @@ namespace_* CFindNamespaceFromRoot(struct script_context* sctx, StringView namev
  * @param namev
  * @return 既に存在するならそれを返します.
  */
-namespace_* AddNamespaceNamespace(namespace_* self, StringView namev);
+Namespace* AddNamespaceNamespace(Namespace* self, StringView namev);
 
 /**
  * この名前空間にクラスを含めます.
@@ -78,7 +78,7 @@ namespace_* AddNamespaceNamespace(namespace_* self, StringView namev);
  * @param self
  * @param type
  */
-struct type* AddTypeNamespace(namespace_* self, struct type* type);
+struct type* AddTypeNamespace(Namespace* self, struct type* type);
 
 /**
  * 指定の名前空間から指定の名前の名前空間を検索します.
@@ -86,7 +86,7 @@ struct type* AddTypeNamespace(namespace_* self, struct type* type);
  * @param namev
  * @return 見つからないなら NULL
  */
-namespace_* FindNamespaceFromNamespace(namespace_* self, StringView namev);
+Namespace* FindNamespaceFromNamespace(Namespace* self, StringView namev);
 
 /**
  * 指定の名前空間で指定の名前のタイプを検索します.
@@ -94,7 +94,7 @@ namespace_* FindNamespaceFromNamespace(namespace_* self, StringView namev);
  * @param namev
  * @return 見つからないなら NULL
  */
-struct type* FindTypeFromNamespace(namespace_* self, StringView namev);
+struct type* FindTypeFromNamespace(Namespace* self, StringView namev);
 
 /**
  * 指定の名前空間で指定の名前のクラスを検索します.
@@ -102,7 +102,7 @@ struct type* FindTypeFromNamespace(namespace_* self, StringView namev);
  * @param namev
  * @return 見つからないなら NULL
  */
-struct class_* FindClassFromNamespace(namespace_* self, StringView namev);
+struct class_* FindClassFromNamespace(Namespace* self, StringView namev);
 
 /**
  * 指定の名前空間で指定の名前のインターフェースを検索します.
@@ -110,31 +110,31 @@ struct class_* FindClassFromNamespace(namespace_* self, StringView namev);
  * @param namev
  * @return 見つからないなら NULL
  */
-struct interface_* FindInterfaceFromNamespace(namespace_* self, StringView namev);
+struct interface_* FindInterfaceFromNamespace(Namespace* self, StringView namev);
 
 /**
  * beacon 名前空間を返します.
  * @return
  */
-namespace_* GetBeaconNamespace();
+Namespace* GetBeaconNamespace();
 
 /**
  * beacon.lang 名前空間を返します.
  * @return
  */
-namespace_* GetLangNamespace();
+Namespace* GetLangNamespace();
 
 /**
  * beacon.unsafe 名前空間を返します.
  * @return
  */
-namespace_* GetUnsafeNamespace();
+Namespace* GetUnsafeNamespace();
 
 /**
  * $placeholder 名前空間を返します.
  * @return
  */
-namespace_* GetPlaceholderNamespace();
+Namespace* GetPlaceholderNamespace();
 
 /**
  * 現在のスクリプトコンテキストで object タイプを返します.
@@ -194,18 +194,18 @@ struct type* GetExceptionTypeNamespace();
  * 指定の名前空間のすべての型で unlink を呼び出します.
  * @param self
  */
-void UnlinkNamespace(namespace_* self);
+void UnlinkNamespace(Namespace* self);
 
 /**
  * 名前空間を完全な文字列として返します.
  * @param self
  * @return
  */
-StringView NamespaceToString(namespace_* self);
+StringView NamespaceToString(Namespace* self);
 
 /**
  * 名前空間を開放します.
  * @param self
  */
-void DeleteNamespace(namespace_* self);
+void DeleteNamespace(Namespace* self);
 #endif // !SIGNAL_ENV_NAMESPACE_H

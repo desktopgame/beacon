@@ -81,7 +81,7 @@ generic_type* EvalILNewInstance(il_factor_new_instance * self, Enviroment * env,
 	}
 	//fqcn_cache typename_group
 	if (self->instance_type == NULL) {
-		namespace_* scope = NULL;
+		Namespace* scope = NULL;
 		generic_type* a = generic_NewType(self->c->parent);
 		for (int i = 0; i < self->type_args->Length; i++) {
 			il_type_argument* e = (il_type_argument*)AtVector(self->type_args, i);

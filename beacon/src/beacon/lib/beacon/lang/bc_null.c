@@ -3,12 +3,12 @@
 
 
 void InitBCNull() {
-	namespace_* lang = GetLangNamespace();
+	Namespace* lang = GetLangNamespace();
 	type* nullType = NewPreloadClass(InternString("Null"));
 	AddTypeNamespace(lang, nullType);
 }
 
 type* GetBCNullType() {
-	namespace_* lang = GetLangNamespace();
+	Namespace* lang = GetLangNamespace();
 	return FindTypeFromNamespace(lang, InternString("Null"));
 }

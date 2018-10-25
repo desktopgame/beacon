@@ -14,7 +14,7 @@ static void bc_object_nativeToString(Method* parent, Frame* fr, Enviroment* env)
 static void bc_object_nativeReferenceEquals(Method* parent, Frame* fr, Enviroment* env);
 
 void InitBCObject() {
-	namespace_* lang = GetLangNamespace();
+	Namespace* lang = GetLangNamespace();
 	type* objectType = NewPreloadClass(InternString("Object"));
 	class_* objectClass = TYPE2CLASS(objectType);
 	AddTypeNamespace(lang, objectType);
@@ -23,7 +23,7 @@ void InitBCObject() {
 }
 
 type* GetBCObjectType() {
-	namespace_* lang = GetLangNamespace();
+	Namespace* lang = GetLangNamespace();
 	return FindTypeFromNamespace(lang, InternString("Object"));
 }
 

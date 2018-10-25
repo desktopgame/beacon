@@ -13,7 +13,7 @@
 static void bc_exception_nativeInit(Method* parent, Frame* fr, Enviroment* env);
 
 void InitBCException() {
-	namespace_* lang = GetLangNamespace();
+	Namespace* lang = GetLangNamespace();
 	type* exceptionType = NewPreloadClass(InternString("Exception"));
 	class_* exceptionClass = TYPE2CLASS(exceptionType);
 	AddTypeNamespace(lang, exceptionType);
@@ -21,12 +21,12 @@ void InitBCException() {
 }
 
 type* GetBCExceptionType() {
-	namespace_* lang = GetLangNamespace();
+	Namespace* lang = GetLangNamespace();
 	return FindTypeFromNamespace(lang, InternString("Exception"));
 }
 //private
 static void bc_exception_nativeInit(Method* parent, Frame* fr, Enviroment* env) {
-	namespace_* lang = GetLangNamespace();
+	Namespace* lang = GetLangNamespace();
 	class_* stackTraceElementClass = FindClassFromNamespace(lang, InternString("StackTraceElement"));
 	class_* exceptionClass = FindClassFromNamespace(lang, InternString("Exception"));
 	object* self= (object*)AtVector(fr->VariableTable, 0);

@@ -14,7 +14,7 @@ static void bc_array_nativeGet(Method* parent, Frame* fr, Enviroment* env);
 static void bc_array_nativeCopy(Method* parent, Frame* fr, Enviroment* env);
 
 void InitBCArray() {
-	namespace_* lang = GetLangNamespace();
+	Namespace* lang = GetLangNamespace();
 	type* arrayType = NewPreloadClass(InternString("Array"));
 	class_* arrayClass = TYPE2CLASS(arrayType);
 	AddTypeNamespace(lang, arrayType);
@@ -25,7 +25,7 @@ void InitBCArray() {
 }
 
 type * GetBCArrayType() {
-	namespace_* lang = GetLangNamespace();
+	Namespace* lang = GetLangNamespace();
 	return FindTypeFromNamespace(lang, InternString("Array"));
 }
 

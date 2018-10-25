@@ -53,10 +53,10 @@ StringView GetTypeFullName(type* self) {
 	if(self == NULL) {
 		return InternString("NULL");
 	}
-	StringView namespace_str = NamespaceToString(self->location);
+	StringView Namespacestr = NamespaceToString(self->location);
 	StringView self_str = GetTypeName(self);
 	return ConcatIntern(
-		Ref2Str(namespace_str),
+		Ref2Str(Namespacestr),
 		ConcatIntern(".", self_str)
 	);
 }

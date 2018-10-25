@@ -33,7 +33,7 @@ struct operator_overload;
 typedef struct class_ {
 	type* parent;
 	StringView namev;
-	namespace_* location;
+	Namespace* location;
 	struct generic_type* super_class;
 	Vector* impl_list;
 	Vector* field_list;

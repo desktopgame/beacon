@@ -15,7 +15,7 @@ static void bc_double_nativeLE(Method* parent, Frame* fr, Enviroment* env);
 static void bc_double_nativeEQ(Method* parent, Frame* fr, Enviroment* env);
 
 void InitBCDouble() {
-	namespace_* lang = GetLangNamespace();
+	Namespace* lang = GetLangNamespace();
 	type* doubleType = NewPreloadClass(InternString("Double"));
 	class_* doubleClass = TYPE2CLASS(doubleType);
 	AddTypeNamespace(lang, doubleType);
@@ -33,7 +33,7 @@ void InitBCDouble() {
 }
 
 type* GetBCDoubleType() {
-	namespace_* lang = GetLangNamespace();
+	Namespace* lang = GetLangNamespace();
 	return FindTypeFromNamespace(lang, InternString("Double"));
 }
 //private

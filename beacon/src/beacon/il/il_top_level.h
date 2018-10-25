@@ -7,7 +7,7 @@
  */
 typedef struct il_top_level {
 	Vector* import_list;
-	Vector* namespace_list;
+	Vector* Namespacelist;
 	Vector* statement_list;
 	Vector* function_list;
 } il_top_level;

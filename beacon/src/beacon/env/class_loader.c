@@ -241,7 +241,7 @@ static void LoadClassLoader_toplevel_function(class_loader* self) {
 		cctx->Scope = GetLangNamespace();
 		cctx->Ty = worldT;
 		cctx->Kind.Method = m;
-		namespace_* loc = GetNamespaceCContext(cctx);
+		Namespace* loc = GetNamespaceCContext(cctx);
 		env->ContextRef = self;
 		sm->Env = env;
 		m->Access = ACCESS_PRIVATE_T;

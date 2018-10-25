@@ -29,7 +29,7 @@
 #include <string.h>
 
 //proto
-static void CLBC_parameter_list(class_loader* self, namespace_* scope, Vector* param_list, Vector* sg_param_liste, CallContext* cctx);
+static void CLBC_parameter_list(class_loader* self, Namespace* scope, Vector* param_list, Vector* sg_param_liste, CallContext* cctx);
 static void CLBC_parameter_list_ctor(Vector* param_list);
 
 static void CLBC_chain(class_loader* self, il_type* iltype, type* tp, ILConstructor* ilcons, ILConstructorChain* ilchain, Enviroment* env);
@@ -42,7 +42,7 @@ static bool CLBC_test_operator_overlaod(class_loader* self, il_type* iltype, typ
 //field
 //
 //
-bool CLBC_field_decl(class_loader* self, il_type* iltype, type* tp, ILField* ilfi, namespace_* scope, CallContext* cctx) {
+bool CLBC_field_decl(class_loader* self, il_type* iltype, type* tp, ILField* ilfi, Namespace* scope, CallContext* cctx) {
 	field* fi = NewField(ilfi->Name);
 	fi->access = ilfi->Access;
 	fi->modifier = ilfi->Modifier;
@@ -90,7 +90,7 @@ bool CLBC_field_decl(class_loader* self, il_type* iltype, type* tp, ILField* ilf
 	return true;
 }
 
-bool CLBC_field_impl(class_loader* self, type* tp, field* fi, namespace_* scope, CallContext* cctx) {
+bool CLBC_field_impl(class_loader* self, type* tp, field* fi, Namespace* scope, CallContext* cctx) {
 	fi->static_value = GetDefaultObject(fi->gtype);
 	if(fi->initial_value == NULL) {
 		return true;
@@ -131,7 +131,7 @@ bool CLBC_field_impl(class_loader* self, type* tp, field* fi, namespace_* scope,
 	return true;
 }
 
-void CLBC_fields_decl(class_loader* self, il_type* iltype, type* tp, Vector* ilfields, namespace_* scope) {
+void CLBC_fields_decl(class_loader* self, il_type* iltype, type* tp, Vector* ilfields, Namespace* scope) {
 	CL_ERROR(self);
 	CallContext* cctx = NewCallContext(CALL_DECL_T);
 	cctx->Scope = scope;
@@ -144,7 +144,7 @@ void CLBC_fields_decl(class_loader* self, il_type* iltype, type* tp, Vector* ilf
 	DeleteCallContext(cctx);
 }
 
-void CLBC_fields_impl(class_loader* self, namespace_* scope, type* tp,Vector* ilfields, Vector* sgfields) {
+void CLBC_fields_impl(class_loader* self, Namespace* scope, type* tp,Vector* ilfields, Vector* sgfields) {
 	CL_ERROR(self);
 	CallContext* cctx = NewCallContext(CALL_CTOR_T);
 	cctx->Scope = scope;
@@ -161,7 +161,7 @@ void CLBC_fields_impl(class_loader* self, namespace_* scope, type* tp,Vector* il
 //property
 //
 //
-bool CLBC_property_decl(class_loader* self, il_type* iltype, type* tp, il_property* ilprop, namespace_* scope, CallContext* cctx) {
+bool CLBC_property_decl(class_loader* self, il_type* iltype, type* tp, il_property* ilprop, Namespace* scope, CallContext* cctx) {
 	//VectorItem e = AtVector(ilprops, i);
 	//il_property* ilprop = e;
 	property* prop = property_new(ilprop->namev);
@@ -201,7 +201,7 @@ bool CLBC_property_decl(class_loader* self, il_type* iltype, type* tp, il_proper
 	return true;
 }
 
-bool CLBC_property_impl(class_loader* self, il_type* iltype, type* tp, il_property* ilprop, property* prop, namespace_* scope, CallContext* cctx) {
+bool CLBC_property_impl(class_loader* self, il_type* iltype, type* tp, il_property* ilprop, property* prop, Namespace* scope, CallContext* cctx) {
 	//VectorItem e = AtVector(sgprops, i);
 	property* pr = prop;
 	il_property* ilpr = ilprop;
@@ -230,7 +230,7 @@ bool CLBC_property_impl(class_loader* self, il_type* iltype, type* tp, il_proper
 	return true;
 }
 
-void CLBC_properties_decl(class_loader* self, il_type* iltype, type* tp, Vector* ilprops, namespace_* scope) {
+void CLBC_properties_decl(class_loader* self, il_type* iltype, type* tp, Vector* ilprops, Namespace* scope) {
 	CL_ERROR(self);
 	CallContext* cctx = NewCallContext(CALL_DECL_T);
 	cctx->Scope = scope;
@@ -243,7 +243,7 @@ void CLBC_properties_decl(class_loader* self, il_type* iltype, type* tp, Vector*
 	DeleteCallContext(cctx);
 }
 
-void CLBC_properties_impl(class_loader* self,  il_type* iltype, type* tp, Vector* ilprops, Vector* sgprops, namespace_* scope) {
+void CLBC_properties_impl(class_loader* self,  il_type* iltype, type* tp, Vector* ilprops, Vector* sgprops, Namespace* scope) {
 	CL_ERROR(self);
 	CallContext* cctx = NewCallContext(CALL_DECL_T);
 	cctx->Scope = scope;
@@ -260,7 +260,7 @@ void CLBC_properties_impl(class_loader* self,  il_type* iltype, type* tp, Vector
 //method
 //
 //
-bool CLBC_method_decl(class_loader* self, il_type* iltype, type* tp, ILMethod* ilmt, namespace_* scope) {
+bool CLBC_method_decl(class_loader* self, il_type* iltype, type* tp, ILMethod* ilmt, Namespace* scope) {
 	//メソッド一覧から取り出す
 	ILMethod* ilmethod = ilmt;
 	//メソッドから仮引数一覧を取りだす
@@ -369,7 +369,7 @@ bool CLBC_method_decl(class_loader* self, il_type* iltype, type* tp, ILMethod* i
 	return true;
 }
 
-bool CLBC_method_impl(class_loader* self, namespace_* scope, il_type* iltype, type* tp, ILMethod* ilmt, Method* mt) {
+bool CLBC_method_impl(class_loader* self, Namespace* scope, il_type* iltype, type* tp, ILMethod* ilmt, Method* mt) {
 	//	VectorItem e = AtVector(sgmethods, i);
 	Method* me = mt;
 	ILMethod* ilmethod = ilmt;
@@ -411,7 +411,7 @@ bool CLBC_method_impl(class_loader* self, namespace_* scope, il_type* iltype, ty
 	return true;
 }
 
-void CLBC_methods_decl(class_loader* self, il_type* iltype, type* tp, Vector* ilmethods, namespace_* scope) {
+void CLBC_methods_decl(class_loader* self, il_type* iltype, type* tp, Vector* ilmethods, Namespace* scope) {
 	CL_ERROR(self);
 	for (int i = 0; i < ilmethods->Length; i++) {
 		if(!CLBC_method_decl(self, iltype, tp, AtVector(ilmethods,i),scope)) {
@@ -420,7 +420,7 @@ void CLBC_methods_decl(class_loader* self, il_type* iltype, type* tp, Vector* il
 	}
 }
 
-void CLBC_methods_impl(class_loader* self, namespace_* scope, il_type* iltype, type* tp, Vector* ilmethods, Vector* sgmethods) {
+void CLBC_methods_impl(class_loader* self, Namespace* scope, il_type* iltype, type* tp, Vector* ilmethods, Vector* sgmethods) {
 	CL_ERROR(self);
 	for (int i = 0; i < ilmethods->Length; i++) {
 		if(!CLBC_method_impl(self, scope, iltype, tp, AtVector(ilmethods, i), AtVector(sgmethods, i))) {
@@ -434,7 +434,7 @@ void CLBC_methods_impl(class_loader* self, namespace_* scope, il_type* iltype, t
 //ctor
 //
 //
-bool CLBC_ctor_decl(class_loader* self, il_type* iltype, type* tp, ILConstructor* ilcons, namespace_* scope) {
+bool CLBC_ctor_decl(class_loader* self, il_type* iltype, type* tp, ILConstructor* ilcons, Namespace* scope) {
 	//メソッドから仮引数一覧を取りだす
 	Vector* ilparams = ilcons->Parameters;
 	class_* classz = tp->u.class_;
@@ -462,7 +462,7 @@ bool CLBC_ctor_decl(class_loader* self, il_type* iltype, type* tp, ILConstructor
 	return true;
 }
 
-bool CLBC_ctor_impl(class_loader* self, il_type* iltype, type* tp, ILConstructor* ilcons, constructor* cons, namespace_* scope) {
+bool CLBC_ctor_impl(class_loader* self, il_type* iltype, type* tp, ILConstructor* ilcons, constructor* cons, Namespace* scope) {
 	//仮引数に型を設定する
 	//class_loader_sgload_params(self, scope, ilcons->parameter_list, cons->parameter_list);
 	//まずは仮引数の一覧にインデックスを割り振る
@@ -492,7 +492,7 @@ bool CLBC_ctor_impl(class_loader* self, il_type* iltype, type* tp, ILConstructor
 	return true;
 }
 
-void CLBC_ctors_decl(class_loader* self, il_type* iltype, type* tp, namespace_* scope) {
+void CLBC_ctors_decl(class_loader* self, il_type* iltype, type* tp, Namespace* scope) {
 	CL_ERROR(self);
 	class_* classz = tp->u.class_;
 	Vector* ilcons_list = iltype->u.class_->constructor_list;
@@ -507,7 +507,7 @@ void CLBC_ctors_impl(class_loader* self, il_type* iltype, type* tp) {
 	CL_ERROR(self);
 	assert(tp->tag == TYPE_CLASS_T);
 	class_* classz = tp->u.class_;
-	namespace_* scope = classz->location;
+	Namespace* scope = classz->location;
 	Vector* constructors = classz->constructor_list;
 	if (iltype->tag != ilTYPE_CLASS_T) {
 		return;
@@ -525,7 +525,7 @@ void CLBC_ctors_impl(class_loader* self, il_type* iltype, type* tp) {
 //operator overload
 //
 //
-bool CLBC_operator_overload_decl(class_loader* self, il_type* iltype, type* tp, il_operator_overload* ilopov, namespace_* scope) {
+bool CLBC_operator_overload_decl(class_loader* self, il_type* iltype, type* tp, il_operator_overload* ilopov, Namespace* scope) {
 	//演算子オーバーロード一覧から取り出す
 	operator_overload* opov = NewOperatorOverload(ilopov->op);
 	opov->access = ilopov->access;
@@ -554,7 +554,7 @@ bool CLBC_operator_overload_decl(class_loader* self, il_type* iltype, type* tp, 
 	return true;
 }
 
-bool CLBC_operator_overload_impl(class_loader* self, il_type* iltype, type* tp, il_operator_overload* ilopov, operator_overload* opov, namespace_* scope) {
+bool CLBC_operator_overload_impl(class_loader* self, il_type* iltype, type* tp, il_operator_overload* ilopov, operator_overload* opov, Namespace* scope) {
 	//オペコードを作成
 	//FIXME:ILメソッドと実行時メソッドのインデックスが同じなのでとりあえず動く
 	//まずは仮引数の一覧にインデックスを割り振る
@@ -588,7 +588,7 @@ bool CLBC_operator_overload_impl(class_loader* self, il_type* iltype, type* tp, 
 	return true;
 }
 
-void CLBC_operator_overloads_decl(class_loader* self, il_type* iltype, type* tp, namespace_* scope) {
+void CLBC_operator_overloads_decl(class_loader* self, il_type* iltype, type* tp, Namespace* scope) {
 	CL_ERROR(self);
 	Vector* opov_list = iltype->u.class_->operator_overload_list;
 	for (int i = 0; i < opov_list->Length; i++) {
@@ -599,7 +599,7 @@ void CLBC_operator_overloads_decl(class_loader* self, il_type* iltype, type* tp,
 	//CLBC_default_operator_overload(self, tp);
 }
 
-void CLBC_operator_overloads_impl(class_loader* self, il_type* iltype, type* tp, namespace_* scope) {
+void CLBC_operator_overloads_impl(class_loader* self, il_type* iltype, type* tp, Namespace* scope) {
 	CL_ERROR(self);
 	Vector* opov_list = tp->u.class_->operator_overload_list;
 	//ここで暗黙的に作成される == != によって長さが合わなくなる
@@ -610,7 +610,7 @@ void CLBC_operator_overloads_impl(class_loader* self, il_type* iltype, type* tp,
 	}
 }
 
-bool CLBC_corutine(class_loader* self, Method* mt, Enviroment* env,  Vector* ilparams, Vector* ilstmts, CallContext* cctx, namespace_* range) {
+bool CLBC_corutine(class_loader* self, Method* mt, Enviroment* env,  Vector* ilparams, Vector* ilstmts, CallContext* cctx, Namespace* range) {
 	//戻り値が iterator なら、
 	//コルーチンとして使えるようにする
 	bool yield_err = false;
@@ -640,7 +640,7 @@ bool CLBC_corutine(class_loader* self, Method* mt, Enviroment* env,  Vector* ilp
 	return true;
 }
 
-void CLBC_body(class_loader* self, Vector* stmt_list, Enviroment* dest, CallContext* cctx, namespace_* range) {
+void CLBC_body(class_loader* self, Vector* stmt_list, Enviroment* dest, CallContext* cctx, Namespace* range) {
 	CL_ERROR(self);
 	//まずは全てのステートメントを読み込む
 	for (int i = 0; i < stmt_list->Length; i++) {
@@ -663,7 +663,7 @@ void CLBC_body(class_loader* self, Vector* stmt_list, Enviroment* dest, CallCont
 }
 
 //private
-static void CLBC_parameter_list(class_loader* self, namespace_* scope, Vector* param_list, Vector* sg_param_list, CallContext* cctx) {
+static void CLBC_parameter_list(class_loader* self, Namespace* scope, Vector* param_list, Vector* sg_param_list, CallContext* cctx) {
 	for (int j = 0; j < param_list->Length; j++) {
 		VectorItem e = AtVector(param_list, j);
 		il_parameter* ilparam = (il_parameter*)e;

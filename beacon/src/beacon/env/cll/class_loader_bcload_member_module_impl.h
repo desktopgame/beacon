@@ -16,8 +16,8 @@
 #include "../../env/operator_overload.h"
 #include "../../env/property.h"
 
-bool CLBC_field_decl(class_loader* self, il_type* iltype, type* tp, ILField* ilfi, namespace_* scope, CallContext* cctx);
-bool CLBC_field_impl(class_loader* self, type* tp, field* fi, namespace_* scope, CallContext* cctx);
+bool CLBC_field_decl(class_loader* self, il_type* iltype, type* tp, ILField* ilfi, Namespace* scope, CallContext* cctx);
+bool CLBC_field_impl(class_loader* self, type* tp, field* fi, Namespace* scope, CallContext* cctx);
 /**
  * フィールド宣言を読み込んでクラスに追加します.
  * @param self
@@ -25,11 +25,11 @@ bool CLBC_field_impl(class_loader* self, type* tp, field* fi, namespace_* scope,
  * @param tp
  * @param ilfields
  */
-void CLBC_fields_decl(class_loader* self, il_type* iltype, type* tp, Vector* ilfields, namespace_* scope);
-void CLBC_fields_impl(class_loader* self, namespace_* scope, type* tp,Vector* ilfields, Vector* sgfields);
+void CLBC_fields_decl(class_loader* self, il_type* iltype, type* tp, Vector* ilfields, Namespace* scope);
+void CLBC_fields_impl(class_loader* self, Namespace* scope, type* tp,Vector* ilfields, Vector* sgfields);
 
-bool CLBC_property_decl(class_loader* self, il_type* iltype, type* tp, il_property* ilprop, namespace_* scope, CallContext* cctx);
-bool CLBC_property_impl(class_loader* self, il_type* iltype, type* tp, il_property* ilprop, property* prop, namespace_* scope, CallContext* cctx);
+bool CLBC_property_decl(class_loader* self, il_type* iltype, type* tp, il_property* ilprop, Namespace* scope, CallContext* cctx);
+bool CLBC_property_impl(class_loader* self, il_type* iltype, type* tp, il_property* ilprop, property* prop, Namespace* scope, CallContext* cctx);
 
 /**
  * @param self
@@ -37,11 +37,11 @@ bool CLBC_property_impl(class_loader* self, il_type* iltype, type* tp, il_proper
  * @param tp
  * @param scope
  */
-void CLBC_properties_decl(class_loader* self, il_type* iltype, type* tp, Vector* ilprops, namespace_* scope);
-void CLBC_properties_impl(class_loader* self, il_type* iltype, type* tp, Vector* ilprops, Vector* sgprops, namespace_* scope);
+void CLBC_properties_decl(class_loader* self, il_type* iltype, type* tp, Vector* ilprops, Namespace* scope);
+void CLBC_properties_impl(class_loader* self, il_type* iltype, type* tp, Vector* ilprops, Vector* sgprops, Namespace* scope);
 
-bool CLBC_method_decl(class_loader* self, il_type* iltype, type* tp, ILMethod* ilmt, namespace_* scope);
-bool CLBC_method_impl(class_loader* self, namespace_* scope, il_type* iltype, type* tp, ILMethod* ilmt, Method* mt);
+bool CLBC_method_decl(class_loader* self, il_type* iltype, type* tp, ILMethod* ilmt, Namespace* scope);
+bool CLBC_method_impl(class_loader* self, Namespace* scope, il_type* iltype, type* tp, ILMethod* ilmt, Method* mt);
 
 /**
  * メソッド宣言を読み込んでクラスに追加します.
@@ -51,12 +51,12 @@ bool CLBC_method_impl(class_loader* self, namespace_* scope, il_type* iltype, ty
  * @param ilmethods
  * @param scope
  */
-void CLBC_methods_decl(class_loader* self, il_type* iltype, type* tp, Vector* ilmethods, namespace_* scope);
-void CLBC_methods_impl(class_loader* self, namespace_* scope, il_type* iltype, type* tp, Vector* ilmethods, Vector* sgmethods);
+void CLBC_methods_decl(class_loader* self, il_type* iltype, type* tp, Vector* ilmethods, Namespace* scope);
+void CLBC_methods_impl(class_loader* self, Namespace* scope, il_type* iltype, type* tp, Vector* ilmethods, Vector* sgmethods);
 
 
-bool CLBC_ctor_decl(class_loader* self, il_type* iltype, type* tp, ILConstructor* ilcons, namespace_* scope);
-bool CLBC_ctor_impl(class_loader* self, il_type* iltype, type* tp, ILConstructor* ilcons, constructor* cons, namespace_* scope);
+bool CLBC_ctor_decl(class_loader* self, il_type* iltype, type* tp, ILConstructor* ilcons, Namespace* scope);
+bool CLBC_ctor_impl(class_loader* self, il_type* iltype, type* tp, ILConstructor* ilcons, constructor* cons, Namespace* scope);
 
 /**
  * コンストラクタ宣言を読み込んでクラスに追加します.
@@ -65,16 +65,16 @@ bool CLBC_ctor_impl(class_loader* self, il_type* iltype, type* tp, ILConstructor
  * @param tp
  * @param scope
  */
-void CLBC_ctors_decl(class_loader* self, il_type* iltype, type* tp, namespace_* scope);
+void CLBC_ctors_decl(class_loader* self, il_type* iltype, type* tp, Namespace* scope);
 void CLBC_ctors_impl(class_loader* self, il_type* iltype, type* tp);
 
-bool CLBC_operator_overload_decl(class_loader* self, il_type* iltype, type* tp, il_operator_overload* ilopov, namespace_* scope);
-bool CLBC_operator_overload_impl(class_loader* self, il_type* iltype, type* tp, il_operator_overload* ilopov, operator_overload* opov, namespace_* scope);
+bool CLBC_operator_overload_decl(class_loader* self, il_type* iltype, type* tp, il_operator_overload* ilopov, Namespace* scope);
+bool CLBC_operator_overload_impl(class_loader* self, il_type* iltype, type* tp, il_operator_overload* ilopov, operator_overload* opov, Namespace* scope);
 
-void CLBC_operator_overloads_decl(class_loader* self, il_type* iltype, type* tp, namespace_* scope);
-void CLBC_operator_overloads_impl(class_loader* self, il_type* iltype, type* tp, namespace_* scope);
+void CLBC_operator_overloads_decl(class_loader* self, il_type* iltype, type* tp, Namespace* scope);
+void CLBC_operator_overloads_impl(class_loader* self, il_type* iltype, type* tp, Namespace* scope);
 
-bool CLBC_corutine(class_loader* self, Method* mt, Enviroment* env, Vector* ilparams, Vector* ilstmts, CallContext* cctx, namespace_* range);
+bool CLBC_corutine(class_loader* self, Method* mt, Enviroment* env, Vector* ilparams, Vector* ilstmts, CallContext* cctx, Namespace* range);
 
-void CLBC_body(class_loader* self, Vector* stmt_list, Enviroment* dest, CallContext* cctx, namespace_* range);
+void CLBC_body(class_loader* self, Vector* stmt_list, Enviroment* dest, CallContext* cctx, Namespace* range);
 #endif

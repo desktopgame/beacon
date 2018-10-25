@@ -9,7 +9,7 @@
 #include <string.h>
 
 //proto
-static type * fqcn_TYPE_IMPL(fqcn_cache * self, namespace_* current);
+static type * fqcn_TYPE_IMPL(fqcn_cache * self, Namespace* current);
 
 /*
 fqcn_cache * fqcn_cache_new() {
@@ -57,11 +57,11 @@ void PrintFQCNCache(fqcn_cache * self) {
 	}
 }
 
-namespace_ * GetScopeFQCN(fqcn_cache * self, namespace_* current) {
+Namespace * GetScopeFQCN(fqcn_cache * self, Namespace* current) {
 	if (self->scope_vec->Length == 0) {
 		return current;
 	}
-	namespace_* top = NULL;
+	Namespace* top = NULL;
 	for (int i = 0; i < self->scope_vec->Length; i++) {
 		StringView ev = (StringView)AtVector(self->scope_vec, i);
 		if (top == NULL) {
@@ -73,7 +73,7 @@ namespace_ * GetScopeFQCN(fqcn_cache * self, namespace_* current) {
 	return top;
 }
 
-type * GetTypeFQCN(fqcn_cache * self, namespace_ * current) {
+type * GetTypeFQCN(fqcn_cache * self, Namespace * current) {
 	type* ret = fqcn_TYPE_IMPL(self, current);
 	//Console(X::Yを含まない)のような指定なら
 	//signal::lang空間も探索する
@@ -83,11 +83,11 @@ type * GetTypeFQCN(fqcn_cache * self, namespace_ * current) {
 	return ret;
 }
 
-interface_ * GetInterfaceFQCN(fqcn_cache * self, namespace_ * current) {
+interface_ * GetInterfaceFQCN(fqcn_cache * self, Namespace * current) {
 	return TypeToInterface(GetTypeFQCN(self, current));
 }
 
-class_ * GetClassFQCN(fqcn_cache * self, namespace_ * current) {
+class_ * GetClassFQCN(fqcn_cache * self, Namespace * current) {
 	return TypeToClass(GetTypeFQCN(self, current));
 }
 
@@ -130,7 +130,7 @@ bool EqualsFQCNCache(fqcn_cache* a, fqcn_cache* b) {
 	return true;
 }
 //private
-static type * fqcn_TYPE_IMPL(fqcn_cache * self, namespace_* current) {
+static type * fqcn_TYPE_IMPL(fqcn_cache * self, Namespace* current) {
 	//Y形式
 	if (self->scope_vec->Length == 0) {
 		StringView namev = self->namev;
@@ -156,7 +156,7 @@ static type * fqcn_TYPE_IMPL(fqcn_cache * self, namespace_* current) {
 		return FindTypeFromNamespace(current, self->namev);
 	}
 	//X::Yのような形式
-	namespace_* c = GetScopeFQCN(self, current);
+	Namespace* c = GetScopeFQCN(self, current);
 	if (c == NULL) {
 		return NULL;
 	}

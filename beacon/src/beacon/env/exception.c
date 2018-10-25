@@ -35,7 +35,7 @@ object * NewSimplefException(Frame* fr, const char * message, ...) {
 
 //private
 static class_* exception_class() {
-	namespace_* lang = GetLangNamespace();
+	Namespace* lang = GetLangNamespace();
 	class_* excClass = FindClassFromNamespace(lang, InternString("Exception"));
 	assert(excClass != NULL);
 	return excClass;

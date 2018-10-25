@@ -60,10 +60,10 @@ void CloseScriptContext() {
 void BootstrapScriptContext(script_context* self) {
 	self->heap->AcceptBlocking++;
 	//プリロード
-	namespace_* beacon = CreateNamespaceAtRoot(InternString("beacon"));
-	namespace_* lang = AddNamespaceNamespace(beacon, InternString("lang"));
-	namespace_* unsafe = AddNamespaceNamespace(beacon, InternString("unsafe"));
-	namespace_* placeholder = CreateNamespaceAtRoot(InternString("$placeholder"));
+	Namespace* beacon = CreateNamespaceAtRoot(InternString("beacon"));
+	Namespace* lang = AddNamespaceNamespace(beacon, InternString("lang"));
+	Namespace* unsafe = AddNamespaceNamespace(beacon, InternString("unsafe"));
+	Namespace* placeholder = CreateNamespaceAtRoot(InternString("$placeholder"));
 	InitBCObject();
 	InitBCArray();
 	InitBCException();
@@ -166,7 +166,7 @@ void CacheScriptContext() {
 //private
 static script_context* script_context_malloc(void) {
 	script_context* ret = (script_context*)MEM_MALLOC(sizeof(script_context));
-	ret->namespace_nmap = NewNumericMap();
+	ret->Namespacenmap = NewNumericMap();
 	ret->class_loader_map = NewTreeMap();
 	ret->heap = NewHeap();
 	ret->type_vec = NewVector();
@@ -218,12 +218,12 @@ static void script_context_free(script_context* self) {
 	DeleteTreeMap(self->class_loader_map, script_context_DeleteClassLoader);
 	//ブートストラップクラスローダを意図的に起動していないなら、
 	//ここはまだNULL
-	if(self->namespace_nmap != NULL) {
-		EachNumericMap(self->namespace_nmap, script_context_UnlinkNamespace);
+	if(self->Namespacenmap != NULL) {
+		EachNumericMap(self->Namespacenmap, script_context_UnlinkNamespace);
 	}
 
 	int a = CountActiveObject();
-	DeleteNumericMap(self->namespace_nmap, script_context_DeleteNamespace);
+	DeleteNumericMap(self->Namespacenmap, script_context_DeleteNamespace);
 	DeleteFiles(self->include_vec);
 	MEM_FREE(self);
 }
@@ -234,12 +234,12 @@ static void script_context_DeleteClassLoader(const char* name, TreeItem item) {
 }
 
 static void script_context_UnlinkNamespace(NumericMapKey key, NumericMapItem item) {
-	namespace_* e = (namespace_*)item;
+	Namespace* e = (Namespace*)item;
 	UnlinkNamespace(e);
 }
 
 static void script_context_DeleteNamespace(NumericMapKey key, NumericMapItem item) {
-	namespace_* e = (namespace_*)item;
+	Namespace* e = (Namespace*)item;
 	DeleteNamespace(e);
 }
 

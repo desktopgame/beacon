@@ -15,7 +15,7 @@ static void bc_system_nativeAbort(Method* parent, Frame* fr, Enviroment* env);
 static void bc_system_nativeExec(Method* parent, Frame* fr, Enviroment* env);
 
 void InitBCSystem() {
-	namespace_* unsafe = GetUnsafeNamespace();
+	Namespace* unsafe = GetUnsafeNamespace();
 	type* systemType = NewPreloadClass(InternString("System"));
 	class_* systemClass = TYPE2CLASS(systemType);
 	AddTypeNamespace(unsafe, systemType);
@@ -25,7 +25,7 @@ void InitBCSystem() {
 }
 
 type* GetBCSystemType() {
-	namespace_* unsafe = GetUnsafeNamespace();
+	Namespace* unsafe = GetUnsafeNamespace();
 	return FindTypeFromNamespace(unsafe, InternString("System"));
 }
 

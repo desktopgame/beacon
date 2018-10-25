@@ -21,7 +21,7 @@ static void bc_locale_nativeGetIntFracDigits(Method* parent, Frame* fr, Envirome
 static void bc_locale_nativeGetFracDigits(Method* parent, Frame* fr, Enviroment* env);
 
 void InitBCLocaleType() {
-	namespace_* unsafe = GetUnsafeNamespace();
+	Namespace* unsafe = GetUnsafeNamespace();
 	type* localeType = NewPreloadClass(InternString("Locale"));
 	class_* localeClass = TYPE2CLASS(localeType);
 	AddTypeNamespace(unsafe, localeType);
@@ -39,7 +39,7 @@ void InitBCLocaleType() {
 }
 
 type* GetBCLocaleType() {
-	namespace_* unsafe = GetUnsafeNamespace();
+	Namespace* unsafe = GetUnsafeNamespace();
 	return FindTypeFromNamespace(unsafe, InternString("Locale"));
 }
 //private

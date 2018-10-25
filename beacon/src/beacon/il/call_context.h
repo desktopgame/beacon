@@ -3,7 +3,7 @@
 #include "../util/vector.h"
 #include "call_frame.h"
 #include "control_structure.h"
-struct namespace_;
+struct Namespace;
 struct type;
 struct class_;
 struct Method;
@@ -31,7 +31,7 @@ typedef struct CallContext {
 	Vector* CallStack;
 	ControlStructure Control;
 	CallContextTag Tag;
-	struct namespace_* Scope;
+	struct Namespace* Scope;
 	struct type* Ty;
 	union {
 		struct Method* Method;
@@ -50,7 +50,7 @@ CallFrame* TopCallContext(CallContext* self);
 
 void PopCallContext(CallContext* self);
 
-struct namespace_* GetNamespaceCContext(CallContext* self);
+struct Namespace* GetNamespaceCContext(CallContext* self);
 
 struct Method* GetMethodCContext(CallContext* self);
 

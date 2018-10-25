@@ -22,7 +22,7 @@ typedef struct interface_ {
 	Vector* impl_list;
 	Vector* prop_list;
 	Vector* method_list;
-	namespace_* location;
+	Namespace* location;
 	vtable* vt;
 	Vector* GetParameterListType;
 } interface_;

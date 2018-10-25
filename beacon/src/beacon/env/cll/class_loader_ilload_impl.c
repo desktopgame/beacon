@@ -54,18 +54,18 @@ static void class_loader_ilload_import(class_loader* self, AST* aimport_decl);
  * 名前空間とその内側のエントリ全てを IL に変換します.
  * @param self
  * @param parent
- * @param namespace_decl
+ * @param Namespacedecl
  */
-static void class_loader_ilload_namespace(class_loader* self, Vector* parent, AST* anamespace_decl);
+static void class_loader_ilload_namespace(class_loader* self, Vector* parent, AST* aNamespacedecl);
 
 /**
  * 名前空間のパス(A.B.C)を解析します.
  * デバッグ用の関数で、今は特に何も行いません。
  * @param self
- * @param namespace_path
- * @param namespace_body
+ * @param Namespacepath
+ * @param Namespacebody
  */
-static void class_loader_ilload_namespace_path_recursive(class_loader* self, AST* anamespace_path, AST* namespace_body);
+static void class_loader_ilload_Namespacepath_recursive(class_loader* self, AST* aNamespacepath, AST* Namespacebody);
 
 /**
  * 名前空間(またはそのリスト)を IL に変換します.
@@ -79,9 +79,9 @@ static il_namespace* class_loader_ilload_ast_to_namespace(AST* a);
  * @param self
  * @param current
  * @param parent
- * @param namespace_body
+ * @param Namespacebody
  */
-static void class_loader_ilload_namespace_body(class_loader* self, il_namespace* current, Vector* parent, AST* anamespace_body);
+static void class_loader_ilload_Namespacebody(class_loader* self, il_namespace* current, Vector* parent, AST* aNamespacebody);
 
 /**
  * クラス宣言を IL に変換します.
@@ -116,7 +116,7 @@ void ILLoadClassLoader(class_loader* self, AST* source_code) {
 			class_loader_ilload_import_list(self, child);
 		//namespace Foo { ... }
 		} else if (child->Tag == AST_NAMESPACE_DECL_T) {
-			class_loader_ilload_namespace(self, self->il_code->namespace_list, child);
+			class_loader_ilload_namespace(self, self->il_code->Namespacelist, child);
 		//print();
 		} else if (IsStmtAST(child)) {
 			CLILBody(self, self->il_code->statement_list, child);
@@ -164,24 +164,24 @@ static void class_loader_ilload_import(class_loader* self, AST* aimport_decl) {
 	PushVector(self->il_code->import_list, ret);
 }
 
-static void class_loader_ilload_namespace(class_loader* self, Vector* parent, AST* anamespace_decl) {
-	assert(anamespace_decl->Tag == AST_NAMESPACE_DECL_T);
-	AST* anamespace_path = FirstAST(anamespace_decl);
-	AST* anamespace_body = SecondAST(anamespace_decl);
-	il_namespace* iln = class_loader_ilload_ast_to_namespace(anamespace_path);
+static void class_loader_ilload_namespace(class_loader* self, Vector* parent, AST* aNamespacedecl) {
+	assert(aNamespacedecl->Tag == AST_NAMESPACE_DECL_T);
+	AST* aNamespacepath = FirstAST(aNamespacedecl);
+	AST* aNamespacebody = SecondAST(aNamespacedecl);
+	il_namespace* iln = class_loader_ilload_ast_to_namespace(aNamespacepath);
 	il_namespace* top = GetRootILNamespace(iln);
 	PushVector(parent, top);
-	class_loader_ilload_namespace_path_recursive(self, anamespace_path, anamespace_body);
-	class_loader_ilload_namespace_body(self, iln, iln->namespace_list, anamespace_body);
+	class_loader_ilload_Namespacepath_recursive(self, aNamespacepath, aNamespacebody);
+	class_loader_ilload_Namespacebody(self, iln, iln->Namespacelist, aNamespacebody);
 }
 
-static void class_loader_ilload_namespace_path_recursive(class_loader* self, AST* anamespace_path, AST* anamespace_body) {
-	assert(anamespace_path->Tag == AST_NAMESPACE_PATH_T ||
-		   anamespace_path->Tag == AST_NAMESPACE_PATH_LIST_T);
-	if (anamespace_path->Tag == AST_NAMESPACE_PATH_T) {
-	} else if (anamespace_path->Tag == AST_NAMESPACE_PATH_LIST_T) {
-		for (int i = 0; i < anamespace_path->Children->Length; i++) {
-			class_loader_ilload_namespace_path_recursive(self, AtAST(anamespace_path, i), anamespace_body);
+static void class_loader_ilload_Namespacepath_recursive(class_loader* self, AST* aNamespacepath, AST* aNamespacebody) {
+	assert(aNamespacepath->Tag == AST_NAMESPACE_PATH_T ||
+		   aNamespacepath->Tag == AST_NAMESPACE_PATH_LIST_T);
+	if (aNamespacepath->Tag == AST_NAMESPACE_PATH_T) {
+	} else if (aNamespacepath->Tag == AST_NAMESPACE_PATH_LIST_T) {
+		for (int i = 0; i < aNamespacepath->Children->Length; i++) {
+			class_loader_ilload_Namespacepath_recursive(self, AtAST(aNamespacepath, i), aNamespacebody);
 		}
 	}
 }
@@ -198,37 +198,37 @@ static il_namespace* class_loader_ilload_ast_to_namespace(AST* a) {
 		il_namespace* parent = class_loader_ilload_ast_to_namespace(al);
 		il_namespace* child = class_loader_ilload_ast_to_namespace(ar);
 		child->parent = parent;
-		PushVector(parent->namespace_list, child);
+		PushVector(parent->Namespacelist, child);
 		return child;
 	}
 	return NULL;
 }
 
-static void class_loader_ilload_namespace_body(class_loader* self, il_namespace* current, Vector* parent, AST* anamespace_body) {
-	if (IsBlankAST(anamespace_body)) {
+static void class_loader_ilload_Namespacebody(class_loader* self, il_namespace* current, Vector* parent, AST* aNamespacebody) {
+	if (IsBlankAST(aNamespacebody)) {
 		return;
 	}
 	//namespace xxx { ...
 	//namespace xxx { namespace yyy { ...
-	if (anamespace_body->Tag == AST_NAMESPACE_DECL_T) {
-		class_loader_ilload_namespace(self, parent, anamespace_body);
+	if (aNamespacebody->Tag == AST_NAMESPACE_DECL_T) {
+		class_loader_ilload_namespace(self, parent, aNamespacebody);
 		//namespace xxx { abstract class yyy { ...
-	} else if(anamespace_body->Tag == AST_ABSTRACT_CLASS_DECL_T) {
-		class_loader_ilload_abstract_class(self, current, anamespace_body);
+	} else if(aNamespacebody->Tag == AST_ABSTRACT_CLASS_DECL_T) {
+		class_loader_ilload_abstract_class(self, current, aNamespacebody);
 		//namespace xxx { class yyy { ...
-	} else if (anamespace_body->Tag == AST_CLASS_DECL_T) {
-		class_loader_ilload_class(self, current, anamespace_body);
+	} else if (aNamespacebody->Tag == AST_CLASS_DECL_T) {
+		class_loader_ilload_class(self, current, aNamespacebody);
 		//namespace xxx { interface yyy { ...
-	} else if (anamespace_body->Tag == AST_INTERFACE_DECL) {
-		class_loader_ilload_interface(self, current, anamespace_body);
+	} else if (aNamespacebody->Tag == AST_INTERFACE_DECL) {
+		class_loader_ilload_interface(self, current, aNamespacebody);
 		//namespace xxx { enum yyy { ...
-	} else if(anamespace_body->Tag == AST_ENUM_DECL_T) {
-		class_loader_ilload_enum(self, current, anamespace_body);
+	} else if(aNamespacebody->Tag == AST_ENUM_DECL_T) {
+		class_loader_ilload_enum(self, current, aNamespacebody);
 		//namespace xxx { any yyy { ...
-	} else if (anamespace_body->Tag == AST_NAMESPACE_MEMBER_DECL_LIST_T) {
-		for (int i = 0; i < anamespace_body->Children->Length; i++) {
-			AST* amember = AtAST(anamespace_body, i);
-			class_loader_ilload_namespace_body(self, current, parent, amember);
+	} else if (aNamespacebody->Tag == AST_NAMESPACE_MEMBER_DECL_LIST_T) {
+		for (int i = 0; i < aNamespacebody->Children->Length; i++) {
+			AST* amember = AtAST(aNamespacebody, i);
+			class_loader_ilload_Namespacebody(self, current, parent, amember);
 		}
 	}
 }

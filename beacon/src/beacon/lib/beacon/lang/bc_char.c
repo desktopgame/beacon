@@ -6,7 +6,7 @@ static void bc_char_nativeInit(Method* parent, Frame* fr, Enviroment* env);
 static void bc_char_nativeToInt(Method* parent, Frame* fr, Enviroment* env);
 
 void InitBCChar() {
-	namespace_* lang = GetLangNamespace();
+	Namespace* lang = GetLangNamespace();
 	type* charType = NewPreloadClass(InternString("Char"));
 	class_* charClass = TYPE2CLASS(charType);
 	AddTypeNamespace(lang, charType);
@@ -15,7 +15,7 @@ void InitBCChar() {
 }
 
 type* GetBCCharType() {
-	namespace_* lang = GetLangNamespace();
+	Namespace* lang = GetLangNamespace();
 	return FindTypeFromNamespace(lang, InternString("Char"));
 }
 

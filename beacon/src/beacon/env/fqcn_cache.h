@@ -3,7 +3,7 @@
 #define BEACON_ENV_FQCN_CACHE_H
 #include "../util/vector.h"
 #include "../util/string_pool.h"
-struct namespace_;
+struct Namespace;
 struct type;
 struct class_;
 struct interface_;
@@ -48,7 +48,7 @@ void PrintFQCNCache(fqcn_cache* self);
  * @param current
  * @return
  */
-struct namespace_* GetScopeFQCN(fqcn_cache* self, struct namespace_* current);
+struct Namespace* GetScopeFQCN(fqcn_cache* self, struct Namespace* current);
 
 /**
  * X::Y の表すタイプを返します.
@@ -57,7 +57,7 @@ struct namespace_* GetScopeFQCN(fqcn_cache* self, struct namespace_* current);
  * @param current
  * @return
  */
-struct type* GetTypeFQCN(fqcn_cache* self, struct namespace_* current);
+struct type* GetTypeFQCN(fqcn_cache* self, struct Namespace* current);
 
 /**
  * X::Y の表すタイプを返します.
@@ -66,7 +66,7 @@ struct type* GetTypeFQCN(fqcn_cache* self, struct namespace_* current);
  * @param current
  * @return
  */
-struct interface_* GetInterfaceFQCN(fqcn_cache* self, struct namespace_* current);
+struct interface_* GetInterfaceFQCN(fqcn_cache* self, struct Namespace* current);
 
 /**
  * X::Y の表すタイプを返します.
@@ -75,7 +75,7 @@ struct interface_* GetInterfaceFQCN(fqcn_cache* self, struct namespace_* current
  * @param current
  * @return
  */
-struct class_* GetClassFQCN(fqcn_cache* self, struct namespace_* current);
+struct class_* GetClassFQCN(fqcn_cache* self, struct Namespace* current);
 
 /**
  * 文字列に変換して返します.

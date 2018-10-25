@@ -98,7 +98,7 @@ static void il_factor_variable_check(il_factor_variable* self, Enviroment* env, 
 }
 
 static void il_factor_variable_check_instance(il_factor_variable* self, Enviroment* env, CallContext* cctx) {
-	namespace_* cur = GetNamespaceCContext(cctx);
+	Namespace* cur = GetNamespaceCContext(cctx);
 	class_* ctype = FindClassFromNamespace(cur, self->fqcn->namev);
 	if(ctype == NULL) {
 		ctype = FindClassFromNamespace(GetLangNamespace(), self->fqcn->namev);

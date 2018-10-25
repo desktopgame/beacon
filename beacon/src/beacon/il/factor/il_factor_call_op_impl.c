@@ -156,7 +156,7 @@ static void il_factor_member_op_check_namebase(il_factor_call_op* self, il_facto
 		#if defined(DEBUG)
 		const char* clname = Ref2Str(ilvar->fqcn->namev);
 		#endif
-		namespace_* cur = GetNamespaceCContext(cctx);
+		Namespace* cur = GetNamespaceCContext(cctx);
 		class_* ctype = FindClassFromNamespace(cur, ilvar->fqcn->namev);
 		if(ctype == NULL) {
 			ctype = FindClassFromNamespace(GetLangNamespace(), ilvar->fqcn->namev);

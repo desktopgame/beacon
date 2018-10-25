@@ -17,7 +17,7 @@ typedef enum type_tag {
 	TYPE_ENUM_T
 } type_tag;
 
-struct namespace_;
+struct Namespace;
 struct class_;
 struct interface_;
 struct field;
@@ -56,7 +56,7 @@ typedef enum type_state {
  */
 typedef struct type {
 	type_tag tag;
-	struct namespace_* location;
+	struct Namespace* location;
 	struct generic_type* generic_self;
 	int absolute_index;
 	type_state state;

@@ -21,7 +21,7 @@ static void bc_file_nativeClose(Method* parent, Frame* fr, Enviroment* env);
 static object* file_new(FILE* fp, bool std);
 
 void InitBCFile() {
-	namespace_* unsafe = GetUnsafeNamespace();
+	Namespace* unsafe = GetUnsafeNamespace();
 	type* fileType = NewPreloadClass(InternString("File"));
 	class_* fileClass = TYPE2CLASS(fileType);
 	AddTypeNamespace(unsafe, fileType);
@@ -36,7 +36,7 @@ void InitBCFile() {
 }
 
 type* GetBCFileType() {
-	namespace_* unsafe = GetUnsafeNamespace();
+	Namespace* unsafe = GetUnsafeNamespace();
 	return FindTypeFromNamespace(unsafe, InternString("File"));
 }
 //private

@@ -8,7 +8,7 @@ struct generic_type;
 struct type;
 struct class_;
 struct interface_;
-struct namespace_;
+struct Namespace;
 
 /**
  * 型変数を含む型の宣言.

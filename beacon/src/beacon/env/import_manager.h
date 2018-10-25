@@ -7,7 +7,7 @@
 struct generic_cache;
 struct generic_type;
 struct fqcn_cache;
-struct namespace_;
+struct Namespace;
 struct class_loader;
 struct ImportInfo;
 struct CallContext;
@@ -49,7 +49,7 @@ bool IsLoadedImportManager(ImportManager* self, int index);
  * @param cctx
  * @return 解決出来なかったなら NULL を返します.
  */
-struct generic_type* ResolveImportManager(struct namespace_* scope, struct generic_cache* fqcn, struct CallContext* cctx);
+struct generic_type* ResolveImportManager(struct Namespace* scope, struct generic_cache* fqcn, struct CallContext* cctx);
 
 /**
  * 指定の名前から型を解決します.
@@ -59,7 +59,7 @@ struct generic_type* ResolveImportManager(struct namespace_* scope, struct gener
  * @param cctx
  * @return 解決出来なかったなら NULL を返します.
  */
-struct generic_type* ResolvefImportManager(struct namespace_* scope, struct fqcn_cache* fqcn, struct CallContext* cctx);
+struct generic_type* ResolvefImportManager(struct Namespace* scope, struct fqcn_cache* fqcn, struct CallContext* cctx);
 
 /**
  * インポートマネージャを開放します.

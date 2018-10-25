@@ -36,7 +36,7 @@ typedef struct type_cache {
 	struct class_loader* context;
 	il_type* iltype;
 	type* tp;
-	namespace_* scope;
+	Namespace* scope;
 	cache_kind kind;
 	bool consume;
 } type_cache;
@@ -48,7 +48,7 @@ type_cache * InitTypeCache(
 	struct class_loader* context,
 	il_type* iltype,
 	type* tp,
-	namespace_* scope,
+	Namespace* scope,
 	cache_kind kind
 	);
 

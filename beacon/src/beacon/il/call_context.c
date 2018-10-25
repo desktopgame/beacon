@@ -38,7 +38,7 @@ void PopCallContext(CallContext* self) {
 	DeleteCallFrame(fr);
 }
 
-namespace_* GetNamespaceCContext(CallContext* self) {
+Namespace* GetNamespaceCContext(CallContext* self) {
 	if(self->Scope != NULL) {
 		return self->Scope;
 	}

@@ -9,19 +9,19 @@
 
 /**
  * 名前空間を表す要素を作成します.
- * @param anamespace_path
+ * @param aNamespacepath
  * @param abody
  * @return
  */
-AST* NewASTNamespaceDecl(AST* anamespace_path, AST* abody);
+AST* NewASTNamespaceDecl(AST* aNamespacepath, AST* abody);
 
 /**
  * 名前空間の内側に定義された名前空間を表す要素を作成します.
- * @param anamespace_path
+ * @param aNamespacepath
  * @param abody
  * @return
  */
-AST* NewASTNamespaceNamespaceDecl(AST* anamespace_path, AST* abody);
+AST* NewASTNamespaceNamespaceDecl(AST* aNamespacepath, AST* abody);
 
 /**
  * 名前空間の内側に含めることが出来る定義の一覧を作成します.

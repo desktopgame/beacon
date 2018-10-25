@@ -22,7 +22,7 @@ typedef void(*static_each)(struct field* item);
  * ホスト言語から異なる環境のスクリプトを実行するためにこの方法を使用します。
  */
 typedef struct script_context {
-	NumericMap* namespace_nmap;
+	NumericMap* Namespacenmap;
 	TreeMap* class_loader_map;
 	Vector* thread_vec;
 	Vector* include_vec;

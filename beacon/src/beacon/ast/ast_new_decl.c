@@ -11,15 +11,15 @@ static AST* NewASTParameter_GetTypeName(StringView GetTypeNamev);
 static AST* NewASTParameter_access_name(StringView parameter_namev);
 static AST* NewASTClassDeclImpl(AST* aclass_name, AST* aextend_list, AST* amember_list, ASTTag tag);
 
-AST* NewASTNamespaceDecl(AST* anamespace_path, AST* abody) {
+AST* NewASTNamespaceDecl(AST* aNamespacepath, AST* abody) {
 	AST* ret = ast_new(AST_NAMESPACE_DECL_T);
-	PushAST(ret, anamespace_path);
+	PushAST(ret, aNamespacepath);
 	PushAST(ret, abody);
 	return ret;
 }
 
-AST* NewASTNamespaceNamespaceDecl(AST* anamespace_path, AST* abody) {
-	return NewASTNamespaceDecl(anamespace_path, abody);
+AST* NewASTNamespaceNamespaceDecl(AST* aNamespacepath, AST* abody) {
+	return NewASTNamespaceDecl(aNamespacepath, abody);
 }
 
 AST* NewASTNamespaceMemberDeclList(AST* aforward, AST* alist) {

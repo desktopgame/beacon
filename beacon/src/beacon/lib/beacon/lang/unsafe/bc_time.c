@@ -23,7 +23,7 @@ static void bc_time_nativeGetDayOfWeek(Method* parent, Frame* fr, Enviroment* en
 static void bc_time_nativeGetDayOfYear(Method* parent, Frame* fr, Enviroment* env);
 
 void InitBCTime() {
-	namespace_* unsafe = GetUnsafeNamespace();
+	Namespace* unsafe = GetUnsafeNamespace();
 	type* timeType = NewPreloadClass(InternString("Time"));
 	class_* timeClass = TYPE2CLASS(timeType);
 	AddTypeNamespace(unsafe, timeType);
@@ -39,7 +39,7 @@ void InitBCTime() {
 }
 
 type* GetBCTimeType() {
-	namespace_* unsafe = GetUnsafeNamespace();
+	Namespace* unsafe = GetUnsafeNamespace();
 	return FindTypeFromNamespace(unsafe, InternString("Time"));
 }
 //private

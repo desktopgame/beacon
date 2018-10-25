@@ -12,7 +12,7 @@ static void bc_console_readLine(Method* parent, Frame* fr, Enviroment* env);
 static void bc_console_read(Method* parent, Frame* fr, Enviroment* env);
 
 void InitBCConsole() {
-	namespace_* lang = GetLangNamespace();
+	Namespace* lang = GetLangNamespace();
 	type* consoleType = NewPreloadClass(InternString("Console"));
 	class_* consoleClass = TYPE2CLASS(consoleType);
 	AddTypeNamespace(lang, consoleType);
@@ -23,7 +23,7 @@ void InitBCConsole() {
 }
 
 type* GetBCConsoleType() {
-	namespace_* lang = GetLangNamespace();
+	Namespace* lang = GetLangNamespace();
 	return FindTypeFromNamespace(lang, InternString("Console"));
 }
 

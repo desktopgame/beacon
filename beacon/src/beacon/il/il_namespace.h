@@ -10,7 +10,7 @@
 typedef struct il_namespace {
 	StringView namev;
 	struct il_namespace* parent;
-	Vector* namespace_list;
+	Vector* Namespacelist;
 	Vector* type_list;
 } il_namespace;
 

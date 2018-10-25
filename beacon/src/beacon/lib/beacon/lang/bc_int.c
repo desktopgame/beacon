@@ -21,7 +21,7 @@ static void bc_int_nativeEQ(Method* parent, Frame* fr, Enviroment* env);
 static void bc_int_nativeToChar(Method* parent, Frame* fr, Enviroment* env);
 
 void InitBCInt() {
-	namespace_* lang =  GetLangNamespace();
+	Namespace* lang =  GetLangNamespace();
 	type* intType = NewPreloadClass(InternString("Int"));
 	class_* intClass = TYPE2CLASS(intType);
 	AddTypeNamespace(lang, intType);
@@ -45,7 +45,7 @@ void InitBCInt() {
 }
 
 type* GetBCIntType() {
-	namespace_* lang = GetLangNamespace();
+	Namespace* lang = GetLangNamespace();
 	return FindTypeFromNamespace(lang, InternString("Int"));
 }
 //private
