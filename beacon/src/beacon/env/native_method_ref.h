@@ -13,20 +13,20 @@ typedef void(*native_impl)(Method* parent, Frame* vm, Enviroment* env);
 /**
  * ネイティブメソッドを表す関数ポインタをラップする構造体.
  */
-typedef struct native_method_ref {
+typedef struct NativeMethodRef {
 	native_impl impl;
-} native_method_ref;
+} NativeMethodRef;
 
 /**
  * ラッパーを作成します.
  * @param impl
  * @return
  */
-native_method_ref* NewNativeMethodRef(native_impl impl);
+NativeMethodRef* NewNativeMethodRef(native_impl impl);
 
 /**
  * ラッパーを開放します.
  * @param self
  */
-void DeleteNativeMethodRef(native_method_ref* self);
+void DeleteNativeMethodRef(NativeMethodRef* self);
 #endif // !SIGNAL_ENV_NATIVE_METHOD_REF_H

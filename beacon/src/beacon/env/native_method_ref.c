@@ -2,12 +2,12 @@
 #include <stdlib.h>
 #include "../util/mem.h"
 
-native_method_ref * NewNativeMethodRef(native_impl impl) {
-	native_method_ref* ret = (native_method_ref*)MEM_MALLOC(sizeof(native_method_ref));
+NativeMethodRef * NewNativeMethodRef(native_impl impl) {
+	NativeMethodRef* ret = (NativeMethodRef*)MEM_MALLOC(sizeof(NativeMethodRef));
 	ret->impl = impl;
 	return ret;
 }
 
-void DeleteNativeMethodRef(native_method_ref * self) {
+void DeleteNativeMethodRef(NativeMethodRef * self) {
 	MEM_FREE(self);
 }

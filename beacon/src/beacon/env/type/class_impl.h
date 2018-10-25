@@ -46,7 +46,7 @@ typedef struct class_ {
 	Vector* operator_overload_list;
 	//class_type type;
 	uint32_t ref_count;
-	NumericMap* native_method_ref_nmap;
+	NumericMap* NativeMethodRef_nmap;
 	Vector* GetParameterListType;
 	//インターフェースに対応した
 	//実装メソッドのテーブルのベクター

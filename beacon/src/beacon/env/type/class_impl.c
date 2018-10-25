@@ -70,7 +70,7 @@ class_ * NewClass(StringView namev) {
 	ret->method_list = NewVector();
 	ret->smethod_list = NewVector();
 	ret->constructor_list = NewVector();
-	ret->native_method_ref_nmap = NewNumericMap();
+	ret->NativeMethodRef_nmap = NewNumericMap();
 	ret->vt_vec = NewVector();
 	ret->GetParameterListType = NewVector();
 	ret->vt = NULL;
@@ -183,8 +183,8 @@ void DefineNativeMethodClass(class_* self, const char* name, native_impl impl) {
 }
 
 void DefineNativeMethodByRefClass(class_ * self, StringView namev, native_impl impl) {
-	native_method_ref* ref = NewNativeMethodRef(impl);
-	PutNumericMap(self->native_method_ref_nmap, namev, ref);
+	NativeMethodRef* ref = NewNativeMethodRef(impl);
+	PutNumericMap(self->NativeMethodRef_nmap, namev, ref);
 }
 
 int DistanceClass(class_ * super, class_ * sub) {
@@ -387,7 +387,7 @@ void UnlinkClass(class_ * self) {
 	}
 	//XSTREQ(self->name, "Object");
 	//generic_DeleteType(self->super_class);
-	DeleteNumericMap(self->native_method_ref_nmap, class_DeleteNativeMethodRef);
+	DeleteNumericMap(self->NativeMethodRef_nmap, class_DeleteNativeMethodRef);
 	DeleteVector(self->impl_list, class_impl_delete);
 	DeleteVector(self->field_list, class_DeleteField);
 	DeleteVector(self->sfield_list, class_DeleteField);
@@ -504,7 +504,7 @@ static void class_ctor_delete(VectorItem item) {
 }
 
 static void class_DeleteNativeMethodRef(NumericMapKey key, NumericMapItem item) {
-	native_method_ref* e = (native_method_ref*)item;
+	NativeMethodRef* e = (NativeMethodRef*)item;
 	DeleteNativeMethodRef(e);
 }
 

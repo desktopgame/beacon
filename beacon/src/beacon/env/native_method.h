@@ -1,7 +1,7 @@
 #pragma once
 #ifndef BEACON_ENV_NATIVE_METHOD_H
 #define BEACON_ENV_NATIVE_METHOD_H
-struct native_method_ref;
+struct NativeMethodRef;
 struct Enviroment;
 struct Method;
 struct Frame;
@@ -9,7 +9,7 @@ struct Frame;
  * Cで実装されたメソッド.
  */
 typedef struct native_method {
-	struct native_method_ref* ref;
+	struct NativeMethodRef* ref;
 } native_method;
 
 /**
