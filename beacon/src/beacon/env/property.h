@@ -10,15 +10,15 @@ struct field;
 struct object;
 
 typedef struct Property {
-	ModifierType modifier;
-	StringView namev;
-	struct type* parent;
-	struct field* source_ref;
-	struct generic_type* gtype;
-	AccessLevel access;
-	PropertyBody* set;
-	PropertyBody* get;
-	bool is_short;
+	ModifierType Modifier;
+	StringView Name;
+	struct type* Parent;
+	struct field* SourceRef;
+	struct generic_type* GType;
+	AccessLevel Access;
+	PropertyBody* Set;
+	PropertyBody* Get;
+	bool IsShort;
 } Property;
 
 #define Property_new(namev) (MallocProperty(namev, __FILE__, __LINE__))

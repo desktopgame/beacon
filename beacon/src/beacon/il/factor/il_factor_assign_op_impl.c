@@ -146,33 +146,33 @@ static void assign_to_field(il_factor_assign_op* self, il_factor* receiver, il_f
 static void assign_to_Property(il_factor_assign_op* self, Enviroment* env, CallContext* cctx) {
 	il_factor_Property* prop = self->left->u.prop;
 	Property* pp = prop->p;
-	bool is_static = IsStaticModifier(prop->p->modifier);
+	bool is_static = IsStaticModifier(prop->p->Modifier);
 	BC_ERROR();
 	//プロパティへアクセスできない
 	if(!IsAccessiblePropertyClass(GetClassCContext(cctx), pp)) {
 		ThrowBCError(BCERROR_CAN_T_ACCESS_FIELD_T,
-			Ref2Str(GetTypeName(pp->parent)),
-			Ref2Str(pp->namev)
+			Ref2Str(GetTypeName(pp->Parent)),
+			Ref2Str(pp->Name)
 		);
 		return;
 	}
-	if(!IsAccessiblePropertyAccessorClass(GetClassCContext(cctx), pp->set)) {
+	if(!IsAccessiblePropertyAccessorClass(GetClassCContext(cctx), pp->Set)) {
 		ThrowBCError(BCERROR_CAN_T_ACCESS_FIELD_T,
-			Ref2Str(GetTypeName(pp->parent)),
-			Ref2Str(pp->namev)
+			Ref2Str(GetTypeName(pp->Parent)),
+			Ref2Str(pp->Name)
 		);
 		return;
 	}
-	if(DistanceGenericType(prop->p->gtype, EvalILFactor(self->right, env, cctx), cctx) < 0) {
+	if(DistanceGenericType(prop->p->GType, EvalILFactor(self->right, env, cctx), cctx) < 0) {
 		ThrowBCError(BCERROR_ASSIGN_NOT_COMPATIBLE_PROPERTY_T,
-			Ref2Str(GetTypeName(prop->p->parent)),
-			Ref2Str(prop->p->namev)
+			Ref2Str(GetTypeName(prop->p->Parent)),
+			Ref2Str(prop->p->Name)
 		);
 		return;
 	}
 	//省略記法なら初期化されてるかチェック
-	if(pp->is_short && !IsStaticModifier(pp->modifier)) {
-		check_final(prop->fact, self->right, prop->p->source_ref->namev, env, cctx);
+	if(pp->IsShort && !IsStaticModifier(pp->Modifier)) {
+		check_final(prop->fact, self->right, prop->p->SourceRef->namev, env, cctx);
 	}
 	BC_ERROR();
 	if(!is_static) {
@@ -354,19 +354,19 @@ static void generate_assign_to_variable_local(il_factor_assign_op* self, Envirom
 		assert(temp != -1);
 		//フィールドはstaticでないが
 		//現在のコンテキストはstaticなので this にアクセスできない
-		if(!IsStaticModifier(p->modifier) &&
+		if(!IsStaticModifier(p->Modifier) &&
 		    IsStaticCContext(cctx)) {
 			ThrowBCError(BCERROR_ACCESS_TO_THIS_AT_STATIC_METHOD_T,
-				Ref2Str(GetTypeName(p->parent)),
-				Ref2Str(p->namev)
+				Ref2Str(GetTypeName(p->Parent)),
+				Ref2Str(p->Name)
 			);
 			return;
 		}
-		if(!IsStaticModifier(p->modifier)) {
+		if(!IsStaticModifier(p->Modifier)) {
 			AddOpcodeBuf(env->Bytecode, OP_THIS);
 		}
 		GenerateILFactor(self->right, env, cctx);
 		GeneratePutProperty(env->Bytecode, p, temp);
-		assert(!IsStaticModifier(p->modifier));
+		assert(!IsStaticModifier(p->Modifier));
 	}
 }

@@ -165,18 +165,18 @@ bool CLBC_Property_decl(class_loader* self, il_type* iltype, type* tp, ILPropert
 	//VectorItem e = AtVector(ilprops, i);
 	//ILProperty* ilprop = e;
 	Property* prop = Property_new(ilprop->Name);
-	prop->access = ilprop->Access;
-	prop->modifier = ilprop->Modifier;
-	prop->set->Access = ilprop->Set->Access;
-	prop->get->Access = ilprop->Get->Access;
-	prop->parent = tp;
-	prop->gtype = ResolveImportManager(scope, ilprop->GCache, cctx);
-	prop->is_short = ilprop->Set->IsShort && ilprop->Get->IsShort;
+	prop->Access = ilprop->Access;
+	prop->Modifier = ilprop->Modifier;
+	prop->Set->Access = ilprop->Set->Access;
+	prop->Get->Access = ilprop->Get->Access;
+	prop->Parent = tp;
+	prop->GType = ResolveImportManager(scope, ilprop->GCache, cctx);
+	prop->IsShort = ilprop->Set->IsShort && ilprop->Get->IsShort;
 	   AddPropertyType(tp, prop);
-	if(IsAbstractModifier(prop->modifier) ||
-	   IsOverrideModifier(prop->modifier) ||
-	   IsNativeModifier(prop->modifier)) {
-		   ThrowBCError(BCERROR_NATIVE_FIELD_T, Ref2Str(prop->namev));
+	if(IsAbstractModifier(prop->Modifier) ||
+	   IsOverrideModifier(prop->Modifier) ||
+	   IsNativeModifier(prop->Modifier)) {
+		   ThrowBCError(BCERROR_NATIVE_FIELD_T, Ref2Str(prop->Name));
 			DeleteCallContext(cctx);
 		   return false;
 	   }
@@ -205,16 +205,16 @@ bool CLBC_Property_impl(class_loader* self, il_type* iltype, type* tp, ILPropert
 	//VectorItem e = AtVector(sgprops, i);
 	Property* pr = prop;
 	ILProperty* ilpr = ilprop;
-	if(pr->is_short) { return true; }
-	PropertyBody* set = pr->set;
-	PropertyBody* get = pr->get;
+	if(pr->IsShort) { return true; }
+	PropertyBody* set = pr->Set;
+	PropertyBody* get = pr->Get;
 	Vector* set_stmt_list = ilpr->Set->Statements;
 	Vector* get_stmt_list = ilpr->Get->Statements;
 	set->Env->ContextRef = self;
 	get->Env->ContextRef = self;
 	//setterのオペコードを生成
-	SymbolEntry* valueE = EntrySymbolTable(set->Env->Symboles, pr->gtype, InternString("value"));
-	if(!IsStaticModifier(pr->modifier)) {
+	SymbolEntry* valueE = EntrySymbolTable(set->Env->Symboles, pr->GType, InternString("value"));
+	if(!IsStaticModifier(pr->Modifier)) {
 		AddOpcodeBuf(set->Env->Bytecode, OP_STORE);
 		AddOpcodeBuf(set->Env->Bytecode, 0);
 	}
@@ -222,7 +222,7 @@ bool CLBC_Property_impl(class_loader* self, il_type* iltype, type* tp, ILPropert
 	AddOpcodeBuf(set->Env->Bytecode, valueE->Index);
 	CLBC_body(self, set_stmt_list, set->Env, cctx, scope);
 	//getterのオペコードを生成
-	if(!IsStaticModifier(pr->modifier)) {
+	if(!IsStaticModifier(pr->Modifier)) {
 		AddOpcodeBuf(get->Env->Bytecode, OP_STORE);
 		AddOpcodeBuf(get->Env->Bytecode, 0);
 	}

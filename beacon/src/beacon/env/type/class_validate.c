@@ -60,19 +60,19 @@ bool IsImplementInterfacePropertyValidClass(class_* cls, Property** out) {
 		for(int j=0; j<inter->prop_list->Length; j++) {
 			int temp = 0;
 			Property* decl = AtVector(inter->prop_list, j);
-			Property* impl = FindPropertyClass(cls, decl->namev, &temp);
+			Property* impl = FindPropertyClass(cls, decl->Name, &temp);
 			if(temp == -1) {
 				(*out) = decl;
 				DeleteVector(gimpl_list, VectorDeleterOfNull);
 				return false;
 			} else {
-				if(DistanceGenericType(decl->gtype, impl->gtype, NULL) != 0) {
+				if(DistanceGenericType(decl->GType, impl->GType, NULL) != 0) {
 					(*out) = decl;
 					DeleteVector(gimpl_list, VectorDeleterOfNull);
 					return false;
 				}
-				if(decl->set->Access != impl->set->Access ||
-				   decl->get->Access != impl->get->Access) {
+				if(decl->Set->Access != impl->Set->Access ||
+				   decl->Get->Access != impl->Get->Access) {
 					(*out) = decl;
 					DeleteVector(gimpl_list, VectorDeleterOfNull);
 					return false;
@@ -214,7 +214,7 @@ static bool IsValidPropertyClassImpl(Vector* prop_vec, Property** out) {
 		for(int j=0; j<prop_vec->Length; j++) {
 			Property* pE = (Property*)AtVector(prop_vec, j);
 			if(i == j) { continue; }
-			if(p->namev == pE->namev) {
+			if(p->Name == pE->Name) {
 				ret = false;
 				(*out) = p;
 				break;

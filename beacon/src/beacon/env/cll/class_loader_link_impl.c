@@ -131,11 +131,11 @@ static void CLBC_interface_decl(class_loader * self, il_type * iltype, type * tp
 	}
 	for(int i=0; i<tp->u.interface_->prop_list->Length; i++) {
 		Property* e = AtVector(tp->u.interface_->prop_list, i);
-		if(e->access == ACCESS_PRIVATE_T) {
+		if(e->Access == ACCESS_PRIVATE_T) {
 			ThrowBCError(
 				BCERROR_INTERFACE_HAS_PRIVATE_MEMBER_T,
 				Ref2Str(GetTypeName(tp)),
-				Ref2Str(e->namev)
+				Ref2Str(e->Name)
 			);
 		}
 	}
@@ -274,7 +274,7 @@ static void CLBC_check_class(class_loader * self, il_type * iltype, type * tp, N
 	Property* outiProperty = NULL;
 	if(tp->tag == TYPE_CLASS_T &&
 	  !IsImplementInterfacePropertyValidClass(TYPE2CLASS(tp), &outiProperty)) {
-		ThrowBCError(BCERROR_NOT_IMPLEMENT_ABSTRACT_METHOD_T, Ref2Str(tp->u.class_->namev), Ref2Str(outiProperty->namev));
+		ThrowBCError(BCERROR_NOT_IMPLEMENT_ABSTRACT_METHOD_T, Ref2Str(tp->u.class_->namev), Ref2Str(outiProperty->Name));
 		return;
 	}
 	//実装されていない抽象メソッドを確認する
@@ -289,7 +289,7 @@ static void CLBC_check_class(class_loader * self, il_type * iltype, type * tp, N
 	if(!IsValidPropertyClass(tp->u.class_, &outProp)) {
 		ThrowBCError(BCERROR_OVERWRAP_PROPERTY_NAME_T,
 			Ref2Str(tp->u.class_->namev),
-			Ref2Str(outProp->namev)
+			Ref2Str(outProp->Name)
 		);
 		return;
 	}

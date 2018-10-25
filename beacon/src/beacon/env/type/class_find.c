@@ -135,14 +135,14 @@ bool IsContainsSPropertyClass(class_* self, Property* p) {
 
 bool IsAccessiblePropertyClass(class_* self, Property* p) {
 	assert(p != NULL);
-	if(p->access == ACCESS_PUBLIC_T) {
+	if(p->Access == ACCESS_PUBLIC_T) {
 		return true;
 	}
-	if(p->access == ACCESS_PRIVATE_T) {
-		return self == TYPE2CLASS(p->parent);
+	if(p->Access == ACCESS_PRIVATE_T) {
+		return self == TYPE2CLASS(p->Parent);
 	}
 	type* ty = self->parent;
-	class_* fcl = TYPE2CLASS(p->parent);
+	class_* fcl = TYPE2CLASS(p->Parent);
 	while(true) {
 		class_* c = TYPE2CLASS(ty);
 		if(c == fcl) {
@@ -163,10 +163,10 @@ bool IsAccessiblePropertyAccessorClass(class_* self, PropertyBody* pb) {
 		return true;
 	}
 	if(pb->Access == ACCESS_PRIVATE_T) {
-		return self == TYPE2CLASS(pb->Parent->parent);
+		return self == TYPE2CLASS(pb->Parent->Parent);
 	}
 	type* ty = self->parent;
-	class_* fcl = TYPE2CLASS(pb->Parent->parent);
+	class_* fcl = TYPE2CLASS(pb->Parent->Parent);
 	while(true) {
 		class_* c = TYPE2CLASS(ty);
 		if(c == fcl) {
@@ -183,11 +183,11 @@ bool IsAccessiblePropertyAccessorClass(class_* self, PropertyBody* pb) {
 
 int GetFieldByPropertyClass(class_* self, Property* p) {
 	int temp = -1;
-	assert(p->source_ref != NULL);
-	if(IsStaticModifier(p->modifier)) {
-		FindSFieldClass(self, p->source_ref->namev, &temp);
+	assert(p->SourceRef != NULL);
+	if(IsStaticModifier(p->Modifier)) {
+		FindSFieldClass(self, p->SourceRef->namev, &temp);
 	} else {
-		FindFieldClass(self, p->source_ref->namev, &temp);
+		FindFieldClass(self, p->SourceRef->namev, &temp);
 	}
 	return temp;
 }
@@ -217,7 +217,7 @@ Property* FindPropertyClass(class_* self, StringView namev, int* outIndex) {
 	for (int i = 0; i < self->prop_list->Length; i++) {
 		VectorItem e = AtVector(self->prop_list, i);
 		Property* p = (Property*)e;
-		if (namev == p->namev) {
+		if (namev == p->Name) {
 			(*outIndex) = (CountAllPropertyClass(self) - self->prop_list->Length) + i;
 			return p;
 		}
@@ -246,7 +246,7 @@ Property* FindSPropertyClass(class_* self, StringView namev, int* outIndex) {
 	for (int i = 0; i < self->sprop_list->Length; i++) {
 		VectorItem e = AtVector(self->sprop_list, i);
 		Property* p = (Property*)e;
-		if (namev == p->namev) {
+		if (namev == p->Name) {
 			(*outIndex) = (CountAllSPropertyClass(self) - self->sprop_list->Length) + i;
 			return p;
 		}

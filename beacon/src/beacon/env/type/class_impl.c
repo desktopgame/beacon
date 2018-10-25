@@ -143,7 +143,7 @@ void AddFieldClass(class_ * self, field * f) {
 }
 
 void AddPropertyClass(class_* self, Property* p) {
-	if (IsStaticModifier(p->modifier)) {
+	if (IsStaticModifier(p->Modifier)) {
 		PushVector(self->sprop_list, p);
 	} else {
 		PushVector(self->prop_list, p);
@@ -151,16 +151,16 @@ void AddPropertyClass(class_* self, Property* p) {
 	//プロパティが単純な省略形として記述されているなら、
 	//それはフィールドと同じなのでフィールドも定義する
 	#if defined(DEBUG)
-	const char* name = Ref2Str(p->namev);
+	const char* name = Ref2Str(p->Name);
 	#endif
-	if(p->is_short) {
-		field* f = NewField(ConcatIntern("$propery.", p->namev));
+	if(p->IsShort) {
+		field* f = NewField(ConcatIntern("$propery.", p->Name));
 		f->access = ACCESS_PRIVATE_T;
-		f->gtype = p->gtype;
-		f->modifier = p->modifier;
+		f->gtype = p->GType;
+		f->modifier = p->Modifier;
 		f->parent = self->parent;
 		f->static_value = GetNullObject();
-		p->source_ref = f;
+		p->SourceRef = f;
 		AddFieldClass(self, f);
 	}
 }

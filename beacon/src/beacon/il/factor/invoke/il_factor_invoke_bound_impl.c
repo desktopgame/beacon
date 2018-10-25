@@ -155,7 +155,7 @@ static void il_factor_invoke_bound_check(il_factor_invoke_bound * self, Envirome
 	//プロパティとして解決する
 	Property* prop = FindPropertyClass(GetClassCContext(cctx), self->namev, &temp);
 	if(receiver_gtype == NULL && prop != NULL) {
-		receiver_gtype = prop->gtype;
+		receiver_gtype = prop->GType;
 		self->u.subscript.tag = SUBSCRIPT_PROPERTY_T;
 		self->u.subscript.u.prop = prop;
 		self->u.subscript.index = temp;

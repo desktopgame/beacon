@@ -3,19 +3,19 @@
 
 Property* MallocProperty(StringView namev, const char* filename, int lineno) {
 	Property* ret = mem_malloc(sizeof(Property), filename, lineno);
-	ret->namev = namev;
-	ret->gtype = NULL;
-	ret->parent = NULL;
-	ret->set = PropertyBody_new(PROPERTY_SET_T);
-	ret->get = PropertyBody_new(PROPERTY_GET_T);
-	ret->is_short = false;
-	ret->source_ref = NULL;
-	ret->set->Parent = ret;
-	ret->get->Parent = ret;
+	ret->Name = namev;
+	ret->GType = NULL;
+	ret->Parent = NULL;
+	ret->Set = PropertyBody_new(PROPERTY_SET_T);
+	ret->Get = PropertyBody_new(PROPERTY_GET_T);
+	ret->IsShort = false;
+	ret->SourceRef = NULL;
+	ret->Set->Parent = ret;
+	ret->Get->Parent = ret;
 	return ret;
 }
 void DeleteProperty(Property* self) {
-	DeletePropertyBody(self->set);
-	DeletePropertyBody(self->get);
+	DeletePropertyBody(self->Set);
+	DeletePropertyBody(self->Get);
 	MEM_FREE(self);
 }

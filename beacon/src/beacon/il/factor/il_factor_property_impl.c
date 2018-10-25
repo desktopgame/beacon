@@ -26,7 +26,7 @@ void LoadILProperty(il_factor_Property* self, Enviroment* env, CallContext* cctx
 	generic_type* receiver = EvalILFactor(self->fact, env, cctx);
 	type* receiverT = GENERIC2TYPE(receiver);
 	int temp = -1;
-	FindTreePropertyClass(TYPE2CLASS(receiverT), self->p->namev, &temp);
+	FindTreePropertyClass(TYPE2CLASS(receiverT), self->p->Name, &temp);
 	self->index = temp;
 	if(temp == -1) {
 		ThrowBCError(
@@ -38,7 +38,7 @@ void LoadILProperty(il_factor_Property* self, Enviroment* env, CallContext* cctx
 }
 
 generic_type* EvalILProperty(il_factor_Property* self, Enviroment* env, CallContext* cctx) {
-	return self->p->gtype;
+	return self->p->GType;
 }
 
 char* ILPropertyToString(il_factor_Property* self, Enviroment* env) {

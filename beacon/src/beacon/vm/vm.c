@@ -716,10 +716,10 @@ static void vm_run(Frame* self, Enviroment * env, int pos, int deferStart) {
 				Property* pro = GetPropertyClass(TYPE2CLASS(GENERIC2TYPE(assignTarget->gtype)), propIndex);
 				//プロパティを実行
 				Frame* sub = SubFrame(self);
-				sub->Receiver = pro->parent;
+				sub->Receiver = pro->Parent;
 				PushVector(sub->ValueStack, assignValue);
 				PushVector(sub->ValueStack, assignTarget);
-				ExecuteVM(sub, pro->set->Env);
+				ExecuteVM(sub, pro->Set->Env);
 				DeleteFrame(sub);
 				break;
 			}
@@ -733,9 +733,9 @@ static void vm_run(Frame* self, Enviroment * env, int pos, int deferStart) {
 				Property* pro = GetPropertyClass(TYPE2CLASS(GENERIC2TYPE(sourceObject->gtype)), propIndex);
 				//プロパティを実行
 				Frame* sub = SubFrame(self);
-				sub->Receiver = pro->parent;
+				sub->Receiver = pro->Parent;
 				PushVector(sub->ValueStack, sourceObject);
-				ExecuteVM(sub, pro->get->Env);
+				ExecuteVM(sub, pro->Get->Env);
 				//戻り値をスタックに残す
 				VectorItem returnV = TopVector(sub->ValueStack);
 				object* returnO = (object*)returnV;
@@ -756,7 +756,7 @@ static void vm_run(Frame* self, Enviroment * env, int pos, int deferStart) {
 				Frame* sub = SubFrame(self);
 				sub->Receiver = NULL;
 				PushVector(sub->ValueStack, sv);
-				ExecuteVM(sub, p->set->Env);
+				ExecuteVM(sub, p->Set->Env);
 				DeleteFrame(sub);
 				break;
 			}
@@ -771,7 +771,7 @@ static void vm_run(Frame* self, Enviroment * env, int pos, int deferStart) {
 				//プロパティを実行
 				Frame* sub = SubFrame(self);
 				sub->Receiver = NULL;
-				ExecuteVM(sub, p->get->Env);
+				ExecuteVM(sub, p->Get->Env);
 				//戻り値をスタックに残す
 				VectorItem returnV = TopVector(sub->ValueStack);
 				object* returnO = (object*)returnV;

@@ -10,7 +10,7 @@ generic_type* subscript_descriptor_receiver(const subscript_descriptor* desc) {
 	} else if(desc->tag == SUBSCRIPT_FIELD_T) {
 		return desc->u.fi->gtype;
 	} else if(desc->tag == SUBSCRIPT_PROPERTY_T) {
-		return desc->u.prop->gtype;
+		return desc->u.prop->GType;
 	}
 	return NULL;
 }

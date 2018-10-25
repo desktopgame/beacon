@@ -50,7 +50,7 @@ void GenerateILVariableLocal(il_factor_variable_local* self, Enviroment* env, Ca
 		GenerateGetField(env->Bytecode, f, self->u.f_with_i.index);
 	} else if(self->type == VARIABLE_LOCAL_PROPERTY_T) {
 		Property* p = self->u.p_with_i.p;
-		if(!IsStaticModifier(p->modifier)) {
+		if(!IsStaticModifier(p->Modifier)) {
 			AddOpcodeBuf(env->Bytecode, OP_THIS);
 		}
 		GenerateGetProperty(env->Bytecode, p, self->u.p_with_i.index);
@@ -162,9 +162,9 @@ static void LoadILVariableLocal_Property(il_factor_variable_local * self, Enviro
 	self->u.p_with_i = pwi;
 	//プロパティにアクセスできない
 	if(!IsAccessiblePropertyClass(TYPE2CLASS(tp), p)) {
-		ThrowBCError(BCERROR_CAN_T_ACCESS_PROPERTY_T, Ref2Str(GetTypeName(tp)), Ref2Str(p->namev));
+		ThrowBCError(BCERROR_CAN_T_ACCESS_PROPERTY_T, Ref2Str(GetTypeName(tp)), Ref2Str(p->Name));
 	}
-	set_gtype(self, p->gtype);
+	set_gtype(self, p->GType);
 }
 
 static void set_gtype(il_factor_variable_local * self, generic_type* gt) {

@@ -164,7 +164,7 @@ static void il_factor_member_op_check_prop(il_factor_member_op* self, Enviroment
 		DeleteILFactor(factp->fact);
 		factp->fact = NULL;
 	} else if(!IsAccessiblePropertyClass(GetClassCContext(cctx), p)) {
-		ThrowBCError(BCERROR_CAN_T_ACCESS_PROPERTY_T, Ref2Str(GetTypeName(ctype)), Ref2Str(p->namev));
+		ThrowBCError(BCERROR_CAN_T_ACCESS_PROPERTY_T, Ref2Str(GetTypeName(ctype)), Ref2Str(p->Name));
 		DeleteILFactor(factp->fact);
 		factp->fact = NULL;
 	}
@@ -186,7 +186,7 @@ static void il_factor_member_op_check_static_prop(il_factor_member_op* self, Env
 	self->parent->u.prop = factp;
 	//プロパティの可視性を確認
 	if(!IsAccessiblePropertyClass(GetClassCContext(cctx), p)) {
-		ThrowBCError(BCERROR_CAN_T_ACCESS_PROPERTY_T, Ref2Str(GetTypeName(ctype)), Ref2Str(p->namev));
+		ThrowBCError(BCERROR_CAN_T_ACCESS_PROPERTY_T, Ref2Str(GetTypeName(ctype)), Ref2Str(p->Name));
 		DeleteILFactor(factp->fact);
 		factp->fact = NULL;
 	}
