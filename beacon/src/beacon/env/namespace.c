@@ -27,13 +27,13 @@ static void Namespacedump_class(NumericMap* root, bool isRoot, int depth);
 
 Namespace * CreateNamespaceAtRoot(StringView namev) {
 	ScriptContext* ctx = GetCurrentScriptContext();
-	if (ctx->Namespacenmap == NULL) {
-		ctx->Namespacenmap = NewNumericMap();
+	if (ctx->NamespaceMap == NULL) {
+		ctx->NamespaceMap = NewNumericMap();
 	}
-	TreeItem item = GetNumericMapValue(ctx->Namespacenmap, namev);
+	TreeItem item = GetNumericMapValue(ctx->NamespaceMap, namev);
 	if (item == NULL) {
 		Namespace* newNamespace = Namespacemalloc(namev);
-		PutNumericMap(ctx->Namespacenmap, namev, newNamespace);
+		PutNumericMap(ctx->NamespaceMap, namev, newNamespace);
 		return newNamespace;
 	} else return (Namespace*)item;
 }
@@ -44,10 +44,10 @@ Namespace * FindNamespaceFromRoot(StringView namev) {
 }
 
 Namespace* CFindNamespaceFromRoot(ScriptContext* sctx, StringView namev) {
-	if (sctx->Namespacenmap == NULL) {
+	if (sctx->NamespaceMap == NULL) {
 		return NULL;
 	}
-	return (Namespace*)GetNumericMapValue(sctx->Namespacenmap, namev);
+	return (Namespace*)GetNumericMapValue(sctx->NamespaceMap, namev);
 }
 
 Namespace * AddNamespaceNamespace(Namespace * self, StringView namev) {

@@ -29,8 +29,8 @@ void CLBC_import(class_loader* self, Vector* ilimports) {
 	//Javaがjava.langをインポートせずに使用できるのと同じように、
 	//全てのクラスローダーはデフォルトで beacon/lang をロードする
 	ScriptContext* ctx = GetCurrentScriptContext();
-	for(int i=0; i<ctx->include_vec->Length; i++) {
-		FileEntry* entry = AtVector(ctx->include_vec, i);
+	for(int i=0; i<ctx->IncludeList->Length; i++) {
+		FileEntry* entry = AtVector(ctx->IncludeList, i);
 		if(entry->IsFile && IsMatchExtension(entry->FileName, "bc")) {
 			char* p = GetAbsolutePath(entry->FileName);
 			CLBC_new_load(self, p);
@@ -54,7 +54,7 @@ class_loader* CLBC_import_new(class_loader* self, char* full_path) {
 	cll->parent = self;
 	ImportInfo* info = ImportImportManager(self->ImportManager, cll);
 	info->IsConsume = false;
-	PutTreeMap(ctx->class_loader_map, full_path, cll);
+	PutTreeMap(ctx->ClassLoaderMap, full_path, cll);
 	return cll;
 }
 
@@ -79,7 +79,7 @@ static void CLBC_new_load_internal(class_loader * self, char * full_path) {
 	ScriptContext* ctx = GetCurrentScriptContext();
 	//そのファイルパスに対応した
 	//クラスローダが既に存在するなら無視
-	class_loader* cll = GetTreeMapValue(ctx->class_loader_map, full_path);
+	class_loader* cll = GetTreeMapValue(ctx->ClassLoaderMap, full_path);
 	if (cll != NULL) {
 		CLBC_import_already(self, cll);
 		return;

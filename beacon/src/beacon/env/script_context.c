@@ -166,11 +166,11 @@ void CacheScriptContext() {
 //private
 static ScriptContext* ScriptContext_malloc(void) {
 	ScriptContext* ret = (ScriptContext*)MEM_MALLOC(sizeof(ScriptContext));
-	ret->Namespacenmap = NewNumericMap();
-	ret->class_loader_map = NewTreeMap();
+	ret->NamespaceMap = NewNumericMap();
+	ret->ClassLoaderMap = NewTreeMap();
 	ret->heap = NewHeap();
 	ret->type_vec = NewVector();
-	ret->thread_vec = NewVector();
+	ret->ThreadList = NewVector();
 	ret->bootstrap_class_loader = NULL;
 	ret->all_generic_vec = NewVector();
 	ret->true_obj = NULL;
@@ -178,17 +178,17 @@ static ScriptContext* ScriptContext_malloc(void) {
 	ret->null_obj = NULL;
 #if defined(_MSC_VER)
 	char* path = GetAbsolutePath("script-lib/beacon/lang");
-	ret->include_vec = GetFiles(path);
+	ret->IncludeList = GetFiles(path);
 	MEM_FREE(path);
 #else
-	ret->include_vec = GetFiles("script-lib/beacon/lang");
+	ret->IncludeList = GetFiles("script-lib/beacon/lang");
 #endif
 	ret->pos_int_vec = NewVector();
 	ret->neg_int_vec = NewVector();
 	ret->n_int_map = NewNumericMap();
 	ret->print_error = true;
 	ret->abort_on_error = true;
-	PushVector(ret->thread_vec, GetMainSGThread());
+	PushVector(ret->ThreadList, GetMainSGThread());
 	return ret;
 }
 
@@ -214,17 +214,17 @@ static void ScriptContext_free(ScriptContext* self) {
 	int x = CountActiveObject();
 
 	DeleteVector(self->type_vec, VectorDeleterOfNull);
-	DeleteVector(self->thread_vec, VectorDeleterOfNull);
-	DeleteTreeMap(self->class_loader_map, ScriptContext_DeleteClassLoader);
+	DeleteVector(self->ThreadList, VectorDeleterOfNull);
+	DeleteTreeMap(self->ClassLoaderMap, ScriptContext_DeleteClassLoader);
 	//ブートストラップクラスローダを意図的に起動していないなら、
 	//ここはまだNULL
-	if(self->Namespacenmap != NULL) {
-		EachNumericMap(self->Namespacenmap, ScriptContext_UnlinkNamespace);
+	if(self->NamespaceMap != NULL) {
+		EachNumericMap(self->NamespaceMap, ScriptContext_UnlinkNamespace);
 	}
 
 	int a = CountActiveObject();
-	DeleteNumericMap(self->Namespacenmap, ScriptContext_DeleteNamespace);
-	DeleteFiles(self->include_vec);
+	DeleteNumericMap(self->NamespaceMap, ScriptContext_DeleteNamespace);
+	DeleteFiles(self->IncludeList);
 	MEM_FREE(self);
 }
 

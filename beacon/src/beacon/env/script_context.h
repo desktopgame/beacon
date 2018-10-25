@@ -22,10 +22,10 @@ typedef void(*static_each)(struct field* item);
  * ホスト言語から異なる環境のスクリプトを実行するためにこの方法を使用します。
  */
 typedef struct ScriptContext {
-	NumericMap* Namespacenmap;
-	TreeMap* class_loader_map;
-	Vector* thread_vec;
-	Vector* include_vec;
+	NumericMap* NamespaceMap;
+	TreeMap* ClassLoaderMap;
+	Vector* ThreadList;
+	Vector* IncludeList;
 	struct class_loader* bootstrap_class_loader;
 	//通し番号でクラスを参照するためのベクター
 	Vector* type_vec;

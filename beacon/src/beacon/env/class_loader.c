@@ -96,7 +96,7 @@ void SpecialLoadClassLoader(class_loader* self, char* relativePath) {
 	char* fullP = ResolveScriptPath(relativePath);
 	ScriptContext* ctx = GetCurrentScriptContext();
 	Heap* he = GetHeap();
-	class_loader* cll = GetTreeMapValue(ctx->class_loader_map, fullP);
+	class_loader* cll = GetTreeMapValue(ctx->ClassLoaderMap, fullP);
 	he->AcceptBlocking++;
 	if(cll == NULL) {
 		cll = LoadClassLoader_specialImpl(self, cll, fullP);
