@@ -94,7 +94,7 @@ void LoadPassASTClassLoader(class_loader* self, AST* a) {
 
 void SpecialLoadClassLoader(class_loader* self, char* relativePath) {
 	char* fullP = ResolveScriptPath(relativePath);
-	script_context* ctx = GetCurrentScriptContext();
+	ScriptContext* ctx = GetCurrentScriptContext();
 	Heap* he = GetHeap();
 	class_loader* cll = GetTreeMapValue(ctx->class_loader_map, fullP);
 	he->AcceptBlocking++;

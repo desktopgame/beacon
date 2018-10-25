@@ -6,7 +6,7 @@
 #include "../util/vector.h"
 #include "../util/numeric_map.h"
 #include <stdint.h>
-struct script_context;
+struct ScriptContext;
 #define TYPE_OBJECT (GetObjectTypeNamespace())
 #define TYPE_INT (GetIntTypeNamespace())
 #define TYPE_DOUBLE (GetDoubleTypeNamespace())
@@ -62,7 +62,7 @@ Namespace* FindNamespaceFromRoot(StringView namev);
  * @param namev
  * @return
  */
-Namespace* CFindNamespaceFromRoot(struct script_context* sctx, StringView namev);
+Namespace* CFindNamespaceFromRoot(struct ScriptContext* sctx, StringView namev);
 
 /**
  * 指定の名前空間に新しい名前空間を定義します.

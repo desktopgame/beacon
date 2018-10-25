@@ -43,7 +43,7 @@ Frame* SubFrame(Frame* parent) {
 
 void MarkAllFrame(Frame* self) {
 	//全ての静的フィールドをマークする
-	script_context* ctx = GetCurrentScriptContext();
+	ScriptContext* ctx = GetCurrentScriptContext();
 	EachStaticScriptContext(ctx, frame_markStatic);
 	//全ての子要素を巡回してマーキング
 	frame_markRecursive(self);

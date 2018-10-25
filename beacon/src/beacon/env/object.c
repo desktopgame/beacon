@@ -35,7 +35,7 @@ object * MallocIntObject(int i, const char* filename, int lineno) {
 }
 
 object* GetIntObject(int i) {
-	script_context* ctx = GetCurrentScriptContext();
+	ScriptContext* ctx = GetCurrentScriptContext();
 	CacheScriptContext();
 	if((i < -9) || i > 99) {
 		return IInternScriptContext(ctx, i);
@@ -121,7 +121,7 @@ object * GetBoolObject(bool b) {
 }
 
 object * GetTrueObject() {
-	script_context* ctx = GetCurrentScriptContext();
+	ScriptContext* ctx = GetCurrentScriptContext();
 	if (ctx->true_obj == NULL) {
 		ctx->true_obj = object_malloc(OBJECT_BOOL_T);
 		ctx->true_obj->u.bool_ = true;
@@ -133,7 +133,7 @@ object * GetTrueObject() {
 }
 
 object * GetFalseObject() {
-	script_context* ctx = GetCurrentScriptContext();
+	ScriptContext* ctx = GetCurrentScriptContext();
 	if (ctx->false_obj == NULL) {
 		ctx->false_obj = object_malloc(OBJECT_BOOL_T);
 		ctx->false_obj->u.bool_ = false;
@@ -145,7 +145,7 @@ object * GetFalseObject() {
 }
 
 object * GetNullObject() {
-	script_context* ctx = GetCurrentScriptContext();
+	ScriptContext* ctx = GetCurrentScriptContext();
 	if (ctx->null_obj == NULL) {
 		ctx->null_obj = object_malloc(OBJECT_NULL_T);
 		ctx->null_obj->gtype = generic_NewType(TYPE_NULL);

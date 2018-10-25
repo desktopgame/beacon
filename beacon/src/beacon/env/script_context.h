@@ -21,7 +21,7 @@ typedef void(*static_each)(struct field* item);
  * beacon言語のあらゆるオブジェクトのトップレベル.
  * ホスト言語から異なる環境のスクリプトを実行するためにこの方法を使用します。
  */
-typedef struct script_context {
+typedef struct ScriptContext {
 	NumericMap* Namespacenmap;
 	TreeMap* class_loader_map;
 	Vector* thread_vec;
@@ -40,7 +40,7 @@ typedef struct script_context {
 	struct object* true_obj;
 	struct object* false_obj;
 	struct object* null_obj;
-} script_context;
+} ScriptContext;
 
 /**
  * スクリプトコンテキストを登録するためのスクリプトコンテキストを作成します.
@@ -48,14 +48,14 @@ typedef struct script_context {
  * 既に作成されている場合は何もしません。
  * @return
  */
-script_context* OpenScriptContext();
+ScriptContext* OpenScriptContext();
 
 /**
  * 現在のスクリプトコンテキストを返します.
  * この呼び出しは同期される必要があります。
  * @return
  */
-script_context* GetCurrentScriptContext();
+ScriptContext* GetCurrentScriptContext();
 
 /**
  * スクリプトコンテキストを登録するためのスクリプトコンテキストと、
@@ -67,14 +67,14 @@ void CloseScriptContext();
  * まだブートストラップクラスローダが起動していないなら起動します.
  * @param self
  */
-void BootstrapScriptContext(script_context* self);
+void BootstrapScriptContext(ScriptContext* self);
 
 /**
  * 全ての静的フィールドを訪問します.
  * @param self
  * @param act
  */
-void EachStaticScriptContext(script_context* self, static_each act);
+void EachStaticScriptContext(ScriptContext* self, static_each act);
 
 /**
  * 全ての静的フィールドをクリアします.
@@ -88,7 +88,7 @@ void EachStaticScriptContext(script_context* self, static_each act);
  * なので、複数回実行する場合にはこれを使用して静的フィールドをクリアします。
  * @param self
  */
-void ClearScriptContext(script_context* self);
+void ClearScriptContext(ScriptContext* self);
 
 /**
  * 指定の整数をキャッシュします.
@@ -96,7 +96,7 @@ void ClearScriptContext(script_context* self);
  * @param i
  * @return
  */
-struct object* IInternScriptContext(script_context* self, int i);
+struct object* IInternScriptContext(ScriptContext* self, int i);
 
 /**
  * 現在のコンテキストでリテラルをキャッシュします.

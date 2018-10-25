@@ -88,7 +88,7 @@ bool EvalString(const char* source) {
 
 //private
 static bool eval_top_from_cll(class_loader* cll, AST* aOpt) {
-	script_context* ctx = GetCurrentScriptContext();
+	ScriptContext* ctx = GetCurrentScriptContext();
 	if(aOpt == NULL) {
 		LoadClassLoader(cll);
 	} else {

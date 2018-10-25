@@ -12,7 +12,7 @@ static StringView gErrorFile = ZERO_VIEW;
 static StringView gLastMessage = ZERO_VIEW;
 static int gErrorLineNo = -1;
 static int gErrorColumn = -1;
-static void check_abort(script_context* sctx);
+static void check_abort(ScriptContext* sctx);
 
 void ThrowBCError(BCErrorID id, ...) {
 	va_list ap;
@@ -25,7 +25,7 @@ void VthrowBCError(BCErrorID id, va_list ap) {
 	char* fmt = VformatBCError(id, ap);
 	gGlobalError = id;
 	gLastMessage = InternString(fmt);
-	script_context* sctx = GetCurrentScriptContext();
+	ScriptContext* sctx = GetCurrentScriptContext();
 	if(sctx->print_error) {
 		fprintf(stderr, "%s", fmt);
 	}
@@ -395,7 +395,7 @@ BCErrorID GetLastBCError() {
 	return gGlobalError;
 }
 //private
-static void check_abort(script_context* sctx) {
+static void check_abort(ScriptContext* sctx) {
 	if(sctx->abort_on_error) {
 		abort();
 	}

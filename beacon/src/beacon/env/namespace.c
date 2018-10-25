@@ -26,7 +26,7 @@ static void Namespaceput_indent(int depth);
 static void Namespacedump_class(NumericMap* root, bool isRoot, int depth);
 
 Namespace * CreateNamespaceAtRoot(StringView namev) {
-	script_context* ctx = GetCurrentScriptContext();
+	ScriptContext* ctx = GetCurrentScriptContext();
 	if (ctx->Namespacenmap == NULL) {
 		ctx->Namespacenmap = NewNumericMap();
 	}
@@ -39,11 +39,11 @@ Namespace * CreateNamespaceAtRoot(StringView namev) {
 }
 
 Namespace * FindNamespaceFromRoot(StringView namev) {
-	script_context* ctx = GetCurrentScriptContext();
+	ScriptContext* ctx = GetCurrentScriptContext();
 	return CFindNamespaceFromRoot(ctx, namev);
 }
 
-Namespace* CFindNamespaceFromRoot(script_context* sctx, StringView namev) {
+Namespace* CFindNamespaceFromRoot(ScriptContext* sctx, StringView namev) {
 	if (sctx->Namespacenmap == NULL) {
 		return NULL;
 	}
@@ -65,7 +65,7 @@ Namespace * AddNamespaceNamespace(Namespace * self, StringView namev) {
 }
 
 struct type* AddTypeNamespace(Namespace* self, type* type) {
-	script_context* ctx = GetCurrentScriptContext();
+	ScriptContext* ctx = GetCurrentScriptContext();
 	type->location = self;
 	PutNumericMap(self->TypeMap, GetTypeName(type), type);
 	type->absolute_index = ctx->type_vec->Length;

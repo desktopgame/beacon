@@ -25,7 +25,7 @@ Heap * NewHeap() {
 }
 
 Heap * GetHeap() {
-	script_context* ctx = GetCurrentScriptContext();
+	ScriptContext* ctx = GetCurrentScriptContext();
 	if(ctx == NULL) { return NULL; }
 	return ctx->heap;
 }

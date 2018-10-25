@@ -4,7 +4,7 @@
 //#include "../util/stack.h"
 #include <stdbool.h>
 #include "../util/vector.h"
-struct script_context;
+struct ScriptContext;
 struct Frame;
 struct CallContext;
 /**
@@ -35,7 +35,7 @@ ScriptThread* NewSGThread();
  * @param sctx
  * @return
  */
-ScriptThread* GetCurrentSGThread(struct script_context* sctx);
+ScriptThread* GetCurrentSGThread(struct ScriptContext* sctx);
 
 /**
  * スレッドに記録された全てのトレースを解放します.

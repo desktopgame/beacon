@@ -173,7 +173,7 @@ void TerminateVM(Frame* self) {
 
 void UncaughtVM(Frame* self, Enviroment* env, int pc) {
 	char* message = create_error_message(self, env, pc);
-	script_context* sctx = GetCurrentScriptContext();
+	ScriptContext* sctx = GetCurrentScriptContext();
 	if(sctx->print_error) {
 		fprintf(stderr, "%s", message);
 	}
@@ -191,7 +191,7 @@ StringView GetVMErrorMessage() {
 //private
 static void vm_run(Frame* self, Enviroment * env, int pos, int deferStart) {
 	assert(env != NULL);
-	script_context* ctx = GetCurrentScriptContext();
+	ScriptContext* ctx = GetCurrentScriptContext();
 	int source_len = env->Bytecode->Instructions->Length;
 	self->ContextRef = env;
 	Heap* he = GetHeap();

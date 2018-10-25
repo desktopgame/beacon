@@ -4,7 +4,7 @@
 #include <assert.h>
 
 JNIEXPORT jobject JNICALL Java_jp_koya_jbeacon_BCScriptContext_nativeOpen(JNIEnv * env, jclass cls) {
-	script_context* sctx = OpenScriptContext();
+	ScriptContext* sctx = OpenScriptContext();
 	//エラーメッセージはスタックトレースに含めるので、
 	//出力しない
 	sctx->print_error = false;
