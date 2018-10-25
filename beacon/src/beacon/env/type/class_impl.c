@@ -178,11 +178,11 @@ void AddConstructorClass(class_ * self, constructor * c) {
 	PushVector(self->constructor_list, c);
 }
 
-void DefineNativeMethodClass(class_* self, const char* name, native_impl impl) {
+void DefineNativeMethodClass(class_* self, const char* name, NativeImpl impl) {
 	DefineNativeMethodByRefClass(self, InternString(name), impl);
 }
 
-void DefineNativeMethodByRefClass(class_ * self, StringView namev, native_impl impl) {
+void DefineNativeMethodByRefClass(class_ * self, StringView namev, NativeImpl impl) {
 	NativeMethodRef* ref = NewNativeMethodRef(impl);
 	PutNumericMap(self->NativeMethodRef_nmap, namev, ref);
 }

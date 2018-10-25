@@ -2,7 +2,7 @@
 #include <stdlib.h>
 #include "../util/mem.h"
 
-NativeMethodRef * NewNativeMethodRef(native_impl impl) {
+NativeMethodRef * NewNativeMethodRef(NativeImpl impl) {
 	NativeMethodRef* ret = (NativeMethodRef*)MEM_MALLOC(sizeof(NativeMethodRef));
 	ret->impl = impl;
 	return ret;

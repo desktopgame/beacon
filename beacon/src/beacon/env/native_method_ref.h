@@ -8,13 +8,13 @@
 /**
  * ネイティブメソッドの実装.
  */
-typedef void(*native_impl)(Method* parent, Frame* vm, Enviroment* env);
+typedef void(*NativeImpl)(Method* parent, Frame* vm, Enviroment* env);
 
 /**
  * ネイティブメソッドを表す関数ポインタをラップする構造体.
  */
 typedef struct NativeMethodRef {
-	native_impl impl;
+	NativeImpl impl;
 } NativeMethodRef;
 
 /**
@@ -22,7 +22,7 @@ typedef struct NativeMethodRef {
  * @param impl
  * @return
  */
-NativeMethodRef* NewNativeMethodRef(native_impl impl);
+NativeMethodRef* NewNativeMethodRef(NativeImpl impl);
 
 /**
  * ラッパーを開放します.

@@ -143,7 +143,7 @@ void AddConstructorClass(class_* self, struct constructor* c);
  * @param name
  * @param impl
  */
-void DefineNativeMethodClass(class_* self, const char* name, native_impl impl);
+void DefineNativeMethodClass(class_* self, const char* name, NativeImpl impl);
 
 /**
  * 指定の名前に対応するネイティブ関数を登録します.
@@ -151,7 +151,7 @@ void DefineNativeMethodClass(class_* self, const char* name, native_impl impl);
  * @param namev
  * @param impl
  */
-void DefineNativeMethodByRefClass(class_* self, StringView namev, native_impl impl);
+void DefineNativeMethodByRefClass(class_* self, StringView namev, NativeImpl impl);
 
 /**
  * super と sub の距離を返します.
