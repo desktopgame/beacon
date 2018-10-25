@@ -66,7 +66,7 @@ void AddFieldType(type* self, field * f) {
 	AddFieldClass(self->u.class_, f);
 }
 
-void AddPropertyType(type* self, property* p) {
+void AddPropertyType(type* self, Property* p) {
 	if(self->tag == TYPE_CLASS_T) {
 		AddPropertyClass(self->u.class_, p);
 	} else if(self->tag == TYPE_INTERFACE_T) {

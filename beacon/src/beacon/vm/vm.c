@@ -713,7 +713,7 @@ static void vm_run(Frame* self, Enviroment * env, int pos, int deferStart) {
 				}
 				assert(assignTarget->tag == OBJECT_REF_T);
 				int propIndex = (int)GetEnviromentSourceAt(env, ++IDX);
-				property* pro = GetPropertyClass(TYPE2CLASS(GENERIC2TYPE(assignTarget->gtype)), propIndex);
+				Property* pro = GetPropertyClass(TYPE2CLASS(GENERIC2TYPE(assignTarget->gtype)), propIndex);
 				//プロパティを実行
 				Frame* sub = SubFrame(self);
 				sub->Receiver = pro->parent;
@@ -730,7 +730,7 @@ static void vm_run(Frame* self, Enviroment * env, int pos, int deferStart) {
 					break;
 				}
 				int propIndex = (int)GetEnviromentSourceAt(env, ++IDX);
-				property* pro = GetPropertyClass(TYPE2CLASS(GENERIC2TYPE(sourceObject->gtype)), propIndex);
+				Property* pro = GetPropertyClass(TYPE2CLASS(GENERIC2TYPE(sourceObject->gtype)), propIndex);
 				//プロパティを実行
 				Frame* sub = SubFrame(self);
 				sub->Receiver = pro->parent;
@@ -751,7 +751,7 @@ static void vm_run(Frame* self, Enviroment * env, int pos, int deferStart) {
 				int propIndex = (int)GetEnviromentSourceAt(env, ++IDX);
 				type* tp = (type*)AtVector(ctx->type_vec, absClsIndex);
 				class_* cls = tp->u.class_;
-				property * p = GetSPropertyClass(cls, propIndex);
+				Property * p = GetSPropertyClass(cls, propIndex);
 				//プロパティを実行
 				Frame* sub = SubFrame(self);
 				sub->Receiver = NULL;
@@ -767,7 +767,7 @@ static void vm_run(Frame* self, Enviroment * env, int pos, int deferStart) {
 				int propIndex = (int)GetEnviromentSourceAt(env, ++IDX);
 				type* tp = (type*)AtVector(ctx->type_vec, absClsIndex);
 				class_* cls = tp->u.class_;
-				property * p = GetSPropertyClass(cls, propIndex);
+				Property * p = GetSPropertyClass(cls, propIndex);
 				//プロパティを実行
 				Frame* sub = SubFrame(self);
 				sub->Receiver = NULL;

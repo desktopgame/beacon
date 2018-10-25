@@ -12,7 +12,7 @@
 
 static void assign_by_namebase(il_factor_assign_op* self, Enviroment* env, CallContext* cctx);
 static void assign_to_field(il_factor_assign_op* self,il_factor* receiver, il_factor* source, StringView namev, Enviroment* env, CallContext* cctx);
-static void assign_to_property(il_factor_assign_op* self, Enviroment* env, CallContext* cctx);
+static void assign_to_Property(il_factor_assign_op* self, Enviroment* env, CallContext* cctx);
 static void assign_to_array(il_factor_assign_op* self, Enviroment* env, CallContext* cctx);
 static void assign_by_call(il_factor_assign_op* self, Enviroment* env, CallContext* cctx);
 static void assign_by_invoke(il_factor_invoke* lhs, il_factor* rhs, Enviroment* env, CallContext* cctx);
@@ -63,7 +63,7 @@ void GenerateILAssignOp(il_factor_assign_op* self, Enviroment* env, CallContext*
 			assign_to_field(self, ilmem->fact, self->right, ilmem->namev, env, cctx);
 		}
 	} else if(self->left->type == ILFACTOR_PROPERTY_T) {
-		assign_to_property(self, env, cctx);
+		assign_to_Property(self, env, cctx);
 	} else if(self->left->type == ILFACTOR_SUBSCRIPT_T) {
 		assign_to_array(self, env, cctx);
 	} else if(self->left->type == ILFACTOR_CALL_OP_T) {
@@ -143,9 +143,9 @@ static void assign_to_field(il_factor_assign_op* self, il_factor* receiver, il_f
 	check_final(receiver, source, namev, env, cctx);
 }
 
-static void assign_to_property(il_factor_assign_op* self, Enviroment* env, CallContext* cctx) {
-	il_factor_property* prop = self->left->u.prop;
-	property* pp = prop->p;
+static void assign_to_Property(il_factor_assign_op* self, Enviroment* env, CallContext* cctx) {
+	il_factor_Property* prop = self->left->u.prop;
+	Property* pp = prop->p;
 	bool is_static = IsStaticModifier(prop->p->modifier);
 	BC_ERROR();
 	//プロパティへアクセスできない
@@ -350,7 +350,7 @@ static void generate_assign_to_variable_local(il_factor_assign_op* self, Envirom
 	//src のような名前がプロパティを示す場合
 	} else if(illoc->type == VARIABLE_LOCAL_PROPERTY_T) {
 		int temp = -1;
-		property* p = FindTreePropertyClass(GetClassCContext(cctx), illoc->namev, &temp);
+		Property* p = FindTreePropertyClass(GetClassCContext(cctx), illoc->namev, &temp);
 		assert(temp != -1);
 		//フィールドはstaticでないが
 		//現在のコンテキストはstaticなので this にアクセスできない

@@ -158,13 +158,13 @@ void CLBC_fields_impl(class_loader* self, Namespace* scope, type* tp,Vector* ilf
 }
 
 //
-//property
+//Property
 //
 //
-bool CLBC_property_decl(class_loader* self, il_type* iltype, type* tp, ILProperty* ilprop, Namespace* scope, CallContext* cctx) {
+bool CLBC_Property_decl(class_loader* self, il_type* iltype, type* tp, ILProperty* ilprop, Namespace* scope, CallContext* cctx) {
 	//VectorItem e = AtVector(ilprops, i);
 	//ILProperty* ilprop = e;
-	property* prop = property_new(ilprop->Name);
+	Property* prop = Property_new(ilprop->Name);
 	prop->access = ilprop->Access;
 	prop->modifier = ilprop->Modifier;
 	prop->set->Access = ilprop->Set->Access;
@@ -201,9 +201,9 @@ bool CLBC_property_decl(class_loader* self, il_type* iltype, type* tp, ILPropert
 	return true;
 }
 
-bool CLBC_property_impl(class_loader* self, il_type* iltype, type* tp, ILProperty* ilprop, property* prop, Namespace* scope, CallContext* cctx) {
+bool CLBC_Property_impl(class_loader* self, il_type* iltype, type* tp, ILProperty* ilprop, Property* prop, Namespace* scope, CallContext* cctx) {
 	//VectorItem e = AtVector(sgprops, i);
-	property* pr = prop;
+	Property* pr = prop;
 	ILProperty* ilpr = ilprop;
 	if(pr->is_short) { return true; }
 	PropertyBody* set = pr->set;
@@ -236,7 +236,7 @@ void CLBC_properties_decl(class_loader* self, il_type* iltype, type* tp, Vector*
 	cctx->Scope = scope;
 	cctx->Ty = tp;
 	for (int i = 0; i < ilprops->Length; i++) {
-		if(!CLBC_property_decl(self, iltype, tp, AtVector(ilprops, i), scope, cctx)) {
+		if(!CLBC_Property_decl(self, iltype, tp, AtVector(ilprops, i), scope, cctx)) {
 			break;
 		}
 	}
@@ -249,7 +249,7 @@ void CLBC_properties_impl(class_loader* self,  il_type* iltype, type* tp, Vector
 	cctx->Scope = scope;
 	cctx->Ty = tp;
 	for (int i = 0; i < sgprops->Length; i++) {
-		if(!CLBC_property_impl(self, iltype, tp, AtVector(ilprops, i), AtVector(sgprops, i), scope, cctx)) {
+		if(!CLBC_Property_impl(self, iltype, tp, AtVector(ilprops, i), AtVector(sgprops, i), scope, cctx)) {
 			break;
 		}
 	}

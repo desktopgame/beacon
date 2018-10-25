@@ -12,7 +12,7 @@
 #include "../../util/vector.h"
 
 static bool IsContainsFieldClassImpl(Vector* fields, field* f);
-static bool IsContainsPropertyClassImpl(Vector* props, property* p);
+static bool IsContainsPropertyClassImpl(Vector* props, Property* p);
 
 field * FindFieldClass(class_* self, StringView namev, int* outIndex) {
 	(*outIndex) = -1;
@@ -125,15 +125,15 @@ bool IsAccessibleFieldClass(class_* self, field* f) {
 
 
 
-bool IsContainsPropertyClass(class_* self, property* p) {
+bool IsContainsPropertyClass(class_* self, Property* p) {
 	return IsContainsPropertyClassImpl(self->prop_list, p);
 }
 
-bool IsContainsSPropertyClass(class_* self, property* p) {
+bool IsContainsSPropertyClass(class_* self, Property* p) {
 	return IsContainsPropertyClassImpl(self->sprop_list, p);
 }
 
-bool IsAccessiblePropertyClass(class_* self, property* p) {
+bool IsAccessiblePropertyClass(class_* self, Property* p) {
 	assert(p != NULL);
 	if(p->access == ACCESS_PUBLIC_T) {
 		return true;
@@ -181,7 +181,7 @@ bool IsAccessiblePropertyAccessorClass(class_* self, PropertyBody* pb) {
 	return false;
 }
 
-int GetFieldByPropertyClass(class_* self, property* p) {
+int GetFieldByPropertyClass(class_* self, Property* p) {
 	int temp = -1;
 	assert(p->source_ref != NULL);
 	if(IsStaticModifier(p->modifier)) {
@@ -192,7 +192,7 @@ int GetFieldByPropertyClass(class_* self, property* p) {
 	return temp;
 }
 
-property* GetPropertyClass(class_* self, int index) {
+Property* GetPropertyClass(class_* self, int index) {
 	assert(index >= 0);
 	int all = CountAllPropertyClass(self);
 	if (index >= (all - self->prop_list->Length) &&
@@ -202,7 +202,7 @@ property* GetPropertyClass(class_* self, int index) {
 	return GetPropertyClass(self->super_class->core_type->u.class_, index);
 }
 
-property* GetSPropertyClass(class_* self, int index) {
+Property* GetSPropertyClass(class_* self, int index) {
 	assert(index >= 0);
 	int all = CountAllSPropertyClass(self);
 	if (index >= (all - self->sprop_list->Length) &&
@@ -212,11 +212,11 @@ property* GetSPropertyClass(class_* self, int index) {
 	return GetPropertyClass(self->super_class->core_type->u.class_, index);
 }
 
-property* FindPropertyClass(class_* self, StringView namev, int* outIndex) {
+Property* FindPropertyClass(class_* self, StringView namev, int* outIndex) {
 	(*outIndex) = -1;
 	for (int i = 0; i < self->prop_list->Length; i++) {
 		VectorItem e = AtVector(self->prop_list, i);
-		property* p = (property*)e;
+		Property* p = (Property*)e;
 		if (namev == p->namev) {
 			(*outIndex) = (CountAllPropertyClass(self) - self->prop_list->Length) + i;
 			return p;
@@ -225,10 +225,10 @@ property* FindPropertyClass(class_* self, StringView namev, int* outIndex) {
 	return NULL;
 }
 
-property* FindTreePropertyClass(class_* self, StringView namev, int* outIndex) {
+Property* FindTreePropertyClass(class_* self, StringView namev, int* outIndex) {
 	class_* pointee = self;
 	do {
-		property* p = FindPropertyClass(pointee, namev, outIndex);
+		Property* p = FindPropertyClass(pointee, namev, outIndex);
 		if (p != NULL) {
 			return p;
 		}
@@ -241,11 +241,11 @@ property* FindTreePropertyClass(class_* self, StringView namev, int* outIndex) {
 	return NULL;
 }
 
-property* FindSPropertyClass(class_* self, StringView namev, int* outIndex) {
+Property* FindSPropertyClass(class_* self, StringView namev, int* outIndex) {
 	(*outIndex) = -1;
 	for (int i = 0; i < self->sprop_list->Length; i++) {
 		VectorItem e = AtVector(self->sprop_list, i);
-		property* p = (property*)e;
+		Property* p = (Property*)e;
 		if (namev == p->namev) {
 			(*outIndex) = (CountAllSPropertyClass(self) - self->sprop_list->Length) + i;
 			return p;
@@ -254,10 +254,10 @@ property* FindSPropertyClass(class_* self, StringView namev, int* outIndex) {
 	return NULL;
 }
 
-property* FindTreeSPropertyClass(class_* self, StringView namev, int* outIndex) {
+Property* FindTreeSPropertyClass(class_* self, StringView namev, int* outIndex) {
 	class_* pointee = self;
 	do {
-		property* p = FindSPropertyClass(pointee, namev, outIndex);
+		Property* p = FindSPropertyClass(pointee, namev, outIndex);
 		if (p != NULL) {
 			return p;
 		}
@@ -620,9 +620,9 @@ static bool IsContainsFieldClassImpl(Vector* fields, field* f) {
 	return false;
 }
 
-static bool IsContainsPropertyClassImpl(Vector* props, property* p) {
+static bool IsContainsPropertyClassImpl(Vector* props, Property* p) {
 	for(int i=0; i<props->Length; i++) {
-		property* e = (property*)AtVector(props, i);
+		Property* e = (Property*)AtVector(props, i);
 		if(e == p) {
 			return true;
 		}

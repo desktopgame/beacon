@@ -7,7 +7,7 @@ struct SymbolEntry;
 struct Enviroment;
 struct generic_type;
 struct field;
-struct property;
+struct Property;
 
 typedef enum variable_local_type {
 	VARIABLE_LOCAL_SCOPE_T,
@@ -21,10 +21,10 @@ typedef struct field_with_index {
 	int index;
 } field_with_index;
 
-typedef struct property_with_index {
-	struct property* p;
+typedef struct Property_with_index {
+	struct Property* p;
 	int index;
-} property_with_index;
+} Property_with_index;
 
 /**
  * ローカル変数を表す構造体.
@@ -36,7 +36,7 @@ typedef struct il_factor_variable_local {
 	union {
 		struct SymbolEntry* entry_;
 		field_with_index f_with_i;
-		property_with_index p_with_i;
+		Property_with_index p_with_i;
 	} u;
 	Vector* type_args;
 } il_factor_variable_local;

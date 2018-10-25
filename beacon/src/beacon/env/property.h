@@ -9,7 +9,7 @@ struct type;
 struct field;
 struct object;
 
-typedef struct property {
+typedef struct Property {
 	ModifierType modifier;
 	StringView namev;
 	struct type* parent;
@@ -19,10 +19,10 @@ typedef struct property {
 	PropertyBody* set;
 	PropertyBody* get;
 	bool is_short;
-} property;
+} Property;
 
-#define property_new(namev) (MallocProperty(namev, __FILE__, __LINE__))
-property* MallocProperty(StringView namev, const char* filename, int lineno);
+#define Property_new(namev) (MallocProperty(namev, __FILE__, __LINE__))
+Property* MallocProperty(StringView namev, const char* filename, int lineno);
 
-void DeleteProperty(property* self);
+void DeleteProperty(Property* self);
 #endif

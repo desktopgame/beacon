@@ -21,7 +21,7 @@
 //struct method_list;
 struct object;
 struct field;
-struct property;
+struct Property;
 struct PropertyBody;
 struct Method;
 struct constructor;
@@ -121,7 +121,7 @@ void AddFieldClass(class_* self, struct field* f);
  * @param self
  * @param p
  */
-void AddPropertyClass(class_* self, struct property* p);
+void AddPropertyClass(class_* self, struct Property* p);
 
 /**
  * このクラスにメソッドを追加します.

@@ -84,7 +84,7 @@ char* VformatBCError(BCErrorID id, va_list ap) {
 			fmt = "overwrap of field name: %s @%s";
 			break;
 		case BCERROR_OVERWRAP_PROPERTY_NAME_T:
-			fmt = "overwrap of property name: %s @%s";
+			fmt = "overwrap of Property name: %s @%s";
 			break;
 
 
@@ -229,7 +229,7 @@ char* VformatBCError(BCErrorID id, va_list ap) {
 			fmt = "undefined variable: %s";
 			break;
 		case BCERROR_UNDEFINED_PROPERTY_T:
-			fmt = "undefined property: %s#%s";
+			fmt = "undefined Property: %s#%s";
 			break;
 
 		case BCERROR_ASSIGN_TO_INVOKE_T:
@@ -329,19 +329,19 @@ char* VformatBCError(BCErrorID id, va_list ap) {
 			fmt = "must be public a access level of operator: %s";
 			break;
 		case BCERROR_INVALID_PROPERTY_DECL_T:
-			fmt = "can't use abbrev expression for only one property accessor: %s#%s";
+			fmt = "can't use abbrev expression for only one Property accessor: %s#%s";
 			break;
 		case BCERROR_CAN_T_ACCESS_FIELD_T:
 			fmt = "can't access field: %s#%s";
 			break;
 		case BCERROR_CAN_T_ACCESS_PROPERTY_T:
-			fmt = "can't access property: %s#%s";
+			fmt = "can't access Property: %s#%s";
 			break;
 		case BCERROR_INVALID_ACCESS_LEVEL_OF_PROPERTY_T:
-			fmt = "access level of property accessor must be secure level more than property: %s#%s";
+			fmt = "access level of Property accessor must be secure level more than Property: %s#%s";
 			break;
 		case BCERROR_SPECIFIED_BOTH_PROPERTY_ACCESSOR_T:
-			fmt = "specified both access level of property accessor: %s#%s";
+			fmt = "specified both access level of Property accessor: %s#%s";
 			break;
 		default:
 			{

@@ -94,7 +94,7 @@ bool IsAccessibleFieldClass(class_* self, struct field* f);
  * @param p
  * @return
  */
-bool IsContainsPropertyClass(class_* self, struct property* p);
+bool IsContainsPropertyClass(class_* self, struct Property* p);
 
 /**
  * クラスに指定のプロパティが含まれるなら true.
@@ -102,14 +102,14 @@ bool IsContainsPropertyClass(class_* self, struct property* p);
  * @param p
  * @return
  */
-bool IsContainsSPropertyClass(class_* self, struct property* p);
+bool IsContainsSPropertyClass(class_* self, struct Property* p);
 
 /**
  * 指定のクラスからプロパティにアクセスできるなら true.
  * @param self
  * @param p
  */
-bool IsAccessiblePropertyClass(class_* self, struct property* p);
+bool IsAccessiblePropertyClass(class_* self, struct Property* p);
 
 /**
  * 指定のクラスからアクセサにアクセスできるなら true.
@@ -125,20 +125,20 @@ bool IsAccessiblePropertyAccessorClass(class_* self, struct PropertyBody* pb);
  * @param p
  * @return
  */
-int GetFieldByPropertyClass(class_* self, struct property* p);
+int GetFieldByPropertyClass(class_* self, struct Property* p);
 
 /**
  * @param self
  * @param index
  * @return
  */
-struct property* GetPropertyClass(class_* self, int index);
+struct Property* GetPropertyClass(class_* self, int index);
 /**
  * @param self
  * @param index
  * @return
  */
-struct property* GetSPropertyClass(class_* self, int index);
+struct Property* GetSPropertyClass(class_* self, int index);
 
 /**
  * 指定の名前のプロパティを検索します.
@@ -147,7 +147,7 @@ struct property* GetSPropertyClass(class_* self, int index);
  * @param outIndex
  * @return
  */
-struct property* FindPropertyClass(class_* self, StringView namev, int* outIndex);
+struct Property* FindPropertyClass(class_* self, StringView namev, int* outIndex);
 
 /**
  * 指定の名前を持つプロパティを返します.
@@ -157,7 +157,7 @@ struct property* FindPropertyClass(class_* self, StringView namev, int* outIndex
  * @param outIndex
  * @return
  */
-struct property* FindTreePropertyClass(class_* self, StringView namev, int* outIndex);
+struct Property* FindTreePropertyClass(class_* self, StringView namev, int* outIndex);
 
 /**
  * 指定の名前の静的プロパティを検索します.
@@ -166,7 +166,7 @@ struct property* FindTreePropertyClass(class_* self, StringView namev, int* outI
  * @param outIndex
  * @return
  */
-struct property* FindSPropertyClass(class_* self, StringView namev, int* outIndex);
+struct Property* FindSPropertyClass(class_* self, StringView namev, int* outIndex);
 
 /**
  * 指定の名前を持つ静的プロパティを返します.
@@ -176,7 +176,7 @@ struct property* FindSPropertyClass(class_* self, StringView namev, int* outInde
  * @param outIndex
  * @return
  */
-struct property* FindTreeSPropertyClass(class_* self, StringView namev, int* outIndex);
+struct Property* FindTreeSPropertyClass(class_* self, StringView namev, int* outIndex);
 
 
 

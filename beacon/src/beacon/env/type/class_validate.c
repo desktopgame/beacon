@@ -8,7 +8,7 @@
 #include "../field.h"
 #include "class_impl.h"
 static bool IsValidFieldClassImpl(Vector* field_vec, field** out);
-static bool IsValidPropertyClassImpl(Vector* prop_vec, property** out);
+static bool IsValidPropertyClassImpl(Vector* prop_vec, Property** out);
 static bool methods_is_all_abstract(Vector* v);
 
 bool IsImplementInterfaceMethodValidClass(class_* cls, Method** out) {
@@ -44,7 +44,7 @@ bool IsImplementInterfaceMethodValidClass(class_* cls, Method** out) {
 	return contains;
 }
 
-bool IsImplementInterfacePropertyValidClass(class_* cls, property** out) {
+bool IsImplementInterfacePropertyValidClass(class_* cls, Property** out) {
 	(*out) = NULL;
 	//全ての実装インターフェイスを取得する
 	Vector* gimpl_list = GetGenericInterfaceListClass(cls);
@@ -59,8 +59,8 @@ bool IsImplementInterfacePropertyValidClass(class_* cls, property** out) {
 		bool valid = true;
 		for(int j=0; j<inter->prop_list->Length; j++) {
 			int temp = 0;
-			property* decl = AtVector(inter->prop_list, j);
-			property* impl = FindPropertyClass(cls, decl->namev, &temp);
+			Property* decl = AtVector(inter->prop_list, j);
+			Property* impl = FindPropertyClass(cls, decl->namev, &temp);
 			if(temp == -1) {
 				(*out) = decl;
 				DeleteVector(gimpl_list, VectorDeleterOfNull);
@@ -130,7 +130,7 @@ bool IsValidFieldClass(class_* cls, field** out) {
 		   IsValidFieldClassImpl(cls->sfield_list, out);
 }
 
-bool IsValidPropertyClass(class_* self, property** out) {
+bool IsValidPropertyClass(class_* self, Property** out) {
 	return IsValidPropertyClassImpl(self->prop_list, out) &&
 	       IsValidPropertyClassImpl(self->sprop_list, out);
 }
@@ -206,13 +206,13 @@ static bool IsValidFieldClassImpl(Vector* field_vec, field** out) {
 	return ret;
 }
 
-static bool IsValidPropertyClassImpl(Vector* prop_vec, property** out) {
+static bool IsValidPropertyClassImpl(Vector* prop_vec, Property** out) {
 	(*out) = NULL;
 	bool ret = true;
 	for(int i=0; i<prop_vec->Length; i++) {
-		property* p = (property*)AtVector(prop_vec, i);
+		Property* p = (Property*)AtVector(prop_vec, i);
 		for(int j=0; j<prop_vec->Length; j++) {
-			property* pE = (property*)AtVector(prop_vec, j);
+			Property* pE = (Property*)AtVector(prop_vec, j);
 			if(i == j) { continue; }
 			if(p->namev == pE->namev) {
 				ret = false;

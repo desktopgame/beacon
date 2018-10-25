@@ -235,28 +235,28 @@ int FprintOpcode(FILE* fp, Vector* source, int index) {
 		case OP_PUT_PROPERTY:
 		{
 			int a = (int)AtVector(source, ++index);
-			fprintf(fp,"put property(%d)", a);
+			fprintf(fp,"put Property(%d)", a);
 			break;
 		}
 		case OP_GET_PROPERTY:
 		{
 			//int a = (int)AtVector(source, ++index);
 			int b = (int)AtVector(source, ++index);
-			fprintf(fp,"get property(%d)", b);
+			fprintf(fp,"get Property(%d)", b);
 			break;
 		}
 		case OP_PUT_STATIC_PROPERTY:
 		{
 			int a = (int)AtVector(source, ++index);
 			int b = (int)AtVector(source, ++index);
-			fprintf(fp,"put static_property(%d %d)", a, b);
+			fprintf(fp,"put static_Property(%d %d)", a, b);
 			break;
 		}
 		case OP_GET_STATIC_PROPERTY:
 		{
 			int a = (int)AtVector(source, ++index);
 			int b = (int)AtVector(source, ++index);
-			fprintf(fp,"get static_property(%d %d)", a, b);
+			fprintf(fp,"get static_Property(%d %d)", a, b);
 			break;
 		}
 		case OP_STORE:

@@ -16,7 +16,7 @@
 static void DeleteILVariableLocal_typeargs(VectorItem item);
 static void LoadILVariableLocalImpl(il_factor_variable_local * self, Enviroment * env, CallContext* cctx);
 static void LoadILVariableLocal_field(il_factor_variable_local * self, Enviroment * env, CallContext* cctx);
-static void LoadILVariableLocal_property(il_factor_variable_local * self, Enviroment * env, CallContext* cctx);
+static void LoadILVariableLocal_Property(il_factor_variable_local * self, Enviroment * env, CallContext* cctx);
 static void set_gtype(il_factor_variable_local * self, generic_type* gt);
 
 il_factor_variable_local* NewILVariableLocal(StringView namev) {
@@ -49,7 +49,7 @@ void GenerateILVariableLocal(il_factor_variable_local* self, Enviroment* env, Ca
 		}
 		GenerateGetField(env->Bytecode, f, self->u.f_with_i.index);
 	} else if(self->type == VARIABLE_LOCAL_PROPERTY_T) {
-		property* p = self->u.p_with_i.p;
+		Property* p = self->u.p_with_i.p;
 		if(!IsStaticModifier(p->modifier)) {
 			AddOpcodeBuf(env->Bytecode, OP_THIS);
 		}
@@ -130,7 +130,7 @@ static void LoadILVariableLocal_field(il_factor_variable_local * self, Enviromen
 	}
 	self->u.f_with_i = fwi;
 	if(temp == -1) {
-		LoadILVariableLocal_property(self, env, cctx);
+		LoadILVariableLocal_Property(self, env, cctx);
 		return;
 	//フィールドが見つかったなら可視性を確認する
 	} else if(!IsAccessibleFieldClass(GetClassCContext(cctx), f)) {
@@ -140,10 +140,10 @@ static void LoadILVariableLocal_field(il_factor_variable_local * self, Enviromen
 	set_gtype(self, f->gtype);
 }
 
-static void LoadILVariableLocal_property(il_factor_variable_local * self, Enviroment * env, CallContext* cctx) {
+static void LoadILVariableLocal_Property(il_factor_variable_local * self, Enviroment * env, CallContext* cctx) {
 	int temp = -1;
 	type* tp = GetTypeCContext(cctx);
-	property* p = FindTreePropertyClass(TYPE2CLASS(tp), self->namev, &temp);
+	Property* p = FindTreePropertyClass(TYPE2CLASS(tp), self->namev, &temp);
 	if(temp == -1) {
 		p = FindTreeSPropertyClass(TYPE2CLASS(tp), self->namev, &temp);
 	}
@@ -152,9 +152,9 @@ static void LoadILVariableLocal_property(il_factor_variable_local * self, Enviro
 		return;
 	}
 #if defined(_MSC_VER)
-	property_with_index pwi;
+	Property_with_index pwi;
 #else
-	property_with_index pwi = {};
+	Property_with_index pwi = {};
 #endif
 	pwi.p = p;
 	pwi.index = temp;

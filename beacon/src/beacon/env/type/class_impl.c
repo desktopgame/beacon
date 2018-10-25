@@ -45,7 +45,7 @@ static void class_vtable_vec_delete(VectorItem item);
 static void class_DeleteTypeParameter(VectorItem item);
 static void class_generic_type_list_delete(VectorItem item);
 static void DeleteClass_operator_overload(VectorItem item);
-static void DeleteClass_property(VectorItem item);
+static void DeleteClass_Property(VectorItem item);
 
 type * WrapClass(class_ * self) {
 	type* ret = NewType();
@@ -142,7 +142,7 @@ void AddFieldClass(class_ * self, field * f) {
 	}
 }
 
-void AddPropertyClass(class_* self, property* p) {
+void AddPropertyClass(class_* self, Property* p) {
 	if (IsStaticModifier(p->modifier)) {
 		PushVector(self->sprop_list, p);
 	} else {
@@ -395,8 +395,8 @@ void UnlinkClass(class_ * self) {
 	DeleteVector(self->smethod_list, class_DeleteMethod);
 	DeleteVector(self->constructor_list, class_ctor_delete);
 	DeleteVector(self->operator_overload_list, DeleteClass_operator_overload);
-	DeleteVector(self->prop_list, DeleteClass_property);
-	DeleteVector(self->sprop_list, DeleteClass_property);
+	DeleteVector(self->prop_list, DeleteClass_Property);
+	DeleteVector(self->sprop_list, DeleteClass_Property);
 	DeleteVTable(self->vt);
 	DeleteOperatorVt(self->ovt);
 	DeleteVector(self->vt_vec, class_vtable_vec_delete);
@@ -545,7 +545,7 @@ static void DeleteClass_operator_overload(VectorItem item) {
 	DeleteOperatorOverload(e);
 }
 
-static void DeleteClass_property(VectorItem item) {
-	property* e = (property*)item;
+static void DeleteClass_Property(VectorItem item) {
+	Property* e = (Property*)item;
 	DeleteProperty(e);
 }

@@ -16,7 +16,7 @@ static void DeleteInterface_method(VectorItem item);
 static void interface_DeleteTypeParameter(VectorItem item);
 static void interface_generic_type_list_delete(VectorItem item);
 static void FlattenMethodInterfaceImpl(interface_* self, Vector* dest, int depth);
-static void DeleteInterface_property(VectorItem item);
+static void DeleteInterface_Property(VectorItem item);
 
 type * WrapInterface(interface_ * self) {
 	type* ret = NewType();
@@ -43,7 +43,7 @@ void AddMethodInterface(interface_ * self, Method * m) {
 	PushVector(self->method_list, m);
 }
 
-void AddPropertyInterface(interface_* self, property* p) {
+void AddPropertyInterface(interface_* self, Property* p) {
 	PushVector(self->prop_list, p);
 }
 
@@ -103,7 +103,7 @@ void CreateVTableInterface(interface_ * self) {
 
 void UnlinkInterface(interface_ * self) {
 	DeleteVector(self->method_list, DeleteInterface_method);
-	DeleteVector(self->prop_list, DeleteInterface_property);
+	DeleteVector(self->prop_list, DeleteInterface_Property);
 	DeleteVector(self->impl_list, VectorDeleterOfNull);
 	DeleteVTable(self->vt);
 }
@@ -204,7 +204,7 @@ static void FlattenMethodInterfaceImpl(interface_* self, Vector* dest, int depth
 	}
 }
 
-static void DeleteInterface_property(VectorItem item) {
-	property* e = (property*)item;
+static void DeleteInterface_Property(VectorItem item) {
+	Property* e = (Property*)item;
 	DeleteProperty(e);
 }

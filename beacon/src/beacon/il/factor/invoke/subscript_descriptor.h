@@ -4,7 +4,7 @@
 struct operator_overload;
 struct SymbolEntry;
 struct field;
-struct property;
+struct Property;
 
 typedef enum subscript_tag {
 	SUBSCRIPT_LOCAL_T,
@@ -20,7 +20,7 @@ typedef struct subscript_descriptor {
 	union {
 		struct SymbolEntry* local;
 		struct field* fi;
-		struct property* prop;
+		struct Property* prop;
 	} u;
 } subscript_descriptor;
 

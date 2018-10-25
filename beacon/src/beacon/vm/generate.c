@@ -14,7 +14,7 @@ void GenerateGetField(OpcodeBuf* buf, field* fi, int index) {
 	}
 }
 
-void GenerateGetProperty(OpcodeBuf* buf, property* prop, int index) {
+void GenerateGetProperty(OpcodeBuf* buf, Property* prop, int index) {
 	if(prop->is_short) {
 		GenerateGetField(buf, prop->source_ref, GetFieldByPropertyClass(prop->parent->u.class_, prop));
 	} else {
@@ -40,7 +40,7 @@ void GeneratePutField(OpcodeBuf* buf, field* fi, int index) {
 	}
 }
 
-void GeneratePutProperty(OpcodeBuf* buf, property* prop, int index) {
+void GeneratePutProperty(OpcodeBuf* buf, Property* prop, int index) {
 	if(prop->is_short) {
 		GeneratePutField(buf, prop->source_ref, GetFieldByPropertyClass(prop->parent->u.class_, prop));
 	} else {

@@ -1,4 +1,4 @@
-#include "il_factor_property_impl.h"
+#include "il_factor_Property_impl.h"
 #include "../../util/mem.h"
 #include "../../vm/enviroment.h"
 #include "../../vm/generate.h"
@@ -8,8 +8,8 @@
 #include <assert.h>
 
 
-il_factor_property* MallocILPropertyAccess(const char* filename, int lineno) {
-	il_factor_property* ret = mem_malloc(sizeof(il_factor_property), filename, lineno);
+il_factor_Property* MallocILPropertyAccess(const char* filename, int lineno) {
+	il_factor_Property* ret = mem_malloc(sizeof(il_factor_Property), filename, lineno);
 	ret->fact = NULL;
 	ret->index = -1;
 	ret->namev = ZERO_VIEW;
@@ -17,12 +17,12 @@ il_factor_property* MallocILPropertyAccess(const char* filename, int lineno) {
 	return ret;
 }
 
-void GenerateILPropertyAccess(il_factor_property* self, Enviroment* env, CallContext* cctx) {
+void GenerateILPropertyAccess(il_factor_Property* self, Enviroment* env, CallContext* cctx) {
 	GenerateILFactor(self->fact, env, cctx);
 	GenerateGetProperty(env->Bytecode, self->p, self->index);
 }
 
-void LoadILProperty(il_factor_property* self, Enviroment* env, CallContext* cctx) {
+void LoadILProperty(il_factor_Property* self, Enviroment* env, CallContext* cctx) {
 	generic_type* receiver = EvalILFactor(self->fact, env, cctx);
 	type* receiverT = GENERIC2TYPE(receiver);
 	int temp = -1;
@@ -37,11 +37,11 @@ void LoadILProperty(il_factor_property* self, Enviroment* env, CallContext* cctx
 	}
 }
 
-generic_type* EvalILProperty(il_factor_property* self, Enviroment* env, CallContext* cctx) {
+generic_type* EvalILProperty(il_factor_Property* self, Enviroment* env, CallContext* cctx) {
 	return self->p->gtype;
 }
 
-char* ILPropertyToString(il_factor_property* self, Enviroment* env) {
+char* ILPropertyToString(il_factor_Property* self, Enviroment* env) {
 	Buffer* sb = NewBuffer();
 	char* name = ILFactorToString(self->fact, env);
 	AppendsBuffer(sb, name);
@@ -51,7 +51,7 @@ char* ILPropertyToString(il_factor_property* self, Enviroment* env) {
 	return ReleaseBuffer(sb);
 }
 
-void DeleteILPropertyAccess(il_factor_property* self) {
+void DeleteILPropertyAccess(il_factor_Property* self) {
 	DeleteILFactor(self->fact);
 	MEM_FREE(self);
 }

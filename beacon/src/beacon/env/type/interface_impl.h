@@ -9,7 +9,7 @@
 #include "../../util/string_pool.h"
 #include "interface_validate.h"
 struct Method;
-struct property;
+struct Property;
 struct Enviroment;
 struct generic_type;
 struct type;
@@ -53,7 +53,7 @@ void AddMethodInterface(interface_* self, struct Method* m);
  * @param self
  * @param p
  */
-void AddPropertyInterface(interface_* self, struct property* p);
+void AddPropertyInterface(interface_* self, struct Property* p);
 
 /**
  * インターフェイスからメソッドを検索します.

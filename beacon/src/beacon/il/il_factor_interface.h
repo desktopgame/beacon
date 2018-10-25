@@ -69,7 +69,7 @@ struct il_factor_member_op;
 struct il_factor_instanceof;
 struct il_factor_explicit_binary_op;
 struct il_factor_explicit_unary_op;
-struct il_factor_property;
+struct il_factor_Property;
 struct il_factor_subscript;
 
 /**
@@ -101,7 +101,7 @@ typedef struct il_factor {
 		struct il_factor_instanceof* instanceof_;
 		struct il_factor_explicit_binary_op* exp_binary_op;
 		struct il_factor_explicit_unary_op* exp_unary_op;
-		struct il_factor_property* prop;
+		struct il_factor_Property* prop;
 		struct il_factor_subscript* subscript;
 	} u;
 } il_factor;

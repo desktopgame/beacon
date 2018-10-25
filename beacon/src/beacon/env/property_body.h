@@ -2,7 +2,7 @@
 #define BEACON_ENV_PROPERTY_BODY_H
 #include "../ast/access_level.h"
 struct Enviroment;
-struct property;
+struct Property;
 
 typedef enum PropertyBodyTag {
 	PROPERTY_SET_T,
@@ -10,7 +10,7 @@ typedef enum PropertyBodyTag {
 } PropertyBodyTag;
 
 typedef struct PropertyBody {
-	struct property* Parent;
+	struct Property* Parent;
 	AccessLevel Access;
 	PropertyBodyTag Tag;
 	struct Enviroment* Env;

@@ -149,8 +149,8 @@ static void il_factor_member_op_check_prop(il_factor_member_op* self, Enviroment
 	const char* name = Ref2Str(self->namev);
 	#endif
 	type* ctype = receiver_type->core_type;
-	property* p = FindTreePropertyClass(TYPE2CLASS(ctype), self->namev, &temp);
-	il_factor_property* factp = il_factor_property_new();
+	Property* p = FindTreePropertyClass(TYPE2CLASS(ctype), self->namev, &temp);
+	il_factor_Property* factp = il_factor_Property_new();
 	factp->fact = self->fact;
 	factp->namev = self->namev;
 	factp->p = p;
@@ -175,8 +175,8 @@ static void il_factor_member_op_check_prop(il_factor_member_op* self, Enviroment
 static void il_factor_member_op_check_static_prop(il_factor_member_op* self, Enviroment* env, CallContext* cctx, generic_type* receiver_type,bool* swap) {
 	int temp = -1;
 	type* ctype = receiver_type->core_type;
-	property* p = FindTreeSPropertyClass(TYPE2CLASS(ctype), self->namev, &temp);
-	il_factor_property* factp = il_factor_property_new();
+	Property* p = FindTreeSPropertyClass(TYPE2CLASS(ctype), self->namev, &temp);
+	il_factor_Property* factp = il_factor_Property_new();
 	factp->fact = self->fact;
 	factp->namev = self->namev;
 	factp->p = p;

@@ -4,7 +4,7 @@
 #include <stdbool.h>
 struct class_;
 struct Method;
-struct property;
+struct Property;
 struct field;
 struct constructor;
 /**
@@ -22,7 +22,7 @@ bool IsImplementInterfaceMethodValidClass(struct class_* cls, struct Method** ou
  * @param out
  * @return
  */
-bool IsImplementInterfacePropertyValidClass(struct class_* cls, struct property** out);
+bool IsImplementInterfacePropertyValidClass(struct class_* cls, struct Property** out);
 
 /**
  * クラスが親の抽象メソッドを正しく実装しているなら true.
@@ -48,7 +48,7 @@ bool IsValidFieldClass(struct class_* cls, struct field** out);
  * @param out
  * @return
  */
-bool IsValidPropertyClass(struct class_* self, struct property** out);
+bool IsValidPropertyClass(struct class_* self, struct Property** out);
 
 /**
  * 全てのメソッドを巡回して、全てにおいてパラメータ名の重複がないなら true.

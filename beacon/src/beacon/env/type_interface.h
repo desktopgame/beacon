@@ -22,7 +22,7 @@ struct class_;
 struct interface_;
 struct field;
 struct Method;
-struct property;
+struct Property;
 struct Enviroment;
 struct vtable;
 struct generic_type;
@@ -106,7 +106,7 @@ void AddFieldType(type* self, struct field* f);
  * @param self
  * @param p
  */
-void AddPropertyType(type* self, struct property* p);
+void AddPropertyType(type* self, struct Property* p);
 
 /**
  * この型にメソッドを追加します.
