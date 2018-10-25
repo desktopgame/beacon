@@ -206,8 +206,8 @@ bool CLBC_property_impl(class_loader* self, il_type* iltype, type* tp, ILPropert
 	property* pr = prop;
 	ILProperty* ilpr = ilprop;
 	if(pr->is_short) { return true; }
-	property_body* set = pr->set;
-	property_body* get = pr->get;
+	PropertyBody* set = pr->set;
+	PropertyBody* get = pr->get;
 	Vector* set_stmt_list = ilpr->Set->Statements;
 	Vector* get_stmt_list = ilpr->Get->Statements;
 	set->env->ContextRef = self;

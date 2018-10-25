@@ -22,7 +22,7 @@
 struct object;
 struct field;
 struct property;
-struct property_body;
+struct PropertyBody;
 struct Method;
 struct constructor;
 struct generic_type;

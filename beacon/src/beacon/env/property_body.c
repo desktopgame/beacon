@@ -2,15 +2,15 @@
 #include "../util/mem.h"
 #include "../vm/enviroment.h"
 
-property_body* MallocPropertyBody(PropertyBodyTag tag, const char* filename, int lineno) {
-	property_body* ret = mem_malloc(sizeof(property_body), filename, lineno);
+PropertyBody* MallocPropertyBody(PropertyBodyTag tag, const char* filename, int lineno) {
+	PropertyBody* ret = mem_malloc(sizeof(PropertyBody), filename, lineno);
 	ret->tag = tag;
 	ret->env = NewEnviroment();
 	ret->parent = NULL;
 	return ret;
 }
 
-void DeletePropertyBody(property_body* self) {
+void DeletePropertyBody(PropertyBody* self) {
 	DeleteEnviroment(self->env);
 	MEM_FREE(self);
 }

@@ -117,7 +117,7 @@ bool IsAccessiblePropertyClass(class_* self, struct property* p);
  * @param pb
  * @return
  */
-bool IsAccessiblePropertyAccessorClass(class_* self, struct property_body* pb);
+bool IsAccessiblePropertyAccessorClass(class_* self, struct PropertyBody* pb);
 
 /**
  * 指定のプロパティが内部的に使用しているフィールドを返します.

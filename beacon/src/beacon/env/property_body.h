@@ -9,15 +9,15 @@ typedef enum PropertyBodyTag {
 	PROPERTY_GET_T
 } PropertyBodyTag;
 
-typedef struct property_body {
+typedef struct PropertyBody {
 	struct property* parent;
 	AccessLevel access;
 	PropertyBodyTag tag;
 	struct Enviroment* env;
-} property_body;
+} PropertyBody;
 
-#define property_body_new(tag) (MallocPropertyBody(tag, __FILE__, __LINE__))
-property_body* MallocPropertyBody(PropertyBodyTag tag, const char* filename, int lineno);
+#define PropertyBody_new(tag) (MallocPropertyBody(tag, __FILE__, __LINE__))
+PropertyBody* MallocPropertyBody(PropertyBodyTag tag, const char* filename, int lineno);
 
-void DeletePropertyBody(property_body* self);
+void DeletePropertyBody(PropertyBody* self);
 #endif

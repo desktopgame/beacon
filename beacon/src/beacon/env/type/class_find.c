@@ -157,7 +157,7 @@ bool IsAccessiblePropertyClass(class_* self, property* p) {
 	return false;
 }
 
-bool IsAccessiblePropertyAccessorClass(class_* self, property_body* pb) {
+bool IsAccessiblePropertyAccessorClass(class_* self, PropertyBody* pb) {
 	assert(pb != NULL);
 	if(pb->access == ACCESS_PUBLIC_T) {
 		return true;
