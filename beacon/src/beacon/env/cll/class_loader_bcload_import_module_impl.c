@@ -42,9 +42,9 @@ void CLBC_import(class_loader* self, Vector* ilimports) {
 void CLBC_new_load(class_loader * self, char * fullPath) {
 	CL_ERROR(self);
 	ScriptContext* ctx = GetCurrentScriptContext();
-	ctx->heap->AcceptBlocking++;
+	ctx->Heap->AcceptBlocking++;
 	CLBC_new_load_internal(self, fullPath);
-	ctx->heap->AcceptBlocking--;
+	ctx->Heap->AcceptBlocking--;
 }
 
 class_loader* CLBC_import_new(class_loader* self, char* full_path) {

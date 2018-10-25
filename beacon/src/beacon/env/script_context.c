@@ -58,7 +58,7 @@ void CloseScriptContext() {
 }
 
 void BootstrapScriptContext(ScriptContext* self) {
-	self->heap->AcceptBlocking++;
+	self->Heap->AcceptBlocking++;
 	//プリロード
 	Namespace* beacon = CreateNamespaceAtRoot(InternString("beacon"));
 	Namespace* lang = AddNamespaceNamespace(beacon, InternString("lang"));
@@ -100,7 +100,7 @@ void BootstrapScriptContext(ScriptContext* self) {
 
 	SpecialLoadClassLoader(self->BootstrapClassLoader, "beacon/lang/World.bc");
 	//退避していたコンテキストを復帰
-	self->heap->AcceptBlocking--;
+	self->Heap->AcceptBlocking--;
 }
 
 void EachStaticScriptContext(ScriptContext* self, static_each act) {
@@ -125,7 +125,7 @@ void ClearScriptContext(ScriptContext* self) {
 }
 
 object* IInternScriptContext(ScriptContext* self, int i) {
-	Heap* he = self->heap;
+	Heap* he = self->Heap;
 	NumericMap* cell = GetNumericMapCell(self->IntegerCacheMap, i);
 	he->AcceptBlocking++;
 	if(cell == NULL) {
@@ -168,14 +168,14 @@ static ScriptContext* ScriptContext_malloc(void) {
 	ScriptContext* ret = (ScriptContext*)MEM_MALLOC(sizeof(ScriptContext));
 	ret->NamespaceMap = NewNumericMap();
 	ret->ClassLoaderMap = NewTreeMap();
-	ret->heap = NewHeap();
+	ret->Heap = NewHeap();
 	ret->TypeList = NewVector();
 	ret->ThreadList = NewVector();
 	ret->BootstrapClassLoader = NULL;
 	ret->AllGenericList = NewVector();
-	ret->true_obj = NULL;
-	ret->false_obj = NULL;
-	ret->null_obj = NULL;
+	ret->True = NULL;
+	ret->False = NULL;
+	ret->Null = NULL;
 #if defined(_MSC_VER)
 	char* path = GetAbsolutePath("script-lib/beacon/lang");
 	ret->IncludeList = GetFiles(path);
@@ -194,21 +194,21 @@ static ScriptContext* ScriptContext_malloc(void) {
 
 static void ScriptContext_free(ScriptContext* self) {
 	int aa = CountActiveObject();
-	assert(self->heap->CollectBlocking == 0);
+	assert(self->Heap->CollectBlocking == 0);
 	//全ての例外フラグをクリア
 	Frame* thv = GetSGThreadFrameRef(GetCurrentSGThread(self));
 	CatchVM(thv);
 	DeleteClassLoader(self->BootstrapClassLoader);
-	if(self->null_obj != NULL) {
-		IgnoreHeap(self->heap, self->null_obj);
-		self->null_obj->paint = PAINT_ONEXIT_T;
-		DestroyObject(self->null_obj);
+	if(self->Null != NULL) {
+		IgnoreHeap(self->Heap, self->Null);
+		self->Null->paint = PAINT_ONEXIT_T;
+		DestroyObject(self->Null);
 	}
-	DeleteHeap(self->heap);
+	DeleteHeap(self->Heap);
 	DeleteVector(self->NegativeIntegerCacheList, CacheScriptContext_delete);
 	DeleteVector(self->PositiveIntegerCacheList, CacheScriptContext_delete);
 	DeleteNumericMap(self->IntegerCacheMap, ScriptContext_mcache_delete);
-	//DeleteObject(self->null_obj);
+	//DeleteObject(self->Null);
 	CollectGenericType();
 	DeleteVector(self->AllGenericList, VectorDeleterOfNull);
 	int x = CountActiveObject();

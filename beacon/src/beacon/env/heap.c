@@ -27,7 +27,7 @@ Heap * NewHeap() {
 Heap * GetHeap() {
 	ScriptContext* ctx = GetCurrentScriptContext();
 	if(ctx == NULL) { return NULL; }
-	return ctx->heap;
+	return ctx->Heap;
 }
 
 void AddHeap(Heap * self, object * obj) {

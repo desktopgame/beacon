@@ -36,10 +36,10 @@ typedef struct ScriptContext {
 	NumericMap* IntegerCacheMap;
 	bool IsPrintError;
 	bool IsAbortOnError;
-	struct Heap* heap;
-	struct object* true_obj;
-	struct object* false_obj;
-	struct object* null_obj;
+	struct Heap* Heap;
+	struct object* True;
+	struct object* False;
+	struct object* Null;
 } ScriptContext;
 
 /**

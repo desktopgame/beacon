@@ -122,36 +122,36 @@ object * GetBoolObject(bool b) {
 
 object * GetTrueObject() {
 	ScriptContext* ctx = GetCurrentScriptContext();
-	if (ctx->true_obj == NULL) {
-		ctx->true_obj = object_malloc(OBJECT_BOOL_T);
-		ctx->true_obj->u.bool_ = true;
-		ctx->true_obj->gtype = GENERIC_BOOL;
-		ctx->true_obj->vptr = TYPE2CLASS(TYPE_BOOL)->vt;
-		ctx->true_obj->paint = PAINT_ONEXIT_T;
+	if (ctx->True == NULL) {
+		ctx->True = object_malloc(OBJECT_BOOL_T);
+		ctx->True->u.bool_ = true;
+		ctx->True->gtype = GENERIC_BOOL;
+		ctx->True->vptr = TYPE2CLASS(TYPE_BOOL)->vt;
+		ctx->True->paint = PAINT_ONEXIT_T;
 	}
-	return ctx->true_obj;
+	return ctx->True;
 }
 
 object * GetFalseObject() {
 	ScriptContext* ctx = GetCurrentScriptContext();
-	if (ctx->false_obj == NULL) {
-		ctx->false_obj = object_malloc(OBJECT_BOOL_T);
-		ctx->false_obj->u.bool_ = false;
-		ctx->false_obj->gtype = GENERIC_BOOL;
-		ctx->false_obj->vptr = TYPE2CLASS(TYPE_BOOL)->vt;
-		ctx->false_obj->paint = PAINT_ONEXIT_T;
+	if (ctx->False == NULL) {
+		ctx->False = object_malloc(OBJECT_BOOL_T);
+		ctx->False->u.bool_ = false;
+		ctx->False->gtype = GENERIC_BOOL;
+		ctx->False->vptr = TYPE2CLASS(TYPE_BOOL)->vt;
+		ctx->False->paint = PAINT_ONEXIT_T;
 	}
-	return ctx->false_obj;
+	return ctx->False;
 }
 
 object * GetNullObject() {
 	ScriptContext* ctx = GetCurrentScriptContext();
-	if (ctx->null_obj == NULL) {
-		ctx->null_obj = object_malloc(OBJECT_NULL_T);
-		ctx->null_obj->gtype = generic_NewType(TYPE_NULL);
-		ctx->null_obj->paint = PAINT_ONEXIT_T;
+	if (ctx->Null == NULL) {
+		ctx->Null = object_malloc(OBJECT_NULL_T);
+		ctx->Null->gtype = generic_NewType(TYPE_NULL);
+		ctx->Null->paint = PAINT_ONEXIT_T;
 	}
-	return ctx->null_obj;
+	return ctx->Null;
 }
 
 void IncObject(object * self) {
