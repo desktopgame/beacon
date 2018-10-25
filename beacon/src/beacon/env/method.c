@@ -418,7 +418,7 @@ static Method* create_has_next(Method* self, type* ty, class_loader* cll, Vector
 	}
 	(*out_op_len) = envSmt->Bytecode->Instructions->Length;
 	DeleteCallContext(cctx);
-	smt->env = envSmt;
+	smt->Env = envSmt;
 	mt->Kind.Script = smt;
 	mt->Parent = ty;
 	return mt;
@@ -446,8 +446,7 @@ static Method* create_next(Method* self, type* ty, class_loader* cll,generic_typ
 	cctx->Scope = self->Parent->location;
 	cctx->Ty = self->Parent;
 	cctx->Kind.Method = self;
-	
-	smt->env = envSmt;
+	smt->Env = envSmt;
 	mt->Kind.Script = smt;
 	mt->Parent = ty;
 	DeleteCallContext(cctx);

@@ -627,7 +627,7 @@ bool CLBC_corutine(class_loader* self, Method* mt, Enviroment* env,  Vector* ilp
 			AddOpcodeBuf(env->Bytecode, OP_LOAD);
 			AddOpcodeBuf(env->Bytecode, i + 1);
 		}
-		mt->Kind.Script->env = env;
+		mt->Kind.Script->Env = env;
 		AddOpcodeBuf(env->Bytecode, OP_NEW_INSTANCE);
 		AddOpcodeBuf(env->Bytecode, iterT->absolute_index);
 		AddOpcodeBuf(env->Bytecode, 0);
@@ -636,7 +636,7 @@ bool CLBC_corutine(class_loader* self, Method* mt, Enviroment* env,  Vector* ilp
 	}
 	//NOTE:ここなら名前空間を設定出来る
 	CLBC_body(self, ilstmts, env, cctx, range);
-	mt->Kind.Script->env = env;
+	mt->Kind.Script->Env = env;
 	return true;
 }
 

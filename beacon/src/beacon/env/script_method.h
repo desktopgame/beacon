@@ -11,8 +11,7 @@ struct Enviroment;
  * スクリプトで実装されたメソッド.
  */
 typedef struct ScriptMethod {
-//	Vector* source;
-	Enviroment* env;
+	Enviroment* Env;
 } ScriptMethod;
 
 /**

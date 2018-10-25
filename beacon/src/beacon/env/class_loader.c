@@ -243,7 +243,7 @@ static void LoadClassLoader_toplevel_function(class_loader* self) {
 		cctx->Kind.Method = m;
 		namespace_* loc = GetNamespaceCContext(cctx);
 		env->ContextRef = self;
-		sm->env = env;
+		sm->Env = env;
 		m->Access = ACCESS_PRIVATE_T;
 		m->Kind.Script = sm;
 		m->Parent = worldT;
@@ -282,7 +282,7 @@ static void LoadClassLoader_toplevel_function(class_loader* self) {
 		cctx->Scope = GetLangNamespace();
 		cctx->Ty = worldT;
 		cctx->Kind.Method = m;
-		CLBC_corutine(self, m, sm->env, ilfunc->Parameters, ilfunc->Statements, cctx, GetLangNamespace());
+		CLBC_corutine(self, m, sm->Env, ilfunc->Parameters, ilfunc->Statements, cctx, GetLangNamespace());
 		DeleteCallContext(cctx);
 	}
 }

@@ -13,7 +13,7 @@
 
 ScriptMethod * NewScriptMethod() {
 	ScriptMethod* ret = (ScriptMethod*)MEM_MALLOC(sizeof(ScriptMethod));
-	ret->env = NULL;
+	ret->Env = NULL;
 	return ret;
 }
 
@@ -50,7 +50,7 @@ void ExecuteScriptMethod(ScriptMethod * self, Method* parent, Frame* fr, Envirom
 		AssignVector(sub->TypeArgs, (typeparams - i) - 1, e);
 		AssignVector(aTArgs, (typeparams - i) - 1, e);
 	}
-	ExecuteVM(sub, self->env);
+	ExecuteVM(sub, self->Env);
 	//戻り値が Void 以外ならスタックトップの値を引き継ぐ
 	//例外によって終了した場合には戻り値がない
 	if(parent->ReturnGType != TYPE_VOID->generic_self &&
@@ -65,6 +65,6 @@ void ExecuteScriptMethod(ScriptMethod * self, Method* parent, Frame* fr, Envirom
 }
 
 void DeleteScriptMethod(ScriptMethod * self) {
-	DeleteEnviroment(self->env);
+	DeleteEnviroment(self->Env);
 	MEM_FREE(self);
 }
