@@ -440,9 +440,9 @@ bool CLBC_ctor_decl(class_loader* self, il_type* iltype, type* tp, ILConstructor
 	class_* classz = tp->u.class_;
 	//実行時のメソッド情報を作成する
 	Constructor* cons = NewConstructor();
-	Vector* parameter_list = cons->parameter_list;
-	cons->access = ilcons->Access;
-	cons->parent = tp;
+	Vector* parameter_list = cons->Parameters;
+	cons->Access = ilcons->Access;
+	cons->Parent = tp;
 	CallContext* cctx = NewCallContext(CALL_CTOR_T);
 	cctx->Scope = scope;
 	cctx->Ty = tp;
@@ -455,8 +455,8 @@ bool CLBC_ctor_decl(class_loader* self, il_type* iltype, type* tp, ILConstructor
 		Parameter* param = NewParameter(ilp->Name);
 		PushVector(parameter_list, param);
 	}
-	CLBC_parameter_list(self, scope, ilcons->Parameters, cons->parameter_list, cctx);
-	CLBC_parameter_list_ctor(cons->parameter_list);
+	CLBC_parameter_list(self, scope, ilcons->Parameters, cons->Parameters, cctx);
+	CLBC_parameter_list_ctor(cons->Parameters);
 	AddConstructorClass(classz, cons);
 	DeleteCallContext(cctx);
 	return true;
@@ -472,7 +472,7 @@ bool CLBC_ctor_impl(class_loader* self, il_type* iltype, type* tp, ILConstructor
 	cctx->Scope = scope;
 	cctx->Ty = tp;
 	cctx->Kind.Ctor = cons;
-	for (int i = 0; i < cons->parameter_list->Length; i++) {
+	for (int i = 0; i < cons->Parameters->Length; i++) {
 		ILParameter* ilparam = (ILParameter*)AtVector(ilcons->Parameters, i);
 		EntrySymbolTable(
 			env->Symboles,
@@ -487,7 +487,7 @@ bool CLBC_ctor_impl(class_loader* self, il_type* iltype, type* tp, ILConstructor
 	CLBC_chain(self, iltype, tp, ilcons, ilcons->Chain, env);
 	//NOTE:ここなら名前空間を設定出来る
 	CLBC_body(self, ilcons->Statements, env, cctx, scope);
-	cons->env = env;
+	cons->Env = env;
 	DeleteCallContext(cctx);
 	return true;
 }

@@ -358,7 +358,7 @@ object * NewInstanceClass(class_* self, Frame* fr, Vector* args, Vector* type_ar
 			PushVector(sub->TypeArgs, AtVector(type_args, i));
 		}
 	}
-	ExecuteVM(sub, ctor->env);
+	ExecuteVM(sub, ctor->Env);
 	object* inst = PopVector(sub->ValueStack);
 	h->CollectBlocking++;
 	DeleteFrame(sub);
@@ -377,7 +377,7 @@ void LinkAllClass(class_ * self) {
 	}
 	for (int i = 0; i < self->constructor_list->Length; i++) {
 		Constructor* ctor = (Constructor*)AtVector(self->constructor_list, i);
-		ctor->parent = self->parent;
+		ctor->Parent = self->parent;
 	}
 }
 

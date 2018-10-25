@@ -12,10 +12,10 @@ struct Frame;
  * コンストラクタを表す構造体.
  */
 typedef struct Constructor {
-	struct type* parent;
-	struct Enviroment* env;
-	Vector* parameter_list;
-	AccessLevel access;
+	struct type* Parent;
+	struct Enviroment* Env;
+	Vector* Parameters;
+	AccessLevel Access;
 } Constructor;
 
 /**

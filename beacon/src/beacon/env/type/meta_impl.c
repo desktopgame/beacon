@@ -216,7 +216,7 @@ Constructor* MetaScopedILFindConstructor(class_* context, Vector* ctor_vec, Vect
 			continue;
 		}
 		//引数の個数が違うので無視
-		if (ctor->parameter_list->Length != ilargs->Length) {
+		if (ctor->Parameters->Length != ilargs->Length) {
 			continue;
 		}
 		//引数がひとつもないので、
@@ -226,7 +226,7 @@ Constructor* MetaScopedILFindConstructor(class_* context, Vector* ctor_vec, Vect
 			return ctor;
 		}
 		//もっともスコアの高いメソッドを選択する
-		int score = MetaILCalcScore(ctor->parameter_list, ilargs, env, cctx);
+		int score = MetaILCalcScore(ctor->Parameters, ilargs, env, cctx);
 		if(score == -1) {
 			continue;
 		}
@@ -246,12 +246,12 @@ Constructor* MetaScopedRFindConstructor(class_* context, Vector* ctor_vec, Vecto
 	for (int i = 0; i < ctor_vec->Length; i++) {
 		VectorItem ve = AtVector(ctor_vec, i);
 		Constructor* ctor = (Constructor*)ve;
-		class_* cls = TYPE2CLASS(ctor->parent);
+		class_* cls = TYPE2CLASS(ctor->Parent);
 		//引数の個数が違うので無視
-		if (ctor->parameter_list->Length != gargs->Length) {
+		if (ctor->Parameters->Length != gargs->Length) {
 			continue;
 		}
-		int score = MetaRCalcScore(ctor->parameter_list, gargs, typeargs, fr);
+		int score = MetaRCalcScore(ctor->Parameters, gargs, typeargs, fr);
 		if (score < min) {
 			min = score;
 			ret = ctor;
@@ -309,14 +309,14 @@ bool IsMetaConstructorAccessValid(Constructor* ctor, CallContext* cctx) {
 	class_* context = GetClassCContext(cctx);
 	//privateメソッドなのに現在のコンテキストではない
 	if(context != NULL &&
-		ctor->access == ACCESS_PRIVATE_T &&
-		TYPE2CLASS(ctor->parent) != context) {
+		ctor->Access == ACCESS_PRIVATE_T &&
+		TYPE2CLASS(ctor->Parent) != context) {
 		return false;
 	}
 	//protectedメソッドなのにそのサブクラスではない
 	if(context != NULL &&
-		ctor->access == ACCESS_PROTECTED_T &&
-		DistanceClass(TYPE2CLASS(ctor->parent), context) < 0) {
+		ctor->Access == ACCESS_PROTECTED_T &&
+		DistanceClass(TYPE2CLASS(ctor->Parent), context) < 0) {
 		return false;
 	}
 	return true;

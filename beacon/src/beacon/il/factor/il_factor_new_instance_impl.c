@@ -54,7 +54,7 @@ void GenerateILNewInstance(il_factor_new_instance * self, Enviroment * env, Call
 	}
 	//クラスとコンストラクタのインデックスをプッシュ
 	AddOpcodeBuf(env->Bytecode, OP_NEW_INSTANCE);
-	AddOpcodeBuf(env->Bytecode, self->c->parent->absolute_index);
+	AddOpcodeBuf(env->Bytecode, self->c->Parent->absolute_index);
 	AddOpcodeBuf(env->Bytecode, self->constructor_index);
 }
 
@@ -64,8 +64,8 @@ void LoadILNewInstance(il_factor_new_instance * self, Enviroment * env, CallCont
 		return;
 	}
 	//抽象クラスはインスタンス化できない
-	if(IsAbstractType(self->c->parent)) {
-		ThrowBCError(BCERROR_CONSTRUCT_ABSTRACT_TYPE_T, Ref2Str(GetTypeName(self->c->parent)));
+	if(IsAbstractType(self->c->Parent)) {
+		ThrowBCError(BCERROR_CONSTRUCT_ABSTRACT_TYPE_T, Ref2Str(GetTypeName(self->c->Parent)));
 	}
 }
 
@@ -76,13 +76,13 @@ generic_type* EvalILNewInstance(il_factor_new_instance * self, Enviroment * env,
 	}
 	//型引数がないのでそのまま
 	if (self->type_args->Length == 0) {
-		generic_type* ret = RefGenericType(self->c->parent);
+		generic_type* ret = RefGenericType(self->c->Parent);
 		return ret;
 	}
 	//FQCNCache typename_group
 	if (self->instance_type == NULL) {
 		Namespace* scope = NULL;
-		generic_type* a = generic_NewType(self->c->parent);
+		generic_type* a = generic_NewType(self->c->Parent);
 		for (int i = 0; i < self->type_args->Length; i++) {
 			ILTypeArgument* e = (ILTypeArgument*)AtVector(self->type_args, i);
 			generic_type* arg = ResolveImportManager(GetNamespaceCContext(cctx), e->GCache, cctx);

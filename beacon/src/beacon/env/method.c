@@ -338,17 +338,17 @@ static Constructor* create_delegate_ctor(Method* self, type* ty, class_loader* c
 	Enviroment* envIterCons = NewEnviroment();
 	//コルーチンを生成したオブジェクトを受け取るパラメータ追加
 	Parameter* coroOwnerParam = NewParameter(InternString("owner"));
-	PushVector(iterCons->parameter_list, coroOwnerParam);
+	PushVector(iterCons->Parameters, coroOwnerParam);
 	envIterCons->ContextRef = cll;
 	//コルーチンに渡された引数を引き継ぐパラメータ追加
 	for(int i=0; i<self->Parameters->Length; i++) {
 		Parameter* methP = (Parameter*)AtVector(self->Parameters, i);
 		Parameter* consP = NewParameter(methP->Name);
 		consP->GType = methP->GType;
-		PushVector(iterCons->parameter_list, consP);
+		PushVector(iterCons->Parameters, consP);
 	}
-	for (int i = 0; i < iterCons->parameter_list->Length; i++) {
-		Parameter* e = (Parameter*)AtVector(iterCons->parameter_list, i);
+	for (int i = 0; i < iterCons->Parameters->Length; i++) {
+		Parameter* e = (Parameter*)AtVector(iterCons->Parameters, i);
 		EntrySymbolTable(
 			envIterCons->Symboles,
 			e->GType,
@@ -367,9 +367,9 @@ static Constructor* create_delegate_ctor(Method* self, type* ty, class_loader* c
 	AddOpcodeBuf(envIterCons->Bytecode, (VectorItem)OP_ALLOC_FIELD);
 	AddOpcodeBuf(envIterCons->Bytecode, (VectorItem)ty->absolute_index);
 	AddOpcodeBuf(envIterCons->Bytecode, OP_CORO_INIT);
-	AddOpcodeBuf(envIterCons->Bytecode, iterCons->parameter_list->Length);
+	AddOpcodeBuf(envIterCons->Bytecode, iterCons->Parameters->Length);
 	AddOpcodeBuf(envIterCons->Bytecode, op_len);
-	iterCons->env = envIterCons;
+	iterCons->Env = envIterCons;
 	return iterCons;
 }
 

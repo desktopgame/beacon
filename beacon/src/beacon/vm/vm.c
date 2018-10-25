@@ -571,11 +571,11 @@ static void vm_run(Frame* self, Enviroment * env, int pos, int deferStart) {
 				CallFrame* cfr = PushCallContext(GetSGThreadCContext(), FRAME_STATIC_INVOKE_T);
 				cfr->Kind.StaticInvoke.Args = NewVector();
 				cfr->Kind.StaticInvoke.TypeArgs = NewVector();
-				for (int i = 0; i < ctor->parameter_list->Length; i++) {
+				for (int i = 0; i < ctor->Parameters->Length; i++) {
 					VectorItem e = PopVector(self->ValueStack);
 					object* o = (object*)e;
 					PushVector(sub->ValueStack, NON_NULL(e));
-					AssignVector(cfr->Kind.StaticInvoke.Args, (ctor->parameter_list->Length - i), o->gtype);
+					AssignVector(cfr->Kind.StaticInvoke.Args, (ctor->Parameters->Length - i), o->gtype);
 				}
 				//コンストラクタに渡された型引数を引き継ぐ
 				int typeparams = cls->GetParameterListType->Length;
@@ -588,7 +588,7 @@ static void vm_run(Frame* self, Enviroment * env, int pos, int deferStart) {
 				//Printfln("[ %s#new ]", GetTypeName(ctor->Parent));
 				//DumpEnviromentOp(ctor->env, sub->level);
 				//DumpOpcodeBuf(ctor->env->Bytecode, sub->level);
-				ExecuteVM(sub, ctor->env);
+				ExecuteVM(sub, ctor->Env);
 				DeleteVector(cfr->Kind.StaticInvoke.Args, VectorDeleterOfNull);
 				DeleteVector(cfr->Kind.StaticInvoke.TypeArgs, VectorDeleterOfNull);
 				PopCallContext(GetSGThreadCContext());
@@ -616,17 +616,17 @@ static void vm_run(Frame* self, Enviroment * env, int pos, int deferStart) {
 				cfr->Kind.StaticInvoke.Args = NewVector();
 				cfr->Kind.StaticInvoke.TypeArgs = NewVector();
 				//チェインコンストラクタに渡された実引数をプッシュ
-				for (int i = 0; i < ctor->parameter_list->Length; i++) {
+				for (int i = 0; i < ctor->Parameters->Length; i++) {
 					object* o = (object*)PopVector(self->ValueStack);
 					PushVector(sub->ValueStack, NON_NULL(o));
-					AssignVector(cfr->Kind.StaticInvoke.Args, (ctor->parameter_list->Length - i), o->gtype);
+					AssignVector(cfr->Kind.StaticInvoke.Args, (ctor->Parameters->Length - i), o->gtype);
 				}
 				for(int i=0; i<self->TypeArgs->Length; i++) {
 					PushVector(cfr->Kind.StaticInvoke.TypeArgs, self->TypeArgs);
 				}
 				//		DumpEnviromentOp(ctor->env, sub->level);
 				//DumpOpcodeBuf(ctor->env->Bytecode, sub->level);
-				ExecuteVM(sub, ctor->env);
+				ExecuteVM(sub, ctor->Env);
 				DeleteVector(cfr->Kind.StaticInvoke.Args, VectorDeleterOfNull);
 				DeleteVector(cfr->Kind.StaticInvoke.TypeArgs, VectorDeleterOfNull);
 				PopCallContext(GetSGThreadCContext());

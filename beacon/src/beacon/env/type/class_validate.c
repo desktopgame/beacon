@@ -157,7 +157,7 @@ bool IsMethodParameterValidClass(class_* cls, Method** out_method, StringView* o
 bool IsConstructorParameterValidClass(class_* self, Constructor** out_ctor, StringView* out_name) {
 	for(int i=0; i<self->constructor_list->Length; i++) {
 		Constructor* ctor = (Constructor*)AtVector(self->constructor_list, i);
-		if(IsOverwrappedParameterName(ctor->parameter_list, out_name)) {
+		if(IsOverwrappedParameterName(ctor->Parameters, out_name)) {
 			(*out_ctor) = ctor;
 			return false;
 		}
