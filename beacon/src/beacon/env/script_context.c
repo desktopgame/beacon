@@ -80,33 +80,33 @@ void BootstrapScriptContext(ScriptContext* self) {
 	InitBCLocaleType();
 	InitBCTime();
 	//ブートストラップクラスローダー
-	self->bootstrap_class_loader = NewClassLoader("bootstrap", CONTENT_LIB_T);
-	SpecialLoadClassLoader(self->bootstrap_class_loader, "beacon/lang/Object.bc");
+	self->BootstrapClassLoader = NewClassLoader("bootstrap", CONTENT_LIB_T);
+	SpecialLoadClassLoader(self->BootstrapClassLoader, "beacon/lang/Object.bc");
 
-	SpecialLoadClassLoader(self->bootstrap_class_loader, "beacon/lang/Int.bc");
-	SpecialLoadClassLoader(self->bootstrap_class_loader, "beacon/lang/Double.bc");
-	SpecialLoadClassLoader(self->bootstrap_class_loader, "beacon/lang/Char.bc");
-	SpecialLoadClassLoader(self->bootstrap_class_loader, "beacon/lang/Bool.bc");
-	SpecialLoadClassLoader(self->bootstrap_class_loader, "beacon/lang/Null.bc");
-	SpecialLoadClassLoader(self->bootstrap_class_loader, "beacon/lang/Void.bc");
+	SpecialLoadClassLoader(self->BootstrapClassLoader, "beacon/lang/Int.bc");
+	SpecialLoadClassLoader(self->BootstrapClassLoader, "beacon/lang/Double.bc");
+	SpecialLoadClassLoader(self->BootstrapClassLoader, "beacon/lang/Char.bc");
+	SpecialLoadClassLoader(self->BootstrapClassLoader, "beacon/lang/Bool.bc");
+	SpecialLoadClassLoader(self->BootstrapClassLoader, "beacon/lang/Null.bc");
+	SpecialLoadClassLoader(self->BootstrapClassLoader, "beacon/lang/Void.bc");
 
-	SpecialLoadClassLoader(self->bootstrap_class_loader, "beacon/lang/Iterable.bc");
-	SpecialLoadClassLoader(self->bootstrap_class_loader, "beacon/lang/Iterator.bc");
-	SpecialLoadClassLoader(self->bootstrap_class_loader, "beacon/lang/Array.bc");
-	SpecialLoadClassLoader(self->bootstrap_class_loader, "beacon/lang/String.bc");
-	SpecialLoadClassLoader(self->bootstrap_class_loader, "beacon/lang/Console.bc");
-	SpecialLoadClassLoader(self->bootstrap_class_loader, "beacon/lang/Exception.bc");
-	SpecialLoadClassLoader(self->bootstrap_class_loader, "beacon/lang/StackTraceElement.bc");
+	SpecialLoadClassLoader(self->BootstrapClassLoader, "beacon/lang/Iterable.bc");
+	SpecialLoadClassLoader(self->BootstrapClassLoader, "beacon/lang/Iterator.bc");
+	SpecialLoadClassLoader(self->BootstrapClassLoader, "beacon/lang/Array.bc");
+	SpecialLoadClassLoader(self->BootstrapClassLoader, "beacon/lang/String.bc");
+	SpecialLoadClassLoader(self->BootstrapClassLoader, "beacon/lang/Console.bc");
+	SpecialLoadClassLoader(self->BootstrapClassLoader, "beacon/lang/Exception.bc");
+	SpecialLoadClassLoader(self->BootstrapClassLoader, "beacon/lang/StackTraceElement.bc");
 
-	SpecialLoadClassLoader(self->bootstrap_class_loader, "beacon/lang/World.bc");
+	SpecialLoadClassLoader(self->BootstrapClassLoader, "beacon/lang/World.bc");
 	//退避していたコンテキストを復帰
 	self->heap->AcceptBlocking--;
 }
 
 void EachStaticScriptContext(ScriptContext* self, static_each act) {
 	ScriptContext* ctx = self;
-	for (int i = 0; i < ctx->type_vec->Length; i++) {
-		type* e = (type*)AtVector(ctx->type_vec, i);
+	for (int i = 0; i < ctx->TypeList->Length; i++) {
+		type* e = (type*)AtVector(ctx->TypeList, i);
 		if (e->tag != TYPE_CLASS_T) {
 			continue;
 		}
@@ -169,10 +169,10 @@ static ScriptContext* ScriptContext_malloc(void) {
 	ret->NamespaceMap = NewNumericMap();
 	ret->ClassLoaderMap = NewTreeMap();
 	ret->heap = NewHeap();
-	ret->type_vec = NewVector();
+	ret->TypeList = NewVector();
 	ret->ThreadList = NewVector();
-	ret->bootstrap_class_loader = NULL;
-	ret->all_generic_vec = NewVector();
+	ret->BootstrapClassLoader = NULL;
+	ret->AllGenericList = NewVector();
 	ret->true_obj = NULL;
 	ret->false_obj = NULL;
 	ret->null_obj = NULL;
@@ -198,7 +198,7 @@ static void ScriptContext_free(ScriptContext* self) {
 	//全ての例外フラグをクリア
 	Frame* thv = GetSGThreadFrameRef(GetCurrentSGThread(self));
 	CatchVM(thv);
-	DeleteClassLoader(self->bootstrap_class_loader);
+	DeleteClassLoader(self->BootstrapClassLoader);
 	if(self->null_obj != NULL) {
 		IgnoreHeap(self->heap, self->null_obj);
 		self->null_obj->paint = PAINT_ONEXIT_T;
@@ -210,10 +210,10 @@ static void ScriptContext_free(ScriptContext* self) {
 	DeleteNumericMap(self->n_int_map, ScriptContext_mcache_delete);
 	//DeleteObject(self->null_obj);
 	CollectGenericType();
-	DeleteVector(self->all_generic_vec, VectorDeleterOfNull);
+	DeleteVector(self->AllGenericList, VectorDeleterOfNull);
 	int x = CountActiveObject();
 
-	DeleteVector(self->type_vec, VectorDeleterOfNull);
+	DeleteVector(self->TypeList, VectorDeleterOfNull);
 	DeleteVector(self->ThreadList, VectorDeleterOfNull);
 	DeleteTreeMap(self->ClassLoaderMap, ScriptContext_DeleteClassLoader);
 	//ブートストラップクラスローダを意図的に起動していないなら、

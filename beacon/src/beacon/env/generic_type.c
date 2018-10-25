@@ -49,7 +49,7 @@ generic_type* MallocGenericType(struct type* core_type, const char* filename, in
 	ret->is_ctor = false;
 	//現在のスクリプトコンテキストに登録
 	ScriptContext* ctx = GetCurrentScriptContext();
-	PushVector(ctx->all_generic_vec, ret);
+	PushVector(ctx->AllGenericList, ret);
 	return ret;
 }
 
@@ -72,24 +72,24 @@ generic_type* CloneGenericType(generic_type* self) {
 void CollectGenericType() {
 	ScriptContext* ctx = GetCurrentScriptContext();
 	//マークを外す
-	for(int i=0; i<ctx->all_generic_vec->Length; i++) {
-		generic_type* e= (generic_type*)AtVector(ctx->all_generic_vec, i);
+	for(int i=0; i<ctx->AllGenericList->Length; i++) {
+		generic_type* e= (generic_type*)AtVector(ctx->AllGenericList, i);
 		e->mark = false;
 	}
 	//全ての型に定義された自身を参照するための generic をマーク
-	for(int i=0; i<ctx->type_vec->Length; i++) {
-		type* e= (type*)AtVector(ctx->type_vec, i);
+	for(int i=0; i<ctx->TypeList->Length; i++) {
+		type* e= (type*)AtVector(ctx->TypeList, i);
 		generic_type_recursive_mark(e->generic_self);
 	}
 	Vector* alive = NewVector();
 	Vector* dead = NewVector();
-	for(int i=0; i<ctx->all_generic_vec->Length; i++) {
-		generic_type* e= (generic_type*)AtVector(ctx->all_generic_vec, i);
+	for(int i=0; i<ctx->AllGenericList->Length; i++) {
+		generic_type* e= (generic_type*)AtVector(ctx->AllGenericList, i);
 		PushVector((!e->mark ? dead : alive), e);
 	}
-	DeleteVector(ctx->all_generic_vec, VectorDeleterOfNull);
+	DeleteVector(ctx->AllGenericList, VectorDeleterOfNull);
 	DeleteVector(dead, generic_DeleteType_self);
-	ctx->all_generic_vec = alive;
+	ctx->AllGenericList = alive;
 }
 
 void LostownershipGenericType(generic_type* a) {

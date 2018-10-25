@@ -68,8 +68,8 @@ struct type* AddTypeNamespace(Namespace* self, type* type) {
 	ScriptContext* ctx = GetCurrentScriptContext();
 	type->location = self;
 	PutNumericMap(self->TypeMap, GetTypeName(type), type);
-	type->absolute_index = ctx->type_vec->Length;
-	PushVector(ctx->type_vec, type);
+	type->absolute_index = ctx->TypeList->Length;
+	PushVector(ctx->TypeList, type);
 	return type;
 }
 

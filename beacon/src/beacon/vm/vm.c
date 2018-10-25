@@ -530,7 +530,7 @@ static void vm_run(Frame* self, Enviroment * env, int pos, int deferStart) {
 			case OP_ALLOC_FIELD:
 			{
 				int absClsIndex = (int)GetEnviromentSourceAt(env, ++IDX);
-				type* tp = (type*)AtVector(ctx->type_vec, absClsIndex);
+				type* tp = (type*)AtVector(ctx->TypeList, absClsIndex);
 				class_* cls = TYPE2CLASS(tp);
 				object* obj = (object*)TopVector(self->ValueStack);
 				//仮想関数テーブル更新
@@ -557,7 +557,7 @@ static void vm_run(Frame* self, Enviroment * env, int pos, int deferStart) {
 				//生成するクラスとコンストラクタを特定
 				int absClsIndex = (int)GetEnviromentSourceAt(env, ++IDX);
 				int constructorIndex = (int)GetEnviromentSourceAt(env, ++IDX);
-				type* tp = (type*)AtVector(ctx->type_vec, absClsIndex);
+				type* tp = (type*)AtVector(ctx->TypeList, absClsIndex);
 				assert(tp->tag == TYPE_CLASS_T);
 				class_* cls = TYPE2CLASS(tp);
 				#if defined(DEBUG)
@@ -605,7 +605,7 @@ static void vm_run(Frame* self, Enviroment * env, int pos, int deferStart) {
 			{
 				int absClsIndex = (int)GetEnviromentSourceAt(env, ++IDX);
 				int ctorIndex = (int)GetEnviromentSourceAt(env, ++IDX);
-				type* tp = (type*)AtVector(ctx->type_vec, absClsIndex);
+				type* tp = (type*)AtVector(ctx->TypeList, absClsIndex);
 				assert(tp->tag == TYPE_CLASS_T);
 				class_* cls = tp->u.class_;
 				constructor* ctor = (constructor*)AtVector(cls->constructor_list, ctorIndex);
@@ -687,7 +687,7 @@ static void vm_run(Frame* self, Enviroment * env, int pos, int deferStart) {
 			{
 				int absClsIndex = (int)GetEnviromentSourceAt(env, ++IDX);
 				int fieldIndex = (int)GetEnviromentSourceAt(env, ++IDX);
-				type* tp = (type*)AtVector(ctx->type_vec, absClsIndex);
+				type* tp = (type*)AtVector(ctx->TypeList, absClsIndex);
 				class_* cls = tp->u.class_;
 				field* f = GetSFieldClass(cls, fieldIndex);
 				object* sv = (object*)PopVector(self->ValueStack);
@@ -699,7 +699,7 @@ static void vm_run(Frame* self, Enviroment * env, int pos, int deferStart) {
 			{
 				int absClsIndex = (int)GetEnviromentSourceAt(env, ++IDX);
 				int fieldIndex = (int)GetEnviromentSourceAt(env, ++IDX);
-				type* cls = (type*)AtVector(ctx->type_vec, absClsIndex);
+				type* cls = (type*)AtVector(ctx->TypeList, absClsIndex);
 				field* f = GetSFieldClass(cls->u.class_, fieldIndex);
 				PushVector(self->ValueStack, NON_NULL(f->static_value));
 				break;
@@ -749,7 +749,7 @@ static void vm_run(Frame* self, Enviroment * env, int pos, int deferStart) {
 				object* sv = (object*)PopVector(self->ValueStack);
 				int absClsIndex = (int)GetEnviromentSourceAt(env, ++IDX);
 				int propIndex = (int)GetEnviromentSourceAt(env, ++IDX);
-				type* tp = (type*)AtVector(ctx->type_vec, absClsIndex);
+				type* tp = (type*)AtVector(ctx->TypeList, absClsIndex);
 				class_* cls = tp->u.class_;
 				Property * p = GetSPropertyClass(cls, propIndex);
 				//プロパティを実行
@@ -765,7 +765,7 @@ static void vm_run(Frame* self, Enviroment * env, int pos, int deferStart) {
 				object* sv = (object*)PopVector(self->ValueStack);
 				int absClsIndex = (int)GetEnviromentSourceAt(env, ++IDX);
 				int propIndex = (int)GetEnviromentSourceAt(env, ++IDX);
-				type* tp = (type*)AtVector(ctx->type_vec, absClsIndex);
+				type* tp = (type*)AtVector(ctx->TypeList, absClsIndex);
 				class_* cls = tp->u.class_;
 				Property * p = GetSPropertyClass(cls, propIndex);
 				//プロパティを実行
@@ -852,7 +852,7 @@ static void vm_run(Frame* self, Enviroment * env, int pos, int deferStart) {
 			{
 				int absClassIndex = (int)GetEnviromentSourceAt(env, ++IDX);
 				int methodIndex = (int)GetEnviromentSourceAt(env, ++IDX);
-				type* tp = AtVector(ctx->type_vec, absClassIndex);
+				type* tp = AtVector(ctx->TypeList, absClassIndex);
 				object* o = (object*)TopVector(self->ValueStack);
 				if(throw_npe(self, o)) {
 					break;
@@ -866,7 +866,7 @@ static void vm_run(Frame* self, Enviroment * env, int pos, int deferStart) {
 			{
 				int absClassIndex = (int)GetEnviromentSourceAt(env, ++IDX);
 				int methodIndex = (int)GetEnviromentSourceAt(env, ++IDX);
-				type* cls = (type*)AtVector(ctx->type_vec, absClassIndex);
+				type* cls = (type*)AtVector(ctx->TypeList, absClassIndex);
 				Method* m = GetSMethodClass(cls->u.class_, methodIndex);
 				#if defined(DEBUG)
 				const char* clsname = Ref2Str(GetTypeName(cls));
@@ -1071,7 +1071,7 @@ static void vm_run(Frame* self, Enviroment * env, int pos, int deferStart) {
 						int arg = (int)GetEnviromentSourceAt(env, ++IDX);
 						generic_type* a = NULL;
 						if(code == OP_GENERIC_UNIQUE_TYPE) {
-							a = generic_NewType((type*)AtVector(ctx->type_vec, arg));
+							a = generic_NewType((type*)AtVector(ctx->TypeList, arg));
 						} else if(code == OP_GENERIC_INSTANCE_TYPE) {
 							object* receiver = (object*)AtVector(self->VariableTable, 0);
 							a = (generic_type*)AtVector(receiver->gtype->type_args_list, arg);

@@ -26,10 +26,10 @@ typedef struct ScriptContext {
 	TreeMap* ClassLoaderMap;
 	Vector* ThreadList;
 	Vector* IncludeList;
-	struct class_loader* bootstrap_class_loader;
+	struct class_loader* BootstrapClassLoader;
 	//通し番号でクラスを参照するためのベクター
-	Vector* type_vec;
-	Vector* all_generic_vec;
+	Vector* TypeList;
+	Vector* AllGenericList;
 	//整数のキャッシュ
 	Vector* pos_int_vec;
 	Vector* neg_int_vec;
