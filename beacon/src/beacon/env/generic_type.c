@@ -367,7 +367,7 @@ static generic_type* generic_type_typeargs_at(CallContext* cctx, Frame* fr, int 
 	if(fr == NULL) {
 		Vector* type_args = GetTypeArgsCContext(cctx);
 		ILTypeArgument* a = AtVector(type_args, index);
-		return a->gtype;
+		return a->GType;
 	} else {
 		generic_type* a = AtVector(fr->TypeArgs, index);
 		return a;

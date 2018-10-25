@@ -325,7 +325,7 @@ void ILTypeArgsToString(Buffer* sb, Vector* type_args, Enviroment* env) {
 	}
 	for(int i=0; i<type_args->Length; i++) {
 		ILTypeArgument* e = (ILTypeArgument*)AtVector(type_args, i);
-		char* str = GenericCacheToString(e->gcache);
+		char* str = GenericCacheToString(e->GCache);
 		AppendsBuffer(sb, str);
 		if(i != (type_args->Length - 1)) {
 			AppendsBuffer(sb, ", ");

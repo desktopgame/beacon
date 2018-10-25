@@ -40,9 +40,9 @@ void GenerateILNewInstance(il_factor_new_instance * self, Enviroment * env, Call
 	il_factor_new_instance_find(self, env, cctx);
 	for(int i=0; i<self->type_args->Length; i++) {
 		ILTypeArgument* e = (ILTypeArgument*)AtVector(self->type_args, i);
-		assert(e->gtype != NULL);
+		assert(e->GType != NULL);
 		AddOpcodeBuf(env->Bytecode, OP_GENERIC_ADD);
-		GenerateGenericType(e->gtype, env);
+		GenerateGenericType(e->GType, env);
 	}
 	//実引数を全てスタックへ
 	for (int i = 0; i < self->argument_list->Length; i++) {
@@ -85,7 +85,7 @@ generic_type* EvalILNewInstance(il_factor_new_instance * self, Enviroment * env,
 		generic_type* a = generic_NewType(self->c->parent);
 		for (int i = 0; i < self->type_args->Length; i++) {
 			ILTypeArgument* e = (ILTypeArgument*)AtVector(self->type_args, i);
-			generic_type* arg = ResolveImportManager(GetNamespaceCContext(cctx), e->gcache, cctx);
+			generic_type* arg = ResolveImportManager(GetNamespaceCContext(cctx), e->GCache, cctx);
 			AddArgsGenericType(a, arg);
 		}
 		self->instance_type = a;

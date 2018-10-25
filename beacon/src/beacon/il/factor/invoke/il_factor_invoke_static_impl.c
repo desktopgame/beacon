@@ -30,9 +30,9 @@ il_factor_invoke_static* NewILInvokeStatic(StringView namev) {
 void GenerateILInvokeStatic(il_factor_invoke_static* self, Enviroment* env, CallContext* cctx) {
 	for(int i=0; i<self->type_args->Length; i++) {
 		ILTypeArgument* e = (ILTypeArgument*)AtVector(self->type_args, i);
-		assert(e->gtype != NULL);
+		assert(e->GType != NULL);
 		AddOpcodeBuf(env->Bytecode, OP_GENERIC_ADD);
-		GenerateGenericType(e->gtype, env);
+		GenerateGenericType(e->GType, env);
 	}
 	for(int i=0; i<self->args->Length; i++) {
 		ILArgument* e = (ILArgument*)AtVector(self->args, i);

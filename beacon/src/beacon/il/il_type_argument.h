@@ -9,8 +9,8 @@ struct CallContext;
  * 型実引数を表す構造体.
  */
 typedef struct ILTypeArgument {
-	generic_cache* gcache;
-	generic_type* gtype;
+	generic_cache* GCache;
+	generic_type* GType;
 } ILTypeArgument;
 
 /**

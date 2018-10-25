@@ -191,9 +191,9 @@ static void GenerateILInvokeBound_method(il_factor_invoke_bound* self, Enviromen
 	}
 	for(int i=0; i<self->type_args->Length; i++) {
 		ILTypeArgument* e = (ILTypeArgument*)AtVector(self->type_args, i);
-		assert(e->gtype != NULL);
+		assert(e->GType != NULL);
 		AddOpcodeBuf(env->Bytecode, OP_GENERIC_ADD);
-		GenerateGenericType(e->gtype, env);
+		GenerateGenericType(e->GType, env);
 	}
 	for(int i=0; i<self->args->Length; i++) {
 		ILArgument* e = (ILArgument*)AtVector(self->args, i);
@@ -225,9 +225,9 @@ static void GenerateILInvokeBound_subscript(il_factor_invoke_bound* self, Enviro
 	}
 	for(int i=0; i<self->type_args->Length; i++) {
 		ILTypeArgument* e = (ILTypeArgument*)AtVector(self->type_args, i);
-		assert(e->gtype != NULL);
+		assert(e->GType != NULL);
 		AddOpcodeBuf(env->Bytecode, OP_GENERIC_ADD);
-		GenerateGenericType(e->gtype, env);
+		GenerateGenericType(e->GType, env);
 	}
 	for(int i=0; i<self->args->Length; i++) {
 		ILArgument* e = (ILArgument*)AtVector(self->args, i);
