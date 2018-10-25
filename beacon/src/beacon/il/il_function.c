@@ -37,7 +37,7 @@ static void ILFunction_DeleteTypeParameter(VectorItem item) {
 }
 
 static void ILFunction_DeleteParameter(VectorItem item) {
-	il_parameter* e = (il_parameter*)item;
+	ILParameter* e = (ILParameter*)item;
 	DeleteILParameter(e);
 }
 

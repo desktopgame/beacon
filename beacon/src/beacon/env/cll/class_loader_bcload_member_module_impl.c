@@ -359,7 +359,7 @@ bool CLBC_method_decl(class_loader* self, il_type* iltype, type* tp, ILMethod* i
 	//     class_loader_sgload_complete参照
 	for (int i = 0; i < ilparams->Length; i++) {
 		VectorItem e = AtVector(ilparams, i);
-		il_parameter* ilp = (il_parameter*)e;
+		ILParameter* ilp = (ILParameter*)e;
 		Parameter* param = NewParameter(ilp->namev);
 		PushVector(parameter_list, param);
 	}
@@ -389,7 +389,7 @@ bool CLBC_method_impl(class_loader* self, Namespace* scope, il_type* iltype, typ
 	cctx->Kind.Method = me;
 	//引数を保存
 	for (int i = 0; i < ilmethod->Parameters->Length; i++) {
-		il_parameter* ilparam = (il_parameter*)AtVector(ilmethod->Parameters, i);
+		ILParameter* ilparam = (ILParameter*)AtVector(ilmethod->Parameters, i);
 		EntrySymbolTable(
 			env->Symboles,
 			ResolveImportManager(scope, ilparam->fqcn, cctx),
@@ -451,7 +451,7 @@ bool CLBC_ctor_decl(class_loader* self, il_type* iltype, type* tp, ILConstructor
 	//     class_loader_sgload_complete参照
 	for (int i = 0; i < ilparams->Length; i++) {
 		VectorItem e = AtVector(ilparams, i);
-		il_parameter* ilp = (il_parameter*)e;
+		ILParameter* ilp = (ILParameter*)e;
 		Parameter* param = NewParameter(ilp->namev);
 		PushVector(parameter_list, param);
 	}
@@ -473,7 +473,7 @@ bool CLBC_ctor_impl(class_loader* self, il_type* iltype, type* tp, ILConstructor
 	cctx->Ty = tp;
 	cctx->Kind.Ctor = cons;
 	for (int i = 0; i < cons->parameter_list->Length; i++) {
-		il_parameter* ilparam = (il_parameter*)AtVector(ilcons->Parameters, i);
+		ILParameter* ilparam = (ILParameter*)AtVector(ilcons->Parameters, i);
 		EntrySymbolTable(
 			env->Symboles,
 			ResolveImportManager(scope, ilparam->fqcn, cctx),
@@ -539,7 +539,7 @@ bool CLBC_operator_overload_decl(class_loader* self, il_type* iltype, type* tp, 
 	opov->return_gtype = ResolveImportManager(scope, ilopov->return_fqcn, cctx);
 	//パラメータ読み込み
 	for(int j=0; j<ilopov->parameter_list->Length; j++) {
-		il_parameter* ilparam = AtVector(ilopov->parameter_list, j);
+		ILParameter* ilparam = AtVector(ilopov->parameter_list, j);
 		Parameter* param = NewParameter(ilparam->namev);
 		PushVector(opov->parameter_list, param);
 	}
@@ -566,7 +566,7 @@ bool CLBC_operator_overload_impl(class_loader* self, il_type* iltype, type* tp, 
 	//ccpush_method(me);
 	env->ContextRef = self;
 	for (int i = 0; i < ilopov->parameter_list->Length; i++) {
-		il_parameter* ilparam = (il_parameter*)AtVector(ilopov->parameter_list, i);
+		ILParameter* ilparam = (ILParameter*)AtVector(ilopov->parameter_list, i);
 		EntrySymbolTable(
 			env->Symboles,
 			ResolveImportManager(scope, ilparam->fqcn, cctx),
@@ -666,7 +666,7 @@ void CLBC_body(class_loader* self, Vector* stmt_list, Enviroment* dest, CallCont
 static void CLBC_parameter_list(class_loader* self, Namespace* scope, Vector* param_list, Vector* sg_param_list, CallContext* cctx) {
 	for (int j = 0; j < param_list->Length; j++) {
 		VectorItem e = AtVector(param_list, j);
-		il_parameter* ilparam = (il_parameter*)e;
+		ILParameter* ilparam = (ILParameter*)e;
 		//FIXME:ILパラメータと実行時パラメータのインデックスが同じなのでとりあえず動く
 		Parameter* mep = (Parameter*)AtVector(sg_param_list, j);
 		mep->GType = ResolveImportManager(

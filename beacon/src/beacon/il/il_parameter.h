@@ -15,21 +15,21 @@ typedef enum ILParameterType {
 /**
  * メソッド/関数の引数を表す要素.
  */
-typedef struct il_parameter {
+typedef struct ILParameter {
 	ILParameterType param_type;
 	generic_cache* fqcn;
 	StringView namev;
-} il_parameter;
+} ILParameter;
 /**
  * パラメータを作成します.
  * @param name
  * @return
  */
-il_parameter* NewILParameter(StringView namev);
+ILParameter* NewILParameter(StringView namev);
 
 /**
  * パラメータを開放します.
  * @param self
  */
-void DeleteILParameter(il_parameter* self);
+void DeleteILParameter(ILParameter* self);
 #endif // !SIGNAL_IL_IL_PARAMETER_H

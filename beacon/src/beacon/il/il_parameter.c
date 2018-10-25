@@ -5,15 +5,15 @@
 #include "../util/mem.h"
 #include "../env/fqcn_cache.h"
 
-il_parameter * NewILParameter(StringView namev) {
-	il_parameter* ret = (il_parameter*)MEM_MALLOC(sizeof(il_parameter));
+ILParameter * NewILParameter(StringView namev) {
+	ILParameter* ret = (ILParameter*)MEM_MALLOC(sizeof(ILParameter));
 	ret->namev = namev;
 	ret->param_type = IL_PARAM_TYPE_DEFAULT;
 	ret->fqcn = NewGenericCache();
 	return ret;
 }
 
-void DeleteILParameter(il_parameter * self) {
+void DeleteILParameter(ILParameter * self) {
 	if (self == NULL) {
 		return;
 	}

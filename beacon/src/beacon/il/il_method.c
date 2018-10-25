@@ -38,7 +38,7 @@ void DeleteILMethod(ILMethod * self) {
 
 //private
 static void ILMethod_DeleteParameter(VectorItem item) {
-	il_parameter* e = (il_parameter*)item;
+	ILParameter* e = (ILParameter*)item;
 	DeleteILParameter(e);
 }
 

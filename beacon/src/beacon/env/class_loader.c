@@ -253,7 +253,7 @@ static void LoadClassLoader_toplevel_function(class_loader* self) {
 	//	Println();
 		//引数を指定
 		for(int j=0; j<ilfunc->Parameters->Length; j++) {
-			il_parameter* ilparam = AtVector(ilfunc->Parameters, j);
+			ILParameter* ilparam = AtVector(ilfunc->Parameters, j);
 			Parameter* param = NewParameter(ilparam->namev);
 			PushVector(m->Parameters, param);
 			param->GType = ResolveImportManager(loc, ilparam->fqcn, cctx);

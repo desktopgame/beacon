@@ -24,7 +24,7 @@ void DeleteILOperatorOverload(il_operator_overload* self) {
 }
 //private
 static void DeleteILOperatorOverload_parameter(VectorItem item) {
-	il_parameter* e = (il_parameter*)item;
+	ILParameter* e = (ILParameter*)item;
 	DeleteILParameter(e);
 }
 
